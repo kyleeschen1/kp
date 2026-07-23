@@ -17,10 +17,6 @@ import {
   createSemanticTransformationLeaf,
   createSemanticTransformationParallel
 } from "../semantic/transformation-composition.ts";
-import {
-  createKpDerivativePowerRuleCorrespondenceMap,
-  createKpDerivativePowerRuleSemanticRoles
-} from "../semantic/derivative-power-rule-semantics.ts";
 
 export const derivativeTangentAnimationId =
   "animation.derivative-rules.tangent-graph";
@@ -33,16 +29,30 @@ const sourceExpressionId = "expression.derivative-rules.x-cubed.source";
 const targetExpressionId = "expression.derivative-rules.x-cubed.derivative";
 const sourceStateId = "tangent-state.derivative-rules.x-cubed.start";
 const targetStateId = "tangent-state.derivative-rules.x-cubed.end";
-const powerRuleTransformationId =
-  "transform.derivative-rules.tangent-graph.apply-power-rule";
-const tangentTransformationId =
-  "transform.derivative-rules.tangent-graph.move-tangent";
+const limitTransformationId =
+  "transform.derivative-rules.tangent-graph.converge-difference-quotient";
+const geometryTransformationId =
+  "transform.derivative-rules.tangent-graph.converge-secant";
+const anchorX = 1;
+const sourceH = 1;
 
 export interface DerivativeTangentState {
   readonly x: number;
   readonly y: number;
   readonly slope: number;
   readonly intercept: number;
+}
+
+export interface DerivativeSecantTangentState {
+  readonly anchorX: number;
+  readonly anchorY: number;
+  readonly h: number;
+  readonly movingX: number;
+  readonly movingY: number;
+  readonly secantSlope: number;
+  readonly secantIntercept: number;
+  readonly tangentSlope: number;
+  readonly tangentIntercept: number;
 }
 
 export function createDerivativeTangentAnimationAsset(): KpAnimationAsset {
@@ -84,108 +94,122 @@ export function createDerivativeTangentAnimationAsset(): KpAnimationAsset {
   };
   const sourceExpression = expressionObject({
     id: sourceExpressionId,
-    title: "Derivative of x cubed",
-    latex: "\\frac{d}{dx}x^3",
+    title: "Finite difference quotient",
+    latex: "\\frac{f(a+h)-f(a)}{h}",
     selectors: [
-      ["operator", "derivative-operator", "d/dx"],
-      ["operator-variable", "variable", "x"],
-      ["base", "variable", "x"],
-      ["exponent", "exponent", "3"]
+      ["quotient", "fraction", "finite difference quotient"],
+      ["moving-value", "function-value", "f(a+h)"],
+      ["anchor-value", "function-value", "f(a)"],
+      ["increment", "variable", "h"]
     ]
   });
   const targetExpression = expressionObject({
     id: targetExpressionId,
-    title: "Power-rule derivative",
-    latex: "3x^2",
+    title: "Derivative at the anchor",
+    latex: "f'(1)=3",
     selectors: [
-      ["coefficient", "coefficient", "3"],
-      ["base", "variable", "x"],
-      ["exponent", "exponent", "2"]
+      ["derivative", "derivative-operator", "f'"],
+      ["anchor", "argument", "1"],
+      ["value", "value", "3"]
     ]
   });
-  const powerRuleRoles = createKpDerivativePowerRuleSemanticRoles({
-    sourceObjectId: sourceExpression.id,
-    targetObjectId: targetExpression.id,
-    differentiationVariable: "x",
-    base: "x",
-    exponent: 3
-  });
-  const sourceState = tangentStateObject(
+  const sourceState = secantTangentStateObject(
     sourceStateId,
-    "Tangent at x = 0",
-    tangentStateAt(0),
+    "Finite secant at h = 1",
+    secantTangentStateAt(anchorX, sourceH),
     "source"
   );
-  const targetState = tangentStateObject(
+  const targetState = secantTangentStateObject(
     targetStateId,
-    "Tangent at x = 2",
-    tangentStateAt(2),
+    "Tangent limit at h = 0",
+    secantTangentStateAt(anchorX, 0),
     "target"
   );
-  const powerRuleTransformation = createKpSemanticTransformation({
-    id: powerRuleTransformationId,
-    definitionId: "definition.symbolic.calculus.derivative-power-rule",
-    transformType: "derivativePowerRule",
-    title: "Drop the exponent into coefficient position",
+  const limitTransformation = createKpSemanticTransformation({
+    id: limitTransformationId,
+    definitionId: "definition.symbolic.calculus.derivative-limit",
+    transformType: "convergeDifferenceQuotient",
+    title: "Converge the finite difference quotient to the derivative",
     sourceObjectIds: [sourceExpression.id],
     targetObjectIds: [targetExpression.id],
-    preserves: ["value", "structure"],
-    correspondenceMap: createKpDerivativePowerRuleCorrespondenceMap(
-      powerRuleRoles,
-      powerRuleTransformationId
-    ),
+    preserves: ["value", "role"],
+    correspondenceMap: {
+      id: `${limitTransformationId}.correspondence`,
+      records: [
+        {
+          id: "quotient-becomes-derivative",
+          relation: "role-change",
+          sourceSelectorIds: [`${sourceExpressionId}.quotient`],
+          targetSelectorIds: [`${targetExpressionId}.derivative`],
+          summary:
+            "The finite secant slope becomes the derivative at the anchor as h tends to zero."
+        },
+        {
+          id: "anchor-persists",
+          relation: "identity",
+          sourceSelectorIds: [`${sourceExpressionId}.anchor-value`],
+          targetSelectorIds: [`${targetExpressionId}.anchor`],
+          summary: "The evaluation anchor remains fixed throughout the limit."
+        },
+        {
+          id: "finite-values-resolve",
+          relation: "fan-in",
+          sourceSelectorIds: [
+            `${sourceExpressionId}.moving-value`,
+            `${sourceExpressionId}.increment`
+          ],
+          targetSelectorIds: [`${targetExpressionId}.value`],
+          summary:
+            "The moving function value and shrinking increment resolve into the derivative value."
+        }
+      ]
+    },
     correspondence: [
       {
-        sourceSelectorId: `${sourceExpressionId}.base`,
-        targetSelectorId: `${targetExpressionId}.base`,
-        preserves: ["identity", "role"]
+        sourceSelectorId: `${sourceExpressionId}.quotient`,
+        targetSelectorId: `${targetExpressionId}.derivative`,
+        preserves: ["role", "value"]
       },
       {
-        sourceSelectorId: `${sourceExpressionId}.exponent`,
-        targetSelectorId: `${targetExpressionId}.coefficient`,
-        preserves: ["value", "role"]
+        sourceSelectorId: `${sourceExpressionId}.anchor-value`,
+        targetSelectorId: `${targetExpressionId}.anchor`,
+        preserves: ["identity", "role"]
       }
     ],
     lawRefs: [
       {
-        id: "law.calculus.derivative.power-rule",
-        level: "strict"
+        id: "law.calculus.derivative.difference-quotient-limit",
+        level: "sampled",
+        summary:
+          "For f(x)=x cubed at a=1, the finite quotient converges continuously to f'(1)=3."
       }
     ]
   });
-  const tangentTransformation = createKpSemanticTransformation({
-    id: tangentTransformationId,
-    definitionId: "definition.graph.derivative.tangent-motion",
-    transformType: "moveDerivativeTangent",
-    title: "Move the tangent using the derivative slope",
-    sourceObjectIds: [curveId, targetExpressionId, sourceStateId],
+  const geometryTransformation = createKpSemanticTransformation({
+    id: geometryTransformationId,
+    definitionId: "definition.graph.derivative.secant-tangent-convergence",
+    transformType: "convergeDerivativeSecant",
+    title: "Move the second point into the anchor and converge the secant",
+    sourceObjectIds: [curveId, sourceExpressionId, sourceStateId],
     targetObjectIds: [curveId, targetExpressionId, targetStateId],
     preserves: ["identity", "value", "role"],
     correspondenceMap: {
-      id: `${tangentTransformationId}.correspondence`,
+      id: `${geometryTransformationId}.correspondence`,
       records: [
         {
           id: "curve-persists",
           relation: "identity",
           sourceSelectorIds: [`${curveId}.body`],
           targetSelectorIds: [`${curveId}.body`],
-          summary: "The cubic curve remains fixed while its tangent moves."
+          summary: "The cubic curve remains fixed during convergence."
         },
-        ...["coefficient", "base", "exponent"].map((selector) => ({
-          id: `derivative-${selector}-persists`,
+        ...["anchor-point", "secant-point", "secant-line", "slope", "increment"].map((selector) => ({
+          id: `${selector}-converges`,
           relation: "identity" as const,
-          sourceSelectorIds: [`${targetExpressionId}.${selector}`],
-          targetSelectorIds: [`${targetExpressionId}.${selector}`],
-          summary:
-            "The derivative expression remains fixed while its value drives the tangent slope."
-        })),
-        ...["point", "tangent", "slope"].map((selector) => ({
-          id: `${selector}-moves`,
-          relation: "role-change" as const,
           sourceSelectorIds: [`${sourceStateId}.${selector}`],
           targetSelectorIds: [`${targetStateId}.${selector}`],
           summary:
-            `The ${selector} preserves its explanatory role as the contact location changes.`
+            `The ${selector} keeps its semantic identity as the finite secant becomes the tangent.`
         }))
       ]
     },
@@ -196,28 +220,29 @@ export function createDerivativeTangentAnimationAsset(): KpAnimationAsset {
         preserves: ["identity", "value", "presentation"]
       },
       {
-        sourceSelectorId: `${sourceStateId}.point`,
-        targetSelectorId: `${targetStateId}.point`,
-        preserves: ["role"]
+        sourceSelectorId: `${sourceStateId}.anchor-point`,
+        targetSelectorId: `${targetStateId}.anchor-point`,
+        preserves: ["identity", "role"]
       },
       {
-        sourceSelectorId: `${sourceStateId}.tangent`,
-        targetSelectorId: `${targetStateId}.tangent`,
-        preserves: ["role"]
+        sourceSelectorId: `${sourceStateId}.secant-line`,
+        targetSelectorId: `${targetStateId}.secant-line`,
+        preserves: ["identity", "role"]
       }
     ],
     lawRefs: [
       {
         id: "law.graph.derivative-tangent-slope",
         level: "sampled",
-        summary: "The tangent slope equals 3x squared at every sampled point."
+        summary:
+          "The secant slope equals the finite difference quotient and converges to the tangent slope."
       }
     ]
   });
   const treeRoot = createSemanticTransformationParallel({
     id: "diagram.derivative-rules.tangent-graph.synchronized",
     label: "Synchronized derivative and tangent motion",
-    children: [powerRuleTransformation, tangentTransformation].map(
+    children: [limitTransformation, geometryTransformation].map(
       (transformation) =>
         createSemanticTransformationLeaf(
           createSemanticTransformationRef({
@@ -231,7 +256,7 @@ export function createDerivativeTangentAnimationAsset(): KpAnimationAsset {
         )
     ),
     summary:
-      "The symbolic power rule and graph tangent consume the same animation clock."
+      "The KaTeX difference quotient and SVG secant geometry consume the same convergence parameter."
   });
   const objects = [
     graphObject(graph),
@@ -258,34 +283,36 @@ export function createDerivativeTangentAnimationAsset(): KpAnimationAsset {
 
   return createKpAnimationAsset({
     id: derivativeTangentAnimationId,
-    title: "Power rule with synchronized tangent",
+    title: "Difference quotient converging to a tangent",
     bundle: createKpAssetBundle({
       id: "asset.derivative-rules.tangent-graph",
       title: "Derivative tangent graph assets",
       objects
     }),
-    transformations: [powerRuleTransformation, tangentTransformation],
+    transformations: [limitTransformation, geometryTransformation],
     transformationTree: createEditableSemanticTransformationTree({
       root: treeRoot,
       annotations: [
         {
           id: "focus.derivative-rules.tangent-graph.point",
           kind: "focus",
-          targetNodeId: tangentTransformation.id,
+          targetNodeId: geometryTransformation.id,
           placement: "during",
           selectorIds: [
-            `${sourceStateId}.point`,
-            `${targetStateId}.point`,
-            `${sourceStateId}.tangent`,
-            `${targetStateId}.tangent`
+            `${sourceStateId}.anchor-point`,
+            `${targetStateId}.anchor-point`,
+            `${sourceStateId}.secant-point`,
+            `${targetStateId}.secant-point`,
+            `${sourceStateId}.secant-line`,
+            `${targetStateId}.secant-line`
           ]
         }
       ]
     }),
     timeline: {
       id: timelineId,
-      durationMs: 2400,
-      beatCount: 50
+      durationMs: 3200,
+      beatCount: 64
     },
     layout: {
       id: "layout.derivative-rules.tangent-graph",
@@ -301,18 +328,25 @@ export function createDerivativeTangentAnimationAsset(): KpAnimationAsset {
           object.selectors.map((selector) => selector.id)
         ),
         transformationIds: [
-          powerRuleTransformation.id,
-          tangentTransformation.id
+          limitTransformation.id,
+          geometryTransformation.id
         ],
         timelineId,
         summary:
-          "Moves a point and tangent line along x cubed while the power-rule derivative drives slope.",
+          "Moves the second point toward a fixed anchor while the finite difference quotient and secant converge to the derivative and tangent.",
         metadata: {
           graphMotionKind: "derivative-tangent-motion",
           graphId,
           curveId,
+          sourceExpressionId,
           derivativeExpressionId: targetExpressionId,
-          derivativeDisplayText: "f′(x) = 3x²",
+          contextLatex: "f(x)=x^3,\\quad a=1",
+          differenceQuotientLatex:
+            "m_{\\mathrm{sec}}(h)=\\frac{f(a+h)-f(a)}{h}",
+          derivativeDisplayLatex: "f'(1)=3",
+          convergenceLatex:
+            "h\\to 0\\quad\\Longrightarrow\\quad m_{\\mathrm{sec}}(h)\\to f'(1)=3",
+          anchorX,
           sourceStateId,
           targetStateId
         }
@@ -335,7 +369,7 @@ export function createDerivativeTangentAnimationAsset(): KpAnimationAsset {
         id: "check.derivative-rules.tangent-graph.slope",
         lawId: "law.graph.derivative-tangent-slope",
         level: "sampled",
-        targetId: tangentTransformation.id
+        targetId: geometryTransformation.id
       }
     ],
     exportTargets: [
@@ -351,6 +385,7 @@ export function createDerivativeTangentAnimationAsset(): KpAnimationAsset {
       sampleTargetIds: [renderTargetId],
       sourceRefIds: [
         "family.calculus.derivative-rules",
+        "law.calculus.derivative.difference-quotient-limit",
         "law.graph.derivative-tangent-slope"
       ]
     },
@@ -358,7 +393,7 @@ export function createDerivativeTangentAnimationAsset(): KpAnimationAsset {
       domain: "calculus",
       graphMotionKind: "derivative-tangent-motion",
       summary:
-        "Synchronizes the power-rule derivative with a moving point and tangent line on x cubed."
+        "Synchronizes a KaTeX finite difference quotient with secant geometry converging to the tangent of x cubed."
     }
   });
 }
@@ -375,21 +410,47 @@ export function tangentStateAt(x: number): DerivativeTangentState {
   };
 }
 
-function tangentStateObject(
+export function secantTangentStateAt(
+  anchor: number,
+  h: number
+): DerivativeSecantTangentState {
+  const tangent = tangentStateAt(anchor);
+  const movingX = anchor + h;
+  const movingY = movingX ** 3;
+  const secantSlope = h === 0
+    ? tangent.slope
+    : (movingY - tangent.y) / h;
+
+  return {
+    anchorX: anchor,
+    anchorY: tangent.y,
+    h,
+    movingX,
+    movingY,
+    secantSlope,
+    secantIntercept: tangent.y - secantSlope * anchor,
+    tangentSlope: tangent.slope,
+    tangentIntercept: tangent.intercept
+  };
+}
+
+function secantTangentStateObject(
   id: string,
   title: string,
-  state: DerivativeTangentState,
+  state: DerivativeSecantTangentState,
   role: "source" | "target"
 ) {
   return createKpSemanticAssetObject({
     id,
-    objectType: "derivative-tangent-state",
+    objectType: "derivative-secant-tangent-state",
     title,
     value: state,
     selectors: [
-      { id: `${id}.point`, kind: "point", label: `${role} point` },
-      { id: `${id}.tangent`, kind: "line", label: `${role} tangent` },
-      { id: `${id}.slope`, kind: "slope", label: String(state.slope) }
+      { id: `${id}.anchor-point`, kind: "point", label: `${role} anchor point` },
+      { id: `${id}.secant-point`, kind: "point", label: `${role} second point` },
+      { id: `${id}.secant-line`, kind: "line", label: `${role} secant line` },
+      { id: `${id}.slope`, kind: "slope", label: String(state.secantSlope) },
+      { id: `${id}.increment`, kind: "increment", label: String(state.h) }
     ]
   });
 }

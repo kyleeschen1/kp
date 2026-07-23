@@ -3070,24 +3070,41 @@ test("vector scaling visibly travels from its source to transformed coordinates"
   expect(Number(await vector.getAttribute("y2"))).toBeLessThan(startY);
 });
 
-test("the derivative tangent and contact point move together along x cubed", async ({
+test("the finite quotient and secant converge together to the derivative and tangent", async ({
   page
 }) => {
   await page.goto("/?animation=editor-animation.sample.animation.derivative-rules.tangent-graph");
   const player = page.locator("[data-kp-editor-animation-player]");
-  const tangent = player.locator("[data-kp-editor-graph-tangent]");
-  const point = player.locator("[data-kp-editor-graph-tangent-point]");
-  await expect(
-    player.locator("[data-kp-editor-graph-derivative-expression]")
-  ).toHaveText("f′(x) = 3x²");
-  await expect(tangent).toHaveAttribute("data-kp-editor-graph-tangent-slope", "0");
-  await expect(point).toHaveAttribute("data-kp-editor-graph-tangent-x", "0");
-  const startX = Number(await point.getAttribute("cx"));
+  const secant = player.locator("[data-kp-editor-graph-secant]");
+  const anchor = player.locator("[data-kp-editor-graph-anchor-point]");
+  const moving = player.locator("[data-kp-editor-graph-secant-point]");
+  const quotient = player.locator("[data-kp-editor-graph-difference-quotient]");
+  const result = player.locator("[data-kp-editor-graph-derivative-expression]");
+  await expect(quotient.locator(".katex")).toBeVisible();
+  await expect(quotient).toHaveAttribute(
+    "data-kp-latex",
+    "m_{\\mathrm{sec}}(h)=\\frac{f(a+h)-f(a)}{h}"
+  );
+  await expect(result.locator(".katex")).toBeVisible();
+  await expect(result).toHaveAttribute(
+    "data-kp-latex",
+    "h\\to 0\\quad\\Longrightarrow\\quad m_{\\mathrm{sec}}(h)\\to f'(1)=3"
+  );
+  await expect(player.locator(".editor-graph-stage__label")).toHaveCount(0);
+  await expect(player.locator(".editor-graph-stage__annotation")).toHaveCount(0);
+  await expect(secant).toHaveAttribute("data-kp-editor-graph-secant-h", "1");
+  await expect(secant).toHaveAttribute("data-kp-editor-graph-secant-slope", "7");
+  await expect(anchor).toHaveAttribute("data-kp-editor-graph-tangent-x", "1");
+  await expect(moving).toHaveAttribute("data-kp-editor-graph-secant-x", "2");
+  const startX = Number(await moving.getAttribute("cx"));
 
   await player.locator('[data-action="seek-editor-animation"]').fill("1");
-  await expect(tangent).toHaveAttribute("data-kp-editor-graph-tangent-slope", "12");
-  await expect(point).toHaveAttribute("data-kp-editor-graph-tangent-x", "2");
-  expect(Number(await point.getAttribute("cx"))).toBeGreaterThan(startX);
+  await expect(secant).toHaveAttribute("data-kp-editor-graph-secant-h", "0");
+  await expect(secant).toHaveAttribute("data-kp-editor-graph-secant-slope", "3");
+  await expect(moving).toHaveAttribute("data-kp-editor-graph-secant-x", "1");
+  await expect(player.locator("[data-kp-editor-graph-tangent-target]"))
+    .toHaveAttribute("data-kp-editor-graph-tangent-slope", "3");
+  expect(Number(await moving.getAttribute("cx"))).toBeLessThan(startX);
 });
 
 test("the integral area and moving upper bound visibly sweep together", async ({ page }) => {
@@ -3123,7 +3140,6 @@ test("dot projection visibly drops the source point onto the target vector", asy
 test("graph annotations stay synchronized with the visible runtime geometry", async ({ page }) => {
   const cases = [
     ["editor-animation.sample.animation.vector-add-scale.basic", "v(t) = (1, 2)", "v(t) = (2, 6)"],
-    ["editor-animation.sample.animation.derivative-rules.tangent-graph", "x = 0 · slope = 0", "x = 2 · slope = 12"],
     ["editor-animation.sample.animation.integral-ftc.area-sweep", "b = 0 · area = 0", "b = 3 · area = 9"],
     ["editor-animation.sample.animation.dot-projection.basic", "a·b = 12 · drop = (3, 4)", "a·b = 12 · drop = (3, 0)"]
   ] as const;

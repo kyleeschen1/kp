@@ -1046,8 +1046,8 @@
     "id": "editor-animation.animation.derivative-rules.tangent-graph",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.derivative-rules.tangent-graph",
-    "title": "Power rule with synchronized tangent",
-    "summary": "Synchronizes the power-rule derivative with a moving point and tangent line on x cubed.",
+    "title": "Difference quotient converging to a tangent",
+    "summary": "Synchronizes a KaTeX finite difference quotient with secant geometry converging to the tangent of x cubed.",
     "renderTargetKinds": [
       "graph"
     ],
@@ -1057,8 +1057,8 @@
       "scrubber",
       "rewind"
     ],
-    "durationMs": 2400,
-    "beatCount": 50,
+    "durationMs": 3200,
+    "beatCount": 64,
     "tags": [
       "animation",
       "graph",
@@ -1077,8 +1077,8 @@
     "id": "editor-animation.sample.animation.derivative-rules.tangent-graph",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.derivative-rules.tangent-graph",
-    "title": "Power rule with synchronized tangent",
-    "summary": "The x-cubed graph sample synchronizes power-rule evaluation with tangent line and local-slope motion.",
+    "title": "Difference quotient converging to a tangent",
+    "summary": "The x-cubed graph sample synchronizes a KaTeX finite difference quotient with secant-to-tangent convergence.",
     "domain": "calculus",
     "familyId": "family.calculus.derivative-rules",
     "sampleId": "sample.animation.derivative-rules.tangent-graph",
@@ -1091,8 +1091,8 @@
       "scrubber",
       "rewind"
     ],
-    "durationMs": 2400,
-    "beatCount": 50,
+    "durationMs": 3200,
+    "beatCount": 64,
     "tags": [
       "animation",
       "graph",

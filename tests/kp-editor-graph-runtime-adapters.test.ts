@@ -44,7 +44,7 @@ test("integral sweep grows its bound and accumulated area together", () => {
   assert.deepEqual(areas, [[0, 0], [1.5, 1.125], [3, 9]]);
 });
 
-test("derivative tangent moves along x cubed while its slope changes", () => {
+test("derivative secant point converges to the tangent anchor", () => {
   const animation = createKpAnimationAssets().find((a) => a.id === "animation.derivative-rules.tangent-graph");
   assert.ok(animation);
   const points = [0, 0.5, 1].map((progress) => {
@@ -52,7 +52,11 @@ test("derivative tangent moves along x cubed while its slope changes", () => {
       animation,
       runtimeFrame: sampleKpAnimationRuntimeFrame({ animation, progress })
     });
-    return [frame.x, frame.y, frame.slope];
+    return [frame.h, frame.movingX, frame.movingY, frame.secantSlope];
   });
-  assert.deepEqual(points, [[0, 0, 0], [1, 1, 3], [2, 8, 12]]);
+  assert.deepEqual(points, [
+    [1, 2, 8, 7],
+    [0.5, 1.5, 3.375, 4.75],
+    [0, 1, 1, 3]
+  ]);
 });

@@ -1257,14 +1257,14 @@ test("symbolic library progress rows summarize cross-domain coverage and blocker
     [
       ["Families", "18"],
       ["Ready families", "18"],
-      ["Transform definitions", "71"],
+      ["Transform definitions", "72"],
       ["Runtime sample refs", "23"],
       ["Concrete runtime samples", "17"],
       ["Planned runtime samples", "6"],
       ["Law status", "passed"],
       ["Generated problem hooks", "18"],
       ["Flashcard hooks", "18"],
-      ["Paused-frame drill-down candidates", "39"],
+      ["Paused-frame drill-down candidates", "40"],
       ["Blockers", "None"]
     ]
   );
@@ -1336,6 +1336,16 @@ test("calculus derivative rules family models rule-specific persistence", () => 
           "product.operator",
           "quotient.bar"
         ]
+      ],
+      [
+        "derivative.secant-finite",
+        "derivative-expression",
+        ["quotient", "anchor", "increment"]
+      ],
+      [
+        "derivative.limit",
+        "derivative-expression",
+        ["derivative.operator", "anchor", "value"]
       ]
     ]
   );
@@ -1364,6 +1374,12 @@ test("calculus derivative rules family models rule-specific persistence", () => 
         "derivativePowerRule",
         ["value", "structure"],
         "law.calculus.derivative-power"
+      ],
+      [
+        "definition.symbolic.calculus.derivative-limit",
+        "convergeDifferenceQuotient",
+        ["value", "role"],
+        "law.calculus.derivative.difference-quotient-limit"
       ],
       [
         "definition.symbolic.calculus.derivative-product-rule",
@@ -1400,7 +1416,7 @@ test("calculus derivative rules family models rule-specific persistence", () => 
     ]
   );
   assert.deepEqual(
-    family.transformationDefinitions[5]?.correspondenceTemplates.map(
+    family.transformationDefinitions[6]?.correspondenceTemplates.map(
       (correspondence) => [
         correspondence.sourceSelectorRole,
         correspondence.targetSelectorRole,
@@ -1434,6 +1450,15 @@ test("calculus derivative rules family models rule-specific persistence", () => 
         "The exponent drops into coefficient position while a decremented exponent remains in the superscript region."
     },
     {
+      id: "motif.calculus.derivative.limit-convergence",
+      motifKind: "limit-convergence",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.derivative-limit"
+      ],
+      summary:
+        "A finite secant and its difference quotient continuously approach the tangent and derivative at one fixed anchor."
+    },
+    {
       id: "motif.calculus.derivative.rule-branch",
       motifKind: "rule-branch",
       transformationDefinitionIds: [
@@ -1464,10 +1489,10 @@ test("calculus derivative rules family models rule-specific persistence", () => 
       availability: "concrete",
       renderTargetKinds: ["graph"],
       transformationDefinitionIds: [
-        "definition.symbolic.calculus.derivative-power-rule"
+        "definition.symbolic.calculus.derivative-limit"
       ],
       summary:
-        "The x-cubed graph sample synchronizes power-rule evaluation with tangent line and local-slope motion."
+        "The x-cubed graph sample synchronizes a KaTeX finite difference quotient with secant-to-tangent convergence."
     }
   ]);
   assert.deepEqual(family.graphEquivalents, [
@@ -1503,7 +1528,7 @@ test("calculus derivative rules family models rule-specific persistence", () => 
       ],
       sampleAssetIds: ["animation.derivative-rules.tangent-graph"],
       summary:
-        "A shared derivative value can drive a tangent handle, secant-to-tangent limit cue, or local-slope marker without changing the symbolic step."
+        "One shared h parameter drives the finite quotient, moving curve point, secant slope, tangent limit, and exact rewind."
     }
   ]);
   assert.deepEqual(family.generatedProblemHooks, [
@@ -1558,10 +1583,10 @@ test("calculus derivative rules family projects to tangent graph samples", () =>
         availability: "concrete",
         renderTargetKinds: ["graph"],
         transformationDefinitionIds: [
-          "definition.symbolic.calculus.derivative-power-rule"
+          "definition.symbolic.calculus.derivative-limit"
         ],
         summary:
-          "The x-cubed graph sample synchronizes power-rule evaluation with tangent line and local-slope motion."
+          "The x-cubed graph sample synchronizes a KaTeX finite difference quotient with secant-to-tangent convergence."
       }
     ]
   );
@@ -1583,7 +1608,7 @@ test("calculus derivative rules family projects to tangent graph samples", () =>
         "graph.calculus.derivative.local-slope-motion",
         "local-slope-motion",
         ["animation.derivative-rules.tangent-graph"],
-        "A shared derivative value can drive a tangent handle, secant-to-tangent limit cue, or local-slope marker without changing the symbolic step."
+        "One shared h parameter drives the finite quotient, moving curve point, secant slope, tangent limit, and exact rewind."
       ]
     ]
   );

@@ -47,6 +47,7 @@ export type EquationVisualMotifKind =
   | "fraction-factor-split"
   | "fraction-common-factor-extract"
   | "fraction-unit-absorb"
+  | "limit-convergence"
   | "merge-fan-in"
   | "matrix-row-compose"
   | "matrix-cell-compose"
@@ -169,6 +170,13 @@ export const equationVisualMotifDescriptors: readonly EquationVisualMotifDescrip
     motionPrimitiveIds: ["copy", "shift"],
     phaseIds: [...kpCopyFanOutPhaseIds],
     summary: "A persistent source contracts while lineage-bearing copies branch and travel independently."
+  },
+  {
+    kind: "limit-convergence",
+    motionPrimitiveIds: ["shift", "reveal"],
+    phaseIds: ["layout-shift", "final-simplify-reveal"],
+    summary:
+      "A finite state changes continuously while its limiting representation gains explanatory authority."
   },
   {
     kind: "dot-product-accumulate",

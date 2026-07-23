@@ -1891,6 +1891,26 @@ function createCalculusDerivativeRulesFamily(): KpSymbolicManipulationFamily {
           { id: "product.operator", kind: "operator" },
           { id: "quotient.bar", kind: "fraction-bar" }
         ]
+      },
+      {
+        id: "derivative.secant-finite",
+        objectType: "derivative-expression",
+        title: "Finite difference quotient",
+        selectorRoles: [
+          { id: "quotient", kind: "fraction" },
+          { id: "anchor", kind: "function-value" },
+          { id: "increment", kind: "variable" }
+        ]
+      },
+      {
+        id: "derivative.limit",
+        objectType: "derivative-expression",
+        title: "Derivative at an anchor",
+        selectorRoles: [
+          { id: "derivative.operator", kind: "derivative-operator" },
+          { id: "anchor", kind: "argument" },
+          { id: "value", kind: "value" }
+        ]
       }
     ],
     transformationDefinitions: [
@@ -1945,6 +1965,39 @@ function createCalculusDerivativeRulesFamily(): KpSymbolicManipulationFamily {
             targetObjectRole: "derivative.after",
             targetSelectorRole: "exponent.decremented",
             preserves: ["value", "role"]
+          }
+        ]
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.calculus.derivative-limit",
+        transformType: "convergeDifferenceQuotient",
+        title: "Converge a finite difference quotient to the derivative",
+        sourceObjectRoles: ["derivative.secant-finite"],
+        targetObjectRoles: ["derivative.limit"],
+        preserves: ["value", "role"],
+        assumptions: [
+          "The represented function is differentiable at the fixed anchor."
+        ],
+        lawRefs: [
+          {
+            id: "law.calculus.derivative.difference-quotient-limit",
+            level: "sampled"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "derivative.secant-finite",
+            sourceSelectorRole: "quotient",
+            targetObjectRole: "derivative.limit",
+            targetSelectorRole: "derivative.operator",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "derivative.secant-finite",
+            sourceSelectorRole: "anchor",
+            targetObjectRole: "derivative.limit",
+            targetSelectorRole: "anchor",
+            preserves: ["identity", "role"]
           }
         ]
       }),
@@ -2026,6 +2079,15 @@ function createCalculusDerivativeRulesFamily(): KpSymbolicManipulationFamily {
           "The exponent drops into coefficient position while a decremented exponent remains in the superscript region."
       },
       {
+        id: "motif.calculus.derivative.limit-convergence",
+        motifKind: "limit-convergence",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.derivative-limit"
+        ],
+        summary:
+          "A finite secant and its difference quotient continuously approach the tangent and derivative at one fixed anchor."
+      },
+      {
         id: "motif.calculus.derivative.rule-branch",
         motifKind: "rule-branch",
         transformationDefinitionIds: [
@@ -2056,10 +2118,10 @@ function createCalculusDerivativeRulesFamily(): KpSymbolicManipulationFamily {
         availability: "concrete",
         renderTargetKinds: ["graph"],
         transformationDefinitionIds: [
-          "definition.symbolic.calculus.derivative-power-rule"
+          "definition.symbolic.calculus.derivative-limit"
         ],
         summary:
-          "The x-cubed graph sample synchronizes power-rule evaluation with tangent line and local-slope motion."
+          "The x-cubed graph sample synchronizes a KaTeX finite difference quotient with secant-to-tangent convergence."
       }
     ],
     graphEquivalents: [
@@ -2095,7 +2157,7 @@ function createCalculusDerivativeRulesFamily(): KpSymbolicManipulationFamily {
         ],
         sampleAssetIds: ["animation.derivative-rules.tangent-graph"],
         summary:
-          "A shared derivative value can drive a tangent handle, secant-to-tangent limit cue, or local-slope marker without changing the symbolic step."
+          "One shared h parameter drives the finite quotient, moving curve point, secant slope, tangent limit, and exact rewind."
       }
     ],
     generatedProblemHooks: [

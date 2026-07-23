@@ -153,7 +153,7 @@ test("unmigrated graph choreography warns while the graph renderer reports its c
   ));
 });
 
-test("derivative tangent inspection promotes synchronized algebra and graph semantics", () => {
+test("derivative tangent inspection promotes synchronized limit and graph semantics", () => {
   const catalog = createKpAnimationAssets();
   const descriptor = createKpEditorAnimationLibrary().find(
     (candidate) =>
@@ -176,8 +176,8 @@ test("derivative tangent inspection promotes synchronized algebra and graph sema
   });
 
   assert.equal(inspection.status, "ready");
-  assert.match(inspection.choreographyPlanId ?? "", /apply-power-rule/);
-  assert.equal(inspection.designStrategyLabel, "operation-specific · derivative-power");
+  assert.match(inspection.choreographyPlanId ?? "", /converge-difference-quotient/);
+  assert.equal(inspection.designStrategyLabel, "operation-specific · limit-convergence");
   assert.equal(inspection.designIssueLabel, "none");
   assert.match(inspection.capabilityLabel, /^compatible/);
   assert.deepEqual(inspection.warnings, []);

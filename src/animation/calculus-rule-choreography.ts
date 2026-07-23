@@ -16,6 +16,7 @@ import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph
 import type { SelectorCorrespondenceRecord } from "../semantic/correspondence.ts";
 
 export const kpPromotedCalculusRuleTransformTypes = [
+  "convergeDifferenceQuotient",
   "applyDerivativeSumRule",
   "applyDerivativePowerRulesToTerms",
   "applyAntiderivativePowerRule",

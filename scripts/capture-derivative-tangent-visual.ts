@@ -8,11 +8,11 @@ const outputRoot = path.resolve(
   process.env["KP_VISUAL_OUTPUT"] ?? "tmp/codex/derivative-tangent-visual"
 );
 const checkpoints = [
-  { id: "tangent-at-zero", progress: 0 },
-  { id: "tangent-quarter", progress: 0.25 },
-  { id: "tangent-midpoint", progress: 0.5 },
-  { id: "tangent-three-quarters", progress: 0.75 },
-  { id: "tangent-at-two", progress: 1 }
+  { id: "finite-secant", progress: 0 },
+  { id: "convergence-quarter", progress: 0.25 },
+  { id: "convergence-midpoint", progress: 0.5 },
+  { id: "convergence-three-quarters", progress: 0.75 },
+  { id: "tangent-limit", progress: 1 }
 ] as const;
 
 await mkdir(outputRoot, { recursive: true });
@@ -34,9 +34,15 @@ try {
       "[data-kp-editor-animation-player]"
     )?.dataset["kpEditorAnimationHydrated"] === "true"
   );
-  await player.locator("[data-kp-editor-graph-tangent]").waitFor({
+  await player.locator("[data-kp-editor-graph-secant]").waitFor({
     state: "attached"
   });
+  const mathOverlays = player.locator(
+    "[data-kp-editor-graph-function-context] .katex, [data-kp-editor-graph-difference-quotient] .katex, [data-kp-editor-graph-current-sample] .katex, [data-kp-editor-graph-derivative-expression] .katex"
+  );
+  if (await mathOverlays.count() !== 4) {
+    throw new Error("Derivative-tangent exemplar did not render all four math overlays through KaTeX.");
+  }
   const warnings = (await player.locator(
     "[data-kp-editor-gestalt-warnings] li"
   ).allTextContents()).map((warning) => warning.trim()).filter(Boolean);
@@ -84,18 +90,19 @@ try {
     page,
     player,
     scrubber,
-    id: "tangent-rewind-midpoint",
+    id: "convergence-rewind-midpoint",
     progress: 0.5,
     direction: "rewind",
     captures
   });
   const forwardMiddle = captures.find(
-    (candidate) => candidate.id === "tangent-midpoint.png"
+    (candidate) => candidate.id === "convergence-midpoint.png"
   );
   const rewindMiddle = captures.at(-1);
   if (
-    forwardMiddle?.x !== rewindMiddle?.x ||
-    forwardMiddle?.slope !== rewindMiddle?.slope
+    forwardMiddle?.h !== rewindMiddle?.h ||
+    forwardMiddle?.movingX !== rewindMiddle?.movingX ||
+    forwardMiddle?.secantSlope !== rewindMiddle?.secantSlope
   ) {
     throw new Error("Derivative-tangent rewind does not mirror forward state.");
   }
@@ -125,8 +132,9 @@ interface DerivativeTangentCapture {
   readonly id: string;
   readonly progress: number;
   readonly direction: "forward" | "rewind";
-  readonly x: string;
-  readonly slope: string;
+  readonly h: string;
+  readonly movingX: string;
+  readonly secantSlope: string;
 }
 
 async function capture(input: {
@@ -144,17 +152,19 @@ async function capture(input: {
       requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
     )
   );
-  const point = input.player.locator("[data-kp-editor-graph-tangent-point]");
-  const tangent = input.player.locator("[data-kp-editor-graph-tangent]");
+  const point = input.player.locator("[data-kp-editor-graph-secant-point]");
+  const secant = input.player.locator("[data-kp-editor-graph-secant]");
   const id = `${input.id}.png`;
   await input.player.screenshot({ path: path.join(outputRoot, id) });
   input.captures.push({
     id,
     progress: input.progress,
     direction: input.direction,
-    x: await point.getAttribute("data-kp-editor-graph-tangent-x") ?? "missing",
-    slope:
-      await tangent.getAttribute("data-kp-editor-graph-tangent-slope") ??
+    h: await secant.getAttribute("data-kp-editor-graph-secant-h") ?? "missing",
+    movingX:
+      await point.getAttribute("data-kp-editor-graph-secant-x") ?? "missing",
+    secantSlope:
+      await secant.getAttribute("data-kp-editor-graph-secant-slope") ??
       "missing"
   });
 }

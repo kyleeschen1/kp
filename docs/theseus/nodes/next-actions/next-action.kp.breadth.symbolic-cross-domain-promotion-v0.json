@@ -20,6 +20,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-07-23-kp-semantic-animation-workbench-order.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-derivative-secant-tangent-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -178,11 +182,53 @@
       "status": "passed",
       "scope": "s27 visible derivative label plus synchronized tangent and contact point",
       "checkedAt": "2026-07-23T17:29:43.784Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-derivative-tangent-animation.test.ts tests/kp-editor-graph-runtime-adapters.test.ts tests/kp-editor-animation-gestalt-inspector.test.ts tests/equation-motion-plan.test.ts tests/project-dashboard-symbolic-family-catalog.test.ts",
+      "status": "passed",
+      "scope": "Derivative semantic model, shared clock, motif, catalog, and inspector cohort: 62 tests passed.",
+      "checkedAt": "2026-07-23T18:46:40.851Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --grep finite-quotient-and-secant-converge",
+      "status": "passed",
+      "scope": "Chromium verifies continuously synchronized finite quotient and secant-to-tangent convergence.",
+      "checkedAt": "2026-07-23T18:46:41.754Z"
+    },
+    {
+      "command": "npm run visual:derivative-tangent",
+      "status": "passed",
+      "scope": "Six stable captures, four KaTeX overlays, Ready diagnostics, zero warnings, and mirrored rewind values.",
+      "checkedAt": "2026-07-23T18:46:42.528Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, test, and domain TypeScript projects.",
+      "checkedAt": "2026-07-23T18:46:43.319Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full deterministic regression suite: 1,975 tests passed.",
+      "checkedAt": "2026-07-23T18:46:44.083Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Repository typecheck and Vite production build passed.",
+      "checkedAt": "2026-07-23T18:46:44.857Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "Workspace graph valid after s27 evidence: 755 nodes and 10,799 events.",
+      "checkedAt": "2026-07-23T18:47:14.740Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Human approved the functional-wrap exemplar. Slice s26 is promotion-complete with deterministic forward/rewind captures and broad verification. Learner lessons must suppress the editor flat-focus token boxes; a durable lesson-presentation decision records this future integration gate without changing current editor diagnostics."
+    "summary": "Rebuilt s27 as a KaTeX finite quotient and continuously reversible secant-to-tangent convergence. Automated gates pass; the editor exemplar awaits human visual approval before learner projection or reuse."
   },
   "expectedLearning": [
     "Which promoted semantic, scheduling, authoring, renderer, and verification contracts survive capability-opening exemplars across symbolic, calculus, vector, and linear-map domains without combinatorial growth."

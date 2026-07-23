@@ -62,6 +62,8 @@ const operationSpecificTransformTypes = new Set([
   "multiplyMatrices",
   "applyDerivativePowerRule",
   "derivativePowerRule",
+  "convergeDifferenceQuotient",
+  "convergeDerivativeSecant",
   "applyDerivativeSumRule",
   "applyDerivativePowerRulesToTerms",
   "applyAntiderivativePowerRule",

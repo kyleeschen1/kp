@@ -75,6 +75,12 @@ export const defaultEquationTransformVisualMotifRules:
         "The exponent branches into coefficient and predecessor roles after the persistent base reflows."
     },
     {
+      transformationKind: "convergeDifferenceQuotient",
+      descriptor: descriptorForEquationMotif("limit-convergence"),
+      summary:
+        "The finite difference quotient remains legible while its shared parameter converges to the derivative."
+    },
+    {
       transformationKind: "applyDerivativeSumRule",
       descriptor: descriptorForEquationMotif("copy-fan-out"),
       summary:

@@ -141,7 +141,7 @@
     {
       "id": "s27",
       "title": "Promote the derivative and tangent exemplar",
-      "summary": "Human checkpoint not approved: all visible mathematical notation in the derivative/tangent exemplar must use the shared LaTeX/KaTeX rendering path. The review target is the explanatory synchronization between the derivative law and tangent geometry, including forward motion and exact rewind—not merely graph motion or metadata readiness.",
+      "summary": "Derivative finite-quotient/secant-to-tangent exemplar rebuilt and verified; HUMAN_CHECKPOINT ready at the Animation Library route.",
       "status": "in-progress"
     },
     {

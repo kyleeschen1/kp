@@ -6,7 +6,7 @@ import {
   sampleKpAnimationRuntimeFrame,
   type KpAnimationRuntimeFrame
 } from "./runtime-sampler.ts";
-import { tangentStateAt } from "./derivative-tangent-adapter.ts";
+import { secantTangentStateAt } from "./derivative-tangent-adapter.ts";
 import type { KpLawCheckResult, KpLawFailure } from "../semantic/asset-laws.ts";
 
 export interface DerivativeTangentRuntimeFrame {
@@ -17,14 +17,30 @@ export interface DerivativeTangentRuntimeFrame {
   readonly renderTargetId: string;
   readonly graphId: string;
   readonly curveId: string;
+  readonly sourceExpressionId: string;
   readonly derivativeExpressionId: string;
-  readonly derivativeDisplayText: string;
+  readonly contextLatex: string;
+  readonly differenceQuotientLatex: string;
+  readonly derivativeDisplayLatex: string;
+  readonly convergenceLatex: string;
+  readonly currentSampleLatex: string;
   readonly progress: number;
   readonly graphProgress: number;
-  readonly x: number;
-  readonly y: number;
-  readonly slope: number;
-  readonly intercept: number;
+  readonly anchorX: number;
+  readonly anchorY: number;
+  readonly h: number;
+  readonly movingX: number;
+  readonly movingY: number;
+  readonly secantSlope: number;
+  readonly secantIntercept: number;
+  readonly tangentSlope: number;
+  readonly tangentIntercept: number;
+  readonly movingPointOpacity: number;
+  readonly derivativeRevealProgress: number;
+  readonly secantSegment: readonly [
+    readonly [number, number],
+    readonly [number, number]
+  ];
   readonly tangentSegment: readonly [
     readonly [number, number],
     readonly [number, number]
@@ -54,9 +70,22 @@ export function sampleDerivativeTangentRuntimeFrame(input: {
     target.metadata?.["derivativeExpressionId"],
     "derivativeExpressionId"
   );
-  const derivativeDisplayText = metadataString(
-    target.metadata?.["derivativeDisplayText"],
-    "derivativeDisplayText"
+  const sourceExpressionId = metadataString(
+    target.metadata?.["sourceExpressionId"],
+    "sourceExpressionId"
+  );
+  const contextLatex = metadataString(target.metadata?.["contextLatex"], "contextLatex");
+  const differenceQuotientLatex = metadataString(
+    target.metadata?.["differenceQuotientLatex"],
+    "differenceQuotientLatex"
+  );
+  const derivativeDisplayLatex = metadataString(
+    target.metadata?.["derivativeDisplayLatex"],
+    "derivativeDisplayLatex"
+  );
+  const convergenceLatex = metadataString(
+    target.metadata?.["convergenceLatex"],
+    "convergenceLatex"
   );
   const sourceState = tangentStateValue(
     input.animation,
@@ -69,11 +98,13 @@ export function sampleDerivativeTangentRuntimeFrame(input: {
   const graphProgress = input.runtimeFrame.clock.direction === "rewind"
     ? 1 - input.runtimeFrame.clock.progress
     : input.runtimeFrame.clock.progress;
-  const x = sourceState.x + (targetState.x - sourceState.x) * graphProgress;
-  const state = tangentStateAt(x);
-  const tangentHalfWidth = 0.75;
-  const leftX = x - tangentHalfWidth;
-  const rightX = x + tangentHalfWidth;
+  const h = sourceState.h + (targetState.h - sourceState.h) * graphProgress;
+  const state = secantTangentStateAt(sourceState.anchorX, h);
+  const lineHalfWidth = 1.25;
+  const leftX = state.anchorX - lineHalfWidth;
+  const rightX = state.anchorX + lineHalfWidth;
+  const movingPointOpacity = Math.min(1, Math.max(0, h / sourceState.h));
+  const derivativeRevealProgress = smoothstep(0.55, 1, graphProgress);
 
   return {
     id: `derivative-tangent-frame.${input.runtimeFrame.id}.${target.id}`,
@@ -83,14 +114,26 @@ export function sampleDerivativeTangentRuntimeFrame(input: {
     renderTargetId: target.id,
     graphId,
     curveId,
+    sourceExpressionId,
     derivativeExpressionId,
-    derivativeDisplayText,
+    contextLatex,
+    differenceQuotientLatex,
+    derivativeDisplayLatex,
+    convergenceLatex,
+    currentSampleLatex:
+      `h=${formatLatexNumber(h)},\\quad m_{\\mathrm{sec}}=${formatLatexNumber(state.secantSlope)}`,
     progress: input.runtimeFrame.clock.progress,
     graphProgress,
     ...state,
+    movingPointOpacity,
+    derivativeRevealProgress,
+    secantSegment: [
+      [leftX, state.secantSlope * leftX + state.secantIntercept],
+      [rightX, state.secantSlope * rightX + state.secantIntercept]
+    ],
     tangentSegment: [
-      [leftX, state.slope * leftX + state.intercept],
-      [rightX, state.slope * rightX + state.intercept]
+      [leftX, state.tangentSlope * leftX + state.tangentIntercept],
+      [rightX, state.tangentSlope * rightX + state.tangentIntercept]
     ],
     activeTransformationIds: [...input.runtimeFrame.activeTransformationIds]
   };
@@ -109,29 +152,57 @@ export function checkDerivativeTangentRuntimeLaw(input: {
     const forward = sampleAt(input.animation, "forward", progress);
     const rewind = sampleAt(input.animation, "rewind", 1 - progress);
 
-    if (!nearlyEqual(forward.slope, 3 * forward.x ** 2, epsilon)) {
-      failures.push({
-        path: `samples[${index}].slope`,
-        message: `Tangent slope ${forward.slope} does not equal 3x^2 at x=${forward.x}.`
-      });
-    }
+    const expectedFiniteSlope =
+      forward.h === 0
+        ? forward.tangentSlope
+        : (forward.movingY - forward.anchorY) / forward.h;
 
-    if (!nearlyEqual(forward.y, forward.slope * forward.x + forward.intercept, epsilon)) {
+    if (!nearlyEqual(forward.secantSlope, expectedFiniteSlope, epsilon)) {
       failures.push({
-        path: `samples[${index}].point`,
-        message: `Tangent line does not pass through the sampled curve point at x=${forward.x}.`
+        path: `samples[${index}].secantSlope`,
+        message:
+          `Secant slope ${forward.secantSlope} does not equal the finite difference quotient ${expectedFiniteSlope}.`
       });
     }
 
     if (
-      !nearlyEqual(forward.x, rewind.x, epsilon) ||
-      !nearlyEqual(forward.y, rewind.y, epsilon) ||
-      !nearlyEqual(forward.slope, rewind.slope, epsilon) ||
-      !nearlyEqual(forward.intercept, rewind.intercept, epsilon)
+      !nearlyEqual(
+        forward.anchorY,
+        forward.secantSlope * forward.anchorX + forward.secantIntercept,
+        epsilon
+      ) ||
+      !nearlyEqual(
+        forward.movingY,
+        forward.secantSlope * forward.movingX + forward.secantIntercept,
+        epsilon
+      )
+    ) {
+      failures.push({
+        path: `samples[${index}].secant`,
+        message: "Secant line does not pass through both sampled curve points."
+      });
+    }
+
+    if (
+      !nearlyEqual(forward.h, rewind.h, epsilon) ||
+      !nearlyEqual(forward.movingX, rewind.movingX, epsilon) ||
+      !nearlyEqual(forward.movingY, rewind.movingY, epsilon) ||
+      !nearlyEqual(forward.secantSlope, rewind.secantSlope, epsilon) ||
+      !nearlyEqual(forward.secantIntercept, rewind.secantIntercept, epsilon)
     ) {
       failures.push({
         path: `samples[${index}].rewind`,
         message: `Mirrored rewind tangent does not match forward progress ${progress}.`
+      });
+    }
+
+    if (
+      progress === 1 &&
+      !nearlyEqual(forward.secantSlope, forward.tangentSlope, epsilon)
+    ) {
+      failures.push({
+        path: `samples[${index}].limit`,
+        message: "The h=0 secant limit does not settle onto the tangent slope."
       });
     }
   });
@@ -163,28 +234,43 @@ function tangentStateValue(animation: KpAnimationAsset, objectId: string) {
     (candidate) => candidate.id === objectId
   );
   const value = object?.value as {
-    readonly x?: unknown;
-    readonly y?: unknown;
-    readonly slope?: unknown;
-    readonly intercept?: unknown;
+    readonly anchorX?: unknown;
+    readonly anchorY?: unknown;
+    readonly h?: unknown;
+    readonly movingX?: unknown;
+    readonly movingY?: unknown;
+    readonly secantSlope?: unknown;
+    readonly secantIntercept?: unknown;
+    readonly tangentSlope?: unknown;
+    readonly tangentIntercept?: unknown;
   } | undefined;
 
   if (
-    typeof value?.x !== "number" ||
-    typeof value.y !== "number" ||
-    typeof value.slope !== "number" ||
-    typeof value.intercept !== "number"
+    typeof value?.anchorX !== "number" ||
+    typeof value.anchorY !== "number" ||
+    typeof value.h !== "number" ||
+    typeof value.movingX !== "number" ||
+    typeof value.movingY !== "number" ||
+    typeof value.secantSlope !== "number" ||
+    typeof value.secantIntercept !== "number" ||
+    typeof value.tangentSlope !== "number" ||
+    typeof value.tangentIntercept !== "number"
   ) {
     throw new Error(
-      `Animation ${animation.id} tangent state ${objectId} must be numeric.`
+      `Animation ${animation.id} secant-tangent state ${objectId} must be numeric.`
     );
   }
 
   return value as {
-    readonly x: number;
-    readonly y: number;
-    readonly slope: number;
-    readonly intercept: number;
+    readonly anchorX: number;
+    readonly anchorY: number;
+    readonly h: number;
+    readonly movingX: number;
+    readonly movingY: number;
+    readonly secantSlope: number;
+    readonly secantIntercept: number;
+    readonly tangentSlope: number;
+    readonly tangentIntercept: number;
   };
 }
 
@@ -198,4 +284,14 @@ function metadataString(value: unknown, key: string): string {
 
 function nearlyEqual(left: number, right: number, epsilon: number): boolean {
   return Math.abs(left - right) <= epsilon;
+}
+
+function formatLatexNumber(value: number): string {
+  const rounded = Number(value.toFixed(2));
+  return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(2);
+}
+
+function smoothstep(start: number, end: number, value: number): number {
+  const t = Math.min(1, Math.max(0, (value - start) / (end - start)));
+  return t * t * (3 - 2 * t);
 }

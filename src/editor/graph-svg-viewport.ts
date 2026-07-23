@@ -4,6 +4,7 @@ import { sampleLinearMapVectorGraphRuntimeFrame } from "../animation/graph-runti
 import { sampleDerivativeTangentRuntimeFrame } from "../animation/derivative-tangent-runtime-frame.ts";
 import { sampleIntegralAreaSweepRuntimeFrame } from "../animation/integral-area-sweep-runtime-frame.ts";
 import { sampleDotProjectionRuntimeFrame } from "../animation/dot-projection-runtime-frame.ts";
+import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import {
   kpEditorAnimationSurfaceAdapterRegistry,
   type KpEditorAnimationSurfaceAdapter
@@ -108,9 +109,17 @@ function renderRuntimeContent(
         const x = -2 + index / 12;
         return point([x, x ** 3]);
       });
+      const secant = frame.secantSegment.map((coordinates) => point(coordinates));
       const tangent = frame.tangentSegment.map((coordinates) => point(coordinates));
-      const current = point([frame.x, frame.y]);
-      return `<polyline class="editor-graph-stage__curve" points="${curve.map((p) => p.join(",")).join(" ")}" /><text class="editor-graph-stage__label" data-kp-editor-graph-derivative-expression x="36" y="32">${escapeHtml(frame.derivativeDisplayText)}</text><line class="editor-graph-stage__tangent" data-kp-editor-graph-tangent data-kp-editor-graph-tangent-slope="${frame.slope}" x1="${tangent[0]![0]}" y1="${tangent[0]![1]}" x2="${tangent[1]![0]}" y2="${tangent[1]![1]}" /><circle class="editor-graph-stage__point" data-kp-editor-graph-tangent-point data-kp-editor-graph-tangent-x="${frame.x}" cx="${current[0]}" cy="${current[1]}" r="5" />${renderAnnotation(`x = ${formatNumber(frame.x)} · slope = ${formatNumber(frame.slope)}`, model)}`;
+      const anchor = point([frame.anchorX, frame.anchorY]);
+      const moving = point([frame.movingX, frame.movingY]);
+      return `<polyline class="editor-graph-stage__curve" points="${curve.map((p) => p.join(",")).join(" ")}" />
+        <line class="editor-graph-stage__tangent-target" data-kp-editor-graph-tangent-target data-kp-editor-graph-tangent-slope="${frame.tangentSlope}" x1="${tangent[0]![0]}" y1="${tangent[0]![1]}" x2="${tangent[1]![0]}" y2="${tangent[1]![1]}" style="opacity:${0.12 + frame.derivativeRevealProgress * 0.48}" />
+        <line class="editor-graph-stage__secant" data-kp-editor-graph-secant data-kp-editor-graph-tangent data-kp-editor-graph-secant-h="${frame.h}" data-kp-editor-graph-secant-slope="${frame.secantSlope}" data-kp-editor-graph-tangent-slope="${frame.secantSlope}" x1="${secant[0]![0]}" y1="${secant[0]![1]}" x2="${secant[1]![0]}" y2="${secant[1]![1]}" />
+        <line class="editor-graph-stage__secant-span" data-kp-editor-graph-secant-span x1="${anchor[0]}" y1="${anchor[1]}" x2="${moving[0]}" y2="${moving[1]}" style="opacity:${frame.movingPointOpacity}" />
+        <circle class="editor-graph-stage__point editor-graph-stage__point--anchor" data-kp-editor-graph-tangent-point data-kp-editor-graph-anchor-point data-kp-editor-graph-tangent-x="${frame.anchorX}" cx="${anchor[0]}" cy="${anchor[1]}" r="5" />
+        <circle class="editor-graph-stage__point editor-graph-stage__point--secant" data-kp-editor-graph-secant-point data-kp-editor-graph-secant-x="${frame.movingX}" cx="${moving[0]}" cy="${moving[1]}" r="5" style="opacity:${frame.movingPointOpacity}" />
+        ${renderDerivativeMath(frame, model)}`;
     }
     case "animation.integral-ftc.area-sweep": {
       const frame = sampleIntegralAreaSweepRuntimeFrame({ animation, runtimeFrame: state.runtimeFrame });
@@ -129,6 +138,24 @@ function renderRuntimeContent(
     default:
       return "";
   }
+}
+
+function renderDerivativeMath(
+  frame: ReturnType<typeof sampleDerivativeTangentRuntimeFrame>,
+  model: KpEditorGraphSvgViewportModel
+): string {
+  return `<foreignObject class="editor-graph-stage__math-foreign-object" x="18" y="12" width="356" height="116">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="editor-graph-stage__math-panel">
+        <div data-kp-editor-graph-function-context data-kp-latex="${escapeHtml(frame.contextLatex)}">${renderLatexToHtml(frame.contextLatex, { displayMode: false })}</div>
+        <div data-kp-editor-graph-difference-quotient data-kp-latex="${escapeHtml(frame.differenceQuotientLatex)}">${renderLatexToHtml(frame.differenceQuotientLatex, { displayMode: false })}</div>
+        <div data-kp-editor-graph-current-sample data-kp-latex="${escapeHtml(frame.currentSampleLatex)}">${renderLatexToHtml(frame.currentSampleLatex, { displayMode: false })}</div>
+      </div>
+    </foreignObject>
+    <foreignObject class="editor-graph-stage__math-foreign-object" x="18" y="${model.height - 58}" width="${model.width - 36}" height="48">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="editor-graph-stage__math-limit" data-kp-editor-graph-derivative-expression data-kp-latex="${escapeHtml(frame.convergenceLatex)}" style="opacity:${0.35 + 0.65 * frame.derivativeRevealProgress}">
+        ${renderLatexToHtml(frame.convergenceLatex, { displayMode: false })}
+      </div>
+    </foreignObject>`;
 }
 
 function renderAnnotation(value: string, model: KpEditorGraphSvgViewportModel): string {
