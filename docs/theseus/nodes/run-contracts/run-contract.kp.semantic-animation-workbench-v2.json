@@ -68,7 +68,8 @@
     {
       "id": "s02",
       "title": "Freeze the authority map",
-      "status": "planned"
+      "summary": "Added a typed read-only authority map: catalog owns canonical identity and playability, registries own representations, Theseus owns execution and priority, promotion evidence owns maturity and approval, and review owns current and historical feedback.",
+      "status": "complete"
     },
     {
       "id": "s03",

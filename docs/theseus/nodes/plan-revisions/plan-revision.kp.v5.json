@@ -39,6 +39,20 @@
     "next-action.refill.experiment.plan-revision.kp.v4.primitive-amortization",
     "next-action.refill.experiment.plan-revision.kp.v4.semantic-llm-boundary"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-authority.test.ts",
+      "status": "passed",
+      "scope": "s02 single-authority ownership, overlap rejection, and missing-authority diagnostics: 3 tests passed.",
+      "checkedAt": "2026-07-23T19:52:20.701Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02 Workbench authority contract and repository TypeScript boundaries.",
+      "checkedAt": "2026-07-23T19:52:30.537Z"
+    }
+  ],
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v1",
     "revision": 5,
