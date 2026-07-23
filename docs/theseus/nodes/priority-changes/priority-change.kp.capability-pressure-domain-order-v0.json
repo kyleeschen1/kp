@@ -1,0 +1,77 @@
+{
+  "id": "priority-change.kp.capability-pressure-domain-order-v0",
+  "kind": "priority-change",
+  "title": "Capability-pressure domain order",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The user approved architectural-pressure ordering: derivative secant-to-tangent, quadratic solution branching, integral accumulation, vector projection, matrix linear-map coordination, exact arithmetic, pre-calculus closure, geometry and data, then later cross-domain breadth. The committed project review owns the exact within-wave order and acceptance criteria.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The user approved architectural-pressure ordering: derivative secant-to-tangent, quadratic solution branching, integral accumulation, vector projection, matrix linear-map coordination, exact arithmetic, pre-calculus closure, geometry and data, then later cross-domain breadth. The committed project review owns the exact within-wave order and acceptance criteria.",
+      "occurredAt": "2026-07-23T18:11:23.490Z",
+      "summary": "Priority change disposition: checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-23-kp-capability-pressure-and-arithmetic-expansion.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-kp-capability-pressure-domain-order-next-step-review.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v5"
+    ],
+    "preferred": [
+      "run-contract.kp.product-roadmap-v5-continuation-v2"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5",
+    "run-contract.kp.product-roadmap-v5-continuation-v2"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v5",
+    "rationale": "The user approved architectural-pressure ordering: derivative secant-to-tangent, quadratic solution branching, integral accumulation, vector projection, matrix linear-map coordination, exact arithmetic, pre-calculus closure, geometry and data, then later cross-domain breadth. The committed project review owns the exact within-wave order and acceptance criteria.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.product-roadmap-v5-continuation-v2"
+    ],
+    "changes": [
+      {
+        "subject": "derivative-secant-to-tangent",
+        "to": "now"
+      },
+      {
+        "subject": "quadratic-solution-branching",
+        "to": "next"
+      },
+      {
+        "subject": "integral-vector-matrix",
+        "to": "current-breadth-after-quadratic"
+      },
+      {
+        "subject": "exact-arithmetic",
+        "to": "next-major-lane"
+      },
+      {
+        "subject": "precalculus-symbolic-closure",
+        "to": "after-arithmetic"
+      },
+      {
+        "subject": "geometry-measurement-probability-data",
+        "to": "after-precalculus"
+      },
+      {
+        "subject": "programming-economics-physics",
+        "to": "later"
+      }
+    ],
+    "effectiveAt": "2026-07-23T18:11:23.490Z",
+    "requestedBy": "user"
+  }
+}
