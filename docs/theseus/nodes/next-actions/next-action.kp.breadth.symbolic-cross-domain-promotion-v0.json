@@ -86,11 +86,17 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-07-23T15:28:16.652Z"
+    },
+    {
+      "command": "npm test; npm run build; npm run test:browser:reader-conformance; npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-23T16:03:49.783Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Replaced the rejected radical point-particle path with an exact-native KaTeX clipped-SVG target, solid signed-distance WebGL morph, conventional named motion profile, and deterministic native handoff. Automated and visual evidence passed; s25 remains at its required human exemplar checkpoint before promotion."
+    "summary": "Implemented the reviewed square-root radical endpoint, continuous arc solid morph, and direction-neutral WebGL ownership. Full KaTeX overbar, exact rewind, broad gates, and stable forward/rewind visual captures pass; awaiting human exemplar review before promotion or family generalization. Parked negative rational exponent reciprocal-radical composition in project memory."
   },
   "expectedLearning": [
     "Which promoted semantic, scheduling, authoring, renderer, and verification contracts survive capability-opening exemplars across symbolic, calculus, vector, and linear-map domains without combinatorial growth."

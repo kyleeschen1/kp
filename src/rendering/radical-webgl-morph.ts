@@ -21,11 +21,12 @@ export interface KpRadicalWebglMorphSyncResult {
 }
 
 interface KpRadicalWebglMorphState {
-  readonly sourceElement: HTMLElement;
-  readonly targetElement: HTMLElement;
+  sourceElement: HTMLElement;
+  targetElement: HTMLElement;
   readonly canvas: HTMLCanvasElement;
   readonly width: number;
   readonly height: number;
+  readonly materialIdentityKey: string;
   renderer?: KatexArtifactSolidMaskMorphRenderer | undefined;
   status: "initializing" | "ready" | "fallback";
   progress: number;
@@ -53,6 +54,27 @@ export function syncKpRadicalWebglMorph(input: {
 
   const stageRect = input.stage.getBoundingClientRect();
   let state = morphStates.get(input.stage);
+  const endpointsChanged = state !== undefined && (
+    state.sourceElement !== input.sourceElement ||
+    state.targetElement !== input.targetElement
+  );
+  if (
+    state !== undefined &&
+    endpointsChanged &&
+    state.status === "ready" &&
+    state.materialIdentityKey ===
+      (input.stage.dataset["kpEditorEquationMaterialIdentityKey"] ?? "")
+  ) {
+    // The equation surface already invalidates this identity for authored or
+    // structural changes. A direction-only role swap reuses the same atlas.
+    state.sourceElement = input.sourceElement;
+    state.targetElement = input.targetElement;
+    state.canvas.dataset["kpEditorRadicalWebglRebindCount"] = String(
+      Number(
+        state.canvas.dataset["kpEditorRadicalWebglRebindCount"] ?? 0
+      ) + 1
+    );
+  }
   if (
     state !== undefined &&
     (
@@ -132,6 +154,8 @@ function createMorphState(
     canvas,
     width: rect.width,
     height: rect.height,
+    materialIdentityKey:
+      stage.dataset["kpEditorEquationMaterialIdentityKey"] ?? "",
     status: "initializing",
     progress: 0,
     opacity: 0
@@ -191,6 +215,8 @@ async function initializeMorphState(input: {
       edgeSoftnessPx: profile.solidMask.edgeSoftnessPx,
       boundsPaddingPx: profile.solidMask.boundsPaddingPx,
       sourceTravelFraction: profile.solidMask.sourceTravelFraction,
+      sourceArcHeightPx: profile.solidMask.sourceArcHeightPx,
+      shapeLeadFraction: profile.solidMask.shapeLeadFraction,
       bridgeExpansionPx: profile.solidMask.bridgeExpansionPx,
       endpointBlendFraction: profile.solidMask.endpointBlendFraction,
       color: parseComputedColor(input.state.targetElement)

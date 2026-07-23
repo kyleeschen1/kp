@@ -23,6 +23,7 @@ try {
     animationId: string;
     progress: number;
     explanationProfile: string;
+    direction: "forward" | "rewind";
   }[] = [];
   const diagnostics: {
     animationId: string;
@@ -74,6 +75,7 @@ try {
     explanationProfile: "explain",
     checkpoints: [
       { id: "radical-solid-source", progress: 0.12 },
+      { id: "radical-solid-departing", progress: 0.25 },
       { id: "radical-solid-morph", progress: 0.5 },
       { id: "radical-solid-forming", progress: 0.75 },
       { id: "radical-solid-complete", progress: 0.82 },
@@ -83,10 +85,11 @@ try {
     captures,
     diagnostics
   });
+  await captureRadicalRewind({ page, player, captures });
   await writeFile(
     path.join(outputRoot, "manifest.json"),
     `${JSON.stringify({
-      schemaVersion: "kp.exponent-radical-visual-review.v2",
+      schemaVersion: "kp.exponent-radical-visual-review.v3",
       baseUrl,
       viewport,
       captures,
@@ -119,6 +122,7 @@ async function captureAnimation(input: {
     animationId: string;
     progress: number;
     explanationProfile: string;
+    direction: "forward" | "rewind";
   }[];
   readonly diagnostics: {
     animationId: string;
@@ -211,7 +215,60 @@ async function captureAnimation(input: {
       id: `${checkpoint.id}.png`,
       animationId: input.animationId,
       progress: checkpoint.progress,
-      explanationProfile: input.explanationProfile
+      explanationProfile: input.explanationProfile,
+      direction: "forward"
+    });
+  }
+}
+
+async function captureRadicalRewind(input: {
+  readonly page: Page;
+  readonly player: Locator;
+  readonly captures: {
+    id: string;
+    animationId: string;
+    progress: number;
+    explanationProfile: string;
+    direction: "forward" | "rewind";
+  }[];
+}): Promise<void> {
+  const stage = input.player.locator("[data-kp-editor-equation-stage]");
+  const canvas = stage.locator("[data-kp-editor-radical-webgl-morph]");
+  await canvas.evaluate((element) => {
+    element.dataset["kpVisualRewindProbe"] = "prepared";
+  });
+  await input.player.getByRole("button", { name: "Rewind" }).click();
+  if (
+    await canvas.getAttribute("data-kp-visual-rewind-probe") !== "prepared" ||
+    await stage.getAttribute("data-kp-editor-radical-morph-ready") !== "true"
+  ) {
+    throw new Error(
+      "Radical rewind replaced or unprepared the solid morph renderer."
+    );
+  }
+
+  const scrubber = input.player.locator('[data-action="seek-editor-animation"]');
+  for (const checkpoint of [
+    { id: "radical-rewind-settled", progress: 0.04 },
+    { id: "radical-rewind-forming", progress: 0.25 },
+    { id: "radical-rewind-morph", progress: 0.5 },
+    { id: "radical-rewind-source", progress: 0.75 }
+  ] as const) {
+    await scrubber.fill(String(checkpoint.progress));
+    await input.page.evaluate(() =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+      )
+    );
+    await input.player.screenshot({
+      path: path.join(outputRoot, `${checkpoint.id}.png`)
+    });
+    input.captures.push({
+      id: `${checkpoint.id}.png`,
+      animationId: "animation.generated.radical.square-root-as-power",
+      progress: checkpoint.progress,
+      explanationProfile: "explain",
+      direction: "rewind"
     });
   }
 }

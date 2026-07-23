@@ -234,6 +234,7 @@ const derivativePowerChoreographyCache =
 export interface KpEditorEquationStageFrame {
   readonly stageIdentityKey: string;
   readonly contentKey: string;
+  readonly materialIdentityKey: string;
   readonly projection: KpEditorEquationRuntimeFrameProjection;
   readonly globalProgress: number;
   readonly semanticProgress: number;
@@ -350,10 +351,14 @@ export function createKpEditorEquationStageFrame(input: {
   const contentKey = `${projection.direction}:${projection.transitions
     .map((transition) => transition.id)
     .join(":")}:authoring-${input.authoringRevision ?? 0}`;
+  const materialIdentityKey = `${projection.animationId}:${projection.transitions
+    .map((transition) => transition.id)
+    .join(":")}:authoring-${input.authoringRevision ?? 0}`;
 
   return {
     stageIdentityKey,
     contentKey,
+    materialIdentityKey,
     projection,
     globalProgress: input.state.progress,
     semanticProgress,
@@ -425,7 +430,12 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       stage = slot.querySelector<HTMLElement>("[data-kp-editor-equation-stage]");
       contentChanged = true;
     } else if (stage.dataset["kpEditorEquationContentKey"] !== frame.contentKey) {
-      disposeKpRadicalWebglMorph(stage);
+      if (
+        stage.dataset["kpEditorEquationMaterialIdentityKey"] !==
+          frame.materialIdentityKey
+      ) {
+        disposeKpRadicalWebglMorph(stage);
+      }
       invalidateKpEditorEquationStageHotPathCache(stage, "content");
       replaceStageContent(stage, frame);
       contentChanged = true;
@@ -2386,7 +2396,7 @@ function findMotionTokenByEntityId(
 
 function renderStage(frame: KpEditorEquationStageFrame): string {
   return `
-    <div class="editor-equation-stage" data-kp-editor-equation-stage data-kp-editor-equation-stage-identity-key="${escapeHtml(frame.stageIdentityKey)}" data-kp-editor-equation-content-key="${escapeHtml(frame.contentKey)}" data-kp-editor-equation-phase-id="${escapeHtml(frame.projection.phaseId)}" data-kp-editor-equation-global-progress="${frame.globalProgress}" data-kp-editor-equation-semantic-progress="${frame.semanticProgress}" data-kp-editor-equation-local-progress="${frame.localProgress}">
+    <div class="editor-equation-stage" data-kp-editor-equation-stage data-kp-editor-equation-stage-identity-key="${escapeHtml(frame.stageIdentityKey)}" data-kp-editor-equation-content-key="${escapeHtml(frame.contentKey)}" data-kp-editor-equation-material-identity-key="${escapeHtml(frame.materialIdentityKey)}" data-kp-editor-equation-phase-id="${escapeHtml(frame.projection.phaseId)}" data-kp-editor-equation-global-progress="${frame.globalProgress}" data-kp-editor-equation-semantic-progress="${frame.semanticProgress}" data-kp-editor-equation-local-progress="${frame.localProgress}">
       <div class="editor-equation-stage__content" data-kp-editor-equation-content>
         ${renderStageContent(frame)}
       </div>
@@ -2439,6 +2449,8 @@ function replaceStageContent(
   }
   content.replaceChildren(...template.content.childNodes);
   stage.dataset["kpEditorEquationContentKey"] = frame.contentKey;
+  stage.dataset["kpEditorEquationMaterialIdentityKey"] =
+    frame.materialIdentityKey;
 }
 
 function renderEquationObjects(

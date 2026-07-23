@@ -17,6 +17,8 @@ export interface KpRadicalMorphMotionProfile {
     readonly edgeSoftnessPx: number;
     readonly boundsPaddingPx: number;
     readonly sourceTravelFraction: number;
+    readonly sourceArcHeightPx: number;
+    readonly shapeLeadFraction: number;
     readonly bridgeExpansionPx: number;
     readonly endpointBlendFraction: number;
   };
@@ -26,7 +28,7 @@ export const kpRadicalConventionalMorphProfile: KpRadicalMorphMotionProfile =
   Object.freeze({
     id: "radical-morph.conventional-solid-mask.v1",
     morph: Object.freeze({
-      start: 0.1,
+      start: 0.06,
       end: 0.82,
       easing: "ease-in-out"
     }),
@@ -39,8 +41,10 @@ export const kpRadicalConventionalMorphProfile: KpRadicalMorphMotionProfile =
       maximumDistancePx: 24,
       edgeSoftnessPx: 0.7,
       boundsPaddingPx: 4,
-      sourceTravelFraction: 0.82,
-      bridgeExpansionPx: 1.2,
+      sourceTravelFraction: 1,
+      sourceArcHeightPx: 6,
+      shapeLeadFraction: 0.12,
+      bridgeExpansionPx: 0.55,
       endpointBlendFraction: 0.08
     })
   });

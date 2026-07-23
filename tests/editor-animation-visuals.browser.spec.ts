@@ -1357,6 +1357,27 @@ test("exponent and radical family animations render their semantic rewrite motif
   await expect(player.locator(
     "[data-kp-editor-equation-target] [data-kp-radical-structural-fragment][data-kp-motion-id]"
   )).toHaveCount(2);
+  const completeRadicalGeometry = await player.locator(
+    "[data-kp-editor-equation-target]"
+  ).evaluate((target) => {
+    const native = target.querySelector<HTMLElement>(
+      '[data-kp-radical-native-visual="true"]'
+    );
+    const radicand = target.querySelector<HTMLElement>(
+      '[data-kp-motion-id*=".radical.radicand"]'
+    );
+    if (native === null || radicand === null) {
+      throw new Error("Radical endpoint geometry is unavailable.");
+    }
+    const nativeRect = native.getBoundingClientRect();
+    const radicandRect = radicand.getBoundingClientRect();
+    return {
+      nativeRight: nativeRect.right,
+      radicandRight: radicandRect.right
+    };
+  });
+  expect(completeRadicalGeometry.nativeRight)
+    .toBeGreaterThanOrEqual(completeRadicalGeometry.radicandRight);
   await scrubber.fill("0.88");
   await expect(player.locator("[data-kp-editor-equation-stage]"))
     .toHaveAttribute(
@@ -1638,9 +1659,32 @@ test("radical material succession is identical under semantic rewind", async ({
     "data-kp-editor-radical-morph-ready",
     "true"
   );
+  await scrubber.fill("1");
+  await morphOwner.evaluate((element) => {
+    element.dataset["kpRadicalEndpointRewindProbe"] = "same-morph";
+  });
+  await player.getByRole("button", { name: "Rewind" }).click();
+  await expect(morphOwner).toHaveAttribute(
+    "data-kp-radical-endpoint-rewind-probe",
+    "same-morph"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-radical-morph-ready",
+    "true"
+  );
+  await scrubber.fill("0.02");
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-semantic-progress",
+    "0.98"
+  );
+
+  await player.getByRole("button", { name: "Reset" }).click();
   await scrubber.fill("0.65");
   await baseOwner.evaluate((element) => {
     element.dataset["kpRadicalRewindProbe"] = "base";
+  });
+  await morphOwner.evaluate((element) => {
+    element.dataset["kpRadicalMidpointRewindProbe"] = "same-morph";
   });
   const forwardRects = await Promise.all([baseOwner, morphOwner].map((locator) =>
     locator.evaluate((element) => {
@@ -1662,6 +1706,10 @@ test("radical material succession is identical under semantic rewind", async ({
   await expect(stage).toHaveAttribute(
     "data-kp-editor-radical-morph-ready",
     "true"
+  );
+  await expect(morphOwner).toHaveAttribute(
+    "data-kp-radical-midpoint-rewind-probe",
+    "same-morph"
   );
   await expect(morphOwner).toHaveAttribute(
     "data-kp-editor-radical-webgl-target",

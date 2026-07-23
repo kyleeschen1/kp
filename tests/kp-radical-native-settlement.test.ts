@@ -70,7 +70,7 @@ test("a complete WebGL target can hand off to exact native ink earlier", () => {
   });
 
   assert.equal(frame.phase, "native-handoff");
-  assert.equal(frame.nativeOpacity, 0.5);
+  assert.ok(Math.abs(frame.nativeOpacity - 0.5) < 1e-12);
   assert.ok(Math.abs(frame.fragmentOpacity + frame.nativeOpacity - 1) < 1e-12);
 });
 

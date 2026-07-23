@@ -151,7 +151,9 @@ function ensureRadicalFragmentElements(object: HTMLElement): {
   stack.style.display = "inline-block";
   stack.style.position = "relative";
   stack.style.minWidth = hideTail.style.minWidth;
-  stack.style.width = hideTail.style.minWidth;
+  // KaTeX stretches this SVG to the complete radical box. Preserve that
+  // percentage contract so the wrapper does not clip the overbar to the hook.
+  stack.style.width = hideTail.style.width || "100%";
   stack.style.height = hideTail.style.height;
   stack.style.overflow = "visible";
 

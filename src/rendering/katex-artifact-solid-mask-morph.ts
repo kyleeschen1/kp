@@ -22,6 +22,8 @@ export interface KatexArtifactSolidMaskMorphPlan {
   readonly edgeSoftnessPx: number;
   readonly boundsPaddingPx: number;
   readonly sourceTravelFraction: number;
+  readonly sourceArcHeightPx: number;
+  readonly shapeLeadFraction: number;
   readonly bridgeExpansionPx: number;
   readonly endpointBlendFraction: number;
   readonly color: {
@@ -47,6 +49,9 @@ interface SolidMaskProgramInfo {
   readonly maximumDistanceLocation: WebGLUniformLocation;
   readonly edgeSoftnessLocation: WebGLUniformLocation;
   readonly sourceShiftLocation: WebGLUniformLocation;
+  readonly sourceArcOffsetLocation: WebGLUniformLocation;
+  readonly arcProgressLocation: WebGLUniformLocation;
+  readonly shapeProgressLocation: WebGLUniformLocation;
   readonly bridgeExpansionLocation: WebGLUniformLocation;
   readonly endpointBlendLocation: WebGLUniformLocation;
   readonly colorLocation: WebGLUniformLocation;
@@ -67,6 +72,32 @@ export function sampleKatexArtifactSolidMaskMorphProgress(
     (clampedProgress - plan.start) / (plan.end - plan.start)
   );
   return easedProgress(plan.easing, localProgress);
+}
+
+export function sampleKatexArtifactSolidMaskMorphFrame(
+  plan: Pick<
+    KatexArtifactSolidMaskMorphPlan,
+    "start" | "end" | "easing" | "shapeLeadFraction"
+  >,
+  progress: number
+): {
+  readonly travelProgress: number;
+  readonly shapeProgress: number;
+  readonly arcProgress: number;
+} {
+  const travelProgress = sampleKatexArtifactSolidMaskMorphProgress(
+    plan,
+    progress
+  );
+  const arcProgress = quadraticArcProgress(travelProgress);
+  return {
+    travelProgress,
+    // Shape formation leads position without changing either exact endpoint.
+    shapeProgress: clamp01(
+      travelProgress + plan.shapeLeadFraction * arcProgress
+    ),
+    arcProgress
+  };
 }
 
 export function createSignedDistanceField(
@@ -191,13 +222,33 @@ export function createKatexArtifactSolidMaskMorphRenderer(
       Math.max(1, fields.bounds.height)
     ) * plan.sourceTravelFraction
   };
+  const sourceToTarget = {
+    x: targetCenter.x - sourceCenter.x,
+    y: targetCenter.y - sourceCenter.y
+  };
+  const sourceToTargetLength = Math.hypot(
+    sourceToTarget.x,
+    sourceToTarget.y
+  );
+  const sourceArcOffset = sourceToTargetLength <= 0
+    ? { x: 0, y: 0 }
+    : {
+        x: (
+          -sourceToTarget.y / sourceToTargetLength *
+          plan.sourceArcHeightPx
+        ) / Math.max(1, fields.bounds.width),
+        y: (
+          sourceToTarget.x / sourceToTargetLength *
+          plan.sourceArcHeightPx
+        ) / Math.max(1, fields.bounds.height)
+      };
   let disposed = false;
 
   return {
     bounds: fields.bounds,
     render(progress) {
       if (disposed) return;
-      const localProgress = sampleKatexArtifactSolidMaskMorphProgress(
+      const frame = sampleKatexArtifactSolidMaskMorphFrame(
         plan,
         progress
       );
@@ -216,7 +267,18 @@ export function createKatexArtifactSolidMaskMorphRenderer(
         canvas.width,
         canvas.height
       );
-      gl.uniform1f(programInfo.progressLocation, localProgress);
+      gl.uniform1f(
+        programInfo.progressLocation,
+        frame.travelProgress
+      );
+      gl.uniform1f(
+        programInfo.shapeProgressLocation,
+        frame.shapeProgress
+      );
+      gl.uniform1f(
+        programInfo.arcProgressLocation,
+        frame.arcProgress
+      );
       gl.uniform1f(
         programInfo.maximumDistanceLocation,
         plan.maximumDistancePx * pixelRatio
@@ -229,6 +291,11 @@ export function createKatexArtifactSolidMaskMorphRenderer(
         programInfo.sourceShiftLocation,
         sourceShift.x,
         sourceShift.y
+      );
+      gl.uniform2f(
+        programInfo.sourceArcOffsetLocation,
+        sourceArcOffset.x,
+        sourceArcOffset.y
       );
       gl.uniform1f(
         programInfo.bridgeExpansionLocation,
@@ -514,23 +581,31 @@ function createProgram(gl: WebGLRenderingContext): SolidMaskProgramInfo {
       precision mediump float;
       uniform sampler2D u_fieldTexture;
       uniform float u_progress;
+      uniform float u_shapeProgress;
+      uniform float u_arcProgress;
       uniform float u_maximumDistance;
       uniform float u_edgeSoftness;
       uniform vec2 u_sourceShift;
+      uniform vec2 u_sourceArcOffset;
       uniform float u_bridgeExpansion;
       uniform float u_endpointBlend;
       uniform vec3 u_color;
       varying vec2 v_texCoord;
       void main() {
-        vec2 sourceUv = v_texCoord - u_sourceShift * u_progress;
+        vec2 sourceUv = v_texCoord -
+          u_sourceShift * u_progress -
+          u_sourceArcOffset * u_arcProgress;
         vec4 sourceSample = texture2D(u_fieldTexture, sourceUv);
         vec4 targetSample = texture2D(u_fieldTexture, v_texCoord);
         float sourceDistance = (sourceSample.r * 2.0 - 1.0) *
           u_maximumDistance;
         float targetDistance = (targetSample.g * 2.0 - 1.0) *
           u_maximumDistance;
-        float distance = mix(sourceDistance, targetDistance, u_progress) -
-          u_bridgeExpansion * sin(3.14159265 * u_progress);
+        float distance = mix(
+          sourceDistance,
+          targetDistance,
+          u_shapeProgress
+        ) - u_bridgeExpansion * sin(3.14159265 * u_shapeProgress);
         float fieldAlpha = 1.0 - smoothstep(
           -u_edgeSoftness,
           u_edgeSoftness,
@@ -539,12 +614,12 @@ function createProgram(gl: WebGLRenderingContext): SolidMaskProgramInfo {
         float sourceEndpoint = 1.0 - smoothstep(
           0.0,
           u_endpointBlend,
-          u_progress
+          u_shapeProgress
         );
         float targetEndpoint = smoothstep(
           1.0 - u_endpointBlend,
           1.0,
-          u_progress
+          u_shapeProgress
         );
         float alpha = mix(fieldAlpha, sourceSample.b, sourceEndpoint);
         alpha = mix(alpha, targetSample.a, targetEndpoint);
@@ -577,6 +652,8 @@ function createProgram(gl: WebGLRenderingContext): SolidMaskProgramInfo {
     resolutionLocation: requiredUniform(gl, program, "u_resolution"),
     fieldTextureLocation: requiredUniform(gl, program, "u_fieldTexture"),
     progressLocation: requiredUniform(gl, program, "u_progress"),
+    shapeProgressLocation: requiredUniform(gl, program, "u_shapeProgress"),
+    arcProgressLocation: requiredUniform(gl, program, "u_arcProgress"),
     maximumDistanceLocation: requiredUniform(
       gl,
       program,
@@ -584,6 +661,11 @@ function createProgram(gl: WebGLRenderingContext): SolidMaskProgramInfo {
     ),
     edgeSoftnessLocation: requiredUniform(gl, program, "u_edgeSoftness"),
     sourceShiftLocation: requiredUniform(gl, program, "u_sourceShift"),
+    sourceArcOffsetLocation: requiredUniform(
+      gl,
+      program,
+      "u_sourceArcOffset"
+    ),
     bridgeExpansionLocation: requiredUniform(
       gl,
       program,
@@ -710,6 +792,10 @@ function easedProgress(easing: EasingName, progress: number): number {
     default:
       return assertNever(easing);
   }
+}
+
+function quadraticArcProgress(progress: number): number {
+  return 4 * progress * (1 - progress);
 }
 
 function clamp01(value: number): number {

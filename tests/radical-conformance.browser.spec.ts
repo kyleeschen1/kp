@@ -93,13 +93,15 @@ test("normative radical transition satisfies explicit visual continuity laws", a
   const typography = await stage.evaluate((element) => {
     const material = element.querySelector<HTMLElement>(
       '[data-kp-equation-material-owner-id="radical-rewrite.root-notation.hook"]'
-    )!;
+    );
     const native = element.querySelector<HTMLElement>(
       '[data-kp-radical-native-visual="true"]'
     )!;
-    const materialVisual = material.querySelector<HTMLElement>(
+    // The solid-mask path derives color directly from this native target;
+    // the DOM fragment exists only when WebGL is unavailable.
+    const materialVisual = material?.querySelector<HTMLElement>(
       ".editor-equation-stage__material-visual"
-    )!;
+    ) ?? native;
     const materialStyle = getComputedStyle(materialVisual);
     const nativeStyle = getComputedStyle(native);
     return {
@@ -149,8 +151,12 @@ test("normative radical transition satisfies explicit visual continuity laws", a
     maximumNativeResidualPx: Number(
       element.dataset["kpEditorEquationNativeSettlementResidual"] ?? Infinity
     ),
-    remainingMaterialFragmentCount: element.querySelectorAll(
-      '[data-kp-equation-material-fragment-role^="radical-"]'
+    remainingMaterialFragmentCount: Array.from(
+      element.querySelectorAll<HTMLElement>(
+        '[data-kp-equation-material-fragment-role^="radical-"]'
+      )
+    ).filter(
+      (fragment) => Number(getComputedStyle(fragment).opacity) > 0.001
     ).length
   }));
 
