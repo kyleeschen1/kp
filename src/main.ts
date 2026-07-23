@@ -117,6 +117,9 @@ import {
 import {
   discoverKpActiveApprovedPlan
 } from "./editor/semantic-animation-workbench-roadmap-source.ts";
+import {
+  projectKpWorkbenchRoadmap
+} from "./editor/semantic-animation-workbench-roadmap.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -164,7 +167,7 @@ const graph3DWebGLVisibilityObservers = new WeakMap<
 >();
 const animationWorkbenchIndex =
   createKpSemanticAnimationWorkbenchIndex();
-discoverKpActiveApprovedPlan();
+projectKpWorkbenchRoadmap(discoverKpActiveApprovedPlan());
 
 declare global {
   interface Window {

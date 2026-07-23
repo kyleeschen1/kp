@@ -134,7 +134,9 @@
     {
       "id": "s13",
       "title": "Project-read-only-roadmap-rows",
-      "status": "planned"
+      "summary": "Added a deterministic frozen roadmap projection with canonical order, plan identity, title, objective, topic, horizon, state, architecture benefit, rationale, and canonical exemplar. Five authority/projection tests and repository typecheck pass; the projection exposes no mutation or execution-state API.",
+      "status": "complete",
+      "planPhaseId": "authoritative-roadmap-workbench"
     },
     {
       "id": "s14",
