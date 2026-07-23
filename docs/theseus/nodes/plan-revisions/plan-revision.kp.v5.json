@@ -91,6 +91,16 @@
       "command": "npm run typecheck",
       "status": "passed",
       "checkedAt": "2026-07-23T20:12:16.186Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-representation-adapter.test.ts tests/semantic-animation-workbench-representation.test.ts tests/semantic-animation-workbench-catalog-adapter.test.ts tests/animation-selection-route.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:16:45.911Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:16:54.138Z"
     }
   ],
   "planRevision": {

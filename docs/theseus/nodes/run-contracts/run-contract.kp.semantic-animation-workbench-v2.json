@@ -104,7 +104,8 @@
     {
       "id": "s08",
       "title": "Add the representation adapter",
-      "status": "planned"
+      "summary": "Derived playable editor and family-sample card relationships directly from existing descriptors and selection routes, preserving one canonical identity and leaving planned quadratic without invented representations.",
+      "status": "complete"
     },
     {
       "id": "s09",
