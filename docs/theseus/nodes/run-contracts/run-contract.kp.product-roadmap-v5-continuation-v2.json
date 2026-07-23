@@ -135,7 +135,8 @@
     {
       "id": "s26",
       "title": "Promote the functional wrapping exemplar",
-      "status": "in-progress"
+      "summary": "Promoted the function-wrap exemplar at the human gate. x reflows before enclosure and function entry, settles exactly to native f(x), and reconstructs on rewind. Added stable visual capture; 1,974 tests, typecheck, focused browser motion, and build passed. Recorded that ordinary learner lessons must not inherit editor flat-focus token boxes.",
+      "status": "complete"
     },
     {
       "id": "s27",

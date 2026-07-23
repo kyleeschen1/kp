@@ -140,11 +140,23 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-07-23T16:34:54.350Z"
+    },
+    {
+      "command": "npm test -- full deterministic suite",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-23T17:16:03.404Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-23T17:16:04.242Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s26 is at its required human exemplar checkpoint. A committed visual:function-wrap capture now records source, focus, reflow, enclosure entry, function entry, recognition, native settlement, and rewind. Automation passes; review should decide whether to retain or refine the temporary x focus outline, pale enclosure entry, and late f entrance."
+    "summary": "Human approved the functional-wrap exemplar. Slice s26 is promotion-complete with deterministic forward/rewind captures and broad verification. Learner lessons must suppress the editor flat-focus token boxes; a durable lesson-presentation decision records this future integration gate without changing current editor diagnostics."
   },
   "expectedLearning": [
     "Which promoted semantic, scheduling, authoring, renderer, and verification contracts survive capability-opening exemplars across symbolic, calculus, vector, and linear-map domains without combinatorial growth."
