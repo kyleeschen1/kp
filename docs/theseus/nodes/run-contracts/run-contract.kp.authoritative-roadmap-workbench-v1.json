@@ -176,7 +176,9 @@
     {
       "id": "s19",
       "title": "Link-only-real-animation-representations",
-      "status": "planned"
+      "summary": "Added a closed five-link roadmap adapter for exact existing editor representations: gold solve, distribution, generated exponent, derivative tangent, and radical. Planned quadratic/future/platform-only rows remain text. Nine focused tests, typecheck, and all 9 Workbench Chromium tests pass, including opening the exact radical representation.",
+      "status": "complete",
+      "planPhaseId": "authoritative-roadmap-workbench"
     },
     {
       "id": "s20",

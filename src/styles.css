@@ -3127,6 +3127,31 @@ h2 {
   font-size: 0.82rem;
 }
 
+.kp-animation-workbench__roadmap tbody th button {
+  margin: -0.25rem;
+  padding: 0.25rem;
+  border: 0;
+  border-radius: 0.3rem;
+  background: transparent;
+  color: #1d6543;
+  font: inherit;
+  font-weight: 800;
+  text-align: left;
+  text-decoration: underline;
+  text-decoration-color: rgba(29, 101, 67, 0.35);
+  text-underline-offset: 0.18em;
+  cursor: pointer;
+}
+
+.kp-animation-workbench__roadmap tbody th button:hover {
+  text-decoration-color: currentColor;
+}
+
+.kp-animation-workbench__roadmap tbody th button:focus-visible {
+  outline: 3px solid rgba(38, 113, 77, 0.3);
+  outline-offset: 1px;
+}
+
 .kp-animation-workbench__roadmap tbody td:first-child {
   width: 2.5rem;
   color: #6b766f;

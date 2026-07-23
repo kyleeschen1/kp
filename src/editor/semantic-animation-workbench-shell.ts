@@ -27,6 +27,9 @@ import type {
   KpWorkbenchRoadmap,
   KpWorkbenchRoadmapRow
 } from "./semantic-animation-workbench-roadmap.ts";
+import type {
+  KpWorkbenchRoadmapAnimationLink
+} from "./semantic-animation-workbench-roadmap-links.ts";
 
 export function renderKpSemanticAnimationWorkbenchShell(input: {
   readonly query: string;
@@ -38,6 +41,7 @@ export function renderKpSemanticAnimationWorkbenchShell(input: {
   readonly roadmapRows: readonly KpWorkbenchRoadmapRow[];
   readonly roadmapQuery: KpWorkbenchRoadmapQuery;
   readonly roadmapTopics: readonly string[];
+  readonly roadmapAnimationLinks: readonly KpWorkbenchRoadmapAnimationLink[];
 }): string {
   return `<section class="kp-animation-workbench" data-kp-animation-workbench aria-labelledby="kp-animation-workbench-title">
     <header class="kp-animation-workbench__header">
@@ -57,7 +61,8 @@ export function renderKpSemanticAnimationWorkbenchShell(input: {
       input.roadmap,
       input.roadmapRows,
       input.roadmapQuery,
-      input.roadmapTopics
+      input.roadmapTopics,
+      input.roadmapAnimationLinks
     )}
     <div class="kp-animation-workbench__layout">
       <aside class="kp-animation-workbench__results" aria-label="Animation results">
@@ -79,7 +84,8 @@ function renderRoadmap(
   roadmap: KpWorkbenchRoadmap,
   rows: readonly KpWorkbenchRoadmapRow[],
   query: KpWorkbenchRoadmapQuery,
-  topics: readonly string[]
+  topics: readonly string[],
+  animationLinks: readonly KpWorkbenchRoadmapAnimationLink[]
 ): string {
   const selectedTopic = query.topics?.[0] ?? "";
   const selectedHorizon = query.horizons?.[0] ?? "";
@@ -160,16 +166,28 @@ function renderRoadmap(
             <th scope="col">Why this order</th>
           </tr>
         </thead>
-        <tbody>${rows.map(renderRoadmapRow).join("")}</tbody>
+        <tbody>${rows
+          .map((row) =>
+            renderRoadmapRow(
+              row,
+              animationLinks.find(({ phaseId }) => phaseId === row.id)
+            )
+          )
+          .join("")}</tbody>
       </table>
     </div>
   </section>`;
 }
 
-function renderRoadmapRow(row: KpWorkbenchRoadmapRow): string {
+function renderRoadmapRow(
+  row: KpWorkbenchRoadmapRow,
+  animationLink: KpWorkbenchRoadmapAnimationLink | undefined
+): string {
   return `<tr data-kp-animation-workbench-roadmap-row="${escapeHtml(row.id)}">
     <td>${row.order}</td>
-    <th scope="row">${escapeHtml(row.title)}</th>
+    <th scope="row">${animationLink === undefined
+      ? escapeHtml(row.title)
+      : `<button type="button" data-action="select-animation-workbench-roadmap-link" data-kp-animation-id="${escapeHtml(animationLink.animationId)}" data-kp-representation-id="${escapeHtml(animationLink.representationId)}">${escapeHtml(row.title)}<span class="visually-hidden"> — open animation</span></button>`}</th>
     <td>${escapeHtml(row.topic ?? "Unspecified")}</td>
     <td>${escapeHtml(row.horizon)}</td>
     <td><span data-state="${escapeHtml(row.state)}">${escapeHtml(row.state)}</span></td>

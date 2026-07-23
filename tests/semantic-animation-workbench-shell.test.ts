@@ -33,6 +33,15 @@ test("Workbench shell renders a labeled search and two-pane control surface", ()
   assert.match(html, /Architecture benefit/);
   assert.match(html, /Why this order/);
   assert.match(html, /Roadmap order/);
+  assert.equal(
+    html.match(/data-action="select-animation-workbench-roadmap-link"/g)
+      ?.length,
+    1
+  );
+  assert.match(
+    html,
+    /data-kp-animation-workbench-roadmap-row="arithmetic"[\s\S]*?<th scope="row">Arithmetic<\/th>/
+  );
   assert.match(html, /data-kp-animation-workbench-query/);
   assert.match(html, /aria-keyshortcuts="Control\+K Meta\+K \/"/);
   assert.match(html, /data-kp-animation-workbench-results/);
@@ -221,6 +230,13 @@ function roadmapInput() {
       sortBy: "canonical" as const,
       direction: "ascending" as const
     },
-    roadmapTopics: ["Arithmetic", "Platform"]
+    roadmapTopics: ["Arithmetic", "Platform"],
+    roadmapAnimationLinks: [
+      {
+        phaseId: "workbench",
+        animationId: "animation.radical",
+        representationId: "representation.animation.radical"
+      }
+    ]
   };
 }

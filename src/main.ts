@@ -121,6 +121,9 @@ import {
   projectKpWorkbenchRoadmap
 } from "./editor/semantic-animation-workbench-roadmap.ts";
 import {
+  projectKpWorkbenchRoadmapAnimationLinks
+} from "./editor/semantic-animation-workbench-roadmap-links.ts";
+import {
   listKpWorkbenchRoadmapTopics,
   queryKpWorkbenchRoadmap,
   type KpWorkbenchRoadmapQuery
@@ -177,6 +180,11 @@ const animationWorkbenchIndex =
   createKpSemanticAnimationWorkbenchIndex();
 const animationWorkbenchRoadmap =
   projectKpWorkbenchRoadmap(discoverKpActiveApprovedPlan());
+const animationWorkbenchRoadmapAnimationLinks =
+  projectKpWorkbenchRoadmapAnimationLinks({
+    roadmap: animationWorkbenchRoadmap,
+    index: animationWorkbenchIndex
+  });
 
 declare global {
   interface Window {
@@ -276,6 +284,9 @@ appRoot.addEventListener("click", (event) => {
       return;
     case "select-animation-workbench-representation":
       selectAnimationWorkbenchRepresentation(button);
+      return;
+    case "select-animation-workbench-roadmap-link":
+      selectAnimationWorkbenchRoadmapLink(button);
       return;
     case "show-ftc-tutorial":
       navigateToView("ftc-tutorial");
@@ -497,7 +508,8 @@ function renderAnimationWorkbenchView(): void {
     roadmapQuery,
     roadmapTopics: listKpWorkbenchRoadmapTopics(
       animationWorkbenchRoadmap.rows
-    )
+    ),
+    roadmapAnimationLinks: animationWorkbenchRoadmapAnimationLinks
   });
   hydrateKpEditorAnimationSurfaces(appRoot);
   hydrateKpEditorAnimationLiveDiagnostics(appRoot);
@@ -836,6 +848,28 @@ function selectAnimationWorkbenchRepresentation(
       `[data-action="select-animation-workbench-representation"][data-kp-representation-id="${representationId}"]`
     )
     ?.focus();
+}
+
+function selectAnimationWorkbenchRoadmapLink(
+  button: HTMLButtonElement
+): void {
+  const animationId = button.dataset["kpAnimationId"];
+  const representationId = button.dataset["kpRepresentationId"];
+  if (animationId === undefined || representationId === undefined) return;
+  const route = readKpSemanticAnimationWorkbenchRoute(
+    window.location.search
+  );
+  window.history.replaceState(
+    null,
+    "",
+    writeKpSemanticAnimationWorkbenchRoute(window.location.search, {
+      query: "",
+      animationId,
+      representationId,
+      roadmap: route.roadmap
+    })
+  );
+  renderAnimationWorkbenchView();
 }
 
 function handleAnimationWorkbenchKeydown(event: KeyboardEvent): boolean {

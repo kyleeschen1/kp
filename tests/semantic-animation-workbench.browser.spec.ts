@@ -223,6 +223,43 @@ test("Workbench renders and queries the authoritative roadmap table", async ({
   ).toHaveValue("name");
 });
 
+test("roadmap rows open only proven concrete animation representations", async ({
+  page
+}) => {
+  await page.goto(
+    `/?view=animation-workbench&q=quadratic&workbenchAnimation=${quadraticId}`
+  );
+  await expect(
+    page.locator(
+      '[data-action="select-animation-workbench-roadmap-link"]'
+    )
+  ).toHaveCount(5);
+  await expect(
+    page.locator(
+      '[data-kp-animation-workbench-roadmap-row="quadratic-semantic-branching"] button'
+    )
+  ).toHaveCount(0);
+  await expect(
+    page.locator(
+      '[data-kp-animation-workbench-roadmap-row="authoritative-roadmap-workbench"] button'
+    )
+  ).toHaveCount(0);
+
+  await page
+    .locator(
+      '[data-kp-animation-workbench-roadmap-row="radical-native-settlement"] button'
+    )
+    .click();
+  await expect(page).toHaveURL(
+    new RegExp(
+      `workbenchAnimation=${radicalId}.*representation=editor-animation\\.${radicalId}`
+    )
+  );
+  await expect(
+    page.locator("[data-kp-editor-animation-player]")
+  ).toHaveAttribute("data-kp-editor-animation-id", radicalId);
+});
+
 test("Workbench search and results support keyboard-only traversal", async ({
   page
 }) => {
