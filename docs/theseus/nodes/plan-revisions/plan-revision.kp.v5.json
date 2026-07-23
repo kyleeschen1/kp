@@ -141,6 +141,16 @@
       "command": "npm test",
       "status": "passed",
       "checkedAt": "2026-07-23T20:35:03.563Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fuzzy-query.test.ts tests/semantic-animation-workbench-query.test.ts tests/project-dashboard.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:40:34.888Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:40:40.886Z"
     }
   ],
   "planRevision": {

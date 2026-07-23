@@ -489,73 +489,13 @@ function textFieldsMatch(
   fields: readonly string[],
   normalizedQuery: string
 ): boolean {
-  const normalizedFields = fields.map(normalizeSearchText);
-
-  if (normalizedFields.some((field) => field.includes(normalizedQuery))) {
-    return true;
-  }
-
-  const terms = normalizedQuery.split(" ").filter((term) => term.length > 0);
-
-  return terms.every((term) =>
-    normalizedFields.some((field) => fuzzyTermMatches(field, term))
-  );
+  return kpFuzzyQueryMatches(fields, normalizedQuery);
 }
 
 function normalizeSearchText(value: string): string {
-  return value.trim().toLowerCase().replace(/\s+/g, " ");
+  return normalizeKpFuzzySearchText(value);
 }
-
-function fuzzyTermMatches(field: string, term: string): boolean {
-  if (term.length < 3) {
-    return field.includes(term);
-  }
-
-  let fieldIndex = 0;
-  let firstMatch = -1;
-  let lastMatch = -1;
-
-  for (const character of term) {
-    const nextIndex = field.indexOf(character, fieldIndex);
-
-    if (nextIndex === -1) {
-      return false;
-    }
-
-    if (firstMatch === -1) {
-      firstMatch = nextIndex;
-    }
-
-    lastMatch = nextIndex;
-    fieldIndex = nextIndex + 1;
-  }
-
-  const span = lastMatch - firstMatch + 1;
-  const maxSpan = term.length + Math.max(2, Math.floor(term.length / 2));
-  const wordLength = containingWordLength(field, firstMatch, lastMatch);
-
-  return span <= maxSpan && wordLength <= term.length + 4;
-}
-
-function containingWordLength(
-  field: string,
-  firstMatch: number,
-  lastMatch: number
-): number {
-  let start = firstMatch;
-  let end = lastMatch;
-
-  while (start > 0 && isSearchWordCharacter(field[start - 1] ?? "")) {
-    start -= 1;
-  }
-
-  while (end + 1 < field.length && isSearchWordCharacter(field[end + 1] ?? "")) {
-    end += 1;
-  }
-
-  return end - start + 1;
-}
-
-function isSearchWordCharacter(character: string): boolean {
-  return /[a-z0-9]/.test(character);
-}
+import {
+  kpFuzzyQueryMatches,
+  normalizeKpFuzzySearchText
+} from "../search/fuzzy-query.ts";

@@ -128,7 +128,8 @@
     {
       "id": "s12",
       "title": "Add fuzzy query and ranking",
-      "status": "planned"
+      "summary": "Extracted the dashboard fuzzy matcher into a shared weighted scorer and added deterministic Workbench ranking across title aliases families tags lifecycle and nested representations without a second metadata store.",
+      "status": "complete"
     },
     {
       "id": "s13",
