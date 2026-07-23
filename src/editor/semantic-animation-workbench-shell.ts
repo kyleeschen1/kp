@@ -20,6 +20,13 @@ import {
 import type {
   KpAnimationRepresentationRelationship
 } from "./semantic-animation-workbench-representation.ts";
+import type {
+  KpWorkbenchRoadmapQuery
+} from "./semantic-animation-workbench-roadmap-query.ts";
+import type {
+  KpWorkbenchRoadmap,
+  KpWorkbenchRoadmapRow
+} from "./semantic-animation-workbench-roadmap.ts";
 
 export function renderKpSemanticAnimationWorkbenchShell(input: {
   readonly query: string;
@@ -27,6 +34,10 @@ export function renderKpSemanticAnimationWorkbenchShell(input: {
   readonly selectedAnimationId?: string;
   readonly selectedDescriptor?: KpEditorAnimationDescriptor;
   readonly selectedRepresentationId?: string;
+  readonly roadmap: KpWorkbenchRoadmap;
+  readonly roadmapRows: readonly KpWorkbenchRoadmapRow[];
+  readonly roadmapQuery: KpWorkbenchRoadmapQuery;
+  readonly roadmapTopics: readonly string[];
 }): string {
   return `<section class="kp-animation-workbench" data-kp-animation-workbench aria-labelledby="kp-animation-workbench-title">
     <header class="kp-animation-workbench__header">
@@ -42,6 +53,12 @@ export function renderKpSemanticAnimationWorkbenchShell(input: {
       <input type="search" value="${escapeHtml(input.query)}" placeholder="Try radical, tangent, quadratic, or a family…" autocomplete="off" aria-controls="kp-animation-workbench-results" aria-keyshortcuts="Control+K Meta+K /" data-action="filter-animation-workbench" data-kp-animation-workbench-query />
       <small>Search title, aliases, families, motifs, lifecycle, and representations. Press <kbd>⌘/Ctrl K</kbd> or <kbd>/</kbd> to focus; use <kbd>↓</kbd> to enter results.</small>
     </label>
+    ${renderRoadmap(
+      input.roadmap,
+      input.roadmapRows,
+      input.roadmapQuery,
+      input.roadmapTopics
+    )}
     <div class="kp-animation-workbench__layout">
       <aside class="kp-animation-workbench__results" aria-label="Animation results">
         ${renderResults(input.results, input.selectedAnimationId)}
@@ -56,6 +73,123 @@ export function renderKpSemanticAnimationWorkbenchShell(input: {
       </main>
     </div>
   </section>`;
+}
+
+function renderRoadmap(
+  roadmap: KpWorkbenchRoadmap,
+  rows: readonly KpWorkbenchRoadmapRow[],
+  query: KpWorkbenchRoadmapQuery,
+  topics: readonly string[]
+): string {
+  const selectedTopic = query.topics?.[0] ?? "";
+  const selectedHorizon = query.horizons?.[0] ?? "";
+  const selectedState = query.states?.[0] ?? "";
+  return `<section class="kp-animation-workbench__roadmap" data-kp-animation-workbench-roadmap aria-labelledby="kp-animation-workbench-roadmap-title">
+    <div class="kp-animation-workbench__roadmap-heading">
+      <div>
+        <p class="eyebrow">Product roadmap · revision ${roadmap.planRevision}</p>
+        <h2 id="kp-animation-workbench-roadmap-title">Roadmap</h2>
+        <p>${escapeHtml(roadmap.objective)}</p>
+      </div>
+      <p><strong>${rows.length}</strong> of ${roadmap.rows.length} rows</p>
+    </div>
+    <div class="kp-animation-workbench__roadmap-controls" aria-label="Roadmap sort and filters">
+      ${renderRoadmapSelect(
+        "Sort",
+        "sort-animation-workbench-roadmap",
+        query.sortBy,
+        [
+          ["canonical", "Roadmap order"],
+          ["name", "Name"],
+          ["topic", "Topic"],
+          ["horizon", "Horizon"],
+          ["state", "State"]
+        ]
+      )}
+      ${renderRoadmapSelect(
+        "Direction",
+        "set-animation-workbench-roadmap-direction",
+        query.direction,
+        [
+          ["ascending", "Ascending"],
+          ["descending", "Descending"]
+        ]
+      )}
+      ${renderRoadmapSelect(
+        "Topic",
+        "filter-animation-workbench-roadmap-topic",
+        selectedTopic,
+        [["", "All topics"], ...topics.map((topic) => [topic, topic] as const)]
+      )}
+      ${renderRoadmapSelect(
+        "Horizon",
+        "filter-animation-workbench-roadmap-horizon",
+        selectedHorizon,
+        [
+          ["", "All horizons"],
+          ["now", "Now"],
+          ["next", "Next"],
+          ["later", "Later"],
+          ["someday", "Someday"]
+        ]
+      )}
+      ${renderRoadmapSelect(
+        "State",
+        "filter-animation-workbench-roadmap-state",
+        selectedState,
+        [
+          ["", "All states"],
+          ["active", "Active"],
+          ["planned", "Planned"],
+          ["complete", "Complete"],
+          ["deferred", "Deferred"]
+        ]
+      )}
+    </div>
+    <div class="kp-animation-workbench__roadmap-table-wrap" tabindex="0">
+      <table>
+        <caption>${escapeHtml(roadmap.planTitle)} — derived from ${escapeHtml(roadmap.planId)}</caption>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Topic</th>
+            <th scope="col">Horizon</th>
+            <th scope="col">State</th>
+            <th scope="col">Architecture benefit</th>
+            <th scope="col">Why this order</th>
+          </tr>
+        </thead>
+        <tbody>${rows.map(renderRoadmapRow).join("")}</tbody>
+      </table>
+    </div>
+  </section>`;
+}
+
+function renderRoadmapRow(row: KpWorkbenchRoadmapRow): string {
+  return `<tr data-kp-animation-workbench-roadmap-row="${escapeHtml(row.id)}">
+    <td>${row.order}</td>
+    <th scope="row">${escapeHtml(row.title)}</th>
+    <td>${escapeHtml(row.topic ?? "Unspecified")}</td>
+    <td>${escapeHtml(row.horizon)}</td>
+    <td><span data-state="${escapeHtml(row.state)}">${escapeHtml(row.state)}</span></td>
+    <td>${escapeHtml(row.architectureBenefit ?? "Not specified")}</td>
+    <td>${escapeHtml(row.rationale ?? "Not specified")}</td>
+  </tr>`;
+}
+
+function renderRoadmapSelect(
+  label: string,
+  action: string,
+  selectedValue: string,
+  options: readonly (readonly [string, string])[]
+): string {
+  return `<label><span>${escapeHtml(label)}</span><select data-action="${action}">${options
+    .map(
+      ([value, text]) =>
+        `<option value="${escapeHtml(value)}"${value === selectedValue ? " selected" : ""}>${escapeHtml(text)}</option>`
+    )
+    .join("")}</select></label>`;
 }
 
 function renderResults(

@@ -162,7 +162,9 @@
     {
       "id": "s17",
       "title": "Render-the-simple-roadmap-table",
-      "status": "planned"
+      "summary": "Rendered the v6 roadmap as a bounded accessible table with 35 authoritative rows, columns for name/topic/horizon/state/architecture benefit/rationale, and working sort/direction/topic/horizon/state controls. Eight shell/roadmap tests, typecheck, and all 8 Workbench Chromium tests pass including table interaction and narrow layout.",
+      "status": "complete",
+      "planPhaseId": "authoritative-roadmap-workbench"
     },
     {
       "id": "s18",

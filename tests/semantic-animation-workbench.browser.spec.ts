@@ -178,6 +178,36 @@ test("Workbench planned quadratic never mounts a player", async ({ page }) => {
   await expect(page.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
 });
 
+test("Workbench renders and queries the authoritative roadmap table", async ({
+  page
+}) => {
+  await page.goto(
+    `/?view=animation-workbench&q=radical&workbenchAnimation=${radicalId}`
+  );
+  const roadmap = page.locator("[data-kp-animation-workbench-roadmap]");
+  await expect(roadmap).toContainText("Product roadmap · revision 6");
+  await expect(
+    roadmap.locator("[data-kp-animation-workbench-roadmap-row]")
+  ).toHaveCount(35);
+
+  await roadmap
+    .locator('[data-action="sort-animation-workbench-roadmap"]')
+    .selectOption("name");
+  await expect(
+    page
+      .locator("[data-kp-animation-workbench-roadmap] tbody th")
+      .first()
+  ).toHaveText("Authoritative roadmap Workbench");
+
+  await page
+    .locator('[data-action="filter-animation-workbench-roadmap-topic"]')
+    .selectOption("Arithmetic · Addition");
+  const rows = page.locator("[data-kp-animation-workbench-roadmap-row]");
+  await expect(rows).toHaveCount(1);
+  await expect(rows.first()).toContainText("Multi-digit addition");
+  await expect(rows.first()).toContainText("planned");
+});
+
 test("Workbench search and results support keyboard-only traversal", async ({
   page
 }) => {

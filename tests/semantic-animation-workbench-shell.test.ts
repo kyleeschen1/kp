@@ -13,6 +13,7 @@ import {
 
 test("Workbench shell renders a labeled search and two-pane control surface", () => {
   const html = renderKpSemanticAnimationWorkbenchShell({
+    ...roadmapInput(),
     query: `radical "rewrite"`,
     results: [result("animation.radical", "Power to radical")],
     selectedAnimationId: "animation.radical",
@@ -24,6 +25,14 @@ test("Workbench shell renders a labeled search and two-pane control surface", ()
   });
 
   assert.match(html, /data-kp-animation-workbench/);
+  assert.match(html, /data-kp-animation-workbench-roadmap/);
+  assert.equal(
+    html.match(/data-kp-animation-workbench-roadmap-row=/g)?.length,
+    2
+  );
+  assert.match(html, /Architecture benefit/);
+  assert.match(html, /Why this order/);
+  assert.match(html, /Roadmap order/);
   assert.match(html, /data-kp-animation-workbench-query/);
   assert.match(html, /aria-keyshortcuts="Control\+K Meta\+K \/"/);
   assert.match(html, /data-kp-animation-workbench-results/);
@@ -86,6 +95,7 @@ test("Workbench shell never mounts a player for planned items", () => {
     true
   );
   const html = renderKpSemanticAnimationWorkbenchShell({
+    ...roadmapInput(),
     query: "quadratic",
     results: [planned],
     selectedAnimationId: planned.entry.identity.animationId
@@ -104,6 +114,7 @@ test("Workbench shell never mounts a player for planned items", () => {
 
 test("Workbench shell renders one top-level result per canonical entry", () => {
   const html = renderKpSemanticAnimationWorkbenchShell({
+    ...roadmapInput(),
     query: "",
     results: [
       result("animation.radical", "Power to radical"),
@@ -169,5 +180,47 @@ function result(
       controlIds: [],
       diagnostics: []
     }
+  };
+}
+
+function roadmapInput() {
+  const rows = [
+    {
+      id: "workbench",
+      order: 1,
+      title: "Workbench",
+      objective: "Project one roadmap.",
+      topic: "Platform",
+      horizon: "now" as const,
+      state: "active" as const,
+      architectureBenefit: "One control plane.",
+      rationale: "Make progress legible."
+    },
+    {
+      id: "arithmetic",
+      order: 2,
+      title: "Arithmetic",
+      objective: "Retain arithmetic.",
+      topic: "Arithmetic",
+      horizon: "later" as const,
+      state: "planned" as const,
+      architectureBenefit: "Shared quantities.",
+      rationale: "Follow architectural pressure."
+    }
+  ];
+  return {
+    roadmap: {
+      planId: "plan-revision.kp.v6",
+      planRevision: 6,
+      planTitle: "Roadmap v6",
+      objective: "Keep one roadmap authority.",
+      rows
+    },
+    roadmapRows: rows,
+    roadmapQuery: {
+      sortBy: "canonical" as const,
+      direction: "ascending" as const
+    },
+    roadmapTopics: ["Arithmetic", "Platform"]
   };
 }

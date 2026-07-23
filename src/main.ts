@@ -120,6 +120,14 @@ import {
 import {
   projectKpWorkbenchRoadmap
 } from "./editor/semantic-animation-workbench-roadmap.ts";
+import {
+  KP_WORKBENCH_ROADMAP_SORTS,
+  listKpWorkbenchRoadmapTopics,
+  queryKpWorkbenchRoadmap,
+  type KpWorkbenchRoadmapQuery,
+  type KpWorkbenchRoadmapSort,
+  type KpWorkbenchRoadmapSortDirection
+} from "./editor/semantic-animation-workbench-roadmap-query.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -134,6 +142,12 @@ let projectDashboardSelectedAgendaRowId: string | undefined;
 let projectDashboardTocOnly = false;
 let projectDashboardSelectedKatexFixtureId: string | undefined;
 let selectedEquationAnimationId: string | undefined;
+let animationWorkbenchRoadmapSort: KpWorkbenchRoadmapSort = "canonical";
+let animationWorkbenchRoadmapDirection:
+  KpWorkbenchRoadmapSortDirection = "ascending";
+let animationWorkbenchRoadmapTopic = "";
+let animationWorkbenchRoadmapHorizon = "";
+let animationWorkbenchRoadmapState = "";
 const editorAnimationDescriptors = createKpEditorAnimationLibrary();
 let selectedEditorAnimationDescriptorId = selectKpEditorAnimationDescriptor(
   editorAnimationDescriptors,
@@ -167,7 +181,8 @@ const graph3DWebGLVisibilityObservers = new WeakMap<
 >();
 const animationWorkbenchIndex =
   createKpSemanticAnimationWorkbenchIndex();
-projectKpWorkbenchRoadmap(discoverKpActiveApprovedPlan());
+const animationWorkbenchRoadmap =
+  projectKpWorkbenchRoadmap(discoverKpActiveApprovedPlan());
 
 declare global {
   interface Window {
@@ -344,6 +359,11 @@ appRoot.addEventListener("change", (event) => {
 
   if (event.target.dataset["action"] === "set-editor-animation") {
     selectEditorAnimation(event.target);
+    return;
+  }
+
+  if (event.target.dataset["action"]?.includes("animation-workbench-roadmap")) {
+    updateAnimationWorkbenchRoadmapQuery(event.target);
   }
 });
 
@@ -461,6 +481,7 @@ function renderAnimationWorkbenchView(): void {
             : { requestedRepresentationId: route.representationId }),
           descriptors: editorAnimationDescriptors
         });
+  const roadmapQuery = animationWorkbenchRoadmapQuery();
   appRoot.innerHTML = renderKpSemanticAnimationWorkbenchShell({
     query: route.query,
     results,
@@ -473,7 +494,16 @@ function renderAnimationWorkbenchView(): void {
       : {
           selectedRepresentationId:
             representationSelection.relationship.representationId
-        })
+        }),
+    roadmap: animationWorkbenchRoadmap,
+    roadmapRows: queryKpWorkbenchRoadmap(
+      animationWorkbenchRoadmap.rows,
+      roadmapQuery
+    ),
+    roadmapQuery,
+    roadmapTopics: listKpWorkbenchRoadmapTopics(
+      animationWorkbenchRoadmap.rows
+    )
   });
   hydrateKpEditorAnimationSurfaces(appRoot);
   hydrateKpEditorAnimationLiveDiagnostics(appRoot);
@@ -491,6 +521,62 @@ function renderAnimationWorkbenchView(): void {
       revision
     );
   }
+}
+
+function animationWorkbenchRoadmapQuery(): KpWorkbenchRoadmapQuery {
+  return {
+    sortBy: animationWorkbenchRoadmapSort,
+    direction: animationWorkbenchRoadmapDirection,
+    ...(animationWorkbenchRoadmapTopic === ""
+      ? {}
+      : { topics: [animationWorkbenchRoadmapTopic] }),
+    ...(animationWorkbenchRoadmapHorizon === ""
+      ? {}
+      : {
+          horizons: [
+            animationWorkbenchRoadmapHorizon as
+              NonNullable<KpWorkbenchRoadmapQuery["horizons"]>[number]
+          ]
+        }),
+    ...(animationWorkbenchRoadmapState === ""
+      ? {}
+      : {
+          states: [
+            animationWorkbenchRoadmapState as
+              NonNullable<KpWorkbenchRoadmapQuery["states"]>[number]
+          ]
+        })
+  };
+}
+
+function updateAnimationWorkbenchRoadmapQuery(
+  select: HTMLSelectElement
+): void {
+  switch (select.dataset["action"]) {
+    case "sort-animation-workbench-roadmap":
+      if (
+        (KP_WORKBENCH_ROADMAP_SORTS as readonly string[]).includes(select.value)
+      ) {
+        animationWorkbenchRoadmapSort =
+          select.value as KpWorkbenchRoadmapSort;
+      }
+      break;
+    case "set-animation-workbench-roadmap-direction":
+      if (select.value === "ascending" || select.value === "descending") {
+        animationWorkbenchRoadmapDirection = select.value;
+      }
+      break;
+    case "filter-animation-workbench-roadmap-topic":
+      animationWorkbenchRoadmapTopic = select.value;
+      break;
+    case "filter-animation-workbench-roadmap-horizon":
+      animationWorkbenchRoadmapHorizon = select.value;
+      break;
+    case "filter-animation-workbench-roadmap-state":
+      animationWorkbenchRoadmapState = select.value;
+      break;
+  }
+  renderAnimationWorkbenchView();
 }
 
 async function mountAnimationWorkbenchReviewCapture(
