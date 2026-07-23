@@ -19,6 +19,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-23-kp-semantic-animation-workbench-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-semantic-animation-workbench-long-loop-proposal.md"
     }
   ],
   "dependsOn": {
