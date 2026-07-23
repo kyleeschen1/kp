@@ -16,6 +16,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-23-kp-capability-pressure-domain-order-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-23-kp-semantic-animation-workbench-order.md"
     }
   ],
   "dependsOn": {

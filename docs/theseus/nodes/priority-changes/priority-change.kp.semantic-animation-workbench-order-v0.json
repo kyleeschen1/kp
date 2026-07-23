@@ -1,0 +1,65 @@
+{
+  "id": "priority-change.kp.semantic-animation-workbench-order-v0",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.semantic-animation-workbench-order-v0",
+  "status": "active",
+  "domain": "kp",
+  "summary": "Finish the derivative checkpoint, then establish a canonical searchable Semantic Animation Workbench before quadratic breadth so animation identity, approval, progress, representations, and review evidence cannot drift.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Finish the derivative checkpoint, then establish a canonical searchable Semantic Animation Workbench before quadratic breadth so animation identity, approval, progress, representations, and review evidence cannot drift.",
+      "occurredAt": "2026-07-23T18:23:34.334Z",
+      "summary": "Priority change disposition: checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-23-kp-semantic-animation-workbench-order.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-kp-semantic-animation-workbench-next-step-review.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v5"
+    ],
+    "preferred": [
+      "run-contract.kp.product-roadmap-v5-continuation-v2"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5",
+    "run-contract.kp.product-roadmap-v5-continuation-v2"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v5",
+    "rationale": "Finish the derivative checkpoint, then establish a canonical searchable Semantic Animation Workbench before quadratic breadth so animation identity, approval, progress, representations, and review evidence cannot drift.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.product-roadmap-v5-continuation-v2"
+    ],
+    "changes": [
+      {
+        "subject": "derivative-secant-to-tangent",
+        "to": "now"
+      },
+      {
+        "subject": "semantic-animation-workbench-v0",
+        "to": "next"
+      },
+      {
+        "subject": "quadratic-solution-branching",
+        "to": "after-workbench"
+      },
+      {
+        "subject": "later-capability-exemplars",
+        "to": "after-quadratic"
+      }
+    ],
+    "effectiveAt": "2026-07-23T18:23:34.334Z",
+    "requestedBy": "user"
+  }
+}
