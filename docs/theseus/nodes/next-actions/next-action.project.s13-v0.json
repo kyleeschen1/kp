@@ -1,0 +1,64 @@
+{
+  "id": "next-action.project.s13-v0",
+  "kind": "next-action",
+  "title": "Add typed normal-form intent and compiler boundaries",
+  "status": "ready",
+  "summary": "Materialized from stored run-contract slice s13 in KP product roadmap v5 continuation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.product-roadmap-v5-continuation-v1.json",
+      "summary": "Run contract whose stored slice s13 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.product-roadmap-v5-program-v0.json",
+      "summary": "Approved predecessor closed after Goal 1 because its immutable target resolved."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.resume-product-after-codex-reliability-v0.json",
+      "summary": "User-authorized product resumption sequence retained without scope change."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.product-roadmap-v5-continuation-v1",
+      "plan-revision.kp.v5"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5"
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "npm run typecheck",
+    "npm test",
+    "npm run test:browser:reader-conformance",
+    "npm run visual:contact-sheet",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether Add typed normal-form intent and compiler boundaries can be completed inside KP product roadmap v5 continuation."
+  ],
+  "allowedWork": [
+    "Finish structured algebra, pressure-test fraction composition, add governed semantic and LLM authoring, and promote the approved bounded breadth exemplars in dependency order.",
+    "Extract only contracts proven by exemplars, preserve accepted semantic documents and measured-motion ownership, use shared routes and verification, and commit each reversible slice with durable evidence."
+  ],
+  "disallowedWork": [
+    "Do not generalize a subjective visual pattern before its human exemplar approval, bypass dependency order, or overwrite unrelated user-authored roadmap and design work.",
+    "Do not add LLM-authored DOM, CSS, pixels, arbitrary keyframes, unchecked math, course-scale curriculum, dynamic package loading, parked FTC, BFS, economics, programming, physics work, or broad WebGL generalization."
+  ],
+  "criteria": [
+    {
+      "id": "typed-normal-form-compiler-boundary",
+      "weight": "high"
+    }
+  ]
+}

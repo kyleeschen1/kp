@@ -1,0 +1,66 @@
+{
+  "id": "next-action.kp.decompose-semantic-structured-algebra-v0-v0",
+  "kind": "next-action",
+  "title": "Decompose Prove structured algebra and typed normal-form intent",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "The broad structured-algebra evidence trail now has explicit narrower follow-up actions and contracts.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic.structured-algebra-v0.json",
+      "summary": "Broad task evidence trail that triggered pressure materialization."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "next-action.kp.semantic.structured-algebra-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic.structured-algebra-v0"
+  ],
+  "verification": [
+    "npm run theseus -- decomposition-report",
+    "npm run theseus -- validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- decomposition-report",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-07-23T00:24:10.886Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-07-23T00:24:11.723Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Materialized slices s12 through s15 as four narrow next actions in the approved run contract."
+  },
+  "expectedLearning": [
+    "Which smaller follow-up actions should replace the broad evidence trail."
+  ],
+  "allowedWork": [
+    "Inspect the broad task's source refs, verification records, and affected nodes.",
+    "Create or link narrower follow-up actions with their own contracts."
+  ],
+  "disallowedWork": [
+    "Do not add more implementation evidence to the broad task while decomposing it.",
+    "Do not mark the broad task resolved unless the replacement queue is explicit."
+  ],
+  "criteria": [
+    {
+      "id": "broad-task-has-narrow-follow-ups",
+      "weight": "high"
+    },
+    {
+      "id": "follow-ups-have-contracts",
+      "weight": "high"
+    }
+  ]
+}

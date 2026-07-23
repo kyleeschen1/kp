@@ -1,9 +1,8 @@
 {
-  "id": "run-contract.kp.product-roadmap-v5-continuation-v1",
+  "id": "run-contract.kp.product-roadmap-v5-continuation-v2",
   "kind": "run-contract",
-  "title": "KP product roadmap v5 continuation",
-  "status": "resolved",
-  "summary": "Closed after Theseus materialized four structured-algebra child actions; successor retains the nineteen uncompleted approved slices without skipped bookkeeping entries.",
+  "title": "KP product roadmap v5 continuation v2",
+  "status": "ready",
   "sourceRefs": [
     {
       "kind": "file",
@@ -12,13 +11,8 @@
     },
     {
       "kind": "file",
-      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.product-roadmap-v5-program-v0.json",
-      "summary": "Approved predecessor closed after Goal 1 because its immutable target resolved."
-    },
-    {
-      "kind": "file",
-      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.resume-product-after-codex-reliability-v0.json",
-      "summary": "User-authorized product resumption sequence retained without scope change."
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.product-roadmap-v5-continuation-v1.json",
+      "summary": "Approved predecessor closed after pressure decomposition materialized narrow structured-algebra actions."
     }
   ],
   "verification": [
@@ -41,7 +35,7 @@
   "goal": "Continue the approved dependency-ordered product frontier through structured algebra, fraction composition, governed semantic and LLM authoring, and bounded exemplar breadth.",
   "target": "plan-revision.kp.v5",
   "runMode": "run",
-  "maxSlices": 21,
+  "maxSlices": 19,
   "commitCadence": "Commit each independently reversible verified slice with its Theseus evidence; never mix user-authored unrelated document edits into a slice commit.",
   "verificationLevel": "broad",
   "stopConditions": [
@@ -55,64 +49,24 @@
   ],
   "slices": [
     {
-      "id": "s10",
-      "title": "Add stable expression subtree identity contracts",
-      "summary": "Stable structured-expression subtree IDs now survive reconstruction, validate uniqueness and shape, and preserve authored topology.",
-      "status": "complete"
-    },
-    {
-      "id": "s11",
-      "title": "Add semantic algebra role binding over structured expressions",
-      "summary": "Semantic roles now bind to validated source or target subtree identities with explicit cardinality and node-kind constraints while presentation remains renderer-owned.",
-      "status": "complete"
-    },
-    {
-      "id": "s12",
-      "title": "Add verified rewrite laws and deterministic diagnostics",
-      "summary": "Materialized as next-action.project.s12-v0.",
-      "status": "skipped"
-    },
-    {
       "id": "next-action.project.s12-v0",
       "title": "Add verified rewrite laws and deterministic diagnostics",
-      "summary": "Materialized from stored run-contract slice s12 in KP product roadmap v5 continuation.",
-      "status": "ready"
-    },
-    {
-      "id": "s13",
-      "title": "Add typed normal-form intent and compiler boundaries",
-      "summary": "Materialized as next-action.project.s13-v0.",
-      "status": "skipped"
+      "status": "planned"
     },
     {
       "id": "next-action.project.s13-v0",
       "title": "Add typed normal-form intent and compiler boundaries",
-      "summary": "Materialized from stored run-contract slice s13 in KP product roadmap v5 continuation.",
-      "status": "ready"
-    },
-    {
-      "id": "s14",
-      "title": "Migrate the distribution exemplar from string templates to structured algebra",
-      "summary": "Materialized as next-action.project.s14-v0.",
-      "status": "skipped"
+      "status": "planned"
     },
     {
       "id": "next-action.project.s14-v0",
       "title": "Migrate the distribution exemplar from string templates to structured algebra",
-      "summary": "Materialized from stored run-contract slice s14 in KP product roadmap v5 continuation.",
-      "status": "ready"
-    },
-    {
-      "id": "s15",
-      "title": "Run structured-algebra boundary and preservation gates",
-      "summary": "Materialized as next-action.project.s15-v0.",
-      "status": "skipped"
+      "status": "planned"
     },
     {
       "id": "next-action.project.s15-v0",
       "title": "Run structured-algebra boundary and preservation gates",
-      "summary": "Materialized from stored run-contract slice s15 in KP product roadmap v5 continuation.",
-      "status": "ready"
+      "status": "planned"
     },
     {
       "id": "s16",
