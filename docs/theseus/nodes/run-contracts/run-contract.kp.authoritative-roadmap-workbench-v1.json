@@ -169,7 +169,9 @@
     {
       "id": "s18",
       "title": "Preserve-route-keyboard-and-responsive-use",
-      "status": "planned"
+      "summary": "Moved roadmap sort/direction/topic/horizon/state UI state into validated URL parameters, preserving it across animation search, selection, representation changes, and reload. Native select keyboard focus survives rerender; the narrow table scrolls internally with zero page overflow. Eleven focused tests, typecheck/build, and all 8 Workbench Chromium tests pass.",
+      "status": "complete",
+      "planPhaseId": "authoritative-roadmap-workbench"
     },
     {
       "id": "s19",

@@ -15,7 +15,11 @@ test("Workbench route reads canonical query selection and representation", () =>
       active: true,
       query: "radical",
       animationId: "animation.radical",
-      representationId: "sample.radical"
+      representationId: "sample.radical",
+      roadmap: {
+        sortBy: "canonical",
+        direction: "ascending"
+      }
     }
   );
 });
@@ -44,5 +48,43 @@ test("Workbench route omits blank optional state", () => {
       { query: " " }
     ),
     "?view=animation-workbench"
+  );
+});
+
+test("Workbench route round-trips non-default roadmap controls", () => {
+  const search = writeKpSemanticAnimationWorkbenchRoute(
+    "?view=animation-workbench&q=radical",
+    {
+      query: "radical",
+      roadmap: {
+        sortBy: "topic",
+        direction: "descending",
+        topic: "Arithmetic · Addition",
+        horizon: "later",
+        state: "planned"
+      }
+    }
+  );
+
+  assert.deepEqual(readKpSemanticAnimationWorkbenchRoute(search).roadmap, {
+    sortBy: "topic",
+    direction: "descending",
+    topic: "Arithmetic · Addition",
+    horizon: "later",
+    state: "planned"
+  });
+  assert.match(search, /roadmapSort=topic/);
+  assert.match(search, /roadmapDirection=descending/);
+});
+
+test("Workbench route rejects unsupported roadmap values", () => {
+  assert.deepEqual(
+    readKpSemanticAnimationWorkbenchRoute(
+      "?view=animation-workbench&roadmapSort=random&roadmapDirection=sideways&roadmapHorizon=soon&roadmapState=maybe"
+    ).roadmap,
+    {
+      sortBy: "canonical",
+      direction: "ascending"
+    }
   );
 });

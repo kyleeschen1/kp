@@ -121,13 +121,13 @@ import {
   projectKpWorkbenchRoadmap
 } from "./editor/semantic-animation-workbench-roadmap.ts";
 import {
-  KP_WORKBENCH_ROADMAP_SORTS,
   listKpWorkbenchRoadmapTopics,
   queryKpWorkbenchRoadmap,
-  type KpWorkbenchRoadmapQuery,
-  type KpWorkbenchRoadmapSort,
-  type KpWorkbenchRoadmapSortDirection
+  type KpWorkbenchRoadmapQuery
 } from "./editor/semantic-animation-workbench-roadmap-query.ts";
+import type {
+  KpSemanticAnimationWorkbenchRoadmapRouteState
+} from "./editor/semantic-animation-workbench-route.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -142,12 +142,6 @@ let projectDashboardSelectedAgendaRowId: string | undefined;
 let projectDashboardTocOnly = false;
 let projectDashboardSelectedKatexFixtureId: string | undefined;
 let selectedEquationAnimationId: string | undefined;
-let animationWorkbenchRoadmapSort: KpWorkbenchRoadmapSort = "canonical";
-let animationWorkbenchRoadmapDirection:
-  KpWorkbenchRoadmapSortDirection = "ascending";
-let animationWorkbenchRoadmapTopic = "";
-let animationWorkbenchRoadmapHorizon = "";
-let animationWorkbenchRoadmapState = "";
 const editorAnimationDescriptors = createKpEditorAnimationLibrary();
 let selectedEditorAnimationDescriptorId = selectKpEditorAnimationDescriptor(
   editorAnimationDescriptors,
@@ -481,7 +475,7 @@ function renderAnimationWorkbenchView(): void {
             : { requestedRepresentationId: route.representationId }),
           descriptors: editorAnimationDescriptors
         });
-  const roadmapQuery = animationWorkbenchRoadmapQuery();
+  const roadmapQuery = animationWorkbenchRoadmapQuery(route.roadmap);
   appRoot.innerHTML = renderKpSemanticAnimationWorkbenchShell({
     query: route.query,
     results,
@@ -523,60 +517,91 @@ function renderAnimationWorkbenchView(): void {
   }
 }
 
-function animationWorkbenchRoadmapQuery(): KpWorkbenchRoadmapQuery {
+function animationWorkbenchRoadmapQuery(
+  route: KpSemanticAnimationWorkbenchRoadmapRouteState
+): KpWorkbenchRoadmapQuery {
   return {
-    sortBy: animationWorkbenchRoadmapSort,
-    direction: animationWorkbenchRoadmapDirection,
-    ...(animationWorkbenchRoadmapTopic === ""
-      ? {}
-      : { topics: [animationWorkbenchRoadmapTopic] }),
-    ...(animationWorkbenchRoadmapHorizon === ""
-      ? {}
-      : {
-          horizons: [
-            animationWorkbenchRoadmapHorizon as
-              NonNullable<KpWorkbenchRoadmapQuery["horizons"]>[number]
-          ]
-        }),
-    ...(animationWorkbenchRoadmapState === ""
-      ? {}
-      : {
-          states: [
-            animationWorkbenchRoadmapState as
-              NonNullable<KpWorkbenchRoadmapQuery["states"]>[number]
-          ]
-        })
+    sortBy: route.sortBy,
+    direction: route.direction,
+    ...(route.topic === undefined ? {} : { topics: [route.topic] }),
+    ...(route.horizon === undefined ? {} : { horizons: [route.horizon] }),
+    ...(route.state === undefined ? {} : { states: [route.state] })
   };
 }
 
 function updateAnimationWorkbenchRoadmapQuery(
   select: HTMLSelectElement
 ): void {
+  const route = readKpSemanticAnimationWorkbenchRoute(
+    window.location.search
+  );
+  let roadmap = route.roadmap;
   switch (select.dataset["action"]) {
     case "sort-animation-workbench-roadmap":
-      if (
-        (KP_WORKBENCH_ROADMAP_SORTS as readonly string[]).includes(select.value)
-      ) {
-        animationWorkbenchRoadmapSort =
-          select.value as KpWorkbenchRoadmapSort;
-      }
+      roadmap = { ...roadmap, sortBy: select.value as typeof roadmap.sortBy };
       break;
     case "set-animation-workbench-roadmap-direction":
-      if (select.value === "ascending" || select.value === "descending") {
-        animationWorkbenchRoadmapDirection = select.value;
-      }
+      roadmap = {
+        ...roadmap,
+        direction: select.value as typeof roadmap.direction
+      };
       break;
     case "filter-animation-workbench-roadmap-topic":
-      animationWorkbenchRoadmapTopic = select.value;
+      {
+        const { topic: _topic, ...withoutTopic } = roadmap;
+        roadmap = select.value === ""
+          ? withoutTopic
+          : { ...withoutTopic, topic: select.value };
+      }
       break;
     case "filter-animation-workbench-roadmap-horizon":
-      animationWorkbenchRoadmapHorizon = select.value;
+      {
+        const { horizon: _horizon, ...withoutHorizon } = roadmap;
+        roadmap = select.value === ""
+          ? withoutHorizon
+          : {
+              ...withoutHorizon,
+              horizon: select.value as NonNullable<
+                KpSemanticAnimationWorkbenchRoadmapRouteState["horizon"]
+              >
+            };
+      }
       break;
     case "filter-animation-workbench-roadmap-state":
-      animationWorkbenchRoadmapState = select.value;
+      {
+        const { state: _state, ...withoutState } = roadmap;
+        roadmap = select.value === ""
+          ? withoutState
+          : {
+              ...withoutState,
+              state: select.value as NonNullable<
+                KpSemanticAnimationWorkbenchRoadmapRouteState["state"]
+              >
+            };
+      }
       break;
   }
+  window.history.replaceState(
+    null,
+    "",
+    writeKpSemanticAnimationWorkbenchRoute(window.location.search, {
+      query: route.query,
+      ...(route.animationId === undefined
+        ? {}
+        : { animationId: route.animationId }),
+      ...(route.representationId === undefined
+        ? {}
+        : { representationId: route.representationId }),
+      roadmap
+    })
+  );
+  const action = select.dataset["action"];
   renderAnimationWorkbenchView();
+  if (action !== undefined) {
+    appRoot
+      .querySelector<HTMLSelectElement>(`select[data-action="${action}"]`)
+      ?.focus();
+  }
 }
 
 async function mountAnimationWorkbenchReviewCapture(
@@ -746,7 +771,8 @@ function filterAnimationWorkbenchFromInput(input: HTMLInputElement): void {
         : { animationId: route.animationId }),
       ...(route.representationId === undefined
         ? {}
-        : { representationId: route.representationId })
+        : { representationId: route.representationId }),
+      roadmap: route.roadmap
     })
   );
   renderAnimationWorkbenchView();
@@ -768,7 +794,8 @@ function selectAnimationWorkbenchResult(button: HTMLButtonElement): void {
     "",
     writeKpSemanticAnimationWorkbenchRoute(window.location.search, {
       query: route.query,
-      animationId
+      animationId,
+      roadmap: route.roadmap
     })
   );
   renderAnimationWorkbenchView();
@@ -799,7 +826,8 @@ function selectAnimationWorkbenchRepresentation(
     writeKpSemanticAnimationWorkbenchRoute(window.location.search, {
       query: route.query,
       animationId,
-      representationId
+      representationId,
+      roadmap: route.roadmap
     })
   );
   renderAnimationWorkbenchView();

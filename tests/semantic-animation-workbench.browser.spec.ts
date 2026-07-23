@@ -193,6 +193,10 @@ test("Workbench renders and queries the authoritative roadmap table", async ({
   await roadmap
     .locator('[data-action="sort-animation-workbench-roadmap"]')
     .selectOption("name");
+  await expect(page).toHaveURL(/roadmapSort=name/);
+  await expect(
+    page.locator('[data-action="sort-animation-workbench-roadmap"]')
+  ).toBeFocused();
   await expect(
     page
       .locator("[data-kp-animation-workbench-roadmap] tbody th")
@@ -202,10 +206,21 @@ test("Workbench renders and queries the authoritative roadmap table", async ({
   await page
     .locator('[data-action="filter-animation-workbench-roadmap-topic"]')
     .selectOption("Arithmetic · Addition");
+  await expect(page).toHaveURL(/roadmapTopic=Arithmetic/);
+  await expect(
+    page.locator('[data-action="filter-animation-workbench-roadmap-topic"]')
+  ).toBeFocused();
   const rows = page.locator("[data-kp-animation-workbench-roadmap-row]");
   await expect(rows).toHaveCount(1);
   await expect(rows.first()).toContainText("Multi-digit addition");
   await expect(rows.first()).toContainText("planned");
+  await page.reload();
+  await expect(
+    page.locator("[data-kp-animation-workbench-roadmap-row]")
+  ).toHaveCount(1);
+  await expect(
+    page.locator('[data-action="sort-animation-workbench-roadmap"]')
+  ).toHaveValue("name");
 });
 
 test("Workbench search and results support keyboard-only traversal", async ({
@@ -287,15 +302,22 @@ test("Workbench stacks without horizontal overflow on a narrow viewport", async 
     const detail = document.querySelector<HTMLElement>(
       ".kp-animation-workbench__detail"
     );
+    const roadmapTable = document.querySelector<HTMLElement>(
+      ".kp-animation-workbench__roadmap-table-wrap"
+    );
     return {
       overflow:
         document.documentElement.scrollWidth -
         document.documentElement.clientWidth,
       resultsTop: results?.getBoundingClientRect().top ?? 0,
-      detailTop: detail?.getBoundingClientRect().top ?? 0
+      detailTop: detail?.getBoundingClientRect().top ?? 0,
+      roadmapTableOverflow:
+        (roadmapTable?.scrollWidth ?? 0) -
+        (roadmapTable?.clientWidth ?? 0)
     };
   });
   expect(geometry.overflow).toBeLessThanOrEqual(1);
+  expect(geometry.roadmapTableOverflow).toBeGreaterThan(0);
   expect(geometry.detailTop).toBeGreaterThan(geometry.resultsTop);
 });
 
