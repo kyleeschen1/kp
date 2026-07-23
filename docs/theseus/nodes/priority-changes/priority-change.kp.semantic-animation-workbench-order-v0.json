@@ -2,9 +2,9 @@
   "id": "priority-change.kp.semantic-animation-workbench-order-v0",
   "kind": "priority-change",
   "title": "Priority change priority-change.kp.semantic-animation-workbench-order-v0",
-  "status": "active",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Finish the derivative checkpoint, then establish a canonical searchable Semantic Animation Workbench before quadratic breadth so animation identity, approval, progress, representations, and review evidence cannot drift.",
+  "summary": "The approved priority is now materialized in run-contract.kp.semantic-animation-workbench-v1; the prior continuation closed with its three superseded breadth slices preserved as skipped history.",
   "sourceRefs": [
     {
       "kind": "user-intent",
@@ -36,6 +36,20 @@
   "affects": [
     "plan-revision.kp.v5",
     "run-contract.kp.product-roadmap-v5-continuation-v2"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/theseus-loop-status.test.ts",
+      "status": "passed",
+      "scope": "Contract-boundary progress derivation: 3 tests passed after predecessor closeout and successor activation.",
+      "checkedAt": "2026-07-23T19:46:55.876Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "Typed successor contract and preserved predecessor history: 757 nodes and 10,815 events valid.",
+      "checkedAt": "2026-07-23T19:47:08.976Z"
+    }
   ],
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

@@ -1,0 +1,195 @@
+{
+  "id": "run-contract.kp.semantic-animation-workbench-v1",
+  "kind": "run-contract",
+  "title": "KP Semantic Animation Workbench v1",
+  "status": "superseded",
+  "summary": "Superseded before implementation because its resolved priority-change target violated run-contract hygiene; v2 retains the exact approved slices and sources while targeting active plan-revision.kp.v5.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.semantic-animation-workbench-order-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-semantic-animation-workbench-long-loop-proposal.md",
+      "summary": "Human-approved exact 27-slice order, authority boundaries, verification cadence, rollback units, and human checkpoints."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-23-kp-semantic-animation-workbench-order.md",
+      "summary": "Accepted Workbench-before-quadratic priority and preservation boundary."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "npm run typecheck",
+    "npm test",
+    "npm run test:browser:reader-conformance",
+    "npm run visual:contact-sheet",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Add a derived canonical animation index and explicit representation links by reusing the existing catalog picker player review inbox and Theseus state.",
+    "Add the Semantic Editor Workbench route search preview lifecycle badges acceptance brief review evidence and representation switching.",
+    "After the Workbench human checkpoint add one quadratic semantic and visual exemplar and normalize only contracts proven by that second consumer."
+  ],
+  "disallowedWork": [
+    "Do not create a second animation database duplicate Theseus state or make presentation representations separate animation identities.",
+    "Do not redesign Agenda replace review storage merge unrelated branch work or begin deferred integral vector matrix arithmetic FTC BFS economics programming physics dynamic loading or curriculum work.",
+    "Do not cross the Workbench checkpoint at s21 or quadratic choreography checkpoint at s24 without explicit human approval."
+  ],
+  "goal": "Build one canonical searchable Semantic Animation Workbench, prove it on radical derivative and planned quadratic lifecycle states, then introduce quadratic solution branching and promote only second-consumer contracts.",
+  "target": "priority-change.kp.semantic-animation-workbench-order-v0",
+  "runMode": "run",
+  "maxSlices": 27,
+  "commitCadence": "Commit every independently reversible verified slice with its Theseus evidence and never mix unrelated user-authored files.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "H1 WORKBENCH-REVIEW: stop after s21 until the user approves the wide and narrow Workbench control-plane exemplar.",
+    "H2 QUADRATIC-REVIEW: stop after s24 until the user approves the quadratic branch choreography.",
+    "H3 AUTHORITY: stop on ambiguous ownership identity collision silent status conflict review-history mutation or a need for a second animation database.",
+    "H4 PRESERVATION: stop on runtime duplication route regression accessibility regression or exact seek and rewind failure.",
+    "H5 SCOPE: stop before any deferred domain Agenda redesign review-protocol replacement dynamic loading or unsupported global generalization.",
+    "H6 USER-OVERLAP: stop if required work cannot be separated from unrelated user-authored roadmap or design changes."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Close the superseded continuation",
+      "summary": "Closed the old continuation without deletion: s28-s30 are skipped with deferred evidence preserved, the old contract auto-resolved, the incomplete v0 successor is superseded, and the hygienic approved v1 contract now owns execution.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Freeze the authority map",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Freeze the seed cohort",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Define canonical animation identity",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Define representation relationships",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Define lifecycle facets",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Add the catalog adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Add the representation adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Add the Theseus read adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Add the review-evidence adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Compile the canonical index",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Add fuzzy query and ranking",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Add the Workbench route and shell",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Render canonical results",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Reuse the live preview",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Derive the acceptance brief",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Render independent lifecycle badges",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Add item-scoped review history",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Add representation switching",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Harden keyboard responsive and static use",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Workbench control-plane checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Define quadratic semantic branching",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Compile quadratic solution paths",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Add quadratic visual choreography",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Publish quadratic through Workbench",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Extract second-consumer contracts",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Run successor release gates",
+      "status": "planned"
+    }
+  ]
+}

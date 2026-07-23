@@ -2,7 +2,8 @@
   "id": "run-contract.kp.product-roadmap-v5-continuation-v2",
   "kind": "run-contract",
   "title": "KP product roadmap v5 continuation v2",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -147,17 +148,20 @@
     {
       "id": "s28",
       "title": "Promote the integral accumulation exemplar",
-      "status": "planned"
+      "summary": "Superseded by the user-approved Semantic Animation Workbench successor; integral accumulation remains deferred evidence, not deleted work.",
+      "status": "skipped"
     },
     {
       "id": "s29",
       "title": "Promote the vector and projection exemplar",
-      "status": "planned"
+      "summary": "Superseded by the user-approved Semantic Animation Workbench successor; vector and projection remain deferred evidence, not deleted work.",
+      "status": "skipped"
     },
     {
       "id": "s30",
       "title": "Promote matrix-vector linear-map coordination and run program release gates",
-      "status": "planned"
+      "summary": "Superseded by the user-approved Semantic Animation Workbench successor; matrix and linear-map coordination remain deferred evidence, not deleted work.",
+      "status": "skipped"
     }
   ]
 }

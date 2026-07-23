@@ -1,7 +1,7 @@
 # Semantic Animation Workbench Long-Loop Proposal
 
 Date: 2026-07-23
-Status: proposed; awaiting explicit execution approval
+Status: approved for execution on 2026-07-23
 Decision: `../decisions/2026-07-23-kp-semantic-animation-workbench-order.md`
 
 ## Objective
@@ -149,3 +149,10 @@ tests.
 Approve these 27 slices as the exact order for the successor Theseus run
 contract. Approval authorizes contract creation and execution through slice 21,
 where the Workbench control-plane exemplar must return for human review.
+
+## Approval outcome
+
+The user approved the exact 27-slice order on 2026-07-23. The successor
+contract may execute through slice 21, where the Workbench control-plane
+checkpoint remains mandatory. Approval does not waive the quadratic checkpoint
+at slice 24 or any preservation, scope, verification, or authority stop.
