@@ -2,12 +2,17 @@
   "id": "next-action.kp.authoring.governed-semantic-llm-v0",
   "kind": "next-action",
   "title": "Prove governed semantic and LLM authoring",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Governed semantic and LLM authoring is accepted: providers select verified intent while deterministic compilers retain truth, repair, provenance, and presentation authority.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-governed-semantic-authoring-exemplar-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -82,8 +87,8 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "One Codex-authored fraction fan-out response compiles only through verified source identities and exact operation contracts. Full gates pass and the bounded authority split is packaged for mandatory human review."
+    "state": "complete",
+    "summary": "Human approved the bounded semantic authoring authority split after the governed fraction fan-out exemplar and full preservation gates."
   },
   "expectedLearning": [
     "Whether an LLM can select verified semantics, correspondence, focus, cadence, and normal-form intent while deterministic compilers retain geometry, timing, typography, responsive adaptation, rendering, validation, and repair authority."
