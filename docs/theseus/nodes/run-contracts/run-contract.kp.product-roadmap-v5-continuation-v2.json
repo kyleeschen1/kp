@@ -123,7 +123,8 @@
     {
       "id": "s24",
       "title": "Prove and review one governed LLM authoring exemplar",
-      "status": "planned"
+      "summary": "Governed fraction fan-out exemplar, full verification, preservation inspection, and review package are ready. Holding at the mandatory human checkpoint before action completion or breadth work.",
+      "status": "in-progress"
     },
     {
       "id": "s25",

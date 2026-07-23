@@ -37,11 +37,53 @@
       "scope": "focused",
       "checkedAt": "2026-07-23T13:32:46.944Z",
       "notes": "Four compiler acceptance, repair, provenance, and unsafe-authority tests passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/governed-fraction-fan-out-exemplar.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T13:40:28.874Z",
+      "notes": "Three tests prove fixture grounding, deterministic compiler-owned policy, immutable provenance, and exclusion of presentation or unchecked math authority."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-23T13:40:29.796Z",
+      "notes": "Application, Node, test, and domain TypeScript boundaries passed."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-23T13:40:30.607Z",
+      "notes": "Full architecture and deterministic regression suite passed with the governed exemplar."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-07-23T13:40:31.557Z",
+      "notes": "Production build and its repository typecheck passed."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-07-23T13:40:32.411Z",
+      "notes": "Shared reader conformance cohort passed without route, URL-state, responsive, or accessibility regression."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation",
+      "status": "passed",
+      "scope": "visual",
+      "checkedAt": "2026-07-23T13:40:33.268Z",
+      "notes": "Existing fractional-linear reader visual contract passed; the governed exemplar adds no renderer authority."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Constrained request schema and deterministic compiler with typed rejection, local repair patches, exact source and operation resolution, and immutable provenance are implemented; one governed exemplar remains."
+    "summary": "One Codex-authored fraction fan-out response compiles only through verified source identities and exact operation contracts. Full gates pass and the bounded authority split is packaged for mandatory human review."
   },
   "expectedLearning": [
     "Whether an LLM can select verified semantics, correspondence, focus, cadence, and normal-form intent while deterministic compilers retain geometry, timing, typography, responsive adaptation, rendering, validation, and repair authority."
