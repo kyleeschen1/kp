@@ -51,7 +51,8 @@
     {
       "id": "next-action.project.s12-v0",
       "title": "Add verified rewrite laws and deterministic diagnostics",
-      "status": "planned"
+      "summary": "Distribution rewrites now require lawful structured topology and emit stable lineage or path-addressed rejection diagnostics.",
+      "status": "complete"
     },
     {
       "id": "next-action.project.s13-v0",

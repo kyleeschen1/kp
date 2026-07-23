@@ -2,8 +2,8 @@
   "id": "next-action.project.s12-v0",
   "kind": "next-action",
   "title": "Add verified rewrite laws and deterministic diagnostics",
-  "status": "ready",
-  "summary": "Materialized from stored run-contract slice s12 in KP product roadmap v5 continuation.",
+  "status": "resolved",
+  "summary": "Verified distribution rewrite law and diagnostics are implemented and broadly verified.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -44,6 +44,38 @@
     "npm run build",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/structured-expression-rewrite.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T00:32:54.537Z",
+      "notes": "Three rewrite-law and deterministic-diagnostic tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-23T00:32:55.479Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-23T00:32:56.290Z",
+      "notes": "All 1926 tests passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-07-23T00:32:57.069Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Verified distribution now proves source and target topology, factor fan-out, addend preservation, cardinality, and deterministic diagnostics."
+  },
   "expectedLearning": [
     "Whether Add verified rewrite laws and deterministic diagnostics can be completed inside KP product roadmap v5 continuation."
   ],
