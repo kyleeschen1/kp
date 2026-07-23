@@ -63,6 +63,12 @@
       "status": "passed",
       "scope": "s04 canonical identity, collision, seed, and authority laws: 9 tests passed.",
       "checkedAt": "2026-07-23T19:58:56.615Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-representation.test.ts tests/semantic-animation-workbench-identity.test.ts",
+      "status": "passed",
+      "scope": "s05 subordinate representation closure and identity boundaries: 6 tests passed.",
+      "checkedAt": "2026-07-23T20:02:12.651Z"
     }
   ],
   "planRevision": {
