@@ -6,6 +6,9 @@ import {
   kpRadicalNativeSettlementStart,
   sampleKpRadicalNativeSettlement
 } from "../src/animation/radical-native-settlement.ts";
+import {
+  kpRadicalConventionalMorphProfile
+} from "../src/animation/radical-morph-profile.ts";
 
 const nativeRect = { left: 20, top: 10, width: 40, height: 28 };
 
@@ -56,35 +59,48 @@ test("settlement reaches exact native geometry and mirrors under direct seek", (
 });
 
 test("a complete WebGL target can hand off to exact native ink earlier", () => {
+  const settlement = kpRadicalConventionalMorphProfile.settlement;
   const frame = sampleKpRadicalNativeSettlement({
-    semanticProgress: 0.75,
+    semanticProgress: (settlement.start + settlement.end) / 2,
     fragmentRects: [nativeRect],
     nativeRect,
-    handoffStart: 0.68,
-    handoffEnd: 0.92
+    handoffStart: settlement.start,
+    handoffEnd: settlement.end,
+    easing: settlement.easing
   });
 
   assert.equal(frame.phase, "native-handoff");
-  assert.ok(frame.nativeOpacity > 0.15);
-  assert.ok(frame.nativeOpacity < 0.3);
+  assert.equal(frame.nativeOpacity, 0.5);
   assert.ok(Math.abs(frame.fragmentOpacity + frame.nativeOpacity - 1) < 1e-12);
 });
 
 test("native handoff uses a symmetric conventional ease-in-out", () => {
+  const settlement = kpRadicalConventionalMorphProfile.settlement;
+  const duration = settlement.end - settlement.start;
   const early = sampleKpRadicalNativeSettlement({
-    semanticProgress: 0.72,
+    semanticProgress: settlement.start + duration * 0.25,
     fragmentRects: [nativeRect],
     nativeRect,
-    handoffStart: 0.68,
-    handoffEnd: 0.92
+    handoffStart: settlement.start,
+    handoffEnd: settlement.end,
+    easing: settlement.easing
   });
   const late = sampleKpRadicalNativeSettlement({
-    semanticProgress: 0.88,
+    semanticProgress: settlement.start + duration * 0.75,
     fragmentRects: [nativeRect],
     nativeRect,
-    handoffStart: 0.68,
-    handoffEnd: 0.92
+    handoffStart: settlement.start,
+    handoffEnd: settlement.end,
+    easing: settlement.easing
   });
 
   assert.ok(Math.abs(early.nativeOpacity + late.nativeOpacity - 1) < 1e-12);
+});
+
+test("the named profile finishes the solid morph before native ownership changes", () => {
+  const profile = kpRadicalConventionalMorphProfile;
+
+  assert.equal(profile.morph.end, profile.settlement.start);
+  assert.ok(profile.morph.start < profile.morph.end);
+  assert.ok(profile.settlement.start < profile.settlement.end);
 });

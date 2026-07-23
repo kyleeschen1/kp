@@ -91,6 +91,9 @@ import {
   sampleKpRadicalNativeSettlement
 } from "../animation/radical-native-settlement.ts";
 import {
+  kpRadicalConventionalMorphProfile
+} from "../animation/radical-morph-profile.ts";
+import {
   disposeKpRadicalWebglMorph,
   syncKpRadicalWebglMorph
 } from "../rendering/radical-webgl-morph.ts";
@@ -829,7 +832,7 @@ function applyRadicalMaterialLayer(input: {
     editorAccessibilityMode(input.stage) === "full-motion" &&
     player?.dataset["kpEditorAnimationQualityTier"] !== "efficient";
   let warmedWebglMorph = {
-    mode: "dom-fallback" as "webgl-pixel-flow" | "dom-fallback",
+    mode: "dom-fallback" as "webgl-solid-mask" | "dom-fallback",
     ready: false
   };
   if (sourceExponent !== null && radicalNative !== null) {
@@ -841,10 +844,7 @@ function applyRadicalMaterialLayer(input: {
       targetElement: radicalNative,
       semanticProgress: input.semanticProgress,
       opacity: 0,
-      enabled: webglEnabled,
-      particleDensityScale: Number(
-        player?.dataset["kpEditorAnimationQualityParticleDensityScale"] ?? 1
-      )
+      enabled: webglEnabled
     });
   } else {
     disposeKpRadicalWebglMorph(input.stage);
@@ -905,7 +905,13 @@ function applyRadicalMaterialLayer(input: {
       : [hookRect, overbarRect],
     nativeRect,
     ...(warmedWebglMorph.ready
-      ? { handoffStart: 0.68, handoffEnd: 0.92 }
+      ? {
+          handoffStart:
+            kpRadicalConventionalMorphProfile.settlement.start,
+          handoffEnd:
+            kpRadicalConventionalMorphProfile.settlement.end,
+          easing: kpRadicalConventionalMorphProfile.settlement.easing
+        }
       : {})
   });
   setRadicalSettlementDataset(input.stage, settlement);
@@ -917,10 +923,7 @@ function applyRadicalMaterialLayer(input: {
         targetElement: radicalNative,
         semanticProgress: input.semanticProgress,
         opacity: settlement.fragmentOpacity,
-        enabled: webglEnabled,
-        particleDensityScale: Number(
-          player?.dataset["kpEditorAnimationQualityParticleDensityScale"] ?? 1
-        )
+        enabled: webglEnabled
       });
 
   if (webglMorph.ready && sourceExponent !== null) {

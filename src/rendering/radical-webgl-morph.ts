@@ -1,20 +1,22 @@
 import {
-  createKatexArtifactPixelFlowRenderer,
-  type KatexArtifactPixelFlowPlan,
-  type KatexArtifactPixelFlowRenderer
-} from "./katex-artifact-pixel-flow.ts";
+  kpRadicalConventionalMorphProfile
+} from "../animation/radical-morph-profile.ts";
+import {
+  createKatexArtifactSolidMaskMorphRenderer,
+  type KatexArtifactSolidMaskMorphPlan,
+  type KatexArtifactSolidMaskMorphRenderer
+} from "./katex-artifact-solid-mask-morph.ts";
 import {
   createKatexTextureAtlas,
   measureKatexTextureCaptureRect
 } from "./katex-texture-atlas.ts";
 import type {
   KatexMotionToken,
-  KatexTokenRect,
-  KatexTextureAtlas
+  KatexTokenRect
 } from "./katex-transition-types.ts";
 
 export interface KpRadicalWebglMorphSyncResult {
-  readonly mode: "webgl-pixel-flow" | "dom-fallback";
+  readonly mode: "webgl-solid-mask" | "dom-fallback";
   readonly ready: boolean;
 }
 
@@ -24,7 +26,7 @@ interface KpRadicalWebglMorphState {
   readonly canvas: HTMLCanvasElement;
   readonly width: number;
   readonly height: number;
-  renderer?: KatexArtifactPixelFlowRenderer | undefined;
+  renderer?: KatexArtifactSolidMaskMorphRenderer | undefined;
   status: "initializing" | "ready" | "fallback";
   progress: number;
   opacity: number;
@@ -39,7 +41,6 @@ export function syncKpRadicalWebglMorph(input: {
   readonly semanticProgress: number;
   readonly opacity: number;
   readonly enabled: boolean;
-  readonly particleDensityScale?: number | undefined;
 }): KpRadicalWebglMorphSyncResult {
   if (!input.enabled) {
     disposeKpRadicalWebglMorph(input.stage);
@@ -66,13 +67,13 @@ export function syncKpRadicalWebglMorph(input: {
   }
 
   if (state === undefined) {
-    state = createMorphState(input.stage, input.sourceElement, input.targetElement);
+    state = createMorphState(
+      input.stage,
+      input.sourceElement,
+      input.targetElement
+    );
     morphStates.set(input.stage, state);
-    void initializeMorphState({
-      stage: input.stage,
-      state,
-      particleDensityScale: input.particleDensityScale
-    });
+    void initializeMorphState({ stage: input.stage, state });
   }
 
   state.progress = input.semanticProgress;
@@ -80,21 +81,21 @@ export function syncKpRadicalWebglMorph(input: {
   if (state.status === "ready" && state.renderer !== undefined) {
     state.renderer.render(state.progress);
     state.canvas.style.opacity = String(state.opacity);
-    input.stage.dataset["kpEditorRadicalMorphMode"] = "webgl-pixel-flow";
+    input.stage.dataset["kpEditorRadicalMorphMode"] = "webgl-solid-mask";
     input.stage.dataset["kpEditorRadicalMorphReady"] = "true";
     delete input.stage.dataset["kpEditorRadicalMorphFallbackReason"];
-    return { mode: "webgl-pixel-flow", ready: true };
+    return { mode: "webgl-solid-mask", ready: true };
   }
 
   state.canvas.style.opacity = "0";
   input.stage.dataset["kpEditorRadicalMorphReady"] = "false";
   input.stage.dataset["kpEditorRadicalMorphMode"] = state.status === "fallback"
     ? "dom-fallback"
-    : "webgl-pixel-flow";
+    : "webgl-solid-mask";
   return {
     mode: state.status === "fallback"
       ? "dom-fallback"
-      : "webgl-pixel-flow",
+      : "webgl-solid-mask",
     ready: false
   };
 }
@@ -140,7 +141,6 @@ function createMorphState(
 async function initializeMorphState(input: {
   readonly stage: HTMLElement;
   readonly state: KpRadicalWebglMorphState;
-  readonly particleDensityScale?: number | undefined;
 }): Promise<void> {
   try {
     const stageRect = input.stage.getBoundingClientRect();
@@ -152,11 +152,6 @@ async function initializeMorphState(input: {
     );
     const sourceLocalRect = viewportRectToLocalRect(sourceRect, stageRect);
     const targetLocalRect = viewportRectToLocalRect(targetRect, stageRect);
-    const targetCaptureElement = createCompleteRadicalCaptureElement({
-      stage: input.stage,
-      nativeElement: input.state.targetElement,
-      rect: targetLocalRect
-    });
     const sourceToken = captureToken(
       "radical-morph.fractional-exponent",
       input.state.sourceElement,
@@ -165,16 +160,11 @@ async function initializeMorphState(input: {
     );
     const targetToken = captureToken(
       "radical-morph.complete-native-radical",
-      targetCaptureElement,
+      input.state.targetElement,
       targetRect,
       targetLocalRect
     );
-    let atlas: KatexTextureAtlas;
-    try {
-      atlas = await createKatexTextureAtlas([sourceToken, targetToken]);
-    } finally {
-      targetCaptureElement.remove();
-    }
+    const atlas = await createKatexTextureAtlas([sourceToken, targetToken]);
     if (
       morphStates.get(input.stage) !== input.state ||
       !input.stage.isConnected
@@ -182,10 +172,10 @@ async function initializeMorphState(input: {
       return;
     }
 
-    const density = boundedDensity(input.particleDensityScale);
-    const plan: KatexArtifactPixelFlowPlan = {
-      id: "radical-rewrite.complete-native-radical.webgl-morph",
-      kind: "artifact-pixel-flow",
+    const profile = kpRadicalConventionalMorphProfile;
+    const plan: KatexArtifactSolidMaskMorphPlan = {
+      id: "radical-rewrite.complete-native-radical.solid-mask-morph",
+      kind: "artifact-solid-mask-morph",
       source: {
         tokenId: sourceToken.id,
         rect: sourceLocalRect
@@ -194,18 +184,18 @@ async function initializeMorphState(input: {
         tokenId: targetToken.id,
         rect: targetLocalRect
       },
-      particleCount: Math.round(2200 * density),
-      pairing: "spatial-coherent",
-      color: {
-        red: 15 / 255,
-        green: 23 / 255,
-        blue: 42 / 255
-      },
-      start: 0.08,
-      end: 0.9,
-      easing: "ease-in-out"
+      start: profile.morph.start,
+      end: profile.morph.end,
+      easing: profile.morph.easing,
+      maximumDistancePx: profile.solidMask.maximumDistancePx,
+      edgeSoftnessPx: profile.solidMask.edgeSoftnessPx,
+      boundsPaddingPx: profile.solidMask.boundsPaddingPx,
+      sourceTravelFraction: profile.solidMask.sourceTravelFraction,
+      bridgeExpansionPx: profile.solidMask.bridgeExpansionPx,
+      endpointBlendFraction: profile.solidMask.endpointBlendFraction,
+      color: parseComputedColor(input.state.targetElement)
     };
-    input.state.renderer = createKatexArtifactPixelFlowRenderer(
+    input.state.renderer = createKatexArtifactSolidMaskMorphRenderer(
       input.state.canvas,
       plan,
       atlas
@@ -213,10 +203,13 @@ async function initializeMorphState(input: {
     input.state.status = "ready";
     input.state.renderer.render(input.state.progress);
     input.state.canvas.style.opacity = String(input.state.opacity);
-    input.state.canvas.dataset["kpEditorRadicalWebglParticleCount"] =
-      String(input.state.renderer.particleCount);
-    input.state.canvas.dataset["kpEditorRadicalWebglPairing"] =
-      "spatial-coherent";
+    input.state.canvas.dataset["kpEditorRadicalWebglStrategy"] =
+      "signed-distance-field";
+    input.state.canvas.dataset["kpEditorRadicalWebglPrimitive"] =
+      "triangle-strip";
+    input.state.canvas.dataset["kpEditorRadicalWebglTargetCapture"] =
+      "native-clipped-svg";
+    input.state.canvas.dataset["kpEditorRadicalMotionProfile"] = profile.id;
     input.state.canvas.dataset["kpEditorRadicalWebglTargetWidth"] =
       String(targetLocalRect.width);
     input.state.canvas.dataset["kpEditorRadicalWebglTargetHeight"] =
@@ -225,7 +218,7 @@ async function initializeMorphState(input: {
       String(targetLocalRect.left);
     input.state.canvas.dataset["kpEditorRadicalWebglTargetTop"] =
       String(targetLocalRect.top);
-    input.stage.dataset["kpEditorRadicalMorphMode"] = "webgl-pixel-flow";
+    input.stage.dataset["kpEditorRadicalMorphMode"] = "webgl-solid-mask";
     input.stage.dataset["kpEditorRadicalMorphReady"] = "true";
     delete input.stage.dataset["kpEditorRadicalMorphFallbackReason"];
   } catch (error) {
@@ -235,52 +228,10 @@ async function initializeMorphState(input: {
     input.stage.dataset["kpEditorRadicalMorphMode"] = "dom-fallback";
     input.stage.dataset["kpEditorRadicalMorphReady"] = "false";
     input.stage.dataset["kpEditorRadicalMorphFallbackReason"] =
-      error instanceof Error ? error.message : "WebGL morph initialization failed.";
+      error instanceof Error
+        ? error.message
+        : "WebGL solid-mask morph initialization failed.";
   }
-}
-
-function createCompleteRadicalCaptureElement(input: {
-  readonly stage: HTMLElement;
-  readonly nativeElement: HTMLElement;
-  readonly rect: KatexTokenRect;
-}): HTMLElement {
-  const capture = document.createElement("span");
-  capture.dataset["kpRadicalWebglCapture"] = "complete-native-operator";
-  capture.style.position = "absolute";
-  capture.style.left = `${input.rect.left}px`;
-  capture.style.top = `${input.rect.top}px`;
-  capture.style.width = `${input.rect.width}px`;
-  capture.style.height = `${input.rect.height}px`;
-  capture.style.display = "block";
-  capture.style.opacity = "0";
-  capture.style.pointerEvents = "none";
-  capture.style.color = getComputedStyle(input.nativeElement).color;
-
-  const hook = input.nativeElement.cloneNode(true);
-  if (!(hook instanceof HTMLElement)) {
-    throw new Error("Expected the native radical hook to clone as HTML.");
-  }
-  hook.removeAttribute("data-kp-radical-native-visual");
-  hook.style.position = "absolute";
-  hook.style.inset = "0";
-  hook.style.opacity = "1";
-  hook.style.transform = "none";
-
-  // KaTeX stretches the overbar inside a very wide SVG viewBox. Some browser
-  // foreign-object rasterizers retain the hook but clip that hairline, so the
-  // capture mask completes the same measured operator geometry explicitly.
-  const overbar = document.createElement("span");
-  overbar.dataset["kpRadicalWebglCaptureFragment"] = "overbar";
-  overbar.style.position = "absolute";
-  overbar.style.left = "32%";
-  overbar.style.right = "0";
-  overbar.style.top = "7%";
-  overbar.style.height = `${Math.max(1, input.rect.height * 0.055)}px`;
-  overbar.style.background = "currentColor";
-
-  capture.append(hook, overbar);
-  input.stage.append(capture);
-  return capture;
 }
 
 function captureToken(
@@ -312,7 +263,20 @@ function viewportRectToLocalRect(
   };
 }
 
-function boundedDensity(value: number | undefined): number {
-  if (value === undefined || !Number.isFinite(value)) return 1;
-  return Math.min(1, Math.max(0.45, value));
+function parseComputedColor(element: HTMLElement): {
+  readonly red: number;
+  readonly green: number;
+  readonly blue: number;
+} {
+  const components = getComputedStyle(element).color.match(
+    /rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/
+  );
+  if (components === null) {
+    throw new Error("Could not resolve the native KaTeX radical color.");
+  }
+  return {
+    red: Number(components[1]) / 255,
+    green: Number(components[2]) / 255,
+    blue: Number(components[3]) / 255
+  };
 }

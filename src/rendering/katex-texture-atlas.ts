@@ -116,6 +116,15 @@ export async function createKatexTextureAtlas(
       throw new Error("Could not create a 2D atlas canvas context.");
     }
 
+    if (isNativeClippedSvgToken(token)) {
+      await drawNativeClippedSvgToken(
+        context,
+        token,
+        region
+      );
+      continue;
+    }
+
     if (shouldPaintStructuralToken(token)) {
       drawStructuralToken(context, token, region, pixelRatio);
       continue;
@@ -202,6 +211,102 @@ async function captureElementImage(
   await new Promise<void>((resolve, reject) => {
     image.onload = () => resolve();
     image.onerror = () => reject(new Error("Could not rasterize KaTeX token."));
+    image.src = dataUrl;
+  });
+
+  return image;
+}
+
+function isNativeClippedSvgToken(token: KatexMotionToken): boolean {
+  return (
+    token.element instanceof HTMLElement &&
+    token.element.dataset["kpRadicalNativeVisual"] === "true" &&
+    token.element.querySelector("svg") !== null
+  );
+}
+
+async function drawNativeClippedSvgToken(
+  context: CanvasRenderingContext2D,
+  token: KatexMotionToken,
+  region: KatexAtlasRegion
+): Promise<void> {
+  if (!(token.element instanceof HTMLElement)) {
+    throw new Error(`KaTeX token ${token.id} is not an HTML clip owner.`);
+  }
+  const sourceSvg = token.element.querySelector<SVGSVGElement>("svg");
+  if (sourceSvg === null) {
+    throw new Error(`KaTeX token ${token.id} has no native SVG geometry.`);
+  }
+  const sourceRect = sourceSvg.getBoundingClientRect();
+  const viewBox = sourceSvg.viewBox.baseVal;
+  if (
+    sourceRect.width <= 0 ||
+    sourceRect.height <= 0 ||
+    viewBox.width <= 0 ||
+    viewBox.height <= 0
+  ) {
+    throw new Error(`KaTeX token ${token.id} has invalid native SVG geometry.`);
+  }
+
+  const sliceScale = Math.max(
+    sourceRect.width / viewBox.width,
+    sourceRect.height / viewBox.height
+  );
+  const cropViewBox = {
+    x: viewBox.x,
+    y: viewBox.y,
+    width: token.rect.width / sliceScale,
+    height: token.rect.height / sliceScale
+  };
+  const clone = sourceSvg.cloneNode(true);
+  if (!(clone instanceof SVGSVGElement)) {
+    throw new Error(`KaTeX token ${token.id} could not clone its native SVG.`);
+  }
+
+  inlineComputedCaptureStyles(sourceSvg, clone);
+  clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  clone.setAttribute("width", String(region.width));
+  clone.setAttribute("height", String(region.height));
+  clone.setAttribute(
+    "viewBox",
+    [
+      cropViewBox.x,
+      cropViewBox.y,
+      cropViewBox.width,
+      cropViewBox.height
+    ].join(" ")
+  );
+  clone.setAttribute("preserveAspectRatio", "none");
+  appendInlineStyle(
+    clone,
+    `display:block;width:${region.width}px;height:${region.height}px;overflow:visible`
+  );
+
+  // .hide-tail clips the extremely wide KaTeX SVG from xMinYMin. Preserve
+  // that origin exactly; viewport offsets describe layout, not path-space
+  // crop offsets, and applying them would amputate the radical hook.
+  const image = await loadSvgImage(
+    clone.outerHTML,
+    region.width,
+    region.height
+  );
+  context.drawImage(image, region.x, region.y, region.width, region.height);
+}
+
+async function loadSvgImage(
+  markup: string,
+  width: number,
+  height: number
+): Promise<HTMLImageElement> {
+  const image = new Image(width, height);
+  const dataUrl =
+    `data:image/svg+xml;charset=utf-8,${encodeURIComponent(markup)}`;
+
+  await new Promise<void>((resolve, reject) => {
+    image.onload = () => resolve();
+    image.onerror = () => reject(
+      new Error("Could not rasterize native KaTeX SVG geometry.")
+    );
     image.src = dataUrl;
   });
 

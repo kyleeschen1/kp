@@ -56,11 +56,41 @@
       "scope": "s25 revised exponent and radical exemplar",
       "checkedAt": "2026-07-23T14:58:02.779Z",
       "notes": "Eleven captures; dark complete-operator raw-WebGL radical morph, Fluent exponent projection, and both inspectors Ready with zero warnings"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T15:28:05.682Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-23T15:28:08.204Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-23T15:28:10.627Z"
+    },
+    {
+      "command": "playwright radical browser checks",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T15:28:12.805Z"
+    },
+    {
+      "command": "npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T15:28:16.652Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s25 revision implemented and verified: accepted exponent retains Explain plus Fluent omission of transient unit-exponent ink; radical now uses a dark raw-WebGL spatially coherent complete-operator morph with conventional symmetric timing, DOM and reduced-motion fallback, exact native settlement, seek and rewind preservation. Awaiting human visual approval before resolving s25."
+    "summary": "Replaced the rejected radical point-particle path with an exact-native KaTeX clipped-SVG target, solid signed-distance WebGL morph, conventional named motion profile, and deterministic native handoff. Automated and visual evidence passed; s25 remains at its required human exemplar checkpoint before promotion."
   },
   "expectedLearning": [
     "Which promoted semantic, scheduling, authoring, renderer, and verification contracts survive capability-opening exemplars across symbolic, calculus, vector, and linear-map domains without combinatorial growth."

@@ -1329,12 +1329,17 @@ test("exponent and radical family animations render their semantic rewrite motif
     "complete-native-radical-operator"
   );
   await expect(radicalMorph).toHaveAttribute(
-    "data-kp-editor-radical-webgl-pairing",
-    "spatial-coherent"
+    "data-kp-editor-radical-webgl-strategy",
+    "signed-distance-field"
   );
-  expect(Number(await radicalMorph.getAttribute(
-    "data-kp-editor-radical-webgl-particle-count"
-  ))).toBeGreaterThan(1000);
+  await expect(radicalMorph).toHaveAttribute(
+    "data-kp-editor-radical-webgl-primitive",
+    "triangle-strip"
+  );
+  await expect(radicalMorph).toHaveAttribute(
+    "data-kp-editor-radical-webgl-target-capture",
+    "native-clipped-svg"
+  );
   await expect(player.locator("[data-kp-editor-equation-transition-id]"))
     .toHaveAttribute(
       "data-kp-editor-equation-motif",
@@ -1352,7 +1357,7 @@ test("exponent and radical family animations render their semantic rewrite motif
   await expect(player.locator(
     "[data-kp-editor-equation-target] [data-kp-radical-structural-fragment][data-kp-motion-id]"
   )).toHaveCount(2);
-  await scrubber.fill("0.75");
+  await scrubber.fill("0.88");
   await expect(player.locator("[data-kp-editor-equation-stage]"))
     .toHaveAttribute(
       "data-kp-editor-equation-native-settlement-phase",
@@ -1535,7 +1540,7 @@ test("radical-succession uses a complete WebGL operator and native settle", asyn
     "same-base"
   );
 
-  await scrubber.fill("0.8");
+  await scrubber.fill("0.88");
   const settlementProgress = Number(await stage.getAttribute(
     "data-kp-editor-equation-native-settlement-progress"
   ));
@@ -1572,7 +1577,7 @@ test("radical-succession uses a complete WebGL operator and native settle", asyn
     "data-kp-radical-base-owner-probe",
     "same-base"
   );
-  await scrubber.fill("0.92");
+  await scrubber.fill("0.94");
   await expect(stage).toHaveAttribute(
     "data-kp-editor-equation-native-settlement-progress",
     "1"

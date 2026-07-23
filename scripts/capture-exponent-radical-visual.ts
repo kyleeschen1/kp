@@ -73,12 +73,12 @@ try {
     animationId: "animation.generated.radical.square-root-as-power",
     explanationProfile: "explain",
     checkpoints: [
-      { id: "radical-webgl-source", progress: 0.12 },
-      { id: "radical-webgl-morph", progress: 0.5 },
-      { id: "radical-webgl-forming", progress: 0.75 },
-      { id: "radical-webgl-complete", progress: 0.86 },
-      { id: "radical-webgl-native-handoff", progress: 0.9 },
-      { id: "radical-native-settled", progress: 0.98 }
+      { id: "radical-solid-source", progress: 0.12 },
+      { id: "radical-solid-morph", progress: 0.5 },
+      { id: "radical-solid-forming", progress: 0.75 },
+      { id: "radical-solid-complete", progress: 0.82 },
+      { id: "radical-native-handoff", progress: 0.9 },
+      { id: "radical-native-settled", progress: 0.96 }
     ],
     captures,
     diagnostics
@@ -158,11 +158,13 @@ async function captureAnimation(input: {
     const canvas = stage.locator("[data-kp-editor-radical-webgl-morph]");
     if (
       await stage.getAttribute("data-kp-editor-radical-morph-mode") !==
-        "webgl-pixel-flow" ||
+        "webgl-solid-mask" ||
       await canvas.getAttribute("data-kp-editor-radical-webgl-target") !==
         "complete-native-radical-operator"
     ) {
-      throw new Error("Radical exemplar did not initialize its complete-operator WebGL morph.");
+      throw new Error(
+        "Radical exemplar did not initialize its complete-operator solid morph."
+      );
     }
   }
   const diagnostic = {

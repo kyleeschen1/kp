@@ -1,5 +1,12 @@
-export const kpRadicalNativeSettlementStart = 0.88;
-export const kpRadicalNativeSettlementEnd = 0.98;
+import type { EasingName } from "../rendering/equation-motion-plan.ts";
+import {
+  kpRadicalConventionalMorphProfile
+} from "./radical-morph-profile.ts";
+
+export const kpRadicalNativeSettlementStart =
+  kpRadicalConventionalMorphProfile.settlement.start;
+export const kpRadicalNativeSettlementEnd =
+  kpRadicalConventionalMorphProfile.settlement.end;
 export const kpRadicalNativeSettlementGeometryTolerancePx = 0.25;
 
 export interface KpRadicalNativeSettlementFrame {
@@ -22,6 +29,7 @@ export function sampleKpRadicalNativeSettlement(input: {
   readonly geometryTolerancePx?: number | undefined;
   readonly handoffStart?: number | undefined;
   readonly handoffEnd?: number | undefined;
+  readonly easing?: EasingName | undefined;
 }): KpRadicalNativeSettlementFrame {
   const semanticProgress = clamp01(input.semanticProgress);
   const maximumGeometryResidualPx = input.fragmentRects.reduce(
@@ -39,11 +47,10 @@ export function sampleKpRadicalNativeSettlement(input: {
   if (handoffEnd <= handoffStart) {
     throw new Error("Radical native settlement requires an ordered handoff window.");
   }
-  const requestedProgress = easeInOut(intervalProgress(
-    semanticProgress,
-    handoffStart,
-    handoffEnd
-  ));
+  const requestedProgress = sampleEasing(
+    input.easing ?? kpRadicalConventionalMorphProfile.settlement.easing,
+    intervalProgress(semanticProgress, handoffStart, handoffEnd)
+  );
   // Native ink cannot crossfade safely while semantic fragment anchors are
   // still in transit; a delayed font/layout pass therefore holds ownership.
   const progress = geometryReady ? requestedProgress : 0;
@@ -87,11 +94,26 @@ function intervalProgress(value: number, start: number, end: number): number {
   return clamp01((value - start) / (end - start));
 }
 
-function easeInOut(value: number): number {
-  return value * value * (3 - 2 * value);
+function sampleEasing(easing: EasingName, value: number): number {
+  switch (easing) {
+    case "linear":
+      return value;
+    case "ease-in":
+      return value * value;
+    case "ease-out":
+      return 1 - (1 - value) * (1 - value);
+    case "ease-in-out":
+      return value * value * (3 - 2 * value);
+    default:
+      return assertNever(easing);
+  }
 }
 
 function clamp01(value: number): number {
   if (!Number.isFinite(value)) return 0;
   return Math.max(0, Math.min(1, value));
+}
+
+function assertNever(value: never): never {
+  throw new Error(`Unhandled radical settlement easing ${value}.`);
 }
