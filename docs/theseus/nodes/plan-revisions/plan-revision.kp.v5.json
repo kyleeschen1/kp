@@ -57,6 +57,12 @@
       "status": "passed",
       "scope": "s03 distinct radical derivative and planned-quadratic seed identities: 3 tests passed.",
       "checkedAt": "2026-07-23T19:56:04.200Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-identity.test.ts tests/semantic-animation-workbench-seeds.test.ts tests/semantic-animation-workbench-authority.test.ts",
+      "status": "passed",
+      "scope": "s04 canonical identity, collision, seed, and authority laws: 9 tests passed.",
+      "checkedAt": "2026-07-23T19:58:56.615Z"
     }
   ],
   "planRevision": {

@@ -80,7 +80,8 @@
     {
       "id": "s04",
       "title": "Define canonical animation identity",
-      "status": "planned"
+      "summary": "Added canonical animation identity records with stable IDs, nested aliases, family coverage, honest concrete or planned provenance, deduplication, and cross-animation collision rejection.",
+      "status": "complete"
     },
     {
       "id": "s05",
