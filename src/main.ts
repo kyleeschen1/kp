@@ -114,6 +114,9 @@ import {
 import {
   resolveKpAnimationWorkbenchRepresentation
 } from "./editor/semantic-animation-workbench-representation-selection.ts";
+import {
+  discoverKpActiveApprovedPlan
+} from "./editor/semantic-animation-workbench-roadmap-source.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -161,6 +164,7 @@ const graph3DWebGLVisibilityObservers = new WeakMap<
 >();
 const animationWorkbenchIndex =
   createKpSemanticAnimationWorkbenchIndex();
+discoverKpActiveApprovedPlan();
 
 declare global {
   interface Window {

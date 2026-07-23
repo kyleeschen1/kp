@@ -127,7 +127,9 @@
     {
       "id": "s12",
       "title": "Discover-the-active-approved-plan",
-      "status": "planned"
+      "summary": "Added build-time discovery over all plan-revision nodes and a strict selector that returns exactly one active approved KP plan without version matching. Three authority tests, repository typecheck, and production build pass; missing or multiple authorities throw instead of choosing silently.",
+      "status": "complete",
+      "planPhaseId": "authoritative-roadmap-workbench"
     },
     {
       "id": "s13",
