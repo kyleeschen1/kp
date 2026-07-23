@@ -164,7 +164,8 @@
     {
       "id": "s18",
       "title": "Add item-scoped review history",
-      "status": "planned"
+      "summary": "Added a development-only read path over the existing append-only review inbox, isolated notes through canonical animation identity, rendered current and resolved history with captured route checkpoint phase build and progress provenance, synchronized review and acceptance views, and kept production bundles and source bytes unchanged.",
+      "status": "complete"
     },
     {
       "id": "s19",

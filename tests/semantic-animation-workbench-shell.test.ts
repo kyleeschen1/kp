@@ -33,6 +33,8 @@ test("Workbench shell renders a labeled search and two-pane control surface", ()
   assert.match(html, /data-kp-animation-workbench-live-preview/);
   assert.match(html, /data-kp-editor-animation-player/);
   assert.match(html, /data-kp-animation-workbench-acceptance/);
+  assert.match(html, /data-kp-animation-workbench-review/);
+  assert.match(html, /Loading the existing development review inbox/);
   assert.match(html, /Loading semantic law checks/);
   assert.equal(
     [

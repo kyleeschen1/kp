@@ -14,6 +14,9 @@ import {
   deriveKpAnimationAcceptanceBrief,
   renderKpAnimationAcceptanceBrief
 } from "./semantic-animation-workbench-acceptance.ts";
+import {
+  renderKpAnimationWorkbenchReviewPanel
+} from "./semantic-animation-workbench-review.ts";
 
 export function renderKpSemanticAnimationWorkbenchShell(input: {
   readonly query: string;
@@ -118,6 +121,10 @@ function renderSelectedSummary(
             : "unavailable"
       })
     )}
+    ${renderKpAnimationWorkbenchReviewPanel({
+      animationId: selected.identity.animationId,
+      state: "loading"
+    })}
     ${renderPreview(selected, selectedDescriptor)}
   </article>`;
 }

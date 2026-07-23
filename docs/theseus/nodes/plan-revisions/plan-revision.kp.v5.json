@@ -231,6 +231,42 @@
       "status": "passed",
       "scope": "s17 Chromium simultaneous seven-facet visibility",
       "checkedAt": "2026-07-23T21:05:12.981Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-review.test.ts tests/semantic-animation-workbench-review-adapter.test.ts tests/semantic-animation-workbench-shell.test.ts tests/semantic-animation-workbench-acceptance.test.ts",
+      "status": "passed",
+      "scope": "s18 item-isolated current and historical review projections",
+      "checkedAt": "2026-07-23T21:11:52.205Z"
+    },
+    {
+      "command": "npm run test:browser:animation-workbench",
+      "status": "passed",
+      "scope": "s18 Chromium review hydration current-history separation and cross-item exclusion",
+      "checkedAt": "2026-07-23T21:11:57.626Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18 review loader renderer and integration TypeScript boundaries",
+      "checkedAt": "2026-07-23T21:12:02.610Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s18 production build with development-only review graph erased",
+      "checkedAt": "2026-07-23T21:12:13.289Z"
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s18 production exclusion of local review endpoint and client markers",
+      "checkedAt": "2026-07-23T21:12:19.560Z"
+    },
+    {
+      "command": "npm run review:logs -- audit",
+      "status": "passed",
+      "scope": "s18 append-only review source byte stability and projection integrity",
+      "checkedAt": "2026-07-23T21:12:27.607Z"
     }
   ],
   "planRevision": {

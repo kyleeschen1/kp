@@ -102,6 +102,12 @@ import {
 import type {
   KpSemanticAnimationWorkbenchIndexEntry
 } from "./editor/semantic-animation-workbench-index.ts";
+import {
+  loadKpAnimationWorkbenchReviewEvidence
+} from "./editor/semantic-animation-workbench-review-loader.ts";
+import {
+  renderKpAnimationWorkbenchReviewPanel
+} from "./editor/semantic-animation-workbench-review.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -441,6 +447,11 @@ function renderAnimationWorkbenchView(): void {
       selectedEntry,
       revision
     );
+    void hydrateAnimationWorkbenchReview(
+      appRoot,
+      selectedEntry,
+      revision
+    );
   }
 }
 
@@ -476,6 +487,107 @@ async function hydrateAnimationWorkbenchAcceptance(
       })
     );
   }
+}
+
+async function hydrateAnimationWorkbenchReview(
+  root: ParentNode,
+  entry: KpSemanticAnimationWorkbenchIndexEntry,
+  revision: number
+): Promise<void> {
+  const reviewContainer = root.querySelector<HTMLElement>(
+    "[data-kp-animation-workbench-review]"
+  );
+  if (reviewContainer === null) return;
+  if (loadKpAnimationWorkbenchReviewEvidence === undefined) {
+    reviewContainer.outerHTML = renderKpAnimationWorkbenchReviewPanel({
+      animationId: entry.identity.animationId,
+      state: "unavailable"
+    });
+    return;
+  }
+  try {
+    const result = await loadKpAnimationWorkbenchReviewEvidence(
+      animationWorkbenchIndex.entries.map(({ identity }) => identity)
+    );
+    if (revision !== viewRevision || !reviewContainer.isConnected) return;
+    const projection = result.projections.find(
+      (candidate) =>
+        candidate.animationId === entry.identity.animationId
+    );
+    const reviewedEntry: KpSemanticAnimationWorkbenchIndexEntry =
+      projection === undefined
+        ? entry
+        : {
+            ...entry,
+            lifecycle: {
+              ...entry.lifecycle,
+              review: projection.state
+            },
+            review: projection
+          };
+    reviewContainer.outerHTML = renderKpAnimationWorkbenchReviewPanel({
+      animationId: entry.identity.animationId,
+      state: "available",
+      ...(projection === undefined ? {} : { projection })
+    });
+    updateAnimationWorkbenchReviewFacet(root, reviewedEntry);
+    await refreshAnimationWorkbenchAcceptance(
+      root,
+      reviewedEntry,
+      revision
+    );
+  } catch {
+    if (revision !== viewRevision || !reviewContainer.isConnected) return;
+    reviewContainer.outerHTML = renderKpAnimationWorkbenchReviewPanel({
+      animationId: entry.identity.animationId,
+      state: "error"
+    });
+  }
+}
+
+function updateAnimationWorkbenchReviewFacet(
+  root: ParentNode,
+  entry: KpSemanticAnimationWorkbenchIndexEntry
+): void {
+  const facet = root.querySelector<HTMLElement>(
+    '[data-kp-animation-workbench-lifecycle-facet="review"]'
+  );
+  if (facet === null) return;
+  facet.dataset["state"] = entry.lifecycle.review;
+  facet.setAttribute("aria-label", `Review: ${entry.lifecycle.review}`);
+  const value = facet.querySelector("dd");
+  if (value !== null) value.textContent = entry.lifecycle.review;
+}
+
+async function refreshAnimationWorkbenchAcceptance(
+  root: ParentNode,
+  entry: KpSemanticAnimationWorkbenchIndexEntry,
+  revision: number
+): Promise<void> {
+  const container = root.querySelector<HTMLElement>(
+    "[data-kp-animation-workbench-acceptance]"
+  );
+  if (container === null) return;
+  let lawChecks;
+  if (entry.lifecycle.playability === "playable") {
+    try {
+      lawChecks = (await loadKpAnimationAsset(entry.identity.animationId))
+        .animation.checks;
+    } catch {
+      lawChecks = undefined;
+    }
+  }
+  if (revision !== viewRevision || !container.isConnected) return;
+  container.outerHTML = renderKpAnimationAcceptanceBrief(
+    deriveKpAnimationAcceptanceBrief({
+      entry,
+      ...(lawChecks === undefined ? {} : { lawChecks }),
+      lawEvidence:
+        lawChecks !== undefined
+          ? "available"
+          : "unavailable"
+    })
+  );
 }
 
 function filterAnimationWorkbenchFromInput(input: HTMLInputElement): void {
