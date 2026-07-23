@@ -1,24 +1,23 @@
 {
-  "id": "run-contract.kp.product-roadmap-v5-program-v0",
+  "id": "run-contract.kp.product-roadmap-v5-continuation-v1",
   "kind": "run-contract",
-  "title": "KP product roadmap v5 program",
-  "status": "resolved",
-  "summary": "Closed at the approved Goal 1 boundary because its immutable target is now resolved; the already-approved slices s10-s30 continue in a successor contract targeting plan revision v5.",
+  "title": "KP product roadmap v5 continuation",
+  "status": "ready",
   "sourceRefs": [
     {
       "kind": "file",
-      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.branch-scheduling-responsive-attention-v0.json",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
       "summary": "Run-contract target that explains why this generated contract exists."
     },
     {
       "kind": "file",
-      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
-      "summary": "Approved compositional quality roadmap and dependency order."
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.product-roadmap-v5-program-v0.json",
+      "summary": "Approved predecessor closed after Goal 1 because its immutable target resolved."
     },
     {
       "kind": "file",
       "path": "docs/theseus/nodes/priority-changes/priority-change.kp.resume-product-after-codex-reliability-v0.json",
-      "summary": "User-authorized product resumption sequence after the reliability tranche."
+      "summary": "User-authorized product resumption sequence retained without scope change."
     }
   ],
   "verification": [
@@ -31,17 +30,17 @@
     "theseus workspace validate"
   ],
   "allowedWork": [
-    "Reconcile project memory, finish the solve-x branch-scheduling and responsive-attention exemplar, prove structured algebra, pressure-test fraction composition, add governed semantic and LLM authoring, and promote the approved bounded breadth exemplars in dependency order.",
+    "Finish structured algebra, pressure-test fraction composition, add governed semantic and LLM authoring, and promote the approved bounded breadth exemplars in dependency order.",
     "Extract only contracts proven by exemplars, preserve accepted semantic documents and measured-motion ownership, use shared routes and verification, and commit each reversible slice with durable evidence."
   ],
   "disallowedWork": [
     "Do not generalize a subjective visual pattern before its human exemplar approval, bypass dependency order, or overwrite unrelated user-authored roadmap and design work.",
-    "Do not add LLM-authored DOM, CSS, pixels, arbitrary keyframes, unchecked math, course-scale curriculum, dynamic package loading, parked FTC/BFS/economics/programming/physics work, or broad WebGL generalization."
+    "Do not add LLM-authored DOM, CSS, pixels, arbitrary keyframes, unchecked math, course-scale curriculum, dynamic package loading, parked FTC, BFS, economics, programming, physics work, or broad WebGL generalization."
   ],
-  "goal": "Execute the approved dependency-ordered product frontier from branch scheduling and responsive attention through structured algebra, fraction composition, governed semantic and LLM authoring, and bounded exemplar breadth.",
-  "target": "next-action.kp.reader.branch-scheduling-responsive-attention-v0",
+  "goal": "Continue the approved dependency-ordered product frontier through structured algebra, fraction composition, governed semantic and LLM authoring, and bounded exemplar breadth.",
+  "target": "plan-revision.kp.v5",
   "runMode": "run",
-  "maxSlices": 30,
+  "maxSlices": 21,
   "commitCadence": "Commit each independently reversible verified slice with its Theseus evidence; never mix user-authored unrelated document edits into a slice commit.",
   "verificationLevel": "broad",
   "stopConditions": [
@@ -54,60 +53,6 @@
     "H7 AUTHORITY: stop if required external mutation or destructive work exceeds the user's approval."
   ],
   "slices": [
-    {
-      "id": "s01",
-      "title": "Reconcile roadmap and active thread with completed product state",
-      "summary": "Updated human project memory to match current Theseus truth and preserved the user-authored atlas lane as an unrelated unstaged change.",
-      "status": "complete"
-    },
-    {
-      "id": "s02",
-      "title": "Audit and stabilize the interrupted branch-scheduling worktree",
-      "summary": "Recovered the interrupted branch-scheduling patch, removed duplicate progress state, centralized balanced scheduling for choreography and lightweight reader bindings, and restored repository-wide type safety.",
-      "status": "complete"
-    },
-    {
-      "id": "s03",
-      "title": "Prove the semantic branch-operation contract and dependency validation",
-      "summary": "Added focused laws for stable branch identity, exclusive entity ownership, deterministic topological order, and rejection of malformed or cyclic dependencies.",
-      "status": "complete"
-    },
-    {
-      "id": "s04",
-      "title": "Compile together sequential staggered and stepped schedules with exact inverse",
-      "summary": "Proved four bounded presentation schedules over one semantic operation, dependency-respecting windows, invalid-overlap rejection, endpoint clamping, and exact forward/inverse reconstruction.",
-      "status": "complete"
-    },
-    {
-      "id": "s05",
-      "title": "Integrate the selected schedule through solve-x measured rendering",
-      "summary": "Proved the canonical solve-x together schedule is identical in full choreography and lightweight reader bindings, then reaches measured geometry and operation-specific target-token poses without changing the accepted semantic operation.",
-      "status": "complete"
-    },
-    {
-      "id": "s06",
-      "title": "Prove branch scheduling unit runtime and conformance laws",
-      "summary": "Updated strict external-port metadata parity for the new bounded presentation intent and passed the complete 1,916-test unit, runtime, architecture, inference, catalog, and conformance suite.",
-      "status": "complete"
-    },
-    {
-      "id": "s07",
-      "title": "Prove responsive attention URL search focus rewind and accessibility parity",
-      "summary": "Browser conformance now explicitly proves the solve-x branch schedule remains selected across wide scrollytelling and the narrow focus stepper while URL progress, searchable fallback, ARIA focus, resize, reduced motion, direct seek, rewind, and native endpoints remain intact.",
-      "status": "complete"
-    },
-    {
-      "id": "s08",
-      "title": "Capture deterministic wide and narrow branch-attention visual evidence",
-      "summary": "Added stable wide and phone branch-entry checkpoints to the manifest-driven visual harness, captured and manually inspected the eight-frame solve-x sheet, and passed production build, closure, budget, and Theseus integrity gates.",
-      "status": "complete"
-    },
-    {
-      "id": "s09",
-      "title": "Obtain human approval for the branch-scheduling responsive-attention exemplar",
-      "summary": "User approved the wide and phone branch-scheduling responsive-attention exemplar on 2026-07-22; visual promotion may proceed to the dependency-ordered structured-algebra tranche.",
-      "status": "complete"
-    },
     {
       "id": "s10",
       "title": "Add stable expression subtree identity contracts",

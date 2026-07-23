@@ -2,7 +2,8 @@
   "id": "next-action.kp.reader.branch-scheduling-responsive-attention-v0",
   "kind": "next-action",
   "title": "Prove composable branch scheduling and responsive attention",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Resolved after automated gates and explicit human approval; structured algebra is the next dependency-ordered action.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -129,6 +130,10 @@
       "notes": "Workspace validation passed with 746 nodes and 10,567 events before recording final slice evidence."
     }
   ],
+  "progress": {
+    "state": "complete",
+    "summary": "User approved the canonical wide and phone branch-attention exemplar after all unit, browser, production, budget, and visual evidence passed; structured algebra is now unblocked."
+  },
   "expectedLearning": [
     "Whether together, sequential, staggered, and stepped presentation schedules can share one semantic branch operation and lawful inverse without per-case choreography.",
     "Which wide scrollytelling and narrow focus-stepper projection best scaffolds prose-to-symbol attention while preserving URL, search, rewind, and accessibility state."
