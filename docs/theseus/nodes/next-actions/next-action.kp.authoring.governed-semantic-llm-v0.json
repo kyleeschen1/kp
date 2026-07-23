@@ -23,6 +23,19 @@
     "npm test",
     "npm run build"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/governed-semantic-authoring-schema.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T13:23:53.512Z",
+      "notes": "Schema accepts only verified semantic references, registered operation/correspondence/focus/cadence/normal-form/compression intent, and rejects presentation or raw math authority."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Starting the constrained semantic authoring schema before compilation, repair, provenance, or exemplar promotion."
+  },
   "expectedLearning": [
     "Whether an LLM can select verified semantics, correspondence, focus, cadence, and normal-form intent while deterministic compilers retain geometry, timing, typography, responsive adaptation, rendering, validation, and repair authority."
   ],
