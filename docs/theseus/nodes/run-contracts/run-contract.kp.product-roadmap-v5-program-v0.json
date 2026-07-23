@@ -104,7 +104,8 @@
     {
       "id": "s09",
       "title": "Obtain human approval for the branch-scheduling responsive-attention exemplar",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: awaiting user review of the wide and phone branch-entry exemplar before any structured-algebra generalization.",
+      "status": "in-progress"
     },
     {
       "id": "s10",
