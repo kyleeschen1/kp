@@ -129,8 +129,8 @@
     {
       "id": "s25",
       "title": "Promote the radical and exponent exemplar",
-      "summary": "Promote the existing radical and exponent exemplar through the accepted governed authoring, operation, reader, and verification boundaries.",
-      "status": "in-progress"
+      "summary": "Promoted the exponent and radical exemplar at the human gate. The approved radical uses continuous simultaneous diagonal-and-overbar growth; the later point-seed variant was rejected and reverted. Broad tests, build, visual capture, and radical browser continuity passed.",
+      "status": "complete"
     },
     {
       "id": "s26",

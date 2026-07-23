@@ -98,11 +98,35 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-07-23T16:15:43.037Z"
+    },
+    {
+      "command": "npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T16:31:24.360Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --grep exponent-and-radical-radical-succession-rewind-continuity",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-23T16:31:25.195Z"
+    },
+    {
+      "command": "npm test -- full deterministic suite",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-23T16:31:25.973Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-23T16:31:26.733Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Refined the square-root exemplar so the radical diagonal and overbar reveal simultaneously at equal radius from the exponent-collapse junction. Exact KaTeX settlement, direction-neutral WebGL rewind, full regression, browser conformance, build, and 17-frame visual evidence pass; awaiting final human visual approval."
+    "summary": "Human approved the prior simultaneous radial-growth design after rejecting and reverting the visible seed variant. Slice s25 is promotion-complete: exponent Fluent identity suppression, exact native radical settlement, smooth reversible WebGL morph, and broad verification are preserved; continue with the next contracted exemplar."
   },
   "expectedLearning": [
     "Which promoted semantic, scheduling, authoring, renderer, and verification contracts survive capability-opening exemplars across symbolic, calculus, vector, and linear-map domains without combinatorial growth."
