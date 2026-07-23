@@ -213,6 +213,24 @@
       "status": "passed",
       "scope": "s16 Chromium law-check hydration and planned missing-evidence rendering",
       "checkedAt": "2026-07-23T21:01:52.566Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-shell.test.ts tests/semantic-animation-workbench-lifecycle.test.ts tests/semantic-animation-workbench-acceptance.test.ts",
+      "status": "passed",
+      "scope": "s17 independent lifecycle facet rendering and state-product contracts",
+      "checkedAt": "2026-07-23T21:04:55.876Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s17 lifecycle badge TypeScript boundaries",
+      "checkedAt": "2026-07-23T21:05:03.015Z"
+    },
+    {
+      "command": "npm run test:browser:animation-workbench",
+      "status": "passed",
+      "scope": "s17 Chromium simultaneous seven-facet visibility",
+      "checkedAt": "2026-07-23T21:05:12.981Z"
     }
   ],
   "planRevision": {

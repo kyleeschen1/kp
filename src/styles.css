@@ -3125,21 +3125,22 @@ h2 {
   line-height: 1.55;
 }
 
-.kp-animation-workbench__selection dl {
+.kp-animation-workbench__identity-facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.65rem;
   margin: 1.5rem 0;
 }
 
-.kp-animation-workbench__selection dl div {
+.kp-animation-workbench__identity-facts div {
   padding: 0.8rem;
   border: 1px solid rgba(34, 62, 50, 0.11);
   border-radius: 0.7rem;
   background: rgba(246, 248, 243, 0.78);
 }
 
-.kp-animation-workbench__selection dt {
+.kp-animation-workbench__identity-facts dt,
+.kp-animation-workbench__lifecycle-badge dt {
   color: #6b766f;
   font-size: 0.72rem;
   font-weight: 800;
@@ -3147,9 +3148,53 @@ h2 {
   text-transform: uppercase;
 }
 
-.kp-animation-workbench__selection dd {
+.kp-animation-workbench__identity-facts dd,
+.kp-animation-workbench__lifecycle-badge dd {
   margin: 0.25rem 0 0;
   overflow-wrap: anywhere;
+}
+
+.kp-animation-workbench__lifecycle {
+  margin-top: 1.5rem;
+}
+
+.kp-animation-workbench__lifecycle dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 0.75rem 0 0;
+}
+
+.kp-animation-workbench__lifecycle-badge {
+  min-width: 7.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(34, 62, 50, 0.14);
+  border-radius: 0.7rem;
+  background: rgba(239, 243, 239, 0.78);
+}
+
+.kp-animation-workbench__lifecycle-badge[data-state="approved"],
+.kp-animation-workbench__lifecycle-badge[data-state="complete"],
+.kp-animation-workbench__lifecycle-badge[data-state="passing"],
+.kp-animation-workbench__lifecycle-badge[data-state="playable"],
+.kp-animation-workbench__lifecycle-badge[data-state="promoted"] {
+  border-color: rgba(38, 113, 77, 0.28);
+  background: rgba(214, 232, 220, 0.64);
+}
+
+.kp-animation-workbench__lifecycle-badge[data-state="active"],
+.kp-animation-workbench__lifecycle-badge[data-state="awaiting-review"],
+.kp-animation-workbench__lifecycle-badge[data-state="next"],
+.kp-animation-workbench__lifecycle-badge[data-state="reviewable"] {
+  border-color: rgba(142, 98, 35, 0.28);
+  background: rgba(244, 231, 202, 0.52);
+}
+
+.kp-animation-workbench__lifecycle-badge[data-state="blocked"],
+.kp-animation-workbench__lifecycle-badge[data-state="changes-requested"],
+.kp-animation-workbench__lifecycle-badge[data-state="failing"] {
+  border-color: rgba(143, 53, 45, 0.28);
+  background: rgba(245, 220, 216, 0.58);
 }
 
 .kp-animation-workbench__planned-preview {

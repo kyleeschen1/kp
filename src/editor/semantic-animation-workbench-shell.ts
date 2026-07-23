@@ -104,12 +104,11 @@ function renderSelectedSummary(
     <h2>${escapeHtml(selected.identity.title)}</h2>
     <code>${escapeHtml(selected.identity.animationId)}</code>
     <p>${escapeHtml(selected.summary)}</p>
-    <dl>
+    <dl class="kp-animation-workbench__identity-facts">
       <div><dt>Families</dt><dd>${selected.identity.familyIds.length === 0 ? "Not assigned" : selected.identity.familyIds.map(escapeHtml).join(", ")}</dd></div>
       <div><dt>Representations</dt><dd>${selected.representations.length}</dd></div>
-      <div><dt>Execution</dt><dd>${escapeHtml(selected.lifecycle.execution)}</dd></div>
-      <div><dt>Playability</dt><dd>${escapeHtml(selected.lifecycle.playability)}</dd></div>
     </dl>
+    ${renderLifecycleFacets(selected.lifecycle)}
     ${renderKpAnimationAcceptanceBrief(
       deriveKpAnimationAcceptanceBrief({
         entry: selected,
@@ -121,6 +120,32 @@ function renderSelectedSummary(
     )}
     ${renderPreview(selected, selectedDescriptor)}
   </article>`;
+}
+
+function renderLifecycleFacets(
+  lifecycle: KpSemanticAnimationWorkbenchQueryResult["entry"]["lifecycle"]
+): string {
+  const facets = [
+    ["roadmap", "Roadmap", lifecycle.roadmap],
+    ["execution", "Execution", lifecycle.execution],
+    ["maturity", "Maturity", lifecycle.maturity],
+    ["approval", "Approval", lifecycle.approval],
+    ["review", "Review", lifecycle.review],
+    ["verification", "Verification", lifecycle.verification],
+    ["playability", "Playability", lifecycle.playability]
+  ] as const;
+  return `<section class="kp-animation-workbench__lifecycle" aria-labelledby="kp-animation-workbench-lifecycle-title">
+    <div class="kp-animation-workbench__section-heading">
+      <p class="eyebrow">Independent lifecycle facets</p>
+      <h3 id="kp-animation-workbench-lifecycle-title">Current state</h3>
+    </div>
+    <dl>${facets
+      .map(
+        ([facet, label, value]) =>
+          `<div class="kp-animation-workbench__lifecycle-badge" data-kp-animation-workbench-lifecycle-facet="${facet}" data-state="${escapeHtml(value)}" aria-label="${label}: ${escapeHtml(value)}"><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`
+      )
+      .join("")}</dl>
+  </section>`;
 }
 
 function renderPreview(

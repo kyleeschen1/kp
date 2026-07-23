@@ -23,6 +23,9 @@ test("Workbench reuses the live player and preserves direct seek and rewind", as
   await expect(
     page.locator("[data-kp-animation-workbench-acceptance]")
   ).toContainText("animation.seek-rewind");
+  await expect(
+    page.locator("[data-kp-animation-workbench-lifecycle-facet]")
+  ).toHaveCount(7);
 
   const scrubber = player.locator('[data-action="seek-editor-animation"]');
   await scrubber.fill("0.5");
@@ -45,5 +48,10 @@ test("Workbench planned quadratic never mounts a player", async ({ page }) => {
   await expect(
     page.locator("[data-kp-animation-workbench-missing-evidence]")
   ).toContainText("Semantic law checks will appear");
+  await expect(
+    page.locator(
+      '[data-kp-animation-workbench-lifecycle-facet="playability"]'
+    )
+  ).toHaveAttribute("data-state", "planned-only");
   await expect(page.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
 });
