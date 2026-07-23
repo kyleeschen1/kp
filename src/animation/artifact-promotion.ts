@@ -44,6 +44,12 @@ export const kpGoldEquationAnimationIds = Object.freeze([
   "animation.generated.distribution.expand-a-sum"
 ] as const);
 
+// The radical rewrite already has a human-reviewed normative conformance
+// baseline, so breadth promotion can distinguish it from the broader gold set.
+export const kpPromotedEquationAnimationIds = Object.freeze([
+  "animation.generated.radical.square-root-as-power"
+] as const);
+
 export function resolveKpAnimationPromotionFacet(input: {
   readonly animationId: string;
   readonly novelty?: KpArtifactNovelty | undefined;
@@ -51,9 +57,12 @@ export function resolveKpAnimationPromotionFacet(input: {
   const goldCohort = kpGoldEquationAnimationIds.includes(
     input.animationId as (typeof kpGoldEquationAnimationIds)[number]
   );
+  const promoted = kpPromotedEquationAnimationIds.includes(
+    input.animationId as (typeof kpPromotedEquationAnimationIds)[number]
+  );
   const novelty = input.novelty ?? "composition";
   return {
-    maturity: goldCohort ? "gold" : "reviewable",
+    maturity: promoted ? "promoted" : goldCohort ? "gold" : "reviewable",
     novelty,
     humanReviewRequired: novelty !== "composition",
     goldCohort

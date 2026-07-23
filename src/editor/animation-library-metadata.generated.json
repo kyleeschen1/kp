@@ -250,7 +250,7 @@
       "generated"
     ],
     "promotion": {
-      "maturity": "gold",
+      "maturity": "promoted",
       "novelty": "composition",
       "humanReviewRequired": false,
       "goldCohort": true
@@ -285,7 +285,7 @@
       "algebra"
     ],
     "promotion": {
-      "maturity": "gold",
+      "maturity": "promoted",
       "novelty": "composition",
       "humanReviewRequired": false,
       "goldCohort": true

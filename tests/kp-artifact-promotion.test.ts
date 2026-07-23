@@ -32,7 +32,13 @@ test("gold equation cohort is small exact and visible in editor metadata", () =>
   for (const animationId of kpGoldEquationAnimationIds) {
     const matches = descriptors.filter((descriptor) => descriptor.animationId === animationId);
     assert.ok(matches.length > 0);
-    assert.ok(matches.every((descriptor) => descriptor.promotion?.maturity === "gold"));
+    assert.ok(matches.every((descriptor) =>
+      descriptor.promotion?.maturity === (
+        animationId === "animation.generated.radical.square-root-as-power"
+          ? "promoted"
+          : "gold"
+      )
+    ));
     assert.ok(matches.every((descriptor) => descriptor.promotion?.goldCohort === true));
   }
 });

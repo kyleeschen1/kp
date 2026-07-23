@@ -8,7 +8,10 @@ export const kpGovernedNormalFormIds = [
   "distributed-sum",
   "factored-product",
   "isolated-variable",
-  "evaluated-constant"
+  "evaluated-constant",
+  "lowered-exponent-product",
+  "expanded-product",
+  "radical-expression"
 ] as const;
 
 export type KpGovernedNormalFormId = typeof kpGovernedNormalFormIds[number];

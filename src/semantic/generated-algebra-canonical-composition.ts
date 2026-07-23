@@ -23,11 +23,11 @@ export function canonicalCompositionForGeneratedTransform(
     case "splitFractionFactors":
       return ["kp.core.persist", "kp.core.reorder", "kp.core.wrap"];
     case "lowerExponent":
-      return ["kp.core.persist", "kp.core.reorder"];
+      return ["kp.core.persist", "kp.core.fan-out", "kp.core.reorder"];
     case "unwrapUnitExponent":
-      return ["kp.core.unwrap", "kp.core.eliminate"];
+      return ["kp.core.persist", "kp.core.unwrap", "kp.core.eliminate"];
     case "rewritePowerAsRoot":
-      return ["kp.core.persist", "kp.core.substitute", "kp.core.wrap"];
+      return ["kp.core.persist", "kp.core.substitute", "kp.core.wrap", "kp.core.eliminate"];
     case "wrapFunction":
       return ["kp.core.wrap"];
     case "distributeMultiplication":

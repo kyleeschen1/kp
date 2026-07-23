@@ -29,6 +29,9 @@ import {
   createKpFunctionWrapChoreography
 } from "../animation/function-wrap-choreography.ts";
 import {
+  createKpExponentSuccessionChoreography
+} from "../animation/exponent-succession-choreography.ts";
+import {
   createKpLinearRearrangementChoreography
 } from "../animation/linear-rearrangement-choreography.ts";
 import {
@@ -281,6 +284,16 @@ function inspectChoreography(
       timeline: choreography.timeline,
       focusGroupIds: [choreography.focus.groupId]
     };
+  } else if (animation.transformations.some((transformation) =>
+    transformation.id === activeTransformationId &&
+    (transformation.transformType === "lowerExponent" ||
+      transformation.transformType === "unwrapUnitExponent")
+  )) {
+    const choreography = createKpExponentSuccessionChoreography({
+      animation,
+      transformationId: activeTransformationId
+    });
+    result = choreography;
   } else if (animation.transformations.some(
     (transformation) => transformation.transformType === "rewritePowerAsRoot"
   )) {

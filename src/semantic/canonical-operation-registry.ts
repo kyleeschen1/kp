@@ -315,8 +315,15 @@ function operationContract(input: {
   readonly reverse: Pick<KpCanonicalOperationContract["reverse"], "kind" | "operationId">;
   readonly fixtureIds: readonly string[];
 }): KpCanonicalOperationContract {
-  const unitRoleId = pacingRole(input.authority.refId, input.roles);
-  const pacingKind = pacingKindFor(input.authority.refId);
+  const unitRoleId = pacingRole(
+    input.authority.refId,
+    input.roles,
+    input.canonicalComposition
+  );
+  const pacingKind = pacingKindFor(
+    input.authority.refId,
+    input.canonicalComposition
+  );
   const structuralRoleIds = input.roles
     .filter((role) => role.kind === "structural-artifact")
     .map((role) => role.id);
@@ -484,14 +491,19 @@ function reverseSemantics(input: {
 }
 
 function pacingKindFor(
-  authorityRef: string
+  authorityRef: string,
+  composition: readonly KpCanonicalOperationId[]
 ): KpCanonicalOperationContract["pacing"]["kind"] {
   if (authorityRef.includes("multiplyMatrices")) return "per-cell";
   if (
     authorityRef.includes("DotProduct") ||
     authorityRef.includes("multiplyMatrixVector")
   ) return "per-index";
-  if (authorityRef.includes("distribute") || authorityRef.includes("fan-out")) {
+  if (
+    authorityRef.includes("distribute") ||
+    authorityRef.includes("fan-out") ||
+    composition.includes("kp.core.fan-out")
+  ) {
     return "per-descendant";
   }
   return "single";
@@ -499,7 +511,8 @@ function pacingKindFor(
 
 function pacingRole(
   authorityRef: string,
-  roles: readonly KpCanonicalOperationRole[]
+  roles: readonly KpCanonicalOperationRole[],
+  composition: readonly KpCanonicalOperationId[]
 ): string | undefined {
   const preferred = authorityRef.includes("multiplyMatrices")
     ? "result-cells"
@@ -511,6 +524,12 @@ function pacingRole(
           ? "factor-copies"
           : authorityRef.includes("fan-out")
             ? "destinations"
+            : composition.includes("kp.core.fan-out")
+              ? roles.find((role) =>
+                  role.endpoint === "target" &&
+                  role.kind === "semantic-entity" &&
+                  role.cardinality === "one-or-more"
+                )?.id
             : undefined;
   return roles.find((role) => role.id === preferred)?.id;
 }
@@ -564,14 +583,16 @@ function generatedTransformAuthoringRoles(
       return [
         entityRole("base-before", "source"),
         entityRole("exponent-before", "source"),
-        entityRole("base-after", "target"),
-        entityRole("factors-after", "target", "one-or-more")
+        entityRole("base-descendants", "target", "one-or-more"),
+        entityRole("exponent-descendants", "target", "one-or-more")
       ];
     case "unwrapUnitExponent":
       return [
-        entityRole("base-before", "source"),
+        entityRole("factors-before", "source", "one-or-more"),
+        entityRole("product-operators-before", "source", "one-or-more"),
         entityRole("unit-exponent", "source"),
-        entityRole("base-after", "target")
+        entityRole("factors-after", "target", "one-or-more"),
+        entityRole("product-operators-after", "target", "one-or-more")
       ];
     case "rewritePowerAsRoot":
       return [

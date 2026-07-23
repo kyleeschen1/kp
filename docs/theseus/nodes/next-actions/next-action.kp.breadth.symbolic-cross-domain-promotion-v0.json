@@ -8,6 +8,10 @@
     {
       "kind": "file",
       "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-exponent-radical-promotion-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -24,6 +28,26 @@
     "npm run build",
     "npm run visual:contact-sheet"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "s25 exponent and radical promotion exemplar",
+      "checkedAt": "2026-07-23T14:09:25.741Z",
+      "notes": "Six deterministic captures; exponent and radical both Ready with zero warnings."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s25 repository regression",
+      "checkedAt": "2026-07-23T14:09:30.426Z",
+      "notes": "Passed 1,965 architecture and deterministic tests after metadata regeneration."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "s25 exponent and radical promotion candidate is verified and packaged; exponent awaits explicit human perceptual approval before gold promotion and s26."
+  },
   "expectedLearning": [
     "Which promoted semantic, scheduling, authoring, renderer, and verification contracts survive capability-opening exemplars across symbolic, calculus, vector, and linear-map domains without combinatorial growth."
   ],
