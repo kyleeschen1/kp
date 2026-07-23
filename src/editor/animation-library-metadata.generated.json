@@ -1067,10 +1067,10 @@
       "tangent"
     ],
     "promotion": {
-      "maturity": "reviewable",
+      "maturity": "gold",
       "novelty": "composition",
       "humanReviewRequired": false,
-      "goldCohort": false
+      "goldCohort": true
     }
   },
   {
@@ -1102,10 +1102,10 @@
       "family-backed"
     ],
     "promotion": {
-      "maturity": "reviewable",
+      "maturity": "gold",
       "novelty": "composition",
       "humanReviewRequired": false,
-      "goldCohort": false
+      "goldCohort": true
     }
   },
   {

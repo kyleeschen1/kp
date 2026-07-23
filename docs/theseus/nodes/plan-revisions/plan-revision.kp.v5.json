@@ -126,6 +126,21 @@
       "command": "npm run typecheck",
       "status": "passed",
       "checkedAt": "2026-07-23T20:25:11.298Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-index.test.ts tests/semantic-animation-workbench-catalog-adapter.test.ts tests/semantic-animation-workbench-representation-adapter.test.ts tests/semantic-animation-workbench-theseus-adapter.test.ts tests/semantic-animation-workbench-review-adapter.test.ts tests/semantic-animation-workbench-lifecycle.test.ts tests/animation-library-metadata.test.ts tests/kp-artifact-promotion.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:34:52.826Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:34:57.845Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:35:03.563Z"
     }
   ],
   "planRevision": {

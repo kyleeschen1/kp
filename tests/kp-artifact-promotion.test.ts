@@ -23,7 +23,8 @@ test("gold equation cohort is small exact and visible in editor metadata", () =>
     "animation.linear-solve.solve-x",
     "animation.generated.radical.square-root-as-power",
     "animation.generated.function-wrap.apply-f",
-    "animation.generated.distribution.expand-a-sum"
+    "animation.generated.distribution.expand-a-sum",
+    "animation.derivative-rules.tangent-graph"
   ]);
   const descriptors = projectKpAnimationAssetsToEditorDescriptors({
     assets: createKpAnimationAssets(),

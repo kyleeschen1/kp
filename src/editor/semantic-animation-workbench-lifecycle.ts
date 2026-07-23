@@ -25,6 +25,8 @@ export type KpAnimationReviewState =
   | "changes-requested"
   | "approved";
 
+export type KpAnimationApprovalState = "unapproved" | "approved";
+
 export type KpAnimationVerificationState =
   | "unknown"
   | "passing"
@@ -40,6 +42,7 @@ export interface KpAnimationLifecycleFacets {
   readonly roadmap: KpAnimationRoadmapState;
   readonly execution: KpAnimationExecutionState;
   readonly maturity: KpAnimationMaturityState;
+  readonly approval: KpAnimationApprovalState;
   readonly review: KpAnimationReviewState;
   readonly verification: KpAnimationVerificationState;
   readonly playability: KpAnimationPlayabilityState;
@@ -51,10 +54,10 @@ export function createKpAnimationLifecycleFacets(
   if (input.playability === "planned-only" && input.execution === "complete") {
     throw new Error("A planned-only animation cannot have complete execution.");
   }
-  if (input.review === "approved" && input.maturity === "proposed") {
+  if (input.approval === "approved" && input.maturity === "proposed") {
     throw new Error("An approved review cannot point to proposed-only maturity.");
   }
-  if (input.maturity === "promoted" && input.review !== "approved") {
+  if (input.maturity === "promoted" && input.approval !== "approved") {
     throw new Error("A promoted animation requires approved review evidence.");
   }
   return {

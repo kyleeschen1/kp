@@ -10,6 +10,7 @@ test("lifecycle facets retain independent roadmap, execution, and evidence state
     roadmap: "now",
     execution: "complete",
     maturity: "approved",
+    approval: "approved",
     review: "approved",
     verification: "passing",
     playability: "playable"
@@ -18,6 +19,7 @@ test("lifecycle facets retain independent roadmap, execution, and evidence state
     roadmap: "next",
     execution: "queued",
     maturity: "proposed",
+    approval: "unapproved",
     review: "unreviewed",
     verification: "unknown",
     playability: "planned-only"
@@ -37,6 +39,7 @@ test("lifecycle facets reject evidence-backed incompatible states", () => {
         roadmap: "next",
         execution: "complete",
         maturity: "proposed",
+        approval: "unapproved",
         review: "unreviewed",
         verification: "unknown",
         playability: "planned-only"
@@ -49,6 +52,7 @@ test("lifecycle facets reject evidence-backed incompatible states", () => {
         roadmap: "later",
         execution: "not-scheduled",
         maturity: "promoted",
+        approval: "unapproved",
         review: "changes-requested",
         verification: "passing",
         playability: "playable"
@@ -62,6 +66,7 @@ test("lifecycle facets do not infer maturity from passing verification", () => {
     roadmap: "later",
     execution: "not-scheduled",
     maturity: "experimental",
+    approval: "unapproved",
     review: "awaiting-review",
     verification: "passing",
     playability: "playable"

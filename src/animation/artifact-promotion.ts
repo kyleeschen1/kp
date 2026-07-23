@@ -41,7 +41,8 @@ export const kpGoldEquationAnimationIds = Object.freeze([
   "animation.linear-solve.solve-x",
   "animation.generated.radical.square-root-as-power",
   "animation.generated.function-wrap.apply-f",
-  "animation.generated.distribution.expand-a-sum"
+  "animation.generated.distribution.expand-a-sum",
+  "animation.derivative-rules.tangent-graph"
 ] as const);
 
 // The radical rewrite already has a human-reviewed normative conformance

@@ -122,7 +122,8 @@
     {
       "id": "s11",
       "title": "Compile the canonical index",
-      "status": "planned"
+      "summary": "Compiled a deterministic canonical index across catalog planned identity representations roadmap Theseus review and promotion inputs, added per-entry and global orphan/conflict diagnostics, separated historical approval from current review state, and aligned the approved tangent exemplar with gold promotion metadata.",
+      "status": "complete"
     },
     {
       "id": "s12",
