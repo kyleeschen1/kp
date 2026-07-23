@@ -56,6 +56,16 @@ on 2026-07-19. The accepted review decisions are recorded in
 input and content-specific composition seams remain intentionally local until a
 second concept supplies evidence for promotion.
 
+The capability-pressure and arithmetic expansion decision is recorded in
+`decisions/2026-07-23-kp-capability-pressure-and-arithmetic-expansion.md`.
+Architectural pressure remains the ordering rule, while exact fraction models,
+place-value exchange, multi-digit algorithms, ratios, and the retained
+pre-calculus motif gaps are now first-class future product work. The ranked
+waves and coverage ledger live in
+`reviews/2026-07-23-kp-capability-pressure-domain-order-next-step-review.md`;
+they do not expand the active Theseus contract without a later explicit
+approval.
+
 ## Active Focus
 
 **Execute the approved compositional-quality frontier beginning with branch
@@ -66,6 +76,11 @@ checkpoints. The current exemplar must now prove dependency-checked together,
 sequential, staggered, and stepped branch schedules with exact rewind while
 preserving the accepted semantic document, measured motion, URLs, search,
 focus, accessibility, and production route behavior.
+
+The current breadth checkpoint is the derivative bridge. It must synchronize a
+KaTeX finite difference quotient with secant geometry, continuously converge to
+the tangent and `f'(a)`, and rewind exactly. The previous moving-tangent editor
+sample is reusable reference evidence, not the learner promotion target.
 
 The dependency order is owned by approved Theseus plan revision
 `plan-revision.kp.v5`: branch scheduling and responsive attention, structured

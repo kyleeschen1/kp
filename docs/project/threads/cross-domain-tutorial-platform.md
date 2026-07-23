@@ -47,6 +47,21 @@ through integral accumulation, vector/projection, and matrix-vector/linear-map
 coordination. The decision and responsive attention constraint are recorded in
 `decisions/2026-07-21-kp-symbolic-exemplar-sequence-and-responsive-attention.md`.
 
+The derivative step is now explicitly a pre-calculus-to-calculus bridge:
+KaTeX-rendered finite difference quotient, synchronized secant geometry,
+continuous tangent convergence, and exact rewind. A quadratic branch-and-roots
+exemplar is the accepted first insertion candidate after that checkpoint, but
+the executable contract must be changed explicitly before it begins.
+
+Exact arithmetic is now a first-class future lane rather than an implicit
+curriculum gap. Its exemplar sequence covers fraction repartition across
+KaTeX, partitioned circles, bars, and number lines; place-value addition and
+subtraction; partial-product multiplication; division with quotient and
+remainder; and proportional quantities. The accepted direction is recorded in
+`decisions/2026-07-23-kp-capability-pressure-and-arithmetic-expansion.md`, with
+the broader ordered coverage ledger in
+`reviews/2026-07-23-kp-capability-pressure-domain-order-next-step-review.md`.
+
 Wide two-column scrollytelling is no longer assumed to be the phone layout.
 The solve-x reader now projects the same semantic document, checkpoints, URLs,
 focus refs, transcript, and runtime clock as wide scrollytelling or a narrow
@@ -144,6 +159,8 @@ is a new combination of tutorial, graph, equation, and interaction vocabulary.
 - `docs/project/decisions/2026-07-19-kp-concept-room-architecture.md`
 - `docs/project/reviews/2026-07-19-linear-equation-architecture-stabilization-proposal.md`
 - `docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md`
+- `docs/project/decisions/2026-07-23-kp-capability-pressure-and-arithmetic-expansion.md`
+- `docs/project/reviews/2026-07-23-kp-capability-pressure-domain-order-next-step-review.md`
 - `docs/project/decisions/2026-07-17-kp-hermeneutic-cross-domain-tutorial-contract.md`
 - `docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md`
 - `docs/project/reviews/2026-07-18-reviewable-ftc-tutorial-loop-closeout.md`
