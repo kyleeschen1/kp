@@ -23,6 +23,10 @@
       "kind": "file",
       "path": "docs/theseus/nodes/priority-changes/priority-change.kp.semantic-animation-workbench-order-v0.json",
       "summary": "Resolved priority change materialized by this successor contract."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-semantic-animation-workbench-checkpoint.md"
     }
   ],
   "verification": [
@@ -182,7 +186,8 @@
     {
       "id": "s21",
       "title": "Workbench control-plane checkpoint",
-      "status": "planned"
+      "summary": "Completed the Workbench control-plane checkpoint with six stable radical, derivative, and planned-quadratic wide and narrow captures; canonical representation defaults; no-overflow and player-count assertions; full unit, browser, build, production-isolation, and review-audit gates; and a durable human review report. HUMAN_CHECKPOINT before s22 generalization.",
+      "status": "complete"
     },
     {
       "id": "s22",

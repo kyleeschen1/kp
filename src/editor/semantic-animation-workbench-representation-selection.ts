@@ -18,11 +18,19 @@ export function resolveKpAnimationWorkbenchRepresentation(input: {
   readonly requestedRepresentationId?: string;
   readonly descriptors: readonly KpEditorAnimationDescriptor[];
 }): KpAnimationWorkbenchRepresentationSelection {
+  const provenance = input.entry.identity.provenance;
   const relationship =
     input.entry.representations.find(
       (candidate) =>
         candidate.representationId === input.requestedRepresentationId
     ) ??
+    (provenance.kind === "catalog"
+      ? input.entry.representations.find(
+          (candidate) =>
+            candidate.representationId ===
+            provenance.descriptorId
+        )
+      : undefined) ??
     input.entry.representations.find((candidate) => candidate.playable) ??
     input.entry.representations[0];
   if (relationship === undefined) return {};

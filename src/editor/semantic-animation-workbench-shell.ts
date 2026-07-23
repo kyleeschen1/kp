@@ -150,16 +150,22 @@ function renderRepresentationSwitcher(
   representations: readonly KpAnimationRepresentationRelationship[],
   selectedRepresentationId: string | undefined
 ): string {
+  const ordered = [...representations].sort((left, right) => {
+    const selectedRank =
+      Number(right.representationId === selectedRepresentationId) -
+      Number(left.representationId === selectedRepresentationId);
+    return selectedRank || left.label.localeCompare(right.label);
+  });
   return `<section class="kp-animation-workbench__representations" aria-labelledby="kp-animation-workbench-representations-title">
     <div class="kp-animation-workbench__section-heading">
       <p class="eyebrow">Representations</p>
       <h3 id="kp-animation-workbench-representations-title">View the same animation</h3>
     </div>
     ${
-      representations.length === 0
+      ordered.length === 0
         ? `<p data-kp-animation-workbench-no-representations>No representation has been published.</p>`
         : `<div class="kp-animation-workbench__representation-list" role="group" aria-label="Animation representations">
-            ${representations
+            ${ordered
               .map(
                 (representation) =>
                   `<button type="button" data-action="select-animation-workbench-representation" data-kp-representation-id="${escapeHtml(representation.representationId)}" aria-pressed="${representation.representationId === selectedRepresentationId}">

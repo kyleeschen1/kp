@@ -42,7 +42,9 @@ test("unknown representation falls back without changing identity", () => {
   assert.equal(selection.descriptor?.animationId, radicalId);
   assert.equal(
     selection.relationship?.representationId,
-    entry.representations[0]?.representationId
+    entry.identity.provenance.kind === "catalog"
+      ? entry.identity.provenance.descriptorId
+      : undefined
   );
 });
 

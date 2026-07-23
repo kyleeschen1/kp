@@ -303,6 +303,48 @@
       "status": "passed",
       "scope": "s20 production closure including TypeScript and responsive accessibility changes",
       "checkedAt": "2026-07-23T21:28:34.652Z"
+    },
+    {
+      "command": "npm run visual:animation-workbench",
+      "status": "passed",
+      "scope": "s21 six actual wide and narrow seed captures contact sheet player counts lifecycle facets review availability and overflow assertions",
+      "checkedAt": "2026-07-23T21:38:21.555Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s21 full unit and architecture release gate: 2024 tests passed",
+      "checkedAt": "2026-07-23T21:39:33.515Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s21 production TypeScript and Vite build closure",
+      "checkedAt": "2026-07-23T21:39:34.490Z"
+    },
+    {
+      "command": "npm run test:browser:animation-workbench",
+      "status": "passed",
+      "scope": "s21 five Chromium Workbench playback planning keyboard reduced-motion representation and narrow-layout scenarios",
+      "checkedAt": "2026-07-23T21:39:35.300Z"
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s21 production graph excludes dev-review inbox markers across 130 built files",
+      "checkedAt": "2026-07-23T21:39:36.180Z"
+    },
+    {
+      "command": "npm run review:logs -- audit",
+      "status": "passed",
+      "scope": "s21 read-only review-log audit preserves bytes identity and event order",
+      "checkedAt": "2026-07-23T21:39:37.007Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s21 durable graph closure: 758 nodes and 10956 events valid",
+      "checkedAt": "2026-07-23T21:40:00.824Z"
     }
   ],
   "planRevision": {

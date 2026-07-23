@@ -66,10 +66,10 @@ export const kpLegacyArchitectureExceptionBaseline = [
     sourceFile: "src/main.ts",
     evidencePatterns: [
       'get("view") === "ftc-tutorial"',
-      'let activeView: "dashboard" | "editor" | "ftc-tutorial"'
+      '| "animation-workbench" = "editor"'
     ],
     rationale:
-      "Legacy views are selected by branches in the app entrypoint; generated concept routes need an isolated resolver rather than another view discriminant."
+      "Legacy views and the approved Semantic Animation Workbench are selected by branches in the app entrypoint; generated concept routes still need an isolated resolver rather than another view discriminant."
   },
   {
     id: "legacy.ftc.embedded-render-style",
@@ -96,4 +96,3 @@ export const kpLegacyArchitectureExceptionBaseline = [
       "The legacy learner shell owns a literal theme and font stack; the concept room must receive versioned theme roles through renderer adapters."
   }
 ] as const satisfies readonly KpLegacyArchitectureException[];
-
