@@ -81,6 +81,16 @@
       "status": "passed",
       "scope": "s06 Workbench foundation contracts and repository TypeScript boundaries.",
       "checkedAt": "2026-07-23T20:06:19.047Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-catalog-adapter.test.ts tests/semantic-animation-workbench-identity.test.ts tests/animation-library-metadata.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:12:09.477Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:12:16.186Z"
     }
   ],
   "planRevision": {

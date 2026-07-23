@@ -98,7 +98,8 @@
     {
       "id": "s07",
       "title": "Add the catalog adapter",
-      "status": "planned"
+      "summary": "Projected the generated editor catalog into one canonical Workbench entry per animationId, retained all descriptor aliases, preferred family-backed metadata, and proved radical and tangent variants deduplicate while planned quadratic remains absent.",
+      "status": "complete"
     },
     {
       "id": "s08",
