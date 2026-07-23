@@ -99,7 +99,8 @@
     {
       "id": "s20",
       "title": "Compose the lawful fraction solve macro",
-      "status": "planned"
+      "summary": "Composed a 14-state renderer-neutral solve macro for 2/3(x+6)=10 from the verified fan-out, normalization, sum-composition, inverse, balance, cancellation, and arithmetic authorities. Every adjacent step is continuous and every state independently verifies the exact solution x=9.",
+      "status": "complete"
     },
     {
       "id": "s21",

@@ -52,6 +52,13 @@
       "scope": "focused",
       "checkedAt": "2026-07-23T01:08:19.666Z",
       "notes": "Factoring inverts the verified distribution law, flips fan-out lineage to fan-in, and rejects denominator drift."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fraction-solve-macro.test.ts tests/fraction-distributed-sum-composition.test.ts tests/fraction-reverse-factoring.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T01:12:01.552Z",
+      "notes": "The 14-state renderer-neutral solve trace composes verified fraction primitives and preserves exact solution x=9 at every step."
     }
   ],
   "progress": {
