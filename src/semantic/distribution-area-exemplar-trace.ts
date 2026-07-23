@@ -13,6 +13,7 @@ import type {
   SelectorCorrespondenceRecord
 } from "./correspondence.ts";
 import { kpDistributionAreaExemplarContract } from "./distribution-area-exemplar-contract.ts";
+import type { KpStructuredExpression } from "./structured-expression.ts";
 
 export type KpDistributionAreaExemplarStateId =
   | "factored"
@@ -56,32 +57,32 @@ export function createKpDistributionAreaExemplarSemanticTrace():
     id: `${baseId}.semantic-trace.bundle`,
     title: "Three times x plus two reversible semantic trace",
     objects: [
-      expression(stateObjectIds.factored, "Factored expression", "3(x+2)", [
-        selector(stateObjectIds.factored, "factor.3", "factor", "3"),
+      expression(stateObjectIds.factored, "Factored expression", kpDistributionAreaExemplarContract.algebra.expressions.factored, [
+        selector(stateObjectIds.factored, "factor.3", "factor", "3", "distribution.factored.factor.3"),
         selector(stateObjectIds.factored, "left-paren", "delimiter", "("),
-        selector(stateObjectIds.factored, "term.x", "term", "x"),
+        selector(stateObjectIds.factored, "term.x", "term", "x", "distribution.factored.addend.x"),
         selector(stateObjectIds.factored, "plus", "operator", "+"),
-        selector(stateObjectIds.factored, "term.2", "term", "2"),
+        selector(stateObjectIds.factored, "term.2", "term", "2", "distribution.factored.addend.2"),
         selector(stateObjectIds.factored, "right-paren", "delimiter", ")")
       ]),
       expression(
         stateObjectIds.distributed,
         "Distributed expression",
-        "3x+3\\cdot2",
+        kpDistributionAreaExemplarContract.algebra.expressions.distributed,
         [
-          selector(stateObjectIds.distributed, "left.factor.3", "factor", "3"),
-          selector(stateObjectIds.distributed, "left.term.x", "term", "x"),
+          selector(stateObjectIds.distributed, "left.factor.3", "factor", "3", "distribution.distributed.factor.3.x"),
+          selector(stateObjectIds.distributed, "left.term.x", "term", "x", "distribution.distributed.addend.x"),
           selector(stateObjectIds.distributed, "plus", "operator", "+"),
-          selector(stateObjectIds.distributed, "right.factor.3", "factor", "3"),
+          selector(stateObjectIds.distributed, "right.factor.3", "factor", "3", "distribution.distributed.factor.3.2"),
           selector(stateObjectIds.distributed, "right.times", "operator", "\\cdot"),
-          selector(stateObjectIds.distributed, "right.term.2", "term", "2")
+          selector(stateObjectIds.distributed, "right.term.2", "term", "2", "distribution.distributed.addend.2")
         ]
       ),
-      expression(stateObjectIds.expanded, "Expanded expression", "3x+6", [
-        selector(stateObjectIds.expanded, "left.factor.3", "factor", "3"),
-        selector(stateObjectIds.expanded, "left.term.x", "term", "x"),
+      expression(stateObjectIds.expanded, "Expanded expression", kpDistributionAreaExemplarContract.algebra.expressions.expanded, [
+        selector(stateObjectIds.expanded, "left.factor.3", "factor", "3", "distribution.expanded.factor.3.x"),
+        selector(stateObjectIds.expanded, "left.term.x", "term", "x", "distribution.expanded.addend.x"),
         selector(stateObjectIds.expanded, "plus", "operator", "+"),
-        selector(stateObjectIds.expanded, "right.product.6", "derived-product", "6")
+        selector(stateObjectIds.expanded, "right.product.6", "derived-product", "6", "distribution.expanded.product.6")
       ])
     ]
   });
@@ -210,14 +211,14 @@ function transition(input: {
 function expression(
   id: string,
   title: string,
-  latex: string,
+  structuredExpression: KpStructuredExpression,
   selectors: readonly CreateKpAssetSelectorInput[]
 ) {
   return createKpSemanticAssetObject({
     id,
     objectType: "expression",
     title,
-    value: { latex },
+    value: { structuredExpression },
     selectors
   });
 }
@@ -226,9 +227,17 @@ function selector(
   objectId: string,
   suffix: string,
   kind: string,
-  label: string
+  label: string,
+  structuredSubtreeId?: string
 ): CreateKpAssetSelectorInput {
-  return { id: `${objectId}.${suffix}`, kind, label };
+  return {
+    id: `${objectId}.${suffix}`,
+    kind,
+    label,
+    ...(structuredSubtreeId === undefined
+      ? {}
+      : { metadata: { structuredSubtreeId } })
+  };
 }
 
 function record(

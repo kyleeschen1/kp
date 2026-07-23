@@ -63,7 +63,8 @@
     {
       "id": "next-action.project.s14-v0",
       "title": "Migrate the distribution exemplar from string templates to structured algebra",
-      "status": "planned"
+      "summary": "The accepted distribution presentation is now projected from structured semantic expressions, verified role bindings, and compiled normal-form lineage rather than semantic LaTeX templates.",
+      "status": "complete"
     },
     {
       "id": "next-action.project.s15-v0",

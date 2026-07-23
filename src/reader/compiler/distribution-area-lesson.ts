@@ -29,10 +29,20 @@ export function compileKpDistributionAreaLesson(markdown: string) {
   if (story?.kind !== "animation-story" || story.asset.id !== assetId) {
     throw new Error(`Distribution area lesson must reference ${assetId}.`);
   }
-  const staticMath = compileKpStaticMathStates(document, ({ progressPermille }) => ({
-    latex: progressPermille === 0 ? "3(x+2)" : progressPermille < 1000 ? "3x+3\\cdot2" : "3x+6",
-    label: progressPermille === 0 ? "Factored expression" : progressPermille < 1000 ? "Distributed expression" : "Expanded expression"
-  }));
+  const trace = createKpDistributionAreaExemplarSemanticTrace();
+  const staticMath = compileKpStaticMathStates(document, ({ progressPermille }) => {
+    const stateId = progressPermille === 0
+      ? "factored"
+      : progressPermille < 1000 ? "distributed" : "expanded";
+    const object = trace.bundle.objects.find(({ id }) => id === trace.stateObjectIds[stateId]);
+    if (object === undefined) throw new Error(`Distribution area trace is missing ${stateId}.`);
+    return {
+      latex: createKpDistributionAreaSelectorAnnotatedLatex(object).rawLatex,
+      label: stateId === "factored"
+        ? "Factored expression"
+        : stateId === "distributed" ? "Distributed expression" : "Expanded expression"
+    };
+  });
   const prose = compileKpStaticLessonProse(document, {
     staticMath,
     renderAnimationStorySlot: ({ block }) =>

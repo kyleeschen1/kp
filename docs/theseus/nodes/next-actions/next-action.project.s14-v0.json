@@ -2,8 +2,8 @@
   "id": "next-action.project.s14-v0",
   "kind": "next-action",
   "title": "Migrate the distribution exemplar from string templates to structured algebra",
-  "status": "ready",
-  "summary": "Materialized from stored run-contract slice s14 in KP product roadmap v5 continuation.",
+  "status": "resolved",
+  "summary": "Structured-algebra migration is complete with reader, motion, budget, and visual preservation verified.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -44,6 +44,65 @@
     "npm run build",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/distribution-area-exemplar-contract.test.ts tests/distribution-area-exemplar-trace.test.ts tests/distribution-area-exemplar-endpoint.test.ts tests/semantic-reader-distribution-area-compiler.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T00:46:36.245Z",
+      "notes": "Thirteen structured migration and projection-preservation tests passed."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-23T00:46:37.170Z",
+      "notes": "All 1931 tests passed, including distribution motion laws and architecture checks."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-07-23T00:46:37.958Z",
+      "notes": "Production build and its typecheck passed."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "reader-production",
+      "checkedAt": "2026-07-23T00:46:38.739Z"
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "reader-production",
+      "checkedAt": "2026-07-23T00:46:39.516Z"
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "reader-production",
+      "checkedAt": "2026-07-23T00:46:40.299Z"
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-07-23T00:46:41.148Z",
+      "notes": "All eight shared reader conformance checks passed."
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-07-23T00:46:42.014Z",
+      "notes": "All twelve distribution visual and interaction checks passed."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "The distribution exemplar now stores structured factored, distributed, and expanded expressions and a verified normal-form plan while renderer projection remains unchanged."
+  },
   "expectedLearning": [
     "Whether Migrate the distribution exemplar from string templates to structured algebra can be completed inside KP product roadmap v5 continuation."
   ],

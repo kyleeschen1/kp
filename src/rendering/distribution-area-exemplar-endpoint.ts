@@ -6,6 +6,7 @@ import {
 import {
   createKpDistributionAreaExemplarSemanticTrace
 } from "../semantic/distribution-area-exemplar-trace.ts";
+import { createKpDistributionAreaSelectorAnnotatedLatex } from "./distribution-area-selector-annotated-latex.ts";
 
 export type KpDistributionAreaEndpointId = "factored" | "expanded";
 
@@ -42,7 +43,7 @@ export function createKpDistributionAreaExemplarEndpoint(
   const objectId = trace.stateObjectIds[id];
   const object = trace.bundle.objects.find((candidate) => candidate.id === objectId);
   if (object === undefined) throw new Error(`Missing distribution area endpoint ${id}.`);
-  const latex = (object.value as { readonly latex: string }).latex;
+  const latex = createKpDistributionAreaSelectorAnnotatedLatex(object).rawLatex;
   const expanded = id === "expanded";
   const labels = expanded
     ? scene.labels.map((label) => ({

@@ -10,13 +10,14 @@ import { kpDistributionAreaExemplarContract } from "../src/semantic/distribution
 import {
   createKpDistributionAreaExemplarSemanticTrace
 } from "../src/semantic/distribution-area-exemplar-trace.ts";
+import { createKpDistributionAreaSelectorAnnotatedLatex } from "../src/rendering/distribution-area-selector-annotated-latex.ts";
 
 test("area trace keeps distribution and constant evaluation as distinct reversible steps", () => {
   const trace = createKpDistributionAreaExemplarSemanticTrace();
   const latexById = new Map(
     trace.bundle.objects.map((object) => [
       object.id,
-      (object.value as { readonly latex: string }).latex
+      createKpDistributionAreaSelectorAnnotatedLatex(object).rawLatex
     ])
   );
 
@@ -33,6 +34,21 @@ test("area trace keeps distribution and constant evaluation as distinct reversib
   assert.deepEqual(
     trace.reverse.map(({ sourceStateId, targetStateId }) => [sourceStateId, targetStateId]),
     [["expanded", "distributed"], ["distributed", "factored"]]
+  );
+});
+
+test("area trace stores structured expressions and binds semantic selectors to subtree ids", () => {
+  const trace = createKpDistributionAreaExemplarSemanticTrace();
+  const factored = trace.bundle.objects.find(({ id }) => id === trace.stateObjectIds.factored)!;
+  const value = factored.value as {
+    readonly structuredExpression: { readonly root: { readonly id: string } };
+  };
+
+  assert.equal(value.structuredExpression.root.id, "distribution.factored.root");
+  assert.equal("latex" in (factored.value as object), false);
+  assert.equal(
+    factored.selectors.find(({ id }) => id.endsWith("factor.3"))?.metadata?.["structuredSubtreeId"],
+    "distribution.factored.factor.3"
   );
 });
 
