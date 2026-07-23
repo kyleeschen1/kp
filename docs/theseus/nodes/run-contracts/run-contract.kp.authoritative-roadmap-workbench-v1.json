@@ -76,7 +76,8 @@
     {
       "id": "s04",
       "title": "Preserve-roadmap-fields-through-projections",
-      "status": "planned"
+      "summary": "Preserved v2 roadmap metadata through horizon reports, reconciliation, refill candidates, and resume capsules; refill uses a non-conflicting roadmapMetadata namespace. 29 focused tests and typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s05",
