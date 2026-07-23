@@ -141,8 +141,8 @@
     {
       "id": "s27",
       "title": "Promote the derivative and tangent exemplar",
-      "summary": "Derivative finite-quotient/secant-to-tangent exemplar rebuilt and verified; HUMAN_CHECKPOINT ready at the Animation Library route.",
-      "status": "in-progress"
+      "summary": "Human approved the derivative bridge. The finite quotient, moving point, secant slope, tangent limit, KaTeX presentation, and exact rewind are accepted; Workbench now owns the next representation integration boundary.",
+      "status": "complete"
     },
     {
       "id": "s28",

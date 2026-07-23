@@ -228,7 +228,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Rebuilt s27 as a KaTeX finite quotient and continuously reversible secant-to-tangent convergence. Automated gates pass; the editor exemplar awaits human visual approval before learner projection or reuse."
+    "summary": "Human approved the derivative finite-quotient/secant-to-tangent exemplar. The accepted reference keeps one shared h, KaTeX-owned math, continuous convergence, and exact rewind; later representations must remain aliases of this canonical animation identity."
   },
   "expectedLearning": [
     "Which promoted semantic, scheduling, authoring, renderer, and verification contracts survive capability-opening exemplars across symbolic, calculus, vector, and linear-map domains without combinatorial growth."

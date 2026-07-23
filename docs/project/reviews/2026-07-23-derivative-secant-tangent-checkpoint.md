@@ -1,6 +1,6 @@
 # Derivative secant-to-tangent exemplar checkpoint
 
-Status: `HUMAN_CHECKPOINT`
+Status: approved on 2026-07-23
 
 Run contract: `run-contract.kp.product-roadmap-v5-continuation-v2`
 Slice: `s27`
@@ -103,6 +103,13 @@ authorize automatic reuse for arbitrary limits or a global derivative style.
 
 ## Human decision
 
-Recommended: approve the synchronized finite-quotient and secant-to-tangent
-exemplar. After approval, finish its learner projections, close slice 27, and
-start the separately reviewed Semantic Animation Workbench successor contract.
+The user approved the synchronized finite-quotient and secant-to-tangent
+exemplar after reviewing the live Animation Library route. The shared semantic
+clock, exact rewind, KaTeX mathematical presentation, and graph construction
+are accepted as the derivative reference.
+
+This approval closes the exemplar gate. It does not create a separate learner
+route, generalize the construction to arbitrary limits, or authorize the
+superseded integral-first continuation. Learner representations will be
+attached beneath the same canonical animation identity through the approved
+Semantic Animation Workbench sequence.
