@@ -31,6 +31,13 @@
       "scope": "focused",
       "checkedAt": "2026-07-23T00:59:43.262Z",
       "notes": "Opaque quotient subtree fan-out preserves full quotient topology and rejects changed descendants."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fraction-numerator-normalization.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T01:04:28.370Z",
+      "notes": "Sequential and parallel schedules share the same verified numerator-normalization branches; denominator drift is rejected."
     }
   ],
   "progress": {

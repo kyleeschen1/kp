@@ -81,7 +81,8 @@
     {
       "id": "s17",
       "title": "Prove sequential and parallel numerator normalization",
-      "status": "planned"
+      "summary": "Normalized each distributed fraction term into an explicit quotient numerator while keeping scheduling presentation-only. Sequential and parallel policies share one immutable semantic outcome; focused tests, full regression, and typecheck passed.",
+      "status": "complete"
     },
     {
       "id": "s18",
