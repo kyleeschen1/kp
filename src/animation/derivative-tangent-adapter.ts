@@ -17,6 +17,10 @@ import {
   createSemanticTransformationLeaf,
   createSemanticTransformationParallel
 } from "../semantic/transformation-composition.ts";
+import {
+  createKpDerivativePowerRuleCorrespondenceMap,
+  createKpDerivativePowerRuleSemanticRoles
+} from "../semantic/derivative-power-rule-semantics.ts";
 
 export const derivativeTangentAnimationId =
   "animation.derivative-rules.tangent-graph";
@@ -84,6 +88,7 @@ export function createDerivativeTangentAnimationAsset(): KpAnimationAsset {
     latex: "\\frac{d}{dx}x^3",
     selectors: [
       ["operator", "derivative-operator", "d/dx"],
+      ["operator-variable", "variable", "x"],
       ["base", "variable", "x"],
       ["exponent", "exponent", "3"]
     ]
@@ -97,6 +102,13 @@ export function createDerivativeTangentAnimationAsset(): KpAnimationAsset {
       ["base", "variable", "x"],
       ["exponent", "exponent", "2"]
     ]
+  });
+  const powerRuleRoles = createKpDerivativePowerRuleSemanticRoles({
+    sourceObjectId: sourceExpression.id,
+    targetObjectId: targetExpression.id,
+    differentiationVariable: "x",
+    base: "x",
+    exponent: 3
   });
   const sourceState = tangentStateObject(
     sourceStateId,
@@ -118,6 +130,10 @@ export function createDerivativeTangentAnimationAsset(): KpAnimationAsset {
     sourceObjectIds: [sourceExpression.id],
     targetObjectIds: [targetExpression.id],
     preserves: ["value", "structure"],
+    correspondenceMap: createKpDerivativePowerRuleCorrespondenceMap(
+      powerRuleRoles,
+      powerRuleTransformationId
+    ),
     correspondence: [
       {
         sourceSelectorId: `${sourceExpressionId}.base`,
@@ -145,6 +161,34 @@ export function createDerivativeTangentAnimationAsset(): KpAnimationAsset {
     sourceObjectIds: [curveId, targetExpressionId, sourceStateId],
     targetObjectIds: [curveId, targetExpressionId, targetStateId],
     preserves: ["identity", "value", "role"],
+    correspondenceMap: {
+      id: `${tangentTransformationId}.correspondence`,
+      records: [
+        {
+          id: "curve-persists",
+          relation: "identity",
+          sourceSelectorIds: [`${curveId}.body`],
+          targetSelectorIds: [`${curveId}.body`],
+          summary: "The cubic curve remains fixed while its tangent moves."
+        },
+        ...["coefficient", "base", "exponent"].map((selector) => ({
+          id: `derivative-${selector}-persists`,
+          relation: "identity" as const,
+          sourceSelectorIds: [`${targetExpressionId}.${selector}`],
+          targetSelectorIds: [`${targetExpressionId}.${selector}`],
+          summary:
+            "The derivative expression remains fixed while its value drives the tangent slope."
+        })),
+        ...["point", "tangent", "slope"].map((selector) => ({
+          id: `${selector}-moves`,
+          relation: "role-change" as const,
+          sourceSelectorIds: [`${sourceStateId}.${selector}`],
+          targetSelectorIds: [`${targetStateId}.${selector}`],
+          summary:
+            `The ${selector} preserves its explanatory role as the contact location changes.`
+        }))
+      ]
+    },
     correspondence: [
       {
         sourceSelectorId: `${curveId}.body`,
@@ -268,6 +312,7 @@ export function createDerivativeTangentAnimationAsset(): KpAnimationAsset {
           graphId,
           curveId,
           derivativeExpressionId: targetExpressionId,
+          derivativeDisplayText: "f′(x) = 3x²",
           sourceStateId,
           targetStateId
         }

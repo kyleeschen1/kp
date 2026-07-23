@@ -40,6 +40,7 @@ import {
 import {
   kpDiagramSvgGestaltRenderer,
   kpEquationDomGestaltRenderer,
+  kpGraphSvgGestaltRenderer,
   resolveKpGestaltRendererCapabilities,
   type KpGestaltRendererCapabilityResolution
 } from "../animation/gestalt-renderer-capabilities.ts";
@@ -317,8 +318,9 @@ function inspectChoreography(
         (contribution) => contribution.focus.groupId
       )
     };
-  } else if (animation.transformations.some(
-    (transformation) => transformation.transformType === "applyDerivativePowerRule"
+  } else if (animation.transformations.some((transformation) =>
+    transformation.transformType === "applyDerivativePowerRule" ||
+    transformation.transformType === "derivativePowerRule"
   )) {
     const choreography = createKpDerivativePowerRuleChoreography(animation);
     result = {
@@ -368,7 +370,9 @@ function resolveRendererCapabilities(
     ? kpEquationDomGestaltRenderer
     : state.surface.slotKinds.includes("diagram")
       ? kpDiagramSvgGestaltRenderer
-      : undefined;
+      : state.surface.slotKinds.includes("graph")
+        ? kpGraphSvgGestaltRenderer
+        : undefined;
   return renderer === undefined
     ? undefined
     : resolveKpGestaltRendererCapabilities({ style, renderer });

@@ -45,6 +45,26 @@ test("derivative tangent asset synchronizes the power rule and graph motion", ()
       "transform.derivative-rules.tangent-graph.move-tangent"
     ]
   ]);
+  assert.deepEqual(
+    animation.transformations[0]?.correspondenceMap?.records.map(
+      (record) => record.relation
+    ),
+    ["removal", "removal", "identity", "fan-out"]
+  );
+  assert.deepEqual(
+    animation.transformations[1]?.correspondenceMap?.records.map(
+      (record) => record.relation
+    ),
+    [
+      "identity",
+      "identity",
+      "identity",
+      "identity",
+      "role-change",
+      "role-change",
+      "role-change"
+    ]
+  );
   assert.deepEqual(checkKpAnimationAssetReferenceClosure(animation), {
     lawId: "animation.reference-closure",
     passed: true,
@@ -75,6 +95,7 @@ test("derivative tangent runtime frame uses 3x squared on the shared clock", () 
       slope: frame.slope,
       intercept: frame.intercept,
       tangentSegment: frame.tangentSegment,
+      derivativeDisplayText: frame.derivativeDisplayText,
       activeTransformationIds: frame.activeTransformationIds
     },
     {
@@ -87,6 +108,7 @@ test("derivative tangent runtime frame uses 3x squared on the shared clock", () 
         [0.25, -1.25],
         [1.75, 3.25]
       ],
+      derivativeDisplayText: "f′(x) = 3x²",
       activeTransformationIds: [
         "transform.derivative-rules.tangent-graph.apply-power-rule",
         "transform.derivative-rules.tangent-graph.move-tangent"

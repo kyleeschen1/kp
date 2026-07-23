@@ -18,6 +18,7 @@ export interface DerivativeTangentRuntimeFrame {
   readonly graphId: string;
   readonly curveId: string;
   readonly derivativeExpressionId: string;
+  readonly derivativeDisplayText: string;
   readonly progress: number;
   readonly graphProgress: number;
   readonly x: number;
@@ -53,6 +54,10 @@ export function sampleDerivativeTangentRuntimeFrame(input: {
     target.metadata?.["derivativeExpressionId"],
     "derivativeExpressionId"
   );
+  const derivativeDisplayText = metadataString(
+    target.metadata?.["derivativeDisplayText"],
+    "derivativeDisplayText"
+  );
   const sourceState = tangentStateValue(
     input.animation,
     metadataString(target.metadata?.["sourceStateId"], "sourceStateId")
@@ -79,6 +84,7 @@ export function sampleDerivativeTangentRuntimeFrame(input: {
     graphId,
     curveId,
     derivativeExpressionId,
+    derivativeDisplayText,
     progress: input.runtimeFrame.clock.progress,
     graphProgress,
     ...state,

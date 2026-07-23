@@ -69,6 +69,12 @@ export const defaultEquationTransformVisualMotifRules:
         "The exponent branches into coefficient and predecessor roles after the persistent base reflows."
     },
     {
+      transformationKind: "derivativePowerRule",
+      descriptor: descriptorForEquationMotif("derivative-power"),
+      summary:
+        "The exponent branches into coefficient and predecessor roles after the persistent base reflows."
+    },
+    {
       transformationKind: "applyDerivativeSumRule",
       descriptor: descriptorForEquationMotif("copy-fan-out"),
       summary:

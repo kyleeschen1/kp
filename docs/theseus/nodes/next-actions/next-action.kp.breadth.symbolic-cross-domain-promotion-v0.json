@@ -152,6 +152,24 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-07-23T17:16:04.242Z"
+    },
+    {
+      "command": "node --test focused derivative tangent and gestalt inspector tests",
+      "status": "passed",
+      "scope": "s27 semantic correspondence, choreography promotion, exact rewind, and renderer capability",
+      "checkedAt": "2026-07-23T17:29:41.871Z"
+    },
+    {
+      "command": "npm run visual:derivative-tangent",
+      "status": "passed",
+      "scope": "s27 six-checkpoint visual capture, ready diagnostics, and mirrored rewind",
+      "checkedAt": "2026-07-23T17:29:42.830Z"
+    },
+    {
+      "command": "playwright focused derivative tangent browser check",
+      "status": "passed",
+      "scope": "s27 visible derivative label plus synchronized tangent and contact point",
+      "checkedAt": "2026-07-23T17:29:43.784Z"
     }
   ],
   "progress": {

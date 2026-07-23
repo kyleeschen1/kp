@@ -106,7 +106,9 @@ export function createKpDerivativePowerRuleChoreography(
   animation: KpAnimationAsset
 ): KpDerivativePowerRuleChoreography {
   const transformation = animation.transformations.find(
-    (candidate) => candidate.transformType === "applyDerivativePowerRule"
+    (candidate) =>
+      candidate.transformType === "applyDerivativePowerRule" ||
+      candidate.transformType === "derivativePowerRule"
   );
   if (transformation?.correspondenceMap === undefined) {
     throw new Error(

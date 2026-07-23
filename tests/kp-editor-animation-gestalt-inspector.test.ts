@@ -122,7 +122,7 @@ test("radical inspection exposes one salience transfer per fragment succession",
   assert.equal(inspection.traversalLabel, "execution · 1 ranks");
 });
 
-test("unmigrated surfaces expose honest warnings and invalid style pins fall back", () => {
+test("unmigrated graph choreography warns while the graph renderer reports its capabilities", () => {
   const catalog = createKpAnimationAssets();
   const descriptor = createKpEditorAnimationLibrary().find(
     (candidate) => candidate.renderTargetKinds.includes("graph")
@@ -147,7 +147,38 @@ test("unmigrated surfaces expose honest warnings and invalid style pins fall bac
   assert.ok(inspection.warnings.some((warning) =>
     warning.includes("not yet been migrated")
   ));
-  assert.ok(inspection.warnings.some((warning) =>
-    warning.includes("No gestalt renderer capability declaration")
+  assert.match(inspection.capabilityLabel, /^compatible/);
+  assert.ok(inspection.warnings.every((warning) =>
+    !warning.includes("No gestalt renderer capability declaration")
   ));
+});
+
+test("derivative tangent inspection promotes synchronized algebra and graph semantics", () => {
+  const catalog = createKpAnimationAssets();
+  const descriptor = createKpEditorAnimationLibrary().find(
+    (candidate) =>
+      candidate.animationId === "animation.derivative-rules.tangent-graph"
+  )!;
+  const animation = catalog.find(
+    (candidate) => candidate.id === descriptor.animationId
+  )!;
+  const state = createKpEditorAnimationPlayerState({
+    descriptor,
+    animation,
+    catalog,
+    progress: 0.5,
+    playbackStatus: "paused"
+  });
+  const inspection = createKpEditorAnimationGestaltInspection({
+    animation,
+    state,
+    selectedStyle: kpOrganicSubtleStyleRef
+  });
+
+  assert.equal(inspection.status, "ready");
+  assert.match(inspection.choreographyPlanId ?? "", /apply-power-rule/);
+  assert.equal(inspection.designStrategyLabel, "operation-specific · derivative-power");
+  assert.equal(inspection.designIssueLabel, "none");
+  assert.match(inspection.capabilityLabel, /^compatible/);
+  assert.deepEqual(inspection.warnings, []);
 });

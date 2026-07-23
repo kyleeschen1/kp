@@ -229,7 +229,10 @@ export function resolveKpDerivativePowerRuleSemanticRoles(input: {
   readonly bundle: KpAssetBundle;
 }): KpDerivativePowerRuleSemanticRoles {
   if (
-    input.transformation.transformType !== "applyDerivativePowerRule" ||
+    !(
+      input.transformation.transformType === "applyDerivativePowerRule" ||
+      input.transformation.transformType === "derivativePowerRule"
+    ) ||
     input.transformation.sourceObjectIds.length !== 1 ||
     input.transformation.targetObjectIds.length !== 1
   ) {

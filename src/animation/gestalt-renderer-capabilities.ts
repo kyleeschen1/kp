@@ -11,6 +11,7 @@ export interface KpGestaltRendererDeclaration {
   readonly kind:
     | "equation-dom"
     | "diagram-svg"
+    | "graph-svg"
     | "css-2_5d"
     | "webgl-fragment";
   readonly supportedCapabilities: readonly string[];
@@ -152,6 +153,24 @@ export const kpDiagramSvgGestaltRenderer: KpGestaltRendererDeclaration = {
     capabilityId: "focus.depth.css-2_5d",
     fallbackCapabilityId: "focus.flat",
     summary: "Keep the salient SVG group flat."
+  }]
+};
+
+export const kpGraphSvgGestaltRenderer: KpGestaltRendererDeclaration = {
+  id: "renderer.kp.graph-svg",
+  kind: "graph-svg",
+  supportedCapabilities: [
+    "motion.path.direct",
+    "motion.path.arc",
+    "motion.seek.direct-sampling",
+    "focus.flat",
+    "opacity.token",
+    "fragment.svg"
+  ],
+  fallbacks: [{
+    capabilityId: "focus.depth.css-2_5d",
+    fallbackCapabilityId: "focus.flat",
+    summary: "Keep the salient graph geometry flat."
   }]
 };
 

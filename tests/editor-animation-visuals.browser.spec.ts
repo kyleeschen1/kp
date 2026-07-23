@@ -3077,6 +3077,9 @@ test("the derivative tangent and contact point move together along x cubed", asy
   const player = page.locator("[data-kp-editor-animation-player]");
   const tangent = player.locator("[data-kp-editor-graph-tangent]");
   const point = player.locator("[data-kp-editor-graph-tangent-point]");
+  await expect(
+    player.locator("[data-kp-editor-graph-derivative-expression]")
+  ).toHaveText("f′(x) = 3x²");
   await expect(tangent).toHaveAttribute("data-kp-editor-graph-tangent-slope", "0");
   await expect(point).toHaveAttribute("data-kp-editor-graph-tangent-x", "0");
   const startX = Number(await point.getAttribute("cx"));
