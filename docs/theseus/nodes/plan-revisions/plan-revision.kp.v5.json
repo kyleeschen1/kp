@@ -51,6 +51,12 @@
       "status": "passed",
       "scope": "s02 Workbench authority contract and repository TypeScript boundaries.",
       "checkedAt": "2026-07-23T19:52:30.537Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-seeds.test.ts",
+      "status": "passed",
+      "scope": "s03 distinct radical derivative and planned-quadratic seed identities: 3 tests passed.",
+      "checkedAt": "2026-07-23T19:56:04.200Z"
     }
   ],
   "planRevision": {
