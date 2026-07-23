@@ -93,7 +93,8 @@
     {
       "id": "s19",
       "title": "Prove verified reverse factoring for fraction expressions",
-      "status": "planned"
+      "summary": "Added verified reverse factoring as an explicit inverse of the distribution authority. Fan-out lineage reverses to fan-in, while opaque quotient drift is rejected with deterministic paths. Focused tests and typecheck passed.",
+      "status": "complete"
     },
     {
       "id": "s20",

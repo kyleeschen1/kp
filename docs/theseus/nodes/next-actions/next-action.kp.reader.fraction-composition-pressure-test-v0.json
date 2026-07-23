@@ -45,6 +45,13 @@
       "scope": "focused",
       "checkedAt": "2026-07-23T01:06:12.890Z",
       "notes": "Verified normalized quotient branches compose into one ordered sum with explicit identity lineage."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fraction-reverse-factoring.test.ts tests/fraction-fan-out-fixture.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T01:08:19.666Z",
+      "notes": "Factoring inverts the verified distribution law, flips fan-out lineage to fan-in, and rejects denominator drift."
     }
   ],
   "progress": {
