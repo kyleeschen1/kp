@@ -8,6 +8,10 @@
     {
       "kind": "file",
       "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-fraction-composition-architecture-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -59,11 +63,32 @@
       "scope": "focused",
       "checkedAt": "2026-07-23T01:12:01.552Z",
       "notes": "The 14-state renderer-neutral solve trace composes verified fraction primitives and preserves exact solution x=9 at every step."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-23T01:19:18.903Z",
+      "notes": "Repository architecture, inference, concept-catalog, and deterministic suites passed: 1947 tests."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-07-23T01:19:19.826Z",
+      "notes": "All eight shared reader conformance checks passed across fraction, distribution, solve, and responsive routes."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation",
+      "status": "passed",
+      "scope": "human-checkpoint",
+      "checkedAt": "2026-07-23T01:19:20.607Z",
+      "notes": "31 sampled frames passed with zero failures, zero material collisions, and fraction-rule edge alignment within the 0.5px budget."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Starting the fraction pressure test with opaque quotient subtree fan-out."
+    "summary": "Implementation and automated architecture, regression, browser, build, and visual evidence are complete. The fraction macro remains exemplar-local pending the mandatory human architecture checkpoint."
   },
   "expectedLearning": [
     "Whether opaque fraction fan-out, numerator normalization, distributed fraction terms, reverse factoring, and a lawful multi-step solve macro compose from promoted primitives without bespoke routes, coordinates, or gates."
