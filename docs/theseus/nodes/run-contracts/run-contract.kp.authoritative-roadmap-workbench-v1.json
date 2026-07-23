@@ -120,7 +120,9 @@
     {
       "id": "s11",
       "title": "Bind-successor-slices-to-v6",
-      "status": "planned"
+      "summary": "Bound the current Workbench slice plus the radical and quadratic tranche anchors to v6 phase identities. Corrected Theseus so only active-status phases require links; focused 10 tests and package typecheck/build pass. KP linkage report is ready with 35 phases, 3 linked phases, 5 links, and 0 issues.",
+      "status": "complete",
+      "planPhaseId": "authoritative-roadmap-workbench"
     },
     {
       "id": "s12",
@@ -185,7 +187,9 @@
     {
       "id": "s24",
       "title": "Add-radical-source-endpoint-regression",
-      "status": "planned"
+      "summary": "Authorized radical settlement tranche begins with the source-endpoint regression.",
+      "status": "planned",
+      "planPhaseId": "radical-native-settlement"
     },
     {
       "id": "s25",
@@ -205,7 +209,9 @@
     {
       "id": "s28",
       "title": "Define-quadratic-semantic-branching",
-      "status": "planned"
+      "summary": "Authorized quadratic tranche begins with semantic branching after the Workbench/radical checkpoint.",
+      "status": "planned",
+      "planPhaseId": "quadratic-semantic-branching"
     },
     {
       "id": "s29",
