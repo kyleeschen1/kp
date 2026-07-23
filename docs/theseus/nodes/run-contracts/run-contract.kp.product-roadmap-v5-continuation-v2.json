@@ -105,8 +105,8 @@
     {
       "id": "s21",
       "title": "Run fraction architecture visual and primitive-amortization checkpoint",
-      "summary": "Automated checkpoint evidence is complete: 1947 repository tests, production build, 8 reader conformance checks, 31 fraction visual samples with zero failures, 8 contact-sheet captures, and renderer-neutral architecture assertions passed. Awaiting human approval before promotion or s22.",
-      "status": "in-progress"
+      "summary": "Human approved the fraction architecture and visual checkpoint. The renderer-neutral pressure test is accepted, the existing reader remains preserved, and fraction-specific macro contracts stay exemplar-local pending further evidence.",
+      "status": "complete"
     },
     {
       "id": "s22",

@@ -2,8 +2,9 @@
   "id": "next-action.kp.reader.fraction-composition-pressure-test-v0",
   "kind": "next-action",
   "title": "Pressure-test fraction composition and primitive amortization",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Fraction composition and primitive-amortization pressure test approved at the mandatory human checkpoint.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -87,8 +88,8 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Implementation and automated architecture, regression, browser, build, and visual evidence are complete. The fraction macro remains exemplar-local pending the mandatory human architecture checkpoint."
+    "state": "complete",
+    "summary": "Human approved the architecture checkpoint on 2026-07-23. The fraction macro remains exemplar-local; renderer-neutral structured composition is accepted as evidence for the governed-authoring tranche."
   },
   "expectedLearning": [
     "Whether opaque fraction fan-out, numerator normalization, distributed fraction terms, reverse factoring, and a lawful multi-step solve macro compose from promoted primitives without bespoke routes, coordinates, or gates."
