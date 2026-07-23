@@ -122,11 +122,29 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-07-23T16:31:26.733Z"
+    },
+    {
+      "command": "npm run visual:function-wrap",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T16:34:52.743Z"
+    },
+    {
+      "command": "playwright function-wrap-family browser check",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T16:34:53.566Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-23T16:34:54.350Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Human approved the prior simultaneous radial-growth design after rejecting and reverting the visible seed variant. Slice s25 is promotion-complete: exponent Fluent identity suppression, exact native radical settlement, smooth reversible WebGL morph, and broad verification are preserved; continue with the next contracted exemplar."
+    "summary": "Slice s26 is at its required human exemplar checkpoint. A committed visual:function-wrap capture now records source, focus, reflow, enclosure entry, function entry, recognition, native settlement, and rewind. Automation passes; review should decide whether to retain or refine the temporary x focus outline, pale enclosure entry, and late f entrance."
   },
   "expectedLearning": [
     "Which promoted semantic, scheduling, authoring, renderer, and verification contracts survive capability-opening exemplars across symbolic, calculus, vector, and linear-map domains without combinatorial growth."
