@@ -75,7 +75,8 @@
     {
       "id": "s16",
       "title": "Prove opaque fraction fan-out over structured subtrees",
-      "status": "planned"
+      "summary": "Added a structured fraction fan-out fixture for 2/3(x+6), preserving stable descendant identities beneath copied quotient roots. Focused tests, 1937-test regression suite, typecheck, and production build passed.",
+      "status": "complete"
     },
     {
       "id": "s17",

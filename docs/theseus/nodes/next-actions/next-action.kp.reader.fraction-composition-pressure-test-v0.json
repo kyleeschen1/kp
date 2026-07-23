@@ -24,6 +24,19 @@
     "npm run test:browser:reader-conformance",
     "npm run visual:contact-sheet"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/fraction-fan-out-fixture.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T00:59:43.262Z",
+      "notes": "Opaque quotient subtree fan-out preserves full quotient topology and rejects changed descendants."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Starting the fraction pressure test with opaque quotient subtree fan-out."
+  },
   "expectedLearning": [
     "Whether opaque fraction fan-out, numerator normalization, distributed fraction terms, reverse factoring, and a lawful multi-step solve macro compose from promoted primitives without bespoke routes, coordinates, or gates."
   ],
