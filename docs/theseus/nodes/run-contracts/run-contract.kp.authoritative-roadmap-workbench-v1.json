@@ -82,7 +82,8 @@
     {
       "id": "s05",
       "title": "Link-run-slices-to-plan-phases",
-      "status": "planned"
+      "summary": "Added validated optional planPhaseId foreign-key linkage to run-contract slices while preserving legacy unlinked slices. 10 focused tests and package typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s06",
