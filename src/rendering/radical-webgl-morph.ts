@@ -217,6 +217,11 @@ async function initializeMorphState(input: {
       sourceTravelFraction: profile.solidMask.sourceTravelFraction,
       sourceArcHeightPx: profile.solidMask.sourceArcHeightPx,
       shapeLeadFraction: profile.solidMask.shapeLeadFraction,
+      targetGrowthOriginXFraction:
+        profile.solidMask.targetGrowthOriginXFraction,
+      targetGrowthOriginYFraction:
+        profile.solidMask.targetGrowthOriginYFraction,
+      targetGrowthSoftnessPx: profile.solidMask.targetGrowthSoftnessPx,
       bridgeExpansionPx: profile.solidMask.bridgeExpansionPx,
       endpointBlendFraction: profile.solidMask.endpointBlendFraction,
       color: parseComputedColor(input.state.targetElement)
@@ -244,6 +249,8 @@ async function initializeMorphState(input: {
       String(targetLocalRect.left);
     input.state.canvas.dataset["kpEditorRadicalWebglTargetTop"] =
       String(targetLocalRect.top);
+    input.state.canvas.dataset["kpEditorRadicalWebglGrowth"] =
+      "simultaneous-radial-from-junction";
     input.stage.dataset["kpEditorRadicalMorphMode"] = "webgl-solid-mask";
     input.stage.dataset["kpEditorRadicalMorphReady"] = "true";
     delete input.stage.dataset["kpEditorRadicalMorphFallbackReason"];

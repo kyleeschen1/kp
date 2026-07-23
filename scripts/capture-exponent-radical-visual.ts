@@ -76,6 +76,7 @@ try {
     checkpoints: [
       { id: "radical-solid-source", progress: 0.12 },
       { id: "radical-solid-departing", progress: 0.25 },
+      { id: "radical-solid-branch-growth", progress: 0.38 },
       { id: "radical-solid-morph", progress: 0.5 },
       { id: "radical-solid-forming", progress: 0.75 },
       { id: "radical-solid-complete", progress: 0.82 },

@@ -15,4 +15,5 @@ test("radical WebGL morph uses an exact native target and solid mask", async () 
   assert.match(source, /complete-native-radical-operator/);
   assert.match(source, /native-clipped-svg/);
   assert.match(source, /parseComputedColor/);
+  assert.match(source, /simultaneous-radial-from-junction/);
 });

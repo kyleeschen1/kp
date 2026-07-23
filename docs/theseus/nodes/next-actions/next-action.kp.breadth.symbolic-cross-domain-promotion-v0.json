@@ -92,11 +92,17 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-07-23T16:03:49.783Z"
+    },
+    {
+      "command": "npm test; npm run build; focused radical browser conformance; npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-23T16:15:43.037Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Implemented the reviewed square-root radical endpoint, continuous arc solid morph, and direction-neutral WebGL ownership. Full KaTeX overbar, exact rewind, broad gates, and stable forward/rewind visual captures pass; awaiting human exemplar review before promotion or family generalization. Parked negative rational exponent reciprocal-radical composition in project memory."
+    "summary": "Refined the square-root exemplar so the radical diagonal and overbar reveal simultaneously at equal radius from the exponent-collapse junction. Exact KaTeX settlement, direction-neutral WebGL rewind, full regression, browser conformance, build, and 17-frame visual evidence pass; awaiting final human visual approval."
   },
   "expectedLearning": [
     "Which promoted semantic, scheduling, authoring, renderer, and verification contracts survive capability-opening exemplars across symbolic, calculus, vector, and linear-map domains without combinatorial growth."

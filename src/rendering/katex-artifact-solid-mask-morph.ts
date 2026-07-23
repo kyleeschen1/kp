@@ -24,6 +24,9 @@ export interface KatexArtifactSolidMaskMorphPlan {
   readonly sourceTravelFraction: number;
   readonly sourceArcHeightPx: number;
   readonly shapeLeadFraction: number;
+  readonly targetGrowthOriginXFraction: number;
+  readonly targetGrowthOriginYFraction: number;
+  readonly targetGrowthSoftnessPx: number;
   readonly bridgeExpansionPx: number;
   readonly endpointBlendFraction: number;
   readonly color: {
@@ -52,6 +55,10 @@ interface SolidMaskProgramInfo {
   readonly sourceArcOffsetLocation: WebGLUniformLocation;
   readonly arcProgressLocation: WebGLUniformLocation;
   readonly shapeProgressLocation: WebGLUniformLocation;
+  readonly fieldSizeLocation: WebGLUniformLocation;
+  readonly targetGrowthOriginLocation: WebGLUniformLocation;
+  readonly targetGrowthMaximumRadiusLocation: WebGLUniformLocation;
+  readonly targetGrowthSoftnessLocation: WebGLUniformLocation;
   readonly bridgeExpansionLocation: WebGLUniformLocation;
   readonly endpointBlendLocation: WebGLUniformLocation;
   readonly colorLocation: WebGLUniformLocation;
@@ -242,6 +249,12 @@ export function createKatexArtifactSolidMaskMorphRenderer(
           plan.sourceArcHeightPx
         ) / Math.max(1, fields.bounds.height)
       };
+  const targetGrowth = resolveTargetGrowthGeometry({
+    target: plan.target.rect,
+    bounds: fields.bounds,
+    originXFraction: plan.targetGrowthOriginXFraction,
+    originYFraction: plan.targetGrowthOriginYFraction
+  });
   let disposed = false;
 
   return {
@@ -278,6 +291,24 @@ export function createKatexArtifactSolidMaskMorphRenderer(
       gl.uniform1f(
         programInfo.arcProgressLocation,
         frame.arcProgress
+      );
+      gl.uniform2f(
+        programInfo.fieldSizeLocation,
+        fields.bounds.width,
+        fields.bounds.height
+      );
+      gl.uniform2f(
+        programInfo.targetGrowthOriginLocation,
+        targetGrowth.originX,
+        targetGrowth.originY
+      );
+      gl.uniform1f(
+        programInfo.targetGrowthMaximumRadiusLocation,
+        targetGrowth.maximumRadius
+      );
+      gl.uniform1f(
+        programInfo.targetGrowthSoftnessLocation,
+        plan.targetGrowthSoftnessPx
       );
       gl.uniform1f(
         programInfo.maximumDistanceLocation,
@@ -583,6 +614,10 @@ function createProgram(gl: WebGLRenderingContext): SolidMaskProgramInfo {
       uniform float u_progress;
       uniform float u_shapeProgress;
       uniform float u_arcProgress;
+      uniform vec2 u_fieldSize;
+      uniform vec2 u_targetGrowthOrigin;
+      uniform float u_targetGrowthMaximumRadius;
+      uniform float u_targetGrowthSoftness;
       uniform float u_maximumDistance;
       uniform float u_edgeSoftness;
       uniform vec2 u_sourceShift;
@@ -601,7 +636,7 @@ function createProgram(gl: WebGLRenderingContext): SolidMaskProgramInfo {
           u_maximumDistance;
         float targetDistance = (targetSample.g * 2.0 - 1.0) *
           u_maximumDistance;
-        float distance = mix(
+        float morphDistance = mix(
           sourceDistance,
           targetDistance,
           u_shapeProgress
@@ -609,7 +644,7 @@ function createProgram(gl: WebGLRenderingContext): SolidMaskProgramInfo {
         float fieldAlpha = 1.0 - smoothstep(
           -u_edgeSoftness,
           u_edgeSoftness,
-          distance
+          morphDistance
         );
         float sourceEndpoint = 1.0 - smoothstep(
           0.0,
@@ -622,6 +657,26 @@ function createProgram(gl: WebGLRenderingContext): SolidMaskProgramInfo {
           u_shapeProgress
         );
         float alpha = mix(fieldAlpha, sourceSample.b, sourceEndpoint);
+        float targetGrowthDistance = distance(
+          v_texCoord * u_fieldSize,
+          u_targetGrowthOrigin
+        );
+        float targetGrowthRadius =
+          u_targetGrowthMaximumRadius * u_shapeProgress;
+        float targetGrowthMask = 1.0 - smoothstep(
+          targetGrowthRadius,
+          targetGrowthRadius + u_targetGrowthSoftness,
+          targetGrowthDistance
+        );
+        float targetGrowthAuthority = smoothstep(
+          0.0,
+          u_endpointBlend,
+          u_shapeProgress
+        );
+        alpha = max(
+          alpha,
+          targetSample.a * targetGrowthMask * targetGrowthAuthority
+        );
         alpha = mix(alpha, targetSample.a, targetEndpoint);
         gl_FragColor = vec4(u_color, alpha);
       }
@@ -654,6 +709,22 @@ function createProgram(gl: WebGLRenderingContext): SolidMaskProgramInfo {
     progressLocation: requiredUniform(gl, program, "u_progress"),
     shapeProgressLocation: requiredUniform(gl, program, "u_shapeProgress"),
     arcProgressLocation: requiredUniform(gl, program, "u_arcProgress"),
+    fieldSizeLocation: requiredUniform(gl, program, "u_fieldSize"),
+    targetGrowthOriginLocation: requiredUniform(
+      gl,
+      program,
+      "u_targetGrowthOrigin"
+    ),
+    targetGrowthMaximumRadiusLocation: requiredUniform(
+      gl,
+      program,
+      "u_targetGrowthMaximumRadius"
+    ),
+    targetGrowthSoftnessLocation: requiredUniform(
+      gl,
+      program,
+      "u_targetGrowthSoftness"
+    ),
     maximumDistanceLocation: requiredUniform(
       gl,
       program,
@@ -796,6 +867,41 @@ function easedProgress(easing: EasingName, progress: number): number {
 
 function quadraticArcProgress(progress: number): number {
   return 4 * progress * (1 - progress);
+}
+
+function resolveTargetGrowthGeometry(input: {
+  readonly target: KatexTokenRect;
+  readonly bounds: KatexTokenRect;
+  readonly originXFraction: number;
+  readonly originYFraction: number;
+}): {
+  readonly originX: number;
+  readonly originY: number;
+  readonly maximumRadius: number;
+} {
+  const absoluteOrigin = {
+    x: input.target.left + input.target.width * input.originXFraction,
+    y: input.target.top + input.target.height * input.originYFraction
+  };
+  const corners = [
+    { x: input.target.left, y: input.target.top },
+    { x: input.target.left + input.target.width, y: input.target.top },
+    { x: input.target.left, y: input.target.top + input.target.height },
+    {
+      x: input.target.left + input.target.width,
+      y: input.target.top + input.target.height
+    }
+  ];
+  return {
+    originX: absoluteOrigin.x - input.bounds.left,
+    originY: absoluteOrigin.y - input.bounds.top,
+    maximumRadius: Math.max(
+      ...corners.map((corner) => Math.hypot(
+        corner.x - absoluteOrigin.x,
+        corner.y - absoluteOrigin.y
+      ))
+    )
+  };
 }
 
 function clamp01(value: number): number {

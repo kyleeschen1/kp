@@ -1313,8 +1313,15 @@ test("exponent and radical family animations render their semantic rewrite motif
   );
   player = page.locator("[data-kp-editor-animation-player]");
   scrubber = player.locator('[data-action="seek-editor-animation"]');
-  await expect(player.locator("[data-kp-editor-equation-stage]"))
-    .toHaveAttribute("data-kp-editor-radical-morph-ready", "true");
+  const radicalStage = player.locator("[data-kp-editor-equation-stage]");
+  await expect.poll(async () => ({
+    ready: await radicalStage.getAttribute(
+      "data-kp-editor-radical-morph-ready"
+    ),
+    fallbackReason: await radicalStage.getAttribute(
+      "data-kp-editor-radical-morph-fallback-reason"
+    )
+  })).toEqual({ ready: "true", fallbackReason: null });
   await scrubber.fill("0.5");
   await expect(player.locator("[data-kp-editor-equation-stage]"))
     .toHaveAttribute(
@@ -1339,6 +1346,10 @@ test("exponent and radical family animations render their semantic rewrite motif
   await expect(radicalMorph).toHaveAttribute(
     "data-kp-editor-radical-webgl-target-capture",
     "native-clipped-svg"
+  );
+  await expect(radicalMorph).toHaveAttribute(
+    "data-kp-editor-radical-webgl-growth",
+    "simultaneous-radial-from-junction"
   );
   await expect(player.locator("[data-kp-editor-equation-transition-id]"))
     .toHaveAttribute(

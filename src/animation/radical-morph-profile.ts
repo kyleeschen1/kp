@@ -19,6 +19,9 @@ export interface KpRadicalMorphMotionProfile {
     readonly sourceTravelFraction: number;
     readonly sourceArcHeightPx: number;
     readonly shapeLeadFraction: number;
+    readonly targetGrowthOriginXFraction: number;
+    readonly targetGrowthOriginYFraction: number;
+    readonly targetGrowthSoftnessPx: number;
     readonly bridgeExpansionPx: number;
     readonly endpointBlendFraction: number;
   };
@@ -44,6 +47,9 @@ export const kpRadicalConventionalMorphProfile: KpRadicalMorphMotionProfile =
       sourceTravelFraction: 1,
       sourceArcHeightPx: 6,
       shapeLeadFraction: 0.12,
+      targetGrowthOriginXFraction: 0.36,
+      targetGrowthOriginYFraction: 0.16,
+      targetGrowthSoftnessPx: 0.8,
       bridgeExpansionPx: 0.55,
       endpointBlendFraction: 0.08
     })
