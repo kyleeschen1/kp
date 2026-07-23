@@ -64,7 +64,8 @@
     {
       "id": "s02",
       "title": "Add-generic-plan-phase-v2-fields",
-      "status": "planned"
+      "summary": "Added generic plan-revision v2 phase fields topic, architectureBenefit, rationale, and canonicalExemplar with strict parsing, public exports, 21 focused tests passing, and package typecheck passing.",
+      "status": "complete"
     },
     {
       "id": "s03",
