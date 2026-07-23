@@ -108,6 +108,9 @@ import {
 import {
   renderKpAnimationWorkbenchReviewPanel
 } from "./editor/semantic-animation-workbench-review.ts";
+import {
+  resolveKpAnimationWorkbenchRepresentation
+} from "./editor/semantic-animation-workbench-representation-selection.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -247,6 +250,9 @@ appRoot.addEventListener("click", (event) => {
       return;
     case "select-animation-workbench-result":
       selectAnimationWorkbenchResult(button);
+      return;
+    case "select-animation-workbench-representation":
+      selectAnimationWorkbenchRepresentation(button);
       return;
     case "show-ftc-tutorial":
       navigateToView("ftc-tutorial");
@@ -425,18 +431,29 @@ function renderAnimationWorkbenchView(): void {
   const selectedEntry = results.find(
     ({ entry }) => entry.identity.animationId === selectedAnimationId
   )?.entry;
-  const selectedProvenance = selectedEntry?.identity.provenance;
-  const selectedDescriptor =
-    selectedProvenance?.kind === "catalog"
-      ? editorAnimationDescriptors.find(
-          (descriptor) => descriptor.id === selectedProvenance.descriptorId
-        )
-      : undefined;
+  const representationSelection =
+    selectedEntry === undefined
+      ? {}
+      : resolveKpAnimationWorkbenchRepresentation({
+          entry: selectedEntry,
+          ...(route.representationId === undefined
+            ? {}
+            : { requestedRepresentationId: route.representationId }),
+          descriptors: editorAnimationDescriptors
+        });
   appRoot.innerHTML = renderKpSemanticAnimationWorkbenchShell({
     query: route.query,
     results,
     ...(selectedAnimationId === undefined ? {} : { selectedAnimationId }),
-    ...(selectedDescriptor === undefined ? {} : { selectedDescriptor })
+    ...(representationSelection.descriptor === undefined
+      ? {}
+      : { selectedDescriptor: representationSelection.descriptor }),
+    ...(representationSelection.relationship === undefined
+      ? {}
+      : {
+          selectedRepresentationId:
+            representationSelection.relationship.representationId
+        })
   });
   hydrateKpEditorAnimationSurfaces(appRoot);
   hydrateKpEditorAnimationLiveDiagnostics(appRoot);
@@ -627,6 +644,32 @@ function selectAnimationWorkbenchResult(button: HTMLButtonElement): void {
     writeKpSemanticAnimationWorkbenchRoute(window.location.search, {
       query: route.query,
       animationId
+    })
+  );
+  renderAnimationWorkbenchView();
+}
+
+function selectAnimationWorkbenchRepresentation(
+  button: HTMLButtonElement
+): void {
+  const representationId = button.dataset["kpRepresentationId"];
+  if (representationId === undefined) return;
+  const route = readKpSemanticAnimationWorkbenchRoute(
+    window.location.search
+  );
+  const animationId =
+    route.animationId ??
+    button
+      .closest<HTMLElement>("[data-kp-animation-workbench-selection]")
+      ?.dataset["kpAnimationWorkbenchSelection"];
+  if (animationId === undefined) return;
+  window.history.replaceState(
+    null,
+    "",
+    writeKpSemanticAnimationWorkbenchRoute(window.location.search, {
+      query: route.query,
+      animationId,
+      representationId
     })
   );
   renderAnimationWorkbenchView();

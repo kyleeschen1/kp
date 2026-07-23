@@ -170,7 +170,8 @@
     {
       "id": "s19",
       "title": "Add representation switching",
-      "status": "planned"
+      "summary": "Added representation controls derived from subordinate relationships, resolved editor and card views to existing descriptors, synchronized the representation URL parameter, preserved canonical animation and semantic asset identity across disposal and remount, and left planned quadratic without fabricated views.",
+      "status": "complete"
     },
     {
       "id": "s20",

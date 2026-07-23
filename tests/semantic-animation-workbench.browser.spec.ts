@@ -49,11 +49,46 @@ test("Workbench reuses the live player and preserves direct seek and rewind", as
     )
   ).toHaveAttribute("data-state", "changes-requested");
 
-  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const cardRepresentation =
+    "sample.animation.radical-rewrite.square-root-as-power";
+  await page
+    .locator(`[data-kp-representation-id="${cardRepresentation}"]`)
+    .click();
+  await expect(page).toHaveURL(
+    new RegExp(
+      `workbenchAnimation=${radicalId}.*representation=${cardRepresentation.replaceAll(".", "\\.")}`
+    )
+  );
+  await expect(
+    page.locator("[data-kp-animation-workbench-selection]")
+  ).toHaveAttribute("data-kp-animation-workbench-selection", radicalId);
+  await expect(
+    page.locator("[data-kp-animation-workbench-live-preview]")
+  ).toHaveAttribute(
+    "data-kp-animation-workbench-representation",
+    cardRepresentation
+  );
+  await expect(page.locator("[data-kp-editor-animation-player]")).toHaveCount(1);
+  await expect(
+    page.locator("[data-kp-editor-animation-player]")
+  ).toHaveAttribute("data-kp-editor-animation-id", radicalId);
+
+  const switchedPlayer = workbench.locator("[data-kp-editor-animation-player]");
+  const scrubber = switchedPlayer.locator(
+    '[data-action="seek-editor-animation"]'
+  );
   await scrubber.fill("0.5");
-  await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "0.5");
-  await player.locator('[data-action="rewind-editor-animation"]').click();
-  await expect(player).toHaveAttribute("data-kp-editor-animation-direction", "rewind");
+  await expect(switchedPlayer).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "0.5"
+  );
+  await switchedPlayer
+    .locator('[data-action="rewind-editor-animation"]')
+    .click();
+  await expect(switchedPlayer).toHaveAttribute(
+    "data-kp-editor-animation-direction",
+    "rewind"
+  );
 });
 
 test("Workbench planned quadratic never mounts a player", async ({ page }) => {

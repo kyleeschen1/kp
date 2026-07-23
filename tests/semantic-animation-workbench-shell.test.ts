@@ -16,6 +16,7 @@ test("Workbench shell renders a labeled search and two-pane control surface", ()
     query: `radical "rewrite"`,
     results: [result("animation.radical", "Power to radical")],
     selectedAnimationId: "animation.radical",
+    selectedRepresentationId: "representation.animation.radical",
     selectedDescriptor: {
       ...createKpEditorAnimationLibrary()[0]!,
       animationId: "animation.radical"
@@ -35,6 +36,14 @@ test("Workbench shell renders a labeled search and two-pane control surface", ()
   assert.match(html, /data-kp-animation-workbench-acceptance/);
   assert.match(html, /data-kp-animation-workbench-review/);
   assert.match(html, /Loading the existing development review inbox/);
+  assert.match(
+    html,
+    /data-action="select-animation-workbench-representation"/
+  );
+  assert.match(
+    html,
+    /data-kp-animation-workbench-representation="representation\.animation\.radical"/
+  );
   assert.match(html, /Loading semantic law checks/);
   assert.equal(
     [
@@ -75,6 +84,7 @@ test("Workbench shell never mounts a player for planned items", () => {
   );
   assert.match(html, /aria-label="Maturity: proposed"/);
   assert.match(html, /aria-label="Playability: planned-only"/);
+  assert.match(html, /data-kp-animation-workbench-no-representations/);
 });
 
 test("Workbench shell renders one top-level result per canonical entry", () => {
@@ -117,7 +127,20 @@ function result(
       },
       summary: `${title} summary`,
       tags: [],
-      representations: [],
+      representations: planned
+        ? []
+        : [
+            {
+              schemaVersion:
+                "kp.animation-representation-relationship.v1",
+              id: `relationship.${animationId}`,
+              animationId,
+              representationId: `representation.${animationId}`,
+              kind: "editor",
+              label: `${title} editor`,
+              playable: true
+            }
+          ],
       lifecycle: {
         schemaVersion: "kp.animation-lifecycle-facets.v1",
         roadmap: "untracked",

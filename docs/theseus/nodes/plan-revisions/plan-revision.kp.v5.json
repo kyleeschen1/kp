@@ -267,6 +267,24 @@
       "status": "passed",
       "scope": "s18 append-only review source byte stability and projection integrity",
       "checkedAt": "2026-07-23T21:12:27.607Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-representation-selection.test.ts tests/semantic-animation-workbench-representation-adapter.test.ts tests/semantic-animation-workbench-route.test.ts tests/semantic-animation-workbench-shell.test.ts",
+      "status": "passed",
+      "scope": "s19 subordinate representation selection route and identity contracts",
+      "checkedAt": "2026-07-23T21:18:06.590Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19 representation selection TypeScript boundaries",
+      "checkedAt": "2026-07-23T21:18:16.258Z"
+    },
+    {
+      "command": "npm run test:browser:animation-workbench",
+      "status": "passed",
+      "scope": "s19 Chromium representation URL identity player disposal and clock-owner preservation",
+      "checkedAt": "2026-07-23T21:18:22.770Z"
     }
   ],
   "planRevision": {

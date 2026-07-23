@@ -3158,6 +3158,45 @@ h2 {
   margin-top: 1.5rem;
 }
 
+.kp-animation-workbench__representations {
+  margin-top: 1.5rem;
+}
+
+.kp-animation-workbench__representation-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
+}
+
+.kp-animation-workbench__representation-list button {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 10rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(34, 62, 50, 0.16);
+  border-radius: 0.7rem;
+  background: rgba(246, 248, 243, 0.78);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.kp-animation-workbench__representation-list button:hover,
+.kp-animation-workbench__representation-list button[aria-pressed="true"] {
+  border-color: rgba(38, 113, 77, 0.36);
+  background: rgba(214, 232, 220, 0.64);
+}
+
+.kp-animation-workbench__representation-list button:focus-visible {
+  outline: 3px solid rgba(38, 113, 77, 0.3);
+  outline-offset: 2px;
+}
+
+.kp-animation-workbench__representation-list small {
+  color: #637069;
+}
+
 .kp-animation-workbench__lifecycle dl {
   display: flex;
   flex-wrap: wrap;
