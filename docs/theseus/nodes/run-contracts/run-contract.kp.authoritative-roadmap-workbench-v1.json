@@ -100,7 +100,8 @@
     {
       "id": "s08",
       "title": "Run-Theseus-package-release-gate",
-      "status": "planned"
+      "summary": "Theseus package gate passes: production build, package smoke, 303 test files and 1026 tests, CLI guidance audit, source-size and function-size gates, import boundary gate, and typecheck. Actor registry metadata and generated CLI docs now include --plan-phase.",
+      "status": "complete"
     },
     {
       "id": "s09",
