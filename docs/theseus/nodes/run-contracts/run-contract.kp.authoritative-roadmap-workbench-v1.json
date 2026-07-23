@@ -88,7 +88,8 @@
     {
       "id": "s06",
       "title": "Preserve-linkage-through-mutation",
-      "status": "planned"
+      "summary": "Preserved planPhaseId through status and summary mutation, explicit typed actor relinking, replacement materialization, and dry-run reports. 46 focused tests and typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s07",
