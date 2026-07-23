@@ -54,3 +54,37 @@ test("settlement reaches exact native geometry and mirrors under direct seek", (
   assert.equal(forward.fragmentOpacity, 0);
   assert.equal(forward.nativeOpacity, 1);
 });
+
+test("a complete WebGL target can hand off to exact native ink earlier", () => {
+  const frame = sampleKpRadicalNativeSettlement({
+    semanticProgress: 0.75,
+    fragmentRects: [nativeRect],
+    nativeRect,
+    handoffStart: 0.68,
+    handoffEnd: 0.92
+  });
+
+  assert.equal(frame.phase, "native-handoff");
+  assert.ok(frame.nativeOpacity > 0.15);
+  assert.ok(frame.nativeOpacity < 0.3);
+  assert.ok(Math.abs(frame.fragmentOpacity + frame.nativeOpacity - 1) < 1e-12);
+});
+
+test("native handoff uses a symmetric conventional ease-in-out", () => {
+  const early = sampleKpRadicalNativeSettlement({
+    semanticProgress: 0.72,
+    fragmentRects: [nativeRect],
+    nativeRect,
+    handoffStart: 0.68,
+    handoffEnd: 0.92
+  });
+  const late = sampleKpRadicalNativeSettlement({
+    semanticProgress: 0.88,
+    fragmentRects: [nativeRect],
+    nativeRect,
+    handoffStart: 0.68,
+    handoffEnd: 0.92
+  });
+
+  assert.ok(Math.abs(early.nativeOpacity + late.nativeOpacity - 1) < 1e-12);
+});

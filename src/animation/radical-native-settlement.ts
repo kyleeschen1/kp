@@ -20,6 +20,8 @@ export function sampleKpRadicalNativeSettlement(input: {
   readonly fragmentRects: readonly KpRadicalSettlementRect[];
   readonly nativeRect: KpRadicalSettlementRect;
   readonly geometryTolerancePx?: number | undefined;
+  readonly handoffStart?: number | undefined;
+  readonly handoffEnd?: number | undefined;
 }): KpRadicalNativeSettlementFrame {
   const semanticProgress = clamp01(input.semanticProgress);
   const maximumGeometryResidualPx = input.fragmentRects.reduce(
@@ -30,10 +32,17 @@ export function sampleKpRadicalNativeSettlement(input: {
     kpRadicalNativeSettlementGeometryTolerancePx;
   const geometryReady = input.fragmentRects.length > 0 &&
     maximumGeometryResidualPx <= tolerance;
-  const requestedProgress = easeOutSine(intervalProgress(
+  const handoffStart = input.handoffStart ??
+    kpRadicalNativeSettlementStart;
+  const handoffEnd = input.handoffEnd ??
+    kpRadicalNativeSettlementEnd;
+  if (handoffEnd <= handoffStart) {
+    throw new Error("Radical native settlement requires an ordered handoff window.");
+  }
+  const requestedProgress = easeInOut(intervalProgress(
     semanticProgress,
-    kpRadicalNativeSettlementStart,
-    kpRadicalNativeSettlementEnd
+    handoffStart,
+    handoffEnd
   ));
   // Native ink cannot crossfade safely while semantic fragment anchors are
   // still in transit; a delayed font/layout pass therefore holds ownership.
@@ -42,7 +51,7 @@ export function sampleKpRadicalNativeSettlement(input: {
     ? "native-geometry"
     : progress > 0
       ? "native-handoff"
-      : semanticProgress >= kpRadicalNativeSettlementStart
+      : semanticProgress >= handoffStart
         ? "waiting-for-native-geometry"
         : "material-fragments";
   return {
@@ -78,8 +87,8 @@ function intervalProgress(value: number, start: number, end: number): number {
   return clamp01((value - start) / (end - start));
 }
 
-function easeOutSine(value: number): number {
-  return Math.sin(value * Math.PI / 2);
+function easeInOut(value: number): number {
+  return value * value * (3 - 2 * value);
 }
 
 function clamp01(value: number): number {

@@ -18,7 +18,12 @@ try {
   await page.evaluate(async () => document.fonts.ready);
   const player = page.locator("[data-kp-editor-animation-player]");
   const select = page.locator('[data-action="set-editor-animation"]');
-  const captures: { id: string; animationId: string; progress: number }[] = [];
+  const captures: {
+    id: string;
+    animationId: string;
+    progress: number;
+    explanationProfile: string;
+  }[] = [];
   const diagnostics: {
     animationId: string;
     status: string;
@@ -35,6 +40,7 @@ try {
     optionId:
       "editor-animation.sample.animation.exponent-combine.square-as-product",
     animationId: "animation.generated.exponent.square-as-product",
+    explanationProfile: "explain",
     checkpoints: [
       { id: "exponent-factor-peel", progress: 0.35 },
       { id: "exponent-unit-absorb", progress: 0.82 },
@@ -48,11 +54,30 @@ try {
     player,
     select,
     optionId:
+      "editor-animation.sample.animation.exponent-combine.square-as-product",
+    animationId: "animation.generated.exponent.square-as-product",
+    explanationProfile: "fluent",
+    checkpoints: [
+      { id: "exponent-fluent-direct-expansion", progress: 0.78 },
+      { id: "exponent-fluent-settled", progress: 1 }
+    ],
+    captures,
+    diagnostics
+  });
+  await captureAnimation({
+    page,
+    player,
+    select,
+    optionId:
       "editor-animation.sample.animation.radical-rewrite.square-root-as-power",
     animationId: "animation.generated.radical.square-root-as-power",
+    explanationProfile: "explain",
     checkpoints: [
-      { id: "radical-source-gathered", progress: 0.55 },
-      { id: "radical-bundle-transfer", progress: 0.67 },
+      { id: "radical-webgl-source", progress: 0.12 },
+      { id: "radical-webgl-morph", progress: 0.5 },
+      { id: "radical-webgl-forming", progress: 0.75 },
+      { id: "radical-webgl-complete", progress: 0.86 },
+      { id: "radical-webgl-native-handoff", progress: 0.9 },
       { id: "radical-native-settled", progress: 0.98 }
     ],
     captures,
@@ -61,7 +86,7 @@ try {
   await writeFile(
     path.join(outputRoot, "manifest.json"),
     `${JSON.stringify({
-      schemaVersion: "kp.exponent-radical-visual-review.v1",
+      schemaVersion: "kp.exponent-radical-visual-review.v2",
       baseUrl,
       viewport,
       captures,
@@ -84,11 +109,17 @@ async function captureAnimation(input: {
   readonly select: Locator;
   readonly optionId: string;
   readonly animationId: string;
+  readonly explanationProfile: "explain" | "fluent";
   readonly checkpoints: readonly {
     readonly id: string;
     readonly progress: number;
   }[];
-  readonly captures: { id: string; animationId: string; progress: number }[];
+  readonly captures: {
+    id: string;
+    animationId: string;
+    progress: number;
+    explanationProfile: string;
+  }[];
   readonly diagnostics: {
     animationId: string;
     status: string;
@@ -111,6 +142,29 @@ async function captureAnimation(input: {
     )?.textContent?.trim();
     return status !== undefined && status !== "Inspecting";
   });
+  await input.player.locator(
+    "[data-kp-editor-animation-explanation-profile-control]"
+  ).selectOption(input.explanationProfile);
+  if (
+    input.animationId ===
+    "animation.generated.radical.square-root-as-power"
+  ) {
+    await input.page.waitForFunction(() =>
+      document.querySelector<HTMLElement>(
+        "[data-kp-editor-equation-stage]"
+      )?.dataset["kpEditorRadicalMorphReady"] === "true"
+    );
+    const stage = input.player.locator("[data-kp-editor-equation-stage]");
+    const canvas = stage.locator("[data-kp-editor-radical-webgl-morph]");
+    if (
+      await stage.getAttribute("data-kp-editor-radical-morph-mode") !==
+        "webgl-pixel-flow" ||
+      await canvas.getAttribute("data-kp-editor-radical-webgl-target") !==
+        "complete-native-radical-operator"
+    ) {
+      throw new Error("Radical exemplar did not initialize its complete-operator WebGL morph.");
+    }
+  }
   const diagnostic = {
     animationId: input.animationId,
     status: await input.player.locator(
@@ -154,7 +208,8 @@ async function captureAnimation(input: {
     input.captures.push({
       id: `${checkpoint.id}.png`,
       animationId: input.animationId,
-      progress: checkpoint.progress
+      progress: checkpoint.progress,
+      explanationProfile: input.explanationProfile
     });
   }
 }

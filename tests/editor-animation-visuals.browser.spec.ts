@@ -1292,13 +1292,49 @@ test("exponent and radical family animations render their semantic rewrite motif
     );
   await expect(player.locator("[data-kp-editor-equation-transition-id]"))
     .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
+  const explanationProfile = player.locator(
+    "[data-kp-editor-animation-explanation-profile-control]"
+  );
+  await explanationProfile.selectOption("fluent");
+  await scrubber.fill("0.78");
+  await expect(player.locator("[data-kp-editor-equation-stage]"))
+    .toHaveAttribute(
+      "data-kp-editor-equation-explanation-projection",
+      "fluent-omit-unit-exponent"
+    );
+  await expect(unitExponent).toHaveCSS("opacity", "0");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-transition-id",
+    "transform.generated.exponent.square-as-product.unwrap-unit-exponent"
+  );
 
   await page.locator('[data-action="set-editor-animation"]').selectOption(
     "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
   );
   player = page.locator("[data-kp-editor-animation-player]");
   scrubber = player.locator('[data-action="seek-editor-animation"]');
+  await expect(player.locator("[data-kp-editor-equation-stage]"))
+    .toHaveAttribute("data-kp-editor-radical-morph-ready", "true");
   await scrubber.fill("0.5");
+  await expect(player.locator("[data-kp-editor-equation-stage]"))
+    .toHaveAttribute(
+      "data-kp-editor-equation-material-continuity",
+      "radical-rewrite-webgl"
+    );
+  const radicalMorph = player.locator(
+    "[data-kp-editor-radical-webgl-morph]"
+  );
+  await expect(radicalMorph).toHaveAttribute(
+    "data-kp-editor-radical-webgl-target",
+    "complete-native-radical-operator"
+  );
+  await expect(radicalMorph).toHaveAttribute(
+    "data-kp-editor-radical-webgl-pairing",
+    "spatial-coherent"
+  );
+  expect(Number(await radicalMorph.getAttribute(
+    "data-kp-editor-radical-webgl-particle-count"
+  ))).toBeGreaterThan(1000);
   await expect(player.locator("[data-kp-editor-equation-transition-id]"))
     .toHaveAttribute(
       "data-kp-editor-equation-motif",
@@ -1316,9 +1352,30 @@ test("exponent and radical family animations render their semantic rewrite motif
   await expect(player.locator(
     "[data-kp-editor-equation-target] [data-kp-radical-structural-fragment][data-kp-motion-id]"
   )).toHaveCount(2);
+  await scrubber.fill("0.75");
+  await expect(player.locator("[data-kp-editor-equation-stage]"))
+    .toHaveAttribute(
+      "data-kp-editor-equation-native-settlement-phase",
+      "native-handoff"
+    );
+  await scrubber.fill("0.25");
+  await expect(radicalMorph).toHaveCSS("opacity", "1");
+
+  const motionPresentation = player.locator(
+    "[data-kp-editor-animation-accessibility-control]"
+  );
+  await motionPresentation.selectOption("reduced-motion");
+  await expect(player.locator("[data-kp-editor-equation-stage]"))
+    .toHaveAttribute("data-kp-editor-radical-morph-mode", "dom-fallback");
+  await expect(player.locator(
+    "[data-kp-editor-radical-webgl-morph]"
+  )).toHaveCount(0);
+  await motionPresentation.selectOption("full-motion");
+  await expect(player.locator("[data-kp-editor-equation-stage]"))
+    .toHaveAttribute("data-kp-editor-radical-morph-ready", "true");
 });
 
-test("radical-succession uses independent opposite-corner tokens and native settle", async ({
+test("radical-succession uses a complete WebGL operator and native settle", async ({
   page
 }) => {
   await page.goto("/");
@@ -1452,18 +1509,17 @@ test("radical-succession uses independent opposite-corner tokens and native sett
   const radicalFragments = materialLayer.locator(
     '[data-kp-equation-material-fragment-role^="radical-"]'
   );
-  await expect(radicalFragments).toHaveCount(2);
-  const fragmentOpacities = await radicalFragments.evaluateAll((elements) =>
-    elements.map((element) => Number(getComputedStyle(element).opacity))
+  await expect(radicalFragments).toHaveCount(0);
+  const radicalMorph = stage.locator(
+    "[data-kp-editor-radical-webgl-morph]"
   );
-  expect(fragmentOpacities.every((opacity) => opacity > 0 && opacity < 1))
-    .toBe(true);
-  expect(new Set(fragmentOpacities).size).toBe(2);
-  for (const fragment of await radicalFragments.all()) {
-    await expect(fragment.locator(
-      ".editor-equation-stage__material-visual"
-    )).not.toHaveCSS("clip-path", "none");
-  }
+  await expect(radicalMorph).toHaveAttribute(
+    "data-kp-editor-radical-webgl-target",
+    "complete-native-radical-operator"
+  );
+  expect(Number(await radicalMorph.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeGreaterThan(0);
   await expect(
     transition.locator("[data-kp-editor-equation-source]")
   ).toHaveCSS("transform", "none");
@@ -1479,7 +1535,7 @@ test("radical-succession uses independent opposite-corner tokens and native sett
     "same-base"
   );
 
-  await scrubber.fill("0.92");
+  await scrubber.fill("0.8");
   const settlementProgress = Number(await stage.getAttribute(
     "data-kp-editor-equation-native-settlement-progress"
   ));
@@ -1503,23 +1559,20 @@ test("radical-succession uses independent opposite-corner tokens and native sett
   );
   expect(settlingNativeOpacity).toBeGreaterThan(0);
   expect(settlingNativeOpacity).toBeLessThan(1);
-  const settlingFragments = materialLayer.locator(
-    '[data-kp-equation-material-fragment-role^="radical-"]'
-  );
-  await expect(settlingFragments).toHaveCount(2);
-  const settlingFragmentOpacity = Number(
-    await settlingFragments.first().evaluate(
+  await expect(radicalFragments).toHaveCount(0);
+  const settlingMorphOpacity = Number(
+    await radicalMorph.evaluate(
       (element) => getComputedStyle(element).opacity
     )
   );
-  expect(settlingFragmentOpacity + settlingNativeOpacity).toBeCloseTo(1, 5);
+  expect(settlingMorphOpacity + settlingNativeOpacity).toBeCloseTo(1, 5);
 
-  await scrubber.fill("0.95");
+  await scrubber.fill("0.9");
   await expect(baseMaterialOwner).toHaveAttribute(
     "data-kp-radical-base-owner-probe",
     "same-base"
   );
-  await scrubber.fill("0.98");
+  await scrubber.fill("0.92");
   await expect(stage).toHaveAttribute(
     "data-kp-editor-equation-native-settlement-progress",
     "1"
@@ -1572,18 +1625,19 @@ test("radical material succession is identical under semantic rewind", async ({
   const baseOwner = stage.locator(
     '[data-kp-equation-material-owner-id="radical-rewrite.base-radicand"]'
   );
-  const hookOwner = stage.locator(
-    '[data-kp-equation-material-owner-id="radical-rewrite.root-notation.hook"]'
+  const morphOwner = stage.locator(
+    "[data-kp-editor-radical-webgl-morph]"
   );
 
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-radical-morph-ready",
+    "true"
+  );
   await scrubber.fill("0.65");
   await baseOwner.evaluate((element) => {
     element.dataset["kpRadicalRewindProbe"] = "base";
   });
-  await hookOwner.evaluate((element) => {
-    element.dataset["kpRadicalRewindProbe"] = "hook";
-  });
-  const forwardRects = await Promise.all([baseOwner, hookOwner].map((locator) =>
+  const forwardRects = await Promise.all([baseOwner, morphOwner].map((locator) =>
     locator.evaluate((element) => {
       const rect = element.getBoundingClientRect();
       return { x: rect.x, y: rect.y };
@@ -1600,11 +1654,15 @@ test("radical material succession is identical under semantic rewind", async ({
     "data-kp-radical-rewind-probe",
     "base"
   );
-  await expect(hookOwner).toHaveAttribute(
-    "data-kp-radical-rewind-probe",
-    "hook"
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-radical-morph-ready",
+    "true"
   );
-  const rewindRects = await Promise.all([baseOwner, hookOwner].map((locator) =>
+  await expect(morphOwner).toHaveAttribute(
+    "data-kp-editor-radical-webgl-target",
+    "complete-native-radical-operator"
+  );
+  const rewindRects = await Promise.all([baseOwner, morphOwner].map((locator) =>
     locator.evaluate((element) => {
       const rect = element.getBoundingClientRect();
       return { x: rect.x, y: rect.y };
@@ -1711,7 +1769,7 @@ test("radical bundle and native settlement satisfy continuity budgets", async ({
     });
   });
 
-  await scrubber.fill("0.92");
+  await scrubber.fill("0.84");
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-continuity-settlement",
     "native handoff"
@@ -1733,7 +1791,31 @@ test("radical bundle and native settlement satisfy continuity budgets", async ({
         '[data-kp-equation-material-fragment-role^="radical-"]'
       )
     ).map((fragment) => {
-      const rect = fragment.getBoundingClientRect();
+      const stageRect = element.getBoundingClientRect();
+      const targetLeft = Number(
+        fragment.dataset["kpEditorRadicalWebglTargetLeft"]
+      );
+      const targetTop = Number(
+        fragment.dataset["kpEditorRadicalWebglTargetTop"]
+      );
+      const targetWidth = Number(
+        fragment.dataset["kpEditorRadicalWebglTargetWidth"]
+      );
+      const targetHeight = Number(
+        fragment.dataset["kpEditorRadicalWebglTargetHeight"]
+      );
+      const measuredRect = fragment.getBoundingClientRect();
+      const rect = Number.isFinite(targetLeft) &&
+        Number.isFinite(targetTop) &&
+        Number.isFinite(targetWidth) &&
+        Number.isFinite(targetHeight)
+        ? {
+            left: stageRect.left + targetLeft,
+            top: stageRect.top + targetTop,
+            width: targetWidth,
+            height: targetHeight
+          }
+        : measuredRect;
       const residualTransformPx = Math.max(
         Math.abs(rect.left - nativeRect.left),
         Math.abs(rect.top - nativeRect.top),

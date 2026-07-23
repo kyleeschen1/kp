@@ -34,7 +34,7 @@ export function renderKpEditorAnimationPlayerShell(input: {
     descriptor.controlKinds.includes(kind);
 
   return `
-    <section class="editor-animation-player" data-kp-editor-animation-player data-kp-editor-animation-descriptor-id="${escapeHtml(descriptorId)}" data-kp-editor-animation-id="${escapeHtml(animationId)}" data-kp-editor-animation-status="${playbackStatus}" data-kp-editor-animation-direction="${direction}" data-kp-editor-animation-progress="${progress}" data-kp-editor-animation-maturity="${promotion?.maturity ?? "unclassified"}" data-kp-editor-animation-novelty="${promotion?.novelty ?? "unclassified"}" data-kp-editor-animation-gold-cohort="${promotion?.goldCohort === true}" data-kp-editor-animation-gestalt-pinned-style="${styleKey(kpOrganicSubtleStyleRef)}" data-kp-editor-animation-gestalt-selected-style="${styleKey(kpOrganicSubtleStyleRef)}" aria-label="${escapeHtml(descriptor.title)} animation player" aria-keyshortcuts="Space ArrowLeft ArrowRight Home End R" tabindex="0">
+    <section class="editor-animation-player" data-kp-editor-animation-player data-kp-editor-animation-descriptor-id="${escapeHtml(descriptorId)}" data-kp-editor-animation-id="${escapeHtml(animationId)}" data-kp-editor-animation-status="${playbackStatus}" data-kp-editor-animation-direction="${direction}" data-kp-editor-animation-progress="${progress}" data-kp-editor-animation-explanation-profile="explain" data-kp-editor-animation-maturity="${promotion?.maturity ?? "unclassified"}" data-kp-editor-animation-novelty="${promotion?.novelty ?? "unclassified"}" data-kp-editor-animation-gold-cohort="${promotion?.goldCohort === true}" data-kp-editor-animation-gestalt-pinned-style="${styleKey(kpOrganicSubtleStyleRef)}" data-kp-editor-animation-gestalt-selected-style="${styleKey(kpOrganicSubtleStyleRef)}" aria-label="${escapeHtml(descriptor.title)} animation player" aria-keyshortcuts="Space ArrowLeft ArrowRight Home End R" tabindex="0">
       <div class="editor-animation-player__stage" data-kp-editor-animation-stage data-kp-editor-animation-surface="${surface.kind}">
         ${surface.slotKinds.map((slotKind) => `
           <div class="editor-animation-player__surface editor-animation-player__surface--${slotKind}" data-kp-editor-animation-surface-slot="${slotKind}" aria-label="${surfaceLabel(slotKind)}">
@@ -67,6 +67,12 @@ export function renderKpEditorAnimationPlayerShell(input: {
             <option value="reduced-motion">reduced motion</option>
             <option value="static">static checkpoints</option>
             <option value="narrated">narrated</option>
+          </select>
+        </label>
+        <label class="editor-animation-player__explanation-profile">Explanation
+          <select data-kp-editor-animation-explanation-profile-control aria-label="Animation explanation profile">
+            <option value="explain" selected>explain</option>
+            <option value="fluent">fluent</option>
           </select>
         </label>
         <label class="editor-animation-player__quality">Quality

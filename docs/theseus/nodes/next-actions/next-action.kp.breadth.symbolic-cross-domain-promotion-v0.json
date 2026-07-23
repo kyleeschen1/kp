@@ -42,11 +42,25 @@
       "scope": "s25 repository regression",
       "checkedAt": "2026-07-23T14:09:30.426Z",
       "notes": "Passed 1,965 architecture and deterministic tests after metadata regeneration."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "repository-wide unit and architecture regression",
+      "checkedAt": "2026-07-23T14:57:57.443Z",
+      "notes": "1,969 tests passed after raw-WebGL radical morph and Fluent exponent projection"
+    },
+    {
+      "command": "npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "s25 revised exponent and radical exemplar",
+      "checkedAt": "2026-07-23T14:58:02.779Z",
+      "notes": "Eleven captures; dark complete-operator raw-WebGL radical morph, Fluent exponent projection, and both inspectors Ready with zero warnings"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Human perceptual review accepts the exponent exemplar and requests a Fluent projection that omits transient x^1 identity ink. The radical exemplar is rejected despite contract compliance: s25 now requires a smooth morph into the complete native radical operator. Reuse of the existing WebGL alpha-mask pixel-flow lineage is preferred for a bounded exemplar, with the persistent radicand kept DOM-owned and the whole radical glyph plus overbar captured as the target."
+    "summary": "s25 revision implemented and verified: accepted exponent retains Explain plus Fluent omission of transient unit-exponent ink; radical now uses a dark raw-WebGL spatially coherent complete-operator morph with conventional symmetric timing, DOM and reduced-motion fallback, exact native settlement, seek and rewind preservation. Awaiting human visual approval before resolving s25."
   },
   "expectedLearning": [
     "Which promoted semantic, scheduling, authoring, renderer, and verification contracts survive capability-opening exemplars across symbolic, calculus, vector, and linear-map domains without combinatorial growth."

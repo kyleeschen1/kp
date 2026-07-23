@@ -60,6 +60,40 @@ test("pairKatexArtifactPixelFlowPoints creates deterministic source-to-target pa
   );
 });
 
+test("spatially coherent pairing preserves normalized silhouette neighborhoods", () => {
+  const particles = pairKatexArtifactPixelFlowPoints(
+    [
+      { x: 0, y: 0, alpha: 1 },
+      { x: 10, y: 0, alpha: 1 },
+      { x: 0, y: 10, alpha: 1 },
+      { x: 10, y: 10, alpha: 1 }
+    ],
+    [
+      { x: 100, y: 200, alpha: 1 },
+      { x: 140, y: 200, alpha: 1 },
+      { x: 100, y: 280, alpha: 1 },
+      { x: 140, y: 280, alpha: 1 }
+    ],
+    4,
+    "spatial-coherent"
+  );
+
+  assert.deepEqual(
+    particles.map((particle) => [
+      particle.sourceX / 10,
+      particle.sourceY / 10,
+      (particle.targetX - 100) / 40,
+      (particle.targetY - 200) / 80
+    ]),
+    [
+      [0, 0, 0, 0],
+      [1, 0, 1, 0],
+      [0, 1, 0, 1],
+      [1, 1, 1, 1]
+    ]
+  );
+});
+
 test("createKatexArtifactPixelFlowFrame interpolates particles with no semantic jumps", () => {
   const particles = pairKatexArtifactPixelFlowPoints(
     [{ x: 0, y: 10, alpha: 1 }],

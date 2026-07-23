@@ -91,6 +91,10 @@ import {
   sampleKpRadicalNativeSettlement
 } from "../animation/radical-native-settlement.ts";
 import {
+  disposeKpRadicalWebglMorph,
+  syncKpRadicalWebglMorph
+} from "../rendering/radical-webgl-morph.ts";
+import {
   createKpLinearRearrangementChoreography,
   sampleKpLinearRearrangementChoreography,
   type KpLinearRearrangementChoreography,
@@ -410,11 +414,15 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
 
     let contentChanged = false;
     if (stage?.dataset["kpEditorEquationStageIdentityKey"] !== frame.stageIdentityKey) {
-      if (stage !== null) disposeKpEditorEquationStageHotPathCache(stage);
+      if (stage !== null) {
+        disposeKpRadicalWebglMorph(stage);
+        disposeKpEditorEquationStageHotPathCache(stage);
+      }
       slot.innerHTML = renderStage(frame);
       stage = slot.querySelector<HTMLElement>("[data-kp-editor-equation-stage]");
       contentChanged = true;
     } else if (stage.dataset["kpEditorEquationContentKey"] !== frame.contentKey) {
+      disposeKpRadicalWebglMorph(stage);
       invalidateKpEditorEquationStageHotPathCache(stage, "content");
       replaceStageContent(stage, frame);
       contentChanged = true;
@@ -572,12 +580,44 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       stage,
       player?.dataset["kpEditorAnimationFocusExperiment"] ?? "flat"
     );
+    applyExponentExplanationProjection({
+      stage,
+      animationId: state.animationId,
+      profile:
+        player?.dataset["kpEditorAnimationExplanationProfile"] ?? "explain"
+    });
     if (shouldSyncContinuityInspection(stage, player, state)) {
       syncKpEditorEquationMaterialContinuityInspection({ player, stage });
       player.dataset["kpEditorAnimationMotionPlanInvalidated"] = "false";
     }
   }
 };
+
+function applyExponentExplanationProjection(input: {
+  readonly stage: HTMLElement;
+  readonly animationId: string;
+  readonly profile: string;
+}): void {
+  if (
+    input.animationId !==
+      "animation.generated.exponent.square-as-product" ||
+    input.profile !== "fluent"
+  ) {
+    delete input.stage.dataset["kpEditorEquationExplanationProjection"];
+    return;
+  }
+  const unitExponent = input.stage.querySelector<HTMLElement>(
+    '[data-kp-motion-id$=".lowered.residual-exponent"]'
+  );
+  if (unitExponent === null) return;
+
+  // Fluent playback keeps the verified identity step in the semantic trace,
+  // but omits its transient ink so the learner sees x² project directly to x·x.
+  unitExponent.style.opacity = "0";
+  unitExponent.dataset["kpEditorEquationFluentOmission"] = "unit-exponent";
+  input.stage.dataset["kpEditorEquationExplanationProjection"] =
+    "fluent-omit-unit-exponent";
+}
 
 function postBindingGestaltMotionTokens(
   stage: HTMLElement,
@@ -776,6 +816,39 @@ function applyRadicalMaterialLayer(input: {
   const targetBase = input.stage.querySelector<HTMLElement>(
     '[data-kp-motion-id*=".radical.radicand"]'
   );
+  const sourceExponentToken = input.stage.querySelector<HTMLElement>(
+    '[data-kp-motion-id*=".power.exponent-numerator"]'
+  );
+  const sourceExponent = sourceExponentToken?.closest<HTMLElement>(".msupsub")
+    ?? sourceExponentToken?.parentElement
+    ?? null;
+  const player = input.stage.closest<HTMLElement>(
+    "[data-kp-editor-animation-player]"
+  );
+  const webglEnabled =
+    editorAccessibilityMode(input.stage) === "full-motion" &&
+    player?.dataset["kpEditorAnimationQualityTier"] !== "efficient";
+  let warmedWebglMorph = {
+    mode: "dom-fallback" as "webgl-pixel-flow" | "dom-fallback",
+    ready: false
+  };
+  if (sourceExponent !== null && radicalNative !== null) {
+    // Warm the atlas against untouched KaTeX at the initial frame. The canvas
+    // stays transparent until the semantic rewrite actually begins.
+    warmedWebglMorph = syncKpRadicalWebglMorph({
+      stage: input.stage,
+      sourceElement: sourceExponent,
+      targetElement: radicalNative,
+      semanticProgress: input.semanticProgress,
+      opacity: 0,
+      enabled: webglEnabled,
+      particleDensityScale: Number(
+        player?.dataset["kpEditorAnimationQualityParticleDensityScale"] ?? 1
+      )
+    });
+  } else {
+    disposeKpRadicalWebglMorph(input.stage);
+  }
   if (
     radicalHook === null ||
     radicalOverbar === null ||
@@ -785,6 +858,7 @@ function applyRadicalMaterialLayer(input: {
     input.semanticProgress <= 0 ||
     input.semanticProgress >= 1
   ) {
+    sourceExponent?.style.removeProperty("opacity");
     syncKpEquationMaterialLayer({ stage: input.stage, owners: [] });
     if (radicalNative !== null) {
       radicalNative.style.opacity = input.semanticProgress >= 1 ? "1" : "0";
@@ -826,10 +900,47 @@ function applyRadicalMaterialLayer(input: {
   const nativeRect = radicalNative.getBoundingClientRect();
   const settlement = sampleKpRadicalNativeSettlement({
     semanticProgress: input.semanticProgress,
-    fragmentRects: [hookRect, overbarRect],
-    nativeRect
+    fragmentRects: warmedWebglMorph.ready
+      ? [nativeRect]
+      : [hookRect, overbarRect],
+    nativeRect,
+    ...(warmedWebglMorph.ready
+      ? { handoffStart: 0.68, handoffEnd: 0.92 }
+      : {})
   });
   setRadicalSettlementDataset(input.stage, settlement);
+  const webglMorph = sourceExponent === null
+    ? { mode: "dom-fallback" as const, ready: false }
+    : syncKpRadicalWebglMorph({
+        stage: input.stage,
+        sourceElement: sourceExponent,
+        targetElement: radicalNative,
+        semanticProgress: input.semanticProgress,
+        opacity: settlement.fragmentOpacity,
+        enabled: webglEnabled,
+        particleDensityScale: Number(
+          player?.dataset["kpEditorAnimationQualityParticleDensityScale"] ?? 1
+        )
+      });
+
+  if (webglMorph.ready && sourceExponent !== null) {
+    // The overlay owns only the changing notation. The x continuant remains a
+    // DOM-owned material owner above it and the exact KaTeX radical takes over
+    // during native settlement.
+    sourceExponent.style.opacity = "0";
+    radicalNative.style.opacity = String(settlement.nativeOpacity);
+    radicalNative.dataset["kpEquationMaterialNativeHidden"] = "true";
+    syncKpEquationMaterialLayer({ stage: input.stage, owners });
+    sourceBase.style.opacity = "0";
+    targetBase.style.opacity = "0";
+    sourceBase.dataset["kpEquationMaterialNativeHidden"] = "true";
+    targetBase.dataset["kpEquationMaterialNativeHidden"] = "true";
+    input.stage.dataset["kpEditorEquationMaterialContinuity"] =
+      "radical-rewrite-webgl";
+    return;
+  }
+
+  sourceExponent?.style.removeProperty("opacity");
 
   if (input.semanticProgress >= 0.42 && settlement.fragmentOpacity > 0) {
     const hookProgress = Number.parseFloat(

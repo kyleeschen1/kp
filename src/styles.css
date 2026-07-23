@@ -1892,6 +1892,15 @@ h2 {
   font-size: clamp(0.82rem, 2.3vw, 1.2rem);
 }
 
+.editor-equation-stage__radical-webgl-morph {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 .editor-equation-stage__material-owner {
   position: absolute;
   display: grid;

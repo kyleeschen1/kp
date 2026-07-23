@@ -184,6 +184,7 @@ async function hydrateKpEditorAnimationPlayer(player: HTMLElement): Promise<void
   }));
   syncAuthoringData(player, authoring);
   syncAccessibilityData(player, "full-motion");
+  syncExplanationProfileData(player, "explain");
   syncRenderQualityData(player);
   player.dataset["kpEditorAnimationDiagnosticsRevision"] = "0";
   player.dataset["kpEditorAnimationPackId"] = packId;
@@ -281,6 +282,21 @@ function handlePlayerInput(event: Event): void {
     input.dataset["kpEditorAnimationFocusExperimentControl"] !== undefined
   ) {
     selectFocusExperiment(player, input.value);
+    return;
+  }
+
+  if (
+    input instanceof HTMLSelectElement &&
+    input.dataset["kpEditorAnimationExplanationProfileControl"] !== undefined
+  ) {
+    syncExplanationProfileData(player, input.value);
+    const session = sessions.get(player);
+    if (session !== undefined) {
+      dispatchKpEditorAnimationPlaybackAction(player, {
+        type: "seek",
+        progress: session.player.progress
+      });
+    }
     return;
   }
 
@@ -419,6 +435,18 @@ function syncAccessibilityData(player: HTMLElement, preference: string): void {
   player.dataset["kpEditorAnimationAccessibilityMode"] = mode;
 }
 
+function syncExplanationProfileData(
+  player: HTMLElement,
+  requestedProfile: string
+): void {
+  const profile = requestedProfile === "fluent" ? "fluent" : "explain";
+  player.dataset["kpEditorAnimationExplanationProfile"] = profile;
+  const control = player.querySelector<HTMLSelectElement>(
+    "[data-kp-editor-animation-explanation-profile-control]"
+  );
+  if (control !== null) control.value = profile;
+}
+
 function selectRenderQuality(player: HTMLElement, value: string): void {
   const preference = normalizeKpRenderQualityPreference(value);
   persistRenderQualityPreference(preference);
@@ -477,6 +505,8 @@ function syncRenderQualityData(player: HTMLElement): void {
   player.dataset["kpEditorAnimationQualityFrozen"] = String(state.frozen);
   player.dataset["kpEditorAnimationQualityPending"] = String(pending);
   player.dataset["kpEditorAnimationQualityRevision"] = String(state.revision);
+  player.dataset["kpEditorAnimationQualityParticleDensityScale"] =
+    String(state.profile.particleDensityScale);
   player.dataset["kpEditorAnimationQualityMicroMotionScale"] =
     String(state.profile.microMotionScale);
   player.style.setProperty(

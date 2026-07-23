@@ -38,6 +38,12 @@ export interface KatexArtifactPixelFlowPlan {
   readonly source: KatexArtifactPixelFlowEndpoint;
   readonly target: KatexArtifactPixelFlowEndpoint;
   readonly particleCount: number;
+  readonly pairing?: "modular" | "spatial-coherent" | undefined;
+  readonly color?: {
+    readonly red: number;
+    readonly green: number;
+    readonly blue: number;
+  } | undefined;
   readonly sourceMotion?: KatexArtifactPixelFlowSourceMotion | undefined;
   readonly pathMotion?: KatexArtifactPixelFlowPathMotion | undefined;
   readonly targetMotion?: KatexArtifactPixelFlowTargetMotion | undefined;
@@ -126,7 +132,8 @@ export function sampleKatexArtifactPixelFlowProgress(
 export function pairKatexArtifactPixelFlowPoints(
   sourcePoints: readonly KatexArtifactPixelFlowMaskPoint[],
   targetPoints: readonly KatexArtifactPixelFlowMaskPoint[],
-  particleCount: number
+  particleCount: number,
+  pairing: "modular" | "spatial-coherent" = "modular"
 ): readonly KatexArtifactPixelFlowParticle[] {
   if (sourcePoints.length === 0) {
     throw new Error("Cannot create artifact pixel flow without source points.");
@@ -138,10 +145,28 @@ export function pairKatexArtifactPixelFlowPoints(
 
   const count = Math.max(0, Math.floor(particleCount));
   const particles: KatexArtifactPixelFlowParticle[] = [];
+  const orderedSource = pairing === "spatial-coherent"
+    ? spatiallyOrderMaskPoints(sourcePoints)
+    : sourcePoints;
+  const orderedTarget = pairing === "spatial-coherent"
+    ? spatiallyOrderMaskPoints(targetPoints)
+    : targetPoints;
 
   for (let index = 0; index < count; index += 1) {
-    const source = sourcePoints[(index * 1543) % sourcePoints.length];
-    const target = targetPoints[(index * 2657) % targetPoints.length];
+    const sourceIndex = pairing === "spatial-coherent"
+      ? Math.min(
+          orderedSource.length - 1,
+          Math.floor((index / Math.max(1, count)) * orderedSource.length)
+        )
+      : (index * 1543) % orderedSource.length;
+    const targetIndex = pairing === "spatial-coherent"
+      ? Math.min(
+          orderedTarget.length - 1,
+          Math.floor((index / Math.max(1, count)) * orderedTarget.length)
+        )
+      : (index * 2657) % orderedTarget.length;
+    const source = orderedSource[sourceIndex];
+    const target = orderedTarget[targetIndex];
 
     if (source === undefined || target === undefined) {
       continue;
@@ -158,6 +183,60 @@ export function pairKatexArtifactPixelFlowPoints(
   }
 
   return particles;
+}
+
+function spatiallyOrderMaskPoints(
+  points: readonly KatexArtifactPixelFlowMaskPoint[]
+): readonly KatexArtifactPixelFlowMaskPoint[] {
+  const bounds = maskPointBounds(points);
+  return [...points].sort((left, right) => {
+    const leftKey = mortonKey(normalizeMaskPoint(left, bounds));
+    const rightKey = mortonKey(normalizeMaskPoint(right, bounds));
+    return leftKey - rightKey ||
+      left.y - right.y ||
+      left.x - right.x;
+  });
+}
+
+function maskPointBounds(
+  points: readonly KatexArtifactPixelFlowMaskPoint[]
+): {
+  readonly left: number;
+  readonly top: number;
+  readonly width: number;
+  readonly height: number;
+} {
+  const left = Math.min(...points.map((point) => point.x));
+  const top = Math.min(...points.map((point) => point.y));
+  const right = Math.max(...points.map((point) => point.x));
+  const bottom = Math.max(...points.map((point) => point.y));
+  return {
+    left,
+    top,
+    width: Math.max(1, right - left),
+    height: Math.max(1, bottom - top)
+  };
+}
+
+function normalizeMaskPoint(
+  point: KatexArtifactPixelFlowMaskPoint,
+  bounds: ReturnType<typeof maskPointBounds>
+): { readonly x: number; readonly y: number } {
+  return {
+    x: (point.x - bounds.left) / bounds.width,
+    y: (point.y - bounds.top) / bounds.height
+  };
+}
+
+function mortonKey(point: { readonly x: number; readonly y: number }): number {
+  const x = Math.round(clamp01(point.x) * 255);
+  const y = Math.round(clamp01(point.y) * 255);
+  let key = 0;
+  for (let bit = 0; bit < 8; bit += 1) {
+    key |= ((x >> bit) & 1) << (bit * 2);
+    key |= ((y >> bit) & 1) << (bit * 2 + 1);
+  }
+  return key;
 }
 
 export function createKatexArtifactPixelFlowFrame(
@@ -367,7 +446,8 @@ export function createKatexArtifactPixelFlowParticles(
   return pairKatexArtifactPixelFlowPoints(
     sourcePoints,
     targetPoints,
-    plan.particleCount
+    plan.particleCount,
+    plan.pairing
   );
 }
 
@@ -555,7 +635,12 @@ export function createKatexArtifactPixelFlowRenderer(
         endpointMidpointY(plan.target, atlas.pixelRatio)
       );
       gl.uniform1f(programInfo.pixelRatioLocation, atlas.pixelRatio);
-      gl.uniform3f(programInfo.colorLocation, 31 / 255, 99 / 255, 113 / 255);
+      gl.uniform3f(
+        programInfo.colorLocation,
+        plan.color?.red ?? 31 / 255,
+        plan.color?.green ?? 99 / 255,
+        plan.color?.blue ?? 113 / 255
+      );
       gl.drawArrays(gl.POINTS, 0, particleCount);
     },
     dispose() {
