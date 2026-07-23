@@ -2,8 +2,8 @@
   "id": "next-action.project.s13-v0",
   "kind": "next-action",
   "title": "Add typed normal-form intent and compiler boundaries",
-  "status": "ready",
-  "summary": "Materialized from stored run-contract slice s13 in KP product roadmap v5 continuation.",
+  "status": "resolved",
+  "summary": "Normal-form intent and semantic compiler boundaries are implemented and broadly verified.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -44,6 +44,38 @@
     "npm run build",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/structured-expression-normal-form.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T00:38:05.878Z",
+      "notes": "Four normal-form intent and compiler-boundary tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-23T00:38:06.803Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-23T00:38:07.579Z",
+      "notes": "All 1930 tests passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-07-23T00:38:08.373Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Typed distributed-sum intent now compiles only through verified rewrite lineage and excludes presentation authority."
+  },
   "expectedLearning": [
     "Whether Add typed normal-form intent and compiler boundaries can be completed inside KP product roadmap v5 continuation."
   ],

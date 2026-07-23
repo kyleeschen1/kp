@@ -57,7 +57,8 @@
     {
       "id": "next-action.project.s13-v0",
       "title": "Add typed normal-form intent and compiler boundaries",
-      "status": "planned"
+      "summary": "Normal-form plans now require registered semantic intent, verified roots, and complete requested lineage while renderer-shaped fields remain outside the contract.",
+      "status": "complete"
     },
     {
       "id": "next-action.project.s14-v0",
