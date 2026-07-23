@@ -2942,3 +2942,111 @@ h2 {
     justify-self: start;
   }
 }
+.kp-animation-workbench {
+  min-height: 100vh;
+  padding: clamp(1rem, 2.6vw, 2.5rem);
+  color: #17211d;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(225, 240, 230, 0.9), transparent 30rem),
+    #f6f3eb;
+}
+
+.kp-animation-workbench__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  max-width: 92rem;
+  margin: 0 auto 1.5rem;
+}
+
+.kp-animation-workbench__header h1 {
+  margin: 0.2rem 0 0.45rem;
+  font-size: clamp(2rem, 4vw, 4.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+
+.kp-animation-workbench__header p:last-child {
+  max-width: 48rem;
+  margin: 0;
+  color: #52615a;
+  font-size: 1rem;
+}
+
+.kp-animation-workbench__search {
+  display: grid;
+  gap: 0.45rem;
+  max-width: 92rem;
+  margin: 0 auto 1rem;
+  font-weight: 700;
+}
+
+.kp-animation-workbench__search input {
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border: 1px solid rgba(34, 62, 50, 0.24);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.88);
+  color: inherit;
+  font: inherit;
+  font-size: 1.05rem;
+  box-shadow: 0 0.5rem 1.6rem rgba(38, 52, 45, 0.07);
+}
+
+.kp-animation-workbench__search input:focus-visible {
+  outline: 3px solid rgba(38, 113, 77, 0.3);
+  outline-offset: 2px;
+}
+
+.kp-animation-workbench__search small {
+  color: #69756f;
+  font-weight: 500;
+}
+
+.kp-animation-workbench__layout {
+  display: grid;
+  grid-template-columns: minmax(17rem, 0.75fr) minmax(0, 1.6fr);
+  gap: 1rem;
+  max-width: 92rem;
+  margin: 0 auto;
+}
+
+.kp-animation-workbench__results,
+.kp-animation-workbench__detail {
+  min-height: 34rem;
+  border: 1px solid rgba(34, 62, 50, 0.14);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 0.8rem 2.5rem rgba(38, 52, 45, 0.06);
+}
+
+.kp-animation-workbench__empty {
+  display: grid;
+  align-content: center;
+  min-height: 22rem;
+  padding: 2rem;
+}
+
+.kp-animation-workbench__empty h2 {
+  margin: 0.3rem 0;
+}
+
+.kp-animation-workbench__empty p:last-child {
+  color: #68756f;
+}
+
+@media (max-width: 760px) {
+  .kp-animation-workbench__header {
+    display: grid;
+  }
+
+  .kp-animation-workbench__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .kp-animation-workbench__results,
+  .kp-animation-workbench__detail {
+    min-height: auto;
+  }
+}

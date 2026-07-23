@@ -174,6 +174,7 @@ export function renderEditorDocument(
           <h1>${escapeHtml(document.title)}</h1>
         </div>
         <div class="editor-header__actions">
+          <button class="editor-header__button" type="button" data-action="show-animation-workbench">Animation Workbench</button>
           <button class="editor-header__button" type="button" data-action="show-project-dashboard">Project Dashboard</button>
           <span class="status-pill">Semantic API</span>
         </div>

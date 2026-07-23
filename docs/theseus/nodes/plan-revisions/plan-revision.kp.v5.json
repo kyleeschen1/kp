@@ -151,6 +151,16 @@
       "command": "npm run typecheck",
       "status": "passed",
       "checkedAt": "2026-07-23T20:40:40.886Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-route.test.ts tests/semantic-animation-workbench-shell.test.ts tests/kp-editor-animation-selection-route.test.ts tests/kp-editor.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:44:37.406Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:44:42.602Z"
     }
   ],
   "planRevision": {

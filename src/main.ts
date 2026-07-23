@@ -78,6 +78,13 @@ import { registerKpEditorDiagramSvgAdapter } from "./editor/diagram-svg-adapter.
 import {
   disposeKpEditorEquationStageHotPathCaches
 } from "./editor/equation-stage-hot-path-cache.ts";
+import {
+  KP_ANIMATION_WORKBENCH_VIEW,
+  readKpSemanticAnimationWorkbenchRoute
+} from "./editor/semantic-animation-workbench-route.ts";
+import {
+  renderKpSemanticAnimationWorkbenchShell
+} from "./editor/semantic-animation-workbench-shell.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -109,7 +116,11 @@ let projectDashboardClientPromise: Promise<{
 }> | undefined;
 let ftcTutorialSurfaceClientPromise: Promise<FtcTutorialSurfaceClient> | undefined;
 let ftcTutorialEditorClientPromise: Promise<FtcTutorialEditorClient> | undefined;
-let activeView: "dashboard" | "editor" | "ftc-tutorial" = "editor";
+let activeView:
+  | "dashboard"
+  | "editor"
+  | "ftc-tutorial"
+  | "animation-workbench" = "editor";
 let viewRevision = 0;
 const graph3DWebGLVisibilityObservers = new WeakMap<
   HTMLElement,
@@ -130,8 +141,12 @@ registerKpEditorEquationSurfaceAdapter();
 registerKpEditorDiagramSvgAdapter();
 registerKpEditorGraphSvgViewportAdapter();
 
-if (new URLSearchParams(window.location.search).get("view") === "ftc-tutorial") {
+if (
+  new URLSearchParams(window.location.search).get("view") === "ftc-tutorial"
+) {
   void renderFtcTutorialView();
+} else if (readKpSemanticAnimationWorkbenchRoute(window.location.search).active) {
+  renderAnimationWorkbenchView();
 } else {
   renderEditor();
 }
@@ -199,6 +214,10 @@ appRoot.addEventListener("click", (event) => {
     case "show-editor":
       navigateToView("editor");
       renderEditor();
+      return;
+    case "show-animation-workbench":
+      navigateToView("animation-workbench");
+      renderAnimationWorkbenchView();
       return;
     case "show-ftc-tutorial":
       navigateToView("ftc-tutorial");
@@ -353,6 +372,20 @@ function renderEditor(): void {
   hydrateGraph3DWebGL(appRoot, editorDocument.objects);
 }
 
+function renderAnimationWorkbenchView(): void {
+  activeView = "animation-workbench";
+  viewRevision += 1;
+  disposeKpEditorAnimationPlayers(appRoot);
+  disposeKpEditorEquationStageHotPathCaches(appRoot);
+  disposeGraph3DWebGL(appRoot);
+  const route = readKpSemanticAnimationWorkbenchRoute(
+    window.location.search
+  );
+  appRoot.innerHTML = renderKpSemanticAnimationWorkbenchShell({
+    query: route.query
+  });
+}
+
 async function renderFtcTutorialView(): Promise<void> {
   activeView = "ftc-tutorial";
   const revision = ++viewRevision;
@@ -395,9 +428,14 @@ function loadFtcTutorialEditorClient(): Promise<FtcTutorialEditorClient> {
   return ftcTutorialEditorClientPromise;
 }
 
-function navigateToView(view: "editor" | "ftc-tutorial"): void {
+function navigateToView(
+  view: "editor" | "ftc-tutorial" | "animation-workbench"
+): void {
   const url = new URL(window.location.href);
   if (view === "ftc-tutorial") url.searchParams.set("view", view);
+  else if (view === "animation-workbench") {
+    url.searchParams.set("view", KP_ANIMATION_WORKBENCH_VIEW);
+  }
   else url.searchParams.delete("view");
   window.history.replaceState(null, "", url);
 }

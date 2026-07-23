@@ -134,7 +134,8 @@
     {
       "id": "s13",
       "title": "Add the Workbench route and shell",
-      "status": "planned"
+      "summary": "Added a deep-linkable Semantic Editor Animation Workbench route and responsive two-pane shell, preserved existing editor animation and unrelated query parameters, added editor entry and return navigation, and kept result and preview mounting deferred to their approved slices.",
+      "status": "complete"
     },
     {
       "id": "s14",
