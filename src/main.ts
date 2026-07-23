@@ -286,6 +286,10 @@ appRoot.addEventListener("keydown", (event) => {
   handleEquationMotionDemoKeydown(event);
 });
 
+document.addEventListener("keydown", (event) => {
+  handleAnimationWorkbenchKeydown(event);
+});
+
 appRoot.addEventListener("mouseover", (event) => {
   previewApiCatalogItemFromEvent(event);
 });
@@ -647,6 +651,11 @@ function selectAnimationWorkbenchResult(button: HTMLButtonElement): void {
     })
   );
   renderAnimationWorkbenchView();
+  appRoot
+    .querySelector<HTMLButtonElement>(
+      `[data-action="select-animation-workbench-result"][data-kp-animation-id="${animationId}"]`
+    )
+    ?.focus();
 }
 
 function selectAnimationWorkbenchRepresentation(
@@ -673,6 +682,120 @@ function selectAnimationWorkbenchRepresentation(
     })
   );
   renderAnimationWorkbenchView();
+  appRoot
+    .querySelector<HTMLButtonElement>(
+      `[data-action="select-animation-workbench-representation"][data-kp-representation-id="${representationId}"]`
+    )
+    ?.focus();
+}
+
+function handleAnimationWorkbenchKeydown(event: KeyboardEvent): boolean {
+  if (activeView !== "animation-workbench") return false;
+  const query = appRoot.querySelector<HTMLInputElement>(
+    "[data-kp-animation-workbench-query]"
+  );
+  const target = event.target;
+  const focusShortcut =
+    (event.key.toLowerCase() === "k" && (event.metaKey || event.ctrlKey)) ||
+    (event.key === "/" &&
+      !event.metaKey &&
+      !event.ctrlKey &&
+      !isEditableTarget(target));
+  if (focusShortcut) {
+    event.preventDefault();
+    query?.focus();
+    query?.select();
+    return true;
+  }
+  if (!(target instanceof HTMLElement)) return false;
+  if (target === query) {
+    if (event.key === "ArrowDown" || event.key === "Enter") {
+      const firstResult = animationWorkbenchButtons(
+        "select-animation-workbench-result"
+      )[0];
+      if (firstResult !== undefined) {
+        event.preventDefault();
+        firstResult.focus();
+        return true;
+      }
+    }
+    return false;
+  }
+  if (target.dataset["action"] === "select-animation-workbench-result") {
+    return moveAnimationWorkbenchFocus(
+      event,
+      animationWorkbenchButtons("select-animation-workbench-result"),
+      query
+    );
+  }
+  if (
+    target.dataset["action"] ===
+    "select-animation-workbench-representation"
+  ) {
+    return moveAnimationWorkbenchFocus(
+      event,
+      animationWorkbenchButtons(
+        "select-animation-workbench-representation"
+      ),
+      query,
+      true
+    );
+  }
+  return false;
+}
+
+function animationWorkbenchButtons(
+  action:
+    | "select-animation-workbench-result"
+    | "select-animation-workbench-representation"
+): readonly HTMLButtonElement[] {
+  return [
+    ...appRoot.querySelectorAll<HTMLButtonElement>(
+      `[data-action="${action}"]`
+    )
+  ];
+}
+
+function moveAnimationWorkbenchFocus(
+  event: KeyboardEvent,
+  buttons: readonly HTMLButtonElement[],
+  query: HTMLInputElement | null,
+  horizontal = false
+): boolean {
+  const target = event.target;
+  const currentIndex =
+    target instanceof HTMLButtonElement ? buttons.indexOf(target) : -1;
+  const previousKey = horizontal ? "ArrowLeft" : "ArrowUp";
+  const nextKey = horizontal ? "ArrowRight" : "ArrowDown";
+  let nextIndex: number | undefined;
+  if (event.key === previousKey) {
+    nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+  } else if (event.key === nextKey) {
+    nextIndex = (currentIndex + 1) % buttons.length;
+  } else if (event.key === "Home") {
+    nextIndex = 0;
+  } else if (event.key === "End") {
+    nextIndex = buttons.length - 1;
+  } else if (event.key === "Escape") {
+    event.preventDefault();
+    query?.focus();
+    return true;
+  }
+  if (nextIndex === undefined || buttons[nextIndex] === undefined) {
+    return false;
+  }
+  event.preventDefault();
+  buttons[nextIndex]?.focus();
+  return true;
+}
+
+function isEditableTarget(target: EventTarget | null): boolean {
+  return (
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLTextAreaElement ||
+    target instanceof HTMLSelectElement ||
+    (target instanceof HTMLElement && target.isContentEditable)
+  );
 }
 
 async function renderFtcTutorialView(): Promise<void> {

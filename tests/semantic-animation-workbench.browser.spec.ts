@@ -113,6 +113,97 @@ test("Workbench planned quadratic never mounts a player", async ({ page }) => {
   await expect(page.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
 });
 
+test("Workbench search and results support keyboard-only traversal", async ({
+  page
+}) => {
+  await page.goto(
+    `/?view=animation-workbench&q=radical&workbenchAnimation=${radicalId}`
+  );
+  // Chromium reserves Control+K for the omnibox, so "/" is the portable
+  // in-page shortcut while Command+K remains available on macOS.
+  await page.locator('[data-action="show-editor"]').focus();
+  await page.keyboard.press("/");
+  const query = page.locator("[data-kp-animation-workbench-query]");
+  await expect(query).toBeFocused();
+  await query.fill(quadraticId);
+  await page.keyboard.press("ArrowDown");
+  const result = page.locator(
+    '[data-action="select-animation-workbench-result"]'
+  ).first();
+  await expect(result).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(
+    page.locator(`[data-kp-animation-workbench-selection="${quadraticId}"]`)
+  ).toBeVisible();
+  await expect(result).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(query).toBeFocused();
+});
+
+test("Workbench respects system reduced motion and exposes static checkpoints", async ({
+  page
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(
+    `/?view=animation-workbench&q=radical&workbenchAnimation=${radicalId}`
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-accessibility-preference",
+    "system"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-accessibility-mode",
+    "reduced-motion"
+  );
+  await player
+    .locator("[data-kp-editor-animation-accessibility-control]")
+    .selectOption("static");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-accessibility-mode",
+    "static"
+  );
+  await expect(
+    player.locator('[data-action="play-editor-animation"]')
+  ).toBeDisabled();
+  await expect(
+    page.locator("[data-kp-animation-workbench-static-hint]")
+  ).toContainText("static checkpoints");
+});
+
+test("Workbench stacks without horizontal overflow on a narrow viewport", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(
+    `/?view=animation-workbench&q=radical&workbenchAnimation=${radicalId}`
+  );
+  await expect(
+    page.locator("[data-kp-editor-animation-player]")
+  ).toHaveAttribute("data-kp-editor-animation-hydrated", "true");
+  const geometry = await page.evaluate(() => {
+    const results = document.querySelector<HTMLElement>(
+      ".kp-animation-workbench__results"
+    );
+    const detail = document.querySelector<HTMLElement>(
+      ".kp-animation-workbench__detail"
+    );
+    return {
+      overflow:
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+      resultsTop: results?.getBoundingClientRect().top ?? 0,
+      detailTop: detail?.getBoundingClientRect().top ?? 0
+    };
+  });
+  expect(geometry.overflow).toBeLessThanOrEqual(1);
+  expect(geometry.detailTop).toBeGreaterThan(geometry.resultsTop);
+});
+
 async function mockReviewInbox(page: Page): Promise<void> {
   await page.route("**/api/dev/reviews/v2/query", async (route) => {
     await route.fulfill({

@@ -51,6 +51,7 @@ test("editor animation player shell renders an accessible surface and declared c
   assert.match(html, /data-kp-editor-animation-accessibility-control/);
   assert.match(html, /data-kp-editor-animation-explanation-profile-control/);
   assert.match(html, /value="reduced-motion"/);
+  assert.match(html, /value="system" selected/);
   assert.match(html, /data-kp-editor-animation-quality-control/);
   assert.match(html, /data-kp-editor-animation-quality-status/);
   assert.match(html, /value="auto"/);

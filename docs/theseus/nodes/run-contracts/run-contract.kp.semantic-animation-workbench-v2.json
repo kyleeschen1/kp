@@ -176,7 +176,8 @@
     {
       "id": "s20",
       "title": "Harden keyboard responsive and static use",
-      "status": "planned"
+      "summary": "Added slash and Command or Control K search discovery, arrow Home End Escape result and representation focus flow, focus restoration after selection, narrow stacked no-overflow layouts, scoped reduced-motion CSS, a system-preference player default, and explicit static-checkpoint fallback guidance.",
+      "status": "complete"
     },
     {
       "id": "s21",

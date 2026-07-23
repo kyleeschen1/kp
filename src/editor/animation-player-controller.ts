@@ -183,7 +183,7 @@ async function hydrateKpEditorAnimationPlayer(player: HTMLElement): Promise<void
     capabilities: currentRenderQualityCapabilities()
   }));
   syncAuthoringData(player, authoring);
-  syncAccessibilityData(player, "full-motion");
+  syncAccessibilityData(player, "system");
   syncExplanationProfileData(player, "explain");
   syncRenderQualityData(player);
   player.dataset["kpEditorAnimationDiagnosticsRevision"] = "0";

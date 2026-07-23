@@ -62,8 +62,8 @@ export function renderKpEditorAnimationPlayerShell(input: {
         <p class="editor-animation-player__status" data-kp-editor-animation-status-label aria-live="polite">${statusLabel(playbackStatus, direction)}</p>
         <label class="editor-animation-player__accessibility">Presentation
           <select data-kp-editor-animation-accessibility-control aria-label="Animation accessibility presentation">
-            <option value="full-motion" selected>full motion</option>
-            <option value="system">system preference</option>
+            <option value="full-motion">full motion</option>
+            <option value="system" selected>system preference</option>
             <option value="reduced-motion">reduced motion</option>
             <option value="static">static checkpoints</option>
             <option value="narrated">narrated</option>

@@ -285,6 +285,24 @@
       "status": "passed",
       "scope": "s19 Chromium representation URL identity player disposal and clock-owner preservation",
       "checkedAt": "2026-07-23T21:18:22.770Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-shell.test.ts tests/kp-editor-animation-player-shell.test.ts tests/kp-editor-animation-playback-session.test.ts tests/semantic-animation-workbench-route.test.ts",
+      "status": "passed",
+      "scope": "s20 accessible shell system-presentation default and player keyboard contracts",
+      "checkedAt": "2026-07-23T21:28:20.161Z"
+    },
+    {
+      "command": "npm run test:browser:animation-workbench",
+      "status": "passed",
+      "scope": "s20 Chromium keyboard reduced-motion static fallback and 390px responsive overflow gate",
+      "checkedAt": "2026-07-23T21:28:27.800Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s20 production closure including TypeScript and responsive accessibility changes",
+      "checkedAt": "2026-07-23T21:28:34.652Z"
     }
   ],
   "planRevision": {

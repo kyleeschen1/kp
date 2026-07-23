@@ -25,6 +25,7 @@ test("Workbench shell renders a labeled search and two-pane control surface", ()
 
   assert.match(html, /data-kp-animation-workbench/);
   assert.match(html, /data-kp-animation-workbench-query/);
+  assert.match(html, /aria-keyshortcuts="Control\+K Meta\+K \/"/);
   assert.match(html, /data-kp-animation-workbench-results/);
   assert.match(html, /data-kp-animation-workbench-detail/);
   assert.match(html, /value="radical &quot;rewrite&quot;"/);
@@ -45,6 +46,7 @@ test("Workbench shell renders a labeled search and two-pane control surface", ()
     /data-kp-animation-workbench-representation="representation\.animation\.radical"/
   );
   assert.match(html, /Loading semantic law checks/);
+  assert.match(html, /data-kp-animation-workbench-static-hint/);
   assert.equal(
     [
       "roadmap",

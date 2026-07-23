@@ -39,8 +39,8 @@ export function renderKpSemanticAnimationWorkbenchShell(input: {
     </header>
     <label class="kp-animation-workbench__search">
       <span>Search animations</span>
-      <input type="search" value="${escapeHtml(input.query)}" placeholder="Try radical, tangent, quadratic, or a family…" autocomplete="off" data-action="filter-animation-workbench" data-kp-animation-workbench-query />
-      <small>Search title, aliases, families, motifs, lifecycle, and representations.</small>
+      <input type="search" value="${escapeHtml(input.query)}" placeholder="Try radical, tangent, quadratic, or a family…" autocomplete="off" aria-controls="kp-animation-workbench-results" aria-keyshortcuts="Control+K Meta+K /" data-action="filter-animation-workbench" data-kp-animation-workbench-query />
+      <small>Search title, aliases, families, motifs, lifecycle, and representations. Press <kbd>⌘/Ctrl K</kbd> or <kbd>/</kbd> to focus; use <kbd>↓</kbd> to enter results.</small>
     </label>
     <div class="kp-animation-workbench__layout">
       <aside class="kp-animation-workbench__results" aria-label="Animation results">
@@ -63,13 +63,13 @@ function renderResults(
   selectedAnimationId: string | undefined
 ): string {
   if (results.length === 0) {
-    return `<div class="kp-animation-workbench__empty" data-kp-animation-workbench-results>
+    return `<div id="kp-animation-workbench-results" class="kp-animation-workbench__empty" data-kp-animation-workbench-results>
       <p class="eyebrow">0 canonical animations</p>
       <h2>No matching animation</h2>
       <p>Try a title, alias, family, motif, lifecycle state, or representation.</p>
     </div>`;
   }
-  return `<div data-kp-animation-workbench-results>
+  return `<div id="kp-animation-workbench-results" data-kp-animation-workbench-results>
     <div class="kp-animation-workbench__results-header">
       <p class="eyebrow">${results.length} canonical ${results.length === 1 ? "animation" : "animations"}</p>
       <p>Representations stay nested beneath their source.</p>
@@ -227,6 +227,7 @@ function renderPreview(
       <h3>${escapeHtml(descriptor.title)}</h3>
     </div>
     ${renderKpEditorAnimationPlayerShell({ descriptor })}
+    <p class="kp-animation-workbench__static-hint" data-kp-animation-workbench-static-hint>For a non-animated view, choose <strong>static checkpoints</strong> in the player’s Presentation control.</p>
     ${renderKpEditorAnimationDiagnosticsLoading(descriptor)}
   </section>`;
 }
