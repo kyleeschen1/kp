@@ -56,7 +56,8 @@
     {
       "id": "s10",
       "title": "Add stable expression subtree identity contracts",
-      "status": "planned"
+      "summary": "Stable structured-expression subtree IDs now survive reconstruction, validate uniqueness and shape, and preserve authored topology.",
+      "status": "complete"
     },
     {
       "id": "s11",

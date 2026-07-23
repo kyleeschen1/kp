@@ -22,6 +22,58 @@
     "npm run typecheck",
     "npm test"
   ],
+  "verificationRecords": [
+    {
+      "command": "node",
+      "status": "passed",
+      "scope": "slice-s10",
+      "checkedAt": "2026-07-23T00:15:14.147Z"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "slice-s10",
+      "checkedAt": "2026-07-23T00:15:15.017Z"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "slice-s10",
+      "checkedAt": "2026-07-23T00:15:15.784Z"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "slice-s10",
+      "checkedAt": "2026-07-23T00:15:16.545Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/structured-expression.test.ts",
+      "status": "passed",
+      "scope": "slice-s10",
+      "checkedAt": "2026-07-23T00:15:26.337Z",
+      "notes": "Four subtree identity and validation tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s10",
+      "checkedAt": "2026-07-23T00:15:27.105Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-s10",
+      "checkedAt": "2026-07-23T00:15:27.890Z",
+      "notes": "All 1920 tests passed after aligning the responsive route-manifest checkpoint count."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-s10",
+      "checkedAt": "2026-07-23T00:15:28.659Z"
+    }
+  ],
   "expectedLearning": [
     "Whether stable expression subtrees, semantic role binding, verified rewrites, and typed normal-form intent can replace distribution string templates without changing accepted presentation behavior."
   ],
