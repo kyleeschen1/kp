@@ -2,8 +2,9 @@
   "id": "next-action.kp.semantic-presentation-continuity-v1",
   "kind": "next-action",
   "title": "Enforce semantic presentation continuity",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Approved presentation continuity scope is complete. Distribution evidence is promotable; the radical exemplar is retained as accepted product behavior with a documented cross-renderer residual and explicit family-promotion block.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -557,11 +558,17 @@
       "status": "passed",
       "scope": "slice-29 promotion gate and Workbench diagnostics",
       "checkedAt": "2026-07-24T19:03:52.772Z"
+    },
+    {
+      "command": "npm run verify:impact -- --path src/editor/canonical-presentation-group-audit.ts --path src/editor/semantic-animation-workbench-index.ts --path src/editor/semantic-animation-workbench-shell.ts --path src/animation/radical-native-settlement.ts --run; npm run test:semantic-animation-convergence; npm run check:architecture; npm run audit:presentation-groups; npm run visual:presentation-continuity; npm run visual:semantic-animation-convergence; npm run visual:linear-equation; playwright workbench chromium; npm run perf:animation",
+      "status": "passed",
+      "scope": "slice-30 release gate",
+      "checkedAt": "2026-07-24T19:15:16.527Z"
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Canonical presentation audit outcomes now drive an independent promotion gate and Workbench panel. Declared groups and typed exemptions pass; missing contracts and the radical known residual block promotion while animations remain playable and unchanged."
+    "state": "complete",
+    "summary": "Presentation continuity run completed its approved scope: distribution contracts pass, canonical audit and Workbench promotion gates are active, and all release gates pass. The preferred radical animation is retained with its small initial fraction handoff logged as a known residual; it is not promoted as reusable family evidence."
   },
   "expectedLearning": [
     "Whether renderer-neutral presentation groups can make distributed products and cross-owner radical handoffs converge without renderer-specific ownership in the semantic layer."

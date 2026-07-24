@@ -2,7 +2,8 @@
   "id": "run-contract.kp.semantic-presentation-continuity-v2",
   "kind": "run-contract",
   "title": "Semantic presentation continuity",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -223,7 +224,8 @@
     {
       "id": "slice-30",
       "title": "Run release gates and close the contract.",
-      "status": "planned"
+      "summary": "Release gates passed and the contract closed. The radical 1/2 handoff remains a documented animation-specific residual and blocks family promotion; other root animations inherit no renderer workaround unless they explicitly opt into the same cross-renderer material layer.",
+      "status": "complete"
     }
   ]
 }
