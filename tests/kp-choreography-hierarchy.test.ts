@@ -16,6 +16,12 @@ test("radical succession declares group, token, and temporary fragment layers", 
     radical.groups[0]?.cohesion.anchorTokenIds[0],
     "radical.rewrite-power-as-root.source.exponent"
   );
+  assert.deepEqual(radical.groups[0]?.presentationSettlement, {
+    cohesionLockProgress: 0.72,
+    settlementAnchorTokenId:
+      "radical.rewrite-power-as-root.source.exponent",
+    nativeOwnerId: "katex-dom"
+  });
   assert.deepEqual(
     radical.fragments.map((fragment) => ({
       medium: fragment.medium,
@@ -35,6 +41,23 @@ test("radical succession declares group, token, and temporary fragment layers", 
       }
     ]
   );
+});
+
+test("presentation settlement anchors must belong to their choreography group", () => {
+  const invalid: KpChoreographyHierarchyPlan = {
+    ...structuredClone(radical),
+    groups: [{
+      ...radical.groups[0]!,
+      presentationSettlement: {
+        ...radical.groups[0]!.presentationSettlement!,
+        settlementAnchorTokenId: "outside-token"
+      }
+    }]
+  };
+
+  assert.ok(validateKpChoreographyHierarchyPlan(invalid).some(
+    (issue) => issue.path.endsWith("settlementAnchorTokenId")
+  ));
 });
 
 test("temporary fragments own presentation only during the act phase", () => {

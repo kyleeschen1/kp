@@ -22,6 +22,11 @@ export interface KpChoreographyGroup {
   readonly tokenIds: readonly string[];
   readonly motionFieldId: string;
   readonly cohesion: KpChoreographyGroupCohesion;
+  readonly presentationSettlement?: {
+    readonly cohesionLockProgress: number;
+    readonly settlementAnchorTokenId: string;
+    readonly nativeOwnerId: string;
+  } | undefined;
 }
 
 interface KpChoreographyTokenBase {
@@ -183,6 +188,34 @@ export function validateKpChoreographyHierarchyPlan(
       `${path}.cohesion.reconciliationRegionId`,
       issues
     );
+    if (group.presentationSettlement !== undefined) {
+      requireUnit(
+        group.presentationSettlement.cohesionLockProgress,
+        `${path}.presentationSettlement.cohesionLockProgress`,
+        issues
+      );
+      requireReference(
+        group.presentationSettlement.settlementAnchorTokenId,
+        tokenIds,
+        `${path}.presentationSettlement.settlementAnchorTokenId`,
+        "token",
+        issues
+      );
+      if (!group.tokenIds.includes(
+        group.presentationSettlement.settlementAnchorTokenId
+      )) {
+        issue(
+          `${path}.presentationSettlement.settlementAnchorTokenId`,
+          "Settlement anchor must belong to its choreography group.",
+          issues
+        );
+      }
+      requireText(
+        group.presentationSettlement.nativeOwnerId,
+        `${path}.presentationSettlement.nativeOwnerId`,
+        issues
+      );
+    }
   });
 
   plan.tokens.forEach((token, index) => {
@@ -322,6 +355,11 @@ export function createRadicalArtifactHierarchyFixture():
         semanticEntityIds: [sourceExponent, targetRadical],
         tokenIds: [sourceExponent, targetRadical],
         motionFieldId: "radical.rewrite-power-as-root.opposite-corner-field",
+        presentationSettlement: {
+          cohesionLockProgress: 0.72,
+          settlementAnchorTokenId: sourceExponent,
+          nativeOwnerId: "katex-dom"
+        },
         cohesion: {
           anchorTokenIds: [sourceExponent],
           maximumSeparation: 0.32,

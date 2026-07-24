@@ -67,7 +67,8 @@
     {
       "id": "slice-04",
       "title": "Extend choreography hierarchy with cohesion lock, settlement anchor, and native owner fields.",
-      "status": "planned"
+      "summary": "Choreography groups can now declare cohesion lock, settlement anchor, and native owner; validation enforces group-local anchors. Seven hierarchy tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "slice-05",
