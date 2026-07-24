@@ -703,6 +703,41 @@
       "scope": "s24 architecture",
       "checkedAt": "2026-07-24T06:21:45.118Z",
       "notes": "All architecture gates pass across 268 semantic-animation files with zero rendering exceptions."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s25 focused product projection and preservation matrix",
+      "checkedAt": "2026-07-24T06:31:16.288Z",
+      "notes": "All 253 focused tests pass, including exact aggregate/projected catalog parity, lesson-first Workbench identity, card projection parity, shared review scope, canonical routes, and export target preservation."
+    },
+    {
+      "command": "npm run test:browser:animation-workbench",
+      "status": "passed",
+      "scope": "s25 Workbench, roadmap authority, review lineage, and route preservation",
+      "checkedAt": "2026-07-24T06:31:17.865Z",
+      "notes": "All 14 Chromium Workbench tests pass. The gate now follows authoritative roadmap revision 7 with 36 rows; lesson authority, card provenance, review capture, search, and routes remain intact."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s25 standard",
+      "checkedAt": "2026-07-24T06:31:19.111Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass with aggregate-or-projection consumer APIs."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s25 production",
+      "checkedAt": "2026-07-24T06:31:20.405Z",
+      "notes": "Production build passes after product consumer migration; only the pre-existing large Three.js chunk advisory remains."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s25 architecture",
+      "checkedAt": "2026-07-24T06:31:21.801Z",
+      "notes": "Concept-room, semantic-reader, and semantic-animation architecture gates pass with zero semantic-animation frozen exceptions."
     }
   ],
   "expectedLearning": [
@@ -931,7 +966,8 @@
     {
       "id": "s25",
       "title": "Product-consumer-migration",
-      "status": "planned",
+      "summary": "Migrated editor catalog, Workbench/card projection, review lineage, routes, and exports to projection-backed consumer paths. Aggregate callers normalize immediately; flashcards accept semantic projections; exact descriptor, card, lesson-first canonical, review-scope, route, and export parity is executable. All 253 focused tests, 14 Workbench browser tests, typecheck, production build, and architecture gates pass.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {

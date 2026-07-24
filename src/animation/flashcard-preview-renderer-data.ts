@@ -1,4 +1,7 @@
 import type { KpAnimationAsset } from "./asset.ts";
+import type {
+  KpSemanticAnimationAssetProjection
+} from "./asset-projections.ts";
 import {
   createKpAnimationClozeProjection,
   createKpAnimationFlashcardProjection,
@@ -20,7 +23,7 @@ export type KpAnimationFlashcardPreviewInteractionKind =
   | "review";
 
 export interface CreateKpAnimationFlashcardPreviewRendererDataInput {
-  readonly animation: KpAnimationAsset;
+  readonly animation: KpAnimationAsset | KpSemanticAnimationAssetProjection;
   readonly cards: readonly KpFlashcardSpec[];
   readonly progress?: number | undefined;
 }
@@ -64,9 +67,9 @@ export function createKpAnimationFlashcardPreviewRendererData(
   );
 
   return {
-    id: `flashcard-preview.${input.animation.id}`,
+    id: `flashcard-preview.${animationId(input.animation)}`,
     kind: "animation-flashcard-preview-renderer-data",
-    animationId: input.animation.id,
+    animationId: animationId(input.animation),
     itemCount: items.length,
     items,
     diagnostics: items.flatMap((item) => item.diagnostics)
@@ -74,7 +77,7 @@ export function createKpAnimationFlashcardPreviewRendererData(
 }
 
 function createKpAnimationFlashcardPreviewRendererItem(
-  animation: KpAnimationAsset,
+  animation: KpAnimationAsset | KpSemanticAnimationAssetProjection,
   card: KpFlashcardSpec,
   progress: number | undefined
 ): KpAnimationFlashcardPreviewRendererItem {
@@ -120,6 +123,14 @@ function createKpAnimationFlashcardPreviewRendererItem(
     hiddenSelectorIds: [],
     candidateTransformationIds: []
   };
+}
+
+function animationId(
+  animation: KpAnimationAsset | KpSemanticAnimationAssetProjection
+): string {
+  return animation.kind === "semantic-animation-asset-projection"
+    ? animation.identity.id
+    : animation.id;
 }
 
 function baseItemFields(

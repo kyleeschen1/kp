@@ -2,6 +2,11 @@ import type {
   KpAnimationAsset
 } from "./asset.ts";
 import {
+  isKpSemanticAnimationAssetProjection,
+  projectKpAnimationAsset,
+  type KpSemanticAnimationAssetProjection
+} from "./asset-projections.ts";
+import {
   sampleKpAnimationRuntimeFrame,
   type KpAnimationRuntimeClock,
   type KpAnimationRuntimeFrame
@@ -15,13 +20,13 @@ import {
 } from "../semantic/asset-flashcard.ts";
 
 export interface CreateKpAnimationFlashcardProjectionInput {
-  readonly animation: KpAnimationAsset;
+  readonly animation: KpAnimationAsset | KpSemanticAnimationAssetProjection;
   readonly card: KpFlashcardSpec;
   readonly progress?: number | undefined;
 }
 
 export interface CreateKpAnimationFlashcardProjectionsInput {
-  readonly animation: KpAnimationAsset;
+  readonly animation: KpAnimationAsset | KpSemanticAnimationAssetProjection;
   readonly cards: readonly KpFlashcardSpec[];
   readonly progress?: number | undefined;
 }
@@ -60,21 +65,22 @@ export interface KpAnimationPredictNextProjection
 export function createKpAnimationFlashcardProjection(
   input: CreateKpAnimationFlashcardProjectionInput
 ): KpAnimationFlashcardProjection {
+  const animation = semanticProjection(input.animation);
   const frame = sampleKpAnimationRuntimeFrame({
-    animation: input.animation,
+    animation,
     ...(input.card.timeMs === undefined
       ? { progress: input.progress ?? 0.5 }
       : { elapsedMs: input.card.timeMs })
   });
   const diagnostics = validateKpFlashcardSpec(input.card, {
-    bundle: input.animation.bundle,
-    transformations: input.animation.transformations
+    bundle: animation.bundle,
+    transformations: animation.transformations
   });
 
   return {
-    id: `projection.${input.animation.id}.${input.card.id}`,
+    id: `projection.${animation.identity.id}.${input.card.id}`,
     kind: "animation-flashcard-projection",
-    animationId: input.animation.id,
+    animationId: animation.identity.id,
     cardId: input.card.id,
     cardKind: input.card.kind,
     title: input.card.title,
@@ -107,6 +113,7 @@ export function createKpAnimationClozeProjection(
 export function createKpAnimationPredictNextProjection(
   input: CreateKpAnimationFlashcardProjectionInput
 ): KpAnimationPredictNextProjection {
+  const animation = semanticProjection(input.animation);
   const projection = createKpAnimationFlashcardProjection(input);
 
   return {
@@ -117,10 +124,18 @@ export function createKpAnimationPredictNextProjection(
       : projection.transformationIds[0] === undefined
         ? {}
         : { expectedTransformationId: projection.transformationIds[0] }),
-    candidateTransformationIds: input.animation.transformations.map(
+    candidateTransformationIds: animation.transformations.map(
       (transformation) => transformation.id
     )
   };
+}
+
+function semanticProjection(
+  animation: KpAnimationAsset | KpSemanticAnimationAssetProjection
+): KpSemanticAnimationAssetProjection {
+  return isKpSemanticAnimationAssetProjection(animation)
+    ? animation
+    : projectKpAnimationAsset(animation).semanticAnimation;
 }
 
 export function createKpAnimationFlashcardProjections(
