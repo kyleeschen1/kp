@@ -4,6 +4,9 @@ import test from "node:test";
 import {
   compileKpCompoundTargetDeclarations,
   kpDefaultPresentationContinuityBudget,
+  observeKpCompositeInk,
+  observeKpMeasuredInk,
+  observeKpRasterInk,
   snapshotKpPresentationGroupGeometry,
   type KpPresentationGroupContract,
   type KpPresentationOwnerObservation
@@ -44,6 +47,46 @@ test("presentation groups describe semantic members without renderer resources",
   assert.equal(JSON.stringify(contract).includes("Element"), false);
   assert.equal(JSON.stringify(contract).includes("WebGL"), false);
   assert.equal(kpDefaultPresentationContinuityBudget.positionPx, 0.5);
+});
+
+test("rendered ink observations ignore transparent raster padding", () => {
+  const alpha = new Uint8Array(6 * 4);
+  alpha[1 * 6 + 2] = 255;
+  alpha[1 * 6 + 3] = 255;
+  alpha[2 * 6 + 2] = 255;
+  alpha[2 * 6 + 3] = 255;
+
+  assert.deepEqual(observeKpRasterInk({
+    origin: { x: 100, y: 50 },
+    width: 6,
+    height: 4,
+    alpha
+  }), {
+    rect: { x: 102, y: 51, width: 2, height: 2 },
+    coverage: 1
+  });
+});
+
+test("measured and raster owners compose into one visible ink union", () => {
+  const dom = observeKpMeasuredInk([
+    { x: 10, y: 10, width: 4, height: 8 },
+    { x: 15, y: 10, width: 3, height: 8 }
+  ]);
+  const canvas = observeKpRasterInk({
+    origin: { x: 20, y: 10 },
+    width: 2,
+    height: 2,
+    alpha: new Uint8Array([255, 255, 255, 255])
+  });
+  const composite = observeKpCompositeInk([dom, canvas]);
+
+  assert.deepEqual(composite?.rect, {
+    x: 10,
+    y: 10,
+    width: 12,
+    height: 8
+  });
+  assert.ok((composite?.coverage ?? 0) > 0);
 });
 
 test("geometry snapshots preserve native-local offsets and edge gaps", () => {

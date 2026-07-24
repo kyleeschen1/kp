@@ -106,6 +106,82 @@ export const kpDefaultPresentationContinuityBudget:
     opacity: 0.01
   };
 
+export function observeKpMeasuredInk(
+  rects: readonly KpPresentationRect[]
+): KpPresentationInkObservation | undefined {
+  if (rects.length === 0) return undefined;
+  const rect = unionRects(rects);
+  const area = rect.width * rect.height;
+  const coveredArea = rects.reduce(
+    (total, current) => total + current.width * current.height,
+    0
+  );
+  return { rect, coverage: area === 0 ? 0 : Math.min(1, coveredArea / area) };
+}
+
+export function observeKpRasterInk(input: {
+  readonly origin: KpPresentationPoint;
+  readonly width: number;
+  readonly height: number;
+  readonly alpha: ArrayLike<number>;
+  readonly alphaThreshold?: number | undefined;
+}): KpPresentationInkObservation | undefined {
+  if (input.alpha.length !== input.width * input.height) {
+    throw new Error("Raster ink alpha length must match its dimensions.");
+  }
+  const threshold = input.alphaThreshold ?? 1;
+  let left = input.width;
+  let top = input.height;
+  let right = -1;
+  let bottom = -1;
+  let covered = 0;
+  for (let y = 0; y < input.height; y += 1) {
+    for (let x = 0; x < input.width; x += 1) {
+      if ((input.alpha[y * input.width + x] ?? 0) < threshold) continue;
+      left = Math.min(left, x);
+      top = Math.min(top, y);
+      right = Math.max(right, x);
+      bottom = Math.max(bottom, y);
+      covered += 1;
+    }
+  }
+  if (right < left || bottom < top) return undefined;
+  const width = right - left + 1;
+  const height = bottom - top + 1;
+  return {
+    rect: {
+      x: input.origin.x + left,
+      y: input.origin.y + top,
+      width,
+      height
+    },
+    coverage: covered / (width * height)
+  };
+}
+
+export function observeKpCompositeInk(
+  observations: readonly (KpPresentationInkObservation | undefined)[]
+): KpPresentationInkObservation | undefined {
+  const visible = observations.filter(
+    (observation): observation is KpPresentationInkObservation =>
+      observation !== undefined
+  );
+  if (visible.length === 0) return undefined;
+  const rect = unionRects(visible.map((observation) => observation.rect));
+  const weightedInk = visible.reduce(
+    (total, observation) =>
+      total +
+      observation.rect.width *
+        observation.rect.height *
+        observation.coverage,
+    0
+  );
+  return {
+    rect,
+    coverage: Math.min(1, weightedInk / (rect.width * rect.height))
+  };
+}
+
 export function compileKpCompoundTargetDeclarations(
   descriptors: readonly KpCompoundTargetDescriptor[]
 ): readonly KpPresentationGroupDeclaration[] {
@@ -201,4 +277,12 @@ export function snapshotKpPresentationGroupGeometry(input: {
 function requireText(value: string, label: string): string {
   if (value.trim().length === 0) throw new Error(`Presentation group requires ${label}.`);
   return value;
+}
+
+function unionRects(rects: readonly KpPresentationRect[]): KpPresentationRect {
+  const left = Math.min(...rects.map((rect) => rect.x));
+  const top = Math.min(...rects.map((rect) => rect.y));
+  const right = Math.max(...rects.map((rect) => rect.x + rect.width));
+  const bottom = Math.max(...rects.map((rect) => rect.y + rect.height));
+  return { x: left, y: top, width: right - left, height: bottom - top };
 }

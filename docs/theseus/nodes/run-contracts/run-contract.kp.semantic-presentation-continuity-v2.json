@@ -79,7 +79,8 @@
     {
       "id": "slice-06",
       "title": "Define rendered-ink observation for DOM, canvas, and composite owners.",
-      "status": "planned"
+      "summary": "Added pure reducers for measured DOM ink, alpha-grid canvas/WebGL ink, and composite owner unions; transparent padding is excluded. Six tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "slice-07",
