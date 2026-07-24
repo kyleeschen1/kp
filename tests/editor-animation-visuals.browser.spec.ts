@@ -2037,8 +2037,6 @@ test("radical source handoff preserves live fraction ink weight before travel", 
         throw new Error("Expected a radical source ink observation.");
       }
 
-      const stageRect = element.getBoundingClientRect();
-      const ink = comparison.liveNativeInkRect;
       const padding = 2;
       const powerBase = element.querySelector<HTMLElement>(
         '[data-kp-motion-id*=".power.base"]'
@@ -2049,6 +2047,9 @@ test("radical source handoff preserves live fraction ink weight before travel", 
       const nativeExponent = powerLayer?.querySelector<HTMLElement>(
         '[data-kp-motion-id*=".power.exponent-numerator"]'
       )?.closest<HTMLElement>(".msupsub");
+      const nativeFraction = powerLayer?.querySelector<HTMLElement>(
+        '[data-kp-motion-id*=".power.exponent-numerator"]'
+      )?.closest<HTMLElement>(".mfrac");
       const morph = element.querySelector<HTMLCanvasElement>(
         "[data-kp-editor-radical-webgl-morph]"
       );
@@ -2056,17 +2057,20 @@ test("radical source handoff preserves live fraction ink weight before travel", 
       if (
         nativeExponent === null ||
         nativeExponent === undefined ||
+        nativeFraction === null ||
+        nativeFraction === undefined ||
         morph === null
       ) {
         throw new Error("Expected both radical source owners.");
       }
 
+      const fractionRect = nativeFraction.getBoundingClientRect();
       return {
         clip: {
-          x: Math.floor(stageRect.left + ink.left - padding),
-          y: Math.floor(stageRect.top + ink.top - padding),
-          width: Math.ceil(ink.width + padding * 2),
-          height: Math.ceil(ink.height + padding * 2)
+          x: Math.floor(fractionRect.left - padding),
+          y: Math.floor(fractionRect.top - padding),
+          width: Math.ceil(fractionRect.width + padding * 2),
+          height: Math.ceil(fractionRect.height + padding * 2)
         },
         morphOpacity: Number(getComputedStyle(morph).opacity),
         nativeOpacity: Number(getComputedStyle(nativeExponent).opacity)
@@ -2116,15 +2120,36 @@ test("radical source handoff preserves live fraction ink weight before travel", 
   const nativeInk = await measureSourceInk(
     kpRadicalConventionalMorphProfile.morph.start / 2
   );
-  const webglInk = await measureSourceInk(
+  const handoffStartInk = await measureSourceInk(
     kpRadicalConventionalMorphProfile.morph.start
+  );
+  const sourceNotation = stage.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id*=".power.exponent-"]'
+  );
+  for (const token of await sourceNotation.all()) {
+    await expect(token).toHaveAttribute(
+      "data-kp-focus-preserves-material-handoff",
+      "true"
+    );
+    await expect(token).toHaveCSS("--kp-focus-outline-strength", "0");
+  }
+  const webglInk = await measureSourceInk(
+    kpRadicalConventionalMorphProfile.morph.start + 0.04
   );
   const darknessRatio = webglInk.totalDarkness / nativeInk.totalDarkness;
 
   expect(nativeInk.visibleInkPixels).toBeGreaterThan(0);
   expect(webglInk.visibleInkPixels).toBeGreaterThan(0);
   expect(nativeInk).toMatchObject({ morphOpacity: 0, nativeOpacity: 1 });
+  expect(handoffStartInk).toMatchObject({
+    morphOpacity: 0,
+    nativeOpacity: 1
+  });
   expect(webglInk).toMatchObject({ morphOpacity: 1, nativeOpacity: 0 });
+  expect(
+    darknessRatio,
+    JSON.stringify({ darknessRatio, nativeInk, webglInk })
+  ).toBeGreaterThanOrEqual(0.95);
   expect(
     darknessRatio,
     JSON.stringify({ darknessRatio, nativeInk, webglInk })

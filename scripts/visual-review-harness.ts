@@ -10,6 +10,7 @@ import { createServer, type ViteDevServer } from "vite";
 
 export interface KpVisualBrowserProfile {
   readonly viewport?: { readonly width: number; readonly height: number };
+  readonly deviceScaleFactor?: number;
   readonly colorScheme?: "light" | "dark" | "no-preference";
   readonly reducedMotion?: "reduce" | "no-preference";
   readonly forcedColors?: "active" | "none";
@@ -156,10 +157,10 @@ async function attachServer(baseUrl: string): Promise<KpVisualHarnessServer> {
 function profileKey(profile: KpVisualBrowserProfile): string {
   return JSON.stringify({
     viewport: profile.viewport ?? null,
+    deviceScaleFactor: profile.deviceScaleFactor ?? 1,
     colorScheme: profile.colorScheme ?? null,
     reducedMotion: profile.reducedMotion ?? null,
     forcedColors: profile.forcedColors ?? null,
     javaScriptEnabled: profile.javaScriptEnabled ?? true
   });
 }
-

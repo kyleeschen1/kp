@@ -529,6 +529,18 @@
       "scope": "slice-27 production and shared-renderer impact",
       "checkedAt": "2026-07-24T18:08:48.527Z",
       "notes": "Production typecheck/build passed with only the existing chunk advisory; all 39 shared linear-equation visual states captured successfully."
+    },
+    {
+      "command": "npm run visual:radical-handoff and npm run visual:radical-handoff:dpr2",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-24T18:40:22.755Z"
+    },
+    {
+      "command": "npm test, npm run build, npm run visual:presentation-continuity, npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T18:40:30.899Z"
     }
   ],
   "progress": {

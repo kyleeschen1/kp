@@ -7,9 +7,10 @@ export const kpRadicalNativeSettlementStart =
   kpRadicalConventionalMorphProfile.settlement.start;
 export const kpRadicalNativeSettlementEnd =
   kpRadicalConventionalMorphProfile.settlement.end;
-export const kpRadicalSourceNativeSettlementStart = 0;
-export const kpRadicalSourceNativeSettlementEnd =
+export const kpRadicalSourceNativeSettlementStart =
   kpRadicalConventionalMorphProfile.morph.start;
+export const kpRadicalSourceNativeSettlementEnd =
+  kpRadicalConventionalMorphProfile.morph.start + 0.04;
 export const kpRadicalNativeSettlementGeometryTolerancePx = 0.25;
 
 export interface KpRadicalNativeSettlementFrame {
@@ -76,10 +77,10 @@ export function sampleKpRadicalCompositeNativeSettlement(input: {
   const handoffComplete = handoffProgress >= 1;
   const requestedNativeOpacity = input.endpoint === "target"
     ? handoffComplete ? 1 : 0
-    : handoffComplete ? 0 : 1;
-  // A composite endpoint owns the handoff as one measured block. Its children
-  // may move independently before this window, but cannot transfer partial
-  // ownership or compare their individual boxes to the whole native parent.
+    : 1 - handoffProgress;
+  // Treat the fraction as one measured block: the source may crossfade as a
+  // group to hide renderer raster differences, but its children never transfer
+  // independently or compare their boxes to the whole native parent.
   const requiresGeometry = input.endpoint === "target"
     ? semanticProgress >= handoffStart
     : semanticProgress > handoffStart && semanticProgress <= handoffEnd;

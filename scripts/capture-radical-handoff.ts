@@ -5,9 +5,30 @@ import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
 
 const animationId =
   "editor-animation.sample.animation.radical-rewrite.square-root-as-power";
-const sampleProgresses = [0.03, 0.055, 0.059, 0.06, 0.061, 0.065, 0.07, 0.08];
+const deviceScaleFactor = Number(
+  process.argv.find((argument) => argument.startsWith("--dpr="))
+    ?.slice("--dpr=".length) ?? "1"
+);
+if (!Number.isFinite(deviceScaleFactor) || deviceScaleFactor <= 0) {
+  throw new Error("Radical handoff DPR must be positive.");
+}
+const sampleProgresses = [
+  0.03,
+  0.055,
+  0.059,
+  0.06,
+  0.061,
+  0.065,
+  0.07,
+  0.08,
+  0.09,
+  0.099,
+  0.1,
+  0.101
+];
 const outputRoot = path.resolve(
-  process.env["KP_VISUAL_OUTPUT"] ?? "tmp/codex/radical-handoff"
+  process.env["KP_VISUAL_OUTPUT"] ??
+    `tmp/codex/radical-handoff-dpr${deviceScaleFactor}`
 );
 const harness = createKpVisualReviewHarness(
   process.env["KP_VISUAL_BASE_URL"] === undefined
@@ -112,6 +133,7 @@ await mkdir(outputRoot, { recursive: true });
 try {
   const page = await harness.page({
     viewport: { width: 1180, height: 760 },
+    deviceScaleFactor,
     reducedMotion: "no-preference"
   });
   const url = new URL("/", harness.baseUrl);
@@ -315,12 +337,20 @@ try {
   }
 
   const baseline = samples[0]?.pixel.centroidY;
+  const boundaryDeltas = adjacentBoundaryDeltas(samples);
+  const maximumBoundaryDelta = Math.max(
+    0,
+    ...boundaryDeltas.map((sample) => Math.abs(sample.deltaY))
+  );
   const trace = {
     schemaVersion: "kp.radical-handoff-trace.v1",
     direction: "forward",
     viewport: { width: 1180, height: 760 },
+    deviceScaleFactor,
     fixedClip: reference.clip,
     referenceRows: reference.rows,
+    boundaryDeltas,
+    maximumBoundaryDelta,
     samples: samples.map((sample) => ({
       ...sample,
       centroidDeltaFromNative:
@@ -331,6 +361,12 @@ try {
   };
   const manifestPath = path.join(outputRoot, "trace.json");
   const contactSheetPath = path.join(outputRoot, "contact-sheet.html");
+  if (maximumBoundaryDelta > 0.15) {
+    throw new Error(
+      `Radical handoff centroid discontinuity ${maximumBoundaryDelta}px ` +
+      "exceeds the 0.15px boundary budget."
+    );
+  }
   await writeFile(manifestPath, `${JSON.stringify(trace, null, 2)}\n`, "utf8");
   await writeFile(
     contactSheetPath,
@@ -352,10 +388,39 @@ try {
       totalDarkness: sample.pixel.totalDarkness,
       bbox: sample.pixel.bbox,
       canvasTransform: sample.canvas.transform
-    }))
+    })),
+    boundaryDeltas,
+    maximumBoundaryDelta
   }, null, 2));
 } finally {
   await harness.close();
+}
+
+function adjacentBoundaryDeltas(
+  samples: readonly HandoffSample[]
+): readonly {
+  readonly from: number;
+  readonly to: number;
+  readonly deltaY: number;
+}[] {
+  const deltas = [];
+  for (let index = 1; index < samples.length; index += 1) {
+    const previous = samples[index - 1]!;
+    const current = samples[index]!;
+    if (current.progress - previous.progress > 0.002) continue;
+    if (
+      previous.pixel.centroidY === undefined ||
+      current.pixel.centroidY === undefined
+    ) {
+      continue;
+    }
+    deltas.push({
+      from: previous.progress,
+      to: current.progress,
+      deltaY: current.pixel.centroidY - previous.pixel.centroidY
+    });
+  }
+  return deltas;
 }
 
 async function analyzePixels(

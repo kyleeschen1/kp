@@ -46,6 +46,7 @@
     "visual:distribution-area": "playwright test tests/semantic-reader-distribution-area.browser.spec.ts --project=chromium --workers=1",
     "visual:exponent-radical": "node --disable-warning=ExperimentalWarning scripts/capture-exponent-radical-visual.ts",
     "visual:radical-handoff": "node --disable-warning=ExperimentalWarning scripts/capture-radical-handoff.ts",
+    "visual:radical-handoff:dpr2": "node --disable-warning=ExperimentalWarning scripts/capture-radical-handoff.ts --dpr=2",
     "visual:presentation-continuity": "node --disable-warning=ExperimentalWarning scripts/capture-presentation-continuity.ts",
     "visual:function-wrap": "node --disable-warning=ExperimentalWarning scripts/capture-function-wrap-visual.ts",
     "visual:derivative-tangent": "node --disable-warning=ExperimentalWarning scripts/capture-derivative-tangent-visual.ts",

@@ -1162,18 +1162,26 @@ function applyFocusExperiment(
       )
     );
     maximumAttention = Math.max(maximumAttention, attention);
+    const preservesMaterialHandoff =
+      group.dataset["kpFocusPreservesMaterialHandoff"] === "true";
     group.dataset["kpFocusProfile"] = mode === "elevated" ? "elevated" : "flat";
     group.style.setProperty(
       "--kp-focus-z",
-      mode === "elevated" ? `${12 * attention}px` : "0px"
+      mode === "elevated" && !preservesMaterialHandoff
+        ? `${12 * attention}px`
+        : "0px"
     );
     group.style.setProperty(
       "--kp-focus-scale",
-      mode === "elevated" ? String(1 + 0.018 * attention) : "1"
+      mode === "elevated" && !preservesMaterialHandoff
+        ? String(1 + 0.018 * attention)
+        : "1"
     );
     group.style.setProperty(
       "--kp-focus-outline-strength",
-      mode === "elevated" ? "0" : String(0.55 * attention)
+      mode !== "elevated" && !preservesMaterialHandoff
+        ? String(0.55 * attention)
+        : "0"
     );
     group.style.setProperty("--kp-focus-shadow-opacity", "0");
   });
@@ -1607,6 +1615,10 @@ function applyRadicalSuccessionChoreography(input: {
   );
   notationTokens.forEach((token) => {
     token.classList.add(binding.className);
+    // The WebGL successor captures the unadorned KaTeX ink. Keeping focus
+    // geometry-neutral prevents an outline or scale from disappearing at the
+    // renderer ownership boundary.
+    token.dataset["kpFocusPreservesMaterialHandoff"] = "true";
     Object.entries(binding.attributes).forEach(([name, value]) =>
       token.setAttribute(name, value)
     );

@@ -71,8 +71,9 @@ test("source settlement hands the whole native parent to independent children", 
 
   assert.equal(start.phase, "native-geometry");
   assert.equal(start.nativeOpacity, 1);
-  assert.equal(middle.nativeOpacity, 1);
-  assert.equal(middle.fragmentOpacity, 0);
+  assert.equal(middle.phase, "native-handoff");
+  assert.equal(middle.nativeOpacity, 0.5);
+  assert.equal(middle.fragmentOpacity, 0.5);
   assert.equal(end.phase, "material-fragments");
   assert.equal(end.fragmentOpacity, 1);
 });
@@ -81,7 +82,10 @@ test("an unready composite retains the safe endpoint owner", () => {
   const shifted = [{ ...nativeRect, left: nativeRect.left + 1 }];
   const source = sampleKpRadicalCompositeNativeSettlement({
     endpoint: "source",
-    semanticProgress: kpRadicalSourceNativeSettlementEnd / 2,
+    semanticProgress: (
+      kpRadicalSourceNativeSettlementStart +
+      kpRadicalSourceNativeSettlementEnd
+    ) / 2,
     fragmentRects: shifted,
     nativeRect,
     handoffStart: kpRadicalSourceNativeSettlementStart,

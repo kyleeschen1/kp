@@ -172,16 +172,21 @@ export function measureKpRadicalWebglInk(
   ) {
     return undefined;
   }
-  // Readback is diagnostic-only. Re-rendering immediately before readPixels
-  // avoids relying on the browser preserving a composited WebGL buffer.
-  state.renderer.render(state.progress);
+  // Source settlement compares the stable endpoint while the visible morph
+  // begins moving underneath its opacity handoff. Re-rendering immediately
+  // before readPixels also avoids relying on a preserved WebGL buffer.
+  const measuredProgress = endpoint === "source" ? 0 : state.progress;
+  state.renderer.render(measuredProgress);
   const renderedWebglInkRect = state.renderer.measureInk(
     kpRadicalInkAlphaThreshold
   );
+  state.renderer.render(state.progress);
   if (renderedWebglInkRect === undefined) return undefined;
   const correctedWebglInkRect = applyEndpointCorrection(
     renderedWebglInkRect,
-    state.currentCorrection
+    endpoint === "source"
+      ? state.sourceCorrection
+      : state.currentCorrection
   );
   const renderedCenter = rectCenter(correctedWebglInkRect);
   const nativeCenter = rectCenter(liveNativeInkRect);
