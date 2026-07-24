@@ -61,7 +61,8 @@
     {
       "id": "slice-03",
       "title": "Detect compound target groups from semantic structure and correspondence, with explicit exemptions.",
-      "status": "planned"
+      "summary": "Compound target declarations now derive native order from semantic correspondence, reject undeclared singleton handling, and support explicit typed exemptions; 3 focused tests pass.",
+      "status": "complete"
     },
     {
       "id": "slice-04",

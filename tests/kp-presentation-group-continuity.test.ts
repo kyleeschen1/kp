@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  compileKpCompoundTargetDeclarations,
   kpDefaultPresentationContinuityBudget,
   type KpPresentationGroupContract,
   type KpPresentationOwnerObservation
@@ -42,4 +43,46 @@ test("presentation groups describe semantic members without renderer resources",
   assert.equal(JSON.stringify(contract).includes("Element"), false);
   assert.equal(JSON.stringify(contract).includes("WebGL"), false);
   assert.equal(kpDefaultPresentationContinuityBudget.positionPx, 0.5);
+});
+
+test("compound targets use correspondence order rather than token order", () => {
+  const [declaration] = compileKpCompoundTargetDeclarations([{
+    id: "product.0",
+    nativeOwnerId: "native.product.0",
+    memberBindings: [
+      { memberId: "addend", semanticEntityId: "b", correspondenceOrder: 1 },
+      { memberId: "factor", semanticEntityId: "a", correspondenceOrder: 0 }
+    ]
+  }]);
+
+  assert.equal(declaration?.kind, "presentation-group");
+  assert.deepEqual(
+    declaration?.kind === "presentation-group"
+      ? declaration.members.map((member) => member.memberId)
+      : [],
+    ["factor", "addend"]
+  );
+});
+
+test("single and intentionally independent targets require typed exemptions", () => {
+  assert.throws(() => compileKpCompoundTargetDeclarations([{
+    id: "single",
+    nativeOwnerId: "native.single",
+    memberBindings: [
+      { memberId: "only", semanticEntityId: "x", correspondenceOrder: 0 }
+    ]
+  }]), /typed exemption/);
+
+  const [declaration] = compileKpCompoundTargetDeclarations([{
+    id: "single",
+    nativeOwnerId: "native.single",
+    memberBindings: [
+      { memberId: "only", semanticEntityId: "x", correspondenceOrder: 0 }
+    ],
+    exemption: {
+      reason: "single-member-target",
+      rationale: "There is no internal relationship to preserve."
+    }
+  }]);
+  assert.equal(declaration?.kind, "presentation-group-exemption");
 });
