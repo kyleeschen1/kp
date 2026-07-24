@@ -545,11 +545,17 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-07-24T18:40:30.899Z"
+    },
+    {
+      "command": "npm run audit:presentation-groups, focused canonical presentation audit tests, and npm run typecheck",
+      "status": "passed",
+      "scope": "slice-28 deterministic canonical coverage audit",
+      "checkedAt": "2026-07-24T18:59:44.349Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Human review prefers the current WebGL-assisted radical over the KaTeX-only fallback and accepts moving forward with a small known initial 1/2 jerk. The residual remains exemplar-scoped, is not family-promotion evidence, and now has a durable diagnosis, commit trail, transfer boundary, and revisit triggers."
+    "summary": "Canonical presentation audit now covers all nine preserved animations: two declared distribution product groups, three narrowly justified exemptions, four missing contracts that remain visible but promotion-blocked, and the radical known residual linked as durable evidence. No animation motion changed."
   },
   "expectedLearning": [
     "Whether renderer-neutral presentation groups can make distributed products and cross-owner radical handoffs converge without renderer-specific ownership in the semantic layer."

@@ -211,7 +211,8 @@
     {
       "id": "slice-28",
       "title": "Audit existing canonical animations for compound groups, missing contracts, and justified exemptions without changing motion.",
-      "status": "planned"
+      "summary": "Added a deterministic audit for all nine canonical preservation entries: distribution has two declared product groups; solve-x, matrix composition, and equation/graph have typed exemptions; program trace has no compound target; factoring, fractions, radical, and structural wrap remain visible but promotion-blocked. The radical residual is linked and no motion changed.",
+      "status": "complete"
     },
     {
       "id": "slice-29",
