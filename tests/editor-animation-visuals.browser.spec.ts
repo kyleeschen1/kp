@@ -1859,15 +1859,17 @@ test("radical rewind interpolates through the composite source-native boundary",
     }));
   }
 
-  for (const [index, sample] of samples.entries()) {
-    const exactNativeEndpoint = index === samples.length - 1;
-    expect(sample.sourceGeometryReady).toBe(exactNativeEndpoint);
-    if (exactNativeEndpoint) {
-      expect(sample.sourceGeometryResidualPx).toBe(0);
-    } else {
+  for (const sample of samples) {
+    if (sample.sourceGeometryReady) {
+      expect(sample.sourceGeometryResidualPx).toBeLessThanOrEqual(
+        kpRadicalNativeSettlementGeometryTolerancePx
+      );
+    } else if (sample.semanticProgress < morphStart) {
       expect(sample.sourceGeometryResidualPx).toBeGreaterThan(
         kpRadicalNativeSettlementGeometryTolerancePx
       );
+      expect(sample.nativeOpacity).toBe(1);
+      expect(sample.morphOpacity).toBe(0);
     }
     expect(sample.nativeOpacity).toBeCloseTo(
       sample.recordedNativeOpacity,
@@ -1935,9 +1937,7 @@ test("radical rewind interpolates through the composite source-native boundary",
     sourceInkDiagnostic.maximumGeometryResidualPx,
     5
   );
-  expect(sourceInkDiagnostic.maximumGeometryResidualPx).toBeGreaterThan(
-    kpRadicalNativeSettlementGeometryTolerancePx
-  );
+  expect(sourceInkDiagnostic.sizeResidualPx).toBe(0);
 });
 
 test("radical bundle and native settlement satisfy continuity budgets", async ({

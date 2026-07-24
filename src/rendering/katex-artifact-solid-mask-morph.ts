@@ -215,8 +215,9 @@ export function createKatexArtifactSolidMaskMorphRenderer(
   ]);
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-  gl.enable(gl.BLEND);
-  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+  // This renderer owns one non-overlapping quad on a cleared framebuffer.
+  // GPU blending would apply source alpha to the alpha channel a second time,
+  // deforming exact captured endpoints before browser canvas compositing.
 
   const sourceCenter = rectCenter(plan.source.rect);
   const targetCenter = rectCenter(plan.target.rect);
@@ -484,8 +485,11 @@ function captureEndpointAlpha(
     region.height,
     (endpoint.rect.left - bounds.left) * pixelRatio,
     (endpoint.rect.top - bounds.top) * pixelRatio,
-    endpoint.rect.width * pixelRatio,
-    endpoint.rect.height * pixelRatio
+    // Atlas regions already contain the captured endpoint on the device-pixel
+    // grid. Resizing them back to a fractional CSS box here would deform the
+    // exact source before the signed-distance morph even begins.
+    region.width,
+    region.height
   );
   const rgba = context.getImageData(0, 0, width, height).data;
   const alpha = new Uint8ClampedArray(width * height);

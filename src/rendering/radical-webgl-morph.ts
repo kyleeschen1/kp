@@ -51,6 +51,7 @@ interface KpRadicalWebglMorphState {
 }
 
 const morphStates = new WeakMap<HTMLElement, KpRadicalWebglMorphState>();
+export const kpRadicalInkAlphaThreshold = 128;
 
 export function syncKpRadicalWebglMorph(input: {
   readonly stage: HTMLElement;
@@ -155,7 +156,9 @@ export function measureKpRadicalWebglInk(
   // Readback is diagnostic-only. Re-rendering immediately before readPixels
   // avoids relying on the browser preserving a composited WebGL buffer.
   state.renderer.render(state.progress);
-  const renderedWebglInkRect = state.renderer.measureInk();
+  const renderedWebglInkRect = state.renderer.measureInk(
+    kpRadicalInkAlphaThreshold
+  );
   if (renderedWebglInkRect === undefined) return undefined;
   const renderedCenter = rectCenter(renderedWebglInkRect);
   const nativeCenter = rectCenter(liveNativeInkRect);
@@ -290,13 +293,15 @@ async function initializeMorphState(input: {
     input.state.sourceNativeInkRect = measureAtlasEndpointInk({
       atlas,
       tokenId: sourceToken.id,
-      endpointRect: sourceLocalRect
+      endpointRect: sourceLocalRect,
+      alphaThreshold: kpRadicalInkAlphaThreshold
     });
     input.state.targetCaptureRect = targetLocalRect;
     input.state.targetNativeInkRect = measureAtlasEndpointInk({
       atlas,
       tokenId: targetToken.id,
-      endpointRect: targetLocalRect
+      endpointRect: targetLocalRect,
+      alphaThreshold: kpRadicalInkAlphaThreshold
     });
     input.state.status = "ready";
     input.state.renderer.render(input.state.progress);

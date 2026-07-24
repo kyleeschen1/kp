@@ -181,7 +181,8 @@
     {
       "id": "slice-23",
       "title": "Make the WebGL source endpoint render the exact captured fraction without residual SDF deformation.",
-      "status": "planned"
+      "summary": "WebGL source endpoint now preserves exact captured fraction ink: removing unnecessary single-quad blending prevents alpha squaring, and atlas regions retain device-pixel dimensions without fractional recapture scaling. Stable source evidence is 6x20px versus 6x20px with zero size residual; remaining subpixel translation stays measured and blocked for slice 24.",
+      "status": "complete"
     },
     {
       "id": "slice-24",

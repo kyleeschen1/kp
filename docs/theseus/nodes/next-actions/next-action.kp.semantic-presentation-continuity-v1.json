@@ -312,6 +312,41 @@
       "scope": "slice-22 morph preservation",
       "checkedAt": "2026-07-24T16:32:11.498Z",
       "notes": "17 canonical captures passed; radical morph remains Ready with no inspector warnings while mismatched ownership transfer is blocked."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/katex-artifact-solid-mask-morph.test.ts tests/radical-webgl-morph.test.ts tests/kp-radical-native-settlement.test.ts",
+      "status": "passed",
+      "scope": "slice-23 exact source endpoint",
+      "checkedAt": "2026-07-24T16:41:19.818Z",
+      "notes": "14 focused tests passed after removing single-quad alpha squaring and preserving captured atlas device-pixel dimensions."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --grep radical-rewind-source-boundary",
+      "status": "passed",
+      "scope": "slice-23 live source ink",
+      "checkedAt": "2026-07-24T16:41:26.179Z",
+      "notes": "Focused Chromium test passed; WebGL/native source fraction ink sizes match exactly, measured translation debt remains safely blocked, and rewind retains one visual owner."
+    },
+    {
+      "command": "npm run visual:presentation-continuity",
+      "status": "passed",
+      "scope": "slice-23 source endpoint geometry",
+      "checkedAt": "2026-07-24T16:41:31.819Z",
+      "notes": "18 stable captures passed. Source WebGL/native ink is 6x20px with zero size residual and 0.125px maximum residual; target remains blocked for slice 24."
+    },
+    {
+      "command": "npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "slice-23 morph preservation",
+      "checkedAt": "2026-07-24T16:41:39.988Z",
+      "notes": "17 canonical captures passed with radical Ready and no warnings; visual inspection confirms a dark continuous full-radical morph."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-23 exact source endpoint",
+      "checkedAt": "2026-07-24T16:41:47.714Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
     }
   ],
   "progress": {
