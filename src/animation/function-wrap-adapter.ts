@@ -14,6 +14,9 @@ import {
   createSemanticTransformationLeaf,
   createSemanticTransformationSequence
 } from "../semantic/transformation-composition.ts";
+import {
+  createKpSemanticMaterialEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
 
 export const defaultFunctionWrapFixtureId = "generated.function-wrap.apply-f";
 
@@ -104,6 +107,8 @@ export function createFunctionWrapAnimationAsset(
       tags: ["animation", "equation", "function-wrap", "generated"],
       sourceRefIds: [fixture.id, fixture.trace.id]
     },
+    presentationProfile:
+      createKpSemanticMaterialEquationPresentationProfileV1(),
     metadata: {
       sourceFixtureId: fixture.id,
       sourceFixtureFamilyId: fixture.familyId,

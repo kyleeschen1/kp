@@ -1,6 +1,5 @@
 import { createKpAnimationAsset, type KpAnimationAsset } from "./asset.ts";
 import { createSemanticTransformationRef } from "../semantic/animation.ts";
-import { createKpCancellationPresentationAuthoringMetadata } from "../semantic/cancellation-presentation-authoring.ts";
 import { createKpAssetBundle } from "../semantic/asset.ts";
 import { createKpSemanticTransformation } from "../semantic/asset-transformation.ts";
 import {
@@ -16,6 +15,9 @@ import {
   createSemanticTransformationLeaf,
   createSemanticTransformationSequence
 } from "../semantic/transformation-composition.ts";
+import {
+  createKpContinuityEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
 
 const comparisonObjectIds = [
   ids.rightSimplified,
@@ -149,14 +151,15 @@ function comparisonAnimation(input: {
       level: "strict",
       targetId: input.id
     }],
+    presentationProfile: createKpContinuityEquationPresentationProfileV1({
+      nativeHandoff: "atomic-v1",
+      cancellation: "counter-orbit-v1",
+      successor: "convergence-v1",
+      depth: "semantic-depth-v1",
+      continuants: "transit-then-reflow-v1"
+    }),
     metadata: {
       sourceTraceId: input.source.sourceTraceId,
-      equationMotionPresentationRecipe: "continuity-v1",
-      equationNativeHandoffRecipe: "atomic-v1",
-      ...createKpCancellationPresentationAuthoringMetadata("preserve-flow"),
-      equationSuccessorPresentationRecipe: "convergence-v1",
-      equationDepthPresentationRecipe: "semantic-depth-v1",
-      equationContinuantPresentationRecipe: "transit-then-reflow-v1",
       ...(input.metadata ?? {})
     }
   });

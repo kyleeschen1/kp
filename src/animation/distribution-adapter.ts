@@ -15,6 +15,9 @@ import {
   createSemanticTransformationLeaf,
   createSemanticTransformationSequence
 } from "../semantic/transformation-composition.ts";
+import {
+  createKpSemanticMaterialEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
 
 export const defaultDistributionExpansionFixtureId =
   "generated.distribution.expand-a-sum";
@@ -135,6 +138,8 @@ function createGeneratedDistributionAnimationAsset(
       tags: ["animation", "equation", "distribution", "generated"],
       sourceRefIds: [fixture.id, fixture.trace.id]
     },
+    presentationProfile:
+      createKpSemanticMaterialEquationPresentationProfileV1(),
     metadata: {
       sourceFixtureId: fixture.id,
       sourceFixtureFamilyId: fixture.familyId,

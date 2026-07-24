@@ -472,6 +472,62 @@
       "scope": "s17 Reader/editor parity",
       "checkedAt": "2026-07-24T05:33:48.859Z",
       "notes": "Production build passes and all 8 named solve-x editor/Reader frames match from start through final settlement."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test promotion, decoder, cancellation, ledger, and preservation suites",
+      "status": "passed",
+      "scope": "s18 promotion contracts",
+      "checkedAt": "2026-07-24T05:43:10.267Z",
+      "notes": "All 19 targeted tests pass for typed authority, prior recipe views, experimental metadata preservation, legacy control, catalog conformance, and ledger closure."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s18 focused convergence suite",
+      "checkedAt": "2026-07-24T05:43:11.410Z",
+      "notes": "All 220 focused convergence tests pass after the bounded profile promotion."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18 type safety",
+      "checkedAt": "2026-07-24T05:43:12.349Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s18 architecture",
+      "checkedAt": "2026-07-24T05:43:13.307Z",
+      "notes": "All architecture gates pass with zero rendering-import exceptions across 262 semantic-animation files."
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "s18 distribution evidence",
+      "checkedAt": "2026-07-24T05:43:14.278Z",
+      "notes": "All 12 distribution Reader, review, endpoint, inverse, shared-clock, URL, phone, and resize browser checks pass."
+    },
+    {
+      "command": "npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "s18 exponent radical evidence",
+      "checkedAt": "2026-07-24T05:43:15.381Z",
+      "notes": "All 17 captures completed; three inspected assets reported Ready with no design warnings."
+    },
+    {
+      "command": "npm run visual:function-wrap",
+      "status": "passed",
+      "scope": "s18 function wrap evidence",
+      "checkedAt": "2026-07-24T05:43:16.329Z",
+      "notes": "All 8 function-wrap captures completed with no warnings."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation",
+      "status": "passed",
+      "scope": "s18 fraction evidence",
+      "checkedAt": "2026-07-24T05:43:17.281Z",
+      "notes": "All 31 fractional-linear visual samples pass with zero failures."
     }
   ],
   "expectedLearning": [
@@ -651,7 +707,8 @@
     {
       "id": "s18",
       "title": "Promote-proven-profiles",
-      "status": "planned",
+      "summary": "Promoted only proven distribution, factoring, fraction simplification/split/merge, fractional solve/division/transfer, exponent, radical, and function-wrap assets to typed presentation-profile authoring. Exact prior recipe views are preserved; the teacher-detail solve-x remains the legacy decoder control; experimental sequence-envelope and fraction-hierarchy metadata remain local and unpromoted. All 19 targeted tests, 220 focused tests, typecheck, and architecture gates pass. Visual evidence passes 12 distribution browser checks, 17 warning-free exponent/radical captures, 8 warning-free function-wrap captures, and 31 fractional-linear samples with zero failures.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {

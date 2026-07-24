@@ -15,6 +15,9 @@ import {
   createSemanticTransformationLeaf,
   createSemanticTransformationSequence
 } from "../semantic/transformation-composition.ts";
+import {
+  createKpSemanticMaterialEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
 
 export const defaultFractionSimplificationFixtureId =
   "generated.fraction-expression.two-fourths";
@@ -120,6 +123,8 @@ export function createFractionSimplificationAnimationAsset(
       tags: ["animation", "equation", "fraction", "generated"],
       sourceRefIds: [fixture.id, fixture.trace.id]
     },
+    presentationProfile:
+      createKpSemanticMaterialEquationPresentationProfileV1(),
     metadata: {
       sourceFixtureId: fixture.id,
       sourceFixtureFamilyId: fixture.familyId,

@@ -89,7 +89,7 @@ export const kpSemanticAnimationCompatibilityLedger = [
   }),
   metadata({
     key: "equationSuccessorPresentationRecipe",
-    authors: equationRecipeAuthors(false),
+    authors: equationRecipeAuthors(),
     consumers: [equationPresentationDecoder],
     statusCandidate: "compiles-forward",
     retirementCondition: "Accepted successor choreography authors typed convergence policy."
@@ -327,24 +327,13 @@ export const kpSemanticAnimationCompatibilityLedger = [
   })
 ] as const satisfies readonly KpSemanticAnimationCompatibilityLedgerEntry[];
 
-function equationRecipeAuthors(
-  includeNumeratorSplitMerge = true
-): KpCompatibilitySourceReference[] {
-  const names = [
-    "divide-both-sides-equation-adapter",
-    "fractional-linear-equation-adapter",
-    "fractional-linear-transfer-comparison-adapter",
-    "linear-solve-adapter"
-  ];
-  if (includeNumeratorSplitMerge) {
-    names.push("numerator-split-merge-equation-adapter");
-  }
-  return names.map((name) =>
+function equationRecipeAuthors(): KpCompatibilitySourceReference[] {
+  return [
     reference(
-      `src/animation/${name}.ts`,
+      "src/animation/linear-solve-adapter.ts",
       "equation"
     )
-  );
+  ];
 }
 
 function metadata(input: {

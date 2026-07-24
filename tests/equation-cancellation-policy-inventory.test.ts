@@ -28,12 +28,12 @@ test("approved equation assets expose the current cancellation-policy inventory"
     createFractionalLinearTransferFluentAnimationAsset()
   ];
 
-  for (const [index, asset] of assets.entries()) {
+  for (const asset of assets) {
     assert.equal(
       asset.metadata?.["equationCancellationPresentationRecipe"],
       undefined
     );
-    if (index === 0) {
+    if (asset.presentationProfile !== undefined) {
       assert.equal(asset.presentationProfile?.domain, "equation");
       assert.equal(asset.metadata?.["equationCancellationTeachingGoal"], undefined);
     } else {

@@ -9,6 +9,9 @@ import {
   createSemanticTransformationLeaf,
   createSemanticTransformationSequence
 } from "../semantic/transformation-composition.ts";
+import {
+  createKpContinuityEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
 
 /** Forward-only until the exact inverse merge clears its own motion slice. */
 export function createNumeratorSplitEquationAnimationAsset(): KpAnimationAsset {
@@ -131,12 +134,13 @@ function createNumeratorSplitMergeAnimationAsset(includeMerge: boolean): KpAnima
       tags: ["animation", "equation", "fraction", "split", ...(includeMerge ? ["merge"] : []), "exemplar"],
       sourceRefIds: [source.sourceTraceId]
     },
+    presentationProfile: createKpContinuityEquationPresentationProfileV1({
+      nativeHandoff: "atomic-v1",
+      depth: "semantic-depth-v1",
+      continuants: "transit-then-reflow-v1"
+    }),
     metadata: {
       sourceTraceId: source.sourceTraceId,
-      equationMotionPresentationRecipe: "continuity-v1",
-      equationNativeHandoffRecipe: "atomic-v1",
-      equationDepthPresentationRecipe: "semantic-depth-v1",
-      equationContinuantPresentationRecipe: "transit-then-reflow-v1",
       equationSequenceEnvelopeRecipe: "measure-once-per-sequence-v1",
       equationFractionHierarchyRecipe: "preserve-native-katex-tree-v1"
     }

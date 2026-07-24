@@ -59,6 +59,7 @@ test("all governed legacy keys decode into one typed profile", () => {
   const result = decodeKpEquationPresentationProfile({
     animation: {
       ...source,
+      presentationProfile: undefined,
       metadata: {
         equationMotionPresentationRecipe: "continuity-v1",
         equationNativeHandoffRecipe: "atomic-v1",
@@ -130,6 +131,7 @@ test("typed and legacy profiles cannot both own presentation authority", () => {
   const result = decodeKpEquationPresentationProfile({
     animation: {
       ...animation,
+      presentationProfile: undefined,
       metadata: {
         ...animation.metadata,
         equationMotionPresentationRecipe: "continuity-v1"
@@ -176,7 +178,11 @@ test("a typed profile passes through without metadata fallback", () => {
     }
   });
   const result = decodeKpEquationPresentationProfile({
-    animation: { ...animation, metadata: undefined },
+    animation: {
+      ...animation,
+      presentationProfile: undefined,
+      metadata: undefined
+    },
     authoredProfile: profile,
     resolveCancellation: resolveKpCancellationPresentation
   });

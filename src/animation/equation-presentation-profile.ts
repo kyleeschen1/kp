@@ -125,6 +125,42 @@ export function createKpEquationPresentationProfileV1(input: {
   });
 }
 
+export function createKpSemanticMaterialEquationPresentationProfileV1():
+  KpEquationPresentationProfileV1 {
+  return createKpEquationPresentationProfileV1({
+    payload: {
+      kind: "equation-presentation",
+      motion: "semantic-material-v2",
+      nativeHandoff: "crossfade-v1",
+      cancellation: "witnessed-annihilation-v1",
+      zeroWitness: "embedded-v1",
+      successor: "successor-synthesis-v1",
+      depth: "flat-v1",
+      continuants: "concurrent-v1"
+    }
+  });
+}
+
+export function createKpContinuityEquationPresentationProfileV1(
+  overrides: Partial<
+    Omit<KpEquationPresentationDomainPayload, "kind" | "motion">
+  > = {}
+): KpEquationPresentationProfileV1 {
+  return createKpEquationPresentationProfileV1({
+    payload: {
+      kind: "equation-presentation",
+      motion: "continuity-v1",
+      nativeHandoff: "crossfade-v1",
+      cancellation: "native-handoff-v1",
+      zeroWitness: "none",
+      successor: "native-handoff-v1",
+      depth: "flat-v1",
+      continuants: "concurrent-v1",
+      ...overrides
+    }
+  });
+}
+
 export function validateKpEquationPresentationProfileV1(
   value: unknown
 ): readonly KpEquationPresentationProfileIssue[] {

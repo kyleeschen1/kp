@@ -24,6 +24,9 @@ import {
   compileKpRepresentationalLineageGraph
 } from "./representational-lineage-compiler.ts";
 import { resolveKpRadicalFragmentSemantics } from "../semantic/radical-fragment-semantics.ts";
+import {
+  createKpSemanticMaterialEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
 
 export const defaultExponentExpansionFixtureId =
   "generated.exponent.square-as-product";
@@ -217,6 +220,8 @@ function createGeneratedEquationAnimationAsset(input: {
       tags: input.tags,
       sourceRefIds: [fixture.id, fixture.trace.id]
     },
+    presentationProfile:
+      createKpSemanticMaterialEquationPresentationProfileV1(),
     metadata: {
       sourceFixtureId: fixture.id,
       sourceFixtureFamilyId: fixture.familyId,

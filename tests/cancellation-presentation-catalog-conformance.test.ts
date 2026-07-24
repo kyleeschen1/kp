@@ -27,10 +27,11 @@ test("catalog conformance reports raw and missing presentation authority", () =>
   const { equationCancellationTeachingGoal: _goal, ...withoutGoal } =
     base.metadata ?? {};
   assert.deepEqual(checkKpCancellationPresentationCatalog([
-    { ...base, metadata: withoutGoal },
+    { ...base, presentationProfile: undefined, metadata: withoutGoal },
     {
       ...base,
       id: `${base.id}.raw`,
+      presentationProfile: undefined,
       metadata: {
         ...withoutGoal,
         equationCancellationPresentationRecipe: "counter-orbit-v1"
