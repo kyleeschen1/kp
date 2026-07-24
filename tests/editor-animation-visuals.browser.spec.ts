@@ -1582,33 +1582,57 @@ test("radical-succession uses a complete WebGL operator and native settle", asyn
   const settlementProgress = Number(await stage.getAttribute(
     "data-kp-editor-equation-native-settlement-progress"
   ));
-  expect(settlementProgress).toBeGreaterThan(0);
-  expect(settlementProgress).toBeLessThan(1);
+  expect(settlementProgress).toBe(0);
   await expect(stage).toHaveAttribute(
     "data-kp-editor-equation-native-settlement-phase",
-    "native-handoff"
+    "waiting-for-native-geometry"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-editor-equation-native-settlement-ready",
-    "true"
+    "false"
   );
   expect(Number(await stage.getAttribute(
     "data-kp-editor-equation-native-settlement-residual"
-  ))).toBeLessThanOrEqual(0.25);
+  ))).toBeGreaterThan(0.25);
   const settlingNativeOpacity = Number(
     await targetNativeRadical.evaluate(
       (element) => getComputedStyle(element).opacity
     )
   );
-  expect(settlingNativeOpacity).toBeGreaterThan(0);
-  expect(settlingNativeOpacity).toBeLessThan(1);
+  expect(settlingNativeOpacity).toBe(0);
   await expect(radicalFragments).toHaveCount(0);
   const settlingMorphOpacity = Number(
     await radicalMorph.evaluate(
       (element) => getComputedStyle(element).opacity
     )
   );
-  expect(settlingMorphOpacity + settlingNativeOpacity).toBeCloseTo(1, 5);
+  expect(settlingMorphOpacity).toBe(1);
+  const targetInkDiagnostic = await stage.evaluate(async (element) => {
+    if (!(element instanceof HTMLElement)) {
+      throw new Error("Radical stage must be an HTML element.");
+    }
+    const moduleUrl = "/src/rendering/radical-webgl-morph.ts";
+    const module = await import(moduleUrl) as {
+      measureKpRadicalWebglInk(
+        stage: HTMLElement,
+        endpoint: "target"
+      ): { maximumGeometryResidualPx: number } | undefined;
+    };
+    const comparison = module.measureKpRadicalWebglInk(element, "target");
+    if (comparison === undefined) {
+      throw new Error("Expected target WebGL and native ink observations.");
+    }
+    return {
+      measuredResidualPx: comparison.maximumGeometryResidualPx,
+      recordedResidualPx: Number(
+        element.dataset["kpEditorEquationNativeSettlementResidual"]
+      )
+    };
+  });
+  expect(targetInkDiagnostic.recordedResidualPx).toBeCloseTo(
+    targetInkDiagnostic.measuredResidualPx,
+    5
+  );
 
   await scrubber.fill("0.9");
   await expect(baseMaterialOwner).toHaveAttribute(
@@ -1618,16 +1642,16 @@ test("radical-succession uses a complete WebGL operator and native settle", asyn
   await scrubber.fill("0.94");
   await expect(stage).toHaveAttribute(
     "data-kp-editor-equation-native-settlement-progress",
-    "1"
+    "0"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-editor-equation-native-settlement-phase",
-    "native-geometry"
+    "waiting-for-native-geometry"
   );
   await expect(materialLayer.locator(
     '[data-kp-equation-material-fragment-role^="radical-"]'
   )).toHaveCount(0);
-  await expect(targetNativeRadical).toHaveCSS("opacity", "1");
+  await expect(targetNativeRadical).toHaveCSS("opacity", "0");
   await scrubber.fill("1");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-choreography-phase",
@@ -1798,10 +1822,6 @@ test("radical rewind interpolates through the composite source-native boundary",
         )
       )
     ).toBeCloseTo(semanticProgress, 5);
-    await expect(stage).toHaveAttribute(
-      "data-kp-editor-equation-source-settlement-ready",
-      "true"
-    );
     samples.push(await stage.evaluate((element) => {
       const sourceToken = element.querySelector<HTMLElement>(
         '[data-kp-motion-id*=".power.exponent-numerator"]'
@@ -1839,11 +1859,16 @@ test("radical rewind interpolates through the composite source-native boundary",
     }));
   }
 
-  for (const sample of samples) {
-    expect(sample.sourceGeometryReady).toBe(true);
-    expect(sample.sourceGeometryResidualPx).toBeLessThanOrEqual(
-      kpRadicalNativeSettlementGeometryTolerancePx
-    );
+  for (const [index, sample] of samples.entries()) {
+    const exactNativeEndpoint = index === samples.length - 1;
+    expect(sample.sourceGeometryReady).toBe(exactNativeEndpoint);
+    if (exactNativeEndpoint) {
+      expect(sample.sourceGeometryResidualPx).toBe(0);
+    } else {
+      expect(sample.sourceGeometryResidualPx).toBeGreaterThan(
+        kpRadicalNativeSettlementGeometryTolerancePx
+      );
+    }
     expect(sample.nativeOpacity).toBeCloseTo(
       sample.recordedNativeOpacity,
       5
@@ -1906,9 +1931,10 @@ test("radical rewind interpolates through the composite source-native boundary",
   expect(sourceInkDiagnostic.renderedWebglInkRect.height).toBeGreaterThan(0);
   expect(sourceInkDiagnostic.liveNativeInkRect.width).toBeGreaterThan(0);
   expect(sourceInkDiagnostic.liveNativeInkRect.height).toBeGreaterThan(0);
-  // This negative fixture proves the old readiness signal compared the
-  // capture rectangle with itself instead of observing rendered ink.
-  expect(sourceInkDiagnostic.recordedResidualPx).toBe(0);
+  expect(sourceInkDiagnostic.recordedResidualPx).toBeCloseTo(
+    sourceInkDiagnostic.maximumGeometryResidualPx,
+    5
+  );
   expect(sourceInkDiagnostic.maximumGeometryResidualPx).toBeGreaterThan(
     kpRadicalNativeSettlementGeometryTolerancePx
   );

@@ -9,7 +9,7 @@ import {
 import { createKpPresentationContinuityVisualPlan } from
   "../src/editor/presentation-continuity-visual-plan.ts";
 import type {
-  KpRadicalWebglSourceInkComparison
+  KpRadicalWebglInkComparison
 } from "../src/rendering/radical-webgl-morph.ts";
 import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
 
@@ -59,7 +59,7 @@ const captures: {
   progress: number;
   viewport: { width: number; height: number };
   distributionGap?: DistributionGapMeasurement | undefined;
-  radicalSourceInk?: KpRadicalWebglSourceInkComparison | undefined;
+  radicalInk?: KpRadicalWebglInkComparison | undefined;
   screenshot: string;
   sha256: string;
 }[] = [];
@@ -92,10 +92,11 @@ try {
       visualCase.surface === "workbench-card"
       ? await measureDistributionGap(stage)
       : undefined;
-    const radicalSourceInk =
+    const radicalInk =
       visualCase.family === "radical" &&
-      visualCase.surface === "workbench-card"
-      ? await measureRadicalSourceInk(stage)
+      visualCase.surface === "workbench-card" &&
+      visualCase.radicalEndpoint !== undefined
+      ? await measureRadicalInk(stage, visualCase.radicalEndpoint)
       : undefined;
     captures.push({
       id: visualCase.id,
@@ -105,7 +106,7 @@ try {
       progress: visualCase.progress,
       viewport: visualCase.viewport,
       ...(distributionGap === undefined ? {} : { distributionGap }),
-      ...(radicalSourceInk === undefined ? {} : { radicalSourceInk }),
+      ...(radicalInk === undefined ? {} : { radicalInk }),
       screenshot: path.relative(process.cwd(), screenshotPath),
       sha256: firstHash
     });
@@ -130,27 +131,32 @@ try {
   await harness.close();
 }
 
-async function measureRadicalSourceInk(
-  stage: import("playwright").Locator
-): Promise<KpRadicalWebglSourceInkComparison> {
-  return stage.evaluate(async (element) => {
+async function measureRadicalInk(
+  stage: import("playwright").Locator,
+  endpoint: "source" | "target"
+): Promise<KpRadicalWebglInkComparison> {
+  return stage.evaluate(async (element, measuredEndpoint) => {
     if (!(element instanceof HTMLElement)) {
       throw new Error("Radical stage must be an HTML element.");
     }
     const moduleUrl = "/src/rendering/radical-webgl-morph.ts";
     const module = await import(moduleUrl) as {
-      measureKpRadicalWebglSourceInk(
-        stage: HTMLElement
-      ): KpRadicalWebglSourceInkComparison | undefined;
+      measureKpRadicalWebglInk(
+        stage: HTMLElement,
+        endpoint: "source" | "target"
+      ): KpRadicalWebglInkComparison | undefined;
     };
-    const comparison = module.measureKpRadicalWebglSourceInk(element);
+    const comparison = module.measureKpRadicalWebglInk(
+      element,
+      measuredEndpoint
+    );
     if (comparison === undefined) {
       throw new Error(
         "Could not compare actual WebGL fraction ink with live native KaTeX."
       );
     }
     return comparison;
-  });
+  }, endpoint);
 }
 
 async function openWorkbenchCard(

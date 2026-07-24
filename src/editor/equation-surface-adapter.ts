@@ -100,6 +100,7 @@ import {
 } from "../animation/radical-morph-profile.ts";
 import {
   disposeKpRadicalWebglMorph,
+  measureKpRadicalWebglInk,
   syncKpRadicalWebglMorph,
   type KpRadicalWebglMorphSyncResult
 } from "../rendering/radical-webgl-morph.ts";
@@ -925,12 +926,22 @@ function applyRadicalMaterialLayer(input: {
   const hookRect = radicalHook.getBoundingClientRect();
   const overbarRect = radicalOverbar.getBoundingClientRect();
   const nativeRect = radicalNative.getBoundingClientRect();
+  const targetInkComparison = (
+    warmedWebglMorph.ready &&
+    input.semanticProgress >=
+      kpRadicalConventionalMorphProfile.settlement.start
+  )
+    ? measureKpRadicalWebglInk(input.stage, "target")
+    : undefined;
   const settlement = sampleKpRadicalNativeSettlement({
     semanticProgress: input.semanticProgress,
     fragmentRects: warmedWebglMorph.ready
-      ? [nativeRect]
+      ? targetInkComparison === undefined
+        ? []
+        : [targetInkComparison.renderedWebglInkRect]
       : [hookRect, overbarRect],
-    nativeRect,
+    nativeRect:
+      targetInkComparison?.liveNativeInkRect ?? nativeRect,
     ...(warmedWebglMorph.ready
       ? {
           handoffStart:
@@ -942,23 +953,23 @@ function applyRadicalMaterialLayer(input: {
       : {})
   });
   setRadicalSettlementDataset(input.stage, settlement);
-  const sourceSettlement = (
+  const sourceInkComparison = (
     warmedWebglMorph.ready &&
-    warmedWebglMorph.sourceCaptureRect !== undefined
+    input.semanticProgress <= kpRadicalSourceNativeSettlementEnd
   )
-    ? sampleKpRadicalCompositeNativeSettlement({
+    ? measureKpRadicalWebglInk(input.stage, "source")
+    : undefined;
+  const sourceSettlement = sourceInkComparison === undefined
+    ? undefined
+    : sampleKpRadicalCompositeNativeSettlement({
         endpoint: "source",
         semanticProgress: input.semanticProgress,
-        fragmentRects: [warmedWebglMorph.sourceCaptureRect],
-        // The atlas is captured from the complete native exponent block. A
-        // direction change invalidates and recaptures this endpoint instead of
-        // rebinding old child geometry to a newly spaced KaTeX parent.
-        nativeRect: warmedWebglMorph.sourceCaptureRect,
+        fragmentRects: [sourceInkComparison.renderedWebglInkRect],
+        nativeRect: sourceInkComparison.liveNativeInkRect,
         handoffStart: kpRadicalSourceNativeSettlementStart,
         handoffEnd: kpRadicalSourceNativeSettlementEnd,
         easing: kpRadicalConventionalMorphProfile.morph.easing
-      })
-    : undefined;
+      });
   setRadicalSourceSettlementDataset(input.stage, sourceSettlement ?? {
     progress: 0,
     phase: "material-fragments",

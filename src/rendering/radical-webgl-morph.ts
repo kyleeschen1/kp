@@ -23,7 +23,8 @@ export interface KpRadicalWebglMorphSyncResult {
   readonly targetCaptureRect?: KatexTokenRect | undefined;
 }
 
-export interface KpRadicalWebglSourceInkComparison {
+export interface KpRadicalWebglInkComparison {
+  readonly endpoint: "source" | "target";
   readonly semanticProgress: number;
   readonly renderedWebglInkRect: KatexTokenRect;
   readonly liveNativeInkRect: KatexTokenRect;
@@ -46,6 +47,7 @@ interface KpRadicalWebglMorphState {
   sourceCaptureRect?: KatexTokenRect | undefined;
   sourceNativeInkRect?: KatexTokenRect | undefined;
   targetCaptureRect?: KatexTokenRect | undefined;
+  targetNativeInkRect?: KatexTokenRect | undefined;
 }
 
 const morphStates = new WeakMap<HTMLElement, KpRadicalWebglMorphState>();
@@ -131,12 +133,22 @@ export function disposeKpRadicalWebglMorph(stage: HTMLElement): void {
 
 export function measureKpRadicalWebglSourceInk(
   stage: HTMLElement
-): KpRadicalWebglSourceInkComparison | undefined {
+): KpRadicalWebglInkComparison | undefined {
+  return measureKpRadicalWebglInk(stage, "source");
+}
+
+export function measureKpRadicalWebglInk(
+  stage: HTMLElement,
+  endpoint: "source" | "target"
+): KpRadicalWebglInkComparison | undefined {
   const state = morphStates.get(stage);
+  const liveNativeInkRect = endpoint === "source"
+    ? state?.sourceNativeInkRect
+    : state?.targetNativeInkRect;
   if (
     state?.status !== "ready" ||
     state.renderer === undefined ||
-    state.sourceNativeInkRect === undefined
+    liveNativeInkRect === undefined
   ) {
     return undefined;
   }
@@ -145,10 +157,10 @@ export function measureKpRadicalWebglSourceInk(
   state.renderer.render(state.progress);
   const renderedWebglInkRect = state.renderer.measureInk();
   if (renderedWebglInkRect === undefined) return undefined;
-  const liveNativeInkRect = state.sourceNativeInkRect;
   const renderedCenter = rectCenter(renderedWebglInkRect);
   const nativeCenter = rectCenter(liveNativeInkRect);
   return {
+    endpoint,
     semanticProgress: state.progress,
     renderedWebglInkRect,
     liveNativeInkRect,
@@ -281,6 +293,11 @@ async function initializeMorphState(input: {
       endpointRect: sourceLocalRect
     });
     input.state.targetCaptureRect = targetLocalRect;
+    input.state.targetNativeInkRect = measureAtlasEndpointInk({
+      atlas,
+      tokenId: targetToken.id,
+      endpointRect: targetLocalRect
+    });
     input.state.status = "ready";
     input.state.renderer.render(input.state.progress);
     input.state.canvas.style.opacity = String(input.state.opacity);

@@ -277,6 +277,41 @@
       "scope": "slice-21 production build",
       "checkedAt": "2026-07-24T16:23:06.485Z",
       "notes": "Full typecheck and Vite production build passed; only the existing chunk-size advisory remains."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/presentation-continuity-visual-plan.test.ts tests/kp-radical-native-settlement.test.ts tests/radical-webgl-morph.test.ts",
+      "status": "passed",
+      "scope": "slice-22 measured settlement inputs",
+      "checkedAt": "2026-07-24T16:31:37.299Z",
+      "notes": "11 focused tests passed; visual plan now carries explicit source and target radical endpoints."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --grep radical-source-and-target-settlement",
+      "status": "passed",
+      "scope": "slice-22 live owner readiness",
+      "checkedAt": "2026-07-24T16:31:46.649Z",
+      "notes": "2 Chromium tests passed; source and target settlement datasets equal actual WebGL/native ink residuals and block ownership transfer outside the 0.25px budget."
+    },
+    {
+      "command": "npm run visual:presentation-continuity",
+      "status": "passed",
+      "scope": "slice-22 dual-endpoint ink manifest",
+      "checkedAt": "2026-07-24T16:31:52.958Z",
+      "notes": "18 stable captures passed. Source and target records each expose a 1px maximum geometry residual; distribution's accepted generic handoff gate remains green."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-22 measured radical settlement",
+      "checkedAt": "2026-07-24T16:31:58.347Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "slice-22 morph preservation",
+      "checkedAt": "2026-07-24T16:32:11.498Z",
+      "notes": "17 canonical captures passed; radical morph remains Ready with no inspector warnings while mismatched ownership transfer is blocked."
     }
   ],
   "progress": {

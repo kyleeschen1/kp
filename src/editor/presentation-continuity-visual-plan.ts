@@ -5,6 +5,7 @@ export interface KpPresentationContinuityVisualCase {
   readonly query: string;
   readonly progress: number;
   readonly surface: "workbench-card" | "lesson";
+  readonly radicalEndpoint?: "source" | "target" | undefined;
   readonly viewport: { readonly width: number; readonly height: number };
 }
 
@@ -44,7 +45,16 @@ export function createKpPresentationContinuityVisualPlan():
       family: "radical",
       animationId: "animation.generated.radical.square-root-as-power",
       query: "radical",
-      progress: 0.04
+      progress: 0.04,
+      radicalEndpoint: "source"
+    },
+    {
+      id: "radical-target-handoff",
+      family: "radical",
+      animationId: "animation.generated.radical.square-root-as-power",
+      query: "radical",
+      progress: 0.88,
+      radicalEndpoint: "target"
     }
   ] as const;
   return [

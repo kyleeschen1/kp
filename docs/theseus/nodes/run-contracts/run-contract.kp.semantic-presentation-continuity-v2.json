@@ -175,7 +175,8 @@
     {
       "id": "slice-22",
       "title": "Remove the self-comparison geometry check and feed actual outgoing/incoming observations into settlement.",
-      "status": "planned"
+      "summary": "Removed metadata self-comparisons for both radical endpoints. Source and target settlement now consume on-demand rendered WebGL ink and independent live native ink; each measured 1px mismatch is recorded and blocks transfer. Dual-endpoint manifest, focused browser/unit tests, canonical captures, and typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "slice-23",
