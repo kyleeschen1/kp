@@ -55,7 +55,8 @@
     {
       "id": "slice-02",
       "title": "Define renderer-neutral presentation-group and owner-observation types.",
-      "status": "planned"
+      "summary": "Added renderer-neutral group, member, owner observation, ink observation, geometry, and continuity-budget types; focused test and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "slice-03",
