@@ -8,7 +8,13 @@ import {
 import {
   createKpQuadraticFormulaKatexProjection
 } from "../../projections/quadratic-formula-katex.ts";
-import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
+import {
+  renderLatexToHtml,
+  renderSelectorAnnotatedLatexToHtml
+} from "../../rendering/katex-adapter.ts";
+import {
+  createKpQuadraticSelectorAnnotatedLatex
+} from "../../rendering/quadratic-selector-annotated-latex.ts";
 import { renderKpQuadraticParabolaSvg } from "../../rendering/quadratic-parabola-svg.ts";
 import {
   createCanonicalKpQuadraticParabolaGraphProjection
@@ -129,9 +135,10 @@ function stateMarkup(
   states: readonly KpQuadraticKatexState[],
   method: "completing-square" | "formula"
 ): readonly string[] {
-  return states.map((state, index) =>
-    `<div class="kp-quadratic-equation" data-kp-equation-method="${method}" data-kp-equation-state="${state.id}" data-kp-semantic-state="${state.semanticStateId}" aria-label="${attribute(state.spoken)}"${index === 0 && method === "completing-square" ? "" : " hidden"}>${renderLatexToHtml(state.latex, { displayMode: true })}</div>`
-  );
+  return states.map((state, index) => {
+    const annotated = createKpQuadraticSelectorAnnotatedLatex(state);
+    return `<div class="kp-quadratic-equation" data-kp-equation-method="${method}" data-kp-equation-state="${state.id}" data-kp-semantic-state="${state.semanticStateId}" aria-label="${attribute(state.spoken)}"${index === 0 && method === "completing-square" ? "" : " hidden"}>${renderSelectorAnnotatedLatexToHtml(annotated, { displayMode: true })}</div>`;
+  });
 }
 
 function attribute(value: string): string {

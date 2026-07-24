@@ -25,10 +25,30 @@ export function createKpQuadraticFormulaKatexProjection():
     state("roots", "\\displaystyle x \\in \\{2,3\\}", "x is in the set containing two and three", ["variable", "root-two", "root-three"])
   ]);
   const transitions = Object.freeze([
-    transition("substitute", states[0]!, states[1]!, ["variable", "plus-minus"]),
-    transition("evaluate-discriminant", states[1]!, states[2]!, ["variable", "base", "plus-minus", "denominator"]),
-    transition("simplify-radical", states[2]!, states[3]!, ["variable", "base", "plus-minus", "denominator"]),
-    transition("verify-roots", states[3]!, states[4]!, ["variable"])
+    transition("substitute", states[0]!, states[1]!, [
+      sameRole("variable"),
+      sameRole("base"),
+      sameRole("plus-minus"),
+      sameRole("radical"),
+      sameRole("denominator")
+    ]),
+    transition("evaluate-discriminant", states[1]!, states[2]!, [
+      sameRole("variable"),
+      sameRole("base"),
+      sameRole("plus-minus"),
+      sameRole("radical"),
+      sameRole("denominator")
+    ]),
+    transition("simplify-radical", states[2]!, states[3]!, [
+      sameRole("variable"),
+      sameRole("base"),
+      sameRole("plus-minus"),
+      roleBinding("exact-radical", "radical", "offset"),
+      sameRole("denominator")
+    ]),
+    transition("verify-roots", states[3]!, states[4]!, [
+      sameRole("variable")
+    ])
   ]);
   return Object.freeze({
     schemaVersion: "kp.quadratic-katex-projection.v1" as const,
@@ -95,17 +115,25 @@ function transition(
   suffix: string,
   source: KpQuadraticKatexState,
   target: KpQuadraticKatexState,
-  persistentRoles: readonly string[]
+  bindings: readonly {
+    readonly role: string;
+    readonly sourceRole: string;
+    readonly targetRole: string;
+  }[]
 ): KpQuadraticKatexTransition {
   return Object.freeze({
     id: `transition.quadratic.formula.${suffix}`,
     sourceStateId: source.id,
     targetStateId: target.id,
-    correspondence: Object.freeze(persistentRoles.map((role) =>
+    correspondence: Object.freeze(bindings.map((binding) =>
       Object.freeze({
-        role,
-        sourceSelectorId: source.selectors.find((selector) => selector.role === role)!.id,
-        targetSelectorId: target.selectors.find((selector) => selector.role === role)!.id
+        role: binding.role,
+        sourceSelectorId: source.selectors.find(
+          (selector) => selector.role === binding.sourceRole
+        )!.id,
+        targetSelectorId: target.selectors.find(
+          (selector) => selector.role === binding.targetRole
+        )!.id
       })
     )),
     layout: Object.freeze({
@@ -114,4 +142,24 @@ function transition(
       endpointOwnership: "native-source-and-target" as const
     })
   });
+}
+
+function sameRole(role: string): {
+  readonly role: string;
+  readonly sourceRole: string;
+  readonly targetRole: string;
+} {
+  return roleBinding(role, role, role);
+}
+
+function roleBinding(
+  role: string,
+  sourceRole: string,
+  targetRole: string
+): {
+  readonly role: string;
+  readonly sourceRole: string;
+  readonly targetRole: string;
+} {
+  return Object.freeze({ role, sourceRole, targetRole });
 }

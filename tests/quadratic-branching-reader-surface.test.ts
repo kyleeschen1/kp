@@ -23,6 +23,23 @@ test("quadratic reader projects both methods from one normalized progress value"
   assert.equal(square.solutionSetNative, false);
 });
 
+test("method phases expose direct-seekable selector transitions instead of state replacement", () => {
+  const square = projectKpQuadraticReaderSurface({
+    progress: 0.34,
+    methodId: "method.quadratic.completing-square"
+  });
+  const formula = projectKpQuadraticReaderSurface({
+    progress: 0.4,
+    methodId: "method.quadratic.formula"
+  });
+  assert.equal(square.equationTransition?.transition.id, "transition.quadratic.completing-square.complete");
+  assert.ok(Math.abs(square.equationTransition!.progress - 0.5) < 1e-9);
+  assert.equal(formula.equationTransition?.transition.id, "transition.quadratic.formula.simplify-radical");
+  assert.ok(Math.abs(formula.equationTransition!.progress - 0.5) < 1e-9);
+  assert.ok(square.equationTransition!.transition.correspondence.length > 1);
+  assert.ok(formula.equationTransition!.transition.correspondence.length > 1);
+});
+
 test("quadratic reader exposes exact branch and reunion boundaries", () => {
   const branch = projectKpQuadraticReaderSurface({
     progress: 0.68,
@@ -40,7 +57,7 @@ test("quadratic reader exposes exact branch and reunion boundaries", () => {
   assert.equal(reunion.solutionSetNative, true);
   assert.deepEqual(
     kpQuadraticReaderCheckpoints.map(({ progressPermille }) => progressPermille),
-    [0, 320, 680, 880, 1_000]
+    [0, 100, 680, 880, 1_000]
   );
 });
 

@@ -1,4 +1,7 @@
-import type { KpQuadraticKatexState } from "../../projections/quadratic-completing-square-katex.ts";
+import type {
+  KpQuadraticKatexState,
+  KpQuadraticKatexTransition
+} from "../../projections/quadratic-completing-square-katex.ts";
 import {
   createKpCompletingSquareKatexProjection
 } from "../../projections/quadratic-completing-square-katex.ts";
@@ -9,7 +12,7 @@ import type { KpQuadraticMethodId } from "../../semantic/quadratic-solution-meth
 
 export const kpQuadraticReaderCheckpoints = Object.freeze([
   { id: "source", label: "Read the equation", progressPermille: 0, beatId: "beat.read-equation" },
-  { id: "method", label: "Choose a method", progressPermille: 320, beatId: "beat.choose-method" },
+  { id: "method", label: "Choose a method", progressPermille: 100, beatId: "beat.choose-method" },
   { id: "branches", label: "Follow plus and minus", progressPermille: 680, beatId: "beat.split-branches" },
   { id: "solution-set", label: "Reunite the roots", progressPermille: 880, beatId: "beat.reunite-roots" },
   { id: "graph", label: "Locate the roots", progressPermille: 1_000, beatId: "beat.connect-graph" }
@@ -21,6 +24,12 @@ export interface KpQuadraticReaderSurfaceFrame {
   readonly phase: "intro" | "method" | "branch" | "reunion" | "graph";
   readonly methodId: KpQuadraticMethodId;
   readonly equationState: KpQuadraticKatexState;
+  readonly equationTransition?: {
+    readonly transition: KpQuadraticKatexTransition;
+    readonly sourceState: KpQuadraticKatexState;
+    readonly targetState: KpQuadraticKatexState;
+    readonly progress: number;
+  } | undefined;
   readonly branchProgress: number;
   readonly solutionSetNative: boolean;
   readonly checkpointId: string;
@@ -35,13 +44,26 @@ export function projectKpQuadraticReaderSurface(input: {
   if (!Number.isFinite(input.progress) || input.progress < 0 || input.progress > 1) {
     throw new Error("Quadratic reader progress must be normalized.");
   }
-  const states = methodStates(input.methodId);
+  const projection = methodProjection(input.methodId);
+  const states = projection.states;
   const phase = phaseAt(input.progress);
   const methodProgress = clamp01((input.progress - 0.1) / 0.48);
-  const stateIndex = Math.min(
-    states.length - 1,
-    Math.floor(methodProgress * states.length)
+  const transitionCount = projection.transitions.length;
+  const scaledTransition = methodProgress * transitionCount;
+  const transitionIndex = Math.min(
+    transitionCount - 1,
+    Math.floor(scaledTransition)
   );
+  const transitionProgress = methodProgress === 1
+    ? 1
+    : transitionWindow(scaledTransition - transitionIndex);
+  const sourceState = states[transitionIndex]!;
+  const targetState = states[transitionIndex + 1]!;
+  const equationState = phase === "intro"
+    ? states[0]!
+    : phase === "method"
+      ? transitionProgress < 0.5 ? sourceState : targetState
+      : states.at(-1)!;
   const checkpoint = [...kpQuadraticReaderCheckpoints]
     .reverse()
     .find(({ progressPermille }) => progressPermille <= Math.round(input.progress * 1_000))
@@ -51,7 +73,17 @@ export function projectKpQuadraticReaderSurface(input: {
     progressPermille: Math.round(input.progress * 1_000),
     phase,
     methodId: input.methodId,
-    equationState: states[stateIndex]!,
+    equationState,
+    ...(phase === "method"
+      ? {
+          equationTransition: Object.freeze({
+            transition: projection.transitions[transitionIndex]!,
+            sourceState,
+            targetState,
+            progress: transitionProgress
+          })
+        }
+      : {}),
     branchProgress: clamp01((input.progress - 0.58) / 0.22),
     solutionSetNative: input.progress >= 0.8,
     checkpointId: checkpoint.id,
@@ -76,10 +108,13 @@ export function kpQuadraticReaderMethodQueryValue(
     : "completing-square";
 }
 
-function methodStates(methodId: KpQuadraticMethodId): readonly KpQuadraticKatexState[] {
+function methodProjection(methodId: KpQuadraticMethodId): {
+  readonly states: readonly KpQuadraticKatexState[];
+  readonly transitions: readonly KpQuadraticKatexTransition[];
+} {
   return methodId === "method.quadratic.formula"
-    ? createKpQuadraticFormulaKatexProjection().states
-    : createKpCompletingSquareKatexProjection().states;
+    ? createKpQuadraticFormulaKatexProjection()
+    : createKpCompletingSquareKatexProjection();
 }
 
 function phaseAt(
@@ -94,4 +129,8 @@ function phaseAt(
 
 function clamp01(value: number): number {
   return Math.min(1, Math.max(0, value));
+}
+
+function transitionWindow(progress: number): number {
+  return clamp01((progress - 0.16) / 0.68);
 }

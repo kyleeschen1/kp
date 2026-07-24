@@ -108,7 +108,7 @@ test("build manifest declares every accepted reader route exactly once", () => {
   );
   assert.deepEqual(
     kpReaderRouteManifest.map(({ review }) => review.checkpoints.length),
-    [8, 1, 1, 1, 1, 1, 36, 10]
+    [8, 1, 1, 1, 1, 1, 36, 14]
   );
   assert.ok(kpReaderRouteManifest.every(({ budget }) =>
     budget.compiledHtmlRawBytes > 0 &&

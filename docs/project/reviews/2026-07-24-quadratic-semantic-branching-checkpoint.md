@@ -1,6 +1,6 @@
 # Quadratic semantic branching exemplar checkpoint
 
-Status: awaiting human review on 2026-07-24
+Status: awaiting renewed human review after symbolic-motion revision
 
 Run contract: `run-contract.kp.quadratic-semantic-branching-v2`  
 Slice: `slice-20`
@@ -32,8 +32,9 @@ graph all sample the same canonical clock.
 ## Observable acceptance criteria
 
 1. The opening equation is quiet, centered, and immediately legible.
-2. Completing the square and using the quadratic formula read as distinct
-   methods without changing the eventual root identities.
+2. Completing the square and using the quadratic formula visibly move
+   selector-owned symbols through measured paths rather than replacing whole
+   equations, without changing the eventual root identities.
 3. The plus and minus paths visibly separate into \(x=3\) and \(x=2\), with no
    duplicated or ownerless mathematical ink.
 4. Both paths reunite into the native complete solution set
@@ -62,9 +63,9 @@ The development server is available at
 Useful deterministic states:
 
 - Completing the square:
-  `?kpLesson=lesson.algebra.quadratic-branching&kpVersion=1&kpProgress=430&kpMethod=completing-square`
+  `?kpLesson=lesson.algebra.quadratic-branching&kpVersion=1&kpProgress=180&kpMethod=completing-square&kpMotion=full`
 - Quadratic formula:
-  `?kpLesson=lesson.algebra.quadratic-branching&kpVersion=1&kpProgress=430&kpMethod=formula`
+  `?kpLesson=lesson.algebra.quadratic-branching&kpVersion=1&kpProgress=400&kpMethod=formula&kpMotion=full`
 - Plus-minus branches:
   `?kpLesson=lesson.algebra.quadratic-branching&kpVersion=1&kpProgress=680&kpMethod=completing-square`
 - Native reunion:
@@ -73,9 +74,10 @@ Useful deterministic states:
   `?kpLesson=lesson.algebra.quadratic-branching&kpVersion=1&kpProgress=1000&kpMethod=completing-square`
 
 After viewing the graph, drag back to 68 percent and then forward to 100
-percent. Switch methods at 43 and 68 percent. Repeat at a phone-width viewport.
+percent. Scrub slowly across 10–58 percent for each method, then switch methods
+at 34, 40, and 68 percent. Repeat at a phone-width viewport.
 
-`npm run visual:quadratic-branching` regenerates the deterministic ten-frame
+`npm run visual:quadratic-branching` regenerates the deterministic 14-frame
 contact sheet at
 `tmp/codex/quadratic-branching-preservation/checkpoint-contact-sheet/contact-sheet.png`.
 The sheet covers both methods, branch separation, native reunion, graph
@@ -90,10 +92,10 @@ not separate static appearances.
 | Quadratic semantic convergence cohort | Passed |
 | `npm run test:semantic-animation-convergence` | Passed: 255 tests |
 | `npm run test:browser:reader-conformance` | Passed: 9 tests across 8 routes |
-| Quadratic focused Chromium suite | Passed: 8 tests |
+| Quadratic focused Chromium suite | Passed: 9 tests, including measured symbolic paths |
 | `npm run test:browser:animation-workbench` | Passed: 14 tests; quadratic still mounts zero Workbench players |
-| `npm run visual:quadratic-branching` | Passed: 14 preservation captures and deterministic 10-frame contact sheet |
-| `npm test` | Passed: 2,254 tests |
+| `npm run visual:quadratic-branching` | Passed: 14 preservation captures and deterministic 14-frame contact sheet |
+| `npm test` | Passed: 2,257 tests |
 | `npm run typecheck` and `npm run build` | Passed |
 | Reader production closure and route budgets | Passed for all 8 routes |
 | Development-review production closure | Passed: no review markers in 137 production files |
@@ -138,3 +140,16 @@ promotion, or reuse of the radical WebGL material path.
 
 Pending. Stop after this checkpoint until the user explicitly approves or
 requests a bounded revision.
+
+Human review accepted the graph and plus-minus branching, but rejected the
+first checkpoint because the method phase replaced whole native KaTeX states
+without visible symbolic movement. Slice 20 was reopened to repair that
+presentation gap without changing the accepted graph or branch choreography.
+
+The revision now moves selector-owned native KaTeX symbols through measured,
+direct-seekable paths in both methods. In the completing-square path, the
+constant visibly relocates across the equality; in the formula path, the
+native radical and its evaluated value retain semantic ownership through the
+transition. Full motion exposes those paths, while reduced and static modes
+retain legible native checkpoints. The graph, branch split, reunion, semantic
+fixture, and radical renderer boundary are unchanged.

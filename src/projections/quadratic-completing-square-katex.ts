@@ -67,9 +67,22 @@ export function createKpCompletingSquareKatexProjection():
     )
   ]);
   const transitions = Object.freeze([
-    transition("balance", states[0]!, states[1]!, ["quadratic", "linear", "equals", "right"]),
-    transition("complete", states[1]!, states[2]!, ["quadratic", "linear", "equals", "right"]),
-    transition("recognize", states[2]!, states[3]!, ["equals", "right"])
+    transition("balance", states[0]!, states[1]!, [
+      sameRole("quadratic"),
+      sameRole("linear"),
+      sameRole("equals"),
+      roleBinding("relocated-constant", "constant", "right")
+    ]),
+    transition("complete", states[1]!, states[2]!, [
+      sameRole("quadratic"),
+      sameRole("linear"),
+      sameRole("equals"),
+      sameRole("right")
+    ]),
+    transition("recognize", states[2]!, states[3]!, [
+      sameRole("equals"),
+      sameRole("right")
+    ])
   ]);
   return Object.freeze({
     schemaVersion: "kp.quadratic-katex-projection.v1" as const,
@@ -137,17 +150,25 @@ function transition(
   suffix: string,
   source: KpQuadraticKatexState,
   target: KpQuadraticKatexState,
-  persistentRoles: readonly string[]
+  bindings: readonly {
+    readonly role: string;
+    readonly sourceRole: string;
+    readonly targetRole: string;
+  }[]
 ): KpQuadraticKatexTransition {
   return Object.freeze({
     id: `transition.quadratic.completing-square.${suffix}`,
     sourceStateId: source.id,
     targetStateId: target.id,
-    correspondence: Object.freeze(persistentRoles.map((role) =>
+    correspondence: Object.freeze(bindings.map((binding) =>
       Object.freeze({
-        role,
-        sourceSelectorId: source.selectors.find((selector) => selector.role === role)!.id,
-        targetSelectorId: target.selectors.find((selector) => selector.role === role)!.id
+        role: binding.role,
+        sourceSelectorId: source.selectors.find(
+          (selector) => selector.role === binding.sourceRole
+        )!.id,
+        targetSelectorId: target.selectors.find(
+          (selector) => selector.role === binding.targetRole
+        )!.id
       })
     )),
     layout: Object.freeze({
@@ -156,4 +177,24 @@ function transition(
       endpointOwnership: "native-source-and-target" as const
     })
   });
+}
+
+function sameRole(role: string): {
+  readonly role: string;
+  readonly sourceRole: string;
+  readonly targetRole: string;
+} {
+  return roleBinding(role, role, role);
+}
+
+function roleBinding(
+  role: string,
+  sourceRole: string,
+  targetRole: string
+): {
+  readonly role: string;
+  readonly sourceRole: string;
+  readonly targetRole: string;
+} {
+  return Object.freeze({ role, sourceRole, targetRole });
 }

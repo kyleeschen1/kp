@@ -20,7 +20,7 @@ Solve the exact equation x² − 5x + 6 = 0. Completing the square and the quadr
       "id": "beat.choose-method",
       "title": "Choose a method",
       "content": "Complete the square to expose a perfect square, or substitute the coefficients into the quadratic formula.",
-      "progressPermille": 320,
+      "progressPermille": 100,
       "checkpointId": "method",
       "focusRefs": ["method.active"]
     },

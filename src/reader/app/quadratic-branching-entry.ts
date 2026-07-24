@@ -16,7 +16,8 @@ import {
 import {
   kpQuadraticReaderCheckpoints,
   kpQuadraticReaderMethodQueryValue,
-  parseKpQuadraticReaderMethod
+  parseKpQuadraticReaderMethod,
+  type KpQuadraticReaderSurfaceFrame
 } from "./quadratic-branching-surface.ts";
 import type { KpQuadraticMethodId } from "../../semantic/quadratic-solution-method-graph.ts";
 import {
@@ -110,11 +111,7 @@ function render(sample: KpReaderClockSample): void {
   narration.textContent = narrationFor(frame);
   motionSelect.value = motionPreference;
 
-  for (const equation of stage.querySelectorAll<HTMLElement>("[data-kp-equation-state]")) {
-    equation.hidden = equation.dataset["kpEquationState"] !== frame.equationState.id ||
-      branchesVisible(frame.progress) ||
-      frame.solutionSetNative;
-  }
+  renderEquations(frame, motionPolicy.resolvedMode);
   const showBranches = branchesVisible(frame.progress) && !frame.solutionSetNative;
   branches.hidden = !showBranches;
   solution.hidden = !frame.solutionSetNative;
@@ -134,6 +131,149 @@ function render(sample: KpReaderClockSample): void {
   next.disabled = checkpointIndex >= kpQuadraticReaderCheckpoints.length - 1;
   activateBeat(frame.beatId);
   updateUrl();
+}
+
+function renderEquations(
+  frame: KpQuadraticReaderSurfaceFrame,
+  motionMode: "full" | "essential" | "static"
+): void {
+  const equations = [
+    ...stage.querySelectorAll<HTMLElement>("[data-kp-equation-state]")
+  ];
+  resetEquationPresentation(equations);
+  if (branchesVisible(frame.progress) || frame.solutionSetNative) {
+    stage.dataset["kpSymbolicTransition"] = "none";
+    stage.dataset["kpSymbolicMotionOwners"] = "0";
+    return;
+  }
+  const sampled = frame.equationTransition;
+  if (sampled === undefined || motionMode !== "full") {
+    showNativeEquation(equations, frame.equationState.id);
+    stage.dataset["kpSymbolicTransition"] =
+      sampled?.transition.id ?? "native";
+    stage.dataset["kpSymbolicTransitionProgress"] =
+      sampled === undefined ? "0" : String(sampled.progress);
+    stage.dataset["kpSymbolicMotionOwners"] = "0";
+    return;
+  }
+
+  const source = equationElement(sampled.sourceState.id);
+  const target = equationElement(sampled.targetState.id);
+  const progress = smoothstep(sampled.progress);
+  if (progress <= 0.001) {
+    showNativeEquation(equations, sampled.sourceState.id);
+  } else if (progress >= 0.999) {
+    showNativeEquation(equations, sampled.targetState.id);
+  } else {
+    source.hidden = false;
+    target.hidden = false;
+    source.dataset["kpTransitionLayer"] = "source";
+    target.dataset["kpTransitionLayer"] = "target";
+    source.style.opacity = String(1 - progress);
+    target.style.opacity = String(progress);
+    renderCorrespondenceMotion({
+      source,
+      target,
+      progress,
+      correspondence: sampled.transition.correspondence
+    });
+  }
+  stage.dataset["kpSymbolicTransition"] = sampled.transition.id;
+  stage.dataset["kpSymbolicTransitionProgress"] = String(sampled.progress);
+  stage.dataset["kpSymbolicMotionOwners"] = String(
+    sampled.transition.correspondence.length
+  );
+}
+
+function renderCorrespondenceMotion(input: {
+  readonly source: HTMLElement;
+  readonly target: HTMLElement;
+  readonly progress: number;
+  readonly correspondence: NonNullable<
+    KpQuadraticReaderSurfaceFrame["equationTransition"]
+  >["transition"]["correspondence"];
+}): void {
+  const matchedSource = new Set<string>();
+  const matchedTarget = new Set<string>();
+  input.correspondence.forEach((binding, index) => {
+    const sourceToken = motionToken(input.source, binding.sourceSelectorId);
+    const targetToken = motionToken(input.target, binding.targetSelectorId);
+    const sourceRect = sourceToken.getBoundingClientRect();
+    const targetRect = targetToken.getBoundingClientRect();
+    const deltaX =
+      targetRect.left + targetRect.width / 2 -
+      (sourceRect.left + sourceRect.width / 2);
+    const deltaY =
+      targetRect.top + targetRect.height / 2 -
+      (sourceRect.top + sourceRect.height / 2);
+    const lane = (index % 2 === 0 ? -1 : 1) * (4 + index % 3 * 2);
+    const arc = Math.sin(Math.PI * input.progress) * lane;
+    sourceToken.style.transform =
+      `translate3d(${deltaX * input.progress}px, ${deltaY * input.progress + arc}px, 0)`;
+    targetToken.style.transform =
+      `translate3d(${-deltaX * (1 - input.progress)}px, ${-deltaY * (1 - input.progress) + arc}px, 0)`;
+    sourceToken.dataset["kpSymbolicMotionRole"] = binding.role;
+    targetToken.dataset["kpSymbolicMotionRole"] = binding.role;
+    matchedSource.add(binding.sourceSelectorId);
+    matchedTarget.add(binding.targetSelectorId);
+  });
+  for (const token of motionTokens(input.source)) {
+    const id = token.dataset["kpMotionId"];
+    if (id !== undefined && matchedSource.has(id)) continue;
+    token.style.transform =
+      `translate3d(0, ${-8 * input.progress}px, 0) scale(${1 - 0.06 * input.progress})`;
+  }
+  for (const token of motionTokens(input.target)) {
+    const id = token.dataset["kpMotionId"];
+    if (id !== undefined && matchedTarget.has(id)) continue;
+    token.style.transform =
+      `translate3d(0, ${8 * (1 - input.progress)}px, 0) scale(${0.94 + 0.06 * input.progress})`;
+  }
+}
+
+function resetEquationPresentation(equations: readonly HTMLElement[]): void {
+  for (const equation of equations) {
+    equation.hidden = true;
+    equation.style.removeProperty("opacity");
+    delete equation.dataset["kpTransitionLayer"];
+    for (const token of motionTokens(equation)) {
+      token.style.removeProperty("transform");
+      delete token.dataset["kpSymbolicMotionRole"];
+    }
+  }
+}
+
+function showNativeEquation(
+  equations: readonly HTMLElement[],
+  stateId: string
+): void {
+  const equation = equations.find(
+    (candidate) => candidate.dataset["kpEquationState"] === stateId
+  );
+  if (equation === undefined) {
+    throw new Error(`Missing native quadratic equation state ${stateId}.`);
+  }
+  equation.hidden = false;
+}
+
+function equationElement(stateId: string): HTMLElement {
+  return requireElement<HTMLElement>(
+    `[data-kp-equation-state="${CSS.escape(stateId)}"]`
+  );
+}
+
+function motionToken(root: HTMLElement, motionId: string): HTMLElement {
+  const token = root.querySelector<HTMLElement>(
+    `[data-kp-motion-id="${CSS.escape(motionId)}"]`
+  );
+  if (token === null) {
+    throw new Error(`Missing quadratic motion token ${motionId}.`);
+  }
+  return token;
+}
+
+function motionTokens(root: HTMLElement): readonly HTMLElement[] {
+  return [...root.querySelectorAll<HTMLElement>("[data-kp-motion-id]")];
 }
 
 function renderGraph(
@@ -199,6 +339,10 @@ function applyBranch(
 ): void {
   element.style.opacity = String(opacity);
   element.style.transform = `translateX(${translateX}px) scale(${scale})`;
+}
+
+function smoothstep(progress: number): number {
+  return progress * progress * (3 - 2 * progress);
 }
 
 function activateBeat(beatId: string): void {

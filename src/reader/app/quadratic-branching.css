@@ -129,9 +129,23 @@ body[data-kp-reader="quadratic-branching"] {
 }
 
 .kp-quadratic-equation {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
   max-width: 100%;
   font-size: clamp(1rem, 2.5vw, 1.45rem);
-  transition: opacity 160ms ease, transform 220ms ease;
+}
+
+.kp-quadratic-equation[data-kp-transition-layer] {
+  will-change: opacity;
+}
+
+.kp-quadratic-equation [data-kp-motion-id] {
+  position: relative;
+  display: inline-block;
+  transform-origin: center;
+  will-change: transform;
 }
 
 .kp-quadratic-equation[hidden],
@@ -353,15 +367,12 @@ body[data-kp-reader="quadratic-branching"] .kp-animation-beats > li {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .kp-quadratic-equation,
   .kp-quadratic-graph-slot {
     transition: none;
   }
 }
 
-body[data-kp-reader-motion-mode="essential"] .kp-quadratic-equation,
 body[data-kp-reader-motion-mode="essential"] .kp-quadratic-graph-slot,
-body[data-kp-reader-motion-mode="static"] .kp-quadratic-equation,
 body[data-kp-reader-motion-mode="static"] .kp-quadratic-graph-slot {
   transition: none;
 }

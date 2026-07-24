@@ -314,17 +314,21 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       imageFit: "contain",
       checkpoints: [
         { id: "source", label: "Read the equation", progressPermille: 0, viewport: "desktop" },
-        { id: "method-square", label: "Complete the square", progressPermille: 430, viewport: "desktop" },
-        { id: "method-formula", label: "Quadratic formula", progressPermille: 430, viewport: "desktop", query: { kpMethod: "formula" } },
+        { id: "method-square-start", label: "Move six · start", progressPermille: 140, viewport: "desktop", query: { kpMotion: "full" } },
+        { id: "method-square", label: "Move six across the relation · symbolic motion", progressPermille: 180, viewport: "desktop", query: { kpMotion: "full" } },
+        { id: "method-square-end", label: "Move six · end", progressPermille: 220, viewport: "desktop", query: { kpMotion: "full" } },
+        { id: "method-formula-start", label: "Simplify the radical · start", progressPermille: 370, viewport: "desktop", query: { kpMethod: "formula", kpMotion: "full" } },
+        { id: "method-formula", label: "Simplify the radical · symbolic motion", progressPermille: 400, viewport: "desktop", query: { kpMethod: "formula", kpMotion: "full" } },
+        { id: "method-formula-end", label: "Simplify the radical · end", progressPermille: 430, viewport: "desktop", query: { kpMethod: "formula", kpMotion: "full" } },
         { id: "branches", label: "Plus-minus branches", progressPermille: 680, viewport: "desktop" },
         { id: "reunion", label: "Complete solution set", progressPermille: 880, viewport: "desktop" },
         { id: "graph", label: "Roots meet the graph", progressPermille: 1_000, viewport: "desktop" },
-        { id: "method-square-phone", label: "Complete the square · phone", progressPermille: 430, viewport: "phone" },
-        { id: "method-formula-phone", label: "Quadratic formula · phone", progressPermille: 430, viewport: "phone", query: { kpMethod: "formula" } },
+        { id: "method-square-phone", label: "Move six · symbolic motion · phone", progressPermille: 180, viewport: "phone", query: { kpMotion: "full" } },
+        { id: "method-formula-phone", label: "Simplify the radical · motion · phone", progressPermille: 400, viewport: "phone", query: { kpMethod: "formula", kpMotion: "full" } },
         { id: "branches-phone", label: "Branches · phone", progressPermille: 680, viewport: "phone" },
         { id: "graph-phone", label: "Roots meet the graph · phone", progressPermille: 1_000, viewport: "phone" }
       ]
     },
-    budget: routeBudget(35_454, 5_404, 45_528)
+    budget: routeBudget(38_677, 5_796, 46_455)
   })
 ]);

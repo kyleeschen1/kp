@@ -27,6 +27,84 @@ test("quadratic learner surface shares progress across method, URL, and controls
   await expect(page.locator("[data-kp-quadratic-branches]")).toBeHidden();
 });
 
+test("both methods move selector-owned native symbols through measured paths", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(
+    route.replace("kpProgress=680", "kpProgress=180") + "&kpMotion=full",
+    { waitUntil: "networkidle" }
+  );
+  const stage = page.locator("[data-kp-quadratic-stage]");
+  const slider = page.locator("[data-kp-quadratic-progress]");
+  await expect(stage).toHaveAttribute(
+    "data-kp-symbolic-transition",
+    "transition.quadratic.completing-square.balance"
+  );
+  await expect(stage.locator("[data-kp-transition-layer]")).toHaveCount(2);
+  const squareMotion = await symbolicSnapshot(
+    "katex.quadratic.completing-square.standard.constant",
+    "katex.quadratic.completing-square.balanced.right"
+  );
+  expect(squareMotion.sourceTransform).not.toBe("none");
+  expect(squareMotion.targetTransform).not.toBe("none");
+  expect(squareMotion.centerDistance).toBeLessThan(1);
+
+  await seek(430);
+  await seek(180);
+  expect(await symbolicSnapshot(
+    "katex.quadratic.completing-square.standard.constant",
+    "katex.quadratic.completing-square.balanced.right"
+  )).toEqual(squareMotion);
+
+  await page.getByRole("button", { name: "Quadratic formula" }).click();
+  await seek(400);
+  await expect(stage).toHaveAttribute(
+    "data-kp-symbolic-transition",
+    "transition.quadratic.formula.simplify-radical"
+  );
+  await expect(stage.locator("[data-kp-transition-layer]")).toHaveCount(2);
+  await expect(
+    stage.locator(
+      '[data-kp-motion-id="katex.quadratic.formula.discriminant.radical"]'
+    )
+  ).toHaveCSS("transform", /matrix/);
+  await expect(
+    stage.locator(
+      '[data-kp-motion-id="katex.quadratic.formula.simplified.offset"]'
+    )
+  ).toHaveCSS("transform", /matrix/);
+  await expect(stage.locator("[data-kp-reader-equation-material-layer]")).toHaveCount(0);
+
+  async function seek(progressPermille: number): Promise<void> {
+    await slider.evaluate((element: HTMLInputElement, value) => {
+      element.value = String(value);
+      element.dispatchEvent(new Event("input", { bubbles: true }));
+    }, progressPermille);
+  }
+
+  async function symbolicSnapshot(sourceId: string, targetId: string) {
+    return page.evaluate(({ sourceId, targetId }) => {
+      const source = document.querySelector<HTMLElement>(
+        `[data-kp-motion-id="${sourceId}"]`
+      )!;
+      const target = document.querySelector<HTMLElement>(
+        `[data-kp-motion-id="${targetId}"]`
+      )!;
+      const sourceRect = source.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      return {
+        sourceTransform: getComputedStyle(source).transform,
+        targetTransform: getComputedStyle(target).transform,
+        centerDistance: Math.hypot(
+          sourceRect.left + sourceRect.width / 2 -
+            (targetRect.left + targetRect.width / 2),
+          sourceRect.top + sourceRect.height / 2 -
+            (targetRect.top + targetRect.height / 2)
+        )
+      };
+    }, { sourceId, targetId });
+  }
+});
+
 test("quadratic learner surface becomes a narrow focus stepper without overflow", async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 760 });
   await page.goto(route, { waitUntil: "networkidle" });
