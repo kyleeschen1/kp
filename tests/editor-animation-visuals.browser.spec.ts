@@ -5,6 +5,12 @@ import {
   evaluateKpMaterialContinuityQuality,
   kpDefaultMaterialContinuityQualityBudgets
 } from "../src/animation/material-continuity-quality.ts";
+import {
+  kpRadicalConventionalMorphProfile
+} from "../src/animation/radical-morph-profile.ts";
+import {
+  kpRadicalNativeSettlementGeometryTolerancePx
+} from "../src/animation/radical-native-settlement.ts";
 
 test("selected editor animation controls play, pause, seek, step, rewind, and reset", async ({
   page
@@ -1741,6 +1747,105 @@ test("radical material succession is identical under semantic rewind", async ({
       '[data-kp-editor-equation-target] [data-kp-motion-id*=".power.exponent-"]'
     )
   ).toHaveCount(3);
+});
+
+test("radical rewind records the abrupt source-native ownership boundary", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-radical-morph-ready",
+    "true"
+  );
+  await scrubber.fill("1");
+  await player.getByRole("button", { name: "Rewind" }).click();
+
+  const morphStart = kpRadicalConventionalMorphProfile.morph.start;
+  const scrubberStep = Number(await scrubber.getAttribute("step"));
+  const sourceBoundarySamples = [
+    morphStart,
+    morphStart * 0.5,
+    morphStart * 0.1,
+    scrubberStep,
+    0
+  ];
+  const samples: Array<{
+    semanticProgress: number;
+    nativeOpacity: number;
+    morphOpacity: number;
+    sourceGeometryResidualPx: number;
+  }> = [];
+  for (const semanticProgress of sourceBoundarySamples) {
+    await scrubber.fill(String(Number((1 - semanticProgress).toFixed(3))));
+    await expect.poll(async () =>
+      Number(
+        await stage.getAttribute(
+          "data-kp-editor-equation-semantic-progress"
+        )
+      )
+    ).toBeCloseTo(semanticProgress, 5);
+    samples.push(await stage.evaluate((element) => {
+      const sourceToken = element.querySelector<HTMLElement>(
+        '[data-kp-motion-id*=".power.exponent-numerator"]'
+      );
+      const nativeExponent =
+        sourceToken?.closest<HTMLElement>(".msupsub") ??
+        sourceToken?.parentElement;
+      const morph = element.querySelector<HTMLCanvasElement>(
+        "[data-kp-editor-radical-webgl-morph]"
+      );
+      if (
+        nativeExponent === null ||
+        nativeExponent === undefined ||
+        morph === null
+      ) {
+        throw new Error(
+          "Radical source endpoint requires native and WebGL owners"
+        );
+      }
+      const stageRect = element.getBoundingClientRect();
+      const nativeRect = nativeExponent.getBoundingClientRect();
+      const captured = {
+        left: Number(morph.dataset["kpEditorRadicalWebglSourceLeft"]),
+        top: Number(morph.dataset["kpEditorRadicalWebglSourceTop"]),
+        width: Number(morph.dataset["kpEditorRadicalWebglSourceWidth"]),
+        height: Number(morph.dataset["kpEditorRadicalWebglSourceHeight"])
+      };
+      return {
+        semanticProgress: Number(
+          element.dataset["kpEditorEquationSemanticProgress"]
+        ),
+        nativeOpacity: Number(getComputedStyle(nativeExponent).opacity),
+        morphOpacity: Number(getComputedStyle(morph).opacity),
+        sourceGeometryResidualPx: Math.max(
+          Math.abs(nativeRect.left - stageRect.left - captured.left),
+          Math.abs(nativeRect.top - stageRect.top - captured.top),
+          Math.abs(nativeRect.width - captured.width),
+          Math.abs(nativeRect.height - captured.height)
+        )
+      };
+    }));
+  }
+
+  for (const sample of samples.slice(0, -1)) {
+    expect(sample.semanticProgress).toBeGreaterThan(0);
+    expect(sample.sourceGeometryResidualPx).toBeGreaterThan(
+      kpRadicalNativeSettlementGeometryTolerancePx
+    );
+    expect(sample.nativeOpacity).toBe(0);
+    expect(sample.morphOpacity).toBe(1);
+  }
+  expect(samples.at(-1)).toMatchObject({
+    semanticProgress: 0,
+    nativeOpacity: 1,
+    morphOpacity: 0
+  });
 });
 
 test("radical bundle and native settlement satisfy continuity budgets", async ({

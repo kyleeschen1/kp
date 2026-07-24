@@ -8,13 +8,30 @@ Decision: `../decisions/2026-07-23-kp-authoritative-product-roadmap-projection.m
 
 Establish one authoritative complete product roadmap, project it into a simple
 sortable Semantic Animation Workbench table, eliminate Workbench and review
-rebuild flicker, fix exact power-to-radical rewind settlement, and then resume
-quadratic work through its visual checkpoint.
+rebuild flicker, fix exact power-to-radical rewind settlement, and make
+lesson-maintained choreography canonical anywhere a lesson and animation card
+duplicate the same animation. Cards, Workbench representations, review
+evidence, and promotion state must derive from that canonical lineage rather
+than retaining parallel choreography.
+
+## Approved amendment
+
+On 2026-07-23, the user replaced the quadratic tranche with canonical
+presentation synchronization. When a lesson and card duplicate an animation,
+the lesson-maintained choreography is the canonical presentation in every
+case. Existing card identities remain resolvable as aliases or fixtures until
+reference checks permit removal; they do not remain competing canonical
+versions. Quadratic work is deferred until this ownership boundary passes its
+human checkpoint.
 
 ## Preservation boundary
 
 - Preserve existing animation identities, representations, player/runtime
-  clocks, routes, review history, and native KaTeX endpoint authority.
+  clocks, routes, review history, and native KaTeX endpoint authority through
+  explicit aliases and supersession lineage.
+- Preserve lesson-specific composition where a compact card projection needs
+  to extract only one track; do not make page DOM or lesson layout the
+  animation source of truth.
 - Preserve all existing Theseus graph and event history.
 - Keep user-authored roadmap, thread, and exploratory design changes outside
   this loop's commits.
@@ -52,9 +69,9 @@ quadratic work through its visual checkpoint.
 | 25 | Define composite native settlement | Add reusable bidirectional parent/child residual laws. | Focused pure contract tests. | Stop if independent fragments cannot be retained. |
 | 26 | Integrate exact radical handoff | Converge fragment-local motion into native KaTeX without flicker. | Broad seek, rewind, fallback, and typography tests. | Stop on endpoint mismatch. |
 | 27 | Workbench and radical checkpoint | Produce release captures and stop for human review. | Release gate and deterministic contact sheet. | `HUMAN_CHECKPOINT`. |
-| 28 | Define quadratic branching | Model exact branch semantics and provenance. | Standard algebra and invalid-input laws. | Stop if unchecked CAS behavior is required. |
-| 29 | Compile quadratic solution paths | Preserve shared and branch-specific lineage. | Standard dependency and correspondence laws. | Stop on fabricated lineage. |
-| 30 | Add quadratic choreography | Produce one exact branch-and-roots exemplar and stop. | Broad browser and visual captures. | `HUMAN_CHECKPOINT`. |
+| 28 | Define lesson-first canonical lineage | Add one authoritative presentation relationship with lesson-first precedence, explicit aliases, supersession, and fixture status; audit every learner/card overlap. | Standard identity, closure, and migration-law tests. | Stop if a duplicate cannot retain exact route or review provenance. |
+| 29 | Project canonical choreography into cards | Make cards, picker, and Workbench consume the lesson-maintained canonical presentation; collapse duplicate descriptor exposure and demote superseded generated variants without deleting fixtures. | Broad catalog, player, browser, and representative distribution no-jump tests. | Stop on lesson/card semantic, clock, seek, rewind, accessibility, or route drift. |
+| 30 | Unify review and promotion lineage | Aggregate card and lesson feedback under canonical identity while retaining exact projection provenance; derive visible promotion from durable evidence and produce the curated catalog checkpoint. | Broad review, promotion, browser, build, and deterministic visual checks. | `HUMAN_CHECKPOINT`. |
 
 ## Verification cadence
 
@@ -62,7 +79,8 @@ quadratic work through its visual checkpoint.
 - Typecheck and Theseus validation at subsystem boundaries.
 - Broad package gates at the generic Theseus boundary.
 - Browser lifecycle gates for the Workbench controller and review shell.
-- Dense visual evidence for radical settlement and quadratic choreography.
+- Dense visual evidence for radical settlement and lesson/card choreography
+  parity, beginning with distribution.
 - One focused commit per independently reversible slice.
 
 ## Done contract
@@ -70,7 +88,8 @@ quadratic work through its visual checkpoint.
 The loop is complete only when the active approved plan is the sole structured
 roadmap authority; the Workbench renders its complete sortable projection
 without local state or input-time remounts; radical rewind settles exactly into
-native KaTeX; and the quadratic exemplar has reached its mandatory visual
-checkpoint. Quadratic publication, second-consumer extraction, arithmetic
+native KaTeX; every lesson/card duplicate resolves to lesson-maintained
+canonical choreography; duplicate picker exposure is removed; and review and
+promotion state follow the same canonical lineage while preserving projection
+provenance. Quadratic implementation, destructive fixture pruning, arithmetic
 implementation, and later breadth remain successor work.
-

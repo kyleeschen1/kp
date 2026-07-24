@@ -1,0 +1,49 @@
+{
+  "id": "priority-change.kp.lesson-first-canonical-presentations-v0",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.lesson-first-canonical-presentations-v0",
+  "status": "active",
+  "domain": "kp",
+  "summary": "Replace the remaining quadratic breadth tranche with lesson-first canonical presentation lineage, card projection, curation, and unified review evidence; lesson-maintained choreography wins every duplicate.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Replace the remaining quadratic breadth tranche with lesson-first canonical presentation lineage, card projection, curation, and unified review evidence; lesson-maintained choreography wins every duplicate.",
+      "occurredAt": "2026-07-24T00:48:12.346Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v6"
+    ],
+    "preferred": [
+      "run-contract.kp.authoritative-roadmap-workbench-v1"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v6",
+    "run-contract.kp.authoritative-roadmap-workbench-v1"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v6",
+    "rationale": "Replace the remaining quadratic breadth tranche with lesson-first canonical presentation lineage, card projection, curation, and unified review evidence; lesson-maintained choreography wins every duplicate.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.authoritative-roadmap-workbench-v1"
+    ],
+    "changes": [
+      {
+        "subject": "canonical-presentation-lineage",
+        "to": "now"
+      },
+      {
+        "subject": "quadratic-semantic-branching",
+        "to": "next"
+      }
+    ],
+    "effectiveAt": "2026-07-24T00:48:12.346Z",
+    "requestedBy": "user"
+  }
+}

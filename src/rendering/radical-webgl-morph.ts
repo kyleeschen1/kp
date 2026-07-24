@@ -241,6 +241,14 @@ async function initializeMorphState(input: {
     input.state.canvas.dataset["kpEditorRadicalWebglTargetCapture"] =
       "native-clipped-svg";
     input.state.canvas.dataset["kpEditorRadicalMotionProfile"] = profile.id;
+    input.state.canvas.dataset["kpEditorRadicalWebglSourceWidth"] =
+      String(sourceLocalRect.width);
+    input.state.canvas.dataset["kpEditorRadicalWebglSourceHeight"] =
+      String(sourceLocalRect.height);
+    input.state.canvas.dataset["kpEditorRadicalWebglSourceLeft"] =
+      String(sourceLocalRect.left);
+    input.state.canvas.dataset["kpEditorRadicalWebglSourceTop"] =
+      String(sourceLocalRect.top);
     input.state.canvas.dataset["kpEditorRadicalWebglTargetWidth"] =
       String(targetLocalRect.width);
     input.state.canvas.dataset["kpEditorRadicalWebglTargetHeight"] =
