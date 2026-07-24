@@ -119,7 +119,8 @@
     {
       "id": "slice-10",
       "title": "Total-lifecycle-and-reverse-laws",
-      "status": "planned"
+      "summary": "Added total semantic lifecycles and authority correspondence for every visible equation, method, branch, root, and solution-set entity, plus deterministic method frames proving stateless direct seek, exact endpoints, branch closure, unique path reconstruction, and mirrored rewind.",
+      "status": "complete"
     },
     {
       "id": "slice-11",
