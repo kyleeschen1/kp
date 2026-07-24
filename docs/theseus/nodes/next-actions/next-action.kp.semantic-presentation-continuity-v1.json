@@ -551,11 +551,17 @@
       "status": "passed",
       "scope": "slice-28 deterministic canonical coverage audit",
       "checkedAt": "2026-07-24T18:59:44.349Z"
+    },
+    {
+      "command": "focused presentation audit and Workbench unit tests, focused Chromium Workbench regression, and npm run typecheck",
+      "status": "passed",
+      "scope": "slice-29 promotion gate and Workbench diagnostics",
+      "checkedAt": "2026-07-24T19:03:52.772Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Canonical presentation audit now covers all nine preserved animations: two declared distribution product groups, three narrowly justified exemptions, four missing contracts that remain visible but promotion-blocked, and the radical known residual linked as durable evidence. No animation motion changed."
+    "summary": "Canonical presentation audit outcomes now drive an independent promotion gate and Workbench panel. Declared groups and typed exemptions pass; missing contracts and the radical known residual block promotion while animations remain playable and unchanged."
   },
   "expectedLearning": [
     "Whether renderer-neutral presentation groups can make distributed products and cross-owner radical handoffs converge without renderer-specific ownership in the semantic layer."

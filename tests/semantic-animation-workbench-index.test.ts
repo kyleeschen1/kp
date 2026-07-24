@@ -19,6 +19,9 @@ import {
 import {
   createKpAnimationWorkbenchSeedCohort
 } from "../src/editor/semantic-animation-workbench-seeds.ts";
+import {
+  createKpCanonicalPresentationAuditReport
+} from "../src/editor/canonical-presentation-group-audit.ts";
 
 function inputs() {
   const seeds = createKpAnimationWorkbenchSeedCohort();
@@ -37,6 +40,8 @@ function inputs() {
       catalogEntries,
       descriptors
     }),
+    presentationAudits:
+      createKpCanonicalPresentationAuditReport().entries,
     roadmap: [
       {
         animationId: seeds[0]!.animationId,
@@ -122,6 +127,16 @@ test("seed cohort keeps independent lifecycle authority facets", () => {
   });
   assert.equal(radical.promotion.animationId, radical.identity.animationId);
   assert.ok(radical.promotion.evidenceSourceIds.length > 0);
+  assert.equal(radical.presentationPromotion?.status, "blocked");
+  assert.deepEqual(
+    radical.presentationPromotion?.diagnostics.map(
+      (diagnostic) => diagnostic.code
+    ),
+    [
+      "promotion.presentation.missing-contract",
+      "promotion.presentation.known-residual"
+    ]
+  );
   assert.equal(derivative.lifecycle.maturity, "approved");
   assert.equal(derivative.lifecycle.approval, "approved");
   assert.equal(quadratic.lifecycle.maturity, "proposed");

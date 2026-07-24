@@ -26,6 +26,11 @@ import type {
 import type {
   KpAnimationTheseusProjection
 } from "./semantic-animation-workbench-theseus-adapter.ts";
+import {
+  gateKpCanonicalPresentationPromotion,
+  type KpCanonicalPresentationAuditEntry,
+  type KpCanonicalPresentationPromotionResult
+} from "./canonical-presentation-group-audit.ts";
 
 export interface KpAnimationRoadmapProjection {
   readonly animationId: string;
@@ -40,6 +45,8 @@ export interface KpSemanticAnimationWorkbenchIndexEntry {
   readonly tags: readonly string[];
   readonly representations: readonly KpAnimationRepresentationRelationship[];
   readonly promotion: KpArtifactPromotionLineage;
+  readonly presentationPromotion?:
+    KpCanonicalPresentationPromotionResult | undefined;
   readonly lifecycle: KpAnimationLifecycleFacets;
   readonly controlIds: readonly string[];
   readonly review?: KpAnimationReviewProjection;
@@ -81,12 +88,20 @@ export function compileKpSemanticAnimationWorkbenchIndex(input: {
     readonly sourceIds: readonly string[];
     readonly message: string;
   }[];
+  readonly presentationAudits?:
+    readonly KpCanonicalPresentationAuditEntry[] | undefined;
 }): KpSemanticAnimationWorkbenchIndex {
   const diagnostics: KpSemanticAnimationWorkbenchIndexDiagnostic[] = [];
   const catalogById = new Map(
     input.catalogEntries.map((entry) => [entry.identity.animationId, entry])
   );
   const identityById = new Map<string, KpCanonicalAnimationIdentity>();
+  const presentationAuditById = new Map(
+    (input.presentationAudits ?? []).map((audit) => [
+      audit.animationId,
+      audit
+    ])
+  );
 
   for (const entry of input.catalogEntries) {
     addIdentity(entry.identity, identityById, diagnostics);
@@ -167,6 +182,12 @@ export function compileKpSemanticAnimationWorkbenchIndex(input: {
       const promotion = resolveKpAnimationPromotionLineage({
         animationId: identity.animationId
       });
+      const presentationAudit = presentationAuditById.get(
+        identity.animationId
+      );
+      const presentationPromotion = presentationAudit === undefined
+        ? undefined
+        : gateKpCanonicalPresentationPromotion(presentationAudit);
       if (
         catalog?.primaryDescriptor.promotion !== undefined &&
         !samePromotionFacet(
@@ -209,6 +230,9 @@ export function compileKpSemanticAnimationWorkbenchIndex(input: {
         ]).sort(),
         representations,
         promotion,
+        ...(presentationPromotion === undefined
+          ? {}
+          : { presentationPromotion }),
         lifecycle,
         controlIds: unique(
           theseus.flatMap((projection) => projection.controlIds)

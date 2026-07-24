@@ -23,6 +23,16 @@ test("Workbench reuses the live player and preserves direct seek and rewind", as
   await expect(workbench).toBeVisible();
   await expect(player).toHaveAttribute("data-kp-editor-animation-id", radicalId);
   await expect(player).toHaveAttribute("data-kp-editor-animation-hydrated", "true");
+  const presentationGate = page.locator(
+    '[data-kp-animation-workbench-presentation-promotion="blocked"]'
+  );
+  await expect(presentationGate).toContainText(
+    "promotion.presentation.missing-contract"
+  );
+  await expect(presentationGate).toContainText(
+    "promotion.presentation.known-residual"
+  );
+  await expect(presentationGate).toContainText("initial 1/2 jerk");
   await expect(
     page.locator(
       '[data-kp-animation-workbench-acceptance-kind="semantic-law"]'

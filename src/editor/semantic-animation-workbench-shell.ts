@@ -307,6 +307,7 @@ function renderSelectedSummary(
       </dl>
       ${renderLifecycleFacets(selected.lifecycle)}
       ${renderPromotionLineage(selected)}
+      ${renderPresentationPromotion(selected)}
       ${renderRepresentationSwitcher(
         selected.representations,
         selectedRepresentationId
@@ -317,6 +318,28 @@ function renderSelectedSummary(
       })}
     </section>
   </article>`;
+}
+
+function renderPresentationPromotion(
+  selected: KpSemanticAnimationWorkbenchQueryResult["entry"]
+): string {
+  const result = selected.presentationPromotion;
+  if (result === undefined) return "";
+  const summary = result.status === "pass"
+    ? `${result.declaredTargetCount} declared groups · ${result.exemptTargetCount} typed exemptions`
+    : `${result.diagnostics.length} blocking presentation diagnostics`;
+  return `<section class="kp-animation-workbench__promotion-lineage" data-kp-animation-workbench-presentation-promotion="${escapeHtml(result.status)}" aria-labelledby="kp-animation-workbench-presentation-title">
+    <div class="kp-animation-workbench__section-heading">
+      <p class="eyebrow">Presentation continuity</p>
+      <h3 id="kp-animation-workbench-presentation-title">Compound settlement gate</h3>
+    </div>
+    <p><strong>${escapeHtml(result.status)}</strong> · ${escapeHtml(summary)}</p>
+    ${result.diagnostics.length === 0
+      ? "<p>No missing compound declarations or known visual residuals.</p>"
+      : `<ul>${result.diagnostics.map((diagnostic) =>
+          `<li><code>${escapeHtml(diagnostic.code)}</code> ${escapeHtml(diagnostic.message)}</li>`
+        ).join("")}</ul>`}
+  </section>`;
 }
 
 function renderPromotionLineage(

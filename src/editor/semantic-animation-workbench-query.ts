@@ -58,6 +58,15 @@ function searchFields(
     { value: lifecycle.review, weight: 3 },
     { value: lifecycle.verification, weight: 2 },
     { value: lifecycle.playability, weight: 3 },
+    ...(entry.presentationPromotion === undefined
+      ? []
+      : [
+          { value: entry.presentationPromotion.status, weight: 3 },
+          ...entry.presentationPromotion.diagnostics.map((diagnostic) => ({
+            value: `${diagnostic.code} ${diagnostic.message}`,
+            weight: 3
+          }))
+        ]),
     ...entry.representations.flatMap((representation) => [
       { value: representation.label, weight: 4 },
       { value: representation.representationId, weight: 3 },

@@ -32,6 +32,9 @@ import {
 import {
   projectKpAnimationTheseusState
 } from "./semantic-animation-workbench-theseus-adapter.ts";
+import {
+  createKpCanonicalPresentationAuditReport
+} from "./canonical-presentation-group-audit.ts";
 
 export function createKpSemanticAnimationWorkbenchIndex():
   KpSemanticAnimationWorkbenchIndex {
@@ -67,6 +70,8 @@ export function createKpSemanticAnimationWorkbenchIndex():
       descriptors,
       learnerExperiences: createKpLearnerExperienceLibrary()
     }),
+    presentationAudits:
+      createKpCanonicalPresentationAuditReport().entries,
     theseus
   });
 }

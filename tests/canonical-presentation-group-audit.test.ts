@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  createKpCanonicalPresentationAuditReport
+  createKpCanonicalPresentationAuditReport,
+  gateKpCanonicalPresentationPromotion
 } from "../src/editor/canonical-presentation-group-audit.ts";
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import {
@@ -36,6 +37,34 @@ test("known radical residual blocks family promotion without hiding the exemplar
     "known-residual.radical.initial-fraction-handoff"
   ]);
   assert.ok(report.blockedAnimationIds.includes(radical.animationId));
+  assert.deepEqual(
+    gateKpCanonicalPresentationPromotion(radical),
+    {
+      schemaVersion: "kp.canonical-presentation-promotion-result.v1",
+      animationId: radical.animationId,
+      status: "blocked",
+      promotable: false,
+      declaredTargetCount: 0,
+      exemptTargetCount: 0,
+      diagnostics: [
+        {
+          code: "promotion.presentation.missing-contract",
+          severity: "error",
+          sourceId: "radical.complete-notation",
+          message:
+            "Compound target radical.complete-notation has no presentation-group contract or typed exemption."
+        },
+        {
+          code: "promotion.presentation.known-residual",
+          severity: "error",
+          sourceId:
+            "docs/project/decisions/2026-07-24-kp-radical-cross-renderer-handoff-residual.md",
+          message:
+            "Human review retains a small initial 1/2 jerk at the animation-specific DOM/KaTeX-to-WebGL ownership boundary."
+        }
+      ]
+    }
+  );
 });
 
 test("only explicit contracts and justified exemptions pass the audit", () => {
@@ -64,6 +93,10 @@ test("only explicit contracts and justified exemptions pass the audit", () => {
       `${distributionTransformation.id}.distribution-choreography.product.`
     )
   ));
+  assert.equal(
+    gateKpCanonicalPresentationPromotion(distribution).promotable,
+    true
+  );
 
   assert.ok(matrix);
   assert.equal(matrix.status, "pass");

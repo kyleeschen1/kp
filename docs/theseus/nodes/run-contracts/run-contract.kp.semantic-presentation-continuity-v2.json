@@ -217,7 +217,8 @@
     {
       "id": "slice-29",
       "title": "Activate the promotion gate and Workbench diagnostics for declared groups without auto-redesigning failures.",
-      "status": "planned"
+      "summary": "Canonical presentation audit outcomes now drive an independent promotion gate and searchable Workbench panel. Declared groups and typed exemptions pass; missing contracts and the radical known residual block promotion while existing animations remain playable and unchanged. Focused unit, Chromium, and typecheck gates pass.",
+      "status": "complete"
     },
     {
       "id": "slice-30",

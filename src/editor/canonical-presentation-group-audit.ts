@@ -43,6 +43,25 @@ export interface KpCanonicalPresentationAuditReport {
   readonly blockedAnimationIds: readonly string[];
 }
 
+export interface KpCanonicalPresentationPromotionDiagnostic {
+  readonly code:
+    | "promotion.presentation.missing-contract"
+    | "promotion.presentation.known-residual";
+  readonly severity: "error";
+  readonly sourceId: string;
+  readonly message: string;
+}
+
+export interface KpCanonicalPresentationPromotionResult {
+  readonly schemaVersion: "kp.canonical-presentation-promotion-result.v1";
+  readonly animationId: string;
+  readonly status: "pass" | "blocked";
+  readonly promotable: boolean;
+  readonly declaredTargetCount: number;
+  readonly exemptTargetCount: number;
+  readonly diagnostics: readonly KpCanonicalPresentationPromotionDiagnostic[];
+}
+
 type AuditDefinition = Omit<
   KpCanonicalPresentationAuditEntry,
   "schemaVersion" | "animationId" | "status"
@@ -179,6 +198,41 @@ export function createKpCanonicalPresentationAuditReport():
     blockedAnimationIds: entries
       .filter((entry) => entry.status === "blocked")
       .map((entry) => entry.animationId)
+  };
+}
+
+export function gateKpCanonicalPresentationPromotion(
+  audit: KpCanonicalPresentationAuditEntry
+): KpCanonicalPresentationPromotionResult {
+  const diagnostics: KpCanonicalPresentationPromotionDiagnostic[] = [
+    ...audit.targets
+      .filter((target) => target.disposition === "missing-contract")
+      .map((target) => ({
+        code: "promotion.presentation.missing-contract" as const,
+        severity: "error" as const,
+        sourceId: target.targetId,
+        message:
+          `Compound target ${target.targetId} has no presentation-group contract or typed exemption.`
+      })),
+    ...audit.residuals.map((residual) => ({
+      code: "promotion.presentation.known-residual" as const,
+      severity: "error" as const,
+      sourceId: residual.sourceRef,
+      message: residual.summary
+    }))
+  ];
+  return {
+    schemaVersion: "kp.canonical-presentation-promotion-result.v1",
+    animationId: audit.animationId,
+    status: diagnostics.length === 0 ? "pass" : "blocked",
+    promotable: diagnostics.length === 0,
+    declaredTargetCount: audit.targets.filter(
+      (target) => target.disposition === "declared-contract"
+    ).length,
+    exemptTargetCount: audit.targets.filter(
+      (target) => target.disposition === "typed-exemption"
+    ).length,
+    diagnostics
   };
 }
 
