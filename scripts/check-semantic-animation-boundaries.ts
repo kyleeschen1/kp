@@ -7,6 +7,9 @@ import {
 import {
   kpSemanticAnimationRenderingImportBaseline
 } from "../src/architecture/semantic-animation-import-baseline.ts";
+import {
+  kpSemanticAnimationCompatibilityLedger
+} from "../src/architecture/semantic-animation-compatibility-ledger.ts";
 
 const projectRoot = process.cwd();
 const roots = ["src/semantic", "src/animation"] as const;
@@ -17,20 +20,47 @@ const sourceFiles = roots.flatMap((root) =>
   }))
 );
 const violations = checkKpSemanticAnimationImports(sourceFiles);
+const compatibilityViolations = kpSemanticAnimationCompatibilityLedger.flatMap(
+  (entry) => {
+    const references = [
+      entry.owner,
+      ...entry.authors,
+      ...entry.consumers,
+      ...entry.sunsetEvidence
+    ];
+    return references.flatMap((reference) => {
+      const path = join(projectRoot, reference.path);
+      try {
+        return readFileSync(path, "utf8").includes(reference.evidence)
+          ? []
+          : [
+              `${entry.id}: ${reference.path} lacks status evidence ` +
+              `${reference.evidence}.`
+            ];
+      } catch {
+        return [`${entry.id}: missing status evidence ${reference.path}.`];
+      }
+    });
+  }
+);
 
-if (violations.length > 0) {
+if (violations.length > 0 || compatibilityViolations.length > 0) {
   for (const violation of violations) {
     console.error(
       `${violation.kind}: ${violation.sourceFile} -> ` +
       `${violation.specifier}: ${violation.message}`
     );
   }
+  for (const violation of compatibilityViolations) {
+    console.error(`compatibility-status: ${violation}`);
+  }
   process.exitCode = 1;
 } else {
   console.log(
     `semantic-animation architecture gate passed ` +
     `(${sourceFiles.length} files, ` +
-    `${kpSemanticAnimationRenderingImportBaseline.length} frozen exceptions)`
+    `${kpSemanticAnimationRenderingImportBaseline.length} frozen exceptions, ` +
+    `${kpSemanticAnimationCompatibilityLedger.length} classified compatibility paths)`
   );
 }
 

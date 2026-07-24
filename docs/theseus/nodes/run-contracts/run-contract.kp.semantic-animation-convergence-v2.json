@@ -738,6 +738,34 @@
       "scope": "s25 architecture",
       "checkedAt": "2026-07-24T06:31:21.801Z",
       "notes": "Concept-room, semantic-reader, and semantic-animation architecture gates pass with zero semantic-animation frozen exceptions."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-compatibility-ledger.test.ts",
+      "status": "passed",
+      "scope": "s26 compatibility status closure",
+      "checkedAt": "2026-07-24T06:36:10.976Z",
+      "notes": "All 5 ledger tests pass. Eighteen bounded paths have exact canonical, compatibility-only, retirement-candidate, or retained-fixture dispositions; every owner and sunset-evidence reference resolves live."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s26 focused",
+      "checkedAt": "2026-07-24T06:36:12.546Z",
+      "notes": "All 254 convergence tests pass with compatibility classification and sunset evidence enforced."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s26 architecture enforcement",
+      "checkedAt": "2026-07-24T06:36:13.921Z",
+      "notes": "Architecture gate passes and now validates 18 classified compatibility paths and their live status evidence in addition to the zero rendering-exception boundary."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s26 standard",
+      "checkedAt": "2026-07-24T06:36:15.264Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass with the finalized compatibility disposition types."
     }
   ],
   "expectedLearning": [
@@ -973,7 +1001,8 @@
     {
       "id": "s26",
       "title": "Compatibility-status-enforcement",
-      "status": "planned",
+      "summary": "Finalized 18 bounded compatibility paths as canonical, compatibility-only, retirement-candidate, or retained-fixture. Every entry has a live source owner, explicit retirement condition, closure requirements, and test-backed sunset evidence. The architecture gate now validates these references, preventing documentary-only classification. Five ledger tests, all 254 focused tests, architecture gates, and typecheck pass; only the two unread experimental fraction metadata keys are retirement candidates.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {

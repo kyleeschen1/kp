@@ -5,7 +5,8 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import {
-  kpSemanticAnimationCompatibilityLedger
+  kpSemanticAnimationCompatibilityLedger,
+  type KpSemanticAnimationCompatibilityStatus
 } from "../src/architecture/semantic-animation-compatibility-ledger.ts";
 
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
@@ -29,7 +30,48 @@ test("compatibility ledger references live owners, authors, and consumers", () =
     }
     assert.ok(entry.requiredClosureEvidence.includes("reference"));
     assert.ok(entry.retirementCondition.length >= 40);
+    assert.ok(entry.sunsetEvidence.length > 0);
+    for (const sourceRef of entry.sunsetEvidence) {
+      const absolutePath = join(projectRoot, sourceRef.path);
+      assert.equal(existsSync(absolutePath), true, `missing ${sourceRef.path}`);
+      assert.ok(
+        readFileSync(absolutePath, "utf8").includes(sourceRef.evidence),
+        `${sourceRef.path} does not contain ${sourceRef.evidence}`
+      );
+    }
   }
+});
+
+test("every compatibility path has one enforced disposition and owner", () => {
+  const allowed = new Set<KpSemanticAnimationCompatibilityStatus>([
+    "canonical",
+    "compatibility-only",
+    "retirement-candidate",
+    "retained-fixture"
+  ]);
+  const ids = kpSemanticAnimationCompatibilityLedger.map(({ id }) => id);
+
+  assert.equal(new Set(ids).size, ids.length);
+  for (const entry of kpSemanticAnimationCompatibilityLedger) {
+    assert.equal(allowed.has(entry.status), true, entry.id);
+    assert.match(entry.owner.path, /^src\/.+\.ts$/);
+    assert.ok(entry.owner.evidence.length > 0);
+  }
+  assert.deepEqual(
+    kpSemanticAnimationCompatibilityLedger
+      .filter(({ status }) => status === "canonical")
+      .map(({ id }) => id),
+    ["compatibility.cross-surface-animation-projections"]
+  );
+  assert.deepEqual(
+    kpSemanticAnimationCompatibilityLedger
+      .filter(({ status }) => status === "retirement-candidate")
+      .map(({ contractKey }) => contractKey),
+    [
+      "equationSequenceEnvelopeRecipe",
+      "equationFractionHierarchyRecipe"
+    ]
+  );
 });
 
 test("presentation metadata ledger exactly closes over production recipe keys", () => {
@@ -76,7 +118,7 @@ test("every production reference to a presentation key is classified", () => {
       `unclassified reference to ${entry.contractKey}`
     );
     if (entry.consumers.length === 0) {
-      assert.equal(entry.statusCandidate, "retirement-candidate");
+      assert.equal(entry.status, "retirement-candidate");
     }
   }
 });
@@ -84,8 +126,8 @@ test("every production reference to a presentation key is classified", () => {
 test("destructive compatibility candidates require replacement and fixture proof", () => {
   for (const entry of kpSemanticAnimationCompatibilityLedger) {
     if (
-      entry.statusCandidate === "retirement-candidate" ||
-      entry.statusCandidate === "compatibility-only"
+      entry.status === "retirement-candidate" ||
+      entry.status === "compatibility-only"
     ) {
       assert.ok(entry.requiredClosureEvidence.includes("replacement"));
       assert.ok(entry.requiredClosureEvidence.includes("fixture"));

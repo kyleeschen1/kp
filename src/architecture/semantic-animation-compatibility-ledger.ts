@@ -9,9 +9,8 @@ export type KpSemanticAnimationCompatibilityCategory =
   | "projection"
   | "registry";
 
-export type KpSemanticAnimationCompatibilityStatusCandidate =
-  | "permanent"
-  | "compiles-forward"
+export type KpSemanticAnimationCompatibilityStatus =
+  | "canonical"
   | "compatibility-only"
   | "retirement-candidate"
   | "retained-fixture";
@@ -29,6 +28,11 @@ export interface KpCompatibilitySourceReference {
   readonly evidence: string;
 }
 
+export interface KpCompatibilitySunsetEvidence {
+  readonly path: `tests/${string}.test.ts`;
+  readonly evidence: string;
+}
+
 export interface KpSemanticAnimationCompatibilityLedgerEntry {
   readonly id: string;
   readonly category: KpSemanticAnimationCompatibilityCategory;
@@ -36,7 +40,8 @@ export interface KpSemanticAnimationCompatibilityLedgerEntry {
   readonly owner: KpCompatibilitySourceReference;
   readonly authors: readonly KpCompatibilitySourceReference[];
   readonly consumers: readonly KpCompatibilitySourceReference[];
-  readonly statusCandidate: KpSemanticAnimationCompatibilityStatusCandidate;
+  readonly status: KpSemanticAnimationCompatibilityStatus;
+  readonly sunsetEvidence: readonly KpCompatibilitySunsetEvidence[];
   readonly requiredClosureEvidence:
     readonly KpCompatibilityClosureEvidenceKind[];
   readonly retirementCondition: string;
@@ -52,14 +57,16 @@ export const kpSemanticAnimationCompatibilityLedger = [
     key: "equationMotionPresentationRecipe",
     authors: equationRecipeAuthors(),
     consumers: [equationPresentationDecoder],
-    statusCandidate: "compiles-forward",
+    status: "compatibility-only",
+    sunsetEvidence: [decoderEvidence()],
     retirementCondition: "All accepted equation assets author the typed motion profile."
   }),
   metadata({
     key: "equationNativeHandoffRecipe",
     authors: equationRecipeAuthors(),
     consumers: [equationPresentationDecoder],
-    statusCandidate: "compiles-forward",
+    status: "compatibility-only",
+    sunsetEvidence: [decoderEvidence()],
     retirementCondition: "Native settlement policy is represented in typed equation profiles."
   }),
   metadata({
@@ -72,7 +79,8 @@ export const kpSemanticAnimationCompatibilityLedger = [
         "equationCancellationPresentationRecipe"
       )
     ],
-    statusCandidate: "compatibility-only",
+    status: "compatibility-only",
+    sunsetEvidence: [decoderEvidence()],
     retirementCondition: "Generated and catalog cancellation profiles no longer read metadata."
   }),
   metadata({
@@ -84,28 +92,32 @@ export const kpSemanticAnimationCompatibilityLedger = [
       )
     ],
     consumers: [equationPresentationDecoder],
-    statusCandidate: "compiles-forward",
+    status: "compatibility-only",
+    sunsetEvidence: [decoderEvidence()],
     retirementCondition: "Solve-x authors its zero-witness policy through the typed profile."
   }),
   metadata({
     key: "equationSuccessorPresentationRecipe",
     authors: equationRecipeAuthors(),
     consumers: [equationPresentationDecoder],
-    statusCandidate: "compiles-forward",
+    status: "compatibility-only",
+    sunsetEvidence: [decoderEvidence()],
     retirementCondition: "Accepted successor choreography authors typed convergence policy."
   }),
   metadata({
     key: "equationDepthPresentationRecipe",
     authors: equationRecipeAuthors(),
     consumers: [equationPresentationDecoder],
-    statusCandidate: "compiles-forward",
+    status: "compatibility-only",
+    sunsetEvidence: [decoderEvidence()],
     retirementCondition: "Accepted depth policy is promoted without making it semantic truth."
   }),
   metadata({
     key: "equationContinuantPresentationRecipe",
     authors: equationRecipeAuthors(),
     consumers: [equationPresentationDecoder],
-    statusCandidate: "compiles-forward",
+    status: "compatibility-only",
+    sunsetEvidence: [decoderEvidence()],
     retirementCondition: "Continuant transit policy is represented in typed equation profiles."
   }),
   metadata({
@@ -121,7 +133,8 @@ export const kpSemanticAnimationCompatibilityLedger = [
         "equationBranchPresentationStrategy"
       )
     ],
-    statusCandidate: "compiles-forward",
+    status: "compatibility-only",
+    sunsetEvidence: [decoderEvidence()],
     retirementCondition: "Branch scheduling reads a typed equation presentation profile."
   }),
   metadata({
@@ -137,7 +150,13 @@ export const kpSemanticAnimationCompatibilityLedger = [
       )
     ],
     consumers: [],
-    statusCandidate: "retirement-candidate",
+    status: "retirement-candidate",
+    sunsetEvidence: [
+      sunsetEvidence(
+        "tests/proven-presentation-profile-promotion.test.ts",
+        "equationSequenceEnvelopeRecipe"
+      )
+    ],
     retirementCondition: "Repository closure still shows no runtime reader at slice 26."
   }),
   metadata({
@@ -148,7 +167,13 @@ export const kpSemanticAnimationCompatibilityLedger = [
     ),
     authors: [],
     consumers: [],
-    statusCandidate: "retirement-candidate",
+    status: "retirement-candidate",
+    sunsetEvidence: [
+      sunsetEvidence(
+        "tests/proven-presentation-profile-promotion.test.ts",
+        "equationFractionHierarchyRecipe"
+      )
+    ],
     retirementCondition: "Repository closure still shows no runtime reader at slice 26."
   }),
   compatibility({
@@ -162,7 +187,13 @@ export const kpSemanticAnimationCompatibilityLedger = [
       reference("src/animation/runtime-sampler.ts", "transformation.correspondence"),
       reference("src/animation/visual-frame-laws.ts", "transformation.correspondence")
     ],
-    statusCandidate: "compiles-forward",
+    status: "compatibility-only",
+    sunsetEvidence: [
+      sunsetEvidence(
+        "tests/correspondence-composition.test.ts",
+        "correspondence"
+      )
+    ],
     requiredClosureEvidence: ["reference", "replacement", "fixture"],
     retirementCondition: "Every consumer derives pair views from rich correspondence maps."
   }),
@@ -179,7 +210,13 @@ export const kpSemanticAnimationCompatibilityLedger = [
         "legacy-fade"
       )
     ],
-    statusCandidate: "compatibility-only",
+    status: "compatibility-only",
+    sunsetEvidence: [
+      sunsetEvidence(
+        "tests/semantic-equation-transition-compiler.test.ts",
+        "fallback"
+      )
+    ],
     requiredClosureEvidence: ["reference", "replacement", "fixture"],
     retirementCondition: "All supported transitions compile semantically and legacy policy has no callers."
   }),
@@ -194,7 +231,13 @@ export const kpSemanticAnimationCompatibilityLedger = [
       reference("src/animation/asset.ts", "transformationRefs"),
       reference("src/animation/runtime-sampler.ts", "transformationRefs")
     ],
-    statusCandidate: "compiles-forward",
+    status: "compatibility-only",
+    sunsetEvidence: [
+      sunsetEvidence(
+        "tests/kp-animation-runtime-sampler.test.ts",
+        "activeTransformationIds"
+      )
+    ],
     requiredClosureEvidence: ["reference", "replacement", "fixture"],
     retirementCondition: "The canonical sampled-frame projection produces this view from rich transformations."
   }),
@@ -211,7 +254,10 @@ export const kpSemanticAnimationCompatibilityLedger = [
         "sampleSaddleDenominatorAnimationFrames"
       )
     ],
-    statusCandidate: "retained-fixture",
+    status: "retained-fixture",
+    sunsetEvidence: [
+      sunsetEvidence("tests/tween.test.ts", "SaddleDenominator")
+    ],
     requiredClosureEvidence: ["reference", "fixture"],
     retirementCondition: "A graph-domain replacement exists and the semantic fixture is migrated."
   }),
@@ -228,7 +274,13 @@ export const kpSemanticAnimationCompatibilityLedger = [
       reference("src/animation/frame-descriptor.ts", "timelineId"),
       reference("src/rendering/equation-motion-sampler.ts", "SemanticBeatTimeline")
     ],
-    statusCandidate: "compiles-forward",
+    status: "compatibility-only",
+    sunsetEvidence: [
+      sunsetEvidence(
+        "tests/sampled-frame-envelope.test.ts",
+        "clock"
+      )
+    ],
     requiredClosureEvidence: ["reference", "replacement", "fixture"],
     retirementCondition: "All timeline vocabularies compile to one clock without losing authored beats."
   }),
@@ -251,7 +303,13 @@ export const kpSemanticAnimationCompatibilityLedger = [
         "resolveKpCanonicalOperation"
       )
     ],
-    statusCandidate: "retained-fixture",
+    status: "retained-fixture",
+    sunsetEvidence: [
+      sunsetEvidence(
+        "tests/kp-animation-generated-problem-import.test.ts",
+        "fixture"
+      )
+    ],
     requiredClosureEvidence: ["reference", "replacement", "fixture"],
     retirementCondition: "Generated fixtures bind through canonical operation pins with fixture parity."
   }),
@@ -275,7 +333,13 @@ export const kpSemanticAnimationCompatibilityLedger = [
         "canonicalRepresentation"
       )
     ],
-    statusCandidate: "compatibility-only",
+    status: "canonical",
+    sunsetEvidence: [
+      sunsetEvidence(
+        "tests/product-consumer-projections.test.ts",
+        "lesson-first"
+      )
+    ],
     requiredClosureEvidence: [
       "reference",
       "replacement",
@@ -321,7 +385,13 @@ export const kpSemanticAnimationCompatibilityLedger = [
         "registeredRuntime"
       )
     ],
-    statusCandidate: "compatibility-only",
+    status: "compatibility-only",
+    sunsetEvidence: [
+      sunsetEvidence(
+        "tests/canonical-reverse-choreography.test.ts",
+        "registry"
+      )
+    ],
     requiredClosureEvidence: ["reference", "replacement", "fixture"],
     retirementCondition: "Capability-pack loading supplies explicit runtime dependencies without import side effects."
   })
@@ -341,7 +411,8 @@ function metadata(input: {
   readonly owner?: KpCompatibilitySourceReference | undefined;
   readonly authors: readonly KpCompatibilitySourceReference[];
   readonly consumers: readonly KpCompatibilitySourceReference[];
-  readonly statusCandidate: KpSemanticAnimationCompatibilityStatusCandidate;
+  readonly status: KpSemanticAnimationCompatibilityStatus;
+  readonly sunsetEvidence: readonly KpCompatibilitySunsetEvidence[];
   readonly retirementCondition: string;
 }): KpSemanticAnimationCompatibilityLedgerEntry {
   return {
@@ -351,7 +422,8 @@ function metadata(input: {
     owner: input.owner ?? equationPresentationDecoder,
     authors: input.authors,
     consumers: input.consumers,
-    statusCandidate: input.statusCandidate,
+    status: input.status,
+    sunsetEvidence: input.sunsetEvidence,
     requiredClosureEvidence: ["reference", "replacement", "fixture"],
     retirementCondition: input.retirementCondition
   };
@@ -370,4 +442,18 @@ function reference(
   evidence: string
 ): KpCompatibilitySourceReference {
   return { path, evidence };
+}
+
+function sunsetEvidence(
+  path: KpCompatibilitySunsetEvidence["path"],
+  evidence: string
+): KpCompatibilitySunsetEvidence {
+  return { path, evidence };
+}
+
+function decoderEvidence(): KpCompatibilitySunsetEvidence {
+  return sunsetEvidence(
+    "tests/equation-presentation-profile-decoder.test.ts",
+    "legacy"
+  );
 }
