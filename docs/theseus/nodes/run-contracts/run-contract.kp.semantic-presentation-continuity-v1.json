@@ -1,0 +1,200 @@
+{
+  "id": "run-contract.kp.semantic-presentation-continuity-v1",
+  "kind": "run-contract",
+  "title": "Semantic presentation continuity",
+  "status": "superseded",
+  "summary": "Replaced before execution by v2 because the initial CLI authoring omitted required run-mode hygiene fields; scope, order, and approval boundary are unchanged.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-presentation-continuity-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-24-semantic-presentation-continuity-long-loop-proposal.md",
+      "summary": "User-approved 30-slice scope, verification, checkpoints, and done contract."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-24-distribution-first-product-settlement-diagnostic.md",
+      "summary": "Distribution failure diagnosis."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "npm run typecheck",
+    "npm run test:semantic-animation-convergence",
+    "npm run visual:presentation-continuity",
+    "npm run visual:distribution-area",
+    "npm run visual:exponent-radical",
+    "npm test",
+    "npm run check:architecture",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Typed choreography groups, settlement contracts, relative geometry, rendered-ink observation, velocity, rewind, and ownership laws.",
+    "Distribution card and Workbench settlement plus radical WebGL-to-native settlement through their approved exemplar checkpoints.",
+    "Focused promotion diagnostics, stable visual tooling, tests, and project-control evidence for this contract."
+  ],
+  "disallowedWork": [
+    "New animation families, curriculum implementation, semantic algebra changes, KaTeX modification, Three.js, or renderer replacement.",
+    "Unrelated roadmap, thread, exploratory files, and broad visual changes to other families before promotion evidence.",
+    "Continuing past slice 20 or slice 27 without explicit human acceptance, or continuing after a named proposal stop condition fires."
+  ],
+  "goal": "Prevent compound expressions from losing internal coherence or changing geometry when presentation ownership transfers; perfect distribution and radical rewind exemplars before promotion.",
+  "target": "next-action.kp.semantic-presentation-continuity-v1",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Freeze-behavior-and-authority-baselines",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Define-presentation-group-observation-types",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Detect-compound-target-groups",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Extend-choreography-hierarchy-settlement",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Add-native-local-relative-geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Define-rendered-ink-observation",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Add-intra-owner-relative-geometry-law",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Add-inter-owner-presentation-equivalence-law",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Add-boundary-velocity-and-reverse-laws",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Require-group-contract-or-exemption",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Encode-reported-negative-fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Add-stable-presentation-continuity-visual-tooling",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Measure-live-distribution-settlement-defect",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Compile-distributed-product-groups",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Add-shared-product-settlement-clock",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Render-group-local-distribution-settlement",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Gate-distribution-native-transfer",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Cover-arbitrary-distributed-products",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Prove-lesson-card-parity-and-capture",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Distribution-human-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Measure-WebGL-source-ink-against-native",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Replace-radical-self-comparison",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Render-exact-WebGL-source-endpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Reconcile-radical-source-geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Prove-radical-runtime-modes",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Add-dense-radical-rewind-captures",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Radical-human-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Audit-canonical-compound-groups",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Activate-promotion-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "Run-release-gates-and-close",
+      "status": "planned"
+    }
+  ]
+}

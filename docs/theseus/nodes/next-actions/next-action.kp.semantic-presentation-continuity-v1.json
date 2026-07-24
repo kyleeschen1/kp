@@ -1,0 +1,72 @@
+{
+  "id": "next-action.kp.semantic-presentation-continuity-v1",
+  "kind": "next-action",
+  "title": "Enforce semantic presentation continuity",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-24-semantic-presentation-continuity-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-24-distribution-first-product-settlement-diagnostic.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-authoritative-roadmap-workbench-successor-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "run-contract.kp.semantic-animation-convergence-v2"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.radical-settlement-v1",
+    "next-action.kp.material-motion.distribution-fission-v0"
+  ],
+  "verification": [
+    "npm test",
+    "npm run typecheck",
+    "npm run test:animation-browser"
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "User approved the exact 30-slice long loop on 2026-07-24. Execution is authorized through the mandatory distribution checkpoint at slice 20."
+  },
+  "expectedLearning": [
+    "Whether renderer-neutral presentation groups can make distributed products and cross-owner radical handoffs converge without renderer-specific ownership in the semantic layer."
+  ],
+  "allowedWork": [
+    "Renderer-neutral presentation-group contracts and conformance laws.",
+    "Focused distribution and radical presentation-settlement adapters, tests, and stable visual evidence."
+  ],
+  "disallowedWork": [
+    "New curriculum, semantic algebra changes, renderer replacement, and unrelated roadmap or design changes.",
+    "Promotion before the distribution and radical human checkpoints."
+  ],
+  "criteria": [
+    {
+      "id": "intra-owner-continuity",
+      "weight": "high"
+    },
+    {
+      "id": "inter-owner-equivalence",
+      "weight": "high"
+    },
+    {
+      "id": "distribution-human-acceptance",
+      "weight": "high"
+    },
+    {
+      "id": "radical-human-acceptance",
+      "weight": "high"
+    },
+    {
+      "id": "promotion-and-release",
+      "weight": "medium"
+    }
+  ]
+}
