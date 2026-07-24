@@ -25,6 +25,17 @@ const captures: {
     temporaryPx: number;
     nativePx: number;
     residualPx: number;
+    temporaryFactorWidthPx: number;
+    nativeFactorWidthPx: number;
+    temporaryTermWidthPx: number;
+    nativeTermWidthPx: number;
+    temporaryInkGapPx: number;
+    nativeInkGapPx: number;
+    inkResidualPx: number;
+    temporaryTermFontSizePx: number;
+    nativeTermFontSizePx: number;
+    temporaryTermText: string;
+    nativeTermText: string;
   } | undefined;
   screenshot: string;
   sha256: string;
@@ -106,7 +117,22 @@ function sha256(value: Uint8Array): string {
 
 async function measureDistributionGap(
   stage: import("playwright").Locator
-): Promise<{ temporaryPx: number; nativePx: number; residualPx: number }> {
+): Promise<{
+  temporaryPx: number;
+  nativePx: number;
+  residualPx: number;
+  temporaryFactorWidthPx: number;
+  nativeFactorWidthPx: number;
+  temporaryTermWidthPx: number;
+  nativeTermWidthPx: number;
+  temporaryInkGapPx: number;
+  nativeInkGapPx: number;
+  inkResidualPx: number;
+  temporaryTermFontSizePx: number;
+  nativeTermFontSizePx: number;
+  temporaryTermText: string;
+  nativeTermText: string;
+}> {
   return stage.evaluate((element) => {
     const rect = (selector: string) => {
       const node = element.querySelector<HTMLElement>(selector);
@@ -125,12 +151,69 @@ async function measureDistributionGap(
     const nativeTerm = rect(
       '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-term"]'
     );
+    const inkRect = (selector: string) => {
+      const node = element.querySelector<HTMLElement>(selector);
+      if (node === null) throw new Error(`Missing distribution ink probe ${selector}.`);
+      const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+      const rects: DOMRect[] = [];
+      while (walker.nextNode() !== null) {
+        const text = walker.currentNode;
+        if ((text.textContent ?? "").trim().length === 0) continue;
+        const range = document.createRange();
+        range.selectNodeContents(text);
+        rects.push(range.getBoundingClientRect());
+      }
+      if (rects.length === 0) return node.getBoundingClientRect();
+      const left = Math.min(...rects.map((rect) => rect.left));
+      const top = Math.min(...rects.map((rect) => rect.top));
+      const right = Math.max(...rects.map((rect) => rect.right));
+      const bottom = Math.max(...rects.map((rect) => rect.bottom));
+      return new DOMRect(left, top, right - left, bottom - top);
+    };
+    const temporaryFactorInk = inkRect(
+      '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.factor"]'
+    );
+    const temporaryTermInk = inkRect(
+      '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.left-term"]'
+    );
+    const nativeFactorInk = inkRect(
+      '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-factor"]'
+    );
+    const nativeTermInk = inkRect(
+      '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-term"]'
+    );
     const temporaryPx = temporaryTerm.left - temporaryFactor.right;
     const nativePx = nativeTerm.left - nativeFactor.right;
+    const temporaryInkGapPx =
+      temporaryTermInk.left - temporaryFactorInk.right;
+    const nativeInkGapPx = nativeTermInk.left - nativeFactorInk.right;
     return {
       temporaryPx,
       nativePx,
-      residualPx: temporaryPx - nativePx
+      residualPx: temporaryPx - nativePx,
+      temporaryFactorWidthPx: temporaryFactor.width,
+      nativeFactorWidthPx: nativeFactor.width,
+      temporaryTermWidthPx: temporaryTerm.width,
+      nativeTermWidthPx: nativeTerm.width,
+      temporaryInkGapPx,
+      nativeInkGapPx,
+      inkResidualPx: temporaryInkGapPx - nativeInkGapPx,
+      temporaryTermFontSizePx: Number.parseFloat(
+        getComputedStyle(element.querySelector<HTMLElement>(
+          '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.left-term"]'
+        )!).fontSize
+      ),
+      nativeTermFontSizePx: Number.parseFloat(
+        getComputedStyle(element.querySelector<HTMLElement>(
+          '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-term"]'
+        )!).fontSize
+      ),
+      temporaryTermText: element.querySelector<HTMLElement>(
+        '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.left-term"]'
+      )!.textContent ?? "",
+      nativeTermText: element.querySelector<HTMLElement>(
+        '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-term"]'
+      )!.textContent ?? ""
     };
   });
 }

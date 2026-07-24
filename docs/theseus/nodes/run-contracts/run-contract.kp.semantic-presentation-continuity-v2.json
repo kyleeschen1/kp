@@ -139,7 +139,8 @@
     {
       "id": "slice-16",
       "title": "Render post-lock distribution motion in group-local target geometry.",
-      "status": "planned"
+      "summary": "After cohesion lock, native target factor/addend tokens move under one group offset while source material crossfades away; target spacing stays exact during settlement. Seventeen unit checks, typecheck, focused browser regression, and stable visuals pass.",
+      "status": "complete"
     },
     {
       "id": "slice-17",

@@ -2251,6 +2251,12 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   const targetFactors = transition.locator(
     '[data-kp-editor-equation-target] [data-kp-motion-id$="-factor"]'
   );
+  const sourceLeftTerm = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.left-term"]'
+  );
+  const targetLeftTerm = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-term"]'
+  );
 
   await scrubber.fill("0.18");
   await expect(transition).toHaveAttribute(
@@ -2333,6 +2339,32 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   ));
   expect(groupingOpacity).toBeGreaterThan(0);
   expect(groupingOpacity).toBeLessThan(1);
+
+  await scrubber.fill("0.83");
+  const settlementOwnerState = await Promise.all([
+    sourceFactor,
+    sourceLeftTerm,
+    targetFactors.nth(0),
+    targetLeftTerm
+  ].map((locator) => locator.evaluate((element) => ({
+    opacity: Number(getComputedStyle(element).opacity),
+    rect: (() => {
+      const rect = element.getBoundingClientRect();
+      return { left: rect.left, right: rect.right };
+    })()
+  }))));
+  expect(settlementOwnerState[0]!.opacity).toBeCloseTo(
+    1 - settlementOwnerState[2]!.opacity,
+    3
+  );
+  expect(settlementOwnerState[1]!.opacity).toBeCloseTo(
+    1 - settlementOwnerState[3]!.opacity,
+    3
+  );
+  expect(Math.abs(
+    settlementOwnerState[3]!.rect.left -
+    settlementOwnerState[2]!.rect.right
+  )).toBeLessThan(0.05);
 
   await scrubber.fill("0.359");
   const beforeFormerTransfer = await sourceFactor.evaluate((element) => {

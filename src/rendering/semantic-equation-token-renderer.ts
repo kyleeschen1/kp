@@ -176,6 +176,11 @@ interface DistributionChoreographyContext {
   readonly reflowRelationRecordIds: ReadonlySet<string>;
   readonly groupingRelationRecordIds: ReadonlySet<string>;
   readonly sourceFactorAnchorDelta: { readonly x: number; readonly y: number };
+  readonly productOffsetBySemanticIndex: ReadonlyMap<
+    number,
+    { readonly x: number; readonly y: number }
+  >;
+  readonly productIndexByReflowRelationId: ReadonlyMap<string, number>;
   readonly groupingReflowByMotionId: ReadonlyMap<
     string,
     { readonly x: number; readonly y: number }
@@ -1020,9 +1025,66 @@ function createDistributionChoreographyContext(
       ] as const;
     })
   );
+  const frame = runtime.sample({ plan, progress });
+  const leaderProgress = frame.sourceFactor.pathProgress;
+  const leaderCenter = {
+    x: sourceFactorCenter.x + sourceFactorAnchorDelta.x * leaderProgress,
+    y:
+      sourceFactorCenter.y +
+      sourceFactorAnchorDelta.y * leaderProgress +
+      kpLessonCanonicalDistributionMotionProfile.leader.arcPx *
+        Math.sin(Math.PI * leaderProgress)
+  };
+  const productOffsetBySemanticIndex = new Map(
+    factorRelation.target.motionIds.map((motionId) => {
+      const token = geometry.targetTokens.find(
+        (candidate) => candidate.motionId === motionId
+      );
+      const selectorIndex = factorRelation.target!.motionIds.indexOf(motionId);
+      const selectorId = factorRelation.target!.selectorIds[selectorIndex];
+      const copy = frame.factorCopies.find(
+        (candidate) => candidate.entityId === selectorId
+      );
+      if (token === undefined || copy === undefined) {
+        throw new Error(`Canonical distribution is missing product factor ${motionId}.`);
+      }
+      const destination = rectCenter(token.localRect);
+      if (copy.semanticIndex === 0) {
+        return [
+          copy.semanticIndex,
+          {
+            x: leaderCenter.x - destination.x,
+            y: leaderCenter.y - destination.y
+          }
+        ] as const;
+      }
+      const followerArc =
+        kpLessonCanonicalDistributionMotionProfile.follower.arcPx *
+        Math.sin(Math.PI * copy.pathProgress);
+      const current = {
+        x: interpolate(leaderCenter.x, destination.x, copy.pathProgress),
+        y:
+          interpolate(leaderCenter.y, destination.y, copy.pathProgress) +
+          followerArc
+      };
+      return [
+        copy.semanticIndex,
+        {
+          x: current.x - destination.x,
+          y: current.y - destination.y
+        }
+      ] as const;
+    })
+  );
+  const productIndexByReflowRelationId = new Map(
+    addendRelations.map((relation, semanticIndex) => [
+      relation.recordId,
+      semanticIndex
+    ] as const)
+  );
   return {
     plan,
-    frame: runtime.sample({ plan, progress }),
+    frame,
     factorRelationRecordId: factorRelation.recordId,
     reflowRelationRecordIds: new Set(
       persistentRelations.map((relation) => relation.recordId)
@@ -1031,6 +1093,8 @@ function createDistributionChoreographyContext(
       groupingRelations.map((relation) => relation.recordId)
     ),
     sourceFactorAnchorDelta,
+    productOffsetBySemanticIndex,
+    productIndexByReflowRelationId,
     groupingReflowByMotionId
   };
 }
@@ -2069,15 +2133,12 @@ function sampleDistributionRelation(
       kpLessonCanonicalDistributionMotionProfile.leader.arcPx *
       Math.sin(Math.PI * leaderProgress);
     const sourceFactorPose = {
-      opacity: context.frame.sourceFactor.opacity,
+      opacity:
+        context.frame.sourceFactor.opacity *
+        (1 - context.frame.productSettlementProgress),
       x: context.sourceFactorAnchorDelta.x * leaderProgress,
       y: context.sourceFactorAnchorDelta.y * leaderProgress + leaderArc,
       scale: context.frame.sourceFactor.scale
-    };
-    const sourceFactorCenter = rectCenter(relation.source.bounds);
-    const leaderCenter = {
-      x: sourceFactorCenter.x + sourceFactorPose.x,
-      y: sourceFactorCenter.y + sourceFactorPose.y
     };
     return [
       ...sourceTokens.map((token) =>
@@ -2092,47 +2153,19 @@ function sampleDistributionRelation(
         if (copy === undefined) {
           throw new Error(`Missing distribution factor copy ${selectorId ?? token.motionId}.`);
         }
-        if (copy.semanticIndex === 0) {
-          return {
-            ...frameToken(token, "target", {
-              opacity: copy.opacity,
-              x: 0,
-              y: 0,
-              scale: 1
-            }),
-            lineagePathId: `${context.plan.id}.factor-copy.0`,
-            lineageEdgeId: relation.recordId,
-            lineageBranchIndex: 0,
-            motionPathVariant: "arc-above" as const
-          };
-        }
-        const destination = rectCenter(token.localRect);
-        const followerProgress = copy.pathProgress;
-        const followerArc =
-          kpLessonCanonicalDistributionMotionProfile.follower.arcPx *
-          Math.sin(Math.PI * followerProgress);
-        const followerCenter = {
-          x: interpolate(
-            leaderCenter.x,
-            destination.x,
-            followerProgress
-          ),
-          y:
-            interpolate(
-              leaderCenter.y,
-              destination.y,
-              followerProgress
-            ) + followerArc
-        };
+        const groupOffset = context.productOffsetBySemanticIndex.get(
+          copy.semanticIndex
+        ) ?? { x: 0, y: 0 };
         return {
-          motionId: token.motionId,
-          side: "target" as const,
-          pose: {
-            opacity: copy.opacity,
-            x: followerCenter.x - destination.x,
-            y: followerCenter.y - destination.y,
+          ...frameToken(token, "target", {
+            opacity: Math.max(
+              copy.opacity,
+              context.frame.productSettlementProgress
+            ),
+            x: groupOffset.x,
+            y: groupOffset.y,
             scale: copy.scale
-          },
+          }),
           lineagePathId: `${context.plan.id}.factor-copy.${copy.semanticIndex}`,
           lineageEdgeId: relation.recordId,
           lineageBranchIndex: copy.semanticIndex,
@@ -2143,6 +2176,28 @@ function sampleDistributionRelation(
   }
   if (context.reflowRelationRecordIds.has(relation.recordId)) {
     const reflow = context.frame.addendReflowProgress;
+    const productIndex = context.productIndexByReflowRelationId.get(
+      relation.recordId
+    );
+    if (productIndex !== undefined) {
+      const groupOffset = context.productOffsetBySemanticIndex.get(
+        productIndex
+      ) ?? { x: 0, y: 0 };
+      return [
+        ...sourceTokens.map((token) => frameToken(token, "source", {
+          opacity: 1 - context.frame.productSettlementProgress,
+          x: (relation.delta?.x ?? 0) * reflow,
+          y: (relation.delta?.y ?? 0) * reflow,
+          scale: 1
+        })),
+        ...targetTokens.map((token) => frameToken(token, "target", {
+          opacity: context.frame.productSettlementProgress,
+          x: groupOffset.x,
+          y: groupOffset.y,
+          scale: 1
+        }))
+      ];
+    }
     return [
       ...sourceTokens.map((token) => frameToken(token, "source", {
         opacity: progress === 1 ? 0 : 1,
