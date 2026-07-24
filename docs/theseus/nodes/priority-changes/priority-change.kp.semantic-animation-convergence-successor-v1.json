@@ -2,9 +2,9 @@
   "id": "priority-change.kp.semantic-animation-convergence-successor-v1",
   "kind": "priority-change",
   "title": "Select semantic animation convergence successor",
-  "status": "active",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "After the completed authoritative-roadmap Workbench loop, make the reviewed semantic-animation convergence proposal the next implementation priority; complete the predecessor phases, defer quadratic branching to next, preserve all later roadmap coverage, and require approval of an exact typed run contract before execution.",
+  "summary": "Semantic-animation convergence was implemented through all 28 approved slices and explicitly accepted at the final human checkpoint on 2026-07-24. The newly reported distribution landing-offset bug remains follow-up work, not an unresolved convergence-contract checkpoint.",
   "sourceRefs": [
     {
       "kind": "user-intent",

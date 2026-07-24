@@ -4,7 +4,7 @@
   "title": "Semantic animation convergence execution",
   "status": "resolved",
   "domain": "kp",
-  "summary": "All 28 authorized execution slices and release evidence are complete. This resolves execution bookkeeping only; H7 human acceptance remains pending on priority-change.kp.semantic-animation-convergence-successor-v1 and plan-revision.kp.v7.",
+  "summary": "All 28 slices, release proof, and the final human checkpoint are complete. User explicitly accepted the convergence result on 2026-07-24; the distribution first-factor landing offset remains separate follow-up work.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -900,6 +900,13 @@
       "scope": "s28 project-control integrity",
       "checkedAt": "2026-07-24T06:51:41.482Z",
       "notes": "Workspace validation passes before final slice closure."
+    },
+    {
+      "command": "human visual checkpoint",
+      "status": "passed",
+      "scope": "s28 final acceptance",
+      "checkedAt": "2026-07-24T13:44:46.077Z",
+      "notes": "User explicitly approved the final semantic-animation convergence checkpoint on 2026-07-24. A newly reported distribution landing-offset bug is registered as follow-up diagnostic work and does not revoke acceptance of the completed architecture migration."
     }
   ],
   "expectedLearning": [

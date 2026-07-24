@@ -50,6 +50,10 @@
       "kind": "user-intent",
       "intent": "Approve semantic-animation convergence and execute all 28 slices without pausing at slice 17; retain the final checkpoint after slice 28.",
       "summary": "The user approved the exact long-loop proposal and waived only its intermediate human pause."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-24-distribution-first-product-settlement-diagnostic.md"
     }
   ],
   "affects": [
@@ -60,7 +64,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Semantic-animation convergence implementation and release proof are complete through slice 28. The roadmap remains active at the final human acceptance boundary; the post-convergence Lisp diagnostic remains proposal-only."
+    "summary": "The semantic-animation convergence priority is complete and human-accepted. Next implementation remains unselected; the post-convergence Lisp diagnostic is still proposal-only, while the distribution landing-offset bug is registered for diagnosis."
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
