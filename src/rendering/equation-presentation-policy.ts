@@ -1,5 +1,4 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
-import type { KpEquationMaterialHandoffMode } from "./equation-material-owner.ts";
 import {
   inferKpCancellationPresentationIntent,
   kpCancellationOperationIdForTransformType,
@@ -10,38 +9,31 @@ import { resolveKpCancellationPresentation } from "./cancellation-presentation-r
 import type {
   KpEquationCancellationPresentationRecipe
 } from "../animation/cancellation-presentation-contract.ts";
+import type {
+  KpEquationContinuantPresentationRecipe,
+  KpEquationDepthPresentationRecipe,
+  KpEquationMotionPresentationRecipe,
+  KpEquationNativeHandoffRecipe,
+  KpEquationSuccessorPresentationRecipe,
+  KpEquationZeroWitnessPresentationRecipe
+} from "../animation/equation-presentation-profile.ts";
 
 export type KpEquationPresentationRecipe =
-  | "semantic-material-v2"
-  | "continuity-v1";
+  KpEquationMotionPresentationRecipe;
 
 export type {
   KpEquationCancellationPresentationRecipe
 } from "../animation/cancellation-presentation-contract.ts";
-
-export type KpEquationZeroWitnessPresentationRecipe =
-  | "none"
-  | "embedded-v1"
-  | "independent-zero-v1";
-
-export type KpEquationSuccessorPresentationRecipe =
-  | "native-handoff-v1"
-  | "successor-synthesis-v1"
-  | "convergence-v1"
-  | "counter-convergence-v1";
-
-export type KpEquationDepthPresentationRecipe =
-  | "flat-v1"
-  | "semantic-depth-v1";
-
-export type KpEquationContinuantPresentationRecipe =
-  | "concurrent-v1"
-  | "reserve-then-transit-v1"
-  | "transit-then-reflow-v1";
+export type {
+  KpEquationContinuantPresentationRecipe,
+  KpEquationDepthPresentationRecipe,
+  KpEquationSuccessorPresentationRecipe,
+  KpEquationZeroWitnessPresentationRecipe
+} from "../animation/equation-presentation-profile.ts";
 
 export interface KpEquationPresentationProfile {
   readonly recipe: KpEquationPresentationRecipe;
-  readonly handoff: KpEquationMaterialHandoffMode;
+  readonly handoff: KpEquationNativeHandoffRecipe;
   readonly cancellation: KpEquationCancellationPresentationRecipe;
   readonly zeroWitness: KpEquationZeroWitnessPresentationRecipe;
   readonly successor: KpEquationSuccessorPresentationRecipe;

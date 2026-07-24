@@ -107,11 +107,13 @@ export const kpSemanticAnimationCompilerStages = [
     owner: "presentation",
     authority: "presentation-policy",
     representations: [
+      "KpEquationPresentationProfileV1",
       "KpEquationPresentationProfile",
       "KpCancellationPresentationResolution"
     ],
     sourcePaths: [
       "src/animation/cancellation-presentation-contract.ts",
+      "src/animation/equation-presentation-profile.ts",
       "src/rendering/equation-presentation-policy.ts"
     ],
     dependsOn: ["correspondence-lineage"],

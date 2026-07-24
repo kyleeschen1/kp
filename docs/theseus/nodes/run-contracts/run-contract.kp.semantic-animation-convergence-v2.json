@@ -346,6 +346,34 @@
       "scope": "s13 production build",
       "checkedAt": "2026-07-24T05:04:28.142Z",
       "notes": "Production build passed; only the pre-existing large-chunk advisory remains."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-presentation-profile.test.ts tests/equation-presentation-policy.test.ts tests/semantic-animation-compiler-stages.test.ts tests/semantic-animation-layer-ownership.test.ts",
+      "status": "passed",
+      "scope": "s14 typed presentation profile",
+      "checkedAt": "2026-07-24T05:13:52.982Z",
+      "notes": "All 18 profile, compatibility-policy, compiler-inventory, and layer-ownership tests pass."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s14 focused convergence suite",
+      "checkedAt": "2026-07-24T05:13:55.749Z",
+      "notes": "All 208 focused convergence tests pass with versioned profile construction, validation, closed extension, and substitution coverage."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s14 type safety",
+      "checkedAt": "2026-07-24T05:13:57.569Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass with the neutral profile contract and rendering type consumption."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s14 dependency direction",
+      "checkedAt": "2026-07-24T05:13:59.206Z",
+      "notes": "All architecture gates pass; semantic-animation scans 261 files with zero rendering-import exceptions."
     }
   ],
   "expectedLearning": [
@@ -497,7 +525,8 @@
     {
       "id": "s14",
       "title": "Versioned-typed-presentation-profile",
-      "status": "planned",
+      "summary": "Defined a renderer-neutral kp.presentation-profile.v1 envelope with an equation-only typed payload for motion, native handoff, cancellation, zero witness, successor, depth, continuants, and balanced-branch scheduling. Version 1 rejects all unregistered extension bags, freezes constructed profiles, and cannot carry semantic transformations, correspondence, or renderer resources. Rendering now consumes the neutral recipe types. All 18 targeted tests, 208 focused tests, typecheck, and architecture gates pass; the architecture gate scans 261 semantic-animation files with zero rendering-import exceptions.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
