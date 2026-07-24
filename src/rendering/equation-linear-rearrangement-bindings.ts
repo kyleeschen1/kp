@@ -6,7 +6,7 @@ import {
 import {
   kpEquationLinearRearrangementKindForTransformType,
   type KpEquationLinearRearrangementKind
-} from "./equation-linear-rearrangement.ts";
+} from "../animation/equation-linear-rearrangement-kind.ts";
 import {
   createKpBalancedBranchScheduling,
   type KpBalancedBranchScheduling

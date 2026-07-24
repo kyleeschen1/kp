@@ -3,7 +3,9 @@ import type { KpEquationTransitionIr } from "../domain-ir/public-api.ts";
 import type { KpSelectorAnnotatedLatex } from "./selector-annotated-latex.ts";
 import type { KpEquationEnclosureChoreographyKind } from "./equation-enclosure-choreography.ts";
 import type { KpEquationMotionPathCandidate } from "./equation-motion-path-planner.ts";
-import type { KpEquationLinearRearrangementKind } from "./equation-linear-rearrangement.ts";
+import type {
+  KpEquationLinearRearrangementKind
+} from "../animation/equation-linear-rearrangement-kind.ts";
 import type {
   KpEquationCancellationPresentationRecipe,
   KpEquationContinuantPresentationRecipe,
@@ -14,9 +16,15 @@ import type {
 import type {
   KpIndependentZeroWitnessPlan
 } from "./equation-independent-zero-witness.ts";
-import type { KpDotProductRendererPlan } from "./equation-dot-product-traversal.ts";
-import type { KpMatrixVectorRendererPlan } from "./equation-matrix-vector-composition.ts";
-import type { KpMatrixMatrixRendererPlan } from "./equation-matrix-matrix-composition.ts";
+import type {
+  KpDotProductRendererPlan
+} from "../animation/dot-product-traversal-progress.ts";
+import type {
+  KpMatrixVectorRendererPlan
+} from "../animation/matrix-vector-composition-progress.ts";
+import type {
+  KpMatrixMatrixRendererPlan
+} from "../animation/matrix-matrix-composition-progress.ts";
 import type {
   KpDerivativePowerChoreographyPlan
 } from "../animation/derivative-power-choreography.ts";

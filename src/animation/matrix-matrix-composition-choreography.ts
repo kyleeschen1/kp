@@ -20,13 +20,13 @@ import {
 } from "./matrix-matrix-duration-contract.ts";
 import {
   sampleKpMatrixMatrixCompositionProgress,
-  type KpMatrixMatrixCompositionProgressFrame,
-  type KpMatrixMatrixRendererCellPlan,
-  type KpMatrixMatrixRendererPlan
-} from "../rendering/equation-matrix-matrix-composition.ts";
+  type KpMatrixMatrixCompositionCellPlan as KpMatrixMatrixProgressCellPlan,
+  type KpMatrixMatrixCompositionPlan,
+  type KpMatrixMatrixCompositionProgressFrame
+} from "./matrix-matrix-composition-progress.ts";
 
 export interface KpMatrixMatrixCompositionCellPlan
-  extends KpMatrixMatrixRendererCellPlan {
+  extends KpMatrixMatrixProgressCellPlan {
   readonly focus: KpFocusProfilePlan;
 }
 
@@ -35,7 +35,7 @@ export interface KpMatrixMatrixCompositionChoreography {
   readonly transformationId: string;
   readonly traversal: KpSemanticTraversalPlan;
   readonly propagation: KpPropagationPlan;
-  readonly rendererPlan: KpMatrixMatrixRendererPlan;
+  readonly rendererPlan: KpMatrixMatrixCompositionPlan;
   readonly cells: readonly KpMatrixMatrixCompositionCellPlan[];
 }
 

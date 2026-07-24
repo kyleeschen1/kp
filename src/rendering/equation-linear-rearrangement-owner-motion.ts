@@ -1,6 +1,6 @@
 import type {
   KpEquationLinearRearrangementKind
-} from "./equation-linear-rearrangement.ts";
+} from "../animation/equation-linear-rearrangement-kind.ts";
 import {
   sampleKpEquationLinearRearrangementFrame,
   sampleKpEquationLinearRearrangementRelation,

@@ -66,6 +66,12 @@ test("migration targets expose current package debt without hiding authority", (
     "sampled-frame",
     "domain-payload"
   ]);
+  assert.deepEqual(
+    kpSemanticAnimationCompilerStages
+      .filter(({ id }) => id === "motion-plan")
+      .map(({ owner, migrationStatus }) => [owner, migrationStatus]),
+    [["presentation", "canonical"]]
+  );
   assert.equal(
     kpSemanticAnimationCompilerStages.some(
       ({ authority }) => authority === "renderer-output"

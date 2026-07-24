@@ -6,7 +6,7 @@ import {
 import {
   sampleSaddleSurfaceMorph,
   type SaddleSurfaceMorphSample
-} from "../rendering/graph-svg.ts";
+} from "./saddle-surface-morph.ts";
 
 export interface NumberTweenInput {
   from: number;

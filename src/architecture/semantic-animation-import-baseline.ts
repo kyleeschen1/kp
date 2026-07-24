@@ -1,7 +1,5 @@
 export type KpSemanticAnimationRenderingImportClassification =
-  | "neutral-utility-location-debt"
-  | "choreography-location-debt"
-  | "compatibility-boundary";
+  "compatibility-boundary";
 
 export type KpSemanticAnimationRenderingImportOwner =
   | "semantic"
@@ -10,8 +8,7 @@ export type KpSemanticAnimationRenderingImportOwner =
   | "presentation";
 
 export type KpSemanticAnimationRenderingImportRetirementSlice =
-  | "s12"
-  | "s13";
+  "s13";
 
 export interface KpSemanticAnimationRenderingImportException {
   readonly sourcePath: `src/${"semantic" | "animation"}/${string}.ts`;
@@ -26,62 +23,6 @@ export interface KpSemanticAnimationRenderingImportException {
 // Every entry is temporary and exact. This inventory prevents dependency
 // inversion from hiding behind a wildcard while ownership moves in slices 9–13.
 export const kpSemanticAnimationRenderingImportBaseline = [
-  exception({
-    sourcePath: "src/animation/tween.ts",
-    modulePath: "../rendering/graph-svg.ts",
-    classification: "neutral-utility-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s12",
-    rationale: "Saddle morph sampling is numeric animation logic, not SVG state."
-  }),
-  exception({
-    sourcePath: "src/animation/radical-morph-profile.ts",
-    modulePath: "../rendering/equation-motion-plan.ts",
-    classification: "neutral-utility-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s12",
-    rationale: "Easing names are neutral motion vocabulary."
-  }),
-  exception({
-    sourcePath: "src/animation/radical-native-settlement.ts",
-    modulePath: "../rendering/equation-motion-plan.ts",
-    classification: "neutral-utility-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s12",
-    rationale: "Settlement sampling consumes neutral easing vocabulary."
-  }),
-  exception({
-    sourcePath: "src/animation/dot-product-traversal-choreography.ts",
-    modulePath: "../rendering/equation-dot-product-traversal.ts",
-    classification: "choreography-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s12",
-    rationale: "Dot-product traversal plans and samples are choreography-domain logic."
-  }),
-  exception({
-    sourcePath: "src/animation/linear-rearrangement-choreography.ts",
-    modulePath: "../rendering/equation-linear-rearrangement.ts",
-    classification: "choreography-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s12",
-    rationale: "Linear rearrangement kinds classify choreography before rendering."
-  }),
-  exception({
-    sourcePath: "src/animation/matrix-vector-composition-choreography.ts",
-    modulePath: "../rendering/equation-matrix-vector-composition.ts",
-    classification: "choreography-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s12",
-    rationale: "Matrix-vector progression and plans are choreography-domain logic."
-  }),
-  exception({
-    sourcePath: "src/animation/matrix-matrix-composition-choreography.ts",
-    modulePath: "../rendering/equation-matrix-matrix-composition.ts",
-    classification: "choreography-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s12",
-    rationale: "Matrix-matrix progression and plans are choreography-domain logic."
-  }),
   exception({
     sourcePath: "src/animation/generated-cancellation-presentation-boundary.ts",
     modulePath: "../rendering/cancellation-presentation-capabilities.ts",

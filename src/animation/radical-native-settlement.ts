@@ -1,4 +1,4 @@
-import type { EasingName } from "../rendering/equation-motion-plan.ts";
+import type { EasingName } from "./easing.ts";
 import {
   kpRadicalConventionalMorphProfile
 } from "./radical-morph-profile.ts";

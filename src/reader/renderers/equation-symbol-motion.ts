@@ -22,7 +22,9 @@ import {
   type KpEquationLinearRearrangementOwnerFrame,
   type KpEquationOwnerFragmentMotion
 } from "../../rendering/equation-linear-rearrangement-owner-motion.ts";
-import type { KpEquationLinearRearrangementKind } from "../../rendering/equation-linear-rearrangement.ts";
+import type {
+  KpEquationLinearRearrangementKind
+} from "../../animation/equation-linear-rearrangement-kind.ts";
 import type { KpReaderEquationLayoutSnapshot } from "./equation-layout-snapshot.ts";
 import type { KpWitnessedAnnihilationBinding } from "../../animation/witnessed-annihilation.ts";
 import type { KpSuccessorSynthesisBinding } from "../../animation/successor-synthesis.ts";

@@ -121,12 +121,22 @@ export const kpSemanticAnimationCompilerStages = [
       "SemanticTransformationNode",
       "EquationVisualMotifDescriptor",
       "KpExecutableMotifComposition",
-      "TransformTreeVisualMotifTimeline"
+      "TransformTreeVisualMotifTimeline",
+      "KpEasingName",
+      "KpDotProductTraversalPlan",
+      "KpMatrixVectorCompositionPlan",
+      "KpMatrixMatrixCompositionPlan"
     ],
     sourcePaths: [
       "src/animation/choreography-plan.ts",
       "src/animation/choreography-timeline.ts",
+      "src/animation/dot-product-traversal-progress.ts",
+      "src/animation/easing.ts",
+      "src/animation/equation-linear-rearrangement-kind.ts",
+      "src/animation/matrix-matrix-composition-progress.ts",
+      "src/animation/matrix-vector-composition-progress.ts",
       "src/animation/motifs/public-api.ts",
+      "src/animation/saddle-surface-morph.ts",
       "src/semantic/transformation-composition.ts"
     ],
     dependsOn: ["presentation-profile"],
@@ -146,7 +156,7 @@ export const kpSemanticAnimationCompilerStages = [
   }),
   stage({
     id: "motion-plan",
-    owner: "rendering",
+    owner: "presentation",
     authority: "renderer-motion-plan",
     representations: ["KpEquationMotionPlan", "KpAnimationMotionPlan"],
     sourcePaths: [
@@ -154,7 +164,7 @@ export const kpSemanticAnimationCompilerStages = [
       "src/animation/kernel.ts"
     ],
     dependsOn: ["domain-ir"],
-    migrationStatus: "compatibility-boundary"
+    migrationStatus: "canonical"
   }),
   stage({
     id: "sampled-frame",

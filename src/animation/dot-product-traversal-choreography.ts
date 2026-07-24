@@ -22,13 +22,13 @@ import type { KpSemanticTraversalPlan } from "./semantic-traversal.ts";
 import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
 import {
   sampleKpDotProductTraversalProgress,
-  type KpDotProductRendererContributionPlan,
-  type KpDotProductRendererPlan,
+  type KpDotProductTraversalContributionPlan as KpDotProductProgressContributionPlan,
+  type KpDotProductTraversalPlan,
   type KpDotProductTraversalProgressFrame
-} from "../rendering/equation-dot-product-traversal.ts";
+} from "./dot-product-traversal-progress.ts";
 
 export interface KpDotProductTraversalContributionPlan
-  extends KpDotProductRendererContributionPlan {
+  extends KpDotProductProgressContributionPlan {
   readonly traversalParticipantId: string;
   readonly motionField: KpMotionFieldPlan;
   readonly focus: KpFocusProfilePlan;
@@ -40,7 +40,7 @@ export interface KpDotProductTraversalChoreography {
   readonly plan: KpCompiledChoreographyPlan;
   readonly traversal: KpSemanticTraversalPlan;
   readonly propagation: KpPropagationPlan;
-  readonly rendererPlan: KpDotProductRendererPlan;
+  readonly rendererPlan: KpDotProductTraversalPlan;
   readonly contributions: readonly KpDotProductTraversalContributionPlan[];
   readonly patternCompression: {
     readonly available: true;

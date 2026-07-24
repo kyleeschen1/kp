@@ -97,7 +97,6 @@ test("current ownership debt is explicit and scheduled", () => {
     ),
     [
       ["presentation-profile", "s14"],
-      ["motion-plan", "s12"],
       ["domain-payload", "s21"]
     ]
   );

@@ -34,7 +34,7 @@ import type { SelectorCorrespondenceRecord } from "../semantic/correspondence.ts
 import {
   kpEquationLinearRearrangementKindForTransformType,
   type KpEquationLinearRearrangementKind
-} from "../rendering/equation-linear-rearrangement.ts";
+} from "./equation-linear-rearrangement-kind.ts";
 import {
   compileKpBridgedChoreographySequence,
   type KpBridgedChoreographySequence

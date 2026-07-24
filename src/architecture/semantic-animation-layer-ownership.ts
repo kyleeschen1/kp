@@ -174,14 +174,6 @@ export const kpSemanticAnimationOwnershipMigrationDebt = [
       "The current equation profile imports renderer-owned handoff and resolver contracts."
   },
   {
-    stageId: "motion-plan",
-    currentSourcePath: "src/rendering/equation-motion-plan.ts",
-    targetLayer: "presentation",
-    retirementSlice: "s12",
-    reason:
-      "Neutral motion vocabulary and concrete equation planning still share one module."
-  },
-  {
     stageId: "domain-payload",
     currentSourcePath: "src/rendering/equation-motion-sampler.ts",
     targetLayer: "presentation",

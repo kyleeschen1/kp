@@ -1,4 +1,4 @@
-import type { EasingName } from "../rendering/equation-motion-plan.ts";
+import type { EasingName } from "./easing.ts";
 
 export interface KpRadicalMorphMotionProfile {
   readonly id: string;

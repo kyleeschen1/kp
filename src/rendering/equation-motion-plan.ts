@@ -21,6 +21,7 @@ import {
   type EquationVisualMotifKind,
   type EquationVisualMotifPlan
 } from "../animation/motifs/visual-motif.ts";
+import type { EasingName } from "../animation/easing.ts";
 
 export {
   equationVisualMotifDescriptors,
@@ -39,7 +40,7 @@ export type {
   VisualMotionPrimitiveId
 } from "../animation/motifs/visual-motif.ts";
 
-export type EasingName = "linear" | "ease-in" | "ease-out" | "ease-in-out";
+export type { EasingName, KpEasingName } from "../animation/easing.ts";
 
 export interface EquationMotionPlan {
   readonly sourceLatex: string;
