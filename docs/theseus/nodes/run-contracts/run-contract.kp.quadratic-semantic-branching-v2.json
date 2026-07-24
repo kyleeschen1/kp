@@ -125,7 +125,8 @@
     {
       "id": "slice-11",
       "title": "Canonical-animation-asset",
-      "status": "planned"
+      "summary": "Built the canonical renderer-neutral quadratic AnimationAsset with semantic objects and transformations, both method paths, lifecycle checkpoints, typed sampled-frame envelopes and equation payloads, inspection data, one shared deterministic clock, and no concrete renderer dependencies.",
+      "status": "complete"
     },
     {
       "id": "slice-12",

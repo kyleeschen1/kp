@@ -104,6 +104,13 @@
       "scope": "slice-10 total lifecycle and reverse laws",
       "checkedAt": "2026-07-24T20:09:42.033Z",
       "notes": "Eighteen focused tests passed. Lifecycle and correspondence totality, shared endpoints, branch closure, unique reconstruction, stateless direct seek, exact settlement, mirrored rewind, convergence preservation, immutability, and type safety are verified."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/quadratic-branching-animation-asset.test.ts tests/quadratic-lifecycle.test.ts tests/sampled-frame-envelope.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-11 canonical renderer-neutral animation asset",
+      "checkedAt": "2026-07-24T20:12:57.630Z",
+      "notes": "Seventeen focused tests passed. Asset reference closure, seek-rewind law, two-method shared clock, typed envelope and equation payload, semantic inspection, renderer neutrality, deterministic sampling, JSON stability, and type safety are verified."
     }
   ],
   "progress": {
