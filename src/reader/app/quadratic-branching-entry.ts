@@ -7,6 +7,9 @@ import {
 import {
   createKpReaderClockSample,
   createKpReaderContinuousScrollClock,
+  parseKpReaderMotionPreference,
+  projectKpReaderMotion,
+  resolveKpReaderMotionPolicy,
   resolveKpReaderResponsiveProjection,
   type KpReaderClockSample
 } from "../runtime/public-api.ts";
@@ -32,6 +35,8 @@ const share = requireElement<HTMLAnchorElement>("[data-kp-quadratic-share]");
 const branches = requireElement<HTMLElement>("[data-kp-quadratic-branches]");
 const solution = requireElement<HTMLElement>("[data-kp-quadratic-solution]");
 const graph = requireElement<SVGElement>("[data-kp-quadratic-graph]");
+const motionSelect = requireElement<HTMLSelectElement>("[data-kp-quadratic-motion]");
+const narration = requireElement<HTMLElement>("[data-kp-quadratic-narration]");
 const methodButtons = [
   ...stage.querySelectorAll<HTMLButtonElement>("[data-kp-quadratic-method]")
 ];
@@ -41,6 +46,8 @@ const beatElements = [
 let methodId: KpQuadraticMethodId = parseKpQuadraticReaderMethod(
   new URL(window.location.href).searchParams.get("kpMethod")
 );
+let motionPreference = motionPreferenceFromUrl();
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 let current = createKpReaderClockSample({
   source: "initial",
   progress: progressFromUrl(),
@@ -49,6 +56,8 @@ let current = createKpReaderClockSample({
 let sequence = 0;
 let scrollEngaged = false;
 let preserveExplicitProgress = new URL(window.location.href).searchParams.has("kpProgress");
+let layoutRevision = 0;
+let captureRevision = 0;
 
 const scrollClock = createKpReaderContinuousScrollClock({
   id: "clock.reader.quadratic-branching.shared",
@@ -58,14 +67,29 @@ const scrollClock = createKpReaderContinuousScrollClock({
 });
 
 function render(sample: KpReaderClockSample): void {
-  current = sample;
+  const motionPolicy = resolveKpReaderMotionPolicy({
+    preference: motionPreference,
+    systemReducedMotion: reducedMotion.matches
+  });
+  const motion = projectKpReaderMotion({
+    clock: sample,
+    checkpoints: kpQuadraticReaderCheckpoints,
+    policy: motionPolicy
+  });
+  current = {
+    ...sample,
+    progress: motion.progress,
+    progressPermille: motion.progressPermille,
+    checkpointId: motion.checkpointId
+  };
   const synchronized = sampleKpQuadraticEquationGraphFrame({
-    progress: sample.progress,
+    progress: current.progress,
     methodId,
-    direction: sample.direction
+    direction: current.direction
   });
   const frame = synchronized.equation;
   body.dataset["kpReaderProgress"] = String(frame.progressPermille);
+  body.dataset["kpReaderMotionMode"] = motionPolicy.resolvedMode;
   body.dataset["kpReaderResponsiveProjection"] = resolveKpReaderResponsiveProjection({
     viewportWidth: window.innerWidth,
     attentionAvailable: true
@@ -74,14 +98,17 @@ function render(sample: KpReaderClockSample): void {
   stage.dataset["kpPhase"] = frame.phase;
   stage.dataset["kpCheckpoint"] = frame.checkpointId;
   stage.dataset["kpClockId"] = scrollClock.id;
-  stage.dataset["kpClockSource"] = sample.source;
-  stage.dataset["kpDirection"] = sample.direction;
+  stage.dataset["kpClockSource"] = current.source;
+  stage.dataset["kpDirection"] = current.direction;
+  stage.dataset["kpMotionSampling"] = motionPolicy.sampling;
   stage.dataset["kpGraphProgress"] = String(synchronized.graphLocalProgress);
   graph.dataset["kpSharedClockId"] = synchronized.sharedClockId;
   progress.value = String(frame.progressPermille);
   progress.setAttribute("aria-valuetext", `${frame.checkpointLabel}, ${Math.round(frame.progress * 100)} percent`);
   status.value = frame.checkpointLabel;
   count.value = `${frame.checkpointLabel}, ${Math.round(frame.progress * 100)} percent`;
+  narration.textContent = narrationFor(frame);
+  motionSelect.value = motionPreference;
 
   for (const equation of stage.querySelectorAll<HTMLElement>("[data-kp-equation-state]")) {
     equation.hidden = equation.dataset["kpEquationState"] !== frame.equationState.id ||
@@ -217,14 +244,20 @@ progress.addEventListener("input", () => setControlProgress(Number(progress.valu
 previous.addEventListener("click", () => adjacentCheckpoint(-1));
 next.addEventListener("click", () => adjacentCheckpoint(1));
 stage.addEventListener("keydown", (event) => {
-  if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+  if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
   event.preventDefault();
-  adjacentCheckpoint(event.key === "ArrowLeft" ? -1 : 1);
+  if (event.key === "Home") setControlProgress(0);
+  else if (event.key === "End") setControlProgress(1_000);
+  else adjacentCheckpoint(event.key === "ArrowLeft" ? -1 : 1);
 });
 methodButtons.forEach((button) => button.addEventListener("click", () => {
   methodId = parseKpQuadraticReaderMethod(button.dataset["kpQuadraticMethod"]);
   render(current);
 }));
+motionSelect.addEventListener("change", () => {
+  motionPreference = parseKpReaderMotionPreference(motionSelect.value) ?? "system";
+  render(current);
+});
 
 window.addEventListener("wheel", () => {
   preserveExplicitProgress = false;
@@ -238,12 +271,35 @@ window.addEventListener("scroll", () => {
   render(scrollClock.samplePosition(readerPosition()));
 }, { passive: true });
 window.addEventListener("resize", () => {
+  invalidateLayout("resize");
   scrollClock.updateGeometry(scrollGeometry());
   render(scrollEngaged
     ? scrollClock.samplePosition(readerPosition())
     : current);
 });
-window.addEventListener("pagehide", () => scrollClock.dispose(), { once: true });
+reducedMotion.addEventListener("change", () => render(current));
+const onFontLoadingDone = (): void => invalidateLayout("font");
+document.fonts.addEventListener("loadingdone", onFontLoadingDone);
+const onReviewRequest = (): void => {
+  captureRevision += 1;
+  render(current);
+  stage.dataset["kpCaptureRevision"] = String(captureRevision);
+  window.dispatchEvent(new CustomEvent("kp:reader-dev-review-frame", {
+    detail: {
+      route: window.location.pathname,
+      progressPermille: current.progressPermille,
+      methodId,
+      clockId: stage.dataset["kpClockId"],
+      captureRevision
+    }
+  }));
+};
+window.addEventListener("kp:reader-dev-review-request-frame", onReviewRequest);
+window.addEventListener("pagehide", () => {
+  scrollClock.dispose();
+  document.fonts.removeEventListener("loadingdone", onFontLoadingDone);
+  window.removeEventListener("kp:reader-dev-review-request-frame", onReviewRequest);
+}, { once: true });
 
 function updateUrl(): void {
   const url = new URL(window.location.href);
@@ -251,6 +307,7 @@ function updateUrl(): void {
   url.searchParams.set("kpVersion", "1");
   url.searchParams.set("kpProgress", String(current.progressPermille));
   url.searchParams.set("kpMethod", kpQuadraticReaderMethodQueryValue(methodId));
+  url.searchParams.set("kpMotion", motionPreference);
   history.replaceState(null, "", url);
   share.href = url.toString();
 }
@@ -278,6 +335,37 @@ function branchesVisible(value: number): boolean {
   return value >= 0.58 && value < 0.8;
 }
 
+function narrationFor(
+  frame: ReturnType<typeof sampleKpQuadraticEquationGraphFrame>["equation"]
+): string {
+  if (frame.phase === "branch") {
+    return `${frame.checkpointLabel}. The minus branch gives x equals two. The plus branch gives x equals three.`;
+  }
+  if (frame.phase === "reunion") {
+    return `${frame.checkpointLabel}. The complete solution set contains two and three.`;
+  }
+  if (frame.phase === "graph") {
+    return `${frame.checkpointLabel}. The parabola crosses the x-axis at x equals two and x equals three.`;
+  }
+  return `${frame.checkpointLabel}. ${frame.equationState.spoken}.`;
+}
+
+function motionPreferenceFromUrl(): "system" | "reduced" | "full" | "static" {
+  try {
+    return parseKpReaderMotionPreference(
+      new URL(window.location.href).searchParams.get("kpMotion")
+    ) ?? "system";
+  } catch {
+    return "system";
+  }
+}
+
+function invalidateLayout(reason: "resize" | "font"): void {
+  layoutRevision += 1;
+  stage.dataset["kpLayoutRevision"] = String(layoutRevision);
+  stage.dataset["kpLayoutInvalidation"] = reason;
+}
+
 function requireElement<TElement extends Element>(selector: string): TElement {
   const element = document.querySelector<TElement>(selector);
   if (element === null) throw new Error(`Missing quadratic reader element ${selector}.`);
@@ -286,7 +374,9 @@ function requireElement<TElement extends Element>(selector: string): TElement {
 
 void document.fonts.ready.then(() => {
   body.dataset["kpReaderFontReady"] = "true";
+  invalidateLayout("font");
 });
 body.dataset["kpReaderHydrated"] = "true";
 body.dataset["kpDevReviewReady"] = "true";
+body.dataset["kpReaderDepth"] = "none";
 render(current);

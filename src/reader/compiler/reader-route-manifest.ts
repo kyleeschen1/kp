@@ -321,6 +321,6 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         { id: "branches-phone", label: "Branches · phone", progressPermille: 680, viewport: "phone" }
       ]
     },
-    budget: routeBudget(32_529, 4_511, 40_160)
+    budget: routeBudget(35_454, 5_404, 45_653)
   })
 ]);

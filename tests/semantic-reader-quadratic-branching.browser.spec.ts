@@ -89,7 +89,7 @@ test("direct seek and rewind keep equation and graph on the same playhead", asyn
   await expect(rootTwo).toHaveAttribute("data-kp-graph-root", "root:2/1");
 
   async function seek(progressPermille: number): Promise<void> {
-    await slider.evaluate((element, value) => {
+    await slider.evaluate((element: HTMLInputElement, value) => {
       element.value = String(value);
       element.dispatchEvent(new Event("input", { bubbles: true }));
     }, progressPermille);
@@ -112,5 +112,91 @@ test("direct seek and rewind keep equation and graph on the same playhead", asyn
           }))
       };
     });
+  }
+});
+
+test("motion policy, narration, and no-depth mode preserve semantic checkpoints", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(`${route}&kpMotion=system`, { waitUntil: "networkidle" });
+  const body = page.locator("body");
+  const stage = page.locator("[data-kp-quadratic-stage]");
+  await expect(body).toHaveAttribute("data-kp-reader-motion-mode", "essential");
+  await expect(body).toHaveAttribute("data-kp-reader-depth", "none");
+  await expect(stage).toHaveAttribute("data-kp-motion-sampling", "continuous");
+  await expect(page.locator("[data-kp-quadratic-narration]")).toContainText(
+    "minus branch gives x equals two"
+  );
+
+  await page.goto(
+    route.replace("kpProgress=680", "kpProgress=950") + "&kpMotion=static",
+    { waitUntil: "networkidle" }
+  );
+  await expect(body).toHaveAttribute("data-kp-reader-motion-mode", "static");
+  await expect(body).toHaveAttribute("data-kp-reader-progress", "1000");
+  await expect(stage).toHaveAttribute("data-kp-motion-sampling", "checkpoint");
+  await expect(page.locator("[data-kp-quadratic-graph]")).toBeVisible();
+  expect(new URL(page.url()).searchParams.get("kpProgress")).toBe("1000");
+});
+
+test("keyboard endpoints, resize invalidation, and review recapture are deterministic", async ({ page }) => {
+  await page.goto(route, { waitUntil: "networkidle" });
+  const stage = page.locator("[data-kp-quadratic-stage]");
+  await stage.press("End");
+  await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "1000");
+  await stage.press("Home");
+  await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "0");
+
+  const beforeRevision = Number(await stage.getAttribute("data-kp-layout-revision"));
+  await page.setViewportSize({ width: 420, height: 780 });
+  await expect.poll(async () =>
+    Number(await stage.getAttribute("data-kp-layout-revision"))
+  ).toBeGreaterThan(beforeRevision);
+
+  const detail = await page.evaluate(() => new Promise<Record<string, unknown>>((resolve) => {
+    window.addEventListener("kp:reader-dev-review-frame", (event) => {
+      resolve((event as CustomEvent<Record<string, unknown>>).detail);
+    }, { once: true });
+    window.dispatchEvent(new CustomEvent("kp:reader-dev-review-request-frame"));
+  }));
+  expect(detail["progressPermille"]).toBe(0);
+  expect(detail["clockId"]).toBe("clock.reader.quadratic-branching.shared");
+  await expect(stage).toHaveAttribute("data-kp-capture-revision", "1");
+});
+
+test("forced colors retain distinct roots without color-only meaning", async ({ page }) => {
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.goto(route.replace("kpProgress=680", "kpProgress=1000"), {
+    waitUntil: "networkidle"
+  });
+  const styles = await page.evaluate(() => {
+    const curve = document.querySelector<SVGPolylineElement>(".kp-quadratic-graph__curve")!;
+    const plus = document.querySelector<SVGCircleElement>(
+      '.kp-quadratic-graph__root[data-kp-branch-sign="plus"] circle'
+    )!;
+    return {
+      curveStroke: getComputedStyle(curve).stroke,
+      plusDash: getComputedStyle(plus).strokeDasharray
+    };
+  });
+  expect(styles.curveStroke).not.toBe("none");
+  expect(styles.plusDash).not.toBe("none");
+});
+
+test("no-script fallback keeps the complete transcript in reading order", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    await page.goto(route, { waitUntil: "domcontentloaded" });
+    await expect(page.locator("[data-kp-quadratic-stage]")).toHaveAttribute(
+      "aria-describedby",
+      "kp-quadratic-transcript"
+    );
+    await expect(page.locator("#kp-quadratic-transcript")).toBeVisible();
+    await expect(page.locator("#kp-quadratic-transcript")).toContainText(
+      "both give x ∈ {2, 3}"
+    );
+    await expect(page.locator("[data-kp-quadratic-progress]")).toBeHidden();
+  } finally {
+    await context.close();
   }
 });

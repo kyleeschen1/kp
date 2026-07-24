@@ -173,7 +173,8 @@
     {
       "id": "slice-19",
       "title": "Accessibility-and-runtime-hardening",
-      "status": "planned"
+      "summary": "Hardened the quadratic learner route for reduced/full/static motion, live narration, keyboard endpoints, resize/font/review recapture, forced colors, and no-script transcript; refreshed the explicit post-hardening budget and stale roadmap revision assertion; all focused, broad, browser, visual, production, budget, and workspace gates pass.",
+      "status": "complete"
     },
     {
       "id": "slice-20",

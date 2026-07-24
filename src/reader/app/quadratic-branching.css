@@ -24,19 +24,21 @@ body[data-kp-reader="quadratic-branching"] {
 }
 
 .kp-quadratic-stage__header {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
-  justify-content: space-between;
-  gap: 1rem;
-  min-height: 3.8rem;
+  gap: .55rem 1rem;
+  min-height: 6.2rem;
 }
 
 .kp-quadratic-stage__header > div:first-child {
+  grid-column: 1;
+  grid-row: 1;
   display: grid;
   gap: .2rem;
 }
 
-.kp-quadratic-stage__header span:first-child {
+.kp-quadratic-stage__header > div:first-child > span:first-child {
   color: var(--kp-accent);
   font-size: .65rem;
   font-weight: 800;
@@ -51,12 +53,39 @@ body[data-kp-reader="quadratic-branching"] {
 }
 
 .kp-quadratic-methods {
+  grid-column: 1 / -1;
+  grid-row: 2;
   display: flex;
   gap: .35rem;
   padding: .22rem;
   border: 1px solid var(--kp-line);
   border-radius: .7rem;
   background: var(--kp-paper);
+}
+
+.kp-quadratic-motion {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  gap: .18rem;
+  color: var(--kp-muted);
+  font-size: .62rem;
+}
+
+.kp-quadratic-motion > span {
+  font-weight: 750;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.kp-quadratic-motion select {
+  min-height: 2.15rem;
+  padding: .25rem 1.5rem .25rem .45rem;
+  border: 1px solid var(--kp-line);
+  border-radius: .5rem;
+  color: var(--kp-ink);
+  background: var(--kp-surface);
+  font: inherit;
 }
 
 .kp-quadratic-methods button,
@@ -284,10 +313,6 @@ body[data-kp-reader="quadratic-branching"] .kp-animation-beats > li {
     padding: .85rem;
   }
 
-  .kp-quadratic-stage__header {
-    display: grid;
-  }
-
   .kp-quadratic-methods {
     width: 100%;
   }
@@ -331,5 +356,70 @@ body[data-kp-reader="quadratic-branching"] .kp-animation-beats > li {
   .kp-quadratic-equation,
   .kp-quadratic-graph-slot {
     transition: none;
+  }
+}
+
+body[data-kp-reader-motion-mode="essential"] .kp-quadratic-equation,
+body[data-kp-reader-motion-mode="essential"] .kp-quadratic-graph-slot,
+body[data-kp-reader-motion-mode="static"] .kp-quadratic-equation,
+body[data-kp-reader-motion-mode="static"] .kp-quadratic-graph-slot {
+  transition: none;
+}
+
+body[data-kp-reader-motion-mode="static"] .kp-quadratic-stage__hint {
+  visibility: hidden;
+}
+
+body:not([data-kp-reader-hydrated="true"]) .kp-quadratic-controls,
+body:not([data-kp-reader-hydrated="true"]) .kp-quadratic-motion {
+  display: none;
+}
+
+body:not([data-kp-reader-hydrated="true"]) .kp-quadratic-stage__transcript {
+  position: static;
+  width: auto;
+  height: auto;
+  margin-top: 1rem;
+  overflow: visible;
+  clip: auto;
+  text-align: left;
+}
+
+@media (prefers-contrast: more) {
+  .kp-quadratic-stage,
+  .kp-quadratic-methods,
+  .kp-quadratic-controls button,
+  .kp-quadratic-solution {
+    border-width: 2px;
+  }
+
+  .kp-quadratic-graph__grid line {
+    stroke: var(--kp-line);
+  }
+
+  .kp-quadratic-graph__curve,
+  .kp-quadratic-graph__root circle {
+    stroke-width: 6;
+  }
+}
+
+@media (forced-colors: active) {
+  .kp-quadratic-stage,
+  .kp-quadratic-methods button[aria-pressed="true"],
+  .kp-quadratic-solution {
+    forced-color-adjust: auto;
+    border-color: CanvasText;
+    background: Canvas;
+  }
+
+  .kp-quadratic-graph__grid line,
+  .kp-quadratic-graph__axes line,
+  .kp-quadratic-graph__curve,
+  .kp-quadratic-graph__root circle {
+    stroke: CanvasText;
+  }
+
+  .kp-quadratic-graph__root[data-kp-branch-sign="plus"] circle {
+    stroke-dasharray: 5 3;
   }
 }

@@ -91,14 +91,16 @@ function compileStage(): string {
   const formula = createKpQuadraticFormulaKatexProjection();
   const graph = createCanonicalKpQuadraticParabolaGraphProjection();
   return [
-    '<section class="kp-quadratic-stage" data-kp-quadratic-stage data-kp-reader-renderer-adapter="renderer.quadratic-native-katex" data-kp-method="completing-square" data-kp-phase="intro" tabindex="0" aria-label="Quadratic solution animation">',
+    '<section class="kp-quadratic-stage" data-kp-quadratic-stage data-kp-reader-renderer-adapter="renderer.quadratic-native-katex" data-kp-method="completing-square" data-kp-phase="intro" tabindex="0" aria-label="Quadratic solution animation" aria-describedby="kp-quadratic-transcript">',
     '<header class="kp-quadratic-stage__header">',
     '<div><span>Two exact methods</span><output data-kp-quadratic-status aria-live="polite">Read the equation</output></div>',
     '<div class="kp-quadratic-methods" role="group" aria-label="Choose a solution method">',
     '<button type="button" data-kp-quadratic-method="completing-square" aria-pressed="true">Complete the square</button>',
     '<button type="button" data-kp-quadratic-method="formula" aria-pressed="false">Quadratic formula</button>',
     "</div>",
+    '<label class="kp-quadratic-motion"><span>Motion</span><select data-kp-quadratic-motion aria-label="Motion preference"><option value="system">System</option><option value="reduced">Reduced</option><option value="full">Full</option><option value="static">Static steps</option></select></label>',
     "</header>",
+    '<p class="kp-reader-visually-hidden" data-kp-quadratic-narration role="status" aria-live="polite" aria-atomic="true">x squared minus five x plus six equals zero.</p>',
     '<div class="kp-quadratic-visual" data-kp-quadratic-visual>',
     '<div class="kp-quadratic-equations" aria-label="Current equation">',
     ...stateMarkup(completingSquare.states, "completing-square"),
@@ -118,7 +120,7 @@ function compileStage(): string {
     '<output data-kp-quadratic-count aria-live="polite">Read the equation, 0 percent</output>',
     "</nav>",
     '<p class="kp-quadratic-stage__hint">Scroll to move the proof. Use the controls to inspect an exact moment.</p>',
-    '<p class="kp-quadratic-stage__transcript">Symbolic transcript: x² − 5x + 6 = 0; completing the square gives (x − 5/2)² = 1/4; the formula gives x = (5 ± 1)/2; both give x ∈ {2, 3}.</p>',
+    '<p id="kp-quadratic-transcript" class="kp-quadratic-stage__transcript">Symbolic transcript: x² − 5x + 6 = 0; completing the square gives (x − 5/2)² = 1/4; the formula gives x = (5 ± 1)/2; both give x ∈ {2, 3}.</p>',
     "</section>"
   ].join("\n");
 }

@@ -167,6 +167,20 @@
       "scope": "slice-18",
       "checkedAt": "2026-07-24T20:49:56.121Z",
       "notes": "Seventeen focused tests, typecheck, architecture, four browser checks, and fourteen captures passed. Equation, branches, solution set, and graph use one timeline; graph handoff begins at 0.9; root selectors retain exact identities across methods; direct seek and rewind reproduce settlement."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full repository",
+      "checkedAt": "2026-07-24T21:06:17.297Z",
+      "notes": "2254 tests passed"
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence; npm run test:browser:reader-conformance; npm run test:browser:animation-workbench; npm run typecheck; npm run build; npm run check:reader-production; npm run check:reader-budgets; npm run visual:quadratic-branching; npm run visual:animation-workbench; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-19 accessibility and runtime hardening",
+      "checkedAt": "2026-07-24T21:06:26.089Z",
+      "notes": "255 convergence tests, 9 shared-reader tests, 14 Workbench tests, 8 quadratic browser tests, typecheck, production build, 8-route closure, post-hardening 5% budget baseline, 14 quadratic captures, 8 Workbench captures, and 773-node workspace validation passed. Reduced/static motion, narration, keyboard, resize/font/review recapture, forced colors, and no-script transcript are covered."
     }
   ],
   "progress": {
