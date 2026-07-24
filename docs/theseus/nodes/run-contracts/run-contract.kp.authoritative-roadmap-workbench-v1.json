@@ -78,6 +78,34 @@
       "scope": "broad",
       "checkedAt": "2026-07-24T01:19:44.201Z",
       "notes": "Full typecheck and Vite production build pass."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T01:25:40.193Z",
+      "notes": "All 2044 repository tests pass after the radical rewind settlement fix, including architecture, inference, catalog, semantic choreography, Workbench, and rendering contracts."
+    },
+    {
+      "command": "npm run test:browser:animation-workbench",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T01:25:41.153Z",
+      "notes": "All 12 Chromium Workbench tests pass for playback, direct seek and rewind, review capture, lesson links, roadmap sorting and filtering, bounded search projection, preserved player and composer state, keyboard traversal, reduced motion, and narrow layout."
+    },
+    {
+      "command": "npm run visual:animation-workbench and npm run visual:contact-sheet",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T01:25:41.974Z",
+      "notes": "Deterministic captures produced six Workbench states and eight canonical lesson checkpoints. Human inspection confirms the review control plane is available in wide and narrow layouts and the lesson surface remains coherent."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T01:26:02.075Z",
+      "notes": "The modified 30-slice run contract, approved lesson-first priority change, and all 762 project-memory nodes validate across 11078 events."
     }
   ],
   "allowedWork": [
@@ -285,7 +313,9 @@
     {
       "id": "s27",
       "title": "Workbench-and-radical-human-checkpoint",
-      "status": "planned"
+      "summary": "Completed the mandatory radical and Workbench review gate. All 2044 repository tests and all 12 Workbench Chromium tests pass; deterministic captures cover six Workbench states, eight canonical lesson checkpoints, and the previously verified 17-frame radical sequence. Stopping for human visual approval before lesson-first canonicalization.",
+      "status": "complete",
+      "planPhaseId": "radical-native-settlement"
     },
     {
       "id": "s28",
