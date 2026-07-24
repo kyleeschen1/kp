@@ -73,7 +73,8 @@
     {
       "id": "slice-05",
       "title": "Add native-local member offsets and adjacent-edge geometry snapshots.",
-      "status": "planned"
+      "summary": "Geometry snapshots now retain anchor-local member rectangles and true adjacent edge gaps, including uneven-width and baseline-offset fixtures; four focused tests pass.",
+      "status": "complete"
     },
     {
       "id": "slice-06",

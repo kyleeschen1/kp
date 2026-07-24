@@ -74,6 +74,23 @@ export interface KpPresentationOwnerObservation {
   readonly ink?: KpPresentationInkObservation | undefined;
 }
 
+export interface KpPresentationGroupGeometrySnapshot {
+  readonly groupId: string;
+  readonly ownerId: string;
+  readonly progress: number;
+  readonly anchorMemberId: string;
+  readonly memberLocalRects: readonly {
+    readonly memberId: string;
+    readonly rect: KpPresentationRect;
+  }[];
+  readonly adjacentEdgeGaps: readonly {
+    readonly leadingMemberId: string;
+    readonly trailingMemberId: string;
+    readonly horizontalPx: number;
+    readonly verticalPx: number;
+  }[];
+}
+
 export interface KpPresentationContinuityBudget {
   readonly positionPx: number;
   readonly sizePx: number;
@@ -129,6 +146,56 @@ export function compileKpCompoundTargetDeclarations(
       cohesionLockProgress
     };
   });
+}
+
+export function snapshotKpPresentationGroupGeometry(input: {
+  readonly contract: KpPresentationGroupContract;
+  readonly observation: KpPresentationOwnerObservation;
+}): KpPresentationGroupGeometrySnapshot {
+  if (input.observation.groupId !== input.contract.id) {
+    throw new Error("Presentation observation must identify its group contract.");
+  }
+  const byId = new Map(
+    input.observation.members.map((member) => [member.memberId, member] as const)
+  );
+  const ordered = [...input.contract.members]
+    .sort((left, right) => left.nativeOrder - right.nativeOrder)
+    .map((member) => {
+      const observation = byId.get(member.memberId);
+      if (observation === undefined) {
+        throw new Error(`Missing presentation member ${member.memberId}.`);
+      }
+      return observation;
+    });
+  const anchor = byId.get(input.contract.settlementAnchorMemberId);
+  if (anchor === undefined) {
+    throw new Error("Presentation settlement anchor was not observed.");
+  }
+  return {
+    groupId: input.contract.id,
+    ownerId: input.observation.ownerId,
+    progress: input.observation.progress,
+    anchorMemberId: anchor.memberId,
+    memberLocalRects: ordered.map((member) => ({
+      memberId: member.memberId,
+      rect: {
+        x: member.rect.x - anchor.rect.x,
+        y: member.rect.y - anchor.rect.y,
+        width: member.rect.width,
+        height: member.rect.height
+      }
+    })),
+    adjacentEdgeGaps: ordered.slice(0, -1).map((leading, index) => {
+      const trailing = ordered[index + 1]!;
+      return {
+        leadingMemberId: leading.memberId,
+        trailingMemberId: trailing.memberId,
+        horizontalPx:
+          trailing.rect.x - (leading.rect.x + leading.rect.width),
+        verticalPx: trailing.rect.y - leading.rect.y
+      };
+    })
+  };
 }
 
 function requireText(value: string, label: string): string {
