@@ -444,6 +444,34 @@
       "scope": "s16 visual baseline",
       "checkedAt": "2026-07-24T05:29:20.176Z",
       "notes": "Captured 39 desktop and phone states across division and coordinated equation-room modes without command failure."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s17 focused evidence",
+      "checkedAt": "2026-07-24T05:33:46.149Z",
+      "notes": "All 217 focused tests pass with the solve-x typed profile and no semantic, timing, seek, or rewind regression."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "s17 Reader conformance",
+      "checkedAt": "2026-07-24T05:33:47.205Z",
+      "notes": "All 8 Reader conformance checks pass, including solve-x branch attention across wide and narrow projections."
+    },
+    {
+      "command": "npm run visual:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s17 deterministic gold comparison",
+      "checkedAt": "2026-07-24T05:33:48.048Z",
+      "notes": "All 9 topics produced 45 captures, 45 deterministic recaptures, and 18 native endpoint captures. Non-fatal ResizeObserver notices appeared only during matrix capture and did not change hashes or command success."
+    },
+    {
+      "command": "npm run visual:reader-gold-parity",
+      "status": "passed",
+      "scope": "s17 Reader/editor parity",
+      "checkedAt": "2026-07-24T05:33:48.859Z",
+      "notes": "Production build passes and all 8 named solve-x editor/Reader frames match from start through final settlement."
     }
   ],
   "expectedLearning": [
@@ -616,7 +644,8 @@
     {
       "id": "s17",
       "title": "Exemplar-comparison-evidence-gate",
-      "status": "planned",
+      "summary": "Completed the evidence-only solve-x comparison gate with no family-wide migration. All 217 focused tests pass; all 8 Reader conformance checks pass including wide/narrow branch attention; the semantic-animation gold command produced 45 deterministic captures across 9 topics with 45 byte-stable recaptures and 18 native endpoints; and Reader/editor gold parity matched all 8 named solve-x frames from start through final. Non-fatal matrix ResizeObserver notices did not affect capture hashes or command success and are unrelated to the solve-x profile change. Per explicit authorization, no human pause occurs here; promotion may proceed to slice 18.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
