@@ -50,8 +50,17 @@ export const kpSemanticAnimationCompilerStages = [
     id: "domain-state",
     owner: "semantic",
     authority: "authoritative-source",
-    representations: ["KpAssetBundle", "KpSemanticAssetObject"],
-    sourcePaths: ["src/semantic/asset.ts"],
+    representations: [
+      "KpAssetBundle",
+      "KpSemanticAssetObject",
+      "KpSemanticAnimationAssetProjection",
+      "KpAnimationPresentationAssetProjection",
+      "KpAnimationProductManifestProjection"
+    ],
+    sourcePaths: [
+      "src/semantic/asset.ts",
+      "src/animation/asset-projections.ts"
+    ],
     dependsOn: [],
     migrationStatus: "canonical"
   }),

@@ -647,6 +647,34 @@
       "scope": "s22 architecture",
       "checkedAt": "2026-07-24T06:12:53.437Z",
       "notes": "All architecture gates pass across 266 semantic-animation files with zero rendering exceptions."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-asset-projections.test.ts",
+      "status": "passed",
+      "scope": "s23 asset projections",
+      "checkedAt": "2026-07-24T06:16:33.018Z",
+      "notes": "All 5 projection tests pass for exact field partition, shared identity, source-authority references, version-1 serialization round trip, and forged-identity rejection."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s23 focused convergence suite",
+      "checkedAt": "2026-07-24T06:16:33.863Z",
+      "notes": "All 245 focused tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s23 type safety",
+      "checkedAt": "2026-07-24T06:16:34.726Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s23 architecture",
+      "checkedAt": "2026-07-24T06:16:35.539Z",
+      "notes": "All architecture gates pass across 267 semantic-animation files with zero rendering exceptions."
     }
   ],
   "expectedLearning": [
@@ -861,7 +889,8 @@
     {
       "id": "s23",
       "title": "Narrow-asset-projections",
-      "status": "planned",
+      "summary": "Added three explicit read-only projections over KpAnimationAsset: semantic-animation kernel authority, presentation/layout authority, and product manifest/export authority. Every aggregate field has exactly one projection owner, all projections share one immutable identity object, and source collections remain reference-identical instead of duplicating state. Recomposing the projections preserves version-1 JSON serialization exactly and rejects independently forged identities. All 5 targeted tests, 245 focused tests, typecheck, and architecture gates pass.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
