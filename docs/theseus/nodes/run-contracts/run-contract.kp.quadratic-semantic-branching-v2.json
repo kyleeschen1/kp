@@ -131,7 +131,8 @@
     {
       "id": "slice-12",
       "title": "Typed-presentation-profile",
-      "status": "planned"
+      "summary": "Added an exemplar-local typed presentation profile for method choice, normalized pacing, attention roles, plus-minus scheduling, root reunion, and graph handoff, with strict decoder rejection and proof that presentation policy cannot alter semantic asset serialization.",
+      "status": "complete"
     },
     {
       "id": "slice-13",

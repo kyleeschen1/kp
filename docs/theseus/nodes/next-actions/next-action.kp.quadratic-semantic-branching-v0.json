@@ -111,6 +111,13 @@
       "scope": "slice-11 canonical renderer-neutral animation asset",
       "checkedAt": "2026-07-24T20:12:57.630Z",
       "notes": "Seventeen focused tests passed. Asset reference closure, seek-rewind law, two-method shared clock, typed envelope and equation payload, semantic inspection, renderer neutrality, deterministic sampling, JSON stability, and type safety are verified."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/quadratic-presentation-profile.test.ts tests/quadratic-branching-animation-asset.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-12 typed quadratic presentation profile",
+      "checkedAt": "2026-07-24T20:15:55.575Z",
+      "notes": "Eleven focused tests passed. Typed method selection, ordered normalized pacing, attention roles, branch schedule, reunion and graph handoff, decoder rejection, semantic serialization preservation, immutability, and type safety are verified."
     }
   ],
   "progress": {
