@@ -143,6 +143,27 @@
       "scope": "s06 broad",
       "checkedAt": "2026-07-24T04:01:14.804Z",
       "notes": "Animation performance gate reports passed=true with no regressions; existing transfer and constrained-device product targets remain unchanged."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-layer-ownership.test.ts",
+      "status": "passed",
+      "scope": "s07 boundary contract",
+      "checkedAt": "2026-07-24T04:07:58.620Z",
+      "notes": "Five ownership tests pass for monotonic layers, adjacent typed seams, forbidden concrete resources, scheduled debt, reverse-edge rejection, and equation-domain honesty."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s07 focused",
+      "checkedAt": "2026-07-24T04:07:59.815Z",
+      "notes": "All 116 focused convergence tests pass with the layer ownership contract included."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s07 standard",
+      "checkedAt": "2026-07-24T04:08:00.668Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass with the ownership contract."
     }
   ],
   "expectedLearning": [
@@ -245,7 +266,8 @@
     {
       "id": "s07",
       "title": "Layer-ownership-contract",
-      "status": "planned",
+      "summary": "Defined four monotonic dependency tiers over the executable compiler stages, with adjacent typed public seams and renderer resources forbidden before the concrete adapter. Authority remains separate from dependency tier, KpEquationTransitionIr is explicitly equation-domain rather than universal, and four current location/coupling debts own retirement slices. Five boundary tests, all 116 focused tests, and full typecheck pass.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
