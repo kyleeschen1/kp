@@ -577,6 +577,41 @@
       "scope": "s20 architecture",
       "checkedAt": "2026-07-24T05:59:31.524Z",
       "notes": "All architecture gates pass across 264 semantic-animation files with zero frozen rendering exceptions; typed domain payloads are registered as domain-honest public seams."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-sampled-frame-adapter.test.ts",
+      "status": "passed",
+      "scope": "s21 equation adapter",
+      "checkedAt": "2026-07-24T06:04:21.698Z",
+      "notes": "All 5 adapter tests pass for typed payload attachment, exact compatibility identity, rewind orientation, descriptor and diagnostic preservation, and clock/transformation drift rejection."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s21 focused convergence suite",
+      "checkedAt": "2026-07-24T06:04:22.545Z",
+      "notes": "All 236 focused tests pass, including equation motion-plan, sampler, runtime temporal continuity, and reverse-equivalence coverage."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21 type safety",
+      "checkedAt": "2026-07-24T06:04:23.366Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s21 architecture",
+      "checkedAt": "2026-07-24T06:04:24.223Z",
+      "notes": "All architecture gates pass across 265 semantic-animation files with zero rendering exceptions."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s21 linear equation preservation",
+      "checkedAt": "2026-07-24T06:04:25.111Z",
+      "notes": "All 39 desktop and phone baseline states capture successfully after equation payload adaptation."
     }
   ],
   "expectedLearning": [
@@ -777,7 +812,8 @@
     {
       "id": "s21",
       "title": "Equation-frame-adaptation",
-      "status": "planned",
+      "summary": "Added an equation sampled-frame adapter that maps the existing KpEquationFrame semantic contract into the closed typed equation payload and attaches it to the canonical runtime envelope. Forward and rewind object roles and selector correspondence are oriented explicitly; clock parity and active-transformation closure reject drift. The original equation frame remains the exact public compatibility object, and payload attachment changes no descriptor, diagnostic, child, clock, or endpoint view. All 5 adapter tests, 236 focused tests, typecheck, architecture gates, and 39-state linear-equation visual capture pass.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {

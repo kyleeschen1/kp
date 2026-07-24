@@ -88,6 +88,16 @@ export function createKpSampledFrameEnvelope(
   });
 }
 
+export function attachKpSampledFrameDomainPayload(
+  envelope: KpSampledFrameEnvelope,
+  payload: KpSampledFrameDomainPayload
+): KpSampledFrameEnvelope {
+  return createKpSampledFrameEnvelope({
+    ...envelope,
+    payload
+  });
+}
+
 export function validateKpSampledFrameEnvelope(
   value: unknown
 ): readonly KpSampledFrameEnvelopeIssue[] {

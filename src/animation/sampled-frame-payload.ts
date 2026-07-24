@@ -110,6 +110,18 @@ export interface KpSampledFrameDomainPayloadIssue {
 }
 
 export function createKpSampledFrameDomainPayload(
+  input: KpEquationSampledFramePayload
+): KpEquationSampledFramePayload;
+export function createKpSampledFrameDomainPayload(
+  input: KpGraphDiagramSampledFramePayload
+): KpGraphDiagramSampledFramePayload;
+export function createKpSampledFrameDomainPayload(
+  input: KpProgramTraceSampledFramePayload
+): KpProgramTraceSampledFramePayload;
+export function createKpSampledFrameDomainPayload(
+  input: KpSampledFrameDomainPayload
+): KpSampledFrameDomainPayload;
+export function createKpSampledFrameDomainPayload(
   input: KpSampledFrameDomainPayload
 ): KpSampledFrameDomainPayload {
   const issues = validateKpSampledFrameDomainPayload(input);
