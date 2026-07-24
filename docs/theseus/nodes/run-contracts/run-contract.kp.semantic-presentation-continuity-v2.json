@@ -109,7 +109,8 @@
     {
       "id": "slice-11",
       "title": "Encode both reported bugs as negative conformance fixtures.",
-      "status": "planned"
+      "summary": "Named negative fixtures reproduce the distribution factor/addend gap and the WebGL/native fraction scale-position-ink mismatch for the intended conformance reasons; 12 focused tests pass.",
+      "status": "complete"
     },
     {
       "id": "slice-12",
