@@ -1,59 +1,20 @@
 {
-  "id": "plan-revision.kp.v7",
+  "id": "plan-revision.kp.v8",
   "kind": "plan-revision",
-  "title": "Kinetic Press semantic animation convergence roadmap v7",
-  "status": "superseded",
+  "title": "Kinetic Press quadratic branching roadmap v8",
+  "status": "active",
   "domain": "kp",
-  "summary": "Preserve the authoritative product roadmap while making bounded semantic-animation convergence the sole current implementation phase and moving quadratic branching next.",
+  "summary": "Preserve the authoritative product roadmap, mark semantic-animation convergence complete, and make the approved quadratic semantic branching exemplar the sole current implementation phase.",
   "sourceRefs": [
     {
-      "kind": "user-intent",
-      "intent": "Use one authoritative sortable roadmap that includes finished work, current animation/editor work, arithmetic, logarithms, trigonometry, geometry, data, and cross-domain motifs without replicating state across the dashboard.",
-      "summary": "The user approved the recommended architecture-pressure order and the 30-slice successor loop."
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-24-quadratic-semantic-branching-long-loop-proposal.md",
+      "summary": "Human-approved 24-slice quadratic exemplar plan and execution boundary."
     },
     {
       "kind": "file",
-      "path": "docs/project/reviews/2026-07-23-authoritative-roadmap-workbench-successor-loop-proposal.md",
-      "summary": "Human-approved execution order, preservation boundaries, rollback units, and visual checkpoints for this successor loop."
-    },
-    {
-      "kind": "file",
-      "path": "docs/project/decisions/2026-07-23-kp-authoritative-product-roadmap-projection.md",
-      "summary": "Decision that the active approved Theseus plan is the sole roadmap authority and the Workbench is a read-only projection."
-    },
-    {
-      "kind": "file",
-      "path": "docs/project/reviews/2026-07-23-kp-capability-pressure-domain-order-next-step-review.md",
-      "summary": "Accepted architecture-pressure sequence and robust future coverage ledger across arithmetic, precalculus, geometry, probability, data, and cross-domain work."
-    },
-    {
-      "kind": "file",
-      "path": "docs/project/decisions/2026-07-23-kp-capability-pressure-and-arithmetic-expansion.md",
-      "summary": "Accepted arithmetic cohort and rule that architectural pressure precedes curricular breadth."
-    },
-    {
-      "kind": "file",
-      "path": "docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md",
-      "summary": "Accepted cross-domain sequence for programming, economics, physics, and governed authoring."
-    },
-    {
-      "kind": "file",
-      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
-      "summary": "Approved predecessor whose completed compositional and governed-authoring capabilities remain visible as roadmap landmarks."
-    },
-    {
-      "kind": "file",
-      "path": "docs/project/reviews/2026-07-23-semantic-animation-convergence-successor-loop-proposal.md",
-      "summary": "User-approved exact 28-slice convergence contract, preservation boundary, verification cadence, rollback units, and final human checkpoint."
-    },
-    {
-      "kind": "user-intent",
-      "intent": "Approve semantic-animation convergence and execute all 28 slices without pausing at slice 17; retain the final checkpoint after slice 28.",
-      "summary": "The user approved the exact long-loop proposal and waived only its intermediate human pause."
-    },
-    {
-      "kind": "file",
-      "path": "docs/project/reviews/2026-07-24-distribution-first-product-settlement-diagnostic.md"
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v7.json",
+      "summary": "Approved predecessor retaining the complete architecture-pressure roadmap."
     }
   ],
   "affects": [
@@ -68,8 +29,8 @@
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
-    "revision": 7,
-    "objective": "Grow Kinetic Press through reusable semantic and visual primitives: preserve accepted exemplars, converge the semantic-animation compiler and compatibility surface now, pressure-test quadratic branching next, then expand through calculus, linear algebra, arithmetic, precalculus, geometry/data, and cross-domain explanations in architecture-amortizing order.",
+    "revision": 8,
+    "objective": "Grow Kinetic Press through reusable semantic and visual primitives: preserve accepted exemplars, prove quadratic solution branching and graph-root correspondence now, then expand through calculus, linear algebra, arithmetic, precalculus, geometry/data, and cross-domain explanations in architecture-amortizing order.",
     "assumptions": [
       {
         "id": "single-roadmap-authority",
@@ -239,9 +200,11 @@
         "title": "Semantic animation convergence",
         "objective": "Converge the semantic-animation compiler into one enforceable dependency direction, typed presentation seam, canonical sampled-frame convention, narrow asset projections, and classified compatibility surface while preserving the accepted gold cohort.",
         "horizon": "now",
-        "status": "active",
+        "status": "complete",
         "evidence": [
-          "run-contract.kp.semantic-animation-convergence-v1"
+          "run-contract.kp.semantic-animation-convergence-v1",
+          "run-contract.kp.semantic-animation-convergence-v2",
+          "run-contract.kp.semantic-presentation-continuity-v2"
         ],
         "topic": "Platform · Semantic animation architecture",
         "architectureBenefit": "One-way compiler ownership, typed presentation policy, shared frame laws, and bounded compatibility debt.",
@@ -252,8 +215,12 @@
         "id": "quadratic-semantic-branching",
         "title": "Quadratic semantic branching",
         "objective": "Model completing the square and quadratic-formula paths as explicit lawful branches that converge on verified roots.",
-        "horizon": "next",
-        "status": "planned",
+        "horizon": "now",
+        "status": "active",
+        "evidence": [
+          "next-action.kp.quadratic-semantic-branching-v0",
+          "run-contract.kp.quadratic-semantic-branching-v2"
+        ],
         "topic": "Algebra · Quadratics",
         "architectureBenefit": "Branch scheduling, convergence, and alternative solution-path semantics.",
         "rationale": "Quadratics apply the highest next architectural pressure after the Workbench and radical settlement stabilize.",
@@ -536,12 +503,11 @@
       }
     ],
     "approval": {
-      "status": "superseded",
+      "status": "approved",
       "decidedAt": "2026-07-24T19:32:00.000Z",
       "decidedBy": "user",
-      "rationale": "Superseded by plan-revision.kp.v8."
+      "rationale": "Reconcile resolved semantic-animation convergence and presentation-continuity contracts, then activate the human-approved quadratic semantic branching loop."
     },
-    "supersedes": "plan-revision.kp.v6",
-    "supersededBy": "plan-revision.kp.v8"
+    "supersedes": "plan-revision.kp.v7"
   }
 }

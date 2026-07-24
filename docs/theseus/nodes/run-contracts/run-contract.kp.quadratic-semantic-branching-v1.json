@@ -1,0 +1,170 @@
+{
+  "id": "run-contract.kp.quadratic-semantic-branching-v1",
+  "kind": "run-contract",
+  "title": "Quadratic semantic branching",
+  "status": "superseded",
+  "summary": "Superseded before execution because the initial creation command omitted approved typed-autonomy fields; v2 preserves the exact approved target, slice order, scope, verification, cadence, and stop conditions.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.quadratic-semantic-branching-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-24-quadratic-semantic-branching-long-loop-proposal.md",
+      "summary": "Human-approved exact 24-slice proposal with mandatory checkpoint at slice 20."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v7.json",
+      "summary": "Active authoritative roadmap placing quadratic semantic branching next after resolved convergence work."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "npm run typecheck",
+    "npm test",
+    "npm run check:architecture",
+    "npm run test:semantic-animation-convergence",
+    "npm run test:browser:reader-conformance",
+    "npm run test:browser:animation-workbench",
+    "npm run visual:quadratic-branching",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Quadratic semantic fixtures, exact rational and discriminant laws, structured rewrite authorities, solution paths, plus-minus branching, root-set reunion, correspondence, provenance, and verification.",
+    "One lesson-owned equation and graph animation, responsive reader projection, Workbench publication, stable visual tooling, focused tests, and Theseus evidence.",
+    "Extract shared contracts only after the human-approved exemplar proves them as a second consumer."
+  ],
+  "disallowedWork": [
+    "No integral, vector, matrix, arithmetic, rational-expression, trigonometry, geometry, probability, data, programming, economics, or physics implementation.",
+    "No general quadratic curriculum, arbitrary polynomial solving, unchecked CAS, LLM-authored presentation, broad renderer redesign, or family-wide visual promotion before review.",
+    "Do not reuse or generalize the radical animation-specific WebGL material path, and do not touch unrelated user-authored roadmap, thread, or design changes."
+  ],
+  "goal": "Build one exact lesson-owned quadratic animation with completing-square and quadratic-formula paths, lawful plus-minus branches, synchronized graph roots, exact rewind, a mandatory human checkpoint, and bounded post-approval publication.",
+  "target": "next-action.kp.quadratic-semantic-branching-v0",
+  "slices": [
+    {
+      "id": "slice-01",
+      "title": "Roadmap-and-execution-authority",
+      "status": "planned"
+    },
+    {
+      "id": "slice-02",
+      "title": "Preservation-manifest-and-stable-harness",
+      "status": "planned"
+    },
+    {
+      "id": "slice-03",
+      "title": "Exact-quadratic-semantic-fixture",
+      "status": "planned"
+    },
+    {
+      "id": "slice-04",
+      "title": "Solution-set-and-discriminant-laws",
+      "status": "planned"
+    },
+    {
+      "id": "slice-05",
+      "title": "Completing-square-authority",
+      "status": "planned"
+    },
+    {
+      "id": "slice-06",
+      "title": "Quadratic-formula-authority",
+      "status": "planned"
+    },
+    {
+      "id": "slice-07",
+      "title": "Solution-method-path-graph",
+      "status": "planned"
+    },
+    {
+      "id": "slice-08",
+      "title": "Plus-minus-branch-semantics",
+      "status": "planned"
+    },
+    {
+      "id": "slice-09",
+      "title": "Method-convergence-and-reunion",
+      "status": "planned"
+    },
+    {
+      "id": "slice-10",
+      "title": "Total-lifecycle-and-reverse-laws",
+      "status": "planned"
+    },
+    {
+      "id": "slice-11",
+      "title": "Canonical-animation-asset",
+      "status": "planned"
+    },
+    {
+      "id": "slice-12",
+      "title": "Typed-presentation-profile",
+      "status": "planned"
+    },
+    {
+      "id": "slice-13",
+      "title": "Completing-square-KaTeX-projection",
+      "status": "planned"
+    },
+    {
+      "id": "slice-14",
+      "title": "Formula-KaTeX-projection",
+      "status": "planned"
+    },
+    {
+      "id": "slice-15",
+      "title": "Branch-choreography-and-native-reunion",
+      "status": "planned"
+    },
+    {
+      "id": "slice-16",
+      "title": "Lesson-owned-responsive-surface",
+      "status": "planned"
+    },
+    {
+      "id": "slice-17",
+      "title": "Parabola-and-root-graph-frames",
+      "status": "planned"
+    },
+    {
+      "id": "slice-18",
+      "title": "Equation-graph-synchronization",
+      "status": "planned"
+    },
+    {
+      "id": "slice-19",
+      "title": "Accessibility-and-runtime-hardening",
+      "status": "planned"
+    },
+    {
+      "id": "slice-20",
+      "title": "Quadratic-exemplar-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "slice-21",
+      "title": "Workbench-publication",
+      "status": "planned"
+    },
+    {
+      "id": "slice-22",
+      "title": "Proven-second-consumer-extraction",
+      "status": "planned"
+    },
+    {
+      "id": "slice-23",
+      "title": "Compatibility-and-promotion-audit",
+      "status": "planned"
+    },
+    {
+      "id": "slice-24",
+      "title": "Release-proof-and-closeout",
+      "status": "planned"
+    }
+  ]
+}

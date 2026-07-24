@@ -1,0 +1,85 @@
+{
+  "id": "next-action.kp.quadratic-semantic-branching-v0",
+  "kind": "next-action",
+  "title": "Build quadratic semantic branching exemplar",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-24-quadratic-semantic-branching-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "run-contract.kp.semantic-animation-convergence-v2",
+      "run-contract.kp.semantic-presentation-continuity-v2"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:semantic-animation-convergence",
+    "npm run typecheck",
+    "npm test",
+    "npm run test:browser:reader-conformance",
+    "npm run test:browser:animation-workbench",
+    "npm run visual:quadratic-branching",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-roadmap-coverage.test.ts tests/semantic-animation-workbench-roadmap-links.test.ts tests/semantic-animation-workbench-roadmap-source.test.ts; npm run typecheck; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-01 authoritative roadmap reconciliation",
+      "checkedAt": "2026-07-24T19:32:57.235Z",
+      "notes": "Five roadmap coverage and link tests passed; application, Node, test, and domain TypeScript projects passed; successor plan v8 activated atomically and workspace validation passed."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Activated authoritative plan revision v8 with resolved convergence and active quadratic branching; established the exact 24-slice typed run contract and preserved all unrelated user-authored project docs."
+  },
+  "expectedLearning": [
+    "Whether explicit quadratic method paths, plus-minus solution branching, and graph-root correspondence can share stable semantic identity and exact rewind without renderer-owned algebra.",
+    "Which scheduling, cross-view, and presentation contracts are genuinely reusable after a second accepted consumer."
+  ],
+  "allowedWork": [
+    "Exact quadratic semantics, one lesson-owned equation and graph exemplar, responsive reader and Workbench projection, stable verification, and bounded post-review extraction."
+  ],
+  "disallowedWork": [
+    "Other roadmap domains, unchecked CAS or LLM authority, broad renderer redesign, radical WebGL generalization, and unrelated user-authored changes."
+  ],
+  "criteria": [
+    {
+      "id": "exact-mathematics",
+      "weight": "high"
+    },
+    {
+      "id": "stable-branch-identity",
+      "weight": "high"
+    },
+    {
+      "id": "equation-graph-correspondence",
+      "weight": "high"
+    },
+    {
+      "id": "responsive-accessible-presentation",
+      "weight": "high"
+    },
+    {
+      "id": "exact-seek-and-rewind",
+      "weight": "high"
+    },
+    {
+      "id": "human-exemplar-approval",
+      "weight": "high"
+    },
+    {
+      "id": "bounded-promotion",
+      "weight": "medium"
+    }
+  ]
+}
