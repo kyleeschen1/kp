@@ -105,11 +105,18 @@ export function createKpCompletingSquareKatexProjection():
       ["quadratic", "linear", "completion", "equals", "right"]
     ),
     state(
+      "factor-pattern",
+      "presentation.quadratic.completing-square.factor-pattern",
+      "x^2 - 2(x)\\left(\\frac{5}{2}\\right) + \\left(\\frac{5}{2}\\right)^2 = \\frac{1}{4}",
+      "x squared minus two times x times five halves plus five halves squared equals one fourth",
+      ["quadratic", "product", "square", "equals", "right"]
+    ),
+    state(
       "perfect",
       "state.quadratic.completing-square.perfect",
       "\\left(x - \\frac{5}{2}\\right)^2 = \\frac{1}{4}",
       "the quantity x minus five halves squared equals one fourth",
-      ["binomial", "exponent", "equals", "right"]
+      ["binomial-x", "binomial-offset", "exponent", "equals", "right"]
     )
   ]);
   const transitions = Object.freeze([
@@ -185,14 +192,51 @@ export function createKpCompletingSquareKatexProjection():
       ]
     ),
     transition(
-      "recognize",
-      "rewrite.quadratic.completing-square.recognize-perfect-square",
+      "expose-factor-pattern",
+      "operation.algebra.expose-perfect-square-pattern",
       states[4]!,
       states[5]!,
       [
-      sameRole("equals"),
-      sameRole("right")
-    ])
+        sameRole("quadratic"),
+        roleBinding("linear-as-product", "linear", "product", "focal-operand"),
+        roleBinding(
+          "completion-as-square",
+          "completion",
+          "square",
+          "focal-operand"
+        ),
+        sameRole("equals"),
+        sameRole("right")
+      ]
+    ),
+    transition(
+      "factor-perfect-square",
+      "rewrite.quadratic.completing-square.recognize-perfect-square",
+      states[5]!,
+      states[6]!,
+      [
+        roleBinding(
+          "quadratic-to-binomial-x",
+          "quadratic",
+          "binomial-x",
+          "merged"
+        ),
+        roleBinding(
+          "product-to-binomial-offset",
+          "product",
+          "binomial-offset",
+          "merged"
+        ),
+        roleBinding(
+          "square-to-exponent",
+          "square",
+          "exponent",
+          "merged"
+        ),
+        sameRole("equals"),
+        sameRole("right")
+      ]
+    )
   ]);
   return Object.freeze({
     schemaVersion: "kp.quadratic-katex-projection.v1" as const,

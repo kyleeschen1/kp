@@ -25,7 +25,7 @@ test("quadratic reader projects both methods from one normalized progress value"
 
 test("method phases expose direct-seekable selector transitions instead of state replacement", () => {
   const square = projectKpQuadraticReaderSurface({
-    progress: 0.34,
+    progress: 0.3,
     methodId: "method.quadratic.completing-square"
   });
   const formula = projectKpQuadraticReaderSurface({

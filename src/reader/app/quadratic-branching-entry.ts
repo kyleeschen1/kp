@@ -190,8 +190,11 @@ function renderEquations(
     target.hidden = false;
     source.dataset["kpTransitionLayer"] = "source";
     target.dataset["kpTransitionLayer"] = "target";
-    source.style.opacity = String(1 - progress);
-    target.style.opacity = String(progress);
+    // Differently shaped equations become illegible when both complete KaTeX
+    // trees ghost through each other. The measured tokens meet at one shared
+    // position, then ownership switches while their geometry keeps moving.
+    source.style.opacity = progress <= 0.5 ? "1" : "0";
+    target.style.opacity = progress <= 0.5 ? "0" : "1";
     renderCorrespondenceMotion({
       source,
       target,

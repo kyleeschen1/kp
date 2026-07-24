@@ -69,8 +69,19 @@ function segmentsFor(
       ];
     case "katex.quadratic.completing-square.perfect":
       return [
-        selector("binomial", "\\left(x - \\frac{5}{2}\\right)"),
+        latex("\\left("),
+        selector("binomial-x", "x"),
+        selector("binomial-offset", " - \\frac{5}{2}"),
+        latex("\\right)"),
         selector("exponent", "^2"),
+        selector("equals", " = "),
+        selector("right", "\\frac{1}{4}")
+      ];
+    case "katex.quadratic.completing-square.factor-pattern":
+      return [
+        selector("quadratic", "x^2"),
+        selector("product", " - 2(x)\\left(\\frac{5}{2}\\right)"),
+        selector("square", " + \\left(\\frac{5}{2}\\right)^2"),
         selector("equals", " = "),
         selector("right", "\\frac{1}{4}")
       ];

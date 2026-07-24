@@ -128,7 +128,8 @@
     {
       "id": "slice-12",
       "title": "Perfect-square-factor-recognition",
-      "status": "planned"
+      "summary": "Expanded perfect-square recognition into an explicit a²−2ab+b² state and a reverse-distribution factor collapse with role-owned native KaTeX motion. Replaced unreadable full-tree crossfade with a measured midpoint ownership handoff.",
+      "status": "complete"
     },
     {
       "id": "slice-13",
