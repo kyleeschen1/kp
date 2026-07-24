@@ -16,15 +16,33 @@ export interface KpQuadraticKatexTransition {
   readonly targetStateId: string;
   readonly correspondence: readonly {
     readonly role: string;
+    readonly presentationRole?:
+      | "focal-operand"
+      | "continuant"
+      | "introduced"
+      | "eliminated"
+      | "copied"
+      | "merged"
+      | "structural";
     readonly sourceSelectorId: string;
     readonly targetSelectorId: string;
   }[];
+  readonly presentation?: {
+    readonly operationRef: string;
+    readonly phaseOrder: readonly ["reflow", "act"];
+    readonly reflowEnd: 0.36;
+    readonly actStart: 0.3;
+  };
   readonly layout: {
     readonly measurement: "native-dom-rect";
     readonly collisionPolicy: "role-lanes";
     readonly endpointOwnership: "native-source-and-target";
   };
 }
+
+type KpQuadraticKatexPresentationRole = NonNullable<
+  KpQuadraticKatexTransition["correspondence"][number]["presentationRole"]
+>;
 
 export interface KpCompletingSquareKatexProjection {
   readonly schemaVersion: "kp.quadratic-katex-projection.v1";
@@ -67,19 +85,39 @@ export function createKpCompletingSquareKatexProjection():
     )
   ]);
   const transitions = Object.freeze([
-    transition("balance", states[0]!, states[1]!, [
+    transition(
+      "balance",
+      "rewrite.quadratic.completing-square.balance-constant",
+      states[0]!,
+      states[1]!,
+      [
       sameRole("quadratic"),
       sameRole("linear"),
       sameRole("equals"),
-      roleBinding("relocated-constant", "constant", "right")
+      roleBinding(
+        "relocated-constant",
+        "constant",
+        "right",
+        "focal-operand"
+      )
     ]),
-    transition("complete", states[1]!, states[2]!, [
+    transition(
+      "complete",
+      "rewrite.quadratic.completing-square.add-square-term",
+      states[1]!,
+      states[2]!,
+      [
       sameRole("quadratic"),
       sameRole("linear"),
       sameRole("equals"),
       sameRole("right")
     ]),
-    transition("recognize", states[2]!, states[3]!, [
+    transition(
+      "recognize",
+      "rewrite.quadratic.completing-square.recognize-perfect-square",
+      states[2]!,
+      states[3]!,
+      [
       sameRole("equals"),
       sameRole("right")
     ])
@@ -148,21 +186,30 @@ function state(
 
 function transition(
   suffix: string,
+  operationRef: string,
   source: KpQuadraticKatexState,
   target: KpQuadraticKatexState,
   bindings: readonly {
     readonly role: string;
     readonly sourceRole: string;
     readonly targetRole: string;
+    readonly presentationRole: KpQuadraticKatexPresentationRole;
   }[]
 ): KpQuadraticKatexTransition {
   return Object.freeze({
     id: `transition.quadratic.completing-square.${suffix}`,
+    presentation: Object.freeze({
+      operationRef,
+      phaseOrder: Object.freeze(["reflow", "act"] as const),
+      reflowEnd: 0.36 as const,
+      actStart: 0.3 as const
+    }),
     sourceStateId: source.id,
     targetStateId: target.id,
     correspondence: Object.freeze(bindings.map((binding) =>
       Object.freeze({
         role: binding.role,
+        presentationRole: binding.presentationRole,
         sourceSelectorId: source.selectors.find(
           (selector) => selector.role === binding.sourceRole
         )!.id,
@@ -183,18 +230,26 @@ function sameRole(role: string): {
   readonly role: string;
   readonly sourceRole: string;
   readonly targetRole: string;
+  readonly presentationRole: KpQuadraticKatexPresentationRole;
 } {
-  return roleBinding(role, role, role);
+  return roleBinding(role, role, role, "continuant");
 }
 
 function roleBinding(
   role: string,
   sourceRole: string,
-  targetRole: string
+  targetRole: string,
+  presentationRole: KpQuadraticKatexPresentationRole
 ): {
   readonly role: string;
   readonly sourceRole: string;
   readonly targetRole: string;
+  readonly presentationRole: KpQuadraticKatexPresentationRole;
 } {
-  return Object.freeze({ role, sourceRole, targetRole });
+  return Object.freeze({
+    role,
+    sourceRole,
+    targetRole,
+    presentationRole
+  });
 }

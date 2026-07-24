@@ -116,7 +116,8 @@
     {
       "id": "slice-10",
       "title": "Completing-square-balance-choreography",
-      "status": "planned"
+      "summary": "Rebuilt balance choreography so x², −5x, and equality are continuants that finish reflow before action; the relocated six is the sole focal operand and sole arcing owner. Native KaTeX endpoints, direct seek, responsive reader, review, accepted branches, and graph remain stable.",
+      "status": "complete"
     },
     {
       "id": "slice-11",

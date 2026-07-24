@@ -204,6 +204,12 @@ function renderEquations(
   stage.dataset["kpSymbolicMotionOwners"] = String(
     sampled.transition.correspondence.length
   );
+  stage.dataset["kpSymbolicFocalOwners"] = String(
+    sampled.transition.correspondence.filter(
+      ({ presentationRole }) =>
+        (presentationRole ?? "focal-operand") === "focal-operand"
+    ).length
+  );
 }
 
 function renderCorrespondenceMotion(input: {
@@ -228,14 +234,20 @@ function renderCorrespondenceMotion(input: {
     const deltaY =
       targetRect.top + targetRect.height / 2 -
       (sourceRect.top + sourceRect.height / 2);
-    const lane = (index % 2 === 0 ? -1 : 1) * (4 + index % 3 * 2);
-    const arc = Math.sin(Math.PI * input.progress) * lane;
+    const presentationRole = binding.presentationRole ?? "focal-operand";
+    const localProgress = presentationRole === "continuant"
+      ? smoothstep(Math.min(1, input.progress / 0.36))
+      : smoothstep(Math.max(0, (input.progress - 0.3) / 0.7));
+    const lane = presentationRole === "focal-operand"
+      ? (index % 2 === 0 ? -1 : 1) * (4 + index % 3 * 2)
+      : 0;
+    const arc = Math.sin(Math.PI * localProgress) * lane;
     sourceToken.style.transform =
-      `translate3d(${deltaX * input.progress}px, ${deltaY * input.progress + arc}px, 0)`;
+      `translate3d(${deltaX * localProgress}px, ${deltaY * localProgress + arc}px, 0)`;
     targetToken.style.transform =
-      `translate3d(${-deltaX * (1 - input.progress)}px, ${-deltaY * (1 - input.progress) + arc}px, 0)`;
-    sourceToken.dataset["kpSymbolicMotionRole"] = binding.role;
-    targetToken.dataset["kpSymbolicMotionRole"] = binding.role;
+      `translate3d(${-deltaX * (1 - localProgress)}px, ${-deltaY * (1 - localProgress) + arc}px, 0)`;
+    sourceToken.dataset["kpSymbolicMotionRole"] = presentationRole;
+    targetToken.dataset["kpSymbolicMotionRole"] = presentationRole;
     matchedSource.add(binding.sourceSelectorId);
     matchedTarget.add(binding.targetSelectorId);
   });

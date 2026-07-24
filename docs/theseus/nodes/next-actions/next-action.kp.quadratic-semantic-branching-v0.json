@@ -265,6 +265,13 @@
       "scope": "slice-09 quadratic authority presentation adapter",
       "checkedAt": "2026-07-24T22:44:38.960Z",
       "notes": "Seven focused tests pass. Quadratic asset transformations now retain their verified method-edge operationRef, with explicit branch and reunion operations, rather than flattening all transitions to quadraticSemanticCheckpoint; source/target object correspondence, shared clock, seek, rewind, and JSON stability remain intact."
+    },
+    {
+      "command": "focused completing-square tests; npm run typecheck; quadratic Chromium; npm run visual:quadratic-branching",
+      "status": "passed",
+      "scope": "slice-10 completing-square balance choreography",
+      "checkedAt": "2026-07-24T22:51:49.551Z",
+      "notes": "Ten focused tests, typecheck, all nine quadratic Chromium checks, and 14 deterministic captures pass. The balance transition declares reflow then act, assigns x², −5x, and equality to continuant motion, gives the relocated constant the only focal-operand owner, and preserves native endpoints, direct seek, phone layout, review, branches, and graph."
     }
   ],
   "progress": {

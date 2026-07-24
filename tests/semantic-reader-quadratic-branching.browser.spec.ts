@@ -40,6 +40,13 @@ test("both methods move selector-owned native symbols through measured paths", a
     "transition.quadratic.completing-square.balance"
   );
   await expect(stage.locator("[data-kp-transition-layer]")).toHaveCount(2);
+  await expect(stage).toHaveAttribute("data-kp-symbolic-focal-owners", "1");
+  await expect(stage.locator(
+    '[data-kp-motion-id="katex.quadratic.completing-square.standard.quadratic"]'
+  )).toHaveAttribute("data-kp-symbolic-motion-role", "continuant");
+  await expect(stage.locator(
+    '[data-kp-motion-id="katex.quadratic.completing-square.standard.constant"]'
+  )).toHaveAttribute("data-kp-symbolic-motion-role", "focal-operand");
   const squareMotion = await symbolicSnapshot(
     "katex.quadratic.completing-square.standard.constant",
     "katex.quadratic.completing-square.balanced.right"

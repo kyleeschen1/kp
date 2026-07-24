@@ -38,6 +38,29 @@ test("transitions require measured native endpoints and collision-safe lanes", (
   }
 });
 
+test("balance reflows persistent context before only the constant acts", () => {
+  const balance = createKpCompletingSquareKatexProjection().transitions[0]!;
+  const presentation = balance.presentation;
+  assert.ok(presentation);
+  assert.equal(
+    presentation.operationRef,
+    "rewrite.quadratic.completing-square.balance-constant"
+  );
+  assert.deepEqual(presentation.phaseOrder, ["reflow", "act"]);
+  assert.deepEqual(
+    balance.correspondence.map(({ role, presentationRole }) => [
+      role,
+      presentationRole
+    ]),
+    [
+      ["quadratic", "continuant"],
+      ["linear", "continuant"],
+      ["equals", "continuant"],
+      ["relocated-constant", "focal-operand"]
+    ]
+  );
+});
+
 test("projection contains no radical workaround or concrete geometry", () => {
   const serialized = JSON.stringify(createKpCompletingSquareKatexProjection());
   assert.doesNotMatch(serialized, /webgl|radical-structural|translateX|translateY/);
