@@ -2,8 +2,8 @@
 
 Date: 2026-07-24
 
-Status: active presentation defect; diagnosed; implementation not yet
-authorized
+Status: active presentation defect; diagnosed; implementation authorized by
+the semantic presentation continuity run
 
 Reported behavior: in the distribution animation, the first copied factor
 appears to land too far from its first term and then corrects late with a
@@ -77,6 +77,23 @@ assert:
 
 This permits every token to have a valid start, valid end, and continuous path
 while the product still reads as temporarily broken.
+
+## Live Workbench measurement
+
+The stable `visual:presentation-continuity` probe compares the temporary
+factor-to-addend edge gap with hidden native KaTeX target geometry. Before the
+fix, its absolute residual remains outside the `0.5px` continuity budget:
+
+| Viewport | Lock (`0.72`) | Pre-handoff (`0.94`) | Endpoint (`1`) |
+| --- | ---: | ---: | ---: |
+| Wide | `1.58px` | `2.62px` | `2.58px` |
+| Narrow | `1.07px` | `1.78px` | `1.76px` |
+
+The negative sign in the raw manifest means the independently transformed
+boxes overlap relative to the native edge seam; the relevant conformance
+failure is the nonzero magnitude. Because the residual survives through the
+temporary owner's endpoint pose, native ownership has to correct it rather
+than merely reveal equivalent geometry.
 
 ## Recommended fix direction
 

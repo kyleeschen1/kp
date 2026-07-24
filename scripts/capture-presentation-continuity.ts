@@ -21,6 +21,11 @@ const captures: {
   animationId: string;
   progress: number;
   viewport: { width: number; height: number };
+  distributionGap?: {
+    temporaryPx: number;
+    nativePx: number;
+    residualPx: number;
+  } | undefined;
   screenshot: string;
   sha256: string;
 }[] = [];
@@ -62,12 +67,16 @@ try {
     }
     const screenshotPath = path.join(outputRoot, `${visualCase.id}.png`);
     await writeFile(screenshotPath, first);
+    const distributionGap = visualCase.family === "distribution"
+      ? await measureDistributionGap(stage)
+      : undefined;
     captures.push({
       id: visualCase.id,
       family: visualCase.family,
       animationId: visualCase.animationId,
       progress: visualCase.progress,
       viewport: visualCase.viewport,
+      ...(distributionGap === undefined ? {} : { distributionGap }),
       screenshot: path.relative(process.cwd(), screenshotPath),
       sha256: firstHash
     });
@@ -93,4 +102,35 @@ async function settle(page: import("playwright").Page): Promise<void> {
 
 function sha256(value: Uint8Array): string {
   return createHash("sha256").update(value).digest("hex");
+}
+
+async function measureDistributionGap(
+  stage: import("playwright").Locator
+): Promise<{ temporaryPx: number; nativePx: number; residualPx: number }> {
+  return stage.evaluate((element) => {
+    const rect = (selector: string) => {
+      const node = element.querySelector<HTMLElement>(selector);
+      if (node === null) throw new Error(`Missing distribution probe ${selector}.`);
+      return node.getBoundingClientRect();
+    };
+    const temporaryFactor = rect(
+      '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.factor"]'
+    );
+    const temporaryTerm = rect(
+      '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.left-term"]'
+    );
+    const nativeFactor = rect(
+      '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-factor"]'
+    );
+    const nativeTerm = rect(
+      '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-term"]'
+    );
+    const temporaryPx = temporaryTerm.left - temporaryFactor.right;
+    const nativePx = nativeTerm.left - nativeFactor.right;
+    return {
+      temporaryPx,
+      nativePx,
+      residualPx: temporaryPx - nativePx
+    };
+  });
 }

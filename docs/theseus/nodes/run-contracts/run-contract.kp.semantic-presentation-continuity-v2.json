@@ -121,7 +121,8 @@
     {
       "id": "slice-13",
       "title": "Measure the live distribution factor-to-term gap and final ownership seam.",
-      "status": "planned"
+      "summary": "Live Workbench edge-gap measurements reproduce the defect: absolute pre-handoff residual is 2.62px wide and 1.78px narrow versus a 0.5px budget, and persists in the temporary endpoint pose. Stable visual command and typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "slice-14",
