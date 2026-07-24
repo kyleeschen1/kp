@@ -132,6 +132,13 @@
       "scope": "slice-14 quadratic-formula KaTeX projection",
       "checkedAt": "2026-07-24T20:21:07.174Z",
       "notes": "Sixteen focused tests passed with typecheck. Five native formula states, exact roots, stable selectors, measured native endpoints, and explicit radical workaround isolation are verified; all eight preservation captures remain stable and planned publication remains zero players."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/quadratic-branch-choreography.test.ts tests/fission-fusion.test.ts tests/quadratic-plus-minus-branches.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-15 branch choreography and native reunion",
+      "checkedAt": "2026-07-24T20:23:38.230Z",
+      "notes": "Seventeen focused tests passed with typecheck. Both methods use stable branches, exclusive nonzero material ownership, bounded responsive separation, semantic micro-stagger, discrete native reunion, direct seek, rewind, and JSON-stable choreography."
     }
   ],
   "progress": {
