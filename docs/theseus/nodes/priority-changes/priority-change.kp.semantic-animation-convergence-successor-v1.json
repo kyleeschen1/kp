@@ -1,0 +1,55 @@
+{
+  "id": "priority-change.kp.semantic-animation-convergence-successor-v1",
+  "kind": "priority-change",
+  "title": "Select semantic animation convergence successor",
+  "status": "active",
+  "domain": "kp",
+  "summary": "After the completed authoritative-roadmap Workbench loop, make the reviewed semantic-animation convergence proposal the next implementation priority; complete the predecessor phases, defer quadratic branching to next, preserve all later roadmap coverage, and require approval of an exact typed run contract before execution.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "After the completed authoritative-roadmap Workbench loop, make the reviewed semantic-animation convergence proposal the next implementation priority; complete the predecessor phases, defer quadratic branching to next, preserve all later roadmap coverage, and require approval of an exact typed run contract before execution.",
+      "occurredAt": "2026-07-24T02:45:07.926Z",
+      "summary": "Priority change disposition: checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-semantic-animation-convergence-successor-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v6"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v6"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v6",
+    "rationale": "After the completed authoritative-roadmap Workbench loop, make the reviewed semantic-animation convergence proposal the next implementation priority; complete the predecessor phases, defer quadratic branching to next, preserve all later roadmap coverage, and require approval of an exact typed run contract before execution.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "authoritative-roadmap-workbench",
+        "to": "complete"
+      },
+      {
+        "subject": "radical-native-settlement",
+        "to": "complete"
+      },
+      {
+        "subject": "semantic-animation-convergence",
+        "to": "now"
+      },
+      {
+        "subject": "quadratic-semantic-branching",
+        "to": "next"
+      }
+    ],
+    "effectiveAt": "2026-07-24T02:45:07.926Z",
+    "requestedBy": "user"
+  }
+}
