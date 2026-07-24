@@ -98,6 +98,22 @@ export interface KpPresentationContinuityBudget {
   readonly opacity: number;
 }
 
+export interface KpPresentationContinuityIssue {
+  readonly kind:
+    | "missing-member"
+    | "relative-position"
+    | "relative-size"
+    | "adjacent-gap"
+    | "ink-bounds"
+    | "ink-coverage"
+    | "relative-velocity"
+    | "endpoint";
+  readonly memberId?: string | undefined;
+  readonly residual: number;
+  readonly budget: number;
+  readonly message: string;
+}
+
 export const kpDefaultPresentationContinuityBudget:
   KpPresentationContinuityBudget = {
     positionPx: 0.5,
@@ -272,6 +288,76 @@ export function snapshotKpPresentationGroupGeometry(input: {
       };
     })
   };
+}
+
+export function evaluateKpIntraOwnerContinuity(input: {
+  readonly actual: KpPresentationGroupGeometrySnapshot;
+  readonly native: KpPresentationGroupGeometrySnapshot;
+  readonly budget?: KpPresentationContinuityBudget | undefined;
+}): readonly KpPresentationContinuityIssue[] {
+  const budget = input.budget ?? kpDefaultPresentationContinuityBudget;
+  const issues: KpPresentationContinuityIssue[] = [];
+  const nativeById = new Map(
+    input.native.memberLocalRects.map((member) => [member.memberId, member.rect])
+  );
+  for (const member of input.actual.memberLocalRects) {
+    const expected = nativeById.get(member.memberId);
+    if (expected === undefined) {
+      issues.push({
+        kind: "missing-member",
+        memberId: member.memberId,
+        residual: Number.POSITIVE_INFINITY,
+        budget: 0,
+        message: `Native presentation is missing ${member.memberId}.`
+      });
+      continue;
+    }
+    const positionResidual = Math.max(
+      Math.abs(member.rect.x - expected.x),
+      Math.abs(member.rect.y - expected.y)
+    );
+    if (positionResidual > budget.positionPx) {
+      issues.push({
+        kind: "relative-position",
+        memberId: member.memberId,
+        residual: positionResidual,
+        budget: budget.positionPx,
+        message: `${member.memberId} has not reached its native-local position.`
+      });
+    }
+    const sizeResidual = Math.max(
+      Math.abs(member.rect.width - expected.width),
+      Math.abs(member.rect.height - expected.height)
+    );
+    if (sizeResidual > budget.sizePx) {
+      issues.push({
+        kind: "relative-size",
+        memberId: member.memberId,
+        residual: sizeResidual,
+        budget: budget.sizePx,
+        message: `${member.memberId} has not reached its native size.`
+      });
+    }
+  }
+  input.actual.adjacentEdgeGaps.forEach((gap, index) => {
+    const expected = input.native.adjacentEdgeGaps[index];
+    const residual = expected === undefined
+      ? Number.POSITIVE_INFINITY
+      : Math.max(
+          Math.abs(gap.horizontalPx - expected.horizontalPx),
+          Math.abs(gap.verticalPx - expected.verticalPx)
+        );
+    if (residual > budget.positionPx) {
+      issues.push({
+        kind: "adjacent-gap",
+        memberId: `${gap.leadingMemberId}:${gap.trailingMemberId}`,
+        residual,
+        budget: budget.positionPx,
+        message: "Adjacent members have not reached their native edge gap."
+      });
+    }
+  });
+  return issues;
 }
 
 function requireText(value: string, label: string): string {

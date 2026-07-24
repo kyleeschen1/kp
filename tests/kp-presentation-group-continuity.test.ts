@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   compileKpCompoundTargetDeclarations,
+  evaluateKpIntraOwnerContinuity,
   kpDefaultPresentationContinuityBudget,
   observeKpCompositeInk,
   observeKpMeasuredInk,
@@ -47,6 +48,19 @@ test("presentation groups describe semantic members without renderer resources",
   assert.equal(JSON.stringify(contract).includes("Element"), false);
   assert.equal(JSON.stringify(contract).includes("WebGL"), false);
   assert.equal(kpDefaultPresentationContinuityBudget.positionPx, 0.5);
+});
+
+test("intra-owner law rejects a late factor-to-term gap", () => {
+  const native = geometrySnapshot(0);
+  const actual = geometrySnapshot(7);
+  const issues = evaluateKpIntraOwnerContinuity({ actual, native });
+
+  assert.ok(issues.some((issue) => issue.kind === "relative-position"));
+  assert.ok(issues.some((issue) => issue.kind === "adjacent-gap"));
+  assert.deepEqual(
+    evaluateKpIntraOwnerContinuity({ actual: native, native }),
+    []
+  );
 });
 
 test("rendered ink observations ignore transparent raster padding", () => {
@@ -176,3 +190,28 @@ test("single and intentionally independent targets require typed exemptions", ()
   }]);
   assert.equal(declaration?.kind, "presentation-group-exemption");
 });
+
+function geometrySnapshot(termOffset: number) {
+  return {
+    groupId: "product",
+    ownerId: "temporary",
+    progress: 0.9,
+    anchorMemberId: "factor",
+    memberLocalRects: [
+      {
+        memberId: "factor",
+        rect: { x: 0, y: 0, width: 10, height: 12 }
+      },
+      {
+        memberId: "term",
+        rect: { x: 10 + termOffset, y: 0, width: 11, height: 12 }
+      }
+    ],
+    adjacentEdgeGaps: [{
+      leadingMemberId: "factor",
+      trailingMemberId: "term",
+      horizontalPx: termOffset,
+      verticalPx: 0
+    }]
+  };
+}

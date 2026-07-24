@@ -85,7 +85,8 @@
     {
       "id": "slice-07",
       "title": "Add the intra-owner relative-geometry law.",
-      "status": "planned"
+      "summary": "The intra-owner law now reports member position, size, and adjacent-gap residuals against native geometry; the reported late product gap fails while exact native geometry passes. Seven tests pass.",
+      "status": "complete"
     },
     {
       "id": "slice-08",
