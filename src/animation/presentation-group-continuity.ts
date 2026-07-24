@@ -415,6 +415,94 @@ export function evaluateKpInterOwnerEquivalence(input: {
   return issues;
 }
 
+export function evaluateKpPresentationTemporalContinuity(input: {
+  readonly contract: KpPresentationGroupContract;
+  readonly samples: readonly KpPresentationOwnerObservation[];
+  readonly native: KpPresentationOwnerObservation;
+  readonly reverseSamples?: readonly KpPresentationOwnerObservation[] | undefined;
+  readonly budget?: KpPresentationContinuityBudget | undefined;
+}): readonly KpPresentationContinuityIssue[] {
+  const budget = input.budget ?? kpDefaultPresentationContinuityBudget;
+  const ordered = [...input.samples].sort(
+    (left, right) => left.progress - right.progress
+  );
+  const issues: KpPresentationContinuityIssue[] = [];
+  const endpoint = ordered.at(-1);
+  if (endpoint === undefined || endpoint.progress !== 1) {
+    issues.push({
+      kind: "endpoint",
+      residual: endpoint === undefined ? 1 : 1 - endpoint.progress,
+      budget: 0,
+      message: "Presentation samples must include the exact endpoint."
+    });
+  } else {
+    issues.push(...evaluateKpIntraOwnerContinuity({
+      actual: snapshotKpPresentationGroupGeometry({
+        contract: input.contract,
+        observation: endpoint
+      }),
+      native: snapshotKpPresentationGroupGeometry({
+        contract: input.contract,
+        observation: input.native
+      }),
+      budget
+    }).map((issue) => ({ ...issue, kind: "endpoint" as const })));
+  }
+  const finalPair = ordered.slice(-2);
+  if (finalPair.length === 2) {
+    const [previous, current] = finalPair;
+    const deltaProgress = current!.progress - previous!.progress;
+    if (deltaProgress > 0) {
+      const previousSnapshot = snapshotKpPresentationGroupGeometry({
+        contract: input.contract,
+        observation: previous!
+      });
+      const currentSnapshot = snapshotKpPresentationGroupGeometry({
+        contract: input.contract,
+        observation: current!
+      });
+      currentSnapshot.memberLocalRects.forEach((member) => {
+        const before = previousSnapshot.memberLocalRects.find(
+          (candidate) => candidate.memberId === member.memberId
+        );
+        if (before === undefined) return;
+        const velocity = Math.max(
+          Math.abs(member.rect.x - before.rect.x),
+          Math.abs(member.rect.y - before.rect.y)
+        ) / deltaProgress;
+        if (velocity > budget.velocityPxPerProgress) {
+          issues.push({
+            kind: "relative-velocity",
+            memberId: member.memberId,
+            residual: velocity,
+            budget: budget.velocityPxPerProgress,
+            message: `${member.memberId} retains relative velocity at settlement.`
+          });
+        }
+      });
+    }
+  }
+  const reverseByProgress = new Map(
+    (input.reverseSamples ?? []).map((sample) => [sample.progress, sample])
+  );
+  for (const sample of ordered) {
+    const reverse = reverseByProgress.get(sample.progress);
+    if (reverse === undefined) continue;
+    issues.push(...evaluateKpIntraOwnerContinuity({
+      actual: snapshotKpPresentationGroupGeometry({
+        contract: input.contract,
+        observation: reverse
+      }),
+      native: snapshotKpPresentationGroupGeometry({
+        contract: input.contract,
+        observation: sample
+      }),
+      budget
+    }));
+  }
+  return issues;
+}
+
 function requireText(value: string, label: string): string {
   if (value.trim().length === 0) throw new Error(`Presentation group requires ${label}.`);
   return value;

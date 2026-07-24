@@ -97,7 +97,8 @@
     {
       "id": "slice-09",
       "title": "Add relative velocity, direct-seek, endpoint, and reverse-equivalence requirements.",
-      "status": "planned"
+      "summary": "Temporal conformance now checks exact endpoints, final relative velocity, direct-seek geometry, and reverse-equivalent samples; nine tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "slice-10",

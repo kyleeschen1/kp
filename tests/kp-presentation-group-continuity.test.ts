@@ -5,6 +5,7 @@ import {
   compileKpCompoundTargetDeclarations,
   evaluateKpInterOwnerEquivalence,
   evaluateKpIntraOwnerContinuity,
+  evaluateKpPresentationTemporalContinuity,
   kpDefaultPresentationContinuityBudget,
   observeKpCompositeInk,
   observeKpMeasuredInk,
@@ -49,6 +50,36 @@ test("presentation groups describe semantic members without renderer resources",
   assert.equal(JSON.stringify(contract).includes("Element"), false);
   assert.equal(JSON.stringify(contract).includes("WebGL"), false);
   assert.equal(kpDefaultPresentationContinuityBudget.positionPx, 0.5);
+});
+
+test("temporal law requires settled velocity, exact endpoints, and reverse parity", () => {
+  const contract: KpPresentationGroupContract = {
+    id: "product",
+    kind: "presentation-group",
+    members: [
+      { memberId: "factor", semanticEntityId: "a", nativeOrder: 0 },
+      { memberId: "term", semanticEntityId: "b", nativeOrder: 1 }
+    ],
+    settlementAnchorMemberId: "factor",
+    nativeOwnerId: "native",
+    cohesionLockProgress: 0.72
+  };
+  const native = ownerObservation(1, 0);
+  assert.deepEqual(evaluateKpPresentationTemporalContinuity({
+    contract,
+    samples: [ownerObservation(0.9, 0), native],
+    native,
+    reverseSamples: [ownerObservation(0.9, 0), native]
+  }), []);
+
+  const issues = evaluateKpPresentationTemporalContinuity({
+    contract,
+    samples: [ownerObservation(0.9, 6), native],
+    native,
+    reverseSamples: [ownerObservation(0.9, 3), native]
+  });
+  assert.ok(issues.some((issue) => issue.kind === "relative-velocity"));
+  assert.ok(issues.some((issue) => issue.kind === "relative-position"));
 });
 
 test("inter-owner law cannot hide geometry mismatch with opacity", () => {
@@ -272,5 +303,28 @@ function geometrySnapshot(termOffset: number) {
       horizontalPx: termOffset,
       verticalPx: 0
     }]
+  };
+}
+
+function ownerObservation(
+  progress: number,
+  termOffset: number
+): KpPresentationOwnerObservation {
+  return {
+    groupId: "product",
+    ownerId: "temporary",
+    progress,
+    members: [
+      {
+        memberId: "factor",
+        rect: { x: 0, y: 0, width: 10, height: 12 },
+        opacity: 1
+      },
+      {
+        memberId: "term",
+        rect: { x: 10 + termOffset, y: 0, width: 11, height: 12 },
+        opacity: 1
+      }
+    ]
   };
 }
