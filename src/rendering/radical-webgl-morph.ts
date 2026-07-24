@@ -12,6 +12,7 @@ import {
 } from "./katex-texture-atlas.ts";
 import type {
   KatexMotionToken,
+  KatexTextureAtlas,
   KatexTokenRect
 } from "./katex-transition-types.ts";
 
@@ -20,6 +21,15 @@ export interface KpRadicalWebglMorphSyncResult {
   readonly ready: boolean;
   readonly sourceCaptureRect?: KatexTokenRect | undefined;
   readonly targetCaptureRect?: KatexTokenRect | undefined;
+}
+
+export interface KpRadicalWebglSourceInkComparison {
+  readonly semanticProgress: number;
+  readonly renderedWebglInkRect: KatexTokenRect;
+  readonly liveNativeInkRect: KatexTokenRect;
+  readonly positionResidualPx: number;
+  readonly sizeResidualPx: number;
+  readonly maximumGeometryResidualPx: number;
 }
 
 interface KpRadicalWebglMorphState {
@@ -34,6 +44,7 @@ interface KpRadicalWebglMorphState {
   progress: number;
   opacity: number;
   sourceCaptureRect?: KatexTokenRect | undefined;
+  sourceNativeInkRect?: KatexTokenRect | undefined;
   targetCaptureRect?: KatexTokenRect | undefined;
 }
 
@@ -116,6 +127,46 @@ export function disposeKpRadicalWebglMorph(stage: HTMLElement): void {
   state.renderer?.dispose();
   state.canvas.remove();
   morphStates.delete(stage);
+}
+
+export function measureKpRadicalWebglSourceInk(
+  stage: HTMLElement
+): KpRadicalWebglSourceInkComparison | undefined {
+  const state = morphStates.get(stage);
+  if (
+    state?.status !== "ready" ||
+    state.renderer === undefined ||
+    state.sourceNativeInkRect === undefined
+  ) {
+    return undefined;
+  }
+  // Readback is diagnostic-only. Re-rendering immediately before readPixels
+  // avoids relying on the browser preserving a composited WebGL buffer.
+  state.renderer.render(state.progress);
+  const renderedWebglInkRect = state.renderer.measureInk();
+  if (renderedWebglInkRect === undefined) return undefined;
+  const liveNativeInkRect = state.sourceNativeInkRect;
+  const renderedCenter = rectCenter(renderedWebglInkRect);
+  const nativeCenter = rectCenter(liveNativeInkRect);
+  return {
+    semanticProgress: state.progress,
+    renderedWebglInkRect,
+    liveNativeInkRect,
+    positionResidualPx: Math.hypot(
+      renderedCenter.x - nativeCenter.x,
+      renderedCenter.y - nativeCenter.y
+    ),
+    sizeResidualPx: Math.hypot(
+      renderedWebglInkRect.width - liveNativeInkRect.width,
+      renderedWebglInkRect.height - liveNativeInkRect.height
+    ),
+    maximumGeometryResidualPx: Math.max(
+      Math.abs(renderedWebglInkRect.left - liveNativeInkRect.left),
+      Math.abs(renderedWebglInkRect.top - liveNativeInkRect.top),
+      Math.abs(renderedWebglInkRect.width - liveNativeInkRect.width),
+      Math.abs(renderedWebglInkRect.height - liveNativeInkRect.height)
+    )
+  };
 }
 
 function createMorphState(
@@ -224,6 +275,11 @@ async function initializeMorphState(input: {
       atlas
     );
     input.state.sourceCaptureRect = sourceLocalRect;
+    input.state.sourceNativeInkRect = measureAtlasEndpointInk({
+      atlas,
+      tokenId: sourceToken.id,
+      endpointRect: sourceLocalRect
+    });
     input.state.targetCaptureRect = targetLocalRect;
     input.state.status = "ready";
     input.state.renderer.render(input.state.progress);
@@ -313,5 +369,63 @@ function parseComputedColor(element: HTMLElement): {
     red: Number(components[1]) / 255,
     green: Number(components[2]) / 255,
     blue: Number(components[3]) / 255
+  };
+}
+
+function measureAtlasEndpointInk(input: {
+  readonly atlas: KatexTextureAtlas;
+  readonly tokenId: string;
+  readonly endpointRect: KatexTokenRect;
+  readonly alphaThreshold?: number | undefined;
+}): KatexTokenRect {
+  const region = input.atlas.regions.get(input.tokenId);
+  const page = region === undefined ? undefined : input.atlas.pages[region.page];
+  if (region === undefined || page === undefined) {
+    throw new Error(`Missing live native ink capture for ${input.tokenId}.`);
+  }
+  const context = page.getContext("2d");
+  if (context === null) {
+    throw new Error("Could not read the live native KaTeX ink capture.");
+  }
+  const alphaThreshold = input.alphaThreshold ?? 8;
+  const pixels = context.getImageData(
+    region.x,
+    region.y,
+    region.width,
+    region.height
+  ).data;
+  let left = region.width;
+  let top = region.height;
+  let right = -1;
+  let bottom = -1;
+  for (let y = 0; y < region.height; y += 1) {
+    for (let x = 0; x < region.width; x += 1) {
+      if ((pixels[(y * region.width + x) * 4 + 3] ?? 0) < alphaThreshold) {
+        continue;
+      }
+      left = Math.min(left, x);
+      top = Math.min(top, y);
+      right = Math.max(right, x);
+      bottom = Math.max(bottom, y);
+    }
+  }
+  if (right < left || bottom < top) {
+    throw new Error("Live native KaTeX fraction capture contains no ink.");
+  }
+  const pixelRatio = input.atlas.pixelRatio;
+  return {
+    left: input.endpointRect.left + left / pixelRatio,
+    top: input.endpointRect.top + top / pixelRatio,
+    width: (right - left + 1) / pixelRatio,
+    height: (bottom - top + 1) / pixelRatio
+  };
+}
+
+function rectCenter(
+  rect: KatexTokenRect
+): { readonly x: number; readonly y: number } {
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top + rect.height / 2
   };
 }

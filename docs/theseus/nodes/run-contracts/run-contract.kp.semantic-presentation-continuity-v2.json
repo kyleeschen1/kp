@@ -169,7 +169,8 @@
     {
       "id": "slice-21",
       "title": "Measure actual WebGL source ink against live native 1/2, replacing metadata-only diagnosis.",
-      "status": "planned"
+      "summary": "Added on-demand WebGL alpha readback and independent live KaTeX source-fraction raster bounds. Stable evidence at semantic progress 0.04 shows recorded readiness residual 0px but actual rendered/native maximum residual 1px (7x20px versus 6x20px), deterministically replacing the metadata-only diagnosis without changing motion.",
+      "status": "complete"
     },
     {
       "id": "slice-22",

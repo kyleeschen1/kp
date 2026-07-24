@@ -235,6 +235,48 @@
       "scope": "slice-20 distribution checkpoint",
       "checkedAt": "2026-07-24T16:11:58.988Z",
       "notes": "User accepted the repaired distribution exemplar: persistent terms and operators settle without fading, double ownership, or endpoint correction."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/radical-webgl-morph.test.ts tests/kp-radical-native-settlement.test.ts tests/kp-presentation-group-continuity.test.ts",
+      "status": "passed",
+      "scope": "slice-21 isolated radical ink measurement",
+      "checkedAt": "2026-07-24T16:22:31.354Z",
+      "notes": "24 focused tests passed; renderer-neutral continuity and existing radical settlement contracts remain intact."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --grep radical-rewind-source-boundary",
+      "status": "passed",
+      "scope": "actual WebGL versus live KaTeX source ink",
+      "checkedAt": "2026-07-24T16:22:39.751Z",
+      "notes": "Focused Chromium diagnostic passed and deterministically exposed the false-ready seam: recorded residual 0px versus actual 1px maximum ink-geometry residual at semantic progress 0.04."
+    },
+    {
+      "command": "npm run visual:presentation-continuity",
+      "status": "passed",
+      "scope": "slice-21 stable radical ink manifest",
+      "checkedAt": "2026-07-24T16:22:47.492Z",
+      "notes": "17 captures passed; manifest records rendered WebGL source ink 7x20px, live native KaTeX ink 6x20px, 0.41px center residual, and 1px maximum geometry residual at progress 0.04."
+    },
+    {
+      "command": "npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "accepted radical choreography preservation",
+      "checkedAt": "2026-07-24T16:22:56.115Z",
+      "notes": "17 deterministic captures passed; exponent and radical exemplars remain Ready with zero inspector warnings after diagnostic readback instrumentation."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-21 repository gate",
+      "checkedAt": "2026-07-24T16:23:01.121Z",
+      "notes": "All 2,162 deterministic unit and architecture tests passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-21 production build",
+      "checkedAt": "2026-07-24T16:23:06.485Z",
+      "notes": "Full typecheck and Vite production build passed; only the existing chunk-size advisory remains."
     }
   ],
   "progress": {

@@ -1863,6 +1863,55 @@ test("radical rewind interpolates through the composite source-native boundary",
     nativeOpacity: 1,
     morphOpacity: 0
   });
+
+  await scrubber.fill("0.96");
+  const sourceInkDiagnostic = await stage.evaluate(async (element) => {
+    if (!(element instanceof HTMLElement)) {
+      throw new Error("Radical stage must be an HTML element.");
+    }
+    const moduleUrl = "/src/rendering/radical-webgl-morph.ts";
+    const module = await import(moduleUrl) as {
+      measureKpRadicalWebglSourceInk(stage: HTMLElement): {
+        semanticProgress: number;
+        renderedWebglInkRect: {
+          left: number;
+          top: number;
+          width: number;
+          height: number;
+        };
+        liveNativeInkRect: {
+          left: number;
+          top: number;
+          width: number;
+          height: number;
+        };
+        positionResidualPx: number;
+        sizeResidualPx: number;
+        maximumGeometryResidualPx: number;
+      } | undefined;
+    };
+    const comparison = module.measureKpRadicalWebglSourceInk(element);
+    if (comparison === undefined) {
+      throw new Error("Expected isolated WebGL and live native ink bounds.");
+    }
+    return {
+      ...comparison,
+      recordedResidualPx: Number(
+        element.dataset["kpEditorEquationSourceSettlementResidual"]
+      )
+    };
+  });
+  expect(sourceInkDiagnostic.semanticProgress).toBeCloseTo(0.04, 5);
+  expect(sourceInkDiagnostic.renderedWebglInkRect.width).toBeGreaterThan(0);
+  expect(sourceInkDiagnostic.renderedWebglInkRect.height).toBeGreaterThan(0);
+  expect(sourceInkDiagnostic.liveNativeInkRect.width).toBeGreaterThan(0);
+  expect(sourceInkDiagnostic.liveNativeInkRect.height).toBeGreaterThan(0);
+  // This negative fixture proves the old readiness signal compared the
+  // capture rectangle with itself instead of observing rendered ink.
+  expect(sourceInkDiagnostic.recordedResidualPx).toBe(0);
+  expect(sourceInkDiagnostic.maximumGeometryResidualPx).toBeGreaterThan(
+    kpRadicalNativeSettlementGeometryTolerancePx
+  );
 });
 
 test("radical bundle and native settlement satisfy continuity budgets", async ({

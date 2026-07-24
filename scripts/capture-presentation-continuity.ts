@@ -8,6 +8,9 @@ import {
 } from "../src/animation/presentation-group-continuity.ts";
 import { createKpPresentationContinuityVisualPlan } from
   "../src/editor/presentation-continuity-visual-plan.ts";
+import type {
+  KpRadicalWebglSourceInkComparison
+} from "../src/rendering/radical-webgl-morph.ts";
 import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
 
 interface DistributionHandoffObservation
@@ -56,6 +59,7 @@ const captures: {
   progress: number;
   viewport: { width: number; height: number };
   distributionGap?: DistributionGapMeasurement | undefined;
+  radicalSourceInk?: KpRadicalWebglSourceInkComparison | undefined;
   screenshot: string;
   sha256: string;
 }[] = [];
@@ -88,6 +92,11 @@ try {
       visualCase.surface === "workbench-card"
       ? await measureDistributionGap(stage)
       : undefined;
+    const radicalSourceInk =
+      visualCase.family === "radical" &&
+      visualCase.surface === "workbench-card"
+      ? await measureRadicalSourceInk(stage)
+      : undefined;
     captures.push({
       id: visualCase.id,
       family: visualCase.family,
@@ -96,6 +105,7 @@ try {
       progress: visualCase.progress,
       viewport: visualCase.viewport,
       ...(distributionGap === undefined ? {} : { distributionGap }),
+      ...(radicalSourceInk === undefined ? {} : { radicalSourceInk }),
       screenshot: path.relative(process.cwd(), screenshotPath),
       sha256: firstHash
     });
@@ -118,6 +128,29 @@ try {
   }, null, 2));
 } finally {
   await harness.close();
+}
+
+async function measureRadicalSourceInk(
+  stage: import("playwright").Locator
+): Promise<KpRadicalWebglSourceInkComparison> {
+  return stage.evaluate(async (element) => {
+    if (!(element instanceof HTMLElement)) {
+      throw new Error("Radical stage must be an HTML element.");
+    }
+    const moduleUrl = "/src/rendering/radical-webgl-morph.ts";
+    const module = await import(moduleUrl) as {
+      measureKpRadicalWebglSourceInk(
+        stage: HTMLElement
+      ): KpRadicalWebglSourceInkComparison | undefined;
+    };
+    const comparison = module.measureKpRadicalWebglSourceInk(element);
+    if (comparison === undefined) {
+      throw new Error(
+        "Could not compare actual WebGL fraction ink with live native KaTeX."
+      );
+    }
+    return comparison;
+  });
 }
 
 async function openWorkbenchCard(

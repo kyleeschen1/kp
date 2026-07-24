@@ -39,6 +39,7 @@ export interface KatexArtifactSolidMaskMorphPlan {
 export interface KatexArtifactSolidMaskMorphRenderer {
   readonly bounds: KatexTokenRect;
   render(progress: number): void;
+  measureInk(alphaThreshold?: number): KatexTokenRect | undefined;
   dispose(): void;
 }
 
@@ -343,6 +344,48 @@ export function createKatexArtifactSolidMaskMorphRenderer(
         plan.color.blue
       );
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    },
+    measureInk(alphaThreshold = 8) {
+      if (disposed) return undefined;
+      if (
+        !Number.isFinite(alphaThreshold) ||
+        alphaThreshold < 1 ||
+        alphaThreshold > 255
+      ) {
+        throw new Error("Solid-mask ink threshold must be between 1 and 255.");
+      }
+      const pixels = new Uint8Array(canvas.width * canvas.height * 4);
+      gl.readPixels(
+        0,
+        0,
+        canvas.width,
+        canvas.height,
+        gl.RGBA,
+        gl.UNSIGNED_BYTE,
+        pixels
+      );
+      let left = canvas.width;
+      let bottom = canvas.height;
+      let right = -1;
+      let top = -1;
+      for (let y = 0; y < canvas.height; y += 1) {
+        for (let x = 0; x < canvas.width; x += 1) {
+          if ((pixels[(y * canvas.width + x) * 4 + 3] ?? 0) < alphaThreshold) {
+            continue;
+          }
+          left = Math.min(left, x);
+          bottom = Math.min(bottom, y);
+          right = Math.max(right, x);
+          top = Math.max(top, y);
+        }
+      }
+      if (right < left || top < bottom) return undefined;
+      return {
+        left: left / pixelRatio,
+        top: (canvas.height - 1 - top) / pixelRatio,
+        width: (right - left + 1) / pixelRatio,
+        height: (top - bottom + 1) / pixelRatio
+      };
     },
     dispose() {
       if (disposed) return;
