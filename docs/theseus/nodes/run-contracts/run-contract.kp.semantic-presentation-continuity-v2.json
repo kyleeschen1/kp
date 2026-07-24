@@ -133,7 +133,8 @@
     {
       "id": "slice-15",
       "title": "Introduce a cohesion lock and shared product-settlement clock while retaining independent fan-out motion.",
-      "status": "planned"
+      "summary": "Distribution preserves independent fan-out before progress 0.72, then factor and addend residuals share one reversible settlement clock and both reach path completion at 0.94. Ten focused tests and stable visuals pass; remaining 2.58px box residual is correctly reserved for group-local rendering in slice 16.",
+      "status": "complete"
     },
     {
       "id": "slice-16",

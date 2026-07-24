@@ -52,6 +52,41 @@ test("grouping leaves after branching and native products settle exactly", () =>
   assert.equal(settled.focusStrength, 0);
 });
 
+test("product members share one settlement clock after cohesion lock", () => {
+  const plan = distributionPlan();
+  const branching = sampleKpDistributionChoreography({
+    plan,
+    progress: 0.5
+  });
+  assert.notEqual(
+    branching.sourceFactor.pathProgress,
+    branching.addendReflowProgress
+  );
+  const lock = sampleKpDistributionChoreography({
+    plan,
+    progress: 0.72
+  });
+  const settling = sampleKpDistributionChoreography({
+    plan,
+    progress: 0.83
+  });
+  const ready = sampleKpDistributionChoreography({
+    plan,
+    progress: 0.94
+  });
+
+  assert.equal(lock.productSettlementProgress, 0);
+  assert.ok(settling.productSettlementProgress > 0);
+  assert.ok(settling.productSettlementProgress < 1);
+  assert.equal(ready.productSettlementProgress, 1);
+  assert.equal(ready.sourceFactor.pathProgress, 1);
+  assert.equal(ready.addendReflowProgress, 1);
+  assert.deepEqual(
+    sampleKpDistributionChoreography({ plan, progress: 0.83 }),
+    settling
+  );
+});
+
 test("distribution separates semantic ownership from continuous presentation ownership", () => {
   const plan = distributionPlan();
   const before = sampleKpDistributionChoreography({
