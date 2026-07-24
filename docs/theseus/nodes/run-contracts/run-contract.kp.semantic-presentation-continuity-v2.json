@@ -163,7 +163,8 @@
     {
       "id": "slice-20",
       "title": "Distribution human checkpoint.",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: distribution exemplar is ready for forward, rewind, direct-seek, wide/narrow, lesson/card, and final native-handoff review. Radical slices remain unauthorized until explicit acceptance.",
+      "status": "in-progress"
     },
     {
       "id": "slice-21",
