@@ -66,6 +66,27 @@
       "scope": "focused",
       "checkedAt": "2026-07-24T03:12:54.911Z",
       "notes": "All 102 focused convergence tests pass, including four executable compiler-stage inventory laws."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-24T03:18:42.782Z",
+      "notes": "All 105 focused convergence tests pass, including exact closure over 26 direct semantic/animation imports from rendering and retirement assignments for slices 9 through 13."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-24T03:18:50.437Z",
+      "notes": "Existing concept-room and semantic-reader architecture gates pass alongside the new dependency baseline."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-24T03:18:50.903Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass with the typed import exception inventory."
     }
   ],
   "expectedLearning": [
@@ -147,7 +168,8 @@
     {
       "id": "s04",
       "title": "Dependency-inversion-baseline",
-      "status": "planned",
+      "summary": "Frozen all 26 direct semantic and animation imports from rendering as exact typed exceptions. Each dependency names its intended owner, classification, rationale, and a required retirement slice from s09 through s13; the closure test scans both source trees so new imports fail. The 105-test focused suite, architecture gates, and full typecheck pass.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
