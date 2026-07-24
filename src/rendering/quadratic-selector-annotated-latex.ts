@@ -163,7 +163,61 @@ function segmentsFor(
         selector("denominator-a", "1"),
         latex(")}")
       ];
+    case "katex.quadratic.formula.power-evaluated":
+      return [
+        latex("\\displaystyle "),
+        selector("variable", "x"),
+        latex(" = \\frac{"),
+        selector("base", "5"),
+        latex(" "),
+        selector("plus-minus", "\\pm"),
+        latex(" \\sqrt{"),
+        selector("power-value", "25"),
+        latex("-4("),
+        selector("product-a", "1"),
+        latex(")("),
+        selector("product-c", "6"),
+        latex(")}}{"),
+        selector("denominator-two", "2"),
+        latex("("),
+        selector("denominator-a", "1"),
+        latex(")}")
+      ];
+    case "katex.quadratic.formula.product-evaluated":
+      return [
+        latex("\\displaystyle "),
+        selector("variable", "x"),
+        latex(" = \\frac{"),
+        selector("base", "5"),
+        latex(" "),
+        selector("plus-minus", "\\pm"),
+        latex(" \\sqrt{"),
+        selector("power-value", "25"),
+        latex("-"),
+        selector("product-value", "24"),
+        latex("}}{"),
+        selector("denominator-two", "2"),
+        latex("("),
+        selector("denominator-a", "1"),
+        latex(")}")
+      ];
     case "katex.quadratic.formula.discriminant":
+      return [
+        latex("\\displaystyle "),
+        selector("variable", "x"),
+        latex(" = \\frac{"),
+        selector("base", "5"),
+        latex(" "),
+        selector("plus-minus", "\\pm"),
+        latex(" "),
+        selector("radical", "\\sqrt{1}"),
+        latex("}{"),
+        selector("denominator-two", "2"),
+        latex("("),
+        selector("denominator-a", "1"),
+        latex(")}")
+      ];
+    case "katex.quadratic.formula.denominator-prepared":
       return fractionState({
         base: "5",
         radicalRole: "radical",

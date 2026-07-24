@@ -44,6 +44,48 @@ test("formula arithmetic is exact from coefficients through both results", () =>
   );
 });
 
+test("formula authority owns exact discriminant sub-operations", () => {
+  const authority = canonicalAuthority();
+  assert.deepEqual(
+    authority.discriminantEvaluation.map(
+      ({ id, expression, result, dependsOn }) => ({
+        id,
+        expression,
+        result,
+        dependsOn
+      })
+    ),
+    [
+      {
+        id: "operation.quadratic-formula.evaluate-b-square",
+        expression: "(-5)^2",
+        result: "25",
+        dependsOn: [
+          "operation.quadratic-formula.substitute-coefficients"
+        ]
+      },
+      {
+        id: "operation.quadratic-formula.evaluate-four-a-c",
+        expression: "4(1)(6)",
+        result: "24",
+        dependsOn: ["operation.quadratic-formula.evaluate-b-square"]
+      },
+      {
+        id: "operation.quadratic-formula.subtract-discriminant",
+        expression: "25-24",
+        result: "1",
+        dependsOn: ["operation.quadratic-formula.evaluate-four-a-c"]
+      },
+      {
+        id: "operation.quadratic-formula.prepare-denominator",
+        expression: "2(1)",
+        result: "2",
+        dependsOn: ["operation.quadratic-formula.subtract-discriminant"]
+      }
+    ]
+  );
+});
+
 test("formula authority is isolated from the radical presentation workaround", () => {
   const authority = canonicalAuthority();
   assert.deepEqual(authority.executionBoundary, {

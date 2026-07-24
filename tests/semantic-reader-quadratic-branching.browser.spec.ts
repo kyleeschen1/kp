@@ -161,7 +161,7 @@ test("both methods move selector-owned native symbols through measured paths", a
   ).toBeVisible();
 
   await page.getByRole("button", { name: "Quadratic formula" }).click();
-  await seek(160);
+  await seek(134);
   await expect(stage).toHaveAttribute(
     "data-kp-symbolic-transition",
     "transition.quadratic.formula.substitute"
@@ -178,7 +178,37 @@ test("both methods move selector-owned native symbols through measured paths", a
     )
   ).toHaveAttribute("data-kp-symbolic-motion-role", "focal-operand");
 
-  await seek(400);
+  await seek(203);
+  await expect(stage).toHaveAttribute(
+    "data-kp-symbolic-transition",
+    "transition.quadratic.formula.evaluate-b-square"
+  );
+  await expect(stage).toHaveAttribute("data-kp-symbolic-focal-owners", "1");
+
+  await seek(271);
+  await expect(stage).toHaveAttribute(
+    "data-kp-symbolic-transition",
+    "transition.quadratic.formula.evaluate-four-a-c"
+  );
+  await expect(
+    stage.locator(
+      '[data-kp-motion-id="katex.quadratic.formula.power-evaluated.product-a"]'
+    )
+  ).toHaveAttribute("data-kp-symbolic-motion-role", "merged");
+
+  await seek(340);
+  await expect(stage).toHaveAttribute(
+    "data-kp-symbolic-transition",
+    "transition.quadratic.formula.subtract-discriminant"
+  );
+
+  await seek(409);
+  await expect(stage).toHaveAttribute(
+    "data-kp-symbolic-transition",
+    "transition.quadratic.formula.prepare-denominator"
+  );
+
+  await seek(477);
   await expect(stage).toHaveAttribute(
     "data-kp-symbolic-transition",
     "transition.quadratic.formula.simplify-radical"
@@ -186,7 +216,7 @@ test("both methods move selector-owned native symbols through measured paths", a
   await expect(stage.locator("[data-kp-transition-layer]")).toHaveCount(2);
   await expect(
     stage.locator(
-      '[data-kp-motion-id="katex.quadratic.formula.discriminant.radical"]'
+      '[data-kp-motion-id="katex.quadratic.formula.denominator-prepared.radical"]'
     )
   ).toHaveCSS("transform", /matrix/);
   await expect(

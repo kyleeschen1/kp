@@ -24,7 +24,10 @@ export function createKpQuadraticFormulaKatexProjection():
   const states = Object.freeze([
     state("general", "\\displaystyle x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}", "x equals negative b plus or minus the square root of b squared minus four a c, over two a", ["variable", "base", "plus-minus", "discriminant-b", "discriminant-a", "discriminant-c", "denominator-two", "denominator-a"]),
     state("substituted", "\\displaystyle x = \\frac{5 \\pm \\sqrt{(-5)^2-4(1)(6)}}{2(1)}", "x equals five plus or minus the square root of negative five squared minus four times one times six, over two", ["variable", "base", "plus-minus", "discriminant-b", "discriminant-a", "discriminant-c", "denominator-two", "denominator-a"]),
-    state("discriminant", "\\displaystyle x = \\frac{5 \\pm \\sqrt{1}}{2}", "x equals five plus or minus the square root of one, over two", ["variable", "base", "plus-minus", "radical", "denominator"]),
+    state("power-evaluated", "\\displaystyle x = \\frac{5 \\pm \\sqrt{25-4(1)(6)}}{2(1)}", "x equals five plus or minus the square root of twenty-five minus four times one times six, over two times one", ["variable", "base", "plus-minus", "power-value", "product-a", "product-c", "denominator-two", "denominator-a"]),
+    state("product-evaluated", "\\displaystyle x = \\frac{5 \\pm \\sqrt{25-24}}{2(1)}", "x equals five plus or minus the square root of twenty-five minus twenty-four, over two times one", ["variable", "base", "plus-minus", "power-value", "product-value", "denominator-two", "denominator-a"]),
+    state("discriminant", "\\displaystyle x = \\frac{5 \\pm \\sqrt{1}}{2(1)}", "x equals five plus or minus the square root of one, over two times one", ["variable", "base", "plus-minus", "radical", "denominator-two", "denominator-a"]),
+    state("denominator-prepared", "\\displaystyle x = \\frac{5 \\pm \\sqrt{1}}{2}", "x equals five plus or minus the square root of one, over two", ["variable", "base", "plus-minus", "radical", "denominator"]),
     state("simplified", "\\displaystyle x = \\frac{5 \\pm 1}{2}", "x equals five plus or minus one, over two", ["variable", "base", "plus-minus", "offset", "denominator"]),
     state("roots", "\\displaystyle x \\in \\{2,3\\}", "x is in the set containing two and three", ["variable", "root-two", "root-three"])
   ]);
@@ -39,21 +42,50 @@ export function createKpQuadraticFormulaKatexProjection():
       sameRole("denominator-two"),
       roleBinding("denominator-a", "denominator-a", "denominator-a", "focal-operand")
     ]),
-    transition("evaluate-discriminant", "operation.quadratic-formula.evaluate-discriminant", states[1]!, states[2]!, [
+    transition("evaluate-b-square", "operation.quadratic-formula.evaluate-b-square", states[1]!, states[2]!, [
       sameRole("variable"),
       sameRole("base"),
       sameRole("plus-minus"),
-      roleBinding("discriminant", "discriminant-b", "radical", "focal-operand"),
-      roleBinding("denominator", "denominator-two", "denominator", "continuant")
+      roleBinding("b-square", "discriminant-b", "power-value", "focal-operand"),
+      roleBinding("product-a", "discriminant-a", "product-a", "continuant"),
+      roleBinding("product-c", "discriminant-c", "product-c", "continuant"),
+      sameRole("denominator-two"),
+      sameRole("denominator-a")
     ]),
-    transition("simplify-radical", "operation.quadratic-formula.simplify-exact-radical", states[2]!, states[3]!, [
+    transition("evaluate-four-a-c", "operation.quadratic-formula.evaluate-four-a-c", states[2]!, states[3]!, [
+      sameRole("variable"),
+      sameRole("base"),
+      sameRole("plus-minus"),
+      sameRole("power-value"),
+      roleBinding("product", "product-a", "product-value", "merged"),
+      sameRole("denominator-two"),
+      sameRole("denominator-a")
+    ]),
+    transition("subtract-discriminant", "operation.quadratic-formula.subtract-discriminant", states[3]!, states[4]!, [
+      sameRole("variable"),
+      sameRole("base"),
+      sameRole("plus-minus"),
+      roleBinding("power-into-discriminant", "power-value", "radical", "merged"),
+      roleBinding("product-into-discriminant", "product-value", "radical", "merged"),
+      sameRole("denominator-two"),
+      sameRole("denominator-a")
+    ]),
+    transition("prepare-denominator", "operation.quadratic-formula.prepare-denominator", states[4]!, states[5]!, [
+      sameRole("variable"),
+      sameRole("base"),
+      sameRole("plus-minus"),
+      sameRole("radical"),
+      roleBinding("denominator-two", "denominator-two", "denominator", "merged"),
+      roleBinding("denominator-a", "denominator-a", "denominator", "merged")
+    ]),
+    transition("simplify-radical", "operation.quadratic-formula.simplify-exact-radical", states[5]!, states[6]!, [
       sameRole("variable"),
       sameRole("base"),
       sameRole("plus-minus"),
       roleBinding("exact-radical", "radical", "offset", "focal-operand"),
       sameRole("denominator")
     ]),
-    transition("verify-roots", "operation.quadratic-formula.verify-results", states[3]!, states[4]!, [
+    transition("verify-roots", "operation.quadratic-formula.verify-results", states[6]!, states[7]!, [
       sameRole("variable")
     ])
   ]);

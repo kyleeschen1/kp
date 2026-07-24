@@ -8,9 +8,12 @@ import {
 
 test("formula projection covers substitution through exact roots", () => {
   const projection = createKpQuadraticFormulaKatexProjection();
-  assert.equal(projection.states.length, 5);
+  assert.equal(projection.states.length, 8);
   assert.match(projection.states[0]!.latex, /-b.*\\pm.*\\sqrt/);
-  assert.match(projection.states[2]!.latex, /\\sqrt\{1\}/);
+  assert.match(
+    projection.states.find(({ id }) => id.endsWith(".discriminant"))!.latex,
+    /\\sqrt\{1\}/
+  );
   assert.equal(projection.states.at(-1)?.latex, "\\displaystyle x \\in \\{2,3\\}");
 });
 
@@ -46,6 +49,34 @@ test("coefficient substitution separates continuants from signed focal groups", 
     ]
   );
   assert.deepEqual(substitution.presentation?.phaseOrder, ["reflow", "act"]);
+});
+
+test("discriminant arithmetic preserves exact dependency order", () => {
+  const projection = createKpQuadraticFormulaKatexProjection();
+  assert.deepEqual(
+    projection.transitions.slice(1, 5).map(({ id, presentation }) => [
+      id,
+      presentation?.operationRef
+    ]),
+    [
+      [
+        "transition.quadratic.formula.evaluate-b-square",
+        "operation.quadratic-formula.evaluate-b-square"
+      ],
+      [
+        "transition.quadratic.formula.evaluate-four-a-c",
+        "operation.quadratic-formula.evaluate-four-a-c"
+      ],
+      [
+        "transition.quadratic.formula.subtract-discriminant",
+        "operation.quadratic-formula.subtract-discriminant"
+      ],
+      [
+        "transition.quadratic.formula.prepare-denominator",
+        "operation.quadratic-formula.prepare-denominator"
+      ]
+    ]
+  );
 });
 
 test("formula radical stays isolated from the existing workaround", () => {

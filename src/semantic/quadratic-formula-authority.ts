@@ -22,6 +22,14 @@ export interface KpQuadraticFormulaOperation {
   readonly outputRoles: readonly string[];
 }
 
+export interface KpQuadraticFormulaExactEvaluation {
+  readonly id: string;
+  readonly lawId: string;
+  readonly expression: string;
+  readonly result: string;
+  readonly dependsOn: readonly string[];
+}
+
 export interface KpQuadraticFormulaAuthority {
   readonly schemaVersion: "kp.quadratic-formula-authority.v1";
   readonly id: "authority.quadratic.canonical.formula";
@@ -37,6 +45,8 @@ export interface KpQuadraticFormulaAuthority {
     readonly plusResult: KpQuadraticExactRational;
   };
   readonly operations: readonly KpQuadraticFormulaOperation[];
+  readonly discriminantEvaluation:
+    readonly KpQuadraticFormulaExactEvaluation[];
   readonly executionBoundary: {
     readonly kind: "semantic-exact";
     readonly radicalProjectionReuse: "forbidden";
@@ -55,6 +65,7 @@ export interface KpQuadraticFormulaDiagnostic {
     | "non-exact-radical"
     | "zero-denominator"
     | "result-mismatch"
+    | "evaluation-trace"
     | "radical-boundary";
   readonly path: string;
   readonly message: string;
@@ -110,6 +121,36 @@ export function createCanonicalKpQuadraticFormulaAuthority(
   }
   const minusResult = rational(-b - exactSquareRoot, denominator);
   const plusResult = rational(-b + exactSquareRoot, denominator);
+  const discriminantEvaluation = Object.freeze([
+    evaluation(
+      "operation.quadratic-formula.evaluate-b-square",
+      "law.arithmetic.integer-power",
+      `(${b})^2`,
+      String(b * b),
+      "operation.quadratic-formula.substitute-coefficients"
+    ),
+    evaluation(
+      "operation.quadratic-formula.evaluate-four-a-c",
+      "law.arithmetic.integer-product",
+      `4(${a})(${c})`,
+      String(4n * a * c),
+      "operation.quadratic-formula.evaluate-b-square"
+    ),
+    evaluation(
+      "operation.quadratic-formula.subtract-discriminant",
+      "law.arithmetic.integer-subtraction",
+      `${b * b}-${4n * a * c}`,
+      String(discriminant),
+      "operation.quadratic-formula.evaluate-four-a-c"
+    ),
+    evaluation(
+      "operation.quadratic-formula.prepare-denominator",
+      "law.arithmetic.integer-product",
+      `2(${a})`,
+      String(denominator),
+      "operation.quadratic-formula.subtract-discriminant"
+    )
+  ]);
   const authority = Object.freeze({
     schemaVersion: "kp.quadratic-formula-authority.v1" as const,
     id: "authority.quadratic.canonical.formula" as const,
@@ -125,6 +166,7 @@ export function createCanonicalKpQuadraticFormulaAuthority(
       plusResult: Object.freeze(plusResult)
     }),
     operations: operationPins,
+    discriminantEvaluation,
     executionBoundary: Object.freeze({
       kind: "semantic-exact" as const,
       radicalProjectionReuse: "forbidden" as const
@@ -182,6 +224,39 @@ export function validateKpQuadraticFormulaAuthority(
     diagnostics.push(issue("zero-denominator", "exactValues.denominator", "Formula denominator must equal the non-zero exact value two a."));
     return Object.freeze(diagnostics);
   }
+  const expectedEvaluation = [
+    ["operation.quadratic-formula.evaluate-b-square", `(${values.coefficients.b})^2`, String(b ** 2n)],
+    ["operation.quadratic-formula.evaluate-four-a-c", `4(${values.coefficients.a})(${values.coefficients.c})`, String(4n * a * c)],
+    ["operation.quadratic-formula.subtract-discriminant", `${b ** 2n}-${4n * a * c}`, values.discriminant],
+    ["operation.quadratic-formula.prepare-denominator", `2(${values.coefficients.a})`, values.denominator]
+  ] as const;
+  let evaluationDependency = "operation.quadratic-formula.substitute-coefficients";
+  authority.discriminantEvaluation.forEach((candidate, index) => {
+    const expected = expectedEvaluation[index];
+    if (
+      expected === undefined ||
+      candidate.id !== expected[0] ||
+      candidate.expression !== expected[1] ||
+      candidate.result !== expected[2] ||
+      candidate.lawId.trim().length === 0 ||
+      candidate.dependsOn.length !== 1 ||
+      candidate.dependsOn[0] !== evaluationDependency
+    ) {
+      diagnostics.push(issue(
+        "evaluation-trace",
+        `discriminantEvaluation[${index}]`,
+        `Formula evaluation ${candidate.id} must retain exact dependency order and arithmetic.`
+      ));
+    }
+    evaluationDependency = candidate.id;
+  });
+  if (authority.discriminantEvaluation.length !== expectedEvaluation.length) {
+    diagnostics.push(issue(
+      "evaluation-trace",
+      "discriminantEvaluation",
+      "Formula discriminant evaluation requires power, product, subtraction, and denominator preparation."
+    ));
+  }
   const computedSet = createKpQuadraticSolutionSet({
     id: authority.solutionSetId,
     variable: fixture.variable,
@@ -211,6 +286,22 @@ export function validateKpQuadraticFormulaAuthority(
     diagnostics.push(issue("radical-boundary", "executionBoundary", "Formula semantics must remain independent of the radical presentation workaround."));
   }
   return Object.freeze(diagnostics);
+}
+
+function evaluation(
+  id: string,
+  lawId: string,
+  expression: string,
+  result: string,
+  dependency: string
+): KpQuadraticFormulaExactEvaluation {
+  return Object.freeze({
+    id,
+    lawId,
+    expression,
+    result,
+    dependsOn: Object.freeze([dependency])
+  });
 }
 
 function exactIntegerSquareRoot(value: bigint): bigint | undefined {
