@@ -53,6 +53,13 @@
       "scope": "focused",
       "checkedAt": "2026-07-24T14:19:02.217Z",
       "notes": "17 deterministic captures produced; current native radical endpoint and ownership diagnostics are frozen as the comparison baseline."
+    },
+    {
+      "command": "npm run visual:presentation-continuity",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-24T14:36:29.954Z",
+      "notes": "Seven deterministic wide/narrow distribution and radical continuity captures produced with a versioned manifest."
     }
   ],
   "progress": {

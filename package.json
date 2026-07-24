@@ -45,6 +45,7 @@
     "visual:cancellation": "playwright test tests/semantic-reader-cancellation.browser.spec.ts tests/semantic-reader-divide-both-sides.browser.spec.ts tests/semantic-reader-presentation-profile.browser.spec.ts tests/equation-canonical-cross-surface-parity.browser.spec.ts --project=chromium --workers=1",
     "visual:distribution-area": "playwright test tests/semantic-reader-distribution-area.browser.spec.ts --project=chromium --workers=1",
     "visual:exponent-radical": "node --disable-warning=ExperimentalWarning scripts/capture-exponent-radical-visual.ts",
+    "visual:presentation-continuity": "node --disable-warning=ExperimentalWarning scripts/capture-presentation-continuity.ts",
     "visual:function-wrap": "node --disable-warning=ExperimentalWarning scripts/capture-function-wrap-visual.ts",
     "visual:derivative-tangent": "node --disable-warning=ExperimentalWarning scripts/capture-derivative-tangent-visual.ts",
     "visual:animation-workbench": "node --disable-warning=ExperimentalWarning scripts/capture-animation-workbench.ts",

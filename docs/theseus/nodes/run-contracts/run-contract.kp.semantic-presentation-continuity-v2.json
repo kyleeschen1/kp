@@ -115,7 +115,8 @@
     {
       "id": "slice-12",
       "title": "Add stable visual:presentation-continuity tooling for recurring browser captures and measurements.",
-      "status": "planned"
+      "summary": "Added stable visual:presentation-continuity tooling with a versioned seven-frame plan, wide/narrow distribution coverage, radical source baseline, deterministic recapture hashes, and a manifest; test, typecheck, and capture pass.",
+      "status": "complete"
     },
     {
       "id": "slice-13",
