@@ -62,6 +62,13 @@
       "scope": "slice-04 exact solution-set and discriminant laws",
       "checkedAt": "2026-07-24T19:48:18.412Z",
       "notes": "Eleven focused tests passed. Exact normalization, canonical ordering, stable root identity, repeated-root multiplicity, empty real sets, discriminant classification, mismatch rejection, and deep immutability are verified."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/quadratic-completing-square-authority.test.ts tests/quadratic-solution-set.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-05 completing-square rewrite authority",
+      "checkedAt": "2026-07-24T19:54:46.966Z",
+      "notes": "Fourteen focused tests passed. The four structured equation states, three registered rewrites, role bindings, provenance, inverse laws, deterministic diagnostics, and exact AST-to-polynomial preservation are verified."
     }
   ],
   "progress": {

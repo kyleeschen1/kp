@@ -89,7 +89,8 @@
     {
       "id": "slice-05",
       "title": "Completing-square-authority",
-      "status": "planned"
+      "summary": "Added a canonical completing-square authority with four structured equation states, three registered reversible rewrites, explicit semantic role bindings and provenance, and independent exact expansion proving every state preserves the same solution set.",
+      "status": "complete"
     },
     {
       "id": "slice-06",
