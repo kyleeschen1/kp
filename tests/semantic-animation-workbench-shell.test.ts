@@ -167,13 +167,21 @@ function result(
         : [
             {
               schemaVersion:
-                "kp.animation-representation-relationship.v1",
+                "kp.animation-representation-relationship.v2",
               id: `relationship.${animationId}`,
               animationId,
               representationId: `representation.${animationId}`,
               kind: "editor",
               label: `${title} editor`,
-              playable: true
+              playable: true,
+              presentationRole: "canonical",
+              canonicalRepresentationId: `representation.${animationId}`,
+              choreographySource: {
+                kind: "catalog-animation",
+                sourceId: animationId,
+                choreographyId: `choreography.catalog.${animationId}`
+              },
+              aliases: []
             }
           ],
       lifecycle: {

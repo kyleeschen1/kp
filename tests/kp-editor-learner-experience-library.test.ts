@@ -2,7 +2,8 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import {
-  createKpLearnerExperienceLibrary
+  createKpLearnerExperienceLibrary,
+  type KpLearnerExperienceDescriptor
 } from "../src/editor/learner-experience-library.ts";
 
 test("learner experience library puts the synchronized distribution exemplar first", () => {
@@ -17,7 +18,7 @@ test("learner experience library puts the synchronized distribution exemplar fir
     "solve-x-scroll-lesson",
     "solve-with-balance-concept-room"
   ]);
-  assert.deepEqual(experiences[0], {
+  assert.deepEqual(withoutPresentations(experiences[0]!), {
     id: "distribution-area-scroll-lesson",
     kind: "scroll-lesson",
     title: "See distribution become area",
@@ -28,7 +29,7 @@ test("learner experience library puts the synchronized distribution exemplar fir
     status: "prototype",
     animationIds: ["exemplar.distribution-area.3-times-x-plus-2"]
   });
-  assert.deepEqual(experiences[1], {
+  assert.deepEqual(withoutPresentations(experiences[1]!), {
     id: "divide-both-sides-scroll-lesson",
     kind: "scroll-lesson",
     title: "Divide both sides",
@@ -39,7 +40,7 @@ test("learner experience library puts the synchronized distribution exemplar fir
     status: "exemplar",
     animationIds: ["animation.divide-both-sides.solve-3x-equals-12"]
   });
-  assert.deepEqual(experiences[2], {
+  assert.deepEqual(withoutPresentations(experiences[2]!), {
     id: "numerator-split-merge-scroll-lesson",
     kind: "scroll-lesson",
     title: "Split and merge a fraction",
@@ -50,7 +51,7 @@ test("learner experience library puts the synchronized distribution exemplar fir
     status: "exemplar",
     animationIds: ["animation.numerator-split-merge.round-trip"]
   });
-  assert.deepEqual(experiences[3], {
+  assert.deepEqual(withoutPresentations(experiences[3]!), {
     id: "fractional-transfer-comparison-scroll-lesson",
     kind: "scroll-lesson",
     title: "Compare equation views",
@@ -64,7 +65,7 @@ test("learner experience library puts the synchronized distribution exemplar fir
       "animation.fractional-linear.x-over-2.fluent-projection"
     ]
   });
-  assert.deepEqual(experiences[4], {
+  assert.deepEqual(withoutPresentations(experiences[4]!), {
     id: "solve-fractional-linear-scroll-lesson",
     kind: "scroll-lesson",
     title: "Solve a fractional equation",
@@ -75,7 +76,7 @@ test("learner experience library puts the synchronized distribution exemplar fir
     status: "prototype",
     animationIds: ["animation.fractional-linear.solve-x-over-2"]
   });
-  assert.deepEqual(experiences[5], {
+  assert.deepEqual(withoutPresentations(experiences[5]!), {
     id: "solve-x-scroll-lesson",
     kind: "scroll-lesson",
     title: "Solve for x",
@@ -87,3 +88,29 @@ test("learner experience library puts the synchronized distribution exemplar fir
     animationIds: ["animation.linear-solve.solve-x"]
   });
 });
+
+test("learner animation ids derive from one canonical presentation binding", () => {
+  const experiences = createKpLearnerExperienceLibrary();
+  const distribution = experiences[0]!;
+
+  assert.deepEqual(distribution.animationPresentations, [
+    {
+      assetId: "exemplar.distribution-area.3-times-x-plus-2",
+      canonicalAnimationId:
+        "animation.generated.distribution.expand-a-sum",
+      choreographyId:
+        "choreography.lesson.distribution-area.algebra-and-area"
+    }
+  ]);
+  assert.deepEqual(
+    distribution.animationIds,
+    distribution.animationPresentations.map(({ assetId }) => assetId)
+  );
+});
+
+function withoutPresentations(
+  experience: KpLearnerExperienceDescriptor
+): Omit<KpLearnerExperienceDescriptor, "animationPresentations"> {
+  const { animationPresentations: _presentations, ...legacy } = experience;
+  return legacy;
+}

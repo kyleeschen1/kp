@@ -1,5 +1,11 @@
 export type KpLearnerExperienceKind = "scroll-lesson" | "concept-room";
 
+export interface KpLearnerAnimationPresentation {
+  readonly assetId: string;
+  readonly canonicalAnimationId: string;
+  readonly choreographyId: string;
+}
+
 export interface KpLearnerExperienceDescriptor {
   readonly id: string;
   readonly kind: KpLearnerExperienceKind;
@@ -9,9 +15,17 @@ export interface KpLearnerExperienceDescriptor {
   readonly actionLabel: string;
   readonly status: "exemplar" | "prototype";
   readonly animationIds: readonly string[];
+  readonly animationPresentations: readonly KpLearnerAnimationPresentation[];
 }
 
-const learnerExperiences = [
+type KpLearnerExperienceDefinition = Omit<
+  KpLearnerExperienceDescriptor,
+  "animationIds" | "animationPresentations"
+> & {
+  readonly animationPresentations?: readonly KpLearnerAnimationPresentation[];
+};
+
+const learnerExperienceDefinitions = [
   {
     id: "distribution-area-scroll-lesson",
     kind: "scroll-lesson",
@@ -21,7 +35,15 @@ const learnerExperiences = [
     href: "/reader/distribution-area/",
     actionLabel: "Review algebra and area",
     status: "prototype",
-    animationIds: ["exemplar.distribution-area.3-times-x-plus-2"]
+    animationPresentations: [
+      {
+        assetId: "exemplar.distribution-area.3-times-x-plus-2",
+        canonicalAnimationId:
+          "animation.generated.distribution.expand-a-sum",
+        choreographyId:
+          "choreography.lesson.distribution-area.algebra-and-area"
+      }
+    ]
   },
   {
     id: "divide-both-sides-scroll-lesson",
@@ -32,7 +54,9 @@ const learnerExperiences = [
     href: "/reader/divide-both-sides/",
     actionLabel: "Review division animation",
     status: "exemplar",
-    animationIds: ["animation.divide-both-sides.solve-3x-equals-12"]
+    animationPresentations: [
+      lessonAnimation("animation.divide-both-sides.solve-3x-equals-12")
+    ]
   },
   {
     id: "numerator-split-merge-scroll-lesson",
@@ -43,7 +67,9 @@ const learnerExperiences = [
     href: "/reader/split-merge-fractions/",
     actionLabel: "Review split and merge",
     status: "exemplar",
-    animationIds: ["animation.numerator-split-merge.round-trip"]
+    animationPresentations: [
+      lessonAnimation("animation.numerator-split-merge.round-trip")
+    ]
   },
   {
     id: "fractional-transfer-comparison-scroll-lesson",
@@ -54,9 +80,13 @@ const learnerExperiences = [
     href: "/reader/fractional-transfer/",
     actionLabel: "Compare proof and shortcut",
     status: "exemplar",
-    animationIds: [
-      "animation.fractional-linear.x-over-2.balanced-proof",
-      "animation.fractional-linear.x-over-2.fluent-projection"
+    animationPresentations: [
+      lessonAnimation(
+        "animation.fractional-linear.x-over-2.balanced-proof"
+      ),
+      lessonAnimation(
+        "animation.fractional-linear.x-over-2.fluent-projection"
+      )
     ]
   },
   {
@@ -68,7 +98,9 @@ const learnerExperiences = [
     href: "/reader/solve-fractional-linear/",
     actionLabel: "Review fraction animation",
     status: "prototype",
-    animationIds: ["animation.fractional-linear.solve-x-over-2"]
+    animationPresentations: [
+      lessonAnimation("animation.fractional-linear.solve-x-over-2")
+    ]
   },
   {
     id: "solve-x-scroll-lesson",
@@ -79,7 +111,9 @@ const learnerExperiences = [
     href: "/reader/solve-x/",
     actionLabel: "Open scroll lesson",
     status: "exemplar",
-    animationIds: ["animation.linear-solve.solve-x"]
+    animationPresentations: [
+      lessonAnimation("animation.linear-solve.solve-x")
+    ]
   },
   {
     id: "solve-with-balance-concept-room",
@@ -89,12 +123,29 @@ const learnerExperiences = [
       "Move between an equation and the balance model that makes it true.",
     href: "/concepts/mathematics/linear-equations/solve-with-balance",
     actionLabel: "Open concept room",
-    status: "prototype",
-    animationIds: []
+    status: "prototype"
   }
-] as const satisfies readonly KpLearnerExperienceDescriptor[];
+] as const satisfies readonly KpLearnerExperienceDefinition[];
 
 export function createKpLearnerExperienceLibrary():
   readonly KpLearnerExperienceDescriptor[] {
-  return learnerExperiences;
+  return learnerExperienceDefinitions.map((definition) => {
+    const animationPresentations: readonly KpLearnerAnimationPresentation[] =
+      "animationPresentations" in definition
+        ? definition.animationPresentations
+        : [];
+    return {
+      ...definition,
+      animationIds: animationPresentations.map(({ assetId }) => assetId),
+      animationPresentations
+    };
+  });
+}
+
+function lessonAnimation(assetId: string): KpLearnerAnimationPresentation {
+  return {
+    assetId,
+    canonicalAnimationId: assetId,
+    choreographyId: `choreography.lesson.${assetId}`
+  };
 }

@@ -106,6 +106,13 @@
       "scope": "broad",
       "checkedAt": "2026-07-24T01:26:02.075Z",
       "notes": "The modified 30-slice run contract, approved lesson-first priority change, and all 762 project-memory nodes validate across 11078 events."
+    },
+    {
+      "command": "Lesson-first presentation identity and closure suite",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-24T01:42:12.221Z",
+      "notes": "Twenty-two focused lineage, learner inventory, adapter, index, query, and shell tests pass; the full repository typecheck also passes."
     }
   ],
   "allowedWork": [
@@ -320,8 +327,8 @@
     {
       "id": "s28",
       "title": "Define-lesson-first-canonical-lineage",
-      "summary": "Add one authoritative presentation relationship with lesson-first precedence, explicit aliases, supersession, and fixture status; audit every learner and card overlap.",
-      "status": "planned",
+      "summary": "Added canonical presentation relationship v2 with exactly-one authority, lesson-first precedence, canonical choreography refs, projections, aliases, and superseded fixture status. Learner animation ids now derive from one presentation binding; the seven-track audit identifies distribution and solve-x overlaps while retaining exact legacy ids. Twenty-two focused tests and full typecheck pass.",
+      "status": "complete",
       "planPhaseId": "authoritative-roadmap-workbench"
     },
     {

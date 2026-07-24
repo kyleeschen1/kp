@@ -10,8 +10,19 @@ export type KpAnimationRepresentationKind =
   | "static"
   | "export";
 
+export type KpAnimationPresentationRole =
+  | "canonical"
+  | "projection"
+  | "superseded-fixture";
+
+export interface KpAnimationChoreographySourceRef {
+  readonly kind: "catalog-animation" | "lesson-animation";
+  readonly sourceId: string;
+  readonly choreographyId: string;
+}
+
 export interface KpAnimationRepresentationRelationship {
-  readonly schemaVersion: "kp.animation-representation-relationship.v1";
+  readonly schemaVersion: "kp.animation-representation-relationship.v2";
   readonly id: string;
   readonly animationId: string;
   readonly representationId: string;
@@ -19,6 +30,10 @@ export interface KpAnimationRepresentationRelationship {
   readonly label: string;
   readonly href?: string;
   readonly playable: boolean;
+  readonly presentationRole: KpAnimationPresentationRole;
+  readonly canonicalRepresentationId: string;
+  readonly choreographySource: KpAnimationChoreographySourceRef;
+  readonly aliases: readonly string[];
 }
 
 export function createKpAnimationRepresentationRelationship(input: {
@@ -28,6 +43,10 @@ export function createKpAnimationRepresentationRelationship(input: {
   readonly label: string;
   readonly href?: string;
   readonly playable: boolean;
+  readonly presentationRole?: KpAnimationPresentationRole;
+  readonly canonicalRepresentationId?: string;
+  readonly choreographySource?: KpAnimationChoreographySourceRef;
+  readonly aliases?: readonly string[];
 }): KpAnimationRepresentationRelationship {
   const animationId = requireText(input.animationId, "animation id");
   const representationId = requireText(
@@ -39,8 +58,18 @@ export function createKpAnimationRepresentationRelationship(input: {
       `Representation ${representationId} must not claim canonical animation identity.`
     );
   }
+  const presentationRole = input.presentationRole ?? "canonical";
+  const canonicalRepresentationId = requireText(
+    input.canonicalRepresentationId ?? representationId,
+    "canonical representation id"
+  );
+  const choreographySource = input.choreographySource ?? {
+    kind: "catalog-animation" as const,
+    sourceId: animationId,
+    choreographyId: `choreography.catalog.${animationId}`
+  };
   return {
-    schemaVersion: "kp.animation-representation-relationship.v1",
+    schemaVersion: "kp.animation-representation-relationship.v2",
     id: `representation.${animationId}.${input.kind}.${representationId}`,
     animationId,
     representationId,
@@ -49,7 +78,21 @@ export function createKpAnimationRepresentationRelationship(input: {
     ...(input.href === undefined
       ? {}
       : { href: requireText(input.href, "representation href") }),
-    playable: input.playable
+    playable: input.playable,
+    presentationRole,
+    canonicalRepresentationId,
+    choreographySource: {
+      ...choreographySource,
+      sourceId: requireText(
+        choreographySource.sourceId,
+        "choreography source id"
+      ),
+      choreographyId: requireText(
+        choreographySource.choreographyId,
+        "choreography id"
+      )
+    },
+    aliases: uniqueText(input.aliases ?? [], "representation alias")
   };
 }
 
@@ -62,6 +105,7 @@ export function assertKpAnimationRepresentationRelationships(input: {
   );
   const relationshipIds = new Set<string>();
   const representationIds = new Set<string>();
+  const aliasClaims = new Map<string, string>();
   for (const relationship of input.relationships) {
     if (!animationIds.has(relationship.animationId)) {
       throw new Error(
@@ -78,6 +122,68 @@ export function assertKpAnimationRepresentationRelationships(input: {
       );
     }
     representationIds.add(relationship.representationId);
+    for (const alias of relationship.aliases) {
+      const owner = aliasClaims.get(alias);
+      if (owner !== undefined && owner !== relationship.animationId) {
+        throw new Error(
+          `Representation alias ${alias} cannot belong to multiple animations.`
+        );
+      }
+      aliasClaims.set(alias, relationship.animationId);
+    }
+  }
+
+  for (const identity of input.identities) {
+    const relationships = input.relationships.filter(
+      ({ animationId }) => animationId === identity.animationId
+    );
+    if (relationships.length === 0) continue;
+    const canonical = relationships.filter(
+      ({ presentationRole }) => presentationRole === "canonical"
+    );
+    if (canonical.length !== 1) {
+      throw new Error(
+        `Animation ${identity.animationId} requires exactly one canonical presentation relationship.`
+      );
+    }
+    const canonicalRelationship = canonical[0]!;
+    if (
+      canonicalRelationship.canonicalRepresentationId !==
+      canonicalRelationship.representationId
+    ) {
+      throw new Error(
+        `Canonical presentation ${canonicalRelationship.representationId} must refer to itself.`
+      );
+    }
+    if (
+      relationships.some(({ kind }) => kind === "lesson") &&
+      canonicalRelationship.kind !== "lesson"
+    ) {
+      throw new Error(
+        `Animation ${identity.animationId} must use its lesson representation as canonical.`
+      );
+    }
+    for (const relationship of relationships) {
+      if (
+        relationship.canonicalRepresentationId !==
+        canonicalRelationship.representationId
+      ) {
+        throw new Error(
+          `Representation ${relationship.representationId} must refer to canonical presentation ${canonicalRelationship.representationId}.`
+        );
+      }
+      if (
+        relationship.presentationRole === "projection" &&
+        !sameChoreographySource(
+          relationship.choreographySource,
+          canonicalRelationship.choreographySource
+        )
+      ) {
+        throw new Error(
+          `Projection ${relationship.representationId} must consume canonical choreography ${canonicalRelationship.choreographySource.choreographyId}.`
+        );
+      }
+    }
   }
 }
 
@@ -85,4 +191,19 @@ function requireText(value: string, label: string): string {
   const normalized = value.trim();
   if (normalized === "") throw new Error(`Workbench ${label} must not be empty.`);
   return normalized;
+}
+
+function uniqueText(values: readonly string[], label: string): readonly string[] {
+  return [...new Set(values.map((value) => requireText(value, label)))];
+}
+
+function sameChoreographySource(
+  left: KpAnimationChoreographySourceRef,
+  right: KpAnimationChoreographySourceRef
+): boolean {
+  return (
+    left.kind === right.kind &&
+    left.sourceId === right.sourceId &&
+    left.choreographyId === right.choreographyId
+  );
 }

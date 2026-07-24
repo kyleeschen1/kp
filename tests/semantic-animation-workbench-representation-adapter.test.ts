@@ -11,6 +11,7 @@ import {
   projectKpAnimationCatalogToWorkbench
 } from "../src/editor/semantic-animation-workbench-catalog-adapter.ts";
 import {
+  auditKpLearnerCardPresentationOverlaps,
   projectKpAnimationRepresentations
 } from "../src/editor/semantic-animation-workbench-representation-adapter.ts";
 import {
@@ -36,7 +37,7 @@ test("representation adapter projects editor descriptors and sample cards", () =
   const expectedCount =
     descriptors.length +
     descriptors.filter((descriptor) => descriptor.sampleId !== undefined).length +
-    1;
+    2;
 
   assert.equal(relationships.length, expectedCount);
   assert.equal(
@@ -57,7 +58,62 @@ test("existing learner lessons remain subordinate representations", () => {
 
   assert.equal(lesson?.href, "/reader/solve-x/");
   assert.equal(lesson?.playable, true);
+  assert.equal(lesson?.presentationRole, "canonical");
   assert.match(lesson?.representationId ?? "", /^learner-experience\./);
+});
+
+test("distribution lesson supersedes generated card choreography without losing aliases", () => {
+  const { relationships } = createProjection();
+  const distribution = relationships.filter(
+    ({ animationId }) =>
+      animationId === "animation.generated.distribution.expand-a-sum"
+  );
+  const lesson = distribution.find(({ kind }) => kind === "lesson");
+  const fixtures = distribution.filter(
+    ({ presentationRole }) => presentationRole === "superseded-fixture"
+  );
+
+  assert.equal(lesson?.presentationRole, "canonical");
+  assert.equal(
+    lesson?.choreographySource.choreographyId,
+    "choreography.lesson.distribution-area.algebra-and-area"
+  );
+  assert.deepEqual(lesson?.aliases, [
+    "exemplar.distribution-area.3-times-x-plus-2"
+  ]);
+  assert.equal(fixtures.length, 3);
+  assert.equal(
+    fixtures.every(
+      ({ canonicalRepresentationId }) =>
+        canonicalRepresentationId === lesson?.representationId
+    ),
+    true
+  );
+});
+
+test("learner and card audit classifies every lesson binding from one inventory", () => {
+  const descriptors = createKpEditorAnimationLibrary();
+  const audit = auditKpLearnerCardPresentationOverlaps({
+    descriptors,
+    learnerExperiences: createKpLearnerExperienceLibrary()
+  });
+  const overlaps = audit.filter(
+    ({ status }) => status === "lesson-card-overlap"
+  );
+
+  assert.equal(audit.length, 7);
+  assert.deepEqual(
+    overlaps.map(({ canonicalAnimationId }) => canonicalAnimationId),
+    [
+      "animation.generated.distribution.expand-a-sum",
+      "animation.linear-solve.solve-x"
+    ]
+  );
+  assert.deepEqual(overlaps[0]?.preservedAliasIds, [
+    "exemplar.distribution-area.3-times-x-plus-2"
+  ]);
+  assert.equal(overlaps[0]?.supersededFixtureDescriptorIds.length, 2);
+  assert.deepEqual(overlaps[1]?.supersededFixtureDescriptorIds, []);
 });
 
 test("radical representations stay beneath one canonical identity", () => {
@@ -69,25 +125,29 @@ test("radical representations stay beneath one canonical identity", () => {
   );
 
   assert.deepEqual(
-    radical.map(({ kind, representationId }) => ({
+    radical.map(({ kind, representationId, presentationRole }) => ({
       kind,
-      representationId
+      representationId,
+      presentationRole
     })),
     [
       {
         kind: "editor",
         representationId:
-          "editor-animation.animation.generated.radical.square-root-as-power"
+          "editor-animation.animation.generated.radical.square-root-as-power",
+        presentationRole: "projection"
       },
       {
         kind: "editor",
         representationId:
-          "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
+          "editor-animation.sample.animation.radical-rewrite.square-root-as-power",
+        presentationRole: "canonical"
       },
       {
         kind: "card",
         representationId:
-          "sample.animation.radical-rewrite.square-root-as-power"
+          "sample.animation.radical-rewrite.square-root-as-power",
+        presentationRole: "projection"
       }
     ]
   );

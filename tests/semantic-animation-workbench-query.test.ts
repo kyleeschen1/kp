@@ -124,13 +124,21 @@ function entry(input: {
         : [
             {
               schemaVersion:
-                "kp.animation-representation-relationship.v1",
+                "kp.animation-representation-relationship.v2",
               id: `representation.${input.animationId}.card`,
               animationId: input.animationId,
               representationId: `sample.${input.animationId}`,
               kind: "card",
               label: input.representationLabel,
-              playable: true
+              playable: true,
+              presentationRole: "canonical",
+              canonicalRepresentationId: `sample.${input.animationId}`,
+              choreographySource: {
+                kind: "catalog-animation",
+                sourceId: input.animationId,
+                choreographyId: `choreography.catalog.${input.animationId}`
+              },
+              aliases: []
             }
           ],
     lifecycle: {
