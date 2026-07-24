@@ -156,6 +156,44 @@ test("Workbench links a catalog animation to its real learner lesson", async ({
   ).toBeVisible();
 });
 
+test("Workbench projects distribution from lesson authority and hides fixture duplication", async ({
+  page
+}) => {
+  const distributionId =
+    "animation.generated.distribution.expand-a-sum";
+  await page.goto(
+    `/?view=animation-workbench&q=distribution&workbenchAnimation=${distributionId}`
+  );
+
+  const selection = page.locator(
+    `[data-kp-animation-workbench-selection="${distributionId}"]`
+  );
+  const preview = selection.locator(
+    "[data-kp-animation-workbench-live-preview]"
+  );
+  await expect(preview).toHaveAttribute(
+    "data-kp-animation-workbench-representation",
+    "learner-experience.distribution-area-scroll-lesson.exemplar.distribution-area.3-times-x-plus-2"
+  );
+  await expect(preview).toHaveAttribute(
+    "data-kp-editor-animation-descriptor-id",
+    "editor-animation.sample.animation.distribution.expand-a-sum"
+  );
+  await expect(
+    selection.locator(
+      '[data-kp-representation-id="editor-animation.animation.generated.distribution.expand-a-sum"]'
+    )
+  ).toHaveCount(0);
+  await expect(
+    selection.locator("[data-kp-animation-workbench-superseded-fixtures]")
+  ).toContainText("1 legacy route remains resolvable as a fixture");
+  await expect(
+    selection.locator(
+      '[data-kp-representation-id^="learner-experience.distribution-area"]'
+    )
+  ).toContainText("lesson · canonical");
+});
+
 test("Workbench planned quadratic never mounts a player", async ({ page }) => {
   await page.goto(
     `/?view=animation-workbench&q=quadratic&workbenchAnimation=${quadraticId}`

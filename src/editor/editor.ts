@@ -65,6 +65,7 @@ import {
 } from "./animation-player-shell.ts";
 import {
   createKpLearnerExperienceLibrary,
+  findKpLearnerCanonicalAnimationPresentation,
   type KpLearnerExperienceDescriptor
 } from "./learner-experience-library.ts";
 
@@ -269,18 +270,22 @@ function renderEditorAnimationLibrary(
     selectedDescriptorId: selected.id
   });
   const surface = dispatchKpEditorAnimationSurface(selected);
+  const canonicalLesson = findKpLearnerCanonicalAnimationPresentation(
+    selected.animationId
+  );
 
   return `
-    <section class="editor-animation-library" data-kp-editor-animation-library data-kp-editor-animation-descriptor-id="${escapeHtml(selected.id)}" data-kp-editor-animation-id="${escapeHtml(selected.animationId)}" data-kp-editor-animation-surface="${escapeHtml(surface.kind)}" data-kp-editor-animation-maturity="${selected.promotion?.maturity ?? "unclassified"}" data-kp-editor-animation-novelty="${selected.promotion?.novelty ?? "unclassified"}" data-kp-editor-animation-gold-cohort="${selected.promotion?.goldCohort === true}" aria-labelledby="editor-animation-library-title">
+    <section class="editor-animation-library" data-kp-editor-animation-library data-kp-editor-animation-descriptor-id="${escapeHtml(selected.id)}" data-kp-editor-animation-id="${escapeHtml(selected.animationId)}" data-kp-editor-animation-surface="${escapeHtml(surface.kind)}" data-kp-editor-animation-maturity="${selected.promotion?.maturity ?? "unclassified"}" data-kp-editor-animation-novelty="${selected.promotion?.novelty ?? "unclassified"}" data-kp-editor-animation-gold-cohort="${selected.promotion?.goldCohort === true}"${canonicalLesson === undefined ? "" : ` data-kp-editor-animation-canonical-choreography="${escapeHtml(canonicalLesson.presentation.choreographyId)}" data-kp-editor-animation-canonical-lesson="${escapeHtml(canonicalLesson.experience.id)}"`} aria-labelledby="editor-animation-library-title">
       ${renderKpEditorAnimationPicker(picker)}
       <div class="editor-animation-library__selection">
-        <p class="eyebrow">Concrete animation asset</p>
+        <p class="eyebrow">${canonicalLesson === undefined ? "Concrete animation asset" : "Canonical lesson projection"}</p>
         <h3 id="editor-animation-library-title">${escapeHtml(selected.title)}</h3>
         <p>${escapeHtml(selected.summary)}</p>
         <dl>
           <div><dt>Surface</dt><dd>${escapeHtml(surface.kind)}</dd></div>
           <div><dt>Animation ID</dt><dd>${escapeHtml(selected.animationId)}</dd></div>
           ${selected.familyId === undefined ? "" : `<div><dt>Family</dt><dd>${escapeHtml(selected.familyId)}</dd></div>`}
+          ${canonicalLesson === undefined ? "" : `<div><dt>Choreography source</dt><dd><a href="${escapeHtml(canonicalLesson.experience.href)}">${escapeHtml(canonicalLesson.experience.title)}</a></dd></div>`}
         </dl>
       </div>
       ${renderKpEditorAnimationPlayerShell({ descriptor: selected })}

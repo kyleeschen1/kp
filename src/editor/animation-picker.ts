@@ -46,8 +46,13 @@ export function createKpEditorAnimationPickerModel(input: {
   const requested = input.descriptors.find(
     (descriptor) => descriptor.id === input.selectedDescriptorId
   );
-  const selectedDescriptorId = requested?.id ?? input.descriptors[0]?.id;
-  const options = input.descriptors.map((descriptor, index) => ({
+  const canonicalDescriptors = collapseCanonicalAnimationDescriptors(
+    input.descriptors,
+    requested
+  );
+  const selectedDescriptorId =
+    requested?.id ?? canonicalDescriptors[0]?.id;
+  const options = canonicalDescriptors.map((descriptor, index) => ({
     id: `editor-animation-picker-option.${descriptor.id}`,
     descriptorId: descriptor.id,
     animationId: descriptor.animationId,
@@ -60,7 +65,7 @@ export function createKpEditorAnimationPickerModel(input: {
     selectedDescriptorId,
     groups: GROUP_ORDER.flatMap((groupId) => {
       const groupOptions = options.filter((option) => {
-        const descriptor = input.descriptors[option.index]!;
+        const descriptor = canonicalDescriptors[option.index]!;
         return pickerGroupId(descriptor) === groupId;
       });
 
@@ -74,6 +79,35 @@ export function createKpEditorAnimationPickerModel(input: {
     }),
     optionCount: options.length
   };
+}
+
+function collapseCanonicalAnimationDescriptors(
+  descriptors: readonly KpEditorAnimationDescriptor[],
+  requested: KpEditorAnimationDescriptor | undefined
+): readonly KpEditorAnimationDescriptor[] {
+  const grouped = new Map<string, KpEditorAnimationDescriptor[]>();
+  for (const descriptor of descriptors) {
+    const group = grouped.get(descriptor.animationId) ?? [];
+    group.push(descriptor);
+    grouped.set(descriptor.animationId, group);
+  }
+
+  return [...grouped.values()].map((group) => {
+    if (
+      requested !== undefined &&
+      requested.animationId === group[0]!.animationId
+    ) {
+      // A direct legacy route remains exactly resolvable, but it does not add a
+      // second option for the same canonical animation to ordinary discovery.
+      return requested;
+    }
+    return [...group].sort(
+      (left, right) =>
+        Number(right.familyId !== undefined) -
+          Number(left.familyId !== undefined) ||
+        left.id.localeCompare(right.id)
+    )[0]!;
+  });
 }
 
 export function renderKpEditorAnimationPicker(

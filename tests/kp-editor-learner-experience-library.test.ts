@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   createKpLearnerExperienceLibrary,
+  findKpLearnerCanonicalAnimationPresentation,
   type KpLearnerExperienceDescriptor
 } from "../src/editor/learner-experience-library.ts";
 
@@ -105,6 +106,12 @@ test("learner animation ids derive from one canonical presentation binding", () 
   assert.deepEqual(
     distribution.animationIds,
     distribution.animationPresentations.map(({ assetId }) => assetId)
+  );
+  assert.equal(
+    findKpLearnerCanonicalAnimationPresentation(
+      "animation.generated.distribution.expand-a-sum"
+    )?.experience.id,
+    distribution.id
   );
 });
 

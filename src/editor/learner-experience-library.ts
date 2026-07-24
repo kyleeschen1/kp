@@ -142,6 +142,22 @@ export function createKpLearnerExperienceLibrary():
   });
 }
 
+export function findKpLearnerCanonicalAnimationPresentation(
+  canonicalAnimationId: string
+): {
+  readonly experience: KpLearnerExperienceDescriptor;
+  readonly presentation: KpLearnerAnimationPresentation;
+} | undefined {
+  for (const experience of createKpLearnerExperienceLibrary()) {
+    const presentation = experience.animationPresentations.find(
+      (candidate) =>
+        candidate.canonicalAnimationId === canonicalAnimationId
+    );
+    if (presentation !== undefined) return { experience, presentation };
+  }
+  return undefined;
+}
+
 function lessonAnimation(assetId: string): KpLearnerAnimationPresentation {
   return {
     assetId,

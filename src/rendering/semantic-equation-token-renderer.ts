@@ -49,9 +49,10 @@ import {
   type KpDerivativePowerChoreographyFrame,
   type KpDerivativePowerChoreographyPlan
 } from "../animation/derivative-power-choreography.ts";
-import type {
-  KpDistributionChoreographyFrame,
-  KpDistributionChoreographyPlan
+import {
+  kpLessonCanonicalDistributionMotionProfile,
+  type KpDistributionChoreographyFrame,
+  type KpDistributionChoreographyPlan
 } from "../animation/distribution-choreography.ts";
 import {
   kpDistributionChoreographyRuntime
@@ -175,18 +176,10 @@ interface DistributionChoreographyContext {
   readonly reflowRelationRecordIds: ReadonlySet<string>;
   readonly groupingRelationRecordIds: ReadonlySet<string>;
   readonly sourceFactorAnchorDelta: { readonly x: number; readonly y: number };
-  readonly sourceFactorAnchorBounds: {
-    readonly left: number;
-    readonly top: number;
-    readonly width: number;
-    readonly height: number;
-  };
   readonly groupingReflowByMotionId: ReadonlyMap<
     string,
     { readonly x: number; readonly y: number }
   >;
-  readonly motionPathsByMotionId:
-    KpMeasuredEquationTransitionGeometry["precomputedMotionPathsByMotionId"];
 }
 
 interface FactoringChoreographyContext {
@@ -1038,14 +1031,7 @@ function createDistributionChoreographyContext(
       groupingRelations.map((relation) => relation.recordId)
     ),
     sourceFactorAnchorDelta,
-    sourceFactorAnchorBounds: {
-      left: sourceFactorBounds.left + sourceFactorAnchorDelta.x,
-      top: sourceFactorBounds.top + sourceFactorAnchorDelta.y,
-      width: sourceFactorBounds.width,
-      height: sourceFactorBounds.height
-    },
-    groupingReflowByMotionId,
-    motionPathsByMotionId: geometry.precomputedMotionPathsByMotionId
+    groupingReflowByMotionId
   };
 }
 
@@ -2078,13 +2064,25 @@ function sampleDistributionRelation(
     relation.source !== undefined &&
     relation.target !== undefined
   ) {
+    const leaderProgress = context.frame.sourceFactor.pathProgress;
+    const leaderArc =
+      kpLessonCanonicalDistributionMotionProfile.leader.arcPx *
+      Math.sin(Math.PI * leaderProgress);
+    const sourceFactorPose = {
+      opacity: context.frame.sourceFactor.opacity,
+      x: context.sourceFactorAnchorDelta.x * leaderProgress,
+      y: context.sourceFactorAnchorDelta.y * leaderProgress + leaderArc,
+      scale: context.frame.sourceFactor.scale
+    };
+    const sourceFactorCenter = rectCenter(relation.source.bounds);
+    const leaderCenter = {
+      x: sourceFactorCenter.x + sourceFactorPose.x,
+      y: sourceFactorCenter.y + sourceFactorPose.y
+    };
     return [
-      ...sourceTokens.map((token) => frameToken(token, "source", {
-        opacity: context.frame.sourceFactor.opacity,
-        x: context.sourceFactorAnchorDelta.x * context.frame.addendReflowProgress,
-        y: context.sourceFactorAnchorDelta.y * context.frame.addendReflowProgress,
-        scale: context.frame.sourceFactor.scale
-      })),
+      ...sourceTokens.map((token) =>
+        frameToken(token, "source", sourceFactorPose)
+      ),
       ...targetTokens.map((token) => {
         const motionIndex = relation.target!.motionIds.indexOf(token.motionId);
         const selectorId = relation.target!.selectorIds[motionIndex];
@@ -2094,29 +2092,51 @@ function sampleDistributionRelation(
         if (copy === undefined) {
           throw new Error(`Missing distribution factor copy ${selectorId ?? token.motionId}.`);
         }
-        const path = lineagePathPose({
-          origin: {
-            ...context.sourceFactorAnchorBounds,
-            left: context.sourceFactorAnchorBounds.left -
-              context.sourceFactorAnchorDelta.x * (1 - context.frame.addendReflowProgress),
-            top: context.sourceFactorAnchorBounds.top -
-              context.sourceFactorAnchorDelta.y * (1 - context.frame.addendReflowProgress)
-          },
-          destination: token.localRect,
-          pathProgress: copy.pathProgress,
-          branchIndex: copy.semanticIndex,
-          opacity: copy.opacity,
-          scale: copy.scale,
-          precomputedPath: context.motionPathsByMotionId?.[token.motionId]
-        });
+        if (copy.semanticIndex === 0) {
+          return {
+            ...frameToken(token, "target", {
+              opacity: copy.opacity,
+              x: 0,
+              y: 0,
+              scale: 1
+            }),
+            lineagePathId: `${context.plan.id}.factor-copy.0`,
+            lineageEdgeId: relation.recordId,
+            lineageBranchIndex: 0,
+            motionPathVariant: "arc-above" as const
+          };
+        }
+        const destination = rectCenter(token.localRect);
+        const followerProgress = copy.pathProgress;
+        const followerArc =
+          kpLessonCanonicalDistributionMotionProfile.follower.arcPx *
+          Math.sin(Math.PI * followerProgress);
+        const followerCenter = {
+          x: interpolate(
+            leaderCenter.x,
+            destination.x,
+            followerProgress
+          ),
+          y:
+            interpolate(
+              leaderCenter.y,
+              destination.y,
+              followerProgress
+            ) + followerArc
+        };
         return {
           motionId: token.motionId,
           side: "target" as const,
-          pose: path.pose,
+          pose: {
+            opacity: copy.opacity,
+            x: followerCenter.x - destination.x,
+            y: followerCenter.y - destination.y,
+            scale: copy.scale
+          },
           lineagePathId: `${context.plan.id}.factor-copy.${copy.semanticIndex}`,
           lineageEdgeId: relation.recordId,
           lineageBranchIndex: copy.semanticIndex,
-          motionPathVariant: path.variant
+          motionPathVariant: "arc-above" as const
         };
       })
     ];
@@ -2348,6 +2368,10 @@ function averageScale(relation: KpMeasuredEquationTransitionRelationGeometry): n
 
 function lateProgress(progress: number): number {
   return smoothstep(clamp01((progress - 0.55) / 0.45));
+}
+
+function interpolate(from: number, to: number, progress: number): number {
+  return from + (to - from) * progress;
 }
 
 function smoothstep(progress: number): number {

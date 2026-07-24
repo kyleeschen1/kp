@@ -58,13 +58,98 @@ try {
   for (const capture of captures) {
     await capture.locator.screenshot({ path: path.join(outputRoot, `${capture.id}.png`) });
   }
+  const distributionDescriptorId =
+    "editor-animation.sample.animation.distribution.expand-a-sum";
+  const distributionUrl = new URL(baseUrl);
+  distributionUrl.searchParams.set("animation", distributionDescriptorId);
+  await page.goto(distributionUrl.href, { waitUntil: "networkidle" });
+  const distributionPlayer = page.locator(
+    "[data-kp-editor-animation-player]"
+  );
+  await distributionPlayer.waitFor();
+  await page.waitForFunction(() =>
+    document.querySelector<HTMLElement>(
+      "[data-kp-editor-animation-player]"
+    )?.dataset["kpEditorAnimationHydrated"] === "true"
+  );
+  const distributionScrubber = distributionPlayer.locator(
+    '[data-action="seek-editor-animation"]'
+  );
+  const distributionSourceFactor = distributionPlayer.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.factor"]'
+  );
+  const distributionFrames = [
+    ["source", "0"],
+    ["before-former-seam", "0.359"],
+    ["after-former-seam", "0.36"],
+    ["follower-peel", "0.7"],
+    ["settled", "1"]
+  ] as const;
+  const distributionGeometry: Array<{
+    readonly id: string;
+    readonly progress: number;
+    readonly sourceFactor: {
+      readonly x: number;
+      readonly y: number;
+      readonly opacity: number;
+    };
+  }> = [];
+  for (const [id, progress] of distributionFrames) {
+    await distributionScrubber.fill(progress);
+    await page.evaluate(async () => {
+      await new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+      );
+    });
+    distributionGeometry.push({
+      id,
+      progress: Number(progress),
+      sourceFactor: await distributionSourceFactor.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        return {
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2,
+          opacity: Number(getComputedStyle(element).opacity)
+        };
+      })
+    });
+    await distributionPlayer.screenshot({
+      path: path.join(outputRoot, `distribution-${id}.png`)
+    });
+  }
+  const before = distributionGeometry[1]!.sourceFactor;
+  const after = distributionGeometry[2]!.sourceFactor;
+  const formerSeamDeltaPx = Math.hypot(
+    after.x - before.x,
+    after.y - before.y
+  );
+  if (
+    formerSeamDeltaPx >= 1 ||
+    Math.abs(after.opacity - before.opacity) >= 0.01
+  ) {
+    throw new Error(
+      `Distribution former seam is discontinuous: ${formerSeamDeltaPx}px.`
+    );
+  }
   await writeFile(
     path.join(outputRoot, "manifest.json"),
     `${JSON.stringify({ schemaVersion: "kp.editor-card-visual.v1", baseUrl, viewport, order,
-      captures: captures.map(({ id }) => `${id}.png`) }, null, 2)}\n`,
+      captures: [
+        ...captures.map(({ id }) => `${id}.png`),
+        ...distributionFrames.map(([id]) => `distribution-${id}.png`)
+      ],
+      distribution: {
+        descriptorId: distributionDescriptorId,
+        choreographyId:
+          "choreography.lesson.distribution-area.algebra-and-area",
+        formerSeamDeltaPx,
+        geometry: distributionGeometry
+      } }, null, 2)}\n`,
     "utf8"
   );
-  console.log(`captured ${captures.length} editor card states in ${outputRoot}`);
+  console.log(
+    `captured ${captures.length + distributionFrames.length} editor card states in ${outputRoot}`
+  );
 } finally {
   await browser.close();
 }

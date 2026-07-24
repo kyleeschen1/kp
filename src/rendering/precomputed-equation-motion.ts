@@ -227,18 +227,10 @@ function distributionFissionOrigin(
     relation.source === undefined ||
     relation.target === undefined
   ) return undefined;
-  const firstTarget = geometry.targetTokens.find(
-    (token) => token.motionId === relation.target!.motionIds[0]
-  );
-  if (firstTarget === undefined) return undefined;
-  const source = center(relation.source.bounds);
-  const target = center(firstTarget.localRect);
-  // Distribution previews 18% of persistent reflow before the shared birth.
-  // Starting both paths there makes the ownership swap geometrically invisible.
-  return {
-    x: source.x + (target.x - source.x) * 0.18,
-    y: source.y + (target.y - source.y) * 0.18
-  };
+  // The lesson-derived renderer moves one factor continuously and peels the
+  // follower from that live pose; lineage evidence still begins at the exact
+  // semantic source instead of encoding an obsolete shared-birth offset.
+  return center(relation.source.bounds);
 }
 
 function derivativeBranchVariant(

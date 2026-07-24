@@ -113,6 +113,27 @@
       "scope": "standard",
       "checkedAt": "2026-07-24T01:42:12.221Z",
       "notes": "Twenty-two focused lineage, learner inventory, adapter, index, query, and shell tests pass; the full repository typecheck also passes."
+    },
+    {
+      "command": "Canonical presentation unit and type boundary suite",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T02:05:22.758Z",
+      "notes": "Thirty focused lineage, picker, distribution, Workbench selection, shell, and capture tests pass; the full app, node, test, and domain typecheck passes."
+    },
+    {
+      "command": "Canonical card and Workbench Chromium suites",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T02:05:23.870Z",
+      "notes": "All 13 editor animation library tests and all 13 Workbench tests pass. A focused distribution choreography browser test passes in both forward and rewind directions; one preliminary suite run exposed and corrected an obsolete duplicate-picker test assumption."
+    },
+    {
+      "command": "Distribution lesson and card deterministic visual gate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T02:05:24.711Z",
+      "notes": "All 12 distribution lesson Chromium tests pass. The stable editor-card capture produced nine states; adjacent samples around the former card jump differ by only 0.0215px with unchanged opacity, while the follower visibly peels from the leading factor."
     }
   ],
   "allowedWork": [
@@ -334,8 +355,8 @@
     {
       "id": "s29",
       "title": "Project-canonical-choreography-into-cards",
-      "summary": "Make cards, picker, and Workbench consume lesson-maintained canonical presentations; collapse duplicate descriptor exposure and demote superseded generated variants without deleting fixtures.",
-      "status": "planned",
+      "summary": "Cards, picker, and Workbench now consume lesson-first presentation lineage. The picker exposes 28 canonical animations instead of 45 descriptor duplicates while exact legacy URLs remain resolvable. Distribution replaces the atomic shared birth with the lesson's continuous leading factor and follower peel; the former seam measures 0.0215px. Thirty focused tests, full typecheck, 13 editor, 13 Workbench, 12 lesson, and focused forward/rewind browser gates pass.",
+      "status": "complete",
       "planPhaseId": "authoritative-roadmap-workbench"
     },
     {

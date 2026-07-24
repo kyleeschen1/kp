@@ -24,6 +24,9 @@ export function resolveKpAnimationWorkbenchRepresentation(input: {
       (candidate) =>
         candidate.representationId === input.requestedRepresentationId
     ) ??
+    input.entry.representations.find(
+      (candidate) => candidate.presentationRole === "canonical"
+    ) ??
     (provenance.kind === "catalog"
       ? input.entry.representations.find(
           (candidate) =>
@@ -35,16 +38,60 @@ export function resolveKpAnimationWorkbenchRepresentation(input: {
     input.entry.representations[0];
   if (relationship === undefined) return {};
 
-  const descriptor = input.descriptors.find((candidate) => {
-    if (candidate.animationId !== input.entry.identity.animationId) {
+  const descriptor =
+    descriptorForRelationship(
+      relationship,
+      input.entry.identity.animationId,
+      input.descriptors
+    ) ??
+    input.entry.representations
+      .filter(
+        (candidate) =>
+          candidate.presentationRole === "projection" &&
+          sameChoreography(candidate, relationship)
+      )
+      .map((candidate) =>
+        descriptorForRelationship(
+          candidate,
+          input.entry.identity.animationId,
+          input.descriptors
+        )
+      )
+      .find(
+        (candidate): candidate is KpEditorAnimationDescriptor =>
+          candidate !== undefined
+      );
+  return {
+    relationship,
+    ...(descriptor === undefined ? {} : { descriptor })
+  };
+}
+
+function descriptorForRelationship(
+  relationship: KpAnimationRepresentationRelationship,
+  animationId: string,
+  descriptors: readonly KpEditorAnimationDescriptor[]
+): KpEditorAnimationDescriptor | undefined {
+  return descriptors.find((candidate) => {
+    if (candidate.animationId !== animationId) {
       return false;
     }
     return relationship.kind === "card"
       ? candidate.sampleId === relationship.representationId
       : candidate.id === relationship.representationId;
   });
-  return {
-    relationship,
-    ...(descriptor === undefined ? {} : { descriptor })
-  };
+}
+
+function sameChoreography(
+  candidate: KpAnimationRepresentationRelationship,
+  canonical: KpAnimationRepresentationRelationship
+): boolean {
+  return (
+    candidate.canonicalRepresentationId === canonical.representationId &&
+    candidate.choreographySource.kind === canonical.choreographySource.kind &&
+    candidate.choreographySource.sourceId ===
+      canonical.choreographySource.sourceId &&
+    candidate.choreographySource.choreographyId ===
+      canonical.choreographySource.choreographyId
+  );
 }

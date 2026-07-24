@@ -325,7 +325,14 @@ function renderRepresentationSwitcher(
   representations: readonly KpAnimationRepresentationRelationship[],
   selectedRepresentationId: string | undefined
 ): string {
-  const ordered = [...representations].sort((left, right) => {
+  const fixtures = representations.filter(
+    ({ presentationRole }) => presentationRole === "superseded-fixture"
+  );
+  const ordered = representations
+    .filter(
+      ({ presentationRole }) => presentationRole !== "superseded-fixture"
+    )
+    .sort((left, right) => {
     const selectedRank =
       Number(right.representationId === selectedRepresentationId) -
       Number(left.representationId === selectedRepresentationId);
@@ -350,6 +357,11 @@ function renderRepresentationSwitcher(
               .join("")}
           </div>`
     }
+    ${
+      fixtures.length === 0
+        ? ""
+        : `<p data-kp-animation-workbench-superseded-fixtures>${fixtures.length} legacy ${fixtures.length === 1 ? "route remains" : "routes remain"} resolvable as ${fixtures.length === 1 ? "a fixture" : "fixtures"}.</p>`
+    }
   </section>`;
 }
 
@@ -358,7 +370,7 @@ function renderRepresentationControl(
   selectedRepresentationId: string | undefined
 ): string {
   const content = `<span>${escapeHtml(representation.label)}</span>
-    <small>${escapeHtml(representation.kind)} · ${representation.playable ? "playable" : "static"}</small>`;
+    <small>${escapeHtml(representation.kind)} · ${escapeHtml(representation.presentationRole)} · ${representation.playable ? "playable" : "static"}</small>`;
   if (
     representation.href !== undefined &&
     (representation.kind === "lesson" ||

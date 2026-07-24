@@ -12,6 +12,8 @@ import {
 } from "../src/editor/semantic-animation-workbench-representation-selection.ts";
 
 const radicalId = "animation.generated.radical.square-root-as-power";
+const distributionId =
+  "animation.generated.distribution.expand-a-sum";
 
 test("card selection resolves beneath the same canonical animation", () => {
   const entry = radicalEntry();
@@ -62,6 +64,43 @@ test("planned animation has no fabricated selection", () => {
     }),
     {}
   );
+});
+
+test("lesson authority resolves a compact canonical card projection", () => {
+  const entry = createKpSemanticAnimationWorkbenchIndex().entries.find(
+    (candidate) => candidate.identity.animationId === distributionId
+  )!;
+  const selection = resolveKpAnimationWorkbenchRepresentation({
+    entry,
+    descriptors: createKpEditorAnimationLibrary()
+  });
+
+  assert.equal(selection.relationship?.kind, "lesson");
+  assert.equal(selection.relationship?.presentationRole, "canonical");
+  assert.equal(
+    selection.relationship?.choreographySource.choreographyId,
+    "choreography.lesson.distribution-area.algebra-and-area"
+  );
+  assert.equal(
+    selection.descriptor?.id,
+    "editor-animation.sample.animation.distribution.expand-a-sum"
+  );
+});
+
+test("superseded descriptor routes remain exactly resolvable fixtures", () => {
+  const entry = createKpSemanticAnimationWorkbenchIndex().entries.find(
+    (candidate) => candidate.identity.animationId === distributionId
+  )!;
+  const fixtureId =
+    "editor-animation.animation.generated.distribution.expand-a-sum";
+  const selection = resolveKpAnimationWorkbenchRepresentation({
+    entry,
+    requestedRepresentationId: fixtureId,
+    descriptors: createKpEditorAnimationLibrary()
+  });
+
+  assert.equal(selection.relationship?.presentationRole, "superseded-fixture");
+  assert.equal(selection.descriptor?.id, fixtureId);
 });
 
 function radicalEntry() {

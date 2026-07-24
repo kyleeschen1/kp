@@ -18,6 +18,20 @@ export const kpDistributionChoreographyPhaseIds = [
 export type KpDistributionChoreographyPhaseId =
   typeof kpDistributionChoreographyPhaseIds[number];
 
+export const kpLessonCanonicalDistributionMotionProfile = {
+  leader: {
+    start: 0,
+    end: 1,
+    arcPx: -8
+  },
+  follower: {
+    start: 0.42,
+    end: 1,
+    revealEnd: 0.12,
+    arcPx: -12
+  }
+} as const;
+
 export interface KpDistributionChoreographyPlan {
   readonly kind: "distribution-choreography-plan";
   readonly id: string;
@@ -51,6 +65,7 @@ export interface KpDistributionChoreographyFrame {
   readonly sourceFactor: {
     readonly opacity: number;
     readonly scale: number;
+    readonly pathProgress: number;
   };
   readonly factorCopies: readonly {
     readonly entityId: string;
@@ -141,6 +156,21 @@ export function sampleKpDistributionChoreography(input: {
   const addendReflowProgress =
     0.18 * intervalProgress(progress, 0.08, 0.28) +
     0.82 * intervalProgress(progress, 0.52, 0.78);
+  const factorLeaderProgress = intervalProgress(
+    progress,
+    kpLessonCanonicalDistributionMotionProfile.leader.start,
+    kpLessonCanonicalDistributionMotionProfile.leader.end
+  );
+  const factorFollowerProgress = intervalProgress(
+    factorLeaderProgress,
+    kpLessonCanonicalDistributionMotionProfile.follower.start,
+    kpLessonCanonicalDistributionMotionProfile.follower.end
+  );
+  const factorFollowerOpacity = intervalProgress(
+    factorFollowerProgress,
+    0,
+    kpLessonCanonicalDistributionMotionProfile.follower.revealEnd
+  );
   return {
     kind: "distribution-choreography-frame",
     planId: input.plan.id,
@@ -152,8 +182,12 @@ export function sampleKpDistributionChoreography(input: {
     groupingOpacity: 1 - phases["remove-grouping"],
     fission,
     sourceFactor: {
-      opacity: fission.sources[0]!.opacity,
-      scale: fission.sources[0]!.scale
+      // The lesson keeps one readable factor in continuous motion and lets the
+      // second copy peel from it. Native target ownership still changes only at
+      // the endpoint, so the card cannot flash two coincident glyphs mid-flight.
+      opacity: progress === 1 ? 0 : 1,
+      scale: 1,
+      pathProgress: factorLeaderProgress
     },
     factorCopies: input.plan.factorCopyIds.map((entityId, semanticIndex) => {
       const material = fission.targets.find((target) => target.entityId === entityId);
@@ -163,9 +197,15 @@ export function sampleKpDistributionChoreography(input: {
       return {
         entityId,
         semanticIndex,
-        opacity: material.opacity,
-        scale: material.scale,
-        pathProgress: material.pathProgress
+        opacity:
+          semanticIndex === 0
+            ? progress === 1 ? 1 : 0
+            : factorFollowerOpacity,
+        scale: 1,
+        pathProgress:
+          semanticIndex === 0
+            ? factorLeaderProgress
+            : factorFollowerProgress
       };
     })
   };

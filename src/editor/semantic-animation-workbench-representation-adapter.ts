@@ -69,7 +69,9 @@ export function projectKpAnimationRepresentations(input: {
             : "projection" as const
           : lessonAuthority.presentation.assetId === descriptor.animationId
             ? "projection" as const
-            : "superseded-fixture" as const;
+            : descriptor.id === catalogEntry.primaryDescriptor.id
+              ? "projection" as const
+              : "superseded-fixture" as const;
       const choreographySource =
         presentationRole === "superseded-fixture"
           ? {
@@ -162,6 +164,12 @@ export function auditKpLearnerCardPresentationOverlaps(input: {
       const cardRepresentationIds = descriptors.flatMap(({ sampleId }) =>
         sampleId === undefined ? [] : [sampleId]
       );
+      const compactProjection = [...descriptors].sort(
+        (left, right) =>
+          Number(right.familyId !== undefined) -
+            Number(left.familyId !== undefined) ||
+          left.id.localeCompare(right.id)
+      )[0];
       return {
         schemaVersion:
           "kp.learner-card-presentation-audit.v1" as const,
@@ -178,7 +186,9 @@ export function auditKpLearnerCardPresentationOverlaps(input: {
         supersededFixtureDescriptorIds:
           presentation.assetId === presentation.canonicalAnimationId
             ? []
-            : descriptors.map(({ id }) => id),
+            : descriptors
+                .filter(({ id }) => id !== compactProjection?.id)
+                .map(({ id }) => id),
         preservedAliasIds:
           presentation.assetId === presentation.canonicalAnimationId
             ? []

@@ -81,7 +81,13 @@ test("distribution lesson supersedes generated card choreography without losing 
   assert.deepEqual(lesson?.aliases, [
     "exemplar.distribution-area.3-times-x-plus-2"
   ]);
-  assert.equal(fixtures.length, 3);
+  assert.equal(fixtures.length, 1);
+  assert.equal(
+    distribution.filter(
+      ({ presentationRole }) => presentationRole === "projection"
+    ).length,
+    2
+  );
   assert.equal(
     fixtures.every(
       ({ canonicalRepresentationId }) =>
@@ -112,7 +118,7 @@ test("learner and card audit classifies every lesson binding from one inventory"
   assert.deepEqual(overlaps[0]?.preservedAliasIds, [
     "exemplar.distribution-area.3-times-x-plus-2"
   ]);
-  assert.equal(overlaps[0]?.supersededFixtureDescriptorIds.length, 2);
+  assert.equal(overlaps[0]?.supersededFixtureDescriptorIds.length, 1);
   assert.deepEqual(overlaps[1]?.supersededFixtureDescriptorIds, []);
 });
 

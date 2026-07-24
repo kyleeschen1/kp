@@ -2292,14 +2292,16 @@ test("wrap and distribution satisfy their executable choreography contracts", as
     "data-kp-editor-equation-lineage-path-count",
     "2"
   );
-  await expect(sourceFactor).toHaveCSS("opacity", "0");
+  await expect(sourceFactor).toHaveCSS("opacity", "1");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-distribution-owner-side",
     "targets"
   );
   await expect(targetFactors).toHaveCount(2);
-  await expect(targetFactors.nth(0)).toHaveCSS("opacity", "1");
-  await expect(targetFactors.nth(1)).toHaveCSS("opacity", "1");
+  await expect(targetFactors.nth(0)).toHaveCSS("opacity", "0");
+  expect(Number(await targetFactors.nth(1).evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeGreaterThan(0);
   await expect(targetFactors.nth(0)).toHaveAttribute(
     "data-kp-editor-distribution-semantic-index",
     "0"
@@ -2316,7 +2318,7 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   const pathVariants = await targetFactors.evaluateAll((elements) =>
     elements.map((element) => element.getAttribute("data-kp-equation-motion-path-variant"))
   );
-  expect(new Set(pathVariants)).toEqual(new Set(["arc-above", "arc-below"]));
+  expect(new Set(pathVariants)).toEqual(new Set(["arc-above"]));
   expect(await targetFactors.nth(0).evaluate((element) => getComputedStyle(element).transform))
     .not.toBe(await targetFactors.nth(1).evaluate((element) => getComputedStyle(element).transform));
   const transitProgress = Number(await transition.getAttribute(
@@ -2333,21 +2335,30 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   expect(groupingOpacity).toBeLessThan(1);
 
   await scrubber.fill("0.359");
-  await expect(sourceFactor).toHaveCSS("opacity", "1");
-  await expect(targetFactors.nth(0)).toHaveCSS("opacity", "0");
-  await expect(targetFactors.nth(1)).toHaveCSS("opacity", "0");
+  const beforeFormerTransfer = await sourceFactor.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+      opacity: Number(getComputedStyle(element).opacity)
+    };
+  });
   await scrubber.fill("0.36");
-  await expect(sourceFactor).toHaveCSS("opacity", "0");
-  await expect(targetFactors.nth(0)).toHaveCSS("opacity", "1");
-  await expect(targetFactors.nth(1)).toHaveCSS("opacity", "1");
-  const sharedBirthCenters = await targetFactors.evaluateAll((elements) =>
-    elements.map((element) => {
-      const rect = element.getBoundingClientRect();
-      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
-    })
-  );
-  expect(Math.abs(sharedBirthCenters[0]!.x - sharedBirthCenters[1]!.x)).toBeLessThan(1);
-  expect(Math.abs(sharedBirthCenters[0]!.y - sharedBirthCenters[1]!.y)).toBeLessThan(1);
+  const afterFormerTransfer = await sourceFactor.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+      opacity: Number(getComputedStyle(element).opacity)
+    };
+  });
+  expect(Math.hypot(
+    afterFormerTransfer.x - beforeFormerTransfer.x,
+    afterFormerTransfer.y - beforeFormerTransfer.y
+  )).toBeLessThan(1);
+  expect(Math.abs(
+    afterFormerTransfer.opacity - beforeFormerTransfer.opacity
+  )).toBeLessThan(0.01);
   await scrubber.fill("1");
   await expect(sourceFactor).toHaveCSS("opacity", "0");
   await expect(targetFactors.nth(0)).toHaveCSS("opacity", "1");
@@ -2359,7 +2370,7 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   await scrubber.fill("0.5");
   await expect(player).toHaveAttribute("data-kp-editor-animation-direction", "rewind");
   await expect(player.locator('[data-kp-editor-equation-target] [data-kp-motion-id$=".factored.factor"]'))
-    .toHaveCSS("opacity", "0");
+    .toHaveCSS("opacity", "1");
 });
 
 test("factoring coalesces repeated factors through its inverse choreography", async ({

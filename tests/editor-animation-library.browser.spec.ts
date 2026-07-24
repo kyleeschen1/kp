@@ -69,7 +69,7 @@ test("editor animation library restores and persists concrete selections", async
   );
 
   const equationDescriptorId =
-    "editor-animation.animation.linear-solve.solve-x";
+    "editor-animation.sample.animation.solve-x.both-sides";
   await select.selectOption(equationDescriptorId);
 
   await expect(page).toHaveURL(
@@ -112,6 +112,40 @@ test("editor animation library restores and persists concrete selections", async
   await expect(
     diagnostics.locator("[data-kp-editor-animation-diagnostics-selectors]")
   ).toHaveText("12/12");
+});
+
+test("picker exposes one option per canonical animation while legacy routes remain exact", async ({
+  page
+}) => {
+  const legacyFixtureId =
+    "editor-animation.animation.generated.distribution.expand-a-sum";
+  await page.goto(`/?animation=${legacyFixtureId}`);
+
+  const library = page.locator("[data-kp-editor-animation-library]");
+  await expect(library).toHaveAttribute(
+    "data-kp-editor-animation-descriptor-id",
+    legacyFixtureId
+  );
+  await expect(library).toHaveAttribute(
+    "data-kp-editor-animation-canonical-choreography",
+    "choreography.lesson.distribution-area.algebra-and-area"
+  );
+  await expect(library).toContainText("Canonical lesson projection");
+  await expect(
+    library.getByRole("link", { name: "See distribution become area" })
+  ).toHaveAttribute("href", "/reader/distribution-area/");
+  const animationIds = await library
+    .locator("[data-kp-editor-animation-picker-option]")
+    .evaluateAll((options) =>
+      options.map((option) => option.getAttribute("data-kp-editor-animation-id"))
+    );
+  expect(animationIds.every((animationId) => animationId !== null)).toBe(true);
+  expect(new Set(animationIds).size).toBe(animationIds.length);
+  await expect(
+    library.locator(
+      '[data-kp-editor-animation-picker-option][data-kp-editor-animation-id="animation.generated.distribution.expand-a-sum"]'
+    )
+  ).toHaveCount(1);
 });
 
 test("render quality persists independently and stays frozen during playback", async ({
@@ -260,7 +294,7 @@ test("algebra family cohort stays selectable and browser-safe", async ({
     page.locator(
       '[data-action="set-editor-animation"] optgroup[label="Algebra"] option'
     )
-  ).toHaveCount(ALGEBRA_COHORT.length);
+  ).toHaveCount(new Set(ALGEBRA_COHORT.map(({ animationId }) => animationId)).size);
 });
 
 test("derivative tangent family sample opens on the graph surface", async ({

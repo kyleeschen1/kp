@@ -26,16 +26,16 @@ test("editor animation picker groups the concrete catalog by supported surface",
     selectedDescriptorId: descriptors[13]?.id
   });
 
-  assert.equal(model.optionCount, 45);
+  assert.equal(model.optionCount, 28);
   assert.deepEqual(
     model.groups.map((group) => [group.id, group.options.length]),
     [
-      ["algebra", 9],
+      ["algebra", 7],
       ["calculus", 4],
       ["linear-algebra", 4],
-      ["equation", 20],
+      ["equation", 9],
       ["diagram", 1],
-      ["graph", 5],
+      ["graph", 1],
       ["programming", 1],
       ["composite", 1]
     ]
@@ -50,10 +50,10 @@ test("editor animation picker groups the concrete catalog by supported surface",
   assert.match(html, /data-action="set-editor-animation"/);
   assert.match(html, /<optgroup label="Graph catalog">/);
   assert.match(html, /data-kp-editor-animation-picker-option/);
-  assert.match(html, /data-kp-editor-animation-index="44"/);
+  assert.match(html, /data-kp-editor-animation-index="27"/);
 });
 
-test("editor animation picker promotes exact family-backed entries into domain groups", () => {
+test("editor animation picker exposes one family-backed option per canonical animation", () => {
   const asset = createKpAnimationAssets()[0]!;
   const family = createKpSymbolicManipulationFamily({
     id: "family.algebra.both-sides",
@@ -77,7 +77,7 @@ test("editor animation picker promotes exact family-backed entries into domain g
     createKpEditorAnimationPickerModel({ descriptors }).groups.map(
       (group) => group.id
     ),
-    ["algebra", "equation"]
+    ["algebra"]
   );
 });
 
