@@ -19,6 +19,9 @@ import {
   createSemanticTransformationLeaf,
   createSemanticTransformationSequence
 } from "../semantic/transformation-composition.ts";
+import {
+  createKpEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
 
 const linearSolveAnimationId = "animation.linear-solve.solve-x";
 const linearSolveTimelineId = "timeline.linear-solve.shared";
@@ -193,22 +196,40 @@ function createLinearSolveAnimationFromSource(
       tags: ["animation", "equation", "linear-solve", ...(canonical ? [] : ["teacher-detail"])],
       sourceRefIds: [source.sourceAnimationId]
     },
+    ...(canonical
+      ? {
+          presentationProfile: createKpEquationPresentationProfileV1({
+            payload: {
+              kind: "equation-presentation",
+              motion: "continuity-v1",
+              nativeHandoff: "atomic-v1",
+              cancellation: "counter-orbit-v1",
+              zeroWitness: "none",
+              successor: "counter-convergence-v1",
+              depth: "semantic-depth-v1",
+              continuants: "transit-then-reflow-v1",
+              branchStrategy: "together"
+            }
+          })
+        }
+      : {}),
     metadata: {
       sourceAnimationId: source.sourceAnimationId,
-      // Preserve the successful canonical motion while newer material motifs
-      // remain available semantically for isolated refinement and promotion.
-      equationMotionPresentationRecipe: "continuity-v1",
-      equationNativeHandoffRecipe: "atomic-v1",
-      ...createKpCancellationPresentationAuthoringMetadata("preserve-flow"),
-      // The compact flagship path omits the optional +0 teaching beat. The
-      // recipe remains available for explicit lesson variants.
-      equationZeroWitnessPresentationRecipe: "none",
-      equationSuccessorPresentationRecipe: "counter-convergence-v1",
-      equationDepthPresentationRecipe: "semantic-depth-v1",
-      equationContinuantPresentationRecipe: "transit-then-reflow-v1",
-      // Keep the accepted balanced entry while proving alternate presentation
-      // schedules over the same subtract-both-sides semantic operation.
-      ...(canonical ? { equationBranchPresentationStrategy: "together" } : {})
+      // Keep the teacher-detail variant on the compatibility decoder until its
+      // choreography is independently promoted after the canonical exemplar.
+      ...(!canonical
+        ? {
+            equationMotionPresentationRecipe: "continuity-v1",
+            equationNativeHandoffRecipe: "atomic-v1",
+            ...createKpCancellationPresentationAuthoringMetadata(
+              "preserve-flow"
+            ),
+            equationZeroWitnessPresentationRecipe: "none",
+            equationSuccessorPresentationRecipe: "counter-convergence-v1",
+            equationDepthPresentationRecipe: "semantic-depth-v1",
+            equationContinuantPresentationRecipe: "transit-then-reflow-v1"
+          }
+        : {})
     }
   });
 }

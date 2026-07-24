@@ -244,7 +244,20 @@ export function decodeKpEquationPresentationProfile(input: {
   const legacy = decodeKpLegacyEquationPresentationMetadata(
     input.animation.metadata
   );
-  if (input.authoredProfile !== undefined) {
+  if (
+    input.authoredProfile !== undefined &&
+    input.animation.presentationProfile !== undefined &&
+    input.authoredProfile !== input.animation.presentationProfile
+  ) {
+    return rejected(diagnostic(
+      "$.presentationProfile",
+      "authority-conflict",
+      `Animation ${input.animation.id} received two typed presentation-profile authorities.`
+    ));
+  }
+  const authoredProfile =
+    input.authoredProfile ?? input.animation.presentationProfile;
+  if (authoredProfile !== undefined) {
     const presence = inspectKpLegacyEquationPresentationMetadataPresence(
       input.animation.metadata
     );
@@ -258,7 +271,7 @@ export function decodeKpEquationPresentationProfile(input: {
       ));
     }
     const profileIssues = validateKpEquationPresentationProfileV1(
-      input.authoredProfile
+      authoredProfile
     );
     if (profileIssues.length > 0) {
       return {
@@ -273,7 +286,7 @@ export function decodeKpEquationPresentationProfile(input: {
     return {
       status: "accepted",
       source: "typed-profile",
-      profile: input.authoredProfile,
+      profile: authoredProfile,
       diagnostics: []
     };
   }
@@ -311,6 +324,31 @@ export function decodeKpEquationPresentationProfile(input: {
     }),
     diagnostics: []
   };
+}
+
+export function resolveKpEquationPresentationBranchStrategy(
+  animation: KpAnimationAsset
+): KpBalancedBranchPresentationStrategy | undefined {
+  if (animation.presentationProfile === undefined) {
+    return requireKpLegacyEquationPresentationMetadata(
+      animation.metadata
+    ).branchStrategy;
+  }
+  const presence = inspectKpLegacyEquationPresentationMetadataPresence(
+    animation.metadata
+  );
+  if (presence.presentKeys.length > 0 || presence.teachingGoalPresent) {
+    throw new Error(
+      `Animation ${animation.id} cannot combine a typed presentation profile with legacy presentation metadata.`
+    );
+  }
+  const issues = validateKpEquationPresentationProfileV1(
+    animation.presentationProfile
+  );
+  if (issues.length > 0) {
+    throw new Error(issues.map(({ message }) => message).join(" "));
+  }
+  return animation.presentationProfile.payload.branchStrategy;
 }
 
 function resolveCancellationRecipe(input: {

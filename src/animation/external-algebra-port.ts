@@ -76,6 +76,7 @@ function createImportedTraceAnimation(
     checks: input.base.checks,
     exportTargets: input.base.exportTargets,
     dashboard: input.base.dashboard,
+    presentationProfile: input.base.presentationProfile,
     metadata: {
       ...(input.base.metadata ?? {}),
       sourcePortId: input.sourcePortId,
@@ -84,4 +85,3 @@ function createImportedTraceAnimation(
     }
   });
 }
-

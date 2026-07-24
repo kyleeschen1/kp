@@ -12,7 +12,7 @@ import {
   type KpBalancedBranchScheduling
 } from "../animation/equation-balanced-branch-scheduling.ts";
 import {
-  requireKpLegacyEquationPresentationMetadata
+  resolveKpEquationPresentationBranchStrategy
 } from "../animation/equation-presentation-profile-decoder.ts";
 
 export interface KpEquationLinearRearrangementBinding {
@@ -41,9 +41,7 @@ export function createKpEquationLinearRearrangementBindings(
       );
     }
     const selectedBranchStrategy =
-      requireKpLegacyEquationPresentationMetadata(
-        animation.metadata
-      ).branchStrategy;
+      resolveKpEquationPresentationBranchStrategy(animation);
     const branchScheduling = kind === "balanced-introduction"
       ? createKpBalancedBranchScheduling({
           transformationId: transformation.id,

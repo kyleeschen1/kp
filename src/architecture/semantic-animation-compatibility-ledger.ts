@@ -114,12 +114,7 @@ export const kpSemanticAnimationCompatibilityLedger = [
         "src/animation/equation-presentation-profile-decoder.ts",
         "equationBranchPresentationStrategy"
     ),
-    authors: [
-      reference(
-        "src/animation/linear-solve-adapter.ts",
-        "equationBranchPresentationStrategy"
-      )
-    ],
+    authors: [],
     consumers: [
       reference(
         "src/animation/equation-presentation-profile-decoder.ts",

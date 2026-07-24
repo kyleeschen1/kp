@@ -1,13 +1,18 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
+import {
+  createLinearSolveAnimationAsset,
+  createLinearSolveTeacherZeroAnimationAsset
+} from "../src/animation/linear-solve-adapter.ts";
 import { createFractionSimplificationAnimationAsset } from "../src/animation/fraction-adapter.ts";
 import {
   kpEquationPresentationPolicy,
   kpEquationPresentationProfile
 } from "../src/rendering/equation-presentation-policy.ts";
-
+import {
+  createKpEquationPresentationProfileV1
+} from "../src/animation/equation-presentation-profile.ts";
 test("canonical linear solve retains semantics but uses the continuity presentation", () => {
   const animation = createLinearSolveAnimationAsset();
   const policy = kpEquationPresentationPolicy(animation);
@@ -47,20 +52,18 @@ test("other equation assets retain the semantic material presentation", () => {
 
 test("presentation motifs can be selected independently without changing semantics", () => {
   const animation = createLinearSolveAnimationAsset();
-  const {
-    equationCancellationTeachingGoal: _inferredCancellationGoal,
-    ...legacyMetadata
-  } = animation.metadata ?? {};
   const profile = kpEquationPresentationProfile({
     ...animation,
-    metadata: {
-      ...legacyMetadata,
-      equationCancellationPresentationRecipe: "counter-orbit-v1",
-      equationZeroWitnessPresentationRecipe: "independent-zero-v1",
-      equationSuccessorPresentationRecipe: "counter-convergence-v1",
-      equationDepthPresentationRecipe: "semantic-depth-v1",
-      equationContinuantPresentationRecipe: "transit-then-reflow-v1"
-    }
+    presentationProfile: createKpEquationPresentationProfileV1({
+      payload: {
+        ...animation.presentationProfile!.payload,
+        cancellation: "counter-orbit-v1",
+        zeroWitness: "independent-zero-v1",
+        successor: "counter-convergence-v1",
+        depth: "semantic-depth-v1",
+        continuants: "transit-then-reflow-v1"
+      }
+    })
   });
 
   assert.deepEqual(profile, {
@@ -77,7 +80,7 @@ test("presentation motifs can be selected independently without changing semanti
 });
 
 test("inferred cancellation intent cannot be combined with a raw renderer recipe", () => {
-  const animation = createLinearSolveAnimationAsset();
+  const animation = createLinearSolveTeacherZeroAnimationAsset();
   assert.throws(() => kpEquationPresentationProfile({
     ...animation,
     metadata: {
@@ -88,7 +91,7 @@ test("inferred cancellation intent cannot be combined with a raw renderer recipe
 });
 
 test("unknown independent presentation recipes fail at the asset boundary", () => {
-  const animation = createLinearSolveAnimationAsset();
+  const animation = createLinearSolveTeacherZeroAnimationAsset();
   assert.throws(() => kpEquationPresentationProfile({
     ...animation,
     metadata: {

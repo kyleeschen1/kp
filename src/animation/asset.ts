@@ -16,6 +16,11 @@ import type {
   KpLawFailure
 } from "../semantic/asset-laws.ts";
 import {
+  createKpEquationPresentationProfileV1,
+  validateKpEquationPresentationProfileV1,
+  type KpEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
+import {
   createSemanticObjectRef,
   createSemanticTransformationRef,
   type SemanticObjectRef,
@@ -64,6 +69,11 @@ export type KpAnimationAssetExportTargetKind =
   | "frame-sequence"
   | "custom";
 
+// The union stays domain-discriminated; adding a graph or trace profile must
+// not make either payload conform to an equation-shaped universal schema.
+export type KpAnimationAssetPresentationProfile =
+  KpEquationPresentationProfileV1;
+
 export interface KpAnimationAsset {
   readonly id: string;
   readonly kind: "animation-asset";
@@ -78,6 +88,8 @@ export interface KpAnimationAsset {
   readonly checks: readonly KpAnimationAssetCheckRef[];
   readonly exportTargets: readonly KpAnimationAssetExportTarget[];
   readonly dashboard?: KpAnimationAssetDashboardMetadata | undefined;
+  readonly presentationProfile?:
+    KpAnimationAssetPresentationProfile | undefined;
   readonly metadata?: Readonly<Record<string, KpAssetMetadataValue>> | undefined;
 }
 
@@ -93,6 +105,8 @@ export interface CreateKpAnimationAssetInput {
   readonly checks?: readonly KpAnimationAssetCheckRef[] | undefined;
   readonly exportTargets?: readonly KpAnimationAssetExportTarget[] | undefined;
   readonly dashboard?: KpAnimationAssetDashboardMetadata | undefined;
+  readonly presentationProfile?:
+    KpAnimationAssetPresentationProfile | undefined;
   readonly metadata?: Readonly<Record<string, KpAssetMetadataValue>> | undefined;
 }
 
@@ -252,6 +266,9 @@ export interface KpAnimationAssetBuilder {
   withDashboard(
     dashboard: KpAnimationAssetDashboardMetadata
   ): KpAnimationAssetBuilder;
+  withPresentationProfile(
+    profile: KpAnimationAssetPresentationProfile
+  ): KpAnimationAssetBuilder;
   withMetadata(
     metadata: Readonly<Record<string, KpAssetMetadataValue>>
   ): KpAnimationAssetBuilder;
@@ -292,6 +309,13 @@ export function createKpAnimationAsset(
     ...(input.dashboard === undefined
       ? {}
       : { dashboard: cloneAnimationAssetDashboardMetadata(input.dashboard) }),
+    ...(input.presentationProfile === undefined
+      ? {}
+      : {
+          presentationProfile: cloneAnimationAssetPresentationProfile(
+            input.presentationProfile
+          )
+        }),
     ...(input.metadata === undefined ? {} : { metadata: { ...input.metadata } })
   };
 }
@@ -527,6 +551,16 @@ export function validateKpAnimationAsset(
       message: issue.message
     });
   });
+  if (animation.presentationProfile !== undefined) {
+    validateKpEquationPresentationProfileV1(
+      animation.presentationProfile
+    ).forEach((issue) => {
+      issues.push({
+        path: `presentationProfile${issue.path.slice(1)}`,
+        message: issue.message
+      });
+    });
+  }
 
   animation.transformations.forEach((transformation, index) => {
     if (transformationIds.has(transformation.id)) {
@@ -595,6 +629,8 @@ class DefaultKpAnimationAssetBuilder implements KpAnimationAssetBuilder {
   private checks: KpAnimationAssetCheckRef[] = [];
   private exportTargets: KpAnimationAssetExportTarget[] = [];
   private dashboard: KpAnimationAssetDashboardMetadata | undefined;
+  private presentationProfile:
+    KpAnimationAssetPresentationProfile | undefined;
   private metadata: Readonly<Record<string, KpAssetMetadataValue>> | undefined;
 
   constructor(input: CreateKpAnimationAssetBuilderInput) {
@@ -672,6 +708,13 @@ class DefaultKpAnimationAssetBuilder implements KpAnimationAssetBuilder {
     return this;
   }
 
+  withPresentationProfile(
+    profile: KpAnimationAssetPresentationProfile
+  ): KpAnimationAssetBuilder {
+    this.presentationProfile = cloneAnimationAssetPresentationProfile(profile);
+    return this;
+  }
+
   withMetadata(
     metadata: Readonly<Record<string, KpAssetMetadataValue>>
   ): KpAnimationAssetBuilder {
@@ -696,6 +739,9 @@ class DefaultKpAnimationAssetBuilder implements KpAnimationAssetBuilder {
       checks: this.checks,
       exportTargets: this.exportTargets,
       ...(this.dashboard === undefined ? {} : { dashboard: this.dashboard }),
+      ...(this.presentationProfile === undefined
+        ? {}
+        : { presentationProfile: this.presentationProfile }),
       ...(this.metadata === undefined ? {} : { metadata: this.metadata })
     });
   }
@@ -743,6 +789,15 @@ class DefaultKpAnimationAssetBuilder implements KpAnimationAssetBuilder {
       annotations: this.annotations
     });
   }
+}
+
+function cloneAnimationAssetPresentationProfile(
+  profile: KpAnimationAssetPresentationProfile
+): KpAnimationAssetPresentationProfile {
+  return createKpEquationPresentationProfileV1({
+    payload: profile.payload,
+    extensions: profile.extensions
+  });
 }
 
 function validateTransformationTreeClosure(

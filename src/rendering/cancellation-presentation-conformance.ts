@@ -31,19 +31,20 @@ export function checkKpCancellationPresentationCatalog(
       asset.metadata
     );
     const hasTeachingGoal = presence.teachingGoalPresent;
+    const hasTypedProfile = asset.presentationProfile?.domain === "equation";
     const hasRawCancellationRecipe = presence.presentKeys.includes(
       "equationCancellationPresentationRecipe"
     );
     if (hasRawCancellationRecipe) {
       issues.push(issue(asset, "raw-recipe-authority", "Raw cancellation recipe ids are forbidden in catalog assets."));
     }
-    if (hasCancellationAuthority && !hasTeachingGoal) {
+    if (hasCancellationAuthority && !hasTeachingGoal && !hasTypedProfile) {
       issues.push(issue(asset, "missing-teaching-goal", "Cancellation authority requires an inferred teaching goal."));
     }
     if (!hasCancellationAuthority && hasTeachingGoal) {
       issues.push(issue(asset, "orphaned-teaching-goal", "A cancellation teaching goal requires semantic cancellation authority."));
     }
-    if (hasCancellationAuthority && hasTeachingGoal) {
+    if (hasCancellationAuthority && (hasTeachingGoal || hasTypedProfile)) {
       try {
         kpEquationPresentationProfile(asset);
       } catch (error) {

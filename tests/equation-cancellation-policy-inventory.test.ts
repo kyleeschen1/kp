@@ -28,15 +28,20 @@ test("approved equation assets expose the current cancellation-policy inventory"
     createFractionalLinearTransferFluentAnimationAsset()
   ];
 
-  for (const asset of assets) {
+  for (const [index, asset] of assets.entries()) {
     assert.equal(
       asset.metadata?.["equationCancellationPresentationRecipe"],
       undefined
     );
-    assert.equal(
-      asset.metadata?.["equationCancellationTeachingGoal"],
-      "preserve-flow"
-    );
+    if (index === 0) {
+      assert.equal(asset.presentationProfile?.domain, "equation");
+      assert.equal(asset.metadata?.["equationCancellationTeachingGoal"], undefined);
+    } else {
+      assert.equal(
+        asset.metadata?.["equationCancellationTeachingGoal"],
+        "preserve-flow"
+      );
+    }
   }
 
   assert.deepEqual(assets.map((asset) => ({

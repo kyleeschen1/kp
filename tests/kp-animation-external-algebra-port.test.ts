@@ -33,19 +33,18 @@ test("linear solve algebra trace imports as a sampleable AnimationAsset", () => 
   assert.equal(result.animation.id, "animation.linear-solve.solve-x");
   assert.deepEqual(result.animation.metadata, {
     sourceAnimationId: "linear-equation-solve-x",
-    equationMotionPresentationRecipe: "continuity-v1",
-    equationNativeHandoffRecipe: "atomic-v1",
-    // External ports preserve authored teaching intent; policy chooses the renderer recipe later.
-    equationCancellationTeachingGoal: "preserve-flow",
-    equationZeroWitnessPresentationRecipe: "none",
-    equationSuccessorPresentationRecipe: "counter-convergence-v1",
-    equationDepthPresentationRecipe: "semantic-depth-v1",
-    equationContinuantPresentationRecipe: "transit-then-reflow-v1",
-    equationBranchPresentationStrategy: "together",
     sourcePortId: "port.fixture.algebra-trace.linear-solve",
     sourceSystem: "fixture.algebra-trace",
     sourceTraceId: "trace.linear-solve"
   });
+  assert.equal(
+    result.animation.presentationProfile?.payload.motion,
+    "continuity-v1"
+  );
+  assert.equal(
+    result.animation.presentationProfile?.payload.cancellation,
+    "counter-orbit-v1"
+  );
   assert.equal(
     result.animation.bundle.objects[2]?.provenance?.sourceIds[0],
     "trace.linear-solve.step.left-simplified"

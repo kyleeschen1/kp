@@ -402,6 +402,48 @@
       "scope": "s15 dependency direction",
       "checkedAt": "2026-07-24T05:21:48.751Z",
       "notes": "All architecture gates pass; 262 semantic-animation files retain zero rendering-import exceptions."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test solve-x profile, policy, cancellation, asset, port, and ledger suites",
+      "status": "passed",
+      "scope": "s16 exemplar contract",
+      "checkedAt": "2026-07-24T05:29:15.738Z",
+      "notes": "All 25 targeted typed-authority, legacy-fallback, serialization, direct-seek/rewind, catalog, external-port, and compatibility-ledger tests pass."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s16 focused convergence suite",
+      "checkedAt": "2026-07-24T05:29:16.734Z",
+      "notes": "All 217 focused convergence tests pass after the canonical solve-x asset moved to typed profile authoring."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s16 type safety",
+      "checkedAt": "2026-07-24T05:29:17.547Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass with the domain-discriminated asset profile field."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s16 dependency direction",
+      "checkedAt": "2026-07-24T05:29:18.401Z",
+      "notes": "All architecture gates pass; 262 semantic-animation files retain zero rendering-import exceptions."
+    },
+    {
+      "command": "npm run test:browser:linear-equation-conformance",
+      "status": "passed",
+      "scope": "s16 browser conformance",
+      "checkedAt": "2026-07-24T05:29:19.321Z",
+      "notes": "All 3 symbolic conformance tests pass for named phases, exact native endpoints, deterministic seek/rewind, resize, and reduced motion."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s16 visual baseline",
+      "checkedAt": "2026-07-24T05:29:20.176Z",
+      "notes": "Captured 39 desktop and phone states across division and coordinated equation-room modes without command failure."
     }
   ],
   "expectedLearning": [
@@ -567,7 +609,8 @@
     {
       "id": "s16",
       "title": "Solve-x-profile-exemplar",
-      "status": "planned",
+      "summary": "Migrated only the lesson-owned canonical solve-x asset to author kp.presentation-profile.v1 directly; the teacher-detail variant and every other family remain on legacy decoding. KpAnimationAsset now carries a domain-discriminated optional presentation profile, and external-port cloning preserves it. The canonical asset's semantic bundle, transformations, correspondence, transformation tree, timeline, layout, and render targets serialize identically to the legacy facade; typed and legacy presentation policies resolve identically. All 25 targeted tests, 217 focused tests, typecheck, architecture gates, 3 browser conformance tests, and 39-state linear-equation visual capture pass, including exact native endpoints and direct seek/rewind laws.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
