@@ -501,11 +501,39 @@
       "scope": "production atlas asset",
       "checkedAt": "2026-07-24T17:54:47.510Z",
       "notes": "Typecheck and Vite production build passed; the KaTeX_Main WOFF2 is emitted as a production asset and embedded into the capture SVG at runtime. Only the existing chunk-size advisory remains."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium --workers=1 --grep radical-source-ink-weight-and-rewind",
+      "status": "passed",
+      "scope": "slice-27 fraction ink weight",
+      "checkedAt": "2026-07-24T18:08:31.801Z",
+      "notes": "Two focused Chromium tests passed. The new screenshot-pixel gate first reproduced a 1.227 darkness ratio, then passed after removing isolated SVG font embedding while preserving native/WebGL single ownership."
+    },
+    {
+      "command": "npm run visual:presentation-continuity",
+      "status": "passed",
+      "scope": "slice-27 repaired radical checkpoint",
+      "checkedAt": "2026-07-24T18:08:39.367Z",
+      "notes": "All 22 stable captures passed after removing the heavy SVG font raster. Native 0.03 and WebGL 0.06 preserve zero geometry residual and visually matching fraction weight and placement."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-27 second repair repository gate",
+      "checkedAt": "2026-07-24T18:08:43.357Z",
+      "notes": "All 2,162 deterministic unit and architecture tests passed."
+    },
+    {
+      "command": "npm run build and npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "slice-27 production and shared-renderer impact",
+      "checkedAt": "2026-07-24T18:08:48.527Z",
+      "notes": "Production typecheck/build passed with only the existing chunk advisory; all 39 shared linear-equation visual states captured successfully."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Repaired the radical exemplar handoff by capturing KaTeX geometry and nested sizing groups in one reset pose and embedding KaTeX_Main in the isolated SVG raster; human checkpoint remains open for visual approval."
+    "summary": "Second radical checkpoint repair: retained atomic reset-pose capture for KaTeX sizing groups, removed isolated SVG font embedding that made WebGL fraction ink 22.7% darker, and added a real screenshot-pixel weight gate. Awaiting human recheck before promotion."
   },
   "expectedLearning": [
     "Whether renderer-neutral presentation groups can make distributed products and cross-owner radical handoffs converge without renderer-specific ownership in the semantic layer."

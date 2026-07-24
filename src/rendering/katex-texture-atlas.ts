@@ -5,12 +5,6 @@ import type {
   KatexTextureAtlas
 } from "./katex-transition-types.ts";
 
-const katexMainRegularFontUrl = new URL(
-  "../../node_modules/katex/dist/fonts/KaTeX_Main-Regular.woff2",
-  import.meta.url
-).href;
-let katexCaptureFontCssPromise: Promise<string> | undefined;
-
 export interface KatexAtlasPackingOptions {
   width: number;
   height: number;
@@ -202,7 +196,6 @@ async function captureElementImage(
 ): Promise<HTMLImageElement> {
   const width = Math.max(1, Math.ceil(rect.width * pixelRatio));
   const height = Math.max(1, Math.ceil(rect.height * pixelRatio));
-  const captureFontCss = await katexCaptureFontCss();
   const snapshot = () => {
     const elementRect = element.getBoundingClientRect();
     const clone = element.cloneNode(true);
@@ -242,7 +235,6 @@ async function captureElementImage(
   // offset inside that larger visual frame.
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-      <style>${captureFontCss}</style>
       <foreignObject width="100%" height="100%">
         <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;display:block;width:${rect.width}px;height:${rect.height}px;overflow:visible;margin:0;transform:scale(${pixelRatio});transform-origin:top left">${clone.outerHTML}</div>
       </foreignObject>
@@ -258,44 +250,6 @@ async function captureElementImage(
   });
 
   return image;
-}
-
-function katexCaptureFontCss(): Promise<string> {
-  // The data-URL SVG is a separate document, so the parent page's loaded
-  // @font-face does not establish font ownership inside the foreignObject.
-  katexCaptureFontCssPromise ??= fetch(katexMainRegularFontUrl)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Could not load the KaTeX capture font.");
-      }
-
-      return response.blob();
-    })
-    .then(blobToDataUrl)
-    .then(
-      (fontDataUrl) =>
-        `@font-face{font-family:KaTeX_Main;src:url("${fontDataUrl}") format("woff2");font-style:normal;font-weight:400;font-display:block}`
-    );
-
-  return katexCaptureFontCssPromise;
-}
-
-function blobToDataUrl(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      if (typeof reader.result !== "string") {
-        reject(new Error("Could not encode the KaTeX capture font."));
-        return;
-      }
-
-      resolve(reader.result);
-    };
-    reader.onerror = () =>
-      reject(new Error("Could not encode the KaTeX capture font."));
-    reader.readAsDataURL(blob);
-  });
 }
 
 function withResetCaptureTransforms<T>(

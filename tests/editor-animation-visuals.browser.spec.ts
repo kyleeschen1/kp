@@ -1991,6 +1991,146 @@ test("radical rewind interpolates through the composite source-native boundary",
   expect(sourceInkDiagnostic.sizeResidualPx).toBe(0);
 });
 
+test("radical source handoff preserves live fraction ink weight before travel", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-radical-morph-ready",
+    "true"
+  );
+
+  const measureSourceInk = async (semanticProgress: number) => {
+    await scrubber.fill(String(semanticProgress));
+    await expect.poll(async () =>
+      Number(
+        await stage.getAttribute(
+          "data-kp-editor-equation-semantic-progress"
+        )
+      )
+    ).toBeCloseTo(semanticProgress, 5);
+    const observation = await stage.evaluate(async (element) => {
+      if (!(element instanceof HTMLElement)) {
+        throw new Error("Radical stage must be an HTML element.");
+      }
+      const moduleUrl = "/src/rendering/radical-webgl-morph.ts";
+      const module = await import(moduleUrl) as {
+        measureKpRadicalWebglSourceInk(stage: HTMLElement): {
+          liveNativeInkRect: {
+            left: number;
+            top: number;
+            width: number;
+            height: number;
+          };
+        } | undefined;
+      };
+      const comparison = module.measureKpRadicalWebglSourceInk(element);
+
+      if (comparison === undefined) {
+        throw new Error("Expected a radical source ink observation.");
+      }
+
+      const stageRect = element.getBoundingClientRect();
+      const ink = comparison.liveNativeInkRect;
+      const padding = 2;
+      const powerBase = element.querySelector<HTMLElement>(
+        '[data-kp-motion-id*=".power.base"]'
+      );
+      const powerLayer = powerBase?.closest<HTMLElement>(
+        "[data-kp-editor-equation-source], [data-kp-editor-equation-target]"
+      );
+      const nativeExponent = powerLayer?.querySelector<HTMLElement>(
+        '[data-kp-motion-id*=".power.exponent-numerator"]'
+      )?.closest<HTMLElement>(".msupsub");
+      const morph = element.querySelector<HTMLCanvasElement>(
+        "[data-kp-editor-radical-webgl-morph]"
+      );
+
+      if (
+        nativeExponent === null ||
+        nativeExponent === undefined ||
+        morph === null
+      ) {
+        throw new Error("Expected both radical source owners.");
+      }
+
+      return {
+        clip: {
+          x: Math.floor(stageRect.left + ink.left - padding),
+          y: Math.floor(stageRect.top + ink.top - padding),
+          width: Math.ceil(ink.width + padding * 2),
+          height: Math.ceil(ink.height + padding * 2)
+        },
+        morphOpacity: Number(getComputedStyle(morph).opacity),
+        nativeOpacity: Number(getComputedStyle(nativeExponent).opacity)
+      };
+    });
+    const screenshot = await page.screenshot({ clip: observation.clip });
+
+    const ink = await page.evaluate(async (bytes) => {
+      const bitmap = await createImageBitmap(
+        new Blob([new Uint8Array(bytes)], { type: "image/png" })
+      );
+      const canvas = document.createElement("canvas");
+      canvas.width = bitmap.width;
+      canvas.height = bitmap.height;
+      const context = canvas.getContext("2d");
+
+      if (context === null) {
+        throw new Error("Could not read the radical source screenshot.");
+      }
+
+      context.drawImage(bitmap, 0, 0);
+      bitmap.close();
+      const pixels = context.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      ).data;
+      let totalDarkness = 0;
+      let visibleInkPixels = 0;
+
+      for (let index = 0; index < pixels.length; index += 4) {
+        const red = pixels[index] ?? 255;
+        const green = pixels[index + 1] ?? 255;
+        const blue = pixels[index + 2] ?? 255;
+        const darkness = 255 - (red + green + blue) / 3;
+
+        totalDarkness += darkness;
+        if (darkness > 16) visibleInkPixels += 1;
+      }
+
+      return { totalDarkness, visibleInkPixels };
+    }, Array.from(screenshot));
+
+    return { ...ink, ...observation };
+  };
+  const nativeInk = await measureSourceInk(
+    kpRadicalConventionalMorphProfile.morph.start / 2
+  );
+  const webglInk = await measureSourceInk(
+    kpRadicalConventionalMorphProfile.morph.start
+  );
+  const darknessRatio = webglInk.totalDarkness / nativeInk.totalDarkness;
+
+  expect(nativeInk.visibleInkPixels).toBeGreaterThan(0);
+  expect(webglInk.visibleInkPixels).toBeGreaterThan(0);
+  expect(nativeInk).toMatchObject({ morphOpacity: 0, nativeOpacity: 1 });
+  expect(webglInk).toMatchObject({ morphOpacity: 1, nativeOpacity: 0 });
+  expect(
+    darknessRatio,
+    JSON.stringify({ darknessRatio, nativeInk, webglInk })
+  ).toBeLessThanOrEqual(1.05);
+});
+
 test("radical handoffs rebuild exactly across direction, fallback, resize, and fonts", async ({
   page
 }) => {

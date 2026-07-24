@@ -205,7 +205,7 @@
     {
       "id": "slice-27",
       "title": "Radical human checkpoint.",
-      "summary": "Implemented and verified the native fraction raster repair. Radical human checkpoint remains open for user confirmation before promotion.",
+      "summary": "Second checkpoint candidate removes the user-observed bold-before-motion seam: browser pixels now keep native/WebGL fraction darkness within 5% while atomic KaTeX group geometry remains exact. Awaiting user acceptance.",
       "status": "in-progress"
     },
     {
