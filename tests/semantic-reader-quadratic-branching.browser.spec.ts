@@ -219,6 +219,13 @@ test("motion policy, narration, and no-depth mode preserve semantic checkpoints"
 test("keyboard endpoints, resize invalidation, and review recapture are deterministic", async ({ page }) => {
   await page.goto(route, { waitUntil: "networkidle" });
   const stage = page.locator("[data-kp-quadratic-stage]");
+  const reviewShell = page.locator("[data-kp-dev-review-shell]");
+  await expect(page.locator("body")).toHaveAttribute("data-kp-dev-review-ready", "true");
+  await expect(reviewShell.locator("button.launcher")).toBeVisible();
+  await expect(reviewShell).toHaveAttribute(
+    "data-kp-dev-review-placement",
+    "left-prose-rail"
+  );
   await stage.press("End");
   await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "1000");
   await stage.press("Home");
@@ -230,6 +237,9 @@ test("keyboard endpoints, resize invalidation, and review recapture are determin
     Number(await stage.getAttribute("data-kp-layout-revision"))
   ).toBeGreaterThan(beforeRevision);
 
+  const beforeCaptureRevision = Number(
+    await stage.getAttribute("data-kp-capture-revision") ?? "0"
+  );
   const detail = await page.evaluate(() => new Promise<Record<string, unknown>>((resolve) => {
     window.addEventListener("kp:reader-dev-review-frame", (event) => {
       resolve((event as CustomEvent<Record<string, unknown>>).detail);
@@ -237,8 +247,22 @@ test("keyboard endpoints, resize invalidation, and review recapture are determin
     window.dispatchEvent(new CustomEvent("kp:reader-dev-review-request-frame"));
   }));
   expect(detail["progressPermille"]).toBe(0);
-  expect(detail["clockId"]).toBe("clock.reader.quadratic-branching.shared");
-  await expect(stage).toHaveAttribute("data-kp-capture-revision", "1");
+  expect(detail["documentId"]).toBe("lesson.algebra.quadratic-branching");
+  expect(detail["assetId"]).toBe("animation.algebra.quadratic.solution-branching");
+  expect(detail["projectionId"]).toBe("equation-graph.quadratic-branching");
+  expect(detail["rendererId"]).toBe("reader.quadratic.native-katex-svg");
+  expect(detail["ownerIds"]).toEqual([
+    "state.quadratic.completing-square.standard"
+  ]);
+  await expect.poll(async () =>
+    Number(await stage.getAttribute("data-kp-capture-revision"))
+  ).toBeGreaterThan(beforeCaptureRevision);
+
+  await reviewShell.locator("button.launcher").click();
+  await reviewShell.locator("textarea").fill("Review this quadratic moment");
+  await expect(reviewShell.locator(".meta")).toContainText("Locked");
+  await expect(reviewShell.locator(".meta")).not.toContainText("State unavailable");
+  await expect(reviewShell.locator(".route")).toHaveText("/reader/quadratic-branching/");
 });
 
 test("forced colors retain distinct roots without color-only meaning", async ({ page }) => {

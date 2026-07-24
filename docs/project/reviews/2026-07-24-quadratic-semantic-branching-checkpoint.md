@@ -153,3 +153,10 @@ native radical and its evaluated value retain semantic ownership through the
 transition. Full motion exposes those paths, while reduced and static modes
 retain legible native checkpoints. The graph, branch split, reunion, semantic
 fixture, and radical renderer boundary are unchanged.
+
+The renewed review initially could not proceed because this route claimed
+development-review readiness without mounting the standard inbox. The route
+now uses the shared font/review lifecycle and emits the complete typed reader
+capture frame. Shared reader conformance also requires the real review shell
+and launcher, so a readiness attribute alone can no longer conceal this class
+of omission on a generated page.

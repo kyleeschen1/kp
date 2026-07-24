@@ -4,6 +4,12 @@ import {
   createKpQuadraticBranchChoreography,
   sampleKpQuadraticBranchChoreography
 } from "../../animation/quadratic-branch-choreography.ts";
+import type {
+  KpReaderDevReviewFrame
+} from "../../dev-review/reader-capture-provider.ts";
+import {
+  createKpEquationFontReadiness
+} from "../../rendering/equation-font-readiness.ts";
 import {
   createKpReaderClockSample,
   createKpReaderContinuousScrollClock,
@@ -23,7 +29,12 @@ import type { KpQuadraticMethodId } from "../../semantic/quadratic-solution-meth
 import {
   sampleKpQuadraticEquationGraphFrame
 } from "../../projections/quadratic-equation-graph-sync.ts";
+import { mountKpReaderDevelopmentReview } from "./development-review-loader.ts";
+import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycle.ts";
 
+const documentId = "lesson.algebra.quadratic-branching";
+const documentVersion = "1";
+const assetId = "animation.algebra.quadratic.solution-branching";
 const body = document.body;
 const stage = requireElement<HTMLElement>("[data-kp-quadratic-stage]");
 const story = requireElement<HTMLElement>('[data-kp-block="story.quadratic-branching"]');
@@ -58,7 +69,11 @@ let sequence = 0;
 let scrollEngaged = false;
 let preserveExplicitProgress = new URL(window.location.href).searchParams.has("kpProgress");
 let layoutRevision = 0;
+let layoutReadCount = 0;
 let captureRevision = 0;
+let previousReviewFrameAtMs: number | undefined;
+let previousReviewScrollY = window.scrollY;
+const fontReadiness = createKpEquationFontReadiness(document);
 
 const scrollClock = createKpReaderContinuousScrollClock({
   id: "clock.reader.quadratic-branching.shared",
@@ -131,6 +146,12 @@ function render(sample: KpReaderClockSample): void {
   next.disabled = checkpointIndex >= kpQuadraticReaderCheckpoints.length - 1;
   activateBeat(frame.beatId);
   updateUrl();
+  dispatchDevReviewFrame({
+    frame,
+    synchronized,
+    motionMode: motionPolicy.resolvedMode,
+    motionSampling: motionPolicy.sampling
+  });
 }
 
 function renderEquations(
@@ -200,6 +221,7 @@ function renderCorrespondenceMotion(input: {
     const targetToken = motionToken(input.target, binding.targetSelectorId);
     const sourceRect = sourceToken.getBoundingClientRect();
     const targetRect = targetToken.getBoundingClientRect();
+    layoutReadCount += 2;
     const deltaX =
       targetRect.left + targetRect.width / 2 -
       (sourceRect.left + sourceRect.width / 2);
@@ -422,33 +444,30 @@ window.addEventListener("resize", () => {
     : current);
 });
 reducedMotion.addEventListener("change", () => render(current));
-const onFontLoadingDone = (): void => invalidateLayout("font");
-document.fonts.addEventListener("loadingdone", onFontLoadingDone);
-let disposeReviewRequest = (): void => {};
-if (import.meta.env.DEV) {
-  const onReviewRequest = (): void => {
+const fontReviewLifecycle = createKpReaderFontReviewLifecycle({
+  readiness: fontReadiness,
+  ownerDocument: document,
+  ownerWindow: window,
+  developmentReviewMount: mountKpReaderDevelopmentReview,
+  reviewMount: "immediate",
+  reflectFontReadyOnBody: true,
+  renderReviewFrame: () => {
     captureRevision += 1;
-    render(current);
     stage.dataset["kpCaptureRevision"] = String(captureRevision);
-    window.dispatchEvent(new CustomEvent("kp:reader-dev-review-frame", {
-      detail: {
-        route: window.location.pathname,
-        progressPermille: current.progressPermille,
-        methodId,
-        clockId: stage.dataset["kpClockId"],
-        captureRevision
-      }
-    }));
-  };
-  window.addEventListener("kp:reader-dev-review-request-frame", onReviewRequest);
-  disposeReviewRequest = () => {
-    window.removeEventListener("kp:reader-dev-review-request-frame", onReviewRequest);
-  };
-}
+    render(current);
+  },
+  onFontInvalidated: () => {
+    invalidateLayout("font");
+    render(current);
+  },
+  onReady: () => {
+    invalidateLayout("font");
+    render(current);
+  }
+});
 window.addEventListener("pagehide", () => {
   scrollClock.dispose();
-  document.fonts.removeEventListener("loadingdone", onFontLoadingDone);
-  disposeReviewRequest();
+  fontReviewLifecycle.dispose();
 }, { once: true });
 
 function updateUrl(): void {
@@ -516,17 +535,87 @@ function invalidateLayout(reason: "resize" | "font"): void {
   stage.dataset["kpLayoutInvalidation"] = reason;
 }
 
+function dispatchDevReviewFrame(input: {
+  readonly frame: KpQuadraticReaderSurfaceFrame;
+  readonly synchronized: ReturnType<typeof sampleKpQuadraticEquationGraphFrame>;
+  readonly motionMode: "full" | "essential" | "static";
+  readonly motionSampling: string;
+}): void {
+  if (!import.meta.env.DEV) return;
+  const atMs = performance.now();
+  const ownerIds = activeOwnerIds(input.frame, input.synchronized);
+  const activeTransformationIds = input.frame.equationTransition === undefined
+    ? []
+    : [input.frame.equationTransition.transition.id];
+  const detail = {
+    atMs,
+    documentId,
+    documentVersion,
+    assetId,
+    checkpointId: input.frame.checkpointId,
+    progressPermille: input.frame.progressPermille,
+    projectionId: "equation-graph.quadratic-branching",
+    activeTransformationIds,
+    activePhase: input.frame.phase,
+    focusSource: "story",
+    focusRefs: ownerIds,
+    motionPreference,
+    motionMode: input.motionMode,
+    playbackDirection: current.direction,
+    rendererId: "reader.quadratic.native-katex-svg",
+    motionAuthority: `${current.source}:${input.motionSampling}`,
+    fitStatus: quadraticFitStatus(),
+    fitScale: 1,
+    layoutRevision,
+    layoutReadCount,
+    fontRevision: fontReadiness.revision,
+    fontReady: fontReadiness.status !== "waiting",
+    ownerIds,
+    ...(previousReviewFrameAtMs === undefined
+      ? {}
+      : { frameIntervalMs: atMs - previousReviewFrameAtMs }),
+    scrollDeltaY: window.scrollY - previousReviewScrollY
+  } satisfies KpReaderDevReviewFrame;
+  window.dispatchEvent(new CustomEvent<KpReaderDevReviewFrame>(
+    "kp:reader-dev-review-frame",
+    { detail }
+  ));
+  previousReviewFrameAtMs = atMs;
+  previousReviewScrollY = window.scrollY;
+}
+
+function activeOwnerIds(
+  frame: KpQuadraticReaderSurfaceFrame,
+  synchronized: ReturnType<typeof sampleKpQuadraticEquationGraphFrame>
+): readonly string[] {
+  if (frame.phase === "branch") return ["branch.minus", "branch.plus"];
+  if (frame.phase === "reunion") return ["katex.quadratic.solution-set.native"];
+  if (frame.phase === "graph") {
+    return synchronized.correspondences.map(({ graphSelectorId }) => graphSelectorId);
+  }
+  if (frame.equationTransition !== undefined) {
+    return [...new Set(frame.equationTransition.transition.correspondence.flatMap(
+      ({ sourceSelectorId, targetSelectorId }) => [sourceSelectorId, targetSelectorId]
+    ))];
+  }
+  return [frame.equationState.semanticStateId];
+}
+
+function quadraticFitStatus(): "contained" | "overflowing" {
+  const tolerance = 1;
+  return document.documentElement.scrollWidth <= window.innerWidth + tolerance &&
+    stage.scrollWidth <= stage.clientWidth + tolerance
+    ? "contained"
+    : "overflowing";
+}
+
 function requireElement<TElement extends Element>(selector: string): TElement {
   const element = document.querySelector<TElement>(selector);
   if (element === null) throw new Error(`Missing quadratic reader element ${selector}.`);
   return element;
 }
 
-void document.fonts.ready.then(() => {
-  body.dataset["kpReaderFontReady"] = "true";
-  invalidateLayout("font");
-});
 body.dataset["kpReaderHydrated"] = "true";
-body.dataset["kpDevReviewReady"] = "true";
 body.dataset["kpReaderDepth"] = "none";
 render(current);
+void fontReviewLifecycle.ready;
