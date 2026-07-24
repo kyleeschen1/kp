@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   compileKpCompoundTargetDeclarations,
+  evaluateKpDiscretePresentationHandoff,
   evaluateKpInterOwnerEquivalence,
   evaluateKpIntraOwnerContinuity,
   evaluateKpPresentationDeclarationGate,
@@ -12,8 +13,11 @@ import {
   observeKpCompositeInk,
   observeKpMeasuredInk,
   observeKpRasterInk,
+  sampleKpDiscretePresentationHandoff,
   snapshotKpPresentationGroupGeometry,
   type KpPresentationGroupContract,
+  type KpPresentationHandoffContract,
+  type KpPresentationHandoffSample,
   type KpPresentationOwnerObservation
 } from "../src/animation/presentation-group-continuity.ts";
 
@@ -65,6 +69,61 @@ test("native transfer requires residual and velocity readiness", () => {
     sizeResidualPx: 0.1,
     relativeVelocityPxPerProgress: 2
   }).ready, false);
+});
+
+test("discrete handoff sampling never produces an opacity blend", () => {
+  assert.deepEqual(sampleKpDiscretePresentationHandoff({
+    nativeOwnerReady: false
+  }), {
+    visibleOwner: "moving",
+    movingOpacity: 1,
+    nativeOpacity: 0
+  });
+  assert.deepEqual(sampleKpDiscretePresentationHandoff({
+    nativeOwnerReady: true
+  }), {
+    visibleOwner: "native",
+    movingOpacity: 0,
+    nativeOpacity: 1
+  });
+});
+
+test("discrete handoff law rejects fades, vacancies, and premature swaps", () => {
+  const samples: KpPresentationHandoffSample[] = [
+    handoffSample(0, 1, 0),
+    handoffSample(0.2, 1, 0),
+    handoffSample(0.5, 0.5, 0.5),
+    handoffSample(0.7, 0, 0),
+    handoffSample(0.9, 0, 1, 4),
+    handoffSample(1, 0, 1)
+  ];
+  const issues = evaluateKpDiscretePresentationHandoff({
+    contract: handoffContract,
+    samples,
+    reverseSamples: [
+      handoffSample(0.2, 0, 1),
+      handoffSample(1, 0, 1)
+    ]
+  });
+  const kinds = new Set(issues.map((issue) => issue.kind));
+
+  assert.equal(kinds.has("owner-overlap"), true);
+  assert.equal(kinds.has("owner-vacancy"), true);
+  assert.equal(kinds.has("premature-transfer"), true);
+  assert.equal(kinds.has("owner-direction-parity"), true);
+});
+
+test("discrete handoff law accepts one equivalent owner in both directions", () => {
+  const samples = [
+    handoffSample(0, 1, 0, 8),
+    handoffSample(0.9, 1, 0),
+    handoffSample(1, 0, 1)
+  ];
+  assert.deepEqual(evaluateKpDiscretePresentationHandoff({
+    contract: handoffContract,
+    samples,
+    reverseSamples: samples
+  }), []);
 });
 
 test("promotion requires one declaration per compound target", () => {
@@ -355,6 +414,31 @@ function geometrySnapshot(termOffset: number) {
       horizontalPx: termOffset,
       verticalPx: 0
     }]
+  };
+}
+
+const handoffContract: KpPresentationHandoffContract = {
+  id: "term.native-handoff",
+  kind: "presentation-handoff",
+  semanticEntityIds: ["term"],
+  movingOwnerId: "moving.term",
+  nativeOwnerId: "native.term",
+  mode: "discrete-at-equivalence"
+};
+
+function handoffSample(
+  progress: number,
+  movingOpacity: number,
+  nativeOpacity: number,
+  positionResidualPx = 0
+): KpPresentationHandoffSample {
+  return {
+    progress,
+    movingOpacity,
+    nativeOpacity,
+    positionResidualPx,
+    sizeResidualPx: 0,
+    relativeVelocityPxPerProgress: 0
   };
 }
 

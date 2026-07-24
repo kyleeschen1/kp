@@ -151,6 +151,20 @@
       "scope": "shared equation renderer impact gate",
       "checkedAt": "2026-07-24T15:43:26.050Z",
       "notes": "All 39 deterministic linear-equation visual baseline states captured successfully after the shared token measurement change."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-presentation-group-continuity.test.ts tests/kp-presentation-continuity-regressions.test.ts",
+      "status": "passed",
+      "scope": "discrete handoff invariant",
+      "checkedAt": "2026-07-24T15:54:33.696Z",
+      "notes": "16 focused tests pass. Geometry-perfect opacity blends, owner vacancies, premature native exposure, and direction-dependent owner selection are now explicit failures."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "discrete handoff contract",
+      "checkedAt": "2026-07-24T15:54:34.654Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
     }
   ],
   "progress": {

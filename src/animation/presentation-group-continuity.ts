@@ -74,6 +74,30 @@ export interface KpPresentationOwnerObservation {
   readonly ink?: KpPresentationInkObservation | undefined;
 }
 
+export interface KpPresentationHandoffContract {
+  readonly id: string;
+  readonly kind: "presentation-handoff";
+  readonly semanticEntityIds: readonly string[];
+  readonly movingOwnerId: string;
+  readonly nativeOwnerId: string;
+  readonly mode: "discrete-at-equivalence";
+}
+
+export interface KpPresentationHandoffSample {
+  readonly progress: number;
+  readonly movingOpacity: number;
+  readonly nativeOpacity: number;
+  readonly positionResidualPx: number;
+  readonly sizeResidualPx: number;
+  readonly relativeVelocityPxPerProgress: number;
+}
+
+export interface KpDiscretePresentationHandoffFrame {
+  readonly visibleOwner: "moving" | "native";
+  readonly movingOpacity: 0 | 1;
+  readonly nativeOpacity: 0 | 1;
+}
+
 export interface KpPresentationGroupGeometrySnapshot {
   readonly groupId: string;
   readonly ownerId: string;
@@ -107,6 +131,10 @@ export interface KpPresentationContinuityIssue {
     | "ink-bounds"
     | "ink-coverage"
     | "relative-velocity"
+    | "owner-overlap"
+    | "owner-vacancy"
+    | "premature-transfer"
+    | "owner-direction-parity"
     | "endpoint";
   readonly memberId?: string | undefined;
   readonly residual: number;
@@ -298,6 +326,121 @@ export function evaluateKpPresentationTransferReadiness(input: {
     sizeResidualPx: input.sizeResidualPx,
     relativeVelocityPxPerProgress: input.relativeVelocityPxPerProgress
   };
+}
+
+export function sampleKpDiscretePresentationHandoff(input: {
+  readonly nativeOwnerReady: boolean;
+}): KpDiscretePresentationHandoffFrame {
+  return input.nativeOwnerReady
+    ? {
+        visibleOwner: "native",
+        movingOpacity: 0,
+        nativeOpacity: 1
+      }
+    : {
+        visibleOwner: "moving",
+        movingOpacity: 1,
+        nativeOpacity: 0
+      };
+}
+
+export function evaluateKpDiscretePresentationHandoff(input: {
+  readonly contract: KpPresentationHandoffContract;
+  readonly samples: readonly KpPresentationHandoffSample[];
+  readonly reverseSamples?: readonly KpPresentationHandoffSample[] | undefined;
+  readonly budget?: KpPresentationContinuityBudget | undefined;
+}): readonly KpPresentationContinuityIssue[] {
+  const budget = input.budget ?? kpDefaultPresentationContinuityBudget;
+  const ordered = [...input.samples].sort(
+    (left, right) => left.progress - right.progress
+  );
+  const issues: KpPresentationContinuityIssue[] = [];
+  for (const sample of ordered) {
+    const overlap = Math.min(sample.movingOpacity, sample.nativeOpacity);
+    if (overlap > budget.opacity) {
+      issues.push({
+        kind: "owner-overlap",
+        residual: overlap,
+        budget: budget.opacity,
+        message:
+          `${input.contract.id} shows moving and native owners simultaneously.`
+      });
+    }
+    const vacancy = 1 - Math.max(
+      sample.movingOpacity,
+      sample.nativeOpacity
+    );
+    if (vacancy > budget.opacity) {
+      issues.push({
+        kind: "owner-vacancy",
+        residual: vacancy,
+        budget: budget.opacity,
+        message: `${input.contract.id} has no fully visible presentation owner.`
+      });
+    }
+    if (sample.nativeOpacity > budget.opacity) {
+      const readiness = evaluateKpPresentationTransferReadiness({
+        positionResidualPx: sample.positionResidualPx,
+        sizeResidualPx: sample.sizeResidualPx,
+        relativeVelocityPxPerProgress:
+          sample.relativeVelocityPxPerProgress,
+        budget
+      });
+      if (!readiness.ready) {
+        issues.push({
+          kind: "premature-transfer",
+          residual: Math.max(
+            readiness.positionResidualPx / Math.max(budget.positionPx, 1e-9),
+            readiness.sizeResidualPx / Math.max(budget.sizePx, 1e-9),
+            readiness.relativeVelocityPxPerProgress /
+              Math.max(budget.velocityPxPerProgress, 1e-9)
+          ),
+          budget: 1,
+          message:
+            `${input.contract.id} exposed its native owner before equivalence.`
+        });
+      }
+    }
+  }
+  const endpoint = ordered.at(-1);
+  if (
+    endpoint === undefined ||
+    endpoint.progress !== 1 ||
+    endpoint.nativeOpacity < 1 - budget.opacity ||
+    endpoint.movingOpacity > budget.opacity
+  ) {
+    issues.push({
+      kind: "endpoint",
+      residual: endpoint === undefined ? 1 : Math.max(
+        1 - endpoint.progress,
+        1 - endpoint.nativeOpacity,
+        endpoint.movingOpacity
+      ),
+      budget: budget.opacity,
+      message: `${input.contract.id} must end with only its native owner visible.`
+    });
+  }
+  const reverseByProgress = new Map(
+    (input.reverseSamples ?? []).map((sample) => [sample.progress, sample])
+  );
+  for (const sample of ordered) {
+    const reverse = reverseByProgress.get(sample.progress);
+    if (reverse === undefined) continue;
+    const residual = Math.max(
+      Math.abs(sample.movingOpacity - reverse.movingOpacity),
+      Math.abs(sample.nativeOpacity - reverse.nativeOpacity)
+    );
+    if (residual > budget.opacity) {
+      issues.push({
+        kind: "owner-direction-parity",
+        residual,
+        budget: budget.opacity,
+        message:
+          `${input.contract.id} selects different owners by playback direction.`
+      });
+    }
+  }
+  return issues;
 }
 
 export function snapshotKpPresentationGroupGeometry(input: {

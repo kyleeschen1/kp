@@ -163,7 +163,7 @@
     {
       "id": "slice-20",
       "title": "Distribution human checkpoint.",
-      "summary": "HUMAN_CHECKPOINT reissued after reviewer rejected operator crossfade. Distribution and factoring now keep one fully opaque moving operator, align actual glyph ink rather than KaTeX wrapper boxes, and switch to native ownership only at identical geometry. Browser and wide/narrow evidence show zero overlap opacity and zero handoff ink/size residual. Awaiting renewed visual acceptance.",
+      "summary": "User approved the discrete-at-equivalence meta-fix. Implementing invariant and negative gates, then the distribution-term exemplar, then generic browser/visual enforcement before reissuing the checkpoint.",
       "status": "in-progress"
     },
     {
