@@ -320,6 +320,100 @@ test("Workbench search updates only the result projection while typing", async (
   ).toBeVisible();
 });
 
+test("Workbench search preserves player progress and review composer state", async ({
+  page
+}) => {
+  await page.goto(
+    `/?view=animation-workbench&q=&workbenchAnimation=${radicalId}`
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+  await expect(
+    page.locator(
+      '[data-kp-animation-workbench-review-group="current"] [data-kp-animation-workbench-review-note]'
+    )
+  ).toHaveCount(1);
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  await scrubber.fill("0.5");
+  const reviewShell = page.locator("[data-kp-dev-review-shell]");
+  await reviewShell.locator("button.launcher").click();
+  const reviewDraft = reviewShell.locator("textarea");
+  await reviewDraft.fill("Keep this unsent review draft.");
+
+  await page.evaluate(() => {
+    const traceWindow = window as typeof window & {
+      __kpWorkbenchDetailProbe?: Element | null;
+      __kpWorkbenchPlayerProbe?: Element | null;
+      __kpWorkbenchReviewProbe?: Element | null;
+      __kpReviewShellProbe?: Element | null;
+    };
+    traceWindow.__kpWorkbenchDetailProbe = document.querySelector(
+      "[data-kp-animation-workbench-detail]"
+    );
+    traceWindow.__kpWorkbenchPlayerProbe = document.querySelector(
+      "[data-kp-editor-animation-player]"
+    );
+    traceWindow.__kpWorkbenchReviewProbe = document.querySelector(
+      "[data-kp-animation-workbench-review]"
+    );
+    traceWindow.__kpReviewShellProbe = document.querySelector(
+      "[data-kp-dev-review-shell]"
+    );
+  });
+
+  await page
+    .locator("[data-kp-animation-workbench-query]")
+    .pressSequentially("tangent");
+
+  expect(
+    await page.evaluate(() => {
+      const traceWindow = window as typeof window & {
+        __kpWorkbenchDetailProbe?: Element | null;
+        __kpWorkbenchPlayerProbe?: Element | null;
+        __kpWorkbenchReviewProbe?: Element | null;
+        __kpReviewShellProbe?: Element | null;
+      };
+      const retained = (
+        probe: Element | null | undefined,
+        selector: string
+      ): boolean =>
+        probe?.isConnected === true &&
+        probe === document.querySelector(selector);
+      return {
+        detail: retained(
+          traceWindow.__kpWorkbenchDetailProbe,
+          "[data-kp-animation-workbench-detail]"
+        ),
+        player: retained(
+          traceWindow.__kpWorkbenchPlayerProbe,
+          "[data-kp-editor-animation-player]"
+        ),
+        reviewEvidence: retained(
+          traceWindow.__kpWorkbenchReviewProbe,
+          "[data-kp-animation-workbench-review]"
+        ),
+        reviewShell: retained(
+          traceWindow.__kpReviewShellProbe,
+          "[data-kp-dev-review-shell]"
+        )
+      };
+    })
+  ).toEqual({
+    detail: true,
+    player: true,
+    reviewEvidence: true,
+    reviewShell: true
+  });
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "0.5"
+  );
+  await expect(reviewDraft).toHaveValue("Keep this unsent review draft.");
+});
+
 test("Workbench search and results support keyboard-only traversal", async ({
   page
 }) => {
