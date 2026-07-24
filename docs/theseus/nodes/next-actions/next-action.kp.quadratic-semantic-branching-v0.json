@@ -83,6 +83,13 @@
       "scope": "slice-07 solution-method path graph",
       "checkedAt": "2026-07-24T20:01:26.799Z",
       "notes": "Nineteen focused tests passed. Shared endpoints, disjoint method ownership, exact dependency closure, deterministic composition, cycle rejection, authority preservation, and type safety are verified."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/quadratic-plus-minus-branches.test.ts tests/quadratic-solution-method-graph.test.ts tests/quadratic-solution-set.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-08 plus-minus branch semantics",
+      "checkedAt": "2026-07-24T20:04:13.049Z",
+      "notes": "Nineteen focused tests passed. Stable sign identities, exact symmetric evidence, method ownership, branch dependency, screen-order independence, non-overlap, complete reunion prerequisites, immutability, and type safety are verified."
     }
   ],
   "progress": {

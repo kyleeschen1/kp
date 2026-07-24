@@ -107,7 +107,8 @@
     {
       "id": "slice-08",
       "title": "Plus-minus-branch-semantics",
-      "status": "planned"
+      "summary": "Added method-owned plus and minus branch contracts with stable sign-based identities, exact symmetric signed-offset evidence for roots two and three, ordered semantic dependencies, screen-order-independent validation, and complete set-reunion prerequisites.",
+      "status": "complete"
     },
     {
       "id": "slice-09",
