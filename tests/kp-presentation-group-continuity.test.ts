@@ -5,6 +5,7 @@ import {
   compileKpCompoundTargetDeclarations,
   evaluateKpInterOwnerEquivalence,
   evaluateKpIntraOwnerContinuity,
+  evaluateKpPresentationDeclarationGate,
   evaluateKpPresentationTemporalContinuity,
   kpDefaultPresentationContinuityBudget,
   observeKpCompositeInk,
@@ -50,6 +51,43 @@ test("presentation groups describe semantic members without renderer resources",
   assert.equal(JSON.stringify(contract).includes("Element"), false);
   assert.equal(JSON.stringify(contract).includes("WebGL"), false);
   assert.equal(kpDefaultPresentationContinuityBudget.positionPx, 0.5);
+});
+
+test("promotion requires one declaration per compound target", () => {
+  const declarations = compileKpCompoundTargetDeclarations([
+    {
+      id: "product.0",
+      nativeOwnerId: "native.0",
+      memberBindings: [
+        { memberId: "a.0", semanticEntityId: "a", correspondenceOrder: 0 },
+        { memberId: "b", semanticEntityId: "b", correspondenceOrder: 1 }
+      ]
+    },
+    {
+      id: "independent",
+      nativeOwnerId: "native.independent",
+      memberBindings: [
+        { memberId: "x", semanticEntityId: "x", correspondenceOrder: 0 }
+      ],
+      exemption: {
+        reason: "single-member-target",
+        rationale: "No internal geometry exists."
+      }
+    }
+  ]);
+
+  assert.deepEqual(evaluateKpPresentationDeclarationGate({
+    compoundTargetIds: ["product.0", "independent"],
+    declarations
+  }), {
+    status: "pass",
+    missingCompoundTargetIds: [],
+    duplicateCompoundTargetIds: []
+  });
+  assert.equal(evaluateKpPresentationDeclarationGate({
+    compoundTargetIds: ["product.0", "product.1"],
+    declarations
+  }).status, "fail");
 });
 
 test("temporal law requires settled velocity, exact endpoints, and reverse parity", () => {

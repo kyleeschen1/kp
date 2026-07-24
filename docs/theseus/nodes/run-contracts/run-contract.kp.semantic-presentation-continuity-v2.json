@@ -103,7 +103,8 @@
     {
       "id": "slice-10",
       "title": "Require every compound settlement to declare a group contract or typed exemption before promotion.",
-      "status": "planned"
+      "summary": "Promotion declaration gate requires exactly one group contract or typed exemption for every compound target; valid contracts and justified singleton exemptions pass. Ten tests pass.",
+      "status": "complete"
     },
     {
       "id": "slice-11",

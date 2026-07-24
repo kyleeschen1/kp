@@ -114,6 +114,12 @@ export interface KpPresentationContinuityIssue {
   readonly message: string;
 }
 
+export interface KpPresentationDeclarationGateResult {
+  readonly status: "pass" | "fail";
+  readonly missingCompoundTargetIds: readonly string[];
+  readonly duplicateCompoundTargetIds: readonly string[];
+}
+
 export const kpDefaultPresentationContinuityBudget:
   KpPresentationContinuityBudget = {
     positionPx: 0.5,
@@ -238,6 +244,34 @@ export function compileKpCompoundTargetDeclarations(
       cohesionLockProgress
     };
   });
+}
+
+export function evaluateKpPresentationDeclarationGate(input: {
+  readonly compoundTargetIds: readonly string[];
+  readonly declarations: readonly KpPresentationGroupDeclaration[];
+}): KpPresentationDeclarationGateResult {
+  const declarationCounts = new Map<string, number>();
+  for (const declaration of input.declarations) {
+    declarationCounts.set(
+      declaration.id,
+      (declarationCounts.get(declaration.id) ?? 0) + 1
+    );
+  }
+  const missingCompoundTargetIds = input.compoundTargetIds.filter(
+    (id) => (declarationCounts.get(id) ?? 0) === 0
+  );
+  const duplicateCompoundTargetIds = input.compoundTargetIds.filter(
+    (id) => (declarationCounts.get(id) ?? 0) > 1
+  );
+  return {
+    status:
+      missingCompoundTargetIds.length === 0 &&
+      duplicateCompoundTargetIds.length === 0
+        ? "pass"
+        : "fail",
+    missingCompoundTargetIds,
+    duplicateCompoundTargetIds
+  };
 }
 
 export function snapshotKpPresentationGroupGeometry(input: {
