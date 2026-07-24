@@ -199,7 +199,8 @@
     {
       "id": "slice-26",
       "title": "Add dense rewind captures at semantic progress 0.06, 0.03, 0.01, and 0, including owner overlays.",
-      "status": "planned"
+      "summary": "Added stable rewind captures at semantic progress 0.06, 0.03, 0.01, and 0 with measured moving/native ink outlines and explicit owner badges. The new evidence caught and fixed a direction-dependent capture defect: atlas initialization had rasterized the already-collapsed rewind seed. Generic native-pose capture now resets presentation transforms in the measurement and cloned raster only, preserving the full 6x20px fraction in both directions. All four frames record exact geometry, zero overlap/vacancy, and a discrete owner change; 2,162 tests, build, radical browser, canonical visuals, and shared-renderer impact gates pass.",
+      "status": "complete"
     },
     {
       "id": "slice-27",

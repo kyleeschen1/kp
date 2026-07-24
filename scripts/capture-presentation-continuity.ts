@@ -68,6 +68,8 @@ const captures: {
   surface: "workbench-card" | "lesson";
   animationId: string;
   progress: number;
+  direction: "forward" | "rewind";
+  ownerOverlay: boolean;
   viewport: { width: number; height: number };
   distributionGap?: DistributionGapMeasurement | undefined;
   radicalInk?: RadicalHandoffMeasurement | undefined;
@@ -87,8 +89,18 @@ try {
       : await openWorkbenchCard(page, {
           animationId: visualCase.animationId,
           query: visualCase.query,
-          progress: visualCase.progress
+          progress: visualCase.progress,
+          direction: visualCase.direction ?? "forward"
         });
+    const radicalInk =
+      visualCase.family === "radical" &&
+      visualCase.surface === "workbench-card" &&
+      visualCase.radicalEndpoint !== undefined
+      ? await measureRadicalInk(stage, visualCase.radicalEndpoint)
+      : undefined;
+    if (visualCase.ownerOverlay === true && radicalInk !== undefined) {
+      await addRadicalOwnerOverlay(stage, radicalInk);
+    }
     const first = await stage.screenshot({ animations: "disabled" });
     await settle(page);
     const second = await stage.screenshot({ animations: "disabled" });
@@ -103,18 +115,14 @@ try {
       visualCase.surface === "workbench-card"
       ? await measureDistributionGap(stage)
       : undefined;
-    const radicalInk =
-      visualCase.family === "radical" &&
-      visualCase.surface === "workbench-card" &&
-      visualCase.radicalEndpoint !== undefined
-      ? await measureRadicalInk(stage, visualCase.radicalEndpoint)
-      : undefined;
     captures.push({
       id: visualCase.id,
       family: visualCase.family,
       surface: visualCase.surface,
       animationId: visualCase.animationId,
       progress: visualCase.progress,
+      direction: visualCase.direction ?? "forward",
+      ownerOverlay: visualCase.ownerOverlay ?? false,
       viewport: visualCase.viewport,
       ...(distributionGap === undefined ? {} : { distributionGap }),
       ...(radicalInk === undefined ? {} : { radicalInk }),
@@ -170,8 +178,14 @@ async function measureRadicalInk(
     const canvas = element.querySelector<HTMLElement>(
       "[data-kp-editor-radical-webgl-morph]"
     );
+    const powerBase = element.querySelector<HTMLElement>(
+      '[data-kp-motion-id*=".power.base"]'
+    );
+    const powerLayer = powerBase?.closest<HTMLElement>(
+      "[data-kp-editor-equation-source], [data-kp-editor-equation-target]"
+    );
     const native = measuredEndpoint === "source"
-      ? element.querySelector<HTMLElement>(
+      ? powerLayer?.querySelector<HTMLElement>(
           '[data-kp-motion-id*=".power.exponent-numerator"]'
         )?.closest<HTMLElement>(".msupsub")
       : element.querySelector<HTMLElement>(
@@ -194,7 +208,12 @@ async function measureRadicalInk(
 
 async function openWorkbenchCard(
   page: import("playwright").Page,
-  input: { animationId: string; query: string; progress: number }
+  input: {
+    animationId: string;
+    query: string;
+    progress: number;
+    direction: "forward" | "rewind";
+  }
 ): Promise<import("playwright").Locator> {
   const url = new URL("/", harness.baseUrl);
   url.searchParams.set("view", "animation-workbench");
@@ -212,12 +231,111 @@ async function openWorkbenchCard(
   );
   const pause = player.locator('[data-action="pause-editor-animation"]');
   if (await pause.isEnabled()) await pause.click();
-  await player.locator('[data-action="seek-editor-animation"]')
-    .fill(String(input.progress));
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  if (input.direction === "rewind") {
+    await scrubber.fill("1");
+    await player.locator('[data-action="rewind-editor-animation"]').click();
+    await settle(page);
+    if (await pause.isEnabled()) await pause.click();
+    await scrubber.fill(String(1 - input.progress));
+  } else {
+    await scrubber.fill(String(input.progress));
+  }
   await settle(page);
   const stage = player.locator("[data-kp-editor-equation-stage]");
   await stage.waitFor();
+  await page.waitForFunction((semanticProgress) => {
+    const value = Number(
+      document.querySelector<HTMLElement>(
+        "[data-kp-editor-equation-stage]"
+      )?.dataset["kpEditorEquationSemanticProgress"]
+    );
+    return Math.abs(value - semanticProgress) < 1e-9;
+  }, input.progress);
   return stage;
+}
+
+async function addRadicalOwnerOverlay(
+  stage: import("playwright").Locator,
+  observation: RadicalHandoffMeasurement
+): Promise<void> {
+  await stage.evaluate((element, measured) => {
+    if (!(element instanceof HTMLElement)) {
+      throw new Error("Radical stage must be an HTML element.");
+    }
+    element.querySelector("[data-kp-radical-owner-overlay]")?.remove();
+    const overlay = document.createElement("div");
+    overlay.dataset["kpRadicalOwnerOverlay"] = "true";
+    Object.assign(overlay.style, {
+      position: "absolute",
+      inset: "0",
+      pointerEvents: "none",
+      zIndex: "100"
+    });
+
+    const addInkOutline = (
+      owner: "moving WebGL" | "native KaTeX",
+      rect: KpRadicalWebglInkComparison["renderedWebglInkRect"],
+      color: string,
+      style: "solid" | "dashed",
+      offset: string
+    ) => {
+      const outline = document.createElement("div");
+      outline.dataset["kpRadicalOwnerOverlayOwner"] = owner;
+      Object.assign(outline.style, {
+        position: "absolute",
+        left: `${rect.left}px`,
+        top: `${rect.top}px`,
+        width: `${rect.width}px`,
+        height: `${rect.height}px`,
+        outline: `2px ${style} ${color}`,
+        outlineOffset: offset,
+        boxSizing: "border-box"
+      });
+      overlay.append(outline);
+    };
+    addInkOutline(
+      "moving WebGL",
+      measured.renderedWebglInkRect,
+      "#d9480f",
+      "dashed",
+      "2px"
+    );
+    addInkOutline(
+      "native KaTeX",
+      measured.liveNativeInkRect,
+      "#087f8c",
+      "solid",
+      "-1px"
+    );
+
+    const activeOwner = measured.movingOpacity > measured.nativeOpacity
+      ? "moving WebGL"
+      : "native KaTeX";
+    const badge = document.createElement("div");
+    badge.dataset["kpRadicalOwnerOverlaySummary"] = "true";
+    badge.textContent = [
+      `rewind semantic ${measured.semanticProgress.toFixed(2)}`,
+      `active: ${activeOwner}`,
+      `moving ${measured.movingOpacity.toFixed(0)}`,
+      `native ${measured.nativeOpacity.toFixed(0)}`,
+      `residual ${measured.maximumGeometryResidualPx.toFixed(3)}px`
+    ].join(" · ");
+    Object.assign(badge.style, {
+      position: "absolute",
+      left: "8px",
+      top: "8px",
+      padding: "4px 6px",
+      border: "1px solid #516274",
+      borderRadius: "4px",
+      background: "rgba(255, 255, 255, 0.94)",
+      color: "#243444",
+      font: "600 10px/1.25 ui-monospace, SFMono-Regular, monospace",
+      letterSpacing: "0.01em"
+    });
+    overlay.append(badge);
+    element.append(overlay);
+  }, observation);
 }
 
 async function openDistributionLesson(

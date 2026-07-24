@@ -1868,7 +1868,13 @@ test("radical rewind interpolates through the composite source-native boundary",
       )
     ).toBeCloseTo(semanticProgress, 5);
     samples.push(await stage.evaluate((element) => {
-      const sourceToken = element.querySelector<HTMLElement>(
+      const powerBase = element.querySelector<HTMLElement>(
+        '[data-kp-motion-id*=".power.base"]'
+      );
+      const powerLayer = powerBase?.closest<HTMLElement>(
+        "[data-kp-editor-equation-source], [data-kp-editor-equation-target]"
+      );
+      const sourceToken = powerLayer?.querySelector<HTMLElement>(
         '[data-kp-motion-id*=".power.exponent-numerator"]'
       );
       const nativeExponent =
@@ -1975,9 +1981,9 @@ test("radical rewind interpolates through the composite source-native boundary",
   });
   expect(sourceInkDiagnostic.semanticProgress).toBeCloseTo(0.04, 5);
   expect(sourceInkDiagnostic.renderedWebglInkRect.width).toBeGreaterThan(0);
-  expect(sourceInkDiagnostic.renderedWebglInkRect.height).toBeGreaterThan(0);
+  expect(sourceInkDiagnostic.renderedWebglInkRect.height).toBeGreaterThan(15);
   expect(sourceInkDiagnostic.liveNativeInkRect.width).toBeGreaterThan(0);
-  expect(sourceInkDiagnostic.liveNativeInkRect.height).toBeGreaterThan(0);
+  expect(sourceInkDiagnostic.liveNativeInkRect.height).toBeGreaterThan(15);
   expect(sourceInkDiagnostic.recordedResidualPx).toBeCloseTo(
     sourceInkDiagnostic.maximumGeometryResidualPx,
     5
@@ -2028,8 +2034,14 @@ test("radical handoffs rebuild exactly across direction, fallback, resize, and f
       const canvas = element.querySelector<HTMLElement>(
         "[data-kp-editor-radical-webgl-morph]"
       );
+      const powerBase = element.querySelector<HTMLElement>(
+        '[data-kp-motion-id*=".power.base"]'
+      );
+      const powerLayer = powerBase?.closest<HTMLElement>(
+        "[data-kp-editor-equation-source], [data-kp-editor-equation-target]"
+      );
       const native = measuredEndpoint === "source"
-        ? element.querySelector<HTMLElement>(
+        ? powerLayer?.querySelector<HTMLElement>(
             '[data-kp-motion-id*=".power.exponent-numerator"]'
           )?.closest<HTMLElement>(".msupsub")
         : element.querySelector<HTMLElement>(

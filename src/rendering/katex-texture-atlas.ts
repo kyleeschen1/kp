@@ -14,6 +14,7 @@ export interface KatexAtlasPackingOptions {
 
 export interface KatexTextureCaptureOptions {
   forceVisibleTokenIds?: readonly string[] | undefined;
+  resetTransformTokenIds?: readonly string[] | undefined;
   maxTextureSize?: number | undefined;
   padding?: number | undefined;
   pixelRatio?: number | undefined;
@@ -21,6 +22,7 @@ export interface KatexTextureCaptureOptions {
 
 export interface KatexTextureCaptureRectOptions {
   includeTransparent?: boolean | undefined;
+  resetTransforms?: boolean | undefined;
 }
 
 export function packKatexTextureRegions(
@@ -139,7 +141,8 @@ export async function createKatexTextureAtlas(
       token.element,
       token.rect,
       pixelRatio,
-      options.forceVisibleTokenIds?.includes(token.id) ?? false
+      options.forceVisibleTokenIds?.includes(token.id) ?? false,
+      options.resetTransformTokenIds?.includes(token.id) ?? false
     );
 
     context.drawImage(image, region.x, region.y, region.width, region.height);
@@ -166,24 +169,30 @@ export function measureKatexTextureCaptureRect(
   element: Element,
   options: KatexTextureCaptureRectOptions = {}
 ): KatexTokenRect {
-  const rects = [element, ...Array.from(element.querySelectorAll("*"))]
-    .filter(isCaptureRectElement)
-    .filter((entry) =>
-      isVisibleCaptureElement(entry, options.includeTransparent ?? false)
-    )
-    .map((entry) => entry.getBoundingClientRect())
-    .filter((rect) => rect.width > 0 && rect.height > 0);
+  const measure = () => {
+    const rects = [element, ...Array.from(element.querySelectorAll("*"))]
+      .filter(isCaptureRectElement)
+      .filter((entry) =>
+        isVisibleCaptureElement(entry, options.includeTransparent ?? false)
+      )
+      .map((entry) => entry.getBoundingClientRect())
+      .filter((rect) => rect.width > 0 && rect.height > 0);
 
-  return unionCaptureRects(
-    rects.length === 0 ? [element.getBoundingClientRect()] : rects
-  );
+    return unionCaptureRects(
+      rects.length === 0 ? [element.getBoundingClientRect()] : rects
+    );
+  };
+  return options.resetTransforms === true
+    ? withResetCaptureTransforms(element, measure)
+    : measure();
 }
 
 async function captureElementImage(
   element: Element,
   rect: KatexTokenRect,
   pixelRatio: number,
-  forceVisible: boolean
+  forceVisible: boolean,
+  resetTransforms: boolean
 ): Promise<HTMLImageElement> {
   const width = Math.max(1, Math.ceil(rect.width * pixelRatio));
   const height = Math.max(1, Math.ceil(rect.height * pixelRatio));
@@ -195,6 +204,7 @@ async function captureElementImage(
   }
 
   inlineComputedCaptureStyles(element, clone, forceVisible);
+  if (resetTransforms) resetCaptureTransforms(clone);
 
   const captureStyle = [
     copyComputedTextStyle(element),
@@ -231,6 +241,39 @@ async function captureElementImage(
   });
 
   return image;
+}
+
+function withResetCaptureTransforms<T>(
+  element: Element,
+  read: () => T
+): T {
+  const styledElements = [element, ...Array.from(element.querySelectorAll("*"))]
+    .filter((entry): entry is HTMLElement | SVGElement =>
+      entry instanceof HTMLElement || entry instanceof SVGElement
+    );
+  const inlineStyles = styledElements.map((entry) => entry.getAttribute("style"));
+  try {
+    resetCaptureTransforms(element);
+    return read();
+  } finally {
+    styledElements.forEach((entry, index) => {
+      const style = inlineStyles[index];
+      if (style === null || style === undefined) {
+        entry.removeAttribute("style");
+      } else {
+        entry.setAttribute("style", style);
+      }
+    });
+  }
+}
+
+function resetCaptureTransforms(element: Element): void {
+  [element, ...Array.from(element.querySelectorAll("*"))].forEach((entry) => {
+    if (!(entry instanceof HTMLElement || entry instanceof SVGElement)) return;
+    entry.style.setProperty("transform", "none", "important");
+    entry.style.setProperty("translate", "none", "important");
+    entry.style.setProperty("scale", "none", "important");
+  });
 }
 
 function isNativeClippedSvgToken(token: KatexMotionToken): boolean {

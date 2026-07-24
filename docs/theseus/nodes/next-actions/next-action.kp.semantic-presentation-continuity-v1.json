@@ -424,6 +424,55 @@
       "scope": "slice-25 shared adapter impact gate",
       "checkedAt": "2026-07-24T17:09:06.924Z",
       "notes": "All 39 deterministic linear-equation baseline states captured successfully after the shared equation adapter invalidation change."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/presentation-continuity-visual-plan.test.ts",
+      "status": "passed",
+      "scope": "slice-26 dense rewind plan",
+      "checkedAt": "2026-07-24T17:25:50.558Z",
+      "notes": "The stable plan now contains 22 unique captures, including rewind semantic samples 0.06, 0.03, 0.01, and 0 with owner overlays."
+    },
+    {
+      "command": "npm run visual:presentation-continuity",
+      "status": "passed",
+      "scope": "slice-26 dense rewind evidence",
+      "checkedAt": "2026-07-24T17:25:51.569Z",
+      "notes": "22 stable captures passed. All four rewind source frames measure the complete 6x20px fraction at zero geometry residual, zero overlap, and zero vacancy; the active owner switches discretely between 0.06 and 0.03."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --grep radical",
+      "status": "passed",
+      "scope": "slice-26 radical regressions",
+      "checkedAt": "2026-07-24T17:25:52.413Z",
+      "notes": "All 6 Chromium radical tests passed; rewind explicitly rejects a collapsed source capture by requiring the full fraction ink height."
+    },
+    {
+      "command": "npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "slice-26 canonical no-overlay preservation",
+      "checkedAt": "2026-07-24T17:25:53.216Z",
+      "notes": "17 canonical captures passed with all exemplar diagnostics Ready and no warnings."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-26 repository gate",
+      "checkedAt": "2026-07-24T17:25:54.035Z",
+      "notes": "All 2,162 deterministic unit and architecture tests passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-26 production build",
+      "checkedAt": "2026-07-24T17:25:54.855Z",
+      "notes": "Full typecheck and Vite production build passed; only the existing chunk-size advisory remains."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "slice-26 shared rendering impact gate",
+      "checkedAt": "2026-07-24T17:25:55.667Z",
+      "notes": "All 39 deterministic linear-equation baseline states captured successfully after the generic native-pose atlas option."
     }
   ],
   "progress": {

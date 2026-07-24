@@ -250,7 +250,7 @@ async function initializeMorphState(input: {
     const stageRect = input.stage.getBoundingClientRect();
     const sourceRect = measureKatexTextureCaptureRect(
       input.state.sourceElement,
-      { includeTransparent: true }
+      { includeTransparent: true, resetTransforms: true }
     );
     const targetRect = measureKatexTextureCaptureRect(
       input.state.targetElement
@@ -271,7 +271,10 @@ async function initializeMorphState(input: {
     );
     const atlas = await createKatexTextureAtlas(
       [sourceToken, targetToken],
-      { forceVisibleTokenIds: [sourceToken.id] }
+      {
+        forceVisibleTokenIds: [sourceToken.id],
+        resetTransformTokenIds: [sourceToken.id]
+      }
     );
     if (
       morphStates.get(input.stage) !== input.state ||

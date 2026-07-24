@@ -6,7 +6,7 @@ import { createKpPresentationContinuityVisualPlan } from
 
 test("presentation continuity visual plan has stable family checkpoints", () => {
   const plan = createKpPresentationContinuityVisualPlan();
-  assert.equal(plan.length, 18);
+  assert.equal(plan.length, 22);
   assert.deepEqual(
     [...new Set(plan.map((visualCase) => visualCase.id))].length,
     plan.length
@@ -24,7 +24,16 @@ test("presentation continuity visual plan has stable family checkpoints", () => 
     plan
       .filter((visualCase) => visualCase.family === "radical")
       .map((visualCase) => visualCase.radicalEndpoint),
-    ["source", "target"]
+    ["source", "target", "source", "source", "source", "source"]
+  );
+  assert.deepEqual(
+    plan
+      .filter((visualCase) => visualCase.direction === "rewind")
+      .map(({ progress, ownerOverlay }) => ({ progress, ownerOverlay })),
+    [0.06, 0.03, 0.01, 0].map((progress) => ({
+      progress,
+      ownerOverlay: true
+    }))
   );
   for (const progress of [0.72, 0.83, 0.94, 1]) {
     for (const surface of ["workbench-card", "lesson"] as const) {

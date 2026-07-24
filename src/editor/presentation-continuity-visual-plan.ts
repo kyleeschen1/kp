@@ -4,8 +4,10 @@ export interface KpPresentationContinuityVisualCase {
   readonly animationId: string;
   readonly query: string;
   readonly progress: number;
+  readonly direction?: "forward" | "rewind" | undefined;
   readonly surface: "workbench-card" | "lesson";
   readonly radicalEndpoint?: "source" | "target" | undefined;
+  readonly ownerOverlay?: boolean | undefined;
   readonly viewport: { readonly width: number; readonly height: number };
 }
 
@@ -55,7 +57,22 @@ export function createKpPresentationContinuityVisualPlan():
       query: "radical",
       progress: 0.88,
       radicalEndpoint: "target"
-    }
+    },
+    ...[
+      { id: "006", progress: 0.06 },
+      { id: "003", progress: 0.03 },
+      { id: "001", progress: 0.01 },
+      { id: "000", progress: 0 }
+    ].map(({ id, progress }) => ({
+      id: `radical-rewind-${id}`,
+      family: "radical" as const,
+      animationId: "animation.generated.radical.square-root-as-power",
+      query: "radical",
+      progress,
+      direction: "rewind" as const,
+      radicalEndpoint: "source" as const,
+      ownerOverlay: true
+    }))
   ] as const;
   return [
     ...frames.map((frame) => ({

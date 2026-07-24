@@ -845,7 +845,10 @@ function applyRadicalMaterialLayer(input: {
   const targetBase = input.stage.querySelector<HTMLElement>(
     '[data-kp-motion-id*=".radical.radicand"]'
   );
-  const sourceExponentToken = input.stage.querySelector<HTMLElement>(
+  const powerLayer = sourceBase?.closest<HTMLElement>(
+    "[data-kp-editor-equation-source], [data-kp-editor-equation-target]"
+  );
+  const sourceExponentToken = powerLayer?.querySelector<HTMLElement>(
     '[data-kp-motion-id*=".power.exponent-numerator"]'
   );
   const sourceExponent = sourceExponentToken?.closest<HTMLElement>(".msupsub")
