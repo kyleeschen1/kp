@@ -163,8 +163,8 @@
     {
       "id": "slice-20",
       "title": "Distribution human checkpoint.",
-      "summary": "Renewed human checkpoint: identity-preserving distribution terms and operators now keep one fully opaque owner, converge by measured ink geometry, and swap discretely. Generic pure, browser, wide/narrow manifest, lesson-preservation, typecheck, and shared-renderer impact gates pass; awaiting visual acceptance before slice 21.",
-      "status": "in-progress"
+      "summary": "User visually accepted the distribution checkpoint. Persistent terms and operations converge as fully opaque moving owners and swap discretely at matching native ink geometry in forward and rewind playback; generic regression gates remain green.",
+      "status": "complete"
     },
     {
       "id": "slice-21",

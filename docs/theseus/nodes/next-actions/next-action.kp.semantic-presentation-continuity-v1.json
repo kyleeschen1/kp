@@ -228,6 +228,13 @@
       "scope": "shared renderer impact gate",
       "checkedAt": "2026-07-24T16:08:20.443Z",
       "notes": "All 39 deterministic linear-equation visual baseline states captured successfully."
+    },
+    {
+      "command": "human visual review: distribution Workbench forward and rewind handoffs",
+      "status": "passed",
+      "scope": "slice-20 distribution checkpoint",
+      "checkedAt": "2026-07-24T16:11:58.988Z",
+      "notes": "User accepted the repaired distribution exemplar: persistent terms and operators settle without fading, double ownership, or endpoint correction."
     }
   ],
   "progress": {
