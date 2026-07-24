@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { createFractionSimplificationAnimationAsset } from "../src/animation/fraction-adapter.ts";
 import { createKpFractionSelectorAnnotatedLatex } from "../src/editor/fraction-semantic-latex.ts";
-import { compileKpSemanticEquationTransitionResult } from "../src/rendering/semantic-equation-transition-compiler.ts";
+import { compileKpSemanticEquationTransitionResult } from "../src/domain-ir/public-api.ts";
 import { createKpWitnessedAnnihilationBinding } from "../src/animation/witnessed-annihilation.ts";
 
 test("fraction transformations cover split, fan-in, and cancellation lifecycles", () => {

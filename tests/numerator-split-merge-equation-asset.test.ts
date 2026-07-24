@@ -7,7 +7,7 @@ import {
   checkCorrespondenceMapRewindLaw,
   validateCorrespondenceMap
 } from "../src/semantic/correspondence.ts";
-import { compileKpSemanticEquationTransitionResult } from "../src/rendering/semantic-equation-transition-compiler.ts";
+import { compileKpSemanticEquationTransitionResult } from "../src/domain-ir/public-api.ts";
 import {
   createNumeratorSplitMergeEquationKpAsset,
   numeratorSplitMergeEquationAssetIds as ids

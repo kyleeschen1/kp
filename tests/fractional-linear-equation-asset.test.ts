@@ -13,7 +13,7 @@ import {
 } from "../src/semantic/fractional-linear-equation-asset.ts";
 import {
   compileKpSemanticEquationTransitionResult
-} from "../src/rendering/semantic-equation-transition-compiler.ts";
+} from "../src/domain-ir/public-api.ts";
 
 test("fractional equation asset owns every structural fragment through six reversible transforms", () => {
   const asset = createFractionalLinearEquationKpAsset();

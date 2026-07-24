@@ -220,6 +220,34 @@
       "scope": "s09 standard",
       "checkedAt": "2026-07-24T04:20:23.557Z",
       "notes": "Application, node, test, and domain TypeScript projects pass through the neutral domain-IR public seam and compatibility facade."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-equation-transition-compiler.test.ts tests/equation-transition-ir.test.ts tests/equation-motion-plan.test.ts tests/equation-motion-sampler.test.ts tests/semantic-animation-import-baseline.test.ts tests/semantic-animation-import-fitness.test.ts tests/semantic-animation-compatibility-ledger.test.ts tests/semantic-animation-compiler-stages.test.ts",
+      "status": "passed",
+      "scope": "s10 compiler migration",
+      "checkedAt": "2026-07-24T04:26:26.385Z",
+      "notes": "All 72 targeted tests pass, including compatibility function identity, renderer-resource exclusion, semantic compilation diagnostics, IR/motion behavior, ledger closure, and the 19-exception ratchet."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s10 architecture gate",
+      "checkedAt": "2026-07-24T04:26:27.478Z",
+      "notes": "All architecture gates pass; semantic-animation rendering exceptions ratcheted from 23 to 19."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s10 focused",
+      "checkedAt": "2026-07-24T04:26:28.630Z",
+      "notes": "All 132 focused convergence tests pass, now including the semantic equation compiler suite."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s10 standard",
+      "checkedAt": "2026-07-24T04:26:29.538Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass through the neutral compiler seam and rendering facade."
     }
   ],
   "expectedLearning": [
@@ -343,7 +371,8 @@
     {
       "id": "s10",
       "title": "Semantic-equation-compiler-ownership",
-      "status": "planned",
+      "summary": "Moved semantic transformation-to-equation-IR compilation into src/domain-ir and exported it through the neutral public API; the former rendering module is now a compatibility facade with exact function identity proof. Migrated animation, editor, reader, tests, and ledger references; added a source-level guard against DOM, SVG, canvas, WebGL, KaTeX, and measurement state; added compiler coverage to the recurring focused suite; and ratcheted rendering exceptions from 23 to 19. All 72 targeted tests, 132 focused tests, architecture gates, and full typecheck pass.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {

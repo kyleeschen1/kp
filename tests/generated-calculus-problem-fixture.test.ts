@@ -14,7 +14,7 @@ import {
 } from "../src/semantic/generated-calculus-problem-fixture.ts";
 import {
   compileKpSemanticEquationTransitionResult
-} from "../src/rendering/semantic-equation-transition-compiler.ts";
+} from "../src/domain-ir/public-api.ts";
 
 test("generated calculus fixtures cover derivative and integral rules", () => {
   const fixtures = createGeneratedCalculusProblemFixtures();

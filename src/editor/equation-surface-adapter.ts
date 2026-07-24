@@ -9,7 +9,9 @@ import {
 import {
   measureKpEquationTransitionGeometry,
 } from "../rendering/equation-motion-dom.ts";
-import { compileKpSemanticEquationTransitionResult } from "../rendering/semantic-equation-transition-compiler.ts";
+import {
+  compileKpSemanticEquationTransitionResult
+} from "../domain-ir/public-api.ts";
 import type { KpSelectorAnnotatedLatex } from "../rendering/selector-annotated-latex.ts";
 import {
   projectKpEditorEquationRuntimeFrame,

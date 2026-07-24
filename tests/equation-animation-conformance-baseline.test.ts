@@ -5,7 +5,7 @@ import { createDistributionExpansionAnimationAsset } from "../src/animation/dist
 import { createFunctionWrapAnimationAsset } from "../src/animation/function-wrap-adapter.ts";
 import { createKpAnimationAssetVisualMotifTimeline } from "../src/animation/visual-motif.ts";
 import { defaultEquationTransformVisualMotifRules } from "../src/rendering/equation-visual-motif-defaults.ts";
-import { compileKpSemanticEquationTransition } from "../src/rendering/semantic-equation-transition-compiler.ts";
+import { compileKpSemanticEquationTransition } from "../src/domain-ir/public-api.ts";
 import {
   equationAnimationConformanceBaseline,
   equationAnimationConformanceBaselines

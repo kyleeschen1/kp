@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
@@ -12,6 +13,10 @@ import {
 import {
   compileKpSemanticEquationTransition,
   compileKpSemanticEquationTransitionResult
+} from "../src/domain-ir/public-api.ts";
+import {
+  compileKpSemanticEquationTransition as compileKpSemanticEquationTransitionCompatibility,
+  compileKpSemanticEquationTransitionResult as compileKpSemanticEquationTransitionResultCompatibility
 } from "../src/rendering/semantic-equation-transition-compiler.ts";
 import { createKpSemanticLineageGraph } from "../src/semantic/semantic-lineage-graph.ts";
 import type { KpCanonicalOperationExecutionResult } from "../src/semantic/transformation-definition-binding.ts";
@@ -40,6 +45,42 @@ const bundle = createKpAssetBundle({
   id: "bundle.solve",
   title: "Solve",
   objects: [source, target]
+});
+
+test("rendering compatibility path preserves neutral compiler identity", () => {
+  assert.equal(
+    compileKpSemanticEquationTransitionCompatibility,
+    compileKpSemanticEquationTransition
+  );
+  assert.equal(
+    compileKpSemanticEquationTransitionResultCompatibility,
+    compileKpSemanticEquationTransitionResult
+  );
+});
+
+test("neutral semantic compiler contains no renderer resource state", () => {
+  const source = readFileSync(
+    new URL(
+      "../src/domain-ir/semantic-equation-transition-compiler.ts",
+      import.meta.url
+    ),
+    "utf8"
+  );
+  const forbidden = [
+    /\bHTMLElement\b/,
+    /\bSVGElement\b/,
+    /\bCanvasRenderingContext/,
+    /\bWebGL/,
+    /\bTHREE\b/,
+    /\bKaTeX\b/,
+    /\bgetBoundingClientRect\b/,
+    /\bquerySelector\b/,
+    /\bdocument\./,
+    /\bwindow\./
+  ];
+  for (const pattern of forbidden) {
+    assert.doesNotMatch(source, pattern);
+  }
 });
 
 test("compileKpSemanticEquationTransition compiles semantic objects and normalized correspondence", () => {

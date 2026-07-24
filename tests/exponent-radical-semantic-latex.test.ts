@@ -6,7 +6,7 @@ import {
   createExponentRadicalRewriteAnimationAsset
 } from "../src/animation/exponent-radical-adapter.ts";
 import { createKpExponentRadicalSelectorAnnotatedLatex } from "../src/editor/exponent-radical-semantic-latex.ts";
-import { compileKpSemanticEquationTransitionResult } from "../src/rendering/semantic-equation-transition-compiler.ts";
+import { compileKpSemanticEquationTransitionResult } from "../src/domain-ir/public-api.ts";
 
 test("exponent expansion and radical rewriting compile complete semantics", () => {
   for (const animation of [

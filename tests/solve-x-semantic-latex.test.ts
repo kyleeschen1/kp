@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
 import { createKpSolveXSelectorAnnotatedLatex } from "../src/rendering/solve-x-selector-annotated-latex.ts";
-import { compileKpSemanticEquationTransitionResult } from "../src/rendering/semantic-equation-transition-compiler.ts";
+import { compileKpSemanticEquationTransitionResult } from "../src/domain-ir/public-api.ts";
 
 test("solve-x transformations retain complete semantic lifecycle maps", () => {
   const animation = createLinearSolveAnimationAsset();

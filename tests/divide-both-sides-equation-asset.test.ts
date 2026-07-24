@@ -11,7 +11,7 @@ import {
   createDivideBothSidesEquationKpAsset,
   divideBothSidesEquationAssetIds as ids
 } from "../src/semantic/divide-both-sides-equation-asset.ts";
-import { compileKpSemanticEquationTransitionResult } from "../src/rendering/semantic-equation-transition-compiler.ts";
+import { compileKpSemanticEquationTransitionResult } from "../src/domain-ir/public-api.ts";
 
 test("divide-both-sides asset defines the exact four-state trace", () => {
   const asset = createDivideBothSidesEquationKpAsset();

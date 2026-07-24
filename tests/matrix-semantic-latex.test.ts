@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { createGeneratedProblemAnimationAsset } from "../src/animation/generated-problem-import.ts";
 import { createKpMatrixSelectorAnnotatedLatex } from "../src/editor/matrix-semantic-latex.ts";
-import { compileKpSemanticEquationTransitionResult } from "../src/rendering/semantic-equation-transition-compiler.ts";
+import { compileKpSemanticEquationTransitionResult } from "../src/domain-ir/public-api.ts";
 import { createGeneratedLinearAlgebraProblemFixture } from "../src/semantic/generated-linear-algebra-problem-fixture.ts";
 
 const fixtureIds = [

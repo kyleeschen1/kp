@@ -4,7 +4,9 @@ import {
 } from "./asset.ts";
 import { diagnoseKpAnimationDesign } from "./animation-design-diagnostics.ts";
 import { createKpCalculusRuleChoreography } from "./calculus-rule-choreography.ts";
-import { compileKpSemanticEquationTransitionResult } from "../rendering/semantic-equation-transition-compiler.ts";
+import {
+  compileKpSemanticEquationTransitionResult
+} from "../domain-ir/public-api.ts";
 
 export const kpPromotedCalculusRuleAnimationIds = [
   "animation.generated.calculus.derivative.power-rule-x-cubed",

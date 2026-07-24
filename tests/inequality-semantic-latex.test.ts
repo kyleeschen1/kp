@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { createInequalitySignFlipAnimationAsset } from "../src/animation/inequality-sign-flip-adapter.ts";
 import { createKpInequalitySelectorAnnotatedLatex } from "../src/editor/inequality-semantic-latex.ts";
-import { compileKpSemanticEquationTransitionResult } from "../src/rendering/semantic-equation-transition-compiler.ts";
+import { compileKpSemanticEquationTransitionResult } from "../src/domain-ir/public-api.ts";
 
 test("inequality negative scaling compiles persistence, scaling, and relation pivot", () => {
   const animation = createInequalitySignFlipAnimationAsset();

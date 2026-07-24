@@ -1,5 +1,4 @@
 export type KpSemanticAnimationRenderingImportClassification =
-  | "semantic-compiler-location-debt"
   | "motif-contract-location-debt"
   | "neutral-utility-location-debt"
   | "choreography-location-debt"
@@ -12,7 +11,6 @@ export type KpSemanticAnimationRenderingImportOwner =
   | "presentation";
 
 export type KpSemanticAnimationRenderingImportRetirementSlice =
-  | "s10"
   | "s11"
   | "s12"
   | "s13";
@@ -30,38 +28,6 @@ export interface KpSemanticAnimationRenderingImportException {
 // Every entry is temporary and exact. This inventory prevents dependency
 // inversion from hiding behind a wildcard while ownership moves in slices 9–13.
 export const kpSemanticAnimationRenderingImportBaseline = [
-  exception({
-    sourcePath: "src/animation/choreography-compiler.ts",
-    modulePath: "../rendering/semantic-equation-transition-compiler.ts",
-    classification: "semantic-compiler-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s10",
-    rationale: "The choreography compiler invokes semantic compilation before rendering."
-  }),
-  exception({
-    sourcePath: "src/animation/llm-animation-draft-compiler.ts",
-    modulePath: "../rendering/semantic-equation-transition-compiler.ts",
-    classification: "semantic-compiler-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s10",
-    rationale: "Draft validation invokes semantic compilation before promotion."
-  }),
-  exception({
-    sourcePath: "src/animation/semantic-motion-library-promotion.ts",
-    modulePath: "../rendering/semantic-equation-transition-compiler.ts",
-    classification: "semantic-compiler-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s10",
-    rationale: "Promotion audits compile semantics independently of a renderer."
-  }),
-  exception({
-    sourcePath: "src/animation/calculus-rule-promotion.ts",
-    modulePath: "../rendering/semantic-equation-transition-compiler.ts",
-    classification: "semantic-compiler-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s10",
-    rationale: "Calculus promotion audits compile semantics independently of a renderer."
-  }),
   exception({
     sourcePath: "src/animation/animation-design-diagnostics.ts",
     modulePath: "../rendering/equation-visual-motif-defaults.ts",

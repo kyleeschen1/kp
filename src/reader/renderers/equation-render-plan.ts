@@ -9,7 +9,7 @@ import type {
 import {
   compileKpSemanticEquationTransitionResult,
   type KpSemanticEquationTransitionCompileDiagnostic
-} from "../../rendering/semantic-equation-transition-compiler.ts";
+} from "../../domain-ir/public-api.ts";
 
 export interface KpReaderEquationRenderPlan {
   readonly id: string;

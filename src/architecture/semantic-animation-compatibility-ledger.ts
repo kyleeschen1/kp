@@ -180,7 +180,7 @@ export const kpSemanticAnimationCompatibilityLedger = [
     ),
     consumers: [
       reference(
-        "src/rendering/semantic-equation-transition-compiler.ts",
+        "src/domain-ir/semantic-equation-transition-compiler.ts",
         "legacy-fade"
       )
     ],

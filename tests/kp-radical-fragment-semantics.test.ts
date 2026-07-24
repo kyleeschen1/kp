@@ -12,7 +12,7 @@ import {
 } from "../src/semantic/radical-fragment-semantics.ts";
 import {
   compileKpSemanticEquationTransitionResult
-} from "../src/rendering/semantic-equation-transition-compiler.ts";
+} from "../src/domain-ir/public-api.ts";
 
 test("square-root rewrite exposes hook and overbar as independent semantic fragments", () => {
   const animation = createExponentRadicalRewriteAnimationAsset();

@@ -26,7 +26,7 @@ import {
 } from "./static-cost-model.ts";
 import {
   compileKpSemanticEquationTransitionResult
-} from "../rendering/semantic-equation-transition-compiler.ts";
+} from "../domain-ir/public-api.ts";
 import type { EquationVisualMotifKind } from "../rendering/visual-motif.ts";
 
 export interface KpSemanticMotionPromotionRequirement {

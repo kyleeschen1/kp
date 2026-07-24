@@ -133,7 +133,10 @@ export const kpSemanticAnimationCompilerStages = [
     owner: "domain-ir",
     authority: "compiled-semantic-intermediate",
     representations: ["KpEquationTransitionIr"],
-    sourcePaths: ["src/domain-ir/equation-transition-ir.ts"],
+    sourcePaths: [
+      "src/domain-ir/equation-transition-ir.ts",
+      "src/domain-ir/semantic-equation-transition-compiler.ts"
+    ],
     dependsOn: ["choreography"],
     migrationStatus: "canonical"
   }),

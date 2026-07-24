@@ -33,7 +33,7 @@ import {
 } from "../semantic/transformation-composition.ts";
 import {
   compileKpSemanticEquationTransitionResult
-} from "../rendering/semantic-equation-transition-compiler.ts";
+} from "../domain-ir/public-api.ts";
 import type { KpEquationTransitionIr } from "../domain-ir/public-api.ts";
 import type { KpSemanticTransitionGap } from "../semantic/semantic-transition-gap.ts";
 

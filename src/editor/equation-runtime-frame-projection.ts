@@ -4,7 +4,7 @@ import type { KpSemanticAssetObject } from "../semantic/asset.ts";
 import {
   compileKpSemanticEquationTransitionResult,
   type KpSemanticEquationTransitionCompileDiagnostic
-} from "../rendering/semantic-equation-transition-compiler.ts";
+} from "../domain-ir/public-api.ts";
 
 export interface KpEditorEquationRuntimeFrameProjection {
   readonly kind: "editor-equation-runtime-frame";

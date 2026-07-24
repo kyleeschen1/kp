@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { createFunctionWrapAnimationAsset } from "../src/animation/function-wrap-adapter.ts";
 import { createKpFunctionWrapSelectorAnnotatedLatex } from "../src/editor/function-wrap-semantic-latex.ts";
-import { compileKpSemanticEquationTransitionResult } from "../src/rendering/semantic-equation-transition-compiler.ts";
+import { compileKpSemanticEquationTransitionResult } from "../src/domain-ir/public-api.ts";
 
 test("function wrapping compiles role-change and wrapper introduction semantics", () => {
   const animation = createFunctionWrapAnimationAsset();

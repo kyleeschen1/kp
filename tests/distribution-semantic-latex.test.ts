@@ -6,7 +6,7 @@ import {
   createDistributionFactoringAnimationAsset
 } from "../src/animation/distribution-adapter.ts";
 import { createKpDistributionSelectorAnnotatedLatex } from "../src/editor/distribution-semantic-latex.ts";
-import { compileKpSemanticEquationTransitionResult } from "../src/rendering/semantic-equation-transition-compiler.ts";
+import { compileKpSemanticEquationTransitionResult } from "../src/domain-ir/public-api.ts";
 
 test("distribution and factoring compile inverse fan-out and fan-in semantics", () => {
   const cases = [
