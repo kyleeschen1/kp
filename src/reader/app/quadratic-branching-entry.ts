@@ -238,9 +238,13 @@ function renderCorrespondenceMotion(input: {
     const localProgress = presentationRole === "continuant"
       ? smoothstep(Math.min(1, input.progress / 0.36))
       : smoothstep(Math.max(0, (input.progress - 0.3) / 0.7));
-    const lane = presentationRole === "focal-operand"
-      ? (index % 2 === 0 ? -1 : 1) * (4 + index % 3 * 2)
-      : 0;
+    const laneDirection = index % 2 === 0 ? -1 : 1;
+    const lane = presentationRole === "merged"
+      ? laneDirection * (18 + index % 3 * 3)
+      : presentationRole !== "continuant" &&
+          presentationRole !== "structural"
+        ? laneDirection * (4 + index % 3 * 2)
+        : 0;
     const arc = Math.sin(Math.PI * localProgress) * lane;
     sourceToken.style.transform =
       `translate3d(${deltaX * localProgress}px, ${deltaY * localProgress + arc}px, 0)`;

@@ -32,7 +32,10 @@ test("method phases expose direct-seekable selector transitions instead of state
     progress: 0.4,
     methodId: "method.quadratic.formula"
   });
-  assert.equal(square.equationTransition?.transition.id, "transition.quadratic.completing-square.complete");
+  assert.equal(
+    square.equationTransition?.transition.id,
+    "transition.quadratic.completing-square.common-denominator"
+  );
   assert.ok(Math.abs(square.equationTransition!.progress - 0.5) < 1e-9);
   assert.equal(formula.equationTransition?.transition.id, "transition.quadratic.formula.simplify-radical");
   assert.ok(Math.abs(formula.equationTransition!.progress - 0.5) < 1e-9);

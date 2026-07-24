@@ -272,6 +272,13 @@
       "scope": "slice-10 completing-square balance choreography",
       "checkedAt": "2026-07-24T22:51:49.551Z",
       "notes": "Ten focused tests, typecheck, all nine quadratic Chromium checks, and 14 deterministic captures pass. The balance transition declares reflow then act, assigns x², −5x, and equality to continuant motion, gives the relocated constant the only focal-operand owner, and preserves native endpoints, direct seek, phone layout, review, branches, and graph."
+    },
+    {
+      "command": "focused quadratic projection, selector, surface, and contact-sheet tests; npm run typecheck; quadratic Chromium; npm run visual:quadratic-branching",
+      "status": "passed",
+      "scope": "slice-11 completing-square both-sides causal chain",
+      "checkedAt": "2026-07-24T23:02:50.229Z",
+      "notes": "Twenty focused tests, typecheck, all nine quadratic Chromium checks, and the deterministic visual suite pass. The prior one-step jump is now three native states and operations: add 25/4 to both sides, rewrite -6 as -24/4, and merge like-denominator fractions to 1/4. Three dedicated review frames were added; merged operands retain greater than 10px lane separation."
     }
   ],
   "progress": {

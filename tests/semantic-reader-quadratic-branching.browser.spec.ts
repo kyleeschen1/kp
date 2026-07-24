@@ -30,7 +30,7 @@ test("quadratic learner surface shares progress across method, URL, and controls
 test("both methods move selector-owned native symbols through measured paths", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(
-    route.replace("kpProgress=680", "kpProgress=180") + "&kpMotion=full",
+    route.replace("kpProgress=680", "kpProgress=150") + "&kpMotion=full",
     { waitUntil: "networkidle" }
   );
   const stage = page.locator("[data-kp-quadratic-stage]");
@@ -56,11 +56,34 @@ test("both methods move selector-owned native symbols through measured paths", a
   expect(squareMotion.centerDistance).toBeLessThan(1);
 
   await seek(430);
-  await seek(180);
+  await seek(150);
   expect(await symbolicSnapshot(
     "katex.quadratic.completing-square.standard.constant",
     "katex.quadratic.completing-square.balanced.right"
   )).toEqual(squareMotion);
+
+  await seek(436);
+  await expect(stage).toHaveAttribute(
+    "data-kp-symbolic-transition",
+    "transition.quadratic.completing-square.evaluate-right"
+  );
+  const mergeLaneSeparation = await page.evaluate(() => {
+    const centerY = (id: string) => {
+      const rect = document.querySelector<HTMLElement>(
+        `[data-kp-motion-id="${id}"]`
+      )!.getBoundingClientRect();
+      return rect.top + rect.height / 2;
+    };
+    return Math.abs(
+      centerY(
+        "katex.quadratic.completing-square.common-denominator.right-base"
+      ) -
+      centerY(
+        "katex.quadratic.completing-square.common-denominator.right-addend"
+      )
+    );
+  });
+  expect(mergeLaneSeparation).toBeGreaterThan(10);
 
   await page.getByRole("button", { name: "Quadratic formula" }).click();
   await seek(400);

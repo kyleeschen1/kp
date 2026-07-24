@@ -70,6 +70,34 @@ export function createKpCompletingSquareKatexProjection():
       ["quadratic", "linear", "equals", "right"]
     ),
     state(
+      "added-both-sides",
+      "presentation.quadratic.completing-square.added-both-sides",
+      "x^2 - 5x + \\frac{25}{4} = -6 + \\frac{25}{4}",
+      "x squared minus five x plus twenty-five fourths equals negative six plus twenty-five fourths",
+      [
+        "quadratic",
+        "linear",
+        "completion",
+        "equals",
+        "right-base",
+        "right-addend"
+      ]
+    ),
+    state(
+      "common-denominator",
+      "presentation.quadratic.completing-square.common-denominator",
+      "x^2 - 5x + \\frac{25}{4} = -\\frac{24}{4} + \\frac{25}{4}",
+      "x squared minus five x plus twenty-five fourths equals negative twenty-four fourths plus twenty-five fourths",
+      [
+        "quadratic",
+        "linear",
+        "completion",
+        "equals",
+        "right-base",
+        "right-addend"
+      ]
+    ),
+    state(
       "completed",
       "state.quadratic.completing-square.completed",
       "x^2 - 5x + \\frac{25}{4} = \\frac{1}{4}",
@@ -102,21 +130,65 @@ export function createKpCompletingSquareKatexProjection():
       )
     ]),
     transition(
-      "complete",
+      "add-both-sides",
       "rewrite.quadratic.completing-square.add-square-term",
       states[1]!,
       states[2]!,
       [
-      sameRole("quadratic"),
-      sameRole("linear"),
-      sameRole("equals"),
-      sameRole("right")
-    ]),
+        sameRole("quadratic"),
+        sameRole("linear"),
+        sameRole("equals"),
+        roleBinding("right-base", "right", "right-base", "continuant")
+      ]
+    ),
+    transition(
+      "common-denominator",
+      "operation.arithmetic.integer-to-equivalent-fraction",
+      states[2]!,
+      states[3]!,
+      [
+        sameRole("quadratic"),
+        sameRole("linear"),
+        sameRole("completion"),
+        sameRole("equals"),
+        roleBinding(
+          "right-base",
+          "right-base",
+          "right-base",
+          "focal-operand"
+        ),
+        sameRole("right-addend")
+      ]
+    ),
+    transition(
+      "evaluate-right",
+      "operation.arithmetic.add-like-denominator-fractions",
+      states[3]!,
+      states[4]!,
+      [
+        sameRole("quadratic"),
+        sameRole("linear"),
+        sameRole("completion"),
+        sameRole("equals"),
+        roleBinding(
+          "merge-right-base",
+          "right-base",
+          "right",
+          "merged"
+        ),
+        roleBinding(
+          "merge-right-addend",
+          "right-addend",
+          "right",
+          "merged"
+        )
+      ]
+    ),
     transition(
       "recognize",
       "rewrite.quadratic.completing-square.recognize-perfect-square",
-      states[2]!,
-      states[3]!,
+      states[4]!,
+      states[5]!,
       [
       sameRole("equals"),
       sameRole("right")

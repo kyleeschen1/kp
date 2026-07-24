@@ -122,7 +122,8 @@
     {
       "id": "slice-11",
       "title": "Completing-square-both-sides-chain",
-      "status": "planned"
+      "summary": "Expanded the coarse completion jump into native, dependency-ordered add-both-sides, common-denominator, and fraction-merge operations. Dedicated deterministic review frames and a browser lane-separation law prove the arithmetic is depicted while outer timing and accepted endpoints remain stable.",
+      "status": "complete"
     },
     {
       "id": "slice-12",

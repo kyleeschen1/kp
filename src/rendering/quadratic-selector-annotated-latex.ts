@@ -49,6 +49,24 @@ function segmentsFor(
         selector("equals", " = "),
         selector("right", "\\frac{1}{4}")
       ];
+    case "katex.quadratic.completing-square.added-both-sides":
+      return [
+        selector("quadratic", "x^2"),
+        selector("linear", " - 5x"),
+        selector("completion", " + \\frac{25}{4}"),
+        selector("equals", " = "),
+        selector("right-base", "-6"),
+        selector("right-addend", " + \\frac{25}{4}")
+      ];
+    case "katex.quadratic.completing-square.common-denominator":
+      return [
+        selector("quadratic", "x^2"),
+        selector("linear", " - 5x"),
+        selector("completion", " + \\frac{25}{4}"),
+        selector("equals", " = "),
+        selector("right-base", "-\\frac{24}{4}"),
+        selector("right-addend", " + \\frac{25}{4}")
+      ];
     case "katex.quadratic.completing-square.perfect":
       return [
         selector("binomial", "\\left(x - \\frac{5}{2}\\right)"),

@@ -6,15 +6,40 @@ import {
   validateKpCompletingSquareKatexProjection
 } from "../src/projections/quadratic-completing-square-katex.ts";
 
-test("completing-square projection has four native KaTeX states", () => {
+test("completing-square projection exposes both-sides arithmetic as native KaTeX states", () => {
   const projection = createKpCompletingSquareKatexProjection();
   assert.deepEqual(projection.states.map(({ latex }) => latex), [
     "x^2 - 5x + 6 = 0",
     "x^2 - 5x = -6",
+    "x^2 - 5x + \\frac{25}{4} = -6 + \\frac{25}{4}",
+    "x^2 - 5x + \\frac{25}{4} = -\\frac{24}{4} + \\frac{25}{4}",
     "x^2 - 5x + \\frac{25}{4} = \\frac{1}{4}",
     "\\left(x - \\frac{5}{2}\\right)^2 = \\frac{1}{4}"
   ]);
   assert.ok(projection.states.every(({ ownership }) => ownership === "native-katex"));
+});
+
+test("both-sides work retains distinct dependency-ordered operations", () => {
+  const projection = createKpCompletingSquareKatexProjection();
+  assert.deepEqual(
+    projection.transitions.slice(1, 4).map(
+      ({ id, presentation }) => [id, presentation?.operationRef]
+    ),
+    [
+      [
+        "transition.quadratic.completing-square.add-both-sides",
+        "rewrite.quadratic.completing-square.add-square-term"
+      ],
+      [
+        "transition.quadratic.completing-square.common-denominator",
+        "operation.arithmetic.integer-to-equivalent-fraction"
+      ],
+      [
+        "transition.quadratic.completing-square.evaluate-right",
+        "operation.arithmetic.add-like-denominator-fractions"
+      ]
+    ]
+  );
 });
 
 test("stable selectors bind semantic roles across each transition", () => {
