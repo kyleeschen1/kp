@@ -38,6 +38,22 @@
     "npm run perf:animation",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-preservation-manifest.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-24T03:06:10.879Z",
+      "notes": "Three preservation manifest tests pass for cohort closure, live catalog/lesson authority, routes, cards, exports, and lesson-only coverage."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-24T03:06:16.680Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass after adding the preservation manifest."
+    }
+  ],
   "expectedLearning": [
     "Whether the current semantic and animation layers can converge without changing accepted choreography or introducing an equation-shaped universal model."
   ],
@@ -96,7 +112,8 @@
     {
       "id": "s01",
       "title": "Canonical-preservation-manifest",
-      "status": "planned",
+      "summary": "Frozen a nine-topic canonical preservation manifest covering lesson-first solve-x and distribution, reverse factoring, lesson-only fraction split/merge, radical, function wrap, matrix composition, synchronized equation/graph, and program trace. Exact routes, review scope, descriptor/card lineage, export targets, choreography source, and endpoint authority are checked against live sources; three focused tests and full typecheck pass.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
