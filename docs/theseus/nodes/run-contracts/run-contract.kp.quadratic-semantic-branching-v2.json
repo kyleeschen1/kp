@@ -113,7 +113,8 @@
     {
       "id": "slice-09",
       "title": "Method-convergence-and-reunion",
-      "status": "planned"
+      "summary": "Added a convergence compiler that reunites both methods into one canonical identity for each exact root, preserves method-specific branch provenance, proves root substitution, and rejects duplicate or conflicting contributions without silent resolution.",
+      "status": "complete"
     },
     {
       "id": "slice-10",
