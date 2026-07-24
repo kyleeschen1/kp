@@ -1,4 +1,4 @@
-import type { EquationVisualMotifKind } from "./visual-motif.ts";
+import type { EquationVisualMotifKind } from "../animation/motifs/visual-motif.ts";
 import type {
   KpLawCheckResult,
   KpLawFailure

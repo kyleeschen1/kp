@@ -118,11 +118,15 @@ export const kpSemanticAnimationCompilerStages = [
     representations: [
       "KpChoreographyPlan",
       "KpChoreographyTimeline",
-      "SemanticTransformationNode"
+      "SemanticTransformationNode",
+      "EquationVisualMotifDescriptor",
+      "KpExecutableMotifComposition",
+      "TransformTreeVisualMotifTimeline"
     ],
     sourcePaths: [
       "src/animation/choreography-plan.ts",
       "src/animation/choreography-timeline.ts",
+      "src/animation/motifs/public-api.ts",
       "src/semantic/transformation-composition.ts"
     ],
     dependsOn: ["presentation-profile"],

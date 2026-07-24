@@ -1,6 +1,6 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import { createKpAnimationAssetVisualMotifTimeline } from "../animation/visual-motif.ts";
-import { defaultEquationTransformVisualMotifRules } from "./equation-visual-motif-defaults.ts";
+import { defaultEquationTransformVisualMotifRules } from "../animation/motifs/equation-visual-motif-defaults.ts";
 
 export interface KpEquationVisualMotifConformanceFixture {
   readonly id: string;

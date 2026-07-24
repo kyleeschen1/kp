@@ -11,11 +11,11 @@ import type { SelectorCorrespondenceRelationId } from "../semantic/correspondenc
 import type { KpLlmAnimationExplanationDepth } from "./llm-animation-draft-v2.ts";
 import {
   defaultEquationTransformVisualMotifRules
-} from "../rendering/equation-visual-motif-defaults.ts";
+} from "./motifs/equation-visual-motif-defaults.ts";
 import type {
   EquationVisualMotifKind,
   EquationVisualMotifPhaseId
-} from "../rendering/visual-motif.ts";
+} from "./motifs/visual-motif.ts";
 
 export interface KpLlmPromotedOperationAuthoringDefinition {
   readonly operationId: string;

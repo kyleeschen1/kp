@@ -7,7 +7,7 @@ import { createKpAnimationAssetVisualMotifTimeline } from "../src/animation/visu
 import {
   findEquationAnimationCatalogEntry
 } from "../src/editor/equation-animation-catalog.ts";
-import { defaultEquationTransformVisualMotifRules } from "../src/rendering/equation-visual-motif-defaults.ts";
+import { defaultEquationTransformVisualMotifRules } from "../src/animation/motifs/equation-visual-motif-defaults.ts";
 import {
   choreographyEnvelopePhaseIds,
   choreographyExemplarBaseline,

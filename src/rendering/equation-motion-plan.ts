@@ -20,14 +20,14 @@ import {
   type EquationMotionPrimitiveId,
   type EquationVisualMotifKind,
   type EquationVisualMotifPlan
-} from "./visual-motif.ts";
+} from "../animation/motifs/visual-motif.ts";
 
 export {
   equationVisualMotifDescriptors,
   equationVisualMotifPhaseIds,
   phaseIdsForEquationVisualMotifKind,
   primitiveIdsForEquationVisualMotifKind
-} from "./visual-motif.ts";
+} from "../animation/motifs/visual-motif.ts";
 export type {
   EquationMotionPrimitiveId,
   EquationVisualMotifDescriptor,
@@ -37,7 +37,7 @@ export type {
   VisualMotifDescriptor,
   VisualMotifPlan,
   VisualMotionPrimitiveId
-} from "./visual-motif.ts";
+} from "../animation/motifs/visual-motif.ts";
 
 export type EasingName = "linear" | "ease-in" | "ease-out" | "ease-in-out";
 

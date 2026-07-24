@@ -3,7 +3,7 @@ import type {
   EquationMotionTrack,
   MotionPose
 } from "./equation-motion-plan.ts";
-import type { EquationVisualMotifPhaseId } from "./visual-motif.ts";
+import type { EquationVisualMotifPhaseId } from "../animation/motifs/visual-motif.ts";
 import { kpCopyFanOutPhaseIds } from "../animation/copy-fan-out-choreography.ts";
 import { kpSubstitutionPhaseIds } from "../animation/substitution-choreography.ts";
 import { kpDerivativePowerPhaseIds } from "../animation/derivative-power-choreography.ts";

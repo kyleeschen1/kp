@@ -75,7 +75,7 @@ export const choreographyExemplarBaselines:
       ],
       sourceRefs: [
         "src/editor/equation-animation-catalog.ts#createFunctionWrapFixtureTransition",
-        "src/rendering/visual-motif.ts#wrap",
+        "src/animation/motifs/visual-motif.ts#wrap",
         "src/animation/function-wrap-choreography.ts#createKpFunctionWrapChoreography",
         "tests/editor-animation-visuals.browser.spec.ts#function-wrap-family"
       ],

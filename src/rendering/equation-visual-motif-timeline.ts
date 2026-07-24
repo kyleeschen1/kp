@@ -5,7 +5,7 @@ import type {
 import type {
   EquationVisualMotifKind,
   EquationVisualMotifPhaseId
-} from "./visual-motif.ts";
+} from "../animation/motifs/visual-motif.ts";
 import {
   applyBeatEasing,
   findSemanticBeat,

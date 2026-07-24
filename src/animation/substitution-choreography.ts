@@ -1,7 +1,7 @@
 import {
   compileKpExecutableMotifComposition,
   type KpExecutableMotifComposition
-} from "../rendering/executable-motif-grammar.ts";
+} from "./motifs/executable-motif-grammar.ts";
 import type {
   KpSemanticScene,
   KpSemanticSceneTransition

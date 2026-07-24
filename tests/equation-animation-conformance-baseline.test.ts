@@ -4,7 +4,7 @@ import test from "node:test";
 import { createDistributionExpansionAnimationAsset } from "../src/animation/distribution-adapter.ts";
 import { createFunctionWrapAnimationAsset } from "../src/animation/function-wrap-adapter.ts";
 import { createKpAnimationAssetVisualMotifTimeline } from "../src/animation/visual-motif.ts";
-import { defaultEquationTransformVisualMotifRules } from "../src/rendering/equation-visual-motif-defaults.ts";
+import { defaultEquationTransformVisualMotifRules } from "../src/animation/motifs/equation-visual-motif-defaults.ts";
 import { compileKpSemanticEquationTransition } from "../src/domain-ir/public-api.ts";
 import {
   equationAnimationConformanceBaseline,

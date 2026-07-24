@@ -13,7 +13,7 @@ import {
 } from "../src/animation/visual-motif.ts";
 import {
   defaultEquationTransformVisualMotifRules
-} from "../src/rendering/equation-visual-motif-defaults.ts";
+} from "../src/animation/motifs/equation-visual-motif-defaults.ts";
 
 test("createLinearSolveAnimationAsset adapts x plus 3 equals 7 into AnimationAsset", () => {
   const animation = createLinearSolveAnimationAsset();

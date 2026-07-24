@@ -10,7 +10,7 @@ import {
   createEquationVisualMotifTimeline
 } from "../src/rendering/equation-visual-motif-timeline.ts";
 import { linearEquationDemoBeatTimeline } from "../src/rendering/semantic-beat-compiler.ts";
-import { createVisualMotifPlan } from "../src/rendering/visual-motif.ts";
+import { createVisualMotifPlan } from "../src/animation/motifs/visual-motif.ts";
 
 const timeline = compileKpEquationSemanticTimeline(
   createEquationVisualMotifTimeline({

@@ -13,18 +13,18 @@ import {
 } from "../rendering/katex-transform-fixtures.ts";
 import {
   equationVisualMotifDescriptors
-} from "../rendering/visual-motif.ts";
+} from "../animation/motifs/visual-motif.ts";
 import type {
   EquationMotionPrimitiveId,
   EquationVisualMotifKind,
   EquationVisualMotifPhaseId
-} from "../rendering/visual-motif.ts";
+} from "../animation/motifs/visual-motif.ts";
 import {
   createTransformTreeVisualMotifTimeline
-} from "../rendering/visual-motif-composition.ts";
+} from "../animation/motifs/visual-motif-composition.ts";
 import type {
   TransformTreeVisualMotifTimeline
-} from "../rendering/visual-motif-composition.ts";
+} from "../animation/motifs/visual-motif-composition.ts";
 import {
   createSemanticTransformationRef
 } from "../semantic/animation.ts";

@@ -1,8 +1,8 @@
 import type { KpAnimationAsset } from "./asset.ts";
 import {
   defaultEquationTransformVisualMotifRules
-} from "../rendering/equation-visual-motif-defaults.ts";
-import type { EquationVisualMotifKind } from "../rendering/visual-motif.ts";
+} from "./motifs/equation-visual-motif-defaults.ts";
+import type { EquationVisualMotifKind } from "./motifs/visual-motif.ts";
 
 export type KpAnimationDesignDimension =
   | "semantic-correspondence"

@@ -14,7 +14,7 @@ import {
 } from "../src/semantic/asset-transformation.ts";
 import {
   defaultEquationTransformVisualMotifRules
-} from "../src/rendering/equation-visual-motif-defaults.ts";
+} from "../src/animation/motifs/equation-visual-motif-defaults.ts";
 
 test("animation asset visual motif timeline uses definition-backed defaults", () => {
   const initial = createKpSemanticAssetObject({

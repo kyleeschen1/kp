@@ -7,7 +7,7 @@ import {
   createTransformTreeVisualMotifTimeline,
   type TransformTreeVisualMotifRule,
   type TransformTreeVisualMotifTimeline
-} from "../rendering/visual-motif-composition.ts";
+} from "./motifs/visual-motif-composition.ts";
 
 export interface CreateKpAnimationAssetVisualMotifTimelineInput<
   TKind extends string = string,

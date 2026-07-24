@@ -56,7 +56,7 @@ import {
 } from "../semantic/linear-solve-asset.ts";
 import {
   defaultEquationTransformVisualMotifRules
-} from "../rendering/equation-visual-motif-defaults.ts";
+} from "../animation/motifs/equation-visual-motif-defaults.ts";
 import {
   createLinearSolveRuntimeVisualFrameSample,
   type LinearSolveRuntimeVisualFrameSample

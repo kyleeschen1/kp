@@ -12,12 +12,12 @@ import {
   checkTransformTreeVisualMotifRewindLaw,
   createTransformTreeVisualMotifTimeline,
   type TransformTreeVisualMotifRule
-} from "../src/rendering/visual-motif-composition.ts";
+} from "../src/animation/motifs/visual-motif-composition.ts";
 import {
   checkEquationCancelationVisualMotifContract,
   checkGeneratedAlgebraEquationVisualMotifDefaultCoverage,
   defaultEquationTransformVisualMotifRules
-} from "../src/rendering/equation-visual-motif-defaults.ts";
+} from "../src/animation/motifs/equation-visual-motif-defaults.ts";
 import {
   listGeneratedAlgebraTransformDefinitions
 } from "../src/semantic/generated-algebra-transform-definition-registry.ts";
@@ -25,11 +25,11 @@ import type {
   EquationMotionPrimitiveId,
   EquationVisualMotifKind,
   EquationVisualMotifPhaseId
-} from "../src/rendering/visual-motif.ts";
+} from "../src/animation/motifs/visual-motif.ts";
 import {
   compileKpExecutableMotifComposition,
   kpExecutableMotifGrammar
-} from "../src/rendering/executable-motif-grammar.ts";
+} from "../src/animation/motifs/executable-motif-grammar.ts";
 import { kpCanonicalOperationCore } from "../src/semantic/canonical-operation.ts";
 
 type EquationMotifRule = TransformTreeVisualMotifRule<

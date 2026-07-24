@@ -1,7 +1,7 @@
 import {
   defaultEquationTransformVisualMotifRules
-} from "../rendering/equation-visual-motif-defaults.ts";
-import type { EquationVisualMotifKind } from "../rendering/visual-motif.ts";
+} from "../animation/motifs/equation-visual-motif-defaults.ts";
+import type { EquationVisualMotifKind } from "../animation/motifs/visual-motif.ts";
 import type {
   KpEditorEquationTransitionProjection
 } from "./equation-runtime-frame-projection.ts";

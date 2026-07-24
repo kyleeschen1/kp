@@ -20,7 +20,7 @@ import {
   phaseIdsForEquationVisualMotifKind,
   primitiveIdsForEquationVisualMotifKind,
   type EquationVisualMotifKind
-} from "./visual-motif.ts";
+} from "../animation/motifs/visual-motif.ts";
 import type { EquationMotionPlan } from "./equation-motion-plan.ts";
 import { createKpEquationSuccessorSynthesisPlan } from "./equation-linear-rearrangement.ts";
 import {

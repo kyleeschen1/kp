@@ -415,7 +415,10 @@ export const projectDashboardData: ProjectDashboardData = {
           label: "Equation motion plan",
           href: "src/rendering/equation-motion-plan.ts"
         },
-        { label: "Visual motif module", href: "src/rendering/visual-motif.ts" }
+        {
+          label: "Visual motif module",
+          href: "src/animation/motifs/visual-motif.ts"
+        }
       ],
       verification: [
         "tests/equation-motion-plan.test.ts",

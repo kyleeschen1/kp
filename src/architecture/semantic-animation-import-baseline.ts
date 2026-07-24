@@ -1,5 +1,4 @@
 export type KpSemanticAnimationRenderingImportClassification =
-  | "motif-contract-location-debt"
   | "neutral-utility-location-debt"
   | "choreography-location-debt"
   | "compatibility-boundary";
@@ -11,7 +10,6 @@ export type KpSemanticAnimationRenderingImportOwner =
   | "presentation";
 
 export type KpSemanticAnimationRenderingImportRetirementSlice =
-  | "s11"
   | "s12"
   | "s13";
 
@@ -28,62 +26,6 @@ export interface KpSemanticAnimationRenderingImportException {
 // Every entry is temporary and exact. This inventory prevents dependency
 // inversion from hiding behind a wildcard while ownership moves in slices 9–13.
 export const kpSemanticAnimationRenderingImportBaseline = [
-  exception({
-    sourcePath: "src/animation/animation-design-diagnostics.ts",
-    modulePath: "../rendering/equation-visual-motif-defaults.ts",
-    classification: "motif-contract-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s11",
-    rationale: "Design diagnostics consume reusable motif policy."
-  }),
-  exception({
-    sourcePath: "src/animation/animation-design-diagnostics.ts",
-    modulePath: "../rendering/visual-motif.ts",
-    classification: "motif-contract-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s11",
-    rationale: "Motif kinds describe choreography intent rather than renderer state."
-  }),
-  exception({
-    sourcePath: "src/animation/llm-semantic-motion-operation-authoring.ts",
-    modulePath: "../rendering/equation-visual-motif-defaults.ts",
-    classification: "motif-contract-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s11",
-    rationale: "Generated operation authoring consumes reusable motif policy."
-  }),
-  exception({
-    sourcePath: "src/animation/llm-semantic-motion-operation-authoring.ts",
-    modulePath: "../rendering/visual-motif.ts",
-    classification: "motif-contract-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s11",
-    rationale: "Generated operation contracts name semantic motif kinds and phases."
-  }),
-  exception({
-    sourcePath: "src/animation/semantic-motion-library-promotion.ts",
-    modulePath: "../rendering/visual-motif.ts",
-    classification: "motif-contract-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s11",
-    rationale: "Promotion requirements name semantic motif kinds."
-  }),
-  exception({
-    sourcePath: "src/animation/substitution-choreography.ts",
-    modulePath: "../rendering/executable-motif-grammar.ts",
-    classification: "motif-contract-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s11",
-    rationale: "Substitution choreography composes executable semantic motifs."
-  }),
-  exception({
-    sourcePath: "src/animation/visual-motif.ts",
-    modulePath: "../rendering/visual-motif-composition.ts",
-    classification: "motif-contract-location-debt",
-    intendedOwner: "animation",
-    retirementSlice: "s11",
-    rationale: "Animation assets compose motif timelines before renderer adaptation."
-  }),
   exception({
     sourcePath: "src/animation/tween.ts",
     modulePath: "../rendering/graph-svg.ts",

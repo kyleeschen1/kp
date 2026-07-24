@@ -27,7 +27,7 @@ import {
 import {
   compileKpSemanticEquationTransitionResult
 } from "../domain-ir/public-api.ts";
-import type { EquationVisualMotifKind } from "../rendering/visual-motif.ts";
+import type { EquationVisualMotifKind } from "./motifs/visual-motif.ts";
 
 export interface KpSemanticMotionPromotionRequirement {
   readonly transformType: string;

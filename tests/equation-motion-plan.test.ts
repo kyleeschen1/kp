@@ -27,7 +27,7 @@ import {
   equationVisualMotifDescriptors,
   phaseIdsForEquationVisualMotifKind,
   primitiveIdsForEquationVisualMotifKind
-} from "../src/rendering/visual-motif.ts";
+} from "../src/animation/motifs/visual-motif.ts";
 
 type TokenLifecyclePair = [id: string, lifecycle: string];
 type TokenRelationPair = [id: string, relation: string | undefined];
