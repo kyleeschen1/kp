@@ -55,6 +55,7 @@ export interface KpGraphDiagramSampledFramePayload {
   readonly activeSelectorIds: readonly string[];
   readonly numericSamples: readonly {
     readonly entityId: string;
+    readonly role: "source" | "target" | "current";
     readonly components: readonly number[];
   }[];
 }
@@ -278,16 +279,12 @@ function validateGraphDiagramPayload(
     uniqueStringArray(value[key], `$.${key}`, issues);
   }
   recordArray(value["numericSamples"], "$.numericSamples", issues, (sample, path) => {
-    exactKeys(sample, ["entityId", "components"], path, issues);
+    exactKeys(sample, ["entityId", "role", "components"], path, issues);
     requiredString(sample["entityId"], `${path}.entityId`, issues);
+    enumValue(sample["role"], ["source", "target", "current"], `${path}.role`, issues);
     finiteNumberArray(sample["components"], `${path}.components`, issues);
   });
-  uniqueRecordStringKey(
-    value["numericSamples"],
-    "entityId",
-    "$.numericSamples",
-    issues
-  );
+  uniqueNumericSampleKeys(value["numericSamples"], issues);
   validateNumericSampleReferences(value, issues);
   return issues;
 }
@@ -538,6 +535,28 @@ function uniqueRecordStringKey(
       path,
       "payload.shape",
       `${path} must contain unique ${key} values.`
+    ));
+  }
+}
+
+function uniqueNumericSampleKeys(
+  value: unknown,
+  issues: KpSampledFrameDomainPayloadIssue[]
+): void {
+  if (!Array.isArray(value)) return;
+  const keys = value
+    .filter(isRecord)
+    .flatMap((sample) =>
+      typeof sample["entityId"] === "string" &&
+      typeof sample["role"] === "string"
+        ? [`${sample["entityId"]}\u0000${sample["role"]}`]
+        : []
+    );
+  if (new Set(keys).size !== keys.length) {
+    issues.push(issue(
+      "$.numericSamples",
+      "payload.shape",
+      "$.numericSamples must contain unique entityId and role pairs."
     ));
   }
 }

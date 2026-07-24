@@ -6,6 +6,9 @@ import {
   type KpAnimationRuntimeFrame
 } from "./runtime-sampler.ts";
 import {
+  adaptKpProgramTraceSampledRuntimeFrame
+} from "./non-equation-sampled-frame-adapter.ts";
+import {
   createAdditionProgrammingExecutionTraceFixture
 } from "../tutorial/programming-execution-trace-fixture.ts";
 import type {
@@ -59,7 +62,7 @@ export function createProgramTraceFramePreviewSample(
   input: CreateProgramTraceFramePreviewSampleInput = {}
 ): ProgramTraceFramePreviewSample {
   const progress = input.progress ?? 1 / 3;
-  const runtimeFrame = sampleKpAnimationRuntimeFrame({
+  const sampledRuntimeFrame = sampleKpAnimationRuntimeFrame({
     id: "runtime.programming.add.preview",
     animation: createProgramTraceAnimationAsset(),
     progress
@@ -67,6 +70,10 @@ export function createProgramTraceFramePreviewSample(
   const traceFrame = createAdditionProgrammingExecutionTraceFixture().sample(
     progress
   );
+  const runtimeFrame = adaptKpProgramTraceSampledRuntimeFrame({
+    runtimeFrame: sampledRuntimeFrame,
+    traceFrame
+  }).runtimeFrame;
 
   return {
     runtimeFrame,

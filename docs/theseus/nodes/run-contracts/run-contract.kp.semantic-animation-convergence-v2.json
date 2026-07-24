@@ -612,6 +612,41 @@
       "scope": "s21 linear equation preservation",
       "checkedAt": "2026-07-24T06:04:25.111Z",
       "notes": "All 39 desktop and phone baseline states capture successfully after equation payload adaptation."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test graph, program-trace, payload, and preview suites",
+      "status": "passed",
+      "scope": "s22 non-equation adapters",
+      "checkedAt": "2026-07-24T06:12:49.602Z",
+      "notes": "All 16 targeted graph, trace, payload, preview, direct-seek, and rewind tests pass."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s22 focused convergence suite",
+      "checkedAt": "2026-07-24T06:12:50.824Z",
+      "notes": "All 240 focused convergence tests pass."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s22 repository suite",
+      "checkedAt": "2026-07-24T06:12:51.709Z",
+      "notes": "All 2125 repository tests pass. An initial parallel run exposed two stale metadata assertions from the completed typed-profile promotion; they were migrated to the canonical presentationProfile view, and the isolated rerun passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s22 production build",
+      "checkedAt": "2026-07-24T06:12:52.582Z",
+      "notes": "Typecheck and production build pass; only the existing large-chunk advisory remains."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s22 architecture",
+      "checkedAt": "2026-07-24T06:12:53.437Z",
+      "notes": "All architecture gates pass across 266 semantic-animation files with zero rendering exceptions."
     }
   ],
   "expectedLearning": [
@@ -819,7 +854,8 @@
     {
       "id": "s22",
       "title": "Graph-and-program-trace-adaptation",
-      "status": "planned",
+      "summary": "Added distinct graph/diagram and program-trace sampled-frame adapters. Graph payloads carry scene/entity/relation identities and role-labeled mathematical coordinate samples; program payloads carry trace, source, step, stack, locals, and output. Neither payload owns progress or a clock. Graph direct seek and rewind share the envelope clock and produce identical semantic samples; the program preview now uses the adapted runtime frame while retaining its compatibility view. Updated two stale fractional-linear tests to assert the canonical typed presentation profile rather than removed legacy metadata. All 16 targeted tests, 240 focused tests, 2125 repository tests, typecheck, build, and architecture gates pass.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {

@@ -21,7 +21,7 @@ test("fractional equation composes into one renderer-neutral animation asset", (
   assert.equal(animation.transformations.length, 6);
   assert.equal(animation.renderTargets.length, 1);
   assert.equal(animation.renderTargets[0]?.kind, "equation");
-  assert.equal(animation.metadata?.["equationNativeHandoffRecipe"], "atomic-v1");
+  assert.equal(animation.presentationProfile?.payload.nativeHandoff, "atomic-v1");
 });
 
 test("fractional subtraction reuses the accepted balanced-introduction engine", () => {
@@ -105,7 +105,7 @@ test("every transition settles through a total atomic native handoff", () => {
     assert.ok(materialPlan.transitions[0]!.owners.length > 0);
   }
 
-  assert.equal(animation.metadata?.["equationNativeHandoffRecipe"], "atomic-v1");
+  assert.equal(animation.presentationProfile?.payload.nativeHandoff, "atomic-v1");
 });
 
 test("each operation focuses only its causal symbols", () => {

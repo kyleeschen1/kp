@@ -54,6 +54,7 @@ const graphPayload = {
   activeSelectorIds: ["selector.vector.current"],
   numericSamples: [{
     entityId: "vector.current",
+    role: "current" as const,
     components: [2.5, -1]
   }]
 };
@@ -138,6 +139,7 @@ test("domain references must close over their declared semantic ids", () => {
     ...graphPayload,
     numericSamples: [{
       entityId: "vector.missing",
+      role: "current",
       components: [1, 2]
     }]
   });
