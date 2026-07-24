@@ -42,23 +42,23 @@ export interface KpSemanticAnimationCompatibilityLedgerEntry {
   readonly retirementCondition: string;
 }
 
-const equationPresentationPolicy = reference(
-  "src/rendering/equation-presentation-policy.ts",
-  "kpEquationPresentationPolicy"
+const equationPresentationDecoder = reference(
+  "src/animation/equation-presentation-profile-decoder.ts",
+  "decodeKpLegacyEquationPresentationMetadata"
 );
 
 export const kpSemanticAnimationCompatibilityLedger = [
   metadata({
     key: "equationMotionPresentationRecipe",
     authors: equationRecipeAuthors(),
-    consumers: [equationPresentationPolicy],
+    consumers: [equationPresentationDecoder],
     statusCandidate: "compiles-forward",
     retirementCondition: "All accepted equation assets author the typed motion profile."
   }),
   metadata({
     key: "equationNativeHandoffRecipe",
     authors: equationRecipeAuthors(),
-    consumers: [equationPresentationPolicy],
+    consumers: [equationPresentationDecoder],
     statusCandidate: "compiles-forward",
     retirementCondition: "Native settlement policy is represented in typed equation profiles."
   }),
@@ -66,7 +66,7 @@ export const kpSemanticAnimationCompatibilityLedger = [
     key: "equationCancellationPresentationRecipe",
     authors: [],
     consumers: [
-      equationPresentationPolicy,
+      equationPresentationDecoder,
       reference(
         "src/rendering/cancellation-presentation-conformance.ts",
         "equationCancellationPresentationRecipe"
@@ -83,36 +83,36 @@ export const kpSemanticAnimationCompatibilityLedger = [
         "equationZeroWitnessPresentationRecipe"
       )
     ],
-    consumers: [equationPresentationPolicy],
+    consumers: [equationPresentationDecoder],
     statusCandidate: "compiles-forward",
     retirementCondition: "Solve-x authors its zero-witness policy through the typed profile."
   }),
   metadata({
     key: "equationSuccessorPresentationRecipe",
     authors: equationRecipeAuthors(false),
-    consumers: [equationPresentationPolicy],
+    consumers: [equationPresentationDecoder],
     statusCandidate: "compiles-forward",
     retirementCondition: "Accepted successor choreography authors typed convergence policy."
   }),
   metadata({
     key: "equationDepthPresentationRecipe",
     authors: equationRecipeAuthors(),
-    consumers: [equationPresentationPolicy],
+    consumers: [equationPresentationDecoder],
     statusCandidate: "compiles-forward",
     retirementCondition: "Accepted depth policy is promoted without making it semantic truth."
   }),
   metadata({
     key: "equationContinuantPresentationRecipe",
     authors: equationRecipeAuthors(),
-    consumers: [equationPresentationPolicy],
+    consumers: [equationPresentationDecoder],
     statusCandidate: "compiles-forward",
     retirementCondition: "Continuant transit policy is represented in typed equation profiles."
   }),
   metadata({
     key: "equationBranchPresentationStrategy",
     owner: reference(
-      "src/animation/linear-rearrangement-choreography.ts",
-      "equationBranchPresentationStrategy"
+        "src/animation/equation-presentation-profile-decoder.ts",
+        "equationBranchPresentationStrategy"
     ),
     authors: [
       reference(
@@ -122,7 +122,7 @@ export const kpSemanticAnimationCompatibilityLedger = [
     ],
     consumers: [
       reference(
-        "src/rendering/equation-linear-rearrangement-bindings.ts",
+        "src/animation/equation-presentation-profile-decoder.ts",
         "equationBranchPresentationStrategy"
       )
     ],
@@ -364,7 +364,7 @@ function metadata(input: {
     id: `compatibility.metadata.${input.key}`,
     category: "presentation-metadata",
     contractKey: input.key,
-    owner: input.owner ?? equationPresentationPolicy,
+    owner: input.owner ?? equationPresentationDecoder,
     authors: input.authors,
     consumers: input.consumers,
     statusCandidate: input.statusCandidate,

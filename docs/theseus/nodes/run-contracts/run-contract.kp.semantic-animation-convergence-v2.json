@@ -374,6 +374,34 @@
       "scope": "s14 dependency direction",
       "checkedAt": "2026-07-24T05:13:59.206Z",
       "notes": "All architecture gates pass; semantic-animation scans 261 files with zero rendering-import exceptions."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-presentation-profile-decoder.test.ts tests/equation-presentation-policy.test.ts tests/semantic-animation-compatibility-ledger.test.ts tests/kp-linear-rearrangement-choreography.test.ts",
+      "status": "passed",
+      "scope": "s15 legacy decoder",
+      "checkedAt": "2026-07-24T05:21:45.963Z",
+      "notes": "All 26 exhaustive-key, default, invalid-value, authority-conflict, compatibility-ledger, and choreography tests pass."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s15 focused convergence suite",
+      "checkedAt": "2026-07-24T05:21:47.078Z",
+      "notes": "All 214 focused convergence tests pass; canonical profile defaults, inferred cancellation, branch scheduling, and prior semantic-animation laws remain unchanged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15 type safety",
+      "checkedAt": "2026-07-24T05:21:47.900Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass through the decoder and injected cancellation seam."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s15 dependency direction",
+      "checkedAt": "2026-07-24T05:21:48.751Z",
+      "notes": "All architecture gates pass; 262 semantic-animation files retain zero rendering-import exceptions."
     }
   ],
   "expectedLearning": [
@@ -532,7 +560,8 @@
     {
       "id": "s15",
       "title": "Legacy-metadata-decoder",
-      "status": "planned",
+      "summary": "Centralized all eight governed equation presentation metadata reads in one neutral compatibility decoder. It reproduces semantic-material and continuity defaults, resolves cancellation intent through the injected downstream resolver, returns the typed v1 profile, rejects typed-plus-legacy and teaching-goal-plus-raw-recipe authority conflicts, and emits diagnostics in contract order rather than object insertion order. Branch choreography and rendering bindings now consume the decoder instead of reading generic metadata. All 26 targeted tests, 214 focused tests, typecheck, compatibility-ledger closure, and architecture gates pass with zero canonical profile mismatches and zero rendering-import exceptions across 262 files.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {

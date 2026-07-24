@@ -47,6 +47,9 @@ import {
   createKpBalancedBranchScheduling,
   type KpBalancedBranchScheduling
 } from "./equation-balanced-branch-scheduling.ts";
+import {
+  requireKpLegacyEquationPresentationMetadata
+} from "./equation-presentation-profile-decoder.ts";
 
 export const kpLinearRearrangementTiming = {
   orientEnd: 0.14,
@@ -400,7 +403,9 @@ function createBalancedBranchScheduling(input: {
   KpLinearRearrangementStep,
   "branchOperation" | "branchSchedules" | "branchSchedule"
 > | undefined {
-  const selected = input.animation.metadata?.["equationBranchPresentationStrategy"];
+  const selected = requireKpLegacyEquationPresentationMetadata(
+    input.animation.metadata
+  ).branchStrategy;
   if (selected === undefined) return undefined;
   if (input.kind !== "balanced-introduction") return undefined;
   return createKpBalancedBranchScheduling({

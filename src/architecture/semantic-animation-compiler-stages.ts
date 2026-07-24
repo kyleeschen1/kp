@@ -113,6 +113,7 @@ export const kpSemanticAnimationCompilerStages = [
     ],
     sourcePaths: [
       "src/animation/cancellation-presentation-contract.ts",
+      "src/animation/equation-presentation-profile-decoder.ts",
       "src/animation/equation-presentation-profile.ts",
       "src/rendering/equation-presentation-policy.ts"
     ],

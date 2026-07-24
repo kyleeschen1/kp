@@ -1,8 +1,10 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import {
-  kpCancellationOperationIdForTransformType,
-  kpCancellationTeachingGoalMetadataKey
+  kpCancellationOperationIdForTransformType
 } from "../semantic/cancellation-presentation-authoring.ts";
+import {
+  inspectKpLegacyEquationPresentationMetadataPresence
+} from "../animation/equation-presentation-profile-decoder.ts";
 import { kpEquationPresentationProfile } from "./equation-presentation-policy.ts";
 
 export type KpCancellationCatalogIssueCode =
@@ -25,9 +27,14 @@ export function checkKpCancellationPresentationCatalog(
     const hasCancellationAuthority = asset.transformations.some((transformation) =>
       kpCancellationOperationIdForTransformType(transformation.transformType) !== undefined
     );
-    const hasTeachingGoal =
-      asset.metadata?.[kpCancellationTeachingGoalMetadataKey] !== undefined;
-    if (asset.metadata?.["equationCancellationPresentationRecipe"] !== undefined) {
+    const presence = inspectKpLegacyEquationPresentationMetadataPresence(
+      asset.metadata
+    );
+    const hasTeachingGoal = presence.teachingGoalPresent;
+    const hasRawCancellationRecipe = presence.presentKeys.includes(
+      "equationCancellationPresentationRecipe"
+    );
+    if (hasRawCancellationRecipe) {
       issues.push(issue(asset, "raw-recipe-authority", "Raw cancellation recipe ids are forbidden in catalog assets."));
     }
     if (hasCancellationAuthority && !hasTeachingGoal) {
