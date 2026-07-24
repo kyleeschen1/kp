@@ -55,6 +55,13 @@
       "scope": "slice-03 exact quadratic semantic fixture",
       "checkedAt": "2026-07-24T19:44:19.777Z",
       "notes": "Eight focused tests passed. The canonical coefficients, discriminant, roots, structured subtrees, immutability, invalid roots, non-quadratic inputs, and exact rational normalization are verified without solving or floating-point authority."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/quadratic-solution-set.test.ts tests/quadratic-branching-fixture.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-04 exact solution-set and discriminant laws",
+      "checkedAt": "2026-07-24T19:48:18.412Z",
+      "notes": "Eleven focused tests passed. Exact normalization, canonical ordering, stable root identity, repeated-root multiplicity, empty real sets, discriminant classification, mismatch rejection, and deep immutability are verified."
     }
   ],
   "progress": {

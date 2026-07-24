@@ -83,7 +83,8 @@
     {
       "id": "slice-04",
       "title": "Solution-set-and-discriminant-laws",
-      "status": "planned"
+      "summary": "Added exact discriminant classification and immutable solution-set laws with canonical root ordering, stable rational identity, explicit multiplicity, order-independent equality, and rejection of contradictory root evidence.",
+      "status": "complete"
     },
     {
       "id": "slice-05",
