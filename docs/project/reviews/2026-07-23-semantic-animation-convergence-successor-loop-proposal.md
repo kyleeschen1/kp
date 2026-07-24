@@ -2,7 +2,7 @@
 
 Date: 2026-07-23
 
-Status: selected successor priority; exact run contract awaiting approval
+Status: approved for execution; final-only human checkpoint
 
 Requested use: human-readable source of truth for the successor priority and
 its proposed Theseus long-loop contract. Product implementation remains
@@ -63,7 +63,7 @@ following control-plane changes remain approval-gated:
 4. move `quadratic-semantic-branching` to `next`;
 5. preserve every later and someday roadmap row and every existing evidence
    link;
-6. create `run-contract.kp.semantic-animation-convergence-v1` from the exact
+6. create `run-contract.kp.semantic-animation-convergence-v2` from the exact
    proposal below;
 7. keep live slice status, verification evidence, and stop state only in that
    contract.
@@ -499,8 +499,9 @@ is explicitly promoted:
 8. Separate semantic animation, presentation, and product metadata at least as
    explicit projections.
 9. Inventory and classify compatibility paths before deleting them.
-10. Protect a representative gold cohort and stop for human review before any
-    behavior-affecting generalization.
+10. Protect a representative gold cohort and produce reviewable evidence before
+    behavior-affecting generalization. The user explicitly waived the
+    intermediate pause for this contract; unexplained drift still stops work.
 11. Follow convergence immediately with one small Lisp diagnostic exemplar.
 12. Do not create a universal scene graph, general CAS, theorem prover,
     arbitrary-code renderer, dynamic package loader, or second animation
@@ -648,7 +649,7 @@ execution. It should not authorize work outside these fields.
 
 | Field | Proposed value |
 | --- | --- |
-| Contract ID | `run-contract.kp.semantic-animation-convergence-v1` |
+| Contract ID | `run-contract.kp.semantic-animation-convergence-v2` (`v1` is a deferred, never-started scaffold retained as control-plane provenance) |
 | Plan revision | `plan-revision.kp.v7`, superseding revision 6 without rewriting it |
 | Plan phase | `semantic-animation-convergence` |
 | Source reference | This proposal |
@@ -661,9 +662,9 @@ execution. It should not authorize work outside these fields.
 | Commit cadence | One focused commit for every completed slice; never combine independently reversible migrations; derive `npm run --silent loop:status` at slice start, completion, commit boundary, and final stop |
 | Verification cadence | Focused convergence suite every slice; typecheck and architecture gate for boundary/type changes; full suite at slices 6, 13, 22, and 28; visual/browser checks at slices 6, 17, 18, and 28; production/build/performance/export checks at release |
 | Rollback unit | The current slice commit: one inventory/gate, one compiler-stage move, one profile migration, one frame adapter, one projection consumer cohort, or one compatibility deletion |
-| Human checkpoint | Mandatory stop after slice 17 before profile promotion; mandatory final visual acceptance at slice 28 |
+| Human checkpoint | Final visual acceptance at slice 28; slice 17 remains a mandatory visual evidence gate but does not pause |
 | Success state | `COMPLETE` only after all 28 slices and the done contract pass |
-| Required intermediate stop | `HUMAN_CHECKPOINT` after slice 17 |
+| Required intermediate stop | None; the user explicitly approved continuous execution through slice 28 |
 
 ### Exact ordered slices
 
@@ -691,8 +692,8 @@ replace changing scratch scripts for the remainder of the run.
 | 14 | **Versioned typed presentation profile.** Define a renderer-neutral profile envelope with explicit schema version, equation-domain payload, promoted recipe fields, and extension rules that do not change semantic truth. | Current equation maturity becomes a false universal schema. | Profile construction/validation/substitution tests; focused suite; typecheck; architecture gate. | One type-contract commit. Stop if domain payloads require unsafe untyped bags. |
 | 15 | **Legacy metadata decoder.** Centralize generic metadata reads in one compatibility decoder that produces the typed profile, rejects conflicting authority, and emits deterministic diagnostics. | Silent fallback changes accepted recipes. | Exhaustive legacy-key, invalid-value, default, and conflict tests; focused suite; typecheck. | One decoder commit. Stop on any canonical asset profile mismatch. |
 | 16 | **Solve-x profile exemplar.** Migrate only the lesson-owned solve-x canonical presentation to author a typed profile; keep legacy reads for all other assets and preserve semantic transformation, correspondence, clock, and native endpoint data byte-for-byte where serialized. | Observable choreography changes despite equivalent semantics. | Focused suite; solve-x browser conformance; `npm run visual:linear-equation`; direct-seek/rewind assertions; typecheck. | One exemplar commit. Stop on any unexplained semantic, timing, layout, or review-lineage delta. |
-| 17 | **Exemplar comparison and mandatory human checkpoint.** Produce phase-aligned baseline/current evidence for solve-x across lesson, card, Workbench, direct seek, rewind, responsive states, and native settlement. Make no family-wide migration. | Automation misses a perceptible continuity or focus regression. | `npm run visual:semantic-animation-convergence`; `npm run visual:reader-gold-parity`; `npm run test:browser:reader-conformance`; focused suite. | Evidence-only commit if needed, then report `HUMAN_CHECKPOINT`. Do not begin slice 18 without explicit visual acceptance. |
-| 18 | **Promote proven profiles.** After checkpoint approval, migrate only already-successful distribution, fraction, radical, and exponent/function-wrap recipes to typed authoring; leave experimental recipe fields exemplar-local. | Family-wide promotion changes pacing, settlement, or reverse motion. | Focused suite; `npm run visual:distribution-area`; `npm run visual:fractional-linear-equation`; `npm run visual:exponent-radical`; `npm run visual:function-wrap`; relevant browser tests. | One promotion commit. Stop on any unexplained visual delta; roll back this slice without touching the profile seam. |
+| 17 | **Exemplar comparison evidence gate.** Produce phase-aligned baseline/current evidence for solve-x across lesson, card, Workbench, direct seek, rewind, responsive states, and native settlement. Make no family-wide migration in this slice. | Automation misses a perceptible continuity or focus regression. | `npm run visual:semantic-animation-convergence`; `npm run visual:reader-gold-parity`; `npm run test:browser:reader-conformance`; focused suite. | Evidence-only commit if needed. Continue to slice 18 without a human pause only when automated and deterministic comparisons show no unexplained drift. |
+| 18 | **Promote proven profiles.** Migrate only already-successful distribution, fraction, radical, and exponent/function-wrap recipes to typed authoring after slice 17's evidence gate passes; leave experimental recipe fields exemplar-local. | Family-wide promotion changes pacing, settlement, or reverse motion. | Focused suite; `npm run visual:distribution-area`; `npm run visual:fractional-linear-equation`; `npm run visual:exponent-radical`; `npm run visual:function-wrap`; relevant browser tests. | One promotion commit. Stop on any unexplained visual delta; roll back this slice without touching the profile seam. |
 | 19 | **Canonical sampled-frame envelope.** Define the minimal common frame authority—clock, progress, plan/timeline identity, semantic activity, diagnostics, and typed payload attachment—while distinguishing it from frame descriptors and renderer poses. | A universal pose model erases domain structure. | Frame-envelope and sampling law tests; focused suite; typecheck; architecture gate. | One frame-contract commit. Stop if graph, equation, or program trace needs renderer resources in the envelope. |
 | 20 | **Typed domain payload convention.** Add closed, validated equation, graph/diagram, and program-trace payload attachment patterns without an unvalidated `unknown` metadata channel. | Unsafe payload casting or cross-domain coupling. | Payload construction, validation, mismatch, and round-trip tests; focused suite; typecheck. | One payload-contract commit. Stop if payload consumers need unchecked casts. |
 | 21 | **Equation frame adaptation.** Compile equation frame descriptors/runtime frames through the canonical envelope and typed equation payload while preserving public compatibility views. | Seek, rewind, child sampling, or diagnostics change. | Equation frame, motion-plan, sampler, temporal continuity, and reverse-equivalence tests; focused suite; visual linear equation; typecheck. | One equation-adapter commit. Stop on clock, endpoint, or diagnostic drift. |
@@ -779,8 +780,10 @@ produce subjective motion. The run contract must name:
   are available, and a human accepts any behavior-affecting change;
 - stop condition: any unexplained visual or semantic drift.
 
-Do not generalize a new presentation profile across families before one
-representative exemplar is accepted.
+The user explicitly waived the intermediate human pause after the
+representative exemplar. Generalization may proceed only when slice 17's
+deterministic evidence shows no unexplained drift; any drift remains a stop
+condition.
 
 ## Explicit exclusions
 
@@ -1006,5 +1009,5 @@ The next approval request should be interpreted as:
 > cadence, rollback units, stop conditions, and human checkpoint. Do not
 > execute until I approve this exact proposal.
 
-The document and priority record do not authorize execution. The user must
-explicitly approve `run-contract.kp.semantic-animation-convergence-v1`.
+The user approved `run-contract.kp.semantic-animation-convergence-v2` with
+continuous execution through slice 28 and a final-only human checkpoint.

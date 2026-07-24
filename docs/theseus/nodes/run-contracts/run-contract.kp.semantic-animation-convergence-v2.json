@@ -1,0 +1,265 @@
+{
+  "id": "run-contract.kp.semantic-animation-convergence-v2",
+  "kind": "run-contract",
+  "title": "Semantic animation convergence execution",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/milestones/milestone.kp.long-term-semantic-product-plan-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-semantic-animation-convergence-successor-loop-proposal.md",
+      "summary": "User-approved exact 28-slice contract with continuous execution through slice 28 and a final-only human checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v7"
+    ],
+    "preferred": [
+      "priority-change.kp.semantic-animation-convergence-successor-v1"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v7",
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:semantic-animation-convergence",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm test",
+    "npm run build",
+    "npm run visual:semantic-animation-convergence",
+    "npm run perf:animation",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether the current semantic and animation layers can converge without changing accepted choreography or introducing an equation-shaped universal model."
+  ],
+  "allowedWork": [
+    "Behavior-preserving type extraction, dependency inversion, compatible facades and decoders, architecture gates, narrow projections, compiler and frame adapter migration, deterministic preservation fixtures, and bounded deletion with closure evidence.",
+    "Create stable focused and visual verification entry points and the minimum durable architecture evidence required by the approved slices.",
+    "Use brief Theseus context receipts, one independently reversible commit per slice, focused verification on every slice, broad gates at slices 6, 13, 22, and 28, and deterministic visual evidence at slices 6, 17, 18, and 28."
+  ],
+  "disallowedWork": [
+    "Do not implement new curriculum or domains or redesign the editor, Workbench, reader, dashboard, or authoring surfaces.",
+    "Do not create a universal scene graph, CAS, theorem prover, second runtime or clock, arbitrary code execution, broad aesthetic changes, or delete compatibility without route, review, export, fixture, and reference closure.",
+    "Do not pause at slice 17 solely for human review; do stop on unexplained visual or semantic drift. The only planned human checkpoint is after slice 28."
+  ],
+  "criteria": [
+    {
+      "id": "dependency-direction",
+      "weight": "high"
+    },
+    {
+      "id": "presentation-profile",
+      "weight": "high"
+    },
+    {
+      "id": "frame-envelope",
+      "weight": "high"
+    },
+    {
+      "id": "asset-projections",
+      "weight": "high"
+    },
+    {
+      "id": "compatibility-closure",
+      "weight": "medium"
+    },
+    {
+      "id": "gold-preservation",
+      "weight": "high"
+    }
+  ],
+  "goal": "Converge KP's semantic-animation compiler into one enforceable dependency direction, typed presentation seam, canonical sampled-frame convention, narrow asset projections, and classified compatibility surface while preserving every accepted behavior in the gold cohort.",
+  "target": "milestone.kp.long-term-semantic-product-plan-v0",
+  "runMode": "run",
+  "maxSlices": 28,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and its durable Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "H1 PRESERVATION: stop on unexplained semantic, correspondence, lineage, choreography, timing, seek, rewind, native-endpoint, accessibility, route, review, export, or performance drift.",
+    "H2 OWNERSHIP: stop if a proposed neutral contract contains DOM, KaTeX node, SVG, pixel, Three.js, WebGL, or concrete renderer-resource state.",
+    "H3 AUTHORITY: stop if two compiler stages or projections retain conflicting ownership that cannot be safely classified.",
+    "H4 USER-OVERLAP: stop if required work cannot be separated from unrelated user-authored roadmap, thread, or exploratory design changes.",
+    "H5 SCOPE: stop before new curriculum, editor redesign, universal scene graph, CAS, theorem prover, second runtime or clock, arbitrary code execution, or unsupported aesthetic generalization.",
+    "H6 EVIDENCE: stop before deleting compatibility without complete reference, route, review, export, and fixture closure or when deterministic visual evidence shows unexplained drift.",
+    "H7 FINAL-REVIEW: execute continuously through slice 28, then stop for the sole human checkpoint before marking the phase accepted."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Canonical-preservation-manifest",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s02",
+      "title": "Stable-focused-suite",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s03",
+      "title": "Executable-compiler-stage-inventory",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s04",
+      "title": "Dependency-inversion-baseline",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s05",
+      "title": "Recipe-and-compatibility-ledger",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s06",
+      "title": "Deterministic-gold-baseline",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s07",
+      "title": "Layer-ownership-contract",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s08",
+      "title": "Ratcheting-architecture-gate",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s09",
+      "title": "Neutral-equation-transition-IR-ownership",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s10",
+      "title": "Semantic-equation-compiler-ownership",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s11",
+      "title": "Neutral-motif-vocabulary-boundary",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s12",
+      "title": "Neutral-utility-ownership",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s13",
+      "title": "Close-dependency-inversions",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s14",
+      "title": "Versioned-typed-presentation-profile",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s15",
+      "title": "Legacy-metadata-decoder",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s16",
+      "title": "Solve-x-profile-exemplar",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s17",
+      "title": "Exemplar-comparison-evidence-gate",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s18",
+      "title": "Promote-proven-profiles",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s19",
+      "title": "Canonical-sampled-frame-envelope",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s20",
+      "title": "Typed-domain-payload-convention",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s21",
+      "title": "Equation-frame-adaptation",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s22",
+      "title": "Graph-and-program-trace-adaptation",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s23",
+      "title": "Narrow-asset-projections",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s24",
+      "title": "Runtime-and-compiler-consumer-migration",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s25",
+      "title": "Product-consumer-migration",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s26",
+      "title": "Compatibility-status-enforcement",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s27",
+      "title": "Bounded-compatibility-deletion",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    },
+    {
+      "id": "s28",
+      "title": "Release-proof-and-final-human-checkpoint",
+      "status": "planned",
+      "planPhaseId": "semantic-animation-convergence"
+    }
+  ]
+}
