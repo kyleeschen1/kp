@@ -414,6 +414,123 @@ test("Workbench search preserves player progress and review composer state", asy
   await expect(reviewDraft).toHaveValue("Keep this unsent review draft.");
 });
 
+test("Workbench search performs one bounded projection per keypress", async ({
+  page
+}) => {
+  await page.goto(
+    `/?view=animation-workbench&q=&workbenchAnimation=${radicalId}`
+  );
+  await expect(
+    page.locator(
+      '[data-kp-animation-workbench-acceptance-kind="semantic-law"]'
+    )
+  ).toHaveCount(2);
+  await expect(
+    page.locator(
+      '[data-kp-animation-workbench-review-group="current"] [data-kp-animation-workbench-review-note]'
+    )
+  ).toHaveCount(1);
+  await page.evaluate(() => {
+    const app = document.querySelector("#app");
+    const resultsHost = document.querySelector(
+      ".kp-animation-workbench__results"
+    );
+    const reviewShell = document.querySelector(
+      "[data-kp-dev-review-shell]"
+    );
+    if (app === null || resultsHost === null || reviewShell === null) {
+      throw new Error("Workbench lifecycle probes require mounted surfaces");
+    }
+    const state = {
+      resultMutations: 0,
+      outsideResultMutations: 0,
+      historyWrites: 0,
+      reviewShellRemovals: 0
+    };
+    const appObserver = new MutationObserver((records) => {
+      for (const record of records) {
+        if (record.type !== "childList") continue;
+        const target = record.target;
+        if (
+          target === resultsHost ||
+          (target instanceof Node && resultsHost.contains(target))
+        ) {
+          state.resultMutations += 1;
+        } else {
+          state.outsideResultMutations += 1;
+        }
+      }
+    });
+    appObserver.observe(app, { childList: true, subtree: true });
+    const bodyObserver = new MutationObserver((records) => {
+      for (const record of records) {
+        for (const removed of record.removedNodes) {
+          if (
+            removed === reviewShell ||
+            (removed instanceof Node && removed.contains(reviewShell))
+          ) {
+            state.reviewShellRemovals += 1;
+          }
+        }
+      }
+    });
+    bodyObserver.observe(document.body, { childList: true, subtree: true });
+    const originalReplaceState = window.history.replaceState;
+    window.history.replaceState = function replaceState(
+      data: unknown,
+      unused: string,
+      url?: string | URL | null
+    ): void {
+      state.historyWrites += 1;
+      originalReplaceState.call(this, data, unused, url);
+    };
+    (
+      window as typeof window & {
+        __kpWorkbenchLifecycleProbe?: {
+          state: typeof state;
+          appObserver: MutationObserver;
+          bodyObserver: MutationObserver;
+        };
+      }
+    ).__kpWorkbenchLifecycleProbe = {
+      state,
+      appObserver,
+      bodyObserver
+    };
+  });
+
+  await page
+    .locator("[data-kp-animation-workbench-query]")
+    .pressSequentially("tangent");
+
+  expect(
+    await page.evaluate(() => {
+      const probe = (
+        window as typeof window & {
+          __kpWorkbenchLifecycleProbe?: {
+            state: {
+              resultMutations: number;
+              outsideResultMutations: number;
+              historyWrites: number;
+              reviewShellRemovals: number;
+            };
+            appObserver: MutationObserver;
+            bodyObserver: MutationObserver;
+          };
+        }
+      ).__kpWorkbenchLifecycleProbe;
+      probe?.appObserver.disconnect();
+      probe?.bodyObserver.disconnect();
+      return probe?.state;
+    })
+  ).toEqual({
+    resultMutations: "tangent".length,
+    outsideResultMutations: 0,
+    historyWrites: "tangent".length,
+    reviewShellRemovals: 0
+  });
+});
+
 test("Workbench search and results support keyboard-only traversal", async ({
   page
 }) => {

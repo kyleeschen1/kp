@@ -204,7 +204,9 @@
     {
       "id": "s23",
       "title": "Gate-per-keypress-lifecycle-work",
-      "status": "planned"
+      "summary": "Added browser lifecycle instrumentation for a seven-character search: exactly seven result-list mutations and seven URL writes occur, with zero mutations outside the results region and zero floating-review removals. Full typecheck and all 12 Workbench browser tests pass.",
+      "status": "complete",
+      "planPhaseId": "authoritative-roadmap-workbench"
     },
     {
       "id": "s24",
