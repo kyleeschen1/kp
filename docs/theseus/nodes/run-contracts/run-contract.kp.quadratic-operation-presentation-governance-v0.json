@@ -92,7 +92,8 @@
     {
       "id": "slice-06",
       "title": "Generic-checkpoint-negative-fixture",
-      "status": "planned"
+      "summary": "Added the live rejected quadratic negative fixture. The current generic checkpoint asset still passes semantic and clock laws, but its observed all-token arc is now deterministically rejected for operand-like continuants, missing reflow, and an unregistered generic motif.",
+      "status": "complete"
     },
     {
       "id": "slice-07",

@@ -237,6 +237,13 @@
       "scope": "slice-05 phase and motif conformance",
       "checkedAt": "2026-07-24T22:36:08.331Z",
       "notes": "Twelve focused tests pass. Conformance enforces envelope order, operation action, continuant reflow before action, introduced-material reservation, registered motifs, and canonical-operation compatibility."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/quadratic-generic-checkpoint-negative.test.ts tests/operation-presentation-certificate.test.ts tests/quadratic-branching-animation-asset.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-06 generic checkpoint negative fixture",
+      "checkedAt": "2026-07-24T22:38:18.210Z",
+      "notes": "Nineteen focused tests pass. The fixture is tied to the live quadratic asset's quadraticSemanticCheckpoint transformations and proves the observed all-token arc fails continuant role and registered-motif conformance while the existing asset's semantic, clock, seek, rewind, and JSON laws remain intact."
     }
   ],
   "progress": {
