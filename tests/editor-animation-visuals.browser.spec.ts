@@ -1677,19 +1677,19 @@ test("radical material succession is identical under semantic rewind", async ({
     "true"
   );
   await scrubber.fill("1");
+  const endpointMorphHandle = await morphOwner.elementHandle();
   await morphOwner.evaluate((element) => {
-    element.dataset["kpRadicalEndpointRewindProbe"] = "same-morph";
+    element.dataset["kpRadicalEndpointRewindProbe"] = "stale-capture";
   });
   await player.getByRole("button", { name: "Rewind" }).click();
-  await expect(morphOwner).toHaveAttribute(
-    "data-kp-radical-endpoint-rewind-probe",
-    "same-morph"
-  );
+  await scrubber.fill("0.02");
+  await expect.poll(async () =>
+    endpointMorphHandle?.evaluate((element) => element.isConnected)
+  ).toBe(false);
   await expect(stage).toHaveAttribute(
     "data-kp-editor-radical-morph-ready",
     "true"
   );
-  await scrubber.fill("0.02");
   await expect(stage).toHaveAttribute(
     "data-kp-editor-equation-semantic-progress",
     "0.98"
@@ -1700,8 +1700,9 @@ test("radical material succession is identical under semantic rewind", async ({
   await baseOwner.evaluate((element) => {
     element.dataset["kpRadicalRewindProbe"] = "base";
   });
+  const midpointMorphHandle = await morphOwner.elementHandle();
   await morphOwner.evaluate((element) => {
-    element.dataset["kpRadicalMidpointRewindProbe"] = "same-morph";
+    element.dataset["kpRadicalMidpointRewindProbe"] = "stale-capture";
   });
   const forwardRects = await Promise.all([baseOwner, morphOwner].map((locator) =>
     locator.evaluate((element) => {
@@ -1724,10 +1725,9 @@ test("radical material succession is identical under semantic rewind", async ({
     "data-kp-editor-radical-morph-ready",
     "true"
   );
-  await expect(morphOwner).toHaveAttribute(
-    "data-kp-radical-midpoint-rewind-probe",
-    "same-morph"
-  );
+  await expect.poll(async () =>
+    midpointMorphHandle?.evaluate((element) => element.isConnected)
+  ).toBe(false);
   await expect(morphOwner).toHaveAttribute(
     "data-kp-editor-radical-webgl-target",
     "complete-native-radical-operator"
@@ -1749,7 +1749,7 @@ test("radical material succession is identical under semantic rewind", async ({
   ).toHaveCount(3);
 });
 
-test("radical rewind records the abrupt source-native ownership boundary", async ({
+test("radical rewind interpolates through the composite source-native boundary", async ({
   page
 }) => {
   await page.goto("/");
@@ -1765,6 +1765,12 @@ test("radical rewind records the abrupt source-native ownership boundary", async
   );
   await scrubber.fill("1");
   await player.getByRole("button", { name: "Rewind" }).click();
+  await expect.poll(async () => ({
+    ready: await stage.getAttribute("data-kp-editor-radical-morph-ready"),
+    reason: await stage.getAttribute(
+      "data-kp-editor-radical-morph-fallback-reason"
+    )
+  })).toEqual({ ready: "true", reason: null });
 
   const morphStart = kpRadicalConventionalMorphProfile.morph.start;
   const scrubberStep = Number(await scrubber.getAttribute("step"));
@@ -1779,6 +1785,8 @@ test("radical rewind records the abrupt source-native ownership boundary", async
     semanticProgress: number;
     nativeOpacity: number;
     morphOpacity: number;
+    recordedNativeOpacity: number;
+    sourceGeometryReady: boolean;
     sourceGeometryResidualPx: number;
   }> = [];
   for (const semanticProgress of sourceBoundarySamples) {
@@ -1790,6 +1798,10 @@ test("radical rewind records the abrupt source-native ownership boundary", async
         )
       )
     ).toBeCloseTo(semanticProgress, 5);
+    await expect(stage).toHaveAttribute(
+      "data-kp-editor-equation-source-settlement-ready",
+      "true"
+    );
     samples.push(await stage.evaluate((element) => {
       const sourceToken = element.querySelector<HTMLElement>(
         '[data-kp-motion-id*=".power.exponent-numerator"]'
@@ -1809,37 +1821,42 @@ test("radical rewind records the abrupt source-native ownership boundary", async
           "Radical source endpoint requires native and WebGL owners"
         );
       }
-      const stageRect = element.getBoundingClientRect();
-      const nativeRect = nativeExponent.getBoundingClientRect();
-      const captured = {
-        left: Number(morph.dataset["kpEditorRadicalWebglSourceLeft"]),
-        top: Number(morph.dataset["kpEditorRadicalWebglSourceTop"]),
-        width: Number(morph.dataset["kpEditorRadicalWebglSourceWidth"]),
-        height: Number(morph.dataset["kpEditorRadicalWebglSourceHeight"])
-      };
       return {
         semanticProgress: Number(
           element.dataset["kpEditorEquationSemanticProgress"]
         ),
         nativeOpacity: Number(getComputedStyle(nativeExponent).opacity),
         morphOpacity: Number(getComputedStyle(morph).opacity),
-        sourceGeometryResidualPx: Math.max(
-          Math.abs(nativeRect.left - stageRect.left - captured.left),
-          Math.abs(nativeRect.top - stageRect.top - captured.top),
-          Math.abs(nativeRect.width - captured.width),
-          Math.abs(nativeRect.height - captured.height)
+        recordedNativeOpacity: Number(
+          element.dataset["kpEditorEquationSourceSettlementProgress"]
+        ),
+        sourceGeometryReady:
+          element.dataset["kpEditorEquationSourceSettlementReady"] === "true",
+        sourceGeometryResidualPx: Number(
+          element.dataset["kpEditorEquationSourceSettlementResidual"]
         )
       };
     }));
   }
 
-  for (const sample of samples.slice(0, -1)) {
-    expect(sample.semanticProgress).toBeGreaterThan(0);
-    expect(sample.sourceGeometryResidualPx).toBeGreaterThan(
+  for (const sample of samples) {
+    expect(sample.sourceGeometryReady).toBe(true);
+    expect(sample.sourceGeometryResidualPx).toBeLessThanOrEqual(
       kpRadicalNativeSettlementGeometryTolerancePx
     );
-    expect(sample.nativeOpacity).toBe(0);
-    expect(sample.morphOpacity).toBe(1);
+    expect(sample.nativeOpacity).toBeCloseTo(
+      sample.recordedNativeOpacity,
+      5
+    );
+    expect(sample.nativeOpacity + sample.morphOpacity).toBeCloseTo(1, 5);
+  }
+  for (let index = 1; index < samples.length; index += 1) {
+    expect(samples[index]!.nativeOpacity).toBeGreaterThanOrEqual(
+      samples[index - 1]!.nativeOpacity
+    );
+    expect(samples[index]!.morphOpacity).toBeLessThanOrEqual(
+      samples[index - 1]!.morphOpacity
+    );
   }
   expect(samples.at(-1)).toMatchObject({
     semanticProgress: 0,

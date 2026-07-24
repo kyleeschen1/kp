@@ -18,6 +18,8 @@ import type {
 export interface KpRadicalWebglMorphSyncResult {
   readonly mode: "webgl-solid-mask" | "dom-fallback";
   readonly ready: boolean;
+  readonly sourceCaptureRect?: KatexTokenRect | undefined;
+  readonly targetCaptureRect?: KatexTokenRect | undefined;
 }
 
 interface KpRadicalWebglMorphState {
@@ -31,6 +33,8 @@ interface KpRadicalWebglMorphState {
   status: "initializing" | "ready" | "fallback";
   progress: number;
   opacity: number;
+  sourceCaptureRect?: KatexTokenRect | undefined;
+  targetCaptureRect?: KatexTokenRect | undefined;
 }
 
 const morphStates = new WeakMap<HTMLElement, KpRadicalWebglMorphState>();
@@ -54,27 +58,6 @@ export function syncKpRadicalWebglMorph(input: {
 
   const stageRect = input.stage.getBoundingClientRect();
   let state = morphStates.get(input.stage);
-  const endpointsChanged = state !== undefined && (
-    state.sourceElement !== input.sourceElement ||
-    state.targetElement !== input.targetElement
-  );
-  if (
-    state !== undefined &&
-    endpointsChanged &&
-    state.status === "ready" &&
-    state.materialIdentityKey ===
-      (input.stage.dataset["kpEditorEquationMaterialIdentityKey"] ?? "")
-  ) {
-    // The equation surface already invalidates this identity for authored or
-    // structural changes. A direction-only role swap reuses the same atlas.
-    state.sourceElement = input.sourceElement;
-    state.targetElement = input.targetElement;
-    state.canvas.dataset["kpEditorRadicalWebglRebindCount"] = String(
-      Number(
-        state.canvas.dataset["kpEditorRadicalWebglRebindCount"] ?? 0
-      ) + 1
-    );
-  }
   if (
     state !== undefined &&
     (
@@ -106,7 +89,12 @@ export function syncKpRadicalWebglMorph(input: {
     input.stage.dataset["kpEditorRadicalMorphMode"] = "webgl-solid-mask";
     input.stage.dataset["kpEditorRadicalMorphReady"] = "true";
     delete input.stage.dataset["kpEditorRadicalMorphFallbackReason"];
-    return { mode: "webgl-solid-mask", ready: true };
+    return {
+      mode: "webgl-solid-mask",
+      ready: true,
+      sourceCaptureRect: state.sourceCaptureRect,
+      targetCaptureRect: state.targetCaptureRect
+    };
   }
 
   state.canvas.style.opacity = "0";
@@ -169,7 +157,8 @@ async function initializeMorphState(input: {
   try {
     const stageRect = input.stage.getBoundingClientRect();
     const sourceRect = measureKatexTextureCaptureRect(
-      input.state.sourceElement
+      input.state.sourceElement,
+      { includeTransparent: true }
     );
     const targetRect = measureKatexTextureCaptureRect(
       input.state.targetElement
@@ -188,7 +177,10 @@ async function initializeMorphState(input: {
       targetRect,
       targetLocalRect
     );
-    const atlas = await createKatexTextureAtlas([sourceToken, targetToken]);
+    const atlas = await createKatexTextureAtlas(
+      [sourceToken, targetToken],
+      { forceVisibleTokenIds: [sourceToken.id] }
+    );
     if (
       morphStates.get(input.stage) !== input.state ||
       !input.stage.isConnected
@@ -231,6 +223,8 @@ async function initializeMorphState(input: {
       plan,
       atlas
     );
+    input.state.sourceCaptureRect = sourceLocalRect;
+    input.state.targetCaptureRect = targetLocalRect;
     input.state.status = "ready";
     input.state.renderer.render(input.state.progress);
     input.state.canvas.style.opacity = String(input.state.opacity);

@@ -79,14 +79,14 @@ export function sampleKpRadicalCompositeNativeSettlement(input: {
   // A composite endpoint owns the handoff as one measured block. Its children
   // may move independently before this window, but cannot transfer partial
   // ownership or compare their individual boxes to the whole native parent.
-  const nativeOpacity = geometryReady
+  const requiresGeometry = input.endpoint === "target"
+    ? semanticProgress >= handoffStart
+    : semanticProgress > handoffStart && semanticProgress <= handoffEnd;
+  const nativeOpacity = geometryReady || !requiresGeometry
     ? requestedNativeOpacity
     : input.endpoint === "source"
       ? 1
       : 0;
-  const requiresGeometry = input.endpoint === "target"
-    ? semanticProgress >= handoffStart
-    : semanticProgress > handoffStart && semanticProgress <= handoffEnd;
   const phase = !geometryReady && requiresGeometry
     ? "waiting-for-native-geometry"
     : nativeOpacity >= 1

@@ -57,6 +57,27 @@
       "scope": "standard",
       "checkedAt": "2026-07-24T01:06:24.915Z",
       "notes": "App, node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "Radical unit and browser handoff suite",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T01:19:42.367Z",
+      "notes": "Eighteen focused atlas/settlement/WebGL unit tests and five Chromium radical tests pass, including fresh rewind capture and conserved source ownership."
+    },
+    {
+      "command": "Exponent and radical deterministic visual capture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T01:19:43.342Z",
+      "notes": "The stable capture produced 17 frames with ready diagnostics and no warnings; the capture now rejects stale direction-specific endpoint geometry."
+    },
+    {
+      "command": "Production build after exact radical handoff",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T01:19:44.201Z",
+      "notes": "Full typecheck and Vite production build pass."
     }
   ],
   "allowedWork": [
@@ -257,7 +278,9 @@
     {
       "id": "s26",
       "title": "Integrate-exact-radical-handoff",
-      "status": "planned"
+      "summary": "Replaced unsafe direction-only atlas rebinding with fresh complete-exponent capture, including hidden KaTeX descendants offscreen; added a conventional source-native crossfade over the abstract profile window while retaining child motion and exact target settlement. Eighteen unit tests, five Chromium radical tests, deterministic 17-frame capture, full typecheck, and production build pass.",
+      "status": "complete",
+      "planPhaseId": "radical-native-settlement"
     },
     {
       "id": "s27",

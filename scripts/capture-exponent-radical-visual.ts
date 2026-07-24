@@ -235,20 +235,29 @@ async function captureRadicalRewind(input: {
 }): Promise<void> {
   const stage = input.player.locator("[data-kp-editor-equation-stage]");
   const canvas = stage.locator("[data-kp-editor-radical-webgl-morph]");
+  const staleCanvas = await canvas.elementHandle();
   await canvas.evaluate((element) => {
-    element.dataset["kpVisualRewindProbe"] = "prepared";
+    element.dataset["kpVisualRewindProbe"] = "stale-capture";
   });
   await input.player.getByRole("button", { name: "Rewind" }).click();
+  const scrubber = input.player.locator('[data-action="seek-editor-animation"]');
+  await scrubber.fill("0.04");
+  await input.page.waitForFunction(
+    (element) =>
+      element instanceof HTMLElement &&
+      element.dataset["kpEditorRadicalMorphReady"] === "true",
+    await stage.elementHandle()
+  );
   if (
-    await canvas.getAttribute("data-kp-visual-rewind-probe") !== "prepared" ||
-    await stage.getAttribute("data-kp-editor-radical-morph-ready") !== "true"
+    staleCanvas === null ||
+    await staleCanvas.evaluate((element) => element.isConnected) ||
+    await canvas.getAttribute("data-kp-visual-rewind-probe") !== null
   ) {
     throw new Error(
-      "Radical rewind replaced or unprepared the solid morph renderer."
+      "Radical rewind did not replace stale endpoint capture geometry."
     );
   }
 
-  const scrubber = input.player.locator('[data-action="seek-editor-animation"]');
   for (const checkpoint of [
     { id: "radical-rewind-settled", progress: 0.04 },
     { id: "radical-rewind-forming", progress: 0.25 },

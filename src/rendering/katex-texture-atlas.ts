@@ -13,9 +13,14 @@ export interface KatexAtlasPackingOptions {
 }
 
 export interface KatexTextureCaptureOptions {
+  forceVisibleTokenIds?: readonly string[] | undefined;
   maxTextureSize?: number | undefined;
   padding?: number | undefined;
   pixelRatio?: number | undefined;
+}
+
+export interface KatexTextureCaptureRectOptions {
+  includeTransparent?: boolean | undefined;
 }
 
 export function packKatexTextureRegions(
@@ -130,7 +135,12 @@ export async function createKatexTextureAtlas(
       continue;
     }
 
-    const image = await captureElementImage(token.element, token.rect, pixelRatio);
+    const image = await captureElementImage(
+      token.element,
+      token.rect,
+      pixelRatio,
+      options.forceVisibleTokenIds?.includes(token.id) ?? false
+    );
 
     context.drawImage(image, region.x, region.y, region.width, region.height);
   }
@@ -152,10 +162,15 @@ async function waitForDocumentFontsReady(): Promise<void> {
   await document.fonts.ready;
 }
 
-export function measureKatexTextureCaptureRect(element: Element): KatexTokenRect {
+export function measureKatexTextureCaptureRect(
+  element: Element,
+  options: KatexTextureCaptureRectOptions = {}
+): KatexTokenRect {
   const rects = [element, ...Array.from(element.querySelectorAll("*"))]
     .filter(isCaptureRectElement)
-    .filter(isVisibleCaptureElement)
+    .filter((entry) =>
+      isVisibleCaptureElement(entry, options.includeTransparent ?? false)
+    )
     .map((entry) => entry.getBoundingClientRect())
     .filter((rect) => rect.width > 0 && rect.height > 0);
 
@@ -167,7 +182,8 @@ export function measureKatexTextureCaptureRect(element: Element): KatexTokenRect
 async function captureElementImage(
   element: Element,
   rect: KatexTokenRect,
-  pixelRatio: number
+  pixelRatio: number,
+  forceVisible: boolean
 ): Promise<HTMLImageElement> {
   const width = Math.max(1, Math.ceil(rect.width * pixelRatio));
   const height = Math.max(1, Math.ceil(rect.height * pixelRatio));
@@ -178,7 +194,7 @@ async function captureElementImage(
     throw new Error("Expected a KaTeX token clone to be an HTMLElement.");
   }
 
-  inlineComputedCaptureStyles(element, clone);
+  inlineComputedCaptureStyles(element, clone, forceVisible);
 
   const captureStyle = [
     copyComputedTextStyle(element),
@@ -317,13 +333,16 @@ function isCaptureRectElement(element: Element): boolean {
   return !(element instanceof SVGElement && element.ownerSVGElement !== null);
 }
 
-function isVisibleCaptureElement(element: Element): boolean {
+function isVisibleCaptureElement(
+  element: Element,
+  includeTransparent: boolean
+): boolean {
   const style = window.getComputedStyle(element);
 
   return (
     style.display !== "none" &&
     style.visibility !== "hidden" &&
-    style.opacity !== "0"
+    (includeTransparent || style.opacity !== "0")
   );
 }
 
@@ -397,9 +416,16 @@ const COMPUTED_CAPTURE_STYLE_PROPERTIES = [
   "width"
 ] as const;
 
-function inlineComputedCaptureStyles(source: Element, clone: Element): void {
+function inlineComputedCaptureStyles(
+  source: Element,
+  clone: Element,
+  forceVisible = false
+): void {
   if (clone instanceof HTMLElement || clone instanceof SVGElement) {
     appendInlineStyle(clone, serializeComputedCaptureStyle(source));
+    if (forceVisible) {
+      appendInlineStyle(clone, "opacity:1;visibility:visible");
+    }
   }
 
   const sourceChildren = Array.from(source.children);
@@ -409,7 +435,7 @@ function inlineComputedCaptureStyles(source: Element, clone: Element): void {
     const cloneChild = cloneChildren[index];
 
     if (cloneChild !== undefined) {
-      inlineComputedCaptureStyles(sourceChild, cloneChild);
+      inlineComputedCaptureStyles(sourceChild, cloneChild, forceVisible);
     }
   });
 }

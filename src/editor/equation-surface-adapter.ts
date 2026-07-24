@@ -88,6 +88,9 @@ import {
   type KpRadicalSuccessionChoreographyFrame
 } from "../animation/radical-succession-choreography.ts";
 import {
+  kpRadicalSourceNativeSettlementEnd,
+  kpRadicalSourceNativeSettlementStart,
+  sampleKpRadicalCompositeNativeSettlement,
   sampleKpRadicalNativeSettlement
 } from "../animation/radical-native-settlement.ts";
 import {
@@ -95,7 +98,8 @@ import {
 } from "../animation/radical-morph-profile.ts";
 import {
   disposeKpRadicalWebglMorph,
-  syncKpRadicalWebglMorph
+  syncKpRadicalWebglMorph,
+  type KpRadicalWebglMorphSyncResult
 } from "../rendering/radical-webgl-morph.ts";
 import {
   createKpLinearRearrangementChoreography,
@@ -841,7 +845,7 @@ function applyRadicalMaterialLayer(input: {
   const webglEnabled =
     editorAccessibilityMode(input.stage) === "full-motion" &&
     player?.dataset["kpEditorAnimationQualityTier"] !== "efficient";
-  let warmedWebglMorph = {
+  let warmedWebglMorph: KpRadicalWebglMorphSyncResult = {
     mode: "dom-fallback" as "webgl-solid-mask" | "dom-fallback",
     ready: false
   };
@@ -879,6 +883,14 @@ function applyRadicalMaterialLayer(input: {
         ? "native-geometry"
         : "material-fragments",
       geometryReady: input.semanticProgress >= 1,
+      maximumGeometryResidualPx: 0
+    });
+    setRadicalSourceSettlementDataset(input.stage, {
+      progress: input.semanticProgress <= 0 ? 1 : 0,
+      phase: input.semanticProgress <= 0
+        ? "native-geometry"
+        : "material-fragments",
+      geometryReady: input.semanticProgress <= 0,
       maximumGeometryResidualPx: 0
     });
     return;
@@ -925,6 +937,29 @@ function applyRadicalMaterialLayer(input: {
       : {})
   });
   setRadicalSettlementDataset(input.stage, settlement);
+  const sourceSettlement = (
+    warmedWebglMorph.ready &&
+    warmedWebglMorph.sourceCaptureRect !== undefined
+  )
+    ? sampleKpRadicalCompositeNativeSettlement({
+        endpoint: "source",
+        semanticProgress: input.semanticProgress,
+        fragmentRects: [warmedWebglMorph.sourceCaptureRect],
+        // The atlas is captured from the complete native exponent block. A
+        // direction change invalidates and recaptures this endpoint instead of
+        // rebinding old child geometry to a newly spaced KaTeX parent.
+        nativeRect: warmedWebglMorph.sourceCaptureRect,
+        handoffStart: kpRadicalSourceNativeSettlementStart,
+        handoffEnd: kpRadicalSourceNativeSettlementEnd,
+        easing: kpRadicalConventionalMorphProfile.morph.easing
+      })
+    : undefined;
+  setRadicalSourceSettlementDataset(input.stage, sourceSettlement ?? {
+    progress: 0,
+    phase: "material-fragments",
+    geometryReady: false,
+    maximumGeometryResidualPx: Number.POSITIVE_INFINITY
+  });
   const webglMorph = sourceExponent === null
     ? { mode: "dom-fallback" as const, ready: false }
     : syncKpRadicalWebglMorph({
@@ -932,7 +967,10 @@ function applyRadicalMaterialLayer(input: {
         sourceElement: sourceExponent,
         targetElement: radicalNative,
         semanticProgress: input.semanticProgress,
-        opacity: settlement.fragmentOpacity,
+        opacity: Math.min(
+          settlement.fragmentOpacity,
+          sourceSettlement?.fragmentOpacity ?? 1
+        ),
         enabled: webglEnabled
       });
 
@@ -940,7 +978,9 @@ function applyRadicalMaterialLayer(input: {
     // The overlay owns only the changing notation. The x continuant remains a
     // DOM-owned material owner above it and the exact KaTeX radical takes over
     // during native settlement.
-    sourceExponent.style.opacity = "0";
+    sourceExponent.style.opacity = String(
+      sourceSettlement?.nativeOpacity ?? 0
+    );
     radicalNative.style.opacity = String(settlement.nativeOpacity);
     radicalNative.dataset["kpEquationMaterialNativeHidden"] = "true";
     syncKpEquationMaterialLayer({ stage: input.stage, owners });
@@ -1029,6 +1069,24 @@ function setRadicalSettlementDataset(
   stage.dataset["kpEditorEquationNativeSettlementReady"] =
     String(settlement.geometryReady);
   stage.dataset["kpEditorEquationNativeSettlementResidual"] =
+    String(settlement.maximumGeometryResidualPx);
+}
+
+function setRadicalSourceSettlementDataset(
+  stage: HTMLElement,
+  settlement: {
+    readonly progress: number;
+    readonly phase: string;
+    readonly geometryReady: boolean;
+    readonly maximumGeometryResidualPx: number;
+  }
+): void {
+  stage.dataset["kpEditorEquationSourceSettlementProgress"] =
+    String(settlement.progress);
+  stage.dataset["kpEditorEquationSourceSettlementPhase"] = settlement.phase;
+  stage.dataset["kpEditorEquationSourceSettlementReady"] =
+    String(settlement.geometryReady);
+  stage.dataset["kpEditorEquationSourceSettlementResidual"] =
     String(settlement.maximumGeometryResidualPx);
 }
 
