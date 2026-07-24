@@ -48,6 +48,65 @@ test("branch-local evidence derives roots from symmetric exact offsets", () => {
   }
 });
 
+test("completing-square candidates retain the exact post-factor operation chain", () => {
+  const completing = canonical().branchSets.find(
+    ({ methodId }) => methodId === "method.quadratic.completing-square"
+  )!;
+  assert.deepEqual(
+    completing.derivation.map(
+      ({ id, lawId, sourceExpression, targetExpression, dependsOn }) => ({
+        id,
+        lawId,
+        sourceExpression,
+        targetExpression,
+        dependsOn
+      })
+    ),
+    [
+      {
+        id: "operation.quadratic.take-square-roots-and-branch-sign",
+        lawId: "law.equation.square-root-both-sides",
+        sourceExpression: "(x-5/2)^2=1/4",
+        targetExpression: "x-5/2=±sqrt(1/4)",
+        dependsOn: [
+          "authority.quadratic.canonical.completing-square.verify-solution-set"
+        ]
+      },
+      {
+        id: "operation.quadratic.evaluate-principal-square-root",
+        lawId: "law.arithmetic.principal-square-root",
+        sourceExpression: "x-5/2=±sqrt(1/4)",
+        targetExpression: "x-5/2=±1/2",
+        dependsOn: [
+          "operation.quadratic.take-square-roots-and-branch-sign"
+        ]
+      },
+      {
+        id: "operation.quadratic.isolate-signed-candidates",
+        lawId: "law.equation.add-both-sides",
+        sourceExpression: "x-5/2=±1/2",
+        targetExpression: "x=5/2±1/2",
+        dependsOn: [
+          "operation.quadratic.evaluate-principal-square-root"
+        ]
+      },
+      {
+        id: "operation.quadratic.normalize-signed-candidates",
+        lawId: "law.arithmetic.equivalent-fractions",
+        sourceExpression: "x=5/2±1/2",
+        targetExpression: "x=(5±1)/2",
+        dependsOn: [
+          "operation.quadratic.isolate-signed-candidates"
+        ]
+      }
+    ]
+  );
+  assert.ok(completing.branches.every(
+    ({ dependsOn }) =>
+      dependsOn[0] === "operation.quadratic.normalize-signed-candidates"
+  ));
+});
+
 test("branch validity is independent of authored or screen order", () => {
   const { branchSets, graph, solutionSet } = canonical();
   const original = branchSets[0]!;

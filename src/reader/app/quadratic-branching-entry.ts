@@ -163,6 +163,9 @@ function renderEquations(
   ];
   resetEquationPresentation(equations);
   if (branchesVisible(frame.progress) || frame.solutionSetNative) {
+    if (branchOriginOwnsMaterial(frame)) {
+      showNativeEquation(equations, frame.equationState.id);
+    }
     stage.dataset["kpSymbolicTransition"] = "none";
     stage.dataset["kpSymbolicMotionOwners"] = "0";
     return;
@@ -213,6 +216,19 @@ function renderEquations(
         (presentationRole ?? "focal-operand") === "focal-operand"
     ).length
   );
+}
+
+function branchOriginOwnsMaterial(
+  frame: KpQuadraticReaderSurfaceFrame
+): boolean {
+  if (frame.phase !== "branch") return false;
+  const sampled = sampleKpQuadraticBranchChoreography({
+    choreography: createKpQuadraticBranchChoreography(methodId),
+    progress: frame.branchProgress,
+    direction: "forward"
+  });
+  return sampled.stage === "fission" &&
+    sampled.motion.ownership.ownerSide === "sources";
 }
 
 function renderCorrespondenceMotion(input: {
@@ -359,6 +375,17 @@ function renderBranches(branchProgress: number): void {
     : choreography.responsiveSeparation.narrow;
   const minus = requireElement<HTMLElement>('[data-kp-branch="minus"]');
   const plus = requireElement<HTMLElement>('[data-kp-branch="plus"]');
+  const showCandidates = branchProgress < 0.42;
+  for (const candidate of branches.querySelectorAll<HTMLElement>(
+    "[data-kp-branch-candidate]"
+  )) {
+    candidate.hidden = !showCandidates;
+  }
+  for (const result of branches.querySelectorAll<HTMLElement>(
+    "[data-kp-branch-result]"
+  )) {
+    result.hidden = showCandidates;
+  }
   if (frame.stage === "fission") {
     const targets = frame.motion.targets;
     applyBranch(minus, targets[0]?.opacity ?? 0, targets[0]?.scale ?? 1, separation * (1 - (targets[0]?.pathProgress ?? 0)));

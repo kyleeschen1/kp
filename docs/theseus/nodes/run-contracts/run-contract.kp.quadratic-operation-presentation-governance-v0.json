@@ -134,7 +134,8 @@
     {
       "id": "slice-13",
       "title": "Square-root-and-isolate-x-chain",
-      "status": "planned"
+      "summary": "Added an exact four-operation post-factor derivation, native square-root/plus-minus/isolation/candidate states, and a continuous ownership handoff from the shared candidate into the two existing signed branches.",
+      "status": "complete"
     },
     {
       "id": "slice-14",

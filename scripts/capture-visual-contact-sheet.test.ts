@@ -53,6 +53,12 @@ test("quadratic contact sheet freezes both methods and wide and narrow outcomes"
       "method-square-evaluate-right",
       "method-square-factor-pattern",
       "method-square-factor-collapse",
+      "method-square-take-roots",
+      "method-square-evaluate-root",
+      "method-square-isolate",
+      "method-square-normalize-candidates",
+      "method-square-branch-origin",
+      "method-square-branch-candidates",
       "method-formula-start",
       "method-formula",
       "method-formula-end",
@@ -67,7 +73,7 @@ test("quadratic contact sheet freezes both methods and wide and narrow outcomes"
   );
   assert.equal(
     new Set(kpQuadraticBranchingContactSheetCheckpoints.map((checkpoint) => checkpoint.id)).size,
-    19
+    25
   );
 });
 

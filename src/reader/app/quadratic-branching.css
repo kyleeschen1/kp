@@ -180,7 +180,7 @@ body[data-kp-reader="quadratic-branching"] {
   color: var(--kp-quadratic-coral);
 }
 
-.kp-quadratic-branches > div span,
+.kp-quadratic-branch-label,
 .kp-quadratic-solution__label {
   color: var(--kp-muted);
   font-size: .64rem;

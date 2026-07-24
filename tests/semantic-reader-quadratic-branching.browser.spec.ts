@@ -30,7 +30,7 @@ test("quadratic learner surface shares progress across method, URL, and controls
 test("both methods move selector-owned native symbols through measured paths", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(
-    route.replace("kpProgress=680", "kpProgress=140") + "&kpMotion=full",
+    route.replace("kpProgress=680", "kpProgress=124") + "&kpMotion=full",
     { waitUntil: "networkidle" }
   );
   const stage = page.locator("[data-kp-quadratic-stage]");
@@ -56,13 +56,13 @@ test("both methods move selector-owned native symbols through measured paths", a
   expect(squareMotion.centerDistance).toBeLessThan(1);
 
   await seek(430);
-  await seek(140);
+  await seek(124);
   expect(await symbolicSnapshot(
     "katex.quadratic.completing-square.standard.constant",
     "katex.quadratic.completing-square.balanced.right"
   )).toEqual(squareMotion);
 
-  await seek(380);
+  await seek(268);
   await expect(stage).toHaveAttribute(
     "data-kp-symbolic-transition",
     "transition.quadratic.completing-square.evaluate-right"
@@ -85,7 +85,7 @@ test("both methods move selector-owned native symbols through measured paths", a
   });
   expect(mergeLaneSeparation).toBeGreaterThan(10);
 
-  await seek(460);
+  await seek(316);
   await expect(stage).toHaveAttribute(
     "data-kp-symbolic-transition",
     "transition.quadratic.completing-square.expose-factor-pattern"
@@ -98,7 +98,7 @@ test("both methods move selector-owned native symbols through measured paths", a
     stage.locator('[data-kp-transition-layer="target"]')
   ).toHaveCSS("opacity", "0");
 
-  await seek(540);
+  await seek(364);
   await expect(stage).toHaveAttribute(
     "data-kp-symbolic-transition",
     "transition.quadratic.completing-square.factor-perfect-square"
@@ -113,6 +113,52 @@ test("both methods move selector-owned native symbols through measured paths", a
       '[data-kp-motion-id="katex.quadratic.completing-square.factor-pattern.square"]'
     )
   ).toHaveAttribute("data-kp-symbolic-motion-role", "merged");
+
+  await seek(412);
+  await expect(stage).toHaveAttribute(
+    "data-kp-symbolic-transition",
+    "transition.quadratic.completing-square.take-square-roots"
+  );
+  await expect(stage).toHaveAttribute("data-kp-symbolic-focal-owners", "1");
+  await expect(
+    stage.locator(
+      '[data-kp-motion-id="katex.quadratic.completing-square.perfect.right"]'
+    )
+  ).toHaveAttribute("data-kp-symbolic-motion-role", "focal-operand");
+
+  await seek(508);
+  await expect(stage).toHaveAttribute(
+    "data-kp-symbolic-transition",
+    "transition.quadratic.completing-square.isolate-signed-candidates"
+  );
+  await expect(
+    stage.locator(
+      '[data-kp-motion-id="katex.quadratic.completing-square.square-root-evaluated.left-offset"]'
+    )
+  ).toHaveAttribute("data-kp-symbolic-motion-role", "focal-operand");
+
+  await seek(600);
+  await expect(
+    stage.locator(
+      '[data-kp-equation-state="katex.quadratic.completing-square.candidates"]'
+    )
+  ).toBeVisible();
+
+  await seek(670);
+  await expect(
+    stage.locator("[data-kp-branch-candidate]").first()
+  ).toBeVisible();
+  await expect(
+    stage.locator("[data-kp-branch-result]").first()
+  ).toBeHidden();
+
+  await seek(680);
+  await expect(
+    stage.locator("[data-kp-branch-candidate]").first()
+  ).toBeHidden();
+  await expect(
+    stage.locator("[data-kp-branch-result]").first()
+  ).toBeVisible();
 
   await page.getByRole("button", { name: "Quadratic formula" }).click();
   await seek(400);

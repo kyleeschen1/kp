@@ -21,11 +21,20 @@ export interface KpQuadraticSolutionBranch {
   readonly dependsOn: readonly string[];
 }
 
+export interface KpQuadraticBranchDerivationOperation {
+  readonly id: string;
+  readonly lawId: string;
+  readonly sourceExpression: string;
+  readonly targetExpression: string;
+  readonly dependsOn: readonly string[];
+}
+
 export interface KpQuadraticPlusMinusBranchSet {
   readonly schemaVersion: "kp.quadratic-plus-minus-branch-set.v1";
   readonly id: string;
   readonly methodId: KpQuadraticMethodId;
   readonly sourceNodeId: string;
+  readonly derivation: readonly KpQuadraticBranchDerivationOperation[];
   readonly split: {
     readonly id: string;
     readonly relation: "one-to-many";
@@ -46,6 +55,7 @@ export interface KpQuadraticBranchDiagnostic {
     | "branch-identity"
     | "method-ownership"
     | "dependency-order"
+    | "derivation-chain"
     | "root-ownership"
     | "asymmetry"
     | "evidence-mismatch"
@@ -68,9 +78,11 @@ export function createCanonicalKpQuadraticPlusMinusBranches(input: {
       throw new Error(`Method ${path.id} lacks a terminal branch dependency.`);
     }
     const sourceNodeId = sourceEdge.sourceNodeId;
+    const derivation = methodDerivation(path.id, sourceEdge.operationRef);
+    const branchDependency = derivation.at(-1)!.id;
     const branches = Object.freeze([
-      branch(path.id, "minus", center, negate(radius), "root:2/1", sourceEdge.operationRef),
-      branch(path.id, "plus", center, radius, "root:3/1", sourceEdge.operationRef)
+      branch(path.id, "minus", center, negate(radius), "root:2/1", branchDependency),
+      branch(path.id, "plus", center, radius, "root:3/1", branchDependency)
     ]);
     const branchIds = Object.freeze(branches.map(({ id }) => id));
     const branchSet = Object.freeze({
@@ -78,6 +90,7 @@ export function createCanonicalKpQuadraticPlusMinusBranches(input: {
       id: `branches.${path.id}`,
       methodId: path.id,
       sourceNodeId,
+      derivation,
       split: Object.freeze({
         id: `split.${path.id}.plus-minus`,
         relation: "one-to-many" as const,
@@ -115,6 +128,41 @@ export function validateKpQuadraticPlusMinusBranchSet(
     diagnostics.push(issue("branch-cardinality", "branches", `Branch set ${branchSet.id} requires exactly one plus and one minus branch.`));
     return Object.freeze(diagnostics);
   }
+  const derivationIds = new Set<string>();
+  let derivationDependency = graph.edges.find(
+    ({ targetNodeId, methodId }) =>
+      targetNodeId === graph.targetNodeId && methodId === branchSet.methodId
+  )?.operationRef;
+  branchSet.derivation.forEach((operation, index) => {
+    if (
+      derivationDependency === undefined ||
+      operation.id.trim().length === 0 ||
+      operation.lawId.trim().length === 0 ||
+      operation.sourceExpression.trim().length === 0 ||
+      operation.targetExpression.trim().length === 0 ||
+      operation.dependsOn.length !== 1 ||
+      operation.dependsOn[0] !== derivationDependency ||
+      derivationIds.has(operation.id) ||
+      (index > 0 &&
+        branchSet.derivation[index - 1]?.targetExpression !==
+          operation.sourceExpression)
+    ) {
+      diagnostics.push(issue(
+        "derivation-chain",
+        `derivation[${index}]`,
+        `Branch derivation ${operation.id} must preserve one exact ordered dependency and contiguous expressions.`
+      ));
+    }
+    derivationIds.add(operation.id);
+    derivationDependency = operation.id;
+  });
+  if (branchSet.derivation.length === 0) {
+    diagnostics.push(issue(
+      "derivation-chain",
+      "derivation",
+      `Branch set ${branchSet.id} requires an explicit candidate derivation.`
+    ));
+  }
   for (const branch of branchSet.branches) {
     const expectedId = `branch.${branchSet.methodId}.${branch.sign}`;
     if (branch.id !== expectedId) {
@@ -123,7 +171,10 @@ export function validateKpQuadraticPlusMinusBranchSet(
     if (branch.methodId !== branchSet.methodId) {
       diagnostics.push(issue("method-ownership", `branches.${branch.sign}.methodId`, `Branch ${branch.id} belongs to a different method.`));
     }
-    if (branch.dependsOn.length === 0 || new Set(branch.dependsOn).size !== branch.dependsOn.length) {
+    if (
+      branch.dependsOn.length !== 1 ||
+      branch.dependsOn[0] !== branchSet.derivation.at(-1)?.id
+    ) {
       diagnostics.push(issue("dependency-order", `branches.${branch.sign}.dependsOn`, `Branch ${branch.id} requires a unique ordered semantic dependency.`));
     }
     const member = solutionSet.members.find(({ id }) => id === branch.rootMemberId);
@@ -163,6 +214,69 @@ export function validateKpQuadraticPlusMinusBranchSet(
     diagnostics.push(issue("reunion-prerequisite", "reunionPrerequisite", `Branch set ${branchSet.id} must split and reunite the complete exact branch set.`));
   }
   return Object.freeze(diagnostics);
+}
+
+function methodDerivation(
+  methodId: KpQuadraticMethodId,
+  dependency: string
+): readonly KpQuadraticBranchDerivationOperation[] {
+  const operations = methodId === "method.quadratic.completing-square"
+    ? [
+        derivationOperation(
+          "operation.quadratic.take-square-roots-and-branch-sign",
+          "law.equation.square-root-both-sides",
+          "(x-5/2)^2=1/4",
+          "x-5/2=±sqrt(1/4)",
+          dependency
+        ),
+        derivationOperation(
+          "operation.quadratic.evaluate-principal-square-root",
+          "law.arithmetic.principal-square-root",
+          "x-5/2=±sqrt(1/4)",
+          "x-5/2=±1/2",
+          "operation.quadratic.take-square-roots-and-branch-sign"
+        ),
+        derivationOperation(
+          "operation.quadratic.isolate-signed-candidates",
+          "law.equation.add-both-sides",
+          "x-5/2=±1/2",
+          "x=5/2±1/2",
+          "operation.quadratic.evaluate-principal-square-root"
+        ),
+        derivationOperation(
+          "operation.quadratic.normalize-signed-candidates",
+          "law.arithmetic.equivalent-fractions",
+          "x=5/2±1/2",
+          "x=(5±1)/2",
+          "operation.quadratic.isolate-signed-candidates"
+        )
+      ]
+    : [
+        derivationOperation(
+          "operation.quadratic.retain-formula-candidates",
+          "law.arithmetic.equivalent-fractions",
+          "x=(5±1)/2",
+          "x=(5±1)/2",
+          dependency
+        )
+      ];
+  return Object.freeze(operations);
+}
+
+function derivationOperation(
+  id: string,
+  lawId: string,
+  sourceExpression: string,
+  targetExpression: string,
+  dependency: string
+): KpQuadraticBranchDerivationOperation {
+  return Object.freeze({
+    id,
+    lawId,
+    sourceExpression,
+    targetExpression,
+    dependsOn: Object.freeze([dependency])
+  });
 }
 
 function branch(

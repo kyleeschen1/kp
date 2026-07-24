@@ -293,6 +293,13 @@
       "scope": "slice-12 perfect-square factor recognition",
       "checkedAt": "2026-07-24T23:12:21.891Z",
       "notes": "Typecheck, all nine Chromium checks, and 19 deterministic contact-sheet checkpoints passed. The midpoint now uses a measured symbol handoff so unlike KaTeX trees do not ghost through each other."
+    },
+    {
+      "command": "focused quadratic semantic and presentation tests; npm run typecheck; quadratic Chromium; npm run visual:quadratic-branching",
+      "status": "passed",
+      "scope": "slice-13 square-root and isolate-x chain",
+      "checkedAt": "2026-07-24T23:24:02.629Z",
+      "notes": "Thirty focused tests, typecheck, all nine Chromium checks, and 25 deterministic review frames passed. The exact branch authority now owns four ordered post-factor operations; native KaTeX depicts square-root, plus-minus, root evaluation, isolation, numerator normalization, and a continuous split into signed candidates."
     }
   ],
   "progress": {

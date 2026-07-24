@@ -15,7 +15,11 @@ test("completing-square projection exposes both-sides arithmetic as native KaTeX
     "x^2 - 5x + \\frac{25}{4} = -\\frac{24}{4} + \\frac{25}{4}",
     "x^2 - 5x + \\frac{25}{4} = \\frac{1}{4}",
     "x^2 - 2(x)\\left(\\frac{5}{2}\\right) + \\left(\\frac{5}{2}\\right)^2 = \\frac{1}{4}",
-    "\\left(x - \\frac{5}{2}\\right)^2 = \\frac{1}{4}"
+    "\\left(x - \\frac{5}{2}\\right)^2 = \\frac{1}{4}",
+    "x - \\frac{5}{2} = \\pm\\sqrt{\\frac{1}{4}}",
+    "x - \\frac{5}{2} = \\pm\\frac{1}{2}",
+    "x = \\frac{5}{2} \\pm \\frac{1}{2}",
+    "x = \\frac{5 \\pm 1}{2}"
   ]);
   assert.ok(projection.states.every(({ ownership }) => ownership === "native-katex"));
 });
@@ -23,7 +27,7 @@ test("completing-square projection exposes both-sides arithmetic as native KaTeX
 test("perfect-square recognition exposes then factors the distribution pattern", () => {
   const projection = createKpCompletingSquareKatexProjection();
   assert.deepEqual(
-    projection.transitions.slice(-2).map(
+    projection.transitions.slice(4, 6).map(
       ({ id, presentation, correspondence }) => ({
         id,
         operationRef: presentation?.operationRef,
@@ -57,6 +61,45 @@ test("perfect-square recognition exposes then factors the distribution pattern",
           ["right", "continuant"]
         ]
       }
+    ]
+  );
+});
+
+test("square-root and isolation work remains an explicit branch dependency chain", () => {
+  const projection = createKpCompletingSquareKatexProjection();
+  assert.deepEqual(
+    projection.transitions.slice(6).map(({ id, presentation }) => [
+      id,
+      presentation?.operationRef
+    ]),
+    [
+      [
+        "transition.quadratic.completing-square.take-square-roots",
+        "operation.quadratic.take-square-roots-and-branch-sign"
+      ],
+      [
+        "transition.quadratic.completing-square.evaluate-square-root",
+        "operation.quadratic.evaluate-principal-square-root"
+      ],
+      [
+        "transition.quadratic.completing-square.isolate-signed-candidates",
+        "operation.quadratic.isolate-signed-candidates"
+      ],
+      [
+        "transition.quadratic.completing-square.normalize-signed-candidates",
+        "operation.quadratic.normalize-signed-candidates"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    projection.transitions[6]?.correspondence.map(
+      ({ role, presentationRole }) => [role, presentationRole]
+    ),
+    [
+      ["binomial-x-to-left-x", "continuant"],
+      ["binomial-offset-to-left-offset", "continuant"],
+      ["equals", "continuant"],
+      ["right-into-radical", "focal-operand"]
     ]
   );
 });

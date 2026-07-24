@@ -117,6 +117,34 @@ export function createKpCompletingSquareKatexProjection():
       "\\left(x - \\frac{5}{2}\\right)^2 = \\frac{1}{4}",
       "the quantity x minus five halves squared equals one fourth",
       ["binomial-x", "binomial-offset", "exponent", "equals", "right"]
+    ),
+    state(
+      "square-root-applied",
+      "presentation.quadratic.completing-square.square-root-applied",
+      "x - \\frac{5}{2} = \\pm\\sqrt{\\frac{1}{4}}",
+      "x minus five halves equals plus or minus the square root of one fourth",
+      ["left-x", "left-offset", "equals", "plus-minus", "radical"]
+    ),
+    state(
+      "square-root-evaluated",
+      "presentation.quadratic.completing-square.square-root-evaluated",
+      "x - \\frac{5}{2} = \\pm\\frac{1}{2}",
+      "x minus five halves equals plus or minus one half",
+      ["left-x", "left-offset", "equals", "plus-minus", "right"]
+    ),
+    state(
+      "isolated",
+      "presentation.quadratic.completing-square.isolated",
+      "x = \\frac{5}{2} \\pm \\frac{1}{2}",
+      "x equals five halves plus or minus one half",
+      ["variable", "equals", "center", "plus-minus", "offset"]
+    ),
+    state(
+      "candidates",
+      "presentation.quadratic.completing-square.candidates",
+      "x = \\frac{5 \\pm 1}{2}",
+      "x equals the quantity five plus or minus one over two",
+      ["variable", "equals", "center", "plus-minus", "offset", "denominator"]
     )
   ]);
   const transitions = Object.freeze([
@@ -235,6 +263,62 @@ export function createKpCompletingSquareKatexProjection():
         ),
         sameRole("equals"),
         sameRole("right")
+      ]
+    ),
+    transition(
+      "take-square-roots",
+      "operation.quadratic.take-square-roots-and-branch-sign",
+      states[6]!,
+      states[7]!,
+      [
+        roleBinding("binomial-x-to-left-x", "binomial-x", "left-x", "continuant"),
+        roleBinding(
+          "binomial-offset-to-left-offset",
+          "binomial-offset",
+          "left-offset",
+          "continuant"
+        ),
+        sameRole("equals"),
+        roleBinding("right-into-radical", "right", "radical", "focal-operand")
+      ]
+    ),
+    transition(
+      "evaluate-square-root",
+      "operation.quadratic.evaluate-principal-square-root",
+      states[7]!,
+      states[8]!,
+      [
+        sameRole("left-x"),
+        sameRole("left-offset"),
+        sameRole("equals"),
+        sameRole("plus-minus"),
+        roleBinding("radical-to-right", "radical", "right", "focal-operand")
+      ]
+    ),
+    transition(
+      "isolate-signed-candidates",
+      "operation.quadratic.isolate-signed-candidates",
+      states[8]!,
+      states[9]!,
+      [
+        roleBinding("left-x-to-variable", "left-x", "variable", "continuant"),
+        sameRole("equals"),
+        roleBinding("relocate-offset", "left-offset", "center", "focal-operand"),
+        sameRole("plus-minus"),
+        roleBinding("right-to-offset", "right", "offset", "continuant")
+      ]
+    ),
+    transition(
+      "normalize-signed-candidates",
+      "operation.quadratic.normalize-signed-candidates",
+      states[9]!,
+      states[10]!,
+      [
+        sameRole("variable"),
+        sameRole("equals"),
+        sameRole("center"),
+        sameRole("plus-minus"),
+        sameRole("offset")
       ]
     )
   ]);
