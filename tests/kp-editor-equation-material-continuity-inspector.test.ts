@@ -59,6 +59,14 @@ test("inspector distinguishes native handoff from settled geometry", () => {
     }).settlementLabel,
     "native geometry"
   );
+  assert.equal(
+    inspectKpEditorEquationMaterialContinuity({
+      ...snapshot,
+      nativeSettlementProgress: 0,
+      nativeSettlementPhase: "native-handoff"
+    }).settlementLabel,
+    "native handoff"
+  );
 });
 
 test("linear continuity reports persistent owners without a bundle", () => {

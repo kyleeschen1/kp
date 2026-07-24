@@ -1741,12 +1741,38 @@ test("radical material succession is identical under semantic rewind", async ({
   await morphOwner.evaluate((element) => {
     element.dataset["kpRadicalMidpointRewindProbe"] = "stale-capture";
   });
-  const forwardRects = await Promise.all([baseOwner, morphOwner].map((locator) =>
-    locator.evaluate((element) => {
-      const rect = element.getBoundingClientRect();
-      return { x: rect.x, y: rect.y };
-    })
-  ));
+  const observeRewindGeometry = async () => stage.evaluate(
+    async (element) => {
+      if (!(element instanceof HTMLElement)) {
+        throw new Error("Radical stage must be an HTML element.");
+      }
+      const base = element.querySelector<HTMLElement>(
+        '[data-kp-equation-material-owner-id="radical-rewrite.base-radicand"]'
+      );
+      const moduleUrl = "/src/rendering/radical-webgl-morph.ts";
+      const module = await import(moduleUrl) as {
+        measureKpRadicalWebglInk(
+          stage: HTMLElement,
+          endpoint: "target"
+        ): {
+          renderedWebglInkRect: { left: number; top: number };
+        } | undefined;
+      };
+      const morphInk = module.measureKpRadicalWebglInk(element, "target")
+        ?.renderedWebglInkRect;
+      if (base === null || morphInk === undefined) {
+        throw new Error("Radical rewind geometry is unavailable.");
+      }
+      const baseRect = base.getBoundingClientRect();
+      return [
+        { x: baseRect.x, y: baseRect.y },
+        { x: morphInk.left, y: morphInk.top }
+      ];
+    }
+  );
+  // Compare visible ink rather than the transformed full-stage canvas box.
+  // Endpoint calibration may legitimately transform that transparent box.
+  const forwardRects = await observeRewindGeometry();
 
   await player.getByRole("button", { name: "Rewind" }).click();
   await scrubber.fill("0.35");
@@ -1769,15 +1795,21 @@ test("radical material succession is identical under semantic rewind", async ({
     "data-kp-editor-radical-webgl-target",
     "complete-native-radical-operator"
   );
-  const rewindRects = await Promise.all([baseOwner, morphOwner].map((locator) =>
-    locator.evaluate((element) => {
-      const rect = element.getBoundingClientRect();
-      return { x: rect.x, y: rect.y };
-    })
-  ));
+  const rewindRects = await observeRewindGeometry();
   for (const [index, forward] of forwardRects.entries()) {
-    expect(Math.abs(rewindRects[index]!.x - forward.x)).toBeLessThan(0.75);
-    expect(Math.abs(rewindRects[index]!.y - forward.y)).toBeLessThan(0.75);
+    const comparison = {
+      index,
+      forward,
+      rewind: rewindRects[index]
+    };
+    expect(
+      Math.abs(rewindRects[index]!.x - forward.x),
+      JSON.stringify(comparison)
+    ).toBeLessThan(0.75);
+    expect(
+      Math.abs(rewindRects[index]!.y - forward.y),
+      JSON.stringify(comparison)
+    ).toBeLessThan(0.75);
   }
   await expect(
     stage.locator(
@@ -1951,6 +1983,163 @@ test("radical rewind interpolates through the composite source-native boundary",
     5
   );
   expect(sourceInkDiagnostic.sizeResidualPx).toBe(0);
+});
+
+test("radical handoffs rebuild exactly across direction, fallback, resize, and fonts", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  const accessibility = player.locator(
+    "[data-kp-editor-animation-accessibility-control]"
+  );
+  const quality = player.locator(
+    "[data-kp-editor-animation-quality-control]"
+  );
+  const morph = stage.locator("[data-kp-editor-radical-webgl-morph]");
+
+  await quality.selectOption("full");
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-radical-morph-ready",
+    "true"
+  );
+
+  const observeEndpoint = async (endpoint: "source" | "target") =>
+    stage.evaluate(async (element, measuredEndpoint) => {
+      if (!(element instanceof HTMLElement)) {
+        throw new Error("Radical stage must be an HTML element.");
+      }
+      const moduleUrl = "/src/rendering/radical-webgl-morph.ts";
+      const module = await import(moduleUrl) as {
+        measureKpRadicalWebglInk(
+          stage: HTMLElement,
+          endpoint: "source" | "target"
+        ): { maximumGeometryResidualPx: number } | undefined;
+      };
+      const comparison = module.measureKpRadicalWebglInk(
+        element,
+        measuredEndpoint
+      );
+      const canvas = element.querySelector<HTMLElement>(
+        "[data-kp-editor-radical-webgl-morph]"
+      );
+      const native = measuredEndpoint === "source"
+        ? element.querySelector<HTMLElement>(
+            '[data-kp-motion-id*=".power.exponent-numerator"]'
+          )?.closest<HTMLElement>(".msupsub")
+        : element.querySelector<HTMLElement>(
+            '[data-kp-radical-native-visual="true"]'
+          );
+      if (
+        comparison === undefined ||
+        canvas === null ||
+        native === null ||
+        native === undefined
+      ) {
+        throw new Error(`Missing ${measuredEndpoint} handoff observation.`);
+      }
+      return {
+        semanticProgress: Number(
+          element.dataset["kpEditorEquationSemanticProgress"]
+        ),
+        maximumGeometryResidualPx:
+          comparison.maximumGeometryResidualPx,
+        movingOpacity: Number(getComputedStyle(canvas).opacity),
+        nativeOpacity: Number(getComputedStyle(native).opacity)
+      };
+    }, endpoint);
+
+  const expectEndpoint = async (
+    semanticProgress: number,
+    endpoint: "source" | "target"
+  ) => {
+    await expect.poll(async () =>
+      (await observeEndpoint(endpoint)).maximumGeometryResidualPx
+    ).toBeLessThanOrEqual(kpRadicalNativeSettlementGeometryTolerancePx);
+    await expect.poll(async () =>
+      (await observeEndpoint(endpoint)).semanticProgress
+    ).toBeCloseTo(semanticProgress, 10);
+    await expect.poll(async () => observeEndpoint(endpoint)).toMatchObject({
+      movingOpacity: endpoint === "target" ? 1 : 0,
+      nativeOpacity: endpoint === "target" ? 0 : 1
+    });
+  };
+
+  await scrubber.fill("0.04");
+  await expectEndpoint(0.04, "source");
+  await scrubber.fill("0.88");
+  await expectEndpoint(0.88, "target");
+
+  await scrubber.fill("1");
+  await player.getByRole("button", { name: "Rewind" }).click();
+  await scrubber.fill("0.12");
+  await expectEndpoint(0.88, "target");
+  await scrubber.fill("0.96");
+  await expectEndpoint(0.04, "source");
+
+  await accessibility.selectOption("reduced-motion");
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-radical-morph-mode",
+    "dom-fallback"
+  );
+  await expect(morph).toHaveCount(0);
+  await accessibility.selectOption("full-motion");
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-radical-morph-ready",
+    "true"
+  );
+  await player.getByRole("button", { name: "Reset" }).click();
+  await quality.selectOption("efficient");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-quality-tier",
+    "efficient"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-radical-morph-mode",
+    "dom-fallback"
+  );
+  await expect(morph).toHaveCount(0);
+  await quality.selectOption("full");
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-radical-morph-ready",
+    "true"
+  );
+
+  await player.getByRole("button", { name: "Reset" }).click();
+  await scrubber.fill("0.88");
+  await expectEndpoint(0.88, "target");
+  const preResizeMorph = await morph.elementHandle();
+  await page.setViewportSize({ width: 960, height: 800 });
+  await expect.poll(async () =>
+    preResizeMorph?.evaluate((element) => element.isConnected)
+  ).toBe(false);
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-radical-morph-ready",
+    "true"
+  );
+  await expectEndpoint(0.88, "target");
+
+  const preFontMorph = await morph.elementHandle();
+  await page.evaluate(() => {
+    document.fonts.dispatchEvent(new Event("loadingdone"));
+  });
+  await expect.poll(async () =>
+    preFontMorph?.evaluate((element) => element.isConnected)
+  ).toBe(false);
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-cache-invalidation-reason",
+    "fonts"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-radical-morph-ready",
+    "true"
+  );
+  await expectEndpoint(0.88, "target");
 });
 
 test("radical bundle and native settlement satisfy continuity budgets", async ({

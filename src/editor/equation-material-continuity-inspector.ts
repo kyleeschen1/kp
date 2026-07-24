@@ -6,6 +6,7 @@ export interface KpEditorEquationMaterialContinuitySnapshot {
   readonly structuralFragmentCount: number;
   readonly bundleAnchor?: string | undefined;
   readonly nativeSettlementProgress?: number | undefined;
+  readonly nativeSettlementPhase?: string | undefined;
   readonly semanticProgress: number;
 }
 
@@ -35,15 +36,19 @@ export function inspectKpEditorEquationMaterialContinuity(
     : snapshot.motionIdentityIds.length > 0
       ? "native-identities"
       : "unreported";
-  const settlementLabel = snapshot.nativeSettlementProgress === undefined
-    ? snapshot.fragmentRoles.length === 0
-      ? "not applicable"
-      : "material fragments"
-    : snapshot.nativeSettlementProgress >= 1
-      ? "native geometry"
-      : snapshot.nativeSettlementProgress > 0
-        ? "native handoff"
-        : "material fragments";
+  const settlementLabel = snapshot.nativeSettlementPhase === "native-geometry"
+    ? "native geometry"
+    : snapshot.nativeSettlementPhase === "native-handoff"
+      ? "native handoff"
+      : snapshot.nativeSettlementProgress === undefined
+        ? snapshot.fragmentRoles.length === 0
+          ? "not applicable"
+          : "material fragments"
+        : snapshot.nativeSettlementProgress >= 1
+          ? "native geometry"
+          : snapshot.nativeSettlementProgress > 0
+            ? "native handoff"
+            : "material fragments";
 
   return {
     mode,
@@ -98,7 +103,9 @@ export function syncKpEditorEquationMaterialContinuityInspection(input: {
       : {
           nativeSettlementProgress: Number(
             input.stage.dataset["kpEditorEquationNativeSettlementProgress"]
-          )
+          ),
+          nativeSettlementPhase:
+            input.stage.dataset["kpEditorEquationNativeSettlementPhase"]
         }),
     semanticProgress: Number(
       input.stage.dataset["kpEditorEquationSemanticProgress"] ?? 0

@@ -382,6 +382,48 @@
       "scope": "slice-24 calibrated discrete handoff",
       "checkedAt": "2026-07-24T16:58:30.425Z",
       "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-equation-material-continuity-inspector.test.ts",
+      "status": "passed",
+      "scope": "slice-25 discrete settlement diagnostics",
+      "checkedAt": "2026-07-24T17:09:01.551Z",
+      "notes": "3 focused tests passed; a zero-opacity-progress handoff is reported from its explicit phase instead of being mislabeled as material fragments."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --grep radical",
+      "status": "passed",
+      "scope": "slice-25 radical lifecycle matrix",
+      "checkedAt": "2026-07-24T17:09:03.101Z",
+      "notes": "All 6 Chromium radical tests passed, covering forward, rewind, direct seek, reduced-motion and efficient fallbacks, responsive resize, font invalidation, exact endpoint ink, and continuity diagnostics."
+    },
+    {
+      "command": "npm run visual:presentation-continuity",
+      "status": "passed",
+      "scope": "slice-25 stable continuity gate",
+      "checkedAt": "2026-07-24T17:09:03.935Z",
+      "notes": "18 stable captures passed after lifecycle hardening; radical endpoint geometry and single-owner gates remain exact."
+    },
+    {
+      "command": "npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "slice-25 canonical radical preservation",
+      "checkedAt": "2026-07-24T17:09:04.804Z",
+      "notes": "17 deterministic captures passed; all exemplar diagnostics are Ready with no warnings."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-25 lifecycle invalidation",
+      "checkedAt": "2026-07-24T17:09:05.832Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "slice-25 shared adapter impact gate",
+      "checkedAt": "2026-07-24T17:09:06.924Z",
+      "notes": "All 39 deterministic linear-equation baseline states captured successfully after the shared equation adapter invalidation change."
     }
   ],
   "progress": {

@@ -683,6 +683,12 @@ function invalidateEquationStageMeasurements(
   reason: KpEditorEquationStageCacheInvalidationReason
 ): void {
   semanticMotionPlanCache.delete(stage);
+  if (reason === "fonts" || reason === "resize") {
+    // The radical atlas captures native glyph ink, not just the stage box.
+    // Font metrics may change while the outer dimensions remain stable, so
+    // presentation geometry must be recaptured with the hot-path measurements.
+    disposeKpRadicalWebglMorph(stage);
+  }
   if (reason === "fonts") invalidateKpEquationNativeFit(stage);
   const player = stage.closest<HTMLElement>(
     "[data-kp-editor-animation-player]"

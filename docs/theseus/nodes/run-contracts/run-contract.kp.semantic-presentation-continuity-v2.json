@@ -193,7 +193,8 @@
     {
       "id": "slice-25",
       "title": "Prove forward, rewind, direct seek, fallback, reduced motion, resize, and font invalidation.",
-      "status": "planned"
+      "summary": "Proved exact radical handoffs across forward and rewind direct seeks, reduced-motion and efficient DOM fallbacks, responsive resize, and font invalidation. Font/resize measurement invalidation now discards the captured radical atlas so paused frames rebuild at the same semantic instant, and continuity diagnostics read the explicit discrete handoff phase rather than opacity progress. Six radical browser tests, focused unit tests, stable visuals, typecheck, and the shared linear-renderer impact gate pass.",
+      "status": "complete"
     },
     {
       "id": "slice-26",
