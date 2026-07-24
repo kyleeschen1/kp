@@ -98,7 +98,8 @@
     {
       "id": "slice-07",
       "title": "Compressed-causal-chain-contract",
-      "status": "planned"
+      "summary": "Added compressed causal-chain planning for contextual algebra: the same dependency-ordered atomic actions power full and sped-up presentations, every operation retains a distinct disclosed segment and visible minimum, and grouped endpoint replacement cannot pass.",
+      "status": "complete"
     },
     {
       "id": "slice-08",
