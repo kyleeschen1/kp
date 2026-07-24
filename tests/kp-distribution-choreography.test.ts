@@ -145,6 +145,55 @@ test("distribution compiles target products by semantic index", () => {
   ]);
 });
 
+test("distribution groups arbitrary three-term and nested products", () => {
+  const plan = compileKpDistributionChoreography({
+    id: "distribution.three-nested-addends",
+    sourceFactorId: "source.factor",
+    factorCopyIds: [
+      "target.factor.0",
+      "target.factor.1",
+      "target.factor.2"
+    ],
+    addendPairs: [
+      {
+        sourceId: "source.term.2",
+        targetId: "target.term.2.nested",
+        semanticIndex: 2
+      },
+      {
+        sourceId: "source.term.0",
+        targetId: "target.term.0",
+        semanticIndex: 0
+      },
+      {
+        sourceId: "source.term.1",
+        targetId: "target.term.1.wide",
+        semanticIndex: 1
+      }
+    ],
+    connectorPairs: [
+      {
+        sourceId: "source.connector.0",
+        targetId: "target.connector.0",
+        semanticIndex: 0
+      },
+      {
+        sourceId: "source.connector.1",
+        targetId: "target.connector.1",
+        semanticIndex: 1
+      }
+    ],
+    groupingArtifactIds: ["source.left-paren", "source.right-paren"]
+  });
+  assert.equal(plan.productGroups.length, 3);
+  assert.deepEqual(
+    plan.productGroups.map((group) => group.members[1]!.semanticEntityId),
+    ["target.term.2.nested", "target.term.0", "target.term.1.wide"]
+  );
+  const ready = sampleKpDistributionChoreography({ plan, progress: 0.94 });
+  assert.ok(ready.factorCopies.every((copy) => copy.pathProgress === 1));
+});
+
 test("distribution refuses incomplete operation roles", () => {
   assert.throws(() => compileKpDistributionChoreography({
     id: "bad-distribution",

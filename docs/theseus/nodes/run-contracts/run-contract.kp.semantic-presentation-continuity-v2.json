@@ -151,7 +151,8 @@
     {
       "id": "slice-18",
       "title": "Cover arbitrary product positions, multi-term distribution, nested terms, fonts, and responsive widths.",
-      "status": "planned"
+      "summary": "Semantic-index grouping and settlement cover three products, shuffled positions, wide and nested addends; responsive wide/narrow captures prove zero active residual at pre-handoff and endpoint. Nine focused tests and stable visuals pass (visual rerun required normal loopback-server authority).",
+      "status": "complete"
     },
     {
       "id": "slice-19",

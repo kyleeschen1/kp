@@ -20,4 +20,16 @@ test("presentation continuity visual plan has stable family checkpoints", () => 
     visualCase.progress === 1 &&
     visualCase.viewport.width === 390
   ));
+  for (const progress of [0.72, 0.94, 1]) {
+    assert.deepEqual(
+      plan
+        .filter((visualCase) =>
+          visualCase.family === "distribution" &&
+          visualCase.progress === progress
+        )
+        .map((visualCase) => visualCase.viewport.width)
+        .sort((left, right) => left - right),
+      [390, 1280]
+    );
+  }
 });
