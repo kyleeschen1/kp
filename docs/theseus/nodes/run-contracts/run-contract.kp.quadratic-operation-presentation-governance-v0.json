@@ -110,7 +110,8 @@
     {
       "id": "slice-09",
       "title": "Quadratic-authority-to-presentation-adapter",
-      "status": "planned"
+      "summary": "Replaced generic quadraticSemanticCheckpoint transform authority with verified method-edge operation refs plus explicit branch and reunion operations, preserving total source/target correspondence, semantic identity, shared clock, seek, rewind, and serialization.",
+      "status": "complete"
     },
     {
       "id": "slice-10",

@@ -99,7 +99,11 @@ export function createCanonicalKpQuadraticAnimation():
     path.frames.slice(1).map((frame, index) =>
       createKpSemanticTransformation({
         id: transformationId(path.methodId, index + 1),
-        transformType: "quadraticSemanticCheckpoint",
+        transformType: quadraticOperationRef({
+          graph,
+          methodId: path.methodId,
+          transitionIndex: index
+        }),
         title: frame.checkpointId,
         sourceObjectIds: path.frames[index]!.visibleEntityIds,
         targetObjectIds: frame.visibleEntityIds,
@@ -200,6 +204,23 @@ export function createCanonicalKpQuadraticAnimation():
       sharedClockId: kpQuadraticBranchingTimelineId
     })
   });
+}
+
+function quadraticOperationRef(input: {
+  readonly graph: ReturnType<
+    typeof createCanonicalKpQuadraticSolutionMethodGraph
+  >;
+  readonly methodId: KpQuadraticMethodId;
+  readonly transitionIndex: number;
+}): string {
+  const path = input.graph.paths.find(({ id }) => id === input.methodId)!;
+  const edgeId = path.edgeIds[input.transitionIndex];
+  if (edgeId !== undefined) {
+    return input.graph.edges.find(({ id }) => id === edgeId)!.operationRef;
+  }
+  return input.transitionIndex === path.edgeIds.length
+    ? "operation.quadratic.branch-plus-minus"
+    : "operation.quadratic.reunite-solution-set";
 }
 
 export function sampleKpCanonicalQuadraticAnimation(input: {

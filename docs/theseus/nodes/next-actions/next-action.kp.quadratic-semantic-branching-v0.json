@@ -258,6 +258,13 @@
       "scope": "slice-08 exact parent-child drill-down",
       "checkedAt": "2026-07-24T22:42:36.265Z",
       "notes": "Nine focused tests pass. Drill-down requires a compressed parent and full-detail child over the identical action and canonical-operation trace, pauses a valid parent clock position, uses a nested child clock, and restores the exact parent elapsed time and progress."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/quadratic-generic-checkpoint-negative.test.ts tests/quadratic-branching-animation-asset.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-09 quadratic authority presentation adapter",
+      "checkedAt": "2026-07-24T22:44:38.960Z",
+      "notes": "Seven focused tests pass. Quadratic asset transformations now retain their verified method-edge operationRef, with explicit branch and reunion operations, rather than flattening all transitions to quadraticSemanticCheckpoint; source/target object correspondence, shared clock, seek, rewind, and JSON stability remain intact."
     }
   ],
   "progress": {

@@ -15,7 +15,12 @@ test("the rejected generic quadratic checkpoint projection cannot certify", () =
   const animation = createCanonicalKpQuadraticAnimation();
   assert.ok(animation.animation.transformations.length > 0);
   assert.ok(animation.animation.transformations.every(
-    ({ transformType }) => transformType === "quadraticSemanticCheckpoint"
+    ({ transformType }) => transformType !== "quadraticSemanticCheckpoint"
+  ));
+  assert.ok(animation.animation.transformations.some(
+    ({ transformType }) =>
+      transformType ===
+        "operation.quadratic-formula.evaluate-discriminant"
   ));
 
   const certificate = rejectedGenericCheckpointCertificate();
