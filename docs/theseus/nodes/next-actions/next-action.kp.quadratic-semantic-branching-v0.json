@@ -300,6 +300,13 @@
       "scope": "slice-13 square-root and isolate-x chain",
       "checkedAt": "2026-07-24T23:24:02.629Z",
       "notes": "Thirty focused tests, typecheck, all nine Chromium checks, and 25 deterministic review frames passed. The exact branch authority now owns four ordered post-factor operations; native KaTeX depicts square-root, plus-minus, root evaluation, isolation, numerator normalization, and a continuous split into signed candidates."
+    },
+    {
+      "command": "focused formula projection and selector tests; npm run typecheck; quadratic Chromium; npm run visual:quadratic-branching",
+      "status": "passed",
+      "scope": "slice-14 formula substitution choreography",
+      "checkedAt": "2026-07-24T23:30:53.791Z",
+      "notes": "Nineteen focused tests, typecheck, all nine Chromium checks, and 26 deterministic review frames passed. Formula substitution is bound to the registered authority operation; x, plus-minus, and denominator-two reflow as continuants while five signed coefficient groups act, with native KaTeX and radical isolation preserved."
     }
   ],
   "progress": {

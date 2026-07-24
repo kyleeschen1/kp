@@ -126,19 +126,43 @@ function segmentsFor(
         latex("}")
       ];
     case "katex.quadratic.formula.general":
-      return fractionState({
-        base: "-b",
-        radicalRole: "radical",
-        radical: "\\sqrt{b^2-4ac}",
-        denominator: "2a"
-      });
+      return [
+        latex("\\displaystyle "),
+        selector("variable", "x"),
+        latex(" = \\frac{"),
+        selector("base", "-b"),
+        latex(" "),
+        selector("plus-minus", "\\pm"),
+        latex(" \\sqrt{"),
+        selector("discriminant-b", "b^2"),
+        latex("-4"),
+        selector("discriminant-a", "a"),
+        selector("discriminant-c", "c"),
+        latex("}}{"),
+        selector("denominator-two", "2"),
+        selector("denominator-a", "a"),
+        latex("}")
+      ];
     case "katex.quadratic.formula.substituted":
-      return fractionState({
-        base: "5",
-        radicalRole: "radical",
-        radical: "\\sqrt{(-5)^2-4(1)(6)}",
-        denominator: "2(1)"
-      });
+      return [
+        latex("\\displaystyle "),
+        selector("variable", "x"),
+        latex(" = \\frac{"),
+        selector("base", "5"),
+        latex(" "),
+        selector("plus-minus", "\\pm"),
+        latex(" \\sqrt{"),
+        selector("discriminant-b", "(-5)^2"),
+        latex("-4("),
+        selector("discriminant-a", "1"),
+        latex(")("),
+        selector("discriminant-c", "6"),
+        latex(")}}{"),
+        selector("denominator-two", "2"),
+        latex("("),
+        selector("denominator-a", "1"),
+        latex(")}")
+      ];
     case "katex.quadratic.formula.discriminant":
       return fractionState({
         base: "5",

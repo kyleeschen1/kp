@@ -15,38 +15,45 @@ export interface KpQuadraticFormulaKatexProjection {
   };
 }
 
+type KpQuadraticFormulaPresentationRole = NonNullable<
+  KpQuadraticKatexTransition["correspondence"][number]["presentationRole"]
+>;
+
 export function createKpQuadraticFormulaKatexProjection():
   KpQuadraticFormulaKatexProjection {
   const states = Object.freeze([
-    state("general", "\\displaystyle x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}", "x equals negative b plus or minus the square root of b squared minus four a c, over two a", ["variable", "base", "plus-minus", "radical", "denominator"]),
-    state("substituted", "\\displaystyle x = \\frac{5 \\pm \\sqrt{(-5)^2-4(1)(6)}}{2(1)}", "x equals five plus or minus the square root of negative five squared minus four times one times six, over two", ["variable", "base", "plus-minus", "radical", "denominator"]),
+    state("general", "\\displaystyle x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}", "x equals negative b plus or minus the square root of b squared minus four a c, over two a", ["variable", "base", "plus-minus", "discriminant-b", "discriminant-a", "discriminant-c", "denominator-two", "denominator-a"]),
+    state("substituted", "\\displaystyle x = \\frac{5 \\pm \\sqrt{(-5)^2-4(1)(6)}}{2(1)}", "x equals five plus or minus the square root of negative five squared minus four times one times six, over two", ["variable", "base", "plus-minus", "discriminant-b", "discriminant-a", "discriminant-c", "denominator-two", "denominator-a"]),
     state("discriminant", "\\displaystyle x = \\frac{5 \\pm \\sqrt{1}}{2}", "x equals five plus or minus the square root of one, over two", ["variable", "base", "plus-minus", "radical", "denominator"]),
     state("simplified", "\\displaystyle x = \\frac{5 \\pm 1}{2}", "x equals five plus or minus one, over two", ["variable", "base", "plus-minus", "offset", "denominator"]),
     state("roots", "\\displaystyle x \\in \\{2,3\\}", "x is in the set containing two and three", ["variable", "root-two", "root-three"])
   ]);
   const transitions = Object.freeze([
-    transition("substitute", states[0]!, states[1]!, [
+    transition("substitute", "operation.quadratic-formula.substitute-coefficients", states[0]!, states[1]!, [
+      sameRole("variable"),
+      roleBinding("negated-b", "base", "base", "focal-operand"),
+      sameRole("plus-minus"),
+      roleBinding("signed-b", "discriminant-b", "discriminant-b", "focal-operand"),
+      roleBinding("coefficient-a", "discriminant-a", "discriminant-a", "focal-operand"),
+      roleBinding("coefficient-c", "discriminant-c", "discriminant-c", "focal-operand"),
+      sameRole("denominator-two"),
+      roleBinding("denominator-a", "denominator-a", "denominator-a", "focal-operand")
+    ]),
+    transition("evaluate-discriminant", "operation.quadratic-formula.evaluate-discriminant", states[1]!, states[2]!, [
       sameRole("variable"),
       sameRole("base"),
       sameRole("plus-minus"),
-      sameRole("radical"),
-      sameRole("denominator")
+      roleBinding("discriminant", "discriminant-b", "radical", "focal-operand"),
+      roleBinding("denominator", "denominator-two", "denominator", "continuant")
     ]),
-    transition("evaluate-discriminant", states[1]!, states[2]!, [
+    transition("simplify-radical", "operation.quadratic-formula.simplify-exact-radical", states[2]!, states[3]!, [
       sameRole("variable"),
       sameRole("base"),
       sameRole("plus-minus"),
-      sameRole("radical"),
+      roleBinding("exact-radical", "radical", "offset", "focal-operand"),
       sameRole("denominator")
     ]),
-    transition("simplify-radical", states[2]!, states[3]!, [
-      sameRole("variable"),
-      sameRole("base"),
-      sameRole("plus-minus"),
-      roleBinding("exact-radical", "radical", "offset"),
-      sameRole("denominator")
-    ]),
-    transition("verify-roots", states[3]!, states[4]!, [
+    transition("verify-roots", "operation.quadratic-formula.verify-results", states[3]!, states[4]!, [
       sameRole("variable")
     ])
   ]);
@@ -113,21 +120,30 @@ function state(
 
 function transition(
   suffix: string,
+  operationRef: string,
   source: KpQuadraticKatexState,
   target: KpQuadraticKatexState,
   bindings: readonly {
     readonly role: string;
     readonly sourceRole: string;
     readonly targetRole: string;
+    readonly presentationRole: KpQuadraticFormulaPresentationRole;
   }[]
 ): KpQuadraticKatexTransition {
   return Object.freeze({
     id: `transition.quadratic.formula.${suffix}`,
+    presentation: Object.freeze({
+      operationRef,
+      phaseOrder: Object.freeze(["reflow", "act"] as const),
+      reflowEnd: 0.36 as const,
+      actStart: 0.3 as const
+    }),
     sourceStateId: source.id,
     targetStateId: target.id,
     correspondence: Object.freeze(bindings.map((binding) =>
       Object.freeze({
         role: binding.role,
+        presentationRole: binding.presentationRole,
         sourceSelectorId: source.selectors.find(
           (selector) => selector.role === binding.sourceRole
         )!.id,
@@ -148,18 +164,21 @@ function sameRole(role: string): {
   readonly role: string;
   readonly sourceRole: string;
   readonly targetRole: string;
+  readonly presentationRole: KpQuadraticFormulaPresentationRole;
 } {
-  return roleBinding(role, role, role);
+  return roleBinding(role, role, role, "continuant");
 }
 
 function roleBinding(
   role: string,
   sourceRole: string,
-  targetRole: string
+  targetRole: string,
+  presentationRole: KpQuadraticFormulaPresentationRole
 ): {
   readonly role: string;
   readonly sourceRole: string;
   readonly targetRole: string;
+  readonly presentationRole: KpQuadraticFormulaPresentationRole;
 } {
-  return Object.freeze({ role, sourceRole, targetRole });
+  return Object.freeze({ role, sourceRole, targetRole, presentationRole });
 }

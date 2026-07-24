@@ -140,7 +140,8 @@
     {
       "id": "slice-14",
       "title": "Formula-substitution-choreography",
-      "status": "planned"
+      "summary": "Bound formula substitution to its authority operation, split signed/grouped coefficient selectors from stable formula structure, and staged continuant reflow before five focal substitutions in native KaTeX.",
+      "status": "complete"
     },
     {
       "id": "slice-15",

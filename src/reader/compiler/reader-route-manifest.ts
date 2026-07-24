@@ -328,6 +328,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         { id: "method-square-normalize-candidates", label: "Write the candidate numerator", progressPermille: 556, viewport: "desktop", query: { kpMotion: "full" } },
         { id: "method-square-branch-origin", label: "Hold the shared plus-minus origin", progressPermille: 600, viewport: "desktop", query: { kpMotion: "full" } },
         { id: "method-square-branch-candidates", label: "Split into signed candidates", progressPermille: 670, viewport: "desktop", query: { kpMotion: "full" } },
+        { id: "method-formula-substitution", label: "Substitute signed coefficients", progressPermille: 180, viewport: "desktop", query: { kpMethod: "formula", kpMotion: "full" } },
         { id: "method-formula-start", label: "Simplify the radical · start", progressPermille: 370, viewport: "desktop", query: { kpMethod: "formula", kpMotion: "full" } },
         { id: "method-formula", label: "Simplify the radical · symbolic motion", progressPermille: 400, viewport: "desktop", query: { kpMethod: "formula", kpMotion: "full" } },
         { id: "method-formula-end", label: "Simplify the radical · end", progressPermille: 430, viewport: "desktop", query: { kpMethod: "formula", kpMotion: "full" } },

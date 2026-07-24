@@ -22,6 +22,32 @@ test("formula states own native KaTeX and stable semantic selectors", () => {
   assert.equal(new Set(selectors).size, selectors.length);
 });
 
+test("coefficient substitution separates continuants from signed focal groups", () => {
+  const substitution =
+    createKpQuadraticFormulaKatexProjection().transitions[0]!;
+  assert.equal(
+    substitution.presentation?.operationRef,
+    "operation.quadratic-formula.substitute-coefficients"
+  );
+  assert.deepEqual(
+    substitution.correspondence.map(({ role, presentationRole }) => [
+      role,
+      presentationRole
+    ]),
+    [
+      ["variable", "continuant"],
+      ["negated-b", "focal-operand"],
+      ["plus-minus", "continuant"],
+      ["signed-b", "focal-operand"],
+      ["coefficient-a", "focal-operand"],
+      ["coefficient-c", "focal-operand"],
+      ["denominator-two", "continuant"],
+      ["denominator-a", "focal-operand"]
+    ]
+  );
+  assert.deepEqual(substitution.presentation?.phaseOrder, ["reflow", "act"]);
+});
+
 test("formula radical stays isolated from the existing workaround", () => {
   const projection = createKpQuadraticFormulaKatexProjection();
   assert.deepEqual(projection.radicalBoundary, {

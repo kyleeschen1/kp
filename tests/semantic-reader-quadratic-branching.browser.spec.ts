@@ -161,6 +161,23 @@ test("both methods move selector-owned native symbols through measured paths", a
   ).toBeVisible();
 
   await page.getByRole("button", { name: "Quadratic formula" }).click();
+  await seek(160);
+  await expect(stage).toHaveAttribute(
+    "data-kp-symbolic-transition",
+    "transition.quadratic.formula.substitute"
+  );
+  await expect(stage).toHaveAttribute("data-kp-symbolic-focal-owners", "5");
+  await expect(
+    stage.locator(
+      '[data-kp-motion-id="katex.quadratic.formula.general.variable"]'
+    )
+  ).toHaveAttribute("data-kp-symbolic-motion-role", "continuant");
+  await expect(
+    stage.locator(
+      '[data-kp-motion-id="katex.quadratic.formula.general.discriminant-b"]'
+    )
+  ).toHaveAttribute("data-kp-symbolic-motion-role", "focal-operand");
+
   await seek(400);
   await expect(stage).toHaveAttribute(
     "data-kp-symbolic-transition",
