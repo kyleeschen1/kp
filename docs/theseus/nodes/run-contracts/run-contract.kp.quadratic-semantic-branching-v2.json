@@ -95,7 +95,8 @@
     {
       "id": "slice-06",
       "title": "Quadratic-formula-authority",
-      "status": "planned"
+      "summary": "Added a semantic-only quadratic-formula authority with five pinned operations, exact coefficient substitution, discriminant and integer-square-root checks, non-zero denominator handling, verified roots two and three, and an explicit ban on radical presentation-path reuse.",
+      "status": "complete"
     },
     {
       "id": "slice-07",

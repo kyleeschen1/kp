@@ -69,6 +69,13 @@
       "scope": "slice-05 completing-square rewrite authority",
       "checkedAt": "2026-07-24T19:54:46.966Z",
       "notes": "Fourteen focused tests passed. The four structured equation states, three registered rewrites, role bindings, provenance, inverse laws, deterministic diagnostics, and exact AST-to-polynomial preservation are verified."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/quadratic-formula-authority.test.ts tests/quadratic-solution-set.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-06 quadratic-formula authority",
+      "checkedAt": "2026-07-24T19:57:39.550Z",
+      "notes": "Thirteen focused tests passed. Operation order, coefficient provenance, exact discriminant and square root, non-zero denominator, verified results, drift diagnostics, immutability, and radical presentation isolation are verified."
     }
   ],
   "progress": {
