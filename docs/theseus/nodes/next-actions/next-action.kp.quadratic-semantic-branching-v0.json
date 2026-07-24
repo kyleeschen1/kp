@@ -209,6 +209,13 @@
       "scope": "slice-01 rejected checkpoint and preservation ledger",
       "checkedAt": "2026-07-24T22:27:55.962Z",
       "notes": "Three focused tests pass. Review notes 13-20, accepted semantic/branch/graph/runtime boundaries, rejected generic motion/compound omission/visible reunion boundaries, successor contract, and renewed human-approval publication gate are durable and typed; TypeScript and the 774-node workspace validate."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/operation-presentation-certificate.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-02 operation-presentation certificate schema",
+      "checkedAt": "2026-07-24T22:30:33.844Z",
+      "notes": "Three focused tests pass. The renderer-neutral certificate structurally binds authority operations, states, motifs, phases, visible materials, and atomic versus compound spans; it copies caller data and rejects unknown operation/material references and atomic multi-operation claims."
     }
   ],
   "progress": {

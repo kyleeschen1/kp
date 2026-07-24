@@ -68,7 +68,8 @@
     {
       "id": "slice-02",
       "title": "Operation-presentation-certificate-schema",
-      "status": "planned"
+      "summary": "Added and verified a renderer-neutral operation-presentation certificate schema binding authority operations, visible material roles, source/target states, motifs, choreography phases, and atomic or explicit compound spans without DOM, SVG, pixel, or keyframe authority.",
+      "status": "complete"
     },
     {
       "id": "slice-03",
