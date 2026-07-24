@@ -7,9 +7,13 @@ export const kpRadicalNativeSettlementStart =
   kpRadicalConventionalMorphProfile.settlement.start;
 export const kpRadicalNativeSettlementEnd =
   kpRadicalConventionalMorphProfile.settlement.end;
+export const kpRadicalSourceNativeSettlementStart = 0;
+export const kpRadicalSourceNativeSettlementEnd =
+  kpRadicalConventionalMorphProfile.morph.start;
 export const kpRadicalNativeSettlementGeometryTolerancePx = 0.25;
 
 export interface KpRadicalNativeSettlementFrame {
+  readonly endpoint: "source" | "target";
   readonly phase:
     | "material-fragments"
     | "waiting-for-native-geometry"
@@ -31,43 +35,73 @@ export function sampleKpRadicalNativeSettlement(input: {
   readonly handoffEnd?: number | undefined;
   readonly easing?: EasingName | undefined;
 }): KpRadicalNativeSettlementFrame {
+  return sampleKpRadicalCompositeNativeSettlement({
+    ...input,
+    endpoint: "target",
+    handoffStart: input.handoffStart ??
+      kpRadicalNativeSettlementStart,
+    handoffEnd: input.handoffEnd ??
+      kpRadicalNativeSettlementEnd
+  });
+}
+
+export function sampleKpRadicalCompositeNativeSettlement(input: {
+  readonly endpoint: "source" | "target";
+  readonly semanticProgress: number;
+  readonly fragmentRects: readonly KpRadicalSettlementRect[];
+  readonly nativeRect: KpRadicalSettlementRect;
+  readonly geometryTolerancePx?: number | undefined;
+  readonly handoffStart: number;
+  readonly handoffEnd: number;
+  readonly easing?: EasingName | undefined;
+}): KpRadicalNativeSettlementFrame {
   const semanticProgress = clamp01(input.semanticProgress);
-  const maximumGeometryResidualPx = input.fragmentRects.reduce(
-    (maximum, rect) => Math.max(maximum, rectResidual(rect, input.nativeRect)),
-    0
-  );
+  const compositeRect = composeKpRadicalSettlementRect(input.fragmentRects);
+  const maximumGeometryResidualPx = compositeRect === undefined
+    ? Number.POSITIVE_INFINITY
+    : rectResidual(compositeRect, input.nativeRect);
   const tolerance = input.geometryTolerancePx ??
     kpRadicalNativeSettlementGeometryTolerancePx;
-  const geometryReady = input.fragmentRects.length > 0 &&
+  const geometryReady = compositeRect !== undefined &&
     maximumGeometryResidualPx <= tolerance;
-  const handoffStart = input.handoffStart ??
-    kpRadicalNativeSettlementStart;
-  const handoffEnd = input.handoffEnd ??
-    kpRadicalNativeSettlementEnd;
+  const handoffStart = input.handoffStart;
+  const handoffEnd = input.handoffEnd;
   if (handoffEnd <= handoffStart) {
     throw new Error("Radical native settlement requires an ordered handoff window.");
   }
-  const requestedProgress = sampleEasing(
+  const handoffProgress = sampleEasing(
     input.easing ?? kpRadicalConventionalMorphProfile.settlement.easing,
     intervalProgress(semanticProgress, handoffStart, handoffEnd)
   );
-  // Native ink cannot crossfade safely while semantic fragment anchors are
-  // still in transit; a delayed font/layout pass therefore holds ownership.
-  const progress = geometryReady ? requestedProgress : 0;
-  const phase = progress >= 1
-    ? "native-geometry"
-    : progress > 0
-      ? "native-handoff"
-      : semanticProgress >= handoffStart
-        ? "waiting-for-native-geometry"
+  const requestedNativeOpacity = input.endpoint === "target"
+    ? handoffProgress
+    : 1 - handoffProgress;
+  // A composite endpoint owns the handoff as one measured block. Its children
+  // may move independently before this window, but cannot transfer partial
+  // ownership or compare their individual boxes to the whole native parent.
+  const nativeOpacity = geometryReady
+    ? requestedNativeOpacity
+    : input.endpoint === "source"
+      ? 1
+      : 0;
+  const requiresGeometry = input.endpoint === "target"
+    ? semanticProgress >= handoffStart
+    : semanticProgress > handoffStart && semanticProgress <= handoffEnd;
+  const phase = !geometryReady && requiresGeometry
+    ? "waiting-for-native-geometry"
+    : nativeOpacity >= 1
+      ? "native-geometry"
+      : nativeOpacity > 0
+        ? "native-handoff"
         : "material-fragments";
   return {
+    endpoint: input.endpoint,
     phase,
     geometryReady,
     maximumGeometryResidualPx,
-    progress,
-    fragmentOpacity: 1 - progress,
-    nativeOpacity: progress
+    progress: nativeOpacity,
+    fragmentOpacity: 1 - nativeOpacity,
+    nativeOpacity
   };
 }
 
@@ -76,6 +110,22 @@ export interface KpRadicalSettlementRect {
   readonly top: number;
   readonly width: number;
   readonly height: number;
+}
+
+export function composeKpRadicalSettlementRect(
+  rects: readonly KpRadicalSettlementRect[]
+): KpRadicalSettlementRect | undefined {
+  if (rects.length === 0) return undefined;
+  const left = Math.min(...rects.map((rect) => rect.left));
+  const top = Math.min(...rects.map((rect) => rect.top));
+  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
+  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
+  return {
+    left,
+    top,
+    width: right - left,
+    height: bottom - top
+  };
 }
 
 function rectResidual(

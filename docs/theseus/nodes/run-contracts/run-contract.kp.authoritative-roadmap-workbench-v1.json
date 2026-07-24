@@ -43,6 +43,20 @@
       "scope": "broad",
       "checkedAt": "2026-07-24T01:00:48.786Z",
       "notes": "All 2041 node tests pass; app, node, test, and domain TypeScript checks pass."
+    },
+    {
+      "command": "Radical composite native settlement unit tests",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-24T01:06:23.036Z",
+      "notes": "Nine focused tests pass for child-union geometry, source and target ownership, direct seek, easing, and unsafe geometry holds."
+    },
+    {
+      "command": "TypeScript boundary check for composite native settlement",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-24T01:06:24.915Z",
+      "notes": "App, node, test, and domain TypeScript projects pass."
     }
   ],
   "allowedWork": [
@@ -236,7 +250,9 @@
     {
       "id": "s25",
       "title": "Define-composite-native-settlement",
-      "status": "planned"
+      "summary": "Added a reusable bidirectional composite-native settlement sampler. Independently animated children are measured as one union against their native parent; source and target ownership remain conservative when geometry is unready. Nine focused tests and full typecheck pass.",
+      "status": "complete",
+      "planPhaseId": "radical-native-settlement"
     },
     {
       "id": "s26",
