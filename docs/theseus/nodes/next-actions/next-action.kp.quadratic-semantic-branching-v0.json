@@ -125,6 +125,13 @@
       "scope": "slice-13 completing-square KaTeX projection",
       "checkedAt": "2026-07-24T20:18:45.197Z",
       "notes": "Twelve focused tests passed with typecheck. Four native KaTeX states, global stable selectors, semantic role correspondence, measured collision-safe transitions, and native endpoints are verified; eight preservation captures remain stable, planned publication remains zero players, and the radical known residual is unchanged."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/quadratic-formula-katex.test.ts tests/quadratic-formula-authority.test.ts tests/quadratic-completing-square-katex.test.ts; npm run typecheck; npm run visual:quadratic-branching",
+      "status": "passed",
+      "scope": "slice-14 quadratic-formula KaTeX projection",
+      "checkedAt": "2026-07-24T20:21:07.174Z",
+      "notes": "Sixteen focused tests passed with typecheck. Five native formula states, exact roots, stable selectors, measured native endpoints, and explicit radical workaround isolation are verified; all eight preservation captures remain stable and planned publication remains zero players."
     }
   ],
   "progress": {
