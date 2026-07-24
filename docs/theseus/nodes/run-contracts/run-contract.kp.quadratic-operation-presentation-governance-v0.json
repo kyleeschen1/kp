@@ -104,7 +104,8 @@
     {
       "id": "slice-08",
       "title": "Exact-parent-child-drilldown-contract",
-      "status": "planned"
+      "summary": "Added exact causal-chain drill-down: Show steps can only expand the same operation trace from compressed context to full detail, while a nested child clock leaves the parent paused and closing restores the identical elapsed time and progress.",
+      "status": "complete"
     },
     {
       "id": "slice-09",

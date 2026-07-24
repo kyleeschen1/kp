@@ -251,6 +251,13 @@
       "scope": "slice-07 compressed causal-chain contract",
       "checkedAt": "2026-07-24T22:40:29.765Z",
       "notes": "Five focused tests pass. Contextual compression and full detail use the same dependency-ordered action list; each action retains its own segment, operation identity, disclosure, and bounded visible duration, while grouped endpoint replacement and dependency reorder are rejected."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/causal-chain-drilldown.test.ts tests/compressed-causal-chain.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-08 exact parent-child drill-down",
+      "checkedAt": "2026-07-24T22:42:36.265Z",
+      "notes": "Nine focused tests pass. Drill-down requires a compressed parent and full-detail child over the identical action and canonical-operation trace, pauses a valid parent clock position, uses a nested child clock, and restores the exact parent elapsed time and progress."
     }
   ],
   "progress": {
