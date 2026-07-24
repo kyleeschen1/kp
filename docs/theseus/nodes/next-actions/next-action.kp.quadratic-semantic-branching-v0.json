@@ -43,6 +43,18 @@
       "scope": "slice-02 preservation manifest and stable visual harness",
       "checkedAt": "2026-07-24T19:40:21.658Z",
       "notes": "Eight focused tests and 255 convergence tests passed; planned quadratic mounted zero players in Chromium and all eight new reference captures; the established Workbench visual suite also passed after restarting the stale dev server; radical remains explicitly blocked with its known residual."
+    },
+    {
+      "command": "node",
+      "status": "passed",
+      "checkedAt": "2026-07-24T19:43:33.680Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/quadratic-branching-fixture.test.ts tests/structured-expression.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-03 exact quadratic semantic fixture",
+      "checkedAt": "2026-07-24T19:44:19.777Z",
+      "notes": "Eight focused tests passed. The canonical coefficients, discriminant, roots, structured subtrees, immutability, invalid roots, non-quadratic inputs, and exact rational normalization are verified without solving or floating-point authority."
     }
   ],
   "progress": {

@@ -77,7 +77,8 @@
     {
       "id": "slice-03",
       "title": "Exact-quadratic-semantic-fixture",
-      "status": "planned"
+      "summary": "Added the immutable structured fixture for x squared minus 5x plus 6 equals zero with exact coefficients, discriminant one, verified roots two and three, authored provenance, and no floating-point or solver authority.",
+      "status": "complete"
     },
     {
       "id": "slice-04",
