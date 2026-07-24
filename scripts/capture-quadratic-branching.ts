@@ -88,6 +88,7 @@ try {
 
   for (const checkpoint of [
     { id: "branches", progressPermille: 680 },
+    { id: "graph-handoff", progressPermille: 950 },
     { id: "graph", progressPermille: 1_000 }
   ] as const) {
     for (const profile of profiles) {

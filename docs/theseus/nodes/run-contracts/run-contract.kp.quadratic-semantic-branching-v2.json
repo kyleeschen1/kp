@@ -167,7 +167,8 @@
     {
       "id": "slice-18",
       "title": "Equation-graph-synchronization",
-      "status": "planned"
+      "summary": "Composed equation, plus-minus branches, native solution set, and exact graph into one deterministic frame under the canonical shared timeline, with profile-owned graph handoff, stable branch-to-root correspondence, method-specific provenance, and identical direct-seek and rewind settlement.",
+      "status": "complete"
     },
     {
       "id": "slice-19",

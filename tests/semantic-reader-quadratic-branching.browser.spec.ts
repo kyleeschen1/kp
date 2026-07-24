@@ -60,3 +60,57 @@ test("quadratic graph displays the authored curve and exact solution intersectio
   await expect(graph.locator('[data-kp-graph-root="root:3/1"]')).toHaveCount(1);
   await expect(graph.locator("[data-kp-selector-id='selector.quadratic.graph.curve']")).toHaveCount(1);
 });
+
+test("direct seek and rewind keep equation and graph on the same playhead", async ({ page }) => {
+  await page.goto(route.replace("kpProgress=680", "kpProgress=1000"), {
+    waitUntil: "networkidle"
+  });
+  const stage = page.locator("[data-kp-quadratic-stage]");
+  const slider = page.locator("[data-kp-quadratic-progress]");
+  const rootTwo = page.locator('[data-kp-graph-root="root:2/1"]');
+  const settled = await synchronizedSnapshot();
+
+  await seek(950);
+  await expect(stage).toHaveAttribute("data-kp-graph-progress", "0.5");
+  await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "950");
+
+  await seek(680);
+  await expect(stage).toHaveAttribute("data-kp-phase", "branch");
+  await expect(stage).toHaveAttribute("data-kp-graph-progress", "0");
+  await expect(page.locator("[data-kp-quadratic-branches]")).toBeVisible();
+
+  await seek(1000);
+  expect(await synchronizedSnapshot()).toEqual(settled);
+  await page.getByRole("button", { name: "Quadratic formula" }).click();
+  await expect(rootTwo).toHaveAttribute(
+    "data-kp-source-branch",
+    "branch.method.quadratic.formula.minus"
+  );
+  await expect(rootTwo).toHaveAttribute("data-kp-graph-root", "root:2/1");
+
+  async function seek(progressPermille: number): Promise<void> {
+    await slider.evaluate((element, value) => {
+      element.value = String(value);
+      element.dispatchEvent(new Event("input", { bubbles: true }));
+    }, progressPermille);
+  }
+
+  async function synchronizedSnapshot() {
+    return page.evaluate(() => {
+      const graph = document.querySelector<SVGElement>("[data-kp-quadratic-graph]")!;
+      const curve = graph.querySelector<SVGPolylineElement>(".kp-quadratic-graph__curve")!;
+      return {
+        clock: graph.dataset["kpSharedClockId"],
+        progress: document.body.dataset["kpReaderProgress"],
+        graphProgress: document.querySelector<HTMLElement>("[data-kp-quadratic-stage]")!
+          .dataset["kpGraphProgress"],
+        curveOffset: curve.style.strokeDashoffset,
+        roots: [...graph.querySelectorAll<SVGGElement>("[data-kp-graph-root]")]
+          .map((root) => ({
+            id: root.dataset["kpGraphRoot"],
+            opacity: root.style.opacity
+          }))
+      };
+    });
+  }
+});

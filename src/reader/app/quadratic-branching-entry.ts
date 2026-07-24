@@ -13,10 +13,12 @@ import {
 import {
   kpQuadraticReaderCheckpoints,
   kpQuadraticReaderMethodQueryValue,
-  parseKpQuadraticReaderMethod,
-  projectKpQuadraticReaderSurface
+  parseKpQuadraticReaderMethod
 } from "./quadratic-branching-surface.ts";
 import type { KpQuadraticMethodId } from "../../semantic/quadratic-solution-method-graph.ts";
+import {
+  sampleKpQuadraticEquationGraphFrame
+} from "../../projections/quadratic-equation-graph-sync.ts";
 
 const body = document.body;
 const stage = requireElement<HTMLElement>("[data-kp-quadratic-stage]");
@@ -29,6 +31,7 @@ const status = requireElement<HTMLOutputElement>("[data-kp-quadratic-status]");
 const share = requireElement<HTMLAnchorElement>("[data-kp-quadratic-share]");
 const branches = requireElement<HTMLElement>("[data-kp-quadratic-branches]");
 const solution = requireElement<HTMLElement>("[data-kp-quadratic-solution]");
+const graph = requireElement<SVGElement>("[data-kp-quadratic-graph]");
 const methodButtons = [
   ...stage.querySelectorAll<HTMLButtonElement>("[data-kp-quadratic-method]")
 ];
@@ -56,10 +59,12 @@ const scrollClock = createKpReaderContinuousScrollClock({
 
 function render(sample: KpReaderClockSample): void {
   current = sample;
-  const frame = projectKpQuadraticReaderSurface({
+  const synchronized = sampleKpQuadraticEquationGraphFrame({
     progress: sample.progress,
-    methodId
+    methodId,
+    direction: sample.direction
   });
+  const frame = synchronized.equation;
   body.dataset["kpReaderProgress"] = String(frame.progressPermille);
   body.dataset["kpReaderResponsiveProjection"] = resolveKpReaderResponsiveProjection({
     viewportWidth: window.innerWidth,
@@ -71,6 +76,8 @@ function render(sample: KpReaderClockSample): void {
   stage.dataset["kpClockId"] = scrollClock.id;
   stage.dataset["kpClockSource"] = sample.source;
   stage.dataset["kpDirection"] = sample.direction;
+  stage.dataset["kpGraphProgress"] = String(synchronized.graphLocalProgress);
+  graph.dataset["kpSharedClockId"] = synchronized.sharedClockId;
   progress.value = String(frame.progressPermille);
   progress.setAttribute("aria-valuetext", `${frame.checkpointLabel}, ${Math.round(frame.progress * 100)} percent`);
   status.value = frame.checkpointLabel;
@@ -85,6 +92,7 @@ function render(sample: KpReaderClockSample): void {
   branches.hidden = !showBranches;
   solution.hidden = !frame.solutionSetNative;
   if (showBranches) renderBranches(frame.branchProgress);
+  renderGraph(synchronized);
 
   methodButtons.forEach((button) => {
     button.setAttribute(
@@ -99,6 +107,36 @@ function render(sample: KpReaderClockSample): void {
   next.disabled = checkpointIndex >= kpQuadraticReaderCheckpoints.length - 1;
   activateBeat(frame.beatId);
   updateUrl();
+}
+
+function renderGraph(
+  synchronized: ReturnType<typeof sampleKpQuadraticEquationGraphFrame>
+): void {
+  const axes = requireElement<SVGGElement>(".kp-quadratic-graph__axes");
+  const grid = requireElement<SVGGElement>(".kp-quadratic-graph__grid");
+  const curve = requireElement<SVGPolylineElement>(".kp-quadratic-graph__curve");
+  axes.style.opacity = String(synchronized.graph.axesOpacity);
+  grid.style.opacity = String(synchronized.graph.axesOpacity);
+  curve.style.strokeDasharray = "1";
+  curve.style.strokeDashoffset = String(1 - synchronized.graph.curveReveal);
+  synchronized.correspondences.forEach((binding, index) => {
+    const root = requireElement<SVGGElement>(
+      `[data-kp-selector-id="${binding.graphSelectorId}"]`
+    );
+    const rootFrame = synchronized.graph.roots[index]!;
+    root.style.opacity = String(rootFrame.opacity);
+    root.dataset["kpSourceBranch"] = binding.branchId;
+    root.dataset["kpCorrespondenceId"] = binding.id;
+    const label = root.querySelector<SVGTextElement>("text");
+    if (label !== null) label.style.opacity = String(rootFrame.labelOpacity);
+    const branch = requireElement<HTMLElement>(
+      `[data-kp-branch="${binding.branchSign}"]`
+    );
+    branch.dataset["kpSemanticId"] = binding.branchId;
+    branch.dataset["kpGraphSelector"] = binding.graphSelectorId;
+  });
+  solution.dataset["kpGraphCorrespondenceStatus"] =
+    synchronized.graphLocalProgress === 1 ? "settled" : "pending";
 }
 
 function renderBranches(branchProgress: number): void {
