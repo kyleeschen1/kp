@@ -87,6 +87,20 @@
       "scope": "standard",
       "checkedAt": "2026-07-24T03:18:50.903Z",
       "notes": "Application, node, test, and domain TypeScript projects pass with the typed import exception inventory."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-24T03:25:15.107Z",
+      "notes": "All 109 focused tests pass. Ledger tests close over all ten production equation recipe/strategy keys, verify live owner/author/consumer references, and require replacement plus fixture evidence for destructive candidates."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-24T03:25:20.594Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass with the typed compatibility ledger."
     }
   ],
   "expectedLearning": [
@@ -175,7 +189,8 @@
     {
       "id": "s05",
       "title": "Recipe-and-compatibility-ledger",
-      "status": "planned",
+      "summary": "Added an executable ledger for all ten production equation presentation metadata keys and eight broader compatibility surfaces spanning correspondence, typed-gap fallback, transformation refs, legacy intent, timeline vocabularies, generated operation resolution, cross-surface projections, and module registries. Every entry names a live owner, authors, consumers, status candidate, retirement condition, and required closure evidence. All 109 focused tests and full typecheck pass.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
