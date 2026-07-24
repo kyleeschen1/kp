@@ -2257,6 +2257,12 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   const targetLeftTerm = transition.locator(
     '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-term"]'
   );
+  const sourceRightTerm = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.right-term"]'
+  );
+  const targetRightTerm = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.right-term"]'
+  );
   const sourcePlus = transition.locator(
     '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.plus"]'
   );
@@ -2353,29 +2359,30 @@ test("wrap and distribution satisfy their executable choreography contracts", as
     targetFactors.nth(0),
     targetLeftTerm,
     sourcePlus,
-    targetPlus
+    targetPlus,
+    sourceRightTerm,
+    targetRightTerm
   ].map((locator) => locator.evaluate((element) => ({
-    opacity: Number(getComputedStyle(element).opacity),
-    rect: (() => {
-      const rect = element.getBoundingClientRect();
-      return { left: rect.left, right: rect.right };
-    })()
+    opacity: Number(getComputedStyle(element).opacity)
   }))));
-  expect(settlementOwnerState[0]!.opacity).toBeCloseTo(
-    1 - settlementOwnerState[2]!.opacity,
-    3
-  );
-  expect(settlementOwnerState[1]!.opacity).toBeCloseTo(
-    1 - settlementOwnerState[3]!.opacity,
-    3
-  );
+  expect(settlementOwnerState[1]!.opacity).toBe(1);
+  expect(settlementOwnerState[3]!.opacity).toBe(0);
   expect(settlementOwnerState[4]!.opacity).toBe(1);
   expect(settlementOwnerState[5]!.opacity).toBe(0);
-  expect(Math.abs(
-    settlementOwnerState[3]!.rect.left -
-    settlementOwnerState[2]!.rect.right
-  )).toBeLessThan(0.05);
+  expect(settlementOwnerState[6]!.opacity).toBe(1);
+  expect(settlementOwnerState[7]!.opacity).toBe(0);
   await scrubber.fill("0.939");
+  const movingTermBeforeHandoff = await sourceLeftTerm.evaluate((element) => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const rect = range.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+      width: rect.width,
+      height: rect.height
+    };
+  });
   const movingOperatorBeforeHandoff = await sourcePlus.evaluate((element) => {
     const range = document.createRange();
     range.selectNodeContents(element);
@@ -2387,6 +2394,10 @@ test("wrap and distribution satisfy their executable choreography contracts", as
       height: rect.height
     };
   });
+  await expect(sourceLeftTerm).toHaveCSS("opacity", "1");
+  await expect(targetLeftTerm).toHaveCSS("opacity", "0");
+  await expect(sourceRightTerm).toHaveCSS("opacity", "1");
+  await expect(targetRightTerm).toHaveCSS("opacity", "0");
   await expect(sourcePlus).toHaveCSS("opacity", "1");
   await expect(targetPlus).toHaveCSS("opacity", "0");
   await scrubber.fill("0.94");
@@ -2394,8 +2405,31 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   await expect(sourceLeftTerm).toHaveCSS("opacity", "0");
   await expect(targetFactors.nth(0)).toHaveCSS("opacity", "1");
   await expect(targetLeftTerm).toHaveCSS("opacity", "1");
+  await expect(sourceRightTerm).toHaveCSS("opacity", "0");
+  await expect(targetRightTerm).toHaveCSS("opacity", "1");
   await expect(sourcePlus).toHaveCSS("opacity", "0");
   await expect(targetPlus).toHaveCSS("opacity", "1");
+  const termBeforeEndpoint = await targetLeftTerm.evaluate((element) => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const rect = range.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+      width: rect.width,
+      height: rect.height
+    };
+  });
+  expect(Math.hypot(
+    termBeforeEndpoint.x - movingTermBeforeHandoff.x,
+    termBeforeEndpoint.y - movingTermBeforeHandoff.y
+  )).toBeLessThan(0.05);
+  expect(Math.abs(
+    termBeforeEndpoint.width - movingTermBeforeHandoff.width
+  )).toBeLessThan(0.05);
+  expect(Math.abs(
+    termBeforeEndpoint.height - movingTermBeforeHandoff.height
+  )).toBeLessThan(0.05);
   const plusBeforeEndpoint = await targetPlus.evaluate((element) => {
     const range = document.createRange();
     range.selectNodeContents(element);

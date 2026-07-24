@@ -165,6 +165,27 @@
       "scope": "discrete handoff contract",
       "checkedAt": "2026-07-24T15:54:34.654Z",
       "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-distribution-choreography.test.ts tests/kp-factoring-choreography.test.ts tests/distribution-lesson-card-parity.test.ts",
+      "status": "passed",
+      "scope": "distribution term discrete handoff",
+      "checkedAt": "2026-07-24T16:00:49.486Z",
+      "notes": "15 choreography and parity tests pass after separating product readiness from semantic fission opacity."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium --workers=1 -g 'wrap and distribution satisfy|factoring coalesces'",
+      "status": "passed",
+      "scope": "forward and inverse term handoff",
+      "checkedAt": "2026-07-24T16:00:50.405Z",
+      "notes": "2 Chromium exemplars pass; left and right persistent terms remain single-owner through transit and switch at matching ink geometry, while factoring preserves the inverse."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "distribution discrete term handoff",
+      "checkedAt": "2026-07-24T16:00:51.191Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
     }
   ],
   "progress": {

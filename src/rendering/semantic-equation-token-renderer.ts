@@ -57,8 +57,10 @@ import {
 import {
   kpDistributionChoreographyRuntime
 } from "../animation/distribution-choreography-runtime.ts";
-import { evaluateKpPresentationTransferReadiness } from
-  "../animation/presentation-group-continuity.ts";
+import {
+  evaluateKpPresentationTransferReadiness,
+  sampleKpDiscretePresentationHandoff
+} from "../animation/presentation-group-continuity.ts";
 import type {
   KpFactoringChoreographyFrame,
   KpFactoringChoreographyPlan
@@ -183,7 +185,8 @@ interface DistributionChoreographyContext {
     { readonly x: number; readonly y: number }
   >;
   readonly productIndexByReflowRelationId: ReadonlyMap<string, number>;
-  readonly productOwnershipProgressBySemanticIndex: ReadonlyMap<number, number>;
+  readonly productFissionOpacityBySemanticIndex: ReadonlyMap<number, number>;
+  readonly productNativeOwnerReadyBySemanticIndex: ReadonlyMap<number, boolean>;
   readonly operatorIndexByReflowRelationId: ReadonlyMap<string, number>;
   readonly operatorNativeOwnerReadyBySemanticIndex: ReadonlyMap<number, boolean>;
   readonly groupingReflowByMotionId: ReadonlyMap<
@@ -197,7 +200,6 @@ interface FactoringChoreographyContext {
   readonly frame: KpFactoringChoreographyFrame;
   readonly factorRelationRecordId: string;
   readonly reflowRelationRecordIds: ReadonlySet<string>;
-  readonly operatorRelationRecordIds: ReadonlySet<string>;
   readonly groupingRelationRecordIds: ReadonlySet<string>;
   readonly commonFactorBounds: {
     readonly left: number;
@@ -1090,7 +1092,7 @@ function createDistributionChoreographyContext(
   const previousOffsets = offsetsForFrame(
     runtime.sample({ plan, progress: previousProgress })
   );
-  const productOwnershipProgressBySemanticIndex = new Map(
+  const productReadinessBySemanticIndex = new Map(
     [...productOffsetBySemanticIndex].map(([semanticIndex, offset]) => {
       const previous = previousOffsets.get(semanticIndex) ?? offset;
       const deltaProgress = Math.max(sampleDelta, progress - previousProgress);
@@ -1102,12 +1104,25 @@ function createDistributionChoreographyContext(
           offset.y - previous.y
         ) / deltaProgress
       });
-      const settlement = frame.productSettlementProgress;
       return [
         semanticIndex,
-        settlement < 1 || readiness.ready ? settlement : 0.99
+        readiness.ready
       ] as const;
     })
+  );
+  const productFissionOpacityBySemanticIndex = new Map(
+    [...productReadinessBySemanticIndex].map(([semanticIndex, ready]) => [
+      semanticIndex,
+      frame.productSettlementProgress < 1 || ready
+        ? frame.productSettlementProgress
+        : 0.99
+    ] as const)
+  );
+  const productNativeOwnerReadyBySemanticIndex = new Map(
+    [...productReadinessBySemanticIndex].map(([semanticIndex, ready]) => [
+      semanticIndex,
+      frame.productSettlementProgress === 1 && ready
+    ] as const)
   );
   const productIndexByReflowRelationId = new Map(
     addendRelations.map((relation) => {
@@ -1137,10 +1152,10 @@ function createDistributionChoreographyContext(
     plan.operatorGroups.map((operator) => [
       operator.semanticIndex,
       frame.addendReflowProgress === 1 &&
-        productOwnershipProgressBySemanticIndex.get(operator.semanticIndex) === 1 &&
-        productOwnershipProgressBySemanticIndex.get(
+        productNativeOwnerReadyBySemanticIndex.get(operator.semanticIndex) === true &&
+        productNativeOwnerReadyBySemanticIndex.get(
           operator.semanticIndex + 1
-        ) === 1
+        ) === true
     ] as const)
   );
   return {
@@ -1156,7 +1171,8 @@ function createDistributionChoreographyContext(
     sourceFactorAnchorDelta,
     productOffsetBySemanticIndex,
     productIndexByReflowRelationId,
-    productOwnershipProgressBySemanticIndex,
+    productFissionOpacityBySemanticIndex,
+    productNativeOwnerReadyBySemanticIndex,
     operatorIndexByReflowRelationId,
     operatorNativeOwnerReadyBySemanticIndex,
     groupingReflowByMotionId
@@ -1238,9 +1254,6 @@ function createFactoringChoreographyContext(
     factorRelationRecordId: factorRelation.recordId,
     reflowRelationRecordIds: new Set(
       persistentRelations.map((relation) => relation.recordId)
-    ),
-    operatorRelationRecordIds: new Set(
-      connectorRelations.map((relation) => relation.recordId)
     ),
     groupingRelationRecordIds: new Set(
       groupingRelations.map((relation) => relation.recordId)
@@ -1676,40 +1689,26 @@ function sampleFactoringRelation(
   }
   if (context.reflowRelationRecordIds.has(relation.recordId)) {
     const reflow = context.frame.addendCompactionProgress;
-    if (context.operatorRelationRecordIds.has(relation.recordId)) {
-      const sourceInk = unionBounds(sourceTokens.map(
-        (token) => token.localInkRect ?? token.localRect
-      ));
-      const targetInk = unionBounds(targetTokens.map(
-        (token) => token.localInkRect ?? token.localRect
-      ));
-      const sourceInkCenter = rectCenter(sourceInk);
-      const targetInkCenter = rectCenter(targetInk);
-      const nativeOwnerReady = progress === 1;
-      return [
-        ...sourceTokens.map((token) => frameToken(token, "source", {
-          opacity: nativeOwnerReady ? 0 : 1,
-          x: (targetInkCenter.x - sourceInkCenter.x) * reflow,
-          y: (targetInkCenter.y - sourceInkCenter.y) * reflow,
-          scale: 1
-        })),
-        ...targetTokens.map((token) => frameToken(token, "target", {
-          opacity: nativeOwnerReady ? 1 : 0,
-          x: 0,
-          y: 0,
-          scale: 1
-        }))
-      ];
-    }
+    const sourceInk = unionBounds(sourceTokens.map(
+      (token) => token.localInkRect ?? token.localRect
+    ));
+    const targetInk = unionBounds(targetTokens.map(
+      (token) => token.localInkRect ?? token.localRect
+    ));
+    const sourceInkCenter = rectCenter(sourceInk);
+    const targetInkCenter = rectCenter(targetInk);
+    const handoff = sampleKpDiscretePresentationHandoff({
+      nativeOwnerReady: progress === 1
+    });
     return [
       ...sourceTokens.map((token) => frameToken(token, "source", {
-        opacity: progress === 1 ? 0 : 1,
-        x: (relation.delta?.x ?? 0) * reflow,
-        y: (relation.delta?.y ?? 0) * reflow,
+        opacity: handoff.movingOpacity,
+        x: (targetInkCenter.x - sourceInkCenter.x) * reflow,
+        y: (targetInkCenter.y - sourceInkCenter.y) * reflow,
         scale: 1
       })),
       ...targetTokens.map((token) => frameToken(token, "target", {
-        opacity: progress === 1 ? 1 : 0,
+        opacity: handoff.nativeOpacity,
         x: 0,
         y: 0,
         scale: 1
@@ -2225,10 +2224,12 @@ function sampleDistributionRelation(
       kpLessonCanonicalDistributionMotionProfile.leader.arcPx *
       Math.sin(Math.PI * leaderProgress);
     const sourceFactorPose = {
+      // The original factor undergoes semantic fission; this disappearance is
+      // not the identity-preserving native handoff used by persistent terms.
       opacity:
         context.frame.sourceFactor.opacity *
         (1 - (
-          context.productOwnershipProgressBySemanticIndex.get(0) ??
+          context.productFissionOpacityBySemanticIndex.get(0) ??
           context.frame.productSettlementProgress
         )),
       x: context.sourceFactorAnchorDelta.x * leaderProgress,
@@ -2251,16 +2252,13 @@ function sampleDistributionRelation(
         const groupOffset = context.productOffsetBySemanticIndex.get(
           copy.semanticIndex
         ) ?? { x: 0, y: 0 };
-        const ownershipProgress =
-          context.productOwnershipProgressBySemanticIndex.get(
+        const fissionOpacity =
+          context.productFissionOpacityBySemanticIndex.get(
             copy.semanticIndex
           ) ?? context.frame.productSettlementProgress;
         return {
           ...frameToken(token, "target", {
-            opacity: Math.max(
-              copy.opacity,
-              ownershipProgress
-            ),
+            opacity: Math.max(copy.opacity, fissionOpacity),
             x: groupOffset.x,
             y: groupOffset.y,
             scale: copy.scale
@@ -2282,20 +2280,43 @@ function sampleDistributionRelation(
       const groupOffset = context.productOffsetBySemanticIndex.get(
         productIndex
       ) ?? { x: 0, y: 0 };
-      const ownershipProgress =
-        context.productOwnershipProgressBySemanticIndex.get(productIndex) ??
-        context.frame.productSettlementProgress;
+      const handoff = sampleKpDiscretePresentationHandoff({
+        nativeOwnerReady:
+          context.productNativeOwnerReadyBySemanticIndex.get(productIndex) ??
+          false
+      });
+      const sourceInk = unionBounds(sourceTokens.map(
+        (token) => token.localInkRect ?? token.localRect
+      ));
+      const targetInk = unionBounds(targetTokens.map(
+        (token) => token.localInkRect ?? token.localRect
+      ));
+      const sourceInkCenter = rectCenter(sourceInk);
+      const targetInkCenter = rectCenter(targetInk);
+      const inkDelta = {
+        x: targetInkCenter.x - sourceInkCenter.x,
+        y: targetInkCenter.y - sourceInkCenter.y
+      };
+      const cohesion = context.frame.productSettlementProgress;
       return [
         ...sourceTokens.map((token) => frameToken(token, "source", {
-          opacity: 1 - ownershipProgress,
-          x: (relation.delta?.x ?? 0) * reflow,
-          y: (relation.delta?.y ?? 0) * reflow,
+          opacity: handoff.movingOpacity,
+          x: interpolate(
+            inkDelta.x * reflow,
+            inkDelta.x + groupOffset.x,
+            cohesion
+          ),
+          y: interpolate(
+            inkDelta.y * reflow,
+            inkDelta.y + groupOffset.y,
+            cohesion
+          ),
           scale: 1
         })),
         ...targetTokens.map((token) => frameToken(token, "target", {
-          opacity: ownershipProgress,
-          x: groupOffset.x,
-          y: groupOffset.y,
+          opacity: handoff.nativeOpacity,
+          x: 0,
+          y: 0,
           scale: 1
         }))
       ];
@@ -2307,6 +2328,9 @@ function sampleDistributionRelation(
       const nativeOwnerReady =
         context.operatorNativeOwnerReadyBySemanticIndex.get(operatorIndex) ??
         false;
+      const handoff = sampleKpDiscretePresentationHandoff({
+        nativeOwnerReady
+      });
       const sourceInk = unionBounds(sourceTokens.map(
         (token) => token.localInkRect ?? token.localRect
       ));
@@ -2323,13 +2347,13 @@ function sampleDistributionRelation(
         ...sourceTokens.map((token) => frameToken(token, "source", {
           // Keep one visible glyph: move the source operator into exact native
           // ink geometry, ignoring KaTeX's context-dependent wrapper spacing.
-          opacity: nativeOwnerReady ? 0 : 1,
+          opacity: handoff.movingOpacity,
           x: inkDelta.x * reflow,
           y: inkDelta.y * reflow,
           scale: 1
         })),
         ...targetTokens.map((token) => frameToken(token, "target", {
-          opacity: nativeOwnerReady ? 1 : 0,
+          opacity: handoff.nativeOpacity,
           x: 0,
           y: 0,
           scale: 1
