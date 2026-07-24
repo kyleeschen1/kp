@@ -15,9 +15,10 @@ test("build manifest declares every accepted reader route exactly once", () => {
     "/reader/divide-both-sides/",
     "/reader/split-merge-fractions/",
     "/reader/fractional-transfer/",
-    "/reader/distribution-area/"
+    "/reader/distribution-area/",
+    "/reader/quadratic-branching/"
   ]);
-  assert.equal(new Set(kpReaderRouteManifest.map(({ sourcePath }) => sourcePath)).size, 7);
+  assert.equal(new Set(kpReaderRouteManifest.map(({ sourcePath }) => sourcePath)).size, 8);
   assert.deepEqual(
     kpReaderRouteManifest.map(({ route }) => ({
       entry: kpReaderRouteEntryName(route),
@@ -30,7 +31,8 @@ test("build manifest declares every accepted reader route exactly once", () => {
       { entry: "reader-divide-both-sides", html: "reader/divide-both-sides/index.html" },
       { entry: "reader-split-merge-fractions", html: "reader/split-merge-fractions/index.html" },
       { entry: "reader-fractional-transfer", html: "reader/fractional-transfer/index.html" },
-      { entry: "reader-distribution-area", html: "reader/distribution-area/index.html" }
+      { entry: "reader-distribution-area", html: "reader/distribution-area/index.html" },
+      { entry: "reader-quadratic-branching", html: "reader/quadratic-branching/index.html" }
     ]
   );
   assert.deepEqual(
@@ -82,6 +84,12 @@ test("build manifest declares every accepted reader route exactly once", () => {
         documentId: "lesson.algebra.distribution-area",
         progressPermille: 720,
         rendererAdapterId: "renderer.distribution-composite"
+      },
+      {
+        route: "/reader/quadratic-branching/",
+        documentId: "lesson.algebra.quadratic-branching",
+        progressPermille: 680,
+        rendererAdapterId: "renderer.quadratic-native-katex"
       }
     ]
   );
@@ -94,12 +102,13 @@ test("build manifest declares every accepted reader route exactly once", () => {
       "divide-both-sides",
       "split-merge-fractions",
       "fractional-transfer",
-      "distribution-area"
+      "distribution-area",
+      "quadratic-branching"
     ]
   );
   assert.deepEqual(
     kpReaderRouteManifest.map(({ review }) => review.checkpoints.length),
-    [8, 1, 1, 1, 1, 1, 36]
+    [8, 1, 1, 1, 1, 1, 36, 6]
   );
   assert.ok(kpReaderRouteManifest.every(({ budget }) =>
     budget.compiledHtmlRawBytes > 0 &&

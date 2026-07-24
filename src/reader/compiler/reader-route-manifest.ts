@@ -4,6 +4,7 @@ import {
   compileKpFractionalLinearEquationLesson,
   compileKpFractionalTransferComparisonLesson,
   compileKpNumeratorSplitMergeEquationLesson,
+  compileKpQuadraticBranchingLesson,
   compileKpXPlusThreeLesson,
   compileKpXPlusThreeTeacherZeroLesson
 } from "./public-api.ts";
@@ -282,5 +283,44 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       )
     },
     budget: routeBudget(19_237, 3_003, 54_210)
+  }),
+  defineKpReaderRoute({
+    route: "/reader/quadratic-branching/",
+    sourcePath: "content/lessons/quadratic-branching.md",
+    compile: compileKpQuadraticBranchingLesson,
+    conformance: {
+      readerId: "quadratic-branching",
+      documentId: "lesson.algebra.quadratic-branching",
+      version: "1",
+      progressPermille: 680,
+      beatId: "beat.split-branches",
+      query: { kpMethod: "completing-square" },
+      stageSelector: "[data-kp-quadratic-stage]",
+      rendererAdapterId: "renderer.quadratic-native-katex",
+      shareSelector: "[data-kp-quadratic-share]",
+      fontReadyEvidence: "body-attribute",
+      progressEvidence: {
+        kind: "attribute",
+        selector: "body",
+        name: "data-kp-reader-progress"
+      },
+      searchableText: "complete solution set x ∈ {2, 3}"
+    },
+    review: {
+      id: "quadratic-branching",
+      title: "Kinetic Press · quadratic branching",
+      capture: "stage",
+      columns: 3,
+      imageFit: "contain",
+      checkpoints: [
+        { id: "source", label: "Read the equation", progressPermille: 0, viewport: "desktop" },
+        { id: "method-square", label: "Complete the square", progressPermille: 430, viewport: "desktop" },
+        { id: "method-formula", label: "Quadratic formula", progressPermille: 430, viewport: "desktop", query: { kpMethod: "formula" } },
+        { id: "branches", label: "Plus-minus branches", progressPermille: 680, viewport: "desktop" },
+        { id: "reunion", label: "Complete solution set", progressPermille: 880, viewport: "desktop" },
+        { id: "branches-phone", label: "Branches · phone", progressPermille: 680, viewport: "phone" }
+      ]
+    },
+    budget: routeBudget(32_529, 4_511, 40_160)
   })
 ]);

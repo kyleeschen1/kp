@@ -139,6 +139,20 @@
       "scope": "slice-15 branch choreography and native reunion",
       "checkedAt": "2026-07-24T20:23:38.230Z",
       "notes": "Seventeen focused tests passed with typecheck. Both methods use stable branches, exclusive nonzero material ownership, bounded responsive separation, semantic micro-stagger, discrete native reunion, direct seek, rewind, and JSON-stable choreography."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/quadratic-branching-reader-surface.test.ts tests/semantic-reader-quadratic-branching-compiler.test.ts tests/semantic-reader-route-manifest.test.ts",
+      "status": "passed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-24T20:37:38.881Z",
+      "notes": "Five focused model, compiler, and manifest checks passed."
+    },
+    {
+      "command": "npm run check:architecture; npm run build; npm run check:reader-production; npm run check:reader-budgets; npm run visual:quadratic-branching; playwright quadratic reader and shared conformance checks",
+      "status": "passed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-24T20:37:48.628Z",
+      "notes": "Architecture, production build, eight-route closure, exact route budgets, ten preservation and learner captures, two responsive browser checks, and shared reader conformance passed. The learner route owns native KaTeX presentation, uses one shared clock, preserves URL/control authority until genuine scroll input, has no horizontal overflow, and mounts no editor player."
     }
   ],
   "progress": {

@@ -86,6 +86,50 @@ try {
     }
   }
 
+  for (const profile of profiles) {
+    const page = await browser.newPage({ viewport: profile.viewport });
+    try {
+      const url = new URL("/reader/quadratic-branching/", baseUrl);
+      url.searchParams.set("kpLesson", "lesson.algebra.quadratic-branching");
+      url.searchParams.set("kpVersion", "1");
+      url.searchParams.set("kpProgress", "680");
+      url.searchParams.set("kpMethod", "completing-square");
+      await page.goto(url.toString(), { waitUntil: "networkidle" });
+      await page.evaluate(async () => document.fonts.ready);
+      const stage = page.locator("[data-kp-quadratic-stage]");
+      await stage.waitFor();
+      const playerCount = await page
+        .locator("[data-kp-editor-animation-player]")
+        .count();
+      if (playerCount !== 0) {
+        throw new Error("The lesson-owned quadratic route must not mount an editor player.");
+      }
+      const horizontalOverflowPx = await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth
+      );
+      if (horizontalOverflowPx > 1) {
+        throw new Error(
+          `quadratic learner surface ${profile.id} overflows by ${horizontalOverflowPx}px.`
+        );
+      }
+      const id = `quadratic-learner-surface-${profile.id}`;
+      const file = path.join(outputRoot, `${id}.png`);
+      await stage.screenshot({ path: file, animations: "disabled" });
+      captures.push({
+        id,
+        animationId: "animation.algebra.quadratic.solution-branching",
+        profile: profile.id,
+        file: path.relative(process.cwd(), file),
+        playerCount,
+        horizontalOverflowPx
+      });
+    } finally {
+      await page.close();
+    }
+  }
+
   const outputManifest = path.join(outputRoot, "manifest.json");
   await writeFile(
     outputManifest,

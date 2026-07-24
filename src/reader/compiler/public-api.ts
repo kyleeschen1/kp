@@ -75,6 +75,9 @@ export {
   compileKpDistributionAreaLesson
 } from "./distribution-area-lesson.ts";
 export {
+  compileKpQuadraticBranchingLesson
+} from "./quadratic-branching-lesson.ts";
+export {
   defineKpReaderRoute,
   defineKpReaderRouteManifest,
   kpReaderRouteEntryName,
