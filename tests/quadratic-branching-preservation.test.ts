@@ -3,6 +3,8 @@ import test from "node:test";
 
 import {
   createKpQuadraticBranchingPreservationManifest,
+  createKpQuadraticExemplarReviewLedger,
+  KP_QUADRATIC_REJECTED_REVIEW_NOTE_IDS,
   KP_QUADRATIC_BRANCHING_ANIMATION_ID
 } from "../src/editor/quadratic-branching-preservation.ts";
 import { createKpAnimationLifecycleFacets } from "../src/editor/semantic-animation-workbench-lifecycle.ts";
@@ -43,4 +45,29 @@ test("planned quadratic identity stays non-playable before publication", () => {
     playability: "planned-only"
   });
   assert.equal(lifecycle.playability, "planned-only");
+});
+
+test("rejected quadratic checkpoint blocks publication without discarding accepted work", () => {
+  const ledger = createKpQuadraticExemplarReviewLedger();
+
+  assert.equal(ledger.checkpointStatus, "rejected");
+  assert.deepEqual(ledger.reviewNoteIds, KP_QUADRATIC_REJECTED_REVIEW_NOTE_IDS);
+  assert.equal(ledger.reviewNoteIds.length, 8);
+  assert.deepEqual(ledger.acceptedBoundaries, [
+    "exact-semantic-authority",
+    "plus-minus-branch-identity",
+    "branch-graph-correspondence",
+    "shared-runtime-and-review-lifecycle"
+  ]);
+  assert.deepEqual(ledger.rejectedBoundaries, [
+    "generic-checkpoint-symbol-motion",
+    "compound-operation-omission",
+    "standalone-visible-solution-set-reunion"
+  ]);
+  assert.deepEqual(ledger.publicationGate, {
+    status: "blocked",
+    requires: "renewed-human-exemplar-approval",
+    successorContract:
+      "run-contract.kp.quadratic-operation-presentation-governance-v0"
+  });
 });

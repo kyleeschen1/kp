@@ -1,17 +1,20 @@
 # Quadratic semantic branching exemplar checkpoint
 
-Status: awaiting renewed human review after symbolic-motion revision
+Status: rejected; publication tail superseded
 
-Run contract: `run-contract.kp.quadratic-semantic-branching-v2`  
+Run contract: `run-contract.kp.quadratic-semantic-branching-v2` (superseded)  
 Slice: `slice-20`
+Successor:
+`run-contract.kp.quadratic-operation-presentation-governance-v0`
 
-## Recommendation
+## Disposition
 
-Review the quadratic lesson as the canonical reference for one equation with
-two exact solution methods, explicit plus-minus branches, one native solution
-set, and graph-root correspondence. Approve the exemplar before it is
-published in the Animation Workbench or used to extract shared branching
-contracts.
+Do not publish this checkpoint. Preserve its exact semantic authority,
+plus-minus branch identity, graph correspondence, shared runtime, and review
+lifecycle. Replace both generic algebra transitions with certified
+operation-specific causal traces, support compressed contextual playback plus
+exact drill-down, and hand branches directly to the graph before requesting a
+new human review.
 
 ## Canonical reference
 
@@ -138,8 +141,10 @@ promotion, or reuse of the radical WebGL material path.
 
 ## Human decision
 
-Pending. Stop after this checkpoint until the user explicitly approves or
-requests a bounded revision.
+Rejected. Review notes `review-note.13.mrzhovqp` through
+`review-note.20.mrzhxsef` are the durable critique record. The approved
+revision is specified in
+`docs/project/reviews/2026-07-24-quadratic-operation-presentation-governance-long-loop-proposal.md`.
 
 Human review accepted the graph and plus-minus branching, but rejected the
 first checkpoint because the method phase replaced whole native KaTeX states

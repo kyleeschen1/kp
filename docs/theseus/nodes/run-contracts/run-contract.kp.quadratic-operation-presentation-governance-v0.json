@@ -1,0 +1,164 @@
+{
+  "id": "run-contract.kp.quadratic-operation-presentation-governance-v0",
+  "kind": "run-contract",
+  "title": "Quadratic operation-presentation governance",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.quadratic-semantic-branching-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-24-quadratic-operation-presentation-governance-long-loop-proposal.md",
+      "summary": "Human-approved 20-slice governance and exemplar revision with publication excluded and a renewed checkpoint at slice 20."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.quadratic-semantic-branching-v0.json",
+      "summary": "Existing quadratic target whose rejected publication tail this contract replaces."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "npm run typecheck",
+    "npm test",
+    "npm run check:architecture",
+    "npm run test:semantic-animation-convergence",
+    "npm run test:browser:reader-conformance",
+    "npm run visual:quadratic-branching",
+    "npm run build",
+    "npm run check:reader-production",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Quadratic operation-presentation certificates, atomic trace compilation, material roles, phase and motif conformance, compressed causal chains, exact drill-down, both method projections, route ratchets, tests, visual evidence, and Theseus records.",
+    "Presentation-only simplification from semantic solution-set reunion to direct branch-to-graph handoff while retaining semantic, accessibility, inspection, root, and graph authority."
+  ],
+  "disallowedWork": [
+    "No Workbench publication, family-wide promotion, unrelated roadmap domain, CAS, broad renderer redesign, or reuse of the radical animation WebGL workaround.",
+    "Do not alter accepted quadratic math, root and branch identity, graph authority, shared clock, review lifecycle, or unrelated user-authored changes."
+  ],
+  "goal": "Certify and rebuild both quadratic algebra methods as operation-specific compressed causal traces with exact drill-down and direct branch-to-graph continuity, then stop for renewed human review.",
+  "target": "next-action.kp.quadratic-semantic-branching-v0",
+  "runMode": "run",
+  "maxSlices": 20,
+  "commitCadence": "Commit every independently reversible verified slice with its Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "H1 HUMAN-EXEMPLAR: stop at slice 20 for explicit visual approval.",
+    "H2 MATH: stop on unverified algebra, inexact canonical results, or presentation-owned mathematical truth.",
+    "H3 CAUSALITY: stop if a visible transformation lacks total operation coverage, material roles, phase order, or a registered motif.",
+    "H4 COMPRESSION: stop if contextual speed-up omits an operation or drill-down diverges from the canonical trace.",
+    "H5 PRESERVATION: stop on accepted graph, branch, route, review, accessibility, native settlement, seek, rewind, or baseline drift.",
+    "H6 OWNERSHIP: stop if a renderer must invent operations, correspondence, timing authority, or semantic identity.",
+    "H7 RADICAL-ISOLATION: stop if the quadratic fix requires the radical animation WebGL path or changes its known residual.",
+    "H8 SCOPE: stop before Workbench publication, family-wide generalization, another roadmap domain, a CAS, or broad renderer redesign.",
+    "H9 USER-OVERLAP: stop if required work cannot be separated from unrelated user-authored changes.",
+    "H10 VERIFICATION: stop if a required gate fails without a bounded in-scope repair."
+  ],
+  "slices": [
+    {
+      "id": "slice-01",
+      "title": "Rejected-checkpoint-and-preservation-ledger",
+      "summary": "Made the rejected checkpoint durable: notes 13-20, accepted semantic/branch/graph/runtime boundaries, rejected generic motion/compound omission/visible reunion, successor contract, and renewed human-approval publication gate are typed and tested; proposal and checkpoint records now agree.",
+      "status": "complete"
+    },
+    {
+      "id": "slice-02",
+      "title": "Operation-presentation-certificate-schema",
+      "status": "planned"
+    },
+    {
+      "id": "slice-03",
+      "title": "Operation-coverage-laws",
+      "status": "planned"
+    },
+    {
+      "id": "slice-04",
+      "title": "Total-material-role-classification",
+      "status": "planned"
+    },
+    {
+      "id": "slice-05",
+      "title": "Phase-and-motif-conformance-laws",
+      "status": "planned"
+    },
+    {
+      "id": "slice-06",
+      "title": "Generic-checkpoint-negative-fixture",
+      "status": "planned"
+    },
+    {
+      "id": "slice-07",
+      "title": "Compressed-causal-chain-contract",
+      "status": "planned"
+    },
+    {
+      "id": "slice-08",
+      "title": "Exact-parent-child-drilldown-contract",
+      "status": "planned"
+    },
+    {
+      "id": "slice-09",
+      "title": "Quadratic-authority-to-presentation-adapter",
+      "status": "planned"
+    },
+    {
+      "id": "slice-10",
+      "title": "Completing-square-balance-choreography",
+      "status": "planned"
+    },
+    {
+      "id": "slice-11",
+      "title": "Completing-square-both-sides-chain",
+      "status": "planned"
+    },
+    {
+      "id": "slice-12",
+      "title": "Perfect-square-factor-recognition",
+      "status": "planned"
+    },
+    {
+      "id": "slice-13",
+      "title": "Square-root-and-isolate-x-chain",
+      "status": "planned"
+    },
+    {
+      "id": "slice-14",
+      "title": "Formula-substitution-choreography",
+      "status": "planned"
+    },
+    {
+      "id": "slice-15",
+      "title": "Dependency-ordered-discriminant-evaluation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-16",
+      "title": "Radical-and-candidate-evaluation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-17",
+      "title": "Compressed-context-and-show-steps-surface",
+      "status": "planned"
+    },
+    {
+      "id": "slice-18",
+      "title": "Branch-directly-to-graph-presentation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-19",
+      "title": "Route-conformance-and-generation-ratchet",
+      "status": "planned"
+    },
+    {
+      "id": "slice-20",
+      "title": "Renewed-human-exemplar-checkpoint",
+      "status": "planned"
+    }
+  ]
+}

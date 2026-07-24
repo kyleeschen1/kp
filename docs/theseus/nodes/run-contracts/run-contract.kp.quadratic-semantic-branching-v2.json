@@ -2,8 +2,9 @@
   "id": "run-contract.kp.quadratic-semantic-branching-v2",
   "kind": "run-contract",
   "title": "Quadratic semantic branching",
-  "status": "ready",
+  "status": "superseded",
   "domain": "kp",
+  "summary": "Human rejected the slice-20 algebra presentation after review notes 13-20. Accepted graph, branch, semantic, review, and runtime work remains preserved; the publication and generalization tail is replaced by run-contract.kp.quadratic-operation-presentation-governance-v0.",
   "sourceRefs": [
     {
       "kind": "file",
