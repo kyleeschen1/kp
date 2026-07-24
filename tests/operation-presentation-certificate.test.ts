@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   createKpOperationPresentationCertificate,
   evaluateKpOperationPresentationCoverage,
+  evaluateKpOperationPresentationMaterialRoles,
   validateKpOperationPresentationCertificate,
   type KpOperationPresentationCertificate
 } from "../src/animation/operation-presentation-certificate.ts";
@@ -161,6 +162,109 @@ test("compound coverage cannot skip an intervening authority operation", () => {
       "operation-coverage.missing",
       "operation-coverage.presentation-order",
       "operation-coverage.noncontiguous-compound"
+    ]
+  );
+});
+
+test("material roles distinguish focal action from continuant reflow", () => {
+  const certificate = createKpOperationPresentationCertificate({
+    ...validInput(),
+    spans: [{
+      ...validInput().spans[0]!,
+      phases: [
+        {
+          id: "phase.reflow",
+          phaseId: "reflow",
+          activityKind: "move-continuant",
+          materialEntityIds: ["material.equality"]
+        },
+        validInput().spans[0]!.phases[0]!
+      ]
+    }]
+  });
+
+  assert.deepEqual(
+    evaluateKpOperationPresentationMaterialRoles(certificate),
+    []
+  );
+});
+
+test("material-role laws reject arcing continuants and omitted focal ink", () => {
+  const certificate = createKpOperationPresentationCertificate({
+    ...validInput(),
+    materials: [
+      ...validInput().materials,
+      {
+        entityId: "material.unused",
+        semanticRoleId: "role.unused",
+        presentationRole: "structural"
+      }
+    ],
+    spans: [{
+      ...validInput().spans[0]!,
+      phases: [{
+        id: "phase.act",
+        phaseId: "act",
+        activityKind: "execute-operation",
+        materialEntityIds: ["material.equality"]
+      }]
+    }]
+  });
+
+  assert.deepEqual(
+    evaluateKpOperationPresentationMaterialRoles(certificate).map(
+      ({ code, entityId }) => [code, entityId]
+    ),
+    [
+      ["material-role.unused", "material.six"],
+      ["material-role.continuant-acted", "material.equality"],
+      ["material-role.continuant-not-reflowed", "material.equality"],
+      ["material-role.unused", "material.unused"]
+    ]
+  );
+});
+
+test("introduced and structural material have incompatible action duties", () => {
+  const certificate = createKpOperationPresentationCertificate({
+    ...validInput(),
+    materials: [
+      {
+        entityId: "material.result",
+        semanticRoleId: "role.result",
+        presentationRole: "introduced"
+      },
+      {
+        entityId: "material.paren",
+        semanticRoleId: "role.structure",
+        presentationRole: "structural"
+      }
+    ],
+    spans: [{
+      ...validInput().spans[0]!,
+      phases: [
+        {
+          id: "phase.reflow",
+          phaseId: "reflow",
+          activityKind: "reserve-space",
+          materialEntityIds: ["material.result"]
+        },
+        {
+          id: "phase.act",
+          phaseId: "act",
+          activityKind: "execute-operation",
+          materialEntityIds: ["material.paren"]
+        }
+      ]
+    }]
+  });
+
+  assert.deepEqual(
+    evaluateKpOperationPresentationMaterialRoles(certificate).map(
+      ({ code }) => code
+    ),
+    [
+      "material-role.operation-result-not-acted",
+      "material-role.structural-acted"
     ]
   );
 });

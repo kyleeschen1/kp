@@ -80,7 +80,8 @@
     {
       "id": "slice-04",
       "title": "Total-material-role-classification",
-      "status": "planned"
+      "summary": "Added total material-role laws that prevent the original all-symbol arc failure: visible material cannot be omitted, continuants reserve or reflow and never execute, focal and operation-result material must act, and structural ink remains inert.",
+      "status": "complete"
     },
     {
       "id": "slice-05",

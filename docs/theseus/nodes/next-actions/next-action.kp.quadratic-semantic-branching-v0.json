@@ -223,6 +223,13 @@
       "scope": "slice-03 operation coverage laws",
       "checkedAt": "2026-07-24T22:32:22.386Z",
       "notes": "Six focused tests pass. Coverage accepts exact atomic and contiguous compound traces and diagnoses missing, duplicated, reordered, and non-contiguous authority operations."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/operation-presentation-certificate.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-04 total material-role classification",
+      "checkedAt": "2026-07-24T22:34:12.219Z",
+      "notes": "Nine focused tests pass. Every declared visible entity must participate, focal/result material must execute, continuants must reserve or reflow and cannot execute, and structural material cannot act."
     }
   ],
   "progress": {

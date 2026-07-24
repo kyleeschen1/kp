@@ -73,6 +73,18 @@ export interface KpOperationPresentationCoverageIssue {
   readonly message: string;
 }
 
+export interface KpOperationPresentationMaterialIssue {
+  readonly code:
+    | "material-role.unused"
+    | "material-role.focal-not-acted"
+    | "material-role.continuant-acted"
+    | "material-role.continuant-not-reflowed"
+    | "material-role.operation-result-not-acted"
+    | "material-role.structural-acted";
+  readonly entityId: string;
+  readonly message: string;
+}
+
 export function createKpOperationPresentationCertificate(
   input: Omit<
     KpOperationPresentationCertificate,
@@ -287,6 +299,83 @@ export function evaluateKpOperationPresentationCoverage(
         });
       }
     });
+  return issues;
+}
+
+export function evaluateKpOperationPresentationMaterialRoles(
+  certificate: KpOperationPresentationCertificate
+): readonly KpOperationPresentationMaterialIssue[] {
+  const issues: KpOperationPresentationMaterialIssue[] = [];
+  const phases = certificate.spans.flatMap((span) => span.phases);
+  certificate.materials.forEach((material) => {
+    const participating = phases.filter(
+      (phase) => phase.materialEntityIds.includes(material.entityId)
+    );
+    const executes = participating.some(
+      (phase) => phase.activityKind === "execute-operation"
+    );
+    const reflows = participating.some(
+      (phase) =>
+        phase.activityKind === "reserve-space" ||
+        phase.activityKind === "move-continuant"
+    );
+    if (participating.length === 0) {
+      issues.push({
+        code: "material-role.unused",
+        entityId: material.entityId,
+        message:
+          `Visible material ${material.entityId} has no presentation participation.`
+      });
+      return;
+    }
+    if (material.presentationRole === "focal-operand" && !executes) {
+      issues.push({
+        code: "material-role.focal-not-acted",
+        entityId: material.entityId,
+        message:
+          `Focal operand ${material.entityId} must participate in execute-operation.`
+      });
+    }
+    if (material.presentationRole === "continuant") {
+      if (executes) {
+        issues.push({
+          code: "material-role.continuant-acted",
+          entityId: material.entityId,
+          message:
+            `Continuant ${material.entityId} cannot be animated as an operand.`
+        });
+      }
+      if (!reflows) {
+        issues.push({
+          code: "material-role.continuant-not-reflowed",
+          entityId: material.entityId,
+          message:
+            `Continuant ${material.entityId} must reserve space or reflow.`
+        });
+      }
+    }
+    if ([
+      "introduced",
+      "eliminated",
+      "copied",
+      "merged"
+    ].includes(material.presentationRole) && !executes) {
+      issues.push({
+        code: "material-role.operation-result-not-acted",
+        entityId: material.entityId,
+        message:
+          `${material.presentationRole} material ${material.entityId} must participate in execute-operation.`
+      });
+    }
+    if (material.presentationRole === "structural" && executes) {
+      issues.push({
+        code: "material-role.structural-acted",
+        entityId: material.entityId,
+        message:
+          `Structural material ${material.entityId} cannot execute the operation.`
+      });
+    }
+  });
   return issues;
 }
 
