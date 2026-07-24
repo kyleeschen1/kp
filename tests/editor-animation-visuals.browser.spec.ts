@@ -1582,18 +1582,21 @@ test("radical-succession uses a complete WebGL operator and native settle", asyn
   const settlementProgress = Number(await stage.getAttribute(
     "data-kp-editor-equation-native-settlement-progress"
   ));
+  const targetSettlementState = {
+    phase: await stage.getAttribute(
+      "data-kp-editor-equation-native-settlement-phase"
+    ),
+    ready: await stage.getAttribute(
+      "data-kp-editor-equation-native-settlement-ready"
+    ),
+    residual: Number(await stage.getAttribute(
+      "data-kp-editor-equation-native-settlement-residual"
+    ))
+  };
   expect(settlementProgress).toBe(0);
-  await expect(stage).toHaveAttribute(
-    "data-kp-editor-equation-native-settlement-phase",
-    "waiting-for-native-geometry"
-  );
-  await expect(stage).toHaveAttribute(
-    "data-kp-editor-equation-native-settlement-ready",
-    "false"
-  );
-  expect(Number(await stage.getAttribute(
-    "data-kp-editor-equation-native-settlement-residual"
-  ))).toBeGreaterThan(0.25);
+  expect(targetSettlementState.phase).toBe("native-handoff");
+  expect(targetSettlementState.ready).toBe("true");
+  expect(targetSettlementState.residual).toBe(0);
   const settlingNativeOpacity = Number(
     await targetNativeRadical.evaluate(
       (element) => getComputedStyle(element).opacity
@@ -1616,13 +1619,19 @@ test("radical-succession uses a complete WebGL operator and native settle", asyn
       measureKpRadicalWebglInk(
         stage: HTMLElement,
         endpoint: "target"
-      ): { maximumGeometryResidualPx: number } | undefined;
+      ): {
+        renderedWebglInkRect: object;
+        liveNativeInkRect: object;
+        maximumGeometryResidualPx: number;
+      } | undefined;
     };
     const comparison = module.measureKpRadicalWebglInk(element, "target");
     if (comparison === undefined) {
       throw new Error("Expected target WebGL and native ink observations.");
     }
     return {
+      renderedWebglInkRect: comparison.renderedWebglInkRect,
+      liveNativeInkRect: comparison.liveNativeInkRect,
       measuredResidualPx: comparison.maximumGeometryResidualPx,
       recordedResidualPx: Number(
         element.dataset["kpEditorEquationNativeSettlementResidual"]
@@ -1633,6 +1642,10 @@ test("radical-succession uses a complete WebGL operator and native settle", asyn
     targetInkDiagnostic.measuredResidualPx,
     5
   );
+  expect(
+    targetInkDiagnostic.measuredResidualPx,
+    JSON.stringify(targetInkDiagnostic)
+  ).toBeCloseTo(0, 10);
 
   await scrubber.fill("0.9");
   await expect(baseMaterialOwner).toHaveAttribute(
@@ -1642,16 +1655,16 @@ test("radical-succession uses a complete WebGL operator and native settle", asyn
   await scrubber.fill("0.94");
   await expect(stage).toHaveAttribute(
     "data-kp-editor-equation-native-settlement-progress",
-    "0"
+    "1"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-editor-equation-native-settlement-phase",
-    "waiting-for-native-geometry"
+    "native-geometry"
   );
   await expect(materialLayer.locator(
     '[data-kp-equation-material-fragment-role^="radical-"]'
   )).toHaveCount(0);
-  await expect(targetNativeRadical).toHaveCSS("opacity", "0");
+  await expect(targetNativeRadical).toHaveCSS("opacity", "1");
   await scrubber.fill("1");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-choreography-phase",

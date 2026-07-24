@@ -186,8 +186,9 @@
     },
     {
       "id": "slice-24",
-      "title": "Reconcile remaining translation and scale before crossfade; block transfer until genuinely ready.",
-      "status": "planned"
+      "title": "Reconcile remaining translation and scale before discrete handoff; block transfer until genuinely ready.",
+      "summary": "Calibrated WebGL source and target ink against independently captured native KaTeX bounds, including endpoint scale and translation. Settlement now retains exactly one fully opaque owner and switches discretely only after measured geometry is exact. Stable source/target evidence records zero residual, overlap, and vacancy; focused unit/browser, canonical visual, and typecheck gates pass.",
+      "status": "complete"
     },
     {
       "id": "slice-25",

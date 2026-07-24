@@ -347,6 +347,41 @@
       "scope": "slice-23 exact source endpoint",
       "checkedAt": "2026-07-24T16:41:47.714Z",
       "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/katex-artifact-solid-mask-morph.test.ts tests/radical-webgl-morph.test.ts tests/kp-radical-native-settlement.test.ts",
+      "status": "passed",
+      "scope": "slice-24 exact radical endpoints and discrete ownership",
+      "checkedAt": "2026-07-24T16:58:26.360Z",
+      "notes": "14 focused tests passed; source and target calibration preserves endpoint ink and the settlement model exposes exactly one fully opaque owner throughout the handoff window."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --grep radical-forward-and-rewind-discrete-handoffs",
+      "status": "passed",
+      "scope": "slice-24 live browser handoffs",
+      "checkedAt": "2026-07-24T16:58:27.588Z",
+      "notes": "2 focused Chromium tests passed; actual WebGL/native target residual is zero at progress 0.88, native ownership transfers discretely at 0.94, and rewind source geometry also converges without a fade."
+    },
+    {
+      "command": "npm run visual:presentation-continuity",
+      "status": "passed",
+      "scope": "slice-24 generic radical handoff gate",
+      "checkedAt": "2026-07-24T16:58:28.529Z",
+      "notes": "18 stable captures passed. Source and target radical endpoints each record zero geometry residual, zero owner overlap, and zero owner vacancy."
+    },
+    {
+      "command": "npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "slice-24 accepted choreography preservation",
+      "checkedAt": "2026-07-24T16:58:29.471Z",
+      "notes": "17 deterministic captures passed; the complete radical remains continuous and Ready with no inspector warnings across forward and rewind frames."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-24 calibrated discrete handoff",
+      "checkedAt": "2026-07-24T16:58:30.425Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
     }
   ],
   "progress": {

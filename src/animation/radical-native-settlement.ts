@@ -73,9 +73,10 @@ export function sampleKpRadicalCompositeNativeSettlement(input: {
     input.easing ?? kpRadicalConventionalMorphProfile.settlement.easing,
     intervalProgress(semanticProgress, handoffStart, handoffEnd)
   );
+  const handoffComplete = handoffProgress >= 1;
   const requestedNativeOpacity = input.endpoint === "target"
-    ? handoffProgress
-    : 1 - handoffProgress;
+    ? handoffComplete ? 1 : 0
+    : handoffComplete ? 0 : 1;
   // A composite endpoint owns the handoff as one measured block. Its children
   // may move independently before this window, but cannot transfer partial
   // ownership or compare their individual boxes to the whole native parent.
@@ -89,6 +90,8 @@ export function sampleKpRadicalCompositeNativeSettlement(input: {
       : 0;
   const phase = !geometryReady && requiresGeometry
     ? "waiting-for-native-geometry"
+    : handoffProgress > 0 && handoffProgress < 1
+      ? "native-handoff"
     : nativeOpacity >= 1
       ? "native-geometry"
       : nativeOpacity > 0

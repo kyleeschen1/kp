@@ -483,8 +483,10 @@ function captureEndpointAlpha(
     region.y,
     region.width,
     region.height,
-    (endpoint.rect.left - bounds.left) * pixelRatio,
-    (endpoint.rect.top - bounds.top) * pixelRatio,
+    // Keep one-device-pixel rules (notably the radical overbar) on the atlas
+    // grid; fractional placement would split their alpha across two rows.
+    Math.round((endpoint.rect.left - bounds.left) * pixelRatio),
+    Math.round((endpoint.rect.top - bounds.top) * pixelRatio),
     // Atlas regions already contain the captured endpoint on the device-pixel
     // grid. Resizing them back to a fractional CSS box here would deform the
     // exact source before the signed-distance morph even begins.

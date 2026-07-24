@@ -3,6 +3,7 @@ import {
 } from "../animation/radical-morph-profile.ts";
 import {
   createKatexArtifactSolidMaskMorphRenderer,
+  sampleKatexArtifactSolidMaskMorphProgress,
   type KatexArtifactSolidMaskMorphPlan,
   type KatexArtifactSolidMaskMorphRenderer
 } from "./katex-artifact-solid-mask-morph.ts";
@@ -48,7 +49,24 @@ interface KpRadicalWebglMorphState {
   sourceNativeInkRect?: KatexTokenRect | undefined;
   targetCaptureRect?: KatexTokenRect | undefined;
   targetNativeInkRect?: KatexTokenRect | undefined;
+  sourceCorrection: KpRadicalEndpointCorrection;
+  targetCorrection: KpRadicalEndpointCorrection;
+  currentCorrection: KpRadicalEndpointCorrection;
 }
+
+interface KpRadicalEndpointCorrection {
+  readonly scaleX: number;
+  readonly scaleY: number;
+  readonly translateX: number;
+  readonly translateY: number;
+}
+
+const identityEndpointCorrection: KpRadicalEndpointCorrection = {
+  scaleX: 1,
+  scaleY: 1,
+  translateX: 0,
+  translateY: 0
+};
 
 const morphStates = new WeakMap<HTMLElement, KpRadicalWebglMorphState>();
 export const kpRadicalInkAlphaThreshold = 128;
@@ -99,6 +117,7 @@ export function syncKpRadicalWebglMorph(input: {
   state.opacity = input.opacity;
   if (state.status === "ready" && state.renderer !== undefined) {
     state.renderer.render(state.progress);
+    applyCanvasCorrection(state);
     state.canvas.style.opacity = String(state.opacity);
     input.stage.dataset["kpEditorRadicalMorphMode"] = "webgl-solid-mask";
     input.stage.dataset["kpEditorRadicalMorphReady"] = "true";
@@ -160,26 +179,30 @@ export function measureKpRadicalWebglInk(
     kpRadicalInkAlphaThreshold
   );
   if (renderedWebglInkRect === undefined) return undefined;
-  const renderedCenter = rectCenter(renderedWebglInkRect);
+  const correctedWebglInkRect = applyEndpointCorrection(
+    renderedWebglInkRect,
+    state.currentCorrection
+  );
+  const renderedCenter = rectCenter(correctedWebglInkRect);
   const nativeCenter = rectCenter(liveNativeInkRect);
   return {
     endpoint,
     semanticProgress: state.progress,
-    renderedWebglInkRect,
+    renderedWebglInkRect: correctedWebglInkRect,
     liveNativeInkRect,
     positionResidualPx: Math.hypot(
       renderedCenter.x - nativeCenter.x,
       renderedCenter.y - nativeCenter.y
     ),
     sizeResidualPx: Math.hypot(
-      renderedWebglInkRect.width - liveNativeInkRect.width,
-      renderedWebglInkRect.height - liveNativeInkRect.height
+      correctedWebglInkRect.width - liveNativeInkRect.width,
+      correctedWebglInkRect.height - liveNativeInkRect.height
     ),
     maximumGeometryResidualPx: Math.max(
-      Math.abs(renderedWebglInkRect.left - liveNativeInkRect.left),
-      Math.abs(renderedWebglInkRect.top - liveNativeInkRect.top),
-      Math.abs(renderedWebglInkRect.width - liveNativeInkRect.width),
-      Math.abs(renderedWebglInkRect.height - liveNativeInkRect.height)
+      Math.abs(correctedWebglInkRect.left - liveNativeInkRect.left),
+      Math.abs(correctedWebglInkRect.top - liveNativeInkRect.top),
+      Math.abs(correctedWebglInkRect.width - liveNativeInkRect.width),
+      Math.abs(correctedWebglInkRect.height - liveNativeInkRect.height)
     )
   };
 }
@@ -212,7 +235,10 @@ function createMorphState(
       stage.dataset["kpEditorEquationMaterialIdentityKey"] ?? "",
     status: "initializing",
     progress: 0,
-    opacity: 0
+    opacity: 0,
+    sourceCorrection: identityEndpointCorrection,
+    targetCorrection: identityEndpointCorrection,
+    currentCorrection: identityEndpointCorrection
   };
 }
 
@@ -303,8 +329,19 @@ async function initializeMorphState(input: {
       endpointRect: targetLocalRect,
       alphaThreshold: kpRadicalInkAlphaThreshold
     });
+    input.state.sourceCorrection = measureEndpointCorrection({
+      renderer: input.state.renderer,
+      semanticProgress: 0,
+      nativeInkRect: input.state.sourceNativeInkRect
+    });
+    input.state.targetCorrection = measureEndpointCorrection({
+      renderer: input.state.renderer,
+      semanticProgress: 1,
+      nativeInkRect: input.state.targetNativeInkRect
+    });
     input.state.status = "ready";
     input.state.renderer.render(input.state.progress);
+    applyCanvasCorrection(input.state);
     input.state.canvas.style.opacity = String(input.state.opacity);
     input.state.canvas.dataset["kpEditorRadicalWebglStrategy"] =
       "signed-distance-field";
@@ -450,4 +487,83 @@ function rectCenter(
     x: rect.left + rect.width / 2,
     y: rect.top + rect.height / 2
   };
+}
+
+function measureEndpointCorrection(input: {
+  readonly renderer: KatexArtifactSolidMaskMorphRenderer;
+  readonly semanticProgress: number;
+  readonly nativeInkRect: KatexTokenRect;
+}): KpRadicalEndpointCorrection {
+  input.renderer.render(input.semanticProgress);
+  const renderedInkRect = input.renderer.measureInk(
+    kpRadicalInkAlphaThreshold
+  );
+  if (renderedInkRect === undefined) {
+    throw new Error("Radical endpoint calibration produced no WebGL ink.");
+  }
+  const renderedCenter = rectCenter(renderedInkRect);
+  const nativeCenter = rectCenter(input.nativeInkRect);
+  const scaleX = input.nativeInkRect.width / renderedInkRect.width;
+  const scaleY = input.nativeInkRect.height / renderedInkRect.height;
+  return {
+    scaleX,
+    scaleY,
+    translateX: nativeCenter.x - renderedCenter.x * scaleX,
+    translateY: nativeCenter.y - renderedCenter.y * scaleY
+  };
+}
+
+function applyCanvasCorrection(state: KpRadicalWebglMorphState): void {
+  const progress = sampleKatexArtifactSolidMaskMorphProgress(
+    kpRadicalConventionalMorphProfile.morph,
+    state.progress
+  );
+  state.currentCorrection = {
+    scaleX: interpolate(
+      state.sourceCorrection.scaleX,
+      state.targetCorrection.scaleX,
+      progress
+    ),
+    scaleY: interpolate(
+      state.sourceCorrection.scaleY,
+      state.targetCorrection.scaleY,
+      progress
+    ),
+    translateX: interpolate(
+      state.sourceCorrection.translateX,
+      state.targetCorrection.translateX,
+      progress
+    ),
+    translateY: interpolate(
+      state.sourceCorrection.translateY,
+      state.targetCorrection.translateY,
+      progress
+    )
+  };
+  state.canvas.style.transformOrigin = "0 0";
+  state.canvas.style.transform = `matrix(${
+    state.currentCorrection.scaleX
+  }, 0, 0, ${
+    state.currentCorrection.scaleY
+  }, ${
+    state.currentCorrection.translateX
+  }, ${
+    state.currentCorrection.translateY
+  })`;
+}
+
+function applyEndpointCorrection(
+  rect: KatexTokenRect,
+  correction: KpRadicalEndpointCorrection
+): KatexTokenRect {
+  return {
+    left: rect.left * correction.scaleX + correction.translateX,
+    top: rect.top * correction.scaleY + correction.translateY,
+    width: rect.width * correction.scaleX,
+    height: rect.height * correction.scaleY
+  };
+}
+
+function interpolate(start: number, end: number, progress: number): number {
+  return start + (end - start) * progress;
 }

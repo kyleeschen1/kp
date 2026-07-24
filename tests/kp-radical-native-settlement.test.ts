@@ -71,7 +71,8 @@ test("source settlement hands the whole native parent to independent children", 
 
   assert.equal(start.phase, "native-geometry");
   assert.equal(start.nativeOpacity, 1);
-  assert.ok(Math.abs(middle.nativeOpacity - 0.5) < 1e-12);
+  assert.equal(middle.nativeOpacity, 1);
+  assert.equal(middle.fragmentOpacity, 0);
   assert.equal(end.phase, "material-fragments");
   assert.equal(end.fragmentOpacity, 1);
 });
@@ -104,7 +105,7 @@ test("an unready composite retains the safe endpoint owner", () => {
   assert.equal(target.nativeOpacity, 0);
 });
 
-test("native handoff waits for fragment geometry before crossfading", () => {
+test("native handoff waits for fragment geometry before transferring", () => {
   const moving = sampleKpRadicalNativeSettlement({
     semanticProgress: 0.94,
     fragmentRects: [{ ...nativeRect, left: nativeRect.left + 0.5 }],
@@ -116,7 +117,7 @@ test("native handoff waits for fragment geometry before crossfading", () => {
   assert.equal(moving.nativeOpacity, 0);
 });
 
-test("settlement crossfade conserves one visual owner at every sample", () => {
+test("settlement keeps exactly one visual owner at every sample", () => {
   for (const semanticProgress of [
     kpRadicalNativeSettlementStart,
     0.92,
@@ -150,7 +151,7 @@ test("settlement reaches exact native geometry and mirrors under direct seek", (
   assert.equal(forward.nativeOpacity, 1);
 });
 
-test("a complete WebGL target can hand off to exact native ink earlier", () => {
+test("a complete WebGL target waits for the discrete transfer boundary", () => {
   const settlement = kpRadicalConventionalMorphProfile.settlement;
   const frame = sampleKpRadicalNativeSettlement({
     semanticProgress: (settlement.start + settlement.end) / 2,
@@ -162,11 +163,11 @@ test("a complete WebGL target can hand off to exact native ink earlier", () => {
   });
 
   assert.equal(frame.phase, "native-handoff");
-  assert.ok(Math.abs(frame.nativeOpacity - 0.5) < 1e-12);
-  assert.ok(Math.abs(frame.fragmentOpacity + frame.nativeOpacity - 1) < 1e-12);
+  assert.equal(frame.nativeOpacity, 0);
+  assert.equal(frame.fragmentOpacity, 1);
 });
 
-test("native handoff uses a symmetric conventional ease-in-out", () => {
+test("native handoff never exposes both owners inside its timing window", () => {
   const settlement = kpRadicalConventionalMorphProfile.settlement;
   const duration = settlement.end - settlement.start;
   const early = sampleKpRadicalNativeSettlement({
@@ -186,7 +187,10 @@ test("native handoff uses a symmetric conventional ease-in-out", () => {
     easing: settlement.easing
   });
 
-  assert.ok(Math.abs(early.nativeOpacity + late.nativeOpacity - 1) < 1e-12);
+  assert.equal(early.nativeOpacity, 0);
+  assert.equal(early.fragmentOpacity, 1);
+  assert.equal(late.nativeOpacity, 0);
+  assert.equal(late.fragmentOpacity, 1);
 });
 
 test("the named profile finishes the solid morph before native ownership changes", () => {

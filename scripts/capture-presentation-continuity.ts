@@ -4,8 +4,12 @@ import path from "node:path";
 
 import {
   evaluateKpDiscretePresentationHandoff,
+  kpDefaultPresentationContinuityBudget,
   type KpPresentationHandoffSample
 } from "../src/animation/presentation-group-continuity.ts";
+import {
+  kpRadicalNativeSettlementGeometryTolerancePx
+} from "../src/animation/radical-native-settlement.ts";
 import { createKpPresentationContinuityVisualPlan } from
   "../src/editor/presentation-continuity-visual-plan.ts";
 import type {
@@ -42,6 +46,13 @@ interface DistributionGapMeasurement {
   readonly handoffs: readonly DistributionHandoffObservation[];
 }
 
+interface RadicalHandoffMeasurement extends KpRadicalWebglInkComparison {
+  readonly movingOpacity: number;
+  readonly nativeOpacity: number;
+  readonly overlapOpacity: number;
+  readonly vacancyOpacity: number;
+}
+
 const outputRoot = path.resolve(
   process.env["KP_VISUAL_OUTPUT"] ??
     "tmp/codex/presentation-continuity"
@@ -59,7 +70,7 @@ const captures: {
   progress: number;
   viewport: { width: number; height: number };
   distributionGap?: DistributionGapMeasurement | undefined;
-  radicalInk?: KpRadicalWebglInkComparison | undefined;
+  radicalInk?: RadicalHandoffMeasurement | undefined;
   screenshot: string;
   sha256: string;
 }[] = [];
@@ -112,6 +123,7 @@ try {
     });
   }
   enforceDistributionHandoffContinuity(captures);
+  enforceRadicalHandoffContinuity(captures);
   const manifestPath = path.join(outputRoot, "manifest.json");
   const contactSheetPath = path.join(
     outputRoot,
@@ -134,7 +146,7 @@ try {
 async function measureRadicalInk(
   stage: import("playwright").Locator,
   endpoint: "source" | "target"
-): Promise<KpRadicalWebglInkComparison> {
+): Promise<RadicalHandoffMeasurement> {
   return stage.evaluate(async (element, measuredEndpoint) => {
     if (!(element instanceof HTMLElement)) {
       throw new Error("Radical stage must be an HTML element.");
@@ -155,7 +167,28 @@ async function measureRadicalInk(
         "Could not compare actual WebGL fraction ink with live native KaTeX."
       );
     }
-    return comparison;
+    const canvas = element.querySelector<HTMLElement>(
+      "[data-kp-editor-radical-webgl-morph]"
+    );
+    const native = measuredEndpoint === "source"
+      ? element.querySelector<HTMLElement>(
+          '[data-kp-motion-id*=".power.exponent-numerator"]'
+        )?.closest<HTMLElement>(".msupsub")
+      : element.querySelector<HTMLElement>(
+          '[data-kp-radical-native-visual="true"]'
+        );
+    if (canvas === null || native === null || native === undefined) {
+      throw new Error(`Missing ${measuredEndpoint} radical handoff owner.`);
+    }
+    const movingOpacity = Number(getComputedStyle(canvas).opacity);
+    const nativeOpacity = Number(getComputedStyle(native).opacity);
+    return {
+      ...comparison,
+      movingOpacity,
+      nativeOpacity,
+      overlapOpacity: Math.min(movingOpacity, nativeOpacity),
+      vacancyOpacity: 1 - Math.max(movingOpacity, nativeOpacity)
+    };
   }, endpoint);
 }
 
@@ -456,6 +489,40 @@ function enforceDistributionHandoffContinuity(
           issues.map((issue) => `${issue.kind} (${issue.residual})`).join(", ")
         );
       }
+    }
+  }
+}
+
+function enforceRadicalHandoffContinuity(
+  records: readonly {
+    id: string;
+    family: string;
+    radicalInk?: RadicalHandoffMeasurement | undefined;
+  }[]
+): void {
+  for (const record of records) {
+    if (record.family !== "radical" || record.radicalInk === undefined) {
+      continue;
+    }
+    const observation = record.radicalInk;
+    const issues = [
+      observation.maximumGeometryResidualPx >
+          kpRadicalNativeSettlementGeometryTolerancePx
+        ? `geometry ${observation.maximumGeometryResidualPx}px`
+        : undefined,
+      observation.overlapOpacity >
+          kpDefaultPresentationContinuityBudget.opacity
+        ? `owner overlap ${observation.overlapOpacity}`
+        : undefined,
+      observation.vacancyOpacity >
+          kpDefaultPresentationContinuityBudget.opacity
+        ? `owner vacancy ${observation.vacancyOpacity}`
+        : undefined
+    ].filter((issue): issue is string => issue !== undefined);
+    if (issues.length > 0) {
+      throw new Error(
+        `Radical ${observation.endpoint} handoff failed: ${issues.join(", ")}`
+      );
     }
   }
 }
