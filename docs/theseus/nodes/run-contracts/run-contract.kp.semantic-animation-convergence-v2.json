@@ -52,6 +52,13 @@
       "scope": "standard",
       "checkedAt": "2026-07-24T03:06:16.680Z",
       "notes": "Application, node, test, and domain TypeScript projects pass after adding the preservation manifest."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence twice",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-24T03:09:25.634Z",
+      "notes": "Two consecutive runs each pass the same 98 tests across 15 stable files; no order or mutable external-state dependence appeared."
     }
   ],
   "expectedLearning": [
@@ -119,7 +126,8 @@
     {
       "id": "s02",
       "title": "Stable-focused-suite",
-      "status": "planned",
+      "summary": "Added npm run test:semantic-animation-convergence over 15 stable test files covering the preservation manifest, definitions, correspondence, lineage, composition, asset/runtime laws, scene protocol, equation IR/motion, reverse choreography, and program traces. Two consecutive runs each pass 98 tests; full typecheck passes.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
