@@ -74,7 +74,8 @@
     {
       "id": "slice-03",
       "title": "Operation-coverage-laws",
-      "status": "planned"
+      "summary": "Added exact operation-coverage laws: every authority operation must appear once in semantic order, and compound spans may cover only one contiguous authority interval; focused adversarial tests cover omissions, duplication, reorder, and skipped operations.",
+      "status": "complete"
     },
     {
       "id": "slice-04",

@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   createKpOperationPresentationCertificate,
+  evaluateKpOperationPresentationCoverage,
   validateKpOperationPresentationCertificate,
   type KpOperationPresentationCertificate
 } from "../src/animation/operation-presentation-certificate.ts";
@@ -87,6 +88,83 @@ test("atomic spans cannot silently claim compound operation coverage", () => {
   );
 });
 
+test("operation coverage accepts exact atomic and contiguous compound traces", () => {
+  const atomic = createKpOperationPresentationCertificate(traceInput());
+  assert.deepEqual(evaluateKpOperationPresentationCoverage(atomic), []);
+
+  const compound = createKpOperationPresentationCertificate({
+    ...traceInput(),
+    spans: [{
+      ...traceInput().spans[0]!,
+      id: "span.compound",
+      presentation: "compound",
+      representedOperationIds: [
+        "operation.balance",
+        "operation.evaluate"
+      ]
+    }]
+  });
+  assert.deepEqual(evaluateKpOperationPresentationCoverage(compound), []);
+});
+
+test("operation coverage reports omissions, duplicates, and reordered work", () => {
+  const base = createKpOperationPresentationCertificate(traceInput());
+  const broken: KpOperationPresentationCertificate = {
+    ...base,
+    spans: [
+      base.spans[1]!,
+      base.spans[1]!
+    ]
+  };
+
+  assert.deepEqual(
+    evaluateKpOperationPresentationCoverage(broken).map(({ code }) => code),
+    [
+      "operation-coverage.missing",
+      "operation-coverage.duplicate",
+      "operation-coverage.presentation-order"
+    ]
+  );
+});
+
+test("compound coverage cannot skip an intervening authority operation", () => {
+  const input = traceInput();
+  const certificate = createKpOperationPresentationCertificate({
+    ...input,
+    authorityOperations: [
+      input.authorityOperations[0]!,
+      {
+        id: "operation.middle",
+        semanticRank: 1,
+        canonicalOperationId: "canonical.middle"
+      },
+      {
+        ...input.authorityOperations[1]!,
+        semanticRank: 2
+      }
+    ],
+    spans: [{
+      ...input.spans[0]!,
+      presentation: "compound",
+      representedOperationIds: [
+        "operation.balance",
+        "operation.evaluate"
+      ]
+    }]
+  });
+
+  assert.deepEqual(
+    evaluateKpOperationPresentationCoverage(certificate).map(
+      ({ code }) => code
+    ),
+    [
+      "operation-coverage.missing",
+      "operation-coverage.presentation-order",
+      "operation-coverage.noncontiguous-compound"
+    ]
+  );
+});
+
 function validInput() {
   return {
     id: "certificate.quadratic.balance",
@@ -123,5 +201,31 @@ function validInput() {
         materialEntityIds: ["material.six"]
       }]
     }]
+  };
+}
+
+function traceInput() {
+  const input = validInput();
+  return {
+    ...input,
+    authorityOperations: [
+      input.authorityOperations[0]!,
+      {
+        id: "operation.evaluate",
+        semanticRank: 1,
+        canonicalOperationId: "canonical.evaluate"
+      }
+    ],
+    spans: [
+      input.spans[0]!,
+      {
+        ...input.spans[0]!,
+        id: "span.evaluate",
+        representedOperationIds: ["operation.evaluate"],
+        sourceStateId: "state.balanced",
+        targetStateId: "state.evaluated",
+        motifId: "motif.evaluate"
+      }
+    ]
   };
 }

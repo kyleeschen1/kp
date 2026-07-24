@@ -216,6 +216,13 @@
       "scope": "slice-02 operation-presentation certificate schema",
       "checkedAt": "2026-07-24T22:30:33.844Z",
       "notes": "Three focused tests pass. The renderer-neutral certificate structurally binds authority operations, states, motifs, phases, visible materials, and atomic versus compound spans; it copies caller data and rejects unknown operation/material references and atomic multi-operation claims."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/operation-presentation-certificate.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-03 operation coverage laws",
+      "checkedAt": "2026-07-24T22:32:22.386Z",
+      "notes": "Six focused tests pass. Coverage accepts exact atomic and contiguous compound traces and diagnoses missing, duplicated, reordered, and non-contiguous authority operations."
     }
   ],
   "progress": {

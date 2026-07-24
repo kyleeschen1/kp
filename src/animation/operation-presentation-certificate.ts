@@ -62,6 +62,17 @@ export interface KpOperationPresentationCertificateIssue {
   readonly message: string;
 }
 
+export interface KpOperationPresentationCoverageIssue {
+  readonly code:
+    | "operation-coverage.authority-order"
+    | "operation-coverage.missing"
+    | "operation-coverage.duplicate"
+    | "operation-coverage.presentation-order"
+    | "operation-coverage.noncontiguous-compound";
+  readonly operationIds: readonly string[];
+  readonly message: string;
+}
+
 export function createKpOperationPresentationCertificate(
   input: Omit<
     KpOperationPresentationCertificate,
@@ -191,6 +202,94 @@ export function validateKpOperationPresentationCertificate(
   return issues;
 }
 
+export function evaluateKpOperationPresentationCoverage(
+  certificate: KpOperationPresentationCertificate
+): readonly KpOperationPresentationCoverageIssue[] {
+  const issues: KpOperationPresentationCoverageIssue[] = [];
+  const authorityOperations = [...certificate.authorityOperations].sort(
+    (left, right) => left.semanticRank - right.semanticRank
+  );
+  const authorityIds = authorityOperations.map((operation) => operation.id);
+  if (!sameIds(
+    certificate.authorityOperations.map((operation) => operation.id),
+    authorityIds
+  ) || new Set(authorityOperations.map(
+    (operation) => operation.semanticRank
+  )).size !== authorityOperations.length) {
+    issues.push({
+      code: "operation-coverage.authority-order",
+      operationIds: authorityIds,
+      message:
+        "Authority operations must have unique ranks and be stored in semantic order."
+    });
+  }
+
+  const representedIds = certificate.spans.flatMap(
+    (span) => span.representedOperationIds
+  );
+  const representedCounts = new Map<string, number>();
+  representedIds.forEach((operationId) => {
+    representedCounts.set(
+      operationId,
+      (representedCounts.get(operationId) ?? 0) + 1
+    );
+  });
+  const missing = authorityIds.filter(
+    (operationId) => !representedCounts.has(operationId)
+  );
+  if (missing.length > 0) {
+    issues.push({
+      code: "operation-coverage.missing",
+      operationIds: missing,
+      message: `Missing visible operation coverage for ${missing.join(", ")}.`
+    });
+  }
+  const duplicated = authorityIds.filter(
+    (operationId) => (representedCounts.get(operationId) ?? 0) > 1
+  );
+  if (duplicated.length > 0) {
+    issues.push({
+      code: "operation-coverage.duplicate",
+      operationIds: duplicated,
+      message:
+        `Authority operations cannot be represented more than once: ${duplicated.join(", ")}.`
+    });
+  }
+  if (!sameIds(representedIds, authorityIds)) {
+    issues.push({
+      code: "operation-coverage.presentation-order",
+      operationIds: representedIds,
+      message:
+        "Visible operation spans must preserve exact semantic dependency order."
+    });
+  }
+
+  const rankById = new Map(
+    authorityOperations.map(
+      (operation, index) => [operation.id, index] as const
+    )
+  );
+  certificate.spans
+    .filter((span) => span.presentation === "compound")
+    .forEach((span) => {
+      const ranks = span.representedOperationIds.map(
+        (operationId) => rankById.get(operationId)
+      );
+      if (ranks.some((rank) => rank === undefined) ||
+          ranks.some((rank, index) =>
+            index > 0 && rank !== (ranks[index - 1] ?? Infinity) + 1
+          )) {
+        issues.push({
+          code: "operation-coverage.noncontiguous-compound",
+          operationIds: span.representedOperationIds,
+          message:
+            `Compound span ${span.id} must cover one contiguous operation interval.`
+        });
+      }
+    });
+  return issues;
+}
+
 function requireText(
   value: string,
   path: string,
@@ -228,4 +327,12 @@ function collectUniqueIds(
     unique.add(id);
   });
   return unique;
+}
+
+function sameIds(
+  left: readonly string[],
+  right: readonly string[]
+): boolean {
+  return left.length === right.length &&
+    left.every((id, index) => id === right[index]);
 }
