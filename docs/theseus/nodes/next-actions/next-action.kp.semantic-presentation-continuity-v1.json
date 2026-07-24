@@ -16,6 +16,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-23-authoritative-roadmap-workbench-successor-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-24-kp-radical-cross-renderer-handoff-residual.md"
     }
   ],
   "dependsOn": {
@@ -545,7 +549,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Second radical checkpoint repair: retained atomic reset-pose capture for KaTeX sizing groups, removed isolated SVG font embedding that made WebGL fraction ink 22.7% darker, and added a real screenshot-pixel weight gate. Awaiting human recheck before promotion."
+    "summary": "Human review prefers the current WebGL-assisted radical over the KaTeX-only fallback and accepts moving forward with a small known initial 1/2 jerk. The residual remains exemplar-scoped, is not family-promotion evidence, and now has a durable diagnosis, commit trail, transfer boundary, and revisit triggers."
   },
   "expectedLearning": [
     "Whether renderer-neutral presentation groups can make distributed products and cross-owner radical handoffs converge without renderer-specific ownership in the semantic layer."
