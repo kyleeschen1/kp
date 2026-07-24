@@ -49,7 +49,8 @@
     {
       "id": "slice-01",
       "title": "Freeze distribution and radical behavior, existing laws, routes, and authority baselines.",
-      "status": "planned"
+      "summary": "Frozen baselines: 33 focused unit tests, 12 distribution browser tests, and 17 radical captures pass; distribution lesson and native KaTeX endpoints remain canonical.",
+      "status": "complete"
     },
     {
       "id": "slice-02",

@@ -32,6 +32,29 @@
     "npm run typecheck",
     "npm run test:animation-browser"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test focused distribution and radical continuity baseline files",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-24T14:18:50.758Z",
+      "notes": "33/33 focused unit baselines pass; accepted distribution and radical authorities remain unchanged."
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-24T14:18:56.923Z",
+      "notes": "12/12 browser baselines pass across forward, inverse, semantic clock, URL, and responsive behavior."
+    },
+    {
+      "command": "npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-24T14:19:02.217Z",
+      "notes": "17 deterministic captures produced; current native radical endpoint and ownership diagnostics are frozen as the comparison baseline."
+    }
+  ],
   "progress": {
     "state": "partial",
     "summary": "User approved the exact 30-slice long loop on 2026-07-24. Execution is authorized through the mandatory distribution checkpoint at slice 20."
