@@ -101,6 +101,48 @@
       "scope": "standard",
       "checkedAt": "2026-07-24T03:25:20.594Z",
       "notes": "Application, node, test, and domain TypeScript projects pass with the typed compatibility ledger."
+    },
+    {
+      "command": "npm run visual:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s06: 45 preservation captures across 9 topics",
+      "checkedAt": "2026-07-24T04:00:51.091Z",
+      "notes": "Each frame passed immediate byte-identical recapture, route/direction/progress assertions, and native endpoint checks; independent sessions were pixel-identical except explained one-level SVG edge anti-aliasing tolerance on one distribution endpoint."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s06 focused",
+      "checkedAt": "2026-07-24T04:00:59.640Z",
+      "notes": "All 111 convergence tests pass, including visual-plan closure over five canonical states for each preservation topic."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06 standard",
+      "checkedAt": "2026-07-24T04:01:12.056Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass with the visual-plan and capture tooling."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s06 broad",
+      "checkedAt": "2026-07-24T04:01:13.096Z",
+      "notes": "Full repository suite passes all 2069 tests after the deterministic gold baseline was added."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s06 broad",
+      "checkedAt": "2026-07-24T04:01:13.951Z",
+      "notes": "Production build passes; only the pre-existing large-chunk advisory remains."
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "s06 broad",
+      "checkedAt": "2026-07-24T04:01:14.804Z",
+      "notes": "Animation performance gate reports passed=true with no regressions; existing transfer and constrained-device product targets remain unchanged."
     }
   ],
   "expectedLearning": [
@@ -196,7 +238,8 @@
     {
       "id": "s06",
       "title": "Deterministic-gold-baseline",
-      "status": "planned",
+      "summary": "Added an executable five-state visual plan for all nine preservation topics and a stable npm visual command that captures animation stages only while asserting canonical routes, direction, progress, native settlement, and deterministic recapture. Focused 111 tests, full 2069 tests, typecheck, build, visual, and performance gates pass with no explained product drift.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
