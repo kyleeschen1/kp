@@ -192,6 +192,34 @@
       "scope": "s08 standard",
       "checkedAt": "2026-07-24T04:14:09.704Z",
       "notes": "Application, node, test, and domain TypeScript projects pass after keeping the checker browser-compatible."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-transition-ir.test.ts tests/semantic-scene-protocol.test.ts tests/measured-equation-transition-geometry.test.ts tests/semantic-animation-import-baseline.test.ts tests/semantic-animation-import-fitness.test.ts tests/semantic-animation-compiler-stages.test.ts tests/semantic-animation-layer-ownership.test.ts",
+      "status": "passed",
+      "scope": "s09 IR migration",
+      "checkedAt": "2026-07-24T04:20:17.979Z",
+      "notes": "All 25 migration tests pass, including exact serialized shape, diagnostics, correspondence, compatibility constructor identity, ownership inventory, and 23-exception closure."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s09 architecture gate",
+      "checkedAt": "2026-07-24T04:20:19.957Z",
+      "notes": "All architecture gates pass; semantic-animation rendering exceptions ratcheted from 27 to 23."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s09 focused",
+      "checkedAt": "2026-07-24T04:20:21.946Z",
+      "notes": "All 121 focused convergence tests pass after neutral IR ownership migration."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09 standard",
+      "checkedAt": "2026-07-24T04:20:23.557Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass through the neutral domain-IR public seam and compatibility facade."
     }
   ],
   "expectedLearning": [
@@ -308,7 +336,8 @@
     {
       "id": "s09",
       "title": "Neutral-equation-transition-IR-ownership",
-      "status": "planned",
+      "summary": "Moved KpEquationTransitionIr and its constructor into src/domain-ir behind a neutral public API; rendering now consumes that seam and the former rendering module is a compatibility-only re-export with constructor identity proof. Migrated semantic, animation, reader, and rendering consumers, preserved exact serialized output and diagnostics, marked the compiler stage canonical, removed its ownership debt, and ratcheted rendering import exceptions from 27 to 23. All 25 targeted tests, 121 focused tests, architecture gates, and full typecheck pass.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {

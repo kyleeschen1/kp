@@ -174,14 +174,6 @@ export const kpSemanticAnimationOwnershipMigrationDebt = [
       "The current equation profile imports renderer-owned handoff and resolver contracts."
   },
   {
-    stageId: "domain-ir",
-    currentSourcePath: "src/rendering/equation-transition-ir.ts",
-    targetLayer: "neutral-animation-domain",
-    retirementSlice: "s09",
-    reason:
-      "The renderer-neutral equation IR is still physically owned by rendering."
-  },
-  {
     stageId: "motion-plan",
     currentSourcePath: "src/rendering/equation-motion-plan.ts",
     targetLayer: "presentation",

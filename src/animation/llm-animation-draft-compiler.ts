@@ -34,7 +34,7 @@ import {
 import {
   compileKpSemanticEquationTransitionResult
 } from "../rendering/semantic-equation-transition-compiler.ts";
-import type { KpEquationTransitionIr } from "../rendering/equation-transition-ir.ts";
+import type { KpEquationTransitionIr } from "../domain-ir/public-api.ts";
 import type { KpSemanticTransitionGap } from "../semantic/semantic-transition-gap.ts";
 
 export type KpLlmAnimationDraftCompileDiagnosticCode =

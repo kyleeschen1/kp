@@ -4,7 +4,7 @@ import type { KpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.
 import {
   compileKpSemanticEquationTransitionResult
 } from "../rendering/semantic-equation-transition-compiler.ts";
-import type { KpEquationTransitionIr } from "../rendering/equation-transition-ir.ts";
+import type { KpEquationTransitionIr } from "../domain-ir/public-api.ts";
 import {
   activeKpChoreographyPhase,
   createKpChoreographyPlan,

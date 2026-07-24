@@ -13,7 +13,7 @@ import {
 import type {
   KpEquationTransitionIr,
   KpEquationTransitionIrState
-} from "../rendering/equation-transition-ir.ts";
+} from "../domain-ir/public-api.ts";
 
 export interface KpSemanticSceneRelation {
   readonly id: string;

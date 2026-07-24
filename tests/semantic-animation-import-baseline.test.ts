@@ -39,11 +39,11 @@ test("temporary rendering imports are exact and own a retirement slice", () => {
     const key = importKey(dependency.sourcePath, dependency.modulePath);
     assert.equal(keys.has(key), false, `duplicate import exception ${key}`);
     assert.equal(dependency.modulePath.includes("*"), false);
-    assert.match(dependency.retirementSlice, /^s(?:09|10|11|12|13)$/);
+    assert.match(dependency.retirementSlice, /^s(?:10|11|12|13)$/);
     assert.ok(dependency.rationale.length >= 24);
     keys.add(key);
   }
-  assert.equal(keys.size, 27);
+  assert.equal(keys.size, 23);
 });
 
 test("dependency retirement follows the approved ownership sequence", () => {
@@ -55,7 +55,6 @@ test("dependency retirement follows the approved ownership sequence", () => {
   );
 
   assert.deepEqual(Object.fromEntries(slicesByClassification), {
-    "domain-ir-location-debt": "s09",
     "semantic-compiler-location-debt": "s10",
     "motif-contract-location-debt": "s11",
     "neutral-utility-location-debt": "s12",

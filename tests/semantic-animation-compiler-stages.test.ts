@@ -63,7 +63,6 @@ test("migration targets expose current package debt without hiding authority", (
 
   assert.deepEqual(targets, [
     "presentation-profile",
-    "domain-ir",
     "sampled-frame",
     "domain-payload"
   ]);

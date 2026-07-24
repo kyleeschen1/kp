@@ -1,7 +1,19 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { createKpEquationTransitionIr } from "../src/rendering/equation-transition-ir.ts";
+import {
+  createKpEquationTransitionIr
+} from "../src/domain-ir/public-api.ts";
+import {
+  createKpEquationTransitionIr as createKpEquationTransitionIrCompatibility
+} from "../src/rendering/equation-transition-ir.ts";
+
+test("rendering compatibility path preserves the neutral IR constructor", () => {
+  assert.equal(
+    createKpEquationTransitionIrCompatibility,
+    createKpEquationTransitionIr
+  );
+});
 
 test("createKpEquationTransitionIr projects semantic relations into renderer-neutral lifecycles", () => {
   const ir = createKpEquationTransitionIr({
@@ -56,6 +68,92 @@ test("createKpEquationTransitionIr projects semantic relations into renderer-neu
     ["constants-merge", "fan-in", "merge"]
   ]);
   assert.equal(ir.kind, "equation-transition-ir");
+  assert.deepEqual(JSON.parse(JSON.stringify(ir)), {
+    id: "equation-transition.combine-constants",
+    kind: "equation-transition-ir",
+    transformationId: "transform.combine-constants",
+    transformType: "simplify",
+    title: "Combine constants",
+    source: [{
+      objectId: "equation.before",
+      latex: "x = 7 - 3",
+      selectors: [
+        {
+          id: "before.x",
+          kind: "semantic",
+          semanticKind: "term",
+          label: "x"
+        },
+        {
+          id: "before.7",
+          kind: "semantic",
+          semanticKind: "constant",
+          label: "7"
+        },
+        {
+          id: "before.minus-3",
+          kind: "semantic",
+          semanticKind: "term",
+          label: "-3"
+        }
+      ]
+    }],
+    target: [{
+      objectId: "equation.after",
+      latex: "x = 4",
+      selectors: [
+        {
+          id: "after.x",
+          kind: "semantic",
+          semanticKind: "term",
+          label: "x"
+        },
+        {
+          id: "after.4",
+          kind: "semantic",
+          semanticKind: "constant",
+          label: "4"
+        }
+      ]
+    }],
+    correspondenceMap: {
+      id: "correspondence.combine-constants",
+      records: [
+        {
+          id: "x-persists",
+          relation: "identity",
+          sourceSelectorIds: ["before.x"],
+          targetSelectorIds: ["after.x"],
+          summary: "x persists."
+        },
+        {
+          id: "constants-merge",
+          relation: "fan-in",
+          sourceSelectorIds: ["before.7", "before.minus-3"],
+          targetSelectorIds: ["after.4"],
+          summary: "The constants derive four."
+        }
+      ]
+    },
+    relations: [
+      {
+        recordId: "x-persists",
+        relation: "identity",
+        lifecycle: "persist",
+        sourceSelectorIds: ["before.x"],
+        targetSelectorIds: ["after.x"],
+        summary: "x persists."
+      },
+      {
+        recordId: "constants-merge",
+        relation: "fan-in",
+        lifecycle: "merge",
+        sourceSelectorIds: ["before.7", "before.minus-3"],
+        targetSelectorIds: ["after.4"],
+        summary: "The constants derive four."
+      }
+    ]
+  });
 });
 
 test("createKpEquationTransitionIr rejects invalid endpoint shapes and selector closure", () => {

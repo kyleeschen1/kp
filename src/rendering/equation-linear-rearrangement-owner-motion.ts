@@ -13,7 +13,9 @@ import type {
 import type {
   KpEquationTokenMotionPose
 } from "./semantic-equation-token-renderer.ts";
-import type { KpEquationTransitionLifecycleKind } from "./equation-transition-ir.ts";
+import type {
+  KpEquationTransitionLifecycleKind
+} from "../domain-ir/public-api.ts";
 import type {
   KpWitnessedAnnihilationBinding
 } from "../animation/witnessed-annihilation.ts";

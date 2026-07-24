@@ -1,5 +1,5 @@
 import type { KatexTokenRect } from "./katex-transition-types.ts";
-import type { KpEquationTransitionIr } from "./equation-transition-ir.ts";
+import type { KpEquationTransitionIr } from "../domain-ir/public-api.ts";
 import type { KpSelectorAnnotatedLatex } from "./selector-annotated-latex.ts";
 import type { KpEquationEnclosureChoreographyKind } from "./equation-enclosure-choreography.ts";
 import type { KpEquationMotionPathCandidate } from "./equation-motion-path-planner.ts";

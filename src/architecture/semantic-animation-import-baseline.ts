@@ -1,5 +1,4 @@
 export type KpSemanticAnimationRenderingImportClassification =
-  | "domain-ir-location-debt"
   | "semantic-compiler-location-debt"
   | "motif-contract-location-debt"
   | "neutral-utility-location-debt"
@@ -13,7 +12,6 @@ export type KpSemanticAnimationRenderingImportOwner =
   | "presentation";
 
 export type KpSemanticAnimationRenderingImportRetirementSlice =
-  | "s09"
   | "s10"
   | "s11"
   | "s12"
@@ -32,38 +30,6 @@ export interface KpSemanticAnimationRenderingImportException {
 // Every entry is temporary and exact. This inventory prevents dependency
 // inversion from hiding behind a wildcard while ownership moves in slices 9–13.
 export const kpSemanticAnimationRenderingImportBaseline = [
-  exception({
-    sourcePath: "src/semantic/semantic-scene-protocol.ts",
-    modulePath: "../rendering/equation-transition-ir.ts",
-    classification: "domain-ir-location-debt",
-    intendedOwner: "domain-ir",
-    retirementSlice: "s09",
-    rationale: "Semantic scene projection consumes neutral equation transition state."
-  }),
-  exception({
-    sourcePath: "src/animation/choreography-compiler.ts",
-    modulePath: "../rendering/equation-transition-ir.ts",
-    classification: "domain-ir-location-debt",
-    intendedOwner: "domain-ir",
-    retirementSlice: "s09",
-    rationale: "Choreography output names the neutral equation transition IR."
-  }),
-  exception({
-    sourcePath: "src/animation/llm-animation-draft-compiler.ts",
-    modulePath: "../rendering/equation-transition-ir.ts",
-    classification: "domain-ir-location-debt",
-    intendedOwner: "domain-ir",
-    retirementSlice: "s09",
-    rationale: "Generated drafts emit neutral equation transition IR values."
-  }),
-  exception({
-    sourcePath: "src/animation/generated-substitution-fixture.ts",
-    modulePath: "../rendering/equation-transition-ir.ts",
-    classification: "domain-ir-location-debt",
-    intendedOwner: "domain-ir",
-    retirementSlice: "s09",
-    rationale: "The substitution fixture constructs a neutral equation transition."
-  }),
   exception({
     sourcePath: "src/animation/choreography-compiler.ts",
     modulePath: "../rendering/semantic-equation-transition-compiler.ts",

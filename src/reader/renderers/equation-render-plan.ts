@@ -5,7 +5,7 @@ import type {
   KpEquationTransitionIrRelation,
   KpEquationTransitionIrSelector,
   KpEquationTransitionIrState
-} from "../../rendering/equation-transition-ir.ts";
+} from "../../domain-ir/public-api.ts";
 import {
   compileKpSemanticEquationTransitionResult,
   type KpSemanticEquationTransitionCompileDiagnostic

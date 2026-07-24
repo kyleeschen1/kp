@@ -9,7 +9,7 @@ import {
   projectKpEquationTransitionStateToSemanticScene
 } from "../src/semantic/semantic-scene-protocol.ts";
 import { createKpSemanticLineageGraph } from "../src/semantic/semantic-lineage-graph.ts";
-import { createKpEquationTransitionIr } from "../src/rendering/equation-transition-ir.ts";
+import { createKpEquationTransitionIr } from "../src/domain-ir/public-api.ts";
 
 test("equations conform to the shared entity, group, region, and fragment scene seam", () => {
   const ir = equationIr();

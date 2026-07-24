@@ -12,7 +12,7 @@ import {
   type KpSemanticSceneTransition
 } from "../semantic/semantic-scene-protocol.ts";
 import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
-import { createKpEquationTransitionIr } from "../rendering/equation-transition-ir.ts";
+import { createKpEquationTransitionIr } from "../domain-ir/public-api.ts";
 
 export interface KpGeneratedSubstitutionFixture {
   readonly kind: "generated-substitution-fixture";

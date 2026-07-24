@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { measureKpEquationTransitionGeometry } from "../src/rendering/equation-motion-dom.ts";
-import { createKpEquationTransitionIr } from "../src/rendering/equation-transition-ir.ts";
+import { createKpEquationTransitionIr } from "../src/domain-ir/public-api.ts";
 import { createKpSelectorAnnotatedLatex } from "../src/rendering/selector-annotated-latex.ts";
 
 const rect = (left: number, top: number, width: number, height: number) =>

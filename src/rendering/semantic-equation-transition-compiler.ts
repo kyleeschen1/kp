@@ -18,7 +18,7 @@ import {
   createKpEquationTransitionIr,
   type KpEquationTransitionIr,
   type KpEquationTransitionIrState
-} from "./equation-transition-ir.ts";
+} from "../domain-ir/public-api.ts";
 import {
   adaptKpSemanticTransitionGapToLegacyFade,
   createKpSemanticTransitionGap,
