@@ -183,7 +183,9 @@
     {
       "id": "s20",
       "title": "Make-Workbench-search-incremental",
-      "status": "planned"
+      "summary": "Workbench search now replaces only the results projection; URL query state updates incrementally while the selected detail, player, and review surfaces retain DOM identity. Verified by 2041 unit tests, full typecheck, and 10 Workbench browser tests.",
+      "status": "complete",
+      "planPhaseId": "authoritative-roadmap-workbench"
     },
     {
       "id": "s21",

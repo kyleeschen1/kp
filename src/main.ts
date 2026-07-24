@@ -83,6 +83,7 @@ import {
   readKpSemanticAnimationWorkbenchRoute
 } from "./editor/semantic-animation-workbench-route.ts";
 import {
+  renderKpSemanticAnimationWorkbenchResults,
   renderKpSemanticAnimationWorkbenchShell
 } from "./editor/semantic-animation-workbench-shell.ts";
 import {
@@ -468,14 +469,11 @@ function renderAnimationWorkbenchView(): void {
     animationWorkbenchIndex,
     route.query
   );
-  const selectedAnimationId = results.some(
-    ({ entry }) => entry.identity.animationId === route.animationId
-  )
-    ? route.animationId
-    : results[0]?.entry.identity.animationId;
-  const selectedEntry = results.find(
-    ({ entry }) => entry.identity.animationId === selectedAnimationId
-  )?.entry;
+  const selectedEntry =
+    animationWorkbenchIndex.entries.find(
+      ({ identity }) => identity.animationId === route.animationId
+    ) ?? results[0]?.entry;
+  const selectedAnimationId = selectedEntry?.identity.animationId;
   const representationSelection =
     selectedEntry === undefined
       ? {}
@@ -773,26 +771,43 @@ function filterAnimationWorkbenchFromInput(input: HTMLInputElement): void {
   const route = readKpSemanticAnimationWorkbenchRoute(
     window.location.search
   );
+  const selectedAnimationId =
+    route.animationId ??
+    appRoot
+      .querySelector<HTMLElement>(
+        "[data-kp-animation-workbench-selection]"
+      )
+      ?.dataset["kpAnimationWorkbenchSelection"];
   window.history.replaceState(
     null,
     "",
     writeKpSemanticAnimationWorkbenchRoute(window.location.search, {
       query: input.value,
-      ...(route.animationId === undefined
+      ...(selectedAnimationId === undefined
         ? {}
-        : { animationId: route.animationId }),
+        : { animationId: selectedAnimationId }),
       ...(route.representationId === undefined
         ? {}
         : { representationId: route.representationId }),
       roadmap: route.roadmap
     })
   );
-  renderAnimationWorkbenchView();
-  const query = appRoot.querySelector<HTMLInputElement>(
-    "[data-kp-animation-workbench-query]"
+  const results = queryKpSemanticAnimationWorkbench(
+    animationWorkbenchIndex,
+    input.value
   );
-  query?.focus();
-  query?.setSelectionRange(query.value.length, query.value.length);
+  const resultsContainer = appRoot.querySelector<HTMLElement>(
+    "[data-kp-animation-workbench-results]"
+  );
+  if (resultsContainer === null) {
+    renderAnimationWorkbenchView();
+    return;
+  }
+  resultsContainer.outerHTML =
+    renderKpSemanticAnimationWorkbenchResults(
+      results,
+      selectedAnimationId
+    );
 }
 
 function selectAnimationWorkbenchResult(button: HTMLButtonElement): void {

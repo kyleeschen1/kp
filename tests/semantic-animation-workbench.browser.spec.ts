@@ -260,6 +260,66 @@ test("roadmap rows open only proven concrete animation representations", async (
   ).toHaveAttribute("data-kp-editor-animation-id", radicalId);
 });
 
+test("Workbench search updates only the result projection while typing", async ({
+  page
+}) => {
+  await page.goto(
+    `/?view=animation-workbench&q=&workbenchAnimation=${radicalId}`
+  );
+  await expect(
+    page.locator(
+      '[data-kp-animation-workbench-review-group="current"] [data-kp-animation-workbench-review-note]'
+    )
+  ).toHaveCount(1);
+  await page.evaluate(() => {
+    const traceWindow = window as typeof window & {
+      __kpWorkbenchProbe?: Element | null;
+      __kpWorkbenchDetailProbe?: Element | null;
+    };
+    traceWindow.__kpWorkbenchProbe = document.querySelector(
+      "[data-kp-animation-workbench]"
+    );
+    traceWindow.__kpWorkbenchDetailProbe = document.querySelector(
+      "[data-kp-animation-workbench-detail]"
+    );
+  });
+  const query = page.locator("[data-kp-animation-workbench-query]");
+  await query.fill("");
+  await query.pressSequentially("tangent");
+
+  await expect(page).toHaveURL(/q=tangent/);
+  expect(
+    await page.evaluate(() => {
+      const traceWindow = window as typeof window & {
+        __kpWorkbenchProbe?: Element | null;
+        __kpWorkbenchDetailProbe?: Element | null;
+      };
+      return {
+        workbench:
+          traceWindow.__kpWorkbenchProbe?.isConnected === true &&
+          traceWindow.__kpWorkbenchProbe ===
+            document.querySelector("[data-kp-animation-workbench]"),
+        detail:
+          traceWindow.__kpWorkbenchDetailProbe?.isConnected === true &&
+          traceWindow.__kpWorkbenchDetailProbe ===
+            document.querySelector("[data-kp-animation-workbench-detail]")
+      };
+    })
+  ).toEqual({
+    workbench: true,
+    detail: true
+  });
+  await expect(
+    page.locator('[data-kp-animation-workbench-result]')
+  ).toHaveCount(1);
+  await expect(
+    page.locator('[data-kp-animation-workbench-result]')
+  ).toContainText("Difference quotient converging to a tangent");
+  await expect(
+    page.locator(`[data-kp-animation-workbench-selection="${radicalId}"]`)
+  ).toBeVisible();
+});
+
 test("Workbench search and results support keyboard-only traversal", async ({
   page
 }) => {

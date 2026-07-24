@@ -66,7 +66,10 @@ export function renderKpSemanticAnimationWorkbenchShell(input: {
     )}
     <div class="kp-animation-workbench__layout">
       <aside class="kp-animation-workbench__results" aria-label="Animation results">
-        ${renderResults(input.results, input.selectedAnimationId)}
+        ${renderKpSemanticAnimationWorkbenchResults(
+          input.results,
+          input.selectedAnimationId
+        )}
       </aside>
       <main class="kp-animation-workbench__detail" data-kp-animation-workbench-detail>
         ${renderSelectedSummary(
@@ -210,7 +213,7 @@ function renderRoadmapSelect(
     .join("")}</select></label>`;
 }
 
-function renderResults(
+export function renderKpSemanticAnimationWorkbenchResults(
   results: readonly KpSemanticAnimationWorkbenchQueryResult[],
   selectedAnimationId: string | undefined
 ): string {
