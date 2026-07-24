@@ -8,9 +8,6 @@ import {
   createLinearSolveKpAssetBundle
 } from "../semantic/linear-solve-asset.ts";
 import {
-  createLinearSolveRuntimeVisualFrameSample
-} from "../rendering/linear-solve-runtime-visual-sample.ts";
-import {
   createKpAnimationFlashcardPreviewRendererData,
   type KpAnimationFlashcardPreviewInteractionKind,
   type KpAnimationFlashcardPreviewRendererItem
@@ -29,9 +26,13 @@ import type {
   KpAnimationVisualRendererKind,
   KpAnimationVisualSelector
 } from "./visual-frame-adapter.ts";
+import type {
+  KpAnimationRuntimeVisualFrameSampleFactory
+} from "./runtime-visual-frame-sample.ts";
 
 export interface CreateLinearSolvePausedFrameDrillDownSampleInput {
   readonly progress?: number | undefined;
+  readonly createVisualSample: KpAnimationRuntimeVisualFrameSampleFactory;
 }
 
 export type KpAnimationPausedFrameDrillDownDiagnostic =
@@ -105,12 +106,12 @@ export interface KpAnimationPausedFrameDrillDownFlashcardRow {
 }
 
 export function createLinearSolvePausedFrameDrillDownSample(
-  input: CreateLinearSolvePausedFrameDrillDownSampleInput = {}
+  input: CreateLinearSolvePausedFrameDrillDownSampleInput
 ): KpAnimationPausedFrameDrillDownSample {
   const progress = input.progress ?? 0.5;
   const animation = createLinearSolveAnimationAsset();
   const semantic = createLinearSolveKpAssetBundle();
-  const visualSample = createLinearSolveRuntimeVisualFrameSample({ progress });
+  const visualSample = input.createVisualSample({ progress });
   const previewData = createKpAnimationFlashcardPreviewRendererData({
     animation,
     cards: semantic.flashcards,

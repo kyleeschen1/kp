@@ -13,9 +13,6 @@ import {
 import {
   createInequalitySignFlipAnimationAsset
 } from "../inequality-sign-flip-adapter.ts";
-// Register material-motion semantics with the lazy algebra pack so the generic
-// editor shell does not pay for operation-specific choreography at startup.
-import "../../rendering/equation-witnessed-annihilation-register.ts";
 import "../fission-fusion-register.ts";
 import "../distribution-choreography-register.ts";
 import "../factoring-choreography-register.ts";

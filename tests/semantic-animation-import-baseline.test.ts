@@ -39,11 +39,11 @@ test("temporary rendering imports are exact and own a retirement slice", () => {
     const key = importKey(dependency.sourcePath, dependency.modulePath);
     assert.equal(keys.has(key), false, `duplicate import exception ${key}`);
     assert.equal(dependency.modulePath.includes("*"), false);
-    assert.equal(dependency.retirementSlice, "s13");
     assert.ok(dependency.rationale.length >= 24);
     keys.add(key);
+    assert.fail(`unexpected rendering exception ${dependency.sourcePath}`);
   }
-  assert.equal(keys.size, 5);
+  assert.equal(keys.size, 0);
 });
 
 test("dependency retirement follows the approved ownership sequence", () => {
@@ -54,9 +54,7 @@ test("dependency retirement follows the approved ownership sequence", () => {
     ])
   );
 
-  assert.deepEqual(Object.fromEntries(slicesByClassification), {
-    "compatibility-boundary": "s13"
-  });
+  assert.deepEqual(Object.fromEntries(slicesByClassification), {});
 });
 
 function importKey(sourcePath: string, modulePath: string): string {

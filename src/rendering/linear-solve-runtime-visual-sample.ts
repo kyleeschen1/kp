@@ -2,12 +2,12 @@ import {
   createLinearSolveAnimationAsset
 } from "../animation/linear-solve-adapter.ts";
 import {
-  sampleKpAnimationRuntimeFrame,
-  type KpAnimationRuntimeFrame
+  sampleKpAnimationRuntimeFrame
 } from "../animation/runtime-sampler.ts";
 import type {
-  KpAnimationVisualFrame
-} from "../animation/visual-frame-adapter.ts";
+  CreateKpAnimationRuntimeVisualFrameSampleInput,
+  KpAnimationRuntimeVisualFrameSample
+} from "../animation/runtime-visual-frame-sample.ts";
 import {
   createKatexDomRuntimeVisualFrame
 } from "./katex-dom-visual-frame-adapter.ts";
@@ -18,15 +18,12 @@ import type {
   KatexMotionToken
 } from "./katex-transition-types.ts";
 
-export interface CreateLinearSolveRuntimeVisualFrameSampleInput {
-  readonly progress?: number | undefined;
-}
+export type CreateLinearSolveRuntimeVisualFrameSampleInput =
+  CreateKpAnimationRuntimeVisualFrameSampleInput;
 
-export interface LinearSolveRuntimeVisualFrameSample {
-  readonly animationId: string;
-  readonly runtimeFrame: KpAnimationRuntimeFrame;
+export interface LinearSolveRuntimeVisualFrameSample
+  extends KpAnimationRuntimeVisualFrameSample {
   readonly snapshot: KatexSnapshot;
-  readonly visualFrame: KpAnimationVisualFrame;
 }
 
 export function createLinearSolveRuntimeVisualFrameSample(

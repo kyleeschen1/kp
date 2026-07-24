@@ -16,10 +16,10 @@ import { createLinearSolveAnimationAsset } from "./linear-solve-adapter.ts";
 import type {
   KpAnimationVisualFrameDiagnostic
 } from "./visual-frame-adapter.ts";
+import type {
+  KpAnimationRuntimeVisualFrameSampleFactory
+} from "./runtime-visual-frame-sample.ts";
 import { createLinearSolveKpAssetBundle } from "../semantic/linear-solve-asset.ts";
-import {
-  createLinearSolveRuntimeVisualFrameSample
-} from "../rendering/linear-solve-runtime-visual-sample.ts";
 
 export type KpAnimationFlashcardRendererSampleDiagnostic =
   | KpAnimationVisualFrameDiagnostic
@@ -39,11 +39,12 @@ export interface LinearSolveFlashcardRendererSample {
   readonly diagnostics: readonly KpAnimationFlashcardRendererSampleDiagnostic[];
 }
 
-export function createLinearSolveFlashcardRendererSample():
-  LinearSolveFlashcardRendererSample {
+export function createLinearSolveFlashcardRendererSample(input: {
+  readonly createVisualSample: KpAnimationRuntimeVisualFrameSampleFactory;
+}): LinearSolveFlashcardRendererSample {
   const animation = createLinearSolveAnimationAsset();
   const semantic = createLinearSolveKpAssetBundle();
-  const visualSample = createLinearSolveRuntimeVisualFrameSample({ progress: 0 });
+  const visualSample = input.createVisualSample({ progress: 0 });
   const previewData = createKpAnimationFlashcardPreviewRendererData({
     animation,
     cards: semantic.flashcards,

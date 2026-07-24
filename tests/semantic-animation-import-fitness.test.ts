@@ -8,7 +8,7 @@ import {
   checkKpSemanticAnimationImports
 } from "../src/architecture/semantic-animation-import-fitness.ts";
 import {
-  kpSemanticAnimationRenderingImportBaseline
+  type KpSemanticAnimationRenderingImportException
 } from "../src/architecture/semantic-animation-import-baseline.ts";
 
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
@@ -55,7 +55,15 @@ test("rendering may consume neutral contracts without reversing the gate", () =>
 });
 
 test("stale and duplicate exceptions fail instead of widening the baseline", () => {
-  const exception = kpSemanticAnimationRenderingImportBaseline[0]!;
+  const exception: KpSemanticAnimationRenderingImportException = {
+    sourcePath: "src/animation/example.ts",
+    modulePath: "../rendering/example.ts",
+    classification: "compatibility-boundary",
+    intendedOwner: "animation",
+    retirementSlice: "s13",
+    rationale:
+      "Synthetic exception proves stale and duplicate declarations still fail."
+  };
   assert.deepEqual(
     checkKpSemanticAnimationImports([], [exception]).map(({ kind }) => kind),
     ["stale-rendering-import-exception"]

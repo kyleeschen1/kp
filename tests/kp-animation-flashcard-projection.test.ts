@@ -328,7 +328,9 @@ test("createKpAnimationPredictNextAnswerState evaluates selected transformation 
 });
 
 test("createLinearSolveFlashcardRendererSample surfaces renderable flashcard state", () => {
-  const sample = createLinearSolveFlashcardRendererSample();
+  const sample = createLinearSolveFlashcardRendererSample({
+    createVisualSample: createLinearSolveRuntimeVisualFrameSample
+  });
 
   assert.equal(
     sample.id,

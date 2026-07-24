@@ -1,35 +1,17 @@
-import type { KpCancellationPresentationIntent } from "../semantic/cancellation-presentation-intent.ts";
 import {
   kpCancellationPresentationCapabilities,
-  type KpCancellationMeasuredTopology,
   type KpCancellationPresentationCapabilities
 } from "./cancellation-presentation-capabilities.ts";
-import type { KpEquationCancellationPresentationRecipe } from "./equation-presentation-policy.ts";
+import type {
+  KpCancellationPresentationResolution,
+  KpCancellationPresentationResolutionInput,
+  KpEquationCancellationPresentationRecipe
+} from "../animation/cancellation-presentation-contract.ts";
 
-export interface KpCancellationPresentationResolutionInput {
-  readonly intent: KpCancellationPresentationIntent;
-  readonly topology: KpCancellationMeasuredTopology;
-}
-
-export type KpCancellationPresentationResolution =
-  | {
-      readonly kind: "resolved";
-      readonly recipe: KpEquationCancellationPresentationRecipe;
-    }
-  | {
-      readonly kind: "repair-source-topology";
-      readonly issue: "incomplete-cancellation-source-set";
-      readonly minimumSourceCount: 2;
-    }
-  | {
-      readonly kind: "repair-intent";
-      readonly issue: "distinct-baselines-require-two-axis-contact";
-      readonly repairedIntent: KpCancellationPresentationIntent;
-    }
-  | {
-      readonly kind: "manual-review";
-      readonly issue: "no-supported-cancellation-recipe";
-    };
+export type {
+  KpCancellationPresentationResolution,
+  KpCancellationPresentationResolutionInput
+} from "../animation/cancellation-presentation-contract.ts";
 
 const recipeOrder = Object.freeze([
   "counter-orbit-v1",

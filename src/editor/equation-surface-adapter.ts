@@ -113,6 +113,9 @@ import {
 import {
   kpEquationWitnessedAnnihilationRuntime
 } from "../rendering/equation-witnessed-annihilation-runtime.ts";
+// The concrete equation adapter owns renderer registration; neutral catalog
+// loading must not trigger presentation implementations by side effect.
+import "../rendering/equation-witnessed-annihilation-register.ts";
 import {
   kpEquationPresentationPolicy
 } from "../rendering/equation-presentation-policy.ts";

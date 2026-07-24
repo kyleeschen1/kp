@@ -106,8 +106,14 @@ export const kpSemanticAnimationCompilerStages = [
     id: "presentation-profile",
     owner: "presentation",
     authority: "presentation-policy",
-    representations: ["KpEquationPresentationProfile"],
-    sourcePaths: ["src/rendering/equation-presentation-policy.ts"],
+    representations: [
+      "KpEquationPresentationProfile",
+      "KpCancellationPresentationResolution"
+    ],
+    sourcePaths: [
+      "src/animation/cancellation-presentation-contract.ts",
+      "src/rendering/equation-presentation-policy.ts"
+    ],
     dependsOn: ["correspondence-lineage"],
     migrationStatus: "target-owner"
   }),
@@ -204,10 +210,12 @@ export const kpSemanticAnimationCompilerStages = [
     authority: "renderer-output",
     representations: [
       "KpEquationMaterialOwner",
-      "KpAnimationSurfaceAdapter"
+      "KpAnimationSurfaceAdapter",
+      "KpAnimationRuntimeVisualFrameSampleFactory"
     ],
     sourcePaths: [
       "src/rendering/equation-material-owner.ts",
+      "src/animation/runtime-visual-frame-sample.ts",
       "src/editor/animation-surface-adapter-registry.ts"
     ],
     dependsOn: ["domain-payload"],

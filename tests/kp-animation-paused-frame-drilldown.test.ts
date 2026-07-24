@@ -4,9 +4,15 @@ import test from "node:test";
 import {
   createLinearSolvePausedFrameDrillDownSample
 } from "../src/animation/paused-frame-drilldown.ts";
+import {
+  createLinearSolveRuntimeVisualFrameSample
+} from "../src/rendering/linear-solve-runtime-visual-sample.ts";
 
 test("createLinearSolvePausedFrameDrillDownSample explains the paused cancel frame", () => {
-  const sample = createLinearSolvePausedFrameDrillDownSample({ progress: 0.5 });
+  const sample = createLinearSolvePausedFrameDrillDownSample({
+    progress: 0.5,
+    createVisualSample: createLinearSolveRuntimeVisualFrameSample
+  });
 
   assert.equal(
     sample.id,

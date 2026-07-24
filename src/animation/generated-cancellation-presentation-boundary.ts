@@ -3,11 +3,11 @@ import {
   type KpCancellationOperationId,
   type KpCancellationTeachingGoal
 } from "../semantic/cancellation-presentation-authoring.ts";
-import type { KpCancellationMeasuredTopology } from "../rendering/cancellation-presentation-capabilities.ts";
-import {
-  resolveKpCancellationPresentation,
-  type KpCancellationPresentationResolution
-} from "../rendering/cancellation-presentation-resolver.ts";
+import type {
+  KpCancellationMeasuredTopology,
+  KpCancellationPresentationResolver,
+  KpCancellationPresentationResolution
+} from "./cancellation-presentation-contract.ts";
 
 export type KpGeneratedCancellationPresentationResult =
   | { readonly kind: "accepted"; readonly resolution: Extract<KpCancellationPresentationResolution, { kind: "resolved" }> }
@@ -18,7 +18,8 @@ const allowedKeys = new Set(["operationId", "teachingGoal", "topology"]);
 
 /** Strict LLM boundary: generated data describes meaning, never rendering. */
 export function compileKpGeneratedCancellationPresentation(
-  value: unknown
+  value: unknown,
+  resolvePresentation: KpCancellationPresentationResolver
 ): KpGeneratedCancellationPresentationResult {
   if (!isRecord(value)) return rejected("request must be an object");
   const unknownKeys = Object.keys(value).filter((key) => !allowedKeys.has(key));
@@ -41,7 +42,7 @@ export function compileKpGeneratedCancellationPresentation(
     measuredTopology === undefined
   ) return { kind: "rejected", issues: Object.freeze(issues) };
 
-  const resolution = resolveKpCancellationPresentation({
+  const resolution = resolvePresentation({
     intent: inferKpCancellationPresentationIntent({
       operationId: authorizedOperationId,
       teachingGoal: authorizedTeachingGoal

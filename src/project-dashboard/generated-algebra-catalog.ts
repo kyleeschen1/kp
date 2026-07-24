@@ -883,7 +883,9 @@ function flashcardRendererSampleForAnimation(
   animation: KpAnimationAsset
 ): LinearSolveFlashcardRendererSample | undefined {
   return animation.id === "animation.linear-solve.solve-x"
-    ? createLinearSolveFlashcardRendererSample()
+    ? createLinearSolveFlashcardRendererSample({
+        createVisualSample: createLinearSolveRuntimeVisualFrameSample
+      })
     : undefined;
 }
 
@@ -930,7 +932,10 @@ function pausedFrameDrillDownSampleForAnimation(
   animation: KpAnimationAsset
 ): KpAnimationPausedFrameDrillDownSample | undefined {
   return animation.id === "animation.linear-solve.solve-x"
-    ? createLinearSolvePausedFrameDrillDownSample({ progress: 0.5 })
+    ? createLinearSolvePausedFrameDrillDownSample({
+        progress: 0.5,
+        createVisualSample: createLinearSolveRuntimeVisualFrameSample
+      })
     : undefined;
 }
 

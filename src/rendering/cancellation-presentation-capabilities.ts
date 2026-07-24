@@ -1,10 +1,11 @@
 import type { KpCancellationPresentationIntent } from "../semantic/cancellation-presentation-intent.ts";
-import type { KpEquationCancellationPresentationRecipe } from "./equation-presentation-policy.ts";
+import type {
+  KpEquationCancellationPresentationRecipe
+} from "../animation/cancellation-presentation-contract.ts";
 
-export interface KpCancellationMeasuredTopology {
-  readonly sourceCount: number;
-  readonly sourceBaselines: "shared" | "distinct";
-}
+export type {
+  KpCancellationMeasuredTopology
+} from "../animation/cancellation-presentation-contract.ts";
 
 export interface KpCancellationPresentationCapabilities {
   readonly recipe: KpEquationCancellationPresentationRecipe;

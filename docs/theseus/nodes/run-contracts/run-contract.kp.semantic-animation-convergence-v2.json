@@ -304,6 +304,48 @@
       "scope": "s12 type safety",
       "checkedAt": "2026-07-24T04:48:57.776Z",
       "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test targeted inversion closeout suites",
+      "status": "passed",
+      "scope": "s13 dependency closeout",
+      "checkedAt": "2026-07-24T05:04:15.577Z",
+      "notes": "33 targeted tests passed for zero-baseline closure, typed injection, catalog loading, cancellation resolution, and visual sample consumers."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s13 zero-exception gate",
+      "checkedAt": "2026-07-24T05:04:19.645Z",
+      "notes": "All architecture gates passed; semantic-animation scans 260 files with zero frozen rendering exceptions."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s13 focused convergence suite",
+      "checkedAt": "2026-07-24T05:04:22.293Z",
+      "notes": "204 tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s13 type safety",
+      "checkedAt": "2026-07-24T05:04:24.314Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s13 broad repository suite",
+      "checkedAt": "2026-07-24T05:04:25.883Z",
+      "notes": "All 2089 tests passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s13 production build",
+      "checkedAt": "2026-07-24T05:04:28.142Z",
+      "notes": "Production build passed; only the pre-existing large-chunk advisory remains."
     }
   ],
   "expectedLearning": [
@@ -448,7 +490,8 @@
     {
       "id": "s13",
       "title": "Close-dependency-inversions",
-      "status": "planned",
+      "summary": "Closed all remaining semantic/animation-to-rendering dependency inversions. Generated cancellation now accepts an injected typed presentation resolver; flashcard and drilldown projections accept a neutral runtime-visual-sample factory; concrete witnessed-annihilation registration moved from lazy catalog loading to the equation adapter composition root. The import baseline is exactly empty and the architecture gate scans 260 files with zero exceptions. All 33 targeted tests, 204 focused tests, 2089 repository tests, typecheck, architecture gates, and production build pass.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {

@@ -7,15 +7,17 @@ import {
   type KpCancellationTeachingGoal
 } from "../semantic/cancellation-presentation-authoring.ts";
 import { resolveKpCancellationPresentation } from "./cancellation-presentation-resolver.ts";
+import type {
+  KpEquationCancellationPresentationRecipe
+} from "../animation/cancellation-presentation-contract.ts";
 
 export type KpEquationPresentationRecipe =
   | "semantic-material-v2"
   | "continuity-v1";
 
-export type KpEquationCancellationPresentationRecipe =
-  | "native-handoff-v1"
-  | "witnessed-annihilation-v1"
-  | "counter-orbit-v1";
+export type {
+  KpEquationCancellationPresentationRecipe
+} from "../animation/cancellation-presentation-contract.ts";
 
 export type KpEquationZeroWitnessPresentationRecipe =
   | "none"
