@@ -45,3 +45,18 @@ test("quadratic learner surface becomes a narrow focus stepper without overflow"
   await page.locator("[data-kp-quadratic-stage]").press("ArrowRight");
   await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "880");
 });
+
+test("quadratic graph displays the authored curve and exact solution intersections", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(route.replace("kpProgress=680", "kpProgress=1000"), {
+    waitUntil: "networkidle"
+  });
+  const stage = page.locator("[data-kp-quadratic-stage]");
+  const graph = page.locator("[data-kp-quadratic-graph]");
+  await expect(stage).toHaveAttribute("data-kp-phase", "graph");
+  await expect(graph).toBeVisible();
+  await expect(graph).toHaveAttribute("data-kp-renderer-may-solve", "false");
+  await expect(graph.locator('[data-kp-graph-root="root:2/1"]')).toHaveCount(1);
+  await expect(graph.locator('[data-kp-graph-root="root:3/1"]')).toHaveCount(1);
+  await expect(graph.locator("[data-kp-selector-id='selector.quadratic.graph.curve']")).toHaveCount(1);
+});

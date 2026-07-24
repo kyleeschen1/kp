@@ -153,6 +153,13 @@
       "scope": "slice-16",
       "checkedAt": "2026-07-24T20:37:48.628Z",
       "notes": "Architecture, production build, eight-route closure, exact route budgets, ten preservation and learner captures, two responsive browser checks, and shared reader conformance passed. The learner route owns native KaTeX presentation, uses one shared clock, preserves URL/control authority until genuine scroll input, has no horizontal overflow, and mounts no editor player."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/quadratic-parabola-graph.test.ts tests/quadratic-solution-set.test.ts tests/semantic-reader-quadratic-branching-compiler.test.ts; npm run typecheck; playwright quadratic reader checks; npm run visual:quadratic-branching",
+      "status": "passed",
+      "scope": "slice-17",
+      "checkedAt": "2026-07-24T20:45:25.310Z",
+      "notes": "Twelve focused tests, typecheck, three browser checks, and twelve stable captures passed. The graph consumes 41 exact polynomial samples, exact vertex and solution-set roots, exposes stable selectors, renders wide and narrow without overflow, and declares rendererMaySolve false."
     }
   ],
   "progress": {

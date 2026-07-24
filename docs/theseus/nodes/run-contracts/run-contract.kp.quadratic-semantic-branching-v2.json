@@ -161,7 +161,8 @@
     {
       "id": "slice-17",
       "title": "Parabola-and-root-graph-frames",
-      "status": "planned"
+      "summary": "Added the exact renderer-neutral parabola projection for y equals x squared minus five x plus six, 41 rational curve samples, exact vertex, solution-set-owned root intersections and selectors, deterministic reveal and mirrored rewind frames, and an SVG renderer that cannot solve.",
+      "status": "complete"
     },
     {
       "id": "slice-18",

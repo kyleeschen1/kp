@@ -9,6 +9,10 @@ import {
   createKpQuadraticFormulaKatexProjection
 } from "../../projections/quadratic-formula-katex.ts";
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
+import { renderKpQuadraticParabolaSvg } from "../../rendering/quadratic-parabola-svg.ts";
+import {
+  createCanonicalKpQuadraticParabolaGraphProjection
+} from "../../projections/quadratic-parabola-graph.ts";
 import { createKpCompiledLessonArtifact } from "../document/public-api.ts";
 import { parseKpLessonMarkdown } from "./lesson-markdown-parser.ts";
 import { compileKpReaderPageShell } from "./reader-page-shell.ts";
@@ -85,6 +89,7 @@ export function compileKpQuadraticBranchingLesson(markdown: string) {
 function compileStage(): string {
   const completingSquare = createKpCompletingSquareKatexProjection();
   const formula = createKpQuadraticFormulaKatexProjection();
+  const graph = createCanonicalKpQuadraticParabolaGraphProjection();
   return [
     '<section class="kp-quadratic-stage" data-kp-quadratic-stage data-kp-reader-renderer-adapter="renderer.quadratic-native-katex" data-kp-method="completing-square" data-kp-phase="intro" tabindex="0" aria-label="Quadratic solution animation">',
     '<header class="kp-quadratic-stage__header">',
@@ -103,8 +108,8 @@ function compileStage(): string {
     `<div data-kp-branch="minus" data-kp-semantic-id="branch.minus">${renderLatexToHtml("x=2", { displayMode: true })}<span>minus branch</span></div>`,
     `<div data-kp-branch="plus" data-kp-semantic-id="branch.plus">${renderLatexToHtml("x=3", { displayMode: true })}<span>plus branch</span></div>`,
     "</div>",
-    `<div class="kp-quadratic-solution" data-kp-quadratic-solution data-kp-semantic-id="katex.quadratic.solution-set.native" hidden>${renderLatexToHtml("x\\in\\{2,3\\}", { displayMode: true })}<span>complete solution set</span></div>`,
-    '<div class="kp-quadratic-graph-slot" data-kp-quadratic-graph-slot aria-label="Graph connection follows in the next frame"><span>Equation</span><i></i><span>two roots</span></div>',
+    `<div class="kp-quadratic-solution" data-kp-quadratic-solution data-kp-semantic-id="katex.quadratic.solution-set.native" hidden>${renderLatexToHtml("x\\in\\{2,3\\}", { displayMode: true })}<span class="kp-quadratic-solution__label">complete solution set</span></div>`,
+    `<div class="kp-quadratic-graph-slot" data-kp-quadratic-graph-slot>${renderKpQuadraticParabolaSvg(graph)}</div>`,
     "</div>",
     '<nav class="kp-quadratic-controls" aria-label="Explanation controls">',
     '<button type="button" data-kp-quadratic-previous aria-label="Previous explanation step">Back</button>',
