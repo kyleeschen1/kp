@@ -127,7 +127,8 @@
     {
       "id": "slice-14",
       "title": "Compile each distributed factor/addend pair as a target-product presentation group.",
-      "status": "planned"
+      "summary": "Distribution plans now compile one factor/addend presentation group per explicit semantic index; shuffled pair order maps correctly and invalid indices are rejected. Nine focused tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "slice-15",

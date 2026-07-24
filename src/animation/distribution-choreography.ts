@@ -4,6 +4,10 @@ import type {
 } from "./fission-fusion.ts";
 import { kpFissionFusionRuntime } from "./fission-fusion-runtime.ts";
 import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
+import {
+  compileKpCompoundTargetDeclarations,
+  type KpPresentationGroupContract
+} from "./presentation-group-continuity.ts";
 
 export const kpDistributionChoreographyPhaseIds = [
   "focus-factor",
@@ -50,6 +54,7 @@ export interface KpDistributionChoreographyPlan {
   readonly groupingArtifactIds: readonly string[];
   readonly phaseIds: readonly KpDistributionChoreographyPhaseId[];
   readonly sourceMinimumScale: number;
+  readonly productGroups: readonly KpPresentationGroupContract[];
   readonly fissionPlan: KpFissionFusionPlan;
 }
 
@@ -94,6 +99,20 @@ export function compileKpDistributionChoreography(input: {
   if (input.connectorPairs.length !== input.addendPairs.length - 1) {
     throw new Error("Distribution choreography requires one connector pair between addends.");
   }
+  const semanticIndices = input.addendPairs.map((pair) => pair.semanticIndex);
+  if (
+    new Set(semanticIndices).size !== input.addendPairs.length ||
+    semanticIndices.some(
+      (semanticIndex) =>
+        !Number.isInteger(semanticIndex) ||
+        semanticIndex < 0 ||
+        semanticIndex >= input.factorCopyIds.length
+    )
+  ) {
+    throw new Error(
+      "Distribution choreography requires one unique semantic index per product."
+    );
+  }
   if (input.groupingArtifactIds.length === 0) {
     throw new Error("Distribution choreography requires explicit grouping artifacts.");
   }
@@ -119,6 +138,29 @@ export function compileKpDistributionChoreography(input: {
     semanticOrder: input.factorCopyIds,
     junctionScale: sourceMinimumScale
   });
+  const productGroups = compileKpCompoundTargetDeclarations(
+    input.addendPairs.map((addend) => ({
+      id: `${input.id}.product.${addend.semanticIndex}`,
+      nativeOwnerId: `${input.id}.native-product.${addend.semanticIndex}`,
+      memberBindings: [
+        {
+          memberId: input.factorCopyIds[addend.semanticIndex]!,
+          semanticEntityId: input.factorCopyIds[addend.semanticIndex]!,
+          correspondenceOrder: 0
+        },
+        {
+          memberId: addend.targetId,
+          semanticEntityId: addend.targetId,
+          correspondenceOrder: 1
+        }
+      ]
+    }))
+  ).map((declaration) => {
+    if (declaration.kind !== "presentation-group") {
+      throw new Error("Distributed products cannot use presentation exemptions.");
+    }
+    return declaration;
+  });
   return {
     kind: "distribution-choreography-plan",
     id: input.id,
@@ -129,6 +171,7 @@ export function compileKpDistributionChoreography(input: {
     groupingArtifactIds: [...input.groupingArtifactIds],
     phaseIds: [...kpDistributionChoreographyPhaseIds],
     sourceMinimumScale,
+    productGroups,
     fissionPlan
   };
 }

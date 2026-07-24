@@ -70,6 +70,46 @@ test("distribution separates semantic ownership from continuous presentation own
   assert.deepEqual(after.fission.ownership.ownerEntityIds, plan.factorCopyIds);
 });
 
+test("distribution compiles target products by semantic index", () => {
+  const plan = compileKpDistributionChoreography({
+    id: "distribution.shuffled-addends",
+    sourceFactorId: "source.factor",
+    factorCopyIds: ["target.factor.0", "target.factor.1"],
+    addendPairs: [
+      {
+        sourceId: "source.term.1",
+        targetId: "target.term.1",
+        semanticIndex: 1
+      },
+      {
+        sourceId: "source.term.0",
+        targetId: "target.term.0",
+        semanticIndex: 0
+      }
+    ],
+    connectorPairs: [{
+      sourceId: "source.connector.0",
+      targetId: "target.connector.0",
+      semanticIndex: 0
+    }],
+    groupingArtifactIds: ["source.left-paren", "source.right-paren"]
+  });
+
+  assert.deepEqual(plan.productGroups.map((group) => [
+    group.id,
+    group.members.map((member) => member.memberId)
+  ]), [
+    [
+      "distribution.shuffled-addends.product.1",
+      ["target.factor.1", "target.term.1"]
+    ],
+    [
+      "distribution.shuffled-addends.product.0",
+      ["target.factor.0", "target.term.0"]
+    ]
+  ]);
+});
+
 test("distribution refuses incomplete operation roles", () => {
   assert.throws(() => compileKpDistributionChoreography({
     id: "bad-distribution",
