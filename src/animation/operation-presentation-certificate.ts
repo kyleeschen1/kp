@@ -85,6 +85,23 @@ export interface KpOperationPresentationMaterialIssue {
   readonly message: string;
 }
 
+export interface KpOperationPresentationMotifRegistration {
+  readonly motifId: string;
+  readonly canonicalOperationIds: readonly string[];
+}
+
+export interface KpOperationPresentationConformanceIssue {
+  readonly code:
+    | "presentation-phase.out-of-order"
+    | "presentation-phase.missing-act"
+    | "presentation-phase.reflow-after-act"
+    | "presentation-phase.introduced-without-reservation"
+    | "presentation-motif.unregistered"
+    | "presentation-motif.operation-mismatch";
+  readonly spanId: string;
+  readonly message: string;
+}
+
 export function createKpOperationPresentationCertificate(
   input: Omit<
     KpOperationPresentationCertificate,
@@ -379,6 +396,124 @@ export function evaluateKpOperationPresentationMaterialRoles(
   return issues;
 }
 
+export function evaluateKpOperationPresentationConformance(input: {
+  readonly certificate: KpOperationPresentationCertificate;
+  readonly motifRegistry: readonly KpOperationPresentationMotifRegistration[];
+}): readonly KpOperationPresentationConformanceIssue[] {
+  const issues: KpOperationPresentationConformanceIssue[] = [];
+  const phaseRanks = new Map(
+    kpOperationPresentationPhaseOrder.map(
+      (phaseId, index) => [phaseId, index] as const
+    )
+  );
+  const materialById = new Map(
+    input.certificate.materials.map(
+      (material) => [material.entityId, material] as const
+    )
+  );
+  const operationById = new Map(
+    input.certificate.authorityOperations.map(
+      (operation) => [operation.id, operation] as const
+    )
+  );
+  const motifById = new Map(
+    input.motifRegistry.map(
+      (registration) => [registration.motifId, registration] as const
+    )
+  );
+
+  input.certificate.spans.forEach((span) => {
+    const ranks = span.phases.map(
+      (phase) => phaseRanks.get(phase.phaseId) ?? Infinity
+    );
+    if (ranks.some(
+      (rank, index) => index > 0 && rank < ranks[index - 1]!
+    )) {
+      issues.push({
+        code: "presentation-phase.out-of-order",
+        spanId: span.id,
+        message:
+          `Span ${span.id} must preserve orient-reflow-act-settle-release order.`
+      });
+    }
+    const firstActIndex = span.phases.findIndex(
+      (phase) => phase.activityKind === "execute-operation"
+    );
+    if (firstActIndex < 0) {
+      issues.push({
+        code: "presentation-phase.missing-act",
+        spanId: span.id,
+        message: `Span ${span.id} must visibly execute its operation.`
+      });
+    } else {
+      const continuantReflowAfterAct = span.phases
+        .slice(firstActIndex)
+        .some((phase) =>
+          (phase.activityKind === "reserve-space" ||
+            phase.activityKind === "move-continuant") &&
+          phase.materialEntityIds.some(
+            (entityId) =>
+              materialById.get(entityId)?.presentationRole === "continuant"
+          )
+        );
+      if (continuantReflowAfterAct) {
+        issues.push({
+          code: "presentation-phase.reflow-after-act",
+          spanId: span.id,
+          message:
+            `Continuants in ${span.id} must reserve and reflow before focal action.`
+        });
+      }
+      const introducedInAct = new Set(
+        span.phases[firstActIndex]!.materialEntityIds.filter(
+          (entityId) =>
+            materialById.get(entityId)?.presentationRole === "introduced"
+        )
+      );
+      const reservedBeforeAct = new Set(
+        span.phases.slice(0, firstActIndex)
+          .filter((phase) => phase.activityKind === "reserve-space")
+          .flatMap((phase) => phase.materialEntityIds)
+      );
+      if ([...introducedInAct].some(
+        (entityId) => !reservedBeforeAct.has(entityId)
+      )) {
+        issues.push({
+          code: "presentation-phase.introduced-without-reservation",
+          spanId: span.id,
+          message:
+            `Introduced material in ${span.id} must reserve space before action.`
+        });
+      }
+    }
+
+    const motif = motifById.get(span.motifId);
+    if (motif === undefined) {
+      issues.push({
+        code: "presentation-motif.unregistered",
+        spanId: span.id,
+        message: `Span ${span.id} uses unregistered motif ${span.motifId}.`
+      });
+      return;
+    }
+    const incompatible = span.representedOperationIds.filter((operationId) => {
+      const canonicalOperationId =
+        operationById.get(operationId)?.canonicalOperationId;
+      return canonicalOperationId === undefined ||
+        !motif.canonicalOperationIds.includes(canonicalOperationId);
+    });
+    if (incompatible.length > 0) {
+      issues.push({
+        code: "presentation-motif.operation-mismatch",
+        spanId: span.id,
+        message:
+          `Motif ${span.motifId} does not cover operations ${incompatible.join(", ")}.`
+      });
+    }
+  });
+  return issues;
+}
+
 function requireText(
   value: string,
   path: string,
@@ -425,3 +560,11 @@ function sameIds(
   return left.length === right.length &&
     left.every((id, index) => id === right[index]);
 }
+
+const kpOperationPresentationPhaseOrder = [
+  "orient",
+  "reflow",
+  "act",
+  "settle",
+  "release"
+] as const satisfies readonly KpChoreographyEnvelopePhaseId[];

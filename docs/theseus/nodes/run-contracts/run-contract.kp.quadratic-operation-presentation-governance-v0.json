@@ -86,7 +86,8 @@
     {
       "id": "slice-05",
       "title": "Phase-and-motif-conformance-laws",
-      "status": "planned"
+      "summary": "Added phase and motif conformance: spans preserve orient-reflow-act-settle-release order, continuants move before focal action, introduced material reserves space, every span acts, and motifs must be registered for each covered canonical operation.",
+      "status": "complete"
     },
     {
       "id": "slice-06",

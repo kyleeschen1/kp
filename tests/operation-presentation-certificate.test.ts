@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   createKpOperationPresentationCertificate,
+  evaluateKpOperationPresentationConformance,
   evaluateKpOperationPresentationCoverage,
   evaluateKpOperationPresentationMaterialRoles,
   validateKpOperationPresentationCertificate,
@@ -267,6 +268,95 @@ test("introduced and structural material have incompatible action duties", () =>
       "material-role.structural-acted"
     ]
   );
+});
+
+test("phase and motif conformance accepts reflow before registered action", () => {
+  const certificate = createKpOperationPresentationCertificate({
+    ...validInput(),
+    spans: [{
+      ...validInput().spans[0]!,
+      phases: [
+        {
+          id: "phase.reflow",
+          phaseId: "reflow",
+          activityKind: "move-continuant",
+          materialEntityIds: ["material.equality"]
+        },
+        validInput().spans[0]!.phases[0]!
+      ]
+    }]
+  });
+
+  assert.deepEqual(evaluateKpOperationPresentationConformance({
+    certificate,
+    motifRegistry: [{
+      motifId: "motif.equation.balance",
+      canonicalOperationIds: ["canonical.equation.balance"]
+    }]
+  }), []);
+});
+
+test("phase conformance rejects late reflow and unreserved introduction", () => {
+  const certificate = createKpOperationPresentationCertificate({
+    ...validInput(),
+    materials: [
+      ...validInput().materials,
+      {
+        entityId: "material.result",
+        semanticRoleId: "role.result",
+        presentationRole: "introduced"
+      }
+    ],
+    spans: [{
+      ...validInput().spans[0]!,
+      phases: [
+        {
+          id: "phase.act",
+          phaseId: "act",
+          activityKind: "execute-operation",
+          materialEntityIds: ["material.six", "material.result"]
+        },
+        {
+          id: "phase.late-reflow",
+          phaseId: "reflow",
+          activityKind: "move-continuant",
+          materialEntityIds: ["material.equality"]
+        }
+      ]
+    }]
+  });
+
+  assert.deepEqual(evaluateKpOperationPresentationConformance({
+    certificate,
+    motifRegistry: [{
+      motifId: "motif.equation.balance",
+      canonicalOperationIds: ["canonical.equation.balance"]
+    }]
+  }).map(({ code }) => code), [
+    "presentation-phase.out-of-order",
+    "presentation-phase.reflow-after-act",
+    "presentation-phase.introduced-without-reservation"
+  ]);
+});
+
+test("motif conformance rejects generic and incompatible motion", () => {
+  const certificate = createKpOperationPresentationCertificate(validInput());
+
+  assert.deepEqual(evaluateKpOperationPresentationConformance({
+    certificate,
+    motifRegistry: []
+  }).map(({ code }) => code), [
+    "presentation-motif.unregistered"
+  ]);
+  assert.deepEqual(evaluateKpOperationPresentationConformance({
+    certificate,
+    motifRegistry: [{
+      motifId: "motif.equation.balance",
+      canonicalOperationIds: ["canonical.factor"]
+    }]
+  }).map(({ code }) => code), [
+    "presentation-motif.operation-mismatch"
+  ]);
 });
 
 function validInput() {

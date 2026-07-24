@@ -230,6 +230,13 @@
       "scope": "slice-04 total material-role classification",
       "checkedAt": "2026-07-24T22:34:12.219Z",
       "notes": "Nine focused tests pass. Every declared visible entity must participate, focal/result material must execute, continuants must reserve or reflow and cannot execute, and structural material cannot act."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/operation-presentation-certificate.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-05 phase and motif conformance",
+      "checkedAt": "2026-07-24T22:36:08.331Z",
+      "notes": "Twelve focused tests pass. Conformance enforces envelope order, operation action, continuant reflow before action, introduced-material reservation, registered motifs, and canonical-operation compatibility."
     }
   ],
   "progress": {
