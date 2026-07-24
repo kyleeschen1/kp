@@ -76,6 +76,13 @@
       "scope": "slice-06 quadratic-formula authority",
       "checkedAt": "2026-07-24T19:57:39.550Z",
       "notes": "Thirteen focused tests passed. Operation order, coefficient provenance, exact discriminant and square root, non-zero denominator, verified results, drift diagnostics, immutability, and radical presentation isolation are verified."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/quadratic-solution-method-graph.test.ts tests/quadratic-completing-square-authority.test.ts tests/quadratic-formula-authority.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-07 solution-method path graph",
+      "checkedAt": "2026-07-24T20:01:26.799Z",
+      "notes": "Nineteen focused tests passed. Shared endpoints, disjoint method ownership, exact dependency closure, deterministic composition, cycle rejection, authority preservation, and type safety are verified."
     }
   ],
   "progress": {

@@ -101,7 +101,8 @@
     {
       "id": "slice-07",
       "title": "Solution-method-path-graph",
-      "status": "planned"
+      "summary": "Composed completing-square and formula authorities into two explicit acyclic method paths with disjoint intermediate ownership, deterministic dependency closure, one shared equation source, and one shared exact solution-set target.",
+      "status": "complete"
     },
     {
       "id": "slice-08",
