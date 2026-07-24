@@ -137,7 +137,8 @@
     {
       "id": "slice-13",
       "title": "Completing-square-KaTeX-projection",
-      "status": "planned"
+      "summary": "Added the completing-square KaTeX projection with four native states, stable semantic selectors, explicit role correspondence, native DOM measurement, collision-safe role lanes, native source and target settlement, spoken text, and no radical workaround or concrete geometry.",
+      "status": "complete"
     },
     {
       "id": "slice-14",
