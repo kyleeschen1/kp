@@ -35,6 +35,7 @@ export interface KpSemanticAnimationAssetProjection {
   readonly transformations: readonly KpSemanticTransformation[];
   readonly transformationTree: EditableSemanticTransformationTree;
   readonly timeline?: KpAnimationAssetTimeline | undefined;
+  readonly renderTargets: readonly KpAnimationAssetRenderTarget[];
   readonly checks: readonly KpAnimationAssetCheckRef[];
 }
 
@@ -42,7 +43,6 @@ export interface KpAnimationPresentationAssetProjection {
   readonly kind: "animation-presentation-asset-projection";
   readonly identity: KpAnimationAssetIdentityProjection;
   readonly layout?: KpAnimationAssetLayoutNode | undefined;
-  readonly renderTargets: readonly KpAnimationAssetRenderTarget[];
   readonly presentationProfile?: KpAnimationAssetPresentationProfile | undefined;
 }
 
@@ -68,11 +68,11 @@ export const kpAnimationAssetProjectionFieldOwnership = Object.freeze({
     "transformations",
     "transformationTree",
     "timeline",
+    "renderTargets",
     "checks"
   ]),
   presentation: Object.freeze([
     "layout",
-    "renderTargets",
     "presentationProfile"
   ]),
   productManifest: Object.freeze([
@@ -107,13 +107,13 @@ export function projectKpAnimationAsset(
       transformations: asset.transformations,
       transformationTree: asset.transformationTree,
       ...(asset.timeline === undefined ? {} : { timeline: asset.timeline }),
+      renderTargets: asset.renderTargets,
       checks: asset.checks
     }),
     presentation: Object.freeze({
       kind: "animation-presentation-asset-projection" as const,
       identity,
       ...(asset.layout === undefined ? {} : { layout: asset.layout }),
-      renderTargets: asset.renderTargets,
       ...(asset.presentationProfile === undefined
         ? {}
         : { presentationProfile: asset.presentationProfile })
@@ -146,7 +146,7 @@ export function recomposeKpAnimationAsset(
     ...(projections.presentation.layout === undefined
       ? {}
       : { layout: projections.presentation.layout }),
-    renderTargets: projections.presentation.renderTargets,
+    renderTargets: projections.semanticAnimation.renderTargets,
     checks: projections.semanticAnimation.checks,
     exportTargets: projections.productManifest.exportTargets,
     ...(projections.productManifest.dashboard === undefined
@@ -162,6 +162,35 @@ export function recomposeKpAnimationAsset(
       ? {}
       : { metadata: projections.productManifest.metadata })
   });
+}
+
+/**
+ * The aggregate remains a version-1 compatibility facade while legacy kernel
+ * functions migrate. Product, export, dashboard, and generic metadata state
+ * are intentionally absent from this reconstruction.
+ */
+export function createKpSemanticAnimationCompatibilityAsset(
+  projection: KpSemanticAnimationAssetProjection
+): KpAnimationAsset {
+  return createKpAnimationAsset({
+    id: projection.identity.id,
+    title: projection.identity.title,
+    bundle: projection.bundle,
+    transformations: projection.transformations,
+    transformationTree: projection.transformationTree,
+    ...(projection.timeline === undefined
+      ? {}
+      : { timeline: projection.timeline }),
+    renderTargets: projection.renderTargets,
+    checks: projection.checks,
+    exportTargets: []
+  });
+}
+
+export function isKpSemanticAnimationAssetProjection(
+  value: KpAnimationAsset | KpSemanticAnimationAssetProjection
+): value is KpSemanticAnimationAssetProjection {
+  return value.kind === "semantic-animation-asset-projection";
 }
 
 function assertSharedIdentity(projections: KpAnimationAssetProjections): void {

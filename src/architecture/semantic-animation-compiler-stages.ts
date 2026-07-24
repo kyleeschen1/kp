@@ -59,7 +59,8 @@ export const kpSemanticAnimationCompilerStages = [
     ],
     sourcePaths: [
       "src/semantic/asset.ts",
-      "src/animation/asset-projections.ts"
+      "src/animation/asset-projections.ts",
+      "src/animation/semantic-animation-projection-compiler.ts"
     ],
     dependsOn: [],
     migrationStatus: "canonical"

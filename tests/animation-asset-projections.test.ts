@@ -46,7 +46,10 @@ test("projections retain source authorities rather than copying their state", ()
     projections.semanticAnimation.transformationTree,
     asset.transformationTree
   );
-  assert.strictEqual(projections.presentation.renderTargets, asset.renderTargets);
+  assert.strictEqual(
+    projections.semanticAnimation.renderTargets,
+    asset.renderTargets
+  );
   assert.strictEqual(
     projections.productManifest.exportTargets,
     asset.exportTargets

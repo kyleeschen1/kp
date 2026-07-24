@@ -675,6 +675,34 @@
       "scope": "s23 architecture",
       "checkedAt": "2026-07-24T06:16:35.539Z",
       "notes": "All architecture gates pass across 267 semantic-animation files with zero rendering exceptions."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-projection-consumers.test.ts tests/animation-asset-projections.test.ts",
+      "status": "passed",
+      "scope": "s24 projection consumers",
+      "checkedAt": "2026-07-24T06:21:42.607Z",
+      "notes": "All 10 consumer and projection tests pass for runtime, descriptor, validation, compiler, child-composition, identity, and serialization parity."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s24 focused convergence suite",
+      "checkedAt": "2026-07-24T06:21:43.436Z",
+      "notes": "All 250 focused tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s24 type safety",
+      "checkedAt": "2026-07-24T06:21:44.287Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s24 architecture",
+      "checkedAt": "2026-07-24T06:21:45.118Z",
+      "notes": "All architecture gates pass across 268 semantic-animation files with zero rendering exceptions."
     }
   ],
   "expectedLearning": [
@@ -896,7 +924,8 @@
     {
       "id": "s24",
       "title": "Runtime-and-compiler-consumer-migration",
-      "status": "planned",
+      "summary": "Runtime sampling, scrubber control, frame descriptors, semantic validation, and semantic reference compilation now accept the semantic-animation projection. Aggregate assets remain accepted through an explicitly named compatibility reconstruction containing no dashboard, export, review, generic product metadata, layout, or presentation profile state. Aggregate and projected sampling are exactly equal for rewind and composed child frames; descriptor, semantic refs, and diagnostics remain exact. Render targets moved to the semantic-animation projection because the kernel requires their semantic refs, while layout/profile remain presentation-owned. All 10 targeted tests, 250 focused tests, typecheck, and architecture gates pass.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {

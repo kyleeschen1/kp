@@ -8,6 +8,11 @@ import {
   type KpAnimationAssetTransformationTreeDirection
 } from "./asset.ts";
 import type { KpLawFailure } from "../semantic/asset-laws.ts";
+import {
+  createKpSemanticAnimationCompatibilityAsset,
+  isKpSemanticAnimationAssetProjection,
+  type KpSemanticAnimationAssetProjection
+} from "./asset-projections.ts";
 
 export interface KpAnimationFrameDescriptor {
   readonly id: string;
@@ -33,7 +38,7 @@ export interface CreateKpAnimationFrameDescriptorInput
 
 export interface SampleKpAnimationFrameDescriptorInput {
   readonly id?: string | undefined;
-  readonly animation: KpAnimationAsset;
+  readonly animation: KpAnimationAsset | KpSemanticAnimationAssetProjection;
   readonly direction: KpAnimationAssetTransformationTreeDirection;
   readonly progress: number;
 }
@@ -68,6 +73,12 @@ export function createKpAnimationFrameDescriptor(
 export function sampleKpAnimationFrameDescriptor(
   input: SampleKpAnimationFrameDescriptorInput
 ): KpAnimationFrameDescriptor {
+  if (isKpSemanticAnimationAssetProjection(input.animation)) {
+    return sampleKpAnimationFrameDescriptor({
+      ...input,
+      animation: createKpSemanticAnimationCompatibilityAsset(input.animation)
+    });
+  }
   const phase = sampleKpAnimationAssetPhase(input.animation, {
     direction: input.direction,
     progress: input.progress

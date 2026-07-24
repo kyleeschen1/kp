@@ -21,11 +21,20 @@ import {
   roundKpSampledFrameClockValue,
   type KpSampledFrameEnvelope
 } from "./sampled-frame-envelope.ts";
+import {
+  createKpSemanticAnimationCompatibilityAsset,
+  isKpSemanticAnimationAssetProjection,
+  type KpSemanticAnimationAssetProjection
+} from "./asset-projections.ts";
+
+export type KpAnimationRuntimeAsset =
+  | KpAnimationAsset
+  | KpSemanticAnimationAssetProjection;
 
 export interface SampleKpAnimationRuntimeFrameInput {
   readonly id?: string | undefined;
-  readonly animation: KpAnimationAsset;
-  readonly childAnimations?: readonly KpAnimationAsset[] | undefined;
+  readonly animation: KpAnimationRuntimeAsset;
+  readonly childAnimations?: readonly KpAnimationRuntimeAsset[] | undefined;
   readonly direction?: KpAnimationAssetTransformationTreeDirection | undefined;
   readonly progress?: number | undefined;
   readonly elapsedMs?: number | undefined;
@@ -98,10 +107,10 @@ export interface KpAnimationRuntimeChildFrame {
 }
 
 export interface SampleKpAnimationRuntimeFrameFromScrubberInput {
-  readonly animation: KpAnimationAsset;
+  readonly animation: KpAnimationRuntimeAsset;
   readonly scrubber: KpAnimationRuntimeScrubberControl;
   readonly value: number;
-  readonly childAnimations?: readonly KpAnimationAsset[] | undefined;
+  readonly childAnimations?: readonly KpAnimationRuntimeAsset[] | undefined;
   readonly direction?: KpAnimationAssetTransformationTreeDirection | undefined;
 }
 
@@ -131,9 +140,12 @@ export interface KpAnimationRuntimeSelectorFrame {
 }
 
 export function createKpAnimationRuntimeScrubberControl(
-  animation: KpAnimationAsset
+  animation: KpAnimationRuntimeAsset
 ): KpAnimationRuntimeScrubberControl {
-  const timeline = animation.timeline;
+  const source = isKpSemanticAnimationAssetProjection(animation)
+    ? createKpSemanticAnimationCompatibilityAsset(animation)
+    : animation;
+  const timeline = source.timeline;
   const beatCount = timeline?.beatCount;
 
   if (
@@ -142,9 +154,9 @@ export function createKpAnimationRuntimeScrubberControl(
     beatCount > 0
   ) {
     return {
-      id: `scrubber.${animation.id}`,
+      id: `scrubber.${source.id}`,
       kind: "animation-runtime-scrubber",
-      animationId: animation.id,
+      animationId: source.id,
       ...(timeline?.id === undefined ? {} : { timelineId: timeline.id }),
       unit: "beat",
       min: 0,
@@ -156,9 +168,9 @@ export function createKpAnimationRuntimeScrubberControl(
   }
 
   return {
-    id: `scrubber.${animation.id}`,
+    id: `scrubber.${source.id}`,
     kind: "animation-runtime-scrubber",
-    animationId: animation.id,
+    animationId: source.id,
     ...(timeline?.id === undefined ? {} : { timelineId: timeline.id }),
     unit: "progress",
     min: 0,
@@ -185,10 +197,18 @@ export function sampleKpAnimationRuntimeFrameFromScrubber(
 export function sampleKpAnimationRuntimeFrame(
   input: SampleKpAnimationRuntimeFrameInput
 ): KpAnimationRuntimeFrame {
+  const animation = isKpSemanticAnimationAssetProjection(input.animation)
+    ? createKpSemanticAnimationCompatibilityAsset(input.animation)
+    : input.animation;
+  const childAnimations = (input.childAnimations ?? []).map((child) =>
+    isKpSemanticAnimationAssetProjection(child)
+      ? createKpSemanticAnimationCompatibilityAsset(child)
+      : child
+  );
   const direction = input.direction ?? "forward";
-  const progress = runtimeProgress(input);
-  const clock = runtimeClock(input.animation, direction, progress);
-  const phase = sampleKpAnimationAssetPhase(input.animation, {
+  const progress = runtimeProgress({ ...input, animation });
+  const clock = runtimeClock(animation, direction, progress);
+  const phase = sampleKpAnimationAssetPhase(animation, {
     direction,
     progress
   });
@@ -197,16 +217,16 @@ export function sampleKpAnimationRuntimeFrame(
       input.id === undefined
         ? undefined
         : `${input.id}.frame`,
-    animation: input.animation,
+    animation,
     direction,
     progress
   });
-  const refs = compileKpAnimationAssetSemanticRefs(input.animation);
+  const refs = compileKpAnimationAssetSemanticRefs(animation);
   const activeTransformationIds = [...descriptor.transformationIds];
   const activeAnnotationIds = flattenAnnotationIds(
     phase.annotationIdsByPlacement
   );
-  const activeAnnotations = input.animation.transformationTree.annotations
+  const activeAnnotations = animation.transformationTree.annotations
     .filter((annotation) => activeAnnotationIds.includes(annotation.id));
   const activeRenderTargets = descriptor.renderTargets
     .map((target) =>
@@ -215,7 +235,7 @@ export function sampleKpAnimationRuntimeFrame(
     .filter((target) => target.activeTransformationIds.length > 0);
   const frameId =
     input.id ??
-    `runtime.${input.animation.id}.${direction}.${progress.toFixed(4)}`;
+    `runtime.${animation.id}.${direction}.${progress.toFixed(4)}`;
   const focusSelectorIds = uniqueStrings(
     activeAnnotations
       .filter((annotation) =>
@@ -224,15 +244,15 @@ export function sampleKpAnimationRuntimeFrame(
       .flatMap((annotation) => annotation.selectorIds ?? [])
   );
   const selectorFrames = runtimeSelectorFrames({
-    animation: input.animation,
+    animation,
     activeTransformationIds,
     activeAnnotationIds,
     focusSelectorIds,
     activeRenderTargets
   });
   const childFrames = runtimeChildFrames({
-    animation: input.animation,
-    childAnimations: input.childAnimations ?? [],
+    animation,
+    childAnimations,
     activeRenderTargets,
     direction,
     progress,
@@ -256,8 +276,8 @@ export function sampleKpAnimationRuntimeFrame(
     id: `envelope.${frameId}`,
     kind: "sampled-frame-envelope",
     source: {
-      animationId: input.animation.id,
-      planId: input.animation.transformationTree.root.id,
+      animationId: animation.id,
+      planId: animation.transformationTree.root.id,
       ...(clock.timelineId === undefined
         ? {}
         : { timelineId: clock.timelineId })
@@ -296,8 +316,8 @@ export function sampleKpAnimationRuntimeFrame(
     id: frameId,
     kind: "animation-runtime-frame",
     rendererNeutral: true,
-    animationId: input.animation.id,
-    title: input.animation.title,
+    animationId: animation.id,
+    title: animation.title,
     envelope,
     clock,
     phase: {
