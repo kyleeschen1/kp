@@ -186,6 +186,22 @@ test("distribution groups arbitrary three-term and nested products", () => {
     groupingArtifactIds: ["source.left-paren", "source.right-paren"]
   });
   assert.equal(plan.productGroups.length, 3);
+  assert.deepEqual(plan.operatorGroups.map((operator) => ({
+    semanticIndex: operator.semanticIndex,
+    left: operator.leftProductGroupId,
+    right: operator.rightProductGroupId
+  })), [
+    {
+      semanticIndex: 0,
+      left: "distribution.three-nested-addends.product.0",
+      right: "distribution.three-nested-addends.product.1"
+    },
+    {
+      semanticIndex: 1,
+      left: "distribution.three-nested-addends.product.1",
+      right: "distribution.three-nested-addends.product.2"
+    }
+  ]);
   assert.deepEqual(
     plan.productGroups.map((group) => group.members[1]!.semanticEntityId),
     ["target.term.2.nested", "target.term.0", "target.term.1.wide"]

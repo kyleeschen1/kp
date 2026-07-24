@@ -2257,6 +2257,12 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   const targetLeftTerm = transition.locator(
     '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-term"]'
   );
+  const sourcePlus = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.plus"]'
+  );
+  const targetPlus = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.plus"]'
+  );
 
   await scrubber.fill("0.18");
   await expect(transition).toHaveAttribute(
@@ -2345,7 +2351,9 @@ test("wrap and distribution satisfy their executable choreography contracts", as
     sourceFactor,
     sourceLeftTerm,
     targetFactors.nth(0),
-    targetLeftTerm
+    targetLeftTerm,
+    sourcePlus,
+    targetPlus
   ].map((locator) => locator.evaluate((element) => ({
     opacity: Number(getComputedStyle(element).opacity),
     rect: (() => {
@@ -2361,6 +2369,10 @@ test("wrap and distribution satisfy their executable choreography contracts", as
     1 - settlementOwnerState[3]!.opacity,
     3
   );
+  expect(settlementOwnerState[4]!.opacity).toBeCloseTo(
+    1 - settlementOwnerState[5]!.opacity,
+    3
+  );
   expect(Math.abs(
     settlementOwnerState[3]!.rect.left -
     settlementOwnerState[2]!.rect.right
@@ -2370,6 +2382,12 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   await expect(sourceLeftTerm).toHaveCSS("opacity", "0");
   await expect(targetFactors.nth(0)).toHaveCSS("opacity", "1");
   await expect(targetLeftTerm).toHaveCSS("opacity", "1");
+  await expect(sourcePlus).toHaveCSS("opacity", "0");
+  await expect(targetPlus).toHaveCSS("opacity", "1");
+  const plusBeforeEndpoint = await targetPlus.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+  });
 
   await scrubber.fill("0.359");
   const beforeFormerTransfer = await sourceFactor.evaluate((element) => {
@@ -2398,6 +2416,14 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   )).toBeLessThan(0.01);
   await scrubber.fill("1");
   await expect(sourceFactor).toHaveCSS("opacity", "0");
+  const plusAtEndpoint = await targetPlus.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+  });
+  expect(Math.hypot(
+    plusAtEndpoint.x - plusBeforeEndpoint.x,
+    plusAtEndpoint.y - plusBeforeEndpoint.y
+  )).toBeLessThan(0.05);
   await expect(targetFactors.nth(0)).toHaveCSS("opacity", "1");
   await expect(targetFactors.nth(1)).toHaveCSS("opacity", "1");
   await expect(sourceFactor).toHaveCSS("--kp-focus-z", "0px");

@@ -184,6 +184,12 @@ interface DistributionChoreographyContext {
   >;
   readonly productIndexByReflowRelationId: ReadonlyMap<string, number>;
   readonly productOwnershipProgressBySemanticIndex: ReadonlyMap<number, number>;
+  readonly operatorIndexByReflowRelationId: ReadonlyMap<string, number>;
+  readonly operatorOffsetBySemanticIndex: ReadonlyMap<
+    number,
+    { readonly x: number; readonly y: number }
+  >;
+  readonly operatorOwnershipProgressBySemanticIndex: ReadonlyMap<number, number>;
   readonly groupingReflowByMotionId: ReadonlyMap<
     string,
     { readonly x: number; readonly y: number }
@@ -1107,9 +1113,60 @@ function createDistributionChoreographyContext(
     })
   );
   const productIndexByReflowRelationId = new Map(
-    addendRelations.map((relation, semanticIndex) => [
-      relation.recordId,
-      semanticIndex
+    addendRelations.map((relation) => {
+      const targetId = relation.target!.selectorIds[0];
+      const pair = plan.addendPairs.find(
+        (candidate) => candidate.targetId === targetId
+      );
+      if (pair === undefined) {
+        throw new Error(`Distribution is missing product relation ${targetId}.`);
+      }
+      return [relation.recordId, pair.semanticIndex] as const;
+    })
+  );
+  const operatorIndexByReflowRelationId = new Map(
+    connectorRelations.map((relation) => {
+      const targetId = relation.target!.selectorIds[0];
+      const operator = plan.operatorGroups.find(
+        (candidate) => candidate.targetId === targetId
+      );
+      if (operator === undefined) {
+        throw new Error(`Distribution is missing operator relation ${targetId}.`);
+      }
+      return [relation.recordId, operator.semanticIndex] as const;
+    })
+  );
+  const operatorOffsetBySemanticIndex = new Map(
+    plan.operatorGroups.map((operator) => {
+      const left = productOffsetBySemanticIndex.get(operator.semanticIndex);
+      const right = productOffsetBySemanticIndex.get(
+        operator.semanticIndex + 1
+      );
+      if (left === undefined || right === undefined) {
+        throw new Error(
+          `Distribution operator ${operator.id} is missing adjacent product geometry.`
+        );
+      }
+      return [
+        operator.semanticIndex,
+        {
+          x: (left.x + right.x) / 2,
+          y: (left.y + right.y) / 2
+        }
+      ] as const;
+    })
+  );
+  const operatorOwnershipProgressBySemanticIndex = new Map(
+    plan.operatorGroups.map((operator) => [
+      operator.semanticIndex,
+      Math.min(
+        productOwnershipProgressBySemanticIndex.get(
+          operator.semanticIndex
+        ) ?? 0,
+        productOwnershipProgressBySemanticIndex.get(
+          operator.semanticIndex + 1
+        ) ?? 0
+      )
     ] as const)
   );
   return {
@@ -1126,6 +1183,9 @@ function createDistributionChoreographyContext(
     productOffsetBySemanticIndex,
     productIndexByReflowRelationId,
     productOwnershipProgressBySemanticIndex,
+    operatorIndexByReflowRelationId,
+    operatorOffsetBySemanticIndex,
+    operatorOwnershipProgressBySemanticIndex,
     groupingReflowByMotionId
   };
 }
@@ -2224,6 +2284,31 @@ function sampleDistributionRelation(
       const ownershipProgress =
         context.productOwnershipProgressBySemanticIndex.get(productIndex) ??
         context.frame.productSettlementProgress;
+      return [
+        ...sourceTokens.map((token) => frameToken(token, "source", {
+          opacity: 1 - ownershipProgress,
+          x: (relation.delta?.x ?? 0) * reflow,
+          y: (relation.delta?.y ?? 0) * reflow,
+          scale: 1
+        })),
+        ...targetTokens.map((token) => frameToken(token, "target", {
+          opacity: ownershipProgress,
+          x: groupOffset.x,
+          y: groupOffset.y,
+          scale: 1
+        }))
+      ];
+    }
+    const operatorIndex = context.operatorIndexByReflowRelationId.get(
+      relation.recordId
+    );
+    if (operatorIndex !== undefined) {
+      const groupOffset = context.operatorOffsetBySemanticIndex.get(
+        operatorIndex
+      ) ?? { x: 0, y: 0 };
+      const ownershipProgress =
+        context.operatorOwnershipProgressBySemanticIndex.get(operatorIndex) ??
+        0;
       return [
         ...sourceTokens.map((token) => frameToken(token, "source", {
           opacity: 1 - ownershipProgress,

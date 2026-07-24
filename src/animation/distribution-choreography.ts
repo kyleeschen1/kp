@@ -55,6 +55,14 @@ export interface KpDistributionChoreographyPlan {
     readonly targetId: string;
     readonly semanticIndex: number;
   }[];
+  readonly operatorGroups: readonly {
+    readonly id: string;
+    readonly semanticIndex: number;
+    readonly sourceId: string;
+    readonly targetId: string;
+    readonly leftProductGroupId: string;
+    readonly rightProductGroupId: string;
+  }[];
   readonly groupingArtifactIds: readonly string[];
   readonly phaseIds: readonly KpDistributionChoreographyPhaseId[];
   readonly sourceMinimumScale: number;
@@ -118,6 +126,22 @@ export function compileKpDistributionChoreography(input: {
       "Distribution choreography requires one unique semantic index per product."
     );
   }
+  const connectorIndices = input.connectorPairs.map(
+    (pair) => pair.semanticIndex
+  );
+  if (
+    new Set(connectorIndices).size !== input.connectorPairs.length ||
+    connectorIndices.some(
+      (semanticIndex) =>
+        !Number.isInteger(semanticIndex) ||
+        semanticIndex < 0 ||
+        semanticIndex >= input.addendPairs.length - 1
+    )
+  ) {
+    throw new Error(
+      "Distribution choreography requires one unique semantic index per operator."
+    );
+  }
   if (input.groupingArtifactIds.length === 0) {
     throw new Error("Distribution choreography requires explicit grouping artifacts.");
   }
@@ -166,6 +190,16 @@ export function compileKpDistributionChoreography(input: {
     }
     return declaration;
   });
+  const operatorGroups = input.connectorPairs.map((operator) => ({
+    id: `${input.id}.operator.${operator.semanticIndex}`,
+    semanticIndex: operator.semanticIndex,
+    sourceId: operator.sourceId,
+    targetId: operator.targetId,
+    leftProductGroupId:
+      `${input.id}.product.${operator.semanticIndex}`,
+    rightProductGroupId:
+      `${input.id}.product.${operator.semanticIndex + 1}`
+  }));
   return {
     kind: "distribution-choreography-plan",
     id: input.id,
@@ -173,6 +207,7 @@ export function compileKpDistributionChoreography(input: {
     factorCopyIds: [...input.factorCopyIds],
     addendPairs: input.addendPairs.map((pair) => ({ ...pair })),
     connectorPairs: input.connectorPairs.map((pair) => ({ ...pair })),
+    operatorGroups,
     groupingArtifactIds: [...input.groupingArtifactIds],
     phaseIds: [...kpDistributionChoreographyPhaseIds],
     sourceMinimumScale,

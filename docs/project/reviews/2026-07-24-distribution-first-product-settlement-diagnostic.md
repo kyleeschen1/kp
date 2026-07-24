@@ -114,3 +114,27 @@ and across the final native-owner handoff in both directions.
 
 Do not solve this with a one-off pixel offset. The anchors are correct; the
 defect is the mismatch between clocks and ownership boundaries.
+
+## Checkpoint correction: operation continuity
+
+Human review of the repaired product exposed the same ownership omission on
+the `+` connector. Product members had moved to target-native ownership before
+the endpoint, while connector relations still used the generic persistence
+fallback: the source operator remained visible until progress `1`, then the
+native target operator appeared. That endpoint owner swap caused the jump.
+
+The correction generalizes by semantic role rather than glyph:
+
+- every connector pair compiles into an operator presentation group between
+  its adjacent product groups;
+- its target-native token follows the mean offset of those neighboring
+  products during settlement;
+- its native ownership readiness is the minimum readiness of the two
+  neighboring products, so the connector cannot finish ahead of either side;
+- no branch inspects `+`, `-`, or any other displayed operator text.
+
+The focused browser regression conserves source/target operator opacity during
+settlement and measures less than `0.05px` motion from progress `0.94` to the
+endpoint. The stable visual manifest reports an operator opacity total of `1`
+through all sampled frames and an active native-operator residual of `0px` at
+progress `0.94` and `1` in both wide and narrow viewports.

@@ -74,6 +74,41 @@
       "scope": "focused",
       "checkedAt": "2026-07-24T15:05:14.693Z",
       "notes": "12/12 canonical lesson browser tests pass after card settlement changes, including reverse, resize, URL, endpoint ownership, and synchronized algebra/area clocks."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-distribution-choreography.test.ts tests/distribution-lesson-card-parity.test.ts tests/kp-presentation-group-continuity.test.ts tests/kp-presentation-continuity-regressions.test.ts",
+      "status": "passed",
+      "scope": "distribution operator grouping and continuity laws",
+      "checkedAt": "2026-07-24T15:21:11.215Z",
+      "notes": "22 tests passed; connector groups cover every semantic index between arbitrary product groups."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium --workers=1 -g wrap-and-distribution-contract",
+      "status": "passed",
+      "scope": "distribution connector browser geometry",
+      "checkedAt": "2026-07-24T15:21:19.771Z",
+      "notes": "Focused Chromium test passed; source and native operator opacity is conserved and the operator moves less than 0.05px from progress 0.94 to endpoint."
+    },
+    {
+      "command": "npm run visual:presentation-continuity",
+      "status": "passed",
+      "scope": "wide and narrow distribution operator settlement",
+      "checkedAt": "2026-07-24T15:21:36.729Z",
+      "notes": "13 stable captures produced; operator opacity totals 1 and active target-native operator residual is 0px at progress 0.94 and 1 in wide and narrow viewports."
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "canonical distribution lesson preservation",
+      "checkedAt": "2026-07-24T15:21:41.133Z",
+      "notes": "12/12 Chromium lesson checks pass after generalized connector settlement, including inverse playback and native endpoints."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "operator presentation group integration",
+      "checkedAt": "2026-07-24T15:21:47.207Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
     }
   ],
   "progress": {
