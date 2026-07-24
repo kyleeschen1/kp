@@ -16,6 +16,11 @@ import type {
   SemanticObjectRef,
   SemanticTransformationRef
 } from "../semantic/animation.ts";
+import {
+  createKpSampledFrameEnvelope,
+  roundKpSampledFrameClockValue,
+  type KpSampledFrameEnvelope
+} from "./sampled-frame-envelope.ts";
 
 export interface SampleKpAnimationRuntimeFrameInput {
   readonly id?: string | undefined;
@@ -33,6 +38,7 @@ export interface KpAnimationRuntimeFrame {
   readonly rendererNeutral: true;
   readonly animationId: string;
   readonly title: string;
+  readonly envelope: KpSampledFrameEnvelope;
   readonly clock: KpAnimationRuntimeClock;
   readonly phase: KpAnimationRuntimePhase;
   readonly activeTransformationIds: readonly string[];
@@ -144,7 +150,7 @@ export function createKpAnimationRuntimeScrubberControl(
       min: 0,
       max: beatCount,
       step: 1,
-      defaultValue: roundClockValue(beatCount / 2),
+      defaultValue: roundKpSampledFrameClockValue(beatCount / 2),
       defaultProgress: 0.5
     };
   }
@@ -232,6 +238,59 @@ export function sampleKpAnimationRuntimeFrame(
     progress,
     parentFrameId: frameId
   });
+  const phaseDiagnostics = createPhaseDiagnostics({
+    phaseId: phase.phaseId,
+    activeTransformationCount: activeTransformationIds.length,
+    activeAnnotationCount: activeAnnotationIds.length
+  });
+  const selectorDiagnostics = createSelectorDiagnostics({
+    selectorCount: selectorFrames.length,
+    focusSelectorCount: focusSelectorIds.length
+  });
+  const childDiagnostics = createChildDiagnostics(childFrames.length);
+  const diagnostics = descriptor.diagnostics.map((diagnostic) => ({
+    ...diagnostic
+  }));
+  const envelope = createKpSampledFrameEnvelope({
+    schemaVersion: "kp.sampled-frame-envelope.v1",
+    id: `envelope.${frameId}`,
+    kind: "sampled-frame-envelope",
+    source: {
+      animationId: input.animation.id,
+      planId: input.animation.transformationTree.root.id,
+      ...(clock.timelineId === undefined
+        ? {}
+        : { timelineId: clock.timelineId })
+    },
+    clock: {
+      direction: clock.direction,
+      progress: clock.progress,
+      ...(clock.durationMs === undefined ? {} : { durationMs: clock.durationMs }),
+      ...(clock.elapsedMs === undefined ? {} : { elapsedMs: clock.elapsedMs }),
+      ...(clock.beatCount === undefined ? {} : { beatCount: clock.beatCount }),
+      ...(clock.beat === undefined ? {} : { beat: clock.beat })
+    },
+    activity: {
+      phaseId: phase.phaseId,
+      phaseIndex: phase.phaseIndex,
+      semanticObjectIds: descriptor.semanticObjectIds,
+      transformationIds: activeTransformationIds,
+      annotationIds: activeAnnotationIds,
+      focusSelectorIds,
+      childFrameIds: childFrames.map(({ frame }) => frame.envelope.id)
+    },
+    diagnostics: [
+      ...phaseDiagnostics,
+      ...selectorDiagnostics,
+      ...childDiagnostics,
+      ...diagnostics.map((diagnostic) => ({
+        severity: "error" as const,
+        code: "runtime.reference-closure",
+        path: diagnostic.path,
+        message: diagnostic.message
+      }))
+    ]
+  });
 
   return {
     id: frameId,
@@ -239,6 +298,7 @@ export function sampleKpAnimationRuntimeFrame(
     rendererNeutral: true,
     animationId: input.animation.id,
     title: input.animation.title,
+    envelope,
     clock,
     phase: {
       phaseIndex: phase.phaseIndex,
@@ -259,17 +319,10 @@ export function sampleKpAnimationRuntimeFrame(
     activeRenderTargets,
     childFrames,
     frameDescriptor: descriptor,
-    phaseDiagnostics: createPhaseDiagnostics({
-      phaseId: phase.phaseId,
-      activeTransformationCount: activeTransformationIds.length,
-      activeAnnotationCount: activeAnnotationIds.length
-    }),
-    selectorDiagnostics: createSelectorDiagnostics({
-      selectorCount: selectorFrames.length,
-      focusSelectorCount: focusSelectorIds.length
-    }),
-    childDiagnostics: createChildDiagnostics(childFrames.length),
-    diagnostics: descriptor.diagnostics.map((diagnostic) => ({ ...diagnostic }))
+    phaseDiagnostics,
+    selectorDiagnostics,
+    childDiagnostics,
+    diagnostics
   };
 }
 
@@ -316,13 +369,13 @@ function runtimeClock(
       ? {}
       : {
           durationMs: timeline.durationMs,
-          elapsedMs: roundClockValue(timeline.durationMs * progress)
+          elapsedMs: roundKpSampledFrameClockValue(timeline.durationMs * progress)
         }),
     ...(timeline?.beatCount === undefined
       ? {}
       : {
           beatCount: timeline.beatCount,
-          beat: roundClockValue(timeline.beatCount * progress)
+          beat: roundKpSampledFrameClockValue(timeline.beatCount * progress)
         })
   };
 }
@@ -565,12 +618,6 @@ function cloneTransformationRef(
     targetObjectIds: [...ref.targetObjectIds],
     preserves: [...ref.preserves]
   };
-}
-
-function roundClockValue(value: number): number {
-  const rounded = Number(value.toFixed(3));
-
-  return Object.is(rounded, -0) ? 0 : rounded;
 }
 
 function uniqueStrings(values: readonly string[]): readonly string[] {

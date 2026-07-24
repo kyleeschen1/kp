@@ -145,6 +145,10 @@ export const kpSemanticAnimationPublicSeams = [
     consumerStageId: "renderer-adapter",
     contracts: [
       {
+        representation: "KpSampledFrameEnvelope",
+        scope: "generic"
+      },
+      {
         representation: "KpAnimationRuntimeFrame",
         scope: "generic"
       },

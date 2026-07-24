@@ -180,15 +180,17 @@ export const kpSemanticAnimationCompilerStages = [
     owner: "animation",
     authority: "sampled-frame",
     representations: [
+      "KpSampledFrameEnvelope",
       "KpAnimationRuntimeFrame",
       "KpAnimationFrameDescriptor"
     ],
     sourcePaths: [
+      "src/animation/sampled-frame-envelope.ts",
       "src/animation/runtime-sampler.ts",
       "src/animation/frame-descriptor.ts"
     ],
     dependsOn: ["motion-plan"],
-    migrationStatus: "target-owner"
+    migrationStatus: "canonical"
   }),
   stage({
     id: "domain-payload",

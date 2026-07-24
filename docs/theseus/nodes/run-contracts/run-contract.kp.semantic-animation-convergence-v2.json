@@ -528,6 +528,27 @@
       "scope": "s18 fraction evidence",
       "checkedAt": "2026-07-24T05:43:17.281Z",
       "notes": "All 31 fractional-linear visual samples pass with zero failures."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s19 sampled-frame envelope",
+      "checkedAt": "2026-07-24T05:50:52.803Z",
+      "notes": "All 225 focused convergence tests pass, including canonical envelope construction, rounded clock authority, typed payload discriminants, runtime projection, child frame identity, and renderer-resource exclusion."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19 type safety",
+      "checkedAt": "2026-07-24T05:50:53.906Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s19 architecture",
+      "checkedAt": "2026-07-24T05:50:54.793Z",
+      "notes": "All architecture gates pass across 263 semantic-animation files with zero frozen rendering exceptions."
     }
   ],
   "expectedLearning": [
@@ -714,7 +735,8 @@
     {
       "id": "s19",
       "title": "Canonical-sampled-frame-envelope",
-      "status": "planned",
+      "summary": "Defined kp.sampled-frame-envelope.v1 as the minimal renderer-neutral sampled-frame authority for source plan/timeline identity, normalized direction/progress clock, semantic activity, diagnostics, child frame identity, and an optional domain/schema-discriminated payload attachment. Runtime frames now project this envelope while retaining their existing descriptor and renderer-neutral render targets as distinct representations. Clock rounding is a named shared convention used identically by producer and validator. Five envelope tests plus all 225 focused tests, typecheck, and architecture gates pass; no renderer resources leaked into the envelope.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
