@@ -25,6 +25,10 @@
   "affects": [
     "plan-revision.kp.v6"
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "The approved 28-slice convergence execution has reached its final automated boundary with all required release gates passing. Priority remains active only for the final human checkpoint; no successor work is authorized before acceptance."
+  },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
     "planRevisionId": "plan-revision.kp.v6",

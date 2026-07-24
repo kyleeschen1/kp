@@ -2,8 +2,9 @@
   "id": "run-contract.kp.semantic-animation-convergence-v2",
   "kind": "run-contract",
   "title": "Semantic animation convergence execution",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "All 28 authorized execution slices and release evidence are complete. This resolves execution bookkeeping only; H7 human acceptance remains pending on priority-change.kp.semantic-animation-convergence-successor-v1 and plan-revision.kp.v7.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -794,6 +795,111 @@
       "scope": "s27 route, review, card, lesson, and roadmap preservation",
       "checkedAt": "2026-07-24T06:41:01.917Z",
       "notes": "All 14 Chromium Workbench tests pass, including lesson-first distribution ownership, card capture provenance, review identity, canonical routes, and authoritative roadmap rows."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s28 focused release proof",
+      "checkedAt": "2026-07-24T06:51:29.438Z",
+      "notes": "All 255 focused convergence tests pass on the final source state."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s28 full repository release proof",
+      "checkedAt": "2026-07-24T06:51:30.494Z",
+      "notes": "All 2140 repository tests pass on the final source state, including inference, concept catalog, architecture, routes, review, export, and accessibility contracts."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s28 typecheck and production build",
+      "checkedAt": "2026-07-24T06:51:31.348Z",
+      "notes": "Application, node, test, and domain typechecks plus production build pass; only the existing large Three.js chunk advisory remains."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s28 final architecture proof",
+      "checkedAt": "2026-07-24T06:51:32.177Z",
+      "notes": "Concept-room and semantic-reader gates pass; semantic-animation reports zero frozen rendering exceptions and 16 classified compatibility paths."
+    },
+    {
+      "command": "npm run check:reader-production; npm run check:dev-review-production; npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s28 production closure",
+      "checkedAt": "2026-07-24T06:51:32.996Z",
+      "notes": "Reader production closure passes for seven manifest routes, dev-review production closure passes, and reader budgets remain within their enforced baselines."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "s28 reader browser conformance",
+      "checkedAt": "2026-07-24T06:51:33.821Z",
+      "notes": "All 8 Chromium reader conformance tests pass across the seven reader routes and responsive branch attention."
+    },
+    {
+      "command": "npm run test:browser:animation-workbench",
+      "status": "passed",
+      "scope": "s28 Workbench browser proof",
+      "checkedAt": "2026-07-24T06:51:34.684Z",
+      "notes": "All 14 Chromium Workbench tests pass for playback, review capture, lesson-first ownership, routes, roadmap authority, bounded search, keyboard access, reduced motion, and narrow layout."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test focused export cohort",
+      "status": "passed",
+      "scope": "s28 export closure",
+      "checkedAt": "2026-07-24T06:51:35.501Z",
+      "notes": "All 26 export artifact, catalog, dependency, equation-frame, graph-frame, program-frame, and generated sample tests pass."
+    },
+    {
+      "command": "npm run visual:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s28 deterministic gold cohort",
+      "checkedAt": "2026-07-24T06:51:36.350Z",
+      "notes": "Nine topics produce 45 captures, 45 deterministic recaptures, and 18 native endpoint captures with exact canonical routes and representations."
+    },
+    {
+      "command": "npm run visual:cancellation; npm run visual:distribution-area; npm run visual:reader-gold-parity",
+      "status": "passed",
+      "scope": "s28 equation and lesson gold parity",
+      "checkedAt": "2026-07-24T06:51:37.177Z",
+      "notes": "Eight cancellation/native-settlement browser tests, 12 distribution/factoring browser tests, and 8 named editor-reader parity frames pass."
+    },
+    {
+      "command": "npm run visual:exponent-radical; npm run visual:function-wrap; npm run visual:derivative-tangent",
+      "status": "passed",
+      "scope": "s28 structural and multi-view gold captures",
+      "checkedAt": "2026-07-24T06:51:38.046Z",
+      "notes": "Exponent/radical produces 17 ready warning-free captures, function-wrap 8 warning-free captures, and derivative/tangent 6 ready warning-free captures."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation; npm run visual:linear-equation; npm run visual:editor-cards",
+      "status": "passed",
+      "scope": "s28 fraction, responsive, and card gold captures",
+      "checkedAt": "2026-07-24T06:51:38.919Z",
+      "notes": "Fractional-linear checks 31 samples with zero failures; linear-equation captures 39 states; editor cards capture 9 states."
+    },
+    {
+      "command": "npm run visual:animation-workbench; npm run visual:contact-sheet",
+      "status": "passed",
+      "scope": "s28 final human review artifacts",
+      "checkedAt": "2026-07-24T06:51:39.764Z",
+      "notes": "Workbench produces 8 wide/narrow review-available captures and the deterministic solve-x contact sheet produces 8 captures."
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "s28 performance release proof",
+      "checkedAt": "2026-07-24T06:51:40.608Z",
+      "notes": "Performance gate passes with no regressions. Existing transfer and constrained-frame product targets remain explicit and unchanged."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s28 project-control integrity",
+      "checkedAt": "2026-07-24T06:51:41.482Z",
+      "notes": "Workspace validation passes before final slice closure."
     }
   ],
   "expectedLearning": [
@@ -1043,7 +1149,8 @@
     {
       "id": "s28",
       "title": "Release-proof-and-final-human-checkpoint",
-      "status": "planned",
+      "summary": "Completed the full release preservation matrix and project-memory reconciliation. Final state passes 255 focused convergence tests, 2140 repository tests, typecheck/build, zero-exception architecture gates, seven-route reader and dev-review production closure, reader budgets, 8 reader and 14 Workbench browser tests, 26 export tests, 45 deterministic nine-topic captures with 18 native endpoints, all focused gold visual commands, and the animation performance gate with no regressions. Recorded ownership, simplification, two bounded deletions, 16 retained classified compatibility paths, residual product targets, and the proposal-only post-convergence Lisp diagnostic in the closeout. Slice execution is complete; the run remains open solely for H7 final human acceptance.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     }
   ]

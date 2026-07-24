@@ -58,6 +58,10 @@
     "workflow.kp.delivery",
     "priority-change.kp.semantic-animation-convergence-successor-v1"
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "Semantic-animation convergence implementation and release proof are complete through slice 28. The roadmap remains active at the final human acceptance boundary; the post-convergence Lisp diagnostic remains proposal-only."
+  },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
     "revision": 7,
