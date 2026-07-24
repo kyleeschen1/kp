@@ -36,6 +36,9 @@ const captures: {
     nativeTermFontSizePx: number;
     temporaryTermText: string;
     nativeTermText: string;
+    activeOwner: "source" | "target";
+    activeGapPx: number;
+    activeResidualPx: number;
   } | undefined;
   screenshot: string;
   sha256: string;
@@ -132,6 +135,9 @@ async function measureDistributionGap(
   nativeTermFontSizePx: number;
   temporaryTermText: string;
   nativeTermText: string;
+  activeOwner: "source" | "target";
+  activeGapPx: number;
+  activeResidualPx: number;
 }> {
   return stage.evaluate((element) => {
     const rect = (selector: string) => {
@@ -184,6 +190,13 @@ async function measureDistributionGap(
     );
     const temporaryPx = temporaryTerm.left - temporaryFactor.right;
     const nativePx = nativeTerm.left - nativeFactor.right;
+    const targetOpacity = Number(getComputedStyle(
+      element.querySelector<HTMLElement>(
+        '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-factor"]'
+      )!
+    ).opacity);
+    const activeOwner = targetOpacity >= 0.5 ? "target" : "source";
+    const activeGapPx = activeOwner === "target" ? nativePx : temporaryPx;
     const temporaryInkGapPx =
       temporaryTermInk.left - temporaryFactorInk.right;
     const nativeInkGapPx = nativeTermInk.left - nativeFactorInk.right;
@@ -213,7 +226,10 @@ async function measureDistributionGap(
       )!.textContent ?? "",
       nativeTermText: element.querySelector<HTMLElement>(
         '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-term"]'
-      )!.textContent ?? ""
+      )!.textContent ?? "",
+      activeOwner,
+      activeGapPx,
+      activeResidualPx: activeGapPx - nativePx
     };
   });
 }

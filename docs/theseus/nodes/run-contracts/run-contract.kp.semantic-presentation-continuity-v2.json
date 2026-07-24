@@ -145,7 +145,8 @@
     {
       "id": "slice-17",
       "title": "Gate distribution native transfer on true group residual and velocity.",
-      "status": "planned"
+      "summary": "Full native ownership is now gated by group-offset residual and sampled relative velocity. Browser proof shows source/target opacity conservation during settlement and exact target ownership by 0.94; active pre-handoff and endpoint residuals are 0px wide and narrow. Eighteen unit checks, typecheck, browser, and stable visuals pass.",
+      "status": "complete"
     },
     {
       "id": "slice-18",

@@ -57,6 +57,8 @@ import {
 import {
   kpDistributionChoreographyRuntime
 } from "../animation/distribution-choreography-runtime.ts";
+import { evaluateKpPresentationTransferReadiness } from
+  "../animation/presentation-group-continuity.ts";
 import type {
   KpFactoringChoreographyFrame,
   KpFactoringChoreographyPlan
@@ -181,6 +183,7 @@ interface DistributionChoreographyContext {
     { readonly x: number; readonly y: number }
   >;
   readonly productIndexByReflowRelationId: ReadonlyMap<string, number>;
+  readonly productOwnershipProgressBySemanticIndex: ReadonlyMap<number, number>;
   readonly groupingReflowByMotionId: ReadonlyMap<
     string,
     { readonly x: number; readonly y: number }
@@ -1026,23 +1029,25 @@ function createDistributionChoreographyContext(
     })
   );
   const frame = runtime.sample({ plan, progress });
-  const leaderProgress = frame.sourceFactor.pathProgress;
-  const leaderCenter = {
-    x: sourceFactorCenter.x + sourceFactorAnchorDelta.x * leaderProgress,
-    y:
-      sourceFactorCenter.y +
-      sourceFactorAnchorDelta.y * leaderProgress +
-      kpLessonCanonicalDistributionMotionProfile.leader.arcPx *
-        Math.sin(Math.PI * leaderProgress)
-  };
-  const productOffsetBySemanticIndex = new Map(
-    factorRelation.target.motionIds.map((motionId) => {
+  const offsetsForFrame = (
+    sampledFrame: KpDistributionChoreographyFrame
+  ): ReadonlyMap<number, { readonly x: number; readonly y: number }> => {
+    const leaderProgress = sampledFrame.sourceFactor.pathProgress;
+    const leaderCenter = {
+      x: sourceFactorCenter.x + sourceFactorAnchorDelta.x * leaderProgress,
+      y:
+        sourceFactorCenter.y +
+        sourceFactorAnchorDelta.y * leaderProgress +
+        kpLessonCanonicalDistributionMotionProfile.leader.arcPx *
+          Math.sin(Math.PI * leaderProgress)
+    };
+    return new Map(factorRelation.target!.motionIds.map((motionId) => {
       const token = geometry.targetTokens.find(
         (candidate) => candidate.motionId === motionId
       );
       const selectorIndex = factorRelation.target!.motionIds.indexOf(motionId);
       const selectorId = factorRelation.target!.selectorIds[selectorIndex];
-      const copy = frame.factorCopies.find(
+      const copy = sampledFrame.factorCopies.find(
         (candidate) => candidate.entityId === selectorId
       );
       if (token === undefined || copy === undefined) {
@@ -1074,6 +1079,31 @@ function createDistributionChoreographyContext(
           y: current.y - destination.y
         }
       ] as const;
+    }));
+  };
+  const productOffsetBySemanticIndex = offsetsForFrame(frame);
+  const sampleDelta = 0.001;
+  const previousProgress = Math.max(0, progress - sampleDelta);
+  const previousOffsets = offsetsForFrame(
+    runtime.sample({ plan, progress: previousProgress })
+  );
+  const productOwnershipProgressBySemanticIndex = new Map(
+    [...productOffsetBySemanticIndex].map(([semanticIndex, offset]) => {
+      const previous = previousOffsets.get(semanticIndex) ?? offset;
+      const deltaProgress = Math.max(sampleDelta, progress - previousProgress);
+      const readiness = evaluateKpPresentationTransferReadiness({
+        positionResidualPx: Math.hypot(offset.x, offset.y),
+        sizeResidualPx: 0,
+        relativeVelocityPxPerProgress: Math.hypot(
+          offset.x - previous.x,
+          offset.y - previous.y
+        ) / deltaProgress
+      });
+      const settlement = frame.productSettlementProgress;
+      return [
+        semanticIndex,
+        settlement < 1 || readiness.ready ? settlement : 0.99
+      ] as const;
     })
   );
   const productIndexByReflowRelationId = new Map(
@@ -1095,6 +1125,7 @@ function createDistributionChoreographyContext(
     sourceFactorAnchorDelta,
     productOffsetBySemanticIndex,
     productIndexByReflowRelationId,
+    productOwnershipProgressBySemanticIndex,
     groupingReflowByMotionId
   };
 }
@@ -2135,7 +2166,10 @@ function sampleDistributionRelation(
     const sourceFactorPose = {
       opacity:
         context.frame.sourceFactor.opacity *
-        (1 - context.frame.productSettlementProgress),
+        (1 - (
+          context.productOwnershipProgressBySemanticIndex.get(0) ??
+          context.frame.productSettlementProgress
+        )),
       x: context.sourceFactorAnchorDelta.x * leaderProgress,
       y: context.sourceFactorAnchorDelta.y * leaderProgress + leaderArc,
       scale: context.frame.sourceFactor.scale
@@ -2156,11 +2190,15 @@ function sampleDistributionRelation(
         const groupOffset = context.productOffsetBySemanticIndex.get(
           copy.semanticIndex
         ) ?? { x: 0, y: 0 };
+        const ownershipProgress =
+          context.productOwnershipProgressBySemanticIndex.get(
+            copy.semanticIndex
+          ) ?? context.frame.productSettlementProgress;
         return {
           ...frameToken(token, "target", {
             opacity: Math.max(
               copy.opacity,
-              context.frame.productSettlementProgress
+              ownershipProgress
             ),
             x: groupOffset.x,
             y: groupOffset.y,
@@ -2183,15 +2221,18 @@ function sampleDistributionRelation(
       const groupOffset = context.productOffsetBySemanticIndex.get(
         productIndex
       ) ?? { x: 0, y: 0 };
+      const ownershipProgress =
+        context.productOwnershipProgressBySemanticIndex.get(productIndex) ??
+        context.frame.productSettlementProgress;
       return [
         ...sourceTokens.map((token) => frameToken(token, "source", {
-          opacity: 1 - context.frame.productSettlementProgress,
+          opacity: 1 - ownershipProgress,
           x: (relation.delta?.x ?? 0) * reflow,
           y: (relation.delta?.y ?? 0) * reflow,
           scale: 1
         })),
         ...targetTokens.map((token) => frameToken(token, "target", {
-          opacity: context.frame.productSettlementProgress,
+          opacity: ownershipProgress,
           x: groupOffset.x,
           y: groupOffset.y,
           scale: 1

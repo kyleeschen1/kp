@@ -6,6 +6,7 @@ import {
   evaluateKpInterOwnerEquivalence,
   evaluateKpIntraOwnerContinuity,
   evaluateKpPresentationDeclarationGate,
+  evaluateKpPresentationTransferReadiness,
   evaluateKpPresentationTemporalContinuity,
   kpDefaultPresentationContinuityBudget,
   observeKpCompositeInk,
@@ -51,6 +52,19 @@ test("presentation groups describe semantic members without renderer resources",
   assert.equal(JSON.stringify(contract).includes("Element"), false);
   assert.equal(JSON.stringify(contract).includes("WebGL"), false);
   assert.equal(kpDefaultPresentationContinuityBudget.positionPx, 0.5);
+});
+
+test("native transfer requires residual and velocity readiness", () => {
+  assert.equal(evaluateKpPresentationTransferReadiness({
+    positionResidualPx: 0.2,
+    sizeResidualPx: 0.1,
+    relativeVelocityPxPerProgress: 0.4
+  }).ready, true);
+  assert.equal(evaluateKpPresentationTransferReadiness({
+    positionResidualPx: 0.2,
+    sizeResidualPx: 0.1,
+    relativeVelocityPxPerProgress: 2
+  }).ready, false);
 });
 
 test("promotion requires one declaration per compound target", () => {

@@ -120,6 +120,13 @@ export interface KpPresentationDeclarationGateResult {
   readonly duplicateCompoundTargetIds: readonly string[];
 }
 
+export interface KpPresentationTransferReadiness {
+  readonly ready: boolean;
+  readonly positionResidualPx: number;
+  readonly sizeResidualPx: number;
+  readonly relativeVelocityPxPerProgress: number;
+}
+
 export const kpDefaultPresentationContinuityBudget:
   KpPresentationContinuityBudget = {
     positionPx: 0.5,
@@ -271,6 +278,25 @@ export function evaluateKpPresentationDeclarationGate(input: {
         : "fail",
     missingCompoundTargetIds,
     duplicateCompoundTargetIds
+  };
+}
+
+export function evaluateKpPresentationTransferReadiness(input: {
+  readonly positionResidualPx: number;
+  readonly sizeResidualPx: number;
+  readonly relativeVelocityPxPerProgress: number;
+  readonly budget?: KpPresentationContinuityBudget | undefined;
+}): KpPresentationTransferReadiness {
+  const budget = input.budget ?? kpDefaultPresentationContinuityBudget;
+  return {
+    ready:
+      input.positionResidualPx <= budget.positionPx &&
+      input.sizeResidualPx <= budget.sizePx &&
+      input.relativeVelocityPxPerProgress <=
+        budget.velocityPxPerProgress,
+    positionResidualPx: input.positionResidualPx,
+    sizeResidualPx: input.sizeResidualPx,
+    relativeVelocityPxPerProgress: input.relativeVelocityPxPerProgress
   };
 }
 

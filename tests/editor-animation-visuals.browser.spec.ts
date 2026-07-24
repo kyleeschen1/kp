@@ -2365,6 +2365,11 @@ test("wrap and distribution satisfy their executable choreography contracts", as
     settlementOwnerState[3]!.rect.left -
     settlementOwnerState[2]!.rect.right
   )).toBeLessThan(0.05);
+  await scrubber.fill("0.94");
+  await expect(sourceFactor).toHaveCSS("opacity", "0");
+  await expect(sourceLeftTerm).toHaveCSS("opacity", "0");
+  await expect(targetFactors.nth(0)).toHaveCSS("opacity", "1");
+  await expect(targetLeftTerm).toHaveCSS("opacity", "1");
 
   await scrubber.fill("0.359");
   const beforeFormerTransfer = await sourceFactor.evaluate((element) => {
