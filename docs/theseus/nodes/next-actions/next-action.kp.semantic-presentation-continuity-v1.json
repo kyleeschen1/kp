@@ -60,6 +60,20 @@
       "scope": "focused",
       "checkedAt": "2026-07-24T14:36:29.954Z",
       "notes": "Seven deterministic wide/narrow distribution and radical continuity captures produced with a versioned manifest."
+    },
+    {
+      "command": "npm run visual:presentation-continuity",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-24T15:05:06.230Z",
+      "notes": "13 deterministic paired lesson/card captures produced plus distribution contact sheet; active card residual is 0px at pre-handoff and endpoint in wide and narrow viewports."
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-24T15:05:14.693Z",
+      "notes": "12/12 canonical lesson browser tests pass after card settlement changes, including reverse, resize, URL, endpoint ownership, and synchronized algebra/area clocks."
     }
   ],
   "progress": {

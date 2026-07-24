@@ -95,6 +95,14 @@ failure is the nonzero magnitude. Because the residual survives through the
 temporary owner's endpoint pose, native ownership has to correct it rather
 than merely reveal equivalent geometry.
 
+After group-local settlement, the visual manifest still reports the old
+source wrapper's residual for diagnosis, but the active presentation owner is
+the target-native product group by pre-handoff. Its measured residual is
+`0px` at both progress `0.94` and `1` in wide and narrow viewports. The lesson
+and card also sample the same canonical choreography frame at equivalent
+distribution progress; their paired contact sheet is produced by
+`npm run visual:presentation-continuity`.
+
 ## Recommended fix direction
 
 Treat the first factor and its addend as a persistent target product cluster

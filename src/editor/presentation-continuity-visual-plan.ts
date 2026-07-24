@@ -4,6 +4,7 @@ export interface KpPresentationContinuityVisualCase {
   readonly animationId: string;
   readonly query: string;
   readonly progress: number;
+  readonly surface: "workbench-card" | "lesson";
   readonly viewport: { readonly width: number; readonly height: number };
 }
 
@@ -42,6 +43,7 @@ export function createKpPresentationContinuityVisualPlan():
   return [
     ...frames.map((frame) => ({
       ...frame,
+      surface: "workbench-card" as const,
       id: `${frame.id}-wide`,
       viewport: { width: 1280, height: 900 }
     })),
@@ -49,8 +51,25 @@ export function createKpPresentationContinuityVisualPlan():
       .filter((frame) => frame.family === "distribution")
       .map((frame) => ({
         ...frame,
+        surface: "workbench-card" as const,
         id: `${frame.id}-narrow`,
         viewport: { width: 390, height: 844 }
-      }))
+      })),
+    ...frames
+      .filter((frame) => frame.family === "distribution")
+      .flatMap((frame) => [
+        {
+          ...frame,
+          surface: "lesson" as const,
+          id: `${frame.id}-lesson-wide`,
+          viewport: { width: 1280, height: 900 }
+        },
+        {
+          ...frame,
+          surface: "lesson" as const,
+          id: `${frame.id}-lesson-narrow`,
+          viewport: { width: 390, height: 844 }
+        }
+      ])
   ];
 }

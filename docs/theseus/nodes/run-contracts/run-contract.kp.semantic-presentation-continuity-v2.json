@@ -157,7 +157,8 @@
     {
       "id": "slice-19",
       "title": "Prove lesson/card canonical schedule parity and produce the distribution contact sheet.",
-      "status": "planned"
+      "summary": "Lesson/card parity is executable at seven canonical samples (within 1e-12 numeric normalization). Stable tooling produces 13 deterministic paired lesson/card and radical captures plus a distribution contact sheet; 12/12 lesson browser tests, typecheck, and visual gates pass.",
+      "status": "complete"
     },
     {
       "id": "slice-20",
