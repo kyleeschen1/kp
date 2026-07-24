@@ -151,3 +151,43 @@ mid-transit frame at progress `0.83`: operator overlap opacity remains `0`,
 active glyph size residual remains `0px`, and the moving glyph converges from
 `0.34px` residual to `0px` before ownership switches in the wide viewport
 (`0.23px` to `0px` narrow).
+
+## Meta-diagnosis: repeated two-owner fades
+
+The operator repair initially left the same fade on persistent terms because
+the renderer represented settlement readiness as a continuous opacity value.
+That single value answered two different questions:
+
+1. how close the moving presentation is to native geometry; and
+2. which presentation owner should draw the semantic entity.
+
+The first is continuous. The second must be discrete. Treating both as one
+progress value made a crossfade look like a natural continuation of the
+settlement animation, and the browser regression reinforced the mistake by
+asserting complementary source/target opacity instead of rejecting it.
+
+The durable rule is now a typed `discrete-at-equivalence` handoff:
+
+- the moving owner stays fully opaque while geometry converges;
+- the native owner stays fully hidden until position, size, and velocity are
+  inside the continuity budget;
+- ownership then switches in one frame, with no overlap and no vacancy;
+- forward, rewind, and direct seek select the same owner at the same semantic
+  progress.
+
+This applies to identity-preserving presentation changes such as persistent
+terms and operators. It intentionally does not ban opacity animation for real
+semantic entry, exit, or fission. In distribution, the original common factor
+becoming two factor copies is a one-to-many semantic fission, not a native
+ownership handoff.
+
+The regression layers now reflect that distinction:
+
+- pure invariant tests reject geometry-perfect crossfades, simultaneous owner
+  vacancy, premature native ownership, and forward/reverse owner mismatch;
+- the browser exemplar checks both persistent terms and the operator at
+  transit, immediately before transfer, and after transfer;
+- `npm run visual:presentation-continuity` records and validates generic
+  handoff observations for the left term, right term, and operator at wide and
+  narrow viewports. The command fails on owner overlap, owner vacancy, or a
+  native transfer before measured ink geometry is equivalent.

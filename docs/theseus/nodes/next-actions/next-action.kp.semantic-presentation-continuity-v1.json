@@ -186,6 +186,48 @@
       "scope": "distribution discrete term handoff",
       "checkedAt": "2026-07-24T16:00:51.191Z",
       "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-presentation-group-continuity.test.ts tests/kp-distribution-choreography.test.ts tests/kp-factoring-choreography.test.ts tests/presentation-continuity-visual-plan.test.ts tests/distribution-lesson-card-parity.test.ts",
+      "status": "passed",
+      "scope": "discrete owner law and distribution/factoring choreography",
+      "checkedAt": "2026-07-24T16:07:41.370Z",
+      "notes": "30 tests passed; negative gates reject geometry-perfect fades, owner vacancy, premature transfer, and direction mismatch."
+    },
+    {
+      "command": "npm run visual:presentation-continuity",
+      "status": "passed",
+      "scope": "generic distribution native handoff gate",
+      "checkedAt": "2026-07-24T16:07:47.541Z",
+      "notes": "17 stable captures passed. Left term, right term, and operator report zero owner overlap and vacancy at every sampled wide/narrow frame; native ownership occurs only at zero ink position and size residual."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --grep wrap-and-distribution-or-factoring",
+      "status": "passed",
+      "scope": "distribution and factoring browser handoff",
+      "checkedAt": "2026-07-24T16:08:00.726Z",
+      "notes": "2 Chromium exemplars passed; both persistent terms and the operator remain single-owner through transit and land at matching ink geometry before native transfer."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "generic handoff visual gate",
+      "checkedAt": "2026-07-24T16:08:09.336Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "canonical lesson preservation",
+      "checkedAt": "2026-07-24T16:08:15.170Z",
+      "notes": "12 Chromium lesson checks passed across forward/inverse playback, endpoint ownership, synchronized algebra/area motion, URL state, and responsive behavior."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "shared renderer impact gate",
+      "checkedAt": "2026-07-24T16:08:20.443Z",
+      "notes": "All 39 deterministic linear-equation visual baseline states captured successfully."
     }
   ],
   "progress": {

@@ -2,9 +2,42 @@ import { createHash } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import {
+  evaluateKpDiscretePresentationHandoff,
+  type KpPresentationHandoffSample
+} from "../src/animation/presentation-group-continuity.ts";
 import { createKpPresentationContinuityVisualPlan } from
   "../src/editor/presentation-continuity-visual-plan.ts";
 import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
+
+interface DistributionHandoffObservation
+  extends KpPresentationHandoffSample {
+  readonly id: "left-term" | "right-term" | "operator";
+  readonly activeOwner: "source" | "target";
+  readonly overlapOpacity: number;
+  readonly vacancyOpacity: number;
+}
+
+interface DistributionGapMeasurement {
+  readonly temporaryPx: number;
+  readonly nativePx: number;
+  readonly residualPx: number;
+  readonly temporaryFactorWidthPx: number;
+  readonly nativeFactorWidthPx: number;
+  readonly temporaryTermWidthPx: number;
+  readonly nativeTermWidthPx: number;
+  readonly temporaryInkGapPx: number;
+  readonly nativeInkGapPx: number;
+  readonly inkResidualPx: number;
+  readonly temporaryTermFontSizePx: number;
+  readonly nativeTermFontSizePx: number;
+  readonly temporaryTermText: string;
+  readonly nativeTermText: string;
+  readonly activeOwner: "source" | "target";
+  readonly activeGapPx: number;
+  readonly activeResidualPx: number;
+  readonly handoffs: readonly DistributionHandoffObservation[];
+}
 
 const outputRoot = path.resolve(
   process.env["KP_VISUAL_OUTPUT"] ??
@@ -22,30 +55,7 @@ const captures: {
   animationId: string;
   progress: number;
   viewport: { width: number; height: number };
-  distributionGap?: {
-    temporaryPx: number;
-    nativePx: number;
-    residualPx: number;
-    temporaryFactorWidthPx: number;
-    nativeFactorWidthPx: number;
-    temporaryTermWidthPx: number;
-    nativeTermWidthPx: number;
-    temporaryInkGapPx: number;
-    nativeInkGapPx: number;
-    inkResidualPx: number;
-    temporaryTermFontSizePx: number;
-    nativeTermFontSizePx: number;
-    temporaryTermText: string;
-    nativeTermText: string;
-    activeOwner: "source" | "target";
-    activeGapPx: number;
-    activeResidualPx: number;
-    operatorOpacityTotal: number;
-    operatorOverlapOpacity: number;
-    activeOperatorOwner: "source" | "target";
-    activeOperatorResidualPx: number;
-    activeOperatorSizeResidualPx: number;
-  } | undefined;
+  distributionGap?: DistributionGapMeasurement | undefined;
   screenshot: string;
   sha256: string;
 }[] = [];
@@ -90,6 +100,7 @@ try {
       sha256: firstHash
     });
   }
+  enforceDistributionHandoffContinuity(captures);
   const manifestPath = path.join(outputRoot, "manifest.json");
   const contactSheetPath = path.join(
     outputRoot,
@@ -97,7 +108,7 @@ try {
   );
   await writeFile(contactSheetPath, distributionContactSheet(captures), "utf8");
   await writeFile(manifestPath, `${JSON.stringify({
-    schemaVersion: "kp.presentation-continuity-visual.v1",
+    schemaVersion: "kp.presentation-continuity-visual.v2",
     captures
   }, null, 2)}\n`, "utf8");
   console.log(JSON.stringify({
@@ -202,30 +213,7 @@ function distributionContactSheet(
 
 async function measureDistributionGap(
   stage: import("playwright").Locator
-): Promise<{
-  temporaryPx: number;
-  nativePx: number;
-  residualPx: number;
-  temporaryFactorWidthPx: number;
-  nativeFactorWidthPx: number;
-  temporaryTermWidthPx: number;
-  nativeTermWidthPx: number;
-  temporaryInkGapPx: number;
-  nativeInkGapPx: number;
-  inkResidualPx: number;
-  temporaryTermFontSizePx: number;
-  nativeTermFontSizePx: number;
-  temporaryTermText: string;
-  nativeTermText: string;
-  activeOwner: "source" | "target";
-  activeGapPx: number;
-  activeResidualPx: number;
-  operatorOpacityTotal: number;
-  operatorOverlapOpacity: number;
-  activeOperatorOwner: "source" | "target";
-  activeOperatorResidualPx: number;
-  activeOperatorSizeResidualPx: number;
-}> {
+): Promise<DistributionGapMeasurement> {
   return stage.evaluate((element) => {
     const rect = (selector: string) => {
       const node = element.querySelector<HTMLElement>(selector);
@@ -244,23 +232,6 @@ async function measureDistributionGap(
     const nativeTerm = rect(
       '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-term"]'
     );
-    const temporaryOperatorNode = element.querySelector<HTMLElement>(
-      '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.plus"]'
-    );
-    const nativeOperatorNode = element.querySelector<HTMLElement>(
-      '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.plus"]'
-    );
-    if (temporaryOperatorNode === null || nativeOperatorNode === null) {
-      throw new Error("Missing distribution operator continuity probe.");
-    }
-    const temporaryOperatorOpacity = Number(
-      getComputedStyle(temporaryOperatorNode).opacity
-    );
-    const nativeOperatorOpacity = Number(
-      getComputedStyle(nativeOperatorNode).opacity
-    );
-    const activeOperatorOwner =
-      nativeOperatorOpacity >= 0.5 ? "target" : "source";
     const inkRect = (selector: string) => {
       const node = element.querySelector<HTMLElement>(selector);
       if (node === null) throw new Error(`Missing distribution ink probe ${selector}.`);
@@ -292,18 +263,48 @@ async function measureDistributionGap(
     const nativeTermInk = inkRect(
       '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-term"]'
     );
-    const temporaryOperatorInk = inkRect(
-      '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.plus"]'
-    );
-    const nativeOperatorInk = inkRect(
-      '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.plus"]'
-    );
-    const activeOperatorInk = activeOperatorOwner === "target"
-      ? nativeOperatorInk
-      : temporaryOperatorInk;
-    const nativeOperatorCenter = {
-      x: nativeOperatorInk.left + nativeOperatorInk.width / 2,
-      y: nativeOperatorInk.top + nativeOperatorInk.height / 2
+    const handoffObservation = (
+      id: "left-term" | "right-term" | "operator",
+      sourceSelector: string,
+      targetSelector: string
+    ) => {
+      const source = element.querySelector<HTMLElement>(sourceSelector);
+      const target = element.querySelector<HTMLElement>(targetSelector);
+      if (source === null || target === null) {
+        throw new Error(`Missing distribution ${id} handoff probe.`);
+      }
+      const movingOpacity = Number(getComputedStyle(source).opacity);
+      const nativeOpacity = Number(getComputedStyle(target).opacity);
+      const activeOwner: "source" | "target" =
+        nativeOpacity >= 0.5 ? "target" : "source";
+      const movingInk = inkRect(sourceSelector);
+      const nativeInk = inkRect(targetSelector);
+      const activeInk = activeOwner === "target" ? nativeInk : movingInk;
+      const center = (rect: DOMRect) => ({
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2
+      });
+      const activeCenter = center(activeInk);
+      const nativeCenter = center(nativeInk);
+      return {
+        id,
+        progress: 0,
+        movingOpacity,
+        nativeOpacity,
+        activeOwner,
+        overlapOpacity: Math.min(movingOpacity, nativeOpacity),
+        vacancyOpacity: 1 - Math.max(movingOpacity, nativeOpacity),
+        positionResidualPx: Math.hypot(
+          activeCenter.x - nativeCenter.x,
+          activeCenter.y - nativeCenter.y
+        ),
+        sizeResidualPx: Math.hypot(
+          activeInk.width - nativeInk.width,
+          activeInk.height - nativeInk.height
+        ),
+        // Deterministic seek captures are settled before measurement.
+        relativeVelocityPxPerProgress: 0
+      };
     };
     const temporaryPx = temporaryTerm.left - temporaryFactor.right;
     const nativePx = nativeTerm.left - nativeFactor.right;
@@ -347,25 +348,75 @@ async function measureDistributionGap(
       activeOwner,
       activeGapPx,
       activeResidualPx: activeGapPx - nativePx,
-      operatorOpacityTotal:
-        temporaryOperatorOpacity + nativeOperatorOpacity,
-      operatorOverlapOpacity: Math.min(
-        temporaryOperatorOpacity,
-        nativeOperatorOpacity
-      ),
-      activeOperatorOwner,
-      activeOperatorResidualPx: Math.hypot(
-        activeOperatorInk.left +
-          activeOperatorInk.width / 2 -
-          nativeOperatorCenter.x,
-        activeOperatorInk.top +
-          activeOperatorInk.height / 2 -
-          nativeOperatorCenter.y
-      ),
-      activeOperatorSizeResidualPx: Math.hypot(
-        activeOperatorInk.width - nativeOperatorInk.width,
-        activeOperatorInk.height - nativeOperatorInk.height
-      )
+      handoffs: [
+        handoffObservation(
+          "left-term",
+          '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.left-term"]',
+          '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-term"]'
+        ),
+        handoffObservation(
+          "right-term",
+          '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.right-term"]',
+          '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.right-term"]'
+        ),
+        handoffObservation(
+          "operator",
+          '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.plus"]',
+          '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.plus"]'
+        )
+      ]
     };
   });
+}
+
+function enforceDistributionHandoffContinuity(
+  records: readonly {
+    id: string;
+    family: string;
+    surface: "workbench-card" | "lesson";
+    progress: number;
+    viewport: { width: number; height: number };
+    distributionGap?: DistributionGapMeasurement | undefined;
+  }[]
+): void {
+  const workbenchRecords = records.filter((record) =>
+    record.family === "distribution" &&
+    record.surface === "workbench-card" &&
+    record.distributionGap !== undefined
+  );
+  const viewportKeys = new Set(workbenchRecords.map((record) =>
+    `${record.viewport.width}x${record.viewport.height}`
+  ));
+  for (const viewportKey of viewportKeys) {
+    const viewportRecords = workbenchRecords.filter((record) =>
+      `${record.viewport.width}x${record.viewport.height}` === viewportKey
+    );
+    for (const handoffId of ["left-term", "right-term", "operator"] as const) {
+      const samples = viewportRecords.flatMap((record) => {
+        const observation = record.distributionGap?.handoffs.find(
+          (handoff) => handoff.id === handoffId
+        );
+        return observation === undefined
+          ? []
+          : [{ ...observation, progress: record.progress }];
+      });
+      const issues = evaluateKpDiscretePresentationHandoff({
+        contract: {
+          id: `distribution.${viewportKey}.${handoffId}`,
+          kind: "presentation-handoff",
+          semanticEntityIds: [`distribution.${handoffId}`],
+          movingOwnerId: `distribution.${handoffId}.moving`,
+          nativeOwnerId: `distribution.${handoffId}.native`,
+          mode: "discrete-at-equivalence"
+        },
+        samples
+      });
+      if (issues.length > 0) {
+        throw new Error(
+          `Distribution ${handoffId} handoff failed at ${viewportKey}: ` +
+          issues.map((issue) => `${issue.kind} (${issue.residual})`).join(", ")
+        );
+      }
+    }
+  }
 }
