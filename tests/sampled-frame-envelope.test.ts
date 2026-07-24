@@ -82,9 +82,15 @@ test("payload attachment requires typed domain and schema discriminants", () => 
   const typed = createKpSampledFrameEnvelope({
     ...baseEnvelope,
     payload: {
-      domain: "test-domain",
-      schemaVersion: "kp.test-frame.v1",
-      stateId: "state.test"
+      domain: "equation",
+      schemaVersion: "kp.sampled-frame-payload.equation.v1",
+      kind: "equation-frame-payload",
+      frameId: "frame.equation.test",
+      assetId: "asset.equation.test",
+      surface: "katex-dom",
+      objects: [],
+      selectors: [],
+      correspondences: []
     }
   });
 
@@ -92,9 +98,10 @@ test("payload attachment requires typed domain and schema discriminants", () => 
     path: "$.payload",
     code: "envelope.payload",
     message:
-      "Frame payload attachments require typed domain and schemaVersion discriminants."
+      "Frame payload attachment is invalid: Domain frame payload must declare equation, graph-diagram, or program-trace."
   }]);
-  assert.equal(typed.payload?.stateId, "state.test");
+  assert.equal(typed.payload?.domain, "equation");
+  assert.equal(Object.isFrozen(typed.payload), true);
 });
 
 test("runtime frames project shared activity and child clocks into envelopes", () => {

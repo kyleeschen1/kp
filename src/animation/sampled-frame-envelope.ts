@@ -1,22 +1,17 @@
 import type {
   KpAnimationAssetTransformationTreeDirection
 } from "./asset.ts";
+import {
+  createKpSampledFrameDomainPayload,
+  validateKpSampledFrameDomainPayload,
+  type KpSampledFrameDomainPayload
+} from "./sampled-frame-payload.ts";
 
 export const kpSampledFrameEnvelopeSchemaVersion =
   "kp.sampled-frame-envelope.v1" as const;
 export const kpSampledFrameClockPrecision = 3;
 
-export interface KpSampledFramePayloadAttachment<
-  TDomain extends string = string,
-  TSchemaVersion extends string = string
-> {
-  readonly domain: TDomain;
-  readonly schemaVersion: TSchemaVersion;
-}
-
-export interface KpSampledFrameEnvelope<
-  TPayload extends KpSampledFramePayloadAttachment = never
-> {
+export interface KpSampledFrameEnvelope {
   readonly schemaVersion: typeof kpSampledFrameEnvelopeSchemaVersion;
   readonly id: string;
   readonly kind: "sampled-frame-envelope";
@@ -43,7 +38,7 @@ export interface KpSampledFrameEnvelope<
     readonly childFrameIds: readonly string[];
   };
   readonly diagnostics: readonly KpSampledFrameEnvelopeDiagnostic[];
-  readonly payload?: TPayload | undefined;
+  readonly payload?: KpSampledFrameDomainPayload | undefined;
 }
 
 export interface KpSampledFrameEnvelopeDiagnostic {
@@ -63,11 +58,9 @@ export interface KpSampledFrameEnvelopeIssue {
   readonly message: string;
 }
 
-export function createKpSampledFrameEnvelope<
-  TPayload extends KpSampledFramePayloadAttachment = never
->(
-  input: KpSampledFrameEnvelope<TPayload>
-): KpSampledFrameEnvelope<TPayload> {
+export function createKpSampledFrameEnvelope(
+  input: KpSampledFrameEnvelope
+): KpSampledFrameEnvelope {
   const issues = validateKpSampledFrameEnvelope(input);
   if (issues.length > 0) {
     throw new Error(issues.map(({ message }) => message).join(" "));
@@ -91,7 +84,7 @@ export function createKpSampledFrameEnvelope<
     ),
     ...(input.payload === undefined
       ? {}
-      : { payload: Object.freeze({ ...input.payload }) })
+      : { payload: createKpSampledFrameDomainPayload(input.payload) })
   });
 }
 
@@ -120,18 +113,12 @@ export function validateKpSampledFrameEnvelope(
   validateActivity(value["activity"], issues);
   validateDiagnostics(value["diagnostics"], issues);
   if (value["payload"] !== undefined) {
-    const payload = value["payload"];
-    if (
-      !isRecord(payload) ||
-      typeof payload["domain"] !== "string" ||
-      payload["domain"].length === 0 ||
-      typeof payload["schemaVersion"] !== "string" ||
-      payload["schemaVersion"].length === 0
-    ) {
+    const payloadIssues = validateKpSampledFrameDomainPayload(value["payload"]);
+    if (payloadIssues.length > 0) {
       issues.push(issue(
         "$.payload",
         "envelope.payload",
-        "Frame payload attachments require typed domain and schemaVersion discriminants."
+        `Frame payload attachment is invalid: ${payloadIssues[0]!.message}`
       ));
     }
   }

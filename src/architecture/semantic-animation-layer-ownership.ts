@@ -145,6 +145,18 @@ export const kpSemanticAnimationPublicSeams = [
     consumerStageId: "renderer-adapter",
     contracts: [
       {
+        representation: "KpEquationSampledFramePayload",
+        scope: "equation-domain"
+      },
+      {
+        representation: "KpGraphDiagramSampledFramePayload",
+        scope: "graph-domain"
+      },
+      {
+        representation: "KpProgramTraceSampledFramePayload",
+        scope: "program-trace-domain"
+      },
+      {
         representation: "KpSampledFrameEnvelope",
         scope: "generic"
       },

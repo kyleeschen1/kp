@@ -197,11 +197,16 @@ export const kpSemanticAnimationCompilerStages = [
     owner: "domain-ir",
     authority: "domain-frame-payload",
     representations: [
+      "KpSampledFrameDomainPayload",
+      "KpEquationSampledFramePayload",
+      "KpGraphDiagramSampledFramePayload",
+      "KpProgramTraceSampledFramePayload",
       "KpEquationMotionFrame",
       "KpDerivativeTangentRuntimeFrame",
       "KpProgramTraceFramePreview"
     ],
     sourcePaths: [
+      "src/animation/sampled-frame-payload.ts",
       "src/rendering/equation-motion-sampler.ts",
       "src/animation/derivative-tangent-runtime-frame.ts",
       "src/animation/program-trace-frame-preview.ts"

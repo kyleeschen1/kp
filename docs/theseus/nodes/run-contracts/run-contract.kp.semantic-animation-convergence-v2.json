@@ -549,6 +549,34 @@
       "scope": "s19 architecture",
       "checkedAt": "2026-07-24T05:50:54.793Z",
       "notes": "All architecture gates pass across 263 semantic-animation files with zero frozen rendering exceptions."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/sampled-frame-payload.test.ts tests/sampled-frame-envelope.test.ts",
+      "status": "passed",
+      "scope": "s20 payload contracts",
+      "checkedAt": "2026-07-24T05:59:27.386Z",
+      "notes": "All 11 payload and envelope tests pass for construction, discriminants, closed shapes, reference closure, JSON round trips, immutability, and validated decoding without unchecked domain coercion."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s20 focused convergence suite",
+      "checkedAt": "2026-07-24T05:59:28.641Z",
+      "notes": "All 231 focused convergence tests pass with the three typed payload families included."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20 type safety",
+      "checkedAt": "2026-07-24T05:59:30.304Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s20 architecture",
+      "checkedAt": "2026-07-24T05:59:31.524Z",
+      "notes": "All architecture gates pass across 264 semantic-animation files with zero frozen rendering exceptions; typed domain payloads are registered as domain-honest public seams."
     }
   ],
   "expectedLearning": [
@@ -742,7 +770,8 @@
     {
       "id": "s20",
       "title": "Typed-domain-payload-convention",
-      "status": "planned",
+      "summary": "Added a closed, versioned KpSampledFrameDomainPayload union with equation, graph/diagram, and program-trace attachments. Each family has exact shapes, immutable constructors, unknown-input parsing, schema/domain mismatch rejection, duplicate and reference checks, and JSON round-trip restoration; unknown metadata properties and unchecked domain coercions are rejected. The sampled-frame envelope now accepts only this union and deep-clones its payload. Compiler and layer ownership inventories name the three domain-honest seams. All 11 targeted tests, 231 focused tests, typecheck, and architecture gates pass.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
