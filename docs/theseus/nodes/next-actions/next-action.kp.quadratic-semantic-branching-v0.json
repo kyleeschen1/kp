@@ -36,6 +36,13 @@
       "scope": "slice-01 authoritative roadmap reconciliation",
       "checkedAt": "2026-07-24T19:32:57.235Z",
       "notes": "Five roadmap coverage and link tests passed; application, Node, test, and domain TypeScript projects passed; successor plan v8 activated atomically and workspace validation passed."
+    },
+    {
+      "command": "focused preservation tests; npm run typecheck; npm run audit:presentation-groups; npm run test:semantic-animation-convergence; focused Workbench Chromium; npm run visual:animation-workbench; npm run visual:quadratic-branching",
+      "status": "passed",
+      "scope": "slice-02 preservation manifest and stable visual harness",
+      "checkedAt": "2026-07-24T19:40:21.658Z",
+      "notes": "Eight focused tests and 255 convergence tests passed; planned quadratic mounted zero players in Chromium and all eight new reference captures; the established Workbench visual suite also passed after restarting the stale dev server; radical remains explicitly blocked with its known residual."
     }
   ],
   "progress": {
