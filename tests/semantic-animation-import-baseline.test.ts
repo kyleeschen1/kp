@@ -10,14 +10,19 @@ import {
 
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 const renderingImportPattern =
-  /import\s+(?:type\s+)?(?:\{[\s\S]*?\}|[^;]+?)\s+from\s+["'](\.\.\/rendering\/[^"']+)["'];/g;
+  /import\s+(?:type\s+)?(?:\{[\s\S]*?\}|[^;]+?)\s+from\s+["']((?:\.\.\/)+rendering\/[^"']+)["'];/g;
+const renderingSideEffectImportPattern =
+  /import\s+["']((?:\.\.\/)+rendering\/[^"']+)["'];/g;
 
 test("rendering import baseline exactly matches semantic and animation source", () => {
   const actual = ["src/semantic", "src/animation"]
     .flatMap(typescriptFilesBeneath)
     .flatMap((sourcePath) => {
     const source = readFileSync(join(projectRoot, sourcePath), "utf8");
-    return [...source.matchAll(renderingImportPattern)].map((match) =>
+    return [
+      ...source.matchAll(renderingImportPattern),
+      ...source.matchAll(renderingSideEffectImportPattern)
+    ].map((match) =>
       importKey(sourcePath, match[1]!)
     );
   });
@@ -38,7 +43,7 @@ test("temporary rendering imports are exact and own a retirement slice", () => {
     assert.ok(dependency.rationale.length >= 24);
     keys.add(key);
   }
-  assert.equal(keys.size, 26);
+  assert.equal(keys.size, 27);
 });
 
 test("dependency retirement follows the approved ownership sequence", () => {

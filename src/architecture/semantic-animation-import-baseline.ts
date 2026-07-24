@@ -21,7 +21,8 @@ export type KpSemanticAnimationRenderingImportRetirementSlice =
 
 export interface KpSemanticAnimationRenderingImportException {
   readonly sourcePath: `src/${"semantic" | "animation"}/${string}.ts`;
-  readonly modulePath: `../rendering/${string}.ts`;
+  readonly modulePath:
+    `${"../rendering/" | "../../rendering/"}${string}.ts`;
   readonly classification: KpSemanticAnimationRenderingImportClassification;
   readonly intendedOwner: KpSemanticAnimationRenderingImportOwner;
   readonly retirementSlice: KpSemanticAnimationRenderingImportRetirementSlice;
@@ -222,6 +223,15 @@ export const kpSemanticAnimationRenderingImportBaseline = [
     intendedOwner: "presentation",
     retirementSlice: "s13",
     rationale: "Cancellation intent resolution belongs at the typed presentation seam."
+  }),
+  exception({
+    sourcePath: "src/animation/catalog-packs/algebra.ts",
+    modulePath: "../../rendering/equation-witnessed-annihilation-register.ts",
+    classification: "compatibility-boundary",
+    intendedOwner: "animation",
+    retirementSlice: "s13",
+    rationale:
+      "The lazy algebra pack currently bootstraps one concrete renderer registration by side effect."
   }),
   exception({
     sourcePath: "src/animation/flashcard-renderer-sample.ts",

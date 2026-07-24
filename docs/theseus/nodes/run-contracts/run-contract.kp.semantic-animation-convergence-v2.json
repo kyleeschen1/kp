@@ -164,6 +164,34 @@
       "scope": "s07 standard",
       "checkedAt": "2026-07-24T04:08:00.668Z",
       "notes": "Application, node, test, and domain TypeScript projects pass with the ownership contract."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-import-baseline.test.ts tests/semantic-animation-import-fitness.test.ts",
+      "status": "passed",
+      "scope": "s08 checker fixtures",
+      "checkedAt": "2026-07-24T04:14:06.955Z",
+      "notes": "Seven tests pass for exact live closure, positive allowance, static/dynamic/re-export/require rejection, stale exceptions, and duplicate exceptions."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s08 architecture gate",
+      "checkedAt": "2026-07-24T04:14:07.971Z",
+      "notes": "Concept-room, semantic-reader, and semantic-animation gates pass; the new gate scans 247 files against exactly 27 frozen exceptions."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s08 focused",
+      "checkedAt": "2026-07-24T04:14:08.832Z",
+      "notes": "All 120 focused convergence tests pass with the import ratchet."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08 standard",
+      "checkedAt": "2026-07-24T04:14:09.704Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass after keeping the checker browser-compatible."
     }
   ],
   "expectedLearning": [
@@ -273,7 +301,8 @@
     {
       "id": "s08",
       "title": "Ratcheting-architecture-gate",
-      "status": "planned",
+      "summary": "Added a semantic-animation import-fitness checker to check:architecture that scans all semantic and animation TypeScript files, permits only exact frozen exceptions, and rejects new static, dynamic, re-export, or require-based rendering imports plus stale/duplicate exceptions. The gate exposed and classified one previously missed nested lazy-pack renderer registration, correcting the baseline to 27 exact entries. Seven checker tests, all architecture gates, 120 focused tests, and full typecheck pass.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
