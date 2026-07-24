@@ -109,6 +109,48 @@
       "scope": "operator presentation group integration",
       "checkedAt": "2026-07-24T15:21:47.207Z",
       "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-dom.test.ts tests/kp-distribution-choreography.test.ts tests/kp-factoring-choreography.test.ts tests/presentation-continuity-visual-plan.test.ts tests/distribution-lesson-card-parity.test.ts",
+      "status": "passed",
+      "scope": "glyph-ink geometry and visual plan",
+      "checkedAt": "2026-07-24T15:42:58.064Z",
+      "notes": "19 focused tests passed; live token measurement remains compatible with non-DOM fixtures and the visual plan includes the operator transit frame."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium --workers=1 -g 'wrap and distribution satisfy|factoring coalesces'",
+      "status": "passed",
+      "scope": "single-owner operator handoff",
+      "checkedAt": "2026-07-24T15:43:05.058Z",
+      "notes": "2 Chromium exemplars passed; distribution and factoring retain exactly one visible operator and moving/native glyph ink centers and sizes match within 0.05px at handoff."
+    },
+    {
+      "command": "npm run visual:presentation-continuity",
+      "status": "passed",
+      "scope": "operator transit contact sheet",
+      "checkedAt": "2026-07-24T15:43:15.460Z",
+      "notes": "17 deterministic captures passed. At the new 0.83 transit frame, operator overlap opacity is 0 and size residual is 0px; pre-handoff and endpoint ink residuals are 0px wide and narrow."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "glyph-ink token geometry",
+      "checkedAt": "2026-07-24T15:43:24.265Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass after adding optional live glyph-ink rectangles."
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "canonical distribution lesson preservation",
+      "checkedAt": "2026-07-24T15:43:25.070Z",
+      "notes": "12/12 canonical lesson tests pass with discrete operation ownership."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "shared equation renderer impact gate",
+      "checkedAt": "2026-07-24T15:43:26.050Z",
+      "notes": "All 39 deterministic linear-equation visual baseline states captured successfully after the shared token measurement change."
     }
   ],
   "progress": {

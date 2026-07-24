@@ -185,11 +185,7 @@ interface DistributionChoreographyContext {
   readonly productIndexByReflowRelationId: ReadonlyMap<string, number>;
   readonly productOwnershipProgressBySemanticIndex: ReadonlyMap<number, number>;
   readonly operatorIndexByReflowRelationId: ReadonlyMap<string, number>;
-  readonly operatorOffsetBySemanticIndex: ReadonlyMap<
-    number,
-    { readonly x: number; readonly y: number }
-  >;
-  readonly operatorOwnershipProgressBySemanticIndex: ReadonlyMap<number, number>;
+  readonly operatorNativeOwnerReadyBySemanticIndex: ReadonlyMap<number, boolean>;
   readonly groupingReflowByMotionId: ReadonlyMap<
     string,
     { readonly x: number; readonly y: number }
@@ -201,6 +197,7 @@ interface FactoringChoreographyContext {
   readonly frame: KpFactoringChoreographyFrame;
   readonly factorRelationRecordId: string;
   readonly reflowRelationRecordIds: ReadonlySet<string>;
+  readonly operatorRelationRecordIds: ReadonlySet<string>;
   readonly groupingRelationRecordIds: ReadonlySet<string>;
   readonly commonFactorBounds: {
     readonly left: number;
@@ -1136,37 +1133,14 @@ function createDistributionChoreographyContext(
       return [relation.recordId, operator.semanticIndex] as const;
     })
   );
-  const operatorOffsetBySemanticIndex = new Map(
-    plan.operatorGroups.map((operator) => {
-      const left = productOffsetBySemanticIndex.get(operator.semanticIndex);
-      const right = productOffsetBySemanticIndex.get(
-        operator.semanticIndex + 1
-      );
-      if (left === undefined || right === undefined) {
-        throw new Error(
-          `Distribution operator ${operator.id} is missing adjacent product geometry.`
-        );
-      }
-      return [
-        operator.semanticIndex,
-        {
-          x: (left.x + right.x) / 2,
-          y: (left.y + right.y) / 2
-        }
-      ] as const;
-    })
-  );
-  const operatorOwnershipProgressBySemanticIndex = new Map(
+  const operatorNativeOwnerReadyBySemanticIndex = new Map(
     plan.operatorGroups.map((operator) => [
       operator.semanticIndex,
-      Math.min(
-        productOwnershipProgressBySemanticIndex.get(
-          operator.semanticIndex
-        ) ?? 0,
+      frame.addendReflowProgress === 1 &&
+        productOwnershipProgressBySemanticIndex.get(operator.semanticIndex) === 1 &&
         productOwnershipProgressBySemanticIndex.get(
           operator.semanticIndex + 1
-        ) ?? 0
-      )
+        ) === 1
     ] as const)
   );
   return {
@@ -1184,8 +1158,7 @@ function createDistributionChoreographyContext(
     productIndexByReflowRelationId,
     productOwnershipProgressBySemanticIndex,
     operatorIndexByReflowRelationId,
-    operatorOffsetBySemanticIndex,
-    operatorOwnershipProgressBySemanticIndex,
+    operatorNativeOwnerReadyBySemanticIndex,
     groupingReflowByMotionId
   };
 }
@@ -1265,6 +1238,9 @@ function createFactoringChoreographyContext(
     factorRelationRecordId: factorRelation.recordId,
     reflowRelationRecordIds: new Set(
       persistentRelations.map((relation) => relation.recordId)
+    ),
+    operatorRelationRecordIds: new Set(
+      connectorRelations.map((relation) => relation.recordId)
     ),
     groupingRelationRecordIds: new Set(
       groupingRelations.map((relation) => relation.recordId)
@@ -1700,6 +1676,31 @@ function sampleFactoringRelation(
   }
   if (context.reflowRelationRecordIds.has(relation.recordId)) {
     const reflow = context.frame.addendCompactionProgress;
+    if (context.operatorRelationRecordIds.has(relation.recordId)) {
+      const sourceInk = unionBounds(sourceTokens.map(
+        (token) => token.localInkRect ?? token.localRect
+      ));
+      const targetInk = unionBounds(targetTokens.map(
+        (token) => token.localInkRect ?? token.localRect
+      ));
+      const sourceInkCenter = rectCenter(sourceInk);
+      const targetInkCenter = rectCenter(targetInk);
+      const nativeOwnerReady = progress === 1;
+      return [
+        ...sourceTokens.map((token) => frameToken(token, "source", {
+          opacity: nativeOwnerReady ? 0 : 1,
+          x: (targetInkCenter.x - sourceInkCenter.x) * reflow,
+          y: (targetInkCenter.y - sourceInkCenter.y) * reflow,
+          scale: 1
+        })),
+        ...targetTokens.map((token) => frameToken(token, "target", {
+          opacity: nativeOwnerReady ? 1 : 0,
+          x: 0,
+          y: 0,
+          scale: 1
+        }))
+      ];
+    }
     return [
       ...sourceTokens.map((token) => frameToken(token, "source", {
         opacity: progress === 1 ? 0 : 1,
@@ -2303,23 +2304,34 @@ function sampleDistributionRelation(
       relation.recordId
     );
     if (operatorIndex !== undefined) {
-      const groupOffset = context.operatorOffsetBySemanticIndex.get(
-        operatorIndex
-      ) ?? { x: 0, y: 0 };
-      const ownershipProgress =
-        context.operatorOwnershipProgressBySemanticIndex.get(operatorIndex) ??
-        0;
+      const nativeOwnerReady =
+        context.operatorNativeOwnerReadyBySemanticIndex.get(operatorIndex) ??
+        false;
+      const sourceInk = unionBounds(sourceTokens.map(
+        (token) => token.localInkRect ?? token.localRect
+      ));
+      const targetInk = unionBounds(targetTokens.map(
+        (token) => token.localInkRect ?? token.localRect
+      ));
+      const sourceInkCenter = rectCenter(sourceInk);
+      const targetInkCenter = rectCenter(targetInk);
+      const inkDelta = {
+        x: targetInkCenter.x - sourceInkCenter.x,
+        y: targetInkCenter.y - sourceInkCenter.y
+      };
       return [
         ...sourceTokens.map((token) => frameToken(token, "source", {
-          opacity: 1 - ownershipProgress,
-          x: (relation.delta?.x ?? 0) * reflow,
-          y: (relation.delta?.y ?? 0) * reflow,
+          // Keep one visible glyph: move the source operator into exact native
+          // ink geometry, ignoring KaTeX's context-dependent wrapper spacing.
+          opacity: nativeOwnerReady ? 0 : 1,
+          x: inkDelta.x * reflow,
+          y: inkDelta.y * reflow,
           scale: 1
         })),
         ...targetTokens.map((token) => frameToken(token, "target", {
-          opacity: ownershipProgress,
-          x: groupOffset.x,
-          y: groupOffset.y,
+          opacity: nativeOwnerReady ? 1 : 0,
+          x: 0,
+          y: 0,
           scale: 1
         }))
       ];

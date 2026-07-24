@@ -19,6 +19,13 @@ export function createKpPresentationContinuityVisualPlan():
       progress: 0.72
     },
     {
+      id: "distribution-operator-transit",
+      family: "distribution",
+      animationId: "animation.generated.distribution.expand-a-sum",
+      query: "distribution",
+      progress: 0.83
+    },
+    {
       id: "distribution-pre-handoff",
       family: "distribution",
       animationId: "animation.generated.distribution.expand-a-sum",

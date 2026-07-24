@@ -2369,14 +2369,26 @@ test("wrap and distribution satisfy their executable choreography contracts", as
     1 - settlementOwnerState[3]!.opacity,
     3
   );
-  expect(settlementOwnerState[4]!.opacity).toBeCloseTo(
-    1 - settlementOwnerState[5]!.opacity,
-    3
-  );
+  expect(settlementOwnerState[4]!.opacity).toBe(1);
+  expect(settlementOwnerState[5]!.opacity).toBe(0);
   expect(Math.abs(
     settlementOwnerState[3]!.rect.left -
     settlementOwnerState[2]!.rect.right
   )).toBeLessThan(0.05);
+  await scrubber.fill("0.939");
+  const movingOperatorBeforeHandoff = await sourcePlus.evaluate((element) => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const rect = range.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+      width: rect.width,
+      height: rect.height
+    };
+  });
+  await expect(sourcePlus).toHaveCSS("opacity", "1");
+  await expect(targetPlus).toHaveCSS("opacity", "0");
   await scrubber.fill("0.94");
   await expect(sourceFactor).toHaveCSS("opacity", "0");
   await expect(sourceLeftTerm).toHaveCSS("opacity", "0");
@@ -2385,9 +2397,26 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   await expect(sourcePlus).toHaveCSS("opacity", "0");
   await expect(targetPlus).toHaveCSS("opacity", "1");
   const plusBeforeEndpoint = await targetPlus.evaluate((element) => {
-    const rect = element.getBoundingClientRect();
-    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const rect = range.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+      width: rect.width,
+      height: rect.height
+    };
   });
+  expect(Math.hypot(
+    plusBeforeEndpoint.x - movingOperatorBeforeHandoff.x,
+    plusBeforeEndpoint.y - movingOperatorBeforeHandoff.y
+  )).toBeLessThan(0.05);
+  expect(Math.abs(
+    plusBeforeEndpoint.width - movingOperatorBeforeHandoff.width
+  )).toBeLessThan(0.05);
+  expect(Math.abs(
+    plusBeforeEndpoint.height - movingOperatorBeforeHandoff.height
+  )).toBeLessThan(0.05);
 
   await scrubber.fill("0.359");
   const beforeFormerTransfer = await sourceFactor.evaluate((element) => {
@@ -2417,7 +2446,9 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   await scrubber.fill("1");
   await expect(sourceFactor).toHaveCSS("opacity", "0");
   const plusAtEndpoint = await targetPlus.evaluate((element) => {
-    const rect = element.getBoundingClientRect();
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const rect = range.getBoundingClientRect();
     return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
   });
   expect(Math.hypot(
@@ -2451,6 +2482,12 @@ test("factoring coalesces repeated factors through its inverse choreography", as
   );
   const commonFactor = transition.locator(
     '[data-kp-editor-equation-target] [data-kp-motion-id$=".factored.factor"]'
+  );
+  const sourceOperator = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id$=".expanded.plus"]'
+  );
+  const targetOperator = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".factored.plus"]'
   );
 
   await scrubber.fill("0.18");
@@ -2544,10 +2581,53 @@ test("factoring coalesces repeated factors through its inverse choreography", as
   await expect(sourceFactors.nth(0)).toHaveCSS("opacity", "0");
   await expect(sourceFactors.nth(1)).toHaveCSS("opacity", "0");
   await expect(commonFactor).toHaveCSS("opacity", "1");
+  await scrubber.fill("0.94");
+  await expect(sourceOperator).toHaveCSS("opacity", "1");
+  await expect(targetOperator).toHaveCSS("opacity", "0");
+  const movingOperatorBeforeFactoringHandoff = await sourceOperator.evaluate(
+    (element) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const rect = range.getBoundingClientRect();
+      return {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+        width: rect.width,
+        height: rect.height
+      };
+    }
+  );
   await scrubber.fill("1");
   await expect(sourceFactors.nth(0)).toHaveCSS("opacity", "0");
   await expect(sourceFactors.nth(1)).toHaveCSS("opacity", "0");
   await expect(commonFactor).toHaveCSS("opacity", "1");
+  await expect(sourceOperator).toHaveCSS("opacity", "0");
+  await expect(targetOperator).toHaveCSS("opacity", "1");
+  const operatorAfterFactoringHandoff = await targetOperator.evaluate(
+    (element) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const rect = range.getBoundingClientRect();
+      return {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+        width: rect.width,
+        height: rect.height
+      };
+    }
+  );
+  expect(Math.hypot(
+    movingOperatorBeforeFactoringHandoff.x - operatorAfterFactoringHandoff.x,
+    movingOperatorBeforeFactoringHandoff.y - operatorAfterFactoringHandoff.y
+  )).toBeLessThan(0.05);
+  expect(Math.abs(
+    movingOperatorBeforeFactoringHandoff.width -
+      operatorAfterFactoringHandoff.width
+  )).toBeLessThan(0.05);
+  expect(Math.abs(
+    movingOperatorBeforeFactoringHandoff.height -
+      operatorAfterFactoringHandoff.height
+  )).toBeLessThan(0.05);
   await player.getByRole("button", { name: "Rewind animation" }).click();
   await scrubber.fill("0.5");
   await expect(player).toHaveAttribute("data-kp-editor-animation-direction", "rewind");

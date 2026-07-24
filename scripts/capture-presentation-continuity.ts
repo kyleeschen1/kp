@@ -41,8 +41,10 @@ const captures: {
     activeGapPx: number;
     activeResidualPx: number;
     operatorOpacityTotal: number;
+    operatorOverlapOpacity: number;
     activeOperatorOwner: "source" | "target";
     activeOperatorResidualPx: number;
+    activeOperatorSizeResidualPx: number;
   } | undefined;
   screenshot: string;
   sha256: string;
@@ -219,8 +221,10 @@ async function measureDistributionGap(
   activeGapPx: number;
   activeResidualPx: number;
   operatorOpacityTotal: number;
+  operatorOverlapOpacity: number;
   activeOperatorOwner: "source" | "target";
   activeOperatorResidualPx: number;
+  activeOperatorSizeResidualPx: number;
 }> {
   return stage.evaluate((element) => {
     const rect = (selector: string) => {
@@ -249,21 +253,6 @@ async function measureDistributionGap(
     if (temporaryOperatorNode === null || nativeOperatorNode === null) {
       throw new Error("Missing distribution operator continuity probe.");
     }
-    const temporaryOperator = temporaryOperatorNode.getBoundingClientRect();
-    const nativeOperator = nativeOperatorNode.getBoundingClientRect();
-    const nativeOperatorTransform = new DOMMatrix(
-      getComputedStyle(nativeOperatorNode).transform
-    );
-    const nativeOperatorCenter = {
-      x:
-        nativeOperator.left +
-        nativeOperator.width / 2 -
-        nativeOperatorTransform.e,
-      y:
-        nativeOperator.top +
-        nativeOperator.height / 2 -
-        nativeOperatorTransform.f
-    };
     const temporaryOperatorOpacity = Number(
       getComputedStyle(temporaryOperatorNode).opacity
     );
@@ -272,9 +261,6 @@ async function measureDistributionGap(
     );
     const activeOperatorOwner =
       nativeOperatorOpacity >= 0.5 ? "target" : "source";
-    const activeOperator = activeOperatorOwner === "target"
-      ? nativeOperator
-      : temporaryOperator;
     const inkRect = (selector: string) => {
       const node = element.querySelector<HTMLElement>(selector);
       if (node === null) throw new Error(`Missing distribution ink probe ${selector}.`);
@@ -306,6 +292,19 @@ async function measureDistributionGap(
     const nativeTermInk = inkRect(
       '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.left-term"]'
     );
+    const temporaryOperatorInk = inkRect(
+      '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.plus"]'
+    );
+    const nativeOperatorInk = inkRect(
+      '[data-kp-editor-equation-target] [data-kp-motion-id$=".expanded.plus"]'
+    );
+    const activeOperatorInk = activeOperatorOwner === "target"
+      ? nativeOperatorInk
+      : temporaryOperatorInk;
+    const nativeOperatorCenter = {
+      x: nativeOperatorInk.left + nativeOperatorInk.width / 2,
+      y: nativeOperatorInk.top + nativeOperatorInk.height / 2
+    };
     const temporaryPx = temporaryTerm.left - temporaryFactor.right;
     const nativePx = nativeTerm.left - nativeFactor.right;
     const targetOpacity = Number(getComputedStyle(
@@ -350,14 +349,22 @@ async function measureDistributionGap(
       activeResidualPx: activeGapPx - nativePx,
       operatorOpacityTotal:
         temporaryOperatorOpacity + nativeOperatorOpacity,
+      operatorOverlapOpacity: Math.min(
+        temporaryOperatorOpacity,
+        nativeOperatorOpacity
+      ),
       activeOperatorOwner,
       activeOperatorResidualPx: Math.hypot(
-        activeOperator.left +
-          activeOperator.width / 2 -
+        activeOperatorInk.left +
+          activeOperatorInk.width / 2 -
           nativeOperatorCenter.x,
-        activeOperator.top +
-          activeOperator.height / 2 -
+        activeOperatorInk.top +
+          activeOperatorInk.height / 2 -
           nativeOperatorCenter.y
+      ),
+      activeOperatorSizeResidualPx: Math.hypot(
+        activeOperatorInk.width - nativeOperatorInk.width,
+        activeOperatorInk.height - nativeOperatorInk.height
       )
     };
   });

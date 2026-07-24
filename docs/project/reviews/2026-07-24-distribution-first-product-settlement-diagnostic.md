@@ -123,18 +123,31 @@ the endpoint, while connector relations still used the generic persistence
 fallback: the source operator remained visible until progress `1`, then the
 native target operator appeared. That endpoint owner swap caused the jump.
 
-The correction generalizes by semantic role rather than glyph:
+The first correction moved a target-native operator with the neighboring
+products and crossfaded ownership. That removed the endpoint jump
+numerically, but human review correctly rejected the visible two-owner fade.
+It also exposed a deeper measurement problem: the source and target KaTeX
+operator wrappers differ by `2.58px` in width because contextual math spacing
+belongs to the wrapper, even though the visible `+` glyph has the same ink
+geometry.
+
+The accepted implementation direction therefore generalizes by semantic role
+and measured glyph ink:
 
 - every connector pair compiles into an operator presentation group between
   its adjacent product groups;
-- its target-native token follows the mean offset of those neighboring
-  products during settlement;
-- its native ownership readiness is the minimum readiness of the two
-  neighboring products, so the connector cannot finish ahead of either side;
+- one source glyph remains fully opaque and moves independently by the
+  measured source-ink-to-target-ink delta;
+- the native glyph remains fully hidden until the moving glyph has reached
+  identical ink center and size and both neighboring products are ready;
+- ownership then switches discretely between geometrically equivalent glyphs;
+- factoring uses the same ink-aligned handoff for the semantic inverse;
 - no branch inspects `+`, `-`, or any other displayed operator text.
 
-The focused browser regression conserves source/target operator opacity during
-settlement and measures less than `0.05px` motion from progress `0.94` to the
-endpoint. The stable visual manifest reports an operator opacity total of `1`
-through all sampled frames and an active native-operator residual of `0px` at
-progress `0.94` and `1` in both wide and narrow viewports.
+The focused browser regressions prove one visible owner throughout, identical
+ink center and size across forward distribution and factoring handoffs, and
+less than `0.05px` endpoint movement. The stable visual manifest adds the
+mid-transit frame at progress `0.83`: operator overlap opacity remains `0`,
+active glyph size residual remains `0px`, and the moving glyph converges from
+`0.34px` residual to `0px` before ownership switches in the wide viewport
+(`0.23px` to `0px` narrow).

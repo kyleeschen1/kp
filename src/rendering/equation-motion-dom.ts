@@ -46,6 +46,8 @@ export interface AnnotatedMotionToken {
   readonly text: string;
   readonly rect: KatexTokenRect;
   readonly localRect: KatexTokenRect;
+  readonly inkRect?: KatexTokenRect | undefined;
+  readonly localInkRect?: KatexTokenRect | undefined;
   readonly element: HTMLElement;
 }
 
@@ -160,6 +162,7 @@ export function measureAnnotatedEquationMotionTokens(
     seenMotionIds.add(motionId);
 
     const elementRect = element.getBoundingClientRect();
+    const inkRect = measureTextInkRect(element);
     const rect = toTokenRect(elementRect);
     tokens.push({
       motionId,
@@ -171,11 +174,37 @@ export function measureAnnotatedEquationMotionTokens(
         width: elementRect.width,
         height: elementRect.height
       },
+      ...(inkRect === undefined
+        ? {}
+        : {
+            inkRect: toTokenRect(inkRect),
+            localInkRect: {
+              left: inkRect.left - rootRect.left,
+              top: inkRect.top - rootRect.top,
+              width: inkRect.width,
+              height: inkRect.height
+            }
+          }),
       element
     });
   }
 
   return tokens;
+}
+
+function measureTextInkRect(element: HTMLElement): DOMRect | undefined {
+  // KaTeX relation wrappers may include contextual spacing; the text range
+  // isolates the glyph that must align across an ownership handoff.
+  if (
+    typeof document === "undefined" ||
+    typeof document.createRange !== "function"
+  ) {
+    return undefined;
+  }
+  const range = document.createRange();
+  range.selectNodeContents(element);
+  const rect = range.getBoundingClientRect();
+  return rect.width > 0 && rect.height > 0 ? rect : undefined;
 }
 
 export function measureKpEquationTransitionGeometry(input: {
