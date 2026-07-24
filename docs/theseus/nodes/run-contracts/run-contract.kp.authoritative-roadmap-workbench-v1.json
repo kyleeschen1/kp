@@ -197,7 +197,9 @@
     {
       "id": "s22",
       "title": "Stabilize-review-typing",
-      "status": "planned"
+      "summary": "Removed review-composer typing flicker by reserving the settled two-line capture metadata, retake control, route, and status footprints. A browser regression proves one immutable capture, exact textarea node retention, and stable vertical geometry across a full sentence. Full typecheck, 9 review-shell/composer tests, and all 11 Workbench browser tests pass.",
+      "status": "complete",
+      "planPhaseId": "authoritative-roadmap-workbench"
     },
     {
       "id": "s23",

@@ -335,7 +335,9 @@ const shellStyles = `
   .close:hover { color: var(--ink); background: color-mix(in srgb, var(--line) 42%, transparent); }
   .content { padding: 1rem; }
   .intro { margin: 0 0 .75rem; color: var(--muted); font-size: .78rem; line-height: 1.5; }
-  .capture-row { display: flex; align-items: flex-start; justify-content: space-between; gap: .55rem; }
+  /* Capture metadata settles asynchronously after the first character. Reserve
+     its normal two-line footprint so the writing surface never jumps. */
+  .capture-row { display: flex; min-height: 3.25rem; align-items: flex-start; justify-content: space-between; gap: .55rem; }
   .retake {
     flex: none;
     padding: .25rem .45rem;
@@ -348,9 +350,9 @@ const shellStyles = `
     cursor: pointer;
   }
   .retake:hover { background: color-mix(in srgb, var(--relation) 7%, transparent); }
-  .retake[hidden] { display: none; }
+  .retake[hidden] { display: block; visibility: hidden; }
   .retake:disabled { cursor: wait; opacity: .58; }
-  .meta { display: flex; flex-wrap: wrap; gap: .34rem; margin: 0 0 .4rem; }
+  .meta { display: flex; min-height: 3.25rem; flex-wrap: wrap; align-content: flex-start; gap: .34rem; margin: 0 0 .4rem; }
   .meta span {
     padding: .2rem .44rem;
     border: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
@@ -360,7 +362,7 @@ const shellStyles = `
     font-size: .63rem;
     font-weight: 700;
   }
-  .route { margin: 0 0 .85rem; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .61rem; overflow-wrap: anywhere; }
+  .route { min-height: .86rem; margin: 0 0 .85rem; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .61rem; overflow-wrap: anywhere; }
   form { display: grid; gap: .48rem; }
   label { font-size: .72rem; font-weight: 750; }
   textarea {
@@ -390,7 +392,7 @@ const shellStyles = `
     cursor: pointer;
   }
   .save:disabled { cursor: default; opacity: .48; }
-  .status { display: block; min-height: 1.2rem; padding: 0 1rem .75rem; color: var(--muted); font-size: .7rem; }
+  .status { display: block; min-height: 1.73rem; padding: 0 1rem .75rem; color: var(--muted); font-size: .7rem; }
   @media (max-width: 520px) {
     :host { right: 12px; bottom: 12px; }
     .panel { width: calc(100vw - 24px); }

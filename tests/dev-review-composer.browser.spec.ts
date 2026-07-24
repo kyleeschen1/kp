@@ -79,6 +79,98 @@ test("composer locks one capture per note and submits with command-enter", async
     .toBe(2);
 });
 
+test("composer typing retains the textarea node and vertical geometry", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.setContent(`<!doctype html><body></body>`);
+  await page.evaluate(async () => {
+    const shellPath = "/src/dev-review/review-shell.ts";
+    const composerPath = "/src/dev-review/review-composer.ts";
+    const shellModule = await import(shellPath);
+    const composerModule = await import(composerPath);
+    const shell = shellModule.mountKpDevReviewShell(document);
+    const state = { captures: 0 };
+    const traceWindow = window as typeof window & {
+      reviewTypingState?: typeof state;
+      reviewTextareaProbe?: HTMLTextAreaElement | null;
+    };
+    traceWindow.reviewTypingState = state;
+    composerModule.mountKpDevReviewComposer({
+      shell,
+      capture: async () => {
+        state.captures += 1;
+        return {
+          route: "http://localhost/reader/solve-x/?kpProgress=500",
+          capturedAt: "2026-07-23T20:00:00.000Z",
+          environment: {
+            browserName: "Chrome",
+            language: "en-US",
+            viewport: {
+              width: 1280,
+              height: 720,
+              devicePixelRatio: 1,
+              scrollX: 0,
+              scrollY: 0
+            },
+            reducedMotion: false,
+            forcedColors: false,
+            colorScheme: "light",
+            build: {
+              commit: "abc",
+              fingerprint: "dev-abc",
+              dirty: false
+            }
+          },
+          semantic: {
+            checkpointId: "story.typing",
+            progressPermille: 500,
+            activePhase: "inspect",
+            activeTransformationIds: [],
+            focusRefs: []
+          },
+          render: { ownerIds: [] },
+          temporalTrace: []
+        };
+      },
+      submit: async () => {
+        throw new Error("not reached");
+      }
+    });
+    traceWindow.reviewTextareaProbe =
+      shell.root.querySelector("textarea") as HTMLTextAreaElement | null;
+  });
+
+  const host = page.locator("[data-kp-dev-review-shell]");
+  await host.locator("button.launcher").click();
+  const textarea = host.locator("textarea");
+  const before = await textarea.boundingBox();
+  await textarea.pressSequentially("The radical should settle.");
+  await expect(host.locator(".meta")).toContainText("Locked");
+  const after = await textarea.boundingBox();
+  expect(before).not.toBeNull();
+  expect(after).not.toBeNull();
+  expect(after!.y).toBeCloseTo(before!.y, 1);
+  expect(
+    await page.evaluate(() => {
+      const traceWindow = window as typeof window & {
+        reviewTypingState?: { captures: number };
+        reviewTextareaProbe?: HTMLTextAreaElement | null;
+      };
+      const shell = document.querySelector<HTMLElement>(
+        "[data-kp-dev-review-shell]"
+      );
+      return {
+        captures: traceWindow.reviewTypingState?.captures,
+        retained:
+          traceWindow.reviewTextareaProbe?.isConnected === true &&
+          traceWindow.reviewTextareaProbe ===
+            shell?.shadowRoot?.querySelector("textarea")
+      };
+    })
+  ).toEqual({ captures: 1, retained: true });
+});
+
 test("composer preserves failed text and its locked capture until retry succeeds", async ({ page }) => {
   await page.goto("/");
   await page.setContent(`<!doctype html><body></body>`);
