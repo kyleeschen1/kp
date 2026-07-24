@@ -29,7 +29,7 @@ test("method phases expose direct-seekable selector transitions instead of state
     methodId: "method.quadratic.completing-square"
   });
   const formula = projectKpQuadraticReaderSurface({
-    progress: 0.1 + 0.48 * (5.5 / 7),
+    progress: 0.1 + 0.48 * (5.5 / 8),
     methodId: "method.quadratic.formula"
   });
   assert.equal(

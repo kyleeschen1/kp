@@ -152,7 +152,8 @@
     {
       "id": "slice-16",
       "title": "Radical-and-candidate-evaluation",
-      "status": "planned"
+      "summary": "Added exact numerator and division sub-operations, native radical collapse, explicit 4/2 and 6/2 candidates, exact 2 and 3 endpoints, and a stable root-to-branch handoff without touching the radical WebGL path.",
+      "status": "complete"
     },
     {
       "id": "slice-17",

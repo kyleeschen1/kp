@@ -47,6 +47,8 @@ export interface KpQuadraticFormulaAuthority {
   readonly operations: readonly KpQuadraticFormulaOperation[];
   readonly discriminantEvaluation:
     readonly KpQuadraticFormulaExactEvaluation[];
+  readonly candidateEvaluation:
+    readonly KpQuadraticFormulaExactEvaluation[];
   readonly executionBoundary: {
     readonly kind: "semantic-exact";
     readonly radicalProjectionReuse: "forbidden";
@@ -151,6 +153,22 @@ export function createCanonicalKpQuadraticFormulaAuthority(
       "operation.quadratic-formula.subtract-discriminant"
     )
   ]);
+  const candidateEvaluation = Object.freeze([
+    evaluation(
+      "operation.quadratic-formula.evaluate-candidate-numerators",
+      "law.arithmetic.signed-offset",
+      "5±1",
+      "4|6",
+      "operation.quadratic-formula.simplify-exact-radical"
+    ),
+    evaluation(
+      "operation.quadratic-formula.divide-candidates",
+      "law.arithmetic.divide-nonzero",
+      "4/2|6/2",
+      "2|3",
+      "operation.quadratic-formula.evaluate-candidate-numerators"
+    )
+  ]);
   const authority = Object.freeze({
     schemaVersion: "kp.quadratic-formula-authority.v1" as const,
     id: "authority.quadratic.canonical.formula" as const,
@@ -167,6 +185,7 @@ export function createCanonicalKpQuadraticFormulaAuthority(
     }),
     operations: operationPins,
     discriminantEvaluation,
+    candidateEvaluation,
     executionBoundary: Object.freeze({
       kind: "semantic-exact" as const,
       radicalProjectionReuse: "forbidden" as const
@@ -255,6 +274,45 @@ export function validateKpQuadraticFormulaAuthority(
       "evaluation-trace",
       "discriminantEvaluation",
       "Formula discriminant evaluation requires power, product, subtraction, and denominator preparation."
+    ));
+  }
+  const expectedCandidates = [
+    [
+      "operation.quadratic-formula.evaluate-candidate-numerators",
+      "5±1",
+      "4|6",
+      "operation.quadratic-formula.simplify-exact-radical"
+    ],
+    [
+      "operation.quadratic-formula.divide-candidates",
+      "4/2|6/2",
+      "2|3",
+      "operation.quadratic-formula.evaluate-candidate-numerators"
+    ]
+  ] as const;
+  authority.candidateEvaluation.forEach((candidate, index) => {
+    const expected = expectedCandidates[index];
+    if (
+      expected === undefined ||
+      candidate.id !== expected[0] ||
+      candidate.expression !== expected[1] ||
+      candidate.result !== expected[2] ||
+      candidate.lawId.trim().length === 0 ||
+      candidate.dependsOn.length !== 1 ||
+      candidate.dependsOn[0] !== expected[3]
+    ) {
+      diagnostics.push(issue(
+        "evaluation-trace",
+        `candidateEvaluation[${index}]`,
+        `Formula candidate evaluation ${candidate.id} must retain exact numerator and division order.`
+      ));
+    }
+  });
+  if (authority.candidateEvaluation.length !== expectedCandidates.length) {
+    diagnostics.push(issue(
+      "evaluation-trace",
+      "candidateEvaluation",
+      "Formula candidate evaluation requires signed numerator work followed by exact division."
     ));
   }
   const computedSet = createKpQuadraticSolutionSet({

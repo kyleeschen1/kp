@@ -185,7 +185,7 @@ test("both methods move selector-owned native symbols through measured paths", a
   );
   await expect(stage).toHaveAttribute("data-kp-symbolic-focal-owners", "1");
 
-  await seek(271);
+  await seek(250);
   await expect(stage).toHaveAttribute(
     "data-kp-symbolic-transition",
     "transition.quadratic.formula.evaluate-four-a-c"
@@ -196,19 +196,19 @@ test("both methods move selector-owned native symbols through measured paths", a
     )
   ).toHaveAttribute("data-kp-symbolic-motion-role", "merged");
 
-  await seek(340);
+  await seek(310);
   await expect(stage).toHaveAttribute(
     "data-kp-symbolic-transition",
     "transition.quadratic.formula.subtract-discriminant"
   );
 
-  await seek(409);
+  await seek(370);
   await expect(stage).toHaveAttribute(
     "data-kp-symbolic-transition",
     "transition.quadratic.formula.prepare-denominator"
   );
 
-  await seek(477);
+  await seek(430);
   await expect(stage).toHaveAttribute(
     "data-kp-symbolic-transition",
     "transition.quadratic.formula.simplify-radical"
@@ -224,6 +224,32 @@ test("both methods move selector-owned native symbols through measured paths", a
       '[data-kp-motion-id="katex.quadratic.formula.simplified.offset"]'
     )
   ).toHaveCSS("transform", /matrix/);
+
+  await seek(490);
+  await expect(stage).toHaveAttribute(
+    "data-kp-symbolic-transition",
+    "transition.quadratic.formula.evaluate-candidate-numerators"
+  );
+
+  await seek(550);
+  await expect(stage).toHaveAttribute(
+    "data-kp-symbolic-transition",
+    "transition.quadratic.formula.divide-candidates"
+  );
+  await expect(
+    stage.locator(
+      '[data-kp-motion-id="katex.quadratic.formula.candidate-numerators.minus-numerator"]'
+    )
+  ).toHaveAttribute("data-kp-symbolic-motion-role", "merged");
+
+  await seek(600);
+  await expect(
+    stage.locator('[data-kp-equation-state="katex.quadratic.formula.roots"]')
+  ).toBeVisible();
+  await seek(642);
+  await expect(stage.locator("[data-kp-branch-result]").first()).toBeVisible();
+  await expect(stage.locator("[data-kp-branch-candidate]").first()).toBeHidden();
+
   await expect(stage.locator("[data-kp-reader-equation-material-layer]")).toHaveCount(0);
 
   async function seek(progressPermille: number): Promise<void> {

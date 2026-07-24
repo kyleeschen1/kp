@@ -375,7 +375,9 @@ function renderBranches(branchProgress: number): void {
     : choreography.responsiveSeparation.narrow;
   const minus = requireElement<HTMLElement>('[data-kp-branch="minus"]');
   const plus = requireElement<HTMLElement>('[data-kp-branch="plus"]');
-  const showCandidates = branchProgress < 0.42;
+  const showCandidates =
+    methodId === "method.quadratic.completing-square" &&
+    branchProgress < 0.42;
   for (const candidate of branches.querySelectorAll<HTMLElement>(
     "[data-kp-branch-candidate]"
   )) {

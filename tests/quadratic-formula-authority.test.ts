@@ -86,6 +86,38 @@ test("formula authority owns exact discriminant sub-operations", () => {
   );
 });
 
+test("formula authority owns numerator work before exact division", () => {
+  const authority = canonicalAuthority();
+  assert.deepEqual(
+    authority.candidateEvaluation.map(
+      ({ id, expression, result, dependsOn }) => ({
+        id,
+        expression,
+        result,
+        dependsOn
+      })
+    ),
+    [
+      {
+        id: "operation.quadratic-formula.evaluate-candidate-numerators",
+        expression: "5±1",
+        result: "4|6",
+        dependsOn: [
+          "operation.quadratic-formula.simplify-exact-radical"
+        ]
+      },
+      {
+        id: "operation.quadratic-formula.divide-candidates",
+        expression: "4/2|6/2",
+        result: "2|3",
+        dependsOn: [
+          "operation.quadratic-formula.evaluate-candidate-numerators"
+        ]
+      }
+    ]
+  );
+});
+
 test("formula authority is isolated from the radical presentation workaround", () => {
   const authority = canonicalAuthority();
   assert.deepEqual(authority.executionBoundary, {

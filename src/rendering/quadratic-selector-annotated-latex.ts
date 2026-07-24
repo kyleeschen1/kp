@@ -234,12 +234,29 @@ function segmentsFor(
     case "katex.quadratic.formula.roots":
       return [
         latex("\\displaystyle "),
-        selector("variable", "x"),
-        latex(" \\in \\{"),
+        selector("minus-variable", "x"),
+        latex(" = "),
         selector("root-two", "2"),
-        latex(","),
+        latex(" \\quad\\text{or}\\quad "),
+        selector("plus-variable", "x"),
+        latex(" = "),
         selector("root-three", "3"),
-        latex("\\}")
+      ];
+    case "katex.quadratic.formula.candidate-numerators":
+      return [
+        latex("\\displaystyle "),
+        selector("minus-variable", "x"),
+        latex(" = \\frac{"),
+        selector("minus-numerator", "4"),
+        latex("}{"),
+        selector("minus-denominator", "2"),
+        latex("} \\quad\\text{or}\\quad "),
+        selector("plus-variable", "x"),
+        latex(" = \\frac{"),
+        selector("plus-numerator", "6"),
+        latex("}{"),
+        selector("plus-denominator", "2"),
+        latex("}")
       ];
     default:
       throw new Error(`Unknown quadratic KaTeX state ${stateId}.`);

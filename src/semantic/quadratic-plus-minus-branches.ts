@@ -255,8 +255,8 @@ function methodDerivation(
         derivationOperation(
           "operation.quadratic.retain-formula-candidates",
           "law.arithmetic.equivalent-fractions",
-          "x=(5±1)/2",
-          "x=(5±1)/2",
+          "x=2 or x=3",
+          "x=2 or x=3",
           dependency
         )
       ];

@@ -314,6 +314,13 @@
       "scope": "slice-15 dependency-ordered discriminant evaluation",
       "checkedAt": "2026-07-24T23:39:27.608Z",
       "notes": "Twenty-seven focused tests, typecheck, all nine Chromium checks, and 30 deterministic review frames passed. Exact authority-owned sub-operations now evaluate b squared, four-a-c, subtraction, and two-a in order; four dedicated native KaTeX frames preserve formula context and radical isolation."
+    },
+    {
+      "command": "focused formula, branch, selector, and surface tests; npm run typecheck; quadratic Chromium; npm run visual:quadratic-branching",
+      "status": "passed",
+      "scope": "slice-16 radical and candidate evaluation",
+      "checkedAt": "2026-07-24T23:48:26.096Z",
+      "notes": "Thirty-six focused tests, typecheck, all nine Chromium checks, and 32 deterministic review frames passed. Native KaTeX collapses sqrt(1), evaluates 5 minus/plus 1 into 4 and 6, divides to exact roots 2 and 3, then hands those identities into the existing branch cards; the WebGL radical path remains forbidden and untouched."
     }
   ],
   "progress": {

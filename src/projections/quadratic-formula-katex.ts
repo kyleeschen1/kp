@@ -29,7 +29,8 @@ export function createKpQuadraticFormulaKatexProjection():
     state("discriminant", "\\displaystyle x = \\frac{5 \\pm \\sqrt{1}}{2(1)}", "x equals five plus or minus the square root of one, over two times one", ["variable", "base", "plus-minus", "radical", "denominator-two", "denominator-a"]),
     state("denominator-prepared", "\\displaystyle x = \\frac{5 \\pm \\sqrt{1}}{2}", "x equals five plus or minus the square root of one, over two", ["variable", "base", "plus-minus", "radical", "denominator"]),
     state("simplified", "\\displaystyle x = \\frac{5 \\pm 1}{2}", "x equals five plus or minus one, over two", ["variable", "base", "plus-minus", "offset", "denominator"]),
-    state("roots", "\\displaystyle x \\in \\{2,3\\}", "x is in the set containing two and three", ["variable", "root-two", "root-three"])
+    state("candidate-numerators", "\\displaystyle x = \\frac{4}{2} \\quad\\text{or}\\quad x = \\frac{6}{2}", "x equals four halves or x equals six halves", ["minus-variable", "minus-numerator", "minus-denominator", "plus-variable", "plus-numerator", "plus-denominator"]),
+    state("roots", "\\displaystyle x = 2 \\quad\\text{or}\\quad x = 3", "x equals two or x equals three", ["minus-variable", "root-two", "plus-variable", "root-three"])
   ]);
   const transitions = Object.freeze([
     transition("substitute", "operation.quadratic-formula.substitute-coefficients", states[0]!, states[1]!, [
@@ -85,8 +86,19 @@ export function createKpQuadraticFormulaKatexProjection():
       roleBinding("exact-radical", "radical", "offset", "focal-operand"),
       sameRole("denominator")
     ]),
-    transition("verify-roots", "operation.quadratic-formula.verify-results", states[6]!, states[7]!, [
-      sameRole("variable")
+    transition("evaluate-candidate-numerators", "operation.quadratic-formula.evaluate-candidate-numerators", states[6]!, states[7]!, [
+      roleBinding("minus-variable", "variable", "minus-variable", "copied"),
+      roleBinding("minus-numerator", "base", "minus-numerator", "merged"),
+      roleBinding("plus-numerator", "offset", "plus-numerator", "merged"),
+      roleBinding("minus-denominator", "denominator", "minus-denominator", "copied")
+    ]),
+    transition("divide-candidates", "operation.quadratic-formula.divide-candidates", states[7]!, states[8]!, [
+      sameRole("minus-variable"),
+      roleBinding("minus-quotient-numerator", "minus-numerator", "root-two", "merged"),
+      roleBinding("minus-quotient-denominator", "minus-denominator", "root-two", "merged"),
+      sameRole("plus-variable"),
+      roleBinding("plus-quotient-numerator", "plus-numerator", "root-three", "merged"),
+      roleBinding("plus-quotient-denominator", "plus-denominator", "root-three", "merged")
     ])
   ]);
   return Object.freeze({
