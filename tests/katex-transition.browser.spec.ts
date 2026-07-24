@@ -2706,6 +2706,125 @@ test("KaTeX texture atlas preserves nested fraction geometry for grouped capture
   });
 });
 
+test("KaTeX texture atlas resets grouped fraction transforms as one native pose", async ({
+  page
+}) => {
+  await page.goto("/");
+  await expect(page.locator(".katex").first()).toBeVisible();
+  const comparison = await page.evaluate(async () => {
+    const katexAdapterPath = "/src/rendering/katex-adapter.ts";
+    const katexTextureAtlasPath = "/src/rendering/katex-texture-atlas.ts";
+    const [
+      { renderLatexToHtml },
+      { createKatexTextureAtlas, measureKatexTextureCaptureRect }
+    ] =
+      await Promise.all([
+        import(katexAdapterPath) as Promise<
+          typeof import("../src/rendering/katex-adapter.ts")
+        >,
+        import(katexTextureAtlasPath) as Promise<
+          typeof import("../src/rendering/katex-texture-atlas.ts")
+        >
+      ]);
+    const fixture = document.createElement("div");
+
+    fixture.style.position = "absolute";
+    fixture.style.left = "80px";
+    fixture.style.top = "80px";
+    fixture.innerHTML = renderLatexToHtml(String.raw`x^{\frac{1}{2}}`);
+    document.body.append(fixture);
+
+    const fraction = fixture.querySelector<HTMLElement>(
+      ".katex-html .msupsub .mfrac"
+    );
+
+    if (fraction === null) {
+      throw new Error("Expected KaTeX to render a script-sized fraction.");
+    }
+
+    const rect = measureKatexTextureCaptureRect(fraction, {
+      resetTransforms: true
+    });
+    const token = {
+      id: "script-fraction",
+      text: "artifact:script-fraction",
+      signature: "mfrac",
+      rect,
+      localRect: {
+        left: 0,
+        top: 0,
+        width: rect.width,
+        height: rect.height
+      },
+      row: 0,
+      element: fraction
+    };
+    const captureAlpha = async () => {
+      const atlas = await createKatexTextureAtlas([token], {
+        maxTextureSize: 128,
+        pixelRatio: 2,
+        resetTransformTokenIds: [token.id]
+      });
+      const region = atlas.regions.get(token.id);
+      const atlasPage = region === undefined
+        ? undefined
+        : atlas.pages[region.page];
+      const context = atlasPage?.getContext("2d");
+
+      if (region === undefined || context == null) {
+        throw new Error("Expected a texture atlas region for the fraction.");
+      }
+
+      const pixels = context.getImageData(
+        region.x,
+        region.y,
+        region.width,
+        region.height
+      ).data;
+
+      return {
+        alpha: Array.from(
+          { length: region.width * region.height },
+          (_, index) => pixels[index * 4 + 3] ?? 0
+        ),
+        height: region.height,
+        width: region.width
+      };
+    };
+    const nativePose = await captureAlpha();
+
+    fraction.style.transform = "translate(3px, 2px) scale(0.97)";
+    fraction.style.transformOrigin = "top left";
+    const transformedDescendant = fraction.querySelector<HTMLElement>(
+      ".sizing"
+    );
+
+    if (transformedDescendant !== null) {
+      transformedDescendant.style.transform = "translateY(1.5px)";
+    }
+
+    const resetPose = await captureAlpha();
+    fixture.remove();
+
+    return {
+      heightMatches: nativePose.height === resetPose.height,
+      inkPixelCount: nativePose.alpha.filter((alpha) => alpha > 16).length,
+      mismatchedAlphaPixels: nativePose.alpha.filter(
+        (alpha, index) => alpha !== resetPose.alpha[index]
+      ).length,
+      widthMatches: nativePose.width === resetPose.width
+    };
+  });
+
+  expect(comparison).toEqual({
+    heightMatches: true,
+    inkPixelCount: expect.any(Number),
+    mismatchedAlphaPixels: 0,
+    widthMatches: true
+  });
+  expect(comparison.inkPixelCount).toBeGreaterThan(0);
+});
+
 test("KaTeX texture atlas waits for document fonts before capture", async ({
   page
 }) => {

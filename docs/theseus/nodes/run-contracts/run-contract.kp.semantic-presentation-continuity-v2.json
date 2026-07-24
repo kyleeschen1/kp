@@ -205,7 +205,7 @@
     {
       "id": "slice-27",
       "title": "Radical human checkpoint.",
-      "summary": "HUMAN_CHECKPOINT: radical forward/rewind choreography is ready for visual acceptance. Dense rewind evidence at semantic 0.06, 0.03, 0.01, and 0 shows the full 1/2 at identical 6x20px geometry; only the fully opaque owner changes between WebGL and native KaTeX. Awaiting user approval before slice 28 promotion audit.",
+      "summary": "Implemented and verified the native fraction raster repair. Radical human checkpoint remains open for user confirmation before promotion.",
       "status": "in-progress"
     },
     {

@@ -473,11 +473,39 @@
       "scope": "slice-26 shared rendering impact gate",
       "checkedAt": "2026-07-24T17:25:55.667Z",
       "notes": "All 39 deterministic linear-equation baseline states captured successfully after the generic native-pose atlas option."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/katex-transition.browser.spec.ts --project=chromium --workers=1 --grep grouped-fraction-native-pose",
+      "status": "passed",
+      "scope": "script-fraction raster ownership",
+      "checkedAt": "2026-07-24T17:54:34.086Z",
+      "notes": "The new browser regression proves that resetting root and nested KaTeX transforms reproduces the native alpha mask pixel-for-pixel; the existing grouped-fraction geometry test also passes."
+    },
+    {
+      "command": "npm run visual:presentation-continuity",
+      "status": "passed",
+      "scope": "radical native-to-WebGL checkpoint",
+      "checkedAt": "2026-07-24T17:54:39.428Z",
+      "notes": "All 22 captures completed; rewind 0.03 native and 0.06 WebGL retain the same 6x20px fraction bounds, zero geometry residual, and visually matching nested fraction placement and proportions."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "repository gate",
+      "checkedAt": "2026-07-24T17:54:43.377Z",
+      "notes": "All 2,162 deterministic unit and architecture tests passed after the atlas repair."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production atlas asset",
+      "checkedAt": "2026-07-24T17:54:47.510Z",
+      "notes": "Typecheck and Vite production build passed; the KaTeX_Main WOFF2 is emitted as a production asset and embedded into the capture SVG at runtime. Only the existing chunk-size advisory remains."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "User approved the exact 30-slice long loop on 2026-07-24. Execution is authorized through the mandatory distribution checkpoint at slice 20."
+    "summary": "Repaired the radical exemplar handoff by capturing KaTeX geometry and nested sizing groups in one reset pose and embedding KaTeX_Main in the isolated SVG raster; human checkpoint remains open for visual approval."
   },
   "expectedLearning": [
     "Whether renderer-neutral presentation groups can make distributed products and cross-owner radical handoffs converge without renderer-specific ownership in the semantic layer."
