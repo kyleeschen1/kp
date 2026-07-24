@@ -1,5 +1,9 @@
 import type {
-  KpArtifactMaturity
+  KpArtifactMaturity,
+  KpArtifactPromotionLineage
+} from "../animation/artifact-promotion.ts";
+import {
+  resolveKpAnimationPromotionLineage
 } from "../animation/artifact-promotion.ts";
 import type {
   KpAnimationWorkbenchCatalogEntry
@@ -35,6 +39,7 @@ export interface KpSemanticAnimationWorkbenchIndexEntry {
   readonly summary: string;
   readonly tags: readonly string[];
   readonly representations: readonly KpAnimationRepresentationRelationship[];
+  readonly promotion: KpArtifactPromotionLineage;
   readonly lifecycle: KpAnimationLifecycleFacets;
   readonly controlIds: readonly string[];
   readonly review?: KpAnimationReviewProjection;
@@ -50,6 +55,7 @@ export interface KpSemanticAnimationWorkbenchIndexDiagnostic {
     | "orphan-representation"
     | "orphan-review"
     | "orphan-theseus"
+    | "promotion-lineage-conflict"
     | "source-diagnostic";
   readonly animationId?: string;
   readonly sourceIds: readonly string[];
@@ -158,9 +164,30 @@ export function compileKpSemanticAnimationWorkbenchIndex(input: {
         (projection) => projection.animationId === identity.animationId
       );
       const entryDiagnostics: KpSemanticAnimationWorkbenchIndexDiagnostic[] = [];
+      const promotion = resolveKpAnimationPromotionLineage({
+        animationId: identity.animationId
+      });
+      if (
+        catalog?.primaryDescriptor.promotion !== undefined &&
+        !samePromotionFacet(
+          catalog.primaryDescriptor.promotion,
+          promotion.facet
+        )
+      ) {
+        entryDiagnostics.push({
+          code: "promotion-lineage-conflict",
+          animationId: identity.animationId,
+          sourceIds: [
+            catalog.primaryDescriptor.id,
+            ...promotion.evidenceSourceIds
+          ],
+          message:
+            `Descriptor promotion for ${identity.animationId} disagrees with canonical promotion evidence.`
+        });
+      }
       const lifecycle = compileLifecycle({
         identity,
-        ...(catalog === undefined ? {} : { catalog }),
+        promotion,
         roadmap,
         theseus,
         reviews,
@@ -181,6 +208,7 @@ export function compileKpSemanticAnimationWorkbenchIndex(input: {
           ...representations.map((relationship) => relationship.kind)
         ]).sort(),
         representations,
+        promotion,
         lifecycle,
         controlIds: unique(
           theseus.flatMap((projection) => projection.controlIds)
@@ -200,7 +228,7 @@ export function compileKpSemanticAnimationWorkbenchIndex(input: {
 
 function compileLifecycle(input: {
   readonly identity: KpCanonicalAnimationIdentity;
-  readonly catalog?: KpAnimationWorkbenchCatalogEntry;
+  readonly promotion: KpArtifactPromotionLineage;
   readonly roadmap: readonly KpAnimationRoadmapProjection[];
   readonly theseus: readonly KpAnimationTheseusProjection[];
   readonly reviews: readonly KpAnimationReviewProjection[];
@@ -248,13 +276,13 @@ function compileLifecycle(input: {
     });
   }
 
-  const promotion = input.catalog?.primaryDescriptor.promotion;
   const maturity =
     input.identity.availability === "planned"
       ? "proposed"
-      : maturityState(promotion?.maturity);
+      : maturityState(input.promotion.facet.maturity);
   const approval =
-    promotion?.maturity === "gold" || promotion?.maturity === "promoted"
+    input.promotion.facet.maturity === "gold" ||
+    input.promotion.facet.maturity === "promoted"
       ? "approved"
       : "unapproved";
 
@@ -330,4 +358,16 @@ function diagnoseOrphans<T>(
 
 function unique<T>(values: readonly T[]): T[] {
   return [...new Set(values)];
+}
+
+function samePromotionFacet(
+  left: KpArtifactPromotionLineage["facet"],
+  right: KpArtifactPromotionLineage["facet"]
+): boolean {
+  return (
+    left.maturity === right.maturity &&
+    left.novelty === right.novelty &&
+    left.humanReviewRequired === right.humanReviewRequired &&
+    left.goldCohort === right.goldCohort
+  );
 }

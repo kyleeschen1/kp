@@ -2,7 +2,8 @@
   "id": "run-contract.kp.authoritative-roadmap-workbench-v1",
   "kind": "run-contract",
   "title": "Authoritative roadmap and Workbench successor loop",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -134,6 +135,48 @@
       "scope": "broad",
       "checkedAt": "2026-07-24T02:05:24.711Z",
       "notes": "All 12 distribution lesson Chromium tests pass. The stable editor-card capture produced nine states; adjacent samples around the former card jump differ by only 0.0215px with unchanged opacity, while the follower visibly peels from the leading factor."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T02:31:39.574Z",
+      "notes": "All 2053 repository tests passed, including canonical identity, review protocol, promotion, semantic choreography, reader, editor, and architecture contracts."
+    },
+    {
+      "command": "npm run test:browser:animation-workbench",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T02:31:40.891Z",
+      "notes": "All 14 Chromium Workbench tests passed, including canonical card capture provenance, lesson authority, review composer stability, route preservation, keyboard use, and narrow layout."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T02:31:42.011Z",
+      "notes": "Full app, node, test, and domain typechecks passed; the Vite production build completed with only the existing chunk-size advisory."
+    },
+    {
+      "command": "npm run visual:animation-workbench",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T02:31:43.205Z",
+      "notes": "Eight deterministic wide/narrow captures passed for radical, derivative, lesson-first distribution, and planned quadratic; distribution proves card playback, lesson authority, and visible canonical promotion evidence."
+    },
+    {
+      "command": "npm run visual:editor-cards",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T02:31:44.970Z",
+      "notes": "Nine deterministic editor-card states passed, retaining the distribution no-jump evidence and exact settled projections."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-24T02:31:45.959Z",
+      "notes": "All 762 project-memory nodes validate across 11096 events before final slice closure."
     }
   ],
   "allowedWork": [
@@ -362,8 +405,8 @@
     {
       "id": "s30",
       "title": "Unify-review-and-promotion-lineage",
-      "summary": "Aggregate card and lesson feedback under canonical identity while retaining exact projection provenance; derive visible promotion from durable evidence and produce the curated catalog checkpoint.",
-      "status": "planned",
+      "summary": "Lesson and card feedback now aggregate under one canonical animation review state while every note retains captured surface, projection, and canonical presentation provenance. Workbench previews report their actual card projection instead of impersonating the lesson. Promotion maturity derives by canonical animation id from durable source records and is visible in the Workbench. Eight curated wide/narrow captures, nine editor-card captures, 2053 tests, 14 Chromium tests, production build, and Theseus validation pass.",
+      "status": "complete",
       "planPhaseId": "authoritative-roadmap-workbench"
     }
   ]

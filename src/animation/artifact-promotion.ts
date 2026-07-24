@@ -37,37 +37,97 @@ export interface KpArtifactPromotionDecision {
   readonly diagnostics: readonly string[];
 }
 
-export const kpGoldEquationAnimationIds = Object.freeze([
-  "animation.linear-solve.solve-x",
-  "animation.generated.radical.square-root-as-power",
-  "animation.generated.function-wrap.apply-f",
-  "animation.generated.distribution.expand-a-sum",
-  "animation.derivative-rules.tangent-graph"
-] as const);
+export interface KpArtifactPromotionLineage {
+  readonly schemaVersion: "kp.artifact-promotion-lineage.v1";
+  readonly animationId: string;
+  readonly facet: KpArtifactPromotionFacet;
+  readonly evidenceSourceIds: readonly string[];
+}
 
-// The radical rewrite already has a human-reviewed normative conformance
-// baseline, so breadth promotion can distinguish it from the broader gold set.
-export const kpPromotedEquationAnimationIds = Object.freeze([
-  "animation.generated.radical.square-root-as-power"
-] as const);
+interface KpReviewedAnimationPromotionRecord {
+  readonly animationId: string;
+  readonly maturity: Extract<KpArtifactMaturity, "gold" | "promoted">;
+  readonly evidenceSourceIds: readonly string[];
+}
+
+const reviewedAnimationPromotionRecords = Object.freeze([
+  {
+    animationId: "animation.linear-solve.solve-x",
+    maturity: "gold",
+    evidenceSourceIds: [
+      "docs/project/reviews/2026-07-21-solve-x-human-checkpoint-follow-up.md"
+    ]
+  },
+  {
+    animationId: "animation.generated.radical.square-root-as-power",
+    maturity: "promoted",
+    evidenceSourceIds: [
+      "docs/project/reviews/2026-07-16-material-continuity-artifact-morph-loop-closeout.md",
+      "run-contract.kp.authoritative-roadmap-workbench-v1#s27"
+    ]
+  },
+  {
+    animationId: "animation.generated.function-wrap.apply-f",
+    maturity: "gold",
+    evidenceSourceIds: [
+      "docs/project/reviews/2026-07-16-phase-ordered-choreography-gestalt-style-loop-closeout.md"
+    ]
+  },
+  {
+    animationId: "animation.generated.distribution.expand-a-sum",
+    maturity: "gold",
+    evidenceSourceIds: [
+      "docs/project/reviews/2026-07-23-governed-semantic-authoring-exemplar-checkpoint.md",
+      "run-contract.kp.authoritative-roadmap-workbench-v1#s29"
+    ]
+  },
+  {
+    animationId: "animation.derivative-rules.tangent-graph",
+    maturity: "gold",
+    evidenceSourceIds: [
+      "docs/project/reviews/2026-07-23-derivative-secant-tangent-checkpoint.md"
+    ]
+  }
+] as const satisfies readonly KpReviewedAnimationPromotionRecord[]);
+
+export const kpGoldEquationAnimationIds = Object.freeze(
+  reviewedAnimationPromotionRecords.map(({ animationId }) => animationId)
+);
+
+export const kpPromotedEquationAnimationIds = Object.freeze(
+  reviewedAnimationPromotionRecords
+    .filter(({ maturity }) => maturity === "promoted")
+    .map(({ animationId }) => animationId)
+);
+
+export function resolveKpAnimationPromotionLineage(input: {
+  readonly animationId: string;
+  readonly novelty?: KpArtifactNovelty | undefined;
+}): KpArtifactPromotionLineage {
+  const record = reviewedAnimationPromotionRecords.find(
+    ({ animationId }) => animationId === input.animationId
+  );
+  const novelty = input.novelty ?? "composition";
+  return {
+    schemaVersion: "kp.artifact-promotion-lineage.v1",
+    animationId: input.animationId,
+    facet: {
+      maturity: record?.maturity ?? "reviewable",
+      novelty,
+      humanReviewRequired: novelty !== "composition",
+      goldCohort: record !== undefined
+    },
+    evidenceSourceIds:
+      record?.evidenceSourceIds ??
+      ["artifact-promotion.default-reviewable-composition-policy"]
+  };
+}
 
 export function resolveKpAnimationPromotionFacet(input: {
   readonly animationId: string;
   readonly novelty?: KpArtifactNovelty | undefined;
 }): KpArtifactPromotionFacet {
-  const goldCohort = kpGoldEquationAnimationIds.includes(
-    input.animationId as (typeof kpGoldEquationAnimationIds)[number]
-  );
-  const promoted = kpPromotedEquationAnimationIds.includes(
-    input.animationId as (typeof kpPromotedEquationAnimationIds)[number]
-  );
-  const novelty = input.novelty ?? "composition";
-  return {
-    maturity: promoted ? "promoted" : goldCohort ? "gold" : "reviewable",
-    novelty,
-    humanReviewRequired: novelty !== "composition",
-    goldCohort
-  };
+  return resolveKpAnimationPromotionLineage(input).facet;
 }
 
 export function decideKpArtifactPromotion(input: {

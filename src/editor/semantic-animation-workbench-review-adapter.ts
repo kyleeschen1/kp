@@ -7,6 +7,20 @@ import type {
 import type {
   KpCanonicalAnimationIdentity
 } from "./semantic-animation-workbench-identity.ts";
+import type {
+  KpAnimationChoreographySourceRef,
+  KpAnimationPresentationRole,
+  KpAnimationRepresentationKind,
+  KpAnimationRepresentationRelationship
+} from "./semantic-animation-workbench-representation.ts";
+
+export interface KpAnimationReviewRepresentationProvenance {
+  readonly representationId: string;
+  readonly kind: KpAnimationRepresentationKind;
+  readonly label: string;
+  readonly presentationRole: KpAnimationPresentationRole;
+  readonly choreographySource: KpAnimationChoreographySourceRef;
+}
 
 export interface KpAnimationReviewEvidence {
   readonly captureIdentity: string;
@@ -24,6 +38,10 @@ export interface KpAnimationReviewEvidence {
   readonly checkpointId?: string;
   readonly progressPermille?: number;
   readonly activePhase?: string;
+  readonly captureDocumentId?: string;
+  readonly captureProjectionId?: string;
+  readonly capturedRepresentation?: KpAnimationReviewRepresentationProvenance;
+  readonly canonicalRepresentation?: KpAnimationReviewRepresentationProvenance;
 }
 
 export interface KpAnimationReviewProjection {
@@ -48,6 +66,7 @@ export interface KpAnimationReviewAdapterResult {
 
 export function projectKpAnimationReviewEvidence(input: {
   readonly identities: readonly KpCanonicalAnimationIdentity[];
+  readonly relationships?: readonly KpAnimationRepresentationRelationship[];
   readonly notes: readonly KpDevReviewCompactNoteEvidence[];
   readonly currentRoundId?: string;
 }): KpAnimationReviewAdapterResult {
@@ -56,7 +75,11 @@ export function projectKpAnimationReviewEvidence(input: {
   const diagnostics: KpAnimationReviewDiagnostic[] = [];
 
   for (const note of input.notes) {
-    const animationIds = matchingAnimationIds(note, input.identities);
+    const animationIds = matchingAnimationIds(
+      note,
+      input.identities,
+      input.relationships ?? []
+    );
     if (animationIds.length === 0) {
       unscopedNoteIds.push(note.id);
       continue;
@@ -73,10 +96,14 @@ export function projectKpAnimationReviewEvidence(input: {
     }
 
     const animationId = animationIds[0]!;
+    const relationships = (input.relationships ?? []).filter(
+      (relationship) => relationship.animationId === animationId
+    );
     const evidence = createEvidence(
       animationId,
       note,
-      note.roundId === input.currentRoundId
+      note.roundId === input.currentRoundId,
+      relationships
     );
     const group = evidenceByAnimation.get(animationId) ?? [];
     group.push(evidence);
@@ -107,12 +134,22 @@ export function projectKpAnimationReviewEvidence(input: {
 
 function matchingAnimationIds(
   note: KpDevReviewCompactNoteEvidence,
-  identities: readonly KpCanonicalAnimationIdentity[]
+  identities: readonly KpCanonicalAnimationIdentity[],
+  relationships: readonly KpAnimationRepresentationRelationship[]
 ): readonly string[] {
   const claims = noteClaims(note);
   return identities
     .filter((identity) => {
-      const identityClaims = [identity.animationId, ...identity.aliases];
+      const identityClaims = [
+        identity.animationId,
+        ...identity.aliases,
+        ...relationships
+          .filter(
+            (relationship) =>
+              relationship.animationId === identity.animationId
+          )
+          .flatMap(relationshipClaims)
+      ];
       return claims.some((claim) =>
         identityClaims.some(
           (identityClaim) =>
@@ -131,16 +168,28 @@ function noteClaims(
   const route = new URL(note.route, "http://kp.local");
   return [
     note.capture?.semantic.assetId,
+    note.capture?.semantic.projectionId,
+    note.capture?.semantic.activePhase,
     note.activePhase,
-    route.searchParams.get("animation") ?? undefined
+    route.searchParams.get("animation") ?? undefined,
+    route.searchParams.get("workbenchAnimation") ?? undefined,
+    route.searchParams.get("representation") ?? undefined
   ].filter((claim): claim is string => claim !== undefined && claim !== "");
 }
 
 function createEvidence(
   animationId: string,
   note: KpDevReviewCompactNoteEvidence,
-  current: boolean
+  current: boolean,
+  relationships: readonly KpAnimationRepresentationRelationship[]
 ): KpAnimationReviewEvidence {
+  const capturedRepresentation = resolveCapturedRepresentation(
+    note,
+    relationships
+  );
+  const canonicalRepresentation = relationships.find(
+    ({ presentationRole }) => presentationRole === "canonical"
+  );
   return {
     captureIdentity:
       `${note.roundId}:${note.id}:${note.sequence}:${note.build.fingerprint}`,
@@ -163,7 +212,97 @@ function createEvidence(
       : { progressPermille: note.progressPermille }),
     ...(note.activePhase === undefined
       ? {}
-      : { activePhase: note.activePhase })
+      : { activePhase: note.activePhase }),
+    ...(note.capture?.semantic.documentId === undefined
+      ? {}
+      : { captureDocumentId: note.capture.semantic.documentId }),
+    ...(note.capture?.semantic.projectionId === undefined
+      ? {}
+      : { captureProjectionId: note.capture.semantic.projectionId }),
+    ...(capturedRepresentation === undefined
+      ? {}
+      : {
+          capturedRepresentation:
+            reviewRepresentationProvenance(capturedRepresentation)
+        }),
+    ...(canonicalRepresentation === undefined
+      ? {}
+      : {
+          canonicalRepresentation:
+            reviewRepresentationProvenance(canonicalRepresentation)
+        })
+  };
+}
+
+function resolveCapturedRepresentation(
+  note: KpDevReviewCompactNoteEvidence,
+  relationships: readonly KpAnimationRepresentationRelationship[]
+): KpAnimationRepresentationRelationship | undefined {
+  const route = new URL(note.route, "http://kp.local");
+  const directClaims = [
+    note.capture?.semantic.projectionId,
+    route.searchParams.get("representation") ?? undefined,
+    route.searchParams.get("animation") ?? undefined
+  ].filter((claim): claim is string => claim !== undefined && claim !== "");
+
+  for (const claim of directClaims) {
+    const relationship = relationships.find((candidate) =>
+      directRelationshipClaims(candidate).includes(claim)
+    );
+    if (relationship !== undefined) return relationship;
+  }
+
+  const assetId = note.capture?.semantic.assetId;
+  if (assetId !== undefined) {
+    const assetRelationship = [...relationships]
+      .sort(
+        (left, right) =>
+          Number(right.presentationRole === "canonical") -
+          Number(left.presentationRole === "canonical")
+      )
+      .find(
+        (candidate) =>
+          directRelationshipClaims(candidate).includes(assetId) ||
+          candidate.choreographySource.sourceId === assetId
+      );
+    if (assetRelationship !== undefined) return assetRelationship;
+  }
+
+  return relationships.find((relationship) => {
+    if (relationship.href === undefined) return false;
+    const href = new URL(relationship.href, "http://kp.local");
+    return href.pathname === route.pathname;
+  });
+}
+
+function relationshipClaims(
+  relationship: KpAnimationRepresentationRelationship
+): readonly string[] {
+  return [
+    ...directRelationshipClaims(relationship),
+    relationship.choreographySource.sourceId,
+  ];
+}
+
+function directRelationshipClaims(
+  relationship: KpAnimationRepresentationRelationship
+): readonly string[] {
+  return [
+    relationship.id,
+    relationship.representationId,
+    ...relationship.aliases
+  ];
+}
+
+function reviewRepresentationProvenance(
+  relationship: KpAnimationRepresentationRelationship
+): KpAnimationReviewRepresentationProvenance {
+  return {
+    representationId: relationship.representationId,
+    kind: relationship.kind,
+    label: relationship.label,
+    presentationRole: relationship.presentationRole,
+    choreographySource: relationship.choreographySource
   };
 }
 

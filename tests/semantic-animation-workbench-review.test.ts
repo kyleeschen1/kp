@@ -24,6 +24,8 @@ test("review panel separates current and historical item evidence", () => {
     /data-kp-animation-workbench-review-group="historical"[\s\S]*note\.historical/
   );
   assert.match(html, /Checkpoint <code>checkpoint\.radical/);
+  assert.match(html, /Captured in <strong>card<\/strong>/);
+  assert.match(html, /Canonical source <strong>lesson<\/strong>/);
   assert.match(html, /Open captured route/);
   assert.doesNotMatch(html, /animation\.derivative/);
 });
@@ -58,7 +60,30 @@ function projection(): KpAnimationReviewProjection {
         buildFingerprint: "build.current",
         checkpointId: "checkpoint.radical",
         progressPermille: 500,
-        activePhase: "animation.radical.forward.form"
+        activePhase: "animation.radical.forward.form",
+        captureProjectionId: "sample.animation.radical",
+        capturedRepresentation: {
+          representationId: "sample.animation.radical",
+          kind: "card",
+          label: "Radical card",
+          presentationRole: "projection",
+          choreographySource: {
+            kind: "lesson-animation",
+            sourceId: "animation.radical",
+            choreographyId: "choreography.lesson.radical"
+          }
+        },
+        canonicalRepresentation: {
+          representationId: "learner-experience.radical",
+          kind: "lesson",
+          label: "Radical lesson",
+          presentationRole: "canonical",
+          choreographySource: {
+            kind: "lesson-animation",
+            sourceId: "animation.radical",
+            choreographyId: "choreography.lesson.radical"
+          }
+        }
       }
     ],
     historical: [

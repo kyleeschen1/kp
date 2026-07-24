@@ -141,6 +141,22 @@ function entry(input: {
               aliases: []
             }
           ],
+    promotion: {
+      schemaVersion: "kp.artifact-promotion-lineage.v1",
+      animationId: input.animationId,
+      facet: {
+        maturity:
+          input.maturity === "promoted"
+            ? "promoted"
+            : input.maturity === "approved"
+              ? "gold"
+              : "reviewable",
+        novelty: "composition",
+        humanReviewRequired: false,
+        goldCohort: input.maturity !== "proposed"
+      },
+      evidenceSourceIds: ["review.fixture"]
+    },
     lifecycle: {
       schemaVersion: "kp.animation-lifecycle-facets.v1",
       roadmap: input.playability === "planned-only" ? "next" : "now",

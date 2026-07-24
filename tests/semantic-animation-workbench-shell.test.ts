@@ -18,6 +18,7 @@ test("Workbench shell renders a labeled search and two-pane control surface", ()
     results: [result("animation.radical", "Power to radical")],
     selectedAnimationId: "animation.radical",
     selectedRepresentationId: "representation.animation.radical",
+    selectedPlaybackRepresentationId: "representation.animation.radical",
     selectedDescriptor: {
       ...createKpEditorAnimationLibrary()[0]!,
       animationId: "animation.radical"
@@ -54,6 +55,8 @@ test("Workbench shell renders a labeled search and two-pane control surface", ()
   assert.match(html, /data-kp-editor-animation-player/);
   assert.match(html, /data-kp-animation-workbench-acceptance/);
   assert.match(html, /data-kp-animation-workbench-review/);
+  assert.match(html, /data-kp-animation-workbench-promotion-lineage/);
+  assert.match(html, /Promotion lineage/);
   assert.match(html, /Loading the existing development review inbox/);
   assert.match(
     html,
@@ -184,6 +187,21 @@ function result(
               aliases: []
             }
           ],
+      promotion: {
+        schemaVersion: "kp.artifact-promotion-lineage.v1",
+        animationId,
+        facet: {
+          maturity: planned ? "reviewable" : "gold",
+          novelty: "composition",
+          humanReviewRequired: false,
+          goldCohort: !planned
+        },
+        evidenceSourceIds: [
+          planned
+            ? "artifact-promotion.default-reviewable-composition-policy"
+            : "review.fixture"
+        ]
+      },
       lifecycle: {
         schemaVersion: "kp.animation-lifecycle-facets.v1",
         roadmap: "untracked",

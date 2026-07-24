@@ -120,6 +120,8 @@ test("seed cohort keeps independent lifecycle authority facets", () => {
     verification: "unknown",
     playability: "playable"
   });
+  assert.equal(radical.promotion.animationId, radical.identity.animationId);
+  assert.ok(radical.promotion.evidenceSourceIds.length > 0);
   assert.equal(derivative.lifecycle.maturity, "approved");
   assert.equal(derivative.lifecycle.approval, "approved");
   assert.equal(quadratic.lifecycle.maturity, "proposed");

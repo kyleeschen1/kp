@@ -4,7 +4,8 @@ import test from "node:test";
 import {
   decideKpArtifactPromotion,
   kpGoldEquationAnimationIds,
-  resolveKpAnimationPromotionFacet
+  resolveKpAnimationPromotionFacet,
+  resolveKpAnimationPromotionLineage
 } from "../src/animation/artifact-promotion.ts";
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import { createSymbolicManipulationFamilyRegistry } from "../src/animation/symbolic-manipulation-family-registry.ts";
@@ -94,6 +95,25 @@ test("non-gold catalog entries default to reviewable composition", () => {
     humanReviewRequired: false,
     goldCohort: false
   });
+});
+
+test("canonical promotion lineage exposes durable evidence independently of descriptors", () => {
+  const distribution = resolveKpAnimationPromotionLineage({
+    animationId: "animation.generated.distribution.expand-a-sum"
+  });
+  assert.equal(distribution.facet.maturity, "gold");
+  assert.deepEqual(distribution.evidenceSourceIds, [
+    "docs/project/reviews/2026-07-23-governed-semantic-authoring-exemplar-checkpoint.md",
+    "run-contract.kp.authoritative-roadmap-workbench-v1#s29"
+  ]);
+
+  const ordinary = resolveKpAnimationPromotionLineage({
+    animationId: "animation.other"
+  });
+  assert.equal(ordinary.facet.maturity, "reviewable");
+  assert.deepEqual(ordinary.evidenceSourceIds, [
+    "artifact-promotion.default-reviewable-composition-policy"
+  ]);
 });
 
 test("editor player exposes independent novelty and maturity facets", () => {

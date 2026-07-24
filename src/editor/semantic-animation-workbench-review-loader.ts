@@ -2,18 +2,24 @@ import type {
   KpCanonicalAnimationIdentity
 } from "./semantic-animation-workbench-identity.ts";
 import type {
+  KpAnimationRepresentationRelationship
+} from "./semantic-animation-workbench-representation.ts";
+import type {
   KpAnimationReviewAdapterResult
 } from "./semantic-animation-workbench-review-adapter.ts";
 
 export type KpAnimationWorkbenchReviewLoader = (
-  identities: readonly KpCanonicalAnimationIdentity[]
+  input: {
+    readonly identities: readonly KpCanonicalAnimationIdentity[];
+    readonly relationships: readonly KpAnimationRepresentationRelationship[];
+  }
 ) => Promise<KpAnimationReviewAdapterResult>;
 
 // Keep the dynamic imports behind a module-scope DEV branch so production
 // builds erase the review client, endpoint, protocol parsers, and adapter.
 export const loadKpAnimationWorkbenchReviewEvidence:
   KpAnimationWorkbenchReviewLoader | undefined = import.meta.env.DEV
-    ? async (identities) => {
+    ? async (input) => {
         const [{ KpDevReviewClient }, { projectKpAnimationReviewEvidence }] =
           await Promise.all([
             import("../dev-review/client.ts"),
@@ -41,7 +47,8 @@ export const loadKpAnimationWorkbenchReviewEvidence:
         } while (afterSequence !== undefined);
 
         return projectKpAnimationReviewEvidence({
-          identities,
+          identities: input.identities,
+          relationships: input.relationships,
           notes,
           ...(currentRoundId === undefined ? {} : { currentRoundId })
         });

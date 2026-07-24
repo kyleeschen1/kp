@@ -1,4 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
+import type {
+  KpDevReviewCreateRequestV2
+} from "../protocols/dev-review-v2.ts";
 
 const radicalId = "animation.generated.radical.square-root-as-power";
 const quadraticId = "animation.algebra.quadratic.solution-branching";
@@ -173,6 +176,10 @@ test("Workbench projects distribution from lesson authority and hides fixture du
   );
   await expect(preview).toHaveAttribute(
     "data-kp-animation-workbench-representation",
+    "sample.animation.distribution.expand-a-sum"
+  );
+  await expect(preview).toHaveAttribute(
+    "data-kp-animation-workbench-canonical-representation",
     "learner-experience.distribution-area-scroll-lesson.exemplar.distribution-area.3-times-x-plus-2"
   );
   await expect(preview).toHaveAttribute(
@@ -192,6 +199,52 @@ test("Workbench projects distribution from lesson authority and hides fixture du
       '[data-kp-representation-id^="learner-experience.distribution-area"]'
     )
   ).toContainText("lesson · canonical");
+  await expect(
+    selection.locator("[data-kp-animation-workbench-promotion-lineage]")
+  ).toContainText(
+    "run-contract.kp.authoritative-roadmap-workbench-v1#s29"
+  );
+});
+
+test("Workbench review capture keeps canonical identity and exact card projection", async ({
+  page
+}) => {
+  const distributionId =
+    "animation.generated.distribution.expand-a-sum";
+  let request: KpDevReviewCreateRequestV2 | undefined;
+  await page.route("**/api/dev/reviews/v2/notes", async (route) => {
+    request = route.request().postDataJSON() as
+      KpDevReviewCreateRequestV2;
+    await route.fulfill({
+      status: 201,
+      contentType: "application/json",
+      body: JSON.stringify({
+        ...request,
+        id: "note.distribution.card",
+        sequence: 44,
+        status: "new"
+      })
+    });
+  });
+  await page.goto(
+    `/?view=animation-workbench&q=distribution&workbenchAnimation=${distributionId}`
+  );
+
+  const host = page.locator("[data-kp-dev-review-shell]");
+  await host.locator("button.launcher").click();
+  await host.locator("textarea").fill(
+    "Keep the leading factor continuous."
+  );
+  await host.locator("button.save").click();
+  await expect(host.locator("output.status")).toHaveText("Saved note 44.");
+
+  expect(request?.capture.semantic.assetId).toBe(distributionId);
+  expect(request?.capture.semantic.projectionId).toBe(
+    "sample.animation.distribution.expand-a-sum"
+  );
+  expect(request?.capture.semantic.documentId).toBe(
+    "editor.semantic-animation-workbench"
+  );
 });
 
 test("Workbench planned quadratic never mounts a player", async ({ page }) => {

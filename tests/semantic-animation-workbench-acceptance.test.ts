@@ -84,6 +84,20 @@ function entry(
     summary: "Preserve the base while the power becomes a radical.",
     tags: [],
     representations: [],
+    promotion: {
+      schemaVersion: "kp.artifact-promotion-lineage.v1",
+      animationId: "animation.radical",
+      facet: {
+        maturity:
+          lifecycle.playability === "planned-only"
+            ? "reviewable"
+            : "promoted",
+        novelty: "composition",
+        humanReviewRequired: false,
+        goldCohort: lifecycle.playability !== "planned-only"
+      },
+      evidenceSourceIds: ["review.fixture"]
+    },
     lifecycle: {
       schemaVersion: "kp.animation-lifecycle-facets.v1",
       roadmap: "now",

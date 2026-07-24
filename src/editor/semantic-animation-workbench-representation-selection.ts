@@ -10,6 +10,7 @@ import type {
 
 export interface KpAnimationWorkbenchRepresentationSelection {
   readonly relationship?: KpAnimationRepresentationRelationship;
+  readonly playbackRelationship?: KpAnimationRepresentationRelationship;
   readonly descriptor?: KpEditorAnimationDescriptor;
 }
 
@@ -38,31 +39,43 @@ export function resolveKpAnimationWorkbenchRepresentation(input: {
     input.entry.representations[0];
   if (relationship === undefined) return {};
 
-  const descriptor =
-    descriptorForRelationship(
-      relationship,
-      input.entry.identity.animationId,
-      input.descriptors
-    ) ??
-    input.entry.representations
+  const directDescriptor = descriptorForRelationship(
+    relationship,
+    input.entry.identity.animationId,
+    input.descriptors
+  );
+  const fallback = input.entry.representations
       .filter(
         (candidate) =>
           candidate.presentationRole === "projection" &&
           sameChoreography(candidate, relationship)
       )
-      .map((candidate) =>
-        descriptorForRelationship(
+      .sort(
+        (left, right) =>
+          playbackKindRank(left.kind) - playbackKindRank(right.kind)
+      )
+      .map((candidate) => ({
+        relationship: candidate,
+        descriptor: descriptorForRelationship(
           candidate,
           input.entry.identity.animationId,
           input.descriptors
         )
-      )
+      }))
       .find(
-        (candidate): candidate is KpEditorAnimationDescriptor =>
-          candidate !== undefined
+        (candidate): candidate is {
+          readonly relationship: KpAnimationRepresentationRelationship;
+          readonly descriptor: KpEditorAnimationDescriptor;
+        } => candidate.descriptor !== undefined
       );
+  const descriptor = directDescriptor ?? fallback?.descriptor;
+  const playbackRelationship =
+    directDescriptor === undefined ? fallback?.relationship : relationship;
   return {
     relationship,
+    ...(playbackRelationship === undefined
+      ? {}
+      : { playbackRelationship }),
     ...(descriptor === undefined ? {} : { descriptor })
   };
 }
@@ -94,4 +107,10 @@ function sameChoreography(
     candidate.choreographySource.choreographyId ===
       canonical.choreographySource.choreographyId
   );
+}
+
+function playbackKindRank(
+  kind: KpAnimationRepresentationRelationship["kind"]
+): number {
+  return kind === "card" ? 0 : kind === "editor" ? 1 : 2;
 }

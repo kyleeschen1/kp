@@ -11,6 +11,9 @@ import {
   createKpCanonicalAnimationIdentity
 } from "../src/editor/semantic-animation-workbench-identity.ts";
 import {
+  createKpAnimationRepresentationRelationship
+} from "../src/editor/semantic-animation-workbench-representation.ts";
+import {
   createKpAnimationWorkbenchSeedCohort
 } from "../src/editor/semantic-animation-workbench-seeds.ts";
 
@@ -115,10 +118,112 @@ test("review adapter keeps unscoped and ambiguous notes explicit", () => {
   assert.equal(result.projections.length, 0);
 });
 
+test("lesson and card notes share canonical review state while retaining capture provenance", () => {
+  const animationId =
+    "animation.generated.distribution.expand-a-sum";
+  const lessonAssetId =
+    "exemplar.distribution-area.3-times-x-plus-2";
+  const lessonRepresentationId =
+    `learner-experience.distribution-area.${lessonAssetId}`;
+  const cardRepresentationId =
+    "sample.animation.distribution.expand-a-sum";
+  const distributionIdentity = createKpCanonicalAnimationIdentity({
+    seed: {
+      animationId,
+      title: "Distribution",
+      source: {
+        kind: "catalog",
+        descriptorId:
+          "editor-animation.sample.animation.distribution.expand-a-sum"
+      },
+      expectedPlayability: "playable"
+    },
+    aliases: [lessonAssetId]
+  });
+  const choreographySource = {
+    kind: "lesson-animation" as const,
+    sourceId: lessonAssetId,
+    choreographyId:
+      "choreography.lesson.distribution-area.algebra-and-area"
+  };
+  const relationships = [
+    createKpAnimationRepresentationRelationship({
+      animationId,
+      representationId: lessonRepresentationId,
+      kind: "lesson",
+      label: "Distribution area lesson",
+      href: "/reader/distribution-area/",
+      playable: true,
+      presentationRole: "canonical",
+      choreographySource,
+      aliases: [lessonAssetId]
+    }),
+    createKpAnimationRepresentationRelationship({
+      animationId,
+      representationId: cardRepresentationId,
+      kind: "card",
+      label: "Distribution card",
+      playable: true,
+      presentationRole: "projection",
+      canonicalRepresentationId: lessonRepresentationId,
+      choreographySource
+    })
+  ];
+
+  const result = projectKpAnimationReviewEvidence({
+    identities: [distributionIdentity],
+    relationships,
+    currentRoundId: "round.current",
+    notes: [
+      note({
+        id: "note.lesson",
+        sequence: 1,
+        assetId: lessonAssetId,
+        projectionId: "equation-area.distribution",
+        documentId: "lesson.distribution-area",
+        route: "/reader/distribution-area/"
+      }),
+      note({
+        id: "note.card",
+        sequence: 2,
+        assetId: animationId,
+        projectionId: cardRepresentationId,
+        documentId: "editor.semantic-animation-workbench",
+        route:
+          `/?view=animation-workbench&workbenchAnimation=${animationId}`
+      })
+    ]
+  });
+
+  assert.equal(result.projections.length, 1);
+  const projection = result.projections[0]!;
+  assert.equal(projection.animationId, animationId);
+  assert.equal(projection.state, "changes-requested");
+  assert.deepEqual(
+    projection.current.map(
+      ({ capturedRepresentation }) => capturedRepresentation?.kind
+    ),
+    ["lesson", "card"]
+  );
+  assert.deepEqual(
+    projection.current.map(
+      ({ canonicalRepresentation }) =>
+        canonicalRepresentation?.representationId
+    ),
+    [lessonRepresentationId, lessonRepresentationId]
+  );
+  assert.equal(
+    projection.current[1]!.captureProjectionId,
+    cardRepresentationId
+  );
+});
+
 function note(
   input: Partial<KpDevReviewCompactNoteEvidence> & {
     readonly id: string;
     readonly assetId?: string;
+    readonly projectionId?: string;
+    readonly documentId?: string;
   }
 ): KpDevReviewCompactNoteEvidence {
   const assetId = input.assetId;
@@ -172,6 +277,12 @@ function note(
             },
             semantic: {
               assetId,
+              ...(input.projectionId === undefined
+                ? {}
+                : { projectionId: input.projectionId }),
+              ...(input.documentId === undefined
+                ? {}
+                : { documentId: input.documentId }),
               activeTransformationIds: [],
               focusRefs: []
             },

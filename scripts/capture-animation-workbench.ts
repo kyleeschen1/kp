@@ -29,6 +29,17 @@ const exemplars = [
     expectedPlayerCount: 1
   },
   {
+    id: "distribution-lesson-lineage",
+    animationId: "animation.generated.distribution.expand-a-sum",
+    query: "distribution",
+    progress: 0.7,
+    expectedPlayerCount: 1,
+    expectedPlaybackRepresentation:
+      "sample.animation.distribution.expand-a-sum",
+    expectedCanonicalRepresentation:
+      "learner-experience.distribution-area-scroll-lesson.exemplar.distribution-area.3-times-x-plus-2"
+  },
+  {
     id: "quadratic-planned",
     animationId: "animation.algebra.quadratic.solution-branching",
     query: "solution branching",
@@ -51,6 +62,9 @@ const captures: {
   reviewState: string;
   reviewCaptureCount: number;
   reviewCapturePlacement: string;
+  playbackRepresentationId: string;
+  canonicalRepresentationId: string;
+  promotionEvidenceSourceCount: number;
   horizontalOverflowPx: number;
 }[] = [];
 
@@ -107,6 +121,49 @@ try {
             .fill(String(exemplar.progress));
           await settleFrames(page);
         }
+        const livePreview = page.locator(
+          "[data-kp-animation-workbench-live-preview]"
+        );
+        const playbackRepresentationId =
+          playerCount === 0
+            ? "missing"
+            : (await livePreview.getAttribute(
+                "data-kp-animation-workbench-representation"
+              )) ?? "missing";
+        const canonicalRepresentationId =
+          playerCount === 0
+            ? "missing"
+            : (await livePreview.getAttribute(
+                "data-kp-animation-workbench-canonical-representation"
+              )) ?? "missing";
+        if (
+          "expectedPlaybackRepresentation" in exemplar &&
+          playbackRepresentationId !==
+            exemplar.expectedPlaybackRepresentation
+        ) {
+          throw new Error(
+            `${exemplar.animationId} expected playback projection ${exemplar.expectedPlaybackRepresentation}, received ${playbackRepresentationId}.`
+          );
+        }
+        if (
+          "expectedCanonicalRepresentation" in exemplar &&
+          canonicalRepresentationId !==
+            exemplar.expectedCanonicalRepresentation
+        ) {
+          throw new Error(
+            `${exemplar.animationId} expected canonical presentation ${exemplar.expectedCanonicalRepresentation}, received ${canonicalRepresentationId}.`
+          );
+        }
+        const promotionEvidenceSourceCount = await page
+          .locator(
+            "[data-kp-animation-workbench-promotion-lineage] li"
+          )
+          .count();
+        if (promotionEvidenceSourceCount === 0) {
+          throw new Error(
+            `${exemplar.animationId} does not expose canonical promotion evidence.`
+          );
+        }
 
         const horizontalOverflowPx = await page.evaluate(
           () =>
@@ -147,6 +204,9 @@ try {
             (await reviewCapture.getAttribute(
               "data-kp-dev-review-placement"
             )) ?? "missing",
+          playbackRepresentationId,
+          canonicalRepresentationId,
+          promotionEvidenceSourceCount,
           horizontalOverflowPx
         });
       } finally {
@@ -238,7 +298,7 @@ async function renderContactSheet(
         figcaption { display: grid; gap: 5px; padding: 13px 15px; border-top: 1px solid #e2ddd3; }
         figcaption code, figcaption span { color: #647069; font-size: 11px; overflow-wrap: anywhere; }
       </style></head><body>
-        <header><h1>Semantic Animation Workbench</h1><p>Control-plane checkpoint · radical, derivative, and planned quadratic · wide and narrow</p></header>
+        <header><h1>Semantic Animation Workbench</h1><p>Curated lineage checkpoint · radical, derivative, lesson-first distribution, and planned quadratic · wide and narrow</p></header>
         <main>${cards.join("")}</main>
       </body></html>`);
     const file = path.join(outputRoot, "contact-sheet.png");

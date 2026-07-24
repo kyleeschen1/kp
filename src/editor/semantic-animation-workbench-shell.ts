@@ -37,6 +37,7 @@ export function renderKpSemanticAnimationWorkbenchShell(input: {
   readonly selectedAnimationId?: string;
   readonly selectedDescriptor?: KpEditorAnimationDescriptor;
   readonly selectedRepresentationId?: string;
+  readonly selectedPlaybackRepresentationId?: string;
   readonly roadmap: KpWorkbenchRoadmap;
   readonly roadmapRows: readonly KpWorkbenchRoadmapRow[];
   readonly roadmapQuery: KpWorkbenchRoadmapQuery;
@@ -76,7 +77,8 @@ export function renderKpSemanticAnimationWorkbenchShell(input: {
           input.results,
           input.selectedAnimationId,
           input.selectedDescriptor,
-          input.selectedRepresentationId
+          input.selectedRepresentationId,
+          input.selectedPlaybackRepresentationId
         )}
       </main>
     </div>
@@ -250,7 +252,8 @@ function renderSelectedSummary(
   results: readonly KpSemanticAnimationWorkbenchQueryResult[],
   selectedAnimationId: string | undefined,
   selectedDescriptor: KpEditorAnimationDescriptor | undefined,
-  selectedRepresentationId: string | undefined
+  selectedRepresentationId: string | undefined,
+  selectedPlaybackRepresentationId: string | undefined
 ): string {
   const selected =
     results.find(
@@ -263,9 +266,13 @@ function renderSelectedSummary(
       <p>Change the search to return to the canonical index.</p>
     </div>`;
   }
-  const selectedRepresentation = selected.representations.find(
+  const playbackRepresentation = selected.representations.find(
     (representation) =>
-      representation.representationId === selectedRepresentationId
+      representation.representationId ===
+      selectedPlaybackRepresentationId
+  );
+  const canonicalRepresentation = selected.representations.find(
+    ({ presentationRole }) => presentationRole === "canonical"
   );
   const acceptance = renderKpAnimationAcceptanceBrief(
     deriveKpAnimationAcceptanceBrief({
@@ -282,7 +289,8 @@ function renderSelectedSummary(
     ${renderPreview(
       selected,
       selectedDescriptor,
-      selectedRepresentation,
+      playbackRepresentation,
+      canonicalRepresentation,
       acceptance
     )}
     <section class="kp-animation-workbench__metadata" data-kp-animation-workbench-metadata aria-labelledby="kp-animation-workbench-metadata-title">
@@ -298,6 +306,7 @@ function renderSelectedSummary(
         <div><dt>Representations</dt><dd>${selected.representations.length}</dd></div>
       </dl>
       ${renderLifecycleFacets(selected.lifecycle)}
+      ${renderPromotionLineage(selected)}
       ${renderRepresentationSwitcher(
         selected.representations,
         selectedRepresentationId
@@ -308,6 +317,21 @@ function renderSelectedSummary(
       })}
     </section>
   </article>`;
+}
+
+function renderPromotionLineage(
+  selected: KpSemanticAnimationWorkbenchQueryResult["entry"]
+): string {
+  return `<section class="kp-animation-workbench__promotion-lineage" data-kp-animation-workbench-promotion-lineage="${escapeHtml(selected.identity.animationId)}" aria-labelledby="kp-animation-workbench-promotion-title">
+    <div class="kp-animation-workbench__section-heading">
+      <p class="eyebrow">Canonical evidence</p>
+      <h3 id="kp-animation-workbench-promotion-title">Promotion lineage</h3>
+    </div>
+    <p><strong>${escapeHtml(selected.promotion.facet.maturity)}</strong> is derived for the canonical animation, independent of the selected lesson or card.</p>
+    <ul>${selected.promotion.evidenceSourceIds
+      .map((sourceId) => `<li><code>${escapeHtml(sourceId)}</code></li>`)
+      .join("")}</ul>
+  </section>`;
 }
 
 function renderTags(tags: readonly string[]): string {
@@ -413,7 +437,8 @@ function renderLifecycleFacets(
 function renderPreview(
   selected: KpSemanticAnimationWorkbenchQueryResult["entry"],
   descriptor: KpEditorAnimationDescriptor | undefined,
-  representation: KpAnimationRepresentationRelationship | undefined,
+  playbackRepresentation: KpAnimationRepresentationRelationship | undefined,
+  canonicalRepresentation: KpAnimationRepresentationRelationship | undefined,
   acceptance: string
 ): string {
   if (selected.lifecycle.playability !== "playable") {
@@ -433,9 +458,9 @@ function renderPreview(
       <p>The Workbench will not mount a player against a mismatched identity.</p>
     </section>${acceptance}`;
   }
-  return `<section class="kp-animation-workbench__live-preview editor-animation-library" data-kp-animation-workbench-live-preview data-kp-editor-animation-library data-kp-editor-animation-id="${escapeHtml(descriptor.animationId)}" data-kp-editor-animation-descriptor-id="${escapeHtml(descriptor.id)}"${representation === undefined ? "" : ` data-kp-animation-workbench-representation="${escapeHtml(representation.representationId)}"`}>
+  return `<section class="kp-animation-workbench__live-preview editor-animation-library" data-kp-animation-workbench-live-preview data-kp-editor-animation-library data-kp-editor-animation-id="${escapeHtml(descriptor.animationId)}" data-kp-editor-animation-descriptor-id="${escapeHtml(descriptor.id)}"${playbackRepresentation === undefined ? "" : ` data-kp-animation-workbench-representation="${escapeHtml(playbackRepresentation.representationId)}"`}${canonicalRepresentation === undefined ? "" : ` data-kp-animation-workbench-canonical-representation="${escapeHtml(canonicalRepresentation.representationId)}"`}>
     <div class="kp-animation-workbench__preview-heading">
-      <p class="eyebrow">${representation === undefined ? "Live animation" : `${escapeHtml(representation.kind)} representation`}</p>
+      <p class="eyebrow">${playbackRepresentation === undefined ? "Live animation" : `${escapeHtml(playbackRepresentation.kind)} projection`}</p>
     </div>
     ${renderKpEditorAnimationPlayerShell({ descriptor })}
     <p class="kp-animation-workbench__static-hint" data-kp-animation-workbench-static-hint>For a non-animated view, choose <strong>static checkpoints</strong> in the player’s Presentation control.</p>

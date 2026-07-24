@@ -3369,6 +3369,24 @@ h2 {
   margin-top: 1.5rem;
 }
 
+.kp-animation-workbench__promotion-lineage {
+  margin-top: 1.5rem;
+  padding: 0.85rem;
+  border-left: 3px solid rgba(38, 113, 77, 0.34);
+  background: rgba(239, 243, 239, 0.62);
+}
+
+.kp-animation-workbench__promotion-lineage > p,
+.kp-animation-workbench__promotion-lineage > ul {
+  margin-bottom: 0;
+}
+
+.kp-animation-workbench__promotion-lineage ul {
+  display: grid;
+  gap: 0.25rem;
+  padding-left: 1.25rem;
+}
+
 .kp-animation-workbench__representations {
   margin-top: 1.5rem;
 }

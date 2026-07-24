@@ -60,6 +60,16 @@ function renderEvidence(evidence: KpAnimationReviewEvidence): string {
     evidence.activePhase === undefined
       ? ""
       : `<span>Phase <code>${escapeHtml(evidence.activePhase)}</code></span>`;
+  const capturedRepresentation =
+    evidence.capturedRepresentation === undefined
+      ? evidence.captureProjectionId === undefined
+        ? ""
+        : `<span>Captured projection <code>${escapeHtml(evidence.captureProjectionId)}</code></span>`
+      : `<span>Captured in <strong>${escapeHtml(evidence.capturedRepresentation.kind)}</strong> <code>${escapeHtml(evidence.capturedRepresentation.representationId)}</code></span>`;
+  const canonicalRepresentation =
+    evidence.canonicalRepresentation === undefined
+      ? ""
+      : `<span>Canonical source <strong>${escapeHtml(evidence.canonicalRepresentation.kind)}</strong> <code>${escapeHtml(evidence.canonicalRepresentation.representationId)}</code></span>`;
   return `<li data-kp-animation-workbench-review-note="${escapeHtml(evidence.noteId)}" data-review-status="${escapeHtml(evidence.status)}">
     <div class="kp-animation-workbench__review-note-heading">
       <strong>${escapeHtml(evidence.status)}</strong>
@@ -67,7 +77,7 @@ function renderEvidence(evidence: KpAnimationReviewEvidence): string {
     </div>
     <p>${escapeHtml(evidence.comment)}</p>
     <div class="kp-animation-workbench__review-provenance">
-      ${checkpoint}${phase}
+      ${capturedRepresentation}${canonicalRepresentation}${checkpoint}${phase}
       <span>Build <code>${escapeHtml(evidence.buildFingerprint)}</code>${progress}</span>
       <a href="${safeHref(evidence.route)}">Open captured route</a>
     </div>
@@ -79,7 +89,7 @@ function stateMessage(state: KpAnimationWorkbenchReviewPanelState): string {
     case "loading":
       return "Loading the existing development review inbox…";
     case "available":
-      return "Current and historical notes are isolated by canonical animation identity.";
+      return "Lesson and card notes share canonical animation state while each capture keeps its exact representation.";
     case "unavailable":
       return "Review evidence is available only from the local development inbox.";
     case "error":

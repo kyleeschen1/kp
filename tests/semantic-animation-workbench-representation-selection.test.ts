@@ -77,6 +77,11 @@ test("lesson authority resolves a compact canonical card projection", () => {
 
   assert.equal(selection.relationship?.kind, "lesson");
   assert.equal(selection.relationship?.presentationRole, "canonical");
+  assert.equal(selection.playbackRelationship?.kind, "card");
+  assert.equal(
+    selection.playbackRelationship?.presentationRole,
+    "projection"
+  );
   assert.equal(
     selection.relationship?.choreographySource.choreographyId,
     "choreography.lesson.distribution-area.algebra-and-area"
@@ -100,6 +105,10 @@ test("superseded descriptor routes remain exactly resolvable fixtures", () => {
   });
 
   assert.equal(selection.relationship?.presentationRole, "superseded-fixture");
+  assert.equal(
+    selection.playbackRelationship?.representationId,
+    fixtureId
+  );
   assert.equal(selection.descriptor?.id, fixtureId);
 });
 

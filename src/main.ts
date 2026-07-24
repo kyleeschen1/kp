@@ -498,6 +498,12 @@ function renderAnimationWorkbenchView(): void {
           selectedRepresentationId:
             representationSelection.relationship.representationId
         }),
+    ...(representationSelection.playbackRelationship === undefined
+      ? {}
+      : {
+          selectedPlaybackRepresentationId:
+            representationSelection.playbackRelationship.representationId
+        }),
     roadmap: animationWorkbenchRoadmap,
     roadmapRows: queryKpWorkbenchRoadmap(
       animationWorkbenchRoadmap.rows,
@@ -683,9 +689,14 @@ async function hydrateAnimationWorkbenchReview(
     return;
   }
   try {
-    const result = await loadKpAnimationWorkbenchReviewEvidence(
-      animationWorkbenchIndex.entries.map(({ identity }) => identity)
-    );
+    const result = await loadKpAnimationWorkbenchReviewEvidence({
+      identities: animationWorkbenchIndex.entries.map(
+        ({ identity }) => identity
+      ),
+      relationships: animationWorkbenchIndex.entries.flatMap(
+        ({ representations }) => representations
+      )
+    });
     if (revision !== viewRevision || !reviewContainer.isConnected) return;
     const projection = result.projections.find(
       (candidate) =>
