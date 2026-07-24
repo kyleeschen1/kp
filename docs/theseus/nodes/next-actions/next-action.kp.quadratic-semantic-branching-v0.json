@@ -181,11 +181,18 @@
       "scope": "slice-19 accessibility and runtime hardening",
       "checkedAt": "2026-07-24T21:06:26.089Z",
       "notes": "255 convergence tests, 9 shared-reader tests, 14 Workbench tests, 8 quadratic browser tests, typecheck, production build, 8-route closure, post-hardening 5% budget baseline, 14 quadratic captures, 8 Workbench captures, and 773-node workspace validation passed. Reduced/static motion, narration, keyboard, resize/font/review recapture, forced colors, and no-script transcript are covered."
+    },
+    {
+      "command": "npm test; npm run test:semantic-animation-convergence; quadratic Chromium; npm run test:browser:reader-conformance; npm run test:browser:animation-workbench; npm run visual:quadratic-branching; npm run audit:presentation-groups; npm run perf:animation; npm run build; npm run check:reader-production; npm run check:reader-budgets; npm run check:dev-review-production; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-20 human exemplar checkpoint",
+      "checkedAt": "2026-07-24T21:19:10.786Z",
+      "notes": "2254 repository tests, 255 convergence tests, 8 quadratic browser tests, 9 shared-reader tests, 14 Workbench tests, 14 preservation captures, deterministic 10-frame contact sheet, presentation audit, performance, typecheck/build, all production closures, exact 5% route budget, and 773-node validation passed. Human visual approval remains required before slices 21-24."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Activated authoritative plan revision v8 with resolved convergence and active quadratic branching; established the exact 24-slice typed run contract and preserved all unrelated user-authored project docs."
+    "summary": "HUMAN_CHECKPOINT: the exact quadratic learner exemplar is complete through slice 20 with both methods, plus-minus branches, native reunion, exact graph correspondence, responsive/accessibility hardening, deterministic contact sheet, and release gates. Awaiting explicit visual approval before Workbench publication or shared-contract extraction."
   },
   "expectedLearning": [
     "Whether explicit quadratic method paths, plus-minus solution branching, and graph-root correspondence can share stable semantic identity and exact rewind without renderer-owned algebra.",

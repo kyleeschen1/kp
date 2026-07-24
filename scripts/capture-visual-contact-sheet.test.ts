@@ -5,6 +5,7 @@ import {
   buildKpVisualContactSheetHtml,
   createKpVisualReviewUrl,
   kpDistributionAreaContactSheetCheckpoints,
+  kpQuadraticBranchingContactSheetCheckpoints,
   kpSolveXContactSheetCheckpoints,
   kpVisualContactSheetExemplars
 } from "./capture-visual-contact-sheet.ts";
@@ -17,7 +18,8 @@ test("route descriptors expose every reader to visual review", () => {
     "divide-both-sides",
     "split-merge-fractions",
     "fractional-transfer",
-    "distribution-area"
+    "distribution-area",
+    "quadratic-branching"
   ]);
 });
 
@@ -36,6 +38,28 @@ test("canonical contact-sheet checkpoints have fixed unique ordering", () => {
     ]
   );
   assert.equal(new Set(kpSolveXContactSheetCheckpoints.map((checkpoint) => checkpoint.id)).size, 8);
+});
+
+test("quadratic contact sheet freezes both methods and wide and narrow outcomes", () => {
+  assert.deepEqual(
+    kpQuadraticBranchingContactSheetCheckpoints.map((checkpoint) => checkpoint.id),
+    [
+      "source",
+      "method-square",
+      "method-formula",
+      "branches",
+      "reunion",
+      "graph",
+      "method-square-phone",
+      "method-formula-phone",
+      "branches-phone",
+      "graph-phone"
+    ]
+  );
+  assert.equal(
+    new Set(kpQuadraticBranchingContactSheetCheckpoints.map((checkpoint) => checkpoint.id)).size,
+    10
+  );
 });
 
 test("distribution contact sheet pairs the same visual moments forward and backward", () => {

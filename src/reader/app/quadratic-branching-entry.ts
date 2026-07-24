@@ -280,25 +280,31 @@ window.addEventListener("resize", () => {
 reducedMotion.addEventListener("change", () => render(current));
 const onFontLoadingDone = (): void => invalidateLayout("font");
 document.fonts.addEventListener("loadingdone", onFontLoadingDone);
-const onReviewRequest = (): void => {
-  captureRevision += 1;
-  render(current);
-  stage.dataset["kpCaptureRevision"] = String(captureRevision);
-  window.dispatchEvent(new CustomEvent("kp:reader-dev-review-frame", {
-    detail: {
-      route: window.location.pathname,
-      progressPermille: current.progressPermille,
-      methodId,
-      clockId: stage.dataset["kpClockId"],
-      captureRevision
-    }
-  }));
-};
-window.addEventListener("kp:reader-dev-review-request-frame", onReviewRequest);
+let disposeReviewRequest = (): void => {};
+if (import.meta.env.DEV) {
+  const onReviewRequest = (): void => {
+    captureRevision += 1;
+    render(current);
+    stage.dataset["kpCaptureRevision"] = String(captureRevision);
+    window.dispatchEvent(new CustomEvent("kp:reader-dev-review-frame", {
+      detail: {
+        route: window.location.pathname,
+        progressPermille: current.progressPermille,
+        methodId,
+        clockId: stage.dataset["kpClockId"],
+        captureRevision
+      }
+    }));
+  };
+  window.addEventListener("kp:reader-dev-review-request-frame", onReviewRequest);
+  disposeReviewRequest = () => {
+    window.removeEventListener("kp:reader-dev-review-request-frame", onReviewRequest);
+  };
+}
 window.addEventListener("pagehide", () => {
   scrollClock.dispose();
   document.fonts.removeEventListener("loadingdone", onFontLoadingDone);
-  window.removeEventListener("kp:reader-dev-review-request-frame", onReviewRequest);
+  disposeReviewRequest();
 }, { once: true });
 
 function updateUrl(): void {

@@ -4,6 +4,7 @@ import path from "node:path";
 import { chromium } from "playwright";
 
 import { createKpQuadraticBranchingPreservationManifest } from "../src/editor/quadratic-branching-preservation.ts";
+import { captureKpVisualContactSheet } from "./capture-visual-contact-sheet.ts";
 
 const baseUrl =
   process.env["KP_VISUAL_BASE_URL"] ?? "http://127.0.0.1:8000";
@@ -150,10 +151,17 @@ try {
     )}\n`,
     "utf8"
   );
+  const contactSheet = await captureKpVisualContactSheet({
+    baseUrl,
+    exemplar: "quadratic-branching",
+    outputRoot: path.join(outputRoot, "checkpoint-contact-sheet")
+  });
   console.log(
     JSON.stringify(
       {
         manifest: path.relative(process.cwd(), outputManifest),
+        contactSheet: path.relative(process.cwd(), contactSheet.sheet),
+        contactSheetManifest: path.relative(process.cwd(), contactSheet.manifest),
         captures: captures.length,
         plannedPlayerCount: captures
           .filter(({ animationId }) =>

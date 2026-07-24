@@ -179,7 +179,8 @@
     {
       "id": "slice-20",
       "title": "Quadratic-exemplar-checkpoint",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: produced and visually inspected the deterministic 10-frame quadratic contact sheet, documented canonical acceptance criteria, preservation and rollback boundaries, and radical-residual isolation, removed the dev-review production marker, and passed the full release matrix. Slices 21-24 remain planned and require explicit approval.",
+      "status": "complete"
     },
     {
       "id": "slice-21",

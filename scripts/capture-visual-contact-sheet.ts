@@ -39,6 +39,8 @@ export interface KpVisualContactSheetCheckpoint {
 export const kpSolveXContactSheetCheckpoints = checkpointsFor("solve-x");
 export const kpDistributionAreaContactSheetCheckpoints =
   checkpointsFor("distribution-area");
+export const kpQuadraticBranchingContactSheetCheckpoints =
+  checkpointsFor("quadratic-branching");
 
 export interface KpVisualContactSheetItem {
   readonly id: string;

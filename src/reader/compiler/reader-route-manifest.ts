@@ -318,9 +318,13 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         { id: "method-formula", label: "Quadratic formula", progressPermille: 430, viewport: "desktop", query: { kpMethod: "formula" } },
         { id: "branches", label: "Plus-minus branches", progressPermille: 680, viewport: "desktop" },
         { id: "reunion", label: "Complete solution set", progressPermille: 880, viewport: "desktop" },
-        { id: "branches-phone", label: "Branches · phone", progressPermille: 680, viewport: "phone" }
+        { id: "graph", label: "Roots meet the graph", progressPermille: 1_000, viewport: "desktop" },
+        { id: "method-square-phone", label: "Complete the square · phone", progressPermille: 430, viewport: "phone" },
+        { id: "method-formula-phone", label: "Quadratic formula · phone", progressPermille: 430, viewport: "phone", query: { kpMethod: "formula" } },
+        { id: "branches-phone", label: "Branches · phone", progressPermille: 680, viewport: "phone" },
+        { id: "graph-phone", label: "Roots meet the graph · phone", progressPermille: 1_000, viewport: "phone" }
       ]
     },
-    budget: routeBudget(35_454, 5_404, 45_653)
+    budget: routeBudget(35_454, 5_404, 45_528)
   })
 ]);
