@@ -91,7 +91,8 @@
     {
       "id": "slice-08",
       "title": "Add the inter-owner presentation-equivalence law.",
-      "status": "planned"
+      "summary": "Inter-owner equivalence now checks member-local geometry plus actual ink bounds and coverage independent of opacity; a hidden mismatched owner fails. Eight focused tests pass.",
+      "status": "complete"
     },
     {
       "id": "slice-09",

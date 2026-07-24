@@ -360,6 +360,61 @@ export function evaluateKpIntraOwnerContinuity(input: {
   return issues;
 }
 
+export function evaluateKpInterOwnerEquivalence(input: {
+  readonly outgoing: KpPresentationOwnerObservation;
+  readonly incoming: KpPresentationOwnerObservation;
+  readonly contract: KpPresentationGroupContract;
+  readonly budget?: KpPresentationContinuityBudget | undefined;
+}): readonly KpPresentationContinuityIssue[] {
+  const budget = input.budget ?? kpDefaultPresentationContinuityBudget;
+  const issues = [...evaluateKpIntraOwnerContinuity({
+    actual: snapshotKpPresentationGroupGeometry({
+      contract: input.contract,
+      observation: input.outgoing
+    }),
+    native: snapshotKpPresentationGroupGeometry({
+      contract: input.contract,
+      observation: input.incoming
+    }),
+    budget
+  })];
+  if (input.outgoing.ink === undefined || input.incoming.ink === undefined) {
+    issues.push({
+      kind: "ink-bounds",
+      residual: Number.POSITIVE_INFINITY,
+      budget: budget.positionPx,
+      message: "Both presentation owners must expose rendered ink."
+    });
+    return issues;
+  }
+  const boundsResidual = Math.max(
+    Math.abs(input.outgoing.ink.rect.x - input.incoming.ink.rect.x),
+    Math.abs(input.outgoing.ink.rect.y - input.incoming.ink.rect.y),
+    Math.abs(input.outgoing.ink.rect.width - input.incoming.ink.rect.width),
+    Math.abs(input.outgoing.ink.rect.height - input.incoming.ink.rect.height)
+  );
+  if (boundsResidual > Math.max(budget.positionPx, budget.sizePx)) {
+    issues.push({
+      kind: "ink-bounds",
+      residual: boundsResidual,
+      budget: Math.max(budget.positionPx, budget.sizePx),
+      message: "Outgoing and incoming rendered ink bounds are not equivalent."
+    });
+  }
+  const coverageResidual = Math.abs(
+    input.outgoing.ink.coverage - input.incoming.ink.coverage
+  );
+  if (coverageResidual > budget.opacity) {
+    issues.push({
+      kind: "ink-coverage",
+      residual: coverageResidual,
+      budget: budget.opacity,
+      message: "Outgoing and incoming rendered ink coverage is not equivalent."
+    });
+  }
+  return issues;
+}
+
 function requireText(value: string, label: string): string {
   if (value.trim().length === 0) throw new Error(`Presentation group requires ${label}.`);
   return value;

@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   compileKpCompoundTargetDeclarations,
+  evaluateKpInterOwnerEquivalence,
   evaluateKpIntraOwnerContinuity,
   kpDefaultPresentationContinuityBudget,
   observeKpCompositeInk,
@@ -48,6 +49,64 @@ test("presentation groups describe semantic members without renderer resources",
   assert.equal(JSON.stringify(contract).includes("Element"), false);
   assert.equal(JSON.stringify(contract).includes("WebGL"), false);
   assert.equal(kpDefaultPresentationContinuityBudget.positionPx, 0.5);
+});
+
+test("inter-owner law cannot hide geometry mismatch with opacity", () => {
+  const contract: KpPresentationGroupContract = {
+    id: "product",
+    kind: "presentation-group",
+    members: [
+      { memberId: "factor", semanticEntityId: "a", nativeOrder: 0 },
+      { memberId: "term", semanticEntityId: "b", nativeOrder: 1 }
+    ],
+    settlementAnchorMemberId: "factor",
+    nativeOwnerId: "native",
+    cohesionLockProgress: 0.72
+  };
+  const outgoing: KpPresentationOwnerObservation = {
+    groupId: "product",
+    ownerId: "temporary",
+    progress: 0.95,
+    members: [
+      {
+        memberId: "factor",
+        rect: { x: 0, y: 0, width: 10, height: 12 },
+        opacity: 0
+      },
+      {
+        memberId: "term",
+        rect: { x: 17, y: 0, width: 11, height: 12 },
+        opacity: 0
+      }
+    ],
+    ink: { rect: { x: 0, y: 0, width: 28, height: 12 }, coverage: 0.7 }
+  };
+  const incoming: KpPresentationOwnerObservation = {
+    groupId: "product",
+    ownerId: "native",
+    progress: 0.95,
+    members: [
+      {
+        memberId: "factor",
+        rect: { x: 0, y: 0, width: 10, height: 12 },
+        opacity: 1
+      },
+      {
+        memberId: "term",
+        rect: { x: 10, y: 0, width: 11, height: 12 },
+        opacity: 1
+      }
+    ],
+    ink: { rect: { x: 0, y: 0, width: 21, height: 12 }, coverage: 0.7 }
+  };
+
+  const issues = evaluateKpInterOwnerEquivalence({
+    contract,
+    outgoing,
+    incoming
+  });
+  assert.ok(issues.some((issue) => issue.kind === "adjacent-gap"));
+  assert.ok(issues.some((issue) => issue.kind === "ink-bounds"));
 });
 
 test("intra-owner law rejects a late factor-to-term gap", () => {
