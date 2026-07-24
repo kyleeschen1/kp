@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import {
+  kpRetiredSemanticAnimationCompatibilityPaths,
   kpSemanticAnimationCompatibilityLedger,
   type KpSemanticAnimationCompatibilityStatus
 } from "../src/architecture/semantic-animation-compatibility-ledger.ts";
@@ -67,11 +68,36 @@ test("every compatibility path has one enforced disposition and owner", () => {
     kpSemanticAnimationCompatibilityLedger
       .filter(({ status }) => status === "retirement-candidate")
       .map(({ contractKey }) => contractKey),
+    []
+  );
+  assert.deepEqual(
+    kpRetiredSemanticAnimationCompatibilityPaths.map(
+      ({ formerContractKey }) => formerContractKey
+    ),
     [
       "equationSequenceEnvelopeRecipe",
       "equationFractionHierarchyRecipe"
     ]
   );
+});
+
+test("retired compatibility keys have complete production reference closure", () => {
+  const sourceFiles = typescriptFilesBeneath("src").filter(
+    (path) => !path.endsWith("semantic-animation-compatibility-ledger.ts")
+  );
+
+  for (const retired of kpRetiredSemanticAnimationCompatibilityPaths) {
+    assert.ok(retired.removedFrom.length > 0);
+    assert.ok(retired.replacement.startsWith("Typed "));
+    assert.equal(
+      sourceFiles.some((sourcePath) =>
+        readFileSync(join(projectRoot, sourcePath), "utf8")
+          .includes(retired.formerContractKey)
+      ),
+      false,
+      `retired compatibility key remains live: ${retired.formerContractKey}`
+    );
+  }
 });
 
 test("presentation metadata ledger exactly closes over production recipe keys", () => {

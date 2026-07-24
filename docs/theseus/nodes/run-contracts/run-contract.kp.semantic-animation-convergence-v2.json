@@ -766,6 +766,34 @@
       "scope": "s26 standard",
       "checkedAt": "2026-07-24T06:36:15.264Z",
       "notes": "Application, node, test, and domain TypeScript projects pass with the finalized compatibility disposition types."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-compatibility-ledger.test.ts tests/proven-presentation-profile-promotion.test.ts tests/product-consumer-projections.test.ts tests/semantic-animation-preservation-manifest.test.ts",
+      "status": "passed",
+      "scope": "s27 deletion reference, replacement, fixture, route, review, and export closure",
+      "checkedAt": "2026-07-24T06:40:58.757Z",
+      "notes": "All 15 targeted tests pass. The two retired metadata keys have zero production references outside their receipt; typed fraction profiles, source lineage, lesson/card authority, review scope, routes, and exports remain exact."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s27 full repository",
+      "checkedAt": "2026-07-24T06:40:59.861Z",
+      "notes": "All 2140 repository tests pass. Architecture reports 16 classified live compatibility paths, zero rendering exceptions, and no remaining retirement candidates."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s27 typecheck and production build",
+      "checkedAt": "2026-07-24T06:41:00.798Z",
+      "notes": "Application, node, test, and domain typechecks plus the production build pass after bounded deletion; only the pre-existing large Three.js chunk advisory remains."
+    },
+    {
+      "command": "npm run test:browser:animation-workbench",
+      "status": "passed",
+      "scope": "s27 route, review, card, lesson, and roadmap preservation",
+      "checkedAt": "2026-07-24T06:41:01.917Z",
+      "notes": "All 14 Chromium Workbench tests pass, including lesson-first distribution ownership, card capture provenance, review identity, canonical routes, and authoritative roadmap rows."
     }
   ],
   "expectedLearning": [
@@ -1008,7 +1036,8 @@
     {
       "id": "s27",
       "title": "Bounded-compatibility-deletion",
-      "status": "planned",
+      "summary": "Deleted only the two slice-26 retirement candidates: unread equationSequenceEnvelopeRecipe and equationFractionHierarchyRecipe metadata from divide-both-sides and numerator split/merge assets. Added a durable retirement receipt and executable zero-production-reference closure. Typed presentation profiles, source lineage, fixtures, lesson/card authority, routes, review identities, and exports remain exact. Fifteen targeted tests, all 2140 repository tests, production build/typecheck, architecture gates, and 14 Workbench browser tests pass; 16 classified live compatibility paths remain and none is deletion-eligible.",
+      "status": "complete",
       "planPhaseId": "semantic-animation-convergence"
     },
     {

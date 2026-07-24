@@ -137,45 +137,6 @@ export const kpSemanticAnimationCompatibilityLedger = [
     sunsetEvidence: [decoderEvidence()],
     retirementCondition: "Branch scheduling reads a typed equation presentation profile."
   }),
-  metadata({
-    key: "equationSequenceEnvelopeRecipe",
-    owner: reference(
-      "src/animation/divide-both-sides-equation-adapter.ts",
-      "equationSequenceEnvelopeRecipe"
-    ),
-    authors: [
-      reference(
-        "src/animation/numerator-split-merge-equation-adapter.ts",
-        "equationSequenceEnvelopeRecipe"
-      )
-    ],
-    consumers: [],
-    status: "retirement-candidate",
-    sunsetEvidence: [
-      sunsetEvidence(
-        "tests/proven-presentation-profile-promotion.test.ts",
-        "equationSequenceEnvelopeRecipe"
-      )
-    ],
-    retirementCondition: "Repository closure still shows no runtime reader at slice 26."
-  }),
-  metadata({
-    key: "equationFractionHierarchyRecipe",
-    owner: reference(
-      "src/animation/numerator-split-merge-equation-adapter.ts",
-      "equationFractionHierarchyRecipe"
-    ),
-    authors: [],
-    consumers: [],
-    status: "retirement-candidate",
-    sunsetEvidence: [
-      sunsetEvidence(
-        "tests/proven-presentation-profile-promotion.test.ts",
-        "equationFractionHierarchyRecipe"
-      )
-    ],
-    retirementCondition: "Repository closure still shows no runtime reader at slice 26."
-  }),
   compatibility({
     id: "compatibility.selector-pair-correspondence",
     category: "correspondence",
@@ -396,6 +357,32 @@ export const kpSemanticAnimationCompatibilityLedger = [
     retirementCondition: "Capability-pack loading supplies explicit runtime dependencies without import side effects."
   })
 ] as const satisfies readonly KpSemanticAnimationCompatibilityLedgerEntry[];
+
+export const kpRetiredSemanticAnimationCompatibilityPaths = [
+  {
+    id: "compatibility.metadata.equationSequenceEnvelopeRecipe",
+    formerContractKey: "equationSequenceEnvelopeRecipe",
+    removedFrom: [
+      "src/animation/divide-both-sides-equation-adapter.ts",
+      "src/animation/numerator-split-merge-equation-adapter.ts"
+    ],
+    replacement:
+      "Typed kp.equation-presentation-profile.v1 continuity policy.",
+    closureTest:
+      "tests/semantic-animation-compatibility-ledger.test.ts"
+  },
+  {
+    id: "compatibility.metadata.equationFractionHierarchyRecipe",
+    formerContractKey: "equationFractionHierarchyRecipe",
+    removedFrom: [
+      "src/animation/numerator-split-merge-equation-adapter.ts"
+    ],
+    replacement:
+      "Typed kp.equation-presentation-profile.v1 depth and continuant policy.",
+    closureTest:
+      "tests/semantic-animation-compatibility-ledger.test.ts"
+  }
+] as const;
 
 function equationRecipeAuthors(): KpCompatibilitySourceReference[] {
   return [

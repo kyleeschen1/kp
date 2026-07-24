@@ -139,11 +139,7 @@ function createNumeratorSplitMergeAnimationAsset(includeMerge: boolean): KpAnima
       depth: "semantic-depth-v1",
       continuants: "transit-then-reflow-v1"
     }),
-    metadata: {
-      sourceTraceId: source.sourceTraceId,
-      equationSequenceEnvelopeRecipe: "measure-once-per-sequence-v1",
-      equationFractionHierarchyRecipe: "preserve-native-katex-tree-v1"
-    }
+    metadata: { sourceTraceId: source.sourceTraceId }
   });
 }
 

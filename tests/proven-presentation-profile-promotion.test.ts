@@ -128,14 +128,12 @@ test("promoted profiles preserve exact prior recipe views", () => {
   );
 });
 
-test("experimental fraction metadata remains local and teacher detail stays legacy", () => {
+test("fraction assets retain source lineage while teacher detail stays legacy", () => {
   const fraction = createNumeratorSplitMergeEquationAnimationAsset();
   const teacherDetail = createLinearSolveTeacherZeroAnimationAsset();
 
   assert.deepEqual(fraction.metadata, {
-    sourceTraceId: "trace.algebra-canonical-numerator-split-merge",
-    equationSequenceEnvelopeRecipe: "measure-once-per-sequence-v1",
-    equationFractionHierarchyRecipe: "preserve-native-katex-tree-v1"
+    sourceTraceId: "trace.algebra-canonical-numerator-split-merge"
   });
   assert.equal(teacherDetail.presentationProfile, undefined);
   assert.equal(
