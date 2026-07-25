@@ -306,14 +306,36 @@ export function compileKpNativeKatexSceneTracks(
       );
     }
     if (disposition.lifecycle === "eliminate") {
-      return sources.map((source, index) =>
-        track(disposition, index, source, source, 1, 0)
-      );
+      return sources.map((source, index) => {
+        const sceneTrack = track(disposition, index, source, source, 1, 0);
+        return Object.freeze({
+          ...sceneTrack,
+          endRect: Object.freeze({
+            ...source.rect,
+            top: source.rect.top - 8
+          })
+        });
+      });
     }
     if (disposition.lifecycle === "introduce") {
-      return targets.map((target, index) =>
-        track(disposition, index, target, target, 0, 1, target.id)
-      );
+      return targets.map((target, index) => {
+        const sceneTrack = track(
+          disposition,
+          index,
+          target,
+          target,
+          0,
+          1,
+          target.id
+        );
+        return Object.freeze({
+          ...sceneTrack,
+          startRect: Object.freeze({
+            ...target.rect,
+            top: target.rect.top + 8
+          })
+        });
+      });
     }
     return [];
   }));
@@ -326,7 +348,8 @@ export function sampleKpNativeKatexSceneTracks(
   if (!Number.isFinite(progress)) {
     throw new Error("Scene track progress must be finite.");
   }
-  const eased = smoothstep(Math.max(0, Math.min(1, progress)));
+  const bounded = Math.max(0, Math.min(1, progress));
+  const eased = smoothstep(bounded);
   return Object.freeze(tracks.map((sceneTrack) => Object.freeze({
     trackId: sceneTrack.id,
     componentId: sceneTrack.componentId,
@@ -339,7 +362,11 @@ export function sampleKpNativeKatexSceneTracks(
       sceneTrack.endRect,
       eased
     )),
-    opacity: lerp(sceneTrack.startOpacity, sceneTrack.endOpacity, eased)
+    opacity: lerp(
+      sceneTrack.startOpacity,
+      sceneTrack.endOpacity,
+      lifecycleOpacityProgress(sceneTrack, bounded)
+    )
   })));
 }
 
@@ -518,4 +545,18 @@ function lerp(source: number, target: number, progress: number): number {
 
 function smoothstep(value: number): number {
   return value * value * (3 - 2 * value);
+}
+
+function lifecycleOpacityProgress(
+  track: KpNativeKatexSceneTrack,
+  progress: number
+): number {
+  if (track.startOpacity === track.endOpacity) return progress;
+  const [start, end] =
+    track.lifecycle === "merge" ? [0.62, 0.94] :
+    track.lifecycle === "split" ? [0.18, 0.68] :
+    track.lifecycle === "introduce" ? [0.28, 0.82] :
+    track.lifecycle === "eliminate" ? [0.08, 0.62] :
+    [0, 1];
+  return smoothstep(Math.max(0, Math.min(1, (progress - start) / (end - start))));
 }

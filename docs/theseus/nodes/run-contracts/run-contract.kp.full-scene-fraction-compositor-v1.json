@@ -114,6 +114,13 @@
       "scope": "slice-13 rule and structural interpolation",
       "checkedAt": "2026-07-25T17:37:46.654Z",
       "notes": "23 focused tests, 24 Chromium tests, and all TypeScript projects pass; both exact fraction rules use generic rule-length tracks with bounded continuous midpoint geometry."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-14 generic merge and departure",
+      "checkedAt": "2026-07-25T17:40:14.561Z",
+      "notes": "24 focused tests and all TypeScript projects pass; secondary merge ink remains until convergence, while generic introduction/elimination use bounded local vertical motion and lifecycle opacity windows."
     }
   ],
   "allowedWork": [
@@ -220,7 +227,8 @@
     {
       "id": "slice-14",
       "title": "generic-merge-and-departure",
-      "status": "planned"
+      "summary": "Added generic convergence-first merge opacity, split/arrival windows, and eight-pixel local introduction/elimination motion so lifecycle changes remain visible without subtree switching.",
+      "status": "complete"
     },
     {
       "id": "slice-15",

@@ -403,6 +403,45 @@ test("structural rule tracks use generic continuous length interpolation", () =>
   ), true);
 });
 
+test("generic lifecycle timing converges before merge loss and moves local departures", () => {
+  const source = createScene("source", ["source.a", "source.b", "source.old"]);
+  const target = createScene("target", ["target.result", "target.new"]);
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source,
+    target,
+    relations: [{
+      id: "lineage.merge",
+      relation: "merge",
+      sourceEntityIds: ["entity.a", "entity.b"],
+      targetEntityIds: ["entity.result"]
+    }]
+  });
+  const tracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+  );
+  const mergeSecondary = tracks.find(({ lifecycle, endOpacity }) =>
+    lifecycle === "merge" && endOpacity === 0
+  )!;
+  const departure = tracks.find(({ lifecycle }) =>
+    lifecycle === "eliminate"
+  )!;
+  const introduction = tracks.find(({ lifecycle }) =>
+    lifecycle === "introduce"
+  )!;
+  const early = sampleKpNativeKatexSceneTracks(tracks, 0.5);
+  const late = sampleKpNativeKatexSceneTracks(tracks, 0.8);
+
+  assert.equal(
+    early.find(({ trackId }) => trackId === mergeSecondary.id)?.opacity,
+    1
+  );
+  assert.ok(
+    late.find(({ trackId }) => trackId === mergeSecondary.id)!.opacity < 1
+  );
+  assert.equal(departure.endRect.top, departure.startRect.top - 8);
+  assert.equal(introduction.startRect.top, introduction.endRect.top + 8);
+});
+
 function createScene(
   endpoint: "source" | "target",
   ids: readonly string[]
