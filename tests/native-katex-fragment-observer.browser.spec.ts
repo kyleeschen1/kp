@@ -591,6 +591,118 @@ test("radical succession inventories native glyph, rule, and path paint", async 
   expect(new Set(viewportKeys).size).toBe(4);
 });
 
+test("radical succession reconciles through existing generic lifecycles", async ({
+  page
+}) => {
+  await page.goto(
+    "/glyph-reconciliation-experiment.html?radicalInventory=1&progress=0"
+  );
+  await page.locator(
+    '[data-radical-inventory][data-kp-radical-inventory-ready="true"]'
+  ).waitFor();
+  const result = await page.evaluate(() => {
+    type Disposition = {
+      id: string;
+      lifecycle: string;
+      sourceAtomIds: readonly string[];
+      targetAtomIds: readonly string[];
+      semanticEntityIds: readonly string[];
+    };
+    type Reconciliation = {
+      source: { atoms: readonly { id: string }[] };
+      target: { atoms: readonly { id: string }[] };
+      dispositions: readonly Disposition[];
+    };
+    type Plan = {
+      components: readonly {
+        lifecycle: string;
+        atoms: readonly { atomId: string }[];
+      }[];
+    };
+    const inventory = (window as unknown as {
+      __kpRadicalSceneInventory: {
+        relations: readonly { relation: string }[];
+        reconciliation: Reconciliation;
+        permutedReconciliation: Reconciliation;
+        plan: Plan;
+        reverseReconciliation: Reconciliation;
+        reversePlan: Plan;
+      };
+    }).__kpRadicalSceneInventory;
+    const summarize = (reconciliation: Reconciliation, plan: Plan) => ({
+      lifecycleCounts: Object.fromEntries(
+        ["persist", "merge", "split", "introduce", "eliminate", "unsupported"]
+          .map((lifecycle) => [
+            lifecycle,
+            reconciliation.dispositions.filter((candidate) =>
+              candidate.lifecycle === lifecycle
+            ).length
+          ])
+      ),
+      sourceIds: reconciliation.source.atoms.map(({ id }) => id).sort(),
+      coveredSourceIds: reconciliation.dispositions.flatMap(
+        ({ sourceAtomIds }) => sourceAtomIds
+      ).sort(),
+      targetIds: reconciliation.target.atoms.map(({ id }) => id).sort(),
+      coveredTargetIds: reconciliation.dispositions.flatMap(
+        ({ targetAtomIds }) => targetAtomIds
+      ).sort(),
+      componentCount: plan.components.length,
+      componentAtomCount: plan.components.flatMap(({ atoms }) => atoms).length,
+      dispositions: reconciliation.dispositions
+    });
+    return {
+      relationKinds: inventory.relations.map(({ relation }) => relation),
+      forward: summarize(inventory.reconciliation, inventory.plan),
+      permutedDispositionIds:
+        inventory.permutedReconciliation.dispositions.map(({ id }) => id),
+      reverse: summarize(
+        inventory.reverseReconciliation,
+        inventory.reversePlan
+      )
+    };
+  });
+
+  expect(result.relationKinds).toEqual([
+    "persist",
+    "persist",
+    "persist",
+    "persist"
+  ]);
+  expect(result.forward.lifecycleCounts).toEqual({
+    persist: 1,
+    merge: 0,
+    split: 0,
+    introduce: 1,
+    eliminate: 3,
+    unsupported: 0
+  });
+  expect(result.reverse.lifecycleCounts).toEqual({
+    persist: 1,
+    merge: 0,
+    split: 0,
+    introduce: 3,
+    eliminate: 1,
+    unsupported: 0
+  });
+  expect(result.forward.coveredSourceIds).toEqual(result.forward.sourceIds);
+  expect(result.forward.coveredTargetIds).toEqual(result.forward.targetIds);
+  expect(result.reverse.coveredSourceIds).toEqual(result.reverse.sourceIds);
+  expect(result.reverse.coveredTargetIds).toEqual(result.reverse.targetIds);
+  expect(result.forward.componentCount).toBe(5);
+  expect(result.forward.componentAtomCount).toBe(6);
+  expect(result.reverse.componentCount).toBe(5);
+  expect(result.reverse.componentAtomCount).toBe(6);
+  expect(result.permutedDispositionIds).toEqual(
+    result.forward.dispositions.map(({ id }) => id)
+  );
+  expect(result.forward.dispositions.find(({ lifecycle }) =>
+    lifecycle === "introduce"
+  )?.semanticEntityIds).toEqual([
+    "expression.generated.radical.square-root-as-power.radical.root-notation"
+  ]);
+});
+
 test("live fraction scene exposes continuously sampled structural rule tracks", async ({
   page
 }) => {

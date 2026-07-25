@@ -232,10 +232,7 @@ export function observeKpNativeKatexGlyphPaintAtoms(input: {
       ) {
         return false;
       }
-      return [...element.childNodes].some((node) =>
-        node.nodeType === Node.TEXT_NODE &&
-        (node.textContent ?? "").trim() !== ""
-      );
+      return directPaintText(element) !== "";
     });
   return Object.freeze(candidates.flatMap((sourceElement, ordinal) => {
     const computed = getComputedStyle(sourceElement);
@@ -249,11 +246,7 @@ export function observeKpNativeKatexGlyphPaintAtoms(input: {
     ) {
       return [];
     }
-    const text = [...sourceElement.childNodes]
-      .filter((node) => node.nodeType === Node.TEXT_NODE)
-      .map((node) => node.textContent ?? "")
-      .join("")
-      .trim();
+    const text = directPaintText(sourceElement);
     return [Object.freeze({
       kind: "native-katex-paint-atom-observation" as const,
       lifecycle: "renderer-session" as const,
@@ -446,6 +439,17 @@ function paintStyleFingerprint(computed: CSSStyleDeclaration): string {
   ].map((property) =>
     `${property}:${computed.getPropertyValue(property)}`
   ).join("|");
+}
+
+function directPaintText(element: HTMLElement): string {
+  // KaTeX uses zero-width vlist text as layout scaffolding; its wrapper can
+  // have geometry even though the text contributes no visible paint.
+  return [...element.childNodes]
+    .filter((node) => node.nodeType === Node.TEXT_NODE)
+    .map((node) => node.textContent ?? "")
+    .join("")
+    .replace(/[\u200b-\u200d\ufeff]/g, "")
+    .trim();
 }
 
 function observeCompleteScene(input: {

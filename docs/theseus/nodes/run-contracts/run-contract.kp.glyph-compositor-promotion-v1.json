@@ -369,6 +369,34 @@
       "scope": "slice-18",
       "checkedAt": "2026-07-25T20:47:04.797Z",
       "notes": "Wide DPR1 and phone DPR2 real-KaTeX endpoints settle with total explicit ownership. Source paint contains generic glyph and rule atoms including exponent denominator 2; target paint contains generic glyph and path atoms including the radicand and existing root-notation representation. IDs are unique, geometry is positive and finite, and four viewport cache keys are distinct."
+    },
+    {
+      "command": "playwright radical succession reconciles",
+      "status": "failed",
+      "scope": "slice-19",
+      "checkedAt": "2026-07-25T20:52:57.004Z",
+      "notes": "Expected one compatible persistent paint atom but observed two. The extra is KaTeX zero-width vlist scaffold text whose wrapper has geometry; the generic glyph observer must exclude non-painted zero-width layout text before reconciliation."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-19",
+      "checkedAt": "2026-07-25T20:55:52.323Z",
+      "notes": "38 compositor checks and all TypeScript projects pass. Canonical lineage projects generically to persist/merge/split relations, reverses merge/split exactly, rejects duplicate relation IDs, and adds no lifecycle category."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-19",
+      "checkedAt": "2026-07-25T20:55:53.963Z",
+      "notes": "All 36 Chromium checks pass. Radical forward reconciliation has one persist, three eliminate, one introduce; reverse mirrors one persist, one eliminate, three introduce. Coverage is total, component atom count is exact, permutation is stable, and unsupported remains zero. Generic zero-width KaTeX layout scaffolding is no longer treated as paint."
+    },
+    {
+      "command": "npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-19",
+      "checkedAt": "2026-07-25T20:55:55.429Z",
+      "notes": "Stable capture still produces 10 overview, 14 dense endpoint, and six inverse split frames after excluding non-painted zero-width KaTeX scaffolding."
     }
   ],
   "allowedWork": [
@@ -508,7 +536,8 @@
     {
       "id": "slice-19",
       "title": "radical-succession-reconciliation",
-      "status": "planned"
+      "summary": "Added an operation-neutral projection from canonical lineage arity to the existing persist, merge, and split paint relations plus exact reversal. The real radical scene reconciles totally as one x-to-radicand persist, three eliminations, and one intact native-path introduction; reverse mirrors those counts, hierarchy covers all six endpoint atoms, permutation is stable, and unsupported is zero. Excluded KaTeX zero-width layout scaffolding from generic paint observation after it surfaced as a false persistent glyph. No succession lifecycle, radical matcher, or operation scheduler was added.",
+      "status": "complete"
     },
     {
       "id": "slice-20",

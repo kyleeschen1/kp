@@ -4,6 +4,9 @@ import {
   createExponentRadicalRepresentationalLineageFixture
 } from "../animation/exponent-radical-adapter.ts";
 import {
+  projectKpCanonicalExecutionLineage
+} from "../animation/canonical-operation-lineage-adapter.ts";
+import {
   createKpRadicalSuccessionGlyphReconciliationAudit
 } from "../animation/semantic-glyph-reconciliation-radical.ts";
 import {
@@ -11,6 +14,12 @@ import {
   createKpExponentRadicalSelectorAnnotatedLatex
 } from "../editor/exponent-radical-semantic-latex.ts";
 import { createKpEquationFontReadiness } from "../rendering/equation-font-readiness.ts";
+import {
+  compileKpNativeKatexHierarchicalScenePlan,
+  projectKpNativeKatexSemanticPaintRelations,
+  reconcileKpNativeKatexScenes,
+  reverseKpNativeKatexSemanticPaintRelations
+} from "../rendering/native-katex-scene-compositor.ts";
 import {
   settleAndObserveKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";
@@ -90,7 +99,7 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
     "group.radical.target.root-notation";
 
   const fontReadiness = createKpEquationFontReadiness(document);
-  const [source, target] = await Promise.all([
+  const [source, target, reverseSource, reverseTarget] = await Promise.all([
     settleAndObserveKpNativeKatexRenderedScene({
       endpoint: "source",
       stage,
@@ -106,8 +115,55 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
       semanticEntityId: representation.targetRepresentation.entityId,
       presentationGroupId: "group.radical.target",
       fontReadiness
+    }),
+    settleAndObserveKpNativeKatexRenderedScene({
+      endpoint: "source",
+      stage,
+      root: targetRoot,
+      semanticEntityId: representation.targetRepresentation.entityId,
+      presentationGroupId: "group.radical.target",
+      fontReadiness
+    }),
+    settleAndObserveKpNativeKatexRenderedScene({
+      endpoint: "target",
+      stage,
+      root: sourceRoot,
+      semanticEntityId: representation.sourceRepresentation.entityId,
+      presentationGroupId: "group.radical.source",
+      fontReadiness
     })
   ]);
+  const relations = [
+    ...projectKpNativeKatexSemanticPaintRelations(
+      projectKpCanonicalExecutionLineage(audit.execution)
+    ),
+    {
+      id: `paint.${representation.id}`,
+      relation: "persist" as const,
+      sourceEntityIds: [representation.sourceRepresentation.entityId],
+      targetEntityIds: [representation.targetRepresentation.entityId]
+    }
+  ];
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source,
+    target,
+    relations
+  });
+  const permutedReconciliation = reconcileKpNativeKatexScenes({
+    source: { ...source, atoms: [...source.atoms].reverse() },
+    target: { ...target, atoms: [...target.atoms].reverse() },
+    relations
+  });
+  const reverseRelations =
+    reverseKpNativeKatexSemanticPaintRelations(relations);
+  const reverseReconciliation = reconcileKpNativeKatexScenes({
+    source: reverseSource,
+    target: reverseTarget,
+    relations: reverseRelations
+  });
+  const plan = compileKpNativeKatexHierarchicalScenePlan(reconciliation);
+  const reversePlan =
+    compileKpNativeKatexHierarchicalScenePlan(reverseReconciliation);
   panel.dataset["kpRadicalInventoryReady"] = "true";
   panel.dataset["kpRadicalSourceAtomCount"] = String(source.atoms.length);
   panel.dataset["kpRadicalTargetAtomCount"] = String(target.atoms.length);
@@ -121,7 +177,17 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
   } target atoms`;
   if (import.meta.env.DEV) {
     Object.assign(window, {
-      __kpRadicalSceneInventory: Object.freeze({ source, target })
+      __kpRadicalSceneInventory: Object.freeze({
+        source,
+        target,
+        relations,
+        reconciliation,
+        permutedReconciliation,
+        plan,
+        reverseRelations,
+        reverseReconciliation,
+        reversePlan
+      })
     });
   }
 }

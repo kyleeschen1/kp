@@ -14,7 +14,9 @@ import {
   correlateKpNativeKatexSceneHandoff,
   createKpNativeKatexScenePlayback,
   createKpNativeKatexSceneReconciliation,
+  projectKpNativeKatexSemanticPaintRelations,
   reconcileKpNativeKatexScenes,
+  reverseKpNativeKatexSemanticPaintRelations,
   sampleKpNativeKatexSceneTracks
 } from "../src/rendering/native-katex-scene-compositor.ts";
 import type {
@@ -629,6 +631,66 @@ test("explicit semantic relations compile generic merge multiplicity", () => {
   assert.deepEqual(result.dispositions.map(({ lifecycle }) => lifecycle), ["merge"]);
   assert.deepEqual(result.dispositions[0]?.sourceAtomIds, ["source.a", "source.b"]);
   assert.deepEqual(result.dispositions[0]?.targetAtomIds, ["target.result"]);
+});
+
+test("canonical lineage projects and reverses through existing paint relations", () => {
+  const relations = projectKpNativeKatexSemanticPaintRelations({
+    groups: [{
+      id: "lineage.base",
+      kind: "one-to-one",
+      sourceEntityIds: ["power.base"],
+      targetEntityIds: ["radical.radicand"]
+    }, {
+      id: "lineage.copy",
+      kind: "one-to-many",
+      sourceEntityIds: ["source.shared"],
+      targetEntityIds: ["target.left", "target.right"]
+    }, {
+      id: "lineage.absorb",
+      kind: "removal",
+      sourceEntityIds: ["power.numerator"],
+      targetEntityIds: []
+    }]
+  });
+
+  assert.deepEqual(relations, [{
+    id: "paint.lineage.base",
+    relation: "persist",
+    sourceEntityIds: ["power.base"],
+    targetEntityIds: ["radical.radicand"]
+  }, {
+    id: "paint.lineage.copy",
+    relation: "split",
+    sourceEntityIds: ["source.shared"],
+    targetEntityIds: ["target.left", "target.right"]
+  }]);
+  assert.deepEqual(reverseKpNativeKatexSemanticPaintRelations(relations), [{
+    id: "reverse.paint.lineage.base",
+    relation: "persist",
+    sourceEntityIds: ["radical.radicand"],
+    targetEntityIds: ["power.base"]
+  }, {
+    id: "reverse.paint.lineage.copy",
+    relation: "merge",
+    sourceEntityIds: ["target.left", "target.right"],
+    targetEntityIds: ["source.shared"]
+  }]);
+  assert.throws(
+    () => projectKpNativeKatexSemanticPaintRelations({
+      groups: [{
+        id: "duplicate",
+        kind: "removal",
+        sourceEntityIds: ["a"],
+        targetEntityIds: []
+      }, {
+        id: "duplicate",
+        kind: "introduction",
+        sourceEntityIds: [],
+        targetEntityIds: ["b"]
+      }]
+    }),
+    /unique and non-empty/
+  );
 });
 
 test("generic split reconciliation is total, permutation-stable, and reversible", () => {

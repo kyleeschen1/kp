@@ -151,6 +151,52 @@ export interface KpNativeKatexSemanticPaintRelation {
   readonly targetEntityIds: readonly string[];
 }
 
+export function projectKpNativeKatexSemanticPaintRelations(input: {
+  readonly groups: readonly {
+    readonly id: string;
+    readonly kind:
+      | "one-to-one"
+      | "many-to-one"
+      | "one-to-many"
+      | "introduction"
+      | "removal";
+    readonly sourceEntityIds: readonly string[];
+    readonly targetEntityIds: readonly string[];
+  }[];
+}): readonly KpNativeKatexSemanticPaintRelation[] {
+  assertUniqueRelationIds(input.groups.map(({ id }) => id));
+  return Object.freeze(input.groups.flatMap((group) => {
+    if (group.kind === "introduction" || group.kind === "removal") return [];
+    const relation = group.kind === "many-to-one"
+      ? "merge" as const
+      : group.kind === "one-to-many"
+        ? "split" as const
+        : "persist" as const;
+    return [Object.freeze({
+      id: `paint.${group.id}`,
+      relation,
+      sourceEntityIds: Object.freeze([...group.sourceEntityIds]),
+      targetEntityIds: Object.freeze([...group.targetEntityIds])
+    })];
+  }));
+}
+
+export function reverseKpNativeKatexSemanticPaintRelations(
+  relations: readonly KpNativeKatexSemanticPaintRelation[]
+): readonly KpNativeKatexSemanticPaintRelation[] {
+  assertUniqueRelationIds(relations.map(({ id }) => id));
+  return Object.freeze(relations.map((relation) => Object.freeze({
+    id: `reverse.${relation.id}`,
+    relation: relation.relation === "merge"
+      ? "split" as const
+      : relation.relation === "split"
+        ? "merge" as const
+        : "persist" as const,
+    sourceEntityIds: Object.freeze([...relation.targetEntityIds]),
+    targetEntityIds: Object.freeze([...relation.sourceEntityIds])
+  })));
+}
+
 export function reconcileKpNativeKatexScenes(input: {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
@@ -947,6 +993,15 @@ function assertLifecycleArity(
     throw new Error(
       `Scene disposition ${disposition.id} has invalid ${disposition.lifecycle} arity.`
     );
+  }
+}
+
+function assertUniqueRelationIds(ids: readonly string[]): void {
+  if (
+    ids.some((id) => id.trim() === "") ||
+    new Set(ids).size !== ids.length
+  ) {
+    throw new Error("Semantic paint relation IDs must be unique and non-empty.");
   }
 }
 
