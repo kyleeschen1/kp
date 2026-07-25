@@ -293,6 +293,13 @@ const traceDetail = root.querySelector<HTMLOListElement>(
 const traceStatus = root.querySelector<HTMLOutputElement>(
   "[data-trace-status]"
 )!;
+const compoundSceneController =
+  searchParams.get("compoundScene") === "1"
+    ? await import("./glyph-reconciliation-compound-scene.ts").then(
+        ({ initializeKpGlyphReconciliationCompoundScene }) =>
+          initializeKpGlyphReconciliationCompoundScene(tracePanel)
+      )
+    : undefined;
 
 await fontReadiness.whenReady();
 await nextFrame();
@@ -766,32 +773,51 @@ branchChoiceButtons.forEach((button) => {
 tracePlay.addEventListener("click", () => {
   stopPlayback();
   stopTracePlayback();
+  const traceStartProgress =
+    compoundSceneController?.currentProgress() ?? 0;
+  const traceTargetProgress = traceStartProgress >= 1 ? 0 : 1;
   if (reducedMotion) {
+    compoundSceneController?.render(traceTargetProgress);
     traceOperations.forEach((operation) => {
-      operation.dataset["traceState"] = "complete";
+      operation.dataset["traceState"] =
+        traceTargetProgress === 1 ? "complete" : "pending";
     });
     tracePanel.dataset["traceCompletedCycles"] = String(
       Number(tracePanel.dataset["traceCompletedCycles"] ?? "0") + 1
     );
-    tracePlay.textContent = "Compressed work shown";
+    tracePlay.textContent =
+      traceTargetProgress === 1 ? "Compressed work shown" : "Play compressed work";
     traceStatus.value =
-      `All ${traceOperations.length} operations shown without motion.`;
+      traceTargetProgress === 1
+        ? `All ${traceOperations.length} operations shown without motion.`
+        : "Native starting equation restored without motion.";
     return;
   }
   const startedAt = performance.now();
   tracePlay.textContent = "Playing…";
   tracePlay.disabled = true;
+  const traceDurationMs =
+    compoundTrace.compressedDurationMs *
+    Math.abs(traceTargetProgress - traceStartProgress);
   const tick = (now: number): void => {
-    const elapsedMs = Math.min(
-      compoundTrace.compressedDurationMs,
-      now - startedAt
+    const elapsedMs = Math.min(traceDurationMs, now - startedAt);
+    const elapsedProgress =
+      traceDurationMs === 0 ? 1 : elapsedMs / traceDurationMs;
+    const traceProgress = lerp(
+      traceStartProgress,
+      traceTargetProgress,
+      elapsedProgress
+    );
+    compoundSceneController?.render(
+      traceProgress
     );
     const activeIndex = Math.min(
       compoundTrace.operationIds.length - 1,
-      Math.floor(elapsedMs / 180)
+      Math.floor(traceProgress * compoundTrace.operationIds.length)
     );
     traceOperations.forEach((operation, index) => {
-      operation.dataset["traceState"] = index < activeIndex
+      operation.dataset["traceState"] =
+        traceProgress === 1 || index < activeIndex
         ? "complete"
         : index === activeIndex
           ? "active"
@@ -799,21 +825,27 @@ tracePlay.addEventListener("click", () => {
     });
     traceStatus.value =
       `Compressed operation ${activeIndex + 1} of ${traceOperations.length}`;
-    if (elapsedMs < compoundTrace.compressedDurationMs) {
+    if (elapsedMs < traceDurationMs) {
       traceAnimationFrame = requestAnimationFrame(tick);
       return;
     }
     traceAnimationFrame = undefined;
     tracePlay.disabled = false;
-    tracePlay.textContent = "Replay compressed work";
+    tracePlay.textContent =
+      traceTargetProgress === 1
+        ? "Rewind compressed work"
+        : "Play compressed work";
     traceOperations.forEach((operation) => {
-      operation.dataset["traceState"] = "complete";
+      operation.dataset["traceState"] =
+        traceTargetProgress === 1 ? "complete" : "pending";
     });
     tracePanel.dataset["traceCompletedCycles"] = String(
       Number(tracePanel.dataset["traceCompletedCycles"] ?? "0") + 1
     );
     traceStatus.value =
-      `All ${traceOperations.length} canonical operations depicted.`;
+      traceTargetProgress === 1
+        ? `All ${traceOperations.length} canonical operations depicted.`
+        : "Native starting equation restored.";
   };
   traceAnimationFrame = requestAnimationFrame(tick);
 });
@@ -822,7 +854,8 @@ traceInspect.addEventListener("click", () => {
   stopPlayback();
   stopTracePlayback();
   if (opening) {
-    traceParentProgress = currentProgress();
+    traceParentProgress =
+      compoundSceneController?.currentProgress() ?? currentProgress();
     const liveTrace = createKpGlyphReconciliationCompoundTrace({
       parentProgress: traceParentProgress
     });
@@ -836,6 +869,7 @@ traceInspect.addEventListener("click", () => {
       button.disabled = true;
     });
     tracePlay.disabled = true;
+    compoundSceneController?.setScrubberDisabled(true);
     tracePanel.dataset["traceMode"] = "full-detail";
     tracePanel.dataset["traceParentProgress"] =
       String(liveTrace.drillDown.parentClock.progress);
@@ -855,10 +889,17 @@ traceInspect.addEventListener("click", () => {
     button.disabled = false;
   });
   tracePlay.disabled = false;
-  render(traceParentProgress);
+  if (compoundSceneController === undefined) {
+    render(traceParentProgress);
+  } else {
+    compoundSceneController.render(traceParentProgress);
+    compoundSceneController.setScrubberDisabled(false);
+  }
   tracePanel.dataset["traceMode"] = "compressed";
   tracePanel.dataset["traceRestoreExact"] =
-    currentProgress() === traceParentProgress ? "true" : "false";
+    (
+      compoundSceneController?.currentProgress() ?? currentProgress()
+    ) === traceParentProgress ? "true" : "false";
   traceStatus.value =
     `Exact ${Math.round(traceParentProgress * 100)}% overview frame restored.`;
 });

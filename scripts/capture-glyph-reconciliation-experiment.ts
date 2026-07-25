@@ -16,6 +16,7 @@ const profiles = [
 const checkpoints = [0, 250, 500, 750, 1000] as const;
 const splitCheckpoints = [0, 500, 1000] as const;
 const radicalCheckpoints = [0, 500, 999, 1000] as const;
+const compoundCheckpoints = [0, 450, 950, 1000] as const;
 
 await mkdir(outputRoot, { recursive: true });
 const browser = await chromium.launch({ headless: true });
@@ -23,6 +24,7 @@ const evidence: Array<Record<string, unknown>> = [];
 const endpointEvidence: Array<Record<string, unknown>> = [];
 const splitEvidence: Array<Record<string, unknown>> = [];
 const radicalEvidence: Array<Record<string, unknown>> = [];
+const compoundEvidence: Array<Record<string, unknown>> = [];
 try {
   for (const profile of profiles) {
     for (const progress of checkpoints) {
@@ -415,6 +417,95 @@ try {
       await page.close();
     }
   }
+  for (const profile of profiles) {
+    for (const progress of compoundCheckpoints) {
+      const page = await browser.newPage({ viewport: profile.viewport });
+      const url = new URL("/glyph-reconciliation-experiment.html", baseUrl);
+      url.searchParams.set("compoundScene", "1");
+      url.searchParams.set("compoundProgress", String(progress));
+      await page.goto(url.toString(), { waitUntil: "networkidle" });
+      await page.evaluate(async () => document.fonts.ready);
+      const panel = page.locator(
+        '[data-compound-trace][data-compound-scene-ready="true"]'
+      );
+      await panel.waitFor();
+      const snapshot = await panel.evaluate((element) => {
+        const stage = element.querySelector<HTMLElement>(
+          "[data-compound-stage]"
+        )!;
+        const stageRect = stage.getBoundingClientRect();
+        const owners = [...stage.querySelectorAll<HTMLElement>(
+          "[data-kp-native-katex-scene-owner]"
+        )];
+        const visibleOwners = owners.filter((owner) =>
+          Number(owner.style.opacity) > 0
+        );
+        return {
+          sceneIndex: element.getAttribute("data-compound-scene-index"),
+          localProgress: element.getAttribute(
+            "data-compound-scene-local-progress"
+          ),
+          visualOwner: element.getAttribute(
+            "data-compound-scene-visual-owner"
+          ),
+          operationId: element.getAttribute(
+            "data-compound-scene-operation-id"
+          ),
+          visibleOwnerCount: visibleOwners.length,
+          accessibleNativeStateCount: stage.querySelectorAll(
+            '[data-compound-state-id]:not([aria-hidden="true"])'
+          ).length,
+          materialOwnersInert: owners.every((owner) =>
+            owner.hasAttribute("inert") &&
+            owner.getAttribute("aria-hidden") === "true"
+          ),
+          contained: visibleOwners.every((owner) => {
+            const rect = owner.getBoundingClientRect();
+            return rect.left >= stageRect.left - 1 &&
+              rect.right <= stageRect.right + 1 &&
+              rect.top >= stageRect.top - 1 &&
+              rect.bottom <= stageRect.bottom + 1;
+          }),
+          overflow:
+            document.documentElement.scrollWidth -
+            document.documentElement.clientWidth
+        };
+      });
+      const expectedOwner =
+        progress === 0 ? "source-native" :
+        progress === 1000 ? "target-native" :
+        "material-scene";
+      if (
+        snapshot.visualOwner !== expectedOwner ||
+        snapshot.materialOwnersInert !== true ||
+        snapshot.contained !== true ||
+        snapshot.overflow !== 0 ||
+        (expectedOwner === "material-scene"
+          ? snapshot.visibleOwnerCount === 0 ||
+            snapshot.accessibleNativeStateCount !== 0
+          : snapshot.visibleOwnerCount !== 0 ||
+            snapshot.accessibleNativeStateCount !== 1)
+      ) {
+        throw new Error(
+          `Invalid compound exemplar at ${profile.id}/${progress}: ${
+            JSON.stringify(snapshot)
+          }.`
+        );
+      }
+      const file = path.join(
+        outputRoot,
+        `compound-scene-${profile.id}-${progress}.png`
+      );
+      await panel.screenshot({ path: file });
+      compoundEvidence.push({
+        profile: profile.id,
+        progress,
+        file: path.relative(process.cwd(), file),
+        ...snapshot
+      });
+      await page.close();
+    }
+  }
   await writeFile(
     path.join(outputRoot, "evidence.json"),
     `${JSON.stringify({
@@ -422,7 +513,8 @@ try {
       evidence,
       endpointEvidence,
       splitEvidence,
-      radicalEvidence
+      radicalEvidence,
+      compoundEvidence
     }, null, 2)}\n`
   );
   console.log(
@@ -430,7 +522,9 @@ try {
       endpointEvidence.length
     } dense endpoint frames, ${splitEvidence.length} inverse split frames, and ${
       radicalEvidence.length
-    } radical succession frames in ${
+    } radical succession frames, plus ${
+      compoundEvidence.length
+    } compound scene frames in ${
       path.relative(process.cwd(), outputRoot)
     }.`
   );

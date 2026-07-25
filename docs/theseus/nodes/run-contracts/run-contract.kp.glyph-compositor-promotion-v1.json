@@ -481,6 +481,20 @@
       "scope": "slice-26 compound scene plan",
       "checkedAt": "2026-07-25T22:02:35.357Z",
       "notes": "69 experiment checks, all TypeScript projects, architecture boundaries, and workspace validation pass. Ten canonical operations bind one-to-one and in order to generic scene tracks inside a contiguous 1800 ms envelope. Boundaries choose exactly one native state, interior samples expose at most one material scene, direct seek and reverse are identical, and unsupported or reordered scenes fail closed. No operation-specific lifecycle or scheduler was added."
+    },
+    {
+      "command": "focused compound reduced-motion browser check",
+      "status": "failed",
+      "scope": "slice-27 initialization readiness",
+      "checkedAt": "2026-07-25T22:14:57.092Z",
+      "notes": "The first reduced-motion check clicked when the query-selected scene had finished its own measurement but before the host review entrypoint had registered shared trace controls. The compositor state was valid; the check now waits for the host's existing kp-ready boundary before interaction."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor; npm run visual:glyph-reconciliation-experiment; npm run perf:glyph-reconciliation-experiment; npm run build; npm run check:architecture; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-27 compound presentation exemplar",
+      "checkedAt": "2026-07-25T22:14:58.064Z",
+      "notes": "40 Chromium compositor checks, 46 stable visual captures including eight compound frames, production build and all TypeScript projects, architecture, performance, and workspace gates pass. The query-isolated completing-square exemplar renders eleven shared native KaTeX states across ten ordered generic scene playbacks. Normal and reduced play/rewind, direct seek, exact paused-frame drill-down, inert single-scene material ownership, native endpoint semantics, and zero-overflow wide/phone containment pass. Route gzip growth is 5603 bytes and scene sampling is 0.009 ms; the optional compound chunk is 3.38 KB gzip. Visual inspection found readable spacing at both profiles with no hidden operation or special-case scheduler."
     }
   ],
   "allowedWork": [
@@ -668,7 +682,8 @@
     {
       "id": "slice-27",
       "title": "compound-presentation-exemplar",
-      "status": "planned"
+      "summary": "Presented the governed ten-operation completing-square trace as one query-isolated compound native-KaTeX exemplar. Eleven shared native equation states feed ten sequential generic scene playbacks, so every boundary has one settled native owner and every interior frame has only inert cloned paint. The shared normalized sampler supports normal and reduced play/rewind, stateless direct seek, and exact paused-frame drill-down restoration. One responsive containment policy keeps all operations visible and readable at wide and phone profiles with zero overflow. Forty Chromium checks, eight compound captures, build, performance, architecture, and workspace gates pass; no algebra-specific timing, lifecycle, matcher, or scheduler was added.",
+      "status": "complete"
     },
     {
       "id": "slice-28",

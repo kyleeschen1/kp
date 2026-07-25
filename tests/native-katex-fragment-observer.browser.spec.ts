@@ -2715,6 +2715,144 @@ test("compound trace depicts every operation and restores its paused parent", as
   )).toHaveCount(10);
 });
 
+test("compound scene composes native states through one generic material owner", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(
+    "/glyph-reconciliation-experiment.html" +
+    "?compoundScene=1&compoundProgress=371"
+  );
+  const trace = page.locator(
+    '[data-compound-trace][data-compound-scene-ready="true"]'
+  );
+  await trace.waitFor();
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const scrubber = trace.locator("[data-compound-progress]");
+  const snapshot = async () => trace.evaluate((element) => {
+    const stage = element.querySelector<HTMLElement>(
+      "[data-compound-stage]"
+    )!;
+    const stageRect = stage.getBoundingClientRect();
+    const owners = [...stage.querySelectorAll<HTMLElement>(
+      "[data-kp-native-katex-scene-owner]"
+    )];
+    const visibleOwners = owners.filter((owner) =>
+      Number(owner.style.opacity) > 0
+    );
+    const nativeStates = [...stage.querySelectorAll<HTMLElement>(
+      "[data-compound-state-id]"
+    )];
+    return {
+      progress: element.getAttribute("data-compound-scene-progress"),
+      index: element.getAttribute("data-compound-scene-index"),
+      localProgress: element.getAttribute(
+        "data-compound-scene-local-progress"
+      ),
+      visualOwner: element.getAttribute(
+        "data-compound-scene-visual-owner"
+      ),
+      visibleOwnerCount: visibleOwners.length,
+      materialOwnersInert: owners.every((owner) =>
+        owner.hasAttribute("inert") &&
+        owner.getAttribute("aria-hidden") === "true"
+      ),
+      accessibleNativeStateCount: nativeStates.filter((state) =>
+        state.getAttribute("aria-hidden") !== "true"
+      ).length,
+      stateCount: nativeStates.length,
+      contained: visibleOwners.every((owner) => {
+        const rect = owner.getBoundingClientRect();
+        return rect.left >= stageRect.left - 1 &&
+          rect.right <= stageRect.right + 1 &&
+          rect.top >= stageRect.top - 1 &&
+          rect.bottom <= stageRect.bottom + 1;
+      }),
+      overflow:
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth
+    };
+  });
+
+  expect(await snapshot()).toMatchObject({
+    progress: "371",
+    visualOwner: "material-scene",
+    materialOwnersInert: true,
+    accessibleNativeStateCount: 0,
+    stateCount: 11,
+    contained: true,
+    overflow: 0
+  });
+  expect((await snapshot()).visibleOwnerCount).toBeGreaterThan(0);
+
+  await scrubber.fill("437");
+  await scrubber.dispatchEvent("input");
+  const direct = await snapshot();
+  await scrubber.fill("800");
+  await scrubber.dispatchEvent("input");
+  await scrubber.fill("437");
+  await scrubber.dispatchEvent("input");
+  expect(await snapshot()).toEqual(direct);
+
+  await trace.locator("[data-trace-inspect]").click();
+  await expect(trace).toHaveAttribute("data-trace-parent-progress", "0.437");
+  await trace.locator("[data-trace-inspect]").click();
+  await expect(trace).toHaveAttribute("data-trace-restore-exact", "true");
+  await expect(scrubber).toHaveValue("437");
+
+  await scrubber.fill("1000");
+  await scrubber.dispatchEvent("input");
+  await trace.locator("[data-trace-play]").click();
+  await expect(trace).toHaveAttribute("data-compound-scene-progress", "0", {
+    timeout: 4_000
+  });
+  await expect(trace).toHaveAttribute(
+    "data-compound-scene-visual-owner",
+    "source-native"
+  );
+  expect(await snapshot()).toMatchObject({
+    visibleOwnerCount: 0,
+    accessibleNativeStateCount: 1,
+    contained: true,
+    overflow: 0
+  });
+});
+
+test("compound scene reduced motion settles and rewinds without transit", async ({
+  page
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(
+    "/glyph-reconciliation-experiment.html?compoundScene=1&compoundProgress=0"
+  );
+  const trace = page.locator(
+    '[data-compound-trace][data-compound-scene-ready="true"]'
+  );
+  await trace.waitFor();
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const play = trace.locator("[data-trace-play]");
+
+  await play.click();
+  await expect(trace).toHaveAttribute("data-compound-scene-progress", "1000");
+  await expect(trace).toHaveAttribute(
+    "data-compound-scene-visual-owner",
+    "target-native"
+  );
+  await expect(trace.locator(
+    '[data-compound-state-id]:not([aria-hidden="true"])'
+  )).toHaveCount(1);
+  await expect(trace.locator(
+    '[data-kp-native-katex-scene-owner][style*="opacity: 1"]'
+  )).toHaveCount(0);
+
+  await play.click();
+  await expect(trace).toHaveAttribute("data-compound-scene-progress", "0");
+  await expect(trace).toHaveAttribute(
+    "data-compound-scene-visual-owner",
+    "source-native"
+  );
+});
+
 test("every equation card exposes synchronized local playback controls", async ({
   page
 }) => {
