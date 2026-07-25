@@ -40,6 +40,10 @@ export {
   type KpReaderEquationMaterialPlanDiagnostic,
   type KpReaderEquationTransitionMaterialPlan
 } from "./equation-material-plan.ts";
+export {
+  createKpReaderEquationSceneCompositorSession,
+  type KpReaderEquationSceneCompositorSession
+} from "./equation-scene-compositor-adapter.ts";
 export { projectKpCertifiedTransferMaterialPlan } from "./certified-transfer-material-projection.ts";
 export {
   createKpReaderEquationLayoutSnapshot,
