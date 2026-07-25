@@ -86,6 +86,13 @@
       "scope": "slice-08 fallback",
       "checkedAt": "2026-07-25T01:52:17.965Z",
       "notes": "28 focused tests and typecheck pass."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment and npm run typecheck",
+      "status": "passed",
+      "scope": "slice-09 measurement",
+      "checkedAt": "2026-07-25T01:54:14.052Z",
+      "notes": "30 focused tests and typecheck pass."
     }
   ],
   "progress": {

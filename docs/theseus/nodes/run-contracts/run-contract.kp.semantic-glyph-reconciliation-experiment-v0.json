@@ -150,7 +150,8 @@
     {
       "id": "slice-09",
       "title": "Native-notation-measurement-protocol",
-      "status": "planned"
+      "summary": "Added a backend-neutral settled native-notation measurement protocol covering bounds, protected regions, and style fingerprints while preserving semantic identity.",
+      "status": "complete"
     },
     {
       "id": "slice-10",
