@@ -311,13 +311,13 @@ export function createKpCrowdedQuadraticGlyphReconciliationCase(
     roleBindings: { sources: merge.sourceEntityIds, result: merge.targetEntityIds },
     lineageGraph: {
       kind: "semantic-lineage-graph",
-      id: `lineage.quadratic.crowded.${viewportId}`,
+      id: "lineage.quadratic.crowded",
       sourceEntityIds: allSourceEntities,
       targetEntityIds: allTargetEntities,
       edges
     },
     correspondenceMap: {
-      id: `correspondence.quadratic.crowded.${viewportId}`,
+      id: "correspondence.quadratic.crowded",
       records: [
         {
           id: merge.id,

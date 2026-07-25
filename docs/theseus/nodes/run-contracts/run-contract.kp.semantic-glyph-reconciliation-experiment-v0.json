@@ -216,7 +216,8 @@
     {
       "id": "slice-20",
       "title": "Crowded-phone-projection",
-      "status": "planned"
+      "summary": "Verified the identical crowded semantic execution at 390px: glyphs remain in viewport, merge constituents clear or settle explicitly, and no phone or viewport-specific scheduler exists.",
+      "status": "complete"
     },
     {
       "id": "slice-21",
