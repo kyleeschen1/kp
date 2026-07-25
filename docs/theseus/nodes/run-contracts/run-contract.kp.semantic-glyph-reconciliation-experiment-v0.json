@@ -138,7 +138,8 @@
     {
       "id": "slice-07",
       "title": "Multiplicity-reconciliation",
-      "status": "planned"
+      "summary": "Represented merges and splits as explicit semantic group reconciliations while retaining unique within-group glyph matches and ambiguity evidence.",
+      "status": "complete"
     },
     {
       "id": "slice-08",

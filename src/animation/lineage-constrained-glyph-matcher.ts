@@ -25,8 +25,18 @@ export interface KpGlyphMatchAmbiguity {
   readonly targetGlyphIds: readonly string[];
 }
 
+export interface KpGlyphMultiplicityReconciliation {
+  readonly id: string;
+  readonly lineageGroupId: string;
+  readonly kind: "merge" | "split";
+  readonly sourceGlyphIds: readonly string[];
+  readonly targetGlyphIds: readonly string[];
+  readonly sharedMatchIds: readonly string[];
+}
+
 export interface KpLineageConstrainedGlyphMatchResult {
   readonly matches: readonly KpGlyphMatch[];
+  readonly multiplicity: readonly KpGlyphMultiplicityReconciliation[];
   readonly unmatchedSourceGlyphIds: readonly string[];
   readonly unmatchedTargetGlyphIds: readonly string[];
   readonly ambiguities: readonly KpGlyphMatchAmbiguity[];
@@ -47,11 +57,13 @@ export function matchKpGlyphsWithinSemanticLineage(input: {
 
   const matches: KpGlyphMatch[] = [];
   const ambiguities: KpGlyphMatchAmbiguity[] = [];
+  const multiplicity: KpGlyphMultiplicityReconciliation[] = [];
   const matchedSource = new Set<string>();
   const matchedTarget = new Set<string>();
   let operationCount = 0;
 
   input.lineage.groups.forEach((group) => {
+    const matchOffset = matches.length;
     const sources = glyphsForEntities(input.sourceGlyphs, group.sourceEntityIds);
     const targets = glyphsForEntities(input.targetGlyphs, group.targetEntityIds);
     const keys = new Set([...sources, ...targets].map((glyph) => glyph.glyphKey));
@@ -74,10 +86,21 @@ export function matchKpGlyphsWithinSemanticLineage(input: {
         }));
       }
     });
+    if (group.kind === "many-to-one" || group.kind === "one-to-many") {
+      multiplicity.push(Object.freeze({
+        id: `glyph-${group.kind}.${group.id}`,
+        lineageGroupId: group.id,
+        kind: group.kind === "many-to-one" ? "merge" : "split",
+        sourceGlyphIds: Object.freeze(sources.map(({ id }) => id)),
+        targetGlyphIds: Object.freeze(targets.map(({ id }) => id)),
+        sharedMatchIds: Object.freeze(matches.slice(matchOffset).map(({ id }) => id))
+      }));
+    }
   });
 
   return Object.freeze({
     matches: Object.freeze(matches),
+    multiplicity: Object.freeze(multiplicity),
     unmatchedSourceGlyphIds: Object.freeze(
       input.sourceGlyphs.filter(({ id }) => !matchedSource.has(id)).map(({ id }) => id)
     ),

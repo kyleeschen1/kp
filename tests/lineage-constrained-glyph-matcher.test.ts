@@ -98,3 +98,60 @@ test("matcher rejects observations outside canonical lineage", () => {
     /outside canonical lineage/
   );
 });
+
+test("matcher retains explicit many-to-one and one-to-many group reconciliation", () => {
+  const group = lineage.groups[0]!;
+  const merge = matchKpGlyphsWithinSemanticLineage({
+    lineage: {
+      ...lineage,
+      sourceEntityIds: ["a", "b"],
+      targetEntityIds: ["sum"],
+      groups: [{
+        ...group,
+        id: "group.merge",
+        kind: "many-to-one",
+        relation: "merge",
+        sourceEntityIds: ["a", "b"],
+        targetEntityIds: ["sum"]
+      }]
+    },
+    sourceGlyphs: [
+      { id: "s.a", entityId: "a", glyphKey: "x", ordinal: 0 },
+      { id: "s.b", entityId: "b", glyphKey: "1", ordinal: 0 }
+    ],
+    targetGlyphs: [{ id: "t.sum", entityId: "sum", glyphKey: "x", ordinal: 0 }]
+  });
+  const split = matchKpGlyphsWithinSemanticLineage({
+    lineage: {
+      ...lineage,
+      sourceEntityIds: ["root"],
+      targetEntityIds: ["positive", "negative"],
+      groups: [{
+        ...group,
+        id: "group.split",
+        kind: "one-to-many",
+        relation: "split",
+        sourceEntityIds: ["root"],
+        targetEntityIds: ["positive", "negative"]
+      }]
+    },
+    sourceGlyphs: [{ id: "s.root", entityId: "root", glyphKey: "r", ordinal: 0 }],
+    targetGlyphs: [
+      { id: "t.positive", entityId: "positive", glyphKey: "r", ordinal: 0 },
+      { id: "t.negative", entityId: "negative", glyphKey: "r", ordinal: 0 }
+    ]
+  });
+
+  assert.deepEqual(merge.multiplicity[0], {
+    id: "glyph-many-to-one.group.merge",
+    lineageGroupId: "group.merge",
+    kind: "merge",
+    sourceGlyphIds: ["s.a", "s.b"],
+    targetGlyphIds: ["t.sum"],
+    sharedMatchIds: ["glyph-match.group.merge.s.a.t.sum"]
+  });
+  assert.equal(split.multiplicity[0]?.kind, "split");
+  assert.deepEqual(split.multiplicity[0]?.targetGlyphIds, ["t.positive", "t.negative"]);
+  assert.equal(split.matches.length, 0);
+  assert.equal(split.ambiguities.length, 1);
+});

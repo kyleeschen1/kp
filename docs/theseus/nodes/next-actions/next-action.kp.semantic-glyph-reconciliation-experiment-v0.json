@@ -72,6 +72,13 @@
       "scope": "slice-06 lineage matcher",
       "checkedAt": "2026-07-25T01:48:45.044Z",
       "notes": "25 focused tests and typecheck pass."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment and npm run typecheck",
+      "status": "passed",
+      "scope": "slice-07 multiplicity",
+      "checkedAt": "2026-07-25T01:50:19.155Z",
+      "notes": "26 focused tests and typecheck pass."
     }
   ],
   "progress": {
