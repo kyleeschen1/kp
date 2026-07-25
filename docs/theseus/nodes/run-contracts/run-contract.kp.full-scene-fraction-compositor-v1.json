@@ -149,6 +149,13 @@
       "scope": "slice-18 semantic affordance preservation",
       "checkedAt": "2026-07-25T18:05:18.735Z",
       "notes": "19 focused tests, all TypeScript projects, 28 compositor Chromium tests, and 9 shared reader conformance tests pass; native endpoint accessibility, focus, annotation, and Cloze survive seek/rewind while interior clones remain inert."
+    },
+    {
+      "command": "npm run build; npm run perf:glyph-reconciliation-experiment; npm run perf:animation; npm run check:reader-production; npm run check:dev-review-production; npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-19 responsive performance complexity gate",
+      "checkedAt": "2026-07-25T18:09:47.584Z",
+      "notes": "Build and 25 focused tests pass; 32-track scene sampling is 0.0078 ms against 1 ms, route is 18.9 KB gzip with 10.1 KB growth against 12 KB, controller is 38.5 KB, and four generic modules remain. Broader animation targets remain advisory with no regressions."
     }
   ],
   "allowedWork": [
@@ -285,7 +292,8 @@
     {
       "id": "slice-19",
       "title": "responsive-performance-complexity-gate",
-      "status": "planned"
+      "summary": "Added a generic 32-paint-track sampler stress gate, removed obsolete denominator-only planner compilation, and passed payload, build, production-boundary, module, controller, responsive, and regression budgets.",
+      "status": "complete"
     },
     {
       "id": "slice-20",

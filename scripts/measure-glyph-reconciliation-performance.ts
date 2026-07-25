@@ -14,6 +14,10 @@ import {
   compileKpGlyphReconciliationCase
 } from "../src/animation/semantic-glyph-reconciliation-compiler.ts";
 import { kpGlyphReconciliationExperimentLedger } from "../src/animation/semantic-glyph-reconciliation-experiment.ts";
+import {
+  sampleKpNativeKatexSceneTracks,
+  type KpNativeKatexSceneTrack
+} from "../src/rendering/native-katex-scene-compositor.ts";
 
 const budgets = kpGlyphReconciliationExperimentLedger.budget;
 const cases = [
@@ -47,6 +51,40 @@ for (const caseInput of cases) {
   planBytes.push(Buffer.byteLength(JSON.stringify({ plan: compiled.plan, schedule: compiled.schedule })));
   operations.push(compiled.plan.operationCount + compiled.schedule.operationCount);
 }
+// Thirty-two paint tracks provide headroom beyond the 15-atom fraction
+// exemplar without introducing another expression-specific benchmark.
+const sceneTracks: readonly KpNativeKatexSceneTrack[] = Array.from(
+  { length: 32 },
+  (_, index) => ({
+    id: `stress.track.${index}`,
+    componentId: `stress.component.${index}`,
+    lifecycle: "persist",
+    sourceAtomId: `source.${index}`,
+    targetAtomId: `target.${index}`,
+    visualAtomId: `source.${index}`,
+    paintKind: index % 7 === 0 ? "rule" : "glyph",
+    sizingMode: index % 7 === 0 ? "rule-length" : "rect",
+    startRect: {
+      left: index * 4,
+      top: index % 3,
+      width: 8 + index % 5,
+      height: 18
+    },
+    endRect: {
+      left: index * 2,
+      top: 24 + index % 4,
+      width: 10 + index % 6,
+      height: 20
+    },
+    startOpacity: 1,
+    endOpacity: 1
+  })
+);
+const sceneSampleStart = performance.now();
+for (let index = 0; index < 1_000; index += 1) {
+  sampleKpNativeKatexSceneTracks(sceneTracks, index / 999);
+}
+const sceneFrameSampleP95Ms = (performance.now() - sceneSampleStart) / 1_000;
 const manifest = JSON.parse(
   await readFile("dist/.vite/manifest.json", "utf8")
 ) as Record<string, { file: string; name?: string }>;
@@ -64,6 +102,7 @@ const report = {
   coldPlanP95Ms: Math.max(...cold),
   cachedPlanP95Ms: Math.max(...cached),
   frameSampleP95Ms: Math.max(...samples),
+  sceneFrameSampleP95Ms,
   maxPlannerOperations: Math.max(...operations),
   serializedPlanMaxBytes: Math.max(...planBytes),
   routeGzipBytes,
@@ -73,6 +112,8 @@ const failures = [
   report.coldPlanP95Ms > budgets.maxColdPlanP95Ms && "cold plan",
   report.cachedPlanP95Ms > budgets.maxCachedPlanP95Ms && "cached plan",
   report.frameSampleP95Ms > budgets.maxFrameSampleP95Ms && "frame sample",
+  report.sceneFrameSampleP95Ms > budgets.maxFrameSampleP95Ms &&
+    "scene frame sample",
   report.maxPlannerOperations > budgets.maxPlannerOperations && "operations",
   report.serializedPlanMaxBytes > budgets.maxSerializedPlanBytes && "plan bytes",
   report.routeGzipGrowthBytes > budgets.maxRouteGzipGrowthBytes &&

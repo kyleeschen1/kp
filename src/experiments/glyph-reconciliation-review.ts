@@ -76,9 +76,6 @@ if (import.meta.env.DEV) {
 const caseInput = createKpSolveXGlyphReconciliationCase();
 const compiled = await compileKpGlyphReconciliationCase(caseInput);
 const fractionCaseInput = createKpFractionMergeGlyphReconciliationCase();
-const fractionCompiled = await compileKpGlyphReconciliationCase(
-  fractionCaseInput
-);
 const branchCaseInput = createKpQuadraticPlusMinusGlyphReconciliationCase();
 const branchCompiled = await compileKpGlyphReconciliationCase(branchCaseInput);
 const crowdedViewportId = window.innerWidth <= 620 ? "phone" : "wide";
@@ -93,13 +90,6 @@ const compoundTrace = createKpGlyphReconciliationCompoundTrace();
 const scheduledMotion = compiled.schedule.motions[0]!;
 if (scheduledMotion?.status !== "direct") {
   throw new Error("The solve-x exemplar requires the generic direct clearance route.");
-}
-if (
-  fractionCompiled.schedule.usedOperationSpecificPolicy ||
-  fractionCompiled.schedule.motions.length !== 2 ||
-  fractionCompiled.schedule.motions.some(({ status }) => status !== "direct")
-) {
-  throw new Error("The fraction merge requires two generic direct clearance routes.");
 }
 if (
   branchCompiled.schedule.usedOperationSpecificPolicy ||
