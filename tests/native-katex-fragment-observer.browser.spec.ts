@@ -1034,3 +1034,50 @@ test("compound trace depicts every operation and restores its paused parent", as
     '[data-trace-operation][data-trace-state="complete"]'
   )).toHaveCount(10);
 });
+
+test("reduced motion uses exact endpoint settlement without transit", async ({
+  page
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  const review = page.locator('[data-kp-glyph-review][data-kp-ready="true"]');
+  await review.waitFor();
+
+  await page.locator("[data-play]").click();
+  await expect(review).toHaveAttribute("data-kp-progress", "1000");
+  await expect(review).toHaveAttribute("data-kp-visual-owner", "target-native");
+  await expect(page.locator("[data-progress]")).toHaveValue("1000");
+
+  const trace = page.locator("[data-compound-trace]");
+  await trace.locator("[data-trace-play]").click();
+  await expect(trace).toHaveAttribute("data-trace-completed-cycles", "1");
+  await expect(trace.locator(
+    '[data-trace-operation][data-trace-state="complete"]'
+  )).toHaveCount(10);
+});
+
+test("phone branch equations remain fully inside their presentation stage", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/glyph-reconciliation-experiment.html?progress=500");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const geometry = await page.locator(
+    '[data-reconciliation-case="plus-minus-branch"]'
+  ).evaluate((caseElement) => {
+    const stage = caseElement.querySelector<HTMLElement>(
+      "[data-branch-stage]"
+    )!.getBoundingClientRect();
+    const targets = [
+      ...caseElement.querySelectorAll<HTMLElement>("[data-branch-target]")
+    ].map((element) => element.getBoundingClientRect());
+    return {
+      stage: { left: stage.left, right: stage.right },
+      targets: targets.map(({ left, right }) => ({ left, right }))
+    };
+  });
+
+  expect(geometry.targets.every(({ left, right }) =>
+    left >= geometry.stage.left - 1 && right <= geometry.stage.right + 1
+  ), JSON.stringify(geometry)).toBe(true);
+});

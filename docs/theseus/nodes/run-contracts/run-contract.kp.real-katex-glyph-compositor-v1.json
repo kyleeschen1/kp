@@ -183,7 +183,8 @@
     {
       "id": "slice-22",
       "title": "Responsive-and-performance-certification",
-      "status": "planned"
+      "summary": "Certified four real-fragment cases at wide and phone sizes, direct reduced-motion settlement, exact capture counts, production build, and all frozen planner, cache, frame, plan, and route-growth budgets.",
+      "status": "complete"
     },
     {
       "id": "slice-23",

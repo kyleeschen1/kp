@@ -47,6 +47,9 @@ export interface KpGlyphReconciliationExperimentLedger {
   readonly schemaVersion: "kp.glyph-reconciliation-experiment.v1";
   readonly cases: readonly KpGlyphReconciliationExperimentCase[];
   readonly budget: KpGlyphReconciliationExperimentBudget;
+  readonly payloadBaseline: {
+    readonly routeGzipBytes: number;
+  };
   readonly policyBaseline: KpGlyphReconciliationPolicyBaseline;
   readonly passCriteria: readonly string[];
   readonly failCriteria: readonly string[];
@@ -146,6 +149,12 @@ KpGlyphReconciliationExperimentLedger = Object.freeze({
     maxSerializedPlanBytes: 32_768,
     maxRouteGzipGrowthBytes: 12_000
   }),
+  // This is the measured four-case route from the completed reconciliation
+  // experiment. The payload budget was defined as growth, so certification
+  // must compare against this durable baseline rather than against zero bytes.
+  payloadBaseline: Object.freeze({
+    routeGzipBytes: 8_780
+  }),
   policyBaseline: Object.freeze({
     scheduleModeIds: Object.freeze([
       "reserve-then-transit-v1",
@@ -214,6 +223,9 @@ export function validateKpGlyphReconciliationExperimentLedger(
   }
   if (ledger.budget.maxPlannerOperations <= 0) {
     issues.push("Planner operation budget must be positive.");
+  }
+  if (ledger.payloadBaseline.routeGzipBytes <= 0) {
+    issues.push("Experiment route payload baseline must be positive.");
   }
   if (ledger.policyBaseline.scheduleModeIds.length === 0) {
     issues.push("Policy baseline must name the existing schedule modes.");

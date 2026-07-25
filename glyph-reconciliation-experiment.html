@@ -6,7 +6,274 @@
     <title>Glyph reconciliation experiment · Kinetic Press</title>
   </head>
   <body>
-    <main id="glyph-experiment"></main>
+    <main id="glyph-experiment">
+      <article class="glyph-exemplar" data-kp-glyph-review data-kp-progress="0">
+        <header class="glyph-exemplar__header">
+          <p class="glyph-exemplar__eyebrow">Real KaTeX compositor · promotion checkpoint</p>
+          <h1>Does one <em>x</em> remain one object?</h1>
+          <p>
+            Watch native context clear and reflow before the focused symbol moves.
+            The moving ink is an inert computed-style clone; exact KaTeX owns both endpoints.
+          </p>
+        </header>
+        <section class="glyph-exemplar__review" data-reconciliation-case="solve-x">
+          <div class="glyph-exemplar__prompt">
+            <div>
+              <span>one-to-one semantic lineage</span>
+              <h2>Cancel the additive inverse</h2>
+            </div>
+            <p data-phase-label>Source notation</p>
+          </div>
+          <div class="glyph-exemplar__viewport">
+            <div
+              class="glyph-exemplar__stage"
+              data-case-stage
+              role="math"
+              aria-label="x plus 3 minus 3 equals 7 minus 3"
+            >
+              <span class="glyph-exemplar__guide" data-source-guide aria-hidden="true">
+                <span data-guide-source-x data-math-slot="solve-x"></span>
+                <span data-guide-departing data-math-slot="solve-departing"></span>
+                <span data-guide-source-context data-math-slot="solve-context"></span>
+              </span>
+              <span class="glyph-exemplar__guide" data-target-guide aria-hidden="true">
+                <span data-guide-target-x data-math-slot="solve-x"></span>
+                <span data-guide-target-context data-math-slot="solve-context"></span>
+              </span>
+              <span
+                class="glyph-exemplar__native glyph-exemplar__focus"
+                data-case-source
+                data-math-slot="solve-x"
+                data-kp-motion-id="motion.solve-x.source-x"
+                data-kp-annotation="The same semantic x before cancellation"
+                title="Persistent x · source"
+                tabindex="0"
+              ></span>
+              <span
+                class="glyph-exemplar__native glyph-exemplar__departing"
+                data-case-departing
+                data-math-slot="solve-departing"
+              ></span>
+              <span
+                class="glyph-exemplar__native glyph-exemplar__context"
+                data-case-context
+                data-math-slot="solve-context"
+              ></span>
+              <span
+                class="glyph-exemplar__native glyph-exemplar__focus"
+                data-case-target
+                data-math-slot="solve-x"
+                data-kp-motion-id="motion.solve-x.target-x"
+                data-kp-annotation="The same semantic x after cancellation"
+                title="Persistent x · target"
+                tabindex="-1"
+              ></span>
+              <span
+                class="glyph-exemplar__material-layer"
+                data-kp-editor-equation-material-layer
+              ></span>
+            </div>
+          </div>
+          <div class="glyph-exemplar__annotation" aria-live="polite">
+            <span data-ownership-label>Native source owns x</span>
+            <span>semantic DOM remains the accessibility + annotation authority</span>
+          </div>
+          <div class="glyph-exemplar__controls">
+            <button type="button" data-play>Play</button>
+            <input
+              type="range"
+              min="0"
+              max="1000"
+              value="0"
+              aria-label="Solve-x animation progress"
+              data-progress
+            >
+            <output data-status>0%</output>
+          </div>
+        </section>
+        <section
+          class="glyph-exemplar__review glyph-exemplar__review--secondary"
+          data-reconciliation-case="fraction-merge"
+        >
+          <div class="glyph-exemplar__prompt">
+            <div>
+              <span>many-to-one semantic lineage</span>
+              <h2>Merge equal native denominators</h2>
+            </div>
+            <p data-fraction-phase>Two source denominators</p>
+          </div>
+          <div class="glyph-exemplar__viewport glyph-exemplar__viewport--fraction">
+            <div
+              class="glyph-exemplar__stage"
+              data-fraction-stage
+              role="math"
+              aria-label="x over 2 plus y over 2 merges into x plus y over 2"
+            >
+              <span
+                class="glyph-exemplar__fraction-equation"
+                data-fraction-source
+                data-math-slot="fraction-source"
+              ></span>
+              <span
+                class="glyph-exemplar__fraction-equation glyph-exemplar__fraction-equation--target"
+                data-fraction-target
+                data-math-slot="fraction-target"
+              ></span>
+              <span
+                class="glyph-exemplar__material-layer"
+                data-kp-editor-equation-material-layer
+              ></span>
+            </div>
+          </div>
+          <div class="glyph-exemplar__annotation">
+            <span data-fraction-owner>Two native source denominators own the ink</span>
+            <span>Cloze, hover, and annotation stay on the settled denominator</span>
+          </div>
+          <div class="glyph-exemplar__controls glyph-exemplar__controls--compact">
+            <button type="button" data-fraction-cloze aria-pressed="false">Hide answer</button>
+            <output data-fraction-cloze-status>Answer visible</output>
+          </div>
+        </section>
+        <section
+          class="glyph-exemplar__review glyph-exemplar__review--secondary"
+          data-reconciliation-case="plus-minus-branch"
+        >
+          <div class="glyph-exemplar__prompt">
+            <div>
+              <span>one-to-many semantic lineage</span>
+              <h2>Open the two exact root branches</h2>
+            </div>
+            <p data-branch-phase>One plus-minus origin</p>
+          </div>
+          <div class="glyph-exemplar__viewport glyph-exemplar__viewport--branch">
+            <div
+              class="glyph-exemplar__stage"
+              data-branch-stage
+              role="math"
+              aria-label="one plus-minus origin opens a negative and positive branch"
+            >
+              <span
+                class="glyph-exemplar__branch-equation glyph-exemplar__branch-equation--source"
+                data-branch-source
+                data-math-slot="branch-source"
+              ></span>
+              <span
+                class="glyph-exemplar__branch-equation glyph-exemplar__branch-equation--minus"
+                data-branch-target="minus"
+                data-math-slot="branch-minus"
+              ></span>
+              <span
+                class="glyph-exemplar__branch-equation glyph-exemplar__branch-equation--plus"
+                data-branch-target="plus"
+                data-math-slot="branch-plus"
+              ></span>
+              <span
+                class="glyph-exemplar__material-layer"
+                data-kp-editor-equation-material-layer
+              ></span>
+            </div>
+          </div>
+          <div class="glyph-exemplar__annotation">
+            <span data-branch-owner>Native plus-minus origin owns the ink</span>
+            <span>Branch choice changes native interaction, not moving fragments</span>
+          </div>
+          <div
+            class="glyph-exemplar__controls glyph-exemplar__branch-controls"
+            aria-label="Quadratic branch selection"
+          >
+            <button type="button" data-branch-choice="both" aria-pressed="true">Both</button>
+            <button type="button" data-branch-choice="minus" aria-pressed="false">Negative</button>
+            <button type="button" data-branch-choice="plus" aria-pressed="false">Positive</button>
+            <output data-branch-status>Both exact branches active</output>
+          </div>
+        </section>
+        <section
+          class="glyph-exemplar__review glyph-exemplar__review--secondary"
+          data-reconciliation-case="crowded-quadratic"
+        >
+          <div class="glyph-exemplar__prompt">
+            <div>
+              <span>responsive protected-ink pressure</span>
+              <h2>Route a crowded discriminant merge</h2>
+            </div>
+            <p data-crowded-phase>Measured source notation</p>
+          </div>
+          <div class="glyph-exemplar__viewport glyph-exemplar__viewport--crowded">
+            <div
+              class="glyph-exemplar__stage"
+              data-crowded-stage
+              role="math"
+              aria-label="twenty five minus twenty four merges into one while plus-minus stays protected"
+            >
+              <span
+                class="glyph-exemplar__crowded-equation glyph-exemplar__crowded-equation--source"
+                data-crowded-source
+                data-math-slot="crowded-source"
+              ></span>
+              <span
+                class="glyph-exemplar__crowded-equation glyph-exemplar__crowded-equation--target"
+                data-crowded-target
+                data-math-slot="crowded-target"
+              ></span>
+              <span
+                class="glyph-exemplar__material-layer"
+                data-kp-editor-equation-material-layer
+              ></span>
+            </div>
+          </div>
+          <div class="glyph-exemplar__annotation">
+            <span data-crowded-owner>Native source discriminant owns the ink</span>
+            <span data-crowded-route>Common scheduler is measuring protected ± ink</span>
+          </div>
+        </section>
+        <section
+          class="glyph-exemplar__trace"
+          data-compound-trace
+          data-trace-mode="compressed"
+          data-trace-completed-cycles="0"
+        >
+          <div class="glyph-exemplar__trace-heading">
+            <div>
+              <span>compound work · same canonical trace</span>
+              <h2>Keep the overview fast; let the algebra open</h2>
+            </div>
+            <p data-trace-metrics></p>
+          </div>
+          <div
+            class="glyph-exemplar__trace-track"
+            role="list"
+            aria-label="Compressed completing-the-square operations"
+            data-trace-track
+          ></div>
+          <div class="glyph-exemplar__trace-controls">
+            <button type="button" data-trace-play>Play compressed work</button>
+            <button
+              type="button"
+              data-trace-inspect
+              aria-expanded="false"
+              aria-controls="glyph-compound-trace-detail"
+            >Inspect all operations</button>
+            <output data-trace-status aria-live="polite">
+              Every operation remains visible for 180 ms.
+            </output>
+          </div>
+          <ol
+            class="glyph-exemplar__trace-detail"
+            id="glyph-compound-trace-detail"
+            data-trace-detail
+            hidden
+          ></ol>
+        </section>
+        <div class="glyph-exemplar__evidence">
+          <span>actual KaTeX subtree</span>
+          <span>canonical lineage</span>
+          <span>one bounded scheduler</span>
+          <span>atomic native handoff</span>
+          <span>no equation crossfade</span>
+          <span>static JS</span>
+        </div>
+      </article>
+    </main>
     <script type="module" src="/src/experiments/glyph-reconciliation-review.ts"></script>
   </body>
 </html>

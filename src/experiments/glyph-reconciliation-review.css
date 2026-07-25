@@ -507,6 +507,9 @@ button, input { font: inherit; }
   .glyph-exemplar__prompt > p { text-align: left; }
   .glyph-exemplar__annotation { display: grid; }
   .glyph-exemplar__stage { font-size: clamp(1.5rem, 10cqw, 2.4rem); }
+  .glyph-exemplar__viewport--branch .glyph-exemplar__stage {
+    font-size: clamp(1.2rem, 7.5cqw, 1.9rem);
+  }
   .glyph-exemplar__trace-heading {
     align-items: start;
     flex-direction: column;

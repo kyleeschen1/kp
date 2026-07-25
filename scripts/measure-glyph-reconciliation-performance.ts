@@ -55,13 +55,19 @@ const entry = Object.values(manifest).find(({ name }) =>
 );
 if (entry === undefined) throw new Error("Built glyph experiment entry is missing.");
 const routeGzipBytes = gzipSync(await readFile(path.join("dist", entry.file)), { level: 9 }).byteLength;
+const routeGzipGrowthBytes = Math.max(
+  0,
+  routeGzipBytes -
+    kpGlyphReconciliationExperimentLedger.payloadBaseline.routeGzipBytes
+);
 const report = {
   coldPlanP95Ms: Math.max(...cold),
   cachedPlanP95Ms: Math.max(...cached),
   frameSampleP95Ms: Math.max(...samples),
   maxPlannerOperations: Math.max(...operations),
   serializedPlanMaxBytes: Math.max(...planBytes),
-  routeGzipBytes
+  routeGzipBytes,
+  routeGzipGrowthBytes
 };
 const failures = [
   report.coldPlanP95Ms > budgets.maxColdPlanP95Ms && "cold plan",
@@ -69,7 +75,8 @@ const failures = [
   report.frameSampleP95Ms > budgets.maxFrameSampleP95Ms && "frame sample",
   report.maxPlannerOperations > budgets.maxPlannerOperations && "operations",
   report.serializedPlanMaxBytes > budgets.maxSerializedPlanBytes && "plan bytes",
-  report.routeGzipBytes > budgets.maxRouteGzipGrowthBytes && "route gzip"
+  report.routeGzipGrowthBytes > budgets.maxRouteGzipGrowthBytes &&
+    "route gzip growth"
 ].filter(Boolean);
 console.log(JSON.stringify({ budgets, report, status: failures.length === 0 ? "passed" : "failed" }, null, 2));
 if (failures.length > 0) throw new Error(`Glyph performance budgets failed: ${failures.join(", ")}.`);

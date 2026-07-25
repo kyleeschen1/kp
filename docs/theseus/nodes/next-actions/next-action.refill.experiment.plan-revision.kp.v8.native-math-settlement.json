@@ -181,6 +181,13 @@
       "scope": "slice-21 compound trace drill-down",
       "checkedAt": "2026-07-25T16:10:18.772Z",
       "notes": "59 focused semantic tests and 15 Chromium tests pass; all ten canonical operations remain visible in compressed order and closing full detail restores the exact parent progress."
+    },
+    {
+      "command": "npm run build; npm run perf:glyph-reconciliation-experiment; npm run test:glyph-reconciliation-experiment; npm run test:browser:real-katex-glyph-compositor; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-22 responsive and performance certification",
+      "checkedAt": "2026-07-25T16:22:26.088Z",
+      "notes": "Production build, 59 semantic tests, 17 Chromium tests, and ten exact four-case wide/phone captures pass. Reduced motion settles directly. Cold 8.56 ms, cached 0.66 ms, sample 0.073 ms, 35 operations, 2573 plan bytes, and 5433 bytes route growth all remain below frozen limits."
     }
   ],
   "progress": {

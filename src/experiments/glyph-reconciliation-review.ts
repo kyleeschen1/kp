@@ -37,8 +37,12 @@ import {
   type KpStageRelativeRect
 } from "../rendering/native-katex-fragment-observer.ts";
 
-const root = document.querySelector<HTMLElement>("#glyph-experiment");
-if (root === null) throw new Error("Glyph experiment root is missing.");
+const rootNode = document.querySelector<HTMLElement>("#glyph-experiment");
+if (rootNode === null) throw new Error("Glyph experiment root is missing.");
+const root = rootNode;
+const reducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+).matches;
 if (import.meta.env.DEV) {
   Object.assign(window, {
     __kpObserveNativeKatexFragments: observeKpNativeKatexFragments,
@@ -101,6 +105,78 @@ const crowdedDisposition = decideKpNativeKatexCompositorDisposition({
   motions: crowdedMergeMotions
 });
 
+renderMathSlots("solve-x", math("x"));
+renderMathSlots("solve-departing", math("{}+3-3"));
+renderMathSlots("solve-context", math("{}=7-3"));
+renderMathSlots(
+  "fraction-source",
+  trustedMath(
+    String.raw`\frac{x}{\htmlData{kp-motion-id=motion.fraction.source-denominator-a}{2}}+\frac{y}{\htmlData{kp-motion-id=motion.fraction.source-denominator-b}{2}}`
+  )
+);
+renderMathSlots(
+  "fraction-target",
+  trustedMath(
+    String.raw`\frac{x+y}{\htmlData{kp-motion-id=motion.fraction.target-denominator}{2}}`
+  )
+);
+renderMathSlots(
+  "branch-source",
+  trustedMath(
+    String.raw`r=\htmlData{kp-motion-id=motion.branch.source-plus-minus}{\pm}\sqrt{\Delta}`
+  )
+);
+renderMathSlots(
+  "branch-minus",
+  trustedMath(
+    String.raw`r_-=\htmlData{kp-motion-id=motion.branch.target-minus}{-}\sqrt{\Delta}`
+  )
+);
+renderMathSlots(
+  "branch-plus",
+  trustedMath(
+    String.raw`r_+=\htmlData{kp-motion-id=motion.branch.target-plus}{+}\sqrt{\Delta}`
+  )
+);
+renderMathSlots(
+  "crowded-source",
+  trustedMath(
+    String.raw`r=-5\htmlData{kp-motion-id=motion.crowded.source-plus-minus}{\pm}\sqrt{\htmlData{kp-motion-id=motion.crowded.source-power}{25}\htmlData{kp-motion-id=motion.crowded.source-minus}{-}\htmlData{kp-motion-id=motion.crowded.source-product}{24}}`
+  )
+);
+renderMathSlots(
+  "crowded-target",
+  trustedMath(
+    String.raw`r=-5\htmlData{kp-motion-id=motion.crowded.target-plus-minus}{\pm}\sqrt{\htmlData{kp-motion-id=motion.crowded.target-result}{1}}`
+  )
+);
+root.querySelector<HTMLElement>("[data-trace-metrics]")!.textContent =
+  `${compoundTrace.operationIds.length} operations · ` +
+  `${formatDuration(compoundTrace.compressedDurationMs)} compressed · ` +
+  `${formatDuration(compoundTrace.fullDurationMs)} inspected`;
+root.querySelector<HTMLElement>("[data-trace-track]")!.innerHTML =
+  compoundTrace.operationIds.map((operationId, index) => `
+    <span
+      role="listitem"
+      data-trace-operation="${index}"
+      data-canonical-operation-id="${operationId}"
+      title="${operationId}"
+    >${index + 1}</span>
+  `).join("");
+root.querySelector<HTMLOListElement>("[data-trace-detail]")!.innerHTML =
+  compoundTrace.accessibilityTranscript.map((entry, index) => `
+    <li data-trace-detail-operation="${index}">
+      ${entry.replace(compoundTrace.operationIds[index]!, readableOperation(
+        compoundTrace.operationIds[index]!
+      ))}
+    </li>
+  `).join("");
+
+// Kept unreachable for this certification slice so the independently
+// reversible HTML migration can be deleted and count-ratcheted in slice 23.
+const keepInlineReviewMarkupForRollback =
+  import.meta.env.MODE === "__kp_rollback__";
+if (keepInlineReviewMarkupForRollback) {
 root.innerHTML = `
   <article class="glyph-exemplar" data-kp-glyph-review data-kp-progress="0">
     <header class="glyph-exemplar__header">
@@ -406,6 +482,7 @@ root.innerHTML = `
       <span>static JS</span>
     </div>
   </article>`;
+}
 
 const review = root.querySelector<HTMLElement>("[data-kp-glyph-review]")!;
 const stage = root.querySelector<HTMLElement>("[data-case-stage]")!;
@@ -894,6 +971,18 @@ branchChoiceButtons.forEach((button) => {
 tracePlay.addEventListener("click", () => {
   stopPlayback();
   stopTracePlayback();
+  if (reducedMotion) {
+    traceOperations.forEach((operation) => {
+      operation.dataset["traceState"] = "complete";
+    });
+    tracePanel.dataset["traceCompletedCycles"] = String(
+      Number(tracePanel.dataset["traceCompletedCycles"] ?? "0") + 1
+    );
+    tracePlay.textContent = "Compressed work shown";
+    traceStatus.value =
+      `All ${traceOperations.length} operations shown without motion.`;
+    return;
+  }
   const startedAt = performance.now();
   tracePlay.textContent = "Playing…";
   tracePlay.disabled = true;
@@ -976,6 +1065,11 @@ play.addEventListener("click", () => {
     return;
   }
   const reverse = Number(slider.value) >= 1000;
+  if (reducedMotion) {
+    render(reverse ? 0 : 1);
+    play.textContent = reverse ? "Play" : "Rewind";
+    return;
+  }
   const start = performance.now();
   const durationMs = 1_800;
   play.textContent = "Pause";
@@ -1164,6 +1258,18 @@ function applyBranchSelection(): void {
 
 function math(latex: string): string {
   return katex.renderToString(latex, { throwOnError: true });
+}
+
+function renderMathSlots(slot: string, html: string): void {
+  const elements = root.querySelectorAll<HTMLElement>(
+    `[data-math-slot="${slot}"]`
+  );
+  if (elements.length === 0) {
+    throw new Error(`Glyph experiment math slot ${slot} is missing.`);
+  }
+  elements.forEach((element) => {
+    element.innerHTML = html;
+  });
 }
 
 function trustedMath(latex: string): string {

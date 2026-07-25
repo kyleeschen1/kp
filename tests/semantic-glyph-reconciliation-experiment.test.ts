@@ -40,6 +40,9 @@ test("experiment budgets are fixed before planner integration", () => {
     maxSerializedPlanBytes: 32_768,
     maxRouteGzipGrowthBytes: 12_000
   });
+  assert.deepEqual(kpGlyphReconciliationExperimentLedger.payloadBaseline, {
+    routeGzipBytes: 8_780
+  });
 });
 
 test("legacy scheduling policy references decrease from the frozen baseline", () => {

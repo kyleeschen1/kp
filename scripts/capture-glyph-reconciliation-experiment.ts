@@ -24,14 +24,34 @@ try {
       await page.evaluate(async () => document.fonts.ready);
       await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
       const caseCount = await page.locator("[data-reconciliation-case]").count();
-      if (caseCount < 2) {
-        throw new Error(`Expected promoted solve and merge cases, found ${caseCount}.`);
+      if (caseCount !== 4) {
+        throw new Error(`Expected exactly four promoted cases, found ${caseCount}.`);
       }
-      const motionCount = await page.locator(
-        "[data-reconciliation-case=\"solve-x\"] [data-kp-native-katex-fragment-clone]"
-      ).count();
-      if (motionCount !== 1) {
-        throw new Error(`Expected one real KaTeX moving owner, found ${motionCount}.`);
+      const motionCounts = {
+        solve: await page.locator(
+          '[data-reconciliation-case="solve-x"] [data-kp-native-katex-fragment-clone]'
+        ).count(),
+        merge: await page.locator(
+          '[data-reconciliation-case="fraction-merge"] [data-kp-native-katex-fragment-clone]'
+        ).count(),
+        branch: await page.locator(
+          '[data-reconciliation-case="plus-minus-branch"] [data-kp-native-katex-fragment-clone]'
+        ).count(),
+        crowded: await page.locator(
+          '[data-reconciliation-case="crowded-quadratic"] [data-kp-native-katex-fragment-clone]'
+        ).count()
+      };
+      if (
+        motionCounts.solve !== 1 ||
+        motionCounts.merge !== 2 ||
+        motionCounts.branch !== 2 ||
+        motionCounts.crowded !== 3
+      ) {
+        throw new Error(
+          `Expected exact 1/2/2/3 fragment owners, found ${
+            JSON.stringify(motionCounts)
+          }.`
+        );
       }
       const owner = await page.locator("[data-kp-glyph-review]")
         .getAttribute("data-kp-visual-owner");
@@ -78,7 +98,7 @@ try {
         file: path.relative(process.cwd(), file),
         overflow,
         caseCount,
-        motionCount,
+        motionCounts,
         geometry
       });
       await page.close();
