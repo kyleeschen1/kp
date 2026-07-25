@@ -103,6 +103,13 @@
       "scope": "slice-07 repository types",
       "checkedAt": "2026-07-25T19:45:22.216Z",
       "notes": "Application, node, test, and domain TypeScript checks passed."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-08 correction application gate",
+      "checkedAt": "2026-07-25T19:46:08.243Z",
+      "notes": "The focused model fixture reproduces the measured plus font-size mismatch and returns unsupported. No runtime correction, native DOM mutation, per-atom scale, offset, or fraction exception was added."
     }
   ],
   "allowedWork": [
@@ -176,7 +183,8 @@
     {
       "id": "slice-08",
       "title": "generic-alignment-application",
-      "status": "planned"
+      "summary": "Intentionally applied no runtime correction. The measured endpoint fails the approved common-translation gate because only the persistent plus needs font-scale and baseline adaptation; adding that per-atom behavior would violate the preservation boundary. Native DOM and compositor playback remain unchanged, and the endpoint jerk is retained as a bounded known risk.",
+      "status": "complete"
     },
     {
       "id": "slice-09",
