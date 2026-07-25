@@ -4,6 +4,9 @@ import {
   numeratorSplitMergeEquationAssetIds
 } from "../semantic/numerator-split-merge-equation-asset.ts";
 import { createKpQuadraticBranchChoreography } from "./quadratic-branch-choreography.ts";
+import {
+  kpGlyphReconciliationNegativeFixtures
+} from "./semantic-glyph-reconciliation-fixtures.ts";
 import type { KpGlyphReconciliationCaseInput } from "./semantic-glyph-reconciliation-compiler.ts";
 import type { KpCanonicalOperationExecutionResult } from "../semantic/transformation-definition-binding.ts";
 
@@ -232,5 +235,135 @@ export function createKpQuadraticPlusMinusGlyphReconciliationCase(): KpGlyphReco
       "rewind"
     ] as const,
     durationMs: 760
+  });
+}
+
+export function createKpCrowdedQuadraticGlyphReconciliationCase(
+  viewportId: "wide" | "phone"
+): KpGlyphReconciliationCaseInput {
+  const fixture = kpGlyphReconciliationNegativeFixtures.find(({ id }) =>
+    id === "fixture.quadratic-discriminant-crowding"
+  );
+  const candidate = fixture?.lineageCandidates[0];
+  const viewport = fixture?.viewports.find(({ id }) => id === viewportId);
+  if (fixture === undefined || candidate === undefined || viewport === undefined) {
+    throw new Error(`Crowded quadratic ${viewportId} fixture is unavailable.`);
+  }
+  const merge = candidate.lineages.find(({ relation }) => relation === "merge")!;
+  const persist = candidate.lineages.find(({ relation }) => relation === "succession")!;
+  const edges = [
+    {
+      id: merge.id,
+      relation: "merge" as const,
+      sourceEntityIds: merge.sourceEntityIds,
+      targetEntityIds: merge.targetEntityIds,
+      summary: "Discriminant components derive the exact simplified radicand."
+    },
+    {
+      id: persist.id,
+      relation: "persist" as const,
+      sourceEntityIds: persist.sourceEntityIds,
+      targetEntityIds: persist.targetEntityIds,
+      summary: "The plus-minus branch origin persists."
+    }
+  ];
+  const sourceGlyphs = fixture.sourceTokens.map((token, ordinal) => ({
+    id: token.id,
+    entityId: token.semanticEntityId,
+    glyphKey: token.glyphKey,
+    ordinal
+  }));
+  const targetGlyphs = fixture.targetTokens.map((token, ordinal) => ({
+    id: token.id,
+    entityId: token.semanticEntityId,
+    glyphKey: token.glyphKey,
+    ordinal
+  }));
+  const measured = new Map(viewport.measurements.map((measurement) => [
+    measurement.tokenId,
+    measurement.rect
+  ]));
+  const fallbackX = viewportId === "wide" ? 684 : 184;
+  const fallbackY = viewportId === "wide" ? 272 : 314;
+  const sourceMetrics = sourceGlyphs.map((glyph, index) => ({
+    glyphId: glyph.id,
+    bounds: measured.get(glyph.id) ?? {
+      x: fallbackX + index * 8,
+      y: fallbackY,
+      width: 20,
+      height: 30
+    }
+  }));
+  const resultX = viewportId === "wide" ? 706 : 214;
+  const targetMetrics = targetGlyphs.map((glyph) => ({
+    glyphId: glyph.id,
+    bounds: glyph.glyphKey === "±"
+      ? measured.get("source.plus-minus")!
+      : { x: resultX, y: fallbackY, width: 18, height: 30 }
+  }));
+  const protectedRect = measured.get("source.plus-minus")!;
+  const allSourceEntities = edges.flatMap(({ sourceEntityIds }) => sourceEntityIds);
+  const allTargetEntities = edges.flatMap(({ targetEntityIds }) => targetEntityIds);
+  const execution: KpCanonicalOperationExecutionResult = {
+    kind: "canonical-operation-execution",
+    transformationId: "operation.quadratic.discriminant-simplification",
+    operationSpecId: "kp.core.merge",
+    roleBindings: { sources: merge.sourceEntityIds, result: merge.targetEntityIds },
+    lineageGraph: {
+      kind: "semantic-lineage-graph",
+      id: `lineage.quadratic.crowded.${viewportId}`,
+      sourceEntityIds: allSourceEntities,
+      targetEntityIds: allTargetEntities,
+      edges
+    },
+    correspondenceMap: {
+      id: `correspondence.quadratic.crowded.${viewportId}`,
+      records: [
+        {
+          id: merge.id,
+          relation: "fan-in",
+          sourceSelectorIds: merge.sourceEntityIds,
+          targetSelectorIds: merge.targetEntityIds,
+          summary: edges[0]!.summary
+        },
+        {
+          id: persist.id,
+          relation: "identity",
+          sourceSelectorIds: persist.sourceEntityIds,
+          targetSelectorIds: persist.targetEntityIds,
+          summary: edges[1]!.summary
+        }
+      ]
+    }
+  };
+  return Object.freeze({
+    id: `case.quadratic.crowded.${viewportId}`,
+    execution,
+    viewport: {
+      x: 0,
+      y: 0,
+      width: viewport.widthPx,
+      height: viewportId === "wide" ? 540 : 480
+    },
+    sourceGlyphs,
+    targetGlyphs,
+    sourceMetrics,
+    targetMetrics,
+    sourceProtectedRegions: [{
+      id: `protected.plus-minus.${viewportId}`,
+      ownerEntityId: "entity.plus-minus",
+      kind: "ink" as const,
+      bounds: protectedRect
+    }],
+    requiredCapabilities: [
+      "accessibility",
+      "annotation",
+      "branching",
+      "direct-seek",
+      "hover",
+      "responsive",
+      "rewind"
+    ] as const,
+    durationMs: 520
   });
 }

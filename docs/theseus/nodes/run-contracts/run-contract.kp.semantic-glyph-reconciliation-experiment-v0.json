@@ -210,7 +210,8 @@
     {
       "id": "slice-19",
       "title": "Crowded-wide-projection",
-      "status": "planned"
+      "summary": "Applied the unchanged common path to the wide crowded discriminant: all three merge constituents receive clearance or explicit settle, plus-minus persists directly, and no quadratic policy is used.",
+      "status": "complete"
     },
     {
       "id": "slice-20",
