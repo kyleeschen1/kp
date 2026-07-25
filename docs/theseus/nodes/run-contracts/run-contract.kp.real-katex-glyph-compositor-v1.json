@@ -69,7 +69,8 @@
     {
       "id": "slice-03",
       "title": "Fragment-observation-contract",
-      "status": "planned"
+      "summary": "Added the ephemeral native KaTeX fragment observation contract with exact identity, geometry, style, and font-revision validation.",
+      "status": "complete"
     },
     {
       "id": "slice-04",

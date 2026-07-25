@@ -42,6 +42,13 @@
       "scope": "slice-02 durable boundary",
       "checkedAt": "2026-07-25T14:07:32.048Z",
       "notes": "Three focused tests and all TypeScript projects pass; forged DOM, glyph rectangle, keyframe, backend plan, and fragment observation fields are stripped."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-03 observation contract",
+      "checkedAt": "2026-07-25T14:09:57.045Z",
+      "notes": "Five focused tests and all TypeScript projects pass; duplicate identity, invalid geometry, and cross-document fragments are rejected."
     }
   ],
   "expectedLearning": [
