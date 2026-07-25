@@ -49,9 +49,8 @@ import {
   settleAndObserveKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";
 import {
-  compileKpNativeKatexHierarchicalScenePlan,
-  compileKpNativeKatexSceneTracks,
-  reconcileKpNativeKatexScenes,
+  applyKpNativeKatexSceneFrame, compileKpNativeKatexHierarchicalScenePlan,
+  compileKpNativeKatexSceneTracks, reconcileKpNativeKatexScenes,
   sampleKpNativeKatexSceneTracks
 } from "../rendering/native-katex-scene-compositor.ts";
 
@@ -344,10 +343,19 @@ const fractionRuleTracks = fractionSceneTracks.filter(({ paintKind }) =>
 review.dataset["kpFractionSceneDispositionCount"] =
   String(fractionSceneReconciliation.dispositions.length);
 review.dataset["kpFractionRuleTrackCount"] = String(fractionRuleTracks.length);
+const applyFractionScene = (progress: number) => applyKpNativeKatexSceneFrame({
+  stage: fractionStage,
+  sourceRoot: fractionSource,
+  targetRoot: fractionTarget,
+  reconciliation: fractionSceneReconciliation,
+  tracks: fractionSceneTracks,
+  progress
+});
 if (import.meta.env.DEV) {
   Object.assign(window, {
     __kpSampleFractionSceneTracks: (progress: number) =>
-      sampleKpNativeKatexSceneTracks(fractionSceneTracks, progress)
+      sampleKpNativeKatexSceneTracks(fractionSceneTracks, progress),
+    __kpApplyFractionSceneFrame: applyFractionScene
   });
 }
 
@@ -609,8 +617,7 @@ function render(progress: number): void {
   });
   const fractionAtTarget = fractionFrame.visualOwner === "target-native";
   fractionSource.style.opacity = fractionAtTarget ? "0" : "1";
-  // Target context is revealed as a destination before its denominator owns
-  // ink; only the semantically bound denominator participates in the handoff.
+  // Reveal target context early; only the bound denominator moves.
   fractionTarget.style.opacity = fractionProgress > 0 ? "1" : "0";
   fractionNativeTarget.tabIndex = fractionAtTarget ? 0 : -1;
   fractionNativeTarget.setAttribute("aria-hidden", String(!fractionAtTarget));

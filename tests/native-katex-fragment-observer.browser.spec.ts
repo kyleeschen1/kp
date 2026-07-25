@@ -348,6 +348,82 @@ test("live fraction scene exposes continuously sampled structural rule tracks", 
   }
 });
 
+test("full fraction scene has one exclusive visual owner through handoff", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const ownership = await page.evaluate(() => {
+    const apply = (window as unknown as {
+      __kpApplyFractionSceneFrame: (progress: number) => {
+        visualOwner: string;
+        sourceNativeOpacity: number;
+        materialSceneOpacity: number;
+        targetNativeOpacity: number;
+        frames: readonly { opacity: number }[];
+      };
+    }).__kpApplyFractionSceneFrame;
+    return [0, 0.5, 1].map((progress) => {
+      const frame = apply(progress);
+      const stage = document.querySelector<HTMLElement>(
+        "[data-fraction-stage]"
+      )!;
+      const materialOwners = [...stage.querySelectorAll<HTMLElement>(
+        "[data-kp-native-katex-scene-owner]"
+      )];
+      return {
+        ...frame,
+        sourceOpacity: stage.querySelector<HTMLElement>(
+          "[data-fraction-source]"
+        )!.style.opacity,
+        targetOpacity: stage.querySelector<HTMLElement>(
+          "[data-fraction-target]"
+        )!.style.opacity,
+        materialOwnerCount: materialOwners.length,
+        inertOwners: materialOwners.filter((owner) =>
+          owner.hasAttribute("inert") &&
+          owner.getAttribute("aria-hidden") === "true"
+        ).length,
+        visibleMaterialOwners: materialOwners.filter((owner) =>
+          Number(owner.style.opacity) > 0
+        ).length
+      };
+    });
+  });
+
+  expect(ownership.map(({ visualOwner }) => visualOwner)).toEqual([
+    "source-native",
+    "material-scene",
+    "target-native"
+  ]);
+  expect(ownership.map((frame) => [
+    frame.sourceNativeOpacity,
+    frame.materialSceneOpacity,
+    frame.targetNativeOpacity
+  ])).toEqual([
+    [1, 0, 0],
+    [0, 1, 0],
+    [0, 0, 1]
+  ]);
+  expect(ownership.map(({ sourceOpacity, targetOpacity }) => [
+    sourceOpacity,
+    targetOpacity
+  ])).toEqual([
+    ["1", "0"],
+    ["0", "0"],
+    ["0", "1"]
+  ]);
+  expect(ownership[1]!.materialOwnerCount).toBe(
+    ownership[1]!.frames.length
+  );
+  expect(ownership[1]!.inertOwners).toBe(
+    ownership[1]!.materialOwnerCount
+  );
+  expect(ownership[1]!.visibleMaterialOwners).toBeGreaterThan(0);
+  expect(ownership[0]!.visibleMaterialOwners).toBe(0);
+  expect(ownership[2]!.visibleMaterialOwners).toBe(0);
+});
+
 test("observer rejects missing and duplicate explicit motion nodes", async ({
   page
 }) => {
