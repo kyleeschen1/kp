@@ -5,6 +5,9 @@ import {
   createKpNativeKatexRenderedSceneObservation,
   type KpNativeKatexPaintAtomObservation
 } from "../src/rendering/native-katex-rendered-scene.ts";
+import {
+  createKpNativeKatexSceneReconciliation
+} from "../src/rendering/native-katex-scene-compositor.ts";
 
 const ownerDocument = {};
 const stage = { ownerDocument } as HTMLElement;
@@ -117,3 +120,125 @@ test("renderer-session scene state is absent from durable animation artifacts", 
     assert.equal(serialized.includes(field), false);
   }
 });
+
+test("scene reconciliation requires exactly one disposition per endpoint atom", () => {
+  const source = createScene("source", ["source.x", "source.plus"]);
+  const target = createScene("target", ["target.x"]);
+  const reconciliation = createKpNativeKatexSceneReconciliation({
+    source,
+    target,
+    dispositions: [{
+      id: "persist.x",
+      lifecycle: "persist",
+      sourceAtomIds: ["source.x"],
+      targetAtomIds: ["target.x"],
+      semanticEntityIds: ["symbol.x"]
+    }, {
+      id: "eliminate.plus",
+      lifecycle: "eliminate",
+      sourceAtomIds: ["source.plus"],
+      targetAtomIds: [],
+      semanticEntityIds: ["operator.plus"]
+    }]
+  });
+
+  assert.equal(reconciliation.dispositions.length, 2);
+  assert.throws(
+    () => createKpNativeKatexSceneReconciliation({
+      source,
+      target,
+      dispositions: [{
+        id: "persist.x",
+        lifecycle: "persist",
+        sourceAtomIds: ["source.x"],
+        targetAtomIds: ["target.x"],
+        semanticEntityIds: ["symbol.x"]
+      }]
+    }),
+    /source atom source.plus has no disposition/
+  );
+  assert.throws(
+    () => createKpNativeKatexSceneReconciliation({
+      source,
+      target,
+      dispositions: [{
+        id: "persist.x",
+        lifecycle: "persist",
+        sourceAtomIds: ["source.x"],
+        targetAtomIds: ["target.x"],
+        semanticEntityIds: ["symbol.x"]
+      }, {
+        id: "duplicate.x",
+        lifecycle: "eliminate",
+        sourceAtomIds: ["source.x", "source.plus"],
+        targetAtomIds: [],
+        semanticEntityIds: ["symbol.x", "operator.plus"]
+      }]
+    }),
+    /multiple dispositions/
+  );
+});
+
+test("scene reconciliation rejects invalid multiplicity and silent unsupported work", () => {
+  const source = createScene("source", ["source.a", "source.b"]);
+  const target = createScene("target", ["target.a"]);
+  assert.throws(
+    () => createKpNativeKatexSceneReconciliation({
+      source,
+      target,
+      dispositions: [{
+        id: "bad.merge",
+        lifecycle: "merge",
+        sourceAtomIds: ["source.a"],
+        targetAtomIds: ["target.a"],
+        semanticEntityIds: ["entity.a"]
+      }, {
+        id: "source.b",
+        lifecycle: "eliminate",
+        sourceAtomIds: ["source.b"],
+        targetAtomIds: [],
+        semanticEntityIds: ["entity.b"]
+      }]
+    }),
+    /invalid merge arity/
+  );
+  assert.throws(
+    () => createKpNativeKatexSceneReconciliation({
+      source,
+      target,
+      dispositions: [{
+        id: "unsupported",
+        lifecycle: "unsupported",
+        sourceAtomIds: ["source.a", "source.b"],
+        targetAtomIds: ["target.a"],
+        semanticEntityIds: ["entity.a"]
+      }]
+    }),
+    /invalid unsupported arity/
+  );
+});
+
+function createScene(
+  endpoint: "source" | "target",
+  ids: readonly string[]
+) {
+  return createKpNativeKatexRenderedSceneObservation({
+    endpoint,
+    stage,
+    root,
+    atoms: ids.map((id, index) => ({
+      ...atom(id, `group.${endpoint}`),
+      endpoint,
+      semanticEntityId: id.replace(/^(source|target)\./, "entity."),
+      rect: { left: index * 20, top: 0, width: 10, height: 20 }
+    })),
+    groups: [{
+      id: `group.${endpoint}`,
+      semanticEntityId: `entity.${endpoint}`,
+      atomIds: ids,
+      rect: { left: 0, top: 0, width: Math.max(10, ids.length * 20 - 10), height: 20 }
+    }],
+    fontRevision: 1,
+    viewportKey: endpoint
+  });
+}

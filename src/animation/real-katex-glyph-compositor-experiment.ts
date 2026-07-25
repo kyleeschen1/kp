@@ -68,7 +68,9 @@ KpRealGlyphCompositorExperimentLedger = Object.freeze({
   ]),
   productionModules: Object.freeze([
     "src/rendering/native-katex-fragment-observer.ts",
-    "src/rendering/native-katex-glyph-compositor.ts"
+    "src/rendering/native-katex-glyph-compositor.ts",
+    "src/rendering/native-katex-rendered-scene.ts",
+    "src/rendering/native-katex-scene-compositor.ts"
   ]),
   lifecyclePrimitives: Object.freeze([
     "observe-settled-fragments",

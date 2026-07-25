@@ -53,7 +53,7 @@ test("real-glyph acceptance and complexity budgets are fixed before implementati
   assert.equal(ledger.maxProductionModules, 4);
   assert.equal(ledger.maxLifecyclePrimitives, 6);
   assert.equal(ledger.nativeHandoffTolerancePx, 1);
-  assert.equal(ledger.productionModules.length, 2);
+  assert.equal(ledger.productionModules.length, 4);
   assert.equal(ledger.lifecyclePrimitives.length, 6);
   assert.deepEqual(validateKpRealGlyphCompositorExperimentLedger(ledger), []);
 });

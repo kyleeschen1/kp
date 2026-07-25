@@ -79,6 +79,13 @@
       "scope": "slice-08 complete endpoint inventories",
       "checkedAt": "2026-07-25T17:25:14.611Z",
       "notes": "16 focused tests, 23 Chromium tests, and all TypeScript projects pass; both wide and phone routes expose total source/target atom and group counts, and the controller remains below 40 KB."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-09 total reconciliation validator",
+      "checkedAt": "2026-07-25T17:27:35.100Z",
+      "notes": "18 focused tests and all TypeScript projects pass; omissions, duplicates, invalid multiplicity, silent unsupported components, and unknown atom IDs fail closed."
     }
   ],
   "allowedWork": [
@@ -155,7 +162,8 @@
     {
       "id": "slice-09",
       "title": "total-reconciliation-validator",
-      "status": "planned"
+      "summary": "Added a total scene reconciliation validator requiring each source and target paint atom exactly once across persistent, merge, split, introduction, elimination, or reasoned unsupported dispositions.",
+      "status": "complete"
     },
     {
       "id": "slice-10",
