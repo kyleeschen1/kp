@@ -111,7 +111,8 @@
     {
       "id": "slice-10",
       "title": "Exact-native-handoff",
-      "status": "planned"
+      "summary": "The real KaTeX clone now follows one generic native-rectangle interpolation and reaches an exact, typography-matched atomic target handoff within the one-pixel acceptance bound.",
+      "status": "complete"
     },
     {
       "id": "slice-11",

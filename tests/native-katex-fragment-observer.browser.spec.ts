@@ -399,3 +399,86 @@ test("source, clone, and target have exactly one visual owner", async ({
     ].filter((opacity) => opacity === 1)).toHaveLength(1);
   }
 });
+
+test("moving clone meets native target within one CSS pixel without typography drift", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  const result = await page.evaluate(async () => {
+    const stage = document.querySelector<HTMLElement>(
+      '[data-reconciliation-case="solve-x"] [data-case-stage]'
+    )!;
+    const sourceX = stage.querySelector<HTMLElement>(
+      "[data-case-source] .mord.mathnormal"
+    )!;
+    const targetX = stage.querySelector<HTMLElement>(
+      "[data-case-target] .mord.mathnormal"
+    )!;
+    sourceX.dataset["kpMotionId"] = "motion.solve-x.handoff-source";
+    targetX.dataset["kpMotionId"] = "motion.solve-x.handoff-target";
+    const layer = document.createElement("span");
+    layer.dataset["kpEditorEquationMaterialLayer"] = "true";
+    stage.append(layer);
+    // @ts-expect-error Vite resolves browser-side source modules.
+    const observer = await import("/src/rendering/native-katex-fragment-observer.ts");
+    // @ts-expect-error Vite resolves browser-side source modules.
+    const compositor = await import("/src/rendering/native-katex-glyph-compositor.ts");
+    const observed = observer.observeKpNativeKatexFragments({
+      stage,
+      bindings: [{
+        id: "fragment.handoff.source",
+        semanticEntityId: "entity.source.x",
+        motionId: "motion.solve-x.handoff-source",
+        glyphKey: "x"
+      }, {
+        id: "fragment.handoff.target",
+        semanticEntityId: "entity.target.x",
+        motionId: "motion.solve-x.handoff-target",
+        glyphKey: "x"
+      }],
+      fontRevision: 1
+    }).fragments;
+    const clone = compositor.createKpNativeKatexFragmentClone({
+      stage,
+      ownerId: "owner.solve-x.handoff",
+      observation: observed[0]!
+    });
+    const before = compositor.applyKpNativeKatexGlyphFrame({
+      clone,
+      source: observed[0]!,
+      target: observed[1]!,
+      progress: 0.999999
+    });
+    const atTarget = compositor.applyKpNativeKatexGlyphFrame({
+      clone,
+      source: observed[0]!,
+      target: observed[1]!,
+      progress: 1
+    });
+    const stageRect = stage.getBoundingClientRect();
+    const ownerRect = clone.ownerElement.getBoundingClientRect();
+    const targetRect = targetX.getBoundingClientRect();
+    const scaleX = stageRect.width / stage.offsetWidth;
+    const scaleY = stageRect.height / stage.offsetHeight;
+    const renderedDelta = Math.max(
+      Math.abs(ownerRect.left - targetRect.left) / scaleX,
+      Math.abs(ownerRect.top - targetRect.top) / scaleY,
+      Math.abs(ownerRect.width - targetRect.width) / scaleX,
+      Math.abs(ownerRect.height - targetRect.height) / scaleY
+    );
+    return {
+      beforeDelta: before.targetHandoffDeltaPx,
+      atTargetDelta: atTarget.targetHandoffDeltaPx,
+      renderedDelta,
+      sourceFingerprint: observed[0]!.styleFingerprint,
+      targetFingerprint: observed[1]!.styleFingerprint,
+      visualOwner: atTarget.visualOwner
+    };
+  });
+
+  expect(result.beforeDelta).toBeLessThan(0.01);
+  expect(result.atTargetDelta).toBe(0);
+  expect(result.renderedDelta).toBeLessThanOrEqual(1);
+  expect(result.sourceFingerprint).toBe(result.targetFingerprint);
+  expect(result.visualOwner).toBe("target-native");
+});
