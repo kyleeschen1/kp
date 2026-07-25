@@ -327,6 +327,27 @@
       "scope": "slice-16",
       "checkedAt": "2026-07-25T20:34:36.193Z",
       "notes": "Workspace is valid at 783 nodes and 12272 events before closing the split promotion gate."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment",
+      "status": "failed",
+      "scope": "slice-17",
+      "checkedAt": "2026-07-25T20:38:00.234Z",
+      "notes": "64 of 66 checks passed. Two new audit assertions were invalid: governed compilation lookup assumed a nonexistent operation transformationId field, and the forbidden-state regex matched the audit preservation sentence rather than renderer data. Correcting the tests to canonical request identity and exact forbidden keys."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-17",
+      "checkedAt": "2026-07-25T20:40:21.217Z",
+      "notes": "All 66 reconciliation checks and all TypeScript projects pass. The radical audit projects exact canonical source and target selector identities into persist, removal, and two representation-succession groups without renderer authority."
+    },
+    {
+      "command": "node --test governed exponent radical assets fragment lineage semantics latex",
+      "status": "passed",
+      "scope": "slice-17",
+      "checkedAt": "2026-07-25T20:40:22.339Z",
+      "notes": "All 14 focused governed radical, animation asset, fragment lineage, fragment semantics, and selector-annotated LaTeX checks pass. Canonical reference closure, strict rational-exponent law, correspondence rewind, and fixture semantics remain intact."
     }
   ],
   "allowedWork": [
@@ -454,7 +475,8 @@
     {
       "id": "slice-17",
       "title": "radical-succession-semantic-audit",
-      "status": "planned"
+      "summary": "Bound the existing governed x^(1/2)-to-sqrt(x) asset to a renderer-blind glyph reconciliation audit. Exact canonical selector identities project into base persistence, unit-numerator removal, fraction-rule-to-overbar representation succession, and denominator-to-hook representation succession under kp.algebra.rewrite-power-as-root. Strict law refs, governed composition, reference closure, correspondence rewind, selector LaTeX, and capability boundaries pass; no renderer or WebGL identity was introduced.",
+      "status": "complete"
     },
     {
       "id": "slice-18",
