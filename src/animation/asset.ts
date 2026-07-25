@@ -21,6 +21,11 @@ import {
   type KpEquationPresentationProfileV1
 } from "./equation-presentation-profile.ts";
 import {
+  cloneKpAnimationPresentationConstraintsV1,
+  validateKpAnimationPresentationConstraintsV1,
+  type KpAnimationPresentationConstraintsV1
+} from "./presentation-constraints.ts";
+import {
   createSemanticObjectRef,
   createSemanticTransformationRef,
   type SemanticObjectRef,
@@ -90,6 +95,8 @@ export interface KpAnimationAsset {
   readonly dashboard?: KpAnimationAssetDashboardMetadata | undefined;
   readonly presentationProfile?:
     KpAnimationAssetPresentationProfile | undefined;
+  readonly presentationConstraints?:
+    KpAnimationPresentationConstraintsV1 | undefined;
   readonly metadata?: Readonly<Record<string, KpAssetMetadataValue>> | undefined;
 }
 
@@ -107,6 +114,8 @@ export interface CreateKpAnimationAssetInput {
   readonly dashboard?: KpAnimationAssetDashboardMetadata | undefined;
   readonly presentationProfile?:
     KpAnimationAssetPresentationProfile | undefined;
+  readonly presentationConstraints?:
+    KpAnimationPresentationConstraintsV1 | undefined;
   readonly metadata?: Readonly<Record<string, KpAssetMetadataValue>> | undefined;
 }
 
@@ -269,6 +278,9 @@ export interface KpAnimationAssetBuilder {
   withPresentationProfile(
     profile: KpAnimationAssetPresentationProfile
   ): KpAnimationAssetBuilder;
+  withPresentationConstraints(
+    constraints: KpAnimationPresentationConstraintsV1
+  ): KpAnimationAssetBuilder;
   withMetadata(
     metadata: Readonly<Record<string, KpAssetMetadataValue>>
   ): KpAnimationAssetBuilder;
@@ -314,6 +326,13 @@ export function createKpAnimationAsset(
       : {
           presentationProfile: cloneAnimationAssetPresentationProfile(
             input.presentationProfile
+          )
+        }),
+    ...(input.presentationConstraints === undefined
+      ? {}
+      : {
+          presentationConstraints: cloneKpAnimationPresentationConstraintsV1(
+            input.presentationConstraints
           )
         }),
     ...(input.metadata === undefined ? {} : { metadata: { ...input.metadata } })
@@ -561,6 +580,16 @@ export function validateKpAnimationAsset(
       });
     });
   }
+  if (animation.presentationConstraints !== undefined) {
+    validateKpAnimationPresentationConstraintsV1(
+      animation.presentationConstraints
+    ).forEach((message, index) => {
+      issues.push({
+        path: `presentationConstraints[${index}]`,
+        message
+      });
+    });
+  }
 
   animation.transformations.forEach((transformation, index) => {
     if (transformationIds.has(transformation.id)) {
@@ -631,6 +660,8 @@ class DefaultKpAnimationAssetBuilder implements KpAnimationAssetBuilder {
   private dashboard: KpAnimationAssetDashboardMetadata | undefined;
   private presentationProfile:
     KpAnimationAssetPresentationProfile | undefined;
+  private presentationConstraints:
+    KpAnimationPresentationConstraintsV1 | undefined;
   private metadata: Readonly<Record<string, KpAssetMetadataValue>> | undefined;
 
   constructor(input: CreateKpAnimationAssetBuilderInput) {
@@ -715,6 +746,14 @@ class DefaultKpAnimationAssetBuilder implements KpAnimationAssetBuilder {
     return this;
   }
 
+  withPresentationConstraints(
+    constraints: KpAnimationPresentationConstraintsV1
+  ): KpAnimationAssetBuilder {
+    this.presentationConstraints =
+      cloneKpAnimationPresentationConstraintsV1(constraints);
+    return this;
+  }
+
   withMetadata(
     metadata: Readonly<Record<string, KpAssetMetadataValue>>
   ): KpAnimationAssetBuilder {
@@ -742,6 +781,9 @@ class DefaultKpAnimationAssetBuilder implements KpAnimationAssetBuilder {
       ...(this.presentationProfile === undefined
         ? {}
         : { presentationProfile: this.presentationProfile }),
+      ...(this.presentationConstraints === undefined
+        ? {}
+        : { presentationConstraints: this.presentationConstraints }),
       ...(this.metadata === undefined ? {} : { metadata: this.metadata })
     });
   }

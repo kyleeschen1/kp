@@ -44,6 +44,13 @@
       "scope": "slice-02 negative and ambiguity fixtures",
       "checkedAt": "2026-07-25T01:35:44.629Z",
       "notes": "Nine focused tests pass: equal glyphs without lineage stay unmatched, repeated tokens retain two plausible candidates, unsupported lineage falls back, crowded wide and phone fixtures reproduce protected-ink overlap, and all fixtures are immutable and valid."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-03 durable artifact boundary",
+      "checkedAt": "2026-07-25T01:39:03.921Z",
+      "notes": "Fourteen focused tests and typecheck pass. Existing assets remain valid; optional constraints clone and validate; serialized constraints exclude measured glyphs, DOM handles, keyframes, and backend plans; capability mismatch must preserve, lower, or reject."
     }
   ],
   "progress": {

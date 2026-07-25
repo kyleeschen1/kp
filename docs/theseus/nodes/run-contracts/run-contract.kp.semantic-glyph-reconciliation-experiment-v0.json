@@ -114,7 +114,8 @@
     {
       "id": "slice-03",
       "title": "Durable-artifact-boundary",
-      "status": "planned"
+      "summary": "Added backward-compatible renderer-independent presentation constraints and capability requirements to AnimationAsset, with strict serialization boundaries and 14 focused tests.",
+      "status": "complete"
     },
     {
       "id": "slice-04",
