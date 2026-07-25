@@ -493,6 +493,104 @@ test("inverse split endpoints inventory one-to-two native structures", async ({
   expect(new Set(viewportKeys).size).toBe(4);
 });
 
+test("radical succession inventories native glyph, rule, and path paint", async ({
+  browser
+}) => {
+  const viewportKeys: string[] = [];
+  for (const profile of [{
+    viewport: { width: 1_440, height: 950 },
+    deviceScaleFactor: 1
+  }, {
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 2
+  }]) {
+    const context = await browser.newContext(profile);
+    const page = await context.newPage();
+    await page.goto(
+      "/glyph-reconciliation-experiment.html?radicalInventory=1&progress=0"
+    );
+    const panel = page.locator(
+      '[data-radical-inventory][data-kp-radical-inventory-ready="true"]'
+    );
+    await panel.waitFor();
+    const inventory = await page.evaluate(() => {
+      const scenes = (window as unknown as {
+        __kpRadicalSceneInventory: {
+          source: {
+            atoms: readonly {
+              id: string;
+              semanticEntityId: string;
+              presentationGroupId: string;
+              paintKind: string;
+              rect: {
+                left: number;
+                top: number;
+                width: number;
+                height: number;
+              };
+            }[];
+            groups: readonly { id: string; atomIds: readonly string[] }[];
+            viewportKey: string;
+          };
+          target: {
+            atoms: readonly {
+              id: string;
+              semanticEntityId: string;
+              presentationGroupId: string;
+              paintKind: string;
+              rect: {
+                left: number;
+                top: number;
+                width: number;
+                height: number;
+              };
+            }[];
+            groups: readonly { id: string; atomIds: readonly string[] }[];
+            viewportKey: string;
+          };
+        };
+      }).__kpRadicalSceneInventory;
+      return [scenes.source, scenes.target].map((scene) => ({
+        atomIds: scene.atoms.map(({ id }) => id),
+        kinds: scene.atoms.map(({ paintKind }) => paintKind),
+        semanticEntityIds: scene.atoms.map(({ semanticEntityId }) =>
+          semanticEntityId
+        ),
+        groupCount: scene.groups.length,
+        owned: scene.atoms.every((atom) =>
+          atom.semanticEntityId.length > 0 &&
+          atom.presentationGroupId.length > 0 &&
+          Object.values(atom.rect).every(Number.isFinite) &&
+          atom.rect.width > 0 &&
+          atom.rect.height > 0
+        ) && scene.groups.every(({ atomIds }) => atomIds.length > 0),
+        viewportKey: scene.viewportKey
+      }));
+    });
+    const [source, target] = inventory;
+    expect(source!.kinds).toContain("glyph");
+    expect(source!.kinds).toContain("rule");
+    expect(target!.kinds).toContain("glyph");
+    expect(target!.kinds).toContain("path");
+    expect(source!.semanticEntityIds).toContain(
+      "expression.generated.radical.square-root-as-power.power.exponent-denominator"
+    );
+    expect(target!.semanticEntityIds).toContain(
+      "expression.generated.radical.square-root-as-power.radical.radicand"
+    );
+    expect(target!.semanticEntityIds).toContain(
+      "expression.generated.radical.square-root-as-power.radical.root-notation"
+    );
+    expect(source!.owned).toBe(true);
+    expect(target!.owned).toBe(true);
+    expect(new Set(source!.atomIds).size).toBe(source!.atomIds.length);
+    expect(new Set(target!.atomIds).size).toBe(target!.atomIds.length);
+    viewportKeys.push(source!.viewportKey, target!.viewportKey);
+    await context.close();
+  }
+  expect(new Set(viewportKeys).size).toBe(4);
+});
+
 test("live fraction scene exposes continuously sampled structural rule tracks", async ({
   page
 }) => {

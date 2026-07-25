@@ -348,6 +348,27 @@
       "scope": "slice-17",
       "checkedAt": "2026-07-25T20:40:22.339Z",
       "notes": "All 14 focused governed radical, animation asset, fragment lineage, fragment semantics, and selector-annotated LaTeX checks pass. Canonical reference closure, strict rational-exponent law, correspondence rewind, and fixture semantics remain intact."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "slice-18",
+      "checkedAt": "2026-07-25T20:45:26.183Z",
+      "notes": "Browser inventory passed, but TypeScript rejected passing semantic asset objects directly to the pre-existing structural binder because it expects objectId instead of id. Adapting the local renderer-neutral state shape; no runtime or semantic change."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-18",
+      "checkedAt": "2026-07-25T20:47:03.686Z",
+      "notes": "All 37 compositor checks and all TypeScript projects pass. The inventory extension preserves the four promoted default cases and keeps complete scene observations ephemeral."
+    },
+    {
+      "command": "playwright radical succession inventories",
+      "status": "passed",
+      "scope": "slice-18",
+      "checkedAt": "2026-07-25T20:47:04.797Z",
+      "notes": "Wide DPR1 and phone DPR2 real-KaTeX endpoints settle with total explicit ownership. Source paint contains generic glyph and rule atoms including exponent denominator 2; target paint contains generic glyph and path atoms including the radicand and existing root-notation representation. IDs are unique, geometry is positive and finite, and four viewport cache keys are distinct."
     }
   ],
   "allowedWork": [
@@ -481,7 +502,8 @@
     {
       "id": "slice-18",
       "title": "radical-structural-inventory",
-      "status": "planned"
+      "summary": "Added a query-isolated real-KaTeX radical endpoint inventory without changing the four default experiment cases. Wide DPR1 and phone DPR2 settle total explicitly owned paint: source x, numerator 1, denominator 2, and fraction line use generic glyph/rule atoms; target radicand x and complete native radical SVG use generic glyph/path atoms tied to canonical selector and existing root-notation representation identities. Geometry, atom IDs, groups, fonts, and viewport invalidation are stable; no radical-named paint kind was added.",
+      "status": "complete"
     },
     {
       "id": "slice-19",
