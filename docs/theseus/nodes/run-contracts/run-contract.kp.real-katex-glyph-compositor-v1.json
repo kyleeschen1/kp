@@ -93,7 +93,8 @@
     {
       "id": "slice-07",
       "title": "Lineage-fragment-binding",
-      "status": "planned"
+      "summary": "Native source and target fragments now bind only inside canonical semantic lineage; unrelated equal glyphs fail closed.",
+      "status": "complete"
     },
     {
       "id": "slice-08",

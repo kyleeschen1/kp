@@ -70,6 +70,13 @@
       "scope": "slice-06 font and style settlement",
       "checkedAt": "2026-07-25T14:21:32.930Z",
       "notes": "6 focused unit tests, 4 real Chromium tests, and all TypeScript projects pass."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-07 lineage fragment binding",
+      "checkedAt": "2026-07-25T14:23:49.141Z",
+      "notes": "Eight focused tests and all TypeScript projects pass, including the unrelated-equal-x rejection."
     }
   ],
   "expectedLearning": [

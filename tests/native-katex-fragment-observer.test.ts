@@ -2,13 +2,62 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  bindKpNativeKatexFragmentsWithinSemanticLineage,
   createKpNativeKatexFragmentObservationBatch,
   normalizeKpStageRelativeRect
 } from "../src/rendering/native-katex-fragment-observer.ts";
+import type {
+  KpCanonicalLineageProjection
+} from "../src/animation/canonical-operation-lineage-adapter.ts";
 
 const ownerDocument = {};
 const stage = { ownerDocument } as HTMLElement;
 const sourceElement = { ownerDocument } as HTMLElement;
+
+function lineage(input: {
+  sourceEntityIds: readonly string[];
+  targetEntityIds: readonly string[];
+}): KpCanonicalLineageProjection {
+  return {
+    kind: "canonical-lineage-projection",
+    id: "lineage.solve-x",
+    sourceEntityIds: input.sourceEntityIds,
+    targetEntityIds: input.targetEntityIds,
+    groups: [{
+      id: "group.solve-x.x",
+      kind: "one-to-one",
+      relation: "persist",
+      sourceEntityIds: input.sourceEntityIds,
+      targetEntityIds: input.targetEntityIds,
+      authority: {
+        executionTransformationId: "transform.solve-x",
+        operationSpecId: "kp.core.persist",
+        lineageGraphId: "graph.solve-x",
+        lineageEdgeId: "edge.solve-x.x"
+      }
+    }]
+  };
+}
+
+function batch(
+  id: string,
+  semanticEntityId: string,
+  glyphKey = "x"
+) {
+  return createKpNativeKatexFragmentObservationBatch({
+    stage,
+    fragments: [{
+      id,
+      semanticEntityId,
+      motionId: `motion.${id}`,
+      glyphKey,
+      sourceElement,
+      rect: { left: 12, top: 20, width: 14, height: 25 },
+      styleFingerprint: "font:KaTeX_Math|size:24|weight:400",
+      fontRevision: 2
+    }]
+  });
+}
 
 test("native fragment observations are explicit renderer-session state", () => {
   const batch = createKpNativeKatexFragmentObservationBatch({
@@ -94,5 +143,37 @@ test("client rectangles normalize into stable stage-local coordinates", () => {
       fragmentClientRect: { left: 0, top: 0, width: 10, height: 20 }
     }),
     /positive settled geometry/
+  );
+});
+
+test("native fragments bind through canonical semantic lineage", () => {
+  const result = bindKpNativeKatexFragmentsWithinSemanticLineage({
+    lineage: lineage({
+      sourceEntityIds: ["entity.before.x"],
+      targetEntityIds: ["entity.after.x"]
+    }),
+    source: batch("fragment.before.x", "entity.before.x"),
+    target: batch("fragment.after.x", "entity.after.x")
+  });
+
+  assert.equal(result.bindings.length, 1);
+  assert.equal(result.bindings[0]?.source.id, "fragment.before.x");
+  assert.equal(result.bindings[0]?.target.id, "fragment.after.x");
+  assert.equal(result.bindings[0]?.glyphKey, "x");
+  assert.deepEqual(result.unmatchedSourceFragmentIds, []);
+  assert.deepEqual(result.unmatchedTargetFragmentIds, []);
+});
+
+test("equal native glyphs cannot create identity outside canonical lineage", () => {
+  assert.throws(
+    () => bindKpNativeKatexFragmentsWithinSemanticLineage({
+      lineage: lineage({
+        sourceEntityIds: ["entity.before.x"],
+        targetEntityIds: ["entity.after.x"]
+      }),
+      source: batch("fragment.before.x", "entity.before.x"),
+      target: batch("fragment.unrelated.x", "entity.unrelated.x")
+    }),
+    /outside canonical lineage/
   );
 });

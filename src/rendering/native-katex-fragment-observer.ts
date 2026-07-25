@@ -1,6 +1,13 @@
 import type {
   KpEquationFontReadiness
 } from "./equation-font-readiness.ts";
+import type {
+  KpCanonicalLineageProjection
+} from "../animation/canonical-operation-lineage-adapter.ts";
+import {
+  matchKpGlyphsWithinSemanticLineage,
+  type KpGlyphMatchAmbiguity
+} from "../animation/lineage-constrained-glyph-matcher.ts";
 
 export interface KpStageRelativeRect {
   readonly left: number;
@@ -25,6 +32,21 @@ export interface KpNativeKatexFragmentObservationBatch {
   readonly lifecycle: "renderer-session";
   readonly stage: HTMLElement;
   readonly fragments: readonly KpNativeKatexFragmentObservation[];
+}
+
+export interface KpNativeKatexFragmentLineageBinding {
+  readonly id: string;
+  readonly lineageGroupId: string;
+  readonly glyphKey: string;
+  readonly source: KpNativeKatexFragmentObservation;
+  readonly target: KpNativeKatexFragmentObservation;
+}
+
+export interface KpNativeKatexFragmentBindingResult {
+  readonly bindings: readonly KpNativeKatexFragmentLineageBinding[];
+  readonly unmatchedSourceFragmentIds: readonly string[];
+  readonly unmatchedTargetFragmentIds: readonly string[];
+  readonly ambiguities: readonly KpGlyphMatchAmbiguity[];
 }
 
 export interface KpNativeKatexFragmentBinding {
@@ -127,6 +149,47 @@ export async function settleAndObserveKpNativeKatexFragments(input: {
     }
   });
   return second;
+}
+
+export function bindKpNativeKatexFragmentsWithinSemanticLineage(input: {
+  readonly lineage: KpCanonicalLineageProjection;
+  readonly source: KpNativeKatexFragmentObservationBatch;
+  readonly target: KpNativeKatexFragmentObservationBatch;
+}): KpNativeKatexFragmentBindingResult {
+  const matches = matchKpGlyphsWithinSemanticLineage({
+    lineage: input.lineage,
+    sourceGlyphs: input.source.fragments.map((fragment, ordinal) => ({
+      id: fragment.id,
+      entityId: fragment.semanticEntityId,
+      glyphKey: fragment.glyphKey,
+      ordinal
+    })),
+    targetGlyphs: input.target.fragments.map((fragment, ordinal) => ({
+      id: fragment.id,
+      entityId: fragment.semanticEntityId,
+      glyphKey: fragment.glyphKey,
+      ordinal
+    }))
+  });
+  const sourceById = new Map(
+    input.source.fragments.map((fragment) => [fragment.id, fragment])
+  );
+  const targetById = new Map(
+    input.target.fragments.map((fragment) => [fragment.id, fragment])
+  );
+  const bindings = matches.matches.map((match) => Object.freeze({
+    id: `native-${match.id}`,
+    lineageGroupId: match.lineageGroupId,
+    glyphKey: match.glyphKey,
+    source: sourceById.get(match.sourceGlyphId)!,
+    target: targetById.get(match.targetGlyphId)!
+  }));
+  return Object.freeze({
+    bindings: Object.freeze(bindings),
+    unmatchedSourceFragmentIds: matches.unmatchedSourceGlyphIds,
+    unmatchedTargetFragmentIds: matches.unmatchedTargetGlyphIds,
+    ambiguities: matches.ambiguities
+  });
 }
 
 export function normalizeKpStageRelativeRect(input: {
