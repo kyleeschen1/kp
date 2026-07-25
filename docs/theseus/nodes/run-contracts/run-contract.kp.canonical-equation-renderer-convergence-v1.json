@@ -1,0 +1,210 @@
+{
+  "id": "run-contract.kp.canonical-equation-renderer-convergence-v1",
+  "kind": "run-contract",
+  "title": "Canonical equation renderer convergence",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-25-canonical-equation-renderer-convergence-long-loop-proposal.md",
+      "summary": "User-approved 28-slice convergence plan with fraction and reader human checkpoints."
+    }
+  ],
+  "verification": [
+    "npm run check:architecture",
+    "npm run test:real-katex-glyph-compositor",
+    "npm run test:glyph-reconciliation-experiment",
+    "npm run test:browser:real-katex-glyph-compositor",
+    "npm run visual:glyph-reconciliation-experiment",
+    "npm run visual:reader-glyph-compositor",
+    "npm run visual:reader-gold-parity",
+    "npm run perf:glyph-reconciliation-experiment",
+    "npm run typecheck",
+    "npm run build",
+    "npm test",
+    "npm run check:reader-production",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Experiment and production native-KaTeX scene observation, reconciliation, track sampling, generic style adaptation, ownership, and settlement.",
+    "Stable fraction and reader visual entrypoints plus deterministic tests.",
+    "One reader adapter and default-route migration only after the fraction checkpoint is explicitly approved.",
+    "Deletion or retirement of renderer code superseded by the migrated exemplar.",
+    "Governed semantic and LLM fixtures compiling into the canonical renderer contract without rendered authority.",
+    "Project-memory and Theseus records needed to close the architecture fork while preserving unrelated user work."
+  ],
+  "disallowedWork": [
+    "No fraction, plus, radical, viewport, card, KaTeX-class, or operation-specific correction logic.",
+    "No new paint kind, atom lifecycle, semantic taxonomy, durable glyph IR, or operation-specific geometry scheduler.",
+    "No model-authored DOM, CSS, coordinates, keyframes, timing tables, target mathematics, geometry, computed style, or backend plans.",
+    "No global equation-family rollout before both mandatory human checkpoints.",
+    "No graph, diagram, code, table, curriculum, media, package-loading, portable-publication, or unrelated UI work.",
+    "No permanent query-selected second reader implementation."
+  ],
+  "goal": "Resolve the equation-renderer fork by proving or rejecting one canonical native-KaTeX scene renderer, then after human approval migrate one gold reader card and remove its duplicate path.",
+  "target": "workflow.kp.delivery",
+  "runMode": "run",
+  "maxSlices": 28,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and its completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if a typography fix requires any plus, fraction, radical, viewport, KaTeX-class, card, expression, or operation exception.",
+    "Stop if the fraction endpoint jerk remains or a generic bound is exceeded at the slice-14 checkpoint.",
+    "Stop if a new paint kind, atom lifecycle, semantic taxonomy, durable glyph IR, or operation-specific scheduler is required.",
+    "Stop if moving paint gains accessibility, focus, annotation, Cloze, hover, interaction, or export authority.",
+    "Stop if native endpoint typography, mathematics, or semantic DOM must be mutated.",
+    "Stop if DOM, geometry, computed style, tracks, keyframes, or backend plans enter durable animation or LLM data.",
+    "Stop if a migrated exemplar cannot delete or disable its superseded renderer path.",
+    "Stop if ordinary reader routes exceed five percent regression or acquire unintended compositor code.",
+    "Stop if direct seek, rewind, reduced motion, static output, headless output, or production closure fails without one bounded generic repair.",
+    "Stop at slice 14 and slice 24 for explicit human approval; absent, rejected, or mixed approval forbids continuation.",
+    "Stop if work expands into deferred domains or cannot avoid unrelated dirty-worktree changes."
+  ],
+  "slices": [
+    {
+      "id": "slice-01",
+      "title": "renderer-inventory",
+      "status": "planned"
+    },
+    {
+      "id": "slice-02",
+      "title": "acceptance-and-complexity-ratchet",
+      "status": "planned"
+    },
+    {
+      "id": "slice-03",
+      "title": "same-baseline-fraction-fixture",
+      "status": "planned"
+    },
+    {
+      "id": "slice-04",
+      "title": "dense-endpoint-style-telemetry",
+      "status": "planned"
+    },
+    {
+      "id": "slice-05",
+      "title": "generic-typography-handoff-law",
+      "status": "planned"
+    },
+    {
+      "id": "slice-06",
+      "title": "candidate-model-comparison",
+      "status": "planned"
+    },
+    {
+      "id": "slice-07",
+      "title": "selected-style-plan",
+      "status": "planned"
+    },
+    {
+      "id": "slice-08",
+      "title": "html-clone-realization",
+      "status": "planned"
+    },
+    {
+      "id": "slice-09",
+      "title": "structural-svg-preservation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-10",
+      "title": "style-aware-scene-sampling",
+      "status": "planned"
+    },
+    {
+      "id": "slice-11",
+      "title": "fraction-merge-correction",
+      "status": "planned"
+    },
+    {
+      "id": "slice-12",
+      "title": "inverse-split-regression",
+      "status": "planned"
+    },
+    {
+      "id": "slice-13",
+      "title": "performance-and-route-boundary",
+      "status": "planned"
+    },
+    {
+      "id": "slice-14",
+      "title": "mandatory-fraction-human-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "slice-15",
+      "title": "canonical-renderer-session-contract",
+      "status": "planned"
+    },
+    {
+      "id": "slice-16",
+      "title": "native-continuity-mode",
+      "status": "planned"
+    },
+    {
+      "id": "slice-17",
+      "title": "atom-transit-mode",
+      "status": "planned"
+    },
+    {
+      "id": "slice-18",
+      "title": "checkpoint-settlement-mode",
+      "status": "planned"
+    },
+    {
+      "id": "slice-19",
+      "title": "capability-based-mode-selection",
+      "status": "planned"
+    },
+    {
+      "id": "slice-20",
+      "title": "reader-adapter-convergence",
+      "status": "planned"
+    },
+    {
+      "id": "slice-21",
+      "title": "default-gold-card-migration",
+      "status": "planned"
+    },
+    {
+      "id": "slice-22",
+      "title": "semantic-authority-preservation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-23",
+      "title": "duplicate-path-removal",
+      "status": "planned"
+    },
+    {
+      "id": "slice-24",
+      "title": "mandatory-reader-human-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "slice-25",
+      "title": "cross-family-composition-proof",
+      "status": "planned"
+    },
+    {
+      "id": "slice-26",
+      "title": "governed-llm-fixture-proof",
+      "status": "planned"
+    },
+    {
+      "id": "slice-27",
+      "title": "renderer-retirement-and-project-memory-reconciliation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-28",
+      "title": "release-and-closeout",
+      "status": "planned"
+    }
+  ]
+}
