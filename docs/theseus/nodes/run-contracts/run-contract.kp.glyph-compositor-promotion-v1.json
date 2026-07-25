@@ -1,0 +1,196 @@
+{
+  "id": "run-contract.kp.glyph-compositor-promotion-v1",
+  "kind": "run-contract",
+  "title": "Glyph compositor endpoint and exemplar promotion",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-25-glyph-compositor-promotion-long-loop-proposal.md",
+      "summary": "User-approved 28-slice proposal, exact scope, verification cadence, rollback units, promotion gates, and hard stops."
+    }
+  ],
+  "verification": [
+    "npm run test:real-katex-glyph-compositor",
+    "npm run test:browser:real-katex-glyph-compositor",
+    "npm run visual:glyph-reconciliation-experiment",
+    "npm run typecheck",
+    "npm run build",
+    "npm run test:browser:reader-conformance",
+    "npm run perf:glyph-reconciliation-experiment",
+    "npm run check:reader-production",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Stable dense endpoint diagnostics, one bounded common alignment correction, generic scene compositor evolution, and only the named split, radical, reader, and compound exemplars with focused evidence."
+  ],
+  "disallowedWork": [
+    "No notation, operation, viewport, card, or expression exceptions; durable renderer state; clone semantic authority; global rollout; unrelated dirty-worktree edits; Manim, CAS, live LLM, or curriculum work."
+  ],
+  "goal": "Resolve or bound the generic native KaTeX endpoint jerk, then prove inverse split, radical succession, one reader card, and one compound presentation without new lifecycle or scheduling categories.",
+  "target": "workflow.kp.delivery",
+  "runMode": "run",
+  "maxSlices": 28,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and its completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if any notation, operation, viewport, expression, or card-specific offset, matcher, lifecycle, track, or scheduler is required.",
+    "Stop if clone/native identity depends on visual equality or DOM order instead of canonical reconciliation lineage.",
+    "Stop if the endpoint correction is not one bounded common scene-level correction or changes native DOM.",
+    "Stop if any painted source or target atom is implicit, unowned, duplicated, or unstable.",
+    "Stop if DOM nodes, computed styles, geometry, tracks, keyframes, or backend plans enter durable semantic or reader artifacts.",
+    "Stop if moving clones gain accessibility, hover, focus, annotation, Cloze, or export authority.",
+    "Stop if a promoted exemplar introduces a notation or operation-specific lifecycle or scheduling category.",
+    "Stop if the retained endpoint residual grows beyond its measured bound or becomes a semantic or accessibility defect.",
+    "Stop on performance, payload, accessibility, semantic, reader, review, production, static-JS, export, seek, rewind, or responsive regression.",
+    "Stop if work broadens beyond the four named exemplars or touches unrelated dirty-worktree changes.",
+    "Stop if a required automated or visual gate fails without one bounded generic correction."
+  ],
+  "slices": [
+    {
+      "id": "slice-01",
+      "title": "endpoint-reproduction-harness",
+      "status": "planned"
+    },
+    {
+      "id": "slice-02",
+      "title": "endpoint-telemetry-contract",
+      "status": "planned"
+    },
+    {
+      "id": "slice-03",
+      "title": "clone-native-atom-correlation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-04",
+      "title": "baseline-and-style-microscope",
+      "status": "planned"
+    },
+    {
+      "id": "slice-05",
+      "title": "structural-rule-microscope",
+      "status": "planned"
+    },
+    {
+      "id": "slice-06",
+      "title": "handoff-ownership-timing",
+      "status": "planned"
+    },
+    {
+      "id": "slice-07",
+      "title": "generic-alignment-model",
+      "status": "planned"
+    },
+    {
+      "id": "slice-08",
+      "title": "generic-alignment-application",
+      "status": "planned"
+    },
+    {
+      "id": "slice-09",
+      "title": "endpoint-regression-matrix",
+      "status": "planned"
+    },
+    {
+      "id": "slice-10",
+      "title": "endpoint-decision-record",
+      "status": "planned"
+    },
+    {
+      "id": "slice-11",
+      "title": "inverse-split-semantic-audit",
+      "status": "planned"
+    },
+    {
+      "id": "slice-12",
+      "title": "inverse-split-endpoint-inventories",
+      "status": "planned"
+    },
+    {
+      "id": "slice-13",
+      "title": "split-multiplicity-reconciliation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-14",
+      "title": "rule-bifurcation-tracks",
+      "status": "planned"
+    },
+    {
+      "id": "slice-15",
+      "title": "inverse-split-exemplar-integration",
+      "status": "planned"
+    },
+    {
+      "id": "slice-16",
+      "title": "split-promotion-gate",
+      "status": "planned"
+    },
+    {
+      "id": "slice-17",
+      "title": "radical-succession-semantic-audit",
+      "status": "planned"
+    },
+    {
+      "id": "slice-18",
+      "title": "radical-structural-inventory",
+      "status": "planned"
+    },
+    {
+      "id": "slice-19",
+      "title": "radical-succession-reconciliation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-20",
+      "title": "radical-path-and-rule-sampling",
+      "status": "planned"
+    },
+    {
+      "id": "slice-21",
+      "title": "radical-exemplar-integration",
+      "status": "planned"
+    },
+    {
+      "id": "slice-22",
+      "title": "radical-promotion-gate",
+      "status": "planned"
+    },
+    {
+      "id": "slice-23",
+      "title": "reader-compositor-seam",
+      "status": "planned"
+    },
+    {
+      "id": "slice-24",
+      "title": "reader-gold-exemplar-integration",
+      "status": "planned"
+    },
+    {
+      "id": "slice-25",
+      "title": "reader-seam-preservation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-26",
+      "title": "compound-scene-plan",
+      "status": "planned"
+    },
+    {
+      "id": "slice-27",
+      "title": "compound-presentation-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "slice-28",
+      "title": "release-and-project-closeout",
+      "status": "planned"
+    }
+  ]
+}
