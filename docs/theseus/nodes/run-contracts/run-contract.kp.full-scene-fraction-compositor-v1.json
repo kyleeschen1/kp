@@ -1,0 +1,160 @@
+{
+  "id": "run-contract.kp.full-scene-fraction-compositor-v1",
+  "kind": "run-contract",
+  "title": "Full-scene fraction compositor",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-25-full-scene-fraction-compositor-long-loop-proposal.md",
+      "summary": "Approved 20-slice exemplar-first plan, preservation boundary, rollback unit, verification cadence, hard stops, and slice-20 human checkpoint."
+    }
+  ],
+  "verification": [
+    "npm run test:real-katex-glyph-compositor",
+    "npm run test:browser:real-katex-glyph-compositor",
+    "npm run visual:glyph-reconciliation-experiment",
+    "npm run typecheck",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run typecheck; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-01 per-card playback controls",
+      "checkedAt": "2026-07-25T17:07:16.227Z",
+      "notes": "12 focused tests, 18 real Chromium tests, all TypeScript projects, and ten wide/phone captures pass; four equation cards expose synchronized local play, seek, status, pause, and rewind controls."
+    }
+  ],
+  "allowedWork": [
+    "Per-card experiment controls; ephemeral scene observation; semantic-constrained total reconciliation; one hierarchical generic scene sampler; canonical fraction exemplar; focused visual, browser, accessibility, performance, architecture, project-memory, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No operation-specific scheduling, durable renderer state, branch/radical/compound/text/code/production rollout, radical repair, Manim/Python/CAS/live-LLM work, clone semantic authority, or unrelated dirty-worktree changes."
+  ],
+  "goal": "Prove one total semantic-constrained rendered-notation scene compositor on the canonical fraction merge, beginning with per-card playback controls and ending at a human visual checkpoint.",
+  "target": "workflow.kp.delivery",
+  "runMode": "run",
+  "maxSlices": 20,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and its completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if painted atoms cannot be totally and deterministically enumerated without scattered brittle KaTeX heuristics.",
+    "Stop if visual equality must establish semantic lineage or any painted source or target atom remains implicit.",
+    "Stop if operation-, fraction-, radical-, branch-, or viewport-specific matching, lifecycle, or scheduling is required.",
+    "Stop if DOM nodes, geometry, tracks, keyframes, or backend plans enter durable artifacts, or moving clones own semantic affordances.",
+    "Stop if one bounded shared correction cannot eliminate whole-subtree jumps or native handoff typography changes.",
+    "Stop if performance, payload, accessibility, semantic, reader, review, production, static-JS, seek, or rewind checks regress.",
+    "Stop before branch, radical, compound, text/code, production-family, Manim, CAS, live-LLM, or unrelated rollout.",
+    "Stop at slice 20 for explicit human visual approval before generalization."
+  ],
+  "slices": [
+    {
+      "id": "slice-01",
+      "title": "per-card-playback-controls",
+      "summary": "Added synchronized play, seek, pause, status, and rewind controls to all four equation cards; playback resumes from the selected shared progress and trace drill-down disables/restores every local control.",
+      "status": "complete"
+    },
+    {
+      "id": "slice-02",
+      "title": "failure-and-coverage-ledger",
+      "status": "planned"
+    },
+    {
+      "id": "slice-03",
+      "title": "rendered-scene-contracts",
+      "status": "planned"
+    },
+    {
+      "id": "slice-04",
+      "title": "paint-bearing-dom-enumeration",
+      "status": "planned"
+    },
+    {
+      "id": "slice-05",
+      "title": "structural-atom-observation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-06",
+      "title": "semantic-ownership-propagation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-07",
+      "title": "scene-settlement-and-invalidation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-08",
+      "title": "complete-endpoint-inventories",
+      "status": "planned"
+    },
+    {
+      "id": "slice-09",
+      "title": "total-reconciliation-validator",
+      "status": "planned"
+    },
+    {
+      "id": "slice-10",
+      "title": "grouped-constrained-matching",
+      "status": "planned"
+    },
+    {
+      "id": "slice-11",
+      "title": "hierarchical-scene-reconciliation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-12",
+      "title": "generic-scene-tracks",
+      "status": "planned"
+    },
+    {
+      "id": "slice-13",
+      "title": "rule-and-structural-interpolation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-14",
+      "title": "generic-merge-and-departure",
+      "status": "planned"
+    },
+    {
+      "id": "slice-15",
+      "title": "exclusive-full-scene-ownership",
+      "status": "planned"
+    },
+    {
+      "id": "slice-16",
+      "title": "deterministic-scene-sampler",
+      "status": "planned"
+    },
+    {
+      "id": "slice-17",
+      "title": "full-scene-fraction-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "slice-18",
+      "title": "semantic-affordance-preservation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-19",
+      "title": "responsive-performance-complexity-gate",
+      "status": "planned"
+    },
+    {
+      "id": "slice-20",
+      "title": "fraction-decision-checkpoint",
+      "status": "planned"
+    }
+  ]
+}

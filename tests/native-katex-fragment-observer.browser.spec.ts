@@ -867,7 +867,7 @@ test("plus-minus split preserves live branch choice through seek and rewind", as
   const minus = branch.locator('[data-kp-branch-id="minus"]');
   const plus = branch.locator('[data-kp-branch-id="plus"]');
   const clones = branch.locator("[data-kp-native-katex-fragment-clone]");
-  const slider = page.locator("[data-progress]");
+  const slider = page.locator("[data-progress]").first();
 
   await expect(clones).toHaveCount(2);
   await expect(minus).toHaveAttribute("tabindex", "0");
@@ -996,8 +996,8 @@ test("crowded quadratic uses the same bounded schedule at wide and phone widths"
     ), JSON.stringify({ viewport, evidence })).toBe(true);
   }
 
-  await page.locator("[data-progress]").fill("1000");
-  await page.locator("[data-progress]").dispatchEvent("input");
+  await page.locator("[data-progress]").first().fill("1000");
+  await page.locator("[data-progress]").first().dispatchEvent("input");
   await expect(page.locator(
     '[data-reconciliation-case="crowded-quadratic"] ' +
     '[data-kp-motion-id="motion.crowded.target-result"]'
@@ -1010,7 +1010,7 @@ test("compound trace depicts every operation and restores its paused parent", as
   await page.goto("/glyph-reconciliation-experiment.html?progress=371");
   await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
   const trace = page.locator("[data-compound-trace]");
-  const slider = page.locator("[data-progress]");
+  const slider = page.locator("[data-progress]").first();
   const operations = trace.locator("[data-trace-operation]");
 
   await expect(operations).toHaveCount(10);
@@ -1035,6 +1035,39 @@ test("compound trace depicts every operation and restores its paused parent", as
   )).toHaveCount(10);
 });
 
+test("every equation card exposes synchronized local playback controls", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  const review = page.locator('[data-kp-glyph-review][data-kp-ready="true"]');
+  await review.waitFor();
+  const cards = page.locator("[data-reconciliation-case]");
+  const controls = cards.locator("[data-playback-controls]");
+  const sliders = controls.locator("[data-progress]");
+  const playButtons = controls.locator("[data-play]");
+  const statuses = controls.locator("[data-status]");
+
+  await expect(cards).toHaveCount(4);
+  await expect(controls).toHaveCount(4);
+  await expect(sliders).toHaveCount(4);
+  await expect(playButtons).toHaveCount(4);
+  await expect(statuses).toHaveCount(4);
+
+  await sliders.nth(1).fill("500");
+  await sliders.nth(1).dispatchEvent("input");
+  await expect(review).toHaveAttribute("data-kp-progress", "500");
+  for (let index = 0; index < 4; index += 1) {
+    await expect(sliders.nth(index)).toHaveValue("500");
+    await expect(statuses.nth(index)).toHaveText("50%");
+  }
+
+  await playButtons.nth(3).click();
+  for (let index = 0; index < 4; index += 1) {
+    await expect(sliders.nth(index)).toHaveValue("1000", { timeout: 1_500 });
+    await expect(playButtons.nth(index)).toHaveText("Rewind");
+  }
+});
+
 test("reduced motion uses exact endpoint settlement without transit", async ({
   page
 }) => {
@@ -1043,10 +1076,10 @@ test("reduced motion uses exact endpoint settlement without transit", async ({
   const review = page.locator('[data-kp-glyph-review][data-kp-ready="true"]');
   await review.waitFor();
 
-  await page.locator("[data-play]").click();
+  await page.locator("[data-play]").first().click();
   await expect(review).toHaveAttribute("data-kp-progress", "1000");
   await expect(review).toHaveAttribute("data-kp-visual-owner", "target-native");
-  await expect(page.locator("[data-progress]")).toHaveValue("1000");
+  await expect(page.locator("[data-progress]").first()).toHaveValue("1000");
 
   const trace = page.locator("[data-compound-trace]");
   await trace.locator("[data-trace-play]").click();

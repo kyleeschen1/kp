@@ -179,9 +179,22 @@ const sourceX = root.querySelector<HTMLElement>("[data-case-source]")!;
 const targetX = root.querySelector<HTMLElement>("[data-case-target]")!;
 const departing = root.querySelector<HTMLElement>("[data-case-departing]")!;
 const context = root.querySelector<HTMLElement>("[data-case-context]")!;
-const slider = root.querySelector<HTMLInputElement>("[data-progress]")!;
-const play = root.querySelector<HTMLButtonElement>("[data-play]")!;
-const status = root.querySelector<HTMLOutputElement>("[data-status]")!;
+const sliders = [
+  ...root.querySelectorAll<HTMLInputElement>("[data-progress]")
+];
+const playButtons = [
+  ...root.querySelectorAll<HTMLButtonElement>("[data-play]")
+];
+const statuses = [
+  ...root.querySelectorAll<HTMLOutputElement>("[data-status]")
+];
+if (
+  sliders.length === 0 ||
+  sliders.length !== playButtons.length ||
+  sliders.length !== statuses.length
+) {
+  throw new Error("Every glyph review card requires one complete playback control.");
+}
 const phaseLabel = root.querySelector<HTMLElement>("[data-phase-label]")!;
 const ownershipLabel = root.querySelector<HTMLElement>(
   "[data-ownership-label]"
@@ -618,8 +631,12 @@ function render(progress: number): void {
   review.dataset["kpVisualOwner"] = glyphFrame.visualOwner;
   review.dataset["kpHandoffDelta"] = glyphFrame.targetHandoffDeltaPx.toFixed(4);
   review.dataset["kpScheduleStatus"] = scheduledMotion.status;
-  slider.value = String(Math.round(bounded * 1000));
-  status.value = `${Math.round(bounded * 100)}%`;
+  sliders.forEach((slider) => {
+    slider.value = String(Math.round(bounded * 1000));
+  });
+  statuses.forEach((status) => {
+    status.value = `${Math.round(bounded * 100)}%`;
+  });
   phaseLabel.textContent = bounded < 0.24
     ? "Clear local context"
     : bounded < 0.55
@@ -634,9 +651,11 @@ function render(progress: number): void {
       : "Inert real-KaTeX clone owns visible ink";
 }
 
-slider.addEventListener("input", () => {
-  stopPlayback();
-  render(Number(slider.value) / 1000);
+sliders.forEach((slider) => {
+  slider.addEventListener("input", () => {
+    stopPlayback();
+    render(Number(slider.value) / 1000);
+  });
 });
 fractionClozeButton.addEventListener("click", () => {
   const hidden = fractionClozeButton.getAttribute("aria-pressed") !== "true";
@@ -716,15 +735,19 @@ traceInspect.addEventListener("click", () => {
   stopPlayback();
   stopTracePlayback();
   if (opening) {
-    traceParentProgress = Number(slider.value) / 1000;
+    traceParentProgress = currentProgress();
     const liveTrace = createKpGlyphReconciliationCompoundTrace({
       parentProgress: traceParentProgress
     });
     traceInspect.setAttribute("aria-expanded", "true");
     traceInspect.textContent = "Return to exact overview frame";
     traceDetail.hidden = false;
-    slider.disabled = true;
-    play.disabled = true;
+    sliders.forEach((slider) => {
+      slider.disabled = true;
+    });
+    playButtons.forEach((button) => {
+      button.disabled = true;
+    });
     tracePlay.disabled = true;
     tracePanel.dataset["traceMode"] = "full-detail";
     tracePanel.dataset["traceParentProgress"] =
@@ -738,41 +761,51 @@ traceInspect.addEventListener("click", () => {
   traceInspect.setAttribute("aria-expanded", "false");
   traceInspect.textContent = "Inspect all operations";
   traceDetail.hidden = true;
-  slider.disabled = false;
-  play.disabled = false;
+  sliders.forEach((slider) => {
+    slider.disabled = false;
+  });
+  playButtons.forEach((button) => {
+    button.disabled = false;
+  });
   tracePlay.disabled = false;
   render(traceParentProgress);
   tracePanel.dataset["traceMode"] = "compressed";
   tracePanel.dataset["traceRestoreExact"] =
-    Number(slider.value) / 1000 === traceParentProgress ? "true" : "false";
+    currentProgress() === traceParentProgress ? "true" : "false";
   traceStatus.value =
     `Exact ${Math.round(traceParentProgress * 100)}% overview frame restored.`;
 });
-play.addEventListener("click", () => {
-  if (animationFrame !== undefined) {
-    stopPlayback();
-    return;
-  }
-  const reverse = Number(slider.value) >= 1000;
-  if (reducedMotion) {
-    render(reverse ? 0 : 1);
-    play.textContent = reverse ? "Play" : "Rewind";
-    return;
-  }
-  const start = performance.now();
-  const durationMs = 1_800;
-  play.textContent = "Pause";
-  const tick = (now: number): void => {
-    const elapsed = Math.min(1, (now - start) / durationMs);
-    render(reverse ? 1 - elapsed : elapsed);
-    if (elapsed < 1) {
-      animationFrame = requestAnimationFrame(tick);
-    } else {
-      animationFrame = undefined;
-      play.textContent = reverse ? "Play" : "Rewind";
+playButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    if (animationFrame !== undefined) {
+      stopPlayback();
+      return;
     }
-  };
-  animationFrame = requestAnimationFrame(tick);
+    const startProgress = currentProgress();
+    const reverse = startProgress >= 1;
+    const targetProgress = reverse ? 0 : 1;
+    if (reducedMotion) {
+      render(targetProgress);
+      syncPlayButtonLabels();
+      return;
+    }
+    const startedAt = performance.now();
+    const durationMs = 1_800 * Math.abs(targetProgress - startProgress);
+    playButtons.forEach((playButton) => {
+      playButton.textContent = "Pause";
+    });
+    const tick = (now: number): void => {
+      const elapsed = Math.min(1, (now - startedAt) / durationMs);
+      render(lerp(startProgress, targetProgress, elapsed));
+      if (elapsed < 1) {
+        animationFrame = requestAnimationFrame(tick);
+      } else {
+        animationFrame = undefined;
+        syncPlayButtonLabels();
+      }
+    };
+    animationFrame = requestAnimationFrame(tick);
+  });
 });
 
 const requestedProgress = Number(
@@ -904,7 +937,18 @@ function projectScheduledRect(input: {
 function stopPlayback(): void {
   if (animationFrame !== undefined) cancelAnimationFrame(animationFrame);
   animationFrame = undefined;
-  play.textContent = Number(slider.value) >= 1000 ? "Rewind" : "Play";
+  syncPlayButtonLabels();
+}
+
+function currentProgress(): number {
+  return Number(sliders[0]!.value) / 1000;
+}
+
+function syncPlayButtonLabels(): void {
+  const label = currentProgress() >= 1 ? "Rewind" : "Play";
+  playButtons.forEach((button) => {
+    button.textContent = label;
+  });
 }
 
 function stopTracePlayback(): void {

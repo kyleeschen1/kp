@@ -78,7 +78,7 @@
             <span data-ownership-label>Native source owns x</span>
             <span>semantic DOM remains the accessibility + annotation authority</span>
           </div>
-          <div class="glyph-exemplar__controls">
+          <div class="glyph-exemplar__controls" data-playback-controls>
             <button type="button" data-play>Play</button>
             <input
               type="range"
@@ -129,6 +129,18 @@
             <span data-fraction-owner>Two native source denominators own the ink</span>
             <span>Cloze, hover, and annotation stay on the settled denominator</span>
           </div>
+          <div class="glyph-exemplar__controls" data-playback-controls>
+            <button type="button" data-play>Play</button>
+            <input
+              type="range"
+              min="0"
+              max="1000"
+              value="0"
+              aria-label="Fraction merge animation progress"
+              data-progress
+            >
+            <output data-status>0%</output>
+          </div>
           <div class="glyph-exemplar__controls glyph-exemplar__controls--compact">
             <button type="button" data-fraction-cloze aria-pressed="false">Hide answer</button>
             <output data-fraction-cloze-status>Answer visible</output>
@@ -177,6 +189,18 @@
             <span data-branch-owner>Native plus-minus origin owns the ink</span>
             <span>Branch choice changes native interaction, not moving fragments</span>
           </div>
+          <div class="glyph-exemplar__controls" data-playback-controls>
+            <button type="button" data-play>Play</button>
+            <input
+              type="range"
+              min="0"
+              max="1000"
+              value="0"
+              aria-label="Plus-minus branch animation progress"
+              data-progress
+            >
+            <output data-status>0%</output>
+          </div>
           <div
             class="glyph-exemplar__controls glyph-exemplar__branch-controls"
             aria-label="Quadratic branch selection"
@@ -224,6 +248,18 @@
           <div class="glyph-exemplar__annotation">
             <span data-crowded-owner>Native source discriminant owns the ink</span>
             <span data-crowded-route>Common scheduler is measuring protected ± ink</span>
+          </div>
+          <div class="glyph-exemplar__controls" data-playback-controls>
+            <button type="button" data-play>Play</button>
+            <input
+              type="range"
+              min="0"
+              max="1000"
+              value="0"
+              aria-label="Crowded discriminant animation progress"
+              data-progress
+            >
+            <output data-status>0%</output>
           </div>
         </section>
         <section
