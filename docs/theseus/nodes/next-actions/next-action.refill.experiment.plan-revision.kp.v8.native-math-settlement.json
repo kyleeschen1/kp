@@ -2,9 +2,9 @@
   "id": "next-action.refill.experiment.plan-revision.kp.v8.native-math-settlement",
   "kind": "next-action",
   "title": "Test native-math-settlement",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Run a bounded uncertainty-reduction experiment for: Animated mathematical fragments may move independently, but exact native KaTeX owns the settled expression and its typography and spacing. Selection rationale: The user approved a bounded real-KaTeX glyph compositor experiment to test native fragment motion and exact settlement before any family rollout.",
+  "summary": "The bounded experiment supports rendered fragments as the primary motion substrate with native semantic DOM at settled states. One-to-one, merge, and split are viable through two generic modules and six lifecycle primitives; crowded or ambiguous geometry uses explicit checkpoint settlement. Radical repair and production-family rollout remain separate future decisions.",
   "sourceRefs": [
     {
       "kind": "user-intent",
@@ -195,6 +195,13 @@
       "scope": "slice-23 complexity-negative migration",
       "checkedAt": "2026-07-25T16:26:27.889Z",
       "notes": "12 focused compositor tests, 255 convergence tests, typecheck, and production build pass. The route controller dropped from 46.8 KB to 37.6 KB source; exactly two compositor modules and six lifecycle primitives are ratcheted below the 4/6 ceilings, with no case-specific scheduler vocabulary."
+    },
+    {
+      "command": "npm test; npm run build; npm run test:glyph-reconciliation-experiment; npm run test:browser:real-katex-glyph-compositor; npm run test:browser:reader-conformance; npm run visual:glyph-reconciliation-experiment; npm run perf:glyph-reconciliation-experiment; npm run perf:animation; npm run check:reader-production; npm run check:dev-review-production; npm run review:logs -- audit; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-24 four-case decision checkpoint",
+      "checkedAt": "2026-07-25T16:32:10.186Z",
+      "notes": "2367 repository tests, 59 glyph tests, 17 real-fragment Chromium tests, and 9 reader checks pass. Build, closures, animation regression budgets, 5433-byte route growth, and ten exact four-case captures pass. Review source is byte/order stable; 16 current legacy notes remain untouched and none targets the experiment route."
     }
   ],
   "progress": {
