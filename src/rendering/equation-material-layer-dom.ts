@@ -45,7 +45,14 @@ export function syncKpEquationMaterialLayer(input: {
       owner.className = "editor-equation-stage__material-owner";
       owner.dataset["kpEquationMaterialOwnerId"] = frame.ownerId;
       owner.setAttribute("aria-hidden", "true");
-      const visual = cloneElementWithComputedStyles(frame.sourceElement);
+      // A detached SVG path has no paint context. Clone its owning SVG so
+      // structural ink remains native and intact inside the material layer.
+      const cloneSource =
+        frame.sourceElement instanceof SVGElement &&
+          !(frame.sourceElement instanceof SVGSVGElement)
+          ? frame.sourceElement.ownerSVGElement ?? frame.sourceElement
+          : frame.sourceElement;
+      const visual = cloneElementWithComputedStyles(cloneSource);
       visual.removeAttribute("data-kp-motion-id");
       visual.style.opacity = "1";
       visual.style.transform = "none";

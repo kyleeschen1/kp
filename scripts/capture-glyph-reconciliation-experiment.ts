@@ -15,12 +15,14 @@ const profiles = [
 ] as const;
 const checkpoints = [0, 250, 500, 750, 1000] as const;
 const splitCheckpoints = [0, 500, 1000] as const;
+const radicalCheckpoints = [0, 500, 999, 1000] as const;
 
 await mkdir(outputRoot, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const evidence: Array<Record<string, unknown>> = [];
 const endpointEvidence: Array<Record<string, unknown>> = [];
 const splitEvidence: Array<Record<string, unknown>> = [];
+const radicalEvidence: Array<Record<string, unknown>> = [];
 try {
   for (const profile of profiles) {
     for (const progress of checkpoints) {
@@ -321,19 +323,114 @@ try {
       await page.close();
     }
   }
+  for (const profile of profiles) {
+    for (const progress of radicalCheckpoints) {
+      const page = await browser.newPage({ viewport: profile.viewport });
+      const url = new URL("/glyph-reconciliation-experiment.html", baseUrl);
+      url.searchParams.set("radicalInventory", "1");
+      url.searchParams.set("progress", String(progress));
+      await page.goto(url.toString(), { waitUntil: "networkidle" });
+      await page.evaluate(async () => document.fonts.ready);
+      const card = page.locator(
+        '[data-radical-inventory][data-kp-radical-inventory-ready="true"]'
+      );
+      await card.waitFor();
+      const snapshot = await card.evaluate((element) => {
+        const stage = element.querySelector<HTMLElement>(
+          "[data-radical-stage]"
+        )!;
+        const stageRect = stage.getBoundingClientRect();
+        const owners = [...stage.querySelectorAll<HTMLElement>(
+          "[data-kp-native-katex-scene-owner]"
+        )];
+        const visibleOwners = owners.filter((owner) =>
+          Number(owner.style.opacity) > 0
+        );
+        const structuralViewport = visibleOwners.find((owner) =>
+          owner.querySelector("svg path") !== null
+        )?.querySelector("svg");
+        const structuralRect = structuralViewport?.getBoundingClientRect();
+        return {
+          visualOwner: element.dataset["kpRadicalVisualOwner"],
+          semanticOwner: stage.dataset["kpRadicalSemanticOwner"],
+          sourceHidden: element.querySelector("[data-radical-source]")
+            ?.getAttribute("aria-hidden"),
+          targetHidden: element.querySelector("[data-radical-target]")
+            ?.getAttribute("aria-hidden"),
+          visibleOwnerCount: visibleOwners.length,
+          materialOwnersInert: owners.every((owner) =>
+            owner.hasAttribute("inert") &&
+            owner.getAttribute("aria-hidden") === "true"
+          ),
+          structuralViewportContained:
+            structuralViewport == null ||
+            (
+              structuralRect !== undefined &&
+              structuralRect.left >= stageRect.left - 1 &&
+              structuralRect.right <= stageRect.right + 1 &&
+              structuralRect.top >= stageRect.top - 1 &&
+              structuralRect.bottom <= stageRect.bottom + 1 &&
+              getComputedStyle(structuralViewport).overflow === "hidden"
+            ),
+          overflow:
+            document.documentElement.scrollWidth -
+            document.documentElement.clientWidth
+        };
+      });
+      const expectedOwner =
+        progress === 0 ? "source-native" :
+        progress === 1000 ? "target-native" :
+        "material-scene";
+      const expectedSemanticOwner =
+        progress === 0 ? "source-native" :
+        progress === 1000 ? "target-native" :
+        "stage-description";
+      if (
+        snapshot.visualOwner !== expectedOwner ||
+        snapshot.semanticOwner !== expectedSemanticOwner ||
+        snapshot.materialOwnersInert !== true ||
+        snapshot.structuralViewportContained !== true ||
+        snapshot.overflow !== 0 ||
+        (progress > 0 && progress < 1000
+          ? snapshot.visibleOwnerCount === 0
+          : snapshot.visibleOwnerCount !== 0)
+      ) {
+        throw new Error(
+          `Invalid radical exemplar at ${profile.id}/${progress}: ${
+            JSON.stringify(snapshot)
+          }.`
+        );
+      }
+      const file = path.join(
+        outputRoot,
+        `radical-succession-${profile.id}-${progress}.png`
+      );
+      await card.screenshot({ path: file });
+      radicalEvidence.push({
+        profile: profile.id,
+        progress,
+        file: path.relative(process.cwd(), file),
+        ...snapshot
+      });
+      await page.close();
+    }
+  }
   await writeFile(
     path.join(outputRoot, "evidence.json"),
     `${JSON.stringify({
       generatedAt: new Date().toISOString(),
       evidence,
       endpointEvidence,
-      splitEvidence
+      splitEvidence,
+      radicalEvidence
     }, null, 2)}\n`
   );
   console.log(
     `Captured ${evidence.length} overview frames and ${
       endpointEvidence.length
-    } dense endpoint frames and ${splitEvidence.length} inverse split frames in ${
+    } dense endpoint frames, ${splitEvidence.length} inverse split frames, and ${
+      radicalEvidence.length
+    } radical succession frames in ${
       path.relative(process.cwd(), outputRoot)
     }.`
   );

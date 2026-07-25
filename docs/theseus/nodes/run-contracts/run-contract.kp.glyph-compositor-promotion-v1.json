@@ -418,6 +418,20 @@
       "scope": "slice-20",
       "checkedAt": "2026-07-25T21:08:57.620Z",
       "notes": "38 focused checks, 37 Chromium compositor checks, two HTML/SVG clone checks, all TypeScript projects, and production build pass. Both normal and reduced-motion contexts densely sample 101 finite bounded frames; direct seek, rewind, exact ownership endpoints, rule-length departure, and intact SVG path cloning pass. The first live apply exposed the generic HTML-only clone boundary and the first performance run exposed static optional-harness bundling; generic SVG cloning plus conditional dynamic import resolved both. Final route gzip growth is 5552 bytes and scene sampling is 0.012 ms, within budget. No path morph, character mutation, radical keyframe, or new lifecycle exists."
+    },
+    {
+      "command": "focused governed radical exemplar browser check; npm run typecheck",
+      "status": "failed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-25T21:13:07.431Z",
+      "notes": "Initial integration proved the cloned SVG paints, ownership is inert, and horizontal page overflow is zero, but midpoint structural ink exceeded the stage clip and TypeScript caught an invalid assumption that selector annotations carry labels. Using the canonical selector vocabulary for labels and measuring the clipping residual before a generic containment correction."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run visual:glyph-reconciliation-experiment; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-25T21:21:29.109Z",
+      "notes": "38 focused compositor checks, 38 Chromium checks, all TypeScript projects, and the stable visual entrypoint pass. The isolated governed radical card has exact native source/target settlement, one inert material owner layer in transit, native-only selector focus/title authority, normal and reduced-motion play/rewind at wide and phone widths, and no page overflow. Eight radical captures cover 0, 50, 99.9, and 100 percent at both profiles. Visual inspection found coherent formation, contained native SVG clipping, and no handoff flash; the initial raw-path bounds assertion was corrected to measure KaTeX's actual clipped SVG viewport."
     }
   ],
   "allowedWork": [
@@ -569,7 +583,8 @@
     {
       "id": "slice-21",
       "title": "radical-exemplar-integration",
-      "status": "planned"
+      "summary": "Integrated the governed rational-exponent-to-square-root card as one query-isolated full-scene exemplar. Native KaTeX owns both settled endpoints and selector affordances; inert cloned paint owns only transit. Generic persistence, elimination, and introduction tracks support normal/reduced play, direct seek, and rewind at wide and phone widths. Stable captures at 0, 50, 99.9, and 100 percent show coherent formation, exact settlement, preserved SVG viewport clipping, and no handoff flash. No radical-specific timing or lifecycle logic was introduced.",
+      "status": "complete"
     },
     {
       "id": "slice-22",

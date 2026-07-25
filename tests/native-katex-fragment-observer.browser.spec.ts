@@ -890,6 +890,175 @@ test("radical path and source rule use bounded generic structural tracks", async
   }
 });
 
+test("governed radical exemplar keeps one visual and native semantic owner", async ({
+  browser
+}) => {
+  for (const profile of [{
+    viewport: { width: 1_440, height: 950 },
+    reducedMotion: "no-preference" as const
+  }, {
+    viewport: { width: 390, height: 844 },
+    reducedMotion: "no-preference" as const
+  }, {
+    viewport: { width: 1_440, height: 950 },
+    reducedMotion: "reduce" as const
+  }, {
+    viewport: { width: 390, height: 844 },
+    reducedMotion: "reduce" as const
+  }]) {
+    const context = await browser.newContext(profile);
+    const page = await context.newPage();
+    await page.goto(
+      "/glyph-reconciliation-experiment.html?radicalInventory=1&progress=0"
+    );
+    const panel = page.locator(
+      '[data-radical-inventory][data-kp-radical-inventory-ready="true"]'
+    );
+    const source = panel.locator("[data-radical-source]");
+    const target = panel.locator("[data-radical-target]");
+    const stage = panel.locator("[data-radical-stage]");
+    const slider = panel.locator("[data-radical-progress]");
+    const play = panel.locator("[data-radical-play]");
+    await panel.waitFor();
+
+    await expect(panel).toHaveAttribute(
+      "data-kp-radical-visual-owner",
+      "source-native"
+    );
+    await expect(stage).toHaveAttribute(
+      "data-kp-radical-semantic-owner",
+      "source-native"
+    );
+    await expect(source).toHaveAttribute("aria-hidden", "false");
+    await expect(target).toHaveAttribute("aria-hidden", "true");
+    expect(await source.locator(
+      '[data-kp-semantic-selector-id][tabindex="0"]'
+    ).count()).toBeGreaterThan(0);
+
+    await slider.fill("500");
+    await slider.dispatchEvent("input");
+    await expect(panel).toHaveAttribute(
+      "data-kp-radical-visual-owner",
+      "material-scene"
+    );
+    await expect(stage).toHaveAttribute(
+      "data-kp-radical-semantic-owner",
+      "stage-description"
+    );
+    await expect(source).toHaveAttribute("aria-hidden", "true");
+    await expect(target).toHaveAttribute("aria-hidden", "true");
+    const transit = await stage.evaluate((element) => {
+      const stageRect = element.getBoundingClientRect();
+      const owners = [...element.querySelectorAll<HTMLElement>(
+        "[data-kp-native-katex-scene-owner]"
+      )];
+      const visible = owners.filter((owner) => Number(owner.style.opacity) > 0);
+      const pathOwner = visible.find((owner) =>
+        owner.querySelector("svg path") !== null
+      );
+      const pathSvg = pathOwner?.querySelector("svg");
+      const pathElement = pathOwner?.querySelector("svg path");
+      const svgRect = pathSvg?.getBoundingClientRect();
+      const pathRect = pathOwner?.querySelector("svg path")
+        ?.getBoundingClientRect();
+      return {
+        visibleOwnerCount: visible.length,
+        allInert: owners.every((owner) =>
+          owner.hasAttribute("inert") &&
+          owner.getAttribute("aria-hidden") === "true"
+        ),
+        pathPaints:
+          pathRect !== undefined &&
+          pathRect.width > 0 &&
+          pathRect.height > 0,
+        structuralViewportContained:
+          svgRect !== undefined &&
+          svgRect.left >= stageRect.left - 1 &&
+          svgRect.right <= stageRect.right + 1 &&
+          svgRect.top >= stageRect.top - 1 &&
+          svgRect.bottom <= stageRect.bottom + 1,
+        structuralViewportClips:
+          pathSvg !== undefined &&
+          pathSvg !== null &&
+          getComputedStyle(pathSvg).overflow === "hidden",
+        clip: {
+          stage: {
+            left: stageRect.left,
+            right: stageRect.right,
+            top: stageRect.top,
+            bottom: stageRect.bottom
+          },
+          svg: svgRect === undefined ? null : {
+            left: svgRect.left,
+            right: svgRect.right,
+            top: svgRect.top,
+            bottom: svgRect.bottom
+          },
+          pathTransform: pathElement?.getAttribute("transform") ?? null
+        },
+        overflow:
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth
+      };
+    });
+    expect(transit).toMatchObject({
+      allInert: true,
+      pathPaints: true,
+      structuralViewportClips: true,
+      overflow: 0
+    });
+    expect(
+      transit.structuralViewportContained,
+      JSON.stringify(transit.clip)
+    ).toBe(true);
+    expect(transit.visibleOwnerCount).toBeGreaterThan(0);
+
+    await slider.fill("999");
+    await slider.dispatchEvent("input");
+    await expect(panel).toHaveAttribute(
+      "data-kp-radical-visual-owner",
+      "material-scene"
+    );
+    await slider.fill("1000");
+    await slider.dispatchEvent("input");
+    await expect(panel).toHaveAttribute(
+      "data-kp-radical-visual-owner",
+      "target-native"
+    );
+    await expect(stage).toHaveAttribute(
+      "data-kp-radical-semantic-owner",
+      "target-native"
+    );
+    await expect(source).toHaveAttribute("aria-hidden", "true");
+    await expect(target).toHaveAttribute("aria-hidden", "false");
+    expect(await target.locator(
+      '[data-kp-semantic-selector-id][tabindex="0"]'
+    ).count()).toBeGreaterThan(0);
+    expect(await target.locator(
+      "[data-kp-semantic-selector-id][title]"
+    ).count()).toBeGreaterThan(0);
+    expect(await stage.locator(
+      '[data-kp-native-katex-scene-owner][style*="opacity: 0"]'
+    ).count()).toBeGreaterThan(0);
+
+    await slider.fill("0");
+    await slider.dispatchEvent("input");
+    await play.click();
+    await expect(panel).toHaveAttribute(
+      "data-kp-radical-visual-owner",
+      "target-native",
+      { timeout: profile.reducedMotion === "reduce" ? 500 : 2_500 }
+    );
+    await play.click();
+    await expect(panel).toHaveAttribute(
+      "data-kp-radical-visual-owner",
+      "source-native",
+      { timeout: profile.reducedMotion === "reduce" ? 500 : 2_500 }
+    );
+    await context.close();
+  }
+});
+
 test("live fraction scene exposes continuously sampled structural rule tracks", async ({
   page
 }) => {

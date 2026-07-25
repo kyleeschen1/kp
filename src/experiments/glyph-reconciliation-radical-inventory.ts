@@ -58,6 +58,14 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
 
   panel.hidden = false;
   const stage = required<HTMLElement>(panel, "[data-radical-stage]");
+  const sourceEquation = required<HTMLElement>(
+    panel,
+    "[data-radical-source]"
+  );
+  const targetEquation = required<HTMLElement>(
+    panel,
+    "[data-radical-target]"
+  );
   const sourceRoot = required<HTMLElement>(
     panel,
     "[data-radical-source-object]"
@@ -170,15 +178,15 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
   const reverseTracks = compileKpNativeKatexSceneTracks(reversePlan);
   const playback = createKpNativeKatexScenePlayback({
     stage,
-    sourceRoot,
-    targetRoot,
+    sourceRoot: sourceEquation,
+    targetRoot: targetEquation,
     reconciliation,
     tracks
   });
   const reversePlayback = createKpNativeKatexScenePlayback({
     stage,
-    sourceRoot: targetRoot,
-    targetRoot: sourceRoot,
+    sourceRoot: targetEquation,
+    targetRoot: sourceEquation,
     reconciliation: reverseReconciliation,
     tracks: reverseTracks
   });
@@ -187,14 +195,107 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
   panel.dataset["kpRadicalTargetAtomCount"] = String(target.atoms.length);
   panel.dataset["kpRadicalSourceGroupCount"] = String(source.groups.length);
   panel.dataset["kpRadicalTargetGroupCount"] = String(target.groups.length);
-  required<HTMLElement>(
+  const headerStatus = required<HTMLElement>(
     panel,
     "[data-radical-inventory-status]"
-  ).textContent = `${source.atoms.length} source + ${
-    target.atoms.length
-  } target atoms`;
+  );
+  const status = required<HTMLOutputElement>(
+    panel,
+    "[data-radical-status]"
+  );
+  const ownerLabel = required<HTMLElement>(panel, "[data-radical-owner]");
+  const phaseLabel = required<HTMLElement>(panel, "[data-radical-phase]");
+  const slider = required<HTMLInputElement>(panel, "[data-radical-progress]");
+  const playButton = required<HTMLButtonElement>(panel, "[data-radical-play]");
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const sourceSelectors = [
+    ...sourceEquation.querySelectorAll<HTMLElement>(
+      "[data-kp-semantic-selector-id]"
+    )
+  ];
+  const targetSelectors = [
+    ...targetEquation.querySelectorAll<HTMLElement>(
+      "[data-kp-semantic-selector-id]"
+    )
+  ];
+  let animationFrame: number | undefined;
+
+  const render = (progress: number) => {
+    const bounded = Math.max(0, Math.min(1, progress));
+    const frame = playback.apply(bounded);
+    const sourceActive = frame.visualOwner === "source-native";
+    const targetActive = frame.visualOwner === "target-native";
+    sourceEquation.setAttribute("aria-hidden", String(!sourceActive));
+    targetEquation.setAttribute("aria-hidden", String(!targetActive));
+    sourceEquation.toggleAttribute("inert", !sourceActive);
+    targetEquation.toggleAttribute("inert", !targetActive);
+    syncSelectorFocus(sourceSelectors, sourceActive);
+    syncSelectorFocus(targetSelectors, targetActive);
+    stage.dataset["kpRadicalSemanticOwner"] =
+      sourceActive ? "source-native" :
+      targetActive ? "target-native" :
+      "stage-description";
+    panel.dataset["kpRadicalVisualOwner"] = frame.visualOwner;
+    panel.dataset["kpRadicalProgress"] = String(Math.round(bounded * 1_000));
+    slider.value = String(Math.round(bounded * 1_000));
+    status.value = `${Math.round(bounded * 100)}%`;
+    ownerLabel.textContent =
+      sourceActive ? "Native exponent notation owns the ink" :
+      targetActive ? "Native radical notation owns the ink" :
+      "Inert compositor atoms own the paint";
+    phaseLabel.textContent =
+      sourceActive ? "Exact native rational-exponent endpoint" :
+      targetActive ? "Exact native square-root endpoint" :
+      "Generic persistence, elimination, and introduction tracks";
+    headerStatus.textContent =
+      sourceActive ? "Rational exponent" :
+      targetActive ? "Square root" :
+      "Representational succession";
+    playButton.textContent = bounded >= 1 ? "Rewind" : "Play";
+    return frame;
+  };
+  const stopPlayback = () => {
+    if (animationFrame !== undefined) cancelAnimationFrame(animationFrame);
+    animationFrame = undefined;
+    playButton.textContent =
+      Number(slider.value) >= 1_000 ? "Rewind" : "Play";
+  };
+  slider.addEventListener("input", () => {
+    stopPlayback();
+    render(Number(slider.value) / 1_000);
+  });
+  playButton.addEventListener("click", () => {
+    if (animationFrame !== undefined) {
+      stopPlayback();
+      return;
+    }
+    const start = Number(slider.value) / 1_000;
+    const targetProgress = start >= 1 ? 0 : 1;
+    if (reducedMotion) {
+      render(targetProgress);
+      return;
+    }
+    const startedAt = performance.now();
+    const durationMs = 1_600 * Math.abs(targetProgress - start);
+    playButton.textContent = "Pause";
+    const tick = (now: number): void => {
+      const elapsed = Math.min(1, (now - startedAt) / durationMs);
+      render(start + (targetProgress - start) * elapsed);
+      if (elapsed < 1) {
+        animationFrame = requestAnimationFrame(tick);
+      } else {
+        animationFrame = undefined;
+      }
+    };
+    animationFrame = requestAnimationFrame(tick);
+  });
+  const requestedProgress = Number(
+    new URL(location.href).searchParams.get("progress") ?? "0"
+  ) / 1_000;
+  render(requestedProgress);
   if (import.meta.env.DEV) {
     Object.assign(window, {
+      __kpApplyRadicalSceneFrame: render,
       __kpRadicalSceneInventory: Object.freeze({
         source,
         target,
@@ -252,6 +353,13 @@ function renderEndpoint(input: {
     element.dataset["kpSemanticEntityId"] = annotation.selectorId;
     element.dataset["kpPresentationGroupId"] =
       `${input.groupId}.selector.${annotation.selectorId}`;
+    element.dataset["kpSemanticSelectorId"] = annotation.selectorId;
+    const label = input.state.selectors.find(
+      ({ id }) => id === annotation.selectorId
+    )?.label ?? annotation.selectorId;
+    element.dataset["kpAnnotation"] = label;
+    element.title = label;
+    if (element.textContent?.trim() !== "") element.tabIndex = -1;
   }
 }
 
@@ -288,4 +396,15 @@ function required<T extends Element>(
   const result = root.querySelector<T>(selector);
   if (result === null) throw new Error(`Missing radical inventory ${selector}.`);
   return result;
+}
+
+function syncSelectorFocus(
+  selectors: readonly HTMLElement[],
+  active: boolean
+): void {
+  selectors.forEach((selector) => {
+    if (selector.hasAttribute("tabindex")) {
+      selector.tabIndex = active ? 0 : -1;
+    }
+  });
 }
