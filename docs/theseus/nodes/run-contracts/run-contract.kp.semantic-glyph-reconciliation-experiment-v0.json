@@ -180,7 +180,8 @@
     {
       "id": "slice-14",
       "title": "First-human-exemplar-evidence",
-      "status": "planned"
+      "summary": "Added a live baseline/new solve-x review route with shared scrub/play/rewind controls, standard review inbox, planner evidence, responsive layout, and deterministic 10-frame wide/phone capture command. User pre-authorized continuation to remaining cases.",
+      "status": "complete"
     },
     {
       "id": "slice-15",

@@ -121,6 +121,13 @@
       "scope": "slice-13 solve-x exemplar",
       "checkedAt": "2026-07-25T02:04:47.224Z",
       "notes": "41 focused tests, typecheck, and 255 convergence tests pass."
+    },
+    {
+      "command": "npm run build; npm run visual:glyph-reconciliation-experiment; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-14 first exemplar evidence",
+      "checkedAt": "2026-07-25T02:11:19.810Z",
+      "notes": "Build passes; 10 wide and phone checkpoints captured with no overflow and review inbox present; workspace valid."
     }
   ],
   "progress": {

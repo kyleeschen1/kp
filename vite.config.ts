@@ -44,6 +44,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(projectRoot, "index.html"),
+        glyphReconciliationExperiment: resolve(projectRoot, "glyph-reconciliation-experiment.html"),
         ...Object.fromEntries(readerBuildRoutes.map(({ descriptor, filename }) => [
           kpReaderRouteEntryName(descriptor.route),
           filename
