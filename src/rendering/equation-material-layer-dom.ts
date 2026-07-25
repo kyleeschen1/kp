@@ -53,7 +53,7 @@ export function syncKpEquationMaterialLayer(input: {
           ? frame.sourceElement.ownerSVGElement ?? frame.sourceElement
           : frame.sourceElement;
       const visual = cloneElementWithComputedStyles(cloneSource);
-      visual.removeAttribute("data-kp-motion-id");
+      stripMaterialCloneAuthority(visual);
       visual.style.opacity = "1";
       visual.style.transform = "none";
       visual.style.translate = "none";
@@ -66,9 +66,6 @@ export function syncKpEquationMaterialLayer(input: {
       visual.style.position = "relative";
       visual.style.display = "block";
       visual.classList.add("editor-equation-stage__material-visual");
-      visual.querySelectorAll<HTMLElement>("[data-kp-motion-id]").forEach((token) =>
-        token.removeAttribute("data-kp-motion-id")
-      );
       owner.append(visual);
       layer.append(owner);
     }
@@ -110,6 +107,34 @@ export function syncKpEquationMaterialLayer(input: {
       delete owner.dataset["kpEquationMaterialFragmentRole"];
     } else {
       owner.dataset["kpEquationMaterialFragmentRole"] = frame.fragmentRole;
+    }
+  }
+}
+
+function stripMaterialCloneAuthority(visual: Element): void {
+  const nodes = [visual, ...visual.querySelectorAll<Element>("*")];
+  for (const node of nodes) {
+    for (const attribute of [...node.attributes]) {
+      if (
+        attribute.name.startsWith("aria-") ||
+        [
+          "id",
+          "role",
+          "tabindex",
+          "href",
+          "target",
+          "download",
+          "contenteditable",
+          "data-kp-motion-id",
+          "data-kp-reader-equation-anchor-id",
+          "data-kp-reader-selector-id",
+          "data-kp-semantic-entity-id",
+          "data-kp-presentation-group-id",
+          "data-kp-focus"
+        ].includes(attribute.name)
+      ) {
+        node.removeAttribute(attribute.name);
+      }
     }
   }
 }

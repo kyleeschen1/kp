@@ -453,6 +453,20 @@
       "scope": "slice-24 one-card integration",
       "checkedAt": "2026-07-25T21:43:23.678Z",
       "notes": "27 focused scene/adapter tests, 3 query-selected Chromium integration tests, 9 shared reader conformance routes, production build/typecheck, and 4 wide/phone full/reduced captures passed. Direct seek and rewind return to the same paint frame; each capture has nine owned atoms and zero horizontal overflow. Visual inspection found coherent native KaTeX paint and no duplicate scene."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "slice-25 absolute reader budget baselines",
+      "checkedAt": "2026-07-25T21:53:44.801Z",
+      "notes": "The absolute budget gate fails across seven routes. An isolated build of pre-integration commit aa92d7f8 reproduces the same failures (solve-x 4788 HTML gzip and 130472 runtime gzip versus current 4814 and 132087). Current integration delta is 0.54 percent HTML and 1.24 percent runtime; all routes remain within 2 percent of that pre-slice state, below the gate's 5 percent policy. No forbidden compositor asset remains in ordinary runtime closure. Baselines were not broadened from this one-card slice."
+    },
+    {
+      "command": "reader seam browser, static, export, production, architecture, visual, and workspace gates",
+      "status": "passed",
+      "scope": "slice-25 reader authority preservation",
+      "checkedAt": "2026-07-25T21:56:58.972Z",
+      "notes": "5 focused Chromium seam checks, 9 reader conformance routes, 29 serialization/static/Cloze/export tests, build/typecheck, production closure, architecture, gold eight-frame parity, four query-selected wide/phone captures, and workspace validation passed. Material clones are inert and stripped of all semantic/interactive attributes; native selectors retain focus and annotations; ordinary routes do not fetch compositor chunks. The separately recorded absolute budget failure predates the integration and the measured delta remains below 2 percent."
     }
   ],
   "allowedWork": [
@@ -628,7 +642,8 @@
     {
       "id": "slice-25",
       "title": "reader-seam-preservation",
-      "status": "planned"
+      "summary": "Certified the one-card reader seam. Material clones are recursively stripped of semantic, accessibility, annotation, focus, link, and tab authority while remaining inert and aria-hidden; native selector nodes retain focus and annotation ownership. Adapter and compositor code load only for the query-selected exemplar through the reader public API. Cloze, static-JS, headless MathML, serialization, export fallbacks, reader conformance, architecture, production closure, build, gold parity, and wide/phone captures pass. Absolute reader budgets remain a pre-existing documented failure; integration delta is under two percent and no forbidden asset enters ordinary closure.",
+      "status": "complete"
     },
     {
       "id": "slice-26",

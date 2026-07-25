@@ -13,6 +13,7 @@ import {
   createKpReaderAdapterRegistry,
   createKpReaderEquationMaterialLayer,
   defineKpReaderScheduledRendererAdapter,
+  loadKpReaderEquationSceneCompositorAdapter,
   measureKpReaderEquationLayoutSnapshot,
   planKpReaderEquationPerceptualAlignment,
   planKpReaderEquationSequenceResponsiveFit,
@@ -100,6 +101,9 @@ const readerGlyphCompositorRequested =
   new URL(window.location.href).searchParams.get("kpGlyphCompositor") === "1";
 const readerGlyphCompositorModule = readerGlyphCompositorRequested
   ? await import("./reader-glyph-compositor-exemplar.ts")
+  : undefined;
+const readerGlyphCompositorAdapter = readerGlyphCompositorRequested
+  ? await loadKpReaderEquationSceneCompositorAdapter()
   : undefined;
 const { documentId, documentVersion } = readerRoute;
 const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
@@ -277,12 +281,15 @@ const staticPlans = new Map(animation.transformations.map((transformation, index
 }));
 const readerGlyphCompositor: KpReaderGlyphCompositorExemplar | undefined =
   readerGlyphCompositorModule === undefined ||
+    readerGlyphCompositorAdapter === undefined ||
     !animation.transformations.some(({ id }) =>
       id === "transform.linear-solve.cancel-left-additive-inverse"
     )
     ? undefined
     : readerGlyphCompositorModule.createKpReaderGlyphCompositorExemplar({
-        transitionId: "transform.linear-solve.cancel-left-additive-inverse"
+        transitionId: "transform.linear-solve.cancel-left-additive-inverse",
+        createSession:
+          readerGlyphCompositorAdapter.createKpReaderEquationSceneCompositorSession
       });
 if (readerGlyphCompositor !== undefined) {
   stage.dataset["kpReaderGlyphCompositorExemplar"] =

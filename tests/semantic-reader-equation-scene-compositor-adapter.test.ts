@@ -9,9 +9,11 @@ import {
 } from "../src/rendering/native-katex-rendered-scene.ts";
 import {
   compileKpReaderEquationMaterialPlan,
-  createKpReaderEquationSceneCompositorSession,
   projectKpReaderEquationRenderPlan
 } from "../src/reader/renderers/public-api.ts";
+import {
+  createKpReaderEquationSceneCompositorSession
+} from "../src/reader/renderers/equation-scene-compositor-adapter.ts";
 
 const ownerDocument = {};
 const stage = { ownerDocument } as HTMLElement;

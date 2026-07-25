@@ -40,10 +40,16 @@ export {
   type KpReaderEquationMaterialPlanDiagnostic,
   type KpReaderEquationTransitionMaterialPlan
 } from "./equation-material-plan.ts";
-export {
-  createKpReaderEquationSceneCompositorSession,
-  type KpReaderEquationSceneCompositorSession
+export type {
+  KpReaderEquationSceneCompositorSession
 } from "./equation-scene-compositor-adapter.ts";
+export type KpReaderEquationSceneCompositorFactory =
+  typeof import("./equation-scene-compositor-adapter.ts")[
+    "createKpReaderEquationSceneCompositorSession"
+  ];
+export async function loadKpReaderEquationSceneCompositorAdapter() {
+  return import("./equation-scene-compositor-adapter.ts");
+}
 export { projectKpCertifiedTransferMaterialPlan } from "./certified-transfer-material-projection.ts";
 export {
   createKpReaderEquationLayoutSnapshot,

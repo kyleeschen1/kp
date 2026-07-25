@@ -105,6 +105,10 @@ test("reader compositor direct seek and rewind return to the same paint frame", 
       input.value = String(value);
       input.dispatchEvent(new Event("input", { bubbles: true }));
     }, progress);
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-progress",
+      String(progress)
+    );
     await expect(page.locator("[data-kp-reader-equation-stage]"))
       .toHaveAttribute("data-kp-reader-glyph-compositor-active", "true");
   };
@@ -115,4 +119,66 @@ test("reader compositor direct seek and rewind return to the same paint frame", 
   expect(await sample()).not.toEqual(first);
   await seek(475);
   expect(await sample()).toEqual(first);
+});
+
+test("moving reader paint is inert and has no semantic or annotation authority", async ({
+  page
+}) => {
+  await page.goto(route);
+  const active = page.locator('[data-kp-reader-transition-active="true"]');
+  const layer = active.locator("[data-kp-editor-equation-material-layer]");
+  const owners = layer.locator("[data-kp-native-katex-scene-owner]");
+  await expect(layer).toHaveAttribute("aria-hidden", "true");
+  await expect(layer).toHaveAttribute("inert", "");
+  expect(await owners.count()).toBeGreaterThan(0);
+  for (const owner of await owners.all()) {
+    await expect(owner).toHaveAttribute("aria-hidden", "true");
+    await expect(owner).toHaveAttribute("inert", "");
+  }
+  await expect(layer.locator([
+    "[data-kp-reader-equation-anchor-id]",
+    "[data-kp-reader-selector-id]",
+    "[data-kp-semantic-entity-id]",
+    "[data-kp-presentation-group-id]",
+    "[data-kp-focus]",
+    "[role]",
+    "[tabindex]",
+    "[href]",
+    "[id]"
+  ].join(","))).toHaveCount(0);
+
+  const nativeAnchors = active.locator(
+    "[data-kp-reader-equation-measurement] [data-kp-reader-equation-anchor-id]"
+  );
+  const nativeSelectors = active.locator(
+    "[data-kp-reader-equation-measurement] [data-kp-reader-selector-id]"
+  );
+  expect(await nativeAnchors.count()).toBeGreaterThan(0);
+  expect(await nativeSelectors.count()).toBe(await nativeAnchors.count());
+  expect(await active.locator(
+    "[data-kp-reader-equation-measurement] .kp-reader-semantic-focus"
+  ).count()).toBeGreaterThan(0);
+  await expect(layer.locator(".kp-reader-semantic-focus")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "the unknown" }))
+    .toHaveAttribute(
+      "title",
+      "x stays the same object as the equation changes"
+    );
+});
+
+test("ordinary reader navigation does not load compositor implementation chunks", async ({
+  page
+}) => {
+  const loaded: string[] = [];
+  page.on("response", (response) => loaded.push(response.url()));
+  await page.goto(route.replace("&kpGlyphCompositor=1", ""));
+  expect(loaded.some((url) =>
+    /reader-glyph-compositor-exemplar|native-katex-scene-compositor/.test(url)
+  )).toBe(false);
+
+  loaded.length = 0;
+  await page.goto(route);
+  expect(loaded.some((url) =>
+    /reader-glyph-compositor-exemplar/.test(url)
+  )).toBe(true);
 });

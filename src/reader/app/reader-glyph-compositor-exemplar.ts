@@ -5,9 +5,9 @@ import type {
   KpEquationFontReadiness
 } from "../../rendering/equation-font-readiness.ts";
 import {
-  createKpReaderEquationSceneCompositorSession,
   type KpReaderEquationMaterialPlan,
   type KpReaderEquationRenderPlan,
+  type KpReaderEquationSceneCompositorFactory,
   type KpReaderEquationSceneCompositorSession
 } from "../renderers/public-api.ts";
 
@@ -26,6 +26,7 @@ export interface KpReaderGlyphCompositorExemplar {
 
 export function createKpReaderGlyphCompositorExemplar(input: {
   readonly transitionId: string;
+  readonly createSession: KpReaderEquationSceneCompositorFactory;
 }): KpReaderGlyphCompositorExemplar {
   let session: KpReaderEquationSceneCompositorSession | undefined;
   let sessionKey: string | undefined;
@@ -70,7 +71,7 @@ export function createKpReaderGlyphCompositorExemplar(input: {
           presentationGroupId: `${input.transitionId}.target`,
           fontReadiness: frame.fontReadiness
         });
-        session = createKpReaderEquationSceneCompositorSession({
+        session = input.createSession({
           renderPlan: frame.renderPlan,
           materialPlan: frame.materialPlan,
           transitionId: input.transitionId,
