@@ -128,14 +128,7 @@ export function applyKpNativeKatexGlyphFrame(input: {
   }
   const progress = clamp01(input.progress);
   const rect = interpolateRect(input.source.rect, input.target.rect, progress);
-  Object.assign(input.clone.ownerElement.style, {
-    position: "absolute",
-    left: `${rect.left}px`,
-    top: `${rect.top}px`,
-    width: `${rect.width}px`,
-    height: `${rect.height}px`,
-    transform: "none"
-  });
+  placeCloneAtRect(input.clone, rect);
   const ownership = applyKpNativeKatexGlyphOwnership({
     clone: input.clone,
     source: input.source,
@@ -189,13 +182,20 @@ export function applyKpNativeKatexManyToOneFrame(input: {
   readonly sources: readonly KpNativeKatexFragmentObservation[];
   readonly target: KpNativeKatexFragmentObservation;
   readonly progress: number;
+  readonly routeRects?: readonly KpStageRelativeRect[] | undefined;
 }): KpNativeKatexMultiplicityFrame {
   if (input.sources.length < 2 || input.clones.length !== input.sources.length) {
     throw new Error(
       "Many-to-one native composition requires one clone per source and at least two sources."
     );
   }
-  const constituentFrames = input.sources.map((source, index) =>
+  if (
+    input.routeRects !== undefined &&
+    input.routeRects.length !== input.sources.length
+  ) {
+    throw new Error("Many-to-one route geometry requires one rect per source.");
+  }
+  const linearFrames = input.sources.map((source, index) =>
     applyKpNativeKatexGlyphFrame({
       clone: input.clones[index]!,
       source,
@@ -203,6 +203,17 @@ export function applyKpNativeKatexManyToOneFrame(input: {
       progress: input.progress
     })
   );
+  const constituentFrames = input.routeRects === undefined
+    ? linearFrames
+    : linearFrames.map((frame, index) => {
+        const rect = input.routeRects![index]!;
+        placeCloneAtRect(input.clones[index]!, rect);
+        return Object.freeze({
+          ...frame,
+          rect,
+          targetHandoffDeltaPx: rectDelta(rect, input.target.rect)
+        });
+      });
   const visualOwner = constituentFrames[0]!.visualOwner === "source-native"
     ? "source-natives"
     : constituentFrames[0]!.visualOwner;
@@ -301,6 +312,20 @@ function interpolateRect(
     top: lerp(source.top, target.top, progress),
     width: lerp(source.width, target.width, progress),
     height: lerp(source.height, target.height, progress)
+  });
+}
+
+function placeCloneAtRect(
+  clone: KpNativeKatexFragmentClone,
+  rect: KpStageRelativeRect
+): void {
+  Object.assign(clone.ownerElement.style, {
+    position: "absolute",
+    left: `${rect.left}px`,
+    top: `${rect.top}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+    transform: "none"
   });
 }
 

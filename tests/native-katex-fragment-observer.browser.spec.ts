@@ -912,3 +912,90 @@ test("plus-minus split preserves live branch choice through seek and rewind", as
   await expect(minus).toHaveAttribute("tabindex", "0");
   await expect(plus).toHaveAttribute("tabindex", "-1");
 });
+
+test("crowded quadratic uses the same bounded schedule at wide and phone widths", async ({
+  page
+}) => {
+  for (const viewport of [
+    { width: 1440, height: 950 },
+    { width: 390, height: 844 }
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/glyph-reconciliation-experiment.html?progress=500");
+    await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+    const evidence = await page.evaluate(() => {
+      const review = document.querySelector<HTMLElement>(
+        "[data-kp-glyph-review]"
+      )!;
+      const caseElement = document.querySelector<HTMLElement>(
+        '[data-reconciliation-case="crowded-quadratic"]'
+      )!;
+      const stage = caseElement.querySelector<HTMLElement>(
+        "[data-crowded-stage]"
+      )!;
+      const stageRect = stage.getBoundingClientRect();
+      const protectedInk = caseElement.querySelector<HTMLElement>(
+        '[data-kp-motion-id="motion.crowded.source-plus-minus"]'
+      )!.getBoundingClientRect();
+      const cloneRects = [
+        ...caseElement.querySelectorAll<HTMLElement>(
+          "[data-kp-native-katex-fragment-clone]"
+        )
+      ].map((element) => {
+        const rect = element.getBoundingClientRect();
+        return {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          ariaHidden: element.getAttribute("aria-hidden")
+        };
+      });
+      return {
+        routeStatuses: review.dataset["kpCrowdedRouteStatuses"]?.split(","),
+        protectedOpacity: getComputedStyle(
+          caseElement.querySelector<HTMLElement>(
+            '[data-kp-motion-id="motion.crowded.source-plus-minus"]'
+          )!
+        ).opacity,
+        protectedInk: {
+          left: protectedInk.left,
+          top: protectedInk.top,
+          right: protectedInk.right,
+          bottom: protectedInk.bottom
+        },
+        cloneRects,
+        stageRect: {
+          left: stageRect.left,
+          top: stageRect.top,
+          right: stageRect.right,
+          bottom: stageRect.bottom
+        },
+        overflow:
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth
+      };
+    });
+
+    expect(evidence.routeStatuses).toHaveLength(3);
+    expect(evidence.routeStatuses?.every((status) =>
+      status === "clearance-route" || status === "settle"
+    )).toBe(true);
+    expect(evidence.protectedOpacity).toBe("1");
+    expect(evidence.overflow).toBeLessThanOrEqual(1);
+    expect(evidence.cloneRects.every((rect) =>
+      rect.left >= evidence.stageRect.left - 1 &&
+      rect.right <= evidence.stageRect.right + 1 &&
+      rect.top >= evidence.stageRect.top - 1 &&
+      rect.bottom <= evidence.stageRect.bottom + 1 &&
+      rect.ariaHidden === "true"
+    ), JSON.stringify({ viewport, evidence })).toBe(true);
+  }
+
+  await page.locator("[data-progress]").fill("1000");
+  await page.locator("[data-progress]").dispatchEvent("input");
+  await expect(page.locator(
+    '[data-reconciliation-case="crowded-quadratic"] ' +
+    '[data-kp-motion-id="motion.crowded.target-result"]'
+  )).toHaveText("1");
+});

@@ -165,7 +165,8 @@
     {
       "id": "slice-19",
       "title": "Crowded-projection",
-      "status": "planned"
+      "summary": "Applied the unchanged common scheduler and native compositor to the crowded quadratic at wide and phone widths; protected ± stays visible and all inert route or settlement clones remain in bounds.",
+      "status": "complete"
     },
     {
       "id": "slice-20",

@@ -5,6 +5,7 @@ import {
   projectKpCanonicalExecutionLineage
 } from "../animation/canonical-operation-lineage-adapter.ts";
 import {
+  createKpCrowdedQuadraticGlyphReconciliationCase,
   createKpFractionMergeGlyphReconciliationCase,
   createKpQuadraticPlusMinusGlyphReconciliationCase,
   createKpSolveXGlyphReconciliationCase
@@ -50,6 +51,13 @@ const fractionCompiled = await compileKpGlyphReconciliationCase(
 );
 const branchCaseInput = createKpQuadraticPlusMinusGlyphReconciliationCase();
 const branchCompiled = await compileKpGlyphReconciliationCase(branchCaseInput);
+const crowdedViewportId = window.innerWidth <= 620 ? "phone" : "wide";
+const crowdedCaseInput = createKpCrowdedQuadraticGlyphReconciliationCase(
+  crowdedViewportId
+);
+const crowdedCompiled = await compileKpGlyphReconciliationCase(
+  crowdedCaseInput
+);
 const fractionCloze = createKpFractionMergeClozeProjection();
 const scheduledMotion = compiled.schedule.motions[0]!;
 if (scheduledMotion?.status !== "direct") {
@@ -68,6 +76,20 @@ if (
   branchCompiled.schedule.motions.some(({ status }) => status !== "direct")
 ) {
   throw new Error("The plus-minus split requires two generic direct routes.");
+}
+const crowdedMerge = crowdedCompiled.matches.multiplicity[0];
+const crowdedMergeMotions = crowdedCompiled.schedule.motions.filter(
+  ({ matchId }) => matchId.startsWith(`${crowdedMerge?.id}.`)
+);
+if (
+  crowdedMerge?.kind !== "merge" ||
+  crowdedMergeMotions.length !== 3 ||
+  crowdedMergeMotions.some(({ status }) =>
+    status !== "clearance-route" && status !== "settle"
+  ) ||
+  crowdedCompiled.schedule.usedOperationSpecificPolicy
+) {
+  throw new Error("The crowded case requires the common bounded clearance result.");
 }
 
 root.innerHTML = `
@@ -263,6 +285,51 @@ root.innerHTML = `
         <output data-branch-status>Both exact branches active</output>
       </div>
     </section>
+    <section
+      class="glyph-exemplar__review glyph-exemplar__review--secondary"
+      data-reconciliation-case="crowded-quadratic"
+    >
+      <div class="glyph-exemplar__prompt">
+        <div>
+          <span>responsive protected-ink pressure</span>
+          <h2>Route a crowded discriminant merge</h2>
+        </div>
+        <p data-crowded-phase>Measured source notation</p>
+      </div>
+      <div class="glyph-exemplar__viewport glyph-exemplar__viewport--crowded">
+        <div
+          class="glyph-exemplar__stage"
+          data-crowded-stage
+          role="math"
+          aria-label="twenty five minus twenty four merges into one while plus-minus stays protected"
+        >
+          <span
+            class="glyph-exemplar__crowded-equation glyph-exemplar__crowded-equation--source"
+            data-crowded-source
+          >
+            ${trustedMath(
+              String.raw`r=-5\htmlData{kp-motion-id=motion.crowded.source-plus-minus}{\pm}\sqrt{\htmlData{kp-motion-id=motion.crowded.source-power}{25}\htmlData{kp-motion-id=motion.crowded.source-minus}{-}\htmlData{kp-motion-id=motion.crowded.source-product}{24}}`
+            )}
+          </span>
+          <span
+            class="glyph-exemplar__crowded-equation glyph-exemplar__crowded-equation--target"
+            data-crowded-target
+          >
+            ${trustedMath(
+              String.raw`r=-5\htmlData{kp-motion-id=motion.crowded.target-plus-minus}{\pm}\sqrt{\htmlData{kp-motion-id=motion.crowded.target-result}{1}}`
+            )}
+          </span>
+          <span
+            class="glyph-exemplar__material-layer"
+            data-kp-editor-equation-material-layer
+          ></span>
+        </div>
+      </div>
+      <div class="glyph-exemplar__annotation">
+        <span data-crowded-owner>Native source discriminant owns the ink</span>
+        <span data-crowded-route>Common scheduler is measuring protected ± ink</span>
+      </div>
+    </section>
     <div class="glyph-exemplar__evidence">
       <span>actual KaTeX subtree</span>
       <span>canonical lineage</span>
@@ -312,6 +379,12 @@ const branchStatus = root.querySelector<HTMLOutputElement>(
 const branchChoiceButtons = [
   ...root.querySelectorAll<HTMLButtonElement>("[data-branch-choice]")
 ];
+const crowdedStage = root.querySelector<HTMLElement>("[data-crowded-stage]")!;
+const crowdedSource = root.querySelector<HTMLElement>("[data-crowded-source]")!;
+const crowdedTarget = root.querySelector<HTMLElement>("[data-crowded-target]")!;
+const crowdedPhase = root.querySelector<HTMLElement>("[data-crowded-phase]")!;
+const crowdedOwner = root.querySelector<HTMLElement>("[data-crowded-owner]")!;
+const crowdedRoute = root.querySelector<HTMLElement>("[data-crowded-route]")!;
 
 await fontReadiness.whenReady();
 await nextFrame();
@@ -473,6 +546,72 @@ branchNativeTargets.forEach((target, index) => {
   target.sourceElement.tabIndex = -1;
 });
 
+const crowdedSourceMotionIds = new Map([
+  ["source.power", "motion.crowded.source-power"],
+  ["source.minus", "motion.crowded.source-minus"],
+  ["source.product", "motion.crowded.source-product"],
+  ["source.plus-minus", "motion.crowded.source-plus-minus"]
+]);
+const crowdedTargetMotionIds = new Map([
+  ["target.radical", "motion.crowded.target-result"],
+  ["target.plus-minus", "motion.crowded.target-plus-minus"]
+]);
+const crowdedSourceObservation = await settleAndObserveKpNativeKatexFragments({
+  stage: crowdedStage,
+  bindings: crowdedCaseInput.sourceGlyphs.map((glyph) => ({
+    id: glyph.id,
+    semanticEntityId: glyph.entityId,
+    motionId: crowdedSourceMotionIds.get(glyph.id)!,
+    glyphKey: glyph.glyphKey
+  })),
+  fontReadiness
+});
+const crowdedTargetObservation = await settleAndObserveKpNativeKatexFragments({
+  stage: crowdedStage,
+  bindings: crowdedCaseInput.targetGlyphs.map((glyph) => ({
+    id: glyph.id,
+    semanticEntityId: glyph.entityId,
+    motionId: crowdedTargetMotionIds.get(glyph.id)!,
+    glyphKey: glyph.glyphKey
+  })),
+  fontReadiness
+});
+const crowdedBindings = bindKpNativeKatexFragmentsWithinSemanticLineage({
+  lineage: projectKpCanonicalExecutionLineage(crowdedCaseInput.execution),
+  source: crowdedSourceObservation,
+  target: crowdedTargetObservation
+});
+const crowdedMultiplicity = crowdedBindings.multiplicity[0];
+const crowdedPlusMinusBinding = crowdedBindings.bindings.find(
+  ({ glyphKey }) => glyphKey === "±"
+);
+if (
+  crowdedMultiplicity?.kind !== "merge" ||
+  crowdedMultiplicity.sources.length !== 3 ||
+  crowdedMultiplicity.targets.length !== 1 ||
+  crowdedPlusMinusBinding === undefined
+) {
+  throw new Error("Crowded native fragments did not preserve merge and protected ± lineage.");
+}
+const crowdedNativeSources = crowdedMultiplicity.sources;
+const crowdedNativeTarget = crowdedMultiplicity.targets[0]!;
+const crowdedClones = createKpNativeKatexFragmentClones({
+  stage: crowdedStage,
+  fragments: crowdedNativeSources.map((observation, index) => ({
+    ownerId: `native-owner.crowded.merge.${index}`,
+    observation
+  }))
+});
+for (const crowdedClone of crowdedClones) {
+  crowdedClone.ownerElement.dataset["kpNativeKatexFragmentClone"] = "true";
+}
+const crowdedPlayback = crowdedCompiled.createPlayback({
+  supportedMatchIds: new Set(
+    crowdedCompiled.schedule.motions.map(({ matchId }) => matchId)
+  ),
+  apply() {}
+});
+
 const playback = compiled.createPlayback({
   supportedMatchIds: new Set([scheduledMotion.matchId]),
   apply() {}
@@ -554,6 +693,62 @@ function render(progress: number): void {
       : "Two inert target-fragment clones own the moving ink";
   review.dataset["kpBranchVisualOwner"] = branchFrame.visualOwner;
   applyBranchSelection();
+  const crowdedProgress = clamp((bounded - 0.1) / 0.78);
+  const crowdedSamples = new Map(
+    crowdedPlayback.sample(crowdedProgress).map((frame) => [
+      frame.matchId,
+      frame
+    ])
+  );
+  const crowdedRouteRects = crowdedNativeSources.map((source, index) => {
+    const motion = crowdedMergeMotions[index]!;
+    const sample = crowdedSamples.get(motion.matchId)!;
+    return projectScheduledRect({
+      motion,
+      sample,
+      source: source.rect,
+      target: crowdedNativeTarget.rect,
+      progress: crowdedProgress,
+      sourceViewport: crowdedCaseInput.viewport,
+      targetViewport: {
+        width: crowdedStage.offsetWidth,
+        height: crowdedStage.offsetHeight
+      }
+    });
+  });
+  const crowdedFrame = applyKpNativeKatexManyToOneFrame({
+    clones: crowdedClones,
+    sources: crowdedNativeSources,
+    target: crowdedNativeTarget,
+    progress: crowdedProgress,
+    routeRects: crowdedRouteRects
+  });
+  const crowdedAtTarget = crowdedFrame.visualOwner === "target-native";
+  crowdedSource.style.opacity = crowdedAtTarget ? "0" : "1";
+  crowdedTarget.style.opacity = crowdedProgress > 0 ? "1" : "0";
+  crowdedNativeTarget.sourceElement.setAttribute(
+    "aria-hidden",
+    String(!crowdedAtTarget)
+  );
+  crowdedPhase.textContent = crowdedProgress === 0
+    ? "Measured source notation"
+    : crowdedAtTarget
+      ? "Exact native result"
+      : "Bounded route protects ±";
+  crowdedOwner.textContent = crowdedFrame.visualOwner === "source-natives"
+    ? "Native source discriminant owns the ink"
+    : crowdedAtTarget
+      ? "Native target result owns the ink"
+      : "Inert exact fragments route or hold for settlement";
+  crowdedRoute.textContent = crowdedMergeMotions.some(
+    ({ status: routeStatus }) => routeStatus === "settle"
+  )
+    ? "Blocked constituents use honest checkpoint settlement"
+    : `${crowdedViewportId} projection · common clearance lanes`;
+  review.dataset["kpCrowdedVisualOwner"] = crowdedFrame.visualOwner;
+  review.dataset["kpCrowdedRouteStatuses"] = crowdedMergeMotions
+    .map(({ status: routeStatus }) => routeStatus)
+    .join(",");
   const atTarget = glyphFrame.visualOwner === "target-native";
   const atSource = glyphFrame.visualOwner === "source-native";
   sourceX.setAttribute("aria-hidden", String(!atSource));
@@ -714,6 +909,53 @@ function directScheduleProgress(
   return clamp(((x - source.x) * dx + (y - source.y) * dy) / lengthSquared);
 }
 
+function projectScheduledRect(input: {
+  readonly motion: {
+    readonly status: "direct" | "clearance-route" | "settle";
+    readonly waypoints: readonly { readonly x: number; readonly y: number }[];
+  };
+  readonly sample: { readonly x: number; readonly y: number };
+  readonly source: KpStageRelativeRect;
+  readonly target: KpStageRelativeRect;
+  readonly progress: number;
+  readonly sourceViewport: { readonly width: number; readonly height: number };
+  readonly targetViewport: { readonly width: number; readonly height: number };
+}): KpStageRelativeRect {
+  if (input.motion.status === "settle") {
+    return input.progress < 1 ? input.source : input.target;
+  }
+  const sourcePoint = input.motion.waypoints[0]!;
+  const targetPoint = input.motion.waypoints.at(-1)!;
+  const scaleX = input.targetViewport.width / input.sourceViewport.width;
+  const scaleY = input.targetViewport.height / input.sourceViewport.height;
+  const actualSourceCenter = {
+    x: input.source.left + input.source.width / 2,
+    y: input.source.top + input.source.height / 2
+  };
+  const actualTargetCenter = {
+    x: input.target.left + input.target.width / 2,
+    y: input.target.top + input.target.height / 2
+  };
+  const correctionX = lerp(
+    actualSourceCenter.x - sourcePoint.x * scaleX,
+    actualTargetCenter.x - targetPoint.x * scaleX,
+    input.progress
+  );
+  const correctionY = lerp(
+    actualSourceCenter.y - sourcePoint.y * scaleY,
+    actualTargetCenter.y - targetPoint.y * scaleY,
+    input.progress
+  );
+  const width = lerp(input.source.width, input.target.width, input.progress);
+  const height = lerp(input.source.height, input.target.height, input.progress);
+  return {
+    left: input.sample.x * scaleX + correctionX - width / 2,
+    top: input.sample.y * scaleY + correctionY - height / 2,
+    width,
+    height
+  };
+}
+
 function stopPlayback(): void {
   if (animationFrame !== undefined) cancelAnimationFrame(animationFrame);
   animationFrame = undefined;
@@ -760,6 +1002,10 @@ function trustedMath(latex: string): string {
 
 function clamp(value: number): number {
   return Math.max(0, Math.min(1, value));
+}
+
+function lerp(source: number, target: number, progress: number): number {
+  return source + (target - source) * progress;
 }
 
 function nextFrame(): Promise<void> {
