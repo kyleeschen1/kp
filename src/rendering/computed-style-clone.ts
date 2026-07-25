@@ -1,12 +1,14 @@
-export function cloneElementWithComputedStyles<TElement extends HTMLElement>(
+export function cloneElementWithComputedStyles<TElement extends Element>(
   source: TElement
 ): TElement {
   const clone = source.cloneNode(true);
-  if (!(clone instanceof HTMLElement)) {
-    throw new Error("Computed-style visuals must clone to HTMLElements.");
+  if (!(clone instanceof HTMLElement) && !(clone instanceof SVGElement)) {
+    throw new Error(
+      "Computed-style visuals must clone to HTML or SVG elements."
+    );
   }
   inlineElementComputedStyles(source, clone);
-  return clone as TElement;
+  return clone as unknown as TElement;
 }
 
 export function inlineElementComputedStyles(source: Element, clone: Element): void {

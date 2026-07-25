@@ -57,11 +57,15 @@ import {
 const rootNode = document.querySelector<HTMLElement>("#glyph-experiment");
 if (rootNode === null) throw new Error("Glyph experiment root is missing.");
 const root = rootNode;
+const searchParams = new URL(location.href).searchParams;
+if (searchParams.get("radicalInventory") === "1") {
+  await import("./glyph-reconciliation-radical-inventory.ts");
+}
 const reducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
 const fractionDirection: KpFractionExperimentDirection =
-  new URL(location.href).searchParams.get("fractionDirection") === "split"
+  searchParams.get("fractionDirection") === "split"
     ? "split"
     : "merge";
 if (import.meta.env.DEV) {

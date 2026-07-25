@@ -703,6 +703,193 @@ test("radical succession reconciles through existing generic lifecycles", async 
   ]);
 });
 
+test("radical path and source rule use bounded generic structural tracks", async ({
+  browser
+}) => {
+  for (const reducedMotion of [false, true]) {
+    const context = await browser.newContext({
+      viewport: { width: 1_100, height: 900 },
+      reducedMotion: reducedMotion ? "reduce" : "no-preference"
+    });
+    const page = await context.newPage();
+    await page.goto(
+      "/glyph-reconciliation-experiment.html?radicalInventory=1&progress=0"
+    );
+    await page.locator(
+      '[data-radical-inventory][data-kp-radical-inventory-ready="true"]'
+    ).waitFor();
+    const result = await page.evaluate(() => {
+      type Rect = {
+        left: number;
+        top: number;
+        width: number;
+        height: number;
+      };
+      type Track = {
+        id: string;
+        lifecycle: string;
+        visualAtomId: string;
+        paintKind: string;
+        sizingMode: string;
+        startRect: Rect;
+        endRect: Rect;
+        startOpacity: number;
+        endOpacity: number;
+      };
+      type Frame = {
+        trackId: string;
+        rect: Rect;
+        opacity: number;
+      };
+      type Playback = {
+        sample(progress: number): readonly Frame[];
+        apply(progress: number): {
+          visualOwner: string;
+          frames: readonly Frame[];
+        };
+      };
+      const inventory = (window as unknown as {
+        __kpRadicalSceneInventory: {
+          target: {
+            atoms: readonly {
+              id: string;
+              paintKind: string;
+              sourceElement: HTMLElement;
+            }[];
+          };
+          tracks: readonly Track[];
+          playback: Playback;
+          reverseTracks: readonly Track[];
+          reversePlayback: Playback;
+        };
+      }).__kpRadicalSceneInventory;
+      const pathTrack = inventory.tracks.find(({ paintKind }) =>
+        paintKind === "path"
+      )!;
+      const ruleTrack = inventory.tracks.find(({ paintKind }) =>
+        paintKind === "rule"
+      )!;
+      const targetPathAtom = inventory.target.atoms.find(({ id }) =>
+        id === pathTrack.visualAtomId
+      )!;
+      const nativePath = targetPathAtom.sourceElement.querySelector("path")!;
+      const nativePathDataBefore = nativePath.getAttribute("d");
+      const samples = Array.from({ length: 101 }, (_, index) =>
+        inventory.playback.sample(index / 100)
+      );
+      const within = (value: number, left: number, right: number) =>
+        value >= Math.min(left, right) - 0.001 &&
+        value <= Math.max(left, right) + 0.001;
+      const denseFiniteAndBounded = samples.every((frames) =>
+        frames.every((frame) => {
+          const track = inventory.tracks.find(({ id }) =>
+            id === frame.trackId
+          )!;
+          return Object.values(frame.rect).every(Number.isFinite) &&
+            Number.isFinite(frame.opacity) &&
+            frame.opacity >= 0 &&
+            frame.opacity <= 1 &&
+            within(frame.rect.left, track.startRect.left, track.endRect.left) &&
+            within(frame.rect.top, track.startRect.top, track.endRect.top) &&
+            within(
+              frame.rect.width,
+              track.startRect.width,
+              track.endRect.width
+            ) &&
+            within(
+              frame.rect.height,
+              track.startRect.height,
+              track.endRect.height
+            );
+        })
+      );
+      const direct = inventory.playback.sample(0.73);
+      inventory.playback.sample(0.18);
+      const soughtAgain = inventory.playback.sample(0.73);
+      const reverseDirect = inventory.reversePlayback.sample(0.41);
+      inventory.reversePlayback.sample(0.92);
+      const reverseSoughtAgain = inventory.reversePlayback.sample(0.41);
+
+      const sourceFrame = inventory.playback.apply(0);
+      const middleFrame = inventory.playback.apply(0.5);
+      const pathOwner = document.querySelector<HTMLElement>(
+        `[data-kp-equation-material-owner-id="native-scene-owner.${
+          CSS.escape(pathTrack.id)
+        }"]`
+      )!;
+      const clonedPathData =
+        pathOwner.querySelector("path")?.getAttribute("d") ?? null;
+      const targetFrame = inventory.playback.apply(1);
+      const rewoundFrame = inventory.playback.apply(0);
+      const replayedMiddleFrame = inventory.playback.apply(0.5);
+
+      return {
+        mediaReduced: matchMedia("(prefers-reduced-motion: reduce)").matches,
+        denseFiniteAndBounded,
+        directStable: JSON.stringify(direct) === JSON.stringify(soughtAgain),
+        reverseStable:
+          JSON.stringify(reverseDirect) === JSON.stringify(reverseSoughtAgain),
+        sourceFrame,
+        middleFrame,
+        targetFrame,
+        rewoundFrame,
+        replayedMiddleStable:
+          JSON.stringify(middleFrame.frames) ===
+          JSON.stringify(replayedMiddleFrame.frames),
+        pathTrack,
+        ruleTrack,
+        reversePathTrack: inventory.reverseTracks.find(({ paintKind }) =>
+          paintKind === "path"
+        ),
+        clonedPathData,
+        nativePathDataBefore,
+        nativePathDataAfter: nativePath.getAttribute("d")
+      };
+    });
+
+    expect(result.mediaReduced).toBe(reducedMotion);
+    expect(result.denseFiniteAndBounded).toBe(true);
+    expect(result.directStable).toBe(true);
+    expect(result.reverseStable).toBe(true);
+    expect(result.replayedMiddleStable).toBe(true);
+    expect(result.sourceFrame.visualOwner).toBe("source-native");
+    expect(result.middleFrame.visualOwner).toBe("material-scene");
+    expect(result.targetFrame.visualOwner).toBe("target-native");
+    expect(result.rewoundFrame.visualOwner).toBe("source-native");
+    expect(result.pathTrack).toMatchObject({
+      lifecycle: "introduce",
+      paintKind: "path",
+      sizingMode: "rect",
+      startOpacity: 0,
+      endOpacity: 1
+    });
+    expect(result.pathTrack.startRect.top - result.pathTrack.endRect.top)
+      .toBeCloseTo(8, 5);
+    expect(result.ruleTrack).toMatchObject({
+      lifecycle: "eliminate",
+      paintKind: "rule",
+      sizingMode: "rule-length",
+      startOpacity: 1,
+      endOpacity: 0
+    });
+    expect(result.ruleTrack.startRect.top - result.ruleTrack.endRect.top)
+      .toBeCloseTo(8, 5);
+    expect(result.ruleTrack.startRect.width)
+      .toBeCloseTo(result.ruleTrack.endRect.width, 5);
+    expect(result.reversePathTrack).toMatchObject({
+      lifecycle: "eliminate",
+      paintKind: "path",
+      sizingMode: "rect",
+      startOpacity: 1,
+      endOpacity: 0
+    });
+    expect(result.nativePathDataBefore).not.toBeNull();
+    expect(result.clonedPathData).toBe(result.nativePathDataBefore);
+    expect(result.nativePathDataAfter).toBe(result.nativePathDataBefore);
+    await context.close();
+  }
+});
+
 test("live fraction scene exposes continuously sampled structural rule tracks", async ({
   page
 }) => {

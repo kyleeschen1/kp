@@ -16,6 +16,8 @@ import {
 import { createKpEquationFontReadiness } from "../rendering/equation-font-readiness.ts";
 import {
   compileKpNativeKatexHierarchicalScenePlan,
+  compileKpNativeKatexSceneTracks,
+  createKpNativeKatexScenePlayback,
   projectKpNativeKatexSemanticPaintRelations,
   reconcileKpNativeKatexScenes,
   reverseKpNativeKatexSemanticPaintRelations
@@ -164,6 +166,22 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
   const plan = compileKpNativeKatexHierarchicalScenePlan(reconciliation);
   const reversePlan =
     compileKpNativeKatexHierarchicalScenePlan(reverseReconciliation);
+  const tracks = compileKpNativeKatexSceneTracks(plan);
+  const reverseTracks = compileKpNativeKatexSceneTracks(reversePlan);
+  const playback = createKpNativeKatexScenePlayback({
+    stage,
+    sourceRoot,
+    targetRoot,
+    reconciliation,
+    tracks
+  });
+  const reversePlayback = createKpNativeKatexScenePlayback({
+    stage,
+    sourceRoot: targetRoot,
+    targetRoot: sourceRoot,
+    reconciliation: reverseReconciliation,
+    tracks: reverseTracks
+  });
   panel.dataset["kpRadicalInventoryReady"] = "true";
   panel.dataset["kpRadicalSourceAtomCount"] = String(source.atoms.length);
   panel.dataset["kpRadicalTargetAtomCount"] = String(target.atoms.length);
@@ -184,9 +202,13 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
         reconciliation,
         permutedReconciliation,
         plan,
+        tracks,
+        playback,
         reverseRelations,
         reverseReconciliation,
-        reversePlan
+        reversePlan,
+        reverseTracks,
+        reversePlayback
       })
     });
   }

@@ -50,3 +50,42 @@ test("computed-style clone preserves inherited and nested equation typography", 
     color: "rgb(31, 99, 113)"
   });
 });
+
+test("computed-style clone preserves an intact SVG path subtree", async ({
+  page
+}) => {
+  await page.goto("/");
+  const result = await page.evaluate(async () => {
+    // @ts-expect-error Vite resolves this browser-side absolute module specifier.
+    const { cloneElementWithComputedStyles } = await import("/src/rendering/computed-style-clone.ts");
+    const namespace = "http://www.w3.org/2000/svg";
+    const source = document.createElementNS(namespace, "svg");
+    source.setAttribute("viewBox", "0 0 10 10");
+    source.style.color = "rgb(12, 34, 56)";
+    const path = document.createElementNS(namespace, "path");
+    path.setAttribute("d", "M 0 10 L 5 0 L 10 10");
+    path.setAttribute("fill", "currentColor");
+    source.append(path);
+    document.body.append(source);
+
+    const clone = cloneElementWithComputedStyles(source);
+    const clonePath = clone.querySelector("path")!;
+    const snapshot = {
+      namespace: clone.namespaceURI,
+      viewBox: clone.getAttribute("viewBox"),
+      pathData: clonePath.getAttribute("d"),
+      fill: clonePath.getAttribute("fill"),
+      color: clone.style.color
+    };
+    source.remove();
+    return snapshot;
+  });
+
+  expect(result).toEqual({
+    namespace: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 10 10",
+    pathData: "M 0 10 L 5 0 L 10 10",
+    fill: "currentColor",
+    color: "rgb(12, 34, 56)"
+  });
+});

@@ -397,6 +397,27 @@
       "scope": "slice-19",
       "checkedAt": "2026-07-25T20:55:55.429Z",
       "notes": "Stable capture still produces 10 overview, 14 dense endpoint, and six inverse split frames after excluding non-painted zero-width KaTeX scaffolding."
+    },
+    {
+      "command": "focused radical browser sampling",
+      "status": "failed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-25T21:04:23.349Z",
+      "notes": "Concurrent Playwright invocations contended for the stable Vite port; the SVG clone suite passed and the radical command did not start. Rerunning the radical check serially."
+    },
+    {
+      "command": "npm run perf:glyph-reconciliation-experiment",
+      "status": "failed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-25T21:06:20.964Z",
+      "notes": "Structural sampling stayed fast, but the query-only radical inventory's static entry added 13114 gzip bytes versus the 12000-byte route-growth budget. Moving the optional harness behind a conditional dynamic import before rerunning."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run build; npm run perf:glyph-reconciliation-experiment; Playwright computed-style clone suite",
+      "status": "passed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-25T21:08:57.620Z",
+      "notes": "38 focused checks, 37 Chromium compositor checks, two HTML/SVG clone checks, all TypeScript projects, and production build pass. Both normal and reduced-motion contexts densely sample 101 finite bounded frames; direct seek, rewind, exact ownership endpoints, rule-length departure, and intact SVG path cloning pass. The first live apply exposed the generic HTML-only clone boundary and the first performance run exposed static optional-harness bundling; generic SVG cloning plus conditional dynamic import resolved both. Final route gzip growth is 5552 bytes and scene sampling is 0.012 ms, within budget. No path morph, character mutation, radical keyframe, or new lifecycle exists."
     }
   ],
   "allowedWork": [
@@ -542,7 +563,8 @@
     {
       "id": "slice-20",
       "title": "radical-path-and-rule-sampling",
-      "status": "planned"
+      "summary": "Compiled the radical succession through existing generic tracks: the source rule uses rule-length elimination and the intact native SVG path uses bounded introduction, with 101-sample finite bounds, exact endpoints, deterministic seek/rewind, normal and reduced-motion ownership, and unchanged path data. Generalized computed-style cloning to SVG elements after live playback exposed the HTML-only boundary, and dynamically isolated the query-only harness to restore the route budget. No path interpolation, authored radical keyframe, character mutation, or lifecycle category was added.",
+      "status": "complete"
     },
     {
       "id": "slice-21",
