@@ -52,6 +52,28 @@ export interface KpNativeKatexHierarchicalScenePlan {
   readonly components: readonly KpNativeKatexSceneComponent[];
 }
 
+export interface KpNativeKatexSceneTrack {
+  readonly id: string;
+  readonly componentId: string;
+  readonly lifecycle: KpNativeKatexAtomLifecycle;
+  readonly sourceAtomId?: string | undefined;
+  readonly targetAtomId?: string | undefined;
+  readonly visualAtomId: string;
+  readonly startRect: KpStageRelativeRect;
+  readonly endRect: KpStageRelativeRect;
+  readonly startOpacity: number;
+  readonly endOpacity: number;
+}
+
+export interface KpNativeKatexSceneTrackFrame {
+  readonly trackId: string;
+  readonly componentId: string;
+  readonly lifecycle: KpNativeKatexAtomLifecycle;
+  readonly visualAtomId: string;
+  readonly rect: KpStageRelativeRect;
+  readonly opacity: number;
+}
+
 export interface KpNativeKatexSemanticPaintRelation {
   readonly id: string;
   readonly relation: "persist" | "merge" | "split";
@@ -237,6 +259,84 @@ export function compileKpNativeKatexHierarchicalScenePlan(
   });
 }
 
+export function compileKpNativeKatexSceneTracks(
+  plan: KpNativeKatexHierarchicalScenePlan
+): readonly KpNativeKatexSceneTrack[] {
+  const sourceById = new Map(plan.reconciliation.source.atoms.map((atom) => [
+    atom.id,
+    atom
+  ]));
+  const targetById = new Map(plan.reconciliation.target.atoms.map((atom) => [
+    atom.id,
+    atom
+  ]));
+  return Object.freeze(plan.reconciliation.dispositions.flatMap((disposition) => {
+    const sources = disposition.sourceAtomIds.map((id) => sourceById.get(id)!);
+    const targets = disposition.targetAtomIds.map((id) => targetById.get(id)!);
+    if (disposition.lifecycle === "persist") {
+      return [track(disposition, 0, sources[0]!, targets[0]!, 1, 1)];
+    }
+    if (disposition.lifecycle === "merge") {
+      return sources.map((source, index) =>
+        track(
+          disposition,
+          index,
+          source,
+          targets[0]!,
+          1,
+          index === 0 ? 1 : 0
+        )
+      );
+    }
+    if (disposition.lifecycle === "split") {
+      return targets.map((target, index) =>
+        track(
+          disposition,
+          index,
+          sources[0]!,
+          target,
+          index === 0 ? 1 : 0,
+          1,
+          target.id
+        )
+      );
+    }
+    if (disposition.lifecycle === "eliminate") {
+      return sources.map((source, index) =>
+        track(disposition, index, source, source, 1, 0)
+      );
+    }
+    if (disposition.lifecycle === "introduce") {
+      return targets.map((target, index) =>
+        track(disposition, index, target, target, 0, 1, target.id)
+      );
+    }
+    return [];
+  }));
+}
+
+export function sampleKpNativeKatexSceneTracks(
+  tracks: readonly KpNativeKatexSceneTrack[],
+  progress: number
+): readonly KpNativeKatexSceneTrackFrame[] {
+  if (!Number.isFinite(progress)) {
+    throw new Error("Scene track progress must be finite.");
+  }
+  const eased = smoothstep(Math.max(0, Math.min(1, progress)));
+  return Object.freeze(tracks.map((sceneTrack) => Object.freeze({
+    trackId: sceneTrack.id,
+    componentId: sceneTrack.componentId,
+    lifecycle: sceneTrack.lifecycle,
+    visualAtomId: sceneTrack.visualAtomId,
+    rect: Object.freeze(interpolateRect(
+      sceneTrack.startRect,
+      sceneTrack.endRect,
+      eased
+    )),
+    opacity: lerp(sceneTrack.startOpacity, sceneTrack.endOpacity, eased)
+  })));
+}
+
 function assertLifecycleArity(
   disposition: KpNativeKatexAtomDisposition
 ): void {
@@ -366,4 +466,48 @@ function localRect(
     width: rect.width,
     height: rect.height
   };
+}
+
+function track(
+  disposition: KpNativeKatexAtomDisposition,
+  index: number,
+  source: KpNativeKatexPaintAtomObservation,
+  target: KpNativeKatexPaintAtomObservation,
+  startOpacity: number,
+  endOpacity: number,
+  visualAtomId = source.id
+): KpNativeKatexSceneTrack {
+  return Object.freeze({
+    id: `track.${disposition.id}.${index}`,
+    componentId: `component.${disposition.id}`,
+    lifecycle: disposition.lifecycle,
+    sourceAtomId: source.id,
+    targetAtomId: target.id,
+    visualAtomId,
+    startRect: source.rect,
+    endRect: target.rect,
+    startOpacity,
+    endOpacity
+  });
+}
+
+function interpolateRect(
+  source: KpStageRelativeRect,
+  target: KpStageRelativeRect,
+  progress: number
+): KpStageRelativeRect {
+  return {
+    left: lerp(source.left, target.left, progress),
+    top: lerp(source.top, target.top, progress),
+    width: lerp(source.width, target.width, progress),
+    height: lerp(source.height, target.height, progress)
+  };
+}
+
+function lerp(source: number, target: number, progress: number): number {
+  return source + (target - source) * progress;
+}
+
+function smoothstep(value: number): number {
+  return value * value * (3 - 2 * value);
 }

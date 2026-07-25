@@ -100,6 +100,13 @@
       "scope": "slice-11 hierarchical scene reconciliation",
       "checkedAt": "2026-07-25T17:32:19.529Z",
       "notes": "21 focused tests and all TypeScript projects pass; each total disposition compiles one group-bounded component with source/target child-local residual geometry."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-12 generic scene tracks",
+      "checkedAt": "2026-07-25T17:34:39.835Z",
+      "notes": "22 focused tests and all TypeScript projects pass; persistent, merge, split, introduction, and elimination tracks sample exact finite endpoints with deterministic seek/reverse behavior."
     }
   ],
   "allowedWork": [
@@ -194,7 +201,8 @@
     {
       "id": "slice-12",
       "title": "generic-scene-tracks",
-      "status": "planned"
+      "summary": "Compiled hierarchical lifecycle components into generic rect/opacity tracks and a pure smoothstep sampler with exact endpoint, finite-value, direct-seek, and reverse laws.",
+      "status": "complete"
     },
     {
       "id": "slice-13",

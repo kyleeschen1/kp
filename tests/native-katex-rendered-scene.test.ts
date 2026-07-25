@@ -7,8 +7,10 @@ import {
 } from "../src/rendering/native-katex-rendered-scene.ts";
 import {
   compileKpNativeKatexHierarchicalScenePlan,
+  compileKpNativeKatexSceneTracks,
   createKpNativeKatexSceneReconciliation,
-  reconcileKpNativeKatexScenes
+  reconcileKpNativeKatexScenes,
+  sampleKpNativeKatexSceneTracks
 } from "../src/rendering/native-katex-scene-compositor.ts";
 
 const ownerDocument = {};
@@ -314,6 +316,47 @@ test("hierarchical scene plans separate component motion from child residuals", 
   assert.equal(
     plan.components.flatMap(({ atoms }) => atoms).length,
     source.atoms.length + target.atoms.length
+  );
+});
+
+test("generic scene tracks sample exact finite endpoints and reverse identically", () => {
+  const source = createScene("source", ["source.a", "source.b"]);
+  const target = createScene("target", ["target.result"]);
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source,
+    target,
+    relations: [{
+      id: "lineage.merge",
+      relation: "merge",
+      sourceEntityIds: ["entity.a", "entity.b"],
+      targetEntityIds: ["entity.result"]
+    }]
+  });
+  const tracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+  );
+  const start = sampleKpNativeKatexSceneTracks(tracks, 0);
+  const middle = sampleKpNativeKatexSceneTracks(tracks, 0.5);
+  const end = sampleKpNativeKatexSceneTracks(tracks, 1);
+
+  assert.equal(tracks.length, 2);
+  assert.deepEqual(start.map(({ rect }) => rect), source.atoms.map(({ rect }) => rect));
+  assert.deepEqual(end.map(({ rect }) => rect), [
+    target.atoms[0]!.rect,
+    target.atoms[0]!.rect
+  ]);
+  assert.deepEqual(start.map(({ opacity }) => opacity), [1, 1]);
+  assert.deepEqual(end.map(({ opacity }) => opacity), [1, 0]);
+  assert.equal(middle.every(({ rect, opacity }) =>
+    Object.values(rect).every(Number.isFinite) && Number.isFinite(opacity)
+  ), true);
+  assert.deepEqual(
+    sampleKpNativeKatexSceneTracks(tracks, 0.5),
+    middle
+  );
+  assert.throws(
+    () => sampleKpNativeKatexSceneTracks(tracks, Number.NaN),
+    /progress must be finite/
   );
 });
 
