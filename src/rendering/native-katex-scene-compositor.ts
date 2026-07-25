@@ -2,6 +2,9 @@ import type {
   KpNativeKatexPaintAtomObservation,
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
+import type {
+  KpStageRelativeRect
+} from "./native-katex-fragment-observer.ts";
 
 export type KpNativeKatexAtomLifecycle =
   | "persist"
@@ -26,6 +29,27 @@ export interface KpNativeKatexSceneReconciliation {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly dispositions: readonly KpNativeKatexAtomDisposition[];
+}
+
+export interface KpNativeKatexSceneComponent {
+  readonly id: string;
+  readonly lifecycle: KpNativeKatexAtomLifecycle;
+  readonly sourceGroupIds: readonly string[];
+  readonly targetGroupIds: readonly string[];
+  readonly sourceBounds?: KpStageRelativeRect | undefined;
+  readonly targetBounds?: KpStageRelativeRect | undefined;
+  readonly atoms: readonly {
+    readonly atomId: string;
+    readonly endpoint: "source" | "target";
+    readonly localRect: KpStageRelativeRect;
+  }[];
+}
+
+export interface KpNativeKatexHierarchicalScenePlan {
+  readonly kind: "native-katex-hierarchical-scene-plan";
+  readonly lifecycle: "renderer-session";
+  readonly reconciliation: KpNativeKatexSceneReconciliation;
+  readonly components: readonly KpNativeKatexSceneComponent[];
 }
 
 export interface KpNativeKatexSemanticPaintRelation {
@@ -152,6 +176,67 @@ export function createKpNativeKatexSceneReconciliation(input: {
   });
 }
 
+export function compileKpNativeKatexHierarchicalScenePlan(
+  reconciliation: KpNativeKatexSceneReconciliation
+): KpNativeKatexHierarchicalScenePlan {
+  const sourceById = new Map(reconciliation.source.atoms.map((atom) => [
+    atom.id,
+    atom
+  ]));
+  const targetById = new Map(reconciliation.target.atoms.map((atom) => [
+    atom.id,
+    atom
+  ]));
+  const components = reconciliation.dispositions.map((disposition) => {
+    const sourceAtoms = disposition.sourceAtomIds.map((id) => sourceById.get(id)!);
+    const targetAtoms = disposition.targetAtomIds.map((id) => targetById.get(id)!);
+    const sourceBounds = sourceAtoms.length === 0
+      ? undefined
+      : unionRects(sourceAtoms.map(({ rect }) => rect));
+    const targetBounds = targetAtoms.length === 0
+      ? undefined
+      : unionRects(targetAtoms.map(({ rect }) => rect));
+    return Object.freeze({
+      id: `component.${disposition.id}`,
+      lifecycle: disposition.lifecycle,
+      sourceGroupIds: Object.freeze([
+        ...new Set(sourceAtoms.map(({ presentationGroupId }) =>
+          presentationGroupId
+        ))
+      ]),
+      targetGroupIds: Object.freeze([
+        ...new Set(targetAtoms.map(({ presentationGroupId }) =>
+          presentationGroupId
+        ))
+      ]),
+      ...(sourceBounds === undefined ? {} : {
+        sourceBounds: Object.freeze(sourceBounds)
+      }),
+      ...(targetBounds === undefined ? {} : {
+        targetBounds: Object.freeze(targetBounds)
+      }),
+      atoms: Object.freeze([
+        ...sourceAtoms.map((atom) => Object.freeze({
+          atomId: atom.id,
+          endpoint: "source" as const,
+          localRect: Object.freeze(localRect(atom.rect, sourceBounds!))
+        })),
+        ...targetAtoms.map((atom) => Object.freeze({
+          atomId: atom.id,
+          endpoint: "target" as const,
+          localRect: Object.freeze(localRect(atom.rect, targetBounds!))
+        }))
+      ])
+    });
+  });
+  return Object.freeze({
+    kind: "native-katex-hierarchical-scene-plan",
+    lifecycle: "renderer-session",
+    reconciliation,
+    components: Object.freeze(components)
+  });
+}
+
 function assertLifecycleArity(
   disposition: KpNativeKatexAtomDisposition
 ): void {
@@ -261,4 +346,24 @@ function assertTotalCoverage(
   if (missing.length > 0) {
     throw new Error(`Scene ${endpoint} atom ${missing[0]} has no disposition.`);
   }
+}
+
+function unionRects(rects: readonly KpStageRelativeRect[]): KpStageRelativeRect {
+  const left = Math.min(...rects.map(({ left }) => left));
+  const top = Math.min(...rects.map(({ top }) => top));
+  const right = Math.max(...rects.map(({ left, width }) => left + width));
+  const bottom = Math.max(...rects.map(({ top, height }) => top + height));
+  return { left, top, width: right - left, height: bottom - top };
+}
+
+function localRect(
+  rect: KpStageRelativeRect,
+  bounds: KpStageRelativeRect
+): KpStageRelativeRect {
+  return {
+    left: rect.left - bounds.left,
+    top: rect.top - bounds.top,
+    width: rect.width,
+    height: rect.height
+  };
 }

@@ -6,6 +6,7 @@ import {
   type KpNativeKatexPaintAtomObservation
 } from "../src/rendering/native-katex-rendered-scene.ts";
 import {
+  compileKpNativeKatexHierarchicalScenePlan,
   createKpNativeKatexSceneReconciliation,
   reconcileKpNativeKatexScenes
 } from "../src/rendering/native-katex-scene-compositor.ts";
@@ -274,6 +275,46 @@ test("explicit semantic relations compile generic merge multiplicity", () => {
   assert.deepEqual(result.dispositions.map(({ lifecycle }) => lifecycle), ["merge"]);
   assert.deepEqual(result.dispositions[0]?.sourceAtomIds, ["source.a", "source.b"]);
   assert.deepEqual(result.dispositions[0]?.targetAtomIds, ["target.result"]);
+});
+
+test("hierarchical scene plans separate component motion from child residuals", () => {
+  const source = createScene("source", ["source.a", "source.b"]);
+  const target = createScene("target", ["target.result"]);
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source,
+    target,
+    relations: [{
+      id: "lineage.merge",
+      relation: "merge",
+      sourceEntityIds: ["entity.a", "entity.b"],
+      targetEntityIds: ["entity.result"]
+    }]
+  });
+  const plan = compileKpNativeKatexHierarchicalScenePlan(reconciliation);
+  const component = plan.components[0]!;
+
+  assert.equal(component.lifecycle, "merge");
+  assert.deepEqual(component.sourceBounds, {
+    left: 0,
+    top: 0,
+    width: 30,
+    height: 20
+  });
+  assert.deepEqual(component.targetBounds, {
+    left: 0,
+    top: 0,
+    width: 10,
+    height: 20
+  });
+  assert.deepEqual(
+    component.atoms.filter(({ endpoint }) => endpoint === "source")
+      .map(({ localRect }) => localRect.left),
+    [0, 20]
+  );
+  assert.equal(
+    plan.components.flatMap(({ atoms }) => atoms).length,
+    source.atoms.length + target.atoms.length
+  );
 });
 
 function createScene(

@@ -93,6 +93,13 @@
       "scope": "slice-10 grouped constrained matching",
       "checkedAt": "2026-07-25T17:30:19.753Z",
       "notes": "20 focused tests and all TypeScript projects pass; persistent and merge atoms match deterministically only inside shared semantic ownership or explicit lineage, while unrelated equal ink enters/exits."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-11 hierarchical scene reconciliation",
+      "checkedAt": "2026-07-25T17:32:19.529Z",
+      "notes": "21 focused tests and all TypeScript projects pass; each total disposition compiles one group-bounded component with source/target child-local residual geometry."
     }
   ],
   "allowedWork": [
@@ -181,7 +188,8 @@
     {
       "id": "slice-11",
       "title": "hierarchical-scene-reconciliation",
-      "status": "planned"
+      "summary": "Compiled total reconciliation into group-bounded lifecycle components whose child paint atoms retain endpoint-local residual rectangles, avoiding flat competing motion ownership.",
+      "status": "complete"
     },
     {
       "id": "slice-12",
