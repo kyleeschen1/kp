@@ -1,33 +1,170 @@
 @import "katex/dist/katex.min.css";
 
-:root { color-scheme: light dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: #f3f0e8; color: #1d2926; }
+:root {
+  color-scheme: light dark;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  background: #f3f0e8;
+  color: #1d2926;
+}
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; }
-.glyph-review { width: min(1180px, 100%); margin: 0 auto; padding: clamp(1rem, 3vw, 3rem); }
-.glyph-review header { display: grid; gap: .45rem; margin-bottom: 1.4rem; }
-.glyph-review h1 { margin: 0; font: 650 clamp(1.65rem, 4vw, 3.2rem)/1.05 Georgia, serif; letter-spacing: -.025em; }
-.glyph-review p { max-width: 72ch; margin: 0; color: #52615d; line-height: 1.55; }
-.glyph-review__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-.glyph-review__panel { min-width: 0; padding: 1rem; border: 1px solid #c8cec9; border-radius: 18px; background: rgba(255,255,255,.72); box-shadow: 0 12px 40px rgba(38,55,50,.08); }
-.glyph-review__panel h2 { margin: 0 0 .25rem; font-size: 1rem; }
-.glyph-review__panel p { min-height: 2.8rem; font-size: .86rem; }
-.glyph-review__viewport { position: relative; height: 240px; margin-top: .8rem; overflow: hidden; border-radius: 12px; background: #fbfaf6; color: #17241f; container-type: inline-size; }
-.glyph-review__stage { position: absolute; inset: 0; width: 100%; height: 240px; }
-.glyph-review__math { position: absolute; top: 92px; white-space: nowrap; font-size: 1.45rem; }
-.glyph-review__source-rest { left: 20.625%; }
-.glyph-review__target-rest { left: 41.25%; }
-.glyph-review__glyph { position: absolute; left: 0; top: 0; will-change: transform, opacity; font-size: 1.45rem; }
-.glyph-review__baseline-source, .glyph-review__baseline-target { left: 50%; transform: translateX(-50%); }
-.glyph-review__controls { display: flex; align-items: center; gap: .75rem; margin-top: 1rem; padding: .8rem 1rem; border-radius: 14px; background: #263a34; color: #fff; }
-.glyph-review__controls button { border: 0; border-radius: 999px; padding: .55rem .9rem; background: #d8ff73; color: #17241f; font-weight: 700; cursor: pointer; }
+button, input { font: inherit; }
+.glyph-review {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 3rem);
+}
+.glyph-review header {
+  display: grid;
+  gap: .45rem;
+  margin-bottom: 1.15rem;
+}
+.glyph-review h1 {
+  margin: 0;
+  font: 650 clamp(1.65rem, 4vw, 3.2rem)/1.05 Georgia, serif;
+  letter-spacing: -.025em;
+}
+.glyph-review h2 { margin: 0 0 .3rem; font-size: 1.02rem; }
+.glyph-review p {
+  max-width: 76ch;
+  margin: 0;
+  color: #52615d;
+  line-height: 1.5;
+}
+.glyph-review__controls {
+  position: sticky;
+  z-index: 3;
+  top: .5rem;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-bottom: 1rem;
+  padding: .75rem 1rem;
+  border-radius: 14px;
+  background: #263a34;
+  color: #fff;
+  box-shadow: 0 10px 28px rgba(38, 55, 50, .18);
+}
+.glyph-review__controls button,
+.glyph-review__trace-toggle {
+  border: 0;
+  border-radius: 999px;
+  padding: .55rem .9rem;
+  background: #d8ff73;
+  color: #17241f;
+  font-weight: 700;
+  cursor: pointer;
+}
 .glyph-review__controls input { flex: 1; min-width: 80px; }
-.glyph-review__status { min-width: 4.5rem; font-variant-numeric: tabular-nums; }
-.glyph-review__evidence { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: .45rem; }
-.glyph-review__evidence span { padding: .35rem .6rem; border-radius: 999px; background: #dce6de; font-size: .76rem; }
+.glyph-review__status {
+  min-width: 4.5rem;
+  font-variant-numeric: tabular-nums;
+}
+.glyph-review__cases {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.glyph-review__case {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid #c8cec9;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .72);
+  box-shadow: 0 12px 40px rgba(38, 55, 50, .08);
+}
+.glyph-review__case-copy { min-height: 7.35rem; }
+.glyph-review__case-copy > p:last-child { font-size: .86rem; }
+.glyph-review__eyebrow {
+  margin-bottom: .35rem !important;
+  color: #33705e !important;
+  font-size: .73rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.glyph-review__viewport {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 12px;
+  background:
+    linear-gradient(rgba(47, 91, 77, .035) 1px, transparent 1px),
+    #fbfaf6;
+  background-size: 100% 44px;
+  color: #17241f;
+  container-type: inline-size;
+}
+.glyph-review__stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 220px;
+}
+.glyph-review__math {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max-content;
+  max-width: 94%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  font-size: clamp(1rem, 4.8cqw, 1.5rem);
+}
+.glyph-review__source,
+.glyph-review__target {
+  transition: none;
+}
+.glyph-review__target { opacity: 0; }
+.glyph-review__moving {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  min-width: .8em;
+  min-height: 1em;
+  color: #116b55;
+  font: 700 1.45rem/1 Georgia, serif;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(216, 255, 115, .6);
+  will-change: transform, opacity;
+}
+.glyph-review__moving[data-settled="true"] { color: #8d5a13; }
+.glyph-review__case-evidence,
+.glyph-review__evidence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+.glyph-review__case-evidence { margin-top: .75rem; }
+.glyph-review__evidence { margin-top: 1rem; }
+.glyph-review__case-evidence span,
+.glyph-review__evidence span {
+  padding: .32rem .55rem;
+  border-radius: 999px;
+  background: #dce6de;
+  font-size: .72rem;
+}
+.glyph-review__trace-toggle {
+  margin-top: .75rem;
+  background: #e4ebdf;
+}
+.glyph-review__trace {
+  margin: .7rem 0 0;
+  padding: .8rem .8rem .8rem 1.9rem;
+  border-radius: 12px;
+  background: #f0f3eb;
+  color: #45534f;
+  font-size: .8rem;
+  line-height: 1.45;
+}
+.glyph-review__trace li + li { margin-top: .3rem; }
 @media (max-width: 760px) {
-  .glyph-review__grid { grid-template-columns: 1fr; }
-  .glyph-review__viewport { height: 205px; }
+  .glyph-review__cases { grid-template-columns: 1fr; }
+  .glyph-review__case-copy { min-height: 0; margin-bottom: .8rem; }
+  .glyph-review__viewport, .glyph-review__stage { height: 190px; }
+  .glyph-review__controls { top: .25rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .glyph-review__glyph { will-change: auto; }
+  .glyph-review__moving { will-change: auto; }
 }

@@ -2,7 +2,7 @@
   "id": "next-action.kp.semantic-glyph-reconciliation-experiment-v0",
   "kind": "next-action",
   "title": "Run semantic-constrained glyph reconciliation experiment",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "sourceRefs": [
     {
@@ -191,6 +191,13 @@
       "scope": "slice-23 complexity-negative migration",
       "checkedAt": "2026-07-25T02:39:41.915Z",
       "notes": "Legacy operation-specific schedule references decreased from frozen 10 to 9. Canonical solve-x declares measured reconciliation constraints and uses neutral legacy fallback. 59 focused and 255 convergence tests pass; architecture, build, and workspace validation pass."
+    },
+    {
+      "command": "npm test; npm run build; npm run test:glyph-reconciliation-experiment; npm run test:semantic-animation-convergence; npm run test:browser:reader-conformance; npm run test:browser:animation-workbench; npm run visual:glyph-reconciliation-experiment; npm run perf:glyph-reconciliation-experiment; npm run perf:animation; npm run check:reader-production; npm run check:dev-review-production; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-24 four-case decision checkpoint",
+      "checkedAt": "2026-07-25T02:48:46.965Z",
+      "notes": "2355 repository tests, 59 focused tests, 255 convergence tests, 9 reader and 14 workbench browser tests pass. Ten wide/phone contact-sheet captures show four cases and symbolic motion with the review inbox mounted. Route gzip 8780 bytes; cold 1.88ms; cached 0.13ms; frame sample 0.003ms; max 35 operations. Review log audit is byte/order stable; no experiment-route notes were present."
     }
   ],
   "progress": {

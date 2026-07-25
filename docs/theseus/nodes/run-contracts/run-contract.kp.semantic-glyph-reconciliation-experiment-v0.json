@@ -2,7 +2,8 @@
   "id": "run-contract.kp.semantic-glyph-reconciliation-experiment-v0",
   "kind": "run-contract",
   "title": "Semantic-constrained glyph reconciliation experiment",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -240,7 +241,8 @@
     {
       "id": "slice-24",
       "title": "Four-case-decision-checkpoint",
-      "status": "planned"
+      "summary": "Completed the four-case wide/phone contact sheet, symbolic playback, compressed-trace drill-down, review-inbox audit, and release-grade evidence; stopped for the required human promotion decision.",
+      "status": "complete"
     }
   ]
 }

@@ -23,6 +23,14 @@ try {
       await page.goto(url.toString(), { waitUntil: "networkidle" });
       await page.evaluate(async () => document.fonts.ready);
       await page.locator("[data-kp-glyph-review]").waitFor();
+      const caseCount = await page.locator("[data-reconciliation-case]").count();
+      if (caseCount !== 4) {
+        throw new Error(`Expected four pressure cases, found ${caseCount}.`);
+      }
+      const motionCount = await page.locator("[data-kp-semantic-motion]").count();
+      if (motionCount < 7) {
+        throw new Error(`Expected symbolic motion across all cases, found ${motionCount} routes.`);
+      }
       const overflow = await page.evaluate(() =>
         document.documentElement.scrollWidth - document.documentElement.clientWidth
       );
@@ -30,13 +38,15 @@ try {
       if (await page.locator("[data-kp-dev-review-shell]").count() !== 1) {
         throw new Error("Review inbox is not mounted.");
       }
-      const file = path.join(outputRoot, `solve-x-${profile.id}-${progress}.png`);
+      const file = path.join(outputRoot, `contact-sheet-${profile.id}-${progress}.png`);
       await page.screenshot({ path: file, fullPage: true });
       evidence.push({
         profile: profile.id,
         progress,
         file: path.relative(process.cwd(), file),
-        overflow
+        overflow,
+        caseCount,
+        motionCount
       });
       await page.close();
     }
