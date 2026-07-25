@@ -120,7 +120,8 @@
     {
       "id": "slice-04",
       "title": "Canonical-executor-lineage-adapter",
-      "status": "planned"
+      "summary": "Projected canonical executor lineage into immutable glyph-blind reconciliation groups with explicit authority and multiplicity; invalid competing lineage is rejected.",
+      "status": "complete"
     },
     {
       "id": "slice-05",

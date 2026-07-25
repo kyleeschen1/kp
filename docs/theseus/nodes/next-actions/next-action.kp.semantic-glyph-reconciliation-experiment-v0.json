@@ -51,6 +51,13 @@
       "scope": "slice-03 durable artifact boundary",
       "checkedAt": "2026-07-25T01:39:03.921Z",
       "notes": "Fourteen focused tests and typecheck pass. Existing assets remain valid; optional constraints clone and validate; serialized constraints exclude measured glyphs, DOM handles, keyframes, and backend plans; capability mismatch must preserve, lower, or reject."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment and npm run typecheck",
+      "status": "passed",
+      "scope": "slice-04 canonical lineage adapter",
+      "checkedAt": "2026-07-25T01:43:55.185Z",
+      "notes": "18 focused tests pass; TypeScript projects pass."
     }
   ],
   "progress": {
