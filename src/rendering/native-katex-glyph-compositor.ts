@@ -1,4 +1,5 @@
 import { syncKpEquationMaterialLayer } from "./equation-material-layer-dom.ts";
+import { sampleKpEquationMaterialOwnerHandoff } from "./equation-material-owner.ts";
 import type {
   KpNativeKatexFragmentObservation
 } from "./native-katex-fragment-observer.ts";
@@ -9,6 +10,18 @@ export interface KpNativeKatexFragmentClone {
   readonly observationId: string;
   readonly ownerElement: HTMLElement;
   readonly visualElement: HTMLElement;
+}
+
+export type KpNativeKatexGlyphVisualOwner =
+  | "source-native"
+  | "clone-transit"
+  | "target-native";
+
+export interface KpNativeKatexGlyphOwnershipFrame {
+  readonly visualOwner: KpNativeKatexGlyphVisualOwner;
+  readonly sourceNativeOpacity: number;
+  readonly cloneOpacity: number;
+  readonly targetNativeOpacity: number;
 }
 
 export function createKpNativeKatexFragmentClone(input: {
@@ -47,6 +60,41 @@ export function createKpNativeKatexFragmentClone(input: {
     observationId: input.observation.id,
     ownerElement,
     visualElement
+  });
+}
+
+export function applyKpNativeKatexGlyphOwnership(input: {
+  readonly clone: KpNativeKatexFragmentClone;
+  readonly source: KpNativeKatexFragmentObservation;
+  readonly target: KpNativeKatexFragmentObservation;
+  readonly progress: number;
+}): KpNativeKatexGlyphOwnershipFrame {
+  const handoff = sampleKpEquationMaterialOwnerHandoff({
+    ownerId: input.clone.ownerElement.dataset["kpEquationMaterialOwnerId"] ?? "",
+    progress: input.progress,
+    sourcePresent: true,
+    targetPresent: true,
+    handoffMode: "atomic-v1"
+  });
+  input.source.sourceElement.style.opacity = String(
+    handoff.sourceNativeOpacity
+  );
+  input.clone.ownerElement.style.opacity = String(handoff.materialOpacity);
+  input.target.sourceElement.style.opacity = String(
+    handoff.targetNativeOpacity
+  );
+  const visualOwner: KpNativeKatexGlyphVisualOwner =
+    handoff.nativeHandoff === "source"
+      ? "source-native"
+      : handoff.nativeHandoff === "target"
+        ? "target-native"
+        : "clone-transit";
+  input.clone.ownerElement.dataset["kpNativeKatexVisualOwner"] = visualOwner;
+  return Object.freeze({
+    visualOwner,
+    sourceNativeOpacity: handoff.sourceNativeOpacity,
+    cloneOpacity: handoff.materialOpacity,
+    targetNativeOpacity: handoff.targetNativeOpacity
   });
 }
 

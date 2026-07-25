@@ -84,6 +84,13 @@
       "scope": "slice-08 computed style fragment clone",
       "checkedAt": "2026-07-25T14:26:38.551Z",
       "notes": "Eight unit tests, five real Chromium tests, and all TypeScript projects pass; actual KaTeX x typography matches and its clone is inert."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-09 exclusive visual ownership",
+      "checkedAt": "2026-07-25T14:28:56.264Z",
+      "notes": "Six real Chromium tests and all TypeScript projects pass; five endpoint/transit samples each have exactly one owner and opacity sum one."
     }
   ],
   "expectedLearning": [

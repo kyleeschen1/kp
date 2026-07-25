@@ -324,3 +324,78 @@ test("material clone uses the exact KaTeX subtree without semantic authority", a
   expect(result.ownerInert).toBe(true);
   expect(result.ownerPointerEvents).toBe("none");
 });
+
+test("source, clone, and target have exactly one visual owner", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  const frames = await page.evaluate(async () => {
+    const stage = document.querySelector<HTMLElement>(
+      '[data-reconciliation-case="solve-x"] [data-case-stage]'
+    )!;
+    const sourceX = stage.querySelector<HTMLElement>(
+      "[data-case-source] .mord.mathnormal"
+    )!;
+    const targetX = stage.querySelector<HTMLElement>(
+      "[data-case-target] .mord.mathnormal"
+    )!;
+    sourceX.dataset["kpMotionId"] = "motion.solve-x.owner-source";
+    targetX.dataset["kpMotionId"] = "motion.solve-x.owner-target";
+    const layer = document.createElement("span");
+    layer.dataset["kpEditorEquationMaterialLayer"] = "true";
+    stage.append(layer);
+    // @ts-expect-error Vite resolves browser-side source modules.
+    const observer = await import("/src/rendering/native-katex-fragment-observer.ts");
+    // @ts-expect-error Vite resolves browser-side source modules.
+    const compositor = await import("/src/rendering/native-katex-glyph-compositor.ts");
+    const observed = observer.observeKpNativeKatexFragments({
+      stage,
+      bindings: [{
+        id: "fragment.owner.source",
+        semanticEntityId: "entity.source.x",
+        motionId: "motion.solve-x.owner-source",
+        glyphKey: "x"
+      }, {
+        id: "fragment.owner.target",
+        semanticEntityId: "entity.target.x",
+        motionId: "motion.solve-x.owner-target",
+        glyphKey: "x"
+      }],
+      fontRevision: 1
+    }).fragments;
+    const clone = compositor.createKpNativeKatexFragmentClone({
+      stage,
+      ownerId: "owner.solve-x.exclusive",
+      observation: observed[0]!
+    });
+    return [0, 0.001, 0.5, 0.999, 1].map((progress) => ({
+      progress,
+      ...compositor.applyKpNativeKatexGlyphOwnership({
+        clone,
+        source: observed[0]!,
+        target: observed[1]!,
+        progress
+      })
+    }));
+  });
+
+  expect(frames.map(({ visualOwner }) => visualOwner)).toEqual([
+    "source-native",
+    "clone-transit",
+    "clone-transit",
+    "clone-transit",
+    "target-native"
+  ]);
+  for (const frame of frames) {
+    expect(
+      frame.sourceNativeOpacity +
+      frame.cloneOpacity +
+      frame.targetNativeOpacity
+    ).toBe(1);
+    expect([
+      frame.sourceNativeOpacity,
+      frame.cloneOpacity,
+      frame.targetNativeOpacity
+    ].filter((opacity) => opacity === 1)).toHaveLength(1);
+  }
+});

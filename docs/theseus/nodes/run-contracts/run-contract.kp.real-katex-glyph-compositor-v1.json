@@ -105,7 +105,8 @@
     {
       "id": "slice-09",
       "title": "Exclusive-visual-ownership",
-      "status": "planned"
+      "summary": "Source native, inert clone transit, and target native now exchange visual authority atomically with no crossfade or double-rendered glyph.",
+      "status": "complete"
     },
     {
       "id": "slice-10",
