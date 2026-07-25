@@ -228,7 +228,8 @@
     {
       "id": "slice-22",
       "title": "Performance-payload-and-cache-budget",
-      "status": "planned"
+      "summary": "Enforced the frozen computation, payload, and cache budgets with a shared compiler cache and production route split.",
+      "status": "complete"
     },
     {
       "id": "slice-23",

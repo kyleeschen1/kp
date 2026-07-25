@@ -115,3 +115,42 @@ export async function compileKpGlyphReconciliationCase(
     }
   });
 }
+
+export class KpGlyphReconciliationCompilerCache {
+  readonly #compiled = new Map<string, Promise<KpCompiledGlyphReconciliationCase>>();
+
+  compile(input: KpGlyphReconciliationCaseInput): Promise<KpCompiledGlyphReconciliationCase> {
+    const key = reconciliationCaseCacheKey(input);
+    const existing = this.#compiled.get(key);
+    if (existing !== undefined) return existing;
+    const compiled = compileKpGlyphReconciliationCase(input);
+    this.#compiled.set(key, compiled);
+    void compiled.catch(() => this.#compiled.delete(key));
+    return compiled;
+  }
+
+  clear(): void {
+    this.#compiled.clear();
+  }
+
+  get size(): number {
+    return this.#compiled.size;
+  }
+}
+
+export function reconciliationCaseCacheKey(input: KpGlyphReconciliationCaseInput): string {
+  return JSON.stringify({
+    id: input.id,
+    execution: input.execution,
+    viewport: input.viewport,
+    sourceGlyphs: input.sourceGlyphs,
+    targetGlyphs: input.targetGlyphs,
+    sourceMetrics: input.sourceMetrics,
+    targetMetrics: input.targetMetrics,
+    sourceProtectedRegions: input.sourceProtectedRegions ?? [],
+    targetProtectedRegions: input.targetProtectedRegions ?? [],
+    requiredCapabilities: input.requiredCapabilities,
+    durationMs: input.durationMs,
+    maxPlannerOperations: input.maxPlannerOperations ?? 10_000
+  });
+}

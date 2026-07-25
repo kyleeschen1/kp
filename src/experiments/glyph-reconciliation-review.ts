@@ -3,7 +3,6 @@ import katex from "katex";
 import "./glyph-reconciliation-review.css";
 import { createKpSolveXGlyphReconciliationCase } from "../animation/semantic-glyph-reconciliation-cases.ts";
 import { compileKpGlyphReconciliationCase } from "../animation/semantic-glyph-reconciliation-compiler.ts";
-import { mountKpDevReview } from "../dev-review/review-bootstrap.ts";
 
 const root = document.querySelector<HTMLElement>("#glyph-experiment");
 if (root === null) throw new Error("Glyph experiment root is missing.");
@@ -116,35 +115,38 @@ play.addEventListener("click", () => {
 });
 
 render(Number(new URL(location.href).searchParams.get("progress") ?? "0") / 1000);
-mountKpDevReview({
-  provider: {
-    id: "experiment.glyph-reconciliation",
-    matches: () => true,
-    capture: () => ({
-      semantic: {
-        documentId: "experiment.semantic-glyph-reconciliation",
-        documentVersion: "1",
-        assetId: compiled.input.id,
-        progressPermille: Number(review.dataset["kpProgress"] ?? "0"),
-        activeTransformationIds: [compiled.input.execution.transformationId],
-        focusRefs: [],
-        playbackDirection: "forward"
-      },
-      render: {
-        rendererId: "static-js-glyph-reconciliation",
-        motionAuthority: "canonical-lineage-plus-bounded-clearance",
-        fontReady: document.fonts.status === "loaded",
-        ownerIds: [compiled.input.id]
-      },
-      temporalTrace: [{
-        offsetMs: 0,
-        progressPermille: Number(review.dataset["kpProgress"] ?? "0"),
-        phase: "solve-x-one-to-one"
-      }]
-    })
-  },
-  placement: (width) => width >= 881 ? "left-prose-rail" : "captured-moment-sheet"
-});
+if (import.meta.env.DEV) {
+  const { mountKpDevReview } = await import("../dev-review/review-bootstrap.ts");
+  mountKpDevReview({
+    provider: {
+      id: "experiment.glyph-reconciliation",
+      matches: () => true,
+      capture: () => ({
+        semantic: {
+          documentId: "experiment.semantic-glyph-reconciliation",
+          documentVersion: "1",
+          assetId: compiled.input.id,
+          progressPermille: Number(review.dataset["kpProgress"] ?? "0"),
+          activeTransformationIds: [compiled.input.execution.transformationId],
+          focusRefs: [],
+          playbackDirection: "forward"
+        },
+        render: {
+          rendererId: "static-js-glyph-reconciliation",
+          motionAuthority: "canonical-lineage-plus-bounded-clearance",
+          fontReady: document.fonts.status === "loaded",
+          ownerIds: [compiled.input.id]
+        },
+        temporalTrace: [{
+          offsetMs: 0,
+          progressPermille: Number(review.dataset["kpProgress"] ?? "0"),
+          phase: "solve-x-one-to-one"
+        }]
+      })
+    },
+    placement: (width) => width >= 881 ? "left-prose-rail" : "captured-moment-sheet"
+  });
+}
 
 function math(latex: string): string {
   return katex.renderToString(latex, { throwOnError: true });

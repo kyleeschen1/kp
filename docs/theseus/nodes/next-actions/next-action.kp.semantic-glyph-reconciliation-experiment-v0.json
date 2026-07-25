@@ -177,6 +177,13 @@
       "scope": "slice-21 package capability proof",
       "checkedAt": "2026-07-25T02:27:02.329Z",
       "notes": "57 focused tests and build pass; source closure contains no network or external authoring runtime."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment; npm run build; npm run perf:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-22 performance budgets",
+      "checkedAt": "2026-07-25T02:34:17.598Z",
+      "notes": "59 focused tests pass; build passes; cold 1.65ms, cached 0.12ms, sample 0.013ms, 35 operations, 2573 plan bytes, 6587 route gzip bytes—all beneath frozen limits."
     }
   ],
   "progress": {
