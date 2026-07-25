@@ -432,6 +432,13 @@
       "scope": "slice-21",
       "checkedAt": "2026-07-25T21:21:29.109Z",
       "notes": "38 focused compositor checks, 38 Chromium checks, all TypeScript projects, and the stable visual entrypoint pass. The isolated governed radical card has exact native source/target settlement, one inert material owner layer in transit, native-only selector focus/title authority, normal and reduced-motion play/rewind at wide and phone widths, and no page overflow. Eight radical captures cover 0, 50, 99.9, and 100 percent at both profiles. Visual inspection found coherent formation, contained native SVG clipping, and no handoff flash; the initial raw-path bounds assertion was corrected to measure KaTeX's actual clipped SVG viewport."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment; npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run visual:glyph-reconciliation-experiment; npm run typecheck; npm run build; npm run perf:glyph-reconciliation-experiment; npm run check:reader-production; npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "slice-22",
+      "checkedAt": "2026-07-25T21:26:16.537Z",
+      "notes": "Radical promotion release gate passes: 66 semantic checks, 38 compositor checks, 38 Chromium compositor checks, 9 reader browser checks, all TypeScript projects, production build, 38 stable capture frames, eight production-route closures, and frozen performance budgets. Route growth is 5558 bytes; scene sampling is 0.011 ms. The production-vocabulary ratchet now forbids radical, exponent, and root-notation terms. The structurally different exemplar uses only generic glyph/rule/path kinds and the existing six lifecycles, has exact native settlement, and does not grow the retained fraction-plus endpoint risk."
     }
   ],
   "allowedWork": [
@@ -589,7 +596,8 @@
     {
       "id": "slice-22",
       "title": "radical-promotion-gate",
-      "status": "planned"
+      "summary": "Promoted the structurally different radical succession as one experiment exemplar. Release, semantic, compositor, Chromium, visual, build, performance, reader-conformance, production-closure, and workspace gates pass. The architecture retains five generic paint kinds, six lifecycles, four production modules, shared sampling/timing, exact native settlement, and no notation-specific runtime vocabulary. The known fraction-plus endpoint mismatch remains bounded and does not occur or expand here. Reader integration may proceed behind one ephemeral adapter seam.",
+      "status": "complete"
     },
     {
       "id": "slice-23",

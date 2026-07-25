@@ -70,7 +70,7 @@ test("promoted compositor stays below module and lifecycle ceilings", async () =
 
   assert.doesNotMatch(
     source,
-    /\b(fraction|quadratic|plus-minus|crowded|phone|wide)\b/i
+    /\b(fraction|radical|exponent|root-notation|quadratic|plus-minus|crowded|phone|wide)\b/i
   );
 });
 
