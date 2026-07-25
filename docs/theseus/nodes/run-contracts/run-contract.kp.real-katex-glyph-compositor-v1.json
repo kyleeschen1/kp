@@ -177,7 +177,8 @@
     {
       "id": "slice-21",
       "title": "Compound-trace-drill-down",
-      "status": "planned"
+      "summary": "Added a ten-operation compressed trace player and optional full-detail disclosure backed by the same canonical ids; nested inspection pauses and restores the exact parent frame.",
+      "status": "complete"
     },
     {
       "id": "slice-22",

@@ -1003,3 +1003,34 @@ test("crowded quadratic uses the same bounded schedule at wide and phone widths"
     '[data-kp-motion-id="motion.crowded.target-result"]'
   )).toHaveText("1");
 });
+
+test("compound trace depicts every operation and restores its paused parent", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=371");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const trace = page.locator("[data-compound-trace]");
+  const slider = page.locator("[data-progress]");
+  const operations = trace.locator("[data-trace-operation]");
+
+  await expect(operations).toHaveCount(10);
+  await trace.locator("[data-trace-inspect]").click();
+  await expect(trace).toHaveAttribute("data-trace-mode", "full-detail");
+  await expect(trace).toHaveAttribute("data-trace-parent-progress", "0.371");
+  await expect(slider).toBeDisabled();
+  await expect(trace.locator("[data-trace-detail-operation]")).toHaveCount(10);
+
+  await trace.locator("[data-trace-inspect]").click();
+  await expect(trace).toHaveAttribute("data-trace-mode", "compressed");
+  await expect(trace).toHaveAttribute("data-trace-restore-exact", "true");
+  await expect(slider).toHaveValue("371");
+  await expect(slider).toBeEnabled();
+
+  await trace.locator("[data-trace-play]").click();
+  await expect(trace).toHaveAttribute("data-trace-completed-cycles", "1", {
+    timeout: 4_000
+  });
+  await expect(trace.locator(
+    '[data-trace-operation][data-trace-state="complete"]'
+  )).toHaveCount(10);
+});

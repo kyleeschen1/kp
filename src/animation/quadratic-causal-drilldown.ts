@@ -44,9 +44,9 @@ export function createKpQuadraticCausalDrillDownBundle(input: {
     presentation: "full-detail",
     actions
   });
-  const parentElapsedMs = Math.round(
-    input.parentProgress * compressed.totalDurationMs
-  );
+  // Preserve fractional elapsed time so closing a nested trace can restore the
+  // caller's exact normalized frame instead of a nearby millisecond.
+  const parentElapsedMs = input.parentProgress * compressed.totalDurationMs;
   const drillDown = createKpCausalChainDrillDown({
     id: `drilldown.quadratic.${suffix}`,
     parentPlan: compressed,

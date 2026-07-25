@@ -16,6 +16,9 @@ import {
 import {
   compileKpGlyphReconciliationCase
 } from "../animation/semantic-glyph-reconciliation-compiler.ts";
+import {
+  createKpGlyphReconciliationCompoundTrace
+} from "../animation/semantic-glyph-reconciliation-compound-trace.ts";
 import { createKpEquationFontReadiness } from "../rendering/equation-font-readiness.ts";
 import {
   applyKpNativeKatexContextReflow,
@@ -60,6 +63,7 @@ const crowdedCompiled = await compileKpGlyphReconciliationCase(
   crowdedCaseInput
 );
 const fractionCloze = createKpFractionMergeClozeProjection();
+const compoundTrace = createKpGlyphReconciliationCompoundTrace();
 const scheduledMotion = compiled.schedule.motions[0]!;
 if (scheduledMotion?.status !== "direct") {
   throw new Error("The solve-x exemplar requires the generic direct clearance route.");
@@ -335,6 +339,64 @@ root.innerHTML = `
         <span data-crowded-route>Common scheduler is measuring protected ± ink</span>
       </div>
     </section>
+    <section
+      class="glyph-exemplar__trace"
+      data-compound-trace
+      data-trace-mode="compressed"
+      data-trace-completed-cycles="0"
+    >
+      <div class="glyph-exemplar__trace-heading">
+        <div>
+          <span>compound work · same canonical trace</span>
+          <h2>Keep the overview fast; let the algebra open</h2>
+        </div>
+        <p>
+          ${compoundTrace.operationIds.length} operations ·
+          ${formatDuration(compoundTrace.compressedDurationMs)} compressed ·
+          ${formatDuration(compoundTrace.fullDurationMs)} inspected
+        </p>
+      </div>
+      <div
+        class="glyph-exemplar__trace-track"
+        role="list"
+        aria-label="Compressed completing-the-square operations"
+      >
+        ${compoundTrace.operationIds.map((operationId, index) => `
+          <span
+            role="listitem"
+            data-trace-operation="${index}"
+            data-canonical-operation-id="${operationId}"
+            title="${operationId}"
+          >${index + 1}</span>
+        `).join("")}
+      </div>
+      <div class="glyph-exemplar__trace-controls">
+        <button type="button" data-trace-play>Play compressed work</button>
+        <button
+          type="button"
+          data-trace-inspect
+          aria-expanded="false"
+          aria-controls="glyph-compound-trace-detail"
+        >Inspect all operations</button>
+        <output data-trace-status aria-live="polite">
+          Every operation remains visible for 180 ms.
+        </output>
+      </div>
+      <ol
+        class="glyph-exemplar__trace-detail"
+        id="glyph-compound-trace-detail"
+        data-trace-detail
+        hidden
+      >
+        ${compoundTrace.accessibilityTranscript.map((entry, index) => `
+          <li data-trace-detail-operation="${index}">
+            ${entry.replace(compoundTrace.operationIds[index]!, readableOperation(
+              compoundTrace.operationIds[index]!
+            ))}
+          </li>
+        `).join("")}
+      </ol>
+    </section>
     <div class="glyph-exemplar__evidence">
       <span>actual KaTeX subtree</span>
       <span>canonical lineage</span>
@@ -390,6 +452,20 @@ const crowdedTarget = root.querySelector<HTMLElement>("[data-crowded-target]")!;
 const crowdedPhase = root.querySelector<HTMLElement>("[data-crowded-phase]")!;
 const crowdedOwner = root.querySelector<HTMLElement>("[data-crowded-owner]")!;
 const crowdedRoute = root.querySelector<HTMLElement>("[data-crowded-route]")!;
+const tracePanel = root.querySelector<HTMLElement>("[data-compound-trace]")!;
+const traceOperations = [
+  ...root.querySelectorAll<HTMLElement>("[data-trace-operation]")
+];
+const tracePlay = root.querySelector<HTMLButtonElement>("[data-trace-play]")!;
+const traceInspect = root.querySelector<HTMLButtonElement>(
+  "[data-trace-inspect]"
+)!;
+const traceDetail = root.querySelector<HTMLOListElement>(
+  "[data-trace-detail]"
+)!;
+const traceStatus = root.querySelector<HTMLOutputElement>(
+  "[data-trace-status]"
+)!;
 
 await fontReadiness.whenReady();
 await nextFrame();
@@ -622,6 +698,8 @@ const playback = compiled.createPlayback({
   apply() {}
 });
 let animationFrame: number | undefined;
+let traceAnimationFrame: number | undefined;
+let traceParentProgress = compoundTrace.drillDown.parentClock.progress;
 let selectedBranch: "both" | "minus" | "plus" = "both";
 let branchAtTarget = false;
 
@@ -813,6 +891,85 @@ branchChoiceButtons.forEach((button) => {
     }
   });
 });
+tracePlay.addEventListener("click", () => {
+  stopPlayback();
+  stopTracePlayback();
+  const startedAt = performance.now();
+  tracePlay.textContent = "Playing…";
+  tracePlay.disabled = true;
+  const tick = (now: number): void => {
+    const elapsedMs = Math.min(
+      compoundTrace.compressedDurationMs,
+      now - startedAt
+    );
+    const activeIndex = Math.min(
+      compoundTrace.operationIds.length - 1,
+      Math.floor(elapsedMs / 180)
+    );
+    traceOperations.forEach((operation, index) => {
+      operation.dataset["traceState"] = index < activeIndex
+        ? "complete"
+        : index === activeIndex
+          ? "active"
+          : "pending";
+    });
+    traceStatus.value =
+      `Compressed operation ${activeIndex + 1} of ${traceOperations.length}`;
+    if (elapsedMs < compoundTrace.compressedDurationMs) {
+      traceAnimationFrame = requestAnimationFrame(tick);
+      return;
+    }
+    traceAnimationFrame = undefined;
+    tracePlay.disabled = false;
+    tracePlay.textContent = "Replay compressed work";
+    traceOperations.forEach((operation) => {
+      operation.dataset["traceState"] = "complete";
+    });
+    tracePanel.dataset["traceCompletedCycles"] = String(
+      Number(tracePanel.dataset["traceCompletedCycles"] ?? "0") + 1
+    );
+    traceStatus.value =
+      `All ${traceOperations.length} canonical operations depicted.`;
+  };
+  traceAnimationFrame = requestAnimationFrame(tick);
+});
+traceInspect.addEventListener("click", () => {
+  const opening = traceInspect.getAttribute("aria-expanded") !== "true";
+  stopPlayback();
+  stopTracePlayback();
+  if (opening) {
+    traceParentProgress = Number(slider.value) / 1000;
+    const liveTrace = createKpGlyphReconciliationCompoundTrace({
+      parentProgress: traceParentProgress
+    });
+    traceInspect.setAttribute("aria-expanded", "true");
+    traceInspect.textContent = "Return to exact overview frame";
+    traceDetail.hidden = false;
+    slider.disabled = true;
+    play.disabled = true;
+    tracePlay.disabled = true;
+    tracePanel.dataset["traceMode"] = "full-detail";
+    tracePanel.dataset["traceParentProgress"] =
+      String(liveTrace.drillDown.parentClock.progress);
+    tracePanel.dataset["traceRestoreExact"] = "pending";
+    traceStatus.value =
+      `Parent paused at ${Math.round(traceParentProgress * 100)}%; ` +
+      `${formatDuration(liveTrace.fullDurationMs)} full trace exposed.`;
+    return;
+  }
+  traceInspect.setAttribute("aria-expanded", "false");
+  traceInspect.textContent = "Inspect all operations";
+  traceDetail.hidden = true;
+  slider.disabled = false;
+  play.disabled = false;
+  tracePlay.disabled = false;
+  render(traceParentProgress);
+  tracePanel.dataset["traceMode"] = "compressed";
+  tracePanel.dataset["traceRestoreExact"] =
+    Number(slider.value) / 1000 === traceParentProgress ? "true" : "false";
+  traceStatus.value =
+    `Exact ${Math.round(traceParentProgress * 100)}% overview frame restored.`;
+});
 play.addEventListener("click", () => {
   if (animationFrame !== undefined) {
     stopPlayback();
@@ -967,6 +1124,18 @@ function stopPlayback(): void {
   play.textContent = Number(slider.value) >= 1000 ? "Rewind" : "Play";
 }
 
+function stopTracePlayback(): void {
+  if (traceAnimationFrame !== undefined) {
+    cancelAnimationFrame(traceAnimationFrame);
+  }
+  traceAnimationFrame = undefined;
+  tracePlay.disabled = false;
+  tracePlay.textContent = "Play compressed work";
+  traceOperations.forEach((operation) => {
+    operation.dataset["traceState"] = "pending";
+  });
+}
+
 function applyBranchSelection(): void {
   branchChoiceButtons.forEach((button) => {
     button.setAttribute(
@@ -1011,6 +1180,19 @@ function clamp(value: number): number {
 
 function lerp(source: number, target: number, progress: number): number {
   return source + (target - source) * progress;
+}
+
+function readableOperation(operationId: string): string {
+  return operationId
+    .split(".")
+    .at(-1)!
+    .split("-")
+    .join(" ");
+}
+
+function formatDuration(durationMs: number): string {
+  const seconds = durationMs / 1000;
+  return Number.isInteger(seconds) ? `${seconds}s` : `${seconds.toFixed(1)}s`;
 }
 
 function nextFrame(): Promise<void> {

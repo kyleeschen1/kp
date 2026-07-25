@@ -10,10 +10,12 @@ export interface KpGlyphReconciliationCompoundTrace {
   readonly drillDown: ReturnType<typeof createKpQuadraticCausalDrillDownBundle>["drillDown"];
 }
 
-export function createKpGlyphReconciliationCompoundTrace(): KpGlyphReconciliationCompoundTrace {
+export function createKpGlyphReconciliationCompoundTrace(input: {
+  readonly parentProgress?: number;
+} = {}): KpGlyphReconciliationCompoundTrace {
   const bundle = createKpQuadraticCausalDrillDownBundle({
     methodId: "method.quadratic.completing-square",
-    parentProgress: 0.5
+    parentProgress: input.parentProgress ?? 0.5
   });
   const operationIds = bundle.compressed.actions.map(({ canonicalOperationId }) =>
     canonicalOperationId

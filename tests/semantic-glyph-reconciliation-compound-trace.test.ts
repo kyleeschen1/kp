@@ -14,7 +14,9 @@ test("compound trace speeds up every canonical operation without omission", () =
 });
 
 test("compound trace drill-down restores the exact paused parent frame", () => {
-  const trace = createKpGlyphReconciliationCompoundTrace();
+  const trace = createKpGlyphReconciliationCompoundTrace({
+    parentProgress: 0.371
+  });
 
   assert.equal(trace.drillDown.parentClock.paused, true);
   assert.equal(trace.drillDown.childClock.nested, true);
@@ -22,4 +24,5 @@ test("compound trace drill-down restores the exact paused parent frame", () => {
   assert.equal(trace.drillDown.restore.elapsedMs, trace.drillDown.parentClock.elapsedMs);
   assert.equal(trace.drillDown.restore.progress, trace.drillDown.parentClock.progress);
   assert.deepEqual(trace.drillDown.actionIds, trace.operationIds);
+  assert.equal(trace.drillDown.parentClock.progress, 0.371);
 });

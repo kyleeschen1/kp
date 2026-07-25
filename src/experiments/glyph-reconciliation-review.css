@@ -375,6 +375,121 @@ button, input { font: inherit; }
   margin-top: 1rem;
 }
 
+.glyph-exemplar__trace {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.1rem;
+  padding: 1.25rem;
+  border: 1px solid #c6ccc6;
+  border-radius: 20px;
+  background: rgba(250, 252, 246, .82);
+}
+
+.glyph-exemplar__trace-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.glyph-exemplar__trace-heading span {
+  color: #27705b;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.glyph-exemplar__trace-heading h2 {
+  margin-top: .25rem;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+}
+
+.glyph-exemplar__trace-heading > p {
+  color: #64706c;
+  font-size: .75rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.glyph-exemplar__trace-track {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(1.6rem, 1fr));
+  gap: .35rem;
+}
+
+.glyph-exemplar__trace-track span {
+  display: grid;
+  min-height: 2.1rem;
+  place-items: center;
+  border: 1px solid #c8d0c9;
+  border-radius: 7px;
+  background: #e7ebe6;
+  color: #65706c;
+  font-size: .72rem;
+  font-weight: 800;
+  transition:
+    background-color 90ms linear,
+    color 90ms linear,
+    transform 90ms linear;
+}
+
+.glyph-exemplar__trace-track span[data-trace-state="active"] {
+  border-color: #27705b;
+  background: #d8ff73;
+  color: #18372e;
+  transform: translateY(-3px);
+}
+
+.glyph-exemplar__trace-track span[data-trace-state="complete"] {
+  background: #27705b;
+  color: #fff;
+}
+
+.glyph-exemplar__trace-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .65rem;
+}
+
+.glyph-exemplar__trace-controls button {
+  border: 0;
+  border-radius: 999px;
+  padding: .56rem .85rem;
+  background: #263a34;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.glyph-exemplar__trace-controls button:disabled {
+  cursor: default;
+  opacity: .55;
+}
+
+.glyph-exemplar__trace-controls output {
+  flex: 1;
+  min-width: 14rem;
+  color: #52615c;
+  font-size: .76rem;
+}
+
+.glyph-exemplar__trace-detail {
+  display: grid;
+  gap: .45rem;
+  margin: 0;
+  padding: 1rem 1rem 1rem 2.6rem;
+  border-radius: 12px;
+  background: #edf1e9;
+  color: #354640;
+  font-size: .78rem;
+}
+
+.glyph-exemplar__trace-detail[hidden] {
+  display: none;
+}
+
 .glyph-exemplar__evidence span {
   padding: .35rem .62rem;
   border: 1px solid #c5cdc6;
@@ -392,6 +507,14 @@ button, input { font: inherit; }
   .glyph-exemplar__prompt > p { text-align: left; }
   .glyph-exemplar__annotation { display: grid; }
   .glyph-exemplar__stage { font-size: clamp(1.5rem, 10cqw, 2.4rem); }
+  .glyph-exemplar__trace-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+  .glyph-exemplar__trace-heading > p { text-align: left; }
+  .glyph-exemplar__trace-track {
+    grid-template-columns: repeat(5, minmax(1.6rem, 1fr));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
