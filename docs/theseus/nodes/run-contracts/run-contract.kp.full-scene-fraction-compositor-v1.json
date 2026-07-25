@@ -72,6 +72,13 @@
       "scope": "slice-07 scene settlement and invalidation",
       "checkedAt": "2026-07-25T17:20:44.569Z",
       "notes": "22 Chromium tests and all TypeScript projects pass; complete scene inventories stay stable across consecutive frames and viewport changes produce new cache keys."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-08 complete endpoint inventories",
+      "checkedAt": "2026-07-25T17:25:14.611Z",
+      "notes": "16 focused tests, 23 Chromium tests, and all TypeScript projects pass; both wide and phone routes expose total source/target atom and group counts, and the controller remains below 40 KB."
     }
   ],
   "allowedWork": [
@@ -142,7 +149,8 @@
     {
       "id": "slice-08",
       "title": "complete-endpoint-inventories",
-      "status": "planned"
+      "summary": "Observed and exposed complete source and target fraction paint/group inventories at route startup; extracted experiment fixture and geometry helpers to preserve the controller complexity ratchet.",
+      "status": "complete"
     },
     {
       "id": "slice-09",

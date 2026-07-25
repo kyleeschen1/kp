@@ -2,6 +2,13 @@ import katex from "katex";
 
 import "./glyph-reconciliation-review.css";
 import {
+  createKpGlyphReconciliationFractionMath
+} from "./glyph-reconciliation-fraction-math.ts";
+import {
+  directScheduleProgress,
+  projectScheduledRect
+} from "./glyph-reconciliation-geometry.ts";
+import {
   projectKpCanonicalExecutionLineage
 } from "../animation/canonical-operation-lineage-adapter.ts";
 import {
@@ -119,84 +126,20 @@ const crowdedDisposition = decideKpNativeKatexCompositorDisposition({
 renderMathSlots("solve-x", math("x"));
 renderMathSlots("solve-departing", math("{}+3-3"));
 renderMathSlots("solve-context", math("{}=7-3"));
-renderMathSlots(
-  "fraction-source",
-  trustedMath(
-    semanticMath({
-      entityId: "fraction.expression",
-      groupId: "group.fraction.source",
-      latex:
-        semanticMath({
-          entityId: "fraction.left",
-          groupId: "group.fraction.source.left",
-          latex: String.raw`\frac{${semanticMath({
-            entityId: "symbol.x",
-            groupId: "group.fraction.source.left.numerator",
-            latex: "x"
-          })}}{${semanticMath({
-            entityId: fractionCaseInput.sourceGlyphs[0]!.entityId,
-            groupId: "group.fraction.source.left.denominator",
-            latex: String.raw`\htmlData{kp-motion-id=motion.fraction.source-denominator-a}{2}`
-          })}}`
-        }) +
-        semanticMath({
-          entityId: "operator.add",
-          groupId: "group.fraction.source.operator",
-          latex: "+"
-        }) +
-        semanticMath({
-          entityId: "fraction.right",
-          groupId: "group.fraction.source.right",
-          latex: String.raw`\frac{${semanticMath({
-            entityId: "symbol.y",
-            groupId: "group.fraction.source.right.numerator",
-            latex: "y"
-          })}}{${semanticMath({
-            entityId: fractionCaseInput.sourceGlyphs[1]!.entityId,
-            groupId: "group.fraction.source.right.denominator",
-            latex: String.raw`\htmlData{kp-motion-id=motion.fraction.source-denominator-b}{2}`
-          })}}`
-        })
-    })
-  )
-);
-renderMathSlots(
-  "fraction-target",
-  trustedMath(
-    semanticMath({
-      entityId: "fraction.expression",
-      groupId: "group.fraction.target",
-      latex: semanticMath({
-        entityId: "fraction.merged",
-        groupId: "group.fraction.target.merged",
-        latex: String.raw`\frac{${semanticMath({
-          entityId: "fraction.merged.numerator",
-          groupId: "group.fraction.target.merged.numerator",
-          latex:
-            semanticMath({
-              entityId: "symbol.x",
-              groupId: "group.fraction.target.merged.numerator.x",
-              latex: "x"
-            }) +
-            semanticMath({
-              entityId: "operator.add",
-              groupId: "group.fraction.target.merged.numerator.operator",
-              latex: "+"
-            }) +
-            semanticMath({
-              entityId: "symbol.y",
-              groupId: "group.fraction.target.merged.numerator.y",
-              latex: "y"
-            })
-        })}}{${semanticMath({
-          entityId: fractionCaseInput.targetGlyphs[0]!.entityId,
-          groupId: "group.fraction.target.merged.denominator",
-          latex: String.raw`\htmlData{kp-motion-id=motion.fraction.target-denominator}{2}`
-        })}}`
-      })
-    })
-  )
-);
+const fractionMath = createKpGlyphReconciliationFractionMath({
+  sourceDenominatorEntityIds: [
+    fractionCaseInput.sourceGlyphs[0]!.entityId,
+    fractionCaseInput.sourceGlyphs[1]!.entityId
+  ],
+  targetDenominatorEntityId: fractionCaseInput.targetGlyphs[0]!.entityId,
+  sourceDenominatorMotionIds: [
+    "motion.fraction.source-denominator-a",
+    "motion.fraction.source-denominator-b"
+  ],
+  targetDenominatorMotionId: "motion.fraction.target-denominator"
+});
+renderMathSlots("fraction-source", trustedMath(fractionMath.source));
+renderMathSlots("fraction-target", trustedMath(fractionMath.target));
 renderMathSlots(
   "branch-source",
   trustedMath(
@@ -282,6 +225,9 @@ const fractionSource = root.querySelector<HTMLElement>("[data-fraction-source]")
 const fractionTarget = root.querySelector<HTMLElement>("[data-fraction-target]")!;
 const fractionPhase = root.querySelector<HTMLElement>("[data-fraction-phase]")!;
 const fractionOwner = root.querySelector<HTMLElement>("[data-fraction-owner]")!;
+const fractionInventory = root.querySelector<HTMLElement>(
+  "[data-fraction-inventory]"
+)!;
 const fractionClozeButton = root.querySelector<HTMLButtonElement>(
   "[data-fraction-cloze]"
 )!;
@@ -334,6 +280,36 @@ placeNative(sourceX, sourceXRect);
 placeNative(targetX, targetXRect);
 placeNative(departing, departingRect);
 placeNative(context, sourceContextRect);
+
+const [fractionSourceScene, fractionTargetScene] = await Promise.all([
+  settleAndObserveKpNativeKatexRenderedScene({
+    endpoint: "source",
+    stage: fractionStage,
+    root: fractionSource,
+    semanticEntityId: "fraction.expression",
+    presentationGroupId: "group.fraction.source",
+    fontReadiness
+  }),
+  settleAndObserveKpNativeKatexRenderedScene({
+    endpoint: "target",
+    stage: fractionStage,
+    root: fractionTarget,
+    semanticEntityId: "fraction.expression",
+    presentationGroupId: "group.fraction.target",
+    fontReadiness
+  })
+]);
+review.dataset["kpFractionSourceAtomCount"] =
+  String(fractionSourceScene.atoms.length);
+review.dataset["kpFractionTargetAtomCount"] =
+  String(fractionTargetScene.atoms.length);
+review.dataset["kpFractionSourceGroupCount"] =
+  String(fractionSourceScene.groups.length);
+review.dataset["kpFractionTargetGroupCount"] =
+  String(fractionTargetScene.groups.length);
+fractionInventory.textContent =
+  `${fractionSourceScene.atoms.length} source + ` +
+  `${fractionTargetScene.atoms.length} target paint atoms inventoried`;
 
 const sourceObservation = await settleAndObserveKpNativeKatexFragments({
   stage,
@@ -949,68 +925,6 @@ function placeNative(
   });
 }
 
-function directScheduleProgress(
-  waypoints: readonly { readonly x: number; readonly y: number }[],
-  x: number,
-  y: number
-): number {
-  const source = waypoints[0];
-  const target = waypoints[waypoints.length - 1];
-  if (source === undefined || target === undefined) return 1;
-  const dx = target.x - source.x;
-  const dy = target.y - source.y;
-  const lengthSquared = dx * dx + dy * dy;
-  if (lengthSquared === 0) return 1;
-  return clamp(((x - source.x) * dx + (y - source.y) * dy) / lengthSquared);
-}
-
-function projectScheduledRect(input: {
-  readonly motion: {
-    readonly status: "direct" | "clearance-route" | "settle";
-    readonly waypoints: readonly { readonly x: number; readonly y: number }[];
-  };
-  readonly sample: { readonly x: number; readonly y: number };
-  readonly source: KpStageRelativeRect;
-  readonly target: KpStageRelativeRect;
-  readonly progress: number;
-  readonly sourceViewport: { readonly width: number; readonly height: number };
-  readonly targetViewport: { readonly width: number; readonly height: number };
-}): KpStageRelativeRect {
-  if (input.motion.status === "settle") {
-    return input.progress < 1 ? input.source : input.target;
-  }
-  const sourcePoint = input.motion.waypoints[0]!;
-  const targetPoint = input.motion.waypoints.at(-1)!;
-  const scaleX = input.targetViewport.width / input.sourceViewport.width;
-  const scaleY = input.targetViewport.height / input.sourceViewport.height;
-  const actualSourceCenter = {
-    x: input.source.left + input.source.width / 2,
-    y: input.source.top + input.source.height / 2
-  };
-  const actualTargetCenter = {
-    x: input.target.left + input.target.width / 2,
-    y: input.target.top + input.target.height / 2
-  };
-  const correctionX = lerp(
-    actualSourceCenter.x - sourcePoint.x * scaleX,
-    actualTargetCenter.x - targetPoint.x * scaleX,
-    input.progress
-  );
-  const correctionY = lerp(
-    actualSourceCenter.y - sourcePoint.y * scaleY,
-    actualTargetCenter.y - targetPoint.y * scaleY,
-    input.progress
-  );
-  const width = lerp(input.source.width, input.target.width, input.progress);
-  const height = lerp(input.source.height, input.target.height, input.progress);
-  return {
-    left: input.sample.x * scaleX + correctionX - width / 2,
-    top: input.sample.y * scaleY + correctionY - height / 2,
-    width,
-    height
-  };
-}
-
 function stopPlayback(): void {
   if (animationFrame !== undefined) cancelAnimationFrame(animationFrame);
   animationFrame = undefined;
@@ -1088,14 +1002,6 @@ function trustedMath(latex: string): string {
     strict: false,
     trust: (context) => context.command === "\\htmlData"
   });
-}
-
-function semanticMath(input: {
-  readonly entityId: string;
-  readonly groupId: string;
-  readonly latex: string;
-}): string {
-  return String.raw`\htmlData{kp-semantic-entity-id=${input.entityId},kp-presentation-group-id=${input.groupId}}{${input.latex}}`;
 }
 
 function clamp(value: number): number {

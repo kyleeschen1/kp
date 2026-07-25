@@ -277,6 +277,34 @@ test("complete scene observation settles and invalidates by viewport", async ({
   expect(phoneKey).not.toBe(first.viewportKey);
 });
 
+test("live fraction route exposes complete source and target inventories", async ({
+  page
+}) => {
+  for (const viewport of [
+    { width: 1440, height: 950 },
+    { width: 390, height: 844 }
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+    const review = page.locator('[data-kp-glyph-review][data-kp-ready="true"]');
+    await review.waitFor();
+    const inventory = await review.evaluate((element) => ({
+      sourceAtoms: Number(element.dataset["kpFractionSourceAtomCount"]),
+      targetAtoms: Number(element.dataset["kpFractionTargetAtomCount"]),
+      sourceGroups: Number(element.dataset["kpFractionSourceGroupCount"]),
+      targetGroups: Number(element.dataset["kpFractionTargetGroupCount"])
+    }));
+
+    expect(inventory.sourceAtoms).toBeGreaterThanOrEqual(7);
+    expect(inventory.targetAtoms).toBeGreaterThanOrEqual(5);
+    expect(inventory.sourceGroups).toBeGreaterThanOrEqual(7);
+    expect(inventory.targetGroups).toBeGreaterThanOrEqual(6);
+    await expect(page.locator("[data-fraction-inventory]")).toContainText(
+      "paint atoms inventoried"
+    );
+  }
+});
+
 test("observer rejects missing and duplicate explicit motion nodes", async ({
   page
 }) => {
