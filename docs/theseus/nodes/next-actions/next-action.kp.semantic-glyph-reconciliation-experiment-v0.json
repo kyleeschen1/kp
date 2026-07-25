@@ -107,6 +107,13 @@
       "scope": "slice-11 headless backend",
       "checkedAt": "2026-07-25T01:58:29.802Z",
       "notes": "36 focused tests and typecheck pass."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment and npm run typecheck",
+      "status": "passed",
+      "scope": "slice-12 static JS seam",
+      "checkedAt": "2026-07-25T02:00:43.006Z",
+      "notes": "39 focused tests and typecheck pass."
     }
   ],
   "progress": {

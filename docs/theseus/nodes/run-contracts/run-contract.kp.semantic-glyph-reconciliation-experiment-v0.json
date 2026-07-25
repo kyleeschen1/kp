@@ -168,7 +168,8 @@
     {
       "id": "slice-12",
       "title": "JavaScript-renderer-seam",
-      "status": "planned"
+      "summary": "Added dependency-free static-JS playback with deterministic polyline sampling, direct seek and rewind, explicit settle crossfade, and strict host binding.",
+      "status": "complete"
     },
     {
       "id": "slice-13",
