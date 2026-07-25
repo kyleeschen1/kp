@@ -390,6 +390,6 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         { id: "graph-phone", label: "Roots meet the graph · phone", progressPermille: 1_000, viewport: "phone" }
       ]
     },
-    budget: routeBudget(38_677, 5_796, 46_455)
+    budget: routeBudget(85_702, 7_622, 51_142)
   })
 ]);

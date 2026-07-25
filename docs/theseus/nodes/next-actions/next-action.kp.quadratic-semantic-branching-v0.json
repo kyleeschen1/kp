@@ -2,12 +2,16 @@
   "id": "next-action.kp.quadratic-semantic-branching-v0",
   "kind": "next-action",
   "title": "Build quadratic semantic branching exemplar",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-24-quadratic-semantic-branching-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-24-quadratic-operation-presentation-governance-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -342,11 +346,25 @@
       "scope": "slice-19 route conformance and generation ratchet",
       "checkedAt": "2026-07-25T00:19:51.870Z",
       "notes": "Twenty-three focused checks, typecheck, all architecture gates, twelve quadratic Chromium checks, all nine shared reader conformance checks, and 33 deterministic review frames passed. Every generated reader declares certified presentation governance and forbids generic fallback; both quadratic method traces close structure, exact coverage, total material roles, ordered phases, registered motifs, and live browser phase evidence."
+    },
+    {
+      "command": "npm test; npm run test:semantic-animation-convergence; npm run typecheck; npm run build; npm run test:browser:reader-conformance; focused quadratic Chromium; npm run test:browser:animation-workbench; npm run visual:quadratic-branching; npm run check:reader-production; npm run check:reader-budgets; npm run check:dev-review-production; npm run audit:presentation-groups; npm run perf:animation; focused route-budget tests; git diff --check",
+      "status": "passed",
+      "scope": "slice-20 renewed human exemplar checkpoint",
+      "checkedAt": "2026-07-25T00:31:57.664Z",
+      "notes": "2296 repository tests, 255 convergence tests, 9 shared-reader tests, 12 quadratic Chromium tests, 14 Workbench tests, 7 focused route-governance tests, typecheck, production build, 8-route closure, exact ratcheted route budgets, review-production closure, presentation audit, performance with no regressions, 14 preservation captures, and a deterministic 33-frame contact sheet passed. Human visual approval remains required; publication and generalization remain blocked."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-20 durable checkpoint graph",
+      "checkedAt": "2026-07-25T00:32:27.803Z",
+      "notes": "Validated 774 nodes and 11808 events after completing the run contract and recording the HUMAN_CHECKPOINT target state."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT rejected after review notes 13-20. Graph, plus-minus branches, exact semantics, review lifecycle, and shared runtime are accepted; algebra presentation requires operation-specific causal traces, compressed contextual steps with exact drill-down, and direct branch-to-graph continuity. Publication is blocked and run-contract.kp.quadratic-operation-presentation-governance-v0 is approved and active."
+    "summary": "HUMAN_CHECKPOINT: the renewed exemplar now presents both algebra methods as certified operation-specific causal traces, supports exact nested drill-down, hands signed branches directly to graph roots, preserves the standard review inbox, and passes release gates. Explicit visual approval is still required before Workbench publication or contract generalization."
   },
   "expectedLearning": [
     "Whether explicit quadratic method paths, plus-minus solution branching, and graph-root correspondence can share stable semantic identity and exact rewind without renderer-owned algebra.",

@@ -2,7 +2,8 @@
   "id": "run-contract.kp.quadratic-operation-presentation-governance-v0",
   "kind": "run-contract",
   "title": "Quadratic operation-presentation governance",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -176,7 +177,8 @@
     {
       "id": "slice-20",
       "title": "Renewed-human-exemplar-checkpoint",
-      "status": "planned"
+      "summary": "Renewed human-exemplar checkpoint assembled and verified: certified operation traces, exact drill-down, direct branch-to-graph presentation, review inbox, route budget ratchet, full release gates, and 33-frame evidence are ready for review. Stop at HUMAN_CHECKPOINT before publication or generalization.",
+      "status": "complete"
     }
   ]
 }
