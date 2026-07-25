@@ -132,7 +132,8 @@
     {
       "id": "slice-06",
       "title": "Lineage-constrained-matcher",
-      "status": "planned"
+      "summary": "Added a glyph matcher that admits candidates only within canonical lineage, leaves equal unconnected glyphs unmatched, and reports repeated-token ambiguity.",
+      "status": "complete"
     },
     {
       "id": "slice-07",

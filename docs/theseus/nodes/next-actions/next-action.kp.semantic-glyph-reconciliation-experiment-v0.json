@@ -65,6 +65,13 @@
       "scope": "slice-05 ephemeral plan",
       "checkedAt": "2026-07-25T01:46:31.087Z",
       "notes": "21 focused tests pass; typecheck passes."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment and npm run typecheck",
+      "status": "passed",
+      "scope": "slice-06 lineage matcher",
+      "checkedAt": "2026-07-25T01:48:45.044Z",
+      "notes": "25 focused tests and typecheck pass."
     }
   ],
   "progress": {
