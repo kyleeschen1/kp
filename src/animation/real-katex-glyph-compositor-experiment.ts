@@ -9,6 +9,7 @@ export interface KpRealGlyphCompositorExperimentLedger {
   readonly canonicalCaseId: "case.solve-x.one-to-one";
   readonly currentRenderer: "approximate-text-overlay";
   readonly baselineFailureCodes: readonly KpRealGlyphBaselineFailureCode[];
+  readonly durableForbiddenFields: readonly string[];
   readonly exemplarAcceptance: readonly string[];
   readonly maxProductionModules: 4;
   readonly maxLifecyclePrimitives: 6;
@@ -25,6 +26,13 @@ KpRealGlyphCompositorExperimentLedger = Object.freeze({
     "approximate-text-overlay",
     "mid-flight-character-substitution",
     "unregistered-native-handoff"
+  ] as const),
+  durableForbiddenFields: Object.freeze([
+    "backendPlan",
+    "domHandle",
+    "glyphRect",
+    "keyframes",
+    "nativeFragmentObservations"
   ]),
   exemplarAcceptance: Object.freeze([
     "Actual computed-style KaTeX fragments own visible transit.",
@@ -48,6 +56,12 @@ export function validateKpRealGlyphCompositorExperimentLedger(
   }
   if (ledger.exemplarAcceptance.length !== 6) {
     issues.push("The real-glyph exemplar requires six frozen acceptance laws.");
+  }
+  if (
+    ledger.durableForbiddenFields.length !== 5 ||
+    new Set(ledger.durableForbiddenFields).size !== 5
+  ) {
+    issues.push("The durable artifact boundary requires five forbidden fields.");
   }
   if (
     ledger.maxProductionModules !== 4 ||

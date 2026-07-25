@@ -35,6 +35,13 @@
       "scope": "slice-01 failed overlay baseline",
       "checkedAt": "2026-07-25T14:04:56.471Z",
       "notes": "Two ledger tests pass and ten wide/phone baseline frames reproduce the crossfade, approximate overlay, character substitution, and unregistered handoff failure."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-02 durable boundary",
+      "checkedAt": "2026-07-25T14:07:32.048Z",
+      "notes": "Three focused tests and all TypeScript projects pass; forged DOM, glyph rectangle, keyframe, backend plan, and fragment observation fields are stripped."
     }
   ],
   "expectedLearning": [

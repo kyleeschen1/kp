@@ -63,7 +63,8 @@
     {
       "id": "slice-02",
       "title": "Durable-boundary-ratchet",
-      "status": "planned"
+      "summary": "Ratchet-tested the durable artifact boundary against five classes of ephemeral compositor state.",
+      "status": "complete"
     },
     {
       "id": "slice-03",
