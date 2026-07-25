@@ -5,6 +5,10 @@ import {
   createKpGlyphReconciliationFractionMath
 } from "./glyph-reconciliation-fraction-math.ts";
 import {
+  createKpFractionExperimentScene,
+  type KpFractionExperimentDirection
+} from "./glyph-reconciliation-fraction-scene.ts";
+import {
   directScheduleProgress,
   projectScheduledRect
 } from "./glyph-reconciliation-geometry.ts";
@@ -18,7 +22,8 @@ import {
   createKpSolveXGlyphReconciliationCase
 } from "../animation/semantic-glyph-reconciliation-cases.ts";
 import {
-  createKpFractionMergeClozeProjection
+  createKpFractionMergeClozeProjection,
+  createKpFractionSplitClozeProjection
 } from "../animation/semantic-glyph-reconciliation-cloze.ts";
 import {
   compileKpGlyphReconciliationCase
@@ -48,16 +53,6 @@ import {
   observeKpNativeKatexPaintAtoms,
   settleAndObserveKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";
-import {
-  compileKpNativeKatexHierarchicalScenePlan,
-  compileKpNativeKatexSceneTracks,
-  correlateKpNativeKatexSceneHandoff,
-  createKpNativeKatexScenePlayback,
-  measureKpNativeKatexGlyphHandoff,
-  measureKpNativeKatexRuleHandoff,
-  reconcileKpNativeKatexScenes,
-  traceKpNativeKatexHandoffOwnership
-} from "../rendering/native-katex-scene-compositor.ts";
 
 const rootNode = document.querySelector<HTMLElement>("#glyph-experiment");
 if (rootNode === null) throw new Error("Glyph experiment root is missing.");
@@ -65,6 +60,10 @@ const root = rootNode;
 const reducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
+const fractionDirection: KpFractionExperimentDirection =
+  new URL(location.href).searchParams.get("fractionDirection") === "split"
+    ? "split"
+    : "merge";
 if (import.meta.env.DEV) {
   Object.assign(window, {
     __kpObserveNativeKatexFragments: observeKpNativeKatexFragments,
@@ -91,7 +90,9 @@ const crowdedCaseInput = createKpCrowdedQuadraticGlyphReconciliationCase(
 const crowdedCompiled = await compileKpGlyphReconciliationCase(
   crowdedCaseInput
 );
-const fractionCloze = createKpFractionMergeClozeProjection();
+const fractionCloze = fractionDirection === "split"
+  ? createKpFractionSplitClozeProjection()
+  : createKpFractionMergeClozeProjection();
 const compoundTrace = createKpGlyphReconciliationCompoundTrace();
 const scheduledMotion = compiled.schedule.motions[0]!;
 if (scheduledMotion?.status !== "direct") {
@@ -234,6 +235,26 @@ const fractionClozeButton = root.querySelector<HTMLButtonElement>(
 const fractionClozeStatus = root.querySelector<HTMLOutputElement>(
   "[data-fraction-cloze-status]"
 )!;
+const fractionCard = root.querySelector<HTMLElement>("[data-fraction-card]")!;
+const fractionTitle = root.querySelector<HTMLElement>(
+  "[data-fraction-title]"
+)!;
+const fractionLineage = root.querySelector<HTMLElement>(
+  "[data-fraction-lineage]"
+)!;
+const fractionProgress = root.querySelector<HTMLInputElement>(
+  "[data-fraction-progress]"
+)!;
+if (fractionDirection === "split") {
+  fractionCard.dataset["reconciliationCase"] = "fraction-split";
+  fractionTitle.textContent = "Split one native fraction across its sum";
+  fractionLineage.textContent = "one-to-many semantic lineage";
+  fractionProgress.setAttribute(
+    "aria-label",
+    "Fraction split animation progress"
+  );
+}
+review.dataset["kpFractionDirection"] = fractionDirection;
 const branchStage = root.querySelector<HTMLElement>("[data-branch-stage]")!;
 const branchSource = root.querySelector<HTMLElement>("[data-branch-source]")!;
 const branchTargets = {
@@ -281,24 +302,23 @@ placeNative(targetX, targetXRect);
 placeNative(departing, departingRect);
 placeNative(context, sourceContextRect);
 
-const [fractionSourceScene, fractionTargetScene] = await Promise.all([
-  settleAndObserveKpNativeKatexRenderedScene({
-    endpoint: "source",
-    stage: fractionStage,
-    root: fractionSource,
-    semanticEntityId: "fraction.expression",
-    presentationGroupId: "group.fraction.source",
-    fontReadiness
-  }),
-  settleAndObserveKpNativeKatexRenderedScene({
-    endpoint: "target",
-    stage: fractionStage,
-    root: fractionTarget,
-    semanticEntityId: "fraction.expression",
-    presentationGroupId: "group.fraction.target",
-    fontReadiness
-  })
-]);
+const fractionScene = await createKpFractionExperimentScene({
+  direction: fractionDirection,
+  stage: fractionStage,
+  splitRoot: fractionSource,
+  mergedRoot: fractionTarget,
+  fontReadiness
+});
+const {
+  sourceScene: fractionSourceScene,
+  targetScene: fractionTargetScene,
+  sourceRoot: activeFractionSource,
+  targetRoot: activeFractionTarget,
+  reconciliation: fractionSceneReconciliation,
+  tracks: fractionSceneTracks,
+  ruleTracks: fractionRuleTracks,
+  playback: fractionScenePlayback
+} = fractionScene;
 review.dataset["kpFractionSourceAtomCount"] =
   String(fractionSourceScene.atoms.length);
 review.dataset["kpFractionTargetAtomCount"] =
@@ -310,77 +330,17 @@ review.dataset["kpFractionTargetGroupCount"] =
 fractionInventory.textContent =
   `${fractionSourceScene.atoms.length} source + ` +
   `${fractionTargetScene.atoms.length} target paint atoms inventoried`;
-const fractionSceneReconciliation = reconcileKpNativeKatexScenes({
-  source: fractionSourceScene,
-  target: fractionTargetScene,
-  relations: [{
-    id: "lineage.fraction.denominators",
-    relation: "merge",
-    sourceEntityIds: fractionCaseInput.sourceGlyphs.map(({ entityId }) =>
-      entityId
-    ),
-    targetEntityIds: fractionCaseInput.targetGlyphs.map(({ entityId }) =>
-      entityId
-    )
-  }, {
-    id: "lineage.structural.rules",
-    relation: "merge",
-    sourceEntityIds: ["fraction.left", "fraction.right"],
-    targetEntityIds: ["fraction.merged"]
-  }]
-});
-const fractionSceneTracks = compileKpNativeKatexSceneTracks(
-  compileKpNativeKatexHierarchicalScenePlan(fractionSceneReconciliation)
-);
-const fractionHandoffCorrelations = correlateKpNativeKatexSceneHandoff({
-  reconciliation: fractionSceneReconciliation,
-  tracks: fractionSceneTracks
-});
-const fractionRuleTracks = fractionSceneTracks.filter(({ paintKind }) =>
-  paintKind === "rule"
-);
 review.dataset["kpFractionSceneDispositionCount"] =
   String(fractionSceneReconciliation.dispositions.length);
 review.dataset["kpFractionSceneTrackCount"] = String(fractionSceneTracks.length);
 review.dataset["kpFractionRuleTrackCount"] = String(fractionRuleTracks.length);
-const fractionScenePlayback = createKpNativeKatexScenePlayback({
-  stage: fractionStage,
-  sourceRoot: fractionSource,
-  targetRoot: fractionTarget,
-  reconciliation: fractionSceneReconciliation,
-  tracks: fractionSceneTracks
-});
-const fractionHandoffMicroscope = {
-  stage: fractionStage,
-  reconciliation: fractionSceneReconciliation,
-  correlations: fractionHandoffCorrelations,
-  fontRevision: fontReadiness.revision,
-  viewportKey: fractionTargetScene.viewportKey
-};
 if (import.meta.env.DEV) {
   Object.assign(window, {
     __kpSampleFractionSceneTracks: fractionScenePlayback.sample,
     __kpApplyFractionSceneFrame: fractionScenePlayback.apply,
-    __kpMeasureFractionGlyphHandoff: (progress: number) => {
-      fractionScenePlayback.apply(progress);
-      return measureKpNativeKatexGlyphHandoff({
-        ...fractionHandoffMicroscope,
-        progress
-      });
-    },
-    __kpMeasureFractionRuleHandoff: (progress: number) => {
-      fractionScenePlayback.apply(progress);
-      return measureKpNativeKatexRuleHandoff({
-        ...fractionHandoffMicroscope,
-        progress
-      });
-    },
-    __kpTraceFractionHandoffOwnership: (steps: number[]) =>
-      traceKpNativeKatexHandoffOwnership({
-        ...fractionHandoffMicroscope,
-        playback: fractionScenePlayback,
-        progresses: steps
-      })
+    __kpMeasureFractionGlyphHandoff: fractionScene.measureGlyphHandoff,
+    __kpMeasureFractionRuleHandoff: fractionScene.measureRuleHandoff,
+    __kpTraceFractionHandoffOwnership: fractionScene.traceHandoffOwnership
   });
 }
 
@@ -419,19 +379,34 @@ const clone = createKpNativeKatexFragmentClone({
 });
 clone.ownerElement.dataset["kpNativeKatexFragmentClone"] = "true";
 
-const fractionNativeTargetElement = fractionTarget.querySelector<HTMLElement>(
-  '[data-kp-motion-id="motion.fraction.target-denominator"]'
+const fractionNativeTargets = fractionScene.caseInput.targetGlyphs.map(
+  (glyph, index) => {
+    const matches = fractionTargetScene.atoms.filter((atom) =>
+      atom.semanticEntityId === glyph.entityId &&
+      atom.paintKind === "glyph"
+    );
+    if (matches.length !== 1) {
+      throw new Error(
+        `Native fraction target ${glyph.entityId} requires one glyph atom.`
+      );
+    }
+    // Reader affordances belong to the author-defined motion wrapper; KaTeX may
+    // place the observed paint atom on a nested glyph span.
+    const element = matches[0]!.sourceElement.closest<HTMLElement>(
+      "[data-kp-motion-id]"
+    ) ?? matches[0]!.sourceElement;
+    element.dataset["kpSemanticSelectorId"] =
+      fractionCloze.hiddenSelectorIds[index] ?? glyph.entityId;
+    element.dataset["kpAnnotation"] = fractionDirection === "split"
+      ? "A native denominator produced by the canonical split"
+      : "The one native denominator produced by the canonical merge";
+    element.title = fractionDirection === "split"
+      ? `Copied denominator ${index + 1} · target`
+      : "Merged denominator · target";
+    element.tabIndex = -1;
+    return element;
+  }
 );
-if (fractionNativeTargetElement === null) {
-  throw new Error("Native fraction target denominator is missing.");
-}
-const fractionNativeTarget: HTMLElement = fractionNativeTargetElement;
-fractionNativeTarget.dataset["kpSemanticSelectorId"] =
-  fractionCloze.hiddenSelectorIds[0]!;
-fractionNativeTarget.dataset["kpAnnotation"] =
-  "The one native denominator produced by the canonical merge";
-fractionNativeTarget.title = "Merged denominator · target";
-fractionNativeTarget.tabIndex = -1;
 
 const branchSourceObservation = await settleAndObserveKpNativeKatexFragments({
   stage: branchStage,
@@ -597,28 +572,40 @@ function render(progress: number): void {
   const fractionFrame = fractionScenePlayback.apply(fractionProgress);
   const fractionAtSource = fractionFrame.visualOwner === "source-native";
   const fractionAtTarget = fractionFrame.visualOwner === "target-native";
-  fractionSource.setAttribute("aria-hidden", String(!fractionAtSource));
-  fractionTarget.setAttribute("aria-hidden", String(!fractionAtTarget));
-  fractionSource.toggleAttribute("inert", !fractionAtSource);
-  fractionTarget.toggleAttribute("inert", !fractionAtTarget);
-  fractionNativeTarget.tabIndex = fractionAtTarget ? 0 : -1;
-  fractionNativeTarget.setAttribute("aria-hidden", String(!fractionAtTarget));
+  activeFractionSource.setAttribute("aria-hidden", String(!fractionAtSource));
+  activeFractionTarget.setAttribute("aria-hidden", String(!fractionAtTarget));
+  activeFractionSource.toggleAttribute("inert", !fractionAtSource);
+  activeFractionTarget.toggleAttribute("inert", !fractionAtTarget);
+  fractionNativeTargets.forEach((target) => {
+    target.tabIndex = fractionAtTarget ? 0 : -1;
+    target.setAttribute("aria-hidden", String(!fractionAtTarget));
+  });
   fractionStage.dataset["kpFractionSemanticOwner"] =
     fractionAtSource ? "source-native" :
     fractionAtTarget ? "target-native" :
     "stage-description";
   fractionStage.setAttribute(
     "aria-label",
-    fractionAtSource
-      ? "x over 2 plus y over 2"
-      : fractionAtTarget
+    fractionDirection === "split"
+      ? fractionAtSource
         ? "x plus y, all over 2"
-        : "Transforming x over 2 plus y over 2 into x plus y, all over 2"
+        : fractionAtTarget
+          ? "x over 2 plus y over 2"
+          : "Transforming x plus y over 2 into x over 2 plus y over 2"
+      : fractionAtSource
+        ? "x over 2 plus y over 2"
+        : fractionAtTarget
+          ? "x plus y, all over 2"
+          : "Transforming x over 2 plus y over 2 into x plus y, all over 2"
   );
   fractionPhase.textContent = fractionProgress === 0
-    ? "Two source fractions"
+    ? fractionDirection === "split"
+      ? "One source fraction"
+      : "Two source fractions"
     : fractionAtTarget
-      ? "One exact native fraction"
+      ? fractionDirection === "split"
+        ? "Two exact native fractions"
+        : "One exact native fraction"
       : "Complete notation scene transforms";
   fractionOwner.textContent = fractionFrame.visualOwner === "source-native"
     ? "The native source expression owns all ink"
@@ -755,8 +742,10 @@ fractionClozeButton.addEventListener("click", () => {
   const hidden = fractionClozeButton.getAttribute("aria-pressed") !== "true";
   fractionClozeButton.setAttribute("aria-pressed", String(hidden));
   fractionClozeButton.textContent = hidden ? "Reveal answer" : "Hide answer";
-  fractionNativeTarget.classList.toggle("glyph-exemplar__cloze-hidden", hidden);
-  fractionNativeTarget.dataset["kpClozeHidden"] = String(hidden);
+  fractionNativeTargets.forEach((target) => {
+    target.classList.toggle("glyph-exemplar__cloze-hidden", hidden);
+    target.dataset["kpClozeHidden"] = String(hidden);
+  });
   fractionClozeStatus.value = hidden
     ? fractionCloze.prompt
     : "Answer visible";

@@ -14,11 +14,13 @@ const profiles = [
   { id: "phone", viewport: { width: 390, height: 844 } }
 ] as const;
 const checkpoints = [0, 250, 500, 750, 1000] as const;
+const splitCheckpoints = [0, 500, 1000] as const;
 
 await mkdir(outputRoot, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const evidence: Array<Record<string, unknown>> = [];
 const endpointEvidence: Array<Record<string, unknown>> = [];
+const splitEvidence: Array<Record<string, unknown>> = [];
 try {
   for (const profile of profiles) {
     for (const progress of checkpoints) {
@@ -249,18 +251,91 @@ try {
       await page.close();
     }
   }
+  for (const profile of profiles) {
+    for (const progress of splitCheckpoints) {
+      const page = await browser.newPage({ viewport: profile.viewport });
+      const url = new URL("/glyph-reconciliation-experiment.html", baseUrl);
+      url.searchParams.set("fractionDirection", "split");
+      url.searchParams.set("progress", String(progress));
+      await page.goto(url.toString(), { waitUntil: "networkidle" });
+      await page.evaluate(async () => document.fonts.ready);
+      const review = page.locator(
+        '[data-kp-glyph-review][data-kp-ready="true"]'
+      );
+      await review.waitFor();
+      const card = page.locator(
+        '[data-reconciliation-case="fraction-split"]'
+      );
+      const snapshot = await card.evaluate((element) => {
+        const stage = element.querySelector<HTMLElement>(
+          "[data-fraction-stage]"
+        )!;
+        const materialOwners = [
+          ...element.querySelectorAll<HTMLElement>(
+            "[data-kp-native-katex-scene-owner]"
+          )
+        ];
+        return {
+          semanticOwner: stage.dataset["kpFractionSemanticOwner"],
+          visibleMaterialOwnerCount: materialOwners.filter((owner) =>
+            Number(owner.style.opacity) > 0
+          ).length,
+          nativeTargetDenominatorCount: element.querySelectorAll(
+            '[data-fraction-source] [data-kp-semantic-selector-id]'
+          ).length
+        };
+      });
+      const expectedSemanticOwner = progress === 0
+        ? "source-native"
+        : progress === 1000
+          ? "target-native"
+          : "stage-description";
+      if (snapshot.semanticOwner !== expectedSemanticOwner) {
+        throw new Error(
+          `Expected split ${expectedSemanticOwner} at ${progress}, found ${
+            snapshot.semanticOwner ?? "none"
+          }.`
+        );
+      }
+      if (
+        snapshot.nativeTargetDenominatorCount !== 2 ||
+        (progress === 500
+          ? snapshot.visibleMaterialOwnerCount === 0
+          : snapshot.visibleMaterialOwnerCount !== 0)
+      ) {
+        throw new Error(
+          `Invalid split ownership at ${progress}: ${JSON.stringify(snapshot)}.`
+        );
+      }
+      const file = path.join(
+        outputRoot,
+        `fraction-split-${profile.id}-${progress}.png`
+      );
+      await card.screenshot({ path: file });
+      splitEvidence.push({
+        profile: profile.id,
+        progress,
+        file: path.relative(process.cwd(), file),
+        ...snapshot
+      });
+      await page.close();
+    }
+  }
   await writeFile(
     path.join(outputRoot, "evidence.json"),
     `${JSON.stringify({
       generatedAt: new Date().toISOString(),
       evidence,
-      endpointEvidence
+      endpointEvidence,
+      splitEvidence
     }, null, 2)}\n`
   );
   console.log(
     `Captured ${evidence.length} overview frames and ${
       endpointEvidence.length
-    } dense endpoint frames in ${path.relative(process.cwd(), outputRoot)}.`
+    } dense endpoint frames and ${splitEvidence.length} inverse split frames in ${
+      path.relative(process.cwd(), outputRoot)
+    }.`
   );
 } finally {
   await browser.close();

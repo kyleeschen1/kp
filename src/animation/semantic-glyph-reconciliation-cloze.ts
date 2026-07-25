@@ -27,3 +27,28 @@ export function createKpFractionMergeClozeProjection() {
     progress: 1
   }));
 }
+
+export function createKpFractionSplitClozeProjection() {
+  const animation = createNumeratorSplitMergeEquationAnimationAsset();
+  const hiddenSelectorIds = [
+    `${numeratorSplitMergeEquationAssetIds.split}.left.fraction.denominator.2`,
+    `${numeratorSplitMergeEquationAssetIds.split}.right.fraction.denominator.2`
+  ];
+  const card = createKpFlashcardSpec({
+    id: "card.numerator-split-merge.copied-denominator",
+    kind: "cloze",
+    title: "Name the copied denominator",
+    assetId: animation.bundle.id,
+    prompt: "After the numerator sum splits, what denominator sits beneath each term?",
+    objectIds: [numeratorSplitMergeEquationAssetIds.split],
+    selectorIds: hiddenSelectorIds,
+    transformationIds: [numeratorSplitMergeEquationAssetIds.splitTransform],
+    timeMs: animation.timeline?.durationMs,
+    answer: { kind: "selector", value: hiddenSelectorIds[0]! }
+  });
+  return Object.freeze(createKpAnimationClozeProjection({
+    animation,
+    card,
+    progress: 1
+  }));
+}

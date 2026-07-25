@@ -264,6 +264,34 @@
       "scope": "slice-14 repository types",
       "checkedAt": "2026-07-25T20:17:30.107Z",
       "notes": "Application, node, test, and domain TypeScript checks passed."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/native-katex-fragment-observer.browser.spec.ts --project=chromium --workers=1 --grep inverse-fraction-exemplar",
+      "status": "failed",
+      "scope": "slice-15",
+      "checkedAt": "2026-07-25T20:26:26.999Z",
+      "notes": "Native split endpoint rendered and exposed two denominator motion nodes, but canonical semantic selector IDs were not attached to those stable nodes."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment; npm run test:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-15",
+      "checkedAt": "2026-07-25T20:30:56.504Z",
+      "notes": "63 semantic tests, 37 compositor tests, and all TypeScript projects pass. The inverse card uses governed split lineage, generic full-scene tracks, and two native semantic Cloze targets."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-15",
+      "checkedAt": "2026-07-25T20:30:57.649Z",
+      "notes": "All 34 Chromium checks pass, including inverse split normal and reduced motion, direct seek, rewind, atomic native/material ownership, structural rule bifurcation, and merge regressions."
+    },
+    {
+      "command": "npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-15",
+      "checkedAt": "2026-07-25T20:30:58.556Z",
+      "notes": "Stable visual entrypoint captured 10 overview, 14 dense endpoint, and 6 isolated inverse split frames. Wide and phone source/midpoint/target frames are coherent, exact at native endpoints, and free of equation overflow."
     }
   ],
   "allowedWork": [
@@ -379,7 +407,8 @@
     {
       "id": "slice-15",
       "title": "inverse-split-exemplar-integration",
-      "status": "planned"
+      "summary": "Integrated a query-selected real-KaTeX inverse fraction exemplar by reversing the observed native endpoints while preserving governed split lineage. The generic full-scene compositor produces one-to-many glyph and rule tracks with exact seek/rewind endpoints; native target wrappers alone retain accessibility, annotations, focus, and two-selector Cloze authority. Added stable wide/phone source, midpoint, and target capture seams. One initial native-wrapper selector failure was corrected without changing reconciliation or scheduling.",
+      "status": "complete"
     },
     {
       "id": "slice-16",

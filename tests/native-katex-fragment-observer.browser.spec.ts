@@ -1760,6 +1760,123 @@ test("solve-x exemplar moves one real x without crossfade or character substitut
   expect(samples[1]!.departingOpacity).toBe(0);
 });
 
+test("inverse fraction exemplar uses one full-scene split sampler", async ({
+  page
+}) => {
+  await page.goto(
+    "/glyph-reconciliation-experiment.html?fractionDirection=split&progress=0"
+  );
+  const review = page.locator('[data-kp-glyph-review][data-kp-ready="true"]');
+  await review.waitFor();
+  const fraction = page.locator('[data-reconciliation-case="fraction-split"]');
+  const merged = fraction.locator("[data-fraction-target]");
+  const split = fraction.locator("[data-fraction-source]");
+  const stage = fraction.locator("[data-fraction-stage]");
+  const slider = fraction.locator("[data-progress]");
+  const targetDenominators = split.locator(
+    '[data-kp-motion-id^="motion.fraction.source-denominator"]'
+  );
+  const sceneOwners = fraction.locator("[data-kp-native-katex-scene-owner]");
+
+  await expect(fraction.locator("[data-fraction-title]")).toHaveText(
+    "Split one native fraction across its sum"
+  );
+  await expect(review).toHaveAttribute("data-kp-fraction-direction", "split");
+  await expect(merged).toHaveAttribute("aria-hidden", "false");
+  await expect(split).toHaveAttribute("aria-hidden", "true");
+  await expect(stage).toHaveAttribute(
+    "data-kp-fraction-semantic-owner",
+    "source-native"
+  );
+  const samples = await page.evaluate(() => {
+    const sample = (window as unknown as {
+      __kpSampleFractionSceneTracks: (progress: number) => readonly {
+        lifecycle: string;
+        paintKind: string;
+        sizingMode: string;
+        rect: { left: number; top: number; width: number; height: number };
+        opacity: number;
+      }[];
+    }).__kpSampleFractionSceneTracks;
+    const progresses = [0, 0.25, 0.5, 0.75, 1];
+    return {
+      forward: progresses.map(sample),
+      reverse: [...progresses].reverse().map(sample).reverse()
+    };
+  });
+  expect(samples.forward).toEqual(samples.reverse);
+  const splitTracks = samples.forward[0]!.filter(({ lifecycle }) =>
+    lifecycle === "split"
+  );
+  expect(splitTracks.length).toBeGreaterThanOrEqual(4);
+  expect(splitTracks.some(({ paintKind, sizingMode }) =>
+    paintKind === "rule" && sizingMode === "rule-length"
+  )).toBe(true);
+  expect(samples.forward.flat().every(({ rect, opacity }) =>
+    Object.values(rect).every(Number.isFinite) &&
+    Number.isFinite(opacity)
+  )).toBe(true);
+
+  await slider.fill("500");
+  await slider.dispatchEvent("input");
+  await expect(merged).toHaveAttribute("aria-hidden", "true");
+  await expect(split).toHaveAttribute("aria-hidden", "true");
+  expect(await sceneOwners.count()).toBeGreaterThan(5);
+  await expect(sceneOwners.first()).toHaveAttribute("inert", "");
+  await expect(stage).toHaveAttribute(
+    "data-kp-fraction-semantic-owner",
+    "stage-description"
+  );
+
+  await slider.fill("1000");
+  await slider.dispatchEvent("input");
+  await expect(merged).toHaveAttribute("aria-hidden", "true");
+  await expect(split).toHaveAttribute("aria-hidden", "false");
+  await expect(targetDenominators).toHaveCount(2);
+  await expect(targetDenominators.nth(0)).toHaveAttribute(
+    "data-kp-semantic-selector-id",
+    "equation.numerator-split-merge.split.left.fraction.denominator.2"
+  );
+  await expect(targetDenominators.nth(1)).toHaveAttribute(
+    "data-kp-semantic-selector-id",
+    "equation.numerator-split-merge.split.right.fraction.denominator.2"
+  );
+  await expect(targetDenominators.nth(0)).toHaveAttribute("tabindex", "0");
+  await expect(targetDenominators.nth(1)).toHaveAttribute("tabindex", "0");
+  await fraction.locator("[data-fraction-cloze]").click();
+  await expect(targetDenominators.nth(0)).toHaveAttribute(
+    "data-kp-cloze-hidden",
+    "true"
+  );
+  await expect(targetDenominators.nth(1)).toHaveAttribute(
+    "data-kp-cloze-hidden",
+    "true"
+  );
+  expect(await sceneOwners.evaluateAll((elements) =>
+    elements.every((element) =>
+      !element.hasAttribute("data-kp-semantic-selector-id") &&
+      !element.hasAttribute("tabindex") &&
+      element.hasAttribute("inert")
+    )
+  )).toBe(true);
+
+  await slider.fill("0");
+  await slider.dispatchEvent("input");
+  await expect(merged).toHaveAttribute("aria-hidden", "false");
+  await expect(split).toHaveAttribute("aria-hidden", "true");
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.reload();
+  await review.waitFor();
+  await page.locator('[data-reconciliation-case="fraction-split"] [data-progress]')
+    .fill("1000");
+  await page.locator('[data-reconciliation-case="fraction-split"] [data-progress]')
+    .dispatchEvent("input");
+  await expect(
+    page.locator('[data-reconciliation-case="fraction-split"] [data-fraction-source]')
+  ).toHaveAttribute("aria-hidden", "false");
+});
+
 test("fraction merge settles one native denominator with Cloze authority", async ({
   page
 }) => {
