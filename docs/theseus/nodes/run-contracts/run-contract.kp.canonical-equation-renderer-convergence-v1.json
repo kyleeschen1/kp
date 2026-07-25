@@ -30,6 +30,15 @@
     "npm run check:reader-production",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run check:architecture; import and route audit; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-01 renderer inventory",
+      "checkedAt": "2026-07-25T23:33:09.630Z",
+      "notes": "Architecture gates passed. Product imports confirm one default reader material renderer, one query-selected dynamically loaded scene renderer, active editor hosts with broader coverage, and a reference-only KaTeX transition controller. The retirement ledger preserves all distinct capabilities."
+    }
+  ],
   "allowedWork": [
     "Experiment and production native-KaTeX scene observation, reconciliation, track sampling, generic style adaptation, ownership, and settlement.",
     "Stable fraction and reader visual entrypoints plus deterministic tests.",
@@ -69,7 +78,8 @@
     {
       "id": "slice-01",
       "title": "renderer-inventory",
-      "status": "planned"
+      "summary": "Mapped the default reader material path, query-selected scene path, canonical scene-core candidate, active editor hosts, reference-only KaTeX transition code, and experimental evidence. Frozen retirement rules preserve every distinct capability and confirm the fraction gate can proceed without scope expansion.",
+      "status": "complete"
     },
     {
       "id": "slice-02",
