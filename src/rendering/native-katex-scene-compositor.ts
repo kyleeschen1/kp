@@ -115,6 +115,19 @@ export interface KpNativeKatexHandoffCorrelation {
     | "departing-without-native-target";
 }
 
+export interface KpNativeKatexHandoffOwnershipSample {
+  readonly progress: number;
+  readonly visualOwner: KpNativeKatexSceneOwnershipFrame["visualOwner"];
+  readonly sourceNativeOpacity: 0 | 1;
+  readonly materialSceneOpacity: 0 | 1;
+  readonly targetNativeOpacity: 0 | 1;
+  readonly visibleMaterialOwnerIds: readonly string[];
+  readonly glyphStyleMismatchIds: readonly string[];
+  readonly maximumGlyphRectResidualPx: number;
+  readonly maximumGlyphBaselineResidualPx: number;
+  readonly maximumRuleGeometryResidualPx: number;
+}
+
 export interface KpNativeKatexSemanticPaintRelation {
   readonly id: string;
   readonly relation: "persist" | "merge" | "split";
@@ -643,6 +656,71 @@ export function measureKpNativeKatexRuleHandoff(input: {
   });
 }
 
+export function traceKpNativeKatexHandoffOwnership(input: {
+  readonly stage: HTMLElement;
+  readonly playback: KpNativeKatexScenePlayback;
+  readonly reconciliation: KpNativeKatexSceneReconciliation;
+  readonly correlations: readonly KpNativeKatexHandoffCorrelation[];
+  readonly progresses: readonly number[];
+  readonly fontRevision: number;
+  readonly viewportKey: string;
+}): readonly KpNativeKatexHandoffOwnershipSample[] {
+  return Object.freeze(input.progresses.map((progress) => {
+    const ownership = input.playback.apply(progress);
+    const glyphTelemetry = measureKpNativeKatexGlyphHandoff({
+      ...input,
+      progress
+    });
+    const ruleTelemetry = measureKpNativeKatexRuleHandoff({
+      ...input,
+      progress
+    });
+    const glyphPairs = handoffTelemetryPairs(glyphTelemetry);
+    const rulePairs = handoffTelemetryPairs(ruleTelemetry);
+    const visibleMaterialOwnerIds = [
+      ...input.stage.querySelectorAll<HTMLElement>(
+        "[data-kp-native-katex-scene-owner]"
+      )
+    ].filter((owner) => effectiveOpacity(owner, input.stage) > 0)
+      .map((owner) => owner.dataset["kpEquationMaterialOwnerId"]!)
+      .sort();
+    return Object.freeze({
+      progress,
+      visualOwner: ownership.visualOwner,
+      sourceNativeOpacity: ownership.sourceNativeOpacity,
+      materialSceneOpacity: ownership.materialSceneOpacity,
+      targetNativeOpacity: ownership.targetNativeOpacity,
+      visibleMaterialOwnerIds: Object.freeze(visibleMaterialOwnerIds),
+      glyphStyleMismatchIds: Object.freeze(glyphPairs.filter(
+        ([material, native]) =>
+          material.styleFingerprint !== native.styleFingerprint
+      ).map(([material]) =>
+        material.id.replace(/\.material$/, "")
+      )),
+      maximumGlyphRectResidualPx: maximum(
+        glyphPairs.map(([material, native]) =>
+          rectDelta(material.rect, native.rect)
+        )
+      ),
+      maximumGlyphBaselineResidualPx: maximum(
+        glyphPairs.flatMap(([material, native]) =>
+          material.baselineY === null || native.baselineY === null
+            ? []
+            : [Math.abs(material.baselineY - native.baselineY)]
+        )
+      ),
+      maximumRuleGeometryResidualPx: maximum(
+        rulePairs.map(([material, native]) =>
+          ruleGeometryDelta(
+            material.ruleGeometry!,
+            native.ruleGeometry!
+          )
+        )
+      )
+    });
+  }));
+}
+
 export function applyKpNativeKatexSceneFrame(input: {
   readonly stage: HTMLElement;
   readonly sourceRoot: HTMLElement;
@@ -1154,4 +1232,57 @@ function effectiveOpacity(element: HTMLElement, stage: HTMLElement): number {
     current = current.parentElement;
   }
   return opacity;
+}
+
+function handoffTelemetryPairs(
+  telemetry: KpNativeKatexHandoffTelemetry
+) {
+  const byId = new Map<string, typeof telemetry.observations>();
+  for (const observation of telemetry.observations) {
+    const id = observation.id.replace(/\.(material|native)$/, "");
+    byId.set(id, [...(byId.get(id) ?? []), observation]);
+  }
+  return [...byId.entries()].sort(([left], [right]) =>
+    left.localeCompare(right)
+  ).map(([id, observations]) => {
+    const material = observations.find(({ side }) => side === "material");
+    const native = observations.find(({ side }) => side === "native-target");
+    if (material === undefined || native === undefined) {
+      throw new Error(`Native handoff telemetry ${id} is not paired.`);
+    }
+    return [material, native] as const;
+  });
+}
+
+function rectDelta(
+  left: KpStageRelativeRect,
+  right: KpStageRelativeRect
+): number {
+  return maximum([
+    Math.abs(left.left - right.left),
+    Math.abs(left.top - right.top),
+    Math.abs(left.width - right.width),
+    Math.abs(left.height - right.height)
+  ]);
+}
+
+function ruleGeometryDelta(
+  left: NonNullable<
+    KpNativeKatexHandoffTelemetry["observations"][number]["ruleGeometry"]
+  >,
+  right: NonNullable<
+    KpNativeKatexHandoffTelemetry["observations"][number]["ruleGeometry"]
+  >
+): number {
+  if (left.axis !== right.axis) return Number.POSITIVE_INFINITY;
+  return maximum([
+    Math.abs(left.left - right.left),
+    Math.abs(left.top - right.top),
+    Math.abs(left.width - right.width),
+    Math.abs(left.thickness - right.thickness)
+  ]);
+}
+
+function maximum(values: readonly number[]): number {
+  return values.length === 0 ? 0 : Math.max(...values);
 }

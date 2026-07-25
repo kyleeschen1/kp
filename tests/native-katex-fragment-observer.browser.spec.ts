@@ -654,6 +654,74 @@ test("structural handoff microscope measures generic rule geometry", async ({
   }
 });
 
+test("handoff ownership trace is atomic and seek-direction independent", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=859");
+  await page.locator(
+    '[data-kp-glyph-review][data-kp-ready="true"]'
+  ).waitFor();
+  const evidence = await page.evaluate(() => {
+    type OwnershipSample = {
+      progress: number;
+      visualOwner: "source-native" | "material-scene" | "target-native";
+      sourceNativeOpacity: 0 | 1;
+      materialSceneOpacity: 0 | 1;
+      targetNativeOpacity: 0 | 1;
+      visibleMaterialOwnerIds: readonly string[];
+      glyphStyleMismatchIds: readonly string[];
+      maximumGlyphRectResidualPx: number;
+      maximumGlyphBaselineResidualPx: number;
+      maximumRuleGeometryResidualPx: number;
+    };
+    const trace = (window as unknown as {
+      __kpTraceFractionHandoffOwnership: (
+        progresses: readonly number[]
+      ) => readonly OwnershipSample[];
+    }).__kpTraceFractionHandoffOwnership;
+    const progresses = [0.96, 0.99, 0.999, 1] as const;
+    return {
+      forward: trace(progresses).map((sample) => ({ ...sample })),
+      reverse: trace([...progresses].reverse()).map((sample) => ({
+        ...sample
+      })).reverse()
+    };
+  });
+
+  expect(evidence.forward).toEqual(evidence.reverse);
+  expect(evidence.forward.map(({ visualOwner }) => visualOwner)).toEqual([
+    "material-scene",
+    "material-scene",
+    "material-scene",
+    "target-native"
+  ]);
+  expect(evidence.forward.map((sample) =>
+    sample.sourceNativeOpacity +
+    sample.materialSceneOpacity +
+    sample.targetNativeOpacity
+  )).toEqual([1, 1, 1, 1]);
+  expect(evidence.forward.slice(0, -1).every((sample) =>
+    sample.sourceNativeOpacity === 0 &&
+    sample.materialSceneOpacity === 1 &&
+    sample.targetNativeOpacity === 0 &&
+    sample.visibleMaterialOwnerIds.length > 0
+  )).toBe(true);
+  expect(evidence.forward.at(-1)).toMatchObject({
+    sourceNativeOpacity: 0,
+    materialSceneOpacity: 0,
+    targetNativeOpacity: 1,
+    visibleMaterialOwnerIds: []
+  });
+  expect(evidence.forward.every((sample) =>
+    sample.glyphStyleMismatchIds.some((id) => id.includes("operator.add"))
+  )).toBe(true);
+  expect(evidence.forward[2]!.maximumGlyphRectResidualPx).toBeLessThan(0.2);
+  expect(evidence.forward[2]!.maximumGlyphBaselineResidualPx).toBeGreaterThan(
+    1
+  );
+  expect(evidence.forward[2]!.maximumRuleGeometryResidualPx).toBeLessThan(0.2);
+});
+
 test("visible fraction card renders the complete moving scene on its shared clock", async ({
   page
 }) => {

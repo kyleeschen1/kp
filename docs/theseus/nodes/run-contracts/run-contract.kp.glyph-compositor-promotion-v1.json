@@ -68,6 +68,27 @@
       "scope": "slice-05 structural rule microscope",
       "checkedAt": "2026-07-25T19:29:47.320Z",
       "notes": "30 focused tests, all TypeScript projects, 30 Chromium checks, and 24 capture frames pass. Generic horizontal rule telemetry is repeatable at wide and phone DPR: material/native border style and thickness match exactly, length differs about 0.016 CSS px, position residual stays below 0.08 px, and clipping remains none. Structural rule geometry is not the visible handoff cause."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-06 focused compositor",
+      "checkedAt": "2026-07-25T19:39:26.544Z",
+      "notes": "30 tests passed; controller and lifecycle budgets remain enforced."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-06 repository types",
+      "checkedAt": "2026-07-25T19:39:27.719Z",
+      "notes": "Application, node, test, and domain TypeScript checks passed."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-06 browser regression",
+      "checkedAt": "2026-07-25T19:39:28.682Z",
+      "notes": "31 Chromium tests passed. Ownership is atomic and seek-direction independent; 99.9% evidence retains the material/native glyph baseline residual while glyph boxes and rules remain subpixel-close."
     }
   ],
   "allowedWork": [
@@ -129,7 +150,8 @@
     {
       "id": "slice-06",
       "title": "handoff-ownership-timing",
-      "status": "planned"
+      "summary": "Proved exclusive atomic ownership through the endpoint with reverse/direct-seek equality. At 99.9% material glyph boxes and structural rules are subpixel-close to native while the persistent plus retains a style mismatch and roughly 1.63 px maximum baseline residual, isolating the jerk to paint adaptation rather than handoff timing.",
+      "status": "complete"
     },
     {
       "id": "slice-07",

@@ -55,7 +55,8 @@ import {
   createKpNativeKatexScenePlayback,
   measureKpNativeKatexGlyphHandoff,
   measureKpNativeKatexRuleHandoff,
-  reconcileKpNativeKatexScenes
+  reconcileKpNativeKatexScenes,
+  traceKpNativeKatexHandoffOwnership
 } from "../rendering/native-katex-scene-compositor.ts";
 
 const rootNode = document.querySelector<HTMLElement>("#glyph-experiment");
@@ -349,6 +350,13 @@ const fractionScenePlayback = createKpNativeKatexScenePlayback({
   reconciliation: fractionSceneReconciliation,
   tracks: fractionSceneTracks
 });
+const fractionHandoffMicroscope = {
+  stage: fractionStage,
+  reconciliation: fractionSceneReconciliation,
+  correlations: fractionHandoffCorrelations,
+  fontRevision: fontReadiness.revision,
+  viewportKey: fractionTargetScene.viewportKey
+};
 if (import.meta.env.DEV) {
   Object.assign(window, {
     __kpSampleFractionSceneTracks: fractionScenePlayback.sample,
@@ -356,25 +364,23 @@ if (import.meta.env.DEV) {
     __kpMeasureFractionGlyphHandoff: (progress: number) => {
       fractionScenePlayback.apply(progress);
       return measureKpNativeKatexGlyphHandoff({
-        stage: fractionStage,
-        reconciliation: fractionSceneReconciliation,
-        correlations: fractionHandoffCorrelations,
-        progress,
-        fontRevision: fontReadiness.revision,
-        viewportKey: fractionTargetScene.viewportKey
+        ...fractionHandoffMicroscope,
+        progress
       });
     },
     __kpMeasureFractionRuleHandoff: (progress: number) => {
       fractionScenePlayback.apply(progress);
       return measureKpNativeKatexRuleHandoff({
-        stage: fractionStage,
-        reconciliation: fractionSceneReconciliation,
-        correlations: fractionHandoffCorrelations,
-        progress,
-        fontRevision: fontReadiness.revision,
-        viewportKey: fractionTargetScene.viewportKey
+        ...fractionHandoffMicroscope,
+        progress
       });
-    }
+    },
+    __kpTraceFractionHandoffOwnership: (steps: number[]) =>
+      traceKpNativeKatexHandoffOwnership({
+        ...fractionHandoffMicroscope,
+        playback: fractionScenePlayback,
+        progresses: steps
+      })
   });
 }
 
