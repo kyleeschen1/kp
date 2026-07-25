@@ -89,6 +89,20 @@
       "scope": "slice-06 browser regression",
       "checkedAt": "2026-07-25T19:39:28.682Z",
       "notes": "31 Chromium tests passed. Ownership is atomic and seek-direction independent; 99.9% evidence retains the material/native glyph baseline residual while glyph boxes and rules remain subpixel-close."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-07 common alignment model",
+      "checkedAt": "2026-07-25T19:45:20.984Z",
+      "notes": "35 focused tests passed. Consensus, inverse, tolerance, outlier, paint, style, shape, maximum-bound, and invalid-input paths are covered; the measured fraction plus style ratio returns unsupported instead of a per-glyph correction."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-07 repository types",
+      "checkedAt": "2026-07-25T19:45:22.216Z",
+      "notes": "Application, node, test, and domain TypeScript checks passed."
     }
   ],
   "allowedWork": [
@@ -156,7 +170,8 @@
     {
       "id": "slice-07",
       "title": "generic-alignment-model",
-      "status": "planned"
+      "summary": "Added a pure fail-closed common-translation model. It returns a bounded correction only when every paired paint atom agrees in paint, style, shape, and delta; the measured persistent plus font-size mismatch is explicitly unsupported, proving one scene translation cannot repair the endpoint without a disallowed per-atom adaptation.",
+      "status": "complete"
     },
     {
       "id": "slice-08",

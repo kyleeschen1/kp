@@ -8,6 +8,7 @@ import {
   type KpNativeKatexPaintAtomObservation
 } from "../src/rendering/native-katex-rendered-scene.ts";
 import {
+  calculateKpNativeKatexCommonHandoffAlignment,
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexSceneTracks,
   correlateKpNativeKatexSceneHandoff,
@@ -68,6 +69,49 @@ function handoffObservation(
   };
 }
 
+function alignmentTelemetry(input: {
+  readonly pairs: readonly {
+    readonly id: string;
+    readonly materialRect: KpNativeKatexHandoffPaintObservation["rect"];
+    readonly nativeRect: KpNativeKatexHandoffPaintObservation["rect"];
+    readonly materialBaselineY?: number | null;
+    readonly nativeBaselineY?: number | null;
+    readonly materialStyle?: string;
+    readonly nativeStyle?: string;
+    readonly materialPaintFingerprint?: string;
+    readonly nativePaintFingerprint?: string;
+  }[];
+}) {
+  return createKpNativeKatexHandoffTelemetry({
+    stage,
+    progress: 0.999,
+    observations: input.pairs.flatMap((pair) => [
+      handoffObservation({
+        id: `${pair.id}.material`,
+        side: "material",
+        paintAtomId: `paint.${pair.id}`,
+        semanticEntityId: `entity.${pair.id}`,
+        rect: pair.materialRect,
+        baselineY: pair.materialBaselineY ?? 42,
+        styleFingerprint: pair.materialStyle ?? "font-family:KaTeX_Math",
+        paintFingerprint: pair.materialPaintFingerprint ?? "glyph:x"
+      }),
+      handoffObservation({
+        id: `${pair.id}.native`,
+        side: "native-target",
+        paintAtomId: `paint.${pair.id}`,
+        semanticEntityId: `entity.${pair.id}`,
+        rect: pair.nativeRect,
+        baselineY: pair.nativeBaselineY ?? 42,
+        styleFingerprint: pair.nativeStyle ?? "font-family:KaTeX_Math",
+        paintFingerprint: pair.nativePaintFingerprint ?? "glyph:x"
+      })
+    ]),
+    fontRevision: 2,
+    viewportKey: "wide"
+  });
+}
+
 test("handoff telemetry is immutable renderer-session evidence", () => {
   const telemetry = createKpNativeKatexHandoffTelemetry({
     stage,
@@ -103,6 +147,186 @@ test("handoff telemetry is immutable renderer-session evidence", () => {
     true
   );
   assert.strictEqual(telemetry.observations[0]?.element, sourceElement);
+});
+
+test("common handoff alignment accepts only one bounded consensus delta", () => {
+  const telemetry = alignmentTelemetry({
+    pairs: [{
+      id: "pair.x",
+      materialRect: { left: 10, top: 20, width: 12, height: 24 },
+      nativeRect: { left: 10.5, top: 19.75, width: 12, height: 24 },
+      materialBaselineY: 40,
+      nativeBaselineY: 39.75
+    }, {
+      id: "pair.y",
+      materialRect: { left: 30, top: 20, width: 12, height: 24 },
+      nativeRect: { left: 30.52, top: 19.76, width: 12, height: 24 },
+      materialBaselineY: 40,
+      nativeBaselineY: 39.76
+    }]
+  });
+  const alignment = calculateKpNativeKatexCommonHandoffAlignment({
+    telemetry,
+    tolerancePx: 0.05,
+    maximumCorrectionPx: 1
+  });
+
+  assert.equal(alignment.kind, "native-katex-common-handoff-alignment");
+  assert.equal(alignment.status, "correctable");
+  assert.ok(Math.abs(alignment.translateX - 0.51) < 1e-12);
+  assert.ok(Math.abs(alignment.translateY + 0.245) < 1e-12);
+  assert.deepEqual(alignment.rejectedIds, []);
+  assert.equal(Object.isFrozen(alignment), true);
+  assert.equal(Object.isFrozen(alignment.rejectedIds), true);
+});
+
+test("common handoff alignment is inverse and suppresses sub-tolerance drift", () => {
+  const forwardTelemetry = alignmentTelemetry({
+    pairs: [{
+      id: "pair.x",
+      materialRect: { left: 10, top: 20, width: 12, height: 24 },
+      nativeRect: { left: 10.5, top: 19.75, width: 12, height: 24 },
+      materialBaselineY: 40,
+      nativeBaselineY: 39.75
+    }]
+  });
+  const reverseTelemetry = alignmentTelemetry({
+    pairs: [{
+      id: "pair.x",
+      materialRect: { left: 10.5, top: 19.75, width: 12, height: 24 },
+      nativeRect: { left: 10, top: 20, width: 12, height: 24 },
+      materialBaselineY: 39.75,
+      nativeBaselineY: 40
+    }]
+  });
+  const calculate = (telemetry: ReturnType<typeof alignmentTelemetry>) =>
+    calculateKpNativeKatexCommonHandoffAlignment({
+      telemetry,
+      tolerancePx: 0.05,
+      maximumCorrectionPx: 1
+    });
+  const forward = calculate(forwardTelemetry);
+  const reverse = calculate(reverseTelemetry);
+  const aligned = calculateKpNativeKatexCommonHandoffAlignment({
+    telemetry: alignmentTelemetry({
+      pairs: [{
+        id: "pair.x",
+        materialRect: { left: 10, top: 20, width: 12, height: 24 },
+        nativeRect: { left: 10.01, top: 20.01, width: 12, height: 24 },
+        materialBaselineY: 40,
+        nativeBaselineY: 40.01
+      }]
+    }),
+    tolerancePx: 0.05,
+    maximumCorrectionPx: 1
+  });
+
+  assert.equal(reverse.translateX, -forward.translateX);
+  assert.equal(reverse.translateY, -forward.translateY);
+  assert.equal(aligned.status, "already-aligned");
+});
+
+test("common handoff alignment rejects outliers and non-translational paint", () => {
+  const calculate = (
+    pairs: Parameters<typeof alignmentTelemetry>[0]["pairs"]
+  ) => calculateKpNativeKatexCommonHandoffAlignment({
+    telemetry: alignmentTelemetry({ pairs }),
+    tolerancePx: 0.05,
+    maximumCorrectionPx: 1
+  });
+  const basePair = {
+    id: "pair.x",
+    materialRect: { left: 10, top: 20, width: 12, height: 24 },
+    nativeRect: { left: 10.5, top: 19.75, width: 12, height: 24 }
+  };
+
+  const outlier = calculate([
+    basePair,
+    {
+      ...basePair,
+      id: "pair.y",
+      nativeRect: { ...basePair.nativeRect, left: 10.52 }
+    },
+    {
+      ...basePair,
+      id: "pair.outlier",
+      nativeRect: { ...basePair.nativeRect, left: 10.8 }
+    }
+  ]);
+  assert.equal(outlier.status, "unsupported");
+  assert.equal(outlier.reason, "alignment-outlier");
+  assert.ok(Math.abs(outlier.translateX - 0.52) < 1e-12);
+  assert.deepEqual(outlier.rejectedIds, ["pair.outlier"]);
+  assert.equal(calculate([{
+    ...basePair,
+    materialStyle: "font-size:65px",
+    nativeStyle: "font-size:46px"
+  }]).reason, "style-mismatch");
+  assert.equal(calculate([{
+    ...basePair,
+    nativeRect: { ...basePair.nativeRect, width: 11 }
+  }]).reason, "shape-mismatch");
+  assert.equal(calculate([{
+    ...basePair,
+    nativePaintFingerprint: "glyph:y"
+  }]).reason, "paint-mismatch");
+});
+
+test("fraction endpoint style drift cannot become a common translation", () => {
+  const result = calculateKpNativeKatexCommonHandoffAlignment({
+    telemetry: alignmentTelemetry({
+      pairs: [{
+        id: "fraction.glyph.x",
+        materialRect: { left: 10, top: 20, width: 12, height: 24 },
+        nativeRect: { left: 10.08, top: 20.04, width: 12, height: 24 },
+        materialStyle: "font-size:46.0768px",
+        nativeStyle: "font-size:46.0768px"
+      }, {
+        id: "fraction.operator.add",
+        materialRect: { left: 24, top: 20, width: 12, height: 24 },
+        nativeRect: { left: 24.08, top: 20.04, width: 12, height: 24 },
+        materialStyle: "font-size:65.824px",
+        nativeStyle: "font-size:46.0768px"
+      }]
+    }),
+    tolerancePx: 0.2,
+    maximumCorrectionPx: 1
+  });
+
+  assert.equal(result.status, "unsupported");
+  assert.equal(result.reason, "style-mismatch");
+  assert.deepEqual(result.rejectedIds, ["fraction.operator.add"]);
+});
+
+test("common handoff alignment rejects unbounded and invalid corrections", () => {
+  const telemetry = alignmentTelemetry({
+    pairs: [{
+      id: "pair.x",
+      materialRect: { left: 10, top: 20, width: 12, height: 24 },
+      nativeRect: { left: 12, top: 20, width: 12, height: 24 }
+    }]
+  });
+  assert.equal(calculateKpNativeKatexCommonHandoffAlignment({
+    telemetry,
+    tolerancePx: 0.05,
+    maximumCorrectionPx: 1
+  }).reason, "correction-exceeds-bound");
+  assert.throws(
+    () => calculateKpNativeKatexCommonHandoffAlignment({
+      telemetry,
+      tolerancePx: Number.NaN,
+      maximumCorrectionPx: 1
+    }),
+    /alignment tolerance must be finite and nonnegative/
+  );
+  assert.throws(
+    () => calculateKpNativeKatexCommonHandoffAlignment({
+      telemetry,
+      tolerancePx: 0.05,
+      maximumCorrectionPx: -1
+    }),
+    /maximum alignment correction must be finite and nonnegative/
+  );
 });
 
 test("handoff telemetry rejects invalid geometry and document boundaries", () => {
