@@ -65,6 +65,13 @@
       "scope": "slice-04 dense endpoint style telemetry",
       "checkedAt": "2026-07-25T23:51:36.913Z",
       "notes": "Five convergence-policy tests, 38 focused compositor tests, all TypeScript projects, the font-ready wide DPR1 and phone DPR2 Chromium resize/reload matrix, and 46 stable captures pass. Fourteen dense endpoint frames each contain 21 immutable observations spanning source, material, and native sides. The frozen controller ceiling remains intact."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:canonical-equation-renderer; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-05 generic typography handoff law",
+      "checkedAt": "2026-07-25T23:56:25.086Z",
+      "notes": "Forty-two focused compositor tests, five convergence ratchets, and all TypeScript projects pass. Tests cover exact-style and bounded-transform compatibility, reverse-symmetric translation and scale metrics, the recorded typography mismatch shape, invalid bounds, and explicit native-checkpoint settlement for paint, style, clip, revision, axis, translation, or scale incompatibility. No notation, character, class, viewport, or operation dispatch was introduced."
     }
   ],
   "allowedWork": [
@@ -130,7 +137,8 @@
     {
       "id": "slice-05",
       "title": "generic-typography-handoff-law",
-      "status": "planned"
+      "summary": "Added a pure renderer-session handoff law over measured paint observations. It distinguishes exact-style compatibility, bounded typography transforms, and unsupported native-checkpoint settlement; exposes inverse translation/scale metrics; preserves the five-kind/six-lifecycle vocabulary; and uses no glyph identity or notation cases. Forty-two focused tests, the convergence ratchet, and typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "slice-06",

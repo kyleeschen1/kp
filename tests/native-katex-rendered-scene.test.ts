@@ -8,12 +8,14 @@ import {
   type KpNativeKatexPaintAtomObservation
 } from "../src/rendering/native-katex-rendered-scene.ts";
 import {
+  assessKpNativeKatexTypographyHandoff,
   calculateKpNativeKatexCommonHandoffAlignment,
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexSceneTracks,
   correlateKpNativeKatexSceneHandoff,
   createKpNativeKatexScenePlayback,
   createKpNativeKatexSceneReconciliation,
+  evaluateKpNativeKatexTypographyHandoffLaw,
   projectKpNativeKatexSemanticPaintRelations,
   reconcileKpNativeKatexScenes,
   reverseKpNativeKatexSemanticPaintRelations,
@@ -302,6 +304,144 @@ test("fraction endpoint style drift cannot become a common translation", () => {
   assert.equal(result.status, "unsupported");
   assert.equal(result.reason, "style-mismatch");
   assert.deepEqual(result.rejectedIds, ["fraction.operator.add"]);
+});
+
+test("typography handoff law separates exact style from bounded transforms", () => {
+  const telemetry = alignmentTelemetry({
+    pairs: [{
+      id: "pair.exact",
+      materialRect: { left: 10, top: 20, width: 12, height: 24 },
+      nativeRect: { left: 10.08, top: 20.04, width: 12.02, height: 24.01 },
+      materialBaselineY: 40,
+      nativeBaselineY: 40.04
+    }, {
+      id: "pair.transform",
+      materialRect: { left: 24, top: 20, width: 12, height: 24 },
+      nativeRect: { left: 23.96, top: 20, width: 11.98, height: 23.96 },
+      materialBaselineY: 40,
+      nativeBaselineY: 41.47,
+      materialStyle:
+        "font-family:KaTeX_Main|font-size:65.824px|font-style:normal|font-weight:400|color:rgb(23, 36, 31)|line-height:78.9888px",
+      nativeStyle:
+        "font-family:KaTeX_Main|font-size:46.0768px|font-style:normal|font-weight:400|color:rgb(23, 36, 31)|line-height:55.2922px"
+    }]
+  });
+  const law = evaluateKpNativeKatexTypographyHandoffLaw({
+    telemetry,
+    tolerancePx: 0.05,
+    maximumTranslationPx: 2,
+    maximumScaleRatio: 1.1
+  });
+
+  assert.equal(law.status, "continuous");
+  assert.deepEqual(
+    law.assessments.map(({ id, compatibility, settlement }) => ({
+      id,
+      compatibility,
+      settlement
+    })),
+    [{
+      id: "pair.exact",
+      compatibility: "style-compatible",
+      settlement: "continuous"
+    }, {
+      id: "pair.transform",
+      compatibility: "transform-compatible",
+      settlement: "continuous"
+    }]
+  );
+  assert.equal(Object.isFrozen(law), true);
+  assert.equal(Object.isFrozen(law.assessments), true);
+});
+
+test("typography handoff metrics are reverse symmetric", () => {
+  const telemetry = alignmentTelemetry({
+    pairs: [{
+      id: "pair.transform",
+      materialRect: { left: 10, top: 20, width: 12, height: 24 },
+      nativeRect: { left: 10.25, top: 19.75, width: 9, height: 18 },
+      materialBaselineY: 40,
+      nativeBaselineY: 39.75,
+      materialStyle: "font-size:16px|line-height:20px|color:black",
+      nativeStyle: "font-size:12px|line-height:15px|color:black"
+    }]
+  });
+  const [from, to] = telemetry.observations;
+  const assess = (
+    first: KpNativeKatexHandoffPaintObservation,
+    second: KpNativeKatexHandoffPaintObservation
+  ) => assessKpNativeKatexTypographyHandoff({
+    from: first,
+    to: second,
+    tolerancePx: 0.05,
+    maximumTranslationPx: 1,
+    maximumScaleRatio: 1.5
+  });
+  const forward = assess(from!, to!);
+  const reverse = assess(to!, from!);
+
+  assert.equal(forward.compatibility, "transform-compatible");
+  assert.equal(reverse.compatibility, forward.compatibility);
+  assert.equal(reverse.translateX, -forward.translateX);
+  assert.equal(reverse.translateY, -forward.translateY);
+  assert.equal(reverse.scaleX, 1 / forward.scaleX);
+  assert.equal(reverse.scaleY, 1 / forward.scaleY);
+  assert.equal(reverse.stretchRatio, forward.stretchRatio);
+  assert.deepEqual(reverse.reasons, forward.reasons);
+});
+
+test("unsupported typography settles at the exact native checkpoint", () => {
+  const telemetry = alignmentTelemetry({
+    pairs: [{
+      id: "pair.style",
+      materialRect: { left: 10, top: 20, width: 12, height: 24 },
+      nativeRect: { left: 10.25, top: 20, width: 12, height: 24 },
+      materialStyle: "font-size:16px|color:black",
+      nativeStyle: "font-size:16px|color:red"
+    }, {
+      id: "pair.bounds",
+      materialRect: { left: 20, top: 20, width: 12, height: 24 },
+      nativeRect: { left: 23, top: 20, width: 6, height: 12 }
+    }]
+  });
+  const law = evaluateKpNativeKatexTypographyHandoffLaw({
+    telemetry,
+    tolerancePx: 0.05,
+    maximumTranslationPx: 1,
+    maximumScaleRatio: 1.5
+  });
+
+  assert.equal(law.status, "native-checkpoint");
+  assert.deepEqual(law.unsupportedIds, ["pair.bounds", "pair.style"]);
+  assert.deepEqual(law.assessments.map(({ settlement }) => settlement), [
+    "native-checkpoint",
+    "native-checkpoint"
+  ]);
+  assert.deepEqual(law.assessments[0]?.reasons, [
+    "scale-exceeds-bound",
+    "translation-exceeds-bound"
+  ]);
+  assert.deepEqual(law.assessments[1]?.reasons, ["style-mismatch"]);
+});
+
+test("typography handoff law rejects invalid generic bounds", () => {
+  const [from, to] = alignmentTelemetry({
+    pairs: [{
+      id: "pair.x",
+      materialRect: { left: 10, top: 20, width: 12, height: 24 },
+      nativeRect: { left: 10, top: 20, width: 12, height: 24 }
+    }]
+  }).observations;
+  assert.throws(
+    () => assessKpNativeKatexTypographyHandoff({
+      from: from!,
+      to: to!,
+      tolerancePx: 0.05,
+      maximumTranslationPx: 1,
+      maximumScaleRatio: 0.99
+    }),
+    /scale ratio must be finite and at least one/
+  );
 });
 
 test("common handoff alignment rejects unbounded and invalid corrections", () => {

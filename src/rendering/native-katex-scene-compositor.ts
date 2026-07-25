@@ -144,6 +144,42 @@ export interface KpNativeKatexCommonHandoffAlignment {
     | undefined;
 }
 
+export type KpNativeKatexTypographyHandoffCompatibility =
+  | "style-compatible"
+  | "transform-compatible"
+  | "unsupported";
+
+export type KpNativeKatexTypographyHandoffReason =
+  | "paint-mismatch"
+  | "style-mismatch"
+  | "shape-mismatch"
+  | "clip-mismatch"
+  | "font-revision-mismatch"
+  | "translation-exceeds-bound"
+  | "scale-exceeds-bound";
+
+export interface KpNativeKatexTypographyHandoffAssessment {
+  readonly kind: "native-katex-typography-handoff-assessment";
+  readonly lifecycle: "renderer-session";
+  readonly id: string;
+  readonly compatibility: KpNativeKatexTypographyHandoffCompatibility;
+  readonly translateX: number;
+  readonly translateY: number;
+  readonly scaleX: number;
+  readonly scaleY: number;
+  readonly stretchRatio: number;
+  readonly settlement: "continuous" | "native-checkpoint";
+  readonly reasons: readonly KpNativeKatexTypographyHandoffReason[];
+}
+
+export interface KpNativeKatexTypographyHandoffLaw {
+  readonly kind: "native-katex-typography-handoff-law";
+  readonly lifecycle: "renderer-session";
+  readonly status: "continuous" | "native-checkpoint";
+  readonly assessments: readonly KpNativeKatexTypographyHandoffAssessment[];
+  readonly unsupportedIds: readonly string[];
+}
+
 export interface KpNativeKatexSemanticPaintRelation {
   readonly id: string;
   readonly relation: "persist" | "merge" | "split";
@@ -893,6 +929,132 @@ export function calculateKpNativeKatexCommonHandoffAlignment(input: {
   return commonAlignmentResult(status, translateX, translateY, []);
 }
 
+export function assessKpNativeKatexTypographyHandoff(input: {
+  readonly from: KpNativeKatexHandoffTelemetry["observations"][number];
+  readonly to: KpNativeKatexHandoffTelemetry["observations"][number];
+  readonly tolerancePx: number;
+  readonly maximumTranslationPx: number;
+  readonly maximumScaleRatio: number;
+}): KpNativeKatexTypographyHandoffAssessment {
+  requireNonnegativeFinite(input.tolerancePx, "handoff tolerance");
+  requireNonnegativeFinite(
+    input.maximumTranslationPx,
+    "maximum handoff translation"
+  );
+  if (
+    !Number.isFinite(input.maximumScaleRatio) ||
+    input.maximumScaleRatio < 1
+  ) {
+    throw new Error("Maximum handoff scale ratio must be finite and at least one.");
+  }
+
+  const translateX = input.to.rect.left - input.from.rect.left;
+  const translateY =
+    input.from.baselineY === null || input.to.baselineY === null
+      ? input.to.rect.top - input.from.rect.top
+      : input.to.baselineY - input.from.baselineY;
+  const scaleX = safeScale(input.to.rect.width, input.from.rect.width);
+  const scaleY = safeScale(input.to.rect.height, input.from.rect.height);
+  const stretchRatio = maximum([
+    symmetricScaleRatio(scaleX),
+    symmetricScaleRatio(scaleY)
+  ]);
+  const reasons: KpNativeKatexTypographyHandoffReason[] = [];
+
+  if (
+    input.from.paintKind !== input.to.paintKind ||
+    input.from.paintFingerprint !== input.to.paintFingerprint
+  ) {
+    reasons.push("paint-mismatch");
+  }
+  if (input.from.fontRevision !== input.to.fontRevision) {
+    reasons.push("font-revision-mismatch");
+  }
+  if (input.from.clipPath !== input.to.clipPath) {
+    reasons.push("clip-mismatch");
+  }
+  if (
+    (input.from.baselineY === null) !== (input.to.baselineY === null) ||
+    !compatibleRuleAxis(input.from, input.to)
+  ) {
+    reasons.push("shape-mismatch");
+  }
+  if (
+    Math.abs(translateX) > input.maximumTranslationPx ||
+    Math.abs(translateY) > input.maximumTranslationPx
+  ) {
+    reasons.push("translation-exceeds-bound");
+  }
+  if (
+    !Number.isFinite(stretchRatio) ||
+    stretchRatio > input.maximumScaleRatio
+  ) {
+    reasons.push("scale-exceeds-bound");
+  }
+
+  const sameStyle =
+    input.from.styleFingerprint === input.to.styleFingerprint;
+  const transformableStyle = sameStyle || handoffStylesAreTransformable(
+    input.from,
+    input.to
+  );
+  if (!transformableStyle) reasons.push("style-mismatch");
+
+  const shapeResidual = maximum([
+    Math.abs(input.to.rect.width - input.from.rect.width),
+    Math.abs(input.to.rect.height - input.from.rect.height)
+  ]);
+  const compatibility = reasons.length > 0
+    ? "unsupported"
+    : sameStyle && shapeResidual <= input.tolerancePx
+      ? "style-compatible"
+      : "transform-compatible";
+  return Object.freeze({
+    kind: "native-katex-typography-handoff-assessment",
+    lifecycle: "renderer-session",
+    id: correlationId(input.from.id),
+    compatibility,
+    translateX,
+    translateY,
+    scaleX,
+    scaleY,
+    stretchRatio,
+    settlement: compatibility === "unsupported"
+      ? "native-checkpoint"
+      : "continuous",
+    reasons: Object.freeze([...new Set(reasons)].sort())
+  });
+}
+
+export function evaluateKpNativeKatexTypographyHandoffLaw(input: {
+  readonly telemetry: KpNativeKatexHandoffTelemetry;
+  readonly tolerancePx: number;
+  readonly maximumTranslationPx: number;
+  readonly maximumScaleRatio: number;
+}): KpNativeKatexTypographyHandoffLaw {
+  const assessments = handoffTelemetryPairs(input.telemetry).map(
+    ([material, native]) => assessKpNativeKatexTypographyHandoff({
+      from: material,
+      to: native,
+      tolerancePx: input.tolerancePx,
+      maximumTranslationPx: input.maximumTranslationPx,
+      maximumScaleRatio: input.maximumScaleRatio
+    })
+  );
+  const unsupportedIds = assessments
+    .filter(({ compatibility }) => compatibility === "unsupported")
+    .map(({ id }) => id);
+  return Object.freeze({
+    kind: "native-katex-typography-handoff-law",
+    lifecycle: "renderer-session",
+    status: unsupportedIds.length === 0
+      ? "continuous"
+      : "native-checkpoint",
+    assessments: Object.freeze(assessments),
+    unsupportedIds: Object.freeze(unsupportedIds)
+  });
+}
+
 export function traceKpNativeKatexHandoffOwnership(input: {
   readonly stage: HTMLElement;
   readonly playback: KpNativeKatexScenePlayback;
@@ -1612,7 +1774,72 @@ function maximum(values: readonly number[]): number {
 }
 
 function correlationId(observationId: string): string {
-  return observationId.replace(/\.(material|native)$/, "");
+  return observationId.replace(/\.(source|material|native)$/, "");
+}
+
+// Other style changes substitute paint; these two metrics can be assessed
+// continuously without knowing a character, notation, or renderer class.
+const kpTransformableTypographyProperties = new Set([
+  "font-size",
+  "line-height"
+]);
+
+function handoffStylesAreTransformable(
+  from: KpNativeKatexHandoffTelemetry["observations"][number],
+  to: KpNativeKatexHandoffTelemetry["observations"][number]
+): boolean {
+  if (from.paintKind === "rule" || to.paintKind === "rule") return false;
+  const fromStyle = parseFingerprint(from.styleFingerprint);
+  const toStyle = parseFingerprint(to.styleFingerprint);
+  if (
+    fromStyle.size !== toStyle.size ||
+    [...fromStyle.keys()].some((property) => !toStyle.has(property))
+  ) {
+    return false;
+  }
+  let changed = false;
+  for (const [property, fromValue] of fromStyle) {
+    const toValue = toStyle.get(property);
+    if (fromValue === toValue) continue;
+    changed = true;
+    if (!kpTransformableTypographyProperties.has(property)) return false;
+    if (!positiveCssLength(fromValue) || !positiveCssLength(toValue!)) {
+      return false;
+    }
+  }
+  return changed;
+}
+
+function parseFingerprint(fingerprint: string): ReadonlyMap<string, string> {
+  return new Map(fingerprint.split("|").map((entry) => {
+    const separator = entry.indexOf(":");
+    return separator < 1
+      ? [entry, ""] as const
+      : [entry.slice(0, separator), entry.slice(separator + 1)] as const;
+  }));
+}
+
+function positiveCssLength(value: string): boolean {
+  const match = /^([0-9]+(?:\.[0-9]+)?)px$/.exec(value);
+  return match !== null && Number(match[1]) > 0;
+}
+
+function compatibleRuleAxis(
+  from: KpNativeKatexHandoffTelemetry["observations"][number],
+  to: KpNativeKatexHandoffTelemetry["observations"][number]
+): boolean {
+  if (from.ruleGeometry === undefined && to.ruleGeometry === undefined) {
+    return true;
+  }
+  return from.ruleGeometry?.axis === to.ruleGeometry?.axis;
+}
+
+function safeScale(to: number, from: number): number {
+  return from === 0 ? Number.POSITIVE_INFINITY : to / from;
+}
+
+function symmetricScaleRatio(scale: number): number {
+  return scale <= 0 ? Number.POSITIVE_INFINITY : Math.max(scale, 1 / scale);
 }
 
 function commonAlignmentResult(
