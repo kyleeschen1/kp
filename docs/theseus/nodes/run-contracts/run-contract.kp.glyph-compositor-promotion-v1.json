@@ -222,6 +222,34 @@
       "scope": "slice-12 repository types",
       "checkedAt": "2026-07-25T20:10:05.667Z",
       "notes": "Application, node, test, and domain TypeScript checks passed."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "failed",
+      "scope": "slice-13 intermediate split multiplicity proof",
+      "checkedAt": "2026-07-25T20:12:09.956Z",
+      "notes": "35 checks passed; the new test expected a guessed disposition ID prefix. The compositor deterministically emits lineage.structural-copy.0. Preserve and assert the actual generic identity, then rerun."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "failed",
+      "scope": "slice-13 missing-lineage expectation",
+      "checkedAt": "2026-07-25T20:12:30.353Z",
+      "notes": "35 checks passed; missing explicit target lineage does not throw. The generic reconciler honestly emits eliminate plus introductions rather than a split, so assert that conservative total fallback instead of an exception."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-13 split multiplicity reconciliation",
+      "checkedAt": "2026-07-25T20:14:50.880Z",
+      "notes": "36 focused checks passed. One-to-many reconciliation is total, target-permutation stable, exact and stateless under reverse sampling, and correlated to two distinct native targets. Missing target lineage conservatively emits elimination plus introductions rather than an inferred split."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-13 repository types",
+      "checkedAt": "2026-07-25T20:14:53.206Z",
+      "notes": "Application, node, test, and domain TypeScript checks passed."
     }
   ],
   "allowedWork": [
@@ -325,7 +353,8 @@
     {
       "id": "slice-13",
       "title": "split-multiplicity-reconciliation",
-      "status": "planned"
+      "summary": "Proved the existing generic split lifecycle handles inverse one-to-many scene multiplicity with total deterministic ownership, permutation-stable dispositions, two distinct handoff correlations, exact endpoints, and reverse/direct equality. Missing lineage fails conservatively to eliminate plus introduce; no fraction matcher, lifecycle, or scheduler was added.",
+      "status": "complete"
     },
     {
       "id": "slice-14",

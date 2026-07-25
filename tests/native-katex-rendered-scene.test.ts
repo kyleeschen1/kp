@@ -628,6 +628,116 @@ test("explicit semantic relations compile generic merge multiplicity", () => {
   assert.deepEqual(result.dispositions[0]?.targetAtomIds, ["target.result"]);
 });
 
+test("generic split reconciliation is total, permutation-stable, and reversible", () => {
+  const source = createScene("source", ["source.denominator"]);
+  const target = createScene("target", [
+    "target.denominator.left",
+    "target.denominator.right"
+  ]);
+  const reversedTarget = createKpNativeKatexRenderedSceneObservation({
+    ...target,
+    atoms: [...target.atoms].reverse(),
+    groups: target.groups.map((group) => ({
+      ...group,
+      atomIds: [...group.atomIds].reverse()
+    }))
+  });
+  const relations = [{
+    id: "lineage.structural-copy",
+    relation: "split" as const,
+    sourceEntityIds: ["entity.denominator"],
+    targetEntityIds: [
+      "entity.denominator.left",
+      "entity.denominator.right"
+    ]
+  }];
+  const compile = (candidateTarget: typeof target) => {
+    const reconciliation = reconcileKpNativeKatexScenes({
+      source,
+      target: candidateTarget,
+      relations
+    });
+    const tracks = compileKpNativeKatexSceneTracks(
+      compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+    );
+    return {
+      reconciliation,
+      tracks,
+      correlations: correlateKpNativeKatexSceneHandoff({
+        reconciliation,
+        tracks
+      })
+    };
+  };
+  const direct = compile(target);
+  const permuted = compile(reversedTarget);
+
+  assert.deepEqual(direct.reconciliation.dispositions, [
+    {
+      id: "lineage.structural-copy.0",
+      lifecycle: "split",
+      sourceAtomIds: ["source.denominator"],
+      targetAtomIds: [
+        "target.denominator.left",
+        "target.denominator.right"
+      ],
+      semanticEntityIds: [
+        "entity.denominator",
+        "entity.denominator.left",
+        "entity.denominator.right"
+      ]
+    }
+  ]);
+  assert.deepEqual(
+    direct.reconciliation.dispositions,
+    permuted.reconciliation.dispositions
+  );
+  assert.deepEqual(
+    direct.correlations.map(({ targetAtomId }) => targetAtomId),
+    ["target.denominator.left", "target.denominator.right"]
+  );
+  assert.equal(
+    new Set(direct.correlations.map(({ materialOwnerId }) =>
+      materialOwnerId
+    )).size,
+    2
+  );
+  const progresses = [0, 0.25, 0.5, 0.75, 1];
+  const forward = progresses.map((progress) =>
+    sampleKpNativeKatexSceneTracks(direct.tracks, progress)
+  );
+  const reverse = [...progresses].reverse().map((progress) =>
+    sampleKpNativeKatexSceneTracks(direct.tracks, progress)
+  ).reverse();
+  assert.deepEqual(forward, reverse);
+  assert.deepEqual(
+    forward[0]!.map(({ rect }) => rect),
+    [source.atoms[0]!.rect, source.atoms[0]!.rect]
+  );
+  assert.deepEqual(
+    forward.at(-1)!.map(({ rect }) => rect),
+    target.atoms.map(({ rect }) => rect)
+  );
+  const missingLineage = reconcileKpNativeKatexScenes({
+    source,
+    target,
+    relations: [{
+      ...relations[0]!,
+      targetEntityIds: ["entity.denominator.missing"]
+    }]
+  });
+  assert.deepEqual(
+    missingLineage.dispositions.map(({ lifecycle }) => lifecycle).sort(),
+    ["eliminate", "introduce", "introduce"]
+  );
+  assert.equal(
+    missingLineage.dispositions.some(({ lifecycle }) =>
+      lifecycle === "split"
+    ),
+    false
+  );
+});
+
 test("hierarchical scene plans separate component motion from child residuals", () => {
   const source = createScene("source", ["source.a", "source.b"]);
   const target = createScene("target", ["target.result"]);
