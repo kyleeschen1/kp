@@ -30,6 +30,13 @@ export interface KpNativeKatexFragmentBinding {
   readonly glyphKey: string;
 }
 
+export interface KpClientRectSnapshot {
+  readonly left: number;
+  readonly top: number;
+  readonly width: number;
+  readonly height: number;
+}
+
 const fingerprintProperties = [
   "font-family",
   "font-size",
@@ -47,6 +54,10 @@ export function observeKpNativeKatexFragments(input: {
   readonly fontRevision: number;
 }): KpNativeKatexFragmentObservationBatch {
   const stageRect = input.stage.getBoundingClientRect();
+  const stageLayout = {
+    width: input.stage.offsetWidth || stageRect.width,
+    height: input.stage.offsetHeight || stageRect.height
+  };
   const fragments = input.bindings.map((binding) => {
     const matches = input.stage.querySelectorAll<HTMLElement>(
       `[data-kp-motion-id="${CSS.escape(binding.motionId)}"]`
@@ -57,17 +68,17 @@ export function observeKpNativeKatexFragments(input: {
       );
     }
     const sourceElement = matches[0]!;
-    const rect = sourceElement.getBoundingClientRect();
+    const rect = normalizeKpStageRelativeRect({
+      stageClientRect: stageRect,
+      stageLayoutWidth: stageLayout.width,
+      stageLayoutHeight: stageLayout.height,
+      fragmentClientRect: sourceElement.getBoundingClientRect()
+    });
     const computed = getComputedStyle(sourceElement);
     return {
       ...binding,
       sourceElement,
-      rect: {
-        left: rect.left - stageRect.left,
-        top: rect.top - stageRect.top,
-        width: rect.width,
-        height: rect.height
-      },
+      rect,
       styleFingerprint: fingerprintProperties.map((property) =>
         `${property}:${computed.getPropertyValue(property)}`
       ).join("|"),
@@ -77,6 +88,34 @@ export function observeKpNativeKatexFragments(input: {
   return createKpNativeKatexFragmentObservationBatch({
     stage: input.stage,
     fragments
+  });
+}
+
+export function normalizeKpStageRelativeRect(input: {
+  readonly stageClientRect: KpClientRectSnapshot;
+  readonly stageLayoutWidth: number;
+  readonly stageLayoutHeight: number;
+  readonly fragmentClientRect: KpClientRectSnapshot;
+}): KpStageRelativeRect {
+  if (
+    !Number.isFinite(input.stageLayoutWidth) ||
+    !Number.isFinite(input.stageLayoutHeight) ||
+    input.stageLayoutWidth <= 0 ||
+    input.stageLayoutHeight <= 0 ||
+    input.stageClientRect.width <= 0 ||
+    input.stageClientRect.height <= 0
+  ) {
+    throw new Error("Native fragment stage requires positive settled geometry.");
+  }
+  const scaleX = input.stageClientRect.width / input.stageLayoutWidth;
+  const scaleY = input.stageClientRect.height / input.stageLayoutHeight;
+  return Object.freeze({
+    left:
+      (input.fragmentClientRect.left - input.stageClientRect.left) / scaleX,
+    top:
+      (input.fragmentClientRect.top - input.stageClientRect.top) / scaleY,
+    width: input.fragmentClientRect.width / scaleX,
+    height: input.fragmentClientRect.height / scaleY
   });
 }
 

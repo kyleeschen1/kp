@@ -113,3 +113,58 @@ test("observer rejects missing and duplicate explicit motion nodes", async ({
   expect(messages.missing).toContain("resolved to 0");
   expect(messages.duplicate).toContain("resolved to 2");
 });
+
+test("stage-local fragment geometry is stable under stage scaling", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  const measurements = await page.evaluate(() => {
+    const stage = document.querySelector<HTMLElement>(
+      '[data-reconciliation-case="solve-x"] [data-case-stage]'
+    )!;
+    const renderedX = stage.querySelector<HTMLElement>(
+      "[data-case-source] .mord.mathnormal"
+    )!;
+    renderedX.dataset["kpMotionId"] = "motion.solve-x.scaled-x";
+    const observe = (
+      window as unknown as {
+        __kpObserveNativeKatexFragments: (input: {
+          stage: HTMLElement;
+          bindings: readonly {
+            id: string;
+            semanticEntityId: string;
+            motionId: string;
+            glyphKey: string;
+          }[];
+          fontRevision: number;
+        }) => {
+          fragments: readonly {
+            rect: { left: number; top: number; width: number; height: number };
+          }[];
+        };
+      }
+    ).__kpObserveNativeKatexFragments;
+    const read = () => observe({
+      stage,
+      bindings: [{
+        id: "fragment.solve-x.scaled-x",
+        semanticEntityId: "entity.x",
+        motionId: "motion.solve-x.scaled-x",
+        glyphKey: "x"
+      }],
+      fontRevision: 0
+    }).fragments[0]!.rect;
+    const normal = read();
+    stage.style.transformOrigin = "0 0";
+    stage.style.transform = "scale(1.5)";
+    const scaled = read();
+    return { normal, scaled };
+  });
+
+  for (const key of ["left", "top", "width", "height"] as const) {
+    expect(measurements.scaled[key]).toBeCloseTo(
+      measurements.normal[key],
+      4
+    );
+  }
+});

@@ -56,6 +56,13 @@
       "scope": "slice-04 semantic KaTeX observation",
       "checkedAt": "2026-07-25T14:14:05.706Z",
       "notes": "Five unit tests, two real-KaTeX browser tests, and all TypeScript projects pass; zero and duplicate motion-node matches fail closed."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-05 coordinate normalization",
+      "checkedAt": "2026-07-25T14:16:36.080Z",
+      "notes": "Six unit tests, three browser tests, and all TypeScript projects pass; local x geometry is invariant under a 1.5x stage transform."
     }
   ],
   "expectedLearning": [

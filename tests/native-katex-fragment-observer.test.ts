@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  createKpNativeKatexFragmentObservationBatch
+  createKpNativeKatexFragmentObservationBatch,
+  normalizeKpStageRelativeRect
 } from "../src/rendering/native-katex-fragment-observer.ts";
 
 const ownerDocument = {};
@@ -68,5 +69,30 @@ test("native fragment observations reject ambiguous identity and geometry", () =
       }]
     }),
     /share the stage document/
+  );
+});
+
+test("client rectangles normalize into stable stage-local coordinates", () => {
+  const normalized = normalizeKpStageRelativeRect({
+    stageClientRect: { left: 100, top: 50, width: 960, height: 360 },
+    stageLayoutWidth: 640,
+    stageLayoutHeight: 240,
+    fragmentClientRect: { left: 250, top: 125, width: 30, height: 37.5 }
+  });
+
+  assert.deepEqual(normalized, {
+    left: 100,
+    top: 50,
+    width: 20,
+    height: 25
+  });
+  assert.throws(
+    () => normalizeKpStageRelativeRect({
+      stageClientRect: { left: 0, top: 0, width: 0, height: 240 },
+      stageLayoutWidth: 640,
+      stageLayoutHeight: 240,
+      fragmentClientRect: { left: 0, top: 0, width: 10, height: 20 }
+    }),
+    /positive settled geometry/
   );
 });

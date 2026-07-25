@@ -81,7 +81,8 @@
     {
       "id": "slice-05",
       "title": "Coordinate-normalization",
-      "status": "planned"
+      "summary": "Normalized browser fragment rectangles into stable local CSS coordinates across transformed and responsive stages.",
+      "status": "complete"
     },
     {
       "id": "slice-06",
