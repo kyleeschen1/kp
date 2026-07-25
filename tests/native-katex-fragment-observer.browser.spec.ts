@@ -731,3 +731,40 @@ test("solve-x exemplar moves one real x without crossfade or character substitut
   }
   expect(samples[1]!.departingOpacity).toBe(0);
 });
+
+test("fraction merge settles one native denominator with Cloze authority", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=1000");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const fraction = page.locator('[data-reconciliation-case="fraction-merge"]');
+  const target = fraction.locator(
+    '[data-kp-motion-id="motion.fraction.target-denominator"]'
+  );
+  const clones = fraction.locator("[data-kp-native-katex-fragment-clone]");
+
+  await expect(fraction).toHaveCount(1);
+  await expect(clones).toHaveCount(2);
+  await expect(target).toHaveText("2");
+  await expect(target).toHaveAttribute(
+    "data-kp-semantic-selector-id",
+    "equation.numerator-split-merge.combined.fraction.denominator.2"
+  );
+  await expect(target).toHaveAttribute("tabindex", "0");
+  await expect(clones.first()).toHaveAttribute("aria-hidden", "true");
+  expect(await clones.evaluateAll((elements) =>
+    elements.every((element) =>
+      !element.hasAttribute("data-kp-semantic-selector-id") &&
+      !element.hasAttribute("tabindex") &&
+      (element.textContent ?? "").includes("2")
+    )
+  )).toBe(true);
+
+  await fraction.locator("[data-fraction-cloze]").click();
+  await expect(target).toHaveAttribute("data-kp-cloze-hidden", "true");
+  await expect(target).toHaveClass(/glyph-exemplar__cloze-hidden/);
+  await expect(fraction.locator("[data-fraction-cloze]")).toHaveAttribute(
+    "aria-pressed",
+    "true"
+  );
+});

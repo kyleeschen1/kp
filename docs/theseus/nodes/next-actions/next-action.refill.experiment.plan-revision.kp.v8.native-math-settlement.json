@@ -144,6 +144,12 @@
       "status": "passed",
       "scope": "slice-15 generic many-to-one compositor",
       "checkedAt": "2026-07-25T15:35:18.799Z"
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment; npm run test:browser:real-katex-glyph-compositor; npm run typecheck; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-16 merge settlement and Cloze",
+      "checkedAt": "2026-07-25T15:42:36.601Z"
     }
   ],
   "progress": {

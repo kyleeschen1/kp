@@ -24,11 +24,11 @@ try {
       await page.evaluate(async () => document.fonts.ready);
       await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
       const caseCount = await page.locator("[data-reconciliation-case]").count();
-      if (caseCount !== 1) {
-        throw new Error(`Expected one promoted exemplar, found ${caseCount}.`);
+      if (caseCount < 2) {
+        throw new Error(`Expected promoted solve and merge cases, found ${caseCount}.`);
       }
       const motionCount = await page.locator(
-        "[data-kp-native-katex-fragment-clone]"
+        "[data-reconciliation-case=\"solve-x\"] [data-kp-native-katex-fragment-clone]"
       ).count();
       if (motionCount !== 1) {
         throw new Error(`Expected one real KaTeX moving owner, found ${motionCount}.`);

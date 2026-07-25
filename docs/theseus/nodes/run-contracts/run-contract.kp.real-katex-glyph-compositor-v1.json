@@ -147,7 +147,8 @@
     {
       "id": "slice-16",
       "title": "Merge-settlement-and-Cloze",
-      "status": "planned"
+      "summary": "Delivered a live two-to-one native denominator merge with visible destination context, exact endpoint settlement, and Cloze plus interaction authority confined to the native target.",
+      "status": "complete"
     },
     {
       "id": "slice-17",

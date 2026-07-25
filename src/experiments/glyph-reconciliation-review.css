@@ -61,6 +61,10 @@ button, input { font: inherit; }
   box-shadow: 0 24px 70px rgba(33, 51, 45, .12);
 }
 
+.glyph-exemplar__review--secondary {
+  margin-top: 1.1rem;
+}
+
 .glyph-exemplar__prompt {
   display: flex;
   align-items: end;
@@ -108,6 +112,48 @@ button, input { font: inherit; }
   container-type: inline-size;
   color: #17241f;
   font-size: clamp(1.65rem, 7cqw, 3.4rem);
+}
+
+.glyph-exemplar__viewport--fraction {
+  height: clamp(220px, 32vw, 300px);
+}
+
+.glyph-exemplar__fraction-equation {
+  position: absolute;
+  z-index: 2;
+  top: 34%;
+  left: 50%;
+  display: block;
+  width: max-content;
+  transform: translate(-50%, -50%);
+  transform-origin: 0 0;
+  white-space: nowrap;
+}
+
+.glyph-exemplar__fraction-equation--target {
+  top: 70%;
+  opacity: 0;
+}
+
+.glyph-exemplar__fraction-equation
+  [data-kp-semantic-selector-id] {
+  border-radius: .12em;
+  outline: none;
+}
+
+.glyph-exemplar__fraction-equation
+  [data-kp-semantic-selector-id]:hover,
+.glyph-exemplar__fraction-equation
+  [data-kp-semantic-selector-id]:focus-visible {
+  background: rgba(216, 255, 115, .52);
+  box-shadow: 0 0 0 .12em rgba(39, 112, 91, .25);
+}
+
+.glyph-exemplar__cloze-hidden {
+  border-radius: .08em;
+  background: #243a33 !important;
+  color: transparent !important;
+  text-shadow: none !important;
 }
 
 .glyph-exemplar__guide {
@@ -217,6 +263,15 @@ button, input { font: inherit; }
   font-size: .8rem;
   font-variant-numeric: tabular-nums;
   text-align: right;
+}
+
+.glyph-exemplar__controls--compact {
+  justify-content: space-between;
+}
+
+.glyph-exemplar__controls--compact output {
+  max-width: 34rem;
+  text-align: left;
 }
 
 .glyph-exemplar__evidence {
