@@ -23,6 +23,63 @@ export interface KpNativeKatexFragmentObservationBatch {
   readonly fragments: readonly KpNativeKatexFragmentObservation[];
 }
 
+export interface KpNativeKatexFragmentBinding {
+  readonly id: string;
+  readonly semanticEntityId: string;
+  readonly motionId: string;
+  readonly glyphKey: string;
+}
+
+const fingerprintProperties = [
+  "font-family",
+  "font-size",
+  "font-style",
+  "font-weight",
+  "letter-spacing",
+  "line-height",
+  "transform",
+  "vertical-align"
+] as const;
+
+export function observeKpNativeKatexFragments(input: {
+  readonly stage: HTMLElement;
+  readonly bindings: readonly KpNativeKatexFragmentBinding[];
+  readonly fontRevision: number;
+}): KpNativeKatexFragmentObservationBatch {
+  const stageRect = input.stage.getBoundingClientRect();
+  const fragments = input.bindings.map((binding) => {
+    const matches = input.stage.querySelectorAll<HTMLElement>(
+      `[data-kp-motion-id="${CSS.escape(binding.motionId)}"]`
+    );
+    if (matches.length !== 1) {
+      throw new Error(
+        `Motion node ${binding.motionId} resolved to ${matches.length} rendered fragments; exactly one explicit node is required.`
+      );
+    }
+    const sourceElement = matches[0]!;
+    const rect = sourceElement.getBoundingClientRect();
+    const computed = getComputedStyle(sourceElement);
+    return {
+      ...binding,
+      sourceElement,
+      rect: {
+        left: rect.left - stageRect.left,
+        top: rect.top - stageRect.top,
+        width: rect.width,
+        height: rect.height
+      },
+      styleFingerprint: fingerprintProperties.map((property) =>
+        `${property}:${computed.getPropertyValue(property)}`
+      ).join("|"),
+      fontRevision: input.fontRevision
+    };
+  });
+  return createKpNativeKatexFragmentObservationBatch({
+    stage: input.stage,
+    fragments
+  });
+}
+
 export function createKpNativeKatexFragmentObservationBatch(input: {
   readonly stage: HTMLElement;
   readonly fragments: readonly KpNativeKatexFragmentObservation[];

@@ -75,7 +75,8 @@
     {
       "id": "slice-04",
       "title": "Semantic-KaTeX-leaf-observation",
-      "status": "planned"
+      "summary": "Observed exact explicitly tagged KaTeX fragment subtrees with stage-relative bounds and computed-style fingerprints; ambiguous nodes fail closed.",
+      "status": "complete"
     },
     {
       "id": "slice-05",
