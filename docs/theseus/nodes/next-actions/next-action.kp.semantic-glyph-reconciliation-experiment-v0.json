@@ -100,6 +100,13 @@
       "scope": "slice-10 clearance scheduler",
       "checkedAt": "2026-07-25T01:56:37.560Z",
       "notes": "34 focused tests and typecheck pass."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment and npm run typecheck",
+      "status": "passed",
+      "scope": "slice-11 headless backend",
+      "checkedAt": "2026-07-25T01:58:29.802Z",
+      "notes": "36 focused tests and typecheck pass."
     }
   ],
   "progress": {

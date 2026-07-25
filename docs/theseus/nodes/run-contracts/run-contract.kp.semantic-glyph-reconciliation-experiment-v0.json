@@ -162,7 +162,8 @@
     {
       "id": "slice-11",
       "title": "Headless-test-backend",
-      "status": "planned"
+      "summary": "Added a deterministic no-browser notation measurement backend with fixed metrics, protected regions, settlement epoch, and strict missing or duplicate metric rejection.",
+      "status": "complete"
     },
     {
       "id": "slice-12",
