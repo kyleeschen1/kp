@@ -110,6 +110,62 @@
       "scope": "slice-08 correction application gate",
       "checkedAt": "2026-07-25T19:46:08.243Z",
       "notes": "The focused model fixture reproduces the measured plus font-size mismatch and returns unsupported. No runtime correction, native DOM mutation, per-atom scale, offset, or fraction exception was added."
+    },
+    {
+      "command": "npm run perf:glyph-reconciliation-experiment",
+      "status": "failed",
+      "scope": "slice-09 concurrent performance gate",
+      "checkedAt": "2026-07-25T19:49:04.514Z",
+      "notes": "Cold-plan p95 measured 16.32 ms against 12 ms while repository typecheck ran concurrently; cached plan 0.142 ms, frame sample 0.022 ms, scene sample 0.038 ms, payload, and gzip budgets passed. Rerun the same stable command in isolation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "slice-09 intermediate endpoint matrix",
+      "checkedAt": "2026-07-25T19:49:42.172Z",
+      "notes": "The new reverse-seek assertions called reverse directly on a readonly trace type at two sites. Runtime browser check passed; copy the serialized trace before reversing and rerun."
+    },
+    {
+      "command": "npm run perf:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-09 isolated performance gate",
+      "checkedAt": "2026-07-25T19:50:00.386Z",
+      "notes": "Isolated rerun passed: cold-plan p95 2.92 ms, cached 0.153 ms, frame sample 0.0046 ms, scene sample 0.0156 ms, 35 operations, 2573-byte plan, and 10104-byte route gzip growth. This confirms the concurrent 16.32 ms result was host contention, not a code regression."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-09 focused endpoint ratchets",
+      "checkedAt": "2026-07-25T19:53:26.034Z",
+      "notes": "35 focused tests passed, including the fail-closed common-alignment model and measured plus style mismatch fixture."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-09 corrected endpoint matrix types",
+      "checkedAt": "2026-07-25T19:53:35.268Z",
+      "notes": "After copying readonly traces before reverse ordering, application, node, test, and domain TypeScript checks passed."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-09 browser regression matrix",
+      "checkedAt": "2026-07-25T19:53:46.440Z",
+      "notes": "32 Chromium checks passed. Wide DPR1 and phone DPR2 remain deterministic through font settlement, resize reload, direct seek, reverse, and repeated play with exactly one visual owner and retained style-mismatch evidence."
+    },
+    {
+      "command": "npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-09 stable visual evidence",
+      "checkedAt": "2026-07-25T19:53:56.643Z",
+      "notes": "Captured 10 overview and 14 dense endpoint frames. The 99.9 percent wide/phone material frames visibly retain the bounded oversized-plus and baseline overlap, while 100 percent native targets are exact."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "slice-09 production closure",
+      "checkedAt": "2026-07-25T19:54:05.817Z",
+      "notes": "Reader production closure passed for all 8 manifest routes."
     }
   ],
   "allowedWork": [
@@ -189,7 +245,8 @@
     {
       "id": "slice-09",
       "title": "endpoint-regression-matrix",
-      "status": "planned"
+      "summary": "Added explicit endpoint residual ceilings and a wide DPR1/phone DPR2 matrix covering font readiness, resize reload, direct seek, reverse, and repeated play. Focused tests, typecheck, 32 Chromium checks, stable 24-frame capture, isolated performance budgets, and reader production closure pass. The known 99.9 percent oversized-plus overlap remains visible but deterministic and bounded; native 100 percent settlement stays exact.",
+      "status": "complete"
     },
     {
       "id": "slice-10",

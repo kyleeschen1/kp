@@ -1,4 +1,59 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+import {
+  kpFractionEndpointRegressionLimits
+} from "../scripts/glyph-reconciliation-endpoint-checkpoints.ts";
+
+interface FractionHandoffOwnershipSample {
+  readonly progress: number;
+  readonly visualOwner:
+    | "source-native"
+    | "material-scene"
+    | "target-native";
+  readonly sourceNativeOpacity: 0 | 1;
+  readonly materialSceneOpacity: 0 | 1;
+  readonly targetNativeOpacity: 0 | 1;
+  readonly visibleMaterialOwnerIds: readonly string[];
+  readonly glyphStyleMismatchIds: readonly string[];
+  readonly maximumGlyphRectResidualPx: number;
+  readonly maximumGlyphBaselineResidualPx: number;
+  readonly maximumRuleGeometryResidualPx: number;
+}
+
+async function traceFractionHandoff(
+  page: Page,
+  progresses: readonly number[]
+): Promise<readonly FractionHandoffOwnershipSample[]> {
+  return page.evaluate((steps) => {
+    const trace = (window as unknown as {
+      __kpTraceFractionHandoffOwnership: (
+        progresses: readonly number[]
+      ) => readonly FractionHandoffOwnershipSample[];
+    }).__kpTraceFractionHandoffOwnership;
+    return trace(steps).map((sample) => ({ ...sample }));
+  }, progresses);
+}
+
+function expectFractionEndpointRegression(
+  trace: readonly FractionHandoffOwnershipSample[]
+): void {
+  const nearHandoff = trace.find(({ progress }) => progress === 0.999)!;
+  expect(nearHandoff.maximumGlyphRectResidualPx).toBeLessThanOrEqual(
+    kpFractionEndpointRegressionLimits.maximumGlyphRectResidualPx
+  );
+  expect(nearHandoff.maximumGlyphBaselineResidualPx).toBeLessThanOrEqual(
+    kpFractionEndpointRegressionLimits.maximumGlyphBaselineResidualPx
+  );
+  expect(nearHandoff.maximumRuleGeometryResidualPx).toBeLessThanOrEqual(
+    kpFractionEndpointRegressionLimits.maximumRuleGeometryResidualPx
+  );
+  expect(nearHandoff.glyphStyleMismatchIds.length).toBeGreaterThan(0);
+  expect(trace.every((sample) =>
+    sample.sourceNativeOpacity +
+    sample.materialSceneOpacity +
+    sample.targetNativeOpacity === 1
+  )).toBe(true);
+}
 
 test("observer measures one explicitly tagged real KaTeX fragment", async ({
   page
@@ -661,32 +716,14 @@ test("handoff ownership trace is atomic and seek-direction independent", async (
   await page.locator(
     '[data-kp-glyph-review][data-kp-ready="true"]'
   ).waitFor();
-  const evidence = await page.evaluate(() => {
-    type OwnershipSample = {
-      progress: number;
-      visualOwner: "source-native" | "material-scene" | "target-native";
-      sourceNativeOpacity: 0 | 1;
-      materialSceneOpacity: 0 | 1;
-      targetNativeOpacity: 0 | 1;
-      visibleMaterialOwnerIds: readonly string[];
-      glyphStyleMismatchIds: readonly string[];
-      maximumGlyphRectResidualPx: number;
-      maximumGlyphBaselineResidualPx: number;
-      maximumRuleGeometryResidualPx: number;
-    };
-    const trace = (window as unknown as {
-      __kpTraceFractionHandoffOwnership: (
-        progresses: readonly number[]
-      ) => readonly OwnershipSample[];
-    }).__kpTraceFractionHandoffOwnership;
-    const progresses = [0.96, 0.99, 0.999, 1] as const;
-    return {
-      forward: trace(progresses).map((sample) => ({ ...sample })),
-      reverse: trace([...progresses].reverse()).map((sample) => ({
-        ...sample
-      })).reverse()
-    };
-  });
+  const progresses = [0.96, 0.99, 0.999, 1] as const;
+  const evidence = {
+    forward: await traceFractionHandoff(page, progresses),
+    reverse: [...await traceFractionHandoff(
+      page,
+      [...progresses].reverse()
+    )].reverse()
+  };
 
   expect(evidence.forward).toEqual(evidence.reverse);
   expect(evidence.forward.map(({ visualOwner }) => visualOwner)).toEqual([
@@ -720,6 +757,68 @@ test("handoff ownership trace is atomic and seek-direction independent", async (
     1
   );
   expect(evidence.forward[2]!.maximumRuleGeometryResidualPx).toBeLessThan(0.2);
+});
+
+test("endpoint regression matrix survives DPR, resize, seek, and replay", async ({
+  browser
+}) => {
+  for (const profile of [{
+    viewport: { width: 1_440, height: 950 },
+    resizedViewport: { width: 1_120, height: 820 },
+    deviceScaleFactor: 1
+  }, {
+    viewport: { width: 390, height: 844 },
+    resizedViewport: { width: 430, height: 900 },
+    deviceScaleFactor: 2
+  }]) {
+    const context = await browser.newContext({
+      viewport: profile.viewport,
+      deviceScaleFactor: profile.deviceScaleFactor
+    });
+    const page = await context.newPage();
+    await page.goto("/glyph-reconciliation-experiment.html?progress=859");
+    await page.locator(
+      '[data-kp-glyph-review][data-kp-ready="true"]'
+    ).waitFor();
+    await page.evaluate(async () => document.fonts.ready);
+    expect(await page.evaluate(() => document.fonts.status)).toBe("loaded");
+
+    const steps = [0.96, 0.99, 0.999, 1] as const;
+    const direct = await traceFractionHandoff(page, steps);
+    const repeated = await traceFractionHandoff(page, steps);
+    const reverse = [...await traceFractionHandoff(
+      page,
+      [...steps].reverse()
+    )].reverse();
+    expect(direct).toEqual(repeated);
+    expect(direct).toEqual(reverse);
+    expectFractionEndpointRegression(direct);
+
+    const replay = await traceFractionHandoff(
+      page,
+      [0, 0.999, 1, 0, 0.999, 1]
+    );
+    expect(replay.slice(0, 3)).toEqual(replay.slice(3));
+    expect(replay.map(({ visualOwner }) => visualOwner)).toEqual([
+      "source-native",
+      "material-scene",
+      "target-native",
+      "source-native",
+      "material-scene",
+      "target-native"
+    ]);
+
+    await page.setViewportSize(profile.resizedViewport);
+    await page.reload();
+    await page.locator(
+      '[data-kp-glyph-review][data-kp-ready="true"]'
+    ).waitFor();
+    await page.evaluate(async () => document.fonts.ready);
+    const resized = await traceFractionHandoff(page, steps);
+    expect(resized).toEqual(await traceFractionHandoff(page, steps));
+    expectFractionEndpointRegression(resized);
+    await context.close();
+  }
 });
 
 test("visible fraction card renders the complete moving scene on its shared clock", async ({

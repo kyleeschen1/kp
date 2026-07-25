@@ -4,6 +4,12 @@ export interface KpFractionEndpointCheckpoint {
   readonly routeProgressPermille: number;
 }
 
+export const kpFractionEndpointRegressionLimits = Object.freeze({
+  maximumGlyphRectResidualPx: 0.25,
+  maximumGlyphBaselineResidualPx: 2.5,
+  maximumRuleGeometryResidualPx: 0.25
+});
+
 const fractionWindow = {
   start: 0.14,
   span: 0.72
@@ -31,4 +37,3 @@ export const kpFractionEndpointCheckpoints: readonly KpFractionEndpointCheckpoin
         1_000
     )
   }));
-
