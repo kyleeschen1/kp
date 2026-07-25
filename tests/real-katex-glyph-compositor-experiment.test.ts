@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
@@ -38,7 +39,42 @@ test("real-glyph acceptance and complexity budgets are fixed before implementati
   assert.equal(ledger.maxProductionModules, 4);
   assert.equal(ledger.maxLifecyclePrimitives, 6);
   assert.equal(ledger.nativeHandoffTolerancePx, 1);
+  assert.equal(ledger.productionModules.length, 2);
+  assert.equal(ledger.lifecyclePrimitives.length, 6);
   assert.deepEqual(validateKpRealGlyphCompositorExperimentLedger(ledger), []);
+});
+
+test("promoted compositor stays below module and lifecycle ceilings", async () => {
+  const ledger = kpRealGlyphCompositorExperimentLedger;
+  assert.ok(ledger.productionModules.length <= ledger.maxProductionModules);
+  assert.ok(
+    ledger.lifecyclePrimitives.length <= ledger.maxLifecyclePrimitives
+  );
+  const source = (await Promise.all(ledger.productionModules.map((path) =>
+    readFile(path, "utf8")
+  ))).join("\n");
+
+  assert.doesNotMatch(
+    source,
+    /\b(fraction|quadratic|plus-minus|crowded|phone|wide)\b/i
+  );
+});
+
+test("static route owns markup once and keeps its controller bounded", async () => {
+  const [html, controller] = await Promise.all([
+    readFile("glyph-reconciliation-experiment.html", "utf8"),
+    readFile("src/experiments/glyph-reconciliation-review.ts", "utf8")
+  ]);
+
+  assert.equal(
+    (html.match(/data-reconciliation-case=/g) ?? []).length,
+    4
+  );
+  assert.doesNotMatch(controller, /root\.innerHTML\s*=/);
+  assert.ok(
+    Buffer.byteLength(controller) < 40_000,
+    "Experiment controller must remain below its post-migration source ceiling."
+  );
 });
 
 test("renderer-session fragment state cannot survive animation construction", () => {

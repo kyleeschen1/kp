@@ -188,6 +188,13 @@
       "scope": "slice-22 responsive and performance certification",
       "checkedAt": "2026-07-25T16:22:26.088Z",
       "notes": "Production build, 59 semantic tests, 17 Chromium tests, and ten exact four-case wide/phone captures pass. Reduced motion settles directly. Cold 8.56 ms, cached 0.66 ms, sample 0.073 ms, 35 operations, 2573 plan bytes, and 5433 bytes route growth all remain below frozen limits."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:semantic-animation-convergence; npm run build; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-23 complexity-negative migration",
+      "checkedAt": "2026-07-25T16:26:27.889Z",
+      "notes": "12 focused compositor tests, 255 convergence tests, typecheck, and production build pass. The route controller dropped from 46.8 KB to 37.6 KB source; exactly two compositor modules and six lifecycle primitives are ratcheted below the 4/6 ceilings, with no case-specific scheduler vocabulary."
     }
   ],
   "progress": {

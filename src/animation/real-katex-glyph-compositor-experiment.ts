@@ -11,6 +11,8 @@ export interface KpRealGlyphCompositorExperimentLedger {
   readonly baselineFailureCodes: readonly KpRealGlyphBaselineFailureCode[];
   readonly durableForbiddenFields: readonly string[];
   readonly exemplarAcceptance: readonly string[];
+  readonly productionModules: readonly string[];
+  readonly lifecyclePrimitives: readonly string[];
   readonly maxProductionModules: 4;
   readonly maxLifecyclePrimitives: 6;
   readonly nativeHandoffTolerancePx: 1;
@@ -42,6 +44,18 @@ KpRealGlyphCompositorExperimentLedger = Object.freeze({
     "Direct seek and rewind reproduce identical frames.",
     "Moving clones remain hidden from accessibility and pointer interaction."
   ]),
+  productionModules: Object.freeze([
+    "src/rendering/native-katex-fragment-observer.ts",
+    "src/rendering/native-katex-glyph-compositor.ts"
+  ]),
+  lifecyclePrimitives: Object.freeze([
+    "observe-settled-fragments",
+    "bind-semantic-lineage",
+    "clone-inert-fragments",
+    "handoff-exclusive-ownership",
+    "reflow-persistent-context",
+    "choose-conservative-settlement"
+  ]),
   maxProductionModules: 4,
   maxLifecyclePrimitives: 6,
   nativeHandoffTolerancePx: 1
@@ -68,6 +82,19 @@ export function validateKpRealGlyphCompositorExperimentLedger(
     ledger.maxLifecyclePrimitives !== 6
   ) {
     issues.push("The approved compositor complexity budget changed.");
+  }
+  if (
+    ledger.productionModules.length > ledger.maxProductionModules ||
+    new Set(ledger.productionModules).size !== ledger.productionModules.length
+  ) {
+    issues.push("Native compositor production modules exceed their fixed budget.");
+  }
+  if (
+    ledger.lifecyclePrimitives.length > ledger.maxLifecyclePrimitives ||
+    new Set(ledger.lifecyclePrimitives).size !==
+      ledger.lifecyclePrimitives.length
+  ) {
+    issues.push("Native compositor lifecycle primitives exceed their fixed budget.");
   }
   if (ledger.nativeHandoffTolerancePx !== 1) {
     issues.push("Native handoff tolerance must remain one CSS pixel.");

@@ -189,7 +189,8 @@
     {
       "id": "slice-23",
       "title": "Complexity-negative-migration",
-      "status": "planned"
+      "summary": "Deleted the duplicate inline route body and ratcheted one static markup owner, a sub-40 KB controller, two generic compositor modules, six lifecycle primitives, and zero case-specific scheduler vocabulary.",
+      "status": "complete"
     },
     {
       "id": "slice-24",
