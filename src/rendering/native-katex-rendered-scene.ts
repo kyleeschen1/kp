@@ -117,6 +117,7 @@ export function observeKpNativeKatexPaintAtoms(input: {
   readonly semanticEntityId: string;
   readonly presentationGroupId: string;
   readonly fontRevision: number;
+  readonly requireExplicitOwnership?: boolean | undefined;
 }): readonly KpNativeKatexPaintAtomObservation[] {
   const glyphs = observeKpNativeKatexGlyphPaintAtoms(input);
   const stageRect = input.stage.getBoundingClientRect();
@@ -166,7 +167,32 @@ export function observeKpNativeKatexPaintAtoms(input: {
       fontRevision: input.fontRevision
     })];
   });
-  return Object.freeze([...glyphs, ...structural]);
+  return Object.freeze([...glyphs, ...structural].map((atom) => {
+    const owner = atom.sourceElement.closest<HTMLElement>(
+      "[data-kp-semantic-entity-id], [data-kp-presentation-group-id]"
+    );
+    const semanticEntityId = owner?.dataset["kpSemanticEntityId"];
+    const presentationGroupId = owner?.dataset["kpPresentationGroupId"];
+    if (
+      input.requireExplicitOwnership === true &&
+      (
+        owner === null ||
+        !input.root.contains(owner) ||
+        semanticEntityId === undefined ||
+        presentationGroupId === undefined
+      )
+    ) {
+      throw new Error(
+        `Paint atom ${atom.id} has no explicit semantic presentation owner.`
+      );
+    }
+    return Object.freeze({
+      ...atom,
+      semanticEntityId: semanticEntityId ?? input.semanticEntityId,
+      presentationGroupId:
+        presentationGroupId ?? input.presentationGroupId
+    });
+  }));
 }
 
 export function createKpNativeKatexRenderedSceneObservation(input: {

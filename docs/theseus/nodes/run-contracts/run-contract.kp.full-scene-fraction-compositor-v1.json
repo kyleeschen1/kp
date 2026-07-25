@@ -58,6 +58,13 @@
       "scope": "slice-05 structural atom observation",
       "checkedAt": "2026-07-25T17:15:31.637Z",
       "notes": "20 Chromium tests and all TypeScript projects pass; both exact fraction rules are observed as generic structural paint alongside glyph atoms."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-06 semantic ownership propagation",
+      "checkedAt": "2026-07-25T17:18:07.947Z",
+      "notes": "21 Chromium tests and all TypeScript projects pass; every source fraction paint atom inherits a non-fallback semantic entity and presentation group, including structural rules."
     }
   ],
   "allowedWork": [
@@ -116,7 +123,8 @@
     {
       "id": "slice-06",
       "title": "semantic-ownership-propagation",
-      "status": "planned"
+      "summary": "Added nested compiler-authored semantic and presentation-group wrappers to both fraction endpoints and projected nearest explicit ownership onto every observed paint atom.",
+      "status": "complete"
     },
     {
       "id": "slice-07",

@@ -119,13 +119,79 @@ renderMathSlots("solve-context", math("{}=7-3"));
 renderMathSlots(
   "fraction-source",
   trustedMath(
-    String.raw`\frac{x}{\htmlData{kp-motion-id=motion.fraction.source-denominator-a}{2}}+\frac{y}{\htmlData{kp-motion-id=motion.fraction.source-denominator-b}{2}}`
+    semanticMath({
+      entityId: "fraction.expression",
+      groupId: "group.fraction.source",
+      latex:
+        semanticMath({
+          entityId: "fraction.left",
+          groupId: "group.fraction.source.left",
+          latex: String.raw`\frac{${semanticMath({
+            entityId: "symbol.x",
+            groupId: "group.fraction.source.left.numerator",
+            latex: "x"
+          })}}{${semanticMath({
+            entityId: fractionCaseInput.sourceGlyphs[0]!.entityId,
+            groupId: "group.fraction.source.left.denominator",
+            latex: String.raw`\htmlData{kp-motion-id=motion.fraction.source-denominator-a}{2}`
+          })}}`
+        }) +
+        semanticMath({
+          entityId: "operator.add",
+          groupId: "group.fraction.source.operator",
+          latex: "+"
+        }) +
+        semanticMath({
+          entityId: "fraction.right",
+          groupId: "group.fraction.source.right",
+          latex: String.raw`\frac{${semanticMath({
+            entityId: "symbol.y",
+            groupId: "group.fraction.source.right.numerator",
+            latex: "y"
+          })}}{${semanticMath({
+            entityId: fractionCaseInput.sourceGlyphs[1]!.entityId,
+            groupId: "group.fraction.source.right.denominator",
+            latex: String.raw`\htmlData{kp-motion-id=motion.fraction.source-denominator-b}{2}`
+          })}}`
+        })
+    })
   )
 );
 renderMathSlots(
   "fraction-target",
   trustedMath(
-    String.raw`\frac{x+y}{\htmlData{kp-motion-id=motion.fraction.target-denominator}{2}}`
+    semanticMath({
+      entityId: "fraction.expression",
+      groupId: "group.fraction.target",
+      latex: semanticMath({
+        entityId: "fraction.merged",
+        groupId: "group.fraction.target.merged",
+        latex: String.raw`\frac{${semanticMath({
+          entityId: "fraction.merged.numerator",
+          groupId: "group.fraction.target.merged.numerator",
+          latex:
+            semanticMath({
+              entityId: "symbol.x",
+              groupId: "group.fraction.target.merged.numerator.x",
+              latex: "x"
+            }) +
+            semanticMath({
+              entityId: "operator.add",
+              groupId: "group.fraction.target.merged.numerator.operator",
+              latex: "+"
+            }) +
+            semanticMath({
+              entityId: "symbol.y",
+              groupId: "group.fraction.target.merged.numerator.y",
+              latex: "y"
+            })
+        })}}{${semanticMath({
+          entityId: fractionCaseInput.targetGlyphs[0]!.entityId,
+          groupId: "group.fraction.target.merged.denominator",
+          latex: String.raw`\htmlData{kp-motion-id=motion.fraction.target-denominator}{2}`
+        })}}`
+      })
+    })
   )
 );
 renderMathSlots(
@@ -1019,6 +1085,14 @@ function trustedMath(latex: string): string {
     strict: false,
     trust: (context) => context.command === "\\htmlData"
   });
+}
+
+function semanticMath(input: {
+  readonly entityId: string;
+  readonly groupId: string;
+  readonly latex: string;
+}): string {
+  return String.raw`\htmlData{kp-semantic-entity-id=${input.entityId},kp-presentation-group-id=${input.groupId}}{${input.latex}}`;
 }
 
 function clamp(value: number): number {

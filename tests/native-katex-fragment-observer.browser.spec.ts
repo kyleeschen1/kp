@@ -159,6 +159,56 @@ test("scene observer includes generic fraction rules as structural paint", async
   )).toBe(true);
 });
 
+test("scene paint inherits explicit semantic and presentation ownership", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const evidence = await page.evaluate(() => {
+    const observe = (window as unknown as {
+      __kpObserveNativeKatexPaintAtoms: (input: {
+        endpoint: "source";
+        stage: HTMLElement;
+        root: HTMLElement;
+        semanticEntityId: string;
+        presentationGroupId: string;
+        fontRevision: number;
+        requireExplicitOwnership: boolean;
+      }) => readonly {
+        semanticEntityId: string;
+        presentationGroupId: string;
+        paintKind: string;
+        visualKey: string;
+      }[];
+    }).__kpObserveNativeKatexPaintAtoms;
+    return observe({
+      endpoint: "source",
+      stage: document.querySelector<HTMLElement>("[data-fraction-stage]")!,
+      root: document.querySelector<HTMLElement>("[data-fraction-source]")!,
+      semanticEntityId: "forbidden.fallback",
+      presentationGroupId: "forbidden.fallback",
+      fontRevision: 1,
+      requireExplicitOwnership: true
+    });
+  });
+
+  expect(evidence.every(({ semanticEntityId, presentationGroupId }) =>
+    semanticEntityId !== "forbidden.fallback" &&
+    presentationGroupId !== "forbidden.fallback"
+  )).toBe(true);
+  expect(evidence.some(({ semanticEntityId }) =>
+    semanticEntityId === "symbol.x"
+  )).toBe(true);
+  expect(evidence.some(({ semanticEntityId }) =>
+    semanticEntityId === "symbol.y"
+  )).toBe(true);
+  expect(evidence.filter(({ paintKind }) => paintKind === "rule")
+    .every(({ semanticEntityId }) =>
+      semanticEntityId === "fraction.left" ||
+      semanticEntityId === "fraction.right"
+    )).toBe(true);
+});
+
 test("observer rejects missing and duplicate explicit motion nodes", async ({
   page
 }) => {
