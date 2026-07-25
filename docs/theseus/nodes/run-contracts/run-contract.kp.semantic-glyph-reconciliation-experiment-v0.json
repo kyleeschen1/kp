@@ -1,0 +1,223 @@
+{
+  "id": "run-contract.kp.semantic-glyph-reconciliation-experiment-v0",
+  "kind": "run-contract",
+  "title": "Semantic-constrained glyph reconciliation experiment",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-glyph-reconciliation-experiment-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-24-semantic-glyph-reconciliation-experiment-long-loop-proposal.md",
+      "summary": "Human-approved exact 24-slice experiment proposal."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md",
+      "summary": "Accepted architecture, preservation boundary, pass criteria, and hard stop rule."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "npm test",
+    "npm run typecheck",
+    "npm run build",
+    "npm run test:semantic-animation-convergence",
+    "npm run test:browser:reader-conformance",
+    "npm run test:browser:animation-workbench",
+    "npm run perf:animation",
+    "npm run check:reader-production",
+    "npm run check:dev-review-production",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether the same semantic-constrained matcher and bounded geometry scheduler cover all four adversarial cases without bespoke scheduling.",
+    "Whether the replacement preserves KP interaction and accessibility while measurably reducing scheduling policy."
+  ],
+  "allowedWork": [
+    "Evolve the existing durable animation artifact only with renderer-independent presentation constraints and backend capability requirements.",
+    "Implement one semantic-lineage adapter, one matcher, one geometry scheduler, one conservative fallback, one ephemeral plan, one JavaScript backend seam, and one headless backend.",
+    "Integrate exactly four cases: solve-x one-to-one, numerator or fraction merge with Cloze, quadratic plus-minus branching, and one crowded quadratic interval at wide and phone widths.",
+    "Add stable visual, collision, occlusion, performance, payload, architecture, browser, accessibility, and Theseus evidence; delete or reduce replaced scheduling policy."
+  ],
+  "disallowedWork": [
+    "No operation-specific, quadratic-specific, fraction-specific, branch-specific, or viewport-specific scheduler and no new exception taxonomy.",
+    "No durable glyph IR, separate branch/card/backend artifact, second semantic animation format, or renderer-owned semantic identity.",
+    "No full Manim export, Python runtime, video encoding, CAS, live LLM API, dynamic package loading, another renderer family, radical handoff repair, quadratic publication, family rollout, curriculum expansion, or unrelated roadmap work."
+  ],
+  "criteria": [
+    {
+      "id": "exact-semantic-lineage",
+      "weight": "high"
+    },
+    {
+      "id": "one-common-scheduler",
+      "weight": "high"
+    },
+    {
+      "id": "interactive-capability-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "crowded-layout-or-honest-fallback",
+      "weight": "high"
+    },
+    {
+      "id": "complexity-negative-migration",
+      "weight": "high"
+    },
+    {
+      "id": "static-js-performance-budgets",
+      "weight": "high"
+    },
+    {
+      "id": "human-clarity",
+      "weight": "high"
+    }
+  ],
+  "goal": "Determine whether one semantic-lineage-constrained matcher and one bounded geometry scheduler can cover four adversarial animation cases while preserving KP interaction and reducing scheduling complexity; otherwise stop custom-planner investment.",
+  "target": "next-action.kp.semantic-glyph-reconciliation-experiment-v0",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "Commit every independently reversible verified slice with its Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "H1 FIRST-EXEMPLAR: produce and verify slice-14 evidence before cases 2-4; stop only if it triggers another named failure.",
+    "H2 FINAL-DECISION: stop at slice 24 for explicit PASS or STOP_CUSTOM_PLANNER review.",
+    "H3 BESPOKE-SCHEDULING: stop if any case needs operation-, family-, branch-, or viewport-specific scheduling.",
+    "H4 AMBIGUITY: stop if matching must infer semantic lineage from glyph equality or silently choose a plausible lineage.",
+    "H5 LAYERING: stop if measured glyphs, backend plans, DOM handles, or renderer resources must enter the durable artifact.",
+    "H6 PRESERVATION: stop on exact math, lineage, multiplicity, branch, graph, card, Cloze, accessibility, review, route, seek, rewind, native settlement, or baseline regression.",
+    "H7 COMPLEXITY: stop if scheduling-policy sites or operation-specific modes increase or no old common-path policy can be deleted or reduced.",
+    "H8 PERFORMANCE: stop if budgets require case-specific optimization, silent feature lowering, or relaxed interaction targets.",
+    "H9 RADICAL-ISOLATION: stop if the experiment modifies or relies on the radical WebGL handoff residual.",
+    "H10 SCOPE: stop before full Manim export, another renderer or domain, Workbench publication, curriculum expansion, live LLM integration, CAS work, or broad style redesign.",
+    "H11 USER-OVERLAP: stop if required work cannot be separated from unrelated user-authored worktree changes.",
+    "H12 VERIFICATION: stop if a required gate fails without one bounded common-algorithm correction."
+  ],
+  "slices": [
+    {
+      "id": "slice-01",
+      "title": "Experiment-ledger",
+      "status": "planned"
+    },
+    {
+      "id": "slice-02",
+      "title": "Negative-and-ambiguity-fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "slice-03",
+      "title": "Durable-artifact-boundary",
+      "status": "planned"
+    },
+    {
+      "id": "slice-04",
+      "title": "Canonical-executor-lineage-adapter",
+      "status": "planned"
+    },
+    {
+      "id": "slice-05",
+      "title": "Ephemeral-reconciliation-plan",
+      "status": "planned"
+    },
+    {
+      "id": "slice-06",
+      "title": "Lineage-constrained-matcher",
+      "status": "planned"
+    },
+    {
+      "id": "slice-07",
+      "title": "Multiplicity-reconciliation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-08",
+      "title": "Ambiguity-and-conservative-fallback",
+      "status": "planned"
+    },
+    {
+      "id": "slice-09",
+      "title": "Native-notation-measurement-protocol",
+      "status": "planned"
+    },
+    {
+      "id": "slice-10",
+      "title": "Bounded-clearance-scheduler",
+      "status": "planned"
+    },
+    {
+      "id": "slice-11",
+      "title": "Headless-test-backend",
+      "status": "planned"
+    },
+    {
+      "id": "slice-12",
+      "title": "JavaScript-renderer-seam",
+      "status": "planned"
+    },
+    {
+      "id": "slice-13",
+      "title": "Simple-solve-x-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "slice-14",
+      "title": "First-human-exemplar-evidence",
+      "status": "planned"
+    },
+    {
+      "id": "slice-15",
+      "title": "Many-to-one-fraction-merge",
+      "status": "planned"
+    },
+    {
+      "id": "slice-16",
+      "title": "Cloze-projection-on-merge",
+      "status": "planned"
+    },
+    {
+      "id": "slice-17",
+      "title": "One-to-many-plus-minus-branch",
+      "status": "planned"
+    },
+    {
+      "id": "slice-18",
+      "title": "Sped-up-compound-trace",
+      "status": "planned"
+    },
+    {
+      "id": "slice-19",
+      "title": "Crowded-wide-projection",
+      "status": "planned"
+    },
+    {
+      "id": "slice-20",
+      "title": "Crowded-phone-projection",
+      "status": "planned"
+    },
+    {
+      "id": "slice-21",
+      "title": "Static-JS-and-backend-capability-proof",
+      "status": "planned"
+    },
+    {
+      "id": "slice-22",
+      "title": "Performance-payload-and-cache-budget",
+      "status": "planned"
+    },
+    {
+      "id": "slice-23",
+      "title": "Complexity-negative-migration",
+      "status": "planned"
+    },
+    {
+      "id": "slice-24",
+      "title": "Four-case-decision-checkpoint",
+      "status": "planned"
+    }
+  ]
+}

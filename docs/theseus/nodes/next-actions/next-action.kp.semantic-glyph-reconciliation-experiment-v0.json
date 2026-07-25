@@ -1,0 +1,73 @@
+{
+  "id": "next-action.kp.semantic-glyph-reconciliation-experiment-v0",
+  "kind": "next-action",
+  "title": "Run semantic-constrained glyph reconciliation experiment",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-24-semantic-glyph-reconciliation-experiment-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.quadratic-semantic-branching-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm test",
+    "npm run typecheck",
+    "npm run build",
+    "npm run test:semantic-animation-convergence",
+    "npm run perf:animation",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether one lineage-constrained glyph matcher and one bounded geometry scheduler cover one-to-one, many-to-one, one-to-many, and crowded responsive notation without operation-specific scheduling.",
+    "Whether KP preserves a measurable advantage through static-JS branching, seek/rewind, accessibility, hover, annotations, Cloze, and headless compilation while reducing scheduling policy."
+  ],
+  "allowedWork": [
+    "Exactly the approved four-case replacement experiment and its matcher, scheduler, ephemeral plan, JS and headless backends, verification, visual evidence, and deletion budget."
+  ],
+  "disallowedWork": [
+    "No operation-specific scheduler, durable glyph IR, second animation format, family rollout, quadratic publication, radical handoff repair, new renderer domain, CAS, live LLM API, or unrelated user changes."
+  ],
+  "criteria": [
+    {
+      "id": "exact-semantic-lineage",
+      "weight": "high"
+    },
+    {
+      "id": "one-common-scheduler",
+      "weight": "high"
+    },
+    {
+      "id": "interactive-capability-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "crowded-layout-or-honest-fallback",
+      "weight": "high"
+    },
+    {
+      "id": "complexity-negative-migration",
+      "weight": "high"
+    },
+    {
+      "id": "static-js-performance-budgets",
+      "weight": "high"
+    },
+    {
+      "id": "human-clarity",
+      "weight": "high"
+    }
+  ]
+}
