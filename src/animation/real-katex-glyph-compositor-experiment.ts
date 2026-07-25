@@ -7,7 +7,7 @@ export type KpRealGlyphBaselineFailureCode =
 export interface KpRealGlyphCompositorExperimentLedger {
   readonly schemaVersion: "kp.real-katex-glyph-compositor-experiment.v1";
   readonly canonicalCaseId: "case.solve-x.one-to-one";
-  readonly currentRenderer: "approximate-text-overlay";
+  readonly currentRenderer: "native-katex-fragment-compositor";
   readonly baselineFailureCodes: readonly KpRealGlyphBaselineFailureCode[];
   readonly durableForbiddenFields: readonly string[];
   readonly exemplarAcceptance: readonly string[];
@@ -20,7 +20,7 @@ export const kpRealGlyphCompositorExperimentLedger:
 KpRealGlyphCompositorExperimentLedger = Object.freeze({
   schemaVersion: "kp.real-katex-glyph-compositor-experiment.v1",
   canonicalCaseId: "case.solve-x.one-to-one",
-  currentRenderer: "approximate-text-overlay",
+  currentRenderer: "native-katex-fragment-compositor",
   baselineFailureCodes: Object.freeze([
     "whole-equation-crossfade",
     "approximate-text-overlay",

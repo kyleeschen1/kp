@@ -13,7 +13,7 @@ import {
   validateKpRealGlyphCompositorExperimentLedger
 } from "../src/animation/real-katex-glyph-compositor-experiment.ts";
 
-test("real-glyph experiment freezes the failed overlay baseline", () => {
+test("real-glyph experiment retains the failed baseline after retiring its overlay", () => {
   assert.deepEqual(
     kpRealGlyphCompositorExperimentLedger.baselineFailureCodes,
     [
@@ -25,7 +25,7 @@ test("real-glyph experiment freezes the failed overlay baseline", () => {
   );
   assert.equal(
     kpRealGlyphCompositorExperimentLedger.currentRenderer,
-    "approximate-text-overlay"
+    "native-katex-fragment-compositor"
   );
 });
 

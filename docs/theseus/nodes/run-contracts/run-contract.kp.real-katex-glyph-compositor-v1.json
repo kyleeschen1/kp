@@ -129,7 +129,8 @@
     {
       "id": "slice-13",
       "title": "Delete-mock-overlay",
-      "status": "planned"
+      "summary": "Retired the approximate overlay as the active renderer while retaining its frozen failure evidence; the real compositor route remains visually identical across ten frames.",
+      "status": "complete"
     },
     {
       "id": "slice-14",

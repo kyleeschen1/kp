@@ -126,11 +126,17 @@
       "scope": "slice-12 broad regression gate",
       "checkedAt": "2026-07-25T14:50:10.844Z",
       "notes": "2363 full tests, 255 convergence tests, 59 glyph-suite tests, 9 reader Chromium checks, production closures, and production build pass."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-13 mock-overlay retirement",
+      "checkedAt": "2026-07-25T15:24:34.074Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT after slice 12: solve-x exemplar is complete and broadly verified; slices 13-24 remain unauthorized until explicit visual promotion."
+    "summary": "User ended the architecture-discussion pause and resumed the approved run at slice 13. The recorded rendered-fragment thesis remains durable guidance; execution stays within the existing contract."
   },
   "expectedLearning": [
     "Whether actual computed-style KaTeX fragments eliminate the crossfade and character-substitution failure in solve-x.",
