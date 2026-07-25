@@ -33,6 +33,13 @@
       "scope": "slice-01 endpoint reproduction harness",
       "checkedAt": "2026-07-25T19:07:32.741Z",
       "notes": "26 focused tests and all TypeScript projects pass. The stable visual entrypoint captured 10 overview and 14 dense wide/phone endpoint frames; material progress 99.9 percent visibly compresses plus, rule, and glyph geometry before native KaTeX snaps cleanly at 100 percent."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-02 endpoint telemetry contract",
+      "checkedAt": "2026-07-25T19:10:51.917Z",
+      "notes": "28 focused tests and all TypeScript projects pass. Immutable renderer-session observations cover material/native side, paint identity, semantic/group ownership, rectangles, baseline, wrapper transform, paint/style fingerprints, and rule geometry; invalid geometry, cross-document elements, and durable artifact leakage fail closed."
     }
   ],
   "allowedWork": [
@@ -70,7 +77,8 @@
     {
       "id": "slice-02",
       "title": "endpoint-telemetry-contract",
-      "status": "planned"
+      "summary": "Defined immutable renderer-session handoff telemetry for material/native paint identity, geometry, baselines, wrapper transforms, paint/style fingerprints, and rule geometry; invalid data, cross-document elements, and durable artifact leakage fail closed without adding a production module.",
+      "status": "complete"
     },
     {
       "id": "slice-03",

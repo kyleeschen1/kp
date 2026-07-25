@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  createKpNativeKatexHandoffTelemetry,
   createKpNativeKatexRenderedSceneObservation,
+  type KpNativeKatexHandoffPaintObservation,
   type KpNativeKatexPaintAtomObservation
 } from "../src/rendering/native-katex-rendered-scene.ts";
 import {
@@ -39,6 +41,101 @@ function atom(
     fontRevision: 2
   };
 }
+
+function handoffObservation(
+  overrides: Partial<KpNativeKatexHandoffPaintObservation> = {}
+): KpNativeKatexHandoffPaintObservation {
+  return {
+    kind: "native-katex-handoff-paint-observation",
+    lifecycle: "renderer-session",
+    id: "handoff.material.x",
+    side: "material",
+    paintAtomId: "target.paint.glyph.0",
+    semanticEntityId: "entity.x",
+    presentationGroupId: "group.target",
+    paintKind: "glyph",
+    element: sourceElement,
+    rect: { left: 10, top: 20, width: 12, height: 24 },
+    baselineY: 42,
+    wrapperTransform: "matrix(1, 0, 0, 1, 0, 0)",
+    paintFingerprint: "glyph:x",
+    styleFingerprint: "font-family:KaTeX_Math",
+    fontRevision: 2,
+    ...overrides
+  };
+}
+
+test("handoff telemetry is immutable renderer-session evidence", () => {
+  const telemetry = createKpNativeKatexHandoffTelemetry({
+    stage,
+    progress: 0.999,
+    observations: [
+      handoffObservation(),
+      handoffObservation({
+        id: "handoff.native.rule",
+        side: "native-target",
+        paintAtomId: "target.paint.rule.1",
+        paintKind: "rule",
+        baselineY: null,
+        paintFingerprint: "rule",
+        ruleGeometry: { left: 8, top: 39, width: 32, thickness: 1 }
+      })
+    ],
+    fontRevision: 2,
+    viewportKey: "wide:1040x360@font-2"
+  });
+
+  assert.equal(telemetry.lifecycle, "renderer-session");
+  assert.equal(telemetry.progress, 0.999);
+  assert.equal(Object.isFrozen(telemetry.observations), true);
+  assert.equal(Object.isFrozen(telemetry.observations[0]?.rect), true);
+  assert.equal(
+    Object.isFrozen(telemetry.observations[1]?.ruleGeometry),
+    true
+  );
+  assert.strictEqual(telemetry.observations[0]?.element, sourceElement);
+});
+
+test("handoff telemetry rejects invalid geometry and document boundaries", () => {
+  const create = (
+    observation: KpNativeKatexHandoffPaintObservation,
+    progress = 0.999
+  ) => createKpNativeKatexHandoffTelemetry({
+    stage,
+    progress,
+    observations: [observation],
+    fontRevision: 2,
+    viewportKey: "wide"
+  });
+
+  assert.throws(
+    () => create(handoffObservation(), 1.1),
+    /between zero and one/
+  );
+  assert.throws(
+    () => create(handoffObservation({ baselineY: Number.NaN })),
+    /finite baseline/
+  );
+  assert.throws(
+    () => create(handoffObservation({
+      element: { ownerDocument: {} } as HTMLElement
+    })),
+    /another document/
+  );
+  assert.throws(
+    () => create(handoffObservation({
+      paintKind: "rule",
+      baselineY: null
+    })),
+    /requires rule geometry/
+  );
+  assert.throws(
+    () => create(handoffObservation({
+      ruleGeometry: { left: 0, top: 0, width: 12, thickness: 1 }
+    })),
+    /cannot carry rule geometry/
+  );
+});
 
 test("rendered scene observations remain explicit renderer-session state", () => {
   const scene = createKpNativeKatexRenderedSceneObservation({
@@ -110,7 +207,14 @@ test("renderer-session scene state is absent from durable animation artifacts", 
     renderedScene: { stage, root, atoms: [atom()] },
     paintAtoms: [atom()],
     presentationGroups: [{ domHandle: root }],
-    sceneTracks: [{ keyframes: [] }]
+    sceneTracks: [{ keyframes: [] }],
+    handoffTelemetry: createKpNativeKatexHandoffTelemetry({
+      stage,
+      progress: 0.999,
+      observations: [handoffObservation()],
+      fontRevision: 2,
+      viewportKey: "wide"
+    })
   } as unknown as Parameters<typeof assetModule.createKpAnimationAsset>[0];
   const asset = assetModule.createKpAnimationAsset(forged);
   const serialized = JSON.stringify(asset);
@@ -119,7 +223,8 @@ test("renderer-session scene state is absent from durable animation artifacts", 
     "renderedScene",
     "paintAtoms",
     "presentationGroups",
-    "sceneTracks"
+    "sceneTracks",
+    "handoffTelemetry"
   ]) {
     assert.equal(field in asset, false);
     assert.equal(serialized.includes(field), false);

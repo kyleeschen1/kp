@@ -49,6 +49,125 @@ export interface KpNativeKatexRenderedSceneObservation {
   readonly viewportKey: string;
 }
 
+export type KpNativeKatexHandoffSide = "material" | "native-target";
+
+export interface KpNativeKatexRuleGeometry {
+  readonly left: number;
+  readonly top: number;
+  readonly width: number;
+  readonly thickness: number;
+}
+
+export interface KpNativeKatexHandoffPaintObservation {
+  readonly kind: "native-katex-handoff-paint-observation";
+  readonly lifecycle: "renderer-session";
+  readonly id: string;
+  readonly side: KpNativeKatexHandoffSide;
+  readonly paintAtomId: string;
+  readonly semanticEntityId: string;
+  readonly presentationGroupId: string;
+  readonly paintKind: KpNativeKatexPaintKind;
+  readonly element: HTMLElement;
+  readonly rect: KpStageRelativeRect;
+  readonly baselineY: number | null;
+  readonly wrapperTransform: string;
+  readonly paintFingerprint: string;
+  readonly styleFingerprint: string;
+  readonly ruleGeometry?: KpNativeKatexRuleGeometry | undefined;
+  readonly fontRevision: number;
+}
+
+export interface KpNativeKatexHandoffTelemetry {
+  readonly kind: "native-katex-handoff-telemetry";
+  readonly lifecycle: "renderer-session";
+  readonly stage: HTMLElement;
+  readonly progress: number;
+  readonly observations: readonly KpNativeKatexHandoffPaintObservation[];
+  readonly fontRevision: number;
+  readonly viewportKey: string;
+}
+
+export function createKpNativeKatexHandoffTelemetry(input: {
+  readonly stage: HTMLElement;
+  readonly progress: number;
+  readonly observations: readonly KpNativeKatexHandoffPaintObservation[];
+  readonly fontRevision: number;
+  readonly viewportKey: string;
+}): KpNativeKatexHandoffTelemetry {
+  if (!Number.isFinite(input.progress) || input.progress < 0 || input.progress > 1) {
+    throw new Error("Native KaTeX handoff progress must be between zero and one.");
+  }
+  if (!Number.isInteger(input.fontRevision) || input.fontRevision < 0) {
+    throw new Error("Native KaTeX handoff font revision must be non-negative.");
+  }
+  if (input.viewportKey.trim() === "") {
+    throw new Error("Native KaTeX handoff telemetry requires a viewport key.");
+  }
+  assertUnique(input.observations.map(({ id }) => id), "handoff observation");
+  for (const observation of input.observations) {
+    if (observation.element.ownerDocument !== input.stage.ownerDocument) {
+      throw new Error(
+        `Handoff observation ${observation.id} belongs to another document.`
+      );
+    }
+    for (const [label, value] of [
+      ["paint atom", observation.paintAtomId],
+      ["semantic entity", observation.semanticEntityId],
+      ["presentation group", observation.presentationGroupId],
+      ["wrapper transform", observation.wrapperTransform],
+      ["paint fingerprint", observation.paintFingerprint],
+      ["style fingerprint", observation.styleFingerprint]
+    ] as const) {
+      if (value.trim() === "") {
+        throw new Error(`Handoff observation ${observation.id} requires ${label}.`);
+      }
+    }
+    assertRect(observation.rect, `Handoff observation ${observation.id}`);
+    if (
+      observation.baselineY !== null &&
+      !Number.isFinite(observation.baselineY)
+    ) {
+      throw new Error(
+        `Handoff observation ${observation.id} requires a finite baseline.`
+      );
+    }
+    if (!Number.isInteger(observation.fontRevision) || observation.fontRevision < 0) {
+      throw new Error(
+        `Handoff observation ${observation.id} requires a valid font revision.`
+      );
+    }
+    if (observation.paintKind === "rule") {
+      if (observation.ruleGeometry === undefined) {
+        throw new Error(
+          `Rule handoff observation ${observation.id} requires rule geometry.`
+        );
+      }
+      assertRuleGeometry(observation.ruleGeometry, observation.id);
+    } else if (observation.ruleGeometry !== undefined) {
+      throw new Error(
+        `Non-rule handoff observation ${observation.id} cannot carry rule geometry.`
+      );
+    }
+  }
+  return Object.freeze({
+    kind: "native-katex-handoff-telemetry",
+    lifecycle: "renderer-session",
+    stage: input.stage,
+    progress: input.progress,
+    observations: Object.freeze(input.observations.map((observation) =>
+      Object.freeze({
+        ...observation,
+        rect: Object.freeze({ ...observation.rect }),
+        ...(observation.ruleGeometry === undefined
+          ? {}
+          : { ruleGeometry: Object.freeze({ ...observation.ruleGeometry }) })
+      })
+    )),
+    fontRevision: input.fontRevision,
+    viewportKey: input.viewportKey
+  });
+}
+
 export async function settleAndObserveKpNativeKatexRenderedScene(input: {
   readonly endpoint: "source" | "target";
   readonly stage: HTMLElement;
@@ -463,5 +582,25 @@ function assertRect(rect: KpStageRelativeRect, label: string): void {
     rect.height <= 0
   ) {
     throw new Error(`${label} requires positive finite geometry.`);
+  }
+}
+
+function assertRuleGeometry(
+  geometry: KpNativeKatexRuleGeometry,
+  observationId: string
+): void {
+  if (
+    ![
+      geometry.left,
+      geometry.top,
+      geometry.width,
+      geometry.thickness
+    ].every(Number.isFinite) ||
+    geometry.width <= 0 ||
+    geometry.thickness <= 0
+  ) {
+    throw new Error(
+      `Rule handoff observation ${observationId} requires positive finite geometry.`
+    );
   }
 }
