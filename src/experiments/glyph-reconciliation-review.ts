@@ -6,6 +6,7 @@ import {
 } from "../animation/canonical-operation-lineage-adapter.ts";
 import {
   createKpFractionMergeGlyphReconciliationCase,
+  createKpQuadraticPlusMinusGlyphReconciliationCase,
   createKpSolveXGlyphReconciliationCase
 } from "../animation/semantic-glyph-reconciliation-cases.ts";
 import {
@@ -19,6 +20,7 @@ import {
   applyKpNativeKatexContextReflow,
   applyKpNativeKatexGlyphFrame,
   applyKpNativeKatexManyToOneFrame,
+  applyKpNativeKatexOneToManyFrame,
   createKpNativeKatexFragmentClone,
   createKpNativeKatexFragmentClones
 } from "../rendering/native-katex-glyph-compositor.ts";
@@ -46,6 +48,8 @@ const fractionCaseInput = createKpFractionMergeGlyphReconciliationCase();
 const fractionCompiled = await compileKpGlyphReconciliationCase(
   fractionCaseInput
 );
+const branchCaseInput = createKpQuadraticPlusMinusGlyphReconciliationCase();
+const branchCompiled = await compileKpGlyphReconciliationCase(branchCaseInput);
 const fractionCloze = createKpFractionMergeClozeProjection();
 const scheduledMotion = compiled.schedule.motions[0]!;
 if (scheduledMotion?.status !== "direct") {
@@ -57,6 +61,13 @@ if (
   fractionCompiled.schedule.motions.some(({ status }) => status !== "direct")
 ) {
   throw new Error("The fraction merge requires two generic direct clearance routes.");
+}
+if (
+  branchCompiled.schedule.usedOperationSpecificPolicy ||
+  branchCompiled.schedule.motions.length !== 2 ||
+  branchCompiled.schedule.motions.some(({ status }) => status !== "direct")
+) {
+  throw new Error("The plus-minus split requires two generic direct routes.");
 }
 
 root.innerHTML = `
@@ -190,6 +201,68 @@ root.innerHTML = `
         <output data-fraction-cloze-status>Answer visible</output>
       </div>
     </section>
+    <section
+      class="glyph-exemplar__review glyph-exemplar__review--secondary"
+      data-reconciliation-case="plus-minus-branch"
+    >
+      <div class="glyph-exemplar__prompt">
+        <div>
+          <span>one-to-many semantic lineage</span>
+          <h2>Open the two exact root branches</h2>
+        </div>
+        <p data-branch-phase>One plus-minus origin</p>
+      </div>
+      <div class="glyph-exemplar__viewport glyph-exemplar__viewport--branch">
+        <div
+          class="glyph-exemplar__stage"
+          data-branch-stage
+          role="math"
+          aria-label="one plus-minus origin opens a negative and positive branch"
+        >
+          <span
+            class="glyph-exemplar__branch-equation glyph-exemplar__branch-equation--source"
+            data-branch-source
+          >
+            ${trustedMath(
+              String.raw`r=\htmlData{kp-motion-id=motion.branch.source-plus-minus}{\pm}\sqrt{\Delta}`
+            )}
+          </span>
+          <span
+            class="glyph-exemplar__branch-equation glyph-exemplar__branch-equation--minus"
+            data-branch-target="minus"
+          >
+            ${trustedMath(
+              String.raw`r_-=\htmlData{kp-motion-id=motion.branch.target-minus}{-}\sqrt{\Delta}`
+            )}
+          </span>
+          <span
+            class="glyph-exemplar__branch-equation glyph-exemplar__branch-equation--plus"
+            data-branch-target="plus"
+          >
+            ${trustedMath(
+              String.raw`r_+=\htmlData{kp-motion-id=motion.branch.target-plus}{+}\sqrt{\Delta}`
+            )}
+          </span>
+          <span
+            class="glyph-exemplar__material-layer"
+            data-kp-editor-equation-material-layer
+          ></span>
+        </div>
+      </div>
+      <div class="glyph-exemplar__annotation">
+        <span data-branch-owner>Native plus-minus origin owns the ink</span>
+        <span>Branch choice changes native interaction, not moving fragments</span>
+      </div>
+      <div
+        class="glyph-exemplar__controls glyph-exemplar__branch-controls"
+        aria-label="Quadratic branch selection"
+      >
+        <button type="button" data-branch-choice="both" aria-pressed="true">Both</button>
+        <button type="button" data-branch-choice="minus" aria-pressed="false">Negative</button>
+        <button type="button" data-branch-choice="plus" aria-pressed="false">Positive</button>
+        <output data-branch-status>Both exact branches active</output>
+      </div>
+    </section>
     <div class="glyph-exemplar__evidence">
       <span>actual KaTeX subtree</span>
       <span>canonical lineage</span>
@@ -225,6 +298,20 @@ const fractionClozeButton = root.querySelector<HTMLButtonElement>(
 const fractionClozeStatus = root.querySelector<HTMLOutputElement>(
   "[data-fraction-cloze-status]"
 )!;
+const branchStage = root.querySelector<HTMLElement>("[data-branch-stage]")!;
+const branchSource = root.querySelector<HTMLElement>("[data-branch-source]")!;
+const branchTargets = {
+  minus: root.querySelector<HTMLElement>('[data-branch-target="minus"]')!,
+  plus: root.querySelector<HTMLElement>('[data-branch-target="plus"]')!
+};
+const branchPhase = root.querySelector<HTMLElement>("[data-branch-phase]")!;
+const branchOwner = root.querySelector<HTMLElement>("[data-branch-owner]")!;
+const branchStatus = root.querySelector<HTMLOutputElement>(
+  "[data-branch-status]"
+)!;
+const branchChoiceButtons = [
+  ...root.querySelectorAll<HTMLButtonElement>("[data-branch-choice]")
+];
 
 await fontReadiness.whenReady();
 await nextFrame();
@@ -327,11 +414,72 @@ fractionNativeTarget.dataset["kpAnnotation"] =
 fractionNativeTarget.title = "Merged denominator · target";
 fractionNativeTarget.tabIndex = -1;
 
+const branchSourceObservation = await settleAndObserveKpNativeKatexFragments({
+  stage: branchStage,
+  bindings: [{
+    id: branchCaseInput.sourceGlyphs[0]!.id,
+    semanticEntityId: branchCaseInput.sourceGlyphs[0]!.entityId,
+    motionId: "motion.branch.source-plus-minus",
+    glyphKey: branchCaseInput.sourceGlyphs[0]!.glyphKey
+  }],
+  fontReadiness
+});
+const branchTargetObservation = await settleAndObserveKpNativeKatexFragments({
+  stage: branchStage,
+  bindings: [{
+    id: branchCaseInput.targetGlyphs[0]!.id,
+    semanticEntityId: branchCaseInput.targetGlyphs[0]!.entityId,
+    motionId: "motion.branch.target-minus",
+    glyphKey: branchCaseInput.targetGlyphs[0]!.glyphKey
+  }, {
+    id: branchCaseInput.targetGlyphs[1]!.id,
+    semanticEntityId: branchCaseInput.targetGlyphs[1]!.entityId,
+    motionId: "motion.branch.target-plus",
+    glyphKey: branchCaseInput.targetGlyphs[1]!.glyphKey
+  }],
+  fontReadiness
+});
+const branchMultiplicity = bindKpNativeKatexFragmentsWithinSemanticLineage({
+  lineage: projectKpCanonicalExecutionLineage(branchCaseInput.execution),
+  source: branchSourceObservation,
+  target: branchTargetObservation
+}).multiplicity[0];
+if (
+  branchMultiplicity?.kind !== "split" ||
+  branchMultiplicity.sources.length !== 1 ||
+  branchMultiplicity.targets.length !== 2
+) {
+  throw new Error("Canonical plus-minus lineage did not bind its native split.");
+}
+const branchNativeSource = branchMultiplicity.sources[0]!;
+const branchNativeTargets = branchMultiplicity.targets;
+const branchClones = createKpNativeKatexFragmentClones({
+  stage: branchStage,
+  fragments: branchNativeTargets.map((observation, index) => ({
+    ownerId: `native-owner.branch.target.${index}`,
+    observation
+  }))
+});
+for (const branchClone of branchClones) {
+  branchClone.ownerElement.dataset["kpNativeKatexFragmentClone"] = "true";
+}
+branchNativeTargets.forEach((target, index) => {
+  const branchId = index === 0 ? "minus" : "plus";
+  target.sourceElement.dataset["kpBranchId"] = branchId;
+  target.sourceElement.dataset["kpAnnotation"] =
+    `${branchId === "minus" ? "Negative" : "Positive"} quadratic root branch`;
+  target.sourceElement.title =
+    `${branchId === "minus" ? "Negative" : "Positive"} root branch`;
+  target.sourceElement.tabIndex = -1;
+});
+
 const playback = compiled.createPlayback({
   supportedMatchIds: new Set([scheduledMotion.matchId]),
   apply() {}
 });
 let animationFrame: number | undefined;
+let selectedBranch: "both" | "minus" | "plus" = "both";
+let branchAtTarget = false;
 
 function render(progress: number): void {
   const bounded = clamp(progress);
@@ -383,6 +531,29 @@ function render(progress: number): void {
       ? "One native target denominator owns the ink"
       : "Two inert native-fragment clones own the moving ink";
   review.dataset["kpFractionVisualOwner"] = fractionFrame.visualOwner;
+  const branchProgress = clamp((bounded - 0.12) / 0.74);
+  const branchFrame = applyKpNativeKatexOneToManyFrame({
+    clones: branchClones,
+    source: branchNativeSource,
+    targets: branchNativeTargets,
+    progress: branchProgress
+  });
+  branchAtTarget = branchFrame.visualOwner === "target-natives";
+  branchSource.style.opacity = branchProgress === 0 ? "1" : "0";
+  branchTargets.minus.style.opacity = branchProgress > 0 ? "1" : "0";
+  branchTargets.plus.style.opacity = branchProgress > 0 ? "1" : "0";
+  branchPhase.textContent = branchProgress === 0
+    ? "One plus-minus origin"
+    : branchAtTarget
+      ? "Two exact native branches"
+      : "Exact target fragments separate";
+  branchOwner.textContent = branchFrame.visualOwner === "source-native"
+    ? "Native plus-minus origin owns the ink"
+    : branchAtTarget
+      ? "Two native branch endpoints own the ink"
+      : "Two inert target-fragment clones own the moving ink";
+  review.dataset["kpBranchVisualOwner"] = branchFrame.visualOwner;
+  applyBranchSelection();
   const atTarget = glyphFrame.visualOwner === "target-native";
   const atSource = glyphFrame.visualOwner === "source-native";
   sourceX.setAttribute("aria-hidden", String(!atSource));
@@ -432,6 +603,15 @@ fractionClozeButton.addEventListener("click", () => {
   fractionClozeStatus.value = hidden
     ? fractionCloze.prompt
     : "Answer visible";
+});
+branchChoiceButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const choice = button.dataset["branchChoice"];
+    if (choice === "both" || choice === "minus" || choice === "plus") {
+      selectedBranch = choice;
+      applyBranchSelection();
+    }
+  });
 });
 play.addEventListener("click", () => {
   if (animationFrame !== undefined) {
@@ -538,6 +718,32 @@ function stopPlayback(): void {
   if (animationFrame !== undefined) cancelAnimationFrame(animationFrame);
   animationFrame = undefined;
   play.textContent = Number(slider.value) >= 1000 ? "Rewind" : "Play";
+}
+
+function applyBranchSelection(): void {
+  branchChoiceButtons.forEach((button) => {
+    button.setAttribute(
+      "aria-pressed",
+      String(button.dataset["branchChoice"] === selectedBranch)
+    );
+  });
+  (["minus", "plus"] as const).forEach((branch, index) => {
+    const selected = selectedBranch === "both" || selectedBranch === branch;
+    branchTargets[branch].classList.toggle(
+      "glyph-exemplar__branch-equation--muted",
+      !selected
+    );
+    branchTargets[branch].setAttribute(
+      "aria-hidden",
+      String(!branchAtTarget || !selected)
+    );
+    branchNativeTargets[index]!.sourceElement.tabIndex =
+      branchAtTarget && selected ? 0 : -1;
+  });
+  branchStatus.value = selectedBranch === "both"
+    ? "Both exact branches active"
+    : `${selectedBranch === "minus" ? "Negative" : "Positive"} branch active`;
+  review.dataset["kpSelectedBranch"] = selectedBranch;
 }
 
 function math(latex: string): string {

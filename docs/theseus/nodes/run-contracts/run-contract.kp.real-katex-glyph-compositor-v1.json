@@ -159,7 +159,8 @@
     {
       "id": "slice-18",
       "title": "Live-branch-interaction",
-      "status": "planned"
+      "summary": "Delivered a live native plus-minus fission whose exact branch endpoints retain hover, annotation, selection, seek, and rewind semantics while clones remain inert.",
+      "status": "complete"
     },
     {
       "id": "slice-19",

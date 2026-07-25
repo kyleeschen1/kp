@@ -149,6 +149,53 @@ button, input { font: inherit; }
   box-shadow: 0 0 0 .12em rgba(39, 112, 91, .25);
 }
 
+.glyph-exemplar__viewport--branch {
+  height: clamp(240px, 34vw, 320px);
+}
+
+.glyph-exemplar__branch-equation {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: max-content;
+  transform: translate(-50%, -50%);
+  transition: filter 160ms ease;
+  white-space: nowrap;
+}
+
+.glyph-exemplar__branch-equation--source {
+  top: 28%;
+  left: 50%;
+}
+
+.glyph-exemplar__branch-equation--minus {
+  top: 72%;
+  left: 30%;
+  opacity: 0;
+}
+
+.glyph-exemplar__branch-equation--plus {
+  top: 72%;
+  left: 70%;
+  opacity: 0;
+}
+
+.glyph-exemplar__branch-equation--muted {
+  opacity: .16 !important;
+  filter: grayscale(1);
+}
+
+.glyph-exemplar__branch-equation [data-kp-branch-id] {
+  border-radius: .12em;
+  outline: none;
+}
+
+.glyph-exemplar__branch-equation [data-kp-branch-id]:hover,
+.glyph-exemplar__branch-equation [data-kp-branch-id]:focus-visible {
+  background: rgba(216, 255, 115, .52);
+  box-shadow: 0 0 0 .12em rgba(39, 112, 91, .25);
+}
+
 .glyph-exemplar__cloze-hidden {
   border-radius: .08em;
   background: #243a33 !important;
@@ -272,6 +319,26 @@ button, input { font: inherit; }
 .glyph-exemplar__controls--compact output {
   max-width: 34rem;
   text-align: left;
+}
+
+.glyph-exemplar__branch-controls {
+  flex-wrap: wrap;
+}
+
+.glyph-exemplar__branch-controls button {
+  min-width: auto;
+  background: #dce4de;
+  color: #284139;
+}
+
+.glyph-exemplar__branch-controls button[aria-pressed="true"] {
+  background: #263a34;
+  color: #fff;
+}
+
+.glyph-exemplar__branch-controls output {
+  flex: 1;
+  min-width: 12rem;
 }
 
 .glyph-exemplar__evidence {

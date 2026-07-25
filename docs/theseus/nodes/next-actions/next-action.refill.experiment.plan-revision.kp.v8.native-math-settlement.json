@@ -156,6 +156,12 @@
       "status": "passed",
       "scope": "slice-17 generic one-to-many compositor",
       "checkedAt": "2026-07-25T15:45:16.499Z"
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment; npm run test:browser:real-katex-glyph-compositor; npm run typecheck; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-18 live branch interaction",
+      "checkedAt": "2026-07-25T15:50:22.851Z"
     }
   ],
   "progress": {

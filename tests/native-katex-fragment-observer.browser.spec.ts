@@ -855,3 +855,60 @@ test("fraction merge settles one native denominator with Cloze authority", async
     "true"
   );
 });
+
+test("plus-minus split preserves live branch choice through seek and rewind", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=1000");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const branch = page.locator(
+    '[data-reconciliation-case="plus-minus-branch"]'
+  );
+  const minus = branch.locator('[data-kp-branch-id="minus"]');
+  const plus = branch.locator('[data-kp-branch-id="plus"]');
+  const clones = branch.locator("[data-kp-native-katex-fragment-clone]");
+  const slider = page.locator("[data-progress]");
+
+  await expect(clones).toHaveCount(2);
+  await expect(minus).toHaveAttribute("tabindex", "0");
+  await expect(plus).toHaveAttribute("tabindex", "0");
+  await expect(minus).toHaveAttribute(
+    "data-kp-annotation",
+    "Negative quadratic root branch"
+  );
+  expect(await clones.evaluateAll((elements) =>
+    elements.every((element) =>
+      element.getAttribute("aria-hidden") === "true" &&
+      !element.hasAttribute("data-kp-branch-id")
+    )
+  )).toBe(true);
+
+  await branch.locator('[data-branch-choice="minus"]').click();
+  await expect(branch.locator('[data-branch-choice="minus"]')).toHaveAttribute(
+    "aria-pressed",
+    "true"
+  );
+  await expect(branch.locator('[data-branch-target="minus"]')).toHaveAttribute(
+    "aria-hidden",
+    "false"
+  );
+  await expect(branch.locator('[data-branch-target="plus"]')).toHaveAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  await slider.fill("0");
+  await slider.dispatchEvent("input");
+  await slider.fill("1000");
+  await slider.dispatchEvent("input");
+  await expect(branch.locator('[data-branch-choice="minus"]')).toHaveAttribute(
+    "aria-pressed",
+    "true"
+  );
+  await expect(branch.locator('[data-branch-target="plus"]')).toHaveAttribute(
+    "aria-hidden",
+    "true"
+  );
+  await expect(minus).toHaveAttribute("tabindex", "0");
+  await expect(plus).toHaveAttribute("tabindex", "-1");
+});
