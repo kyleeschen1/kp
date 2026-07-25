@@ -1,5 +1,6 @@
 import type { KpCanonicalLineageProjection } from "./canonical-operation-lineage-adapter.ts";
 import type { KpAnimationPresentationConstraintsV1 } from "./presentation-constraints.ts";
+import type { KpLineageConstrainedGlyphMatchResult } from "./lineage-constrained-glyph-matcher.ts";
 
 export type KpReconciliationDisposition =
   | "pending-measurement"
@@ -89,4 +90,41 @@ export function replaceKpReconciliationSteps(
     }))),
     operationCount
   });
+}
+
+export function resolveKpGlyphReconciliationPlan(
+  plan: KpEphemeralGlyphReconciliationPlan,
+  result: KpLineageConstrainedGlyphMatchResult
+): KpEphemeralGlyphReconciliationPlan {
+  const ambiguityGroups = new Set(result.ambiguities.map(({ lineageGroupId }) => lineageGroupId));
+  const multiplicityGroups = new Set(result.multiplicity.map(({ lineageGroupId }) => lineageGroupId));
+  const unmatched = new Set([
+    ...result.unmatchedSourceGlyphIds,
+    ...result.unmatchedTargetGlyphIds
+  ]);
+  const steps = plan.steps.map((step) => {
+    const matches = result.matches.filter(({ lineageGroupId }) =>
+      lineageGroupId === step.lineageGroupId
+    );
+    const disposition: KpReconciliationDisposition = ambiguityGroups.has(step.lineageGroupId)
+      ? "settle"
+      : multiplicityGroups.has(step.lineageGroupId)
+        ? "group-reconcile"
+        : matches.length > 0 &&
+            !matches.some((match) =>
+              unmatched.has(match.sourceGlyphId) || unmatched.has(match.targetGlyphId)
+            )
+          ? "matched"
+          : "cut";
+    return {
+      ...step,
+      disposition,
+      matchIds: matches.map(({ id }) => id)
+    };
+  });
+  return replaceKpReconciliationSteps(
+    plan,
+    steps,
+    plan.operationCount + result.operationCount + steps.length
+  );
 }

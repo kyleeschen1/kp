@@ -144,7 +144,8 @@
     {
       "id": "slice-08",
       "title": "Ambiguity-and-conservative-fallback",
-      "status": "planned"
+      "summary": "Resolved match results conservatively: ambiguity settles a whole semantic group, multiplicity reconciles as a group, and unsupported or unmatched mappings cut at semantic checkpoints.",
+      "status": "complete"
     },
     {
       "id": "slice-09",
