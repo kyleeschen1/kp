@@ -52,6 +52,7 @@ export interface KpNativeKatexRenderedSceneObservation {
 export type KpNativeKatexHandoffSide = "material" | "native-target";
 
 export interface KpNativeKatexRuleGeometry {
+  readonly axis: "horizontal" | "vertical";
   readonly left: number;
   readonly top: number;
   readonly width: number;
@@ -71,6 +72,7 @@ export interface KpNativeKatexHandoffPaintObservation {
   readonly rect: KpStageRelativeRect;
   readonly baselineY: number | null;
   readonly wrapperTransform: string;
+  readonly clipPath: string;
   readonly paintFingerprint: string;
   readonly styleFingerprint: string;
   readonly opacity: number;
@@ -116,6 +118,7 @@ export function createKpNativeKatexHandoffTelemetry(input: {
       ["semantic entity", observation.semanticEntityId],
       ["presentation group", observation.presentationGroupId],
       ["wrapper transform", observation.wrapperTransform],
+      ["clip path", observation.clipPath],
       ["paint fingerprint", observation.paintFingerprint],
       ["style fingerprint", observation.styleFingerprint]
     ] as const) {

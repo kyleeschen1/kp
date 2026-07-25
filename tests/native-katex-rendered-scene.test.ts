@@ -59,6 +59,7 @@ function handoffObservation(
     rect: { left: 10, top: 20, width: 12, height: 24 },
     baselineY: 42,
     wrapperTransform: "matrix(1, 0, 0, 1, 0, 0)",
+    clipPath: "none",
     paintFingerprint: "glyph:x",
     styleFingerprint: "font-family:KaTeX_Math",
     opacity: 1,
@@ -80,7 +81,13 @@ test("handoff telemetry is immutable renderer-session evidence", () => {
         paintKind: "rule",
         baselineY: null,
         paintFingerprint: "rule",
-        ruleGeometry: { left: 8, top: 39, width: 32, thickness: 1 }
+        ruleGeometry: {
+          axis: "horizontal",
+          left: 8,
+          top: 39,
+          width: 32,
+          thickness: 1
+        }
       })
     ],
     fontRevision: 2,
@@ -137,7 +144,13 @@ test("handoff telemetry rejects invalid geometry and document boundaries", () =>
   );
   assert.throws(
     () => create(handoffObservation({
-      ruleGeometry: { left: 0, top: 0, width: 12, thickness: 1 }
+      ruleGeometry: {
+        axis: "horizontal",
+        left: 0,
+        top: 0,
+        width: 12,
+        thickness: 1
+      }
     })),
     /cannot carry rule geometry/
   );

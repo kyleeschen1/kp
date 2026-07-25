@@ -131,7 +131,7 @@ try {
         '[data-reconciliation-case="fraction-merge"]'
       );
       const snapshot = await card.evaluate((element, fractionProgress) => {
-        const telemetry = (window as unknown as {
+        const telemetryApi = window as unknown as {
           __kpMeasureFractionGlyphHandoff: (progress: number) => {
             observations: readonly {
               id: string;
@@ -151,7 +151,37 @@ try {
               opacity: number;
             }[];
           };
-        }).__kpMeasureFractionGlyphHandoff(fractionProgress);
+          __kpMeasureFractionRuleHandoff: (progress: number) => {
+            observations: readonly {
+              id: string;
+              side: "material" | "native-target";
+              paintAtomId: string;
+              semanticEntityId: string;
+              rect: {
+                left: number;
+                top: number;
+                width: number;
+                height: number;
+              };
+              wrapperTransform: string;
+              clipPath: string;
+              paintFingerprint: string;
+              styleFingerprint: string;
+              opacity: number;
+              ruleGeometry: {
+                axis: "horizontal" | "vertical";
+                left: number;
+                top: number;
+                width: number;
+                thickness: number;
+              };
+            }[];
+          };
+        };
+        const glyphTelemetry =
+          telemetryApi.__kpMeasureFractionGlyphHandoff(fractionProgress);
+        const ruleTelemetry =
+          telemetryApi.__kpMeasureFractionRuleHandoff(fractionProgress);
         const materialOwners = [
           ...element.querySelectorAll<HTMLElement>(
             "[data-kp-native-katex-scene-owner]"
@@ -170,7 +200,10 @@ try {
           visibleMaterialOwnerCount: materialOwners.filter((owner) =>
             Number(owner.style.opacity) > 0
           ).length,
-          glyphTelemetry: telemetry.observations.map((observation) => ({
+          glyphTelemetry: glyphTelemetry.observations.map((observation) => ({
+            ...observation
+          })),
+          ruleTelemetry: ruleTelemetry.observations.map((observation) => ({
             ...observation
           }))
         };

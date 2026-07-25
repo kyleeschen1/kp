@@ -54,6 +54,7 @@ import {
   correlateKpNativeKatexSceneHandoff,
   createKpNativeKatexScenePlayback,
   measureKpNativeKatexGlyphHandoff,
+  measureKpNativeKatexRuleHandoff,
   reconcileKpNativeKatexScenes
 } from "../rendering/native-katex-scene-compositor.ts";
 
@@ -355,6 +356,17 @@ if (import.meta.env.DEV) {
     __kpMeasureFractionGlyphHandoff: (progress: number) => {
       fractionScenePlayback.apply(progress);
       return measureKpNativeKatexGlyphHandoff({
+        stage: fractionStage,
+        reconciliation: fractionSceneReconciliation,
+        correlations: fractionHandoffCorrelations,
+        progress,
+        fontRevision: fontReadiness.revision,
+        viewportKey: fractionTargetScene.viewportKey
+      });
+    },
+    __kpMeasureFractionRuleHandoff: (progress: number) => {
+      fractionScenePlayback.apply(progress);
+      return measureKpNativeKatexRuleHandoff({
         stage: fractionStage,
         reconciliation: fractionSceneReconciliation,
         correlations: fractionHandoffCorrelations,

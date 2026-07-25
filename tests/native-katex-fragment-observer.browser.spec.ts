@@ -552,6 +552,108 @@ test("glyph handoff microscope is repeatable across viewport and DPR", async ({
   }
 });
 
+test("structural handoff microscope measures generic rule geometry", async ({
+  browser
+}) => {
+  for (const profile of [
+    {
+      viewport: { width: 1_440, height: 950 },
+      deviceScaleFactor: 1
+    },
+    {
+      viewport: { width: 390, height: 844 },
+      deviceScaleFactor: 2
+    }
+  ]) {
+    const context = await browser.newContext({
+      viewport: profile.viewport,
+      deviceScaleFactor: profile.deviceScaleFactor
+    });
+    const page = await context.newPage();
+    await page.goto("/glyph-reconciliation-experiment.html?progress=859");
+    await page.locator(
+      '[data-kp-glyph-review][data-kp-ready="true"]'
+    ).waitFor();
+    const evidence = await page.evaluate(() => {
+      const measure = (window as unknown as {
+        __kpMeasureFractionRuleHandoff: (progress: number) => {
+          observations: readonly {
+            id: string;
+            side: "material" | "native-target";
+            paintAtomId: string;
+            semanticEntityId: string;
+            paintKind: string;
+            rect: {
+              left: number;
+              top: number;
+              width: number;
+              height: number;
+            };
+            baselineY: number | null;
+            wrapperTransform: string;
+            clipPath: string;
+            paintFingerprint: string;
+            styleFingerprint: string;
+            opacity: number;
+            ruleGeometry: {
+              axis: "horizontal" | "vertical";
+              left: number;
+              top: number;
+              width: number;
+              thickness: number;
+            };
+          }[];
+        };
+      }).__kpMeasureFractionRuleHandoff;
+      const snapshot = (progress: number) => measure(progress).observations.map(
+        (observation) => ({ ...observation })
+      );
+      return {
+        before: snapshot(0.999),
+        repeated: snapshot(0.999),
+        native: snapshot(1)
+      };
+    });
+
+    expect(evidence.before).toEqual(evidence.repeated);
+    expect(evidence.before.length).toBeGreaterThanOrEqual(4);
+    expect(evidence.before.every((observation) =>
+      observation.paintKind === "rule" &&
+      observation.baselineY === null &&
+      observation.wrapperTransform.length > 0 &&
+      observation.clipPath.length > 0 &&
+      observation.paintFingerprint === "rule" &&
+      observation.styleFingerprint.includes("border-") &&
+      observation.ruleGeometry.axis === "horizontal" &&
+      observation.ruleGeometry.width > 0 &&
+      observation.ruleGeometry.thickness > 0 &&
+      Number.isFinite(observation.ruleGeometry.left) &&
+      Number.isFinite(observation.ruleGeometry.top)
+    )).toBe(true);
+    const byCorrelation = evidence.before.reduce((groups, observation) => {
+      const id = observation.id.replace(/\.(material|native)$/, "");
+      groups.set(id, [...(groups.get(id) ?? []), observation]);
+      return groups;
+    }, new Map<string, typeof evidence.before>());
+    expect([...byCorrelation.values()].every((pair) =>
+      pair.length === 2 &&
+      pair[0]!.paintAtomId === pair[1]!.paintAtomId &&
+      pair[0]!.semanticEntityId === pair[1]!.semanticEntityId &&
+      pair[0]!.paintFingerprint === pair[1]!.paintFingerprint
+    )).toBe(true);
+    expect(evidence.before.filter(({ side, opacity }) =>
+      side === "native-target" && opacity > 0
+    )).toHaveLength(0);
+    expect(evidence.native.filter(({ side, opacity }) =>
+      side === "material" && opacity > 0
+    )).toHaveLength(0);
+    expect(evidence.native.filter(({ side, opacity }) =>
+      side === "native-target" && opacity > 0
+    ).length).toBeGreaterThan(0);
+    await context.close();
+  }
+});
+
 test("visible fraction card renders the complete moving scene on its shared clock", async ({
   page
 }) => {

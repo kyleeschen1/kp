@@ -61,6 +61,13 @@
       "scope": "slice-04 baseline and style microscope",
       "checkedAt": "2026-07-25T19:24:14.365Z",
       "notes": "30 focused tests, all TypeScript projects, 29 Chromium checks, and 24 stable overview/endpoint captures pass. Across wide and phone DPR profiles, correlated track rectangles are within roughly 0.1 CSS px, but the persistent plus clone retains source font size 65.824 versus 46.0768 wide and 46.464 versus 32.5248 phone; this generic 1.43 scale mismatch explains the visible overflow and baseline delta. The initial fingerprint-equality hypothesis was recorded failed and replaced by comparison evidence."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck; npm run test:browser:real-katex-glyph-compositor; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-05 structural rule microscope",
+      "checkedAt": "2026-07-25T19:29:47.320Z",
+      "notes": "30 focused tests, all TypeScript projects, 30 Chromium checks, and 24 capture frames pass. Generic horizontal rule telemetry is repeatable at wide and phone DPR: material/native border style and thickness match exactly, length differs about 0.016 CSS px, position residual stays below 0.08 px, and clipping remains none. Structural rule geometry is not the visible handoff cause."
     }
   ],
   "allowedWork": [
@@ -116,7 +123,8 @@
     {
       "id": "slice-05",
       "title": "structural-rule-microscope",
-      "status": "planned"
+      "summary": "Added generic structural rule handoff telemetry for axis, length, thickness, transforms, clipping, border style, opacity, and paint identity. Wide/phone material and native rules match in style and thickness with about 0.016 px length residual, ruling out rule geometry as the visible jerk cause.",
+      "status": "complete"
     },
     {
       "id": "slice-06",

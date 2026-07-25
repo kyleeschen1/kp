@@ -580,6 +580,69 @@ export function measureKpNativeKatexGlyphHandoff(input: {
   });
 }
 
+export function measureKpNativeKatexRuleHandoff(input: {
+  readonly stage: HTMLElement;
+  readonly reconciliation: KpNativeKatexSceneReconciliation;
+  readonly correlations: readonly KpNativeKatexHandoffCorrelation[];
+  readonly progress: number;
+  readonly fontRevision: number;
+  readonly viewportKey: string;
+}): KpNativeKatexHandoffTelemetry {
+  const targetById = new Map(input.reconciliation.target.atoms.map((atom) => [
+    atom.id,
+    atom
+  ]));
+  const ruleCorrelations = input.correlations.filter((correlation) =>
+    correlation.disposition === "target-bound" &&
+    targetById.get(correlation.targetAtomId!)?.paintKind === "rule"
+  );
+  if (ruleCorrelations.length === 0) {
+    throw new Error("Native handoff microscope requires correlated rule paint.");
+  }
+  const observations = ruleCorrelations.flatMap((correlation) => {
+    const target = targetById.get(correlation.targetAtomId!)!;
+    const materialOwner = input.stage.querySelector<HTMLElement>(
+      `[data-kp-equation-material-owner-id="${
+        CSS.escape(correlation.materialOwnerId)
+      }"]`
+    );
+    const materialVisual = materialOwner?.firstElementChild;
+    if (
+      materialOwner === null ||
+      !(materialVisual instanceof HTMLElement)
+    ) {
+      throw new Error(
+        `Native handoff microscope cannot find ${correlation.materialOwnerId}.`
+      );
+    }
+    return [
+      observeHandoffRule({
+        id: `${correlation.id}.material`,
+        side: "material",
+        stage: input.stage,
+        element: materialVisual,
+        target,
+        fontRevision: input.fontRevision
+      }),
+      observeHandoffRule({
+        id: `${correlation.id}.native`,
+        side: "native-target",
+        stage: input.stage,
+        element: target.sourceElement,
+        target,
+        fontRevision: input.fontRevision
+      })
+    ];
+  });
+  return createKpNativeKatexHandoffTelemetry({
+    stage: input.stage,
+    progress: input.progress,
+    observations,
+    fontRevision: input.fontRevision,
+    viewportKey: input.viewportKey
+  });
+}
+
 export function applyKpNativeKatexSceneFrame(input: {
   readonly stage: HTMLElement;
   readonly sourceRoot: HTMLElement;
@@ -906,9 +969,48 @@ function observeHandoffGlyph(input: {
     rect,
     baselineY: fontMetricBaseline(input.element, computed, rect),
     wrapperTransform: computedTransformChain(input.element, input.stage),
+    clipPath: computed.clipPath || "none",
     paintFingerprint: input.target.visualKey,
     styleFingerprint: handoffStyleFingerprint(computed),
     opacity: effectiveOpacity(input.rectElement, input.stage),
+    fontRevision: input.fontRevision
+  };
+}
+
+function observeHandoffRule(input: {
+  readonly id: string;
+  readonly side: "material" | "native-target";
+  readonly stage: HTMLElement;
+  readonly element: HTMLElement;
+  readonly target: KpNativeKatexPaintAtomObservation;
+  readonly fontRevision: number;
+}) {
+  const stageRect = input.stage.getBoundingClientRect();
+  const rect = normalizeKpStageRelativeRect({
+    stageClientRect: stageRect,
+    stageLayoutWidth: input.stage.offsetWidth || stageRect.width,
+    stageLayoutHeight: input.stage.offsetHeight || stageRect.height,
+    fragmentClientRect: input.element.getBoundingClientRect()
+  });
+  const computed = getComputedStyle(input.element);
+  return {
+    kind: "native-katex-handoff-paint-observation" as const,
+    lifecycle: "renderer-session" as const,
+    id: input.id,
+    side: input.side,
+    paintAtomId: input.target.id,
+    semanticEntityId: input.target.semanticEntityId,
+    presentationGroupId: input.target.presentationGroupId,
+    paintKind: "rule" as const,
+    element: input.element,
+    rect,
+    baselineY: null,
+    wrapperTransform: computedTransformChain(input.element, input.stage),
+    clipPath: computed.clipPath || "none",
+    paintFingerprint: input.target.visualKey,
+    styleFingerprint: structuralStyleFingerprint(computed),
+    opacity: effectiveOpacity(input.element, input.stage),
+    ruleGeometry: measureRuleGeometry(computed, rect),
     fontRevision: input.fontRevision
   };
 }
@@ -964,6 +1066,83 @@ function handoffStyleFingerprint(computed: CSSStyleDeclaration): string {
   ].map((property) =>
     `${property}:${computed.getPropertyValue(property)}`
   ).join("|");
+}
+
+function structuralStyleFingerprint(computed: CSSStyleDeclaration): string {
+  return [
+    "background-color",
+    "border-top-width",
+    "border-top-style",
+    "border-right-width",
+    "border-right-style",
+    "border-bottom-width",
+    "border-bottom-style",
+    "border-left-width",
+    "border-left-style",
+    "box-sizing",
+    "overflow",
+    "clip-path"
+  ].map((property) =>
+    `${property}:${computed.getPropertyValue(property)}`
+  ).join("|");
+}
+
+function measureRuleGeometry(
+  computed: CSSStyleDeclaration,
+  rect: KpStageRelativeRect
+) {
+  const candidates = [
+    {
+      side: "top",
+      axis: "horizontal" as const,
+      width: computed.borderTopWidth,
+      style: computed.borderTopStyle
+    },
+    {
+      side: "bottom",
+      axis: "horizontal" as const,
+      width: computed.borderBottomWidth,
+      style: computed.borderBottomStyle
+    },
+    {
+      side: "left",
+      axis: "vertical" as const,
+      width: computed.borderLeftWidth,
+      style: computed.borderLeftStyle
+    },
+    {
+      side: "right",
+      axis: "vertical" as const,
+      width: computed.borderRightWidth,
+      style: computed.borderRightStyle
+    }
+  ].map((candidate) => ({
+    ...candidate,
+    thickness: Number.parseFloat(candidate.width)
+  })).filter(({ style, thickness }) =>
+    Number.isFinite(thickness) &&
+    thickness > 0 &&
+    style !== "none" &&
+    style !== "hidden"
+  ).sort((left, right) => right.thickness - left.thickness);
+  const border = candidates[0];
+  if (border === undefined) {
+    throw new Error("Native handoff rule requires one visible border.");
+  }
+  const horizontal = border.axis === "horizontal";
+  return {
+    axis: border.axis,
+    left:
+      border.side === "right"
+        ? rect.left + rect.width - border.thickness
+        : rect.left,
+    top:
+      border.side === "bottom"
+        ? rect.top + rect.height - border.thickness
+        : rect.top,
+    width: horizontal ? rect.width : rect.height,
+    thickness: border.thickness
+  };
 }
 
 function effectiveOpacity(element: HTMLElement, stage: HTMLElement): number {
