@@ -49,7 +49,7 @@ test("legacy defaults reproduce semantic-material and continuity profiles", () =
     zeroWitness: "none",
     successor: "counter-convergence-v1",
     depth: "semantic-depth-v1",
-    continuants: "transit-then-reflow-v1",
+    continuants: "concurrent-v1",
     branchStrategy: "together"
   });
 });

@@ -184,6 +184,13 @@
       "scope": "slice-22 performance budgets",
       "checkedAt": "2026-07-25T02:34:17.598Z",
       "notes": "59 focused tests pass; build passes; cold 1.65ms, cached 0.12ms, sample 0.013ms, 35 operations, 2573 plan bytes, 6587 route gzip bytes—all beneath frozen limits."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment; npm run check:architecture; npm run test:semantic-animation-convergence; npm run build; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-23 complexity-negative migration",
+      "checkedAt": "2026-07-25T02:39:41.915Z",
+      "notes": "Legacy operation-specific schedule references decreased from frozen 10 to 9. Canonical solve-x declares measured reconciliation constraints and uses neutral legacy fallback. 59 focused and 255 convergence tests pass; architecture, build, and workspace validation pass."
     }
   ],
   "progress": {

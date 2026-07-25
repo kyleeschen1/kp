@@ -234,7 +234,8 @@
     {
       "id": "slice-23",
       "title": "Complexity-negative-migration",
-      "status": "planned"
+      "summary": "Removed the canonical solve-x dependency on a bespoke continuant schedule, ratcheted legacy policy references from 10 to 9, and closed presentation constraints through asset projections.",
+      "status": "complete"
     },
     {
       "id": "slice-24",

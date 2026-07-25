@@ -22,6 +22,9 @@ import {
 import {
   createKpEquationPresentationProfileV1
 } from "./equation-presentation-profile.ts";
+import {
+  createKpAnimationPresentationConstraintsV1
+} from "./presentation-constraints.ts";
 
 const linearSolveAnimationId = "animation.linear-solve.solve-x";
 const linearSolveTimelineId = "timeline.linear-solve.shared";
@@ -198,6 +201,17 @@ function createLinearSolveAnimationFromSource(
     },
     ...(canonical
       ? {
+          presentationConstraints:
+            createKpAnimationPresentationConstraintsV1({
+              requiredCapabilities: [
+                "accessibility",
+                "annotation",
+                "direct-seek",
+                "hover",
+                "responsive",
+                "rewind"
+              ]
+            }),
           presentationProfile: createKpEquationPresentationProfileV1({
             payload: {
               kind: "equation-presentation",
@@ -207,7 +221,9 @@ function createLinearSolveAnimationFromSource(
               zeroWitness: "none",
               successor: "counter-convergence-v1",
               depth: "semantic-depth-v1",
-              continuants: "transit-then-reflow-v1",
+              // The measured reconciliation planner now owns continuant
+              // clearance; the legacy renderer keeps only its neutral fallback.
+              continuants: "concurrent-v1",
               branchStrategy: "together"
             }
           })

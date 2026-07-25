@@ -23,7 +23,11 @@ test("canonical linear solve retains semantics but uses the continuity presentat
   assert.equal(policy.zeroWitness, "none");
   assert.equal(policy.successor, "counter-convergence-v1");
   assert.equal(policy.depth, "semantic-depth-v1");
-  assert.equal(policy.continuants, "transit-then-reflow-v1");
+  assert.equal(policy.continuants, "concurrent-v1");
+  assert.equal(
+    animation.presentationConstraints?.clearancePlanning,
+    "measured-native-notation"
+  );
   assert.equal(policy.applyWitnessedAnnihilation, false);
   assert.equal(policy.applySuccessorSynthesis, false);
   assert.ok(animation.transformations.some(

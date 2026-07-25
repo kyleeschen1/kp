@@ -48,7 +48,7 @@ test("only the canonical solve-x exemplar authors the typed profile", () => {
     zeroWitness: "none",
     successor: "counter-convergence-v1",
     depth: "semantic-depth-v1",
-    continuants: "transit-then-reflow-v1",
+    continuants: "concurrent-v1",
     branchStrategy: "together"
   });
   assert.equal(decodedCanonical.status, "accepted");
@@ -86,7 +86,7 @@ test("typed authoring preserves solve-x semantic and clock serialization", () =>
       equationZeroWitnessPresentationRecipe: "none",
       equationSuccessorPresentationRecipe: "counter-convergence-v1",
       equationDepthPresentationRecipe: "semantic-depth-v1",
-      equationContinuantPresentationRecipe: "transit-then-reflow-v1",
+      equationContinuantPresentationRecipe: "concurrent-v1",
       equationBranchPresentationStrategy: "together"
     }
   });
@@ -98,6 +98,10 @@ test("typed authoring preserves solve-x semantic and clock serialization", () =>
   assert.deepEqual(
     kpEquationPresentationProfile(typed),
     kpEquationPresentationProfile(legacyFacade)
+  );
+  assert.equal(
+    typed.presentationConstraints?.clearancePlanning,
+    "measured-native-notation"
   );
   assert.deepEqual(validateKpAnimationAsset(typed), []);
 });

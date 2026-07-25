@@ -20,6 +20,9 @@ import type {
 import type {
   EditableSemanticTransformationTree
 } from "../semantic/transformation-composition.ts";
+import type {
+  KpAnimationPresentationConstraintsV1
+} from "./presentation-constraints.ts";
 
 export interface KpAnimationAssetIdentityProjection {
   readonly id: string;
@@ -44,6 +47,8 @@ export interface KpAnimationPresentationAssetProjection {
   readonly identity: KpAnimationAssetIdentityProjection;
   readonly layout?: KpAnimationAssetLayoutNode | undefined;
   readonly presentationProfile?: KpAnimationAssetPresentationProfile | undefined;
+  readonly presentationConstraints?:
+    KpAnimationPresentationConstraintsV1 | undefined;
 }
 
 export interface KpAnimationProductManifestProjection {
@@ -73,7 +78,8 @@ export const kpAnimationAssetProjectionFieldOwnership = Object.freeze({
   ]),
   presentation: Object.freeze([
     "layout",
-    "presentationProfile"
+    "presentationProfile",
+    "presentationConstraints"
   ]),
   productManifest: Object.freeze([
     "exportTargets",
@@ -116,7 +122,10 @@ export function projectKpAnimationAsset(
       ...(asset.layout === undefined ? {} : { layout: asset.layout }),
       ...(asset.presentationProfile === undefined
         ? {}
-        : { presentationProfile: asset.presentationProfile })
+        : { presentationProfile: asset.presentationProfile }),
+      ...(asset.presentationConstraints === undefined
+        ? {}
+        : { presentationConstraints: asset.presentationConstraints })
     }),
     productManifest: Object.freeze({
       kind: "animation-product-manifest-projection" as const,
@@ -157,6 +166,12 @@ export function recomposeKpAnimationAsset(
       : {
           presentationProfile:
             projections.presentation.presentationProfile
+        }),
+    ...(projections.presentation.presentationConstraints === undefined
+      ? {}
+      : {
+          presentationConstraints:
+            projections.presentation.presentationConstraints
         }),
     ...(projections.productManifest.metadata === undefined
       ? {}

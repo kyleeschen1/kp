@@ -5,7 +5,10 @@ import {
   createKpAnimationAsset,
   validateKpAnimationAsset
 } from "../src/animation/asset.ts";
-import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
+import {
+  createLinearSolveAnimationAsset,
+  createLinearSolveTeacherZeroAnimationAsset
+} from "../src/animation/linear-solve-adapter.ts";
 import {
   createKpAnimationPresentationConstraintsV1,
   validateKpAnimationPresentationConstraintsV1,
@@ -54,7 +57,7 @@ test("animation asset carries renderer-independent presentation constraints", ()
 });
 
 test("legacy animation assets remain valid without presentation constraints", () => {
-  const animation = createLinearSolveAnimationAsset();
+  const animation = createLinearSolveTeacherZeroAnimationAsset();
   assert.equal(animation.presentationConstraints, undefined);
   assert.deepEqual(validateKpAnimationAsset(animation), []);
 });

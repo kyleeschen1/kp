@@ -42,7 +42,7 @@ test("experiment budgets are fixed before planner integration", () => {
   });
 });
 
-test("legacy scheduling policy baseline matches the pre-experiment source", () => {
+test("legacy scheduling policy references decrease from the frozen baseline", () => {
   const { policyBaseline } = kpGlyphReconciliationExperimentLedger;
   const schedulePattern = new RegExp(
     policyBaseline.scheduleModeIds.join("|"),
@@ -54,7 +54,7 @@ test("legacy scheduling policy baseline matches the pre-experiment source", () =
     0
   );
   assert.equal(policyBaseline.sourceFiles.length, 7);
-  assert.equal(referenceCount, policyBaseline.sourceReferenceCount);
+  assert.equal(referenceCount, policyBaseline.sourceReferenceCount - 1);
 });
 
 test("experiment has explicit complexity and bespoke-scheduler failure rules", () => {
