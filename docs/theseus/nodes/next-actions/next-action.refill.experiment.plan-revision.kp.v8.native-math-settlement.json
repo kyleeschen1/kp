@@ -150,6 +150,12 @@
       "status": "passed",
       "scope": "slice-16 merge settlement and Cloze",
       "checkedAt": "2026-07-25T15:42:36.601Z"
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-17 generic one-to-many compositor",
+      "checkedAt": "2026-07-25T15:45:16.499Z"
     }
   ],
   "progress": {

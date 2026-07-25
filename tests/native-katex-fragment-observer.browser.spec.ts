@@ -506,6 +506,93 @@ test("generic many-to-one frame converges exact native fragments without substit
   expect(result.targetOpacity).toBe(1);
 });
 
+test("generic one-to-many frame separates exact target fragments without transit substitution", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const result = await page.evaluate(async () => {
+    const stage = document.querySelector<HTMLElement>(
+      '[data-reconciliation-case="solve-x"] [data-case-stage]'
+    )!;
+    const source = stage.querySelector<HTMLElement>("[data-case-source]")!;
+    const firstTarget = stage.querySelector<HTMLElement>("[data-case-target]")!;
+    const secondTarget = firstTarget.cloneNode(true) as HTMLElement;
+    secondTarget.removeAttribute("data-case-target");
+    secondTarget.style.left = `${parseFloat(firstTarget.style.left) + 120}px`;
+    source.dataset["kpMotionId"] = "motion.split.source";
+    firstTarget.dataset["kpMotionId"] = "motion.split.target-a";
+    secondTarget.dataset["kpMotionId"] = "motion.split.target-b";
+    stage.append(secondTarget);
+    // @ts-expect-error Vite resolves browser-side source modules.
+    const observer = await import("/src/rendering/native-katex-fragment-observer.ts");
+    // @ts-expect-error Vite resolves browser-side source modules.
+    const compositor = await import("/src/rendering/native-katex-glyph-compositor.ts");
+    const observed = observer.observeKpNativeKatexFragments({
+      stage,
+      bindings: [{
+        id: "fragment.split.source",
+        semanticEntityId: "entity.split.source",
+        motionId: "motion.split.source",
+        glyphKey: "x"
+      }, {
+        id: "fragment.split.target-a",
+        semanticEntityId: "entity.split.target-a",
+        motionId: "motion.split.target-a",
+        glyphKey: "x"
+      }, {
+        id: "fragment.split.target-b",
+        semanticEntityId: "entity.split.target-b",
+        motionId: "motion.split.target-b",
+        glyphKey: "x"
+      }],
+      fontRevision: 1
+    }).fragments;
+    const clones = compositor.createKpNativeKatexFragmentClones({
+      stage,
+      fragments: [{
+        ownerId: "owner.split.target-a",
+        observation: observed[1]!
+      }, {
+        ownerId: "owner.split.target-b",
+        observation: observed[2]!
+      }]
+    }) as {
+      ownerElement: HTMLElement;
+      visualElement: HTMLElement;
+    }[];
+    const frames = [0, 0.5, 1].map((progress: number) =>
+      compositor.applyKpNativeKatexOneToManyFrame({
+        clones,
+        source: observed[0]!,
+        targets: observed.slice(1),
+        progress
+      })
+    ) as { visualOwner: string; targetHandoffDeltaPx: number }[];
+    return {
+      owners: frames.map((frame) => frame.visualOwner),
+      endpointDelta: frames[2]!.targetHandoffDeltaPx,
+      cloneTexts: clones.map(({ visualElement }) => visualElement.textContent),
+      targetTexts: [firstTarget.textContent, secondTarget.textContent],
+      sourceOpacity: Number(source.style.opacity),
+      targetOpacities: [
+        Number(firstTarget.style.opacity),
+        Number(secondTarget.style.opacity)
+      ]
+    };
+  });
+
+  expect(result.owners).toEqual([
+    "source-native",
+    "clone-transit",
+    "target-natives"
+  ]);
+  expect(result.endpointDelta).toBe(0);
+  expect(result.cloneTexts).toEqual(result.targetTexts);
+  expect(result.sourceOpacity).toBe(0);
+  expect(result.targetOpacities).toEqual([1, 1]);
+});
+
 test("moving clone meets native target within one CSS pixel without typography drift", async ({
   page
 }) => {

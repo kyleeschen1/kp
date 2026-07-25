@@ -38,7 +38,12 @@ export interface KpNativeKatexContextReflowFrame {
 }
 
 export interface KpNativeKatexMultiplicityFrame {
-  readonly visualOwner: "source-natives" | "clone-transit" | "target-native";
+  readonly visualOwner:
+    | "source-native"
+    | "source-natives"
+    | "clone-transit"
+    | "target-native"
+    | "target-natives";
   readonly constituentFrames: readonly KpNativeKatexGlyphFrame[];
   readonly targetHandoffDeltaPx: number;
 }
@@ -203,6 +208,46 @@ export function applyKpNativeKatexManyToOneFrame(input: {
     : constituentFrames[0]!.visualOwner;
   return Object.freeze({
     visualOwner,
+    constituentFrames: Object.freeze(constituentFrames),
+    targetHandoffDeltaPx: Math.max(
+      ...constituentFrames.map(({ targetHandoffDeltaPx }) =>
+        targetHandoffDeltaPx
+      )
+    )
+  });
+}
+
+export function applyKpNativeKatexOneToManyFrame(input: {
+  readonly clones: readonly KpNativeKatexFragmentClone[];
+  readonly source: KpNativeKatexFragmentObservation;
+  readonly targets: readonly KpNativeKatexFragmentObservation[];
+  readonly progress: number;
+}): KpNativeKatexMultiplicityFrame {
+  if (input.targets.length < 2 || input.clones.length !== input.targets.length) {
+    throw new Error(
+      "One-to-many native composition requires one clone per target and at least two targets."
+    );
+  }
+  input.clones.forEach((clone, index) => {
+    if (clone.observationId !== input.targets[index]!.id) {
+      throw new Error(
+        "One-to-many transit clones must use exact target-native fragments."
+      );
+    }
+  });
+  const constituentFrames = input.targets.map((target, index) =>
+    applyKpNativeKatexGlyphFrame({
+      clone: input.clones[index]!,
+      source: input.source,
+      target,
+      progress: input.progress
+    })
+  );
+  const constituentOwner = constituentFrames[0]!.visualOwner;
+  return Object.freeze({
+    visualOwner: constituentOwner === "target-native"
+      ? "target-natives"
+      : constituentOwner,
     constituentFrames: Object.freeze(constituentFrames),
     targetHandoffDeltaPx: Math.max(
       ...constituentFrames.map(({ targetHandoffDeltaPx }) =>
