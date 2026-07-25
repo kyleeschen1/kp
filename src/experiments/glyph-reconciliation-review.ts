@@ -5,6 +5,10 @@ import {
   createKpGlyphReconciliationFractionMath
 } from "./glyph-reconciliation-fraction-math.ts";
 import {
+  formatDuration,
+  readableOperation
+} from "./glyph-reconciliation-review-format.ts";
+import {
   createKpFractionExperimentScene,
   type KpFractionExperimentDirection
 } from "./glyph-reconciliation-fraction-scene.ts";
@@ -293,13 +297,7 @@ const traceDetail = root.querySelector<HTMLOListElement>(
 const traceStatus = root.querySelector<HTMLOutputElement>(
   "[data-trace-status]"
 )!;
-const compoundSceneController =
-  searchParams.get("compoundScene") === "1"
-    ? await import("./glyph-reconciliation-compound-scene.ts").then(
-        ({ initializeKpGlyphReconciliationCompoundScene }) =>
-          initializeKpGlyphReconciliationCompoundScene(tracePanel)
-      )
-    : undefined;
+const compoundSceneEnabled = searchParams.get("compoundScene") === "1";
 
 await fontReadiness.whenReady();
 await nextFrame();
@@ -770,139 +768,112 @@ branchChoiceButtons.forEach((button) => {
     }
   });
 });
-tracePlay.addEventListener("click", () => {
-  stopPlayback();
-  stopTracePlayback();
-  const traceStartProgress =
-    compoundSceneController?.currentProgress() ?? 0;
-  const traceTargetProgress = traceStartProgress >= 1 ? 0 : 1;
-  if (reducedMotion) {
-    compoundSceneController?.render(traceTargetProgress);
-    traceOperations.forEach((operation) => {
-      operation.dataset["traceState"] =
-        traceTargetProgress === 1 ? "complete" : "pending";
-    });
-    tracePanel.dataset["traceCompletedCycles"] = String(
-      Number(tracePanel.dataset["traceCompletedCycles"] ?? "0") + 1
-    );
-    tracePlay.textContent =
-      traceTargetProgress === 1 ? "Compressed work shown" : "Play compressed work";
-    traceStatus.value =
-      traceTargetProgress === 1
-        ? `All ${traceOperations.length} operations shown without motion.`
-        : "Native starting equation restored without motion.";
-    return;
-  }
-  const startedAt = performance.now();
-  tracePlay.textContent = "Playing…";
-  tracePlay.disabled = true;
-  const traceDurationMs =
-    compoundTrace.compressedDurationMs *
-    Math.abs(traceTargetProgress - traceStartProgress);
-  const tick = (now: number): void => {
-    const elapsedMs = Math.min(traceDurationMs, now - startedAt);
-    const elapsedProgress =
-      traceDurationMs === 0 ? 1 : elapsedMs / traceDurationMs;
-    const traceProgress = lerp(
-      traceStartProgress,
-      traceTargetProgress,
-      elapsedProgress
-    );
-    compoundSceneController?.render(
-      traceProgress
-    );
-    const activeIndex = Math.min(
-      compoundTrace.operationIds.length - 1,
-      Math.floor(traceProgress * compoundTrace.operationIds.length)
-    );
-    traceOperations.forEach((operation, index) => {
-      operation.dataset["traceState"] =
-        traceProgress === 1 || index < activeIndex
-        ? "complete"
-        : index === activeIndex
-          ? "active"
-          : "pending";
-    });
-    traceStatus.value =
-      `Compressed operation ${activeIndex + 1} of ${traceOperations.length}`;
-    if (elapsedMs < traceDurationMs) {
-      traceAnimationFrame = requestAnimationFrame(tick);
+if (compoundSceneEnabled) {
+  const compoundScene = await import(
+    "./glyph-reconciliation-compound-scene.ts"
+  );
+  await compoundScene.initializeKpGlyphReconciliationCompoundScene(tracePanel);
+} else {
+  tracePlay.addEventListener("click", () => {
+    stopPlayback();
+    stopTracePlayback();
+    if (reducedMotion) {
+      traceOperations.forEach((operation) => {
+        operation.dataset["traceState"] = "complete";
+      });
+      tracePanel.dataset["traceCompletedCycles"] = String(
+        Number(tracePanel.dataset["traceCompletedCycles"] ?? "0") + 1
+      );
+      tracePlay.textContent = "Compressed work shown";
+      traceStatus.value =
+        `All ${traceOperations.length} operations shown without motion.`;
       return;
     }
-    traceAnimationFrame = undefined;
-    tracePlay.disabled = false;
-    tracePlay.textContent =
-      traceTargetProgress === 1
-        ? "Rewind compressed work"
-        : "Play compressed work";
-    traceOperations.forEach((operation) => {
-      operation.dataset["traceState"] =
-        traceTargetProgress === 1 ? "complete" : "pending";
-    });
-    tracePanel.dataset["traceCompletedCycles"] = String(
-      Number(tracePanel.dataset["traceCompletedCycles"] ?? "0") + 1
-    );
-    traceStatus.value =
-      traceTargetProgress === 1
-        ? `All ${traceOperations.length} canonical operations depicted.`
-        : "Native starting equation restored.";
-  };
-  traceAnimationFrame = requestAnimationFrame(tick);
-});
-traceInspect.addEventListener("click", () => {
-  const opening = traceInspect.getAttribute("aria-expanded") !== "true";
-  stopPlayback();
-  stopTracePlayback();
-  if (opening) {
-    traceParentProgress =
-      compoundSceneController?.currentProgress() ?? currentProgress();
-    const liveTrace = createKpGlyphReconciliationCompoundTrace({
-      parentProgress: traceParentProgress
-    });
-    traceInspect.setAttribute("aria-expanded", "true");
-    traceInspect.textContent = "Return to exact overview frame";
-    traceDetail.hidden = false;
+    const startedAt = performance.now();
+    tracePlay.textContent = "Playing…";
+    tracePlay.disabled = true;
+    const tick = (now: number): void => {
+      const elapsedMs = Math.min(
+        compoundTrace.compressedDurationMs,
+        now - startedAt
+      );
+      const activeIndex = Math.min(
+        compoundTrace.operationIds.length - 1,
+        Math.floor(elapsedMs / 180)
+      );
+      traceOperations.forEach((operation, index) => {
+        operation.dataset["traceState"] = index < activeIndex
+          ? "complete"
+          : index === activeIndex
+            ? "active"
+            : "pending";
+      });
+      traceStatus.value =
+        `Compressed operation ${activeIndex + 1} of ${traceOperations.length}`;
+      if (elapsedMs < compoundTrace.compressedDurationMs) {
+        traceAnimationFrame = requestAnimationFrame(tick);
+        return;
+      }
+      traceAnimationFrame = undefined;
+      tracePlay.disabled = false;
+      tracePlay.textContent = "Replay compressed work";
+      traceOperations.forEach((operation) => {
+        operation.dataset["traceState"] = "complete";
+      });
+      tracePanel.dataset["traceCompletedCycles"] = String(
+        Number(tracePanel.dataset["traceCompletedCycles"] ?? "0") + 1
+      );
+      traceStatus.value =
+        `All ${traceOperations.length} canonical operations depicted.`;
+    };
+    traceAnimationFrame = requestAnimationFrame(tick);
+  });
+  traceInspect.addEventListener("click", () => {
+    const opening = traceInspect.getAttribute("aria-expanded") !== "true";
+    stopPlayback();
+    stopTracePlayback();
+    if (opening) {
+      traceParentProgress = currentProgress();
+      const liveTrace = createKpGlyphReconciliationCompoundTrace({
+        parentProgress: traceParentProgress
+      });
+      traceInspect.setAttribute("aria-expanded", "true");
+      traceInspect.textContent = "Return to exact overview frame";
+      traceDetail.hidden = false;
+      sliders.forEach((slider) => {
+        slider.disabled = true;
+      });
+      playButtons.forEach((button) => {
+        button.disabled = true;
+      });
+      tracePlay.disabled = true;
+      tracePanel.dataset["traceMode"] = "full-detail";
+      tracePanel.dataset["traceParentProgress"] =
+        String(liveTrace.drillDown.parentClock.progress);
+      tracePanel.dataset["traceRestoreExact"] = "pending";
+      traceStatus.value =
+        `Parent paused at ${Math.round(traceParentProgress * 100)}%; ` +
+        `${formatDuration(liveTrace.fullDurationMs)} full trace exposed.`;
+      return;
+    }
+    traceInspect.setAttribute("aria-expanded", "false");
+    traceInspect.textContent = "Inspect all operations";
+    traceDetail.hidden = true;
     sliders.forEach((slider) => {
-      slider.disabled = true;
+      slider.disabled = false;
     });
     playButtons.forEach((button) => {
-      button.disabled = true;
+      button.disabled = false;
     });
-    tracePlay.disabled = true;
-    compoundSceneController?.setScrubberDisabled(true);
-    tracePanel.dataset["traceMode"] = "full-detail";
-    tracePanel.dataset["traceParentProgress"] =
-      String(liveTrace.drillDown.parentClock.progress);
-    tracePanel.dataset["traceRestoreExact"] = "pending";
-    traceStatus.value =
-      `Parent paused at ${Math.round(traceParentProgress * 100)}%; ` +
-      `${formatDuration(liveTrace.fullDurationMs)} full trace exposed.`;
-    return;
-  }
-  traceInspect.setAttribute("aria-expanded", "false");
-  traceInspect.textContent = "Inspect all operations";
-  traceDetail.hidden = true;
-  sliders.forEach((slider) => {
-    slider.disabled = false;
-  });
-  playButtons.forEach((button) => {
-    button.disabled = false;
-  });
-  tracePlay.disabled = false;
-  if (compoundSceneController === undefined) {
+    tracePlay.disabled = false;
     render(traceParentProgress);
-  } else {
-    compoundSceneController.render(traceParentProgress);
-    compoundSceneController.setScrubberDisabled(false);
-  }
-  tracePanel.dataset["traceMode"] = "compressed";
-  tracePanel.dataset["traceRestoreExact"] =
-    (
-      compoundSceneController?.currentProgress() ?? currentProgress()
-    ) === traceParentProgress ? "true" : "false";
-  traceStatus.value =
-    `Exact ${Math.round(traceParentProgress * 100)}% overview frame restored.`;
-});
+    tracePanel.dataset["traceMode"] = "compressed";
+    tracePanel.dataset["traceRestoreExact"] =
+      currentProgress() === traceParentProgress ? "true" : "false";
+    traceStatus.value =
+      `Exact ${Math.round(traceParentProgress * 100)}% overview frame restored.`;
+  });
+}
 playButtons.forEach((button) => {
   button.addEventListener("click", () => {
     if (animationFrame !== undefined) {
@@ -1085,19 +1056,6 @@ function clamp(value: number): number {
 
 function lerp(source: number, target: number, progress: number): number {
   return source + (target - source) * progress;
-}
-
-function readableOperation(operationId: string): string {
-  return operationId
-    .split(".")
-    .at(-1)!
-    .split("-")
-    .join(" ");
-}
-
-function formatDuration(durationMs: number): string {
-  const seconds = durationMs / 1000;
-  return Number.isInteger(seconds) ? `${seconds}s` : `${seconds.toFixed(1)}s`;
 }
 
 function nextFrame(): Promise<void> {

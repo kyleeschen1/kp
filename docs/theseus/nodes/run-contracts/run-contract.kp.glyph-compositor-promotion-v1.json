@@ -2,7 +2,8 @@
   "id": "run-contract.kp.glyph-compositor-promotion-v1",
   "kind": "run-contract",
   "title": "Glyph compositor endpoint and exemplar promotion",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +14,10 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-07-25-glyph-compositor-promotion-long-loop-proposal.md",
       "summary": "User-approved 28-slice proposal, exact scope, verification cadence, rollback units, promotion gates, and hard stops."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-25-glyph-compositor-promotion-closeout.md"
     }
   ],
   "verification": [
@@ -495,6 +500,20 @@
       "scope": "slice-27 compound presentation exemplar",
       "checkedAt": "2026-07-25T22:14:58.064Z",
       "notes": "40 Chromium compositor checks, 46 stable visual captures including eight compound frames, production build and all TypeScript projects, architecture, performance, and workspace gates pass. The query-isolated completing-square exemplar renders eleven shared native KaTeX states across ten ordered generic scene playbacks. Normal and reduced play/rewind, direct seek, exact paused-frame drill-down, inert single-scene material ownership, native endpoint semantics, and zero-overflow wide/phone containment pass. Route gzip growth is 5603 bytes and scene sampling is 0.009 ms; the optional compound chunk is 3.38 KB gzip. Visual inspection found readable spacing at both profiles with no hidden operation or special-case scheduler."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "slice-28 controller ceiling",
+      "checkedAt": "2026-07-25T22:31:28.442Z",
+      "notes": "Initial release run passed 2405 of 2406 checks. The static review controller measured 41352 bytes against its frozen 40000-byte ceiling. Query-only compound controls were moved behind the dynamic compound module, and the ceiling was preserved rather than raised."
+    },
+    {
+      "command": "npm test; npm run test:browser:real-katex-glyph-compositor; npm run test:browser:reader-conformance; npm run visual:glyph-reconciliation-experiment; npm run visual:reader-glyph-compositor; npm run visual:reader-gold-parity; npm run perf:glyph-reconciliation-experiment; npm run check:reader-production; npm run review:logs -- audit; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-28 release and closeout",
+      "checkedAt": "2026-07-25T22:31:36.691Z",
+      "notes": "Full deterministic repository suite passed 2406 of 2406 after preserving the 40000-byte controller ceiling. Forty compositor Chromium checks, nine reader conformance checks, all scoped visual captures, build and typecheck, performance budgets, reader production closure, byte-stable review-log audit, and Theseus workspace validation pass. Endpoint paint mismatch remains bounded and documented; absolute reader route budgets remain pre-existing debt rather than an integration regression."
     }
   ],
   "allowedWork": [
@@ -688,7 +707,8 @@
     {
       "id": "slice-28",
       "title": "release-and-project-closeout",
-      "status": "planned"
+      "summary": "Closed the approved 28-slice promotion run with an honest release record. The full repository suite passes 2406 of 2406 after moving query-only compound controls behind their dynamic module and preserving the frozen 40000-byte controller ceiling. Chromium compositor and reader conformance, scoped visuals, build and typecheck, performance, production closure, review audit, and workspace validation pass. The original fraction-plus endpoint mismatch remains a bounded known defect, absolute reader route budgets remain separately documented pre-existing debt, and global rollout remains deferred.",
+      "status": "complete"
     }
   ]
 }

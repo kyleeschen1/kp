@@ -185,12 +185,141 @@ export async function initializeKpGlyphReconciliationCompoundScene(
     render(Number(progressInput.value) / 1_000);
   });
   render(current);
+  bindCompoundControls({
+    panel,
+    trace,
+    render,
+    currentProgress: () => current,
+    setScrubberDisabled: (disabled) => {
+      progressInput.disabled = disabled;
+    }
+  });
   return Object.freeze({
     render,
     currentProgress: () => current,
     setScrubberDisabled: (disabled: boolean) => {
       progressInput.disabled = disabled;
     }
+  });
+}
+
+function bindCompoundControls(input: {
+  readonly panel: HTMLElement;
+  readonly trace: ReturnType<typeof createKpGlyphReconciliationCompoundTrace>;
+  readonly render: (progress: number) => void;
+  readonly currentProgress: () => number;
+  readonly setScrubberDisabled: (disabled: boolean) => void;
+}): void {
+  const play = required<HTMLButtonElement>(input.panel, "[data-trace-play]");
+  const inspect = required<HTMLButtonElement>(
+    input.panel,
+    "[data-trace-inspect]"
+  );
+  const detail = required<HTMLOListElement>(
+    input.panel,
+    "[data-trace-detail]"
+  );
+  const status = required<HTMLOutputElement>(
+    input.panel,
+    "[data-trace-status]"
+  );
+  const hostSliders = [
+    ...document.querySelectorAll<HTMLInputElement>("[data-progress]")
+  ];
+  const hostPlayButtons = [
+    ...document.querySelectorAll<HTMLButtonElement>("[data-play]")
+  ];
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let animationFrame: number | undefined;
+  let parentProgress = input.currentProgress();
+
+  const stop = (): void => {
+    if (animationFrame !== undefined) cancelAnimationFrame(animationFrame);
+    animationFrame = undefined;
+  };
+  play.addEventListener("click", () => {
+    stop();
+    const start = input.currentProgress();
+    const target = start >= 1 ? 0 : 1;
+    const complete = (): void => {
+      play.disabled = false;
+      play.textContent =
+        target === 1 ? "Rewind compressed work" : "Play compressed work";
+      input.panel.dataset["traceCompletedCycles"] = String(
+        Number(input.panel.dataset["traceCompletedCycles"] ?? "0") + 1
+      );
+      status.value = target === 1
+        ? `All ${input.trace.operationIds.length} canonical operations depicted.`
+        : "Native starting equation restored.";
+    };
+    if (reducedMotion) {
+      input.render(target);
+      complete();
+      return;
+    }
+    const startedAt = performance.now();
+    const durationMs =
+      input.trace.compressedDurationMs * Math.abs(target - start);
+    play.disabled = true;
+    play.textContent = "Playing…";
+    const tick = (now: number): void => {
+      const elapsed = Math.min(durationMs, now - startedAt);
+      const local = durationMs === 0 ? 1 : elapsed / durationMs;
+      input.render(start + (target - start) * local);
+      if (elapsed < durationMs) {
+        animationFrame = requestAnimationFrame(tick);
+        return;
+      }
+      animationFrame = undefined;
+      complete();
+    };
+    animationFrame = requestAnimationFrame(tick);
+  });
+  inspect.addEventListener("click", () => {
+    const opening = inspect.getAttribute("aria-expanded") !== "true";
+    stop();
+    if (opening) {
+      parentProgress = input.currentProgress();
+      const liveTrace = createKpGlyphReconciliationCompoundTrace({
+        parentProgress
+      });
+      inspect.setAttribute("aria-expanded", "true");
+      inspect.textContent = "Return to exact overview frame";
+      detail.hidden = false;
+      hostSliders.forEach((slider) => {
+        slider.disabled = true;
+      });
+      hostPlayButtons.forEach((button) => {
+        button.disabled = true;
+      });
+      play.disabled = true;
+      input.setScrubberDisabled(true);
+      input.panel.dataset["traceMode"] = "full-detail";
+      input.panel.dataset["traceParentProgress"] =
+        String(liveTrace.drillDown.parentClock.progress);
+      input.panel.dataset["traceRestoreExact"] = "pending";
+      status.value =
+        `Parent paused at ${Math.round(parentProgress * 100)}%; ` +
+        `${(liveTrace.fullDurationMs / 1_000).toFixed(1)} s full trace exposed.`;
+      return;
+    }
+    inspect.setAttribute("aria-expanded", "false");
+    inspect.textContent = "Inspect all operations";
+    detail.hidden = true;
+    hostSliders.forEach((slider) => {
+      slider.disabled = false;
+    });
+    hostPlayButtons.forEach((button) => {
+      button.disabled = false;
+    });
+    play.disabled = false;
+    input.setScrubberDisabled(false);
+    input.render(parentProgress);
+    input.panel.dataset["traceMode"] = "compressed";
+    input.panel.dataset["traceRestoreExact"] =
+      input.currentProgress() === parentProgress ? "true" : "false";
+    status.value =
+      `Exact ${Math.round(parentProgress * 100)}% overview frame restored.`;
   });
 }
 
