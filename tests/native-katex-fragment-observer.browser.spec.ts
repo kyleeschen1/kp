@@ -4,6 +4,7 @@ test("observer measures one explicitly tagged real KaTeX fragment", async ({
   page
 }) => {
   await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
   await page.evaluate(async () => document.fonts.ready);
   const observed = await page.evaluate(async () => {
     const stage = document.querySelector<HTMLElement>(
@@ -67,6 +68,7 @@ test("observer rejects missing and duplicate explicit motion nodes", async ({
   page
 }) => {
   await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
   const messages = await page.evaluate(async () => {
     const stage = document.querySelector<HTMLElement>(
       '[data-reconciliation-case="solve-x"] [data-case-stage]'
@@ -118,6 +120,7 @@ test("stage-local fragment geometry is stable under stage scaling", async ({
   page
 }) => {
   await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
   const measurements = await page.evaluate(() => {
     const stage = document.querySelector<HTMLElement>(
       '[data-reconciliation-case="solve-x"] [data-case-stage]'
@@ -173,6 +176,7 @@ test("settled observation waits for fonts and rejects consecutive-frame drift", 
   page
 }) => {
   await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
   const result = await page.evaluate(async () => {
     const stage = document.querySelector<HTMLElement>(
       '[data-reconciliation-case="solve-x"] [data-case-stage]'
@@ -258,6 +262,7 @@ test("material clone uses the exact KaTeX subtree without semantic authority", a
   page
 }) => {
   await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
   const result = await page.evaluate(async () => {
     const stage = document.querySelector<HTMLElement>(
       '[data-reconciliation-case="solve-x"] [data-case-stage]'
@@ -329,6 +334,7 @@ test("source, clone, and target have exactly one visual owner", async ({
   page
 }) => {
   await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
   const frames = await page.evaluate(async () => {
     const stage = document.querySelector<HTMLElement>(
       '[data-reconciliation-case="solve-x"] [data-case-stage]'
@@ -404,6 +410,7 @@ test("moving clone meets native target within one CSS pixel without typography d
   page
 }) => {
   await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
   const result = await page.evaluate(async () => {
     const stage = document.querySelector<HTMLElement>(
       '[data-reconciliation-case="solve-x"] [data-case-stage]'
@@ -457,19 +464,27 @@ test("moving clone meets native target within one CSS pixel without typography d
     });
     const stageRect = stage.getBoundingClientRect();
     const ownerRect = clone.ownerElement.getBoundingClientRect();
+    const visualRect = clone.visualElement.getBoundingClientRect();
     const targetRect = targetX.getBoundingClientRect();
     const scaleX = stageRect.width / stage.offsetWidth;
     const scaleY = stageRect.height / stage.offsetHeight;
-    const renderedDelta = Math.max(
+    const ownerDelta = Math.max(
       Math.abs(ownerRect.left - targetRect.left) / scaleX,
       Math.abs(ownerRect.top - targetRect.top) / scaleY,
       Math.abs(ownerRect.width - targetRect.width) / scaleX,
       Math.abs(ownerRect.height - targetRect.height) / scaleY
     );
+    const visualDelta = Math.max(
+      Math.abs(visualRect.left - targetRect.left) / scaleX,
+      Math.abs(visualRect.top - targetRect.top) / scaleY,
+      Math.abs(visualRect.width - targetRect.width) / scaleX,
+      Math.abs(visualRect.height - targetRect.height) / scaleY
+    );
     return {
       beforeDelta: before.targetHandoffDeltaPx,
       atTargetDelta: atTarget.targetHandoffDeltaPx,
-      renderedDelta,
+      ownerDelta,
+      visualDelta,
       sourceFingerprint: observed[0]!.styleFingerprint,
       targetFingerprint: observed[1]!.styleFingerprint,
       visualOwner: atTarget.visualOwner
@@ -478,7 +493,8 @@ test("moving clone meets native target within one CSS pixel without typography d
 
   expect(result.beforeDelta).toBeLessThan(0.01);
   expect(result.atTargetDelta).toBe(0);
-  expect(result.renderedDelta).toBeLessThanOrEqual(1);
+  expect(result.ownerDelta).toBeLessThanOrEqual(1);
+  expect(result.visualDelta).toBeLessThanOrEqual(1);
   expect(result.sourceFingerprint).toBe(result.targetFingerprint);
   expect(result.visualOwner).toBe("target-native");
 });
@@ -487,6 +503,7 @@ test("persistent context reflows continuously while only local context departs",
   page
 }) => {
   await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
   const result = await page.evaluate(async () => {
     // @ts-expect-error Vite resolves browser-side source modules.
     const compositor = await import("/src/rendering/native-katex-glyph-compositor.ts");
@@ -549,4 +566,68 @@ test("persistent context reflows continuously while only local context departs",
   expect(result.persistentOpacity).toBe("");
   expect(result.sourceEquationOpacity).toBe("1");
   expect(result.targetEquationOpacity).toBe("0");
+});
+
+test("solve-x exemplar moves one real x without crossfade or character substitution", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const samples = await page.evaluate(() => {
+    const review = document.querySelector<HTMLElement>(
+      "[data-kp-glyph-review]"
+    )!;
+    const slider = document.querySelector<HTMLInputElement>("[data-progress]")!;
+    const source = document.querySelector<HTMLElement>("[data-case-source]")!;
+    const target = document.querySelector<HTMLElement>("[data-case-target]")!;
+    const context = document.querySelector<HTMLElement>("[data-case-context]")!;
+    const departing = document.querySelector<HTMLElement>(
+      "[data-case-departing]"
+    )!;
+    const owner = document.querySelector<HTMLElement>(
+      "[data-kp-native-katex-fragment-clone]"
+    )!;
+    const visual = owner.firstElementChild as HTMLElement;
+    return [0, 250, 500, 750, 1000].map((progress) => {
+      slider.value = String(progress);
+      slider.dispatchEvent(new Event("input", { bubbles: true }));
+      const rect = owner.getBoundingClientRect();
+      return {
+        progress,
+        visualOwner: review.dataset["kpVisualOwner"],
+        sourceText: source.textContent,
+        targetText: target.textContent,
+        cloneText: visual.textContent,
+        sourceOpacity: Number(source.style.opacity),
+        cloneOpacity: Number(owner.style.opacity),
+        targetOpacity: Number(target.style.opacity),
+        cloneLeft: rect.left,
+        cloneTop: rect.top,
+        contextOpacity: context.style.opacity,
+        departingOpacity: Number(departing.style.opacity)
+      };
+    });
+  });
+
+  expect(samples.map(({ visualOwner }) => visualOwner)).toEqual([
+    "source-native",
+    "source-native",
+    "clone-transit",
+    "clone-transit",
+    "target-native"
+  ]);
+  expect(samples.map(({ cloneLeft }) => cloneLeft)).toEqual(
+    [...samples.map(({ cloneLeft }) => cloneLeft)].sort((a, b) => a - b)
+  );
+  for (const sample of samples) {
+    expect(sample.sourceText).toMatch(/^x+$/);
+    expect(sample.targetText).toMatch(/^x+$/);
+    expect(sample.cloneText).toMatch(/^x+$/);
+    expect(
+      sample.sourceOpacity + sample.cloneOpacity + sample.targetOpacity
+    ).toBe(1);
+    expect(sample.contextOpacity).toBe("");
+    expect(sample.cloneTop).toBeCloseTo(samples[0]!.cloneTop, 1);
+  }
+  expect(samples[1]!.departingOpacity).toBe(0);
 });

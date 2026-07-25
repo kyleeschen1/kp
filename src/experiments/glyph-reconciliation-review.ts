@@ -2,263 +2,324 @@ import katex from "katex";
 
 import "./glyph-reconciliation-review.css";
 import {
-  createKpCrowdedQuadraticGlyphReconciliationCase,
-  createKpFractionMergeGlyphReconciliationCase,
-  createKpQuadraticPlusMinusGlyphReconciliationCase,
+  projectKpCanonicalExecutionLineage
+} from "../animation/canonical-operation-lineage-adapter.ts";
+import {
   createKpSolveXGlyphReconciliationCase
 } from "../animation/semantic-glyph-reconciliation-cases.ts";
 import {
-  compileKpGlyphReconciliationCase,
-  type KpCompiledGlyphReconciliationCase
+  compileKpGlyphReconciliationCase
 } from "../animation/semantic-glyph-reconciliation-compiler.ts";
+import { createKpEquationFontReadiness } from "../rendering/equation-font-readiness.ts";
 import {
+  applyKpNativeKatexContextReflow,
+  applyKpNativeKatexGlyphFrame,
+  createKpNativeKatexFragmentClone
+} from "../rendering/native-katex-glyph-compositor.ts";
+import {
+  bindKpNativeKatexFragmentsWithinSemanticLineage,
+  normalizeKpStageRelativeRect,
   observeKpNativeKatexFragments,
-  settleAndObserveKpNativeKatexFragments
+  settleAndObserveKpNativeKatexFragments,
+  type KpStageRelativeRect
 } from "../rendering/native-katex-fragment-observer.ts";
-
-interface ReviewCase {
-  readonly id: string;
-  readonly eyebrow: string;
-  readonly title: string;
-  readonly description: string;
-  readonly sourceLatex: string;
-  readonly targetLatex: string;
-  readonly affordances: readonly string[];
-  readonly compiled: KpCompiledGlyphReconciliationCase;
-  readonly trace?: readonly string[] | undefined;
-}
 
 const root = document.querySelector<HTMLElement>("#glyph-experiment");
 if (root === null) throw new Error("Glyph experiment root is missing.");
-
-const crowdedViewport = innerWidth <= 760 ? "phone" : "wide";
-const compiledCases = await Promise.all([
-  compileKpGlyphReconciliationCase(createKpSolveXGlyphReconciliationCase()),
-  compileKpGlyphReconciliationCase(createKpFractionMergeGlyphReconciliationCase()),
-  compileKpGlyphReconciliationCase(
-    createKpQuadraticPlusMinusGlyphReconciliationCase()
-  ),
-  compileKpGlyphReconciliationCase(
-    createKpCrowdedQuadraticGlyphReconciliationCase(crowdedViewport)
-  )
-]);
-const cases: readonly ReviewCase[] = [
-  {
-    id: "solve-x",
-    eyebrow: "1 · one-to-one",
-    title: "Persistent x clears the cancellation",
-    description:
-      "The x keeps semantic identity while the surrounding expression settles into its native target.",
-    sourceLatex: "x+3-3=7-3",
-    targetLatex: "x=7-3",
-    affordances: ["hover", "annotation", "seek + rewind"],
-    compiled: compiledCases[0]!
-  },
-  {
-    id: "fraction-merge",
-    eyebrow: "2 · many-to-one",
-    title: "Two denominators merge",
-    description:
-      "Both source 2s visibly converge on one native denominator; the settled selector remains a valid Cloze target.",
-    sourceLatex: "\\frac{a}{2}+\\frac{b}{2}",
-    targetLatex: "\\frac{a+b}{2}",
-    affordances: ["Cloze: denominator", "hover", "seek + rewind"],
-    compiled: compiledCases[1]!
-  },
-  {
-    id: "plus-minus",
-    eyebrow: "3 · one-to-many",
-    title: "Plus-minus opens two branches",
-    description:
-      "One semantic branch origin splits into stable minus and plus descendants without flattening the branch model.",
-    sourceLatex: "x=\\pm\\sqrt{d}",
-    targetLatex: "\\begin{aligned}x_-&=-\\sqrt{d}\\\\x_+&=+\\sqrt{d}\\end{aligned}",
-    affordances: ["branch −", "branch +", "seek + rewind"],
-    compiled: compiledCases[2]!
-  },
-  {
-    id: "crowded-quadratic",
-    eyebrow: `4 · crowded ${crowdedViewport}`,
-    title: "Discriminant clears protected ink",
-    description:
-      "The same scheduler routes or honestly settles the discriminant merge while preserving the nearby plus-minus.",
-    sourceLatex: "x=\\frac{-b\\pm\\sqrt{25-24}}{2a}",
-    targetLatex: "x=\\frac{-b\\pm\\sqrt{1}}{2a}",
-    affordances: ["responsive", "compressed trace", "drill-down"],
-    trace: [
-      "Read the discriminant components 25, −, and 24.",
-      "Preserve the independent plus-minus branch origin.",
-      "Merge the discriminant lineage into the exact radicand 1.",
-      "Settle into native notation and retain branch interaction."
-    ],
-    compiled: compiledCases[3]!
-  }
-];
-
-root.innerHTML = `
-  <article class="glyph-review" data-kp-glyph-review data-kp-progress="0">
-    <header>
-      <p>Architecture experiment · complete four-case checkpoint</p>
-      <h1>Semantic-constrained glyph reconciliation</h1>
-      <p>One semantic-lineage matcher and one bounded geometry scheduler handle persistence, merge, split, and crowded responsive notation. Scrub once to compare the full family.</p>
-    </header>
-    <div class="glyph-review__controls">
-      <button type="button" data-play>Play all</button>
-      <input type="range" min="0" max="1000" value="0" aria-label="Animation progress for all four cases" data-progress>
-      <output class="glyph-review__status" data-status>0%</output>
-    </div>
-    <section class="glyph-review__cases" aria-label="Four reconciliation pressure cases">
-      ${cases.map(caseMarkup).join("")}
-    </section>
-    <div class="glyph-review__evidence">
-      <span>4 semantic shapes</span>
-      <span>1 matcher</span>
-      <span>1 bounded scheduler</span>
-      <span>0 operation-specific policies</span>
-      <span>static JS</span>
-      <span>headless-capable</span>
-    </div>
-  </article>`;
-
-const review = root.querySelector<HTMLElement>("[data-kp-glyph-review]")!;
-const slider = root.querySelector<HTMLInputElement>("[data-progress]")!;
-const play = root.querySelector<HTMLButtonElement>("[data-play]")!;
-const status = root.querySelector<HTMLOutputElement>("[data-status]")!;
-let animationFrame: number | undefined;
-
-const runtimes = cases.map((reviewCase) => {
-  const card = root.querySelector<HTMLElement>(
-    `[data-reconciliation-case="${reviewCase.id}"]`
-  )!;
-  const stage = card.querySelector<HTMLElement>("[data-case-stage]")!;
-  const source = card.querySelector<HTMLElement>("[data-case-source]")!;
-  const target = card.querySelector<HTMLElement>("[data-case-target]")!;
-  const moving = new Map(
-    [...card.querySelectorAll<HTMLElement>("[data-motion-id]")].map(
-      (element) => [element.dataset["motionId"]!, element]
-    )
-  );
-  const playback = reviewCase.compiled.createPlayback({
-    supportedMatchIds: new Set(reviewCase.compiled.schedule.motions.map(
-      ({ matchId }) => matchId
-    )),
-    apply(frame) {
-      const element = moving.get(frame.matchId);
-      if (element === undefined) return;
-      const viewport = reviewCase.compiled.input.viewport;
-      const x = (frame.x - viewport.x) / viewport.width * stage.clientWidth;
-      const y = (frame.y - viewport.y) / viewport.height * stage.clientHeight;
-      element.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
-      element.style.opacity = String(frame.opacity);
-      element.dataset["settled"] = String(frame.settled);
-    }
-  });
-  return { reviewCase, source, target, moving, playback };
-});
-
-function render(progress: number): void {
-  const bounded = Math.max(0, Math.min(1, progress));
-  slider.value = String(Math.round(bounded * 1000));
-  review.dataset["kpProgress"] = String(Math.round(bounded * 1000));
-  status.value = `${Math.round(bounded * 100)}%`;
-  runtimes.forEach(({ reviewCase, source, target, moving, playback }) => {
-    const motionProgress = clamp((bounded - 0.12) / 0.7);
-    source.style.opacity = String(1 - clamp((bounded - 0.08) / 0.22) * 0.82);
-    target.style.opacity = String(clamp((bounded - 0.72) / 0.2));
-    playback.seek(motionProgress);
-    const motionEnvelope = Math.min(
-      clamp((bounded - 0.06) / 0.12),
-      1 - clamp((bounded - 0.86) / 0.12)
-    );
-    moving.forEach((element, matchId) => {
-      const frameOpacity = Number(element.style.opacity || "1");
-      element.style.opacity = String(frameOpacity * motionEnvelope);
-      const targetGlyph = targetGlyphForMotion(reviewCase.compiled, matchId);
-      if (bounded > 0.58 && targetGlyph !== undefined) {
-        element.textContent = targetGlyph;
-      } else {
-        element.textContent =
-          sourceGlyphForMotion(reviewCase.compiled, matchId) ?? "•";
-      }
-    });
-  });
-}
-
-slider.addEventListener("input", () => render(Number(slider.value) / 1000));
-play.addEventListener("click", () => {
-  if (animationFrame !== undefined) {
-    cancelAnimationFrame(animationFrame);
-    animationFrame = undefined;
-    play.textContent = "Play all";
-    return;
-  }
-  const reverse = Number(slider.value) >= 1000;
-  const start = performance.now();
-  const durationMs = Math.max(...cases.map(({ compiled }) =>
-    compiled.input.durationMs
-  ));
-  play.textContent = "Pause";
-  const tick = (now: number): void => {
-    const elapsed = Math.min(1, (now - start) / durationMs);
-    render(reverse ? 1 - elapsed : elapsed);
-    if (elapsed < 1) animationFrame = requestAnimationFrame(tick);
-    else {
-      animationFrame = undefined;
-      play.textContent = reverse ? "Play all" : "Rewind all";
-    }
-  };
-  animationFrame = requestAnimationFrame(tick);
-});
-
-root.querySelectorAll<HTMLButtonElement>("[data-trace-toggle]").forEach(
-  (button) => {
-    button.addEventListener("click", () => {
-      const trace = document.querySelector<HTMLOListElement>(
-        `#${button.getAttribute("aria-controls")}`
-      );
-      if (trace === null) return;
-      trace.hidden = !trace.hidden;
-      button.setAttribute("aria-expanded", String(!trace.hidden));
-      button.textContent = trace.hidden ? "Inspect compressed steps" : "Hide steps";
-    });
-  }
-);
-
-render(Number(new URL(location.href).searchParams.get("progress") ?? "0") / 1000);
 if (import.meta.env.DEV) {
   Object.assign(window, {
     __kpObserveNativeKatexFragments: observeKpNativeKatexFragments,
     __kpSettleAndObserveNativeKatexFragments:
       settleAndObserveKpNativeKatexFragments
   });
+}
+
+const caseInput = createKpSolveXGlyphReconciliationCase();
+const compiled = await compileKpGlyphReconciliationCase(caseInput);
+const scheduledMotion = compiled.schedule.motions[0]!;
+if (scheduledMotion?.status !== "direct") {
+  throw new Error("The solve-x exemplar requires the generic direct clearance route.");
+}
+
+root.innerHTML = `
+  <article class="glyph-exemplar" data-kp-glyph-review data-kp-progress="0">
+    <header class="glyph-exemplar__header">
+      <p class="glyph-exemplar__eyebrow">Real KaTeX compositor · promotion checkpoint</p>
+      <h1>Does one <em>x</em> remain one object?</h1>
+      <p>
+        Watch native context clear and reflow before the focused symbol moves.
+        The moving ink is an inert computed-style clone; exact KaTeX owns both endpoints.
+      </p>
+    </header>
+    <section class="glyph-exemplar__review" data-reconciliation-case="solve-x">
+      <div class="glyph-exemplar__prompt">
+        <div>
+          <span>one-to-one semantic lineage</span>
+          <h2>Cancel the additive inverse</h2>
+        </div>
+        <p data-phase-label>Source notation</p>
+      </div>
+      <div class="glyph-exemplar__viewport">
+        <div
+          class="glyph-exemplar__stage"
+          data-case-stage
+          role="math"
+          aria-label="x plus 3 minus 3 equals 7 minus 3"
+        >
+          <span class="glyph-exemplar__guide" data-source-guide aria-hidden="true">
+            <span data-guide-source-x>${math("x")}</span>
+            <span data-guide-departing>${math("{}+3-3")}</span>
+            <span data-guide-source-context>${math("{}=7-3")}</span>
+          </span>
+          <span class="glyph-exemplar__guide" data-target-guide aria-hidden="true">
+            <span data-guide-target-x>${math("x")}</span>
+            <span data-guide-target-context>${math("{}=7-3")}</span>
+          </span>
+          <span
+            class="glyph-exemplar__native glyph-exemplar__focus"
+            data-case-source
+            data-kp-motion-id="motion.solve-x.source-x"
+            data-kp-annotation="The same semantic x before cancellation"
+            title="Persistent x · source"
+            tabindex="0"
+          >${math("x")}</span>
+          <span
+            class="glyph-exemplar__native glyph-exemplar__departing"
+            data-case-departing
+          >${math("{}+3-3")}</span>
+          <span
+            class="glyph-exemplar__native glyph-exemplar__context"
+            data-case-context
+          >${math("{}=7-3")}</span>
+          <span
+            class="glyph-exemplar__native glyph-exemplar__focus"
+            data-case-target
+            data-kp-motion-id="motion.solve-x.target-x"
+            data-kp-annotation="The same semantic x after cancellation"
+            title="Persistent x · target"
+            tabindex="-1"
+          >${math("x")}</span>
+          <span
+            class="glyph-exemplar__material-layer"
+            data-kp-editor-equation-material-layer
+          ></span>
+        </div>
+      </div>
+      <div class="glyph-exemplar__annotation" aria-live="polite">
+        <span data-ownership-label>Native source owns x</span>
+        <span>semantic DOM remains the accessibility + annotation authority</span>
+      </div>
+      <div class="glyph-exemplar__controls">
+        <button type="button" data-play>Play</button>
+        <input
+          type="range"
+          min="0"
+          max="1000"
+          value="0"
+          aria-label="Solve-x animation progress"
+          data-progress
+        >
+        <output data-status>0%</output>
+      </div>
+    </section>
+    <div class="glyph-exemplar__evidence">
+      <span>actual KaTeX subtree</span>
+      <span>canonical lineage</span>
+      <span>one bounded scheduler</span>
+      <span>atomic native handoff</span>
+      <span>no equation crossfade</span>
+      <span>static JS</span>
+    </div>
+  </article>`;
+
+const review = root.querySelector<HTMLElement>("[data-kp-glyph-review]")!;
+const stage = root.querySelector<HTMLElement>("[data-case-stage]")!;
+const sourceX = root.querySelector<HTMLElement>("[data-case-source]")!;
+const targetX = root.querySelector<HTMLElement>("[data-case-target]")!;
+const departing = root.querySelector<HTMLElement>("[data-case-departing]")!;
+const context = root.querySelector<HTMLElement>("[data-case-context]")!;
+const slider = root.querySelector<HTMLInputElement>("[data-progress]")!;
+const play = root.querySelector<HTMLButtonElement>("[data-play]")!;
+const status = root.querySelector<HTMLOutputElement>("[data-status]")!;
+const phaseLabel = root.querySelector<HTMLElement>("[data-phase-label]")!;
+const ownershipLabel = root.querySelector<HTMLElement>(
+  "[data-ownership-label]"
+)!;
+const fontReadiness = createKpEquationFontReadiness(document);
+
+await fontReadiness.whenReady();
+await nextFrame();
+const sourceXRect = guideRect("[data-guide-source-x]");
+const targetXRect = guideRect("[data-guide-target-x]");
+const departingRect = guideRect("[data-guide-departing]");
+const sourceContextRect = guideRect("[data-guide-source-context]");
+const targetContextRect = guideRect("[data-guide-target-context]");
+placeNative(sourceX, sourceXRect);
+placeNative(targetX, targetXRect);
+placeNative(departing, departingRect);
+placeNative(context, sourceContextRect);
+
+const sourceObservation = await settleAndObserveKpNativeKatexFragments({
+  stage,
+  bindings: [{
+    id: caseInput.sourceGlyphs[0]!.id,
+    semanticEntityId: caseInput.sourceGlyphs[0]!.entityId,
+    motionId: "motion.solve-x.source-x",
+    glyphKey: caseInput.sourceGlyphs[0]!.glyphKey
+  }],
+  fontReadiness
+});
+const targetObservation = await settleAndObserveKpNativeKatexFragments({
+  stage,
+  bindings: [{
+    id: caseInput.targetGlyphs[0]!.id,
+    semanticEntityId: caseInput.targetGlyphs[0]!.entityId,
+    motionId: "motion.solve-x.target-x",
+    glyphKey: caseInput.targetGlyphs[0]!.glyphKey
+  }],
+  fontReadiness
+});
+const binding = bindKpNativeKatexFragmentsWithinSemanticLineage({
+  lineage: projectKpCanonicalExecutionLineage(caseInput.execution),
+  source: sourceObservation,
+  target: targetObservation
+}).bindings[0]!;
+if (binding === undefined) {
+  throw new Error("Canonical solve-x lineage did not bind its native fragments.");
+}
+const clone = createKpNativeKatexFragmentClone({
+  stage,
+  ownerId: "native-owner.solve-x.x",
+  observation: binding.source
+});
+clone.ownerElement.dataset["kpNativeKatexFragmentClone"] = "true";
+
+const playback = compiled.createPlayback({
+  supportedMatchIds: new Set([scheduledMotion.matchId]),
+  apply() {}
+});
+let animationFrame: number | undefined;
+
+function render(progress: number): void {
+  const bounded = clamp(progress);
+  const departureProgress = clamp(bounded / 0.24);
+  const reflowProgress = clamp((bounded - 0.1) / 0.45);
+  const requestedGlyphProgress = clamp((bounded - 0.3) / 0.62);
+  const scheduledFrame = playback.sample(requestedGlyphProgress)[0]!;
+  const glyphProgress = directScheduleProgress(
+    scheduledMotion.waypoints,
+    scheduledFrame.x,
+    scheduledFrame.y
+  );
+  const contextFrame = applyKpNativeKatexContextReflow({
+    persistentElement: context,
+    persistentSourceRect: sourceContextRect,
+    persistentTargetRect: targetContextRect,
+    departingElements: [departing],
+    reflowProgress,
+    departureProgress
+  });
+  const glyphFrame = applyKpNativeKatexGlyphFrame({
+    clone,
+    source: binding.source,
+    target: binding.target,
+    progress: glyphProgress
+  });
+  const atTarget = glyphFrame.visualOwner === "target-native";
+  const atSource = glyphFrame.visualOwner === "source-native";
+  sourceX.setAttribute("aria-hidden", String(!atSource));
+  targetX.setAttribute("aria-hidden", String(!atTarget));
+  sourceX.tabIndex = atSource ? 0 : -1;
+  targetX.tabIndex = atTarget ? 0 : -1;
+  departing.setAttribute(
+    "aria-hidden",
+    String(contextFrame.departingOpacity === 0)
+  );
+  stage.setAttribute(
+    "aria-label",
+    atTarget
+      ? "x equals 7 minus 3"
+      : "x plus 3 minus 3 equals 7 minus 3"
+  );
+  review.dataset["kpProgress"] = String(Math.round(bounded * 1000));
+  review.dataset["kpVisualOwner"] = glyphFrame.visualOwner;
+  review.dataset["kpHandoffDelta"] = glyphFrame.targetHandoffDeltaPx.toFixed(4);
+  review.dataset["kpScheduleStatus"] = scheduledMotion.status;
+  slider.value = String(Math.round(bounded * 1000));
+  status.value = `${Math.round(bounded * 100)}%`;
+  phaseLabel.textContent = bounded < 0.24
+    ? "Clear local context"
+    : bounded < 0.55
+      ? "Reflow creates the destination"
+      : bounded < 0.92
+        ? "Move the persistent x"
+        : "Exact native target";
+  ownershipLabel.textContent = glyphFrame.visualOwner === "source-native"
+    ? "Native source owns x"
+    : glyphFrame.visualOwner === "target-native"
+      ? "Native target owns x"
+      : "Inert real-KaTeX clone owns visible ink";
+}
+
+slider.addEventListener("input", () => {
+  stopPlayback();
+  render(Number(slider.value) / 1000);
+});
+play.addEventListener("click", () => {
+  if (animationFrame !== undefined) {
+    stopPlayback();
+    return;
+  }
+  const reverse = Number(slider.value) >= 1000;
+  const start = performance.now();
+  const durationMs = 1_800;
+  play.textContent = "Pause";
+  const tick = (now: number): void => {
+    const elapsed = Math.min(1, (now - start) / durationMs);
+    render(reverse ? 1 - elapsed : elapsed);
+    if (elapsed < 1) {
+      animationFrame = requestAnimationFrame(tick);
+    } else {
+      animationFrame = undefined;
+      play.textContent = reverse ? "Play" : "Rewind";
+    }
+  };
+  animationFrame = requestAnimationFrame(tick);
+});
+
+const requestedProgress = Number(
+  new URL(location.href).searchParams.get("progress") ?? "0"
+) / 1000;
+render(requestedProgress);
+review.dataset["kpReady"] = "true";
+
+if (import.meta.env.DEV) {
   const { mountKpDevReview } = await import("../dev-review/review-bootstrap.ts");
   mountKpDevReview({
     provider: {
-      id: "experiment.glyph-reconciliation",
+      id: "experiment.real-katex-glyph-compositor",
       matches: () => true,
       capture: () => ({
         semantic: {
-          documentId: "experiment.semantic-glyph-reconciliation",
+          documentId: "experiment.real-katex-glyph-compositor",
           documentVersion: "1",
-          assetId: "experiment.semantic-glyph-reconciliation.four-case",
+          assetId: caseInput.id,
           progressPermille: Number(review.dataset["kpProgress"] ?? "0"),
-          activeTransformationIds: cases.map(
-            ({ compiled }) => compiled.input.execution.transformationId
-          ),
-          focusRefs: [],
+          activeTransformationIds: [caseInput.execution.transformationId],
+          focusRefs: [binding.source.semanticEntityId],
           playbackDirection: "forward"
         },
         render: {
-          rendererId: "static-js-glyph-reconciliation",
+          rendererId: "static-js-real-katex-glyph-compositor",
           motionAuthority: "canonical-lineage-plus-bounded-clearance",
-          fontReady: document.fonts.status === "loaded",
-          ownerIds: cases.map(({ compiled }) => compiled.input.id)
+          fontReady: fontReadiness.status === "ready",
+          ownerIds: [clone.ownerElement.dataset["kpEquationMaterialOwnerId"]!]
         },
-        temporalTrace: cases.map(({ id }, index) => ({
-          offsetMs: index,
+        temporalTrace: [{
+          offsetMs: 0,
           progressPermille: Number(review.dataset["kpProgress"] ?? "0"),
-          phase: id
-        }))
+          phase: phaseLabel.textContent ?? ""
+        }]
       })
     },
     placement: (width) =>
@@ -266,78 +327,49 @@ if (import.meta.env.DEV) {
   });
 }
 
-function caseMarkup(reviewCase: ReviewCase): string {
-  const operations =
-    reviewCase.compiled.plan.operationCount +
-    reviewCase.compiled.schedule.operationCount;
-  return `
-    <article class="glyph-review__case" data-reconciliation-case="${reviewCase.id}">
-      <div class="glyph-review__case-copy">
-        <p class="glyph-review__eyebrow">${reviewCase.eyebrow}</p>
-        <h2>${reviewCase.title}</h2>
-        <p>${reviewCase.description}</p>
-      </div>
-      <div class="glyph-review__viewport">
-        <div class="glyph-review__stage" data-case-stage>
-          <span class="glyph-review__math glyph-review__source" data-case-source>${math(reviewCase.sourceLatex)}</span>
-          <span class="glyph-review__math glyph-review__target" data-case-target>${math(reviewCase.targetLatex)}</span>
-          ${reviewCase.compiled.schedule.motions.map((motion) => `
-            <span class="glyph-review__moving" data-motion-id="${motion.matchId}" data-kp-semantic-motion aria-hidden="true"></span>
-          `).join("")}
-        </div>
-      </div>
-      <div class="glyph-review__case-evidence">
-        <span>${reviewCase.compiled.schedule.motions.length} glyph route${reviewCase.compiled.schedule.motions.length === 1 ? "" : "s"}</span>
-        <span>${operations} operations</span>
-        ${reviewCase.affordances.map((item) => `<span>${item}</span>`).join("")}
-      </div>
-      ${reviewCase.trace === undefined ? "" : `
-        <button class="glyph-review__trace-toggle" type="button" aria-expanded="false" aria-controls="${reviewCase.id}-trace" data-trace-toggle>Inspect compressed steps</button>
-        <ol class="glyph-review__trace" id="${reviewCase.id}-trace" hidden>
-          ${reviewCase.trace.map((step) => `<li>${step}</li>`).join("")}
-        </ol>
-      `}
-    </article>`;
+function guideRect(selector: string): KpStageRelativeRect {
+  const element = stage.querySelector<HTMLElement>(selector);
+  if (element === null) throw new Error(`Missing exemplar guide ${selector}.`);
+  const stageRect = stage.getBoundingClientRect();
+  return normalizeKpStageRelativeRect({
+    stageClientRect: stageRect,
+    stageLayoutWidth: stage.offsetWidth || stageRect.width,
+    stageLayoutHeight: stage.offsetHeight || stageRect.height,
+    fragmentClientRect: element.getBoundingClientRect()
+  });
 }
 
-function sourceGlyphForMotion(
-  compiled: KpCompiledGlyphReconciliationCase,
-  matchId: string
-): string | undefined {
-  const direct = compiled.matches.matches.find(({ id }) => id === matchId);
-  if (direct !== undefined) {
-    return compiled.input.sourceGlyphs.find(
-      ({ id }) => id === direct.sourceGlyphId
-    )?.glyphKey;
-  }
-  const group = compiled.matches.multiplicity.find(({ id }) =>
-    matchId.startsWith(`${id}.`)
-  );
-  if (group === undefined) return undefined;
-  const index = Number(matchId.slice(group.id.length + 1));
-  const sourceId =
-    group.kind === "merge" ? group.sourceGlyphIds[index] : group.sourceGlyphIds[0];
-  return compiled.input.sourceGlyphs.find(({ id }) => id === sourceId)?.glyphKey;
+function placeNative(
+  element: HTMLElement,
+  rect: KpStageRelativeRect
+): void {
+  Object.assign(element.style, {
+    left: `${rect.left}px`,
+    top: `${rect.top}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`
+  });
 }
 
-function targetGlyphForMotion(
-  compiled: KpCompiledGlyphReconciliationCase,
-  matchId: string
-): string | undefined {
-  const direct = compiled.matches.matches.find(({ id }) => id === matchId);
-  if (direct !== undefined) {
-    return compiled.input.targetGlyphs.find(
-      ({ id }) => id === direct.targetGlyphId
-    )?.glyphKey;
-  }
-  const group = compiled.matches.multiplicity.find(({ id }) =>
-    matchId.startsWith(`${id}.`)
-  );
-  if (group === undefined) return undefined;
-  const index = Number(matchId.slice(group.id.length + 1));
-  const targetId =
-    group.kind === "split" ? group.targetGlyphIds[index] : group.targetGlyphIds[0];
-  return compiled.input.targetGlyphs.find(({ id }) => id === targetId)?.glyphKey;
+function directScheduleProgress(
+  waypoints: readonly { readonly x: number; readonly y: number }[],
+  x: number,
+  y: number
+): number {
+  const source = waypoints[0];
+  const target = waypoints[waypoints.length - 1];
+  if (source === undefined || target === undefined) return 1;
+  const dx = target.x - source.x;
+  const dy = target.y - source.y;
+  const lengthSquared = dx * dx + dy * dy;
+  if (lengthSquared === 0) return 1;
+  return clamp(((x - source.x) * dx + (y - source.y) * dy) / lengthSquared);
+}
+
+function stopPlayback(): void {
+  if (animationFrame !== undefined) cancelAnimationFrame(animationFrame);
+  animationFrame = undefined;
+  play.textContent = Number(slider.value) >= 1000 ? "Rewind" : "Play";
 }
 
 function math(latex: string): string {
@@ -346,4 +378,8 @@ function math(latex: string): string {
 
 function clamp(value: number): number {
   return Math.max(0, Math.min(1, value));
+}
+
+function nextFrame(): Promise<void> {
+  return new Promise((resolve) => requestAnimationFrame(() => resolve()));
 }

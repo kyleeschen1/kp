@@ -22,15 +22,47 @@ try {
       url.searchParams.set("progress", String(progress));
       await page.goto(url.toString(), { waitUntil: "networkidle" });
       await page.evaluate(async () => document.fonts.ready);
-      await page.locator("[data-kp-glyph-review]").waitFor();
+      await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
       const caseCount = await page.locator("[data-reconciliation-case]").count();
-      if (caseCount !== 4) {
-        throw new Error(`Expected four pressure cases, found ${caseCount}.`);
+      if (caseCount !== 1) {
+        throw new Error(`Expected one promoted exemplar, found ${caseCount}.`);
       }
-      const motionCount = await page.locator("[data-kp-semantic-motion]").count();
-      if (motionCount < 7) {
-        throw new Error(`Expected symbolic motion across all cases, found ${motionCount} routes.`);
+      const motionCount = await page.locator(
+        "[data-kp-native-katex-fragment-clone]"
+      ).count();
+      if (motionCount !== 1) {
+        throw new Error(`Expected one real KaTeX moving owner, found ${motionCount}.`);
       }
+      const owner = await page.locator("[data-kp-glyph-review]")
+        .getAttribute("data-kp-visual-owner");
+      const expectedOwner = progress <= 300
+        ? "source-native"
+        : progress >= 920
+          ? "target-native"
+          : "clone-transit";
+      if (owner !== expectedOwner) {
+        throw new Error(
+          `Expected ${expectedOwner} at ${progress}, found ${owner ?? "none"}.`
+        );
+      }
+      const geometry = await page.evaluate(() => {
+        const read = (selector: string) => {
+          const rect = document.querySelector<HTMLElement>(selector)!
+            .getBoundingClientRect();
+          return {
+            left: rect.left,
+            top: rect.top,
+            width: rect.width,
+            height: rect.height
+          };
+        };
+        return {
+          source: read("[data-case-source]"),
+          target: read("[data-case-target]"),
+          moving: read("[data-kp-native-katex-fragment-clone]"),
+          context: read("[data-case-context]")
+        };
+      });
       const overflow = await page.evaluate(() =>
         document.documentElement.scrollWidth - document.documentElement.clientWidth
       );
@@ -46,7 +78,8 @@ try {
         file: path.relative(process.cwd(), file),
         overflow,
         caseCount,
-        motionCount
+        motionCount,
+        geometry
       });
       await page.close();
     }

@@ -225,6 +225,7 @@ function makeVisualCloneInert(
   owner.setAttribute("aria-hidden", "true");
   owner.style.pointerEvents = "none";
   owner.style.userSelect = "none";
+  visual.style.inset = "0";
   for (const element of [visual, ...visual.querySelectorAll<HTMLElement>("*")]) {
     for (const attribute of [...element.attributes]) {
       if (

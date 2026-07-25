@@ -105,8 +105,33 @@
       "scope": "slice-11 gradual context reflow",
       "checkedAt": "2026-07-25T14:35:00.013Z",
       "notes": "Eight real Chromium tests and all TypeScript projects pass; context translation is continuous and only the explicitly departing fragment fades and lifts."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-12 real solve-x compositor",
+      "checkedAt": "2026-07-25T14:50:08.760Z",
+      "notes": "Eight focused unit tests, nine real Chromium tests, and all TypeScript projects pass; the route samples one x, monotonic same-baseline movement, opacity sum one, and no character substitution."
+    },
+    {
+      "command": "npm run visual:glyph-reconciliation-experiment; npm run perf:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-12 visual and performance certification",
+      "checkedAt": "2026-07-25T14:50:09.791Z",
+      "notes": "Ten reviewed wide/phone frames show clean source, context clearing, real-x transit, and exact target. Route gzip is 9631 bytes against 12000; cold plan 1.56 ms, cached 0.10 ms, frame sample 0.0031 ms, 35 operations."
+    },
+    {
+      "command": "npm test; npm run build; npm run test:semantic-animation-convergence; npm run test:glyph-reconciliation-experiment; npm run test:browser:reader-conformance; npm run check:reader-production; npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice-12 broad regression gate",
+      "checkedAt": "2026-07-25T14:50:10.844Z",
+      "notes": "2363 full tests, 255 convergence tests, 59 glyph-suite tests, 9 reader Chromium checks, production closures, and production build pass."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT after slice 12: solve-x exemplar is complete and broadly verified; slices 13-24 remain unauthorized until explicit visual promotion."
+  },
   "expectedLearning": [
     "Whether actual computed-style KaTeX fragments eliminate the crossfade and character-substitution failure in solve-x.",
     "Whether one generic ownership, handoff, and reflow compositor can later cover merge and split without operation-specific scheduling."

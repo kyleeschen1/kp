@@ -1,170 +1,254 @@
 @import "katex/dist/katex.min.css";
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  background: #f3f0e8;
-  color: #1d2926;
+  background: #eeeae0;
+  color: #17231f;
 }
+
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; }
 button, input { font: inherit; }
-.glyph-review {
-  width: min(1180px, 100%);
+
+.glyph-exemplar {
+  width: min(1040px, 100%);
   margin: 0 auto;
-  padding: clamp(1rem, 3vw, 3rem);
+  padding: clamp(1rem, 4vw, 4rem);
 }
-.glyph-review header {
+
+.glyph-exemplar__header {
   display: grid;
-  gap: .45rem;
-  margin-bottom: 1.15rem;
+  gap: .55rem;
+  max-width: 760px;
+  margin-bottom: clamp(1.2rem, 4vw, 2.4rem);
 }
-.glyph-review h1 {
-  margin: 0;
-  font: 650 clamp(1.65rem, 4vw, 3.2rem)/1.05 Georgia, serif;
-  letter-spacing: -.025em;
+
+.glyph-exemplar__eyebrow {
+  color: #27705b !important;
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
 }
-.glyph-review h2 { margin: 0 0 .3rem; font-size: 1.02rem; }
-.glyph-review p {
-  max-width: 76ch;
-  margin: 0;
-  color: #52615d;
-  line-height: 1.5;
+
+.glyph-exemplar h1,
+.glyph-exemplar h2,
+.glyph-exemplar p { margin: 0; }
+
+.glyph-exemplar h1 {
+  font: 600 clamp(2rem, 5.8vw, 4.5rem)/.98 Georgia, serif;
+  letter-spacing: -.035em;
 }
-.glyph-review__controls {
-  position: sticky;
-  z-index: 3;
-  top: .5rem;
+
+.glyph-exemplar h1 em {
+  color: #146e56;
+  font-weight: 500;
+}
+
+.glyph-exemplar__header > p:last-child {
+  max-width: 65ch;
+  color: #53605c;
+  font-size: clamp(.95rem, 2vw, 1.12rem);
+  line-height: 1.55;
+}
+
+.glyph-exemplar__review {
+  overflow: hidden;
+  border: 1px solid #c6ccc6;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, .76);
+  box-shadow: 0 24px 70px rgba(33, 51, 45, .12);
+}
+
+.glyph-exemplar__prompt {
   display: flex;
-  align-items: center;
-  gap: .75rem;
-  margin-bottom: 1rem;
-  padding: .75rem 1rem;
-  border-radius: 14px;
-  background: #263a34;
-  color: #fff;
-  box-shadow: 0 10px 28px rgba(38, 55, 50, .18);
-}
-.glyph-review__controls button,
-.glyph-review__trace-toggle {
-  border: 0;
-  border-radius: 999px;
-  padding: .55rem .9rem;
-  background: #d8ff73;
-  color: #17241f;
-  font-weight: 700;
-  cursor: pointer;
-}
-.glyph-review__controls input { flex: 1; min-width: 80px; }
-.glyph-review__status {
-  min-width: 4.5rem;
-  font-variant-numeric: tabular-nums;
-}
-.glyph-review__cases {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: end;
+  justify-content: space-between;
   gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid #d5d9d4;
 }
-.glyph-review__case {
-  min-width: 0;
-  padding: 1rem;
-  border: 1px solid #c8cec9;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, .72);
-  box-shadow: 0 12px 40px rgba(38, 55, 50, .08);
-}
-.glyph-review__case-copy { min-height: 7.35rem; }
-.glyph-review__case-copy > p:last-child { font-size: .86rem; }
-.glyph-review__eyebrow {
-  margin-bottom: .35rem !important;
-  color: #33705e !important;
-  font-size: .73rem;
+
+.glyph-exemplar__prompt span {
+  color: #27705b;
+  font-size: .7rem;
   font-weight: 800;
   letter-spacing: .08em;
   text-transform: uppercase;
 }
-.glyph-review__viewport {
-  position: relative;
-  height: 220px;
-  overflow: hidden;
-  border-radius: 12px;
-  background:
-    linear-gradient(rgba(47, 91, 77, .035) 1px, transparent 1px),
-    #fbfaf6;
-  background-size: 100% 44px;
-  color: #17241f;
-  container-type: inline-size;
+
+.glyph-exemplar__prompt h2 {
+  margin-top: .25rem;
+  font-size: clamp(1rem, 2vw, 1.25rem);
 }
-.glyph-review__stage {
+
+.glyph-exemplar__prompt > p {
+  color: #6b7672;
+  font-size: .78rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.glyph-exemplar__viewport {
+  position: relative;
+  height: clamp(260px, 38vw, 360px);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(216, 255, 115, .17), transparent 35%),
+    linear-gradient(rgba(40, 81, 67, .04) 1px, transparent 1px),
+    #fbfaf6;
+  background-size: auto, 100% 52px, auto;
+}
+
+.glyph-exemplar__stage {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 220px;
+  overflow: hidden;
+  container-type: inline-size;
+  color: #17241f;
+  font-size: clamp(1.65rem, 7cqw, 3.4rem);
 }
-.glyph-review__math {
+
+.glyph-exemplar__guide {
   position: absolute;
   top: 50%;
   left: 50%;
+  display: flex;
+  align-items: baseline;
   width: max-content;
-  max-width: 94%;
+  visibility: hidden;
   transform: translate(-50%, -50%);
   white-space: nowrap;
-  font-size: clamp(1rem, 4.8cqw, 1.5rem);
 }
-.glyph-review__source,
-.glyph-review__target {
-  transition: none;
-}
-.glyph-review__target { opacity: 0; }
-.glyph-review__moving {
+
+.glyph-exemplar__native {
   position: absolute;
-  top: 0;
-  left: 0;
   z-index: 2;
-  min-width: .8em;
-  min-height: 1em;
-  color: #116b55;
-  font: 700 1.45rem/1 Georgia, serif;
-  text-align: center;
-  text-shadow: 0 0 10px rgba(216, 255, 115, .6);
+  display: block;
+  transform-origin: 0 0;
+  white-space: nowrap;
   will-change: transform, opacity;
 }
-.glyph-review__moving[data-settled="true"] { color: #8d5a13; }
-.glyph-review__case-evidence,
-.glyph-review__evidence {
+
+.glyph-exemplar__focus {
+  z-index: 3;
+  border-radius: .12em;
+  outline: none;
+}
+
+.glyph-exemplar__focus:hover,
+.glyph-exemplar__focus:focus-visible {
+  background: rgba(216, 255, 115, .52);
+  box-shadow: 0 0 0 .12em rgba(39, 112, 91, .25);
+}
+
+.glyph-exemplar__focus:hover::after,
+.glyph-exemplar__focus:focus-visible::after {
+  position: absolute;
+  bottom: calc(100% + .8rem);
+  left: 50%;
+  width: max-content;
+  max-width: 16rem;
+  padding: .45rem .6rem;
+  border-radius: 8px;
+  background: #1c322b;
+  color: #fff;
+  content: attr(data-kp-annotation);
+  font: 600 .72rem/1.35 Inter, sans-serif;
+  transform: translateX(-50%);
+}
+
+.glyph-exemplar__material-layer {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  pointer-events: none;
+}
+
+.glyph-exemplar__material-layer
+  .editor-equation-stage__material-owner {
+  position: absolute;
+  display: block;
+  transform-origin: 0 0;
+  will-change: left, top, opacity;
+}
+
+.glyph-exemplar__annotation {
   display: flex;
   flex-wrap: wrap;
-  gap: .4rem;
+  justify-content: space-between;
+  gap: .5rem 1rem;
+  padding: .85rem 1.25rem;
+  border-top: 1px solid #d5d9d4;
+  border-bottom: 1px solid #d5d9d4;
+  background: #f2f5ec;
+  color: #52615c;
+  font-size: .76rem;
 }
-.glyph-review__case-evidence { margin-top: .75rem; }
-.glyph-review__evidence { margin-top: 1rem; }
-.glyph-review__case-evidence span,
-.glyph-review__evidence span {
-  padding: .32rem .55rem;
+
+.glyph-exemplar__annotation span:first-child {
+  color: #1f5e4d;
+  font-weight: 800;
+}
+
+.glyph-exemplar__controls {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  padding: 1rem 1.25rem 1.15rem;
+}
+
+.glyph-exemplar__controls button {
+  min-width: 5.6rem;
+  border: 0;
   border-radius: 999px;
-  background: #dce6de;
-  font-size: .72rem;
+  padding: .62rem 1rem;
+  background: #263a34;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
 }
-.glyph-review__trace-toggle {
-  margin-top: .75rem;
-  background: #e4ebdf;
-}
-.glyph-review__trace {
-  margin: .7rem 0 0;
-  padding: .8rem .8rem .8rem 1.9rem;
-  border-radius: 12px;
-  background: #f0f3eb;
-  color: #45534f;
+
+.glyph-exemplar__controls input { flex: 1; min-width: 80px; }
+.glyph-exemplar__controls output {
+  min-width: 3.3rem;
+  color: #52615c;
   font-size: .8rem;
-  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
 }
-.glyph-review__trace li + li { margin-top: .3rem; }
-@media (max-width: 760px) {
-  .glyph-review__cases { grid-template-columns: 1fr; }
-  .glyph-review__case-copy { min-height: 0; margin-bottom: .8rem; }
-  .glyph-review__viewport, .glyph-review__stage { height: 190px; }
-  .glyph-review__controls { top: .25rem; }
+
+.glyph-exemplar__evidence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  margin-top: 1rem;
 }
+
+.glyph-exemplar__evidence span {
+  padding: .35rem .62rem;
+  border: 1px solid #c5cdc6;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .56);
+  color: #52615c;
+  font-size: .7rem;
+}
+
+@media (max-width: 620px) {
+  .glyph-exemplar__prompt {
+    align-items: start;
+    flex-direction: column;
+  }
+  .glyph-exemplar__prompt > p { text-align: left; }
+  .glyph-exemplar__annotation { display: grid; }
+  .glyph-exemplar__stage { font-size: clamp(1.5rem, 10cqw, 2.4rem); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .glyph-review__moving { will-change: auto; }
+  .glyph-exemplar__native,
+  .glyph-exemplar__material-layer
+    .editor-equation-stage__material-owner {
+    will-change: auto;
+  }
 }

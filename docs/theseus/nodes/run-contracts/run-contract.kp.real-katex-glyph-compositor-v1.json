@@ -123,7 +123,8 @@
     {
       "id": "slice-12",
       "title": "Real-glyph-solve-x-exemplar",
-      "status": "planned"
+      "summary": "Delivered the mandatory real-glyph solve-x exemplar: exact tagged KaTeX source and target, canonical binding, inert computed-style clone transit, local context-first reflow, one visual owner, unchanged x glyph, and exact native handoff on wide and phone. Stop now for explicit human promotion.",
+      "status": "complete"
     },
     {
       "id": "slice-13",
