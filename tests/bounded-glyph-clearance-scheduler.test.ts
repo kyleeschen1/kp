@@ -104,3 +104,47 @@ test("scheduler enforces the shared operation budget", () => {
     /limit is 1/
   );
 });
+
+test("the same scheduler emits constituent merge and split routes", () => {
+  const mergeMatches: KpLineageConstrainedGlyphMatchResult = {
+    matches: [],
+    multiplicity: [{
+      id: "merge.denominators",
+      lineageGroupId: "group.denominators",
+      kind: "merge",
+      sourceGlyphIds: ["source.left", "source.right"],
+      targetGlyphIds: ["target.shared"],
+      sharedMatchIds: []
+    }],
+    unmatchedSourceGlyphIds: ["source.left", "source.right"],
+    unmatchedTargetGlyphIds: ["target.shared"],
+    ambiguities: [],
+    operationCount: 3
+  };
+  const source: KpNativeNotationMeasurementSnapshot = {
+    ...snapshot("source", "source.left", "left", 20),
+    glyphs: [
+      { id: "source.left", entityId: "left", glyphKey: "2", ordinal: 0, bounds: { x: 20, y: 50, width: 10, height: 16 }, styleFingerprint: "math" },
+      { id: "source.right", entityId: "right", glyphKey: "2", ordinal: 0, bounds: { x: 140, y: 50, width: 10, height: 16 }, styleFingerprint: "math" }
+    ]
+  };
+  const target: KpNativeNotationMeasurementSnapshot = {
+    ...snapshot("target", "target.shared", "shared", 80),
+    glyphs: [
+      { id: "target.shared", entityId: "shared", glyphKey: "2", ordinal: 0, bounds: { x: 80, y: 70, width: 10, height: 16 }, styleFingerprint: "math" }
+    ]
+  };
+  const schedule = scheduleKpBoundedGlyphClearance({
+    matches: mergeMatches,
+    source,
+    target,
+    maxOperations: 100
+  });
+
+  assert.equal(schedule.motions.length, 2);
+  assert.deepEqual(schedule.motions.map(({ matchId }) => matchId), [
+    "merge.denominators.0",
+    "merge.denominators.1"
+  ]);
+  assert.equal(schedule.usedOperationSpecificPolicy, false);
+});

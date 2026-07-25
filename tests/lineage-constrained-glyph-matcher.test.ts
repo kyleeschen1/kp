@@ -153,5 +153,5 @@ test("matcher retains explicit many-to-one and one-to-many group reconciliation"
   assert.equal(split.multiplicity[0]?.kind, "split");
   assert.deepEqual(split.multiplicity[0]?.targetGlyphIds, ["t.positive", "t.negative"]);
   assert.equal(split.matches.length, 0);
-  assert.equal(split.ambiguities.length, 1);
+  assert.equal(split.ambiguities.length, 0);
 });

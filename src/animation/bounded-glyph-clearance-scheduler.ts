@@ -71,6 +71,41 @@ export function scheduleKpBoundedGlyphClearance(input: {
       ? motion(match.id, "settle", [end], source.styleFingerprint, target.styleFingerprint)
       : motion(match.id, "clearance-route", route, source.styleFingerprint, target.styleFingerprint);
   });
+  input.matches.multiplicity.forEach((group) => {
+    const sources = group.sourceGlyphIds.map((id) => sourceGlyphs.get(id));
+    const targets = group.targetGlyphIds.map((id) => targetGlyphs.get(id));
+    if (sources.some((glyph) => glyph === undefined) || targets.some((glyph) => glyph === undefined)) {
+      throw new Error(`Missing measured glyph for multiplicity ${group.id}.`);
+    }
+    const pairs = group.kind === "merge"
+      ? sources.map((source) => [source!, targets[0]!] as const)
+      : targets.map((target) => [sources[0]!, target!] as const);
+    pairs.forEach(([source, target], index) => {
+      const relevantObstacles = obstacles.filter(({ ownerEntityId }) =>
+        ownerEntityId !== source.entityId && ownerEntityId !== target.entityId
+      );
+      const start = center(source.bounds);
+      const end = center(target.bounds);
+      operationCount += relevantObstacles.length + 1;
+      const directBlocked = routeBlocked([start, end], source.bounds, relevantObstacles, clearance);
+      const routes = directBlocked
+        ? clearanceRoutes(start, end, source.bounds, relevantObstacles, viewport, clearance)
+        : [];
+      operationCount += routes.length * relevantObstacles.length;
+      const route = directBlocked
+        ? routes
+            .filter((candidate) => !routeBlocked(candidate, source.bounds, relevantObstacles, clearance))
+            .sort((left, right) => routeLength(left) - routeLength(right))[0]
+        : [start, end];
+      motions.push(motion(
+        `${group.id}.${index}`,
+        route === undefined ? "settle" : directBlocked ? "clearance-route" : "direct",
+        route ?? [end],
+        source.styleFingerprint,
+        target.styleFingerprint
+      ));
+    });
+  });
   if (operationCount > input.maxOperations) {
     throw new Error(
       `Glyph clearance schedule requires ${operationCount} operations; limit is ${input.maxOperations}.`

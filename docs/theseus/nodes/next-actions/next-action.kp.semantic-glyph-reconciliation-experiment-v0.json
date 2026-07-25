@@ -128,6 +128,13 @@
       "scope": "slice-14 first exemplar evidence",
       "checkedAt": "2026-07-25T02:11:19.810Z",
       "notes": "Build passes; 10 wide and phone checkpoints captured with no overflow and review inbox present; workspace valid."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment and npm run typecheck",
+      "status": "passed",
+      "scope": "slice-15 fraction merge",
+      "checkedAt": "2026-07-25T02:13:49.104Z",
+      "notes": "44 focused tests and typecheck pass."
     }
   ],
   "progress": {

@@ -186,7 +186,8 @@
     {
       "id": "slice-15",
       "title": "Many-to-one-fraction-merge",
-      "status": "planned"
+      "summary": "Routed the canonical two-denominator fan-in through generic multiplicity matching and constituent scheduling; both source glyphs converge on one native target with no fraction-specific scheduling.",
+      "status": "complete"
     },
     {
       "id": "slice-16",

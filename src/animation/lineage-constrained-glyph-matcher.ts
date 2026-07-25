@@ -77,7 +77,11 @@ export function matchKpGlyphsWithinSemanticLineage(input: {
         matches.push(match(group, source, target));
         matchedSource.add(source.id);
         matchedTarget.add(target.id);
-      } else if (sourceCandidates.length > 0 && targetCandidates.length > 0) {
+      } else if (
+        group.kind === "one-to-one" &&
+        sourceCandidates.length > 0 &&
+        targetCandidates.length > 0
+      ) {
         ambiguities.push(Object.freeze({
           lineageGroupId: group.id,
           glyphKey,

@@ -1,4 +1,8 @@
 import { createLinearSolveAnimationAsset } from "./linear-solve-adapter.ts";
+import {
+  createNumeratorSplitMergeEquationKpAsset,
+  numeratorSplitMergeEquationAssetIds
+} from "../semantic/numerator-split-merge-equation-asset.ts";
 import type { KpGlyphReconciliationCaseInput } from "./semantic-glyph-reconciliation-compiler.ts";
 import type { KpCanonicalOperationExecutionResult } from "../semantic/transformation-definition-binding.ts";
 
@@ -71,5 +75,79 @@ export function createKpSolveXGlyphReconciliationCase(): KpGlyphReconciliationCa
       "rewind"
     ] as const,
     durationMs: 600
+  });
+}
+
+export function createKpFractionMergeGlyphReconciliationCase(): KpGlyphReconciliationCaseInput {
+  const asset = createNumeratorSplitMergeEquationKpAsset();
+  const transformation = asset.transformations.find(({ id }) =>
+    id === numeratorSplitMergeEquationAssetIds.mergeTransform
+  );
+  const record = transformation?.correspondenceMap?.records.find(({ id }) =>
+    id === "denominators-merge"
+  );
+  if (transformation === undefined || record === undefined) {
+    throw new Error("Canonical fraction denominator merge correspondence is unavailable.");
+  }
+  const execution: KpCanonicalOperationExecutionResult = {
+    kind: "canonical-operation-execution",
+    transformationId: transformation.id,
+    operationSpecId: "kp.core.merge",
+    roleBindings: {
+      sources: record.sourceSelectorIds,
+      result: record.targetSelectorIds
+    },
+    lineageGraph: {
+      kind: "semantic-lineage-graph",
+      id: `${transformation.id}.glyph-experiment-lineage`,
+      sourceEntityIds: record.sourceSelectorIds,
+      targetEntityIds: record.targetSelectorIds,
+      edges: [{
+        id: record.id,
+        relation: "merge",
+        sourceEntityIds: record.sourceSelectorIds,
+        targetEntityIds: record.targetSelectorIds,
+        summary: record.summary
+      }]
+    },
+    correspondenceMap: {
+      id: `${transformation.id}.glyph-experiment-correspondence`,
+      records: [record]
+    }
+  };
+  return Object.freeze({
+    id: "case.fraction.denominator-merge",
+    execution,
+    viewport: { x: 0, y: 0, width: 640, height: 260 },
+    sourceGlyphs: record.sourceSelectorIds.map((entityId, index) => ({
+      id: `fraction.source.denominator.${index}`,
+      entityId,
+      glyphKey: "2",
+      ordinal: 0
+    })),
+    targetGlyphs: [{
+      id: "fraction.target.denominator",
+      entityId: record.targetSelectorIds[0]!,
+      glyphKey: "2",
+      ordinal: 0
+    }],
+    sourceMetrics: [
+      { glyphId: "fraction.source.denominator.0", bounds: { x: 186, y: 154, width: 14, height: 22 } },
+      { glyphId: "fraction.source.denominator.1", bounds: { x: 386, y: 154, width: 14, height: 22 } }
+    ],
+    targetMetrics: [{
+      glyphId: "fraction.target.denominator",
+      bounds: { x: 286, y: 154, width: 14, height: 22 }
+    }],
+    requiredCapabilities: [
+      "accessibility",
+      "annotation",
+      "cloze",
+      "direct-seek",
+      "hover",
+      "responsive",
+      "rewind"
+    ] as const,
+    durationMs: 720
   });
 }
