@@ -59,6 +59,26 @@ function batch(
   });
 }
 
+function batches(
+  fragments: readonly {
+    readonly id: string;
+    readonly semanticEntityId: string;
+    readonly glyphKey: string;
+  }[]
+) {
+  return createKpNativeKatexFragmentObservationBatch({
+    stage,
+    fragments: fragments.map((fragment, index) => ({
+      ...fragment,
+      motionId: `motion.${fragment.id}`,
+      sourceElement,
+      rect: { left: 12 + index * 30, top: 20, width: 14, height: 25 },
+      styleFingerprint: "font:KaTeX_Main|size:24|weight:400",
+      fontRevision: 2
+    }))
+  });
+}
+
 test("native fragment observations are explicit renderer-session state", () => {
   const batch = createKpNativeKatexFragmentObservationBatch({
     stage,
@@ -160,6 +180,7 @@ test("native fragments bind through canonical semantic lineage", () => {
   assert.equal(result.bindings[0]?.source.id, "fragment.before.x");
   assert.equal(result.bindings[0]?.target.id, "fragment.after.x");
   assert.equal(result.bindings[0]?.glyphKey, "x");
+  assert.deepEqual(result.multiplicity, []);
   assert.deepEqual(result.unmatchedSourceFragmentIds, []);
   assert.deepEqual(result.unmatchedTargetFragmentIds, []);
 });
@@ -176,4 +197,50 @@ test("equal native glyphs cannot create identity outside canonical lineage", () 
     }),
     /outside canonical lineage/
   );
+});
+
+test("native denominator fragments bind through declared many-to-one lineage", () => {
+  const projection: KpCanonicalLineageProjection = {
+    kind: "canonical-lineage-projection",
+    id: "lineage.fraction-denominators",
+    sourceEntityIds: ["denominator.left", "denominator.right"],
+    targetEntityIds: ["denominator.merged"],
+    groups: [{
+      id: "group.fraction-denominators",
+      kind: "many-to-one",
+      relation: "merge",
+      sourceEntityIds: ["denominator.left", "denominator.right"],
+      targetEntityIds: ["denominator.merged"],
+      authority: {
+        executionTransformationId: "transform.merge-fractions",
+        operationSpecId: "kp.core.merge",
+        lineageGraphId: "graph.merge-fractions",
+        lineageEdgeId: "edge.denominators-merge"
+      }
+    }]
+  };
+  const result = bindKpNativeKatexFragmentsWithinSemanticLineage({
+    lineage: projection,
+    source: batches([
+      { id: "fragment.denominator.left", semanticEntityId: "denominator.left", glyphKey: "2" },
+      { id: "fragment.denominator.right", semanticEntityId: "denominator.right", glyphKey: "2" }
+    ]),
+    target: batches([
+      { id: "fragment.denominator.merged", semanticEntityId: "denominator.merged", glyphKey: "2" }
+    ])
+  });
+
+  assert.equal(result.bindings.length, 0);
+  assert.equal(result.multiplicity.length, 1);
+  assert.equal(result.multiplicity[0]?.kind, "merge");
+  assert.deepEqual(
+    result.multiplicity[0]?.sources.map(({ id }) => id),
+    ["fragment.denominator.left", "fragment.denominator.right"]
+  );
+  assert.deepEqual(
+    result.multiplicity[0]?.targets.map(({ id }) => id),
+    ["fragment.denominator.merged"]
+  );
+  assert.deepEqual(result.unmatchedSourceFragmentIds, []);
+  assert.deepEqual(result.unmatchedTargetFragmentIds, []);
 });

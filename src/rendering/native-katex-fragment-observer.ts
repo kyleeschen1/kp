@@ -42,8 +42,17 @@ export interface KpNativeKatexFragmentLineageBinding {
   readonly target: KpNativeKatexFragmentObservation;
 }
 
+export interface KpNativeKatexFragmentMultiplicityBinding {
+  readonly id: string;
+  readonly lineageGroupId: string;
+  readonly kind: "merge" | "split";
+  readonly sources: readonly KpNativeKatexFragmentObservation[];
+  readonly targets: readonly KpNativeKatexFragmentObservation[];
+}
+
 export interface KpNativeKatexFragmentBindingResult {
   readonly bindings: readonly KpNativeKatexFragmentLineageBinding[];
+  readonly multiplicity: readonly KpNativeKatexFragmentMultiplicityBinding[];
   readonly unmatchedSourceFragmentIds: readonly string[];
   readonly unmatchedTargetFragmentIds: readonly string[];
   readonly ambiguities: readonly KpGlyphMatchAmbiguity[];
@@ -184,10 +193,28 @@ export function bindKpNativeKatexFragmentsWithinSemanticLineage(input: {
     source: sourceById.get(match.sourceGlyphId)!,
     target: targetById.get(match.targetGlyphId)!
   }));
+  const multiplicity = matches.multiplicity.map((group) => Object.freeze({
+    id: `native-${group.id}`,
+    lineageGroupId: group.lineageGroupId,
+    kind: group.kind,
+    sources: Object.freeze(group.sourceGlyphIds.map((id) => sourceById.get(id)!)),
+    targets: Object.freeze(group.targetGlyphIds.map((id) => targetById.get(id)!))
+  }));
+  const multiplicitySourceIds = new Set(
+    matches.multiplicity.flatMap(({ sourceGlyphIds }) => sourceGlyphIds)
+  );
+  const multiplicityTargetIds = new Set(
+    matches.multiplicity.flatMap(({ targetGlyphIds }) => targetGlyphIds)
+  );
   return Object.freeze({
     bindings: Object.freeze(bindings),
-    unmatchedSourceFragmentIds: matches.unmatchedSourceGlyphIds,
-    unmatchedTargetFragmentIds: matches.unmatchedTargetGlyphIds,
+    multiplicity: Object.freeze(multiplicity),
+    unmatchedSourceFragmentIds: Object.freeze(
+      matches.unmatchedSourceGlyphIds.filter((id) => !multiplicitySourceIds.has(id))
+    ),
+    unmatchedTargetFragmentIds: Object.freeze(
+      matches.unmatchedTargetGlyphIds.filter((id) => !multiplicityTargetIds.has(id))
+    ),
     ambiguities: matches.ambiguities
   });
 }

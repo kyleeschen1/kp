@@ -135,7 +135,8 @@
     {
       "id": "slice-14",
       "title": "Denominator-fragment-binding",
-      "status": "planned"
+      "summary": "Bound two native source denominators and one native target denominator through declared many-to-one lineage; multiplicity members no longer appear falsely unmatched.",
+      "status": "complete"
     },
     {
       "id": "slice-15",
