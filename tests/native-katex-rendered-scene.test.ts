@@ -8,6 +8,7 @@ import {
 import {
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexSceneTracks,
+  createKpNativeKatexScenePlayback,
   createKpNativeKatexSceneReconciliation,
   reconcileKpNativeKatexScenes,
   sampleKpNativeKatexSceneTracks
@@ -358,6 +359,49 @@ test("generic scene tracks sample exact finite endpoints and reverse identically
   assert.throws(
     () => sampleKpNativeKatexSceneTracks(tracks, Number.NaN),
     /progress must be finite/
+  );
+});
+
+test("scene playback direct seeks and reverses without hidden clock state", () => {
+  const source = createScene("source", ["source.a", "source.b"]);
+  const target = createScene("target", ["target.result"]);
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source,
+    target,
+    relations: [{
+      id: "lineage.merge",
+      relation: "merge",
+      sourceEntityIds: ["entity.a", "entity.b"],
+      targetEntityIds: ["entity.result"]
+    }]
+  });
+  const tracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+  );
+  const playback = createKpNativeKatexScenePlayback({
+    stage,
+    sourceRoot: source.root,
+    targetRoot: target.root,
+    reconciliation,
+    tracks
+  });
+  const forward = [0, 0.25, 0.5, 0.75, 1].map(playback.sample);
+  const reverse = [1, 0.75, 0.5, 0.25, 0].map(playback.sample);
+
+  assert.equal(playback.lifecycle, "renderer-session");
+  assert.equal(Object.isFrozen(playback), true);
+  assert.equal(Object.isFrozen(playback.tracks), true);
+  assert.deepEqual(reverse, [...forward].reverse());
+  assert.deepEqual(playback.sample(0.5), playback.sample(0.5));
+  assert.throws(
+    () => createKpNativeKatexScenePlayback({
+      stage,
+      sourceRoot: source.root,
+      targetRoot: target.root,
+      reconciliation,
+      tracks: [{ ...tracks[0]!, visualAtomId: "unknown.atom" }]
+    }),
+    /unknown visual atom/
   );
 });
 

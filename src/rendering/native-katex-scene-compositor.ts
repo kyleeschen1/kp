@@ -87,6 +87,14 @@ export interface KpNativeKatexSceneOwnershipFrame {
   readonly frames: readonly KpNativeKatexSceneTrackFrame[];
 }
 
+export interface KpNativeKatexScenePlayback {
+  readonly kind: "native-katex-scene-playback";
+  readonly lifecycle: "renderer-session";
+  readonly tracks: readonly KpNativeKatexSceneTrack[];
+  readonly sample: (progress: number) => readonly KpNativeKatexSceneTrackFrame[];
+  readonly apply: (progress: number) => KpNativeKatexSceneOwnershipFrame;
+}
+
 export interface KpNativeKatexSemanticPaintRelation {
   readonly id: string;
   readonly relation: "persist" | "merge" | "split";
@@ -437,6 +445,50 @@ export function applyKpNativeKatexSceneFrame(input: {
     materialSceneOpacity: materialOwns ? 1 : 0,
     targetNativeOpacity: targetOwns ? 1 : 0,
     frames
+  });
+}
+
+export function createKpNativeKatexScenePlayback(input: {
+  readonly stage: HTMLElement;
+  readonly sourceRoot: HTMLElement;
+  readonly targetRoot: HTMLElement;
+  readonly reconciliation: KpNativeKatexSceneReconciliation;
+  readonly tracks: readonly KpNativeKatexSceneTrack[];
+}): KpNativeKatexScenePlayback {
+  const trackIds = input.tracks.map(({ id }) => id);
+  if (new Set(trackIds).size !== trackIds.length) {
+    throw new Error("Scene playback requires unique track IDs.");
+  }
+  const atomIds = new Set([
+    ...input.reconciliation.source.atoms,
+    ...input.reconciliation.target.atoms
+  ].map(({ id }) => id));
+  const unknownVisualAtom = input.tracks.find(({ visualAtomId }) =>
+    !atomIds.has(visualAtomId)
+  );
+  if (unknownVisualAtom !== undefined) {
+    throw new Error(
+      `Scene track ${unknownVisualAtom.id} references unknown visual atom ` +
+      `${unknownVisualAtom.visualAtomId}.`
+    );
+  }
+  if (input.reconciliation.dispositions.some(({ lifecycle }) =>
+    lifecycle === "unsupported"
+  )) {
+    throw new Error("Unsupported scene dispositions cannot enter playback.");
+  }
+  const tracks = Object.freeze([...input.tracks]);
+  return Object.freeze({
+    kind: "native-katex-scene-playback",
+    lifecycle: "renderer-session",
+    tracks,
+    sample: (progress: number) =>
+      sampleKpNativeKatexSceneTracks(tracks, progress),
+    apply: (progress: number) => applyKpNativeKatexSceneFrame({
+      ...input,
+      tracks,
+      progress
+    })
   });
 }
 

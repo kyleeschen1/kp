@@ -424,6 +424,35 @@ test("full fraction scene has one exclusive visual owner through handoff", async
   expect(ownership[2]!.visibleMaterialOwners).toBe(0);
 });
 
+test("full-scene playback direct seek is stateless through reverse application", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const snapshots = await page.evaluate(() => {
+    const apply = (window as unknown as {
+      __kpApplyFractionSceneFrame: (progress: number) => unknown;
+    }).__kpApplyFractionSceneFrame;
+    const stage = document.querySelector<HTMLElement>("[data-fraction-stage]")!;
+    return [0.37, 0.82, 0.37].map((progress) => {
+      apply(progress);
+      return [...stage.querySelectorAll<HTMLElement>(
+        "[data-kp-native-katex-scene-owner]"
+      )].map((owner) => ({
+        id: owner.dataset["kpEquationMaterialOwnerId"],
+        left: owner.style.left,
+        top: owner.style.top,
+        width: owner.style.width,
+        height: owner.style.height,
+        opacity: owner.style.opacity
+      }));
+    });
+  });
+
+  expect(snapshots[0]).toEqual(snapshots[2]);
+  expect(snapshots[0]).not.toEqual(snapshots[1]);
+});
+
 test("observer rejects missing and duplicate explicit motion nodes", async ({
   page
 }) => {

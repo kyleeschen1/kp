@@ -128,6 +128,13 @@
       "scope": "slice-15 exclusive full-scene ownership",
       "checkedAt": "2026-07-25T17:51:35.588Z",
       "notes": "18 focused tests, all TypeScript projects, and 25 Chromium tests pass; source native owns only progress zero, complete inert material paint owns every interior frame, and target native owns only progress one."
+    },
+    {
+      "command": "node focused compositor tests; npm run typecheck; npm run test:browser:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-16 deterministic scene sampler",
+      "checkedAt": "2026-07-25T17:55:35.919Z",
+      "notes": "19 focused tests, all TypeScript projects, and 26 Chromium tests pass; stateless direct seek, repeated sample, and reverse application reproduce identical full-scene frames."
     }
   ],
   "allowedWork": [
@@ -246,7 +253,8 @@
     {
       "id": "slice-16",
       "title": "deterministic-scene-sampler",
-      "status": "planned"
+      "summary": "Added a frozen renderer-session playback wrapper with one pure sampler and one exclusive DOM apply path; direct seek, replay, and rewind share identical stateless frames.",
+      "status": "complete"
     },
     {
       "id": "slice-17",
