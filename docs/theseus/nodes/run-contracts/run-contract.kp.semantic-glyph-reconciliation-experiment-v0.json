@@ -102,7 +102,8 @@
     {
       "id": "slice-01",
       "title": "Experiment-ledger",
-      "status": "planned"
+      "summary": "Frozen four canonical cases, fixed budgets, seven-file and ten-reference policy baseline, and explicit pass/fail rubric with focused tests.",
+      "status": "complete"
     },
     {
       "id": "slice-02",

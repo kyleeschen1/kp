@@ -30,6 +30,19 @@
     "npm run perf:animation",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:glyph-reconciliation-experiment; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-01 experiment ledger",
+      "checkedAt": "2026-07-25T01:33:23.871Z",
+      "notes": "Four focused tests freeze the four pressure cases, fixed performance budgets, seven-file and ten-reference legacy scheduling baseline, and explicit pass/fail rules; typecheck passed."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice 1 freezes four canonical pressure cases, pre-integration performance and payload budgets, the legacy scheduling policy baseline, and falsifiable pass/fail criteria."
+  },
   "expectedLearning": [
     "Whether one lineage-constrained glyph matcher and one bounded geometry scheduler cover one-to-one, many-to-one, one-to-many, and crowded responsive notation without operation-specific scheduling.",
     "Whether KP preserves a measurable advantage through static-JS branching, seek/rewind, accessibility, hover, annotations, Cloze, and headless compilation while reducing scheduling policy."
