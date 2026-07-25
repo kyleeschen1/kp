@@ -338,6 +338,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         { id: "method-formula-end", label: "Simplify the radical · end", progressPermille: 450, viewport: "desktop", query: { kpMethod: "formula", kpMotion: "full" } },
         { id: "method-formula-numerators", label: "Evaluate signed numerators", progressPermille: 500, viewport: "desktop", query: { kpMethod: "formula", kpMotion: "full" } },
         { id: "method-formula-divide", label: "Divide the candidate numerators", progressPermille: 560, viewport: "desktop", query: { kpMethod: "formula", kpMotion: "full" } },
+        { id: "method-formula-drilldown", label: "Formula exact-step drill-down", progressPermille: 430, viewport: "desktop", query: { kpMethod: "formula", kpMotion: "full", kpSteps: "full", kpStepProgress: "900" } },
         { id: "branches", label: "Plus-minus branches", progressPermille: 680, viewport: "desktop" },
         { id: "reunion", label: "Complete solution set", progressPermille: 880, viewport: "desktop" },
         { id: "graph", label: "Roots meet the graph", progressPermille: 1_000, viewport: "desktop" },

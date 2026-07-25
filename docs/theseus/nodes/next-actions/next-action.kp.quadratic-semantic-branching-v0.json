@@ -321,6 +321,13 @@
       "scope": "slice-16 radical and candidate evaluation",
       "checkedAt": "2026-07-24T23:48:26.096Z",
       "notes": "Thirty-six focused tests, typecheck, all nine Chromium checks, and 32 deterministic review frames passed. Native KaTeX collapses sqrt(1), evaluates 5 minus/plus 1 into 4 and 6, divides to exact roots 2 and 3, then hands those identities into the existing branch cards; the WebGL radical path remains forbidden and untouched."
+    },
+    {
+      "command": "focused causal drill-down, compiler, and contact-sheet tests; npm run typecheck; quadratic Chromium; npm run visual:quadratic-branching",
+      "status": "passed",
+      "scope": "slice-17 compressed context and Show steps",
+      "checkedAt": "2026-07-25T00:01:54.106Z",
+      "notes": "Ten focused unit/compiler checks, typecheck, all ten Chromium checks, and 33 deterministic review frames passed. Both methods expand the identical operation trace, pause the shared parent clock, survive layout/font rerenders on the child clock, and restore exact progress, transition, and URL on close."
     }
   ],
   "progress": {

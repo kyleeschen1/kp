@@ -15,5 +15,13 @@ test("quadratic lesson compiles through the shared reader shell", async () => {
   assert.match(artifact.html, /data-kp-equation-method="completing-square"/);
   assert.match(artifact.html, /data-kp-equation-method="formula"/);
   assert.match(artifact.html, /complete solution set/);
+  assert.match(
+    artifact.html,
+    /data-kp-quadratic-show-steps[^>]+aria-controls="kp-quadratic-drilldown"/
+  );
+  assert.match(
+    artifact.html,
+    /id="kp-quadratic-drilldown"[^>]+aria-label="Exact algebra steps"/
+  );
   assert.doesNotMatch(artifact.html, /webgl|three\.js/i);
 });

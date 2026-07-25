@@ -283,6 +283,87 @@ test("both methods move selector-owned native symbols through measured paths", a
   }
 });
 
+test("Show steps nests the identical method trace and restores the exact parent frame", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(
+    route
+      .replace("kpProgress=680", "kpProgress=430")
+      .replace("kpMethod=completing-square", "kpMethod=formula") +
+      "&kpMotion=full",
+    { waitUntil: "networkidle" }
+  );
+  const body = page.locator("body");
+  const stage = page.locator("[data-kp-quadratic-stage]");
+  const showSteps = page.getByRole("button", { name: "Show steps" });
+  const parentProgress = await body.getAttribute("data-kp-reader-progress");
+  const parentTransition = await stage.getAttribute("data-kp-symbolic-transition");
+  const parentUrlProgress = new URL(page.url()).searchParams.get("kpProgress");
+
+  await expect(showSteps).toBeEnabled();
+  await showSteps.click();
+  await expect(showSteps).toHaveAttribute("aria-expanded", "true");
+  await expect(page.getByRole("region", { name: "Exact algebra steps" })).toBeVisible();
+  await expect(stage).toHaveAttribute("data-kp-causal-presentation", "full-detail");
+  await expect(stage).toHaveAttribute("data-kp-paused-parent-progress", parentProgress!);
+  await expect(stage).toHaveAttribute(
+    "data-kp-nested-clock-id",
+    "causal-chain.quadratic.formula.full"
+  );
+  await expect(page.getByRole("button", { name: "Close" })).toBeFocused();
+
+  const childSlider = page.getByRole("slider", {
+    name: "Full-detail step position"
+  });
+  const initialAction = await stage.getAttribute("data-kp-drilldown-action-id");
+  await childSlider.evaluate((element: HTMLInputElement) => {
+    element.value = "900";
+    element.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(stage).toHaveAttribute("data-kp-drilldown-progress", "900");
+  expect(await stage.getAttribute("data-kp-drilldown-action-id")).not.toBe(
+    initialAction
+  );
+  await expect(
+    stage.locator(
+      '[data-kp-equation-state="katex.quadratic.formula.candidate-numerators"]'
+    )
+  ).toBeVisible();
+  await page.setViewportSize({ width: 1270, height: 900 });
+  await expect(stage).toHaveAttribute("data-kp-drilldown-progress", "900");
+  await expect(
+    stage.locator(
+      '[data-kp-equation-state="katex.quadratic.formula.candidate-numerators"]'
+    )
+  ).toBeVisible();
+  await expect(body).toHaveAttribute("data-kp-reader-progress", parentProgress!);
+  expect(new URL(page.url()).searchParams.get("kpProgress")).toBe(parentUrlProgress);
+
+  await page.getByRole("button", { name: "Close" }).click();
+  await expect(showSteps).toHaveAttribute("aria-expanded", "false");
+  await expect(page.getByRole("region", { name: "Exact algebra steps" })).toBeHidden();
+  await expect(stage).toHaveAttribute(
+    "data-kp-causal-presentation",
+    "compressed-context"
+  );
+  await expect(stage).not.toHaveAttribute("data-kp-nested-clock-id");
+  await expect(body).toHaveAttribute("data-kp-reader-progress", parentProgress!);
+  await expect(stage).toHaveAttribute(
+    "data-kp-symbolic-transition",
+    parentTransition!
+  );
+  expect(new URL(page.url()).searchParams.get("kpProgress")).toBe(parentUrlProgress);
+  await expect(showSteps).toBeFocused();
+
+  await page.getByRole("button", { name: "Complete the square" }).click();
+  await showSteps.click();
+  await expect(stage).toHaveAttribute(
+    "data-kp-nested-clock-id",
+    "causal-chain.quadratic.completing-square.full"
+  );
+  await stage.press("Escape");
+  await expect(page.getByRole("region", { name: "Exact algebra steps" })).toBeHidden();
+});
+
 test("quadratic learner surface becomes a narrow focus stepper without overflow", async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 760 });
   await page.goto(route, { waitUntil: "networkidle" });

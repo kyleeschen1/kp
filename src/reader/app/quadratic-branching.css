@@ -89,7 +89,9 @@ body[data-kp-reader="quadratic-branching"] {
 }
 
 .kp-quadratic-methods button,
-.kp-quadratic-controls button {
+.kp-quadratic-controls button,
+.kp-quadratic-show-steps,
+.kp-quadratic-drilldown button {
   min-height: 2.45rem;
   border: 0;
   border-radius: .5rem;
@@ -99,6 +101,28 @@ body[data-kp-reader="quadratic-branching"] {
   font-size: .72rem;
   font-weight: 750;
   cursor: pointer;
+}
+
+.kp-quadratic-show-steps {
+  position: absolute;
+  z-index: 3;
+  top: 4.55rem;
+  right: 1.25rem;
+  min-height: 2rem;
+  padding: .3rem .65rem;
+  border: 1px solid var(--kp-line);
+  border-radius: .5rem;
+  color: var(--kp-relation);
+  background: var(--kp-surface);
+  font: inherit;
+  font-size: .68rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.kp-quadratic-show-steps:disabled {
+  opacity: .42;
+  cursor: default;
 }
 
 .kp-quadratic-methods button {
@@ -126,6 +150,46 @@ body[data-kp-reader="quadratic-branching"] {
   inset: 0;
   display: grid;
   place-items: center;
+}
+
+.kp-quadratic-drilldown {
+  display: grid;
+  gap: .55rem;
+  padding: .7rem .8rem;
+  border: 1px solid color-mix(in srgb, var(--kp-relation) 24%, var(--kp-line));
+  border-radius: .7rem;
+  background: var(--kp-paper);
+}
+
+.kp-quadratic-drilldown[hidden] {
+  display: none;
+}
+
+.kp-quadratic-drilldown > div,
+.kp-quadratic-drilldown label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+}
+
+.kp-quadratic-drilldown strong,
+.kp-quadratic-drilldown output,
+.kp-quadratic-drilldown label {
+  color: var(--kp-muted);
+  font-size: .7rem;
+}
+
+.kp-quadratic-drilldown input {
+  flex: 1;
+  accent-color: var(--kp-accent);
+}
+
+.kp-quadratic-drilldown button {
+  min-height: 1.9rem;
+  padding: .25rem .55rem;
+  border: 1px solid var(--kp-line);
+  background: var(--kp-surface);
 }
 
 .kp-quadratic-equation {

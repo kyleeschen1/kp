@@ -158,7 +158,8 @@
     {
       "id": "slice-17",
       "title": "Compressed-context-and-show-steps-surface",
-      "status": "planned"
+      "summary": "Added compressed-context method presentation with an accessible Show steps surface that expands the identical operation trace on a nested full-detail clock, pauses parent controls, remains stable through font and layout rerenders, restores the exact parent frame on close, and is covered by a deterministic visual checkpoint.",
+      "status": "complete"
     },
     {
       "id": "slice-18",

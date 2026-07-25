@@ -23,6 +23,7 @@ import {
   kpQuadraticReaderCheckpoints,
   kpQuadraticReaderMethodQueryValue,
   parseKpQuadraticReaderMethod,
+  projectKpQuadraticReaderSurface,
   type KpQuadraticReaderSurfaceFrame
 } from "./quadratic-branching-surface.ts";
 import type { KpQuadraticMethodId } from "../../semantic/quadratic-solution-method-graph.ts";
@@ -31,6 +32,7 @@ import {
 } from "../../projections/quadratic-equation-graph-sync.ts";
 import { mountKpReaderDevelopmentReview } from "./development-review-loader.ts";
 import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycle.ts";
+import { createKpQuadraticCausalDrillDownBundle } from "../../animation/quadratic-causal-drilldown.ts";
 
 const documentId = "lesson.algebra.quadratic-branching";
 const documentVersion = "1";
@@ -49,6 +51,15 @@ const solution = requireElement<HTMLElement>("[data-kp-quadratic-solution]");
 const graph = requireElement<SVGElement>("[data-kp-quadratic-graph]");
 const motionSelect = requireElement<HTMLSelectElement>("[data-kp-quadratic-motion]");
 const narration = requireElement<HTMLElement>("[data-kp-quadratic-narration]");
+const showSteps = requireElement<HTMLButtonElement>("[data-kp-quadratic-show-steps]");
+const drillDown = requireElement<HTMLElement>("[data-kp-quadratic-drilldown]");
+const closeSteps = requireElement<HTMLButtonElement>("[data-kp-quadratic-close-steps]");
+const drillProgress = requireElement<HTMLInputElement>(
+  "[data-kp-quadratic-drilldown-progress]"
+);
+const drillStatus = requireElement<HTMLOutputElement>(
+  "[data-kp-quadratic-drilldown-status]"
+);
 const methodButtons = [
   ...stage.querySelectorAll<HTMLButtonElement>("[data-kp-quadratic-method]")
 ];
@@ -73,6 +84,10 @@ let layoutReadCount = 0;
 let captureRevision = 0;
 let previousReviewFrameAtMs: number | undefined;
 let previousReviewScrollY = window.scrollY;
+let pausedParent: KpReaderClockSample | undefined;
+let activeDrillDown:
+  | ReturnType<typeof createKpQuadraticCausalDrillDownBundle>
+  | undefined;
 const fontReadiness = createKpEquationFontReadiness(document);
 
 const scrollClock = createKpReaderContinuousScrollClock({
@@ -118,6 +133,10 @@ function render(sample: KpReaderClockSample): void {
   stage.dataset["kpDirection"] = current.direction;
   stage.dataset["kpMotionSampling"] = motionPolicy.sampling;
   stage.dataset["kpGraphProgress"] = String(synchronized.graphLocalProgress);
+  if (pausedParent === undefined) {
+    stage.dataset["kpCausalPresentation"] = "compressed-context";
+    delete stage.dataset["kpNestedClockId"];
+  }
   graph.dataset["kpSharedClockId"] = synchronized.sharedClockId;
   progress.value = String(frame.progressPermille);
   progress.setAttribute("aria-valuetext", `${frame.checkpointLabel}, ${Math.round(frame.progress * 100)} percent`);
@@ -125,8 +144,12 @@ function render(sample: KpReaderClockSample): void {
   count.value = `${frame.checkpointLabel}, ${Math.round(frame.progress * 100)} percent`;
   narration.textContent = narrationFor(frame);
   motionSelect.value = motionPreference;
+  motionSelect.disabled = pausedParent !== undefined;
 
   renderEquations(frame, motionPolicy.resolvedMode);
+  if (activeDrillDown !== undefined) {
+    renderDrillDown(Number(drillProgress.value) / 1_000);
+  }
   const showBranches = branchesVisible(frame.progress) && !frame.solutionSetNative;
   branches.hidden = !showBranches;
   solution.hidden = !frame.solutionSetNative;
@@ -134,6 +157,7 @@ function render(sample: KpReaderClockSample): void {
   renderGraph(synchronized);
 
   methodButtons.forEach((button) => {
+    button.disabled = pausedParent !== undefined;
     button.setAttribute(
       "aria-pressed",
       String(button.dataset["kpQuadraticMethod"] === kpQuadraticReaderMethodQueryValue(methodId))
@@ -142,8 +166,10 @@ function render(sample: KpReaderClockSample): void {
   const checkpointIndex = kpQuadraticReaderCheckpoints.findIndex(
     ({ id }) => id === frame.checkpointId
   );
-  previous.disabled = checkpointIndex <= 0;
-  next.disabled = checkpointIndex >= kpQuadraticReaderCheckpoints.length - 1;
+  previous.disabled = pausedParent !== undefined || checkpointIndex <= 0;
+  next.disabled = pausedParent !== undefined ||
+    checkpointIndex >= kpQuadraticReaderCheckpoints.length - 1;
+  showSteps.disabled = pausedParent !== undefined || frame.phase !== "method";
   activateBeat(frame.beatId);
   updateUrl();
   dispatchDevReviewFrame({
@@ -152,6 +178,79 @@ function render(sample: KpReaderClockSample): void {
     motionMode: motionPolicy.resolvedMode,
     motionSampling: motionPolicy.sampling
   });
+}
+
+function openStepDrillDown(): void {
+  if (pausedParent !== undefined || current.progress < 0.1 || current.progress >= 0.58) {
+    return;
+  }
+  const parentProgress = Math.min(
+    1,
+    Math.max(0, (current.progress - 0.1) / 0.48)
+  );
+  pausedParent = current;
+  activeDrillDown = createKpQuadraticCausalDrillDownBundle({
+    methodId,
+    parentProgress
+  });
+  drillDown.hidden = false;
+  showSteps.setAttribute("aria-expanded", "true");
+  showSteps.disabled = true;
+  stage.dataset["kpCausalPresentation"] = "full-detail";
+  stage.dataset["kpNestedClockId"] = activeDrillDown.drillDown.childPlanId;
+  stage.dataset["kpPausedParentProgress"] = String(current.progressPermille);
+  progress.disabled = true;
+  previous.disabled = true;
+  next.disabled = true;
+  motionSelect.disabled = true;
+  methodButtons.forEach((button) => {
+    button.disabled = true;
+  });
+  drillProgress.value = String(Math.round(parentProgress * 1_000));
+  renderDrillDown(parentProgress);
+  closeSteps.focus();
+}
+
+function renderDrillDown(childProgress: number): void {
+  if (activeDrillDown === undefined) return;
+  const normalized = Math.min(1, Math.max(0, childProgress));
+  const frame = projectKpQuadraticReaderSurface({
+    progress: Math.min(0.579999, 0.1 + 0.48 * normalized),
+    methodId
+  });
+  renderEquations(frame, "full");
+  const index = Math.min(
+    activeDrillDown.full.segments.length - 1,
+    Math.floor(normalized * activeDrillDown.full.segments.length)
+  );
+  const segment = activeDrillDown.full.segments[index]!;
+  drillStatus.value =
+    `Step ${index + 1} of ${activeDrillDown.full.segments.length}: ${segment.canonicalOperationId}`;
+  drillProgress.setAttribute(
+    "aria-valuetext",
+    `Step ${index + 1} of ${activeDrillDown.full.segments.length}`
+  );
+  stage.dataset["kpDrilldownActionId"] = segment.actionId;
+  stage.dataset["kpDrilldownProgress"] = String(Math.round(normalized * 1_000));
+}
+
+function closeStepDrillDown(): void {
+  if (pausedParent === undefined) return;
+  const restore = pausedParent;
+  pausedParent = undefined;
+  activeDrillDown = undefined;
+  drillDown.hidden = true;
+  showSteps.setAttribute("aria-expanded", "false");
+  progress.disabled = false;
+  motionSelect.disabled = false;
+  methodButtons.forEach((button) => {
+    button.disabled = false;
+  });
+  delete stage.dataset["kpPausedParentProgress"];
+  delete stage.dataset["kpDrilldownActionId"];
+  delete stage.dataset["kpDrilldownProgress"];
+  render(restore);
+  showSteps.focus();
 }
 
 function renderEquations(
@@ -454,10 +553,23 @@ function adjacentCheckpoint(direction: -1 | 1): void {
   if (target !== undefined) setControlProgress(target.progressPermille);
 }
 
-progress.addEventListener("input", () => setControlProgress(Number(progress.value)));
+progress.addEventListener("input", () => {
+  if (pausedParent === undefined) setControlProgress(Number(progress.value));
+});
 previous.addEventListener("click", () => adjacentCheckpoint(-1));
 next.addEventListener("click", () => adjacentCheckpoint(1));
+showSteps.addEventListener("click", openStepDrillDown);
+closeSteps.addEventListener("click", closeStepDrillDown);
+drillProgress.addEventListener("input", () => {
+  renderDrillDown(Number(drillProgress.value) / 1_000);
+});
 stage.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && pausedParent !== undefined) {
+    event.preventDefault();
+    closeStepDrillDown();
+    return;
+  }
+  if (pausedParent !== undefined) return;
   if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
   event.preventDefault();
   if (event.key === "Home") setControlProgress(0);
@@ -465,10 +577,12 @@ stage.addEventListener("keydown", (event) => {
   else adjacentCheckpoint(event.key === "ArrowLeft" ? -1 : 1);
 });
 methodButtons.forEach((button) => button.addEventListener("click", () => {
+  if (pausedParent !== undefined) return;
   methodId = parseKpQuadraticReaderMethod(button.dataset["kpQuadraticMethod"]);
   render(current);
 }));
 motionSelect.addEventListener("change", () => {
+  if (pausedParent !== undefined) return;
   motionPreference = parseKpReaderMotionPreference(motionSelect.value) ?? "system";
   render(current);
 });
@@ -480,7 +594,7 @@ window.addEventListener("touchstart", () => {
   preserveExplicitProgress = false;
 }, { passive: true });
 window.addEventListener("scroll", () => {
-  if (preserveExplicitProgress) return;
+  if (preserveExplicitProgress || pausedParent !== undefined) return;
   scrollEngaged = true;
   render(scrollClock.samplePosition(readerPosition()));
 }, { passive: true });
@@ -666,4 +780,17 @@ function requireElement<TElement extends Element>(selector: string): TElement {
 body.dataset["kpReaderHydrated"] = "true";
 body.dataset["kpReaderDepth"] = "none";
 render(current);
+const initialQuery = new URL(window.location.href).searchParams;
+if (initialQuery.get("kpSteps") === "full") {
+  openStepDrillDown();
+  const requestedChildProgress = Number(
+    initialQuery.get("kpStepProgress") ?? String(drillProgress.value)
+  );
+  if (Number.isInteger(requestedChildProgress) &&
+      requestedChildProgress >= 0 &&
+      requestedChildProgress <= 1_000) {
+    drillProgress.value = String(requestedChildProgress);
+    renderDrillDown(requestedChildProgress / 1_000);
+  }
+}
 void fontReviewLifecycle.ready;
