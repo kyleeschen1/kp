@@ -3,6 +3,12 @@ import { createKpQuadraticCausalDrillDownBundle } from "./quadratic-causal-drill
 export interface KpGlyphReconciliationCompoundTrace {
   readonly kind: "glyph-reconciliation-compound-trace";
   readonly operationIds: readonly string[];
+  readonly segments: readonly {
+    readonly operationId: string;
+    readonly startMs: number;
+    readonly durationMs: number;
+    readonly endMs: number;
+  }[];
   readonly compressedDurationMs: number;
   readonly fullDurationMs: number;
   readonly compressionRatio: number;
@@ -20,9 +26,16 @@ export function createKpGlyphReconciliationCompoundTrace(input: {
   const operationIds = bundle.compressed.actions.map(({ canonicalOperationId }) =>
     canonicalOperationId
   );
+  const segments = bundle.compressed.segments.map((segment) => Object.freeze({
+    operationId: segment.canonicalOperationId,
+    startMs: segment.startMs,
+    durationMs: segment.durationMs,
+    endMs: segment.endMs
+  }));
   return Object.freeze({
     kind: "glyph-reconciliation-compound-trace",
     operationIds: Object.freeze(operationIds),
+    segments: Object.freeze(segments),
     compressedDurationMs: bundle.compressed.totalDurationMs,
     fullDurationMs: bundle.full.totalDurationMs,
     compressionRatio: bundle.compressed.totalDurationMs / bundle.full.totalDurationMs,
