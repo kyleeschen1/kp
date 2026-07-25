@@ -305,6 +305,49 @@ test("live fraction route exposes complete source and target inventories", async
   }
 });
 
+test("live fraction scene exposes continuously sampled structural rule tracks", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  const review = page.locator('[data-kp-glyph-review][data-kp-ready="true"]');
+  await review.waitFor();
+  await expect(review).toHaveAttribute("data-kp-fraction-rule-track-count", "2");
+  const samples = await page.evaluate(() => {
+    const sample = (window as unknown as {
+      __kpSampleFractionSceneTracks: (progress: number) => readonly {
+        paintKind: string;
+        sizingMode: string;
+        rect: { left: number; top: number; width: number; height: number };
+      }[];
+    }).__kpSampleFractionSceneTracks;
+    return [0, 0.5, 1].map((progress) =>
+      sample(progress).filter(({ paintKind }) => paintKind === "rule")
+    );
+  });
+
+  expect(samples.every((frames) => frames.length === 2)).toBe(true);
+  expect(samples[1]!.every(({ sizingMode }) =>
+    sizingMode === "rule-length"
+  )).toBe(true);
+  for (let index = 0; index < 2; index += 1) {
+    const start = samples[0]![index]!.rect;
+    const middle = samples[1]![index]!.rect;
+    const end = samples[2]![index]!.rect;
+    expect(middle.left).toBeGreaterThanOrEqual(
+      Math.min(start.left, end.left) - 0.01
+    );
+    expect(middle.left).toBeLessThanOrEqual(
+      Math.max(start.left, end.left) + 0.01
+    );
+    expect(middle.width).toBeGreaterThanOrEqual(
+      Math.min(start.width, end.width) - 0.01
+    );
+    expect(middle.width).toBeLessThanOrEqual(
+      Math.max(start.width, end.width) + 0.01
+    );
+  }
+});
+
 test("observer rejects missing and duplicate explicit motion nodes", async ({
   page
 }) => {

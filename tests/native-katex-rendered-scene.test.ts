@@ -340,6 +340,7 @@ test("generic scene tracks sample exact finite endpoints and reverse identically
   const end = sampleKpNativeKatexSceneTracks(tracks, 1);
 
   assert.equal(tracks.length, 2);
+  assert.equal(tracks.every(({ sizingMode }) => sizingMode === "rect"), true);
   assert.deepEqual(start.map(({ rect }) => rect), source.atoms.map(({ rect }) => rect));
   assert.deepEqual(end.map(({ rect }) => rect), [
     target.atoms[0]!.rect,
@@ -358,6 +359,48 @@ test("generic scene tracks sample exact finite endpoints and reverse identically
     () => sampleKpNativeKatexSceneTracks(tracks, Number.NaN),
     /progress must be finite/
   );
+});
+
+test("structural rule tracks use generic continuous length interpolation", () => {
+  const source = createScene("source", ["source.rule.a", "source.rule.b"]);
+  const target = createScene("target", ["target.rule"]);
+  const ruleScene = (scene: ReturnType<typeof createScene>) =>
+    createKpNativeKatexRenderedSceneObservation({
+      ...scene,
+      atoms: scene.atoms.map((paintAtom) => ({
+        ...paintAtom,
+        paintKind: "rule" as const,
+        visualKey: "rule"
+      }))
+    });
+  const tracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(reconcileKpNativeKatexScenes({
+      source: ruleScene(source),
+      target: ruleScene(target),
+      relations: [{
+        id: "lineage.rules",
+        relation: "merge",
+        sourceEntityIds: ["entity.rule.a", "entity.rule.b"],
+        targetEntityIds: ["entity.rule"]
+      }]
+    }))
+  );
+  const middle = sampleKpNativeKatexSceneTracks(tracks, 0.5);
+
+  assert.equal(tracks.length, 2);
+  assert.equal(tracks.every(({ sizingMode }) =>
+    sizingMode === "rule-length"
+  ), true);
+  assert.equal(middle.every(({ rect }, index) =>
+    rect.width > Math.min(
+      tracks[index]!.startRect.width,
+      tracks[index]!.endRect.width
+    ) - 0.001 &&
+    rect.width < Math.max(
+      tracks[index]!.startRect.width,
+      tracks[index]!.endRect.width
+    ) + 0.001
+  ), true);
 });
 
 function createScene(

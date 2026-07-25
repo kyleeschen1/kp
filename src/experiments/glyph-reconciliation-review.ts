@@ -48,6 +48,12 @@ import {
   observeKpNativeKatexPaintAtoms,
   settleAndObserveKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";
+import {
+  compileKpNativeKatexHierarchicalScenePlan,
+  compileKpNativeKatexSceneTracks,
+  reconcileKpNativeKatexScenes,
+  sampleKpNativeKatexSceneTracks
+} from "../rendering/native-katex-scene-compositor.ts";
 
 const rootNode = document.querySelector<HTMLElement>("#glyph-experiment");
 if (rootNode === null) throw new Error("Glyph experiment root is missing.");
@@ -310,6 +316,40 @@ review.dataset["kpFractionTargetGroupCount"] =
 fractionInventory.textContent =
   `${fractionSourceScene.atoms.length} source + ` +
   `${fractionTargetScene.atoms.length} target paint atoms inventoried`;
+const fractionSceneReconciliation = reconcileKpNativeKatexScenes({
+  source: fractionSourceScene,
+  target: fractionTargetScene,
+  relations: [{
+    id: "lineage.fraction.denominators",
+    relation: "merge",
+    sourceEntityIds: fractionCaseInput.sourceGlyphs.map(({ entityId }) =>
+      entityId
+    ),
+    targetEntityIds: fractionCaseInput.targetGlyphs.map(({ entityId }) =>
+      entityId
+    )
+  }, {
+    id: "lineage.structural.rules",
+    relation: "merge",
+    sourceEntityIds: ["fraction.left", "fraction.right"],
+    targetEntityIds: ["fraction.merged"]
+  }]
+});
+const fractionSceneTracks = compileKpNativeKatexSceneTracks(
+  compileKpNativeKatexHierarchicalScenePlan(fractionSceneReconciliation)
+);
+const fractionRuleTracks = fractionSceneTracks.filter(({ paintKind }) =>
+  paintKind === "rule"
+);
+review.dataset["kpFractionSceneDispositionCount"] =
+  String(fractionSceneReconciliation.dispositions.length);
+review.dataset["kpFractionRuleTrackCount"] = String(fractionRuleTracks.length);
+if (import.meta.env.DEV) {
+  Object.assign(window, {
+    __kpSampleFractionSceneTracks: (progress: number) =>
+      sampleKpNativeKatexSceneTracks(fractionSceneTracks, progress)
+  });
+}
 
 const sourceObservation = await settleAndObserveKpNativeKatexFragments({
   stage,

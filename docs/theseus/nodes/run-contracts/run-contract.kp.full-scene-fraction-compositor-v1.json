@@ -107,6 +107,13 @@
       "scope": "slice-12 generic scene tracks",
       "checkedAt": "2026-07-25T17:34:39.835Z",
       "notes": "22 focused tests and all TypeScript projects pass; persistent, merge, split, introduction, and elimination tracks sample exact finite endpoints with deterministic seek/reverse behavior."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-13 rule and structural interpolation",
+      "checkedAt": "2026-07-25T17:37:46.654Z",
+      "notes": "23 focused tests, 24 Chromium tests, and all TypeScript projects pass; both exact fraction rules use generic rule-length tracks with bounded continuous midpoint geometry."
     }
   ],
   "allowedWork": [
@@ -207,7 +214,8 @@
     {
       "id": "slice-13",
       "title": "rule-and-structural-interpolation",
-      "status": "planned"
+      "summary": "Marked structural rule tracks with generic length sizing and proved exact source/target rules interpolate position and width continuously through the shared scene sampler.",
+      "status": "complete"
     },
     {
       "id": "slice-14",

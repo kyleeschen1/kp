@@ -59,6 +59,8 @@ export interface KpNativeKatexSceneTrack {
   readonly sourceAtomId?: string | undefined;
   readonly targetAtomId?: string | undefined;
   readonly visualAtomId: string;
+  readonly paintKind: KpNativeKatexPaintAtomObservation["paintKind"];
+  readonly sizingMode: "rect" | "rule-length";
   readonly startRect: KpStageRelativeRect;
   readonly endRect: KpStageRelativeRect;
   readonly startOpacity: number;
@@ -70,6 +72,8 @@ export interface KpNativeKatexSceneTrackFrame {
   readonly componentId: string;
   readonly lifecycle: KpNativeKatexAtomLifecycle;
   readonly visualAtomId: string;
+  readonly paintKind: KpNativeKatexPaintAtomObservation["paintKind"];
+  readonly sizingMode: "rect" | "rule-length";
   readonly rect: KpStageRelativeRect;
   readonly opacity: number;
 }
@@ -328,6 +332,8 @@ export function sampleKpNativeKatexSceneTracks(
     componentId: sceneTrack.componentId,
     lifecycle: sceneTrack.lifecycle,
     visualAtomId: sceneTrack.visualAtomId,
+    paintKind: sceneTrack.paintKind,
+    sizingMode: sceneTrack.sizingMode,
     rect: Object.freeze(interpolateRect(
       sceneTrack.startRect,
       sceneTrack.endRect,
@@ -484,6 +490,8 @@ function track(
     sourceAtomId: source.id,
     targetAtomId: target.id,
     visualAtomId,
+    paintKind: source.paintKind,
+    sizingMode: source.paintKind === "rule" ? "rule-length" : "rect",
     startRect: source.rect,
     endRect: target.rect,
     startOpacity,
