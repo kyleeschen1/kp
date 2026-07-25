@@ -192,7 +192,8 @@
     {
       "id": "slice-16",
       "title": "Cloze-projection-on-merge",
-      "status": "planned"
+      "summary": "Projected a Cloze from the settled canonical merged-denominator selector with exact transform provenance and no transient glyph, measurement, or pixel authority.",
+      "status": "complete"
     },
     {
       "id": "slice-17",
