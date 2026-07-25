@@ -292,6 +292,41 @@
       "scope": "slice-15",
       "checkedAt": "2026-07-25T20:30:58.556Z",
       "notes": "Stable visual entrypoint captured 10 overview, 14 dense endpoint, and 6 isolated inverse split frames. Wide and phone source/midpoint/target frames are coherent, exact at native endpoints, and free of equation overflow."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "failed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-25T20:33:13.497Z",
+      "notes": "Sandboxed Playwright web server could not bind 127.0.0.1:4173 with EPERM before any reader test ran; rerunning with the approved scoped npm command outside the sandbox."
+    },
+    {
+      "command": "npm run build; npm run perf:glyph-reconciliation-experiment; npm run check:reader-production",
+      "status": "passed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-25T20:34:25.746Z",
+      "notes": "Production build and all TypeScript projects pass. Performance reports 3.442ms cold plan p95, 0.248ms cached p95, 0.006ms generic frame p95, 0.034ms full-scene p95, 35 operations, 2573-byte plan max, and 10535-byte gzip growth; all budgets pass. All eight reader manifest routes remain closed."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-25T20:34:26.941Z",
+      "notes": "The identical scoped command passed all nine shared reader Chromium checks outside the sandbox after the recorded sandbox-only port-bind failure."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment; npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-25T20:34:27.931Z",
+      "notes": "Release evidence totals 63 semantic tests, 37 compositor tests, 34 compositor Chromium checks, 10 overview frames, 14 dense endpoint frames, and six isolated split frames. Split is exact, contained, accessible, and deterministic at wide and phone with no new lifecycle, scheduler, sizing, or operation category."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-25T20:34:36.193Z",
+      "notes": "Workspace is valid at 783 nodes and 12272 events before closing the split promotion gate."
     }
   ],
   "allowedWork": [
@@ -413,7 +448,8 @@
     {
       "id": "slice-16",
       "title": "split-promotion-gate",
-      "status": "planned"
+      "summary": "Promoted the inverse split as one experiment exemplar. Wide and phone normal/reduced playback, exact endpoints, deterministic seek/rewind, native semantics and Cloze, full tests, build, reader conformance, production closure, visual capture, performance, and workspace validation pass. The architecture retains the same six atom lifecycles, shared rule-length sizing and scene timing, with no fraction-specific category. The prior merge endpoint paint risk remains bounded and unchanged.",
+      "status": "complete"
     },
     {
       "id": "slice-17",
