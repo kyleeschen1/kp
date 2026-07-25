@@ -77,6 +77,13 @@
       "scope": "slice-07 lineage fragment binding",
       "checkedAt": "2026-07-25T14:23:49.141Z",
       "notes": "Eight focused tests and all TypeScript projects pass, including the unrelated-equal-x rejection."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-08 computed style fragment clone",
+      "checkedAt": "2026-07-25T14:26:38.551Z",
+      "notes": "Eight unit tests, five real Chromium tests, and all TypeScript projects pass; actual KaTeX x typography matches and its clone is inert."
     }
   ],
   "expectedLearning": [

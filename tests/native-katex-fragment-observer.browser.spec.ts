@@ -253,3 +253,74 @@ test("settled observation waits for fonts and rejects consecutive-frame drift", 
   expect(result.width).toBeGreaterThan(0);
   expect(result.drift).toContain("did not settle");
 });
+
+test("material clone uses the exact KaTeX subtree without semantic authority", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  const result = await page.evaluate(async () => {
+    const stage = document.querySelector<HTMLElement>(
+      '[data-reconciliation-case="solve-x"] [data-case-stage]'
+    )!;
+    const renderedX = stage.querySelector<HTMLElement>(
+      "[data-case-source] .mord.mathnormal"
+    )!;
+    renderedX.dataset["kpMotionId"] = "motion.solve-x.clone-x";
+    renderedX.id = "semantic-x";
+    renderedX.setAttribute("role", "math");
+    renderedX.setAttribute("aria-label", "semantic x");
+    renderedX.tabIndex = 0;
+    const layer = document.createElement("span");
+    layer.dataset["kpEditorEquationMaterialLayer"] = "true";
+    stage.append(layer);
+    // @ts-expect-error Vite resolves browser-side source modules.
+    const observer = await import("/src/rendering/native-katex-fragment-observer.ts");
+    // @ts-expect-error Vite resolves browser-side source modules.
+    const compositor = await import("/src/rendering/native-katex-glyph-compositor.ts");
+    const observation = observer.observeKpNativeKatexFragments({
+      stage,
+      bindings: [{
+        id: "fragment.solve-x.clone-x",
+        semanticEntityId: "entity.x",
+        motionId: "motion.solve-x.clone-x",
+        glyphKey: "x"
+      }],
+      fontRevision: 1
+    }).fragments[0]!;
+    const clone = compositor.createKpNativeKatexFragmentClone({
+      stage,
+      ownerId: "owner.solve-x.clone-x",
+      observation
+    });
+    const sourceStyle = getComputedStyle(renderedX);
+    return {
+      text: clone.visualElement.textContent,
+      className: clone.visualElement.className,
+      fontFamily: clone.visualElement.style.fontFamily,
+      sourceFontFamily: sourceStyle.fontFamily,
+      fontSize: clone.visualElement.style.fontSize,
+      sourceFontSize: sourceStyle.fontSize,
+      cloneMotionId: clone.visualElement.dataset["kpMotionId"] ?? null,
+      cloneId: clone.visualElement.id,
+      cloneRole: clone.visualElement.getAttribute("role"),
+      cloneLabel: clone.visualElement.getAttribute("aria-label"),
+      cloneTabIndex: clone.visualElement.getAttribute("tabindex"),
+      ownerAriaHidden: clone.ownerElement.getAttribute("aria-hidden"),
+      ownerInert: clone.ownerElement.inert,
+      ownerPointerEvents: clone.ownerElement.style.pointerEvents
+    };
+  });
+
+  expect(result.text).toBe("x");
+  expect(result.className).toContain("mathnormal");
+  expect(result.fontFamily).toBe(result.sourceFontFamily);
+  expect(result.fontSize).toBe(result.sourceFontSize);
+  expect(result.cloneMotionId).toBeNull();
+  expect(result.cloneId).toBe("");
+  expect(result.cloneRole).toBeNull();
+  expect(result.cloneLabel).toBeNull();
+  expect(result.cloneTabIndex).toBeNull();
+  expect(result.ownerAriaHidden).toBe("true");
+  expect(result.ownerInert).toBe(true);
+  expect(result.ownerPointerEvents).toBe("none");
+});

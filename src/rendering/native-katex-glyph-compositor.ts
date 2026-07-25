@@ -1,0 +1,75 @@
+import { syncKpEquationMaterialLayer } from "./equation-material-layer-dom.ts";
+import type {
+  KpNativeKatexFragmentObservation
+} from "./native-katex-fragment-observer.ts";
+
+export interface KpNativeKatexFragmentClone {
+  readonly kind: "native-katex-fragment-clone";
+  readonly lifecycle: "renderer-session";
+  readonly observationId: string;
+  readonly ownerElement: HTMLElement;
+  readonly visualElement: HTMLElement;
+}
+
+export function createKpNativeKatexFragmentClone(input: {
+  readonly stage: HTMLElement;
+  readonly ownerId: string;
+  readonly observation: KpNativeKatexFragmentObservation;
+}): KpNativeKatexFragmentClone {
+  if (input.observation.sourceElement.ownerDocument !== input.stage.ownerDocument) {
+    throw new Error("Native fragment clone requires one renderer document.");
+  }
+  syncKpEquationMaterialLayer({
+    stage: input.stage,
+    owners: [{
+      ownerId: input.ownerId,
+      sourceElement: input.observation.sourceElement,
+      sourceMotionId: input.observation.motionId,
+      rect: input.observation.rect,
+      opacity: 1,
+      transform: "none"
+    }]
+  });
+  const ownerElement = input.stage.querySelector<HTMLElement>(
+    `[data-kp-equation-material-owner-id="${CSS.escape(input.ownerId)}"]`
+  );
+  const visualElement = ownerElement?.firstElementChild;
+  if (
+    ownerElement === null ||
+    !(visualElement instanceof HTMLElement)
+  ) {
+    throw new Error(`Material layer failed to create ${input.ownerId}.`);
+  }
+  makeVisualCloneInert(ownerElement, visualElement);
+  return Object.freeze({
+    kind: "native-katex-fragment-clone",
+    lifecycle: "renderer-session",
+    observationId: input.observation.id,
+    ownerElement,
+    visualElement
+  });
+}
+
+function makeVisualCloneInert(
+  owner: HTMLElement,
+  visual: HTMLElement
+): void {
+  owner.inert = true;
+  owner.setAttribute("aria-hidden", "true");
+  owner.style.pointerEvents = "none";
+  owner.style.userSelect = "none";
+  for (const element of [visual, ...visual.querySelectorAll<HTMLElement>("*")]) {
+    for (const attribute of [...element.attributes]) {
+      if (
+        attribute.name === "id" ||
+        attribute.name === "role" ||
+        attribute.name === "tabindex" ||
+        attribute.name === "contenteditable" ||
+        attribute.name.startsWith("aria-") ||
+        attribute.name.startsWith("data-kp-")
+      ) {
+        element.removeAttribute(attribute.name);
+      }
+    }
+  }
+}

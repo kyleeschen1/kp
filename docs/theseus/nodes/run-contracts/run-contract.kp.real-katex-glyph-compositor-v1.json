@@ -99,7 +99,8 @@
     {
       "id": "slice-08",
       "title": "Computed-style-fragment-clone",
-      "status": "planned"
+      "summary": "Exact observed KaTeX subtrees can now be cloned into the existing material layer with computed typography and no accessibility, focus, hover, or semantic authority.",
+      "status": "complete"
     },
     {
       "id": "slice-09",
