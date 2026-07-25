@@ -64,6 +64,59 @@ test("observer measures one explicitly tagged real KaTeX fragment", async ({
   expect(observed.styleFingerprint).toContain("font-family:");
 });
 
+test("scene observer enumerates visible KaTeX glyph paint without MathML ink", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const evidence = await page.evaluate(() => {
+    const observe = (window as unknown as {
+      __kpObserveNativeKatexGlyphPaintAtoms: (input: {
+        endpoint: "source";
+        stage: HTMLElement;
+        root: HTMLElement;
+        semanticEntityId: string;
+        presentationGroupId: string;
+        fontRevision: number;
+      }) => readonly {
+        id: string;
+        visualKey: string;
+        paintKind: string;
+        sourceElement: HTMLElement;
+        rect: { width: number; height: number };
+      }[];
+    }).__kpObserveNativeKatexGlyphPaintAtoms;
+    const stage = document.querySelector<HTMLElement>("[data-fraction-stage]")!;
+    const root = document.querySelector<HTMLElement>("[data-fraction-source]")!;
+    return observe({
+      endpoint: "source",
+      stage,
+      root,
+      semanticEntityId: "entity.fraction.source",
+      presentationGroupId: "group.fraction.source",
+      fontRevision: 1
+    }).map((atom) => ({
+      id: atom.id,
+      visualKey: atom.visualKey,
+      paintKind: atom.paintKind,
+      inMathMl: atom.sourceElement.closest(".katex-mathml") !== null,
+      width: atom.rect.width,
+      height: atom.rect.height
+    }));
+  });
+
+  expect(evidence.length).toBeGreaterThanOrEqual(5);
+  expect(evidence.some(({ visualKey }) => visualKey === "glyph:x")).toBe(true);
+  expect(evidence.some(({ visualKey }) => visualKey === "glyph:y")).toBe(true);
+  expect(evidence.filter(({ visualKey }) => visualKey === "glyph:2")).toHaveLength(2);
+  expect(evidence.every(({ paintKind, inMathMl, width, height }) =>
+    paintKind === "glyph" &&
+    !inMathMl &&
+    width > 0 &&
+    height > 0
+  )).toBe(true);
+});
+
 test("observer rejects missing and duplicate explicit motion nodes", async ({
   page
 }) => {

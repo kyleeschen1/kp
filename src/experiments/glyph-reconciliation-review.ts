@@ -36,6 +36,9 @@ import {
   settleAndObserveKpNativeKatexFragments,
   type KpStageRelativeRect
 } from "../rendering/native-katex-fragment-observer.ts";
+import {
+  observeKpNativeKatexGlyphPaintAtoms
+} from "../rendering/native-katex-rendered-scene.ts";
 
 const rootNode = document.querySelector<HTMLElement>("#glyph-experiment");
 if (rootNode === null) throw new Error("Glyph experiment root is missing.");
@@ -47,7 +50,9 @@ if (import.meta.env.DEV) {
   Object.assign(window, {
     __kpObserveNativeKatexFragments: observeKpNativeKatexFragments,
     __kpSettleAndObserveNativeKatexFragments:
-      settleAndObserveKpNativeKatexFragments
+      settleAndObserveKpNativeKatexFragments,
+    __kpObserveNativeKatexGlyphPaintAtoms:
+      observeKpNativeKatexGlyphPaintAtoms
   });
 }
 

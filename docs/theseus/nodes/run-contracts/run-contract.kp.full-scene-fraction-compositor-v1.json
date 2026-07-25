@@ -44,6 +44,13 @@
       "scope": "slice-03 rendered scene contracts",
       "checkedAt": "2026-07-25T17:11:10.274Z",
       "notes": "16 focused tests and all TypeScript projects pass; scene, atom, group, geometry, ownership references, and durable serialization boundaries fail closed."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-04 paint-bearing DOM enumeration",
+      "checkedAt": "2026-07-25T17:13:25.947Z",
+      "notes": "19 Chromium tests and all TypeScript projects pass; visible source fraction glyph paint is enumerated with stable local bounds and MathML is excluded."
     }
   ],
   "allowedWork": [
@@ -90,7 +97,8 @@
     {
       "id": "slice-04",
       "title": "paint-bearing-dom-enumeration",
-      "status": "planned"
+      "summary": "Enumerated visible direct-text KaTeX paint leaves with deterministic IDs, local geometry, paint fingerprints, and explicit exclusion of MathML and hidden ink.",
+      "status": "complete"
     },
     {
       "id": "slice-05",

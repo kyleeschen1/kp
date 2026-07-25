@@ -1,4 +1,7 @@
-import type { KpStageRelativeRect } from "./native-katex-fragment-observer.ts";
+import {
+  normalizeKpStageRelativeRect,
+  type KpStageRelativeRect
+} from "./native-katex-fragment-observer.ts";
 
 export type KpNativeKatexPaintKind =
   | "glyph"
@@ -41,6 +44,70 @@ export interface KpNativeKatexRenderedSceneObservation {
   readonly groups: readonly KpNativeKatexPresentationGroupObservation[];
   readonly fontRevision: number;
   readonly viewportKey: string;
+}
+
+export function observeKpNativeKatexGlyphPaintAtoms(input: {
+  readonly endpoint: "source" | "target";
+  readonly stage: HTMLElement;
+  readonly root: HTMLElement;
+  readonly semanticEntityId: string;
+  readonly presentationGroupId: string;
+  readonly fontRevision: number;
+}): readonly KpNativeKatexPaintAtomObservation[] {
+  const stageRect = input.stage.getBoundingClientRect();
+  const stageLayoutWidth = input.stage.offsetWidth || stageRect.width;
+  const stageLayoutHeight = input.stage.offsetHeight || stageRect.height;
+  const candidates = [input.root, ...input.root.querySelectorAll<HTMLElement>("*")]
+    .filter((element) => {
+      if (
+        element.closest(".katex-mathml") !== null ||
+        element.tagName.toLowerCase() === "annotation"
+      ) {
+        return false;
+      }
+      return [...element.childNodes].some((node) =>
+        node.nodeType === Node.TEXT_NODE &&
+        (node.textContent ?? "").trim() !== ""
+      );
+    });
+  return Object.freeze(candidates.flatMap((sourceElement, ordinal) => {
+    const computed = getComputedStyle(sourceElement);
+    const clientRect = sourceElement.getBoundingClientRect();
+    if (
+      computed.display === "none" ||
+      computed.visibility === "hidden" ||
+      Number(computed.opacity) === 0 ||
+      clientRect.width <= 0 ||
+      clientRect.height <= 0
+    ) {
+      return [];
+    }
+    const text = [...sourceElement.childNodes]
+      .filter((node) => node.nodeType === Node.TEXT_NODE)
+      .map((node) => node.textContent ?? "")
+      .join("")
+      .trim();
+    return [Object.freeze({
+      kind: "native-katex-paint-atom-observation" as const,
+      lifecycle: "renderer-session" as const,
+      id: `${input.endpoint}.paint.glyph.${ordinal}`,
+      endpoint: input.endpoint,
+      semanticEntityId: input.semanticEntityId,
+      presentationGroupId: input.presentationGroupId,
+      paintKind: "glyph" as const,
+      visualKey: `glyph:${text}`,
+      sourceElement,
+      rect: normalizeKpStageRelativeRect({
+        stageClientRect: stageRect,
+        stageLayoutWidth,
+        stageLayoutHeight,
+        fragmentClientRect: clientRect
+      }),
+      styleFingerprint: paintStyleFingerprint(computed),
+      zOrder: ordinal,
+      fontRevision: input.fontRevision
+    })];
+  }));
 }
 
 export function createKpNativeKatexRenderedSceneObservation(input: {
@@ -111,6 +178,22 @@ export function createKpNativeKatexRenderedSceneObservation(input: {
     fontRevision: input.fontRevision,
     viewportKey: input.viewportKey
   });
+}
+
+function paintStyleFingerprint(computed: CSSStyleDeclaration): string {
+  return [
+    "font-family",
+    "font-size",
+    "font-style",
+    "font-weight",
+    "color",
+    "letter-spacing",
+    "line-height",
+    "transform",
+    "vertical-align"
+  ].map((property) =>
+    `${property}:${computed.getPropertyValue(property)}`
+  ).join("|");
 }
 
 function assertUnique(values: readonly string[], label: string): void {
