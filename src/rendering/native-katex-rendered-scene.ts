@@ -2,6 +2,9 @@ import {
   normalizeKpStageRelativeRect,
   type KpStageRelativeRect
 } from "./native-katex-fragment-observer.ts";
+import type {
+  KpEquationFontReadiness
+} from "./equation-font-readiness.ts";
 
 export type KpNativeKatexPaintKind =
   | "glyph"
@@ -44,6 +47,38 @@ export interface KpNativeKatexRenderedSceneObservation {
   readonly groups: readonly KpNativeKatexPresentationGroupObservation[];
   readonly fontRevision: number;
   readonly viewportKey: string;
+}
+
+export async function settleAndObserveKpNativeKatexRenderedScene(input: {
+  readonly endpoint: "source" | "target";
+  readonly stage: HTMLElement;
+  readonly root: HTMLElement;
+  readonly semanticEntityId: string;
+  readonly presentationGroupId: string;
+  readonly fontReadiness: KpEquationFontReadiness;
+  readonly geometryTolerancePx?: number | undefined;
+}): Promise<KpNativeKatexRenderedSceneObservation> {
+  await input.fontReadiness.whenReady();
+  await nextSceneLayoutFrame(input.stage.ownerDocument);
+  const first = observeCompleteScene(input);
+  await nextSceneLayoutFrame(input.stage.ownerDocument);
+  const second = observeCompleteScene(input);
+  const tolerance = input.geometryTolerancePx ?? 0.25;
+  if (first.atoms.length !== second.atoms.length) {
+    throw new Error("Rendered scene paint inventory changed between layout frames.");
+  }
+  first.atoms.forEach((atom, index) => {
+    const settled = second.atoms[index]!;
+    if (
+      atom.id !== settled.id ||
+      atom.visualKey !== settled.visualKey ||
+      atom.styleFingerprint !== settled.styleFingerprint ||
+      rectDelta(atom.rect, settled.rect) > tolerance
+    ) {
+      throw new Error(`Rendered scene atom ${atom.id} did not settle.`);
+    }
+  });
+  return second;
 }
 
 export function observeKpNativeKatexGlyphPaintAtoms(input: {
@@ -279,6 +314,94 @@ function paintStyleFingerprint(computed: CSSStyleDeclaration): string {
   ].map((property) =>
     `${property}:${computed.getPropertyValue(property)}`
   ).join("|");
+}
+
+function observeCompleteScene(input: {
+  readonly endpoint: "source" | "target";
+  readonly stage: HTMLElement;
+  readonly root: HTMLElement;
+  readonly semanticEntityId: string;
+  readonly presentationGroupId: string;
+  readonly fontReadiness: KpEquationFontReadiness;
+}): KpNativeKatexRenderedSceneObservation {
+  const atoms = observeKpNativeKatexPaintAtoms({
+    endpoint: input.endpoint,
+    stage: input.stage,
+    root: input.root,
+    semanticEntityId: input.semanticEntityId,
+    presentationGroupId: input.presentationGroupId,
+    fontRevision: input.fontReadiness.revision,
+    requireExplicitOwnership: true
+  });
+  const groupElements = new Map<string, HTMLElement>();
+  for (const atom of atoms) {
+    let owner = atom.sourceElement.closest<HTMLElement>(
+      "[data-kp-presentation-group-id]"
+    );
+    while (owner !== null && input.root.contains(owner)) {
+      const groupId = owner.dataset["kpPresentationGroupId"];
+      if (groupId !== undefined) groupElements.set(groupId, owner);
+      owner = owner.parentElement?.closest<HTMLElement>(
+        "[data-kp-presentation-group-id]"
+      ) ?? null;
+    }
+  }
+  const groups = [...groupElements].map(([groupId, owner]) => {
+    const groupAtoms = atoms.filter(({ sourceElement }) =>
+      owner.contains(sourceElement)
+    );
+    const parent = owner?.parentElement?.closest<HTMLElement>(
+      "[data-kp-presentation-group-id]"
+    );
+    return {
+      id: groupId,
+      semanticEntityId:
+        owner.dataset["kpSemanticEntityId"] ?? groupAtoms[0]!.semanticEntityId,
+      ...(parent?.dataset["kpPresentationGroupId"] === undefined
+        ? {}
+        : { parentGroupId: parent.dataset["kpPresentationGroupId"] }),
+      atomIds: groupAtoms.map(({ id }) => id),
+      rect: unionRects(groupAtoms.map(({ rect }) => rect))
+    };
+  });
+  const stageRect = input.stage.getBoundingClientRect();
+  const dpr = input.stage.ownerDocument.defaultView?.devicePixelRatio ?? 1;
+  return createKpNativeKatexRenderedSceneObservation({
+    endpoint: input.endpoint,
+    stage: input.stage,
+    root: input.root,
+    atoms,
+    groups,
+    fontRevision: input.fontReadiness.revision,
+    viewportKey:
+      `${input.endpoint}:${stageRect.width}x${stageRect.height}` +
+      `@${dpr}:font-${input.fontReadiness.revision}`
+  });
+}
+
+function unionRects(rects: readonly KpStageRelativeRect[]): KpStageRelativeRect {
+  const left = Math.min(...rects.map((rect) => rect.left));
+  const top = Math.min(...rects.map((rect) => rect.top));
+  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
+  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
+  return { left, top, width: right - left, height: bottom - top };
+}
+
+function rectDelta(left: KpStageRelativeRect, right: KpStageRelativeRect): number {
+  return Math.max(
+    Math.abs(left.left - right.left),
+    Math.abs(left.top - right.top),
+    Math.abs(left.width - right.width),
+    Math.abs(left.height - right.height)
+  );
+}
+
+function nextSceneLayoutFrame(document: Document): Promise<void> {
+  const view = document.defaultView;
+  if (view === null) {
+    throw new Error("Rendered scene observation requires a browser window.");
+  }
+  return new Promise((resolve) => view.requestAnimationFrame(() => resolve()));
 }
 
 function structuralPaintKind(

@@ -65,6 +65,13 @@
       "scope": "slice-06 semantic ownership propagation",
       "checkedAt": "2026-07-25T17:18:07.947Z",
       "notes": "21 Chromium tests and all TypeScript projects pass; every source fraction paint atom inherits a non-fallback semantic entity and presentation group, including structural rules."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-07 scene settlement and invalidation",
+      "checkedAt": "2026-07-25T17:20:44.569Z",
+      "notes": "22 Chromium tests and all TypeScript projects pass; complete scene inventories stay stable across consecutive frames and viewport changes produce new cache keys."
     }
   ],
   "allowedWork": [
@@ -129,7 +136,8 @@
     {
       "id": "slice-07",
       "title": "scene-settlement-and-invalidation",
-      "status": "planned"
+      "summary": "Complete scene observation now waits for fonts, compares two stable layout frames, builds nested group bounds, and keys results by endpoint, viewport, DPR, and font revision.",
+      "status": "complete"
     },
     {
       "id": "slice-08",

@@ -209,6 +209,74 @@ test("scene paint inherits explicit semantic and presentation ownership", async 
     )).toBe(true);
 });
 
+test("complete scene observation settles and invalidates by viewport", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const first = await page.evaluate(async () => {
+    const settle = (window as unknown as {
+      __kpSettleAndObserveNativeKatexRenderedScene: (input: {
+        endpoint: "source";
+        stage: HTMLElement;
+        root: HTMLElement;
+        semanticEntityId: string;
+        presentationGroupId: string;
+        fontReadiness: {
+          revision: number;
+          whenReady(): Promise<void>;
+        };
+      }) => Promise<{
+        atoms: readonly unknown[];
+        groups: readonly unknown[];
+        viewportKey: string;
+      }>;
+    }).__kpSettleAndObserveNativeKatexRenderedScene;
+    const scene = await settle({
+      endpoint: "source",
+      stage: document.querySelector<HTMLElement>("[data-fraction-stage]")!,
+      root: document.querySelector<HTMLElement>("[data-fraction-source]")!,
+      semanticEntityId: "fraction.expression",
+      presentationGroupId: "group.fraction.source",
+      fontReadiness: { revision: 7, async whenReady() {} }
+    });
+    return {
+      atoms: scene.atoms.length,
+      groups: scene.groups.length,
+      viewportKey: scene.viewportKey
+    };
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  const phoneKey = await page.evaluate(async () => {
+    const settle = (window as unknown as {
+      __kpSettleAndObserveNativeKatexRenderedScene: (input: {
+        endpoint: "source";
+        stage: HTMLElement;
+        root: HTMLElement;
+        semanticEntityId: string;
+        presentationGroupId: string;
+        fontReadiness: {
+          revision: number;
+          whenReady(): Promise<void>;
+        };
+      }) => Promise<{ viewportKey: string }>;
+    }).__kpSettleAndObserveNativeKatexRenderedScene;
+    return (await settle({
+      endpoint: "source",
+      stage: document.querySelector<HTMLElement>("[data-fraction-stage]")!,
+      root: document.querySelector<HTMLElement>("[data-fraction-source]")!,
+      semanticEntityId: "fraction.expression",
+      presentationGroupId: "group.fraction.source",
+      fontReadiness: { revision: 7, async whenReady() {} }
+    })).viewportKey;
+  });
+
+  expect(first.atoms).toBeGreaterThanOrEqual(7);
+  expect(first.groups).toBeGreaterThanOrEqual(7);
+  expect(first.viewportKey).toContain("font-7");
+  expect(phoneKey).not.toBe(first.viewportKey);
+});
+
 test("observer rejects missing and duplicate explicit motion nodes", async ({
   page
 }) => {
