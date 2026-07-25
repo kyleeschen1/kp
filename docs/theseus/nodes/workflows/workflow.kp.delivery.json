@@ -21,7 +21,8 @@
     "next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability",
     "next-action.refill.experiment.plan-revision.kp.v4.generated-quality-envelope",
     "next-action.refill.experiment.plan-revision.kp.v4.primitive-amortization",
-    "next-action.refill.experiment.plan-revision.kp.v4.semantic-llm-boundary"
+    "next-action.refill.experiment.plan-revision.kp.v4.semantic-llm-boundary",
+    "next-action.refill.experiment.plan-revision.kp.v8.native-math-settlement"
   ],
   "verificationRecords": [
     {

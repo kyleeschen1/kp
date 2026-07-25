@@ -1,0 +1,165 @@
+{
+  "id": "run-contract.kp.real-katex-glyph-compositor-v0",
+  "kind": "run-contract",
+  "title": "Real KaTeX glyph compositor experiment",
+  "status": "superseded",
+  "summary": "Superseded before implementation because the initial contract omitted required typed autonomy fields; no slice work began.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.refill.experiment.plan-revision.kp.v8.native-math-settlement.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-25-real-katex-glyph-compositor-long-loop-proposal.md",
+      "summary": "Human-approved 24-slice proposal, preservation boundary, complexity budget, visual checkpoint, and stop conditions."
+    }
+  ],
+  "verification": [
+    "npm run test:glyph-reconciliation-experiment",
+    "npm run typecheck",
+    "npm run build",
+    "npm run test:semantic-animation-convergence",
+    "npm run visual:glyph-reconciliation-experiment",
+    "npm run perf:glyph-reconciliation-experiment",
+    "npm run test:browser:reader-conformance",
+    "npm run check:reader-production",
+    "npm run check:dev-review-production",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Slices 1-12 may build one isolated real-KaTeX solve-x compositor exemplar using the existing material layer, computed-style clone, font readiness, semantic motion selectors, lineage matcher, and bounded scheduler.",
+    "Slices 13-24 remain gated until explicit human promotion after slice 12, then may generalize the same compositor to fraction merge, plus-minus split, and one crowded responsive case.",
+    "Add at most four focused compositor production modules and six generic lifecycle primitives; commit and verify each slice independently."
+  ],
+  "disallowedWork": [
+    "Stop if semantic selectors require undocumented KaTeX-tree guessing, if solve-x still reads as crossfade or character substitution, or if one shared correction cannot eliminate native handoff jump.",
+    "No operation-, fraction-, quadratic-, branch-, or viewport-specific scheduler; no durable DOM, glyph geometry, keyframes, or backend plans; clones never own accessibility or interaction.",
+    "No radical repair, family rollout, Manim implementation, Python runtime, video encoding, CAS, live LLM API, new renderer family, curriculum expansion, or unrelated user work."
+  ],
+  "goal": "Determine whether actual rendered KaTeX fragments can produce convincing object-constant solve-x motion and, only after human promotion, generalize through one semantic-constrained compositor.",
+  "target": "next-action.refill.experiment.plan-revision.kp.v8.native-math-settlement",
+  "slices": [
+    {
+      "id": "slice-01",
+      "title": "Failed-overlay-baseline",
+      "status": "planned"
+    },
+    {
+      "id": "slice-02",
+      "title": "Durable-boundary-ratchet",
+      "status": "planned"
+    },
+    {
+      "id": "slice-03",
+      "title": "Fragment-observation-contract",
+      "status": "planned"
+    },
+    {
+      "id": "slice-04",
+      "title": "Semantic-KaTeX-leaf-observation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-05",
+      "title": "Coordinate-normalization",
+      "status": "planned"
+    },
+    {
+      "id": "slice-06",
+      "title": "Font-and-style-settlement",
+      "status": "planned"
+    },
+    {
+      "id": "slice-07",
+      "title": "Lineage-fragment-binding",
+      "status": "planned"
+    },
+    {
+      "id": "slice-08",
+      "title": "Computed-style-fragment-clone",
+      "status": "planned"
+    },
+    {
+      "id": "slice-09",
+      "title": "Exclusive-visual-ownership",
+      "status": "planned"
+    },
+    {
+      "id": "slice-10",
+      "title": "Exact-native-handoff",
+      "status": "planned"
+    },
+    {
+      "id": "slice-11",
+      "title": "Gradual-context-reflow",
+      "status": "planned"
+    },
+    {
+      "id": "slice-12",
+      "title": "Real-glyph-solve-x-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "slice-13",
+      "title": "Delete-mock-overlay",
+      "status": "planned"
+    },
+    {
+      "id": "slice-14",
+      "title": "Denominator-fragment-binding",
+      "status": "planned"
+    },
+    {
+      "id": "slice-15",
+      "title": "Generic-many-to-one-compositor",
+      "status": "planned"
+    },
+    {
+      "id": "slice-16",
+      "title": "Merge-settlement-and-Cloze",
+      "status": "planned"
+    },
+    {
+      "id": "slice-17",
+      "title": "Generic-one-to-many-compositor",
+      "status": "planned"
+    },
+    {
+      "id": "slice-18",
+      "title": "Live-branch-interaction",
+      "status": "planned"
+    },
+    {
+      "id": "slice-19",
+      "title": "Crowded-projection",
+      "status": "planned"
+    },
+    {
+      "id": "slice-20",
+      "title": "Conservative-settlement-fallback",
+      "status": "planned"
+    },
+    {
+      "id": "slice-21",
+      "title": "Compound-trace-drill-down",
+      "status": "planned"
+    },
+    {
+      "id": "slice-22",
+      "title": "Responsive-and-performance-certification",
+      "status": "planned"
+    },
+    {
+      "id": "slice-23",
+      "title": "Complexity-negative-migration",
+      "status": "planned"
+    },
+    {
+      "id": "slice-24",
+      "title": "Four-case-decision-checkpoint",
+      "status": "planned"
+    }
+  ]
+}

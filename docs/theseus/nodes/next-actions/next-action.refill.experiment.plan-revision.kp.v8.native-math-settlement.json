@@ -1,0 +1,72 @@
+{
+  "id": "next-action.refill.experiment.plan-revision.kp.v8.native-math-settlement",
+  "kind": "next-action",
+  "title": "Test native-math-settlement",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Run a bounded uncertainty-reduction experiment for: Animated mathematical fragments may move independently, but exact native KaTeX owns the settled expression and its typography and spacing. Selection rationale: The user approved a bounded real-KaTeX glyph compositor experiment to test native fragment motion and exact settlement before any family rollout.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Approved refill option refill.experiment.plan-revision.kp.v8.native-math-settlement: The user approved a bounded real-KaTeX glyph compositor experiment to test native fragment motion and exact settlement before any family rollout.",
+      "occurredAt": "2026-07-25T13:59:55.867Z"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.semantic-glyph-reconciliation-experiment-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:glyph-reconciliation-experiment",
+    "npm run typecheck",
+    "npm run build",
+    "npm run visual:glyph-reconciliation-experiment",
+    "npm run perf:glyph-reconciliation-experiment",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether actual computed-style KaTeX fragments eliminate the crossfade and character-substitution failure in solve-x.",
+    "Whether one generic ownership, handoff, and reflow compositor can later cover merge and split without operation-specific scheduling."
+  ],
+  "allowedWork": [
+    "Build the approved isolated real-KaTeX solve-x compositor through slice 12 using existing semantic lineage and material-layer infrastructure.",
+    "After explicit human promotion, generalize the same compositor to the approved fraction merge, plus-minus split, and crowded responsive cases."
+  ],
+  "disallowedWork": [
+    "No operation-specific scheduling, durable glyph geometry, clone interaction authority, radical repair, family rollout, Manim runtime, CAS, live LLM API, or unrelated work."
+  ],
+  "criteria": [
+    {
+      "id": "actual-katex-fragments",
+      "weight": "high"
+    },
+    {
+      "id": "exact-native-handoff",
+      "weight": "high"
+    },
+    {
+      "id": "continuous-context-reflow",
+      "weight": "high"
+    },
+    {
+      "id": "semantic-authority-preserved",
+      "weight": "high"
+    },
+    {
+      "id": "no-bespoke-scheduling",
+      "weight": "high"
+    },
+    {
+      "id": "complexity-budget",
+      "weight": "high"
+    },
+    {
+      "id": "human-clarity",
+      "weight": "high"
+    }
+  ]
+}
