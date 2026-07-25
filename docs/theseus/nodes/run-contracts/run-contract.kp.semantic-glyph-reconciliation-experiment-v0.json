@@ -108,7 +108,8 @@
     {
       "id": "slice-02",
       "title": "Negative-and-ambiguity-fixtures",
-      "status": "planned"
+      "summary": "Encoded equal-glyph non-lineage, repeated-token ambiguity, unsupported relation fallback, and crowded wide/phone overlap fixtures with nine focused tests.",
+      "status": "complete"
     },
     {
       "id": "slice-03",

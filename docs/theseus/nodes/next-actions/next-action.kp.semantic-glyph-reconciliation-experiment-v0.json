@@ -37,6 +37,13 @@
       "scope": "slice-01 experiment ledger",
       "checkedAt": "2026-07-25T01:33:23.871Z",
       "notes": "Four focused tests freeze the four pressure cases, fixed performance budgets, seven-file and ten-reference legacy scheduling baseline, and explicit pass/fail rules; typecheck passed."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-02 negative and ambiguity fixtures",
+      "checkedAt": "2026-07-25T01:35:44.629Z",
+      "notes": "Nine focused tests pass: equal glyphs without lineage stay unmatched, repeated tokens retain two plausible candidates, unsupported lineage falls back, crowded wide and phone fixtures reproduce protected-ink overlap, and all fixtures are immutable and valid."
     }
   ],
   "progress": {
