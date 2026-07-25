@@ -568,9 +568,26 @@ function render(progress: number): void {
   });
   const fractionProgress = clamp((bounded - 0.14) / 0.72);
   const fractionFrame = fractionScenePlayback.apply(fractionProgress);
+  const fractionAtSource = fractionFrame.visualOwner === "source-native";
   const fractionAtTarget = fractionFrame.visualOwner === "target-native";
+  fractionSource.setAttribute("aria-hidden", String(!fractionAtSource));
+  fractionTarget.setAttribute("aria-hidden", String(!fractionAtTarget));
+  fractionSource.toggleAttribute("inert", !fractionAtSource);
+  fractionTarget.toggleAttribute("inert", !fractionAtTarget);
   fractionNativeTarget.tabIndex = fractionAtTarget ? 0 : -1;
   fractionNativeTarget.setAttribute("aria-hidden", String(!fractionAtTarget));
+  fractionStage.dataset["kpFractionSemanticOwner"] =
+    fractionAtSource ? "source-native" :
+    fractionAtTarget ? "target-native" :
+    "stage-description";
+  fractionStage.setAttribute(
+    "aria-label",
+    fractionAtSource
+      ? "x over 2 plus y over 2"
+      : fractionAtTarget
+        ? "x plus y, all over 2"
+        : "Transforming x over 2 plus y over 2 into x plus y, all over 2"
+  );
   fractionPhase.textContent = fractionProgress === 0
     ? "Two source fractions"
     : fractionAtTarget

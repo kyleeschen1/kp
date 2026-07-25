@@ -142,6 +142,13 @@
       "scope": "slice-17 full-scene fraction exemplar",
       "checkedAt": "2026-07-25T18:01:22.378Z",
       "notes": "19 focused tests, all TypeScript projects, 27 Chromium tests, and ten inspected wide/phone captures pass; the visible fraction card uses total scene playback with exact native endpoints and moving generic glyph/rule paint."
+    },
+    {
+      "command": "node focused compositor tests; npm run typecheck; npm run test:browser:real-katex-glyph-compositor; npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "slice-18 semantic affordance preservation",
+      "checkedAt": "2026-07-25T18:05:18.735Z",
+      "notes": "19 focused tests, all TypeScript projects, 28 compositor Chromium tests, and 9 shared reader conformance tests pass; native endpoint accessibility, focus, annotation, and Cloze survive seek/rewind while interior clones remain inert."
     }
   ],
   "allowedWork": [
@@ -272,7 +279,8 @@
     {
       "id": "slice-18",
       "title": "semantic-affordance-preservation",
-      "status": "planned"
+      "summary": "Bound source, stage-description, and target semantic ownership to the same scene frame; native target focus and Cloze persist across rewind, while every material owner remains aria-hidden, inert, and paint-only.",
+      "status": "complete"
     },
     {
       "id": "slice-19",

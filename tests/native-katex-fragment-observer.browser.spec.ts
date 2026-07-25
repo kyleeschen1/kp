@@ -1296,6 +1296,62 @@ test("fraction merge settles one native denominator with Cloze authority", async
   );
 });
 
+test("fraction semantic affordances remain native through seek and rewind", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const fraction = page.locator('[data-reconciliation-case="fraction-merge"]');
+  const source = fraction.locator("[data-fraction-source]");
+  const targetRoot = fraction.locator("[data-fraction-target]");
+  const target = fraction.locator(
+    '[data-kp-motion-id="motion.fraction.target-denominator"]'
+  );
+  const stage = fraction.locator("[data-fraction-stage]");
+  const slider = fraction.locator("[data-progress]");
+
+  await expect(source).toHaveAttribute("aria-hidden", "false");
+  await expect(source).not.toHaveAttribute("inert", "");
+  await expect(targetRoot).toHaveAttribute("aria-hidden", "true");
+  await expect(targetRoot).toHaveAttribute("inert", "");
+  await expect(stage).toHaveAttribute(
+    "data-kp-fraction-semantic-owner",
+    "source-native"
+  );
+
+  await slider.fill("500");
+  await slider.dispatchEvent("input");
+  await expect(source).toHaveAttribute("aria-hidden", "true");
+  await expect(targetRoot).toHaveAttribute("aria-hidden", "true");
+  await expect(source).toHaveAttribute("inert", "");
+  await expect(targetRoot).toHaveAttribute("inert", "");
+  await expect(target).toHaveAttribute("tabindex", "-1");
+  await expect(stage).toHaveAttribute(
+    "data-kp-fraction-semantic-owner",
+    "stage-description"
+  );
+  await expect(stage).toHaveAttribute("aria-label", /Transforming/);
+
+  await slider.fill("1000");
+  await slider.dispatchEvent("input");
+  await expect(source).toHaveAttribute("aria-hidden", "true");
+  await expect(source).toHaveAttribute("inert", "");
+  await expect(targetRoot).toHaveAttribute("aria-hidden", "false");
+  await expect(targetRoot).not.toHaveAttribute("inert", "");
+  await expect(target).toHaveAttribute("tabindex", "0");
+  await target.focus();
+  await expect(target).toBeFocused();
+
+  await fraction.locator("[data-fraction-cloze]").click();
+  await slider.fill("0");
+  await slider.dispatchEvent("input");
+  await slider.fill("1000");
+  await slider.dispatchEvent("input");
+  await expect(target).toHaveClass(/glyph-exemplar__cloze-hidden/);
+  await expect(target).toHaveAttribute("data-kp-cloze-hidden", "true");
+  await expect(target).toHaveAttribute("tabindex", "0");
+});
+
 test("plus-minus split preserves live branch choice through seek and rewind", async ({
   page
 }) => {
