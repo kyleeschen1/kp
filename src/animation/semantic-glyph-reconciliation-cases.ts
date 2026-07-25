@@ -156,6 +156,80 @@ export function createKpFractionMergeGlyphReconciliationCase(): KpGlyphReconcili
   });
 }
 
+export function createKpFractionSplitGlyphReconciliationCase(): KpGlyphReconciliationCaseInput {
+  const asset = createNumeratorSplitMergeEquationKpAsset();
+  const transformation = asset.transformations.find(({ id }) =>
+    id === numeratorSplitMergeEquationAssetIds.splitTransform
+  );
+  const record = transformation?.correspondenceMap?.records.find(({ id }) =>
+    id === "denominator-copies"
+  );
+  if (transformation === undefined || record === undefined) {
+    throw new Error("Canonical fraction denominator split correspondence is unavailable.");
+  }
+  const execution: KpCanonicalOperationExecutionResult = {
+    kind: "canonical-operation-execution",
+    transformationId: transformation.id,
+    operationSpecId: "kp.core.fan-out",
+    roleBindings: {
+      source: record.sourceSelectorIds,
+      destinations: record.targetSelectorIds
+    },
+    lineageGraph: {
+      kind: "semantic-lineage-graph",
+      id: `${transformation.id}.glyph-experiment-lineage`,
+      sourceEntityIds: record.sourceSelectorIds,
+      targetEntityIds: record.targetSelectorIds,
+      edges: [{
+        id: record.id,
+        relation: "split",
+        sourceEntityIds: record.sourceSelectorIds,
+        targetEntityIds: record.targetSelectorIds,
+        summary: record.summary
+      }]
+    },
+    correspondenceMap: {
+      id: `${transformation.id}.glyph-experiment-correspondence`,
+      records: [record]
+    }
+  };
+  return Object.freeze({
+    id: "case.fraction.denominator-split",
+    execution,
+    viewport: { x: 0, y: 0, width: 640, height: 260 },
+    sourceGlyphs: [{
+      id: "fraction-split.source.denominator",
+      entityId: record.sourceSelectorIds[0]!,
+      glyphKey: "2",
+      ordinal: 0
+    }],
+    targetGlyphs: record.targetSelectorIds.map((entityId, index) => ({
+      id: `fraction-split.target.denominator.${index}`,
+      entityId,
+      glyphKey: "2",
+      ordinal: 0
+    })),
+    sourceMetrics: [{
+      glyphId: "fraction-split.source.denominator",
+      bounds: { x: 286, y: 154, width: 14, height: 22 }
+    }],
+    targetMetrics: [
+      { glyphId: "fraction-split.target.denominator.0", bounds: { x: 186, y: 154, width: 14, height: 22 } },
+      { glyphId: "fraction-split.target.denominator.1", bounds: { x: 386, y: 154, width: 14, height: 22 } }
+    ],
+    requiredCapabilities: [
+      "accessibility",
+      "annotation",
+      "cloze",
+      "direct-seek",
+      "hover",
+      "responsive",
+      "rewind"
+    ] as const,
+    durationMs: 720
+  });
+}
+
 export function createKpQuadraticPlusMinusGlyphReconciliationCase(): KpGlyphReconciliationCaseInput {
   const choreography = createKpQuadraticBranchChoreography(
     "method.quadratic.completing-square"

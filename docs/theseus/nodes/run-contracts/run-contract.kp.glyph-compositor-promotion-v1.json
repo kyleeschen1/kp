@@ -180,6 +180,27 @@
       "scope": "slice-10 visual review inbox audit",
       "checkedAt": "2026-07-25T19:58:15.402Z",
       "notes": "Replay is byte-stable with stable identity/order. Current round review-round.legacy.2.d0920d5fd3c6 has 16 notes, 15 new and one verified; none targets this glyph experiment endpoint. No status or cursor event was appended."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "slice-11 intermediate inverse split audit",
+      "checkedAt": "2026-07-25T20:02:13.232Z",
+      "notes": "The canonical lawRefs field is optional in the semantic transformation type, so the new assertion needs optional access despite the governed fixture containing the strict law. Correct the assertion and rerun."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-11 inverse split semantic audit",
+      "checkedAt": "2026-07-25T20:04:35.582Z",
+      "notes": "62 semantic reconciliation tests passed. The new fixture retains governed denominator source/targets, strict split law, rewind law, generic split multiplicity, two direct motions, static/headless capability closure, and no operation-specific policy."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-11 corrected repository types",
+      "checkedAt": "2026-07-25T20:04:38.074Z",
+      "notes": "After respecting the optional lawRefs schema at the test boundary, application, node, test, and domain TypeScript checks passed."
     }
   ],
   "allowedWork": [
@@ -271,7 +292,8 @@
     {
       "id": "slice-11",
       "title": "inverse-split-semantic-audit",
-      "status": "planned"
+      "summary": "Added an experiment adapter for the governed numerator-split denominator fan-out without changing its canonical asset. Exact source/target selector identities, strict law reference, correspondence reverse law, generic split multiplicity, backend capabilities, and existing scheduler policy all remain intact; no renderer identity was invented.",
+      "status": "complete"
     },
     {
       "id": "slice-12",
