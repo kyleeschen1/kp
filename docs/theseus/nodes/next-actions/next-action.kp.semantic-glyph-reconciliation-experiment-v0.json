@@ -170,6 +170,13 @@
       "scope": "slice-20 crowded phone",
       "checkedAt": "2026-07-25T02:24:55.343Z",
       "notes": "54 focused tests and typecheck pass."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment and npm run build",
+      "status": "passed",
+      "scope": "slice-21 package capability proof",
+      "checkedAt": "2026-07-25T02:27:02.329Z",
+      "notes": "57 focused tests and build pass; source closure contains no network or external authoring runtime."
     }
   ],
   "progress": {

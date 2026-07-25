@@ -222,7 +222,8 @@
     {
       "id": "slice-21",
       "title": "Static-JS-and-backend-capability-proof",
-      "status": "planned"
+      "summary": "Proved all four cases compile offline, static JS preserves every required capability, headless interactive affordances are explicitly lowered to semantic evidence, and runtime source has no network, LLM, Python, Manim, or CAS dependency.",
+      "status": "complete"
     },
     {
       "id": "slice-22",
