@@ -17,6 +17,9 @@ import {
   reconcileKpNativeKatexScenes,
   sampleKpNativeKatexSceneTracks
 } from "../src/rendering/native-katex-scene-compositor.ts";
+import type {
+  KpStageRelativeRect
+} from "../src/rendering/native-katex-fragment-observer.ts";
 
 const ownerDocument = {};
 const stage = { ownerDocument } as HTMLElement;
@@ -1006,6 +1009,92 @@ test("structural rule tracks use generic continuous length interpolation", () =>
       tracks[index]!.startRect.width,
       tracks[index]!.endRect.width
     ) + 0.001
+  ), true);
+});
+
+test("generic split bifurcates one structural rule into two exact tracks", () => {
+  const asRuleScene = (
+    scene: ReturnType<typeof createScene>,
+    rects: readonly KpStageRelativeRect[]
+  ) => createKpNativeKatexRenderedSceneObservation({
+    ...scene,
+    atoms: scene.atoms.map((paintAtom, index) => ({
+      ...paintAtom,
+      paintKind: "rule" as const,
+      visualKey: "rule",
+      rect: rects[index]!
+    })),
+    groups: scene.groups.map((group) => ({
+      ...group,
+      rect: {
+        left: Math.min(...rects.map(({ left }) => left)),
+        top: Math.min(...rects.map(({ top }) => top)),
+        width: Math.max(...rects.map(({ left, width }) => left + width)) -
+          Math.min(...rects.map(({ left }) => left)),
+        height: Math.max(...rects.map(({ height }) => height))
+      }
+    }))
+  });
+  const source = asRuleScene(
+    createScene("source", ["source.rule"]),
+    [{ left: 20, top: 18, width: 60, height: 2 }]
+  );
+  const target = asRuleScene(
+    createScene("target", ["target.rule.left", "target.rule.right"]),
+    [
+      { left: 0, top: 20, width: 25, height: 2 },
+      { left: 70, top: 20, width: 35, height: 2 }
+    ]
+  );
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source,
+    target,
+    relations: [{
+      id: "lineage.structural-copy",
+      relation: "split",
+      sourceEntityIds: ["entity.rule"],
+      targetEntityIds: ["entity.rule.left", "entity.rule.right"]
+    }]
+  });
+  const tracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+  );
+  const correlations = correlateKpNativeKatexSceneHandoff({
+    reconciliation,
+    tracks
+  });
+  const progresses = Array.from({ length: 101 }, (_, index) => index / 100);
+  const forward = progresses.map((progress) =>
+    sampleKpNativeKatexSceneTracks(tracks, progress)
+  );
+  const reverse = [...progresses].reverse().map((progress) =>
+    sampleKpNativeKatexSceneTracks(tracks, progress)
+  ).reverse();
+
+  assert.equal(tracks.length, 2);
+  assert.equal(tracks.every(({ lifecycle, paintKind, sizingMode }) =>
+    lifecycle === "split" &&
+    paintKind === "rule" &&
+    sizingMode === "rule-length"
+  ), true);
+  assert.deepEqual(
+    correlations.map(({ targetAtomId }) => targetAtomId),
+    ["target.rule.left", "target.rule.right"]
+  );
+  assert.deepEqual(forward, reverse);
+  assert.deepEqual(
+    forward[0]!.map(({ rect }) => rect),
+    [source.atoms[0]!.rect, source.atoms[0]!.rect]
+  );
+  assert.deepEqual(
+    forward.at(-1)!.map(({ rect }) => rect),
+    target.atoms.map(({ rect }) => rect)
+  );
+  assert.equal(forward.flat().every(({ rect, opacity }) =>
+    Object.values(rect).every(Number.isFinite) &&
+    Number.isFinite(opacity) &&
+    rect.width > 0 &&
+    rect.height > 0
   ), true);
 });
 

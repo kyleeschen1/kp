@@ -250,6 +250,20 @@
       "scope": "slice-13 repository types",
       "checkedAt": "2026-07-25T20:14:53.206Z",
       "notes": "Application, node, test, and domain TypeScript checks passed."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-14 structural rule bifurcation",
+      "checkedAt": "2026-07-25T20:17:28.848Z",
+      "notes": "37 focused checks passed. One rule compiles into two split lifecycle rule-length tracks with exact endpoints, 101 finite dense samples, reverse/direct equality, and two distinct native target correlations."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-14 repository types",
+      "checkedAt": "2026-07-25T20:17:30.107Z",
+      "notes": "Application, node, test, and domain TypeScript checks passed."
     }
   ],
   "allowedWork": [
@@ -359,7 +373,8 @@
     {
       "id": "slice-14",
       "title": "rule-bifurcation-tracks",
-      "status": "planned"
+      "summary": "Proved generic structural rule bifurcation through the existing split component and rule-length sizing mode. Two target-bound tracks have exact endpoints, dense finite continuity, reverse equality, and distinct correlations; no fraction, fan-out, or notation-specific runtime primitive was added.",
+      "status": "complete"
     },
     {
       "id": "slice-15",
