@@ -24,9 +24,13 @@ import {
   type KpReaderEquationMaterialOwnerFrame,
   type KpReaderEquationMaterialPlan,
   type KpReaderEquationPerceptualAlignmentPlan,
+  type KpReaderEquationRenderPlan,
   type KpReaderEquationResponsiveFitPlan,
   type KpReaderEquationSymbolMotionFrame
 } from "../renderers/public-api.ts";
+import type {
+  KpReaderGlyphCompositorExemplar
+} from "./reader-glyph-compositor-exemplar.ts";
 import {
   createKpReaderClockSample,
   createKpReaderActiveLocationService,
@@ -70,6 +74,7 @@ interface TransitionContext {
   readonly element: HTMLElement;
   readonly fitSurface: HTMLElement;
   readonly measurementRoot: HTMLElement;
+  readonly renderPlan: KpReaderEquationRenderPlan;
   readonly materialPlan: KpReaderEquationMaterialPlan;
   readonly anchorElements: ReadonlyMap<string, HTMLElement>;
   readonly layout: KpReaderEquationLayoutSnapshot;
@@ -91,6 +96,11 @@ const readerRoute = createKpReaderRuntimeRouteDescriptor({
   documentId: requiredData(document.body, "kpReaderDocumentId"),
   documentVersion: requiredData(document.body, "kpReaderDocumentVersion")
 });
+const readerGlyphCompositorRequested =
+  new URL(window.location.href).searchParams.get("kpGlyphCompositor") === "1";
+const readerGlyphCompositorModule = readerGlyphCompositorRequested
+  ? await import("./reader-glyph-compositor-exemplar.ts")
+  : undefined;
 const { documentId, documentVersion } = readerRoute;
 const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
 const lessonDescriptor = resolveKpReaderEquationLessonDescriptor(lessonVariant);
@@ -257,11 +267,27 @@ const staticPlans = new Map(animation.transformations.map((transformation, index
   const renderPlan = projectKpReaderEquationRenderPlan({ animation, runtimeFrame });
   return [
     transformation.id,
-    projectKpCertifiedTransferMaterialPlan(
-      compileKpReaderEquationMaterialPlan(renderPlan)
-    )
+    {
+      renderPlan,
+      materialPlan: projectKpCertifiedTransferMaterialPlan(
+        compileKpReaderEquationMaterialPlan(renderPlan)
+      )
+    }
   ] as const;
 }));
+const readerGlyphCompositor: KpReaderGlyphCompositorExemplar | undefined =
+  readerGlyphCompositorModule === undefined ||
+    !animation.transformations.some(({ id }) =>
+      id === "transform.linear-solve.cancel-left-additive-inverse"
+    )
+    ? undefined
+    : readerGlyphCompositorModule.createKpReaderGlyphCompositorExemplar({
+        transitionId: "transform.linear-solve.cancel-left-additive-inverse"
+      });
+if (readerGlyphCompositor !== undefined) {
+  stage.dataset["kpReaderGlyphCompositorExemplar"] =
+    readerGlyphCompositor.transitionId;
+}
 const materialLayer = createKpReaderEquationMaterialLayer(
   requireDescendant<HTMLElement>(viewport, "[data-kp-reader-equation-material-layer]")
 );
@@ -457,8 +483,8 @@ function measureLayout(revision: number): LayoutState {
   const measured: Omit<TransitionContext, "fit">[] = [];
   for (const element of transitionElements) {
     const id = requiredData(element, "kpReaderTransition");
-    const materialPlan = staticPlans.get(id);
-    if (materialPlan === undefined) {
+    const plans = staticPlans.get(id);
+    if (plans === undefined) {
       throw new Error(`Equation transition ${id} is missing its reader plan.`);
     }
     const measurementRoot = requireDescendant<HTMLElement>(
@@ -471,13 +497,13 @@ function measureLayout(revision: number): LayoutState {
     );
     fitSurface.style.transform = "none";
     const layout = measureKpReaderEquationLayoutSnapshot({
-      materialPlan,
+      materialPlan: plans.materialPlan,
       transitionId: id,
       measurementRoot,
       revision
     });
     const alignment = planKpReaderEquationPerceptualAlignment({
-      materialPlan,
+      materialPlan: plans.materialPlan,
       layout
     });
     measured.push({
@@ -485,7 +511,8 @@ function measureLayout(revision: number): LayoutState {
       element,
       fitSurface,
       measurementRoot,
-      materialPlan,
+      renderPlan: plans.renderPlan,
+      materialPlan: plans.materialPlan,
       anchorElements: anchorElementIndex(measurementRoot),
       layout,
       alignment
@@ -604,10 +631,25 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     candidate.element.dataset["kpReaderTransitionActive"] = String(active);
   }
   applyKpReaderEquationResponsiveFit(materialFitSurface, context.fit);
-  for (const element of context.anchorElements.values()) element.style.opacity = "0";
+  const readerCompositorApplied = readerGlyphCompositor?.apply({
+    renderPlan: context.renderPlan,
+    materialPlan: context.materialPlan,
+    fitSurface: context.fitSurface,
+    progress: phaseProgress,
+    fontReadiness
+  }) ?? false;
+  if (readerCompositorApplied) {
+    materialLayer.sync([]);
+  } else {
+    for (const element of context.anchorElements.values()) {
+      element.style.opacity = "0";
+    }
+  }
   const frames = motion.owners.map((owner): KpReaderEquationMaterialOwnerFrame => {
-    setAnchorOpacity(context, owner.sourceAnchorIds, owner.sourceNativeOpacity);
-    setAnchorOpacity(context, owner.targetAnchorIds, owner.targetNativeOpacity);
+    if (!readerCompositorApplied) {
+      setAnchorOpacity(context, owner.sourceAnchorIds, owner.sourceNativeOpacity);
+      setAnchorOpacity(context, owner.targetAnchorIds, owner.targetNativeOpacity);
+    }
     const visualIds = owner.visualAnchorIds;
     const rawBounds = unionAnchorRects(context.layout, visualIds);
     const fragments = visualIds.map((anchorId) => {
@@ -648,7 +690,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
       fragments
     };
   });
-  materialLayer.sync(frames);
+  if (!readerCompositorApplied) materialLayer.sync(frames);
   syncAnnihilationWitness(
     motion.witnessedAnnihilation,
     projection.mode !== "essential"
@@ -664,6 +706,9 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   document.body.dataset["kpReaderMotionPreference"] = motionPreference;
   document.body.dataset["kpReaderPlaybackDirection"] = sample.direction;
   stage.dataset["kpReaderMotionAuthority"] = motion.samplingAuthority;
+  stage.dataset["kpReaderGlyphCompositorActive"] = String(
+    readerCompositorApplied
+  );
   document.body.dataset["kpReaderTransition"] = transitionId;
   document.body.dataset["kpReaderFramePlans"] = String(
     rendererInspection().framePlanCount + 1
@@ -1209,6 +1254,7 @@ function dispose(): void {
   window.removeEventListener("keydown", onReaderKeyDown);
   window.removeEventListener("scrollend", locationSettlement.settle);
   fontReviewLifecycle.dispose();
+  readerGlyphCompositor?.dispose();
   semanticLinkBindings.dispose();
   locationSettlement.dispose();
   rendererRegistry.disposeAll();

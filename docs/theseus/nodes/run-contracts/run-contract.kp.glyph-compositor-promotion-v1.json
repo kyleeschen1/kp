@@ -439,6 +439,20 @@
       "scope": "slice-22",
       "checkedAt": "2026-07-25T21:26:16.537Z",
       "notes": "Radical promotion release gate passes: 66 semantic checks, 38 compositor checks, 38 Chromium compositor checks, 9 reader browser checks, all TypeScript projects, production build, 38 stable capture frames, eight production-route closures, and frozen performance budgets. Route growth is 5558 bytes; scene sampling is 0.011 ms. The production-vocabulary ratchet now forbids radical, exponent, and root-notation terms. The structurally different exemplar uses only generic glyph/rule/path kinds and the existing six lifecycles, has exact native settlement, and does not grow the retained fraction-plus endpoint risk."
+    },
+    {
+      "command": "playwright reader integration regression subset",
+      "status": "failed",
+      "scope": "slice-24 reader integration regression",
+      "checkedAt": "2026-07-25T21:42:43.413Z",
+      "notes": "The new compositor tests and 11 existing navigation, rewind, and restoration checks passed. One existing scroll test failed only because the optional local dev-review API at 127.0.0.1:8001 returned 502 and the test treats that pageerror as fatal; no reader/compositor assertion failed."
+    },
+    {
+      "command": "reader compositor focused tests, reader conformance, stable wide-phone capture, and build",
+      "status": "passed",
+      "scope": "slice-24 one-card integration",
+      "checkedAt": "2026-07-25T21:43:23.678Z",
+      "notes": "27 focused scene/adapter tests, 3 query-selected Chromium integration tests, 9 shared reader conformance routes, production build/typecheck, and 4 wide/phone full/reduced captures passed. Direct seek and rewind return to the same paint frame; each capture has nine owned atoms and zero horizontal overflow. Visual inspection found coherent native KaTeX paint and no duplicate scene."
     }
   ],
   "allowedWork": [
@@ -608,7 +622,8 @@
     {
       "id": "slice-24",
       "title": "reader-gold-exemplar-integration",
-      "status": "planned"
+      "summary": "Integrated the generic total-scene compositor behind the query-selected cancellation card in the gold solve-x reader. The default reader remains untouched; the exemplar derives ownership from canonical reader selectors, uses one dynamically loaded renderer-session, clears the legacy material layer only while active, and retains native endpoint DOM. Focused scene tests, direct seek/rewind, reduced motion, reader conformance, production build, and wide/phone visual captures passed with nine owned atoms and zero overflow.",
+      "status": "complete"
     },
     {
       "id": "slice-25",

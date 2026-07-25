@@ -192,9 +192,9 @@ export async function settleAndObserveKpNativeKatexRenderedScene(input: {
 }): Promise<KpNativeKatexRenderedSceneObservation> {
   await input.fontReadiness.whenReady();
   await nextSceneLayoutFrame(input.stage.ownerDocument);
-  const first = observeCompleteScene(input);
+  const first = observeKpNativeKatexRenderedScene(input);
   await nextSceneLayoutFrame(input.stage.ownerDocument);
-  const second = observeCompleteScene(input);
+  const second = observeKpNativeKatexRenderedScene(input);
   const tolerance = input.geometryTolerancePx ?? 0.25;
   if (first.atoms.length !== second.atoms.length) {
     throw new Error("Rendered scene paint inventory changed between layout frames.");
@@ -452,7 +452,7 @@ function directPaintText(element: HTMLElement): string {
     .trim();
 }
 
-function observeCompleteScene(input: {
+export function observeKpNativeKatexRenderedScene(input: {
   readonly endpoint: "source" | "target";
   readonly stage: HTMLElement;
   readonly root: HTMLElement;
