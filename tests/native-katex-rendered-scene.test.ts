@@ -10,6 +10,7 @@ import {
 import {
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexSceneTracks,
+  correlateKpNativeKatexSceneHandoff,
   createKpNativeKatexScenePlayback,
   createKpNativeKatexSceneReconciliation,
   reconcileKpNativeKatexScenes,
@@ -464,6 +465,110 @@ test("generic scene tracks sample exact finite endpoints and reverse identically
   assert.throws(
     () => sampleKpNativeKatexSceneTracks(tracks, Number.NaN),
     /progress must be finite/
+  );
+});
+
+test("handoff correlation derives merge and split targets from reconciliation", () => {
+  const mergeReconciliation = reconcileKpNativeKatexScenes({
+    source: createScene("source", ["source.a", "source.b"]),
+    target: createScene("target", ["target.result"]),
+    relations: [{
+      id: "lineage.merge",
+      relation: "merge",
+      sourceEntityIds: ["entity.a", "entity.b"],
+      targetEntityIds: ["entity.result"]
+    }]
+  });
+  const mergeTracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(mergeReconciliation)
+  );
+  const merge = correlateKpNativeKatexSceneHandoff({
+    reconciliation: mergeReconciliation,
+    tracks: [...mergeTracks].reverse()
+  });
+  assert.equal(merge.length, 2);
+  assert.deepEqual(
+    merge.map(({ targetAtomId }) => targetAtomId),
+    ["target.result", "target.result"]
+  );
+  assert.deepEqual(
+    merge.map(({ trackId }) => trackId),
+    [...mergeTracks].map(({ id }) => id).sort()
+  );
+
+  const splitReconciliation = reconcileKpNativeKatexScenes({
+    source: createScene("source", ["source.origin"]),
+    target: createScene("target", ["target.left", "target.right"]),
+    relations: [{
+      id: "lineage.split",
+      relation: "split",
+      sourceEntityIds: ["entity.origin"],
+      targetEntityIds: ["entity.left", "entity.right"]
+    }]
+  });
+  const splitTracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(splitReconciliation)
+  );
+  const split = correlateKpNativeKatexSceneHandoff({
+    reconciliation: splitReconciliation,
+    tracks: splitTracks
+  });
+  assert.deepEqual(
+    split.map(({ targetAtomId }) => targetAtomId),
+    ["target.left", "target.right"]
+  );
+  assert.equal(split.every(({ disposition }) =>
+    disposition === "target-bound"
+  ), true);
+});
+
+test("handoff correlation rejects duplicate, missing, and unbacked targets", () => {
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source: createScene("source", ["source.origin", "source.old"]),
+    target: createScene("target", ["target.left", "target.right"]),
+    relations: [{
+      id: "lineage.split",
+      relation: "split",
+      sourceEntityIds: ["entity.origin"],
+      targetEntityIds: ["entity.left", "entity.right"]
+    }]
+  });
+  const tracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+  );
+  const departing = correlateKpNativeKatexSceneHandoff({
+    reconciliation,
+    tracks
+  }).find(({ atomLifecycle }) => atomLifecycle === "eliminate");
+  assert.equal(departing?.disposition, "departing-without-native-target");
+  assert.equal(departing?.targetAtomId, undefined);
+
+  assert.throws(
+    () => correlateKpNativeKatexSceneHandoff({
+      reconciliation,
+      tracks: [...tracks, tracks[0]!]
+    }),
+    /unique track IDs/
+  );
+  assert.throws(
+    () => correlateKpNativeKatexSceneHandoff({
+      reconciliation,
+      tracks: tracks.filter(({ targetAtomId }) =>
+        targetAtomId !== "target.right"
+      )
+    }),
+    /target.right has no material handoff correlation/
+  );
+  assert.throws(
+    () => correlateKpNativeKatexSceneHandoff({
+      reconciliation,
+      tracks: tracks.map((sceneTrack) =>
+        sceneTrack.targetAtomId === "target.left"
+          ? { ...sceneTrack, targetAtomId: "target.unknown" }
+          : sceneTrack
+      )
+    }),
+    /no lineage-backed native target atom/
   );
 });
 

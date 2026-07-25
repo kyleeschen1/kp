@@ -95,6 +95,23 @@ export interface KpNativeKatexScenePlayback {
   readonly apply: (progress: number) => KpNativeKatexSceneOwnershipFrame;
 }
 
+export interface KpNativeKatexHandoffCorrelation {
+  readonly kind: "native-katex-handoff-correlation";
+  readonly lifecycle: "renderer-session";
+  readonly id: string;
+  readonly materialOwnerId: string;
+  readonly trackId: string;
+  readonly componentId: string;
+  readonly atomLifecycle: KpNativeKatexAtomLifecycle;
+  readonly visualAtomId: string;
+  readonly sourceAtomId?: string | undefined;
+  readonly targetAtomId?: string | undefined;
+  readonly semanticEntityId: string;
+  readonly disposition:
+    | "target-bound"
+    | "departing-without-native-target";
+}
+
 export interface KpNativeKatexSemanticPaintRelation {
   readonly id: string;
   readonly relation: "persist" | "merge" | "split";
@@ -385,6 +402,114 @@ export function sampleKpNativeKatexSceneTracks(
       lifecycleOpacityProgress(sceneTrack, bounded)
     )
   })));
+}
+
+export function correlateKpNativeKatexSceneHandoff(input: {
+  readonly reconciliation: KpNativeKatexSceneReconciliation;
+  readonly tracks: readonly KpNativeKatexSceneTrack[];
+}): readonly KpNativeKatexHandoffCorrelation[] {
+  const trackIds = input.tracks.map(({ id }) => id);
+  if (new Set(trackIds).size !== trackIds.length) {
+    throw new Error("Native handoff correlation requires unique track IDs.");
+  }
+  const sourceById = new Map(input.reconciliation.source.atoms.map((atom) => [
+    atom.id,
+    atom
+  ]));
+  const targetById = new Map(input.reconciliation.target.atoms.map((atom) => [
+    atom.id,
+    atom
+  ]));
+  const dispositionsByComponentId = new Map(
+    input.reconciliation.dispositions.map((disposition) => [
+      `component.${disposition.id}`,
+      disposition
+    ])
+  );
+  const correlations = [...input.tracks].sort((left, right) =>
+    left.id.localeCompare(right.id)
+  ).map((sceneTrack) => {
+    const disposition = dispositionsByComponentId.get(sceneTrack.componentId);
+    if (disposition === undefined) {
+      throw new Error(
+        `Scene track ${sceneTrack.id} has no reconciliation disposition.`
+      );
+    }
+    if (disposition.lifecycle !== sceneTrack.lifecycle) {
+      throw new Error(
+        `Scene track ${sceneTrack.id} disagrees with its disposition lifecycle.`
+      );
+    }
+    const visualAtom = sourceById.get(sceneTrack.visualAtomId) ??
+      targetById.get(sceneTrack.visualAtomId);
+    if (visualAtom === undefined) {
+      throw new Error(
+        `Scene track ${sceneTrack.id} references unknown visual atom ` +
+        `${sceneTrack.visualAtomId}.`
+      );
+    }
+    const targetAtomId =
+      sceneTrack.targetAtomId !== undefined &&
+      disposition.targetAtomIds.includes(sceneTrack.targetAtomId)
+        ? sceneTrack.targetAtomId
+        : undefined;
+    if (
+      disposition.targetAtomIds.length > 0 &&
+      (
+        targetAtomId === undefined ||
+        !targetById.has(targetAtomId)
+      )
+    ) {
+      throw new Error(
+        `Scene track ${sceneTrack.id} has no lineage-backed native target atom.`
+      );
+    }
+    if (
+      disposition.targetAtomIds.length === 0 &&
+      sceneTrack.lifecycle !== "eliminate"
+    ) {
+      throw new Error(
+        `Scene track ${sceneTrack.id} lacks a native target without departing.`
+      );
+    }
+    const semanticEntityId = targetAtomId === undefined
+      ? visualAtom.semanticEntityId
+      : targetById.get(targetAtomId)!.semanticEntityId;
+    return Object.freeze({
+      kind: "native-katex-handoff-correlation" as const,
+      lifecycle: "renderer-session" as const,
+      id: `handoff.${sceneTrack.id}`,
+      materialOwnerId: `native-scene-owner.${sceneTrack.id}`,
+      trackId: sceneTrack.id,
+      componentId: sceneTrack.componentId,
+      atomLifecycle: sceneTrack.lifecycle,
+      visualAtomId: sceneTrack.visualAtomId,
+      ...(sceneTrack.sourceAtomId === undefined
+        ? {}
+        : { sourceAtomId: sceneTrack.sourceAtomId }),
+      ...(targetAtomId === undefined ? {} : { targetAtomId }),
+      semanticEntityId,
+      disposition: targetAtomId === undefined
+        ? "departing-without-native-target" as const
+        : "target-bound" as const
+    });
+  });
+  const coveredTargets = new Set(correlations.flatMap(({ targetAtomId }) =>
+    targetAtomId === undefined ? [] : [targetAtomId]
+  ));
+  const missingTarget = input.reconciliation.target.atoms.find(({ id }) =>
+    !coveredTargets.has(id)
+  );
+  if (missingTarget !== undefined) {
+    throw new Error(
+      `Native target atom ${missingTarget.id} has no material handoff correlation.`
+    );
+  }
+  const ownerIds = correlations.map(({ materialOwnerId }) => materialOwnerId);
+  if (new Set(ownerIds).size !== ownerIds.length) {
+    throw new Error("Native handoff correlation repeats a material owner.");
+  }
+  return Object.freeze(correlations);
 }
 
 export function applyKpNativeKatexSceneFrame(input: {

@@ -40,6 +40,13 @@
       "scope": "slice-02 endpoint telemetry contract",
       "checkedAt": "2026-07-25T19:10:51.917Z",
       "notes": "28 focused tests and all TypeScript projects pass. Immutable renderer-session observations cover material/native side, paint identity, semantic/group ownership, rectangles, baseline, wrapper transform, paint/style fingerprints, and rule geometry; invalid geometry, cross-document elements, and durable artifact leakage fail closed."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-03 clone native atom correlation",
+      "checkedAt": "2026-07-25T19:14:14.755Z",
+      "notes": "30 focused tests and all TypeScript projects pass. Material owner identities correlate deterministically to native targets only through reconciliation dispositions and tracks; merge, split, and departing multiplicity are explicit, while duplicate tracks, missing target coverage, and unbacked target IDs fail closed."
     }
   ],
   "allowedWork": [
@@ -83,7 +90,8 @@
     {
       "id": "slice-03",
       "title": "clone-native-atom-correlation",
-      "status": "planned"
+      "summary": "Added deterministic handoff correlations from material owner IDs to native target atoms through reconciliation disposition and track identities, with explicit departing tracks and total merge/split coverage; duplicates, missing targets, and unbacked IDs fail closed.",
+      "status": "complete"
     },
     {
       "id": "slice-04",
