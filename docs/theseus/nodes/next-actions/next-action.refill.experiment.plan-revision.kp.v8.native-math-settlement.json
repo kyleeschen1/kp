@@ -98,6 +98,13 @@
       "scope": "slice-10 exact native handoff",
       "checkedAt": "2026-07-25T14:31:52.337Z",
       "notes": "Seven real Chromium tests and all TypeScript projects pass; pre-handoff delta is below 0.01 CSS px, endpoint model delta is zero, rendered delta is at most 1 CSS px, and fingerprints match."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-11 gradual context reflow",
+      "checkedAt": "2026-07-25T14:35:00.013Z",
+      "notes": "Eight real Chromium tests and all TypeScript projects pass; context translation is continuous and only the explicitly departing fragment fades and lifts."
     }
   ],
   "expectedLearning": [

@@ -482,3 +482,71 @@ test("moving clone meets native target within one CSS pixel without typography d
   expect(result.sourceFingerprint).toBe(result.targetFingerprint);
   expect(result.visualOwner).toBe("target-native");
 });
+
+test("persistent context reflows continuously while only local context departs", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  const result = await page.evaluate(async () => {
+    // @ts-expect-error Vite resolves browser-side source modules.
+    const compositor = await import("/src/rendering/native-katex-glyph-compositor.ts");
+    const stage = document.querySelector<HTMLElement>(
+      '[data-reconciliation-case="solve-x"] [data-case-stage]'
+    )!;
+    const sourceEquation = stage.querySelector<HTMLElement>(
+      "[data-case-source]"
+    )!;
+    const targetEquation = stage.querySelector<HTMLElement>(
+      "[data-case-target]"
+    )!;
+    const persistent = document.createElement("span");
+    persistent.textContent = "= 7 − 3";
+    const departing = document.createElement("span");
+    departing.textContent = "+ 3 − 3";
+    stage.append(persistent, departing);
+    const samples = [0, 0.25, 0.5, 0.75, 1].map((progress) =>
+      compositor.applyKpNativeKatexContextReflow({
+        persistentElement: persistent,
+        persistentSourceRect: {
+          left: 300,
+          top: 100,
+          width: 80,
+          height: 24
+        },
+        persistentTargetRect: {
+          left: 210,
+          top: 100,
+          width: 80,
+          height: 24
+        },
+        departingElements: [departing],
+        reflowProgress: progress,
+        departureProgress: progress
+      })
+    );
+    return {
+      samples,
+      sourceEquationOpacity: sourceEquation.style.opacity,
+      targetEquationOpacity: targetEquation.style.opacity,
+      persistentOpacity: persistent.style.opacity
+    };
+  });
+
+  expect(result.samples.map(({ translateX }) => translateX)).toEqual([
+    0,
+    -14.0625,
+    -45,
+    -75.9375,
+    -90
+  ]);
+  expect(result.samples.map(({ departingOpacity }) => departingOpacity)).toEqual([
+    1,
+    0.84375,
+    0.5,
+    0.15625,
+    0
+  ]);
+  expect(result.persistentOpacity).toBe("");
+  expect(result.sourceEquationOpacity).toBe("1");
+  expect(result.targetEquationOpacity).toBe("0");
+});

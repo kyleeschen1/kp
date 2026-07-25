@@ -117,7 +117,8 @@
     {
       "id": "slice-11",
       "title": "Gradual-context-reflow",
-      "status": "planned"
+      "summary": "Persistent context now reflows continuously toward target geometry while local departing context clears independently, with no whole-equation or persistent-context opacity change.",
+      "status": "complete"
     },
     {
       "id": "slice-12",

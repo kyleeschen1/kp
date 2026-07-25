@@ -31,6 +31,12 @@ export interface KpNativeKatexGlyphFrame
   readonly targetHandoffDeltaPx: number;
 }
 
+export interface KpNativeKatexContextReflowFrame {
+  readonly translateX: number;
+  readonly translateY: number;
+  readonly departingOpacity: number;
+}
+
 export function createKpNativeKatexFragmentClone(input: {
   readonly stage: HTMLElement;
   readonly ownerId: string;
@@ -139,6 +145,40 @@ export function applyKpNativeKatexGlyphOwnership(input: {
   });
 }
 
+export function applyKpNativeKatexContextReflow(input: {
+  readonly persistentElement: HTMLElement;
+  readonly persistentSourceRect: KpStageRelativeRect;
+  readonly persistentTargetRect: KpStageRelativeRect;
+  readonly departingElements: readonly HTMLElement[];
+  readonly reflowProgress: number;
+  readonly departureProgress: number;
+  readonly departureLiftPx?: number | undefined;
+}): KpNativeKatexContextReflowFrame {
+  const reflow = smoothstep(clamp01(input.reflowProgress));
+  const departure = smoothstep(clamp01(input.departureProgress));
+  const translateX = reflow === 0
+    ? 0
+    : (input.persistentTargetRect.left - input.persistentSourceRect.left) *
+      reflow;
+  const translateY = reflow === 0
+    ? 0
+    : (input.persistentTargetRect.top - input.persistentSourceRect.top) *
+      reflow;
+  input.persistentElement.style.transform =
+    `translate(${translateX}px, ${translateY}px)`;
+  const departingOpacity = 1 - departure;
+  const lift = (input.departureLiftPx ?? 8) * departure;
+  for (const element of input.departingElements) {
+    element.style.opacity = String(departingOpacity);
+    element.style.transform = `translateY(${-lift}px)`;
+  }
+  return Object.freeze({
+    translateX,
+    translateY,
+    departingOpacity
+  });
+}
+
 function interpolateRect(
   source: KpStageRelativeRect,
   target: KpStageRelativeRect,
@@ -171,6 +211,10 @@ function lerp(source: number, target: number, progress: number): number {
 function clamp01(value: number): number {
   if (!Number.isFinite(value)) throw new Error("Glyph progress must be finite.");
   return Math.max(0, Math.min(1, value));
+}
+
+function smoothstep(value: number): number {
+  return value * value * (3 - 2 * value);
 }
 
 function makeVisualCloneInert(
