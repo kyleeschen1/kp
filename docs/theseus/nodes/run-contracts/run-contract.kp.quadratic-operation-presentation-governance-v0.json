@@ -170,7 +170,8 @@
     {
       "id": "slice-19",
       "title": "Route-conformance-and-generation-ratchet",
-      "status": "planned"
+      "summary": "Added the route-generation ratchet: every reader route must declare certified presentation governance, browser phase gates, and forbidden generic fallback; custom renderers must cite operation certificate ids. Both quadratic method projections now compile to valid operation certificates with exact authority coverage, total per-span material roles, dependency-ordered phases, registered motifs, and matching live DOM evidence.",
+      "status": "complete"
     },
     {
       "id": "slice-20",

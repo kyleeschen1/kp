@@ -335,6 +335,13 @@
       "scope": "slice-18 direct branch-to-graph presentation",
       "checkedAt": "2026-07-25T00:09:47.870Z",
       "notes": "Twenty focused checks, typecheck, all eleven Chromium checks, and 33 deterministic review frames passed. The visible profile has four phases, semantic solution-set completion remains explicit and non-visible, signed branches move toward measured root positions, and ownership switches to exact graph selectors without a standalone reunion scene."
+    },
+    {
+      "command": "focused certificate and route-governance tests; npm run typecheck; npm run check:architecture; quadratic Chromium; npm run test:browser:reader-conformance; npm run visual:quadratic-branching",
+      "status": "passed",
+      "scope": "slice-19 route conformance and generation ratchet",
+      "checkedAt": "2026-07-25T00:19:51.870Z",
+      "notes": "Twenty-three focused checks, typecheck, all architecture gates, twelve quadratic Chromium checks, all nine shared reader conformance checks, and 33 deterministic review frames passed. Every generated reader declares certified presentation governance and forbids generic fallback; both quadratic method traces close structure, exact coverage, total material roles, ordered phases, registered motifs, and live browser phase evidence."
     }
   ],
   "progress": {

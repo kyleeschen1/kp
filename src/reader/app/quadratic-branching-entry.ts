@@ -38,6 +38,10 @@ import { createKpQuadraticCausalDrillDownBundle } from "../../animation/quadrati
 const documentId = "lesson.algebra.quadratic-branching";
 const documentVersion = "1";
 const assetId = "animation.algebra.quadratic.solution-branching";
+const presentationCertificateIds = [
+  "certificate.reader.quadratic.completing-square",
+  "certificate.reader.quadratic.formula"
+] as const;
 const body = document.body;
 const stage = requireElement<HTMLElement>("[data-kp-quadratic-stage]");
 const story = requireElement<HTMLElement>('[data-kp-block="story.quadratic-branching"]');
@@ -134,11 +138,17 @@ function render(sample: KpReaderClockSample): void {
   stage.dataset["kpDirection"] = current.direction;
   stage.dataset["kpMotionSampling"] = motionPolicy.sampling;
   stage.dataset["kpGraphProgress"] = String(synchronized.graphLocalProgress);
+  stage.dataset["kpPresentationCertification"] =
+    "certification.reader.quadratic-native-katex.v1";
+  stage.dataset["kpPresentationCertificateIds"] =
+    presentationCertificateIds.join(" ");
+  stage.dataset["kpGenericFallback"] = "forbidden";
   if (pausedParent === undefined) {
     stage.dataset["kpCausalPresentation"] = "compressed-context";
     delete stage.dataset["kpNestedClockId"];
   }
   graph.dataset["kpSharedClockId"] = synchronized.sharedClockId;
+  reflectPresentationGate(frame, synchronized.graphLocalProgress);
   progress.value = String(frame.progressPermille);
   progress.setAttribute("aria-valuetext", `${frame.checkpointLabel}, ${Math.round(frame.progress * 100)} percent`);
   status.value = frame.checkpointLabel;
@@ -223,6 +233,7 @@ function renderDrillDown(childProgress: number): void {
     progress: Math.min(0.579999, 0.1 + 0.48 * normalized),
     methodId
   });
+  reflectPresentationGate(frame, 0);
   renderEquations(frame, "full");
   const index = Math.min(
     activeDrillDown.full.segments.length - 1,
@@ -321,6 +332,41 @@ function renderEquations(
         (presentationRole ?? "focal-operand") === "focal-operand"
     ).length
   );
+}
+
+function reflectPresentationGate(
+  frame: KpQuadraticReaderSurfaceFrame,
+  graphLocalProgress: number
+): void {
+  const transition = frame.equationTransition;
+  if (transition !== undefined) {
+    const presentation = transition.transition.presentation;
+    if (presentation === undefined) {
+      throw new Error(
+        `Playable quadratic transition ${transition.transition.id} cannot use generic fallback.`
+      );
+    }
+    stage.dataset["kpOperationRef"] = presentation.operationRef;
+    stage.dataset["kpPresentationPhaseGate"] =
+      transition.progress < presentation.actStart
+        ? "reflow"
+        : transition.progress < 0.999
+          ? "act"
+          : "native-settlement";
+    return;
+  }
+  if (frame.phase === "branch") {
+    stage.dataset["kpOperationRef"] = "operation.quadratic.split-plus-minus";
+    stage.dataset["kpPresentationPhaseGate"] = "branch-split";
+    return;
+  }
+  if (frame.phase === "graph" && graphLocalProgress < 1) {
+    stage.dataset["kpOperationRef"] = "operation.quadratic.branch-to-graph";
+    stage.dataset["kpPresentationPhaseGate"] = "branch-to-graph";
+    return;
+  }
+  stage.dataset["kpOperationRef"] = "none";
+  stage.dataset["kpPresentationPhaseGate"] = "native-settlement";
 }
 
 function branchOriginOwnsMaterial(

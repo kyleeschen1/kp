@@ -68,6 +68,13 @@ function routeBudget(
   return { compiledHtmlRawBytes, compiledHtmlGzipBytes, runtimeCodeGzipBytes } as const;
 }
 
+const sharedEquationPresentation = {
+  kind: "shared-certified-runtime",
+  certificationId: "certification.reader.equation-dom.promoted-v1",
+  genericFallback: "forbidden",
+  browserPhaseGates: ["reflow", "act", "native-settlement"]
+} as const;
+
 const distributionVisualProgress = [0, 360, 500, 650, 820, 1_000] as const;
 const distributionReviewViewports = [
   { id: "desktop", label: "Desktop" },
@@ -90,6 +97,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       beatId: "beat.cancel",
       searchableText: "x+3=7"
     }),
+    presentation: sharedEquationPresentation,
     review: {
       id: "solve-x",
       title: "Kinetic Press · solve x",
@@ -159,6 +167,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       beatId: "beat.make-zero",
       searchableText: "plus three and minus three make zero"
     }),
+    presentation: sharedEquationPresentation,
     review: singleEquationReview({
       id: "teacher-zero",
       title: "Kinetic Press · explicit zero",
@@ -177,6 +186,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       beatId: "beat.simplify-difference",
       searchableText: "The fraction is not a detour"
     }),
+    presentation: sharedEquationPresentation,
     review: singleEquationReview({
       id: "fractional-linear",
       title: "Kinetic Press · fractional linear equation",
@@ -195,6 +205,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       beatId: "beat.cancel",
       searchableText: "Three copies of x equal twelve"
     }),
+    presentation: sharedEquationPresentation,
     review: singleEquationReview({
       id: "divide-both-sides",
       title: "Kinetic Press · divide both sides",
@@ -213,6 +224,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       beatId: "beat.split",
       searchableText: "One denominator can govern every term"
     }),
+    presentation: sharedEquationPresentation,
     review: singleEquationReview({
       id: "split-merge-fractions",
       title: "Kinetic Press · split and merge fractions",
@@ -231,6 +243,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       beatId: "beat.expose-product",
       searchableText: "The same algebra can be shown at different levels of fluency"
     }),
+    presentation: sharedEquationPresentation,
     review: singleEquationReview({
       id: "fractional-transfer",
       title: "Kinetic Press · fractional transfer",
@@ -259,6 +272,19 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         selector: "[data-kp-distribution-scrubber]"
       },
       searchableText: "3(x+2)"
+    },
+    presentation: {
+      kind: "certified-custom-renderer",
+      certificationId: "certification.reader.distribution-composite.accepted-v1",
+      operationCertificateIds: [
+        "certificate.reader.distribution-area.promoted-v1"
+      ],
+      genericFallback: "forbidden",
+      browserPhaseGates: [
+        "factor-fan-out",
+        "area-partition",
+        "native-settlement"
+      ]
     },
     review: {
       id: "distribution-area",
@@ -305,6 +331,22 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         name: "data-kp-reader-progress"
       },
       searchableText: "complete solution set x ∈ {2, 3}"
+    },
+    presentation: {
+      kind: "certified-custom-renderer",
+      certificationId: "certification.reader.quadratic-native-katex.v1",
+      operationCertificateIds: [
+        "certificate.reader.quadratic.completing-square",
+        "certificate.reader.quadratic.formula"
+      ],
+      genericFallback: "forbidden",
+      browserPhaseGates: [
+        "reflow",
+        "act",
+        "native-settlement",
+        "branch-split",
+        "branch-to-graph"
+      ]
     },
     review: {
       id: "quadratic-branching",

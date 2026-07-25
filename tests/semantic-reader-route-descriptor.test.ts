@@ -48,6 +48,13 @@ const review = {
     viewport: "desktop"
   }]
 } as const;
+const presentation = {
+  kind: "certified-custom-renderer",
+  certificationId: "certification.reader.test",
+  operationCertificateIds: ["certificate.reader.test"],
+  genericFallback: "forbidden",
+  browserPhaseGates: ["reflow", "act", "native-settlement"]
+} as const;
 const budget = {
   compiledHtmlRawBytes: 10_000,
   compiledHtmlGzipBytes: 2_000,
@@ -60,6 +67,7 @@ test("reader route manifests reject duplicate public and build identities", () =
     sourcePath: "content/lessons/test.md",
     compile,
     conformance,
+    presentation,
     review,
     budget
   });
@@ -75,6 +83,7 @@ test("reader route descriptors preserve inferred declarations and derive build n
     sourcePath: "content/lessons/solve-x-teacher-zero.md",
     compile,
     conformance,
+    presentation,
     review,
     budget
   });
@@ -90,6 +99,7 @@ test("reader route descriptors reject paths outside shared reader conventions", 
     sourcePath: "content/lessons/test.md",
     compile,
     conformance,
+    presentation,
     review,
     budget
   }), /end with/);
@@ -98,6 +108,7 @@ test("reader route descriptors reject paths outside shared reader conventions", 
     sourcePath: "content/test.txt" as "content/lessons/test.md",
     compile,
     conformance,
+    presentation,
     review,
     budget
   }), /lesson Markdown/);
@@ -109,6 +120,7 @@ test("reader route descriptors reject ambiguous conformance moments", () => {
     sourcePath: "content/lessons/test.md",
     compile,
     conformance: { ...conformance, progressPermille: 1_001 },
+    presentation,
     review,
     budget
   }), /bounded conformance progress/);
@@ -117,6 +129,7 @@ test("reader route descriptors reject ambiguous conformance moments", () => {
     sourcePath: "content/lessons/test.md",
     compile,
     conformance: { ...conformance, query: { kpProgress: "500" } },
+    presentation,
     review,
     budget
   }), /must not fix kpProgress/);
@@ -128,6 +141,7 @@ test("reader route descriptors require deterministic visual review moments", () 
     sourcePath: "content/lessons/test.md",
     compile,
     conformance,
+    presentation,
     review: { ...review, checkpoints: [] },
     budget
   }), /requires a visual review checkpoint/);
@@ -136,6 +150,7 @@ test("reader route descriptors require deterministic visual review moments", () 
     sourcePath: "content/lessons/test.md",
     compile,
     conformance,
+    presentation,
     review: {
       ...review,
       checkpoints: [review.checkpoints[0], review.checkpoints[0]]
@@ -150,7 +165,35 @@ test("reader route descriptors require positive byte baselines", () => {
     sourcePath: "content/lessons/test.md",
     compile,
     conformance,
+    presentation,
     review,
     budget: { ...budget, runtimeCodeGzipBytes: 0 }
   }), /positive byte baseline/);
+});
+
+test("reader routes reject generic fallback and uncertified custom renderers", () => {
+  assert.throws(() => defineKpReaderRoute({
+    route: "/reader/test/",
+    sourcePath: "content/lessons/test.md",
+    compile,
+    conformance,
+    presentation: {
+      ...presentation,
+      genericFallback: "allowed" as "forbidden"
+    },
+    review,
+    budget
+  }), /forbid generic fallback/);
+  assert.throws(() => defineKpReaderRoute({
+    route: "/reader/test/",
+    sourcePath: "content/lessons/test.md",
+    compile,
+    conformance,
+    presentation: {
+      ...presentation,
+      operationCertificateIds: []
+    },
+    review,
+    budget
+  }), /requires explicit operation-presentation certificate ids/);
 });

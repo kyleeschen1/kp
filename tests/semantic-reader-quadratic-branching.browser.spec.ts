@@ -365,6 +365,66 @@ test("Show steps nests the identical method trace and restores the exact parent 
   await expect(page.getByRole("region", { name: "Exact algebra steps" })).toBeHidden();
 });
 
+test("playable phases expose certified operation gates and forbid generic fallback", async ({ page }) => {
+  await page.goto(
+    route
+      .replace("kpProgress=680", "kpProgress=410")
+      .replace("kpMethod=completing-square", "kpMethod=formula") +
+      "&kpMotion=full",
+    { waitUntil: "networkidle" }
+  );
+  const stage = page.locator("[data-kp-quadratic-stage]");
+  const slider = page.locator("[data-kp-quadratic-progress]");
+  await expect(stage).toHaveAttribute(
+    "data-kp-presentation-certification",
+    "certification.reader.quadratic-native-katex.v1"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-presentation-certificate-ids",
+    "certificate.reader.quadratic.completing-square certificate.reader.quadratic.formula"
+  );
+  await expect(stage).toHaveAttribute("data-kp-generic-fallback", "forbidden");
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-ref",
+    "operation.quadratic-formula.simplify-exact-radical"
+  );
+  await expect(stage).toHaveAttribute("data-kp-presentation-phase-gate", "reflow");
+
+  await seek(430);
+  await expect(stage).toHaveAttribute("data-kp-presentation-phase-gate", "act");
+  await seek(600);
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-ref",
+    "operation.quadratic.split-plus-minus"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-presentation-phase-gate",
+    "branch-split"
+  );
+  await seek(930);
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-ref",
+    "operation.quadratic.branch-to-graph"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-presentation-phase-gate",
+    "branch-to-graph"
+  );
+  await seek(1000);
+  await expect(stage).toHaveAttribute("data-kp-operation-ref", "none");
+  await expect(stage).toHaveAttribute(
+    "data-kp-presentation-phase-gate",
+    "native-settlement"
+  );
+
+  async function seek(progressPermille: number): Promise<void> {
+    await slider.evaluate((element: HTMLInputElement, value) => {
+      element.value = String(value);
+      element.dispatchEvent(new Event("input", { bubbles: true }));
+    }, progressPermille);
+  }
+});
+
 test("quadratic learner surface becomes a narrow focus stepper without overflow", async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 760 });
   await page.goto(route, { waitUntil: "networkidle" });

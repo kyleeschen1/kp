@@ -47,11 +47,27 @@ export interface KpReaderRouteBudgetProfile {
   readonly runtimeCodeGzipBytes: number;
 }
 
+export type KpReaderRoutePresentationGovernance =
+  | {
+      readonly kind: "shared-certified-runtime";
+      readonly certificationId: string;
+      readonly genericFallback: "forbidden";
+      readonly browserPhaseGates: readonly string[];
+    }
+  | {
+      readonly kind: "certified-custom-renderer";
+      readonly certificationId: string;
+      readonly operationCertificateIds: readonly string[];
+      readonly genericFallback: "forbidden";
+      readonly browserPhaseGates: readonly string[];
+    };
+
 export interface KpReaderRouteDescriptor {
   readonly route: KpReaderRoutePath;
   readonly sourcePath: KpReaderLessonSourcePath;
   readonly compile: (markdown: string) => KpCompiledLessonArtifact;
   readonly conformance: KpReaderRouteConformanceProfile;
+  readonly presentation: KpReaderRoutePresentationGovernance;
   readonly review: KpReaderRouteVisualReviewProfile;
   readonly budget: KpReaderRouteBudgetProfile;
 }
@@ -90,6 +106,38 @@ export function defineKpReaderRoute<const TRoute extends KpReaderRouteDescriptor
   }
   if (descriptor.review.id.trim() === "" || descriptor.review.title.trim() === "") {
     throw new Error(`Reader route ${descriptor.route} requires named visual review metadata.`);
+  }
+  if (
+    descriptor.presentation.certificationId.trim() === "" ||
+    descriptor.presentation.genericFallback !== "forbidden" ||
+    descriptor.presentation.browserPhaseGates.length === 0 ||
+    descriptor.presentation.browserPhaseGates.some(
+      (phase) => phase.trim() === "" || /generic/i.test(phase)
+    )
+  ) {
+    throw new Error(
+      `Reader route ${descriptor.route} requires certified presentation phases and must forbid generic fallback.`
+    );
+  }
+  if (
+    descriptor.presentation.kind === "shared-certified-runtime" &&
+    descriptor.conformance.rendererAdapterId !== "renderer.equation-dom"
+  ) {
+    throw new Error(
+      `Reader route ${descriptor.route} may use shared certification only with renderer.equation-dom.`
+    );
+  }
+  if (
+    descriptor.presentation.kind === "certified-custom-renderer" &&
+    (descriptor.conformance.rendererAdapterId === "renderer.equation-dom" ||
+      descriptor.presentation.operationCertificateIds.length === 0 ||
+      descriptor.presentation.operationCertificateIds.some(
+        (id) => id.trim() === ""
+      ))
+  ) {
+    throw new Error(
+      `Custom reader route ${descriptor.route} requires explicit operation-presentation certificate ids.`
+    );
   }
   if (!Number.isInteger(descriptor.review.columns) || descriptor.review.columns < 1) {
     throw new Error(`Reader route ${descriptor.route} requires positive visual review columns.`);
