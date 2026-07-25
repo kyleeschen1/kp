@@ -166,6 +166,20 @@
       "scope": "slice-09 production closure",
       "checkedAt": "2026-07-25T19:54:05.817Z",
       "notes": "Reader production closure passed for all 8 manifest routes."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-10 endpoint decision release",
+      "checkedAt": "2026-07-25T19:58:13.370Z",
+      "notes": "All TypeScript projects and the Vite production build passed. Existing large-chunk advisory remains non-blocking."
+    },
+    {
+      "command": "npm run review:logs -- audit; npm run review:logs -- query --unread codex.main --limit 20",
+      "status": "passed",
+      "scope": "slice-10 visual review inbox audit",
+      "checkedAt": "2026-07-25T19:58:15.402Z",
+      "notes": "Replay is byte-stable with stable identity/order. Current round review-round.legacy.2.d0920d5fd3c6 has 16 notes, 15 new and one verified; none targets this glyph experiment endpoint. No status or cursor event was appended."
     }
   ],
   "allowedWork": [
@@ -251,7 +265,8 @@
     {
       "id": "slice-10",
       "title": "endpoint-decision-record",
-      "status": "planned"
+      "summary": "Published the endpoint decision: the jerk is a deterministic persistent-plus font-scale and baseline mismatch, not handoff timing or rule geometry. One common translation cannot fix it, so no runtime exception was added. Numeric/browser/visual/performance/production/build gates bound the retained visual risk, native 100 percent settlement remains exact, and the review inbox contains no note for this experiment.",
+      "status": "complete"
     },
     {
       "id": "slice-11",
