@@ -201,6 +201,27 @@
       "scope": "slice-11 corrected repository types",
       "checkedAt": "2026-07-25T20:04:38.074Z",
       "notes": "After respecting the optional lawRefs schema at the test boundary, application, node, test, and domain TypeScript checks passed."
+    },
+    {
+      "command": "playwright inverse split endpoints",
+      "status": "failed",
+      "scope": "slice-12 intermediate inventory fixture",
+      "checkedAt": "2026-07-25T20:06:50.306Z",
+      "notes": "The first browser run used the solve-x data-case-stage selector inside the fraction card, so the stage lookup was null. Use the card's existing data-fraction-stage marker and rerun."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-12 inverse split endpoint inventories",
+      "checkedAt": "2026-07-25T20:10:04.421Z",
+      "notes": "33 Chromium checks passed. Inverse observation of the existing real-KaTeX card is repeatable at wide DPR1 and phone DPR2: merged source has one denominator and one rule; split target has two of each, unique atom IDs, complete semantic/group ownership, and distinct viewport keys."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-12 repository types",
+      "checkedAt": "2026-07-25T20:10:05.667Z",
+      "notes": "Application, node, test, and domain TypeScript checks passed."
     }
   ],
   "allowedWork": [
@@ -298,7 +319,8 @@
     {
       "id": "slice-12",
       "title": "inverse-split-endpoint-inventories",
-      "status": "planned"
+      "summary": "Added browser evidence that re-observes the existing fraction card in inverse direction without runtime markup. Wide DPR1 and phone DPR2 inventories are stable and totally owned; the merged source exposes one denominator glyph and structural rule, while the split target exposes two of each with more unique paint atoms and viewport-key invalidation.",
+      "status": "complete"
     },
     {
       "id": "slice-13",

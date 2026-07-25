@@ -360,6 +360,139 @@ test("live fraction route exposes complete source and target inventories", async
   }
 });
 
+test("inverse split endpoints inventory one-to-two native structures", async ({
+  browser
+}) => {
+  const viewportKeys: string[] = [];
+  for (const profile of [{
+    viewport: { width: 1_440, height: 950 },
+    deviceScaleFactor: 1
+  }, {
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 2
+  }]) {
+    const context = await browser.newContext(profile);
+    const page = await context.newPage();
+    await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+    await page.locator(
+      '[data-kp-glyph-review][data-kp-ready="true"]'
+    ).waitFor();
+    const inventories = await page.evaluate(async () => {
+      const observe = (window as unknown as {
+        __kpSettleAndObserveNativeKatexRenderedScene: (input: {
+          endpoint: "source" | "target";
+          stage: HTMLElement;
+          root: HTMLElement;
+          semanticEntityId: string;
+          presentationGroupId: string;
+          fontReadiness: {
+            revision: number;
+            whenReady(): Promise<void>;
+          };
+        }) => Promise<{
+          endpoint: "source" | "target";
+          atoms: readonly {
+            id: string;
+            endpoint: "source" | "target";
+            semanticEntityId: string;
+            presentationGroupId: string;
+            paintKind: string;
+          }[];
+          groups: readonly {
+            id: string;
+            semanticEntityId: string;
+            atomIds: readonly string[];
+          }[];
+          viewportKey: string;
+        }>;
+      }).__kpSettleAndObserveNativeKatexRenderedScene;
+      const stage = document.querySelector<HTMLElement>(
+        '[data-reconciliation-case="fraction-merge"] [data-fraction-stage]'
+      )!;
+      const merged = stage.querySelector<HTMLElement>(
+        "[data-fraction-target]"
+      )!;
+      const split = stage.querySelector<HTMLElement>(
+        "[data-fraction-source]"
+      )!;
+      merged.style.opacity = "1";
+      split.style.opacity = "1";
+      const fontReadiness = {
+        revision: 1,
+        async whenReady() {
+          await document.fonts.ready;
+        }
+      };
+      const summarize = async () => {
+        const [source, target] = await Promise.all([
+          observe({
+            endpoint: "source",
+            stage,
+            root: merged,
+            semanticEntityId: "fraction.expression",
+            presentationGroupId: "group.fraction.target",
+            fontReadiness
+          }),
+          observe({
+            endpoint: "target",
+            stage,
+            root: split,
+            semanticEntityId: "fraction.expression",
+            presentationGroupId: "group.fraction.source",
+            fontReadiness
+          })
+        ]);
+        return [source, target].map((scene) => ({
+          endpoint: scene.endpoint,
+          atomIds: scene.atoms.map(({ id }) => id),
+          atomCount: scene.atoms.length,
+          groupCount: scene.groups.length,
+          ruleCount: scene.atoms.filter(({ paintKind }) =>
+            paintKind === "rule"
+          ).length,
+          denominatorCount: scene.atoms.filter(({ semanticEntityId }) =>
+            semanticEntityId.includes("denominator")
+          ).length,
+          owned: scene.atoms.every((atom) =>
+            atom.endpoint === scene.endpoint &&
+            atom.semanticEntityId.length > 0 &&
+            atom.presentationGroupId.length > 0
+          ) && scene.groups.every((group) =>
+            group.semanticEntityId.length > 0 &&
+            group.atomIds.length > 0
+          ),
+          viewportKey: scene.viewportKey
+        }));
+      };
+      return {
+        first: await summarize(),
+        repeated: await summarize()
+      };
+    });
+
+    expect(inventories.first).toEqual(inventories.repeated);
+    const [source, target] = inventories.first;
+    expect(source).toMatchObject({
+      endpoint: "source",
+      ruleCount: 1,
+      denominatorCount: 1,
+      owned: true
+    });
+    expect(target).toMatchObject({
+      endpoint: "target",
+      ruleCount: 2,
+      denominatorCount: 2,
+      owned: true
+    });
+    expect(new Set(source!.atomIds).size).toBe(source!.atomCount);
+    expect(new Set(target!.atomIds).size).toBe(target!.atomCount);
+    expect(target!.atomCount).toBeGreaterThan(source!.atomCount);
+    viewportKeys.push(source!.viewportKey, target!.viewportKey);
+    await context.close();
+  }
+  expect(new Set(viewportKeys).size).toBe(4);
+});
+
 test("live fraction scene exposes continuously sampled structural rule tracks", async ({
   page
 }) => {
