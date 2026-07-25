@@ -57,7 +57,8 @@
     {
       "id": "slice-01",
       "title": "Failed-overlay-baseline",
-      "status": "planned"
+      "summary": "Froze four observed overlay failure codes, six real-glyph acceptance laws, a one-pixel handoff tolerance, and fixed module/lifecycle complexity budgets.",
+      "status": "complete"
     },
     {
       "id": "slice-02",

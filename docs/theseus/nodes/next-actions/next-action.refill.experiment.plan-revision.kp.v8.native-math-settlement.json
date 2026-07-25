@@ -28,6 +28,15 @@
     "npm run perf:glyph-reconciliation-experiment",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-01 failed overlay baseline",
+      "checkedAt": "2026-07-25T14:04:56.471Z",
+      "notes": "Two ledger tests pass and ten wide/phone baseline frames reproduce the crossfade, approximate overlay, character substitution, and unregistered handoff failure."
+    }
+  ],
   "expectedLearning": [
     "Whether actual computed-style KaTeX fragments eliminate the crossfade and character-substitution failure in solve-x.",
     "Whether one generic ownership, handoff, and reflow compositor can later cover merge and split without operation-specific scheduling."
