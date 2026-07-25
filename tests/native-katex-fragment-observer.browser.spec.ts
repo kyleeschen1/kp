@@ -453,6 +453,57 @@ test("full-scene playback direct seek is stateless through reverse application",
   expect(snapshots[0]).not.toEqual(snapshots[1]);
 });
 
+test("visible fraction card renders the complete moving scene on its shared clock", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=250");
+  const review = page.locator('[data-kp-glyph-review][data-kp-ready="true"]');
+  await review.waitFor();
+  const fraction = page.locator('[data-reconciliation-case="fraction-merge"]');
+  const slider = fraction.locator("[data-progress]");
+  const snapshot = async () => fraction.evaluate((card) =>
+    [...card.querySelectorAll<HTMLElement>(
+      "[data-kp-native-katex-scene-owner]"
+    )].map((owner) => ({
+      id: owner.dataset["kpEquationMaterialOwnerId"],
+      role: owner.dataset["kpEquationMaterialFragmentRole"],
+      left: owner.style.left,
+      top: owner.style.top,
+      width: owner.style.width,
+      opacity: owner.style.opacity
+    }))
+  );
+  const early = await snapshot();
+  await slider.evaluate((element: HTMLInputElement) => {
+    element.value = "750";
+    element.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  const late = await snapshot();
+
+  await expect(review).toHaveAttribute(
+    "data-kp-fraction-visual-owner",
+    "material-scene"
+  );
+  await expect(fraction.locator("[data-fraction-source]")).toHaveCSS(
+    "opacity",
+    "0"
+  );
+  await expect(fraction.locator("[data-fraction-target]")).toHaveCSS(
+    "opacity",
+    "0"
+  );
+  expect(early.length).toBeGreaterThan(5);
+  expect(early.map(({ id }) => id)).toEqual(late.map(({ id }) => id));
+  expect(early.filter((frame, index) => {
+    const next = late[index]!;
+    return frame.left !== next.left ||
+      frame.top !== next.top ||
+      frame.width !== next.width ||
+      frame.opacity !== next.opacity;
+  }).length).toBeGreaterThan(4);
+  expect(early.filter(({ role }) => role?.startsWith("rule:"))).toHaveLength(2);
+});
+
 test("observer rejects missing and duplicate explicit motion nodes", async ({
   page
 }) => {
@@ -1217,22 +1268,22 @@ test("fraction merge settles one native denominator with Cloze authority", async
   const target = fraction.locator(
     '[data-kp-motion-id="motion.fraction.target-denominator"]'
   );
-  const clones = fraction.locator("[data-kp-native-katex-fragment-clone]");
+  const sceneOwners = fraction.locator("[data-kp-native-katex-scene-owner]");
 
   await expect(fraction).toHaveCount(1);
-  await expect(clones).toHaveCount(2);
+  expect(await sceneOwners.count()).toBeGreaterThan(5);
   await expect(target).toHaveText("2");
   await expect(target).toHaveAttribute(
     "data-kp-semantic-selector-id",
     "equation.numerator-split-merge.combined.fraction.denominator.2"
   );
   await expect(target).toHaveAttribute("tabindex", "0");
-  await expect(clones.first()).toHaveAttribute("aria-hidden", "true");
-  expect(await clones.evaluateAll((elements) =>
+  await expect(sceneOwners.first()).toHaveAttribute("aria-hidden", "true");
+  expect(await sceneOwners.evaluateAll((elements) =>
     elements.every((element) =>
       !element.hasAttribute("data-kp-semantic-selector-id") &&
       !element.hasAttribute("tabindex") &&
-      (element.textContent ?? "").includes("2")
+      element.hasAttribute("inert")
     )
   )).toBe(true);
 

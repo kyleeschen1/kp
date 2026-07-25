@@ -32,7 +32,7 @@ try {
           '[data-reconciliation-case="solve-x"] [data-kp-native-katex-fragment-clone]'
         ).count(),
         merge: await page.locator(
-          '[data-reconciliation-case="fraction-merge"] [data-kp-native-katex-fragment-clone]'
+          '[data-reconciliation-case="fraction-merge"] [data-kp-native-katex-scene-owner]'
         ).count(),
         branch: await page.locator(
           '[data-reconciliation-case="plus-minus-branch"] [data-kp-native-katex-fragment-clone]'
@@ -41,14 +41,18 @@ try {
           '[data-reconciliation-case="crowded-quadratic"] [data-kp-native-katex-fragment-clone]'
         ).count()
       };
+      const expectedMergeOwners = Number(await page.locator(
+        "[data-kp-glyph-review]"
+      ).getAttribute("data-kp-fraction-scene-track-count"));
       if (
         motionCounts.solve !== 1 ||
-        motionCounts.merge !== 2 ||
+        motionCounts.merge !== expectedMergeOwners ||
+        expectedMergeOwners < 6 ||
         motionCounts.branch !== 2 ||
         motionCounts.crowded !== 3
       ) {
         throw new Error(
-          `Expected exact 1/2/2/3 fragment owners, found ${
+          `Expected exact 1/${expectedMergeOwners}/2/3 motion owners, found ${
             JSON.stringify(motionCounts)
           }.`
         );

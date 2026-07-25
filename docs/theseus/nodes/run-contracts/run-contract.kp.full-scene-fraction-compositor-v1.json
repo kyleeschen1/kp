@@ -135,6 +135,13 @@
       "scope": "slice-16 deterministic scene sampler",
       "checkedAt": "2026-07-25T17:55:35.919Z",
       "notes": "19 focused tests, all TypeScript projects, and 26 Chromium tests pass; stateless direct seek, repeated sample, and reverse application reproduce identical full-scene frames."
+    },
+    {
+      "command": "node focused compositor tests; npm run typecheck; npm run test:browser:real-katex-glyph-compositor; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-17 full-scene fraction exemplar",
+      "checkedAt": "2026-07-25T18:01:22.378Z",
+      "notes": "19 focused tests, all TypeScript projects, 27 Chromium tests, and ten inspected wide/phone captures pass; the visible fraction card uses total scene playback with exact native endpoints and moving generic glyph/rule paint."
     }
   ],
   "allowedWork": [
@@ -259,7 +266,8 @@
     {
       "id": "slice-17",
       "title": "full-scene-fraction-exemplar",
-      "status": "planned"
+      "summary": "Replaced the denominator-only visible path with total fraction scene playback; native source and target remain exact endpoints while every glyph and fraction rule is material-owned throughout the shared interior clock.",
+      "status": "complete"
     },
     {
       "id": "slice-18",

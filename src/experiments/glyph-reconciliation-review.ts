@@ -341,6 +341,7 @@ const fractionRuleTracks = fractionSceneTracks.filter(({ paintKind }) =>
 );
 review.dataset["kpFractionSceneDispositionCount"] =
   String(fractionSceneReconciliation.dispositions.length);
+review.dataset["kpFractionSceneTrackCount"] = String(fractionSceneTracks.length);
 review.dataset["kpFractionRuleTrackCount"] = String(fractionRuleTracks.length);
 const fractionScenePlayback = createKpNativeKatexScenePlayback({
   stage: fractionStage,
@@ -391,53 +392,13 @@ const clone = createKpNativeKatexFragmentClone({
 });
 clone.ownerElement.dataset["kpNativeKatexFragmentClone"] = "true";
 
-const fractionSourceObservation = await settleAndObserveKpNativeKatexFragments({
-  stage: fractionStage,
-  bindings: fractionCaseInput.sourceGlyphs.map((glyph, index) => ({
-    id: glyph.id,
-    semanticEntityId: glyph.entityId,
-    motionId: index === 0
-      ? "motion.fraction.source-denominator-a"
-      : "motion.fraction.source-denominator-b",
-    glyphKey: glyph.glyphKey
-  })),
-  fontReadiness
-});
-const fractionTargetObservation = await settleAndObserveKpNativeKatexFragments({
-  stage: fractionStage,
-  bindings: [{
-    id: fractionCaseInput.targetGlyphs[0]!.id,
-    semanticEntityId: fractionCaseInput.targetGlyphs[0]!.entityId,
-    motionId: "motion.fraction.target-denominator",
-    glyphKey: fractionCaseInput.targetGlyphs[0]!.glyphKey
-  }],
-  fontReadiness
-});
-const fractionMultiplicity = bindKpNativeKatexFragmentsWithinSemanticLineage({
-  lineage: projectKpCanonicalExecutionLineage(fractionCaseInput.execution),
-  source: fractionSourceObservation,
-  target: fractionTargetObservation
-}).multiplicity[0];
-if (
-  fractionMultiplicity?.kind !== "merge" ||
-  fractionMultiplicity.sources.length !== 2 ||
-  fractionMultiplicity.targets.length !== 1
-) {
-  throw new Error("Canonical fraction lineage did not bind its native merge.");
+const fractionNativeTargetElement = fractionTarget.querySelector<HTMLElement>(
+  '[data-kp-motion-id="motion.fraction.target-denominator"]'
+);
+if (fractionNativeTargetElement === null) {
+  throw new Error("Native fraction target denominator is missing.");
 }
-const fractionClones = createKpNativeKatexFragmentClones({
-  stage: fractionStage,
-  fragments: fractionMultiplicity.sources.map((observation, index) => ({
-    ownerId: `native-owner.fraction.denominator.${index}`,
-    observation
-  }))
-});
-for (const fractionClone of fractionClones) {
-  fractionClone.ownerElement.dataset["kpNativeKatexFragmentClone"] = "true";
-}
-const fractionNativeTarget = fractionMultiplicity.targets[0]!.sourceElement;
-const fractionNativeSources = fractionMultiplicity.sources;
-const fractionNativeTargetObservation = fractionMultiplicity.targets[0]!;
+const fractionNativeTarget: HTMLElement = fractionNativeTargetElement;
 fractionNativeTarget.dataset["kpSemanticSelectorId"] =
   fractionCloze.hiddenSelectorIds[0]!;
 fractionNativeTarget.dataset["kpAnnotation"] =
@@ -606,28 +567,20 @@ function render(progress: number): void {
     progress: glyphProgress
   });
   const fractionProgress = clamp((bounded - 0.14) / 0.72);
-  const fractionFrame = applyKpNativeKatexManyToOneFrame({
-    clones: fractionClones,
-    sources: fractionNativeSources,
-    target: fractionNativeTargetObservation,
-    progress: fractionProgress
-  });
+  const fractionFrame = fractionScenePlayback.apply(fractionProgress);
   const fractionAtTarget = fractionFrame.visualOwner === "target-native";
-  fractionSource.style.opacity = fractionAtTarget ? "0" : "1";
-  // Reveal target context early; only the bound denominator moves.
-  fractionTarget.style.opacity = fractionProgress > 0 ? "1" : "0";
   fractionNativeTarget.tabIndex = fractionAtTarget ? 0 : -1;
   fractionNativeTarget.setAttribute("aria-hidden", String(!fractionAtTarget));
   fractionPhase.textContent = fractionProgress === 0
-    ? "Two source denominators"
+    ? "Two source fractions"
     : fractionAtTarget
-      ? "One exact native denominator"
-      : "Exact fragments converge";
-  fractionOwner.textContent = fractionFrame.visualOwner === "source-natives"
-    ? "Two native source denominators own the ink"
+      ? "One exact native fraction"
+      : "Complete notation scene transforms";
+  fractionOwner.textContent = fractionFrame.visualOwner === "source-native"
+    ? "The native source expression owns all ink"
     : fractionAtTarget
-      ? "One native target denominator owns the ink"
-      : "Two inert native-fragment clones own the moving ink";
+      ? "The native target expression owns all ink"
+      : "One inert full-scene compositor owns every moving mark";
   review.dataset["kpFractionVisualOwner"] = fractionFrame.visualOwner;
   const branchProgress = clamp((bounded - 0.12) / 0.74);
   const branchFrame = applyKpNativeKatexOneToManyFrame({
