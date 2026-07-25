@@ -168,3 +168,88 @@ test("stage-local fragment geometry is stable under stage scaling", async ({
     );
   }
 });
+
+test("settled observation waits for fonts and rejects consecutive-frame drift", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  const result = await page.evaluate(async () => {
+    const stage = document.querySelector<HTMLElement>(
+      '[data-reconciliation-case="solve-x"] [data-case-stage]'
+    )!;
+    const renderedX = stage.querySelector<HTMLElement>(
+      "[data-case-source] .mord.mathnormal"
+    )!;
+    renderedX.dataset["kpMotionId"] = "motion.solve-x.settled-x";
+    const settle = (
+      window as unknown as {
+        __kpSettleAndObserveNativeKatexFragments: (input: {
+          stage: HTMLElement;
+          bindings: readonly {
+            id: string;
+            semanticEntityId: string;
+            motionId: string;
+            glyphKey: string;
+          }[];
+          fontReadiness: {
+            status: "ready";
+            revision: number;
+            whenReady(): Promise<void>;
+            subscribe(): () => void;
+            dispose(): void;
+          };
+        }) => Promise<{
+          fragments: readonly {
+            fontRevision: number;
+            rect: { width: number };
+          }[];
+        }>;
+      }
+    ).__kpSettleAndObserveNativeKatexFragments;
+    const binding = [{
+      id: "fragment.solve-x.settled-x",
+      semanticEntityId: "entity.x",
+      motionId: "motion.solve-x.settled-x",
+      glyphKey: "x"
+    }];
+    const fontReadiness = {
+      status: "ready" as const,
+      revision: 7,
+      whenReady: async () => document.fonts.ready.then(() => undefined),
+      subscribe: () => () => undefined,
+      dispose: () => undefined
+    };
+    const stable = await settle({
+      stage,
+      bindings: binding,
+      fontReadiness
+    });
+    const originalRect = renderedX.getBoundingClientRect.bind(renderedX);
+    let reads = 0;
+    renderedX.getBoundingClientRect = () => {
+      const rect = originalRect();
+      reads += 1;
+      return DOMRect.fromRect({
+        x: rect.x,
+        y: rect.y,
+        width: rect.width + reads,
+        height: rect.height
+      });
+    };
+    let drift = "";
+    try {
+      await settle({ stage, bindings: binding, fontReadiness });
+    } catch (error) {
+      drift = error instanceof Error ? error.message : String(error);
+    }
+    return {
+      fontRevision: stable.fragments[0]!.fontRevision,
+      width: stable.fragments[0]!.rect.width,
+      drift
+    };
+  });
+
+  expect(result.fontRevision).toBe(7);
+  expect(result.width).toBeGreaterThan(0);
+  expect(result.drift).toContain("did not settle");
+});

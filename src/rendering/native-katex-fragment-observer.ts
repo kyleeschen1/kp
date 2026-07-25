@@ -1,3 +1,7 @@
+import type {
+  KpEquationFontReadiness
+} from "./equation-font-readiness.ts";
+
 export interface KpStageRelativeRect {
   readonly left: number;
   readonly top: number;
@@ -91,6 +95,40 @@ export function observeKpNativeKatexFragments(input: {
   });
 }
 
+export async function settleAndObserveKpNativeKatexFragments(input: {
+  readonly stage: HTMLElement;
+  readonly bindings: readonly KpNativeKatexFragmentBinding[];
+  readonly fontReadiness: KpEquationFontReadiness;
+  readonly geometryTolerancePx?: number | undefined;
+}): Promise<KpNativeKatexFragmentObservationBatch> {
+  await input.fontReadiness.whenReady();
+  await nextLayoutFrame(input.stage.ownerDocument);
+  const first = observeKpNativeKatexFragments({
+    stage: input.stage,
+    bindings: input.bindings,
+    fontRevision: input.fontReadiness.revision
+  });
+  await nextLayoutFrame(input.stage.ownerDocument);
+  const second = observeKpNativeKatexFragments({
+    stage: input.stage,
+    bindings: input.bindings,
+    fontRevision: input.fontReadiness.revision
+  });
+  const tolerance = input.geometryTolerancePx ?? 0.25;
+  first.fragments.forEach((fragment, index) => {
+    const settled = second.fragments[index]!;
+    if (
+      fragment.styleFingerprint !== settled.styleFingerprint ||
+      rectDelta(fragment.rect, settled.rect) > tolerance
+    ) {
+      throw new Error(
+        `Native fragment ${fragment.id} did not settle across consecutive layout frames.`
+      );
+    }
+  });
+  return second;
+}
+
 export function normalizeKpStageRelativeRect(input: {
   readonly stageClientRect: KpClientRectSnapshot;
   readonly stageLayoutWidth: number;
@@ -176,6 +214,21 @@ function validateRect(rect: KpStageRelativeRect, path: string): void {
   if (rect.width <= 0 || rect.height <= 0) {
     throw new Error(`${path} requires positive width and height.`);
   }
+}
+
+function nextLayoutFrame(ownerDocument: Document): Promise<void> {
+  const view = ownerDocument.defaultView;
+  if (view === null) return Promise.resolve();
+  return new Promise((resolve) => view.requestAnimationFrame(() => resolve()));
+}
+
+function rectDelta(left: KpStageRelativeRect, right: KpStageRelativeRect): number {
+  return Math.max(
+    Math.abs(left.left - right.left),
+    Math.abs(left.top - right.top),
+    Math.abs(left.width - right.width),
+    Math.abs(left.height - right.height)
+  );
 }
 
 function requireText(value: string, path: string): void {

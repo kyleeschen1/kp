@@ -12,7 +12,8 @@ import {
   type KpCompiledGlyphReconciliationCase
 } from "../animation/semantic-glyph-reconciliation-compiler.ts";
 import {
-  observeKpNativeKatexFragments
+  observeKpNativeKatexFragments,
+  settleAndObserveKpNativeKatexFragments
 } from "../rendering/native-katex-fragment-observer.ts";
 
 interface ReviewCase {
@@ -226,7 +227,9 @@ root.querySelectorAll<HTMLButtonElement>("[data-trace-toggle]").forEach(
 render(Number(new URL(location.href).searchParams.get("progress") ?? "0") / 1000);
 if (import.meta.env.DEV) {
   Object.assign(window, {
-    __kpObserveNativeKatexFragments: observeKpNativeKatexFragments
+    __kpObserveNativeKatexFragments: observeKpNativeKatexFragments,
+    __kpSettleAndObserveNativeKatexFragments:
+      settleAndObserveKpNativeKatexFragments
   });
   const { mountKpDevReview } = await import("../dev-review/review-bootstrap.ts");
   mountKpDevReview({

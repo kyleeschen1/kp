@@ -63,6 +63,13 @@
       "scope": "slice-05 coordinate normalization",
       "checkedAt": "2026-07-25T14:16:36.080Z",
       "notes": "Six unit tests, three browser tests, and all TypeScript projects pass; local x geometry is invariant under a 1.5x stage transform."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-06 font and style settlement",
+      "checkedAt": "2026-07-25T14:21:32.930Z",
+      "notes": "6 focused unit tests, 4 real Chromium tests, and all TypeScript projects pass."
     }
   ],
   "expectedLearning": [

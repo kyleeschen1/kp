@@ -87,7 +87,8 @@
     {
       "id": "slice-06",
       "title": "Font-and-style-settlement",
-      "status": "planned"
+      "summary": "Native fragment observation now waits for fonts and rejects computed-style or greater-than-quarter-pixel geometry drift across consecutive layout frames.",
+      "status": "complete"
     },
     {
       "id": "slice-07",
