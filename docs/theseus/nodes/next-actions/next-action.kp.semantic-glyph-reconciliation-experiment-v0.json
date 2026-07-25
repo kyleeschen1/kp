@@ -114,6 +114,13 @@
       "scope": "slice-12 static JS seam",
       "checkedAt": "2026-07-25T02:00:43.006Z",
       "notes": "39 focused tests and typecheck pass."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment; npm run typecheck; npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "slice-13 solve-x exemplar",
+      "checkedAt": "2026-07-25T02:04:47.224Z",
+      "notes": "41 focused tests, typecheck, and 255 convergence tests pass."
     }
   ],
   "progress": {

@@ -174,7 +174,8 @@
     {
       "id": "slice-13",
       "title": "Simple-solve-x-exemplar",
-      "status": "planned"
+      "summary": "Routed canonical solve-x x-persistence through one shared compiler from executor lineage to matcher, measurement, plan, clearance schedule, and deterministic static-JS playback without changing settled identity.",
+      "status": "complete"
     },
     {
       "id": "slice-14",
