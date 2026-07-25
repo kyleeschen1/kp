@@ -199,9 +199,17 @@ try {
         const target = element.querySelector<HTMLElement>(
           "[data-fraction-target]"
         )!;
+        const sourceRect = source.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
         return {
           sourceOpacity: source.style.opacity,
           targetOpacity: target.style.opacity,
+          sourceAnchorY: sourceRect.top + sourceRect.height / 2,
+          targetAnchorY: targetRect.top + targetRect.height / 2,
+          anchorResidualPx: Math.abs(
+            sourceRect.top + sourceRect.height / 2 -
+              (targetRect.top + targetRect.height / 2)
+          ),
           materialOwnerCount: materialOwners.length,
           visibleMaterialOwnerCount: materialOwners.filter((owner) =>
             Number(owner.style.opacity) > 0
@@ -238,6 +246,13 @@ try {
           `Invalid endpoint ownership at ${checkpoint.id}: ${
             JSON.stringify(snapshot)
           }.`
+        );
+      }
+      if (snapshot.anchorResidualPx > 0.1) {
+        throw new Error(
+          `Fraction endpoints do not share one stable anchor at ${
+            profile.id
+          }: ${JSON.stringify(snapshot)}.`
         );
       }
       const file = path.join(

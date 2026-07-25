@@ -44,6 +44,13 @@
       "scope": "slice-02 acceptance and complexity ratchet",
       "checkedAt": "2026-07-25T23:36:18.404Z",
       "notes": "Five convergence-policy tests, 38 compositor tests, all TypeScript projects, and all architecture gates passed. Frozen policy enforces one current default, one temporary query scaffold with target zero, five paint kinds, six lifecycles, four core modules, 120000 source bytes, 12000 gzip-growth bytes, five-percent reader regression, and forbidden special-case vocabulary."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor; npm run test:real-katex-glyph-compositor; npm run typecheck; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-03 same-baseline fraction fixture",
+      "checkedAt": "2026-07-25T23:40:40.262Z",
+      "notes": "Forty-one Chromium checks, 38 focused compositor tests, all TypeScript projects, and 46 stable captures passed. Wide and phone endpoint evidence reports zero source-target center-anchor residual. Visual inspection confirms arbitrary vertical travel is gone; the known late typography overlap remains visible for the next handoff slices."
     }
   ],
   "allowedWork": [
@@ -97,7 +104,8 @@
     {
       "id": "slice-03",
       "title": "same-baseline-fraction-fixture",
-      "status": "planned"
+      "summary": "Moved the generic review equation wrappers from separate 34/70-percent rows to one 50-percent center anchor. Wide and phone source/target centers now match at zero residual; 41 Chromium checks, 38 focused tests, typecheck, and 46 stable captures pass. The late typography overlap remains deliberately visible for the next generic handoff slices.",
+      "status": "complete"
     },
     {
       "id": "slice-04",

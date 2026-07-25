@@ -1571,6 +1571,36 @@ test("visible fraction card renders the complete moving scene on its shared cloc
   expect(early.filter(({ role }) => role?.startsWith("rule:"))).toHaveLength(2);
 });
 
+test("fraction native endpoints share one stable equation anchor", async ({
+  page
+}) => {
+  for (const viewport of [
+    { width: 1440, height: 950 },
+    { width: 390, height: 844 }
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+    await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+    const anchors = await page.locator(
+      '[data-reconciliation-case="fraction-merge"]'
+    ).evaluate((card) => {
+      const source = card.querySelector<HTMLElement>("[data-fraction-source]")!;
+      const target = card.querySelector<HTMLElement>("[data-fraction-target]")!;
+      const sourceRect = source.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      return {
+        sourceTop: getComputedStyle(source).top,
+        targetTop: getComputedStyle(target).top,
+        sourceAnchorY: sourceRect.top + sourceRect.height / 2,
+        targetAnchorY: targetRect.top + targetRect.height / 2
+      };
+    });
+
+    expect(anchors.sourceTop).toBe(anchors.targetTop);
+    expect(anchors.sourceAnchorY).toBeCloseTo(anchors.targetAnchorY, 1);
+  }
+});
+
 test("observer rejects missing and duplicate explicit motion nodes", async ({
   page
 }) => {
