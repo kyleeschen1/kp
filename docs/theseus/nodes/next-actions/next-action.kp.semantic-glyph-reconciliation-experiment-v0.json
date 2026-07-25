@@ -149,6 +149,13 @@
       "scope": "slice-17 plus-minus split",
       "checkedAt": "2026-07-25T02:18:20.437Z",
       "notes": "48 focused tests and typecheck pass."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment and npm run typecheck",
+      "status": "passed",
+      "scope": "slice-18 compound trace",
+      "checkedAt": "2026-07-25T02:20:16.990Z",
+      "notes": "50 focused tests and typecheck pass."
     }
   ],
   "progress": {

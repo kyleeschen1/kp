@@ -204,7 +204,8 @@
     {
       "id": "slice-18",
       "title": "Sped-up-compound-trace",
-      "status": "planned"
+      "summary": "Connected one quadratic compound interval to generic causal compression: every canonical operation remains visible at sped-up timing, accessibility transcript is complete, and drill-down restores the exact paused parent.",
+      "status": "complete"
     },
     {
       "id": "slice-19",
