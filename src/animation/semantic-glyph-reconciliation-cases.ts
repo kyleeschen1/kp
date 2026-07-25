@@ -3,6 +3,7 @@ import {
   createNumeratorSplitMergeEquationKpAsset,
   numeratorSplitMergeEquationAssetIds
 } from "../semantic/numerator-split-merge-equation-asset.ts";
+import { createKpQuadraticBranchChoreography } from "./quadratic-branch-choreography.ts";
 import type { KpGlyphReconciliationCaseInput } from "./semantic-glyph-reconciliation-compiler.ts";
 import type { KpCanonicalOperationExecutionResult } from "../semantic/transformation-definition-binding.ts";
 
@@ -149,5 +150,87 @@ export function createKpFractionMergeGlyphReconciliationCase(): KpGlyphReconcili
       "rewind"
     ] as const,
     durationMs: 720
+  });
+}
+
+export function createKpQuadraticPlusMinusGlyphReconciliationCase(): KpGlyphReconciliationCaseInput {
+  const choreography = createKpQuadraticBranchChoreography(
+    "method.quadratic.completing-square"
+  );
+  const edge = {
+    id: choreography.fission.lineageEdgeId,
+    relation: "split" as const,
+    sourceEntityIds: choreography.fission.sourceEntityIds,
+    targetEntityIds: choreography.fission.targetEntityIds,
+    summary: "One semantic plus-minus origin creates two exact root branches."
+  };
+  const execution: KpCanonicalOperationExecutionResult = {
+    kind: "canonical-operation-execution",
+    transformationId: "operation.quadratic.branch-plus-minus",
+    operationSpecId: "kp.core.fan-out",
+    roleBindings: {
+      source: edge.sourceEntityIds,
+      destinations: edge.targetEntityIds
+    },
+    lineageGraph: {
+      kind: "semantic-lineage-graph",
+      id: choreography.fission.lineageGraphId,
+      sourceEntityIds: edge.sourceEntityIds,
+      targetEntityIds: edge.targetEntityIds,
+      edges: [edge]
+    },
+    correspondenceMap: {
+      id: `${choreography.fission.lineageGraphId}.correspondence`,
+      records: [{
+        id: edge.id,
+        relation: "fan-out",
+        sourceSelectorIds: edge.sourceEntityIds,
+        targetSelectorIds: edge.targetEntityIds,
+        summary: edge.summary
+      }]
+    }
+  };
+  return Object.freeze({
+    id: "case.quadratic.plus-minus-branch",
+    execution,
+    viewport: { x: 0, y: 0, width: 640, height: 300 },
+    sourceGlyphs: [{
+      id: "quadratic.source.plus-minus",
+      entityId: edge.sourceEntityIds[0]!,
+      glyphKey: "±",
+      ordinal: 0
+    }],
+    targetGlyphs: [
+      {
+        id: "quadratic.target.minus",
+        entityId: edge.targetEntityIds[0]!,
+        glyphKey: "−",
+        ordinal: 0
+      },
+      {
+        id: "quadratic.target.plus",
+        entityId: edge.targetEntityIds[1]!,
+        glyphKey: "+",
+        ordinal: 0
+      }
+    ],
+    sourceMetrics: [{
+      glyphId: "quadratic.source.plus-minus",
+      bounds: { x: 310, y: 134, width: 20, height: 28 }
+    }],
+    targetMetrics: [
+      { glyphId: "quadratic.target.minus", bounds: { x: 238, y: 188, width: 20, height: 28 } },
+      { glyphId: "quadratic.target.plus", bounds: { x: 382, y: 188, width: 20, height: 28 } }
+    ],
+    requiredCapabilities: [
+      "accessibility",
+      "annotation",
+      "branching",
+      "direct-seek",
+      "hover",
+      "responsive",
+      "rewind"
+    ] as const,
+    durationMs: 760
   });
 }

@@ -198,7 +198,8 @@
     {
       "id": "slice-17",
       "title": "One-to-many-plus-minus-branch",
-      "status": "planned"
+      "summary": "Routed the preserved plus-minus origin to stable minus and plus branch IDs through generic split multiplicity and the common scheduler; exact endpoints, seek, and rewind are preserved.",
+      "status": "complete"
     },
     {
       "id": "slice-18",

@@ -142,6 +142,13 @@
       "scope": "slice-16 Cloze",
       "checkedAt": "2026-07-25T02:15:43.191Z",
       "notes": "46 focused tests and typecheck pass."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment and npm run typecheck",
+      "status": "passed",
+      "scope": "slice-17 plus-minus split",
+      "checkedAt": "2026-07-25T02:18:20.437Z",
+      "notes": "48 focused tests and typecheck pass."
     }
   ],
   "progress": {
