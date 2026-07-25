@@ -33,6 +33,20 @@ test("real-glyph experiment retains the failed baseline after retiring its overl
   );
 });
 
+test("full-scene ledger rejects focal-only success claims", () => {
+  const ledger = kpRealGlyphCompositorExperimentLedger;
+  assert.deepEqual(ledger.fullSceneFailureCodes, [
+    "focal-only-reconciliation",
+    "implicit-target-subtree",
+    "unplanned-structural-ink",
+    "component-checkpoint-without-scene-settlement"
+  ]);
+  assert.equal(ledger.fullSceneAcceptance.length, 6);
+  assert.match(ledger.fullSceneAcceptance[0]!, /Every painted source and target/);
+  assert.match(ledger.fullSceneAcceptance[1]!, /every visible fragment/);
+  assert.match(ledger.fullSceneAcceptance[4]!, /complete scene hands off atomically/);
+});
+
 test("real-glyph acceptance and complexity budgets are fixed before implementation", () => {
   const ledger = kpRealGlyphCompositorExperimentLedger;
   assert.equal(ledger.exemplarAcceptance.length, 6);

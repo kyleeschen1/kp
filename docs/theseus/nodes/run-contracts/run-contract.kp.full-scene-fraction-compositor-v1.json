@@ -30,6 +30,13 @@
       "scope": "slice-01 per-card playback controls",
       "checkedAt": "2026-07-25T17:07:16.227Z",
       "notes": "12 focused tests, 18 real Chromium tests, all TypeScript projects, and ten wide/phone captures pass; four equation cards expose synchronized local play, seek, status, pause, and rewind controls."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-02 failure and coverage ledger",
+      "checkedAt": "2026-07-25T17:08:53.438Z",
+      "notes": "13 focused tests pass; four focal-only failure codes and six total-scene acceptance laws are frozen."
     }
   ],
   "allowedWork": [
@@ -64,7 +71,8 @@
     {
       "id": "slice-02",
       "title": "failure-and-coverage-ledger",
-      "status": "planned"
+      "summary": "Recorded four focal-only failure modes and six full-scene acceptance laws so safe focal fallback cannot be mistaken for continuous whole-expression motion.",
+      "status": "complete"
     },
     {
       "id": "slice-03",

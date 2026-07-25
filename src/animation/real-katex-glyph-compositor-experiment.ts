@@ -4,11 +4,19 @@ export type KpRealGlyphBaselineFailureCode =
   | "mid-flight-character-substitution"
   | "unregistered-native-handoff";
 
+export type KpFullSceneFailureCode =
+  | "focal-only-reconciliation"
+  | "implicit-target-subtree"
+  | "unplanned-structural-ink"
+  | "component-checkpoint-without-scene-settlement";
+
 export interface KpRealGlyphCompositorExperimentLedger {
   readonly schemaVersion: "kp.real-katex-glyph-compositor-experiment.v1";
   readonly canonicalCaseId: "case.solve-x.one-to-one";
   readonly currentRenderer: "native-katex-fragment-compositor";
   readonly baselineFailureCodes: readonly KpRealGlyphBaselineFailureCode[];
+  readonly fullSceneFailureCodes: readonly KpFullSceneFailureCode[];
+  readonly fullSceneAcceptance: readonly string[];
   readonly durableForbiddenFields: readonly string[];
   readonly exemplarAcceptance: readonly string[];
   readonly productionModules: readonly string[];
@@ -29,6 +37,20 @@ KpRealGlyphCompositorExperimentLedger = Object.freeze({
     "mid-flight-character-substitution",
     "unregistered-native-handoff"
   ] as const),
+  fullSceneFailureCodes: Object.freeze([
+    "focal-only-reconciliation",
+    "implicit-target-subtree",
+    "unplanned-structural-ink",
+    "component-checkpoint-without-scene-settlement"
+  ] as const),
+  fullSceneAcceptance: Object.freeze([
+    "Every painted source and target fragment has exactly one lifecycle disposition.",
+    "One inert material scene owns every visible fragment during active transit.",
+    "No complete native endpoint subtree leaks visible ink during transit.",
+    "Persistent glyphs and structural rules move continuously between exact endpoints.",
+    "The complete scene hands off atomically to native target notation.",
+    "Unsupported geometry settles one explicit connected scene component."
+  ]),
   durableForbiddenFields: Object.freeze([
     "backendPlan",
     "domHandle",
@@ -67,6 +89,15 @@ export function validateKpRealGlyphCompositorExperimentLedger(
   const issues: string[] = [];
   if (new Set(ledger.baselineFailureCodes).size !== 4) {
     issues.push("The failed overlay baseline requires four distinct failure codes.");
+  }
+  if (
+    ledger.fullSceneFailureCodes.length !== 4 ||
+    new Set(ledger.fullSceneFailureCodes).size !== 4
+  ) {
+    issues.push("The focal-only scene baseline requires four distinct failure codes.");
+  }
+  if (ledger.fullSceneAcceptance.length !== 6) {
+    issues.push("The full-scene fraction exemplar requires six frozen acceptance laws.");
   }
   if (ledger.exemplarAcceptance.length !== 6) {
     issues.push("The real-glyph exemplar requires six frozen acceptance laws.");
