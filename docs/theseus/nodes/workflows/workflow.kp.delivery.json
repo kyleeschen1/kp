@@ -10,6 +10,10 @@
       "kind": "user-intent",
       "intent": "Make Kinetic Press instantly legible as the medium where people see concepts move: perfect one visually beautiful, scrollable, searchable, URL-addressable equation card before generalizing the shared semantic runtime across geometry, graphs, code, providers, and review modes.",
       "summary": "Approved project brief goal."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-24-semantic-glyph-reconciliation-experiment-long-loop-proposal.md"
     }
   ],
   "nextActions": [
@@ -19,6 +23,26 @@
     "next-action.refill.experiment.plan-revision.kp.v4.primitive-amortization",
     "next-action.refill.experiment.plan-revision.kp.v4.semantic-llm-boundary"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "semantic-glyph experiment proposal control plane",
+      "checkedAt": "2026-07-25T01:25:55.164Z",
+      "notes": "2296 tests passed, including architecture, inference, concept catalog, semantic runtime, roadmap, and project-control coverage."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "semantic-glyph experiment proposal control plane",
+      "checkedAt": "2026-07-25T01:25:56.308Z",
+      "notes": "TypeScript application, Node, test, and domain projects passed; Vite production build completed."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Accepted semantic-to-interactive compiler direction recorded; 24-slice glyph reconciliation experiment proposed and awaiting explicit approval."
+  },
   "allowedWork": [
     "The semantic reader matches the accepted x + 3 = 7 animation card at named forward and reverse frames without typography changes, collisions, or discontinuities.",
     "Motion communicates algebraic causality while prose, static HTML, search, print, precise URLs, and accessible focus remain first-class.",

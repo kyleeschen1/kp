@@ -1,14 +1,14 @@
 # KP Strategy
 
-Last Updated: 2026-07-10
+Last Updated: 2026-07-24
 
 ## North Star
 
-Kinetic Press should become a semantic animation system, not a collection of
-one-off visual effects. LLMs should be able to propose and revise structured
-animations; KP should validate the semantics, execute computations, derive
-representations, preserve identity, render synchronized views, and export the
-result as interactive cards, lessons, static steps, GIFs, or videos.
+Kinetic Press should become a verified semantic-to-interactive compiler, not a
+collection of one-off visual effects. LLMs should be able to propose and revise
+structured animations; KP should validate the semantics, execute computations,
+derive representations, preserve identity, render synchronized views, and
+export the result as interactive cards, lessons, static steps, GIFs, or videos.
 
 ## Product Thesis
 
@@ -25,6 +25,12 @@ artifact itself. The same source should support:
 - embeddable capsules with lazy capabilities;
 - GIF, MP4/WebM, and static-step exports.
 
+KP's custom technical investment must measurably improve on a
+semantic-constrained glyph-transform baseline through branching, direct
+seek/rewind, responsive execution, accessibility, hover, annotations, Cloze,
+and renderer-independent compilation. Bespoke motion planning is not itself a
+product thesis.
+
 ## Strategic Architecture
 
 The project should keep four layers distinct:
@@ -38,6 +44,13 @@ The project should keep four layers distinct:
 4. **Authoring layer:** dashboard/catalog, animation specs, LLM-editable
    scripts, tutorial cards, comparison cards, report cards, and project
    navigation.
+
+Within the executable animation path, keep only three stages: canonical
+semantic trace, ephemeral presentation planning, and rendering. Authoring
+produces inputs and projections around that path; it does not add another
+runtime animation layer. One durable semantic animation artifact may compile
+to multiple capability-declaring backends, with static JavaScript as the
+primary full-interaction target.
 
 ## Project Docs And Theseus
 
@@ -92,3 +105,7 @@ contract is stable enough to support it.
 - Do not let dashboard rows drift from source refs, tests, or Theseus records.
 - Do not pursue unrelated Theseus planner infrastructure while KP semantic
   runtime work is the selected frontier.
+- Do not infer semantic lineage from visual glyph equality.
+- Do not grow operation-specific scheduling exceptions as a substitute for a
+  general presentation law; unsupported work must fall back conservatively or
+  remain lesson-authored.

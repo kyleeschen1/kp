@@ -1,18 +1,24 @@
 # Quadratic operation-presentation governance checkpoint
 
 Date: 2026-07-24
-Status: `HUMAN_CHECKPOINT`
+Status: `DIAGNOSTIC_EXEMPLAR`; publication and promotion rejected
 Run contract:
 `run-contract.kp.quadratic-operation-presentation-governance-v0`
 Target: `next-action.kp.quadratic-semantic-branching-v0`
 Slice: `slice-20`
 
-## Recommendation
+## Disposition
 
-Review the revised quadratic exemplar as one explanation, with particular
-attention to causal legibility and motion density inside the two algebra
-methods. Do not publish it in the Workbench or generalize its contracts to
-other animation families until this checkpoint receives explicit approval.
+Human review accepts this checkpoint as a successful diagnostic exemplar but
+rejects it for Workbench publication and architectural promotion. Preserve its
+exact semantic authorities, branching, graph correspondence, drill-down,
+accessibility, review provenance, and deterministic visual baseline. Do not
+continue polishing the presentation under the current scheduler or extract
+quadratic-specific motion rules.
+
+The accepted successor is the bounded semantic-constrained glyph
+reconciliation experiment recorded in
+`../decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md`.
 
 ## Canonical reference and preservation boundary
 
@@ -130,6 +136,10 @@ review of this exemplar.
 
 ## Human decision
 
-Pending explicit visual review. The standard development-review inbox is
-present on the route and should be used for frame-specific critique. Until the
-checkpoint is approved, the durable outcome is `HUMAN_CHECKPOINT`.
+Reviewed on 2026-07-24. The visual work is materially improved, and the graph
+and branching remain strong, but crowded compound manipulation still exposes
+an organizational limit in small-rule composition. The durable outcome is
+`DIAGNOSTIC_EXEMPLAR`: retain for comparison and regression evidence; do not
+publish or generalize. The standard development-review inbox remains present
+for provenance, but this checkpoint is closed rather than awaiting more
+current-scheduler polish.

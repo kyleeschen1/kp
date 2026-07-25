@@ -1,9 +1,10 @@
 # Semantic Runtime Thread
 
 Status: stable-supporting
-Last Updated: 2026-07-17
-Current Next Action: Maintain equation motion as a bounded conformance lane.
-Primary product work has handed off to
+Last Updated: 2026-07-24
+Current Next Action: Preserve the semantic runtime while the bounded
+glyph-reconciliation experiment tests whether a simpler common presentation
+path can replace operation-specific scheduling. Primary product work remains in
 `threads/cross-domain-tutorial-platform.md`.
 
 ## Goal
@@ -192,6 +193,16 @@ treatments into conformance fixtures. Depth and shadow may be tested as
 presentation-only focus channels within that envelope, never as a separate
 semantic or timing system.
 
+Human review of the quadratic pressure exemplar supersedes the assumption that
+one fixed `orient/reflow/act/settle/release` order is universal. Anticipatory
+movement remains useful, but actual ordering must come from bounded measured
+clearance dependencies. The accepted experiment keeps canonical operations and
+semantic lineage authoritative, uses Manim-style glyph reconciliation only
+inside that lineage, falls back at ambiguity, and treats measured schedules as
+ephemeral backend plans. It must reduce existing scheduling policy or stop
+custom-planner investment; it may not add another operation taxonomy. See
+`../decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md`.
+
 The accepted grill-me decisions additionally separate immutable semantic
 choreography from configurable, versioned gestalt styles. New generated work
 should default to `kp.organic-subtle@1.0.0`, while
@@ -306,6 +317,8 @@ same fixtures into tutorial-card and export/sample paths.
 
 - `docs/project/strategy.md`
 - `docs/project/roadmap.md`
+- `docs/project/decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md`
+- `docs/project/reviews/2026-07-24-semantic-glyph-reconciliation-experiment-long-loop-proposal.md`
 - `docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md`
 - `docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md`
 - `docs/project/threads/cross-domain-tutorial-platform.md`

@@ -12,6 +12,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-24-quadratic-operation-presentation-governance-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md"
     }
   ],
   "dependsOn": {
@@ -363,8 +367,8 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: the renewed exemplar now presents both algebra methods as certified operation-specific causal traces, supports exact nested drill-down, hands signed branches directly to graph roots, preserves the standard review inbox, and passes release gates. Explicit visual approval is still required before Workbench publication or contract generalization."
+    "state": "complete",
+    "summary": "Human review closed the renewed quadratic as DIAGNOSTIC_EXEMPLAR: preserve semantic, branch, graph, drill-down, accessibility, and baseline evidence; publication, generalization, and further current-scheduler polish are rejected."
   },
   "expectedLearning": [
     "Whether explicit quadratic method paths, plus-minus solution branching, and graph-root correspondence can share stable semantic identity and exact rewind without renderer-owned algebra.",

@@ -1,10 +1,10 @@
 # Cross-domain Tutorial Platform Thread
 
 Status: active
-Last Updated: 2026-07-22
-Current Next Action: Prove dependency-checked branch schedules and exact rewind
-inside the accepted solve-x responsive-attention exemplar, then stop for human
-visual review before structured algebra or family promotion.
+Last Updated: 2026-07-24
+Current Next Action: Review and approve the four-case semantic-constrained
+glyph reconciliation experiment, then run only through its mandatory first
+solve-x exemplar checkpoint.
 
 ## Goal
 
@@ -36,6 +36,15 @@ reader loops closed the solve-x attention, responsive, distribution, generated-
 quality, and composition-root checkpoints. Approved plan revision
 `plan-revision.kp.v5` now owns the product dependency order, and
 `run-contract.kp.product-roadmap-v5-program-v0` owns live execution progress.
+
+The quadratic operation-presentation checkpoint revealed that small
+operation-specific motion rules do not yet compose cleanly in crowded algebra.
+The accepted response is not another quadratic exception sequence. KP will test
+one lineage-constrained glyph reconciler and one bounded geometry scheduler
+against one-to-one, many-to-one, one-to-many, and crowded responsive cases. The
+current quadratic remains diagnostic evidence and is not approved for
+publication. The decision is recorded in
+`decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md`.
 
 FTC remains a valuable reviewable artifact, but its human review and the BFS,
 economics, programming, and physics breadth sequence are parked until the
@@ -160,6 +169,8 @@ is a new combination of tutorial, graph, equation, and interaction vocabulary.
 - `docs/project/reviews/2026-07-19-linear-equation-architecture-stabilization-proposal.md`
 - `docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md`
 - `docs/project/decisions/2026-07-23-kp-capability-pressure-and-arithmetic-expansion.md`
+- `docs/project/decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md`
+- `docs/project/reviews/2026-07-24-semantic-glyph-reconciliation-experiment-long-loop-proposal.md`
 - `docs/project/reviews/2026-07-23-kp-capability-pressure-domain-order-next-step-review.md`
 - `docs/project/decisions/2026-07-17-kp-hermeneutic-cross-domain-tutorial-contract.md`
 - `docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md`

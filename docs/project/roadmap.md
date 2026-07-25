@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-22
+Last Updated: 2026-07-24
 Status: active
 Active Thread: `threads/cross-domain-tutorial-platform.md`
 Supporting Thread: `threads/semantic-runtime.md`
@@ -66,16 +66,35 @@ waves and coverage ledger live in
 they do not expand the active Theseus contract without a later explicit
 approval.
 
+The semantic-glyph reconciliation decision in
+`decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md` now
+narrows the immediate architecture question. The completed quadratic
+presentation is retained as a diagnostic exemplar, not approved for
+publication or promotion. Before another animation family advances, KP will
+test whether one semantic-lineage-constrained glyph matcher and one bounded
+geometry scheduler can cover four adversarial identity/multiplicity/layout
+cases while preserving branching, cards/Cloze, accessibility, interaction,
+static-JS execution, and headless compilation. If any case needs
+operation-specific scheduling, general custom-motion-planner investment stops.
+
 ## Active Focus
 
-**Execute the approved compositional-quality frontier beginning with branch
-scheduling and responsive attention.** The solve-x attention model, wide
-scrollytelling projection, narrow focus stepper, distribution convergence, and
-shared reader composition roots have passed their prior automated and human
-checkpoints. The current exemplar must now prove dependency-checked together,
-sequential, staggered, and stepped branch schedules with exact rewind while
-preserving the accepted semantic document, measured motion, URLs, search,
-focus, accessibility, and production route behavior.
+**Run the bounded semantic-constrained glyph reconciliation experiment.** The
+current quadratic is a successful diagnostic exemplar but is not approved for
+publication, family promotion, or further polishing under its current
+scheduler. The next proposed loop tests a single matcher, geometry scheduler,
+JavaScript backend, and headless backend against solve-x one-to-one identity, a
+many-to-one fraction merge with Cloze, the quadratic one-to-many `±` branch,
+and one crowded quadratic interval at wide and phone widths.
+
+The experiment is complexity-negative replacement work. It may evolve the
+durable animation artifact only with renderer-independent constraints, must
+keep glyph matches and measured schedules ephemeral, must delete or reduce at
+least one old scheduling policy site, and must stop if a case requires its own
+scheduler. The proposal is in
+`reviews/2026-07-24-semantic-glyph-reconciliation-experiment-long-loop-proposal.md`;
+execution remains unapproved until its exact 24 slices receive explicit
+approval.
 
 The current breadth checkpoint is the derivative bridge. It must synchronize a
 KaTeX finite difference quotient with secant geometry, continuously converge to
@@ -330,20 +349,24 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Perfect and human-review one solve-x branch-scheduling and responsive-
-   attention exemplar without generalizing its visual recipes.
-2. Replace distribution string templates with stable expression subtrees,
+1. Approve and run the four-case semantic-constrained glyph reconciliation
+   experiment, with mandatory human checkpoints after the first solve-x
+   exemplar and the complete experiment.
+2. Based on its terminal `PASS` or `STOP_CUSTOM_PLANNER` result, either migrate
+   proven common presentation behavior or retain conservative checkpoint
+   rendering and move high-fidelity motion to authored backend/lesson assets.
+3. Replace distribution string templates with stable expression subtrees,
    semantic role binding, verified rewrites, and typed normal-form intent.
-3. Pressure-test those contracts through opaque fraction fan-out, numerator
+4. Pressure-test those contracts through opaque fraction fan-out, numerator
    normalization, distributed fraction terms, reverse factoring, and a lawful
    multi-step solve macro.
-4. Prove governed semantic and LLM authoring while deterministic compilers
+5. Prove governed semantic and LLM authoring while deterministic compilers
    retain geometry, timing, typography, responsive adaptation, rendering,
    validation, and repair authority.
-5. Promote radicals/exponents, functional wrapping, derivatives, integral
+6. Promote radicals/exponents, functional wrapping, derivatives, integral
    accumulation, vector/projection, and matrix-vector/linear-map coordination
    one exemplar checkpoint at a time.
-6. Keep FTC, BFS, economics, programming, physics, course-scale curriculum,
+7. Keep FTC, BFS, economics, programming, physics, course-scale curriculum,
    dynamic package loading, and broad WebGL work parked until a new priority
    decision explicitly advances them.
 
