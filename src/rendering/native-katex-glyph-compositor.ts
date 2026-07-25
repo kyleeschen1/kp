@@ -37,43 +37,77 @@ export interface KpNativeKatexContextReflowFrame {
   readonly departingOpacity: number;
 }
 
+export interface KpNativeKatexMultiplicityFrame {
+  readonly visualOwner: "source-natives" | "clone-transit" | "target-native";
+  readonly constituentFrames: readonly KpNativeKatexGlyphFrame[];
+  readonly targetHandoffDeltaPx: number;
+}
+
 export function createKpNativeKatexFragmentClone(input: {
   readonly stage: HTMLElement;
   readonly ownerId: string;
   readonly observation: KpNativeKatexFragmentObservation;
 }): KpNativeKatexFragmentClone {
-  if (input.observation.sourceElement.ownerDocument !== input.stage.ownerDocument) {
-    throw new Error("Native fragment clone requires one renderer document.");
+  return createKpNativeKatexFragmentClones({
+    stage: input.stage,
+    fragments: [{
+      ownerId: input.ownerId,
+      observation: input.observation
+    }]
+  })[0]!;
+}
+
+export function createKpNativeKatexFragmentClones(input: {
+  readonly stage: HTMLElement;
+  readonly fragments: readonly {
+    readonly ownerId: string;
+    readonly observation: KpNativeKatexFragmentObservation;
+  }[];
+}): readonly KpNativeKatexFragmentClone[] {
+  const ownerIds = new Set<string>();
+  for (const fragment of input.fragments) {
+    if (
+      fragment.observation.sourceElement.ownerDocument !==
+      input.stage.ownerDocument
+    ) {
+      throw new Error("Native fragment clone requires one renderer document.");
+    }
+    if (ownerIds.has(fragment.ownerId)) {
+      throw new Error(`Native fragment owner ${fragment.ownerId} is duplicated.`);
+    }
+    ownerIds.add(fragment.ownerId);
   }
   syncKpEquationMaterialLayer({
     stage: input.stage,
-    owners: [{
-      ownerId: input.ownerId,
-      sourceElement: input.observation.sourceElement,
-      sourceMotionId: input.observation.motionId,
-      rect: input.observation.rect,
+    owners: input.fragments.map(({ ownerId, observation }) => ({
+      ownerId,
+      sourceElement: observation.sourceElement,
+      sourceMotionId: observation.motionId,
+      rect: observation.rect,
       opacity: 1,
       transform: "none"
-    }]
+    }))
   });
-  const ownerElement = input.stage.querySelector<HTMLElement>(
-    `[data-kp-equation-material-owner-id="${CSS.escape(input.ownerId)}"]`
-  );
-  const visualElement = ownerElement?.firstElementChild;
-  if (
-    ownerElement === null ||
-    !(visualElement instanceof HTMLElement)
-  ) {
-    throw new Error(`Material layer failed to create ${input.ownerId}.`);
-  }
-  makeVisualCloneInert(ownerElement, visualElement);
-  return Object.freeze({
-    kind: "native-katex-fragment-clone",
-    lifecycle: "renderer-session",
-    observationId: input.observation.id,
-    ownerElement,
-    visualElement
-  });
+  return Object.freeze(input.fragments.map(({ ownerId, observation }) => {
+    const ownerElement = input.stage.querySelector<HTMLElement>(
+      `[data-kp-equation-material-owner-id="${CSS.escape(ownerId)}"]`
+    );
+    const visualElement = ownerElement?.firstElementChild;
+    if (
+      ownerElement === null ||
+      !(visualElement instanceof HTMLElement)
+    ) {
+      throw new Error(`Material layer failed to create ${ownerId}.`);
+    }
+    makeVisualCloneInert(ownerElement, visualElement);
+    return Object.freeze({
+      kind: "native-katex-fragment-clone" as const,
+      lifecycle: "renderer-session" as const,
+      observationId: observation.id,
+      ownerElement,
+      visualElement
+    });
+  }));
 }
 
 export function applyKpNativeKatexGlyphFrame(input: {
@@ -142,6 +176,39 @@ export function applyKpNativeKatexGlyphOwnership(input: {
     sourceNativeOpacity: handoff.sourceNativeOpacity,
     cloneOpacity: handoff.materialOpacity,
     targetNativeOpacity: handoff.targetNativeOpacity
+  });
+}
+
+export function applyKpNativeKatexManyToOneFrame(input: {
+  readonly clones: readonly KpNativeKatexFragmentClone[];
+  readonly sources: readonly KpNativeKatexFragmentObservation[];
+  readonly target: KpNativeKatexFragmentObservation;
+  readonly progress: number;
+}): KpNativeKatexMultiplicityFrame {
+  if (input.sources.length < 2 || input.clones.length !== input.sources.length) {
+    throw new Error(
+      "Many-to-one native composition requires one clone per source and at least two sources."
+    );
+  }
+  const constituentFrames = input.sources.map((source, index) =>
+    applyKpNativeKatexGlyphFrame({
+      clone: input.clones[index]!,
+      source,
+      target: input.target,
+      progress: input.progress
+    })
+  );
+  const visualOwner = constituentFrames[0]!.visualOwner === "source-native"
+    ? "source-natives"
+    : constituentFrames[0]!.visualOwner;
+  return Object.freeze({
+    visualOwner,
+    constituentFrames: Object.freeze(constituentFrames),
+    targetHandoffDeltaPx: Math.max(
+      ...constituentFrames.map(({ targetHandoffDeltaPx }) =>
+        targetHandoffDeltaPx
+      )
+    )
   });
 }
 

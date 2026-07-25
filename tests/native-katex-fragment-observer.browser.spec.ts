@@ -406,6 +406,106 @@ test("source, clone, and target have exactly one visual owner", async ({
   }
 });
 
+test("generic many-to-one frame converges exact native fragments without substitution", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const result = await page.evaluate(async () => {
+    const stage = document.querySelector<HTMLElement>(
+      '[data-reconciliation-case="solve-x"] [data-case-stage]'
+    )!;
+    const firstSource = stage.querySelector<HTMLElement>("[data-case-source]")!;
+    const target = stage.querySelector<HTMLElement>("[data-case-target]")!;
+    const secondSource = firstSource.cloneNode(true) as HTMLElement;
+    secondSource.removeAttribute("data-case-source");
+    secondSource.style.left = `${parseFloat(firstSource.style.left) + 120}px`;
+    secondSource.dataset["kpMotionId"] = "motion.merge.source-b";
+    firstSource.dataset["kpMotionId"] = "motion.merge.source-a";
+    target.dataset["kpMotionId"] = "motion.merge.target";
+    stage.append(secondSource);
+    // @ts-expect-error Vite resolves browser-side source modules.
+    const observer = await import("/src/rendering/native-katex-fragment-observer.ts");
+    // @ts-expect-error Vite resolves browser-side source modules.
+    const compositor = await import("/src/rendering/native-katex-glyph-compositor.ts");
+    type BrowserObservation = {
+      id: string;
+      semanticEntityId: string;
+      motionId: string;
+      glyphKey: string;
+      sourceElement: HTMLElement;
+      rect: { left: number; top: number; width: number; height: number };
+      styleFingerprint: string;
+      fontRevision: number;
+    };
+    const observed = observer.observeKpNativeKatexFragments({
+      stage,
+      bindings: [{
+        id: "fragment.merge.source-a",
+        semanticEntityId: "entity.merge.source-a",
+        motionId: "motion.merge.source-a",
+        glyphKey: "x"
+      }, {
+        id: "fragment.merge.source-b",
+        semanticEntityId: "entity.merge.source-b",
+        motionId: "motion.merge.source-b",
+        glyphKey: "x"
+      }, {
+        id: "fragment.merge.target",
+        semanticEntityId: "entity.merge.target",
+        motionId: "motion.merge.target",
+        glyphKey: "x"
+      }],
+      fontRevision: 1
+    }).fragments as BrowserObservation[];
+    const clones = compositor.createKpNativeKatexFragmentClones({
+      stage,
+      fragments: observed.slice(0, 2).map((observation, index) => ({
+        ownerId: `owner.merge.${index}`,
+        observation
+      }))
+    }) as {
+      ownerElement: HTMLElement;
+      visualElement: HTMLElement;
+    }[];
+    const frames = [0, 0.5, 1].map((progress) =>
+      compositor.applyKpNativeKatexManyToOneFrame({
+        clones,
+        sources: observed.slice(0, 2),
+        target: observed[2]!,
+        progress
+      })
+    );
+    return {
+      owners: frames.map(({ visualOwner }) => visualOwner),
+      endpointDelta: frames[2]!.targetHandoffDeltaPx,
+      sourceTexts: observed.slice(0, 2).map(({ sourceElement }) =>
+        sourceElement.textContent
+      ),
+      cloneTexts: clones.map(({ visualElement }) => visualElement.textContent),
+      targetText: target.textContent,
+      endpointCloneOpacities: clones.map(({ ownerElement }) =>
+        Number(ownerElement.style.opacity)
+      ),
+      targetOpacity: Number(target.style.opacity)
+    };
+  });
+
+  expect(result.owners).toEqual([
+    "source-natives",
+    "clone-transit",
+    "target-native"
+  ]);
+  expect(result.endpointDelta).toBe(0);
+  expect(result.sourceTexts).toEqual([
+    result.targetText,
+    result.targetText
+  ]);
+  expect(result.cloneTexts).toEqual(result.sourceTexts);
+  expect(result.endpointCloneOpacities).toEqual([0, 0]);
+  expect(result.targetOpacity).toBe(1);
+});
+
 test("moving clone meets native target within one CSS pixel without typography drift", async ({
   page
 }) => {

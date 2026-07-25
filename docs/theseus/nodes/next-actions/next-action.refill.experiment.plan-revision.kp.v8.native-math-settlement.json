@@ -138,6 +138,12 @@
       "status": "passed",
       "scope": "slice-14 denominator fragment binding",
       "checkedAt": "2026-07-25T15:27:50.625Z"
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-15 generic many-to-one compositor",
+      "checkedAt": "2026-07-25T15:35:18.799Z"
     }
   ],
   "progress": {

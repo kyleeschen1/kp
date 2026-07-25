@@ -141,7 +141,8 @@
     {
       "id": "slice-15",
       "title": "Generic-many-to-one-compositor",
-      "status": "planned"
+      "summary": "Added a renderer-neutral many-to-one fragment frame with bulk inert clones, exact convergence, unchanged visible content, and one atomic native target handoff.",
+      "status": "complete"
     },
     {
       "id": "slice-16",
