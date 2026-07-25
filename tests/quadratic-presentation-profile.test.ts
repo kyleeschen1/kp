@@ -8,7 +8,7 @@ import {
   validateKpQuadraticPresentationProfile
 } from "../src/animation/quadratic-presentation-profile.ts";
 
-test("canonical profile types method selection and five ordered phases", () => {
+test("canonical profile types method selection and four visible phases", () => {
   const profile = createCanonicalKpQuadraticPresentationProfile();
   assert.deepEqual(profile.methodSelection.availableMethodIds, [
     "method.quadratic.completing-square",
@@ -18,17 +18,23 @@ test("canonical profile types method selection and five ordered phases", () => {
     "intro",
     "method",
     "branch",
-    "reunion",
     "graph"
   ]);
+  assert.deepEqual(profile.semanticSolutionSet, {
+    completeAt: 0.8,
+    visiblyStaged: false,
+    semanticRole: "exact-solution-set"
+  });
   assert.deepEqual(validateKpQuadraticPresentationProfile(profile), []);
 });
 
-test("branch schedule and graph handoff are bounded and ordered", () => {
+test("settled branches hand directly to the graph without a visible reunion", () => {
   const profile = createCanonicalKpQuadraticPresentationProfile();
   assert.ok(profile.branchSchedule.splitAt < profile.branchSchedule.settleAt);
-  assert.ok(profile.branchSchedule.settleAt < profile.branchSchedule.reuniteAt);
-  assert.ok(profile.branchSchedule.reuniteAt < profile.graphHandoffAt);
+  assert.ok(profile.branchSchedule.settleAt < profile.graphHandoffAt);
+  assert.equal(profile.graphHandoffAt, profile.pacing.branchEnd);
+  assert.equal(profile.semanticSolutionSet.completeAt, profile.graphHandoffAt);
+  assert.equal(profile.semanticSolutionSet.visiblyStaged, false);
 });
 
 test("decoder rejects unknown fields and unordered policy", () => {
@@ -40,8 +46,7 @@ test("decoder rejects unknown fields and unordered policy", () => {
         rawKeyframes: [],
         branchSchedule: {
           splitAt: 0.8,
-          settleAt: 0.6,
-          reuniteAt: 0.9
+          settleAt: 0.6
         }
       }),
     /Unexpected presentation field|must order/

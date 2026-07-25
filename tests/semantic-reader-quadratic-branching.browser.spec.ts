@@ -22,8 +22,9 @@ test("quadratic learner surface shares progress across method, URL, and controls
   expect(new URL(page.url()).searchParams.get("kpMethod")).toBe("formula");
 
   await page.getByRole("button", { name: "Next explanation step" }).click();
-  await expect(body).toHaveAttribute("data-kp-reader-progress", "880");
-  await expect(page.locator("[data-kp-quadratic-solution]")).toBeVisible();
+  await expect(body).toHaveAttribute("data-kp-reader-progress", "1000");
+  await expect(page.locator("[data-kp-quadratic-graph]")).toBeVisible();
+  await expect(page.locator("[data-kp-quadratic-solution]")).toBeHidden();
   await expect(page.locator("[data-kp-quadratic-branches]")).toBeHidden();
 });
 
@@ -380,7 +381,7 @@ test("quadratic learner surface becomes a narrow focus stepper without overflow"
   }));
   expect(containment).toEqual({ overflow: 0, stage: true });
   await page.locator("[data-kp-quadratic-stage]").press("ArrowRight");
-  await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "880");
+  await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "1000");
 });
 
 test("quadratic graph displays the authored curve and exact solution intersections", async ({ page }) => {
@@ -408,7 +409,7 @@ test("direct seek and rewind keep equation and graph on the same playhead", asyn
   const settled = await synchronizedSnapshot();
 
   await seek(950);
-  await expect(stage).toHaveAttribute("data-kp-graph-progress", "0.5");
+  await expect(stage).toHaveAttribute("data-kp-graph-progress", "0.75");
   await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "950");
 
   await seek(680);
@@ -449,6 +450,68 @@ test("direct seek and rewind keep equation and graph on the same playhead", asyn
           }))
       };
     });
+  }
+});
+
+test("settled signed branches move directly into their exact graph roots", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(route, { waitUntil: "networkidle" });
+  const stage = page.locator("[data-kp-quadratic-stage]");
+  const slider = page.locator("[data-kp-quadratic-progress]");
+  const branches = page.locator("[data-kp-quadratic-branches]");
+  const solution = page.locator("[data-kp-quadratic-solution]");
+
+  await seek(800);
+  const initialDistance = await branchRootDistance("minus");
+  await expect(stage).toHaveAttribute("data-kp-phase", "graph");
+  await expect(branches).toBeVisible();
+  await expect(solution).toBeHidden();
+
+  await seek(930);
+  await expect(stage).toHaveAttribute("data-kp-graph-progress", "0.65");
+  await expect(branches).toBeVisible();
+  await expect(
+    stage.locator('[data-kp-branch="minus"]')
+  ).toHaveAttribute("data-kp-graph-handoff", "branch-owner");
+  expect(await branchRootDistance("minus")).toBeLessThan(initialDistance);
+
+  await seek(960);
+  await expect(branches).toBeHidden();
+  await expect(
+    stage.locator(
+      '[data-kp-selector-id="selector.quadratic.graph.root-two"]'
+    )
+  ).toHaveCSS("opacity", "1");
+  await expect(
+    stage.locator(
+      '[data-kp-selector-id="selector.quadratic.graph.root-three"]'
+    )
+  ).toHaveCSS("opacity", "1");
+  await expect(solution).toBeHidden();
+
+  async function seek(progressPermille: number): Promise<void> {
+    await slider.evaluate((element: HTMLInputElement, value) => {
+      element.value = String(value);
+      element.dispatchEvent(new Event("input", { bubbles: true }));
+    }, progressPermille);
+  }
+
+  async function branchRootDistance(sign: "minus" | "plus"): Promise<number> {
+    return page.evaluate((sign) => {
+      const branch = document.querySelector<HTMLElement>(
+        `[data-kp-branch="${sign}"]`
+      )!.getBoundingClientRect();
+      const selector = sign === "minus"
+        ? "selector.quadratic.graph.root-two"
+        : "selector.quadratic.graph.root-three";
+      const root = document.querySelector<SVGGElement>(
+        `[data-kp-selector-id="${selector}"]`
+      )!.getBoundingClientRect();
+      return Math.hypot(
+        branch.left + branch.width / 2 - (root.left + root.width / 2),
+        branch.top + branch.height / 2 - (root.top + root.height / 2)
+      );
+    }, sign);
   }
 });
 

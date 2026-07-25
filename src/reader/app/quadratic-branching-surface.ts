@@ -14,14 +14,13 @@ export const kpQuadraticReaderCheckpoints = Object.freeze([
   { id: "source", label: "Read the equation", progressPermille: 0, beatId: "beat.read-equation" },
   { id: "method", label: "Choose a method", progressPermille: 100, beatId: "beat.choose-method" },
   { id: "branches", label: "Follow plus and minus", progressPermille: 680, beatId: "beat.split-branches" },
-  { id: "solution-set", label: "Reunite the roots", progressPermille: 880, beatId: "beat.reunite-roots" },
   { id: "graph", label: "Locate the roots", progressPermille: 1_000, beatId: "beat.connect-graph" }
 ] as const);
 
 export interface KpQuadraticReaderSurfaceFrame {
   readonly progress: number;
   readonly progressPermille: number;
-  readonly phase: "intro" | "method" | "branch" | "reunion" | "graph";
+  readonly phase: "intro" | "method" | "branch" | "graph";
   readonly methodId: KpQuadraticMethodId;
   readonly equationState: KpQuadraticKatexState;
   readonly equationTransition?: {
@@ -31,7 +30,7 @@ export interface KpQuadraticReaderSurfaceFrame {
     readonly progress: number;
   } | undefined;
   readonly branchProgress: number;
-  readonly solutionSetNative: boolean;
+  readonly solutionSetSemanticallyComplete: boolean;
   readonly checkpointId: string;
   readonly checkpointLabel: string;
   readonly beatId: string;
@@ -85,7 +84,9 @@ export function projectKpQuadraticReaderSurface(input: {
         }
       : {}),
     branchProgress: clamp01((input.progress - 0.58) / 0.22),
-    solutionSetNative: input.progress >= 0.8,
+    // The exact set remains available to narration and inspection, but it is
+    // no longer inserted as a visible stop between branches and their roots.
+    solutionSetSemanticallyComplete: input.progress >= 0.8,
     checkpointId: checkpoint.id,
     checkpointLabel: checkpoint.label,
     beatId: checkpoint.beatId
@@ -123,7 +124,6 @@ function phaseAt(
   if (progress < 0.1) return "intro";
   if (progress < 0.58) return "method";
   if (progress < 0.8) return "branch";
-  if (progress < 0.9) return "reunion";
   return "graph";
 }
 

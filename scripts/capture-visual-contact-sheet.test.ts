@@ -71,7 +71,7 @@ test("quadratic contact sheet freezes both methods and wide and narrow outcomes"
       "method-formula-divide",
       "method-formula-drilldown",
       "branches",
-      "reunion",
+      "branch-graph-handoff",
       "graph",
       "method-square-phone",
       "method-formula-phone",

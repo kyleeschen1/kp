@@ -4,6 +4,7 @@ import {
   createKpQuadraticBranchChoreography,
   sampleKpQuadraticBranchChoreography
 } from "../../animation/quadratic-branch-choreography.ts";
+import { sampleKpFissionFusion } from "../../animation/fission-fusion.ts";
 import type {
   KpReaderDevReviewFrame
 } from "../../dev-review/reader-capture-provider.ts";
@@ -150,11 +151,15 @@ function render(sample: KpReaderClockSample): void {
   if (activeDrillDown !== undefined) {
     renderDrillDown(Number(drillProgress.value) / 1_000);
   }
-  const showBranches = branchesVisible(frame.progress) && !frame.solutionSetNative;
+  const showBranches = branchesVisible(frame.progress) ||
+    (frame.phase === "graph" &&
+      synchronized.graph.roots.some(({ opacity }) => opacity < 0.5));
   branches.hidden = !showBranches;
-  solution.hidden = !frame.solutionSetNative;
-  if (showBranches) renderBranches(frame.branchProgress);
+  // Semantic solution-set authority remains in the compiled transcript and
+  // frame model; presentation now moves branches straight into graph roots.
+  solution.hidden = true;
   renderGraph(synchronized);
+  if (showBranches) renderBranches(frame.branchProgress, synchronized);
 
   methodButtons.forEach((button) => {
     button.disabled = pausedParent !== undefined;
@@ -261,7 +266,8 @@ function renderEquations(
     ...stage.querySelectorAll<HTMLElement>("[data-kp-equation-state]")
   ];
   resetEquationPresentation(equations);
-  if (branchesVisible(frame.progress) || frame.solutionSetNative) {
+  if (branchesVisible(frame.progress) ||
+      frame.solutionSetSemanticallyComplete) {
     if (branchOriginOwnsMaterial(frame)) {
       showNativeEquation(equations, frame.equationState.id);
     }
@@ -447,7 +453,9 @@ function renderGraph(
       `[data-kp-selector-id="${binding.graphSelectorId}"]`
     );
     const rootFrame = synchronized.graph.roots[index]!;
-    root.style.opacity = String(rootFrame.opacity);
+    const graphOwnsRoot = synchronized.equation.phase === "graph" &&
+      rootFrame.opacity >= 0.5;
+    root.style.opacity = String(graphOwnsRoot ? 1 : 0);
     root.dataset["kpSourceBranch"] = binding.branchId;
     root.dataset["kpCorrespondenceId"] = binding.id;
     const label = root.querySelector<SVGTextElement>("text");
@@ -462,12 +470,16 @@ function renderGraph(
     synchronized.graphLocalProgress === 1 ? "settled" : "pending";
 }
 
-function renderBranches(branchProgress: number): void {
+function renderBranches(
+  branchProgress: number,
+  synchronized: ReturnType<typeof sampleKpQuadraticEquationGraphFrame>
+): void {
   const choreography = createKpQuadraticBranchChoreography(methodId);
-  const frame = sampleKpQuadraticBranchChoreography({
-    choreography,
-    progress: branchProgress,
-    direction: "forward"
+  const motion = sampleKpFissionFusion({
+    plan: choreography.fission,
+    // The presentation holds the exact signed branches after fission. The
+    // semantic native reunion remains available but is not visibly staged.
+    progress: Math.min(1, branchProgress / 0.55)
   });
   const separation = window.innerWidth >= 881
     ? choreography.responsiveSeparation.wide
@@ -487,17 +499,44 @@ function renderBranches(branchProgress: number): void {
   )) {
     result.hidden = showCandidates;
   }
-  if (frame.stage === "fission") {
-    const targets = frame.motion.targets;
-    applyBranch(minus, targets[0]?.opacity ?? 0, targets[0]?.scale ?? 1, separation * (1 - (targets[0]?.pathProgress ?? 0)));
-    applyBranch(plus, targets[1]?.opacity ?? 0, targets[1]?.scale ?? 1, -separation * (1 - (targets[1]?.pathProgress ?? 0)));
-  } else {
-    const sources = frame.motion.sources;
-    applyBranch(minus, sources[0]?.opacity ?? 0, sources[0]?.scale ?? 1, separation * (sources[0]?.pathProgress ?? 0));
-    applyBranch(plus, sources[1]?.opacity ?? 0, sources[1]?.scale ?? 1, -separation * (sources[1]?.pathProgress ?? 0));
+  const targets = motion.targets;
+  applyBranch(minus, targets[0]?.opacity ?? 0, targets[0]?.scale ?? 1, separation * (1 - (targets[0]?.pathProgress ?? 0)));
+  applyBranch(plus, targets[1]?.opacity ?? 0, targets[1]?.scale ?? 1, -separation * (1 - (targets[1]?.pathProgress ?? 0)));
+  if (synchronized.equation.phase === "graph") {
+    renderBranchGraphHandoff(synchronized);
   }
-  stage.dataset["kpBranchOwnerSide"] = frame.motion.ownership.ownerSide;
-  stage.dataset["kpBranchPlan"] = frame.motion.planId;
+  stage.dataset["kpBranchOwnerSide"] = motion.ownership.ownerSide;
+  stage.dataset["kpBranchPlan"] = motion.planId;
+}
+
+function renderBranchGraphHandoff(
+  synchronized: ReturnType<typeof sampleKpQuadraticEquationGraphFrame>
+): void {
+  synchronized.correspondences.forEach((binding, index) => {
+    const branch = requireElement<HTMLElement>(
+      `[data-kp-branch="${binding.branchSign}"]`
+    );
+    const root = requireElement<SVGGElement>(
+      `[data-kp-selector-id="${binding.graphSelectorId}"]`
+    );
+    const rootFrame = synchronized.graph.roots[index]!;
+    const transferProgress = Math.min(1, rootFrame.opacity / 0.5);
+    const branchRect = branch.getBoundingClientRect();
+    const rootRect = root.getBoundingClientRect();
+    layoutReadCount += 2;
+    const deltaX =
+      rootRect.left + rootRect.width / 2 -
+      (branchRect.left + branchRect.width / 2);
+    const deltaY =
+      rootRect.top + rootRect.height / 2 -
+      (branchRect.top + branchRect.height / 2);
+    branch.style.opacity = rootFrame.opacity < 0.5 ? "1" : "0";
+    branch.style.transform =
+      `translate3d(${deltaX * transferProgress}px, ${deltaY * transferProgress}px, 0)`;
+    branch.dataset["kpGraphHandoff"] = rootFrame.opacity < 0.5
+      ? "branch-owner"
+      : "graph-owner";
+  });
 }
 
 function applyBranch(
@@ -672,11 +711,8 @@ function narrationFor(
   if (frame.phase === "branch") {
     return `${frame.checkpointLabel}. The minus branch gives x equals two. The plus branch gives x equals three.`;
   }
-  if (frame.phase === "reunion") {
-    return `${frame.checkpointLabel}. The complete solution set contains two and three.`;
-  }
   if (frame.phase === "graph") {
-    return `${frame.checkpointLabel}. The parabola crosses the x-axis at x equals two and x equals three.`;
+    return `${frame.checkpointLabel}. The complete solution set contains two and three, and the parabola crosses the x-axis at those roots.`;
   }
   return `${frame.checkpointLabel}. ${frame.equationState.spoken}.`;
 }
@@ -751,9 +787,12 @@ function activeOwnerIds(
   synchronized: ReturnType<typeof sampleKpQuadraticEquationGraphFrame>
 ): readonly string[] {
   if (frame.phase === "branch") return ["branch.minus", "branch.plus"];
-  if (frame.phase === "reunion") return ["katex.quadratic.solution-set.native"];
   if (frame.phase === "graph") {
-    return synchronized.correspondences.map(({ graphSelectorId }) => graphSelectorId);
+    return synchronized.correspondences.map((binding, index) =>
+      synchronized.graph.roots[index]!.opacity < 0.5
+        ? binding.branchId
+        : binding.graphSelectorId
+    );
   }
   if (frame.equationTransition !== undefined) {
     return [...new Set(frame.equationTransition.transition.correspondence.flatMap(

@@ -271,20 +271,6 @@ body[data-kp-reader="quadratic-branching"] {
   opacity: 1;
 }
 
-.kp-quadratic-stage[data-kp-phase="graph"] .kp-quadratic-solution {
-  z-index: 2;
-  inset: .65rem auto auto .65rem;
-  padding: .45rem .7rem;
-  border: 1px solid var(--kp-line);
-  border-radius: .65rem;
-  background: color-mix(in srgb, var(--kp-surface) 92%, transparent);
-  font-size: .88rem;
-}
-
-.kp-quadratic-stage[data-kp-phase="graph"] .kp-quadratic-solution__label {
-  display: none;
-}
-
 .kp-quadratic-graph {
   display: block;
   width: 100%;

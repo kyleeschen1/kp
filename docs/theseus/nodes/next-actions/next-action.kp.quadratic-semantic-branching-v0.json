@@ -328,6 +328,13 @@
       "scope": "slice-17 compressed context and Show steps",
       "checkedAt": "2026-07-25T00:01:54.106Z",
       "notes": "Ten focused unit/compiler checks, typecheck, all ten Chromium checks, and 33 deterministic review frames passed. Both methods expand the identical operation trace, pause the shared parent clock, survive layout/font rerenders on the child clock, and restore exact progress, transition, and URL on close."
+    },
+    {
+      "command": "focused presentation-profile, equation-graph, reader-surface, and contact-sheet tests; npm run typecheck; quadratic Chromium; npm run visual:quadratic-branching",
+      "status": "passed",
+      "scope": "slice-18 direct branch-to-graph presentation",
+      "checkedAt": "2026-07-25T00:09:47.870Z",
+      "notes": "Twenty focused checks, typecheck, all eleven Chromium checks, and 33 deterministic review frames passed. The visible profile has four phases, semantic solution-set completion remains explicit and non-visible, signed branches move toward measured root positions, and ownership switches to exact graph selectors without a standalone reunion scene."
     }
   ],
   "progress": {

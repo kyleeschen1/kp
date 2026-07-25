@@ -20,7 +20,7 @@ test("quadratic reader projects both methods from one normalized progress value"
   assert.equal(square.phase, "method");
   assert.match(square.equationState.id, /completing-square/);
   assert.match(formula.equationState.id, /formula/);
-  assert.equal(square.solutionSetNative, false);
+  assert.equal(square.solutionSetSemanticallyComplete, false);
 });
 
 test("method phases expose direct-seekable selector transitions instead of state replacement", () => {
@@ -43,24 +43,24 @@ test("method phases expose direct-seekable selector transitions instead of state
   assert.ok(formula.equationTransition!.transition.correspondence.length > 1);
 });
 
-test("quadratic reader exposes exact branch and reunion boundaries", () => {
+test("quadratic reader hands settled branches directly to the graph", () => {
   const branch = projectKpQuadraticReaderSurface({
     progress: 0.68,
     methodId: parseKpQuadraticReaderMethod("formula")
   });
-  const reunion = projectKpQuadraticReaderSurface({
+  const graphHandoff = projectKpQuadraticReaderSurface({
     progress: 0.88,
     methodId: parseKpQuadraticReaderMethod(null)
   });
   assert.equal(branch.phase, "branch");
   assert.equal(branch.checkpointId, "branches");
-  assert.equal(branch.solutionSetNative, false);
-  assert.equal(reunion.phase, "reunion");
-  assert.equal(reunion.checkpointId, "solution-set");
-  assert.equal(reunion.solutionSetNative, true);
+  assert.equal(branch.solutionSetSemanticallyComplete, false);
+  assert.equal(graphHandoff.phase, "graph");
+  assert.equal(graphHandoff.checkpointId, "branches");
+  assert.equal(graphHandoff.solutionSetSemanticallyComplete, true);
   assert.deepEqual(
     kpQuadraticReaderCheckpoints.map(({ progressPermille }) => progressPermille),
-    [0, 100, 680, 880, 1_000]
+    [0, 100, 680, 1_000]
   );
 });
 

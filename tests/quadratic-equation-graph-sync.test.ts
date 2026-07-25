@@ -39,11 +39,11 @@ test("equation and graph share one clock and exact root correspondences", () => 
 
 test("graph handoff follows presentation policy without an independent clock", () => {
   const before = sampleKpQuadraticEquationGraphFrame({
-    progress: 0.899,
+    progress: 0.799,
     methodId: completingSquare
   });
   const handoff = sampleKpQuadraticEquationGraphFrame({
-    progress: 0.9,
+    progress: 0.8,
     methodId: completingSquare
   });
   const after = sampleKpQuadraticEquationGraphFrame({
@@ -52,12 +52,12 @@ test("graph handoff follows presentation policy without an independent clock", (
   });
   assert.equal(before.graphLocalProgress, 0);
   assert.equal(handoff.graphLocalProgress, 0);
-  assert.equal(after.graphLocalProgress, 0.5);
+  assert.equal(after.graphLocalProgress, 0.75);
   assert.equal(after.equation.progress, 0.95);
 });
 
 test("direct seek and rewind settle identically at every shared playhead", () => {
-  for (const progress of [0, 0.32, 0.68, 0.88, 0.9, 0.95, 1]) {
+  for (const progress of [0, 0.32, 0.68, 0.8, 0.88, 0.95, 1]) {
     const forward = sampleKpQuadraticEquationGraphFrame({
       progress,
       methodId: completingSquare,

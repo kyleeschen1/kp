@@ -340,7 +340,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         { id: "method-formula-divide", label: "Divide the candidate numerators", progressPermille: 560, viewport: "desktop", query: { kpMethod: "formula", kpMotion: "full" } },
         { id: "method-formula-drilldown", label: "Formula exact-step drill-down", progressPermille: 430, viewport: "desktop", query: { kpMethod: "formula", kpMotion: "full", kpSteps: "full", kpStepProgress: "900" } },
         { id: "branches", label: "Plus-minus branches", progressPermille: 680, viewport: "desktop" },
-        { id: "reunion", label: "Complete solution set", progressPermille: 880, viewport: "desktop" },
+        { id: "branch-graph-handoff", label: "Signed branches hand into exact graph roots", progressPermille: 930, viewport: "desktop", query: { kpMotion: "full" } },
         { id: "graph", label: "Roots meet the graph", progressPermille: 1_000, viewport: "desktop" },
         { id: "method-square-phone", label: "Move six · symbolic motion · phone", progressPermille: 124, viewport: "phone", query: { kpMotion: "full" } },
         { id: "method-formula-phone", label: "Simplify the radical · motion · phone", progressPermille: 430, viewport: "phone", query: { kpMethod: "formula", kpMotion: "full" } },

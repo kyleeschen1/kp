@@ -2,7 +2,7 @@ import { kpQuadraticBranchingAnimationId } from "./quadratic-branching-asset.ts"
 import type { KpQuadraticMethodId } from "../semantic/quadratic-solution-method-graph.ts";
 
 export interface KpQuadraticPresentationProfile {
-  readonly schemaVersion: "kp.quadratic-presentation-profile.v1";
+  readonly schemaVersion: "kp.quadratic-presentation-profile.v2";
   readonly id: "presentation.quadratic.canonical";
   readonly assetId: typeof kpQuadraticBranchingAnimationId;
   readonly methodSelection: {
@@ -13,17 +13,20 @@ export interface KpQuadraticPresentationProfile {
     readonly introEnd: number;
     readonly methodEnd: number;
     readonly branchEnd: number;
-    readonly reunionEnd: number;
     readonly graphEnd: 1;
   };
   readonly attention: readonly {
-    readonly phase: "intro" | "method" | "branch" | "reunion" | "graph";
+    readonly phase: "intro" | "method" | "branch" | "graph";
     readonly semanticRole: string;
   }[];
   readonly branchSchedule: {
     readonly splitAt: number;
     readonly settleAt: number;
-    readonly reuniteAt: number;
+  };
+  readonly semanticSolutionSet: {
+    readonly completeAt: number;
+    readonly visiblyStaged: false;
+    readonly semanticRole: "exact-solution-set";
   };
   readonly graphHandoffAt: number;
 }
@@ -36,7 +39,7 @@ export interface KpQuadraticPresentationProfileIssue {
 export function createCanonicalKpQuadraticPresentationProfile():
   KpQuadraticPresentationProfile {
   return parseKpQuadraticPresentationProfile({
-    schemaVersion: "kp.quadratic-presentation-profile.v1",
+    schemaVersion: "kp.quadratic-presentation-profile.v2",
     id: "presentation.quadratic.canonical",
     assetId: kpQuadraticBranchingAnimationId,
     methodSelection: {
@@ -50,22 +53,24 @@ export function createCanonicalKpQuadraticPresentationProfile():
       introEnd: 0.1,
       methodEnd: 0.58,
       branchEnd: 0.8,
-      reunionEnd: 0.9,
       graphEnd: 1
     },
     attention: [
       { phase: "intro", semanticRole: "source-equation" },
       { phase: "method", semanticRole: "active-method-state" },
       { phase: "branch", semanticRole: "plus-minus-branches" },
-      { phase: "reunion", semanticRole: "exact-solution-set" },
       { phase: "graph", semanticRole: "root-correspondence" }
     ],
     branchSchedule: {
       splitAt: 0.58,
-      settleAt: 0.76,
-      reuniteAt: 0.86
+      settleAt: 0.76
     },
-    graphHandoffAt: 0.9
+    semanticSolutionSet: {
+      completeAt: 0.8,
+      visiblyStaged: false,
+      semanticRole: "exact-solution-set"
+    },
+    graphHandoffAt: 0.8
   });
 }
 
@@ -89,7 +94,8 @@ export function parseKpQuadraticPresentationProfile(
     attention: Object.freeze(profile.attention.map((entry) =>
       Object.freeze({ ...entry })
     )),
-    branchSchedule: Object.freeze({ ...profile.branchSchedule })
+    branchSchedule: Object.freeze({ ...profile.branchSchedule }),
+    semanticSolutionSet: Object.freeze({ ...profile.semanticSolutionSet })
   });
 }
 
@@ -106,9 +112,10 @@ export function validateKpQuadraticPresentationProfile(
     "pacing",
     "attention",
     "branchSchedule",
+    "semanticSolutionSet",
     "graphHandoffAt"
   ], "$", issues);
-  literal(value["schemaVersion"], "kp.quadratic-presentation-profile.v1", "$.schemaVersion", issues);
+  literal(value["schemaVersion"], "kp.quadratic-presentation-profile.v2", "$.schemaVersion", issues);
   literal(value["id"], "presentation.quadratic.canonical", "$.id", issues);
   literal(value["assetId"], kpQuadraticBranchingAnimationId, "$.assetId", issues);
   const methods = value["methodSelection"];
@@ -134,8 +141,8 @@ export function validateKpQuadraticPresentationProfile(
   if (!isRecord(pacing)) {
     issues.push(issue("$.pacing", "Presentation pacing is required."));
   } else {
-    exactKeys(pacing, ["introEnd", "methodEnd", "branchEnd", "reunionEnd", "graphEnd"], "$.pacing", issues);
-    const values = ["introEnd", "methodEnd", "branchEnd", "reunionEnd", "graphEnd"]
+    exactKeys(pacing, ["introEnd", "methodEnd", "branchEnd", "graphEnd"], "$.pacing", issues);
+    const values = ["introEnd", "methodEnd", "branchEnd", "graphEnd"]
       .map((key) => pacing[key]);
     if (
       values.some((candidate) => typeof candidate !== "number" || candidate <= 0 || candidate > 1) ||
@@ -149,17 +156,41 @@ export function validateKpQuadraticPresentationProfile(
   if (!isRecord(branch)) {
     issues.push(issue("$.branchSchedule", "Branch schedule is required."));
   } else {
-    exactKeys(branch, ["splitAt", "settleAt", "reuniteAt"], "$.branchSchedule", issues);
+    exactKeys(branch, ["splitAt", "settleAt"], "$.branchSchedule", issues);
     const split = branch["splitAt"];
     const settle = branch["settleAt"];
-    const reunite = branch["reuniteAt"];
     if (
       typeof split !== "number" ||
       typeof settle !== "number" ||
-      typeof reunite !== "number" ||
-      !(0 <= split && split < settle && settle < reunite && reunite <= 1)
+      !(0 <= split && split < settle && settle <= 1)
     ) {
-      issues.push(issue("$.branchSchedule", "Branch schedule must order split, settlement, and reunion within the shared clock."));
+      issues.push(issue("$.branchSchedule", "Branch schedule must order split and settlement within the shared clock."));
+    }
+  }
+  const semanticSolutionSet = value["semanticSolutionSet"];
+  if (!isRecord(semanticSolutionSet)) {
+    issues.push(issue(
+      "$.semanticSolutionSet",
+      "Presentation must retain semantic solution-set authority."
+    ));
+  } else {
+    exactKeys(
+      semanticSolutionSet,
+      ["completeAt", "visiblyStaged", "semanticRole"],
+      "$.semanticSolutionSet",
+      issues
+    );
+    if (
+      typeof semanticSolutionSet["completeAt"] !== "number" ||
+      semanticSolutionSet["completeAt"] < 0 ||
+      semanticSolutionSet["completeAt"] > 1 ||
+      semanticSolutionSet["visiblyStaged"] !== false ||
+      semanticSolutionSet["semanticRole"] !== "exact-solution-set"
+    ) {
+      issues.push(issue(
+        "$.semanticSolutionSet",
+        "Solution-set authority must remain semantic without a visible reunion stage."
+      ));
     }
   }
   if (
@@ -169,8 +200,18 @@ export function validateKpQuadraticPresentationProfile(
   ) {
     issues.push(issue("$.graphHandoffAt", "Graph handoff must be a normalized clock position."));
   }
-  if (!Array.isArray(value["attention"]) || value["attention"].length !== 5) {
+  if (!Array.isArray(value["attention"]) || value["attention"].length !== 4) {
     issues.push(issue("$.attention", "Attention policy requires one entry for each presentation phase."));
+  }
+  if (
+    isRecord(pacing) &&
+    typeof pacing["branchEnd"] === "number" &&
+    value["graphHandoffAt"] !== pacing["branchEnd"]
+  ) {
+    issues.push(issue(
+      "$.graphHandoffAt",
+      "Graph handoff must begin exactly when the visible branch phase ends."
+    ));
   }
   return Object.freeze(issues);
 }

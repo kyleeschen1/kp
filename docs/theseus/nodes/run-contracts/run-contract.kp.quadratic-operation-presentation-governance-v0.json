@@ -164,7 +164,8 @@
     {
       "id": "slice-18",
       "title": "Branch-directly-to-graph-presentation",
-      "status": "planned"
+      "summary": "Removed the standalone visible solution-set reunion from the presentation profile and reader checkpoints. Settled signed branches now move toward measured exact graph-root positions and transfer ownership directly to native SVG roots, while semantic solution-set completion, searchable fallback, narration, inspection, shared-clock seek, and rewind remain intact.",
+      "status": "complete"
     },
     {
       "id": "slice-19",
