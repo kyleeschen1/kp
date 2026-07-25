@@ -2,7 +2,8 @@
   "id": "run-contract.kp.full-scene-fraction-compositor-v1",
   "kind": "run-contract",
   "title": "Full-scene fraction compositor",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +14,10 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-07-25-full-scene-fraction-compositor-long-loop-proposal.md",
       "summary": "Approved 20-slice exemplar-first plan, preservation boundary, rollback unit, verification cadence, hard stops, and slice-20 human checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-25-full-scene-fraction-compositor-checkpoint.md"
     }
   ],
   "verification": [
@@ -156,6 +161,13 @@
       "scope": "slice-19 responsive performance complexity gate",
       "checkedAt": "2026-07-25T18:09:47.584Z",
       "notes": "Build and 25 focused tests pass; 32-track scene sampling is 0.0078 ms against 1 ms, route is 18.9 KB gzip with 10.1 KB growth against 12 KB, controller is 38.5 KB, and four generic modules remain. Broader animation targets remain advisory with no regressions."
+    },
+    {
+      "command": "npm test; npm run build; npm run test:browser:real-katex-glyph-compositor; npm run test:browser:reader-conformance; npm run visual:glyph-reconciliation-experiment; npm run perf:glyph-reconciliation-experiment; npm run perf:animation; production closure and review audit gates",
+      "status": "passed",
+      "scope": "slice-20 fraction decision checkpoint",
+      "checkedAt": "2026-07-25T18:15:18.661Z",
+      "notes": "2,380 unit/integration tests, 28 compositor browser checks, 9 shared reader checks, build, ten-frame visual matrix, compositor budgets, production closures, review audit, and workspace validation pass. Broader performance targets remain advisory with zero regressions; human gestalt approval is required."
     }
   ],
   "allowedWork": [
@@ -298,7 +310,8 @@
     {
       "id": "slice-20",
       "title": "fraction-decision-checkpoint",
-      "status": "planned"
+      "summary": "Completed the release matrix and durable checkpoint record; the canonical fraction exemplar is reviewable and the run stops at HUMAN_CHECKPOINT before any branch, radical, compound, text/code, production, or backend generalization.",
+      "status": "complete"
     }
   ]
 }
