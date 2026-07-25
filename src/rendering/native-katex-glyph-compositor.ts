@@ -48,6 +48,55 @@ export interface KpNativeKatexMultiplicityFrame {
   readonly targetHandoffDeltaPx: number;
 }
 
+export interface KpNativeKatexCompositorDisposition {
+  readonly kind: "native-katex-compositor-disposition";
+  readonly lifecycle: "renderer-session";
+  readonly mode: "motion" | "checkpoint-settlement";
+  readonly reason: "clear" | "semantic-ambiguity" | "blocked-geometry";
+  readonly affectedIds: readonly string[];
+}
+
+export function decideKpNativeKatexCompositorDisposition(input: {
+  readonly ambiguities: readonly {
+    readonly lineageGroupId: string;
+  }[];
+  readonly motions: readonly {
+    readonly matchId: string;
+    readonly status: "direct" | "clearance-route" | "settle";
+  }[];
+}): KpNativeKatexCompositorDisposition {
+  if (input.ambiguities.length > 0) {
+    return Object.freeze({
+      kind: "native-katex-compositor-disposition",
+      lifecycle: "renderer-session",
+      mode: "checkpoint-settlement",
+      reason: "semantic-ambiguity",
+      affectedIds: Object.freeze([
+        ...new Set(input.ambiguities.map(({ lineageGroupId }) => lineageGroupId))
+      ])
+    });
+  }
+  const blocked = input.motions
+    .filter(({ status }) => status === "settle")
+    .map(({ matchId }) => matchId);
+  if (blocked.length > 0) {
+    return Object.freeze({
+      kind: "native-katex-compositor-disposition",
+      lifecycle: "renderer-session",
+      mode: "checkpoint-settlement",
+      reason: "blocked-geometry",
+      affectedIds: Object.freeze(blocked)
+    });
+  }
+  return Object.freeze({
+    kind: "native-katex-compositor-disposition",
+    lifecycle: "renderer-session",
+    mode: "motion",
+    reason: "clear",
+    affectedIds: Object.freeze([])
+  });
+}
+
 export function createKpNativeKatexFragmentClone(input: {
   readonly stage: HTMLElement;
   readonly ownerId: string;

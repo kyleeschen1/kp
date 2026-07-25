@@ -23,7 +23,8 @@ import {
   applyKpNativeKatexManyToOneFrame,
   applyKpNativeKatexOneToManyFrame,
   createKpNativeKatexFragmentClone,
-  createKpNativeKatexFragmentClones
+  createKpNativeKatexFragmentClones,
+  decideKpNativeKatexCompositorDisposition
 } from "../rendering/native-katex-glyph-compositor.ts";
 import {
   bindKpNativeKatexFragmentsWithinSemanticLineage,
@@ -91,6 +92,10 @@ if (
 ) {
   throw new Error("The crowded case requires the common bounded clearance result.");
 }
+const crowdedDisposition = decideKpNativeKatexCompositorDisposition({
+  ambiguities: crowdedCompiled.matches.ambiguities,
+  motions: crowdedMergeMotions
+});
 
 root.innerHTML = `
   <article class="glyph-exemplar" data-kp-glyph-review data-kp-progress="0">
@@ -740,15 +745,15 @@ function render(progress: number): void {
     : crowdedAtTarget
       ? "Native target result owns the ink"
       : "Inert exact fragments route or hold for settlement";
-  crowdedRoute.textContent = crowdedMergeMotions.some(
-    ({ status: routeStatus }) => routeStatus === "settle"
-  )
-    ? "Blocked constituents use honest checkpoint settlement"
+  crowdedRoute.textContent = crowdedDisposition.mode === "checkpoint-settlement"
+    ? `Inspectable checkpoint · ${crowdedDisposition.reason}`
     : `${crowdedViewportId} projection · common clearance lanes`;
   review.dataset["kpCrowdedVisualOwner"] = crowdedFrame.visualOwner;
   review.dataset["kpCrowdedRouteStatuses"] = crowdedMergeMotions
     .map(({ status: routeStatus }) => routeStatus)
     .join(",");
+  review.dataset["kpCrowdedDisposition"] = crowdedDisposition.mode;
+  review.dataset["kpCrowdedDispositionReason"] = crowdedDisposition.reason;
   const atTarget = glyphFrame.visualOwner === "target-native";
   const atSource = glyphFrame.visualOwner === "source-native";
   sourceX.setAttribute("aria-hidden", String(!atSource));

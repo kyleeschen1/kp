@@ -171,7 +171,8 @@
     {
       "id": "slice-20",
       "title": "Conservative-settlement-fallback",
-      "status": "planned"
+      "summary": "Made ambiguity and blocked geometry choose an inspectable renderer-session checkpoint settlement with explicit reason and affected ids; clear plans remain motion.",
+      "status": "complete"
     },
     {
       "id": "slice-21",

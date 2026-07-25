@@ -168,6 +168,12 @@
       "status": "passed",
       "scope": "slice-19 crowded projection",
       "checkedAt": "2026-07-25T16:00:19.814Z"
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-20 conservative settlement fallback",
+      "checkedAt": "2026-07-25T16:03:29.596Z"
     }
   ],
   "progress": {

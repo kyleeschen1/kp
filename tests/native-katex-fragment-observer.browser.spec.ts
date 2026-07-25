@@ -953,6 +953,8 @@ test("crowded quadratic uses the same bounded schedule at wide and phone widths"
       });
       return {
         routeStatuses: review.dataset["kpCrowdedRouteStatuses"]?.split(","),
+        disposition: review.dataset["kpCrowdedDisposition"],
+        dispositionReason: review.dataset["kpCrowdedDispositionReason"],
         protectedOpacity: getComputedStyle(
           caseElement.querySelector<HTMLElement>(
             '[data-kp-motion-id="motion.crowded.source-plus-minus"]'
@@ -981,6 +983,8 @@ test("crowded quadratic uses the same bounded schedule at wide and phone widths"
     expect(evidence.routeStatuses?.every((status) =>
       status === "clearance-route" || status === "settle"
     )).toBe(true);
+    expect(evidence.disposition).toBe("checkpoint-settlement");
+    expect(evidence.dispositionReason).toBe("blocked-geometry");
     expect(evidence.protectedOpacity).toBe("1");
     expect(evidence.overflow).toBeLessThanOrEqual(1);
     expect(evidence.cloneRects.every((rect) =>
