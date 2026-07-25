@@ -49,8 +49,12 @@ import {
   settleAndObserveKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";
 import {
-  compileKpNativeKatexHierarchicalScenePlan, compileKpNativeKatexSceneTracks,
-  createKpNativeKatexScenePlayback, reconcileKpNativeKatexScenes
+  compileKpNativeKatexHierarchicalScenePlan,
+  compileKpNativeKatexSceneTracks,
+  correlateKpNativeKatexSceneHandoff,
+  createKpNativeKatexScenePlayback,
+  measureKpNativeKatexGlyphHandoff,
+  reconcileKpNativeKatexScenes
 } from "../rendering/native-katex-scene-compositor.ts";
 
 const rootNode = document.querySelector<HTMLElement>("#glyph-experiment");
@@ -326,6 +330,10 @@ const fractionSceneReconciliation = reconcileKpNativeKatexScenes({
 const fractionSceneTracks = compileKpNativeKatexSceneTracks(
   compileKpNativeKatexHierarchicalScenePlan(fractionSceneReconciliation)
 );
+const fractionHandoffCorrelations = correlateKpNativeKatexSceneHandoff({
+  reconciliation: fractionSceneReconciliation,
+  tracks: fractionSceneTracks
+});
 const fractionRuleTracks = fractionSceneTracks.filter(({ paintKind }) =>
   paintKind === "rule"
 );
@@ -343,7 +351,18 @@ const fractionScenePlayback = createKpNativeKatexScenePlayback({
 if (import.meta.env.DEV) {
   Object.assign(window, {
     __kpSampleFractionSceneTracks: fractionScenePlayback.sample,
-    __kpApplyFractionSceneFrame: fractionScenePlayback.apply
+    __kpApplyFractionSceneFrame: fractionScenePlayback.apply,
+    __kpMeasureFractionGlyphHandoff: (progress: number) => {
+      fractionScenePlayback.apply(progress);
+      return measureKpNativeKatexGlyphHandoff({
+        stage: fractionStage,
+        reconciliation: fractionSceneReconciliation,
+        correlations: fractionHandoffCorrelations,
+        progress,
+        fontRevision: fontReadiness.revision,
+        viewportKey: fractionTargetScene.viewportKey
+      });
+    }
   });
 }
 

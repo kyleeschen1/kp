@@ -47,6 +47,20 @@
       "scope": "slice-03 clone native atom correlation",
       "checkedAt": "2026-07-25T19:14:14.755Z",
       "notes": "30 focused tests and all TypeScript projects pass. Material owner identities correlate deterministically to native targets only through reconciliation dispositions and tracks; merge, split, and departing multiplicity are explicit, while duplicate tracks, missing target coverage, and unbacked target IDs fail closed."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor",
+      "status": "failed",
+      "scope": "slice-04 intermediate glyph microscope",
+      "checkedAt": "2026-07-25T19:20:19.443Z",
+      "notes": "28 existing Chromium checks passed; the new check failed because at least one correlated material/native glyph style fingerprint differs. The provisional equality assertion was invalid for a microscope whose purpose is to reveal that difference, so the telemetry remains and the assertion will preserve both fingerprints without assuming parity."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck; npm run test:browser:real-katex-glyph-compositor; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-04 baseline and style microscope",
+      "checkedAt": "2026-07-25T19:24:14.365Z",
+      "notes": "30 focused tests, all TypeScript projects, 29 Chromium checks, and 24 stable overview/endpoint captures pass. Across wide and phone DPR profiles, correlated track rectangles are within roughly 0.1 CSS px, but the persistent plus clone retains source font size 65.824 versus 46.0768 wide and 46.464 versus 32.5248 phone; this generic 1.43 scale mismatch explains the visible overflow and baseline delta. The initial fingerprint-equality hypothesis was recorded failed and replaced by comparison evidence."
     }
   ],
   "allowedWork": [
@@ -96,7 +110,8 @@
     {
       "id": "slice-04",
       "title": "baseline-and-style-microscope",
-      "status": "planned"
+      "summary": "Added repeatable wide/phone/DPR glyph handoff telemetry and stable capture evidence. Track rectangles already coincide within about 0.1 CSS px; the persistent plus clone instead retains a source font roughly 1.43 times the target numerator font, causing generic paint overflow and baseline drift at handoff.",
+      "status": "complete"
     },
     {
       "id": "slice-05",

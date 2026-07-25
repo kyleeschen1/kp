@@ -61,6 +61,7 @@ function handoffObservation(
     wrapperTransform: "matrix(1, 0, 0, 1, 0, 0)",
     paintFingerprint: "glyph:x",
     styleFingerprint: "font-family:KaTeX_Math",
+    opacity: 1,
     fontRevision: 2,
     ...overrides
   };
@@ -116,6 +117,10 @@ test("handoff telemetry rejects invalid geometry and document boundaries", () =>
   assert.throws(
     () => create(handoffObservation({ baselineY: Number.NaN })),
     /finite baseline/
+  );
+  assert.throws(
+    () => create(handoffObservation({ opacity: 1.1 })),
+    /bounded opacity/
   );
   assert.throws(
     () => create(handoffObservation({

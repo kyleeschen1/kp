@@ -1,9 +1,12 @@
-import type {
-  KpNativeKatexPaintAtomObservation,
-  KpNativeKatexRenderedSceneObservation
+import {
+  createKpNativeKatexHandoffTelemetry,
+  type KpNativeKatexHandoffTelemetry,
+  type KpNativeKatexPaintAtomObservation,
+  type KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
-import type {
-  KpStageRelativeRect
+import {
+  normalizeKpStageRelativeRect,
+  type KpStageRelativeRect
 } from "./native-katex-fragment-observer.ts";
 import { syncKpEquationMaterialLayer } from "./equation-material-layer-dom.ts";
 
@@ -512,6 +515,71 @@ export function correlateKpNativeKatexSceneHandoff(input: {
   return Object.freeze(correlations);
 }
 
+export function measureKpNativeKatexGlyphHandoff(input: {
+  readonly stage: HTMLElement;
+  readonly reconciliation: KpNativeKatexSceneReconciliation;
+  readonly correlations: readonly KpNativeKatexHandoffCorrelation[];
+  readonly progress: number;
+  readonly fontRevision: number;
+  readonly viewportKey: string;
+}): KpNativeKatexHandoffTelemetry {
+  const targetById = new Map(input.reconciliation.target.atoms.map((atom) => [
+    atom.id,
+    atom
+  ]));
+  const glyphCorrelations = input.correlations.filter((correlation) =>
+    correlation.disposition === "target-bound" &&
+    targetById.get(correlation.targetAtomId!)?.paintKind === "glyph"
+  );
+  if (glyphCorrelations.length === 0) {
+    throw new Error("Native handoff microscope requires correlated glyph paint.");
+  }
+  const observations = glyphCorrelations.flatMap((correlation) => {
+    const target = targetById.get(correlation.targetAtomId!)!;
+    const materialOwner = input.stage.querySelector<HTMLElement>(
+      `[data-kp-equation-material-owner-id="${
+        CSS.escape(correlation.materialOwnerId)
+      }"]`
+    );
+    const materialVisual = materialOwner?.firstElementChild;
+    if (
+      materialOwner === null ||
+      !(materialVisual instanceof HTMLElement)
+    ) {
+      throw new Error(
+        `Native handoff microscope cannot find ${correlation.materialOwnerId}.`
+      );
+    }
+    return [
+      observeHandoffGlyph({
+        id: `${correlation.id}.material`,
+        side: "material",
+        stage: input.stage,
+        element: materialVisual,
+        rectElement: materialOwner,
+        target,
+        fontRevision: input.fontRevision
+      }),
+      observeHandoffGlyph({
+        id: `${correlation.id}.native`,
+        side: "native-target",
+        stage: input.stage,
+        element: target.sourceElement,
+        rectElement: target.sourceElement,
+        target,
+        fontRevision: input.fontRevision
+      })
+    ];
+  });
+  return createKpNativeKatexHandoffTelemetry({
+    stage: input.stage,
+    progress: input.progress,
+    observations,
+    fontRevision: input.fontRevision,
+    viewportKey: input.viewportKey
+  });
+}
+
 export function applyKpNativeKatexSceneFrame(input: {
   readonly stage: HTMLElement;
   readonly sourceRoot: HTMLElement;
@@ -806,4 +874,105 @@ function lifecycleOpacityProgress(
     track.lifecycle === "eliminate" ? [0.08, 0.62] :
     [0, 1];
   return smoothstep(Math.max(0, Math.min(1, (progress - start) / (end - start))));
+}
+
+function observeHandoffGlyph(input: {
+  readonly id: string;
+  readonly side: "material" | "native-target";
+  readonly stage: HTMLElement;
+  readonly element: HTMLElement;
+  readonly rectElement: HTMLElement;
+  readonly target: KpNativeKatexPaintAtomObservation;
+  readonly fontRevision: number;
+}) {
+  const stageRect = input.stage.getBoundingClientRect();
+  const rect = normalizeKpStageRelativeRect({
+    stageClientRect: stageRect,
+    stageLayoutWidth: input.stage.offsetWidth || stageRect.width,
+    stageLayoutHeight: input.stage.offsetHeight || stageRect.height,
+    fragmentClientRect: input.rectElement.getBoundingClientRect()
+  });
+  const computed = getComputedStyle(input.element);
+  return {
+    kind: "native-katex-handoff-paint-observation" as const,
+    lifecycle: "renderer-session" as const,
+    id: input.id,
+    side: input.side,
+    paintAtomId: input.target.id,
+    semanticEntityId: input.target.semanticEntityId,
+    presentationGroupId: input.target.presentationGroupId,
+    paintKind: input.target.paintKind,
+    element: input.element,
+    rect,
+    baselineY: fontMetricBaseline(input.element, computed, rect),
+    wrapperTransform: computedTransformChain(input.element, input.stage),
+    paintFingerprint: input.target.visualKey,
+    styleFingerprint: handoffStyleFingerprint(computed),
+    opacity: effectiveOpacity(input.rectElement, input.stage),
+    fontRevision: input.fontRevision
+  };
+}
+
+function fontMetricBaseline(
+  element: HTMLElement,
+  computed: CSSStyleDeclaration,
+  rect: KpStageRelativeRect
+): number {
+  const canvas = element.ownerDocument.createElement("canvas");
+  const context = canvas.getContext("2d");
+  if (context === null) {
+    throw new Error("Native handoff baseline measurement requires canvas text metrics.");
+  }
+  context.font = [
+    computed.fontStyle,
+    computed.fontWeight,
+    computed.fontSize,
+    computed.fontFamily
+  ].join(" ");
+  const metrics = context.measureText(element.textContent?.trim() ?? "");
+  return rect.top + rect.height - metrics.actualBoundingBoxDescent;
+}
+
+function computedTransformChain(
+  element: HTMLElement,
+  stage: HTMLElement
+): string {
+  const transforms: string[] = [];
+  let current: HTMLElement | null = element;
+  while (current !== null && current !== stage) {
+    const computed = getComputedStyle(current);
+    transforms.push([
+      computed.transform || "none",
+      computed.translate || "none",
+      computed.scale || "none"
+    ].join(","));
+    current = current.parentElement;
+  }
+  return transforms.join(">");
+}
+
+function handoffStyleFingerprint(computed: CSSStyleDeclaration): string {
+  return [
+    "font-family",
+    "font-size",
+    "font-style",
+    "font-weight",
+    "color",
+    "letter-spacing",
+    "line-height",
+    "vertical-align"
+  ].map((property) =>
+    `${property}:${computed.getPropertyValue(property)}`
+  ).join("|");
+}
+
+function effectiveOpacity(element: HTMLElement, stage: HTMLElement): number {
+  let opacity = 1;
+  let current: HTMLElement | null = element;
+  while (current !== null) {
+    opacity *= Number(getComputedStyle(current).opacity);
+    if (current === stage) break;
+    current = current.parentElement;
+  }
+  return opacity;
 }

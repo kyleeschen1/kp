@@ -130,7 +130,28 @@ try {
       const card = page.locator(
         '[data-reconciliation-case="fraction-merge"]'
       );
-      const snapshot = await card.evaluate((element) => {
+      const snapshot = await card.evaluate((element, fractionProgress) => {
+        const telemetry = (window as unknown as {
+          __kpMeasureFractionGlyphHandoff: (progress: number) => {
+            observations: readonly {
+              id: string;
+              side: "material" | "native-target";
+              paintAtomId: string;
+              semanticEntityId: string;
+              rect: {
+                left: number;
+                top: number;
+                width: number;
+                height: number;
+              };
+              baselineY: number | null;
+              wrapperTransform: string;
+              paintFingerprint: string;
+              styleFingerprint: string;
+              opacity: number;
+            }[];
+          };
+        }).__kpMeasureFractionGlyphHandoff(fractionProgress);
         const materialOwners = [
           ...element.querySelectorAll<HTMLElement>(
             "[data-kp-native-katex-scene-owner]"
@@ -148,9 +169,12 @@ try {
           materialOwnerCount: materialOwners.length,
           visibleMaterialOwnerCount: materialOwners.filter((owner) =>
             Number(owner.style.opacity) > 0
-          ).length
+          ).length,
+          glyphTelemetry: telemetry.observations.map((observation) => ({
+            ...observation
+          }))
         };
-      });
+      }, checkpoint.fractionProgressPermille / 1_000);
       const visualOwner = await review.getAttribute(
         "data-kp-fraction-visual-owner"
       );

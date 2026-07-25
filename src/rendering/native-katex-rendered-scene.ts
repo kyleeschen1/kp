@@ -73,6 +73,7 @@ export interface KpNativeKatexHandoffPaintObservation {
   readonly wrapperTransform: string;
   readonly paintFingerprint: string;
   readonly styleFingerprint: string;
+  readonly opacity: number;
   readonly ruleGeometry?: KpNativeKatexRuleGeometry | undefined;
   readonly fontRevision: number;
 }
@@ -129,6 +130,15 @@ export function createKpNativeKatexHandoffTelemetry(input: {
     ) {
       throw new Error(
         `Handoff observation ${observation.id} requires a finite baseline.`
+      );
+    }
+    if (
+      !Number.isFinite(observation.opacity) ||
+      observation.opacity < 0 ||
+      observation.opacity > 1
+    ) {
+      throw new Error(
+        `Handoff observation ${observation.id} requires bounded opacity.`
       );
     }
     if (!Number.isInteger(observation.fontRevision) || observation.fontRevision < 0) {
