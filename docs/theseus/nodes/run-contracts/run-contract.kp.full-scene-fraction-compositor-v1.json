@@ -51,6 +51,13 @@
       "scope": "slice-04 paint-bearing DOM enumeration",
       "checkedAt": "2026-07-25T17:13:25.947Z",
       "notes": "19 Chromium tests and all TypeScript projects pass; visible source fraction glyph paint is enumerated with stable local bounds and MathML is excluded."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-05 structural atom observation",
+      "checkedAt": "2026-07-25T17:15:31.637Z",
+      "notes": "20 Chromium tests and all TypeScript projects pass; both exact fraction rules are observed as generic structural paint alongside glyph atoms."
     }
   ],
   "allowedWork": [
@@ -103,7 +110,8 @@
     {
       "id": "slice-05",
       "title": "structural-atom-observation",
-      "status": "planned"
+      "summary": "Extended exact paint observation to generic rules, SVG/path material, delimiters, and accents; the source fraction exposes two stable rule atoms without fraction-specific behavior.",
+      "status": "complete"
     },
     {
       "id": "slice-06",

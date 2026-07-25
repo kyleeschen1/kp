@@ -117,6 +117,48 @@ test("scene observer enumerates visible KaTeX glyph paint without MathML ink", a
   )).toBe(true);
 });
 
+test("scene observer includes generic fraction rules as structural paint", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const evidence = await page.evaluate(() => {
+    const observe = (window as unknown as {
+      __kpObserveNativeKatexPaintAtoms: (input: {
+        endpoint: "source";
+        stage: HTMLElement;
+        root: HTMLElement;
+        semanticEntityId: string;
+        presentationGroupId: string;
+        fontRevision: number;
+      }) => readonly {
+        paintKind: string;
+        visualKey: string;
+        rect: { width: number; height: number };
+      }[];
+    }).__kpObserveNativeKatexPaintAtoms;
+    return observe({
+      endpoint: "source",
+      stage: document.querySelector<HTMLElement>("[data-fraction-stage]")!,
+      root: document.querySelector<HTMLElement>("[data-fraction-source]")!,
+      semanticEntityId: "entity.fraction.source",
+      presentationGroupId: "group.fraction.source",
+      fontRevision: 1
+    }).map(({ paintKind, visualKey, rect }) => ({
+      paintKind,
+      visualKey,
+      width: rect.width,
+      height: rect.height
+    }));
+  });
+
+  const rules = evidence.filter(({ paintKind }) => paintKind === "rule");
+  expect(rules).toHaveLength(2);
+  expect(rules.every(({ visualKey, width, height }) =>
+    visualKey === "rule" && width > height && height > 0
+  )).toBe(true);
+});
+
 test("observer rejects missing and duplicate explicit motion nodes", async ({
   page
 }) => {

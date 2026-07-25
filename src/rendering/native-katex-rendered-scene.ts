@@ -110,6 +110,65 @@ export function observeKpNativeKatexGlyphPaintAtoms(input: {
   }));
 }
 
+export function observeKpNativeKatexPaintAtoms(input: {
+  readonly endpoint: "source" | "target";
+  readonly stage: HTMLElement;
+  readonly root: HTMLElement;
+  readonly semanticEntityId: string;
+  readonly presentationGroupId: string;
+  readonly fontRevision: number;
+}): readonly KpNativeKatexPaintAtomObservation[] {
+  const glyphs = observeKpNativeKatexGlyphPaintAtoms(input);
+  const stageRect = input.stage.getBoundingClientRect();
+  const stageLayoutWidth = input.stage.offsetWidth || stageRect.width;
+  const stageLayoutHeight = input.stage.offsetHeight || stageRect.height;
+  const structural = [
+    input.root,
+    ...input.root.querySelectorAll<HTMLElement>("*")
+  ].flatMap((sourceElement, ordinal) => {
+    if (
+      sourceElement.closest(".katex-mathml") !== null ||
+      sourceElement.tagName.toLowerCase() === "annotation"
+    ) {
+      return [];
+    }
+    const computed = getComputedStyle(sourceElement);
+    const paintKind = structuralPaintKind(sourceElement, computed);
+    const clientRect = sourceElement.getBoundingClientRect();
+    if (
+      paintKind === undefined ||
+      computed.display === "none" ||
+      computed.visibility === "hidden" ||
+      Number(computed.opacity) === 0 ||
+      clientRect.width <= 0 ||
+      clientRect.height <= 0
+    ) {
+      return [];
+    }
+    return [Object.freeze({
+      kind: "native-katex-paint-atom-observation" as const,
+      lifecycle: "renderer-session" as const,
+      id: `${input.endpoint}.paint.${paintKind}.${ordinal}`,
+      endpoint: input.endpoint,
+      semanticEntityId: input.semanticEntityId,
+      presentationGroupId: input.presentationGroupId,
+      paintKind,
+      visualKey: structuralVisualKey(sourceElement, paintKind),
+      sourceElement,
+      rect: normalizeKpStageRelativeRect({
+        stageClientRect: stageRect,
+        stageLayoutWidth,
+        stageLayoutHeight,
+        fragmentClientRect: clientRect
+      }),
+      styleFingerprint: paintStyleFingerprint(computed),
+      zOrder: glyphs.length + ordinal,
+      fontRevision: input.fontRevision
+    })];
+  });
+  return Object.freeze([...glyphs, ...structural]);
+}
+
 export function createKpNativeKatexRenderedSceneObservation(input: {
   readonly endpoint: "source" | "target";
   readonly stage: HTMLElement;
@@ -194,6 +253,49 @@ function paintStyleFingerprint(computed: CSSStyleDeclaration): string {
   ].map((property) =>
     `${property}:${computed.getPropertyValue(property)}`
   ).join("|");
+}
+
+function structuralPaintKind(
+  element: HTMLElement,
+  computed: CSSStyleDeclaration
+): Exclude<KpNativeKatexPaintKind, "glyph"> | undefined {
+  const tagName = element.tagName.toLowerCase();
+  if (tagName === "svg" && element.parentElement?.closest("svg") === null) {
+    const classes = element.getAttribute("class") ?? "";
+    if (classes.includes("accent")) return "accent";
+    if (classes.includes("delim")) return "delimiter";
+    return "path";
+  }
+  const hasVisibleBorder = [
+    ["border-top-width", "border-top-style"],
+    ["border-right-width", "border-right-style"],
+    ["border-bottom-width", "border-bottom-style"],
+    ["border-left-width", "border-left-style"]
+  ].some(([width, style]) =>
+    Number.parseFloat(computed.getPropertyValue(width!)) > 0 &&
+    !["none", "hidden"].includes(computed.getPropertyValue(style!))
+  );
+  if (hasVisibleBorder) return "rule";
+  const classes = element.className;
+  if (typeof classes === "string") {
+    if (classes.includes("accent-body")) return "accent";
+    if (classes.includes("delimsizing") || classes.includes("delim-size")) {
+      return "delimiter";
+    }
+  }
+  return undefined;
+}
+
+function structuralVisualKey(
+  element: HTMLElement,
+  paintKind: Exclude<KpNativeKatexPaintKind, "glyph">
+): string {
+  if (paintKind === "rule") return "rule";
+  const viewBox = element.getAttribute("viewBox") ?? "";
+  const pathData = [...element.querySelectorAll("path")]
+    .map((path) => path.getAttribute("d") ?? "")
+    .join("|");
+  return `${paintKind}:${viewBox}:${pathData}`;
 }
 
 function assertUnique(values: readonly string[], label: string): void {

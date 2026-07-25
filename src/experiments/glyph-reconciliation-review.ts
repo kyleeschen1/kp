@@ -37,7 +37,8 @@ import {
   type KpStageRelativeRect
 } from "../rendering/native-katex-fragment-observer.ts";
 import {
-  observeKpNativeKatexGlyphPaintAtoms
+  observeKpNativeKatexGlyphPaintAtoms,
+  observeKpNativeKatexPaintAtoms
 } from "../rendering/native-katex-rendered-scene.ts";
 
 const rootNode = document.querySelector<HTMLElement>("#glyph-experiment");
@@ -52,7 +53,9 @@ if (import.meta.env.DEV) {
     __kpSettleAndObserveNativeKatexFragments:
       settleAndObserveKpNativeKatexFragments,
     __kpObserveNativeKatexGlyphPaintAtoms:
-      observeKpNativeKatexGlyphPaintAtoms
+      observeKpNativeKatexGlyphPaintAtoms,
+    __kpObserveNativeKatexPaintAtoms:
+      observeKpNativeKatexPaintAtoms
   });
 }
 
