@@ -26,6 +26,15 @@
     "npm run check:reader-production",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-01 endpoint reproduction harness",
+      "checkedAt": "2026-07-25T19:07:32.741Z",
+      "notes": "26 focused tests and all TypeScript projects pass. The stable visual entrypoint captured 10 overview and 14 dense wide/phone endpoint frames; material progress 99.9 percent visibly compresses plus, rule, and glyph geometry before native KaTeX snaps cleanly at 100 percent."
+    }
+  ],
   "allowedWork": [
     "Stable dense endpoint diagnostics, one bounded common alignment correction, generic scene compositor evolution, and only the named split, radical, reader, and compound exemplars with focused evidence."
   ],
@@ -55,7 +64,8 @@
     {
       "id": "slice-01",
       "title": "endpoint-reproduction-harness",
-      "status": "planned"
+      "summary": "Added deterministic fraction-local 96–100 percent wide/phone endpoint captures to the stable visual command; reproduced the material-scene geometry compression at 99.9 percent and clean native target snap at 100 percent without changing runtime behavior.",
+      "status": "complete"
     },
     {
       "id": "slice-02",

@@ -3,6 +3,10 @@ import path from "node:path";
 
 import { chromium } from "playwright";
 
+import {
+  kpFractionEndpointCheckpoints
+} from "./glyph-reconciliation-endpoint-checkpoints.ts";
+
 const baseUrl = process.env["KP_VISUAL_BASE_URL"] ?? "http://127.0.0.1:8000";
 const outputRoot = path.resolve("tmp/codex/glyph-reconciliation-experiment");
 const profiles = [
@@ -14,6 +18,7 @@ const checkpoints = [0, 250, 500, 750, 1000] as const;
 await mkdir(outputRoot, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const evidence: Array<Record<string, unknown>> = [];
+const endpointEvidence: Array<Record<string, unknown>> = [];
 try {
   for (const profile of profiles) {
     for (const progress of checkpoints) {
@@ -108,11 +113,98 @@ try {
       await page.close();
     }
   }
+  for (const profile of profiles) {
+    for (const checkpoint of kpFractionEndpointCheckpoints) {
+      const page = await browser.newPage({ viewport: profile.viewport });
+      const url = new URL("/glyph-reconciliation-experiment.html", baseUrl);
+      url.searchParams.set(
+        "progress",
+        String(checkpoint.routeProgressPermille)
+      );
+      await page.goto(url.toString(), { waitUntil: "networkidle" });
+      await page.evaluate(async () => document.fonts.ready);
+      const review = page.locator(
+        '[data-kp-glyph-review][data-kp-ready="true"]'
+      );
+      await review.waitFor();
+      const card = page.locator(
+        '[data-reconciliation-case="fraction-merge"]'
+      );
+      const snapshot = await card.evaluate((element) => {
+        const materialOwners = [
+          ...element.querySelectorAll<HTMLElement>(
+            "[data-kp-native-katex-scene-owner]"
+          )
+        ];
+        const source = element.querySelector<HTMLElement>(
+          "[data-fraction-source]"
+        )!;
+        const target = element.querySelector<HTMLElement>(
+          "[data-fraction-target]"
+        )!;
+        return {
+          sourceOpacity: source.style.opacity,
+          targetOpacity: target.style.opacity,
+          materialOwnerCount: materialOwners.length,
+          visibleMaterialOwnerCount: materialOwners.filter((owner) =>
+            Number(owner.style.opacity) > 0
+          ).length
+        };
+      });
+      const visualOwner = await review.getAttribute(
+        "data-kp-fraction-visual-owner"
+      );
+      const expectedOwner = checkpoint.fractionProgressPermille === 1_000
+        ? "target-native"
+        : "material-scene";
+      if (visualOwner !== expectedOwner) {
+        throw new Error(
+          `Expected ${expectedOwner} at fraction progress ${
+            checkpoint.fractionProgressPermille
+          }, found ${visualOwner ?? "none"}.`
+        );
+      }
+      if (
+        checkpoint.fractionProgressPermille === 1_000
+          ? snapshot.targetOpacity !== "1" ||
+            snapshot.visibleMaterialOwnerCount !== 0
+          : snapshot.targetOpacity !== "0" ||
+            snapshot.visibleMaterialOwnerCount === 0
+      ) {
+        throw new Error(
+          `Invalid endpoint ownership at ${checkpoint.id}: ${
+            JSON.stringify(snapshot)
+          }.`
+        );
+      }
+      const file = path.join(
+        outputRoot,
+        `endpoint-${profile.id}-${checkpoint.id}.png`
+      );
+      await card.screenshot({ path: file });
+      endpointEvidence.push({
+        profile: profile.id,
+        ...checkpoint,
+        file: path.relative(process.cwd(), file),
+        visualOwner,
+        ...snapshot
+      });
+      await page.close();
+    }
+  }
   await writeFile(
     path.join(outputRoot, "evidence.json"),
-    `${JSON.stringify({ generatedAt: new Date().toISOString(), evidence }, null, 2)}\n`
+    `${JSON.stringify({
+      generatedAt: new Date().toISOString(),
+      evidence,
+      endpointEvidence
+    }, null, 2)}\n`
   );
-  console.log(`Captured ${evidence.length} glyph reconciliation frames in ${path.relative(process.cwd(), outputRoot)}.`);
+  console.log(
+    `Captured ${evidence.length} overview frames and ${
+      endpointEvidence.length
+    } dense endpoint frames in ${path.relative(process.cwd(), outputRoot)}.`
+  );
 } finally {
   await browser.close();
 }
