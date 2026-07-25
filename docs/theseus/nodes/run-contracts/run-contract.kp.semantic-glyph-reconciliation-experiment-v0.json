@@ -156,7 +156,8 @@
     {
       "id": "slice-10",
       "title": "Bounded-clearance-scheduler",
-      "status": "planned"
+      "summary": "Added one bounded geometry scheduler with direct paths, shortest clear top or bottom lanes, honest settlement, fixed budget enforcement, and no operation-specific policy.",
+      "status": "complete"
     },
     {
       "id": "slice-11",
