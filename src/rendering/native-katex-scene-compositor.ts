@@ -718,6 +718,96 @@ export function measureKpNativeKatexRuleHandoff(input: {
   });
 }
 
+export function measureKpNativeKatexCorrelatedHandoff(input: {
+  readonly stage: HTMLElement;
+  readonly reconciliation: KpNativeKatexSceneReconciliation;
+  readonly correlations: readonly KpNativeKatexHandoffCorrelation[];
+  readonly progress: number;
+  readonly fontRevision: number;
+  readonly viewportKey: string;
+}): KpNativeKatexHandoffTelemetry {
+  const sourceById = new Map(input.reconciliation.source.atoms.map((atom) => [
+    atom.id,
+    atom
+  ]));
+  const targetById = new Map(input.reconciliation.target.atoms.map((atom) => [
+    atom.id,
+    atom
+  ]));
+  const paintById = new Map([
+    ...sourceById,
+    ...targetById
+  ]);
+  const observations = input.correlations.flatMap((correlation) => {
+    if (correlation.disposition !== "target-bound") return [];
+    const target = targetById.get(correlation.targetAtomId!);
+    const visual = paintById.get(correlation.visualAtomId);
+    const source = correlation.sourceAtomId === undefined
+      ? undefined
+      : sourceById.get(correlation.sourceAtomId);
+    if (target === undefined || visual === undefined) {
+      throw new Error(
+        `Correlated handoff ${correlation.id} references missing paint.`
+      );
+    }
+    const materialOwner = input.stage.querySelector<HTMLElement>(
+      `[data-kp-equation-material-owner-id="${
+        CSS.escape(correlation.materialOwnerId)
+      }"]`
+    );
+    const materialVisual = materialOwner?.firstElementChild;
+    if (
+      materialOwner === null ||
+      !(materialVisual instanceof HTMLElement)
+    ) {
+      throw new Error(
+        `Correlated handoff cannot find ${correlation.materialOwnerId}.`
+      );
+    }
+    return [
+      ...(source === undefined
+        ? []
+        : [observeCorrelatedHandoffPaint({
+            id: `${correlation.id}.source`,
+            side: "native-source",
+            stage: input.stage,
+            element: source.sourceElement,
+            rectElement: source.sourceElement,
+            atom: source,
+            fontRevision: input.fontRevision
+          })]),
+      observeCorrelatedHandoffPaint({
+        id: `${correlation.id}.material`,
+        side: "material",
+        stage: input.stage,
+        element: materialVisual,
+        rectElement: materialOwner,
+        atom: visual,
+        fontRevision: input.fontRevision
+      }),
+      observeCorrelatedHandoffPaint({
+        id: `${correlation.id}.native`,
+        side: "native-target",
+        stage: input.stage,
+        element: target.sourceElement,
+        rectElement: target.sourceElement,
+        atom: target,
+        fontRevision: input.fontRevision
+      })
+    ];
+  });
+  if (observations.length === 0) {
+    throw new Error("Correlated handoff microscope requires target-bound paint.");
+  }
+  return createKpNativeKatexHandoffTelemetry({
+    stage: input.stage,
+    progress: input.progress,
+    observations,
+    fontRevision: input.fontRevision,
+    viewportKey: input.viewportKey
+  });
+}
+
 export function calculateKpNativeKatexCommonHandoffAlignment(input: {
   readonly telemetry: KpNativeKatexHandoffTelemetry;
   readonly tolerancePx: number;
@@ -1175,7 +1265,7 @@ function lifecycleOpacityProgress(
 
 function observeHandoffGlyph(input: {
   readonly id: string;
-  readonly side: "material" | "native-target";
+  readonly side: "native-source" | "material" | "native-target";
   readonly stage: HTMLElement;
   readonly element: HTMLElement;
   readonly rectElement: HTMLElement;
@@ -1203,6 +1293,7 @@ function observeHandoffGlyph(input: {
     rect,
     baselineY: fontMetricBaseline(input.element, computed, rect),
     wrapperTransform: computedTransformChain(input.element, input.stage),
+    wrapperFingerprint: computedWrapperFingerprint(input.element, input.stage),
     clipPath: computed.clipPath || "none",
     paintFingerprint: input.target.visualKey,
     styleFingerprint: handoffStyleFingerprint(computed),
@@ -1213,7 +1304,7 @@ function observeHandoffGlyph(input: {
 
 function observeHandoffRule(input: {
   readonly id: string;
-  readonly side: "material" | "native-target";
+  readonly side: "native-source" | "material" | "native-target";
   readonly stage: HTMLElement;
   readonly element: HTMLElement;
   readonly target: KpNativeKatexPaintAtomObservation;
@@ -1240,11 +1331,67 @@ function observeHandoffRule(input: {
     rect,
     baselineY: null,
     wrapperTransform: computedTransformChain(input.element, input.stage),
+    wrapperFingerprint: computedWrapperFingerprint(input.element, input.stage),
     clipPath: computed.clipPath || "none",
     paintFingerprint: input.target.visualKey,
     styleFingerprint: structuralStyleFingerprint(computed),
     opacity: effectiveOpacity(input.element, input.stage),
     ruleGeometry: measureRuleGeometry(computed, rect),
+    fontRevision: input.fontRevision
+  };
+}
+
+function observeCorrelatedHandoffPaint(input: {
+  readonly id: string;
+  readonly side: "native-source" | "material" | "native-target";
+  readonly stage: HTMLElement;
+  readonly element: HTMLElement;
+  readonly rectElement: HTMLElement;
+  readonly atom: KpNativeKatexPaintAtomObservation;
+  readonly fontRevision: number;
+}) {
+  if (input.atom.paintKind === "glyph") {
+    return observeHandoffGlyph({
+      ...input,
+      target: input.atom
+    });
+  }
+  if (input.atom.paintKind === "rule") {
+    return observeHandoffRule({
+      id: input.id,
+      side: input.side,
+      stage: input.stage,
+      element: input.element,
+      target: input.atom,
+      fontRevision: input.fontRevision
+    });
+  }
+  const stageRect = input.stage.getBoundingClientRect();
+  const rect = normalizeKpStageRelativeRect({
+    stageClientRect: stageRect,
+    stageLayoutWidth: input.stage.offsetWidth || stageRect.width,
+    stageLayoutHeight: input.stage.offsetHeight || stageRect.height,
+    fragmentClientRect: input.rectElement.getBoundingClientRect()
+  });
+  const computed = getComputedStyle(input.element);
+  return {
+    kind: "native-katex-handoff-paint-observation" as const,
+    lifecycle: "renderer-session" as const,
+    id: input.id,
+    side: input.side,
+    paintAtomId: input.atom.id,
+    semanticEntityId: input.atom.semanticEntityId,
+    presentationGroupId: input.atom.presentationGroupId,
+    paintKind: input.atom.paintKind,
+    element: input.element,
+    rect,
+    baselineY: null,
+    wrapperTransform: computedTransformChain(input.element, input.stage),
+    wrapperFingerprint: computedWrapperFingerprint(input.element, input.stage),
+    clipPath: computed.clipPath || "none",
+    paintFingerprint: input.atom.visualKey,
+    styleFingerprint: structuralStyleFingerprint(computed),
+    opacity: effectiveOpacity(input.rectElement, input.stage),
     fontRevision: input.fontRevision
   };
 }
@@ -1285,6 +1432,27 @@ function computedTransformChain(
     current = current.parentElement;
   }
   return transforms.join(">");
+}
+
+function computedWrapperFingerprint(
+  element: HTMLElement,
+  stage: HTMLElement
+): string {
+  const wrappers: string[] = [];
+  let current = element.parentElement;
+  while (current !== null && current !== stage) {
+    const computed = getComputedStyle(current);
+    wrappers.push([
+      `display:${computed.display}`,
+      `position:${computed.position}`,
+      `font-family:${computed.fontFamily}`,
+      `font-size:${computed.fontSize}`,
+      `line-height:${computed.lineHeight}`,
+      `vertical-align:${computed.verticalAlign}`
+    ].join("|"));
+    current = current.parentElement;
+  }
+  return wrappers.join(">");
 }
 
 function handoffStyleFingerprint(computed: CSSStyleDeclaration): string {
@@ -1395,7 +1563,7 @@ function handoffTelemetryPairs(
 ) {
   const byId = new Map<string, typeof telemetry.observations>();
   for (const observation of telemetry.observations) {
-    const id = observation.id.replace(/\.(material|native)$/, "");
+    const id = observation.id.replace(/\.(source|material|native)$/, "");
     byId.set(id, [...(byId.get(id) ?? []), observation]);
   }
   return [...byId.entries()].sort(([left], [right]) =>

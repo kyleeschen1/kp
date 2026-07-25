@@ -323,9 +323,7 @@ const {
   targetScene: fractionTargetScene,
   sourceRoot: activeFractionSource,
   targetRoot: activeFractionTarget,
-  reconciliation: fractionSceneReconciliation,
   tracks: fractionSceneTracks,
-  ruleTracks: fractionRuleTracks,
   playback: fractionScenePlayback
 } = fractionScene;
 review.dataset["kpFractionSourceAtomCount"] =
@@ -339,14 +337,13 @@ review.dataset["kpFractionTargetGroupCount"] =
 fractionInventory.textContent =
   `${fractionSourceScene.atoms.length} source + ` +
   `${fractionTargetScene.atoms.length} target paint atoms inventoried`;
-review.dataset["kpFractionSceneDispositionCount"] =
-  String(fractionSceneReconciliation.dispositions.length);
 review.dataset["kpFractionSceneTrackCount"] = String(fractionSceneTracks.length);
-review.dataset["kpFractionRuleTrackCount"] = String(fractionRuleTracks.length);
 if (import.meta.env.DEV) {
   Object.assign(window, {
     __kpSampleFractionSceneTracks: fractionScenePlayback.sample,
     __kpApplyFractionSceneFrame: fractionScenePlayback.apply,
+    __kpMeasureFractionCorrelatedHandoff:
+      fractionScene.measureCorrelatedHandoff,
     __kpMeasureFractionGlyphHandoff: fractionScene.measureGlyphHandoff,
     __kpMeasureFractionRuleHandoff: fractionScene.measureRuleHandoff,
     __kpTraceFractionHandoffOwnership: fractionScene.traceHandoffOwnership

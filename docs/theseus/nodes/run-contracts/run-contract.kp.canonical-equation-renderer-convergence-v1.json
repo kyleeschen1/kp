@@ -51,6 +51,20 @@
       "scope": "slice-03 same-baseline fraction fixture",
       "checkedAt": "2026-07-25T23:40:40.262Z",
       "notes": "Forty-one Chromium checks, 38 focused compositor tests, all TypeScript projects, and 46 stable captures passed. Wide and phone endpoint evidence reports zero source-target center-anchor residual. Visual inspection confirms arbitrary vertical travel is gone; the known late typography overlap remains visible for the next handoff slices."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "failed",
+      "scope": "slice-04 initial controller ceiling",
+      "checkedAt": "2026-07-25T23:51:35.031Z",
+      "notes": "The first focused run correctly rejected a 40041-byte experiment controller against the frozen less-than-40000-byte ceiling. The bounded repair deleted two unused dataset diagnostics and retained the ceiling; no budget was raised."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer; npm run test:real-katex-glyph-compositor; npm run typecheck; npm run test:browser:real-katex-glyph-compositor -- --grep dense handoff telemetry covers every correlated; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-04 dense endpoint style telemetry",
+      "checkedAt": "2026-07-25T23:51:36.913Z",
+      "notes": "Five convergence-policy tests, 38 focused compositor tests, all TypeScript projects, the font-ready wide DPR1 and phone DPR2 Chromium resize/reload matrix, and 46 stable captures pass. Fourteen dense endpoint frames each contain 21 immutable observations spanning source, material, and native sides. The frozen controller ceiling remains intact."
     }
   ],
   "allowedWork": [
@@ -110,7 +124,8 @@
     {
       "id": "slice-04",
       "title": "dense-endpoint-style-telemetry",
-      "status": "planned"
+      "summary": "Added generic correlated handoff measurement spanning native source, material clone, and native target atoms. Dense 96-to-100-percent wide and phone evidence now validates every correlation's geometry, baseline or rule geometry, style/transform fingerprint, and wrapper context with deterministic font-ready resize/reload repetition. The first ceiling failure was repaired by deleting unused diagnostics, not relaxing the budget.",
+      "status": "complete"
     },
     {
       "id": "slice-05",

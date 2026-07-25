@@ -13,6 +13,7 @@ import {
   compileKpNativeKatexSceneTracks,
   correlateKpNativeKatexSceneHandoff,
   createKpNativeKatexScenePlayback,
+  measureKpNativeKatexCorrelatedHandoff,
   measureKpNativeKatexGlyphHandoff,
   measureKpNativeKatexRuleHandoff,
   reconcileKpNativeKatexScenes,
@@ -115,6 +116,13 @@ export async function createKpFractionExperimentScene(input: {
     measureGlyphHandoff(progress: number) {
       playback.apply(progress);
       return measureKpNativeKatexGlyphHandoff({
+        ...microscope,
+        progress
+      });
+    },
+    measureCorrelatedHandoff(progress: number) {
+      playback.apply(progress);
+      return measureKpNativeKatexCorrelatedHandoff({
         ...microscope,
         progress
       });

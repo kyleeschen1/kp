@@ -65,6 +65,7 @@ function handoffObservation(
     rect: { left: 10, top: 20, width: 12, height: 24 },
     baselineY: 42,
     wrapperTransform: "matrix(1, 0, 0, 1, 0, 0)",
+    wrapperFingerprint: "display:inline|font-size:16px",
     clipPath: "none",
     paintFingerprint: "glyph:x",
     styleFingerprint: "font-family:KaTeX_Math",

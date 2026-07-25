@@ -1408,6 +1408,121 @@ test("structural handoff microscope measures generic rule geometry", async ({
   }
 });
 
+test("dense handoff telemetry covers every correlated source material and target atom", async ({
+  browser
+}) => {
+  const progresses = [0.96, 0.97, 0.98, 0.99, 0.995, 0.999, 1];
+  for (const profile of [
+    {
+      viewport: { width: 1_440, height: 950 },
+      deviceScaleFactor: 1
+    },
+    {
+      viewport: { width: 390, height: 844 },
+      deviceScaleFactor: 2
+    }
+  ]) {
+    const context = await browser.newContext({
+      viewport: profile.viewport,
+      deviceScaleFactor: profile.deviceScaleFactor
+    });
+    const page = await context.newPage();
+    const snapshot = async () => page.evaluate((denseProgresses) => {
+      const measure = (window as unknown as {
+        __kpMeasureFractionCorrelatedHandoff: (progress: number) => {
+          observations: readonly {
+            id: string;
+            side: "native-source" | "material" | "native-target";
+            paintAtomId: string;
+            semanticEntityId: string;
+            paintKind: string;
+            rect: {
+              left: number;
+              top: number;
+              width: number;
+              height: number;
+            };
+            baselineY: number | null;
+            wrapperTransform: string;
+            wrapperFingerprint: string;
+            clipPath: string;
+            paintFingerprint: string;
+            styleFingerprint: string;
+            opacity: number;
+            ruleGeometry?: {
+              axis: "horizontal" | "vertical";
+              left: number;
+              top: number;
+              width: number;
+              thickness: number;
+            };
+          }[];
+        };
+      }).__kpMeasureFractionCorrelatedHandoff;
+      return denseProgresses.map((progress) => ({
+        progress,
+        observations: measure(progress).observations.map((observation) => ({
+          ...observation
+        }))
+      }));
+    }, progresses);
+    const load = async () => {
+      await page.goto("/glyph-reconciliation-experiment.html?progress=859");
+      await page.evaluate(async () => document.fonts.ready);
+      await page.locator(
+        '[data-kp-glyph-review][data-kp-ready="true"]'
+      ).waitFor();
+      return snapshot();
+    };
+    const first = await load();
+    await page.setViewportSize({
+      width: profile.viewport.width - 1,
+      height: profile.viewport.height
+    });
+    await page.setViewportSize(profile.viewport);
+    const resized = await load();
+
+    expect(first).toEqual(resized);
+    for (const sample of first) {
+      const groups = sample.observations.reduce((result, observation) => {
+        const id = observation.id.replace(/\.(source|material|native)$/, "");
+        result.set(id, [...(result.get(id) ?? []), observation]);
+        return result;
+      }, new Map<string, typeof sample.observations>());
+      expect(groups.size).toBeGreaterThanOrEqual(7);
+      expect([...groups.values()].every((observations) =>
+        observations.length === 3 &&
+        observations.some(({ side }) => side === "native-source") &&
+        observations.some(({ side }) => side === "material") &&
+        observations.some(({ side }) => side === "native-target")
+      )).toBe(true);
+      expect(sample.observations.every((observation) =>
+        observation.semanticEntityId.length > 0 &&
+        observation.paintAtomId.length > 0 &&
+        observation.paintFingerprint.length > 0 &&
+        observation.styleFingerprint.length > 0 &&
+        observation.wrapperTransform.length > 0 &&
+        observation.wrapperFingerprint.length > 0 &&
+        observation.clipPath.length > 0 &&
+        Object.values(observation.rect).every(Number.isFinite) &&
+        (
+          observation.paintKind !== "glyph" ||
+          Number.isFinite(observation.baselineY)
+        ) &&
+        (
+          observation.paintKind !== "rule" ||
+          (
+            observation.ruleGeometry !== undefined &&
+            observation.ruleGeometry.width > 0 &&
+            observation.ruleGeometry.thickness > 0
+          )
+        )
+      )).toBe(true);
+    }
+    await context.close();
+  }
+});
+
 test("handoff ownership trace is atomic and seek-direction independent", async ({
   page
 }) => {

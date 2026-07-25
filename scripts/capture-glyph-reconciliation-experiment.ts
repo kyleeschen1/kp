@@ -183,11 +183,42 @@ try {
               };
             }[];
           };
+          __kpMeasureFractionCorrelatedHandoff: (progress: number) => {
+            observations: readonly {
+              id: string;
+              side: "native-source" | "material" | "native-target";
+              paintAtomId: string;
+              semanticEntityId: string;
+              paintKind: string;
+              rect: {
+                left: number;
+                top: number;
+                width: number;
+                height: number;
+              };
+              baselineY: number | null;
+              wrapperTransform: string;
+              wrapperFingerprint: string;
+              clipPath: string;
+              paintFingerprint: string;
+              styleFingerprint: string;
+              opacity: number;
+              ruleGeometry?: {
+                axis: "horizontal" | "vertical";
+                left: number;
+                top: number;
+                width: number;
+                thickness: number;
+              };
+            }[];
+          };
         };
         const glyphTelemetry =
           telemetryApi.__kpMeasureFractionGlyphHandoff(fractionProgress);
         const ruleTelemetry =
           telemetryApi.__kpMeasureFractionRuleHandoff(fractionProgress);
+        const correlatedTelemetry =
+          telemetryApi.__kpMeasureFractionCorrelatedHandoff(fractionProgress);
         const materialOwners = [
           ...element.querySelectorAll<HTMLElement>(
             "[data-kp-native-katex-scene-owner]"
@@ -219,9 +250,41 @@ try {
           })),
           ruleTelemetry: ruleTelemetry.observations.map((observation) => ({
             ...observation
-          }))
+          })),
+          correlatedTelemetry: correlatedTelemetry.observations.map(
+            (observation) => ({
+              ...observation
+            })
+          )
         };
       }, checkpoint.fractionProgressPermille / 1_000);
+      const correlatedGroups = snapshot.correlatedTelemetry.reduce(
+        (groups, observation) => {
+          const id = observation.id.replace(/\.(source|material|native)$/, "");
+          groups.set(id, [
+            ...(groups.get(id) ?? []),
+            observation
+          ]);
+          return groups;
+        },
+        new Map<string, typeof snapshot.correlatedTelemetry>()
+      );
+      if (
+        correlatedGroups.size === 0 ||
+        [...correlatedGroups.values()].some((observations) =>
+          observations.length !== 3 ||
+          !observations.some(({ side }) => side === "native-source") ||
+          !observations.some(({ side }) => side === "material") ||
+          !observations.some(({ side }) => side === "native-target") ||
+          observations.some(({ wrapperTransform, wrapperFingerprint }) =>
+            wrapperTransform.length === 0 || wrapperFingerprint.length === 0
+          )
+        )
+      ) {
+        throw new Error(
+          `Incomplete correlated endpoint telemetry at ${checkpoint.id}.`
+        );
+      }
       const visualOwner = await review.getAttribute(
         "data-kp-fraction-visual-owner"
       );
