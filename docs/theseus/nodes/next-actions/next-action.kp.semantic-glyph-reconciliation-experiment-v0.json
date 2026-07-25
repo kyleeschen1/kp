@@ -58,6 +58,13 @@
       "scope": "slice-04 canonical lineage adapter",
       "checkedAt": "2026-07-25T01:43:55.185Z",
       "notes": "18 focused tests pass; TypeScript projects pass."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment and npm run typecheck",
+      "status": "passed",
+      "scope": "slice-05 ephemeral plan",
+      "checkedAt": "2026-07-25T01:46:31.087Z",
+      "notes": "21 focused tests pass; typecheck passes."
     }
   ],
   "progress": {

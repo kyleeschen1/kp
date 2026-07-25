@@ -126,7 +126,8 @@
     {
       "id": "slice-05",
       "title": "Ephemeral-reconciliation-plan",
-      "status": "planned"
+      "summary": "Added an immutable renderer-session reconciliation plan outside the durable asset, initialized solely from canonical lineage and shared presentation constraints.",
+      "status": "complete"
     },
     {
       "id": "slice-06",
