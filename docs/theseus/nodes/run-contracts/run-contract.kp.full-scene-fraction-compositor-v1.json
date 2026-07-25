@@ -86,6 +86,13 @@
       "scope": "slice-09 total reconciliation validator",
       "checkedAt": "2026-07-25T17:27:35.100Z",
       "notes": "18 focused tests and all TypeScript projects pass; omissions, duplicates, invalid multiplicity, silent unsupported components, and unknown atom IDs fail closed."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-10 grouped constrained matching",
+      "checkedAt": "2026-07-25T17:30:19.753Z",
+      "notes": "20 focused tests and all TypeScript projects pass; persistent and merge atoms match deterministically only inside shared semantic ownership or explicit lineage, while unrelated equal ink enters/exits."
     }
   ],
   "allowedWork": [
@@ -168,7 +175,8 @@
     {
       "id": "slice-10",
       "title": "grouped-constrained-matching",
-      "status": "planned"
+      "summary": "Added deterministic visual-key pairing within shared semantic owners and explicit persist/merge/split relations; all remaining atoms receive generic introduction or elimination.",
+      "status": "complete"
     },
     {
       "id": "slice-11",

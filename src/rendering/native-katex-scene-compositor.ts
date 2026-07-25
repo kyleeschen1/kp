@@ -1,4 +1,5 @@
 import type {
+  KpNativeKatexPaintAtomObservation,
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
 
@@ -25,6 +26,80 @@ export interface KpNativeKatexSceneReconciliation {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly dispositions: readonly KpNativeKatexAtomDisposition[];
+}
+
+export interface KpNativeKatexSemanticPaintRelation {
+  readonly id: string;
+  readonly relation: "persist" | "merge" | "split";
+  readonly sourceEntityIds: readonly string[];
+  readonly targetEntityIds: readonly string[];
+}
+
+export function reconcileKpNativeKatexScenes(input: {
+  readonly source: KpNativeKatexRenderedSceneObservation;
+  readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly relations?: readonly KpNativeKatexSemanticPaintRelation[] | undefined;
+}): KpNativeKatexSceneReconciliation {
+  const sourceRemaining = new Map(input.source.atoms.map((atom) => [atom.id, atom]));
+  const targetRemaining = new Map(input.target.atoms.map((atom) => [atom.id, atom]));
+  const dispositions: KpNativeKatexAtomDisposition[] = [];
+  const sharedEntityIds = [...new Set(input.source.atoms.map(
+    ({ semanticEntityId }) => semanticEntityId
+  ))].filter((entityId) =>
+    input.target.atoms.some((atom) => atom.semanticEntityId === entityId)
+  );
+  for (const entityId of sharedEntityIds.sort()) {
+    pairCompatibleAtoms({
+      idPrefix: `persist.${entityId}`,
+      lifecycle: "persist",
+      semanticEntityIds: [entityId],
+      sources: matchingEntityAtoms(sourceRemaining, [entityId]),
+      targets: matchingEntityAtoms(targetRemaining, [entityId]),
+      dispositions,
+      sourceRemaining,
+      targetRemaining
+    });
+  }
+  for (const relation of [...(input.relations ?? [])].sort((left, right) =>
+    left.id.localeCompare(right.id)
+  )) {
+    pairCompatibleAtoms({
+      idPrefix: relation.id,
+      lifecycle: relation.relation,
+      semanticEntityIds: [
+        ...relation.sourceEntityIds,
+        ...relation.targetEntityIds
+      ],
+      sources: matchingEntityAtoms(sourceRemaining, relation.sourceEntityIds),
+      targets: matchingEntityAtoms(targetRemaining, relation.targetEntityIds),
+      dispositions,
+      sourceRemaining,
+      targetRemaining
+    });
+  }
+  for (const atom of [...sourceRemaining.values()].sort(byAtomId)) {
+    dispositions.push({
+      id: `eliminate.${atom.id}`,
+      lifecycle: "eliminate",
+      sourceAtomIds: [atom.id],
+      targetAtomIds: [],
+      semanticEntityIds: [atom.semanticEntityId]
+    });
+  }
+  for (const atom of [...targetRemaining.values()].sort(byAtomId)) {
+    dispositions.push({
+      id: `introduce.${atom.id}`,
+      lifecycle: "introduce",
+      sourceAtomIds: [],
+      targetAtomIds: [atom.id],
+      semanticEntityIds: [atom.semanticEntityId]
+    });
+  }
+  return createKpNativeKatexSceneReconciliation({
+    source: input.source,
+    target: input.target,
+    dispositions
+  });
 }
 
 export function createKpNativeKatexSceneReconciliation(input: {
@@ -98,6 +173,79 @@ function assertLifecycleArity(
       `Scene disposition ${disposition.id} has invalid ${disposition.lifecycle} arity.`
     );
   }
+}
+
+function pairCompatibleAtoms(input: {
+  readonly idPrefix: string;
+  readonly lifecycle: "persist" | "merge" | "split";
+  readonly semanticEntityIds: readonly string[];
+  readonly sources: readonly KpNativeKatexPaintAtomObservation[];
+  readonly targets: readonly KpNativeKatexPaintAtomObservation[];
+  readonly dispositions: KpNativeKatexAtomDisposition[];
+  readonly sourceRemaining: Map<string, KpNativeKatexPaintAtomObservation>;
+  readonly targetRemaining: Map<string, KpNativeKatexPaintAtomObservation>;
+}): void {
+  const keys = [...new Set(input.sources.map(compatibilityKey))]
+    .filter((key) => input.targets.some((atom) => compatibilityKey(atom) === key))
+    .sort();
+  for (const [keyIndex, key] of keys.entries()) {
+    const sources = input.sources.filter((atom) => compatibilityKey(atom) === key)
+      .sort(byAtomId);
+    const targets = input.targets.filter((atom) => compatibilityKey(atom) === key)
+      .sort(byAtomId);
+    if (input.lifecycle === "persist") {
+      const count = Math.min(sources.length, targets.length);
+      for (let index = 0; index < count; index += 1) {
+        addDisposition(
+          input,
+          `${input.idPrefix}.${keyIndex}.${index}`,
+          [sources[index]!],
+          [targets[index]!]
+        );
+      }
+    } else if (input.lifecycle === "merge" && sources.length >= 2 && targets.length === 1) {
+      addDisposition(input, `${input.idPrefix}.${keyIndex}`, sources, targets);
+    } else if (input.lifecycle === "split" && sources.length === 1 && targets.length >= 2) {
+      addDisposition(input, `${input.idPrefix}.${keyIndex}`, sources, targets);
+    }
+  }
+}
+
+function addDisposition(
+  input: Parameters<typeof pairCompatibleAtoms>[0],
+  id: string,
+  sources: readonly KpNativeKatexPaintAtomObservation[],
+  targets: readonly KpNativeKatexPaintAtomObservation[]
+): void {
+  input.dispositions.push({
+    id,
+    lifecycle: input.lifecycle,
+    sourceAtomIds: sources.map(({ id: atomId }) => atomId),
+    targetAtomIds: targets.map(({ id: atomId }) => atomId),
+    semanticEntityIds: [...input.semanticEntityIds]
+  });
+  sources.forEach(({ id: atomId }) => input.sourceRemaining.delete(atomId));
+  targets.forEach(({ id: atomId }) => input.targetRemaining.delete(atomId));
+}
+
+function matchingEntityAtoms(
+  atoms: ReadonlyMap<string, KpNativeKatexPaintAtomObservation>,
+  entityIds: readonly string[]
+): KpNativeKatexPaintAtomObservation[] {
+  return [...atoms.values()].filter(({ semanticEntityId }) =>
+    entityIds.includes(semanticEntityId)
+  );
+}
+
+function compatibilityKey(atom: KpNativeKatexPaintAtomObservation): string {
+  return `${atom.paintKind}:${atom.visualKey}`;
+}
+
+function byAtomId(
+  left: KpNativeKatexPaintAtomObservation,
+  right: KpNativeKatexPaintAtomObservation
+): number {
+  return left.id.localeCompare(right.id);
 }
 
 function assertTotalCoverage(

@@ -6,7 +6,8 @@ import {
   type KpNativeKatexPaintAtomObservation
 } from "../src/rendering/native-katex-rendered-scene.ts";
 import {
-  createKpNativeKatexSceneReconciliation
+  createKpNativeKatexSceneReconciliation,
+  reconcileKpNativeKatexScenes
 } from "../src/rendering/native-katex-scene-compositor.ts";
 
 const ownerDocument = {};
@@ -216,6 +217,63 @@ test("scene reconciliation rejects invalid multiplicity and silent unsupported w
     }),
     /invalid unsupported arity/
   );
+});
+
+test("grouped scene matching is deterministic and semantic-constrained", () => {
+  const source = createScene("source", ["source.x", "source.unrelated-x"]);
+  const target = createScene("target", ["target.x", "target.other-x"]);
+  const remap = (scene: ReturnType<typeof createScene>, entities: readonly string[]) =>
+    createKpNativeKatexRenderedSceneObservation({
+      ...scene,
+      atoms: scene.atoms.map((paintAtom, index) => ({
+        ...paintAtom,
+        semanticEntityId: entities[index]!,
+        visualKey: "glyph:x"
+      }))
+    });
+  const result = reconcileKpNativeKatexScenes({
+    source: remap(source, ["symbol.x", "source.unrelated"]),
+    target: remap(target, ["symbol.x", "target.unrelated"])
+  });
+
+  assert.equal(result.dispositions.find(({ lifecycle }) =>
+    lifecycle === "persist"
+  )?.semanticEntityIds[0], "symbol.x");
+  assert.equal(result.dispositions.filter(({ lifecycle }) =>
+    lifecycle === "persist"
+  ).length, 1);
+  assert.equal(result.dispositions.filter(({ lifecycle }) =>
+    lifecycle === "eliminate"
+  ).length, 1);
+  assert.equal(result.dispositions.filter(({ lifecycle }) =>
+    lifecycle === "introduce"
+  ).length, 1);
+  assert.deepEqual(
+    result.dispositions.map(({ id }) => id),
+    reconcileKpNativeKatexScenes({
+      source: remap(source, ["symbol.x", "source.unrelated"]),
+      target: remap(target, ["symbol.x", "target.unrelated"])
+    }).dispositions.map(({ id }) => id)
+  );
+});
+
+test("explicit semantic relations compile generic merge multiplicity", () => {
+  const source = createScene("source", ["source.a", "source.b"]);
+  const target = createScene("target", ["target.result"]);
+  const result = reconcileKpNativeKatexScenes({
+    source,
+    target,
+    relations: [{
+      id: "lineage.denominators",
+      relation: "merge",
+      sourceEntityIds: ["entity.a", "entity.b"],
+      targetEntityIds: ["entity.result"]
+    }]
+  });
+
+  assert.deepEqual(result.dispositions.map(({ lifecycle }) => lifecycle), ["merge"]);
+  assert.deepEqual(result.dispositions[0]?.sourceAtomIds, ["source.a", "source.b"]);
+  assert.deepEqual(result.dispositions[0]?.targetAtomIds, ["target.result"]);
 });
 
 function createScene(
