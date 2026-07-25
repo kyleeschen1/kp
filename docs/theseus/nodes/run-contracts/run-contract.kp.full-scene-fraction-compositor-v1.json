@@ -37,6 +37,13 @@
       "scope": "slice-02 failure and coverage ledger",
       "checkedAt": "2026-07-25T17:08:53.438Z",
       "notes": "13 focused tests pass; four focal-only failure codes and six total-scene acceptance laws are frozen."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-03 rendered scene contracts",
+      "checkedAt": "2026-07-25T17:11:10.274Z",
+      "notes": "16 focused tests and all TypeScript projects pass; scene, atom, group, geometry, ownership references, and durable serialization boundaries fail closed."
     }
   ],
   "allowedWork": [
@@ -77,7 +84,8 @@
     {
       "id": "slice-03",
       "title": "rendered-scene-contracts",
-      "status": "planned"
+      "summary": "Added frozen renderer-session scene, paint-atom, presentation-group, and endpoint contracts with geometry, identity, document, ownership, and serialization guards.",
+      "status": "complete"
     },
     {
       "id": "slice-04",
