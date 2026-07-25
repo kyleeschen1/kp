@@ -37,6 +37,13 @@
       "scope": "slice-01 renderer inventory",
       "checkedAt": "2026-07-25T23:33:09.630Z",
       "notes": "Architecture gates passed. Product imports confirm one default reader material renderer, one query-selected dynamically loaded scene renderer, active editor hosts with broader coverage, and a reference-only KaTeX transition controller. The retirement ledger preserves all distinct capabilities."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer; npm run test:real-katex-glyph-compositor; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-02 acceptance and complexity ratchet",
+      "checkedAt": "2026-07-25T23:36:18.404Z",
+      "notes": "Five convergence-policy tests, 38 compositor tests, all TypeScript projects, and all architecture gates passed. Frozen policy enforces one current default, one temporary query scaffold with target zero, five paint kinds, six lifecycles, four core modules, 120000 source bytes, 12000 gzip-growth bytes, five-percent reader regression, and forbidden special-case vocabulary."
     }
   ],
   "allowedWork": [
@@ -84,7 +91,8 @@
     {
       "id": "slice-02",
       "title": "acceptance-and-complexity-ratchet",
-      "status": "planned"
+      "summary": "Added a typed convergence policy and stable focused test command. The ratchet fixes one current default reader, one temporary query scaffold with target zero, five paint kinds, six lifecycles, four core modules, source and payload ceilings, five-percent route regression, and forbidden special-case vocabulary. All focused, type, and architecture checks pass.",
+      "status": "complete"
     },
     {
       "id": "slice-03",
