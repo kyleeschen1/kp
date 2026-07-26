@@ -193,6 +193,13 @@
       "scope": "slice-22 variation cohort conformance",
       "checkedAt": "2026-07-26T14:00:16.964Z",
       "notes": "Forty-six focused tests pass. Fraction split/merge, exponent absorption, and radical succession use the v2 request, verified construction compiler, and native KaTeX renderer-session contract; provider presentation authority remains empty and fixed source/payload ceilings pass."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; npm run typecheck; npm run check:architecture; git diff --check",
+      "status": "passed",
+      "scope": "slice-23 compound operation construction",
+      "checkedAt": "2026-07-26T14:04:43.174Z",
+      "notes": "Fifty-one focused tests, all TypeScript projects, and architecture gates pass. Four verified canonical operations retain exact child order on the existing causal-chain plan; 401 direct-seek samples rewind exactly and optional drill-down restores the parent frame without a second scheduler."
     }
   ],
   "allowedWork": [
@@ -385,7 +392,8 @@
     {
       "id": "slice-23",
       "title": "compound-operation-construction",
-      "status": "planned"
+      "summary": "Built one compound construction from the governed cohort's canonical child operations. The existing causal-chain clock preserves all four operations, supplies compact and full-detail views, and supports stateless seek, rewind, and exact optional drill-down restoration.",
+      "status": "complete"
     },
     {
       "id": "slice-24",

@@ -124,3 +124,11 @@ export {
   type KpGovernedCanonicalConstructionCohortMember,
   type KpGovernedCanonicalConstructionCohortMemberId
 } from "./governed-canonical-construction-cohort.ts";
+
+export {
+  createKpGovernedCanonicalCompoundConstruction,
+  sampleKpGovernedCanonicalCompoundConstruction,
+  type KpGovernedCanonicalCompoundConstruction,
+  type KpGovernedCanonicalCompoundFrame,
+  type KpGovernedCanonicalCompoundOperation
+} from "./governed-canonical-compound-construction.ts";
