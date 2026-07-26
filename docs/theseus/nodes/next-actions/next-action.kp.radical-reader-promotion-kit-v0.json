@@ -285,11 +285,39 @@
       "scope": "slice 10 production route build",
       "checkedAt": "2026-07-26T17:33:39.587Z",
       "notes": "The radical reader route compiled into dist with native lesson HTML and shared reader chunks."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 11 semantic lifecycle totality",
+      "checkedAt": "2026-07-26T17:39:40.192Z",
+      "notes": "24 tests passed. Forward and rewind plans have inverse lifecycles and exact one-relation coverage for every selector."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 11 dense paint lifecycle totality",
+      "checkedAt": "2026-07-26T17:39:41.133Z",
+      "notes": "Two Chromium tests passed. Dense 0-100 percent samples cover every source and target paint atom, keep persist tracks opaque, make genuine emergence and absorption monotonic, settle native endpoints, and reproduce exactly under reverse traversal."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 11 static typing",
+      "checkedAt": "2026-07-26T17:39:41.955Z",
+      "notes": "All TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 11 architecture boundaries",
+      "checkedAt": "2026-07-26T17:39:42.756Z",
+      "notes": "All architecture gates passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 10 activated /reader/radical-succession/ through the existing manifest, descriptor registry, runtime clock, and canonical session. Generic state-root ownership covers native KaTeX remainder while closer selector anchors retain structural identity; compatibility paint is empty whenever canonical paint is active."
+    "summary": "Slice 11 proved radical lifecycle totality without a new category: semantic relations are exact and inverse, observed source and target atoms are fully covered, lineage-backed paint stays opaque, genuine emergence/absorption is monotonic, endpoints settle natively, and reverse traversal is history-independent."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

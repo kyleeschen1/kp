@@ -79,9 +79,9 @@ const session = createKpReaderEquationSceneCompositorSession({
 const first = session.sample(0.37);
 session.sample(0.81);
 const rewound = session.sample(0.37);
-const samples = [0, 0.25, 0.5, 0.75, 1].flatMap((progress) =>
-  session.sample(progress)
-);
+const denseProgress = Array.from({ length: 101 }, (_, index) => index / 100);
+const denseSamples = denseProgress.map((progress) => session.sample(progress));
+const samples = denseSamples.flat();
 const ownership = session.apply(0.5);
 const lifecycles = Object.freeze([...new Set(
   session.tracks.map(({ lifecycle }) => lifecycle)
@@ -106,10 +106,38 @@ const evidence = Object.freeze({
   ),
   persistentPaintOpaque: session.tracks
     .filter(({ lifecycle }) => lifecycle === "persist")
-    .every((track) => [0, 0.25, 0.5, 0.75, 1].every((progress) =>
+    .every((track) => denseProgress.every((progress) =>
       session.sample(progress).find(({ trackId }) => track.id === trackId)
         ?.opacity === 1
     )),
+  sourceMissingAtomIds: missingAtoms(
+    source.atoms.map(({ id }) => id),
+    session.tracks.flatMap(({ sourceAtomId }) =>
+      sourceAtomId === undefined ? [] : [sourceAtomId]
+    )
+  ),
+  targetMissingAtomIds: missingAtoms(
+    target.atoms.map(({ id }) => id),
+    session.tracks.flatMap(({ targetAtomId }) =>
+      targetAtomId === undefined ? [] : [targetAtomId]
+    )
+  ),
+  monotonicEmergence: session.tracks
+    .filter(({ lifecycle }) => lifecycle === "introduce")
+    .every((track) => isMonotonic(denseSamples.map((frames) =>
+      frames.find(({ trackId }) => track.id === trackId)!.opacity
+    ), "ascending")),
+  monotonicAbsorption: session.tracks
+    .filter(({ lifecycle }) => lifecycle === "eliminate")
+    .every((track) => isMonotonic(denseSamples.map((frames) =>
+      frames.find(({ trackId }) => track.id === trackId)!.opacity
+    ), "descending")),
+  reverseTraversalExact: JSON.stringify(denseSamples) === JSON.stringify(
+    [...denseProgress].reverse().map((progress) => session.sample(progress))
+      .reverse()
+  ),
+  endpointsSettled: session.apply(0).visualOwner === "source-native" &&
+    session.apply(1).visualOwner === "target-native",
   visualOwner: ownership.visualOwner,
   materialOwnerCount: stage.querySelectorAll(
     '[data-kp-equation-material-owner-id^="native-scene-owner."]'
@@ -186,4 +214,23 @@ function requireObject(id: string): KpSemanticAssetObject {
 
 function nextFrame(): Promise<void> {
   return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+}
+
+function missingAtoms(
+  expected: readonly string[],
+  observed: readonly string[]
+): readonly string[] {
+  const observedIds = new Set(observed);
+  return expected.filter((id) => !observedIds.has(id));
+}
+
+function isMonotonic(
+  values: readonly number[],
+  direction: "ascending" | "descending"
+): boolean {
+  return values.every((value, index) => {
+    const previous = values[index - 1];
+    return previous === undefined ||
+      (direction === "ascending" ? value >= previous : value <= previous);
+  });
 }

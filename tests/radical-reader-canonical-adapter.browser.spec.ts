@@ -16,6 +16,12 @@ interface RadicalAdapterEvidence {
   readonly statelessSeek: boolean;
   readonly finiteFrames: boolean;
   readonly persistentPaintOpaque: boolean;
+  readonly sourceMissingAtomIds: readonly string[];
+  readonly targetMissingAtomIds: readonly string[];
+  readonly monotonicEmergence: boolean;
+  readonly monotonicAbsorption: boolean;
+  readonly reverseTraversalExact: boolean;
+  readonly endpointsSettled: boolean;
   readonly visualOwner: string;
   readonly materialOwnerCount: number;
 }
@@ -56,6 +62,12 @@ test("radical reader dry run reaches the existing canonical adapter", async ({
   expect(evidence.statelessSeek).toBe(true);
   expect(evidence.finiteFrames).toBe(true);
   expect(evidence.persistentPaintOpaque).toBe(true);
+  expect(evidence.sourceMissingAtomIds).toEqual([]);
+  expect(evidence.targetMissingAtomIds).toEqual([]);
+  expect(evidence.monotonicEmergence).toBe(true);
+  expect(evidence.monotonicAbsorption).toBe(true);
+  expect(evidence.reverseTraversalExact).toBe(true);
+  expect(evidence.endpointsSettled).toBe(true);
   expect(evidence.visualOwner).toBe("material-scene");
   expect(evidence.materialOwnerCount).toBe(evidence.trackCount);
 });
