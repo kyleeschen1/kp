@@ -8,9 +8,11 @@ import {
   type KpGovernedCanonicalConstructionCohortMember
 } from "../authoring/governed-canonical-construction-cohort.ts";
 import {
-  bindKpExponentRadicalStructuralMotionIds,
-  createKpExponentRadicalSelectorAnnotatedLatex
+  bindKpExponentRadicalStructuralMotionIds
 } from "../editor/exponent-radical-semantic-latex.ts";
+import {
+  createKpExponentRadicalSelectorAnnotatedLatex
+} from "../rendering/exponent-radical-selector-annotated-latex.ts";
 import { createKpEquationFontReadiness } from "../rendering/equation-font-readiness.ts";
 import {
   createKpNativeKatexCompoundScenePlan

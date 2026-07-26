@@ -5,7 +5,9 @@ import {
   createExponentExpansionAnimationAsset,
   createExponentRadicalRewriteAnimationAsset
 } from "../src/animation/exponent-radical-adapter.ts";
-import { createKpExponentRadicalSelectorAnnotatedLatex } from "../src/editor/exponent-radical-semantic-latex.ts";
+import {
+  createKpExponentRadicalSelectorAnnotatedLatex
+} from "../src/rendering/exponent-radical-selector-annotated-latex.ts";
 import { compileKpSemanticEquationTransitionResult } from "../src/domain-ir/public-api.ts";
 
 test("exponent expansion and radical rewriting compile complete semantics", () => {
@@ -41,6 +43,10 @@ test("exponent and radical states reserve structural glyphs for DOM binding", ()
         selector.id.endsWith(".radical-overbar")
       );
       assert.equal(annotated.annotations.length, object.selectors.length - structural.length);
+      assert.deepEqual(
+        annotated.structuralSelectorIds,
+        structural.map(({ id }) => id)
+      );
     }
   }
 });

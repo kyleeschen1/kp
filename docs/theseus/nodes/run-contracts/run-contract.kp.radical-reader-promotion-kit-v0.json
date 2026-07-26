@@ -120,7 +120,8 @@
     {
       "id": "slice-04",
       "title": "reuse-selector-annotations",
-      "status": "planned",
+      "summary": "Reused the existing selector annotation utility through one rendering-owned exponent/radical projection; no new sanitizer or annotation implementation.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {
