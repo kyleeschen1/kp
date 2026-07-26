@@ -33,6 +33,19 @@
     "npm run visual:radical-canonical-checkpoint",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:radical-reader-promotion; npm run test:canonical-animation-construction; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-26T16:50:14.006Z",
+      "notes": "Four inventory ratchets, sixty released canonical-construction checks, all TypeScript projects and domain packages, and all architecture gates pass. The inventory freezes the existing radical authorities, explicit reader adoption gap, old editor/WebGL compatibility boundary, preservation contract, and rollback unit."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice 1 complete: the radical adoption inventory freezes existing semantic, governed, renderer, reader-registry, product-paint, editor-compatibility, preservation, stop, and rollback boundaries. The product gap is one reader lesson, descriptor, route, structural annotation, and exclusive eligibility branch; no new renderer authority is required."
+  },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",
     "Whether the resulting promotion kit makes unit-exponent adoption content-and-wiring work only."
