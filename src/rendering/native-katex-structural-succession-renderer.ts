@@ -47,6 +47,7 @@ interface StructuralSuccessionState {
   targetCorrection: EndpointCorrection;
   currentCorrection: EndpointCorrection;
   targetNativeInkRect?: KatexTokenRect | undefined;
+  onSettled?: (() => void) | undefined;
 }
 
 const identityCorrection: EndpointCorrection = {
@@ -72,6 +73,7 @@ export function syncKpNativeKatexStructuralSuccession(input: {
   readonly progress: number;
   readonly visible: boolean;
   readonly enabled: boolean;
+  readonly onSettled?: (() => void) | undefined;
 }): KpNativeKatexStructuralSuccessionSyncResult {
   if (!input.enabled) {
     disposeKpNativeKatexStructuralSuccession(input.stage);
@@ -124,6 +126,7 @@ export function syncKpNativeKatexStructuralSuccession(input: {
 
   state.progress = input.progress;
   state.visible = input.visible;
+  state.onSettled = input.onSettled;
   if (state.status === "ready" && state.renderer !== undefined) {
     state.renderer.render(input.progress);
     applyCanvasCorrection(state);
@@ -303,6 +306,9 @@ async function initializeState(
     state.canvas.dataset["kpNativeKatexStructuralProfile"] =
       strategy.profileId;
     setStageStatus(stage, "solid-mask-succession", "ready");
+    // Capture is asynchronous. Reapply the latest canonical session frame so
+    // a direct seek after resize cannot leave a ready canvas hidden at source.
+    state.onSettled?.();
   } catch (error) {
     if (states.get(stage) !== state) return;
     state.status = "unavailable";
@@ -311,6 +317,7 @@ async function initializeState(
       : "solid-mask-initialization-failed";
     state.canvas.style.opacity = "0";
     checkpoint(stage, state.reason);
+    state.onSettled?.();
   }
 }
 

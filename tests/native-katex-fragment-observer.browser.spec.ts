@@ -579,7 +579,7 @@ test("radical succession inventories native glyph, rule, and path paint", async 
       "expression.generated.radical.square-root-as-power.radical.radicand"
     );
     expect(target!.semanticEntityIds).toContain(
-      "expression.generated.radical.square-root-as-power.radical.root-notation"
+      "expression.generated.radical.square-root-as-power.radical.radical-hook"
     );
     expect(source!.owned).toBe(true);
     expect(target!.owned).toBe(true);
@@ -681,7 +681,6 @@ test("radical succession reconciles through existing generic lifecycles", async 
   expect(result.relationKinds).toEqual([
     "persist",
     "persist",
-    "persist",
     "persist"
   ]);
   expect(result.forward.lifecycleCounts).toEqual({
@@ -711,14 +710,14 @@ test("radical succession reconciles through existing generic lifecycles", async 
   expect(result.permutedDispositionIds).toEqual(
     result.forward.dispositions.map(({ id }) => id)
   );
-  expect(result.forward.dispositions.find(({ lifecycle }) =>
-    lifecycle === "introduce"
-  )?.semanticEntityIds).toEqual([
-    "expression.generated.radical.square-root-as-power.radical.root-notation"
-  ]);
+  expect(result.forward.dispositions.some(({ semanticEntityIds }) =>
+    semanticEntityIds.includes(
+      "expression.generated.radical.square-root-as-power.radical.radical-hook"
+    )
+  )).toBe(true);
 });
 
-test("radical path and source rule use bounded generic structural tracks", async ({
+test("structural succession overrides fade-only atoms without a new lifecycle", async ({
   browser
 }) => {
   for (const reducedMotion of [false, true]) {
@@ -743,13 +742,8 @@ test("radical path and source rule use bounded generic structural tracks", async
       type Track = {
         id: string;
         lifecycle: string;
-        visualAtomId: string;
-        paintKind: string;
-        sizingMode: string;
         startRect: Rect;
         endRect: Rect;
-        startOpacity: number;
-        endOpacity: number;
       };
       type Frame = {
         trackId: string;
@@ -765,30 +759,11 @@ test("radical path and source rule use bounded generic structural tracks", async
       };
       const inventory = (window as unknown as {
         __kpRadicalSceneInventory: {
-          target: {
-            atoms: readonly {
-              id: string;
-              paintKind: string;
-              sourceElement: HTMLElement;
-            }[];
-          };
           tracks: readonly Track[];
           playback: Playback;
-          reverseTracks: readonly Track[];
           reversePlayback: Playback;
         };
       }).__kpRadicalSceneInventory;
-      const pathTrack = inventory.tracks.find(({ paintKind }) =>
-        paintKind === "path"
-      )!;
-      const ruleTrack = inventory.tracks.find(({ paintKind }) =>
-        paintKind === "rule"
-      )!;
-      const targetPathAtom = inventory.target.atoms.find(({ id }) =>
-        id === pathTrack.visualAtomId
-      )!;
-      const nativePath = targetPathAtom.sourceElement.querySelector("path")!;
-      const nativePathDataBefore = nativePath.getAttribute("d");
       const samples = Array.from({ length: 101 }, (_, index) =>
         inventory.playback.sample(index / 100)
       );
@@ -827,18 +802,15 @@ test("radical path and source rule use bounded generic structural tracks", async
 
       const sourceFrame = inventory.playback.apply(0);
       const middleFrame = inventory.playback.apply(0.5);
-      const pathOwner = document.querySelector<HTMLElement>(
-        `[data-kp-equation-material-owner-id="native-scene-owner.${
-          CSS.escape(pathTrack.id)
-        }"]`
+      const stage = document.querySelector<HTMLElement>(
+        "[data-radical-stage]"
       )!;
-      const ruleOwner = document.querySelector<HTMLElement>(
-        `[data-kp-equation-material-owner-id="native-scene-owner.${
-          CSS.escape(ruleTrack.id)
-        }"]`
-      )!;
-      const clonedPathData =
-        pathOwner.querySelector("path")?.getAttribute("d") ?? null;
+      const canvas = stage.querySelector<HTMLCanvasElement>(
+        "[data-kp-native-katex-structural-succession]"
+      );
+      const owners = [...stage.querySelectorAll<HTMLElement>(
+        "[data-kp-native-katex-scene-owner]"
+      )];
       const targetFrame = inventory.playback.apply(1);
       const rewoundFrame = inventory.playback.apply(0);
       const replayedMiddleFrame = inventory.playback.apply(0.5);
@@ -856,18 +828,20 @@ test("radical path and source rule use bounded generic structural tracks", async
         replayedMiddleStable:
           JSON.stringify(middleFrame.frames) ===
           JSON.stringify(replayedMiddleFrame.frames),
-        pathTrack,
-        ruleTrack,
-        reversePathTrack: inventory.reverseTracks.find(({ paintKind }) =>
-          paintKind === "path"
-        ),
-        clonedPathData,
-        structuralTypographyModels: [
-          pathOwner.dataset["kpNativeKatexTypographyModel"] ?? null,
-          ruleOwner.dataset["kpNativeKatexTypographyModel"] ?? null
-        ],
-        nativePathDataBefore,
-        nativePathDataAfter: nativePath.getAttribute("d")
+        strategy:
+          stage.dataset["kpNativeKatexStructuralSuccessionStrategy"],
+        status: stage.dataset["kpNativeKatexStructuralSuccessionStatus"],
+        canvasVisible: canvas?.style.opacity === "1",
+        visibleOwnerCount: owners.filter((owner) =>
+          Number(owner.style.opacity) > 0
+        ).length,
+        sourceNativeOpacity: Number(
+          getComputedStyle(
+            stage.querySelector<HTMLElement>(
+              "[data-radical-source-object]"
+            )!
+          ).opacity
+        )
       };
     });
 
@@ -877,40 +851,18 @@ test("radical path and source rule use bounded generic structural tracks", async
     expect(result.reverseStable).toBe(true);
     expect(result.replayedMiddleStable).toBe(true);
     expect(result.sourceFrame.visualOwner).toBe("source-native");
-    expect(result.middleFrame.visualOwner).toBe("material-scene");
+    expect(result.middleFrame.visualOwner).toBe(
+      reducedMotion ? "source-native" : "material-scene"
+    );
     expect(result.targetFrame.visualOwner).toBe("target-native");
     expect(result.rewoundFrame.visualOwner).toBe("source-native");
-    expect(result.pathTrack).toMatchObject({
-      lifecycle: "introduce",
-      paintKind: "path",
-      sizingMode: "rect",
-      startOpacity: 0,
-      endOpacity: 1
-    });
-    expect(result.pathTrack.startRect.top - result.pathTrack.endRect.top)
-      .toBeCloseTo(8, 5);
-    expect(result.ruleTrack).toMatchObject({
-      lifecycle: "eliminate",
-      paintKind: "rule",
-      sizingMode: "rule-length",
-      startOpacity: 1,
-      endOpacity: 0
-    });
-    expect(result.ruleTrack.startRect.top - result.ruleTrack.endRect.top)
-      .toBeCloseTo(8, 5);
-    expect(result.ruleTrack.startRect.width)
-      .toBeCloseTo(result.ruleTrack.endRect.width, 5);
-    expect(result.reversePathTrack).toMatchObject({
-      lifecycle: "eliminate",
-      paintKind: "path",
-      sizingMode: "rect",
-      startOpacity: 1,
-      endOpacity: 0
-    });
-    expect(result.nativePathDataBefore).not.toBeNull();
-    expect(result.clonedPathData).toBe(result.nativePathDataBefore);
-    expect(result.nativePathDataAfter).toBe(result.nativePathDataBefore);
-    expect(result.structuralTypographyModels).toEqual([null, null]);
+    expect(result.strategy).toBe(
+      reducedMotion ? "checkpoint-settlement" : "solid-mask-succession"
+    );
+    expect(result.status).toBe(reducedMotion ? "unavailable" : "ready");
+    expect(result.canvasVisible).toBe(!reducedMotion);
+    expect(result.visibleOwnerCount).toBe(reducedMotion ? 0 : 1);
+    expect(result.sourceNativeOpacity).toBe(reducedMotion ? 1 : 0);
     await context.close();
   }
 });
@@ -964,63 +916,43 @@ test("governed radical exemplar keeps one visual and native semantic owner", asy
     await slider.dispatchEvent("input");
     await expect(panel).toHaveAttribute(
       "data-kp-radical-visual-owner",
-      "material-scene"
+      profile.reducedMotion === "reduce"
+        ? "source-native"
+        : "material-scene"
     );
     await expect(stage).toHaveAttribute(
       "data-kp-radical-semantic-owner",
-      "stage-description"
+      profile.reducedMotion === "reduce"
+        ? "source-native"
+        : "stage-description"
     );
-    await expect(source).toHaveAttribute("aria-hidden", "true");
+    await expect(source).toHaveAttribute(
+      "aria-hidden",
+      profile.reducedMotion === "reduce" ? "false" : "true"
+    );
     await expect(target).toHaveAttribute("aria-hidden", "true");
     const transit = await stage.evaluate((element) => {
-      const stageRect = element.getBoundingClientRect();
       const owners = [...element.querySelectorAll<HTMLElement>(
         "[data-kp-native-katex-scene-owner]"
       )];
       const visible = owners.filter((owner) => Number(owner.style.opacity) > 0);
-      const pathOwner = visible.find((owner) =>
-        owner.querySelector("svg path") !== null
+      const canvas = element.querySelector<HTMLCanvasElement>(
+        "[data-kp-native-katex-structural-succession]"
       );
-      const pathSvg = pathOwner?.querySelector("svg");
-      const pathElement = pathOwner?.querySelector("svg path");
-      const svgRect = pathSvg?.getBoundingClientRect();
-      const pathRect = pathOwner?.querySelector("svg path")
-        ?.getBoundingClientRect();
       return {
         visibleOwnerCount: visible.length,
         allInert: owners.every((owner) =>
           owner.hasAttribute("inert") &&
           owner.getAttribute("aria-hidden") === "true"
         ),
-        pathPaints:
-          pathRect !== undefined &&
-          pathRect.width > 0 &&
-          pathRect.height > 0,
-        structuralViewportContained:
-          svgRect !== undefined &&
-          svgRect.left >= stageRect.left - 1 &&
-          svgRect.right <= stageRect.right + 1 &&
-          svgRect.top >= stageRect.top - 1 &&
-          svgRect.bottom <= stageRect.bottom + 1,
-        structuralViewportClips:
-          pathSvg !== undefined &&
-          pathSvg !== null &&
-          getComputedStyle(pathSvg).overflow === "hidden",
-        clip: {
-          stage: {
-            left: stageRect.left,
-            right: stageRect.right,
-            top: stageRect.top,
-            bottom: stageRect.bottom
-          },
-          svg: svgRect === undefined ? null : {
-            left: svgRect.left,
-            right: svgRect.right,
-            top: svgRect.top,
-            bottom: svgRect.bottom
-          },
-          pathTransform: pathElement?.getAttribute("transform") ?? null
-        },
+        canvasVisible: canvas?.style.opacity === "1",
+        canvasHasArea:
+          canvas !== null && canvas.width > 0 && canvas.height > 0,
+        canvasPointerEvents:
+          canvas === null ? null : getComputedStyle(canvas).pointerEvents,
+        strategy:
+          element.dataset["kpNativeKatexStructuralSuccessionStrategy"],
+        status: element.dataset["kpNativeKatexStructuralSuccessionStatus"],
         overflow:
           document.documentElement.scrollWidth -
           document.documentElement.clientWidth
@@ -1028,21 +960,27 @@ test("governed radical exemplar keeps one visual and native semantic owner", asy
     });
     expect(transit).toMatchObject({
       allInert: true,
-      pathPaints: true,
-      structuralViewportClips: true,
+      canvasVisible: profile.reducedMotion !== "reduce",
+      canvasHasArea: profile.reducedMotion !== "reduce",
+      canvasPointerEvents:
+        profile.reducedMotion === "reduce" ? null : "none",
+      strategy: profile.reducedMotion === "reduce"
+        ? "checkpoint-settlement"
+        : "solid-mask-succession",
+      status: profile.reducedMotion === "reduce" ? "unavailable" : "ready",
       overflow: 0
     });
-    expect(
-      transit.structuralViewportContained,
-      JSON.stringify(transit.clip)
-    ).toBe(true);
-    expect(transit.visibleOwnerCount).toBeGreaterThan(0);
+    expect(transit.visibleOwnerCount).toBe(
+      profile.reducedMotion === "reduce" ? 0 : 1
+    );
 
     await slider.fill("999");
     await slider.dispatchEvent("input");
     await expect(panel).toHaveAttribute(
       "data-kp-radical-visual-owner",
-      "material-scene"
+      profile.reducedMotion === "reduce"
+        ? "source-native"
+        : "material-scene"
     );
     await slider.fill("1000");
     await slider.dispatchEvent("input");

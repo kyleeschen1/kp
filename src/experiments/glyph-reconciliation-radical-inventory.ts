@@ -10,6 +10,7 @@ import {
   bindKpExponentRadicalStructuralMotionIds
 } from "../editor/exponent-radical-semantic-latex.ts";
 import {
+  bindKpExponentRadicalStructuralAnchors,
   createKpExponentRadicalSelectorAnnotatedLatex
 } from "../rendering/exponent-radical-selector-annotated-latex.ts";
 import { createKpEquationFontReadiness } from "../rendering/equation-font-readiness.ts";
@@ -22,6 +23,12 @@ import {
 import {
   settleAndObserveKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";
+import {
+  resolveDefaultEquationTransformVisualMotifRule
+} from "../animation/motifs/equation-visual-motif-defaults.ts";
+import {
+  compileKpEquationStructuralSuccessionIntent
+} from "../animation/structural-succession-presentation.ts";
 
 const panel = document.querySelector<HTMLElement>("[data-radical-inventory]");
 const enabled =
@@ -41,9 +48,15 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
     throw new Error("Canonical radical representation lineage is unavailable.");
   }
   const operation = governed.compilation.construction.operations[0]!;
+  const animation = governed.authority.animation;
+  const transformation = animation.transformations.find(
+    ({ transformType }) => transformType === "rewritePowerAsRoot"
+  );
+  if (transformation === undefined) {
+    throw new Error("Canonical radical transformation is unavailable.");
+  }
   const sourceObject = operation.sourceObjectIds[0];
   const targetObject = operation.targetObjectIds[0];
-  const animation = governed.authority.animation;
   const sourceState = animation.bundle.objects.find(
     ({ id }) => id === sourceObject
   );
@@ -97,14 +110,14 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
     states: structuralStates,
     structuralMotionIds
   });
-  const nativeRadical = targetRoot.querySelector<HTMLElement>(".hide-tail");
-  if (nativeRadical === null) {
-    throw new Error("Native KaTeX radical path is unavailable.");
-  }
-  nativeRadical.dataset["kpSemanticEntityId"] =
-    representation.targetRepresentation.entityId;
-  nativeRadical.dataset["kpPresentationGroupId"] =
-    "group.radical.target.root-notation";
+  bindKpExponentRadicalStructuralAnchors({
+    root: sourceRoot,
+    state: sourceState
+  });
+  bindKpExponentRadicalStructuralAnchors({
+    root: targetRoot,
+    state: targetState
+  });
 
   const fontReadiness = createKpEquationFontReadiness(document);
   const [source, target, reverseSource, reverseTarget] = await Promise.all([
@@ -141,31 +154,52 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
       fontReadiness
     })
   ]);
-  const relations = [
-    ...projectKpNativeKatexSemanticPaintRelations(
-      {
-        groups: operation.lineage.map((lineage) => ({
-          id: lineage.id,
-          kind: lineageKind(
-            lineage.sourceEntityIds.length,
-            lineage.targetEntityIds.length
-          ),
-          sourceEntityIds: lineage.sourceEntityIds,
-          targetEntityIds: lineage.targetEntityIds
-        }))
-      }
-    ),
-    {
-      id: `paint.${representation.id}`,
-      relation: "persist" as const,
-      sourceEntityIds: [representation.sourceRepresentation.entityId],
-      targetEntityIds: [representation.targetRepresentation.entityId]
-    }
-  ];
+  const relations = projectKpNativeKatexSemanticPaintRelations({
+    groups: operation.lineage.map((lineage) => ({
+      id: lineage.id,
+      kind: lineageKind(
+        lineage.sourceEntityIds.length,
+        lineage.targetEntityIds.length
+      ),
+      sourceEntityIds: lineage.sourceEntityIds,
+      targetEntityIds: lineage.targetEntityIds
+    }))
+  });
+  const motifRule = resolveDefaultEquationTransformVisualMotifRule(
+    transformation.transformType
+  );
+  if (motifRule === undefined) {
+    throw new Error("Canonical radical visual motif is unavailable.");
+  }
+  const motif = {
+    kind: motifRule.descriptor.kind,
+    motionPrimitiveIds: motifRule.descriptor.motionPrimitiveIds,
+    phaseIds: motifRule.descriptor.phaseIds,
+    summary: motifRule.summary ?? motifRule.descriptor.summary
+  };
+  const structuralSuccession =
+    compileKpEquationStructuralSuccessionIntent({
+      transformation,
+      motif,
+      direction: "forward"
+    });
+  const reverseStructuralSuccession =
+    compileKpEquationStructuralSuccessionIntent({
+      transformation,
+      motif,
+      direction: "rewind"
+    });
+  if (
+    structuralSuccession === undefined ||
+    reverseStructuralSuccession === undefined
+  ) {
+    throw new Error("Canonical radical structural succession is unavailable.");
+  }
   const canonical = createKpCanonicalNativeKatexSceneSession({
     source,
     target,
-    relations
+    relations,
+    structuralSuccession
   });
   const reconciliation = canonical.reconciliation;
   const permutedReconciliation = reconcileKpNativeKatexScenes({
@@ -178,7 +212,8 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
   const reverseCanonical = createKpCanonicalNativeKatexSceneSession({
     source: reverseSource,
     target: reverseTarget,
-    relations: reverseRelations
+    relations: reverseRelations,
+    structuralSuccession: reverseStructuralSuccession
   });
   const reverseReconciliation = reverseCanonical.reconciliation;
   const plan = canonical.hierarchy;
@@ -187,6 +222,7 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
   const reverseTracks = reverseCanonical.session.tracks;
   const playback = canonical.session;
   const reversePlayback = reverseCanonical.session;
+  await waitForStructuralSuccession(stage, playback);
   panel.dataset["kpRadicalInventoryReady"] = "true";
   panel.dataset["kpRadicalSourceAtomCount"] = String(source.atoms.length);
   panel.dataset["kpRadicalTargetAtomCount"] = String(target.atoms.length);
@@ -243,7 +279,7 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
     phaseLabel.textContent =
       sourceActive ? "Exact native rational-exponent endpoint" :
       targetActive ? "Exact native square-root endpoint" :
-      "Generic persistence, elimination, and introduction tracks";
+      "Compiled solid-mask representation succession";
     headerStatus.textContent =
       sourceActive ? "Rational exponent" :
       targetActive ? "Square root" :
@@ -306,6 +342,8 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
         tracks,
         playback,
         reverseRelations,
+        structuralSuccession,
+        reverseStructuralSuccession,
         reverseReconciliation,
         reversePlan,
         reverseTracks,
@@ -423,4 +461,19 @@ function lineageKind(
   if (sourceCount > 1 && targetCount === 1) return "many-to-one";
   if (sourceCount === 1 && targetCount > 1) return "one-to-many";
   return "one-to-one";
+}
+
+async function waitForStructuralSuccession(
+  stage: HTMLElement,
+  session: { apply(progress: number): unknown }
+): Promise<void> {
+  for (let frame = 0; frame < 120; frame += 1) {
+    session.apply(0);
+    const status = stage.dataset["kpNativeKatexStructuralSuccessionStatus"];
+    if (status === "ready" || status === "unavailable") return;
+    await new Promise<void>((resolve) =>
+      requestAnimationFrame(() => resolve())
+    );
+  }
+  throw new Error("Experiment structural succession paint did not settle.");
 }

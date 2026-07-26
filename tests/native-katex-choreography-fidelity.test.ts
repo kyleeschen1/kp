@@ -8,6 +8,9 @@ import type {
   KpNativeKatexSceneReconciliation,
   KpNativeKatexSceneTrack
 } from "../src/rendering/native-katex-scene-compositor.ts";
+import type {
+  KpEquationStructuralSuccessionIntent
+} from "../src/animation/structural-succession-presentation.ts";
 
 const sourceEntityIds = ["power.numerator", "power.rule", "power.denominator"];
 const targetEntityIds = ["radical.hook", "radical.overbar"];
@@ -35,15 +38,15 @@ const tracks = [
     lifecycle: "introduce"
   }
 ] as unknown as readonly KpNativeKatexSceneTrack[];
-const intent = {
-  kind: "equation-structural-succession-intent" as const,
+const intent: KpEquationStructuralSuccessionIntent = {
+  kind: "equation-structural-succession-intent",
   id: "intent.power-as-root",
   motifKind: "radical-corner-transfer",
   sourceEntityIds,
   targetEntityIds,
   actPhaseIds: ["radical-representation-handoff"],
   paintStrategy: {
-    kind: "solid-mask-succession" as const,
+    kind: "solid-mask-succession",
     profileId: "test-profile",
     morph: { start: 0, end: 1, easing: "linear" as const },
     settlement: { start: 1, end: 1, easing: "linear" as const },

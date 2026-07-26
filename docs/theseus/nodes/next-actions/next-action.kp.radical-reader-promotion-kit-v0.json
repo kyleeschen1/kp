@@ -541,11 +541,74 @@
       "scope": "slice16 shared solid-mask structural paint",
       "checkedAt": "2026-07-26T20:05:50.383Z",
       "notes": "39 focused promotion tests, 52 generic compositor tests, all TypeScript projects, and all architecture boundaries pass."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-26T20:36:48.728Z",
+      "notes": "39 radical compiler/fidelity/preservation tests"
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-26T20:36:49.537Z",
+      "notes": "52 native KaTeX compositor tests"
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-26T20:36:50.350Z",
+      "notes": "10 reader and fraction browser tests"
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-26T20:36:51.168Z",
+      "notes": "44 full-scene browser tests"
+    },
+    {
+      "command": "npm run test:browser:canonical-host-parity",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-26T20:36:52.010Z",
+      "notes": "3 oracle/experiment/reader parity tests across responsive DPR profiles"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-26T20:36:52.811Z",
+      "notes": "typecheck and production build"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-26T20:36:53.628Z",
+      "notes": "concept-room, reader, and animation boundary gates"
+    },
+    {
+      "command": "npm run visual:radical-canonical-checkpoint",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-26T20:36:54.437Z",
+      "notes": "38 standalone reader checkpoints including full/reduced motion and DPR profiles"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium --workers=1 --grep radical-succession",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-26T20:36:55.266Z",
+      "notes": "accepted editor radical oracle remains intact"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 16 subphase 4 complete: the accepted signed-distance solid morph now runs as an internal canonical-session paint strategy; structural fades are suppressed, x remains on ordinary atom continuity, and unavailable/reduced capability becomes checkpoint settlement."
+    "summary": "Radical meta-repair reached the required visual checkpoint. The standalone reader shows the accepted solid exponent-to-radical transformation; all compiler, compositor, browser, responsive, DPR, reduced-motion, build, and architecture checks pass. Awaiting visual approval before phases 6-7."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

@@ -212,7 +212,7 @@
     {
       "id": "slice-16",
       "title": "correct-oracle-and-gates",
-      "summary": "Correct the normative visual oracle and add independent choreography-fidelity gates that fail the current opacity-only succession.",
+      "summary": "Phases 1-4 and the pre-checkpoint verification are complete: structural succession compiles through the shared session, paused WebGL paint is retained, direct seek after resize reapplies automatically, and the three-surface parity page is ready for human review. Cleanup and global promotion remain paused.",
       "status": "in-progress",
       "planPhaseId": "radical-choreography-meta-repair"
     },

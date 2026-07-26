@@ -1642,10 +1642,12 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
   playback.apply(0);
   input.source.stage.dataset["kpCanonicalNativeKatexSessionFactory"] =
     "shared-v1";
+  let latestProgress = 0;
   const session: KpNativeKatexRendererSession = Object.freeze({
     ...playback,
     apply(progress: number) {
       const bounded = Math.max(0, Math.min(1, progress));
+      latestProgress = bounded;
       const structural = input.structuralSuccession;
       const fullMotion = structural !== undefined &&
         (
@@ -1666,7 +1668,8 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
             intent: structural,
             progress: bounded,
             visible: false,
-            enabled: fullMotion
+            enabled: fullMotion,
+            onSettled: () => session.apply(latestProgress)
           });
       const structuralReady =
         structuralSync?.strategy === "solid-mask-succession" &&
@@ -1710,7 +1713,8 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
           intent: structural,
           progress: bounded,
           visible: true,
-          enabled: true
+          enabled: true,
+          onSettled: () => session.apply(latestProgress)
         });
       }
       return ownership;

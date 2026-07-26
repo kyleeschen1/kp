@@ -173,7 +173,10 @@ export function createKatexArtifactSolidMaskMorphRenderer(
     alpha: true,
     antialias: true,
     depth: false,
-    premultipliedAlpha: false
+    premultipliedAlpha: false,
+    // Scrubbed equations can remain paused indefinitely. Preserve the last
+    // solid-mask frame so browser compositing cannot clear visible notation.
+    preserveDrawingBuffer: true
   });
   if (gl === null) {
     throw new Error("WebGL is unavailable for the KaTeX solid-mask morph.");

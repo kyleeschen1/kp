@@ -133,13 +133,15 @@ test("radical material paint meets native target geometry before handoff", async
       ),
       glyphStyleExact:
         fingerprint(glyphVisual) === fingerprint(targetGlyph),
-      structuralInk: (
-        await import(
-          "/src/rendering/native-katex-structural-succession-renderer.ts"
-        )
-      ).measureKpNativeKatexStructuralSuccessionInk(
-        fitSurface as HTMLElement
-      ),
+      structuralInk: await (async () => {
+        const moduleUrl =
+          "/src/rendering/native-katex-structural-succession-renderer.ts";
+        return (
+          await import(/* @vite-ignore */ moduleUrl)
+        ).measureKpNativeKatexStructuralSuccessionInk(
+          fitSurface as HTMLElement
+        );
+      })(),
       structuralStrategy: (fitSurface as HTMLElement).dataset[
         "kpNativeKatexStructuralSuccessionStrategy"
       ],

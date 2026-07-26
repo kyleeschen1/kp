@@ -1,4 +1,5 @@
 const root = required<HTMLElement>("[data-kp-canonical-host-parity]");
+const oracle = required<HTMLIFrameElement>("[data-kp-canonical-host-oracle]");
 const reference = required<HTMLIFrameElement>(
   "[data-kp-canonical-host-reference]"
 );
@@ -10,6 +11,11 @@ const status = required<HTMLOutputElement>("[data-kp-canonical-host-status]");
 
 root.hidden = false;
 
+const oracleUrl = new URL("/", location.origin);
+oracleUrl.searchParams.set(
+  "animation",
+  "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
+);
 const referenceUrl = new URL(
   "/glyph-reconciliation-experiment.html",
   location.origin
@@ -22,10 +28,34 @@ readerUrl.searchParams.set("kpMotion", "full");
 readerUrl.searchParams.set("kpProgress", "0");
 
 const loaded = Promise.all([
+  loadFrame(oracle, oracleUrl, '[data-action="seek-editor-animation"]'),
   loadFrame(reference, referenceUrl, "[data-radical-progress]"),
   loadFrame(reader, readerUrl, "[data-kp-reader-attention-scrubber]")
 ]);
 await loaded;
+await Promise.all([
+  waitForFrameAttribute(
+    oracle,
+    "[data-kp-editor-equation-stage]",
+    "data-kp-editor-radical-morph-ready",
+    "true"
+  ),
+  waitForFrameAttribute(
+    reference,
+    "[data-radical-stage]",
+    "data-kp-native-katex-structural-succession-status",
+    "ready"
+  ),
+  waitForFrameAttribute(
+    reader,
+    '[data-kp-reader-transition-active="true"] [data-kp-reader-fit-surface]',
+    "data-kp-native-katex-structural-succession-status",
+    "ready"
+  )
+]);
+oracle.contentDocument?.querySelector<HTMLElement>(
+  "[data-kp-editor-equation-stage]"
+)?.scrollIntoView({ block: "center" });
 reference.contentDocument?.querySelector<HTMLElement>("[data-radical-stage]")
   ?.scrollIntoView({ block: "center" });
 reader.contentDocument?.querySelector<HTMLElement>(
@@ -34,6 +64,11 @@ reader.contentDocument?.querySelector<HTMLElement>(
 
 const apply = () => {
   const value = Number(progress.value);
+  setFrameProgress(
+    oracle,
+    '[data-action="seek-editor-animation"]',
+    value / 1_000
+  );
   setFrameProgress(reference, "[data-radical-progress]", value);
   setFrameProgress(reader, "[data-kp-reader-attention-scrubber]", value);
   status.value = `${Math.round(value / 10)}%`;
@@ -67,6 +102,26 @@ async function waitForFrameElement(
     await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
   }
   throw new Error(`Canonical parity frame did not hydrate ${selector}.`);
+}
+
+async function waitForFrameAttribute(
+  frame: HTMLIFrameElement,
+  selector: string,
+  attribute: string,
+  value: string
+): Promise<void> {
+  for (let attempt = 0; attempt < 300; attempt += 1) {
+    if (
+      frame.contentDocument?.querySelector(selector)?.getAttribute(attribute) ===
+        value
+    ) {
+      return;
+    }
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+  }
+  throw new Error(
+    `Canonical parity frame did not settle ${selector}[${attribute}=${value}].`
+  );
 }
 
 function setFrameProgress(
