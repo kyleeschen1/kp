@@ -1433,7 +1433,55 @@ test("handoff correlation rejects duplicate, missing, and unbacked targets", () 
   );
 });
 
-test("scene playback direct seeks and reverses without hidden clock state", () => {
+test("renderer session preserves compatible native material without atomizing", () => {
+  const source = createScene("source", ["source.x"]);
+  const target = createScene("target", ["target.x"]);
+  const reconciliation = reconcileKpNativeKatexScenes({ source, target });
+  const tracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+  );
+  const materialLayer = {
+    querySelectorAll: () => []
+  } as unknown as HTMLElement;
+  const continuityStage = {
+    ownerDocument,
+    querySelector: () => materialLayer,
+    querySelectorAll: () => []
+  } as unknown as HTMLElement;
+  const sourceRoot = {
+    ownerDocument,
+    style: { opacity: "" }
+  } as unknown as HTMLElement;
+  const targetRoot = {
+    ownerDocument,
+    style: { opacity: "" }
+  } as unknown as HTMLElement;
+  const session = createKpNativeKatexRendererSession({
+    stage: continuityStage,
+    sourceRoot,
+    targetRoot,
+    reconciliation,
+    tracks
+  });
+
+  assert.equal(session.mode, "native-continuity");
+  const forward = [0, 0.25, 0.5, 0.75, 1].map(session.apply);
+  const reverse = [1, 0.75, 0.5, 0.25, 0].map(session.apply);
+  assert.deepEqual(reverse.map(({ frames }) => frames), [
+    ...forward.map(({ frames }) => frames)
+  ].reverse());
+  assert.equal(forward.slice(0, -1).every((frame) =>
+    frame.visualOwner === "source-native" &&
+    frame.sourceNativeOpacity === 1 &&
+    frame.materialSceneOpacity === 0 &&
+    frame.targetNativeOpacity === 0
+  ), true);
+  assert.equal(forward.at(-1)?.visualOwner, "target-native");
+  assert.equal(sourceRoot.style.opacity, "1");
+  assert.equal(targetRoot.style.opacity, "0");
+});
+
+test("renderer session direct seeks and reverses without hidden clock state", () => {
   const source = createScene("source", ["source.a", "source.b"]);
   const target = createScene("target", ["target.result"]);
   const reconciliation = reconcileKpNativeKatexScenes({
@@ -1458,6 +1506,7 @@ test("scene playback direct seeks and reverses without hidden clock state", () =
   });
   assert.equal(playback.kind, "native-katex-renderer-session");
   assert.equal(playback.lifecycle, "renderer-session");
+  assert.equal(playback.mode, "atom-transit");
   const forward = [0, 0.25, 0.5, 0.75, 1].map(playback.sample);
   const reverse = [1, 0.75, 0.5, 0.25, 0].map(playback.sample);
 

@@ -198,6 +198,12 @@
       "scope": "slice-15 canonical renderer-session contract",
       "checkedAt": "2026-07-26T02:40:40.030Z",
       "notes": "One public KpNativeKatexRendererSession and factory now replace the playback-named API across experiments and the reader adapter. Forty-seven focused tests, six convergence ratchets, the 120000-byte four-module ceiling, and all TypeScript projects pass; durable reader and animation plans remain session-free."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:canonical-equation-renderer; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-16 native continuity mode",
+      "checkedAt": "2026-07-26T02:50:24.392Z"
     }
   ],
   "allowedWork": [
@@ -329,7 +335,8 @@
     {
       "id": "slice-16",
       "title": "native-continuity-mode",
-      "status": "planned"
+      "summary": "The canonical session now selects native continuity for paint-, typography-, revision-, and geometry-compatible persist-only material. Native source DOM owns every interior frame with no material clones; exact target ownership settles at one; mixed lifecycle scenes continue through the same atom sampler; direct seeks and rewinds are deterministic.",
+      "status": "complete"
     },
     {
       "id": "slice-17",

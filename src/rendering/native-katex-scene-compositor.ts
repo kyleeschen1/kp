@@ -92,10 +92,13 @@ export interface KpNativeKatexSceneOwnershipFrame {
   readonly targetNativeOpacity: 0 | 1;
   readonly frames: readonly KpNativeKatexSceneTrackFrame[];
 }
-
 export interface KpNativeKatexRendererSession {
   readonly kind: "native-katex-renderer-session";
   readonly lifecycle: "renderer-session";
+  readonly mode:
+    | "native-continuity"
+    | "atom-transit"
+    | "checkpoint-settlement";
   readonly tracks: readonly KpNativeKatexSceneTrack[];
   readonly sample: (progress: number) => readonly KpNativeKatexSceneTrackFrame[];
   readonly apply: (progress: number) => KpNativeKatexSceneOwnershipFrame;
@@ -1415,67 +1418,6 @@ export function traceKpNativeKatexHandoffOwnership(input: {
   }));
 }
 
-export function applyKpNativeKatexSceneFrame(input: {
-  readonly stage: HTMLElement;
-  readonly sourceRoot: HTMLElement;
-  readonly targetRoot: HTMLElement;
-  readonly reconciliation: KpNativeKatexSceneReconciliation;
-  readonly tracks: readonly KpNativeKatexSceneTrack[];
-  readonly progress: number;
-}): KpNativeKatexSceneOwnershipFrame {
-  const frames = sampleKpNativeKatexSceneTracks(input.tracks, input.progress);
-  const bounded = Math.max(0, Math.min(1, input.progress));
-  const sourceOwns = bounded === 0;
-  const targetOwns = bounded === 1;
-  const materialOwns = !sourceOwns && !targetOwns;
-  const atomsById = new Map([
-    ...input.reconciliation.source.atoms,
-    ...input.reconciliation.target.atoms
-  ].map((atom) => [atom.id, atom]));
-
-  input.sourceRoot.style.opacity = sourceOwns ? "1" : "0";
-  input.targetRoot.style.opacity = targetOwns ? "1" : "0";
-  // Endpoint DOM remains the semantic surface. Interior clones own only paint,
-  // so a handoff cannot duplicate accessibility or interaction semantics.
-  syncKpEquationMaterialLayer({
-    stage: input.stage,
-    owners: frames.map((frame) => {
-      const atom = atomsById.get(frame.visualAtomId);
-      if (atom === undefined) {
-        throw new Error(
-          `Scene track ${frame.trackId} references unknown visual atom ` +
-          `${frame.visualAtomId}.`
-        );
-      }
-      return {
-        ownerId: `native-scene-owner.${frame.trackId}`,
-        sourceElement: atom.sourceElement,
-        rect: frame.rect,
-        opacity: materialOwns ? frame.opacity : 0,
-        transform: "none",
-        fragmentRole: `${frame.paintKind}:${frame.sizingMode}`
-      };
-    })
-  });
-  input.stage.querySelectorAll<HTMLElement>(
-    "[data-kp-equation-material-owner-id^=\"native-scene-owner.\"]"
-  ).forEach((owner) => {
-    owner.setAttribute("inert", "");
-    owner.dataset["kpNativeKatexSceneOwner"] = "true";
-  });
-
-  return Object.freeze({
-    visualOwner:
-      sourceOwns ? "source-native" :
-      targetOwns ? "target-native" :
-      "material-scene",
-    sourceNativeOpacity: sourceOwns ? 1 : 0,
-    materialSceneOpacity: materialOwns ? 1 : 0,
-    targetNativeOpacity: targetOwns ? 1 : 0,
-    frames
-  });
-}
-
 export function createKpNativeKatexRendererSession(input: {
   readonly stage: HTMLElement;
   readonly sourceRoot: HTMLElement;
@@ -1485,38 +1427,90 @@ export function createKpNativeKatexRendererSession(input: {
 }): KpNativeKatexRendererSession {
   const trackIds = input.tracks.map(({ id }) => id);
   if (new Set(trackIds).size !== trackIds.length) {
-    throw new Error("Scene playback requires unique track IDs.");
+    throw new Error("Renderer session requires unique track IDs.");
   }
-  const atomIds = new Set([
-    ...input.reconciliation.source.atoms,
-    ...input.reconciliation.target.atoms
-  ].map(({ id }) => id));
+  const sourceById = new Map(input.reconciliation.source.atoms.map((atom) => [
+    atom.id,
+    atom
+  ]));
+  const targetById = new Map(input.reconciliation.target.atoms.map((atom) => [
+    atom.id,
+    atom
+  ]));
   const unknownVisualAtom = input.tracks.find(({ visualAtomId }) =>
-    !atomIds.has(visualAtomId)
+    !sourceById.has(visualAtomId) && !targetById.has(visualAtomId)
   );
   if (unknownVisualAtom !== undefined) {
-    throw new Error(
-      `Scene track ${unknownVisualAtom.id} references unknown visual atom ` +
-      `${unknownVisualAtom.visualAtomId}.`
-    );
+    throw new Error(`unknown visual atom ${unknownVisualAtom.visualAtomId}.`);
   }
   if (input.reconciliation.dispositions.some(({ lifecycle }) =>
     lifecycle === "unsupported"
   )) {
-    throw new Error("Unsupported scene dispositions cannot enter playback.");
+    throw new Error("Unsupported scene disposition.");
   }
   const tracks = Object.freeze([...input.tracks]);
+  const mode = tracks.every((track) => {
+    const source = sourceById.get(track.sourceAtomId ?? "");
+    const target = targetById.get(track.targetAtomId ?? "");
+    return track.lifecycle === "persist" &&
+      source !== undefined &&
+      target !== undefined &&
+      source.visualKey === target.visualKey &&
+      source.styleFingerprint === target.styleFingerprint &&
+      source.fontRevision === target.fontRevision &&
+      rectDelta(source.rect, target.rect) <= 0.25;
+  }) ? "native-continuity" : "atom-transit";
+  const apply = (progress: number): KpNativeKatexSceneOwnershipFrame => {
+    const frames = sampleKpNativeKatexSceneTracks(tracks, progress);
+    const bounded = Math.max(0, Math.min(1, progress));
+    const targetOwns = bounded === 1;
+    const sourceOwns =
+      bounded === 0 || (mode === "native-continuity" && !targetOwns);
+    const materialOwns = !sourceOwns && !targetOwns;
+    input.sourceRoot.style.opacity = sourceOwns ? "1" : "0";
+    input.targetRoot.style.opacity = targetOwns ? "1" : "0";
+    // Endpoint DOM keeps semantics; clones own paint.
+    syncKpEquationMaterialLayer({
+      stage: input.stage,
+      owners: mode === "native-continuity" ? [] : frames.map((frame) => {
+        const atom =
+          sourceById.get(frame.visualAtomId) ??
+          targetById.get(frame.visualAtomId)!;
+        return {
+          ownerId: `native-scene-owner.${frame.trackId}`,
+          sourceElement: atom.sourceElement,
+          rect: frame.rect,
+          opacity: materialOwns ? frame.opacity : 0,
+          transform: "none",
+          fragmentRole: `${frame.paintKind}:${frame.sizingMode}`
+        };
+      })
+    });
+    input.stage.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id^=\"native-scene-owner.\"]"
+    ).forEach((owner) => {
+      owner.setAttribute("inert", "");
+      owner.dataset["kpNativeKatexSceneOwner"] = "true";
+    });
+    return Object.freeze({
+      visualOwner:
+        sourceOwns ? "source-native" :
+        targetOwns ? "target-native" :
+        "material-scene",
+      sourceNativeOpacity: sourceOwns ? 1 : 0,
+      materialSceneOpacity: materialOwns ? 1 : 0,
+      targetNativeOpacity: targetOwns ? 1 : 0,
+      frames
+    });
+  };
   return Object.freeze({
     kind: "native-katex-renderer-session",
     lifecycle: "renderer-session",
+    mode,
     tracks,
     sample: (progress: number) =>
       sampleKpNativeKatexSceneTracks(tracks, progress),
-    apply: (progress: number) => applyKpNativeKatexSceneFrame({
-      ...input,
-      tracks,
-      progress
-    })
+    apply
   });
 }
 
