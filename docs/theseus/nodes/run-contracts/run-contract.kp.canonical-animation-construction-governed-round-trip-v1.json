@@ -186,6 +186,13 @@
       "scope": "slice-21 governed radical succession",
       "checkedAt": "2026-07-26T13:55:08.048Z",
       "notes": "Forty-two construction tests, fifty-two compositor tests, forty-four Chromium checks including four radical-wide/phone/reduced endpoint tests, eleven vocabulary ratchets, all TypeScript projects, and architecture gates pass. The v2 construction owns fragment lineage; the unchanged renderer uses only glyph, rule, path and generic persist, introduce, eliminate lifecycles."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; npm run typecheck; npm run check:architecture; git diff --check",
+      "status": "passed",
+      "scope": "slice-22 variation cohort conformance",
+      "checkedAt": "2026-07-26T14:00:16.964Z",
+      "notes": "Forty-six focused tests pass. Fraction split/merge, exponent absorption, and radical succession use the v2 request, verified construction compiler, and native KaTeX renderer-session contract; provider presentation authority remains empty and fixed source/payload ceilings pass."
     }
   ],
   "allowedWork": [
@@ -372,7 +379,8 @@
     {
       "id": "slice-22",
       "title": "variation-cohort-conformance",
-      "status": "planned"
+      "summary": "Added a governed variation cohort and ratchets proving the fraction, exponent, and radical cases share one request schema, mathematical trace compiler, renderer-session contract, and presentation-authority firewall within fixed source and payload ceilings.",
+      "status": "complete"
     },
     {
       "id": "slice-23",

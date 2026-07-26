@@ -117,3 +117,10 @@ export {
   createKpGovernedRadicalSuccessionFixture,
   type KpGovernedRadicalSuccessionFixture
 } from "./governed-radical-succession-fixture.ts";
+
+export {
+  createKpGovernedCanonicalConstructionCohort,
+  kpGovernedCanonicalConstructionCohortPolicy,
+  type KpGovernedCanonicalConstructionCohortMember,
+  type KpGovernedCanonicalConstructionCohortMemberId
+} from "./governed-canonical-construction-cohort.ts";
