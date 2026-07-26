@@ -1806,6 +1806,99 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
   }
 });
 
+test("target glyph paint follows the full scene without a late size snap", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.evaluate(async () => document.fonts.ready);
+  await page.locator(
+    '[data-kp-glyph-review][data-kp-ready="true"]'
+  ).waitFor();
+  const evidence = await page.evaluate(() => {
+    const realize = (window as unknown as {
+      __kpRealizeFractionTypographyHandoff: (progress: number) => {
+        plan: {
+          entries: readonly {
+            id: string;
+            materialOwnerId: string;
+          }[];
+        };
+      };
+    }).__kpRealizeFractionTypographyHandoff;
+    return [
+      0.001,
+      0.25,
+      0.5,
+      0.75,
+      0.959,
+      0.96,
+      0.961,
+      0.999
+    ].map((progress) => {
+      const result = realize(progress);
+      const entities = [
+        "operator.add",
+        "symbol.x",
+        "symbol.y"
+      ].map((entity) => {
+        const entry = result.plan.entries.find(({ id }) =>
+          id.includes(entity)
+        )!;
+        const owner = document.querySelector<HTMLElement>(
+          `[data-kp-equation-material-owner-id="${
+            CSS.escape(entry.materialOwnerId)
+          }"]`
+        )!;
+        const visual = owner.firstElementChild as HTMLElement;
+        const rect = owner.getBoundingClientRect();
+        return {
+          entity,
+          visualRevision:
+            owner.dataset["kpEquationMaterialVisualRevision"] ?? "",
+          fontSize: getComputedStyle(visual).fontSize,
+          width: rect.width,
+          height: rect.height
+        };
+      });
+      return { progress, entities };
+    });
+  });
+
+  const values = (entity: string, key: "width" | "height") =>
+    evidence.map((frame) =>
+      frame.entities.find((candidate) => candidate.entity === entity)![key]
+    );
+  expect(evidence.every((frame) =>
+    frame.entities.every(({ visualRevision }) =>
+      visualRevision.startsWith("target:")
+    )
+  )).toBe(true);
+  expect(evidence.every((frame) =>
+    frame.entities.every(({ fontSize }) => fontSize === "46.0768px")
+  )).toBe(true);
+  const plusWidths = values("operator.add", "width");
+  expect(plusWidths[0]).toBeGreaterThan(plusWidths.at(-1)!);
+  expect(plusWidths.every((width, index) =>
+    index === 0 || width <= plusWidths[index - 1]! + 0.01
+  )).toBe(true);
+  for (const entity of ["symbol.x", "symbol.y"]) {
+    for (const key of ["width", "height"] as const) {
+      const sizes = values(entity, key);
+      expect(Math.max(...sizes) - Math.min(...sizes)).toBeLessThan(0.1);
+    }
+  }
+  for (const entity of ["operator.add", "symbol.x", "symbol.y"]) {
+    const before = evidence[4]!.entities.find((candidate) =>
+      candidate.entity === entity
+    )!;
+    const boundary = evidence[5]!.entities.find((candidate) =>
+      candidate.entity === entity
+    )!;
+    expect(Math.abs(before.width - boundary.width)).toBeLessThan(0.1);
+    expect(Math.abs(before.height - boundary.height)).toBeLessThan(0.1);
+  }
+});
+
 test("handoff ownership trace is atomic and seek-direction independent", async ({
   page
 }) => {
@@ -1935,7 +2028,8 @@ test("visible fraction card renders the complete moving scene on its shared cloc
       left: owner.style.left,
       top: owner.style.top,
       width: owner.style.width,
-      opacity: owner.style.opacity
+      opacity: owner.style.opacity,
+      transform: owner.style.transform
     }))
   );
   const early = await snapshot();
@@ -1964,7 +2058,8 @@ test("visible fraction card renders the complete moving scene on its shared cloc
     return frame.left !== next.left ||
       frame.top !== next.top ||
       frame.width !== next.width ||
-      frame.opacity !== next.opacity;
+      frame.opacity !== next.opacity ||
+      frame.transform !== next.transform;
   }).length).toBeGreaterThan(4);
   expect(early.filter(({ role }) => role?.startsWith("rule:"))).toHaveLength(2);
 });

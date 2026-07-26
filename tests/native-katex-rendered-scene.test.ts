@@ -666,6 +666,58 @@ test("style sampling is finite, reversible, and settles with zero velocity", () 
   );
 });
 
+test("style sampling can follow the whole generic scene transit", () => {
+  const plan = {
+    kind: "native-katex-typography-style-plan" as const,
+    lifecycle: "renderer-session" as const,
+    model: "target-style-reverse-flip" as const,
+    entries: [{
+      id: "entry.paint",
+      materialOwnerId: "native-scene-owner.track.paint",
+      componentId: "component.paint",
+      atomLifecycle: "persist" as const,
+      targetPaintAtomId: "target.paint",
+      paintKind: "glyph" as const,
+      model: "target-style-reverse-flip" as const,
+      currentRect: { left: 10, top: 20, width: 12, height: 24 },
+      targetRect: { left: 11, top: 19, width: 10, height: 20 },
+      inverseTranslateX: -1,
+      inverseTranslateY: 1,
+      inverseScaleX: 1.2,
+      inverseScaleY: 1.2,
+      targetPaintFingerprint: "paint",
+      targetStyleFingerprint: "style",
+      targetClipPath: "none"
+    }]
+  };
+  const sceneFrames = [{
+    trackId: "track.paint",
+    componentId: "component.paint",
+    lifecycle: "persist" as const,
+    visualAtomId: "source.paint",
+    paintKind: "glyph" as const,
+    sizingMode: "rect" as const,
+    rect: { left: 10, top: 20, width: 12, height: 24 },
+    opacity: 1
+  }];
+
+  assert.deepEqual(
+    sampleKpNativeKatexTypographyStylePlan(plan, 0.25, sceneFrames)
+      .entries[0],
+    {
+      id: "entry.paint",
+      translateX: -1,
+      translateY: 1,
+      scaleX: 1.2,
+      scaleY: 1.2
+    }
+  );
+  assert.throws(
+    () => sampleKpNativeKatexTypographyStylePlan(plan, 0.25, []),
+    /scene frame/
+  );
+});
+
 test("handoff telemetry rejects invalid geometry and document boundaries", () => {
   const create = (
     observation: KpNativeKatexHandoffPaintObservation,

@@ -23,6 +23,17 @@ const checkpoints = [0, 250, 500, 750, 1000] as const;
 const splitCheckpoints = [0, 500, 1000] as const;
 const radicalCheckpoints = [0, 500, 999, 1000] as const;
 const compoundCheckpoints = [0, 450, 950, 1000] as const;
+const typographyTransitCheckpoints = [
+  0,
+  250,
+  500,
+  750,
+  959,
+  960,
+  961,
+  999,
+  1_000
+] as const;
 
 await mkdir(outputRoot, { recursive: true });
 const browser = await chromium.launch({ headless: true });
@@ -37,6 +48,11 @@ const checkpointEvidence: Array<{
   old: string;
   corrected: string;
   nativeTarget: string;
+}> = [];
+const typographyTransitEvidence: Array<{
+  profile: typeof profiles[number]["id"];
+  progressPermille: number;
+  file: string;
 }> = [];
 try {
   for (const profile of profiles) {
@@ -690,6 +706,39 @@ try {
       await page.close();
     }
   }
+  for (const profile of profiles) {
+    const page = await browser.newPage({ viewport: profile.viewport });
+    await page.goto(
+      new URL("/glyph-reconciliation-experiment.html?progress=0", baseUrl)
+        .toString(),
+      { waitUntil: "networkidle" }
+    );
+    await page.evaluate(async () => document.fonts.ready);
+    await page.locator(
+      '[data-kp-glyph-review][data-kp-ready="true"]'
+    ).waitFor();
+    for (const progressPermille of typographyTransitCheckpoints) {
+      await page.evaluate((progress) => {
+        const api = window as unknown as {
+          __kpRealizeFractionTypographyHandoff: (
+            progress: number
+          ) => unknown;
+        };
+        api.__kpRealizeFractionTypographyHandoff(progress);
+      }, progressPermille / 1_000);
+      const file = path.join(
+        outputRoot,
+        `typography-transit-${profile.id}-${progressPermille}.png`
+      );
+      await page.locator("[data-fraction-stage]").screenshot({ path: file });
+      typographyTransitEvidence.push({
+        profile: profile.id,
+        progressPermille,
+        file: path.relative(process.cwd(), file)
+      });
+    }
+    await page.close();
+  }
 
   const checkpointRows = await Promise.all(checkpointEvidence.map(
     async (entry) => {
@@ -708,6 +757,19 @@ try {
         })))
       };
     }
+  ));
+  const typographyTransitRows = await Promise.all(profiles.map(
+    async (profile) => ({
+      profile: profile.id,
+      images: await Promise.all(typographyTransitEvidence.filter((entry) =>
+        entry.profile === profile.id
+      ).map(async (entry) => ({
+        label: `${entry.progressPermille / 10}%`,
+        source: `data:image/png;base64,${
+          (await readFile(path.resolve(entry.file))).toString("base64")
+        }`
+      })))
+    })
   ));
   const contactPage = await browser.newPage({
     viewport: { width: 1600, height: 1000 }
@@ -734,6 +796,11 @@ try {
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 14px;
           }
+          .transit-row {
+            display: grid;
+            grid-template-columns: repeat(9, minmax(0, 1fr));
+            gap: 8px;
+          }
           figure {
             margin: 0;
             overflow: hidden;
@@ -755,6 +822,11 @@ try {
             object-position: top center;
             background: white;
           }
+          .transit-row figcaption {
+            padding: 7px 8px;
+            font-size: 13px;
+          }
+          .transit-row img { height: 150px; }
         </style>
       </head>
       <body>
@@ -767,6 +839,24 @@ try {
           <section>
             <h2>${row.profile} · ${row.motion} motion</h2>
             <div class="row">
+              ${row.images.map(({ label, source }) => `
+                <figure>
+                  <figcaption>${label}</figcaption>
+                  <img src="${source}" alt="">
+                </figure>
+              `).join("")}
+            </div>
+          </section>
+        `).join("")}
+        <h1>Whole-transit glyph size succession</h1>
+        <p class="lede">
+          Target paint remains stable through every interior frame. The final
+          three dense samples bracket the former 96% substitution boundary.
+        </p>
+        ${typographyTransitRows.map((row) => `
+          <section>
+            <h2>${row.profile}</h2>
+            <div class="transit-row">
               ${row.images.map(({ label, source }) => `
                 <figure>
                   <figcaption>${label}</figcaption>
@@ -802,7 +892,8 @@ try {
     `${JSON.stringify({
       generatedAt: new Date().toISOString(),
       contactSheet: path.relative(process.cwd(), checkpointContactSheet),
-      rows: checkpointEvidence
+      rows: checkpointEvidence,
+      typographyTransit: typographyTransitEvidence
     }, null, 2)}\n`
   );
   await writeFile(
@@ -814,7 +905,8 @@ try {
       splitEvidence,
       radicalEvidence,
       compoundEvidence,
-      checkpointEvidence
+      checkpointEvidence,
+      typographyTransitEvidence
     }, null, 2)}\n`
   );
   console.log(
@@ -826,7 +918,9 @@ try {
       compoundEvidence.length
     } compound scene frames and one ${
       checkpointEvidence.length
-    }-row fraction checkpoint in ${
+    }-row fraction checkpoint with ${
+      typographyTransitEvidence.length
+    } whole-transit frames in ${
       path.relative(process.cwd(), outputRoot)
     }.`
   );

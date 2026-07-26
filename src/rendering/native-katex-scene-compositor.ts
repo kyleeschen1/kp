@@ -1185,24 +1185,49 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
 
 export function sampleKpNativeKatexTypographyStylePlan(
   plan: KpNativeKatexTypographyStylePlan,
-  progress: number
+  progress: number,
+  sceneFrames?: readonly KpNativeKatexSceneTrackFrame[]
 ): KpNativeKatexTypographyStyleFrame {
   if (!Number.isFinite(progress)) {
     throw new Error("Typography style progress must be finite.");
   }
   const bounded = Math.max(0, Math.min(1, progress));
   const eased = smoothstep(bounded);
+  // Scene-driven sampling keeps target paint mounted for the whole transit,
+  // so typography can resize without a late visual-revision handoff.
+  const sceneRectByOwner = sceneFrames === undefined
+    ? undefined
+    : new Map(sceneFrames.map((frame) => [
+        `native-scene-owner.${frame.trackId}`,
+        frame.rect
+      ]));
   return Object.freeze({
     kind: "native-katex-typography-style-frame",
     lifecycle: "renderer-session",
     progress: bounded,
-    entries: Object.freeze(plan.entries.map((entry) => Object.freeze({
-      id: entry.id,
-      translateX: lerp(entry.inverseTranslateX, 0, eased),
-      translateY: lerp(entry.inverseTranslateY, 0, eased),
-      scaleX: lerp(entry.inverseScaleX, 1, eased),
-      scaleY: lerp(entry.inverseScaleY, 1, eased)
-    })))
+    entries: Object.freeze(plan.entries.map((entry) => {
+      const rect = sceneRectByOwner?.get(entry.materialOwnerId);
+      if (sceneRectByOwner !== undefined && rect === undefined) {
+        throw new Error(
+          `Typography style plan ${entry.id} has no scene frame.`
+        );
+      }
+      return Object.freeze({
+        id: entry.id,
+        translateX: rect === undefined
+          ? lerp(entry.inverseTranslateX, 0, eased)
+          : rect.left - entry.targetRect.left,
+        translateY: rect === undefined
+          ? lerp(entry.inverseTranslateY, 0, eased)
+          : rect.top - entry.targetRect.top,
+        scaleX: rect === undefined
+          ? lerp(entry.inverseScaleX, 1, eased)
+          : safeScale(rect.width, entry.targetRect.width),
+        scaleY: rect === undefined
+          ? lerp(entry.inverseScaleY, 1, eased)
+          : safeScale(rect.height, entry.targetRect.height)
+      });
+    }))
   });
 }
 

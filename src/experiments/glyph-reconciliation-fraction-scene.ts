@@ -101,12 +101,12 @@ export async function createKpFractionExperimentScene(input: {
     fontRevision: input.fontReadiness.revision,
     viewportKey: targetScene.viewportKey
   };
-  const typographyStart = 0.96;
-  playback.apply(typographyStart);
+  const handoffMicroscopeProgress = 0.96;
+  playback.apply(handoffMicroscopeProgress);
   const typographyPlan = compileKpNativeKatexTypographyStylePlan({
     telemetry: measureKpNativeKatexCorrelatedHandoff({
       ...microscope,
-      progress: typographyStart
+      progress: handoffMicroscopeProgress
     }),
     correlations,
     tolerancePx: 0.1,
@@ -116,16 +116,13 @@ export async function createKpFractionExperimentScene(input: {
   playback.apply(0);
   const applyTypographyHandoff = (progress: number) => {
     const ownership = playback.apply(progress);
-    const styleProgress = Math.max(
-      0,
-      Math.min(1, (progress - typographyStart) / (1 - typographyStart))
-    );
     const styleFrame = sampleKpNativeKatexTypographyStylePlan(
       typographyPlan,
-      styleProgress
+      progress,
+      ownership.frames
     );
     const realization =
-      progress >= typographyStart && ownership.visualOwner === "material-scene"
+      ownership.visualOwner === "material-scene"
         ? realizeKpNativeKatexTypographyStylePlan({
           stage: input.stage,
           target: targetScene,

@@ -87,13 +87,16 @@ for (let index = 0; index < 1_000; index += 1) {
   sampleKpNativeKatexSceneTracks(sceneTracks, index / 999);
 }
 const sceneFrameSampleP95Ms = (performance.now() - sceneSampleStart) / 1_000;
+const sceneFrameSamples = Array.from({ length: 1_000 }, (_, index) =>
+  sampleKpNativeKatexSceneTracks(sceneTracks, index / 999)
+);
 const stylePlan: KpNativeKatexTypographyStylePlan = {
   kind: "native-katex-typography-style-plan",
   lifecycle: "renderer-session",
   model: "target-style-reverse-flip",
   entries: sceneTracks.map((track, index) => ({
     id: `style.${track.id}`,
-    materialOwnerId: `owner.${track.id}`,
+    materialOwnerId: `native-scene-owner.${track.id}`,
     componentId: track.componentId,
     atomLifecycle: track.lifecycle,
     targetPaintAtomId: track.targetAtomId!,
@@ -112,7 +115,11 @@ const stylePlan: KpNativeKatexTypographyStylePlan = {
 };
 const styleSampleStart = performance.now();
 for (let index = 0; index < 1_000; index += 1) {
-  sampleKpNativeKatexTypographyStylePlan(stylePlan, index / 999);
+  sampleKpNativeKatexTypographyStylePlan(
+    stylePlan,
+    index / 999,
+    sceneFrameSamples[index]
+  );
 }
 const styleFrameSampleP95Ms = (performance.now() - styleSampleStart) / 1_000;
 const manifest = JSON.parse(

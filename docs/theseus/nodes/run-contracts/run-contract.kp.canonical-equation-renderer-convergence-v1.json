@@ -170,6 +170,20 @@
       "scope": "slice-14 fraction typography human checkpoint",
       "checkedAt": "2026-07-26T00:42:05.730Z",
       "notes": "The stable visual command generated 46 regression frames plus a four-row old/corrected/native checkpoint. Manual inspection confirms the retained raw 99.9-percent collision and corrected continuity in wide/phone normal/reduced states. Typecheck, five frozen convergence ratchets, three architecture gates, and the repaired focused browser proof pass. The prior full browser run had 42 other passing checks."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor",
+      "status": "failed",
+      "scope": "slice-14 rejected-checkpoint repair first proof",
+      "checkedAt": "2026-07-26T01:19:04.499Z",
+      "notes": "The new TDD sampler test initially proved the old progress-window sampler ignored whole-scene frames. After implementation, the first full browser boundary run passed 43 checks and exposed one stale observer that counted only left, top, width, and opacity while glyph motion now correctly uses transform. No product invariant failed; the observer was expanded to the existing transform channel."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run visual:glyph-reconciliation-experiment; npm run test:canonical-equation-renderer; npm run check:architecture; npm run build; npm run perf:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-14 whole-transit typography repair",
+      "checkedAt": "2026-07-26T01:19:12.449Z",
+      "notes": "Forty-six focused tests and all 44 Chromium checks pass. Target glyph paint remains one revision across every interior frame; plus width shrinks monotonically, x and y sizes vary under 0.1 px, and 95.9/96/96.1 geometry is continuous. The stable visual command publishes 18 whole-transit wide/phone frames plus the old/corrected/native checkpoint. Build, typecheck, five ratchets, three architecture gates, 0.017-ms 32-entry scene-driven style sampling, 5847-byte route growth, and all frozen budgets pass. The dev-review 502 logs remain unrelated local inbox noise."
     }
   ],
   "allowedWork": [
@@ -289,7 +303,7 @@
     {
       "id": "slice-14",
       "title": "mandatory-fraction-human-checkpoint",
-      "summary": "Published and manually inspected the required four-row fraction typography checkpoint: retained raw 99.9-percent playback visibly reproduces the numerator/rule collision, while the generic corrected 99.9-percent frame is continuous with exact native target ownership across wide, phone, normal, and reduced-motion states. Dense residuals remain below 0.011 px baseline and 0.087 px rectangle. Stable visual capture, typecheck, ratchets, architecture gates, 42 unchanged browser checks, the repaired focused rule-track proof, and workspace validation pass. Stop condition now requires explicit human approval before slice 15.",
+      "summary": "Repaired the rejected human checkpoint generically: target glyph paint now remains mounted for every material-scene frame and is transformed from the existing scene rectangle, removing the 96-percent visual-revision boundary. Plus shrinks monotonically across the full transit; x and y stay size-stable; 95.9/96/96.1 frames are continuous; 99.9-percent residuals are at most 0.0079 px baseline and 0.0862 px rectangle. Forty-six focused tests, 44 Chromium checks, stable wide/phone visual evidence, build, typecheck, performance, ratchets, architecture, and frozen budgets pass. Stop again for explicit human approval before slice 15.",
       "status": "complete"
     },
     {
