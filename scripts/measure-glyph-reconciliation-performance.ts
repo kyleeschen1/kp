@@ -102,15 +102,12 @@ const stylePlan: KpNativeKatexTypographyStylePlan = {
     targetPaintAtomId: track.targetAtomId!,
     paintKind: track.paintKind,
     model: "target-style-reverse-flip",
-    currentRect: track.startRect,
     targetRect: track.endRect,
     inverseTranslateX: index % 3 - 1,
     inverseTranslateY: index % 5 / 2,
     inverseScaleX: 1 + index % 4 / 100,
     inverseScaleY: 1 + index % 4 / 100,
-    targetPaintFingerprint: `paint.${index}`,
-    targetStyleFingerprint: `style.${index}`,
-    targetClipPath: "none"
+    targetStyleFingerprint: `style.${index}`
   }))
 };
 const styleSampleStart = performance.now();

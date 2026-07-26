@@ -25,6 +25,7 @@ const radicalCheckpoints = [0, 500, 999, 1000] as const;
 const compoundCheckpoints = [0, 450, 950, 1000] as const;
 const typographyTransitCheckpoints = [
   0,
+  1,
   250,
   500,
   750,

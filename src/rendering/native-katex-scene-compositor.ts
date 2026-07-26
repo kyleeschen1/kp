@@ -201,15 +201,21 @@ export interface KpNativeKatexTypographyStylePlanEntry {
   readonly model:
     | "target-style-reverse-flip"
     | "native-checkpoint-settlement";
-  readonly currentRect: KpStageRelativeRect;
   readonly targetRect: KpStageRelativeRect;
+  readonly glyphPaintFrame?: {
+    readonly sourceLeft: number;
+    readonly sourceTop: number;
+    readonly sourceInsetX: number;
+    readonly sourceInsetY: number;
+    readonly targetInsetX: number;
+    readonly targetInsetY: number;
+    readonly sourceScale: number;
+  } | undefined;
   readonly inverseTranslateX: number;
   readonly inverseTranslateY: number;
   readonly inverseScaleX: number;
   readonly inverseScaleY: number;
-  readonly targetPaintFingerprint: string;
   readonly targetStyleFingerprint: string;
-  readonly targetClipPath: string;
 }
 
 export interface KpNativeKatexTypographyStylePlan {
@@ -694,26 +700,45 @@ export function correlateKpNativeKatexSceneHandoff(input: {
   return Object.freeze(correlations);
 }
 
-export function measureKpNativeKatexGlyphHandoff(input: {
+type KpNativeKatexHandoffMeasurementInput = {
   readonly stage: HTMLElement;
   readonly reconciliation: KpNativeKatexSceneReconciliation;
   readonly correlations: readonly KpNativeKatexHandoffCorrelation[];
   readonly progress: number;
   readonly fontRevision: number;
   readonly viewportKey: string;
-}): KpNativeKatexHandoffTelemetry {
+};
+
+export function measureKpNativeKatexGlyphHandoff(
+  input: KpNativeKatexHandoffMeasurementInput
+): KpNativeKatexHandoffTelemetry {
+  return measureKpNativeKatexPaintKindHandoff(input, "glyph");
+}
+
+export function measureKpNativeKatexRuleHandoff(
+  input: KpNativeKatexHandoffMeasurementInput
+): KpNativeKatexHandoffTelemetry {
+  return measureKpNativeKatexPaintKindHandoff(input, "rule");
+}
+
+function measureKpNativeKatexPaintKindHandoff(
+  input: KpNativeKatexHandoffMeasurementInput,
+  paintKind: "glyph" | "rule"
+): KpNativeKatexHandoffTelemetry {
   const targetById = new Map(input.reconciliation.target.atoms.map((atom) => [
     atom.id,
     atom
   ]));
-  const glyphCorrelations = input.correlations.filter((correlation) =>
+  const correlations = input.correlations.filter((correlation) =>
     correlation.disposition === "target-bound" &&
-    targetById.get(correlation.targetAtomId!)?.paintKind === "glyph"
+    targetById.get(correlation.targetAtomId!)?.paintKind === paintKind
   );
-  if (glyphCorrelations.length === 0) {
-    throw new Error("Native handoff microscope requires correlated glyph paint.");
+  if (correlations.length === 0) {
+    throw new Error(
+      `Native handoff microscope requires correlated ${paintKind} paint.`
+    );
   }
-  const observations = glyphCorrelations.flatMap((correlation) => {
+  const observations = correlations.flatMap((correlation) => {
     const target = targetById.get(correlation.targetAtomId!)!;
     const materialOwner = input.stage.querySelector<HTMLElement>(
       `[data-kp-equation-material-owner-id="${
@@ -730,85 +755,22 @@ export function measureKpNativeKatexGlyphHandoff(input: {
       );
     }
     return [
-      observeHandoffGlyph({
+      observeCorrelatedHandoffPaint({
         id: `${correlation.id}.material`,
         side: "material",
         stage: input.stage,
         element: materialVisual,
         rectElement: materialOwner,
-        target,
+        atom: target,
         fontRevision: input.fontRevision
       }),
-      observeHandoffGlyph({
+      observeCorrelatedHandoffPaint({
         id: `${correlation.id}.native`,
         side: "native-target",
         stage: input.stage,
         element: target.sourceElement,
         rectElement: target.sourceElement,
-        target,
-        fontRevision: input.fontRevision
-      })
-    ];
-  });
-  return createKpNativeKatexHandoffTelemetry({
-    stage: input.stage,
-    progress: input.progress,
-    observations,
-    fontRevision: input.fontRevision,
-    viewportKey: input.viewportKey
-  });
-}
-
-export function measureKpNativeKatexRuleHandoff(input: {
-  readonly stage: HTMLElement;
-  readonly reconciliation: KpNativeKatexSceneReconciliation;
-  readonly correlations: readonly KpNativeKatexHandoffCorrelation[];
-  readonly progress: number;
-  readonly fontRevision: number;
-  readonly viewportKey: string;
-}): KpNativeKatexHandoffTelemetry {
-  const targetById = new Map(input.reconciliation.target.atoms.map((atom) => [
-    atom.id,
-    atom
-  ]));
-  const ruleCorrelations = input.correlations.filter((correlation) =>
-    correlation.disposition === "target-bound" &&
-    targetById.get(correlation.targetAtomId!)?.paintKind === "rule"
-  );
-  if (ruleCorrelations.length === 0) {
-    throw new Error("Native handoff microscope requires correlated rule paint.");
-  }
-  const observations = ruleCorrelations.flatMap((correlation) => {
-    const target = targetById.get(correlation.targetAtomId!)!;
-    const materialOwner = input.stage.querySelector<HTMLElement>(
-      `[data-kp-equation-material-owner-id="${
-        CSS.escape(correlation.materialOwnerId)
-      }"]`
-    );
-    const materialVisual = materialOwner?.firstElementChild;
-    if (
-      materialOwner === null ||
-      !(materialVisual instanceof HTMLElement)
-    ) {
-      throw new Error(
-        `Native handoff microscope cannot find ${correlation.materialOwnerId}.`
-      );
-    }
-    return [
-      observeHandoffRule({
-        id: `${correlation.id}.material`,
-        side: "material",
-        stage: input.stage,
-        element: materialVisual,
-        target,
-        fontRevision: input.fontRevision
-      }),
-      observeHandoffRule({
-        id: `${correlation.id}.native`,
-        side: "native-target",
-        stage: input.stage,
-        element: target.sourceElement,
-        target,
+        atom: target,
         fontRevision: input.fontRevision
       })
     ];
@@ -1015,8 +977,8 @@ export function evaluateKpNativeKatexTypographyHandoffLaw(input: {
   readonly maximumTranslationPx: number;
   readonly maximumScaleRatio: number;
 }): KpNativeKatexTypographyHandoffLaw {
-  const assessments = handoffTelemetryPairs(input.telemetry).map(
-    ([material, native]) => assessKpNativeKatexTypographyHandoff({
+  const assessments = handoffTelemetryGroups(input.telemetry).map(
+    ({ material, native }) => assessKpNativeKatexTypographyHandoff({
       from: material,
       to: native,
       tolerancePx: input.tolerancePx,
@@ -1045,8 +1007,8 @@ export function compareKpNativeKatexTypographyHandoffModels(input: {
   readonly maximumScaleRatio: number;
 }): KpNativeKatexTypographyHandoffComparison {
   const law = evaluateKpNativeKatexTypographyHandoffLaw(input);
-  const observedResidual = maximum(handoffTelemetryPairs(input.telemetry)
-    .flatMap(([material, native]) => [
+  const observedResidual = maximum(handoffTelemetryGroups(input.telemetry)
+    .flatMap(({ material, native }) => [
       Math.abs(native.rect.left - material.rect.left),
       Math.abs(native.rect.top - material.rect.top),
       Math.abs(native.rect.width - material.rect.width),
@@ -1122,8 +1084,8 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
   const correlationById = new Map(
     targetBound.map((correlation) => [correlation.id, correlation])
   );
-  const entries = handoffTelemetryPairs(input.telemetry).map(
-    ([material, native]) => {
+  const entries = handoffTelemetryGroups(input.telemetry).map(
+    ({ source, material, native }) => {
       const id = correlationId(material.id);
       const correlation = correlationById.get(id);
       if (correlation === undefined) {
@@ -1148,8 +1110,16 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
         targetPaintAtomId: correlation.targetAtomId,
         paintKind: native.paintKind,
         model,
-        currentRect: material.rect,
         targetRect: native.rect,
+        ...(source === undefined || native.paintKind !== "glyph"
+          ? {}
+          : {
+            glyphPaintFrame: createGlyphPaintFrame(
+              input.telemetry.stage,
+              source,
+              native
+            )
+          }),
         inverseTranslateX: model === "native-checkpoint-settlement"
           ? 0
           : material.rect.left - native.rect.left,
@@ -1164,9 +1134,7 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
         inverseScaleY: model === "native-checkpoint-settlement"
           ? 1
           : safeScale(material.rect.height, native.rect.height),
-        targetPaintFingerprint: native.paintFingerprint,
-        targetStyleFingerprint: native.styleFingerprint,
-        targetClipPath: native.clipPath
+        targetStyleFingerprint: native.styleFingerprint
       });
     }
   );
@@ -1211,6 +1179,34 @@ export function sampleKpNativeKatexTypographyStylePlan(
         throw new Error(
           `Typography style plan ${entry.id} has no scene frame.`
         );
+      }
+      const paint = entry.glyphPaintFrame;
+      if (paint !== undefined) {
+        const scale = lerp(paint.sourceScale, 1, eased);
+        const sampledLeft =
+          rect?.left ?? lerp(paint.sourceLeft, entry.targetRect.left, eased);
+        const sampledTop =
+          rect?.top ?? lerp(paint.sourceTop, entry.targetRect.top, eased);
+        const desiredPaintLeft =
+          sampledLeft +
+          lerp(paint.sourceInsetX, paint.targetInsetX, eased);
+        const desiredPaintTop =
+          sampledTop +
+          lerp(paint.sourceInsetY, paint.targetInsetY, eased);
+        return Object.freeze({
+          id: entry.id,
+          translateX:
+            desiredPaintLeft -
+            entry.targetRect.left -
+            paint.targetInsetX * scale,
+          translateY:
+            desiredPaintTop -
+            entry.targetRect.top -
+            paint.targetInsetY * scale,
+          // Keep glyph axes uniform; independent fitting distorts notation.
+          scaleX: scale,
+          scaleY: scale
+        });
       }
       return Object.freeze({
         id: entry.id,
@@ -1276,7 +1272,7 @@ export function realizeKpNativeKatexTypographyStylePlan(input: {
     if (frame === undefined) {
       throw new Error(`Typography realization has no style frame for ${entry.id}.`);
     }
-    setKpEquationMaterialOwnerVisual({
+    const visual = setKpEquationMaterialOwnerVisual({
       owner,
       sourceElement: target.sourceElement,
       revisionKey:
@@ -1290,6 +1286,15 @@ export function realizeKpNativeKatexTypographyStylePlan(input: {
     owner.style.transform =
       `translate(${frame.translateX}px, ${frame.translateY}px) ` +
       `scale(${frame.scaleX}, ${frame.scaleY})`;
+    if (visual instanceof HTMLElement) {
+      normalizeKpNativeKatexMaterialGlyphPaint({
+        stage: input.stage,
+        owner,
+        visual,
+        entry,
+        frame
+      });
+    }
     owner.dataset["kpNativeKatexTypographyModel"] = entry.model;
     realizedIds.push(entry.id);
   }
@@ -1301,6 +1306,34 @@ export function realizeKpNativeKatexTypographyStylePlan(input: {
     deferred: Object.freeze(deferred),
     nativeMutationCount: 0
   });
+}
+
+function normalizeKpNativeKatexMaterialGlyphPaint(input: {
+  readonly stage: HTMLElement;
+  readonly owner: HTMLElement;
+  readonly visual: HTMLElement;
+  readonly entry: KpNativeKatexTypographyStylePlanEntry;
+  readonly frame: KpNativeKatexTypographyStyleFrame["entries"][number];
+}): void {
+  if (
+    input.entry.glyphPaintFrame === undefined ||
+    input.visual.dataset["kpNativeKatexPaintFrameNormalized"] === "true"
+  ) {
+    return;
+  }
+  const clonePaint = measureTextPaintRect(input.stage, input.visual);
+  const ownerRect = stageRelativeRect(
+    input.stage,
+    input.owner.getBoundingClientRect()
+  );
+  const cloneInsetX =
+    (clonePaint.left - ownerRect.left) / input.frame.scaleX;
+  const cloneInsetY =
+    (clonePaint.top - ownerRect.top) / input.frame.scaleY;
+  const correctionX = input.entry.glyphPaintFrame.targetInsetX - cloneInsetX;
+  const correctionY = input.entry.glyphPaintFrame.targetInsetY - cloneInsetY;
+  input.visual.style.translate = `${correctionX}px ${correctionY}px`;
+  input.visual.dataset["kpNativeKatexPaintFrameNormalized"] = "true";
 }
 
 export function selectKpNativeKatexTypographyRealizationDisposition(
@@ -1336,8 +1369,8 @@ export function traceKpNativeKatexHandoffOwnership(input: {
       ...input,
       progress
     });
-    const glyphPairs = handoffTelemetryPairs(glyphTelemetry);
-    const rulePairs = handoffTelemetryPairs(ruleTelemetry);
+    const glyphPairs = handoffTelemetryGroups(glyphTelemetry);
+    const rulePairs = handoffTelemetryGroups(ruleTelemetry);
     const visibleMaterialOwnerIds = [
       ...input.stage.querySelectorAll<HTMLElement>(
         "[data-kp-native-katex-scene-owner]"
@@ -1353,25 +1386,25 @@ export function traceKpNativeKatexHandoffOwnership(input: {
       targetNativeOpacity: ownership.targetNativeOpacity,
       visibleMaterialOwnerIds: Object.freeze(visibleMaterialOwnerIds),
       glyphStyleMismatchIds: Object.freeze(glyphPairs.filter(
-        ([material, native]) =>
+        ({ material, native }) =>
           material.styleFingerprint !== native.styleFingerprint
-      ).map(([material]) =>
+      ).map(({ material }) =>
         material.id.replace(/\.material$/, "")
       )),
       maximumGlyphRectResidualPx: maximum(
-        glyphPairs.map(([material, native]) =>
+        glyphPairs.map(({ material, native }) =>
           rectDelta(material.rect, native.rect)
         )
       ),
       maximumGlyphBaselineResidualPx: maximum(
-        glyphPairs.flatMap(([material, native]) =>
+        glyphPairs.flatMap(({ material, native }) =>
           material.baselineY === null || native.baselineY === null
             ? []
             : [Math.abs(material.baselineY - native.baselineY)]
         )
       ),
       maximumRuleGeometryResidualPx: maximum(
-        rulePairs.map(([material, native]) =>
+        rulePairs.map(({ material, native }) =>
           ruleGeometryDelta(
             material.ruleGeometry!,
             native.ruleGeometry!
@@ -1687,84 +1720,6 @@ function lifecycleOpacityProgress(
   return smoothstep(Math.max(0, Math.min(1, (progress - start) / (end - start))));
 }
 
-function observeHandoffGlyph(input: {
-  readonly id: string;
-  readonly side: "native-source" | "material" | "native-target";
-  readonly stage: HTMLElement;
-  readonly element: HTMLElement;
-  readonly rectElement: HTMLElement;
-  readonly target: KpNativeKatexPaintAtomObservation;
-  readonly fontRevision: number;
-}) {
-  const stageRect = input.stage.getBoundingClientRect();
-  const rect = normalizeKpStageRelativeRect({
-    stageClientRect: stageRect,
-    stageLayoutWidth: input.stage.offsetWidth || stageRect.width,
-    stageLayoutHeight: input.stage.offsetHeight || stageRect.height,
-    fragmentClientRect: input.rectElement.getBoundingClientRect()
-  });
-  const computed = getComputedStyle(input.element);
-  return {
-    kind: "native-katex-handoff-paint-observation" as const,
-    lifecycle: "renderer-session" as const,
-    id: input.id,
-    side: input.side,
-    paintAtomId: input.target.id,
-    semanticEntityId: input.target.semanticEntityId,
-    presentationGroupId: input.target.presentationGroupId,
-    paintKind: input.target.paintKind,
-    element: input.element,
-    rect,
-    baselineY: fontMetricBaseline(input.element, computed, rect),
-    wrapperTransform: computedTransformChain(input.element, input.stage),
-    wrapperFingerprint: computedWrapperFingerprint(input.element, input.stage),
-    clipPath: computed.clipPath || "none",
-    paintFingerprint: input.target.visualKey,
-    styleFingerprint: handoffStyleFingerprint(computed),
-    opacity: effectiveOpacity(input.rectElement, input.stage),
-    fontRevision: input.fontRevision
-  };
-}
-
-function observeHandoffRule(input: {
-  readonly id: string;
-  readonly side: "native-source" | "material" | "native-target";
-  readonly stage: HTMLElement;
-  readonly element: HTMLElement;
-  readonly target: KpNativeKatexPaintAtomObservation;
-  readonly fontRevision: number;
-}) {
-  const stageRect = input.stage.getBoundingClientRect();
-  const rect = normalizeKpStageRelativeRect({
-    stageClientRect: stageRect,
-    stageLayoutWidth: input.stage.offsetWidth || stageRect.width,
-    stageLayoutHeight: input.stage.offsetHeight || stageRect.height,
-    fragmentClientRect: input.element.getBoundingClientRect()
-  });
-  const computed = getComputedStyle(input.element);
-  return {
-    kind: "native-katex-handoff-paint-observation" as const,
-    lifecycle: "renderer-session" as const,
-    id: input.id,
-    side: input.side,
-    paintAtomId: input.target.id,
-    semanticEntityId: input.target.semanticEntityId,
-    presentationGroupId: input.target.presentationGroupId,
-    paintKind: "rule" as const,
-    element: input.element,
-    rect,
-    baselineY: null,
-    wrapperTransform: computedTransformChain(input.element, input.stage),
-    wrapperFingerprint: computedWrapperFingerprint(input.element, input.stage),
-    clipPath: computed.clipPath || "none",
-    paintFingerprint: input.target.visualKey,
-    styleFingerprint: structuralStyleFingerprint(computed),
-    opacity: effectiveOpacity(input.element, input.stage),
-    ruleGeometry: measureRuleGeometry(computed, rect),
-    fontRevision: input.fontRevision
-  };
-}
-
 function observeCorrelatedHandoffPaint(input: {
   readonly id: string;
   readonly side: "native-source" | "material" | "native-target";
@@ -1774,29 +1729,14 @@ function observeCorrelatedHandoffPaint(input: {
   readonly atom: KpNativeKatexPaintAtomObservation;
   readonly fontRevision: number;
 }) {
-  if (input.atom.paintKind === "glyph") {
-    return observeHandoffGlyph({
-      ...input,
-      target: input.atom
-    });
-  }
-  if (input.atom.paintKind === "rule") {
-    return observeHandoffRule({
-      id: input.id,
-      side: input.side,
-      stage: input.stage,
-      element: input.element,
-      target: input.atom,
-      fontRevision: input.fontRevision
-    });
-  }
-  const stageRect = input.stage.getBoundingClientRect();
-  const rect = normalizeKpStageRelativeRect({
-    stageClientRect: stageRect,
-    stageLayoutWidth: input.stage.offsetWidth || stageRect.width,
-    stageLayoutHeight: input.stage.offsetHeight || stageRect.height,
-    fragmentClientRect: input.rectElement.getBoundingClientRect()
-  });
+  const isGlyph = input.atom.paintKind === "glyph";
+  // Rules own border geometry; other paint follows the scene owner.
+  const rectElement =
+    input.atom.paintKind === "rule" ? input.element : input.rectElement;
+  const rect = stageRelativeRect(
+    input.stage,
+    rectElement.getBoundingClientRect()
+  );
   const computed = getComputedStyle(input.element);
   return {
     kind: "native-katex-handoff-paint-observation" as const,
@@ -1809,15 +1749,76 @@ function observeCorrelatedHandoffPaint(input: {
     paintKind: input.atom.paintKind,
     element: input.element,
     rect,
-    baselineY: null,
+    baselineY: isGlyph
+      ? fontMetricBaseline(input.element, computed, rect)
+      : null,
     wrapperTransform: computedTransformChain(input.element, input.stage),
     wrapperFingerprint: computedWrapperFingerprint(input.element, input.stage),
     clipPath: computed.clipPath || "none",
     paintFingerprint: input.atom.visualKey,
-    styleFingerprint: structuralStyleFingerprint(computed),
-    opacity: effectiveOpacity(input.rectElement, input.stage),
+    styleFingerprint: isGlyph
+      ? handoffStyleFingerprint(computed)
+      : structuralStyleFingerprint(computed),
+    opacity: effectiveOpacity(rectElement, input.stage),
+    ...(input.atom.paintKind === "rule"
+      ? { ruleGeometry: measureRuleGeometry(computed, rect) }
+      : {}),
     fontRevision: input.fontRevision
   };
+}
+
+function measureTextPaintRect(
+  stage: HTMLElement,
+  element: HTMLElement
+): KpStageRelativeRect {
+  const range = element.ownerDocument.createRange();
+  range.selectNodeContents(element);
+  const rangeRect = range.getBoundingClientRect();
+  const elementRect = element.getBoundingClientRect();
+  const clientRect =
+    rangeRect.width > 0 && rangeRect.height > 0 ? rangeRect : elementRect;
+  return stageRelativeRect(stage, clientRect);
+}
+
+function stageRelativeRect(
+  stage: HTMLElement,
+  fragmentClientRect: Pick<DOMRect, "left" | "top" | "width" | "height">
+): KpStageRelativeRect {
+  const stageClientRect = stage.getBoundingClientRect();
+  return normalizeKpStageRelativeRect({
+    stageClientRect,
+    stageLayoutWidth: stage.offsetWidth || stageClientRect.width,
+    stageLayoutHeight: stage.offsetHeight || stageClientRect.height,
+    fragmentClientRect
+  });
+}
+
+function createGlyphPaintFrame(
+  stage: HTMLElement,
+  source: KpNativeKatexHandoffTelemetry["observations"][number],
+  target: KpNativeKatexHandoffTelemetry["observations"][number]
+): NonNullable<KpNativeKatexTypographyStylePlanEntry["glyphPaintFrame"]> {
+  const sourcePaint = measureTextPaintRect(stage, source.element);
+  const targetPaint = measureTextPaintRect(stage, target.element);
+  return Object.freeze({
+    sourceLeft: source.rect.left,
+    sourceTop: source.rect.top,
+    sourceInsetX: sourcePaint.left - source.rect.left,
+    sourceInsetY: sourcePaint.top - source.rect.top,
+    targetInsetX: targetPaint.left - target.rect.left,
+    targetInsetY: targetPaint.top - target.rect.top,
+    sourceScale:
+      cssPixels(getComputedStyle(source.element).fontSize) /
+      cssPixels(getComputedStyle(target.element).fontSize)
+  });
+}
+
+function cssPixels(value: string): number {
+  const pixels = Number.parseFloat(value);
+  if (!(pixels > 0)) {
+    throw new Error(`Native handoff requires positive CSS pixels, got ${value}.`);
+  }
+  return pixels;
 }
 
 function fontMetricBaseline(
@@ -1982,7 +1983,7 @@ function effectiveOpacity(element: HTMLElement, stage: HTMLElement): number {
   return opacity;
 }
 
-function handoffTelemetryPairs(
+function handoffTelemetryGroups(
   telemetry: KpNativeKatexHandoffTelemetry
 ) {
   const byId = new Map<string, typeof telemetry.observations>();
@@ -1993,12 +1994,13 @@ function handoffTelemetryPairs(
   return [...byId.entries()].sort(([left], [right]) =>
     left.localeCompare(right)
   ).map(([id, observations]) => {
+    const source = observations.find(({ side }) => side === "native-source");
     const material = observations.find(({ side }) => side === "material");
     const native = observations.find(({ side }) => side === "native-target");
     if (material === undefined || native === undefined) {
       throw new Error(`Native handoff telemetry ${id} is not paired.`);
     }
-    return [material, native] as const;
+    return { source, material, native } as const;
   });
 }
 
@@ -2126,8 +2128,10 @@ function freezeTypographyStylePlanEntry(
 ): KpNativeKatexTypographyStylePlanEntry {
   return Object.freeze({
     ...entry,
-    currentRect: Object.freeze({ ...entry.currentRect }),
-    targetRect: Object.freeze({ ...entry.targetRect })
+    targetRect: Object.freeze({ ...entry.targetRect }),
+    ...(entry.glyphPaintFrame === undefined
+      ? {}
+      : { glyphPaintFrame: Object.freeze({ ...entry.glyphPaintFrame }) })
   });
 }
 

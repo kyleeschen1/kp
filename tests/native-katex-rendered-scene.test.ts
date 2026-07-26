@@ -462,20 +462,16 @@ test("selected style plan is immutable measured renderer-session state", () => {
     targetPaintAtomId: "paint.pair.transform",
     paintKind: "glyph",
     model: "target-style-reverse-flip",
-    currentRect: { left: 24, top: 20, width: 12, height: 24 },
     targetRect: { left: 23.96, top: 20, width: 11.98, height: 23.96 },
     inverseTranslateX: 0.03999999999999915,
     inverseTranslateY: -1.4699999999999989,
     inverseScaleX: 12 / 11.98,
     inverseScaleY: 24 / 23.96,
-    targetPaintFingerprint: "glyph:x",
     targetStyleFingerprint:
-      "font-size:46.0768px|line-height:55.2922px|color:black",
-    targetClipPath: "none"
+      "font-size:46.0768px|line-height:55.2922px|color:black"
   });
   assert.equal(Object.isFrozen(plan), true);
   assert.equal(Object.isFrozen(plan.entries), true);
-  assert.equal(Object.isFrozen(plan.entries[0]?.currentRect), true);
   assert.equal(Object.isFrozen(plan.entries[0]?.targetRect), true);
   assert.equal("element" in plan.entries[0]!, false);
 });
@@ -567,15 +563,12 @@ test("realization disposition preserves every structural paint kind", () => {
     targetPaintAtomId: "target.paint",
     paintKind: "glyph" as const,
     model: "target-style-reverse-flip" as const,
-    currentRect: { left: 10, top: 20, width: 12, height: 24 },
     targetRect: { left: 10, top: 20, width: 12, height: 24 },
     inverseTranslateX: 0,
     inverseTranslateY: 0,
     inverseScaleX: 1,
     inverseScaleY: 1,
-    targetPaintFingerprint: "paint",
-    targetStyleFingerprint: "style",
-    targetClipPath: "none"
+    targetStyleFingerprint: "style"
   };
   assert.deepEqual(
     (["glyph", "rule", "path", "delimiter", "accent"] as const).map(
@@ -614,15 +607,12 @@ test("style sampling is finite, reversible, and settles with zero velocity", () 
       targetPaintAtomId: "target.paint",
       paintKind: "glyph" as const,
       model: "target-style-reverse-flip" as const,
-      currentRect: { left: 10, top: 20, width: 12, height: 24 },
       targetRect: { left: 11, top: 19, width: 10, height: 20 },
       inverseTranslateX: -1,
       inverseTranslateY: 1.5,
       inverseScaleX: 1.2,
       inverseScaleY: 1.2,
-      targetPaintFingerprint: "paint",
-      targetStyleFingerprint: "style",
-      targetClipPath: "none"
+      targetStyleFingerprint: "style"
     }]
   };
   const progresses = [0, 0.25, 0.5, 0.75, 1];
@@ -679,15 +669,12 @@ test("style sampling can follow the whole generic scene transit", () => {
       targetPaintAtomId: "target.paint",
       paintKind: "glyph" as const,
       model: "target-style-reverse-flip" as const,
-      currentRect: { left: 10, top: 20, width: 12, height: 24 },
       targetRect: { left: 11, top: 19, width: 10, height: 20 },
       inverseTranslateX: -1,
       inverseTranslateY: 1,
       inverseScaleX: 1.2,
       inverseScaleY: 1.2,
-      targetPaintFingerprint: "paint",
-      targetStyleFingerprint: "style",
-      targetClipPath: "none"
+      targetStyleFingerprint: "style"
     }]
   };
   const sceneFrames = [{
@@ -715,6 +702,73 @@ test("style sampling can follow the whole generic scene transit", () => {
   assert.throws(
     () => sampleKpNativeKatexTypographyStylePlan(plan, 0.25, []),
     /scene frame/
+  );
+});
+
+test("glyph paint frames preserve contact with uniform font scaling", () => {
+  const plan = {
+    kind: "native-katex-typography-style-plan" as const,
+    lifecycle: "renderer-session" as const,
+    model: "target-style-reverse-flip" as const,
+    entries: [{
+      id: "entry.paint",
+      materialOwnerId: "native-scene-owner.track.paint",
+      componentId: "component.paint",
+      atomLifecycle: "persist" as const,
+      targetPaintAtomId: "target.paint",
+      paintKind: "glyph" as const,
+      model: "target-style-reverse-flip" as const,
+      targetRect: { left: 30, top: 10, width: 6, height: 12 },
+      glyphPaintFrame: {
+        sourceLeft: 10,
+        sourceTop: 20,
+        sourceInsetX: 1,
+        sourceInsetY: 2,
+        targetInsetX: 0.5,
+        targetInsetY: 1,
+        sourceScale: 2
+      },
+      inverseTranslateX: -20,
+      inverseTranslateY: 10,
+      inverseScaleX: 2,
+      inverseScaleY: 2,
+      targetStyleFingerprint: "style"
+    }]
+  };
+  const sourceFrame = [{
+    trackId: "track.paint",
+    componentId: "component.paint",
+    lifecycle: "persist" as const,
+    visualAtomId: "source.paint",
+    paintKind: "glyph" as const,
+    sizingMode: "rect" as const,
+    rect: { left: 10, top: 20, width: 12, height: 24 },
+    opacity: 1
+  }];
+  const targetFrame = [{
+    ...sourceFrame[0]!,
+    rect: { left: 30, top: 10, width: 6, height: 12 }
+  }];
+
+  assert.deepEqual(
+    sampleKpNativeKatexTypographyStylePlan(plan, 0, sourceFrame).entries[0],
+    {
+      id: "entry.paint",
+      translateX: -20,
+      translateY: 10,
+      scaleX: 2,
+      scaleY: 2
+    }
+  );
+  assert.deepEqual(
+    sampleKpNativeKatexTypographyStylePlan(plan, 1, targetFrame).entries[0],
+    {
+      id: "entry.paint",
+      translateX: 0,
+      translateY: 0,
+      scaleX: 1,
+      scaleY: 1
+    }
   );
 });
 

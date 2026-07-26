@@ -1823,8 +1823,38 @@ test("target glyph paint follows the full scene without a late size snap", async
             materialOwnerId: string;
           }[];
         };
+        styleFrame: {
+          entries: readonly {
+            id: string;
+            scaleX: number;
+            scaleY: number;
+          }[];
+        };
+      };
+      __kpMeasureFractionCorrelatedHandoff: (progress: number) => {
+        observations: readonly {
+          id: string;
+          side: "native-source" | "material" | "native-target";
+          semanticEntityId: string;
+          element: HTMLElement;
+        }[];
       };
     }).__kpRealizeFractionTypographyHandoff;
+    const measure = (window as unknown as {
+      __kpMeasureFractionCorrelatedHandoff: (progress: number) => {
+        observations: readonly {
+          id: string;
+          side: "native-source" | "material" | "native-target";
+          semanticEntityId: string;
+          element: HTMLElement;
+        }[];
+      };
+    }).__kpMeasureFractionCorrelatedHandoff;
+    const paintRect = (element: HTMLElement) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      return range.getBoundingClientRect();
+    };
     return [
       0.001,
       0.25,
@@ -1836,6 +1866,7 @@ test("target glyph paint follows the full scene without a late size snap", async
       0.999
     ].map((progress) => {
       const result = realize(progress);
+      const observations = measure(progress).observations;
       const entities = [
         "operator.add",
         "symbol.x",
@@ -1851,13 +1882,38 @@ test("target glyph paint follows the full scene without a late size snap", async
         )!;
         const visual = owner.firstElementChild as HTMLElement;
         const rect = owner.getBoundingClientRect();
+        const style = result.styleFrame.entries.find(({ id }) =>
+          id === entry.id
+        )!;
+        const correlated = observations.filter(({ semanticEntityId }) =>
+          semanticEntityId === entity
+        );
+        const material = correlated.find(({ side }) => side === "material")!;
+        const native = correlated.find(({ side }) =>
+          side === (progress === 0.001 ? "native-source" : "native-target")
+        );
+        const materialPaintRect = paintRect(material.element);
+        const nativePaintRect = native === undefined
+          ? undefined
+          : paintRect(native.element);
+        const paintResidual = native === undefined
+          ? undefined
+          : Math.max(
+            Math.abs(materialPaintRect.left - nativePaintRect!.left),
+            Math.abs(materialPaintRect.top - nativePaintRect!.top)
+          );
+        const fontSize = getComputedStyle(visual).fontSize;
         return {
           entity,
           visualRevision:
             owner.dataset["kpEquationMaterialVisualRevision"] ?? "",
-          fontSize: getComputedStyle(visual).fontSize,
+          fontSize,
+          effectiveFontSize: Number.parseFloat(fontSize) * style.scaleY,
           width: rect.width,
-          height: rect.height
+          height: rect.height,
+          scaleX: style.scaleX,
+          scaleY: style.scaleY,
+          paintResidual
         };
       });
       return { progress, entities };
@@ -1876,12 +1932,38 @@ test("target glyph paint follows the full scene without a late size snap", async
   expect(evidence.every((frame) =>
     frame.entities.every(({ fontSize }) => fontSize === "46.0768px")
   )).toBe(true);
+  expect(evidence.every((frame) =>
+    frame.entities.every(({ scaleX, scaleY }) =>
+      Math.abs(scaleX - scaleY) < 1e-9
+    )
+  )).toBe(true);
+  expect(evidence[0]!.entities.every(({ paintResidual }) =>
+    paintResidual !== undefined && paintResidual < 0.2
+  )).toBe(true);
+  expect(evidence.at(-1)!.entities.every(({ paintResidual }) =>
+    paintResidual !== undefined && paintResidual < 0.2
+  )).toBe(true);
   const plusWidths = values("operator.add", "width");
+  const plusFontSizes = evidence.map((frame) =>
+    frame.entities.find(({ entity }) => entity === "operator.add")!
+      .effectiveFontSize
+  );
+  expect(Math.abs(plusFontSizes[0]! - 65.824)).toBeLessThan(0.05);
+  expect(Math.abs(plusFontSizes.at(-1)! - 46.0768)).toBeLessThan(0.05);
+  expect(plusFontSizes.every((size, index) =>
+    index === 0 || size <= plusFontSizes[index - 1]! + 0.001
+  )).toBe(true);
   expect(plusWidths[0]).toBeGreaterThan(plusWidths.at(-1)!);
   expect(plusWidths.every((width, index) =>
     index === 0 || width <= plusWidths[index - 1]! + 0.01
   )).toBe(true);
   for (const entity of ["symbol.x", "symbol.y"]) {
+    expect(evidence.every((frame) =>
+      Math.abs(
+        frame.entities.find((candidate) => candidate.entity === entity)!
+          .scaleX - 1
+      ) < 1e-9
+    )).toBe(true);
     for (const key of ["width", "height"] as const) {
       const sizes = values(entity, key);
       expect(Math.max(...sizes) - Math.min(...sizes)).toBeLessThan(0.1);
