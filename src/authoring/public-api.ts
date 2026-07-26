@@ -107,3 +107,8 @@ export {
   type KpExactLinearRationalForm,
   type KpGovernedFractionSplitMergeVariation
 } from "./governed-fraction-split-merge-variation.ts";
+
+export {
+  createKpGovernedExponentAbsorptionFixture,
+  type KpGovernedExponentAbsorptionFixture
+} from "./governed-exponent-absorption-fixture.ts";

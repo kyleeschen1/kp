@@ -172,6 +172,13 @@
       "scope": "slice-19 governed fraction variation",
       "checkedAt": "2026-07-26T13:43:22.149Z",
       "notes": "Thirty-seven construction tests, one isolated Chromium proof, eleven canonical renderer ratchets, all TypeScript projects, and architecture gates pass. Exact 3y-plus-9 over 3 equality reaches existing split and merge renderer sessions with opacity-one lineage and stateless seek/rewind."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; focused exponent and radical tests; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-20 exponent absorption fixture",
+      "checkedAt": "2026-07-26T13:47:51.954Z",
+      "notes": "Forty canonical construction tests, twelve existing exponent/radical checks, all TypeScript projects, and architecture gates pass. Existing unit-exponent semantics compile through v2 and use only the generic elimination lifecycle; static and headless projections carry no session state."
     }
   ],
   "allowedWork": [
@@ -346,7 +353,8 @@
     {
       "id": "slice-20",
       "title": "exponent-absorption-fixture",
-      "status": "planned"
+      "summary": "Migrated the existing governed unit-exponent absorption trace into the canonical construction pipeline. Compiler-owned definition, strict law, roles, and removal lineage project through the existing reader material plan and generic elimination renderer session, with deterministic static and headless parity.",
+      "status": "complete"
     },
     {
       "id": "slice-21",
