@@ -390,11 +390,46 @@
       "scope": "slice 13 architecture boundaries",
       "checkedAt": "2026-07-26T17:51:58.470Z",
       "notes": "All architecture gates passed."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 14 radical product seams and fraction control",
+      "checkedAt": "2026-07-26T17:55:59.071Z",
+      "notes": "Ten Chromium tests passed. Semantic DOM and MathML remain native; material paint is inert and authority-free; pointer and keyboard focus, URL/share restoration, phone transcript fallback, and no route-owned Cloze/export fork are verified."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 14 learning and export preservation",
+      "checkedAt": "2026-07-26T17:56:00.059Z",
+      "notes": "34 focused tests passed, including governed radical hover/accessibility capability, generated card identity, iframe export, and static-step export semantics."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice 14 canonical renderer regression",
+      "checkedAt": "2026-07-26T17:56:01.041Z",
+      "notes": "11 canonical renderer tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 14 static typing",
+      "checkedAt": "2026-07-26T17:56:01.990Z",
+      "notes": "All TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 14 architecture boundaries",
+      "checkedAt": "2026-07-26T17:56:02.993Z",
+      "notes": "All architecture gates passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 13 proved radical time semantics through the existing reader clock: direct seek and repeated forward/rewind sampling reproduce exact paint frames, playback direction is reported correctly, reduced motion keeps finite canonical paint and exact endpoints, and the static no-JavaScript projection remains native and searchable."
+    "summary": "Slice 14 proved product seam preservation: native page MathML/selectors retain semantic authority; moving paint is inert and stripped; hover and keyboard focus bind through exact selectors; URL/share progress restores; the phone keeps the intended full-transcript fallback; generated Cloze/card and iframe/static-step exports remain existing authorities rather than route forks."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

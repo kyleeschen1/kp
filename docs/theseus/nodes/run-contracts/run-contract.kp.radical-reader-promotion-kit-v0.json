@@ -190,7 +190,8 @@
     {
       "id": "slice-14",
       "title": "prove-product-seams",
-      "status": "planned",
+      "summary": "Proved accessibility, focus, hover, URL/share, transcript, Cloze, generated-card, and export seams without semantic DOM mutation or a parallel artifact.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {

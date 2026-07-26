@@ -230,6 +230,87 @@ test("radical reduced and static projections preserve exact endpoints", async ({
   await staticContext.close();
 });
 
+test("radical reader preserves semantic DOM focus URLs and learning seams", async ({
+  page
+}) => {
+  await page.goto(route, { waitUntil: "networkidle" });
+  const stage = page.locator("[data-kp-reader-equation-stage]");
+  const active = stage.locator('[data-kp-reader-transition-active="true"]');
+  const material = active.locator(
+    ".kp-reader-canonical-equation-session-material"
+  );
+  const owners = material.locator("[data-kp-native-katex-scene-owner]");
+  await expect(material).toHaveAttribute("aria-hidden", "true");
+  await expect(material).toHaveAttribute("inert", "");
+  expect(await owners.count()).toBeGreaterThan(0);
+  for (const owner of await owners.all()) {
+    await expect(owner).toHaveAttribute("aria-hidden", "true");
+    await expect(owner).toHaveAttribute("inert", "");
+  }
+  await expect(material.locator([
+    "math",
+    ".katex-mathml",
+    "annotation",
+    "[role]",
+    "[tabindex]",
+    "[href]",
+    "[data-kp-reader-selector-id]",
+    "[data-kp-semantic-entity-id]"
+  ].join(","))).toHaveCount(0);
+  const native = active.locator("[data-kp-reader-equation-measurement]");
+  expect(await page.locator("math").count()).toBeGreaterThan(0);
+  expect(await native.locator(".katex-html").count()).toBeGreaterThan(0);
+  expect(await native.locator(
+    "[data-kp-reader-selector-id]"
+  ).count()).toBeGreaterThan(0);
+
+  const fractionBarLink = page.getByRole("button", {
+    name: "fraction bar"
+  });
+  await fractionBarLink.dispatchEvent("pointerover");
+  await expect(stage).toHaveAttribute("data-kp-reader-focus-source", "pointer");
+  await expect(native.locator(
+    '[data-kp-reader-selector-id$=".exponent-fraction-line"]'
+  ).first()).toHaveClass(/kp-reader-semantic-focus/);
+  await fractionBarLink.focus();
+  await expect(fractionBarLink).toBeFocused();
+  await expect(stage).toHaveAttribute("data-kp-reader-focus-source", "keyboard");
+  await expect(material.locator(".kp-reader-semantic-focus")).toHaveCount(0);
+
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  await seek(page, scrubber, 643);
+  await expect.poll(() =>
+    new URL(page.url()).searchParams.get("kpProgress")
+  ).toBe("643");
+  const share = page.locator("[data-kp-reader-share]");
+  await expect.poll(async () =>
+    new URL((await share.getAttribute("href"))!).searchParams.get("kpProgress")
+  ).toBe("643");
+  expect(new URL((await share.getAttribute("href"))!).pathname)
+    .toBe(routePath);
+  await page.reload({ waitUntil: "networkidle" });
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-progress",
+    "643"
+  );
+
+  // The reader reuses the generated card/export authority; it does not fork
+  // that contract into route-owned Cloze or export markup.
+  await expect(page.locator("[data-kp-cloze], [data-kp-export-artifact]"))
+    .toHaveCount(0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-responsive-projection",
+    "fallback"
+  );
+  await expect(page.getByRole("heading", {
+    name: "Follow the notation change"
+  })).toBeVisible();
+  await expect(page.getByRole("navigation", {
+    name: "Explanation controls"
+  })).toBeHidden();
+});
+
 async function seek(
   page: import("@playwright/test").Page,
   scrubber: import("@playwright/test").Locator,
