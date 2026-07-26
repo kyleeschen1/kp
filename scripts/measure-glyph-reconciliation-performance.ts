@@ -16,7 +16,9 @@ import {
 import { kpGlyphReconciliationExperimentLedger } from "../src/animation/semantic-glyph-reconciliation-experiment.ts";
 import {
   sampleKpNativeKatexSceneTracks,
-  type KpNativeKatexSceneTrack
+  sampleKpNativeKatexTypographyStylePlan,
+  type KpNativeKatexSceneTrack,
+  type KpNativeKatexTypographyStylePlan
 } from "../src/rendering/native-katex-scene-compositor.ts";
 
 const budgets = kpGlyphReconciliationExperimentLedger.budget;
@@ -85,6 +87,34 @@ for (let index = 0; index < 1_000; index += 1) {
   sampleKpNativeKatexSceneTracks(sceneTracks, index / 999);
 }
 const sceneFrameSampleP95Ms = (performance.now() - sceneSampleStart) / 1_000;
+const stylePlan: KpNativeKatexTypographyStylePlan = {
+  kind: "native-katex-typography-style-plan",
+  lifecycle: "renderer-session",
+  model: "target-style-reverse-flip",
+  entries: sceneTracks.map((track, index) => ({
+    id: `style.${track.id}`,
+    materialOwnerId: `owner.${track.id}`,
+    componentId: track.componentId,
+    atomLifecycle: track.lifecycle,
+    targetPaintAtomId: track.targetAtomId!,
+    paintKind: track.paintKind,
+    model: "target-style-reverse-flip",
+    currentRect: track.startRect,
+    targetRect: track.endRect,
+    inverseTranslateX: index % 3 - 1,
+    inverseTranslateY: index % 5 / 2,
+    inverseScaleX: 1 + index % 4 / 100,
+    inverseScaleY: 1 + index % 4 / 100,
+    targetPaintFingerprint: `paint.${index}`,
+    targetStyleFingerprint: `style.${index}`,
+    targetClipPath: "none"
+  }))
+};
+const styleSampleStart = performance.now();
+for (let index = 0; index < 1_000; index += 1) {
+  sampleKpNativeKatexTypographyStylePlan(stylePlan, index / 999);
+}
+const styleFrameSampleP95Ms = (performance.now() - styleSampleStart) / 1_000;
 const manifest = JSON.parse(
   await readFile("dist/.vite/manifest.json", "utf8")
 ) as Record<string, { file: string; name?: string }>;
@@ -103,6 +133,7 @@ const report = {
   cachedPlanP95Ms: Math.max(...cached),
   frameSampleP95Ms: Math.max(...samples),
   sceneFrameSampleP95Ms,
+  styleFrameSampleP95Ms,
   maxPlannerOperations: Math.max(...operations),
   serializedPlanMaxBytes: Math.max(...planBytes),
   routeGzipBytes,
@@ -114,6 +145,8 @@ const failures = [
   report.frameSampleP95Ms > budgets.maxFrameSampleP95Ms && "frame sample",
   report.sceneFrameSampleP95Ms > budgets.maxFrameSampleP95Ms &&
     "scene frame sample",
+  report.styleFrameSampleP95Ms > budgets.maxFrameSampleP95Ms &&
+    "style frame sample",
   report.maxPlannerOperations > budgets.maxPlannerOperations && "operations",
   report.serializedPlanMaxBytes > budgets.maxSerializedPlanBytes && "plan bytes",
   report.routeGzipGrowthBytes > budgets.maxRouteGzipGrowthBytes &&

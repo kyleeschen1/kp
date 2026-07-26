@@ -149,6 +149,13 @@
       "scope": "slice-12 inverse split regression",
       "checkedAt": "2026-07-26T00:31:26.081Z",
       "notes": "The focused inverse Chromium test passes source, midpoint, target, direct-seek/rewind, finite geometry, rule bifurcation, 99.9-percent native style and sub-0.1-pixel baseline, exact identity settlement, structural deferral, focus, Cloze, inert clone, and reduced-motion assertions. Forty-five focused tests, all TypeScript projects, and 46 stable captures pass. Manual wide source/midpoint/target review shows a coherent one-to-two split with no endpoint jump."
+    },
+    {
+      "command": "npm run build; npm run perf:glyph-reconciliation-experiment; npm run check:reader-production; npm run test:canonical-equation-renderer; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-13 performance and route boundary",
+      "checkedAt": "2026-07-26T00:33:42.421Z",
+      "notes": "Build and all TypeScript projects pass. Cold planning is 3.757 ms against 12 ms, cached 0.125 ms against 2 ms, frame sampling 0.004858 ms, 32-track scene sampling 0.008647 ms, and 32-entry style sampling 0.003815 ms against 1 ms. Maximum operations are 35 against 10000, serialized plan is 2573 bytes against 32768, route gzip growth is 5867 bytes against 12000, core source is within 120000, controller is below 40000, all architecture gates pass, and eight reader routes are production-closed."
     }
   ],
   "allowedWork": [
@@ -262,7 +269,8 @@
     {
       "id": "slice-13",
       "title": "performance-and-route-boundary",
-      "status": "planned"
+      "summary": "Extended the stable performance command to cover 32-entry typography style sampling. All frozen budgets pass with margin: 3.757-ms cold, 0.125-ms cached, 0.004858-ms frame, 0.008647-ms scene, 0.003815-ms style, 35 operations, 2573 serialized bytes, and 5867 gzip-growth bytes. Build, typecheck, optional chunks, source/controller ratchets, architecture, and eight-route production closure pass.",
+      "status": "complete"
     },
     {
       "id": "slice-14",
