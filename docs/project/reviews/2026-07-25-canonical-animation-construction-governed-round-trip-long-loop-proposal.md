@@ -1,7 +1,7 @@
 # Canonical animation construction and governed round-trip long-loop proposal
 
 Date: 2026-07-25
-Status: proposed; execution requires explicit approval
+Status: approved on 2026-07-25 for chained execution after predecessor close
 Predecessor:
 `run-contract.kp.canonical-equation-renderer-convergence-v1`
 Proposed target:

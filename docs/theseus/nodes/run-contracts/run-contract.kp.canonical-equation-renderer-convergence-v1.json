@@ -2,7 +2,8 @@
   "id": "run-contract.kp.canonical-equation-renderer-convergence-v1",
   "kind": "run-contract",
   "title": "Canonical equation renderer convergence",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -303,6 +304,27 @@
       "scope": "slice-27 renderer retirement and project-memory reconciliation",
       "checkedAt": "2026-07-26T05:06:56.384Z",
       "notes": "Canonical session naming is explicit from source through the production chunk. Five browser checks, six convergence ratchets, 18 retained legacy-reference tests, all TypeScript projects, architecture gates, eight production routes, build, and a 785-node workspace pass. Audit finds zero safe additional deletions and zero unclassified renderer paths."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "slice-28 initial full release suite",
+      "checkedAt": "2026-07-26T05:25:32.310Z",
+      "notes": "2429 of 2430 tests passed. One pre-existing choreography assertion still expected the superseded two-arc successor layout even though the approved generic successor law now keeps the complete source expression on one readable inline band."
+    },
+    {
+      "command": "focused successor choreography; npm test; canonical compositor Chromium; shared reader Chromium; glyph and canonical-reader visual entrypoints",
+      "status": "passed",
+      "scope": "slice-28 release gates completed before user pause",
+      "checkedAt": "2026-07-26T05:25:39.368Z",
+      "notes": "The stale two-arc assertion was aligned with the approved readable inline-source law. Eleven focused tests and all 2430 repository tests pass; 44 canonical compositor and nine reader conformance browser checks pass; the glyph suite captured 66 primary evidence frames plus the fraction checkpoint/whole-transit filmstrip, and the reader suite captured 32 wide/phone full/reduced frames with zero overflow and exclusive canonical paint at the migrated cancellation moment."
+    },
+    {
+      "command": "npm test; typecheck and build; canonical compositor and shared reader Chromium; canonical reader ownership Chromium; glyph, canonical-reader, and editor-reader visual entrypoints; performance; reader production closure; review-log audit; Theseus workspace validation",
+      "status": "passed",
+      "scope": "slice-28 final release and closeout",
+      "checkedAt": "2026-07-26T05:32:03.899Z",
+      "notes": "All 2430 repository tests, 44 canonical compositor, nine shared reader, and five canonical reader ownership checks pass. Visual suites captured the full glyph and reader matrices with zero reader overflow and exclusive canonical paint at the migrated moment. Cold-plan p95 is 1.78 ms, style-sample p95 0.022 ms, and route growth 5625 bytes, all inside frozen budgets. Eight production routes and the append-only review audit pass; no review status or cursor was mutated."
     }
   ],
   "allowedWork": [
@@ -506,7 +528,8 @@
     {
       "id": "slice-28",
       "title": "release-and-closeout",
-      "status": "planned"
+      "summary": "Canonical renderer convergence released PASS. Full unit, type, build, architecture, compositor, reader, visual, performance, production, review-audit, and workspace gates pass. The native-KaTeX session is canonical for the migrated gold transition; compatibility paint remains only for non-migrated transitions; the user approved the exact chained 30-slice canonical construction successor.",
+      "status": "complete"
     }
   ]
 }

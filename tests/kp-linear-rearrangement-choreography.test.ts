@@ -312,7 +312,7 @@ test("shared witnessed annihilation meets, witnesses, then compacts survivors", 
   );
 });
 
-test("constant operands travel independently on arcs before the derived result appears", () => {
+test("constant operands stay on one readable band before the derived result appears", () => {
   const geometry = {
     ...constantDerivationGeometry(),
     successorPresentationRecipe: "counter-convergence-v1" as const
@@ -329,7 +329,7 @@ test("constant operands travel independently on arcs before the derived result a
   );
   assert.ok(operands.every((token) => token.pose.opacity === 1));
   assert.ok(operands.every((token) => token.pose.scale >= 0.68));
-  assert.equal(new Set(operands.map((token) => token.pose.y)).size, 2);
+  assert.equal(new Set(operands.map((token) => token.pose.y)).size, 1);
   assert.equal(result?.pose.opacity, 0);
 
   const derived = sampleKpEquationTokenMotion(
@@ -344,14 +344,23 @@ test("constant operands travel independently on arcs before the derived result a
     (token) => token.side === "source" && token.motionId.startsWith("operand.")
   );
   assert.ok(arrivingOperands.every((token) => token.pose.opacity > 0));
-  const targetCenter = 72 + 12 / 2;
-  for (const token of arrivingOperands) {
+  const arrivingCenters = arrivingOperands.map((token) => {
     const native = geometry.sourceTokens.find(
       (candidate) => candidate.motionId === token.motionId
     )!;
-    const center = native.localRect.left + native.localRect.width / 2;
-    assert.ok(Math.abs(center + token.pose.x - targetCenter) <= 4.01);
-  }
+    return native.localRect.left + native.localRect.width / 2 + token.pose.x;
+  });
+  const nativeOperandCenters = geometry.sourceTokens
+    .filter((token) => token.motionId.startsWith("operand."))
+    .map((token) => token.localRect.left + token.localRect.width / 2);
+  assert.deepEqual(
+    [...arrivingCenters].sort((left, right) => left - right),
+    arrivingCenters
+  );
+  assert.ok(
+    Math.max(...arrivingCenters) - Math.min(...arrivingCenters) <
+    Math.max(...nativeOperandCenters) - Math.min(...nativeOperandCenters)
+  );
   assert.ok(Math.abs(derivedResult?.pose.y ?? 0) > 0.25);
   assert.ok(Math.abs(derivedResult?.pose.y ?? 0) < 3);
 });
