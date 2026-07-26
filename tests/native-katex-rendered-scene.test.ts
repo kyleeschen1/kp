@@ -21,7 +21,8 @@ import {
   reconcileKpNativeKatexScenes,
   reverseKpNativeKatexSemanticPaintRelations,
   selectKpNativeKatexTypographyRealizationDisposition,
-  sampleKpNativeKatexSceneTracks
+  sampleKpNativeKatexSceneTracks,
+  sampleKpNativeKatexTypographyStylePlan
 } from "../src/rendering/native-katex-scene-compositor.ts";
 import type {
   KpStageRelativeRect
@@ -597,6 +598,71 @@ test("realization disposition preserves every structural paint kind", () => {
       model: "native-checkpoint-settlement"
     }),
     "native-checkpoint"
+  );
+});
+
+test("style sampling is finite, reversible, and settles with zero velocity", () => {
+  const plan = {
+    kind: "native-katex-typography-style-plan" as const,
+    lifecycle: "renderer-session" as const,
+    model: "target-style-reverse-flip" as const,
+    entries: [{
+      id: "entry.paint",
+      materialOwnerId: "owner.paint",
+      componentId: "component.paint",
+      atomLifecycle: "persist" as const,
+      targetPaintAtomId: "target.paint",
+      paintKind: "glyph" as const,
+      model: "target-style-reverse-flip" as const,
+      currentRect: { left: 10, top: 20, width: 12, height: 24 },
+      targetRect: { left: 11, top: 19, width: 10, height: 20 },
+      inverseTranslateX: -1,
+      inverseTranslateY: 1.5,
+      inverseScaleX: 1.2,
+      inverseScaleY: 1.2,
+      targetPaintFingerprint: "paint",
+      targetStyleFingerprint: "style",
+      targetClipPath: "none"
+    }]
+  };
+  const progresses = [0, 0.25, 0.5, 0.75, 1];
+  const forward = progresses.map((progress) =>
+    sampleKpNativeKatexTypographyStylePlan(plan, progress)
+  );
+  const reverse = [...progresses].reverse().map((progress) =>
+    sampleKpNativeKatexTypographyStylePlan(plan, progress)
+  );
+
+  assert.deepEqual(reverse, [...forward].reverse());
+  assert.deepEqual(forward[0]?.entries[0], {
+    id: "entry.paint",
+    translateX: -1,
+    translateY: 1.5,
+    scaleX: 1.2,
+    scaleY: 1.2
+  });
+  assert.deepEqual(forward.at(-1)?.entries[0], {
+    id: "entry.paint",
+    translateX: 0,
+    translateY: 0,
+    scaleX: 1,
+    scaleY: 1
+  });
+  assert.equal(forward.every((frame) =>
+    Object.values(frame.entries[0]!).every((value) =>
+      typeof value === "string" || Number.isFinite(value)
+    ) &&
+    !("opacity" in frame.entries[0]!)
+  ), true);
+  const at = (progress: number) =>
+    sampleKpNativeKatexTypographyStylePlan(plan, progress)
+      .entries[0]!.translateY;
+  assert.ok(Math.abs(at(1) - at(0.999)) < Math.abs(at(0.999) - at(0.998)));
+  assert.equal(sampleKpNativeKatexTypographyStylePlan(plan, -1).progress, 0);
+  assert.equal(sampleKpNativeKatexTypographyStylePlan(plan, 2).progress, 1);
+  assert.throws(
+    () => sampleKpNativeKatexTypographyStylePlan(plan, Number.NaN),
+    /style progress must be finite/
   );
 });
 

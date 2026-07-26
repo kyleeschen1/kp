@@ -19,6 +19,7 @@ import {
   measureKpNativeKatexRuleHandoff,
   reconcileKpNativeKatexScenes,
   realizeKpNativeKatexTypographyStylePlan,
+  sampleKpNativeKatexTypographyStylePlan,
   traceKpNativeKatexHandoffOwnership
 } from "../rendering/native-katex-scene-compositor.ts";
 
@@ -100,6 +101,19 @@ export async function createKpFractionExperimentScene(input: {
     fontRevision: input.fontReadiness.revision,
     viewportKey: targetScene.viewportKey
   };
+  const typographyStart = 0.96;
+  playback.apply(typographyStart);
+  const typographyPlan = compileKpNativeKatexTypographyStylePlan({
+    telemetry: measureKpNativeKatexCorrelatedHandoff({
+      ...microscope,
+      progress: typographyStart
+    }),
+    correlations,
+    tolerancePx: 0.1,
+    maximumTranslationPx: 2,
+    maximumScaleRatio: 1.1
+  });
+  playback.apply(0);
 
   return Object.freeze({
     direction: input.direction,
@@ -115,6 +129,7 @@ export async function createKpFractionExperimentScene(input: {
       paintKind === "rule"
     )),
     playback,
+    typographyPlan,
     measureGlyphHandoff(progress: number) {
       playback.apply(progress);
       return measureKpNativeKatexGlyphHandoff({
@@ -137,24 +152,24 @@ export async function createKpFractionExperimentScene(input: {
       });
     },
     realizeTypographyHandoff(progress: number) {
-      playback.apply(progress);
-      const telemetry = measureKpNativeKatexCorrelatedHandoff({
-        ...microscope,
-        progress
-      });
-      const plan = compileKpNativeKatexTypographyStylePlan({
-        telemetry,
-        correlations,
-        tolerancePx: 0.1,
-        maximumTranslationPx: 2,
-        maximumScaleRatio: 1.1
-      });
+      const ownership = playback.apply(progress);
+      const styleProgress = Math.max(
+        0,
+        Math.min(1, (progress - typographyStart) / (1 - typographyStart))
+      );
+      const styleFrame = sampleKpNativeKatexTypographyStylePlan(
+        typographyPlan,
+        styleProgress
+      );
       return {
-        plan,
+        ownership,
+        plan: typographyPlan,
+        styleFrame,
         realization: realizeKpNativeKatexTypographyStylePlan({
           stage: input.stage,
           target: targetScene,
-          plan
+          plan: typographyPlan,
+          frame: styleFrame
         })
       };
     },

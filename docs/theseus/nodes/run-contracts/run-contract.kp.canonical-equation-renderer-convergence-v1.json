@@ -128,6 +128,13 @@
       "scope": "slice-09 structural and SVG preservation",
       "checkedAt": "2026-07-26T00:18:12.048Z",
       "notes": "Forty-four focused tests, two Chromium checks across normal and reduced motion plus wide and phone HTML realization, five convergence ratchets, and all TypeScript projects pass. The five-kind decision table routes rule, path, delimiter, and accent paint to preserve-structural-paint; the fraction rule reports that disposition; radical path data and source rule geometry remain exact and receive no typography model marker."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor -- --grep target-style realization; npm run test:canonical-equation-renderer; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-10 style-aware scene sampling",
+      "checkedAt": "2026-07-26T00:22:58.291Z",
+      "notes": "Forty-five focused tests, the wide and phone dense Chromium style/ownership matrix, five convergence ratchets, and all TypeScript projects pass. Forward and reverse direct seeks match at six samples from 0.96 through 1.0; owner opacities sum to one; style frames contain no opacity; all values are finite; smoothstep endpoint velocity tends to zero; and the final frame is exact identity under target-native ownership."
     }
   ],
   "allowedWork": [
@@ -223,7 +230,8 @@
     {
       "id": "slice-10",
       "title": "style-aware-scene-sampling",
-      "status": "planned"
+      "summary": "Integrated immutable typography-frame sampling with the existing scene clock and ownership law. The bounded endpoint window samples only inverse translation and scale, has no crossfade channel, is finite and direct-seek/rewind identical, approaches zero velocity, and reaches exact identity before target-native takeover. Wide and phone Chromium evidence and 45 focused tests pass within the frozen source ceiling.",
+      "status": "complete"
     },
     {
       "id": "slice-11",

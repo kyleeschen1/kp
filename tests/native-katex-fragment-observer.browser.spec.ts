@@ -1551,6 +1551,12 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
       const api = (window as unknown as {
         __kpApplyFractionSceneFrame: (progress: number) => unknown;
         __kpRealizeFractionTypographyHandoff: (progress: number) => {
+          ownership: {
+            visualOwner: string;
+            sourceNativeOpacity: number;
+            materialSceneOpacity: number;
+            targetNativeOpacity: number;
+          };
           plan: {
             model: string;
             entries: readonly {
@@ -1559,6 +1565,16 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
               paintKind: string;
               model: string;
               targetStyleFingerprint: string;
+            }[];
+          };
+          styleFrame: {
+            progress: number;
+            entries: readonly {
+              id: string;
+              translateX: number;
+              translateY: number;
+              scaleX: number;
+              scaleY: number;
             }[];
           };
           realization: {
@@ -1582,16 +1598,7 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
       )!;
       const sourceBefore = source.outerHTML;
       const targetBefore = target.outerHTML;
-      const first = realize(0.999);
-      const firstVisuals = new Map(first.plan.entries.flatMap((entry) => {
-        if (!first.realization.realizedIds.includes(entry.id)) return [];
-        const owner = document.querySelector<HTMLElement>(
-          `[data-kp-equation-material-owner-id="${
-            CSS.escape(entry.materialOwnerId)
-          }"]`
-        )!;
-        return [[entry.id, owner.firstElementChild!] as const];
-      }));
+      realize(0.999);
       const second = realize(0.999);
       const owners = second.plan.entries.flatMap((entry) => {
         if (!second.realization.realizedIds.includes(entry.id)) return [];
@@ -1622,7 +1629,8 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
           paintKind: entry.paintKind,
           model: entry.model,
           targetStyleFingerprint: entry.targetStyleFingerprint,
-          visualReused: firstVisuals.get(entry.id) === visual,
+          visualRevision:
+            owner.dataset["kpEquationMaterialVisualRevision"] ?? null,
           inert: owner.hasAttribute("inert"),
           ariaHidden: owner.getAttribute("aria-hidden"),
           forbiddenAuthority,
@@ -1635,6 +1643,17 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
           fontSize: getComputedStyle(visual).fontSize
         }];
       });
+      const progresses = [0.96, 0.97, 0.98, 0.99, 0.999, 1];
+      const sample = (progress: number) => {
+        const result = realize(progress);
+        return {
+          progress,
+          ownership: result.ownership,
+          styleFrame: result.styleFrame
+        };
+      };
+      const forward = progresses.map(sample);
+      const reverse = [...progresses].reverse().map(sample).reverse();
       return {
         sourceUnchanged: source.outerHTML === sourceBefore,
         targetUnchanged: target.outerHTML === targetBefore,
@@ -1643,6 +1662,8 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
         realizedIds: second.realization.realizedIds,
         deferredIds: second.realization.deferredIds,
         deferred: second.realization.deferred,
+        forward,
+        reverse,
         owners
       };
     });
@@ -1656,10 +1677,38 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
     expect(evidence.deferred.every(({ disposition }) =>
       disposition === "preserve-structural-paint"
     )).toBe(true);
+    expect(evidence.reverse).toEqual(evidence.forward);
+    expect(evidence.forward.map(({ ownership }) => ownership.visualOwner))
+      .toEqual([
+        "material-scene",
+        "material-scene",
+        "material-scene",
+        "material-scene",
+        "material-scene",
+        "target-native"
+      ]);
+    expect(evidence.forward.every(({ ownership, styleFrame }) =>
+      ownership.sourceNativeOpacity +
+        ownership.materialSceneOpacity +
+        ownership.targetNativeOpacity === 1 &&
+      styleFrame.entries.every((entry) =>
+        Object.entries(entry).every(([key, value]) =>
+          key === "id" ||
+          (typeof value === "number" && Number.isFinite(value))
+        ) &&
+        !("opacity" in entry)
+      )
+    )).toBe(true);
+    expect(evidence.forward.at(-1)?.styleFrame.entries.every((entry) =>
+      entry.translateX === 0 &&
+      entry.translateY === 0 &&
+      entry.scaleX === 1 &&
+      entry.scaleY === 1
+    )).toBe(true);
     expect(evidence.owners.every((owner) =>
       owner.paintKind === "glyph" &&
       owner.model === "target-style-reverse-flip" &&
-      owner.visualReused &&
+      owner.visualRevision?.startsWith("target:") &&
       owner.inert &&
       owner.ariaHidden === "true" &&
       owner.forbiddenAuthority.length === 0 &&

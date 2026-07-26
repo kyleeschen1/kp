@@ -45,13 +45,13 @@ export function syncKpEquationMaterialLayer(input: {
       owner.className = "editor-equation-stage__material-owner";
       owner.dataset["kpEquationMaterialOwnerId"] = frame.ownerId;
       owner.setAttribute("aria-hidden", "true");
-      setKpEquationMaterialOwnerVisual({
-        owner,
-        sourceElement: frame.sourceElement,
-        revisionKey: `source:${frame.ownerId}`
-      });
       layer.append(owner);
     }
+    setKpEquationMaterialOwnerVisual({
+      owner,
+      sourceElement: frame.sourceElement,
+      revisionKey: `source:${frame.ownerId}`
+    });
     const visual = owner.firstElementChild as HTMLElement | null;
     if (visual !== null) {
       visual.classList.toggle(

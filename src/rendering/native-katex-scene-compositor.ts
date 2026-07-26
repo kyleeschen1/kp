@@ -221,6 +221,19 @@ export interface KpNativeKatexTypographyStylePlan {
   readonly entries: readonly KpNativeKatexTypographyStylePlanEntry[];
 }
 
+export interface KpNativeKatexTypographyStyleFrame {
+  readonly kind: "native-katex-typography-style-frame";
+  readonly lifecycle: "renderer-session";
+  readonly progress: number;
+  readonly entries: readonly {
+    readonly id: string;
+    readonly translateX: number;
+    readonly translateY: number;
+    readonly scaleX: number;
+    readonly scaleY: number;
+  }[];
+}
+
 export interface KpNativeKatexTypographyRealization {
   readonly kind: "native-katex-typography-realization";
   readonly lifecycle: "renderer-session";
@@ -1170,12 +1183,43 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
   });
 }
 
+export function sampleKpNativeKatexTypographyStylePlan(
+  plan: KpNativeKatexTypographyStylePlan,
+  progress: number
+): KpNativeKatexTypographyStyleFrame {
+  if (!Number.isFinite(progress)) {
+    throw new Error("Typography style progress must be finite.");
+  }
+  const bounded = Math.max(0, Math.min(1, progress));
+  const eased = smoothstep(bounded);
+  return Object.freeze({
+    kind: "native-katex-typography-style-frame",
+    lifecycle: "renderer-session",
+    progress: bounded,
+    entries: Object.freeze(plan.entries.map((entry) => Object.freeze({
+      id: entry.id,
+      translateX: lerp(entry.inverseTranslateX, 0, eased),
+      translateY: lerp(entry.inverseTranslateY, 0, eased),
+      scaleX: lerp(entry.inverseScaleX, 1, eased),
+      scaleY: lerp(entry.inverseScaleY, 1, eased)
+    })))
+  });
+}
+
 export function realizeKpNativeKatexTypographyStylePlan(input: {
   readonly stage: HTMLElement;
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly plan: KpNativeKatexTypographyStylePlan;
+  readonly frame?: KpNativeKatexTypographyStyleFrame | undefined;
 }): KpNativeKatexTypographyRealization {
   const targetById = new Map(input.target.atoms.map((atom) => [atom.id, atom]));
+  const frameById = new Map(
+    (input.frame ?? sampleKpNativeKatexTypographyStylePlan(input.plan, 0))
+      .entries.map((entry) => [entry.id, entry])
+  );
+  if (frameById.size !== input.plan.entries.length) {
+    throw new Error("Typography realization requires one style frame per entry.");
+  }
   const realizedIds: string[] = [];
   const deferredIds: string[] = [];
   const deferred: Array<
@@ -1203,6 +1247,10 @@ export function realizeKpNativeKatexTypographyStylePlan(input: {
         `Typography realization cannot find renderer paint for ${entry.id}.`
       );
     }
+    const frame = frameById.get(entry.id);
+    if (frame === undefined) {
+      throw new Error(`Typography realization has no style frame for ${entry.id}.`);
+    }
     setKpEquationMaterialOwnerVisual({
       owner,
       sourceElement: target.sourceElement,
@@ -1215,8 +1263,8 @@ export function realizeKpNativeKatexTypographyStylePlan(input: {
     owner.style.height = `${entry.targetRect.height}px`;
     owner.style.transformOrigin = "0 0";
     owner.style.transform =
-      `translate(${entry.inverseTranslateX}px, ${entry.inverseTranslateY}px) ` +
-      `scale(${entry.inverseScaleX}, ${entry.inverseScaleY})`;
+      `translate(${frame.translateX}px, ${frame.translateY}px) ` +
+      `scale(${frame.scaleX}, ${frame.scaleY})`;
     owner.dataset["kpNativeKatexTypographyModel"] = entry.model;
     realizedIds.push(entry.id);
   }
