@@ -2,15 +2,9 @@ import type {
   KpNativeKatexSceneReconciliation,
   KpNativeKatexSceneTrack
 } from "./native-katex-scene-compositor.ts";
-
-export interface KpNativeKatexStructuralSuccessionIntent {
-  readonly kind: "native-katex-structural-succession-intent";
-  readonly id: string;
-  readonly motifKind: string;
-  readonly sourceEntityIds: readonly string[];
-  readonly targetEntityIds: readonly string[];
-  readonly actPhaseIds: readonly string[];
-}
+import type {
+  KpEquationStructuralSuccessionIntent
+} from "../animation/structural-succession-presentation.ts";
 
 export type KpNativeKatexStructuralSuccessionStrategy =
   | {
@@ -51,7 +45,7 @@ export interface KpNativeKatexChoreographyFidelityReport {
  * otherwise degrade into technically complete but pedagogically empty fades.
  */
 export function auditKpNativeKatexChoreographyFidelity(input: {
-  readonly intent: KpNativeKatexStructuralSuccessionIntent;
+  readonly intent: KpEquationStructuralSuccessionIntent;
   readonly strategy: KpNativeKatexStructuralSuccessionStrategy;
   readonly reconciliation: KpNativeKatexSceneReconciliation;
   readonly tracks: readonly KpNativeKatexSceneTrack[];

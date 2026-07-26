@@ -129,6 +129,14 @@ export const defaultEquationTransformVisualMotifRules:
     }
   ];
 
+export function resolveDefaultEquationTransformVisualMotifRule(
+  transformationKind: string
+): EquationTransformVisualMotifRule | undefined {
+  return defaultEquationTransformVisualMotifRules.find(
+    (rule) => rule.transformationKind === transformationKind
+  );
+}
+
 export interface CheckGeneratedAlgebraEquationVisualMotifDefaultCoverageInput {
   readonly definitions?: readonly GeneratedAlgebraTransformDefinition[] | undefined;
   readonly rules?: readonly EquationTransformVisualMotifRule[] | undefined;

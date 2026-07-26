@@ -513,11 +513,25 @@
       "scope": "slice16 oracle and choreography fidelity gate",
       "checkedAt": "2026-07-26T19:48:50.850Z",
       "notes": "Application, node, test, and domain type checks pass."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice16 structural succession compiler",
+      "checkedAt": "2026-07-26T19:52:47.378Z",
+      "notes": "39 focused tests pass; reader plans preserve default motif intent and exact compiler-owned radical structural source/target entities while ordinary transitions remain strategy-free."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice16 structural succession compiler",
+      "checkedAt": "2026-07-26T19:52:48.312Z",
+      "notes": "All TypeScript projects and architecture boundaries pass; presentation specificity remains in compile-time registration rather than renderer DOM inference."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 16 subphase 2 complete: the promotion oracle now rejects fade-only atom tracks for structural succession and accepts only a real structural strategy or explicit checkpoint settlement."
+    "summary": "Slice 16 subphase 3 complete: canonical reader render plans now retain motif and structural-succession intent from semantic compilation instead of collapsing it to paint arity."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

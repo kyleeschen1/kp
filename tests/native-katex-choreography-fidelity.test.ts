@@ -36,7 +36,7 @@ const tracks = [
   }
 ] as unknown as readonly KpNativeKatexSceneTrack[];
 const intent = {
-  kind: "native-katex-structural-succession-intent" as const,
+  kind: "equation-structural-succession-intent" as const,
   id: "intent.power-as-root",
   motifKind: "radical-corner-transfer",
   sourceEntityIds,

@@ -10,6 +10,14 @@ import {
   compileKpSemanticEquationTransitionResult,
   type KpSemanticEquationTransitionCompileDiagnostic
 } from "../../domain-ir/public-api.ts";
+import {
+  resolveDefaultEquationTransformVisualMotifRule
+} from "../../animation/motifs/equation-visual-motif-defaults.ts";
+import {
+  compileKpEquationStructuralSuccessionIntent,
+  type KpEquationStructuralSuccessionIntent,
+  type KpEquationVisualMotifIntent
+} from "../../animation/structural-succession-presentation.ts";
 
 export interface KpReaderEquationRenderPlan {
   readonly id: string;
@@ -31,6 +39,9 @@ export interface KpReaderEquationTransitionPlan {
   readonly source: readonly KpReaderEquationStatePlan[];
   readonly target: readonly KpReaderEquationStatePlan[];
   readonly relations: readonly KpReaderEquationRelationPlan[];
+  readonly visualMotif?: KpEquationVisualMotifIntent | undefined;
+  readonly structuralSuccession?:
+    KpEquationStructuralSuccessionIntent | undefined;
   readonly semanticStatus: "ready" | "fallback";
   readonly semanticDiagnostics: readonly KpSemanticEquationTransitionCompileDiagnostic[];
 }
@@ -124,6 +135,27 @@ export function projectKpReaderEquationRenderPlan(input: {
     }
 
     const forward = input.runtimeFrame.clock.direction === "forward";
+    const visualMotifRule = resolveDefaultEquationTransformVisualMotifRule(
+      transformation.transformType
+    );
+    const visualMotif = visualMotifRule === undefined
+      ? undefined
+      : {
+          kind: visualMotifRule.descriptor.kind,
+          motionPrimitiveIds: [
+            ...visualMotifRule.descriptor.motionPrimitiveIds
+          ],
+          phaseIds: [...visualMotifRule.descriptor.phaseIds],
+          summary:
+            visualMotifRule.summary ?? visualMotifRule.descriptor.summary
+        };
+    const structuralSuccession = visualMotif === undefined
+      ? undefined
+      : compileKpEquationStructuralSuccessionIntent({
+          transformation,
+          motif: visualMotif,
+          direction: input.runtimeFrame.clock.direction
+        });
     transitions.push({
       id: transformation.id,
       title: transformation.title,
@@ -139,6 +171,10 @@ export function projectKpReaderEquationRenderPlan(input: {
       relations: compiled.ir.relations.map((relation) =>
         projectRelation(relation, forward)
       ),
+      ...(visualMotif === undefined ? {} : { visualMotif }),
+      ...(structuralSuccession === undefined
+        ? {}
+        : { structuralSuccession }),
       semanticStatus: compiled.status === "semantic" ? "ready" : "fallback",
       semanticDiagnostics: compiled.diagnostics.map((diagnostic) => ({
         ...diagnostic
