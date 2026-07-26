@@ -88,6 +88,13 @@
       "scope": "slice-09 no-fade-structural-realization",
       "checkedAt": "2026-07-26T06:20:43.621Z",
       "notes": "Seven canonical renderer checks, 101 dense opacity samples, all TypeScript projects, and 44 Chromium compositor tests pass; frozen source ceiling retained."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer; font readiness Chromium; focused font lifecycle and endpoint capture",
+      "status": "passed",
+      "scope": "slice-10 native-size-and-font-readiness",
+      "checkedAt": "2026-07-26T06:22:42.966Z",
+      "notes": "Nine renderer/readiness ratchets, one Chromium font invalidation test, and two lifecycle/endpoint checks pass; source ceiling and no-notation-exception gate remain green."
     }
   ],
   "allowedWork": [
@@ -195,7 +202,9 @@
     {
       "id": "slice-10",
       "title": "native-size-and-font-readiness",
-      "status": "planned"
+      "summary": "Certified generic native sizing and readiness: session invalidation keys include font revision and surface dimensions, reader font/resize events schedule remeasurement, and native style/DPR fingerprints remain authoritative.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-11",
