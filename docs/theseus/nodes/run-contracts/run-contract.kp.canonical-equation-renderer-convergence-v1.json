@@ -268,6 +268,13 @@
       "scope": "slice-23 duplicate path removal",
       "checkedAt": "2026-07-26T03:41:47.203Z",
       "notes": "The kpGlyphCompositor query selector is absent from runtime and capture sources; policy temporary renderer count and ceiling are both zero. The migrated transition skips legacy frame construction and clears its legacy layer before the canonical session owns paint. Other lesson variants retain their existing renderer. Eighteen Chromium cases, six ratchets, four route budget checks, eight production routes, architecture, typecheck, and build pass; reader entry gzip decreased from 13.25 to 13.23 kB."
+    },
+    {
+      "command": "npm run visual:reader-glyph-compositor; npm run visual:reader-gold-parity; manual image inspection",
+      "status": "passed",
+      "scope": "slice-24 reader human-checkpoint evidence",
+      "checkedAt": "2026-07-26T03:49:57.387Z",
+      "notes": "The stable reader command now publishes the contract's full 32-frame matrix: eight named moments across wide/phone and full/reduced motion. Every capture has zero overflow. At the migrated cancellation-meet frame all four variants have nine canonical owners and zero legacy owners; start/final native states are exact and the phone layout is composed. The parity command publishes eight editor and eight reader frames. Manual review finds the migrated cancellation stack clear and stable; the later successor-convergence frame remains visibly compressed as x = 7 with a subscript-like 3, but report data confirms that moment is still on the intentionally non-migrated legacy path, not the canonical session. Human approval must explicitly accept or reject promotion with that retained baseline issue understood."
     }
   ],
   "allowedWork": [
@@ -447,7 +454,8 @@
     {
       "id": "slice-24",
       "title": "mandatory-reader-human-checkpoint",
-      "status": "planned"
+      "summary": "Published and inspected 32 default-reader captures covering eight named moments at wide/phone and full/reduced motion, plus eight-frame editor-reader parity evidence. All captures have zero overflow; the migrated cancellation moment has exclusive canonical paint in every projection and clear phone composition; native start/final and accessibility gates remain intact. The later compressed successor-convergence image is a retained non-migrated legacy-path issue and is called out for the mandatory human decision. Stop now for explicit approval before slice 25.",
+      "status": "complete"
     },
     {
       "id": "slice-25",
