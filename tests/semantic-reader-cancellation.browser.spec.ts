@@ -33,23 +33,17 @@ test("canonical reader selects counter-orbit cancellation without enabling legac
     "[data-kp-reader-independent-zero-witness]"
   );
   await expect(independentZero).toHaveCSS("opacity", "0");
-
-  const plusThree = page.locator(
-    '[data-kp-reader-equation-material-fragment-id*="after-subtract.lhs.plus3"]'
+  const guidedPaint = page.locator(
+    '[data-kp-native-katex-scene-owner][data-kp-reader-motion-guided="true"]'
   );
-  const minusThree = page.locator(
-    '[data-kp-reader-equation-material-fragment-id*="after-subtract.lhs.minus3"]'
-  );
-  await expect(plusThree).toBeVisible();
-  await expect(minusThree).toBeVisible();
-  const plusBounds = await plusThree.boundingBox();
-  const minusBounds = await minusThree.boundingBox();
-  expect(plusBounds).not.toBeNull();
-  expect(minusBounds).not.toBeNull();
-  const plusCenterY = plusBounds!.y + plusBounds!.height / 2;
-  const minusCenterY = minusBounds!.y + minusBounds!.height / 2;
-  expect(plusCenterY).toBeLessThan(minusCenterY);
-  expect(minusCenterY - plusCenterY).toBeGreaterThan(12);
+  expect(await guidedPaint.count()).toBeGreaterThanOrEqual(4);
+  const centers = await guidedPaint.evaluateAll((owners) => owners.map(
+    (owner) => {
+      const rect = owner.getBoundingClientRect();
+      return rect.top + rect.height / 2;
+    }
+  ));
+  expect(Math.max(...centers) - Math.min(...centers)).toBeGreaterThan(12);
 
   await page.goto(
     "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1&kpProgress=620"

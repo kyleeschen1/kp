@@ -97,7 +97,10 @@ const readerRoute = createKpReaderRuntimeRouteDescriptor({
   documentId: requiredData(document.body, "kpReaderDocumentId"),
   documentVersion: requiredData(document.body, "kpReaderDocumentVersion")
 });
+const { documentId, documentVersion } = readerRoute;
+const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
 const readerGlyphCompositorRequested =
+  lessonVariant === "streamlined" ||
   new URL(window.location.href).searchParams.get("kpGlyphCompositor") === "1";
 const readerGlyphCompositorModule = readerGlyphCompositorRequested
   ? await import("./reader-glyph-compositor-exemplar.ts")
@@ -105,8 +108,6 @@ const readerGlyphCompositorModule = readerGlyphCompositorRequested
 const readerGlyphCompositorAdapter = readerGlyphCompositorRequested
   ? await loadKpReaderEquationSceneCompositorAdapter()
   : undefined;
-const { documentId, documentVersion } = readerRoute;
-const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
 const lessonDescriptor = resolveKpReaderEquationLessonDescriptor(lessonVariant);
 const compiledEquationPresentation = defineKpReaderEquationPresentationCapability({
   defaultProfileId: resolveKpReaderEquationPresentationProfile(
@@ -643,7 +644,8 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     materialPlan: context.materialPlan,
     fitSurface: context.fitSurface,
     progress: phaseProgress,
-    fontReadiness
+    fontReadiness,
+    motion
   }) ?? false;
   if (readerCompositorApplied) {
     materialLayer.sync([]);

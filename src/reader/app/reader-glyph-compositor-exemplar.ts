@@ -7,8 +7,17 @@ import type {
 import {
   type KpReaderEquationMaterialPlan,
   type KpReaderEquationRenderPlan,
-  type KpReaderEquationSceneCompositorFactory
+  type KpReaderEquationSceneCompositorFactory,
+  type KpReaderEquationSymbolMotionFrame
 } from "../renderers/public-api.ts";
+
+interface PaintBinding {
+  readonly ownerId: string;
+  readonly endpoint: "source" | "target";
+  readonly semanticEntityId: string;
+  readonly rect: { readonly left: number; readonly top: number;
+    readonly width: number; readonly height: number };
+}
 
 export interface KpReaderGlyphCompositorExemplar {
   readonly transitionId: string;
@@ -18,6 +27,7 @@ export interface KpReaderGlyphCompositorExemplar {
     readonly fitSurface: HTMLElement;
     readonly progress: number;
     readonly fontReadiness: KpEquationFontReadiness;
+    readonly motion: KpReaderEquationSymbolMotionFrame;
   }) => boolean;
   readonly invalidate: () => void;
   readonly dispose: () => void;
@@ -31,6 +41,7 @@ export function createKpReaderGlyphCompositorExemplar(input: {
     ReturnType<KpReaderEquationSceneCompositorFactory> | undefined;
   let sessionKey: string | undefined;
   let materialLayer: HTMLElement | undefined;
+  let paintBindings: readonly PaintBinding[] = [];
 
   return {
     transitionId: input.transitionId,
@@ -78,9 +89,24 @@ export function createKpReaderGlyphCompositorExemplar(input: {
           source,
           target
         });
+        const atomsById = new Map([...source.atoms, ...target.atoms].map(
+          (atom) => [atom.id, atom]
+        ));
+        paintBindings = session.tracks.map((track) => {
+          const atom = atomsById.get(track.visualAtomId)!;
+          return {
+            ownerId: `native-scene-owner.${track.id}`,
+            endpoint: atom.endpoint,
+            semanticEntityId: atom.semanticEntityId,
+            rect: atom.rect
+          };
+        });
         sessionKey = nextKey;
       }
       const ownership = session.apply(frame.progress);
+      if (ownership.materialSceneOpacity === 1) {
+        applyReaderMotionTrace(frame, paintBindings, input.transitionId);
+      }
       frame.fitSurface.dataset["kpReaderGlyphCompositor"] = "active";
       frame.fitSurface.dataset["kpReaderGlyphCompositorLifecycle"] =
         session.lifecycle;
@@ -93,14 +119,76 @@ export function createKpReaderGlyphCompositorExemplar(input: {
     invalidate: () => {
       session = undefined;
       sessionKey = undefined;
+      paintBindings = [];
     },
     dispose: () => {
       session = undefined;
       sessionKey = undefined;
+      paintBindings = [];
       materialLayer?.remove();
       materialLayer = undefined;
     }
   };
+}
+
+function applyReaderMotionTrace(
+  frame: {
+    readonly materialPlan: KpReaderEquationMaterialPlan;
+    readonly fitSurface: HTMLElement;
+    readonly motion: KpReaderEquationSymbolMotionFrame;
+  },
+  bindings: readonly PaintBinding[],
+  transitionId: string
+): void {
+  const transition = frame.materialPlan.transitions.find(
+    (candidate) => candidate.transitionId === transitionId
+  );
+  if (transition === undefined) return;
+  const anchors = new Map(transition.anchors.map((anchor) => [
+    `${anchor.side}:${anchor.selectorId}`,
+    anchor.id
+  ]));
+  const poses = new Map(frame.motion.owners.flatMap((owner) =>
+    owner.fragmentPoses.map((fragment) => [
+      fragment.anchorId,
+      { materialOpacity: owner.materialOpacity, pose: fragment.pose }
+    ] as const)
+  ));
+  for (const binding of bindings) {
+    const anchorId = anchors.get(
+      `${binding.endpoint}:${binding.semanticEntityId}`
+    );
+    const guided = anchorId === undefined ? undefined : poses.get(anchorId);
+    if (guided === undefined) continue;
+    const owner = frame.fitSurface.querySelector<HTMLElement>(
+      `[data-kp-equation-material-owner-id="${CSS.escape(binding.ownerId)}"]`
+    );
+    if (owner === null) continue;
+    const { pose, materialOpacity } = guided;
+    const depth = pose.depth;
+    owner.style.left = `${binding.rect.left}px`;
+    owner.style.top = `${binding.rect.top}px`;
+    owner.style.width = `${binding.rect.width}px`;
+    owner.style.height = `${binding.rect.height}px`;
+    owner.style.opacity = String(materialOpacity * pose.opacity);
+    owner.style.transformOrigin = "center center";
+    owner.style.transform =
+      `translate(${pose.x}px, ${pose.y + (depth?.translateY ?? 0)}px) ` +
+      `rotate(${pose.rotate ?? 0}deg) ` +
+      `scale(${pose.scaleX ?? pose.scale}, ${pose.scale})`;
+    owner.style.filter = depth === undefined || depth.shadowOpacity === 0
+      ? "none"
+      : `drop-shadow(0 1px ${depth.shadowBlurPx}px ` +
+        `rgba(35, 46, 58, ${depth.shadowOpacity}))`;
+    owner.style.zIndex = String(depth?.layer ?? 0);
+    owner.dataset["kpReaderMotionGuided"] = "true";
+    if (depth === undefined) {
+      delete owner.dataset["kpReaderEquationSemanticDepth"];
+    } else {
+      owner.dataset["kpReaderEquationSemanticDepth"] =
+        String(depth.elevation);
+    }
+  }
 }
 
 function bindReaderPaintOwnership(

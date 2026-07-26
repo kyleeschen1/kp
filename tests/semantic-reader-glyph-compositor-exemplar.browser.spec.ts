@@ -2,7 +2,10 @@ import { expect, test } from "@playwright/test";
 
 const route =
   "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1" +
-  "&kpProgress=500&kpGlyphCompositor=1";
+  "&kpProgress=500";
+const otherRoute =
+  "/reader/solve-x/teacher-zero/?kpLesson=" +
+  "lesson.solve-x.x-plus-3.teacher-zero&kpVersion=1&kpProgress=500";
 
 test("one gold reader card uses the generic glyph compositor session", async ({
   page
@@ -54,7 +57,7 @@ test("one gold reader card uses the generic glyph compositor session", async ({
   )).toEqual([]);
 });
 
-test("reader glyph compositor is opt-in and supports reduced motion", async ({
+test("default reader glyph compositor supports reduced motion", async ({
   page
 }) => {
   await page.goto(`${route}&kpMotion=reduced`);
@@ -68,7 +71,7 @@ test("reader glyph compositor is opt-in and supports reduced motion", async ({
     "reduced"
   );
 
-  await page.goto(route.replace("&kpGlyphCompositor=1", ""));
+  await page.goto(otherRoute);
   await expect(stage).not.toHaveAttribute(
     "data-kp-reader-glyph-compositor-exemplar"
   );
@@ -166,12 +169,12 @@ test("moving reader paint is inert and has no semantic or annotation authority",
     );
 });
 
-test("ordinary reader navigation does not load compositor implementation chunks", async ({
+test("only the gold reader loads compositor implementation chunks", async ({
   page
 }) => {
   const loaded: string[] = [];
   page.on("response", (response) => loaded.push(response.url()));
-  await page.goto(route.replace("&kpGlyphCompositor=1", ""));
+  await page.goto(otherRoute);
   expect(loaded.some((url) =>
     /reader-glyph-compositor-exemplar|native-katex-scene-compositor/.test(url)
   )).toBe(false);

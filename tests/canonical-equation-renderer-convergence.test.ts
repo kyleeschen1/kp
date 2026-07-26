@@ -115,6 +115,7 @@ test("reader keeps one temporary compositor switch and one adapter loader", asyn
   ]);
 
   assert.equal((entry.match(/kpGlyphCompositor/g) ?? []).length, 1);
+  assert.match(entry, /lessonVariant === "streamlined"/);
   assert.equal(
     (publicApi.match(/loadKpReaderEquationSceneCompositorAdapter/g) ?? []).length,
     1

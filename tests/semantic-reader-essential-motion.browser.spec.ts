@@ -20,13 +20,12 @@ test("system reduced motion retains algebraic causality without flourish", async
   await expect(witness).toHaveCSS("opacity", "0");
   await expect(witness).toHaveCSS("filter", "none");
   const movingFragments = page.locator(
-    '[data-kp-reader-equation-material-owner-id="material-owner.left-inverses-cancel"] ' +
-    "[data-kp-reader-equation-material-fragment-id]"
+    '[data-kp-native-katex-scene-owner][data-kp-reader-motion-guided="true"]'
   );
   const transforms = await movingFragments.evaluateAll((elements) =>
     elements.map((element) => (element as HTMLElement).style.transform)
   );
-  expect(transforms).toHaveLength(2);
+  expect(transforms.length).toBeGreaterThanOrEqual(4);
   expect(transforms.every((transform) => !transform.includes("translate(0px, 0px)")))
     .toBe(true);
   await expect(stage).toHaveAttribute(
@@ -55,14 +54,15 @@ test("explicit full motion restores depth under a reduced system preference", as
     "data-kp-reader-equation-effective-depth-recipe",
     "semantic-depth-v1"
   );
-  const plus = page.locator(
-    '[data-kp-reader-equation-material-fragment-id*="after-subtract.lhs.plus3"]'
-  );
-  await expect(plus).toHaveAttribute(
+  const elevated = page.locator(
+    '[data-kp-native-katex-scene-owner]' +
+    '[data-kp-reader-equation-semantic-depth]'
+  ).first();
+  await expect(elevated).toHaveAttribute(
     "data-kp-reader-equation-semantic-depth",
     /.+/
   );
-  await expect(plus).toHaveCSS("filter", /drop-shadow/);
+  await expect(elevated).toHaveCSS("filter", /drop-shadow/);
 });
 
 test("essential causal motion retraces exactly on rewind", async ({ page }) => {
@@ -84,8 +84,7 @@ test("essential causal motion retraces exactly on rewind", async ({ page }) => {
 
 async function cancellationPose(page: import("@playwright/test").Page) {
   return page.locator(
-    '[data-kp-reader-equation-material-owner-id="material-owner.left-inverses-cancel"] ' +
-    "[data-kp-reader-equation-material-fragment-id]"
+    '[data-kp-native-katex-scene-owner][data-kp-reader-motion-guided="true"]'
   ).evaluateAll((elements) => elements.map((element) => ({
     transform: (element as HTMLElement).style.transform,
     opacity: (element as HTMLElement).style.opacity,

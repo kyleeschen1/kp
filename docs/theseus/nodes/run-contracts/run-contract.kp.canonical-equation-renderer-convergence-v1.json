@@ -228,6 +228,18 @@
       "status": "passed",
       "scope": "slice-20 reader adapter convergence",
       "checkedAt": "2026-07-26T03:14:05.753Z"
+    },
+    {
+      "command": "playwright focused reader migration matrix",
+      "status": "failed",
+      "scope": "slice-21 initial broad reader migration",
+      "checkedAt": "2026-07-26T03:28:22.166Z"
+    },
+    {
+      "command": "canonical renderer tests; focused 18-case reader browser matrix; typecheck; build; reader production closure; route budget; architecture check",
+      "status": "passed",
+      "scope": "slice-21 default gold card migration",
+      "checkedAt": "2026-07-26T03:29:47.010Z"
     }
   ],
   "allowedWork": [
@@ -389,7 +401,8 @@
     {
       "id": "slice-21",
       "title": "default-gold-card-migration",
-      "status": "planned"
+      "summary": "The solve-x streamlined gold transition now selects the canonical renderer by default. Existing semantic motion anchors guide the same canonical material owners, so counter-orbit, depth, cancellation, seek, rewind, and reduced-motion behavior survive without a second paint layer. All other reader variants remain on their prior path; the focused 18-case browser matrix, ratchets, typecheck, build, production closure, route budget, and architecture checks pass.",
+      "status": "complete"
     },
     {
       "id": "slice-22",
