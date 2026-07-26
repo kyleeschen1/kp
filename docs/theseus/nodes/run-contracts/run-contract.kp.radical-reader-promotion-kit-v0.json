@@ -1,0 +1,210 @@
+{
+  "id": "run-contract.kp.radical-reader-promotion-kit-v0",
+  "kind": "run-contract",
+  "title": "Canonical radical reader adoption and promotion kit",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.radical-reader-promotion-kit-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-26-radical-reader-promotion-kit-long-loop-proposal.md",
+      "summary": "User-approved exact 20-slice radical reader adoption and promotion-kit proposal with a mandatory slice-15 browser checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "run-contract.kp.canonical-animation-construction-governed-round-trip-v1"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery",
+    "plan-revision.kp.v10"
+  ],
+  "verification": [
+    "npm run test:canonical-animation-construction",
+    "npm run test:real-katex-glyph-compositor",
+    "npm run test:browser:real-katex-glyph-compositor",
+    "npm run test:canonical-equation-renderer",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run build",
+    "npm run check:reader-production",
+    "npm run check:reader-budgets",
+    "npm run visual:radical-canonical-checkpoint",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether the released canonical construction and renderer session adopt a structurally distinct radical transition without a new runtime, lifecycle, scheduler, or notation-specific geometry category.",
+    "Whether a promotion kit extracted only after fraction and radical evidence reduces the next unit-exponent adoption to content, descriptor wiring, and focused verification."
+  ],
+  "allowedWork": [
+    "The stable visual command and disposable browser review outputs needed for the mandatory slice-15 human checkpoint."
+  ],
+  "disallowedWork": [
+    "No automatic continuation beyond slice 15 without fresh user approval of the visible browser exemplar."
+  ],
+  "criteria": [
+    {
+      "id": "native-radical-endpoints",
+      "weight": "high"
+    },
+    {
+      "id": "exclusive-canonical-paint",
+      "weight": "high"
+    },
+    {
+      "id": "exact-seek-rewind",
+      "weight": "medium"
+    },
+    {
+      "id": "reader-seam-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "promotion-cost-ratchet",
+      "weight": "high"
+    }
+  ],
+  "goal": "Adopt one radical succession reader transition through the released canonical construction path, preserve the reader and native semantic contracts, and extract a promotion kit proved by a no-product-route unit-exponent dry run.",
+  "target": "next-action.kp.radical-reader-promotion-kit-v0",
+  "runMode": "run",
+  "maxSlices": 20,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and its completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if any frame has simultaneous compatibility and canonical paint, false semantic identity, fading for structural fusion or fission, or a lifecycle gap.",
+    "Stop if the exemplar needs notation-specific geometry, a new lifecycle or scheduler category, a second runtime or clock, or mutation of native settled mathematics, typography, accessibility, or semantic DOM.",
+    "Stop if direct seek, rewind, reduced motion, static output, responsive composition, accessibility, export, route budgets, or production closure fails without one bounded generic repair.",
+    "Stop at HUMAN_CHECKPOINT after slice 15 for user browser review; this checkpoint is not waived.",
+    "After checkpoint approval, stop at slice 18 if the unit-exponent dry run changes compositor core, adds a lifecycle or scheduler category, adds notation-specific geometry, or creates a second runtime artifact.",
+    "Stop if work touches unrelated dirty-worktree changes, deferred domains, or exceeds the preservation and rollback boundaries.",
+    "Stop if context cannot safely complete and record the remaining contract."
+  ],
+  "slices": [
+    {
+      "id": "slice-01",
+      "title": "freeze-adoption-inventory",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-02",
+      "title": "encode-promotion-cost-ratchet",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-03",
+      "title": "preserve-reader-contract",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-04",
+      "title": "reuse-selector-annotations",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-05",
+      "title": "bind-radical-structure",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-06",
+      "title": "add-lesson-content",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-07",
+      "title": "compile-native-endpoints",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-08",
+      "title": "compile-transition-policy",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-09",
+      "title": "dry-run-canonical-adapter",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-10",
+      "title": "switch-exclusive-ownership",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-11",
+      "title": "prove-lifecycle-totality",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-12",
+      "title": "prove-native-geometry",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-13",
+      "title": "prove-time-semantics",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-14",
+      "title": "prove-product-seams",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-15",
+      "title": "responsive-browser-exemplar",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-16",
+      "title": "apply-reviewed-generic-repair",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-17",
+      "title": "extract-promotion-kit",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-18",
+      "title": "unit-exponent-cost-proof",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-19",
+      "title": "production-gates",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    },
+    {
+      "id": "slice-20",
+      "title": "close-and-hand-off",
+      "status": "planned",
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
+    }
+  ]
+}

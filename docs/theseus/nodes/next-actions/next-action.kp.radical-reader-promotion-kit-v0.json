@@ -1,0 +1,70 @@
+{
+  "id": "next-action.kp.radical-reader-promotion-kit-v0",
+  "kind": "next-action",
+  "title": "Canonical radical reader adoption and promotion kit",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-26-radical-reader-promotion-kit-long-loop-proposal.md",
+      "summary": "User-approved exact 20-slice radical reader adoption and promotion-kit proposal."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "run-contract.kp.canonical-animation-construction-governed-round-trip-v1"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery",
+    "plan-revision.kp.v10"
+  ],
+  "verification": [
+    "npm run test:canonical-animation-construction",
+    "npm run test:real-katex-glyph-compositor",
+    "npm run test:browser:real-katex-glyph-compositor",
+    "npm run test:canonical-equation-renderer",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run build",
+    "npm run check:reader-production",
+    "npm run check:reader-budgets",
+    "npm run visual:radical-canonical-checkpoint",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",
+    "Whether the resulting promotion kit makes unit-exponent adoption content-and-wiring work only."
+  ],
+  "allowedWork": [
+    "Execute only the approved radical reader adoption and promotion-kit contract.",
+    "Preserve and verify native reader semantics, accessibility, responsive behavior, seek, rewind, export, and production closure."
+  ],
+  "disallowedWork": [
+    "Do not generalize to a radical family or implement later foldable-distribution and domain loops.",
+    "Do not add notation-specific geometry, a second runtime or clock, or model-authored mathematical or visual authority."
+  ],
+  "criteria": [
+    {
+      "id": "native-radical-endpoints",
+      "weight": "high"
+    },
+    {
+      "id": "exclusive-canonical-paint",
+      "weight": "high"
+    },
+    {
+      "id": "exact-seek-rewind",
+      "weight": "medium"
+    },
+    {
+      "id": "reader-seam-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "promotion-cost-ratchet",
+      "weight": "high"
+    }
+  ]
+}
