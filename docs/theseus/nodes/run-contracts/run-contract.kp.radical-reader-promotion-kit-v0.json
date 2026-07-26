@@ -113,7 +113,8 @@
     {
       "id": "slice-03",
       "title": "preserve-reader-contract",
-      "status": "planned",
+      "summary": "Added and ratcheted the radical reader preservation manifest before implementation. It freezes exact semantic states, LaTeX, operation, law, lineage, timing, checkpoints, structural focus, learning/export artifacts, interaction, accessibility, responsive/DPR review, exclusive paint, old editor compatibility, and unchanged reader budgets; focused, construction, type, and architecture checks pass.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {

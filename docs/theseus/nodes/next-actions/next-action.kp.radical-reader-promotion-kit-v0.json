@@ -47,11 +47,18 @@
       "scope": "focused",
       "checkedAt": "2026-07-26T16:53:47.901Z",
       "notes": "Eight promotion inventory and cost-ratchet tests pass. The executable gate accepts only content, lesson/compiler, descriptor, selector-annotation, verification, and durable-evidence wiring; it rejects every protected compositor/scheduler core file, new lifecycle or scheduler categories, notation geometry, runtime artifacts, and unclassified production changes. Type and architecture gates pass."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion; npm run test:canonical-animation-construction; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-26T16:57:35.810Z",
+      "notes": "Twelve radical inventory, promotion-cost, and preservation checks plus sixty released construction checks pass. The manifest freezes exact objects, LaTeX, operation, law, lineage, timeline, checkpoints, all seven structural focus selectors, generated learning/export artifacts, interaction, accessibility, responsive/DPR review profiles, exclusive paint policy, old editor residual, and unchanged reader budgets. Type and architecture gates pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-2 complete. The adoption boundary is frozen and an executable post-kit cost gate now rejects compositor core changes, lifecycle or scheduler growth, notation-specific geometry, new runtime artifacts, and unclassified production changes while permitting only lesson, descriptor, annotation, verification, and durable-evidence wiring."
+    "summary": "Slices 1-3 complete. The adoption inventory, executable promotion-cost ratchet, and radical reader preservation manifest now fix semantic, product, interaction, accessibility, review, compatibility, payload, and rollback expectations before reader implementation."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",
