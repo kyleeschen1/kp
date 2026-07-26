@@ -184,6 +184,13 @@
       "scope": "slice-14 whole-transit typography repair",
       "checkedAt": "2026-07-26T01:19:12.449Z",
       "notes": "Forty-six focused tests and all 44 Chromium checks pass. Target glyph paint remains one revision across every interior frame; plus width shrinks monotonically, x and y sizes vary under 0.1 px, and 95.9/96/96.1 geometry is continuous. The stable visual command publishes 18 whole-transit wide/phone frames plus the old/corrected/native checkpoint. Build, typecheck, five ratchets, three architecture gates, 0.017-ms 32-entry scene-driven style sampling, 5847-byte route growth, and all frozen budgets pass. The dev-review 502 logs remain unrelated local inbox noise."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run visual:glyph-reconciliation-experiment; npm run typecheck; npm run build; npm test; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-14 rejected-checkpoint glyph paint-frame repair",
+      "checkedAt": "2026-07-26T02:10:59.603Z",
+      "notes": "Generic Range-derived paint anchors remove the x/y baseline jerk at 0.1 and 99.9 percent; x and y remain at scale 1, plus scales uniformly from 65.824 to 46.0768 pixels, and boundary paint-origin residual stays below 0.2 pixels. Forty-seven focused tests, 44 Chromium tests, refreshed wide/phone visual evidence, 2420 repository tests, production build, typecheck, the 120000-byte core ceiling, and workspace validation pass. Commit a0e06a52. Stop remains at the mandatory human checkpoint before slice 15."
     }
   ],
   "allowedWork": [
