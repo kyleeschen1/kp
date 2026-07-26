@@ -35,6 +35,7 @@ export interface KpGovernedConstructionVerificationIssue {
     | "governed-verification.closure"
     | "governed-verification.definition"
     | "governed-verification.law"
+    | "governed-verification.role"
     | "governed-verification.lineage";
   readonly path: string;
   readonly message: string;
@@ -206,6 +207,32 @@ export function validateKpGovernedCanonicalConstructionCompilation(input: {
           ));
         }
       );
+      const sourceSelectorIds = new Set(operation.sourceObjectIds.flatMap(
+        (objectId) => objects.get(objectId)?.selectors.map(({ id }) => id) ?? []
+      ));
+      const targetSelectorIds = new Set(operation.targetObjectIds.flatMap(
+        (objectId) => objects.get(objectId)?.selectors.map(({ id }) => id) ?? []
+      ));
+      operation.correspondenceMap.records.forEach((record, recordIndex) => {
+        record.sourceSelectorIds.forEach((selectorId) => {
+          if (!sourceSelectorIds.has(selectorId)) {
+            issues.push(issue(
+              "governed-verification.role",
+              `${operationPath}.correspondenceMap.records[${recordIndex}].sourceSelectorIds`,
+              `${selectorId} is outside operation ${operationId}'s source-role closure.`
+            ));
+          }
+        });
+        record.targetSelectorIds.forEach((selectorId) => {
+          if (!targetSelectorIds.has(selectorId)) {
+            issues.push(issue(
+              "governed-verification.role",
+              `${operationPath}.correspondenceMap.records[${recordIndex}].targetSelectorIds`,
+              `${selectorId} is outside operation ${operationId}'s target-role closure.`
+            ));
+          }
+        });
+      });
     }
   });
   return Object.freeze(issues);

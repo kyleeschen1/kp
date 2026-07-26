@@ -94,3 +94,10 @@ export {
   type KpGovernedConstructionVerificationIssue,
   type KpVerifiedGovernedCanonicalConstruction
 } from "./governed-canonical-construction-compiler.ts";
+
+export {
+  planKpGovernedConstructionRepairs,
+  type KpCompilerAuthorityRepair,
+  type KpGovernedConstructionRepair,
+  type KpProviderConstructionRepair
+} from "./governed-canonical-construction-repair.ts";

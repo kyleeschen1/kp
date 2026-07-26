@@ -63,6 +63,6 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-17 complete. Governed requests now compile only after compiler-owned mathematical verification; typed deterministic repair is next."
+    "summary": "Slices 1-18 complete. Governed construction verification now returns deterministic bounded repair guidance without fallback; the isolated fraction variation fixture is next."
   }
 }

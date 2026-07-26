@@ -158,6 +158,13 @@
       "scope": "slice-17 compiler-owned mathematical verification",
       "checkedAt": "2026-07-26T13:22:27.915Z",
       "notes": "Thirty-three focused tests prove exact source and target refs, definitions, strict laws, roles, lineage, stale-ref rejection, and no provider mathematical or presentation authority; all type and architecture gates pass."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-18 typed repair taxonomy",
+      "checkedAt": "2026-07-26T13:27:06.333Z",
+      "notes": "Thirty-five focused tests prove deterministic owner-aware repairs for stale source and pack refs, unknown objects and operations, closure, unsupported composition, role mismatches, and epistemic gaps, with no renderer or replacement-animation fallback."
     }
   ],
   "allowedWork": [
@@ -320,7 +327,8 @@
     {
       "id": "slice-18",
       "title": "typed-repair-taxonomy",
-      "status": "planned"
+      "summary": "Added an immutable deterministic repair taxonomy. Provider-owned request corrections are bounded to verified choices; role, definition, law, lineage, and asset-validity gaps escalate to compiler authority review. No repair can invent mathematics, select a renderer, or substitute an animation.",
+      "status": "complete"
     },
     {
       "id": "slice-19",
