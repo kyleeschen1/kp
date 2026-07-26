@@ -114,6 +114,39 @@ export async function createKpFractionExperimentScene(input: {
     maximumScaleRatio: 1.1
   });
   playback.apply(0);
+  const applyTypographyHandoff = (progress: number) => {
+    const ownership = playback.apply(progress);
+    const styleProgress = Math.max(
+      0,
+      Math.min(1, (progress - typographyStart) / (1 - typographyStart))
+    );
+    const styleFrame = sampleKpNativeKatexTypographyStylePlan(
+      typographyPlan,
+      styleProgress
+    );
+    const realization =
+      progress >= typographyStart && ownership.visualOwner === "material-scene"
+        ? realizeKpNativeKatexTypographyStylePlan({
+          stage: input.stage,
+          target: targetScene,
+          plan: typographyPlan,
+          frame: styleFrame
+        })
+        : Object.freeze({
+          kind: "native-katex-typography-realization" as const,
+          lifecycle: "renderer-session" as const,
+          realizedIds: Object.freeze([]),
+          deferredIds: Object.freeze([]),
+          deferred: Object.freeze([]),
+          nativeMutationCount: 0 as const
+        });
+    return Object.freeze({
+      ownership,
+      plan: typographyPlan,
+      styleFrame,
+      realization
+    });
+  };
 
   return Object.freeze({
     direction: input.direction,
@@ -131,48 +164,27 @@ export async function createKpFractionExperimentScene(input: {
     playback,
     typographyPlan,
     measureGlyphHandoff(progress: number) {
-      playback.apply(progress);
+      applyTypographyHandoff(progress);
       return measureKpNativeKatexGlyphHandoff({
         ...microscope,
         progress
       });
     },
     measureCorrelatedHandoff(progress: number) {
-      playback.apply(progress);
+      applyTypographyHandoff(progress);
       return measureKpNativeKatexCorrelatedHandoff({
         ...microscope,
         progress
       });
     },
     measureRuleHandoff(progress: number) {
-      playback.apply(progress);
+      applyTypographyHandoff(progress);
       return measureKpNativeKatexRuleHandoff({
         ...microscope,
         progress
       });
     },
-    realizeTypographyHandoff(progress: number) {
-      const ownership = playback.apply(progress);
-      const styleProgress = Math.max(
-        0,
-        Math.min(1, (progress - typographyStart) / (1 - typographyStart))
-      );
-      const styleFrame = sampleKpNativeKatexTypographyStylePlan(
-        typographyPlan,
-        styleProgress
-      );
-      return {
-        ownership,
-        plan: typographyPlan,
-        styleFrame,
-        realization: realizeKpNativeKatexTypographyStylePlan({
-          stage: input.stage,
-          target: targetScene,
-          plan: typographyPlan,
-          frame: styleFrame
-        })
-      };
-    },
+    realizeTypographyHandoff: applyTypographyHandoff,
     traceHandoffOwnership(progresses: readonly number[]) {
       return traceKpNativeKatexHandoffOwnership({
         ...microscope,

@@ -1536,11 +1536,25 @@ test("dense handoff telemetry covers every correlated source material and target
 test("target-style realization keeps ordinary clone paint inert and native DOM untouched", async ({
   browser
 }) => {
-  for (const viewport of [
-    { width: 1_440, height: 950 },
-    { width: 390, height: 844 }
+  for (const profile of [
+    {
+      viewport: { width: 1_440, height: 950 },
+      reducedMotion: "no-preference" as const
+    },
+    {
+      viewport: { width: 1_440, height: 950 },
+      reducedMotion: "reduce" as const
+    },
+    {
+      viewport: { width: 390, height: 844 },
+      reducedMotion: "no-preference" as const
+    },
+    {
+      viewport: { width: 390, height: 844 },
+      reducedMotion: "reduce" as const
+    }
   ]) {
-    const context = await browser.newContext({ viewport });
+    const context = await browser.newContext(profile);
     const page = await context.newPage();
     await page.goto("/glyph-reconciliation-experiment.html?progress=999");
     await page.evaluate(async () => document.fonts.ready);
@@ -1550,6 +1564,21 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
     const evidence = await page.evaluate(() => {
       const api = (window as unknown as {
         __kpApplyFractionSceneFrame: (progress: number) => unknown;
+        __kpMeasureFractionCorrelatedHandoff: (progress: number) => {
+          observations: readonly {
+            id: string;
+            side: "native-source" | "material" | "native-target";
+            paintKind: string;
+            rect: {
+              left: number;
+              top: number;
+              width: number;
+              height: number;
+            };
+            baselineY: number | null;
+            styleFingerprint: string;
+          }[];
+        };
         __kpRealizeFractionTypographyHandoff: (progress: number) => {
           ownership: {
             visualOwner: string;
@@ -1654,6 +1683,57 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
       };
       const forward = progresses.map(sample);
       const reverse = [...progresses].reverse().map(sample).reverse();
+      const endpointGroups =
+        api.__kpMeasureFractionCorrelatedHandoff(0.999).observations.reduce(
+          (groups, observation) => {
+            const id = observation.id.replace(
+              /\.(source|material|native)$/,
+              ""
+            );
+            groups.set(id, [...(groups.get(id) ?? []), observation]);
+            return groups;
+          },
+          new Map<string, Array<{
+            id: string;
+            side: "native-source" | "material" | "native-target";
+            paintKind: string;
+            rect: {
+              left: number;
+              top: number;
+              width: number;
+              height: number;
+            };
+            baselineY: number | null;
+            styleFingerprint: string;
+          }>>()
+        );
+      const endpointResiduals = [...endpointGroups.values()].flatMap(
+        (observations) => {
+          const material = observations.find(({ side }) =>
+            side === "material"
+          )!;
+          const native = observations.find(({ side }) =>
+            side === "native-target"
+          )!;
+          if (material.paintKind !== "glyph") return [];
+          return [{
+            styleMatches:
+              material.styleFingerprint === native.styleFingerprint,
+            rect: Math.max(
+              ...Object.keys(material.rect).map((key) =>
+                Math.abs(
+                  material.rect[key as keyof typeof material.rect] -
+                  native.rect[key as keyof typeof native.rect]
+                )
+              )
+            ),
+            baseline:
+              material.baselineY === null || native.baselineY === null
+                ? Number.POSITIVE_INFINITY
+                : Math.abs(material.baselineY - native.baselineY)
+          }];
+        }
+      );
       return {
         sourceUnchanged: source.outerHTML === sourceBefore,
         targetUnchanged: target.outerHTML === targetBefore,
@@ -1664,6 +1744,7 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
         deferred: second.realization.deferred,
         forward,
         reverse,
+        endpointResiduals,
         owners
       };
     });
@@ -1704,6 +1785,11 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
       entry.translateY === 0 &&
       entry.scaleX === 1 &&
       entry.scaleY === 1
+    )).toBe(true);
+    expect(evidence.endpointResiduals.every((residual) =>
+      residual.styleMatches &&
+      residual.rect < 0.2 &&
+      residual.baseline < 0.1
     )).toBe(true);
     expect(evidence.owners.every((owner) =>
       owner.paintKind === "glyph" &&

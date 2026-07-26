@@ -135,6 +135,13 @@
       "scope": "slice-10 style-aware scene sampling",
       "checkedAt": "2026-07-26T00:22:58.291Z",
       "notes": "Forty-five focused tests, the wide and phone dense Chromium style/ownership matrix, five convergence ratchets, and all TypeScript projects pass. Forward and reverse direct seeks match at six samples from 0.96 through 1.0; owner opacities sum to one; style frames contain no opacity; all values are finite; smoothstep endpoint velocity tends to zero; and the final frame is exact identity under target-native ownership."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor -- --grep target-style realization; npm run visual:glyph-reconciliation-experiment; npm run test:canonical-equation-renderer; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-11 corrected fraction merge",
+      "checkedAt": "2026-07-26T00:28:02.884Z",
+      "notes": "Forty-five focused tests, the wide/phone normal/reduced Chromium endpoint matrix, 46 stable captures, five convergence ratchets, and all TypeScript projects pass. At 99.9 percent every glyph style fingerprint equals native target; maximum baseline residual is 0.010376 pixels wide and 0.009583 phone, and maximum rect residual is 0.086627 wide and 0.009766 phone. Manual inspection of 96 percent, 99.9 percent, and native-target captures shows one stable line, readable notation, no overlap, and no size or baseline snap."
     }
   ],
   "allowedWork": [
@@ -236,7 +243,8 @@
     {
       "id": "slice-11",
       "title": "fraction-merge-correction",
-      "status": "planned"
+      "summary": "Enabled the integrated generic typography window on the forward fraction merge. Wide and phone normal/reduced evidence now reaches native style before ownership transfer, with less than 0.011-pixel baseline and 0.087-pixel rectangle residual at 99.9 percent. Dense captures show no endpoint jerk, overlap, or unmotivated line movement; native accessibility ownership remains unchanged and all frozen bounds pass.",
+      "status": "complete"
     },
     {
       "id": "slice-12",
