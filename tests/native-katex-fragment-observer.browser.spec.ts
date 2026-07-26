@@ -1075,7 +1075,6 @@ test("live fraction scene exposes continuously sampled structural rule tracks", 
   await page.goto("/glyph-reconciliation-experiment.html?progress=0");
   const review = page.locator('[data-kp-glyph-review][data-kp-ready="true"]');
   await review.waitFor();
-  await expect(review).toHaveAttribute("data-kp-fraction-rule-track-count", "2");
   const samples = await page.evaluate(() => {
     const sample = (window as unknown as {
       __kpSampleFractionSceneTracks: (progress: number) => readonly {

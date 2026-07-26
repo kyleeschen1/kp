@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { chromium } from "playwright";
@@ -31,6 +31,13 @@ const endpointEvidence: Array<Record<string, unknown>> = [];
 const splitEvidence: Array<Record<string, unknown>> = [];
 const radicalEvidence: Array<Record<string, unknown>> = [];
 const compoundEvidence: Array<Record<string, unknown>> = [];
+const checkpointEvidence: Array<{
+  profile: typeof profiles[number]["id"];
+  motion: "normal" | "reduced";
+  old: string;
+  corrected: string;
+  nativeTarget: string;
+}> = [];
 try {
   for (const profile of profiles) {
     for (const progress of checkpoints) {
@@ -613,6 +620,191 @@ try {
       await page.close();
     }
   }
+  const materialEndpoint = kpFractionEndpointCheckpoints.find(
+    ({ fractionProgressPermille }) => fractionProgressPermille === 999
+  )!;
+  const nativeEndpoint = kpFractionEndpointCheckpoints.find(
+    ({ fractionProgressPermille }) => fractionProgressPermille === 1_000
+  )!;
+  for (const profile of profiles) {
+    for (const motion of ["normal", "reduced"] as const) {
+      const page = await browser.newPage({
+        viewport: profile.viewport,
+        reducedMotion: motion === "reduced" ? "reduce" : "no-preference"
+      });
+      const url = new URL("/glyph-reconciliation-experiment.html", baseUrl);
+      url.searchParams.set(
+        "progress",
+        String(materialEndpoint.routeProgressPermille)
+      );
+      await page.goto(url.toString(), { waitUntil: "networkidle" });
+      await page.evaluate(async () => document.fonts.ready);
+      await page.locator(
+        '[data-kp-glyph-review][data-kp-ready="true"]'
+      ).waitFor();
+      const card = page.locator(
+        '[data-reconciliation-case="fraction-merge"]'
+      );
+      const correctedFile = path.join(
+        outputRoot,
+        `checkpoint-${profile.id}-${motion}-corrected-999.png`
+      );
+      await card.screenshot({ path: correctedFile });
+
+      // The raw playback is the retained pre-correction handoff path.
+      await page.evaluate((progress) => {
+        const api = window as unknown as {
+          __kpApplyFractionSceneFrame: (progress: number) => unknown;
+        };
+        api.__kpApplyFractionSceneFrame(progress);
+      }, materialEndpoint.fractionProgressPermille / 1_000);
+      const oldFile = path.join(
+        outputRoot,
+        `checkpoint-${profile.id}-${motion}-old-999.png`
+      );
+      await card.screenshot({ path: oldFile });
+
+      url.searchParams.set(
+        "progress",
+        String(nativeEndpoint.routeProgressPermille)
+      );
+      await page.goto(url.toString(), { waitUntil: "networkidle" });
+      await page.evaluate(async () => document.fonts.ready);
+      await page.locator(
+        '[data-kp-glyph-review][data-kp-ready="true"]'
+      ).waitFor();
+      const nativeFile = path.join(
+        outputRoot,
+        `checkpoint-${profile.id}-${motion}-native-target.png`
+      );
+      await page.locator(
+        '[data-reconciliation-case="fraction-merge"]'
+      ).screenshot({ path: nativeFile });
+      checkpointEvidence.push({
+        profile: profile.id,
+        motion,
+        old: path.relative(process.cwd(), oldFile),
+        corrected: path.relative(process.cwd(), correctedFile),
+        nativeTarget: path.relative(process.cwd(), nativeFile)
+      });
+      await page.close();
+    }
+  }
+
+  const checkpointRows = await Promise.all(checkpointEvidence.map(
+    async (entry) => {
+      const files = [
+        ["Old raw handoff · 99.9%", entry.old],
+        ["Corrected handoff · 99.9%", entry.corrected],
+        ["Exact native target · 100%", entry.nativeTarget]
+      ] as const;
+      return {
+        ...entry,
+        images: await Promise.all(files.map(async ([label, file]) => ({
+          label,
+          source: `data:image/png;base64,${
+            (await readFile(path.resolve(file))).toString("base64")
+          }`
+        })))
+      };
+    }
+  ));
+  const contactPage = await browser.newPage({
+    viewport: { width: 1600, height: 1000 }
+  });
+  await contactPage.setContent(`<!doctype html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          * { box-sizing: border-box; }
+          body {
+            margin: 0;
+            padding: 32px;
+            background: #eef1f4;
+            color: #17212b;
+            font: 15px/1.45 system-ui, sans-serif;
+          }
+          h1 { margin: 0 0 8px; font-size: 28px; }
+          .lede { margin: 0 0 28px; color: #52606d; }
+          section { margin: 0 0 30px; }
+          h2 { margin: 0 0 10px; font-size: 18px; }
+          .row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+          }
+          figure {
+            margin: 0;
+            overflow: hidden;
+            border: 1px solid #c7ced6;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 3px 12px rgb(23 33 43 / 8%);
+          }
+          figcaption {
+            padding: 9px 12px;
+            border-bottom: 1px solid #d9dee4;
+            font-weight: 700;
+          }
+          img {
+            display: block;
+            width: 100%;
+            height: 250px;
+            object-fit: contain;
+            object-position: top center;
+            background: white;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>Fraction typography handoff checkpoint</h1>
+        <p class="lede">
+          (x/2 + y/2) → (x+y)/2 · raw handoff versus generic target-style
+          reverse FLIP versus exact native ownership
+        </p>
+        ${checkpointRows.map((row) => `
+          <section>
+            <h2>${row.profile} · ${row.motion} motion</h2>
+            <div class="row">
+              ${row.images.map(({ label, source }) => `
+                <figure>
+                  <figcaption>${label}</figcaption>
+                  <img src="${source}" alt="">
+                </figure>
+              `).join("")}
+            </div>
+          </section>
+        `).join("")}
+      </body>
+    </html>`, { waitUntil: "load" });
+  await contactPage.evaluate(async () => {
+    await Promise.all([...document.images].map((image) =>
+      image.complete
+        ? Promise.resolve()
+        : new Promise<void>((resolve, reject) => {
+          image.addEventListener("load", () => resolve(), { once: true });
+          image.addEventListener("error", () => reject(), { once: true });
+        })
+    ));
+  });
+  const checkpointContactSheet = path.join(
+    outputRoot,
+    "fraction-typography-checkpoint-contact-sheet.png"
+  );
+  await contactPage.screenshot({
+    path: checkpointContactSheet,
+    fullPage: true
+  });
+  await contactPage.close();
+  await writeFile(
+    path.join(outputRoot, "fraction-typography-checkpoint.json"),
+    `${JSON.stringify({
+      generatedAt: new Date().toISOString(),
+      contactSheet: path.relative(process.cwd(), checkpointContactSheet),
+      rows: checkpointEvidence
+    }, null, 2)}\n`
+  );
   await writeFile(
     path.join(outputRoot, "evidence.json"),
     `${JSON.stringify({
@@ -621,7 +813,8 @@ try {
       endpointEvidence,
       splitEvidence,
       radicalEvidence,
-      compoundEvidence
+      compoundEvidence,
+      checkpointEvidence
     }, null, 2)}\n`
   );
   console.log(
@@ -631,7 +824,9 @@ try {
       radicalEvidence.length
     } radical succession frames, plus ${
       compoundEvidence.length
-    } compound scene frames in ${
+    } compound scene frames and one ${
+      checkpointEvidence.length
+    }-row fraction checkpoint in ${
       path.relative(process.cwd(), outputRoot)
     }.`
   );
