@@ -1527,6 +1527,91 @@ test("renderer session direct seeks and reverses without hidden clock state", ()
   );
 });
 
+test("one atom-transit session carries the complete structural cohort", () => {
+  const paint = (
+    scene: ReturnType<typeof createScene>,
+    kinds: Readonly<Record<string, "glyph" | "rule" | "path">>
+  ) => createKpNativeKatexRenderedSceneObservation({
+    ...scene,
+    atoms: scene.atoms.map((paintAtom) => ({
+      ...paintAtom,
+      paintKind: kinds[paintAtom.id] ?? "glyph",
+      visualKey: `${kinds[paintAtom.id] ?? "glyph"}:shared`
+    }))
+  });
+  const source = paint(createScene("source", [
+    "source.persist",
+    "source.merge.a",
+    "source.merge.b",
+    "source.split",
+    "source.remove"
+  ]), {
+    "source.split": "rule",
+    "source.remove": "path"
+  });
+  const target = paint(createScene("target", [
+    "target.persist",
+    "target.merge",
+    "target.split.a",
+    "target.split.b",
+    "target.add"
+  ]), {
+    "target.split.a": "rule",
+    "target.split.b": "rule",
+    "target.add": "path"
+  });
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source,
+    target,
+    relations: [{
+      id: "lineage.merge",
+      relation: "merge",
+      sourceEntityIds: ["entity.merge.a", "entity.merge.b"],
+      targetEntityIds: ["entity.merge"]
+    }, {
+      id: "lineage.split",
+      relation: "split",
+      sourceEntityIds: ["entity.split"],
+      targetEntityIds: ["entity.split.a", "entity.split.b"]
+    }]
+  });
+  const tracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+  );
+  const session = createKpNativeKatexRendererSession({
+    stage,
+    sourceRoot: source.root,
+    targetRoot: target.root,
+    reconciliation,
+    tracks
+  });
+  const lifecycles = new Set(session.tracks.map(({ lifecycle }) => lifecycle));
+  const paintKinds = new Set(session.tracks.map(({ paintKind }) => paintKind));
+  const direct = session.sample(0.63);
+  session.sample(0.14);
+
+  assert.equal(session.mode, "atom-transit");
+  assert.deepEqual([...lifecycles].sort(), [
+    "eliminate",
+    "introduce",
+    "merge",
+    "persist",
+    "split"
+  ]);
+  assert.deepEqual([...paintKinds].sort(), ["glyph", "path", "rule"]);
+  assert.deepEqual(session.sample(0.63), direct);
+  assert.deepEqual(session.sample(0), tracks.map((track) => ({
+    trackId: track.id,
+    componentId: track.componentId,
+    lifecycle: track.lifecycle,
+    visualAtomId: track.visualAtomId,
+    paintKind: track.paintKind,
+    sizingMode: track.sizingMode,
+    rect: track.startRect,
+    opacity: track.startOpacity
+  })));
+});
+
 test("structural rule tracks use generic continuous length interpolation", () => {
   const source = createScene("source", ["source.rule.a", "source.rule.b"]);
   const target = createScene("target", ["target.rule"]);

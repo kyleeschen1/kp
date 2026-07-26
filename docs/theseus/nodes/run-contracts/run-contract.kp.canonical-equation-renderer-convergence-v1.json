@@ -204,6 +204,12 @@
       "status": "passed",
       "scope": "slice-16 native continuity mode",
       "checkedAt": "2026-07-26T02:50:24.392Z"
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run test:canonical-equation-renderer; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-17 atom transit mode",
+      "checkedAt": "2026-07-26T02:54:36.728Z"
     }
   ],
   "allowedWork": [
@@ -341,7 +347,8 @@
     {
       "id": "slice-17",
       "title": "atom-transit-mode",
-      "status": "planned"
+      "summary": "A single atom-transit session now carries the complete supported cohort: persist, merge, split, introduction, elimination, glyph, rule, and path tracks. Direct seeks are state-independent, endpoints are exact, and the existing Chromium matrix confirms one exclusive visual owner through normal, reverse, reduced-motion, and structural playback.",
+      "status": "complete"
     },
     {
       "id": "slice-18",
