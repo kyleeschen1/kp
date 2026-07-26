@@ -488,11 +488,18 @@
       "scope": "slice-16 production build",
       "checkedAt": "2026-07-26T19:06:42.666Z",
       "notes": "Typecheck and production build pass; reader and canonical-animation budgets remain within limits."
+    },
+    {
+      "command": "manual live browser review of canonical host parity",
+      "status": "failed",
+      "scope": "slice-16 representational-succession choreography fidelity",
+      "checkedAt": "2026-07-26T19:14:02.910Z",
+      "notes": "Human checkpoint rejected: both experiment and reader reduce exponent notation to eliminate/introduction opacity tracks. Cross-host parity proved shared ownership but missed common-mode loss of the accepted solid radical morph."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 16 is complete and open in the browser. Stopped at the mandatory HUMAN_CHECKPOINT before promotion-kit extraction; slices 17-20 remain inactive."
+    "summary": "HUMAN_CHECKPOINT rejected. Diagnose and repair the common-mode fade-only structural succession before extracting a promotion kit or continuing slices 17-20."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

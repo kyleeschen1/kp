@@ -208,8 +208,8 @@
     {
       "id": "slice-16",
       "title": "apply-reviewed-generic-repair",
-      "summary": "Replaced the degraded reader reinterpretation with the shared experiment session, removed post-session atom paint writes, preserved semantic focus color through native presentation revisions, added shared legible sizing and a live cross-host scrubber, and passed dense handoff plus wide/phone DPR gates.",
-      "status": "complete",
+      "summary": "Reopened after human visual rejection. The shared canonical session preserves host parity and native handoff but does not preserve the normative exponent-to-radical structural morph; promotion slices remain paused.",
+      "status": "in-progress",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {
