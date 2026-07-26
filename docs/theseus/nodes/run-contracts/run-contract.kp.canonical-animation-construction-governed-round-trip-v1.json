@@ -1,0 +1,218 @@
+{
+  "id": "run-contract.kp.canonical-animation-construction-governed-round-trip-v1",
+  "kind": "run-contract",
+  "title": "Canonical animation construction and governed round trip",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.canonical-animation-construction-governed-round-trip-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-25-canonical-animation-construction-governed-round-trip-long-loop-proposal.md",
+      "summary": "User-approved exact 30-slice successor with the slice-15 pause waived only when all named promotion criteria pass."
+    }
+  ],
+  "verification": [
+    "npm run check:architecture",
+    "npm run typecheck",
+    "npm test",
+    "npm run test:browser:reader-conformance",
+    "npm run test:browser:real-katex-glyph-compositor",
+    "npm run build",
+    "npm run check:reader-production",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "One fraction split/merge reader-transition migration to the canonical equation session.",
+    "Canonical semantic construction and governed-draft schemas, compilers, validation, repair, and deterministic projection.",
+    "Isolated review fixtures for existing fraction, exponent, radical, and compound traces.",
+    "A browser-native review gallery inside the existing review or Workbench architecture.",
+    "Consolidation of proven duplicate low-level safety utilities when behavior and consumers are covered in the same slice.",
+    "Exact project-memory, plan-authority, Theseus, and closeout updates required for the approved direction."
+  ],
+  "disallowedWork": [
+    "No second renderer, material layer, animation runtime, clock, or authoring artifact.",
+    "No fraction, glyph, character, KaTeX-class, viewport, route, or operation-specific runtime corrections.",
+    "No model-authored LaTeX truth, DOM, HTML fragments, selectors, geometry, coordinates, paths, keyframes, timing tables, styles, fonts, renderer modes, accessibility markup, or export code.",
+    "No migration of a second product reader family or global equation-family or editor-surface rollout.",
+    "No quadratic redesign, derivative or FTC work, arithmetic quantity models, cross-domain exemplars, publication-platform work, or unrelated UI work.",
+    "No broad utils extraction without identical authority, lifetime, error, and security contracts."
+  ],
+  "goal": "Prove one canonical semantic-to-renderer construction path, migrate one fraction split/merge reader transition exclusively, and establish governed model variation plus browser-native review without parallel runtimes.",
+  "target": "next-action.kp.canonical-animation-construction-governed-round-trip-v0",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and its completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if the predecessor release contract is not closed cleanly or plan authority cannot select this target without competing active implementation work.",
+    "Stop if the fraction migration needs notation, character, route, viewport, KaTeX-class, or operation-specific renderer logic.",
+    "Stop if any migrated frame has both compatibility and canonical paint or lineage-backed split or merge material uses opacity fading.",
+    "Stop if native endpoint typography, mathematics, accessibility, interaction, or semantic DOM must be mutated.",
+    "Stop if DOM, HTML, glyphs, geometry, timing, CSS, fonts, renderer state, or unverified mathematics enters a durable or provider-authored schema.",
+    "Stop if another product reader family must be migrated to prove the contract.",
+    "Stop if a new paint kind, lifecycle, renderer mode, semantic taxonomy, scheduler, runtime, material layer, or clock is required.",
+    "Stop if direct seek, rewind, reduced motion, responsive composition, static, headless, export, or production closure fails without one bounded generic repair.",
+    "Stop if ordinary route or payload ceilings regress and cannot be recovered through in-scope deletion.",
+    "Stop if visual inspection finds snap, wrong scale, double ink, clipping, unexplained line travel, unreadable overlap, or misleading pedagogy.",
+    "Stop if consolidation would merge helpers with different authority, lifetime, failure, or security contracts.",
+    "Continue after slice 15 only because the user explicitly waived that pause, and only if every named fraction acceptance criterion, browser assertion, contact-sheet inspection, and release budget passes.",
+    "Stop if work touches deferred domains, unrelated user drafts, or cannot preserve unrelated dirty-worktree changes.",
+    "Stop if the context cannot safely complete the remaining contract and record an exact handoff."
+  ],
+  "slices": [
+    {
+      "id": "slice-01",
+      "title": "roadmap-authority-reconciliation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-02",
+      "title": "construction-path-inventory",
+      "status": "planned"
+    },
+    {
+      "id": "slice-03",
+      "title": "canonical-construction-contract",
+      "status": "planned"
+    },
+    {
+      "id": "slice-04",
+      "title": "authority-firewall",
+      "status": "planned"
+    },
+    {
+      "id": "slice-05",
+      "title": "deterministic-round-trip-baseline",
+      "status": "planned"
+    },
+    {
+      "id": "slice-06",
+      "title": "fraction-reader-preservation-manifest",
+      "status": "planned"
+    },
+    {
+      "id": "slice-07",
+      "title": "fraction-session-adapter",
+      "status": "planned"
+    },
+    {
+      "id": "slice-08",
+      "title": "total-multiplicity-binding",
+      "status": "planned"
+    },
+    {
+      "id": "slice-09",
+      "title": "no-fade-structural-realization",
+      "status": "planned"
+    },
+    {
+      "id": "slice-10",
+      "title": "native-size-and-font-readiness",
+      "status": "planned"
+    },
+    {
+      "id": "slice-11",
+      "title": "responsive-composition",
+      "status": "planned"
+    },
+    {
+      "id": "slice-12",
+      "title": "semantic-authority-preservation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-13",
+      "title": "seek-rewind-reduced-motion",
+      "status": "planned"
+    },
+    {
+      "id": "slice-14",
+      "title": "exclusive-default-migration",
+      "status": "planned"
+    },
+    {
+      "id": "slice-15",
+      "title": "fraction-exemplar-browser-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "slice-16",
+      "title": "governed-construction-request",
+      "status": "planned"
+    },
+    {
+      "id": "slice-17",
+      "title": "compiler-owned-mathematical-verification",
+      "status": "planned"
+    },
+    {
+      "id": "slice-18",
+      "title": "typed-repair-taxonomy",
+      "status": "planned"
+    },
+    {
+      "id": "slice-19",
+      "title": "fraction-variation-fixture",
+      "status": "planned"
+    },
+    {
+      "id": "slice-20",
+      "title": "exponent-absorption-fixture",
+      "status": "planned"
+    },
+    {
+      "id": "slice-21",
+      "title": "radical-succession-fixture",
+      "status": "planned"
+    },
+    {
+      "id": "slice-22",
+      "title": "variation-cohort-conformance",
+      "status": "planned"
+    },
+    {
+      "id": "slice-23",
+      "title": "compound-operation-construction",
+      "status": "planned"
+    },
+    {
+      "id": "slice-24",
+      "title": "compound-visual-realization",
+      "status": "planned"
+    },
+    {
+      "id": "slice-25",
+      "title": "in-browser-review-gallery",
+      "status": "planned"
+    },
+    {
+      "id": "slice-26",
+      "title": "static-export-parity",
+      "status": "planned"
+    },
+    {
+      "id": "slice-27",
+      "title": "safety-utility-consolidation",
+      "status": "planned"
+    },
+    {
+      "id": "slice-28",
+      "title": "performance-payload-route-budgets",
+      "status": "planned"
+    },
+    {
+      "id": "slice-29",
+      "title": "release-matrix",
+      "status": "planned"
+    },
+    {
+      "id": "slice-30",
+      "title": "closeout-next-step-decision",
+      "status": "planned"
+    }
+  ]
+}

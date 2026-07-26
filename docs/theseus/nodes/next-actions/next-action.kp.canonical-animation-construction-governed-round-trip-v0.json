@@ -1,0 +1,13 @@
+{
+  "id": "next-action.kp.canonical-animation-construction-governed-round-trip-v0",
+  "kind": "next-action",
+  "title": "Canonical-animation-construction-and-governed-round-trip",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-25-canonical-animation-construction-governed-round-trip-long-loop-proposal.md"
+    }
+  ]
+}
