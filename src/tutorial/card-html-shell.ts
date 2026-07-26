@@ -3,6 +3,10 @@ import type {
   LinearSolveTutorialCardSampleFrame
 } from "./linear-solve-card-sample.ts";
 import type { KpTutorialSourceFileFrame } from "./source-file-frame-adapter.ts";
+import {
+  escapeKpTutorialHtmlAttribute as escapeAttr,
+  escapeKpTutorialHtmlText as escapeHtml
+} from "./generated-html-escaping.ts";
 
 export function renderKpTutorialCardHtmlShell(
   sample: LinearSolveTutorialCardSample,
@@ -111,15 +115,4 @@ function renderControl(
   }
 
   return `<button class="kp-tutorial-card__control" type="button" ${attrs}>${escapeHtml(kind)}</button>`;
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
-}
-
-function escapeAttr(value: string): string {
-  return escapeHtml(value).replaceAll("\"", "&quot;");
 }

@@ -221,6 +221,13 @@
       "scope": "slice-26 static and export parity",
       "checkedAt": "2026-07-26T15:09:55.226Z",
       "notes": "Fifty-six construction tests, six live browser checks, one production-packaged browser smoke, production build, reader closure, architecture gates, typecheck, and diff hygiene pass. Four reference-only targets share three canonical artifacts, four operations, and seven checkpoints; alias-normalized serialization rejects renderer-session and DOM state."
+    },
+    {
+      "command": "npm run test:tutorial-generated-html-escaping; npm run test:browser:tutorial-generated-html-escaping; npm run test:canonical-animation-construction; npm run typecheck; npm run build; npm run check:reader-production; npm run check:architecture; git diff --check",
+      "status": "passed",
+      "scope": "slice-27 safety utility consolidation",
+      "checkedAt": "2026-07-26T15:15:04.599Z",
+      "notes": "Twenty-four focused consumer/security tests, five browser consumers, 56 construction tests, typecheck, production build, reader closure, architecture gates, and diff hygiene pass. Eight generated-document consumers now share three context-specific helpers; private duplicate counts ratchet from 29/9/3 to 21/1/0 while unlike editor, SVG, tooling, DOM, selector, validator, and freeze contracts remain separate."
     }
   ],
   "allowedWork": [
@@ -437,7 +444,8 @@
     {
       "id": "slice-27",
       "title": "safety-utility-consolidation",
-      "status": "planned"
+      "summary": "Consolidated eight byte-identical generated tutorial/export HTML consumers behind context-specific text, double-quoted attribute, and script-JSON escaping. Added adversarial and consumer ratchets and documented why editor, SVG, tooling, DOM, selector, validator, and freeze helpers remain distinct.",
+      "status": "complete"
     },
     {
       "id": "slice-28",

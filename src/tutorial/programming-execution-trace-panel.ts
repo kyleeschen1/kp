@@ -1,4 +1,8 @@
 import type { KpProgrammingExecutionTraceFrame } from "./programming-execution-trace.ts";
+import {
+  escapeKpTutorialHtmlAttribute as escapeAttr,
+  escapeKpTutorialHtmlText as escapeHtml
+} from "./generated-html-escaping.ts";
 
 export function renderKpProgrammingExecutionTracePanelHtml(
   frame: KpProgrammingExecutionTraceFrame
@@ -49,15 +53,4 @@ function renderLocals(frame: KpProgrammingExecutionTraceFrame): string {
 
 function renderOutput(frame: KpProgrammingExecutionTraceFrame): string {
   return `<pre class="kp-tutorial-card__trace-output" data-kp-tutorial-execution-output>${escapeHtml(frame.output.join("\n"))}</pre>`;
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
-}
-
-function escapeAttr(value: string): string {
-  return escapeHtml(value).replaceAll("\"", "&quot;");
 }

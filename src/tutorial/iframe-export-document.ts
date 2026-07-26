@@ -1,4 +1,9 @@
 import type { KpTutorialCardExportArtifact } from "./export-artifact.ts";
+import {
+  escapeKpTutorialHtmlAttribute as escapeAttr,
+  escapeKpTutorialHtmlText as escapeHtml,
+  escapeKpTutorialScriptJson as escapeScriptJson
+} from "./generated-html-escaping.ts";
 
 export interface KpTutorialCardIframeDocumentInput {
   readonly artifact: KpTutorialCardExportArtifact;
@@ -43,22 +48,4 @@ export function renderKpTutorialCardIframeDocument(
     "</body>",
     "</html>"
   ].join("\n");
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
-}
-
-function escapeAttr(value: string): string {
-  return escapeHtml(value).replaceAll("\"", "&quot;");
-}
-
-function escapeScriptJson(value: string): string {
-  return value
-    .replaceAll("<", "\\u003c")
-    .replaceAll("\u2028", "\\u2028")
-    .replaceAll("\u2029", "\\u2029");
 }

@@ -8,6 +8,10 @@ import {
   type LinearSolveTutorialCardSampleFrame
 } from "./linear-solve-card-sample.ts";
 import {
+  escapeKpTutorialHtmlAttribute as escapeAttr,
+  escapeKpTutorialHtmlText as escapeHtml
+} from "./generated-html-escaping.ts";
+import {
   renderKpTutorialCardHtmlShell
 } from "./card-html-shell.ts";
 import {
@@ -67,15 +71,4 @@ export function renderKpSynchronizedComparisonHtmlShell(
     `  </div>`,
     `</section>`
   ].join("\n");
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
-}
-
-function escapeAttr(value: string): string {
-  return escapeHtml(value).replaceAll("\"", "&quot;");
 }

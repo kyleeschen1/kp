@@ -68,7 +68,7 @@ test("clone authority sanitation is already one shared browser contract", async 
   }
 });
 
-test("escaping inventory freezes the measured duplicate baseline", async () => {
+test("escaping inventory ratchets only the proven tutorial consolidation", async () => {
   const files = await sourceFiles(["src", "scripts"]);
   const sources = await Promise.all(files.map(async (path) => ({
     path,
@@ -76,17 +76,23 @@ test("escaping inventory freezes the measured duplicate baseline", async () => {
   })));
   assert.equal(
     sources.filter(({ source }) => /function escapeHtml/.test(source)).length,
-    29
+    21
   );
   assert.equal(
     sources.filter(({ source }) =>
       /function (?:escapeAttr|escapeAttribute)/.test(source)
     ).length,
-    9
+    1
   );
   assert.equal(
     sources.filter(({ source }) => /function escapeScriptJson/.test(source)).length,
-    3
+    0
+  );
+  assert.equal(
+    sources.filter(({ source }) =>
+      /generated-html-escaping\.ts/.test(source)
+    ).length,
+    8
   );
 });
 

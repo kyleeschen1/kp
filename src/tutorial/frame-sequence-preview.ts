@@ -2,6 +2,11 @@ import type {
   KpTutorialFrameSequenceArtifact,
   KpTutorialFrameSequenceFrame
 } from "./frame-sequence-artifact.ts";
+import {
+  escapeKpTutorialHtmlAttribute as escapeAttr,
+  escapeKpTutorialHtmlText as escapeHtml,
+  escapeKpTutorialScriptJson as escapeScriptJson
+} from "./generated-html-escaping.ts";
 
 export interface RenderKpTutorialFrameSequencePreviewInput {
   readonly sequence: KpTutorialFrameSequenceArtifact;
@@ -102,22 +107,4 @@ function frameDomains(
     frame.graph === undefined ? undefined : "graph",
     frame.programming === undefined ? undefined : "programming"
   ].filter((domain): domain is string => domain !== undefined);
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
-}
-
-function escapeAttr(value: string): string {
-  return escapeHtml(value).replaceAll("\"", "&quot;");
-}
-
-function escapeScriptJson(value: string): string {
-  return value
-    .replaceAll("<", "\\u003c")
-    .replaceAll("\u2028", "\\u2028")
-    .replaceAll("\u2029", "\\u2029");
 }

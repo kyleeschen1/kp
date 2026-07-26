@@ -63,6 +63,6 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-26 complete. The governed cohort now has live review and static/export parity; shared safety utilities are next."
+    "summary": "Slices 1-27 complete. Shared generated-document escaping is consolidated without a catch-all utility; performance and route budgets are next."
   }
 }

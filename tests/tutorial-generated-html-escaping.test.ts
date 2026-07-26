@@ -1,0 +1,68 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import test from "node:test";
+
+import {
+  escapeKpTutorialHtmlAttribute,
+  escapeKpTutorialHtmlText,
+  escapeKpTutorialScriptJson
+} from "../src/tutorial/generated-html-escaping.ts";
+
+const consumers = [
+  "src/tutorial/card-html-shell.ts",
+  "src/tutorial/frame-sequence-preview.ts",
+  "src/tutorial/iframe-export-document.ts",
+  "src/tutorial/programming-card-sample.ts",
+  "src/tutorial/programming-execution-trace-card-sample.ts",
+  "src/tutorial/programming-execution-trace-panel.ts",
+  "src/tutorial/static-step-export-smoke-fixture.ts",
+  "src/tutorial/synchronized-comparison-card.ts"
+] as const;
+
+test("generated tutorial text and attributes escape their exact HTML contexts", () => {
+  const adversarial = `&<>"'=/\u2028\u2029`;
+
+  assert.equal(
+    escapeKpTutorialHtmlText(adversarial),
+    `&amp;&lt;&gt;"'=/\u2028\u2029`
+  );
+  assert.equal(
+    escapeKpTutorialHtmlAttribute(adversarial),
+    `&amp;&lt;&gt;&quot;'=/\u2028\u2029`
+  );
+  assert.equal(
+    `<p>${escapeKpTutorialHtmlText("</p><script>bad()</script>")}</p>`,
+    "<p>&lt;/p&gt;&lt;script&gt;bad()&lt;/script&gt;</p>"
+  );
+  assert.equal(
+    `<p data-value="${escapeKpTutorialHtmlAttribute(`"><img src=x>`)}"></p>`,
+    `<p data-value="&quot;&gt;&lt;img src=x&gt;"></p>`
+  );
+});
+
+test("script JSON remains parseable while HTML terminators and separators are inert", () => {
+  const value = {
+    title: "</script><script>bad()</script>",
+    separators: "\u2028\u2029",
+    ampersand: "&"
+  };
+  const escaped = escapeKpTutorialScriptJson(JSON.stringify(value));
+
+  assert.equal(escaped.includes("<"), false);
+  assert.equal(escaped.includes("\u2028"), false);
+  assert.equal(escaped.includes("\u2029"), false);
+  assert.equal(escaped.includes("&"), true);
+  assert.deepEqual(JSON.parse(escaped), value);
+});
+
+test("only generated tutorial document consumers share the utility", async () => {
+  for (const path of consumers) {
+    const source = await readFile(path, "utf8");
+    assert.match(source, /generated-html-escaping\.ts/, path);
+    assert.doesNotMatch(
+      source,
+      /function (?:escapeHtml|escapeAttr|escapeScriptJson)/,
+      path
+    );
+  }
+});

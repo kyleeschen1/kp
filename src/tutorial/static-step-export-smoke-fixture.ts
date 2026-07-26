@@ -1,6 +1,11 @@
 import { createLinearSolveTutorialCardManifest } from "./card-manifest.ts";
 import { resolveKpTutorialCardStepExportArtifact } from "./export-artifact-resolver.ts";
 import {
+  escapeKpTutorialHtmlAttribute as escapeAttr,
+  escapeKpTutorialHtmlText as escapeHtml,
+  escapeKpTutorialScriptJson as escapeScriptJson
+} from "./generated-html-escaping.ts";
+import {
   createLinearSolveTutorialCardSample,
   type LinearSolveTutorialCardSampleFrame
 } from "./linear-solve-card-sample.ts";
@@ -78,22 +83,4 @@ function renderStaticStepSmokeHtml(
     "</body>",
     "</html>"
   ].join("\n");
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
-}
-
-function escapeAttr(value: string): string {
-  return escapeHtml(value).replaceAll("\"", "&quot;");
-}
-
-function escapeScriptJson(value: string): string {
-  return value
-    .replaceAll("<", "\\u003c")
-    .replaceAll("\u2028", "\\u2028")
-    .replaceAll("\u2029", "\\u2029");
 }

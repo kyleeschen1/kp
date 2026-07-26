@@ -75,6 +75,36 @@ private attribute-escaping definitions, and three private script-JSON escaping
 definitions across `src/` and `scripts/`. Those counts are evidence of
 duplication, not proof that all implementations should merge.
 
+## Slice-27 bounded consolidation
+
+The eight generated tutorial/export document consumers with identical
+authority, lifetime, failure, and security contracts now import
+`src/tutorial/generated-html-escaping.ts`. The shared utility has three
+context-named functions: HTML text, double-quoted HTML attribute, and
+already-serialized JSON inside an HTML script element. An adversarial matrix
+covers closing tags, injected attributes, quotes, ampersands, and the U+2028
+and U+2029 separators. Existing consumer output tests remain the byte-for-byte
+compatibility boundary.
+
+The private duplicate ratchet consequently falls from 29 to 21 text helpers,
+from nine to one attribute helper, and from three to zero script-JSON helpers.
+This is intentionally not a target of zero for every escaping-shaped
+function. The remaining near-duplicates retain their current owners:
+
+- editor and review `innerHTML` insertion may include apostrophe escaping and
+  has a different interactive lifetime;
+- SVG and graph output is XML/serialization context, not generated HTML;
+- `ftc-surface.ts` and `hermeneutic-learner-shell.ts` currently escape quotes
+  in their text contract, so folding them in would change emitted bytes;
+- capture/contact-sheet helpers are disposable Node tooling, not product
+  output;
+- CSS selector escaping remains selector grammar;
+- material-clone stripping remains live DOM authority sanitation; and
+- validator and recursive-freeze similarities do not share domain failure,
+  cycle, prototype, or trust contracts.
+
+No generic sanitation or validator utility was introduced.
+
 ## Canonical ownership decision
 
 The slice-3 contract should be renderer-neutral and should carry only:

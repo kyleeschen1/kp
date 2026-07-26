@@ -7,6 +7,10 @@ import {
 } from "../semantic/source-file.ts";
 import { renderKpTutorialSourceFilePanelHtml } from "./card-html-shell.ts";
 import {
+  escapeKpTutorialHtmlAttribute as escapeAttr,
+  escapeKpTutorialHtmlText as escapeHtml
+} from "./generated-html-escaping.ts";
+import {
   createKpTutorialProgrammingPanelContract,
   type KpTutorialProgrammingPanelContract
 } from "./programming-panel.ts";
@@ -108,15 +112,4 @@ export function renderKpProgrammingTutorialCardHtmlShell(
     `  </div>`,
     `</section>`
   ].join("\n");
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
-}
-
-function escapeAttr(value: string): string {
-  return escapeHtml(value).replaceAll("\"", "&quot;");
 }
