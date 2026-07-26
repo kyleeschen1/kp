@@ -75,6 +75,21 @@ const sharedEquationPresentation = {
   browserPhaseGates: ["reflow", "act", "native-settlement"]
 } as const;
 
+const splitMergeReviewMoments = [
+  { id: "start", label: "Shared fraction · start", progressPermille: 0 },
+  { id: "branch", label: "Denominator branches", progressPermille: 250 },
+  { id: "split", label: "Two fractions · midpoint", progressPermille: 500 },
+  { id: "converge", label: "Denominators converge", progressPermille: 750 },
+  { id: "end", label: "Shared fraction · endpoint", progressPermille: 1_000 }
+] as const;
+
+const splitMergeReviewProfiles = [
+  { id: "wide-full", label: "Wide · full motion", viewport: "desktop", motion: "full" },
+  { id: "wide-reduced", label: "Wide · reduced motion", viewport: "desktop", motion: "reduced" },
+  { id: "phone-full", label: "Phone · full motion", viewport: "phone", motion: "full" },
+  { id: "phone-reduced", label: "Phone · reduced motion", viewport: "phone", motion: "reduced" }
+] as const;
+
 const distributionVisualProgress = [0, 360, 500, 650, 820, 1_000] as const;
 const distributionReviewViewports = [
   { id: "desktop", label: "Desktop" },
@@ -225,12 +240,22 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       searchableText: "One denominator can govern every term"
     }),
     presentation: sharedEquationPresentation,
-    review: singleEquationReview({
+    review: {
       id: "split-merge-fractions",
       title: "Kinetic Press · split and merge fractions",
-      label: "Give each term the denominator",
-      progressPermille: 500
-    }),
+      capture: "stage",
+      columns: 4,
+      imageFit: "contain",
+      checkpoints: splitMergeReviewProfiles.flatMap((profile) =>
+        splitMergeReviewMoments.map((moment) => ({
+          id: `${profile.id}-${moment.id}`,
+          label: `${moment.label} · ${profile.label}`,
+          progressPermille: moment.progressPermille,
+          viewport: profile.viewport,
+          query: { kpMotion: profile.motion }
+        }))
+      )
+    },
     budget: routeBudget(28_800, 3_448, 120_543)
   }),
   defineKpReaderRoute({

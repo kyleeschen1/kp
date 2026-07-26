@@ -9,5 +9,9 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-07-25-canonical-animation-construction-governed-round-trip-long-loop-proposal.md"
     }
-  ]
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slices 1-15 complete. Fraction canonical ownership and browser checkpoint pass; slices 16-30 await a bounded recovery of frozen reader budgets."
+  }
 }

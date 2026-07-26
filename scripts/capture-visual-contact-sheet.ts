@@ -41,6 +41,8 @@ export const kpDistributionAreaContactSheetCheckpoints =
   checkpointsFor("distribution-area");
 export const kpQuadraticBranchingContactSheetCheckpoints =
   checkpointsFor("quadratic-branching");
+export const kpSplitMergeFractionContactSheetCheckpoints =
+  checkpointsFor("split-merge-fractions");
 
 export interface KpVisualContactSheetItem {
   readonly id: string;
@@ -68,7 +70,11 @@ export async function captureKpVisualContactSheet(input: {
   readonly baseUrl?: string;
   readonly outputRoot: string;
   readonly exemplar?: KpVisualContactSheetExemplar;
-}): Promise<{ readonly sheet: string; readonly manifest: string }> {
+}): Promise<{
+  readonly sheet: string;
+  readonly html: string;
+  readonly manifest: string;
+}> {
   const outputRoot = path.resolve(input.outputRoot);
   await mkdir(outputRoot, { recursive: true });
   const descriptor = descriptorFor(input.exemplar ?? "solve-x");
@@ -104,21 +110,25 @@ export async function captureKpVisualContactSheet(input: {
       });
     }
     const sheetPage = await harness.page({ viewport: { width: 1440, height: 1000 } });
-    await sheetPage.setContent(buildKpVisualContactSheetHtml(items, {
+    const contactSheetHtml = buildKpVisualContactSheetHtml(items, {
       title: descriptor.title,
       columns: descriptor.columns,
       imageFit: descriptor.imageFit
-    }), { waitUntil: "load" });
+    });
+    await sheetPage.setContent(contactSheetHtml, { waitUntil: "load" });
     const sheet = path.join(outputRoot, "contact-sheet.png");
     await sheetPage.screenshot({ path: sheet, fullPage: true, animations: "disabled" });
+    const html = path.join(outputRoot, "index.html");
+    await writeFile(html, contactSheetHtml, "utf8");
     const manifest = path.join(outputRoot, "manifest.json");
     await writeFile(manifest, `${JSON.stringify({
       schemaVersion: "kp.visual-contact-sheet.v1",
       exemplar: descriptor.id,
       ordering: items.map(({ dataUrl: _dataUrl, ...item }) => item),
-      sheet: path.relative(process.cwd(), sheet)
+      sheet: path.relative(process.cwd(), sheet),
+      html: path.relative(process.cwd(), html)
     }, null, 2)}\n`, "utf8");
-    return { sheet, manifest };
+    return { sheet, html, manifest };
   } finally {
     await harness.close();
   }
@@ -273,6 +283,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
   });
   console.log(JSON.stringify({
     sheet: path.relative(process.cwd(), result.sheet),
+    html: path.relative(process.cwd(), result.html),
     manifest: path.relative(process.cwd(), result.manifest),
     captures: descriptorFor(exemplar).checkpoints.length
   }, null, 2));

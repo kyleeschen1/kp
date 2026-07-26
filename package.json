@@ -61,6 +61,7 @@
     "visual:quadratic-branching": "node --disable-warning=ExperimentalWarning scripts/capture-quadratic-branching.ts",
     "visual:animation-workbench": "node --disable-warning=ExperimentalWarning scripts/capture-animation-workbench.ts",
     "visual:contact-sheet": "node --disable-warning=ExperimentalWarning scripts/capture-visual-contact-sheet.ts",
+    "visual:fraction-canonical-checkpoint": "npm run build && node --disable-warning=ExperimentalWarning scripts/capture-visual-contact-sheet.ts --exemplar split-merge-fractions --output tmp/codex/fraction-canonical-checkpoint",
     "visual:reader-gold-parity": "npm run build && node --disable-warning=ExperimentalWarning scripts/capture-reader-gold-equation-parity.ts",
     "baseline:semantic-reader": "node --disable-warning=ExperimentalWarning scripts/capture-semantic-reader-baseline.ts",
     "baseline:solve-x-attention": "node --disable-warning=ExperimentalWarning scripts/capture-solve-x-attention-baseline.ts",

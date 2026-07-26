@@ -7,6 +7,7 @@ import {
   kpDistributionAreaContactSheetCheckpoints,
   kpQuadraticBranchingContactSheetCheckpoints,
   kpSolveXContactSheetCheckpoints,
+  kpSplitMergeFractionContactSheetCheckpoints,
   kpVisualContactSheetExemplars
 } from "./capture-visual-contact-sheet.ts";
 
@@ -96,6 +97,27 @@ test("distribution contact sheet pairs the same visual moments forward and backw
       assert.equal(pair.length, 2);
       assert.equal(pair[0]!.progress + pair[1]!.progress, 1_000);
     }
+  }
+});
+
+test("fraction checkpoint covers every moment, viewport, and motion projection", () => {
+  assert.equal(kpSplitMergeFractionContactSheetCheckpoints.length, 20);
+  assert.equal(
+    new Set(kpSplitMergeFractionContactSheetCheckpoints.map(({ id }) => id)).size,
+    20
+  );
+  for (const profile of [
+    "wide-full",
+    "wide-reduced",
+    "phone-full",
+    "phone-reduced"
+  ]) {
+    assert.deepEqual(
+      kpSplitMergeFractionContactSheetCheckpoints
+        .filter(({ id }) => id.startsWith(profile))
+        .map(({ progress }) => progress),
+      [0, 250, 500, 750, 1_000]
+    );
   }
 });
 

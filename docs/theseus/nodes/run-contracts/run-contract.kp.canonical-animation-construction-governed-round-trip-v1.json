@@ -123,6 +123,20 @@
       "scope": "slice-14 exclusive-default-migration",
       "checkedAt": "2026-07-26T06:39:49.266Z",
       "notes": "Canonical split and merge each render one canonical material layer and zero compatibility children; ordinary teacher-zero remains outside the canonical session chunk; focused tests, typecheck, build, and eight-route production closure pass. Full route budget baseline remains independently red and is not waived."
+    },
+    {
+      "command": "npm run visual:fraction-canonical-checkpoint; 10-test focused Chromium cohort; contact-sheet contract tests; typecheck; production closure; workspace validation",
+      "status": "passed",
+      "scope": "slice-15 fraction exemplar checkpoint",
+      "checkedAt": "2026-07-26T06:46:32.157Z",
+      "notes": "Twenty manually inspected wide/phone full/reduced frames pass the named fraction acceptance criteria; the stable command emits a self-contained browser HTML review page."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "slice-15 conditional promotion gate",
+      "checkedAt": "2026-07-26T06:46:33.133Z",
+      "notes": "Frozen shared runtime and compiled-HTML ceilings fail across migrated and untouched routes. Baselines were not raised; automatic continuation past the waived checkpoint is forbidden until a bounded recovery passes."
     }
   ],
   "allowedWork": [
@@ -265,7 +279,9 @@
     {
       "id": "slice-15",
       "title": "fraction-exemplar-browser-checkpoint",
-      "status": "planned"
+      "summary": "Published and inspected the canonical fraction browser checkpoint. The exemplar passes, but the conditional continuation gate stops at HUMAN_CHECKPOINT because frozen release budgets remain red across shared routes.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-16",
