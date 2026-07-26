@@ -102,6 +102,13 @@
       "scope": "slice-11 responsive-composition",
       "checkedAt": "2026-07-26T06:25:09.997Z",
       "notes": "11 canonical renderer ratchets, seven responsive/layout tests, and two fraction wide/phone Chromium behaviors pass. Full screenshot was visually identical with a one-pixel outer-card width environment delta; dev-review API was offline, so no baseline was changed."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; inert canonical reader Chromium; generated fraction export and backend capabilities",
+      "status": "passed",
+      "scope": "slice-12 semantic-authority-preservation",
+      "checkedAt": "2026-07-26T06:27:07.685Z",
+      "notes": "22 focused construction/authority tests, one Chromium inert-paint/native-DOM test, and ten iframe/static-step/static/headless capability tests pass."
     }
   ],
   "allowedWork": [
@@ -223,7 +230,9 @@
     {
       "id": "slice-12",
       "title": "semantic-authority-preservation",
-      "status": "planned"
+      "summary": "Certified that reader semantic DOM, MathML, focus/keyboard, Cloze, hydration, static/headless, and export semantics remain native while canonical moving paint stays inert and renderer-neutral.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-13",
