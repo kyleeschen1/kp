@@ -25,6 +25,15 @@
     "npm run check:reader-production",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "focused roadmap authority and coverage tests; theseus workspace validate; plan revision inspection",
+      "status": "passed",
+      "scope": "slice-01 roadmap authority reconciliation",
+      "checkedAt": "2026-07-26T05:40:04.133Z",
+      "notes": "Eight focused roadmap authority, coverage, link, and source checks pass. Plan v9 is the sole active approved KP revision, quadratic branching is complete, canonical animation construction is the sole active implementation phase, and all 788 nodes validate."
+    }
+  ],
   "allowedWork": [
     "One fraction split/merge reader-transition migration to the canonical equation session.",
     "Canonical semantic construction and governed-draft schemas, compilers, validation, repair, and deterministic projection.",
@@ -67,7 +76,9 @@
     {
       "id": "slice-01",
       "title": "roadmap-authority-reconciliation",
-      "status": "planned"
+      "summary": "Activated approved plan v9 without touching narrative roadmap drafts: quadratic branching is complete, canonical construction is the sole active implementation phase, slice 1 is linked, and focused authority plus workspace gates pass.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-02",

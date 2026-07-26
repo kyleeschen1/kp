@@ -1,36 +1,36 @@
 {
-  "id": "plan-revision.kp.v8",
+  "id": "plan-revision.kp.v9",
   "kind": "plan-revision",
-  "title": "Kinetic Press quadratic branching roadmap v8",
-  "status": "superseded",
+  "title": "Kinetic Press canonical animation construction roadmap v9",
+  "status": "active",
   "domain": "kp",
-  "summary": "Preserve the authoritative product roadmap, mark semantic-animation convergence complete, and make the approved quadratic semantic branching exemplar the sole current implementation phase.",
+  "summary": "Preserve the architecture-pressure roadmap, mark quadratic branching complete, and make canonical animation construction the sole current implementation phase.",
   "sourceRefs": [
     {
       "kind": "file",
-      "path": "docs/project/reviews/2026-07-24-quadratic-semantic-branching-long-loop-proposal.md",
-      "summary": "Human-approved 24-slice quadratic exemplar plan and execution boundary."
+      "path": "docs/project/reviews/2026-07-25-canonical-animation-construction-governed-round-trip-long-loop-proposal.md",
+      "summary": "User-approved exact 30-slice construction and governed round-trip program."
     },
     {
       "kind": "file",
-      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v7.json",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v8.json",
       "summary": "Approved predecessor retaining the complete architecture-pressure roadmap."
     }
   ],
   "affects": [
-    "milestone.kp.long-term-semantic-product-plan-v0",
-    "run-contract.kp.authoritative-roadmap-workbench-v1",
     "workflow.kp.delivery",
-    "priority-change.kp.semantic-animation-convergence-successor-v1"
+    "next-action.kp.quadratic-semantic-branching-v0",
+    "next-action.kp.canonical-animation-construction-governed-round-trip-v0",
+    "run-contract.kp.canonical-animation-construction-governed-round-trip-v1"
   ],
   "progress": {
     "state": "partial",
-    "summary": "The semantic-animation convergence priority is complete and human-accepted. Next implementation remains unselected; the post-convergence Lisp diagnostic is still proposal-only, while the distribution landing-offset bug is registered for diagnosis."
+    "summary": "Quadratic branching and its bounded presentation-governance follow-up are resolved. The approved canonical animation construction contract is executing as the sole current implementation authority."
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
-    "revision": 8,
-    "objective": "Grow Kinetic Press through reusable semantic and visual primitives: preserve accepted exemplars, prove quadratic solution branching and graph-root correspondence now, then expand through calculus, linear algebra, arithmetic, precalculus, geometry/data, and cross-domain explanations in architecture-amortizing order.",
+    "revision": 9,
+    "objective": "Grow Kinetic Press through reusable semantic and visual primitives: preserve accepted exemplars, prove canonical animation construction and governed round trips now, then expand through calculus, linear algebra, arithmetic, precalculus, geometry/data, and cross-domain explanations in architecture-amortizing order.",
     "assumptions": [
       {
         "id": "single-roadmap-authority",
@@ -216,15 +216,31 @@
         "title": "Quadratic semantic branching",
         "objective": "Model completing the square and quadratic-formula paths as explicit lawful branches that converge on verified roots.",
         "horizon": "now",
-        "status": "active",
+        "status": "complete",
         "evidence": [
           "next-action.kp.quadratic-semantic-branching-v0",
-          "run-contract.kp.quadratic-semantic-branching-v2"
+          "run-contract.kp.quadratic-semantic-branching-v2",
+          "run-contract.kp.quadratic-operation-presentation-governance-v0"
         ],
         "topic": "Algebra · Quadratics",
         "architectureBenefit": "Branch scheduling, convergence, and alternative solution-path semantics.",
-        "rationale": "Quadratics apply the highest next architectural pressure after the Workbench and radical settlement stabilize.",
+        "rationale": "The semantic branching and bounded presentation-governance contracts are resolved; the retained exemplar remains evidence rather than current implementation authority.",
         "canonicalExemplar": "Solve x^2 - 5x + 6 = 0"
+      },
+      {
+        "id": "canonical-animation-construction",
+        "title": "Canonical animation construction",
+        "objective": "Prove one semantic-to-renderer construction path, migrate one fraction split/merge reader transition exclusively, and establish governed variation plus browser-native review without parallel runtimes.",
+        "horizon": "now",
+        "status": "active",
+        "evidence": [
+          "next-action.kp.canonical-animation-construction-governed-round-trip-v0",
+          "run-contract.kp.canonical-animation-construction-governed-round-trip-v1"
+        ],
+        "topic": "Platform · Canonical animation construction",
+        "architectureBenefit": "One composable human and governed-model construction path with compiler-owned mathematics, presentation, rendering, and repair.",
+        "rationale": "Renderer convergence closed the implementation fork; construction is now the narrowest bottleneck to visible library growth without parallel animation systems.",
+        "canonicalExemplar": "Split and merge (x + y) / 2"
       },
       {
         "id": "integral-accumulation",
@@ -503,12 +519,11 @@
       }
     ],
     "approval": {
-      "status": "superseded",
+      "status": "approved",
       "decidedAt": "2026-07-26T05:39:00.000Z",
       "decidedBy": "user",
-      "rationale": "Superseded by plan-revision.kp.v9."
+      "rationale": "Reconcile the resolved quadratic phase and select the user-approved canonical animation construction contract as the sole current implementation phase."
     },
-    "supersedes": "plan-revision.kp.v7",
-    "supersededBy": "plan-revision.kp.v9"
+    "supersedes": "plan-revision.kp.v8"
   }
 }
