@@ -286,14 +286,14 @@ const readerCanonicalEquationSession: KpReaderCanonicalEquationSession | undefin
     )
     ? undefined
     : readerCanonicalEquationSessionModule.createKpReaderCanonicalEquationSession({
-        transitionId: "transform.linear-solve.cancel-left-additive-inverse",
+        transitionIds: ["transform.linear-solve.cancel-left-additive-inverse"],
         createSession:
           readerCanonicalEquationSessionAdapter
             .createKpReaderEquationSceneCompositorSession
       });
 if (readerCanonicalEquationSession !== undefined) {
   stage.dataset["kpReaderCanonicalEquationSession"] =
-    readerCanonicalEquationSession.transitionId;
+    readerCanonicalEquationSession.transitionIds.join(",");
 }
 const materialLayer = createKpReaderEquationMaterialLayer(
   requireDescendant<HTMLElement>(viewport, "[data-kp-reader-equation-material-layer]")

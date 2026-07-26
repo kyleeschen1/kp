@@ -20,7 +20,7 @@ interface PaintBinding {
 }
 
 export interface KpReaderCanonicalEquationSession {
-  readonly transitionId: string;
+  readonly transitionIds: readonly string[];
   readonly apply: (input: {
     readonly renderPlan: KpReaderEquationRenderPlan;
     readonly materialPlan: KpReaderEquationMaterialPlan;
@@ -34,9 +34,18 @@ export interface KpReaderCanonicalEquationSession {
 }
 
 export function createKpReaderCanonicalEquationSession(input: {
-  readonly transitionId: string;
+  readonly transitionIds: readonly string[];
   readonly createSession: KpReaderEquationSceneCompositorFactory;
 }): KpReaderCanonicalEquationSession {
+  if (
+    input.transitionIds.length === 0 ||
+    new Set(input.transitionIds).size !== input.transitionIds.length
+  ) {
+    throw new Error(
+      "Reader canonical equation session requires unique transition ids."
+    );
+  }
+  const transitionIds = Object.freeze([...input.transitionIds]);
   let session:
     ReturnType<KpReaderEquationSceneCompositorFactory> | undefined;
   let sessionKey: string | undefined;
@@ -44,10 +53,15 @@ export function createKpReaderCanonicalEquationSession(input: {
   let paintBindings: readonly PaintBinding[] = [];
 
   return {
-    transitionId: input.transitionId,
+    transitionIds,
     apply: (frame) => {
-      if (frame.renderPlan.transitions[0]?.id !== input.transitionId) return false;
+      const transitionId = frame.renderPlan.transitions[0]?.id;
+      if (
+        transitionId === undefined ||
+        !transitionIds.includes(transitionId)
+      ) return false;
       const nextKey = [
+        transitionId,
         frame.renderPlan.id,
         frame.materialPlan.id,
         frame.fontReadiness.revision,
@@ -70,22 +84,22 @@ export function createKpReaderCanonicalEquationSession(input: {
           endpoint: "source",
           stage: frame.fitSurface,
           root: sourceRoot,
-          semanticEntityId: `${input.transitionId}.source`,
-          presentationGroupId: `${input.transitionId}.source`,
+          semanticEntityId: `${transitionId}.source`,
+          presentationGroupId: `${transitionId}.source`,
           fontReadiness: frame.fontReadiness
         });
         const target = observeKpNativeKatexRenderedScene({
           endpoint: "target",
           stage: frame.fitSurface,
           root: targetRoot,
-          semanticEntityId: `${input.transitionId}.target`,
-          presentationGroupId: `${input.transitionId}.target`,
+          semanticEntityId: `${transitionId}.target`,
+          presentationGroupId: `${transitionId}.target`,
           fontReadiness: frame.fontReadiness
         });
         session = input.createSession({
           renderPlan: frame.renderPlan,
           materialPlan: frame.materialPlan,
-          transitionId: input.transitionId,
+          transitionId,
           source,
           target
         });
@@ -105,7 +119,7 @@ export function createKpReaderCanonicalEquationSession(input: {
       }
       const ownership = session.apply(frame.progress);
       if (ownership.materialSceneOpacity === 1) {
-        applyReaderMotionTrace(frame, paintBindings, input.transitionId);
+        applyReaderMotionTrace(frame, paintBindings, transitionId);
       }
       frame.fitSurface.dataset["kpReaderCanonicalEquationSession"] = "active";
       frame.fitSurface.dataset["kpReaderCanonicalEquationSessionLifecycle"] =

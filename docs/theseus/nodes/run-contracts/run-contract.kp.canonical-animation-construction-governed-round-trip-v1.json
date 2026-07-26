@@ -67,6 +67,13 @@
       "scope": "slice-06 fraction-reader-preservation-manifest",
       "checkedAt": "2026-07-26T06:09:08.843Z",
       "notes": "17 focused tests, reader production closure, and all TypeScript projects pass; preservation ratchets cover semantics, prose, focus, Cloze, hydration, layout, motion, accessibility, route, payload, and review checkpoints."
+    },
+    {
+      "command": "focused reader compositor adapter tests; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-07 fraction-session-adapter",
+      "checkedAt": "2026-07-26T06:12:36.080Z",
+      "notes": "Eight focused adapter/inventory tests pass; split and merge both reach the existing renderer-session lifecycle; app type and architecture gates pass; current route paint selection is unchanged."
     }
   ],
   "allowedWork": [
@@ -153,7 +160,9 @@
     {
       "id": "slice-07",
       "title": "fraction-session-adapter",
-      "status": "planned"
+      "summary": "Generalized the existing canonical reader session to an immutable transition set and proved fraction fan-out and fan-in consume existing render/material plans through the same transient compositor, without product activation.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-08",
