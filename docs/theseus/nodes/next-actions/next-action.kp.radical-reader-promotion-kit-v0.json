@@ -173,11 +173,46 @@
       "scope": "slice 7 architecture boundaries",
       "checkedAt": "2026-07-26T17:15:45.789Z",
       "notes": "All architecture gates passed."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 8 descriptor-owned transition policy",
+      "checkedAt": "2026-07-26T17:21:00.573Z",
+      "notes": "22 tests passed; radical, fraction, and solve-x compile canonical eligibility from descriptors with shared clock, IR lifecycle, and exclusive-native presentation authorities."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice 8 canonical renderer convergence",
+      "checkedAt": "2026-07-26T17:21:01.526Z",
+      "notes": "11 renderer convergence tests passed; entrypoint contains no lesson-specific canonical branch."
+    },
+    {
+      "command": "node --test semantic reader descriptor",
+      "status": "passed",
+      "scope": "slice 8 descriptor regression",
+      "checkedAt": "2026-07-26T17:21:02.353Z",
+      "notes": "All existing descriptor resolution and capability tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 8 static typing",
+      "checkedAt": "2026-07-26T17:21:03.170Z",
+      "notes": "All TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 8 architecture boundaries",
+      "checkedAt": "2026-07-26T17:21:03.969Z",
+      "notes": "All architecture gates passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 7 compiled the radical lesson into exact native KaTeX power and square-root endpoints plus searchable static MathML and hydration data, still without route activation."
+    "summary": "Slice 8 replaced lesson-name canonical eligibility with a validated descriptor-owned transition policy. Radical policy reuses the runtime frame clock, equation-transition IR lifecycles, and exclusive native scene intent; the radical descriptor remains outside the product registry."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

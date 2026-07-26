@@ -148,7 +148,8 @@
     {
       "id": "slice-08",
       "title": "compile-transition-policy",
-      "status": "planned",
+      "summary": "Compiled canonical transition selection from lesson descriptors and removed the central lesson switch; radical policy reuses existing timing, lifecycle, and presentation authorities without route activation.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {

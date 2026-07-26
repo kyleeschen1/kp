@@ -114,7 +114,8 @@ test("reader keeps no compositor query switch and one adapter loader", async () 
   ]);
 
   assert.equal((entry.match(/kpGlyphCompositor/g) ?? []).length, 0);
-  assert.match(entry, /lessonVariant === "streamlined"/);
+  assert.doesNotMatch(entry, /lessonVariant === "(streamlined|numerator-split-merge)"/);
+  assert.match(entry, /compileKpReaderCanonicalTransitionPolicy/);
   assert.match(
     entry,
     /if \(canonicalEquationSessionApplied\) \{\s*materialLayer\.sync\(\[\]\)/

@@ -11,6 +11,7 @@ import type {
 export const numeratorSplitMergeDescriptor = {
   id: "numerator-split-merge",
   createAnimation: () => createNumeratorSplitMergeEquationAnimationAsset(),
+  canonicalTransitionSelection: "all",
   bindStructuralAnchors: bindKpNumeratorSplitMergeStructuralAnchors,
   compactTranscriptAvailable: false
 } satisfies KpReaderEquationLessonDescriptor;

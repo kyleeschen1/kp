@@ -9,6 +9,9 @@ import type {
 export const streamlinedDescriptor = {
   id: "streamlined",
   createAnimation: () => createLinearSolveAnimationAsset(),
+  canonicalTransitionSelection: [
+    "transform.linear-solve.cancel-left-additive-inverse"
+  ],
   compactTranscriptAvailable: false
 } satisfies KpReaderEquationLessonDescriptor;
 

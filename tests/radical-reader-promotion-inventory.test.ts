@@ -31,16 +31,24 @@ test("radical adoption inventory names every existing authority and seam", async
   }
 });
 
-test("radical reader starts as an explicit product adoption gap", async () => {
-  const [descriptors, routes, entry] = await Promise.all([
+test("radical reader remains an explicit product route gap", async () => {
+  const [descriptors, radicalDescriptor, routes, entry] = await Promise.all([
     readFile("src/reader/app/equation-lesson-descriptor.ts", "utf8"),
+    readFile(
+      "src/reader/app/equation-lesson-descriptors/radical-succession.ts",
+      "utf8"
+    ),
     readFile("src/reader/compiler/reader-route-manifest.ts", "utf8"),
     readFile("src/reader/app/exemplar-entry.ts", "utf8")
   ]);
   assert.doesNotMatch(descriptors, /"radical-succession"\s*:/);
+  assert.match(radicalDescriptor, /canonicalTransitionSelection: "all"/);
   assert.doesNotMatch(routes, /\/reader\/radical-succession\//);
-  assert.match(entry, /lessonVariant === "numerator-split-merge"/);
-  assert.doesNotMatch(entry, /lessonVariant === "radical-succession"/);
+  assert.match(entry, /compileKpReaderCanonicalTransitionPolicy/);
+  assert.doesNotMatch(
+    entry,
+    /lessonVariant === "(radical-succession|numerator-split-merge)"/
+  );
 });
 
 test("existing editor radical remains a named compatibility boundary", async () => {

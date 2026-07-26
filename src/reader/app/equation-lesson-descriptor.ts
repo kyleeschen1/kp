@@ -7,6 +7,10 @@ export interface KpReaderEquationLessonDescriptor {
   readonly createAnimation: (
     profile: KpReaderEquationPresentationProfile
   ) => KpAnimationAsset;
+  readonly canonicalTransitionSelection?:
+    | "all"
+    | readonly string[]
+    | undefined;
   readonly bindStructuralAnchors?: ((input: {
     readonly root: ParentNode;
     readonly state: KpSemanticAssetObject;
@@ -15,6 +19,13 @@ export interface KpReaderEquationLessonDescriptor {
     profile: KpReaderEquationPresentationProfile
   ) => string | undefined) | undefined;
   readonly compactTranscriptAvailable: boolean;
+}
+
+export interface KpReaderCanonicalTransitionPolicy {
+  readonly transitionIds: readonly string[];
+  readonly timingAuthority: "runtime-frame-clock";
+  readonly lifecycleAuthority: "equation-transition-ir";
+  readonly presentationIntent: "exclusive-native-scene";
 }
 
 /**
@@ -71,6 +82,39 @@ export async function resolveKpReaderEquationLessonDescriptor(
   return kpReaderEquationLessonDescriptorLoaders[
     variant as KpReaderEquationLessonVariant
   ]();
+}
+
+export function compileKpReaderCanonicalTransitionPolicy(input: {
+  readonly descriptor: KpReaderEquationLessonDescriptor;
+  readonly animation: KpAnimationAsset;
+}): KpReaderCanonicalTransitionPolicy | undefined {
+  const selection = input.descriptor.canonicalTransitionSelection;
+  if (selection === undefined) return undefined;
+  const availableIds = input.animation.transformations.map(({ id }) => id);
+  const transitionIds = selection === "all"
+    ? availableIds
+    : [...selection];
+  if (
+    transitionIds.length === 0 ||
+    new Set(transitionIds).size !== transitionIds.length
+  ) {
+    throw new Error(
+      `${input.descriptor.id} canonical transition selection must be non-empty and unique.`
+    );
+  }
+  for (const transitionId of transitionIds) {
+    if (!availableIds.includes(transitionId)) {
+      throw new Error(
+        `${input.descriptor.id} selected unknown canonical transition ${transitionId}.`
+      );
+    }
+  }
+  return Object.freeze({
+    transitionIds: Object.freeze(transitionIds),
+    timingAuthority: "runtime-frame-clock" as const,
+    lifecycleAuthority: "equation-transition-ir" as const,
+    presentationIntent: "exclusive-native-scene" as const
+  });
 }
 
 export function bindKpReaderEquationLessonStructuralAnchors(input: {

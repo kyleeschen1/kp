@@ -67,6 +67,7 @@ import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycl
 import { mountKpReaderDevelopmentReview } from "./development-review-loader.ts";
 import {
   bindKpReaderEquationLessonStructuralAnchors,
+  compileKpReaderCanonicalTransitionPolicy,
   resolveKpReaderEquationLessonDescriptor
 } from "./equation-lesson-descriptor.ts";
 
@@ -99,16 +100,15 @@ const readerRoute = createKpReaderRuntimeRouteDescriptor({
 });
 const { documentId, documentVersion } = readerRoute;
 const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
+const lessonDescriptor = await resolveKpReaderEquationLessonDescriptor(lessonVariant);
 const usesCanonicalEquationRenderer =
-  lessonVariant === "streamlined" ||
-  lessonVariant === "numerator-split-merge";
+  lessonDescriptor.canonicalTransitionSelection !== undefined;
 const readerCanonicalEquationSessionModule = usesCanonicalEquationRenderer
   ? await import("./reader-canonical-equation-session.ts")
   : undefined;
 const readerCanonicalEquationSessionAdapter = usesCanonicalEquationRenderer
   ? await loadKpReaderEquationSceneCompositorAdapter()
   : undefined;
-const lessonDescriptor = await resolveKpReaderEquationLessonDescriptor(lessonVariant);
 const compiledEquationPresentation = defineKpReaderEquationPresentationCapability({
   defaultProfileId: resolveKpReaderEquationPresentationProfile(
     requiredData(document.body, "kpReaderEquationProfileDefault")
@@ -280,12 +280,13 @@ const staticPlans = new Map(animation.transformations.map((transformation, index
     }
   ] as const;
 }));
+const canonicalTransitionPolicy =
+  compileKpReaderCanonicalTransitionPolicy({
+    descriptor: lessonDescriptor,
+    animation
+  });
 const canonicalTransitionIds =
-  lessonVariant === "streamlined"
-    ? ["transform.linear-solve.cancel-left-additive-inverse"]
-    : lessonVariant === "numerator-split-merge"
-      ? animation.transformations.map(({ id }) => id)
-      : [];
+  canonicalTransitionPolicy?.transitionIds ?? [];
 const readerCanonicalEquationSession: KpReaderCanonicalEquationSession | undefined =
   readerCanonicalEquationSessionModule === undefined ||
     readerCanonicalEquationSessionAdapter === undefined ||
