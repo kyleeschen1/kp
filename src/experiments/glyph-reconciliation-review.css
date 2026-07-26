@@ -11,6 +11,41 @@
 body { margin: 0; min-width: 320px; }
 button, input { font: inherit; }
 
+html[data-kp-review-gallery-artifact] {
+  background: #f8f8f2;
+}
+
+html[data-kp-review-gallery-artifact] .glyph-exemplar {
+  width: 100%;
+  padding: .5rem;
+}
+
+html[data-kp-review-gallery-ready="true"] .glyph-exemplar__header,
+html[data-kp-review-gallery-ready="true"] .glyph-exemplar__evidence {
+  display: none;
+}
+
+html[data-kp-review-gallery-ready="true"][data-kp-review-gallery-artifact="cohort"]
+  .glyph-exemplar__review,
+html[data-kp-review-gallery-ready="true"][data-kp-review-gallery-artifact="fraction"]
+  .glyph-exemplar__review:not([data-fraction-card]),
+html[data-kp-review-gallery-ready="true"][data-kp-review-gallery-artifact="fraction"]
+  .glyph-exemplar__trace {
+  display: none;
+}
+
+html[data-kp-review-gallery-artifact] .glyph-exemplar__review--secondary,
+html[data-kp-review-gallery-artifact] .glyph-exemplar__trace {
+  margin-top: 0;
+}
+
+html[data-kp-review-gallery-ready="true"] .glyph-exemplar__controls,
+html[data-kp-review-gallery-ready="true"] .glyph-exemplar__trace-controls,
+html[data-kp-review-gallery-ready="true"] .glyph-exemplar__trace-detail,
+html[data-kp-review-gallery-ready="true"] [data-kp-dev-review-shell] {
+  display: none;
+}
+
 .glyph-exemplar {
   width: min(1040px, 100%);
   margin: 0 auto;

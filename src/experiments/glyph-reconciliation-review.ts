@@ -64,6 +64,14 @@ const rootNode = document.querySelector<HTMLElement>("#glyph-experiment");
 if (rootNode === null) throw new Error("Glyph root is missing.");
 const root = rootNode;
 const searchParams = new URL(location.href).searchParams;
+const reviewGalleryArtifact = searchParams.get("reviewGallery");
+if (
+  reviewGalleryArtifact === "fraction" ||
+  reviewGalleryArtifact === "cohort"
+) {
+  document.documentElement.dataset["kpReviewGalleryArtifact"] =
+    reviewGalleryArtifact;
+}
 if (searchParams.get("radicalInventory") === "1") {
   await import("./glyph-reconciliation-radical-inventory.ts");
 }
@@ -923,6 +931,9 @@ const requestedProgress = Number(
 ) / 1000;
 render(requestedProgress);
 review.dataset["kpReady"] = "true";
+if (reviewGalleryArtifact !== null) {
+  document.documentElement.dataset["kpReviewGalleryReady"] = "true";
+}
 
 if (import.meta.env.DEV) {
   const { mountKpDevReview } = await import("../dev-review/review-bootstrap.ts");

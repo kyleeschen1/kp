@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+      name="description"
+      content="Live review gallery for canonical equation animation construction."
+    >
+    <title>Canonical animation review · Kinetic Press</title>
+    <link rel="stylesheet" href="/src/experiments/canonical-animation-review.css">
+  </head>
+  <body>
+    <main class="canonical-review" data-kp-canonical-animation-review>
+      <header class="canonical-review__header">
+        <p>Canonical animation construction · live review</p>
+        <h1>Inspect the artifact, not a screenshot</h1>
+        <div>
+          <span>Verified semantic construction</span>
+          <span>Native KaTeX endpoints</span>
+          <span>One inert renderer session</span>
+        </div>
+      </header>
+
+      <section class="canonical-review__controls" aria-label="Review controls">
+        <div role="group" aria-label="Artifact">
+          <button type="button" data-review-artifact="fraction-split" aria-pressed="true">Fraction split</button>
+          <button type="button" data-review-artifact="fraction-merge" aria-pressed="false">Fraction merge</button>
+          <button type="button" data-review-artifact="cohort" aria-pressed="false">Governed cohort</button>
+        </div>
+        <div role="group" aria-label="Viewport">
+          <button type="button" data-review-viewport="wide" aria-pressed="true">Wide</button>
+          <button type="button" data-review-viewport="phone" aria-pressed="false">Phone</button>
+        </div>
+        <div role="group" aria-label="Motion">
+          <button type="button" data-review-motion="full" aria-pressed="true">Full motion</button>
+          <button type="button" data-review-motion="reduced" aria-pressed="false">Reduced</button>
+        </div>
+      </section>
+
+      <section class="canonical-review__player" aria-label="Live animation review">
+        <div class="canonical-review__viewport" data-review-viewport-shell="wide">
+          <iframe title="Canonical fraction split animation" data-review-frame></iframe>
+        </div>
+        <div class="canonical-review__transport">
+          <button type="button" data-review-play>Play</button>
+          <button type="button" data-review-rewind>Rewind</button>
+          <label>
+            <span>Direct seek</span>
+            <input type="range" min="0" max="1000" value="0" data-review-progress>
+          </label>
+          <output data-review-status aria-live="polite">Loading live artifact…</output>
+        </div>
+      </section>
+
+      <section class="canonical-review__diagnostics" aria-label="Authority diagnostics">
+        <article>
+          <span>Provider boundary</span>
+          <strong>Verified refs and intent only</strong>
+          <p>No DOM, glyph, geometry, style, timing, or renderer authority.</p>
+        </article>
+        <article>
+          <span>Mathematical authority</span>
+          <strong>Compiler verified</strong>
+          <p>Definitions, laws, roles, source/target truth, and lineage resolve locally.</p>
+        </article>
+        <article>
+          <span>Presentation authority</span>
+          <strong>Native endpoints + inert paint</strong>
+          <p>MathML and interaction stay native while one ephemeral session moves paint.</p>
+        </article>
+        <article>
+          <span>Live verification</span>
+          <strong data-review-owner>Waiting for artifact</strong>
+          <p data-review-diagnostics>Loading ownership and overflow diagnostics.</p>
+        </article>
+      </section>
+    </main>
+    <script type="module" src="/src/experiments/canonical-animation-review.ts"></script>
+  </body>
+</html>

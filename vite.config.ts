@@ -61,6 +61,7 @@ export default defineConfig({
       input: {
         main: resolve(projectRoot, "index.html"),
         glyphReconciliationExperiment: resolve(projectRoot, "glyph-reconciliation-experiment.html"),
+        canonicalAnimationReview: resolve(projectRoot, "canonical-animation-review.html"),
         ...Object.fromEntries(readerBuildRoutes.map(({ descriptor, filename }) => [
           kpReaderRouteEntryName(descriptor.route),
           filename
