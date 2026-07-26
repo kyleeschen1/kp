@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
-const route = "/reader/radical-succession/?kpMotion=full";
+const routePath = "/reader/radical-succession/";
+const route = `${routePath}?kpMotion=full`;
 
 test("radical succession uses one exclusive canonical paint owner", async ({
   page
@@ -143,3 +144,104 @@ test("radical material paint meets native target geometry before handoff", async
   expect(microscope.pathRectResidualPx).toBeLessThanOrEqual(0.5);
   expect(microscope.pathDataExact).toBe(true);
 });
+
+test("radical direct seek and rewind are history independent", async ({
+  page
+}) => {
+  await page.goto(route, { waitUntil: "networkidle" });
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  const sample = () => page.locator(
+    '[data-kp-reader-transition-active="true"] [data-kp-native-katex-scene-owner]'
+  ).evaluateAll((owners) => owners.map((owner) => {
+    const element = owner as HTMLElement;
+    return {
+      id: element.dataset["kpEquationMaterialOwnerId"],
+      left: element.style.left,
+      top: element.style.top,
+      width: element.style.width,
+      height: element.style.height,
+      opacity: element.style.opacity,
+      transform: element.style.transform
+    };
+  }));
+
+  await seek(page, scrubber, 300);
+  const first = await sample();
+  await seek(page, scrubber, 700);
+  expect(await sample()).not.toEqual(first);
+  await seek(page, scrubber, 300);
+  expect(await sample()).toEqual(first);
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-playback-direction",
+    "rewind"
+  );
+  for (const progress of [700, 300, 700, 300]) {
+    await seek(page, scrubber, progress);
+  }
+  expect(await sample()).toEqual(first);
+});
+
+test("radical reduced and static projections preserve exact endpoints", async ({
+  browser
+}) => {
+  const reduced = await browser.newPage();
+  await reduced.goto(`${routePath}?kpMotion=reduced`, {
+    waitUntil: "networkidle"
+  });
+  const body = reduced.locator("body");
+  const stage = reduced.locator("[data-kp-reader-equation-stage]");
+  const scrubber = reduced.locator("[data-kp-reader-attention-scrubber]");
+  await seek(reduced, scrubber, 500);
+  await expect(body).toHaveAttribute(
+    "data-kp-reader-motion-preference",
+    "reduced"
+  );
+  await expect(body).toHaveAttribute("data-kp-reader-motion-mode", "essential");
+  await expect(stage).toHaveAttribute(
+    "data-kp-reader-canonical-equation-session-active",
+    "true"
+  );
+  const finite = await stage.locator(
+    "[data-kp-native-katex-scene-owner]"
+  ).evaluateAll((owners) => owners.every((owner) => {
+    const style = (owner as HTMLElement).style;
+    return [style.left, style.top, style.width, style.height, style.opacity]
+      .every((value) => Number.isFinite(Number.parseFloat(value)));
+  }));
+  expect(finite).toBe(true);
+  await seek(reduced, scrubber, 0);
+  await expect(stage.locator('[data-kp-reader-native="source"]'))
+    .toHaveCSS("opacity", "1");
+  await seek(reduced, scrubber, 1_000);
+  await expect(stage.locator('[data-kp-reader-native="target"]'))
+    .toHaveCSS("opacity", "1");
+  await reduced.close();
+
+  const staticContext = await browser.newContext({ javaScriptEnabled: false });
+  const staticPage = await staticContext.newPage();
+  await staticPage.goto(routePath);
+  await expect(staticPage.getByText(
+    "A half power and a square root name the same value"
+  )).toBeVisible();
+  await expect(staticPage.locator("math")).toHaveCount(3);
+  await expect(staticPage.locator(
+    "[data-kp-native-katex-scene-owner]"
+  )).toHaveCount(0);
+  await staticContext.close();
+});
+
+async function seek(
+  page: import("@playwright/test").Page,
+  scrubber: import("@playwright/test").Locator,
+  progress: number
+): Promise<void> {
+  await scrubber.evaluate((element, value) => {
+    const input = element as HTMLInputElement;
+    input.value = String(value);
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  }, progress);
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-progress",
+    String(progress)
+  );
+}

@@ -355,11 +355,46 @@
       "scope": "slice 12 architecture boundaries",
       "checkedAt": "2026-07-26T17:49:05.735Z",
       "notes": "All architecture gates passed."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 13 radical time semantics and fraction control",
+      "checkedAt": "2026-07-26T17:51:54.800Z",
+      "notes": "Nine Chromium tests passed. Radical direct seek, rewind, repeated scrub, reduced-motion, native endpoint settlement, and no-JavaScript static projection are deterministic; fraction controls remain green."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 13 focused regressions",
+      "checkedAt": "2026-07-26T17:51:55.740Z",
+      "notes": "24 focused tests passed."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice 13 renderer time laws",
+      "checkedAt": "2026-07-26T17:51:56.680Z",
+      "notes": "11 canonical renderer tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 13 static typing",
+      "checkedAt": "2026-07-26T17:51:57.585Z",
+      "notes": "All TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 13 architecture boundaries",
+      "checkedAt": "2026-07-26T17:51:58.470Z",
+      "notes": "All architecture gates passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 12 brought the existing target-style typography handoff plan into the generic reader adapter, reducing the isolated radical persistent-glyph baseline residual from 7 px to 1 px while retaining native SVG/rule clones. Dense endpoint boxes, styles, path data, and near-handoff geometry pass. The expected 61-pixel fraction x-glyph golden delta is reserved as a visual control for slice 15 rather than silently rewriting the PNG."
+    "summary": "Slice 13 proved radical time semantics through the existing reader clock: direct seek and repeated forward/rewind sampling reproduce exact paint frames, playback direction is reported correctly, reduced motion keeps finite canonical paint and exact endpoints, and the static no-JavaScript projection remains native and searchable."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

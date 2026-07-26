@@ -183,7 +183,8 @@
     {
       "id": "slice-13",
       "title": "prove-time-semantics",
-      "status": "planned",
+      "summary": "Proved play/seek/rewind/repeated-scrub determinism plus reduced and static projections without hidden session history or a second clock.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {
