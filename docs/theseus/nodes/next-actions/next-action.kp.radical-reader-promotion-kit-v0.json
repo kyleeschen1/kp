@@ -313,11 +313,53 @@
       "scope": "slice 11 architecture boundaries",
       "checkedAt": "2026-07-26T17:39:42.756Z",
       "notes": "All architecture gates passed."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 12 native endpoint microscope and fraction control",
+      "checkedAt": "2026-07-26T17:49:01.560Z",
+      "notes": "Seven Chromium tests passed. Radical target glyph rect, style, baseline, endpoint boxes, and native SVG path data are bounded before handoff; fraction ownership, seek/rewind, static, and phone controls pass."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 12 focused regressions",
+      "checkedAt": "2026-07-26T17:49:02.530Z",
+      "notes": "24 focused tests passed."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice 12 canonical renderer regression",
+      "checkedAt": "2026-07-26T17:49:03.325Z",
+      "notes": "11 canonical renderer tests passed."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice 12 native compositor laws",
+      "checkedAt": "2026-07-26T17:49:04.121Z",
+      "notes": "52 compositor and typography handoff tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 12 static typing",
+      "checkedAt": "2026-07-26T17:49:04.923Z",
+      "notes": "All TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 12 architecture boundaries",
+      "checkedAt": "2026-07-26T17:49:05.735Z",
+      "notes": "All architecture gates passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 11 proved radical lifecycle totality without a new category: semantic relations are exact and inverse, observed source and target atoms are fully covered, lineage-backed paint stays opaque, genuine emergence/absorption is monotonic, endpoints settle natively, and reverse traversal is history-independent."
+    "summary": "Slice 12 brought the existing target-style typography handoff plan into the generic reader adapter, reducing the isolated radical persistent-glyph baseline residual from 7 px to 1 px while retaining native SVG/rule clones. Dense endpoint boxes, styles, path data, and near-handoff geometry pass. The expected 61-pixel fraction x-glyph golden delta is reserved as a visual control for slice 15 rather than silently rewriting the PNG."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

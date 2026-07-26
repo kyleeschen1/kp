@@ -1,8 +1,13 @@
 import {
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexSceneTracks,
+  compileKpNativeKatexTypographyStylePlan,
+  correlateKpNativeKatexSceneHandoff,
   createKpNativeKatexRendererSession,
+  measureKpNativeKatexCorrelatedHandoff,
   reconcileKpNativeKatexScenes,
+  realizeKpNativeKatexTypographyStylePlan,
+  sampleKpNativeKatexTypographyStylePlan,
   type KpNativeKatexRendererSession,
   type KpNativeKatexSemanticPaintRelation
 } from "../../rendering/native-katex-scene-compositor.ts";
@@ -40,14 +45,64 @@ export function createKpReaderEquationSceneCompositorSession(input: {
   });
   const hierarchy = compileKpNativeKatexHierarchicalScenePlan(reconciliation);
   const tracks = compileKpNativeKatexSceneTracks(hierarchy);
+  const correlations = correlateKpNativeKatexSceneHandoff({
+    reconciliation,
+    tracks
+  });
+  const targetAtomsById = new Map(input.target.atoms.map((atom) => [
+    atom.id,
+    atom
+  ]));
+  // Structural SVG/rule paint already keeps its native clone; the typography
+  // handoff corrects only target-bound glyph metrics and paint frames.
+  const typographyCorrelations = correlations.filter((correlation) =>
+    targetAtomsById.get(correlation.targetAtomId ?? "")?.paintKind === "glyph"
+  );
   // Measured reader state terminates here in the one canonical session; none
   // of these renderer-session values can flow back into the durable plans.
-  return createKpNativeKatexRendererSession({
+  const playback = createKpNativeKatexRendererSession({
     stage: input.source.stage,
     sourceRoot: input.source.root,
     targetRoot: input.target.root,
     reconciliation,
     tracks
+  });
+  const handoffMicroscopeProgress = 0.96;
+  playback.apply(handoffMicroscopeProgress);
+  const typographyPlan = compileKpNativeKatexTypographyStylePlan({
+    telemetry: measureKpNativeKatexCorrelatedHandoff({
+      stage: input.source.stage,
+      reconciliation,
+      correlations: typographyCorrelations,
+      progress: handoffMicroscopeProgress,
+      fontRevision: input.target.fontRevision,
+      viewportKey: input.target.viewportKey
+    }),
+    correlations: typographyCorrelations,
+    tolerancePx: 0.1,
+    maximumTranslationPx: 2,
+    maximumScaleRatio: 1.1
+  });
+  playback.apply(0);
+
+  return Object.freeze({
+    ...playback,
+    apply(progress: number) {
+      const ownership = playback.apply(progress);
+      if (ownership.visualOwner === "material-scene") {
+        realizeKpNativeKatexTypographyStylePlan({
+          stage: input.source.stage,
+          target: input.target,
+          plan: typographyPlan,
+          frame: sampleKpNativeKatexTypographyStylePlan(
+            typographyPlan,
+            progress,
+            ownership.frames
+          )
+        });
+      }
+      return ownership;
+    }
   });
 }
 

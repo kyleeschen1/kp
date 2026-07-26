@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
 
+import {
+  kpFractionEndpointRegressionLimits
+} from "../scripts/glyph-reconciliation-endpoint-checkpoints.ts";
+
 interface RadicalAdapterEvidence {
   readonly fixtureId: string;
   readonly routeActivated: boolean;
@@ -22,6 +26,13 @@ interface RadicalAdapterEvidence {
   readonly monotonicAbsorption: boolean;
   readonly reverseTraversalExact: boolean;
   readonly endpointsSettled: boolean;
+  readonly endpointTrackGeometryExact: boolean;
+  readonly endpointBoxesExact: boolean;
+  readonly nearSourceMaximumResidualPx: number;
+  readonly nearTargetMaximumResidualPx: number;
+  readonly persistentStyleExact: boolean;
+  readonly maximumPersistentBaselineResidualPx: number;
+  readonly introducedPathGeometryExact: boolean;
   readonly visualOwner: string;
   readonly materialOwnerCount: number;
 }
@@ -68,6 +79,15 @@ test("radical reader dry run reaches the existing canonical adapter", async ({
   expect(evidence.monotonicAbsorption).toBe(true);
   expect(evidence.reverseTraversalExact).toBe(true);
   expect(evidence.endpointsSettled).toBe(true);
+  expect(evidence.endpointTrackGeometryExact).toBe(true);
+  expect(evidence.endpointBoxesExact).toBe(true);
+  expect(evidence.nearSourceMaximumResidualPx).toBeLessThan(0.001);
+  expect(evidence.nearTargetMaximumResidualPx).toBeLessThan(0.001);
+  expect(evidence.persistentStyleExact).toBe(true);
+  expect(evidence.maximumPersistentBaselineResidualPx).toBeLessThanOrEqual(
+    kpFractionEndpointRegressionLimits.maximumGlyphBaselineResidualPx
+  );
+  expect(evidence.introducedPathGeometryExact).toBe(true);
   expect(evidence.visualOwner).toBe("material-scene");
   expect(evidence.materialOwnerCount).toBe(evidence.trackCount);
 });

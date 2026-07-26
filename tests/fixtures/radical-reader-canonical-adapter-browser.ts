@@ -83,6 +83,79 @@ const denseProgress = Array.from({ length: 101 }, (_, index) => index / 100);
 const denseSamples = denseProgress.map((progress) => session.sample(progress));
 const samples = denseSamples.flat();
 const ownership = session.apply(0.5);
+const sourceAtoms = new Map(source.atoms.map((atom) => [atom.id, atom]));
+const targetAtoms = new Map(target.atoms.map((atom) => [atom.id, atom]));
+const sourceEndpointFrames = session.sample(0);
+const targetEndpointFrames = session.sample(1);
+const nearSourceFrames = session.sample(0.001);
+const nearTargetFrames = session.sample(0.999);
+const endpointTrackGeometryExact = session.tracks.every((track) => {
+  const sourceAtom = sourceAtoms.get(track.sourceAtomId ?? "");
+  const targetAtom = targetAtoms.get(track.targetAtomId ?? "");
+  return (sourceAtom === undefined || rectDelta(track.startRect, sourceAtom.rect) === 0) &&
+    (targetAtom === undefined || rectDelta(track.endRect, targetAtom.rect) === 0);
+});
+const endpointBoxesExact =
+  rectDelta(
+    unionRects(sourceEndpointFrames.filter(({ opacity }) => opacity === 1)
+      .map(({ rect }) => rect)),
+    unionRects(source.atoms.map(({ rect }) => rect))
+  ) === 0 &&
+  rectDelta(
+    unionRects(targetEndpointFrames.filter(({ opacity }) => opacity === 1)
+      .map(({ rect }) => rect)),
+    unionRects(target.atoms.map(({ rect }) => rect))
+  ) === 0;
+const nearSourceMaximumResidualPx = maximum(nearSourceFrames.flatMap((frame) => {
+  const track = session.tracks.find(({ id }) => id === frame.trackId)!;
+  return track.startOpacity === 0 ? [] : [rectDelta(frame.rect, track.startRect)];
+}));
+const nearTargetMaximumResidualPx = maximum(nearTargetFrames.flatMap((frame) => {
+  const track = session.tracks.find(({ id }) => id === frame.trackId)!;
+  return track.endOpacity === 0 ? [] : [rectDelta(frame.rect, track.endRect)];
+}));
+session.apply(0.999);
+const persistentHandoff = session.tracks.flatMap((track) => {
+  if (
+    track.lifecycle !== "persist" ||
+    track.sourceAtomId === undefined ||
+    track.targetAtomId === undefined
+  ) return [];
+  const owner = stage.querySelector<HTMLElement>(
+    `[data-kp-equation-material-owner-id="native-scene-owner.${
+      CSS.escape(track.id)
+    }"]`
+  )!;
+  const visual = owner.firstElementChild as HTMLElement;
+  const sourceAtom = sourceAtoms.get(track.sourceAtomId)!;
+  const targetAtom = targetAtoms.get(track.targetAtomId)!;
+  return [{
+    styleExact: styleFingerprint(visual) ===
+      styleFingerprint(targetAtom.sourceElement),
+    baselineResidualPx: Math.abs(
+      textBaseline(stage, visual) -
+      textBaseline(stage, targetAtom.sourceElement)
+    ),
+    sourceTargetStyleExact:
+      sourceAtom.styleFingerprint === targetAtom.styleFingerprint
+  }];
+});
+const introducedPathGeometryExact = session.tracks
+  .filter(({ lifecycle, paintKind }) =>
+    lifecycle === "introduce" && paintKind === "path"
+  )
+  .every((track) => {
+    const owner = stage.querySelector<HTMLElement>(
+      `[data-kp-equation-material-owner-id="native-scene-owner.${
+        CSS.escape(track.id)
+      }"]`
+    )!;
+    const targetPath = targetAtoms.get(track.targetAtomId ?? "")
+      ?.sourceElement.querySelector("path");
+    return owner.querySelector("path")?.getAttribute("d") ===
+      targetPath?.getAttribute("d");
+  });
+session.apply(0.5);
 const lifecycles = Object.freeze([...new Set(
   session.tracks.map(({ lifecycle }) => lifecycle)
 )]);
@@ -138,6 +211,18 @@ const evidence = Object.freeze({
   ),
   endpointsSettled: session.apply(0).visualOwner === "source-native" &&
     session.apply(1).visualOwner === "target-native",
+  endpointTrackGeometryExact,
+  endpointBoxesExact,
+  nearSourceMaximumResidualPx,
+  nearTargetMaximumResidualPx,
+  persistentStyleExact: persistentHandoff.every(
+    ({ styleExact, sourceTargetStyleExact }) =>
+      styleExact && sourceTargetStyleExact
+  ),
+  maximumPersistentBaselineResidualPx: maximum(
+    persistentHandoff.map(({ baselineResidualPx }) => baselineResidualPx)
+  ),
+  introducedPathGeometryExact,
   visualOwner: ownership.visualOwner,
   materialOwnerCount: stage.querySelectorAll(
     '[data-kp-equation-material-owner-id^="native-scene-owner."]'
@@ -233,4 +318,67 @@ function isMonotonic(
     return previous === undefined ||
       (direction === "ascending" ? value >= previous : value <= previous);
   });
+}
+
+function rectDelta(
+  left: { readonly left: number; readonly top: number;
+    readonly width: number; readonly height: number },
+  right: { readonly left: number; readonly top: number;
+    readonly width: number; readonly height: number }
+): number {
+  return Math.max(
+    Math.abs(left.left - right.left),
+    Math.abs(left.top - right.top),
+    Math.abs(left.width - right.width),
+    Math.abs(left.height - right.height)
+  );
+}
+
+function unionRects(
+  rects: readonly { readonly left: number; readonly top: number;
+    readonly width: number; readonly height: number }[]
+) {
+  const left = Math.min(...rects.map((rect) => rect.left));
+  const top = Math.min(...rects.map((rect) => rect.top));
+  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
+  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
+  return { left, top, width: right - left, height: bottom - top };
+}
+
+function maximum(values: readonly number[]): number {
+  return values.length === 0 ? 0 : Math.max(...values);
+}
+
+function styleFingerprint(element: HTMLElement): string {
+  const style = getComputedStyle(element);
+  return [
+    style.fontFamily,
+    style.fontSize,
+    style.fontStyle,
+    style.fontWeight,
+    style.lineHeight,
+    style.letterSpacing
+  ].join("|");
+}
+
+function textBaseline(stage: HTMLElement, element: HTMLElement): number {
+  const range = document.createRange();
+  range.selectNodeContents(element);
+  const rangeRect = range.getBoundingClientRect();
+  const elementRect = element.getBoundingClientRect();
+  const rect = rangeRect.width > 0 && rangeRect.height > 0
+    ? rangeRect
+    : elementRect;
+  const style = getComputedStyle(element);
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d")!;
+  context.font = [
+    style.fontStyle,
+    style.fontWeight,
+    style.fontSize,
+    style.fontFamily
+  ].join(" ");
+  const metrics = context.measureText(element.textContent?.trim() ?? "");
+  const stageRect = stage.getBoundingClientRect();
+  return rect.bottom - stageRect.top - metrics.actualBoundingBoxDescent;
 }

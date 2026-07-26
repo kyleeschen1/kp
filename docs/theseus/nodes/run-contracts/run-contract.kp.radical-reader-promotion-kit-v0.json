@@ -176,7 +176,8 @@
     {
       "id": "slice-12",
       "title": "prove-native-geometry",
-      "status": "planned",
+      "summary": "Proved native endpoint geometry and integrated the released generic typography handoff in the reader adapter; radical residuals are bounded, native structural paint is exact, and fraction functional controls pass without notation-specific geometry.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {
