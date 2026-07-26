@@ -65,3 +65,9 @@ export {
   type KpCanonicalConstructionObjectRef,
   type KpCanonicalConstructionOperationRef
 } from "./canonical-animation-construction.ts";
+
+export {
+  findKpForbiddenPresentationAuthority,
+  type KpForbiddenPresentationAuthority,
+  type KpPresentationAuthorityFirewallIssue
+} from "./presentation-authority-firewall.ts";

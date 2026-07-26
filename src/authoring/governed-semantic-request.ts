@@ -1,5 +1,8 @@
 import type { KpCanonicalOperationPackPin } from "../semantic/canonical-operation-pack.ts";
 import type { SelectorCorrespondenceRelationId } from "../semantic/correspondence.ts";
+import {
+  findKpForbiddenPresentationAuthority
+} from "./presentation-authority-firewall.ts";
 
 export const kpGovernedSemanticAuthoringSchemaVersion =
   "kp.governed-semantic-authoring-request.v1" as const;
@@ -92,9 +95,6 @@ const correspondenceRelations = new Set<SelectorCorrespondenceRelationId>([
   "artifact"
 ]);
 
-const unsafeAuthoringKey =
-  /^(?:bounds|className|computedStyle|css|dataset|dom|fragments?|geometry|html|svg|latex|paint|pixels?|coordinates?|rect|x|y|z|path|trajectory|keyframes?|timing|timingTable|durationMs|delayMs|startMs|endMs|easing|opacity|styles?|font|typography|renderer|renderTarget|selectorId)$/i;
-
 export function validateKpGovernedSemanticAuthoringRequest(
   value: unknown
 ): readonly KpGovernedSemanticAuthoringSchemaIssue[] {
@@ -102,7 +102,13 @@ export function validateKpGovernedSemanticAuthoringRequest(
   if (!isRecord(value)) {
     return [issue("governed-schema.type", "$", "Governed semantic authoring request must be an object.")];
   }
-  rejectUnsafeAuthority(value, "$", issues);
+  findKpForbiddenPresentationAuthority(value).forEach((firewallIssue) => {
+    issues.push(issue(
+      "governed-schema.unsafe-authority",
+      firewallIssue.path,
+      `Provider-authored ${firewallIssue.key} is outside the semantic authoring boundary.`
+    ));
+  });
   if (value["schemaVersion"] !== kpGovernedSemanticAuthoringSchemaVersion) {
     issues.push(issue(
       "governed-schema.required",
@@ -310,28 +316,6 @@ function validateCompressionIntent(
   if (preserve !== undefined && (!preserve.includes("law") || !preserve.includes("lineage"))) {
     issues.push(issue("governed-schema.required", "$.compressionIntent.preserve", "Every compression level must preserve law and lineage evidence."));
   }
-}
-
-function rejectUnsafeAuthority(
-  value: unknown,
-  path: string,
-  issues: KpGovernedSemanticAuthoringSchemaIssue[]
-): void {
-  if (Array.isArray(value)) {
-    value.forEach((entry, index) => rejectUnsafeAuthority(entry, `${path}[${index}]`, issues));
-    return;
-  }
-  if (!isRecord(value)) return;
-  Object.entries(value).forEach(([key, child]) => {
-    if (unsafeAuthoringKey.test(key)) {
-      issues.push(issue(
-        "governed-schema.unsafe-authority",
-        `${path}.${key}`,
-        `Provider-authored ${key} is outside the semantic authoring boundary.`
-      ));
-    }
-    rejectUnsafeAuthority(child, `${path}.${key}`, issues);
-  });
 }
 
 function cloneFocus(focus: KpGovernedFocusIntent): KpGovernedFocusIntent {

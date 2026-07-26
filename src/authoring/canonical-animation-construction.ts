@@ -3,6 +3,9 @@ import {
   validateCorrespondenceMap,
   type SelectorCorrespondenceRelationId
 } from "../semantic/correspondence.ts";
+import {
+  findKpForbiddenPresentationAuthority
+} from "./presentation-authority-firewall.ts";
 
 export const kpCanonicalAnimationConstructionSchemaVersion =
   "kp.canonical-animation-construction.v1" as const;
@@ -84,7 +87,8 @@ export interface KpCanonicalAnimationConstructionIssue {
     | "construction.required"
     | "construction.duplicate"
     | "construction.reference"
-    | "construction.totality";
+    | "construction.totality"
+    | "construction.unsafe-authority";
   readonly message: string;
 }
 
@@ -92,6 +96,13 @@ export function validateKpCanonicalAnimationConstruction(
   input: KpCanonicalAnimationConstructionInput
 ): readonly KpCanonicalAnimationConstructionIssue[] {
   const issues: KpCanonicalAnimationConstructionIssue[] = [];
+  findKpForbiddenPresentationAuthority(input).forEach((firewallIssue) => {
+    issues.push(issue(
+      "construction.unsafe-authority",
+      firewallIssue.path,
+      firewallIssue.message
+    ));
+  });
   requireText(input.id, "$.id", issues);
   requireText(input.title, "$.title", issues);
   requireText(input.semanticSource.sourceId, "$.semanticSource.sourceId", issues);

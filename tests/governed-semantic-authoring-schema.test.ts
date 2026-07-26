@@ -44,6 +44,7 @@ test("governed schema rejects provider control over math text rendering geometry
       .map(({ path }) => path),
     [
       "$.latex",
+      "$.rendering",
       "$.rendering.selectorId",
       "$.rendering.x",
       "$.rendering.keyframes",

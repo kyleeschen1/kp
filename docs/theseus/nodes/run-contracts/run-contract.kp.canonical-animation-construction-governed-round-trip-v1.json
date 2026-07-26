@@ -46,6 +46,13 @@
       "scope": "slice-03 canonical construction contract",
       "checkedAt": "2026-07-26T05:53:55.095Z",
       "notes": "Nine focused construction and inventory checks, all architecture gates, all TypeScript projects, and the 788-node workspace pass. The immutable public contract covers verified object and expression refs, exact operation-pack pins, operation and lineage refs, explanation intent, total composition, and source/target checkpoints while serializing no presentation or renderer state."
+    },
+    {
+      "command": "canonical construction adversarial matrix; governed schema and compiler cohort; npm run check:architecture; npm run typecheck; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-04 authority firewall",
+      "checkedAt": "2026-07-26T05:58:55.206Z",
+      "notes": "Thirteen construction checks, 17 governed-schema/compiler/cohort checks, all architecture gates, all TypeScript projects, and workspace validation pass. Nine forbidden authority categories reject normalized nested aliases while expression refs, role bindings, focus/cadence intent, composition, and checkpoints remain allowed."
     }
   ],
   "allowedWork": [
@@ -111,7 +118,9 @@
     {
       "id": "slice-04",
       "title": "authority-firewall",
-      "status": "planned"
+      "summary": "Added one shared recursive authority firewall for governed requests and durable construction artifacts. It rejects DOM, unverified math, geometry, timing, style, renderer, accessibility, export, and backend fields including normalized hidden aliases, with no fallback path.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-05",
