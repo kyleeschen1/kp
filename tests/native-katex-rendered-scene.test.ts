@@ -14,7 +14,7 @@ import {
   compileKpNativeKatexSceneTracks,
   compileKpNativeKatexTypographyStylePlan,
   correlateKpNativeKatexSceneHandoff,
-  createKpNativeKatexScenePlayback,
+  createKpNativeKatexRendererSession,
   createKpNativeKatexSceneReconciliation,
   evaluateKpNativeKatexTypographyHandoffLaw,
   projectKpNativeKatexSemanticPaintRelations,
@@ -1449,13 +1449,15 @@ test("scene playback direct seeks and reverses without hidden clock state", () =
   const tracks = compileKpNativeKatexSceneTracks(
     compileKpNativeKatexHierarchicalScenePlan(reconciliation)
   );
-  const playback = createKpNativeKatexScenePlayback({
+  const playback = createKpNativeKatexRendererSession({
     stage,
     sourceRoot: source.root,
     targetRoot: target.root,
     reconciliation,
     tracks
   });
+  assert.equal(playback.kind, "native-katex-renderer-session");
+  assert.equal(playback.lifecycle, "renderer-session");
   const forward = [0, 0.25, 0.5, 0.75, 1].map(playback.sample);
   const reverse = [1, 0.75, 0.5, 0.25, 0].map(playback.sample);
 
@@ -1465,7 +1467,7 @@ test("scene playback direct seeks and reverses without hidden clock state", () =
   assert.deepEqual(reverse, [...forward].reverse());
   assert.deepEqual(playback.sample(0.5), playback.sample(0.5));
   assert.throws(
-    () => createKpNativeKatexScenePlayback({
+    () => createKpNativeKatexRendererSession({
       stage,
       sourceRoot: source.root,
       targetRoot: target.root,

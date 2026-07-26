@@ -77,6 +77,24 @@ test("canonical scene core stays within source and vocabulary ceilings", async (
   }
 });
 
+test("canonical scene core exposes one ephemeral renderer session contract", async () => {
+  const source = await readFile(
+    "src/rendering/native-katex-scene-compositor.ts",
+    "utf8"
+  );
+
+  assert.equal(
+    (source.match(/export interface KpNativeKatexRendererSession/g) ?? []).length,
+    1
+  );
+  assert.equal(
+    (source.match(/export function createKpNativeKatexRendererSession/g) ?? [])
+      .length,
+    1
+  );
+  assert.equal(source.includes("KpNativeKatexScenePlayback"), false);
+});
+
 test("reader keeps one temporary compositor switch and one adapter loader", async () => {
   const [entry, publicApi] = await Promise.all([
     readFile("src/reader/app/exemplar-entry.ts", "utf8"),

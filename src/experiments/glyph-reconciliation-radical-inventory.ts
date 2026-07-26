@@ -17,7 +17,7 @@ import { createKpEquationFontReadiness } from "../rendering/equation-font-readin
 import {
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexSceneTracks,
-  createKpNativeKatexScenePlayback,
+  createKpNativeKatexRendererSession,
   projectKpNativeKatexSemanticPaintRelations,
   reconcileKpNativeKatexScenes,
   reverseKpNativeKatexSemanticPaintRelations
@@ -176,14 +176,14 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
     compileKpNativeKatexHierarchicalScenePlan(reverseReconciliation);
   const tracks = compileKpNativeKatexSceneTracks(plan);
   const reverseTracks = compileKpNativeKatexSceneTracks(reversePlan);
-  const playback = createKpNativeKatexScenePlayback({
+  const playback = createKpNativeKatexRendererSession({
     stage,
     sourceRoot: sourceEquation,
     targetRoot: targetEquation,
     reconciliation,
     tracks
   });
-  const reversePlayback = createKpNativeKatexScenePlayback({
+  const reversePlayback = createKpNativeKatexRendererSession({
     stage,
     sourceRoot: targetEquation,
     targetRoot: sourceEquation,

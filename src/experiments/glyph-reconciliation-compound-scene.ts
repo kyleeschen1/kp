@@ -14,7 +14,7 @@ import {
 import {
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexSceneTracks,
-  createKpNativeKatexScenePlayback,
+  createKpNativeKatexRendererSession,
   reconcileKpNativeKatexScenes,
   type KpNativeKatexSemanticPaintRelation
 } from "../rendering/native-katex-scene-compositor.ts";
@@ -123,7 +123,7 @@ export async function initializeKpGlyphReconciliationCompoundScene(
           operationId: transition.presentation!.operationRef,
           tracks
         },
-        playback: createKpNativeKatexScenePlayback({
+        playback: createKpNativeKatexRendererSession({
           stage,
           sourceRoot,
           targetRoot,

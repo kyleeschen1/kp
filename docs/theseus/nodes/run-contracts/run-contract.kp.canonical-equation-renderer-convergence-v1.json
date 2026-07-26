@@ -191,6 +191,13 @@
       "scope": "slice-14 rejected-checkpoint glyph paint-frame repair",
       "checkedAt": "2026-07-26T02:10:59.603Z",
       "notes": "Generic Range-derived paint anchors remove the x/y baseline jerk at 0.1 and 99.9 percent; x and y remain at scale 1, plus scales uniformly from 65.824 to 46.0768 pixels, and boundary paint-origin residual stays below 0.2 pixels. Forty-seven focused tests, 44 Chromium tests, refreshed wide/phone visual evidence, 2420 repository tests, production build, typecheck, the 120000-byte core ceiling, and workspace validation pass. Commit a0e06a52. Stop remains at the mandatory human checkpoint before slice 15."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:canonical-equation-renderer; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-15 canonical renderer-session contract",
+      "checkedAt": "2026-07-26T02:40:40.030Z",
+      "notes": "One public KpNativeKatexRendererSession and factory now replace the playback-named API across experiments and the reader adapter. Forty-seven focused tests, six convergence ratchets, the 120000-byte four-module ceiling, and all TypeScript projects pass; durable reader and animation plans remain session-free."
     }
   ],
   "allowedWork": [
@@ -316,7 +323,8 @@
     {
       "id": "slice-15",
       "title": "canonical-renderer-session-contract",
-      "status": "planned"
+      "summary": "Established one public native-KaTeX renderer-session contract and factory over renderer-neutral tracks, renamed all consumers, removed the playback-named public boundary, and preserved ephemeral DOM/geometry plus the frozen four-module source ceiling.",
+      "status": "complete"
     },
     {
       "id": "slice-16",

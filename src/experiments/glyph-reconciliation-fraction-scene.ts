@@ -13,7 +13,7 @@ import {
   compileKpNativeKatexSceneTracks,
   compileKpNativeKatexTypographyStylePlan,
   correlateKpNativeKatexSceneHandoff,
-  createKpNativeKatexScenePlayback,
+  createKpNativeKatexRendererSession,
   measureKpNativeKatexCorrelatedHandoff,
   measureKpNativeKatexGlyphHandoff,
   measureKpNativeKatexRuleHandoff,
@@ -87,7 +87,7 @@ export async function createKpFractionExperimentScene(input: {
     reconciliation,
     tracks
   });
-  const playback = createKpNativeKatexScenePlayback({
+  const playback = createKpNativeKatexRendererSession({
     stage: input.stage,
     sourceRoot,
     targetRoot,

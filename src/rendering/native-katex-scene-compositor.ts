@@ -93,8 +93,8 @@ export interface KpNativeKatexSceneOwnershipFrame {
   readonly frames: readonly KpNativeKatexSceneTrackFrame[];
 }
 
-export interface KpNativeKatexScenePlayback {
-  readonly kind: "native-katex-scene-playback";
+export interface KpNativeKatexRendererSession {
+  readonly kind: "native-katex-renderer-session";
   readonly lifecycle: "renderer-session";
   readonly tracks: readonly KpNativeKatexSceneTrack[];
   readonly sample: (progress: number) => readonly KpNativeKatexSceneTrackFrame[];
@@ -1352,7 +1352,7 @@ export function selectKpNativeKatexTypographyRealizationDisposition(
 
 export function traceKpNativeKatexHandoffOwnership(input: {
   readonly stage: HTMLElement;
-  readonly playback: KpNativeKatexScenePlayback;
+  readonly playback: KpNativeKatexRendererSession;
   readonly reconciliation: KpNativeKatexSceneReconciliation;
   readonly correlations: readonly KpNativeKatexHandoffCorrelation[];
   readonly progresses: readonly number[];
@@ -1476,13 +1476,13 @@ export function applyKpNativeKatexSceneFrame(input: {
   });
 }
 
-export function createKpNativeKatexScenePlayback(input: {
+export function createKpNativeKatexRendererSession(input: {
   readonly stage: HTMLElement;
   readonly sourceRoot: HTMLElement;
   readonly targetRoot: HTMLElement;
   readonly reconciliation: KpNativeKatexSceneReconciliation;
   readonly tracks: readonly KpNativeKatexSceneTrack[];
-}): KpNativeKatexScenePlayback {
+}): KpNativeKatexRendererSession {
   const trackIds = input.tracks.map(({ id }) => id);
   if (new Set(trackIds).size !== trackIds.length) {
     throw new Error("Scene playback requires unique track IDs.");
@@ -1507,7 +1507,7 @@ export function createKpNativeKatexScenePlayback(input: {
   }
   const tracks = Object.freeze([...input.tracks]);
   return Object.freeze({
-    kind: "native-katex-scene-playback",
+    kind: "native-katex-renderer-session",
     lifecycle: "renderer-session",
     tracks,
     sample: (progress: number) =>
