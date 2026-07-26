@@ -32,6 +32,13 @@
       "scope": "slice-01 roadmap authority reconciliation",
       "checkedAt": "2026-07-26T05:40:04.133Z",
       "notes": "Eight focused roadmap authority, coverage, link, and source checks pass. Plan v9 is the sole active approved KP revision, quadratic branching is complete, canonical animation construction is the sole active implementation phase, and all 788 nodes validate."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; npm run check:architecture; npm run typecheck; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-02 construction path inventory",
+      "checkedAt": "2026-07-26T05:47:01.020Z",
+      "notes": "Four inventory ratchets, three architecture gates, all TypeScript projects, and 788-node workspace validation pass. The ledger maps every construction and projection authority, freezes 29 HTML, 9 attribute, and 3 script-JSON escaping definitions, and confirms clone authority stripping is already shared."
     }
   ],
   "allowedWork": [
@@ -83,7 +90,9 @@
     {
       "id": "slice-02",
       "title": "construction-path-inventory",
-      "status": "planned"
+      "summary": "Published the construction map and utility candidate ledger. Existing authorities cover every stage; the missing seam is one renderer-neutral construction contract replacing the test-only governed-plan bridge. No parallel implementation or authority bypass is required.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-03",
