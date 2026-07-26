@@ -155,7 +155,8 @@
     {
       "id": "slice-09",
       "title": "dry-run-canonical-adapter",
-      "status": "planned",
+      "summary": "Proved the radical transition reaches the released canonical adapter in a functional browser fixture without product routing, diagnostics, new runtime state, or new lifecycle categories.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {

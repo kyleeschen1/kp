@@ -208,11 +208,46 @@
       "scope": "slice 8 architecture boundaries",
       "checkedAt": "2026-07-26T17:21:03.969Z",
       "notes": "All architecture gates passed."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 9 no-route canonical adapter dry run",
+      "checkedAt": "2026-07-26T17:25:03.574Z",
+      "notes": "One Chromium test passed. The governed radical frame compiled with no render/material diagnostics into the existing renderer session; persist/introduce/eliminate tracks were finite, seek-stable, and material-owned without activating a reader route."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 9 focused regressions",
+      "checkedAt": "2026-07-26T17:25:04.519Z",
+      "notes": "22 focused tests passed."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice 9 canonical renderer regression",
+      "checkedAt": "2026-07-26T17:25:05.330Z",
+      "notes": "11 canonical renderer tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 9 static typing",
+      "checkedAt": "2026-07-26T17:25:06.110Z",
+      "notes": "All TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 9 architecture boundaries",
+      "checkedAt": "2026-07-26T17:25:06.935Z",
+      "notes": "All architecture gates passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 8 replaced lesson-name canonical eligibility with a validated descriptor-owned transition policy. Radical policy reuses the runtime frame clock, equation-transition IR lifecycles, and exclusive native scene intent; the radical descriptor remains outside the product registry."
+    "summary": "Slice 9 added a no-route browser dry run. A governed radical runtime frame traverses existing render/material plans, native KaTeX scene observation, and the released adapter into one ephemeral atom-transit session with finite stateless samples and no new lifecycle."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",
