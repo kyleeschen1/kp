@@ -254,6 +254,20 @@
       "scope": "slice-22 semantic authority preservation",
       "checkedAt": "2026-07-26T03:36:09.959Z",
       "notes": "Five gold-reader browser checks prove moving owners are aria-hidden, inert, stripped of anchors, selectors, focus, roles, ids, links, MathML, and annotation markup. Native KaTeX HTML, semantic anchors, focus, hover and keyboard channels remain authoritative. Nine shared reader checks including no-JS output, 28 MathML/Cloze/static-JS/headless/export tests, two packaged export browser smokes, eight production routes, build, typecheck, architecture, and canonical ceilings pass."
+    },
+    {
+      "command": "focused 18-case reader browser matrix",
+      "status": "failed",
+      "scope": "slice-23 initial broad browser audit",
+      "checkedAt": "2026-07-26T03:41:46.018Z",
+      "notes": "Seventeen renderer and reader checks passed. The rewind test invoked scroll before hydration after duplicate-frame work was removed, so the body remained at the previous 480 progress instead of the requested 520. Waiting for the existing hydrated contract repaired only the test timing; the isolated case and full matrix then passed."
+    },
+    {
+      "command": "query and import audit; canonical ratchets; typecheck; focused 18-case reader browser matrix; architecture checks; reader production closure; route budget; build",
+      "status": "passed",
+      "scope": "slice-23 duplicate path removal",
+      "checkedAt": "2026-07-26T03:41:47.203Z",
+      "notes": "The kpGlyphCompositor query selector is absent from runtime and capture sources; policy temporary renderer count and ceiling are both zero. The migrated transition skips legacy frame construction and clears its legacy layer before the canonical session owns paint. Other lesson variants retain their existing renderer. Eighteen Chromium cases, six ratchets, four route budget checks, eight production routes, architecture, typecheck, and build pass; reader entry gzip decreased from 13.25 to 13.23 kB."
     }
   ],
   "allowedWork": [
@@ -427,7 +441,8 @@
     {
       "id": "slice-23",
       "title": "duplicate-path-removal",
-      "status": "planned"
+      "summary": "Removed the temporary kpGlyphCompositor query path and ratcheted temporary renderer count to zero. The visual capture command now exercises the default route. On the migrated gold transition, canonical ownership bypasses legacy material-frame construction entirely and empties the legacy layer; non-migrated transitions and lesson variants retain their prior behavior. Import/query audits and all focused, browser, route, architecture, type, and build gates pass.",
+      "status": "complete"
     },
     {
       "id": "slice-24",

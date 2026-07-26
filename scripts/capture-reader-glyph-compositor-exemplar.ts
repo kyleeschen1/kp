@@ -37,7 +37,6 @@ try {
         url.searchParams.set("kpLesson", "lesson.solve-x.x-plus-3");
         url.searchParams.set("kpVersion", "1");
         url.searchParams.set("kpProgress", "500");
-        url.searchParams.set("kpGlyphCompositor", "1");
         url.searchParams.set("kpMotion", motion);
         await page.goto(url.toString(), { waitUntil: "networkidle" });
         const stage = page.locator(

@@ -20,10 +20,9 @@ test("canonical equation rendering has one default and no permanent query target
   assert.deepEqual(policy.currentDefaultReaderRendererIds, [
     "renderer.equation-dom"
   ]);
-  assert.deepEqual(policy.temporaryQueryRendererIds, [
-    "renderer.equation-scene.query"
-  ]);
+  assert.deepEqual(policy.temporaryQueryRendererIds, []);
   assert.equal(policy.maximumDefaultReaderRenderers, 1);
+  assert.equal(policy.maximumTemporaryQueryRenderers, 0);
   assert.equal(policy.targetTemporaryQueryRenderers, 0);
 });
 
@@ -103,7 +102,7 @@ test("canonical scene core exposes one ephemeral renderer session contract", asy
   );
 });
 
-test("reader keeps one temporary compositor switch and one adapter loader", async () => {
+test("reader keeps no compositor query switch and one adapter loader", async () => {
   const [entry, exemplar, adapter, publicApi] = await Promise.all([
     readFile("src/reader/app/exemplar-entry.ts", "utf8"),
     readFile("src/reader/app/reader-glyph-compositor-exemplar.ts", "utf8"),
@@ -114,8 +113,13 @@ test("reader keeps one temporary compositor switch and one adapter loader", asyn
     readFile("src/reader/renderers/public-api.ts", "utf8")
   ]);
 
-  assert.equal((entry.match(/kpGlyphCompositor/g) ?? []).length, 1);
+  assert.equal((entry.match(/kpGlyphCompositor/g) ?? []).length, 0);
   assert.match(entry, /lessonVariant === "streamlined"/);
+  assert.match(entry, /if \(readerCompositorApplied\) \{\s*materialLayer\.sync\(\[\]\)/);
+  assert.doesNotMatch(
+    entry,
+    /if \(!readerCompositorApplied\) materialLayer\.sync\(frames\)/
+  );
   assert.equal(
     (publicApi.match(/loadKpReaderEquationSceneCompositorAdapter/g) ?? []).length,
     1

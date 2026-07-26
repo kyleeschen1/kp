@@ -11,11 +11,9 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
   currentDefaultReaderRendererIds: Object.freeze([
     "renderer.equation-dom"
   ]),
-  temporaryQueryRendererIds: Object.freeze([
-    "renderer.equation-scene.query"
-  ]),
+  temporaryQueryRendererIds: Object.freeze([]),
   maximumDefaultReaderRenderers: 1,
-  maximumTemporaryQueryRenderers: 1,
+  maximumTemporaryQueryRenderers: 0,
   targetTemporaryQueryRenderers: 0,
   paintKinds: Object.freeze([
     "glyph",

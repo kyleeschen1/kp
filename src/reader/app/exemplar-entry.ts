@@ -99,13 +99,11 @@ const readerRoute = createKpReaderRuntimeRouteDescriptor({
 });
 const { documentId, documentVersion } = readerRoute;
 const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
-const readerGlyphCompositorRequested =
-  lessonVariant === "streamlined" ||
-  new URL(window.location.href).searchParams.get("kpGlyphCompositor") === "1";
-const readerGlyphCompositorModule = readerGlyphCompositorRequested
+const usesCanonicalEquationRenderer = lessonVariant === "streamlined";
+const readerGlyphCompositorModule = usesCanonicalEquationRenderer
   ? await import("./reader-glyph-compositor-exemplar.ts")
   : undefined;
-const readerGlyphCompositorAdapter = readerGlyphCompositorRequested
+const readerGlyphCompositorAdapter = usesCanonicalEquationRenderer
   ? await loadKpReaderEquationSceneCompositorAdapter()
   : undefined;
 const lessonDescriptor = resolveKpReaderEquationLessonDescriptor(lessonVariant);
@@ -653,53 +651,51 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     for (const element of context.anchorElements.values()) {
       element.style.opacity = "0";
     }
-  }
-  const frames = motion.owners.map((owner): KpReaderEquationMaterialOwnerFrame => {
-    if (!readerCompositorApplied) {
+    const frames = motion.owners.map((owner): KpReaderEquationMaterialOwnerFrame => {
       setAnchorOpacity(context, owner.sourceAnchorIds, owner.sourceNativeOpacity);
       setAnchorOpacity(context, owner.targetAnchorIds, owner.targetNativeOpacity);
-    }
-    const visualIds = owner.visualAnchorIds;
-    const rawBounds = unionAnchorRects(context.layout, visualIds);
-    const fragments = visualIds.map((anchorId) => {
-      const element = context.anchorElements.get(anchorId);
-      const anchor = context.layout.anchors.find((candidate) => candidate.id === anchorId);
-      if (element === undefined || anchor === undefined) {
-        throw new Error(`Equation visual anchor ${anchorId} is not measurable.`);
-      }
-      const pose = owner.fragmentPoses.find(
-        (candidate) => candidate.anchorId === anchorId
-      )?.pose;
+      const visualIds = owner.visualAnchorIds;
+      const rawBounds = unionAnchorRects(context.layout, visualIds);
+      const fragments = visualIds.map((anchorId) => {
+        const element = context.anchorElements.get(anchorId);
+        const anchor = context.layout.anchors.find((candidate) => candidate.id === anchorId);
+        if (element === undefined || anchor === undefined) {
+          throw new Error(`Equation visual anchor ${anchorId} is not measurable.`);
+        }
+        const pose = owner.fragmentPoses.find(
+          (candidate) => candidate.anchorId === anchorId
+        )?.pose;
+        return {
+          id: anchorId,
+          visualRevision: `${transitionId}.${anchorId}`,
+          sourceElement: element,
+          rect: anchor.rect,
+          ...(pose === undefined
+            ? {}
+            : {
+                translateX: pose.x,
+                translateY: pose.y,
+                scale: pose.scale,
+                opacity: pose.opacity,
+                depth: pose.depth
+              })
+        };
+      });
+      const fragmentDriven = owner.fragmentPoses.length > 0;
       return {
-        id: anchorId,
-        visualRevision: `${transitionId}.${anchorId}`,
-        sourceElement: element,
-        rect: anchor.rect,
-        ...(pose === undefined
-          ? {}
-          : {
-              translateX: pose.x,
-              translateY: pose.y,
-              scale: pose.scale,
-              opacity: pose.opacity,
-              depth: pose.depth
-            })
+        ownerId: owner.ownerId,
+        rect: rawBounds,
+        translateX: fragmentDriven ? 0 : owner.currentBounds.left - rawBounds.left,
+        translateY: fragmentDriven ? 0 : owner.currentBounds.top - rawBounds.top,
+        scaleX: fragmentDriven ? 1 : owner.currentBounds.width / rawBounds.width,
+        scaleY: fragmentDriven ? 1 : owner.currentBounds.height / rawBounds.height,
+        opacity: owner.materialOpacity,
+        focused: owner.focusStrength > 0 || ownerMatchesFocus(owner, focusedRefs),
+        fragments
       };
     });
-    const fragmentDriven = owner.fragmentPoses.length > 0;
-    return {
-      ownerId: owner.ownerId,
-      rect: rawBounds,
-      translateX: fragmentDriven ? 0 : owner.currentBounds.left - rawBounds.left,
-      translateY: fragmentDriven ? 0 : owner.currentBounds.top - rawBounds.top,
-      scaleX: fragmentDriven ? 1 : owner.currentBounds.width / rawBounds.width,
-      scaleY: fragmentDriven ? 1 : owner.currentBounds.height / rawBounds.height,
-      opacity: owner.materialOpacity,
-      focused: owner.focusStrength > 0 || ownerMatchesFocus(owner, focusedRefs),
-      fragments
-    };
-  });
-  if (!readerCompositorApplied) materialLayer.sync(frames);
+    materialLayer.sync(frames);
+  }
   syncAnnihilationWitness(
     motion.witnessedAnnihilation,
     projection.mode !== "essential"
@@ -753,7 +749,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
       layoutReadCount: schedulerState.readCount,
       fontRevision: fontReadiness.revision,
       fontReady: fontReadiness.status === "ready",
-      ownerIds: frames.map((frame) => frame.ownerId),
+      ownerIds: motion.owners.map((owner) => owner.ownerId),
       ...(previousReviewFrameAtMs === undefined
         ? {}
         : { frameIntervalMs: atMs - previousReviewFrameAtMs }),

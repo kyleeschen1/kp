@@ -70,6 +70,10 @@ test("essential causal motion retraces exactly on rewind", async ({ page }) => {
   await page.goto(
     "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1&kpProgress=480"
   );
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-hydrated",
+    "true"
+  );
   await seekByScroll(page, 520);
   const forward = await cancellationPose(page);
   await seekByScroll(page, 560);
