@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Governed fraction variation fixture</title>
+    <style>
+      body {
+        margin: 0;
+        background: #f4f1e9;
+        color: #20272d;
+        font-family: system-ui, sans-serif;
+      }
+
+      main {
+        width: min(900px, calc(100% - 32px));
+        margin: 32px auto;
+      }
+
+      [data-kp-variation-stage] {
+        position: relative;
+        height: 220px;
+        margin-block: 20px;
+        overflow: hidden;
+        border: 1px solid #c8c0b2;
+        border-radius: 16px;
+        background: #fffdf8;
+      }
+
+      [data-source],
+      [data-target] {
+        position: absolute;
+        inset: 72px 0 auto;
+        font-size: 2rem;
+        text-align: center;
+      }
+
+      [data-kp-editor-equation-material-layer] {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main data-kp-governed-fraction-variation>
+      <h1>Governed fraction variation</h1>
+      <section data-kp-variation-stage="split"></section>
+      <section data-kp-variation-stage="merge"></section>
+      <output data-kp-variation-status>Loading canonical sessions…</output>
+    </main>
+    <script
+      type="module"
+      src="/tests/fixtures/governed-fraction-split-merge-variation-browser.ts"
+    ></script>
+  </body>
+</html>

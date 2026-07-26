@@ -165,6 +165,13 @@
       "scope": "slice-18 typed repair taxonomy",
       "checkedAt": "2026-07-26T13:27:06.333Z",
       "notes": "Thirty-five focused tests prove deterministic owner-aware repairs for stale source and pack refs, unknown objects and operations, closure, unsupported composition, role mismatches, and epistemic gaps, with no renderer or replacement-animation fallback."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; npm run test:browser:canonical-animation-construction; npm run test:canonical-equation-renderer; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-19 governed fraction variation",
+      "checkedAt": "2026-07-26T13:43:22.149Z",
+      "notes": "Thirty-seven construction tests, one isolated Chromium proof, eleven canonical renderer ratchets, all TypeScript projects, and architecture gates pass. Exact 3y-plus-9 over 3 equality reaches existing split and merge renderer sessions with opacity-one lineage and stateless seek/rewind."
     }
   ],
   "allowedWork": [
@@ -333,7 +340,8 @@
     {
       "id": "slice-19",
       "title": "fraction-variation-fixture",
-      "status": "planned"
+      "summary": "Added one governed parameter variation of the accepted numerator split/merge semantics. A shared parameterized semantic factory preserves the original reader contract, compiler-owned exact rational equality reaches the canonical construction, and isolated real KaTeX split and merge sessions prove no copied renderer or schedule path.",
+      "status": "complete"
     },
     {
       "id": "slice-20",

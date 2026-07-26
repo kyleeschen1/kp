@@ -101,3 +101,9 @@ export {
   type KpGovernedConstructionRepair,
   type KpProviderConstructionRepair
 } from "./governed-canonical-construction-repair.ts";
+
+export {
+  createKpGovernedFractionSplitMergeVariation,
+  type KpExactLinearRationalForm,
+  type KpGovernedFractionSplitMergeVariation
+} from "./governed-fraction-split-merge-variation.ts";

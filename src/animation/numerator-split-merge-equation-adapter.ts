@@ -2,7 +2,7 @@ import { createKpAnimationAsset, type KpAnimationAsset } from "./asset.ts";
 import { createSemanticTransformationRef } from "../semantic/animation.ts";
 import {
   createNumeratorSplitMergeEquationKpAsset,
-  numeratorSplitMergeEquationAssetIds as ids
+  type NumeratorSplitMergeEquationKpAsset
 } from "../semantic/numerator-split-merge-equation-asset.ts";
 import {
   createEditableSemanticTransformationTree,
@@ -15,31 +15,47 @@ import {
 
 /** Forward-only until the exact inverse merge clears its own motion slice. */
 export function createNumeratorSplitEquationAnimationAsset(): KpAnimationAsset {
-  return createNumeratorSplitMergeAnimationAsset(false);
+  return createNumeratorSplitMergeAnimationAsset({
+    includeMerge: false,
+    source: createNumeratorSplitMergeEquationKpAsset()
+  });
 }
 
-export function createNumeratorSplitMergeEquationAnimationAsset(): KpAnimationAsset {
-  return createNumeratorSplitMergeAnimationAsset(true);
+export function createNumeratorSplitMergeEquationAnimationAsset(
+  source: NumeratorSplitMergeEquationKpAsset =
+    createNumeratorSplitMergeEquationKpAsset()
+): KpAnimationAsset {
+  return createNumeratorSplitMergeAnimationAsset({
+    includeMerge: true,
+    source
+  });
 }
 
-function createNumeratorSplitMergeAnimationAsset(includeMerge: boolean): KpAnimationAsset {
-  const source = createNumeratorSplitMergeEquationKpAsset();
+function createNumeratorSplitMergeAnimationAsset(input: {
+  readonly includeMerge: boolean;
+  readonly source: NumeratorSplitMergeEquationKpAsset;
+}): KpAnimationAsset {
+  const { includeMerge, source } = input;
+  const ids = source.ids;
+  const stem = ids.combined
+    .replace(/^equation\./, "")
+    .replace(/\.combined$/, "");
   const transformations = includeMerge
     ? source.transformations
     : source.transformations.filter(
         (transformation) => transformation.id === ids.splitTransform
       );
   const animationId = includeMerge
-    ? "animation.numerator-split-merge.round-trip"
-    : "animation.numerator-split-merge.split-sum";
+    ? `animation.${stem}.round-trip`
+    : `animation.${stem}.split-sum`;
   const timelineId = includeMerge
-    ? "timeline.numerator-split-merge.round-trip"
-    : "timeline.numerator-split-merge.split-sum";
-  const renderTargetId = "render.numerator-split-merge.equation";
+    ? `timeline.${stem}.round-trip`
+    : `timeline.${stem}.split-sum`;
+  const renderTargetId = `render.${stem}.equation`;
   const root = createSemanticTransformationSequence({
     id: includeMerge
-      ? "diagram.numerator-split-merge.round-trip-sequence"
-      : "diagram.numerator-split-merge.forward-sequence",
+      ? `diagram.${stem}.round-trip-sequence`
+      : `diagram.${stem}.forward-sequence`,
     label: includeMerge
       ? "Split and merge a fraction over a numerator sum"
       : "Split a fraction over a numerator sum",
@@ -66,28 +82,29 @@ function createNumeratorSplitMergeAnimationAsset(includeMerge: boolean): KpAnima
       root,
       annotations: [
         {
-          id: "focus.numerator-split-merge.shared-structure",
+          id: `focus.${stem}.shared-structure`,
           kind: "focus",
           targetNodeId: ids.splitTransform,
           placement: "during",
           selectorIds: [
-            selector(ids.combined, "fraction.numerator.plus"),
-            selector(ids.combined, "fraction.rule"),
-            selector(ids.combined, "fraction.denominator.2")
+            selectorByRole(source, ids.combined, "numerator-operator"),
+            selectorByRole(source, ids.combined, "fraction-rule"),
+            selectorByRole(source, ids.combined, "denominator")
           ]
         },
         ...(includeMerge
           ? [{
-              id: "focus.numerator-split-merge.compatible-structures",
+              id: `focus.${stem}.compatible-structures`,
               kind: "focus" as const,
               targetNodeId: ids.mergeTransform,
               placement: "during" as const,
               selectorIds: [
-                selector(ids.split, "between.plus"),
-                selector(ids.split, "left.fraction.rule"),
-                selector(ids.split, "left.fraction.denominator.2"),
-                selector(ids.split, "right.fraction.rule"),
-                selector(ids.split, "right.fraction.denominator.2")
+                selectorByRole(source, ids.split, "sum-operator"),
+                ...selectorsByRolesInObjectOrder(
+                  source,
+                  ids.split,
+                  ["fraction-rule", "denominator"]
+                )
               ]
             }]
           : [])
@@ -99,7 +116,7 @@ function createNumeratorSplitMergeAnimationAsset(includeMerge: boolean): KpAnima
       beatCount: includeMerge ? 54 : 27
     },
     layout: {
-      id: "layout.numerator-split-merge.animation",
+      id: `layout.${stem}.animation`,
       kind: "single",
       targetId: renderTargetId
     },
@@ -112,25 +129,25 @@ function createNumeratorSplitMergeAnimationAsset(includeMerge: boolean): KpAnima
     }],
     checks: [
       {
-        id: "check.numerator-split-merge.reference-closure",
+        id: `check.${stem}.reference-closure`,
         lawId: "animation.reference-closure",
         level: "strict",
         targetId: animationId
       },
       {
-        id: "check.numerator-split-merge.seek-rewind",
+        id: `check.${stem}.seek-rewind`,
         lawId: "animation.seek-rewind",
         level: "strict",
         targetId: root.id
       }
     ],
     exportTargets: [{
-      id: "export.numerator-split-merge.frames",
+      id: `export.${stem}.frames`,
       kind: "frame-sequence",
-      artifactId: "artifact.numerator-split-merge.frames"
+      artifactId: `artifact.${stem}.frames`
     }],
     dashboard: {
-      rowId: "animation-numerator-split-merge",
+      rowId: `animation-${stem}`,
       tags: ["animation", "equation", "fraction", "split", ...(includeMerge ? ["merge"] : []), "exemplar"],
       sourceRefIds: [source.sourceTraceId]
     },
@@ -143,6 +160,47 @@ function createNumeratorSplitMergeAnimationAsset(includeMerge: boolean): KpAnima
   });
 }
 
-function selector(objectId: string, path: string): string {
-  return `${objectId}.${path}`;
+function selectorByRole(
+  source: NumeratorSplitMergeEquationKpAsset,
+  objectId: string,
+  role: string
+): string {
+  const matches = selectorsByRole(source, objectId, role);
+  if (matches.length !== 1) {
+    throw new Error(
+      `Numerator split/merge ${objectId} requires one ${role} selector.`
+    );
+  }
+  return matches[0]!;
+}
+
+function selectorsByRole(
+  source: NumeratorSplitMergeEquationKpAsset,
+  objectId: string,
+  role: string
+): readonly string[] {
+  const object = source.bundle.objects.find(({ id }) => id === objectId);
+  if (object === undefined) {
+    throw new Error(`Numerator split/merge is missing object ${objectId}.`);
+  }
+  return object.selectors
+    .filter(({ metadata }) => metadata?.["equationStructureRole"] === role)
+    .map(({ id }) => id);
+}
+
+function selectorsByRolesInObjectOrder(
+  source: NumeratorSplitMergeEquationKpAsset,
+  objectId: string,
+  roles: readonly string[]
+): readonly string[] {
+  const object = source.bundle.objects.find(({ id }) => id === objectId);
+  if (object === undefined) {
+    throw new Error(`Numerator split/merge is missing object ${objectId}.`);
+  }
+  return object.selectors
+    .filter(({ metadata }) => {
+      const role = metadata?.["equationStructureRole"];
+      return typeof role === "string" && roles.includes(role);
+    })
+    .map(({ id }) => id);
 }

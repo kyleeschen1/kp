@@ -12,51 +12,96 @@ import type { SelectorCorrespondenceRecord } from "./correspondence.ts";
 
 export interface NumeratorSplitMergeEquationKpAsset {
   readonly sourceTraceId: string;
+  readonly ids: NumeratorSplitMergeEquationAssetIds;
   readonly bundle: KpAssetBundle;
   readonly transformations: readonly KpSemanticTransformation[];
 }
 
-export const numeratorSplitMergeEquationAssetIds = {
+export interface NumeratorSplitMergeEquationAssetIds {
+  readonly combined: string;
+  readonly split: string;
+  readonly splitTransform: string;
+  readonly mergeTransform: string;
+}
+
+export interface NumeratorSplitMergeEquationParameters {
+  readonly idStem: string;
+  readonly coefficient: number;
+  readonly variable: string;
+  readonly constant: number;
+  readonly denominator: number;
+}
+
+export const numeratorSplitMergeEquationAssetIds:
+  NumeratorSplitMergeEquationAssetIds = {
   combined: "equation.numerator-split-merge.combined",
   split: "equation.numerator-split-merge.split",
   splitTransform: "transform.numerator-split-merge.split-sum",
   mergeTransform: "transform.numerator-split-merge.merge-sum"
 } as const;
 
-const ids = numeratorSplitMergeEquationAssetIds;
 const sourceTraceId = "trace.algebra-canonical-numerator-split-merge";
+const defaultParameters: NumeratorSplitMergeEquationParameters = {
+  idStem: "numerator-split-merge",
+  coefficient: 2,
+  variable: "x",
+  constant: 6,
+  denominator: 2
+};
 
 /**
  * Defines the exact algebra and selector lineage independently of choreography.
  * Branching records describe semantic derivation, not clone paths or timing.
  */
 export function createNumeratorSplitMergeEquationKpAsset(): NumeratorSplitMergeEquationKpAsset {
+  return createParameterizedNumeratorSplitMergeEquationKpAsset(
+    defaultParameters
+  );
+}
+
+export function createParameterizedNumeratorSplitMergeEquationKpAsset(
+  input: NumeratorSplitMergeEquationParameters
+): NumeratorSplitMergeEquationKpAsset {
+  assertParameters(input);
+  const ids: NumeratorSplitMergeEquationAssetIds = {
+    combined: `equation.${input.idStem}.combined`,
+    split: `equation.${input.idStem}.split`,
+    splitTransform: `transform.${input.idStem}.split-sum`,
+    mergeTransform: `transform.${input.idStem}.merge-sum`
+  };
+  const paths = selectorPaths(input);
+  const traceId = input.idStem === defaultParameters.idStem
+    ? sourceTraceId
+    : `trace.algebra-canonical-${input.idStem}`;
   const bundle = createKpAssetBundle({
-    id: "asset.numerator-split-merge-equation",
+    id: `asset.${input.idStem}-equation`,
     title: "Split and merge a fraction over a numerator sum",
     objects: [
-      equationState(ids.combined, "One fraction over a sum", "\\frac{2x + 6}{2}", [
-        part("fraction.numerator.coefficient.2", "term", "2", "coefficient"),
-        part("fraction.numerator.x", "term", "x", "variable"),
+      equationState(ids.combined, "One fraction over a sum",
+        `\\frac{${input.coefficient}${input.variable} + ${input.constant}}{${input.denominator}}`, [
+        part(paths.combinedCoefficient, "term", String(input.coefficient), "coefficient"),
+        part(paths.combinedVariable, "term", input.variable, "variable"),
         part("fraction.numerator.plus", "operator", "+", "numerator-operator"),
-        part("fraction.numerator.6", "term", "6", "constant"),
+        part(paths.combinedConstant, "term", String(input.constant), "constant"),
         part("fraction.rule", "artifact", "fraction rule", "fraction-rule"),
-        part("fraction.denominator.2", "term", "2", "denominator")
-      ]),
+        part(paths.combinedDenominator, "term", String(input.denominator), "denominator")
+      ], traceId),
       equationState(
         ids.split,
         "Two fractions with a shared denominator",
-        "\\frac{2x}{2} + \\frac{6}{2}",
+        `\\frac{${input.coefficient}${input.variable}}{${input.denominator}} + ` +
+          `\\frac{${input.constant}}{${input.denominator}}`,
         [
-          part("left.fraction.numerator.coefficient.2", "term", "2", "coefficient"),
-          part("left.fraction.numerator.x", "term", "x", "variable"),
+          part(paths.splitCoefficient, "term", String(input.coefficient), "coefficient"),
+          part(paths.splitVariable, "term", input.variable, "variable"),
           part("left.fraction.rule", "artifact", "fraction rule", "fraction-rule"),
-          part("left.fraction.denominator.2", "term", "2", "denominator"),
+          part(paths.leftDenominator, "term", String(input.denominator), "denominator"),
           part("between.plus", "operator", "+", "sum-operator"),
-          part("right.fraction.numerator.6", "term", "6", "constant"),
+          part(paths.splitConstant, "term", String(input.constant), "constant"),
           part("right.fraction.rule", "artifact", "fraction rule", "fraction-rule"),
-          part("right.fraction.denominator.2", "term", "2", "denominator")
+          part(paths.rightDenominator, "term", String(input.denominator), "denominator")
         ],
+        traceId,
         ids.combined,
         ids.splitTransform
       )
@@ -64,7 +109,8 @@ export function createNumeratorSplitMergeEquationKpAsset(): NumeratorSplitMergeE
   });
 
   return {
-    sourceTraceId,
+    sourceTraceId: traceId,
+    ids,
     bundle,
     transformations: [
       transformation({
@@ -74,7 +120,7 @@ export function createNumeratorSplitMergeEquationKpAsset(): NumeratorSplitMergeE
         title: "Split the numerator sum",
         sourceObjectId: ids.combined,
         targetObjectId: ids.split,
-        correspondence: splitCorrespondence(),
+        correspondence: splitCorrespondence(ids, paths),
         assumption: "Each term in the numerator shares the same non-zero denominator.",
         lawId: "law.algebra.fraction-sum-split"
       }),
@@ -85,7 +131,7 @@ export function createNumeratorSplitMergeEquationKpAsset(): NumeratorSplitMergeE
         title: "Merge fractions over the common denominator",
         sourceObjectId: ids.split,
         targetObjectId: ids.combined,
-        correspondence: mergeCorrespondence(),
+        correspondence: mergeCorrespondence(ids, paths),
         assumption: "Both fractions have the same non-zero denominator.",
         lawId: "law.algebra.fraction-sum-merge"
       })
@@ -114,6 +160,7 @@ function equationState(
   title: string,
   latex: string,
   parts: readonly Part[],
+  traceId: string,
   sourceId?: string,
   transformationId?: string
 ) {
@@ -131,7 +178,7 @@ function equationState(
     provenance: sourceId === undefined
       ? {
           kind: "authored",
-          sourceIds: [sourceTraceId],
+          sourceIds: [traceId],
           summary: "Canonical exact fraction over a numerator sum."
         }
       : {
@@ -172,12 +219,27 @@ function transformation(input: TransformationInput): KpSemanticTransformation {
   });
 }
 
-function splitCorrespondence(): readonly SelectorCorrespondenceRecord[] {
+interface NumeratorSplitMergeSelectorPaths {
+  readonly combinedCoefficient: string;
+  readonly combinedVariable: string;
+  readonly combinedConstant: string;
+  readonly combinedDenominator: string;
+  readonly splitCoefficient: string;
+  readonly splitVariable: string;
+  readonly splitConstant: string;
+  readonly leftDenominator: string;
+  readonly rightDenominator: string;
+}
+
+function splitCorrespondence(
+  ids: NumeratorSplitMergeEquationAssetIds,
+  paths: NumeratorSplitMergeSelectorPaths
+): readonly SelectorCorrespondenceRecord[] {
   return [
-    identity("coefficient-persists", ids.combined, "fraction.numerator.coefficient.2", ids.split, "left.fraction.numerator.coefficient.2"),
-    identity("variable-persists", ids.combined, "fraction.numerator.x", ids.split, "left.fraction.numerator.x"),
+    identity("coefficient-persists", ids.combined, paths.combinedCoefficient, ids.split, paths.splitCoefficient),
+    identity("variable-persists", ids.combined, paths.combinedVariable, ids.split, paths.splitVariable),
     roleChange("plus-leaves-numerator", ids.combined, "fraction.numerator.plus", ids.split, "between.plus", "The numerator plus becomes the operator between the two fractions."),
-    identity("constant-persists", ids.combined, "fraction.numerator.6", ids.split, "right.fraction.numerator.6"),
+    identity("constant-persists", ids.combined, paths.combinedConstant, ids.split, paths.splitConstant),
     record(
       "fraction-rule-bifurcates",
       "fan-out",
@@ -188,19 +250,22 @@ function splitCorrespondence(): readonly SelectorCorrespondenceRecord[] {
     record(
       "denominator-copies",
       "fan-out",
-      selectors(ids.combined, "fraction.denominator.2"),
-      selectors(ids.split, "left.fraction.denominator.2", "right.fraction.denominator.2"),
+      selectors(ids.combined, paths.combinedDenominator),
+      selectors(ids.split, paths.leftDenominator, paths.rightDenominator),
       "The shared denominator derives one denominator for each numerator term."
     )
   ];
 }
 
-function mergeCorrespondence(): readonly SelectorCorrespondenceRecord[] {
+function mergeCorrespondence(
+  ids: NumeratorSplitMergeEquationAssetIds,
+  paths: NumeratorSplitMergeSelectorPaths
+): readonly SelectorCorrespondenceRecord[] {
   return [
-    identity("coefficient-persists", ids.split, "left.fraction.numerator.coefficient.2", ids.combined, "fraction.numerator.coefficient.2"),
-    identity("variable-persists", ids.split, "left.fraction.numerator.x", ids.combined, "fraction.numerator.x"),
+    identity("coefficient-persists", ids.split, paths.splitCoefficient, ids.combined, paths.combinedCoefficient),
+    identity("variable-persists", ids.split, paths.splitVariable, ids.combined, paths.combinedVariable),
     roleChange("plus-enters-numerator", ids.split, "between.plus", ids.combined, "fraction.numerator.plus", "The between-fractions plus returns to the merged numerator."),
-    identity("constant-persists", ids.split, "right.fraction.numerator.6", ids.combined, "fraction.numerator.6"),
+    identity("constant-persists", ids.split, paths.splitConstant, ids.combined, paths.combinedConstant),
     record(
       "fraction-rules-merge",
       "fan-in",
@@ -211,8 +276,8 @@ function mergeCorrespondence(): readonly SelectorCorrespondenceRecord[] {
     record(
       "denominators-merge",
       "fan-in",
-      selectors(ids.split, "left.fraction.denominator.2", "right.fraction.denominator.2"),
-      selectors(ids.combined, "fraction.denominator.2"),
+      selectors(ids.split, paths.leftDenominator, paths.rightDenominator),
+      selectors(ids.combined, paths.combinedDenominator),
       "Equal denominators derive the one shared denominator."
     )
   ];
@@ -263,4 +328,40 @@ function record(
 
 function selectors(objectId: string, ...paths: readonly string[]): readonly string[] {
   return paths.map((path) => `${objectId}.${path}`);
+}
+
+function selectorPaths(
+  input: NumeratorSplitMergeEquationParameters
+): NumeratorSplitMergeSelectorPaths {
+  return {
+    combinedCoefficient:
+      `fraction.numerator.coefficient.${input.coefficient}`,
+    combinedVariable: `fraction.numerator.${input.variable}`,
+    combinedConstant: `fraction.numerator.${input.constant}`,
+    combinedDenominator: `fraction.denominator.${input.denominator}`,
+    splitCoefficient:
+      `left.fraction.numerator.coefficient.${input.coefficient}`,
+    splitVariable: `left.fraction.numerator.${input.variable}`,
+    splitConstant: `right.fraction.numerator.${input.constant}`,
+    leftDenominator: `left.fraction.denominator.${input.denominator}`,
+    rightDenominator: `right.fraction.denominator.${input.denominator}`
+  };
+}
+
+function assertParameters(input: NumeratorSplitMergeEquationParameters): void {
+  if (!/^[a-z0-9][a-z0-9.-]*$/.test(input.idStem)) {
+    throw new Error("Numerator split/merge id stem must be data-safe.");
+  }
+  if (!/^[a-zA-Z]$/.test(input.variable)) {
+    throw new Error("Numerator split/merge variable must be one letter.");
+  }
+  for (const [label, value] of [
+    ["coefficient", input.coefficient],
+    ["constant", input.constant],
+    ["denominator", input.denominator]
+  ] as const) {
+    if (!Number.isSafeInteger(value) || value <= 0) {
+      throw new Error(`Numerator split/merge ${label} must be a positive integer.`);
+    }
+  }
 }

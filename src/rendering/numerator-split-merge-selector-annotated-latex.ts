@@ -13,17 +13,27 @@ export interface KpNumeratorSplitMergeAnnotatedLatex {
 export function createKpNumeratorSplitMergeSelectorAnnotatedLatex(
   state: KpSemanticAssetObject
 ): KpNumeratorSplitMergeAnnotatedLatex | undefined {
-  if (!state.id.startsWith("equation.numerator-split-merge.")) return undefined;
-  const byPath = new Map(state.selectors.map((selector) => [
-    selector.id.slice(state.id.length + 1),
-    selector
-  ]));
   const structural = state.selectors.filter((selector) => selector.kind === "artifact");
   const semantic = state.selectors.filter((selector) => selector.kind !== "artifact");
-  const token = (path: string, latex?: string): KpSelectorAnnotatedLatexSegment => {
-    const selector = byPath.get(path);
-    if (selector === undefined) throw new Error(`${state.id} is missing selector ${path}`);
-    return { kind: "selector", selectorId: selector.id, latex: latex ?? selector.label ?? path };
+  const byRole = new Map<string, typeof state.selectors>();
+  state.selectors.forEach((selector) => {
+    const role = selector.metadata?.["equationStructureRole"];
+    if (typeof role !== "string") return;
+    byRole.set(role, [...(byRole.get(role) ?? []), selector]);
+  });
+  const token = (
+    role: string,
+    ordinal = 0
+  ): KpSelectorAnnotatedLatexSegment => {
+    const selector = byRole.get(role)?.[ordinal];
+    if (selector === undefined || selector.label === undefined) {
+      throw new Error(`${state.id} is missing labeled role ${role}[${ordinal}]`);
+    }
+    return {
+      kind: "selector",
+      selectorId: selector.id,
+      latex: selector.label
+    };
   };
   const latex = (value: string): KpSelectorAnnotatedLatexSegment => ({
     kind: "latex",
@@ -31,30 +41,27 @@ export function createKpNumeratorSplitMergeSelectorAnnotatedLatex(
   });
   const gap = (): KpSelectorAnnotatedLatexSegment => latex("\\;");
   let segments: readonly KpSelectorAnnotatedLatexSegment[];
-  switch (state.id) {
-    case "equation.numerator-split-merge.combined":
-      segments = [
-        latex("\\frac{"),
-        token("fraction.numerator.coefficient.2", "2"),
-        token("fraction.numerator.x", "x"),
-        gap(), token("fraction.numerator.plus", "+"), gap(),
-        token("fraction.numerator.6", "6"),
-        latex("}{"), token("fraction.denominator.2", "2"), latex("}")
-      ];
-      break;
-    case "equation.numerator-split-merge.split":
-      segments = [
-        latex("\\frac{"),
-        token("left.fraction.numerator.coefficient.2", "2"),
-        token("left.fraction.numerator.x", "x"),
-        latex("}{"), token("left.fraction.denominator.2", "2"), latex("}"),
-        gap(), token("between.plus", "+"), gap(),
-        latex("\\frac{"), token("right.fraction.numerator.6", "6"),
-        latex("}{"), token("right.fraction.denominator.2", "2"), latex("}")
-      ];
-      break;
-    default:
-      return undefined;
+  if (byRole.has("numerator-operator")) {
+    segments = [
+      latex("\\frac{"),
+      token("coefficient"),
+      token("variable"),
+      gap(), token("numerator-operator"), gap(),
+      token("constant"),
+      latex("}{"), token("denominator"), latex("}")
+    ];
+  } else if (byRole.has("sum-operator")) {
+    segments = [
+      latex("\\frac{"),
+      token("coefficient"),
+      token("variable"),
+      latex("}{"), token("denominator", 0), latex("}"),
+      gap(), token("sum-operator"), gap(),
+      latex("\\frac{"), token("constant"),
+      latex("}{"), token("denominator", 1), latex("}")
+    ];
+  } else {
+    return undefined;
   }
   return {
     annotated: createKpSelectorAnnotatedLatex({
