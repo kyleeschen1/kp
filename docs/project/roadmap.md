@@ -76,6 +76,16 @@ diagnostic evidence rather than a promoted product exemplar. This result
 authorizes exemplar-by-exemplar migration, not a global equation-family
 rollout.
 
+The accepted library-expansion direction is recorded in
+`decisions/2026-07-26-kp-foldable-evaluation-tree-library-expansion.md`, with
+the six-loop horizon in
+`reviews/2026-07-26-kp-six-loop-library-expansion-direction.md`. One radical
+reader adoption and promotion kit is the last recommended foundation gate.
+After it, KP returns to visible domain exemplars built from immutable,
+foldable transformation trees. At least three domain exemplars should ship
+before another platform-only compositor loop unless a real exemplar exposes a
+failed generic invariant.
+
 ## Active Focus
 
 **Canonical construction and the fraction reader migration are complete.** The
@@ -86,6 +96,13 @@ radical, and compound fixtures share one verified construction and
 renderer-session path. The next recommended product proposal is one bounded
 radical-succession reader exemplar, stopping for visual review before any
 radical-family generalization.
+
+The proposed radical work is deliberately a promotion-cost proof, not another
+open-ended compositor program. Its successor unit-exponent dry run must require
+zero compositor-core changes, zero new lifecycle or scheduler categories, zero
+notation-specific geometry, and no second runtime artifact. After that proof,
+the next product exemplar is foldable distribution and collection for
+`3(x + 2) + 2(x - 1) -> 5x + 4`.
 
 The migration remains complexity-negative replacement work. Semantic traces,
 lineage, clocks, native accessibility, authoring guidance, and accepted legacy
@@ -100,13 +117,11 @@ the tangent and `f'(a)`, and rewind exactly. The previous moving-tangent editor
 sample is reusable reference evidence, not the learner promotion target.
 
 The dependency order is owned by approved Theseus plan revision
-`plan-revision.kp.v5`: branch scheduling and responsive attention, structured
-algebra, fraction composition pressure testing, governed semantic and LLM
-authoring, then bounded symbolic and cross-domain breadth. The executable
-control record is `run-contract.kp.product-roadmap-v5-program-v0`. Human
+`plan-revision.kp.v10`. Planned roadmap rows preserve direction but do not
+authorize implementation; an approved typed run contract owns execution. Human
 exemplar approval remains mandatory before each subjective visual
-generalization; existing standalone examples remain reference evidence rather
-than automatically promoted reader products.
+generalization, and existing standalone examples remain reference evidence
+rather than automatically promoted reader products.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
@@ -349,24 +364,26 @@ Package executable animations as semantic capsules:
 
 1. Preserve the completed canonical construction guide, fraction reader
    migration, governed cohort, live review gallery, and fixed release gates.
-2. Propose one radical-succession reader exemplar through the same canonical
-   session; stop at its visual checkpoint before broader radical promotion.
-3. Follow with one unit-exponent absorption exemplar only after that checkpoint,
-   without adding notation-specific scheduling categories.
-4. Replace distribution string templates with stable expression subtrees,
-   semantic role binding, verified rewrites, and typed normal-form intent.
-5. Pressure-test those contracts through opaque fraction fan-out, numerator
-   normalization, distributed fraction terms, reverse factoring, and a lawful
-   multi-step solve macro.
-6. Expand governed semantic and LLM authoring while deterministic compilers
-   retain geometry, timing, typography, responsive adaptation, rendering,
-   validation, and repair authority.
-7. Promote functional wrapping, derivatives, integral
-   accumulation, vector/projection, and matrix-vector/linear-map coordination
+2. Adopt one radical-succession reader exemplar through the same canonical
+   session, extract a promotion kit, and stop at its visual checkpoint before
+   broader radical promotion.
+3. Prove the kit with a short unit-exponent dry run that adds no compositor,
+   lifecycle, scheduler, geometry, or runtime category.
+4. Build foldable distribution and collection for
+   `3(x + 2) + 2(x - 1) -> 5x + 4`, keeping one immutable canonical trace and
+   treating folds as presentation projections.
+5. Expand next through exact arithmetic evaluation trees, vector and matrix
+   operations, an equation-graph derivative bridge, and integral accumulation,
    one exemplar checkpoint at a time.
-8. Keep FTC, BFS, economics, programming, physics, course-scale curriculum,
-   dynamic package loading, and broad WebGL work parked until a new priority
-   decision explicitly advances them.
+6. Improve hierarchical layout, temporal lanes, group motion, or deterministic
+   staging only when those product exemplars expose a failed generic
+   non-crowding invariant.
+7. Keep governed models limited to verified semantic operations, laws, and
+   suggested fold/focus intent; deterministic compilers retain mathematics,
+   timing, geometry, typography, rendering, validation, and repair authority.
+8. Keep BFS, economics, programming, physics, course-scale curriculum, dynamic
+   package loading, and broad WebGL work parked until a new priority decision
+   explicitly advances them.
 
 ## Deferred
 

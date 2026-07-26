@@ -3,8 +3,8 @@
 Status: stable-supporting
 Last Updated: 2026-07-26
 Current Next Action: Preserve the released canonical construction and native
-KaTeX session while the active product thread reviews one bounded
-radical-succession reader exemplar. No global equation-family migration is
+KaTeX session while the active product thread reviews one bounded radical
+reader adoption and promotion kit. No global equation-family migration is
 authorized.
 
 ## Goal
@@ -202,6 +202,26 @@ paint only inside that lineage, settle explicitly at ambiguity, and treat
 measured schedules as ephemeral backend plans. The accepted path reduced the
 implementation fork without adding another operation taxonomy. See
 `../reviews/2026-07-26-canonical-animation-construction-governed-round-trip-closeout.md`.
+
+The accepted next architecture step is an immutable transformation/evaluation
+tree with fold state as a deterministic presentation projection. Expression
+ASTs own mathematical structure; transformation nodes reference affected
+subtrees, laws, dependencies, and exact checkpoints. Folding may summarize
+detail and change timing, but it cannot change the trace, result, accessible
+explanation, or seek/rewind semantics. Semantic layout planning owns stable
+rows, groups, lanes, disclosure, and deterministic stage/fold/condense
+fallbacks; the local compositor continues to own measured paint routes and
+native DOM settlement. Generic hierarchy, swept-envelope, temporal-lane, and
+group-motion improvements are promoted only under exemplar evidence.
+
+One radical reader adoption and promotion kit is the final recommended
+foundation gate. Its unit-exponent dry run must require no compositor core
+change, lifecycle or scheduler category, notation-specific geometry, or second
+runtime artifact. The next product exemplar is foldable distribution and
+collection, followed directionally by exact arithmetic, vector/matrix
+operations, an equation-graph derivative bridge, and integral accumulation.
+See
+`../decisions/2026-07-26-kp-foldable-evaluation-tree-library-expansion.md`.
 
 The accepted grill-me decisions additionally separate immutable semantic
 choreography from configurable, versioned gestalt styles. New generated work

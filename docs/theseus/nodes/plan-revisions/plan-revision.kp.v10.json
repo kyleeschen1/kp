@@ -1,36 +1,45 @@
 {
-  "id": "plan-revision.kp.v9",
+  "id": "plan-revision.kp.v10",
   "kind": "plan-revision",
-  "title": "Kinetic Press canonical animation construction roadmap v9",
-  "status": "superseded",
+  "title": "Kinetic Press foldable animation library expansion roadmap v10",
+  "status": "active",
   "domain": "kp",
-  "summary": "Preserve the architecture-pressure roadmap, mark quadratic branching complete, and make canonical animation construction the sole current implementation phase.",
+  "summary": "Close canonical construction, use one radical adoption as the final foundation gate, and return to visible library expansion through foldable evaluation trees, arithmetic, linear algebra, graph bridges, and accumulation.",
   "sourceRefs": [
     {
       "kind": "file",
-      "path": "docs/project/reviews/2026-07-25-canonical-animation-construction-governed-round-trip-long-loop-proposal.md",
-      "summary": "User-approved exact 30-slice construction and governed round-trip program."
+      "path": "docs/project/decisions/2026-07-26-kp-foldable-evaluation-tree-library-expansion.md",
+      "summary": "Accepted implementation-boundary, folding, timing, compositor, promotion-ratchet, and library-expansion direction."
     },
     {
       "kind": "file",
-      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v8.json",
-      "summary": "Approved predecessor retaining the complete architecture-pressure roadmap."
+      "path": "docs/project/reviews/2026-07-26-kp-six-loop-library-expansion-direction.md",
+      "summary": "Reviewed six-loop horizon and progress signals; future rows remain non-authorizing."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-26-radical-reader-promotion-kit-long-loop-proposal.md",
+      "summary": "Exact proposed radical adoption loop awaiting separate explicit implementation approval."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v9.json",
+      "summary": "Approved predecessor retaining the complete architecture-pressure and domain-coverage roadmap."
     }
   ],
   "affects": [
     "workflow.kp.delivery",
-    "next-action.kp.quadratic-semantic-branching-v0",
-    "next-action.kp.canonical-animation-construction-governed-round-trip-v0",
+    "plan-revision.kp.v9",
     "run-contract.kp.canonical-animation-construction-governed-round-trip-v1"
   ],
   "progress": {
     "state": "partial",
-    "summary": "Quadratic branching and its bounded presentation-governance follow-up are resolved. The approved canonical animation construction contract is executing as the sole current implementation authority."
+    "summary": "Canonical construction is complete. No implementation queue is active; the next reviewed candidate is one radical reader adoption and promotion kit, followed by foldable distribution and domain-library expansion."
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
-    "revision": 9,
-    "objective": "Grow Kinetic Press through reusable semantic and visual primitives: preserve accepted exemplars, prove canonical animation construction and governed round trips now, then expand through calculus, linear algebra, arithmetic, precalculus, geometry/data, and cross-domain explanations in architecture-amortizing order.",
+    "revision": 10,
+    "objective": "Grow one canonical semantic animation system through an evidenced radical promotion kit, then expand visible pedagogical coverage with foldable transformation trees across algebra, exact arithmetic, vector and matrix operations, equation-graph calculus bridges, integral accumulation, and the retained longer-term domain roadmap.",
     "assumptions": [
       {
         "id": "single-roadmap-authority",
@@ -65,6 +74,26 @@
       {
         "id": "future-coverage-is-not-authorization",
         "statement": "Later and someday rows retain robust product coverage but do not authorize implementation until a reviewed run contract links to them.",
+        "status": "active"
+      },
+      {
+        "id": "folding-is-presentation-projection",
+        "statement": "Expanded, collapsed, automatic, and pinned evaluation-tree views project one immutable canonical semantic trace; they never change mathematical results, dependencies, checkpoints, accessibility, or export truth.",
+        "status": "active"
+      },
+      {
+        "id": "semantic-layout-before-local-routing",
+        "statement": "Semantic layout planning owns stable groups, rows, lanes, disclosure, and deterministic staging or folding; the local compositor owns measured paint routing and native DOM settlement.",
+        "status": "active"
+      },
+      {
+        "id": "foundation-stopping-rule",
+        "statement": "After the radical promotion kit, KP ships at least three domain exemplars before another platform-only compositor loop unless a real exemplar exposes a failed generic invariant.",
+        "status": "active"
+      },
+      {
+        "id": "promotion-cost-ratchet",
+        "statement": "The post-kit unit-exponent adoption must require no compositor-core change, lifecycle or scheduler category, notation-specific geometry, or second runtime artifact.",
         "status": "active"
       }
     ],
@@ -232,15 +261,48 @@
         "title": "Canonical animation construction",
         "objective": "Prove one semantic-to-renderer construction path, migrate one fraction split/merge reader transition exclusively, and establish governed variation plus browser-native review without parallel runtimes.",
         "horizon": "now",
-        "status": "active",
+        "status": "complete",
         "evidence": [
           "next-action.kp.canonical-animation-construction-governed-round-trip-v0",
           "run-contract.kp.canonical-animation-construction-governed-round-trip-v1"
         ],
         "topic": "Platform · Canonical animation construction",
         "architectureBenefit": "One composable human and governed-model construction path with compiler-owned mathematics, presentation, rendering, and repair.",
-        "rationale": "Renderer convergence closed the implementation fork; construction is now the narrowest bottleneck to visible library growth without parallel animation systems.",
+        "rationale": "The released construction and governed round-trip contract closed with exclusive fraction reader ownership, one construction path, and durable browser/release evidence.",
         "canonicalExemplar": "Split and merge (x + y) / 2"
+      },
+      {
+        "id": "canonical-radical-reader-promotion-kit",
+        "title": "Canonical radical reader adoption and promotion kit",
+        "objective": "Adopt one radical succession reader transition through the released canonical session, preserve native reader semantics, and prove a reusable low-cost promotion kit without family-wide rollout.",
+        "horizon": "now",
+        "status": "planned",
+        "topic": "Platform and algebra · Canonical promotion",
+        "architectureBenefit": "A second structurally distinct adoption plus an evidenced low-cost path for future exemplars.",
+        "rationale": "Radical rules, indices, compound glyph structure, and exact settlement are the last bounded foundation pressure before returning to visible library growth.",
+        "canonicalExemplar": "Rewrite x^(1/2) as sqrt(x)"
+      },
+      {
+        "id": "foldable-distribution-evaluation-tree",
+        "title": "Foldable distribution and collection tree",
+        "objective": "Compile distribution, multiplication, like-term collection, and simplification into one immutable transformation tree with deterministic expanded, collapsed, automatic, and pinned presentation projections.",
+        "horizon": "next",
+        "status": "planned",
+        "topic": "Algebra · Composable evaluation trees",
+        "architectureBenefit": "User-controlled pedagogical detail, hierarchical non-crowding layout, and timing compression without a second runtime or semantic trace.",
+        "rationale": "This returns KP to visible library growth while directly testing whether established semantic laws and the canonical compositor compose under a richer multi-operation expression.",
+        "canonicalExemplar": "Simplify 3(x + 2) + 2(x - 1) to 5x + 4"
+      },
+      {
+        "id": "derivative-reader-graph-bridge",
+        "title": "Foldable derivative equation-graph bridge",
+        "objective": "Synchronize difference-quotient algebra, secant geometry, tangent convergence, and the derivative value while allowing routine symbolic subtraces to fold without changing the shared canonical trace.",
+        "horizon": "next",
+        "status": "planned",
+        "topic": "Calculus · Derivative reader integration",
+        "architectureBenefit": "Foldable symbolic detail under one equation-graph clock and stable semantic checkpoints.",
+        "rationale": "The prior derivative exemplar proved shared-clock semantics; this phase turns that evidence into a canonical learner-facing bridge that reuses evaluation-tree folding.",
+        "canonicalExemplar": "Secant to tangent with a foldable difference quotient"
       },
       {
         "id": "integral-accumulation",
@@ -279,7 +341,7 @@
         "id": "exact-fraction-quantity-models",
         "title": "Exact fractions and quantity models",
         "objective": "Synchronize exact KaTeX fractions with partitioned circles, bars or areas, and number-line positions through shared quantity identity.",
-        "horizon": "later",
+        "horizon": "next",
         "status": "planned",
         "topic": "Arithmetic · Fractions",
         "architectureBenefit": "One quantity model projected into symbolic and concrete representations.",
@@ -290,7 +352,7 @@
         "id": "multidigit-addition",
         "title": "Multi-digit addition",
         "objective": "Coordinate column addition, place-value exchange, regrouping marks, and a base-ten or area representation.",
-        "horizon": "later",
+        "horizon": "next",
         "status": "planned",
         "topic": "Arithmetic · Addition",
         "architectureBenefit": "Persistent place-value identity and carry scheduling.",
@@ -519,12 +581,11 @@
       }
     ],
     "approval": {
-      "status": "superseded",
+      "status": "approved",
       "decidedAt": "2026-07-26T16:35:15.000Z",
       "decidedBy": "user",
-      "rationale": "Superseded by plan-revision.kp.v10."
+      "rationale": "Reconcile the completed canonical-construction contract and record the user-approved foldable evaluation-tree and six-loop library-expansion direction."
     },
-    "supersedes": "plan-revision.kp.v8",
-    "supersededBy": "plan-revision.kp.v10"
+    "supersedes": "plan-revision.kp.v9"
   }
 }
