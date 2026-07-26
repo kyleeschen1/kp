@@ -226,6 +226,12 @@ export interface KpNativeKatexTypographyRealization {
   readonly lifecycle: "renderer-session";
   readonly realizedIds: readonly string[];
   readonly deferredIds: readonly string[];
+  readonly deferred: readonly {
+    readonly id: string;
+    readonly disposition:
+      | "preserve-structural-paint"
+      | "native-checkpoint";
+  }[];
   readonly nativeMutationCount: 0;
 }
 
@@ -1172,12 +1178,18 @@ export function realizeKpNativeKatexTypographyStylePlan(input: {
   const targetById = new Map(input.target.atoms.map((atom) => [atom.id, atom]));
   const realizedIds: string[] = [];
   const deferredIds: string[] = [];
+  const deferred: Array<
+    KpNativeKatexTypographyRealization["deferred"][number]
+  > = [];
   for (const entry of input.plan.entries) {
-    if (
-      entry.model === "native-checkpoint-settlement" ||
-      entry.paintKind !== "glyph"
-    ) {
+    const disposition =
+      selectKpNativeKatexTypographyRealizationDisposition(entry);
+    if (disposition !== "html-clone") {
       deferredIds.push(entry.id);
+      deferred.push(Object.freeze({
+        id: entry.id,
+        disposition
+      }));
       continue;
     }
     const owner = input.stage.querySelector<HTMLElement>(
@@ -1213,8 +1225,23 @@ export function realizeKpNativeKatexTypographyStylePlan(input: {
     lifecycle: "renderer-session",
     realizedIds: Object.freeze(realizedIds),
     deferredIds: Object.freeze(deferredIds),
+    deferred: Object.freeze(deferred),
     nativeMutationCount: 0
   });
+}
+
+export function selectKpNativeKatexTypographyRealizationDisposition(
+  entry: KpNativeKatexTypographyStylePlanEntry
+):
+  | "html-clone"
+  | "preserve-structural-paint"
+  | "native-checkpoint" {
+  if (entry.model === "native-checkpoint-settlement") {
+    return "native-checkpoint";
+  }
+  return entry.paintKind === "glyph"
+    ? "html-clone"
+    : "preserve-structural-paint";
 }
 
 export function traceKpNativeKatexHandoffOwnership(input: {

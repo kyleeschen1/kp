@@ -121,6 +121,13 @@
       "scope": "slice-08 HTML clone realization",
       "checkedAt": "2026-07-26T00:15:11.344Z",
       "notes": "Forty-three focused tests, the wide and phone Chromium realization test, five convergence ratchets, all TypeScript projects, and architecture gates pass. Target-style visuals are idempotently reused, finite, exact-font styled, aria-hidden and inert, stripped of semantic and interactive attributes, and report zero native mutations. Native source and target markup is byte-equal around realization. Core source is 116485 bytes and the controller remains below 40000 bytes."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor -- --grep target-style realization or radical path and source rule; npm run test:canonical-equation-renderer; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-09 structural and SVG preservation",
+      "checkedAt": "2026-07-26T00:18:12.048Z",
+      "notes": "Forty-four focused tests, two Chromium checks across normal and reduced motion plus wide and phone HTML realization, five convergence ratchets, and all TypeScript projects pass. The five-kind decision table routes rule, path, delimiter, and accent paint to preserve-structural-paint; the fraction rule reports that disposition; radical path data and source rule geometry remain exact and receive no typography model marker."
     }
   ],
   "allowedWork": [
@@ -210,7 +217,8 @@
     {
       "id": "slice-09",
       "title": "structural-svg-preservation",
-      "status": "planned"
+      "summary": "Added an inspectable five-kind realization decision: glyph paint may use the target-style HTML clone; rule, path, delimiter, and accent paint stay on their existing structural geometry path; unsupported plans settle at the native checkpoint. Fraction-rule and radical path/rule Chromium evidence confirms no distortion, no target mutation, and exact path preservation in normal and reduced motion without notation branches.",
+      "status": "complete"
     },
     {
       "id": "slice-10",

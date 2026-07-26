@@ -817,6 +817,11 @@ test("radical path and source rule use bounded generic structural tracks", async
           CSS.escape(pathTrack.id)
         }"]`
       )!;
+      const ruleOwner = document.querySelector<HTMLElement>(
+        `[data-kp-equation-material-owner-id="native-scene-owner.${
+          CSS.escape(ruleTrack.id)
+        }"]`
+      )!;
       const clonedPathData =
         pathOwner.querySelector("path")?.getAttribute("d") ?? null;
       const targetFrame = inventory.playback.apply(1);
@@ -842,6 +847,10 @@ test("radical path and source rule use bounded generic structural tracks", async
           paintKind === "path"
         ),
         clonedPathData,
+        structuralTypographyModels: [
+          pathOwner.dataset["kpNativeKatexTypographyModel"] ?? null,
+          ruleOwner.dataset["kpNativeKatexTypographyModel"] ?? null
+        ],
         nativePathDataBefore,
         nativePathDataAfter: nativePath.getAttribute("d")
       };
@@ -886,6 +895,7 @@ test("radical path and source rule use bounded generic structural tracks", async
     expect(result.nativePathDataBefore).not.toBeNull();
     expect(result.clonedPathData).toBe(result.nativePathDataBefore);
     expect(result.nativePathDataAfter).toBe(result.nativePathDataBefore);
+    expect(result.structuralTypographyModels).toEqual([null, null]);
     await context.close();
   }
 });
@@ -1554,6 +1564,10 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
           realization: {
             realizedIds: readonly string[];
             deferredIds: readonly string[];
+            deferred: readonly {
+              id: string;
+              disposition: string;
+            }[];
             nativeMutationCount: number;
           };
         };
@@ -1628,6 +1642,7 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
         nativeMutationCount: second.realization.nativeMutationCount,
         realizedIds: second.realization.realizedIds,
         deferredIds: second.realization.deferredIds,
+        deferred: second.realization.deferred,
         owners
       };
     });
@@ -1638,6 +1653,9 @@ test("target-style realization keeps ordinary clone paint inert and native DOM u
     expect(evidence.targetUnchanged).toBe(true);
     expect(evidence.realizedIds.length).toBeGreaterThan(0);
     expect(evidence.deferredIds.length).toBeGreaterThan(0);
+    expect(evidence.deferred.every(({ disposition }) =>
+      disposition === "preserve-structural-paint"
+    )).toBe(true);
     expect(evidence.owners.every((owner) =>
       owner.paintKind === "glyph" &&
       owner.model === "target-style-reverse-flip" &&

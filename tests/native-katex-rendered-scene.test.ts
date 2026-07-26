@@ -20,6 +20,7 @@ import {
   projectKpNativeKatexSemanticPaintRelations,
   reconcileKpNativeKatexScenes,
   reverseKpNativeKatexSemanticPaintRelations,
+  selectKpNativeKatexTypographyRealizationDisposition,
   sampleKpNativeKatexSceneTracks
 } from "../src/rendering/native-katex-scene-compositor.ts";
 import type {
@@ -554,6 +555,49 @@ test("style plan requires total correlation-to-target paint coverage", () => {
 
   assert.throws(() => compile("paint.pair.x", "pair.missing"), /cannot find/);
   assert.throws(() => compile("paint.wrong"), /no matching target paint atom/);
+});
+
+test("realization disposition preserves every structural paint kind", () => {
+  const base = {
+    id: "entry.paint",
+    materialOwnerId: "owner.paint",
+    componentId: "component.paint",
+    atomLifecycle: "persist" as const,
+    targetPaintAtomId: "target.paint",
+    paintKind: "glyph" as const,
+    model: "target-style-reverse-flip" as const,
+    currentRect: { left: 10, top: 20, width: 12, height: 24 },
+    targetRect: { left: 10, top: 20, width: 12, height: 24 },
+    inverseTranslateX: 0,
+    inverseTranslateY: 0,
+    inverseScaleX: 1,
+    inverseScaleY: 1,
+    targetPaintFingerprint: "paint",
+    targetStyleFingerprint: "style",
+    targetClipPath: "none"
+  };
+  assert.deepEqual(
+    (["glyph", "rule", "path", "delimiter", "accent"] as const).map(
+      (paintKind) => selectKpNativeKatexTypographyRealizationDisposition({
+        ...base,
+        paintKind
+      })
+    ),
+    [
+      "html-clone",
+      "preserve-structural-paint",
+      "preserve-structural-paint",
+      "preserve-structural-paint",
+      "preserve-structural-paint"
+    ]
+  );
+  assert.equal(
+    selectKpNativeKatexTypographyRealizationDisposition({
+      ...base,
+      model: "native-checkpoint-settlement"
+    }),
+    "native-checkpoint"
+  );
 });
 
 test("handoff telemetry rejects invalid geometry and document boundaries", () => {
