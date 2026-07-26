@@ -2811,6 +2811,104 @@ test("inverse fraction exemplar uses one full-scene split sampler", async ({
     Object.values(rect).every(Number.isFinite) &&
     Number.isFinite(opacity)
   )).toBe(true);
+  const styleEvidence = await page.evaluate(() => {
+    const api = window as unknown as {
+      __kpRealizeFractionTypographyHandoff: (progress: number) => {
+        ownership: { visualOwner: string };
+        styleFrame: {
+          entries: readonly {
+            id: string;
+            translateX: number;
+            translateY: number;
+            scaleX: number;
+            scaleY: number;
+          }[];
+        };
+        realization: {
+          deferred: readonly { disposition: string }[];
+        };
+      };
+      __kpMeasureFractionCorrelatedHandoff: (progress: number) => {
+        observations: readonly {
+          id: string;
+          side: "native-source" | "material" | "native-target";
+          paintKind: string;
+          baselineY: number | null;
+          styleFingerprint: string;
+        }[];
+      };
+    };
+    const progresses = [0.96, 0.98, 0.999, 1];
+    const sample = (progress: number) => {
+      const result = api.__kpRealizeFractionTypographyHandoff(progress);
+      return {
+        progress,
+        visualOwner: result.ownership.visualOwner,
+        styleFrame: result.styleFrame,
+        deferred: result.realization.deferred
+      };
+    };
+    const forward = progresses.map(sample);
+    const reverse = [...progresses].reverse().map(sample).reverse();
+    const groups =
+      api.__kpMeasureFractionCorrelatedHandoff(0.999).observations.reduce(
+        (result, observation) => {
+          const id = observation.id.replace(
+            /\.(source|material|native)$/,
+            ""
+          );
+          result.set(id, [...(result.get(id) ?? []), observation]);
+          return result;
+        },
+        new Map<string, Array<{
+          id: string;
+          side: "native-source" | "material" | "native-target";
+          paintKind: string;
+          baselineY: number | null;
+          styleFingerprint: string;
+        }>>()
+      );
+    return {
+      forward,
+      reverse,
+      glyphResiduals: [...groups.values()].flatMap((observations) => {
+        const material = observations.find(({ side }) => side === "material")!;
+        const native = observations.find(({ side }) =>
+          side === "native-target"
+        )!;
+        if (material.paintKind !== "glyph") return [];
+        return [{
+          styleMatches:
+            material.styleFingerprint === native.styleFingerprint,
+          baseline:
+            material.baselineY === null || native.baselineY === null
+              ? Number.POSITIVE_INFINITY
+              : Math.abs(material.baselineY - native.baselineY)
+        }];
+      })
+    };
+  });
+  expect(styleEvidence.reverse).toEqual(styleEvidence.forward);
+  expect(styleEvidence.forward.map(({ visualOwner }) => visualOwner)).toEqual([
+    "material-scene",
+    "material-scene",
+    "material-scene",
+    "target-native"
+  ]);
+  expect(styleEvidence.forward.at(-1)?.styleFrame.entries.every((entry) =>
+    entry.translateX === 0 &&
+    entry.translateY === 0 &&
+    entry.scaleX === 1 &&
+    entry.scaleY === 1
+  )).toBe(true);
+  expect(styleEvidence.forward.slice(0, -1).every(({ deferred }) =>
+    deferred.every(({ disposition }) =>
+      disposition === "preserve-structural-paint"
+    )
+  )).toBe(true);
+  expect(styleEvidence.glyphResiduals.every((residual) =>
+    residual.styleMatches && residual.baseline < 0.1
+  )).toBe(true);
 
   await slider.fill("500");
   await slider.dispatchEvent("input");

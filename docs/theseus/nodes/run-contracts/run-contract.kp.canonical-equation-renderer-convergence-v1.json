@@ -142,6 +142,13 @@
       "scope": "slice-11 corrected fraction merge",
       "checkedAt": "2026-07-26T00:28:02.884Z",
       "notes": "Forty-five focused tests, the wide/phone normal/reduced Chromium endpoint matrix, 46 stable captures, five convergence ratchets, and all TypeScript projects pass. At 99.9 percent every glyph style fingerprint equals native target; maximum baseline residual is 0.010376 pixels wide and 0.009583 phone, and maximum rect residual is 0.086627 wide and 0.009766 phone. Manual inspection of 96 percent, 99.9 percent, and native-target captures shows one stable line, readable notation, no overlap, and no size or baseline snap."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor -- --grep inverse fraction exemplar; npm run test:real-katex-glyph-compositor; npm run typecheck; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-12 inverse split regression",
+      "checkedAt": "2026-07-26T00:31:26.081Z",
+      "notes": "The focused inverse Chromium test passes source, midpoint, target, direct-seek/rewind, finite geometry, rule bifurcation, 99.9-percent native style and sub-0.1-pixel baseline, exact identity settlement, structural deferral, focus, Cloze, inert clone, and reduced-motion assertions. Forty-five focused tests, all TypeScript projects, and 46 stable captures pass. Manual wide source/midpoint/target review shows a coherent one-to-two split with no endpoint jump."
     }
   ],
   "allowedWork": [
@@ -249,7 +256,8 @@
     {
       "id": "slice-12",
       "title": "inverse-split-regression",
-      "status": "planned"
+      "summary": "Applied the identical style-aware session to the inverse fraction split with no new policy. The one-to-two glyph and rule tracks remain finite and reversible, source/midpoint/target captures are coherent, 99.9-percent paint matches native before exact identity settlement, and native focus/Cloze ownership survives normal and reduced motion. Focused, type, and visual gates pass.",
+      "status": "complete"
     },
     {
       "id": "slice-13",

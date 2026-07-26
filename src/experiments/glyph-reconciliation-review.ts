@@ -577,9 +577,8 @@ function render(progress: number): void {
     progress: glyphProgress
   });
   const fractionProgress = clamp((bounded - 0.14) / 0.72);
-  const fractionFrame = fractionDirection === "merge"
-    ? fractionScene.realizeTypographyHandoff(fractionProgress).ownership
-    : fractionScenePlayback.apply(fractionProgress);
+  const fractionFrame =
+    fractionScene.realizeTypographyHandoff(fractionProgress).ownership;
   const fractionAtSource = fractionFrame.visualOwner === "source-native";
   const fractionAtTarget = fractionFrame.visualOwner === "target-native";
   activeFractionSource.setAttribute("aria-hidden", String(!fractionAtSource));
