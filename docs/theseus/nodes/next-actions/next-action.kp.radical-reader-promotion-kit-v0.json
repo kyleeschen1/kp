@@ -527,11 +527,25 @@
       "scope": "slice16 structural succession compiler",
       "checkedAt": "2026-07-26T19:52:48.312Z",
       "notes": "All TypeScript projects and architecture boundaries pass; presentation specificity remains in compile-time registration rather than renderer DOM inference."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice16 shared solid-mask structural paint",
+      "checkedAt": "2026-07-26T20:05:49.475Z",
+      "notes": "10 Chromium tests pass. Full motion uses a visible solid-mask succession canvas with structural atom clones suppressed; endpoint ink residual is <=0.5px; reduced motion holds an explicit exact native checkpoint; fraction controls remain green."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion; npm run test:real-katex-glyph-compositor; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice16 shared solid-mask structural paint",
+      "checkedAt": "2026-07-26T20:05:50.383Z",
+      "notes": "39 focused promotion tests, 52 generic compositor tests, all TypeScript projects, and all architecture boundaries pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 16 subphase 3 complete: canonical reader render plans now retain motif and structural-succession intent from semantic compilation instead of collapsing it to paint arity."
+    "summary": "Slice 16 subphase 4 complete: the accepted signed-distance solid morph now runs as an internal canonical-session paint strategy; structural fades are suppressed, x remains on ordinary atom continuity, and unavailable/reduced capability becomes checkpoint settlement."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

@@ -73,9 +73,11 @@ const session = createKpReaderEquationSceneCompositorSession({
   renderPlan,
   materialPlan,
   transitionId: transition.id,
+  motionMode: "continuous",
   source,
   target
 });
+await waitForStructuralSuccession(stage, session);
 const first = session.sample(0.37);
 session.sample(0.81);
 const rewound = session.sample(0.37);
@@ -83,6 +85,25 @@ const denseProgress = Array.from({ length: 101 }, (_, index) => index / 100);
 const denseSamples = denseProgress.map((progress) => session.sample(progress));
 const samples = denseSamples.flat();
 const ownership = session.apply(0.5);
+const structuralCanvas = stage.querySelector<HTMLCanvasElement>(
+  "[data-kp-native-katex-structural-succession]"
+);
+const structuralOwnersHidden = session.tracks
+  .filter(({ lifecycle }) =>
+    lifecycle === "introduce" || lifecycle === "eliminate"
+  )
+  .every((track) => stage.querySelector<HTMLElement>(
+    `[data-kp-equation-material-owner-id="native-scene-owner.${
+      CSS.escape(track.id)
+    }"]`
+  )?.style.opacity === "0");
+const continuantOwnersOpaque = session.tracks
+  .filter(({ lifecycle }) => lifecycle === "persist")
+  .every((track) => stage.querySelector<HTMLElement>(
+    `[data-kp-equation-material-owner-id="native-scene-owner.${
+      CSS.escape(track.id)
+    }"]`
+  )?.style.opacity === "1");
 const sourceAtoms = new Map(source.atoms.map((atom) => [atom.id, atom]));
 const targetAtoms = new Map(target.atoms.map((atom) => [atom.id, atom]));
 const sourceEndpointFrames = session.sample(0);
@@ -167,6 +188,15 @@ const evidence = Object.freeze({
   sessionKind: session.kind,
   sessionLifecycle: session.lifecycle,
   sessionMode: session.mode,
+  structuralSuccessionStrategy:
+    stage.dataset["kpNativeKatexStructuralSuccessionStrategy"],
+  structuralSuccessionStatus:
+    stage.dataset["kpNativeKatexStructuralSuccessionStatus"],
+  choreographyFidelity:
+    stage.dataset["kpNativeKatexChoreographyFidelity"],
+  structuralCanvasVisible: structuralCanvas?.style.opacity === "1",
+  structuralOwnersHidden,
+  continuantOwnersOpaque,
   transitionId: transition.id,
   lifecycles,
   trackCount: session.tracks.length,
@@ -299,6 +329,19 @@ function requireObject(id: string): KpSemanticAssetObject {
 
 function nextFrame(): Promise<void> {
   return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+}
+
+async function waitForStructuralSuccession(
+  stage: HTMLElement,
+  session: { apply(progress: number): unknown }
+): Promise<void> {
+  for (let frame = 0; frame < 120; frame += 1) {
+    session.apply(0);
+    const status = stage.dataset["kpNativeKatexStructuralSuccessionStatus"];
+    if (status === "ready" || status === "unavailable") return;
+    await nextFrame();
+  }
+  throw new Error("Structural succession paint strategy did not settle.");
 }
 
 function missingAtoms(

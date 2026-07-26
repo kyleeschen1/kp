@@ -12,6 +12,12 @@ import {
   setKpEquationMaterialOwnerVisual,
   syncKpEquationMaterialLayer
 } from "./equation-material-layer-dom.ts";
+import type {
+  KpEquationStructuralSuccessionIntent
+} from "../animation/structural-succession-presentation.ts";
+import {
+  syncKpNativeKatexStructuralSuccession
+} from "./native-katex-structural-succession-renderer.ts";
 
 export type KpNativeKatexAtomLifecycle =
   | "persist"
@@ -1583,6 +1589,9 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly relations: readonly KpNativeKatexSemanticPaintRelation[];
+  readonly structuralSuccession?:
+    KpEquationStructuralSuccessionIntent | undefined;
+  readonly structuralMotion?: "full" | "checkpoint" | undefined;
 }): KpCanonicalNativeKatexSceneSession {
   if (input.source.stage !== input.target.stage) {
     throw new Error("Canonical native KaTeX endpoints must share one stage.");
@@ -1636,7 +1645,40 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
   const session: KpNativeKatexRendererSession = Object.freeze({
     ...playback,
     apply(progress: number) {
-      const ownership = playback.apply(progress);
+      const bounded = Math.max(0, Math.min(1, progress));
+      const structural = input.structuralSuccession;
+      const fullMotion = structural !== undefined &&
+        (
+          input.structuralMotion === "full" ||
+          (
+            input.structuralMotion === undefined &&
+            input.source.stage.ownerDocument.defaultView?.matchMedia(
+              "(prefers-reduced-motion: reduce)"
+            ).matches !== true
+          )
+        );
+      const structuralSync = structural === undefined
+        ? undefined
+        : syncKpNativeKatexStructuralSuccession({
+            stage: input.source.stage,
+            sourceRoot: input.source.root,
+            targetRoot: input.target.root,
+            intent: structural,
+            progress: bounded,
+            visible: false,
+            enabled: fullMotion
+          });
+      const structuralReady =
+        structuralSync?.strategy === "solid-mask-succession" &&
+        structuralSync.status === "ready";
+      const appliedProgress =
+        structural !== undefined &&
+        !structuralReady &&
+        bounded > 0 &&
+        bounded < 1
+          ? 0
+          : bounded;
+      const ownership = playback.apply(appliedProgress);
       if (ownership.visualOwner === "material-scene") {
         realizeKpNativeKatexTypographyStylePlan({
           stage: input.source.stage,
@@ -1649,9 +1691,36 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
           )
         });
       }
+      if (
+        structural !== undefined &&
+        structuralReady &&
+        bounded > 0 &&
+        bounded < 1
+      ) {
+        hideStructuralAtomOwners({
+          stage: input.source.stage,
+          reconciliation,
+          tracks,
+          intent: structural
+        });
+        syncKpNativeKatexStructuralSuccession({
+          stage: input.source.stage,
+          sourceRoot: input.source.root,
+          targetRoot: input.target.root,
+          intent: structural,
+          progress: bounded,
+          visible: true,
+          enabled: true
+        });
+      }
       return ownership;
     }
   });
+  if (input.structuralSuccession !== undefined) {
+    // Warm capture while untouched source KaTeX owns the endpoint. A slow or
+    // unavailable paint capability remains an explicit native checkpoint.
+    session.apply(0);
+  }
   return Object.freeze({
     kind: "canonical-native-katex-scene-session",
     lifecycle: "renderer-session",
@@ -1659,6 +1728,32 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     hierarchy,
     session
   });
+}
+
+function hideStructuralAtomOwners(input: {
+  readonly stage: HTMLElement;
+  readonly reconciliation: KpNativeKatexSceneReconciliation;
+  readonly tracks: readonly KpNativeKatexSceneTrack[];
+  readonly intent: KpEquationStructuralSuccessionIntent;
+}): void {
+  const entityIds = new Set([
+    ...input.intent.sourceEntityIds,
+    ...input.intent.targetEntityIds
+  ]);
+  const componentIds = new Set(input.reconciliation.dispositions
+    .filter(({ semanticEntityIds }) => semanticEntityIds.some((entityId) =>
+      entityIds.has(entityId)
+    ))
+    .map(({ id }) => `component.${id}`));
+  for (const track of input.tracks) {
+    if (!componentIds.has(track.componentId)) continue;
+    const owner = input.stage.querySelector<HTMLElement>(
+      `[data-kp-equation-material-owner-id="native-scene-owner.${
+        CSS.escape(track.id)
+      }"]`
+    );
+    if (owner !== null) owner.style.opacity = "0";
+  }
 }
 
 function assertLifecycleArity(

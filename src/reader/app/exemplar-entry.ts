@@ -670,6 +670,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     materialPlan: context.materialPlan,
     fitSurface: context.fitSurface,
     progress: phaseProgress,
+    motionMode: projection.mode,
     fontReadiness,
     presentationRevision: [
       focusSnapshot.activeSource ?? "none",

@@ -5,6 +5,10 @@ import type {
   EquationVisualMotifKind,
   EquationVisualMotifPhaseId
 } from "./motifs/visual-motif.ts";
+import {
+  kpRadicalConventionalMorphProfile
+} from "./radical-morph-profile.ts";
+import type { EasingName } from "./easing.ts";
 
 export interface KpEquationVisualMotifIntent {
   readonly kind: EquationVisualMotifKind;
@@ -20,6 +24,35 @@ export interface KpEquationStructuralSuccessionIntent {
   readonly sourceEntityIds: readonly string[];
   readonly targetEntityIds: readonly string[];
   readonly actPhaseIds: readonly EquationVisualMotifPhaseId[];
+  readonly paintStrategy: KpEquationStructuralSuccessionPaintStrategy;
+}
+
+export interface KpEquationStructuralSuccessionPaintStrategy {
+  readonly kind: "solid-mask-succession";
+  readonly profileId: string;
+  readonly morph: {
+    readonly start: number;
+    readonly end: number;
+    readonly easing: EasingName;
+  };
+  readonly settlement: {
+    readonly start: number;
+    readonly end: number;
+    readonly easing: EasingName;
+  };
+  readonly solidMask: {
+    readonly maximumDistancePx: number;
+    readonly edgeSoftnessPx: number;
+    readonly boundsPaddingPx: number;
+    readonly sourceTravelFraction: number;
+    readonly sourceArcHeightPx: number;
+    readonly shapeLeadFraction: number;
+    readonly targetGrowthOriginXFraction: number;
+    readonly targetGrowthOriginYFraction: number;
+    readonly targetGrowthSoftnessPx: number;
+    readonly bridgeExpansionPx: number;
+    readonly endpointBlendFraction: number;
+  };
 }
 
 interface KpEquationStructuralSuccessionCompiler {
@@ -46,7 +79,14 @@ const structuralSuccessionCompilers:
         )),
         actPhaseIds: Object.freeze([
           "radical-representation-handoff" as const
-        ])
+        ]),
+        paintStrategy: Object.freeze({
+          kind: "solid-mask-succession",
+          profileId: kpRadicalConventionalMorphProfile.id,
+          morph: kpRadicalConventionalMorphProfile.morph,
+          settlement: kpRadicalConventionalMorphProfile.settlement,
+          solidMask: kpRadicalConventionalMorphProfile.solidMask
+        })
       });
     }
   }];

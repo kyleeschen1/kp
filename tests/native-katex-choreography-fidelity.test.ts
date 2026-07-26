@@ -41,7 +41,26 @@ const intent = {
   motifKind: "radical-corner-transfer",
   sourceEntityIds,
   targetEntityIds,
-  actPhaseIds: ["radical-representation-handoff"]
+  actPhaseIds: ["radical-representation-handoff"],
+  paintStrategy: {
+    kind: "solid-mask-succession" as const,
+    profileId: "test-profile",
+    morph: { start: 0, end: 1, easing: "linear" as const },
+    settlement: { start: 1, end: 1, easing: "linear" as const },
+    solidMask: {
+      maximumDistancePx: 1,
+      edgeSoftnessPx: 1,
+      boundsPaddingPx: 1,
+      sourceTravelFraction: 1,
+      sourceArcHeightPx: 0,
+      shapeLeadFraction: 0,
+      targetGrowthOriginXFraction: 0.5,
+      targetGrowthOriginYFraction: 0.5,
+      targetGrowthSoftnessPx: 1,
+      bridgeExpansionPx: 0,
+      endpointBlendFraction: 0
+    }
+  }
 };
 
 test("fade-only atom tracks cannot satisfy structural succession intent", () => {

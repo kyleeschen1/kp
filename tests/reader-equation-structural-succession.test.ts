@@ -41,7 +41,34 @@ test("reader plan preserves compiler-owned structural succession intent", () => 
       "expression.generated.radical.square-root-as-power.radical.radical-overbar",
       "expression.generated.radical.square-root-as-power.radical.radical-hook"
     ],
-    actPhaseIds: ["radical-representation-handoff"]
+    actPhaseIds: ["radical-representation-handoff"],
+    paintStrategy: {
+      kind: "solid-mask-succession",
+      profileId: "radical-morph.conventional-solid-mask.v1",
+      morph: {
+        start: 0.06,
+        end: 0.82,
+        easing: "ease-in-out"
+      },
+      settlement: {
+        start: 0.82,
+        end: 0.94,
+        easing: "ease-in-out"
+      },
+      solidMask: {
+        maximumDistancePx: 24,
+        edgeSoftnessPx: 0.7,
+        boundsPaddingPx: 4,
+        sourceTravelFraction: 1,
+        sourceArcHeightPx: 6,
+        shapeLeadFraction: 0.12,
+        targetGrowthOriginXFraction: 0.36,
+        targetGrowthOriginYFraction: 0.16,
+        targetGrowthSoftnessPx: 0.8,
+        bridgeExpansionPx: 0.55,
+        endpointBlendFraction: 0.08
+      }
+    }
   });
 });
 

@@ -64,7 +64,7 @@ test("radical material paint meets native target geometry before handoff", async
 
   const microscope = await page.locator(
     '[data-kp-reader-transition-active="true"] [data-kp-reader-fit-surface]'
-  ).evaluate((fitSurface) => {
+  ).evaluate(async (fitSurface) => {
     const visibleOwners = [
       ...fitSurface.querySelectorAll<HTMLElement>(
         "[data-kp-native-katex-scene-owner]"
@@ -74,9 +74,6 @@ test("radical material paint meets native target geometry before handoff", async
       owner.dataset["kpEquationMaterialFragmentRole"]?.startsWith("glyph:") &&
       owner.textContent?.trim() === "x"
     )!;
-    const pathOwner = visibleOwners.find((owner) =>
-      owner.dataset["kpEquationMaterialFragmentRole"]?.startsWith("path:")
-    )!;
     const target = fitSurface.querySelector<HTMLElement>(
       '[data-kp-reader-native="target"]'
     )!;
@@ -85,8 +82,6 @@ test("radical material paint meets native target geometry before handoff", async
     ) ?? target.querySelector<HTMLElement>(
       '[data-kp-reader-selector-id$=".radicand"]'
     )!;
-    const targetSvg = target.querySelector<SVGSVGElement>("svg")!;
-    const targetPath = targetSvg.querySelector<SVGPathElement>("path")!;
     const glyphVisual = glyphOwner.firstElementChild as HTMLElement;
     const rect = (element: Element) => {
       const value = element.getBoundingClientRect();
@@ -138,10 +133,19 @@ test("radical material paint meets native target geometry before handoff", async
       ),
       glyphStyleExact:
         fingerprint(glyphVisual) === fingerprint(targetGlyph),
-      pathRectResidualPx: delta(rect(pathOwner), rect(targetSvg)),
-      pathDataExact:
-        pathOwner.querySelector("path")?.getAttribute("d") ===
-        targetPath.getAttribute("d"),
+      structuralInk: (
+        await import(
+          "/src/rendering/native-katex-structural-succession-renderer.ts"
+        )
+      ).measureKpNativeKatexStructuralSuccessionInk(
+        fitSurface as HTMLElement
+      ),
+      structuralStrategy: (fitSurface as HTMLElement).dataset[
+        "kpNativeKatexStructuralSuccessionStrategy"
+      ],
+      structuralStatus: (fitSurface as HTMLElement).dataset[
+        "kpNativeKatexStructuralSuccessionStatus"
+      ],
       visibleOwnerCount: visibleOwners.length
     };
   });
@@ -150,8 +154,11 @@ test("radical material paint meets native target geometry before handoff", async
   expect(microscope.glyphRectResidualPx).toBeLessThanOrEqual(0.5);
   expect(microscope.glyphBaselineResidualPx).toBeLessThanOrEqual(2.5);
   expect(microscope.glyphStyleExact).toBe(true);
-  expect(microscope.pathRectResidualPx).toBeLessThanOrEqual(0.5);
-  expect(microscope.pathDataExact).toBe(true);
+  expect(microscope.structuralStrategy).toBe("solid-mask-succession");
+  expect(microscope.structuralStatus).toBe("ready");
+  expect(microscope.structuralInk).toBeDefined();
+  expect(microscope.structuralInk?.maximumGeometryResidualPx)
+    .toBeLessThanOrEqual(0.5);
 });
 
 test("radical direct seek and rewind are history independent", async ({
@@ -210,6 +217,22 @@ test("radical reduced and static projections preserve exact endpoints", async ({
     "data-kp-reader-canonical-equation-session-active",
     "true"
   );
+  const activeFit = stage.locator(
+    '[data-kp-reader-transition-active="true"] [data-kp-reader-fit-surface]'
+  );
+  await expect(activeFit).toHaveAttribute(
+    "data-kp-native-katex-structural-succession-strategy",
+    "checkpoint-settlement"
+  );
+  await expect(activeFit).toHaveAttribute(
+    "data-kp-native-katex-structural-succession-status",
+    "unavailable"
+  );
+  await expect(activeFit.locator('[data-kp-reader-native="source"]'))
+    .toHaveCSS("opacity", "1");
+  await expect(activeFit.locator(
+    "[data-kp-native-katex-structural-succession]"
+  )).toHaveCount(0);
   const finite = await stage.locator(
     "[data-kp-native-katex-scene-owner]"
   ).evaluateAll((owners) => owners.every((owner) => {

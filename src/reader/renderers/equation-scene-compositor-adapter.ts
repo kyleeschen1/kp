@@ -14,11 +14,15 @@ import type {
   KpReaderEquationRenderPlan,
   KpReaderEquationTransitionPlan
 } from "./equation-render-plan.ts";
+import {
+  auditKpNativeKatexChoreographyFidelity
+} from "../../rendering/native-katex-choreography-fidelity.ts";
 
 export function createKpReaderEquationSceneCompositorSession(input: {
   readonly renderPlan: KpReaderEquationRenderPlan;
   readonly materialPlan: KpReaderEquationMaterialPlan;
   readonly transitionId: string;
+  readonly motionMode?: "continuous" | "essential" | "checkpoint" | undefined;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
 }): KpNativeKatexRendererSession {
@@ -30,11 +34,50 @@ export function createKpReaderEquationSceneCompositorSession(input: {
   if (input.source.stage !== input.target.stage) {
     throw new Error("Reader equation compositor endpoints must share one stage.");
   }
-  return createKpCanonicalNativeKatexSceneSession({
+  const canonical = createKpCanonicalNativeKatexSceneSession({
     source: input.source,
     target: input.target,
-    relations
-  }).session;
+    relations,
+    ...(renderTransition.structuralSuccession === undefined
+      ? {}
+      : {
+          structuralSuccession: renderTransition.structuralSuccession,
+          structuralMotion:
+            input.motionMode === undefined ||
+            input.motionMode === "continuous"
+              ? "full"
+              : "checkpoint"
+        })
+  });
+  if (renderTransition.structuralSuccession !== undefined) {
+    const reducedMotion =
+      input.motionMode !== undefined && input.motionMode !== "continuous";
+    const fidelity = auditKpNativeKatexChoreographyFidelity({
+      intent: renderTransition.structuralSuccession,
+      strategy: reducedMotion
+        ? {
+            kind: "checkpoint-settlement",
+            actPhaseIds: renderTransition.structuralSuccession.actPhaseIds,
+            reason: "reduced-motion"
+          }
+        : {
+            kind: "solid-mask-succession",
+            actPhaseIds: renderTransition.structuralSuccession.actPhaseIds
+          },
+      reconciliation: canonical.reconciliation,
+      tracks: canonical.session.tracks
+    });
+    if (!fidelity.passed) {
+      throw new Error(
+        `Reader structural succession failed fidelity: ${
+          fidelity.issues.map(({ code }) => code).join(", ")
+        }`
+      );
+    }
+    input.source.stage.dataset["kpNativeKatexChoreographyFidelity"] =
+      "passed";
+  }
+  return canonical.session;
 }
 
 function resolveTransitionPair(input: {

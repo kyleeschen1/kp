@@ -17,6 +17,7 @@ export interface KpReaderCanonicalEquationSession {
     readonly materialPlan: KpReaderEquationMaterialPlan;
     readonly fitSurface: HTMLElement;
     readonly progress: number;
+    readonly motionMode: "continuous" | "essential" | "checkpoint";
     readonly fontReadiness: KpEquationFontReadiness;
     readonly presentationRevision: string;
   }) => boolean;
@@ -55,6 +56,7 @@ export function createKpReaderCanonicalEquationSession(input: {
         frame.renderPlan.id,
         frame.materialPlan.id,
         frame.presentationRevision,
+        frame.motionMode,
         frame.fontReadiness.revision,
         frame.fitSurface.offsetWidth,
         frame.fitSurface.offsetHeight
@@ -95,6 +97,7 @@ export function createKpReaderCanonicalEquationSession(input: {
           renderPlan: frame.renderPlan,
           materialPlan: frame.materialPlan,
           transitionId,
+          motionMode: frame.motionMode,
           source,
           target
         });

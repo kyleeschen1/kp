@@ -12,6 +12,12 @@ interface RadicalAdapterEvidence {
   readonly sessionKind: string;
   readonly sessionLifecycle: string;
   readonly sessionMode: string;
+  readonly structuralSuccessionStrategy: string;
+  readonly structuralSuccessionStatus: string;
+  readonly choreographyFidelity: string;
+  readonly structuralCanvasVisible: boolean;
+  readonly structuralOwnersHidden: boolean;
+  readonly continuantOwnersOpaque: boolean;
   readonly transitionId: string;
   readonly lifecycles: readonly string[];
   readonly trackCount: number;
@@ -61,6 +67,14 @@ test("radical reader dry run reaches the existing canonical adapter", async ({
   expect(evidence.sessionKind).toBe("native-katex-renderer-session");
   expect(evidence.sessionLifecycle).toBe("renderer-session");
   expect(evidence.sessionMode).toBe("atom-transit");
+  expect(evidence.structuralSuccessionStrategy).toBe(
+    "solid-mask-succession"
+  );
+  expect(evidence.structuralSuccessionStatus).toBe("ready");
+  expect(evidence.choreographyFidelity).toBe("passed");
+  expect(evidence.structuralCanvasVisible).toBe(true);
+  expect(evidence.structuralOwnersHidden).toBe(true);
+  expect(evidence.continuantOwnersOpaque).toBe(true);
   expect(evidence.transitionId).toBe(
     "transform.generated.radical.square-root-as-power.rewrite-power-as-root"
   );

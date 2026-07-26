@@ -143,17 +143,23 @@ export function bindKpExponentRadicalStructuralAnchors(input: {
   readonly root: ParentNode;
   readonly state: KpSemanticAssetObject;
 }): void {
-  for (const binding of resolveStructuralElements({
+  const bindings = resolveStructuralElements({
     root: input.root,
     state: {
       objectId: input.state.id,
       selectors: input.state.selectors
     }
-  })) {
+  });
+  for (const binding of bindings) {
     binding.element.dataset["kpReaderEquationAnchorId"] =
       `anchor.${binding.selectorId}`;
     binding.element.dataset["kpReaderSelectorId"] = binding.selectorId;
   }
+  bindStructuralSuccessionCapture({
+    root: input.root,
+    state: input.state,
+    bindings
+  });
 }
 
 export function resolveKpExponentRadicalStructuralElements(input: {
@@ -286,4 +292,43 @@ function radicalFragmentAnchor(
   anchor.style.pointerEvents = "none";
   anchor.style.overflow = "hidden";
   return anchor;
+}
+
+function bindStructuralSuccessionCapture(input: {
+  readonly root: ParentNode;
+  readonly state: KpSemanticAssetObject;
+  readonly bindings: readonly (KpExponentRadicalStructuralBinding & {
+    readonly element: HTMLElement;
+  })[];
+}): void {
+  const power = input.state.id.endsWith(".power");
+  const radical = input.state.id.endsWith(".radical");
+  if (!power && !radical) return;
+  const capture = power
+    ? input.bindings.find(({ role }) => role === "fraction-rule")
+        ?.element.closest<HTMLElement>(".msupsub") ??
+          input.bindings.find(({ role }) => role === "fraction-rule")
+            ?.element.closest<HTMLElement>(".mfrac")
+    : input.root.querySelector<HTMLElement>(
+        '[data-kp-radical-native-visual="true"]'
+      );
+  if (capture === null || capture === undefined) return;
+  const entityIds = input.state.selectors
+    .map(({ id }) => id)
+    .filter((id) => power
+      ? id.includes(".exponent-")
+      : id.includes(".radical-hook") || id.includes(".radical-overbar")
+    );
+  capture.dataset["kpStructuralSuccessionCapture"] =
+    power ? "source" : "target";
+  capture.dataset["kpStructuralSuccessionEntityIds"] =
+    JSON.stringify(entityIds);
+  if (radical && entityIds[0] !== undefined) {
+    // KaTeX paints hook and overbar as one SVG. Give that indivisible native
+    // paint a compiler-owned selector so the generic compositor can suppress
+    // its atom clone while the shared structural canvas owns the handoff.
+    capture.dataset["kpSemanticEntityId"] = entityIds[0];
+    capture.dataset["kpPresentationGroupId"] =
+      `structural-succession-capture.${input.state.id}`;
+  }
 }
