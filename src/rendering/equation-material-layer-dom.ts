@@ -1,4 +1,8 @@
-import { cloneElementWithComputedStyles } from "./computed-style-clone.ts";
+import {
+  cloneElementWithComputedStyles,
+  makeKpMaterialOwnerInert,
+  stripKpMaterialCloneAuthority
+} from "./computed-style-clone.ts";
 
 export interface KpEquationMaterialLayerOwnerFrame {
   readonly ownerId: string;
@@ -44,7 +48,7 @@ export function syncKpEquationMaterialLayer(input: {
       owner = document.createElement("span");
       owner.className = "editor-equation-stage__material-owner";
       owner.dataset["kpEquationMaterialOwnerId"] = frame.ownerId;
-      owner.setAttribute("aria-hidden", "true");
+      makeKpMaterialOwnerInert(owner);
       layer.append(owner);
     }
     setKpEquationMaterialOwnerVisual({
@@ -118,7 +122,7 @@ export function setKpEquationMaterialOwnerVisual(input: {
       ? input.sourceElement.ownerSVGElement ?? input.sourceElement
       : input.sourceElement;
   const visual = cloneElementWithComputedStyles(cloneSource);
-  stripMaterialCloneAuthority(visual);
+  stripKpMaterialCloneAuthority(visual);
   visual.style.opacity = "1";
   visual.style.transform = "none";
   visual.style.translate = "none";
@@ -133,32 +137,4 @@ export function setKpEquationMaterialOwnerVisual(input: {
   input.owner.replaceChildren(visual);
   input.owner.dataset["kpEquationMaterialVisualRevision"] = input.revisionKey;
   return visual;
-}
-
-function stripMaterialCloneAuthority(visual: Element): void {
-  const nodes = [visual, ...visual.querySelectorAll<Element>("*")];
-  for (const node of nodes) {
-    for (const attribute of [...node.attributes]) {
-      if (
-        attribute.name.startsWith("aria-") ||
-        [
-          "id",
-          "role",
-          "tabindex",
-          "href",
-          "target",
-          "download",
-          "contenteditable",
-          "data-kp-motion-id",
-          "data-kp-reader-equation-anchor-id",
-          "data-kp-reader-selector-id",
-          "data-kp-semantic-entity-id",
-          "data-kp-presentation-group-id",
-          "data-kp-focus"
-        ].includes(attribute.name)
-      ) {
-        node.removeAttribute(attribute.name);
-      }
-    }
-  }
 }

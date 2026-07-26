@@ -1,4 +1,8 @@
 import { syncKpEquationMaterialLayer } from "./equation-material-layer-dom.ts";
+import {
+  makeKpMaterialOwnerInert,
+  stripKpMaterialCloneAuthority
+} from "./computed-style-clone.ts";
 import { sampleKpEquationMaterialOwnerHandoff } from "./equation-material-owner.ts";
 import type {
   KpNativeKatexFragmentObservation,
@@ -358,23 +362,7 @@ function makeVisualCloneInert(
   owner: HTMLElement,
   visual: HTMLElement
 ): void {
-  owner.inert = true;
-  owner.setAttribute("aria-hidden", "true");
-  owner.style.pointerEvents = "none";
-  owner.style.userSelect = "none";
+  makeKpMaterialOwnerInert(owner);
   visual.style.inset = "0";
-  for (const element of [visual, ...visual.querySelectorAll<HTMLElement>("*")]) {
-    for (const attribute of [...element.attributes]) {
-      if (
-        attribute.name === "id" ||
-        attribute.name === "role" ||
-        attribute.name === "tabindex" ||
-        attribute.name === "contenteditable" ||
-        attribute.name.startsWith("aria-") ||
-        attribute.name.startsWith("data-kp-")
-      ) {
-        element.removeAttribute(attribute.name);
-      }
-    }
-  }
+  stripKpMaterialCloneAuthority(visual);
 }

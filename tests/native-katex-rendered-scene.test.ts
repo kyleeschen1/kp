@@ -1316,7 +1316,7 @@ test("generic scene tracks sample exact finite endpoints and reverse identically
     target.atoms[0]!.rect
   ]);
   assert.deepEqual(start.map(({ opacity }) => opacity), [1, 1]);
-  assert.deepEqual(end.map(({ opacity }) => opacity), [1, 0]);
+  assert.deepEqual(end.map(({ opacity }) => opacity), [1, 1]);
   assert.equal(middle.every(({ rect, opacity }) =>
     Object.values(rect).every(Number.isFinite) && Number.isFinite(opacity)
   ), true);
@@ -1891,7 +1891,7 @@ test("generic split bifurcates one structural rule into two exact tracks", () =>
   ), true);
 });
 
-test("generic lifecycle timing converges before merge loss and moves local departures", () => {
+test("lineage-backed merge paint never fades while local departures still retire", () => {
   const source = createScene("source", ["source.a", "source.b", "source.old"]);
   const target = createScene("target", ["target.result", "target.new"]);
   const reconciliation = reconcileKpNativeKatexScenes({
@@ -1907,9 +1907,7 @@ test("generic lifecycle timing converges before merge loss and moves local depar
   const tracks = compileKpNativeKatexSceneTracks(
     compileKpNativeKatexHierarchicalScenePlan(reconciliation)
   );
-  const mergeSecondary = tracks.find(({ lifecycle, endOpacity }) =>
-    lifecycle === "merge" && endOpacity === 0
-  )!;
+  const mergeTracks = tracks.filter(({ lifecycle }) => lifecycle === "merge");
   const departure = tracks.find(({ lifecycle }) =>
     lifecycle === "eliminate"
   )!;
@@ -1919,15 +1917,45 @@ test("generic lifecycle timing converges before merge loss and moves local depar
   const early = sampleKpNativeKatexSceneTracks(tracks, 0.5);
   const late = sampleKpNativeKatexSceneTracks(tracks, 0.8);
 
+  assert.equal(mergeTracks.length, 2);
+  assert.equal(mergeTracks.every(({ startOpacity, endOpacity }) =>
+    startOpacity === 1 && endOpacity === 1
+  ), true);
   assert.equal(
-    early.find(({ trackId }) => trackId === mergeSecondary.id)?.opacity,
-    1
-  );
-  assert.ok(
-    late.find(({ trackId }) => trackId === mergeSecondary.id)!.opacity < 1
+    [...early, ...late]
+      .filter(({ lifecycle }) => lifecycle === "merge")
+      .every(({ opacity }) => opacity === 1),
+    true
   );
   assert.equal(departure.endRect.top, departure.startRect.top - 8);
   assert.equal(introduction.startRect.top, introduction.endRect.top + 8);
+});
+
+test("lineage-backed split paint emerges geometrically without fading", () => {
+  const source = createScene("source", ["source.origin"]);
+  const target = createScene("target", ["target.left", "target.right"]);
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source,
+    target,
+    relations: [{
+      id: "lineage.split",
+      relation: "split",
+      sourceEntityIds: ["entity.origin"],
+      targetEntityIds: ["entity.left", "entity.right"]
+    }]
+  });
+  const tracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+  );
+  const samples = [0, 0.1, 0.5, 0.9, 1].flatMap((progress) =>
+    sampleKpNativeKatexSceneTracks(tracks, progress)
+  );
+
+  assert.equal(tracks.length, 2);
+  assert.equal(tracks.every(({ lifecycle, startOpacity, endOpacity }) =>
+    lifecycle === "split" && startOpacity === 1 && endOpacity === 1
+  ), true);
+  assert.equal(samples.every(({ opacity }) => opacity === 1), true);
 });
 
 function createScene(

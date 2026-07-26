@@ -275,6 +275,20 @@
       "scope": "slice-24 reader human-checkpoint evidence",
       "checkedAt": "2026-07-26T03:49:57.387Z",
       "notes": "The stable reader command now publishes the contract's full 32-frame matrix: eight named moments across wide/phone and full/reduced motion. Every capture has zero overflow. At the migrated cancellation-meet frame all four variants have nine canonical owners and zero legacy owners; start/final native states are exact and the phone layout is composed. The parity command publishes eight editor and eight reader frames. Manual review finds the migrated cancellation stack clear and stable; the later successor-convergence frame remains visibly compressed as x = 7 with a subscript-like 3, but report data confirms that moment is still on the intentionally non-migrated legacy path, not the canonical session. Human approval must explicitly accept or reject promotion with that retained baseline issue understood."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test focused canonical scene and successor suites",
+      "status": "passed",
+      "scope": "slice-25 unit and architecture proof",
+      "checkedAt": "2026-07-26T04:48:54.626Z",
+      "notes": "48 rendered-scene/successor checks and 23 cross-family/adapter/radical checks passed."
+    },
+    {
+      "command": "Chromium clone, material-layer, inverse-split, and dense successor suites; stable glyph and reader visual entrypoints; production build",
+      "status": "passed",
+      "scope": "slice-25 browser and visual proof",
+      "checkedAt": "2026-07-26T04:49:00.642Z",
+      "notes": "Ten focused browser checks passed. Visual inspection confirms corrected fraction handoff, fully visible inverse split, radical cohort, and readable inline 7 - 3 convergence across clone/native ownership."
     }
   ],
   "allowedWork": [
@@ -460,7 +474,8 @@
     {
       "id": "slice-25",
       "title": "cross-family-composition-proof",
-      "status": "planned"
+      "summary": "Cross-family proof passes through one canonical native-KaTeX session for merge, inverse split, and radical succession with no family rollout or runtime special cases. Shared clone sanitation removes duplicated authority logic; lineage-backed merge/split paint never fades; and the corrected 7 - 3 legacy convergence preserves the entire source expression on one readable inline band with bounded opacity, protected clearance, direct seek, rewind, and native handoff evidence. Focused unit, architecture, Chromium, visual, typecheck, and build gates pass.",
+      "status": "complete"
     },
     {
       "id": "slice-26",

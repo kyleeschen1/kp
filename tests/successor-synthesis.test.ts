@@ -3,7 +3,9 @@ import test from "node:test";
 
 import {
   createKpSuccessorSynthesisPlan,
+  evaluateKpSuccessorInlineReadability,
   evaluateKpSuccessorSynthesisLaws,
+  evaluateKpSuccessorTemporalContinuity,
   sampleKpCounterConvergence,
   sampleKpSuccessorSynthesis
 } from "../src/animation/successor-synthesis.ts";
@@ -128,7 +130,7 @@ test("counter convergence retires its catalyst before seeding the result", () =>
 
   const handoff = sampleKpCounterConvergence({ plan, progress: 0.79 });
   assert.ok(handoff.sources.filter((source) => source.contribution === "material-input")
-    .every((source) => source.pose.opacity < 0.05));
+    .every((source) => source.pose.opacity > 0));
   assert.ok(handoff.targets.every((target) => target.pose.opacity > 0));
 
   const settled = sampleKpCounterConvergence({ plan, progress: 1 });
@@ -139,6 +141,23 @@ test("counter convergence retires its catalyst before seeding the result", () =>
     target.pose.y === 0 &&
     target.pose.scale === 1
   ));
+});
+
+test("counter convergence preserves one readable inline source band", () => {
+  const plan = createConstantDifferenceSuccessorFixture();
+  const frames = Array.from({ length: 101 }, (_, index) =>
+    sampleKpCounterConvergence({ plan, progress: index / 100 })
+  );
+
+  assert.deepEqual(evaluateKpSuccessorInlineReadability({
+    plan,
+    frames,
+    maximumCenterDriftPx: 1
+  }), []);
+  assert.deepEqual(evaluateKpSuccessorTemporalContinuity({
+    frames,
+    maximumOpacityDelta: 0.16
+  }), []);
 });
 
 function invalidPlan(options: {

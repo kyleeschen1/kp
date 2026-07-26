@@ -2983,6 +2983,9 @@ test("inverse fraction exemplar uses one full-scene split sampler", async ({
   expect(splitTracks.some(({ paintKind, sizingMode }) =>
     paintKind === "rule" && sizingMode === "rule-length"
   )).toBe(true);
+  expect(samples.forward.flat()
+    .filter(({ lifecycle }) => lifecycle === "split")
+    .every(({ opacity }) => opacity === 1)).toBe(true);
   expect(samples.forward.flat().every(({ rect, opacity }) =>
     Object.values(rect).every(Number.isFinite) &&
     Number.isFinite(opacity)

@@ -89,3 +89,61 @@ test("computed-style clone preserves an intact SVG path subtree", async ({
     color: "rgb(12, 34, 56)"
   });
 });
+
+test("material clone authority stripping is complete, nested, and idempotent", async ({
+  page
+}) => {
+  await page.goto("/");
+  const result = await page.evaluate(async () => {
+    const modulePath = "/src/rendering/computed-style-clone.ts";
+    const {
+      makeKpMaterialOwnerInert,
+      stripKpMaterialCloneAuthority
+    } = await import(modulePath);
+    const owner = document.createElement("span");
+    const clone = document.createElement("a");
+    clone.id = "clone-link";
+    clone.href = "/semantic-target";
+    clone.tabIndex = 0;
+    clone.setAttribute("role", "button");
+    clone.setAttribute("aria-label", "semantic target");
+    clone.setAttribute("data-kp-semantic-entity-id", "entity.x");
+    clone.setAttribute("onclick", "void 0");
+    const nested = document.createElement("button");
+    nested.id = "nested-control";
+    nested.setAttribute("aria-describedby", "description");
+    nested.setAttribute("data-kp-reader-selector-id", "selector.x");
+    clone.append(nested);
+
+    makeKpMaterialOwnerInert(owner);
+    stripKpMaterialCloneAuthority(clone);
+    const once = clone.outerHTML;
+    stripKpMaterialCloneAuthority(clone);
+    return {
+      once,
+      twice: clone.outerHTML,
+      ownerInert: owner.inert,
+      ownerAriaHidden: owner.getAttribute("aria-hidden"),
+      ownerPointerEvents: owner.style.pointerEvents,
+      remainingAuthority: [
+        clone,
+        ...clone.querySelectorAll<Element>("*")
+      ].flatMap((element) => [...element.attributes].map(({ name }) => name))
+        .filter((name) =>
+          name === "id" ||
+          name === "role" ||
+          name === "tabindex" ||
+          name === "href" ||
+          name.startsWith("aria-") ||
+          name.startsWith("data-kp-") ||
+          name.startsWith("on")
+        )
+    };
+  });
+
+  expect(result.twice).toBe(result.once);
+  expect(result.ownerInert).toBe(true);
+  expect(result.ownerAriaHidden).toBe("true");
+  expect(result.ownerPointerEvents).toBe("none");
+  expect(result.remainingAuthority).toEqual([]);
+});

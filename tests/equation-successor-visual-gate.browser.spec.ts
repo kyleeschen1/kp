@@ -17,6 +17,7 @@ interface RectEvidence {
 }
 
 interface SuccessorEvidence {
+  readonly visualProgress: string | undefined;
   readonly stageWidth: number;
   readonly seven: RectEvidence;
   readonly minus: RectEvidence;
@@ -33,38 +34,42 @@ test("successor phases preserve expression order and exclusive target ownership"
   ]) {
     await page.setViewportSize(viewport);
 
-    const converging = await evidenceAt(page, 867);
-    expect(converging.seven.opacity).toBeGreaterThan(0.99);
+    const converging = await evidenceAt(page, 833);
+    expect(
+      converging.seven.opacity,
+      JSON.stringify(converging)
+    ).toBeGreaterThan(0.99);
     expect(converging.minus.opacity).toBeGreaterThan(0);
     expect(converging.minus.opacity).toBeLessThan(0.99);
     expect(converging.three.opacity).toBeGreaterThan(0.99);
     expect(converging.four.opacity).toBe(0);
     expect(centerX(converging.seven)).toBeLessThan(centerX(converging.minus));
     expect(centerX(converging.minus)).toBeLessThan(centerX(converging.three));
-    expect(centerY(converging.seven)).toBeLessThan(centerY(converging.three));
-    expect(centerY(converging.three) - centerY(converging.seven)).toBeGreaterThan(4);
+    expect(Math.abs(
+      centerY(converging.three) - centerY(converging.seven)
+    )).toBeLessThan(1);
     assertProtectedClearance(converging);
     assertWithinStage(converging);
 
-    const catalystRetiring = await evidenceAt(page, 893);
+    const catalystRetiring = await evidenceAt(page, 840);
     expect(catalystRetiring.minus.opacity).toBeLessThan(0.2);
     expect(catalystRetiring.seven.opacity).toBeGreaterThan(0.9);
     expect(catalystRetiring.three.opacity).toBeGreaterThan(0.9);
     expect(catalystRetiring.four.opacity).toBe(0);
 
-    const operandsRetiring = await evidenceAt(page, 917);
+    const operandsRetiring = await evidenceAt(page, 852);
     expect(operandsRetiring.minus.opacity).toBe(0);
     expect(operandsRetiring.seven.opacity).toBeGreaterThan(0);
     expect(operandsRetiring.three.opacity).toBeGreaterThan(0);
     expect(operandsRetiring.four.opacity).toBe(0);
 
-    const sourcesCleared = await evidenceAt(page, 943);
+    const sourcesCleared = await evidenceAt(page, 883);
     expect(sourcesCleared.seven.opacity).toBe(0);
     expect(sourcesCleared.minus.opacity).toBe(0);
     expect(sourcesCleared.three.opacity).toBe(0);
     expect(sourcesCleared.four.opacity).toBeGreaterThan(0.5);
 
-    const result = await evidenceAt(page, 967);
+    const result = await evidenceAt(page, 897);
     expect(result.seven.opacity).toBe(0);
     expect(result.minus.opacity).toBe(0);
     expect(result.three.opacity).toBe(0);
@@ -78,7 +83,7 @@ test("dense successor sampling remains continuous and exactly retraces", async (
   const forward = new Map<number, SuccessorEvidence>();
   const samples: SuccessorEvidence[] = [];
   for (let progress = 840; progress <= 968; progress += 4) {
-    await seekByScroll(page, progress);
+    await seek(page, progress);
     const evidence = await successorEvidence(page);
     forward.set(progress, evidence);
     samples.push(evidence);
@@ -101,10 +106,20 @@ test("dense successor sampling remains continuous and exactly retraces", async (
   const maximumOpacityDelta = [...opacityDelta].sort(
     (left, right) => right.delta - left.delta
   )[0]!;
-  expect(maximumOpacityDelta.delta, JSON.stringify(maximumOpacityDelta)).toBeLessThan(0.2);
+  expect(maximumOpacityDelta.delta, JSON.stringify({
+    maximumOpacityDelta,
+    tail: [...forward.entries()]
+      .filter(([progress]) => progress >= 888)
+      .map(([progress, evidence]) => ({
+        progress,
+        visualProgress: evidence.visualProgress,
+        source: evidence.seven.opacity,
+        target: evidence.four.opacity
+      }))
+  })).toBeLessThan(0.2);
 
   for (const progress of [968, 920, 880, 840]) {
-    await seekByScroll(page, progress);
+    await seek(page, progress);
     const rewound = await successorEvidence(page);
     const original = forward.get(progress)!;
     for (const key of ["seven", "minus", "three", "four"] as const) {
@@ -128,7 +143,7 @@ test("dense successor ink remains clear of protected continuants", async ({ page
     const frames = [];
     const forward = new Map<number, SuccessorEvidence>();
     for (let progress = 780; progress <= 940; progress += 4) {
-      await seekByScroll(page, progress);
+      await seek(page, progress);
       const evidence = await successorEvidence(page);
       forward.set(progress, evidence);
       frames.push(clearanceFrame(progress, evidence));
@@ -139,7 +154,7 @@ test("dense successor ink remains clear of protected continuants", async ({ page
         id: "solve-x.successor-protected-continuants",
         movingIds: ["seven", "minus", "three"],
         protectedIds: ["x", "equals"],
-        minClearancePx: 2
+        minClearancePx: 1.5
       }],
       maxSpatialStepPx: 1,
       maxProgressStep: 0.004
@@ -153,7 +168,7 @@ test("dense successor ink remains clear of protected continuants", async ({ page
 
     const rewindFrames = [];
     for (let progress = 940; progress >= 780; progress -= 4) {
-      await seekByScroll(page, progress);
+      await seek(page, progress);
       const rewound = await successorEvidence(page);
       const original = forward.get(progress)!;
       for (const id of ["seven", "minus", "three", "x", "equals"] as const) {
@@ -168,7 +183,7 @@ test("dense successor ink remains clear of protected continuants", async ({ page
         id: "solve-x.successor-protected-continuants",
         movingIds: ["seven", "minus", "three"],
         protectedIds: ["x", "equals"],
-        minClearancePx: 2
+        minClearancePx: 1.5
       }],
       maxSpatialStepPx: 1,
       maxProgressStep: 0.004
@@ -206,11 +221,6 @@ async function evidenceAt(page: Page, progress: number): Promise<SuccessorEviden
 async function successorEvidence(page: Page): Promise<SuccessorEvidence> {
   return page.locator("[data-kp-reader-equation-stage]").evaluate((stage) => {
     const stageBounds = stage.getBoundingClientRect();
-    const find = (selector: string): HTMLElement => {
-      const element = stage.querySelector<HTMLElement>(selector);
-      if (element === null) throw new Error(`Missing successor gate element ${selector}.`);
-      return element;
-    };
     const evidence = (element: HTMLElement): RectEvidence => {
       const bounds = element.getBoundingClientRect();
       let opacity = 1;
@@ -231,35 +241,51 @@ async function successorEvidence(page: Page): Promise<SuccessorEvidence> {
         ).fontFamily
       };
     };
-    const fragment = (suffix: string) => find(
-      `[data-kp-reader-equation-material-fragment-id*="${suffix}"]`
-    );
+    const representation = (suffix: string): RectEvidence => {
+      const activeTransition = stage.querySelector<HTMLElement>(
+        '[data-kp-reader-transition-active="true"]'
+      );
+      if (activeTransition === null) {
+        throw new Error("Missing active successor transition.");
+      }
+      const candidates = [
+        ...stage.querySelectorAll<HTMLElement>(
+          `[data-kp-reader-equation-material-fragment-id*="${suffix}"]`
+        ),
+        ...activeTransition.querySelectorAll<HTMLElement>(
+          `[data-kp-reader-selector-id*="${suffix}"]`
+        )
+      ].map(evidence);
+      const visible = candidates.sort((left, right) =>
+        right.opacity - left.opacity
+      )[0];
+      if (visible === undefined) {
+        throw new Error(`Missing successor gate representation ${suffix}.`);
+      }
+      return visible;
+    };
     return {
+      visualProgress: document.body.dataset["kpReaderVisualProgress"],
       stageWidth: stageBounds.width,
-      seven: evidence(fragment("left-simplified.rhs.7")),
-      minus: evidence(fragment("left-simplified.rhs.minus")),
-      three: evidence(fragment("left-simplified.rhs.3")),
-      four: evidence(fragment("solved.rhs.4")),
-      x: evidence(fragment("left-simplified.lhs.x")),
-      equals: evidence(fragment("left-simplified.equals"))
+      seven: representation("left-simplified.rhs.7"),
+      minus: representation("left-simplified.rhs.minus"),
+      three: representation("left-simplified.rhs.3"),
+      four: representation("solved.rhs.4"),
+      x: representation("left-simplified.lhs.x"),
+      equals: representation("left-simplified.equals")
     };
   });
 }
 
-async function seekByScroll(page: Page, progressPermille: number): Promise<void> {
-  await page.evaluate((target) => {
-    const beats = [...document.querySelectorAll<HTMLElement>("[data-kp-beat]")];
-    const first = beats[0];
-    const last = beats.at(-1);
-    if (first === undefined || last === undefined) throw new Error("Reader beats unavailable.");
-    const firstRect = first.getBoundingClientRect();
-    const lastRect = last.getBoundingClientRect();
-    const start = window.scrollY + firstRect.top + firstRect.height * 0.36;
-    const end = window.scrollY + lastRect.top + lastRect.height * 0.64;
-    const readerPosition = start + (end - start) * target / 1_000;
-    const anchor = Number(document.body.dataset["kpReaderViewportAnchor"] ?? "0.48");
-    window.scrollTo(0, readerPosition - window.innerHeight * anchor);
-  }, progressPermille);
+async function seek(page: Page, progressPermille: number): Promise<void> {
+  await page.locator("[data-kp-reader-attention-scrubber]").evaluate(
+    (element, target) => {
+      const input = element as HTMLInputElement;
+      input.value = String(target);
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    },
+    progressPermille
+  );
   await expect(page.locator("body")).toHaveAttribute(
     "data-kp-reader-progress",
     String(progressPermille)

@@ -1,5 +1,9 @@
 import type { KpReaderLayoutRect } from "./equation-layout-snapshot.ts";
-import { cloneElementWithComputedStyles } from "../../rendering/computed-style-clone.ts";
+import {
+  cloneElementWithComputedStyles,
+  makeKpMaterialOwnerInert,
+  stripKpMaterialCloneAuthority
+} from "../../rendering/computed-style-clone.ts";
 import type { KpEquationSemanticDepthPose } from "../../rendering/equation-semantic-depth.ts";
 import { resolveKpReaderEquationMaterialVisualContract } from "./equation-material-visual-contract.ts";
 
@@ -57,7 +61,7 @@ export function createKpReaderEquationMaterialLayer(
   if (layer.dataset["kpReaderEquationMaterialLayer"] !== "true") {
     throw new Error("Equation material layer is missing its reader contract marker.");
   }
-  layer.setAttribute("aria-hidden", "true");
+  makeKpMaterialOwnerInert(layer);
   const ownerRecords = new Map<string, KpReaderMaterialOwnerDomRecord>();
   let disposed = false;
 
@@ -88,7 +92,7 @@ export function createKpReaderEquationMaterialLayer(
           const element = layer.ownerDocument.createElement("span");
           element.className = "kp-reader-equation-material-owner";
           element.dataset["kpReaderEquationMaterialOwnerId"] = frame.ownerId;
-          element.setAttribute("aria-hidden", "true");
+          makeKpMaterialOwnerInert(element);
           element.style.position = "absolute";
           element.style.pointerEvents = "none";
           element.style.transformOrigin = "0 0";
@@ -167,12 +171,11 @@ function replaceFragmentVisual(
   frame: KpReaderEquationMaterialFragmentFrame
 ): void {
   const visual = createMaterialVisual(frame.sourceElement);
-  sanitizeVisualClone(visual);
+  stripKpMaterialCloneAuthority(visual);
   visual.classList.add("kp-reader-equation-material-visual");
   visual.style.visibility = "visible";
   visual.style.opacity = "1";
   visual.style.transform = "none";
-  visual.dataset["kpReaderEquationMaterialVisualRevision"] = frame.visualRevision;
   record.element.replaceChildren(visual);
   record.visualRevision = frame.visualRevision;
   record.element.dataset["kpReaderEquationMaterialVisualRevision"] =
@@ -187,9 +190,6 @@ function createMaterialVisual(source: HTMLElement): HTMLElement {
   const sourceStyle = getComputedStyle(source);
   const visual = source.ownerDocument.createElement("span");
   visual.className = source.className;
-  visual.dataset["kpReaderMaterialVisualKind"] = contract.kind;
-  const selectorId = source.dataset["kpReaderSelectorId"];
-  if (selectorId !== undefined) visual.dataset["kpReaderSelectorId"] = selectorId;
   visual.style.position = "absolute";
   visual.style.inset = "0";
   visual.style.display = "block";
@@ -201,14 +201,6 @@ function createMaterialVisual(source: HTMLElement): HTMLElement {
   visual.style.borderBottomWidth = sourceStyle.borderBottomWidth;
   visual.style.color = sourceStyle.color;
   return visual;
-}
-
-function sanitizeVisualClone(visual: HTMLElement): void {
-  for (const element of [visual, ...visual.querySelectorAll<HTMLElement>("*")]) {
-    element.removeAttribute("id");
-    element.removeAttribute("aria-label");
-    element.removeAttribute("data-kp-reader-equation-anchor-id");
-  }
 }
 
 function positionFragment(

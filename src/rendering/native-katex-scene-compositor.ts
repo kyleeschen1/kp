@@ -541,7 +541,7 @@ export function compileKpNativeKatexSceneTracks(
           source,
           targets[0]!,
           1,
-          index === 0 ? 1 : 0
+          1
         )
       );
     }
@@ -552,7 +552,7 @@ export function compileKpNativeKatexSceneTracks(
           index,
           sources[0]!,
           target,
-          index === 0 ? 1 : 0,
+          1,
           1,
           target.id
         )

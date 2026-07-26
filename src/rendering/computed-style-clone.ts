@@ -11,6 +11,53 @@ export function cloneElementWithComputedStyles<TElement extends Element>(
   return clone as unknown as TElement;
 }
 
+const materialCloneAuthorityAttributes = new Set([
+  "action",
+  "autofocus",
+  "contenteditable",
+  "controls",
+  "download",
+  "draggable",
+  "for",
+  "form",
+  "formaction",
+  "href",
+  "id",
+  "name",
+  "role",
+  "srcdoc",
+  "tabindex",
+  "target",
+  "usemap",
+  "xlink:href"
+]);
+
+/**
+ * Material clones carry paint only. Native DOM remains the sole owner of
+ * identity, semantics, navigation, focus, form behavior, and interaction.
+ */
+export function stripKpMaterialCloneAuthority(root: Element): void {
+  for (const element of [root, ...root.querySelectorAll<Element>("*")]) {
+    for (const attribute of [...element.attributes]) {
+      if (
+        materialCloneAuthorityAttributes.has(attribute.name) ||
+        attribute.name.startsWith("aria-") ||
+        attribute.name.startsWith("data-kp-") ||
+        attribute.name.startsWith("on")
+      ) {
+        element.removeAttribute(attribute.name);
+      }
+    }
+  }
+}
+
+export function makeKpMaterialOwnerInert(owner: HTMLElement): void {
+  owner.inert = true;
+  owner.setAttribute("aria-hidden", "true");
+  owner.style.pointerEvents = "none";
+  owner.style.userSelect = "none";
+}
+
 export function inlineElementComputedStyles(source: Element, clone: Element): void {
   if (clone instanceof HTMLElement || clone instanceof SVGElement) {
     const computed = getComputedStyle(source);

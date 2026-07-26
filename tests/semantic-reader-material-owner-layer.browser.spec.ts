@@ -80,7 +80,9 @@ test("reader material owners persist by semantic key and sanitize cloned visuals
       ".kp-reader-equation-material-visual"
     )!;
     const revisionReplaced = clone.isConnected === false &&
-      revisedClone.dataset["kpReaderEquationMaterialVisualRevision"] === "r2" &&
+      revisedClone.parentElement?.dataset[
+        "kpReaderEquationMaterialVisualRevision"
+      ] === "r2" &&
       revisedClone.textContent === "y";
     const third = controller.sync([{
       ...ownerA,
@@ -208,7 +210,21 @@ test("measured fraction-rule ink is rebased to its material fragment", async ({ 
       offsetY: visualRect.top - fragmentRect.top,
       widthDelta: visualRect.width - fragmentRect.width,
       heightDelta: visualRect.height - fragmentRect.height,
-      kind: visual.dataset["kpReaderMaterialVisualKind"],
+      authorityAttributeCount: visual.querySelectorAll([
+        "[id]",
+        "[role]",
+        "[tabindex]",
+        "[href]",
+        "[aria-label]",
+        "[data-kp-reader-selector-id]"
+      ].join(",")).length + (visual.matches([
+        "[id]",
+        "[role]",
+        "[tabindex]",
+        "[href]",
+        "[aria-label]",
+        "[data-kp-reader-selector-id]"
+      ].join(",")) ? 1 : 0),
       borderBottomColor,
       borderBottomWidth
     };
@@ -219,7 +235,7 @@ test("measured fraction-rule ink is rebased to its material fragment", async ({ 
     offsetY: 0,
     widthDelta: 0,
     heightDelta: 0,
-    kind: "measured-fraction-rule",
+    authorityAttributeCount: 0,
     borderBottomColor: "rgb(20, 30, 40)",
     borderBottomWidth: "1px"
   });

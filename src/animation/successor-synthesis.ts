@@ -183,6 +183,9 @@ export type KpSuccessorSynthesisLawId =
   | "successor.readiness-gated-birth"
   | "successor.recognition-gated-retirement"
   | "successor.continuous-material-ownership"
+  | "successor.temporal-continuity"
+  | "successor.inline-source-band"
+  | "successor.inline-source-order"
   | "successor.exact-settlement";
 
 export interface KpSuccessorSynthesisViolation {
@@ -381,10 +384,9 @@ export function sampleKpSuccessorSynthesis(input: {
 }
 
 /**
- * Counter-convergence keeps the generic successor semantics but gives
- * subtraction its own visual grammar: material inputs approach on opposing
- * paths, the catalyst retires first, and the result seeds only near the end of
- * source retirement instead of overlapping the full synthesis.
+ * Counter-convergence keeps the source group readable on one inline band
+ * while its material inputs approach, then retires the catalyst before the
+ * result seeds during source retirement.
  */
 export function sampleKpCounterConvergence(input: {
   readonly plan: KpSuccessorSynthesisPlan;
@@ -412,12 +414,11 @@ export function sampleKpCounterConvergence(input: {
     (source) => source.arrivalProgress >= input.plan.targetSeedReadiness
   );
   const materialRetirement = allRequiredInputsReady
-    ? easeInOut(interval(progress, 0.66, 0.8))
+    ? easeInOut(interval(progress, 0.66, 0.9))
     : 0;
   // The catalyst has no result material, so its retirement follows its own
   // continuous clock instead of snapping when the last input becomes ready.
   const catalystRetirement = easeInOut(interval(progress, 0.54, 0.7));
-  const targetGateOpen = materialRetirement >= 0.82 && catalystRetirement >= 1;
   const maximumTargetRank = maximumRank(input.plan.targets);
   const targetBirths = input.plan.targets.map((target) => {
     const rankOffset = rankOffsetFor(
@@ -425,24 +426,25 @@ export function sampleKpCounterConvergence(input: {
       maximumTargetRank,
       input.plan.targetRankStaggerSpan
     );
-    return targetGateOpen
-      ? easeOut(interval(progress, 0.76 + rankOffset, 0.96 + rankOffset))
-      : 0;
+    // Both prerequisites settle before 0.77. Starting the continuous birth
+    // clock there avoids a threshold frame that can reveal a partly born
+    // target atomically during direct seek or rewind.
+    return easeInOut(interval(progress, 0.77 + rankOffset, 1 + rankOffset));
   });
   const targetRecognizable = targetBirths.every(
     (birth) => birth >= input.plan.targetRecognition
   );
   const sources = [
-    ...inputFrames.map(({ member, index, arrivalProgress }) => ({
+    ...inputFrames.map(({ member, arrivalProgress }) => ({
       annotationId: member.id,
       contribution: "material-input" as const,
       arrivalProgress,
       activationProgress: arrivalProgress,
       retirementProgress: materialRetirement,
       pathFamily: member.pathFamily,
-      pose: sourcePose(
+      pose: inlineSourcePose(
         member,
-        junctionSlot(input.plan, index),
+        inlineJunctionSlot(input.plan, member),
         arrivalProgress,
         input.plan.inputJunctionScale,
         materialRetirement
@@ -457,10 +459,11 @@ export function sampleKpCounterConvergence(input: {
         activationProgress,
         retirementProgress: catalystRetirement,
         pathFamily: member.pathFamily,
-        pose: catalystPose(
+        pose: inlineSourcePose(
           member,
-          input.plan.junction,
+          inlineJunctionSlot(input.plan, member),
           activationProgress,
+          input.plan.inputJunctionScale,
           catalystRetirement
         )
       };
@@ -538,6 +541,99 @@ export function evaluateKpSuccessorSynthesisLaws(
     )
   ) {
     push(violations, "successor.exact-settlement", 1, "Successor synthesis does not end at the exact native target pose.");
+  }
+  return deduplicate(violations);
+}
+
+export function evaluateKpSuccessorInlineReadability(input: {
+  readonly plan: KpSuccessorSynthesisPlan;
+  readonly frames: readonly KpSuccessorSynthesisFrame[];
+  readonly maximumCenterDriftPx: number;
+}): readonly KpSuccessorSynthesisViolation[] {
+  if (
+    !Number.isFinite(input.maximumCenterDriftPx) ||
+    input.maximumCenterDriftPx < 0
+  ) {
+    throw new Error("Inline readability requires a nonnegative finite drift.");
+  }
+  const sourceMembers = [...input.plan.materialInputs, ...input.plan.catalysts];
+  const membersById = new Map(sourceMembers.map((member) => [
+    member.id,
+    member
+  ]));
+  const sourceOrder = [...sourceMembers]
+    .sort((left, right) => center(left.rect).x - center(right.rect).x)
+    .map(({ id }) => id);
+  const violations: KpSuccessorSynthesisViolation[] = [];
+  for (const frame of input.frames) {
+    const visible = frame.sources.flatMap((source) => {
+      if (source.pose.opacity < 0.5) {
+        return [];
+      }
+      const member = membersById.get(source.annotationId);
+      if (member === undefined) return [];
+      const origin = center(member.rect);
+      return [{
+        id: source.annotationId,
+        x: origin.x + source.pose.x,
+        y: origin.y + source.pose.y
+      }];
+    });
+    if (visible.length < 2) continue;
+    const centerDrift = Math.max(...visible.map(({ y }) => y)) -
+      Math.min(...visible.map(({ y }) => y));
+    if (centerDrift > input.maximumCenterDriftPx) {
+      push(
+        violations,
+        "successor.inline-source-band",
+        frame.progress,
+        `Visible successor source marks drift ${centerDrift}px across the inline band.`
+      );
+    }
+    const visibleIds = new Set(visible.map(({ id }) => id));
+    const expected = sourceOrder.filter((id) => visibleIds.has(id));
+    const actual = [...visible].sort((left, right) => left.x - right.x)
+      .map(({ id }) => id);
+    if (!sameStrings(actual, expected)) {
+      push(
+        violations,
+        "successor.inline-source-order",
+        frame.progress,
+        "Visible successor source marks no longer preserve inline expression order."
+      );
+    }
+  }
+  return deduplicate(violations);
+}
+
+export function evaluateKpSuccessorTemporalContinuity(input: {
+  readonly frames: readonly KpSuccessorSynthesisFrame[];
+  readonly maximumOpacityDelta: number;
+}): readonly KpSuccessorSynthesisViolation[] {
+  if (
+    !Number.isFinite(input.maximumOpacityDelta) ||
+    input.maximumOpacityDelta < 0
+  ) {
+    throw new Error("Temporal continuity requires a nonnegative finite delta.");
+  }
+  const violations: KpSuccessorSynthesisViolation[] = [];
+  for (let index = 1; index < input.frames.length; index += 1) {
+    const previous = opacityById(input.frames[index - 1]!);
+    const current = input.frames[index]!;
+    for (const [id, opacity] of opacityById(current)) {
+      const priorOpacity = previous.get(id);
+      if (
+        priorOpacity !== undefined &&
+        Math.abs(opacity - priorOpacity) > input.maximumOpacityDelta
+      ) {
+        push(
+          violations,
+          "successor.temporal-continuity",
+          current.progress,
+          `Successor ${id} opacity changes discontinuously.`
+        );
+      }
+    }
   }
   return deduplicate(violations);
 }
@@ -632,6 +728,22 @@ function sourcePose(
   };
 }
 
+function inlineSourcePose(
+  member: KpSuccessorSynthesisMember,
+  slot: { readonly x: number; readonly y: number },
+  progress: number,
+  scaleTo: number,
+  retirementProgress: number
+): KpSuccessorSynthesisPose {
+  const from = center(member.rect);
+  return {
+    x: (slot.x - from.x) * progress,
+    y: (slot.y - from.y) * progress,
+    scale: mix(1, scaleTo, progress),
+    opacity: 1 - retirementProgress
+  };
+}
+
 function catalystPose(
   member: KpSuccessorSynthesisMember,
   junction: { readonly x: number; readonly y: number },
@@ -680,6 +792,23 @@ function junctionSlot(
   return {
     x: plan.junction.x + centered * 8,
     y: plan.junction.y + (index % 2 === 0 ? -3.5 : 3.5)
+  };
+}
+
+function inlineJunctionSlot(
+  plan: KpSuccessorSynthesisPlan,
+  member: KpSuccessorSynthesisMember
+): { readonly x: number; readonly y: number } {
+  const sources = [...plan.materialInputs, ...plan.catalysts];
+  const sourceBounds = unionRect(sources.map((source) => source.rect));
+  const targetBounds = unionRect(plan.targets.map((target) => target.rect));
+  const memberCenter = center(member.rect);
+  return {
+    // A wider source expression grows toward the open result lane instead of
+    // back across the preceding continuant when it contracts around a target.
+    x: targetBounds.left +
+      (memberCenter.x - sourceBounds.left) * plan.inputJunctionScale,
+    y: plan.junction.y
   };
 }
 
@@ -743,6 +872,26 @@ function easeOut(value: number): number {
 
 function mix(from: number, to: number, progress: number): number {
   return from + (to - from) * progress;
+}
+
+function sameStrings(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length &&
+    left.every((value, index) => value === right[index]);
+}
+
+function opacityById(
+  frame: KpSuccessorSynthesisFrame
+): ReadonlyMap<string, number> {
+  return new Map([
+    ...frame.sources.map((source) => [
+      source.annotationId,
+      source.pose.opacity
+    ] as const),
+    ...frame.targets.map((target) => [
+      target.annotationId,
+      target.pose.opacity
+    ] as const)
+  ]);
 }
 
 function clamp01(value: number): number {
