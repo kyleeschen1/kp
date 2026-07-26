@@ -445,5 +445,30 @@ function uniqueIds(values: readonly { readonly id: string }[] | undefined, path:
 
 function referenceIds(ids: readonly string[], available: ReadonlySet<string>, path: string, issues: KpLlmAnimationDraftV2Issue[]): void { ids.forEach((id) => { if (!available.has(id)) issues.push({ path, code: "draft-v2.reference", message: `Unknown state ${id}.` }); }); }
 function requireText(value: string, path: string, issues: KpLlmAnimationDraftV2Issue[]): void { if (typeof value !== "string" || value.trim().length === 0) issues.push({ path, code: "draft-v2.required", message: `${path} must not be empty.` }); }
-function rejectUnsafe(value: unknown, issues: KpLlmAnimationDraftV2Issue[], path = "$"): void { if (Array.isArray(value)) return void value.forEach((item, index) => rejectUnsafe(item, issues, `${path}[${index}]`)); if (!isRecord(value)) return; Object.entries(value).forEach(([key, child]) => { if (/^(dom|svg|html|pixels?|coordinates?|x|y|z|path|motionPath|keyframes?|trajectory|timing|durationMs|delayMs|staggerMs|primitiveId|motionPrimitive|easing|bezier|spring|transform|translate|scale|rotate|opacity|shadow|zIndex)$/i.test(key)) issues.push({ path: `${path}.${key}`, code: "draft-v2.unsafe", message: `Renderer instruction ${key} is not allowed in draft v2.` }); rejectUnsafe(child, issues, `${path}.${key}`); }); }
+const unsafeLlmAuthoringKey =
+  /^(?:bounds|className|computedStyle|css|dataset|dom|fragments?|geometry|html|paint|pixels?|coordinates?|rect|svg|x|y|z|path|motionPath|keyframes?|trajectory|timing|timingTable|durationMs|delayMs|staggerMs|primitiveId|motionPrimitive|easing|bezier|spring|styles?|font|typography|transform|translate|scale|rotate|opacity|shadow|zIndex|renderer|renderTarget|selectorId)$/i;
+
+function rejectUnsafe(
+  value: unknown,
+  issues: KpLlmAnimationDraftV2Issue[],
+  path = "$"
+): void {
+  if (Array.isArray(value)) {
+    value.forEach((item, index) =>
+      rejectUnsafe(item, issues, `${path}[${index}]`)
+    );
+    return;
+  }
+  if (!isRecord(value)) return;
+  Object.entries(value).forEach(([key, child]) => {
+    if (unsafeLlmAuthoringKey.test(key)) {
+      issues.push({
+        path: `${path}.${key}`,
+        code: "draft-v2.unsafe",
+        message: `Renderer instruction ${key} is not allowed in draft v2.`
+      });
+    }
+    rejectUnsafe(child, issues, `${path}.${key}`);
+  });
+}
 function isRecord(value: unknown): value is Record<string, unknown> { return typeof value === "object" && value !== null && !Array.isArray(value); }

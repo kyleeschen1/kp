@@ -135,11 +135,18 @@ type to the established visual motif and semantic phases. This is the contract
 that makes generated matrix multiplication use `matrix-cell-compose`, for
 example, instead of falling back to an unrelated fade.
 
-Models must not provide coordinates, paths, keyframes, timing, per-token
-delays, scale transforms, shadows, DOM, or SVG. KP derives those choices from
-the selected operation, semantic role bindings, salience plan, measured
-layout, and active gestalt style. Missing roles or unknown operations produce
-typed repair gaps; they never select a generic animation as a silent fallback.
+Models must not provide paint fragments, geometry or bounds, coordinates,
+paths, keyframes, timing tables, per-token delays, styles or typography,
+scale transforms, shadows, renderer selection, DOM, or SVG. KP derives those
+choices from the selected operation, semantic role bindings, salience plan,
+measured layout, and active gestalt style. Missing roles or unknown operations
+produce typed repair gaps; they never select a generic animation as a silent
+fallback.
+
+Accepted semantic lineage can be projected into the canonical native-KaTeX
+renderer session only after native endpoints have been measured. That
+renderer-session state is ephemeral: it must never be copied back into an LLM
+draft, governed semantic plan, static artifact, headless output, or export.
 
 ## Verification
 

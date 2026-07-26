@@ -61,7 +61,17 @@ test("LLM authoring catalog binds promoted operations to existing semantic motif
     "keyframes",
     "timing"
   ]);
-  for (const field of ["durations", "motion primitives", "easing", "opacity", "DOM", "SVG"]) {
+  for (const field of [
+    "durations",
+    "motion primitives",
+    "easing",
+    "opacity",
+    "styles and typography",
+    "paint fragments",
+    "geometry and bounds",
+    "DOM",
+    "SVG"
+  ]) {
     assert.ok(catalog.prohibitedAuthoringFields.includes(field));
   }
 });

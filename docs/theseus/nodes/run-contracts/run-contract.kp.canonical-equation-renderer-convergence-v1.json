@@ -289,6 +289,13 @@
       "scope": "slice-25 browser and visual proof",
       "checkedAt": "2026-07-26T04:49:00.642Z",
       "notes": "Ten focused browser checks passed. Visual inspection confirms corrected fraction handoff, fully visible inverse split, radical cohort, and readable inline 7 - 3 convergence across clone/native ownership."
+    },
+    {
+      "command": "focused governed authoring, LLM schema/compiler/repair, canonical renderer session, headless/static tests; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-26 governed LLM fixture proof",
+      "checkedAt": "2026-07-26T04:56:47.383Z",
+      "notes": "Four recorded governed cases compile deterministically into canonical traces and one native-KaTeX renderer-session contract. Forty-one focused checks, all TypeScript projects, and all architecture gates pass; unsafe fragment, geometry, timing, style, DOM, and renderer authority is rejected."
     }
   ],
   "allowedWork": [
@@ -480,7 +487,8 @@
     {
       "id": "slice-26",
       "title": "governed-llm-fixture-proof",
-      "status": "planned"
+      "summary": "Four existing governed provider responses—fraction fan-out, exponent lowering, unit-exponent removal, and power-to-radical rewrite—compile deterministically into compiler-owned canonical traces and the same ephemeral native-KaTeX renderer session. Direct seek/rewind and static/headless serialization pass. Both authoring schemas now reject fragment, paint, geometry/bounds, timing-table, style/font, DOM, and renderer authority; invalid math and operations remain typed repair or epistemic branches. Focused tests, typecheck, and architecture gates pass.",
+      "status": "complete"
     },
     {
       "id": "slice-27",

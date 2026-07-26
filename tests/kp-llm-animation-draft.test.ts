@@ -206,12 +206,30 @@ test("draft v2 rejects unregistered rewrites and renderer-authored motion", () =
     motionPrimitive: "teleport",
     easing: "spring(2)",
     opacity: 0,
-    durationMs: 40
+    durationMs: 40,
+    fragments: [{ paint: "glyph" }],
+    geometry: { rect: { left: 4 } },
+    timingTable: [{ progress: 0.5 }],
+    style: { font: "KaTeX_Main" },
+    renderer: "native-katex"
   } as unknown as KpLlmAnimationDraftV2;
   const issues = validateKpLlmAnimationDraftV2(invalid);
   assert.ok(issues.some((issue) => issue.code === "draft-v2.operation" && /Unknown canonical operation/.test(issue.message)));
   assert.ok(issues.some((issue) => issue.code === "draft-v2.unsafe" && /keyframes/.test(issue.message)));
-  for (const field of ["motionPrimitive", "easing", "opacity", "durationMs"]) {
+  for (const field of [
+    "motionPrimitive",
+    "easing",
+    "opacity",
+    "durationMs",
+    "fragments",
+    "paint",
+    "geometry",
+    "rect",
+    "timingTable",
+    "style",
+    "font",
+    "renderer"
+  ]) {
     assert.ok(issues.some((issue) =>
       issue.code === "draft-v2.unsafe" && issue.path.endsWith(field)
     ));

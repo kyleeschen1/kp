@@ -124,6 +124,9 @@ export function createKpLlmSemanticMotionOperationCatalog():
       "scale transforms",
       "opacity",
       "shadows",
+      "styles and typography",
+      "paint fragments",
+      "geometry and bounds",
       "DOM",
       "SVG"
     ]

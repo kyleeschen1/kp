@@ -5,6 +5,9 @@ import {
   createKpGovernedFractionFanOutExemplar
 } from "../src/authoring/governed-fraction-fan-out-exemplar.ts";
 import {
+  validateKpGovernedSemanticAuthoringRequest
+} from "../src/authoring/governed-semantic-request.ts";
+import {
   createKpOpaqueFractionFanOutFixture
 } from "../src/semantic/fraction-fan-out-fixture.ts";
 import {
@@ -82,6 +85,38 @@ test("provider-shaped response contains no presentation or unchecked math author
   ]);
   assert.equal("rendering" in exemplar.compilation.plan, false);
   assert.equal("timing" in exemplar.compilation.plan, false);
+});
+
+test("governed provider requests reject every renderer authority layer", () => {
+  const request = createKpGovernedFractionFanOutExemplar()
+    .recordedProviderResponse;
+  const unsafe = {
+    ...request,
+    fragments: [{ paint: "glyph" }],
+    geometry: { rect: { left: 12 } },
+    timingTable: [{ progress: 0.5 }],
+    style: { computedStyle: { font: "KaTeX_Main" } },
+    renderer: { dom: "<span>x</span>" }
+  };
+  const issues = validateKpGovernedSemanticAuthoringRequest(unsafe);
+
+  for (const field of [
+    "fragments",
+    "paint",
+    "geometry",
+    "rect",
+    "timingTable",
+    "style",
+    "computedStyle",
+    "font",
+    "renderer",
+    "dom"
+  ]) {
+    assert.ok(issues.some(({ code, path }) =>
+      code === "governed-schema.unsafe-authority" &&
+      path.endsWith(field)
+    ), field);
+  }
 });
 
 function collectKeys(value: unknown): string[] {

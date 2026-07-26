@@ -92,7 +92,8 @@ const correspondenceRelations = new Set<SelectorCorrespondenceRelationId>([
   "artifact"
 ]);
 
-const unsafeAuthoringKey = /^(?:css|dom|html|svg|latex|pixels?|coordinates?|x|y|path|trajectory|keyframes?|timing|durationMs|delayMs|startMs|endMs|easing|opacity|styles?|font|typography|renderer|renderTarget|selectorId)$/i;
+const unsafeAuthoringKey =
+  /^(?:bounds|className|computedStyle|css|dataset|dom|fragments?|geometry|html|svg|latex|paint|pixels?|coordinates?|rect|x|y|z|path|trajectory|keyframes?|timing|timingTable|durationMs|delayMs|startMs|endMs|easing|opacity|styles?|font|typography|renderer|renderTarget|selectorId)$/i;
 
 export function validateKpGovernedSemanticAuthoringRequest(
   value: unknown
