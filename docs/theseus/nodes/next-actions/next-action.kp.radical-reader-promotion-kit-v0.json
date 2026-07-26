@@ -82,11 +82,46 @@
       "scope": "slice 4 architecture boundaries",
       "checkedAt": "2026-07-26T17:04:11.419Z",
       "notes": "All three architecture gates passed."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 5 structural binding and lineage totality",
+      "checkedAt": "2026-07-26T17:09:42.636Z",
+      "notes": "15 tests passed; every radical correspondence selector resolves through semantic annotation or an explicit compiler-owned structural binding."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction",
+      "status": "passed",
+      "scope": "slice 5 governed lineage regression",
+      "checkedAt": "2026-07-26T17:09:43.669Z",
+      "notes": "60 canonical construction tests passed."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice 5 compositor regression",
+      "checkedAt": "2026-07-26T17:09:44.564Z",
+      "notes": "52 compositor tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 5 static typing",
+      "checkedAt": "2026-07-26T17:09:45.434Z",
+      "notes": "All TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 5 architecture boundaries",
+      "checkedAt": "2026-07-26T17:09:46.306Z",
+      "notes": "All architecture gates passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 4 extracted one shared pure exponent/radical selector annotation projection; editor and experiment consumers now reuse it while structural glyphs remain post-render bindings."
+    "summary": "Slice 5 moved radical structural DOM resolution behind the shared rendering projection, added reader anchor binding, preserved the editor adapter through delegation, and proved all correspondence selectors are structurally total without glyph matching."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

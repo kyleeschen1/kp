@@ -3,6 +3,7 @@ import {
   type KpSelectorAnnotatedLatex,
   type KpSelectorAnnotatedLatexSegment
 } from "./selector-annotated-latex.ts";
+import type { KpSemanticAssetObject } from "../semantic/asset.ts";
 
 export interface KpExponentRadicalSelectorState {
   readonly objectId: string;
@@ -15,6 +16,16 @@ export interface KpExponentRadicalSelectorState {
 export interface KpExponentRadicalSelectorAnnotatedLatex
   extends KpSelectorAnnotatedLatex {
   readonly structuralSelectorIds: readonly string[];
+}
+
+export type KpExponentRadicalStructuralRole =
+  | "fraction-rule"
+  | "radical-hook"
+  | "radical-overbar";
+
+export interface KpExponentRadicalStructuralBinding {
+  readonly selectorId: string;
+  readonly role: KpExponentRadicalStructuralRole;
 }
 
 const structuralSuffixes = new Set([
@@ -115,6 +126,45 @@ export function createKpExponentRadicalSelectorAnnotatedLatex(
   };
 }
 
+export function projectKpExponentRadicalStructuralBindings(
+  state: KpExponentRadicalSelectorState
+): readonly KpExponentRadicalStructuralBinding[] {
+  const annotated = createKpExponentRadicalSelectorAnnotatedLatex(state);
+  if (annotated === undefined) return [];
+  return Object.freeze(annotated.structuralSelectorIds.map((selectorId) =>
+    Object.freeze({
+      selectorId,
+      role: structuralRole(state, selectorId)
+    })
+  ));
+}
+
+export function bindKpExponentRadicalStructuralAnchors(input: {
+  readonly root: ParentNode;
+  readonly state: KpSemanticAssetObject;
+}): void {
+  for (const binding of resolveStructuralElements({
+    root: input.root,
+    state: {
+      objectId: input.state.id,
+      selectors: input.state.selectors
+    }
+  })) {
+    binding.element.dataset["kpReaderEquationAnchorId"] =
+      `anchor.${binding.selectorId}`;
+    binding.element.dataset["kpReaderSelectorId"] = binding.selectorId;
+  }
+}
+
+export function resolveKpExponentRadicalStructuralElements(input: {
+  readonly root: ParentNode;
+  readonly state: KpExponentRadicalSelectorState;
+}): readonly (KpExponentRadicalStructuralBinding & {
+  readonly element: HTMLElement;
+})[] {
+  return resolveStructuralElements(input);
+}
+
 function suffix(
   state: KpExponentRadicalSelectorState,
   selectorId: string
@@ -124,4 +174,116 @@ function suffix(
 
 function gap(): KpSelectorAnnotatedLatexSegment {
   return { kind: "latex", latex: "\\;" };
+}
+
+function structuralRole(
+  state: KpExponentRadicalSelectorState,
+  selectorId: string
+): KpExponentRadicalStructuralRole {
+  switch (suffix(state, selectorId)) {
+    case "exponent-fraction-line":
+      return "fraction-rule";
+    case "radical-hook":
+      return "radical-hook";
+    case "radical-overbar":
+      return "radical-overbar";
+    default:
+      throw new Error(
+        `${state.objectId} has unsupported structural selector ${selectorId}.`
+      );
+  }
+}
+
+function resolveStructuralElements(input: {
+  readonly root: ParentNode;
+  readonly state: KpExponentRadicalSelectorState;
+}): readonly (KpExponentRadicalStructuralBinding & {
+  readonly element: HTMLElement;
+})[] {
+  const bindings = projectKpExponentRadicalStructuralBindings(input.state);
+  const radicalFragments = bindings.some(({ role }) =>
+    role === "radical-hook" || role === "radical-overbar"
+  )
+    ? ensureRadicalFragmentElements(input.root)
+    : undefined;
+  const fractionRules = [
+    ...input.root.querySelectorAll<HTMLElement>(".frac-line")
+  ];
+  const fractionBindings = bindings.filter(
+    ({ role }) => role === "fraction-rule"
+  );
+  if (fractionRules.length !== fractionBindings.length) {
+    throw new Error(
+      `State ${input.state.objectId} expected ${fractionBindings.length} ` +
+      `fraction rules, received ${fractionRules.length}.`
+    );
+  }
+  let fractionIndex = 0;
+  return Object.freeze(bindings.map((binding) => {
+    const element = binding.role === "fraction-rule"
+      ? fractionRules[fractionIndex++]
+      : binding.role === "radical-hook"
+        ? radicalFragments?.hook
+        : radicalFragments?.overbar;
+    if (element === undefined) {
+      throw new Error(
+        `State ${input.state.objectId} is missing ${binding.role} structure.`
+      );
+    }
+    return Object.freeze({ ...binding, element });
+  }));
+}
+
+function ensureRadicalFragmentElements(root: ParentNode): {
+  readonly hook: HTMLElement;
+  readonly overbar: HTMLElement;
+} | undefined {
+  const existingHook = root.querySelector<HTMLElement>(
+    '[data-kp-radical-structural-fragment="hook"]'
+  );
+  const existingOverbar = root.querySelector<HTMLElement>(
+    '[data-kp-radical-structural-fragment="overbar"]'
+  );
+  if (existingHook !== null && existingOverbar !== null) {
+    return { hook: existingHook, overbar: existingOverbar };
+  }
+  const hideTail = root.querySelector<HTMLElement>(".hide-tail");
+  if (hideTail === null || hideTail.parentElement === null) return undefined;
+
+  // KaTeX emits the hook and overbar as one SVG. The two inert anchors expose
+  // compiler-owned structural lineage without replacing the native SVG ink.
+  const stack = hideTail.ownerDocument.createElement("span");
+  stack.className = "kp-radical-structural-fragment-stack";
+  stack.style.display = "inline-block";
+  stack.style.position = "relative";
+  stack.style.minWidth = hideTail.style.minWidth;
+  stack.style.width = hideTail.style.width || "100%";
+  stack.style.height = hideTail.style.height;
+  stack.style.overflow = "visible";
+
+  hideTail.parentElement.replaceChild(stack, hideTail);
+  hideTail.dataset["kpRadicalNativeVisual"] = "true";
+  hideTail.style.position = "absolute";
+  hideTail.style.inset = "0";
+  hideTail.style.display = "inline-block";
+  const hook = radicalFragmentAnchor(hideTail.ownerDocument, "hook");
+  const overbar = radicalFragmentAnchor(hideTail.ownerDocument, "overbar");
+  stack.append(hideTail, hook, overbar);
+  return { hook, overbar };
+}
+
+function radicalFragmentAnchor(
+  ownerDocument: Document,
+  role: "hook" | "overbar"
+): HTMLElement {
+  const anchor = ownerDocument.createElement("span");
+  anchor.className =
+    `kp-radical-structural-fragment kp-radical-structural-fragment--${role}`;
+  anchor.dataset["kpRadicalStructuralFragment"] = role;
+  anchor.style.position = "absolute";
+  anchor.style.inset = "0";
+  anchor.style.display = "inline-block";
+  anchor.style.pointerEvents = "none";
+  anchor.style.overflow = "hidden";
+  return anchor;
 }

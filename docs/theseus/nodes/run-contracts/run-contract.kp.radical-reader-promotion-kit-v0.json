@@ -127,7 +127,8 @@
     {
       "id": "slice-05",
       "title": "bind-radical-structure",
-      "status": "planned",
+      "summary": "Bound the exponent fraction rule and radical hook/overbar through compiler-owned selector roles; base, numerator, denominator, and radicand remain shared semantic annotations, with total lineage coverage and no new compositor rule.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {
