@@ -117,11 +117,39 @@
       "scope": "slice 5 architecture boundaries",
       "checkedAt": "2026-07-26T17:09:46.306Z",
       "notes": "All architecture gates passed."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 6 radical lesson content and model",
+      "checkedAt": "2026-07-26T17:12:23.764Z",
+      "notes": "17 tests passed; prose, semantic authority, three checkpoints, and all seven focus selectors match the preservation manifest."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction",
+      "status": "passed",
+      "scope": "slice 6 construction preservation",
+      "checkedAt": "2026-07-26T17:12:24.668Z",
+      "notes": "60 canonical construction tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 6 static typing",
+      "checkedAt": "2026-07-26T17:12:25.515Z",
+      "notes": "All TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 6 architecture boundaries",
+      "checkedAt": "2026-07-26T17:12:26.328Z",
+      "notes": "All architecture gates passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 5 moved radical structural DOM resolution behind the shared rendering projection, added reader anchor binding, preserved the editor adapter through delegation, and proved all correspondence selectors are structurally total without glyph matching."
+    "summary": "Slice 6 added the radical succession prose and lesson model around the existing governed animation, with exact power/rewrite/radical checkpoints and all seven semantic focus selectors; no route or runtime was added."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

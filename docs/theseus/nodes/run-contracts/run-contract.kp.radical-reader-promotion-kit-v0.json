@@ -134,7 +134,8 @@
     {
       "id": "slice-06",
       "title": "add-lesson-content",
-      "status": "planned",
+      "summary": "Added canonical radical succession content and compiled lesson-model authority using the existing animation, exact preservation checkpoints, and semantic focus references without product routing.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {
