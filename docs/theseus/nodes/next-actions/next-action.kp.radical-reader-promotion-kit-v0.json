@@ -425,11 +425,53 @@
       "scope": "slice 14 architecture boundaries",
       "checkedAt": "2026-07-26T17:56:02.993Z",
       "notes": "All architecture gates passed."
+    },
+    {
+      "command": "npm run visual:radical-canonical-checkpoint",
+      "status": "passed",
+      "scope": "slice 15 responsive radical visual matrix",
+      "checkedAt": "2026-07-26T18:07:02.008Z",
+      "notes": "Built 38 self-contained wide/phone DPR1/2 full/reduced frames plus fraction controls; geometry is stable, with native focus-color continuity retained for human slice-16 review."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 15 responsive browser and fraction controls",
+      "checkedAt": "2026-07-26T18:07:18.210Z",
+      "notes": "Ten Chromium tests passed: radical adapter, ownership, pre-handoff geometry, seek/rewind, reduced/static, product seams, and fraction functional controls."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 15 checkpoint plan and focused regressions",
+      "checkedAt": "2026-07-26T18:07:23.837Z",
+      "notes": "Thirty-five tests passed, including the exact 38-frame responsive/DPR/handoff checkpoint matrix."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 15 architecture boundaries",
+      "checkedAt": "2026-07-26T18:07:32.671Z",
+      "notes": "Concept-room, semantic-reader, and semantic-animation architecture gates passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice 15 durable workspace",
+      "checkedAt": "2026-07-26T18:07:39.877Z",
+      "notes": "Validated 791 nodes and 12810 events before checkpoint completion."
+    },
+    {
+      "command": "manual review of generated radical checkpoint",
+      "status": "passed",
+      "scope": "slice 15 visual interpretation",
+      "checkedAt": "2026-07-26T18:08:32.580Z",
+      "notes": "Clarification: the 99.9-to-100 geometry is continuous, but the persistent x focus color is discontinuous from black material paint to orange native paint. This is deliberately retained only as a human-checkpoint finding for generic slice-16 repair."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 14 proved product seam preservation: native page MathML/selectors retain semantic authority; moving paint is inert and stripped; hover and keyboard focus bind through exact selectors; URL/share progress restores; the phone keeps the intended full-transcript fallback; generated Cloze/card and iframe/static-step exports remain existing authorities rather than route forks."
+    "summary": "HUMAN_CHECKPOINT after slice 15: 15 of 20 slices complete. The canonical radical reader is geometrically stable and product seams pass across the 38-frame matrix. Human review is required for midpoint readability and the generic black-to-orange persistent-x focus-color handoff before slice 16."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

@@ -197,7 +197,8 @@
     {
       "id": "slice-15",
       "title": "responsive-browser-exemplar",
-      "status": "planned",
+      "summary": "Captured and reviewed 38 wide/phone DPR1/2 full/reduced radical frames plus fraction controls. Geometry and architecture gates pass; mandatory human checkpoint records a generic persistent-focus color discontinuity for reviewed slice-16 repair.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {

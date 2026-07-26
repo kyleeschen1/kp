@@ -1,7 +1,7 @@
 # Radical Reader Promotion Kit Long-Loop Proposal
 
 Date: 2026-07-26
-Status: proposed; awaiting explicit approval
+Status: approved; paused at the mandatory slice-15 human checkpoint
 Mode: long
 
 ## Objective
