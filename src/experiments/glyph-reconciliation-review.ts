@@ -302,6 +302,8 @@ const traceStatus = root.querySelector<HTMLOutputElement>(
   "[data-trace-status]"
 )!;
 const compoundSceneEnabled = searchParams.get("compoundScene") === "1";
+const governedCompoundEnabled =
+  searchParams.get("governedCompound") === "1";
 
 await fontReadiness.whenReady();
 await nextFrame();
@@ -772,7 +774,12 @@ branchChoiceButtons.forEach((button) => {
     }
   });
 });
-if (compoundSceneEnabled) {
+if (governedCompoundEnabled) {
+  const compoundScene = await import(
+    "./governed-canonical-compound-scene.ts"
+  );
+  await compoundScene.initializeKpGovernedCanonicalCompoundScene(tracePanel);
+} else if (compoundSceneEnabled) {
   const compoundScene = await import(
     "./glyph-reconciliation-compound-scene.ts"
   );

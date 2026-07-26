@@ -63,6 +63,6 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-23 complete. Canonical child constructions now compose on one shared clock; compound visual realization is next."
+    "summary": "Slices 1-24 complete. The governed compound is visually realized without operation-specific geometry; an accessible in-browser review gallery is next."
   }
 }

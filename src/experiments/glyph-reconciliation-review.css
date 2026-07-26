@@ -467,6 +467,44 @@ button, input { font: inherit; }
     #fff;
 }
 
+.glyph-exemplar__compound-stage--governed {
+  display: grid;
+  gap: .65rem;
+  min-height: 21rem;
+  padding: .75rem;
+}
+
+.glyph-exemplar__governed-compound-lane {
+  display: grid;
+  grid-template-columns: minmax(8rem, .34fr) minmax(0, 1fr);
+  align-items: center;
+  min-width: 0;
+  min-height: 6rem;
+  border: 1px solid #e0e5df;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .72);
+}
+
+.glyph-exemplar__governed-compound-lane > strong {
+  padding: .75rem;
+  color: #52615c;
+  font-size: .7rem;
+  text-transform: capitalize;
+}
+
+.glyph-exemplar__governed-compound-equation {
+  position: relative;
+  min-width: 0;
+  min-height: 6rem;
+  overflow: hidden;
+}
+
+.glyph-exemplar__governed-compound-equation
+  .glyph-exemplar__compound-equation {
+  padding: .55rem;
+  font-size: clamp(.82rem, 3.6cqw, 1.35rem);
+}
+
 .glyph-exemplar__compound-equation {
   position: absolute;
   inset: 0;
@@ -570,6 +608,20 @@ button, input { font: inherit; }
     grid-template-columns: repeat(5, minmax(1.6rem, 1fr));
   }
   .glyph-exemplar__compound-stage { min-height: 8rem; }
+  .glyph-exemplar__compound-stage--governed {
+    min-height: 21rem;
+    padding: .45rem;
+  }
+  .glyph-exemplar__governed-compound-lane {
+    grid-template-columns: 1fr;
+    min-height: 6.25rem;
+  }
+  .glyph-exemplar__governed-compound-lane > strong {
+    padding: .45rem .6rem 0;
+  }
+  .glyph-exemplar__governed-compound-equation {
+    min-height: 4.8rem;
+  }
   .glyph-exemplar__compound-equation {
     padding-inline: .35rem;
     font-size: clamp(.85rem, 6.5cqw, 1.3rem);

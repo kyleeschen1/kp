@@ -200,6 +200,13 @@
       "scope": "slice-23 compound operation construction",
       "checkedAt": "2026-07-26T14:04:43.174Z",
       "notes": "Fifty-one focused tests, all TypeScript projects, and architecture gates pass. Four verified canonical operations retain exact child order on the existing causal-chain plan; 401 direct-seek samples rewind exactly and optional drill-down restores the parent frame without a second scheduler."
+    },
+    {
+      "command": "npm run test:browser:canonical-animation-construction; npm run visual:canonical-animation-construction; focused legacy compound Chromium; npm run test:canonical-animation-construction; npm run test:canonical-equation-renderer; npm run build; npm run check:architecture; git diff --check",
+      "status": "passed",
+      "scope": "slice-24 compound visual realization",
+      "checkedAt": "2026-07-26T14:17:27.716Z",
+      "notes": "Wide, phone, reduced-motion, direct-seek, endpoints, cross-lane overlap, and overflow checks pass for the governed three-lane realization; two legacy compound Chromium checks, fifty-one construction tests, eleven renderer ratchets, build, type, and architecture gates pass. One initial one-pixel lane-box overlap was resolved with generic lane headroom only."
     }
   ],
   "allowedWork": [
@@ -398,7 +405,8 @@
     {
       "id": "slice-24",
       "title": "compound-visual-realization",
-      "status": "planned"
+      "summary": "Rendered the four-operation compound through the existing native KaTeX renderer sessions and compound scene plan. Three persistent lanes keep unrelated examples stable while one generic material scene advances; wide, phone, reduced-motion, overflow, reverse-seek, and visual inspection pass after a generic lane-headroom repair.",
+      "status": "complete"
     },
     {
       "id": "slice-25",
