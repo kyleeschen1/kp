@@ -45,28 +45,11 @@ export function syncKpEquationMaterialLayer(input: {
       owner.className = "editor-equation-stage__material-owner";
       owner.dataset["kpEquationMaterialOwnerId"] = frame.ownerId;
       owner.setAttribute("aria-hidden", "true");
-      // A detached SVG path has no paint context. Clone its owning SVG so
-      // structural ink remains native and intact inside the material layer.
-      const cloneSource =
-        frame.sourceElement instanceof SVGElement &&
-          !(frame.sourceElement instanceof SVGSVGElement)
-          ? frame.sourceElement.ownerSVGElement ?? frame.sourceElement
-          : frame.sourceElement;
-      const visual = cloneElementWithComputedStyles(cloneSource);
-      stripMaterialCloneAuthority(visual);
-      visual.style.opacity = "1";
-      visual.style.transform = "none";
-      visual.style.translate = "none";
-      visual.style.scale = "none";
-      visual.style.width = "100%";
-      visual.style.height = "100%";
-      // Ordinary glyphs need visible ink overflow, while KaTeX uses hidden
-      // overflow selectively for structural crops such as radical tails.
-      // The computed clone already carries that distinction from its source.
-      visual.style.position = "relative";
-      visual.style.display = "block";
-      visual.classList.add("editor-equation-stage__material-visual");
-      owner.append(visual);
+      setKpEquationMaterialOwnerVisual({
+        owner,
+        sourceElement: frame.sourceElement,
+        revisionKey: `source:${frame.ownerId}`
+      });
       layer.append(owner);
     }
     const visual = owner.firstElementChild as HTMLElement | null;
@@ -109,6 +92,47 @@ export function syncKpEquationMaterialLayer(input: {
       owner.dataset["kpEquationMaterialFragmentRole"] = frame.fragmentRole;
     }
   }
+}
+
+export function setKpEquationMaterialOwnerVisual(input: {
+  readonly owner: HTMLElement;
+  readonly sourceElement: HTMLElement;
+  readonly revisionKey: string;
+}): HTMLElement | SVGElement {
+  if (input.revisionKey.trim() === "") {
+    throw new Error("Material visual revision key must be non-empty.");
+  }
+  const current = input.owner.firstElementChild;
+  if (
+    current !== null &&
+    input.owner.dataset["kpEquationMaterialVisualRevision"] ===
+      input.revisionKey
+  ) {
+    return current as HTMLElement | SVGElement;
+  }
+  // A detached SVG path has no paint context. Clone its owning SVG so
+  // structural ink remains native and intact inside the material layer.
+  const cloneSource =
+    input.sourceElement instanceof SVGElement &&
+      !(input.sourceElement instanceof SVGSVGElement)
+      ? input.sourceElement.ownerSVGElement ?? input.sourceElement
+      : input.sourceElement;
+  const visual = cloneElementWithComputedStyles(cloneSource);
+  stripMaterialCloneAuthority(visual);
+  visual.style.opacity = "1";
+  visual.style.transform = "none";
+  visual.style.translate = "none";
+  visual.style.scale = "none";
+  visual.style.width = "100%";
+  visual.style.height = "100%";
+  // Ordinary paint needs visible ink overflow, while computed structural
+  // clones retain any deliberate cropping from their source.
+  visual.style.position = "relative";
+  visual.style.display = "block";
+  visual.classList.add("editor-equation-stage__material-visual");
+  input.owner.replaceChildren(visual);
+  input.owner.dataset["kpEquationMaterialVisualRevision"] = input.revisionKey;
+  return visual;
 }
 
 function stripMaterialCloneAuthority(visual: Element): void {

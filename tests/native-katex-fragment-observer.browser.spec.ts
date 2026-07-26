@@ -1523,6 +1523,137 @@ test("dense handoff telemetry covers every correlated source material and target
   }
 });
 
+test("target-style realization keeps ordinary clone paint inert and native DOM untouched", async ({
+  browser
+}) => {
+  for (const viewport of [
+    { width: 1_440, height: 950 },
+    { width: 390, height: 844 }
+  ]) {
+    const context = await browser.newContext({ viewport });
+    const page = await context.newPage();
+    await page.goto("/glyph-reconciliation-experiment.html?progress=999");
+    await page.evaluate(async () => document.fonts.ready);
+    await page.locator(
+      '[data-kp-glyph-review][data-kp-ready="true"]'
+    ).waitFor();
+    const evidence = await page.evaluate(() => {
+      const api = (window as unknown as {
+        __kpApplyFractionSceneFrame: (progress: number) => unknown;
+        __kpRealizeFractionTypographyHandoff: (progress: number) => {
+          plan: {
+            model: string;
+            entries: readonly {
+              id: string;
+              materialOwnerId: string;
+              paintKind: string;
+              model: string;
+              targetStyleFingerprint: string;
+            }[];
+          };
+          realization: {
+            realizedIds: readonly string[];
+            deferredIds: readonly string[];
+            nativeMutationCount: number;
+          };
+        };
+      });
+      api.__kpApplyFractionSceneFrame(0.999);
+      const realize = api.__kpRealizeFractionTypographyHandoff;
+      const source = document.querySelector<HTMLElement>(
+        "[data-fraction-source]"
+      )!;
+      const target = document.querySelector<HTMLElement>(
+        "[data-fraction-target]"
+      )!;
+      const sourceBefore = source.outerHTML;
+      const targetBefore = target.outerHTML;
+      const first = realize(0.999);
+      const firstVisuals = new Map(first.plan.entries.flatMap((entry) => {
+        if (!first.realization.realizedIds.includes(entry.id)) return [];
+        const owner = document.querySelector<HTMLElement>(
+          `[data-kp-equation-material-owner-id="${
+            CSS.escape(entry.materialOwnerId)
+          }"]`
+        )!;
+        return [[entry.id, owner.firstElementChild!] as const];
+      }));
+      const second = realize(0.999);
+      const owners = second.plan.entries.flatMap((entry) => {
+        if (!second.realization.realizedIds.includes(entry.id)) return [];
+        const owner = document.querySelector<HTMLElement>(
+          `[data-kp-equation-material-owner-id="${
+            CSS.escape(entry.materialOwnerId)
+          }"]`
+        )!;
+        const visual = owner.firstElementChild as HTMLElement;
+        const rect = owner.getBoundingClientRect();
+        const forbiddenAuthority = [
+          visual,
+          ...visual.querySelectorAll<HTMLElement>("*")
+        ].flatMap((element) => [
+          "id",
+          "role",
+          "tabindex",
+          "href",
+          "contenteditable",
+          "aria-label",
+          "aria-hidden",
+          "data-kp-motion-id",
+          "data-kp-semantic-entity-id",
+          "data-kp-presentation-group-id"
+        ].filter((attribute) => element.hasAttribute(attribute)));
+        return [{
+          id: entry.id,
+          paintKind: entry.paintKind,
+          model: entry.model,
+          targetStyleFingerprint: entry.targetStyleFingerprint,
+          visualReused: firstVisuals.get(entry.id) === visual,
+          inert: owner.hasAttribute("inert"),
+          ariaHidden: owner.getAttribute("aria-hidden"),
+          forbiddenAuthority,
+          rect: {
+            left: rect.left,
+            top: rect.top,
+            width: rect.width,
+            height: rect.height
+          },
+          fontSize: getComputedStyle(visual).fontSize
+        }];
+      });
+      return {
+        sourceUnchanged: source.outerHTML === sourceBefore,
+        targetUnchanged: target.outerHTML === targetBefore,
+        planModel: second.plan.model,
+        nativeMutationCount: second.realization.nativeMutationCount,
+        realizedIds: second.realization.realizedIds,
+        deferredIds: second.realization.deferredIds,
+        owners
+      };
+    });
+
+    expect(evidence.planModel).toBe("target-style-reverse-flip");
+    expect(evidence.nativeMutationCount).toBe(0);
+    expect(evidence.sourceUnchanged).toBe(true);
+    expect(evidence.targetUnchanged).toBe(true);
+    expect(evidence.realizedIds.length).toBeGreaterThan(0);
+    expect(evidence.deferredIds.length).toBeGreaterThan(0);
+    expect(evidence.owners.every((owner) =>
+      owner.paintKind === "glyph" &&
+      owner.model === "target-style-reverse-flip" &&
+      owner.visualReused &&
+      owner.inert &&
+      owner.ariaHidden === "true" &&
+      owner.forbiddenAuthority.length === 0 &&
+      owner.targetStyleFingerprint.includes(`font-size:${owner.fontSize}`) &&
+      Object.values(owner.rect).every(Number.isFinite) &&
+      owner.rect.width > 0 &&
+      owner.rect.height > 0
+    )).toBe(true);
+    await context.close();
+  }
+});
+
 test("handoff ownership trace is atomic and seek-direction independent", async ({
   page
 }) => {

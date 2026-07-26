@@ -11,12 +11,14 @@ import {
 import {
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexSceneTracks,
+  compileKpNativeKatexTypographyStylePlan,
   correlateKpNativeKatexSceneHandoff,
   createKpNativeKatexScenePlayback,
   measureKpNativeKatexCorrelatedHandoff,
   measureKpNativeKatexGlyphHandoff,
   measureKpNativeKatexRuleHandoff,
   reconcileKpNativeKatexScenes,
+  realizeKpNativeKatexTypographyStylePlan,
   traceKpNativeKatexHandoffOwnership
 } from "../rendering/native-katex-scene-compositor.ts";
 
@@ -133,6 +135,28 @@ export async function createKpFractionExperimentScene(input: {
         ...microscope,
         progress
       });
+    },
+    realizeTypographyHandoff(progress: number) {
+      playback.apply(progress);
+      const telemetry = measureKpNativeKatexCorrelatedHandoff({
+        ...microscope,
+        progress
+      });
+      const plan = compileKpNativeKatexTypographyStylePlan({
+        telemetry,
+        correlations,
+        tolerancePx: 0.1,
+        maximumTranslationPx: 2,
+        maximumScaleRatio: 1.1
+      });
+      return {
+        plan,
+        realization: realizeKpNativeKatexTypographyStylePlan({
+          stage: input.stage,
+          target: targetScene,
+          plan
+        })
+      };
     },
     traceHandoffOwnership(progresses: readonly number[]) {
       return traceKpNativeKatexHandoffOwnership({

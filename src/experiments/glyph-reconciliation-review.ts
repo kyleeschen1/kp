@@ -346,6 +346,8 @@ if (import.meta.env.DEV) {
       fractionScene.measureCorrelatedHandoff,
     __kpMeasureFractionGlyphHandoff: fractionScene.measureGlyphHandoff,
     __kpMeasureFractionRuleHandoff: fractionScene.measureRuleHandoff,
+    __kpRealizeFractionTypographyHandoff:
+      fractionScene.realizeTypographyHandoff,
     __kpTraceFractionHandoffOwnership: fractionScene.traceHandoffOwnership
   });
 }

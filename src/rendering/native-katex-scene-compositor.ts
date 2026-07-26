@@ -8,7 +8,10 @@ import {
   normalizeKpStageRelativeRect,
   type KpStageRelativeRect
 } from "./native-katex-fragment-observer.ts";
-import { syncKpEquationMaterialLayer } from "./equation-material-layer-dom.ts";
+import {
+  setKpEquationMaterialOwnerVisual,
+  syncKpEquationMaterialLayer
+} from "./equation-material-layer-dom.ts";
 
 export type KpNativeKatexAtomLifecycle =
   | "persist"
@@ -128,22 +131,6 @@ export interface KpNativeKatexHandoffOwnershipSample {
   readonly maximumRuleGeometryResidualPx: number;
 }
 
-export interface KpNativeKatexCommonHandoffAlignment {
-  readonly kind: "native-katex-common-handoff-alignment";
-  readonly status: "already-aligned" | "correctable" | "unsupported";
-  readonly translateX: number;
-  readonly translateY: number;
-  readonly rejectedIds: readonly string[];
-  readonly reason?:
-    | "no-correlated-paint"
-    | "paint-mismatch"
-    | "style-mismatch"
-    | "shape-mismatch"
-    | "alignment-outlier"
-    | "correction-exceeds-bound"
-    | undefined;
-}
-
 export type KpNativeKatexTypographyHandoffCompatibility =
   | "style-compatible"
   | "transform-compatible"
@@ -232,6 +219,14 @@ export interface KpNativeKatexTypographyStylePlan {
     | "target-style-reverse-flip"
     | "native-checkpoint-settlement";
   readonly entries: readonly KpNativeKatexTypographyStylePlanEntry[];
+}
+
+export interface KpNativeKatexTypographyRealization {
+  readonly kind: "native-katex-typography-realization";
+  readonly lifecycle: "renderer-session";
+  readonly realizedIds: readonly string[];
+  readonly deferredIds: readonly string[];
+  readonly nativeMutationCount: 0;
 }
 
 export interface KpNativeKatexSemanticPaintRelation {
@@ -898,91 +893,6 @@ export function measureKpNativeKatexCorrelatedHandoff(input: {
   });
 }
 
-export function calculateKpNativeKatexCommonHandoffAlignment(input: {
-  readonly telemetry: KpNativeKatexHandoffTelemetry;
-  readonly tolerancePx: number;
-  readonly maximumCorrectionPx: number;
-}): KpNativeKatexCommonHandoffAlignment {
-  requireNonnegativeFinite(input.tolerancePx, "alignment tolerance");
-  requireNonnegativeFinite(
-    input.maximumCorrectionPx,
-    "maximum alignment correction"
-  );
-  const pairs = handoffTelemetryPairs(input.telemetry);
-  if (pairs.length === 0) {
-    return commonAlignmentResult("unsupported", 0, 0, [], {
-      reason: "no-correlated-paint"
-    });
-  }
-  const paintMismatchIds = pairs.filter(([material, native]) =>
-    material.paintKind !== native.paintKind ||
-    material.paintFingerprint !== native.paintFingerprint
-  ).map(([material]) => correlationId(material.id));
-  if (paintMismatchIds.length > 0) {
-    return commonAlignmentResult("unsupported", 0, 0, paintMismatchIds, {
-      reason: "paint-mismatch"
-    });
-  }
-  const styleMismatchIds = pairs.filter(([material, native]) =>
-    material.styleFingerprint !== native.styleFingerprint
-  ).map(([material]) => correlationId(material.id));
-  if (styleMismatchIds.length > 0) {
-    return commonAlignmentResult("unsupported", 0, 0, styleMismatchIds, {
-      reason: "style-mismatch"
-    });
-  }
-  const shapeMismatchIds = pairs.filter(([material, native]) =>
-    Math.abs(material.rect.width - native.rect.width) > input.tolerancePx ||
-    Math.abs(material.rect.height - native.rect.height) > input.tolerancePx ||
-    (material.baselineY === null) !== (native.baselineY === null)
-  ).map(([material]) => correlationId(material.id));
-  if (shapeMismatchIds.length > 0) {
-    return commonAlignmentResult("unsupported", 0, 0, shapeMismatchIds, {
-      reason: "shape-mismatch"
-    });
-  }
-  const deltas = pairs.map(([material, native]) => ({
-    id: correlationId(material.id),
-    x: native.rect.left - material.rect.left,
-    y: material.baselineY === null
-      ? native.rect.top - material.rect.top
-      : native.baselineY! - material.baselineY
-  }));
-  const translateX = median(deltas.map(({ x }) => x));
-  const translateY = median(deltas.map(({ y }) => y));
-  const outlierIds = deltas.filter(({ x, y }) =>
-    Math.abs(x - translateX) > input.tolerancePx ||
-    Math.abs(y - translateY) > input.tolerancePx
-  ).map(({ id }) => id);
-  if (outlierIds.length > 0) {
-    return commonAlignmentResult(
-      "unsupported",
-      translateX,
-      translateY,
-      outlierIds,
-      { reason: "alignment-outlier" }
-    );
-  }
-  if (
-    Math.abs(translateX) > input.maximumCorrectionPx ||
-    Math.abs(translateY) > input.maximumCorrectionPx
-  ) {
-    return commonAlignmentResult(
-      "unsupported",
-      translateX,
-      translateY,
-      deltas.map(({ id }) => id),
-      { reason: "correction-exceeds-bound" }
-    );
-  }
-  const status =
-    Math.abs(translateX) <= input.tolerancePx &&
-      Math.abs(translateY) <= input.tolerancePx
-      ? "already-aligned"
-      : "correctable";
-  return commonAlignmentResult(status, translateX, translateY, []);
-}
-
 export function assessKpNativeKatexTypographyHandoff(input: {
   readonly from: KpNativeKatexHandoffTelemetry["observations"][number];
   readonly to: KpNativeKatexHandoffTelemetry["observations"][number];
@@ -1251,6 +1161,59 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
     lifecycle: "renderer-session",
     model,
     entries: Object.freeze(entries)
+  });
+}
+
+export function realizeKpNativeKatexTypographyStylePlan(input: {
+  readonly stage: HTMLElement;
+  readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly plan: KpNativeKatexTypographyStylePlan;
+}): KpNativeKatexTypographyRealization {
+  const targetById = new Map(input.target.atoms.map((atom) => [atom.id, atom]));
+  const realizedIds: string[] = [];
+  const deferredIds: string[] = [];
+  for (const entry of input.plan.entries) {
+    if (
+      entry.model === "native-checkpoint-settlement" ||
+      entry.paintKind !== "glyph"
+    ) {
+      deferredIds.push(entry.id);
+      continue;
+    }
+    const owner = input.stage.querySelector<HTMLElement>(
+      `[data-kp-equation-material-owner-id="${
+        CSS.escape(entry.materialOwnerId)
+      }"]`
+    );
+    const target = targetById.get(entry.targetPaintAtomId);
+    if (owner === null || target === undefined) {
+      throw new Error(
+        `Typography realization cannot find renderer paint for ${entry.id}.`
+      );
+    }
+    setKpEquationMaterialOwnerVisual({
+      owner,
+      sourceElement: target.sourceElement,
+      revisionKey:
+        `target:${entry.targetPaintAtomId}:${entry.targetStyleFingerprint}`
+    });
+    owner.style.left = `${entry.targetRect.left}px`;
+    owner.style.top = `${entry.targetRect.top}px`;
+    owner.style.width = `${entry.targetRect.width}px`;
+    owner.style.height = `${entry.targetRect.height}px`;
+    owner.style.transformOrigin = "0 0";
+    owner.style.transform =
+      `translate(${entry.inverseTranslateX}px, ${entry.inverseTranslateY}px) ` +
+      `scale(${entry.inverseScaleX}, ${entry.inverseScaleY})`;
+    owner.dataset["kpNativeKatexTypographyModel"] = entry.model;
+    realizedIds.push(entry.id);
+  }
+  return Object.freeze({
+    kind: "native-katex-typography-realization",
+    lifecycle: "renderer-session",
+    realizedIds: Object.freeze(realizedIds),
+    deferredIds: Object.freeze(deferredIds),
+    nativeMutationCount: 0
   });
 }
 
@@ -2066,33 +2029,6 @@ function freezeTypographyStylePlanEntry(
     currentRect: Object.freeze({ ...entry.currentRect }),
     targetRect: Object.freeze({ ...entry.targetRect })
   });
-}
-
-function commonAlignmentResult(
-  status: KpNativeKatexCommonHandoffAlignment["status"],
-  translateX: number,
-  translateY: number,
-  rejectedIds: readonly string[],
-  input: {
-    readonly reason?: KpNativeKatexCommonHandoffAlignment["reason"];
-  } = {}
-): KpNativeKatexCommonHandoffAlignment {
-  return Object.freeze({
-    kind: "native-katex-common-handoff-alignment",
-    status,
-    translateX,
-    translateY,
-    rejectedIds: Object.freeze([...rejectedIds].sort()),
-    ...(input.reason === undefined ? {} : { reason: input.reason })
-  });
-}
-
-function median(values: readonly number[]): number {
-  const sorted = [...values].sort((left, right) => left - right);
-  const middle = Math.floor(sorted.length / 2);
-  return sorted.length % 2 === 0
-    ? (sorted[middle - 1]! + sorted[middle]!) / 2
-    : sorted[middle]!;
 }
 
 function requireNonnegativeFinite(value: number, label: string): void {

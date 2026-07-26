@@ -100,6 +100,27 @@
       "scope": "slice-07 selected style plan",
       "checkedAt": "2026-07-26T00:06:36.594Z",
       "notes": "Forty-eight focused tests, five convergence ratchets, and all TypeScript projects pass. The plan has total correlation-to-target coverage, frozen nested geometry, exact inverse metrics, identity-only checkpoint fallback, no element references, and explicit durable-artifact exclusion."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "failed",
+      "scope": "slice-08 initial source ceiling",
+      "checkedAt": "2026-07-26T00:15:08.624Z",
+      "notes": "The first realization pass used 120872 core source bytes against the frozen 120000-byte ceiling. The repair deleted the superseded translation-only handoff API and its isolated tests, which had no production consumers; the ceiling was not raised and the core now uses 116485 bytes."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor -- --grep target-style realization",
+      "status": "failed",
+      "scope": "slice-08 initial native DOM assertion",
+      "checkedAt": "2026-07-26T00:15:09.681Z",
+      "notes": "The first browser assertion compared target markup before normalizing playback to the tested 0.999 frame, so the expected ownership opacity update appeared as a mutation. The repair applies the existing scene frame first, then snapshots native markup around realization; no realization code changed."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor -- --grep target-style realization; npm run test:canonical-equation-renderer; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-08 HTML clone realization",
+      "checkedAt": "2026-07-26T00:15:11.344Z",
+      "notes": "Forty-three focused tests, the wide and phone Chromium realization test, five convergence ratchets, all TypeScript projects, and architecture gates pass. Target-style visuals are idempotently reused, finite, exact-font styled, aria-hidden and inert, stripped of semantic and interactive attributes, and report zero native mutations. Native source and target markup is byte-equal around realization. Core source is 116485 bytes and the controller remains below 40000 bytes."
     }
   ],
   "allowedWork": [
@@ -183,7 +204,8 @@
     {
       "id": "slice-08",
       "title": "html-clone-realization",
-      "status": "planned"
+      "summary": "Applied the immutable target-style plan to ordinary HTML paint clones through one scene-level realization path. Wide and phone Chromium evidence proves finite geometry, exact target font paint, idempotent clone reuse, inert and aria-hidden ownership, stripped semantic/focus attributes, and untouched native endpoint DOM. Deleted the unused translation-only predecessor to bring core source from an initial 120872-byte failure down to 116485 without raising the ceiling.",
+      "status": "complete"
     },
     {
       "id": "slice-09",
