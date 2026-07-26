@@ -13,6 +13,7 @@ import {
   compareKpNativeKatexTypographyHandoffModels,
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexSceneTracks,
+  compileKpNativeKatexTypographyStylePlan,
   correlateKpNativeKatexSceneHandoff,
   createKpNativeKatexScenePlayback,
   createKpNativeKatexSceneReconciliation,
@@ -567,6 +568,144 @@ test("model comparison is permutation deterministic and bounded", () => {
   );
 });
 
+test("selected style plan is immutable measured renderer-session state", () => {
+  const plan = compileKpNativeKatexTypographyStylePlan({
+    telemetry: alignmentTelemetry({
+      pairs: [{
+        id: "pair.transform",
+        materialRect: { left: 24, top: 20, width: 12, height: 24 },
+        nativeRect: { left: 23.96, top: 20, width: 11.98, height: 23.96 },
+        materialBaselineY: 40,
+        nativeBaselineY: 41.47,
+        materialStyle: "font-size:65.824px|line-height:78.9888px|color:black",
+        nativeStyle: "font-size:46.0768px|line-height:55.2922px|color:black"
+      }]
+    }),
+    correlations: [{
+      kind: "native-katex-handoff-correlation",
+      lifecycle: "renderer-session",
+      id: "pair.transform",
+      materialOwnerId: "owner.transform",
+      trackId: "track.transform",
+      componentId: "component.transform",
+      atomLifecycle: "persist",
+      visualAtomId: "paint.pair.transform",
+      sourceAtomId: "source.transform",
+      targetAtomId: "paint.pair.transform",
+      semanticEntityId: "entity.transform",
+      disposition: "target-bound"
+    }],
+    tolerancePx: 0.1,
+    maximumTranslationPx: 2,
+    maximumScaleRatio: 1.1
+  });
+
+  assert.equal(plan.lifecycle, "renderer-session");
+  assert.equal(plan.model, "target-style-reverse-flip");
+  assert.deepEqual(plan.entries[0], {
+    id: "pair.transform",
+    materialOwnerId: "owner.transform",
+    componentId: "component.transform",
+    atomLifecycle: "persist",
+    targetPaintAtomId: "paint.pair.transform",
+    paintKind: "glyph",
+    model: "target-style-reverse-flip",
+    currentRect: { left: 24, top: 20, width: 12, height: 24 },
+    targetRect: { left: 23.96, top: 20, width: 11.98, height: 23.96 },
+    inverseTranslateX: 0.03999999999999915,
+    inverseTranslateY: -1.4699999999999989,
+    inverseScaleX: 12 / 11.98,
+    inverseScaleY: 24 / 23.96,
+    targetPaintFingerprint: "glyph:x",
+    targetStyleFingerprint:
+      "font-size:46.0768px|line-height:55.2922px|color:black",
+    targetClipPath: "none"
+  });
+  assert.equal(Object.isFrozen(plan), true);
+  assert.equal(Object.isFrozen(plan.entries), true);
+  assert.equal(Object.isFrozen(plan.entries[0]?.currentRect), true);
+  assert.equal(Object.isFrozen(plan.entries[0]?.targetRect), true);
+  assert.equal("element" in plan.entries[0]!, false);
+});
+
+test("unsupported style plan compiles only exact checkpoint settlement", () => {
+  const plan = compileKpNativeKatexTypographyStylePlan({
+    telemetry: alignmentTelemetry({
+      pairs: [{
+        id: "pair.incompatible",
+        materialRect: { left: 10, top: 20, width: 12, height: 24 },
+        nativeRect: { left: 14, top: 20, width: 5, height: 24 },
+        materialStyle: "font-size:16px|color:black",
+        nativeStyle: "font-size:16px|color:red"
+      }]
+    }),
+    correlations: [{
+      kind: "native-katex-handoff-correlation",
+      lifecycle: "renderer-session",
+      id: "pair.incompatible",
+      materialOwnerId: "owner.incompatible",
+      trackId: "track.incompatible",
+      componentId: "component.incompatible",
+      atomLifecycle: "unsupported",
+      visualAtomId: "paint.pair.incompatible",
+      targetAtomId: "paint.pair.incompatible",
+      semanticEntityId: "entity.incompatible",
+      disposition: "target-bound"
+    }],
+    tolerancePx: 0.1,
+    maximumTranslationPx: 2,
+    maximumScaleRatio: 1.1
+  });
+
+  assert.equal(plan.model, "native-checkpoint-settlement");
+  assert.deepEqual({
+    model: plan.entries[0]?.model,
+    inverseTranslateX: plan.entries[0]?.inverseTranslateX,
+    inverseTranslateY: plan.entries[0]?.inverseTranslateY,
+    inverseScaleX: plan.entries[0]?.inverseScaleX,
+    inverseScaleY: plan.entries[0]?.inverseScaleY
+  }, {
+    model: "native-checkpoint-settlement",
+    inverseTranslateX: 0,
+    inverseTranslateY: 0,
+    inverseScaleX: 1,
+    inverseScaleY: 1
+  });
+});
+
+test("style plan requires total correlation-to-target paint coverage", () => {
+  const telemetry = alignmentTelemetry({
+    pairs: [{
+      id: "pair.x",
+      materialRect: { left: 10, top: 20, width: 12, height: 24 },
+      nativeRect: { left: 10, top: 20, width: 12, height: 24 }
+    }]
+  });
+  const compile = (targetAtomId: string, id = "pair.x") =>
+    compileKpNativeKatexTypographyStylePlan({
+      telemetry,
+      correlations: [{
+        kind: "native-katex-handoff-correlation",
+        lifecycle: "renderer-session",
+        id,
+        materialOwnerId: "owner.x",
+        trackId: "track.x",
+        componentId: "component.x",
+        atomLifecycle: "persist",
+        visualAtomId: "paint.pair.x",
+        targetAtomId,
+        semanticEntityId: "entity.x",
+        disposition: "target-bound"
+      }],
+      tolerancePx: 0.1,
+      maximumTranslationPx: 2,
+      maximumScaleRatio: 1.1
+    });
+
+  assert.throws(() => compile("paint.pair.x", "pair.missing"), /cannot find/);
+  assert.throws(() => compile("paint.wrong"), /no matching target paint atom/);
+});
+
 test("common handoff alignment rejects unbounded and invalid corrections", () => {
   const telemetry = alignmentTelemetry({
     pairs: [{
@@ -720,6 +859,11 @@ test("renderer-session scene state is absent from durable animation artifacts", 
     paintAtoms: [atom()],
     presentationGroups: [{ domHandle: root }],
     sceneTracks: [{ keyframes: [] }],
+    typographyStylePlan: {
+      kind: "native-katex-typography-style-plan",
+      lifecycle: "renderer-session",
+      entries: []
+    },
     handoffTelemetry: createKpNativeKatexHandoffTelemetry({
       stage,
       progress: 0.999,
@@ -736,6 +880,7 @@ test("renderer-session scene state is absent from durable animation artifacts", 
     "paintAtoms",
     "presentationGroups",
     "sceneTracks",
+    "typographyStylePlan",
     "handoffTelemetry"
   ]) {
     assert.equal(field in asset, false);

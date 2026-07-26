@@ -204,6 +204,36 @@ export interface KpNativeKatexTypographyHandoffComparison {
   readonly candidates: readonly KpNativeKatexTypographyHandoffCandidate[];
 }
 
+export interface KpNativeKatexTypographyStylePlanEntry {
+  readonly id: string;
+  readonly materialOwnerId: string;
+  readonly componentId: string;
+  readonly atomLifecycle: KpNativeKatexAtomLifecycle;
+  readonly targetPaintAtomId: string;
+  readonly paintKind: KpNativeKatexPaintAtomObservation["paintKind"];
+  readonly model:
+    | "target-style-reverse-flip"
+    | "native-checkpoint-settlement";
+  readonly currentRect: KpStageRelativeRect;
+  readonly targetRect: KpStageRelativeRect;
+  readonly inverseTranslateX: number;
+  readonly inverseTranslateY: number;
+  readonly inverseScaleX: number;
+  readonly inverseScaleY: number;
+  readonly targetPaintFingerprint: string;
+  readonly targetStyleFingerprint: string;
+  readonly targetClipPath: string;
+}
+
+export interface KpNativeKatexTypographyStylePlan {
+  readonly kind: "native-katex-typography-style-plan";
+  readonly lifecycle: "renderer-session";
+  readonly model:
+    | "target-style-reverse-flip"
+    | "native-checkpoint-settlement";
+  readonly entries: readonly KpNativeKatexTypographyStylePlanEntry[];
+}
+
 export interface KpNativeKatexSemanticPaintRelation {
   readonly id: string;
   readonly relation: "persist" | "merge" | "split";
@@ -1145,6 +1175,85 @@ export function compareKpNativeKatexTypographyHandoffModels(input: {
   });
 }
 
+export function compileKpNativeKatexTypographyStylePlan(input: {
+  readonly telemetry: KpNativeKatexHandoffTelemetry;
+  readonly correlations: readonly KpNativeKatexHandoffCorrelation[];
+  readonly tolerancePx: number;
+  readonly maximumTranslationPx: number;
+  readonly maximumScaleRatio: number;
+}): KpNativeKatexTypographyStylePlan {
+  const comparison = compareKpNativeKatexTypographyHandoffModels(input);
+  const model = comparison.selectedModel === "target-style-reverse-flip"
+    ? comparison.selectedModel
+    : "native-checkpoint-settlement";
+  const targetBound = input.correlations.filter(
+    ({ disposition }) => disposition === "target-bound"
+  );
+  assertUniqueRelationIds(targetBound.map(({ id }) => id));
+  const correlationById = new Map(
+    targetBound.map((correlation) => [correlation.id, correlation])
+  );
+  const entries = handoffTelemetryPairs(input.telemetry).map(
+    ([material, native]) => {
+      const id = correlationId(material.id);
+      const correlation = correlationById.get(id);
+      if (correlation === undefined) {
+        throw new Error(
+          `Typography style plan cannot find scene correlation ${id}.`
+        );
+      }
+      correlationById.delete(id);
+      if (
+        correlation.targetAtomId === undefined ||
+        correlation.targetAtomId !== native.paintAtomId
+      ) {
+        throw new Error(
+          `Typography style plan ${id} has no matching target paint atom.`
+        );
+      }
+      return freezeTypographyStylePlanEntry({
+        id,
+        materialOwnerId: correlation.materialOwnerId,
+        componentId: correlation.componentId,
+        atomLifecycle: correlation.atomLifecycle,
+        targetPaintAtomId: correlation.targetAtomId,
+        paintKind: native.paintKind,
+        model,
+        currentRect: material.rect,
+        targetRect: native.rect,
+        inverseTranslateX: model === "native-checkpoint-settlement"
+          ? 0
+          : material.rect.left - native.rect.left,
+        inverseTranslateY: model === "native-checkpoint-settlement"
+          ? 0
+          : material.baselineY === null || native.baselineY === null
+            ? material.rect.top - native.rect.top
+            : material.baselineY - native.baselineY,
+        inverseScaleX: model === "native-checkpoint-settlement"
+          ? 1
+          : safeScale(material.rect.width, native.rect.width),
+        inverseScaleY: model === "native-checkpoint-settlement"
+          ? 1
+          : safeScale(material.rect.height, native.rect.height),
+        targetPaintFingerprint: native.paintFingerprint,
+        targetStyleFingerprint: native.styleFingerprint,
+        targetClipPath: native.clipPath
+      });
+    }
+  );
+  if (correlationById.size > 0) {
+    throw new Error(
+      "Typography style plan has target-bound correlations without telemetry."
+    );
+  }
+  return Object.freeze({
+    kind: "native-katex-typography-style-plan",
+    lifecycle: "renderer-session",
+    model,
+    entries: Object.freeze(entries)
+  });
+}
+
 export function traceKpNativeKatexHandoffOwnership(input: {
   readonly stage: HTMLElement;
   readonly playback: KpNativeKatexScenePlayback;
@@ -1946,6 +2055,16 @@ function handoffCandidate(input: {
     ...input,
     nativeMutationCount: 0,
     reasons: Object.freeze([...input.reasons])
+  });
+}
+
+function freezeTypographyStylePlanEntry(
+  entry: KpNativeKatexTypographyStylePlanEntry
+): KpNativeKatexTypographyStylePlanEntry {
+  return Object.freeze({
+    ...entry,
+    currentRect: Object.freeze({ ...entry.currentRect }),
+    targetRect: Object.freeze({ ...entry.targetRect })
   });
 }
 

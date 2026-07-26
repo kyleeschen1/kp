@@ -93,6 +93,13 @@
       "scope": "slice-06 candidate model comparison",
       "checkedAt": "2026-07-26T00:02:36.021Z",
       "notes": "Forty-five focused tests, five convergence ratchets, all TypeScript projects, and 46 visual captures pass. Fourteen dense frames select target-style reverse FLIP with continuous law status. Maximum recorded pre-handoff residual is 1.627314 pixels wide and 1.150895 pixels phone. The 5000-evaluation pure microcheck completes in about 180 milliseconds against a two-second ceiling."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:canonical-equation-renderer; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-07 selected style plan",
+      "checkedAt": "2026-07-26T00:06:36.594Z",
+      "notes": "Forty-eight focused tests, five convergence ratchets, and all TypeScript projects pass. The plan has total correlation-to-target coverage, frozen nested geometry, exact inverse metrics, identity-only checkpoint fallback, no element references, and explicit durable-artifact exclusion."
     }
   ],
   "allowedWork": [
@@ -170,7 +177,8 @@
     {
       "id": "slice-07",
       "title": "selected-style-plan",
-      "status": "planned"
+      "summary": "Compiled target-style reverse FLIP into a frozen renderer-session style plan linked only to measured endpoint paint and existing scene correlations. Exact inverse geometry is stored for eligible entries; unsupported scenes receive identity transforms and native-checkpoint settlement. Total coverage, immutability, target-paint identity, and durable serialization exclusion pass 48 focused tests, ratchets, and typecheck.",
+      "status": "complete"
     },
     {
       "id": "slice-08",
