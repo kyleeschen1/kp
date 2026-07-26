@@ -1,11 +1,11 @@
 # Semantic Runtime Thread
 
 Status: stable-supporting
-Last Updated: 2026-07-24
-Current Next Action: Preserve the semantic runtime while the bounded
-glyph-reconciliation experiment tests whether a simpler common presentation
-path can replace operation-specific scheduling. Primary product work remains in
-`threads/cross-domain-tutorial-platform.md`.
+Last Updated: 2026-07-26
+Current Next Action: Preserve the released canonical construction and native
+KaTeX session while the active product thread reviews one bounded
+radical-succession reader exemplar. No global equation-family migration is
+authorized.
 
 ## Goal
 
@@ -196,12 +196,12 @@ semantic or timing system.
 Human review of the quadratic pressure exemplar supersedes the assumption that
 one fixed `orient/reflow/act/settle/release` order is universal. Anticipatory
 movement remains useful, but actual ordering must come from bounded measured
-clearance dependencies. The accepted experiment keeps canonical operations and
-semantic lineage authoritative, uses Manim-style glyph reconciliation only
-inside that lineage, falls back at ambiguity, and treats measured schedules as
-ephemeral backend plans. It must reduce existing scheduling policy or stop
-custom-planner investment; it may not add another operation taxonomy. See
-`../decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md`.
+clearance dependencies. The completed canonical construction and fraction
+migration keep operations and semantic lineage authoritative, reconcile native
+paint only inside that lineage, settle explicitly at ambiguity, and treat
+measured schedules as ephemeral backend plans. The accepted path reduced the
+implementation fork without adding another operation taxonomy. See
+`../reviews/2026-07-26-canonical-animation-construction-governed-round-trip-closeout.md`.
 
 The accepted grill-me decisions additionally separate immutable semantic
 choreography from configurable, versioned gestalt styles. New generated work

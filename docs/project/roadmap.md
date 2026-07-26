@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-25
+Last Updated: 2026-07-26
 Status: active
 Active Thread: `threads/cross-domain-tutorial-platform.md`
 Supporting Thread: `threads/semantic-runtime.md`
@@ -78,13 +78,14 @@ rollout.
 
 ## Active Focus
 
-**Close the canonical equation renderer convergence, then migrate one fraction
-reader exemplar.** The canonical renderer now owns the approved solve-x gold
-transition; the older material layer is compatibility-only for non-migrated
-transitions and never paints alongside it. Release verification and durable
-closeout are the current action. The next proposed product loop should migrate
-one real fraction split/merge card through the same canonical session and stop
-for visual review before any family generalization.
+**Canonical construction and the fraction reader migration are complete.** The
+canonical renderer now owns the approved solve-x and fraction split/merge
+transitions; the older material layer is compatibility-only for non-migrated
+transitions and never paints alongside them. Governed fraction, exponent,
+radical, and compound fixtures share one verified construction and
+renderer-session path. The next recommended product proposal is one bounded
+radical-succession reader exemplar, stopping for visual review before any
+radical-family generalization.
 
 The migration remains complexity-negative replacement work. Semantic traces,
 lineage, clocks, native accessibility, authoring guidance, and accepted legacy
@@ -346,12 +347,12 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Complete the canonical equation renderer release and closeout gates.
-2. Propose one reader fraction split/merge migration using the canonical
-   session, generic lineage multiplicity, and no-fade law; stop at its visual
-   exemplar checkpoint before any broader fraction rollout.
-3. After that approval, promote radical/exponent succession through the same
-   session without adding notation-specific scheduling categories.
+1. Preserve the completed canonical construction guide, fraction reader
+   migration, governed cohort, live review gallery, and fixed release gates.
+2. Propose one radical-succession reader exemplar through the same canonical
+   session; stop at its visual checkpoint before broader radical promotion.
+3. Follow with one unit-exponent absorption exemplar only after that checkpoint,
+   without adding notation-specific scheduling categories.
 4. Replace distribution string templates with stable expression subtrees,
    semantic role binding, verified rewrites, and typed normal-form intent.
 5. Pressure-test those contracts through opaque fraction fan-out, numerator

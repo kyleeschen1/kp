@@ -2,7 +2,7 @@
   "id": "next-action.kp.canonical-animation-construction-governed-round-trip-v0",
   "kind": "next-action",
   "title": "Canonical-animation-construction-and-governed-round-trip",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "sourceRefs": [
     {

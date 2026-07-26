@@ -1,10 +1,9 @@
 # Cross-domain Tutorial Platform Thread
 
 Status: active
-Last Updated: 2026-07-25
-Current Next Action: Complete canonical equation renderer release closeout,
-then propose one real reader fraction split/merge exemplar and stop at its
-visual checkpoint before broader promotion.
+Last Updated: 2026-07-26
+Current Next Action: Review a bounded radical-succession reader-exemplar
+proposal; no successor implementation queue is active.
 
 ## Goal
 
@@ -41,14 +40,16 @@ The quadratic operation-presentation checkpoint revealed that small
 operation-specific motion rules do not compose cleanly in crowded algebra.
 The bounded response has now converged on one lineage-constrained native-KaTeX
 renderer session. It is the exclusive default paint path for the approved
-solve-x gold transition, and generic merge, split, radical succession, seek,
-rewind, responsive, accessibility, export, and governed-authoring proofs pass.
-The older reader material path is compatibility-only for non-migrated
-transitions, not a peer implementation on the same frame. The current
-quadratic remains diagnostic evidence and is not approved for publication.
+solve-x gold and fraction split/merge transitions. Governed fraction,
+unit-exponent, radical succession, compound composition, seek, rewind,
+responsive, accessibility, export, and LLM-authoring proofs pass through one
+canonical construction path. The older reader material path is
+compatibility-only for non-migrated transitions, not a peer implementation on
+the same frame. The current quadratic remains diagnostic evidence and is not
+approved for publication.
 The decision and reconciliation are recorded in
 `decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md` and
-`reviews/2026-07-25-canonical-equation-renderer-retirement-reconciliation.md`.
+`reviews/2026-07-26-canonical-animation-construction-governed-round-trip-closeout.md`.
 
 FTC remains a valuable reviewable artifact, but its human review and the BFS,
 economics, programming, and physics breadth sequence are parked until the

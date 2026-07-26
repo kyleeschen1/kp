@@ -2,7 +2,8 @@
   "id": "run-contract.kp.canonical-animation-construction-governed-round-trip-v1",
   "kind": "run-contract",
   "title": "Canonical animation construction and governed round trip",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -256,6 +257,13 @@
       "scope": "slice-29 performance production workspace and diff release gates",
       "checkedAt": "2026-07-26T15:40:28.249Z",
       "notes": "All frozen construction, projection, review closure, glyph compositor, and eight reader-route ceilings pass unchanged; production closure, 788-node 12,665-event workspace validation, and diff hygiene pass with zero canonical review leakage into ordinary readers."
+    },
+    {
+      "command": "npm test; npm run test:canonical-animation-construction; npm run build; npm run check:canonical-animation-budgets; npm run review:logs -- audit; npm run review:logs -- query --unread codex.main --limit 20; theseus workspace validate; git diff --check",
+      "status": "passed",
+      "scope": "slice-30 closeout, project-memory reconciliation, and review-inbox audit",
+      "checkedAt": "2026-07-26T15:52:18.700Z",
+      "notes": "All 2501 repository tests and 60 canonical-construction checks pass; production typecheck/build and fixed construction, sampling, projection, review-entry, closure, union, and reader-leakage budgets pass. Review audit remained byte-stable with 16 current notes (15 new, 1 verified), and no status or cursor mutation. The construction guide, compatibility ledger, governed round-trip closeout, gallery references, and radical-succession recommendation are durable; no successor queue or run contract was created."
     }
   ],
   "allowedWork": [
@@ -490,7 +498,8 @@
     {
       "id": "slice-30",
       "title": "closeout-next-step-decision",
-      "status": "planned"
+      "summary": "Closed the governed canonical animation construction round trip. The construction guide, authority map, compatibility ledger, gallery entrypoints, output-parity contract, LLM boundary, project-memory reconciliation, and release evidence are durable. Review inbox inspection was read-only. The next recommendation is one radical-succession reader exemplar, but no successor action, queue, plan, or run contract was created.",
+      "status": "complete"
     }
   ]
 }
