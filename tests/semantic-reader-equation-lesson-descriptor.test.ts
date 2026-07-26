@@ -25,7 +25,7 @@ type InferredVariants = Assert<Equal<
 >>;
 const inferredVariants: InferredVariants = true;
 
-test("equation lesson descriptors retain literal variants and runtime coverage", () => {
+test("equation lesson descriptors retain literal variants and runtime coverage", async () => {
   assert.equal(inferredVariants, true);
   assert.deepEqual(kpReaderEquationLessonVariants, [
     "streamlined",
@@ -38,17 +38,17 @@ test("equation lesson descriptors retain literal variants and runtime coverage",
 
   const standard = resolveKpReaderEquationPresentationProfile("standard");
   for (const variant of kpReaderEquationLessonVariants) {
-    const descriptor = resolveKpReaderEquationLessonDescriptor(variant);
+    const descriptor = await resolveKpReaderEquationLessonDescriptor(variant);
     assert.equal(descriptor.id, variant);
     assert.equal(descriptor.createAnimation(standard).kind, "animation-asset");
   }
 });
 
-test("descriptor capabilities preserve lesson-specific runtime behavior", () => {
+test("descriptor capabilities preserve lesson-specific runtime behavior", async () => {
   const standard = resolveKpReaderEquationPresentationProfile("standard");
   const fluent = resolveKpReaderEquationPresentationProfile("fluent");
-  const fractional = resolveKpReaderEquationLessonDescriptor("fractional-linear");
-  const transfer = resolveKpReaderEquationLessonDescriptor("fractional-transfer");
+  const fractional = await resolveKpReaderEquationLessonDescriptor("fractional-linear");
+  const transfer = await resolveKpReaderEquationLessonDescriptor("fractional-transfer");
 
   assert.equal(fractional.compactTranscriptAvailable, true);
   assert.equal(typeof fractional.bindStructuralAnchors, "function");
@@ -60,7 +60,7 @@ test("descriptor capabilities preserve lesson-specific runtime behavior", () => 
   assert.equal(transfer.stageKicker?.(fluent), "Follow the certified shortcut");
 });
 
-test("descriptor definition and resolution reject ambiguous variants", () => {
+test("descriptor definition and resolution reject ambiguous variants", async () => {
   assert.throws(
     () => defineKpReaderEquationLessonDescriptors({
       example: {
@@ -73,8 +73,8 @@ test("descriptor definition and resolution reject ambiguous variants", () => {
     }),
     /declared mismatched id different/
   );
-  assert.throws(
-    () => resolveKpReaderEquationLessonDescriptor("not-a-lesson"),
+  await assert.rejects(
+    resolveKpReaderEquationLessonDescriptor("not-a-lesson"),
     /Unknown reader equation lesson variant not-a-lesson/
   );
 });

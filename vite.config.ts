@@ -10,6 +10,9 @@ import {
   kpReaderRouteHtmlPath
 } from "./src/reader/compiler/reader-route-descriptor.ts";
 import { kpReaderRouteManifest } from "./src/reader/compiler/reader-route-manifest.ts";
+import {
+  compactKpCompiledReaderHtml
+} from "./src/reader/compiler/compiled-reader-html.ts";
 
 const apiTarget = process.env["API_TARGET"] ?? "http://127.0.0.1:8001";
 const projectRoot = fileURLToPath(new URL(".", import.meta.url));
@@ -27,18 +30,31 @@ export default defineConfig({
   define: {
     __KP_DEV_REVIEW_BUILD__: JSON.stringify(reviewBuildIdentity)
   },
-  plugins: [{
-    name: "kp-semantic-reader-route",
-    transformIndexHtml: {
-      order: "pre",
-      handler(html, context) {
-        const route = readerBuildRouteByFilename.get(context.filename);
-        return route === undefined
-          ? html
-          : route.descriptor.compile(route.markdown).html;
+  plugins: [
+    {
+      name: "kp-semantic-reader-route",
+      transformIndexHtml: {
+        order: "pre",
+        handler(html, context) {
+          const route = readerBuildRouteByFilename.get(context.filename);
+          return route === undefined
+            ? html
+            : route.descriptor.compile(route.markdown).html;
+        }
+      }
+    },
+    {
+      name: "kp-reader-html-compaction",
+      transformIndexHtml: {
+        order: "post",
+        handler(html, context) {
+          return readerBuildRouteByFilename.has(context.filename)
+            ? compactKpCompiledReaderHtml(html)
+            : html;
+        }
       }
     }
-  }],
+  ],
   build: {
     manifest: true,
     rollupOptions: {

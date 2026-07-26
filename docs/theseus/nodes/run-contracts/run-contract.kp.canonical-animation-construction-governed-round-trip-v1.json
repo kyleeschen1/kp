@@ -285,8 +285,10 @@
     },
     {
       "id": "slice-16",
-      "title": "governed-construction-request",
-      "status": "planned"
+      "title": "budget-recovery-and-governed-construction-request",
+      "summary": "First recover the frozen slice-15 route budgets as a separate commit without changing animation semantics or raising baselines; after that gate passes, execute the original governed-construction-request target and complete slice 16.",
+      "status": "in-progress",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-17",

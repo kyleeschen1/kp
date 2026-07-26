@@ -108,7 +108,7 @@ const readerCanonicalEquationSessionModule = usesCanonicalEquationRenderer
 const readerCanonicalEquationSessionAdapter = usesCanonicalEquationRenderer
   ? await loadKpReaderEquationSceneCompositorAdapter()
   : undefined;
-const lessonDescriptor = resolveKpReaderEquationLessonDescriptor(lessonVariant);
+const lessonDescriptor = await resolveKpReaderEquationLessonDescriptor(lessonVariant);
 const compiledEquationPresentation = defineKpReaderEquationPresentationCapability({
   defaultProfileId: resolveKpReaderEquationPresentationProfile(
     requiredData(document.body, "kpReaderEquationProfileDefault")

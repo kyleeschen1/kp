@@ -1,18 +1,4 @@
 import type { KpAnimationAsset } from "../../animation/asset.ts";
-import { createDivideBothSidesEquationAnimationAsset } from "../../animation/divide-both-sides-equation-adapter.ts";
-import { createFractionalLinearEquationAnimationAsset } from "../../animation/fractional-linear-equation-adapter.ts";
-import {
-  createFractionalLinearTransferBalancedAnimationAsset,
-  createFractionalLinearTransferFluentAnimationAsset
-} from "../../animation/fractional-linear-transfer-comparison-adapter.ts";
-import {
-  createLinearSolveAnimationAsset,
-  createLinearSolveTeacherZeroAnimationAsset
-} from "../../animation/linear-solve-adapter.ts";
-import { createNumeratorSplitMergeEquationAnimationAsset } from "../../animation/numerator-split-merge-equation-adapter.ts";
-import { bindKpDivideBothSidesStructuralAnchors } from "../../rendering/divide-both-sides-selector-annotated-latex.ts";
-import { bindKpFractionalLinearStructuralAnchors } from "../../rendering/fractional-linear-selector-annotated-latex.ts";
-import { bindKpNumeratorSplitMergeStructuralAnchors } from "../../rendering/numerator-split-merge-selector-annotated-latex.ts";
 import type { KpSemanticAssetObject } from "../../semantic/asset.ts";
 import type { KpReaderEquationPresentationProfile } from "../runtime/public-api.ts";
 
@@ -48,65 +34,43 @@ export function defineKpReaderEquationLessonDescriptors<
   return Object.freeze({ ...descriptors });
 }
 
-export const kpReaderEquationLessonDescriptors =
-  defineKpReaderEquationLessonDescriptors({
-    streamlined: {
-      id: "streamlined",
-      createAnimation: () => createLinearSolveAnimationAsset(),
-      compactTranscriptAvailable: false
-    },
-    "teacher-zero": {
-      id: "teacher-zero",
-      createAnimation: () => createLinearSolveTeacherZeroAnimationAsset(),
-      compactTranscriptAvailable: false
-    },
-    "fractional-linear": {
-      id: "fractional-linear",
-      createAnimation: () => createFractionalLinearEquationAnimationAsset(),
-      bindStructuralAnchors: bindKpFractionalLinearStructuralAnchors,
-      compactTranscriptAvailable: true
-    },
-    "fractional-transfer": {
-      id: "fractional-transfer",
-      createAnimation: (profile) => profile.derivation === "certified-transfer-v1"
-        ? createFractionalLinearTransferFluentAnimationAsset()
-        : createFractionalLinearTransferBalancedAnimationAsset(),
-      bindStructuralAnchors: bindKpFractionalLinearStructuralAnchors,
-      stageKicker: (profile) => profile.derivation === "certified-transfer-v1"
-        ? "Follow the certified shortcut"
-        : undefined,
-      compactTranscriptAvailable: false
-    },
-    "divide-both-sides": {
-      id: "divide-both-sides",
-      createAnimation: () => createDivideBothSidesEquationAnimationAsset(),
-      bindStructuralAnchors: bindKpDivideBothSidesStructuralAnchors,
-      compactTranscriptAvailable: false
-    },
-    "numerator-split-merge": {
-      id: "numerator-split-merge",
-      createAnimation: () => createNumeratorSplitMergeEquationAnimationAsset(),
-      bindStructuralAnchors: bindKpNumeratorSplitMergeStructuralAnchors,
-      compactTranscriptAvailable: false
-    }
-  });
+const kpReaderEquationLessonDescriptorLoaders = {
+  streamlined: () => import("./equation-lesson-descriptors/linear.ts")
+    .then(({ streamlinedDescriptor }) => streamlinedDescriptor),
+  "teacher-zero": () => import("./equation-lesson-descriptors/linear.ts")
+    .then(({ teacherZeroDescriptor }) => teacherZeroDescriptor),
+  "fractional-linear": () =>
+    import("./equation-lesson-descriptors/fractional-linear.ts")
+      .then(({ fractionalLinearDescriptor }) => fractionalLinearDescriptor),
+  "fractional-transfer": () =>
+    import("./equation-lesson-descriptors/fractional-transfer.ts")
+      .then(({ fractionalTransferDescriptor }) => fractionalTransferDescriptor),
+  "divide-both-sides": () =>
+    import("./equation-lesson-descriptors/divide-both-sides.ts")
+      .then(({ divideBothSidesDescriptor }) => divideBothSidesDescriptor),
+  "numerator-split-merge": () =>
+    import("./equation-lesson-descriptors/numerator-split-merge.ts")
+      .then(({ numeratorSplitMergeDescriptor }) => numeratorSplitMergeDescriptor)
+} as const;
 
 export type KpReaderEquationLessonVariant =
-  keyof typeof kpReaderEquationLessonDescriptors;
+  keyof typeof kpReaderEquationLessonDescriptorLoaders;
 
 export const kpReaderEquationLessonVariants = Object.freeze(
-  Object.keys(kpReaderEquationLessonDescriptors) as KpReaderEquationLessonVariant[]
+  Object.keys(
+    kpReaderEquationLessonDescriptorLoaders
+  ) as KpReaderEquationLessonVariant[]
 );
 
-export function resolveKpReaderEquationLessonDescriptor(
+export async function resolveKpReaderEquationLessonDescriptor(
   variant: string
-): KpReaderEquationLessonDescriptor {
-  if (!Object.hasOwn(kpReaderEquationLessonDescriptors, variant)) {
+): Promise<KpReaderEquationLessonDescriptor> {
+  if (!Object.hasOwn(kpReaderEquationLessonDescriptorLoaders, variant)) {
     throw new Error(`Unknown reader equation lesson variant ${variant}.`);
   }
-  return kpReaderEquationLessonDescriptors[
+  return kpReaderEquationLessonDescriptorLoaders[
     variant as KpReaderEquationLessonVariant
-  ];
+  ]();
 }
 
 export function bindKpReaderEquationLessonStructuralAnchors(input: {

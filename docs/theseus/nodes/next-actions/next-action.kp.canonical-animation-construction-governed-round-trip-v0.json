@@ -10,8 +10,45 @@
       "path": "docs/project/reviews/2026-07-25-canonical-animation-construction-governed-round-trip-long-loop-proposal.md"
     }
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-16 budget recovery typecheck and production build",
+      "checkedAt": "2026-07-26T13:08:10.311Z",
+      "notes": "Route-selected dynamic loaders and post-transform HTML compaction build successfully without baseline changes."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "slice-16 frozen reader budgets",
+      "checkedAt": "2026-07-26T13:08:11.223Z",
+      "notes": "All eight reader routes pass the existing five-percent growth limits; no baseline was raised."
+    },
+    {
+      "command": "npm run check:reader-production and npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-16 production closure and layer boundaries",
+      "checkedAt": "2026-07-26T13:08:12.042Z",
+      "notes": "Eight manifest routes retain production closure and all architecture gates pass."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "slice-16 shared reader browser conformance",
+      "checkedAt": "2026-07-26T13:08:12.852Z",
+      "notes": "Nine Chromium checks cover every manifest route plus responsive solve-x behavior."
+    },
+    {
+      "command": "Playwright focused fraction distribution and quadratic reader suites",
+      "status": "passed",
+      "scope": "slice-16 route-owned runtime browser behavior",
+      "checkedAt": "2026-07-26T13:08:13.800Z",
+      "notes": "Twenty-nine Chromium checks pass across exact fraction ownership and rewind, distribution choreography, and quadratic branching."
+    }
+  ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-15 complete. Fraction canonical ownership and browser checkpoint pass; slices 16-30 await a bounded recovery of frozen reader budgets."
+    "summary": "Recovered all frozen reader budgets with route-selected runtime loading and semantics-preserving compiled HTML compaction; production closure, architecture, hydration, seeking, and rewind remain verified. Continuing slice 16 with the governed construction request."
   }
 }
