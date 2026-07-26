@@ -68,6 +68,9 @@ export {
 export {
   compileKpRadicalSuccessionEquationLessonModel
 } from "./radical-succession-equation-lesson-model.ts";
+export {
+  compileKpRadicalSuccessionEquationLesson
+} from "./radical-succession-equation-lesson.ts";
 
 export {
   kpNumeratorSplitMergePreservationManifest

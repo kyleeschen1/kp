@@ -145,11 +145,39 @@
       "scope": "slice 6 architecture boundaries",
       "checkedAt": "2026-07-26T17:12:26.328Z",
       "notes": "All architecture gates passed."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 7 native endpoint compilation",
+      "checkedAt": "2026-07-26T17:15:43.234Z",
+      "notes": "19 tests passed; exact source and target LaTeX, native KaTeX fraction/radical structure, three static MathML checkpoints, and hydration authority are present."
+    },
+    {
+      "command": "node --test reader endpoint regressions",
+      "status": "passed",
+      "scope": "slice 7 existing reader compiler regression",
+      "checkedAt": "2026-07-26T17:15:44.167Z",
+      "notes": "Existing numerator split/merge compiler and semantic-authority tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 7 static typing",
+      "checkedAt": "2026-07-26T17:15:44.973Z",
+      "notes": "All TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 7 architecture boundaries",
+      "checkedAt": "2026-07-26T17:15:45.789Z",
+      "notes": "All architecture gates passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 6 added the radical succession prose and lesson model around the existing governed animation, with exact power/rewrite/radical checkpoints and all seven semantic focus selectors; no route or runtime was added."
+    "summary": "Slice 7 compiled the radical lesson into exact native KaTeX power and square-root endpoints plus searchable static MathML and hydration data, still without route activation."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

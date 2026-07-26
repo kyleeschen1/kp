@@ -141,7 +141,8 @@
     {
       "id": "slice-07",
       "title": "compile-native-endpoints",
-      "status": "planned",
+      "summary": "Compiled exact native source/target KaTeX endpoint DOM and preserved static MathML/hydration forms without product routing or endpoint style mutation.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {
