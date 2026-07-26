@@ -151,6 +151,13 @@
       "scope": "slice-16 governed construction request",
       "checkedAt": "2026-07-26T13:14:42.719Z",
       "notes": "Twenty-nine focused construction tests, all TypeScript projects, and architecture gates pass; the provider request cannot encode visual recipes."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-17 compiler-owned mathematical verification",
+      "checkedAt": "2026-07-26T13:22:27.915Z",
+      "notes": "Thirty-three focused tests prove exact source and target refs, definitions, strict laws, roles, lineage, stale-ref rejection, and no provider mathematical or presentation authority; all type and architecture gates pass."
     }
   ],
   "allowedWork": [
@@ -307,7 +314,8 @@
     {
       "id": "slice-17",
       "title": "compiler-owned-mathematical-verification",
-      "status": "planned"
+      "summary": "Added compiler-owned governed construction verification. Exact source identity, revision, pack pins, object and operation closure, definitions, strict laws, source/target expression truth, role bindings, and lineage all resolve from the accepted animation authority before the immutable canonical construction is created.",
+      "status": "complete"
     },
     {
       "id": "slice-18",

@@ -84,3 +84,13 @@ export {
   type KpGovernedCanonicalConstructionRequest,
   type KpGovernedSemanticAuthoringSchemaIssue
 } from "./governed-semantic-request.ts";
+
+export {
+  compileKpGovernedCanonicalConstruction,
+  KpGovernedConstructionVerificationError,
+  validateKpGovernedCanonicalConstructionCompilation,
+  type KpGovernedConstructionOperationEvidence,
+  type KpGovernedConstructionSourceAuthority,
+  type KpGovernedConstructionVerificationIssue,
+  type KpVerifiedGovernedCanonicalConstruction
+} from "./governed-canonical-construction-compiler.ts";

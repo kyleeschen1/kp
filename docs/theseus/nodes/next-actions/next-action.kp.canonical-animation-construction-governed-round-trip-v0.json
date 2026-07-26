@@ -63,6 +63,6 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-16 complete. Frozen reader budgets are recovered and the governed v2 construction request now carries only approved semantic references and pedagogical intent; compiler-owned mathematical verification is next."
+    "summary": "Slices 1-17 complete. Governed requests now compile only after compiler-owned mathematical verification; typed deterministic repair is next."
   }
 }
