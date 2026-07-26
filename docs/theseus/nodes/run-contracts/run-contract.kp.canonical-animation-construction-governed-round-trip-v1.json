@@ -95,6 +95,13 @@
       "scope": "slice-10 native-size-and-font-readiness",
       "checkedAt": "2026-07-26T06:22:42.966Z",
       "notes": "Nine renderer/readiness ratchets, one Chromium font invalidation test, and two lifecycle/endpoint checks pass; source ceiling and no-notation-exception gate remain green."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer; responsive layout tests; focused fraction Chromium behavior",
+      "status": "passed",
+      "scope": "slice-11 responsive-composition",
+      "checkedAt": "2026-07-26T06:25:09.997Z",
+      "notes": "11 canonical renderer ratchets, seven responsive/layout tests, and two fraction wide/phone Chromium behaviors pass. Full screenshot was visually identical with a one-pixel outer-card width environment delta; dev-review API was offline, so no baseline was changed."
     }
   ],
   "allowedWork": [
@@ -209,7 +216,9 @@
     {
       "id": "slice-11",
       "title": "responsive-composition",
-      "status": "planned"
+      "summary": "Certified one shared native hierarchy and sequence fit for wide and phone fraction composition; the canonical renderer remains viewport- and notation-neutral.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-12",
