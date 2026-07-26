@@ -1458,6 +1458,12 @@ export function createKpNativeKatexRendererSession(input: {
   if (new Set(trackIds).size !== trackIds.length) {
     throw new Error("Renderer session requires unique track IDs.");
   }
+  if (input.tracks.some((track) =>
+    ["persist", "split", "merge"].includes(track.lifecycle) &&
+    (track.startOpacity !== 1 || track.endOpacity !== 1)
+  )) {
+    throw new Error("Lineage-backed scene tracks must remain fully opaque.");
+  }
   const sourceById = new Map(input.reconciliation.source.atoms.map((atom) => [
     atom.id,
     atom

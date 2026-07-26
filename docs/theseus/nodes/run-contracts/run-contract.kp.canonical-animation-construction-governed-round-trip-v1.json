@@ -81,6 +81,13 @@
       "scope": "slice-08 total-multiplicity-binding",
       "checkedAt": "2026-07-26T06:16:22.723Z",
       "notes": "19 focused tests, all TypeScript projects, and architecture gates pass; totality, reverse multiplicity, and correspondence-order independence are certified."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer; npm run typecheck; npm run test:browser:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice-09 no-fade-structural-realization",
+      "checkedAt": "2026-07-26T06:20:43.621Z",
+      "notes": "Seven canonical renderer checks, 101 dense opacity samples, all TypeScript projects, and 44 Chromium compositor tests pass; frozen source ceiling retained."
     }
   ],
   "allowedWork": [
@@ -181,7 +188,9 @@
     {
       "id": "slice-09",
       "title": "no-fade-structural-realization",
-      "status": "planned"
+      "summary": "Made no-fade lineage a renderer-session invariant: persist, split, and merge tracks must remain opacity one while their generic geometry interpolates.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-10",
