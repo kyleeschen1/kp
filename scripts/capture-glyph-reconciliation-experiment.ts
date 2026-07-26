@@ -6,6 +6,12 @@ import { chromium } from "playwright";
 import {
   kpFractionEndpointCheckpoints
 } from "./glyph-reconciliation-endpoint-checkpoints.ts";
+import {
+  compareKpNativeKatexTypographyHandoffModels
+} from "../src/rendering/native-katex-scene-compositor.ts";
+import type {
+  KpNativeKatexHandoffTelemetry
+} from "../src/rendering/native-katex-rendered-scene.ts";
 
 const baseUrl = process.env["KP_VISUAL_BASE_URL"] ?? "http://127.0.0.1:8000";
 const outputRoot = path.resolve("tmp/codex/glyph-reconciliation-experiment");
@@ -285,6 +291,28 @@ try {
           `Incomplete correlated endpoint telemetry at ${checkpoint.id}.`
         );
       }
+      const handoffComparison = compareKpNativeKatexTypographyHandoffModels({
+        telemetry: {
+          kind: "native-katex-handoff-telemetry",
+          lifecycle: "renderer-session",
+          stage: {} as HTMLElement,
+          progress: checkpoint.fractionProgressPermille / 1_000,
+          observations: snapshot.correlatedTelemetry as unknown as
+            KpNativeKatexHandoffTelemetry["observations"],
+          fontRevision: 1,
+          viewportKey: profile.id
+        },
+        tolerancePx: 0.1,
+        maximumTranslationPx: 2,
+        maximumScaleRatio: 1.1
+      });
+      if (handoffComparison.selectedModel !== "target-style-reverse-flip") {
+        throw new Error(
+          `Dense endpoint ${checkpoint.id} requires ${
+            handoffComparison.selectedModel
+          }: ${JSON.stringify(handoffComparison.law.unsupportedIds)}.`
+        );
+      }
       const visualOwner = await review.getAttribute(
         "data-kp-fraction-visual-owner"
       );
@@ -328,6 +356,7 @@ try {
         ...checkpoint,
         file: path.relative(process.cwd(), file),
         visualOwner,
+        handoffComparison,
         ...snapshot
       });
       await page.close();

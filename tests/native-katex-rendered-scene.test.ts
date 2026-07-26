@@ -10,6 +10,7 @@ import {
 import {
   assessKpNativeKatexTypographyHandoff,
   calculateKpNativeKatexCommonHandoffAlignment,
+  compareKpNativeKatexTypographyHandoffModels,
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexSceneTracks,
   correlateKpNativeKatexSceneHandoff,
@@ -441,6 +442,128 @@ test("typography handoff law rejects invalid generic bounds", () => {
       maximumScaleRatio: 0.99
     }),
     /scale ratio must be finite and at least one/
+  );
+});
+
+test("model comparison selects exact target paint over live style interpolation", () => {
+  const telemetry = alignmentTelemetry({
+    pairs: [{
+      id: "pair.transform",
+      materialRect: { left: 24, top: 20, width: 12, height: 24 },
+      nativeRect: { left: 23.96, top: 20, width: 11.98, height: 23.96 },
+      materialBaselineY: 40,
+      nativeBaselineY: 41.47,
+      materialStyle:
+        "font-family:KaTeX_Main|font-size:65.824px|line-height:78.9888px|color:black",
+      nativeStyle:
+        "font-family:KaTeX_Main|font-size:46.0768px|line-height:55.2922px|color:black"
+    }]
+  });
+  const comparison = compareKpNativeKatexTypographyHandoffModels({
+    telemetry,
+    tolerancePx: 0.1,
+    maximumTranslationPx: 2,
+    maximumScaleRatio: 1.1
+  });
+
+  assert.equal(comparison.selectedModel, "target-style-reverse-flip");
+  assert.deepEqual(comparison.candidates.map((candidate) => ({
+    id: candidate.id,
+    status: candidate.status,
+    endpointGuarantee: candidate.endpointGuarantee,
+    maximumEndpointResidualPx: candidate.maximumEndpointResidualPx,
+    requiresLiveStyleInterpolation:
+      candidate.requiresLiveStyleInterpolation,
+    nativeMutationCount: candidate.nativeMutationCount
+  })), [{
+    id: "target-style-reverse-flip",
+    status: "eligible",
+    endpointGuarantee: "exact",
+    maximumEndpointResidualPx: 0,
+    requiresLiveStyleInterpolation: false,
+    nativeMutationCount: 0
+  }, {
+    id: "dual-endpoint-interpolation",
+    status: "eligible",
+    endpointGuarantee: "bounded",
+    maximumEndpointResidualPx: 0.1,
+    requiresLiveStyleInterpolation: true,
+    nativeMutationCount: 0
+  }, {
+    id: "native-checkpoint-settlement",
+    status: "eligible",
+    endpointGuarantee: "exact",
+    maximumEndpointResidualPx: 0,
+    requiresLiveStyleInterpolation: false,
+    nativeMutationCount: 0
+  }]);
+  assert.ok(
+    Math.abs(
+      comparison.candidates[0]!.maximumPreSettlementResidualPx - 1.47
+    ) < 1e-12
+  );
+  assert.equal(Object.isFrozen(comparison.candidates), true);
+});
+
+test("model comparison selects checkpoint settlement for unsupported paint", () => {
+  const comparison = compareKpNativeKatexTypographyHandoffModels({
+    telemetry: alignmentTelemetry({
+      pairs: [{
+        id: "pair.incompatible",
+        materialRect: { left: 10, top: 20, width: 12, height: 24 },
+        nativeRect: { left: 10, top: 20, width: 12, height: 24 },
+        materialStyle: "font-size:16px|color:black",
+        nativeStyle: "font-size:16px|color:red"
+      }]
+    }),
+    tolerancePx: 0.1,
+    maximumTranslationPx: 2,
+    maximumScaleRatio: 1.1
+  });
+
+  assert.equal(comparison.selectedModel, "native-checkpoint-settlement");
+  assert.deepEqual(
+    comparison.candidates.map(({ id, status }) => ({ id, status })),
+    [{
+      id: "target-style-reverse-flip",
+      status: "ineligible"
+    }, {
+      id: "dual-endpoint-interpolation",
+      status: "ineligible"
+    }, {
+      id: "native-checkpoint-settlement",
+      status: "eligible"
+    }]
+  );
+});
+
+test("model comparison is permutation deterministic and bounded", () => {
+  const pairs = [{
+    id: "pair.b",
+    materialRect: { left: 20, top: 20, width: 12, height: 24 },
+    nativeRect: { left: 20.25, top: 19.75, width: 12, height: 24 }
+  }, {
+    id: "pair.a",
+    materialRect: { left: 10, top: 20, width: 12, height: 24 },
+    nativeRect: { left: 10.25, top: 19.75, width: 12, height: 24 }
+  }] as const;
+  const compare = (
+    orderedPairs: Parameters<typeof alignmentTelemetry>[0]["pairs"]
+  ) => compareKpNativeKatexTypographyHandoffModels({
+    telemetry: alignmentTelemetry({ pairs: orderedPairs }),
+    tolerancePx: 0.1,
+    maximumTranslationPx: 2,
+    maximumScaleRatio: 1.1
+  });
+  const forward = compare(pairs);
+  const permuted = compare([...pairs].reverse());
+  assert.deepEqual(permuted, forward);
+
+  const startedAt = performance.now();
+  for (let index = 0; index < 5_000; index += 1) compare(pairs);
+  assert.ok(
+    performance.now() - startedAt < 2_000,
+    "5,000 pure model comparisons should remain a bounded microcheck"
   );
 });
 

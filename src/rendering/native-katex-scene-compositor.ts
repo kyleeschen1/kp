@@ -180,6 +180,30 @@ export interface KpNativeKatexTypographyHandoffLaw {
   readonly unsupportedIds: readonly string[];
 }
 
+export type KpNativeKatexTypographyHandoffModelId =
+  | "target-style-reverse-flip"
+  | "dual-endpoint-interpolation"
+  | "native-checkpoint-settlement";
+
+export interface KpNativeKatexTypographyHandoffCandidate {
+  readonly id: KpNativeKatexTypographyHandoffModelId;
+  readonly status: "eligible" | "ineligible";
+  readonly endpointGuarantee: "exact" | "bounded";
+  readonly maximumEndpointResidualPx: number;
+  readonly maximumPreSettlementResidualPx: number;
+  readonly requiresLiveStyleInterpolation: boolean;
+  readonly nativeMutationCount: 0;
+  readonly reasons: readonly string[];
+}
+
+export interface KpNativeKatexTypographyHandoffComparison {
+  readonly kind: "native-katex-typography-handoff-comparison";
+  readonly lifecycle: "renderer-session";
+  readonly selectedModel: KpNativeKatexTypographyHandoffModelId;
+  readonly law: KpNativeKatexTypographyHandoffLaw;
+  readonly candidates: readonly KpNativeKatexTypographyHandoffCandidate[];
+}
+
 export interface KpNativeKatexSemanticPaintRelation {
   readonly id: string;
   readonly relation: "persist" | "merge" | "split";
@@ -1055,6 +1079,72 @@ export function evaluateKpNativeKatexTypographyHandoffLaw(input: {
   });
 }
 
+export function compareKpNativeKatexTypographyHandoffModels(input: {
+  readonly telemetry: KpNativeKatexHandoffTelemetry;
+  readonly tolerancePx: number;
+  readonly maximumTranslationPx: number;
+  readonly maximumScaleRatio: number;
+}): KpNativeKatexTypographyHandoffComparison {
+  const law = evaluateKpNativeKatexTypographyHandoffLaw(input);
+  const observedResidual = maximum(handoffTelemetryPairs(input.telemetry)
+    .flatMap(([material, native]) => [
+      Math.abs(native.rect.left - material.rect.left),
+      Math.abs(native.rect.top - material.rect.top),
+      Math.abs(native.rect.width - material.rect.width),
+      Math.abs(native.rect.height - material.rect.height),
+      material.baselineY === null || native.baselineY === null
+        ? 0
+        : Math.abs(native.baselineY - material.baselineY)
+    ]));
+  const continuous = law.status === "continuous";
+  const candidates: readonly KpNativeKatexTypographyHandoffCandidate[] = [
+    handoffCandidate({
+      id: "target-style-reverse-flip",
+      status: continuous ? "eligible" : "ineligible",
+      endpointGuarantee: "exact",
+      maximumEndpointResidualPx: continuous ? 0 : observedResidual,
+      maximumPreSettlementResidualPx: observedResidual,
+      requiresLiveStyleInterpolation: false,
+      reasons: continuous
+        ? []
+        : law.unsupportedIds.map((id) => `${id}:unsupported`)
+    }),
+    handoffCandidate({
+      id: "dual-endpoint-interpolation",
+      status: continuous ? "eligible" : "ineligible",
+      endpointGuarantee: "bounded",
+      maximumEndpointResidualPx: continuous
+        ? input.tolerancePx
+        : observedResidual,
+      maximumPreSettlementResidualPx: observedResidual,
+      requiresLiveStyleInterpolation: true,
+      reasons: continuous
+        ? ["live-style-interpolation-cannot-certify-native-paint"]
+        : law.unsupportedIds.map((id) => `${id}:unsupported`)
+    }),
+    handoffCandidate({
+      id: "native-checkpoint-settlement",
+      status: "eligible",
+      endpointGuarantee: "exact",
+      maximumEndpointResidualPx: 0,
+      maximumPreSettlementResidualPx: observedResidual,
+      requiresLiveStyleInterpolation: false,
+      reasons: continuous ? ["visible-pre-checkpoint-residual"] : []
+    })
+  ];
+  return Object.freeze({
+    kind: "native-katex-typography-handoff-comparison",
+    lifecycle: "renderer-session",
+    // Target paint plus inverse geometry preserves native typography without
+    // asking a browser to interpolate font metrics.
+    selectedModel: continuous
+      ? "target-style-reverse-flip"
+      : "native-checkpoint-settlement",
+    law,
+    candidates: Object.freeze(candidates)
+  });
+}
+
 export function traceKpNativeKatexHandoffOwnership(input: {
   readonly stage: HTMLElement;
   readonly playback: KpNativeKatexScenePlayback;
@@ -1840,6 +1930,23 @@ function safeScale(to: number, from: number): number {
 
 function symmetricScaleRatio(scale: number): number {
   return scale <= 0 ? Number.POSITIVE_INFINITY : Math.max(scale, 1 / scale);
+}
+
+function handoffCandidate(input: {
+  readonly id: KpNativeKatexTypographyHandoffModelId;
+  readonly status: KpNativeKatexTypographyHandoffCandidate["status"];
+  readonly endpointGuarantee:
+    KpNativeKatexTypographyHandoffCandidate["endpointGuarantee"];
+  readonly maximumEndpointResidualPx: number;
+  readonly maximumPreSettlementResidualPx: number;
+  readonly requiresLiveStyleInterpolation: boolean;
+  readonly reasons: readonly string[];
+}): KpNativeKatexTypographyHandoffCandidate {
+  return Object.freeze({
+    ...input,
+    nativeMutationCount: 0,
+    reasons: Object.freeze([...input.reasons])
+  });
 }
 
 function commonAlignmentResult(

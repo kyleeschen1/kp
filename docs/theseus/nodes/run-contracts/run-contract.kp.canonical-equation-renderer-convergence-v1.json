@@ -72,6 +72,27 @@
       "scope": "slice-05 generic typography handoff law",
       "checkedAt": "2026-07-25T23:56:25.086Z",
       "notes": "Forty-two focused compositor tests, five convergence ratchets, and all TypeScript projects pass. Tests cover exact-style and bounded-transform compatibility, reverse-symmetric translation and scale metrics, the recorded typography mismatch shape, invalid bounds, and explicit native-checkpoint settlement for paint, style, clip, revision, axis, translation, or scale incompatibility. No notation, character, class, viewport, or operation dispatch was introduced."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "failed",
+      "scope": "slice-06 initial floating-point assertion",
+      "checkedAt": "2026-07-26T00:02:33.316Z",
+      "notes": "The first candidate test used strict decimal equality for a computed 1.47-pixel residual and failed at 1.4699999999999989. The repair changed only the assertion to a 1e-12 numeric tolerance."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "slice-06 serialized visual telemetry type",
+      "checkedAt": "2026-07-26T00:02:34.380Z",
+      "notes": "The visual script's intentionally reduced browser return type omitted renderer-only observation fields. The repair added an explicit boundary cast to the full runtime observation type; runtime evidence was already complete and the comparison never dereferences DOM elements."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:canonical-equation-renderer; npm run typecheck; npm run visual:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "slice-06 candidate model comparison",
+      "checkedAt": "2026-07-26T00:02:36.021Z",
+      "notes": "Forty-five focused tests, five convergence ratchets, all TypeScript projects, and 46 visual captures pass. Fourteen dense frames select target-style reverse FLIP with continuous law status. Maximum recorded pre-handoff residual is 1.627314 pixels wide and 1.150895 pixels phone. The 5000-evaluation pure microcheck completes in about 180 milliseconds against a two-second ceiling."
     }
   ],
   "allowedWork": [
@@ -143,7 +164,8 @@
     {
       "id": "slice-06",
       "title": "candidate-model-comparison",
-      "status": "planned"
+      "summary": "Compared target-style reverse FLIP, bounded dual-endpoint interpolation, and exact checkpoint settlement as immutable pure candidates. All fourteen recorded dense frames pass the generic law and select reverse FLIP because it combines exact target paint with geometry-only transit and zero native mutations. Added numeric decision evidence and a deterministic 5000-evaluation microcheck; focused, type, ratchet, and visual checks pass.",
+      "status": "complete"
     },
     {
       "id": "slice-07",
