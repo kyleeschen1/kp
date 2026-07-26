@@ -53,6 +53,13 @@
       "scope": "slice-04 authority firewall",
       "checkedAt": "2026-07-26T05:58:55.206Z",
       "notes": "Thirteen construction checks, 17 governed-schema/compiler/cohort checks, all architecture gates, all TypeScript projects, and workspace validation pass. Nine forbidden authority categories reject normalized nested aliases while expression refs, role bindings, focus/cadence intent, composition, and checkpoints remain allowed."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-05 deterministic-round-trip-baseline",
+      "checkedAt": "2026-07-26T06:06:04.762Z",
+      "notes": "15 focused tests pass; recorded fraction construction and existing runtime/projection round trips are JSON-stable; type and architecture gates pass."
     }
   ],
   "allowedWork": [
@@ -125,7 +132,9 @@
     {
       "id": "slice-05",
       "title": "deterministic-round-trip-baseline",
-      "status": "planned"
+      "summary": "Compiled the recorded fraction semantic asset into one deterministic construction artifact and proved existing seek, rewind, headless, static/export projections retain identical semantic state.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-06",

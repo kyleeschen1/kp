@@ -71,3 +71,8 @@ export {
   type KpForbiddenPresentationAuthority,
   type KpPresentationAuthorityFirewallIssue
 } from "./presentation-authority-firewall.ts";
+
+export {
+  compileKpCanonicalAnimationConstruction,
+  type CompileKpCanonicalAnimationConstructionInput
+} from "./canonical-animation-construction-compiler.ts";
