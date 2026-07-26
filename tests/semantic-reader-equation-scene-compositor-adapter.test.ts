@@ -104,7 +104,7 @@ function fractionScene(
         endpoint,
         semanticEntityId,
         presentationGroupId: groupId,
-        paintKind: "fraction-rule" as const,
+        paintKind: "rule" as const,
         visualKey: "fraction-rule",
         sourceElement: endpoint === "source" ? sourceElement : targetElement,
         rect,

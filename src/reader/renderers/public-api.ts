@@ -34,10 +34,12 @@ export {
 } from "./equation-render-plan.ts";
 export {
   compileKpReaderEquationMaterialPlan,
+  validateKpReaderEquationMaterialPlanTotality,
   type KpReaderEquationAnchorPlan,
   type KpReaderEquationMaterialOwnerPlan,
   type KpReaderEquationMaterialPlan,
   type KpReaderEquationMaterialPlanDiagnostic,
+  type KpReaderEquationMaterialTotalityIssue,
   type KpReaderEquationTransitionMaterialPlan
 } from "./equation-material-plan.ts";
 export type KpReaderEquationSceneCompositorFactory =

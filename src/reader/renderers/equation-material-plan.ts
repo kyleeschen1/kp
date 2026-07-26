@@ -56,6 +56,15 @@ export interface KpReaderEquationMaterialPlanDiagnostic {
   readonly relationRecordId?: string | undefined;
 }
 
+export interface KpReaderEquationMaterialTotalityIssue {
+  readonly code:
+    | "material-totality.transition"
+    | "material-totality.owner"
+    | "material-totality.anchor";
+  readonly path: string;
+  readonly message: string;
+}
+
 export function compileKpReaderEquationMaterialPlan(
   renderPlan: KpReaderEquationRenderPlan
 ): KpReaderEquationMaterialPlan {
@@ -71,6 +80,102 @@ export function compileKpReaderEquationMaterialPlan(
     transitions,
     diagnostics
   };
+}
+
+export function validateKpReaderEquationMaterialPlanTotality(
+  renderPlan: KpReaderEquationRenderPlan,
+  materialPlan: KpReaderEquationMaterialPlan
+): readonly KpReaderEquationMaterialTotalityIssue[] {
+  const issues: KpReaderEquationMaterialTotalityIssue[] = [];
+  if (
+    materialPlan.renderPlanId !== renderPlan.id ||
+    materialPlan.direction !== renderPlan.direction
+  ) {
+    issues.push({
+      code: "material-totality.transition",
+      path: "$",
+      message: "Material totality requires its exact render-plan authority."
+    });
+    return issues;
+  }
+  const materialByTransition = new Map(
+    materialPlan.transitions.map((transition) => [
+      transition.transitionId,
+      transition
+    ])
+  );
+  for (const transition of renderPlan.transitions) {
+    const material = materialByTransition.get(transition.id);
+    if (material === undefined) {
+      issues.push({
+        code: "material-totality.transition",
+        path: `$.transitions.${transition.id}`,
+        message: `Transition ${transition.id} has no material binding.`
+      });
+      continue;
+    }
+    const anchorsById = new Map(material.anchors.map((anchor) => [
+      anchor.id,
+      anchor
+    ]));
+    const ownersByRecord = new Map<string, KpReaderEquationMaterialOwnerPlan[]>();
+    const ownerCountByAnchor = new Map<string, number>();
+    for (const owner of material.owners) {
+      const existing = ownersByRecord.get(owner.relationRecordId) ?? [];
+      ownersByRecord.set(owner.relationRecordId, [...existing, owner]);
+      for (const anchorId of [
+        ...owner.sourceAnchorIds,
+        ...owner.targetAnchorIds
+      ]) {
+        ownerCountByAnchor.set(
+          anchorId,
+          (ownerCountByAnchor.get(anchorId) ?? 0) + 1
+        );
+      }
+    }
+    for (const relation of transition.relations) {
+      const owners = ownersByRecord.get(relation.recordId) ?? [];
+      if (owners.length !== 1) {
+        issues.push({
+          code: "material-totality.owner",
+          path: `$.transitions.${transition.id}.relations.${relation.recordId}`,
+          message:
+            `Relation ${relation.recordId} requires exactly one material owner; found ${owners.length}.`
+        });
+        continue;
+      }
+      const owner = owners[0]!;
+      const sourceIds = owner.sourceAnchorIds.map(
+        (anchorId) => anchorsById.get(anchorId)?.selectorId
+      );
+      const targetIds = owner.targetAnchorIds.map(
+        (anchorId) => anchorsById.get(anchorId)?.selectorId
+      );
+      if (
+        !sameStrings(sourceIds, relation.sourceSelectorIds) ||
+        !sameStrings(targetIds, relation.targetSelectorIds) ||
+        owner.lifecycle !== relation.lifecycle
+      ) {
+        issues.push({
+          code: "material-totality.owner",
+          path: `$.transitions.${transition.id}.relations.${relation.recordId}`,
+          message: `Material owner ${owner.id} diverges from canonical lineage.`
+        });
+      }
+    }
+    for (const anchor of material.anchors) {
+      const count = ownerCountByAnchor.get(anchor.id) ?? 0;
+      if (count !== 1) {
+        issues.push({
+          code: "material-totality.anchor",
+          path: `$.transitions.${transition.id}.anchors.${anchor.id}`,
+          message:
+            `Anchor ${anchor.id} requires exactly one lineage owner; found ${count}.`
+        });
+      }
+    }
+  }
+  return Object.freeze(issues);
 }
 
 function compileTransitionMaterialPlan(
@@ -204,4 +309,12 @@ function continuityKind(
 ): KpReaderEquationMaterialOwnerPlan["continuity"] {
   if (sourceCount > 0 && targetCount > 0) return "source-target";
   return sourceCount > 0 ? "source-only" : "target-only";
+}
+
+function sameStrings(
+  actual: readonly (string | undefined)[],
+  expected: readonly string[]
+): boolean {
+  return actual.length === expected.length &&
+    actual.every((value, index) => value === expected[index]);
 }

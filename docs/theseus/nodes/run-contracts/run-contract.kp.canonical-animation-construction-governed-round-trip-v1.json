@@ -74,6 +74,13 @@
       "scope": "slice-07 fraction-session-adapter",
       "checkedAt": "2026-07-26T06:12:36.080Z",
       "notes": "Eight focused adapter/inventory tests pass; split and merge both reach the existing renderer-session lifecycle; app type and architecture gates pass; current route paint selection is unchanged."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-08 total-multiplicity-binding",
+      "checkedAt": "2026-07-26T06:16:22.723Z",
+      "notes": "19 focused tests, all TypeScript projects, and architecture gates pass; totality, reverse multiplicity, and correspondence-order independence are certified."
     }
   ],
   "allowedWork": [
@@ -167,7 +174,9 @@
     {
       "id": "slice-08",
       "title": "total-multiplicity-binding",
-      "status": "planned"
+      "summary": "Added a generic totality validator and certified exact one-owner selector coverage plus split/merge multiplicity under forward, rewind, and permuted correspondence order.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-09",
