@@ -124,7 +124,7 @@ test("reader compositor direct seek and rewind return to the same paint frame", 
   expect(await sample()).toEqual(first);
 });
 
-test("moving reader paint is inert and has no semantic or annotation authority", async ({
+test("moving reader paint is inert while native DOM keeps semantic authority", async ({
   page
 }) => {
   await page.goto(route);
@@ -149,24 +149,40 @@ test("moving reader paint is inert and has no semantic or annotation authority",
     "[href]",
     "[id]"
   ].join(","))).toHaveCount(0);
+  await expect(layer.locator("math, .katex-mathml, annotation")).toHaveCount(0);
 
-  const nativeAnchors = active.locator(
-    "[data-kp-reader-equation-measurement] [data-kp-reader-equation-anchor-id]"
+  const nativeMeasurement = active.locator(
+    "[data-kp-reader-equation-measurement]"
   );
-  const nativeSelectors = active.locator(
-    "[data-kp-reader-equation-measurement] [data-kp-reader-selector-id]"
+  const nativeAnchors = nativeMeasurement.locator(
+    "[data-kp-reader-equation-anchor-id]"
+  );
+  const nativeSelectors = nativeMeasurement.locator(
+    "[data-kp-reader-selector-id]"
   );
   expect(await nativeAnchors.count()).toBeGreaterThan(0);
   expect(await nativeSelectors.count()).toBe(await nativeAnchors.count());
-  expect(await active.locator(
-    "[data-kp-reader-equation-measurement] .kp-reader-semantic-focus"
+  expect(await nativeMeasurement.locator(".katex-html").count())
+    .toBeGreaterThan(0);
+  expect(await nativeMeasurement.locator(
+    ".kp-reader-semantic-focus"
   ).count()).toBeGreaterThan(0);
   await expect(layer.locator(".kp-reader-semantic-focus")).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "the unknown" }))
+  const semanticLink = page.getByRole("button", { name: "the unknown" });
+  await expect(semanticLink)
     .toHaveAttribute(
       "title",
       "x stays the same object as the equation changes"
     );
+  await semanticLink.dispatchEvent("pointerover");
+  await expect(page.locator("[data-kp-reader-equation-stage]"))
+    .toHaveAttribute("data-kp-reader-focus-source", "pointer");
+  await expect(semanticLink).toHaveClass(/kp-reader-semantic-focus/);
+  await expect(layer.locator(".kp-reader-semantic-focus")).toHaveCount(0);
+  await semanticLink.focus();
+  await expect(semanticLink).toBeFocused();
+  await expect(page.locator("[data-kp-reader-equation-stage]"))
+    .toHaveAttribute("data-kp-reader-focus-source", "keyboard");
 });
 
 test("only the gold reader loads compositor implementation chunks", async ({

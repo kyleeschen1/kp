@@ -240,6 +240,20 @@
       "status": "passed",
       "scope": "slice-21 default gold card migration",
       "checkedAt": "2026-07-26T03:29:47.010Z"
+    },
+    {
+      "command": "playwright gold reader semantic authority probe",
+      "status": "failed",
+      "scope": "slice-22 initial live semantic-authority probe",
+      "checkedAt": "2026-07-26T03:36:08.899Z",
+      "notes": "The first probe incorrectly required MathML inside hydrated annotated KaTeX measurement HTML and required an initial-state selector to remain focused at a later transition. The renderer did not gain authority: live semantic anchors remained native, while accessible MathML is intentionally owned by the static projection. The test was corrected to certify those actual boundaries."
+    },
+    {
+      "command": "gold reader authority browser test; reader conformance; semantic projection unit matrix; packaged iframe and static-step browser smoke; reader production closure; canonical ratchets; architecture checks; build",
+      "status": "passed",
+      "scope": "slice-22 semantic authority preservation",
+      "checkedAt": "2026-07-26T03:36:09.959Z",
+      "notes": "Five gold-reader browser checks prove moving owners are aria-hidden, inert, stripped of anchors, selectors, focus, roles, ids, links, MathML, and annotation markup. Native KaTeX HTML, semantic anchors, focus, hover and keyboard channels remain authoritative. Nine shared reader checks including no-JS output, 28 MathML/Cloze/static-JS/headless/export tests, two packaged export browser smokes, eight production routes, build, typecheck, architecture, and canonical ceilings pass."
     }
   ],
   "allowedWork": [
@@ -407,7 +421,8 @@
     {
       "id": "slice-22",
       "title": "semantic-authority-preservation",
-      "status": "planned"
+      "summary": "Certified semantic authority at each supported boundary. Canonical moving paint is always inert and stripped of focus, annotation, link, role, id, selector, MathML, and interaction authority; native reader DOM owns live semantics, hover, keyboard focus, and annotation anchors; static projection owns accessible MathML and no-JS text; Cloze, static-JS, headless, iframe, and static-step projections remain renderer-neutral and pass their focused and packaged checks.",
+      "status": "complete"
     },
     {
       "id": "slice-23",
