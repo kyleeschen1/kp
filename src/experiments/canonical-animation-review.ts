@@ -1,3 +1,7 @@
+import {
+  projectKpGovernedCanonicalConstructionCohort
+} from "../authoring/governed-canonical-construction-projections.ts";
+
 type ReviewArtifact = "fraction-split" | "fraction-merge" | "cohort";
 type ReviewViewport = "wide" | "phone";
 type ReviewMotion = "full" | "reduced";
@@ -17,12 +21,17 @@ const rewind = required<HTMLButtonElement>(root, "[data-review-rewind]");
 const status = required<HTMLOutputElement>(root, "[data-review-status]");
 const owner = required<HTMLElement>(root, "[data-review-owner]");
 const diagnostics = required<HTMLElement>(root, "[data-review-diagnostics]");
+const projectionList = required<HTMLOListElement>(
+  root,
+  "[data-review-projections]"
+);
 let artifact: ReviewArtifact = "fraction-split";
 let viewport: ReviewViewport = "wide";
 let motion: ReviewMotion = "full";
 let monitorFrame: number | undefined;
 let loadRevision = 0;
 
+renderProjectionParity();
 root.querySelectorAll<HTMLButtonElement>("[data-review-artifact]")
   .forEach((button) => {
     button.addEventListener("click", () => {
@@ -226,6 +235,27 @@ function refreshDiagnostics(): void {
   root.dataset["reviewOwner"] = visualOwner ?? "native";
   root.dataset["reviewOverflow"] = String(Math.max(0, overflow));
   root.dataset["reviewProgress"] = embeddedSlider().value;
+}
+
+function renderProjectionParity(): void {
+  const bundle = projectKpGovernedCanonicalConstructionCohort();
+  for (const target of bundle.targets) {
+    const item = document.createElement("li");
+    item.dataset["reviewProjection"] = target.kind;
+    item.dataset["reviewProjectionArtifacts"] =
+      target.artifactIds.join(",");
+    item.dataset["reviewProjectionCheckpoints"] =
+      target.checkpointIds.join(",");
+    const name = document.createElement("strong");
+    name.textContent = target.kind;
+    const detail = document.createElement("span");
+    detail.textContent =
+      `${target.artifactIds.length} artifacts · ` +
+      `${target.checkpointIds.length} checkpoints · ${target.delivery}`;
+    item.append(name, detail);
+    projectionList.append(item);
+  }
+  root.dataset["reviewProjectionSchema"] = bundle.schemaVersion;
 }
 
 function embeddedSlider(): HTMLInputElement {

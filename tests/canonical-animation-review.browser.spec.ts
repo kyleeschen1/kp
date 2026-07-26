@@ -130,6 +130,23 @@ test("review gallery exposes keyboard-readable authority diagnostics", async ({
   await expect(page.getByRole("region", {
     name: "Authority diagnostics"
   })).toContainText("Native endpoints + inert paint");
+  const projections = page.locator("[data-review-projection]");
+  await expect(projections).toHaveCount(4);
+  await expect(projections).toContainText([
+    "static-js",
+    "headless",
+    "iframe",
+    "static-step"
+  ]);
+  const parity = await projections.evaluateAll((items) =>
+    items.map((item) => ({
+      artifacts: (item as HTMLElement).dataset["reviewProjectionArtifacts"],
+      checkpoints:
+        (item as HTMLElement).dataset["reviewProjectionCheckpoints"]
+    }))
+  );
+  expect(new Set(parity.map(({ artifacts }) => artifacts)).size).toBe(1);
+  expect(new Set(parity.map(({ checkpoints }) => checkpoints)).size).toBe(1);
   await page.keyboard.press("Tab");
   await expect(page.locator(":focus")).toBeVisible();
 });

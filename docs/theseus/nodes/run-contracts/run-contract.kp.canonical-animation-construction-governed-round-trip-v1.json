@@ -214,6 +214,13 @@
       "scope": "slice-25 in-browser review gallery",
       "checkedAt": "2026-07-26T15:01:00.729Z",
       "notes": "Six Chromium checks cover live fraction/cohort seek, delegated play/rewind, wide/phone, reduced settlement, overflow, keyboard access, and authority diagnostics. Fifty-two focused source tests, typecheck, build, eight-route production closure, architecture gates, and the production gallery manifest pass; the passive gallery entry is 4.63 kB before gzip and imports no construction or renderer authority."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; npm run test:browser:canonical-animation-construction; npm run build; npm run test:browser:canonical-animation-review:packaged; npm run check:reader-production; npm run check:architecture; npm run typecheck; git diff --check",
+      "status": "passed",
+      "scope": "slice-26 static and export parity",
+      "checkedAt": "2026-07-26T15:09:55.226Z",
+      "notes": "Fifty-six construction tests, six live browser checks, one production-packaged browser smoke, production build, reader closure, architecture gates, typecheck, and diff hygiene pass. Four reference-only targets share three canonical artifacts, four operations, and seven checkpoints; alias-normalized serialization rejects renderer-session and DOM state."
     }
   ],
   "allowedWork": [
@@ -424,7 +431,8 @@
     {
       "id": "slice-26",
       "title": "static-export-parity",
-      "status": "planned"
+      "summary": "Projected the governed cohort into one central renderer-neutral artifact and checkpoint set referenced by static-JS, headless, iframe, and static-step outputs. Added live and production-packaged parity inspection plus a nested runtime-state serialization audit.",
+      "status": "complete"
     },
     {
       "id": "slice-27",
