@@ -11,7 +11,10 @@ export function createKpGlyphReviewGalleryMode(
   root: HTMLElement
 ): KpGlyphReviewGalleryMode {
   const artifact = searchParams.get("reviewGallery");
-  const enabled = artifact === "fraction" || artifact === "cohort";
+  const enabled =
+    artifact === "fraction" ||
+    artifact === "cohort" ||
+    artifact === "radical";
   if (enabled) root.dataset["kpReviewGalleryArtifact"] = artifact;
   return Object.freeze({
     markReady() {

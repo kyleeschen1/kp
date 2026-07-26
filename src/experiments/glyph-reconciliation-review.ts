@@ -60,22 +60,22 @@ import {
   settleAndObserveKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";
 
-const rootNode = document.querySelector<HTMLElement>("#glyph-experiment");
-if (rootNode === null) throw new Error("Glyph root is missing.");
-const root = rootNode;
+const root = document.querySelector<HTMLElement>("#glyph-experiment");
+if (!root) throw Error("Missing glyph root.");
 const searchParams = new URL(location.href).searchParams;
-const reviewGallery = createKpGlyphReviewGalleryMode(
-  searchParams,
-  document.documentElement
-);
-const { math, renderMathSlots, trustedMath } =
-  createKpGlyphReviewMathRenderer(root);
-if (searchParams.get("radicalInventory") === "1") {
+const reviewGallery =
+  createKpGlyphReviewGalleryMode(searchParams, document.documentElement);
+const { math, renderMathSlots, trustedMath } = createKpGlyphReviewMathRenderer(root);
+if (searchParams.get("radicalInventory") === "1")
   await import("./glyph-reconciliation-radical-inventory.ts");
-}
-const reducedMotion = window.matchMedia(
-  "(prefers-reduced-motion: reduce)"
-).matches;
+if (searchParams.get("hostParity") === "radical")
+  await import("./glyph-reconciliation-host-parity.ts");
+const isolatedReview =
+  searchParams.get("hostParity") === "radical" ||
+  searchParams.get("reviewGallery") === "radical";
+if (isolatedReview) reviewGallery.markReady();
+else {
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const fractionDirection: KpFractionExperimentDirection =
   searchParams.get("fractionDirection") === "split"
     ? "split"
@@ -1053,4 +1053,5 @@ function lerp(source: number, target: number, progress: number): number {
 
 function nextFrame(): Promise<void> {
   return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+}
 }

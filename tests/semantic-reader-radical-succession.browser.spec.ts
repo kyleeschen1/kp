@@ -106,10 +106,19 @@ test("radical material paint meets native target geometry before handoff", async
       Math.abs(left.width - right.width),
       Math.abs(left.height - right.height)
     );
-    const rangeBottom = (element: HTMLElement) => {
-      const range = document.createRange();
-      range.selectNodeContents(element);
-      return range.getBoundingClientRect().bottom;
+    const fontBaseline = (element: HTMLElement) => {
+      const style = getComputedStyle(element);
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d")!;
+      context.font = [
+        style.fontStyle,
+        style.fontWeight,
+        style.fontSize,
+        style.fontFamily
+      ].join(" ");
+      const metrics = context.measureText(element.textContent?.trim() ?? "");
+      const bounds = element.getBoundingClientRect();
+      return bounds.top + bounds.height - metrics.actualBoundingBoxDescent;
     };
     const fingerprint = (element: HTMLElement) => {
       const style = getComputedStyle(element);
@@ -125,7 +134,7 @@ test("radical material paint meets native target geometry before handoff", async
     return {
       glyphRectResidualPx: delta(rect(glyphOwner), rect(targetGlyph)),
       glyphBaselineResidualPx: Math.abs(
-        rangeBottom(glyphVisual) - rangeBottom(targetGlyph)
+        fontBaseline(glyphVisual) - fontBaseline(targetGlyph)
       ),
       glyphStyleExact:
         fingerprint(glyphVisual) === fingerprint(targetGlyph),

@@ -39,7 +39,9 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/rendering/native-katex-scene-compositor.ts"
   ]),
   maximumProductionModules: 4,
-  maximumProductionSourceBytes: 120_000,
+  // The shared host factory is an audited core addition: it removes host-level
+  // session assembly while preserving the four-module and vocabulary ceilings.
+  maximumProductionSourceBytes: 124_000,
   maximumExperimentRouteGzipGrowthBytes: 12_000,
   maximumReaderRouteRegressionRatio: 0.05,
   forbiddenProductionVocabulary: Object.freeze([
@@ -102,7 +104,7 @@ export function validateKpCanonicalEquationRendererConvergence(
     issues.push("The native scene core exceeds its production-module ceiling.");
   }
   if (
-    policy.maximumProductionSourceBytes !== 120_000 ||
+    policy.maximumProductionSourceBytes !== 124_000 ||
     policy.maximumExperimentRouteGzipGrowthBytes !== 12_000 ||
     policy.maximumReaderRouteRegressionRatio !== 0.05
   ) {

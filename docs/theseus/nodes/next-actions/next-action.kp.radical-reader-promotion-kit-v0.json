@@ -467,11 +467,32 @@
       "scope": "slice 15 visual interpretation",
       "checkedAt": "2026-07-26T18:08:32.580Z",
       "notes": "Clarification: the 99.9-to-100 geometry is continuous, but the persistent x focus color is discontinuous from black material paint to orange native paint. This is deliberately retained only as a human-checkpoint finding for generic slice-16 repair."
+    },
+    {
+      "command": "npm run test:browser:canonical-host-parity",
+      "status": "passed",
+      "scope": "slice-16 live cross-host parity",
+      "checkedAt": "2026-07-26T19:06:40.834Z",
+      "notes": "Shared scrubber, dense persistent-x continuity, wide/phone and DPR 1/2 pass."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice-16 reader preservation",
+      "checkedAt": "2026-07-26T19:06:41.836Z",
+      "notes": "Radical and fraction ownership, geometry, time, accessibility, focus, static, and responsive seams pass."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-16 production build",
+      "checkedAt": "2026-07-26T19:06:42.666Z",
+      "notes": "Typecheck and production build pass; reader and canonical-animation budgets remain within limits."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT after slice 15: 15 of 20 slices complete. The canonical radical reader is geometrically stable and product seams pass across the 38-frame matrix. Human review is required for midpoint readability and the generic black-to-orange persistent-x focus-color handoff before slice 16."
+    "summary": "Slice 16 is complete and open in the browser. Stopped at the mandatory HUMAN_CHECKPOINT before promotion-kit extraction; slices 17-20 remain inactive."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

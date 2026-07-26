@@ -114,6 +114,14 @@ export interface KpNativeKatexRendererSession {
   readonly apply: (progress: number) => KpNativeKatexSceneOwnershipFrame;
 }
 
+export interface KpCanonicalNativeKatexSceneSession {
+  readonly kind: "canonical-native-katex-scene-session";
+  readonly lifecycle: "renderer-session";
+  readonly reconciliation: KpNativeKatexSceneReconciliation;
+  readonly hierarchy: KpNativeKatexHierarchicalScenePlan;
+  readonly session: KpNativeKatexRendererSession;
+}
+
 export function decideKpNativeKatexRendererDisposition(input: {
   readonly ambiguityIds: readonly string[];
   readonly blockedGeometryIds: readonly string[];
@@ -1564,6 +1572,92 @@ export function createKpNativeKatexRendererSession(input: {
     tracks,
     sample,
     apply
+  });
+}
+
+/**
+ * Every host enters native KaTeX motion through this factory so host adapters
+ * cannot quietly select different local tracks or typography settlement.
+ */
+export function createKpCanonicalNativeKatexSceneSession(input: {
+  readonly source: KpNativeKatexRenderedSceneObservation;
+  readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly relations: readonly KpNativeKatexSemanticPaintRelation[];
+}): KpCanonicalNativeKatexSceneSession {
+  if (input.source.stage !== input.target.stage) {
+    throw new Error("Canonical native KaTeX endpoints must share one stage.");
+  }
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source: input.source,
+    target: input.target,
+    relations: input.relations
+  });
+  const hierarchy = compileKpNativeKatexHierarchicalScenePlan(reconciliation);
+  const tracks = compileKpNativeKatexSceneTracks(hierarchy);
+  const correlations = correlateKpNativeKatexSceneHandoff({
+    reconciliation,
+    tracks
+  });
+  const targetAtomsById = new Map(input.target.atoms.map((atom) => [
+    atom.id,
+    atom
+  ]));
+  // Structural paint retains its native clone. Only glyph typography needs
+  // target-style realization before native ownership changes.
+  const typographyCorrelations = correlations.filter((correlation) =>
+    targetAtomsById.get(correlation.targetAtomId ?? "")?.paintKind === "glyph"
+  );
+  const playback = createKpNativeKatexRendererSession({
+    stage: input.source.stage,
+    sourceRoot: input.source.root,
+    targetRoot: input.target.root,
+    reconciliation,
+    tracks
+  });
+  const handoffMicroscopeProgress = 0.96;
+  playback.apply(handoffMicroscopeProgress);
+  const typographyPlan = compileKpNativeKatexTypographyStylePlan({
+    telemetry: measureKpNativeKatexCorrelatedHandoff({
+      stage: input.source.stage,
+      reconciliation,
+      correlations: typographyCorrelations,
+      progress: handoffMicroscopeProgress,
+      fontRevision: input.target.fontRevision,
+      viewportKey: input.target.viewportKey
+    }),
+    correlations: typographyCorrelations,
+    tolerancePx: 0.1,
+    maximumTranslationPx: 2,
+    maximumScaleRatio: 1.1
+  });
+  playback.apply(0);
+  input.source.stage.dataset["kpCanonicalNativeKatexSessionFactory"] =
+    "shared-v1";
+  const session: KpNativeKatexRendererSession = Object.freeze({
+    ...playback,
+    apply(progress: number) {
+      const ownership = playback.apply(progress);
+      if (ownership.visualOwner === "material-scene") {
+        realizeKpNativeKatexTypographyStylePlan({
+          stage: input.source.stage,
+          target: input.target,
+          plan: typographyPlan,
+          frame: sampleKpNativeKatexTypographyStylePlan(
+            typographyPlan,
+            progress,
+            ownership.frames
+          )
+        });
+      }
+      return ownership;
+    }
+  });
+  return Object.freeze({
+    kind: "canonical-native-katex-scene-session",
+    lifecycle: "renderer-session",
+    reconciliation,
+    hierarchy,
+    session
   });
 }
 

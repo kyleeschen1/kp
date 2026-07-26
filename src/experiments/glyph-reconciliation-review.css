@@ -1,4 +1,5 @@
 @import "katex/dist/katex.min.css";
+@import "../rendering/canonical-equation-stage.css";
 
 :root {
   color-scheme: light;
@@ -30,6 +31,10 @@ html[data-kp-review-gallery-ready="true"][data-kp-review-gallery-artifact="cohor
 html[data-kp-review-gallery-ready="true"][data-kp-review-gallery-artifact="fraction"]
   .glyph-exemplar__review:not([data-fraction-card]),
 html[data-kp-review-gallery-ready="true"][data-kp-review-gallery-artifact="fraction"]
+  .glyph-exemplar__trace,
+html[data-kp-review-gallery-ready="true"][data-kp-review-gallery-artifact="radical"]
+  .glyph-exemplar__review:not([data-radical-inventory]),
+html[data-kp-review-gallery-ready="true"][data-kp-review-gallery-artifact="radical"]
   .glyph-exemplar__trace {
   display: none;
 }
@@ -41,9 +46,82 @@ html[data-kp-review-gallery-artifact] .glyph-exemplar__trace {
 
 html[data-kp-review-gallery-ready="true"] .glyph-exemplar__controls,
 html[data-kp-review-gallery-ready="true"] .glyph-exemplar__trace-controls,
-html[data-kp-review-gallery-ready="true"] .glyph-exemplar__trace-detail,
-html[data-kp-review-gallery-ready="true"] [data-kp-dev-review-shell] {
+html[data-kp-review-gallery-ready="true"] .glyph-exemplar__trace-detail {
   display: none;
+}
+
+html[data-kp-canonical-host-parity="radical"] .glyph-exemplar {
+  width: min(1500px, 100%);
+}
+
+html[data-kp-canonical-host-parity="radical"]
+  .glyph-exemplar > :not([data-kp-canonical-host-parity]) {
+  display: none;
+}
+
+.glyph-exemplar__host-parity {
+  display: grid;
+  gap: 1rem;
+}
+
+.glyph-exemplar__host-parity[hidden] {
+  display: none;
+}
+
+.glyph-exemplar__host-parity-header h1 {
+  margin: 0;
+  font: 600 clamp(1.65rem, 4vw, 3rem)/1.05 Iowan Old Style, Georgia, serif;
+}
+
+.glyph-exemplar__host-parity-header p {
+  max-width: 70ch;
+  margin: .6rem 0 0;
+  color: #52615c;
+}
+
+.glyph-exemplar__host-parity-frames {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.glyph-exemplar__host-parity-frame {
+  display: grid;
+  gap: .45rem;
+  min-width: 0;
+}
+
+.glyph-exemplar__host-parity-frame > strong {
+  color: #27705b;
+  font-size: .72rem;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.glyph-exemplar__host-parity-frame iframe {
+  width: 100%;
+  height: min(68vh, 650px);
+  border: 1px solid #c9d0ca;
+  border-radius: .75rem;
+  background: #f8f8f2;
+}
+
+.glyph-exemplar__host-parity-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .8rem;
+}
+
+.glyph-exemplar__host-parity-controls input {
+  width: 100%;
+  accent-color: #df7047;
+}
+
+@media (max-width: 780px) {
+  .glyph-exemplar__host-parity-frames {
+    grid-template-columns: 1fr;
+  }
 }
 
 .glyph-exemplar {

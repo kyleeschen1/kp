@@ -287,6 +287,20 @@ const canonicalTransitionPolicy =
   });
 const canonicalTransitionIds =
   canonicalTransitionPolicy?.transitionIds ?? [];
+for (const transitionId of canonicalTransitionIds) {
+  const transition = transitionElements.find((candidate) =>
+    requiredData(candidate, "kpReaderTransition") === transitionId
+  );
+  if (transition === undefined) continue;
+  requireDescendant<HTMLElement>(
+    transition,
+    "[data-kp-reader-fit-surface]"
+  ).classList.add("kp-canonical-equation-stage");
+  requireDescendant<HTMLElement>(
+    transition,
+    "[data-kp-reader-equation-measurement]"
+  ).classList.add("kp-canonical-equation-content");
+}
 const readerCanonicalEquationSession: KpReaderCanonicalEquationSession | undefined =
   readerCanonicalEquationSessionModule === undefined ||
     readerCanonicalEquationSessionAdapter === undefined ||
@@ -614,6 +628,9 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
         : undefined,
     progress: phaseProgress
   });
+  // Attention selects semantic presentation for this exact sample before the
+  // renderer observes native styles, avoiding a one-frame endpoint color lag.
+  updateActiveBeat(projection.progressPermille, attentionProjection);
   const focusSnapshot = focus.getSnapshot();
   if (motion.linearRearrangement === undefined) {
     delete stage.dataset["kpReaderEquationPersistentReflowProgress"];
@@ -638,6 +655,9 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   }
   const focusedRefs = visualFocusRefs(focusSnapshot);
   syncNativeEndpointEvidence(motion, context, phaseProgress);
+  // Native semantic state is established before the canonical session samples
+  // paint; the session alone then carries that presentation through transit.
+  applyFocus(focusSnapshot);
 
   for (const candidate of layout.contexts.values()) {
     const active = candidate.id === transitionId;
@@ -651,7 +671,10 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     fitSurface: context.fitSurface,
     progress: phaseProgress,
     fontReadiness,
-    motion
+    presentationRevision: [
+      focusSnapshot.activeSource ?? "none",
+      ...focusedRefs
+    ].join(":")
   }) ?? false;
   if (canonicalEquationSessionApplied) {
     materialLayer.sync([]);
@@ -709,7 +732,6 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     projection.mode !== "essential"
   );
   syncIndependentZeroWitness(motion.independentZeroWitness);
-  applyFocus(focusSnapshot);
   progressBar.style.transform = `scaleX(${projection.progressPermille / 1_000})`;
   document.body.dataset["kpReaderProgress"] = String(projection.progressPermille);
   document.body.dataset["kpReaderVisualProgress"] = String(visualProgressPermille);
@@ -726,7 +748,6 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   document.body.dataset["kpReaderFramePlans"] = String(
     rendererInspection().framePlanCount + 1
   );
-  updateActiveBeat(projection.progressPermille, attentionProjection);
   if (import.meta.env.DEV) {
     const atMs = performance.now();
     const schedulerState = rendererInspection();

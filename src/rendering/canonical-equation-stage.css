@@ -1,0 +1,8 @@
+.kp-canonical-equation-stage {
+  container-type: inline-size;
+  --kp-canonical-equation-type-size: clamp(1.65rem, 7vi, 3.4rem);
+}
+
+.kp-canonical-equation-stage > .kp-canonical-equation-content {
+  font-size: var(--kp-canonical-equation-type-size);
+}

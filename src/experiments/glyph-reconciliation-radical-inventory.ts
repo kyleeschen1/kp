@@ -14,9 +14,7 @@ import {
 } from "../rendering/exponent-radical-selector-annotated-latex.ts";
 import { createKpEquationFontReadiness } from "../rendering/equation-font-readiness.ts";
 import {
-  compileKpNativeKatexHierarchicalScenePlan,
-  compileKpNativeKatexSceneTracks,
-  createKpNativeKatexRendererSession,
+  createKpCanonicalNativeKatexSceneSession,
   projectKpNativeKatexSemanticPaintRelations,
   reconcileKpNativeKatexScenes,
   reverseKpNativeKatexSemanticPaintRelations
@@ -164,11 +162,12 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
       targetEntityIds: [representation.targetRepresentation.entityId]
     }
   ];
-  const reconciliation = reconcileKpNativeKatexScenes({
+  const canonical = createKpCanonicalNativeKatexSceneSession({
     source,
     target,
     relations
   });
+  const reconciliation = canonical.reconciliation;
   const permutedReconciliation = reconcileKpNativeKatexScenes({
     source: { ...source, atoms: [...source.atoms].reverse() },
     target: { ...target, atoms: [...target.atoms].reverse() },
@@ -176,30 +175,18 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
   });
   const reverseRelations =
     reverseKpNativeKatexSemanticPaintRelations(relations);
-  const reverseReconciliation = reconcileKpNativeKatexScenes({
+  const reverseCanonical = createKpCanonicalNativeKatexSceneSession({
     source: reverseSource,
     target: reverseTarget,
     relations: reverseRelations
   });
-  const plan = compileKpNativeKatexHierarchicalScenePlan(reconciliation);
-  const reversePlan =
-    compileKpNativeKatexHierarchicalScenePlan(reverseReconciliation);
-  const tracks = compileKpNativeKatexSceneTracks(plan);
-  const reverseTracks = compileKpNativeKatexSceneTracks(reversePlan);
-  const playback = createKpNativeKatexRendererSession({
-    stage,
-    sourceRoot: sourceEquation,
-    targetRoot: targetEquation,
-    reconciliation,
-    tracks
-  });
-  const reversePlayback = createKpNativeKatexRendererSession({
-    stage,
-    sourceRoot: targetEquation,
-    targetRoot: sourceEquation,
-    reconciliation: reverseReconciliation,
-    tracks: reverseTracks
-  });
+  const reverseReconciliation = reverseCanonical.reconciliation;
+  const plan = canonical.hierarchy;
+  const reversePlan = reverseCanonical.hierarchy;
+  const tracks = canonical.session.tracks;
+  const reverseTracks = reverseCanonical.session.tracks;
+  const playback = canonical.session;
+  const reversePlayback = reverseCanonical.session;
   panel.dataset["kpRadicalInventoryReady"] = "true";
   panel.dataset["kpRadicalSourceAtomCount"] = String(source.atoms.length);
   panel.dataset["kpRadicalTargetAtomCount"] = String(target.atoms.length);

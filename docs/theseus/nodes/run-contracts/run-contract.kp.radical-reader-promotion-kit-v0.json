@@ -14,6 +14,10 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-07-26-radical-reader-promotion-kit-long-loop-proposal.md",
       "summary": "User-approved exact 20-slice radical reader adoption and promotion-kit proposal with a mandatory slice-15 browser checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-26-radical-reader-parity-repair-proposal.md"
     }
   ],
   "dependsOn": {
@@ -204,7 +208,8 @@
     {
       "id": "slice-16",
       "title": "apply-reviewed-generic-repair",
-      "status": "planned",
+      "summary": "Replaced the degraded reader reinterpretation with the shared experiment session, removed post-session atom paint writes, preserved semantic focus color through native presentation revisions, added shared legible sizing and a live cross-host scrubber, and passed dense handoff plus wide/phone DPR gates.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {

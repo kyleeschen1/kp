@@ -38,6 +38,13 @@ const materialCloneAuthorityAttributes = new Set([
  */
 export function stripKpMaterialCloneAuthority(root: Element): void {
   for (const element of [root, ...root.querySelectorAll<Element>("*")]) {
+    for (const className of [...element.classList]) {
+      // Computed paint is already inline; semantic-state classes would let an
+      // inert clone impersonate native focus ownership.
+      if (/^kp-.+-semantic-focus$/.test(className)) {
+        element.classList.remove(className);
+      }
+    }
     for (const attribute of [...element.attributes]) {
       if (
         materialCloneAuthorityAttributes.has(attribute.name) ||

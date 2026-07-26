@@ -229,25 +229,25 @@
           </div>
           <div class="glyph-exemplar__viewport glyph-exemplar__viewport--fraction">
             <div
-              class="glyph-exemplar__stage"
+              class="glyph-exemplar__stage kp-canonical-equation-stage"
               data-radical-stage
               role="math"
               aria-label="x to the one half rewrites as the square root of x"
             >
               <span
-                class="glyph-exemplar__fraction-equation"
+                class="glyph-exemplar__fraction-equation kp-canonical-equation-content"
                 data-radical-source
               >
                 <span data-radical-source-object></span>
               </span>
               <span
-                class="glyph-exemplar__fraction-equation glyph-exemplar__fraction-equation--target"
+                class="glyph-exemplar__fraction-equation glyph-exemplar__fraction-equation--target kp-canonical-equation-content"
                 data-radical-target
               >
                 <span data-radical-target-object></span>
               </span>
               <span
-                class="glyph-exemplar__material-layer"
+                class="glyph-exemplar__material-layer kp-canonical-equation-content"
                 data-kp-editor-equation-material-layer
               ></span>
             </div>
@@ -390,6 +390,48 @@
             data-trace-detail
             hidden
           ></ol>
+        </section>
+        <section
+          class="glyph-exemplar__host-parity"
+          data-kp-canonical-host-parity
+          hidden
+        >
+          <header class="glyph-exemplar__host-parity-header">
+            <span class="glyph-exemplar__eyebrow">canonical host parity</span>
+            <h1>One radical session, two hosts</h1>
+            <p>
+              Scrub the accepted glyph reference and the reader together.
+              Both frames use the same native-KaTeX session factory, atom tracks,
+              equation sizing contract, and atomic native handoff.
+            </p>
+          </header>
+          <div class="glyph-exemplar__host-parity-frames">
+            <label class="glyph-exemplar__host-parity-frame">
+              <strong>Accepted glyph reference</strong>
+              <iframe
+                title="Accepted radical glyph animation"
+                data-kp-canonical-host-reference
+              ></iframe>
+            </label>
+            <label class="glyph-exemplar__host-parity-frame">
+              <strong>Reader integration</strong>
+              <iframe
+                title="Radical reader integration"
+                data-kp-canonical-host-reader
+              ></iframe>
+            </label>
+          </div>
+          <label class="glyph-exemplar__host-parity-controls">
+            <input
+              type="range"
+              min="0"
+              max="1000"
+              value="0"
+              aria-label="Shared canonical radical progress"
+              data-kp-canonical-host-progress
+            >
+            <output data-kp-canonical-host-status>0%</output>
+          </label>
         </section>
         <div class="glyph-exemplar__evidence">
           <span>actual KaTeX subtree</span>

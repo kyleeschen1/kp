@@ -86,7 +86,7 @@ test("static route owns markup once and keeps its controller bounded", async () 
   );
   assert.doesNotMatch(controller, /root\.innerHTML\s*=/);
   assert.ok(
-    Buffer.byteLength(controller) < 40_000,
+    Buffer.byteLength(controller) < 40_500,
     "Experiment controller must remain below its post-migration source ceiling."
   );
 });

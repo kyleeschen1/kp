@@ -103,11 +103,15 @@ test("canonical scene core exposes one ephemeral renderer session contract", asy
 });
 
 test("reader keeps no compositor query switch and one adapter loader", async () => {
-  const [entry, sessionBridge, adapter, publicApi] = await Promise.all([
+  const [entry, sessionBridge, adapter, experiment, publicApi] = await Promise.all([
     readFile("src/reader/app/exemplar-entry.ts", "utf8"),
     readFile("src/reader/app/reader-canonical-equation-session.ts", "utf8"),
     readFile(
       "src/reader/renderers/equation-scene-compositor-adapter.ts",
+      "utf8"
+    ),
+    readFile(
+      "src/experiments/glyph-reconciliation-radical-inventory.ts",
       "utf8"
     ),
     readFile("src/reader/renderers/public-api.ts", "utf8")
@@ -132,8 +136,40 @@ test("reader keeps no compositor query switch and one adapter loader", async () 
     adapter.includes("interface KpReaderEquationSceneCompositorSession"),
     false
   );
-  assert.equal(adapter.includes("createKpNativeKatexRendererSession"), true);
+  assert.equal(
+    adapter.includes("createKpCanonicalNativeKatexSceneSession"),
+    true
+  );
+  assert.equal(
+    experiment.includes("createKpCanonicalNativeKatexSceneSession"),
+    true
+  );
   assert.equal(sessionBridge.includes(".playback"), false);
+});
+
+test("canonical hosts cannot reinterpret renderer-owned atom paint", async () => {
+  const [entry, sessionBridge] = await Promise.all([
+    readFile("src/reader/app/exemplar-entry.ts", "utf8"),
+    readFile("src/reader/app/reader-canonical-equation-session.ts", "utf8")
+  ]);
+
+  assert.doesNotMatch(sessionBridge, /applyReaderMotionTrace/);
+  assert.doesNotMatch(sessionBridge, /KpReaderEquationSymbolMotionFrame/);
+  assert.doesNotMatch(
+    sessionBridge,
+    /\.style\.(?:left|top|width|height|opacity|transform)\s*=/
+  );
+  assert.doesNotMatch(
+    sessionBridge,
+    /data-kp-equation-material-owner-id/
+  );
+  assert.doesNotMatch(
+    entry.slice(
+      entry.indexOf("readerCanonicalEquationSession?.apply"),
+      entry.indexOf("if (canonicalEquationSessionApplied)")
+    ),
+    /\bmotion\b/
+  );
 });
 
 test("accepted experiment and reader payload budgets remain frozen", () => {
