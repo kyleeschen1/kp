@@ -499,11 +499,25 @@
       "scope": "slice-16 representational-succession choreography fidelity",
       "checkedAt": "2026-07-26T19:14:02.910Z",
       "notes": "Human checkpoint rejected: both experiment and reader reduce exponent notation to eliminate/introduction opacity tracks. Cross-host parity proved shared ownership but missed common-mode loss of the accepted solid radical morph."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice16 oracle and choreography fidelity gate",
+      "checkedAt": "2026-07-26T19:48:49.904Z",
+      "notes": "37 tests pass; fade-only structural succession is explicitly rejected while solid-mask and checkpoint outcomes pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice16 oracle and choreography fidelity gate",
+      "checkedAt": "2026-07-26T19:48:50.850Z",
+      "notes": "Application, node, test, and domain type checks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT rejected. Diagnose and repair the common-mode fade-only structural succession before extracting a promotion kit or continuing slices 17-20."
+    "summary": "Slice 16 subphase 2 complete: the promotion oracle now rejects fade-only atom tracks for structural succession and accepts only a real structural strategy or explicit checkpoint settlement."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",
