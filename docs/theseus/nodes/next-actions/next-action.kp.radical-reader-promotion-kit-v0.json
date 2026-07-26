@@ -40,11 +40,18 @@
       "scope": "focused",
       "checkedAt": "2026-07-26T16:50:14.006Z",
       "notes": "Four inventory ratchets, sixty released canonical-construction checks, all TypeScript projects and domain packages, and all architecture gates pass. The inventory freezes the existing radical authorities, explicit reader adoption gap, old editor/WebGL compatibility boundary, preservation contract, and rollback unit."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-26T16:53:47.901Z",
+      "notes": "Eight promotion inventory and cost-ratchet tests pass. The executable gate accepts only content, lesson/compiler, descriptor, selector-annotation, verification, and durable-evidence wiring; it rejects every protected compositor/scheduler core file, new lifecycle or scheduler categories, notation geometry, runtime artifacts, and unclassified production changes. Type and architecture gates pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 1 complete: the radical adoption inventory freezes existing semantic, governed, renderer, reader-registry, product-paint, editor-compatibility, preservation, stop, and rollback boundaries. The product gap is one reader lesson, descriptor, route, structural annotation, and exclusive eligibility branch; no new renderer authority is required."
+    "summary": "Slices 1-2 complete. The adoption boundary is frozen and an executable post-kit cost gate now rejects compositor core changes, lifecycle or scheduler growth, notation-specific geometry, new runtime artifacts, and unclassified production changes while permitting only lesson, descriptor, annotation, verification, and durable-evidence wiring."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",
