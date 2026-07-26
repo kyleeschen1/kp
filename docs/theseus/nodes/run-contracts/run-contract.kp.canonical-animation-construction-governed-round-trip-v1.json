@@ -228,6 +228,13 @@
       "scope": "slice-27 safety utility consolidation",
       "checkedAt": "2026-07-26T15:15:04.599Z",
       "notes": "Twenty-four focused consumer/security tests, five browser consumers, 56 construction tests, typecheck, production build, reader closure, architecture gates, and diff hygiene pass. Eight generated-document consumers now share three context-specific helpers; private duplicate counts ratchet from 29/9/3 to 21/1/0 while unlike editor, SVG, tooling, DOM, selector, validator, and freeze contracts remain separate."
+    },
+    {
+      "command": "npm run build; npm run check:canonical-animation-budgets; npm run test:canonical-animation-budgets; npm run perf:glyph-reconciliation-experiment; npm run check:reader-budgets; npm run check:reader-production; npm run check:architecture; npm run typecheck; git diff --check",
+      "status": "passed",
+      "scope": "slice-28 performance payload and route budgets",
+      "checkedAt": "2026-07-26T15:22:30.328Z",
+      "notes": "Construction, verification, compound sampling, 26,725-byte projection payload, 2,302-byte review entry, 47,734-byte review shell, 236,565-byte isolated live-review closure, and 17-file closure pass fixed initial ceilings. Existing reconciliation, scene/style sampling, plan payload/growth, all eight reader route, production, architecture, build, type, and diff gates pass unchanged; no review-only chunk reaches a reader route."
     }
   ],
   "allowedWork": [
@@ -450,7 +457,8 @@
     {
       "id": "slice-28",
       "title": "performance-payload-route-budgets",
-      "status": "planned"
+      "summary": "Added fixed governed-construction performance and payload budgets for compile, audit, compound sampling, projection serialization, review entry/closure, live iframe closure, closure count, and zero reader leakage. Existing compositor and eight reader-route budgets pass unchanged; published the measured budget report.",
+      "status": "complete"
     },
     {
       "id": "slice-29",

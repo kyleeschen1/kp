@@ -63,6 +63,6 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-27 complete. Shared generated-document escaping is consolidated without a catch-all utility; performance and route budgets are next."
+    "summary": "Slices 1-28 complete. Construction, compositor, review-only payload, and ordinary reader route budgets are frozen and passing; the full release matrix is next."
   }
 }
