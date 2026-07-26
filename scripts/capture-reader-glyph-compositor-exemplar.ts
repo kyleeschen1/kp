@@ -5,7 +5,7 @@ import { chromium } from "playwright";
 import { preview, type PreviewServer } from "vite";
 import { kpGoldEquationParityFrames } from "../src/rendering/equation-gold-parity.ts";
 
-const outputRoot = path.resolve("tmp/codex/reader-glyph-compositor");
+const outputRoot = path.resolve("tmp/codex/reader-canonical-equation-session");
 const profiles = [
   { id: "wide", viewport: { width: 1280, height: 900 } },
   { id: "phone", viewport: { width: 390, height: 844 } }
@@ -56,7 +56,7 @@ try {
               "[data-kp-reader-equation-material-owner-id]"
             ).count();
             const canonicalActive = await stage.getAttribute(
-              "data-kp-reader-glyph-compositor-active"
+              "data-kp-reader-canonical-equation-session-active"
             ) === "true";
             if (
               frame.id === "cancellation-meet" &&
@@ -102,7 +102,7 @@ try {
   }
   const report = path.join(outputRoot, "review.json");
   await writeFile(report, `${JSON.stringify({
-    schemaVersion: "kp.reader-glyph-compositor-review.v1",
+    schemaVersion: "kp.reader-canonical-equation-session-review.v1",
     captures
   }, null, 2)}\n`);
   console.log(JSON.stringify({

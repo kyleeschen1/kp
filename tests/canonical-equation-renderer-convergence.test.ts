@@ -103,9 +103,9 @@ test("canonical scene core exposes one ephemeral renderer session contract", asy
 });
 
 test("reader keeps no compositor query switch and one adapter loader", async () => {
-  const [entry, exemplar, adapter, publicApi] = await Promise.all([
+  const [entry, sessionBridge, adapter, publicApi] = await Promise.all([
     readFile("src/reader/app/exemplar-entry.ts", "utf8"),
-    readFile("src/reader/app/reader-glyph-compositor-exemplar.ts", "utf8"),
+    readFile("src/reader/app/reader-canonical-equation-session.ts", "utf8"),
     readFile(
       "src/reader/renderers/equation-scene-compositor-adapter.ts",
       "utf8"
@@ -115,10 +115,13 @@ test("reader keeps no compositor query switch and one adapter loader", async () 
 
   assert.equal((entry.match(/kpGlyphCompositor/g) ?? []).length, 0);
   assert.match(entry, /lessonVariant === "streamlined"/);
-  assert.match(entry, /if \(readerCompositorApplied\) \{\s*materialLayer\.sync\(\[\]\)/);
+  assert.match(
+    entry,
+    /if \(canonicalEquationSessionApplied\) \{\s*materialLayer\.sync\(\[\]\)/
+  );
   assert.doesNotMatch(
     entry,
-    /if \(!readerCompositorApplied\) materialLayer\.sync\(frames\)/
+    /if \(!canonicalEquationSessionApplied\) materialLayer\.sync\(frames\)/
   );
   assert.equal(
     (publicApi.match(/loadKpReaderEquationSceneCompositorAdapter/g) ?? []).length,
@@ -129,7 +132,7 @@ test("reader keeps no compositor query switch and one adapter loader", async () 
     false
   );
   assert.equal(adapter.includes("createKpNativeKatexRendererSession"), true);
-  assert.equal(exemplar.includes(".playback"), false);
+  assert.equal(sessionBridge.includes(".playback"), false);
 });
 
 test("accepted experiment and reader payload budgets remain frozen", () => {

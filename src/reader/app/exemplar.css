@@ -111,13 +111,14 @@ body[data-kp-reader-hydrated="true"] .kp-animation-static > [data-kp-static-stat
 .kp-reader-equation-state [data-kp-reader-equation-anchor-id] { position: relative; display: inline-block; will-change: opacity; transition: color 120ms ease; }
 .kp-reader-equation-material { position: absolute; z-index: 3; inset: 0; pointer-events: none; }
 .kp-reader-equation-material-owner { will-change: transform, opacity; }
-.kp-reader-glyph-compositor-material {
+.kp-reader-canonical-equation-session-material {
   position: absolute;
   z-index: 3;
   inset: 0;
   pointer-events: none;
 }
-.kp-reader-glyph-compositor-material .editor-equation-stage__material-owner {
+.kp-reader-canonical-equation-session-material
+  .editor-equation-stage__material-owner {
   position: absolute;
   display: grid;
   place-items: center;

@@ -1,10 +1,10 @@
 # Cross-domain Tutorial Platform Thread
 
 Status: active
-Last Updated: 2026-07-24
-Current Next Action: Review and approve the four-case semantic-constrained
-glyph reconciliation experiment, then run only through its mandatory first
-solve-x exemplar checkpoint.
+Last Updated: 2026-07-25
+Current Next Action: Complete canonical equation renderer release closeout,
+then propose one real reader fraction split/merge exemplar and stop at its
+visual checkpoint before broader promotion.
 
 ## Goal
 
@@ -38,13 +38,17 @@ quality, and composition-root checkpoints. Approved plan revision
 `run-contract.kp.product-roadmap-v5-program-v0` owns live execution progress.
 
 The quadratic operation-presentation checkpoint revealed that small
-operation-specific motion rules do not yet compose cleanly in crowded algebra.
-The accepted response is not another quadratic exception sequence. KP will test
-one lineage-constrained glyph reconciler and one bounded geometry scheduler
-against one-to-one, many-to-one, one-to-many, and crowded responsive cases. The
-current quadratic remains diagnostic evidence and is not approved for
-publication. The decision is recorded in
-`decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md`.
+operation-specific motion rules do not compose cleanly in crowded algebra.
+The bounded response has now converged on one lineage-constrained native-KaTeX
+renderer session. It is the exclusive default paint path for the approved
+solve-x gold transition, and generic merge, split, radical succession, seek,
+rewind, responsive, accessibility, export, and governed-authoring proofs pass.
+The older reader material path is compatibility-only for non-migrated
+transitions, not a peer implementation on the same frame. The current
+quadratic remains diagnostic evidence and is not approved for publication.
+The decision and reconciliation are recorded in
+`decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md` and
+`reviews/2026-07-25-canonical-equation-renderer-retirement-reconciliation.md`.
 
 FTC remains a valuable reviewable artifact, but its human review and the BFS,
 economics, programming, and physics breadth sequence are parked until the

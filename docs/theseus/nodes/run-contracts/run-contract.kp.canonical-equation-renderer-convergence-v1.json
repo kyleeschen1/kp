@@ -296,6 +296,13 @@
       "scope": "slice-26 governed LLM fixture proof",
       "checkedAt": "2026-07-26T04:56:47.383Z",
       "notes": "Four recorded governed cases compile deterministically into canonical traces and one native-KaTeX renderer-session contract. Forty-one focused checks, all TypeScript projects, and all architecture gates pass; unsafe fragment, geometry, timing, style, DOM, and renderer authority is rejected."
+    },
+    {
+      "command": "canonical renderer unit and type gates; production build; focused reader ownership browser matrix; retained KaTeX WebGL radical baseline; reader production closure; architecture gates; Theseus workspace validation",
+      "status": "passed",
+      "scope": "slice-27 renderer retirement and project-memory reconciliation",
+      "checkedAt": "2026-07-26T05:06:56.384Z",
+      "notes": "Canonical session naming is explicit from source through the production chunk. Five browser checks, six convergence ratchets, 18 retained legacy-reference tests, all TypeScript projects, architecture gates, eight production routes, build, and a 785-node workspace pass. Audit finds zero safe additional deletions and zero unclassified renderer paths."
     }
   ],
   "allowedWork": [
@@ -493,7 +500,8 @@
     {
       "id": "slice-27",
       "title": "renderer-retirement-and-project-memory-reconciliation",
-      "status": "planned"
+      "summary": "Renamed the product bridge and diagnostics as the canonical equation session, classified every renderer path, and reconciled strategy, roadmap, and active-thread memory. The approved gold transition has one exclusive canonical paint path; compatibility paint remains only for non-migrated transitions; active editor and reference paths are retained with explicit revisit conditions. Focused unit, browser, production, architecture, build, legacy-reference, and Theseus validation gates pass.",
+      "status": "complete"
     },
     {
       "id": "slice-28",

@@ -7,7 +7,7 @@ const otherRoute =
   "/reader/solve-x/teacher-zero/?kpLesson=" +
   "lesson.solve-x.x-plus-3.teacher-zero&kpVersion=1&kpProgress=500";
 
-test("one gold reader card uses the generic glyph compositor session", async ({
+test("one gold reader card uses the canonical equation session", async ({
   page
 }) => {
   const errors: string[] = [];
@@ -16,11 +16,11 @@ test("one gold reader card uses the generic glyph compositor session", async ({
 
   const stage = page.locator("[data-kp-reader-equation-stage]");
   await expect(stage).toHaveAttribute(
-    "data-kp-reader-glyph-compositor-exemplar",
+    "data-kp-reader-canonical-equation-session",
     "transform.linear-solve.cancel-left-additive-inverse"
   );
   await expect(stage).toHaveAttribute(
-    "data-kp-reader-glyph-compositor-active",
+    "data-kp-reader-canonical-equation-session-active",
     "true"
   );
   const transition = page.locator(
@@ -32,19 +32,19 @@ test("one gold reader card uses the generic glyph compositor session", async ({
   );
   const fitSurface = transition.locator("[data-kp-reader-fit-surface]");
   await expect(fitSurface).toHaveAttribute(
-    "data-kp-reader-glyph-compositor",
+    "data-kp-reader-canonical-equation-session",
     "active"
   );
   await expect(fitSurface).toHaveAttribute(
-    "data-kp-reader-glyph-compositor-lifecycle",
+    "data-kp-reader-canonical-equation-session-lifecycle",
     "renderer-session"
   );
   await expect(fitSurface).toHaveAttribute(
-    "data-kp-reader-glyph-compositor-owner",
+    "data-kp-reader-canonical-equation-session-owner",
     "material-scene"
   );
   expect(Number(await fitSurface.getAttribute(
-    "data-kp-reader-glyph-compositor-track-count"
+    "data-kp-reader-canonical-equation-session-track-count"
   ))).toBeGreaterThan(0);
   await expect(
     fitSurface.locator("[data-kp-native-katex-scene-owner]")
@@ -57,13 +57,13 @@ test("one gold reader card uses the generic glyph compositor session", async ({
   )).toEqual([]);
 });
 
-test("default reader glyph compositor supports reduced motion", async ({
+test("default reader canonical equation session supports reduced motion", async ({
   page
 }) => {
   await page.goto(`${route}&kpMotion=reduced`);
   const stage = page.locator("[data-kp-reader-equation-stage]");
   await expect(stage).toHaveAttribute(
-    "data-kp-reader-glyph-compositor-active",
+    "data-kp-reader-canonical-equation-session-active",
     "true"
   );
   await expect(page.locator("body")).toHaveAttribute(
@@ -73,10 +73,10 @@ test("default reader glyph compositor supports reduced motion", async ({
 
   await page.goto(otherRoute);
   await expect(stage).not.toHaveAttribute(
-    "data-kp-reader-glyph-compositor-exemplar"
+    "data-kp-reader-canonical-equation-session"
   );
   await expect(stage).toHaveAttribute(
-    "data-kp-reader-glyph-compositor-active",
+    "data-kp-reader-canonical-equation-session-active",
     "false"
   );
   await expect(
@@ -113,7 +113,10 @@ test("reader compositor direct seek and rewind return to the same paint frame", 
       String(progress)
     );
     await expect(page.locator("[data-kp-reader-equation-stage]"))
-      .toHaveAttribute("data-kp-reader-glyph-compositor-active", "true");
+      .toHaveAttribute(
+        "data-kp-reader-canonical-equation-session-active",
+        "true"
+      );
   };
 
   await seek(475);
@@ -185,19 +188,19 @@ test("moving reader paint is inert while native DOM keeps semantic authority", a
     .toHaveAttribute("data-kp-reader-focus-source", "keyboard");
 });
 
-test("only the gold reader loads compositor implementation chunks", async ({
+test("only the gold reader loads canonical equation session chunks", async ({
   page
 }) => {
   const loaded: string[] = [];
   page.on("response", (response) => loaded.push(response.url()));
   await page.goto(otherRoute);
   expect(loaded.some((url) =>
-    /reader-glyph-compositor-exemplar|native-katex-scene-compositor/.test(url)
+    /reader-canonical-equation-session|native-katex-scene-compositor/.test(url)
   )).toBe(false);
 
   loaded.length = 0;
   await page.goto(route);
   expect(loaded.some((url) =>
-    /reader-glyph-compositor-exemplar/.test(url)
+    /reader-canonical-equation-session/.test(url)
   )).toBe(true);
 });

@@ -30,8 +30,8 @@ import {
   type KpReaderEquationSymbolMotionFrame
 } from "../renderers/public-api.ts";
 import type {
-  KpReaderGlyphCompositorExemplar
-} from "./reader-glyph-compositor-exemplar.ts";
+  KpReaderCanonicalEquationSession
+} from "./reader-canonical-equation-session.ts";
 import {
   createKpReaderClockSample,
   createKpReaderActiveLocationService,
@@ -100,10 +100,10 @@ const readerRoute = createKpReaderRuntimeRouteDescriptor({
 const { documentId, documentVersion } = readerRoute;
 const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
 const usesCanonicalEquationRenderer = lessonVariant === "streamlined";
-const readerGlyphCompositorModule = usesCanonicalEquationRenderer
-  ? await import("./reader-glyph-compositor-exemplar.ts")
+const readerCanonicalEquationSessionModule = usesCanonicalEquationRenderer
+  ? await import("./reader-canonical-equation-session.ts")
   : undefined;
-const readerGlyphCompositorAdapter = usesCanonicalEquationRenderer
+const readerCanonicalEquationSessionAdapter = usesCanonicalEquationRenderer
   ? await loadKpReaderEquationSceneCompositorAdapter()
   : undefined;
 const lessonDescriptor = resolveKpReaderEquationLessonDescriptor(lessonVariant);
@@ -278,21 +278,22 @@ const staticPlans = new Map(animation.transformations.map((transformation, index
     }
   ] as const;
 }));
-const readerGlyphCompositor: KpReaderGlyphCompositorExemplar | undefined =
-  readerGlyphCompositorModule === undefined ||
-    readerGlyphCompositorAdapter === undefined ||
+const readerCanonicalEquationSession: KpReaderCanonicalEquationSession | undefined =
+  readerCanonicalEquationSessionModule === undefined ||
+    readerCanonicalEquationSessionAdapter === undefined ||
     !animation.transformations.some(({ id }) =>
       id === "transform.linear-solve.cancel-left-additive-inverse"
     )
     ? undefined
-    : readerGlyphCompositorModule.createKpReaderGlyphCompositorExemplar({
+    : readerCanonicalEquationSessionModule.createKpReaderCanonicalEquationSession({
         transitionId: "transform.linear-solve.cancel-left-additive-inverse",
         createSession:
-          readerGlyphCompositorAdapter.createKpReaderEquationSceneCompositorSession
+          readerCanonicalEquationSessionAdapter
+            .createKpReaderEquationSceneCompositorSession
       });
-if (readerGlyphCompositor !== undefined) {
-  stage.dataset["kpReaderGlyphCompositorExemplar"] =
-    readerGlyphCompositor.transitionId;
+if (readerCanonicalEquationSession !== undefined) {
+  stage.dataset["kpReaderCanonicalEquationSession"] =
+    readerCanonicalEquationSession.transitionId;
 }
 const materialLayer = createKpReaderEquationMaterialLayer(
   requireDescendant<HTMLElement>(viewport, "[data-kp-reader-equation-material-layer]")
@@ -637,7 +638,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     candidate.element.dataset["kpReaderTransitionActive"] = String(active);
   }
   applyKpReaderEquationResponsiveFit(materialFitSurface, context.fit);
-  const readerCompositorApplied = readerGlyphCompositor?.apply({
+  const canonicalEquationSessionApplied = readerCanonicalEquationSession?.apply({
     renderPlan: context.renderPlan,
     materialPlan: context.materialPlan,
     fitSurface: context.fitSurface,
@@ -645,7 +646,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     fontReadiness,
     motion
   }) ?? false;
-  if (readerCompositorApplied) {
+  if (canonicalEquationSessionApplied) {
     materialLayer.sync([]);
   } else {
     for (const element of context.anchorElements.values()) {
@@ -711,8 +712,8 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   document.body.dataset["kpReaderMotionPreference"] = motionPreference;
   document.body.dataset["kpReaderPlaybackDirection"] = sample.direction;
   stage.dataset["kpReaderMotionAuthority"] = motion.samplingAuthority;
-  stage.dataset["kpReaderGlyphCompositorActive"] = String(
-    readerCompositorApplied
+  stage.dataset["kpReaderCanonicalEquationSessionActive"] = String(
+    canonicalEquationSessionApplied
   );
   document.body.dataset["kpReaderTransition"] = transitionId;
   document.body.dataset["kpReaderFramePlans"] = String(
@@ -1259,7 +1260,7 @@ function dispose(): void {
   window.removeEventListener("keydown", onReaderKeyDown);
   window.removeEventListener("scrollend", locationSettlement.settle);
   fontReviewLifecycle.dispose();
-  readerGlyphCompositor?.dispose();
+  readerCanonicalEquationSession?.dispose();
   semanticLinkBindings.dispose();
   locationSettlement.dispose();
   rendererRegistry.disposeAll();

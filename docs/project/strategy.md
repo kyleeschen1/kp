@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-07-24
+Last Updated: 2026-07-25
 
 ## North Star
 
@@ -51,6 +51,13 @@ produces inputs and projections around that path; it does not add another
 runtime animation layer. One durable semantic animation artifact may compile
 to multiple capability-declaring backends, with static JavaScript as the
 primary full-interaction target.
+
+For structurally changing native-KaTeX equations, the canonical renderer is
+one ephemeral session driven by semantic lineage and measured native paint.
+Native DOM remains the sole authority for settled typography, accessibility,
+annotations, and interaction. Existing equation animations remain reference
+and compatibility coverage until migrated one exemplar at a time; a migrated
+transition must retire its old paint branch in the same rollback unit.
 
 ## Project Docs And Theseus
 

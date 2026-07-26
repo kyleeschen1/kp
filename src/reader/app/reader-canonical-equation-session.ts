@@ -19,7 +19,7 @@ interface PaintBinding {
     readonly width: number; readonly height: number };
 }
 
-export interface KpReaderGlyphCompositorExemplar {
+export interface KpReaderCanonicalEquationSession {
   readonly transitionId: string;
   readonly apply: (input: {
     readonly renderPlan: KpReaderEquationRenderPlan;
@@ -33,10 +33,10 @@ export interface KpReaderGlyphCompositorExemplar {
   readonly dispose: () => void;
 }
 
-export function createKpReaderGlyphCompositorExemplar(input: {
+export function createKpReaderCanonicalEquationSession(input: {
   readonly transitionId: string;
   readonly createSession: KpReaderEquationSceneCompositorFactory;
-}): KpReaderGlyphCompositorExemplar {
+}): KpReaderCanonicalEquationSession {
   let session:
     ReturnType<KpReaderEquationSceneCompositorFactory> | undefined;
   let sessionKey: string | undefined;
@@ -107,12 +107,12 @@ export function createKpReaderGlyphCompositorExemplar(input: {
       if (ownership.materialSceneOpacity === 1) {
         applyReaderMotionTrace(frame, paintBindings, input.transitionId);
       }
-      frame.fitSurface.dataset["kpReaderGlyphCompositor"] = "active";
-      frame.fitSurface.dataset["kpReaderGlyphCompositorLifecycle"] =
+      frame.fitSurface.dataset["kpReaderCanonicalEquationSession"] = "active";
+      frame.fitSurface.dataset["kpReaderCanonicalEquationSessionLifecycle"] =
         session.lifecycle;
-      frame.fitSurface.dataset["kpReaderGlyphCompositorOwner"] =
+      frame.fitSurface.dataset["kpReaderCanonicalEquationSessionOwner"] =
         ownership.visualOwner;
-      frame.fitSurface.dataset["kpReaderGlyphCompositorTrackCount"] =
+      frame.fitSurface.dataset["kpReaderCanonicalEquationSessionTrackCount"] =
         String(session.tracks.length);
       return true;
     },
@@ -202,14 +202,16 @@ function bindReaderPaintOwnership(
       )?.dataset["kpReaderTransition"]
   );
   if (transition === undefined) {
-    throw new Error("Reader glyph compositor is missing its material transition.");
+    throw new Error("Reader canonical equation session is missing its material transition.");
   }
   for (const anchor of transition.anchors) {
     const element = fitSurface.querySelector<HTMLElement>(
       `[data-kp-reader-equation-anchor-id="${CSS.escape(anchor.id)}"]`
     );
     if (element === null) {
-      throw new Error(`Reader glyph compositor is missing anchor ${anchor.id}.`);
+      throw new Error(
+        `Reader canonical equation session is missing anchor ${anchor.id}.`
+      );
     }
     element.dataset["kpSemanticEntityId"] = anchor.selectorId;
     element.dataset["kpPresentationGroupId"] = `reader-paint-group.${anchor.id}`;
@@ -219,7 +221,7 @@ function bindReaderPaintOwnership(
 function createMaterialLayer(fitSurface: HTMLElement): HTMLElement {
   const layer = fitSurface.ownerDocument.createElement("div");
   layer.className =
-    "kp-reader-equation-material kp-reader-glyph-compositor-material";
+    "kp-reader-equation-material kp-reader-canonical-equation-session-material";
   layer.dataset["kpEditorEquationMaterialLayer"] = "true";
   layer.setAttribute("aria-hidden", "true");
   layer.setAttribute("inert", "");

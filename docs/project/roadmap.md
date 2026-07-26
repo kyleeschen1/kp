@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-24
+Last Updated: 2026-07-25
 Status: active
 Active Thread: `threads/cross-domain-tutorial-platform.md`
 Supporting Thread: `threads/semantic-runtime.md`
@@ -67,34 +67,31 @@ they do not expand the active Theseus contract without a later explicit
 approval.
 
 The semantic-glyph reconciliation decision in
-`decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md` now
-narrows the immediate architecture question. The completed quadratic
-presentation is retained as a diagnostic exemplar, not approved for
-publication or promotion. Before another animation family advances, KP will
-test whether one semantic-lineage-constrained glyph matcher and one bounded
-geometry scheduler can cover four adversarial identity/multiplicity/layout
-cases while preserving branching, cards/Cloze, accessibility, interaction,
-static-JS execution, and headless compilation. If any case needs
-operation-specific scheduling, general custom-motion-planner investment stops.
+`decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md` has now
+produced a canonical native-KaTeX renderer session. The approved solve-x gold
+transition uses it by default with exclusive paint ownership; generic fraction
+merge/split, radical succession, direct seek/rewind, native semantic authority,
+and governed LLM compilation have passed focused proof. The quadratic remains
+diagnostic evidence rather than a promoted product exemplar. This result
+authorizes exemplar-by-exemplar migration, not a global equation-family
+rollout.
 
 ## Active Focus
 
-**Run the bounded semantic-constrained glyph reconciliation experiment.** The
-current quadratic is a successful diagnostic exemplar but is not approved for
-publication, family promotion, or further polishing under its current
-scheduler. The next proposed loop tests a single matcher, geometry scheduler,
-JavaScript backend, and headless backend against solve-x one-to-one identity, a
-many-to-one fraction merge with Cloze, the quadratic one-to-many `±` branch,
-and one crowded quadratic interval at wide and phone widths.
+**Close the canonical equation renderer convergence, then migrate one fraction
+reader exemplar.** The canonical renderer now owns the approved solve-x gold
+transition; the older material layer is compatibility-only for non-migrated
+transitions and never paints alongside it. Release verification and durable
+closeout are the current action. The next proposed product loop should migrate
+one real fraction split/merge card through the same canonical session and stop
+for visual review before any family generalization.
 
-The experiment is complexity-negative replacement work. It may evolve the
-durable animation artifact only with renderer-independent constraints, must
-keep glyph matches and measured schedules ephemeral, must delete or reduce at
-least one old scheduling policy site, and must stop if a case requires its own
-scheduler. The proposal is in
-`reviews/2026-07-24-semantic-glyph-reconciliation-experiment-long-loop-proposal.md`;
-execution remains unapproved until its exact 24 slices receive explicit
-approval.
+The migration remains complexity-negative replacement work. Semantic traces,
+lineage, clocks, native accessibility, authoring guidance, and accepted legacy
+examples stay authoritative. Measured glyph geometry and clone paint remain
+ephemeral. Each migrated transition must retire or bypass its compatibility
+paint in the same rollback unit, so KP converges on one implementation without
+discarding unmigrated catalog coverage.
 
 The current breadth checkpoint is the derivative bridge. It must synchronize a
 KaTeX finite difference quotient with secant geometry, continuously converge to
@@ -349,24 +346,24 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Approve and run the four-case semantic-constrained glyph reconciliation
-   experiment, with mandatory human checkpoints after the first solve-x
-   exemplar and the complete experiment.
-2. Based on its terminal `PASS` or `STOP_CUSTOM_PLANNER` result, either migrate
-   proven common presentation behavior or retain conservative checkpoint
-   rendering and move high-fidelity motion to authored backend/lesson assets.
-3. Replace distribution string templates with stable expression subtrees,
+1. Complete the canonical equation renderer release and closeout gates.
+2. Propose one reader fraction split/merge migration using the canonical
+   session, generic lineage multiplicity, and no-fade law; stop at its visual
+   exemplar checkpoint before any broader fraction rollout.
+3. After that approval, promote radical/exponent succession through the same
+   session without adding notation-specific scheduling categories.
+4. Replace distribution string templates with stable expression subtrees,
    semantic role binding, verified rewrites, and typed normal-form intent.
-4. Pressure-test those contracts through opaque fraction fan-out, numerator
+5. Pressure-test those contracts through opaque fraction fan-out, numerator
    normalization, distributed fraction terms, reverse factoring, and a lawful
    multi-step solve macro.
-5. Prove governed semantic and LLM authoring while deterministic compilers
+6. Expand governed semantic and LLM authoring while deterministic compilers
    retain geometry, timing, typography, responsive adaptation, rendering,
    validation, and repair authority.
-6. Promote radicals/exponents, functional wrapping, derivatives, integral
+7. Promote functional wrapping, derivatives, integral
    accumulation, vector/projection, and matrix-vector/linear-map coordination
    one exemplar checkpoint at a time.
-7. Keep FTC, BFS, economics, programming, physics, course-scale curriculum,
+8. Keep FTC, BFS, economics, programming, physics, course-scale curriculum,
    dynamic package loading, and broad WebGL work parked until a new priority
    decision explicitly advances them.
 
