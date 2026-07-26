@@ -50,3 +50,18 @@ export {
   type KpPublicationFitnessIssueCode,
   type KpPublicationFitnessReport
 } from "./publication-fitness.ts";
+
+export {
+  createKpCanonicalAnimationConstruction,
+  kpCanonicalAnimationConstructionSchemaVersion,
+  validateKpCanonicalAnimationConstruction,
+  type KpCanonicalAnimationConstructionArtifact,
+  type KpCanonicalAnimationConstructionInput,
+  type KpCanonicalAnimationConstructionIssue,
+  type KpCanonicalConstructionCheckpoint,
+  type KpCanonicalConstructionComposition,
+  type KpCanonicalConstructionExplanationIntent,
+  type KpCanonicalConstructionLineageRef,
+  type KpCanonicalConstructionObjectRef,
+  type KpCanonicalConstructionOperationRef
+} from "./canonical-animation-construction.ts";

@@ -39,6 +39,13 @@
       "scope": "slice-02 construction path inventory",
       "checkedAt": "2026-07-26T05:47:01.020Z",
       "notes": "Four inventory ratchets, three architecture gates, all TypeScript projects, and 788-node workspace validation pass. The ledger maps every construction and projection authority, freezes 29 HTML, 9 attribute, and 3 script-JSON escaping definitions, and confirms clone authority stripping is already shared."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; npm run check:architecture; npm run typecheck; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-03 canonical construction contract",
+      "checkedAt": "2026-07-26T05:53:55.095Z",
+      "notes": "Nine focused construction and inventory checks, all architecture gates, all TypeScript projects, and the 788-node workspace pass. The immutable public contract covers verified object and expression refs, exact operation-pack pins, operation and lineage refs, explanation intent, total composition, and source/target checkpoints while serializing no presentation or renderer state."
     }
   ],
   "allowedWork": [
@@ -97,7 +104,9 @@
     {
       "id": "slice-03",
       "title": "canonical-construction-contract",
-      "status": "planned"
+      "summary": "Added one public immutable renderer-neutral construction contract. It validates reference closure, canonical correspondence arity, total operation composition, explanation intent, and checkpoints, while existing authorities retain math, scheduling, layout, DOM, typography, and export ownership.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-04",
