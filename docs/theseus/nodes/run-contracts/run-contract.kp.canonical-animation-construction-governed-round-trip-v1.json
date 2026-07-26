@@ -60,6 +60,13 @@
       "scope": "slice-05 deterministic-round-trip-baseline",
       "checkedAt": "2026-07-26T06:06:04.762Z",
       "notes": "15 focused tests pass; recorded fraction construction and existing runtime/projection round trips are JSON-stable; type and architecture gates pass."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; npm run check:reader-production; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-06 fraction-reader-preservation-manifest",
+      "checkedAt": "2026-07-26T06:09:08.843Z",
+      "notes": "17 focused tests, reader production closure, and all TypeScript projects pass; preservation ratchets cover semantics, prose, focus, Cloze, hydration, layout, motion, accessibility, route, payload, and review checkpoints."
     }
   ],
   "allowedWork": [
@@ -139,7 +146,9 @@
     {
       "id": "slice-06",
       "title": "fraction-reader-preservation-manifest",
-      "status": "planned"
+      "summary": "Froze the current fraction reader preservation boundary across semantics, product content, interaction, responsive review, accessibility, and budgets before changing paint ownership.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-07",

@@ -65,6 +65,10 @@ export {
 export {
   compileKpNumeratorSplitMergeEquationLessonModel
 } from "./numerator-split-merge-equation-lesson-model.ts";
+
+export {
+  kpNumeratorSplitMergePreservationManifest
+} from "./numerator-split-merge-preservation-manifest.ts";
 export {
   compileKpFractionalTransferComparisonLesson
 } from "./fractional-transfer-comparison-lesson.ts";
