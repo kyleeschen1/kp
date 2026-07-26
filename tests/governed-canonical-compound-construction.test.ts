@@ -4,7 +4,7 @@ import test from "node:test";
 import {
   createKpGovernedCanonicalCompoundConstruction,
   sampleKpGovernedCanonicalCompoundConstruction
-} from "../src/authoring/public-api.ts";
+} from "../src/authoring/canonical-animation-public-api.ts";
 
 test("compound construction preserves every canonical child operation", () => {
   const compound = createKpGovernedCanonicalCompoundConstruction();

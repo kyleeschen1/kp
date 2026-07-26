@@ -8,7 +8,7 @@ import {
   planKpGovernedConstructionRepairs,
   type KpGovernedCanonicalConstructionRequest,
   type KpGovernedConstructionSourceAuthority
-} from "../src/authoring/public-api.ts";
+} from "../src/authoring/canonical-animation-public-api.ts";
 import {
   numeratorSplitMergeEquationAssetIds
 } from "../src/semantic/numerator-split-merge-equation-asset.ts";

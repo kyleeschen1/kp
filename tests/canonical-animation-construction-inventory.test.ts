@@ -96,6 +96,23 @@ test("escaping inventory ratchets only the proven tutorial consolidation", async
   );
 });
 
+test("canonical animation exports stay out of the concept authoring barrel", async () => {
+  const [conceptApi, canonicalApi] = await Promise.all([
+    readFile("src/authoring/public-api.ts", "utf8"),
+    readFile("src/authoring/canonical-animation-public-api.ts", "utf8")
+  ]);
+  for (const symbol of [
+    "createKpCanonicalAnimationConstruction",
+    "compileKpGovernedCanonicalConstruction",
+    "createKpGovernedCanonicalConstructionCohort",
+    "createKpGovernedCanonicalCompoundConstruction",
+    "projectKpGovernedCanonicalConstructionCohort"
+  ]) {
+    assert.doesNotMatch(conceptApi, new RegExp(symbol), symbol);
+    assert.match(canonicalApi, new RegExp(symbol), symbol);
+  }
+});
+
 async function sourceFiles(roots: readonly string[]): Promise<readonly string[]> {
   const { readdir } = await import("node:fs/promises");
   const visit = async (path: string): Promise<string[]> => {

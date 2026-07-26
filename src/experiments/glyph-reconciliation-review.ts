@@ -1,5 +1,3 @@
-import katex from "katex";
-
 import "./glyph-reconciliation-review.css";
 import {
   createKpGlyphReconciliationFractionMath
@@ -8,6 +6,8 @@ import {
   formatDuration,
   readableOperation
 } from "./glyph-reconciliation-review-format.ts";
+import { createKpGlyphReviewGalleryMode } from "./glyph-reconciliation-review-gallery-mode.ts";
+import { createKpGlyphReviewMathRenderer } from "./glyph-reconciliation-review-math.ts";
 import {
   createKpFractionExperimentScene,
   type KpFractionExperimentDirection
@@ -64,14 +64,12 @@ const rootNode = document.querySelector<HTMLElement>("#glyph-experiment");
 if (rootNode === null) throw new Error("Glyph root is missing.");
 const root = rootNode;
 const searchParams = new URL(location.href).searchParams;
-const reviewGalleryArtifact = searchParams.get("reviewGallery");
-if (
-  reviewGalleryArtifact === "fraction" ||
-  reviewGalleryArtifact === "cohort"
-) {
-  document.documentElement.dataset["kpReviewGalleryArtifact"] =
-    reviewGalleryArtifact;
-}
+const reviewGallery = createKpGlyphReviewGalleryMode(
+  searchParams,
+  document.documentElement
+);
+const { math, renderMathSlots, trustedMath } =
+  createKpGlyphReviewMathRenderer(root);
 if (searchParams.get("radicalInventory") === "1") {
   await import("./glyph-reconciliation-radical-inventory.ts");
 }
@@ -412,8 +410,7 @@ const fractionNativeTargets = fractionScene.caseInput.targetGlyphs.map(
         `Native fraction target ${glyph.entityId} requires one glyph atom.`
       );
     }
-    // Reader affordances belong to the author-defined motion wrapper; KaTeX may
-    // place the observed paint atom on a nested glyph span.
+    // Reader affordances belong to the authored wrapper, not nested KaTeX paint.
     const element = matches[0]!.sourceElement.closest<HTMLElement>(
       "[data-kp-motion-id]"
     ) ?? matches[0]!.sourceElement;
@@ -931,9 +928,7 @@ const requestedProgress = Number(
 ) / 1000;
 render(requestedProgress);
 review.dataset["kpReady"] = "true";
-if (reviewGalleryArtifact !== null) {
-  document.documentElement.dataset["kpReviewGalleryReady"] = "true";
-}
+reviewGallery.markReady();
 
 if (import.meta.env.DEV) {
   const { mountKpDevReview } = await import("../dev-review/review-bootstrap.ts");
@@ -1046,30 +1041,6 @@ function applyBranchSelection(): void {
     ? "Both exact branches active"
     : `${selectedBranch === "minus" ? "Negative" : "Positive"} branch active`;
   review.dataset["kpSelectedBranch"] = selectedBranch;
-}
-
-function math(latex: string): string {
-  return katex.renderToString(latex, { throwOnError: true });
-}
-
-function renderMathSlots(slot: string, html: string): void {
-  const elements = root.querySelectorAll<HTMLElement>(
-    `[data-math-slot="${slot}"]`
-  );
-  if (elements.length === 0) {
-    throw new Error(`Glyph experiment math slot ${slot} is missing.`);
-  }
-  elements.forEach((element) => {
-    element.innerHTML = html;
-  });
-}
-
-function trustedMath(latex: string): string {
-  return katex.renderToString(latex, {
-    throwOnError: true,
-    strict: false,
-    trust: (context) => context.command === "\\htmlData"
-  });
 }
 
 function clamp(value: number): number {

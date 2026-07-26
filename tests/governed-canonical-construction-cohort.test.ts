@@ -7,7 +7,7 @@ import {
   createKpGovernedCanonicalConstructionCohort,
   findKpForbiddenPresentationAuthority,
   kpGovernedCanonicalConstructionCohortPolicy
-} from "../src/authoring/public-api.ts";
+} from "../src/authoring/canonical-animation-public-api.ts";
 import {
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexSceneTracks,

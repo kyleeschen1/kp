@@ -4,7 +4,7 @@ import test from "node:test";
 import {
   createKpGovernedCanonicalConstructionRequest,
   validateKpGovernedCanonicalConstructionRequest
-} from "../src/authoring/public-api.ts";
+} from "../src/authoring/canonical-animation-public-api.ts";
 
 test("accepts the smallest governed request for an approved construction", () => {
   const request = createKpGovernedCanonicalConstructionRequest(validRequest());

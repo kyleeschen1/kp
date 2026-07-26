@@ -108,7 +108,35 @@ test("build manifest declares every accepted reader route exactly once", () => {
   );
   assert.deepEqual(
     kpReaderRouteManifest.map(({ review }) => review.checkpoints.length),
-    [8, 1, 1, 1, 1, 1, 36, 33]
+    [8, 1, 1, 1, 20, 1, 36, 33]
+  );
+  const splitMergeRoute = kpReaderRouteManifest.find(
+    ({ route }) => route === "/reader/split-merge-fractions/"
+  );
+  assert.ok(splitMergeRoute);
+  assert.deepEqual(
+    splitMergeRoute.review.checkpoints.map((checkpoint) => ({
+      id: checkpoint.id,
+      progressPermille: checkpoint.progressPermille,
+      viewport: checkpoint.viewport,
+      motion: "query" in checkpoint && "kpMotion" in checkpoint.query
+        ? checkpoint.query.kpMotion
+        : undefined
+    })),
+    ["wide-full", "wide-reduced", "phone-full", "phone-reduced"].flatMap(
+      (profile) => [
+        ["start", 0],
+        ["branch", 250],
+        ["split", 500],
+        ["converge", 750],
+        ["end", 1_000]
+      ].map(([moment, progressPermille]) => ({
+        id: `${profile}-${moment}`,
+        progressPermille,
+        viewport: profile.startsWith("phone") ? "phone" : "desktop",
+        motion: profile.endsWith("reduced") ? "reduced" : "full"
+      }))
+    )
   );
   assert.ok(kpReaderRouteManifest.every(
     ({ presentation }) =>

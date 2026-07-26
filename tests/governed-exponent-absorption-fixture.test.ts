@@ -10,7 +10,7 @@ import {
 } from "../src/animation/runtime-sampler.ts";
 import {
   createKpGovernedExponentAbsorptionFixture
-} from "../src/authoring/public-api.ts";
+} from "../src/authoring/canonical-animation-public-api.ts";
 import {
   createKpGovernedExponentRadicalPromotionCandidate
 } from "../src/authoring/governed-exponent-radical-promotion.ts";

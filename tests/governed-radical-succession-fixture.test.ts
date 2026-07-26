@@ -3,7 +3,7 @@ import test from "node:test";
 
 import {
   createKpGovernedRadicalSuccessionFixture
-} from "../src/authoring/public-api.ts";
+} from "../src/authoring/canonical-animation-public-api.ts";
 import {
   createKpGovernedExponentRadicalPromotionCandidate
 } from "../src/authoring/governed-exponent-radical-promotion.ts";

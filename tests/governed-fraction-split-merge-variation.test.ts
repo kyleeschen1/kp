@@ -9,7 +9,7 @@ import {
 } from "../src/animation/runtime-sampler.ts";
 import {
   createKpGovernedFractionSplitMergeVariation
-} from "../src/authoring/public-api.ts";
+} from "../src/authoring/canonical-animation-public-api.ts";
 import {
   compileKpReaderEquationMaterialPlan,
   projectKpReaderEquationRenderPlan
