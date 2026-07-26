@@ -109,6 +109,13 @@
       "scope": "slice-12 semantic-authority-preservation",
       "checkedAt": "2026-07-26T06:27:07.685Z",
       "notes": "22 focused construction/authority tests, one Chromium inert-paint/native-DOM test, and ten iframe/static-step/static/headless capability tests pass."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; npm run typecheck; focused compositor direct-seek and reduced-motion Chromium",
+      "status": "passed",
+      "scope": "slice-13 seek-rewind-reduced-motion",
+      "checkedAt": "2026-07-26T06:30:08.029Z",
+      "notes": "25 focused tests including 402 dense fraction samples, all TypeScript projects, and two Chromium stateless/reduced-motion tests pass."
     }
   ],
   "allowedWork": [
@@ -237,7 +244,9 @@
     {
       "id": "slice-13",
       "title": "seek-rewind-reduced-motion",
-      "status": "planned"
+      "summary": "Certified dense stateless seek, exact inverse owner identity, causal reduced motion, and exact static checkpoint settlement with no hidden clock or reverse-only correction.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-14",
