@@ -16,6 +16,7 @@ import {
   correlateKpNativeKatexSceneHandoff,
   createKpNativeKatexRendererSession,
   createKpNativeKatexSceneReconciliation,
+  decideKpNativeKatexRendererDisposition,
   evaluateKpNativeKatexTypographyHandoffLaw,
   projectKpNativeKatexSemanticPaintRelations,
   reconcileKpNativeKatexScenes,
@@ -1610,6 +1611,103 @@ test("one atom-transit session carries the complete structural cohort", () => {
     rect: track.startRect,
     opacity: track.startOpacity
   })));
+});
+
+test("checkpoint settlement keeps failures inspectable and native", () => {
+  const source = createScene("source", ["source.a", "source.b"]);
+  const target = createScene("target", ["target.result"]);
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source,
+    target,
+    relations: [{
+      id: "lineage.merge",
+      relation: "merge",
+      sourceEntityIds: ["entity.a", "entity.b"],
+      targetEntityIds: ["entity.result"]
+    }]
+  });
+  const tracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+  );
+  const dispositions = [
+    decideKpNativeKatexRendererDisposition({
+      ambiguityIds: ["lineage.ambiguous"],
+      blockedGeometryIds: []
+    }),
+    decideKpNativeKatexRendererDisposition({
+      ambiguityIds: [],
+      blockedGeometryIds: ["motion.blocked"]
+    }),
+    decideKpNativeKatexRendererDisposition({
+      ambiguityIds: [],
+      blockedGeometryIds: [],
+      unsupportedTypographyIds: ["paint.unsupported"]
+    })
+  ];
+
+  for (const disposition of dispositions) {
+    const materialLayer = {
+      querySelectorAll: () => []
+    } as unknown as HTMLElement;
+    const checkpointStage = {
+      ownerDocument,
+      querySelector: () => materialLayer,
+      querySelectorAll: () => []
+    } as unknown as HTMLElement;
+    const sourceRoot = {
+      ownerDocument,
+      style: { opacity: "" }
+    } as unknown as HTMLElement;
+    const targetRoot = {
+      ownerDocument,
+      style: { opacity: "" }
+    } as unknown as HTMLElement;
+    const session = createKpNativeKatexRendererSession({
+      stage: checkpointStage,
+      sourceRoot,
+      targetRoot,
+      reconciliation,
+      tracks,
+      disposition
+    });
+
+    assert.equal(session.mode, "checkpoint-settlement");
+    assert.strictEqual(session.disposition, disposition);
+    assert.deepEqual(session.sample(0.999), session.sample(0));
+    assert.equal(session.apply(0.999).visualOwner, "source-native");
+    assert.equal(session.apply(1).visualOwner, "target-native");
+    assert.equal(session.apply(0.4).visualOwner, "source-native");
+    assert.equal(sourceRoot.style.opacity, "1");
+    assert.equal(targetRoot.style.opacity, "0");
+  }
+
+  const unsupported = createKpNativeKatexSceneReconciliation({
+    source: createScene("source", ["source.a", "source.b"]),
+    target: createScene("target", ["target.a", "target.b"]),
+    dispositions: [{
+      id: "unsupported.lineage",
+      lifecycle: "unsupported",
+      sourceAtomIds: ["source.a", "source.b"],
+      targetAtomIds: ["target.a", "target.b"],
+      semanticEntityIds: ["entity.a", "entity.b"],
+      reason: "semantic ambiguity"
+    }]
+  });
+  assert.throws(() => createKpNativeKatexRendererSession({
+    stage,
+    sourceRoot: unsupported.source.root,
+    targetRoot: unsupported.target.root,
+    reconciliation: unsupported,
+    tracks: []
+  }), /Unsupported scene disposition/);
+  assert.equal(createKpNativeKatexRendererSession({
+    stage,
+    sourceRoot: unsupported.source.root,
+    targetRoot: unsupported.target.root,
+    reconciliation: unsupported,
+    tracks: [],
+    disposition: dispositions[0]
+  }).mode, "checkpoint-settlement");
 });
 
 test("structural rule tracks use generic continuous length interpolation", () => {

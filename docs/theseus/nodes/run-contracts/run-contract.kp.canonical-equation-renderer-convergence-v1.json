@@ -210,6 +210,12 @@
       "status": "passed",
       "scope": "slice-17 atom transit mode",
       "checkedAt": "2026-07-26T02:54:36.728Z"
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:canonical-equation-renderer; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-18 checkpoint settlement mode",
+      "checkedAt": "2026-07-26T03:04:18.090Z"
     }
   ],
   "allowedWork": [
@@ -353,7 +359,8 @@
     {
       "id": "slice-18",
       "title": "checkpoint-settlement-mode",
-      "status": "planned"
+      "summary": "Checkpoint settlement is now an internal canonical-session mode. Semantic ambiguity, blocked geometry, unsupported typography, and explicit unsupported lineage retain native source ownership at every pre-target progress, create no paint clones, expose reason and affected IDs, and atomically settle exact native target ownership at one without changing mathematics.",
+      "status": "complete"
     },
     {
       "id": "slice-19",

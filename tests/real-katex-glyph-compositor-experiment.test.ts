@@ -14,8 +14,8 @@ import {
   validateKpRealGlyphCompositorExperimentLedger
 } from "../src/animation/real-katex-glyph-compositor-experiment.ts";
 import {
-  decideKpNativeKatexCompositorDisposition
-} from "../src/rendering/native-katex-glyph-compositor.ts";
+  decideKpNativeKatexRendererDisposition
+} from "../src/rendering/native-katex-scene-compositor.ts";
 
 test("real-glyph experiment retains the failed baseline after retiring its overlay", () => {
   assert.deepEqual(
@@ -113,35 +113,32 @@ test("renderer-session fragment state cannot survive animation construction", ()
 });
 
 test("ambiguity and blocked geometry choose inspectable checkpoint settlement", () => {
-  const ambiguous = decideKpNativeKatexCompositorDisposition({
-    ambiguities: [
-      { lineageGroupId: "lineage.ambiguous-x" },
-      { lineageGroupId: "lineage.ambiguous-x" }
-    ],
-    motions: [{ matchId: "motion.direct", status: "direct" }]
+  const ambiguous = decideKpNativeKatexRendererDisposition({
+    ambiguityIds: ["lineage.ambiguous-x", "lineage.ambiguous-x"],
+    blockedGeometryIds: []
   });
-  const blocked = decideKpNativeKatexCompositorDisposition({
-    ambiguities: [],
-    motions: [
-      { matchId: "motion.clear", status: "clearance-route" },
-      { matchId: "motion.blocked", status: "settle" }
-    ]
+  const blocked = decideKpNativeKatexRendererDisposition({
+    ambiguityIds: [],
+    blockedGeometryIds: ["motion.blocked"]
   });
-  const clear = decideKpNativeKatexCompositorDisposition({
-    ambiguities: [],
-    motions: [{ matchId: "motion.clear", status: "clearance-route" }]
+  const clear = decideKpNativeKatexRendererDisposition({
+    ambiguityIds: [],
+    blockedGeometryIds: []
+  });
+  const unsupported = decideKpNativeKatexRendererDisposition({
+    ambiguityIds: [],
+    blockedGeometryIds: [],
+    unsupportedTypographyIds: ["paint.unsupported"]
   });
 
   assert.deepEqual(ambiguous, {
-    kind: "native-katex-compositor-disposition",
-    lifecycle: "renderer-session",
     mode: "checkpoint-settlement",
     reason: "semantic-ambiguity",
     affectedIds: ["lineage.ambiguous-x"]
   });
-  assert.equal(blocked.mode, "checkpoint-settlement");
   assert.equal(blocked.reason, "blocked-geometry");
   assert.deepEqual(blocked.affectedIds, ["motion.blocked"]);
-  assert.equal(clear.mode, "motion");
   assert.equal(clear.reason, "clear");
+  assert.equal(unsupported.reason, "unsupported-typography");
+  assert.deepEqual(unsupported.affectedIds, ["paint.unsupported"]);
 });

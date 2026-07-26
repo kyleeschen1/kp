@@ -42,9 +42,11 @@ import {
   applyKpNativeKatexManyToOneFrame,
   applyKpNativeKatexOneToManyFrame,
   createKpNativeKatexFragmentClone,
-  createKpNativeKatexFragmentClones,
-  decideKpNativeKatexCompositorDisposition
+  createKpNativeKatexFragmentClones
 } from "../rendering/native-katex-glyph-compositor.ts";
+import {
+  decideKpNativeKatexRendererDisposition
+} from "../rendering/native-katex-scene-compositor.ts";
 import {
   bindKpNativeKatexFragmentsWithinSemanticLineage,
   normalizeKpStageRelativeRect,
@@ -59,7 +61,7 @@ import {
 } from "../rendering/native-katex-rendered-scene.ts";
 
 const rootNode = document.querySelector<HTMLElement>("#glyph-experiment");
-if (rootNode === null) throw new Error("Glyph experiment root is missing.");
+if (rootNode === null) throw new Error("Glyph root is missing.");
 const root = rootNode;
 const searchParams = new URL(location.href).searchParams;
 if (searchParams.get("radicalInventory") === "1") {
@@ -104,14 +106,14 @@ const fractionCloze = fractionDirection === "split"
 const compoundTrace = createKpGlyphReconciliationCompoundTrace();
 const scheduledMotion = compiled.schedule.motions[0]!;
 if (scheduledMotion?.status !== "direct") {
-  throw new Error("The solve-x exemplar requires the generic direct clearance route.");
+  throw new Error("Solve-x needs a direct clearance route.");
 }
 if (
   branchCompiled.schedule.usedOperationSpecificPolicy ||
   branchCompiled.schedule.motions.length !== 2 ||
   branchCompiled.schedule.motions.some(({ status }) => status !== "direct")
 ) {
-  throw new Error("The plus-minus split requires two generic direct routes.");
+  throw new Error("Split needs two direct routes.");
 }
 const crowdedMerge = crowdedCompiled.matches.multiplicity[0];
 const crowdedMergeMotions = crowdedCompiled.schedule.motions.filter(
@@ -125,11 +127,13 @@ if (
   ) ||
   crowdedCompiled.schedule.usedOperationSpecificPolicy
 ) {
-  throw new Error("The crowded case requires the common bounded clearance result.");
+  throw new Error("Crowded case needs bounded clearance.");
 }
-const crowdedDisposition = decideKpNativeKatexCompositorDisposition({
-  ambiguities: crowdedCompiled.matches.ambiguities,
-  motions: crowdedMergeMotions
+const crowdedDisposition = decideKpNativeKatexRendererDisposition({
+  ambiguityIds: crowdedCompiled.matches.ambiguities.map(
+    ({ lineageGroupId }) => lineageGroupId),
+  blockedGeometryIds: crowdedMergeMotions.filter(
+    ({ status }) => status === "settle").map(({ matchId }) => matchId)
 });
 
 renderMathSlots("solve-x", math("x"));

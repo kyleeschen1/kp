@@ -92,6 +92,15 @@ export interface KpNativeKatexSceneOwnershipFrame {
   readonly targetNativeOpacity: 0 | 1;
   readonly frames: readonly KpNativeKatexSceneTrackFrame[];
 }
+export interface KpNativeKatexRendererDisposition {
+  readonly mode: "motion" | "checkpoint-settlement";
+  readonly reason:
+    | "clear"
+    | "semantic-ambiguity"
+    | "blocked-geometry"
+    | "unsupported-typography";
+  readonly affectedIds: readonly string[];
+}
 export interface KpNativeKatexRendererSession {
   readonly kind: "native-katex-renderer-session";
   readonly lifecycle: "renderer-session";
@@ -99,9 +108,28 @@ export interface KpNativeKatexRendererSession {
     | "native-continuity"
     | "atom-transit"
     | "checkpoint-settlement";
+  readonly disposition: KpNativeKatexRendererDisposition;
   readonly tracks: readonly KpNativeKatexSceneTrack[];
   readonly sample: (progress: number) => readonly KpNativeKatexSceneTrackFrame[];
   readonly apply: (progress: number) => KpNativeKatexSceneOwnershipFrame;
+}
+
+export function decideKpNativeKatexRendererDisposition(input: {
+  readonly ambiguityIds: readonly string[];
+  readonly blockedGeometryIds: readonly string[];
+  readonly unsupportedTypographyIds?: readonly string[] | undefined;
+}): KpNativeKatexRendererDisposition {
+  const selected = ([
+    ["semantic-ambiguity", input.ambiguityIds],
+    ["blocked-geometry", input.blockedGeometryIds],
+    ["unsupported-typography", input.unsupportedTypographyIds ?? []]
+  ] as const).find(([, ids]) => ids.length > 0);
+  const reason = selected?.[0] ?? "clear";
+  return Object.freeze({
+    mode: reason === "clear" ? "motion" : "checkpoint-settlement",
+    reason,
+    affectedIds: Object.freeze([...new Set(selected?.[1] ?? [])])
+  });
 }
 
 export interface KpNativeKatexHandoffCorrelation {
@@ -1424,6 +1452,7 @@ export function createKpNativeKatexRendererSession(input: {
   readonly targetRoot: HTMLElement;
   readonly reconciliation: KpNativeKatexSceneReconciliation;
   readonly tracks: readonly KpNativeKatexSceneTrack[];
+  readonly disposition?: KpNativeKatexRendererDisposition | undefined;
 }): KpNativeKatexRendererSession {
   const trackIds = input.tracks.map(({ id }) => id);
   if (new Set(trackIds).size !== trackIds.length) {
@@ -1443,13 +1472,19 @@ export function createKpNativeKatexRendererSession(input: {
   if (unknownVisualAtom !== undefined) {
     throw new Error(`unknown visual atom ${unknownVisualAtom.visualAtomId}.`);
   }
-  if (input.reconciliation.dispositions.some(({ lifecycle }) =>
-    lifecycle === "unsupported"
-  )) {
+  const hasUnsupported = input.reconciliation.dispositions.some(
+    ({ lifecycle }) => lifecycle === "unsupported"
+  );
+  const disposition = input.disposition ??
+    decideKpNativeKatexRendererDisposition({
+      ambiguityIds: [],
+      blockedGeometryIds: []
+    });
+  if (hasUnsupported && disposition.reason === "clear") {
     throw new Error("Unsupported scene disposition.");
   }
   const tracks = Object.freeze([...input.tracks]);
-  const mode = tracks.every((track) => {
+  const nativeCompatible = tracks.every((track) => {
     const source = sourceById.get(track.sourceAtomId ?? "");
     const target = targetById.get(track.targetAtomId ?? "");
     return track.lifecycle === "persist" &&
@@ -1459,20 +1494,32 @@ export function createKpNativeKatexRendererSession(input: {
       source.styleFingerprint === target.styleFingerprint &&
       source.fontRevision === target.fontRevision &&
       rectDelta(source.rect, target.rect) <= 0.25;
-  }) ? "native-continuity" : "atom-transit";
+  });
+  const mode =
+    disposition.reason !== "clear"
+      ? "checkpoint-settlement"
+      : nativeCompatible ? "native-continuity" : "atom-transit";
+  const sample = (progress: number) => sampleKpNativeKatexSceneTracks(
+    tracks,
+    mode === "checkpoint-settlement" &&
+      Number.isFinite(progress) &&
+      progress < 1
+      ? 0
+      : progress
+  );
   const apply = (progress: number): KpNativeKatexSceneOwnershipFrame => {
-    const frames = sampleKpNativeKatexSceneTracks(tracks, progress);
+    const frames = sample(progress);
     const bounded = Math.max(0, Math.min(1, progress));
     const targetOwns = bounded === 1;
     const sourceOwns =
-      bounded === 0 || (mode === "native-continuity" && !targetOwns);
+      bounded === 0 || (mode !== "atom-transit" && !targetOwns);
     const materialOwns = !sourceOwns && !targetOwns;
     input.sourceRoot.style.opacity = sourceOwns ? "1" : "0";
     input.targetRoot.style.opacity = targetOwns ? "1" : "0";
     // Endpoint DOM keeps semantics; clones own paint.
     syncKpEquationMaterialLayer({
       stage: input.stage,
-      owners: mode === "native-continuity" ? [] : frames.map((frame) => {
+      owners: mode === "atom-transit" ? frames.map((frame) => {
         const atom =
           sourceById.get(frame.visualAtomId) ??
           targetById.get(frame.visualAtomId)!;
@@ -1484,7 +1531,7 @@ export function createKpNativeKatexRendererSession(input: {
           transform: "none",
           fragmentRole: `${frame.paintKind}:${frame.sizingMode}`
         };
-      })
+      }) : []
     });
     input.stage.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id^=\"native-scene-owner.\"]"
@@ -1507,9 +1554,9 @@ export function createKpNativeKatexRendererSession(input: {
     kind: "native-katex-renderer-session",
     lifecycle: "renderer-session",
     mode,
+    disposition,
     tracks,
-    sample: (progress: number) =>
-      sampleKpNativeKatexSceneTracks(tracks, progress),
+    sample,
     apply
   });
 }
