@@ -93,6 +93,14 @@ test("canonical scene core exposes one ephemeral renderer session contract", asy
     1
   );
   assert.equal(source.includes("KpNativeKatexScenePlayback"), false);
+  const sessionSource = source.slice(
+    source.indexOf("export function createKpNativeKatexRendererSession"),
+    source.indexOf("function assertLifecycleArity")
+  );
+  assert.doesNotMatch(
+    sessionSource,
+    /\b(fraction|radical|quadratic|viewport|card|operation|route)\b/i
+  );
 });
 
 test("reader keeps one temporary compositor switch and one adapter loader", async () => {

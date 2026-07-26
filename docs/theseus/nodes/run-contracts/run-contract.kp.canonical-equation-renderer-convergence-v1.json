@@ -216,6 +216,12 @@
       "status": "passed",
       "scope": "slice-18 checkpoint settlement mode",
       "checkedAt": "2026-07-26T03:04:18.090Z"
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:canonical-equation-renderer; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-19 capability-based mode selection",
+      "checkedAt": "2026-07-26T03:09:11.418Z"
     }
   ],
   "allowedWork": [
@@ -365,7 +371,8 @@
     {
       "id": "slice-19",
       "title": "capability-based-mode-selection",
-      "status": "planned"
+      "summary": "Renderer mode selection is frozen at the canonical session boundary. Trusted measured compatibility selects native continuity; supported structural or paint change selects atom transit; uncertain lineage or unsupported capability selects inspectable checkpoint settlement. Decision laws and source ratchets prohibit notation, operation, route, card, or viewport dispatch.",
+      "status": "complete"
     },
     {
       "id": "slice-20",

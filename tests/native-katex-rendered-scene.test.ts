@@ -1710,6 +1710,59 @@ test("checkpoint settlement keeps failures inspectable and native", () => {
   }).mode, "checkpoint-settlement");
 });
 
+test("renderer mode selection depends only on measured scene capability", () => {
+  const source = createScene("source", ["source.x"]);
+  const target = createScene("target", ["target.x"]);
+  const targetWith = (
+    overrides: Partial<KpNativeKatexPaintAtomObservation>
+  ) => createKpNativeKatexRenderedSceneObservation({
+    ...target,
+    atoms: target.atoms.map((paintAtom) => ({ ...paintAtom, ...overrides }))
+  });
+  const mode = (
+    candidate: ReturnType<typeof targetWith>,
+    disposition = decideKpNativeKatexRendererDisposition({
+      ambiguityIds: [],
+      blockedGeometryIds: []
+    })
+  ) => {
+    const reconciliation = reconcileKpNativeKatexScenes({
+      source,
+      target: candidate
+    });
+    const tracks = compileKpNativeKatexSceneTracks(
+      compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+    );
+    return createKpNativeKatexRendererSession({
+      stage,
+      sourceRoot: source.root,
+      targetRoot: candidate.root,
+      reconciliation,
+      tracks,
+      disposition
+    }).mode;
+  };
+
+  assert.deepEqual([
+    mode(target),
+    mode(targetWith({ styleFingerprint: "font:other" })),
+    mode(targetWith({ fontRevision: 3 })),
+    mode(targetWith({
+      rect: { ...target.atoms[0]!.rect, left: 10 }
+    })),
+    mode(target, decideKpNativeKatexRendererDisposition({
+      ambiguityIds: ["lineage.uncertain"],
+      blockedGeometryIds: []
+    }))
+  ], [
+    "native-continuity",
+    "atom-transit",
+    "atom-transit",
+    "atom-transit",
+    "checkpoint-settlement"
+  ]);
+});
+
 test("structural rule tracks use generic continuous length interpolation", () => {
   const source = createScene("source", ["source.rule.a", "source.rule.b"]);
   const target = createScene("target", ["target.rule"]);
