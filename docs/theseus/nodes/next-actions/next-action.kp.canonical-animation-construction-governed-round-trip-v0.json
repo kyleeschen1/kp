@@ -45,10 +45,24 @@
       "scope": "slice-16 route-owned runtime browser behavior",
       "checkedAt": "2026-07-26T13:08:13.800Z",
       "notes": "Twenty-nine Chromium checks pass across exact fraction ownership and rewind, distribution choreography, and quadratic branching."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction",
+      "status": "passed",
+      "scope": "slice-16 governed construction request",
+      "checkedAt": "2026-07-26T13:13:58.004Z",
+      "notes": "Twenty-nine focused tests pass, including positive serialization, reference closure, intent enums, and nested visual-recipe rejection."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-16 type and architecture gates",
+      "checkedAt": "2026-07-26T13:13:58.864Z",
+      "notes": "Application, Node, test, domain, reader, concept-room, and semantic-animation boundaries pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Recovered all frozen reader budgets with route-selected runtime loading and semantics-preserving compiled HTML compaction; production closure, architecture, hydration, seeking, and rewind remain verified. Continuing slice 16 with the governed construction request."
+    "summary": "Slices 1-16 complete. Frozen reader budgets are recovered and the governed v2 construction request now carries only approved semantic references and pedagogical intent; compiler-owned mathematical verification is next."
   }
 }

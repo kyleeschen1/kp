@@ -76,3 +76,11 @@ export {
   compileKpCanonicalAnimationConstruction,
   type CompileKpCanonicalAnimationConstructionInput
 } from "./canonical-animation-construction-compiler.ts";
+
+export {
+  createKpGovernedCanonicalConstructionRequest,
+  kpGovernedCanonicalConstructionRequestSchemaVersion,
+  validateKpGovernedCanonicalConstructionRequest,
+  type KpGovernedCanonicalConstructionRequest,
+  type KpGovernedSemanticAuthoringSchemaIssue
+} from "./governed-semantic-request.ts";

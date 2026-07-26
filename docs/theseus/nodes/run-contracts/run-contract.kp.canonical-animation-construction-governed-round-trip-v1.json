@@ -137,6 +137,20 @@
       "scope": "slice-15 conditional promotion gate",
       "checkedAt": "2026-07-26T06:46:33.133Z",
       "notes": "Frozen shared runtime and compiled-HTML ceilings fail across migrated and untouched routes. Baselines were not raised; automatic continuation past the waived checkpoint is forbidden until a bounded recovery passes."
+    },
+    {
+      "command": "npm run build; npm run check:reader-budgets; npm run check:reader-production; npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "slice-16 recovered conditional promotion gate",
+      "checkedAt": "2026-07-26T13:14:41.723Z",
+      "notes": "All eight frozen route budgets pass without baseline changes; production closure and nine shared Chromium route checks pass after route-owned loading boundaries."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-16 governed construction request",
+      "checkedAt": "2026-07-26T13:14:42.719Z",
+      "notes": "Twenty-nine focused construction tests, all TypeScript projects, and architecture gates pass; the provider request cannot encode visual recipes."
     }
   ],
   "allowedWork": [
@@ -286,8 +300,8 @@
     {
       "id": "slice-16",
       "title": "budget-recovery-and-governed-construction-request",
-      "summary": "First recover the frozen slice-15 route budgets as a separate commit without changing animation semantics or raising baselines; after that gate passes, execute the original governed-construction-request target and complete slice 16.",
-      "status": "in-progress",
+      "summary": "Recovered frozen reader budgets without raising baselines, then added the v2 governed construction request over exact source pins, approved object and operation refs, explanatory purpose, detail level, and composition intent. Shared authority firewall rejects visual recipes and accepted requests discard provider extensions.",
+      "status": "complete",
       "planPhaseId": "canonical-animation-construction"
     },
     {
