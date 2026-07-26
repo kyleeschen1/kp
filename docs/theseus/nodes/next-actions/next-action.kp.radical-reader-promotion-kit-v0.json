@@ -243,11 +243,53 @@
       "scope": "slice 9 architecture boundaries",
       "checkedAt": "2026-07-26T17:25:06.935Z",
       "notes": "All architecture gates passed."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 10 exclusive product ownership",
+      "checkedAt": "2026-07-26T17:33:35.436Z",
+      "notes": "Two Chromium tests passed on a scope-owned fresh Vite server. The real radical route used one canonical material layer, emptied compatibility paint, and assigned unanchored native radical SVG paint to its semantic state."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 10 focused regressions",
+      "checkedAt": "2026-07-26T17:33:36.353Z",
+      "notes": "22 focused tests passed."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice 10 canonical renderer regression",
+      "checkedAt": "2026-07-26T17:33:37.155Z",
+      "notes": "11 canonical renderer tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 10 static typing",
+      "checkedAt": "2026-07-26T17:33:37.961Z",
+      "notes": "All TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 10 architecture boundaries",
+      "checkedAt": "2026-07-26T17:33:38.790Z",
+      "notes": "All architecture gates passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice 10 production route build",
+      "checkedAt": "2026-07-26T17:33:39.587Z",
+      "notes": "The radical reader route compiled into dist with native lesson HTML and shared reader chunks."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 9 added a no-route browser dry run. A governed radical runtime frame traverses existing render/material plans, native KaTeX scene observation, and the released adapter into one ephemeral atom-transit session with finite stateless samples and no new lifecycle."
+    "summary": "Slice 10 activated /reader/radical-succession/ through the existing manifest, descriptor registry, runtime clock, and canonical session. Generic state-root ownership covers native KaTeX remainder while closer selector anchors retain structural identity; compatibility paint is empty whenever canonical paint is active."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

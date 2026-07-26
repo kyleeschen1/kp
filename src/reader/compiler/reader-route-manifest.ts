@@ -5,6 +5,7 @@ import {
   compileKpFractionalTransferComparisonLesson,
   compileKpNumeratorSplitMergeEquationLesson,
   compileKpQuadraticBranchingLesson,
+  compileKpRadicalSuccessionEquationLesson,
   compileKpXPlusThreeLesson,
   compileKpXPlusThreeTeacherZeroLesson
 } from "./public-api.ts";
@@ -88,6 +89,37 @@ const splitMergeReviewProfiles = [
   { id: "wide-reduced", label: "Wide · reduced motion", viewport: "desktop", motion: "reduced" },
   { id: "phone-full", label: "Phone · full motion", viewport: "phone", motion: "full" },
   { id: "phone-reduced", label: "Phone · reduced motion", viewport: "phone", motion: "reduced" }
+] as const;
+
+const radicalReviewProfiles = [
+  {
+    id: "wide-full",
+    label: "Wide · full motion",
+    viewport: "desktop",
+    motion: "full",
+    moments: [0, 250, 500, 750, 1_000]
+  },
+  {
+    id: "wide-reduced",
+    label: "Wide · reduced motion",
+    viewport: "desktop",
+    motion: "reduced",
+    moments: [0, 1_000]
+  },
+  {
+    id: "phone-full",
+    label: "Phone · full motion",
+    viewport: "phone",
+    motion: "full",
+    moments: [0, 250, 500, 750, 1_000]
+  },
+  {
+    id: "phone-reduced",
+    label: "Phone · reduced motion",
+    viewport: "phone",
+    motion: "reduced",
+    moments: [0, 1_000]
+  }
 ] as const;
 
 const distributionVisualProgress = [0, 360, 500, 650, 820, 1_000] as const;
@@ -257,6 +289,35 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       )
     },
     budget: routeBudget(28_800, 3_448, 120_543)
+  }),
+  defineKpReaderRoute({
+    route: "/reader/radical-succession/",
+    sourcePath: "content/lessons/radical-succession.md",
+    compile: compileKpRadicalSuccessionEquationLesson,
+    conformance: equationConformance({
+      documentId: "lesson.exponents.radical-succession",
+      progressPermille: 500,
+      beatId: "beat.rewrite",
+      searchableText: "A half power and a square root name the same value"
+    }),
+    presentation: sharedEquationPresentation,
+    review: {
+      id: "radical-succession",
+      title: "Kinetic Press · half power to square root",
+      capture: "stage",
+      columns: 5,
+      imageFit: "contain",
+      checkpoints: radicalReviewProfiles.flatMap((profile) =>
+        profile.moments.map((progressPermille) => ({
+          id: `${profile.id}-${progressPermille}`,
+          label: `${profile.label} · ${progressPermille / 10}%`,
+          progressPermille,
+          viewport: profile.viewport,
+          query: { kpMotion: profile.motion }
+        }))
+      )
+    },
+    budget: routeBudget(30_000, 4_000, 120_543)
   }),
   defineKpReaderRoute({
     route: "/reader/fractional-transfer/",

@@ -162,7 +162,8 @@
     {
       "id": "slice-10",
       "title": "switch-exclusive-ownership",
-      "status": "planned",
+      "summary": "Activated the radical product route with one exclusive canonical paint scene and generic state-root fallback ownership; browser, build, type, focused, renderer, and architecture gates pass.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {

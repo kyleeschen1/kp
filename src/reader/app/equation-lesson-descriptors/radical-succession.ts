@@ -8,10 +8,6 @@ import type {
   KpReaderEquationLessonDescriptor
 } from "../equation-lesson-descriptor.ts";
 
-/**
- * Kept out of the product registry until the exclusive-ownership slice. The
- * descriptor can still prove policy and adapter compatibility beforehand.
- */
 export const radicalSuccessionDescriptor = {
   id: "radical-succession",
   createAnimation: () => createExponentRadicalRewriteAnimationAsset(),

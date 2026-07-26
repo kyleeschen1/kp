@@ -31,7 +31,7 @@ test("radical adoption inventory names every existing authority and seam", async
   }
 });
 
-test("radical reader remains an explicit product route gap", async () => {
+test("radical reader activates only through the shared product seams", async () => {
   const [descriptors, radicalDescriptor, routes, entry] = await Promise.all([
     readFile("src/reader/app/equation-lesson-descriptor.ts", "utf8"),
     readFile(
@@ -41,9 +41,9 @@ test("radical reader remains an explicit product route gap", async () => {
     readFile("src/reader/compiler/reader-route-manifest.ts", "utf8"),
     readFile("src/reader/app/exemplar-entry.ts", "utf8")
   ]);
-  assert.doesNotMatch(descriptors, /"radical-succession"\s*:/);
+  assert.match(descriptors, /"radical-succession"\s*:/);
   assert.match(radicalDescriptor, /canonicalTransitionSelection: "all"/);
-  assert.doesNotMatch(routes, /\/reader\/radical-succession\//);
+  assert.match(routes, /\/reader\/radical-succession\//);
   assert.match(entry, /compileKpReaderCanonicalTransitionPolicy/);
   assert.doesNotMatch(
     entry,

@@ -71,7 +71,11 @@ export function createKpReaderCanonicalEquationSession(input: {
       if (session === undefined || sessionKey !== nextKey) {
         materialLayer?.remove();
         materialLayer = createMaterialLayer(frame.fitSurface);
-        bindReaderPaintOwnership(frame.materialPlan, frame.fitSurface);
+        bindReaderPaintOwnership(
+          frame.renderPlan,
+          frame.materialPlan,
+          frame.fitSurface
+        );
         const sourceRoot = requireDescendant<HTMLElement>(
           frame.fitSurface,
           '[data-kp-reader-native="source"]'
@@ -206,17 +210,41 @@ function applyReaderMotionTrace(
 }
 
 function bindReaderPaintOwnership(
+  renderPlan: KpReaderEquationRenderPlan,
   materialPlan: KpReaderEquationMaterialPlan,
   fitSurface: HTMLElement
 ): void {
+  const transitionId = fitSurface.closest<HTMLElement>(
+    "[data-kp-reader-transition]"
+  )?.dataset["kpReaderTransition"];
   const transition = materialPlan.transitions.find(
-    ({ transitionId }) =>
-      transitionId === fitSurface.closest<HTMLElement>(
-        "[data-kp-reader-transition]"
-      )?.dataset["kpReaderTransition"]
+    (candidate) => candidate.transitionId === transitionId
   );
-  if (transition === undefined) {
+  const renderedTransition = renderPlan.transitions.find(
+    ({ id }) => id === transitionId
+  );
+  if (transition === undefined || renderedTransition === undefined) {
     throw new Error("Reader canonical equation session is missing its material transition.");
+  }
+  for (const [side, states] of [
+    ["source", renderedTransition.source],
+    ["target", renderedTransition.target]
+  ] as const) {
+    const endpoint = requireDescendant<HTMLElement>(
+      fitSurface,
+      `[data-kp-reader-native="${side}"]`
+    );
+    for (const state of states) {
+      const element = requireDescendant<HTMLElement>(
+        endpoint,
+        `[data-kp-reader-equation-state="${CSS.escape(state.objectId)}"]`
+      );
+      // State ownership is the truthful fallback for native KaTeX paint that
+      // has no selector anchor; closer selector owners still take precedence.
+      element.dataset["kpSemanticEntityId"] = state.objectId;
+      element.dataset["kpPresentationGroupId"] =
+        `reader-paint-state-group.${side}.${state.objectId}`;
+    }
   }
   for (const anchor of transition.anchors) {
     const element = fitSurface.querySelector<HTMLElement>(

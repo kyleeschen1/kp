@@ -61,7 +61,10 @@ const kpReaderEquationLessonDescriptorLoaders = {
       .then(({ divideBothSidesDescriptor }) => divideBothSidesDescriptor),
   "numerator-split-merge": () =>
     import("./equation-lesson-descriptors/numerator-split-merge.ts")
-      .then(({ numeratorSplitMergeDescriptor }) => numeratorSplitMergeDescriptor)
+      .then(({ numeratorSplitMergeDescriptor }) => numeratorSplitMergeDescriptor),
+  "radical-succession": () =>
+    import("./equation-lesson-descriptors/radical-succession.ts")
+      .then(({ radicalSuccessionDescriptor }) => radicalSuccessionDescriptor)
 } as const;
 
 export type KpReaderEquationLessonVariant =
