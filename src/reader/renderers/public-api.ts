@@ -40,9 +40,6 @@ export {
   type KpReaderEquationMaterialPlanDiagnostic,
   type KpReaderEquationTransitionMaterialPlan
 } from "./equation-material-plan.ts";
-export type {
-  KpReaderEquationSceneCompositorSession
-} from "./equation-scene-compositor-adapter.ts";
 export type KpReaderEquationSceneCompositorFactory =
   typeof import("./equation-scene-compositor-adapter.ts")[
     "createKpReaderEquationSceneCompositorSession"

@@ -95,16 +95,14 @@ test("reader correspondence creates only a transient compositor session", () => 
     target: scene("target", xRelation.targetSelectorIds[0]!)
   });
 
+  assert.equal(session.kind, "native-katex-renderer-session");
   assert.equal(session.lifecycle, "renderer-session");
-  assert.equal(session.reconciliation.dispositions.length, 1);
-  assert.equal(session.reconciliation.dispositions[0]?.lifecycle, "persist");
+  assert.equal(session.mode, "atom-transit");
   assert.equal(session.tracks.length, 1);
-  assert.equal(session.playback.sample(0.5)[0]?.rect.left, 50);
-  assert.equal(
-    session.relations.find(({ id }) => id === "reader-paint.x-persists")
-      ?.relation,
-    "persist"
-  );
+  assert.equal(session.tracks[0]?.lifecycle, "persist");
+  assert.equal(session.tracks[0]?.sourceAtomId, "atom.source.x");
+  assert.equal(session.tracks[0]?.targetAtomId, "atom.target.x");
+  assert.equal(session.sample(0.5)[0]?.rect.left, 50);
 });
 
 test("durable reader plans and static projections contain no compositor state", () => {

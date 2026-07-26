@@ -222,6 +222,12 @@
       "status": "passed",
       "scope": "slice-19 capability-based mode selection",
       "checkedAt": "2026-07-26T03:09:11.418Z"
+    },
+    {
+      "command": "node test reader render material adapter; npm run test:canonical-equation-renderer; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-20 reader adapter convergence",
+      "checkedAt": "2026-07-26T03:14:05.753Z"
     }
   ],
   "allowedWork": [
@@ -377,7 +383,8 @@
     {
       "id": "slice-20",
       "title": "reader-adapter-convergence",
-      "status": "planned"
+      "summary": "The reader equation adapter now returns and the exemplar directly consumes KpNativeKatexRendererSession. The redundant reader-owned session wrapper and playback property are gone; canonical render/material plans remain renderer-neutral and serialization-safe; default routing and the temporary query gate remain unchanged for the next migration slice.",
+      "status": "complete"
     },
     {
       "id": "slice-21",

@@ -7,8 +7,7 @@ import type {
 import {
   type KpReaderEquationMaterialPlan,
   type KpReaderEquationRenderPlan,
-  type KpReaderEquationSceneCompositorFactory,
-  type KpReaderEquationSceneCompositorSession
+  type KpReaderEquationSceneCompositorFactory
 } from "../renderers/public-api.ts";
 
 export interface KpReaderGlyphCompositorExemplar {
@@ -28,7 +27,8 @@ export function createKpReaderGlyphCompositorExemplar(input: {
   readonly transitionId: string;
   readonly createSession: KpReaderEquationSceneCompositorFactory;
 }): KpReaderGlyphCompositorExemplar {
-  let session: KpReaderEquationSceneCompositorSession | undefined;
+  let session:
+    ReturnType<KpReaderEquationSceneCompositorFactory> | undefined;
   let sessionKey: string | undefined;
   let materialLayer: HTMLElement | undefined;
 
@@ -80,7 +80,7 @@ export function createKpReaderGlyphCompositorExemplar(input: {
         });
         sessionKey = nextKey;
       }
-      const ownership = session.playback.apply(frame.progress);
+      const ownership = session.apply(frame.progress);
       frame.fitSurface.dataset["kpReaderGlyphCompositor"] = "active";
       frame.fitSurface.dataset["kpReaderGlyphCompositorLifecycle"] =
         session.lifecycle;

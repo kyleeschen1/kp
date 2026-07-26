@@ -3,10 +3,7 @@ import {
   compileKpNativeKatexSceneTracks,
   createKpNativeKatexRendererSession,
   reconcileKpNativeKatexScenes,
-  type KpNativeKatexHierarchicalScenePlan,
   type KpNativeKatexRendererSession,
-  type KpNativeKatexSceneReconciliation,
-  type KpNativeKatexSceneTrack,
   type KpNativeKatexSemanticPaintRelation
 } from "../../rendering/native-katex-scene-compositor.ts";
 import type {
@@ -21,26 +18,13 @@ import type {
   KpReaderEquationTransitionPlan
 } from "./equation-render-plan.ts";
 
-export interface KpReaderEquationSceneCompositorSession {
-  readonly kind: "reader-equation-scene-compositor-session";
-  readonly lifecycle: "renderer-session";
-  readonly renderPlanId: string;
-  readonly materialPlanId: string;
-  readonly transitionId: string;
-  readonly relations: readonly KpNativeKatexSemanticPaintRelation[];
-  readonly reconciliation: KpNativeKatexSceneReconciliation;
-  readonly hierarchy: KpNativeKatexHierarchicalScenePlan;
-  readonly tracks: readonly KpNativeKatexSceneTrack[];
-  readonly playback: KpNativeKatexRendererSession;
-}
-
 export function createKpReaderEquationSceneCompositorSession(input: {
   readonly renderPlan: KpReaderEquationRenderPlan;
   readonly materialPlan: KpReaderEquationMaterialPlan;
   readonly transitionId: string;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
-}): KpReaderEquationSceneCompositorSession {
+}): KpNativeKatexRendererSession {
   const { renderTransition, materialTransition } = resolveTransitionPair(input);
   const relations = projectReaderRelations({
     renderTransition,
@@ -56,27 +40,14 @@ export function createKpReaderEquationSceneCompositorSession(input: {
   });
   const hierarchy = compileKpNativeKatexHierarchicalScenePlan(reconciliation);
   const tracks = compileKpNativeKatexSceneTracks(hierarchy);
-  const playback = createKpNativeKatexRendererSession({
+  // Measured reader state terminates here in the one canonical session; none
+  // of these renderer-session values can flow back into the durable plans.
+  return createKpNativeKatexRendererSession({
     stage: input.source.stage,
     sourceRoot: input.source.root,
     targetRoot: input.target.root,
     reconciliation,
     tracks
-  });
-
-  // The adapter returns a renderer-owned session instead of mutating either
-  // canonical plan, keeping DOM geometry and sampled tracks out of durable data.
-  return Object.freeze({
-    kind: "reader-equation-scene-compositor-session",
-    lifecycle: "renderer-session",
-    renderPlanId: input.renderPlan.id,
-    materialPlanId: input.materialPlan.id,
-    transitionId: input.transitionId,
-    relations,
-    reconciliation,
-    hierarchy,
-    tracks,
-    playback
   });
 }
 

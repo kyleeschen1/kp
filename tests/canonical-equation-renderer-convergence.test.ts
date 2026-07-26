@@ -104,8 +104,13 @@ test("canonical scene core exposes one ephemeral renderer session contract", asy
 });
 
 test("reader keeps one temporary compositor switch and one adapter loader", async () => {
-  const [entry, publicApi] = await Promise.all([
+  const [entry, exemplar, adapter, publicApi] = await Promise.all([
     readFile("src/reader/app/exemplar-entry.ts", "utf8"),
+    readFile("src/reader/app/reader-glyph-compositor-exemplar.ts", "utf8"),
+    readFile(
+      "src/reader/renderers/equation-scene-compositor-adapter.ts",
+      "utf8"
+    ),
     readFile("src/reader/renderers/public-api.ts", "utf8")
   ]);
 
@@ -114,6 +119,12 @@ test("reader keeps one temporary compositor switch and one adapter loader", asyn
     (publicApi.match(/loadKpReaderEquationSceneCompositorAdapter/g) ?? []).length,
     1
   );
+  assert.equal(
+    adapter.includes("interface KpReaderEquationSceneCompositorSession"),
+    false
+  );
+  assert.equal(adapter.includes("createKpNativeKatexRendererSession"), true);
+  assert.equal(exemplar.includes(".playback"), false);
 });
 
 test("accepted experiment and reader payload budgets remain frozen", () => {
