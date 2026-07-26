@@ -9,6 +9,10 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-07-26-radical-reader-promotion-kit-long-loop-proposal.md",
       "summary": "User-approved exact 20-slice radical reader adoption and promotion-kit proposal."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-26-radical-choreography-meta-repair-proposal.md"
     }
   ],
   "dependsOn": {

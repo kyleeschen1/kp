@@ -18,6 +18,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-26-radical-reader-parity-repair-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-26-radical-choreography-meta-repair-proposal.md"
     }
   ],
   "dependsOn": {
@@ -207,10 +211,10 @@
     },
     {
       "id": "slice-16",
-      "title": "apply-reviewed-generic-repair",
-      "summary": "Reopened after human visual rejection. The shared canonical session preserves host parity and native handoff but does not preserve the normative exponent-to-radical structural morph; promotion slices remain paused.",
+      "title": "correct-oracle-and-gates",
+      "summary": "Correct the normative visual oracle and add independent choreography-fidelity gates that fail the current opacity-only succession.",
       "status": "in-progress",
-      "planPhaseId": "canonical-radical-reader-promotion-kit"
+      "planPhaseId": "radical-choreography-meta-repair"
     },
     {
       "id": "slice-17",
