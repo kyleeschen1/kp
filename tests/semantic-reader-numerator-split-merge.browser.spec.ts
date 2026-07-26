@@ -64,6 +64,41 @@ test("split-merge reader seeks through both directions and rewinds deterministic
   await expect(stage).toHaveAttribute("data-kp-reader-native-endpoint-passed", "true");
 });
 
+test("split and merge use exclusive canonical paint ownership", async ({ page }) => {
+  await page.goto(`${route}?kpMotion=full`, { waitUntil: "networkidle" });
+  const stage = page.locator("[data-kp-reader-equation-stage]");
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  const seek = async (value: number) => {
+    await scrubber.evaluate((node, nextValue) => {
+      const input = node as HTMLInputElement;
+      input.value = String(nextValue);
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }, value);
+    await expectRenderedProgress(page, value);
+  };
+
+  await expect(stage).toHaveAttribute(
+    "data-kp-reader-canonical-equation-session",
+    "transform.numerator-split-merge.split-sum,transform.numerator-split-merge.merge-sum"
+  );
+  for (const value of [250, 750]) {
+    await seek(value);
+    const active = stage.locator(
+      '[data-kp-reader-transition-active="true"] [data-kp-reader-fit-surface]'
+    );
+    await expect(active).toHaveAttribute(
+      "data-kp-reader-canonical-equation-session",
+      "active"
+    );
+    await expect(active.locator(
+      ".kp-reader-canonical-equation-session-material"
+    )).toHaveCount(1);
+    await expect(active.locator(
+      ".kp-reader-equation-material:not(.kp-reader-canonical-equation-session-material) > *"
+    )).toHaveCount(0);
+  }
+});
+
 test("split-merge remains searchable without JavaScript and contained on phone", async ({ browser }) => {
   const staticContext = await browser.newContext({ javaScriptEnabled: false });
   const staticPage = await staticContext.newPage();

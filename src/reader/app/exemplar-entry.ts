@@ -99,7 +99,9 @@ const readerRoute = createKpReaderRuntimeRouteDescriptor({
 });
 const { documentId, documentVersion } = readerRoute;
 const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
-const usesCanonicalEquationRenderer = lessonVariant === "streamlined";
+const usesCanonicalEquationRenderer =
+  lessonVariant === "streamlined" ||
+  lessonVariant === "numerator-split-merge";
 const readerCanonicalEquationSessionModule = usesCanonicalEquationRenderer
   ? await import("./reader-canonical-equation-session.ts")
   : undefined;
@@ -278,15 +280,19 @@ const staticPlans = new Map(animation.transformations.map((transformation, index
     }
   ] as const;
 }));
+const canonicalTransitionIds =
+  lessonVariant === "streamlined"
+    ? ["transform.linear-solve.cancel-left-additive-inverse"]
+    : lessonVariant === "numerator-split-merge"
+      ? animation.transformations.map(({ id }) => id)
+      : [];
 const readerCanonicalEquationSession: KpReaderCanonicalEquationSession | undefined =
   readerCanonicalEquationSessionModule === undefined ||
     readerCanonicalEquationSessionAdapter === undefined ||
-    !animation.transformations.some(({ id }) =>
-      id === "transform.linear-solve.cancel-left-additive-inverse"
-    )
+    canonicalTransitionIds.length === 0
     ? undefined
     : readerCanonicalEquationSessionModule.createKpReaderCanonicalEquationSession({
-        transitionIds: ["transform.linear-solve.cancel-left-additive-inverse"],
+        transitionIds: canonicalTransitionIds,
         createSession:
           readerCanonicalEquationSessionAdapter
             .createKpReaderEquationSceneCompositorSession

@@ -30,15 +30,20 @@ test("construction inventory names every existing canonical authority", async ()
   }
 });
 
-test("fraction migration seam remains exclusive and explicit", async () => {
+test("fraction migration seam is canonical, exclusive, and explicit", async () => {
   const entry = await readFile("src/reader/app/exemplar-entry.ts", "utf8");
   assert.match(
     entry,
     /transform\.linear-solve\.cancel-left-additive-inverse/
   );
-  assert.doesNotMatch(
+  assert.match(
     entry,
-    /createKpReaderCanonicalEquationSession\(\{[\s\S]{0,400}numerator-split-merge/
+    /lessonVariant === "numerator-split-merge"/
+  );
+  assert.match(entry, /transitionIds: canonicalTransitionIds/);
+  assert.match(
+    entry,
+    /lessonVariant === "numerator-split-merge"\s*\?\s*animation\.transformations\.map/
   );
   assert.match(entry, /if \(canonicalEquationSessionApplied\) \{\s*materialLayer\.sync\(\[\]\)/);
 });

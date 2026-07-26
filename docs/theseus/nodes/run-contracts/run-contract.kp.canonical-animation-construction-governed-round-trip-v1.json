@@ -116,6 +116,13 @@
       "scope": "slice-13 seek-rewind-reduced-motion",
       "checkedAt": "2026-07-26T06:30:08.029Z",
       "notes": "25 focused tests including 402 dense fraction samples, all TypeScript projects, and two Chromium stateless/reduced-motion tests pass."
+    },
+    {
+      "command": "focused construction tests; canonical route chunk Chromium; exclusive fraction ownership Chromium; typecheck; build; production closure",
+      "status": "passed",
+      "scope": "slice-14 exclusive-default-migration",
+      "checkedAt": "2026-07-26T06:39:49.266Z",
+      "notes": "Canonical split and merge each render one canonical material layer and zero compatibility children; ordinary teacher-zero remains outside the canonical session chunk; focused tests, typecheck, build, and eight-route production closure pass. Full route budget baseline remains independently red and is not waived."
     }
   ],
   "allowedWork": [
@@ -251,7 +258,9 @@
     {
       "id": "slice-14",
       "title": "exclusive-default-migration",
-      "status": "planned"
+      "summary": "Migrated the approved fraction round trip to exclusive canonical session ownership with no compatibility paint, while keeping ordinary routes outside the optional canonical chunk.",
+      "status": "complete",
+      "planPhaseId": "canonical-animation-construction"
     },
     {
       "id": "slice-15",

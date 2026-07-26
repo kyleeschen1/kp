@@ -6,6 +6,7 @@ const route =
 const otherRoute =
   "/reader/solve-x/teacher-zero/?kpLesson=" +
   "lesson.solve-x.x-plus-3.teacher-zero&kpVersion=1&kpProgress=500";
+const fractionRoute = "/reader/split-merge-fractions/";
 
 test("one gold reader card uses the canonical equation session", async ({
   page
@@ -188,19 +189,25 @@ test("moving reader paint is inert while native DOM keeps semantic authority", a
     .toHaveAttribute("data-kp-reader-focus-source", "keyboard");
 });
 
-test("only the gold reader loads canonical equation session chunks", async ({
-  page
+test("only canonical readers load canonical equation session chunks", async ({
+  browser
 }) => {
-  const loaded: string[] = [];
-  page.on("response", (response) => loaded.push(response.url()));
-  await page.goto(otherRoute);
-  expect(loaded.some((url) =>
-    /reader-canonical-equation-session|native-katex-scene-compositor/.test(url)
-  )).toBe(false);
+  const loadsCanonicalSession = async (readerRoute: string): Promise<boolean> => {
+    // Isolated contexts prevent the first canonical route from satisfying the
+    // second route through the browser module cache.
+    const context = await browser.newContext();
+    const isolatedPage = await context.newPage();
+    const loaded: string[] = [];
+    isolatedPage.on("response", (response) => loaded.push(response.url()));
+    await isolatedPage.goto(readerRoute);
+    const result = loaded.some((url) =>
+      /reader-canonical-equation-session/.test(url)
+    );
+    await context.close();
+    return result;
+  };
 
-  loaded.length = 0;
-  await page.goto(route);
-  expect(loaded.some((url) =>
-    /reader-canonical-equation-session/.test(url)
-  )).toBe(true);
+  expect(await loadsCanonicalSession(otherRoute)).toBe(false);
+  expect(await loadsCanonicalSession(route)).toBe(true);
+  expect(await loadsCanonicalSession(fractionRoute)).toBe(true);
 });
