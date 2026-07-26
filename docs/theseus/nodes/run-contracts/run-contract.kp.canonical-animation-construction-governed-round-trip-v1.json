@@ -179,6 +179,13 @@
       "scope": "slice-20 exponent absorption fixture",
       "checkedAt": "2026-07-26T13:47:51.954Z",
       "notes": "Forty canonical construction tests, twelve existing exponent/radical checks, all TypeScript projects, and architecture gates pass. Existing unit-exponent semantics compile through v2 and use only the generic elimination lifecycle; static and headless projections carry no session state."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction; npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run test:canonical-equation-renderer; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-21 governed radical succession",
+      "checkedAt": "2026-07-26T13:55:08.048Z",
+      "notes": "Forty-two construction tests, fifty-two compositor tests, forty-four Chromium checks including four radical-wide/phone/reduced endpoint tests, eleven vocabulary ratchets, all TypeScript projects, and architecture gates pass. The v2 construction owns fragment lineage; the unchanged renderer uses only glyph, rule, path and generic persist, introduce, eliminate lifecycles."
     }
   ],
   "allowedWork": [
@@ -359,7 +366,8 @@
     {
       "id": "slice-21",
       "title": "radical-succession-fixture",
-      "status": "planned"
+      "summary": "Migrated the existing governed rational-power-to-radical trace into the v2 canonical construction. Compiler-owned numerator, denominator, fraction-rule, hook, overbar, and radicand lineage now feeds the established real-KaTeX inventory, with unchanged generic paint/lifecycle vocabulary and exact native endpoints across wide, phone, forward, rewind, and reduced motion.",
+      "status": "complete"
     },
     {
       "id": "slice-22",

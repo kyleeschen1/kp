@@ -112,3 +112,8 @@ export {
   createKpGovernedExponentAbsorptionFixture,
   type KpGovernedExponentAbsorptionFixture
 } from "./governed-exponent-absorption-fixture.ts";
+
+export {
+  createKpGovernedRadicalSuccessionFixture,
+  type KpGovernedRadicalSuccessionFixture
+} from "./governed-radical-succession-fixture.ts";

@@ -621,6 +621,9 @@ test("radical succession reconciles through existing generic lifecycles", async 
     };
     const inventory = (window as unknown as {
       __kpRadicalSceneInventory: {
+        governedFixtureId: string;
+        governedRequestId: string;
+        constructionKind: string;
         relations: readonly { relation: string }[];
         reconciliation: Reconciliation;
         permutedReconciliation: Reconciliation;
@@ -652,6 +655,9 @@ test("radical succession reconciles through existing generic lifecycles", async 
       dispositions: reconciliation.dispositions
     });
     return {
+      governedFixtureId: inventory.governedFixtureId,
+      governedRequestId: inventory.governedRequestId,
+      constructionKind: inventory.constructionKind,
       relationKinds: inventory.relations.map(({ relation }) => relation),
       forward: summarize(inventory.reconciliation, inventory.plan),
       permutedDispositionIds:
@@ -663,6 +669,15 @@ test("radical succession reconciles through existing generic lifecycles", async 
     };
   });
 
+  expect(result.governedFixtureId).toBe(
+    "fixture.governed.radical-succession.v1"
+  );
+  expect(result.governedRequestId).toBe(
+    "request.governed.radical-succession.v2"
+  );
+  expect(result.constructionKind).toBe(
+    "verified-governed-canonical-construction"
+  );
   expect(result.relationKinds).toEqual([
     "persist",
     "persist",

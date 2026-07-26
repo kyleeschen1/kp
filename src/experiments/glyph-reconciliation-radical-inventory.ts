@@ -4,11 +4,8 @@ import {
   createExponentRadicalRepresentationalLineageFixture
 } from "../animation/exponent-radical-adapter.ts";
 import {
-  projectKpCanonicalExecutionLineage
-} from "../animation/canonical-operation-lineage-adapter.ts";
-import {
-  createKpRadicalSuccessionGlyphReconciliationAudit
-} from "../animation/semantic-glyph-reconciliation-radical.ts";
+  createKpGovernedRadicalSuccessionFixture
+} from "../authoring/governed-radical-succession-fixture.ts";
 import {
   bindKpExponentRadicalStructuralMotionIds,
   createKpExponentRadicalSelectorAnnotatedLatex
@@ -35,7 +32,7 @@ if (panel !== null && enabled) {
 }
 
 async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
-  const audit = createKpRadicalSuccessionGlyphReconciliationAudit();
+  const governed = createKpGovernedRadicalSuccessionFixture();
   const representationFixture =
     createExponentRadicalRepresentationalLineageFixture();
   const representation =
@@ -43,9 +40,10 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
   if (representation === undefined) {
     throw new Error("Canonical radical representation lineage is unavailable.");
   }
-  const sourceObject = audit.transformation.sourceObjectIds[0];
-  const targetObject = audit.transformation.targetObjectIds[0];
-  const animation = representationFixture.animation;
+  const operation = governed.compilation.construction.operations[0]!;
+  const sourceObject = operation.sourceObjectIds[0];
+  const targetObject = operation.targetObjectIds[0];
+  const animation = governed.authority.animation;
   const sourceState = animation.bundle.objects.find(
     ({ id }) => id === sourceObject
   );
@@ -145,7 +143,17 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
   ]);
   const relations = [
     ...projectKpNativeKatexSemanticPaintRelations(
-      projectKpCanonicalExecutionLineage(audit.execution)
+      {
+        groups: operation.lineage.map((lineage) => ({
+          id: lineage.id,
+          kind: lineageKind(
+            lineage.sourceEntityIds.length,
+            lineage.targetEntityIds.length
+          ),
+          sourceEntityIds: lineage.sourceEntityIds,
+          targetEntityIds: lineage.targetEntityIds
+        }))
+      }
     ),
     {
       id: `paint.${representation.id}`,
@@ -297,6 +305,9 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
     Object.assign(window, {
       __kpApplyRadicalSceneFrame: render,
       __kpRadicalSceneInventory: Object.freeze({
+        governedFixtureId: governed.id,
+        governedRequestId: governed.request.id,
+        constructionKind: governed.compilation.kind,
         source,
         target,
         relations,
@@ -407,4 +418,20 @@ function syncSelectorFocus(
       selector.tabIndex = active ? 0 : -1;
     }
   });
+}
+
+function lineageKind(
+  sourceCount: number,
+  targetCount: number
+):
+  | "one-to-one"
+  | "many-to-one"
+  | "one-to-many"
+  | "introduction"
+  | "removal" {
+  if (sourceCount === 0) return "introduction";
+  if (targetCount === 0) return "removal";
+  if (sourceCount > 1 && targetCount === 1) return "many-to-one";
+  if (sourceCount === 1 && targetCount > 1) return "one-to-many";
+  return "one-to-one";
 }

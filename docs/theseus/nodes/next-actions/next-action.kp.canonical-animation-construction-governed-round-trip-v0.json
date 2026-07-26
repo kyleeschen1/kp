@@ -63,6 +63,6 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-20 complete. Fraction variation and unit-exponent elimination both use the canonical construction/session path; radical representational succession is next."
+    "summary": "Slices 1-21 complete. Fraction split/merge, unit-exponent elimination, and power-to-radical succession now share the canonical construction and renderer-session path; cohort conformance is next."
   }
 }
