@@ -79,6 +79,7 @@ export interface KpEquationStageMeasuredEnvelope {
   readonly endpointObjectId: string;
   readonly memberOwnerIds: readonly string[];
   readonly rect: KpEquationStageRect;
+  readonly baselineY: number;
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
 }
 
@@ -95,6 +96,7 @@ export interface KpEquationStageEnvelopeObservation {
   readonly endpointObjectId: string;
   readonly memberOwnerIds: readonly string[];
   readonly rect: KpEquationStageRect;
+  readonly baselineY: number;
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
 }
 
@@ -104,6 +106,7 @@ export interface KpCertifiedEquationStageRow {
   readonly rect: KpEquationStageRect;
   readonly translateX: number;
   readonly translateY: number;
+  readonly baselinePolicy: "preserve-native";
 }
 
 const measuredEquationStageInputAuthority: unique symbol =
@@ -126,6 +129,7 @@ export interface KpCertifiedEquationStageLayout {
   readonly schemaVersion: "kp.certified-equation-stage-layout.v1";
   readonly executionState: "certified";
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
+  readonly policy: KpEquationStageLayoutPolicy;
   readonly measuredInput: KpMeasuredEquationStageInput;
   readonly rows: readonly KpCertifiedEquationStageRow[];
   readonly stageBounds: KpEquationStageRect;
@@ -200,12 +204,16 @@ export function compileKpMeasuredEquationStageInput(input: {
       `Equation stage envelope ${id}`
     );
     assertStageRect(observation.rect, `Equation stage envelope ${id}`);
+    if (!Number.isFinite(observation.baselineY)) {
+      throw new Error(`Equation stage envelope ${id} must have a finite baseline.`);
+    }
     return Object.freeze({
       id,
       transitionId: input.intent.nodeId,
       endpointObjectId: definition.endpointObjectId,
       memberOwnerIds: Object.freeze([...expectedMembers]),
       rect: Object.freeze({ ...observation.rect }),
+      baselineY: observation.baselineY,
       measurementIdentity
     });
   });
@@ -217,6 +225,56 @@ export function compileKpMeasuredEquationStageInput(input: {
     intent: input.intent,
     envelopes: Object.freeze(envelopes),
     [measuredEquationStageInputAuthority]: true as const
+  });
+}
+
+export function certifyKpSingleRowEquationStageLayout(
+  measuredInput: KpMeasuredEquationStageInput
+): KpCertifiedEquationStageLayout {
+  if (
+    measuredInput.intent.policy !== "single-row" ||
+    measuredInput.intent.rows.length !== 1
+  ) {
+    throw new Error(
+      "Single-row equation stage certification requires exactly one declared row."
+    );
+  }
+  const intentRow = measuredInput.intent.rows[0]!;
+  const envelopesById = new Map(
+    measuredInput.envelopes.map((envelope) => [envelope.id, envelope])
+  );
+  const rowEnvelopes = intentRow.envelopeIds.map((id) => {
+    const envelope = envelopesById.get(id);
+    if (envelope === undefined) {
+      throw new Error(`Single-row equation stage is missing envelope ${id}.`);
+    }
+    assertKpEquationStageMeasurementIdentity(
+      measuredInput.measurementIdentity,
+      envelope.measurementIdentity,
+      `Single-row equation stage envelope ${id}`
+    );
+    return envelope;
+  });
+  const rect = unionStageRects(rowEnvelopes.map(({ rect }) => rect));
+  const row = Object.freeze({
+    id: intentRow.id,
+    envelopeIds: Object.freeze([...intentRow.envelopeIds]),
+    rect,
+    // One shared zero transform retains every endpoint's native KaTeX
+    // baseline and internal spacing while still producing certified occupancy.
+    translateX: 0,
+    translateY: 0,
+    baselinePolicy: "preserve-native" as const
+  });
+  return Object.freeze({
+    schemaVersion: "kp.certified-equation-stage-layout.v1" as const,
+    executionState: "certified" as const,
+    measurementIdentity: measuredInput.measurementIdentity,
+    policy: "single-row" as const,
+    measuredInput,
+    rows: Object.freeze([row]),
+    stageBounds: rect,
+    [certifiedEquationStageLayoutAuthority]: true as const
   });
 }
 
@@ -272,4 +330,22 @@ function assertStageRect(rect: KpEquationStageRect, label: string): void {
   ) {
     throw new Error(`${label} must have finite positive native geometry.`);
   }
+}
+
+function unionStageRects(
+  rects: readonly KpEquationStageRect[]
+): Readonly<KpEquationStageRect> {
+  if (rects.length === 0) {
+    throw new Error("Equation stage row requires measured envelope geometry.");
+  }
+  const left = Math.min(...rects.map(({ left }) => left));
+  const top = Math.min(...rects.map(({ top }) => top));
+  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
+  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
+  return Object.freeze({
+    left,
+    top,
+    width: right - left,
+    height: bottom - top
+  });
 }

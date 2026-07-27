@@ -63,6 +63,7 @@ export {
 } from "./foldable-distribution-layout.ts";
 export {
   assertKpEquationStageMeasurementIdentity,
+  certifyKpSingleRowEquationStageLayout,
   compileKpMeasuredEquationStageInput,
   createKpEquationStageMeasurementIdentity,
   type KpAppliedEquationStageLayout,

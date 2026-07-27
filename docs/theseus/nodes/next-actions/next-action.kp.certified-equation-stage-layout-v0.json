@@ -164,11 +164,32 @@
       "scope": "slice s06 measured envelope closure",
       "checkedAt": "2026-07-27T22:05:59.306Z",
       "notes": "All TypeScript projects accept complete measured-envelope and branded input contracts."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s07 pure single row planner",
+      "checkedAt": "2026-07-27T22:09:47.055Z",
+      "notes": "79 tests pass, including tight endpoint containment, native baseline preservation, deterministic zero transform, and 100 randomized translation-invariance fixtures."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice s07 certified construction boundary",
+      "checkedAt": "2026-07-27T22:09:48.097Z",
+      "notes": "Only the measured-input certifier can produce the branded single-row certificate; inference limits pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s07 pure single row planner",
+      "checkedAt": "2026-07-27T22:09:48.946Z",
+      "notes": "All TypeScript projects accept the certified single-row occupancy contract."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s06 adds the only measured-input constructor: every declared row envelope must close over exact native endpoint membership in one transition, revision, and coordinate space; nested groups remain legal."
+    "summary": "Slice s07 certifies one-row measured geometry as tight, translation-invariant occupancy with one shared zero transform, preserving native KaTeX baseline and internal spacing relationships."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

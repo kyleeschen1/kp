@@ -55,6 +55,7 @@ function foldableFixture() {
       width: 100,
       height: 32
     },
+    baselineY: index % 2 * 48 + 24,
     measurementIdentity
   }));
   return { intent, definitions, observations };
@@ -180,6 +181,7 @@ test("nested semantic groups may share native members without becoming duplicate
     definitions.map((definition, index) => ({
       ...definition,
       rect: { left: index * 10, top: 0, width: 40, height: 20 },
+      baselineY: 15,
       measurementIdentity
     }));
 

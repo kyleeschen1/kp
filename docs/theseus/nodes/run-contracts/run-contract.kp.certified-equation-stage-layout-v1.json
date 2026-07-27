@@ -95,7 +95,8 @@
     {
       "id": "s07",
       "title": "Pure single row planner",
-      "status": "planned"
+      "summary": "Implemented and verified the pure single-row certifier over branded measured envelopes, with exact containment, stable row identity, native baseline policy, and randomized translation invariance.",
+      "status": "complete"
     },
     {
       "id": "s08",
