@@ -166,13 +166,14 @@
     {
       "id": "s19",
       "title": "Implement-reader-controls",
-      "summary": "Integrated the canonical reader route with complete parallel phase cohorts, proper opaque motifs, fold controls, pinned drill state, one fold-aware clock, stable URLs, responsive state, and production-budget preservation.",
+      "summary": "Integrated the reader route with complete parallel phase cohorts, fold controls, pinned drill state, one fold-aware clock, stable URLs, responsive state, and production-budget preservation. Slice 20 browser opacity checks later showed constant-product successor glyphs still reconcile as elimination/introduction; s19 did not prove that visual motif.",
       "status": "complete"
     },
     {
       "id": "s20",
       "title": "Preserve-accessibility-and-export",
-      "status": "planned"
+      "summary": "STOP_CONDITION: product successor glyphs require a generic multi-intent structural succession or another canonical compositor repair beyond the approved frozen compositor boundary. Slice 20 is returned to ready with partial local accessibility/export work preserved for an explicitly approved repair run.",
+      "status": "ready"
     },
     {
       "id": "s21",

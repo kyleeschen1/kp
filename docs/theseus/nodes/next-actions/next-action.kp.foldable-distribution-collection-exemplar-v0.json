@@ -302,11 +302,32 @@
       "scope": "production-routes",
       "checkedAt": "2026-07-27T07:06:04.408Z",
       "notes": "All existing and new reader routes remain within raw HTML, gzip HTML, runtime closure, and forbidden-asset budgets."
+    },
+    {
+      "command": "node --test foldable distribution accessibility export and motif unit suites",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T07:24:55.625Z",
+      "notes": "Thirteen focused tests pass for semantic motifs, product certificates, reader compilation, and five-state static export."
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "failed",
+      "scope": "broad",
+      "checkedAt": "2026-07-27T07:24:55.956Z",
+      "notes": "Distribution split owners remain opaque, but product successor glyphs have no compatible semantic merge tracks: 3 dot 2 to 6 and 2 dot negative 1 to negative 2 reconcile as elimination plus introduction. Proper successor synthesis therefore requires a generic multi-intent structural succession capability or another separately approved canonical compositor repair."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-27T07:24:56.230Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 19 mounted the canonical foldable distribution route. Six semantic operations now play as four complete phase cohorts with proper fan-out, successor synthesis, signed grouping, and merge motifs; expanded/collapsed/automatic/pinned controls use one fold-aware clock and durable URL state."
+    "summary": "Slice 20 accessibility and static export work is implemented locally and focused checks pass. Browser verification exposed that canonical semantic merge tracks require compatible glyph visuals, so constant-product successors currently degrade to elimination/introduction rather than the required gathered successor motif. The approved no-compositor-core boundary has fired."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",
