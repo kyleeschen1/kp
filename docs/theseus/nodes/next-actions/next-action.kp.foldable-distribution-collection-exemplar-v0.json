@@ -1,0 +1,70 @@
+{
+  "id": "next-action.kp.foldable-distribution-collection-exemplar-v0",
+  "kind": "next-action",
+  "title": "Ship foldable distribution and collection exemplar",
+  "status": "ready",
+  "domain": "reader",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-27-foldable-distribution-collection-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.radical-reader-promotion-kit-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v10"
+  ],
+  "verification": [
+    "npm run test:foldable-distribution",
+    "npm run visual:foldable-distribution",
+    "npm run build"
+  ],
+  "verificationRecords": [
+    {
+      "command": "theseus plan checks quick",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-07-27T05:18:14.607Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice 1 established the approved v1 run contract, resolved the completed Animation Library action, linked the radical prerequisite, and passed source-ref, done-contract, and run-contract hygiene."
+  },
+  "expectedLearning": [
+    "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",
+    "Whether existing semantic visual motifs and the canonical renderer express distribution, evaluation, gathering, and no-fade collection without compositor-core growth."
+  ],
+  "allowedWork": [
+    "The exact approved foldable distribution exemplar and its verification."
+  ],
+  "disallowedWork": [
+    "No compositor-core changes, fade replacement, global family rollout, or unrelated domain work."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-trace-preserved",
+      "weight": "high"
+    },
+    {
+      "id": "proper-no-fade-visual-motifs",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-fold-projection",
+      "weight": "high"
+    },
+    {
+      "id": "native-katex-settlement",
+      "weight": "high"
+    },
+    {
+      "id": "exact-seek-rewind",
+      "weight": "medium"
+    }
+  ]
+}

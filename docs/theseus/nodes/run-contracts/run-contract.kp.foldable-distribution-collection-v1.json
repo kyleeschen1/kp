@@ -1,0 +1,190 @@
+{
+  "id": "run-contract.kp.foldable-distribution-collection-v1",
+  "kind": "run-contract",
+  "title": "Foldable distribution and collection exemplar",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.foldable-distribution-collection-exemplar-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-27-foldable-distribution-collection-long-loop-proposal.md",
+      "summary": "User-approved 26-slice proposal with a no-fade semantic visual motif requirement and mandatory slice-23 checkpoint."
+    }
+  ],
+  "verification": [
+    "npm run test:foldable-distribution",
+    "npm run visual:foldable-distribution",
+    "npm run test:canonical-animation-construction",
+    "npm run test:canonical-equation-renderer",
+    "npm run test:animation-library-display",
+    "npm run typecheck",
+    "npm run build",
+    "npm test",
+    "npm run check:reader-production",
+    "npm run check:reader-budgets",
+    "npm run check:dev-review-production",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Exact semantic fixture, verified operations, immutable evaluation tree, deterministic fold/timing/layout projections, one reader route, one Animation Library entry, governed fold-intent proof, focused reusable helpers, tests, visual harness, production gates, and durable project evidence.",
+    "Proper semantic visual motifs: visible distribution fan-out, provenance-preserving product evaluation, signed-term gathering, and no-fade many-to-one collection into exact native KaTeX."
+  ],
+  "disallowedWork": [
+    "Second runtime, tree runtime, clock, compositor, lifecycle category, scheduler category, global family migration, simultaneous legacy/canonical paint, or operation-specific routing geometry.",
+    "Whole-equation fade replacement, generic source-out/target-in crossfade, fading structural fission/fusion, LLM-authored math/DOM/pixels/timing/keyframes, or unrelated domain and UI work.",
+    "Compositor-core changes without stopping on the failed generic invariant and receiving separate approval."
+  ],
+  "goal": "Ship one canonical no-fade visual animation for 3(x+2)+2(x-1) to 5x+4 with deterministic expanded, collapsed, automatic, and pinned projections over one immutable evaluation tree.",
+  "target": "next-action.kp.foldable-distribution-collection-exemplar-v0",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and its completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if mathematics or semantic lineage cannot be independently verified.",
+    "Stop if folding changes the canonical trace, result, dependencies, checkpoints, accessible explanation, or export truth.",
+    "Stop if existing compositor relations cannot express the required motifs without compositor-core, lifecycle, scheduler, notation-specific geometry, or operation-specific routing changes.",
+    "Stop if any canonical transition uses whole-equation fade replacement, generic source-out/target-in crossfade, fading structural fission/fusion, simultaneous legacy/canonical paint, or non-native settlement.",
+    "Stop on unresolved overlap, clipping, font swap, baseline jerk, endpoint jump, unexplained line change, seek/rewind drift, or resource leakage.",
+    "Stop at HUMAN_CHECKPOINT after slice s23; this checkpoint is not waived, and slices s24-s26 require fresh visual approval.",
+    "Stop if work touches unrelated dirty changes, exceeds the approved preservation boundary, or cannot safely record and commit exact slice evidence."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Reconcile-control-plane",
+      "summary": "Approved v1 contract is active and hygienic; completed display state is resolved and the radical prerequisite is linked.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Clean-regression-baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Freeze-preservation-manifest",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Verify-expression-chain",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Certify-distribution-fan-out",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Certify-product-evaluation",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Certify-signed-term-grouping",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Certify-final-collection",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Assemble-evaluation-tree",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Define-fold-intent",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Project-expanded-collapsed",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Project-automatic-pinned",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Compile-fold-timing",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Encode-stable-URL-state",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Compile-reader-lesson",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Build-native-KaTeX-endpoints",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Compile-canonical-visual-motifs",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Plan-hierarchical-layout",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Implement-reader-controls",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Preserve-accessibility-and-export",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Register-animation-library-host",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Run-responsive-browser-matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Human-visual-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Apply-bounded-visual-repairs",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Prove-governed-authoring-cost",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Run-release-closeout",
+      "status": "planned"
+    }
+  ]
+}
