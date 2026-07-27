@@ -2,7 +2,8 @@ import {
   createKpFoldableDistributionExpressionChain
 } from "./foldable-distribution-expression-chain.ts";
 import {
-  createKpSemanticTransformation
+  createKpSemanticTransformation,
+  type KpSemanticTransformation
 } from "./asset-transformation.ts";
 import {
   executeKpDistributionCanonicalOperation
@@ -33,6 +34,27 @@ export interface KpFoldableDistributionFanOutCertificate {
   readonly distributedExpression: KpStructuredExpression;
   readonly rewrite: KpVerifiedStructuredExpressionRewrite;
   readonly execution: KpCanonicalOperationExecutionResult;
+}
+
+export interface KpFoldableProductEvaluationCertificate {
+  readonly schemaVersion: "kp.foldable-product-evaluation-certificate.v1";
+  readonly id: string;
+  readonly authority: {
+    readonly operationId: "kp.algebra.simplify-constant-product";
+    readonly strictLawId: "law.arithmetic.constant-product";
+  };
+  readonly inputSubtreeIds: readonly [string, string];
+  readonly inputValues: readonly [number, number];
+  readonly operatorSelectorId: string;
+  readonly targetSubtreeId: string;
+  readonly targetValue: number;
+  readonly transformation: KpSemanticTransformation;
+  readonly presentation: {
+    readonly requiredMotif: "successor-synthesis";
+    readonly materialPolicy: "inputs-opaque-through-target-recognition";
+    readonly settlement: "exact-native-target";
+    readonly geometryAuthority: "renderer-session-measurement";
+  };
 }
 
 export function createKpFoldableDistributionFanOutCertificates():
@@ -96,6 +118,42 @@ export function createKpFoldableDistributionFanOutCertificates():
           "distribution.right.negative-one"
         ]
       }
+    })
+  ]);
+}
+
+export function createKpFoldableProductEvaluationCertificates():
+  readonly KpFoldableProductEvaluationCertificate[] {
+  const fanOut = createKpFoldableDistributionFanOutCertificates();
+  const distributed = createKpFoldableDistributionExpressionChain()[1]!.expression;
+  return Object.freeze([
+    certifyProduct({
+      id: "certificate.foldable-distribution.product.three-times-two",
+      sourceExpression: fanOut[0]!.distributedExpression,
+      inputSubtreeIds: [
+        "distribution.left.factor-3-constant",
+        "distribution.left.constant-2"
+      ],
+      inputValues: [3, 2],
+      operatorSelectorId:
+        "expression.foldable-distribution.distributed.operator.three-times-two",
+      targetExpression: distributed,
+      targetSubtreeId: "distributed.constant-6",
+      targetValue: 6
+    }),
+    certifyProduct({
+      id: "certificate.foldable-distribution.product.two-times-negative-one",
+      sourceExpression: fanOut[1]!.distributedExpression,
+      inputSubtreeIds: [
+        "distribution.right.factor-2-constant",
+        "distribution.right.negative-one"
+      ],
+      inputValues: [2, -1],
+      operatorSelectorId:
+        "expression.foldable-distribution.distributed.operator.two-times-negative-one",
+      targetExpression: distributed,
+      targetSubtreeId: "distributed.negative-2",
+      targetValue: -2
     })
   ]);
 }
@@ -190,6 +248,98 @@ function certifyBranch(
   });
 }
 
+function certifyProduct(input: {
+  readonly id: string;
+  readonly sourceExpression: KpStructuredExpression;
+  readonly inputSubtreeIds: readonly [string, string];
+  readonly inputValues: readonly [number, number];
+  readonly operatorSelectorId: string;
+  readonly targetExpression: KpStructuredExpression;
+  readonly targetSubtreeId: string;
+  readonly targetValue: number;
+}): KpFoldableProductEvaluationCertificate {
+  const observedInputs = input.inputSubtreeIds.map((subtreeId) =>
+    evaluateConstantSubtree(
+      requiredSubtree(input.sourceExpression, subtreeId)
+    )
+  ) as [number, number];
+  const observedTarget = evaluateConstantSubtree(
+    requiredSubtree(input.targetExpression, input.targetSubtreeId)
+  );
+  if (
+    observedInputs[0] !== input.inputValues[0] ||
+    observedInputs[1] !== input.inputValues[1]
+  ) {
+    throw new Error(
+      `${input.id} input values ${observedInputs.join(" × ")} do not match ` +
+      `${input.inputValues.join(" × ")}.`
+    );
+  }
+  if (
+    observedInputs[0] * observedInputs[1] !== input.targetValue ||
+    observedTarget !== input.targetValue
+  ) {
+    throw new Error(
+      `${input.id} does not certify ${observedInputs.join(" × ")} = ` +
+      `${input.targetValue}.`
+    );
+  }
+
+  const transformation = createKpSemanticTransformation({
+    id: input.id.replace("certificate.", "transform."),
+    transformType: "simplifyConstantProduct",
+    title: `Evaluate ${input.inputValues[0]} times ${input.inputValues[1]}`,
+    sourceObjectIds: ["expression.foldable-distribution.distributed-raw"],
+    targetObjectIds: ["expression.foldable-distribution.distributed"],
+    preserves: ["value", "structure"],
+    correspondenceMap: {
+      id: `${input.id}.correspondence`,
+      records: [
+        {
+          id: `${input.id}.inputs-derive-result`,
+          relation: "fan-in",
+          sourceSelectorIds: input.inputSubtreeIds,
+          targetSelectorIds: [input.targetSubtreeId],
+          summary:
+            "Both exact factors causally derive one evaluated product."
+        },
+        {
+          id: `${input.id}.operator-retires`,
+          relation: "removal",
+          sourceSelectorIds: [input.operatorSelectorId],
+          targetSelectorIds: [],
+          summary:
+            "The multiplication operator is a catalyst, not result material."
+        }
+      ]
+    }
+  });
+
+  return Object.freeze({
+    schemaVersion: "kp.foldable-product-evaluation-certificate.v1" as const,
+    id: input.id,
+    authority: Object.freeze({
+      operationId: "kp.algebra.simplify-constant-product" as const,
+      strictLawId: "law.arithmetic.constant-product" as const
+    }),
+    inputSubtreeIds: Object.freeze([...input.inputSubtreeIds]) as
+      readonly [string, string],
+    inputValues: Object.freeze([...input.inputValues]) as
+      readonly [number, number],
+    operatorSelectorId: input.operatorSelectorId,
+    targetSubtreeId: input.targetSubtreeId,
+    targetValue: input.targetValue,
+    transformation,
+    presentation: Object.freeze({
+      requiredMotif: "successor-synthesis" as const,
+      materialPolicy:
+        "inputs-opaque-through-target-recognition" as const,
+      settlement: "exact-native-target" as const,
+      geometryAuthority: "renderer-session-measurement" as const
+    })
+  });
+}
+
 function expressionFromSubtree(
   expression: KpStructuredExpression,
   subtreeId: string
@@ -199,6 +349,42 @@ function expressionFromSubtree(
     throw new Error(`Missing foldable distribution subtree ${subtreeId}.`);
   }
   return createKpStructuredExpression({ root });
+}
+
+function requiredSubtree(
+  expression: KpStructuredExpression,
+  subtreeId: string
+): KpStructuredExpressionNode {
+  const subtree = resolveKpStructuredExpressionSubtree(expression, subtreeId);
+  if (subtree === undefined) {
+    throw new Error(`Missing foldable distribution subtree ${subtreeId}.`);
+  }
+  return subtree;
+}
+
+function evaluateConstantSubtree(node: KpStructuredExpressionNode): number {
+  switch (node.kind) {
+    case "number":
+      return node.value;
+    case "negate":
+      return -evaluateConstantSubtree(node.value);
+    case "sum":
+      return node.terms
+        .map(evaluateConstantSubtree)
+        .reduce((sum, value) => sum + value, 0);
+    case "product":
+      return node.factors
+        .map(evaluateConstantSubtree)
+        .reduce((product, value) => product * value, 1);
+    case "quotient":
+      return evaluateConstantSubtree(node.numerator) /
+        evaluateConstantSubtree(node.denominator);
+    case "power":
+      return evaluateConstantSubtree(node.base) **
+        evaluateConstantSubtree(node.exponent);
+    case "symbol":
+      throw new Error(`Subtree ${node.id} contains symbol ${node.name}.`);
+  }
 }
 
 function leftDistributedExpression(): KpStructuredExpression {

@@ -92,11 +92,25 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T05:40:24.533Z",
       "notes": "Fan-out certificates and canonical operation bindings typecheck across all projects."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/foldable-distribution-product-evaluation.test.ts tests/foldable-distribution-fan-out.test.ts tests/foldable-distribution-expression-chain.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T05:44:01.851Z",
+      "notes": "3x2 and 2x(-1) certify exact signed values, complete two-to-one material lineage, catalyst exclusion, causal successor synthesis, renderer-measured geometry, and native settlement with no fade policy."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T05:44:09.302Z",
+      "notes": "Product certificates and signed constant evaluation pass all TypeScript projects."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 5 certified left and right distributions independently through the existing exact rewrite law and promoted distribution spec: each factor has one-to-two fan-out, addends/connectors persist, grouping exits, and the copy choreography contains no generic enter/exit replacement."
+    "summary": "Slice 6 certified 3×2→6 and 2×(-1)→-2 as exact two-input fan-in derivations. Multiplication signs are catalysts, successor synthesis is required, inputs remain opaque through recognition, native target settlement is mandatory, and geometry remains renderer-session state."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",
