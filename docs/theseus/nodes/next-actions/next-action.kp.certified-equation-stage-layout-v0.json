@@ -115,11 +115,39 @@
       "scope": "slice s04 proof carrying layout types",
       "checkedAt": "2026-07-27T21:54:38.861Z",
       "notes": "Application, node, test, and domain projects accept the opaque lifecycle types and renamed foldable intent surface."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-reader-equation-layout-snapshot.test.ts tests/semantic-reader-equation-perceptual-alignment.test.ts tests/semantic-reader-equation-symbol-motion.test.ts tests/semantic-reader-equation-responsive-fit.test.ts tests/semantic-reader-equation-scene-compositor-adapter.test.ts",
+      "status": "passed",
+      "scope": "slice s05 measurement identity",
+      "checkedAt": "2026-07-27T22:01:02.845Z",
+      "notes": "22 focused tests pass, including stale revision, mixed coordinate-space, snapshot propagation, and compositor-session identity."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice s05 renderer boundary",
+      "checkedAt": "2026-07-27T22:01:03.710Z",
+      "notes": "12 canonical renderer tests pass across fraction responsive fitting, opacity, readiness, and revision invalidation."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice s05 proof boundary",
+      "checkedAt": "2026-07-27T22:01:04.521Z",
+      "notes": "Opaque proof fixtures pass and remain below compiler-cost ceilings."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s05 measurement identity",
+      "checkedAt": "2026-07-27T22:01:05.360Z",
+      "notes": "All TypeScript projects accept required revision and coordinate-space propagation."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s04 separates declared row intent, measured native input, certified layout, and applied DOM layout with private proof brands; raw policy cannot type-check as executed geometry."
+    "summary": "Slice s05 binds measured envelopes, certificates, applied layouts, responsive fit, and reader compositor sessions to one validated measurement revision and coordinate-space id; mixed identities fail before rendering."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

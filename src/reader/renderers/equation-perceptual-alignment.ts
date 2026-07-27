@@ -7,6 +7,9 @@ import type {
   KpReaderEquationMeasuredAnchor,
   KpReaderLayoutRect
 } from "./equation-layout-snapshot.ts";
+import type {
+  KpEquationStageMeasurementIdentity
+} from "../runtime/equation-stage-layout.ts";
 
 export interface KpReaderEquationPerceptualAlignmentPolicy {
   readonly maxInlineCorrectionPx: number;
@@ -22,6 +25,7 @@ export interface KpReaderEquationPerceptualAlignmentPlan {
   readonly id: string;
   readonly kind: "reader-equation-perceptual-alignment-plan";
   readonly layoutSnapshotId: string;
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly direction: "forward" | "rewind";
   readonly referenceOwnerId?: string | undefined;
   readonly correction: {
@@ -98,6 +102,7 @@ export function planKpReaderEquationPerceptualAlignment(input: {
     id: `alignment.${input.layout.id}`,
     kind: "reader-equation-perceptual-alignment-plan",
     layoutSnapshotId: input.layout.id,
+    measurementIdentity: input.layout.measurementIdentity,
     direction: input.materialPlan.direction,
     ...(reference === undefined ? {} : { referenceOwnerId: reference.ownerId }),
     correction: {

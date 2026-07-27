@@ -563,7 +563,8 @@ function measureLayout(revision: number): LayoutState {
       materialPlan: plans.materialPlan,
       transitionId: id,
       measurementRoot,
-      revision
+      revision,
+      coordinateSpaceId: `${animation.id}.equation-stage`
     });
     const alignment = planKpReaderEquationPerceptualAlignment({
       materialPlan: plans.materialPlan,
@@ -737,7 +738,8 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     presentationRevision: [
       focusSnapshot.activeSource ?? "none",
       ...focusedRefs
-    ].join(":")
+    ].join(":"),
+    measurementIdentity: context.fit.measurementIdentity
   }) ?? false;
   if (canonicalEquationSessionApplied) {
     materialLayer.sync([]);

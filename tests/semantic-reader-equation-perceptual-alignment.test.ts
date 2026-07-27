@@ -38,6 +38,7 @@ function fixture(direction: "forward" | "rewind") {
     materialPlan,
     transitionId: transition.transitionId,
     revision: 1,
+    coordinateSpaceId: "fixture.equation-stage",
     rootRect: { left: 0, top: 0, width: 240, height: 80 },
     measurements
   });

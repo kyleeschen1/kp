@@ -17,6 +17,10 @@ test("reader equation fit applies a centered no-wrap transform", async ({ page }
       id: "alignment.browser",
       kind: "reader-equation-perceptual-alignment-plan",
       layoutSnapshotId: "layout.browser",
+      measurementIdentity: {
+        revision: 1,
+        coordinateSpaceId: "fixture.browser-stage"
+      },
       correction: { x: 0, y: 0, rawX: 0, rawY: 0, clamped: false },
       owners: [{
         ownerId: "owner.browser",

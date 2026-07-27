@@ -62,11 +62,14 @@ export {
   type KpFoldableDistributionViewport
 } from "./foldable-distribution-layout.ts";
 export {
+  assertKpEquationStageMeasurementIdentity,
+  createKpEquationStageMeasurementIdentity,
   type KpAppliedEquationStageLayout,
   type KpCertifiedEquationStageLayout,
   type KpCertifiedEquationStageRow,
   type KpEquationStageLayoutIntent,
   type KpEquationStageLayoutPolicy,
+  type KpEquationStageMeasurementIdentity,
   type KpEquationStageMeasuredEnvelope,
   type KpEquationStagePhaseIntent,
   type KpEquationStageRect,

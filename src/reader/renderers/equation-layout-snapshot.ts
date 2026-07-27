@@ -3,6 +3,10 @@ import type {
   KpReaderEquationMaterialPlan,
   KpReaderEquationTransitionMaterialPlan
 } from "./equation-material-plan.ts";
+import {
+  createKpEquationStageMeasurementIdentity,
+  type KpEquationStageMeasurementIdentity
+} from "../runtime/equation-stage-layout.ts";
 
 export interface KpReaderLayoutRect {
   readonly left: number;
@@ -22,6 +26,7 @@ export interface KpReaderEquationLayoutSnapshot {
   readonly materialPlanId: string;
   readonly transitionId: string;
   readonly revision: number;
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly viewport: { readonly width: number; readonly height: number };
   readonly anchors: readonly KpReaderEquationMeasuredAnchor[];
   readonly owners: readonly KpReaderEquationMeasuredOwner[];
@@ -43,6 +48,7 @@ export function measureKpReaderEquationLayoutSnapshot(input: {
   readonly transitionId: string;
   readonly measurementRoot: HTMLElement;
   readonly revision: number;
+  readonly coordinateSpaceId: string;
 }): KpReaderEquationLayoutSnapshot {
   if (
     input.measurementRoot.dataset["kpReaderEquationMeasurement"] !== "true" ||
@@ -68,6 +74,7 @@ export function measureKpReaderEquationLayoutSnapshot(input: {
     materialPlan: input.materialPlan,
     transitionId: input.transitionId,
     revision: input.revision,
+    coordinateSpaceId: input.coordinateSpaceId,
     rootRect,
     measurements
   });
@@ -77,12 +84,17 @@ export function createKpReaderEquationLayoutSnapshot(input: {
   readonly materialPlan: KpReaderEquationMaterialPlan;
   readonly transitionId: string;
   readonly revision: number;
+  readonly coordinateSpaceId: string;
   readonly rootRect: KpReaderLayoutRect;
   readonly measurements: readonly KpReaderEquationAnchorMeasurement[];
 }): KpReaderEquationLayoutSnapshot {
   if (!Number.isInteger(input.revision) || input.revision < 0) {
     throw new Error("Equation layout revision must be a non-negative integer.");
   }
+  const measurementIdentity = createKpEquationStageMeasurementIdentity({
+    revision: input.revision,
+    coordinateSpaceId: input.coordinateSpaceId
+  });
   assertRect(input.rootRect, "Equation measurement root", false);
   const transition = input.materialPlan.transitions.find(
     (candidate) => candidate.transitionId === input.transitionId
@@ -117,6 +129,7 @@ export function createKpReaderEquationLayoutSnapshot(input: {
     materialPlanId: input.materialPlan.id,
     transitionId: input.transitionId,
     revision: input.revision,
+    measurementIdentity,
     viewport: {
       width: input.rootRect.width,
       height: input.rootRect.height

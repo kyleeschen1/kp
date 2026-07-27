@@ -111,6 +111,10 @@ async function createBrowserSession(
     renderPlan,
     materialPlan,
     transitionId: transition.id,
+    measurementIdentity: {
+      revision: 1,
+      coordinateSpaceId: `fixture.${name}.stage`
+    },
     source,
     target
   });

@@ -8,11 +8,21 @@ import {
   type KpReaderEquationPerceptualAlignmentPlan,
   type KpReaderEquationSymbolMotionFrame
 } from "../src/reader/renderers/public-api.ts";
+import {
+  assertKpEquationStageMeasurementIdentity,
+  createKpEquationStageMeasurementIdentity
+} from "../src/reader/runtime/equation-stage-layout.ts";
+
+const measurementIdentity = createKpEquationStageMeasurementIdentity({
+  revision: 2,
+  coordinateSpaceId: "fixture.solve-stage"
+});
 
 const alignment: KpReaderEquationPerceptualAlignmentPlan = {
   id: "alignment.solve",
   kind: "reader-equation-perceptual-alignment-plan",
   layoutSnapshotId: "layout.solve",
+  measurementIdentity,
   direction: "forward",
   correction: { x: 0, y: 0, rawX: 0, rawY: 0, clamped: false },
   owners: [{
@@ -47,6 +57,34 @@ test("a sequence shares one fit transform across transition envelopes", () => {
     height: 20
   });
   assert.equal(fit.translateX, 5);
+  assert.deepEqual(fit.measurementIdentity, measurementIdentity);
+});
+
+test("responsive fit rejects stale revisions and mixed coordinate spaces", () => {
+  for (const mismatched of [
+    { revision: 3, coordinateSpaceId: measurementIdentity.coordinateSpaceId },
+    { revision: 2, coordinateSpaceId: "fixture.other-stage" }
+  ]) {
+    assert.throws(
+      () => planKpReaderEquationSequenceResponsiveFit({
+        id: "mixed-identity",
+        alignments: [
+          alignment,
+          { ...alignment, id: "alignment.mismatch", measurementIdentity: mismatched }
+        ],
+        viewportWidth: 300
+      }),
+      /measurement identity mismatch/
+    );
+    assert.throws(
+      () => assertKpEquationStageMeasurementIdentity(
+        measurementIdentity,
+        mismatched,
+        "Fixture"
+      ),
+      /measurement identity mismatch/
+    );
+  }
 });
 
 test("responsive fit preserves native size then scales without wrapping", () => {

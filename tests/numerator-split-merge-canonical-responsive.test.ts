@@ -7,11 +7,17 @@ import {
   type KpReaderEquationPerceptualAlignmentPlan
 } from "../src/reader/renderers/public-api.ts";
 
+const measurementIdentity = {
+  revision: 1,
+  coordinateSpaceId: "fixture.fraction-stage"
+} as const;
+
 const alignments: readonly KpReaderEquationPerceptualAlignmentPlan[] = [
   {
     id: "alignment.fraction.split",
     kind: "reader-equation-perceptual-alignment-plan",
     layoutSnapshotId: "layout.fraction.split",
+    measurementIdentity,
     direction: "forward",
     correction: { x: 0, y: 0, rawX: 0, rawY: 0, clamped: false },
     owners: [{
@@ -24,6 +30,7 @@ const alignments: readonly KpReaderEquationPerceptualAlignmentPlan[] = [
     id: "alignment.fraction.merge",
     kind: "reader-equation-perceptual-alignment-plan",
     layoutSnapshotId: "layout.fraction.merge",
+    measurementIdentity,
     direction: "forward",
     correction: { x: 0, y: 0, rawX: 0, rawY: 0, clamped: false },
     owners: [{

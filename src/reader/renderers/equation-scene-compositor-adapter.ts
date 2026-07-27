@@ -21,15 +21,28 @@ import {
   bindKpNativeKatexFactoringScene,
   type KpNativeKatexFactoringChoreographyIntent
 } from "../../rendering/native-katex-factoring-choreography.ts";
+import {
+  createKpEquationStageMeasurementIdentity,
+  type KpEquationStageMeasurementIdentity
+} from "../runtime/equation-stage-layout.ts";
+
+export interface KpReaderEquationMeasuredRendererSession
+  extends KpNativeKatexRendererSession {
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
+}
 
 export function createKpReaderEquationSceneCompositorSession(input: {
   readonly renderPlan: KpReaderEquationRenderPlan;
   readonly materialPlan: KpReaderEquationMaterialPlan;
   readonly transitionId: string;
   readonly motionMode?: "continuous" | "essential" | "checkpoint" | undefined;
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
-}): KpNativeKatexRendererSession {
+}): KpReaderEquationMeasuredRendererSession {
+  const measurementIdentity = createKpEquationStageMeasurementIdentity(
+    input.measurementIdentity
+  );
   const { renderTransition, materialTransition } = resolveTransitionPair(input);
   const relations = projectReaderRelations({
     renderTransition,
@@ -141,7 +154,10 @@ export function createKpReaderEquationSceneCompositorSession(input: {
     input.source.stage.dataset["kpNativeKatexChoreographyFidelity"] =
       "passed";
   }
-  return canonical.session;
+  return Object.freeze({
+    ...canonical.session,
+    measurementIdentity
+  });
 }
 
 function projectFactoringChoreography(input: {

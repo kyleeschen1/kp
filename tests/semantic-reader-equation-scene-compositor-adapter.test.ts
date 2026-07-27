@@ -21,6 +21,10 @@ import {
 const sourceRect = { left: 10, top: 20, width: 12, height: 24 };
 const targetRect = { left: 90, top: 20, width: 12, height: 24 };
 const stageRect = { left: 0, top: 0, width: 200, height: 100 };
+const measurementIdentity = {
+  revision: 1,
+  coordinateSpaceId: "fixture.compositor-stage"
+} as const;
 type FakeStyle = {
   [key: string]: unknown;
   getPropertyValue(): string;
@@ -358,12 +362,14 @@ test("reader correspondence creates only a transient compositor session", () => 
     renderPlan,
     materialPlan,
     transitionId: transition.id,
+    measurementIdentity,
     source: scene("source", xRelation.sourceSelectorIds[0]!),
     target: scene("target", xRelation.targetSelectorIds[0]!)
   });
 
   assert.equal(session.kind, "native-katex-renderer-session");
   assert.equal(session.lifecycle, "renderer-session");
+  assert.deepEqual(session.measurementIdentity, measurementIdentity);
   assert.equal(session.mode, "atom-transit");
   assert.equal(session.tracks.length, 1);
   assert.equal(session.tracks[0]?.lifecycle, "persist");
@@ -402,6 +408,7 @@ test("adapter rejects material plans that are detached from canonical lineage", 
       renderPlan,
       materialPlan: { ...materialPlan, renderPlanId: "equation-plan.forged" },
       transitionId: transition.id,
+      measurementIdentity,
       source: scene("source", xRelation.sourceSelectorIds[0]!),
       target: scene("target", xRelation.targetSelectorIds[0]!)
     }),
@@ -420,6 +427,7 @@ test("the same reader session adapter accepts both fraction fission and fusion p
       renderPlan,
       materialPlan,
       transitionId: transition.id,
+      measurementIdentity,
       source: fractionScene("source", structural.sourceSelectorIds),
       target: fractionScene("target", structural.targetSelectorIds)
     });

@@ -1,11 +1,17 @@
 import type { KpReaderLayoutRect } from "./equation-layout-snapshot.ts";
 import type { KpReaderEquationPerceptualAlignmentPlan } from "./equation-perceptual-alignment.ts";
 import type { KpReaderEquationSymbolMotionFrame } from "./equation-symbol-motion.ts";
+import {
+  assertKpEquationStageMeasurementIdentity,
+  createKpEquationStageMeasurementIdentity,
+  type KpEquationStageMeasurementIdentity
+} from "../runtime/equation-stage-layout.ts";
 
 export interface KpReaderEquationResponsiveFitPlan {
   readonly id: string;
   readonly kind: "reader-equation-responsive-fit-plan";
   readonly alignmentPlanId: string;
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly viewportWidth: number;
   readonly viewportHeight?: number | undefined;
   readonly horizontalPadding: number;
@@ -87,6 +93,19 @@ function planFit(input: {
   readonly minScale?: number | undefined;
   readonly overflowStrategy?: "report" | "contain" | undefined;
 }): KpReaderEquationResponsiveFitPlan {
+  const firstIdentity = input.alignments[0]?.measurementIdentity;
+  if (firstIdentity === undefined) {
+    throw new Error("Equation responsive fit requires measured alignment identity.");
+  }
+  const measurementIdentity =
+    createKpEquationStageMeasurementIdentity(firstIdentity);
+  for (const alignment of input.alignments.slice(1)) {
+    assertKpEquationStageMeasurementIdentity(
+      measurementIdentity,
+      alignment.measurementIdentity,
+      `Equation responsive fit alignment ${alignment.id}`
+    );
+  }
   const horizontalPadding = input.horizontalPadding ?? 16;
   const verticalPadding = input.verticalPadding ?? 0;
   const minScale = input.minScale ?? 0.72;
@@ -155,6 +174,7 @@ function planFit(input: {
     id: input.id,
     kind: "reader-equation-responsive-fit-plan",
     alignmentPlanId: input.alignmentPlanId,
+    measurementIdentity,
     viewportWidth: input.viewportWidth,
     ...(input.viewportHeight === undefined
       ? {}

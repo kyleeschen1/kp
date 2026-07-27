@@ -37,6 +37,10 @@ consumeApplied(certified);
 const fabricatedMeasured: KpMeasuredEquationStageInput = {
   schemaVersion: "kp.measured-equation-stage-input.v1",
   executionState: "measured",
+  measurementIdentity: {
+    revision: 1,
+    coordinateSpaceId: "fixture.stage"
+  },
   intent,
   envelopes: []
 };

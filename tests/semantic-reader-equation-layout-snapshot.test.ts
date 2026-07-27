@@ -38,12 +38,17 @@ test("layout snapshots convert one explicit measurement pass to local geometry",
     materialPlan: plan,
     transitionId: transition.transitionId,
     revision: 3,
+    coordinateSpaceId: "fixture.equation-stage",
     rootRect: { left: 100, top: 40, width: 320, height: 120 },
     measurements
   });
 
   assert.equal(snapshot.kind, "reader-equation-layout-snapshot");
   assert.equal(snapshot.revision, 3);
+  assert.deepEqual(snapshot.measurementIdentity, {
+    revision: 3,
+    coordinateSpaceId: "fixture.equation-stage"
+  });
   assert.deepEqual(snapshot.viewport, { width: 320, height: 120 });
   assert.deepEqual(snapshot.anchors[0]?.rect, {
     left: 20,
@@ -76,6 +81,7 @@ test("layout snapshots reject missing duplicate and zero-size anchor measurement
     materialPlan: plan,
     transitionId: transition.transitionId,
     revision: 0,
+    coordinateSpaceId: "fixture.equation-stage",
     rootRect: { left: 0, top: 0, width: 200, height: 40 }
   };
 
@@ -103,5 +109,13 @@ test("layout snapshots reject missing duplicate and zero-size anchor measurement
       )
     }),
     /not measurably rendered/
+  );
+  assert.throws(
+    () => createKpReaderEquationLayoutSnapshot({
+      ...base,
+      coordinateSpaceId: " ",
+      measurements
+    }),
+    /coordinate-space id must be non-empty/
   );
 });

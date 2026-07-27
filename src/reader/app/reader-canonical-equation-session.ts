@@ -9,6 +9,9 @@ import {
   type KpReaderEquationRenderPlan,
   type KpReaderEquationSceneCompositorFactory
 } from "../renderers/public-api.ts";
+import type {
+  KpEquationStageMeasurementIdentity
+} from "../runtime/equation-stage-layout.ts";
 
 export interface KpReaderCanonicalEquationSession {
   readonly transitionIds: readonly string[];
@@ -20,6 +23,7 @@ export interface KpReaderCanonicalEquationSession {
     readonly motionMode: "continuous" | "essential" | "checkpoint";
     readonly fontReadiness: KpEquationFontReadiness;
     readonly presentationRevision: string;
+    readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   }) => boolean;
   readonly invalidate: () => void;
   readonly dispose: () => void;
@@ -76,6 +80,8 @@ export function createKpReaderCanonicalEquationSession(input: {
         frame.presentationRevision,
         frame.motionMode,
         frame.fontReadiness.revision,
+        frame.measurementIdentity.coordinateSpaceId,
+        frame.measurementIdentity.revision,
         frame.fitSurface.offsetWidth,
         frame.fitSurface.offsetHeight
       ].join(":");
@@ -132,6 +138,7 @@ export function createKpReaderCanonicalEquationSession(input: {
           materialPlan: frame.materialPlan,
           transitionId,
           motionMode: frame.motionMode,
+          measurementIdentity: frame.measurementIdentity,
           source,
           target
         });

@@ -9,6 +9,44 @@ export interface KpEquationStageRect {
   readonly height: number;
 }
 
+export interface KpEquationStageMeasurementIdentity {
+  readonly revision: number;
+  readonly coordinateSpaceId: string;
+}
+
+export function createKpEquationStageMeasurementIdentity(input: {
+  readonly revision: number;
+  readonly coordinateSpaceId: string;
+}): KpEquationStageMeasurementIdentity {
+  if (!Number.isInteger(input.revision) || input.revision < 0) {
+    throw new Error("Equation stage measurement revision must be a non-negative integer.");
+  }
+  if (input.coordinateSpaceId.trim() === "") {
+    throw new Error("Equation stage coordinate-space id must be non-empty.");
+  }
+  return Object.freeze({
+    revision: input.revision,
+    coordinateSpaceId: input.coordinateSpaceId
+  });
+}
+
+export function assertKpEquationStageMeasurementIdentity(
+  expected: KpEquationStageMeasurementIdentity,
+  actual: KpEquationStageMeasurementIdentity,
+  label: string
+): void {
+  if (
+    expected.revision !== actual.revision ||
+    expected.coordinateSpaceId !== actual.coordinateSpaceId
+  ) {
+    throw new Error(
+      `${label} measurement identity mismatch: expected ` +
+      `${expected.coordinateSpaceId}@${expected.revision}, received ` +
+      `${actual.coordinateSpaceId}@${actual.revision}.`
+    );
+  }
+}
+
 export interface KpEquationStageRowIntent<
   TRole extends string = string
 > {
@@ -39,6 +77,7 @@ export interface KpEquationStageMeasuredEnvelope {
   readonly id: string;
   readonly memberOwnerIds: readonly string[];
   readonly rect: KpEquationStageRect;
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
 }
 
 export interface KpCertifiedEquationStageRow {
@@ -56,6 +95,7 @@ declare const appliedEquationStageLayoutAuthority: unique symbol;
 export interface KpMeasuredEquationStageInput {
   readonly schemaVersion: "kp.measured-equation-stage-input.v1";
   readonly executionState: "measured";
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly intent: KpEquationStagePhaseIntent;
   readonly envelopes: readonly KpEquationStageMeasuredEnvelope[];
   readonly [measuredEquationStageInputAuthority]: true;
@@ -64,6 +104,7 @@ export interface KpMeasuredEquationStageInput {
 export interface KpCertifiedEquationStageLayout {
   readonly schemaVersion: "kp.certified-equation-stage-layout.v1";
   readonly executionState: "certified";
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly measuredInput: KpMeasuredEquationStageInput;
   readonly rows: readonly KpCertifiedEquationStageRow[];
   readonly stageBounds: KpEquationStageRect;
@@ -73,6 +114,7 @@ export interface KpCertifiedEquationStageLayout {
 export interface KpAppliedEquationStageLayout {
   readonly schemaVersion: "kp.applied-equation-stage-layout.v1";
   readonly executionState: "applied";
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly certificate: KpCertifiedEquationStageLayout;
   readonly appliedRowIds: readonly string[];
   readonly [appliedEquationStageLayoutAuthority]: true;

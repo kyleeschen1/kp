@@ -74,6 +74,10 @@ const session = createKpReaderEquationSceneCompositorSession({
   materialPlan,
   transitionId: transition.id,
   motionMode: "continuous",
+  measurementIdentity: {
+    revision: 1,
+    coordinateSpaceId: "fixture.radical.stage"
+  },
   source,
   target
 });

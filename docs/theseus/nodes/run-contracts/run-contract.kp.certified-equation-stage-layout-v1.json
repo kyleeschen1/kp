@@ -83,7 +83,8 @@
     {
       "id": "s05",
       "title": "Measurement revision identity",
-      "status": "planned"
+      "summary": "Added measurement identity creation and equality enforcement across snapshots, alignment, fit, proof states, and canonical reader compositor inputs, with stale and mixed-space rejection coverage.",
+      "status": "complete"
     },
     {
       "id": "s06",
