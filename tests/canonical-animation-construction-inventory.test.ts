@@ -31,21 +31,32 @@ test("construction inventory names every existing canonical authority", async ()
 });
 
 test("fraction migration seam is canonical, exclusive, and explicit", async () => {
-  const entry = await readFile("src/reader/app/exemplar-entry.ts", "utf8");
+  const [entry, descriptorRegistry, fractionDescriptor] = await Promise.all([
+    readFile("src/reader/app/exemplar-entry.ts", "utf8"),
+    readFile("src/reader/app/equation-lesson-descriptor.ts", "utf8"),
+    readFile(
+      "src/reader/app/equation-lesson-descriptors/numerator-split-merge.ts",
+      "utf8"
+    )
+  ]);
   assert.match(
-    entry,
-    /transform\.linear-solve\.cancel-left-additive-inverse/
+    descriptorRegistry,
+    /"numerator-split-merge"\s*:/
   );
   assert.match(
-    entry,
-    /lessonVariant === "numerator-split-merge"/
+    fractionDescriptor,
+    /defineKpCanonicalEquationLessonDescriptor/
   );
+  assert.match(entry, /compileKpReaderCanonicalTransitionPolicy/);
   assert.match(entry, /transitionIds: canonicalTransitionIds/);
   assert.match(
     entry,
-    /lessonVariant === "numerator-split-merge"\s*\?\s*animation\.transformations\.map/
+    /if \(canonicalEquationSessionApplied\) \{\s*materialLayer\.sync\(\[\]\)/
   );
-  assert.match(entry, /if \(canonicalEquationSessionApplied\) \{\s*materialLayer\.sync\(\[\]\)/);
+  assert.doesNotMatch(
+    entry,
+    /lessonVariant === "(?:numerator-split-merge|radical-succession)"/
+  );
 });
 
 test("clone authority sanitation is already one shared browser contract", async () => {

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
@@ -15,22 +16,9 @@ import {
   createKpGovernedExponentRadicalPromotionCandidate
 } from "../src/authoring/governed-exponent-radical-promotion.ts";
 import {
-  createKpNativeKatexRenderedSceneObservation,
-  type KpNativeKatexPaintAtomObservation
-} from "../src/rendering/native-katex-rendered-scene.ts";
-import {
-  createKpReaderEquationSceneCompositorSession
-} from "../src/reader/renderers/equation-scene-compositor-adapter.ts";
-import {
   compileKpReaderEquationMaterialPlan,
-  projectKpReaderEquationRenderPlan,
-  type KpReaderEquationStatePlan
+  projectKpReaderEquationRenderPlan
 } from "../src/reader/renderers/public-api.ts";
-
-const ownerDocument = {};
-const stage = { ownerDocument } as HTMLElement;
-const sourceRoot = { ownerDocument } as HTMLElement;
-const targetRoot = { ownerDocument } as HTMLElement;
 
 test("existing governed unit-exponent trace compiles into the v2 construction", () => {
   const fixture = createKpGovernedExponentAbsorptionFixture();
@@ -58,7 +46,7 @@ test("existing governed unit-exponent trace compiles into the v2 construction", 
   ));
 });
 
-test("unit-exponent absorption uses the canonical elimination session", () => {
+test("unit-exponent absorption projects the canonical elimination contract", async () => {
   const fixture = createKpGovernedExponentAbsorptionFixture();
   const animation = fixture.authority.animation;
   const runtimeFrame = sampleKpAnimationRuntimeFrame({
@@ -73,29 +61,24 @@ test("unit-exponent absorption uses the canonical elimination session", () => {
   });
   const materialPlan = compileKpReaderEquationMaterialPlan(renderPlan);
   const transition = renderPlan.transitions[0]!;
-  const session = createKpReaderEquationSceneCompositorSession({
-    renderPlan,
-    materialPlan,
-    transitionId: transition.id,
-    source: scene("source", transition.source[0]!),
-    target: scene("target", transition.target[0]!)
-  });
-  const first = session.sample(0.37);
-  session.sample(0.84);
+  const materialTransition = materialPlan.transitions[0]!;
+  const adapter = await readFile(
+    "src/reader/renderers/equation-scene-compositor-adapter.ts",
+    "utf8"
+  );
 
   assert.deepEqual(renderPlan.diagnostics, []);
   assert.deepEqual(materialPlan.diagnostics, []);
-  assert.equal(session.kind, "native-katex-renderer-session");
-  assert.equal(session.lifecycle, "renderer-session");
-  assert.equal(session.mode, "atom-transit");
-  assert.ok(session.tracks.some(({ lifecycle }) => lifecycle === "eliminate"));
-  assert.deepEqual(session.sample(0.37), first);
-  assert.ok([0, 0.25, 0.5, 0.75, 1].every((progress) =>
-    session.sample(progress).every(({ opacity, rect }) =>
-      Number.isFinite(opacity) &&
-      [rect.left, rect.top, rect.width, rect.height].every(Number.isFinite)
+  assert.ok(
+    transition.relations.some(({ lifecycle }) => lifecycle === "exit")
+  );
+  assert.ok(
+    materialTransition.owners.some(
+      ({ lifecycle }) => lifecycle === "exit"
     )
-  ));
+  );
+  assert.match(adapter, /createKpCanonicalNativeKatexSceneSession/);
+  assert.doesNotMatch(adapter, /unit-exponent|unwrap-unit-exponent/);
 });
 
 test("unit-exponent construction stays static and headless", () => {
@@ -135,48 +118,3 @@ test("unit-exponent construction stays static and headless", () => {
     assert.equal(durable.includes(forbidden), false, forbidden);
   }
 });
-
-function scene(
-  endpoint: "source" | "target",
-  statePlan: KpReaderEquationStatePlan
-) {
-  const root = endpoint === "source" ? sourceRoot : targetRoot;
-  const atoms = statePlan.selectors.map((selector, index) => {
-    const groupId = `group.${endpoint}.${index}`;
-    const atom: KpNativeKatexPaintAtomObservation = {
-      kind: "native-katex-paint-atom-observation",
-      lifecycle: "renderer-session",
-      id: `atom.${endpoint}.${index}`,
-      endpoint,
-      semanticEntityId: selector.id,
-      presentationGroupId: groupId,
-      paintKind: "glyph",
-      visualKey: `glyph:${selector.label ?? selector.id}`,
-      sourceElement: { ownerDocument } as HTMLElement,
-      rect: {
-        left: (endpoint === "source" ? 20 : 80) + index * 24,
-        top: selector.id.endsWith("residual-exponent") ? 4 : 24,
-        width: 14,
-        height: 20
-      },
-      styleFingerprint: "font:KaTeX_Main",
-      zOrder: index,
-      fontRevision: 1
-    };
-    return { atom, groupId };
-  });
-  return createKpNativeKatexRenderedSceneObservation({
-    endpoint,
-    stage,
-    root,
-    atoms: atoms.map(({ atom }) => atom),
-    groups: atoms.map(({ atom, groupId }) => ({
-      id: groupId,
-      semanticEntityId: atom.semanticEntityId,
-      atomIds: [atom.id],
-      rect: atom.rect
-    })),
-    fontRevision: 1,
-    viewportKey: "governed-exponent-headless"
-  });
-}

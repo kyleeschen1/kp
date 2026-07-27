@@ -71,6 +71,10 @@ export {
 export {
   compileKpRadicalSuccessionEquationLesson
 } from "./radical-succession-equation-lesson.ts";
+export {
+  compileKpCanonicalEquationLessonPromotion,
+  type KpCanonicalEquationLessonPromotionInput
+} from "./canonical-equation-lesson-promotion-kit.ts";
 
 export {
   kpNumeratorSplitMergePreservationManifest

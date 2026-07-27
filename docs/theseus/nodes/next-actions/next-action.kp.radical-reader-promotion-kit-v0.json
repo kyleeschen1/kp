@@ -744,6 +744,48 @@
       "scope": "slice 17 resource hardening durable graph",
       "checkedAt": "2026-07-27T03:29:02.224Z",
       "notes": "Valid: 794 nodes and 12892 events before hardening commit."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 17 promotion-kit parity",
+      "checkedAt": "2026-07-27T03:41:53.253Z",
+      "notes": "43 tests passed. Fraction and radical compile through one shared reader assembly kit and canonical descriptor factory while retaining exact lesson-specific semantics and annotations."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction",
+      "status": "passed",
+      "scope": "slice 17 construction and unit-exponent preservation",
+      "checkedAt": "2026-07-27T03:41:58.454Z",
+      "notes": "60 tests passed after updating stale seam assertions to the descriptor-owned canonical path and keeping the unit-exponent proof DOM-free."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 17 fraction and radical browser parity",
+      "checkedAt": "2026-07-27T03:42:04.794Z",
+      "notes": "12 Chromium checks passed across both promoted lessons, including exact seek, native endpoint geometry, semantic seams, and bounded WebGL recovery."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 17 static typing",
+      "checkedAt": "2026-07-27T03:42:09.615Z",
+      "notes": "All TypeScript projects passed after extraction."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 17 architecture boundaries",
+      "checkedAt": "2026-07-27T03:42:17.447Z",
+      "notes": "All reader, animation, and concept-room architecture gates passed."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "failed",
+      "scope": "slice 19 deferred source ceiling",
+      "checkedAt": "2026-07-27T03:42:24.701Z",
+      "notes": "11 of 12 checks passed. The only failure is the accumulated native scene source ceiling: 128628 bytes versus the stale 124000 ceiling. No vocabulary or behavior gate failed; slice 19 must either consolidate the generic core or update the ratchet with explicit evidence."
     }
   ],
   "progress": {

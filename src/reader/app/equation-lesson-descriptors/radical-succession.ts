@@ -4,14 +4,14 @@ import {
 import {
   bindKpExponentRadicalStructuralAnchors
 } from "../../../rendering/exponent-radical-selector-annotated-latex.ts";
-import type {
-  KpReaderEquationLessonDescriptor
+import {
+  defineKpCanonicalEquationLessonDescriptor
 } from "../equation-lesson-descriptor.ts";
 
-export const radicalSuccessionDescriptor = {
-  id: "radical-succession",
-  createAnimation: () => createExponentRadicalRewriteAnimationAsset(),
-  canonicalTransitionSelection: "all",
-  bindStructuralAnchors: bindKpExponentRadicalStructuralAnchors,
-  compactTranscriptAvailable: false
-} satisfies KpReaderEquationLessonDescriptor;
+export const radicalSuccessionDescriptor =
+  defineKpCanonicalEquationLessonDescriptor({
+    id: "radical-succession",
+    createAnimation: () => createExponentRadicalRewriteAnimationAsset(),
+    bindStructuralAnchors: bindKpExponentRadicalStructuralAnchors,
+    compactTranscriptAvailable: false
+  });

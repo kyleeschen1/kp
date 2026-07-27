@@ -45,6 +45,20 @@ export function defineKpReaderEquationLessonDescriptors<
   return Object.freeze({ ...descriptors });
 }
 
+export function defineKpCanonicalEquationLessonDescriptor<
+  const TDescriptor extends Omit<
+    KpReaderEquationLessonDescriptor,
+    "canonicalTransitionSelection"
+  >
+>(
+  descriptor: TDescriptor
+): Readonly<TDescriptor & { readonly canonicalTransitionSelection: "all" }> {
+  return Object.freeze({
+    ...descriptor,
+    canonicalTransitionSelection: "all" as const
+  });
+}
+
 const kpReaderEquationLessonDescriptorLoaders = {
   streamlined: () => import("./equation-lesson-descriptors/linear.ts")
     .then(({ streamlinedDescriptor }) => streamlinedDescriptor),

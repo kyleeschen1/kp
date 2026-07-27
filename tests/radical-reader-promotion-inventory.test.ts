@@ -42,7 +42,11 @@ test("radical reader activates only through the shared product seams", async () 
     readFile("src/reader/app/exemplar-entry.ts", "utf8")
   ]);
   assert.match(descriptors, /"radical-succession"\s*:/);
-  assert.match(radicalDescriptor, /canonicalTransitionSelection: "all"/);
+  assert.match(
+    radicalDescriptor,
+    /defineKpCanonicalEquationLessonDescriptor/
+  );
+  assert.match(descriptors, /canonicalTransitionSelection: "all"/);
   assert.match(routes, /\/reader\/radical-succession\//);
   assert.match(entry, /compileKpReaderCanonicalTransitionPolicy/);
   assert.doesNotMatch(

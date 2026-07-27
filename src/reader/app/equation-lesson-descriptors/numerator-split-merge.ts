@@ -4,14 +4,14 @@ import {
 import {
   bindKpNumeratorSplitMergeStructuralAnchors
 } from "../../../rendering/numerator-split-merge-selector-annotated-latex.ts";
-import type {
-  KpReaderEquationLessonDescriptor
+import {
+  defineKpCanonicalEquationLessonDescriptor
 } from "../equation-lesson-descriptor.ts";
 
-export const numeratorSplitMergeDescriptor = {
-  id: "numerator-split-merge",
-  createAnimation: () => createNumeratorSplitMergeEquationAnimationAsset(),
-  canonicalTransitionSelection: "all",
-  bindStructuralAnchors: bindKpNumeratorSplitMergeStructuralAnchors,
-  compactTranscriptAvailable: false
-} satisfies KpReaderEquationLessonDescriptor;
+export const numeratorSplitMergeDescriptor =
+  defineKpCanonicalEquationLessonDescriptor({
+    id: "numerator-split-merge",
+    createAnimation: () => createNumeratorSplitMergeEquationAnimationAsset(),
+    bindStructuralAnchors: bindKpNumeratorSplitMergeStructuralAnchors,
+    compactTranscriptAvailable: false
+  });
