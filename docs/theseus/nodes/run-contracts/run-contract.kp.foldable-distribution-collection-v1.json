@@ -142,7 +142,8 @@
     {
       "id": "s15",
       "title": "Compile-reader-lesson",
-      "status": "planned"
+      "summary": "Compiled the reader lesson, five narrated semantic checkpoints, searchable native static math, and a complete accessible six-operation transcript without requiring JavaScript.",
+      "status": "complete"
     },
     {
       "id": "s16",

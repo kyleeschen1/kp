@@ -197,11 +197,25 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T06:07:57.297Z",
       "notes": "Stable foldable distribution URL state compiles across all TypeScript projects."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/foldable-distribution-lesson-model.test.ts tests/foldable-distribution-expression-chain.test.ts tests/foldable-distribution-evaluation-tree.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T06:11:20.181Z",
+      "notes": "Five searchable native static checkpoints compile from verified algebra; narration explicitly discloses all six operations and remains useful without JavaScript."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T06:11:26.069Z",
+      "notes": "Foldable distribution lesson content, transcript, and static projections compile across all TypeScript projects."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 14 made reader state durable and canonical: shared URLs preserve node focus, folds, pins, mode, direction, checkpoint, and progress; malformed nodes, duplicate fold state, and incoherent pins are rejected."
+    "summary": "Slice 15 compiled one searchable reader document with five semantic checkpoints, native static math, and an accessible transcript that names all six operations even when visual detail is folded."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",
