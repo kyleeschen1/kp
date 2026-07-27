@@ -4,7 +4,9 @@ import type {
   KpReaderEquationTransitionMaterialPlan
 } from "./equation-material-plan.ts";
 import {
+  assertKpAppliedEquationStageLayout,
   createKpEquationStageMeasurementIdentity,
+  type KpAppliedEquationStageLayout,
   type KpEquationStageMeasurementIdentity
 } from "../runtime/equation-stage-layout.ts";
 
@@ -78,6 +80,28 @@ export function measureKpReaderEquationLayoutSnapshot(input: {
     rootRect,
     measurements
   });
+}
+
+export function measureKpReaderAppliedEquationStageLayoutSnapshot(input: {
+  readonly materialPlan: KpReaderEquationMaterialPlan;
+  readonly transitionId: string;
+  readonly measurementRoot: HTMLElement;
+  readonly revision: number;
+  readonly coordinateSpaceId: string;
+  readonly appliedStageLayout: KpAppliedEquationStageLayout;
+}): KpReaderEquationLayoutSnapshot {
+  const expected = createKpEquationStageMeasurementIdentity({
+    revision: input.revision,
+    coordinateSpaceId: input.coordinateSpaceId
+  });
+  // Paint observation is downstream of DOM application, so stale or merely
+  // certified geometry cannot enter the canonical measurement path.
+  assertKpAppliedEquationStageLayout(
+    input.appliedStageLayout,
+    expected,
+    "Reader applied equation-stage measurement"
+  );
+  return measureKpReaderEquationLayoutSnapshot(input);
 }
 
 export function createKpReaderEquationLayoutSnapshot(input: {

@@ -318,11 +318,39 @@
       "scope": "slice s12 deterministic fit fallback",
       "checkedAt": "2026-07-27T22:36:09.135Z",
       "notes": "Inference contracts remain below ceilings; the fallback module does not enlarge the lightweight proof fixture graph."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s13 applied layout seam",
+      "checkedAt": "2026-07-27T22:44:09.769Z",
+      "notes": "97 tests pass, including exact native-member closure, absolute idempotent row writes, stale/partial/foreign rejection, and post-application endpoint paint measurement."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s13 applied layout seam",
+      "checkedAt": "2026-07-27T22:44:10.666Z",
+      "notes": "All TypeScript projects accept the generic applied-layout proof and applied-only measurement entrypoint."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice s13 applied layout seam",
+      "checkedAt": "2026-07-27T22:44:11.464Z",
+      "notes": "Inference contracts pass alone at types=36587, instantiations=44680, check=1.55s; the earlier concurrent timing-only run was load contention."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice s13 applied layout seam",
+      "checkedAt": "2026-07-27T22:44:12.285Z",
+      "notes": "12 canonical renderer gates pass; renderer vocabulary, session ownership, fraction behavior, and invalidation remain unchanged."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Unsatisfied certified layouts now have one deterministic requested-stage-fold-condense ladder; resolution accepts exact branded phase fit closure, preserves the shared trace and accessibility identities, and reports explicit failure if no readable semantic projection fits."
+    "summary": "Certified row transforms can now be atomically applied to exact connected native members with stale-revision, completeness, foreign-authority, and double-transform guards; only the resulting opaque applied proof can enter the post-transform paint measurement path."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

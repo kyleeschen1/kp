@@ -139,13 +139,28 @@ export interface KpCertifiedEquationStageLayout {
   readonly [certifiedEquationStageLayoutAuthority]: true;
 }
 
-export interface KpAppliedEquationStageLayout {
+export interface KpAppliedEquationStageLayout<
+  TCertificate extends KpCertifiedEquationStageLayout =
+    KpCertifiedEquationStageLayout
+> {
   readonly schemaVersion: "kp.applied-equation-stage-layout.v1";
   readonly executionState: "applied";
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
-  readonly certificate: KpCertifiedEquationStageLayout;
+  readonly certificate: TCertificate;
   readonly appliedRowIds: readonly string[];
+  readonly appliedNativeMemberIds: readonly string[];
+  readonly applicationId: string;
   readonly [appliedEquationStageLayoutAuthority]: true;
+}
+
+export interface KpEquationStageNativeMemberBinding {
+  readonly ownerId: string;
+  readonly element: HTMLElement;
+}
+
+export interface KpEquationStageNativeRowBinding {
+  readonly rowId: string;
+  readonly members: readonly KpEquationStageNativeMemberBinding[];
 }
 
 export function compileKpMeasuredEquationStageInput(input: {
@@ -359,6 +374,194 @@ export function certifyKpTwoRowEquationStageLayout(
   });
 }
 
+export function applyKpCertifiedEquationStageLayout<
+  TCertificate extends KpCertifiedEquationStageLayout
+>(input: {
+  readonly certificate: TCertificate;
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
+  readonly rows: readonly KpEquationStageNativeRowBinding[];
+}): KpAppliedEquationStageLayout<TCertificate> {
+  assertKpEquationStageMeasurementIdentity(
+    input.certificate.measurementIdentity,
+    input.measurementIdentity,
+    "Equation stage DOM application"
+  );
+  const expectedRows = new Map(
+    input.certificate.rows.map((row) => [row.id, row])
+  );
+  if (
+    input.rows.length !== expectedRows.size ||
+    new Set(input.rows.map(({ rowId }) => rowId)).size !== input.rows.length
+  ) {
+    throw new Error(
+      "Equation stage DOM application must bind every certified row exactly once."
+    );
+  }
+  const envelopes = new Map(
+    input.certificate.measuredInput.envelopes.map((envelope) => [
+      envelope.id,
+      envelope
+    ])
+  );
+  const seenElements = new Set<HTMLElement>();
+  const seenOwnerIds = new Set<string>();
+  const staged = input.rows.flatMap((binding) => {
+    const row = expectedRows.get(binding.rowId);
+    if (row === undefined) {
+      throw new Error(
+        `Equation stage DOM application names unknown row ${binding.rowId}.`
+      );
+    }
+    const expectedMembers = new Set(row.envelopeIds.flatMap((envelopeId) => {
+      const envelope = envelopes.get(envelopeId);
+      if (envelope === undefined) {
+        throw new Error(
+          `Equation stage DOM application is missing envelope ${envelopeId}.`
+        );
+      }
+      return envelope.memberOwnerIds;
+    }));
+    const actualMembers = binding.members.map(({ ownerId }) => ownerId);
+    if (
+      binding.members.length !== expectedMembers.size ||
+      new Set(actualMembers).size !== actualMembers.length ||
+      actualMembers.some((ownerId) => !expectedMembers.has(ownerId))
+    ) {
+      throw new Error(
+        `Equation stage DOM row ${binding.rowId} must bind its exact native members.`
+      );
+    }
+    return binding.members.map(({ ownerId, element }) => {
+      if (seenOwnerIds.has(ownerId)) {
+        throw new Error(
+          `Equation stage DOM application repeats native owner ${ownerId}.`
+        );
+      }
+      seenOwnerIds.add(ownerId);
+      if (!element.isConnected) {
+        throw new Error(
+          `Equation stage native member ${ownerId} is not connected.`
+        );
+      }
+      if (seenElements.has(element)) {
+        throw new Error(
+          `Equation stage DOM application repeats native element ${ownerId}.`
+        );
+      }
+      seenElements.add(element);
+      const owned =
+        element.dataset["kpEquationStageLayoutAuthority"] === "applied-v1";
+      if (
+        !owned &&
+        element.style.translate !== "" &&
+        element.style.translate !== "none"
+      ) {
+        throw new Error(
+          `Equation stage native member ${ownerId} already owns CSS translation.`
+        );
+      }
+      return {
+        ownerId,
+        element,
+        row,
+        previous: {
+          translate: element.style.translate,
+          authority: element.dataset["kpEquationStageLayoutAuthority"],
+          application: element.dataset["kpEquationStageLayoutApplication"],
+          row: element.dataset["kpEquationStageLayoutRow"],
+          revision: element.dataset["kpEquationStageLayoutRevision"],
+          coordinateSpace:
+            element.dataset["kpEquationStageLayoutCoordinateSpace"]
+        }
+      };
+    });
+  });
+  const applicationId = [
+    input.measurementIdentity.coordinateSpaceId,
+    input.measurementIdentity.revision,
+    input.certificate.measuredInput.intent.nodeId
+  ].join("@");
+  try {
+    for (const { element, row } of staged) {
+      element.style.translate =
+        `${row.translateX}px ${row.translateY}px`;
+      element.dataset["kpEquationStageLayoutAuthority"] = "applied-v1";
+      element.dataset["kpEquationStageLayoutApplication"] = applicationId;
+      element.dataset["kpEquationStageLayoutRow"] = row.id;
+      element.dataset["kpEquationStageLayoutRevision"] =
+        String(input.measurementIdentity.revision);
+      element.dataset["kpEquationStageLayoutCoordinateSpace"] =
+        input.measurementIdentity.coordinateSpaceId;
+    }
+    for (const { ownerId, element, row } of staged) {
+      if (
+        element.style.translate !==
+          `${row.translateX}px ${row.translateY}px` ||
+        element.dataset["kpEquationStageLayoutApplication"] !== applicationId
+      ) {
+        throw new Error(
+          `Equation stage native member ${ownerId} rejected its row transform.`
+        );
+      }
+    }
+  } catch (error) {
+    for (const { element, previous } of staged) {
+      element.style.translate = previous.translate;
+      restoreData(
+        element,
+        "kpEquationStageLayoutAuthority",
+        previous.authority
+      );
+      restoreData(
+        element,
+        "kpEquationStageLayoutApplication",
+        previous.application
+      );
+      restoreData(element, "kpEquationStageLayoutRow", previous.row);
+      restoreData(
+        element,
+        "kpEquationStageLayoutRevision",
+        previous.revision
+      );
+      restoreData(
+        element,
+        "kpEquationStageLayoutCoordinateSpace",
+        previous.coordinateSpace
+      );
+    }
+    throw error;
+  }
+  return Object.freeze({
+    schemaVersion: "kp.applied-equation-stage-layout.v1" as const,
+    executionState: "applied" as const,
+    measurementIdentity: input.certificate.measurementIdentity,
+    certificate: input.certificate,
+    appliedRowIds: Object.freeze(
+      input.certificate.rows.map(({ id }) => id)
+    ),
+    appliedNativeMemberIds: Object.freeze(
+      staged.map(({ ownerId }) => ownerId)
+    ),
+    applicationId,
+    [appliedEquationStageLayoutAuthority]: true as const
+  });
+}
+
+export function assertKpAppliedEquationStageLayout(
+  applied: KpAppliedEquationStageLayout,
+  expected: KpEquationStageMeasurementIdentity,
+  label: string
+): void {
+  assertKpEquationStageMeasurementIdentity(
+    expected,
+    applied.measurementIdentity,
+    label
+  );
+  if (applied.appliedRowIds.length !== applied.certificate.rows.length) {
+    throw new Error(`${label} is missing applied row proof.`);
+  }
+}
+
 // These states are deliberately opaque: later compiler, certifier, and DOM
 // application functions own the only runtime paths that can create them.
 
@@ -442,4 +645,13 @@ function translateStageRect(
     width: rect.width,
     height: rect.height
   });
+}
+
+function restoreData(
+  element: HTMLElement,
+  key: string,
+  value: string | undefined
+): void {
+  if (value === undefined) delete element.dataset[key];
+  else element.dataset[key] = value;
 }

@@ -131,7 +131,8 @@
     {
       "id": "s13",
       "title": "Apply layout before paint measurement",
-      "status": "planned"
+      "summary": "Added atomic exact-member DOM application for certified rows, absolute idempotent transforms, stale and foreign authority rejection, opaque applied proof, and an applied-only post-transform paint measurement entrypoint.",
+      "status": "complete"
     },
     {
       "id": "s14",

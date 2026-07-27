@@ -52,6 +52,7 @@ export async function loadKpReaderEquationSceneCompositorAdapter() {
 export { projectKpCertifiedTransferMaterialPlan } from "./certified-transfer-material-projection.ts";
 export {
   createKpReaderEquationLayoutSnapshot,
+  measureKpReaderAppliedEquationStageLayoutSnapshot,
   measureKpReaderEquationLayoutSnapshot,
   type KpReaderEquationAnchorMeasurement,
   type KpReaderEquationLayoutSnapshot,
