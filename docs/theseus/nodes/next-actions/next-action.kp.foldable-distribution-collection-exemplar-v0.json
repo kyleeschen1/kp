@@ -2,8 +2,9 @@
   "id": "next-action.kp.foldable-distribution-collection-exemplar-v0",
   "kind": "next-action",
   "title": "Ship foldable distribution and collection exemplar",
-  "status": "ready",
+  "status": "resolved",
   "domain": "reader",
+  "summary": "Shipped the canonical foldable distribution and collection exemplar with exact algebra, deterministic folding, semantic visual motifs, native settlement, opaque lineage, responsive fitting, lazy library hosting, review capture, exact outline navigation, and complete release evidence. Commit be814b86.",
   "sourceRefs": [
     {
       "kind": "file",

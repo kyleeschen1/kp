@@ -2,8 +2,9 @@
   "id": "run-contract.kp.foldable-distribution-collection-v1",
   "kind": "run-contract",
   "title": "Foldable distribution and collection exemplar",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -208,8 +209,8 @@
     {
       "id": "s26",
       "title": "Run-release-closeout",
-      "summary": "Running release closeout: production reader and review gates, route and source budgets, full unit suite, production build, workspace validation, exact residual-risk and promotion-status recording, then final visual checkpoint handoff.",
-      "status": "in-progress"
+      "summary": "Release closeout complete. User-requested distribution and outline corrections are encoded as generic contracts: homogeneous parallel motifs survive composition; canonical copy fan-out stays opaque and follows measured native geometry; outline links land on exact successor-phase starts. All focused, browser, full-suite, production, budget, review, build, type, and workspace gates pass. Committed as be814b86.",
+      "status": "complete"
     }
   ]
 }
