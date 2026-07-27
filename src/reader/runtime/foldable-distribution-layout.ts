@@ -1,35 +1,33 @@
 import type {
   KpFoldableDistributionProjection
 } from "../../semantic/foldable-distribution-fold-projection.ts";
+import type {
+  KpEquationStageLayoutIntent,
+  KpEquationStagePhaseIntent,
+  KpEquationStageRowIntent
+} from "./equation-stage-layout.ts";
 
 export type KpFoldableDistributionViewport = "wide" | "phone";
 
-export interface KpFoldableDistributionLayoutRow {
-  readonly id: string;
-  readonly envelopeIds: readonly string[];
-  readonly role: "single-equation" | "left-branch" | "right-branch" |
-    "coefficient-group" | "constant-group" | "result";
-}
+export interface KpFoldableDistributionLayoutRow
+  extends KpEquationStageRowIntent<
+    "single-equation" | "left-branch" | "right-branch" |
+    "coefficient-group" | "constant-group" | "result"
+  > {}
 
-export interface KpFoldableDistributionPhaseLayout {
-  readonly nodeId: string;
-  readonly policy: "single-row" | "semantic-two-row-stage";
-  readonly rows: readonly KpFoldableDistributionLayoutRow[];
-  readonly lineChangeReason?: "viewport-semantic-staging" | undefined;
-}
+export interface KpFoldableDistributionPhaseLayout
+  extends KpEquationStagePhaseIntent<KpFoldableDistributionLayoutRow> {}
 
-export interface KpFoldableDistributionLayoutPlan {
+export interface KpFoldableDistributionLayoutIntent
+  extends KpEquationStageLayoutIntent<KpFoldableDistributionPhaseLayout> {
   readonly schemaVersion: "kp.foldable-distribution-layout.v1";
   readonly viewport: KpFoldableDistributionViewport;
-  readonly phases: readonly KpFoldableDistributionPhaseLayout[];
-  readonly geometryAuthority: "native-measurement";
-  readonly operationSpecificCoordinates: false;
 }
 
 export function planKpFoldableDistributionLayout(input: {
   readonly projection: KpFoldableDistributionProjection;
   readonly viewport: KpFoldableDistributionViewport;
-}): KpFoldableDistributionLayoutPlan {
+}): KpFoldableDistributionLayoutIntent {
   const phone = input.viewport === "phone";
   const collapsed = new Set(input.projection.collapsedNodeIds);
   const phases = Object.freeze([
@@ -71,6 +69,7 @@ export function planKpFoldableDistributionLayout(input: {
 
   return Object.freeze({
     schemaVersion: "kp.foldable-distribution-layout.v1" as const,
+    executionState: "intent" as const,
     viewport: input.viewport,
     phases,
     geometryAuthority: "native-measurement" as const,

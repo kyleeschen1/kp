@@ -56,11 +56,23 @@ export {
 } from "./reader-route-descriptor.ts";
 export {
   planKpFoldableDistributionLayout,
-  type KpFoldableDistributionLayoutPlan,
+  type KpFoldableDistributionLayoutIntent,
   type KpFoldableDistributionLayoutRow,
   type KpFoldableDistributionPhaseLayout,
   type KpFoldableDistributionViewport
 } from "./foldable-distribution-layout.ts";
+export {
+  type KpAppliedEquationStageLayout,
+  type KpCertifiedEquationStageLayout,
+  type KpCertifiedEquationStageRow,
+  type KpEquationStageLayoutIntent,
+  type KpEquationStageLayoutPolicy,
+  type KpEquationStageMeasuredEnvelope,
+  type KpEquationStagePhaseIntent,
+  type KpEquationStageRect,
+  type KpEquationStageRowIntent,
+  type KpMeasuredEquationStageInput
+} from "./equation-stage-layout.ts";
 export {
   decodeKpFoldableDistributionUrl,
   encodeKpFoldableDistributionUrl,

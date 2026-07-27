@@ -77,7 +77,8 @@
     {
       "id": "s04",
       "title": "Proof carrying layout types",
-      "status": "planned"
+      "summary": "Added proof-carrying equation-stage lifecycle types, marked foldable plans as intent, exported the generic boundary, and added compile-time plan-to-render rejection fixtures.",
+      "status": "complete"
     },
     {
       "id": "s05",

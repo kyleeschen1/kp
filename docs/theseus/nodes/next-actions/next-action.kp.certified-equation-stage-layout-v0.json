@@ -94,11 +94,32 @@
       "scope": "slice s03 semantic contact law",
       "checkedAt": "2026-07-27T21:50:00.148Z",
       "notes": "TypeScript compilation passed after adding explicit contact types and evaluator."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s04 proof carrying layout types",
+      "checkedAt": "2026-07-27T21:54:37.186Z",
+      "notes": "72 focused tests pass; foldable intent retains semantic row behavior and is explicitly marked intent."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice s04 negative type fixture",
+      "checkedAt": "2026-07-27T21:54:38.027Z",
+      "notes": "Inference fixture proves intent, measured, certified, and applied states are not assignable across proof boundaries; compiler cost remains below ceilings."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s04 proof carrying layout types",
+      "checkedAt": "2026-07-27T21:54:38.861Z",
+      "notes": "Application, node, test, and domain projects accept the opaque lifecycle types and renamed foldable intent surface."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s03 defines explicit symmetric, bounded semantic-contact allowances; semantic identity alone cannot excuse visible-paint overlap."
+    "summary": "Slice s04 separates declared row intent, measured native input, certified layout, and applied DOM layout with private proof brands; raw policy cannot type-check as executed geometry."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

@@ -25,6 +25,7 @@ test("wide layout keeps every checkpoint on one stable native row", () => {
 
   assert.ok(plan.phases.every(({ policy }) => policy === "single-row"));
   assert.ok(plan.phases.every(({ rows }) => rows.length === 1));
+  assert.equal(plan.executionState, "intent");
   assert.equal(plan.geometryAuthority, "native-measurement");
   assert.equal(plan.operationSpecificCoordinates, false);
 });
