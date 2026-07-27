@@ -183,11 +183,25 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T06:04:40.760Z",
       "notes": "Fold-aware timing compiles across all TypeScript projects without adding a runtime or clock."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/foldable-distribution-url-codec.test.ts tests/semantic-reader-url-state-codec.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T06:07:52.241Z",
+      "notes": "URL codec round-trips active node, canonical fold order, pins, direction, checkpoint, and progress while preserving unrelated query state and rejecting fabricated or incoherent input."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T06:07:57.297Z",
+      "notes": "Stable foldable distribution URL state compiles across all TypeScript projects."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 13 compiled all four semantic phases onto one deterministic shared clock. Collapsed groups compress presentation time but retain every operation, a bounded visible interval, exact checkpoints, and stateless seek/rewind."
+    "summary": "Slice 14 made reader state durable and canonical: shared URLs preserve node focus, folds, pins, mode, direction, checkpoint, and progress; malformed nodes, duplicate fold state, and incoherent pins are rejected."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",

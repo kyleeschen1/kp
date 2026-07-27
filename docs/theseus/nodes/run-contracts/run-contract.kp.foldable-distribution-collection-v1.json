@@ -136,7 +136,8 @@
     {
       "id": "s14",
       "title": "Encode-stable-URL-state",
-      "status": "planned"
+      "summary": "Added canonical URL state for node focus, folds, pins, fold mode, direction, checkpoint, and progress; stable ordering, route validation, bounded defaults, and malformed-input rejection pass.",
+      "status": "complete"
     },
     {
       "id": "s15",
