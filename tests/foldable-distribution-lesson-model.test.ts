@@ -33,7 +33,7 @@ test("foldable distribution content compiles five narrated checkpoints", () => {
     model.staticMath[0]!.states.map(({ latex }) => latex),
     [
       "3(x + 2) + 2(x - 1)",
-      "3x + 3(2) + 2x + 2(-1)",
+      "3x + 3 \\cdot 2 + 2x + 2 \\cdot (-1)",
       "3x + 6 + 2x - 2",
       "(3x + 2x) + (6 - 2)",
       "5x + 4"

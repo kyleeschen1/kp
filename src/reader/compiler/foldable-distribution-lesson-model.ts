@@ -23,8 +23,8 @@ export interface KpFoldableDistributionTranscriptEntry {
 }
 
 const distributedProducts = Object.freeze({
-  id: "expression.foldable-distribution.distributed-products",
-  latex: "3x + 3(2) + 2x + 2(-1)",
+  id: "expression.foldable-distribution.distributed-raw",
+  latex: "3x + 3 \\cdot 2 + 2x + 2 \\cdot (-1)",
   title: "Four distributed products"
 });
 
@@ -56,7 +56,8 @@ export function compileKpFoldableDistributionLessonModel(markdown: string) {
     }],
     ["distributed", {
       latex: distributedProducts.latex,
-      label: "Three x plus three times two, plus two x plus two times negative one"
+      label:
+        "Three x plus three times two, plus two x plus two times negative one"
     }],
     ["products-evaluated", {
       latex: expressionChain[1]!.latex,

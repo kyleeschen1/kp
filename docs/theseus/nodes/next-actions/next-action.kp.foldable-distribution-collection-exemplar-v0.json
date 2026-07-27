@@ -211,11 +211,25 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T06:11:26.069Z",
       "notes": "Foldable distribution lesson content, transcript, and static projections compile across all TypeScript projects."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/foldable-distribution-native-endpoints.test.ts tests/foldable-distribution-lesson-model.test.ts tests/selector-annotated-latex.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T06:16:33.341Z",
+      "notes": "Five exact native KaTeX endpoints annotate every visible glyph; semantic term envelopes resolve every certified product, grouping, and collection relation; searchable static MathML remains intact."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T06:16:39.613Z",
+      "notes": "Native endpoint annotations and semantic envelope declarations compile across all TypeScript projects."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 15 compiled one searchable reader document with five semantic checkpoints, native static math, and an accessible transcript that names all six operations even when visual detail is folded."
+    "summary": "Slice 16 built five exact native KaTeX endpoint specifications. Every visible glyph is annotated, nested signed-term and coefficient concepts use declared envelopes, and all certified relations resolve before browser rendering."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",

@@ -148,7 +148,8 @@
     {
       "id": "s16",
       "title": "Build-native-KaTeX-endpoints",
-      "status": "planned"
+      "summary": "Built five exact native KaTeX endpoints with complete stable selector annotations, semantic group envelopes, and compile-time resolution of every certified product, grouping, and collection relation.",
+      "status": "complete"
     },
     {
       "id": "s17",
