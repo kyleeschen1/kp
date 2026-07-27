@@ -78,11 +78,25 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T05:37:00.457Z",
       "notes": "The exact linear-normal-form verifier and structured fixture pass all TypeScript projects."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/foldable-distribution-fan-out.test.ts tests/foldable-distribution-expression-chain.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T05:40:20.922Z",
+      "notes": "Both branches pass exact structured distribution law, promoted operation execution, one-to-two factor fan-out, persistent addends/connectors, and canonical copy choreography without entry/exit replacement."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T05:40:24.533Z",
+      "notes": "Fan-out certificates and canonical operation bindings typecheck across all projects."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 4 constructed four immutable, explicitly identified structured-expression states and independently normalized every state to the exact linear form 5x+4, with negative-term structure preserved and drift rejected."
+    "summary": "Slice 5 certified left and right distributions independently through the existing exact rewrite law and promoted distribution spec: each factor has one-to-two fan-out, addends/connectors persist, grouping exits, and the copy choreography contains no generic enter/exit replacement."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",

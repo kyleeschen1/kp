@@ -82,7 +82,8 @@
     {
       "id": "s05",
       "title": "Certify-distribution-fan-out",
-      "status": "planned"
+      "summary": "Certified both exact distributive fan-outs with promoted roles, one-to-two factor lineage, persistent addends/connectors, grouping exit, and existing copy choreography only.",
+      "status": "complete"
     },
     {
       "id": "s06",
