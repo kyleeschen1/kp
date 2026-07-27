@@ -48,6 +48,33 @@ export function compileKpFoldableDistributionStaticProjection(
   });
 }
 
+export function compileKpFoldableDistributionAdaptiveProjection(input: {
+  readonly intent: KpFoldableDistributionFoldIntent;
+  readonly detailBudget: "compact" | "balanced" | "roomy";
+}): KpFoldableDistributionProjection {
+  const { intent } = input;
+  if (intent.mode !== "automatic" && intent.mode !== "pinned") {
+    throw new Error(
+      `Adaptive fold projection cannot compile ${intent.mode} intent.`
+    );
+  }
+  const expandedNodeIds = intent.mode === "pinned"
+    ? intent.pinnedNodeIds
+    : input.detailBudget === "roomy"
+      ? intent.foldableNodeIds
+      : input.detailBudget === "balanced"
+        ? intent.foldableNodeIds.slice(0, 1)
+        : [];
+  const expanded = new Set(expandedNodeIds);
+  return compileProjection({
+    intent,
+    expandedNodeIds,
+    collapsedNodeIds: intent.foldableNodeIds.filter(
+      (nodeId) => !expanded.has(nodeId)
+    )
+  });
+}
+
 export function compileKpFoldableDistributionProjectionFromNodeState(input: {
   readonly intent: KpFoldableDistributionFoldIntent;
   readonly expandedNodeIds: readonly string[];

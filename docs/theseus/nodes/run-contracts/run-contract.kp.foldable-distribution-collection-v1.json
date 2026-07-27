@@ -124,7 +124,8 @@
     {
       "id": "s12",
       "title": "Project-automatic-pinned",
-      "status": "planned"
+      "summary": "Compiled deterministic compact/balanced/roomy automatic projections and pin-respecting projections with complete disclosures and unchanged operation truth.",
+      "status": "complete"
     },
     {
       "id": "s13",

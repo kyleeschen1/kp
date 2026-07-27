@@ -162,11 +162,18 @@
       "scope": "focused",
       "checkedAt": "2026-07-27T05:58:49.092Z",
       "notes": "Expanded exposes all six leaves; collapsed summarizes two parallel groups while disclosing all four hidden operations; semantic truth is byte-equivalent."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/foldable-distribution-adaptive-projection.test.ts tests/foldable-distribution-static-projection.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T06:00:26.511Z",
+      "notes": "Automatic budgets map deterministically to 0/1/2 expanded groups; pinned intent overrides every budget; disclosures and all six operations remain complete."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 11 compiled expanded and collapsed views from one tree. Collapsed mode hides only leaf detail, retains all six operations in semantic truth, and emits explicit disclosures for every hidden operation."
+    "summary": "Slice 12 made automatic folding deterministic across compact, balanced, and roomy budgets and made pins authoritative over all budgets. Every projection retains identical operation truth and disclosures."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",
