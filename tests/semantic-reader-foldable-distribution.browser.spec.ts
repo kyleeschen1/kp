@@ -199,12 +199,55 @@ test("successor ownership survives direct seek, rewind, phone, and reduced motio
           ?.startsWith("successor-")
       )
     )).toBe(true);
+    expect(await page.evaluate(async () => {
+      const poolUrl = "/src/rendering/webgl-context-lease-pool.ts";
+      const pool = await import(/* @vite-ignore */ poolUrl);
+      return pool.inspectKpWebglContextLeasePool(document);
+    })).toMatchObject({ active: 0, waiting: 0 });
+    await expect(
+      page.locator(
+        "[data-kp-reader-transition-active='true'] " +
+        "[data-kp-editor-equation-material-layer]"
+      )
+    ).toHaveCount(1);
+    if (candidate.width === 390) {
+      await expect(
+        page.locator("[data-kp-reader-equation-stage]")
+      ).toHaveAttribute(
+        "data-kp-reader-fold-layout-policy",
+        "semantic-two-row-stage"
+      );
+      expect(await page.evaluate(() =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth
+      )).toBeLessThanOrEqual(1);
+    }
   }
 
   await page.setViewportSize({ width: 1_100, height: 800 });
   await page.goto(route(400, { kpFoldMode: "expanded" }), {
     waitUntil: "networkidle"
   });
+  const sampleSuccessors = () => page.locator(
+    '[data-kp-equation-material-owner-id*="native-scene-owner.successor."]'
+  ).evaluateAll((owners) => owners.map((owner) => {
+    const element = owner as HTMLElement;
+    return {
+      semantic:
+        element.dataset["kpEquationMaterialSemanticEntityId"],
+      role: element.dataset["kpEquationMaterialFragmentRole"],
+      text: element.textContent,
+      left: element.style.left,
+      top: element.style.top,
+      width: element.style.width,
+      height: element.style.height,
+      opacity: element.style.opacity,
+      transform: element.style.transform
+    };
+  }).sort((left, right) =>
+    JSON.stringify(left).localeCompare(JSON.stringify(right))
+  ));
+  const forwardFrame = await sampleSuccessors();
   const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
   const seek = (value: number) => scrubber.evaluate((node, nextValue) => {
     const input = node as HTMLInputElement;
@@ -233,6 +276,7 @@ test("successor ownership survives direct seek, rewind, phone, and reduced motio
     "data-kp-native-katex-successor-synthesis-count",
     "2"
   );
+  expect(await sampleSuccessors()).toEqual(forwardFrame);
 });
 
 test("one native MathML owner reports settled equation truth", async ({ page }) => {
