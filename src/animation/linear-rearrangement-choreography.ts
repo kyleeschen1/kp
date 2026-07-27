@@ -222,7 +222,30 @@ function createStep(
   if (kind === undefined || transformation.correspondenceMap === undefined) {
     throw new Error(`Transformation ${transformation.id} is not a complete rearrangement step.`);
   }
-  const records = transformation.correspondenceMap.records;
+  const semanticSelectorIds = new Set(
+    animation.bundle.objects.flatMap((object) =>
+      object.selectors
+        .filter(({ kind: selectorKind }) => selectorKind !== "artifact")
+        .map(({ id }) => id)
+    )
+  );
+  // Structural paint has a native compositor owner, so this semantic plan
+  // must project the same non-artifact inventory as transition IR.
+  const records = transformation.correspondenceMap.records.flatMap((record) => {
+    const projected = {
+      ...record,
+      sourceSelectorIds: record.sourceSelectorIds.filter((id) =>
+        semanticSelectorIds.has(id)
+      ),
+      targetSelectorIds: record.targetSelectorIds.filter((id) =>
+        semanticSelectorIds.has(id)
+      )
+    };
+    return projected.sourceSelectorIds.length === 0 &&
+        projected.targetSelectorIds.length === 0
+      ? []
+      : [projected];
+  });
   const continuantRecords = records.filter((record) =>
     record.relation === "identity" ||
     (isFractionStructureRewriteKind(kind) && record.relation === "role-change")
@@ -725,9 +748,10 @@ function focusEntityIdsForStep(
   if (causalRecord.sourceSelectorIds.length > 0) {
     return causalRecord.sourceSelectorIds;
   }
-  if (causalRecords.length > 1) {
-    return causalRecords.flatMap((record) => record.targetSelectorIds);
-  }
+  const introduced = causalRecords.flatMap((record) =>
+    record.targetSelectorIds
+  );
+  if (introduced.length > 0) return introduced;
   const records = transformation.correspondenceMap!.records;
   return records
     .filter((record) => record.id === "left-constant-persists")

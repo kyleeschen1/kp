@@ -27,7 +27,7 @@ test("parallel same-endpoint operations compile as one ordered visual cohort", (
 
   assert.deepEqual(
     cohorts.map(({ transformationIds }) => transformationIds.length),
-    [2, 2, 1, 1]
+    [2, 2, 1, 1, 1]
   );
   assert.match(cohorts[0]!.id, /^cohort\./);
   assert.equal(

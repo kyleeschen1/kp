@@ -285,6 +285,73 @@ function successorMetadata(
       successorRank: 0
     };
   }
+  if (objectId.endsWith(".coefficient-factored")) {
+    const source = new Map([
+      ["coefficient-factored.coefficient-3", {
+        successorRole: "coefficient-addend",
+        successorRank: 0
+      }],
+      ["coefficient-factored.coefficient-2", {
+        successorRole: "coefficient-addend",
+        successorRank: 1
+      }],
+      ["coefficient-factored.constant-6", {
+        successorRole: "constant-minuend",
+        successorRank: 0
+      }],
+      ["coefficient-factored.negative-2", {
+        successorRole: "constant-subtrahend",
+        successorRank: 1
+      }]
+    ]).get(selectorId);
+    if (source !== undefined) {
+      return {
+        successorContribution: "material-input",
+        ...source
+      };
+    }
+    const catalyst = new Map([
+      [
+        "coefficient-factored.coefficients.plus",
+        {
+          successorRole: "addition-operator",
+          successorOperationId: "kp.algebra.simplify-constant-sum"
+        }
+      ],
+      [
+        "coefficient-factored.constants.minus",
+        {
+          successorRole: "subtraction-operator",
+          successorOperationId: "kp.algebra.simplify-constant-difference"
+        }
+      ]
+    ]).get(selectorId);
+    if (catalyst !== undefined) {
+      return {
+        successorContribution: "catalyst",
+        ...catalyst,
+        successorRank: 0
+      };
+    }
+  }
+  if (objectId.endsWith(".collected")) {
+    if (selectorId === "collected.coefficient-5") {
+      return {
+        successorTarget: true,
+        successorRole: "evaluated-coefficient-sum",
+        successorRank: 0,
+        successorOperationId: "kp.algebra.simplify-constant-sum"
+      };
+    }
+    if (selectorId === "collected.constant-4") {
+      return {
+        successorTarget: true,
+        successorRole: "evaluated-constant-difference",
+        successorRank: 0,
+        successorOperationId: "kp.algebra.simplify-constant-difference"
+      };
+    }
+  }
   return {};
 }
 

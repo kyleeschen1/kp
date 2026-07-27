@@ -2,6 +2,52 @@ import {
   normalizeKpStageRelativeRect,
   type KpStageRelativeRect
 } from "./native-katex-fragment-observer.ts";
+import type {
+  KpNativeKatexPaintAtomObservation,
+  KpNativeKatexRenderedSceneObservation
+} from "./native-katex-rendered-scene.ts";
+
+export function attachKpNativeKatexTrackPaintGeometry<
+  Track extends {
+    readonly sourceAtomId?: string | undefined;
+    readonly targetAtomId?: string | undefined;
+  }
+>(input: {
+  readonly tracks: readonly Track[];
+  readonly source: KpNativeKatexRenderedSceneObservation;
+  readonly target: KpNativeKatexRenderedSceneObservation;
+}): readonly (
+  Track & {
+    readonly startPaintRect?: KpStageRelativeRect | undefined;
+    readonly endPaintRect?: KpStageRelativeRect | undefined;
+  }
+)[] {
+  const sourceAtoms = new Map(input.source.atoms.map((atom) => [atom.id, atom]));
+  const targetAtoms = new Map(input.target.atoms.map((atom) => [atom.id, atom]));
+  const paintRect = (
+    atom: KpNativeKatexPaintAtomObservation | undefined,
+    stage: HTMLElement
+  ) => atom === undefined
+    ? undefined
+    : atom.paintKind === "glyph"
+      ? measureKpNativeKatexTextInkRect(stage, atom.sourceElement)
+      : atom.rect;
+  return Object.freeze(input.tracks.map((track) => {
+    const sourceAtom =
+      sourceAtoms.get(track.sourceAtomId ?? "") ??
+      targetAtoms.get(track.sourceAtomId ?? "");
+    const targetAtom =
+      targetAtoms.get(track.targetAtomId ?? "") ??
+      sourceAtoms.get(track.targetAtomId ?? "");
+    const startPaintRect = paintRect(sourceAtom, input.source.stage);
+    const endPaintRect = paintRect(targetAtom, input.target.stage);
+    return Object.freeze({
+      ...track,
+      ...(startPaintRect === undefined ? {} : { startPaintRect }),
+      ...(endPaintRect === undefined ? {} : { endPaintRect })
+    });
+  }));
+}
 
 /**
  * Measures visible glyph ink rather than the Range/element line box.

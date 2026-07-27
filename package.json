@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "node --disable-warning=ExperimentalWarning scripts/dev.ts",
+    "dev:browser-test": "node --disable-warning=ExperimentalWarning scripts/dev.ts --browser-test",
     "dev:client": "vite",
     "dev:server": "node --disable-warning=ExperimentalWarning --watch server/main.ts",
     "dashboard:extension": "node --disable-warning=ExperimentalWarning scripts/project-dashboard-extension.ts",
@@ -23,8 +24,8 @@
     "test:animation-library-display": "node --disable-warning=ExperimentalWarning --test tests/animation-library-display-catalog.test.ts tests/canonical-animation-review.test.ts tests/dev-review-placement.test.ts",
     "test:radical-reader-promotion": "node --disable-warning=ExperimentalWarning --test tests/radical-reader-promotion-inventory.test.ts tests/canonical-reader-promotion-cost.test.ts tests/canonical-equation-lesson-promotion-kit.test.ts tests/canonical-reader-unit-exponent-cost-proof.test.ts tests/radical-reader-preservation-manifest.test.ts tests/exponent-radical-semantic-latex.test.ts tests/radical-succession-equation-lesson-model.test.ts tests/radical-succession-native-endpoints.test.ts tests/radical-reader-transition-policy.test.ts tests/radical-reader-lifecycle-totality.test.ts tests/semantic-glyph-reconciliation-radical.test.ts tests/generated-algebra-export-sample.test.ts tests/radical-canonical-checkpoint-plan.test.ts tests/native-katex-choreography-fidelity.test.ts tests/reader-equation-structural-succession.test.ts tests/webgl-context-lease-pool.test.ts",
     "test:browser:canonical-animation-construction": "playwright test tests/governed-fraction-split-merge-variation.browser.spec.ts tests/governed-canonical-compound.browser.spec.ts tests/canonical-animation-review.browser.spec.ts --project=chromium --workers=1",
-    "test:browser:canonical-animation-review": "playwright test tests/canonical-animation-review.browser.spec.ts --project=chromium --workers=1",
-    "visual:animation-library-display": "playwright test tests/canonical-animation-review.browser.spec.ts --project=chromium --workers=1",
+    "test:browser:canonical-animation-review": "playwright test tests/canonical-animation-review.browser.spec.ts tests/canonical-animation-review-live.browser.spec.ts --project=chromium --workers=1",
+    "visual:animation-library-display": "playwright test tests/canonical-animation-review.browser.spec.ts tests/canonical-animation-review-live.browser.spec.ts --project=chromium --workers=1",
     "test:browser:canonical-animation-review:packaged": "playwright test tests/canonical-animation-export-packaged.browser.spec.ts --config playwright.canonical-animation-review-packaged.config.ts --project=chromium --workers=1",
     "test:browser:radical-reader-promotion": "playwright test tests/radical-reader-canonical-adapter.browser.spec.ts tests/semantic-reader-radical-succession.browser.spec.ts tests/semantic-reader-numerator-split-merge.browser.spec.ts --grep-invert \"visually stable\" --config playwright.radical-reader.config.ts --project=chromium --workers=1",
     "test:browser:canonical-host-parity": "playwright test tests/canonical-host-parity.browser.spec.ts --config playwright.radical-reader.config.ts --project=chromium --workers=1",

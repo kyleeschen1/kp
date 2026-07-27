@@ -40,6 +40,9 @@ export function createKpReaderEquationSceneCompositorSession(input: {
     source: input.source,
     target: input.target,
     relations,
+    ...(renderTransition.visualMotif?.kind === "merge-fan-in"
+      ? { fanInRouting: true }
+      : {}),
     ...(renderTransition.successorSyntheses === undefined
       ? {}
       : {

@@ -49,13 +49,67 @@ const featuredAnimationIds = [
   "animation.derivative-rules.tangent-graph"
 ] as const;
 
-// Each entry here is backed by a reader descriptor that selects the exclusive
-// canonical equation session for all or a bounded subset of its transitions.
-const canonicalFormatByAnimationId = new Map<string, "ported" | "partial">([
-  ["animation.generated.radical.square-root-as-power", "ported"],
-  ["animation.numerator-split-merge.round-trip", "ported"],
-  ["animation.foldable-distribution.collect-like-terms", "ported"],
-  ["animation.linear-solve.solve-x", "partial"]
+export interface KpCanonicalFormatPromotionEvidence {
+  readonly animationId: string;
+  readonly exclusiveCanonicalPaint: boolean;
+  readonly requiredMotifParity: boolean;
+  readonly responsiveRuntimeGates: boolean;
+  readonly humanReviewApproved: boolean;
+  readonly compatibilityPaintRetired: boolean;
+  readonly releaseGatePassed: boolean;
+  readonly evidenceSourceIds: readonly string[];
+}
+
+const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
+  KpCanonicalFormatPromotionEvidence>([
+  [
+    "animation.generated.radical.square-root-as-power",
+    completeCanonicalFormatEvidence(
+      "animation.generated.radical.square-root-as-power",
+      [
+        "review.kp.radical-reader-promotion-kit-closeout",
+        "decision.kp.endpoint-paint-font-continuity"
+      ]
+    )
+  ],
+  [
+    "animation.numerator-split-merge.round-trip",
+    completeCanonicalFormatEvidence(
+      "animation.numerator-split-merge.round-trip",
+      ["review.kp.glyph-compositor-promotion"]
+    )
+  ],
+  [
+    "animation.foldable-distribution.collect-like-terms",
+    {
+      animationId:
+        "animation.foldable-distribution.collect-like-terms",
+      exclusiveCanonicalPaint: true,
+      requiredMotifParity: false,
+      responsiveRuntimeGates: true,
+      humanReviewApproved: false,
+      compatibilityPaintRetired: false,
+      releaseGatePassed: false,
+      evidenceSourceIds: [
+        "run-contract.kp.foldable-distribution-collection-v1"
+      ]
+    }
+  ],
+  [
+    "animation.linear-solve.solve-x",
+    {
+      animationId: "animation.linear-solve.solve-x",
+      exclusiveCanonicalPaint: true,
+      requiredMotifParity: false,
+      responsiveRuntimeGates: true,
+      humanReviewApproved: true,
+      compatibilityPaintRetired: false,
+      releaseGatePassed: false,
+      evidenceSourceIds: [
+        "review.kp.canonical-equation-renderer-convergence"
+      ]
+    }
+  ]
 ]);
 
 const supplementalRepresentations = [
@@ -269,8 +323,11 @@ function finalizeEntry(
     summary: entry.summary,
     tags: [...entry.tags].sort(),
     availability: entry.availability,
-    canonicalFormat:
-      canonicalFormatByAnimationId.get(entry.animationId) ?? "legacy",
+    canonicalFormat: deriveKpCanonicalFormatStatus({
+      evidence:
+        canonicalFormatPromotionEvidenceByAnimationId.get(entry.animationId),
+      representations
+    }),
     featured: (featuredAnimationIds as readonly string[]).includes(
       entry.animationId
     ),
@@ -279,6 +336,43 @@ function finalizeEntry(
       : { primaryRepresentationId: preferredId }),
     representations
   };
+}
+
+export function deriveKpCanonicalFormatStatus(input: {
+  readonly evidence?: KpCanonicalFormatPromotionEvidence | undefined;
+  readonly representations:
+    readonly KpAnimationLibraryDisplayRepresentation[];
+}): KpAnimationLibraryDisplayEntry["canonicalFormat"] {
+  if (input.evidence === undefined) return "legacy";
+  const hasCanonicalHost = input.representations.some(
+    ({ role }) => role === "canonical-host"
+  );
+  const passed =
+    hasCanonicalHost &&
+    input.evidence.evidenceSourceIds.length > 0 &&
+    input.evidence.exclusiveCanonicalPaint &&
+    input.evidence.requiredMotifParity &&
+    input.evidence.responsiveRuntimeGates &&
+    input.evidence.humanReviewApproved &&
+    input.evidence.compatibilityPaintRetired &&
+    input.evidence.releaseGatePassed;
+  return passed ? "ported" : "partial";
+}
+
+function completeCanonicalFormatEvidence(
+  animationId: string,
+  evidenceSourceIds: readonly string[]
+): KpCanonicalFormatPromotionEvidence {
+  return Object.freeze({
+    animationId,
+    exclusiveCanonicalPaint: true,
+    requiredMotifParity: true,
+    responsiveRuntimeGates: true,
+    humanReviewApproved: true,
+    compatibilityPaintRetired: true,
+    releaseGatePassed: true,
+    evidenceSourceIds: Object.freeze([...evidenceSourceIds])
+  });
 }
 
 function representationRank(

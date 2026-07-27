@@ -37,6 +37,22 @@ export interface KpEquationMotionPathPlan {
   readonly sampleCount: number;
 }
 
+export type KpEquationMotionPathSampling =
+  | "planned-curve"
+  | "canonical-fan-in-lift";
+
+export interface KpEquationCollisionTrack {
+  readonly id: string;
+  readonly componentId: string;
+  readonly lifecycle: string;
+  readonly startRect: KpEquationLayoutRect;
+  readonly endRect: KpEquationLayoutRect;
+  readonly startPaintRect?: KpEquationLayoutRect | undefined;
+  readonly endPaintRect?: KpEquationLayoutRect | undefined;
+  readonly motionPath?: KpEquationMotionPathCandidate | undefined;
+  readonly motionPathSampling?: KpEquationMotionPathSampling | undefined;
+}
+
 export function planKpEquationMotionPath(input: {
   readonly id: string;
   readonly layoutPlan: KpEquationLayoutPlan;
@@ -161,6 +177,209 @@ export function sampleKpEquationMotionPath(
       2 * remaining * p * path.control.y +
       p * p * path.end.y
   };
+}
+
+export function sampleKpEquationMotionPathWithSampling(
+  path: KpEquationMotionPathCandidate,
+  progress: number,
+  sampling: KpEquationMotionPathSampling
+): KpEquationLayoutPoint {
+  if (sampling === "planned-curve") {
+    return sampleKpEquationMotionPath(path, progress);
+  }
+  const p = clamp01(progress);
+  const midpointY = (path.start.y + path.end.y) / 2;
+  const lift = path.control.y - midpointY;
+  return {
+    x: interpolate(path.start.x, path.end.x, p),
+    // Clear the protected row early and settle late without an oversized arc.
+    y:
+      interpolate(path.start.y, path.end.y, p) +
+      lift * Math.pow(Math.max(0, Math.sin(Math.PI * p)), 0.55)
+  };
+}
+
+export function compileKpCollisionSafeFanInTracks<
+  Track extends KpEquationCollisionTrack
+>(tracks: readonly Track[]): readonly Track[] {
+  const mergeTracks = tracks.filter(({ lifecycle }) => lifecycle === "merge");
+  if (mergeTracks.length === 0) return tracks;
+  const directPaths = new Map(mergeTracks.map((track) => [
+    track.id,
+    planTrackPath(track, "direct", 0)
+  ]));
+  const blockingTrackIds = new Set(mergeTracks.flatMap((mergeTrack) =>
+    tracks
+      .filter((candidate) =>
+        candidate.componentId !== mergeTrack.componentId &&
+        motionPathIntersectsPaint(
+          directPaths.get(mergeTrack.id)!,
+          mergeTrack,
+          [candidate]
+        )
+      )
+      .map(({ id }) => id)
+  ));
+  if (blockingTrackIds.size === 0) return tracks;
+  for (const clearance of [24, 40, 64, 96, 128]) {
+    const candidates = tracks.map((track) =>
+      !blockingTrackIds.has(track.id)
+        ? track
+        : Object.freeze({
+            ...track,
+            motionPath: Object.freeze(
+              planTrackPath(track, "arc-above", clearance)
+            ),
+            motionPathSampling: "canonical-fan-in-lift" as const
+          }) as Track
+    );
+    const safe = mergeTracks.every((mergeTrack) =>
+      !motionPathIntersectsPaint(
+        directPaths.get(mergeTrack.id)!,
+        mergeTrack,
+        candidates.filter((candidate) =>
+          candidate.componentId !== mergeTrack.componentId
+        )
+      )
+    );
+    if (safe) return Object.freeze(candidates);
+  }
+  throw new Error(
+    `Fan-in cannot clear blocking paint: ${[...blockingTrackIds].join(", ")}.`
+  );
+}
+
+export function sampleKpEquationMotionTrackRect(
+  track: KpEquationCollisionTrack,
+  progress: number
+): KpEquationLayoutRect {
+  const p = clamp01(progress);
+  return track.motionPath === undefined
+    ? interpolateRect(track.startRect, track.endRect, p)
+    : layoutRectAt(track, track.motionPath, p);
+}
+
+function planTrackPath(
+  track: KpEquationCollisionTrack,
+  variant: "direct" | "arc-above",
+  clearance: number
+): KpEquationMotionPathCandidate {
+  return planKpEquationMotionPathBetweenPoints({
+    id: `paint-path.${track.id}.${variant}.${clearance}`,
+    start: rectCenter(track.startRect),
+    end: rectCenter(track.endRect),
+    moverRadius: 0,
+    variants: [variant],
+    clearance
+  }).selected;
+}
+
+function motionPathIntersectsPaint(
+  path: KpEquationMotionPathCandidate,
+  track: KpEquationCollisionTrack,
+  obstacles: readonly KpEquationCollisionTrack[]
+): boolean {
+  return Array.from({ length: 81 }, (_value, index) => {
+    const progress = smoothstep((index + 10) / 100);
+    const mover = paintRectAt(
+      track,
+      layoutRectAt(track, path, progress),
+      progress
+    );
+    return obstacles.some((obstacleTrack) => {
+      const obstaclePath = obstacleTrack.motionPath;
+      const obstacle = paintRectAt(
+        obstacleTrack,
+        obstaclePath === undefined
+          ? interpolateRect(
+              obstacleTrack.startRect,
+              obstacleTrack.endRect,
+              progress
+            )
+          : layoutRectAt(obstacleTrack, obstaclePath, progress),
+        progress
+      );
+      return mover.left < obstacle.left + obstacle.width - 0.25 &&
+        mover.left + mover.width > obstacle.left + 0.25 &&
+        mover.top < obstacle.top + obstacle.height - 0.25 &&
+        mover.top + mover.height > obstacle.top + 0.25;
+    });
+  }).some(Boolean);
+}
+
+function layoutRectAt(
+  track: KpEquationCollisionTrack,
+  path: KpEquationMotionPathCandidate,
+  progress: number
+): KpEquationLayoutRect {
+  const center = sampleKpEquationMotionPathWithSampling(
+    path,
+    progress,
+    track.motionPathSampling ?? "planned-curve"
+  );
+  const width = interpolate(track.startRect.width, track.endRect.width, progress);
+  const height = interpolate(
+    track.startRect.height,
+    track.endRect.height,
+    progress
+  );
+  return {
+    left: center.x - width / 2,
+    top: center.y - height / 2,
+    width,
+    height
+  };
+}
+
+function paintRectAt(
+  track: KpEquationCollisionTrack,
+  layoutRect: KpEquationLayoutRect,
+  progress: number
+): KpEquationLayoutRect {
+  const start = track.startPaintRect ?? track.startRect;
+  const end = track.endPaintRect ?? track.endRect;
+  return {
+    left: layoutRect.left + interpolate(
+      start.left - track.startRect.left,
+      end.left - track.endRect.left,
+      progress
+    ),
+    top: layoutRect.top + interpolate(
+      start.top - track.startRect.top,
+      end.top - track.endRect.top,
+      progress
+    ),
+    width: interpolate(start.width, end.width, progress),
+    height: interpolate(start.height, end.height, progress)
+  };
+}
+
+function interpolateRect(
+  source: KpEquationLayoutRect,
+  target: KpEquationLayoutRect,
+  progress: number
+): KpEquationLayoutRect {
+  return {
+    left: interpolate(source.left, target.left, progress),
+    top: interpolate(source.top, target.top, progress),
+    width: interpolate(source.width, target.width, progress),
+    height: interpolate(source.height, target.height, progress)
+  };
+}
+
+function rectCenter(rect: KpEquationLayoutRect): KpEquationLayoutPoint {
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top + rect.height / 2
+  };
+}
+
+function interpolate(source: number, target: number, progress: number): number {
+  return source + (target - source) * progress;
+}
+
+function smoothstep(value: number): number {
+  return value * value * (3 - 2 * value);
 }
 
 function controlPoint(

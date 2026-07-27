@@ -26,7 +26,7 @@ import type {
   KpSuccessorSynthesisBinding
 } from "../../animation/successor-synthesis.ts";
 import {
-  createKpEquationLinearRearrangementBinding
+  createKpEquationSuccessorSynthesisBindings
 } from "../../rendering/equation-linear-rearrangement-bindings.ts";
 
 export interface KpReaderEquationRenderPlan {
@@ -167,11 +167,10 @@ export function projectKpReaderEquationRenderPlan(input: {
           motif: visualMotif,
           direction: input.runtimeFrame.clock.direction
         });
-    const rearrangement = createKpEquationLinearRearrangementBinding({
+    const successorSyntheses = createKpEquationSuccessorSynthesisBindings({
       animation: input.animation,
       transformation
     });
-    const successorSynthesis = rearrangement?.successorSynthesisBinding;
     transitions.push({
       id: transformation.id,
       title: transformation.title,
@@ -191,9 +190,9 @@ export function projectKpReaderEquationRenderPlan(input: {
       ...(structuralSuccession === undefined
         ? {}
         : { structuralSuccession }),
-      ...(successorSynthesis === undefined
+      ...(successorSyntheses.length === 0
         ? {}
-        : { successorSyntheses: [successorSynthesis] }),
+        : { successorSyntheses }),
       semanticStatus: compiled.status === "semantic" ? "ready" : "fallback",
       semanticDiagnostics: compiled.diagnostics.map((diagnostic) => ({
         ...diagnostic

@@ -196,7 +196,7 @@
     {
       "id": "s24",
       "title": "Apply-bounded-visual-repairs",
-      "summary": "Repaired the rejected exemplar inside the approved boundary. Reader cards now use one reusable two-axis contain-and-center policy with a 24-32px effective type target across wide and phone widths; the linear-solve reader shares the same policy. Paint-space measurement and single semantic ownership keep x aligned through factoring. Factoring is now an explicit no-fade fan-in beat yielding (3 + 2)x + (6 - 2), followed by a separate coefficient/constant evaluation beat. The Animation Library rail scrolls independently and exposes ported, partial, or legacy evidence status while retaining one lazy host and the fixed Review launcher. Focused, browser, architecture, typecheck, and production build gates pass.",
+      "summary": "Applied the separately approved generic choreography repair. Persistent one-to-one paint no longer fades; arithmetic successor syntheses retain all target bindings; collision-safe fan-in uses measured ink and shared planner routing with no notation coordinates; review submission reaches the real local inbox; and port status fails closed on incomplete promotion evidence. Focused browser, renderer, construction, type, full 2609-test, and production build gates pass.",
       "status": "complete"
     },
     {

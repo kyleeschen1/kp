@@ -365,11 +365,85 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T12:06:41.017Z",
       "notes": "All TypeScript projects and the production Vite build pass after the bounded responsive-fit, semantic-beat, paint-alignment, and Animation Library repairs."
+    },
+    {
+      "command": "npm run visual:foldable-distribution -- --grep factoring-and-coefficient-evaluation",
+      "status": "failed",
+      "scope": "browser",
+      "checkedAt": "2026-07-27T14:19:13.266Z",
+      "notes": "New paint-overlap guard reproduces the reported sag/crowding: at progress 740 the left x overlaps coefficient 2 by 7.80 by 12.10 CSS px and the right x overlaps the closing parenthesis by 8.26 by 12.40 CSS px. Baselines themselves remain stable, proving the defect is straight-line choreography through occupied paint, not endpoint font geometry."
+    },
+    {
+      "command": "npm run visual:foldable-distribution -- --grep number-collection-reuses",
+      "status": "failed",
+      "scope": "browser",
+      "checkedAt": "2026-07-27T14:19:25.611Z",
+      "notes": "The final arithmetic phase reports zero successor-synthesis paint plans, not the required two. Current collectLikeTerms fan-in therefore does not reuse the settled pre-port constant-sum and constant-difference convergence/derive-result/native-settle motif."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "semantic, motif, fold, and reader regression suite",
+      "checkedAt": "2026-07-27T15:26:42.150Z"
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "responsive browser matrix, opaque persistence, factoring routing, arithmetic motif, and equation fitting",
+      "checkedAt": "2026-07-27T15:26:43.088Z"
+    },
+    {
+      "command": "npm run test:canonical-animation-construction",
+      "status": "passed",
+      "scope": "governed construction and authority preservation",
+      "checkedAt": "2026-07-27T15:26:43.926Z"
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "canonical renderer invariants and source ceilings",
+      "checkedAt": "2026-07-27T15:26:44.744Z"
+    },
+    {
+      "command": "npm run test:animation-library-display",
+      "status": "passed",
+      "scope": "derived port status and lazy review host",
+      "checkedAt": "2026-07-27T15:26:45.545Z"
+    },
+    {
+      "command": "npm run test:browser:canonical-animation-review",
+      "status": "passed",
+      "scope": "real local review submission and persistent launcher",
+      "checkedAt": "2026-07-27T15:26:46.366Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, test, and domain type safety",
+      "checkedAt": "2026-07-27T15:26:47.178Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full repository regression suite: 2609 passing",
+      "checkedAt": "2026-07-27T15:26:47.999Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production typecheck and Vite build",
+      "checkedAt": "2026-07-27T15:26:48.783Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "project memory: 798 nodes and 13106 events valid",
+      "checkedAt": "2026-07-27T15:27:54.620Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 20 accessibility and static export work is implemented locally and focused checks pass. Browser verification exposed that canonical semantic merge tracks require compatible glyph visuals, so constant-product successors currently degrade to elimination/introduction rather than the required gathered successor motif. The approved no-compositor-core boundary has fired."
+    "summary": "Slice 24 bounded repairs now pass: persistent one-to-one paint translates opaquely; final sum and difference use two canonical successor-synthesis derivations; factoring keeps merge material direct and routes only measured blocking paint through the generic fan-in planner; port labels derive from complete promotion evidence; and the fixed Review launcher submits through the real local inbox. Full unit, browser, type, construction, renderer, and build gates pass."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",

@@ -9,6 +9,13 @@ interface DevProcess {
   env?: NodeJS.ProcessEnv;
 }
 
+const browserTestMode = process.argv.slice(2).includes("--browser-test");
+const browserTestApiPort = "4174";
+const reviewRoot = browserTestMode
+  ? resolve(process.cwd(), "tmp/codex/browser-inbox")
+  : process.env["KP_DEV_REVIEW_ROOT"] ??
+    resolve(process.cwd(), ".kp/review-logs");
+
 const processes: readonly DevProcess[] = [
   {
     name: "api",
@@ -17,13 +24,22 @@ const processes: readonly DevProcess[] = [
     env: {
       ...process.env,
       KP_DEV_REVIEW: "1",
-      KP_DEV_REVIEW_ROOT: resolve(process.cwd(), ".kp/review-logs")
+      KP_DEV_REVIEW_ROOT: reviewRoot,
+      ...(browserTestMode ? { PORT: browserTestApiPort } : {})
     }
   },
   {
     name: "web",
     command: resolveBin("vite"),
-    args: []
+    args: browserTestMode
+      ? ["--host", "127.0.0.1", "--port", "4173", "--strictPort"]
+      : [],
+    env: browserTestMode
+      ? {
+          ...process.env,
+          API_TARGET: `http://127.0.0.1:${browserTestApiPort}`
+        }
+      : process.env
   }
 ];
 

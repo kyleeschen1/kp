@@ -23,8 +23,12 @@ import {
   reverseKpNativeKatexSemanticPaintRelations,
   selectKpNativeKatexTypographyRealizationDisposition,
   sampleKpNativeKatexSceneTracks,
-  sampleKpNativeKatexTypographyStylePlan
+  sampleKpNativeKatexTypographyStylePlan,
+  type KpNativeKatexSceneTrack
 } from "../src/rendering/native-katex-scene-compositor.ts";
+import {
+  compileKpCollisionSafeFanInTracks
+} from "../src/rendering/equation-motion-path-planner.ts";
 import type {
   KpStageRelativeRect
 } from "../src/rendering/native-katex-fragment-observer.ts";
@@ -1078,6 +1082,64 @@ test("explicit semantic relations compile generic merge multiplicity", () => {
   assert.deepEqual(result.dispositions[0]?.targetAtomIds, ["target.result"]);
 });
 
+test("composite semantic merges preserve one-to-one paint atoms without fading", () => {
+  const source = createKpNativeKatexRenderedSceneObservation({
+    ...createScene("source", ["source.coefficient", "source.variable"]),
+    atoms: createScene(
+      "source",
+      ["source.coefficient", "source.variable"]
+    ).atoms.map((paintAtom, index) => ({
+      ...paintAtom,
+      semanticEntityId:
+        index === 0 ? "source.coefficient" : "source.variable",
+      visualKey: index === 0 ? "glyph:3" : "glyph:x"
+    }))
+  });
+  const target = createKpNativeKatexRenderedSceneObservation({
+    ...createScene("target", ["target.coefficient", "target.variable"]),
+    atoms: createScene(
+      "target",
+      ["target.coefficient", "target.variable"]
+    ).atoms.map((paintAtom, index) => ({
+      ...paintAtom,
+      semanticEntityId: "target.term-3x",
+      visualKey: index === 0 ? "glyph:3" : "glyph:x"
+    }))
+  });
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source,
+    target,
+    relations: [{
+      id: "lineage.visual-invariant-3x",
+      relation: "merge",
+      sourceEntityIds: ["source.coefficient", "source.variable"],
+      targetEntityIds: ["target.term-3x"]
+    }]
+  });
+  const tracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+  );
+
+  assert.deepEqual(
+    reconciliation.dispositions.map(({ lifecycle }) => lifecycle),
+    ["persist", "persist"]
+  );
+  assert.equal(
+    tracks.every(({ lifecycle, startOpacity, endOpacity }) =>
+      lifecycle === "persist" &&
+      startOpacity === 1 &&
+      endOpacity === 1
+    ),
+    true
+  );
+  assert.equal(
+    [0, 0.25, 0.5, 0.75, 1].flatMap((progress) =>
+      sampleKpNativeKatexSceneTracks(tracks, progress)
+    ).every(({ opacity }) => opacity === 1),
+    true
+  );
+});
+
 test("canonical lineage projects and reverses through existing paint relations", () => {
   const relations = projectKpNativeKatexSemanticPaintRelations({
     groups: [{
@@ -1526,6 +1588,55 @@ test("renderer session direct seeks and reverses without hidden clock state", ()
     }),
     /unknown visual atom/
   );
+});
+
+test("merge-fan-in routes opaque material around measured paint obstacles", () => {
+  const merge: KpNativeKatexSceneTrack = {
+    id: "track.merge.x",
+    componentId: "component.merge.x",
+    lifecycle: "merge" as const,
+    sourceAtomId: "source.x",
+    targetAtomId: "target.x",
+    visualAtomId: "source.x",
+    paintKind: "glyph" as const,
+    sizingMode: "rect" as const,
+    startRect: { left: 0, top: 20, width: 12, height: 16 },
+    endRect: { left: 100, top: 20, width: 12, height: 16 },
+    startOpacity: 1,
+    endOpacity: 1
+  };
+  const obstacle: KpNativeKatexSceneTrack = {
+    ...merge,
+    id: "track.persist.coefficient",
+    componentId: "component.persist.coefficient",
+    lifecycle: "persist" as const,
+    sourceAtomId: "source.coefficient",
+    targetAtomId: "target.coefficient",
+    visualAtomId: "source.coefficient",
+    startRect: { left: 36, top: 16, width: 28, height: 24 },
+    endRect: { left: 36, top: 16, width: 28, height: 24 }
+  };
+  const tracks = compileKpCollisionSafeFanInTracks([merge, obstacle]);
+  const preservedMerge = tracks[0]!;
+  const routedObstacle = tracks[1]!;
+  const samples = [0, 0.5, 1].map((progress) =>
+    sampleKpNativeKatexSceneTracks([preservedMerge], progress)[0]!
+  );
+  const start = samples[0]!;
+  const middle = samples[1]!;
+  const end = samples[2]!;
+  const obstacleMiddle = sampleKpNativeKatexSceneTracks(
+    [routedObstacle],
+    0.5
+  )[0]!;
+
+  assert.equal(preservedMerge.motionPath, undefined);
+  assert.equal(routedObstacle.motionPath?.variant, "arc-above");
+  assert.deepEqual(start.rect, merge.startRect);
+  assert.deepEqual(end.rect, merge.endRect);
+  assert.equal(middle.rect.top, merge.startRect.top);
+  assert.ok(obstacleMiddle.rect.top < obstacle.startRect.top);
+  assert.deepEqual([start.opacity, middle.opacity, end.opacity], [1, 1, 1]);
 });
 
 test("one atom-transit session carries the complete structural cohort", () => {

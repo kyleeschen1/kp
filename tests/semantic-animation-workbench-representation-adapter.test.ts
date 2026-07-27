@@ -107,7 +107,7 @@ test("learner and card audit classifies every lesson binding from one inventory"
     ({ status }) => status === "lesson-card-overlap"
   );
 
-  assert.equal(audit.length, 7);
+  assert.equal(audit.length, 8);
   assert.deepEqual(
     overlaps.map(({ canonicalAnimationId }) => canonicalAnimationId),
     [

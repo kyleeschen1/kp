@@ -15,6 +15,73 @@ const route = (
   return `/reader/foldable-distribution/?${parameters}`;
 };
 
+async function visibleXPaint(page: Page) {
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-hydrated",
+    "true"
+  );
+  return page.locator(
+    "[data-kp-reader-transition-active='true']"
+  ).evaluate(async (transition) => {
+    const geometryModule =
+      "/src/rendering/native-katex-paint-geometry.ts";
+    const { measureKpNativeKatexSubtreePaintRect } =
+      await import(geometryModule);
+    const stage = document.querySelector<HTMLElement>(
+      "[data-kp-reader-equation-viewport]"
+    );
+    if (stage === null) throw new Error("Visible x paint lacks its viewport.");
+    const observations: Array<{
+      owner: string;
+      top: number;
+      bottom: number;
+      height: number;
+    }> = [];
+    for (const root of transition.querySelectorAll<HTMLElement>(
+      "[data-kp-reader-native]"
+    )) {
+      if (Number(getComputedStyle(root).opacity) <= 0.01) continue;
+      for (const anchor of root.querySelectorAll<HTMLElement>(
+        "[data-kp-reader-selector-id$='.x']"
+      )) {
+        const rect = measureKpNativeKatexSubtreePaintRect(stage, anchor);
+        if (rect === undefined) continue;
+        observations.push({
+          owner: `native:${anchor.dataset["kpReaderSelectorId"]}`,
+          top: rect.top,
+          bottom: rect.top + rect.height,
+          height: rect.height
+        });
+      }
+    }
+    for (const owner of document.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )) {
+      if (
+        Number(getComputedStyle(owner).opacity) <= 0.01 ||
+        owner.textContent?.trim() !== "x"
+      ) {
+        continue;
+      }
+      const visual = owner.firstElementChild as HTMLElement | null;
+      const rect = visual === null
+        ? undefined
+        : measureKpNativeKatexSubtreePaintRect(stage, visual);
+      if (rect === undefined) continue;
+      observations.push({
+        owner: `material:${owner.dataset["kpEquationMaterialOwnerId"]}`,
+        top: rect.top,
+        bottom: rect.top + rect.height,
+        height: rect.height
+      });
+    }
+    return {
+      transition: transition.getAttribute("data-kp-reader-transition"),
+      observations
+    };
+  });
+}
+
 test("fold controls preserve one semantic clock and stable URL state", async ({
   page
 }) => {
@@ -149,6 +216,57 @@ test("parallel distribution and product work each render as one complete cohort"
           ?.startsWith("successor-")
       );
   })).toBe(true);
+});
+
+test("persistent product terms translate as opaque paint through evaluation", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  const persistentEntityIds = new Set([
+    "distribution.left.factor-3-x",
+    "distribution.left.x",
+    "distributed.term-3x",
+    "distribution.right.factor-2-x",
+    "distribution.right.x",
+    "distributed.term-2x"
+  ]);
+
+  for (const progress of [300, 320, 340, 380, 420]) {
+    await page.goto(route(progress, { kpFoldMode: "expanded" }), {
+      waitUntil: "domcontentloaded"
+    });
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-transition",
+      /^cohort\./
+    );
+    const observations = await page.locator(
+      "[data-kp-equation-material-owner-id]"
+    ).evaluateAll((owners, entityIds) => owners.flatMap((owner) => {
+      const element = owner as HTMLElement;
+      const semantic =
+        element.dataset["kpEquationMaterialSemanticEntityId"] ?? "";
+      if (!entityIds.includes(semantic)) return [];
+      return [{
+        ownerId: element.dataset["kpEquationMaterialOwnerId"],
+        semantic,
+        opacity: Number(getComputedStyle(element).opacity),
+        text: element.textContent?.trim()
+      }];
+    }), [...persistentEntityIds]);
+
+    expect(
+      observations.length,
+      JSON.stringify({ progress, observations })
+    ).toBeGreaterThan(0);
+    expect(
+      observations.every(({ ownerId, opacity }) =>
+        !ownerId?.includes(".eliminate.") &&
+        !ownerId?.includes(".introduce.") &&
+        opacity === 1
+      ),
+      JSON.stringify({ progress, observations })
+    ).toBe(true);
+  }
 });
 
 test("successor ownership survives direct seek, rewind, phone, and reduced motion", async ({
@@ -362,7 +480,8 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
     )
   ).toContainText("(3+2)x+(6−2)");
 
-  for (const progress of [670, 740, 800]) {
+  const factoringPaintSamples = [];
+  for (const progress of [650, 670, 740, 800, 820]) {
     await page.goto(route(progress, { kpFoldMode: "expanded" }), {
       waitUntil: "domcontentloaded"
     });
@@ -386,6 +505,33 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
       const visible = owners.filter((owner) =>
         Number(getComputedStyle(owner).opacity) > 0.01
       );
+      const glyphBaselines = visible.flatMap((owner) => {
+        const glyph = [
+          owner,
+          ...owner.querySelectorAll<HTMLElement>("*")
+        ].find((candidate) =>
+          [...candidate.childNodes].some((node) =>
+            node.nodeType === Node.TEXT_NODE &&
+            (node.textContent?.trim() ?? "") !== ""
+          )
+        ) as HTMLElement | undefined;
+        if (glyph === undefined) return [];
+        const marker = document.createElement("span");
+        marker.setAttribute("aria-hidden", "true");
+        marker.style.cssText =
+          "display:inline-block;width:0;height:0;padding:0;margin:0;" +
+          "border:0;line-height:0;vertical-align:baseline";
+        glyph.append(marker);
+        const baseline = marker.getBoundingClientRect().top;
+        marker.remove();
+        return [{
+          semantic:
+            (owner as HTMLElement)
+              .dataset["kpEquationMaterialSemanticEntityId"],
+          text: glyph.textContent?.trim(),
+          baseline
+        }];
+      });
       const xPaint = visible.filter((owner) =>
         owner.textContent?.trim() === "x"
       ).map((owner) => {
@@ -411,6 +557,24 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
           inlineHeight: element.style.height,
           transform: element.style.transform
         };
+      });
+      const visiblePaint = visible.flatMap((owner) => {
+        const element = owner as HTMLElement;
+        const visual = element.firstElementChild as HTMLElement | null;
+        const rect = visual === null
+          ? undefined
+          : measureKpNativeKatexSubtreePaintRect(stage, visual);
+        return rect === undefined
+          ? []
+          : [{
+              semantic:
+                element.dataset["kpEquationMaterialSemanticEntityId"],
+              text: element.textContent?.trim() ?? "",
+              left: rect.left,
+              top: rect.top,
+              right: rect.left + rect.width,
+              bottom: rect.top + rect.height
+            }];
       });
       const nativeXPaint = [
         ...document.querySelectorAll<HTMLElement>(
@@ -444,6 +608,8 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
             Math.abs(bottom - nativeBottom)
           ))
         )),
+        glyphBaselines,
+        visiblePaint,
         xPaint,
         nativeXPaint
       };
@@ -452,7 +618,51 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
       baselineEvidence.residual,
       JSON.stringify({ progress, baselineEvidence })
     ).toBeLessThanOrEqual(0.75);
+    factoringPaintSamples.push({
+      progress,
+      baselines: baselineEvidence.glyphBaselines,
+      visiblePaint: baselineEvidence.visiblePaint,
+      observations: baselineEvidence.xPaint
+    });
   }
+  const factoringBottoms = factoringPaintSamples.flatMap(
+    ({ observations }) => observations.map(({ bottom }) => bottom)
+  );
+  expect(
+    Math.max(...factoringBottoms) - Math.min(...factoringBottoms),
+    JSON.stringify(factoringPaintSamples)
+  ).toBeLessThanOrEqual(0.75);
+  const crowding = factoringPaintSamples.flatMap((sample) => {
+    const xPaint = sample.visiblePaint.filter(({ text }) => text === "x");
+    const otherPaint = sample.visiblePaint.filter(({ text }) => text !== "x");
+    return xPaint.flatMap((x) => otherPaint.flatMap((other) => {
+      const width =
+        Math.min(x.right, other.right) - Math.max(x.left, other.left);
+      const height =
+        Math.min(x.bottom, other.bottom) - Math.max(x.top, other.top);
+      return width > 0.25 && height > 0.25
+        ? [{ progress: sample.progress, x, other, width, height }]
+        : [];
+    }));
+  });
+  expect(crowding, JSON.stringify(crowding)).toEqual([]);
+  const withinFrameBaselineResidual = Math.max(
+    ...factoringPaintSamples.flatMap(({ baselines }) => {
+      const xBaselines = baselines.filter(({ text }) => text === "x");
+      const digitBaselines = baselines.filter(({ text }) =>
+        text === "2" || text === "3" || text === "6"
+      );
+      return xBaselines.map(({ baseline }) =>
+        Math.min(...digitBaselines.map((digit) =>
+          Math.abs(baseline - digit.baseline)
+        ))
+      );
+    })
+  );
+  expect(
+    withinFrameBaselineResidual,
+    JSON.stringify(factoringPaintSamples)
+  ).toBeLessThanOrEqual(0.75);
 
   await page.goto(route(900, { kpFoldMode: "expanded" }), {
     waitUntil: "domcontentloaded"
@@ -466,6 +676,51 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
       "[data-kp-reader-transition-active='true'] [data-kp-reader-native='source']"
     )
   ).toContainText("(3+2)x+(6−2)");
+
+  const collectionSamples = [];
+  for (const progress of [821, 825, 840, 880, 940, 999, 1_000]) {
+    await page.goto(route(progress, { kpFoldMode: "expanded" }), {
+      waitUntil: "domcontentloaded"
+    });
+    const paint = await visibleXPaint(page);
+    expect(
+      paint.observations.length,
+      JSON.stringify({ progress, paint })
+    ).toBeGreaterThan(0);
+    collectionSamples.push({
+      progress,
+      transition: paint.transition,
+      bottom:
+        paint.observations.reduce((sum, observation) =>
+          sum + observation.bottom, 0
+        ) / paint.observations.length,
+      observations: paint.observations
+    });
+  }
+  const collectionBottoms = collectionSamples.map(({ bottom }) => bottom);
+  expect(
+    Math.max(...collectionBottoms) - Math.min(...collectionBottoms),
+    JSON.stringify(collectionSamples)
+  ).toBeLessThanOrEqual(0.75);
+});
+
+test("number collection reuses canonical arithmetic derivation paint", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  await page.goto(route(900, { kpFoldMode: "expanded" }), {
+    waitUntil: "domcontentloaded"
+  });
+
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-transition",
+    "transform.foldable-distribution.collect-results"
+  );
+  await expect(
+    page.locator(
+      "[data-kp-reader-transition-active='true'] [data-kp-reader-fit-surface]"
+    )
+  ).toHaveAttribute("data-kp-native-katex-successor-synthesis-count", "2");
 });
 
 test("shared equation fitting contains and centers foldable and linear solve cards", async ({

@@ -152,6 +152,40 @@ test("parallel product cohort retains both successor synthesis bindings", () => 
   ));
 });
 
+test("final collection retains separate sum and difference successor bindings", () => {
+  const animation = createKpFoldableDistributionEquationAnimationAsset();
+  const runtimeFrame = sampleKpAnimationRuntimeFrame({
+    animation,
+    progress: 0.9
+  });
+  const transition = projectKpReaderEquationRenderPlan({
+    animation,
+    runtimeFrame
+  }).transitions[0]!;
+
+  assert.equal(
+    transition.id,
+    "transform.foldable-distribution.collect-results"
+  );
+  assert.deepEqual(
+    transition.successorSyntheses?.map(
+      ({ authority }) => authority.operationId
+    ).sort(),
+    [
+      "kp.algebra.simplify-constant-difference",
+      "kp.algebra.simplify-constant-sum"
+    ]
+  );
+  assert.ok(transition.successorSyntheses?.every((binding) =>
+    binding.sourceAnnotations.filter(
+      ({ contribution }) => contribution === "material-input"
+    ).length === 2 &&
+    binding.sourceAnnotations.filter(
+      ({ contribution }) => contribution === "catalyst"
+    ).length === 1
+  ));
+});
+
 test("structural branching and fusion remain opaque semantic relations", () => {
   const animation = createKpFoldableDistributionEquationAnimationAsset();
   const relations = animation.transformations.flatMap(

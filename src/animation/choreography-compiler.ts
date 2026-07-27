@@ -357,9 +357,13 @@ function continuantBindingGaps(
   ir: KpEquationTransitionIr,
   continuants: readonly KpSemanticContinuant[]
 ): readonly KpChoreographyCompileGap[] {
+  const sourceIds = new Set(semanticSelectorIds(ir.source));
+  const targetIds = new Set(semanticSelectorIds(ir.target));
   return ir.correspondenceMap.records
     .filter((record) =>
-      record.relation === "identity" || record.relation === "role-change"
+      (record.relation === "identity" || record.relation === "role-change") &&
+      record.sourceSelectorIds.every((id) => sourceIds.has(id)) &&
+      record.targetSelectorIds.every((id) => targetIds.has(id))
     )
     .flatMap((record, index) => {
       const matches = continuants.filter((continuant) =>

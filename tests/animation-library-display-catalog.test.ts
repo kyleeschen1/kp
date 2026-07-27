@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  createKpAnimationLibraryDisplayCatalog
+  createKpAnimationLibraryDisplayCatalog,
+  deriveKpCanonicalFormatStatus,
+  type KpCanonicalFormatPromotionEvidence
 } from "../src/editor/animation-library-display-catalog.ts";
 import {
   createKpSemanticAnimationWorkbenchIndex
@@ -28,14 +30,14 @@ test("display catalog exposes every Workbench identity plus reader-only animatio
   );
 });
 
-test("foldable distribution resolves one lazy canonical reader host", () => {
+test("foldable distribution resolves one lazy partial reader host until approval", () => {
   const entry = createKpAnimationLibraryDisplayCatalog().find(
     ({ animationId }) =>
       animationId === "animation.foldable-distribution.collect-like-terms"
   );
 
   assert.equal(entry?.availability, "playable");
-  assert.equal(entry?.canonicalFormat, "ported");
+  assert.equal(entry?.canonicalFormat, "partial");
   assert.equal(entry?.featured, false);
   assert.equal(entry?.representations.length, 1);
   assert.deepEqual(entry?.representations[0], {
@@ -61,7 +63,7 @@ test("canonical-format status distinguishes complete, partial, and legacy hosts"
 
   assert.equal(
     status("animation.foldable-distribution.collect-like-terms"),
-    "ported"
+    "partial"
   );
   assert.equal(
     status("animation.generated.radical.square-root-as-power"),
@@ -70,6 +72,42 @@ test("canonical-format status distinguishes complete, partial, and legacy hosts"
   assert.equal(status("animation.linear-solve.solve-x"), "partial");
   assert.equal(
     status("animation.generated.distribution.expand-a-sum"),
+    "legacy"
+  );
+});
+
+test("ported status fails closed when any promotion facet is missing", () => {
+  const complete: KpCanonicalFormatPromotionEvidence = {
+    animationId: "animation.test",
+    exclusiveCanonicalPaint: true,
+    requiredMotifParity: true,
+    responsiveRuntimeGates: true,
+    humanReviewApproved: true,
+    compatibilityPaintRetired: true,
+    releaseGatePassed: true,
+    evidenceSourceIds: ["evidence.test"]
+  };
+  const representations = [{
+    id: "reader.test",
+    label: "Reader",
+    kind: "reader" as const,
+    href: "/reader/test/",
+    role: "canonical-host" as const
+  }];
+
+  assert.equal(
+    deriveKpCanonicalFormatStatus({ evidence: complete, representations }),
+    "ported"
+  );
+  assert.equal(
+    deriveKpCanonicalFormatStatus({
+      evidence: { ...complete, humanReviewApproved: false },
+      representations
+    }),
+    "partial"
+  );
+  assert.equal(
+    deriveKpCanonicalFormatStatus({ representations }),
     "legacy"
   );
 });

@@ -17,10 +17,16 @@ import type {
   KpEquationStructuralSuccessionIntent
 } from "../animation/structural-succession-presentation.ts";
 import {
+  compileKpCollisionSafeFanInTracks,
+  sampleKpEquationMotionTrackRect,
+  type KpEquationCollisionTrack
+} from "./equation-motion-path-planner.ts";
+import {
   disposeKpNativeKatexStructuralSuccession,
   syncKpNativeKatexStructuralSuccession
 } from "./native-katex-structural-succession-renderer.ts";
 import {
+  attachKpNativeKatexTrackPaintGeometry,
   measureKpNativeKatexTextInkRect
 } from "./native-katex-paint-geometry.ts";
 import {
@@ -77,17 +83,13 @@ export interface KpNativeKatexHierarchicalScenePlan {
   readonly components: readonly KpNativeKatexSceneComponent[];
 }
 
-export interface KpNativeKatexSceneTrack {
-  readonly id: string;
-  readonly componentId: string;
+export interface KpNativeKatexSceneTrack extends KpEquationCollisionTrack {
   readonly lifecycle: KpNativeKatexAtomLifecycle;
   readonly sourceAtomId?: string | undefined;
   readonly targetAtomId?: string | undefined;
   readonly visualAtomId: string;
   readonly paintKind: KpNativeKatexPaintAtomObservation["paintKind"];
   readonly sizingMode: "rect" | "rule-length";
-  readonly startRect: KpStageRelativeRect;
-  readonly endRect: KpStageRelativeRect;
   readonly startOpacity: number;
   readonly endOpacity: number;
 }
@@ -639,11 +641,7 @@ export function sampleKpNativeKatexSceneTracks(
     visualAtomId: sceneTrack.visualAtomId,
     paintKind: sceneTrack.paintKind,
     sizingMode: sceneTrack.sizingMode,
-    rect: Object.freeze(interpolateRect(
-      sceneTrack.startRect,
-      sceneTrack.endRect,
-      eased
-    )),
+    rect: Object.freeze(sampleKpEquationMotionTrackRect(sceneTrack, eased)),
     opacity: lerp(
       sceneTrack.startOpacity,
       sceneTrack.endOpacity,
@@ -1088,9 +1086,7 @@ export function compareKpNativeKatexTypographyHandoffModels(input: {
       source.fontRevision === native.fontRevision &&
       source.clipPath === native.clipPath
   );
-  // The initial material clone is deliberately source-styled. Its line box
-  // may exceed the old translation bound even though target paint can be
-  // mounted and aligned exactly from lineage paint frames.
+  // Source styling owns the initial clone; target paint handles metric drift.
   const continuous =
     law.status === "continuous" || hasExactLineagePaintFrames;
   const candidates: readonly KpNativeKatexTypographyHandoffCandidate[] = [
@@ -1133,8 +1129,7 @@ export function compareKpNativeKatexTypographyHandoffModels(input: {
   return Object.freeze({
     kind: "native-katex-typography-handoff-comparison",
     lifecycle: "renderer-session",
-    // Target paint plus inverse geometry preserves native typography without
-    // asking a browser to interpolate font metrics.
+    // Target paint plus inverse geometry avoids interpolating font metrics.
     selectedModel: continuous
       ? "target-style-reverse-flip"
       : "native-checkpoint-settlement",
@@ -1238,8 +1233,7 @@ export function sampleKpNativeKatexTypographyStylePlan(
   }
   const bounded = Math.max(0, Math.min(1, progress));
   const eased = smoothstep(bounded);
-  // Scene-driven sampling keeps target paint mounted for the whole transit,
-  // so typography can resize without a late visual-revision handoff.
+  // Mounted target paint avoids a late typography handoff.
   const sceneRectByOwner = sceneFrames === undefined
     ? undefined
     : new Map(sceneFrames.map((frame) => [
@@ -1636,6 +1630,7 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
   readonly structuralMotion?: "full" | "checkpoint" | undefined;
   readonly successorSyntheses?:
     readonly KpNativeKatexSuccessorSynthesisIntent[] | undefined;
+  readonly fanInRouting?: boolean | undefined;
 }): KpCanonicalNativeKatexSceneSession {
   if (input.source.stage !== input.target.stage) {
     throw new Error("Canonical native KaTeX endpoints must share one stage.");
@@ -1646,7 +1641,11 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     relations: input.relations
   });
   const hierarchy = compileKpNativeKatexHierarchicalScenePlan(reconciliation);
-  const allTracks = compileKpNativeKatexSceneTracks(hierarchy);
+  const allTracks = attachKpNativeKatexTrackPaintGeometry({
+    tracks: compileKpNativeKatexSceneTracks(hierarchy),
+    source: input.source,
+    target: input.target
+  });
   const successorPlans = compileKpNativeKatexSuccessorSynthesisScenePlans({
     source: input.source,
     target: input.target,
@@ -1656,7 +1655,9 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     successorPlans,
     allTracks
   );
-  const tracks = successorOwnership.tracks;
+  const tracks = input.fanInRouting === true
+    ? compileKpCollisionSafeFanInTracks(successorOwnership.tracks)
+    : successorOwnership.tracks;
   const correlations = correlateKpNativeKatexSceneHandoff({
     reconciliation,
     tracks: allTracks
@@ -1668,8 +1669,7 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     atom.id,
     atom
   ]));
-  // Structural paint retains its native clone. Only glyph typography needs
-  // target-style realization before native ownership changes.
+  // Structural paint keeps its clone; only glyphs need target styling.
   const typographyCorrelations = correlations.filter((correlation) =>
     targetAtomsById.get(correlation.targetAtomId ?? "")?.paintKind === "glyph"
   );
@@ -1773,9 +1773,7 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
         const canvasOwnsStructuralPaint =
           bounded >= structural.paintStrategy.morph.start &&
           structuralSync?.paintReady !== false;
-        // Same-document KaTeX clones retain the exact source font and paint
-        // until the shape actually begins changing. A raster renderer must
-        // not create a font handoff merely because progress left zero.
+        // Keep source paint until structural shape change actually begins.
         if (canvasOwnsStructuralPaint) {
           hideStructuralAtomOwners({
             stage: input.source.stage,
@@ -1813,8 +1811,7 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     }
   });
   if (input.structuralSuccession !== undefined) {
-    // Warm capture while untouched source KaTeX owns the endpoint. A slow or
-    // unavailable paint capability remains an explicit native checkpoint.
+    // Warm capture preserves a native checkpoint when paint is unavailable.
     session.apply(0);
   }
   return Object.freeze({
@@ -1902,7 +1899,9 @@ function pairCompatibleAtoms(input: {
       .sort(byAtomId);
     const targets = input.targets.filter((atom) => compatibilityKey(atom) === key)
       .sort(byAtomId);
-    if (input.lifecycle === "persist") {
+    const isContinuant = sources.length === 1 && targets.length === 1;
+    // A compound selector merge cannot erase distinct one-to-one paint.
+    if (input.lifecycle === "persist" || isContinuant) {
       const count = Math.min(sources.length, targets.length);
       for (let index = 0; index < count; index += 1) {
         addDisposition(
@@ -1928,7 +1927,10 @@ function addDisposition(
 ): void {
   input.dispositions.push({
     id,
-    lifecycle: input.lifecycle,
+    lifecycle:
+      sources.length === 1 && targets.length === 1
+        ? "persist"
+        : input.lifecycle,
     sourceAtomIds: sources.map(({ id: atomId }) => atomId),
     targetAtomIds: targets.map(({ id: atomId }) => atomId),
     semanticEntityIds: [...input.semanticEntityIds]
@@ -2015,19 +2017,6 @@ function track(
     startOpacity,
     endOpacity
   });
-}
-
-function interpolateRect(
-  source: KpStageRelativeRect,
-  target: KpStageRelativeRect,
-  progress: number
-): KpStageRelativeRect {
-  return {
-    left: lerp(source.left, target.left, progress),
-    top: lerp(source.top, target.top, progress),
-    width: lerp(source.width, target.width, progress),
-    height: lerp(source.height, target.height, progress)
-  };
 }
 
 function lerp(source: number, target: number, progress: number): number {
@@ -2367,8 +2356,7 @@ function correlationId(observationId: string): string {
   return observationId.replace(/\.(source|material|native)$/, "");
 }
 
-// Other style changes substitute paint; these two metrics can be assessed
-// continuously without knowing a character, notation, or renderer class.
+// These metrics are continuous without notation-specific knowledge.
 const kpTransformableTypographyProperties = new Set([
   "font-size",
   "line-height"
