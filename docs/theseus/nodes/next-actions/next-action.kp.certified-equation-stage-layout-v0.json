@@ -269,11 +269,39 @@
       "scope": "slice s10 solve-x non regression",
       "checkedAt": "2026-07-27T22:22:43.193Z",
       "notes": "All 39 desktop/phone linear-equation baseline states captured successfully."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s11 readable fit result",
+      "checkedAt": "2026-07-27T22:26:42.260Z",
+      "notes": "Certified fit threshold tests pass; the certified result never reports contained below the readability floor."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s11 readable fit result",
+      "checkedAt": "2026-07-27T22:26:43.116Z",
+      "notes": "Certified satisfied and unsatisfied fit variants compile with exhaustive status narrowing."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice s11 readable fit result",
+      "checkedAt": "2026-07-27T22:26:43.950Z",
+      "notes": "Inference contracts remain under budget after adding the certified fit result."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice s11 readable fit result",
+      "checkedAt": "2026-07-27T22:26:44.736Z",
+      "notes": "Canonical renderer convergence remains unchanged by the fit-result boundary."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s10 adds a branded responsive-fit path whose only staged input is a corridor certificate; its content bounds are the full swept envelope. Legacy exemplars retain their alignment-envelope API until migrated."
+    "summary": "Certified stage fitting now returns a typed satisfied-or-unsatisfied result; below-floor layouts expose deterministic readability evidence and cannot masquerade as contained success."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

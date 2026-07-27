@@ -37,9 +37,30 @@ const certifiedEquationStageResponsiveFitAuthority: unique symbol =
 export interface KpReaderCertifiedEquationStageResponsiveFitPlan
   extends KpReaderEquationResponsiveFitPlan {
   readonly geometrySource: "certified-stage-swept-envelope";
+  readonly status: "native" | "scaled";
   readonly stageLayout: KpCorridorCertifiedEquationStageLayout;
   readonly [certifiedEquationStageResponsiveFitAuthority]: true;
 }
+
+export interface KpReaderCertifiedEquationStageFitSatisfied {
+  readonly kind: "satisfied";
+  readonly fit: KpReaderCertifiedEquationStageResponsiveFitPlan;
+}
+
+export interface KpReaderCertifiedEquationStageFitUnsatisfied {
+  readonly kind: "unsatisfied";
+  readonly reason: "below-readability-floor";
+  readonly layout: KpCorridorCertifiedEquationStageLayout;
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
+  readonly requiredScale: number;
+  readonly minimumReadableScale: number;
+  readonly viewportWidth: number;
+  readonly viewportHeight?: number | undefined;
+}
+
+export type KpReaderCertifiedEquationStageFitResult =
+  | KpReaderCertifiedEquationStageFitSatisfied
+  | KpReaderCertifiedEquationStageFitUnsatisfied;
 
 export interface KpReaderEquationConformanceIssue {
   readonly code:
@@ -107,8 +128,7 @@ export function planKpReaderCertifiedEquationStageResponsiveFit(input: {
   readonly horizontalPadding?: number | undefined;
   readonly verticalPadding?: number | undefined;
   readonly minScale?: number | undefined;
-  readonly overflowStrategy?: "report" | "contain" | undefined;
-}): KpReaderCertifiedEquationStageResponsiveFitPlan {
+}): KpReaderCertifiedEquationStageFitResult {
   const fit = planFit({
     id:
       `fit.stage.${input.layout.measuredInput.intent.nodeId}.` +
@@ -124,13 +144,31 @@ export function planKpReaderCertifiedEquationStageResponsiveFit(input: {
     horizontalPadding: input.horizontalPadding,
     verticalPadding: input.verticalPadding,
     minScale: input.minScale,
-    overflowStrategy: input.overflowStrategy
+    overflowStrategy: "report"
   });
+  if (fit.status !== "native" && fit.status !== "scaled") {
+    return Object.freeze({
+      kind: "unsatisfied" as const,
+      reason: "below-readability-floor" as const,
+      layout: input.layout,
+      measurementIdentity: input.layout.measurementIdentity,
+      requiredScale: fit.requiredScale,
+      minimumReadableScale: fit.scale,
+      viewportWidth: fit.viewportWidth,
+      ...(fit.viewportHeight === undefined
+        ? {}
+        : { viewportHeight: fit.viewportHeight })
+    });
+  }
   return Object.freeze({
-    ...fit,
-    geometrySource: "certified-stage-swept-envelope" as const,
-    stageLayout: input.layout,
-    [certifiedEquationStageResponsiveFitAuthority]: true as const
+    kind: "satisfied" as const,
+    fit: Object.freeze({
+      ...fit,
+      status: fit.status,
+      geometrySource: "certified-stage-swept-envelope" as const,
+      stageLayout: input.layout,
+      [certifiedEquationStageResponsiveFitAuthority]: true as const
+    })
   });
 }
 

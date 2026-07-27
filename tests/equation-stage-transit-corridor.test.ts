@@ -140,15 +140,17 @@ test("full swept bounds contain rows, corridor, and every transit", () => {
 
 test("responsive fit centers and contains the complete swept envelope", () => {
   const layout = corridor();
-  const fit = planKpReaderCertifiedEquationStageResponsiveFit({
+  const result = planKpReaderCertifiedEquationStageResponsiveFit({
     layout,
     viewportWidth: 260,
     viewportHeight: 140,
     horizontalPadding: 12,
     verticalPadding: 10,
-    minScale: 0.68,
-    overflowStrategy: "contain"
+    minScale: 0.68
   });
+  assert.equal(result.kind, "satisfied");
+  if (result.kind !== "satisfied") throw new Error("Expected satisfied fit.");
+  const fit = result.fit;
 
   assert.equal(fit.geometrySource, "certified-stage-swept-envelope");
   assert.equal(fit.stageLayout, layout);
@@ -170,6 +172,44 @@ test("responsive fit centers and contains the complete swept envelope", () => {
       fitted.left + fitted.width / 2 - fit.viewportWidth / 2
     ) < 1e-9
   );
+});
+
+test("certified fit never scales below its readability floor", () => {
+  const layout = corridor();
+  const minimumReadableScale = 0.68;
+  const padding = 12;
+  const exactWidth =
+    layout.sweptBounds.width * minimumReadableScale + padding * 2;
+  const satisfied = planKpReaderCertifiedEquationStageResponsiveFit({
+    layout,
+    viewportWidth: exactWidth,
+    viewportHeight: 1_000,
+    horizontalPadding: padding,
+    verticalPadding: 10,
+    minScale: minimumReadableScale
+  });
+  assert.equal(satisfied.kind, "satisfied");
+  if (satisfied.kind === "satisfied") {
+    assert.ok(satisfied.fit.scale >= minimumReadableScale);
+    assert.notEqual(satisfied.fit.status, "contained");
+  }
+
+  const unsatisfied = planKpReaderCertifiedEquationStageResponsiveFit({
+    layout,
+    viewportWidth: exactWidth - 0.1,
+    viewportHeight: 1_000,
+    horizontalPadding: padding,
+    verticalPadding: 10,
+    minScale: minimumReadableScale
+  });
+  assert.deepEqual(unsatisfied.kind, "unsatisfied");
+  if (unsatisfied.kind !== "unsatisfied") {
+    throw new Error("Expected unsatisfied fit.");
+  }
+  assert.equal(unsatisfied.reason, "below-readability-floor");
+  assert.equal(unsatisfied.minimumReadableScale, minimumReadableScale);
+  assert.ok(unsatisfied.requiredScale < unsatisfied.minimumReadableScale);
+  assert.equal("fit" in unsatisfied, false);
 });
 
 test("corridor rejects duplicate, unknown-row, and escaped transit evidence", () => {

@@ -119,7 +119,8 @@
     {
       "id": "s11",
       "title": "Readable fit result",
-      "status": "planned"
+      "summary": "Certified responsive fitting now returns a proof-carrying success only at or above the readable scale floor; insufficient viewports return deterministic typed evidence instead of contained success.",
+      "status": "complete"
     },
     {
       "id": "s12",

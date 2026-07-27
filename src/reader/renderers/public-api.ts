@@ -94,6 +94,9 @@ export {
   planKpReaderCertifiedEquationStageResponsiveFit,
   planKpReaderEquationSequenceResponsiveFit,
   type KpReaderCertifiedEquationStageResponsiveFitPlan,
+  type KpReaderCertifiedEquationStageFitResult,
+  type KpReaderCertifiedEquationStageFitSatisfied,
+  type KpReaderCertifiedEquationStageFitUnsatisfied,
   type KpReaderEquationConformanceIssue,
   type KpReaderEquationResponsiveFitPlan
 } from "./equation-responsive-fit.ts";
