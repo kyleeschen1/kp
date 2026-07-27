@@ -65,7 +65,8 @@
     {
       "id": "s02",
       "title": "Baseline visible paint diagnostic",
-      "status": "planned"
+      "summary": "Added a stable all-authority visible-paint overlap report, synthetic classification and validation tests, foldable-suite coverage, and a scoped phone browser baseline that records intersections before layout execution.",
+      "status": "complete"
     },
     {
       "id": "s03",

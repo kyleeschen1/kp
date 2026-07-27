@@ -59,11 +59,32 @@
       "scope": "s01 approved control plane",
       "checkedAt": "2026-07-27T21:41:28.468Z",
       "notes": "Workspace validates with 807 nodes; complete v1 contract has 26 approved slices, broad verification, exact stop conditions, mandatory slice 24 checkpoint, and the target done-contract gate passes."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T21:46:02.776Z",
+      "notes": "69 tests pass including deterministic native/native, native/material, and material/material overlap classification."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-27T21:46:03.655Z",
+      "notes": "All application, node, test, and domain TypeScript projects accept the generic diagnostic."
+    },
+    {
+      "command": "npm run visual:foldable-distribution -- --grep visible-paint diagnostic",
+      "status": "passed",
+      "scope": "browser baseline",
+      "checkedAt": "2026-07-27T21:46:04.476Z",
+      "notes": "One phone browser case samples five representative phases and durably proves visible intersections remain while layout is declaration-only."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Approved 26-slice v1 contract is active and ready. The incomplete unstarted v0 record is superseded; proposal approval, target done contract, explicit deferrals, and the downstream x-fusion dependency are durable."
+    "summary": "Generic visible-paint overlap inspection now classifies all native/material authority pairs with semantic owner, row, progress, and viewport evidence. The foldable phone baseline proves the current unapplied layout still produces intersections; 69 focused tests, typecheck, and the scoped browser case pass."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

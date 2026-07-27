@@ -114,6 +114,112 @@ function summarizeXPaint(
   };
 }
 
+async function visiblePaintOverlapReport(page: Page, progress: number) {
+  return page.evaluate(async ({ progress }) => {
+    const overlapModule =
+      "/src/rendering/equation-visible-paint-overlap.ts";
+    const geometryModule =
+      "/src/rendering/native-katex-paint-geometry.ts";
+    const { inspectKpEquationVisiblePaintOverlap } =
+      await import(overlapModule);
+    const { measureKpNativeKatexSubtreePaintRect } =
+      await import(geometryModule);
+    const stage = document.querySelector<HTMLElement>(
+      "[data-kp-reader-equation-viewport]"
+    );
+    const transition = document.querySelector<HTMLElement>(
+      "[data-kp-reader-transition-active='true']"
+    );
+    if (stage === null || transition === null) {
+      throw new Error("Visible-paint inspection lacks an active stage.");
+    }
+    const observations = [
+      ...[...transition.querySelectorAll<HTMLElement>(
+        "[data-kp-reader-native]"
+      )].flatMap((root) => {
+        const authority = root.dataset["kpReaderNative"] === "source"
+          ? "source-native" as const
+          : "target-native" as const;
+        return [...root.querySelectorAll<HTMLElement>(
+          "[data-kp-reader-equation-anchor-id]"
+        )].filter((anchor) =>
+          anchor.dataset["kpFoldableEnvelopeId"] === undefined &&
+          Number(getComputedStyle(anchor).opacity) > 0.01
+        ).flatMap((anchor) => {
+          const rect = measureKpNativeKatexSubtreePaintRect(stage, anchor);
+          return rect === undefined ? [] : [{
+            ownerId:
+              `native:${authority}:${anchor.dataset["kpReaderEquationAnchorId"]}`,
+            semanticEntityId: anchor.dataset["kpReaderSelectorId"],
+            rowId: anchor.closest<HTMLElement>(
+              "[data-kp-foldable-envelope-id]"
+            )?.dataset["kpFoldableEnvelopeId"],
+            authority,
+            rect,
+            opacity: Number(getComputedStyle(anchor).opacity)
+          }];
+        });
+      }),
+      ...[...document.querySelectorAll<HTMLElement>(
+        "[data-kp-equation-material-owner-id]"
+      )].flatMap((owner) => {
+        const visual = owner.firstElementChild as HTMLElement | null;
+        const rect = visual === null
+          ? undefined
+          : measureKpNativeKatexSubtreePaintRect(stage, visual);
+        return rect === undefined ? [] : [{
+          ownerId:
+            `material:${owner.dataset["kpEquationMaterialOwnerId"]}`,
+          semanticEntityId:
+            owner.dataset["kpEquationMaterialSemanticEntityId"],
+          authority: "material" as const,
+          rect,
+          opacity: Number(getComputedStyle(owner).opacity)
+        }];
+      })
+    ];
+    return inspectKpEquationVisiblePaintOverlap({
+      progress,
+      viewportId: `${window.innerWidth}x${window.innerHeight}`,
+      observations,
+      contactTolerancePx: 0.75
+    });
+  }, { progress });
+}
+
+test("visible-paint diagnostic preserves the unapplied-layout baseline", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const reports = [];
+  for (const progressPermille of [140, 240, 340, 500, 740]) {
+    await page.goto(
+      route(progressPermille, { kpFoldMode: "expanded" }),
+      { waitUntil: "domcontentloaded" }
+    );
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-hydrated",
+      "true"
+    );
+    await expect(
+      page.locator("[data-kp-reader-transition-active='true']")
+    ).toHaveCount(1);
+    reports.push(
+      await visiblePaintOverlapReport(page, progressPermille / 1_000)
+    );
+  }
+  await expect(
+    page.locator("[data-kp-reader-equation-stage]")
+  ).toHaveAttribute(
+    "data-kp-reader-fold-layout-policy",
+    /single-row|semantic-two-row-stage/
+  );
+  expect(
+    reports.some(({ intersections }) => intersections.length > 0),
+    JSON.stringify(reports)
+  ).toBe(true);
+});
+
 test("fold controls preserve one semantic clock and stable URL state", async ({
   page
 }) => {
