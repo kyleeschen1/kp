@@ -4,6 +4,9 @@ import type {
   KatexTextureAtlas,
   KatexTokenRect
 } from "./katex-transition-types.ts";
+import {
+  acquireKpWebglContextLease
+} from "./webgl-context-lease-pool.ts";
 
 export interface KatexArtifactSolidMaskMorphEndpoint {
   readonly tokenId: string;
@@ -46,6 +49,13 @@ export interface KatexArtifactSolidMaskMorphRenderer {
   render(progress: number): void;
   measureInk(alphaThreshold?: number): KatexTokenRect | undefined;
   dispose(): void;
+}
+
+export class KpWebglContextCapacityError extends Error {
+  constructor() {
+    super("The structural WebGL context lease budget is full.");
+    this.name = "KpWebglContextCapacityError";
+  }
 }
 
 interface SolidMaskProgramInfo {
@@ -172,33 +182,64 @@ export function createSignedDistanceField(
 export function createKatexArtifactSolidMaskMorphRenderer(
   canvas: HTMLCanvasElement,
   plan: KatexArtifactSolidMaskMorphPlan,
-  atlas: KatexTextureAtlas
+  atlas: KatexTextureAtlas,
+  options: {
+    readonly onContextAvailable?: (() => void) | undefined;
+    readonly onContextLost?: (() => void) | undefined;
+  } = {}
 ): KatexArtifactSolidMaskMorphRenderer {
-  const gl = canvas.getContext("webgl", {
-    alpha: true,
-    antialias: true,
-    depth: false,
-    premultipliedAlpha: false,
-    // Scrubbed equations can remain paused indefinitely. Preserve the last
-    // solid-mask frame so browser compositing cannot clear visible notation.
-    preserveDrawingBuffer: true
+  const fields = createSolidMaskFields(plan, atlas);
+  let contextLost = false;
+  const acquisition = acquireKpWebglContextLease({
+    canvas,
+    attributes: {
+      alpha: true,
+      antialias: true,
+      depth: false,
+      premultipliedAlpha: false,
+      // Scrubbed equations can remain paused indefinitely. Preserve the last
+      // solid-mask frame so browser compositing cannot clear visible notation.
+      preserveDrawingBuffer: true
+    },
+    onAvailable: options.onContextAvailable,
+    onContextLost: () => {
+      contextLost = true;
+      options.onContextLost?.();
+    }
   });
-  if (gl === null) {
+  if (acquisition.status === "capacity") {
+    throw new KpWebglContextCapacityError();
+  }
+  if (acquisition.status === "unavailable") {
     throw new Error("WebGL is unavailable for the KaTeX solid-mask morph.");
   }
+  const { context: gl } = acquisition.lease;
 
-  const fields = createSolidMaskFields(plan, atlas);
-  const programInfo = createProgram(gl);
-  const texture = createFieldTexture(
-    gl,
-    fields.width,
-    fields.height,
-    fields.pixels
-  );
+  let programInfo: SolidMaskProgramInfo;
+  try {
+    programInfo = createProgram(gl);
+  } catch (error) {
+    acquisition.lease.release();
+    throw error;
+  }
+  let texture: WebGLTexture;
+  try {
+    texture = createFieldTexture(
+      gl,
+      fields.width,
+      fields.height,
+      fields.pixels
+    );
+  } catch (error) {
+    gl.deleteProgram(programInfo.program);
+    acquisition.lease.release();
+    throw error;
+  }
   const buffer = gl.createBuffer();
   if (buffer === null) {
     gl.deleteTexture(texture);
     gl.deleteProgram(programInfo.program);
+    acquisition.lease.release();
     throw new Error("Could not create the solid-mask morph buffer.");
   }
 
@@ -270,7 +311,7 @@ export function createKatexArtifactSolidMaskMorphRenderer(
   return {
     bounds: fields.bounds,
     render(progress) {
-      if (disposed) return;
+      if (disposed || contextLost) return;
       const frame = sampleKatexArtifactSolidMaskMorphFrame(
         plan,
         progress
@@ -384,7 +425,7 @@ export function createKatexArtifactSolidMaskMorphRenderer(
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     },
     measureInk(alphaThreshold = 8) {
-      if (disposed) return undefined;
+      if (disposed || contextLost) return undefined;
       if (
         !Number.isFinite(alphaThreshold) ||
         alphaThreshold < 1 ||
@@ -434,7 +475,7 @@ export function createKatexArtifactSolidMaskMorphRenderer(
       // Responsive hosts can replace renderer sessions repeatedly. Releasing
       // objects alone leaves the browser context quota occupied until GC,
       // which can make a later canvas report ready but paint transparently.
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      acquisition.lease.release();
     }
   };
 }

@@ -16,6 +16,7 @@ import type {
   KpEquationStructuralSuccessionIntent
 } from "../animation/structural-succession-presentation.ts";
 import {
+  disposeKpNativeKatexStructuralSuccession,
   syncKpNativeKatexStructuralSuccession
 } from "./native-katex-structural-succession-renderer.ts";
 import {
@@ -121,6 +122,7 @@ export interface KpNativeKatexRendererSession {
   readonly tracks: readonly KpNativeKatexSceneTrack[];
   readonly sample: (progress: number) => readonly KpNativeKatexSceneTrackFrame[];
   readonly apply: (progress: number) => KpNativeKatexSceneOwnershipFrame;
+  readonly dispose: () => void;
 }
 
 export interface KpCanonicalNativeKatexSceneSession {
@@ -1549,7 +1551,11 @@ export function createKpNativeKatexRendererSession(input: {
       ? 0
       : progress
   );
+  let disposed = false;
   const apply = (progress: number): KpNativeKatexSceneOwnershipFrame => {
+    if (disposed) {
+      throw new Error("Cannot apply a disposed native KaTeX renderer session.");
+    }
     const frames = sample(progress);
     const bounded = Math.max(0, Math.min(1, progress));
     const targetOwns = bounded === 1;
@@ -1599,7 +1605,14 @@ export function createKpNativeKatexRendererSession(input: {
     disposition,
     tracks,
     sample,
-    apply
+    apply,
+    dispose() {
+      if (disposed) return;
+      disposed = true;
+      syncKpEquationMaterialLayer({ stage: input.stage, owners: [] });
+      input.sourceRoot.style.opacity = "1";
+      input.targetRoot.style.opacity = "0";
+    }
   });
 }
 
@@ -1665,9 +1678,13 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
   input.source.stage.dataset["kpCanonicalNativeKatexSessionFactory"] =
     "shared-v1";
   let latestProgress = 0;
+  let canonicalDisposed = false;
   const session: KpNativeKatexRendererSession = Object.freeze({
     ...playback,
     apply(progress: number) {
+      if (canonicalDisposed) {
+        throw new Error("Cannot apply a disposed canonical KaTeX scene session.");
+      }
       const bounded = Math.max(0, Math.min(1, progress));
       latestProgress = bounded;
       const structural = input.structuralSuccession;
@@ -1752,6 +1769,12 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
             : "native-material-clones";
       }
       return ownership;
+    },
+    dispose() {
+      if (canonicalDisposed) return;
+      canonicalDisposed = true;
+      disposeKpNativeKatexStructuralSuccession(input.source.stage);
+      playback.dispose();
     }
   });
   if (input.structuralSuccession !== undefined) {

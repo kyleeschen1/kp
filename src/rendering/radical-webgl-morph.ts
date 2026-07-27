@@ -3,6 +3,7 @@ import {
 } from "../animation/radical-morph-profile.ts";
 import {
   createKatexArtifactSolidMaskMorphRenderer,
+  KpWebglContextCapacityError,
   sampleKatexArtifactSolidMaskMorphProgress,
   type KatexArtifactSolidMaskMorphPlan,
   type KatexArtifactSolidMaskMorphRenderer
@@ -16,6 +17,9 @@ import type {
   KatexTextureAtlas,
   KatexTokenRect
 } from "./katex-transition-types.ts";
+import {
+  cancelKpWebglContextLeaseWait
+} from "./webgl-context-lease-pool.ts";
 
 export interface KpRadicalWebglMorphSyncResult {
   readonly mode: "webgl-solid-mask" | "dom-fallback";
@@ -146,6 +150,7 @@ export function syncKpRadicalWebglMorph(input: {
 export function disposeKpRadicalWebglMorph(stage: HTMLElement): void {
   const state = morphStates.get(stage);
   if (state === undefined) return;
+  cancelKpWebglContextLeaseWait(state.canvas);
   state.renderer?.dispose();
   state.canvas.remove();
   morphStates.delete(stage);
@@ -321,7 +326,27 @@ async function initializeMorphState(input: {
     input.state.renderer = createKatexArtifactSolidMaskMorphRenderer(
       input.state.canvas,
       plan,
-      atlas
+      atlas,
+      {
+        onContextAvailable: () => {
+          if (
+            morphStates.get(input.stage) === input.state &&
+            input.stage.isConnected
+          ) {
+            void initializeMorphState(input);
+          }
+        },
+        onContextLost: () => {
+          if (morphStates.get(input.stage) !== input.state) return;
+          input.state.renderer = undefined;
+          input.state.status = "fallback";
+          input.state.canvas.style.opacity = "0";
+          input.stage.dataset["kpEditorRadicalMorphMode"] = "dom-fallback";
+          input.stage.dataset["kpEditorRadicalMorphReady"] = "false";
+          input.stage.dataset["kpEditorRadicalMorphFallbackReason"] =
+            "webgl-context-lost";
+        }
+      }
     );
     input.state.sourceCaptureRect = sourceLocalRect;
     input.state.sourceNativeInkRect = measureAtlasEndpointInk({
@@ -381,6 +406,15 @@ async function initializeMorphState(input: {
     delete input.stage.dataset["kpEditorRadicalMorphFallbackReason"];
   } catch (error) {
     if (morphStates.get(input.stage) !== input.state) return;
+    if (error instanceof KpWebglContextCapacityError) {
+      input.state.status = "fallback";
+      input.state.canvas.style.opacity = "0";
+      input.stage.dataset["kpEditorRadicalMorphMode"] = "dom-fallback";
+      input.stage.dataset["kpEditorRadicalMorphReady"] = "false";
+      input.stage.dataset["kpEditorRadicalMorphFallbackReason"] =
+        "webgl-context-capacity";
+      return;
+    }
     input.state.status = "fallback";
     input.state.canvas.style.opacity = "0";
     input.stage.dataset["kpEditorRadicalMorphMode"] = "dom-fallback";

@@ -219,7 +219,8 @@
     {
       "id": "slice-17",
       "title": "extract-promotion-kit",
-      "status": "planned",
+      "summary": "Promotion-kit extraction starts with the newly approved bounded WebGL resource prerequisite: explicit disposal, capped leases, deterministic native fallback, and over-capacity proof. The resource unit will be committed independently before extraction proceeds.",
+      "status": "in-progress",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {

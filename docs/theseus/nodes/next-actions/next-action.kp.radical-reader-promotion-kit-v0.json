@@ -674,11 +674,81 @@
       "scope": "slice 16 durable graph",
       "checkedAt": "2026-07-27T02:47:25.594Z",
       "notes": "Valid: 793 nodes and 12878 events after slice completion, priority resolution, and HUMAN_CHECKPOINT progress record."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 17 WebGL resource lifecycle",
+      "checkedAt": "2026-07-27T03:28:02.614Z",
+      "notes": "41 focused tests passed, including the context lease pool."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 17 WebGL fallback and recovery",
+      "checkedAt": "2026-07-27T03:28:08.297Z",
+      "notes": "12 Chromium checks passed: bounded acquisition, native fallback, automatic resume, endpoint idle release, reacquisition, and forced context-loss recovery."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice 17 compositor regression",
+      "checkedAt": "2026-07-27T03:28:16.109Z",
+      "notes": "44 Chromium compositor checks passed."
+    },
+    {
+      "command": "npm run test:browser:canonical-host-parity",
+      "status": "passed",
+      "scope": "slice 17 cross-host resource regression",
+      "checkedAt": "2026-07-27T03:28:20.791Z",
+      "notes": "3 cross-host parity checks passed across responsive and DPR profiles."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 17 static typing",
+      "checkedAt": "2026-07-27T03:28:25.454Z",
+      "notes": "All application, node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 17 architecture boundaries",
+      "checkedAt": "2026-07-27T03:28:30.008Z",
+      "notes": "All three architecture gates passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice 17 production build",
+      "checkedAt": "2026-07-27T03:28:34.793Z",
+      "notes": "Typecheck and Vite production build passed."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "slice 17 production route closure",
+      "checkedAt": "2026-07-27T03:28:42.364Z",
+      "notes": "All 9 manifest reader routes passed production closure."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice 17 native compositor regression",
+      "checkedAt": "2026-07-27T03:28:49.767Z",
+      "notes": "52 native KaTeX compositor tests passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice 17 resource hardening durable graph",
+      "checkedAt": "2026-07-27T03:29:02.224Z",
+      "notes": "Valid: 794 nodes and 12892 events before hardening commit."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Human visual checkpoint accepted: the repaired radical x and one-half handoffs look beautiful. Slice 17 remains unstarted while the user reviews WebGL context capacity and compositor maturity."
+    "summary": "The user-approved short resource-hardening unit is complete and verified: structural WebGL contexts are capped, lazily acquired, released at native endpoints, automatically resumed from exact native fallback, and recovered after context loss. Slice 17 now continues with the originally approved promotion-kit extraction."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

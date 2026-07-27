@@ -3,6 +3,7 @@ import type {
 } from "../animation/structural-succession-presentation.ts";
 import {
   createKatexArtifactSolidMaskMorphRenderer,
+  KpWebglContextCapacityError,
   sampleKatexArtifactSolidMaskMorphProgress,
   type KatexArtifactSolidMaskMorphPlan,
   type KatexArtifactSolidMaskMorphRenderer
@@ -19,6 +20,9 @@ import type {
   KatexTextureAtlas,
   KatexTokenRect
 } from "./katex-transition-types.ts";
+import {
+  cancelKpWebglContextLeaseWait
+} from "./webgl-context-lease-pool.ts";
 
 export interface KpNativeKatexStructuralSuccessionSyncResult {
   readonly strategy: "solid-mask-succession" | "checkpoint-settlement";
@@ -42,8 +46,10 @@ interface StructuralSuccessionState {
   readonly width: number;
   readonly height: number;
   readonly intent: KpEquationStructuralSuccessionIntent;
+  atlas?: KatexTextureAtlas | undefined;
+  plan?: KatexArtifactSolidMaskMorphPlan | undefined;
   renderer?: KatexArtifactSolidMaskMorphRenderer | undefined;
-  status: "initializing" | "ready" | "unavailable";
+  status: "initializing" | "prepared" | "waiting" | "ready" | "unavailable";
   reason?: string | undefined;
   progress: number;
   visible: boolean;
@@ -52,6 +58,7 @@ interface StructuralSuccessionState {
   currentCorrection: EndpointCorrection;
   emptyPaintRetries: number;
   retryFrame?: number | undefined;
+  idleReleaseTimer?: number | undefined;
   sourceNativeInkRect?: KatexTokenRect | undefined;
   targetNativeInkRect?: KatexTokenRect | undefined;
   onSettled?: (() => void) | undefined;
@@ -68,6 +75,7 @@ const states = new WeakMap<HTMLElement, StructuralSuccessionState>();
 // midpoint-only correction can be internally exact while the composited glyph
 // still grows by a pixel on each side at a renderer handoff.
 const inkAlphaThreshold = 48;
+const contextIdleReleaseMs = 250;
 
 export interface KpNativeKatexStructuralSuccessionInkComparison {
   readonly renderedInkRect: KatexTokenRect;
@@ -105,11 +113,6 @@ export function syncKpNativeKatexStructuralSuccession(input: {
     disposeKpNativeKatexStructuralSuccession(input.stage);
     return checkpoint(input.stage, "structural-capture-unavailable");
   }
-  if (!supportsWebgl(input.stage.ownerDocument)) {
-    disposeKpNativeKatexStructuralSuccession(input.stage);
-    return checkpoint(input.stage, "webgl-unavailable");
-  }
-
   const stageRect = input.stage.getBoundingClientRect();
   let state = states.get(input.stage);
   if (
@@ -139,6 +142,21 @@ export function syncKpNativeKatexStructuralSuccession(input: {
   state.progress = input.progress;
   state.visible = input.visible;
   state.onSettled = input.onSettled;
+  const requiresContext =
+    input.progress >= state.intent.paintStrategy.morph.start &&
+    input.progress < 1;
+  if (requiresContext) {
+    cancelIdleContextRelease(input.stage, state);
+    if (state.status === "prepared") {
+      activatePreparedRenderer(input.stage, state);
+    }
+  } else if (state.status === "waiting") {
+    cancelKpWebglContextLeaseWait(state.canvas);
+    state.status = "prepared";
+    state.reason = "webgl-context-idle";
+  } else if (state.status === "ready") {
+    scheduleIdleContextRelease(input.stage, state);
+  }
   if (state.status === "ready" && state.renderer !== undefined) {
     state.renderer.render(input.progress);
     applyCanvasCorrection(state);
@@ -166,6 +184,16 @@ export function syncKpNativeKatexStructuralSuccession(input: {
       ...(paintReady ? {} : { reason: "solid-mask-frame-empty" })
     };
   }
+  if (!requiresContext && state.status === "prepared") {
+    state.canvas.style.opacity = "0";
+    setStageStatus(input.stage, "solid-mask-succession", "ready");
+    return {
+      strategy: "solid-mask-succession",
+      status: "ready",
+      paintReady: false,
+      reason: "native-structural-settlement"
+    };
+  }
   state.canvas.style.opacity = "0";
   if (state.status === "unavailable") {
     return checkpoint(
@@ -173,11 +201,18 @@ export function syncKpNativeKatexStructuralSuccession(input: {
       state.reason ?? "solid-mask-initialization-failed"
     );
   }
-  setStageStatus(input.stage, "solid-mask-succession", "initializing");
+  setStageStatus(
+    input.stage,
+    state.reason === "webgl-context-capacity"
+      ? "checkpoint-settlement"
+      : "solid-mask-succession",
+    "initializing",
+    state.reason
+  );
   return {
     strategy: "checkpoint-settlement",
     status: "initializing",
-    reason: "solid-mask-initializing"
+    reason: state.reason ?? "solid-mask-initializing"
   };
 }
 
@@ -189,6 +224,10 @@ export function disposeKpNativeKatexStructuralSuccession(
   if (state.retryFrame !== undefined) {
     stage.ownerDocument.defaultView?.cancelAnimationFrame(state.retryFrame);
   }
+  if (state.idleReleaseTimer !== undefined) {
+    stage.ownerDocument.defaultView?.clearTimeout(state.idleReleaseTimer);
+  }
+  cancelKpWebglContextLeaseWait(state.canvas);
   state.renderer?.dispose();
   state.canvas.remove();
   states.delete(stage);
@@ -213,6 +252,39 @@ function scheduleEmptyPaintRetry(
       state.onSettled?.();
     }
   });
+}
+
+function scheduleIdleContextRelease(
+  stage: HTMLElement,
+  state: StructuralSuccessionState
+): void {
+  const view = stage.ownerDocument.defaultView;
+  if (view === null || state.idleReleaseTimer !== undefined) return;
+  state.idleReleaseTimer = view.setTimeout(() => {
+    state.idleReleaseTimer = undefined;
+    if (
+      states.get(stage) !== state ||
+      (state.progress > 0 && state.progress < 1) ||
+      state.renderer === undefined
+    ) {
+      return;
+    }
+    state.renderer.dispose();
+    state.renderer = undefined;
+    state.status = "prepared";
+    state.reason = "webgl-context-idle";
+    state.canvas.style.opacity = "0";
+    setStageStatus(stage, "solid-mask-succession", "ready");
+  }, contextIdleReleaseMs);
+}
+
+function cancelIdleContextRelease(
+  stage: HTMLElement,
+  state: StructuralSuccessionState
+): void {
+  if (state.idleReleaseTimer === undefined) return;
+  stage.ownerDocument.defaultView?.clearTimeout(state.idleReleaseTimer);
+  state.idleReleaseTimer = undefined;
 }
 
 export function measureKpNativeKatexStructuralSuccessionInk(
@@ -334,11 +406,6 @@ async function initializeState(
       sourceColor: parseComputedColor(state.sourceElement),
       color: parseComputedColor(state.targetElement)
     };
-    state.renderer = createKatexArtifactSolidMaskMorphRenderer(
-      state.canvas,
-      plan,
-      atlas
-    );
     const sourceLiveInkRect = measureAtlasEndpointInk({
       atlas,
       tokenId: sourceToken.id,
@@ -352,22 +419,13 @@ async function initializeState(
       tokenId: targetToken.id,
       endpointRect: targetLocalRect
     });
-    state.sourceCorrection = measureEndpointCorrection({
-      renderer: state.renderer,
-      progress: 0,
-      nativeInkRect: sourceNativeInkRect
-    });
-    state.targetCorrection = measureEndpointCorrection({
-      renderer: state.renderer,
-      progress: 1,
-      nativeInkRect: targetLiveInkRect
-    });
+    state.atlas = atlas;
+    state.plan = plan;
     state.sourceNativeInkRect = sourceNativeInkRect;
     state.targetNativeInkRect = targetLiveInkRect;
-    state.status = "ready";
-    state.renderer.render(state.progress);
-    applyCanvasCorrection(state);
-    state.canvas.style.opacity = state.visible ? "1" : "0";
+    state.status = "prepared";
+    state.reason = "webgl-context-idle";
+    state.canvas.style.opacity = "0";
     state.canvas.dataset["kpNativeKatexStructuralStrategy"] =
       "signed-distance-field";
     state.canvas.dataset["kpNativeKatexStructuralProfile"] =
@@ -376,7 +434,27 @@ async function initializeState(
       "document-font-canvas";
     state.canvas.dataset["kpNativeKatexStructuralSourceFont"] =
       nativeTextFontFingerprint(state.sourceElement);
-    setStageStatus(stage, "solid-mask-succession", "ready");
+    if (
+      state.progress >= state.intent.paintStrategy.morph.start &&
+      state.progress < 1
+    ) {
+      activatePreparedRenderer(stage, state);
+    }
+    const activationStatus = (state as StructuralSuccessionState).status;
+    if (activationStatus === "unavailable") {
+      state.onSettled?.();
+      return;
+    }
+    setStageStatus(
+      stage,
+      activationStatus === "waiting"
+        ? "checkpoint-settlement"
+        : "solid-mask-succession",
+      activationStatus === "ready" || activationStatus === "prepared"
+        ? "ready"
+        : "initializing",
+      state.reason
+    );
     // Capture is asynchronous. Reapply the latest canonical session frame so
     // a direct seek after resize cannot leave a ready canvas hidden at source.
     state.onSettled?.();
@@ -389,6 +467,82 @@ async function initializeState(
     state.canvas.style.opacity = "0";
     checkpoint(stage, state.reason);
     state.onSettled?.();
+  }
+}
+
+function activatePreparedRenderer(
+  stage: HTMLElement,
+  state: StructuralSuccessionState
+): void {
+  if (
+    state.atlas === undefined ||
+    state.plan === undefined ||
+    state.sourceNativeInkRect === undefined ||
+    state.targetNativeInkRect === undefined
+  ) {
+    return;
+  }
+  try {
+    const renderer = createKatexArtifactSolidMaskMorphRenderer(
+      state.canvas,
+      state.plan,
+      state.atlas,
+      {
+        onContextAvailable: () => {
+          if (
+            states.get(stage) !== state ||
+            !stage.isConnected ||
+            state.status !== "waiting"
+          ) {
+            return;
+          }
+          state.status = "prepared";
+          activatePreparedRenderer(stage, state);
+          state.onSettled?.();
+        },
+        onContextLost: () => {
+          if (states.get(stage) !== state) return;
+          const onSettled = state.onSettled;
+          disposeKpNativeKatexStructuralSuccession(stage);
+          onSettled?.();
+        }
+      }
+    );
+    state.renderer = renderer;
+    state.sourceCorrection = measureEndpointCorrection({
+      renderer,
+      progress: 0,
+      nativeInkRect: state.sourceNativeInkRect
+    });
+    state.targetCorrection = measureEndpointCorrection({
+      renderer,
+      progress: 1,
+      nativeInkRect: state.targetNativeInkRect
+    });
+    state.status = "ready";
+    state.reason = undefined;
+    renderer.render(state.progress);
+    applyCanvasCorrection(state);
+  } catch (error) {
+    state.renderer?.dispose();
+    state.renderer = undefined;
+    state.canvas.style.opacity = "0";
+    if (error instanceof KpWebglContextCapacityError) {
+      state.status = "waiting";
+      state.reason = "webgl-context-capacity";
+      setStageStatus(
+        stage,
+        "checkpoint-settlement",
+        "initializing",
+        state.reason
+      );
+      return;
+    }
+    state.status = "unavailable";
+    state.reason = error instanceof Error
+      ? error.message
+      : "solid-mask-initialization-failed";
+    checkpoint(stage, state.reason);
   }
 }
 
@@ -413,14 +567,6 @@ function resolveCaptureElement(
       return false;
     }
   });
-}
-
-function supportsWebgl(ownerDocument: Document): boolean {
-  try {
-    return ownerDocument.createElement("canvas").getContext("webgl") !== null;
-  } catch {
-    return false;
-  }
 }
 
 function captureToken(

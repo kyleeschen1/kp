@@ -42,6 +42,13 @@ export function createKpReaderCanonicalEquationSession(input: {
     ReturnType<KpReaderEquationSceneCompositorFactory> | undefined;
   let sessionKey: string | undefined;
   let materialLayer: HTMLElement | undefined;
+  const releaseCurrentSession = (): void => {
+    session?.dispose();
+    session = undefined;
+    sessionKey = undefined;
+    materialLayer?.remove();
+    materialLayer = undefined;
+  };
 
   return {
     transitionIds,
@@ -50,7 +57,10 @@ export function createKpReaderCanonicalEquationSession(input: {
       if (
         transitionId === undefined ||
         !transitionIds.includes(transitionId)
-      ) return false;
+      ) {
+        releaseCurrentSession();
+        return false;
+      }
       const nextKey = [
         transitionId,
         frame.renderPlan.id,
@@ -62,7 +72,7 @@ export function createKpReaderCanonicalEquationSession(input: {
         frame.fitSurface.offsetHeight
       ].join(":");
       if (session === undefined || sessionKey !== nextKey) {
-        materialLayer?.remove();
+        releaseCurrentSession();
         materialLayer = createMaterialLayer(frame.fitSurface);
         bindReaderPaintOwnership(
           frame.renderPlan,
@@ -113,16 +123,8 @@ export function createKpReaderCanonicalEquationSession(input: {
         String(session.tracks.length);
       return true;
     },
-    invalidate: () => {
-      session = undefined;
-      sessionKey = undefined;
-    },
-    dispose: () => {
-      session = undefined;
-      sessionKey = undefined;
-      materialLayer?.remove();
-      materialLayer = undefined;
-    }
+    invalidate: releaseCurrentSession,
+    dispose: releaseCurrentSession
   };
 }
 

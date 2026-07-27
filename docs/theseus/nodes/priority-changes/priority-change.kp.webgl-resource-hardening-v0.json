@@ -1,0 +1,49 @@
+{
+  "id": "priority-change.kp.webgl-resource-hardening-v0",
+  "kind": "priority-change",
+  "title": "Bound WebGL resources before promotion-kit extraction",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Bounded structural WebGL leases, exact native fallback, automatic queued resume, endpoint idle release, explicit session disposal, and context-loss recovery are implemented and verified without changing the compositor lifecycle taxonomy.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The human approved the repaired radical exemplar and requested one short generic resource-hardening slice before the approved loop resumes. Add explicit renderer-session disposal, eliminate repeated capability-probe contexts, bound active structural contexts with deterministic native fallback, and prove over-capacity behavior without adding a compositor, runtime, or notation-specific rule.",
+      "occurredAt": "2026-07-27T03:03:10.065Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v10"
+    ],
+    "preferred": [
+      "run-contract.kp.radical-reader-promotion-kit-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v10",
+    "run-contract.kp.radical-reader-promotion-kit-v0"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v10",
+    "rationale": "The human approved the repaired radical exemplar and requested one short generic resource-hardening slice before the approved loop resumes. Add explicit renderer-session disposal, eliminate repeated capability-probe contexts, bound active structural contexts with deterministic native fallback, and prove over-capacity behavior without adding a compositor, runtime, or notation-specific rule.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.radical-reader-promotion-kit-v0"
+    ],
+    "changes": [
+      {
+        "subject": "webgl-resource-lifecycle",
+        "to": "now"
+      },
+      {
+        "subject": "extract-promotion-kit",
+        "to": "next"
+      }
+    ],
+    "effectiveAt": "2026-07-27T03:03:10.065Z",
+    "requestedBy": "user"
+  }
+}

@@ -92,14 +92,11 @@ async function assertRadicalEndpointPaintContinuity(
     const comparison = (
       await import(/* @vite-ignore */ moduleUrl)
     ).measureKpNativeKatexStructuralSuccessionInk(surface as HTMLElement);
-    if (comparison === undefined) {
-      throw new Error("Structural successor has no paint observation.");
-    }
     const canvas = surface.querySelector<HTMLCanvasElement>(
       "[data-kp-native-katex-structural-succession]"
     );
     return {
-      ...comparison,
+      ...(comparison ?? {}),
       canvases: [...surface.querySelectorAll<HTMLCanvasElement>("canvas")]
         .map((candidate) => ({
           className: candidate.className,
@@ -681,6 +678,193 @@ test("radical reader preserves semantic DOM focus URLs and learning seams", asyn
   await expect(page.getByRole("navigation", {
     name: "Explanation controls"
   })).toBeHidden();
+});
+
+test("structural WebGL leases cap contexts and recover from native fallback", async ({
+  page
+}) => {
+  await page.goto(route, { waitUntil: "networkidle" });
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  const fitSurface = page.locator(
+    '[data-kp-reader-transition-active="true"] [data-kp-reader-fit-surface]'
+  );
+  await seek(page, scrubber, 500);
+  await expect(fitSurface).toHaveAttribute(
+    "data-kp-native-katex-structural-succession-status",
+    "ready"
+  );
+
+  const steadyState = await fitSurface.evaluate(async () => {
+    const poolUrl = "/src/rendering/webgl-context-lease-pool.ts";
+    const pool = await import(/* @vite-ignore */ poolUrl);
+    let webglRequests = 0;
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (
+      this: HTMLCanvasElement,
+      contextId: string,
+      ...args: unknown[]
+    ) {
+      if (contextId === "webgl") webglRequests += 1;
+      return original.call(this, contextId, ...args);
+    } as typeof HTMLCanvasElement.prototype.getContext;
+    try {
+      const input = document.querySelector<HTMLInputElement>(
+        "[data-kp-reader-attention-scrubber]"
+      );
+      if (input === null) throw new Error("Missing radical scrubber.");
+      for (const progress of [501, 502, 503]) {
+        input.value = String(progress);
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    } finally {
+      HTMLCanvasElement.prototype.getContext = original;
+    }
+    return {
+      webglRequests,
+      snapshot: pool.inspectKpWebglContextLeasePool(document)
+    };
+  });
+  expect(steadyState).toEqual({
+    webglRequests: 0,
+    snapshot: { limit: 2, active: 1, waiting: 0 }
+  });
+
+  const saturated = await fitSurface.evaluate(async (surface) => {
+    const poolUrl = "/src/rendering/webgl-context-lease-pool.ts";
+    const structuralUrl =
+      "/src/rendering/native-katex-structural-succession-renderer.ts";
+    const pool = await import(/* @vite-ignore */ poolUrl);
+    const structural = await import(/* @vite-ignore */ structuralUrl);
+    structural.disposeKpNativeKatexStructuralSuccession(
+      surface as HTMLElement
+    );
+    const canvases = [0, 1].map(() => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 2;
+      canvas.height = 2;
+      canvas.hidden = true;
+      document.body.append(canvas);
+      return canvas;
+    });
+    const acquisitions = canvases.map((canvas) =>
+      pool.acquireKpWebglContextLease({ canvas })
+    );
+    if (acquisitions.some(({ status }) => status !== "acquired")) {
+      throw new Error("Could not saturate the structural WebGL lease pool.");
+    }
+    const held = acquisitions.flatMap((acquisition) =>
+      acquisition.status === "acquired" ? [acquisition.lease] : []
+    );
+    (window as typeof window & {
+      __kpHeldStructuralWebglLeases?: readonly {
+        readonly release: () => void;
+      }[];
+      __kpHeldStructuralWebglCanvases?: readonly HTMLCanvasElement[];
+    }).__kpHeldStructuralWebglLeases = held;
+    (window as typeof window & {
+      __kpHeldStructuralWebglCanvases?: readonly HTMLCanvasElement[];
+    }).__kpHeldStructuralWebglCanvases = canvases;
+    return pool.inspectKpWebglContextLeasePool(document);
+  });
+  expect(saturated).toEqual({ limit: 2, active: 2, waiting: 0 });
+
+  await seek(page, scrubber, 500);
+  await expect(fitSurface).toHaveAttribute(
+    "data-kp-native-katex-structural-succession-reason",
+    "webgl-context-capacity"
+  );
+  await expect(fitSurface).toHaveAttribute(
+    "data-kp-reader-canonical-equation-session-owner",
+    "source-native"
+  );
+  await expect(fitSurface.locator(
+    "[data-kp-native-katex-structural-succession]"
+  )).toHaveCSS("opacity", "0");
+
+  await page.evaluate(() => {
+    const holder = window as typeof window & {
+      __kpHeldStructuralWebglLeases?: {
+        readonly release: () => void;
+      }[];
+    };
+    holder.__kpHeldStructuralWebglLeases?.shift()?.release();
+  });
+  await expect(fitSurface).toHaveAttribute(
+    "data-kp-native-katex-structural-succession-status",
+    "ready"
+  );
+  await expect(fitSurface).toHaveAttribute(
+    "data-kp-native-katex-structural-paint-owner",
+    "solid-mask-canvas"
+  );
+  await expect(fitSurface.locator(
+    '[data-kp-reader-native="source"]'
+  )).toHaveCSS("opacity", "0");
+  await expect(fitSurface.locator(
+    "[data-kp-native-katex-structural-succession]"
+  )).toHaveCSS("opacity", "1");
+
+  const recovered = await page.evaluate(async () => {
+    const poolUrl = "/src/rendering/webgl-context-lease-pool.ts";
+    const pool = await import(/* @vite-ignore */ poolUrl);
+    const holder = window as typeof window & {
+      __kpHeldStructuralWebglLeases?: {
+        readonly release: () => void;
+      }[];
+      __kpHeldStructuralWebglCanvases?: readonly HTMLCanvasElement[];
+    };
+    holder.__kpHeldStructuralWebglLeases?.forEach(({ release }) => release());
+    holder.__kpHeldStructuralWebglCanvases?.forEach((canvas) => canvas.remove());
+    delete holder.__kpHeldStructuralWebglLeases;
+    delete holder.__kpHeldStructuralWebglCanvases;
+    await Promise.resolve();
+    return pool.inspectKpWebglContextLeasePool(document);
+  });
+  expect(recovered).toEqual({ limit: 2, active: 1, waiting: 0 });
+
+  await seek(page, scrubber, 1_000);
+  await expect.poll(() => page.evaluate(async () => {
+    const poolUrl = "/src/rendering/webgl-context-lease-pool.ts";
+    const pool = await import(/* @vite-ignore */ poolUrl);
+    return pool.inspectKpWebglContextLeasePool(document);
+  })).toEqual({ limit: 2, active: 0, waiting: 0 });
+
+  await seek(page, scrubber, 500);
+  await expect(fitSurface).toHaveAttribute(
+    "data-kp-native-katex-structural-succession-status",
+    "ready"
+  );
+  await expect.poll(() => page.evaluate(async () => {
+    const poolUrl = "/src/rendering/webgl-context-lease-pool.ts";
+    const pool = await import(/* @vite-ignore */ poolUrl);
+    return pool.inspectKpWebglContextLeasePool(document);
+  })).toEqual({ limit: 2, active: 1, waiting: 0 });
+
+  const lossRequested = await fitSurface.evaluate((surface) => {
+    const canvas = surface.querySelector<HTMLCanvasElement>(
+      "[data-kp-native-katex-structural-succession]"
+    );
+    if (canvas === null) return false;
+    canvas.dataset["kpWebglLossSentinel"] = "true";
+    const extension = canvas.getContext("webgl")
+      ?.getExtension("WEBGL_lose_context");
+    if (extension === null || extension === undefined) return false;
+    extension.loseContext();
+    return true;
+  });
+  expect(lossRequested).toBe(true);
+  await expect(fitSurface.locator(
+    '[data-kp-webgl-loss-sentinel="true"]'
+  )).toHaveCount(0);
+  await expect(fitSurface).toHaveAttribute(
+    "data-kp-native-katex-structural-succession-status",
+    "ready"
+  );
+  await expect.poll(() => page.evaluate(async () => {
+    const poolUrl = "/src/rendering/webgl-context-lease-pool.ts";
+    const pool = await import(/* @vite-ignore */ poolUrl);
+    return pool.inspectKpWebglContextLeasePool(document);
+  })).toEqual({ limit: 2, active: 1, waiting: 0 });
 });
 
 async function seek(
