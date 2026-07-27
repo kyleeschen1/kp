@@ -88,6 +88,31 @@ export interface KpFoldableSignedTermGroupingCertificate {
   };
 }
 
+export interface KpFoldableFinalCollectionCertificate {
+  readonly schemaVersion: "kp.foldable-final-collection-certificate.v1";
+  readonly id: string;
+  readonly canonicalOperationIds: readonly ["kp.core.merge"];
+  readonly arithmetic: readonly [
+    {
+      readonly id: "collection.foldable-distribution.coefficient";
+      readonly inputValues: readonly [3, 2];
+      readonly targetValue: 5;
+    },
+    {
+      readonly id: "collection.foldable-distribution.constant";
+      readonly inputValues: readonly [6, -2];
+      readonly targetValue: 4;
+    }
+  ];
+  readonly transformation: KpSemanticTransformation;
+  readonly presentation: {
+    readonly requiredMotif: "merge-fan-in";
+    readonly fusionPaintPolicy: "opaque-many-to-one";
+    readonly settlement: "exact-native-target";
+    readonly geometryAuthority: "renderer-session-measurement";
+  };
+}
+
 export function createKpFoldableDistributionFanOutCertificates():
   readonly KpFoldableDistributionFanOutCertificate[] {
   const factored = createKpFoldableDistributionExpressionChain()[0]!.expression;
@@ -315,6 +340,136 @@ export function createKpFoldableSignedTermGroupingCertificate():
       termPaintPolicy: "opaque-identity-through-reflow" as const,
       groupingPolicy: "establish-after-reflow" as const,
       geometryAuthority: "reader-layout" as const
+    })
+  });
+}
+
+export function createKpFoldableFinalCollectionCertificate():
+  KpFoldableFinalCollectionCertificate {
+  const chain = createKpFoldableDistributionExpressionChain();
+  const grouped = chain[2]!.expression;
+  const collected = chain[3]!.expression;
+  const coefficientInputs = [
+    evaluateConstantSubtree(
+      requiredSubtree(grouped, "grouped.coefficient-3")
+    ),
+    evaluateConstantSubtree(
+      requiredSubtree(grouped, "grouped.coefficient-2")
+    )
+  ] as const;
+  const constantInputs = [
+    evaluateConstantSubtree(
+      requiredSubtree(grouped, "grouped.constant-6")
+    ),
+    evaluateConstantSubtree(
+      requiredSubtree(grouped, "grouped.negative-2")
+    )
+  ] as const;
+  const coefficientTarget = evaluateConstantSubtree(
+    requiredSubtree(collected, "collected.coefficient-5")
+  );
+  const constantTarget = evaluateConstantSubtree(
+    requiredSubtree(collected, "collected.constant-4")
+  );
+  if (
+    coefficientInputs[0] + coefficientInputs[1] !== coefficientTarget ||
+    constantInputs[0] + constantInputs[1] !== constantTarget
+  ) {
+    throw new Error("Final collection does not certify exact signed addition.");
+  }
+
+  const id = "certificate.foldable-distribution.final-collection";
+  const transformation = createKpSemanticTransformation({
+    id: "transform.foldable-distribution.collect-results",
+    transformType: "collectLikeTerms",
+    title: "Collect coefficient terms and signed constants",
+    sourceObjectIds: ["expression.foldable-distribution.grouped"],
+    targetObjectIds: ["expression.foldable-distribution.collected"],
+    preserves: ["value", "structure"],
+    correspondenceMap: {
+      id: `${id}.correspondence`,
+      records: [
+        {
+          id: `${id}.coefficients-merge`,
+          relation: "fan-in",
+          sourceSelectorIds: [
+            "grouped.coefficient-3",
+            "grouped.coefficient-2"
+          ],
+          targetSelectorIds: ["collected.coefficient-5"],
+          summary: "Three and two coalesce into coefficient five."
+        },
+        {
+          id: `${id}.variables-merge`,
+          relation: "fan-in",
+          sourceSelectorIds: [
+            "grouped.x-from-left",
+            "grouped.x-from-right"
+          ],
+          targetSelectorIds: ["collected.x"],
+          summary: "Both like-term variable roles coalesce into the result term."
+        },
+        {
+          id: `${id}.constants-merge`,
+          relation: "fan-in",
+          sourceSelectorIds: [
+            "grouped.constant-6",
+            "grouped.negative-2"
+          ],
+          targetSelectorIds: ["collected.constant-4"],
+          summary: "Six and signed negative two coalesce into four."
+        },
+        {
+          id: `${id}.outer-plus-persists`,
+          relation: "identity",
+          sourceSelectorIds: ["grouped.outer-plus"],
+          targetSelectorIds: ["collected.plus"],
+          summary: "Addition persists between the collected result terms."
+        },
+        {
+          id: `${id}.grouping-retires`,
+          relation: "removal",
+          sourceSelectorIds: [
+            "grouped.coefficients.left-parenthesis",
+            "grouped.coefficients.right-parenthesis",
+            "grouped.constants.left-parenthesis",
+            "grouped.constants.right-parenthesis",
+            "grouped.coefficients.plus",
+            "grouped.constants.minus"
+          ],
+          targetSelectorIds: [],
+          summary: "Grouping and internal operators retire after fusion settles."
+        }
+      ]
+    }
+  });
+  const arithmetic: KpFoldableFinalCollectionCertificate["arithmetic"] =
+    Object.freeze([
+      Object.freeze({
+        id: "collection.foldable-distribution.coefficient" as const,
+        inputValues: Object.freeze([3, 2]) as readonly [3, 2],
+        targetValue: 5 as const
+      }),
+      Object.freeze({
+        id: "collection.foldable-distribution.constant" as const,
+        inputValues: Object.freeze([6, -2]) as readonly [6, -2],
+        targetValue: 4 as const
+      })
+    ]);
+
+  return Object.freeze({
+    schemaVersion: "kp.foldable-final-collection-certificate.v1" as const,
+    id,
+    canonicalOperationIds: Object.freeze([
+      "kp.core.merge"
+    ]) as readonly ["kp.core.merge"],
+    arithmetic,
+    transformation,
+    presentation: Object.freeze({
+      requiredMotif: "merge-fan-in" as const,
+      fusionPaintPolicy: "opaque-many-to-one" as const,
+      settlement: "exact-native-target" as const,
+      geometryAuthority: "renderer-session-measurement" as const
     })
   });
 }

@@ -120,11 +120,25 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T05:47:38.715Z",
       "notes": "Signed-term grouping certificates pass all TypeScript projects."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/foldable-distribution-final-collection.test.ts tests/foldable-distribution-signed-term-grouping.test.ts tests/foldable-distribution-product-evaluation.test.ts tests/foldable-distribution-fan-out.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T05:50:24.771Z",
+      "notes": "Coefficient, repeated-variable, and signed-constant cohorts each have exact two-to-one lineage; arithmetic is 3+2=5 and 6+(-2)=4; fusion is opaque and settles natively."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T05:50:28.918Z",
+      "notes": "Final many-to-one collection certificates pass all TypeScript projects."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 7 certified a total one-to-one signed-term mapping from the flat sum into coefficient and signed-constant groups. Reorder and group are the only canonical operations; terms remain opaque and grouping establishes only after reflow."
+    "summary": "Slice 8 certified 3+2→5, both x roles→x, and 6+(-2)→4 as exact many-to-one relations. Fusion is explicitly opaque, uses core merge, keeps measurement in the renderer session, and settles to native KaTeX."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",

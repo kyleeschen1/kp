@@ -100,7 +100,8 @@
     {
       "id": "s08",
       "title": "Certify-final-collection",
-      "status": "planned"
+      "summary": "Certified exact coefficient, variable-role, and signed-constant many-to-one collection with core merge, opaque fusion, measured geometry, and native 5x+4 settlement.",
+      "status": "complete"
     },
     {
       "id": "s09",
