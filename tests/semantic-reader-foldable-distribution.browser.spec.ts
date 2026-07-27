@@ -150,9 +150,60 @@ test("parallel distribution and product work each render as one complete cohort"
     '[data-kp-equation-material-owner-id*="factor-fans-out"]'
   );
   await expect.poll(() => splitOwners.count()).toBeGreaterThan(0);
+  await expect(
+    page.locator(
+      "[data-kp-reader-transition-active='true'] [data-kp-reader-fit-surface]"
+    )
+  ).toHaveAttribute(
+    "data-kp-native-katex-motion-profile",
+    "canonical-copy-fan-out"
+  );
   expect(await splitOwners.evaluateAll((owners) =>
     owners.every((owner) => getComputedStyle(owner).opacity === "1")
   )).toBe(true);
+  const fanOutPaint = await splitOwners.evaluateAll(async (owners) => {
+    const geometryModule =
+      "/src/rendering/native-katex-paint-geometry.ts";
+    const { measureKpNativeKatexSubtreePaintRect } =
+      await import(geometryModule);
+    const stage = document.querySelector<HTMLElement>(
+      "[data-kp-reader-equation-viewport]"
+    );
+    if (stage === null) throw new Error("Fan-out paint lacks its viewport.");
+    const movingTops = owners.flatMap((owner) => {
+      const visual = owner.firstElementChild as HTMLElement | null;
+      const rect = visual === null
+        ? undefined
+        : measureKpNativeKatexSubtreePaintRect(stage, visual);
+      return rect === undefined ? [] : [rect.top];
+    });
+    const endpointIds = new Set([
+      "factored.left-factor",
+      "factored.right-factor",
+      "distribution.left.factor-3-x",
+      "distribution.left.factor-3-constant",
+      "distribution.right.factor-2-x",
+      "distribution.right.factor-2-constant"
+    ]);
+    const endpointTops = [
+      ...document.querySelectorAll<HTMLElement>(
+        "[data-kp-reader-selector-id]"
+      )
+    ].flatMap((anchor) => {
+      if (!endpointIds.has(anchor.dataset["kpReaderSelectorId"] ?? "")) {
+        return [];
+      }
+      const rect = measureKpNativeKatexSubtreePaintRect(stage, anchor);
+      return rect === undefined ? [] : [rect.top];
+    });
+    return { movingTops, endpointTops };
+  });
+  expect(fanOutPaint.movingTops.length).toBeGreaterThanOrEqual(4);
+  expect(fanOutPaint.endpointTops.length).toBeGreaterThanOrEqual(6);
+  expect(
+    Math.min(...fanOutPaint.movingTops),
+    JSON.stringify(fanOutPaint)
+  ).toBeLessThan(Math.min(...fanOutPaint.endpointTops) - 1.5);
 
   await page.goto(route(340, { kpFoldMode: "expanded" }), {
     waitUntil: "domcontentloaded"
@@ -216,6 +267,41 @@ test("parallel distribution and product work each render as one complete cohort"
           ?.startsWith("successor-")
       );
   })).toBe(true);
+});
+
+test("outline navigation lands on an exact native checkpoint, never intermediate paint", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  await page.goto(route(740, { kpFoldMode: "expanded" }), {
+    waitUntil: "domcontentloaded"
+  });
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-hydrated",
+    "true"
+  );
+  await page.locator(
+    '.kp-lesson-toc a[href="#beat.distributed"]'
+  ).click();
+
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-progress",
+    "231"
+  );
+  await expect(page.locator(".kp-lesson-toc")).toHaveAttribute(
+    "data-kp-toc-active-id",
+    "beat.distributed"
+  );
+  expect(await page.locator(
+    "[data-kp-equation-material-owner-id]"
+  ).evaluateAll((owners) =>
+    owners.every((owner) => Number(getComputedStyle(owner).opacity) === 0)
+  )).toBe(true);
+  await expect(
+    page.locator(
+      "[data-kp-reader-transition-active='true'] [data-kp-reader-native='source']"
+    )
+  ).toHaveCSS("opacity", "1");
 });
 
 test("persistent product terms translate as opaque paint through evaluation", async ({

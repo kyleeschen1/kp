@@ -2069,6 +2069,48 @@ test("lineage-backed split paint emerges geometrically without fading", () => {
   assert.equal(samples.every(({ opacity }) => opacity === 1), true);
 });
 
+test("canonical copy-fan-out keeps opaque descendants on the leader until they peel", () => {
+  const source = createScene("source", ["source.origin"]);
+  const target = createScene("target", ["target.left", "target.right"]);
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source,
+    target,
+    relations: [{
+      id: "lineage.split",
+      relation: "split",
+      sourceEntityIds: ["entity.origin"],
+      targetEntityIds: ["entity.left", "entity.right"]
+    }]
+  });
+  const tracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+  );
+  const sample = (progress: number) =>
+    sampleKpNativeKatexSceneTracks(
+      tracks,
+      progress,
+      true
+    );
+  const start = sample(0);
+  const following = sample(0.25);
+  const peeled = sample(0.65);
+  const end = sample(1);
+
+  assert.deepEqual(start.map(({ rect }) => rect), [
+    source.atoms[0]!.rect,
+    source.atoms[0]!.rect
+  ]);
+  assert.deepEqual(end.map(({ rect }) => rect), target.atoms.map(({ rect }) => rect));
+  assert.deepEqual(following[0]!.rect, following[1]!.rect);
+  assert.ok(following[0]!.rect.top < source.atoms[0]!.rect.top);
+  assert.notDeepEqual(peeled[0]!.rect, peeled[1]!.rect);
+  assert.equal(
+    [start, following, peeled, end].flat()
+      .every(({ opacity }) => opacity === 1),
+    true
+  );
+});
+
 function createScene(
   endpoint: "source" | "target",
   ids: readonly string[]

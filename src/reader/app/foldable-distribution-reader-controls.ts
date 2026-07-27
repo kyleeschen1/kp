@@ -22,6 +22,10 @@ import {
 
 export interface KpFoldableDistributionReaderControls {
   readonly projectAnimationProgress: (semanticProgress: number) => number;
+  readonly resolveCheckpointProgressPermille: (
+    checkpointId: string,
+    fallbackProgressPermille: number
+  ) => number;
   readonly encodeHref: (input: {
     readonly baseUrl: string | URL;
     readonly checkpointId?: string | undefined;
@@ -168,6 +172,21 @@ export function mountKpFoldableDistributionReaderControls(input: {
         1,
         Math.max(0, (phaseIndex + sample.phaseProgress) / timeline.phases.length)
       );
+    },
+    resolveCheckpointProgressPermille(
+      checkpointId: string,
+      fallbackProgressPermille: number
+    ) {
+      const timeline = compileKpFoldableDistributionFoldTimeline(projection);
+      const normalizedCheckpointId = checkpointId.replace(/^beat\./, "");
+      const exact = Object.entries(timeline.checkpoints).find(
+        ([id]) => id === normalizedCheckpointId
+      )?.[1];
+      // Fold durations vary by presentation mode, so authored integer
+      // permilles cannot be the exact operation boundary in every projection.
+      return exact === undefined
+        ? fallbackProgressPermille
+        : exact * 1_000;
     },
     encodeHref({
       baseUrl,

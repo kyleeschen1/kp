@@ -8,6 +8,16 @@ import {
   compileKpCompoundTargetDeclarations,
   type KpPresentationGroupContract
 } from "./presentation-group-continuity.ts";
+import {
+  sampleKpLessonCanonicalDistributionMotion
+} from "./distribution-motion-profile.ts";
+export {
+  kpLessonCanonicalDistributionMotionProfile,
+  sampleKpLessonCanonicalDistributionMotion
+} from "./distribution-motion-profile.ts";
+export type {
+  KpLessonCanonicalDistributionMotionFrame
+} from "./distribution-motion-profile.ts";
 
 export const kpDistributionChoreographyPhaseIds = [
   "focus-factor",
@@ -21,24 +31,6 @@ export const kpDistributionChoreographyPhaseIds = [
 
 export type KpDistributionChoreographyPhaseId =
   typeof kpDistributionChoreographyPhaseIds[number];
-
-export const kpLessonCanonicalDistributionMotionProfile = {
-  leader: {
-    start: 0,
-    end: 1,
-    arcPx: -8
-  },
-  follower: {
-    start: 0.42,
-    end: 1,
-    revealEnd: 0.12,
-    arcPx: -12
-  },
-  settlement: {
-    cohesionLock: 0.72,
-    nativeReady: 0.94
-  }
-} as const;
 
 export interface KpDistributionChoreographyPlan {
   readonly kind: "distribution-choreography-plan";
@@ -234,57 +226,14 @@ export function sampleKpDistributionChoreography(input: {
     "settle-products": intervalProgress(progress, 0.72, 0.94),
     "release-factor-focus": intervalProgress(progress, 0.72, 0.9)
   };
-  // A small preview shift anchors attention; the topology-changing reflow waits
-  // until grouping removal makes enough horizontal room for the products.
-  const rawAddendReflowProgress =
-    0.18 * intervalProgress(progress, 0.08, 0.28) +
-    0.82 * intervalProgress(progress, 0.52, 0.78);
-  const rawFactorLeaderProgress = intervalProgress(
-    progress,
-    kpLessonCanonicalDistributionMotionProfile.leader.start,
-    kpLessonCanonicalDistributionMotionProfile.leader.end
-  );
-  const productSettlementProgress = intervalProgress(
-    progress,
-    kpLessonCanonicalDistributionMotionProfile.settlement.cohesionLock,
-    kpLessonCanonicalDistributionMotionProfile.settlement.nativeReady
-  );
-  const addendReflowProgress = settleAfterCohesionLock({
-    progress,
-    current: rawAddendReflowProgress,
-    valueAtLock:
-      0.18 * intervalProgress(
-        kpLessonCanonicalDistributionMotionProfile.settlement.cohesionLock,
-        0.08,
-        0.28
-      ) +
-      0.82 * intervalProgress(
-        kpLessonCanonicalDistributionMotionProfile.settlement.cohesionLock,
-        0.52,
-        0.78
-      ),
-    settlementProgress: productSettlementProgress
-  });
-  const factorLeaderProgress = settleAfterCohesionLock({
-    progress,
-    current: rawFactorLeaderProgress,
-    valueAtLock: intervalProgress(
-      kpLessonCanonicalDistributionMotionProfile.settlement.cohesionLock,
-      kpLessonCanonicalDistributionMotionProfile.leader.start,
-      kpLessonCanonicalDistributionMotionProfile.leader.end
-    ),
-    settlementProgress: productSettlementProgress
-  });
-  const factorFollowerProgress = intervalProgress(
-    factorLeaderProgress,
-    kpLessonCanonicalDistributionMotionProfile.follower.start,
-    kpLessonCanonicalDistributionMotionProfile.follower.end
-  );
-  const factorFollowerOpacity = intervalProgress(
-    factorFollowerProgress,
-    0,
-    kpLessonCanonicalDistributionMotionProfile.follower.revealEnd
-  );
+  const motion = sampleKpLessonCanonicalDistributionMotion(progress);
+  const {
+    leaderProgress: factorLeaderProgress,
+    followerProgress: factorFollowerProgress,
+    followerOpacity: factorFollowerOpacity,
+    productSettlementProgress,
+    addendReflowProgress
+  } = motion;
   return {
     kind: "distribution-choreography-frame",
     planId: input.plan.id,
@@ -324,22 +273,6 @@ export function sampleKpDistributionChoreography(input: {
       };
     })
   };
-}
-
-function settleAfterCohesionLock(input: {
-  readonly progress: number;
-  readonly current: number;
-  readonly valueAtLock: number;
-  readonly settlementProgress: number;
-}): number {
-  if (
-    input.progress <=
-    kpLessonCanonicalDistributionMotionProfile.settlement.cohesionLock
-  ) {
-    return input.current;
-  }
-  return input.valueAtLock +
-    (1 - input.valueAtLock) * input.settlementProgress;
 }
 
 function intervalProgress(progress: number, start: number, end: number): number {

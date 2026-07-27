@@ -50,10 +50,12 @@ import {
   type KpDerivativePowerChoreographyPlan
 } from "../animation/derivative-power-choreography.ts";
 import {
-  kpLessonCanonicalDistributionMotionProfile,
   type KpDistributionChoreographyFrame,
   type KpDistributionChoreographyPlan
 } from "../animation/distribution-choreography.ts";
+import {
+  kpLessonCanonicalDistributionMotionProfile
+} from "../animation/distribution-motion-profile.ts";
 import {
   kpDistributionChoreographyRuntime
 } from "../animation/distribution-choreography-runtime.ts";

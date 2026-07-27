@@ -415,6 +415,7 @@ equationProfileSelect?.addEventListener("change", onEquationProfileChange);
 attentionPrevious.addEventListener("click", onAttentionPrevious);
 attentionNext.addEventListener("click", onAttentionNext);
 attentionScrubber.addEventListener("input", onAttentionScrub);
+toc.addEventListener("click", onTocNavigation);
 updateScrollGeometry();
 // Initial geometry must be measured from final KaTeX fonts. Rendering before
 // this gate creates a visible first-frame font and width swap on slow loads.
@@ -614,17 +615,21 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     attention,
     progressPermille: projection.progressPermille
   });
-  const visualProgressPermille = attentionProjection?.visualProgressPermille
-    ?? projection.progressPermille;
+  const visualProgress = attentionProjection === undefined
+    ? sample.source === "controls"
+      ? projection.progress
+      : projection.progressPermille / 1_000
+    : attentionProjection.visualProgressPermille / 1_000;
+  const visualProgressPermille = Math.round(visualProgress * 1_000);
   const visualSample = {
     ...sample,
-    // URL restoration can land within a sub-permille physical-scroll residual.
-    // Semantic endpoints remain exact geometry and ownership authorities.
-    progress: visualProgressPermille === 0
+    // Keep exact control-selected boundaries for renderer ownership. Permilles
+    // remain URL/UI serialization and must not move a fold boundary inward.
+    progress: visualProgress === 0
       ? 0
-      : visualProgressPermille === 1_000
+      : visualProgress === 1
         ? 1
-        : visualProgressPermille / 1_000,
+        : visualProgress,
     progressPermille: visualProgressPermille,
     checkpointId: attentionProjection?.checkpointId ?? projection.checkpointId
   };
@@ -1128,6 +1133,31 @@ function setControlProgress(progressPermille: number): void {
   setExplicitProgress(progressPermille, "controls", true);
 }
 
+function onTocNavigation(event: MouseEvent): void {
+  const link = event.target instanceof Element
+    ? event.target.closest<HTMLAnchorElement>('a[href^="#"]')
+    : null;
+  const href = link?.getAttribute("href");
+  if (link === null || href === null || href === undefined || !toc.contains(link)) {
+    return;
+  }
+  const beatId = decodeURIComponent(href.slice(1));
+  const beat = beats.find((candidate) =>
+    requiredData(candidate, "kpBeat") === beatId
+  );
+  if (beat === undefined) return;
+  event.preventDefault();
+  const authoredProgress = Number(requiredData(beat, "kpCheckpoint"));
+  const exactProgress =
+    foldableDistributionControls?.resolveCheckpointProgressPermille(
+      beatId,
+      authoredProgress
+    ) ?? authoredProgress;
+  // Outline navigation selects a semantic checkpoint. Only the scrubber and
+  // scrolling controls are allowed to request intermediate material states.
+  setControlProgress(exactProgress);
+}
+
 function setExplicitProgress(
   progressPermille: number,
   source: "controls" | "url",
@@ -1359,6 +1389,7 @@ function dispose(): void {
   attentionPrevious.removeEventListener("click", onAttentionPrevious);
   attentionNext.removeEventListener("click", onAttentionNext);
   attentionScrubber.removeEventListener("input", onAttentionScrub);
+  toc.removeEventListener("click", onTocNavigation);
   window.removeEventListener("wheel", releaseControlAuthority);
   window.removeEventListener("touchstart", releaseControlAuthority);
   window.removeEventListener("pointerdown", releaseControlAuthority);

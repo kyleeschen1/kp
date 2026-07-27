@@ -99,7 +99,10 @@ test("every phase compiles semantic transition IR rather than fallback paint", (
 
 test("parallel motif phases render as one complete source-target cohort", () => {
   const animation = createKpFoldableDistributionEquationAnimationAsset();
-  for (const progress of [0.05, 0.3]) {
+  for (const [progress, motifKind] of [
+    [0.05, "copy-fan-out"],
+    [0.3, undefined]
+  ] as const) {
     const runtimeFrame = sampleKpAnimationRuntimeFrame({
       animation,
       progress
@@ -112,6 +115,11 @@ test("parallel motif phases render as one complete source-target cohort", () => 
 
     assert.match(transition.id, /^cohort\./);
     assert.equal(transition.transformType, "parallelSemanticCohort");
+    assert.equal(
+      transition.visualMotif?.kind,
+      motifKind,
+      "homogeneous parallel cohorts must retain their executable motif"
+    );
     assert.equal(
       transition.relations.length,
       runtimeFrame.activeTransformationIds.reduce((count, id) =>

@@ -36,6 +36,9 @@ import {
   sampleKpNativeKatexSuccessorSynthesisScenePlans,
   type KpNativeKatexSuccessorSynthesisIntent
 } from "./native-katex-successor-synthesis.ts";
+import {
+  sampleKpNativeKatexCopyFanOutTrackRect
+} from "./native-katex-copy-fan-out-motion.ts";
 
 export type KpNativeKatexAtomLifecycle =
   | "persist"
@@ -627,7 +630,8 @@ export function compileKpNativeKatexSceneTracks(
 
 export function sampleKpNativeKatexSceneTracks(
   tracks: readonly KpNativeKatexSceneTrack[],
-  progress: number
+  progress: number,
+  copyFanOut = false
 ): readonly KpNativeKatexSceneTrackFrame[] {
   if (!Number.isFinite(progress)) {
     throw new Error("Scene track progress must be finite.");
@@ -641,7 +645,15 @@ export function sampleKpNativeKatexSceneTracks(
     visualAtomId: sceneTrack.visualAtomId,
     paintKind: sceneTrack.paintKind,
     sizingMode: sceneTrack.sizingMode,
-    rect: Object.freeze(sampleKpEquationMotionTrackRect(sceneTrack, eased)),
+    rect: Object.freeze(
+      copyFanOut
+        ? sampleKpNativeKatexCopyFanOutTrackRect({
+            track: sceneTrack,
+            tracks,
+            progress: bounded
+          })
+        : sampleKpEquationMotionTrackRect(sceneTrack, eased)
+    ),
     opacity: lerp(
       sceneTrack.startOpacity,
       sceneTrack.endOpacity,
@@ -1494,6 +1506,7 @@ export function createKpNativeKatexRendererSession(input: {
   readonly targetRoot: HTMLElement;
   readonly reconciliation: KpNativeKatexSceneReconciliation;
   readonly tracks: readonly KpNativeKatexSceneTrack[];
+  readonly copyFanOut?: boolean | undefined;
   readonly disposition?: KpNativeKatexRendererDisposition | undefined;
   readonly supplementalMaterialOwners?:
     (progress: number) => readonly KpEquationMaterialLayerOwnerFrame[];
@@ -1556,7 +1569,8 @@ export function createKpNativeKatexRendererSession(input: {
       Number.isFinite(progress) &&
       progress < 1
       ? 0
-      : progress
+      : progress,
+    input.copyFanOut
   );
   let disposed = false;
   const apply = (progress: number): KpNativeKatexSceneOwnershipFrame => {
@@ -1631,6 +1645,7 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
   readonly successorSyntheses?:
     readonly KpNativeKatexSuccessorSynthesisIntent[] | undefined;
   readonly fanInRouting?: boolean | undefined;
+  readonly copyFanOutRouting?: boolean | undefined;
 }): KpCanonicalNativeKatexSceneSession {
   if (input.source.stage !== input.target.stage) {
     throw new Error("Canonical native KaTeX endpoints must share one stage.");
@@ -1679,6 +1694,7 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     targetRoot: input.target.root,
     reconciliation,
     tracks,
+    copyFanOut: input.copyFanOutRouting,
     ...(successorPlans.length === 0
       ? {}
       : {

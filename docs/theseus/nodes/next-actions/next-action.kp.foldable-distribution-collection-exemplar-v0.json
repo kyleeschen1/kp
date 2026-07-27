@@ -463,11 +463,102 @@
       "status": "passed",
       "scope": "application, node, test, and domain type safety",
       "checkedAt": "2026-07-27T15:38:24.996Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "repository 2614 tests",
+      "checkedAt": "2026-07-27T16:12:00.225Z",
+      "notes": "Full repository suite passed with zero failures after the functional repair."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "65 exemplar tests",
+      "checkedAt": "2026-07-27T16:12:01.068Z",
+      "notes": "Exact checkpoints, canonical visual motifs, semantic truth, folding, layout, accessibility, and export contracts pass."
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "10 Chromium promotion checks",
+      "checkedAt": "2026-07-27T16:12:01.883Z",
+      "notes": "Canonical fan-out geometry and opacity, exact outline checkpoint navigation, ownership, rewind, phone, reduced motion, fitting, and arithmetic motifs pass."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction",
+      "status": "passed",
+      "scope": "60 construction tests",
+      "checkedAt": "2026-07-27T16:12:02.709Z",
+      "notes": "Canonical construction authority, projections, opaque lineage, and governed request boundaries pass."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "12 renderer convergence tests",
+      "checkedAt": "2026-07-27T16:12:03.507Z",
+      "notes": "Core size, vocabulary, lifecycle, renderer-session, and native settlement ceilings pass."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "55 native compositor tests",
+      "checkedAt": "2026-07-27T16:12:04.326Z",
+      "notes": "Copy fan-out stays opaque, follows one leader before peeling, and reaches exact measured native endpoints."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "app node tests domains",
+      "checkedAt": "2026-07-27T16:12:05.151Z",
+      "notes": "All TypeScript projects accept the final dependency extraction and exact checkpoint control path."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production build",
+      "checkedAt": "2026-07-27T16:12:05.968Z",
+      "notes": "Vite production build completed after the final implementation."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "10 reader routes",
+      "checkedAt": "2026-07-27T16:12:06.784Z",
+      "notes": "Reader production closure passed."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "10 reader routes",
+      "checkedAt": "2026-07-27T16:12:07.565Z",
+      "notes": "Neutral motion-profile extraction prevents unrelated readers from importing distribution authoring and every route remains within its approved budget."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "production review boundary",
+      "checkedAt": "2026-07-27T16:12:08.369Z",
+      "notes": "Production closure passed across 225 files."
+    },
+    {
+      "command": "npm run test:browser:canonical-animation-review",
+      "status": "passed",
+      "scope": "4 Chromium library and review checks",
+      "checkedAt": "2026-07-27T16:12:09.175Z",
+      "notes": "Lazy single-host library behavior and reachable persisted review capture pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "project memory 798 nodes 13129 events",
+      "checkedAt": "2026-07-27T16:12:19.285Z",
+      "notes": "Workspace validation passes before final slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Governed authoring now selects the exact seven-operation verified trace plus semantic fold intent, compiles certificate-backed laws and lineage, and rejects keyframes, opacity, coordinates, DOM, and paint authority. Promotion cost explicitly classifies the prior compositor work as foundational rather than cheap porting, while repeat authoring passes with test/evidence wiring only. Human re-review also corrected the generic fan-in role invariant: extracted x material arcs around occupied paint; persistent + 2 ) context remains on direct vertically stable paths, with unit and browser regressions."
+    "summary": "During s26 the user explicitly required two promotion-blocking corrections: restore the canonical distribution fan-out and make outline navigation select exact animation starts. The bounded generic compositor repair was separately authorized, adds no lifecycle, scheduler, notation coordinates, or fallback paint, and is guarded at semantic, renderer, and browser layers."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",

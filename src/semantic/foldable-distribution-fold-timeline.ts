@@ -114,7 +114,11 @@ export function sampleKpFoldableDistributionTimeline(input: {
   readonly progress: number;
 }): KpFoldableDistributionTimelineSample {
   const progress = clamp(input.progress, 0, 1);
-  const beat = progress * input.timeline.totalBeats;
+  const rawBeat = progress * input.timeline.totalBeats;
+  const beat = [
+    0,
+    ...input.timeline.phases.map(({ endBeat }) => endBeat)
+  ].find((boundary) => Math.abs(boundary - rawBeat) <= 1e-9) ?? rawBeat;
   const active =
     input.timeline.phases.find(({ endBeat }) => beat < endBeat) ??
     input.timeline.phases.at(-1);

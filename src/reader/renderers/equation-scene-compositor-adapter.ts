@@ -36,12 +36,19 @@ export function createKpReaderEquationSceneCompositorSession(input: {
   }
   input.source.stage.dataset["kpNativeKatexSuccessorSynthesisCount"] =
     String(renderTransition.successorSyntheses?.length ?? 0);
+  input.source.stage.dataset["kpNativeKatexMotionProfile"] =
+    renderTransition.visualMotif?.kind === "copy-fan-out"
+      ? "canonical-copy-fan-out"
+      : "default";
   const canonical = createKpCanonicalNativeKatexSceneSession({
     source: input.source,
     target: input.target,
     relations,
     ...(renderTransition.visualMotif?.kind === "merge-fan-in"
       ? { fanInRouting: true }
+      : {}),
+    ...(renderTransition.visualMotif?.kind === "copy-fan-out"
+      ? { copyFanOutRouting: true }
       : {}),
     ...(renderTransition.successorSyntheses === undefined
       ? {}

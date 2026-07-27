@@ -83,3 +83,20 @@ test("sampling is deterministic, clamped, and symmetric under rewind", () => {
     forward
   );
 });
+
+test("derived checkpoints snap to the exact start of their successor phase", () => {
+  const timeline = compileKpFoldableDistributionFoldTimeline(
+    projection("expanded")
+  );
+  const distributed = sampleKpFoldableDistributionTimeline({
+    timeline,
+    progress: timeline.checkpoints.distributed
+  });
+
+  assert.equal(
+    distributed.activeNodeId,
+    timeline.phases[1]!.nodeId
+  );
+  assert.equal(distributed.beat, timeline.phases[1]!.startBeat);
+  assert.equal(distributed.phaseProgress, 0);
+});

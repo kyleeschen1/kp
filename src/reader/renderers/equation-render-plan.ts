@@ -243,16 +243,17 @@ function mergeParallelTransitions(
     }
     recordIds.add(relation.recordId);
   }
+  const visualMotif = sharedParallelVisualMotif(transitions);
   return {
     id: cohortId,
     title: transitions.map(({ title }) => title).join(" and "),
-    // Parallel material still follows canonical correspondence relations; this
-    // label prevents a single branch's optional specialized intent from
-    // claiming ownership of the whole cohort.
+    // A homogeneous cohort keeps its common motif; a mixed cohort cannot let
+    // one branch's specialized intent claim ownership of every other branch.
     transformType: "parallelSemanticCohort",
     source: mergeStates(transitions.flatMap(({ source }) => source)),
     target: mergeStates(transitions.flatMap(({ target }) => target)),
     relations: transitions.flatMap(({ relations }) => relations),
+    ...(visualMotif === undefined ? {} : { visualMotif }),
     ...(transitions.some(({ successorSyntheses }) =>
       (successorSyntheses?.length ?? 0) > 0
     )
@@ -271,6 +272,41 @@ function mergeParallelTransitions(
       ({ semanticDiagnostics }) => semanticDiagnostics
     )
   };
+}
+
+function sharedParallelVisualMotif(
+  transitions: readonly KpReaderEquationTransitionPlan[]
+): KpEquationVisualMotifIntent | undefined {
+  const first = transitions[0]?.visualMotif;
+  if (
+    first === undefined ||
+    !transitions.every(({ visualMotif }) =>
+      visualMotif !== undefined &&
+      visualMotif.kind === first.kind &&
+      visualMotif.summary === first.summary &&
+      sameOrderedValues(
+        visualMotif.motionPrimitiveIds,
+        first.motionPrimitiveIds
+      ) &&
+      sameOrderedValues(visualMotif.phaseIds, first.phaseIds)
+    )
+  ) {
+    return undefined;
+  }
+  return {
+    kind: first.kind,
+    motionPrimitiveIds: [...first.motionPrimitiveIds],
+    phaseIds: [...first.phaseIds],
+    summary: first.summary
+  };
+}
+
+function sameOrderedValues(
+  left: readonly string[],
+  right: readonly string[]
+): boolean {
+  return left.length === right.length &&
+    left.every((value, index) => value === right[index]);
 }
 
 function mergeStates(

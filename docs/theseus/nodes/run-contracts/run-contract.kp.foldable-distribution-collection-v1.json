@@ -208,7 +208,8 @@
     {
       "id": "s26",
       "title": "Run-release-closeout",
-      "status": "planned"
+      "summary": "Running release closeout: production reader and review gates, route and source budgets, full unit suite, production build, workspace validation, exact residual-risk and promotion-status recording, then final visual checkpoint handoff.",
+      "status": "in-progress"
     }
   ]
 }
