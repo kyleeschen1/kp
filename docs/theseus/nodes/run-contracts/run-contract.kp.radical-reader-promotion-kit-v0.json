@@ -226,7 +226,8 @@
     {
       "id": "slice-18",
       "title": "unit-exponent-cost-proof",
-      "status": "planned",
+      "summary": "The unit-exponent cost proof passes without a product route. The existing governed exponent animation compiles through the shared model, promotion compiler, selector annotations, canonical descriptor, and transition policy entirely in test space. The exact slice diff contains only root test evidence, durable project/Theseus evidence, and package wiring; the ratchet reports zero compositor-core, lifecycle, scheduler, notation-geometry, runtime-artifact, or unclassified changes.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {

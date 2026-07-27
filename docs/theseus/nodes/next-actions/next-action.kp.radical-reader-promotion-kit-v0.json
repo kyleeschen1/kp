@@ -786,6 +786,27 @@
       "scope": "slice 19 deferred source ceiling",
       "checkedAt": "2026-07-27T03:42:24.701Z",
       "notes": "11 of 12 checks passed. The only failure is the accumulated native scene source ceiling: 128628 bytes versus the stale 124000 ceiling. No vocabulary or behavior gate failed; slice 19 must either consolidate the generic core or update the ratchet with explicit evidence."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 18 unit-exponent cost proof",
+      "checkedAt": "2026-07-27T03:46:31.205Z",
+      "notes": "45 tests passed. The governed three-state exponent animation compiles through the promotion kit with no product route; the exact slice diff passes the cost ratchet with no core, lifecycle, scheduler, geometry, or runtime-artifact growth."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 18 static typing",
+      "checkedAt": "2026-07-27T03:46:35.495Z",
+      "notes": "All TypeScript projects passed for the test-only dry run."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 18 architecture boundaries",
+      "checkedAt": "2026-07-27T03:46:40.033Z",
+      "notes": "All three architecture gates passed; the dry run adds no production import edge."
     }
   ],
   "progress": {
