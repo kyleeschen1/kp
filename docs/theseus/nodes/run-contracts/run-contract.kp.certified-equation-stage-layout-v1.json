@@ -167,7 +167,8 @@
     {
       "id": "s19",
       "title": "Layout determinism",
-      "status": "planned"
+      "summary": "Equivalent semantic state now produces equal certified CSS-pixel layout across forward, rewind, direct load, wide-phone-wide resize, device scale 1/2, and font invalidation. Each invalidation creates fresh revision authority and removes stale applications; production closure and route budgets pass.",
+      "status": "complete"
     },
     {
       "id": "s20",

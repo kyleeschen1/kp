@@ -624,6 +624,116 @@ test("reader applies exact phase layout across fold and resize invalidation", as
   ).not.toBe(expandedPhoneApplication);
 });
 
+test("certified layout is deterministic across playback, resize, and fonts", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  await page.goto(route(0, { kpFoldMode: "expanded" }), {
+    waitUntil: "domcontentloaded"
+  });
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-hydrated",
+    "true"
+  );
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  const seek = async (progress: number) => {
+    await scrubber.evaluate((node, nextValue) => {
+      const input = node as HTMLInputElement;
+      input.value = String(nextValue);
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }, progress);
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-progress",
+      String(progress)
+    );
+    await page.evaluate(() => new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+    ));
+  };
+
+  await seek(50);
+  const forward = await certifiedLayoutSnapshot(page);
+  await seek(150);
+  await seek(50);
+  const rewind = await certifiedLayoutSnapshot(page);
+  expect(rewind.layout).toEqual(forward.layout);
+
+  await page.goto(route(50, { kpFoldMode: "expanded" }), {
+    waitUntil: "domcontentloaded"
+  });
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-hydrated",
+    "true"
+  );
+  const direct = await certifiedLayoutSnapshot(page);
+  expect(direct.layout).toEqual(forward.layout);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect.poll(() => appliedRowIds(page.locator(
+    "[data-kp-reader-transition-active='true']"
+  ))).toEqual([
+    "row.foldable-distribution.left",
+    "row.foldable-distribution.right"
+  ]);
+  const phone = await certifiedLayoutSnapshot(page);
+  expect(phone.applicationId).not.toBe(direct.applicationId);
+
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  await expect.poll(() => appliedRowIds(page.locator(
+    "[data-kp-reader-transition-active='true']"
+  ))).toEqual([
+    "row.foldable-distribution.equation"
+  ]);
+  await expect.poll(async () =>
+    (await certifiedLayoutSnapshot(page)).applicationId
+  ).not.toBe(phone.applicationId);
+  const resized = await certifiedLayoutSnapshot(page);
+  expect(resized.layout).toEqual(forward.layout);
+
+  const beforeFontApplication = resized.applicationId;
+  await page.evaluate(() =>
+    document.fonts.dispatchEvent(new Event("loadingdone"))
+  );
+  await expect.poll(async () =>
+    (await certifiedLayoutSnapshot(page)).applicationId
+  ).not.toBe(beforeFontApplication);
+  const fontInvalidated = await certifiedLayoutSnapshot(page);
+  expect(fontInvalidated.layout).toEqual(forward.layout);
+  await expect(page.locator(
+    `[data-kp-equation-stage-layout-application="${beforeFontApplication}"]`
+  )).toHaveCount(0);
+  expect(new Set(fontInvalidated.revisions).size).toBe(1);
+  expect(Number(fontInvalidated.revisions[0]))
+    .toBeGreaterThan(Number(resized.revisions[0]));
+});
+
+test("certified layout is invariant in CSS pixels across device scale", async ({
+  browser
+}) => {
+  let reference:
+    Awaited<ReturnType<typeof certifiedLayoutSnapshot>>["layout"] | undefined;
+  for (const deviceScaleFactor of [1, 2]) {
+    const context = await browser.newContext({
+      viewport: { width: 390, height: 844 },
+      deviceScaleFactor
+    });
+    const page = await context.newPage();
+    await page.goto(route(50, { kpFoldMode: "expanded" }), {
+      waitUntil: "domcontentloaded"
+    });
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-hydrated",
+      "true"
+    );
+    expect(await page.evaluate(() => window.devicePixelRatio))
+      .toBe(deviceScaleFactor);
+    const snapshot = await certifiedLayoutSnapshot(page);
+    if (reference === undefined) reference = snapshot.layout;
+    else expect(snapshot.layout).toEqual(reference);
+    await context.close();
+  }
+});
+
 test("parallel distribution and product work each render as one complete cohort", async ({
   page
 }) => {
@@ -1880,6 +1990,96 @@ async function equationGeometry(page: Page): Promise<{
       verticalCenterDeltaPx:
         (nativeUnion.top + nativeUnion.bottom) / 2 -
         (viewportRect.top + viewportRect.bottom) / 2
+    };
+  });
+}
+
+async function certifiedLayoutSnapshot(page: Page) {
+  return page.locator(
+    "[data-kp-reader-transition-active='true']"
+  ).evaluate((transition) => {
+    const fit = transition.querySelector<HTMLElement>(
+      "[data-kp-reader-fit-surface]"
+    );
+    if (fit === null) throw new Error("Certified layout lacks its fit surface.");
+    const round = (value: number) => Math.round(value * 1_000) / 1_000;
+    const roundedRect = (attribute: string) => {
+      const value = JSON.parse(attribute) as {
+        left: number;
+        top: number;
+        width: number;
+        height: number;
+      };
+      return {
+        left: round(value.left),
+        top: round(value.top),
+        width: round(value.width),
+        height: round(value.height)
+      };
+    };
+    const applied = [
+      ...transition.querySelectorAll<HTMLElement>(
+        '[data-kp-equation-stage-layout-authority="applied-v1"]'
+      )
+    ];
+    const applicationIds = [...new Set(applied.map((element) =>
+      element.dataset["kpEquationStageLayoutApplication"] ?? ""
+    ))];
+    const revisions = [...new Set(applied.map((element) =>
+      element.dataset["kpEquationStageLayoutRevision"] ?? ""
+    ))];
+    if (
+      applied.length === 0 ||
+      applicationIds.length !== 1 ||
+      applicationIds[0] === "" ||
+      revisions.length !== 1 ||
+      revisions[0] === ""
+    ) {
+      throw new Error("Certified layout members lack one applied authority.");
+    }
+    const matrix = new DOMMatrix(getComputedStyle(fit).transform);
+    return {
+      applicationId: applicationIds[0]!,
+      revisions,
+      layout: {
+        transitionId:
+          (transition as HTMLElement).dataset["kpReaderTransition"],
+        phase:
+          (transition as HTMLElement).dataset["kpReaderStageLayoutPhase"],
+        fit: {
+          source: fit.dataset["kpReaderEquationFitGeometrySource"],
+          wrapAllowed: fit.dataset["kpReaderEquationWrapAllowed"],
+          status: fit.dataset["kpReaderEquationFitStatus"],
+          scale: round(Number(fit.dataset["kpReaderEquationFitScale"])),
+          bounds: roundedRect(
+            fit.dataset["kpReaderEquationFitBounds"] ?? "null"
+          ),
+          centeringBounds: roundedRect(
+            fit.dataset["kpReaderEquationFitCenteringBounds"] ?? "null"
+          ),
+          transform: [
+            matrix.a,
+            matrix.b,
+            matrix.c,
+            matrix.d,
+            matrix.e,
+            matrix.f
+          ].map(round)
+        },
+        members: applied.map((element) => ({
+          id:
+            element.dataset["kpReaderSelectorId"] ??
+            element.dataset["kpFoldableEnvelopeId"] ??
+            element.dataset["kpReaderEquationAnchorId"],
+          row: element.dataset["kpEquationStageLayoutRow"],
+          translate: element.style.translate
+            .split(/\s+/)
+            .filter(Boolean)
+            .map((value) => round(Number.parseFloat(value)))
+        })).sort((left, right) =>
+          String(left.id).localeCompare(String(right.id))
+        )
+      }
     };
   });
 }
