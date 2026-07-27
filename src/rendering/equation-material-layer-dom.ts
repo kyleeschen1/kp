@@ -3,6 +3,9 @@ import {
   makeKpMaterialOwnerInert,
   stripKpMaterialCloneAuthority
 } from "./computed-style-clone.ts";
+import {
+  measureKpNativeKatexSubtreePaintRect
+} from "./native-katex-paint-geometry.ts";
 
 export interface KpEquationMaterialLayerOwnerFrame {
   readonly ownerId: string;
@@ -15,6 +18,12 @@ export interface KpEquationMaterialLayerOwnerFrame {
     readonly width: number;
     readonly height: number;
   };
+  readonly expectedPaintRect?: {
+    readonly left: number;
+    readonly top: number;
+    readonly width: number;
+    readonly height: number;
+  } | undefined;
   readonly opacity: number;
   readonly transform: string;
   readonly filter?: string | undefined;
@@ -101,6 +110,63 @@ export function syncKpEquationMaterialLayer(input: {
       delete owner.dataset["kpEquationMaterialFragmentRole"];
     } else {
       owner.dataset["kpEquationMaterialFragmentRole"] = frame.fragmentRole;
+    }
+    if (frame.expectedPaintRect === undefined || visual === null) {
+      delete owner.dataset["kpEquationMaterialPaintAlignment"];
+      delete owner.dataset["kpEquationMaterialPaintAlignmentKey"];
+      delete owner.dataset["kpEquationMaterialPaintCorrectionX"];
+      delete owner.dataset["kpEquationMaterialPaintCorrectionY"];
+    } else {
+      const alignmentKey = [
+        owner.dataset["kpEquationMaterialVisualRevision"],
+        frame.rect.width,
+        frame.rect.height,
+        frame.expectedPaintRect.width,
+        frame.expectedPaintRect.height
+      ].join(":");
+      if (
+        owner.dataset["kpEquationMaterialPaintAlignmentKey"] !== alignmentKey
+      ) {
+        const measured = measureKpNativeKatexSubtreePaintRect(
+          input.stage,
+          visual
+        );
+        if (measured === undefined) {
+          throw new Error(
+            `Material owner ${frame.ownerId} has no measurable cloned paint.`
+          );
+        }
+        const widthResidual = Math.abs(
+          measured.width - frame.expectedPaintRect.width
+        );
+        const heightResidual = Math.abs(
+          measured.height - frame.expectedPaintRect.height
+        );
+        if (widthResidual > 0.75 || heightResidual > 0.75) {
+          throw new Error(
+            `Material owner ${frame.ownerId} changed cloned paint size ` +
+            `(${widthResidual.toFixed(2)}px × ${heightResidual.toFixed(2)}px).`
+          );
+        }
+        owner.dataset["kpEquationMaterialPaintAlignmentKey"] = alignmentKey;
+        owner.dataset["kpEquationMaterialPaintCorrectionX"] = String(
+          frame.expectedPaintRect.left - measured.left
+        );
+        owner.dataset["kpEquationMaterialPaintCorrectionY"] = String(
+          frame.expectedPaintRect.top - measured.top
+        );
+      }
+      // Clone-internal KaTeX offsets can differ from the native wrapper even
+      // when both outer boxes agree. Calibrate the mounted ink itself.
+      owner.style.left = `${
+        frame.rect.left +
+        Number(owner.dataset["kpEquationMaterialPaintCorrectionX"])
+      }px`;
+      owner.style.top = `${
+        frame.rect.top +
+        Number(owner.dataset["kpEquationMaterialPaintCorrectionY"])
+      }px`;
+      owner.dataset["kpEquationMaterialPaintAlignment"] = "measured-ink";
     }
   }
 }

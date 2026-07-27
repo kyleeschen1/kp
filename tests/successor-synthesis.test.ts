@@ -49,25 +49,36 @@ test("semantic rank staggers convergence without shrinking inputs to zero", () =
   assert.ok(four.pose.scale >= 0.68);
 });
 
-test("the subtraction glyph activates but contributes no result material", () => {
+test("the subtraction glyph joins the shrinking cohort without contributing material", () => {
+  const plan = createConstantDifferenceSuccessorFixture();
   const frame = sampleKpSuccessorSynthesis({
-    plan: createConstantDifferenceSuccessorFixture(),
-    progress: 0.26
+    plan,
+    progress: 0.42
   });
   const minus = frame.sources.find((source) => source.annotationId === "operator.minus")!;
   assert.equal(minus.contribution, "catalyst");
   assert.equal(minus.arrivalProgress, 0);
   assert.ok(minus.activationProgress > 0);
-  assert.ok(minus.pose.scale > 1);
+  assert.equal(minus.pose.scale, plan.inputJunctionScale);
+  assert.notEqual(minus.pose.x, 0);
+  assert.ok(minus.pose.opacity > 0);
 });
 
-test("sources persist through target recognition and overlap its birth", () => {
+test("material inputs persist through recognition while catalysts retire with the consumed operation", () => {
   const plan = createConstantDifferenceSuccessorFixture();
   let observedOverlap = false;
+  let observedCatalystRetirement = false;
   for (let index = 0; index <= 100; index += 1) {
     const frame = sampleKpSuccessorSynthesis({ plan, progress: index / 100 });
     if (!frame.targetRecognizable) {
-      assert.ok(frame.sources.every((source) => source.pose.opacity === 1));
+      assert.ok(frame.sources
+        .filter(({ contribution }) => contribution === "material-input")
+        .every((source) => source.pose.opacity === 1));
+      if (frame.sources.some((source) =>
+        source.contribution === "catalyst" && source.pose.opacity < 1
+      )) {
+        observedCatalystRetirement = true;
+      }
     }
     if (
       frame.targets.some((target) => target.pose.opacity > 0) &&
@@ -77,6 +88,7 @@ test("sources persist through target recognition and overlap its birth", () => {
     }
   }
   assert.equal(observedOverlap, true);
+  assert.equal(observedCatalystRetirement, true);
 });
 
 test("successor synthesis settles at exact native target geometry", () => {

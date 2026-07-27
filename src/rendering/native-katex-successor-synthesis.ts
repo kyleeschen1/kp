@@ -150,12 +150,15 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
 export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
   readonly plans: readonly KpNativeKatexSuccessorSynthesisScenePlan[];
   readonly progress: number;
-}): readonly KpNativeKatexSuccessorMaterialOwnerFrame[] {
+  readonly supplementalOwners?:
+    ((progress: number) => readonly KpEquationMaterialLayerOwnerFrame[]) |
+    undefined;
+}): readonly KpEquationMaterialLayerOwnerFrame[] {
   if (!Number.isFinite(input.progress)) {
     throw new Error("Native successor synthesis progress must be finite.");
   }
   const bounded = Math.max(0, Math.min(1, input.progress));
-  return Object.freeze(input.plans.flatMap((plan) => {
+  const owners = input.plans.flatMap((plan) => {
     const presentationProgress =
       plan.motion === "full" || bounded === 1 ? bounded : 0;
     const frame = sampleKpSuccessorSynthesis({
@@ -194,7 +197,11 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
         });
       })
     ];
-  }));
+  });
+  return Object.freeze([
+    ...owners,
+    ...(input.supplementalOwners?.(bounded) ?? [])
+  ]);
 }
 
 function collectKpNativeKatexSuccessorClaimedAtomIds(
@@ -235,7 +242,11 @@ export function partitionKpNativeKatexSuccessorOwnedTracks<
   }
 >(
   plans: readonly KpNativeKatexSuccessorSynthesisScenePlan[],
-  tracks: readonly T[]
+  tracks: readonly T[],
+  supplemental?: {
+    readonly claimTracks: (tracks: readonly T[]) => readonly T[];
+    readonly claimedTargetAtomIds: ReadonlySet<string>;
+  } | undefined
 ): {
   readonly tracks: readonly T[];
   readonly claimedTargetAtomIds: ReadonlySet<string>;
@@ -244,13 +255,17 @@ export function partitionKpNativeKatexSuccessorOwnedTracks<
     collectKpNativeKatexSuccessorClaimedAtomIds(plans, "source");
   const claimedTargetAtomIds =
     collectKpNativeKatexSuccessorClaimedAtomIds(plans, "target");
-  return {
-    tracks: excludeKpNativeKatexSuccessorOwnedTracks({
-      tracks,
-      claimedSourceAtomIds,
-      claimedTargetAtomIds
-    }),
+  const unclaimedTracks = excludeKpNativeKatexSuccessorOwnedTracks({
+    tracks,
+    claimedSourceAtomIds,
     claimedTargetAtomIds
+  });
+  return {
+    tracks: supplemental?.claimTracks(unclaimedTracks) ?? unclaimedTracks,
+    claimedTargetAtomIds: new Set([
+      ...claimedTargetAtomIds,
+      ...(supplemental?.claimedTargetAtomIds ?? [])
+    ])
   };
 }
 

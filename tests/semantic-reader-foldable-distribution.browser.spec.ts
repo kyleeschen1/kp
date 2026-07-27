@@ -1,9 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
 import {
-  kpMaximumFanInExcursionInLocalInkHeights,
-  kpMaximumFanInSettlementAspectRatio,
   kpNativeReorderInkContactTolerancePx
 } from "../src/rendering/equation-motion-path-planner.ts";
+import {
+  kpMaximumFactoringExcursionInLocalInkHeights
+} from "../src/rendering/native-katex-factoring-choreography.ts";
 
 const route = (
   progressPermille: number,
@@ -744,6 +745,21 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
       const visible = owners.filter((owner) =>
         Number(getComputedStyle(owner).opacity) > 0.01
       );
+      const factorOwnership = owners.filter((owner) =>
+        (owner as HTMLElement)
+          .dataset["kpEquationMaterialFragmentRole"]
+          ?.startsWith("glyph:factoring-") === true
+      ).map((owner) => {
+        const element = owner as HTMLElement;
+        return {
+          semantic:
+            element.dataset["kpEquationMaterialSemanticEntityId"],
+          role: element.dataset["kpEquationMaterialFragmentRole"],
+          opacity: Number(getComputedStyle(element).opacity),
+          paintAlignment:
+            element.dataset["kpEquationMaterialPaintAlignment"]
+        };
+      });
       const glyphBaselines = visible.flatMap((owner) => {
         const glyph = [
           owner,
@@ -855,12 +871,14 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
         residual: Math.max(...xPaint.map(({ bottom }) =>
           Math.abs(bottom - target.bottom)
         )),
+        targetCenter: (target.left + target.right) / 2,
         targetHorizontalResidual: Math.max(...xPaint.map(({ left, right }) =>
           Math.abs(
             (left + right) / 2 - (target.left + target.right) / 2
           )
         )),
         glyphBaselines,
+        factorOwnership,
         visiblePaint,
         xPaint,
         nativeXPaint
@@ -869,9 +887,11 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
     factoringPaintSamples.push({
       progress,
       xNativeResidual: baselineEvidence.residual,
+      xTargetCenter: baselineEvidence.targetCenter,
       xTargetHorizontalResidual:
         baselineEvidence.targetHorizontalResidual,
       baselines: baselineEvidence.glyphBaselines,
+      ownership: baselineEvidence.factorOwnership,
       visiblePaint: baselineEvidence.visiblePaint,
       observations: baselineEvidence.xPaint
     });
@@ -879,13 +899,8 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
   const maximumXExcursion = Math.max(...factoringPaintSamples.map(
     ({ xNativeResidual }) => xNativeResidual
   ));
-  const maximumXTrackHeight = Math.max(...factoringPaintSamples.flatMap(
-    ({ observations, visiblePaint }) => [
-      ...observations.map(({ height, inlineHeight }) =>
-        Math.max(height, Number.parseFloat(inlineHeight) || 0)
-      ),
-      ...visiblePaint.map(({ top, bottom }) => bottom - top)
-    ]
+  const maximumXInkHeight = Math.max(...factoringPaintSamples.flatMap(
+    ({ observations }) => observations.map(({ height }) => height)
   ));
   expect(
     maximumXExcursion,
@@ -893,80 +908,80 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
   ).toBeGreaterThanOrEqual(4);
   expect(
     maximumXExcursion,
-    JSON.stringify({ maximumXExcursion, maximumXTrackHeight })
+    JSON.stringify({ maximumXExcursion, maximumXInkHeight })
   ).toBeLessThanOrEqual(
-    maximumXTrackHeight * kpMaximumFanInExcursionInLocalInkHeights
+    maximumXInkHeight * kpMaximumFactoringExcursionInLocalInkHeights
   );
   expect(
     factoringPaintSamples.at(-1)!.xNativeResidual,
     JSON.stringify(factoringPaintSamples.at(-1))
-  ).toBeLessThanOrEqual(0.75);
+  ).toBeLessThanOrEqual(0.25);
   expect(
     factoringPaintSamples.at(-1)!.xTargetHorizontalResidual,
     JSON.stringify(factoringPaintSamples.at(-1))
-  ).toBeLessThanOrEqual(0.75);
+  ).toBeLessThanOrEqual(0.25);
+  const visibleOwnership = factoringPaintSamples.map((sample) => ({
+    progress: sample.progress,
+    owners: sample.ownership.filter(({ opacity }) => opacity > 0.99)
+  }));
   for (const sample of factoringPaintSamples) {
     expect(
-      sample.xNativeResidual,
+      sample.ownership.every(({ opacity }) =>
+        opacity < 0.01 || opacity > 0.99
+      ),
       JSON.stringify(sample)
-    ).toBeLessThanOrEqual(
-      sample.xTargetHorizontalResidual *
-        kpMaximumFanInSettlementAspectRatio + 0.75
-    );
+    ).toBe(true);
+    expect(
+      sample.ownership.every(({ paintAlignment }) =>
+        paintAlignment === "measured-ink"
+      ),
+      JSON.stringify(sample)
+    ).toBe(true);
   }
-  const peakExcursionIndex = factoringPaintSamples.findIndex(
-    ({ xNativeResidual }) => xNativeResidual === maximumXExcursion
+  const firstTargetOwnerIndex = visibleOwnership.findIndex(({ owners }) =>
+    owners.some(({ semantic }) => semantic === "coefficient-factored.x")
   );
-  for (let index = 1; index <= peakExcursionIndex; index += 1) {
+  expect(firstTargetOwnerIndex).toBeGreaterThan(0);
+  for (const { owners } of visibleOwnership.slice(0, firstTargetOwnerIndex)) {
     expect(
-      factoringPaintSamples[index]!.xNativeResidual + 0.75,
-      JSON.stringify(factoringPaintSamples)
-    ).toBeGreaterThanOrEqual(
-      factoringPaintSamples[index - 1]!.xNativeResidual
+      owners.map(({ semantic }) => semantic).sort()
+    ).toEqual([
+      "grouped.x-from-left",
+      "grouped.x-from-right"
+    ]);
+  }
+  for (const { owners } of visibleOwnership.slice(firstTargetOwnerIndex)) {
+    expect(owners.map(({ semantic }) => semantic)).toEqual([
+      "coefficient-factored.x"
+    ]);
+  }
+  const sourceSamples = factoringPaintSamples.slice(0, firstTargetOwnerIndex);
+  for (const semantic of [
+    "grouped.x-from-left",
+    "grouped.x-from-right"
+  ]) {
+    const observations = sourceSamples.map((sample) =>
+      sample.observations.find((observation) =>
+        observation.semantic === semantic
+      )!
     );
+    for (let index = 1; index < observations.length; index += 1) {
+      const previous = observations[index - 1]!;
+      const current = observations[index]!;
+      const previousResidual = Math.abs(
+        (previous.left + previous.right) / 2 -
+          sourceSamples[index - 1]!.xTargetCenter
+      );
+      const currentResidual = Math.abs(
+        (current.left + current.right) / 2 -
+          sourceSamples[index]!.xTargetCenter
+      );
+      expect(
+        currentResidual,
+        JSON.stringify({ semantic, observations })
+      ).toBeLessThanOrEqual(previousResidual + 0.75);
+    }
   }
-  for (
-    let index = peakExcursionIndex + 1;
-    index < factoringPaintSamples.length;
-    index += 1
-  ) {
-    expect(
-      factoringPaintSamples[index]!.xNativeResidual,
-      JSON.stringify(factoringPaintSamples)
-    ).toBeLessThanOrEqual(
-      factoringPaintSamples[index - 1]!.xNativeResidual + 0.75
-    );
-  }
-  const settledSample = factoringPaintSamples.find(({ progress }) =>
-    progress === 760
-  )!;
-  const finalSample = factoringPaintSamples.at(-1)!;
-  const finalLeader = finalSample.observations.find(({ semantic }) =>
-    semantic === "grouped.x-from-right"
-  )!;
-  const finalLeaderCenter = (finalLeader.left + finalLeader.right) / 2;
-  for (const sample of factoringPaintSamples.filter(({ progress }) =>
-    progress >= 760
-  )) {
-    const leader = sample.observations.find(({ semantic }) =>
-      semantic === "grouped.x-from-right"
-    )!;
-    expect(
-      Math.abs(leader.bottom - finalLeader.bottom),
-      JSON.stringify({ sample, finalLeader })
-    ).toBeLessThanOrEqual(0.75);
-    expect(
-      Math.abs((leader.left + leader.right) / 2 - finalLeaderCenter),
-      JSON.stringify({ sample, finalLeader })
-    ).toBeLessThanOrEqual(0.75);
-  }
-  const movingContributor = settledSample.observations.find(({ semantic }) =>
-    semantic === "grouped.x-from-left"
-  )!;
-  expect(
-    Math.abs(movingContributor.bottom - finalLeader.bottom),
-    JSON.stringify({ settledSample, finalLeader })
-  ).toBeGreaterThanOrEqual(4);
   const persistentContextIds = new Set([
     "grouped.coefficients.plus",
     "grouped.coefficient-2",
@@ -1075,11 +1090,51 @@ test("number collection reuses canonical arithmetic derivation paint", async ({
       "[data-kp-reader-transition-active='true'] [data-kp-reader-fit-surface]"
     )
   ).toHaveAttribute("data-kp-native-katex-successor-synthesis-count", "2");
+  const gathering = await page.locator(
+    "[data-kp-equation-material-fragment-role^='successor-source:']"
+  ).evaluateAll((owners) => owners.map((owner) => {
+    const element = owner as HTMLElement;
+    return {
+      role: element.dataset["kpEquationMaterialFragmentRole"],
+      semantic: element.dataset["kpEquationMaterialSemanticEntityId"],
+      scale: new DOMMatrix(getComputedStyle(element).transform).a,
+      opacity: Number(getComputedStyle(element).opacity)
+    };
+  }));
+  const catalysts = gathering.filter(({ role }) =>
+    role === "successor-source:catalyst"
+  );
+  const materialInputs = gathering.filter(({ role }) =>
+    role === "successor-source:material-input"
+  );
+  expect(catalysts).toHaveLength(2);
+  expect(materialInputs).toHaveLength(4);
+  expect(
+    catalysts.every(({ scale, opacity }) => scale < 0.8 && opacity > 0.99),
+    JSON.stringify(gathering)
+  ).toBe(true);
+  expect(
+    materialInputs.every(({ scale }) => scale < 0.85),
+    JSON.stringify(gathering)
+  ).toBe(true);
+
+  await page.goto(route(960, { kpFoldMode: "expanded" }), {
+    waitUntil: "domcontentloaded"
+  });
+  const retiredCatalysts = page.locator(
+    "[data-kp-equation-material-fragment-role='successor-source:catalyst']"
+  );
+  await expect(retiredCatalysts).toHaveCount(2);
+  expect(await retiredCatalysts.evaluateAll((owners) =>
+    owners.every((owner) => Number(getComputedStyle(owner).opacity) < 0.05)
+  )).toBe(true);
 });
 
 test("shared equation fitting contains and centers foldable and linear solve cards", async ({
   page
 }) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
   const cases = [
     {
       path: route(740, { kpFoldMode: "expanded" }),
@@ -1133,6 +1188,7 @@ test("shared equation fitting contains and centers foldable and linear solve car
       Math.abs(geometry.verticalCenterDeltaPx),
       JSON.stringify({ candidate, geometry })
     ).toBeLessThanOrEqual(1);
+    expect(pageErrors, JSON.stringify(candidate)).toEqual([]);
   }
 });
 

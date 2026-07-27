@@ -255,8 +255,8 @@ export function compileKpCollisionSafeFanInTracks<
   const mergeTracks = tracks.filter(({ lifecycle }) => lifecycle === "merge");
   if (mergeTracks.length === 0) return tracks;
   const groupTravel = Math.max(...mergeTracks.map((track) => {
-    const start = rectCenter(track.startRect);
-    const end = rectCenter(track.endRect);
+    const start = rectCenter(track.startPaintRect ?? track.startRect);
+    const end = rectCenter(track.endPaintRect ?? track.endRect);
     return Math.hypot(end.x - start.x, end.y - start.y);
   }));
   const localInkScale = Math.max(...tracks.map(kpEquationMotionTrackScale));
@@ -462,8 +462,8 @@ function planTrackPath(
 ): KpEquationMotionPathCandidate {
   return planKpEquationMotionPathBetweenPoints({
     id: `paint-path.${track.id}.${variant}.${clearance}`,
-    start: rectCenter(track.startRect),
-    end: rectCenter(track.endRect),
+    start: rectCenter(track.startPaintRect ?? track.startRect),
+    end: rectCenter(track.endPaintRect ?? track.endRect),
     moverRadius: 0,
     variants: [variant],
     clearance
@@ -645,9 +645,25 @@ function layoutRectAt(
     track.endRect.height,
     progress
   );
+  const startPaint = track.startPaintRect ?? track.startRect;
+  const endPaint = track.endPaintRect ?? track.endRect;
+  const paintWidth = interpolate(startPaint.width, endPaint.width, progress);
+  const paintHeight = interpolate(startPaint.height, endPaint.height, progress);
+  const paintOffsetX = interpolate(
+    startPaint.left - track.startRect.left,
+    endPaint.left - track.endRect.left,
+    progress
+  );
+  const paintOffsetY = interpolate(
+    startPaint.top - track.startRect.top,
+    endPaint.top - track.endRect.top,
+    progress
+  );
   return {
-    left: center.x - width / 2,
-    top: center.y - height / 2,
+    // Curves are planned against visible paint, then wrapper layout is
+    // reconstructed so inner KaTeX offsets cannot reintroduce baseline sag.
+    left: center.x - paintWidth / 2 - paintOffsetX,
+    top: center.y - paintHeight / 2 - paintOffsetY,
     width,
     height
   };

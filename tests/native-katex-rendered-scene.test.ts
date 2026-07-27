@@ -1398,6 +1398,26 @@ test("generic scene tracks sample exact finite endpoints and reverse identically
   );
 });
 
+test("typed track progress changes geometry without changing lifecycle opacity", () => {
+  const [frame] = sampleKpNativeKatexSceneTracks([{
+    id: "track.context",
+    componentId: "component.context",
+    lifecycle: "introduce",
+    targetAtomId: "target.context",
+    visualAtomId: "target.context",
+    paintKind: "glyph",
+    sizingMode: "rect",
+    startRect: { left: 0, top: 0, width: 10, height: 10 },
+    endRect: { left: 100, top: 0, width: 10, height: 10 },
+    startOpacity: 0,
+    endOpacity: 1,
+    sampleProgress: () => 0.25
+  }], 0.8);
+
+  assert.equal(frame!.rect.left, 25);
+  assert.ok(frame!.opacity > 0.99);
+});
+
 test("handoff correlation derives merge and split targets from reconciliation", () => {
   const mergeReconciliation = reconcileKpNativeKatexScenes({
     source: createScene("source", ["source.a", "source.b"]),

@@ -40,6 +40,8 @@ import {
   sampleKpNativeKatexSuccessorSynthesisScenePlans,
   type KpNativeKatexSuccessorSynthesisIntent
 } from "./native-katex-successor-synthesis.ts";
+import type { KpNativeKatexFactoringSceneBinding } from
+  "./native-katex-factoring-choreography.ts";
 import {
   sampleKpNativeKatexCopyFanOutTrackRect
 } from "./native-katex-copy-fan-out-motion.ts";
@@ -99,6 +101,7 @@ export interface KpNativeKatexSceneTrack extends KpEquationCollisionTrack {
   readonly sizingMode: "rect" | "rule-length";
   readonly startOpacity: number;
   readonly endOpacity: number;
+  readonly sampleProgress?: (progress: number) => number;
 }
 
 export interface KpNativeKatexSceneTrackFrame {
@@ -656,7 +659,10 @@ export function sampleKpNativeKatexSceneTracks(
             tracks,
             progress: bounded
           })
-        : sampleKpEquationMotionTrackRect(sceneTrack, eased)
+        : sampleKpEquationMotionTrackRect(
+            sceneTrack,
+            sceneTrack.sampleProgress?.(bounded) ?? eased
+          )
     ),
     opacity: lerp(
       sceneTrack.startOpacity,
@@ -717,10 +723,7 @@ export function correlateKpNativeKatexSceneHandoff(input: {
         : undefined;
     if (
       disposition.targetAtomIds.length > 0 &&
-      (
-        targetAtomId === undefined ||
-        !targetById.has(targetAtomId)
-      )
+      (targetAtomId === undefined || !targetById.has(targetAtomId))
     ) {
       throw new Error(
         `Scene track ${sceneTrack.id} has no lineage-backed native target atom.`
@@ -1648,6 +1651,7 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
   readonly structuralMotion?: "full" | "checkpoint" | undefined;
   readonly successorSyntheses?:
     readonly KpNativeKatexSuccessorSynthesisIntent[] | undefined;
+  readonly factoring?: KpNativeKatexFactoringSceneBinding;
   readonly fanInRouting?: boolean | undefined;
   readonly copyFanOutRouting?: boolean | undefined;
   readonly reorderRouting?: boolean | undefined;
@@ -1666,35 +1670,36 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     source: input.source,
     target: input.target
   });
-  const successorPlans = compileKpNativeKatexSuccessorSynthesisScenePlans({
+  const syntheses = compileKpNativeKatexSuccessorSynthesisScenePlans({
     source: input.source,
     target: input.target,
     intents: input.successorSyntheses ?? []
   });
-  const successorOwnership = partitionKpNativeKatexSuccessorOwnedTracks(
-    successorPlans,
-    allTracks
+  const ownership = partitionKpNativeKatexSuccessorOwnedTracks(
+    syntheses,
+    allTracks,
+    input.factoring
   );
-  const reorderedTracks = input.reorderRouting === true
-    ? compileKpCollisionSafeReorderTracks(successorOwnership.tracks)
-    : successorOwnership.tracks;
+  const routed = input.reorderRouting === true
+    ? compileKpCollisionSafeReorderTracks(ownership.tracks)
+    : ownership.tracks;
   const tracks = input.fanInRouting === true
-    ? compileKpQualityBoundedFanInTracks(reorderedTracks)
-    : reorderedTracks;
+    ? compileKpQualityBoundedFanInTracks(routed)
+    : routed;
   const correlations = correlateKpNativeKatexSceneHandoff({
     reconciliation,
     tracks: allTracks
   }).filter(({ targetAtomId }) =>
     targetAtomId === undefined ||
-    !successorOwnership.claimedTargetAtomIds.has(targetAtomId)
+    !ownership.claimedTargetAtomIds.has(targetAtomId)
   );
-  const targetAtomsById = new Map(input.target.atoms.map((atom) => [
+  const targetAtoms = new Map(input.target.atoms.map((atom) => [
     atom.id,
     atom
   ]));
   // Structural paint keeps its clone; only glyphs need target styling.
-  const typographyCorrelations = correlations.filter((correlation) =>
-    targetAtomsById.get(correlation.targetAtomId ?? "")?.paintKind === "glyph"
+  const glyphLinks = correlations.filter((correlation) =>
+    targetAtoms.get(correlation.targetAtomId ?? "")?.paintKind === "glyph"
   );
   const playback = createKpNativeKatexRendererSession({
     stage: input.source.stage,
@@ -1703,28 +1708,29 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     reconciliation,
     tracks,
     copyFanOut: input.copyFanOutRouting,
-    ...(successorPlans.length === 0
+    ...(syntheses.length === 0 && input.factoring === undefined
       ? {}
       : {
           supplementalMaterialOwners: (progress: number) =>
             sampleKpNativeKatexSuccessorSynthesisScenePlans({
-              plans: successorPlans,
-              progress
+              plans: syntheses,
+              progress,
+              supplementalOwners: input.factoring?.sampleMaterialOwners
             })
         })
   });
-  const handoffMicroscopeProgress = 0.96;
-  playback.apply(handoffMicroscopeProgress);
+  const microscope = 0.96;
+  playback.apply(microscope);
   const typographyPlan = compileKpNativeKatexTypographyStylePlan({
     telemetry: measureKpNativeKatexCorrelatedHandoff({
       stage: input.source.stage,
       reconciliation,
-      correlations: typographyCorrelations,
-      progress: handoffMicroscopeProgress,
+      correlations: glyphLinks,
+      progress: microscope,
       fontRevision: input.target.fontRevision,
       viewportKey: input.target.viewportKey
     }),
-    correlations: typographyCorrelations,
+    correlations: glyphLinks,
     tolerancePx: 0.1,
     maximumTranslationPx: 2,
     maximumScaleRatio: 1.1
@@ -1733,11 +1739,11 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
   input.source.stage.dataset["kpCanonicalNativeKatexSessionFactory"] =
     "shared-v1";
   let latestProgress = 0;
-  let canonicalDisposed = false;
+  let disposed = false;
   const session: KpNativeKatexRendererSession = Object.freeze({
     ...playback,
     apply(progress: number) {
-      if (canonicalDisposed) {
+      if (disposed) {
         throw new Error("Cannot apply a disposed canonical KaTeX scene session.");
       }
       const bounded = Math.max(0, Math.min(1, progress));
@@ -1826,8 +1832,8 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     dispose(options?: {
       readonly preserveStructuralSuccession?: boolean | undefined;
     }) {
-      if (canonicalDisposed) return;
-      canonicalDisposed = true;
+      if (disposed) return;
+      disposed = true;
       if (options?.preserveStructuralSuccession !== true) {
         disposeKpNativeKatexStructuralSuccession(input.source.stage);
       }

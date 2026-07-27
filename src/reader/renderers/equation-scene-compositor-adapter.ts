@@ -17,6 +17,10 @@ import type {
 import {
   auditKpNativeKatexChoreographyFidelity
 } from "../../rendering/native-katex-choreography-fidelity.ts";
+import {
+  bindKpNativeKatexFactoringScene,
+  type KpNativeKatexFactoringChoreographyIntent
+} from "../../rendering/native-katex-factoring-choreography.ts";
 
 export function createKpReaderEquationSceneCompositorSession(input: {
   readonly renderPlan: KpReaderEquationRenderPlan;
@@ -31,13 +35,26 @@ export function createKpReaderEquationSceneCompositorSession(input: {
     renderTransition,
     materialTransition
   });
+  const factoringChoreography = projectFactoringChoreography({
+    renderTransition,
+    direction: input.renderPlan.direction
+  });
+  const factoring = factoringChoreography === undefined
+    ? undefined
+    : bindKpNativeKatexFactoringScene({
+        source: input.source,
+        target: input.target,
+        intent: factoringChoreography
+      });
   if (input.source.stage !== input.target.stage) {
     throw new Error("Reader equation compositor endpoints must share one stage.");
   }
   input.source.stage.dataset["kpNativeKatexSuccessorSynthesisCount"] =
     String(renderTransition.successorSyntheses?.length ?? 0);
   input.source.stage.dataset["kpNativeKatexMotionProfile"] =
-    renderTransition.visualMotif?.kind === "copy-fan-out"
+    factoringChoreography !== undefined
+      ? "canonical-factoring-fission-fusion"
+      : renderTransition.visualMotif?.kind === "copy-fan-out"
       ? "canonical-copy-fan-out"
       : renderTransition.visualMotif?.kind === "semantic-reorder-and-group"
         ? "canonical-semantic-reorder-and-group"
@@ -46,9 +63,13 @@ export function createKpReaderEquationSceneCompositorSession(input: {
     source: input.source,
     target: input.target,
     relations,
-    ...(renderTransition.visualMotif?.kind === "merge-fan-in"
+    ...(factoringChoreography === undefined &&
+      renderTransition.visualMotif?.kind === "merge-fan-in"
       ? { fanInRouting: true }
       : {}),
+    ...(factoring === undefined
+      ? {}
+      : { factoring }),
     ...(renderTransition.visualMotif?.kind === "copy-fan-out"
       ? { copyFanOutRouting: true }
       : {}),
@@ -91,6 +112,7 @@ export function createKpReaderEquationSceneCompositorSession(input: {
               : "checkpoint"
         })
   });
+  factoring?.recordEvidence();
   if (renderTransition.structuralSuccession !== undefined) {
     const reducedMotion =
       input.motionMode !== undefined && input.motionMode !== "continuous";
@@ -120,6 +142,46 @@ export function createKpReaderEquationSceneCompositorSession(input: {
       "passed";
   }
   return canonical.session;
+}
+
+function projectFactoringChoreography(input: {
+  readonly renderTransition: KpReaderEquationTransitionPlan;
+  readonly direction: KpReaderEquationRenderPlan["direction"];
+}): KpNativeKatexFactoringChoreographyIntent | undefined {
+  if (
+    input.renderTransition.transformType !== "factorCommonTerm" ||
+    input.renderTransition.visualMotif?.kind !== "merge-fan-in"
+  ) {
+    return undefined;
+  }
+  const factorRelation = input.renderTransition.relations.find((relation) =>
+    input.direction === "forward"
+      ? relation.lifecycle === "merge" &&
+        relation.sourceSelectorIds.length >= 2 &&
+        relation.targetSelectorIds.length === 1
+      : relation.lifecycle === "split" &&
+        relation.sourceSelectorIds.length === 1 &&
+        relation.targetSelectorIds.length >= 2
+  );
+  if (factorRelation === undefined) {
+    throw new Error(
+      `Factoring transition ${input.renderTransition.id} lacks one typed ` +
+      "many-to-one factor lineage."
+    );
+  }
+  return Object.freeze({
+    id: `${input.renderTransition.id}.factoring-choreography`,
+    direction: input.direction,
+    factorCopyIds: Object.freeze([
+      ...(input.direction === "forward"
+        ? factorRelation.sourceSelectorIds
+        : factorRelation.targetSelectorIds)
+    ]),
+    commonFactorId:
+      (input.direction === "forward"
+        ? factorRelation.targetSelectorIds
+        : factorRelation.sourceSelectorIds)[0]!
+  });
 }
 
 function resolveTransitionPair(input: {

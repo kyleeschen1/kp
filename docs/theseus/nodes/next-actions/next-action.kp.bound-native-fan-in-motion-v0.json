@@ -75,10 +75,38 @@
       "scope": "production build and type boundaries",
       "checkedAt": "2026-07-27T18:39:23.312Z",
       "notes": "Production build, repository typecheck, reader production closure, dev-review production closure, and canonical linear-equation visual boundary pass."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full 2622-test regression suite",
+      "checkedAt": "2026-07-27T19:49:59.164Z",
+      "notes": "All tests and architecture, inference, and concept-catalog gates pass on the factoring and catalyst repair."
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "twelve desktop and phone browser cases",
+      "checkedAt": "2026-07-27T19:50:03.983Z",
+      "notes": "Dense factoring has binary ownership, paint-aligned settlement within 0.25px, bounded excursion, zero crowding, and consumed arithmetic operators retire with their source cohort."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, test, and domain projects",
+      "checkedAt": "2026-07-27T19:50:11.335Z",
+      "notes": "Typed factoring binding and generic per-track progress seam compile without errors."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test focused factoring renderer and successor files",
+      "status": "passed",
+      "scope": "80 focused unit and architecture tests",
+      "checkedAt": "2026-07-27T19:52:05.153Z",
+      "notes": "Includes the generic guard that typed per-track geometry progress cannot alter lifecycle opacity."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Human-rejected checkpoint repaired without formula-specific coordinates: the nearest fusion owner settles early while contributors finish their bounded lift, signed-term order inversions use measured upper/lower clearance lanes before grouping enters, grouping structure switches discretely without fading, and narrow card chrome responds to its container. Dense wide/phone paint tests and the full suite pass. Awaiting human visual approval; shared TOC conformance and the quadratic route-budget check remain independently failing on their pre-existing descriptors."
+    "summary": "Factoring now uses atomic canonical fusion, measured cloned ink, and typed per-track timing. Arithmetic catalysts join the shrinking cohort. Automated gates pass; expanded layout remains paused behind the exemplar visual checkpoint."
   }
 }

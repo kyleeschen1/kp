@@ -1,6 +1,7 @@
-import type {
-  KpFissionFusionFrame,
-  KpFissionFusionPlan
+import {
+  compileKpFissionFusionPlan,
+  type KpFissionFusionFrame,
+  type KpFissionFusionPlan
 } from "./fission-fusion.ts";
 import { kpFissionFusionRuntime } from "./fission-fusion-runtime.ts";
 import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
@@ -58,6 +59,53 @@ export interface KpFactoringChoreographyFrame {
   }[];
 }
 
+/**
+ * The factor transfer is the canonical lineage core shared by full factoring
+ * presentations and renderers that already have grouping structure in place.
+ */
+export function compileKpFactoringFusionPlan(input: {
+  readonly id: string;
+  readonly factorCopyIds: readonly string[];
+  readonly commonFactorId: string;
+  readonly factorMinimumScale?: number | undefined;
+}): KpFissionFusionPlan {
+  if (input.factorCopyIds.length < 2) {
+    throw new Error("Factoring fusion requires at least two factor copies.");
+  }
+  const factorMinimumScale = input.factorMinimumScale ?? 0.82;
+  if (!(factorMinimumScale > 0 && factorMinimumScale <= 1)) {
+    throw new Error(
+      "Factoring factorMinimumScale must be greater than zero and at most one."
+    );
+  }
+  return compileKpFissionFusionPlan({
+    id: `${input.id}.factor-fusion`,
+    mode: "fusion",
+    lineageGraph: createKpSemanticLineageGraph({
+      id: `${input.id}.factor-lineage`,
+      sourceEntityIds: [...input.factorCopyIds],
+      targetEntityIds: [input.commonFactorId],
+      edges: [{
+        id: `${input.id}.factor-merge`,
+        relation: "merge",
+        sourceEntityIds: [...input.factorCopyIds],
+        targetEntityIds: [input.commonFactorId],
+        summary: "Repeated factors fuse into one common factor."
+      }]
+    }),
+    semanticOrder: input.factorCopyIds,
+    junctionScale: factorMinimumScale
+  });
+}
+
+export function sampleKpFactoringAddendCompactionProgress(
+  progress: number
+): number {
+  const bounded = clamp01(progress);
+  return 0.18 * intervalProgress(bounded, 0.08, 0.28) +
+    0.82 * intervalProgress(bounded, 0.52, 0.78);
+}
+
 export function compileKpFactoringChoreography(input: {
   readonly id: string;
   readonly factorCopyIds: readonly string[];
@@ -83,23 +131,11 @@ export function compileKpFactoringChoreography(input: {
   if (!(factorMinimumScale > 0 && factorMinimumScale <= 1)) {
     throw new Error("Factoring factorMinimumScale must be greater than zero and at most one.");
   }
-  const fusionPlan = kpFissionFusionRuntime().compile({
-    id: `${input.id}.factor-fusion`,
-    mode: "fusion",
-    lineageGraph: createKpSemanticLineageGraph({
-      id: `${input.id}.factor-lineage`,
-      sourceEntityIds: [...input.factorCopyIds],
-      targetEntityIds: [input.commonFactorId],
-      edges: [{
-        id: `${input.id}.factor-merge`,
-        relation: "merge",
-        sourceEntityIds: [...input.factorCopyIds],
-        targetEntityIds: [input.commonFactorId],
-        summary: "Repeated factors fuse into one common factor."
-      }]
-    }),
-    semanticOrder: input.factorCopyIds,
-    junctionScale: factorMinimumScale
+  const fusionPlan = compileKpFactoringFusionPlan({
+    id: input.id,
+    factorCopyIds: input.factorCopyIds,
+    commonFactorId: input.commonFactorId,
+    factorMinimumScale
   });
   return {
     kind: "factoring-choreography-plan",
@@ -134,8 +170,7 @@ export function sampleKpFactoringChoreography(input: {
     "release-factor-focus": intervalProgress(progress, 0.72, 0.9)
   };
   const addendCompactionProgress =
-    0.18 * phases["preview-compaction"] +
-    0.82 * intervalProgress(progress, 0.52, 0.78);
+    sampleKpFactoringAddendCompactionProgress(progress);
   return {
     kind: "factoring-choreography-frame",
     planId: input.plan.id,

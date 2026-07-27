@@ -5,7 +5,8 @@ import {
   kpEquationMotionPathVariantIds,
   planKpEquationMotionPath,
   planKpEquationMotionPathBetweenPoints,
-  sampleKpEquationMotionPath
+  sampleKpEquationMotionPath,
+  sampleKpEquationMotionTrackPaintRect
 } from "../src/rendering/equation-motion-path-planner.ts";
 import type { KpEquationLayoutPlan } from "../src/rendering/equation-layout-plan.ts";
 
@@ -91,6 +92,41 @@ test("quadratic sampling clamps progress and preserves exact endpoints", () => {
   assert.deepEqual(sampleKpEquationMotionPath(plan.selected, -1), { x: 10, y: 20 });
   assert.deepEqual(sampleKpEquationMotionPath(plan.selected, 1), { x: 90, y: 20 });
   assert.ok(sampleKpEquationMotionPath(plan.selected, 0.5).y < 20);
+});
+
+test("curved tracks follow measured paint while reconstructing wrapper offsets", () => {
+  const path = planKpEquationMotionPathBetweenPoints({
+    id: "path.paint-authority",
+    start: { x: 8, y: 13 },
+    end: { x: 115, y: 27 },
+    variants: ["arc-above"],
+    clearance: 18
+  }).selected;
+  const track = {
+    id: "track.paint-authority",
+    componentId: "component.paint-authority",
+    lifecycle: "merge",
+    startRect: { left: 0, top: 0, width: 24, height: 30 },
+    endRect: { left: 100, top: 10, width: 32, height: 40 },
+    startPaintRect: { left: 3, top: 8, width: 10, height: 10 },
+    endPaintRect: { left: 109, top: 22, width: 12, height: 10 },
+    motionPath: path
+  };
+
+  for (const progress of [0, 0.25, 0.5, 0.75, 1]) {
+    const paint = sampleKpEquationMotionTrackPaintRect(track, progress);
+    const expected = sampleKpEquationMotionPath(path, progress);
+    assert.ok(Math.abs(paint.left + paint.width / 2 - expected.x) < 0.000_001);
+    assert.ok(Math.abs(paint.top + paint.height / 2 - expected.y) < 0.000_001);
+  }
+  assert.deepEqual(
+    sampleKpEquationMotionTrackPaintRect(track, 0),
+    track.startPaintRect
+  );
+  assert.deepEqual(
+    sampleKpEquationMotionTrackPaintRect(track, 1),
+    track.endPaintRect
+  );
 });
 
 test("layout-plan adapter excludes the moving relation's own destination", () => {

@@ -192,6 +192,7 @@ export function createKpSuccessorSynthesisBindingFromMetadata(input: {
 export type KpSuccessorSynthesisLawId =
   | "successor.explicit-authority"
   | "successor.catalyst-noncontribution"
+  | "successor.catalyst-co-gather"
   | "successor.readiness-gated-birth"
   | "successor.recognition-gated-retirement"
   | "successor.continuous-material-ownership"
@@ -319,6 +320,7 @@ export function sampleKpSuccessorSynthesis(input: {
   const targetRecognizable = targetBirths.every(
     (birth) => birth >= input.plan.targetRecognition
   );
+  const catalystRetirement = easeInOut(interval(progress, 0.52, 0.7));
   const retirementProgress = targetRecognizable
     ? easeInOut(interval(
         progress,
@@ -351,13 +353,14 @@ export function sampleKpSuccessorSynthesis(input: {
         // role inspectable instead of relying on a renderer convention.
         arrivalProgress: 0,
         activationProgress,
-        retirementProgress,
+        retirementProgress: catalystRetirement,
         pathFamily: member.pathFamily,
         pose: catalystPose(
           member,
           input.plan.junction,
           activationProgress,
-          retirementProgress
+          input.plan.inputJunctionScale,
+          catalystRetirement
         )
       };
     })
@@ -379,7 +382,10 @@ export function sampleKpSuccessorSynthesis(input: {
     progress,
     phase: progress >= 1
       ? "settled"
-      : retirementProgress > 0
+      : (
+          retirementProgress > 0 ||
+          catalystRetirement > 0
+        )
         ? "retire"
         : targetRecognizable
           ? "recognize"
@@ -527,13 +533,39 @@ export function evaluateKpSuccessorSynthesisLaws(
   )) {
     push(violations, "successor.catalyst-noncontribution", 0, "A catalyst is classified as result material.");
   }
+  const gatheredCatalysts = sampleKpSuccessorSynthesis({
+    plan,
+    progress: plan.inputArrivalEnd
+  }).sources.filter(({ contribution }) => contribution === "catalyst");
+  if (gatheredCatalysts.some(({ annotationId, pose }) => {
+    const catalyst = plan.catalysts.find(({ id }) => id === annotationId)!;
+    const origin = center(catalyst.rect);
+    return pose.scale > plan.inputJunctionScale + 0.001 ||
+      Math.hypot(
+        origin.x + pose.x - plan.junction.x,
+        origin.y + pose.y - plan.junction.y
+      ) > 0.001;
+  })) {
+    push(
+      violations,
+      "successor.catalyst-co-gather",
+      plan.inputArrivalEnd,
+      "A consumed operation remains outside the shrinking source cohort."
+    );
+  }
   for (let index = 0; index <= sampleCount; index += 1) {
     const progress = index / sampleCount;
     const frame = sampleKpSuccessorSynthesis({ plan, progress });
     if (!frame.allRequiredInputsReady && frame.targets.some((target) => target.birthProgress > 0)) {
       push(violations, "successor.readiness-gated-birth", progress, "Target material appears before every required input reaches the junction.");
     }
-    if (!frame.targetRecognizable && frame.sources.some((source) => source.pose.opacity < 1)) {
+    if (
+      !frame.targetRecognizable &&
+      frame.sources.some((source) =>
+        source.contribution === "material-input" &&
+        source.pose.opacity < 1
+      )
+    ) {
       push(violations, "successor.recognition-gated-retirement", progress, "A source retires before the target is recognizable.");
     }
     const maximumSourceOpacity = Math.max(...frame.sources.map((source) => source.pose.opacity));
@@ -760,17 +792,16 @@ function catalystPose(
   member: KpSuccessorSynthesisMember,
   junction: { readonly x: number; readonly y: number },
   activationProgress: number,
+  scaleTo: number,
   retirementProgress: number
 ): KpSuccessorSynthesisPose {
   const origin = center(member.rect);
-  const attraction = 0.42 * activationProgress;
   return {
-    x: (junction.x - origin.x) * attraction,
-    y: (junction.y - origin.y) * attraction - Math.sin(activationProgress * Math.PI) * 1.5,
-    scale:
-      1 +
-      0.025 * activationProgress +
-      Math.sin(activationProgress * Math.PI) * 0.025,
+    // The operator contributes causality rather than result material, but it
+    // still belongs to the consumed expression and gathers with that cohort.
+    x: (junction.x - origin.x) * activationProgress,
+    y: (junction.y - origin.y) * activationProgress,
+    scale: mix(1, scaleTo, activationProgress),
     opacity: 1 - retirementProgress
   };
 }
