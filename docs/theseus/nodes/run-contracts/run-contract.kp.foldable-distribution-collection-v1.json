@@ -130,7 +130,8 @@
     {
       "id": "s13",
       "title": "Compile-fold-timing",
-      "status": "planned"
+      "summary": "Compiled one deterministic shared clock: expanded and collapsed views preserve the same ordered six-operation trace, collapsed detail remains visibly bounded, and exact checkpoints plus seek/rewind pass.",
+      "status": "complete"
     },
     {
       "id": "s14",
