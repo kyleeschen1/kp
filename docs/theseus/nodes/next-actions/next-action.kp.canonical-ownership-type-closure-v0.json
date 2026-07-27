@@ -1,0 +1,18 @@
+{
+  "id": "next-action.kp.canonical-ownership-type-closure-v0",
+  "kind": "next-action",
+  "title": "Close canonical ownership and lifecycle types",
+  "status": "deferred",
+  "domain": "kp",
+  "summary": "Generalize proof-carrying opaque persist, split, and merge track contracts plus total paint ownership across canonical equation exemplars after the certified-layout seam is proven.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-27-certified-equation-stage-layout-long-loop-proposal.md"
+    }
+  ],
+  "revisitWhen": [
+    "A later approved loop selects this type or production frontier without displacing visible library expansion.",
+    "A later approved loop selects this frontier without displacing visible animation-library expansion."
+  ]
+}

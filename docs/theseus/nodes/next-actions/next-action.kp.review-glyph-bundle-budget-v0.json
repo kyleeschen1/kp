@@ -1,0 +1,18 @@
+{
+  "id": "next-action.kp.review-glyph-bundle-budget-v0",
+  "kind": "next-action",
+  "title": "Restore the Review plus glyph bundle ceiling",
+  "status": "deferred",
+  "domain": "kp",
+  "summary": "Repair the pre-existing optional Review-plus-glyph closure above its 250000-byte gzip ceiling without changing ordinary reader closure or canonical behavior.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-27-certified-equation-stage-layout-long-loop-proposal.md"
+    }
+  ],
+  "revisitWhen": [
+    "A later approved loop selects this type or production frontier without displacing visible library expansion.",
+    "A later approved loop selects this frontier without displacing visible animation-library expansion."
+  ]
+}

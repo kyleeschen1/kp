@@ -1,0 +1,18 @@
+{
+  "id": "next-action.kp.context-safe-html-boundary-v0",
+  "kind": "next-action",
+  "title": "Consolidate context-safe generated HTML",
+  "status": "deferred",
+  "domain": "kp",
+  "summary": "Introduce branded HTML text, attribute, URL, and script-data contexts and consolidate remaining local escape helpers without conflating clone sanitation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-27-certified-equation-stage-layout-long-loop-proposal.md"
+    }
+  ],
+  "revisitWhen": [
+    "A later approved loop selects this type or production frontier without displacing visible library expansion.",
+    "A later approved loop selects this frontier without displacing visible animation-library expansion."
+  ]
+}

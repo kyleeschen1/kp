@@ -1,0 +1,18 @@
+{
+  "id": "next-action.kp.nominal-canonical-promotion-v0",
+  "kind": "next-action",
+  "title": "Make canonical promotion proof-carrying",
+  "status": "deferred",
+  "domain": "kp",
+  "summary": "Replace manually authorable canonical-format evidence booleans with nominal certificates produced only by passed motif, responsive, ownership, retirement, release, and human-review gates.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-27-certified-equation-stage-layout-long-loop-proposal.md"
+    }
+  ],
+  "revisitWhen": [
+    "A later approved loop selects this type or production frontier without displacing visible library expansion.",
+    "A later approved loop selects this frontier without displacing visible animation-library expansion."
+  ]
+}

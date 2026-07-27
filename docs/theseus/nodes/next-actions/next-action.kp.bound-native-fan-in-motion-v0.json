@@ -2,8 +2,9 @@
   "id": "next-action.kp.bound-native-fan-in-motion-v0",
   "kind": "next-action",
   "title": "Bound native fan-in motion and repair the factoring exemplar",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp",
+  "summary": "The simultaneous opaque x-fusion requirement is retained inside the proposed certified stage-layout loop, after the upstream applied-layout invariant is proven.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -143,5 +144,8 @@
   "progress": {
     "state": "partial",
     "summary": "Measured paint authority is now mandatory at the generic clone-composer seam, and clone placement tracks native ink insets across endpoint changes. The distribution x boundary at 230-251 is fixed and guarded across forward seek, direct load, and rewind; full tests, build, and visual checks pass. Remaining queued exemplar work: make both distributed x contributors collapse into the extracted factored x as one simultaneous opaque fusion cohort. The optional review-plus-glyph bundle ceiling remains a pre-existing failing gate."
-  }
+  },
+  "revisitWhen": [
+    "The certified stage layout reaches its non-regression gate or the proposed long-loop contract is declined."
+  ]
 }

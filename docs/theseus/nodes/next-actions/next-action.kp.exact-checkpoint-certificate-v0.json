@@ -1,0 +1,18 @@
+{
+  "id": "next-action.kp.exact-checkpoint-certificate-v0",
+  "kind": "next-action",
+  "title": "Certify exact checkpoint navigation",
+  "status": "deferred",
+  "domain": "kp",
+  "summary": "Replace behavior-only checkpoint-start correction with proof-carrying exact checkpoint values consumed by outline, URL, direct-seek, and fold projections across readers.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-27-certified-equation-stage-layout-long-loop-proposal.md"
+    }
+  ],
+  "revisitWhen": [
+    "A later approved loop selects this type or production frontier without displacing visible library expansion.",
+    "A later approved loop selects this frontier without displacing visible animation-library expansion."
+  ]
+}

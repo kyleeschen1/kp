@@ -1,0 +1,47 @@
+{
+  "id": "next-action.kp.certified-equation-stage-layout-v0",
+  "kind": "next-action",
+  "title": "Certify and execute equation stage layout",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Execute semantic row intent as measured, certified, and applied stage geometry before canonical glyph measurement; eliminate foldable distribution crowding at wide and phone sizes; preserve measured-paint alignment; then complete simultaneous opaque x fusion.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-27-certified-equation-stage-layout-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/runtime/foldable-distribution-layout.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/app/foldable-distribution-reader-controls.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/app/exemplar-entry.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/renderers/equation-responsive-fit.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-reader-foldable-distribution.browser.spec.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.bound-native-fan-in-motion-v0.json"
+    }
+  ],
+  "verification": [
+    "npm run test:foldable-distribution",
+    "npm run visual:foldable-distribution",
+    "npm run test:canonical-equation-renderer",
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "theseus workspace validate"
+  ]
+}
