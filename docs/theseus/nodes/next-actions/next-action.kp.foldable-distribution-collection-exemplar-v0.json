@@ -106,11 +106,25 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T05:44:09.302Z",
       "notes": "Product certificates and signed constant evaluation pass all TypeScript projects."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/foldable-distribution-signed-term-grouping.test.ts tests/foldable-distribution-product-evaluation.test.ts tests/foldable-distribution-fan-out.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T05:47:33.147Z",
+      "notes": "All four signed terms preserve one-to-one identity, negative-two stays structurally signed, coefficient and constant groups form an exact partition, and core reorder/group owns opaque reflow with reader-layout geometry."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T05:47:38.715Z",
+      "notes": "Signed-term grouping certificates pass all TypeScript projects."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 6 certified 3×2→6 and 2×(-1)→-2 as exact two-input fan-in derivations. Multiplication signs are catalysts, successor synthesis is required, inputs remain opaque through recognition, native target settlement is mandatory, and geometry remains renderer-session state."
+    "summary": "Slice 7 certified a total one-to-one signed-term mapping from the flat sum into coefficient and signed-constant groups. Reorder and group are the only canonical operations; terms remain opaque and grouping establishes only after reflow."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",

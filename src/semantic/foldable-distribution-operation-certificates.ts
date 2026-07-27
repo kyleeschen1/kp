@@ -57,6 +57,37 @@ export interface KpFoldableProductEvaluationCertificate {
   };
 }
 
+export interface KpFoldableSignedTermGroupingCertificate {
+  readonly schemaVersion: "kp.foldable-signed-term-grouping-certificate.v1";
+  readonly id: string;
+  readonly canonicalOperationIds: readonly [
+    "kp.core.reorder",
+    "kp.core.group"
+  ];
+  readonly sourceTermIds: readonly string[];
+  readonly targetTermIds: readonly string[];
+  readonly sourceToTarget: Readonly<Record<string, string>>;
+  readonly groups: readonly [
+    {
+      readonly id: "group.foldable-distribution.coefficients";
+      readonly kind: "coefficient-terms";
+      readonly memberIds: readonly [string, string];
+    },
+    {
+      readonly id: "group.foldable-distribution.constants";
+      readonly kind: "signed-constants";
+      readonly memberIds: readonly [string, string];
+    }
+  ];
+  readonly transformation: KpSemanticTransformation;
+  readonly presentation: {
+    readonly requiredMotif: "semantic-reorder-and-group";
+    readonly termPaintPolicy: "opaque-identity-through-reflow";
+    readonly groupingPolicy: "establish-after-reflow";
+    readonly geometryAuthority: "reader-layout";
+  };
+}
+
 export function createKpFoldableDistributionFanOutCertificates():
   readonly KpFoldableDistributionFanOutCertificate[] {
   const factored = createKpFoldableDistributionExpressionChain()[0]!.expression;
@@ -156,6 +187,136 @@ export function createKpFoldableProductEvaluationCertificates():
       targetValue: -2
     })
   ]);
+}
+
+export function createKpFoldableSignedTermGroupingCertificate():
+  KpFoldableSignedTermGroupingCertificate {
+  const chain = createKpFoldableDistributionExpressionChain();
+  const source = chain[1]!.expression;
+  const target = chain[2]!.expression;
+  const mappings = Object.freeze([
+    Object.freeze({
+      sourceId: "distributed.term-3x",
+      targetId: "grouped.term-3x"
+    }),
+    Object.freeze({
+      sourceId: "distributed.term-2x",
+      targetId: "grouped.term-2x"
+    }),
+    Object.freeze({
+      sourceId: "distributed.constant-6",
+      targetId: "grouped.constant-6"
+    }),
+    Object.freeze({
+      sourceId: "distributed.negative-2",
+      targetId: "grouped.negative-2"
+    })
+  ]);
+  mappings.forEach(({ sourceId, targetId }) => {
+    const sourceNode = requiredSubtree(source, sourceId);
+    const targetNode = requiredSubtree(target, targetId);
+    if (semanticFingerprint(sourceNode) !== semanticFingerprint(targetNode)) {
+      throw new Error(
+        `Signed-term grouping changes ${sourceId} while mapping it to ${targetId}.`
+      );
+    }
+  });
+
+  const sourceTermIds = Object.freeze([
+    "distributed.term-3x",
+    "distributed.constant-6",
+    "distributed.term-2x",
+    "distributed.negative-2"
+  ]);
+  const targetTermIds = Object.freeze([
+    "grouped.term-3x",
+    "grouped.term-2x",
+    "grouped.constant-6",
+    "grouped.negative-2"
+  ]);
+  if (
+    new Set(mappings.map(({ sourceId }) => sourceId)).size !==
+      sourceTermIds.length ||
+    new Set(mappings.map(({ targetId }) => targetId)).size !==
+      targetTermIds.length
+  ) {
+    throw new Error("Signed-term grouping requires total one-to-one term identity.");
+  }
+
+  const id = "certificate.foldable-distribution.signed-term-grouping";
+  const transformation = createKpSemanticTransformation({
+    id: "transform.foldable-distribution.group-like-terms",
+    transformType: "groupLikeTerms",
+    title: "Gather coefficient terms and signed constants",
+    sourceObjectIds: ["expression.foldable-distribution.distributed"],
+    targetObjectIds: ["expression.foldable-distribution.grouped"],
+    preserves: ["identity", "value", "structure"],
+    correspondenceMap: {
+      id: `${id}.correspondence`,
+      records: [
+        ...mappings.map(({ sourceId, targetId }) => ({
+          id: `${id}.${sourceId}.to.${targetId}`,
+          relation: "identity" as const,
+          sourceSelectorIds: [sourceId],
+          targetSelectorIds: [targetId],
+          summary: "The signed term persists while its group position changes."
+        })),
+        {
+          id: `${id}.grouping-enters`,
+          relation: "introduction" as const,
+          sourceSelectorIds: [],
+          targetSelectorIds: [
+            "grouped.coefficients.left-parenthesis",
+            "grouped.coefficients.right-parenthesis",
+            "grouped.constants.left-parenthesis",
+            "grouped.constants.right-parenthesis"
+          ],
+          summary: "Grouping structure enters after persistent terms reflow."
+        }
+      ]
+    }
+  });
+  const groups: KpFoldableSignedTermGroupingCertificate["groups"] =
+    Object.freeze([
+      Object.freeze({
+        id: "group.foldable-distribution.coefficients" as const,
+        kind: "coefficient-terms" as const,
+        memberIds: Object.freeze([
+          "grouped.term-3x",
+          "grouped.term-2x"
+        ]) as readonly [string, string]
+      }),
+      Object.freeze({
+        id: "group.foldable-distribution.constants" as const,
+        kind: "signed-constants" as const,
+        memberIds: Object.freeze([
+          "grouped.constant-6",
+          "grouped.negative-2"
+        ]) as readonly [string, string]
+      })
+    ]);
+
+  return Object.freeze({
+    schemaVersion: "kp.foldable-signed-term-grouping-certificate.v1" as const,
+    id,
+    canonicalOperationIds: Object.freeze([
+      "kp.core.reorder",
+      "kp.core.group"
+    ]) as readonly ["kp.core.reorder", "kp.core.group"],
+    sourceTermIds,
+    targetTermIds,
+    sourceToTarget: Object.freeze(Object.fromEntries(
+      mappings.map(({ sourceId, targetId }) => [sourceId, targetId])
+    )),
+    groups,
+    transformation,
+    presentation: Object.freeze({
+      requiredMotif: "semantic-reorder-and-group" as const,
+      termPaintPolicy: "opaque-identity-through-reflow" as const,
+      groupingPolicy: "establish-after-reflow" as const,
+      geometryAuthority: "reader-layout" as const
+    })
+  });
 }
 
 interface CertifyBranchInput {
@@ -384,6 +545,27 @@ function evaluateConstantSubtree(node: KpStructuredExpressionNode): number {
         evaluateConstantSubtree(node.exponent);
     case "symbol":
       throw new Error(`Subtree ${node.id} contains symbol ${node.name}.`);
+  }
+}
+
+function semanticFingerprint(node: KpStructuredExpressionNode): string {
+  switch (node.kind) {
+    case "number":
+      return `number:${node.value}`;
+    case "symbol":
+      return `symbol:${node.name}`;
+    case "negate":
+      return `negate(${semanticFingerprint(node.value)})`;
+    case "sum":
+      return `sum(${node.terms.map(semanticFingerprint).join(",")})`;
+    case "product":
+      return `product(${node.factors.map(semanticFingerprint).join(",")})`;
+    case "quotient":
+      return `quotient(${semanticFingerprint(node.numerator)},` +
+        `${semanticFingerprint(node.denominator)})`;
+    case "power":
+      return `power(${semanticFingerprint(node.base)},` +
+        `${semanticFingerprint(node.exponent)})`;
   }
 }
 

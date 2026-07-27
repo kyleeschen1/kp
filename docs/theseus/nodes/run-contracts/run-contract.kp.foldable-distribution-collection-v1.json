@@ -94,7 +94,8 @@
     {
       "id": "s07",
       "title": "Certify-signed-term-grouping",
-      "status": "planned"
+      "summary": "Certified total signed-term identity through core reorder/group: negative-two stays signed, target groups partition all terms, paint remains opaque, and layout owns reflow.",
+      "status": "complete"
     },
     {
       "id": "s08",
