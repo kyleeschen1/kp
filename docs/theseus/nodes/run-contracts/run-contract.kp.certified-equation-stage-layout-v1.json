@@ -137,7 +137,8 @@
     {
       "id": "s14",
       "title": "Reader consumes applied layout",
-      "status": "planned"
+      "summary": "Integrated descriptor-owned semantic envelope compilation with shared reader reset-measure-certify-apply ordering; canonical sessions require applied proof, fold and resize invalidate cleanly, and two-row stacks preserve intrinsic center on both axes.",
+      "status": "complete"
     },
     {
       "id": "s15",

@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 import {
   kpNativeReorderInkContactTolerancePx
 } from "../src/rendering/equation-motion-path-planner.ts";
@@ -187,7 +187,7 @@ async function visiblePaintOverlapReport(page: Page, progress: number) {
   }, { progress });
 }
 
-test("visible-paint diagnostic preserves the unapplied-layout baseline", async ({
+test("visible-paint diagnostic samples the applied-layout integration", async ({
   page
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -204,6 +204,9 @@ test("visible-paint diagnostic preserves the unapplied-layout baseline", async (
     await expect(
       page.locator("[data-kp-reader-transition-active='true']")
     ).toHaveCount(1);
+    await expect(
+      page.locator("[data-kp-reader-transition-active='true']")
+    ).toHaveAttribute("data-kp-reader-stage-layout-applied", /equation-stage/);
     reports.push(
       await visiblePaintOverlapReport(page, progressPermille / 1_000)
     );
@@ -265,6 +268,65 @@ test("fold controls preserve one semantic clock and stable URL state", async ({
   await expect.poll(() =>
     new URL(page.url()).searchParams.get("kpPin")
   ).toBe("evaluation.foldable-distribution.distribute");
+});
+
+test("reader applies exact phase layout across fold and resize invalidation", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route(50, { kpFoldMode: "expanded" }), {
+    waitUntil: "domcontentloaded"
+  });
+  const active = page.locator(
+    "[data-kp-reader-transition-active='true']"
+  );
+  await expect(active).toHaveAttribute(
+    "data-kp-reader-stage-layout-phase",
+    "evaluation.foldable-distribution.distribute"
+  );
+  await expect(active).toHaveAttribute(
+    "data-kp-reader-stage-layout-applied",
+    /animation\.foldable-distribution\.collect-like-terms\.equation-stage/
+  );
+  await expect(
+    page.locator("[data-kp-reader-equation-stage]")
+  ).toHaveAttribute(
+    "data-kp-reader-canonical-equation-session-active",
+    "true"
+  );
+  await expect.poll(() => appliedRowIds(active)).toEqual([
+    "row.foldable-distribution.left",
+    "row.foldable-distribution.right"
+  ]);
+  const phoneApplication = await active.getAttribute(
+    "data-kp-reader-stage-layout-applied"
+  );
+
+  await page.locator("select[data-kp-reader-fold-mode]")
+    .selectOption("collapsed");
+  await expect.poll(() => appliedRowIds(active)).toEqual([
+    "row.foldable-distribution.equation"
+  ]);
+  await expect.poll(async () =>
+    active.getAttribute("data-kp-reader-stage-layout-applied")
+  ).not.toBe(phoneApplication);
+
+  await page.locator("select[data-kp-reader-fold-mode]")
+    .selectOption("expanded");
+  await expect.poll(() => appliedRowIds(active)).toEqual([
+    "row.foldable-distribution.left",
+    "row.foldable-distribution.right"
+  ]);
+  const expandedPhoneApplication = await active.getAttribute(
+    "data-kp-reader-stage-layout-applied"
+  );
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  await expect.poll(() => appliedRowIds(active)).toEqual([
+    "row.foldable-distribution.equation"
+  ]);
+  await expect.poll(async () =>
+    active.getAttribute("data-kp-reader-stage-layout-applied")
+  ).not.toBe(expandedPhoneApplication);
 });
 
 test("parallel distribution and product work each render as one complete cohort", async ({
@@ -1489,4 +1551,14 @@ async function equationGeometry(page: Page): Promise<{
         (viewportRect.top + viewportRect.bottom) / 2
     };
   });
+}
+
+async function appliedRowIds(active: Locator): Promise<readonly string[]> {
+  return active.locator(
+    '[data-kp-equation-stage-layout-authority="applied-v1"]'
+  ).evaluateAll((elements) => [...new Set(elements.flatMap((element) => {
+    const rowId = (element as HTMLElement)
+      .dataset["kpEquationStageLayoutRow"];
+    return rowId === undefined ? [] : [rowId];
+  }))].sort());
 }

@@ -46,6 +46,9 @@ export function bindKpFoldableDistributionSemanticEnvelopes(input: {
     "[data-kp-reader-selector-id]"
   )) {
     const selectorId = anchor.dataset["kpReaderSelectorId"];
+    if (selectorId !== undefined) {
+      anchor.dataset["kpFoldableLayoutMemberId"] = selectorId;
+    }
     if (selectorId !== undefined && !activeSelectorIds.has(selectorId)) {
       delete anchor.dataset["kpReaderEquationAnchorId"];
       delete anchor.dataset["kpReaderSelectorId"];

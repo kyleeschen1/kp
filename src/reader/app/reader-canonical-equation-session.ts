@@ -10,7 +10,11 @@ import {
   type KpReaderEquationSceneCompositorFactory
 } from "../renderers/public-api.ts";
 import type {
+  KpAppliedEquationStageLayout,
   KpEquationStageMeasurementIdentity
+} from "../runtime/equation-stage-layout.ts";
+import {
+  assertKpAppliedEquationStageLayout
 } from "../runtime/equation-stage-layout.ts";
 
 export interface KpReaderCanonicalEquationSession {
@@ -24,6 +28,8 @@ export interface KpReaderCanonicalEquationSession {
     readonly fontReadiness: KpEquationFontReadiness;
     readonly presentationRevision: string;
     readonly measurementIdentity: KpEquationStageMeasurementIdentity;
+    readonly appliedStageLayout?:
+      KpAppliedEquationStageLayout | undefined;
   }) => boolean;
   readonly invalidate: () => void;
   readonly dispose: () => void;
@@ -32,6 +38,7 @@ export interface KpReaderCanonicalEquationSession {
 export function createKpReaderCanonicalEquationSession(input: {
   readonly transitionIds: readonly string[];
   readonly createSession: KpReaderEquationSceneCompositorFactory;
+  readonly requireAppliedStageLayout?: boolean | undefined;
 }): KpReaderCanonicalEquationSession {
   if (
     input.transitionIds.length === 0 ||
@@ -82,6 +89,7 @@ export function createKpReaderCanonicalEquationSession(input: {
         frame.fontReadiness.revision,
         frame.measurementIdentity.coordinateSpaceId,
         frame.measurementIdentity.revision,
+        frame.appliedStageLayout?.applicationId ?? "native",
         frame.fitSurface.offsetWidth,
         frame.fitSurface.offsetHeight
       ].join(":");
@@ -94,6 +102,21 @@ export function createKpReaderCanonicalEquationSession(input: {
         frame.fitSurface.offsetWidth,
         frame.fitSurface.offsetHeight
       ].join(":");
+      if (
+        input.requireAppliedStageLayout === true &&
+        frame.appliedStageLayout === undefined
+      ) {
+        throw new Error(
+          "Reader canonical equation session requires applied stage layout."
+        );
+      }
+      if (frame.appliedStageLayout !== undefined) {
+        assertKpAppliedEquationStageLayout(
+          frame.appliedStageLayout,
+          frame.measurementIdentity,
+          "Reader canonical equation session"
+        );
+      }
       if (session === undefined || sessionKey !== nextKey) {
         // Focus-only presentation revisions rebuild their typography plan but
         // retain the expensive structural capture. The inner renderer still

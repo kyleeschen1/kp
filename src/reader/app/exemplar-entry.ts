@@ -14,6 +14,7 @@ import {
   createKpReaderEquationMaterialLayer,
   defineKpReaderScheduledRendererAdapter,
   loadKpReaderEquationSceneCompositorAdapter,
+  measureKpReaderAppliedEquationStageLayoutSnapshot,
   measureKpReaderEquationLayoutSnapshot,
   planKpReaderEquationPerceptualAlignment,
   planKpReaderEquationSequenceResponsiveFit,
@@ -41,6 +42,7 @@ import {
   createKpReaderSemanticFocusService,
   createKpReaderSessionSnapshot,
   createKpReaderRuntimeRouteDescriptor,
+  createKpEquationStageMeasurementIdentity,
   decodeKpReaderSessionUrl,
   defineKpReaderEquationPresentationCapability,
   encodeKpReaderSessionUrl,
@@ -52,6 +54,8 @@ import {
   resolveKpReaderMotionPolicy,
   selectKpReaderEquationPresentation,
   sampleKpReaderAnimationFrame,
+  resetKpAppliedEquationStageLayout,
+  type KpAppliedEquationStageLayout,
   type KpReaderClockSample,
   type KpReaderContinuousScrollClock,
   type KpReaderFocusSnapshot,
@@ -86,6 +90,8 @@ interface TransitionContext {
   readonly layout: KpReaderEquationLayoutSnapshot;
   readonly alignment: KpReaderEquationPerceptualAlignmentPlan;
   readonly fit: KpReaderEquationResponsiveFitPlan;
+  readonly appliedStageLayout?:
+    KpAppliedEquationStageLayout | undefined;
 }
 
 interface LayoutState {
@@ -343,7 +349,9 @@ const readerCanonicalEquationSession: KpReaderCanonicalEquationSession | undefin
         transitionIds: canonicalTransitionIds,
         createSession:
           readerCanonicalEquationSessionAdapter
-            .createKpReaderEquationSceneCompositorSession
+            .createKpReaderEquationSceneCompositorSession,
+        requireAppliedStageLayout:
+          lessonDescriptor.stageLayoutCompiler !== undefined
       });
 if (readerCanonicalEquationSession !== undefined) {
   stage.dataset["kpReaderCanonicalEquationSession"] =
@@ -544,7 +552,23 @@ function measureLayout(revision: number): LayoutState {
     return lastMeasuredLayout;
   }
   const measured: Omit<TransitionContext, "fit">[] = [];
-  for (const element of transitionElements) {
+  const stageLayoutIntent =
+    foldableDistributionControls?.readStageLayoutIntent();
+  const stageLayoutCompiler = lessonDescriptor.stageLayoutCompiler;
+  if ((stageLayoutIntent === undefined) !== (stageLayoutCompiler === undefined)) {
+    throw new Error(
+      "Reader stage layout requires both semantic intent and a descriptor compiler."
+    );
+  }
+  if (
+    stageLayoutIntent !== undefined &&
+    stageLayoutIntent.phases.length !== transitionElements.length
+  ) {
+    throw new Error(
+      "Reader stage layout must cover every equation transition exactly once."
+    );
+  }
+  for (const [index, element] of transitionElements.entries()) {
     const id = requiredData(element, "kpReaderTransition");
     const plans = staticPlans.get(id);
     if (plans === undefined) {
@@ -559,13 +583,47 @@ function measureLayout(revision: number): LayoutState {
       "[data-kp-reader-fit-surface]"
     );
     fitSurface.style.transform = "none";
-    const layout = measureKpReaderEquationLayoutSnapshot({
-      materialPlan: plans.materialPlan,
-      transitionId: id,
-      measurementRoot,
+    const coordinateSpaceId = `${animation.id}.equation-stage`;
+    const measurementIdentity = createKpEquationStageMeasurementIdentity({
       revision,
-      coordinateSpaceId: `${animation.id}.equation-stage`
+      coordinateSpaceId
     });
+    const phaseIntent = stageLayoutIntent?.phases[index];
+    const cohort = phaseCohorts[index];
+    let appliedStageLayout: KpAppliedEquationStageLayout | undefined;
+    if (
+      stageLayoutCompiler !== undefined &&
+      phaseIntent !== undefined &&
+      cohort !== undefined
+    ) {
+      resetKpAppliedEquationStageLayout(measurementRoot);
+      appliedStageLayout = stageLayoutCompiler.apply({
+        phaseIntent,
+        sourceObjectIds: cohort.sourceObjectIds,
+        targetObjectIds: cohort.targetObjectIds,
+        measurementRoot,
+        measurementIdentity
+      });
+      element.dataset["kpReaderStageLayoutApplied"] =
+        appliedStageLayout.applicationId;
+      element.dataset["kpReaderStageLayoutPhase"] = phaseIntent.nodeId;
+    }
+    const layout = appliedStageLayout === undefined
+      ? measureKpReaderEquationLayoutSnapshot({
+          materialPlan: plans.materialPlan,
+          transitionId: id,
+          measurementRoot,
+          revision,
+          coordinateSpaceId
+        })
+      : measureKpReaderAppliedEquationStageLayoutSnapshot({
+          materialPlan: plans.materialPlan,
+          transitionId: id,
+          measurementRoot,
+          revision,
+          coordinateSpaceId,
+          appliedStageLayout
+        });
     const alignment = planKpReaderEquationPerceptualAlignment({
       materialPlan: plans.materialPlan,
       layout
@@ -579,7 +637,8 @@ function measureLayout(revision: number): LayoutState {
       materialPlan: plans.materialPlan,
       anchorElements: anchorElementIndex(measurementRoot),
       layout,
-      alignment
+      alignment,
+      ...(appliedStageLayout === undefined ? {} : { appliedStageLayout })
     });
   }
   const fit = planKpReaderEquationSequenceResponsiveFit({
@@ -739,7 +798,8 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
       focusSnapshot.activeSource ?? "none",
       ...focusedRefs
     ].join(":"),
-    measurementIdentity: context.fit.measurementIdentity
+    measurementIdentity: context.fit.measurementIdentity,
+    appliedStageLayout: context.appliedStageLayout
   }) ?? false;
   if (canonicalEquationSessionApplied) {
     materialLayer.sync([]);

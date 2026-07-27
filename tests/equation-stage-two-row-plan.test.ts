@@ -86,6 +86,10 @@ for (const fixture of [
     assert.equal(certificate.policy, "semantic-two-row-stage");
     assertClose(centerX(first!.rect), centerX(second!.rect));
     assertClose(
+      centerY(certificate.stageBounds),
+      centerY(union([...fixture.first, ...fixture.second]))
+    );
+    assertClose(
       second!.rect.top - (first!.rect.top + first!.rect.height),
       certificate.minimumGutterPx
     );
@@ -142,6 +146,18 @@ test("random two-row fixtures remain centered and non-overlapping", () => {
 
 function centerX(rect: KpEquationStageRect): number {
   return rect.left + rect.width / 2;
+}
+
+function centerY(rect: KpEquationStageRect): number {
+  return rect.top + rect.height / 2;
+}
+
+function union(rects: readonly KpEquationStageRect[]): KpEquationStageRect {
+  const left = Math.min(...rects.map(({ left }) => left));
+  const top = Math.min(...rects.map(({ top }) => top));
+  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
+  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
+  return { left, top, width: right - left, height: bottom - top };
 }
 
 function contains(outer: KpEquationStageRect, inner: KpEquationStageRect) {

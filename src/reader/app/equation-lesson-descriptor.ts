@@ -4,6 +4,21 @@ import type { KpReaderEquationPresentationProfile } from "../runtime/public-api.
 import {
   compileKpAnimationTransformationPhaseCohorts
 } from "../../animation/transformation-phase-cohorts.ts";
+import type {
+  KpAppliedEquationStageLayout,
+  KpEquationStageMeasurementIdentity,
+  KpEquationStagePhaseIntent
+} from "../runtime/equation-stage-layout.ts";
+
+export interface KpReaderEquationStageLayoutCompiler {
+  readonly apply: (input: {
+    readonly phaseIntent: KpEquationStagePhaseIntent;
+    readonly sourceObjectIds: readonly string[];
+    readonly targetObjectIds: readonly string[];
+    readonly measurementRoot: HTMLElement;
+    readonly measurementIdentity: KpEquationStageMeasurementIdentity;
+  }) => KpAppliedEquationStageLayout;
+}
 
 export interface KpReaderEquationLessonDescriptor {
   readonly id: string;
@@ -23,6 +38,8 @@ export interface KpReaderEquationLessonDescriptor {
   ) => string | undefined) | undefined;
   readonly compactTranscriptAvailable: boolean;
   readonly readerControls?: "foldable-distribution-v1" | undefined;
+  readonly stageLayoutCompiler?:
+    KpReaderEquationStageLayoutCompiler | undefined;
 }
 
 export interface KpReaderCanonicalTransitionPolicy {

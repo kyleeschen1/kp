@@ -346,11 +346,46 @@
       "scope": "slice s13 applied layout seam",
       "checkedAt": "2026-07-27T22:44:12.285Z",
       "notes": "12 canonical renderer gates pass; renderer vocabulary, session ownership, fraction behavior, and invalidation remain unchanged."
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s14 reader applied layout integration",
+      "checkedAt": "2026-07-27T22:56:59.989Z",
+      "notes": "All 15 Chromium cases pass, including exact applied phase proof, fold and resize invalidation, canonical ownership, direct seek, rewind, phone, no-JS accessibility, and shared foldable/solve-x centering."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s14 reader applied layout integration",
+      "checkedAt": "2026-07-27T22:57:00.927Z",
+      "notes": "97 focused tests pass; the two-row certifier now preserves the intrinsic vertical as well as horizontal center."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice s14 reader applied layout integration",
+      "checkedAt": "2026-07-27T22:57:01.735Z",
+      "notes": "12 canonical renderer gates pass with applied-layout proof gating enabled only through the descriptor capability."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s14 reader applied layout integration",
+      "checkedAt": "2026-07-27T22:57:02.536Z",
+      "notes": "All TypeScript projects accept the descriptor stage-layout compiler, controls intent provider, optional applied context, and canonical-session gate."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice s14 reader applied layout integration",
+      "checkedAt": "2026-07-27T22:57:03.333Z",
+      "notes": "Inference contracts pass at types=36604, instantiations=44723, check=1.5s."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Certified row transforms can now be atomically applied to exact connected native members with stale-revision, completeness, foreign-authority, and double-transform guards; only the resulting opaque applied proof can enter the post-transform paint measurement path."
+    "summary": "The foldable descriptor now compiles semantic envelopes into applied row proof inside the shared reader, resets and remeasures on fold or resize, gates canonical paint observation on that proof, and preserves two-row center on both axes without a distribution branch in the renderer."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

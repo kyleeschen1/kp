@@ -345,7 +345,11 @@ export function certifyKpTwoRowEquationStageLayout(
   const minimumGutterPx = Math.max(measuredEm * 0.75, measuredInk * 0.15);
   const intrinsicBounds = unionStageRects(intrinsic.map(({ rect }) => rect));
   const centerX = intrinsicBounds.left + intrinsicBounds.width / 2;
-  let nextTop = intrinsicBounds.top;
+  const centerY = intrinsicBounds.top + intrinsicBounds.height / 2;
+  const stackHeight =
+    intrinsic.reduce((height, { rect }) => height + rect.height, 0) +
+    minimumGutterPx;
+  let nextTop = centerY - stackHeight / 2;
   const rows = intrinsic.map(({ intent, rect }) => {
     const translateX = centerX - (rect.left + rect.width / 2);
     const translateY = nextTop - rect.top;
@@ -495,8 +499,11 @@ export function applyKpCertifiedEquationStageLayout<
     }
     for (const { ownerId, element, row } of staged) {
       if (
-        element.style.translate !==
-          `${row.translateX}px ${row.translateY}px` ||
+        !cssTranslationMatches(
+          element.style.translate,
+          row.translateX,
+          row.translateY
+        ) ||
         element.dataset["kpEquationStageLayoutApplication"] !== applicationId
       ) {
         throw new Error(
@@ -559,6 +566,19 @@ export function assertKpAppliedEquationStageLayout(
   );
   if (applied.appliedRowIds.length !== applied.certificate.rows.length) {
     throw new Error(`${label} is missing applied row proof.`);
+  }
+}
+
+export function resetKpAppliedEquationStageLayout(root: ParentNode): void {
+  for (const element of root.querySelectorAll<HTMLElement>(
+    '[data-kp-equation-stage-layout-authority="applied-v1"]'
+  )) {
+    element.style.translate = "";
+    delete element.dataset["kpEquationStageLayoutAuthority"];
+    delete element.dataset["kpEquationStageLayoutApplication"];
+    delete element.dataset["kpEquationStageLayoutRow"];
+    delete element.dataset["kpEquationStageLayoutRevision"];
+    delete element.dataset["kpEquationStageLayoutCoordinateSpace"];
   }
 }
 
@@ -654,4 +674,20 @@ function restoreData(
 ): void {
   if (value === undefined) delete element.dataset[key];
   else element.dataset[key] = value;
+}
+
+function cssTranslationMatches(
+  value: string,
+  expectedX: number,
+  expectedY: number
+): boolean {
+  const components = value.trim().split(/\s+/);
+  const x = Number.parseFloat(components[0] ?? "");
+  const y = components.length < 2
+    ? 0
+    : Number.parseFloat(components[1] ?? "");
+  return Number.isFinite(x) &&
+    Number.isFinite(y) &&
+    Math.abs(x - expectedX) <= 1e-4 &&
+    Math.abs(y - expectedY) <= 1e-4;
 }

@@ -134,6 +134,17 @@ export function measureKpNativeKatexSubtreePaintRect(
   };
 }
 
+export function measureKpNativeKatexBaselineY(
+  stage: HTMLElement,
+  element: HTMLElement
+): number {
+  const stageRect = stage.getBoundingClientRect();
+  const scaleY = stageRect.height > 0
+    ? (stage.offsetHeight || stageRect.height) / stageRect.height
+    : 1;
+  return (measureInlineBaseline(element) - stageRect.top) * scaleY;
+}
+
 function visibleDirectText(element: HTMLElement): string {
   return [...element.childNodes]
     .filter((node) => node.nodeType === Node.TEXT_NODE)

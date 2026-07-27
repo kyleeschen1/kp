@@ -15,12 +15,15 @@ import {
   planKpFoldableDistributionLayout,
   decodeKpFoldableDistributionUrl,
   encodeKpFoldableDistributionUrl,
+  type KpFoldableDistributionLayoutIntent,
   type KpFoldableDistributionCheckpoint,
   type KpFoldableDistributionUrlState,
   type KpReaderRuntimeRouteDescriptor
 } from "../runtime/public-api.ts";
 
 export interface KpFoldableDistributionReaderControls {
+  readonly readStageLayoutIntent: () =>
+    KpFoldableDistributionLayoutIntent;
   readonly projectAnimationProgress: (semanticProgress: number) => number;
   readonly resolveCheckpointProgressPermille: (
     checkpointId: string,
@@ -148,6 +151,12 @@ export function mountKpFoldableDistributionReaderControls(input: {
   }
 
   return Object.freeze({
+    readStageLayoutIntent() {
+      return planKpFoldableDistributionLayout({
+        projection,
+        viewport: window.innerWidth > 880 ? "wide" : "phone"
+      });
+    },
     projectAnimationProgress(semanticProgress: number) {
       const timeline = compileKpFoldableDistributionFoldTimeline(projection);
       const sample = sampleKpFoldableDistributionTimeline({
