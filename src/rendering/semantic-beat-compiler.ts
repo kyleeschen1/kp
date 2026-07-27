@@ -178,6 +178,27 @@ export const linearEquationDemoBeatTimeline = compileSemanticBeatTimeline({
       summary: "Semantic radical fragments settle into the native KaTeX radical without a whole-expression scale."
     },
     {
+      id: "reflow-signed-terms",
+      startBeat: 0,
+      endBeat: 31,
+      easing: "ease-in-out",
+      summary: "Opaque signed terms travel through measured clearance lanes before their neighbors move."
+    },
+    {
+      id: "establish-groups",
+      startBeat: 31,
+      endBeat: 45,
+      easing: "ease-in-out",
+      summary: "Grouping structure enters only after the signed terms have cleared one another."
+    },
+    {
+      id: "native-settle",
+      startBeat: 45,
+      endBeat: 50,
+      easing: "ease-in-out",
+      summary: "Reordered terms settle into the exact native KaTeX target."
+    },
+    {
       id: "unwrap-artifact-exit",
       startBeat: 0,
       endBeat: 20,

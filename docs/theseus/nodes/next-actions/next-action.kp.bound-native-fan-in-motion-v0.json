@@ -20,6 +20,14 @@
     {
       "kind": "file",
       "path": "src/rendering/native-katex-fan-in-motion.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/renderers/equation-scene-compositor-adapter.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/motifs/visual-motif.ts"
     }
   ],
   "verificationRecords": [
@@ -46,10 +54,31 @@
       "status": "passed",
       "scope": "boundary",
       "checkedAt": "2026-07-27T17:23:50.065Z"
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "dense wide and phone native-paint geometry",
+      "checkedAt": "2026-07-27T18:39:12.853Z",
+      "notes": "Twelve browser cases pass. Expanded grouping samples 470-630 at 10-permille intervals on 1100px and 390px viewports, forbidding unrelated opaque overlap and fractional opacity; factoring samples forbid the settled x leader from sagging after 760."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full 2621-test regression suite",
+      "checkedAt": "2026-07-27T18:39:18.745Z",
+      "notes": "All tests pass after registering the semantic reorder motif and its beat inventory."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production build and type boundaries",
+      "checkedAt": "2026-07-27T18:39:23.312Z",
+      "notes": "Production build, repository typecheck, reader production closure, dev-review production closure, and canonical linear-equation visual boundary pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Implemented the generic measured-paint fan-in corridor, shared group settlement schedule, local-ink excursion bound, native contact tolerance, and foldable-distribution sag regression coverage. All automated promotion criteria pass; awaiting the named human visual checkpoint before closing or generalizing."
+    "summary": "Human-rejected checkpoint repaired without formula-specific coordinates: the nearest fusion owner settles early while contributors finish their bounded lift, signed-term order inversions use measured upper/lower clearance lanes before grouping enters, grouping structure switches discretely without fading, and narrow card chrome responds to its container. Dense wide/phone paint tests and the full suite pass. Awaiting human visual approval; shared TOC conformance and the quadratic route-budget check remain independently failing on their pre-existing descriptors."
   }
 }

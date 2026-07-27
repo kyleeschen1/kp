@@ -63,6 +63,14 @@ export const defaultEquationTransformVisualMotifRules:
         "The multiplication operator folds into one before the identity is absorbed by its persistent operand."
     },
     {
+      transformationKind: "groupLikeTerms",
+      descriptor: descriptorForEquationMotif("semantic-reorder-and-group"),
+      canonicalOperationIds: ["kp.core.reorder", "kp.core.group"],
+      trustedMotifIds: ["reorder", "group"],
+      summary:
+        "Opaque signed terms reorder before their grouping structure settles."
+    },
+    {
       transformationKind: "applyDerivativePowerRule",
       descriptor: descriptorForEquationMotif("derivative-power"),
       summary:

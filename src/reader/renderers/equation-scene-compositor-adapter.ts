@@ -39,6 +39,8 @@ export function createKpReaderEquationSceneCompositorSession(input: {
   input.source.stage.dataset["kpNativeKatexMotionProfile"] =
     renderTransition.visualMotif?.kind === "copy-fan-out"
       ? "canonical-copy-fan-out"
+      : renderTransition.visualMotif?.kind === "semantic-reorder-and-group"
+        ? "canonical-semantic-reorder-and-group"
       : "default";
   const canonical = createKpCanonicalNativeKatexSceneSession({
     source: input.source,
@@ -49,6 +51,9 @@ export function createKpReaderEquationSceneCompositorSession(input: {
       : {}),
     ...(renderTransition.visualMotif?.kind === "copy-fan-out"
       ? { copyFanOutRouting: true }
+      : {}),
+    ...(renderTransition.visualMotif?.kind === "semantic-reorder-and-group"
+      ? { reorderRouting: true }
       : {}),
     ...(renderTransition.successorSyntheses === undefined
       ? {}

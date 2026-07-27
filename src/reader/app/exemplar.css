@@ -162,6 +162,23 @@ body[data-kp-reader-motion-mode="essential"] .kp-reader-equation-material-owner-
 .kp-reader-equation-progress span { display: block; width: 100%; height: 100%; background: var(--kp-accent); transform: scaleX(0); transform-origin: left; }
 .kp-reader-equation-hint { margin: .68rem 0 0; color: var(--kp-muted); font-size: .7rem; text-align: center; }
 
+/* Reader cards can be narrow inside a wide viewport, so their chrome responds
+   to the card rather than waiting for the page-level phone breakpoint. */
+body[data-kp-reader-lesson-variant="foldable-distribution"] .kp-reader-equation-stage {
+  container-type: inline-size;
+}
+@container (max-width: 40rem) {
+  body[data-kp-reader-lesson-variant="foldable-distribution"] .kp-reader-equation-stage-heading {
+    grid-template-areas: "kicker" "control" "status";
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body[data-kp-reader-lesson-variant="foldable-distribution"] .kp-reader-equation-controls {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-left: 0;
+  }
+}
+
 @media (max-width: 880px) {
   :root { --kp-equation-type-size: clamp(1.05rem, 4.2vw, 1.2rem); }
   .kp-reader-layout { grid-template-columns: 1fr; width: min(100% - 28px, 700px); }

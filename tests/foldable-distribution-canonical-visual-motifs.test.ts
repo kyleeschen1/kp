@@ -97,6 +97,24 @@ test("every phase compiles semantic transition IR rather than fallback paint", (
   }
 });
 
+test("reader execution retains the signed-term reorder motif", () => {
+  const animation = createKpFoldableDistributionEquationAnimationAsset();
+  const runtimeFrame = sampleKpAnimationRuntimeFrame({
+    animation,
+    progress: 0.5
+  });
+  const transition = projectKpReaderEquationRenderPlan({
+    animation,
+    runtimeFrame
+  }).transitions[0]!;
+
+  assert.equal(transition.transformType, "groupLikeTerms");
+  assert.equal(
+    transition.visualMotif?.kind,
+    "semantic-reorder-and-group"
+  );
+});
+
 test("parallel motif phases render as one complete source-target cohort", () => {
   const animation = createKpFoldableDistributionEquationAnimationAsset();
   for (const [progress, motifKind] of [

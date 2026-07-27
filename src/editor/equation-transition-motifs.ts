@@ -91,6 +91,10 @@ function sourceMotion(
       return motion(1 - progress, 0, 0, 1, 0);
     case "relation-flip":
       return motion(1 - progress, 0, 0, 1, 0, -90 * progress);
+    case "semantic-reorder-and-group":
+      // The canonical compositor owns measured term lanes; this geometry-free
+      // preview holds the source instead of inventing a crossfade.
+      return motion(progress === 1 ? 0 : 1, 0, 0, 1, 0);
     case "simplify-into":
       return motion(1 - progress, 0, 0, 1 - 0.12 * progress, 0);
     case "substitute":
@@ -141,6 +145,8 @@ function targetMotion(
       return motion(progress, 0, 0, 1, 0);
     case "relation-flip":
       return motion(progress, 0, 0, 1, 0, 90 * (1 - progress));
+    case "semantic-reorder-and-group":
+      return motion(progress === 1 ? 1 : 0, 0, 0, 1, 0);
     case "simplify-into":
       return motion(progress, 0, 0, 0.86 + 0.14 * progress, 0);
     case "substitute":

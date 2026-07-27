@@ -53,6 +53,7 @@ export type EquationVisualMotifKind =
   | "matrix-cell-compose"
   | "radical-corner-transfer"
   | "relation-flip"
+  | "semantic-reorder-and-group"
   | "simplify-into"
   | "substitute"
   | "wrap"
@@ -78,6 +79,9 @@ export const equationVisualMotifPhaseIds = [
   "radical-corner-gather",
   "radical-representation-handoff",
   "radical-native-settle",
+  "reflow-signed-terms",
+  "establish-groups",
+  "native-settle",
   "unwrap-artifact-exit",
   "wrap-artifact-enter",
   "wrapped-token-shift",
@@ -170,6 +174,17 @@ export const equationVisualMotifDescriptors: readonly EquationVisualMotifDescrip
     motionPrimitiveIds: ["copy", "shift"],
     phaseIds: [...kpCopyFanOutPhaseIds],
     summary: "A persistent source contracts while lineage-bearing copies branch and travel independently."
+  },
+  {
+    kind: "semantic-reorder-and-group",
+    motionPrimitiveIds: ["shift"],
+    phaseIds: [
+      "reflow-signed-terms",
+      "establish-groups",
+      "native-settle"
+    ],
+    summary:
+      "Opaque terms reorder before their grouping structure is established."
   },
   {
     kind: "limit-convergence",

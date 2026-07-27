@@ -1,7 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 import {
   kpMaximumFanInExcursionInLocalInkHeights,
-  kpMaximumFanInSettlementAspectRatio
+  kpMaximumFanInSettlementAspectRatio,
+  kpNativeReorderInkContactTolerancePx
 } from "../src/rendering/equation-motion-path-planner.ts";
 
 const route = (
@@ -375,6 +376,91 @@ test("persistent product terms translate as opaque paint through evaluation", as
   }
 });
 
+test("expanded signed-term reorder clears unrelated paint before grouping", async ({
+  page
+}) => {
+  for (const viewport of [
+    { width: 1_100, height: 800 },
+    { width: 390, height: 844 }
+  ]) {
+    await page.setViewportSize(viewport);
+    for (const progress of Array.from(
+      { length: 17 },
+      (_value, index) => 470 + index * 10
+    )) {
+      await page.goto(route(progress, { kpFoldMode: "expanded" }), {
+        waitUntil: "domcontentloaded"
+      });
+      await expect(page.locator("body")).toHaveAttribute(
+        "data-kp-reader-transition",
+        "transform.foldable-distribution.group-like-terms"
+      );
+      const active = page.locator(
+        "[data-kp-reader-transition-active='true']"
+      );
+      await expect(
+        active.locator("[data-kp-reader-fit-surface]")
+      ).toHaveAttribute(
+        "data-kp-native-katex-motion-profile",
+        "canonical-semantic-reorder-and-group"
+      );
+      const observations = await page.locator(
+        "[data-kp-equation-material-owner-id]"
+      ).evaluateAll(async (owners) => {
+        const geometryModule =
+          "/src/rendering/native-katex-paint-geometry.ts";
+        const { measureKpNativeKatexSubtreePaintRect } =
+          await import(geometryModule);
+        const stage = document.querySelector<HTMLElement>(
+          "[data-kp-reader-equation-viewport]"
+        );
+        if (stage === null) {
+          throw new Error("Signed-term reorder lacks its measured stage.");
+        }
+        return owners.flatMap((owner) => {
+          const element = owner as HTMLElement;
+          const opacity = Number(getComputedStyle(element).opacity);
+          if (opacity <= 0.01) return [];
+          const visual = element.firstElementChild as HTMLElement | null;
+          const rect = visual === null
+            ? undefined
+            : measureKpNativeKatexSubtreePaintRect(stage, visual);
+          if (rect === undefined) return [];
+          return [{
+            owner: element.dataset["kpEquationMaterialOwnerId"] ?? "",
+            semantic:
+              element.dataset["kpEquationMaterialSemanticEntityId"] ?? "",
+            opacity,
+            left: rect.left,
+            top: rect.top,
+            right: rect.left + rect.width,
+            bottom: rect.top + rect.height
+          }];
+        });
+      });
+      const overlaps = observations.flatMap((left, leftIndex) =>
+        observations.slice(leftIndex + 1).flatMap((right) => {
+          if (left.semantic === right.semantic) return [];
+          const width =
+            Math.min(left.right, right.right) - Math.max(left.left, right.left);
+          const height =
+            Math.min(left.bottom, right.bottom) - Math.max(left.top, right.top);
+          const toleratedContact = kpNativeReorderInkContactTolerancePx * 2;
+          return width > toleratedContact && height > toleratedContact
+            ? [{ left, right, width, height }]
+            : [];
+        })
+      );
+      expect(overlaps, JSON.stringify({ viewport, progress, overlaps }))
+        .toEqual([]);
+      expect(
+        observations.filter(({ opacity }) => opacity > 0.01 && opacity < 0.99),
+        JSON.stringify({ viewport, progress, observations })
+      ).toEqual([]);
+    }
+  }
+});
+
 test("successor ownership survives direct seek, rewind, phone, and reduced motion", async ({
   page
 }) => {
@@ -585,6 +671,50 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
       "[data-kp-reader-transition-active='true'] [data-kp-reader-native='target']"
     )
   ).toContainText("(3+2)x+(6−2)");
+  const chromeGeometry = await page.locator(
+    "[data-kp-reader-equation-stage]"
+  ).evaluate((stage) => {
+    const kicker = stage.querySelector<HTMLElement>(
+      "[data-kp-reader-stage-kicker]"
+    );
+    const controls = stage.querySelector<HTMLElement>(
+      ".kp-reader-equation-controls"
+    );
+    if (kicker === null || controls === null) {
+      throw new Error("Expanded equation card lacks its chrome.");
+    }
+    const stageRect = stage.getBoundingClientRect();
+    const kickerRect = kicker.getBoundingClientRect();
+    const controlsRect = controls.getBoundingClientRect();
+    return {
+      stage: {
+        left: stageRect.left,
+        right: stageRect.right
+      },
+      kicker: {
+        left: kickerRect.left,
+        top: kickerRect.top,
+        right: kickerRect.right,
+        bottom: kickerRect.bottom
+      },
+      controls: {
+        left: controlsRect.left,
+        top: controlsRect.top,
+        right: controlsRect.right,
+        bottom: controlsRect.bottom
+      }
+    };
+  });
+  expect(chromeGeometry.controls.left).toBeGreaterThanOrEqual(
+    chromeGeometry.stage.left
+  );
+  expect(chromeGeometry.controls.right).toBeLessThanOrEqual(
+    chromeGeometry.stage.right
+  );
+  expect(
+    rectanglesOverlap(chromeGeometry.kicker, chromeGeometry.controls),
+    JSON.stringify(chromeGeometry)
+  ).toBe(false);
 
   const factoringPaintSamples = [];
   for (const progress of Array.from(
@@ -715,24 +845,21 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
       if (xPaint.length === 0 || nativeXPaint.length !== 3) {
         throw new Error("Factoring paint lacks complete native x geometry.");
       }
+      const target = nativeXPaint.find(({ selector }) =>
+        selector === "coefficient-factored.x"
+      );
+      if (target === undefined) {
+        throw new Error("Factoring paint lacks its native x target.");
+      }
       return {
         residual: Math.max(...xPaint.map(({ bottom }) =>
-          Math.min(...nativeXPaint.map(({ bottom: nativeBottom }) =>
-            Math.abs(bottom - nativeBottom)
-          ))
+          Math.abs(bottom - target.bottom)
         )),
-        targetHorizontalResidual: (() => {
-          const target = nativeXPaint.find(({ selector }) =>
-            selector === "coefficient-factored.x"
-          );
-          if (target === undefined) {
-            throw new Error("Factoring paint lacks its native x target.");
-          }
-          const targetCenter = (target.left + target.right) / 2;
-          return Math.max(...xPaint.map(({ left, right }) =>
-            Math.abs((left + right) / 2 - targetCenter)
-          ));
-        })(),
+        targetHorizontalResidual: Math.max(...xPaint.map(({ left, right }) =>
+          Math.abs(
+            (left + right) / 2 - (target.left + target.right) / 2
+          )
+        )),
         glyphBaselines,
         visiblePaint,
         xPaint,
@@ -810,6 +937,36 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
       factoringPaintSamples[index - 1]!.xNativeResidual + 0.75
     );
   }
+  const settledSample = factoringPaintSamples.find(({ progress }) =>
+    progress === 760
+  )!;
+  const finalSample = factoringPaintSamples.at(-1)!;
+  const finalLeader = finalSample.observations.find(({ semantic }) =>
+    semantic === "grouped.x-from-right"
+  )!;
+  const finalLeaderCenter = (finalLeader.left + finalLeader.right) / 2;
+  for (const sample of factoringPaintSamples.filter(({ progress }) =>
+    progress >= 760
+  )) {
+    const leader = sample.observations.find(({ semantic }) =>
+      semantic === "grouped.x-from-right"
+    )!;
+    expect(
+      Math.abs(leader.bottom - finalLeader.bottom),
+      JSON.stringify({ sample, finalLeader })
+    ).toBeLessThanOrEqual(0.75);
+    expect(
+      Math.abs((leader.left + leader.right) / 2 - finalLeaderCenter),
+      JSON.stringify({ sample, finalLeader })
+    ).toBeLessThanOrEqual(0.75);
+  }
+  const movingContributor = settledSample.observations.find(({ semantic }) =>
+    semantic === "grouped.x-from-left"
+  )!;
+  expect(
+    Math.abs(movingContributor.bottom - finalLeader.bottom),
+    JSON.stringify({ settledSample, finalLeader })
+  ).toBeGreaterThanOrEqual(4);
   const persistentContextIds = new Set([
     "grouped.coefficients.plus",
     "grouped.coefficient-2",
@@ -978,6 +1135,26 @@ test("shared equation fitting contains and centers foldable and linear solve car
     ).toBeLessThanOrEqual(1);
   }
 });
+
+function rectanglesOverlap(
+  left: {
+    readonly left: number;
+    readonly top: number;
+    readonly right: number;
+    readonly bottom: number;
+  },
+  right: {
+    readonly left: number;
+    readonly top: number;
+    readonly right: number;
+    readonly bottom: number;
+  }
+): boolean {
+  return left.left < right.right &&
+    left.right > right.left &&
+    left.top < right.bottom &&
+    left.bottom > right.top;
+}
 
 async function equationGeometry(page: Page): Promise<{
   fitStatus: string | undefined;

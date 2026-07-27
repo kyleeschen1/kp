@@ -17,6 +17,8 @@ import type {
   KpEquationStructuralSuccessionIntent
 } from "../animation/structural-succession-presentation.ts";
 import {
+  compileKpCollisionSafeReorderTracks,
+  sampleKpEquationMotionTrackOpacityProgress,
   sampleKpEquationMotionTrackRect,
   type KpEquationCollisionTrack
 } from "./equation-motion-path-planner.ts";
@@ -659,7 +661,7 @@ export function sampleKpNativeKatexSceneTracks(
     opacity: lerp(
       sceneTrack.startOpacity,
       sceneTrack.endOpacity,
-      lifecycleOpacityProgress(sceneTrack, bounded)
+      sampleKpEquationMotionTrackOpacityProgress(sceneTrack, bounded)
     )
   })));
 }
@@ -1648,6 +1650,7 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     readonly KpNativeKatexSuccessorSynthesisIntent[] | undefined;
   readonly fanInRouting?: boolean | undefined;
   readonly copyFanOutRouting?: boolean | undefined;
+  readonly reorderRouting?: boolean | undefined;
 }): KpCanonicalNativeKatexSceneSession {
   if (input.source.stage !== input.target.stage) {
     throw new Error("Canonical native KaTeX endpoints must share one stage.");
@@ -1672,9 +1675,12 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     successorPlans,
     allTracks
   );
-  const tracks = input.fanInRouting === true
-    ? compileKpQualityBoundedFanInTracks(successorOwnership.tracks)
+  const reorderedTracks = input.reorderRouting === true
+    ? compileKpCollisionSafeReorderTracks(successorOwnership.tracks)
     : successorOwnership.tracks;
+  const tracks = input.fanInRouting === true
+    ? compileKpQualityBoundedFanInTracks(reorderedTracks)
+    : reorderedTracks;
   const correlations = correlateKpNativeKatexSceneHandoff({
     reconciliation,
     tracks: allTracks
@@ -2043,20 +2049,6 @@ function lerp(source: number, target: number, progress: number): number {
 
 function smoothstep(value: number): number {
   return value * value * (3 - 2 * value);
-}
-
-function lifecycleOpacityProgress(
-  track: KpNativeKatexSceneTrack,
-  progress: number
-): number {
-  if (track.startOpacity === track.endOpacity) return progress;
-  const [start, end] =
-    track.lifecycle === "merge" ? [0.62, 0.94] :
-    track.lifecycle === "split" ? [0.18, 0.68] :
-    track.lifecycle === "introduce" ? [0.28, 0.82] :
-    track.lifecycle === "eliminate" ? [0.08, 0.62] :
-    [0, 1];
-  return smoothstep(Math.max(0, Math.min(1, (progress - start) / (end - start))));
 }
 
 function observeCorrelatedHandoffPaint(input: {

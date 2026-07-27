@@ -106,6 +106,11 @@ test("visual motif module exposes reusable equation motif descriptors", () => {
         ]
       ],
       [
+        "semantic-reorder-and-group",
+        ["shift"],
+        ["reflow-signed-terms", "establish-groups", "native-settle"]
+      ],
+      [
         "limit-convergence",
         ["shift", "reveal"],
         ["layout-shift", "final-simplify-reveal"]

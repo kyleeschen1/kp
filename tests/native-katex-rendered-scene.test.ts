@@ -31,6 +31,7 @@ import {
   evaluateKpNativeKatexFanInMotionQuality
 } from "../src/rendering/native-katex-fan-in-motion.ts";
 import {
+  compileKpCollisionSafeReorderTracks,
   planKpEquationMotionPathBetweenPoints,
   sampleKpEquationMotionTrackPaintRect
 } from "../src/rendering/equation-motion-path-planner.ts";
@@ -1645,7 +1646,8 @@ test("merge-fan-in opens a lane before routing focal material", () => {
   assert.deepEqual(start.rect, merge.startRect);
   assert.deepEqual(end.rect, merge.endRect);
   assert.ok(middle.rect.top < merge.startRect.top);
-  assert.equal(middle.rect.left, merge.startRect.left);
+  assert.ok(middle.rect.left > merge.startRect.left);
+  assert.ok(middle.rect.left < merge.endRect.left);
   assert.ok(maximumLift >= 4);
   assert.ok(maximumLift <= merge.startRect.height * 1.5);
   assert.equal(obstacleMiddle.rect.top, obstacle.startRect.top);
@@ -1658,6 +1660,99 @@ test("merge-fan-in opens a lane before routing focal material", () => {
     evaluateKpNativeKatexFanInMotionQuality(tracks).passed,
     true
   );
+});
+
+test("merge-fan-in settles its nearest fusion leader before contributors", () => {
+  const contributor: KpNativeKatexSceneTrack = {
+    id: "track.merge.contributor",
+    componentId: "component.merge.shared",
+    lifecycle: "merge",
+    sourceAtomId: "source.contributor",
+    targetAtomId: "target.shared",
+    visualAtomId: "source.contributor",
+    paintKind: "glyph",
+    sizingMode: "rect",
+    startRect: { left: 0, top: 20, width: 12, height: 16 },
+    endRect: { left: 100, top: 20, width: 12, height: 16 },
+    startOpacity: 1,
+    endOpacity: 1
+  };
+  const leader: KpNativeKatexSceneTrack = {
+    ...contributor,
+    id: "track.merge.leader",
+    sourceAtomId: "source.leader",
+    visualAtomId: "source.leader",
+    startRect: { left: 88, top: 20, width: 12, height: 16 }
+  };
+  const [compiledContributor, compiledLeader] =
+    compileKpQualityBoundedFanInTracks([contributor, leader]);
+  const progress = 0.8;
+  const [contributorFrame, leaderFrame] = sampleKpNativeKatexSceneTracks(
+    [compiledContributor!, compiledLeader!],
+    progress
+  );
+
+  assert.equal(compiledContributor!.motionProgressRange?.end, 0.95);
+  assert.equal(compiledLeader!.motionProgressRange?.end, 0.72);
+  assert.notDeepEqual(contributorFrame!.rect, contributor.endRect);
+  assert.deepEqual(leaderFrame!.rect, leader.endRect);
+  assert.deepEqual(
+    [contributorFrame!.opacity, leaderFrame!.opacity],
+    [1, 1]
+  );
+});
+
+test("semantic reorder lifts one opaque crossing cohort before grouping enters", () => {
+  const track = (
+    id: string,
+    componentId: string,
+    startLeft: number,
+    endLeft: number
+  ): KpNativeKatexSceneTrack => ({
+    id,
+    componentId,
+    lifecycle: "persist",
+    sourceAtomId: `source.${id}`,
+    targetAtomId: `target.${id}`,
+    visualAtomId: `source.${id}`,
+    paintKind: "glyph",
+    sizingMode: "rect",
+    startRect: { left: startLeft, top: 20, width: 8, height: 16 },
+    endRect: { left: endLeft, top: 20, width: 8, height: 16 },
+    startOpacity: 1,
+    endOpacity: 1
+  });
+  const moverDigit = track("mover.digit", "component.mover", 80, 20);
+  const moverVariable = track("mover.variable", "component.mover", 90, 30);
+  const context = track("context", "component.context", 40, 60);
+  const grouping: KpNativeKatexSceneTrack = {
+    ...track("grouping", "component.grouping", 10, 10),
+    lifecycle: "introduce",
+    startOpacity: 0,
+    endOpacity: 1
+  };
+  const compiled = compileKpCollisionSafeReorderTracks([
+    moverDigit,
+    moverVariable,
+    context,
+    grouping
+  ]);
+  const [compiledDigit, compiledVariable, compiledContext, compiledGrouping] =
+    compiled;
+  const middle = sampleKpNativeKatexSceneTracks(compiled, 0.5);
+  const beforeGrouping = sampleKpNativeKatexSceneTracks(compiled, 0.85);
+  const afterGrouping = sampleKpNativeKatexSceneTracks(compiled, 0.91);
+
+  assert.equal(compiledDigit!.motionPath?.variant, "arc-above");
+  assert.equal(compiledVariable!.motionPath?.variant, "arc-above");
+  assert.equal(compiledDigit!.motionProgressRange?.end, 0.62);
+  assert.equal(compiledContext!.motionProgressRange?.start, 0.62);
+  assert.equal(compiledGrouping!.opacityStepAt, 0.9);
+  assert.ok(middle[0]!.rect.top < moverDigit.startRect.top);
+  assert.ok(middle[1]!.rect.top < moverVariable.startRect.top);
+  assert.deepEqual(middle[2]!.rect, context.startRect);
+  assert.equal(beforeGrouping[3]!.opacity, 0);
+  assert.equal(afterGrouping[3]!.opacity, 1);
 });
 
 test("merge-fan-in fails closed when its native target remains occluded", () => {
@@ -1742,7 +1837,7 @@ test("merge-fan-in quality rejects a late correction after travel is exhausted",
       variants: ["arc-above"],
       clearance: 30
     }).selected,
-    motionPathSampling: "canonical-fan-in-lift",
+    motionPathSampling: "canonical-clearance-lane",
     motionProgressRange: { start: 0.05, end: 0.95 }
   };
   const report = evaluateKpNativeKatexFanInMotionQuality([merge]);
