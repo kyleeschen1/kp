@@ -202,7 +202,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         }
       ]
     },
-    budget: routeBudget(36_312, 4_503, 120_543)
+    budget: routeBudget(36_312, 4_885, 120_543)
   }),
   defineKpReaderRoute({
     route: "/reader/solve-x/teacher-zero/",
@@ -221,7 +221,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       label: "Make the zero visible",
       progressPermille: 500
     }),
-    budget: routeBudget(35_935, 3_868, 120_543)
+    budget: routeBudget(35_935, 4_267, 120_543)
   }),
   defineKpReaderRoute({
     route: "/reader/solve-fractional-linear/",
@@ -240,7 +240,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       label: "Simplify the difference",
       progressPermille: 500
     }),
-    budget: routeBudget(62_792, 5_029, 120_543)
+    budget: routeBudget(62_792, 5_416, 120_543)
   }),
   defineKpReaderRoute({
     route: "/reader/divide-both-sides/",
@@ -259,7 +259,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       label: "Cancel the coefficient",
       progressPermille: 667
     }),
-    budget: routeBudget(32_148, 3_670, 120_543)
+    budget: routeBudget(32_148, 4_061, 120_543)
   }),
   defineKpReaderRoute({
     route: "/reader/split-merge-fractions/",
@@ -288,7 +288,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         }))
       )
     },
-    budget: routeBudget(28_800, 3_448, 120_543)
+    budget: routeBudget(28_800, 3_839, 120_543)
   }),
   defineKpReaderRoute({
     route: "/reader/radical-succession/",
@@ -336,7 +336,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       label: "Expose the product",
       progressPermille: 667
     }),
-    budget: routeBudget(37_889, 4_078, 120_543)
+    budget: routeBudget(37_889, 4_457, 120_543)
   }),
   defineKpReaderRoute({
     route: "/reader/distribution-area/",

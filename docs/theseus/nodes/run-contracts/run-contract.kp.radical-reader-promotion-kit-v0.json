@@ -233,7 +233,8 @@
     {
       "id": "slice-19",
       "title": "production-gates",
-      "status": "planned",
+      "summary": "Production release gates pass on the promoted radical reader: production build and typecheck; 9-route closure and measured budgets; 12 canonical renderer, 60 construction, 45 radical promotion, 52 compositor unit, 44 real-browser compositor, 12 radical browser, 38-frame responsive visual checkpoint, architecture, diff, and workspace validation. Rebaselined only six stale compiled-HTML gzip measurements and the canonical source ceiling to 130000 bytes while retaining the 5 percent growth guard, raw/runtime caps, vocabulary caps, and compatibility boundaries.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {
