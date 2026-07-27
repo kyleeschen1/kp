@@ -41,7 +41,7 @@ export function createKpFoldableDistributionAnnotatedEndpoints():
         ["expression.foldable-distribution.right.factored.left-parenthesis", "("],
         ["factored.right-x", "x"],
         ["expression.foldable-distribution.right.factored.connector", "-"],
-        ["factored.right-one", "1"],
+        ["factored.right-negative-one", "1"],
         ["expression.foldable-distribution.right.factored.right-parenthesis", ")"]
       ],
       groups: [
@@ -56,7 +56,7 @@ export function createKpFoldableDistributionAnnotatedEndpoints():
           "expression.foldable-distribution.right.factored.left-parenthesis",
           "factored.right-x",
           "expression.foldable-distribution.right.factored.connector",
-          "factored.right-one",
+          "factored.right-negative-one",
           "expression.foldable-distribution.right.factored.right-parenthesis"
         ])
       ]
@@ -117,14 +117,9 @@ export function createKpFoldableDistributionAnnotatedEndpoints():
         ["distributed.outer-plus", "+"],
         ["distributed.term-2x", "2x"],
         ["distributed.minus-right", "-"],
-        ["distributed.constant-2", "2"]
+        ["distributed.negative-2", "2"]
       ],
-      groups: [
-        group("distributed.negative-2", [
-          "distributed.minus-right",
-          "distributed.constant-2"
-        ])
-      ]
+      groups: []
     }),
     endpoint({
       objectId: "expression.foldable-distribution.grouped",
@@ -141,7 +136,7 @@ export function createKpFoldableDistributionAnnotatedEndpoints():
         ["grouped.constants.left-parenthesis", "("],
         ["grouped.constant-6", "6"],
         ["grouped.constants.minus", "-"],
-        ["grouped.constant-2", "2"],
+        ["grouped.negative-2", "2"],
         ["grouped.constants.right-parenthesis", ")"]
       ],
       groups: [
@@ -152,10 +147,6 @@ export function createKpFoldableDistributionAnnotatedEndpoints():
         group("grouped.term-2x", [
           "grouped.coefficient-2",
           "grouped.x-from-right"
-        ]),
-        group("grouped.negative-2", [
-          "grouped.constants.minus",
-          "grouped.constant-2"
         ]),
         group("grouped.coefficients", [
           "grouped.coefficients.left-parenthesis",
@@ -170,7 +161,7 @@ export function createKpFoldableDistributionAnnotatedEndpoints():
           "grouped.constants.left-parenthesis",
           "grouped.constant-6",
           "grouped.constants.minus",
-          "grouped.constant-2",
+          "grouped.negative-2",
           "grouped.constants.right-parenthesis"
         ])
       ]

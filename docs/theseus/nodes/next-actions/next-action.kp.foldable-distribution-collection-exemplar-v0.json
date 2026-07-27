@@ -225,11 +225,39 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T06:16:39.613Z",
       "notes": "Native endpoint annotations and semantic envelope declarations compile across all TypeScript projects."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/foldable-distribution-canonical-visual-motifs.test.ts tests/foldable-distribution-native-endpoints.test.ts tests/foldable-distribution-signed-term-grouping.test.ts tests/foldable-distribution-final-collection.test.ts tests/semantic-equation-transition-compiler.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T06:32:37.064Z",
+      "notes": "Six certified operations compile into four semantic-ready phases with copy fan-out, opaque successor synthesis, signed-term reflow/grouping, and merge fan-in; no phase uses enter/exit/reveal/vanish as its motif."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction",
+      "status": "passed",
+      "scope": "canonical-construction",
+      "checkedAt": "2026-07-27T06:32:48.737Z",
+      "notes": "All 60 governed construction, authority firewall, static/export, material ownership, and canonical reader preservation checks pass."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "canonical-renderer",
+      "checkedAt": "2026-07-27T06:32:55.301Z",
+      "notes": "Canonical scene vocabulary, opaque lineage, responsive envelopes, measurement invalidation, and one-session renderer boundaries all pass without compositor-core changes."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T06:33:01.984Z",
+      "notes": "Canonical foldable animation, transition-scoped hierarchical selectors, and visual motif projection compile across all TypeScript projects."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 16 built five exact native KaTeX endpoint specifications. Every visible glyph is annotated, nested signed-term and coefficient concepts use declared envelopes, and all certified relations resolve before browser rendering."
+    "summary": "Slice 17 produced the canonical semantic animation: six certified operations retain four composable phases and compile without fallback into copy fan-out, opaque successor synthesis, signed-term reflow/grouping, and merge fan-in over native endpoints."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",

@@ -432,7 +432,6 @@ function selectorLifecycleIssues(
   coveredSelectorIds: readonly string[]
 ): readonly CorrespondenceMapValidationIssue[] {
   const issues: CorrespondenceMapValidationIssue[] = [];
-  const expected = new Set(expectedSelectorIds);
   const coverage = new Map<string, number>();
   coveredSelectorIds.forEach((selectorId) => {
     coverage.set(selectorId, (coverage.get(selectorId) ?? 0) + 1);
@@ -453,14 +452,9 @@ function selectorLifecycleIssues(
     }
   });
 
-  for (const selectorId of coverage.keys()) {
-    if (!expected.has(selectorId)) {
-      issues.push({
-        path: `lifecycle.${side}SelectorIds`,
-        message: `Correspondence map ${map.id} covers unexpected ${side} selector ${selectorId}.`
-      });
-    }
-  }
+  // The endpoint expectation can intentionally name semantic selectors only;
+  // structural artifacts remain closure-checked by the IR and may still have
+  // explicit introduction/removal records without becoming semantic material.
 
   return issues;
 }

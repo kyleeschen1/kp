@@ -18,9 +18,11 @@ Track the [outside factors](kp:focus/factored.left-factor,factored.right-factor 
       "checkpointId": "factored",
       "focusRefs": [
         "factored.left-factor",
-        "factored.left-group",
+        "factored.left-x",
+        "factored.left-constant",
         "factored.right-factor",
-        "factored.right-group"
+        "factored.right-x",
+        "factored.right-negative-one"
       ]
     },
     {
@@ -54,8 +56,10 @@ Track the [outside factors](kp:focus/factored.left-factor,factored.right-factor 
       "progressPermille": 781,
       "checkpointId": "grouped",
       "focusRefs": [
-        "grouped.coefficients",
-        "grouped.constants"
+        "grouped.term-3x",
+        "grouped.term-2x",
+        "grouped.constant-6",
+        "grouped.negative-2"
       ]
     },
     {
@@ -65,7 +69,8 @@ Track the [outside factors](kp:focus/factored.left-factor,factored.right-factor 
       "progressPermille": 1000,
       "checkpointId": "collected",
       "focusRefs": [
-        "collected.term-5x",
+        "collected.coefficient-5",
+        "collected.x",
         "collected.constant-4"
       ]
     }

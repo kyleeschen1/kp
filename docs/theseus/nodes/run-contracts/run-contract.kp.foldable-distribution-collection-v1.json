@@ -154,7 +154,8 @@
     {
       "id": "s17",
       "title": "Compile-canonical-visual-motifs",
-      "status": "planned"
+      "summary": "Compiled six certified operations into four semantic-ready canonical phases: copy fan-out, opaque product successor synthesis, signed-term reorder/group, and merge fan-in; no fade motif or compositor-core change was introduced.",
+      "status": "complete"
     },
     {
       "id": "s18",

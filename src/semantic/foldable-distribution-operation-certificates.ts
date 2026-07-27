@@ -287,6 +287,27 @@ export function createKpFoldableSignedTermGroupingCertificate():
           summary: "The signed term persists while its group position changes."
         })),
         {
+          id: `${id}.coefficient-plus-persists`,
+          relation: "identity" as const,
+          sourceSelectorIds: ["distributed.plus-left"],
+          targetSelectorIds: ["grouped.coefficients.plus"],
+          summary: "The coefficient-term plus persists through reflow."
+        },
+        {
+          id: `${id}.outer-plus-persists`,
+          relation: "identity" as const,
+          sourceSelectorIds: ["distributed.outer-plus"],
+          targetSelectorIds: ["grouped.outer-plus"],
+          summary: "The plus between groups persists through reflow."
+        },
+        {
+          id: `${id}.constant-minus-persists`,
+          relation: "identity" as const,
+          sourceSelectorIds: ["distributed.minus-right"],
+          targetSelectorIds: ["grouped.constants.minus"],
+          summary: "The negative sign persists with the signed constant."
+        },
+        {
           id: `${id}.grouping-enters`,
           relation: "introduction" as const,
           sourceSelectorIds: [],

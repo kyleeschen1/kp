@@ -276,14 +276,40 @@ function compileEquationStates(
     return {
       objectId: object.id,
       latex,
-      selectors: object.selectors.map((selector) => ({
+      // Hierarchical equation states may expose different semantic units to
+      // adjacent transformations (for example, a whole term while grouping,
+      // then its coefficient and variable while collecting). The native DOM
+      // stays identical; only the active lineage namespace changes.
+      selectors: object.selectors
+        .filter((selector) =>
+          selectorAppliesToTransformation(selector, transformationId)
+        )
+        .map((selector) => ({
         id: selector.id,
-        kind: "semantic" as const,
+        kind: selector.kind === "artifact"
+          ? "artifact" as const
+          : selector.kind === "annotation"
+            ? "annotation" as const
+            : "semantic" as const,
         semanticKind: selector.kind,
         ...(selector.label === undefined ? {} : { label: selector.label })
-      }))
+        }))
     };
   });
+}
+
+function selectorAppliesToTransformation(
+  selector: KpSemanticAssetObject["selectors"][number],
+  transformationId: string
+): boolean {
+  const scope = selector.metadata?.["activeTransformationIds"];
+  if (scope === undefined) return true;
+  if (typeof scope !== "string" || scope.trim() === "") {
+    throw new Error(
+      `Selector ${selector.id} has invalid active transformation scope.`
+    );
+  }
+  return scope.split(",").includes(transformationId);
 }
 
 function equationLatex(object: KpSemanticAssetObject): string | undefined {

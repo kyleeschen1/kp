@@ -24,7 +24,7 @@ test("signed-term gathering preserves every complete term identity", () => {
     certificate.transformation.correspondenceMap!.records.filter(
       ({ relation }) => relation === "identity"
     ).length,
-    4
+    7
   );
   assert.equal(
     certificate.sourceToTarget["distributed.negative-2"],
