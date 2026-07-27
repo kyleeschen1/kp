@@ -42,7 +42,7 @@ interface StructuralSuccessionState {
   readonly intentId: string;
   readonly sourceElement: HTMLElement;
   readonly targetElement: HTMLElement;
-  readonly canvas: HTMLCanvasElement;
+  canvas: HTMLCanvasElement;
   readonly width: number;
   readonly height: number;
   readonly intent: KpEquationStructuralSuccessionIntent;
@@ -271,6 +271,8 @@ function scheduleIdleContextRelease(
     }
     state.renderer.dispose();
     state.renderer = undefined;
+    const releasedCanvas = state.canvas;
+    state.canvas = replaceReleasedCanvas(stage, releasedCanvas);
     state.status = "prepared";
     state.reason = "webgl-context-idle";
     state.canvas.style.opacity = "0";
@@ -330,15 +332,12 @@ function createState(input: {
 }): StructuralSuccessionState {
   const rect = input.stage.getBoundingClientRect();
   const pixelRatio = window.devicePixelRatio || 1;
-  const canvas = input.stage.ownerDocument.createElement("canvas");
-  canvas.className = "kp-native-katex-structural-succession";
-  canvas.dataset["kpNativeKatexStructuralSuccession"] = input.intent.id;
-  canvas.dataset["kpEquationMaterialFragmentRole"] =
-    "structural-succession";
-  canvas.setAttribute("aria-hidden", "true");
-  canvas.setAttribute("inert", "");
-  canvas.width = Math.max(1, Math.ceil(rect.width * pixelRatio));
-  canvas.height = Math.max(1, Math.ceil(rect.height * pixelRatio));
+  const canvas = createStructuralCanvas({
+    stage: input.stage,
+    intentId: input.intent.id,
+    width: Math.max(1, Math.ceil(rect.width * pixelRatio)),
+    height: Math.max(1, Math.ceil(rect.height * pixelRatio))
+  });
   input.stage.append(canvas);
   return {
     intentId: input.intent.id,
@@ -356,6 +355,50 @@ function createState(input: {
     targetCorrection: identityCorrection,
     currentCorrection: identityCorrection
   };
+}
+
+function createStructuralCanvas(input: {
+  readonly stage: HTMLElement;
+  readonly intentId: string;
+  readonly width: number;
+  readonly height: number;
+}): HTMLCanvasElement {
+  const canvas = input.stage.ownerDocument.createElement("canvas");
+  canvas.className = "kp-native-katex-structural-succession";
+  canvas.dataset["kpNativeKatexStructuralSuccession"] = input.intentId;
+  canvas.dataset["kpEquationMaterialFragmentRole"] =
+    "structural-succession";
+  canvas.setAttribute("aria-hidden", "true");
+  canvas.setAttribute("inert", "");
+  canvas.width = input.width;
+  canvas.height = input.height;
+  return canvas;
+}
+
+function replaceReleasedCanvas(
+  stage: HTMLElement,
+  released: HTMLCanvasElement
+): HTMLCanvasElement {
+  const replacement = createStructuralCanvas({
+    stage,
+    intentId:
+      released.dataset["kpNativeKatexStructuralSuccession"] ??
+      "structural-succession",
+    width: released.width,
+    height: released.height
+  });
+  for (const key of [
+    "kpNativeKatexStructuralStrategy",
+    "kpNativeKatexStructuralProfile",
+    "kpNativeKatexStructuralSourceCapture",
+    "kpNativeKatexStructuralSourceFont"
+  ] as const) {
+    const value = released.dataset[key];
+    if (value !== undefined) replacement.dataset[key] = value;
+  }
+  replacement.style.opacity = "0";
+  released.replaceWith(replacement);
+  return replacement;
 }
 
 async function initializeState(

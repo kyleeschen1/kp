@@ -822,6 +822,13 @@ test("structural WebGL leases cap contexts and recover from native fallback", as
   });
   expect(recovered).toEqual({ limit: 2, active: 1, waiting: 0 });
 
+  await fitSurface.evaluate((surface) => {
+    const canvas = surface.querySelector<HTMLCanvasElement>(
+      "[data-kp-native-katex-structural-succession]"
+    );
+    if (canvas === null) throw new Error("Missing structural canvas.");
+    canvas.dataset["kpIdleLeaseCanvas"] = "before-release";
+  });
   await seek(page, scrubber, 1_000);
   await expect.poll(() => page.evaluate(async () => {
     const poolUrl = "/src/rendering/webgl-context-lease-pool.ts";
@@ -829,16 +836,150 @@ test("structural WebGL leases cap contexts and recover from native fallback", as
     return pool.inspectKpWebglContextLeasePool(document);
   })).toEqual({ limit: 2, active: 0, waiting: 0 });
 
+  await page.evaluate(() => {
+    const holder = window as typeof window & {
+      __kpIdleResumeFrames?: {
+        readonly progress: string | null;
+        readonly status: string | null;
+        readonly retainedReleasedCanvas: boolean;
+        readonly contextLost: boolean;
+        readonly canvasOpacity: string | null;
+        readonly paintOwner: string | null;
+      }[];
+      __kpIdleResumeListener?: () => void;
+    };
+    holder.__kpIdleResumeFrames = [];
+    holder.__kpIdleResumeListener = () => {
+      const surface = document.querySelector<HTMLElement>(
+        '[data-kp-reader-transition-active="true"] [data-kp-reader-fit-surface]'
+      );
+      const canvas = surface?.querySelector<HTMLCanvasElement>(
+        "[data-kp-native-katex-structural-succession]"
+      );
+      const context = canvas?.getContext("webgl");
+      holder.__kpIdleResumeFrames?.push({
+        progress: document.body.dataset["kpReaderProgress"] ?? null,
+        status:
+          surface?.dataset["kpNativeKatexStructuralSuccessionStatus"] ?? null,
+        retainedReleasedCanvas:
+          canvas?.dataset["kpIdleLeaseCanvas"] === "before-release",
+        contextLost: context?.isContextLost() ?? true,
+        canvasOpacity: canvas === undefined || canvas === null
+          ? null
+          : getComputedStyle(canvas).opacity,
+        paintOwner:
+          surface?.dataset["kpNativeKatexStructuralPaintOwner"] ?? null
+      });
+    };
+    window.addEventListener(
+      "kp:reader-dev-review-frame",
+      holder.__kpIdleResumeListener
+    );
+  });
   await seek(page, scrubber, 500);
+  const resumeFrames = await page.evaluate(() => {
+    const holder = window as typeof window & {
+      __kpIdleResumeFrames?: readonly {
+        readonly progress: string | null;
+        readonly status: string | null;
+        readonly retainedReleasedCanvas: boolean;
+        readonly contextLost: boolean;
+        readonly canvasOpacity: string | null;
+        readonly paintOwner: string | null;
+      }[];
+      __kpIdleResumeListener?: () => void;
+    };
+    if (holder.__kpIdleResumeListener !== undefined) {
+      window.removeEventListener(
+        "kp:reader-dev-review-frame",
+        holder.__kpIdleResumeListener
+      );
+    }
+    const frames = holder.__kpIdleResumeFrames ?? [];
+    delete holder.__kpIdleResumeFrames;
+    delete holder.__kpIdleResumeListener;
+    return frames;
+  });
+  expect(resumeFrames[0]).toEqual({
+    progress: "500",
+    status: "ready",
+    retainedReleasedCanvas: false,
+    contextLost: false,
+    canvasOpacity: "1",
+    paintOwner: "solid-mask-canvas"
+  });
   await expect(fitSurface).toHaveAttribute(
     "data-kp-native-katex-structural-succession-status",
     "ready"
   );
+  const currentResume = await fitSurface.evaluate((surface) => {
+    const canvas = surface.querySelector<HTMLCanvasElement>(
+      "[data-kp-native-katex-structural-succession]"
+    );
+    const context = canvas?.getContext("webgl");
+    return {
+      progress: document.body.dataset["kpReaderProgress"] ?? null,
+      status:
+        (surface as HTMLElement).dataset[
+          "kpNativeKatexStructuralSuccessionStatus"
+        ] ?? null,
+      retainedReleasedCanvas:
+        canvas?.dataset["kpIdleLeaseCanvas"] === "before-release",
+      contextLost: context?.isContextLost() ?? true,
+      canvasOpacity: canvas === undefined || canvas === null
+        ? null
+        : getComputedStyle(canvas).opacity,
+      paintOwner:
+        (surface as HTMLElement).dataset[
+          "kpNativeKatexStructuralPaintOwner"
+        ] ?? null
+    };
+  });
+  expect(currentResume).toEqual({
+    progress: "500",
+    status: "ready",
+    retainedReleasedCanvas: false,
+    contextLost: false,
+    canvasOpacity: "1",
+    paintOwner: "solid-mask-canvas"
+  });
   await expect.poll(() => page.evaluate(async () => {
     const poolUrl = "/src/rendering/webgl-context-lease-pool.ts";
     const pool = await import(/* @vite-ignore */ poolUrl);
     return pool.inspectKpWebglContextLeasePool(document);
   })).toEqual({ limit: 2, active: 1, waiting: 0 });
+  const resumedAfterIdleRelease = await fitSurface.evaluate(async (surface) => {
+    const structuralUrl =
+      "/src/rendering/native-katex-structural-succession-renderer.ts";
+    const structural = await import(/* @vite-ignore */ structuralUrl);
+    const canvas = surface.querySelector<HTMLCanvasElement>(
+      "[data-kp-native-katex-structural-succession]"
+    );
+    const context = canvas?.getContext("webgl");
+    return {
+      retainedReleasedCanvas:
+        canvas?.dataset["kpIdleLeaseCanvas"] === "before-release",
+      contextLost: context?.isContextLost() ?? true,
+      canvasOpacity: canvas === null
+        ? null
+        : getComputedStyle(canvas).opacity,
+      paintOwner:
+        (surface as HTMLElement).dataset[
+          "kpNativeKatexStructuralPaintOwner"
+        ] ?? null,
+      hasStructuralInk:
+        structural.measureKpNativeKatexStructuralSuccessionInk(
+          surface as HTMLElement
+        ) !== undefined
+    };
+  });
+  expect(resumedAfterIdleRelease).toEqual({
+    retainedReleasedCanvas: false,
+    contextLost: false,
+    canvasOpacity: "1",
+    paintOwner: "solid-mask-canvas",
+    hasStructuralInk: true
+  });
 
   const lossRequested = await fitSurface.evaluate((surface) => {
     const canvas = surface.querySelector<HTMLCanvasElement>(

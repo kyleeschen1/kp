@@ -122,7 +122,9 @@ export interface KpNativeKatexRendererSession {
   readonly tracks: readonly KpNativeKatexSceneTrack[];
   readonly sample: (progress: number) => readonly KpNativeKatexSceneTrackFrame[];
   readonly apply: (progress: number) => KpNativeKatexSceneOwnershipFrame;
-  readonly dispose: () => void;
+  readonly dispose: (options?: {
+    readonly preserveStructuralSuccession?: boolean | undefined;
+  }) => void;
 }
 
 export interface KpCanonicalNativeKatexSceneSession {
@@ -1770,10 +1772,14 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
       }
       return ownership;
     },
-    dispose() {
+    dispose(options?: {
+      readonly preserveStructuralSuccession?: boolean | undefined;
+    }) {
       if (canonicalDisposed) return;
       canonicalDisposed = true;
-      disposeKpNativeKatexStructuralSuccession(input.source.stage);
+      if (options?.preserveStructuralSuccession !== true) {
+        disposeKpNativeKatexStructuralSuccession(input.source.stage);
+      }
       playback.dispose();
     }
   });

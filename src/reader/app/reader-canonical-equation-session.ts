@@ -41,11 +41,17 @@ export function createKpReaderCanonicalEquationSession(input: {
   let session:
     ReturnType<KpReaderEquationSceneCompositorFactory> | undefined;
   let sessionKey: string | undefined;
+  let structuralSessionKey: string | undefined;
+  let structuralFitSurface: HTMLElement | undefined;
   let materialLayer: HTMLElement | undefined;
-  const releaseCurrentSession = (): void => {
-    session?.dispose();
+  const releaseCurrentSession = (
+    preserveStructuralSuccession = false
+  ): void => {
+    session?.dispose({ preserveStructuralSuccession });
     session = undefined;
     sessionKey = undefined;
+    structuralSessionKey = undefined;
+    structuralFitSurface = undefined;
     materialLayer?.remove();
     materialLayer = undefined;
   };
@@ -58,7 +64,9 @@ export function createKpReaderCanonicalEquationSession(input: {
         transitionId === undefined ||
         !transitionIds.includes(transitionId)
       ) {
-        releaseCurrentSession();
+        // The structural renderer releases its scarce WebGL lease at native
+        // endpoints. Retain the prepared reader session so returning across an
+        // attention boundary does not flash through asynchronous recapture.
         return false;
       }
       const nextKey = [
@@ -71,8 +79,24 @@ export function createKpReaderCanonicalEquationSession(input: {
         frame.fitSurface.offsetWidth,
         frame.fitSurface.offsetHeight
       ].join(":");
+      const nextStructuralSessionKey = [
+        transitionId,
+        frame.renderPlan.id,
+        frame.materialPlan.id,
+        frame.motionMode,
+        frame.fontReadiness.revision,
+        frame.fitSurface.offsetWidth,
+        frame.fitSurface.offsetHeight
+      ].join(":");
       if (session === undefined || sessionKey !== nextKey) {
-        releaseCurrentSession();
+        // Focus-only presentation revisions rebuild their typography plan but
+        // retain the expensive structural capture. The inner renderer still
+        // releases its WebGL lease independently at native endpoints.
+        releaseCurrentSession(
+          session !== undefined &&
+            structuralFitSurface === frame.fitSurface &&
+            structuralSessionKey === nextStructuralSessionKey
+        );
         materialLayer = createMaterialLayer(frame.fitSurface);
         bindReaderPaintOwnership(
           frame.renderPlan,
@@ -112,6 +136,8 @@ export function createKpReaderCanonicalEquationSession(input: {
           target
         });
         sessionKey = nextKey;
+        structuralSessionKey = nextStructuralSessionKey;
+        structuralFitSurface = frame.fitSurface;
       }
       const ownership = session.apply(frame.progress);
       frame.fitSurface.dataset["kpReaderCanonicalEquationSession"] = "active";
