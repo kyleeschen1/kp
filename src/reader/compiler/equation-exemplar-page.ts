@@ -8,6 +8,9 @@ import type { KpSelectorAnnotatedLatex } from "../../rendering/selector-annotate
 import type { KpReaderEquationPresentationCapability } from "../document/public-api.ts";
 import { resolveKpReaderEquationPresentationProfile } from "../document/public-api.ts";
 import { compileKpReaderPageShell } from "./reader-page-shell.ts";
+import {
+  compileKpAnimationTransformationPhaseCohorts
+} from "../../animation/transformation-phase-cohorts.ts";
 
 export interface KpEquationExemplarPageInput {
   readonly animation: KpAnimationAsset;
@@ -16,6 +19,7 @@ export interface KpEquationExemplarPageInput {
   readonly documentId: string;
   readonly documentVersion: string;
   readonly lessonVariant: string;
+  readonly readerControls?: "foldable-distribution-v1" | undefined;
   readonly modeLink: { readonly href: string; readonly label: string };
   readonly tocHtml: string;
   readonly articleHtml: string;
@@ -35,6 +39,8 @@ export function compileKpEquationExemplarPage(
       presentationAnimations: input.presentationAnimations,
       equationPresentation: input.equationPresentation,
       showEquationProfileControl: input.showEquationProfileControl
+      ,
+      readerControls: input.readerControls
   });
   return compileKpReaderPageShell({
     title: input.title,
@@ -69,6 +75,7 @@ export function compileKpEquationExemplarTemplate(
     readonly presentationAnimations?: readonly KpAnimationAsset[] | undefined;
     readonly equationPresentation?: KpReaderEquationPresentationCapability | undefined;
     readonly showEquationProfileControl?: boolean | undefined;
+    readonly readerControls?: "foldable-distribution-v1" | undefined;
   }
 ): string {
   const animations = [animation, ...(options?.presentationAnimations ?? [])];
@@ -79,31 +86,35 @@ export function compileKpEquationExemplarTemplate(
     object.id,
     compileAnnotatedState(object, annotateState)
   ]));
-  const transformations = [...new Map(animations.flatMap((candidate) =>
-    candidate.transformations.map((transformation) => [
-      transformation.id,
-      transformation
+  const cohorts = [...new Map(animations.flatMap((candidate) =>
+    compileKpAnimationTransformationPhaseCohorts(candidate).map((cohort) => [
+      cohort.id,
+      cohort
     ] as const)
   )).values()];
-  const transitions = transformations.map((transformation) => {
-    const source = transformation.sourceObjectIds.map((id) => {
+  const transitions = cohorts.map((cohort) => {
+    const source = cohort.sourceObjectIds.map((id) => {
       if (!objects.has(id)) throw new Error(`missing equation source ${id}`);
       return states.get(id)!;
     }).join("\n");
-    const target = transformation.targetObjectIds.map((id) => {
+    const target = cohort.targetObjectIds.map((id) => {
       if (!objects.has(id)) throw new Error(`missing equation target ${id}`);
       return states.get(id)!;
     }).join("\n");
     return [
-      `<div class="kp-reader-equation-transition" data-kp-reader-transition="${attribute(transformation.id)}" hidden>`,
+      `<div class="kp-reader-equation-transition" data-kp-reader-transition="${attribute(cohort.id)}"${
+        cohort.transformationIds.length > 1
+          ? ` data-kp-reader-cohort-transformations="${attribute(cohort.transformationIds.join(","))}"`
+          : ""
+      }>`,
       `<div class="kp-reader-equation-fit-surface" data-kp-reader-fit-surface>`,
-      `<div class="kp-reader-equation-measurement" data-kp-reader-equation-measurement="true" aria-hidden="true">`,
-      `<div class="kp-reader-equation-native kp-reader-equation-native--source" data-kp-reader-native="source">${source}</div>`,
-      `<div class="kp-reader-equation-native kp-reader-equation-native--target" data-kp-reader-native="target">${target}</div>`,
+      `<div class="kp-reader-equation-measurement" data-kp-reader-equation-measurement aria-hidden="true">`,
+      `<div class="kp-reader-equation-native" data-kp-reader-native="source">${source}</div>`,
+      `<div class="kp-reader-equation-native" data-kp-reader-native="target">${target}</div>`,
       `</div>`,
       `</div>`,
       `</div>`
-    ].join("\n");
+    ].join("");
   });
   return [
     `<template data-kp-reader-exemplar-template>`,
@@ -113,6 +124,9 @@ export function compileKpEquationExemplarTemplate(
     `<div class="kp-reader-equation-controls">`,
     options?.showEquationProfileControl === true && options.equationPresentation !== undefined
       ? profileControl(options.equationPresentation)
+      : "",
+    options?.readerControls === "foldable-distribution-v1"
+      ? foldableDistributionControls()
       : "",
     `<label class="kp-reader-motion-control">`,
     `<span>Motion</span>`,
@@ -133,7 +147,6 @@ export function compileKpEquationExemplarTemplate(
     `<button type="button" data-kp-reader-attention-next aria-label="Next explanation step">Next</button>`,
     `</div>`,
     `<label class="kp-reader-focus-scrubber">`,
-    `<span class="kp-reader-visually-hidden">Scrub explanation</span>`,
     `<input type="range" min="0" max="1000" step="1" value="0" data-kp-reader-attention-scrubber aria-label="Scrub explanation">`,
     `<span data-kp-reader-attention-count aria-hidden="true">Step 1 of 1</span>`,
     `</label>`,
@@ -141,7 +154,7 @@ export function compileKpEquationExemplarTemplate(
     `<div class="kp-reader-equation-viewport" data-kp-reader-equation-viewport>`,
     transitions.join("\n"),
     `<div class="kp-reader-equation-material-fit-surface" data-kp-reader-material-fit-surface>`,
-    `<div class="kp-reader-equation-material" data-kp-reader-equation-material-layer="true"></div>`,
+    `<div class="kp-reader-equation-material" data-kp-reader-equation-material-layer></div>`,
     `<span class="kp-reader-equation-annihilation-witness" data-kp-reader-annihilation-witness aria-hidden="true">`,
     `<span data-kp-reader-identity-value="0">${renderLatexToHtml("0", { displayMode: false })}</span>`,
     `<span data-kp-reader-identity-value="1" hidden>${renderLatexToHtml("1", { displayMode: false })}</span>`,
@@ -153,6 +166,25 @@ export function compileKpEquationExemplarTemplate(
     `<p class="kp-reader-equation-hint">Scroll to move the equation. Scroll back to rewind.</p>`,
     `</div>`,
     `</template>`
+  ].join("");
+}
+
+function foldableDistributionControls(): string {
+  return [
+    `<label class="kp-reader-fold-control">`,
+    `<span>Detail</span>`,
+    `<select data-kp-reader-fold-mode aria-label="Evaluation detail">`,
+    `<option value="automatic">Automatic</option>`,
+    `<option value="expanded">Expanded</option>`,
+    `<option value="collapsed">Collapsed</option>`,
+    `<option value="pinned">Pinned</option>`,
+    `</select>`,
+    `</label>`,
+    `<div class="kp-reader-fold-drills" role="group" aria-label="Pinned evaluation details">`,
+    `<button type="button" data-kp-reader-fold-node="evaluation.foldable-distribution.distribute" aria-pressed="false">Distribution</button>`,
+    `<button type="button" data-kp-reader-fold-node="evaluation.foldable-distribution.evaluate-products" aria-pressed="false">Products</button>`,
+    `</div>`,
+    `<output class="kp-reader-fold-status" data-kp-reader-fold-status aria-live="polite">Detail follows the available space</output>`
   ].join("\n");
 }
 

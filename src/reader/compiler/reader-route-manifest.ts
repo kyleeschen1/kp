@@ -3,6 +3,7 @@ import {
   compileKpDivideBothSidesEquationLesson,
   compileKpFractionalLinearEquationLesson,
   compileKpFractionalTransferComparisonLesson,
+  compileKpFoldableDistributionEquationLesson,
   compileKpNumeratorSplitMergeEquationLesson,
   compileKpQuadraticBranchingLesson,
   compileKpRadicalSuccessionEquationLesson,
@@ -120,6 +121,25 @@ const radicalReviewProfiles = [
     motion: "reduced",
     moments: [0, 1_000]
   }
+] as const;
+
+const foldableDistributionReviewMoments = [
+  { id: "factored", label: "Factored groups", progressPermille: 0 },
+  { id: "distributed", label: "Distributed products", progressPermille: 281 },
+  {
+    id: "products-evaluated",
+    label: "Products evaluated",
+    progressPermille: 563
+  },
+  { id: "grouped", label: "Like terms gathered", progressPermille: 781 },
+  { id: "collected", label: "Result collected", progressPermille: 1_000 }
+] as const;
+
+const foldableDistributionReviewProfiles = [
+  { id: "wide-full", label: "Wide · full motion", viewport: "desktop", motion: "full" },
+  { id: "wide-reduced", label: "Wide · reduced motion", viewport: "desktop", motion: "reduced" },
+  { id: "phone-full", label: "Phone · full motion", viewport: "phone", motion: "full" },
+  { id: "phone-reduced", label: "Phone · reduced motion", viewport: "phone", motion: "reduced" }
 ] as const;
 
 const distributionVisualProgress = [0, 360, 500, 650, 820, 1_000] as const;
@@ -318,6 +338,39 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       )
     },
     budget: routeBudget(30_000, 4_000, 120_543)
+  }),
+  defineKpReaderRoute({
+    route: "/reader/foldable-distribution/",
+    sourcePath: "content/lessons/foldable-distribution.md",
+    compile: compileKpFoldableDistributionEquationLesson,
+    conformance: equationConformance({
+      documentId: "lesson.algebra.foldable-distribution",
+      progressPermille: 563,
+      beatId: "beat.products-evaluated",
+      searchableText:
+        "Distribute each factor, gather like terms, and collect the result"
+    }),
+    presentation: sharedEquationPresentation,
+    review: {
+      id: "foldable-distribution",
+      title: "Kinetic Press · distribute and collect like terms",
+      capture: "stage",
+      columns: 5,
+      imageFit: "contain",
+      checkpoints: foldableDistributionReviewProfiles.flatMap((profile) =>
+        foldableDistributionReviewMoments.map((moment) => ({
+          id: `${profile.id}-${moment.id}`,
+          label: `${moment.label} · ${profile.label}`,
+          progressPermille: moment.progressPermille,
+          viewport: profile.viewport,
+          query: {
+            kpMotion: profile.motion,
+            kpFoldMode: "automatic"
+          }
+        }))
+      )
+    },
+    budget: routeBudget(64_000, 7_000, 140_000)
   }),
   defineKpReaderRoute({
     route: "/reader/fractional-transfer/",

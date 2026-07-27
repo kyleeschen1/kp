@@ -18,6 +18,10 @@ import {
   type KpEquationStructuralSuccessionIntent,
   type KpEquationVisualMotifIntent
 } from "../../animation/structural-succession-presentation.ts";
+import {
+  compileKpAnimationTransformationPhaseCohorts,
+  findKpAnimationTransformationPhaseCohort
+} from "../../animation/transformation-phase-cohorts.ts";
 
 export interface KpReaderEquationRenderPlan {
   readonly id: string;
@@ -182,7 +186,16 @@ export function projectKpReaderEquationRenderPlan(input: {
     });
   }
 
-  if (transitions.length === 0) {
+  const cohort = findKpAnimationTransformationPhaseCohort({
+    cohorts: compileKpAnimationTransformationPhaseCohorts(input.animation),
+    transformationIds: input.runtimeFrame.activeTransformationIds
+  });
+  const projectedTransitions =
+    cohort !== undefined && transitions.length > 1
+      ? [mergeParallelTransitions(cohort.id, transitions)]
+      : transitions;
+
+  if (projectedTransitions.length === 0) {
     diagnostics.push({
       code: "equation-plan.no-active-transition",
       message: `Runtime phase ${input.runtimeFrame.phase.phaseId} has no renderable equation transition.`
@@ -198,9 +211,73 @@ export function projectKpReaderEquationRenderPlan(input: {
     direction: input.runtimeFrame.clock.direction,
     progress: input.runtimeFrame.clock.progress,
     focusSelectorIds: [...input.runtimeFrame.focusSelectorIds],
-    transitions,
+    transitions: projectedTransitions,
     diagnostics
   };
+}
+
+function mergeParallelTransitions(
+  cohortId: string,
+  transitions: readonly KpReaderEquationTransitionPlan[]
+): KpReaderEquationTransitionPlan {
+  const recordIds = new Set<string>();
+  for (const relation of transitions.flatMap(({ relations }) => relations)) {
+    if (recordIds.has(relation.recordId)) {
+      throw new Error(
+        `Parallel equation cohort ${cohortId} repeats relation ${relation.recordId}.`
+      );
+    }
+    recordIds.add(relation.recordId);
+  }
+  return {
+    id: cohortId,
+    title: transitions.map(({ title }) => title).join(" and "),
+    // Parallel material still follows canonical correspondence relations; this
+    // label prevents a single branch's optional specialized intent from
+    // claiming ownership of the whole cohort.
+    transformType: "parallelSemanticCohort",
+    source: mergeStates(transitions.flatMap(({ source }) => source)),
+    target: mergeStates(transitions.flatMap(({ target }) => target)),
+    relations: transitions.flatMap(({ relations }) => relations),
+    semanticStatus: transitions.every(
+      ({ semanticStatus }) => semanticStatus === "ready"
+    )
+      ? "ready"
+      : "fallback",
+    semanticDiagnostics: transitions.flatMap(
+      ({ semanticDiagnostics }) => semanticDiagnostics
+    )
+  };
+}
+
+function mergeStates(
+  states: readonly KpReaderEquationStatePlan[]
+): readonly KpReaderEquationStatePlan[] {
+  const byObjectId = new Map<string, {
+    latex: string;
+    selectors: Map<string, KpReaderEquationSelectorPlan>;
+  }>();
+  for (const state of states) {
+    const existing = byObjectId.get(state.objectId);
+    if (existing !== undefined && existing.latex !== state.latex) {
+      throw new Error(
+        `Parallel equation state ${state.objectId} has conflicting LaTeX.`
+      );
+    }
+    const entry = existing ?? {
+      latex: state.latex,
+      selectors: new Map<string, KpReaderEquationSelectorPlan>()
+    };
+    for (const selector of state.selectors) {
+      entry.selectors.set(selector.id, selector);
+    }
+    byObjectId.set(state.objectId, entry);
+  }
+  return [...byObjectId].map(([objectId, state]) => ({
+    objectId,
+    latex: state.latex,
+    selectors: [...state.selectors.values()]
+  }));
 }
 
 function projectStates(

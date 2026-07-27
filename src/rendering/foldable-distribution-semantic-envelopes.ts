@@ -12,14 +12,20 @@ export function bindKpFoldableDistributionSemanticEnvelopes(input: {
   const endpoint = createKpFoldableDistributionAnnotatedEndpoints()
     .find(({ objectId }) => objectId === input.state.id);
   if (endpoint === undefined) return;
-  const transitionId = input.root
-    .closest<HTMLElement>("[data-kp-reader-transition]")
-    ?.dataset["kpReaderTransition"];
-  if (transitionId === undefined) {
+  const transition = input.root
+    .closest<HTMLElement>("[data-kp-reader-transition]");
+  const transitionId = transition?.dataset["kpReaderTransition"];
+  if (transitionId === undefined || transition === null) {
     throw new Error(
       `Foldable distribution state ${input.state.id} has no transition owner.`
     );
   }
+  const activeTransformationIds = new Set(
+    transition.dataset["kpReaderCohortTransformations"]
+      ?.split(",")
+      .filter(Boolean) ??
+      [transitionId]
+  );
 
   // Largest-first wrapping preserves nested groups such as a coefficient row
   // containing two term envelopes without splitting KaTeX token wrappers.
@@ -32,7 +38,9 @@ export function bindKpFoldableDistributionSemanticEnvelopes(input: {
   }
 
   const activeSelectorIds = new Set(input.state.selectors
-    .filter((selector) => selectorIsActive(selector, transitionId))
+    .filter((selector) =>
+      selectorIsActive(selector, activeTransformationIds)
+    )
     .map(({ id }) => id));
   for (const anchor of input.root.querySelectorAll<HTMLElement>(
     "[data-kp-reader-selector-id]"
@@ -87,10 +95,11 @@ function wrapEnvelope(
 
 function selectorIsActive(
   selector: KpSemanticAssetObject["selectors"][number],
-  transitionId: string
+  activeTransformationIds: ReadonlySet<string>
 ): boolean {
   const scope = selector.metadata?.["activeTransformationIds"];
-  return typeof scope !== "string" || scope.split(",").includes(transitionId);
+  return typeof scope !== "string" ||
+    scope.split(",").some((id) => activeTransformationIds.has(id));
 }
 
 function cssEscape(value: string): string {

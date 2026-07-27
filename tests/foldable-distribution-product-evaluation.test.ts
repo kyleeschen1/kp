@@ -4,6 +4,12 @@ import test from "node:test";
 import {
   createKpFoldableProductEvaluationCertificates
 } from "../src/semantic/foldable-distribution-operation-certificates.ts";
+import {
+  createKpFoldableDistributionEquationAnimationAsset
+} from "../src/animation/foldable-distribution-equation-adapter.ts";
+import {
+  createKpEquationLinearRearrangementBindings
+} from "../src/rendering/equation-linear-rearrangement-bindings.ts";
 
 test("constant products certify exact signed arithmetic", () => {
   const certificates = createKpFoldableProductEvaluationCertificates();
@@ -61,4 +67,21 @@ test("product evaluation requires causal synthesis and measured native settlemen
     JSON.stringify(certificates).includes("left\":"),
     false
   );
+});
+
+test("reader product motifs compile complete opaque successor bindings", () => {
+  const bindings = createKpEquationLinearRearrangementBindings(
+    createKpFoldableDistributionEquationAnimationAsset()
+  ).filter(({ kind }) => kind === "simplify-constant-product");
+
+  assert.equal(bindings.length, 2);
+  for (const binding of bindings) {
+    const successor = binding.successorSynthesisBinding;
+    assert.ok(successor);
+    assert.equal(successor.sourceAnnotations.length, 2);
+    assert.ok(successor.sourceAnnotations.every(
+      ({ contribution }) => contribution === "material-input"
+    ));
+    assert.equal(successor.targetAnnotations.length, 1);
+  }
 });

@@ -23,6 +23,7 @@ export interface KpCanonicalEquationLessonPromotionInput {
   readonly compiledLessonId: string;
   readonly description: string;
   readonly lessonVariant: string;
+  readonly readerControls?: "foldable-distribution-v1" | undefined;
   readonly modeLink: {
     readonly href: string;
     readonly label: string;
@@ -54,6 +55,7 @@ export function compileKpCanonicalEquationLessonPromotion(
     documentId: input.model.document.id,
     documentVersion: input.model.document.version,
     lessonVariant: input.lessonVariant,
+    readerControls: input.readerControls,
     modeLink: input.modeLink,
     tocHtml: input.model.prose.tocHtml,
     articleHtml: input.model.prose.articleHtml,

@@ -1,6 +1,9 @@
 import type { KpAnimationAsset } from "../../animation/asset.ts";
 import type { KpSemanticAssetObject } from "../../semantic/asset.ts";
 import type { KpReaderEquationPresentationProfile } from "../runtime/public-api.ts";
+import {
+  compileKpAnimationTransformationPhaseCohorts
+} from "../../animation/transformation-phase-cohorts.ts";
 
 export interface KpReaderEquationLessonDescriptor {
   readonly id: string;
@@ -12,13 +15,14 @@ export interface KpReaderEquationLessonDescriptor {
     | readonly string[]
     | undefined;
   readonly bindStructuralAnchors?: ((input: {
-    readonly root: ParentNode;
+    readonly root: HTMLElement;
     readonly state: KpSemanticAssetObject;
   }) => void) | undefined;
   readonly stageKicker?: ((
     profile: KpReaderEquationPresentationProfile
   ) => string | undefined) | undefined;
   readonly compactTranscriptAvailable: boolean;
+  readonly readerControls?: "foldable-distribution-v1" | undefined;
 }
 
 export interface KpReaderCanonicalTransitionPolicy {
@@ -78,7 +82,12 @@ const kpReaderEquationLessonDescriptorLoaders = {
       .then(({ numeratorSplitMergeDescriptor }) => numeratorSplitMergeDescriptor),
   "radical-succession": () =>
     import("./equation-lesson-descriptors/radical-succession.ts")
-      .then(({ radicalSuccessionDescriptor }) => radicalSuccessionDescriptor)
+      .then(({ radicalSuccessionDescriptor }) => radicalSuccessionDescriptor),
+  "foldable-distribution": () =>
+    import("./equation-lesson-descriptors/foldable-distribution.ts")
+      .then(({ foldableDistributionDescriptor }) =>
+        foldableDistributionDescriptor
+      )
 } as const;
 
 export type KpReaderEquationLessonVariant =
@@ -107,7 +116,9 @@ export function compileKpReaderCanonicalTransitionPolicy(input: {
 }): KpReaderCanonicalTransitionPolicy | undefined {
   const selection = input.descriptor.canonicalTransitionSelection;
   if (selection === undefined) return undefined;
-  const availableIds = input.animation.transformations.map(({ id }) => id);
+  const availableIds = compileKpAnimationTransformationPhaseCohorts(
+    input.animation
+  ).map(({ id }) => id);
   const transitionIds = selection === "all"
     ? availableIds
     : [...selection];

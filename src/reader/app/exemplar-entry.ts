@@ -70,6 +70,10 @@ import {
   compileKpReaderCanonicalTransitionPolicy,
   resolveKpReaderEquationLessonDescriptor
 } from "./equation-lesson-descriptor.ts";
+import {
+  compileKpAnimationTransformationPhaseCohorts,
+  findKpAnimationTransformationPhaseCohort
+} from "../../animation/transformation-phase-cohorts.ts";
 
 interface TransitionContext {
   readonly id: string;
@@ -130,6 +134,7 @@ document.body.dataset["kpReaderEquationProfile"] = equationPresentationProfile.i
 document.body.dataset["kpReaderEquationProfileSource"] =
   equationPresentationSelection.source;
 const animation = lessonDescriptor.createAnimation(equationPresentationProfile);
+const phaseCohorts = compileKpAnimationTransformationPhaseCohorts(animation);
 const presentationProfile = kpEquationPresentationProfile(animation);
 const linearRearrangementBindings = createKpEquationLinearRearrangementBindings(
   animation
@@ -220,8 +225,8 @@ motionSelect.value = motionPreference;
 const fontReadiness = createKpEquationFontReadiness(document);
 const transitionElements = [
   ...stage.querySelectorAll<HTMLElement>("[data-kp-reader-transition]")
-].filter((element) => animation.transformations.some((transformation) =>
-  transformation.id === requiredData(element, "kpReaderTransition")
+].filter((element) => phaseCohorts.some((cohort) =>
+  cohort.id === requiredData(element, "kpReaderTransition")
 ));
 const witnessedBindings = new Map(animation.transformations.flatMap((transformation) => {
   if (equationPresentationProfile.identity !== "hold-until-settled-v1") return [];
@@ -264,14 +269,34 @@ const locationSettlement = createKpReaderLocationSettlement({
   canSettle: () => urlAuthorityReady,
   scrollRestoration: "manual"
 });
+const foldableDistributionControls =
+  lessonDescriptor.readerControls === "foldable-distribution-v1"
+    ? (await import("./foldable-distribution-reader-controls.ts"))
+      .mountKpFoldableDistributionReaderControls({
+        root: staticSurface,
+        stage,
+        route: readerRoute,
+        initialUrl: window.location.href,
+        onChange: () => {
+          renderer.refresh("content");
+          renderCurrentSample();
+          locationSettlement.settle();
+        }
+      })
+    : undefined;
 
-const staticPlans = new Map(animation.transformations.map((transformation, index) => {
-  const progress = (index + 0.5) / animation.transformations.length;
+const staticPlans = new Map(phaseCohorts.map((cohort, index) => {
+  const progress = (index + 0.5) / phaseCohorts.length;
   const clock = createKpReaderClockSample({ source: "scroll", progress });
   const runtimeFrame = sampleKpReaderAnimationFrame({ animation, clock });
   const renderPlan = projectKpReaderEquationRenderPlan({ animation, runtimeFrame });
+  if (renderPlan.transitions[0]?.id !== cohort.id) {
+    throw new Error(
+      `Equation phase cohort ${cohort.id} did not compile its shared reader transition.`
+    );
+  }
   return [
-    transformation.id,
+    cohort.id,
     {
       renderPlan,
       materialPlan: projectKpCertifiedTransferMaterialPlan(
@@ -435,6 +460,7 @@ function updateScrollGeometry(): void {
 function onResize(): void {
   const progressPermille = lastSample().progressPermille;
   applyResponsiveProjection();
+  foldableDistributionControls?.refreshViewport();
   updateScrollGeometry();
   // A breakpoint changes the document's geometry. Re-anchor the semantic
   // moment so responsive projection cannot silently behave like navigation.
@@ -589,16 +615,29 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     progressPermille: visualProgressPermille,
     checkpointId: attentionProjection?.checkpointId ?? projection.checkpointId
   };
-  const forwardClock = { ...visualSample, direction: "forward" as const };
+  const animationProgress =
+    foldableDistributionControls?.projectAnimationProgress(
+      visualSample.progress
+    ) ?? visualSample.progress;
+  const forwardClock = {
+    ...visualSample,
+    progress: animationProgress,
+    progressPermille: Math.round(animationProgress * 1_000),
+    direction: "forward" as const
+  };
   const runtimeFrame = sampleKpReaderAnimationFrame({ animation, clock: forwardClock });
-  const transitionId = runtimeFrame.activeTransformationIds[0];
-  if (transitionId === undefined) return;
+  const cohort = findKpAnimationTransformationPhaseCohort({
+    cohorts: phaseCohorts,
+    transformationIds: runtimeFrame.activeTransformationIds
+  });
+  if (cohort === undefined) return;
+  const transitionId = cohort.id;
   const context = layout.contexts.get(transitionId);
   if (context === undefined) throw new Error(`No measured transition ${transitionId}.`);
   const phaseProgress = localPhaseProgress(
-    visualSample.progress,
+    animationProgress,
     runtimeFrame.phase.phaseIndex,
-    animation.transformations.length
+    phaseCohorts.length
   );
   const choreographyStep = linearRearrangementBindings.find(
     (step) => step.transformationId === transitionId
@@ -1128,7 +1167,7 @@ function ownerMatchesFocus(
 function readerHref(sample: KpReaderClockSample): string {
   const base = new URL(window.location.href);
   if (activeBeat !== undefined) base.hash = requiredData(activeBeat, "kpBeat");
-  return encodeKpReaderSessionUrl(base, createKpReaderSessionSnapshot({
+  const sessionHref = encodeKpReaderSessionUrl(base, createKpReaderSessionSnapshot({
     documentId,
     documentVersion,
     checkpointId: sample.checkpointId,
@@ -1138,6 +1177,14 @@ function readerHref(sample: KpReaderClockSample): string {
     motionPreference,
     equationPresentationProfileId: equationPresentationProfile.id
   }));
+  return foldableDistributionControls?.encodeHref({
+    baseUrl: sessionHref,
+    checkpointId: activeBeat === undefined
+      ? sample.checkpointId
+      : requiredData(activeBeat, "kpBeat"),
+    progressPermille: sample.progressPermille,
+    direction: sample.direction
+  }) ?? sessionHref;
 }
 
 function initialMotionPreference(): KpReaderMotionPreference {
@@ -1290,6 +1337,7 @@ function dispose(): void {
   window.removeEventListener("scrollend", locationSettlement.settle);
   fontReviewLifecycle.dispose();
   readerCanonicalEquationSession?.dispose();
+  foldableDistributionControls?.dispose();
   semanticLinkBindings.dispose();
   locationSettlement.dispose();
   rendererRegistry.disposeAll();

@@ -267,11 +267,46 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T06:38:02.008Z",
       "notes": "Hierarchical native envelope binding and deterministic layout projections compile across all TypeScript projects."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test focused foldable distribution reader tests",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T07:06:01.133Z",
+      "notes": "Phase cohorts combine parallel fan-out and product evaluation into four complete canonical scenes; successor metadata, native endpoints, material totality, lesson compilation, URL state, and no-fade motif laws pass."
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-07-27T07:06:02.000Z",
+      "notes": "Browser checks prove fold controls preserve one semantic clock, canonical URL state and pins, and both parallel phases render as one complete active cohort."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T07:06:02.806Z",
+      "notes": "All TypeScript projects and the ten-route Vite production build pass; the fold controller remains dynamically loaded."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-07-27T07:06:03.586Z",
+      "notes": "Reader, semantic animation, and concept-room boundaries pass after separating renderer-neutral endpoint specs from KaTeX annotations."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "production-routes",
+      "checkedAt": "2026-07-27T07:06:04.408Z",
+      "notes": "All existing and new reader routes remain within raw HTML, gzip HTML, runtime closure, and forbidden-asset budgets."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 18 defined hierarchical native envelopes and deterministic responsive rows. Wide remains one row; phone stages distribution branches in two stable rows; folding can compress them; no pixel offsets or operation-specific compositor routes exist."
+    "summary": "Slice 19 mounted the canonical foldable distribution route. Six semantic operations now play as four complete phase cohorts with proper fan-out, successor synthesis, signed grouping, and merge motifs; expanded/collapsed/automatic/pinned controls use one fold-aware clock and durable URL state."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",

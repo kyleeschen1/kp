@@ -15,8 +15,10 @@ import {
   sampleKpAnimationRuntimeFrame
 } from "../src/animation/runtime-sampler.ts";
 import {
-  projectKpReaderEquationRenderPlan
-} from "../src/reader/renderers/equation-render-plan.ts";
+  projectKpReaderEquationRenderPlan,
+  compileKpReaderEquationMaterialPlan,
+  validateKpReaderEquationMaterialPlanTotality
+} from "../src/reader/renderers/public-api.ts";
 
 test("foldable distribution animation retains four phases and six operations", () => {
   const animation = createKpFoldableDistributionEquationAnimationAsset();
@@ -72,6 +74,7 @@ test("every phase compiles semantic transition IR rather than fallback paint", (
     });
 
     assert.ok(renderPlan.transitions.length > 0);
+    assert.equal(renderPlan.transitions.length, 1);
     assert.ok(renderPlan.transitions.every(
       ({ semanticStatus }) => semanticStatus === "ready"
     ));
@@ -83,6 +86,37 @@ test("every phase compiles semantic transition IR rather than fallback paint", (
         lifecycle === "role-change"
       )
     ));
+  }
+});
+
+test("parallel motif phases render as one complete source-target cohort", () => {
+  const animation = createKpFoldableDistributionEquationAnimationAsset();
+  for (const progress of [0.05, 0.3]) {
+    const runtimeFrame = sampleKpAnimationRuntimeFrame({
+      animation,
+      progress
+    });
+    const renderPlan = projectKpReaderEquationRenderPlan({
+      animation,
+      runtimeFrame
+    });
+    const transition = renderPlan.transitions[0]!;
+
+    assert.match(transition.id, /^cohort\./);
+    assert.equal(transition.transformType, "parallelSemanticCohort");
+    assert.equal(
+      transition.relations.length,
+      runtimeFrame.activeTransformationIds.reduce((count, id) =>
+        count + animation.transformations.find(
+          (candidate) => candidate.id === id
+        )!.correspondenceMap!.records.length, 0)
+    );
+    const material = compileKpReaderEquationMaterialPlan(renderPlan);
+    assert.deepEqual(material.diagnostics, []);
+    assert.deepEqual(
+      validateKpReaderEquationMaterialPlanTotality(renderPlan, material),
+      []
+    );
   }
 });
 

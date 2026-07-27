@@ -72,6 +72,12 @@ export {
   compileKpRadicalSuccessionEquationLesson
 } from "./radical-succession-equation-lesson.ts";
 export {
+  compileKpFoldableDistributionEquationLesson
+} from "./foldable-distribution-equation-lesson.ts";
+export {
+  compileKpFoldableDistributionLessonModel
+} from "./foldable-distribution-lesson-model.ts";
+export {
   compileKpCanonicalEquationLessonPromotion,
   type KpCanonicalEquationLessonPromotionInput
 } from "./canonical-equation-lesson-promotion-kit.ts";

@@ -8,9 +8,15 @@ import {
   semanticTransformationLeafRefs
 } from "../../semantic/transformation-composition.ts";
 import {
+  createKpFoldableDistributionEquationAnimationAsset
+} from "../../animation/foldable-distribution-equation-adapter.ts";
+import {
   kpFoldableDistributionPreservationManifest as manifest
 } from "./foldable-distribution-preservation-manifest.ts";
-import { parseKpLessonMarkdown } from "./lesson-markdown-parser.ts";
+import {
+  compileKpEquationExemplarLessonModel
+} from "./equation-exemplar-lesson-model.ts";
+import { emitKpReaderHydrationManifest } from "./hydration-manifest.ts";
 import { compileKpStaticMathStates } from "./static-math-compiler.ts";
 import { compileKpStaticLessonProse } from "./static-prose-compiler.ts";
 
@@ -29,14 +35,17 @@ const distributedProducts = Object.freeze({
 });
 
 export function compileKpFoldableDistributionLessonModel(markdown: string) {
-  const document = parseKpLessonMarkdown({
+  const base = compileKpEquationExemplarLessonModel({
+    animation: createKpFoldableDistributionEquationAnimationAsset(),
     sourceId: "content/lessons/foldable-distribution.md",
-    id: manifest.document.id,
+    documentId: manifest.document.id,
     version: manifest.document.version,
     title: manifest.document.title,
     language: "en",
-    markdown
+    markdown,
+    diagnosticLabel: "foldable-distribution"
   });
+  const { document } = base;
   const story = document.blocks.find(
     (block) => block.kind === "animation-story"
   );
@@ -113,12 +122,13 @@ export function compileKpFoldableDistributionLessonModel(markdown: string) {
   })));
 
   return Object.freeze({
-    document,
+    ...base,
+    staticMath,
+    prose,
+    hydration: emitKpReaderHydrationManifest(base.resolved, staticMath),
     story,
     expressionChain,
     distributedProducts,
-    staticMath,
-    prose,
     transcript
   });
 }

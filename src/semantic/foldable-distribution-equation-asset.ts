@@ -19,8 +19,8 @@ import {
   createKpFoldableSignedTermGroupingCertificate
 } from "./foldable-distribution-operation-certificates.ts";
 import {
-  createKpFoldableDistributionAnnotatedEndpoints
-} from "../rendering/foldable-distribution-selector-annotated-latex.ts";
+  createKpFoldableDistributionEndpointSpecs
+} from "./foldable-distribution-endpoint-spec.ts";
 
 export interface KpFoldableDistributionEquationAsset {
   readonly sourceTraceId: "trace.algebra.foldable-distribution";
@@ -46,7 +46,7 @@ const transformIds = Object.freeze({
 
 export function createKpFoldableDistributionEquationAsset():
   KpFoldableDistributionEquationAsset {
-  const endpoints = createKpFoldableDistributionAnnotatedEndpoints();
+  const endpoints = createKpFoldableDistributionEndpointSpecs();
   const fanOut = createKpFoldableDistributionFanOutCertificates();
   const products = createKpFoldableProductEvaluationCertificates();
   const grouping = createKpFoldableSignedTermGroupingCertificate();
@@ -170,18 +170,19 @@ export function createKpFoldableDistributionEquationAsset():
 
 function equationObject(input: {
   readonly endpoint:
-    ReturnType<typeof createKpFoldableDistributionAnnotatedEndpoints>[number];
+    ReturnType<typeof createKpFoldableDistributionEndpointSpecs>[number];
   readonly sourceId?: string | undefined;
   readonly transformationId?: string | undefined;
 }): KpSemanticAssetObject {
-  const annotationSelectors = input.endpoint.annotated.annotations.map(
-    ({ selectorId, latex }) => ({
+  const annotationSelectors = input.endpoint.tokens.map(
+    ([selectorId, latex]) => ({
       id: selectorId,
       kind: selectorKind(latex),
       label: readableLabel(latex),
       metadata: {
         equationStructureRole: selectorKind(latex),
         nativeEndpoint: true,
+        ...successorMetadata(input.endpoint.objectId, selectorId),
         activeTransformationIds: selectorScopes(
           input.endpoint.objectId,
           selectorId
@@ -208,7 +209,9 @@ function equationObject(input: {
     id: input.endpoint.objectId,
     objectType: "equation",
     title: input.endpoint.label,
-    value: { latex: input.endpoint.annotated.rawLatex },
+    value: {
+      latex: input.endpoint.tokens.map(([, latex]) => latex).join(" ")
+    },
     selectors: [...annotationSelectors, ...relationGroups],
     provenance: input.sourceId === undefined
       ? {
@@ -224,6 +227,39 @@ function equationObject(input: {
             : { transformationId: input.transformationId })
         }
   });
+}
+
+function successorMetadata(
+  objectId: string,
+  selectorId: string
+): Readonly<Record<string, string | number | boolean>> {
+  if (objectId.endsWith(".distributed-raw")) {
+    const sourceRank = new Map([
+      ["distribution.left.factor-3-constant", 0],
+      ["distribution.left.constant-2", 1],
+      ["distribution.right.factor-2-constant", 0],
+      ["distribution.right.negative-one", 1]
+    ]).get(selectorId);
+    return sourceRank === undefined
+      ? {}
+      : {
+          successorContribution: "material-input",
+          successorRole: "factor",
+          successorRank: sourceRank
+        };
+  }
+  if (
+    objectId.endsWith(".distributed") &&
+    (selectorId === "distributed.constant-6" ||
+      selectorId === "distributed.negative-2")
+  ) {
+    return {
+      successorTarget: true,
+      successorRole: "evaluated-product",
+      successorRank: 0
+    };
+  }
+  return {};
 }
 
 function selectorScopes(

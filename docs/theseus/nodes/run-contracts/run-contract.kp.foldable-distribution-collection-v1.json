@@ -166,7 +166,8 @@
     {
       "id": "s19",
       "title": "Implement-reader-controls",
-      "status": "planned"
+      "summary": "Integrated the canonical reader route with complete parallel phase cohorts, proper opaque motifs, fold controls, pinned drill state, one fold-aware clock, stable URLs, responsive state, and production-budget preservation.",
+      "status": "complete"
     },
     {
       "id": "s20",

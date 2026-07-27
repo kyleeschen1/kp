@@ -55,6 +55,20 @@ export {
   type KpReaderRuntimeRouteDescriptor
 } from "./reader-route-descriptor.ts";
 export {
+  planKpFoldableDistributionLayout,
+  type KpFoldableDistributionLayoutPlan,
+  type KpFoldableDistributionLayoutRow,
+  type KpFoldableDistributionPhaseLayout,
+  type KpFoldableDistributionViewport
+} from "./foldable-distribution-layout.ts";
+export {
+  decodeKpFoldableDistributionUrl,
+  encodeKpFoldableDistributionUrl,
+  type KpFoldableDistributionCheckpoint,
+  type KpFoldableDistributionDirection,
+  type KpFoldableDistributionUrlState
+} from "./foldable-distribution-url-codec.ts";
+export {
   createKpReaderSemanticFocusService,
   type KpReaderFocusListener,
   type KpReaderFocusSnapshot,
