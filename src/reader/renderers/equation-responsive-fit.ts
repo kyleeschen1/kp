@@ -7,12 +7,15 @@ export interface KpReaderEquationResponsiveFitPlan {
   readonly kind: "reader-equation-responsive-fit-plan";
   readonly alignmentPlanId: string;
   readonly viewportWidth: number;
+  readonly viewportHeight?: number | undefined;
   readonly horizontalPadding: number;
+  readonly verticalPadding?: number | undefined;
   readonly contentBounds: KpReaderLayoutRect;
   readonly requiredScale: number;
   readonly scale: number;
   readonly translateX: number;
-  readonly status: "native" | "scaled" | "overflow";
+  readonly translateY: number;
+  readonly status: "native" | "scaled" | "contained" | "overflow";
   readonly wrapAllowed: false;
 }
 
@@ -28,16 +31,22 @@ export interface KpReaderEquationConformanceIssue {
 export function planKpReaderEquationResponsiveFit(input: {
   readonly alignment: KpReaderEquationPerceptualAlignmentPlan;
   readonly viewportWidth: number;
+  readonly viewportHeight?: number | undefined;
   readonly horizontalPadding?: number | undefined;
+  readonly verticalPadding?: number | undefined;
   readonly minScale?: number | undefined;
+  readonly overflowStrategy?: "report" | "contain" | undefined;
 }): KpReaderEquationResponsiveFitPlan {
   return planFit({
     id: `fit.${input.alignment.id}.${input.viewportWidth}`,
     alignmentPlanId: input.alignment.id,
     alignments: [input.alignment],
     viewportWidth: input.viewportWidth,
+    viewportHeight: input.viewportHeight,
     horizontalPadding: input.horizontalPadding,
-    minScale: input.minScale
+    verticalPadding: input.verticalPadding,
+    minScale: input.minScale,
+    overflowStrategy: input.overflowStrategy
   });
 }
 
@@ -45,8 +54,11 @@ export function planKpReaderEquationSequenceResponsiveFit(input: {
   readonly id: string;
   readonly alignments: readonly KpReaderEquationPerceptualAlignmentPlan[];
   readonly viewportWidth: number;
+  readonly viewportHeight?: number | undefined;
   readonly horizontalPadding?: number | undefined;
+  readonly verticalPadding?: number | undefined;
   readonly minScale?: number | undefined;
+  readonly overflowStrategy?: "report" | "contain" | undefined;
 }): KpReaderEquationResponsiveFitPlan {
   if (input.id.trim() === "" || input.alignments.length === 0) {
     throw new Error("Equation sequence fit requires an id and at least one alignment.");
@@ -56,8 +68,11 @@ export function planKpReaderEquationSequenceResponsiveFit(input: {
     alignmentPlanId: `sequence.${input.id}`,
     alignments: input.alignments,
     viewportWidth: input.viewportWidth,
+    viewportHeight: input.viewportHeight,
     horizontalPadding: input.horizontalPadding,
-    minScale: input.minScale
+    verticalPadding: input.verticalPadding,
+    minScale: input.minScale,
+    overflowStrategy: input.overflowStrategy
   });
 }
 
@@ -66,16 +81,32 @@ function planFit(input: {
   readonly alignmentPlanId: string;
   readonly alignments: readonly KpReaderEquationPerceptualAlignmentPlan[];
   readonly viewportWidth: number;
+  readonly viewportHeight?: number | undefined;
   readonly horizontalPadding?: number | undefined;
+  readonly verticalPadding?: number | undefined;
   readonly minScale?: number | undefined;
+  readonly overflowStrategy?: "report" | "contain" | undefined;
 }): KpReaderEquationResponsiveFitPlan {
   const horizontalPadding = input.horizontalPadding ?? 16;
+  const verticalPadding = input.verticalPadding ?? 0;
   const minScale = input.minScale ?? 0.72;
+  const overflowStrategy = input.overflowStrategy ?? "report";
   if (!Number.isFinite(input.viewportWidth) || input.viewportWidth <= 0) {
     throw new Error("Equation fit viewport width must be finite and positive.");
   }
   if (!Number.isFinite(horizontalPadding) || horizontalPadding < 0) {
     throw new Error("Equation fit padding must be finite and non-negative.");
+  }
+  if (
+    input.viewportHeight !== undefined &&
+    (!Number.isFinite(input.viewportHeight) || input.viewportHeight <= 0)
+  ) {
+    throw new Error("Equation fit viewport height must be finite and positive.");
+  }
+  if (!Number.isFinite(verticalPadding) || verticalPadding < 0) {
+    throw new Error(
+      "Equation fit vertical padding must be finite and non-negative."
+    );
   }
   if (!Number.isFinite(minScale) || minScale <= 0 || minScale > 1) {
     throw new Error("Equation fit minimum scale must be within (0, 1].");
@@ -90,27 +121,51 @@ function planFit(input: {
       ...(owner.targetBounds === undefined ? [] : [owner.targetBounds])
     ])
   ));
-  const requiredScale = Math.min(1, availableWidth / contentBounds.width);
+  const availableHeight = input.viewportHeight === undefined
+    ? undefined
+    : input.viewportHeight - verticalPadding * 2;
+  if (availableHeight !== undefined && availableHeight <= 0) {
+    throw new Error("Equation fit padding leaves no available block space.");
+  }
+  const requiredScale = Math.min(
+    1,
+    availableWidth / contentBounds.width,
+    ...(availableHeight === undefined
+      ? []
+      : [availableHeight / contentBounds.height])
+  );
   const status = requiredScale >= 1
     ? "native" as const
     : requiredScale >= minScale
       ? "scaled" as const
-      : "overflow" as const;
+      : overflowStrategy === "contain"
+        ? "contained" as const
+        : "overflow" as const;
   const scale = status === "overflow" ? minScale : requiredScale;
   const translateX =
     horizontalPadding + (availableWidth - contentBounds.width * scale) / 2 -
     contentBounds.left * scale;
+  const translateY = availableHeight === undefined
+    ? 0
+    : verticalPadding +
+      (availableHeight - contentBounds.height * scale) / 2 -
+      contentBounds.top * scale;
 
   return {
     id: input.id,
     kind: "reader-equation-responsive-fit-plan",
     alignmentPlanId: input.alignmentPlanId,
     viewportWidth: input.viewportWidth,
+    ...(input.viewportHeight === undefined
+      ? {}
+      : { viewportHeight: input.viewportHeight }),
     horizontalPadding,
+    ...(input.viewportHeight === undefined ? {} : { verticalPadding }),
     contentBounds,
     requiredScale,
     scale,
     translateX,
+    translateY,
     status,
     wrapAllowed: false
   };
@@ -122,9 +177,14 @@ export function applyKpReaderEquationResponsiveFit(
 ): void {
   surface.dataset["kpReaderEquationFitStatus"] = fit.status;
   surface.dataset["kpReaderEquationWrapAllowed"] = "false";
+  surface.dataset["kpReaderEquationFitScale"] = String(fit.scale);
+  surface.dataset["kpReaderEquationFitBounds"] = JSON.stringify(
+    fit.contentBounds
+  );
   surface.style.transformOrigin = "0 0";
   surface.style.transform =
-    `translate3d(${fit.translateX}px, 0, 0) scale(${fit.scale})`;
+    `translate3d(${fit.translateX}px, ${fit.translateY}px, 0) ` +
+    `scale(${fit.scale})`;
   surface.style.whiteSpace = "nowrap";
 }
 
@@ -174,10 +234,24 @@ export function checkKpReaderEquationMotionConformance(input: {
       input.fit.translateX;
     const min = input.fit.horizontalPadding - tolerance;
     const max = input.fit.viewportWidth - input.fit.horizontalPadding + tolerance;
-    if (left < min || right > max) {
+    const top =
+      owner.currentBounds.top * input.fit.scale + input.fit.translateY;
+    const bottom =
+      (owner.currentBounds.top + owner.currentBounds.height) * input.fit.scale +
+      input.fit.translateY;
+    const minimumTop = (input.fit.verticalPadding ?? 0) - tolerance;
+    const maximumBottom = input.fit.viewportHeight === undefined
+      ? Number.POSITIVE_INFINITY
+      : input.fit.viewportHeight - (input.fit.verticalPadding ?? 0) + tolerance;
+    if (
+      left < min ||
+      right > max ||
+      top < minimumTop ||
+      bottom > maximumBottom
+    ) {
       issues.push({
         code: "equation-conformance.owner-out-of-bounds",
-        message: `Equation material owner ${owner.ownerId} exceeds the fitted inline viewport.`,
+        message: `Equation material owner ${owner.ownerId} exceeds the fitted viewport.`,
         ownerId: owner.ownerId
       });
     }

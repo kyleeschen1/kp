@@ -27,7 +27,9 @@ test("reader equation fit applies a centered no-wrap transform", async ({ page }
     const fit = planKpReaderEquationResponsiveFit({
       alignment,
       viewportWidth: 180,
+      viewportHeight: 60,
       horizontalPadding: 10,
+      verticalPadding: 10,
       minScale: 0.7
     });
     const surface = document.querySelector<HTMLElement>("#surface")!;
@@ -41,7 +43,8 @@ test("reader equation fit applies a centered no-wrap transform", async ({ page }
       whiteSpace: surface.style.whiteSpace,
       scale: fit.scale,
       leftInset: surfaceRect.left - stageRect.left,
-      rightInset: stageRect.right - surfaceRect.right
+      rightInset: stageRect.right - surfaceRect.right,
+      contentCenterY: surfaceRect.top + 20 * fit.scale - stageRect.top
     };
   });
 
@@ -51,4 +54,5 @@ test("reader equation fit applies a centered no-wrap transform", async ({ page }
   expect(result.scale).toBe(0.8);
   expect(result.leftInset).toBeCloseTo(10, 4);
   expect(result.rightInset).toBeCloseTo(10, 4);
+  expect(result.contentCenterY).toBeCloseTo(30, 4);
 });

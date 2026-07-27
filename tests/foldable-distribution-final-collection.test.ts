@@ -22,7 +22,29 @@ test("final collection certifies exact coefficient and signed-constant results",
   ]);
 });
 
-test("every collected material role has complete many-to-one lineage", () => {
+test("factoring coalesces x before arithmetic collection begins", () => {
+  const certificate = createKpFoldableFinalCollectionCertificate();
+  const factoringRecords =
+    certificate.factoringTransformation.correspondenceMap!.records;
+  const factorMerge = factoringRecords.find(
+    ({ targetSelectorIds }) =>
+      targetSelectorIds.includes("coefficient-factored.x")
+  );
+
+  assert.deepEqual(
+    factorMerge,
+    {
+      id: "certificate.foldable-distribution.final-collection.factor.common-x",
+      relation: "fan-in",
+      sourceSelectorIds: ["grouped.x-from-left", "grouped.x-from-right"],
+      targetSelectorIds: ["coefficient-factored.x"],
+      summary: "The repeated x factors coalesce into one exact common factor."
+    }
+  );
+  assert.equal(certificate.factoringPresentation.coefficientEvaluation, "deferred");
+});
+
+test("final collection merges only arithmetic inputs and preserves factored x", () => {
   const certificate = createKpFoldableFinalCollectionCertificate();
   const records = certificate.transformation.correspondenceMap!.records;
   const merges = records.filter(({ relation }) => relation === "fan-in");
@@ -34,23 +56,33 @@ test("every collected material role has complete many-to-one lineage", () => {
     ]),
     [
       [
-        ["grouped.coefficient-3", "grouped.coefficient-2"],
+        [
+          "coefficient-factored.coefficient-3",
+          "coefficient-factored.coefficient-2"
+        ],
         ["collected.coefficient-5"]
       ],
       [
-        ["grouped.x-from-left", "grouped.x-from-right"],
-        ["collected.x"]
-      ],
-      [
-        ["grouped.constant-6", "grouped.negative-2"],
+        [
+          "coefficient-factored.constant-6",
+          "coefficient-factored.negative-2"
+        ],
         ["collected.constant-4"]
       ]
     ]
   );
-  assert.ok(merges.every(
-    ({ sourceSelectorIds, targetSelectorIds }) =>
-      sourceSelectorIds.length === 2 && targetSelectorIds.length === 1
-  ));
+  assert.deepEqual(
+    records.find(({ targetSelectorIds }) =>
+      targetSelectorIds.includes("collected.x")
+    ),
+    {
+      id: "certificate.foldable-distribution.final-collection.common-x-persists",
+      relation: "identity",
+      sourceSelectorIds: ["coefficient-factored.x"],
+      targetSelectorIds: ["collected.x"],
+      summary: "The already factored x persists at one exact baseline."
+    }
+  );
 });
 
 test("final fusion is opaque and settles into exact native KaTeX", () => {

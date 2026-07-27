@@ -23,6 +23,7 @@ test("foldable distribution evaluation tree preserves causal phase structure", (
       "transform.foldable-distribution.product.two-times-negative-one"
     ],
     ["transform.foldable-distribution.group-like-terms"],
+    ["transform.foldable-distribution.factor-common-x"],
     ["transform.foldable-distribution.collect-results"]
   ]);
   assert.deepEqual(tree.root.sourceObjectIds, [
@@ -38,6 +39,7 @@ test("evaluation rewind mirrors sequence while preserving parallel cohorts", () 
 
   assert.deepEqual(semanticTransformationRewindPhases(tree.root), [
     ["transform.foldable-distribution.collect-results"],
+    ["transform.foldable-distribution.factor-common-x"],
     ["transform.foldable-distribution.group-like-terms"],
     [
       "transform.foldable-distribution.product.three-times-two",
@@ -48,7 +50,7 @@ test("evaluation rewind mirrors sequence while preserving parallel cohorts", () 
       "transform.foldable-distribution.right.fan-out"
     ]
   ]);
-  assert.equal(semanticTransformationLeafRefs(tree.root).length, 6);
+  assert.equal(semanticTransformationLeafRefs(tree.root).length, 7);
 });
 
 test("one deeply immutable tree owns operations and inspection points", () => {

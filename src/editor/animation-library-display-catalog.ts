@@ -35,6 +35,7 @@ export interface KpAnimationLibraryDisplayEntry {
   readonly summary: string;
   readonly tags: readonly string[];
   readonly availability: "playable" | "planned";
+  readonly canonicalFormat: "ported" | "partial" | "legacy";
   readonly featured: boolean;
   readonly primaryRepresentationId?: string | undefined;
   readonly representations: readonly KpAnimationLibraryDisplayRepresentation[];
@@ -47,6 +48,15 @@ const featuredAnimationIds = [
   "animation.generated.distribution.expand-a-sum",
   "animation.derivative-rules.tangent-graph"
 ] as const;
+
+// Each entry here is backed by a reader descriptor that selects the exclusive
+// canonical equation session for all or a bounded subset of its transitions.
+const canonicalFormatByAnimationId = new Map<string, "ported" | "partial">([
+  ["animation.generated.radical.square-root-as-power", "ported"],
+  ["animation.numerator-split-merge.round-trip", "ported"],
+  ["animation.foldable-distribution.collect-like-terms", "ported"],
+  ["animation.linear-solve.solve-x", "partial"]
+]);
 
 const supplementalRepresentations = [
   {
@@ -259,6 +269,8 @@ function finalizeEntry(
     summary: entry.summary,
     tags: [...entry.tags].sort(),
     availability: entry.availability,
+    canonicalFormat:
+      canonicalFormatByAnimationId.get(entry.animationId) ?? "legacy",
     featured: (featuredAnimationIds as readonly string[]).includes(
       entry.animationId
     ),

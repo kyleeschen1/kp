@@ -110,9 +110,16 @@ body[data-kp-reader-hydrated="true"] .kp-animation-static > [data-kp-static-stat
 .kp-reader-equation-transition { position: absolute; inset: 0; display: block !important; visibility: hidden; }
 .kp-reader-equation-transition[data-kp-reader-transition-active="true"] { visibility: visible; }
 .kp-reader-equation-fit-surface, .kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { position: absolute; inset: 0; }
+.kp-reader-equation-fit-surface, .kp-reader-equation-material-fit-surface {
+  /* Reader cards cap display type by their own width; the fit transform then
+     handles unusually long or tall notation without operation-specific CSS. */
+  --kp-canonical-equation-type-size: clamp(1.5rem, 7cqi, 2rem);
+}
 .kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { font-size: var(--kp-equation-type-size); }
-.kp-reader-equation-native { position: absolute; inset: 0; display: grid; place-items: center; }
-.kp-reader-equation-state { width: max-content; }
+.kp-reader-equation-native { position: absolute; inset: 0; }
+/* Explicit intrinsic centering avoids Grid's start fallback for overwide math,
+   so the fit planner measures the same centered coordinate system on phones. */
+.kp-reader-equation-state { position: absolute; left: 50%; top: 50%; width: max-content; transform: translate(-50%, -50%); }
 .kp-reader-equation-state .katex-display { margin: 0; }
 .kp-reader-equation-state [data-kp-reader-equation-anchor-id] { position: relative; display: inline-block; will-change: opacity; transition: color 120ms ease; }
 .kp-reader-equation-material { position: absolute; z-index: 3; inset: 0; pointer-events: none; }

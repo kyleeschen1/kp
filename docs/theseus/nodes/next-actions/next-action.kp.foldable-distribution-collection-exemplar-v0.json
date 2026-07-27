@@ -323,6 +323,48 @@
       "scope": "standard",
       "checkedAt": "2026-07-27T07:24:56.230Z",
       "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T12:03:26.106Z",
+      "notes": "60 semantic, motif, fold, endpoint, reader, and static-export checks passed after the bounded visual repair."
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-07-27T12:03:32.164Z",
+      "notes": "Seven browser gates pass: responsive containment and centering for foldable distribution and linear solve, exact factoring versus evaluation beats, paint-space x baseline continuity, rewind, phone, reduced motion, accessibility, and no-JavaScript truth."
+    },
+    {
+      "command": "npm run visual:reader-responsive-fit",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-07-27T12:03:40.798Z",
+      "notes": "All solve-x checkpoints stay single-line, centered, in bounds, and at an effective 24-32px reader-card type scale across desktop, compact, and phone viewports; the standalone two-axis fit primitive also passes."
+    },
+    {
+      "command": "npm run visual:animation-library-display",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-07-27T12:03:45.805Z",
+      "notes": "Animation Library lazily mounts one selected host, scrolls the independent catalog rail, shows ported/partial/legacy status, preserves deep links and phone preview, and keeps review capture reachable."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-07-27T12:03:50.830Z",
+      "notes": "Canonical vocabulary, opaque lineage, responsive envelopes, single renderer session, and font/layout invalidation remain frozen; no compositor-core category was added."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T12:06:41.017Z",
+      "notes": "All TypeScript projects and the production Vite build pass after the bounded responsive-fit, semantic-beat, paint-alignment, and Animation Library repairs."
     }
   ],
   "progress": {

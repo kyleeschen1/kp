@@ -51,14 +51,12 @@ export function planKpFoldableDistributionLayout(input: {
       singleRow("distributed", "grouped")
     ),
     phase(
+      "transform.foldable-distribution.factor-common-x",
+      singleRow("grouped", "coefficient-factored")
+    ),
+    phase(
       "transform.foldable-distribution.collect-results",
-      [
-        row(
-          "result",
-          ["layout.foldable-distribution.collected.result"],
-          "result"
-        )
-      ]
+      singleRow("coefficient-factored", "collected.result")
     )
   ].map(({ nodeId, rows }) => Object.freeze({
     nodeId,

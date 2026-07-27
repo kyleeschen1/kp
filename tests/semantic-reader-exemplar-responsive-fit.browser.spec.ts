@@ -47,11 +47,17 @@ for (const viewport of viewports) {
           return style.visibility !== "hidden" && Number(style.opacity) > 0.01 &&
             rect.width > 0 && rect.height > 0;
         }).map((element) => element.getBoundingClientRect());
+        const fontSize = Number.parseFloat(
+          getComputedStyle(measurement).fontSize
+        );
+        const fitScale = Number(
+          fit.dataset["kpReaderEquationFitScale"] ?? "1"
+        );
         return {
           fitStatus: fit.dataset["kpReaderEquationFitStatus"],
           wrapAllowed: fit.dataset["kpReaderEquationWrapAllowed"],
           whiteSpace: getComputedStyle(fit).whiteSpace,
-          fontSize: Number.parseFloat(getComputedStyle(measurement).fontSize),
+          effectiveFontSize: fontSize * fitScale,
           headingOverflows: heading === null || heading.scrollWidth > heading.clientWidth + 1,
           outOfBounds: visibleRects.some((rect) =>
             rect.left < stageRect.left - 0.5 || rect.right > stageRect.right + 0.5
@@ -64,7 +70,9 @@ for (const viewport of viewports) {
       expect(result.fitStatus).not.toBe("overflow");
       expect(result.wrapAllowed).toBe("false");
       expect(result.whiteSpace).toBe("nowrap");
-      expect(result.fontSize).toBeLessThanOrEqual(viewport.maxFontSize);
+      expect(result.effectiveFontSize).toBeLessThanOrEqual(
+        viewport.maxFontSize
+      );
       expect(result.headingOverflows).toBe(false);
       expect(result.outOfBounds).toBe(false);
       expect(result.multilineState).toBe(false);

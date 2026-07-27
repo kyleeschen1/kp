@@ -64,7 +64,7 @@ test("adaptive projections preserve complete disclosure and operation truth", ()
     detailBudget: "balanced"
   });
 
-  assert.equal(projection.operationIds.length, 6);
+  assert.equal(projection.operationIds.length, 7);
   assert.deepEqual(
     projection.disclosures.flatMap(({ hiddenOperationIds }) =>
       hiddenOperationIds

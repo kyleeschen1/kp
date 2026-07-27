@@ -55,10 +55,19 @@ export function createKpFoldableDistributionEvaluationTree():
     targetObjectId: "expression.foldable-distribution.grouped",
     summary: grouping.transformation.title
   });
+  const factoringNode = scopedLeaf({
+    id: collection.factoringTransformation.id,
+    kind: collection.factoringTransformation.transformType,
+    sourceObjectId: "expression.foldable-distribution.grouped",
+    targetObjectId:
+      "expression.foldable-distribution.coefficient-factored",
+    summary: collection.factoringTransformation.title
+  });
   const collectionNode = scopedLeaf({
     id: collection.transformation.id,
     kind: collection.transformation.transformType,
-    sourceObjectId: "expression.foldable-distribution.grouped",
+    sourceObjectId:
+      "expression.foldable-distribution.coefficient-factored",
     targetObjectId: "expression.foldable-distribution.collected",
     summary: collection.transformation.title
   });
@@ -69,6 +78,7 @@ export function createKpFoldableDistributionEvaluationTree():
       distributionNode,
       productNode,
       groupingNode,
+      factoringNode,
       collectionNode
     ],
     summary:

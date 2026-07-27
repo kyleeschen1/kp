@@ -112,6 +112,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   position: sticky;
   top: 1rem;
   display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
   max-height: calc(100svh - 2rem);
   gap: .85rem;
   padding: 1rem;
@@ -188,6 +189,16 @@ button, a { -webkit-tap-highlight-color: transparent; }
   color: #68746f;
   font-size: .64rem;
   text-transform: capitalize;
+}
+
+.animation-library__catalog button[data-canonical-format="ported"] span {
+  color: #27705b;
+  font-weight: 800;
+}
+
+.animation-library__catalog button[data-canonical-format="partial"] span {
+  color: #8e4a31;
+  font-weight: 800;
 }
 
 .animation-library__catalog button[data-featured="true"] strong::after {

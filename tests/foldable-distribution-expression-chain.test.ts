@@ -13,7 +13,7 @@ import {
   listKpStructuredExpressionSubtrees
 } from "../src/semantic/structured-expression.ts";
 
-test("foldable distribution chain constructs the four frozen source states", () => {
+test("foldable distribution chain constructs the five frozen source states", () => {
   const chain = createKpFoldableDistributionExpressionChain();
 
   assert.deepEqual(
@@ -40,7 +40,7 @@ test("every foldable distribution state independently normalizes to 5x plus 4", 
   });
   assert.deepEqual(
     verification.stateNormalForms,
-    Array.from({ length: 4 }, () => ({
+    Array.from({ length: 5 }, () => ({
       coefficients: { x: 5 },
       constant: 4
     }))
@@ -50,9 +50,9 @@ test("every foldable distribution state independently normalizes to 5x plus 4", 
 test("expression-chain verification rejects silent algebra drift", () => {
   const chain = createKpFoldableDistributionExpressionChain();
   const drifted = [
-    ...chain.slice(0, 3),
+    ...chain.slice(0, 4),
     {
-      ...chain[3]!,
+      ...chain[4]!,
       expression: createKpStructuredExpression({
         root: {
           id: "drifted.root",
@@ -82,5 +82,5 @@ test("expression-chain verification rejects silent algebra drift", () => {
 
   const incomplete = verifyKpFoldableDistributionExpressionChain(chain.slice(1));
   assert.equal(incomplete.ok, false);
-  assert.match(incomplete.diagnostics[0] ?? "", /Expected 4 expression states/);
+  assert.match(incomplete.diagnostics[0] ?? "", /Expected 5 expression states/);
 });

@@ -35,6 +35,7 @@ test("foldable distribution resolves one lazy canonical reader host", () => {
   );
 
   assert.equal(entry?.availability, "playable");
+  assert.equal(entry?.canonicalFormat, "ported");
   assert.equal(entry?.featured, false);
   assert.equal(entry?.representations.length, 1);
   assert.deepEqual(entry?.representations[0], {
@@ -49,6 +50,27 @@ test("foldable distribution resolves one lazy canonical reader host", () => {
   assert.equal(
     entry?.primaryRepresentationId,
     entry?.representations[0]?.id
+  );
+});
+
+test("canonical-format status distinguishes complete, partial, and legacy hosts", () => {
+  const catalog = createKpAnimationLibraryDisplayCatalog();
+  const status = (animationId: string) =>
+    catalog.find((entry) => entry.animationId === animationId)
+      ?.canonicalFormat;
+
+  assert.equal(
+    status("animation.foldable-distribution.collect-like-terms"),
+    "ported"
+  );
+  assert.equal(
+    status("animation.generated.radical.square-root-as-power"),
+    "ported"
+  );
+  assert.equal(status("animation.linear-solve.solve-x"), "partial");
+  assert.equal(
+    status("animation.generated.distribution.expand-a-sum"),
+    "legacy"
   );
 });
 

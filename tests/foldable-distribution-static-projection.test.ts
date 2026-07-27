@@ -13,8 +13,8 @@ test("expanded projection exposes every operation leaf", () => {
     createKpFoldableDistributionFoldIntent({ mode: "expanded" })
   );
 
-  assert.equal(projection.operationIds.length, 6);
-  assert.equal(projection.visibleNodeIds.length, 8);
+  assert.equal(projection.operationIds.length, 7);
+  assert.equal(projection.visibleNodeIds.length, 9);
   assert.deepEqual(projection.collapsedNodeIds, []);
   assert.deepEqual(projection.disclosures, []);
 });
@@ -24,7 +24,7 @@ test("collapsed projection hides detail but discloses every operation", () => {
     createKpFoldableDistributionFoldIntent({ mode: "collapsed" })
   );
 
-  assert.equal(projection.visibleNodeIds.length, 4);
+  assert.equal(projection.visibleNodeIds.length, 5);
   assert.deepEqual(
     projection.disclosures.flatMap(({ hiddenOperationIds }) =>
       hiddenOperationIds
@@ -35,6 +35,7 @@ test("collapsed projection hides detail but discloses every operation", () => {
     projection.operationIds.slice(4),
     [
       "transform.foldable-distribution.group-like-terms",
+      "transform.foldable-distribution.factor-common-x",
       "transform.foldable-distribution.collect-results"
     ]
   );

@@ -29,7 +29,7 @@ Track the [outside factors](kp:focus/factored.left-factor,factored.right-factor 
       "id": "beat.distributed",
       "title": "Fan each factor into its group",
       "content": "Each outside factor branches to both descendant products. Folding can compress this work, but it never removes either multiplication.",
-      "progressPermille": 281,
+      "progressPermille": 230,
       "checkpointId": "distributed",
       "focusRefs": [
         "distribution.left.factor-3-x",
@@ -42,7 +42,7 @@ Track the [outside factors](kp:focus/factored.left-factor,factored.right-factor 
       "id": "beat.products-evaluated",
       "title": "Evaluate the constant products",
       "content": "Three times two becomes six, and two times negative one becomes negative two. Each result retains both contributors.",
-      "progressPermille": 563,
+      "progressPermille": 460,
       "checkpointId": "products-evaluated",
       "focusRefs": [
         "distributed.constant-6",
@@ -53,7 +53,7 @@ Track the [outside factors](kp:focus/factored.left-factor,factored.right-factor 
       "id": "beat.grouped",
       "title": "Gather like terms",
       "content": "The x terms move together and the signed constants move together. Their identities and signs do not change during the reflow.",
-      "progressPermille": 781,
+      "progressPermille": 650,
       "checkpointId": "grouped",
       "focusRefs": [
         "grouped.term-3x",
@@ -63,9 +63,21 @@ Track the [outside factors](kp:focus/factored.left-factor,factored.right-factor 
       ]
     },
     {
+      "id": "beat.coefficient-factored",
+      "title": "Factor out the common x",
+      "content": "The two x factors merge into one shared x. Three plus two remains visible and unevaluated, so factoring and arithmetic stay separate.",
+      "progressPermille": 825,
+      "checkpointId": "coefficient-factored",
+      "focusRefs": [
+        "coefficient-factored.coefficient-3",
+        "coefficient-factored.coefficient-2",
+        "coefficient-factored.x"
+      ]
+    },
+    {
       "id": "beat.collected",
-      "title": "Collect each group",
-      "content": "Three x and two x coalesce into five x, while six and negative two coalesce into four.",
+      "title": "Evaluate the two sums",
+      "content": "Only after x has been factored does three plus two become five, while six minus two becomes four.",
       "progressPermille": 1000,
       "checkpointId": "collected",
       "focusRefs": [

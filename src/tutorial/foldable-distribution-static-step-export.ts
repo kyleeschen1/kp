@@ -74,7 +74,7 @@ export function createKpFoldableDistributionStaticStepExport():
         strategy: "static-snapshot",
         preservesLayout: true,
         message:
-          "Show the five verified equation checkpoints when motion is unavailable."
+          "Show the six verified equation checkpoints when motion is unavailable."
       },
       metadata: {
         sourceTraceId: "trace.algebra.foldable-distribution",

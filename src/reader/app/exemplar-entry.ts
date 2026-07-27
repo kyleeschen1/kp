@@ -584,8 +584,13 @@ function measureLayout(revision: number): LayoutState {
     id: `${animation.id}.r${revision}`,
     alignments: measured.map((context) => context.alignment),
     viewportWidth: viewport.clientWidth,
+    viewportHeight: viewport.clientHeight,
     horizontalPadding: 18,
-    minScale: 0.68
+    verticalPadding: 18,
+    minScale: 0.68,
+    // Reader cards must contain every supported equation. The minimum scale is
+    // still diagnostic, while semantic staging/folding protects readability.
+    overflowStrategy: "contain"
   });
   const contexts = new Map(measured.map((context) => {
     applyKpReaderEquationResponsiveFit(context.fitSurface, fit);

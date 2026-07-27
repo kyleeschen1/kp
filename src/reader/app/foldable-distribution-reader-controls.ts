@@ -214,14 +214,16 @@ function checkpoint(
     normalized === "distributed" ||
     normalized === "products-evaluated" ||
     normalized === "grouped" ||
+    normalized === "coefficient-factored" ||
     normalized === "collected"
   ) {
     return normalized;
   }
-  if (progressPermille >= 891) return "collected";
-  if (progressPermille >= 672) return "grouped";
-  if (progressPermille >= 422) return "products-evaluated";
-  if (progressPermille >= 141) return "distributed";
+  if (progressPermille >= 913) return "collected";
+  if (progressPermille >= 738) return "coefficient-factored";
+  if (progressPermille >= 555) return "grouped";
+  if (progressPermille >= 345) return "products-evaluated";
+  if (progressPermille >= 115) return "distributed";
   return "factored";
 }
 

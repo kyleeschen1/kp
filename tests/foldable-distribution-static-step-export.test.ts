@@ -11,7 +11,7 @@ import {
   createKpFoldableDistributionStaticStepExport
 } from "../src/tutorial/foldable-distribution-static-step-export.ts";
 
-test("foldable distribution exports the five canonical endpoint truths", () => {
+test("foldable distribution exports the six canonical endpoint truths", () => {
   const animation = createKpFoldableDistributionEquationAnimationAsset();
   const endpoints = createKpFoldableDistributionEndpointSpecs();
   const sequence = createKpFoldableDistributionStaticStepExport();
@@ -23,7 +23,7 @@ test("foldable distribution exports the five canonical endpoint truths", () => {
   );
   assert.deepEqual(
     sequence.steps.map(({ progress }) => progress),
-    [0, 0.25, 0.5, 0.75, 1]
+    [0, 0.2, 0.4, 0.6, 0.8, 1]
   );
   assert.deepEqual(
     sequence.steps.map(({ frame }) => frame.state),
@@ -42,7 +42,7 @@ test("static export retains all operations independent of fold presentation", ()
 
   assert.deepEqual(
     sequence.steps.map(({ frame }) => frame.completedOperationIds.length),
-    [0, 2, 4, 5, 6]
+    [0, 2, 4, 5, 6, 7]
   );
   for (const { frame } of sequence.steps) {
     assert.deepEqual(frame.semanticTruth.operationIds, operationIds);

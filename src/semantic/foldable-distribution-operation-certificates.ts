@@ -89,7 +89,7 @@ export interface KpFoldableSignedTermGroupingCertificate {
 }
 
 export interface KpFoldableFinalCollectionCertificate {
-  readonly schemaVersion: "kp.foldable-final-collection-certificate.v1";
+  readonly schemaVersion: "kp.foldable-final-collection-certificate.v2";
   readonly id: string;
   readonly canonicalOperationIds: readonly ["kp.core.merge"];
   readonly arithmetic: readonly [
@@ -104,7 +104,14 @@ export interface KpFoldableFinalCollectionCertificate {
       readonly targetValue: 4;
     }
   ];
+  readonly factoringTransformation: KpSemanticTransformation;
   readonly transformation: KpSemanticTransformation;
+  readonly factoringPresentation: {
+    readonly requiredMotif: "merge-fan-in";
+    readonly commonFactor: "x";
+    readonly coefficientEvaluation: "deferred";
+    readonly geometryAuthority: "renderer-session-measurement";
+  };
   readonly presentation: {
     readonly requiredMotif: "merge-fan-in";
     readonly fusionPaintPolicy: "opaque-many-to-one";
@@ -368,22 +375,34 @@ export function createKpFoldableSignedTermGroupingCertificate():
 export function createKpFoldableFinalCollectionCertificate():
   KpFoldableFinalCollectionCertificate {
   const chain = createKpFoldableDistributionExpressionChain();
-  const grouped = chain[2]!.expression;
-  const collected = chain[3]!.expression;
+  const coefficientFactored = chain[3]!.expression;
+  const collected = chain[4]!.expression;
   const coefficientInputs = [
     evaluateConstantSubtree(
-      requiredSubtree(grouped, "grouped.coefficient-3")
+      requiredSubtree(
+        coefficientFactored,
+        "coefficient-factored.coefficient-3"
+      )
     ),
     evaluateConstantSubtree(
-      requiredSubtree(grouped, "grouped.coefficient-2")
+      requiredSubtree(
+        coefficientFactored,
+        "coefficient-factored.coefficient-2"
+      )
     )
   ] as const;
   const constantInputs = [
     evaluateConstantSubtree(
-      requiredSubtree(grouped, "grouped.constant-6")
+      requiredSubtree(
+        coefficientFactored,
+        "coefficient-factored.constant-6"
+      )
     ),
     evaluateConstantSubtree(
-      requiredSubtree(grouped, "grouped.negative-2")
+      requiredSubtree(
+        coefficientFactored,
+        "coefficient-factored.negative-2"
+      )
     )
   ] as const;
   const coefficientTarget = evaluateConstantSubtree(
@@ -400,11 +419,85 @@ export function createKpFoldableFinalCollectionCertificate():
   }
 
   const id = "certificate.foldable-distribution.final-collection";
+  const factoringTransformation = createKpSemanticTransformation({
+    id: "transform.foldable-distribution.factor-common-x",
+    definitionId: "definition.generated.distribution.factor-common-term",
+    transformType: "factorCommonTerm",
+    title: "Factor x from the like terms",
+    sourceObjectIds: ["expression.foldable-distribution.grouped"],
+    targetObjectIds: [
+      "expression.foldable-distribution.coefficient-factored"
+    ],
+    preserves: ["identity", "value", "structure"],
+    correspondenceMap: {
+      id: `${id}.factoring-correspondence`,
+      records: [
+        identityRecord(
+          `${id}.factor.coefficient-three`,
+          "grouped.coefficient-3",
+          "coefficient-factored.coefficient-3",
+          "Coefficient three persists inside the factored coefficient sum."
+        ),
+        identityRecord(
+          `${id}.factor.coefficient-two`,
+          "grouped.coefficient-2",
+          "coefficient-factored.coefficient-2",
+          "Coefficient two persists inside the factored coefficient sum."
+        ),
+        identityRecord(
+          `${id}.factor.coefficient-plus`,
+          "grouped.coefficients.plus",
+          "coefficient-factored.coefficients.plus",
+          "The coefficient addition remains unevaluated during factoring."
+        ),
+        {
+          id: `${id}.factor.common-x`,
+          relation: "fan-in",
+          sourceSelectorIds: [
+            "grouped.x-from-left",
+            "grouped.x-from-right"
+          ],
+          targetSelectorIds: ["coefficient-factored.x"],
+          summary:
+            "The repeated x factors coalesce into one exact common factor."
+        },
+        ...[
+          ["left-parenthesis", "grouped.coefficients.left-parenthesis",
+            "coefficient-factored.coefficients.left-parenthesis"],
+          ["right-parenthesis", "grouped.coefficients.right-parenthesis",
+            "coefficient-factored.coefficients.right-parenthesis"],
+          ["outer-plus", "grouped.outer-plus",
+            "coefficient-factored.outer-plus"],
+          ["constant-left-parenthesis",
+            "grouped.constants.left-parenthesis",
+            "coefficient-factored.constants.left-parenthesis"],
+          ["constant-six", "grouped.constant-6",
+            "coefficient-factored.constant-6"],
+          ["constant-minus", "grouped.constants.minus",
+            "coefficient-factored.constants.minus"],
+          ["constant-two", "grouped.negative-2",
+            "coefficient-factored.negative-2"],
+          ["constant-right-parenthesis",
+            "grouped.constants.right-parenthesis",
+            "coefficient-factored.constants.right-parenthesis"]
+        ].map(([suffix, sourceSelectorId, targetSelectorId]) =>
+          identityRecord(
+            `${id}.factor.${suffix}`,
+            sourceSelectorId!,
+            targetSelectorId!,
+            "Unrelated structure persists while x is factored."
+          )
+        )
+      ]
+    }
+  });
   const transformation = createKpSemanticTransformation({
     id: "transform.foldable-distribution.collect-results",
     transformType: "collectLikeTerms",
-    title: "Collect coefficient terms and signed constants",
-    sourceObjectIds: ["expression.foldable-distribution.grouped"],
+    title: "Evaluate the coefficient and constant sums",
+    sourceObjectIds: [
+      "expression.foldable-distribution.coefficient-factored"
+    ],
     targetObjectIds: ["expression.foldable-distribution.collected"],
     preserves: ["value", "structure"],
     correspondenceMap: {
@@ -414,28 +507,26 @@ export function createKpFoldableFinalCollectionCertificate():
           id: `${id}.coefficients-merge`,
           relation: "fan-in",
           sourceSelectorIds: [
-            "grouped.coefficient-3",
-            "grouped.coefficient-2"
+            "coefficient-factored.coefficient-3",
+            "coefficient-factored.coefficient-2"
           ],
           targetSelectorIds: ["collected.coefficient-5"],
           summary: "Three and two coalesce into coefficient five."
         },
         {
-          id: `${id}.variables-merge`,
-          relation: "fan-in",
-          sourceSelectorIds: [
-            "grouped.x-from-left",
-            "grouped.x-from-right"
-          ],
+          id: `${id}.common-x-persists`,
+          relation: "identity",
+          sourceSelectorIds: ["coefficient-factored.x"],
           targetSelectorIds: ["collected.x"],
-          summary: "Both like-term variable roles coalesce into the result term."
+          summary:
+            "The already factored x persists at one exact baseline."
         },
         {
           id: `${id}.constants-merge`,
           relation: "fan-in",
           sourceSelectorIds: [
-            "grouped.constant-6",
-            "grouped.negative-2"
+            "coefficient-factored.constant-6",
+            "coefficient-factored.negative-2"
           ],
           targetSelectorIds: ["collected.constant-4"],
           summary: "Six and signed negative two coalesce into four."
@@ -443,7 +534,7 @@ export function createKpFoldableFinalCollectionCertificate():
         {
           id: `${id}.outer-plus-persists`,
           relation: "identity",
-          sourceSelectorIds: ["grouped.outer-plus"],
+          sourceSelectorIds: ["coefficient-factored.outer-plus"],
           targetSelectorIds: ["collected.plus"],
           summary: "Addition persists between the collected result terms."
         },
@@ -451,12 +542,12 @@ export function createKpFoldableFinalCollectionCertificate():
           id: `${id}.grouping-retires`,
           relation: "removal",
           sourceSelectorIds: [
-            "grouped.coefficients.left-parenthesis",
-            "grouped.coefficients.right-parenthesis",
-            "grouped.constants.left-parenthesis",
-            "grouped.constants.right-parenthesis",
-            "grouped.coefficients.plus",
-            "grouped.constants.minus"
+            "coefficient-factored.coefficients.left-parenthesis",
+            "coefficient-factored.coefficients.right-parenthesis",
+            "coefficient-factored.constants.left-parenthesis",
+            "coefficient-factored.constants.right-parenthesis",
+            "coefficient-factored.coefficients.plus",
+            "coefficient-factored.constants.minus"
           ],
           targetSelectorIds: [],
           summary: "Grouping and internal operators retire after fusion settles."
@@ -479,13 +570,20 @@ export function createKpFoldableFinalCollectionCertificate():
     ]);
 
   return Object.freeze({
-    schemaVersion: "kp.foldable-final-collection-certificate.v1" as const,
+    schemaVersion: "kp.foldable-final-collection-certificate.v2" as const,
     id,
     canonicalOperationIds: Object.freeze([
       "kp.core.merge"
     ]) as readonly ["kp.core.merge"],
     arithmetic,
+    factoringTransformation,
     transformation,
+    factoringPresentation: Object.freeze({
+      requiredMotif: "merge-fan-in" as const,
+      commonFactor: "x" as const,
+      coefficientEvaluation: "deferred" as const,
+      geometryAuthority: "renderer-session-measurement" as const
+    }),
     presentation: Object.freeze({
       requiredMotif: "merge-fan-in" as const,
       fusionPaintPolicy: "opaque-many-to-one" as const,
@@ -493,6 +591,21 @@ export function createKpFoldableFinalCollectionCertificate():
       geometryAuthority: "renderer-session-measurement" as const
     })
   });
+}
+
+function identityRecord(
+  id: string,
+  sourceSelectorId: string,
+  targetSelectorId: string,
+  summary: string
+) {
+  return {
+    id,
+    relation: "identity" as const,
+    sourceSelectorIds: [sourceSelectorId],
+    targetSelectorIds: [targetSelectorId],
+    summary
+  };
 }
 
 interface CertifyBranchInput {

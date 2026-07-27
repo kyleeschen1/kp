@@ -14,7 +14,7 @@ import {
   renderSelectorAnnotatedLatexToHtml
 } from "../src/rendering/katex-adapter.ts";
 
-test("foldable distribution defines five exact native endpoint states", () => {
+test("foldable distribution defines six exact native endpoint states", () => {
   const endpoints = createKpFoldableDistributionAnnotatedEndpoints();
 
   assert.deepEqual(
@@ -24,6 +24,7 @@ test("foldable distribution defines five exact native endpoint states", () => {
       "expression.foldable-distribution.distributed-raw",
       "expression.foldable-distribution.distributed",
       "expression.foldable-distribution.grouped",
+      "expression.foldable-distribution.coefficient-factored",
       "expression.foldable-distribution.collected"
     ]
   );
@@ -34,6 +35,7 @@ test("foldable distribution defines five exact native endpoint states", () => {
       "3 x + 3 \\cdot 2 + 2 x + 2 \\cdot (-1)",
       "3x + 6 + 2x - 2",
       "( 3 x + 2 x ) + ( 6 - 2 )",
+      "( 3 + 2 ) x + ( 6 - 2 )",
       "5 x + 4"
     ]
   );
@@ -83,12 +85,14 @@ test("certified relation selectors resolve against exact endpoint namespaces", (
       ])
     ])
   );
+  const collection = createKpFoldableFinalCollectionCertificate();
   const transformations = [
     ...createKpFoldableProductEvaluationCertificates().map(
       ({ transformation }) => transformation
     ),
     createKpFoldableSignedTermGroupingCertificate().transformation,
-    createKpFoldableFinalCollectionCertificate().transformation
+    collection.factoringTransformation,
+    collection.transformation
   ];
 
   for (const transformation of transformations) {

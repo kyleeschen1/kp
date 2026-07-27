@@ -37,6 +37,21 @@ test("Animation Library lists all metadata but mounts only the selected host", a
       .textContent())?.split(" ")[0]
   );
   expect(catalogCount).toBeGreaterThan(29);
+  await expect(
+    page.locator(
+      '[data-animation-library-list] button[data-canonical-format="ported"]'
+    ).first()
+  ).toContainText("ported");
+  await expect(
+    page.locator(
+      '[data-animation-library-list] button[data-canonical-format="partial"]'
+    ).first()
+  ).toContainText("partial port");
+  await expect.poll(() =>
+    page.locator("[data-animation-library-list]").evaluate(
+      (element) => element.scrollHeight > element.clientHeight
+    )
+  ).toBe(true);
 
   const frame = page.locator("[data-animation-library-frame]");
   await expect(frame).toHaveCount(1);

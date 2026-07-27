@@ -20,16 +20,16 @@ import {
   validateKpReaderEquationMaterialPlanTotality
 } from "../src/reader/renderers/public-api.ts";
 
-test("foldable distribution animation retains four phases and six operations", () => {
+test("foldable distribution animation retains five phases and seven operations", () => {
   const animation = createKpFoldableDistributionEquationAnimationAsset();
   const refs = compileKpAnimationAssetSemanticRefs(animation);
   const timeline = createKpFoldableDistributionVisualMotifTimeline();
 
   assert.deepEqual(refs.diagnostics, []);
-  assert.equal(animation.transformations.length, 6);
+  assert.equal(animation.transformations.length, 7);
   assert.deepEqual(
     timeline.forwardPhases.map(({ segmentIds }) => segmentIds.length),
-    [2, 2, 1, 1]
+    [2, 2, 1, 1, 1]
   );
   assert.equal(checkTransformTreeVisualMotifRewindLaw(timeline).passed, true);
 });
@@ -45,6 +45,7 @@ test("canonical phases select proper semantic motifs without fade primitives", (
       "successor-synthesis",
       "successor-synthesis",
       "semantic-reorder-and-group",
+      "merge-fan-in",
       "merge-fan-in"
     ]
   );
@@ -63,7 +64,7 @@ test("canonical phases select proper semantic motifs without fade primitives", (
 
 test("every phase compiles semantic transition IR rather than fallback paint", () => {
   const animation = createKpFoldableDistributionEquationAnimationAsset();
-  for (const progress of [0.05, 0.3, 0.55, 0.8]) {
+  for (const progress of [0.05, 0.25, 0.5, 0.7, 0.9]) {
     const runtimeFrame = sampleKpAnimationRuntimeFrame({
       animation,
       progress
@@ -75,9 +76,16 @@ test("every phase compiles semantic transition IR rather than fallback paint", (
 
     assert.ok(renderPlan.transitions.length > 0);
     assert.equal(renderPlan.transitions.length, 1);
-    assert.ok(renderPlan.transitions.every(
-      ({ semanticStatus }) => semanticStatus === "ready"
-    ));
+    assert.ok(
+      renderPlan.transitions.every(
+        ({ semanticStatus }) => semanticStatus === "ready"
+      ),
+      renderPlan.transitions.flatMap(
+        ({ semanticDiagnostics }) => semanticDiagnostics.map(
+          ({ message }) => message
+        )
+      ).join("\n")
+    );
     assert.ok(renderPlan.transitions.every(
       ({ relations }) => relations.some(({ lifecycle }) =>
         lifecycle === "persist" ||

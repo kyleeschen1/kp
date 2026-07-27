@@ -18,7 +18,7 @@ function projection(mode: "expanded" | "collapsed") {
   );
 }
 
-test("fold timing preserves one ordered six-operation semantic trace", () => {
+test("fold timing preserves one ordered seven-operation semantic trace", () => {
   const expanded = compileKpFoldableDistributionFoldTimeline(
     projection("expanded")
   );
@@ -35,7 +35,7 @@ test("fold timing preserves one ordered six-operation semantic trace", () => {
     expanded.phases.flatMap(({ operationIds }) => operationIds),
     collapsed.phases.flatMap(({ operationIds }) => operationIds)
   );
-  assert.equal(expanded.phases.flatMap(({ operationIds }) => operationIds).length, 6);
+  assert.equal(expanded.phases.flatMap(({ operationIds }) => operationIds).length, 7);
   assert.ok(expanded.totalBeats > collapsed.totalBeats);
 });
 
@@ -46,7 +46,7 @@ test("collapsed groups remain visible and checkpoints span the shared clock", ()
 
   assert.deepEqual(
     timeline.phases.map(({ detail }) => detail),
-    ["collapsed", "collapsed", "leaf", "leaf"]
+    ["collapsed", "collapsed", "leaf", "leaf", "leaf"]
   );
   assert.ok(timeline.phases.every(
     ({ endBeat, startBeat, minimumVisibleBeats }) =>

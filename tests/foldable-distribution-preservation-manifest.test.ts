@@ -12,6 +12,7 @@ test("foldable distribution manifest freezes the exact expression chain", () => 
       "3(x + 2) + 2(x - 1)",
       "3x + 6 + 2x - 2",
       "(3x + 2x) + (6 - 2)",
+      "(3 + 2)x + (6 - 2)",
       "5x + 4"
     ]
   );
@@ -28,6 +29,7 @@ test("foldable distribution manifest requires semantic motifs instead of fades",
       "copy-fan-out",
       "successor-synthesis",
       "semantic-reorder-and-group",
+      "merge-fan-in",
       "merge-fan-in"
     ]
   );

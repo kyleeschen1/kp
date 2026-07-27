@@ -76,8 +76,12 @@ export function compileKpFoldableDistributionLessonModel(markdown: string) {
       latex: expressionChain[2]!.latex,
       label: "Three x plus two x, grouped with six minus two"
     }],
-    ["collected", {
+    ["coefficient-factored", {
       latex: expressionChain[3]!.latex,
+      label: "Three plus two, times x, plus six minus two"
+    }],
+    ["collected", {
+      latex: expressionChain[4]!.latex,
       label: "Five x plus four"
     }]
   ]);
@@ -106,7 +110,11 @@ export function compileKpFoldableDistributionLessonModel(markdown: string) {
       semanticTransformationLeafRefs(tree.root.children[1]!)
     ],
     ["grouped", semanticTransformationLeafRefs(tree.root.children[2]!)],
-    ["collected", semanticTransformationLeafRefs(tree.root.children[3]!)]
+    [
+      "coefficient-factored",
+      semanticTransformationLeafRefs(tree.root.children[3]!)
+    ],
+    ["collected", semanticTransformationLeafRefs(tree.root.children[4]!)]
   ]);
   const transcript = Object.freeze(story.beats.map((beat) => Object.freeze({
     beatId: beat.id,

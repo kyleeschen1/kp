@@ -23,7 +23,7 @@ test("foldable distribution compiles one canonical native scene per phase", () =
     ...artifact.html.matchAll(/data-kp-reader-transition="([^"]+)"/g)
   ].map((match) => match[1]);
 
-  assert.equal(transitions.length, 4);
+  assert.equal(transitions.length, 5);
   assert.equal(transitions.filter((id) => id?.startsWith("cohort.")).length, 2);
   assert.match(
     artifact.html,
@@ -35,7 +35,7 @@ test("foldable distribution compiles one canonical native scene per phase", () =
     [...artifact.html.matchAll(
       /data-kp-reader-equation-measurement="true" aria-hidden="true"/g
     )].length,
-    4
+    5
   );
   assert.match(
     artifact.html,
@@ -45,7 +45,7 @@ test("foldable distribution compiles one canonical native scene per phase", () =
     [...artifact.html.matchAll(
       /data-kp-reader-accessible-equation-state=/g
     )].length,
-    5
+    6
   );
   assert.match(
     artifact.html,
@@ -61,17 +61,17 @@ test("foldable distribution compiles one canonical native scene per phase", () =
   );
 });
 
-test("canonical reader policy exposes four visual cohorts for six operations", () => {
+test("canonical reader policy exposes five visual cohorts for seven operations", () => {
   const animation = foldableDistributionDescriptor.createAnimation();
   const policy = compileKpReaderCanonicalTransitionPolicy({
     descriptor: foldableDistributionDescriptor,
     animation
   });
 
-  assert.equal(animation.transformations.length, 6);
-  assert.equal(policy?.transitionIds.length, 4);
+  assert.equal(animation.transformations.length, 7);
+  assert.equal(policy?.transitionIds.length, 5);
   assert.deepEqual(
     policy?.transitionIds.map((id) => id.startsWith("cohort.")),
-    [true, true, false, false]
+    [true, true, false, false, false]
   );
 });

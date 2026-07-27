@@ -18,6 +18,7 @@ export type KpFoldableDistributionCheckpoint =
   | "distributed"
   | "products-evaluated"
   | "grouped"
+  | "coefficient-factored"
   | "collected";
 
 export interface KpFoldableDistributionUrlState {
@@ -46,6 +47,7 @@ const checkpoints = new Set<KpFoldableDistributionCheckpoint>([
   "distributed",
   "products-evaluated",
   "grouped",
+  "coefficient-factored",
   "collected"
 ]);
 const foldModes = new Set<KpFoldableDistributionFoldMode>([

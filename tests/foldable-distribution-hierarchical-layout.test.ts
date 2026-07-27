@@ -41,6 +41,7 @@ test("phone layout stages semantic branches and groups, never pixel routes", () 
       "semantic-two-row-stage",
       "semantic-two-row-stage",
       "single-row",
+      "single-row",
       "single-row"
     ]
   );
@@ -69,6 +70,7 @@ test("collapsed work uses a single disclosed row without changing phases", () =>
   assert.deepEqual(
     collapsed.phases.map(({ policy }) => policy),
     [
+      "single-row",
       "single-row",
       "single-row",
       "single-row",

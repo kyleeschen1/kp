@@ -91,6 +91,26 @@ export function createKpFoldableDistributionExpressionChain():
       )
     ),
     state(
+      "expression.foldable-distribution.coefficient-factored",
+      "(3 + 2)x + (6 - 2)",
+      sum("coefficient-factored.root",
+        product("coefficient-factored.variable-term",
+          sum("coefficient-factored.coefficients",
+            number("coefficient-factored.coefficient-3", 3),
+            number("coefficient-factored.coefficient-2", 2)
+          ),
+          symbol("coefficient-factored.x", "x")
+        ),
+        sum("coefficient-factored.constants",
+          number("coefficient-factored.constant-6", 6),
+          negate(
+            "coefficient-factored.negative-2",
+            number("coefficient-factored.constant-2", 2)
+          )
+        )
+      )
+    ),
+    state(
       "expression.foldable-distribution.collected",
       "5x + 4",
       sum("collected.root",
@@ -109,8 +129,8 @@ export function verifyKpFoldableDistributionExpressionChain(
 ): KpFoldableDistributionExpressionVerification {
   const expected = freezeNormalForm({ coefficients: { x: 5 }, constant: 4 });
   const diagnostics: string[] = [];
-  if (chain.length !== 4) {
-    diagnostics.push(`Expected 4 expression states, received ${chain.length}.`);
+  if (chain.length !== 5) {
+    diagnostics.push(`Expected 5 expression states, received ${chain.length}.`);
   }
 
   const stateNormalForms = chain.map(({ id, expression }) => {

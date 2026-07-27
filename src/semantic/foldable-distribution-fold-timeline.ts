@@ -23,7 +23,8 @@ export interface KpFoldableDistributionTimeline {
   readonly totalBeats: number;
   readonly phases: readonly KpFoldableDistributionTimelinePhase[];
   readonly checkpoints: Readonly<Record<
-    "factored" | "distributed" | "products-evaluated" | "grouped" | "collected",
+    "factored" | "distributed" | "products-evaluated" | "grouped" |
+      "coefficient-factored" | "collected",
     number
   >>;
 }
@@ -81,14 +82,15 @@ export function compileKpFoldableDistributionFoldTimeline(
     cursor += duration;
     return phase;
   });
-  const [distribution, products, grouping, collection] = phases;
+  const [distribution, products, grouping, factoring, collection] = phases;
   if (
     distribution === undefined ||
     products === undefined ||
     grouping === undefined ||
+    factoring === undefined ||
     collection === undefined
   ) {
-    throw new Error("Foldable distribution timeline requires four phases.");
+    throw new Error("Foldable distribution timeline requires five phases.");
   }
 
   return Object.freeze({
@@ -101,6 +103,7 @@ export function compileKpFoldableDistributionFoldTimeline(
       distributed: distribution.endBeat / cursor,
       "products-evaluated": products.endBeat / cursor,
       grouped: grouping.endBeat / cursor,
+      "coefficient-factored": factoring.endBeat / cursor,
       collected: collection.endBeat / cursor
     })
   });

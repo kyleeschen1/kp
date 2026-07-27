@@ -14,7 +14,7 @@ const markdown = readFileSync(
   "utf8"
 );
 
-test("foldable distribution content compiles five narrated checkpoints", () => {
+test("foldable distribution content compiles six narrated checkpoints", () => {
   const model = compileKpFoldableDistributionLessonModel(markdown);
 
   assert.equal(model.document.id, manifest.document.id);
@@ -26,6 +26,7 @@ test("foldable distribution content compiles five narrated checkpoints", () => {
       "distributed",
       "products-evaluated",
       "grouped",
+      "coefficient-factored",
       "collected"
     ]
   );
@@ -36,6 +37,7 @@ test("foldable distribution content compiles five narrated checkpoints", () => {
       "3x + 3 \\cdot 2 + 2x + 2 \\cdot (-1)",
       "3x + 6 + 2x - 2",
       "(3x + 2x) + (6 - 2)",
+      "(3 + 2)x + (6 - 2)",
       "5x + 4"
     ]
   );
@@ -47,8 +49,8 @@ test("foldable distribution transcript discloses every operation", () => {
     ({ operationIds }) => operationIds
   );
 
-  assert.equal(operationIds.length, 6);
-  assert.equal(new Set(operationIds).size, 6);
+  assert.equal(operationIds.length, 7);
+  assert.equal(new Set(operationIds).size, 7);
   assert.ok(model.transcript.every(({ narration }) => narration.length > 0));
   assert.match(model.prose.articleHtml, new RegExp(manifest.document.searchableText));
   assert.match(model.prose.articleHtml, /data-kp-static-state/);
@@ -58,9 +60,9 @@ test("foldable distribution static output remains useful without JavaScript", ()
   const model = compileKpFoldableDistributionLessonModel(markdown);
   const html = model.prose.articleHtml;
 
-  assert.equal((html.match(/data-kp-static-state/g) ?? []).length, 5);
-  assert.equal((html.match(/<math\b/g) ?? []).length, 5);
-  assert.equal((html.match(/class="katex-mathml"/g) ?? []).length, 5);
+  assert.equal((html.match(/data-kp-static-state/g) ?? []).length, 6);
+  assert.equal((html.match(/<math\b/g) ?? []).length, 6);
+  assert.equal((html.match(/class="katex-mathml"/g) ?? []).length, 6);
   assert.match(html, /Explanation steps/);
   assert.match(html, /Evaluate the constant products/);
 });

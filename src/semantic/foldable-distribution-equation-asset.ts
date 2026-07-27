@@ -41,6 +41,7 @@ const transformIds = Object.freeze({
   rightProduct:
     "transform.foldable-distribution.product.two-times-negative-one",
   grouping: "transform.foldable-distribution.group-like-terms",
+  factoring: "transform.foldable-distribution.factor-common-x",
   collection: "transform.foldable-distribution.collect-results"
 });
 
@@ -141,6 +142,7 @@ export function createKpFoldableDistributionEquationAsset():
     leftProduct,
     rightProduct,
     grouping.transformation,
+    collection.factoringTransformation,
     collection.transformation
   ]);
   const bundle = createKpAssetBundle({
@@ -150,13 +152,7 @@ export function createKpFoldableDistributionEquationAsset():
       equationObject({
         endpoint,
         sourceId: index === 0 ? undefined : endpoints[index - 1]!.objectId,
-        transformationId: index === 0
-          ? undefined
-          : index === 1
-            ? "evaluation.foldable-distribution.distribute"
-            : index === 2
-              ? "evaluation.foldable-distribution.evaluate-products"
-              : transformations[index + 1]?.id
+        transformationId: provenanceTransformationId(endpoint.objectId)
       })
     )
   });
@@ -166,6 +162,23 @@ export function createKpFoldableDistributionEquationAsset():
     bundle,
     transformations
   });
+}
+
+function provenanceTransformationId(
+  objectId: string
+): string | undefined {
+  if (objectId.endsWith(".factored")) return undefined;
+  if (objectId.endsWith(".distributed-raw")) {
+    return "evaluation.foldable-distribution.distribute";
+  }
+  if (objectId.endsWith(".distributed")) {
+    return "evaluation.foldable-distribution.evaluate-products";
+  }
+  if (objectId.endsWith(".grouped")) return transformIds.grouping;
+  if (objectId.endsWith(".coefficient-factored")) {
+    return transformIds.factoring;
+  }
+  return transformIds.collection;
 }
 
 function equationObject(input: {
@@ -308,21 +321,23 @@ function selectorScopes(
       : [transformIds.rightProduct, transformIds.grouping];
   }
   if (objectId.endsWith(".grouped")) {
-    if (
-      selectorId === "grouped.term-3x" ||
-      selectorId === "grouped.term-2x"
-    ) {
+    // Grouping moves each variable term as one opaque paint owner; the next
+    // factoring beat alone exposes its coefficient and x as separate owners.
+    if (requiredRelationGroupIds.has(selectorId)) {
       return [transformIds.grouping];
     }
-    if ([
-      "grouped.coefficient-3",
-      "grouped.x-from-left",
-      "grouped.coefficient-2",
-      "grouped.x-from-right"
-    ].includes(selectorId)) {
-      return [transformIds.collection];
+    if (
+      selectorId === "grouped.coefficient-3" ||
+      selectorId === "grouped.x-from-left" ||
+      selectorId === "grouped.coefficient-2" ||
+      selectorId === "grouped.x-from-right"
+    ) {
+      return [transformIds.factoring];
     }
-    return [transformIds.grouping, transformIds.collection];
+    return [transformIds.grouping, transformIds.factoring];
+  }
+  if (objectId.endsWith(".coefficient-factored")) {
+    return [transformIds.factoring, transformIds.collection];
   }
   return [transformIds.collection];
 }

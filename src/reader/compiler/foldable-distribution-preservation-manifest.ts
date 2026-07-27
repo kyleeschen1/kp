@@ -27,6 +27,10 @@ export const kpFoldableDistributionPreservationManifest = Object.freeze({
       latex: "(3x + 2x) + (6 - 2)"
     }),
     Object.freeze({
+      id: "expression.foldable-distribution.coefficient-factored",
+      latex: "(3 + 2)x + (6 - 2)"
+    }),
+    Object.freeze({
       id: "expression.foldable-distribution.collected",
       latex: "5x + 4"
     })
@@ -86,6 +90,18 @@ export const kpFoldableDistributionPreservationManifest = Object.freeze({
       ]),
       observable:
         "Signed terms reflow into stable coefficient and constant groups without changing identity.",
+      opacityPolicy: "opaque-lineage"
+    }),
+    Object.freeze({
+      id: "phase.factor-common-x",
+      requiredMotif: "merge-fan-in",
+      canonicalOperationIds: Object.freeze([
+        "kp.core.persist",
+        "kp.core.merge",
+        "kp.core.group"
+      ]),
+      observable:
+        "The repeated x factors visibly coalesce before either coefficient is evaluated.",
       opacityPolicy: "opaque-lineage"
     }),
     Object.freeze({

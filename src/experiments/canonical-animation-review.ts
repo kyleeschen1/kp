@@ -154,12 +154,14 @@ function renderCatalog(): void {
       button.type = "button";
       button.dataset["animationId"] = entry.animationId;
       button.dataset["featured"] = String(entry.featured);
+      button.dataset["canonicalFormat"] = entry.canonicalFormat;
       button.setAttribute(
         "aria-pressed",
         String(entry.animationId === selectedAnimationId)
       );
       heading.textContent = entry.title;
       metadata.textContent =
+        `${canonicalFormatLabel(entry.canonicalFormat)} · ` +
         `${entry.availability} · ` +
         `${entry.representations.length} ` +
         `${entry.representations.length === 1 ? "host" : "hosts"}`;
@@ -204,14 +206,27 @@ function renderSelection(updateRoute: boolean): void {
   root.dataset["animationId"] = entry.animationId;
   root.dataset["representationId"] =
     representation?.id ?? "unpublished";
+  root.dataset["canonicalFormat"] = entry.canonicalFormat;
   root.dataset["previewReady"] = "false";
   title.textContent = entry.title;
   summary.textContent = entry.summary;
   state.textContent =
-    `${entry.availability} · ${entry.featured ? "featured exemplar" : "catalog"}`;
+    `${canonicalFormatLabel(entry.canonicalFormat)} · ` +
+    `${entry.availability} · ` +
+    `${entry.featured ? "featured exemplar" : "catalog"}`;
   renderRepresentations(entry, representation);
   mountRepresentation(entry, representation);
   if (updateRoute) writeRoute(true);
+}
+
+function canonicalFormatLabel(
+  format: KpAnimationLibraryDisplayEntry["canonicalFormat"]
+): string {
+  switch (format) {
+    case "ported": return "ported";
+    case "partial": return "partial port";
+    case "legacy": return "legacy";
+  }
 }
 
 function renderRepresentations(

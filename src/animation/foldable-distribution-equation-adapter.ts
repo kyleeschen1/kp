@@ -30,13 +30,14 @@ export function createKpFoldableDistributionEquationAnimationAsset():
     transformationTree: tree,
     timeline: {
       id: "timeline.foldable-distribution.shared",
-      durationMs: 3_600,
-      beatCount: 64,
+      durationMs: 4_200,
+      beatCount: 78,
       markerIds: [
         "factored",
         "distributed",
         "products-evaluated",
         "grouped",
+        "coefficient-factored",
         "collected"
       ]
     },
@@ -144,6 +145,19 @@ export function createKpFoldableDistributionVisualMotifTimeline() {
         },
         canonicalOperationIds: ["kp.core.reorder", "kp.core.group"],
         trustedMotifIds: ["reorder", "group"]
+      },
+      {
+        transformationKind: "factorCommonTerm",
+        descriptor: descriptor("merge-fan-in"),
+        definitionIds: [
+          "definition.generated.distribution.factor-common-term"
+        ],
+        canonicalOperationIds: [
+          "kp.core.persist",
+          "kp.core.merge",
+          "kp.core.group"
+        ],
+        trustedMotifIds: ["persist", "merge", "group"]
       },
       {
         transformationKind: "collectLikeTerms",

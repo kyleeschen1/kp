@@ -275,6 +275,55 @@ export function createKpFoldableDistributionEndpointSpecs():
       ]
     }),
     endpoint({
+      objectId: "expression.foldable-distribution.coefficient-factored",
+      label: "Three plus two, times x, plus six minus two",
+      tokens: [
+        ["coefficient-factored.coefficients.left-parenthesis", "("],
+        ["coefficient-factored.coefficient-3", "3"],
+        ["coefficient-factored.coefficients.plus", "+"],
+        ["coefficient-factored.coefficient-2", "2"],
+        ["coefficient-factored.coefficients.right-parenthesis", ")"],
+        ["coefficient-factored.x", "x"],
+        ["coefficient-factored.outer-plus", "+"],
+        ["coefficient-factored.constants.left-parenthesis", "("],
+        ["coefficient-factored.constant-6", "6"],
+        ["coefficient-factored.constants.minus", "-"],
+        ["coefficient-factored.negative-2", "2"],
+        ["coefficient-factored.constants.right-parenthesis", ")"]
+      ],
+      groups: [
+        group("layout.foldable-distribution.coefficient-factored", [
+          "coefficient-factored.coefficients.left-parenthesis",
+          "coefficient-factored.coefficient-3",
+          "coefficient-factored.coefficients.plus",
+          "coefficient-factored.coefficient-2",
+          "coefficient-factored.coefficients.right-parenthesis",
+          "coefficient-factored.x",
+          "coefficient-factored.outer-plus",
+          "coefficient-factored.constants.left-parenthesis",
+          "coefficient-factored.constant-6",
+          "coefficient-factored.constants.minus",
+          "coefficient-factored.negative-2",
+          "coefficient-factored.constants.right-parenthesis"
+        ]),
+        group("coefficient-factored.variable-term", [
+          "coefficient-factored.coefficients.left-parenthesis",
+          "coefficient-factored.coefficient-3",
+          "coefficient-factored.coefficients.plus",
+          "coefficient-factored.coefficient-2",
+          "coefficient-factored.coefficients.right-parenthesis",
+          "coefficient-factored.x"
+        ]),
+        group("coefficient-factored.constants", [
+          "coefficient-factored.constants.left-parenthesis",
+          "coefficient-factored.constant-6",
+          "coefficient-factored.constants.minus",
+          "coefficient-factored.negative-2",
+          "coefficient-factored.constants.right-parenthesis"
+        ])
+      ]
+    }),
+    endpoint({
       objectId: "expression.foldable-distribution.collected",
       label: "Five x plus four",
       tokens: [

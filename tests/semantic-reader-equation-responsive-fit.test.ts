@@ -80,6 +80,50 @@ test("responsive fit preserves native size then scales without wrapping", () => 
   assert.ok(tooNarrow.requiredScale < tooNarrow.scale);
 });
 
+test("reader containment fits below the legibility threshold and centers both axes", () => {
+  const contained = planKpReaderEquationResponsiveFit({
+    alignment,
+    viewportWidth: 110,
+    viewportHeight: 80,
+    horizontalPadding: 10,
+    verticalPadding: 10,
+    minScale: 0.7,
+    overflowStrategy: "contain"
+  });
+
+  assert.equal(contained.status, "contained");
+  assert.equal(contained.scale, contained.requiredScale);
+  assert.equal(contained.scale, 0.45);
+  assert.equal(contained.translateX, 1);
+  assert.equal(contained.translateY, 31);
+});
+
+test("reader containment also scales tall notation to the card height", () => {
+  const tallAlignment = {
+    ...alignment,
+    id: "alignment.tall",
+    owners: [{
+      ownerId: "owner.radical",
+      sourceBounds: { left: 10, top: 0, width: 80, height: 160 },
+      targetBounds: { left: 10, top: 0, width: 80, height: 160 }
+    }]
+  };
+  const contained = planKpReaderEquationResponsiveFit({
+    alignment: tallAlignment,
+    viewportWidth: 220,
+    viewportHeight: 100,
+    horizontalPadding: 10,
+    verticalPadding: 10,
+    minScale: 0.7,
+    overflowStrategy: "contain"
+  });
+
+  assert.equal(contained.status, "contained");
+  assert.equal(contained.scale, 0.5);
+  assert.equal(contained.translateX, 85);
+  assert.equal(contained.translateY, 10);
+});
+
 test("motion conformance reports overflow and fitted owner escapes", () => {
   const fit = planKpReaderEquationResponsiveFit({
     alignment,
