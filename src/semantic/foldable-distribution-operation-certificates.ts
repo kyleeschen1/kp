@@ -120,6 +120,8 @@ export interface KpFoldableFinalCollectionCertificate {
   };
 }
 
+// Governed authoring may select these certificate-backed operations, but the
+// certificates below remain the authority for laws, values, and lineage.
 export function createKpFoldableDistributionFanOutCertificates():
   readonly KpFoldableDistributionFanOutCertificate[] {
   const factored = createKpFoldableDistributionExpressionChain()[0]!.expression;
@@ -278,6 +280,7 @@ export function createKpFoldableSignedTermGroupingCertificate():
   const id = "certificate.foldable-distribution.signed-term-grouping";
   const transformation = createKpSemanticTransformation({
     id: "transform.foldable-distribution.group-like-terms",
+    definitionId: "definition.certified.foldable-distribution.group-like-terms",
     transformType: "groupLikeTerms",
     title: "Gather coefficient terms and signed constants",
     sourceObjectIds: ["expression.foldable-distribution.distributed"],
@@ -327,7 +330,11 @@ export function createKpFoldableSignedTermGroupingCertificate():
           summary: "Grouping structure enters after persistent terms reflow."
         }
       ]
-    }
+    },
+    lawRefs: [{
+      id: "law.algebra.combine-like-terms",
+      level: "strict"
+    }]
   });
   const groups: KpFoldableSignedTermGroupingCertificate["groups"] =
     Object.freeze([
@@ -489,10 +496,15 @@ export function createKpFoldableFinalCollectionCertificate():
           )
         )
       ]
-    }
+    },
+    lawRefs: [{
+      id: "law.algebra.distributive-property",
+      level: "strict"
+    }]
   });
   const transformation = createKpSemanticTransformation({
     id: "transform.foldable-distribution.collect-results",
+    definitionId: "definition.certified.foldable-distribution.collect-like-terms",
     transformType: "collectLikeTerms",
     title: "Evaluate the coefficient and constant sums",
     sourceObjectIds: [
@@ -553,7 +565,12 @@ export function createKpFoldableFinalCollectionCertificate():
           summary: "Grouping and internal operators retire after fusion settles."
         }
       ]
-    }
+    },
+    lawRefs: [
+      { id: "law.algebra.combine-like-terms", level: "strict" },
+      { id: "law.arithmetic.constant-sum", level: "strict" },
+      { id: "law.arithmetic.constant-difference", level: "strict" }
+    ]
   });
   const arithmetic: KpFoldableFinalCollectionCertificate["arithmetic"] =
     Object.freeze([
@@ -737,6 +754,8 @@ function certifyProduct(input: {
 
   const transformation = createKpSemanticTransformation({
     id: input.id.replace("certificate.", "transform."),
+    definitionId:
+      "definition.certified.foldable-distribution.simplify-constant-product",
     transformType: "simplifyConstantProduct",
     title: `Evaluate ${input.inputValues[0]} times ${input.inputValues[1]}`,
     sourceObjectIds: ["expression.foldable-distribution.distributed-raw"],
@@ -762,7 +781,11 @@ function certifyProduct(input: {
             "The multiplication operator is a catalyst, not result material."
         }
       ]
-    }
+    },
+    lawRefs: [{
+      id: "law.arithmetic.constant-product",
+      level: "strict"
+    }]
   });
 
   return Object.freeze({

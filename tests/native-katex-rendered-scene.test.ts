@@ -1590,7 +1590,7 @@ test("renderer session direct seeks and reverses without hidden clock state", ()
   );
 });
 
-test("merge-fan-in routes opaque material around measured paint obstacles", () => {
+test("merge-fan-in routes focal material without displacing persistent context", () => {
   const merge: KpNativeKatexSceneTrack = {
     id: "track.merge.x",
     componentId: "component.merge.x",
@@ -1617,25 +1617,25 @@ test("merge-fan-in routes opaque material around measured paint obstacles", () =
     endRect: { left: 36, top: 16, width: 28, height: 24 }
   };
   const tracks = compileKpCollisionSafeFanInTracks([merge, obstacle]);
-  const preservedMerge = tracks[0]!;
-  const routedObstacle = tracks[1]!;
+  const routedMerge = tracks[0]!;
+  const persistentObstacle = tracks[1]!;
   const samples = [0, 0.5, 1].map((progress) =>
-    sampleKpNativeKatexSceneTracks([preservedMerge], progress)[0]!
+    sampleKpNativeKatexSceneTracks([routedMerge], progress)[0]!
   );
   const start = samples[0]!;
   const middle = samples[1]!;
   const end = samples[2]!;
   const obstacleMiddle = sampleKpNativeKatexSceneTracks(
-    [routedObstacle],
+    [persistentObstacle],
     0.5
   )[0]!;
 
-  assert.equal(preservedMerge.motionPath, undefined);
-  assert.equal(routedObstacle.motionPath?.variant, "arc-above");
+  assert.equal(routedMerge.motionPath?.variant, "arc-above");
+  assert.equal(persistentObstacle.motionPath, undefined);
   assert.deepEqual(start.rect, merge.startRect);
   assert.deepEqual(end.rect, merge.endRect);
-  assert.equal(middle.rect.top, merge.startRect.top);
-  assert.ok(obstacleMiddle.rect.top < obstacle.startRect.top);
+  assert.ok(middle.rect.top < merge.startRect.top);
+  assert.equal(obstacleMiddle.rect.top, obstacle.startRect.top);
   assert.deepEqual([start.opacity, middle.opacity, end.opacity], [1, 1, 1]);
 });
 

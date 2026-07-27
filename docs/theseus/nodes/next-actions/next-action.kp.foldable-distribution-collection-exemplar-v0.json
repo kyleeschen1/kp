@@ -439,11 +439,35 @@
       "status": "passed",
       "scope": "project memory: 798 nodes and 13106 events valid",
       "checkedAt": "2026-07-27T15:27:54.620Z"
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "64 semantic, fold, governed-authoring, motif, and reader checks",
+      "checkedAt": "2026-07-27T15:38:22.327Z"
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "nine browser gates including focal x arc and vertically stable persistent plus-two-parenthesis context",
+      "checkedAt": "2026-07-27T15:38:23.288Z"
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "generic fan-in role routing, exact endpoints, opacity, and compositor ceilings",
+      "checkedAt": "2026-07-27T15:38:24.153Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, test, and domain type safety",
+      "checkedAt": "2026-07-27T15:38:24.996Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 24 bounded repairs now pass: persistent one-to-one paint translates opaquely; final sum and difference use two canonical successor-synthesis derivations; factoring keeps merge material direct and routes only measured blocking paint through the generic fan-in planner; port labels derive from complete promotion evidence; and the fixed Review launcher submits through the real local inbox. Full unit, browser, type, construction, renderer, and build gates pass."
+    "summary": "Governed authoring now selects the exact seven-operation verified trace plus semantic fold intent, compiles certificate-backed laws and lineage, and rejects keyframes, opacity, coordinates, DOM, and paint authority. Promotion cost explicitly classifies the prior compositor work as foundational rather than cheap porting, while repeat authoring passes with test/evidence wiring only. Human re-review also corrected the generic fan-in role invariant: extracted x material arcs around occupied paint; persistent + 2 ) context remains on direct vertically stable paths, with unit and browser regressions."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",

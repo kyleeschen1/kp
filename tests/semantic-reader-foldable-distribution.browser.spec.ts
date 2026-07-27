@@ -614,24 +614,46 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
         nativeXPaint
       };
     });
-    expect(
-      baselineEvidence.residual,
-      JSON.stringify({ progress, baselineEvidence })
-    ).toBeLessThanOrEqual(0.75);
     factoringPaintSamples.push({
       progress,
+      xNativeResidual: baselineEvidence.residual,
       baselines: baselineEvidence.glyphBaselines,
       visiblePaint: baselineEvidence.visiblePaint,
       observations: baselineEvidence.xPaint
     });
   }
-  const factoringBottoms = factoringPaintSamples.flatMap(
-    ({ observations }) => observations.map(({ bottom }) => bottom)
+  expect(
+    Math.max(...factoringPaintSamples.map(({ xNativeResidual }) =>
+      xNativeResidual
+    )),
+    JSON.stringify(factoringPaintSamples)
+  ).toBeGreaterThanOrEqual(4);
+  const persistentContextIds = new Set([
+    "grouped.coefficients.plus",
+    "grouped.coefficient-2",
+    "grouped.coefficients.right-parenthesis"
+  ]);
+  const persistentContext = factoringPaintSamples.flatMap((sample) =>
+    sample.visiblePaint
+      .filter(({ semantic }) =>
+        semantic !== undefined && persistentContextIds.has(semantic)
+      )
+      .map((observation) => ({ progress: sample.progress, ...observation }))
   );
   expect(
-    Math.max(...factoringBottoms) - Math.min(...factoringBottoms),
-    JSON.stringify(factoringPaintSamples)
-  ).toBeLessThanOrEqual(0.75);
+    persistentContext.length,
+    JSON.stringify(persistentContext)
+  ).toBe(factoringPaintSamples.length * persistentContextIds.size);
+  for (const semantic of persistentContextIds) {
+    const observations = persistentContext.filter((observation) =>
+      observation.semantic === semantic
+    );
+    expect(
+      Math.max(...observations.map(({ top }) => top)) -
+        Math.min(...observations.map(({ top }) => top)),
+      JSON.stringify({ semantic, observations })
+    ).toBeLessThanOrEqual(0.75);
+  }
   const crowding = factoringPaintSamples.flatMap((sample) => {
     const xPaint = sample.visiblePaint.filter(({ text }) => text === "x");
     const otherPaint = sample.visiblePaint.filter(({ text }) => text !== "x");
@@ -646,21 +668,14 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
     }));
   });
   expect(crowding, JSON.stringify(crowding)).toEqual([]);
-  const withinFrameBaselineResidual = Math.max(
-    ...factoringPaintSamples.flatMap(({ baselines }) => {
-      const xBaselines = baselines.filter(({ text }) => text === "x");
-      const digitBaselines = baselines.filter(({ text }) =>
-        text === "2" || text === "3" || text === "6"
-      );
-      return xBaselines.map(({ baseline }) =>
-        Math.min(...digitBaselines.map((digit) =>
-          Math.abs(baseline - digit.baseline)
-        ))
-      );
-    })
+  const persistentContextBaselines = factoringPaintSamples.flatMap(
+    ({ baselines }) => baselines.filter(({ semantic }) =>
+      semantic !== undefined && persistentContextIds.has(semantic)
+    ).map(({ baseline }) => baseline)
   );
   expect(
-    withinFrameBaselineResidual,
+    Math.max(...persistentContextBaselines) -
+      Math.min(...persistentContextBaselines),
     JSON.stringify(factoringPaintSamples)
   ).toBeLessThanOrEqual(0.75);
 

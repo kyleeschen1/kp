@@ -188,6 +188,8 @@ export function sampleKpEquationMotionPathWithSampling(
     return sampleKpEquationMotionPath(path, progress);
   }
   const p = clamp01(progress);
+  if (p === 0) return path.start;
+  if (p === 1) return path.end;
   const midpointY = (path.start.y + path.end.y) / 2;
   const lift = path.control.y - midpointY;
   return {
@@ -208,9 +210,11 @@ export function compileKpCollisionSafeFanInTracks<
     track.id,
     planTrackPath(track, "direct", 0)
   ]));
-  const blockingTrackIds = new Set(mergeTracks.flatMap((mergeTrack) =>
-    tracks
-      .filter((candidate) =>
+  // Fan-in paint is the focal mover; persistent context must not be displaced
+  // merely because it occupies the direct extraction lane.
+  const obstructedMergeTrackIds = new Set(mergeTracks
+    .filter((mergeTrack) =>
+      tracks.some((candidate) =>
         candidate.componentId !== mergeTrack.componentId &&
         motionPathIntersectsPaint(
           directPaths.get(mergeTrack.id)!,
@@ -218,12 +222,12 @@ export function compileKpCollisionSafeFanInTracks<
           [candidate]
         )
       )
-      .map(({ id }) => id)
-  ));
-  if (blockingTrackIds.size === 0) return tracks;
+    )
+    .map(({ id }) => id));
+  if (obstructedMergeTrackIds.size === 0) return tracks;
   for (const clearance of [24, 40, 64, 96, 128]) {
     const candidates = tracks.map((track) =>
-      !blockingTrackIds.has(track.id)
+      !obstructedMergeTrackIds.has(track.id)
         ? track
         : Object.freeze({
             ...track,
@@ -233,9 +237,11 @@ export function compileKpCollisionSafeFanInTracks<
             motionPathSampling: "canonical-fan-in-lift" as const
           }) as Track
     );
-    const safe = mergeTracks.every((mergeTrack) =>
+    const safe = candidates
+      .filter(({ id }) => obstructedMergeTrackIds.has(id))
+      .every((mergeTrack) =>
       !motionPathIntersectsPaint(
-        directPaths.get(mergeTrack.id)!,
+        mergeTrack.motionPath!,
         mergeTrack,
         candidates.filter((candidate) =>
           candidate.componentId !== mergeTrack.componentId
@@ -245,7 +251,9 @@ export function compileKpCollisionSafeFanInTracks<
     if (safe) return Object.freeze(candidates);
   }
   throw new Error(
-    `Fan-in cannot clear blocking paint: ${[...blockingTrackIds].join(", ")}.`
+    `Fan-in material cannot clear blocking paint: ${
+      [...obstructedMergeTrackIds].join(", ")
+    }.`
   );
 }
 
