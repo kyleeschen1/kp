@@ -1,4 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
+import {
+  kpMaximumFanInExcursionInLocalInkHeights,
+  kpMaximumFanInSettlementAspectRatio
+} from "../src/rendering/equation-motion-path-planner.ts";
 
 const route = (
   progressPermille: number,
@@ -304,6 +308,22 @@ test("outline navigation lands on an exact native checkpoint, never intermediate
   ).toHaveCSS("opacity", "1");
 });
 
+test("automatic factoring checkpoint constructs without compositor errors", async ({
+  page
+}) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+
+  await page.goto(route(781), { waitUntil: "domcontentloaded" });
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-hydrated",
+    "true"
+  );
+  await page.waitForTimeout(100);
+
+  expect(pageErrors).toEqual([]);
+});
+
 test("persistent product terms translate as opaque paint through evaluation", async ({
   page
 }) => {
@@ -567,7 +587,10 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
   ).toContainText("(3+2)x+(6−2)");
 
   const factoringPaintSamples = [];
-  for (const progress of [650, 670, 740, 800, 820]) {
+  for (const progress of Array.from(
+    { length: 18 },
+    (_value, index) => 650 + index * 10
+  )) {
     await page.goto(route(progress, { kpFoldMode: "expanded" }), {
       waitUntil: "domcontentloaded"
     });
@@ -636,7 +659,9 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
           semantic:
             element.dataset["kpEquationMaterialSemanticEntityId"],
           role: element.dataset["kpEquationMaterialFragmentRole"],
+          left: rect.left,
           top: rect.top,
+          right: rect.left + rect.width,
           bottom: rect.top + rect.height,
           height: rect.height,
           inlineTop: element.style.top,
@@ -680,7 +705,9 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
         }
         return {
           selector: anchor.dataset["kpReaderSelectorId"],
+          left: rect.left,
           top: rect.top,
+          right: rect.left + rect.width,
           bottom: rect.top + rect.height,
           height: rect.height
         };
@@ -694,6 +721,18 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
             Math.abs(bottom - nativeBottom)
           ))
         )),
+        targetHorizontalResidual: (() => {
+          const target = nativeXPaint.find(({ selector }) =>
+            selector === "coefficient-factored.x"
+          );
+          if (target === undefined) {
+            throw new Error("Factoring paint lacks its native x target.");
+          }
+          const targetCenter = (target.left + target.right) / 2;
+          return Math.max(...xPaint.map(({ left, right }) =>
+            Math.abs((left + right) / 2 - targetCenter)
+          ));
+        })(),
         glyphBaselines,
         visiblePaint,
         xPaint,
@@ -703,17 +742,74 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
     factoringPaintSamples.push({
       progress,
       xNativeResidual: baselineEvidence.residual,
+      xTargetHorizontalResidual:
+        baselineEvidence.targetHorizontalResidual,
       baselines: baselineEvidence.glyphBaselines,
       visiblePaint: baselineEvidence.visiblePaint,
       observations: baselineEvidence.xPaint
     });
   }
+  const maximumXExcursion = Math.max(...factoringPaintSamples.map(
+    ({ xNativeResidual }) => xNativeResidual
+  ));
+  const maximumXTrackHeight = Math.max(...factoringPaintSamples.flatMap(
+    ({ observations, visiblePaint }) => [
+      ...observations.map(({ height, inlineHeight }) =>
+        Math.max(height, Number.parseFloat(inlineHeight) || 0)
+      ),
+      ...visiblePaint.map(({ top, bottom }) => bottom - top)
+    ]
+  ));
   expect(
-    Math.max(...factoringPaintSamples.map(({ xNativeResidual }) =>
-      xNativeResidual
-    )),
+    maximumXExcursion,
     JSON.stringify(factoringPaintSamples)
   ).toBeGreaterThanOrEqual(4);
+  expect(
+    maximumXExcursion,
+    JSON.stringify({ maximumXExcursion, maximumXTrackHeight })
+  ).toBeLessThanOrEqual(
+    maximumXTrackHeight * kpMaximumFanInExcursionInLocalInkHeights
+  );
+  expect(
+    factoringPaintSamples.at(-1)!.xNativeResidual,
+    JSON.stringify(factoringPaintSamples.at(-1))
+  ).toBeLessThanOrEqual(0.75);
+  expect(
+    factoringPaintSamples.at(-1)!.xTargetHorizontalResidual,
+    JSON.stringify(factoringPaintSamples.at(-1))
+  ).toBeLessThanOrEqual(0.75);
+  for (const sample of factoringPaintSamples) {
+    expect(
+      sample.xNativeResidual,
+      JSON.stringify(sample)
+    ).toBeLessThanOrEqual(
+      sample.xTargetHorizontalResidual *
+        kpMaximumFanInSettlementAspectRatio + 0.75
+    );
+  }
+  const peakExcursionIndex = factoringPaintSamples.findIndex(
+    ({ xNativeResidual }) => xNativeResidual === maximumXExcursion
+  );
+  for (let index = 1; index <= peakExcursionIndex; index += 1) {
+    expect(
+      factoringPaintSamples[index]!.xNativeResidual + 0.75,
+      JSON.stringify(factoringPaintSamples)
+    ).toBeGreaterThanOrEqual(
+      factoringPaintSamples[index - 1]!.xNativeResidual
+    );
+  }
+  for (
+    let index = peakExcursionIndex + 1;
+    index < factoringPaintSamples.length;
+    index += 1
+  ) {
+    expect(
+      factoringPaintSamples[index]!.xNativeResidual,
+      JSON.stringify(factoringPaintSamples)
+    ).toBeLessThanOrEqual(
+      factoringPaintSamples[index - 1]!.xNativeResidual + 0.75
+    );
+  }
   const persistentContextIds = new Set([
     "grouped.coefficients.plus",
     "grouped.coefficient-2",

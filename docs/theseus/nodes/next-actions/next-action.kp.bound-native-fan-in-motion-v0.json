@@ -1,0 +1,55 @@
+{
+  "id": "next-action.kp.bound-native-fan-in-motion-v0",
+  "kind": "next-action",
+  "title": "Bound native fan-in motion and repair the factoring exemplar",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-path-planner.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-quality.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-reader-foldable-distribution.browser.spec.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/native-katex-fan-in-motion.ts"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T17:23:33.839Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full",
+      "checkedAt": "2026-07-27T17:23:40.592Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "full",
+      "checkedAt": "2026-07-27T17:23:45.061Z"
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "boundary",
+      "checkedAt": "2026-07-27T17:23:50.065Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Implemented the generic measured-paint fan-in corridor, shared group settlement schedule, local-ink excursion bound, native contact tolerance, and foldable-distribution sag regression coverage. All automated promotion criteria pass; awaiting the named human visual checkpoint before closing or generalizing."
+  }
+}

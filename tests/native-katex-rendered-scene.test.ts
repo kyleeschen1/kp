@@ -27,7 +27,12 @@ import {
   type KpNativeKatexSceneTrack
 } from "../src/rendering/native-katex-scene-compositor.ts";
 import {
-  compileKpCollisionSafeFanInTracks
+  compileKpQualityBoundedFanInTracks,
+  evaluateKpNativeKatexFanInMotionQuality
+} from "../src/rendering/native-katex-fan-in-motion.ts";
+import {
+  planKpEquationMotionPathBetweenPoints,
+  sampleKpEquationMotionTrackPaintRect
 } from "../src/rendering/equation-motion-path-planner.ts";
 import type {
   KpStageRelativeRect
@@ -1590,7 +1595,7 @@ test("renderer session direct seeks and reverses without hidden clock state", ()
   );
 });
 
-test("merge-fan-in routes focal material without displacing persistent context", () => {
+test("merge-fan-in opens a lane before routing focal material", () => {
   const merge: KpNativeKatexSceneTrack = {
     id: "track.merge.x",
     componentId: "component.merge.x",
@@ -1614,29 +1619,136 @@ test("merge-fan-in routes focal material without displacing persistent context",
     targetAtomId: "target.coefficient",
     visualAtomId: "source.coefficient",
     startRect: { left: 36, top: 16, width: 28, height: 24 },
-    endRect: { left: 36, top: 16, width: 28, height: 24 }
+    endRect: { left: 130, top: 16, width: 28, height: 24 }
   };
-  const tracks = compileKpCollisionSafeFanInTracks([merge, obstacle]);
+  const tracks = compileKpQualityBoundedFanInTracks([merge, obstacle]);
   const routedMerge = tracks[0]!;
   const persistentObstacle = tracks[1]!;
-  const samples = [0, 0.5, 1].map((progress) =>
+  const samples = Array.from({ length: 101 }, (_value, index) =>
+    index / 100
+  ).map((progress) =>
     sampleKpNativeKatexSceneTracks([routedMerge], progress)[0]!
   );
   const start = samples[0]!;
-  const middle = samples[1]!;
-  const end = samples[2]!;
+  const middle = samples[50]!;
+  const end = samples[100]!;
   const obstacleMiddle = sampleKpNativeKatexSceneTracks(
     [persistentObstacle],
     0.5
   )[0]!;
+  const maximumLift = Math.max(...samples.map(({ rect }) =>
+    merge.startRect.top - rect.top
+  ));
 
   assert.equal(routedMerge.motionPath?.variant, "arc-above");
   assert.equal(persistentObstacle.motionPath, undefined);
   assert.deepEqual(start.rect, merge.startRect);
   assert.deepEqual(end.rect, merge.endRect);
   assert.ok(middle.rect.top < merge.startRect.top);
+  assert.equal(middle.rect.left, merge.startRect.left);
+  assert.ok(maximumLift >= 4);
+  assert.ok(maximumLift <= merge.startRect.height * 1.5);
   assert.equal(obstacleMiddle.rect.top, obstacle.startRect.top);
-  assert.deepEqual([start.opacity, middle.opacity, end.opacity], [1, 1, 1]);
+  assert.ok(obstacleMiddle.rect.left > obstacle.startRect.left);
+  assert.deepEqual(
+    [start.opacity, middle.opacity, end.opacity],
+    [1, 1, 1]
+  );
+  assert.equal(
+    evaluateKpNativeKatexFanInMotionQuality(tracks).passed,
+    true
+  );
+});
+
+test("merge-fan-in fails closed when its native target remains occluded", () => {
+  const merge: KpNativeKatexSceneTrack = {
+    id: "track.merge.x",
+    componentId: "component.merge.x",
+    lifecycle: "merge",
+    sourceAtomId: "source.x",
+    targetAtomId: "target.x",
+    visualAtomId: "source.x",
+    paintKind: "glyph",
+    sizingMode: "rect",
+    startRect: { left: 0, top: 20, width: 12, height: 16 },
+    endRect: { left: 100, top: 20, width: 12, height: 16 },
+    startOpacity: 1,
+    endOpacity: 1
+  };
+  const immovableObstacle: KpNativeKatexSceneTrack = {
+    ...merge,
+    id: "track.persist.immovable",
+    componentId: "component.persist.immovable",
+    lifecycle: "persist",
+    sourceAtomId: "source.immovable",
+    targetAtomId: "target.immovable",
+    visualAtomId: "source.immovable",
+    startRect: { left: 90, top: 0, width: 30, height: 50 },
+    endRect: { left: 90, top: 0, width: 30, height: 50 }
+  };
+
+  assert.throws(
+    () => compileKpQualityBoundedFanInTracks([merge, immovableObstacle]),
+    /cannot clear blocking paint within its measured motion corridor/
+  );
+});
+
+test("fan-in quality samples measured inner paint instead of outer layout", () => {
+  const track: KpNativeKatexSceneTrack = {
+    id: "track.merge.paint",
+    componentId: "component.merge.paint",
+    lifecycle: "merge",
+    sourceAtomId: "source.paint",
+    targetAtomId: "target.paint",
+    visualAtomId: "source.paint",
+    paintKind: "glyph",
+    sizingMode: "rect",
+    startRect: { left: 0, top: 20, width: 16, height: 20 },
+    endRect: { left: 80, top: 20, width: 18, height: 20 },
+    startPaintRect: { left: 3, top: 25, width: 9, height: 11 },
+    endPaintRect: { left: 84, top: 24, width: 10, height: 12 },
+    startOpacity: 1,
+    endOpacity: 1
+  };
+
+  assert.deepEqual(
+    sampleKpEquationMotionTrackPaintRect(track, 0),
+    track.startPaintRect
+  );
+  assert.deepEqual(
+    sampleKpEquationMotionTrackPaintRect(track, 1),
+    track.endPaintRect
+  );
+});
+
+test("merge-fan-in quality rejects a late correction after travel is exhausted", () => {
+  const merge: KpNativeKatexSceneTrack = {
+    id: "track.merge.short",
+    componentId: "component.merge.short",
+    lifecycle: "merge",
+    sourceAtomId: "source.short",
+    targetAtomId: "target.short",
+    visualAtomId: "source.short",
+    paintKind: "glyph",
+    sizingMode: "rect",
+    startRect: { left: 0, top: 20, width: 12, height: 16 },
+    endRect: { left: 2, top: 20, width: 12, height: 16 },
+    startOpacity: 1,
+    endOpacity: 1,
+    motionPath: planKpEquationMotionPathBetweenPoints({
+      id: "path.merge.short",
+      start: { x: 6, y: 28 },
+      end: { x: 8, y: 28 },
+      variants: ["arc-above"],
+      clearance: 30
+    }).selected,
+    motionPathSampling: "canonical-fan-in-lift",
+    motionProgressRange: { start: 0.05, end: 0.95 }
+  };
+  const report = evaluateKpNativeKatexFanInMotionQuality([merge]);
+
+  assert.equal(report.passed, false);
+  assert.ok(report.settlementDiagnostics.length > 0);
 });
 
 test("one atom-transit session carries the complete structural cohort", () => {

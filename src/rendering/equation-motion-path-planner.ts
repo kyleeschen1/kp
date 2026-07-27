@@ -3,6 +3,9 @@ import type {
   KpEquationLayoutPoint,
   KpEquationLayoutRect
 } from "./equation-layout-plan.ts";
+import {
+  evaluateKpEquationMotionClearanceSequence
+} from "./equation-motion-clearance.ts";
 
 export const kpEquationMotionPathVariantIds = [
   "direct",
@@ -41,6 +44,16 @@ export type KpEquationMotionPathSampling =
   | "planned-curve"
   | "canonical-fan-in-lift";
 
+export const kpMaximumFanInExcursionInLocalInkHeights = 1.5;
+export const kpMaximumFanInSettlementAspectRatio = 5;
+const kpFanInContextMotionRange = Object.freeze({ start: 0.35, end: 0.55 });
+const kpFanInFocalMotionRange = Object.freeze({ start: 0.05, end: 0.95 });
+const kpFanInLiftRiseEnd = 0.22;
+const kpFanInTransitStart = 0.55;
+const kpFanInLiftRatios = [0.35, 0.5, 0.75, 1, 1.25, 1.5] as const;
+// Measured paint includes antialiasing fringes that may touch in native KaTeX.
+const kpNativeInkContactTolerancePx = 0.75;
+
 export interface KpEquationCollisionTrack {
   readonly id: string;
   readonly componentId: string;
@@ -51,6 +64,11 @@ export interface KpEquationCollisionTrack {
   readonly endPaintRect?: KpEquationLayoutRect | undefined;
   readonly motionPath?: KpEquationMotionPathCandidate | undefined;
   readonly motionPathSampling?: KpEquationMotionPathSampling | undefined;
+  readonly motionProgressRange?: {
+    readonly start: number;
+    readonly end: number;
+  } | undefined;
+  readonly motionGroupTravel?: number | undefined;
 }
 
 export function planKpEquationMotionPath(input: {
@@ -182,7 +200,8 @@ export function sampleKpEquationMotionPath(
 export function sampleKpEquationMotionPathWithSampling(
   path: KpEquationMotionPathCandidate,
   progress: number,
-  sampling: KpEquationMotionPathSampling
+  sampling: KpEquationMotionPathSampling,
+  groupTravel?: number
 ): KpEquationLayoutPoint {
   if (sampling === "planned-curve") {
     return sampleKpEquationMotionPath(path, progress);
@@ -192,12 +211,33 @@ export function sampleKpEquationMotionPathWithSampling(
   if (p === 1) return path.end;
   const midpointY = (path.start.y + path.end.y) / 2;
   const lift = path.control.y - midpointY;
+  const transitProgress = clamp01(
+    (p - kpFanInTransitStart) / (1 - kpFanInTransitStart)
+  );
+  const baseline = {
+    x: interpolate(path.start.x, path.end.x, transitProgress),
+    y: interpolate(path.start.y, path.end.y, transitProgress)
+  };
+  const remainingGroupTravel = (
+    groupTravel ?? Math.hypot(
+      path.end.x - path.start.x,
+      path.end.y - path.start.y
+    )
+  ) * (1 - transitProgress);
+  const settlementLift = Math.abs(lift) === 0
+    ? 0
+    : clamp01(
+        remainingGroupTravel *
+          kpMaximumFanInSettlementAspectRatio /
+          Math.abs(lift)
+      );
+  const liftProgress = p < kpFanInLiftRiseEnd
+    ? smoothstep(p / kpFanInLiftRiseEnd)
+    : settlementLift;
   return {
-    x: interpolate(path.start.x, path.end.x, p),
-    // Clear the protected row early and settle late without an oversized arc.
-    y:
-      interpolate(path.start.y, path.end.y, p) +
-      lift * Math.pow(Math.max(0, Math.sin(Math.PI * p)), 0.55)
+    x: baseline.x,
+    // Linear transit keeps visible travel pending through the final descent.
+    y: baseline.y + lift * liftProgress
   };
 }
 
@@ -206,54 +246,48 @@ export function compileKpCollisionSafeFanInTracks<
 >(tracks: readonly Track[]): readonly Track[] {
   const mergeTracks = tracks.filter(({ lifecycle }) => lifecycle === "merge");
   if (mergeTracks.length === 0) return tracks;
-  const directPaths = new Map(mergeTracks.map((track) => [
-    track.id,
-    planTrackPath(track, "direct", 0)
-  ]));
-  // Fan-in paint is the focal mover; persistent context must not be displaced
-  // merely because it occupies the direct extraction lane.
-  const obstructedMergeTrackIds = new Set(mergeTracks
-    .filter((mergeTrack) =>
-      tracks.some((candidate) =>
-        candidate.componentId !== mergeTrack.componentId &&
-        motionPathIntersectsPaint(
-          directPaths.get(mergeTrack.id)!,
-          mergeTrack,
-          [candidate]
-        )
-      )
-    )
-    .map(({ id }) => id));
-  if (obstructedMergeTrackIds.size === 0) return tracks;
-  for (const clearance of [24, 40, 64, 96, 128]) {
-    const candidates = tracks.map((track) =>
-      !obstructedMergeTrackIds.has(track.id)
+  const groupTravel = Math.max(...mergeTracks.map((track) => {
+    const start = rectCenter(track.startRect);
+    const end = rectCenter(track.endRect);
+    return Math.hypot(end.x - start.x, end.y - start.y);
+  }));
+  const localInkScale = Math.max(...tracks.map(kpEquationMotionTrackScale));
+  const scheduled = tracks.map((track) => Object.freeze({
+    ...track,
+    ...(track.lifecycle === "persist"
+      ? { motionProgressRange: kpFanInContextMotionRange }
+      : track.lifecycle === "merge"
+        ? { motionProgressRange: kpFanInFocalMotionRange }
+        : {})
+  }) as Track);
+  // Merge-fan-in is a space-time motif: context opens the lane first, then
+  // focal paint takes the smallest scale-relative lift that clears real ink.
+  let blockers: readonly string[] = [];
+  for (const liftRatio of kpFanInLiftRatios) {
+    const candidates = scheduled.map((track) =>
+      track.lifecycle !== "merge"
         ? track
         : Object.freeze({
             ...track,
-            motionPath: Object.freeze(
-              planTrackPath(track, "arc-above", clearance)
-            ),
-            motionPathSampling: "canonical-fan-in-lift" as const
+            motionPath: Object.freeze(planTrackPath(
+              track,
+              "arc-above",
+              localInkScale * liftRatio
+            )),
+            motionPathSampling: "canonical-fan-in-lift" as const,
+            motionGroupTravel: groupTravel
           }) as Track
     );
-    const safe = candidates
-      .filter(({ id }) => obstructedMergeTrackIds.has(id))
-      .every((mergeTrack) =>
-      !motionPathIntersectsPaint(
-        mergeTrack.motionPath!,
-        mergeTrack,
-        candidates.filter((candidate) =>
-          candidate.componentId !== mergeTrack.componentId
-        )
-      )
-    );
-    if (safe) return Object.freeze(candidates);
+    const clearance = evaluateFanInTrackClearance(candidates);
+    if (clearance.passed) {
+      return Object.freeze(candidates);
+    }
+    blockers = clearance.blockers;
   }
   throw new Error(
-    `Fan-in material cannot clear blocking paint: ${
-      [...obstructedMergeTrackIds].join(", ")
-    }.`
+    "Fan-in material cannot clear blocking paint within its measured " +
+      `motion corridor: ${mergeTracks.map(({ id }) => id).join(", ")}; ` +
+      `blocked by ${blockers.join(", ")}.`
   );
 }
 
@@ -262,9 +296,18 @@ export function sampleKpEquationMotionTrackRect(
   progress: number
 ): KpEquationLayoutRect {
   const p = clamp01(progress);
+  const motionProgress = trackMotionProgress(track, p);
   return track.motionPath === undefined
-    ? interpolateRect(track.startRect, track.endRect, p)
-    : layoutRectAt(track, track.motionPath, p);
+    ? interpolateRect(track.startRect, track.endRect, motionProgress)
+    : layoutRectAt(track, track.motionPath, motionProgress);
+}
+
+export function sampleKpEquationMotionTrackPaintRect(
+  track: KpEquationCollisionTrack,
+  progress: number
+): KpEquationLayoutRect {
+  const p = clamp01(progress);
+  return paintRectAt(track, sampleKpEquationMotionTrackRect(track, p), p);
 }
 
 function planTrackPath(
@@ -282,37 +325,59 @@ function planTrackPath(
   }).selected;
 }
 
-function motionPathIntersectsPaint(
-  path: KpEquationMotionPathCandidate,
-  track: KpEquationCollisionTrack,
-  obstacles: readonly KpEquationCollisionTrack[]
-): boolean {
-  return Array.from({ length: 81 }, (_value, index) => {
-    const progress = smoothstep((index + 10) / 100);
-    const mover = paintRectAt(
-      track,
-      layoutRectAt(track, path, progress),
-      progress
-    );
-    return obstacles.some((obstacleTrack) => {
-      const obstaclePath = obstacleTrack.motionPath;
-      const obstacle = paintRectAt(
-        obstacleTrack,
-        obstaclePath === undefined
-          ? interpolateRect(
-              obstacleTrack.startRect,
-              obstacleTrack.endRect,
-              progress
-            )
-          : layoutRectAt(obstacleTrack, obstaclePath, progress),
-        progress
-      );
-      return mover.left < obstacle.left + obstacle.width - 0.25 &&
-        mover.left + mover.width > obstacle.left + 0.25 &&
-        mover.top < obstacle.top + obstacle.height - 0.25 &&
-        mover.top + mover.height > obstacle.top + 0.25;
-    });
-  }).some(Boolean);
+function evaluateFanInTrackClearance(
+  tracks: readonly KpEquationCollisionTrack[]
+): { readonly passed: boolean; readonly blockers: readonly string[] } {
+  const mergeTracks = tracks.filter(({ lifecycle }) => lifecycle === "merge");
+  const requirements = mergeTracks.flatMap((mergeTrack) => {
+    const protectedIds = tracks
+      .filter(({ componentId }) => componentId !== mergeTrack.componentId)
+      .map(({ id }) => id);
+    return protectedIds.length === 0
+      ? []
+      : [{
+          id: `fan-in-clearance.${mergeTrack.id}`,
+          movingIds: [mergeTrack.id],
+          protectedIds,
+          minClearancePx: 0.001
+        }];
+  });
+  if (requirements.length === 0) {
+    return { passed: true, blockers: [] };
+  }
+  const frames = Array.from({ length: 19 }, (_value, index) => {
+    const progress = (index + 1) / 20;
+    const easedProgress = smoothstep(progress);
+    return {
+      progress,
+      ink: tracks.map((track) => {
+        const paint = insetRect(
+          sampleKpEquationMotionTrackPaintRect(track, easedProgress),
+          kpNativeInkContactTolerancePx
+        );
+        return { id: track.id, ...paint, opacity: 1 };
+      })
+    };
+  });
+  const report = evaluateKpEquationMotionClearanceSequence({
+    frames,
+    requirements,
+    maxSpatialStepPx: 1,
+    maxProgressStep: 0.01
+  });
+  const blockerProgress = new Map<string, number>();
+  for (const diagnostic of report.diagnostics) {
+    const pair = `${diagnostic.movingId}->${diagnostic.protectedId}`;
+    if (!blockerProgress.has(pair)) {
+      blockerProgress.set(pair, diagnostic.progress);
+    }
+  }
+  return {
+    passed: report.passed,
+    blockers: [...blockerProgress].map(([pair, progress]) =>
+      `${pair}@${progress.toFixed(3)}`
+    )
+  };
 }
 
 function layoutRectAt(
@@ -323,7 +388,8 @@ function layoutRectAt(
   const center = sampleKpEquationMotionPathWithSampling(
     path,
     progress,
-    track.motionPathSampling ?? "planned-curve"
+    track.motionPathSampling ?? "planned-curve",
+    track.motionGroupTravel
   );
   const width = interpolate(track.startRect.width, track.endRect.width, progress);
   const height = interpolate(
@@ -346,19 +412,58 @@ function paintRectAt(
 ): KpEquationLayoutRect {
   const start = track.startPaintRect ?? track.startRect;
   const end = track.endPaintRect ?? track.endRect;
+  const motionProgress = trackMotionProgress(track, progress);
   return {
     left: layoutRect.left + interpolate(
       start.left - track.startRect.left,
       end.left - track.endRect.left,
-      progress
+      motionProgress
     ),
     top: layoutRect.top + interpolate(
       start.top - track.startRect.top,
       end.top - track.endRect.top,
-      progress
+      motionProgress
     ),
-    width: interpolate(start.width, end.width, progress),
-    height: interpolate(start.height, end.height, progress)
+    width: interpolate(start.width, end.width, motionProgress),
+    height: interpolate(start.height, end.height, motionProgress)
+  };
+}
+
+export function kpEquationMotionTrackScale(
+  track: KpEquationCollisionTrack
+): number {
+  const start = track.startPaintRect ?? track.startRect;
+  const end = track.endPaintRect ?? track.endRect;
+  return Math.max(
+    1,
+    start.height,
+    end.height,
+    track.startRect.height,
+    track.endRect.height
+  );
+}
+
+function trackMotionProgress(
+  track: KpEquationCollisionTrack,
+  progress: number
+): number {
+  const range = track.motionProgressRange;
+  if (range === undefined) return clamp01(progress);
+  const local = clamp01((progress - range.start) / (range.end - range.start));
+  return smoothstep(local);
+}
+
+function insetRect(
+  rect: KpEquationLayoutRect,
+  inset: number
+): KpEquationLayoutRect {
+  const horizontal = Math.min(inset, rect.width / 2);
+  const vertical = Math.min(inset, rect.height / 2);
+  return {
+    left: rect.left + horizontal,
+    top: rect.top + vertical,
+    width: Math.max(0, rect.width - horizontal * 2),
+    height: Math.max(0, rect.height - vertical * 2)
   };
 }
 

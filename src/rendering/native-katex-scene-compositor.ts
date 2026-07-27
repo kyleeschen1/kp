@@ -17,10 +17,12 @@ import type {
   KpEquationStructuralSuccessionIntent
 } from "../animation/structural-succession-presentation.ts";
 import {
-  compileKpCollisionSafeFanInTracks,
   sampleKpEquationMotionTrackRect,
   type KpEquationCollisionTrack
 } from "./equation-motion-path-planner.ts";
+import {
+  compileKpQualityBoundedFanInTracks
+} from "./native-katex-fan-in-motion.ts";
 import {
   disposeKpNativeKatexStructuralSuccession,
   syncKpNativeKatexStructuralSuccession
@@ -1634,7 +1636,7 @@ export function createKpNativeKatexRendererSession(input: {
   });
 }
 
-/** Every host enters here to prevent local track or handoff policy. */
+/** Prevents local track or handoff policy. */
 export function createKpCanonicalNativeKatexSceneSession(input: {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
@@ -1671,7 +1673,7 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     allTracks
   );
   const tracks = input.fanInRouting === true
-    ? compileKpCollisionSafeFanInTracks(successorOwnership.tracks)
+    ? compileKpQualityBoundedFanInTracks(successorOwnership.tracks)
     : successorOwnership.tracks;
   const correlations = correlateKpNativeKatexSceneHandoff({
     reconciliation,

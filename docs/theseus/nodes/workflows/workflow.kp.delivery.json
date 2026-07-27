@@ -23,7 +23,8 @@
     "next-action.refill.experiment.plan-revision.kp.v4.primitive-amortization",
     "next-action.refill.experiment.plan-revision.kp.v4.semantic-llm-boundary",
     "next-action.refill.experiment.plan-revision.kp.v8.native-math-settlement",
-    "next-action.kp.radical-reader-promotion-kit-v0"
+    "next-action.kp.radical-reader-promotion-kit-v0",
+    "next-action.kp.bound-native-fan-in-motion-v0"
   ],
   "verificationRecords": [
     {

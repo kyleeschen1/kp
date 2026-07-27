@@ -18,6 +18,13 @@ export interface KpMotionQualityFrameSample {
   readonly entities: readonly KpMotionQualityEntitySample[];
 }
 
+export interface KpMotionQualityCorridor {
+  readonly entityId: string;
+  readonly start: { readonly x: number; readonly y: number };
+  readonly end: { readonly x: number; readonly y: number };
+  readonly maxOrthogonalExcursion: number;
+}
+
 export interface KpMotionQualityBudget {
   readonly durationMs: number;
   readonly maxPositionStep: number;
@@ -37,6 +44,7 @@ export interface KpMotionQualityDiagnostic {
     | "motion.acceleration-budget"
     | "motion.scale-discontinuity"
     | "motion.boundary-discontinuity"
+    | "motion.path-excursion"
     | "motion.collision"
     | "motion.crowding"
     | "motion.salience-gap";
@@ -58,6 +66,7 @@ export interface KpMotionQualityReport {
     readonly maxVelocityPerSecond: number;
     readonly maxAccelerationPerSecondSquared: number;
     readonly maxScaleStep: number;
+    readonly maxPathExcursion: number;
     readonly minEntitySeparation: number | null;
   };
   readonly diagnostics: readonly KpMotionQualityDiagnostic[];
@@ -97,6 +106,7 @@ export function evaluateKpMotionQuality(input: {
   readonly samples: readonly KpMotionQualityFrameSample[];
   readonly budget?: Partial<KpMotionQualityBudget> | undefined;
   readonly motifBoundaryProgresses?: readonly number[] | undefined;
+  readonly corridors?: readonly KpMotionQualityCorridor[] | undefined;
 }): KpMotionQualityReport {
   const budget = { ...defaultKpMotionQualityBudget, ...input.budget };
   validateBudget(budget);
@@ -106,6 +116,7 @@ export function evaluateKpMotionQuality(input: {
   let maxVelocityPerSecond = 0;
   let maxAccelerationPerSecondSquared = 0;
   let maxScaleStep = 0;
+  let maxPathExcursion = 0;
   let minEntitySeparation = Number.POSITIVE_INFINITY;
   const previousVelocity = new Map<string, { value: number; progress: number }>();
 
@@ -114,6 +125,14 @@ export function evaluateKpMotionQuality(input: {
       minEntitySeparation = Math.min(minEntitySeparation, value);
     });
     inspectSalience(sample, budget, diagnostics);
+    inspectCorridors(
+      sample,
+      input.corridors ?? [],
+      diagnostics,
+      (value) => {
+        maxPathExcursion = Math.max(maxPathExcursion, value);
+      }
+    );
     if (sampleIndex === 0) return;
     const previous = samples[sampleIndex - 1]!;
     const deltaProgress = sample.progress - previous.progress;
@@ -204,12 +223,68 @@ export function evaluateKpMotionQuality(input: {
       maxVelocityPerSecond,
       maxAccelerationPerSecondSquared,
       maxScaleStep,
+      maxPathExcursion,
       minEntitySeparation: Number.isFinite(minEntitySeparation)
         ? minEntitySeparation
         : null
     },
     diagnostics
   };
+}
+
+function inspectCorridors(
+  sample: KpMotionQualityFrameSample,
+  corridors: readonly KpMotionQualityCorridor[],
+  diagnostics: KpMotionQualityDiagnostic[],
+  observe: (value: number) => void
+): void {
+  const entitiesById = new Map(sample.entities.map((entity) => [
+    entity.id,
+    entity
+  ]));
+  for (const corridor of corridors) {
+    if (
+      !Number.isFinite(corridor.maxOrthogonalExcursion) ||
+      corridor.maxOrthogonalExcursion <= 0
+    ) {
+      throw new Error(
+        `Motion corridor ${corridor.entityId} requires positive excursion.`
+      );
+    }
+    const entity = entitiesById.get(corridor.entityId);
+    if (entity === undefined) continue;
+    const excursion = orthogonalDistance(
+      entity,
+      corridor.start,
+      corridor.end
+    );
+    observe(excursion);
+    if (excursion > corridor.maxOrthogonalExcursion) {
+      diagnostics.push(diagnostic(
+        "motion.path-excursion",
+        "error",
+        sample.progress,
+        [entity.id],
+        excursion,
+        corridor.maxOrthogonalExcursion,
+        `Entity ${entity.id} leaves its motion corridor by ` +
+          `${excursion.toFixed(2)}px.`
+      ));
+    }
+  }
+}
+
+function orthogonalDistance(
+  point: { readonly x: number; readonly y: number },
+  start: { readonly x: number; readonly y: number },
+  end: { readonly x: number; readonly y: number }
+): number {
+  const dx = end.x - start.x;
+  const dy = end.y - start.y;
+  const length = Math.hypot(dx, dy);
+  if (length === 0) return Math.hypot(point.x - start.x, point.y - start.y);
+  return Math.abs(dx * (start.y - point.y) - (start.x - point.x) * dy) /
+    length;
 }
 
 function inspectSeparation(

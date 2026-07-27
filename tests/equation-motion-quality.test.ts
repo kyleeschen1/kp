@@ -107,6 +107,37 @@ test("quality gate distinguishes collisions, crowding, and salience gaps", () =>
   assert.ok(report.metrics.minEntitySeparation !== null);
 });
 
+test("quality gate rejects a smooth but disproportionately large path excursion", () => {
+  const samples = Array.from({ length: 101 }, (_value, index) => {
+    const progress = index / 100;
+    return {
+      progress,
+      entities: [{
+        id: "factor",
+        x: progress * 100,
+        y: -96 * Math.sin(Math.PI * progress),
+        scale: 1,
+        opacity: 1
+      }]
+    };
+  });
+  const report = evaluateKpMotionQuality({
+    samples,
+    corridors: [{
+      entityId: "factor",
+      start: { x: 0, y: 0 },
+      end: { x: 100, y: 0 },
+      maxOrthogonalExcursion: 16
+    }]
+  });
+
+  assert.equal(report.passed, false);
+  assert.equal(report.metrics.maxPathExcursion, 96);
+  assert.ok(report.diagnostics.some(({ code }) =>
+    code === "motion.path-excursion"
+  ));
+});
+
 test("quality evaluation is deterministic for direct seek sample sets", () => {
   const samples = [frame(1, 10, 1), frame(0, 0, 1), frame(0.5, 5, 1)];
   assert.deepEqual(
