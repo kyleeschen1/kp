@@ -160,7 +160,8 @@
     {
       "id": "s18",
       "title": "Plan-hierarchical-layout",
-      "status": "planned"
+      "summary": "Added hierarchical native group envelopes, transition-scoped anchor ownership, one-row wide layouts, and deterministic two-row phone staging for branch phases; all geometry remains native-measured and coordinate-free.",
+      "status": "complete"
     },
     {
       "id": "s19",

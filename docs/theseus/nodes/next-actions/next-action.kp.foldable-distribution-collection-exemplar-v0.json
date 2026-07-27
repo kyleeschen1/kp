@@ -253,11 +253,25 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T06:33:01.984Z",
       "notes": "Canonical foldable animation, transition-scoped hierarchical selectors, and visual motif projection compile across all TypeScript projects."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/foldable-distribution-hierarchical-layout.test.ts tests/foldable-distribution-native-endpoints.test.ts tests/foldable-distribution-canonical-visual-motifs.test.ts tests/semantic-equation-transition-compiler.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T06:37:55.875Z",
+      "notes": "Wide phases remain one row; phone distribution/evaluation use two stable semantic branch rows; collapsed phases return to one row; envelope binding switches nested term ownership by transition without pixels or compositor routing."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T06:38:02.008Z",
+      "notes": "Hierarchical native envelope binding and deterministic layout projections compile across all TypeScript projects."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 17 produced the canonical semantic animation: six certified operations retain four composable phases and compile without fallback into copy fan-out, opaque successor synthesis, signed-term reflow/grouping, and merge fan-in over native endpoints."
+    "summary": "Slice 18 defined hierarchical native envelopes and deterministic responsive rows. Wide remains one row; phone stages distribution branches in two stable rows; folding can compress them; no pixel offsets or operation-specific compositor routes exist."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",
