@@ -64,11 +64,25 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T05:33:09.101Z",
       "notes": "The preservation manifest is accepted across app, node, test, and domain TypeScript projects."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/foldable-distribution-expression-chain.test.ts tests/foldable-distribution-preservation-manifest.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T05:36:53.960Z",
+      "notes": "All four explicit AST states match the frozen LaTeX identities and independently normalize to 5x+4; drift is rejected."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T05:37:00.457Z",
+      "notes": "The exact linear-normal-form verifier and structured fixture pass all TypeScript projects."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 3 froze the exact four-state equation chain, reference exemplars, semantic motif obligations, opaque-lineage/no-fade paint contract, fold truth, accessibility, responsive matrix, and no-core-growth boundary before implementation."
+    "summary": "Slice 4 constructed four immutable, explicitly identified structured-expression states and independently normalized every state to the exact linear form 5x+4, with negative-term structure preserved and drift rejected."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",

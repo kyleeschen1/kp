@@ -76,7 +76,8 @@
     {
       "id": "s04",
       "title": "Verify-expression-chain",
-      "status": "planned"
+      "summary": "Constructed four immutable structured-expression states and independently proved each normalizes to exactly 5x+4; identity and drift tests pass.",
+      "status": "complete"
     },
     {
       "id": "s05",
