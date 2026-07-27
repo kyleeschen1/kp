@@ -64,7 +64,8 @@
     {
       "id": "s02",
       "title": "Clean-regression-baseline",
-      "status": "planned"
+      "summary": "Restored the clean regression baseline by updating stale DOM test doubles only; production compositor remained frozen and all 2,539 tests pass.",
+      "status": "complete"
     },
     {
       "id": "s03",

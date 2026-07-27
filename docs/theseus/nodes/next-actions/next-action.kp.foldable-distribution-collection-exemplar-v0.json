@@ -29,11 +29,32 @@
       "status": "passed",
       "scope": "control-plane",
       "checkedAt": "2026-07-27T05:18:14.607Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-reader-equation-scene-compositor-adapter.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T05:28:50.138Z",
+      "notes": "Adapter browser-contract fixture passes all four session tests without production compositor changes."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T05:28:53.976Z",
+      "notes": "TypeScript accepts the repaired browser-contract test fixture."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T05:29:02.042Z",
+      "notes": "Full architecture, inference, catalog, and 2,539-test regression suite passes with zero failures."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 1 established the approved v1 run contract, resolved the completed Animation Library action, linked the radical prerequisite, and passed source-ref, done-contract, and run-contract hygiene."
+    "summary": "Slices 1-2 established the approved run and restored a clean compositor-adapter regression baseline by updating only stale browser-contract test doubles; production compositor code is unchanged, typecheck passes, and all 2,539 tests pass."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",
