@@ -112,7 +112,8 @@
     {
       "id": "s10",
       "title": "Define-fold-intent",
-      "status": "planned"
+      "summary": "Defined four renderer-neutral fold intents over known group IDs; invalid pins and any timing, geometry, or opacity authority are excluded.",
+      "status": "complete"
     },
     {
       "id": "s11",

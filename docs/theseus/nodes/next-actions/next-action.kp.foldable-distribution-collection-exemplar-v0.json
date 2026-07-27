@@ -148,11 +148,18 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T05:53:39.399Z",
       "notes": "Immutable evaluation-tree assembly passes all TypeScript projects."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/foldable-distribution-fold-intent.test.ts tests/foldable-distribution-evaluation-tree.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T05:56:24.164Z",
+      "notes": "Four renderer-neutral fold modes reference only known foldable semantic groups; invalid pins and presentation authority are rejected."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 9 assembled all six certified operations into one deeply immutable tree: parallel fan-out, parallel product evaluation, signed grouping, then collection. Forward and rewind preserve the same parallel cohorts and exact endpoint states."
+    "summary": "Slice 10 defined four bounded fold intents over the unchanged tree. Intent carries only semantic group IDs and pins; timing, visibility, geometry, and opacity remain compiler-owned."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",
