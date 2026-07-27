@@ -465,11 +465,25 @@
       "scope": "slice s17 phone proof gate",
       "checkedAt": "2026-07-27T23:41:08.782Z",
       "notes": "All 98 focused stage/foldable tests and every TypeScript project pass after promoting phone overlap from a known-diagnostic assertion to a certified zero-unrelated-contact gate."
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s18 fold projection conformance",
+      "checkedAt": "2026-07-27T23:47:13.990Z",
+      "notes": "All 17 Chromium cases pass. Automatic, expanded, collapsed, and pinned modes share exact transition, accessible-state, beat, and static-checkpoint identities; use one applied certificate and fit mechanism; preserve MathML and material aria ownership; and admit no unrelated paint overlap. Keyboard pinning and stable URL state pass."
+    },
+    {
+      "command": "npm run test:foldable-distribution; npm run typecheck",
+      "status": "passed",
+      "scope": "slice s18 semantic and type gate",
+      "checkedAt": "2026-07-27T23:47:21.733Z",
+      "notes": "All 98 foldable/stage tests and every TypeScript project pass; projection timing and disclosure vary only through existing semantic projection authority, without a fold-mode renderer or layout branch."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Wide and 390x844 expanded rendering now share one applied certificate, responsive fit, no-wrap policy, and bounded contact evaluator. The old phone test that accepted any intersection has been replaced by dense zero-unrelated-overlap, gutter, scale, centering, URL/direct-seek, rewind, and exact two-row assertions."
+    "summary": "All four fold presentation modes now have browser proof that they preserve one semantic transition/checkpoint set, one accessible MathML owner, one certified stage mechanism, and one collision law. Fold choice changes disclosed detail and timing only; static and no-JavaScript truth remain identical."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

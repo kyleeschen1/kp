@@ -161,7 +161,8 @@
     {
       "id": "s18",
       "title": "Fold projection conformance",
-      "status": "planned"
+      "summary": "Automatic, expanded, collapsed, and pinned projections now have browser conformance proof for identical semantic transitions, checkpoints, disclosures, static truth, accessible MathML ownership, and the same applied stage certificate/compositor path; keyboard pinning and URL state remain functional.",
+      "status": "complete"
     },
     {
       "id": "s19",

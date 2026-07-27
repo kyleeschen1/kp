@@ -28,6 +28,28 @@ const route = (
   return `/reader/foldable-distribution/?${parameters}`;
 };
 
+const foldProjectionCases = [
+  {
+    mode: "automatic",
+    additions: { kpFoldMode: "automatic" }
+  },
+  {
+    mode: "expanded",
+    additions: { kpFoldMode: "expanded" }
+  },
+  {
+    mode: "collapsed",
+    additions: { kpFoldMode: "collapsed" }
+  },
+  {
+    mode: "pinned",
+    additions: {
+      kpFoldMode: "pinned",
+      kpPin: "evaluation.foldable-distribution.distribute"
+    }
+  }
+] as const;
+
 async function visibleXPaint(page: Page) {
   await expect(page.locator("body")).toHaveAttribute(
     "data-kp-reader-hydrated",
@@ -388,6 +410,110 @@ test("wide expanded stage is certified, readable, centered, and uncrowded", asyn
         contactTolerancePx: kpNativeInkContactTolerancePx
       }).violations,
       JSON.stringify({ progress, report })
+    ).toEqual([]);
+  }
+});
+
+test("all fold projections preserve one certified semantic mechanism", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  let semanticReference: {
+    transitions: readonly string[];
+    accessibleStates: readonly string[];
+    beats: readonly string[];
+    checkpoints: readonly string[];
+  } | undefined;
+  for (const candidate of foldProjectionCases) {
+    await page.goto(route(300, candidate.additions), {
+      waitUntil: "domcontentloaded"
+    });
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-hydrated",
+      "true"
+    );
+    const stage = page.locator("[data-kp-reader-equation-stage]");
+    const active = page.locator(
+      "[data-kp-reader-transition-active='true']"
+    );
+    await expect(stage).toHaveAttribute(
+      "data-kp-reader-fold-mode",
+      candidate.mode
+    );
+    await expect(active).toHaveCount(1);
+    await expect(active).toHaveAttribute(
+      "data-kp-reader-stage-layout-applied",
+      /equation-stage/
+    );
+    const fit = active.locator("[data-kp-reader-fit-surface]");
+    await expect(fit).toHaveAttribute(
+      "data-kp-reader-equation-fit-geometry-source",
+      "certified-stage-swept-envelope"
+    );
+    await expect(fit).toHaveAttribute(
+      "data-kp-reader-equation-wrap-allowed",
+      "false"
+    );
+    expect(Number(await fit.getAttribute(
+      "data-kp-reader-equation-fit-scale"
+    ))).toBeGreaterThanOrEqual(0.68);
+    await expect(
+      page.getByLabel("Evaluation detail", { exact: true })
+    ).toHaveValue(candidate.mode);
+    const pinned = page.getByRole("button", { name: "Distribution" });
+    await expect(pinned).toHaveAttribute(
+      "aria-pressed",
+      String(candidate.mode === "pinned")
+    );
+    await expect(page.locator("#kp-reader-fold-status")).not.toBeEmpty();
+
+    const accessible = page.locator("[data-kp-reader-accessible-equation]");
+    await expect(
+      accessible.locator("[data-kp-reader-accessible-equation-state]")
+    ).toHaveCount(6);
+    await expect(
+      accessible.locator(
+        "[data-kp-reader-accessible-equation-state]:not([hidden]) math"
+      )
+    ).toHaveCount(1);
+    await expect(page.locator("[data-kp-reader-equation-material-layer]"))
+      .toHaveAttribute("aria-hidden", "true");
+    const semantic = await page.evaluate(() => ({
+      transitions: [
+        ...document.querySelectorAll<HTMLElement>(
+          ".kp-reader-equation-transition[data-kp-reader-transition]"
+        )
+      ].map((element) => element.dataset["kpReaderTransition"] ?? ""),
+      accessibleStates: [
+        ...document.querySelectorAll<HTMLElement>(
+          "[data-kp-reader-accessible-equation] > " +
+          "[data-kp-reader-accessible-equation-state]"
+        )
+      ].map((element) =>
+        element.dataset["kpReaderAccessibleEquationState"] ?? ""
+      ),
+      beats: [
+        ...document.querySelectorAll<HTMLElement>("[data-kp-beat]")
+      ].map((element) => element.dataset["kpBeat"] ?? ""),
+      checkpoints: [
+        ...document.querySelectorAll<HTMLElement>("[data-kp-static-state]")
+      ].map((element) => element.id)
+    }));
+    expect(
+      semantic.transitions.every((id) => id !== "") &&
+      semantic.accessibleStates.every((id) => id !== "") &&
+      semantic.beats.every((id) => id !== "")
+    ).toBe(true);
+    if (semanticReference === undefined) semanticReference = semantic;
+    else expect(semantic).toEqual(semanticReference);
+
+    const report = await visiblePaintOverlapReport(page, 0.3);
+    expect(
+      evaluateKpEquationVisiblePaintCertifiedContacts({
+        report,
+        contactTolerancePx: kpNativeInkContactTolerancePx
+      }).violations,
+      JSON.stringify({ candidate, report })
     ).toEqual([]);
   }
 });
@@ -1070,17 +1196,25 @@ test("one native MathML owner reports settled equation truth", async ({ page }) 
   );
 });
 
-test("no-JavaScript document exposes all six native static checkpoints", async ({
+test("no-JavaScript fold projections expose the same six static checkpoints", async ({
   browser
 }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  await page.goto(route(0), { waitUntil: "domcontentloaded" });
-
-  await expect(page.locator("[data-kp-static-state]")).toHaveCount(6);
-  await expect(page.locator("[data-kp-static-state] math")).toHaveCount(6);
-  await expect(page.locator("[data-kp-reader-equation-stage]")).toHaveCount(0);
-  await expect(page.locator("body")).toContainText("5x + 4");
+  let checkpointIds: readonly string[] | undefined;
+  for (const candidate of foldProjectionCases) {
+    await page.goto(route(0, candidate.additions), {
+      waitUntil: "domcontentloaded"
+    });
+    await expect(page.locator("[data-kp-static-state]")).toHaveCount(6);
+    await expect(page.locator("[data-kp-static-state] math")).toHaveCount(6);
+    await expect(page.locator("[data-kp-reader-equation-stage]")).toHaveCount(0);
+    await expect(page.locator("body")).toContainText("5x + 4");
+    const ids = await page.locator("[data-kp-static-state]")
+      .evaluateAll((elements) => elements.map((element) => element.id));
+    if (checkpointIds === undefined) checkpointIds = ids;
+    else expect(ids).toEqual(checkpointIds);
+  }
 
   await context.close();
 });
