@@ -134,11 +134,25 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T05:50:28.918Z",
       "notes": "Final many-to-one collection certificates pass all TypeScript projects."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/foldable-distribution-evaluation-tree.test.ts tests/foldable-distribution-final-collection.test.ts tests/foldable-distribution-signed-term-grouping.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T05:53:33.873Z",
+      "notes": "One deeply immutable tree sequences parallel fan-out, parallel product evaluation, grouping, and collection; forward/rewind phase symmetry and exact source/target anchors pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T05:53:39.399Z",
+      "notes": "Immutable evaluation-tree assembly passes all TypeScript projects."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 8 certified 3+2→5, both x roles→x, and 6+(-2)→4 as exact many-to-one relations. Fusion is explicitly opaque, uses core merge, keeps measurement in the renderer session, and settles to native KaTeX."
+    "summary": "Slice 9 assembled all six certified operations into one deeply immutable tree: parallel fan-out, parallel product evaluation, signed grouping, then collection. Forward and rewind preserve the same parallel cohorts and exact endpoint states."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",

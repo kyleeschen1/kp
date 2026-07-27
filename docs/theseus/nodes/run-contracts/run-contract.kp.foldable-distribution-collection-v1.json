@@ -106,7 +106,8 @@
     {
       "id": "s09",
       "title": "Assemble-evaluation-tree",
-      "status": "planned"
+      "summary": "Assembled one deeply immutable tree with parallel fan-out, parallel evaluation, grouping, and collection; exact forward/rewind phase symmetry and endpoint anchors pass.",
+      "status": "complete"
     },
     {
       "id": "s10",
