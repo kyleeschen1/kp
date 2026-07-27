@@ -1415,6 +1415,7 @@ test("typed track progress changes geometry without changing lifecycle opacity",
   }], 0.8);
 
   assert.equal(frame!.rect.left, 25);
+  assert.equal(frame!.expectedPaintRect, undefined);
   assert.ok(frame!.opacity > 0.99);
 });
 
@@ -1939,7 +1940,17 @@ test("one atom-transit session carries the complete structural cohort", () => {
   ]);
   assert.deepEqual([...paintKinds].sort(), ["glyph", "path", "rule"]);
   assert.deepEqual(session.sample(0.63), direct);
-  assert.deepEqual(session.sample(0), tracks.map((track) => ({
+  const startFrames = session.sample(0);
+  assert.equal(
+    startFrames.every(({ expectedPaintRect }) =>
+      expectedPaintRect !== undefined
+    ),
+    true
+  );
+  assert.deepEqual(startFrames.map(({
+    expectedPaintRect: _expectedPaintRect,
+    ...frame
+  }) => frame), tracks.map((track) => ({
     trackId: track.id,
     componentId: track.componentId,
     lifecycle: track.lifecycle,

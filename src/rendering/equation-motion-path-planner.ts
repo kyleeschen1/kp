@@ -435,7 +435,19 @@ export function sampleKpEquationMotionTrackPaintRect(
   progress: number
 ): KpEquationLayoutRect {
   const p = clamp01(progress);
-  return paintRectAt(track, sampleKpEquationMotionTrackRect(track, p), p);
+  return projectKpEquationMotionTrackPaintRect(
+    track,
+    sampleKpEquationMotionTrackRect(track, p),
+    p
+  );
+}
+
+export function projectKpEquationMotionTrackPaintRect(
+  track: KpEquationCollisionTrack,
+  layoutRect: KpEquationLayoutRect,
+  progress: number
+): KpEquationLayoutRect {
+  return paintRectAt(track, layoutRect, clamp01(progress));
 }
 
 export function sampleKpEquationMotionTrackOpacityProgress(

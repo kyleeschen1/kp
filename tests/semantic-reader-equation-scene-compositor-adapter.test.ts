@@ -113,11 +113,14 @@ const ownerDocument = {
 };
 let ownerRectProvider = () => sourceRect;
 const visual = {
+  append: () => undefined,
   classList: { toggle: () => undefined },
-  childNodes: [],
+  childNodes: [{ nodeType: 3, textContent: "x" }],
   children: [],
+  closest: () => null,
   ownerDocument,
   parentElement: undefined as unknown,
+  querySelectorAll: () => [],
   style: fakeStyle(),
   textContent: "x",
   getBoundingClientRect: () => ownerRectProvider()
@@ -290,8 +293,8 @@ function fractionScene(
     const rect = {
       left: (endpoint === "source" ? 10 : 90) + index * 24,
       top: 20,
-      width: 20,
-      height: 2
+      width: 12,
+      height: 24
     };
     return {
       atom: {

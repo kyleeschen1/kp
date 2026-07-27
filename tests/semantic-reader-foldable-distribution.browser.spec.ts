@@ -42,6 +42,7 @@ async function visibleXPaint(page: Page) {
       top: number;
       bottom: number;
       height: number;
+      paintAlignment?: string | undefined;
     }> = [];
     for (const root of transition.querySelectorAll<HTMLElement>(
       "[data-kp-reader-native]"
@@ -78,7 +79,9 @@ async function visibleXPaint(page: Page) {
         owner: `material:${owner.dataset["kpEquationMaterialOwnerId"]}`,
         top: rect.top,
         bottom: rect.top + rect.height,
-        height: rect.height
+        height: rect.height,
+        paintAlignment:
+          owner.dataset["kpEquationMaterialPaintAlignment"]
       });
     }
     return {
@@ -86,6 +89,29 @@ async function visibleXPaint(page: Page) {
       observations
     };
   });
+}
+
+function summarizeXPaint(
+  sample: Awaited<ReturnType<typeof visibleXPaint>>
+) {
+  expect(
+    sample.observations.length,
+    JSON.stringify(sample)
+  ).toBeGreaterThan(0);
+  const bottoms = sample.observations.map(({ bottom }) => bottom);
+  const heights = sample.observations.map(({ height }) => height);
+  expect(
+    Math.max(...bottoms) - Math.min(...bottoms),
+    JSON.stringify(sample)
+  ).toBeLessThanOrEqual(0.25);
+  expect(
+    Math.max(...heights) - Math.min(...heights),
+    JSON.stringify(sample)
+  ).toBeLessThanOrEqual(0.25);
+  return {
+    bottom: bottoms.reduce((sum, value) => sum + value, 0) / bottoms.length,
+    height: heights.reduce((sum, value) => sum + value, 0) / heights.length
+  };
 }
 
 test("fold controls preserve one semantic clock and stable URL state", async ({
@@ -308,6 +334,73 @@ test("outline navigation lands on an exact native checkpoint, never intermediate
       "[data-kp-reader-transition-active='true'] [data-kp-reader-native='source']"
     )
   ).toHaveCSS("opacity", "1");
+});
+
+test("distribution x paint crosses its phase boundary without sag or size drift", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  await page.goto(route(230, { kpFoldMode: "expanded" }), {
+    waitUntil: "domcontentloaded"
+  });
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  const seek = async (value: number) => {
+    await scrubber.evaluate((node, nextValue) => {
+      const input = node as HTMLInputElement;
+      input.value = String(nextValue);
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }, value);
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-progress",
+      String(value)
+    );
+    await page.evaluate(() => new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+    ));
+  };
+
+  const outgoing = summarizeXPaint(await visibleXPaint(page));
+  await seek(231);
+  const checkpoint = summarizeXPaint(await visibleXPaint(page));
+  await seek(251);
+  const forward = await visibleXPaint(page);
+  const forwardGeometry = summarizeXPaint(forward);
+  const forwardMaterials = forward.observations.filter(({ owner }) =>
+    owner.startsWith("material:")
+  );
+  expect(
+    forwardMaterials.length,
+    JSON.stringify(forward)
+  ).toBeGreaterThan(0);
+  expect(
+    forwardMaterials.every(
+      ({ paintAlignment }) => paintAlignment === "measured-ink"
+    ),
+    JSON.stringify(forward)
+  ).toBe(true);
+  await seek(300);
+  await seek(251);
+  const rewindGeometry = summarizeXPaint(await visibleXPaint(page));
+
+  for (const geometry of [
+    outgoing,
+    forwardGeometry,
+    rewindGeometry
+  ]) {
+    expect(Math.abs(geometry.bottom - checkpoint.bottom))
+      .toBeLessThanOrEqual(0.25);
+    expect(Math.abs(geometry.height - checkpoint.height))
+      .toBeLessThanOrEqual(0.25);
+  }
+
+  await page.goto(route(251, { kpFoldMode: "expanded" }), {
+    waitUntil: "domcontentloaded"
+  });
+  const directGeometry = summarizeXPaint(await visibleXPaint(page));
+  expect(Math.abs(directGeometry.bottom - checkpoint.bottom))
+    .toBeLessThanOrEqual(0.25);
+  expect(Math.abs(directGeometry.height - checkpoint.height))
+    .toBeLessThanOrEqual(0.25);
 });
 
 test("automatic factoring checkpoint constructs without compositor errors", async ({

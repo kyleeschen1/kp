@@ -7,6 +7,11 @@ import type {
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
 
+export type KpNativeKatexPaintMeasuredTrack<Track> = Track & {
+  readonly startPaintRect: KpStageRelativeRect;
+  readonly endPaintRect: KpStageRelativeRect;
+};
+
 export function attachKpNativeKatexTrackPaintGeometry<
   Track extends {
     readonly sourceAtomId?: string | undefined;
@@ -16,12 +21,7 @@ export function attachKpNativeKatexTrackPaintGeometry<
   readonly tracks: readonly Track[];
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
-}): readonly (
-  Track & {
-    readonly startPaintRect?: KpStageRelativeRect | undefined;
-    readonly endPaintRect?: KpStageRelativeRect | undefined;
-  }
-)[] {
+}): readonly KpNativeKatexPaintMeasuredTrack<Track>[] {
   const sourceAtoms = new Map(input.source.atoms.map((atom) => [atom.id, atom]));
   const targetAtoms = new Map(input.target.atoms.map((atom) => [atom.id, atom]));
   const paintRect = (
@@ -29,7 +29,8 @@ export function attachKpNativeKatexTrackPaintGeometry<
     stage: HTMLElement
   ) => atom === undefined
     ? undefined
-    : atom.paintKind === "glyph"
+    : atom.paintKind === "glyph" &&
+        typeof atom.sourceElement.ownerDocument.createRange === "function"
       ? measureKpNativeKatexTextInkRect(stage, atom.sourceElement)
       : atom.rect;
   return Object.freeze(input.tracks.map((track) => {
@@ -41,10 +42,15 @@ export function attachKpNativeKatexTrackPaintGeometry<
       sourceAtoms.get(track.targetAtomId ?? "");
     const startPaintRect = paintRect(sourceAtom, input.source.stage);
     const endPaintRect = paintRect(targetAtom, input.target.stage);
+    if (startPaintRect === undefined || endPaintRect === undefined) {
+      throw new Error(
+        "Native KaTeX render tracks require measured paint at both endpoints."
+      );
+    }
     return Object.freeze({
       ...track,
-      ...(startPaintRect === undefined ? {} : { startPaintRect }),
-      ...(endPaintRect === undefined ? {} : { endPaintRect })
+      startPaintRect,
+      endPaintRect
     });
   }));
 }

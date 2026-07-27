@@ -18,8 +18,6 @@ import type {
 } from "../animation/structural-succession-presentation.ts";
 import {
   compileKpCollisionSafeReorderTracks,
-  sampleKpEquationMotionTrackOpacityProgress,
-  sampleKpEquationMotionTrackRect,
   type KpEquationCollisionTrack
 } from "./equation-motion-path-planner.ts";
 import {
@@ -31,7 +29,8 @@ import {
 } from "./native-katex-structural-succession-renderer.ts";
 import {
   attachKpNativeKatexTrackPaintGeometry,
-  measureKpNativeKatexTextInkRect
+  measureKpNativeKatexTextInkRect,
+  type KpNativeKatexPaintMeasuredTrack
 } from "./native-katex-paint-geometry.ts";
 import {
   composeKpNativeKatexSceneMaterialOwners,
@@ -43,8 +42,8 @@ import {
 import type { KpNativeKatexFactoringSceneBinding } from
   "./native-katex-factoring-choreography.ts";
 import {
-  sampleKpNativeKatexCopyFanOutTrackRect
-} from "./native-katex-copy-fan-out-motion.ts";
+  sampleKpNativeKatexSceneTrackFrames
+} from "./native-katex-scene-track-sampling.ts";
 
 export type KpNativeKatexAtomLifecycle =
   | "persist"
@@ -104,6 +103,9 @@ export interface KpNativeKatexSceneTrack extends KpEquationCollisionTrack {
   readonly sampleProgress?: (progress: number) => number;
 }
 
+export type KpNativeKatexPaintMeasuredSceneTrack =
+  KpNativeKatexPaintMeasuredTrack<KpNativeKatexSceneTrack>;
+
 export interface KpNativeKatexSceneTrackFrame {
   readonly trackId: string;
   readonly componentId: string;
@@ -112,7 +114,13 @@ export interface KpNativeKatexSceneTrackFrame {
   readonly paintKind: KpNativeKatexPaintAtomObservation["paintKind"];
   readonly sizingMode: "rect" | "rule-length";
   readonly rect: KpStageRelativeRect;
+  readonly expectedPaintRect?: KpStageRelativeRect | undefined;
   readonly opacity: number;
+}
+
+export interface KpNativeKatexPaintMeasuredSceneTrackFrame
+  extends KpNativeKatexSceneTrackFrame {
+  readonly expectedPaintRect: KpStageRelativeRect;
 }
 
 export interface KpNativeKatexSceneOwnershipFrame {
@@ -636,40 +644,21 @@ export function compileKpNativeKatexSceneTracks(
 }
 
 export function sampleKpNativeKatexSceneTracks(
+  tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[],
+  progress: number,
+  copyFanOut?: boolean
+): readonly KpNativeKatexPaintMeasuredSceneTrackFrame[];
+export function sampleKpNativeKatexSceneTracks(
+  tracks: readonly KpNativeKatexSceneTrack[],
+  progress: number,
+  copyFanOut?: boolean
+): readonly KpNativeKatexSceneTrackFrame[];
+export function sampleKpNativeKatexSceneTracks(
   tracks: readonly KpNativeKatexSceneTrack[],
   progress: number,
   copyFanOut = false
 ): readonly KpNativeKatexSceneTrackFrame[] {
-  if (!Number.isFinite(progress)) {
-    throw new Error("Scene track progress must be finite.");
-  }
-  const bounded = Math.max(0, Math.min(1, progress));
-  const eased = smoothstep(bounded);
-  return Object.freeze(tracks.map((sceneTrack) => Object.freeze({
-    trackId: sceneTrack.id,
-    componentId: sceneTrack.componentId,
-    lifecycle: sceneTrack.lifecycle,
-    visualAtomId: sceneTrack.visualAtomId,
-    paintKind: sceneTrack.paintKind,
-    sizingMode: sceneTrack.sizingMode,
-    rect: Object.freeze(
-      copyFanOut
-        ? sampleKpNativeKatexCopyFanOutTrackRect({
-            track: sceneTrack,
-            tracks,
-            progress: bounded
-          })
-        : sampleKpEquationMotionTrackRect(
-            sceneTrack,
-            sceneTrack.sampleProgress?.(bounded) ?? eased
-          )
-    ),
-    opacity: lerp(
-      sceneTrack.startOpacity,
-      sceneTrack.endOpacity,
-      sampleKpEquationMotionTrackOpacityProgress(sceneTrack, bounded)
-    )
-  })));
+  return sampleKpNativeKatexSceneTrackFrames(tracks, progress, copyFanOut);
 }
 
 export function correlateKpNativeKatexSceneHandoff(input: {
@@ -1553,7 +1542,12 @@ export function createKpNativeKatexRendererSession(input: {
   if (hasUnsupported && disposition.reason === "clear") {
     throw new Error("Unsupported scene disposition.");
   }
-  const tracks = Object.freeze([...input.tracks]);
+  // Close raw-track entrypoints before clones receive paint authority.
+  const tracks = attachKpNativeKatexTrackPaintGeometry({
+    tracks: input.tracks,
+    source: input.reconciliation.source,
+    target: input.reconciliation.target
+  });
   const nativeCompatible = input.supplementalMaterialOwners === undefined &&
     tracks.every((track) => {
     const source = sourceById.get(track.sourceAtomId ?? "");

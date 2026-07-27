@@ -276,6 +276,8 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
     readonly paintKind: KpNativeKatexPaintAtomObservation["paintKind"];
     readonly sizingMode: "rect" | "rule-length";
     readonly rect: KpEquationMaterialLayerOwnerFrame["rect"];
+    readonly expectedPaintRect:
+      NonNullable<KpEquationMaterialLayerOwnerFrame["expectedPaintRect"]>;
     readonly opacity: number;
   }[];
   readonly sourceAtoms: ReadonlyMap<string, KpNativeKatexPaintAtomObservation>;
@@ -296,6 +298,7 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
         sourceElement: atom.sourceElement,
         semanticEntityId: atom.semanticEntityId,
         rect: frame.rect,
+        expectedPaintRect: frame.expectedPaintRect,
         opacity: input.visible ? frame.opacity : 0,
         transform: "none",
         fragmentRole: `${frame.paintKind}:${frame.sizingMode}`

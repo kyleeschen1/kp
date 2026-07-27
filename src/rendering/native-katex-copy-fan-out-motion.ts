@@ -16,30 +16,36 @@ import type {
  * Projects the promoted copy/fan-out schedule onto measured native paint.
  * Semantic lineage chooses the tracks; this helper owns only sampled motion.
  */
-export function sampleKpNativeKatexCopyFanOutTrackRect(input: {
+export function sampleKpNativeKatexCopyFanOutTrack(input: {
   readonly track: KpNativeKatexSceneTrack;
   readonly tracks: readonly KpNativeKatexSceneTrack[];
   readonly progress: number;
-}): KpStageRelativeRect {
+}): readonly [rect: KpStageRelativeRect, paintProgress: number] {
   const motion = sampleKpLessonCanonicalDistributionMotion(input.progress);
   if (input.track.lifecycle === "persist") {
-    return sampleKpEquationMotionTrackRect(
-      input.track,
+    return [
+      sampleKpEquationMotionTrackRect(
+        input.track,
+        motion.addendReflowProgress
+      ),
       motion.addendReflowProgress
-    );
+    ];
   }
   if (input.track.lifecycle !== "split") {
-    return sampleKpEquationMotionTrackRect(
-      input.track,
-      smoothstep(input.progress)
-    );
+    const paintProgress = smoothstep(input.progress);
+    return [
+      sampleKpEquationMotionTrackRect(input.track, paintProgress),
+      paintProgress
+    ];
   }
-  if (motion.leaderProgress === 0) return { ...input.track.startRect };
+  if (motion.leaderProgress === 0) {
+    return [{ ...input.track.startRect }, 0];
+  }
   if (
     motion.leaderProgress === 1 &&
     motion.followerProgress === 1
   ) {
-    return { ...input.track.endRect };
+    return [{ ...input.track.endRect }, 1];
   }
   const branches = input.tracks
     .filter((candidate) =>
@@ -110,12 +116,15 @@ export function sampleKpNativeKatexCopyFanOutTrackRect(input: {
   const height = isLeader
     ? leaderHeight
     : interpolate(leaderHeight, input.track.endRect.height, branchProgress);
-  return {
-    left: center.x - width / 2,
-    top: center.y - height / 2,
-    width,
-    height
-  };
+  return [
+    {
+      left: center.x - width / 2,
+      top: center.y - height / 2,
+      width,
+      height
+    },
+    branchProgress
+  ];
 }
 
 function rectCenterX(rect: KpStageRelativeRect): number {

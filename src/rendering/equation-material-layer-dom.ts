@@ -114,8 +114,8 @@ export function syncKpEquationMaterialLayer(input: {
     if (frame.expectedPaintRect === undefined || visual === null) {
       delete owner.dataset["kpEquationMaterialPaintAlignment"];
       delete owner.dataset["kpEquationMaterialPaintAlignmentKey"];
-      delete owner.dataset["kpEquationMaterialPaintCorrectionX"];
-      delete owner.dataset["kpEquationMaterialPaintCorrectionY"];
+      delete owner.dataset["kpEquationMaterialPaintInsetX"];
+      delete owner.dataset["kpEquationMaterialPaintInsetY"];
     } else {
       const alignmentKey = [
         owner.dataset["kpEquationMaterialVisualRevision"],
@@ -149,22 +149,29 @@ export function syncKpEquationMaterialLayer(input: {
           );
         }
         owner.dataset["kpEquationMaterialPaintAlignmentKey"] = alignmentKey;
-        owner.dataset["kpEquationMaterialPaintCorrectionX"] = String(
-          frame.expectedPaintRect.left - measured.left
+        owner.dataset["kpEquationMaterialPaintInsetX"] = String(
+          measured.left - frame.rect.left
         );
-        owner.dataset["kpEquationMaterialPaintCorrectionY"] = String(
-          frame.expectedPaintRect.top - measured.top
+        owner.dataset["kpEquationMaterialPaintInsetY"] = String(
+          measured.top - frame.rect.top
         );
       }
       // Clone-internal KaTeX offsets can differ from the native wrapper even
-      // when both outer boxes agree. Calibrate the mounted ink itself.
+      // when both outer boxes agree. Preserve that inset while the expected
+      // native paint inset changes across endpoints.
+      const correctionX =
+        frame.expectedPaintRect.left -
+        frame.rect.left -
+        Number(owner.dataset["kpEquationMaterialPaintInsetX"]);
+      const correctionY =
+        frame.expectedPaintRect.top -
+        frame.rect.top -
+        Number(owner.dataset["kpEquationMaterialPaintInsetY"]);
       owner.style.left = `${
-        frame.rect.left +
-        Number(owner.dataset["kpEquationMaterialPaintCorrectionX"])
+        frame.rect.left + correctionX
       }px`;
       owner.style.top = `${
-        frame.rect.top +
-        Number(owner.dataset["kpEquationMaterialPaintCorrectionY"])
+        frame.rect.top + correctionY
       }px`;
       owner.dataset["kpEquationMaterialPaintAlignment"] = "measured-ink";
     }
