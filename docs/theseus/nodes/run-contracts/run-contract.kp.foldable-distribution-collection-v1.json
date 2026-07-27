@@ -118,7 +118,8 @@
     {
       "id": "s11",
       "title": "Project-expanded-collapsed",
-      "status": "planned"
+      "summary": "Compiled expanded and collapsed projections; collapsed hides leaf detail only, discloses every hidden operation, and retains identical semantic truth.",
+      "status": "complete"
     },
     {
       "id": "s12",
