@@ -42,6 +42,31 @@ export interface KpEquationVisiblePaintOverlapReport {
   readonly intersections: readonly KpEquationVisiblePaintIntersection[];
 }
 
+export type KpEquationVisiblePaintContactReason =
+  | "native-handoff"
+  | "semantic-fusion"
+  | "semantic-fission"
+  | "typographic-adjacency";
+
+export interface KpEquationVisiblePaintContactAllowance {
+  readonly id: string;
+  readonly ownerIds: readonly [string, string];
+  readonly reason: KpEquationVisiblePaintContactReason;
+  readonly maximumOverlapWidthPx: number;
+  readonly maximumOverlapHeightPx: number;
+}
+
+export interface KpEquationVisiblePaintContactEvaluation {
+  readonly kind: "equation-visible-paint-contact-evaluation";
+  readonly passed: boolean;
+  readonly allowed: readonly {
+    readonly intersection: KpEquationVisiblePaintIntersection;
+    readonly allowanceId: string;
+    readonly reason: KpEquationVisiblePaintContactReason;
+  }[];
+  readonly violations: readonly KpEquationVisiblePaintIntersection[];
+}
+
 /**
  * Reports geometry only. Semantic contact is classified separately so a
  * handoff or fusion cannot disappear merely because both owners share an id.
@@ -105,6 +130,72 @@ export function inspectKpEquationVisiblePaintOverlap(input: {
     observationCount: visible.length,
     intersections: Object.freeze(intersections)
   });
+}
+
+export function evaluateKpEquationVisiblePaintContact(input: {
+  readonly report: KpEquationVisiblePaintOverlapReport;
+  readonly allowances: readonly KpEquationVisiblePaintContactAllowance[];
+}): KpEquationVisiblePaintContactEvaluation {
+  const allowances = new Map<string, KpEquationVisiblePaintContactAllowance>();
+  for (const allowance of input.allowances) {
+    if (allowance.id.trim() === "") {
+      throw new Error("Visible paint contact allowances require ids.");
+    }
+    const [leftOwnerId, rightOwnerId] = allowance.ownerIds;
+    if (leftOwnerId.trim() === "" || rightOwnerId.trim() === "") {
+      throw new Error(`${allowance.id} requires two paint owners.`);
+    }
+    if (leftOwnerId === rightOwnerId) {
+      throw new Error(`${allowance.id} cannot allow self-contact.`);
+    }
+    nonNegative(
+      allowance.maximumOverlapWidthPx,
+      `${allowance.id} maximum overlap width`
+    );
+    nonNegative(
+      allowance.maximumOverlapHeightPx,
+      `${allowance.id} maximum overlap height`
+    );
+    const key = ownerPairKey(leftOwnerId, rightOwnerId);
+    if (allowances.has(key)) {
+      throw new Error(
+        `Duplicate visible paint contact allowance for ${key}.`
+      );
+    }
+    allowances.set(key, allowance);
+  }
+  const allowed: KpEquationVisiblePaintContactEvaluation["allowed"][number][] =
+    [];
+  const violations: KpEquationVisiblePaintIntersection[] = [];
+  for (const intersection of input.report.intersections) {
+    const allowance = allowances.get(ownerPairKey(
+      intersection.leftOwnerId,
+      intersection.rightOwnerId
+    ));
+    if (
+      allowance === undefined ||
+      intersection.width > allowance.maximumOverlapWidthPx ||
+      intersection.height > allowance.maximumOverlapHeightPx
+    ) {
+      violations.push(intersection);
+      continue;
+    }
+    allowed.push(Object.freeze({
+      intersection,
+      allowanceId: allowance.id,
+      reason: allowance.reason
+    }));
+  }
+  return Object.freeze({
+    kind: "equation-visible-paint-contact-evaluation" as const,
+    passed: violations.length === 0,
+    allowed: Object.freeze(allowed),
+    violations: Object.freeze(violations)
+  });
+}
+
+function ownerPairKey(leftOwnerId: string, rightOwnerId: string): string {
+  return [leftOwnerId, rightOwnerId].sort().join("\u0000");
 }
 
 function intersectionKind(

@@ -71,7 +71,8 @@
     {
       "id": "s03",
       "title": "Semantic contact law",
-      "status": "planned"
+      "summary": "Implemented and verified the semantic contact law with explicit symmetric owner pairs, bounded dimensions, and no implicit identity exemption.",
+      "status": "complete"
     },
     {
       "id": "s04",

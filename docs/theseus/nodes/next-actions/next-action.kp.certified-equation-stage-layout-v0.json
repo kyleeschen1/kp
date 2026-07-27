@@ -80,11 +80,25 @@
       "scope": "browser baseline",
       "checkedAt": "2026-07-27T21:46:04.476Z",
       "notes": "One phone browser case samples five representative phases and durably proves visible intersections remain while layout is declaration-only."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s03 semantic contact law",
+      "checkedAt": "2026-07-27T21:49:59.352Z",
+      "notes": "72 tests passed, including symmetric bounded allowance, identity non-exemption, and invalid allowance rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s03 semantic contact law",
+      "checkedAt": "2026-07-27T21:50:00.148Z",
+      "notes": "TypeScript compilation passed after adding explicit contact types and evaluator."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Generic visible-paint overlap inspection now classifies all native/material authority pairs with semantic owner, row, progress, and viewport evidence. The foldable phone baseline proves the current unapplied layout still produces intersections; 69 focused tests, typecheck, and the scoped browser case pass."
+    "summary": "Slice s03 defines explicit symmetric, bounded semantic-contact allowances; semantic identity alone cannot excuse visible-paint overlap."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

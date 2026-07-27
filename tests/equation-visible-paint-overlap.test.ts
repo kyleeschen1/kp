@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  evaluateKpEquationVisiblePaintContact,
   inspectKpEquationVisiblePaintOverlap,
   type KpEquationVisiblePaintObservation
 } from "../src/rendering/equation-visible-paint-overlap.ts";
@@ -91,5 +92,124 @@ test("visible paint diagnostic rejects duplicate or invalid owners", () => {
       observations: []
     }),
     /progress must be between zero and one/
+  );
+});
+
+test("semantic contact allowances are explicit, symmetric, and bounded", () => {
+  const report = inspectKpEquationVisiblePaintOverlap({
+    progress: 0.5,
+    viewportId: "wide",
+    observations: [
+      observation("native", "target-native", 0, 0),
+      observation("material", "material", 2, 2),
+      observation("unrelated", "material", 4, 4)
+    ]
+  });
+  const forward = evaluateKpEquationVisiblePaintContact({
+    report,
+    allowances: [{
+      id: "contact.handoff",
+      ownerIds: ["native", "material"],
+      reason: "native-handoff",
+      maximumOverlapWidthPx: 8,
+      maximumOverlapHeightPx: 8
+    }]
+  });
+  const reverse = evaluateKpEquationVisiblePaintContact({
+    report,
+    allowances: [{
+      id: "contact.handoff",
+      ownerIds: ["material", "native"],
+      reason: "native-handoff",
+      maximumOverlapWidthPx: 8,
+      maximumOverlapHeightPx: 8
+    }]
+  });
+
+  assert.deepEqual(forward, reverse);
+  assert.equal(forward.passed, false);
+  assert.equal(forward.allowed.length, 1);
+  assert.equal(forward.violations.length, 2);
+});
+
+test("semantic identity alone never excuses visible overlap", () => {
+  const report = inspectKpEquationVisiblePaintOverlap({
+    progress: 0.5,
+    viewportId: "wide",
+    observations: [
+      observation("native", "target-native", 0, 0, {
+        semanticEntityId: "semantic.x"
+      }),
+      observation("material", "material", 1, 1, {
+        semanticEntityId: "semantic.x"
+      })
+    ]
+  });
+
+  assert.deepEqual(evaluateKpEquationVisiblePaintContact({
+    report,
+    allowances: []
+  }), {
+    kind: "equation-visible-paint-contact-evaluation",
+    passed: false,
+    allowed: [],
+    violations: report.intersections
+  });
+});
+
+test("contact allowances reject duplicate, self, and excessive contact", () => {
+  const report = inspectKpEquationVisiblePaintOverlap({
+    progress: 0.5,
+    viewportId: "wide",
+    observations: [
+      observation("left", "source-native", 0, 0),
+      observation("right", "material", 1, 1)
+    ]
+  });
+  const excessive = evaluateKpEquationVisiblePaintContact({
+    report,
+    allowances: [{
+      id: "contact.small",
+      ownerIds: ["left", "right"],
+      reason: "typographic-adjacency",
+      maximumOverlapWidthPx: 1,
+      maximumOverlapHeightPx: 1
+    }]
+  });
+  assert.equal(excessive.passed, false);
+  assert.throws(
+    () => evaluateKpEquationVisiblePaintContact({
+      report,
+      allowances: [{
+        id: "contact.self",
+        ownerIds: ["left", "left"],
+        reason: "semantic-fusion",
+        maximumOverlapWidthPx: 10,
+        maximumOverlapHeightPx: 10
+      }]
+    }),
+    /cannot allow self-contact/
+  );
+  assert.throws(
+    () => evaluateKpEquationVisiblePaintContact({
+      report,
+      allowances: [
+        {
+          id: "contact.forward",
+          ownerIds: ["left", "right"],
+          reason: "semantic-fusion",
+          maximumOverlapWidthPx: 10,
+          maximumOverlapHeightPx: 10
+        },
+        {
+          id: "contact.reverse",
+          ownerIds: ["right", "left"],
+          reason: "semantic-fission",
+          maximumOverlapWidthPx: 10,
+          maximumOverlapHeightPx: 10
+        }
+      ]
+    }),
+    /Duplicate visible paint contact allowance/
   );
 });
