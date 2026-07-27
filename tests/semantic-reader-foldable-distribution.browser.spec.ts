@@ -214,40 +214,102 @@ async function visiblePaintOverlapReport(
   }, { progress }) as Promise<KpEquationVisiblePaintOverlapReport>;
 }
 
-test("visible-paint diagnostic samples the applied-layout integration", async ({
+test("phone expanded stage is certified, readable, and uncrowded", async ({
   page
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  const reports = [];
-  for (const progressPermille of [140, 240, 340, 500, 740]) {
+  await page.goto(route(0, { kpFoldMode: "expanded" }), {
+    waitUntil: "domcontentloaded"
+  });
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-hydrated",
+    "true"
+  );
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  const sample = async (progress: number) => {
+    await scrubber.evaluate((node, nextValue) => {
+      const input = node as HTMLInputElement;
+      input.value = String(nextValue);
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }, progress);
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-progress",
+      String(progress)
+    );
+    await page.evaluate(() => new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+    ));
+    const active = page.locator(
+      "[data-kp-reader-transition-active='true']"
+    );
+    await expect(active).toHaveAttribute(
+      "data-kp-reader-stage-layout-applied",
+      /equation-stage/
+    );
+    const fit = active.locator("[data-kp-reader-fit-surface]");
+    await expect(fit).toHaveAttribute(
+      "data-kp-reader-equation-fit-geometry-source",
+      "certified-stage-swept-envelope"
+    );
+    await expect(fit).toHaveAttribute(
+      "data-kp-reader-equation-wrap-allowed",
+      "false"
+    );
+    const scale = Number(await fit.getAttribute(
+      "data-kp-reader-equation-fit-scale"
+    ));
+    expect(scale, `unreadable phone fit at ${progress}`)
+      .toBeGreaterThanOrEqual(0.68);
+    const geometry = await equationGeometry(page);
+    expect(geometry.maximumOverflowPx, JSON.stringify({ progress, geometry }))
+      .toBeLessThanOrEqual(1);
+    expect(
+      geometry.minimumSweptGutterPx,
+      JSON.stringify({ progress, geometry })
+    ).toBeGreaterThanOrEqual(17);
+    expect(
+      Math.abs(geometry.horizontalCenterDeltaPx),
+      JSON.stringify({ progress, geometry })
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(geometry.verticalCenterDeltaPx),
+      JSON.stringify({ progress, geometry })
+    ).toBeLessThanOrEqual(2);
+    const report = await visiblePaintOverlapReport(page, progress / 1_000);
+    expect(
+      evaluateKpEquationVisiblePaintCertifiedContacts({
+        report,
+        contactTolerancePx: kpNativeInkContactTolerancePx
+      }).violations,
+      JSON.stringify({ progress, report })
+    ).toEqual([]);
+  };
+  const dense = Array.from({ length: 21 }, (_value, index) => index * 50);
+  for (const progress of dense) await sample(progress);
+  for (const progress of [...dense].reverse()) await sample(progress);
+
+  for (const progress of [50, 100, 300, 500, 700, 900]) {
     await page.goto(
-      route(progressPermille, { kpFoldMode: "expanded" }),
+      route(progress, { kpFoldMode: "expanded" }),
       { waitUntil: "domcontentloaded" }
     );
     await expect(page.locator("body")).toHaveAttribute(
-      "data-kp-reader-hydrated",
-      "true"
+      "data-kp-reader-progress",
+      String(progress)
     );
-    await expect(
-      page.locator("[data-kp-reader-transition-active='true']")
-    ).toHaveCount(1);
-    await expect(
-      page.locator("[data-kp-reader-transition-active='true']")
-    ).toHaveAttribute("data-kp-reader-stage-layout-applied", /equation-stage/);
-    reports.push(
-      await visiblePaintOverlapReport(page, progressPermille / 1_000)
-    );
+    expect(new URL(page.url()).searchParams.get("kpProgress"))
+      .toBe(String(progress));
+    await sample(progress);
   }
-  await expect(
-    page.locator("[data-kp-reader-equation-stage]")
-  ).toHaveAttribute(
-    "data-kp-reader-fold-layout-policy",
-    /single-row|semantic-two-row-stage/
-  );
-  expect(
-    reports.some(({ intersections }) => intersections.length > 0),
-    JSON.stringify(reports)
-  ).toBe(true);
+  await page.goto(route(50, { kpFoldMode: "expanded" }), {
+    waitUntil: "domcontentloaded"
+  });
+  await expect.poll(() => appliedRowIds(page.locator(
+    "[data-kp-reader-transition-active='true']"
+  ))).toEqual([
+    "row.foldable-distribution.left",
+    "row.foldable-distribution.right"
+  ]);
 });
 
 test("wide expanded stage is certified, readable, centered, and uncrowded", async ({
@@ -1585,6 +1647,7 @@ async function equationGeometry(page: Page): Promise<{
   fitStatus: string | undefined;
   wrapAllowed: string | undefined;
   maximumOverflowPx: number;
+  minimumSweptGutterPx: number;
   horizontalCenterDeltaPx: number;
   verticalCenterDeltaPx: number;
   fitScale: string | undefined;
@@ -1639,6 +1702,26 @@ async function equationGeometry(page: Page): Promise<{
       right: Math.max(...nativeRects.map(({ right }) => right)),
       bottom: Math.max(...nativeRects.map(({ bottom }) => bottom))
     };
+    const fitBounds = JSON.parse(
+      fit.dataset["kpReaderEquationFitBounds"] ?? "null"
+    ) as {
+      left: number;
+      top: number;
+      width: number;
+      height: number;
+    } | null;
+    if (fitBounds === null) {
+      throw new Error("Fitted equation lacks its swept bounds.");
+    }
+    const transform = new DOMMatrix(getComputedStyle(fit).transform);
+    const sweptTopLeft = new DOMPoint(
+      fitBounds.left,
+      fitBounds.top
+    ).matrixTransform(transform);
+    const sweptBottomRight = new DOMPoint(
+      fitBounds.left + fitBounds.width,
+      fitBounds.top + fitBounds.height
+    ).matrixTransform(transform);
     return {
       fitStatus: fit.dataset["kpReaderEquationFitStatus"],
       wrapAllowed: fit.dataset["kpReaderEquationWrapAllowed"],
@@ -1650,6 +1733,12 @@ async function equationGeometry(page: Page): Promise<{
         union.right - viewportRect.right,
         viewportRect.top - union.top,
         union.bottom - viewportRect.bottom
+      ),
+      minimumSweptGutterPx: Math.min(
+        sweptTopLeft.x,
+        viewportRect.width - sweptBottomRight.x,
+        sweptTopLeft.y,
+        viewportRect.height - sweptBottomRight.y
       ),
       horizontalCenterDeltaPx:
         (nativeUnion.left + nativeUnion.right) / 2 -

@@ -155,7 +155,8 @@
     {
       "id": "s17",
       "title": "Phone expanded exemplar",
-      "status": "planned"
+      "summary": "The 390x844 expanded exemplar uses the same semantic trace and applied two-row certificate as wide rendering, preserves readable no-wrap fitting and an 18px swept gutter, and passes dense forward, direct-URL, and rewind checks with zero unrelated visible-paint overlap.",
+      "status": "complete"
     },
     {
       "id": "s18",

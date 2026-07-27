@@ -451,11 +451,25 @@
       "scope": "slice s16 proof and compiler gate",
       "checkedAt": "2026-07-27T23:34:39.214Z",
       "notes": "All TypeScript projects pass; inference remains within ceilings at types 36621, instantiations 44758, and check 1.6s after certified fit and collision-proof integration."
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s17 phone expanded exemplar",
+      "checkedAt": "2026-07-27T23:41:04.395Z",
+      "notes": "All 16 Chromium cases pass. The 390x844 expanded gate densely samples forward and rewind plus direct URL seeks, requires exact applied two-row proof, no wrapping, scale at least 0.68, an 18px swept-envelope gutter within 1px tolerance, centered visible paint, and zero unrelated overlap."
+    },
+    {
+      "command": "npm run test:foldable-distribution; npm run typecheck",
+      "status": "passed",
+      "scope": "slice s17 phone proof gate",
+      "checkedAt": "2026-07-27T23:41:08.782Z",
+      "notes": "All 98 focused stage/foldable tests and every TypeScript project pass after promoting phone overlap from a known-diagnostic assertion to a certified zero-unrelated-contact gate."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The wide expanded exemplar now derives fit, centering, and containment from its certified swept stage envelope. Dense forward, rewind, and direct-seek sampling proves readable scale and zero unrelated visible-paint overlap; exact successor contact is bounded evidence, while arbitrary intersections still fail."
+    "summary": "Wide and 390x844 expanded rendering now share one applied certificate, responsive fit, no-wrap policy, and bounded contact evaluator. The old phone test that accepted any intersection has been replaced by dense zero-unrelated-overlap, gutter, scale, centering, URL/direct-seek, rewind, and exact two-row assertions."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."
