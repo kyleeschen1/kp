@@ -178,7 +178,8 @@
     {
       "id": "s21",
       "title": "Register-animation-library-host",
-      "status": "planned"
+      "summary": "Registered animation.foldable-distribution.collect-like-terms as one playable exemplar reader representation at /reader/foldable-distribution/. The Animation Library retains passive metadata for all entries, mounts only the selected iframe, makes no eager reader request, and keeps exactly one fixed Review launcher while switching through radical, fraction, and foldable hosts. Unit catalog checks and the three-case library browser suite pass.",
+      "status": "complete"
     },
     {
       "id": "s22",

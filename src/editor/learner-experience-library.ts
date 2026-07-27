@@ -27,6 +27,19 @@ type KpLearnerExperienceDefinition = Omit<
 
 const learnerExperienceDefinitions = [
   {
+    id: "foldable-distribution-scroll-lesson",
+    kind: "scroll-lesson",
+    title: "Distribute, evaluate, and collect",
+    summary:
+      "Follow 3(x+2)+2(x-1) to 5x+4, then fold or pin the evaluation detail you want to inspect.",
+    href: "/reader/foldable-distribution/",
+    actionLabel: "Review foldable evaluation",
+    status: "exemplar",
+    animationPresentations: [
+      lessonAnimation("animation.foldable-distribution.collect-like-terms")
+    ]
+  },
+  {
     id: "distribution-area-scroll-lesson",
     kind: "scroll-lesson",
     title: "See distribution become area",

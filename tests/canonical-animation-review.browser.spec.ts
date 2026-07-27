@@ -6,6 +6,8 @@ import type {
 const radicalId =
   "animation.generated.radical.square-root-as-power";
 const splitMergeId = "animation.numerator-split-merge.round-trip";
+const foldableDistributionId =
+  "animation.foldable-distribution.collect-like-terms";
 
 test.beforeEach(async ({ page }) => {
   await mockReviewInbox(page);
@@ -81,6 +83,32 @@ test("Animation Library lists all metadata but mounts only the selected host", a
   await expect(page).toHaveURL(
     new RegExp(`animation=${splitMergeId.replaceAll(".", "\\.")}`)
   );
+
+  await search.fill("Distribute, evaluate, and collect");
+  await expect(page.locator("[data-animation-library-list] button")).toHaveCount(
+    1
+  );
+  await page.locator("[data-animation-library-list] button").click();
+  await expect(library).toHaveAttribute(
+    "data-animation-id",
+    foldableDistributionId
+  );
+  await expect(frame).toHaveAttribute(
+    "src",
+    "/reader/foldable-distribution/"
+  );
+  await page
+    .frameLocator("[data-animation-library-frame]")
+    .locator("[data-kp-reader-equation-stage]")
+    .waitFor();
+  expect(
+    documentRequests.filter((path) => path.startsWith("/reader/"))
+  ).toEqual([
+    "/reader/radical-succession/",
+    "/reader/split-merge-fractions/",
+    "/reader/foldable-distribution/"
+  ]);
+  await expect(page.locator("[data-kp-dev-review-shell]")).toHaveCount(1);
 });
 
 test("deep links preserve representation and phone preview without overflow", async ({

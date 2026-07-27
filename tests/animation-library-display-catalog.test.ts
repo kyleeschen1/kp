@@ -23,6 +23,33 @@ test("display catalog exposes every Workbench identity plus reader-only animatio
   );
   assert.ok(ids.includes("animation.numerator-split-merge.round-trip"));
   assert.ok(ids.includes("animation.divide-both-sides.solve-3x-equals-12"));
+  assert.ok(
+    ids.includes("animation.foldable-distribution.collect-like-terms")
+  );
+});
+
+test("foldable distribution resolves one lazy canonical reader host", () => {
+  const entry = createKpAnimationLibraryDisplayCatalog().find(
+    ({ animationId }) =>
+      animationId === "animation.foldable-distribution.collect-like-terms"
+  );
+
+  assert.equal(entry?.availability, "playable");
+  assert.equal(entry?.featured, false);
+  assert.equal(entry?.representations.length, 1);
+  assert.deepEqual(entry?.representations[0], {
+    id:
+      "learner-experience.foldable-distribution-scroll-lesson." +
+      "animation.foldable-distribution.collect-like-terms",
+    label: "Distribute, evaluate, and collect",
+    kind: "reader",
+    href: "/reader/foldable-distribution/",
+    role: "canonical-host"
+  });
+  assert.equal(
+    entry?.primaryRepresentationId,
+    entry?.representations[0]?.id
+  );
 });
 
 test("featured exemplars resolve one primary host without duplicating runtimes", () => {
