@@ -9,6 +9,7 @@ import {
   type KpStageRelativeRect
 } from "./native-katex-fragment-observer.ts";
 import {
+  type KpEquationMaterialLayerOwnerFrame,
   setKpEquationMaterialOwnerVisual,
   syncKpEquationMaterialLayer
 } from "./equation-material-layer-dom.ts";
@@ -22,6 +23,13 @@ import {
 import {
   measureKpNativeKatexTextInkRect
 } from "./native-katex-paint-geometry.ts";
+import {
+  composeKpNativeKatexSceneMaterialOwners,
+  compileKpNativeKatexSuccessorSynthesisScenePlans,
+  partitionKpNativeKatexSuccessorOwnedTracks,
+  sampleKpNativeKatexSuccessorSynthesisScenePlans,
+  type KpNativeKatexSuccessorSynthesisIntent
+} from "./native-katex-successor-synthesis.ts";
 
 export type KpNativeKatexAtomLifecycle =
   | "persist"
@@ -1493,6 +1501,8 @@ export function createKpNativeKatexRendererSession(input: {
   readonly reconciliation: KpNativeKatexSceneReconciliation;
   readonly tracks: readonly KpNativeKatexSceneTrack[];
   readonly disposition?: KpNativeKatexRendererDisposition | undefined;
+  readonly supplementalMaterialOwners?:
+    (progress: number) => readonly KpEquationMaterialLayerOwnerFrame[];
 }): KpNativeKatexRendererSession {
   const trackIds = input.tracks.map(({ id }) => id);
   if (new Set(trackIds).size !== trackIds.length) {
@@ -1530,7 +1540,8 @@ export function createKpNativeKatexRendererSession(input: {
     throw new Error("Unsupported scene disposition.");
   }
   const tracks = Object.freeze([...input.tracks]);
-  const nativeCompatible = tracks.every((track) => {
+  const nativeCompatible = input.supplementalMaterialOwners === undefined &&
+    tracks.every((track) => {
     const source = sourceById.get(track.sourceAtomId ?? "");
     const target = targetById.get(track.targetAtomId ?? "");
     return track.lifecycle === "persist" &&
@@ -1540,7 +1551,7 @@ export function createKpNativeKatexRendererSession(input: {
       source.styleFingerprint === target.styleFingerprint &&
       source.fontRevision === target.fontRevision &&
       rectDelta(source.rect, target.rect) <= 0.25;
-  });
+    });
   const mode =
     disposition.reason !== "clear"
       ? "checkpoint-settlement"
@@ -1569,19 +1580,16 @@ export function createKpNativeKatexRendererSession(input: {
     // Endpoint DOM keeps semantics; clones own paint.
     syncKpEquationMaterialLayer({
       stage: input.stage,
-      owners: mode === "atom-transit" ? frames.map((frame) => {
-        const atom =
-          sourceById.get(frame.visualAtomId) ??
-          targetById.get(frame.visualAtomId)!;
-        return {
-          ownerId: `native-scene-owner.${frame.trackId}`,
-          sourceElement: atom.sourceElement,
-          rect: frame.rect,
-          opacity: materialOwns ? frame.opacity : 0,
-          transform: "none",
-          fragmentRole: `${frame.paintKind}:${frame.sizingMode}`
-        };
-      }) : []
+      owners: mode === "atom-transit"
+        ? composeKpNativeKatexSceneMaterialOwners({
+            frames,
+            sourceAtoms: sourceById,
+            targetAtoms: targetById,
+            supplementalOwners:
+              input.supplementalMaterialOwners?.(bounded) ?? [],
+            visible: materialOwns
+          })
+        : []
     });
     input.stage.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id^=\"native-scene-owner.\"]"
@@ -1618,10 +1626,7 @@ export function createKpNativeKatexRendererSession(input: {
   });
 }
 
-/**
- * Every host enters native KaTeX motion through this factory so host adapters
- * cannot quietly select different local tracks or typography settlement.
- */
+/** Every host enters here to prevent local track or handoff policy. */
 export function createKpCanonicalNativeKatexSceneSession(input: {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
@@ -1629,6 +1634,8 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
   readonly structuralSuccession?:
     KpEquationStructuralSuccessionIntent | undefined;
   readonly structuralMotion?: "full" | "checkpoint" | undefined;
+  readonly successorSyntheses?:
+    readonly KpNativeKatexSuccessorSynthesisIntent[] | undefined;
 }): KpCanonicalNativeKatexSceneSession {
   if (input.source.stage !== input.target.stage) {
     throw new Error("Canonical native KaTeX endpoints must share one stage.");
@@ -1639,11 +1646,24 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     relations: input.relations
   });
   const hierarchy = compileKpNativeKatexHierarchicalScenePlan(reconciliation);
-  const tracks = compileKpNativeKatexSceneTracks(hierarchy);
+  const allTracks = compileKpNativeKatexSceneTracks(hierarchy);
+  const successorPlans = compileKpNativeKatexSuccessorSynthesisScenePlans({
+    source: input.source,
+    target: input.target,
+    intents: input.successorSyntheses ?? []
+  });
+  const successorOwnership = partitionKpNativeKatexSuccessorOwnedTracks(
+    successorPlans,
+    allTracks
+  );
+  const tracks = successorOwnership.tracks;
   const correlations = correlateKpNativeKatexSceneHandoff({
     reconciliation,
-    tracks
-  });
+    tracks: allTracks
+  }).filter(({ targetAtomId }) =>
+    targetAtomId === undefined ||
+    !successorOwnership.claimedTargetAtomIds.has(targetAtomId)
+  );
   const targetAtomsById = new Map(input.target.atoms.map((atom) => [
     atom.id,
     atom
@@ -1658,7 +1678,16 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     sourceRoot: input.source.root,
     targetRoot: input.target.root,
     reconciliation,
-    tracks
+    tracks,
+    ...(successorPlans.length === 0
+      ? {}
+      : {
+          supplementalMaterialOwners: (progress: number) =>
+            sampleKpNativeKatexSuccessorSynthesisScenePlans({
+              plans: successorPlans,
+              progress
+            })
+        })
   });
   const handoffMicroscopeProgress = 0.96;
   playback.apply(handoffMicroscopeProgress);

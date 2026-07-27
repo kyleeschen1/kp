@@ -120,6 +120,30 @@ test("parallel motif phases render as one complete source-target cohort", () => 
   }
 });
 
+test("parallel product cohort retains both successor synthesis bindings", () => {
+  const animation = createKpFoldableDistributionEquationAnimationAsset();
+  const runtimeFrame = sampleKpAnimationRuntimeFrame({
+    animation,
+    progress: 0.3
+  });
+  const transition = projectKpReaderEquationRenderPlan({
+    animation,
+    runtimeFrame
+  }).transitions[0]!;
+
+  assert.match(transition.id, /^cohort\./);
+  assert.equal(transition.successorSyntheses?.length, 2);
+  assert.equal(
+    new Set(transition.successorSyntheses?.map(({ id }) => id)).size,
+    2
+  );
+  assert.ok(transition.successorSyntheses?.every((binding) =>
+    binding.sourceAnnotations.some(
+      ({ contribution }) => contribution === "catalyst"
+    )
+  ));
+});
+
 test("structural branching and fusion remain opaque semantic relations", () => {
   const animation = createKpFoldableDistributionEquationAnimationAsset();
   const relations = animation.transformations.flatMap(

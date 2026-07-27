@@ -8,6 +8,7 @@ export interface KpEquationMaterialLayerOwnerFrame {
   readonly ownerId: string;
   readonly sourceElement: HTMLElement;
   readonly sourceMotionId?: string | undefined;
+  readonly semanticEntityId?: string | undefined;
   readonly rect: {
     readonly left: number;
     readonly top: number;
@@ -90,6 +91,12 @@ export function syncKpEquationMaterialLayer(input: {
     }
     owner.dataset["kpEquationMaterialSourceMotionId"] =
       frame.sourceMotionId ?? frame.sourceElement.dataset["kpMotionId"] ?? "";
+    if (frame.semanticEntityId === undefined) {
+      delete owner.dataset["kpEquationMaterialSemanticEntityId"];
+    } else {
+      owner.dataset["kpEquationMaterialSemanticEntityId"] =
+        frame.semanticEntityId;
+    }
     if (frame.fragmentRole === undefined) {
       delete owner.dataset["kpEquationMaterialFragmentRole"];
     } else {

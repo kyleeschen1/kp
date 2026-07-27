@@ -3,11 +3,15 @@ import type { KpSelectorAnnotatedLatex } from "./selector-annotated-latex.ts";
 
 export function renderLatexToHtml(
   latex: string,
-  options: { readonly displayMode?: boolean; readonly trust?: boolean } = {}
+  options: {
+    readonly displayMode?: boolean;
+    readonly trust?: boolean;
+    readonly output?: "html" | "htmlAndMathml";
+  } = {}
 ): string {
   return katex.renderToString(latex, {
     displayMode: options.displayMode ?? true,
-    output: "html",
+    output: options.output ?? "html",
     trust: options.trust ?? false,
     throwOnError: false,
     ...(options.trust === true ? { strict: "ignore" as const } : {})

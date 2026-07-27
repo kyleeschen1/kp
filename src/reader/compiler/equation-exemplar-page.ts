@@ -92,6 +92,31 @@ export function compileKpEquationExemplarTemplate(
       cohort
     ] as const)
   )).values()];
+  const accessibleStateIds =
+    options?.readerControls === "foldable-distribution-v1"
+      ? compileKpAnimationTransformationPhaseCohorts(
+          animation
+        ).flatMap((cohort, index) => [
+          ...(index === 0 ? cohort.sourceObjectIds : []),
+          ...cohort.targetObjectIds
+        ]).filter((id, index, ids) => ids.indexOf(id) === index)
+      : [];
+  const accessibleStates = accessibleStateIds.map((objectId, index) => {
+    const object = objects.get(objectId);
+    if (object === undefined) {
+      throw new Error(`missing accessible equation state ${objectId}`);
+    }
+    return [
+      `<div data-kp-reader-accessible-equation-state="${attribute(objectId)}"${
+        index === 0 ? "" : " hidden"
+      }>`,
+      renderLatexToHtml(latexValue(object), {
+        displayMode: true,
+        output: "htmlAndMathml"
+      }),
+      `</div>`
+    ].join("");
+  });
   const transitions = cohorts.map((cohort) => {
     const source = cohort.sourceObjectIds.map((id) => {
       if (!objects.has(id)) throw new Error(`missing equation source ${id}`);
@@ -108,7 +133,7 @@ export function compileKpEquationExemplarTemplate(
           : ""
       }>`,
       `<div class="kp-reader-equation-fit-surface" data-kp-reader-fit-surface>`,
-      `<div class="kp-reader-equation-measurement" data-kp-reader-equation-measurement aria-hidden="true">`,
+      `<div class="kp-reader-equation-measurement" data-kp-reader-equation-measurement="true" aria-hidden="true">`,
       `<div class="kp-reader-equation-native" data-kp-reader-native="source">${source}</div>`,
       `<div class="kp-reader-equation-native" data-kp-reader-native="target">${target}</div>`,
       `</div>`,
@@ -154,7 +179,7 @@ export function compileKpEquationExemplarTemplate(
     `<div class="kp-reader-equation-viewport" data-kp-reader-equation-viewport>`,
     transitions.join("\n"),
     `<div class="kp-reader-equation-material-fit-surface" data-kp-reader-material-fit-surface>`,
-    `<div class="kp-reader-equation-material" data-kp-reader-equation-material-layer></div>`,
+    `<div class="kp-reader-equation-material" data-kp-reader-equation-material-layer="true"></div>`,
     `<span class="kp-reader-equation-annihilation-witness" data-kp-reader-annihilation-witness aria-hidden="true">`,
     `<span data-kp-reader-identity-value="0">${renderLatexToHtml("0", { displayMode: false })}</span>`,
     `<span data-kp-reader-identity-value="1" hidden>${renderLatexToHtml("1", { displayMode: false })}</span>`,
@@ -162,6 +187,13 @@ export function compileKpEquationExemplarTemplate(
     `<span class="kp-reader-equation-independent-zero-witness" data-kp-reader-independent-zero-witness aria-hidden="true">${renderLatexToHtml("+0", { displayMode: false })}</span>`,
     `</div>`,
     `</div>`,
+    ...(accessibleStates.length === 0
+      ? []
+      : [
+          `<div class="kp-reader-equation-accessible" data-kp-reader-accessible-equation aria-live="polite" aria-atomic="true">`,
+          accessibleStates.join(""),
+          `</div>`
+        ]),
     `<div class="kp-reader-equation-progress" aria-hidden="true"><span data-kp-reader-progress-bar></span></div>`,
     `<p class="kp-reader-equation-hint">Scroll to move the equation. Scroll back to rewind.</p>`,
     `</div>`,
@@ -173,7 +205,7 @@ function foldableDistributionControls(): string {
   return [
     `<label class="kp-reader-fold-control">`,
     `<span>Detail</span>`,
-    `<select data-kp-reader-fold-mode aria-label="Evaluation detail">`,
+    `<select data-kp-reader-fold-mode aria-label="Evaluation detail" aria-describedby="kp-reader-fold-status">`,
     `<option value="automatic">Automatic</option>`,
     `<option value="expanded">Expanded</option>`,
     `<option value="collapsed">Collapsed</option>`,
@@ -181,10 +213,10 @@ function foldableDistributionControls(): string {
     `</select>`,
     `</label>`,
     `<div class="kp-reader-fold-drills" role="group" aria-label="Pinned evaluation details">`,
-    `<button type="button" data-kp-reader-fold-node="evaluation.foldable-distribution.distribute" aria-pressed="false">Distribution</button>`,
-    `<button type="button" data-kp-reader-fold-node="evaluation.foldable-distribution.evaluate-products" aria-pressed="false">Products</button>`,
+    `<button type="button" data-kp-reader-fold-node="evaluation.foldable-distribution.distribute" aria-pressed="false" aria-describedby="kp-reader-fold-status">Distribution</button>`,
+    `<button type="button" data-kp-reader-fold-node="evaluation.foldable-distribution.evaluate-products" aria-pressed="false" aria-describedby="kp-reader-fold-status">Products</button>`,
     `</div>`,
-    `<output class="kp-reader-fold-status" data-kp-reader-fold-status aria-live="polite">Detail follows the available space</output>`
+    `<output id="kp-reader-fold-status" class="kp-reader-fold-status" data-kp-reader-fold-status aria-live="polite">Detail follows the available space</output>`
   ].join("\n");
 }
 
@@ -220,6 +252,19 @@ function compileAnnotatedState(
     );
   }
   return `<div class="kp-reader-equation-state" data-kp-reader-equation-state="${attribute(object.id)}">${html}</div>`;
+}
+
+function latexValue(object: KpSemanticAssetObject): string {
+  const value = object.value;
+  if (
+    typeof value !== "object" ||
+    value === null ||
+    !("latex" in value) ||
+    typeof value.latex !== "string"
+  ) {
+    throw new Error(`equation object ${object.id} has no LaTeX`);
+  }
+  return value.latex;
 }
 
 function attribute(value: string): string {

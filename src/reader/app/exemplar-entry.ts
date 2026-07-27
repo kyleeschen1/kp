@@ -194,6 +194,14 @@ const attentionScrubber = requireElement<HTMLInputElement>(
 );
 const attentionCount = requireElement<HTMLElement>("[data-kp-reader-attention-count]");
 const progressBar = requireElement<HTMLElement>("[data-kp-reader-progress-bar]");
+const accessibleEquationStates = new Map(
+  [...stage.querySelectorAll<HTMLElement>(
+    "[data-kp-reader-accessible-equation-state]"
+  )].map((element) => [
+    requiredData(element, "kpReaderAccessibleEquationState"),
+    element
+  ])
+);
 const motionSelect = requireElement<HTMLSelectElement>(
   "[data-kp-reader-motion-preference]"
 );
@@ -639,6 +647,11 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     runtimeFrame.phase.phaseIndex,
     phaseCohorts.length
   );
+  syncAccessibleEquation(
+    phaseProgress < 1
+      ? context.renderPlan.transitions[0]?.source[0]?.objectId
+      : context.renderPlan.transitions[0]?.target[0]?.objectId
+  );
   const choreographyStep = linearRearrangementBindings.find(
     (step) => step.transformationId === transitionId
   );
@@ -827,6 +840,17 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     previousReviewFrameAtMs = atMs;
     previousReviewScrollY = window.scrollY;
   }
+}
+
+function syncAccessibleEquation(objectId: string | undefined): void {
+  if (objectId === undefined) return;
+  for (const [candidateId, element] of accessibleEquationStates) {
+    const active = candidateId === objectId;
+    element.hidden = !active;
+    if (active) element.setAttribute("aria-current", "step");
+    else element.removeAttribute("aria-current");
+  }
+  stage.dataset["kpReaderAccessibleEquationState"] = objectId;
 }
 
 function syncNativeEndpointEvidence(

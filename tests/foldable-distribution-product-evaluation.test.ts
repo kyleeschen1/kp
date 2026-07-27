@@ -78,10 +78,13 @@ test("reader product motifs compile complete opaque successor bindings", () => {
   for (const binding of bindings) {
     const successor = binding.successorSynthesisBinding;
     assert.ok(successor);
-    assert.equal(successor.sourceAnnotations.length, 2);
-    assert.ok(successor.sourceAnnotations.every(
+    assert.equal(successor.sourceAnnotations.length, 3);
+    assert.equal(successor.sourceAnnotations.filter(
       ({ contribution }) => contribution === "material-input"
-    ));
+    ).length, 2);
+    assert.equal(successor.sourceAnnotations.filter(
+      ({ contribution }) => contribution === "catalyst"
+    ).length, 1);
     assert.equal(successor.targetAnnotations.length, 1);
   }
 });

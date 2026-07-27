@@ -31,6 +31,30 @@ test("foldable distribution compiles one canonical native scene per phase", () =
   );
   assert.match(artifact.html, /data-kp-reader-fold-mode/);
   assert.match(artifact.html, /data-kp-reader-fold-node=/);
+  assert.equal(
+    [...artifact.html.matchAll(
+      /data-kp-reader-equation-measurement="true" aria-hidden="true"/g
+    )].length,
+    4
+  );
+  assert.match(
+    artifact.html,
+    /data-kp-reader-equation-material-layer="true"/
+  );
+  assert.equal(
+    [...artifact.html.matchAll(
+      /data-kp-reader-accessible-equation-state=/g
+    )].length,
+    5
+  );
+  assert.match(
+    artifact.html,
+    /data-kp-reader-accessible-equation[\s\S]*katex-mathml/
+  );
+  assert.match(
+    artifact.html,
+    /data-kp-reader-fold-mode[^>]+aria-describedby="kp-reader-fold-status"/
+  );
   assert.doesNotMatch(
     artifact.html,
     /whole-equation-fade|source-out-target-in|crossfade/

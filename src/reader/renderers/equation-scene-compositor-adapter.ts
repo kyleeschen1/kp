@@ -34,10 +34,37 @@ export function createKpReaderEquationSceneCompositorSession(input: {
   if (input.source.stage !== input.target.stage) {
     throw new Error("Reader equation compositor endpoints must share one stage.");
   }
+  input.source.stage.dataset["kpNativeKatexSuccessorSynthesisCount"] =
+    String(renderTransition.successorSyntheses?.length ?? 0);
   const canonical = createKpCanonicalNativeKatexSceneSession({
     source: input.source,
     target: input.target,
     relations,
+    ...(renderTransition.successorSyntheses === undefined
+      ? {}
+      : {
+          successorSyntheses: renderTransition.successorSyntheses.map(
+            (binding) => {
+              const relation = renderTransition.relations.find(
+                ({ recordId }) => recordId === binding.relationRecordId
+              );
+              if (relation === undefined) {
+                throw new Error(
+                  `Successor binding ${binding.id} has no canonical correspondence.`
+                );
+              }
+              return {
+                binding,
+                direction: input.renderPlan.direction,
+                motion:
+                  input.motionMode === undefined ||
+                  input.motionMode === "continuous"
+                    ? "full" as const
+                    : "checkpoint" as const
+              };
+            }
+          )
+        }),
     ...(renderTransition.structuralSuccession === undefined
       ? {}
       : {

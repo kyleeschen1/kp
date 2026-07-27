@@ -131,9 +131,9 @@ export function mountKpFoldableDistributionReaderControls(input: {
     input.stage.dataset["kpReaderFoldViewport"] = layout.viewport;
     status.value = projection.disclosures.length === 0
       ? "Distribution and product details are expanded"
-      : `${projection.disclosures.length} operation group${
-          projection.disclosures.length === 1 ? "" : "s"
-        } folded; all operations remain in the transcript`;
+      : `Folded: ${projection.disclosures.map((disclosure) =>
+          `${disclosure.label} (${disclosure.hiddenOperationIds.length} operations)`
+        ).join("; ")}. All operations remain in the transcript.`;
     for (const button of buttons) {
       const nodeId = buttonNodeId(button);
       button.setAttribute(

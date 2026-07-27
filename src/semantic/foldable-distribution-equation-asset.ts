@@ -240,13 +240,26 @@ function successorMetadata(
       ["distribution.right.factor-2-constant", 0],
       ["distribution.right.negative-one", 1]
     ]).get(selectorId);
-    return sourceRank === undefined
-      ? {}
-      : {
+    if (sourceRank !== undefined) {
+      return {
           successorContribution: "material-input",
           successorRole: "factor",
           successorRank: sourceRank
-        };
+      };
+    }
+    if (
+      selectorId ===
+        "expression.foldable-distribution.distributed.operator.three-times-two" ||
+      selectorId ===
+        "expression.foldable-distribution.distributed.operator.two-times-negative-one"
+    ) {
+      return {
+        successorContribution: "catalyst",
+        successorRole: "multiplication-operator",
+        successorRank: 0
+      };
+    }
+    return {};
   }
   if (
     objectId.endsWith(".distributed") &&

@@ -22,6 +22,12 @@ import {
   compileKpAnimationTransformationPhaseCohorts,
   findKpAnimationTransformationPhaseCohort
 } from "../../animation/transformation-phase-cohorts.ts";
+import type {
+  KpSuccessorSynthesisBinding
+} from "../../animation/successor-synthesis.ts";
+import {
+  createKpEquationLinearRearrangementBinding
+} from "../../rendering/equation-linear-rearrangement-bindings.ts";
 
 export interface KpReaderEquationRenderPlan {
   readonly id: string;
@@ -46,6 +52,7 @@ export interface KpReaderEquationTransitionPlan {
   readonly visualMotif?: KpEquationVisualMotifIntent | undefined;
   readonly structuralSuccession?:
     KpEquationStructuralSuccessionIntent | undefined;
+  readonly successorSyntheses?: readonly KpSuccessorSynthesisBinding[] | undefined;
   readonly semanticStatus: "ready" | "fallback";
   readonly semanticDiagnostics: readonly KpSemanticEquationTransitionCompileDiagnostic[];
 }
@@ -160,6 +167,11 @@ export function projectKpReaderEquationRenderPlan(input: {
           motif: visualMotif,
           direction: input.runtimeFrame.clock.direction
         });
+    const rearrangement = createKpEquationLinearRearrangementBinding({
+      animation: input.animation,
+      transformation
+    });
+    const successorSynthesis = rearrangement?.successorSynthesisBinding;
     transitions.push({
       id: transformation.id,
       title: transformation.title,
@@ -179,6 +191,9 @@ export function projectKpReaderEquationRenderPlan(input: {
       ...(structuralSuccession === undefined
         ? {}
         : { structuralSuccession }),
+      ...(successorSynthesis === undefined
+        ? {}
+        : { successorSyntheses: [successorSynthesis] }),
       semanticStatus: compiled.status === "semantic" ? "ready" : "fallback",
       semanticDiagnostics: compiled.diagnostics.map((diagnostic) => ({
         ...diagnostic
@@ -239,6 +254,15 @@ function mergeParallelTransitions(
     source: mergeStates(transitions.flatMap(({ source }) => source)),
     target: mergeStates(transitions.flatMap(({ target }) => target)),
     relations: transitions.flatMap(({ relations }) => relations),
+    ...(transitions.some(({ successorSyntheses }) =>
+      (successorSyntheses?.length ?? 0) > 0
+    )
+      ? {
+          successorSyntheses: transitions.flatMap(
+            ({ successorSyntheses }) => successorSyntheses ?? []
+          )
+        }
+      : {}),
     semanticStatus: transitions.every(
       ({ semanticStatus }) => semanticStatus === "ready"
     )

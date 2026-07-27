@@ -172,8 +172,8 @@
     {
       "id": "s20",
       "title": "Repair-successor-and-preserve-accessibility-export",
-      "summary": "Starting approved repair prerequisite with failing ownership coverage before paint implementation; accessibility and export partial work remains preserved.",
-      "status": "in-progress"
+      "summary": "Repaired incompatible successor glyph ownership generically: parallel successor bindings now survive cohort projection, semantically claim their factor/operator/result paint before visual-key tracking, share one canonical DOM material layer and clock, use checkpoint settlement for reduced motion, and exclude fade-capable tracks. Preserved one live MathML owner, inert measurement/material DOM, keyboard-described fold disclosures, and five-state fold-invariant static export. Verified 59 focused foldable tests, canonical renderer budget/vocabulary gates, architecture, typecheck, and a five-case browser matrix covering direct seek, rewind, phone, reduced motion, accessibility, and no-JavaScript truth.",
+      "status": "complete"
     },
     {
       "id": "s21",

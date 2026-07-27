@@ -112,6 +112,7 @@ export function createKpSuccessorSynthesisBindingFromMetadata(input: {
   readonly transformation: KpSemanticTransformation;
   readonly correspondence: SelectorCorrespondenceRecord;
   readonly operationId: string;
+  readonly supplementalSourceSelectorIds?: readonly string[] | undefined;
 }): KpSuccessorSynthesisBinding {
   const selectors = new Map(
     input.bundle.objects.flatMap((object) => object.selectors).map((selector) => [
@@ -119,7 +120,18 @@ export function createKpSuccessorSynthesisBindingFromMetadata(input: {
       selector
     ])
   );
-  const sourceAnnotations = input.correspondence.sourceSelectorIds.map((id, index) => {
+  const sourceSelectorIds = [
+    ...input.correspondence.sourceSelectorIds,
+    ...(input.supplementalSourceSelectorIds ?? []).filter(
+      (id) => {
+        const contribution =
+          selectors.get(id)?.metadata?.["successorContribution"];
+        return !input.correspondence.sourceSelectorIds.includes(id) &&
+          (contribution === "material-input" || contribution === "catalyst");
+      }
+    )
+  ];
+  const sourceAnnotations = sourceSelectorIds.map((id, index) => {
     const selector = selectors.get(id);
     const contribution = selector?.metadata?.["successorContribution"];
     const semanticRole = selector?.metadata?.["successorRole"];

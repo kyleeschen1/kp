@@ -1,4 +1,5 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
+import type { KpSemanticTransformation } from "../semantic/asset-transformation.ts";
 import {
   createKpSuccessorSynthesisBindingFromMetadata,
   type KpSuccessorSynthesisBinding
@@ -28,45 +29,61 @@ export function createKpEquationLinearRearrangementBindings(
   animation: KpAnimationAsset
 ): readonly KpEquationLinearRearrangementBinding[] {
   return animation.transformations.flatMap((transformation) => {
-    const kind = kpEquationLinearRearrangementKindForTransformType(
-      transformation.transformType
-    );
-    if (kind === undefined) return [];
-    const causalRecord = transformation.correspondenceMap?.records.find(
-      (record) => record.relation !== "identity"
-    );
-    if (causalRecord === undefined) {
-      throw new Error(
-        `Linear rearrangement ${transformation.id} requires a causal correspondence.`
-      );
-    }
-    const selectedBranchStrategy =
-      resolveKpEquationPresentationBranchStrategy(animation);
-    const branchScheduling = kind === "balanced-introduction"
-      ? createKpBalancedBranchScheduling({
-          transformationId: transformation.id,
-          authorityId: `kp.algebra.${kebabCase(transformation.transformType)}`,
-          targetSelectorIds: causalRecord.targetSelectorIds,
-          selectedStrategy: selectedBranchStrategy
-        })
-      : undefined;
-    return [{
-      transformationId: transformation.id,
-      kind,
-      ...(branchScheduling === undefined ? {} : branchScheduling),
-      ...(isSuccessorKind(kind)
-        ? {
-            successorSynthesisBinding:
-              createKpSuccessorSynthesisBindingFromMetadata({
-                bundle: animation.bundle,
-                transformation,
-                correspondence: causalRecord,
-                operationId: `kp.algebra.${kind}`
-              })
-          }
-        : {})
-    }];
+    const binding = createKpEquationLinearRearrangementBinding({
+      animation,
+      transformation
+    });
+    return binding === undefined ? [] : [binding];
   });
+}
+
+export function createKpEquationLinearRearrangementBinding(input: {
+  readonly animation: KpAnimationAsset;
+  readonly transformation: KpSemanticTransformation;
+}): KpEquationLinearRearrangementBinding | undefined {
+  const { animation, transformation } = input;
+  const kind = kpEquationLinearRearrangementKindForTransformType(
+    transformation.transformType
+  );
+  if (kind === undefined) return undefined;
+  const causalRecord = transformation.correspondenceMap?.records.find(
+    (record) => record.relation !== "identity"
+  );
+  if (causalRecord === undefined) {
+    throw new Error(
+      `Linear rearrangement ${transformation.id} requires a causal correspondence.`
+    );
+  }
+  const selectedBranchStrategy =
+    resolveKpEquationPresentationBranchStrategy(animation);
+  const branchScheduling = kind === "balanced-introduction"
+    ? createKpBalancedBranchScheduling({
+        transformationId: transformation.id,
+        authorityId: `kp.algebra.${kebabCase(transformation.transformType)}`,
+        targetSelectorIds: causalRecord.targetSelectorIds,
+        selectedStrategy: selectedBranchStrategy
+      })
+    : undefined;
+  return {
+    transformationId: transformation.id,
+    kind,
+    ...(branchScheduling === undefined ? {} : branchScheduling),
+    ...(isSuccessorKind(kind)
+      ? {
+          successorSynthesisBinding:
+            createKpSuccessorSynthesisBindingFromMetadata({
+              bundle: animation.bundle,
+              transformation,
+              correspondence: causalRecord,
+              operationId: `kp.algebra.${kind}`,
+              supplementalSourceSelectorIds:
+                transformation.correspondenceMap?.records
+                  .filter(({ relation }) => relation === "removal")
+                  .flatMap(({ sourceSelectorIds }) => sourceSelectorIds)
+            })
+        }
+      : {})
+  };
 }
 
 function isSuccessorKind(kind: KpEquationLinearRearrangementKind): boolean {
