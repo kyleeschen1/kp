@@ -101,7 +101,8 @@
     {
       "id": "s08",
       "title": "Pure two row planner",
-      "status": "planned"
+      "summary": "Implemented and verified the pure two-row certifier with deterministic row order, measured typography gutter, row-local baseline preservation, common centering, containment, and randomized non-overlap.",
+      "status": "complete"
     },
     {
       "id": "s09",

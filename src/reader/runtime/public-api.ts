@@ -64,6 +64,7 @@ export {
 export {
   assertKpEquationStageMeasurementIdentity,
   certifyKpSingleRowEquationStageLayout,
+  certifyKpTwoRowEquationStageLayout,
   compileKpMeasuredEquationStageInput,
   createKpEquationStageMeasurementIdentity,
   type KpAppliedEquationStageLayout,

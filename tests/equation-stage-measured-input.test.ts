@@ -56,6 +56,7 @@ function foldableFixture() {
       height: 32
     },
     baselineY: index % 2 * 48 + 24,
+    emSizePx: 16,
     measurementIdentity
   }));
   return { intent, definitions, observations };
@@ -182,6 +183,7 @@ test("nested semantic groups may share native members without becoming duplicate
       ...definition,
       rect: { left: index * 10, top: 0, width: 40, height: 20 },
       baselineY: 15,
+      emSizePx: 16,
       measurementIdentity
     }));
 

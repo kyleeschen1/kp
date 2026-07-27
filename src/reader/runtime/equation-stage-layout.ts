@@ -80,6 +80,7 @@ export interface KpEquationStageMeasuredEnvelope {
   readonly memberOwnerIds: readonly string[];
   readonly rect: KpEquationStageRect;
   readonly baselineY: number;
+  readonly emSizePx: number;
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
 }
 
@@ -97,6 +98,7 @@ export interface KpEquationStageEnvelopeObservation {
   readonly memberOwnerIds: readonly string[];
   readonly rect: KpEquationStageRect;
   readonly baselineY: number;
+  readonly emSizePx: number;
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
 }
 
@@ -133,6 +135,7 @@ export interface KpCertifiedEquationStageLayout {
   readonly measuredInput: KpMeasuredEquationStageInput;
   readonly rows: readonly KpCertifiedEquationStageRow[];
   readonly stageBounds: KpEquationStageRect;
+  readonly minimumGutterPx: number;
   readonly [certifiedEquationStageLayoutAuthority]: true;
 }
 
@@ -204,8 +207,14 @@ export function compileKpMeasuredEquationStageInput(input: {
       `Equation stage envelope ${id}`
     );
     assertStageRect(observation.rect, `Equation stage envelope ${id}`);
-    if (!Number.isFinite(observation.baselineY)) {
-      throw new Error(`Equation stage envelope ${id} must have a finite baseline.`);
+    if (
+      !Number.isFinite(observation.baselineY) ||
+      !Number.isFinite(observation.emSizePx) ||
+      observation.emSizePx <= 0
+    ) {
+      throw new Error(
+        `Equation stage envelope ${id} must have finite baseline and positive em size.`
+      );
     }
     return Object.freeze({
       id,
@@ -214,6 +223,7 @@ export function compileKpMeasuredEquationStageInput(input: {
       memberOwnerIds: Object.freeze([...expectedMembers]),
       rect: Object.freeze({ ...observation.rect }),
       baselineY: observation.baselineY,
+      emSizePx: observation.emSizePx,
       measurementIdentity
     });
   });
@@ -274,6 +284,77 @@ export function certifyKpSingleRowEquationStageLayout(
     measuredInput,
     rows: Object.freeze([row]),
     stageBounds: rect,
+    minimumGutterPx: 0,
+    [certifiedEquationStageLayoutAuthority]: true as const
+  });
+}
+
+export function certifyKpTwoRowEquationStageLayout(
+  measuredInput: KpMeasuredEquationStageInput
+): KpCertifiedEquationStageLayout {
+  if (
+    measuredInput.intent.policy !== "semantic-two-row-stage" ||
+    measuredInput.intent.rows.length !== 2
+  ) {
+    throw new Error(
+      "Two-row equation stage certification requires exactly two staged rows."
+    );
+  }
+  const envelopesById = new Map(
+    measuredInput.envelopes.map((envelope) => [envelope.id, envelope])
+  );
+  const intrinsic = measuredInput.intent.rows.map((intentRow) => {
+    const envelopes = intentRow.envelopeIds.map((id) => {
+      const envelope = envelopesById.get(id);
+      if (envelope === undefined) {
+        throw new Error(`Two-row equation stage is missing envelope ${id}.`);
+      }
+      assertKpEquationStageMeasurementIdentity(
+        measuredInput.measurementIdentity,
+        envelope.measurementIdentity,
+        `Two-row equation stage envelope ${id}`
+      );
+      return envelope;
+    });
+    return {
+      intent: intentRow,
+      envelopes,
+      rect: unionStageRects(envelopes.map(({ rect }) => rect))
+    };
+  });
+  const allEnvelopes = intrinsic.flatMap(({ envelopes }) => envelopes);
+  const measuredEm = Math.max(...allEnvelopes.map(({ emSizePx }) => emSizePx));
+  const measuredInk = Math.max(...allEnvelopes.map(({ rect }) => rect.height));
+  // Em provides the readable rhythm; the ink term protects unusually tall
+  // notation without introducing glyph- or operation-specific dimensions.
+  const minimumGutterPx = Math.max(measuredEm * 0.75, measuredInk * 0.15);
+  const intrinsicBounds = unionStageRects(intrinsic.map(({ rect }) => rect));
+  const centerX = intrinsicBounds.left + intrinsicBounds.width / 2;
+  let nextTop = intrinsicBounds.top;
+  const rows = intrinsic.map(({ intent, rect }) => {
+    const translateX = centerX - (rect.left + rect.width / 2);
+    const translateY = nextTop - rect.top;
+    const placedRect = translateStageRect(rect, translateX, translateY);
+    nextTop = placedRect.top + placedRect.height + minimumGutterPx;
+    return Object.freeze({
+      id: intent.id,
+      envelopeIds: Object.freeze([...intent.envelopeIds]),
+      rect: placedRect,
+      translateX,
+      translateY,
+      baselinePolicy: "preserve-native" as const
+    });
+  });
+  const stageBounds = unionStageRects(rows.map(({ rect }) => rect));
+  return Object.freeze({
+    schemaVersion: "kp.certified-equation-stage-layout.v1" as const,
+    executionState: "certified" as const,
+    measurementIdentity: measuredInput.measurementIdentity,
+    policy: "semantic-two-row-stage" as const,
+    measuredInput,
+    rows: Object.freeze(rows),
+    stageBounds,
+    minimumGutterPx,
     [certifiedEquationStageLayoutAuthority]: true as const
   });
 }
@@ -347,5 +428,18 @@ function unionStageRects(
     top,
     width: right - left,
     height: bottom - top
+  });
+}
+
+function translateStageRect(
+  rect: KpEquationStageRect,
+  translateX: number,
+  translateY: number
+): Readonly<KpEquationStageRect> {
+  return Object.freeze({
+    left: rect.left + translateX,
+    top: rect.top + translateY,
+    width: rect.width,
+    height: rect.height
   });
 }

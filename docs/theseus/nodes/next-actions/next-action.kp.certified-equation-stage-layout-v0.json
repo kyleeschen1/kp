@@ -185,11 +185,32 @@
       "scope": "slice s07 pure single row planner",
       "checkedAt": "2026-07-27T22:09:48.946Z",
       "notes": "All TypeScript projects accept the certified single-row occupancy contract."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s08 pure two row planner",
+      "checkedAt": "2026-07-27T22:13:10.982Z",
+      "notes": "83 tests pass, including wide/phone fixtures, semantic row-order determinism, measured em/ink gutter, common centering, and 100 randomized non-overlap cases."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice s08 certified construction boundary",
+      "checkedAt": "2026-07-27T22:13:11.832Z",
+      "notes": "Two-row certification remains reachable only from branded measured input; inference ceilings pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s08 pure two row planner",
+      "checkedAt": "2026-07-27T22:13:12.626Z",
+      "notes": "All TypeScript projects accept measured typography scale and certified two-row geometry."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s07 certifies one-row measured geometry as tight, translation-invariant occupancy with one shared zero transform, preserving native KaTeX baseline and internal spacing relationships."
+    "summary": "Slice s08 certifies two semantic rows in declared order, centers them on one inline axis, applies one transform per row, and derives a guaranteed gutter from measured em and ink height."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

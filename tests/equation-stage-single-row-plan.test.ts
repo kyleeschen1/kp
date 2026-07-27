@@ -39,6 +39,7 @@ function certify(rects: readonly KpEquationStageRect[]) {
       ...definitions[index]!,
       rect,
       baselineY: rect.top + rect.height * 0.75,
+      emSizePx: 16,
       measurementIdentity: identity
     })
   );
@@ -65,6 +66,7 @@ test("single-row certification preserves native geometry and baselines", () => {
   assert.equal(row.translateX, 0);
   assert.equal(row.translateY, 0);
   assert.equal(row.baselinePolicy, "preserve-native");
+  assert.equal(certificate.minimumGutterPx, 0);
   for (const envelope of certificate.measuredInput.envelopes) {
     assert.equal(contains(row.rect, envelope.rect), true);
   }
