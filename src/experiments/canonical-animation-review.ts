@@ -1,300 +1,329 @@
 import {
-  projectKpGovernedCanonicalConstructionCohort
-} from "../authoring/governed-canonical-construction-projections.ts";
+  createKpAnimationLibraryDisplayCatalog,
+  type KpAnimationLibraryDisplayEntry,
+  type KpAnimationLibraryDisplayRepresentation
+} from "../editor/animation-library-display-catalog.ts";
 
-type ReviewArtifact = "fraction-split" | "fraction-merge" | "cohort";
-type ReviewViewport = "wide" | "phone";
-type ReviewMotion = "full" | "reduced";
+// Keep the development branch at module scope so production erases the
+// feedback client while local review always mounts one persistent shell.
+const loadAnimationLibraryReview =
+  import.meta.env.DEV
+    ? () => import("../dev-review/animation-library-review-bootstrap.ts")
+    : undefined;
 
+const defaultAnimationId =
+  "animation.generated.radical.square-root-as-power";
+const catalog = createKpAnimationLibraryDisplayCatalog();
 const root = required<HTMLElement>(
   document,
-  "[data-kp-canonical-animation-review]"
+  "[data-kp-animation-library]"
 );
-const frame = required<HTMLIFrameElement>(root, "[data-review-frame]");
-const viewportShell = required<HTMLElement>(
+const count = required<HTMLElement>(
   root,
-  "[data-review-viewport-shell]"
+  "[data-animation-library-count]"
 );
-const progress = required<HTMLInputElement>(root, "[data-review-progress]");
-const play = required<HTMLButtonElement>(root, "[data-review-play]");
-const rewind = required<HTMLButtonElement>(root, "[data-review-rewind]");
-const status = required<HTMLOutputElement>(root, "[data-review-status]");
-const owner = required<HTMLElement>(root, "[data-review-owner]");
-const diagnostics = required<HTMLElement>(root, "[data-review-diagnostics]");
-const projectionList = required<HTMLOListElement>(
+const search = required<HTMLInputElement>(
   root,
-  "[data-review-projections]"
+  "[data-animation-library-search]"
 );
-let artifact: ReviewArtifact = "fraction-split";
-let viewport: ReviewViewport = "wide";
-let motion: ReviewMotion = "full";
-let monitorFrame: number | undefined;
-let loadRevision = 0;
+const resultStatus = required<HTMLElement>(
+  root,
+  "[data-animation-library-results]"
+);
+const list = required<HTMLOListElement>(
+  root,
+  "[data-animation-library-list]"
+);
+const title = required<HTMLElement>(
+  root,
+  "[data-animation-library-title]"
+);
+const summary = required<HTMLElement>(
+  root,
+  "[data-animation-library-summary]"
+);
+const state = required<HTMLElement>(
+  root,
+  "[data-animation-library-state]"
+);
+const representations = required<HTMLElement>(
+  root,
+  "[data-animation-library-representations]"
+);
+const openOriginal = required<HTMLAnchorElement>(
+  root,
+  "[data-animation-library-open]"
+);
+const viewport = required<HTMLElement>(
+  root,
+  "[data-animation-library-viewport-shell]"
+);
+const frame = required<HTMLIFrameElement>(
+  root,
+  "[data-animation-library-frame]"
+);
+const empty = required<HTMLElement>(
+  root,
+  "[data-animation-library-empty]"
+);
+const status = required<HTMLOutputElement>(
+  root,
+  "[data-animation-library-status]"
+);
 
-renderProjectionParity();
-root.querySelectorAll<HTMLButtonElement>("[data-review-artifact]")
+let query = readParameter("q") ?? "";
+let selectedAnimationId =
+  readParameter("animation") ?? defaultAnimationId;
+let selectedRepresentationId =
+  readParameter("representation");
+let selectedViewport: "wide" | "phone" =
+  readParameter("viewport") === "phone"
+  ? "phone"
+  : "wide";
+
+count.textContent = `${catalog.length} animations`;
+search.value = query;
+setViewport(selectedViewport, false);
+renderCatalog();
+renderSelection(false);
+
+search.addEventListener("input", () => {
+  query = search.value.trim();
+  renderCatalog();
+  writeRoute(false);
+});
+root
+  .querySelectorAll<HTMLButtonElement>(
+    "[data-animation-library-viewport]"
+  )
   .forEach((button) => {
     button.addEventListener("click", () => {
-      const value = button.dataset["reviewArtifact"];
-      if (
-        value === "fraction-split" ||
-        value === "fraction-merge" ||
-        value === "cohort"
-      ) {
-        artifact = value;
-        setPressed("[data-review-artifact]", value, "reviewArtifact");
-        loadArtifact();
-      }
-    });
-  });
-root.querySelectorAll<HTMLButtonElement>("[data-review-viewport]")
-  .forEach((button) => {
-    button.addEventListener("click", () => {
-      const value = button.dataset["reviewViewport"];
+      const value = button.dataset["animationLibraryViewport"];
       if (value === "wide" || value === "phone") {
-        viewport = value;
-        viewportShell.dataset["reviewViewportShell"] = viewport;
-        setPressed("[data-review-viewport]", value, "reviewViewport");
-        refreshDiagnostics();
+        setViewport(value, true);
       }
     });
   });
-root.querySelectorAll<HTMLButtonElement>("[data-review-motion]")
-  .forEach((button) => {
-    button.addEventListener("click", () => {
-      const value = button.dataset["reviewMotion"];
-      if (value === "full" || value === "reduced") {
-        motion = value;
-        setPressed("[data-review-motion]", value, "reviewMotion");
-        status.value = motion === "reduced"
-          ? "Reduced review settles directly at native checkpoints."
-          : "Full review delegates playback to the embedded canonical surface.";
-      }
-    });
-  });
-progress.addEventListener("input", () => {
-  seekEmbedded(Number(progress.value));
+frame.addEventListener("load", () => {
+  if (frame.getAttribute("src") === "about:blank") return;
+  status.value = "Selected host ready.";
+  root.dataset["previewReady"] = "true";
 });
-play.addEventListener("click", () => {
-  if (motion === "reduced") {
-    seekEmbedded(1_000);
-    return;
-  }
-  clickEmbeddedPlay(false);
+window.addEventListener("popstate", () => {
+  query = readParameter("q") ?? "";
+  selectedAnimationId =
+    readParameter("animation") ?? defaultAnimationId;
+  selectedRepresentationId = readParameter("representation");
+  selectedViewport = readParameter("viewport") === "phone"
+    ? "phone"
+    : "wide";
+  search.value = query;
+  setViewport(selectedViewport, false);
+  renderCatalog();
+  renderSelection(false);
 });
-rewind.addEventListener("click", () => {
-  if (motion === "reduced") {
-    seekEmbedded(0);
-    return;
-  }
-  clickEmbeddedPlay(true);
-});
-loadArtifact();
 
-function loadArtifact(): void {
-  loadRevision += 1;
-  const revision = loadRevision;
-  const requestedArtifact = artifact;
-  stopMonitor();
-  progress.value = "0";
-  status.value = "Loading live artifact…";
-  owner.textContent = "Waiting for artifact";
-  frame.title = artifact === "cohort"
-    ? "Governed canonical animation cohort"
-    : artifact === "fraction-split"
-      ? "Canonical fraction split animation"
-      : "Canonical fraction merge animation";
-  const url = new URL("/glyph-reconciliation-experiment.html", location.href);
-  if (artifact === "cohort") {
-    url.searchParams.set("governedCompound", "1");
-    url.searchParams.set("compoundProgress", "0");
-    url.searchParams.set("reviewGallery", "cohort");
-    url.hash = "glyph-compound-trace";
-  } else {
-    url.searchParams.set(
-      "fractionDirection",
-      artifact === "fraction-split" ? "split" : "merge"
-    );
-    url.searchParams.set("progress", "0");
-    url.searchParams.set("reviewGallery", "fraction");
-    url.hash = "glyph-fraction-exemplar";
+root.dataset["catalogReady"] = "true";
+void loadAnimationLibraryReview?.().then(
+  ({ mountKpAnimationLibraryDevReview }) => {
+    mountKpAnimationLibraryDevReview(window);
   }
-  frame.src = url.toString();
-  void initializeEmbeddedFrame(revision, requestedArtifact);
-}
+);
 
-async function initializeEmbeddedFrame(
-  revision: number,
-  requestedArtifact: ReviewArtifact
-): Promise<void> {
-  const readySelector = requestedArtifact === "cohort"
-    ? '[data-compound-trace][data-governed-compound-ready="true"]'
-    : '[data-kp-glyph-review][data-kp-ready="true"]';
-  const sectionSelector = requestedArtifact === "cohort"
-    ? "[data-compound-trace]"
-    : "[data-fraction-card]";
-  const sliderSelector = requestedArtifact === "cohort"
-    ? "[data-compound-progress]"
-    : "[data-fraction-card] [data-fraction-progress]";
-  let document: Document | undefined;
-  for (let attempt = 0; attempt < 600; attempt += 1) {
-    if (revision !== loadRevision) return;
-    const candidate = frame.contentDocument;
-    if (
-      candidate !== null &&
-      candidate.querySelector(readySelector) !== null &&
-      candidate.querySelector(sectionSelector) !== null &&
-      candidate.querySelector(sliderSelector) !== null
-    ) {
-      document = candidate;
-      break;
-    }
-    await nextFrame();
-  }
-  if (revision !== loadRevision) return;
-  if (document === undefined) {
-    throw new Error(`Embedded review did not expose ${readySelector}.`);
-  }
-  const slider = required<HTMLInputElement>(document, sliderSelector);
-  slider.value = "0";
-  slider.dispatchEvent(new Event("input", { bubbles: true }));
-  progress.value = "0";
-  root.dataset["reviewReady"] = "true";
-  root.dataset["reviewArtifact"] = requestedArtifact;
-  status.value = "Live canonical artifact ready for direct review.";
-  refreshDiagnostics();
-}
-
-function seekEmbedded(value: number): void {
-  const bounded = Math.max(0, Math.min(1_000, value));
-  const slider = embeddedSlider();
-  slider.value = String(Math.round(bounded));
-  slider.dispatchEvent(new Event("input", { bubbles: true }));
-  progress.value = slider.value;
-  refreshDiagnostics();
-}
-
-function clickEmbeddedPlay(forceRewind: boolean): void {
-  const slider = embeddedSlider();
-  if (forceRewind && Number(slider.value) < 1_000) {
-    seekEmbedded(1_000);
-  } else if (!forceRewind && Number(slider.value) >= 1_000) {
-    seekEmbedded(0);
-  }
-  const button = artifact === "cohort"
-    ? required<HTMLButtonElement>(childDocument(), "[data-trace-play]")
-    : required<HTMLButtonElement>(
-        childDocument(),
-        "[data-fraction-card] [data-play]"
+function renderCatalog(): void {
+  const normalized = query.toLocaleLowerCase();
+  const visible = catalog.filter((entry) =>
+    normalized === "" ||
+    [
+      entry.title,
+      entry.animationId,
+      entry.summary,
+      ...entry.tags,
+      ...entry.representations.flatMap((representation) => [
+        representation.label,
+        representation.kind
+      ])
+    ].some((value) => value.toLocaleLowerCase().includes(normalized))
+  );
+  list.replaceChildren(
+    ...visible.map((entry) => {
+      const item = document.createElement("li");
+      const button = document.createElement("button");
+      const heading = document.createElement("strong");
+      const metadata = document.createElement("span");
+      button.type = "button";
+      button.dataset["animationId"] = entry.animationId;
+      button.dataset["featured"] = String(entry.featured);
+      button.setAttribute(
+        "aria-pressed",
+        String(entry.animationId === selectedAnimationId)
       );
-  button.click();
-  monitorEmbeddedProgress();
+      heading.textContent = entry.title;
+      metadata.textContent =
+        `${entry.availability} · ` +
+        `${entry.representations.length} ` +
+        `${entry.representations.length === 1 ? "host" : "hosts"}`;
+      button.append(heading, metadata);
+      button.addEventListener("click", () => {
+        selectedAnimationId = entry.animationId;
+        selectedRepresentationId = entry.primaryRepresentationId;
+        renderCatalog();
+        renderSelection(true);
+      });
+      item.append(button);
+      return item;
+    })
+  );
+  resultStatus.textContent =
+    `${visible.length} of ${catalog.length} animations`;
 }
 
-function monitorEmbeddedProgress(): void {
-  stopMonitor();
-  const tick = (): void => {
-    const slider = embeddedSlider();
-    progress.value = slider.value;
-    refreshDiagnostics();
-    if (slider.disabled || (
-      Number(slider.value) > 0 && Number(slider.value) < 1_000
-    )) {
-      monitorFrame = requestAnimationFrame(tick);
-    } else {
-      monitorFrame = undefined;
-    }
-  };
-  monitorFrame = requestAnimationFrame(tick);
-}
-
-function stopMonitor(): void {
-  if (monitorFrame !== undefined) cancelAnimationFrame(monitorFrame);
-  monitorFrame = undefined;
-}
-
-function refreshDiagnostics(): void {
-  const document = childDocument();
-  const embedded = artifact === "cohort"
-    ? document.querySelector<HTMLElement>("[data-compound-trace]")
-    : document.querySelector<HTMLElement>("[data-kp-glyph-review]");
-  if (embedded === null) return;
-  const visualOwner = artifact === "cohort"
-    ? embedded.dataset["governedCompoundVisualOwner"]
-    : embedded.dataset["kpFractionVisualOwner"];
-  const operation = artifact === "cohort"
-    ? embedded.dataset["governedCompoundOperationId"]
-    : embedded.dataset["kpFractionDirection"];
-  const overflow =
-    document.documentElement.scrollWidth -
-    document.documentElement.clientWidth;
-  owner.textContent = visualOwner ?? "Native endpoint";
-  diagnostics.textContent =
-    `${artifact.replaceAll("-", " ")} · ${operation ?? "checkpoint"} · ` +
-    `${viewport} · ${motion} · overflow ${Math.max(0, overflow)} px`;
-  root.dataset["reviewOwner"] = visualOwner ?? "native";
-  root.dataset["reviewOverflow"] = String(Math.max(0, overflow));
-  root.dataset["reviewProgress"] = embeddedSlider().value;
-}
-
-function renderProjectionParity(): void {
-  const bundle = projectKpGovernedCanonicalConstructionCohort();
-  for (const target of bundle.targets) {
-    const item = document.createElement("li");
-    item.dataset["reviewProjection"] = target.kind;
-    item.dataset["reviewProjectionArtifacts"] =
-      target.artifactIds.join(",");
-    item.dataset["reviewProjectionCheckpoints"] =
-      target.checkpointIds.join(",");
-    const name = document.createElement("strong");
-    name.textContent = target.kind;
-    const detail = document.createElement("span");
-    detail.textContent =
-      `${target.artifactIds.length} artifacts · ` +
-      `${target.checkpointIds.length} checkpoints · ${target.delivery}`;
-    item.append(name, detail);
-    projectionList.append(item);
+function renderSelection(updateRoute: boolean): void {
+  const entry =
+    catalog.find(
+      (candidate) => candidate.animationId === selectedAnimationId
+    ) ??
+    catalog.find(
+      (candidate) => candidate.animationId === defaultAnimationId
+    ) ??
+    catalog[0];
+  if (entry === undefined) {
+    throw new Error("Animation Library catalog must not be empty.");
   }
-  root.dataset["reviewProjectionSchema"] = bundle.schemaVersion;
+  selectedAnimationId = entry.animationId;
+  const representation =
+    entry.representations.find(
+      (candidate) => candidate.id === selectedRepresentationId
+    ) ??
+    entry.representations.find(
+      (candidate) => candidate.id === entry.primaryRepresentationId
+    ) ??
+    entry.representations[0];
+  selectedRepresentationId = representation?.id;
+
+  root.dataset["animationId"] = entry.animationId;
+  root.dataset["representationId"] =
+    representation?.id ?? "unpublished";
+  root.dataset["previewReady"] = "false";
+  title.textContent = entry.title;
+  summary.textContent = entry.summary;
+  state.textContent =
+    `${entry.availability} · ${entry.featured ? "featured exemplar" : "catalog"}`;
+  renderRepresentations(entry, representation);
+  mountRepresentation(entry, representation);
+  if (updateRoute) writeRoute(true);
 }
 
-function embeddedSlider(): HTMLInputElement {
-  return artifact === "cohort"
-    ? required<HTMLInputElement>(childDocument(), "[data-compound-progress]")
-    : required<HTMLInputElement>(
-        childDocument(),
-        "[data-fraction-card] [data-fraction-progress]"
-      );
-}
-
-function childDocument(): Document {
-  const document = frame.contentDocument;
-  if (document === null) throw new Error("Review iframe is not available.");
-  return document;
-}
-
-function setPressed(
-  selector: string,
-  value: string,
-  datasetKey: "reviewArtifact" | "reviewViewport" | "reviewMotion"
+function renderRepresentations(
+  entry: KpAnimationLibraryDisplayEntry,
+  selected: KpAnimationLibraryDisplayRepresentation | undefined
 ): void {
-  root.querySelectorAll<HTMLButtonElement>(selector).forEach((button) => {
-    button.setAttribute(
-      "aria-pressed",
-      String(button.dataset[datasetKey] === value)
-    );
-  });
+  representations.replaceChildren(
+    ...entry.representations.map((representation) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset["representationId"] = representation.id;
+      button.dataset["role"] = representation.role;
+      button.setAttribute(
+        "aria-pressed",
+        String(representation.id === selected?.id)
+      );
+      button.textContent =
+        `${representation.label} · ${representation.kind}`;
+      button.addEventListener("click", () => {
+        selectedRepresentationId = representation.id;
+        renderSelection(true);
+      });
+      return button;
+    })
+  );
+  if (entry.representations.length === 0) {
+    const message = document.createElement("span");
+    message.textContent = "No live representation published.";
+    representations.append(message);
+  }
+}
+
+function mountRepresentation(
+  entry: KpAnimationLibraryDisplayEntry,
+  representation: KpAnimationLibraryDisplayRepresentation | undefined
+): void {
+  if (representation === undefined) {
+    frame.hidden = true;
+    empty.hidden = false;
+    frame.src = "about:blank";
+    openOriginal.hidden = true;
+    status.value = "Planned identity; no live host.";
+    return;
+  }
+  frame.hidden = false;
+  empty.hidden = true;
+  openOriginal.hidden = false;
+  openOriginal.href = representation.href;
+  frame.title = `${entry.title} · ${representation.label}`;
+  status.value = `Loading ${representation.label}…`;
+  if (frame.getAttribute("src") !== representation.href) {
+    frame.src = representation.href;
+  } else {
+    status.value = "Selected host ready.";
+    root.dataset["previewReady"] = "true";
+  }
+}
+
+function setViewport(
+  value: "wide" | "phone",
+  updateRoute: boolean
+): void {
+  selectedViewport = value;
+  viewport.dataset["animationLibraryViewportShell"] = value;
+  root
+    .querySelectorAll<HTMLButtonElement>(
+      "[data-animation-library-viewport]"
+    )
+    .forEach((button) => {
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset["animationLibraryViewport"] === value)
+      );
+    });
+  if (updateRoute) writeRoute(true);
+}
+
+function writeRoute(push: boolean): void {
+  const url = new URL(location.href);
+  setParameter(url, "q", query);
+  setParameter(url, "animation", selectedAnimationId);
+  setParameter(url, "representation", selectedRepresentationId);
+  setParameter(
+    url,
+    "viewport",
+    selectedViewport === "wide" ? undefined : selectedViewport
+  );
+  const method = push ? "pushState" : "replaceState";
+  history[method](null, "", url);
+}
+
+function readParameter(name: string): string | undefined {
+  const value = new URL(location.href).searchParams.get(name)?.trim();
+  return value === undefined || value === "" ? undefined : value;
+}
+
+function setParameter(
+  url: URL,
+  name: string,
+  value: string | undefined
+): void {
+  if (value === undefined || value === "") url.searchParams.delete(name);
+  else url.searchParams.set(name, value);
 }
 
 function required<T extends Element>(
-  parent: ParentNode,
+  rootNode: ParentNode,
   selector: string
 ): T {
-  const element = parent.querySelector<T>(selector);
-  if (element === null) throw new Error(`Missing review control ${selector}.`);
+  const element = rootNode.querySelector<T>(selector);
+  if (element === null) {
+    throw new Error(`Animation Library requires ${selector}.`);
+  }
   return element;
-}
-
-function nextFrame(): Promise<void> {
-  return new Promise((resolve) => requestAnimationFrame(() => resolve()));
 }

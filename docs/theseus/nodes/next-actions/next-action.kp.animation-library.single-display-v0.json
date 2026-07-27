@@ -1,0 +1,31 @@
+{
+  "id": "next-action.kp.animation-library.single-display-v0",
+  "kind": "next-action",
+  "title": "Consolidate animation review into one lazy display",
+  "status": "ready",
+  "domain": "editor",
+  "verificationRecords": [
+    {
+      "command": "npm-run-test-animation-library-display",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T04:56:02.470Z"
+    },
+    {
+      "command": "npm-run-visual-animation-library-display",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-07-27T04:56:03.387Z"
+    },
+    {
+      "command": "npm-run-build-and-packaged-browser",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-07-27T04:56:04.279Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Consolidated 34 animation identities behind one metadata-only lazy display, retained exactly one selected host and one persistent parent review capture, and passed focused unit, browser, production, and bundle-budget gates."
+  }
+}

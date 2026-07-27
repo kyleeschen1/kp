@@ -1,36 +1,32 @@
 import { expect, test } from "@playwright/test";
 
-test("production package exposes one artifact set through four outputs", async ({
+test("production package exposes one lazy Animation Library host", async ({
   page
 }) => {
   await page.goto("/canonical-animation-review.html");
-  const review = page.locator("[data-kp-canonical-animation-review]");
-  await expect(review).toHaveAttribute(
-    "data-review-projection-schema",
-    "kp.governed-canonical-projection-bundle.v1"
+  const library = page.locator(
+    '[data-kp-animation-library][data-catalog-ready="true"]'
   );
-
-  const outputs = page.locator("[data-review-projection]");
-  await expect(outputs).toHaveCount(4);
-  const records = await outputs.evaluateAll((items) =>
-    items.map((item) => {
-      const element = item as HTMLElement;
-      return {
-        kind: element.dataset["reviewProjection"],
-        artifacts: element.dataset["reviewProjectionArtifacts"],
-        checkpoints: element.dataset["reviewProjectionCheckpoints"]
-      };
-    })
+  await expect(library).toBeVisible();
+  await expect(page.locator("[data-animation-library-count]")).toHaveText(
+    /\d+ animations/
   );
+  const count = Number(
+    (await page
+      .locator("[data-animation-library-count]")
+      .textContent())?.split(" ")[0]
+  );
+  expect(count).toBeGreaterThan(29);
 
-  expect(records.map(({ kind }) => kind)).toEqual([
-    "static-js",
-    "headless",
-    "iframe",
-    "static-step"
-  ]);
-  expect(new Set(records.map(({ artifacts }) => artifacts)).size).toBe(1);
-  expect(new Set(records.map(({ checkpoints }) => checkpoints)).size).toBe(1);
-  expect(records[0]!.artifacts?.split(",")).toHaveLength(3);
-  expect(records[0]!.checkpoints?.split(",")).toHaveLength(7);
+  const frames = page.locator("[data-animation-library-frame]");
+  await expect(frames).toHaveCount(1);
+  await expect(frames).toHaveAttribute(
+    "src",
+    "/reader/radical-succession/"
+  );
+  await page
+    .frameLocator("[data-animation-library-frame]")
+    .locator("[data-kp-reader-equation-stage]")
+    .waitFor();
+  await expect(page.locator("[data-kp-dev-review-shell]")).toHaveCount(0);
 });
