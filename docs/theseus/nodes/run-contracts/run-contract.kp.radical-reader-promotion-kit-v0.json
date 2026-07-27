@@ -212,8 +212,8 @@
     {
       "id": "slice-16",
       "title": "correct-oracle-and-gates",
-      "summary": "Phases 1-4 and the pre-checkpoint verification are complete: structural succession compiles through the shared session, paused WebGL paint is retained, direct seek after resize reapplies automatically, and the three-surface parity page is ready for human review. Cleanup and global promotion remain paused.",
-      "status": "in-progress",
+      "summary": "Repaired the rejected radical checkpoint at the generic renderer boundary. Glyph handoff now normalizes visible ink rather than Range line boxes; source one-half retains native KaTeX clones until typed morph start, captures through the loaded document font with inline-baseline calibration, and is screenshot-gated at the first canvas frame. Empty endpoint paint fails back to structural clones without rewinding unrelated glyphs, replaced WebGL sessions release their contexts, and full glyph/reader/parity matrices pass. Reopened for human browser review.",
+      "status": "complete",
       "planPhaseId": "radical-choreography-meta-repair"
     },
     {

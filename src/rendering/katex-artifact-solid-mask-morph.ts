@@ -34,6 +34,11 @@ export interface KatexArtifactSolidMaskMorphPlan {
     readonly green: number;
     readonly blue: number;
   };
+  readonly sourceColor?: {
+    readonly red: number;
+    readonly green: number;
+    readonly blue: number;
+  } | undefined;
 }
 
 export interface KatexArtifactSolidMaskMorphRenderer {
@@ -279,6 +284,23 @@ export function createKatexArtifactSolidMaskMorphRenderer(
       bindVertexAttributes(gl, programInfo);
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, texture);
+      // Exact endpoint frames replay captured alpha. Nearest sampling keeps
+      // that bitmap from growing a soft one-pixel fringe that reads as a
+      // typeface/weight change when paint ownership leaves native KaTeX.
+      const endpointFilter =
+        frame.shapeProgress === 0 || frame.shapeProgress === 1
+          ? gl.NEAREST
+          : gl.LINEAR;
+      gl.texParameteri(
+        gl.TEXTURE_2D,
+        gl.TEXTURE_MIN_FILTER,
+        endpointFilter
+      );
+      gl.texParameteri(
+        gl.TEXTURE_2D,
+        gl.TEXTURE_MAG_FILTER,
+        endpointFilter
+      );
       gl.uniform1i(programInfo.fieldTextureLocation, 0);
       gl.uniform2f(
         programInfo.resolutionLocation,
@@ -343,9 +365,21 @@ export function createKatexArtifactSolidMaskMorphRenderer(
       );
       gl.uniform3f(
         programInfo.colorLocation,
-        plan.color.red,
-        plan.color.green,
-        plan.color.blue
+        interpolate(
+          plan.sourceColor?.red ?? plan.color.red,
+          plan.color.red,
+          frame.shapeProgress
+        ),
+        interpolate(
+          plan.sourceColor?.green ?? plan.color.green,
+          plan.color.green,
+          frame.shapeProgress
+        ),
+        interpolate(
+          plan.sourceColor?.blue ?? plan.color.blue,
+          plan.color.blue,
+          frame.shapeProgress
+        )
       );
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     },
@@ -397,6 +431,10 @@ export function createKatexArtifactSolidMaskMorphRenderer(
       gl.deleteBuffer(buffer);
       gl.deleteTexture(texture);
       gl.deleteProgram(programInfo.program);
+      // Responsive hosts can replace renderer sessions repeatedly. Releasing
+      // objects alone leaves the browser context quota occupied until GC,
+      // which can make a later canvas report ready but paint transparently.
+      gl.getExtension("WEBGL_lose_context")?.loseContext();
     }
   };
 }
@@ -959,6 +997,10 @@ function resolveTargetGrowthGeometry(input: {
 function clamp01(value: number): number {
   if (!Number.isFinite(value)) return 0;
   return Math.min(1, Math.max(0, value));
+}
+
+function interpolate(start: number, end: number, progress: number): number {
+  return start + (end - start) * progress;
 }
 
 function assertNever(value: never): never {

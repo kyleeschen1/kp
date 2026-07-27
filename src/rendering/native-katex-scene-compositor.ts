@@ -18,6 +18,9 @@ import type {
 import {
   syncKpNativeKatexStructuralSuccession
 } from "./native-katex-structural-succession-renderer.ts";
+import {
+  measureKpNativeKatexTextInkRect
+} from "./native-katex-paint-geometry.ts";
 
 export type KpNativeKatexAtomLifecycle =
   | "persist"
@@ -1052,7 +1055,8 @@ export function compareKpNativeKatexTypographyHandoffModels(input: {
   readonly maximumScaleRatio: number;
 }): KpNativeKatexTypographyHandoffComparison {
   const law = evaluateKpNativeKatexTypographyHandoffLaw(input);
-  const observedResidual = maximum(handoffTelemetryGroups(input.telemetry)
+  const groups = handoffTelemetryGroups(input.telemetry);
+  const observedResidual = maximum(groups
     .flatMap(({ material, native }) => [
       Math.abs(native.rect.left - material.rect.left),
       Math.abs(native.rect.top - material.rect.top),
@@ -1062,7 +1066,21 @@ export function compareKpNativeKatexTypographyHandoffModels(input: {
         ? 0
         : Math.abs(native.baselineY - material.baselineY)
     ]));
-  const continuous = law.status === "continuous";
+  const hasExactLineagePaintFrames = groups.every(
+    ({ source, material, native }) =>
+      source !== undefined &&
+      source.paintKind === "glyph" &&
+      material.paintKind === "glyph" &&
+      native.paintKind === "glyph" &&
+      source.paintFingerprint === native.paintFingerprint &&
+      source.fontRevision === native.fontRevision &&
+      source.clipPath === native.clipPath
+  );
+  // The initial material clone is deliberately source-styled. Its line box
+  // may exceed the old translation bound even though target paint can be
+  // mounted and aligned exactly from lineage paint frames.
+  const continuous =
+    law.status === "continuous" || hasExactLineagePaintFrames;
   const candidates: readonly KpNativeKatexTypographyHandoffCandidate[] = [
     handoffCandidate({
       id: "target-style-reverse-flip",
@@ -1072,7 +1090,9 @@ export function compareKpNativeKatexTypographyHandoffModels(input: {
       maximumPreSettlementResidualPx: observedResidual,
       requiresLiveStyleInterpolation: false,
       reasons: continuous
-        ? []
+        ? hasExactLineagePaintFrames && law.status !== "continuous"
+          ? ["lineage-paint-frame-normalization"]
+          : []
         : law.unsupportedIds.map((id) => `${id}:unsupported`)
     }),
     handoffCandidate({
@@ -1332,6 +1352,8 @@ export function realizeKpNativeKatexTypographyStylePlan(input: {
       `translate(${frame.translateX}px, ${frame.translateY}px) ` +
       `scale(${frame.scaleX}, ${frame.scaleY})`;
     if (visual instanceof HTMLElement) {
+      owner.dataset["kpNativeKatexGlyphPaintFrame"] =
+        entry.glyphPaintFrame === undefined ? "missing" : "measured";
       normalizeKpNativeKatexMaterialGlyphPaint({
         stage: input.stage,
         owner,
@@ -1700,22 +1722,34 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
         bounded > 0 &&
         bounded < 1
       ) {
-        hideStructuralAtomOwners({
-          stage: input.source.stage,
-          reconciliation,
-          tracks,
-          intent: structural
-        });
+        const canvasOwnsStructuralPaint =
+          bounded >= structural.paintStrategy.morph.start &&
+          structuralSync?.paintReady !== false;
+        // Same-document KaTeX clones retain the exact source font and paint
+        // until the shape actually begins changing. A raster renderer must
+        // not create a font handoff merely because progress left zero.
+        if (canvasOwnsStructuralPaint) {
+          hideStructuralAtomOwners({
+            stage: input.source.stage,
+            reconciliation,
+            tracks,
+            intent: structural
+          });
+        }
         syncKpNativeKatexStructuralSuccession({
           stage: input.source.stage,
           sourceRoot: input.source.root,
           targetRoot: input.target.root,
           intent: structural,
           progress: bounded,
-          visible: true,
+          visible: canvasOwnsStructuralPaint,
           enabled: true,
           onSettled: () => session.apply(latestProgress)
         });
+        input.source.stage.dataset["kpNativeKatexStructuralPaintOwner"] =
+          canvasOwnsStructuralPaint
+            ? "solid-mask-canvas"
+            : "native-material-clones";
       }
       return ownership;
     }
@@ -2011,13 +2045,7 @@ function measureTextPaintRect(
   stage: HTMLElement,
   element: HTMLElement
 ): KpStageRelativeRect {
-  const range = element.ownerDocument.createRange();
-  range.selectNodeContents(element);
-  const rangeRect = range.getBoundingClientRect();
-  const elementRect = element.getBoundingClientRect();
-  const clientRect =
-    rangeRect.width > 0 && rangeRect.height > 0 ? rangeRect : elementRect;
-  return stageRelativeRect(stage, clientRect);
+  return measureKpNativeKatexTextInkRect(stage, element);
 }
 
 function stageRelativeRect(

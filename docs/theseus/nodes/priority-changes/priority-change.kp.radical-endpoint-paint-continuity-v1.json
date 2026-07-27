@@ -1,0 +1,53 @@
+{
+  "id": "priority-change.kp.radical-endpoint-paint-continuity-v1",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.radical-endpoint-paint-continuity-v1",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "The generic paint-space and font-continuity repair is implemented and fully verified. Source and target endpoint jumps, literal one-half font substitution, atomic empty-frame fallback, and cross-host WebGL lifecycle now have durable regression gates. Human visual confirmation remains before slice 17 or library expansion.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The user rejected the radical visual checkpoint because x and source one-half visibly jerk when native paint ownership changes. Exact paint-space endpoint continuity and a generic regression gate are current before promotion-kit cleanup or library expansion. Preserve semantic models, canonical choreography, native accessibility DOM, one compositor, and no-fade structural succession.",
+      "occurredAt": "2026-07-27T01:06:18.762Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v10"
+    ],
+    "preferred": [
+      "run-contract.kp.radical-reader-promotion-kit-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v10",
+    "run-contract.kp.radical-reader-promotion-kit-v0"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v10",
+    "rationale": "The user rejected the radical visual checkpoint because x and source one-half visibly jerk when native paint ownership changes. Exact paint-space endpoint continuity and a generic regression gate are current before promotion-kit cleanup or library expansion. Preserve semantic models, canonical choreography, native accessibility DOM, one compositor, and no-fade structural succession.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.radical-reader-promotion-kit-v0"
+    ],
+    "changes": [
+      {
+        "subject": "radical-endpoint-paint-continuity",
+        "to": "now"
+      },
+      {
+        "subject": "promotion-kit-cleanup",
+        "to": "next"
+      },
+      {
+        "subject": "library-expansion",
+        "to": "next"
+      }
+    ],
+    "effectiveAt": "2026-07-27T01:06:18.762Z",
+    "requestedBy": "user"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "priority-change.kp.radical-endpoint-paint-continuity-v0",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.radical-endpoint-paint-continuity-v0",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Superseded immediately by the corrected v1 priority record because shell argument parsing truncated the original rationale.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "User",
+      "occurredAt": "2026-07-27T01:05:57.530Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v10"
+    ],
+    "preferred": [
+      "run-contract.kp.radical-reader-promotion-kit-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v10",
+    "run-contract.kp.radical-reader-promotion-kit-v0"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v10",
+    "rationale": "User",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.radical-reader-promotion-kit-v0"
+    ],
+    "changes": [
+      {
+        "subject": "radical-endpoint-paint-continuity",
+        "to": "now"
+      },
+      {
+        "subject": "promotion-kit-cleanup",
+        "to": "next"
+      },
+      {
+        "subject": "library-expansion",
+        "to": "next"
+      }
+    ],
+    "effectiveAt": "2026-07-27T01:05:57.530Z",
+    "requestedBy": "user"
+  }
+}

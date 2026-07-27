@@ -604,11 +604,81 @@
       "scope": "focused",
       "checkedAt": "2026-07-26T20:36:55.266Z",
       "notes": "accepted editor radical oracle remains intact"
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 16 semantic and promotion preservation",
+      "checkedAt": "2026-07-27T02:46:22.473Z",
+      "notes": "39 tests passed. Semantic authority, structural succession intent, no-fade lineage, accessibility, static output, and promotion-cost ratchets remain intact."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice 16 generic compositor regression",
+      "checkedAt": "2026-07-27T02:46:24.754Z",
+      "notes": "52 tests passed. Paint-space normalization stays within the existing lifecycle and complexity budgets."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice 16 full glyph browser regression",
+      "checkedAt": "2026-07-27T02:46:25.664Z",
+      "notes": "44 Chromium tests passed. The old Range-line-box oracle now measures actual glyph ink, and all fraction, split/merge, solve-x, crowded, compound, reduced-motion, and phone cases remain green."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 16 radical paint and font continuity",
+      "checkedAt": "2026-07-27T02:46:26.585Z",
+      "notes": "11 Chromium tests passed. The radical gate samples source/material/target paint forward and rewind at DPR 1 and 2, including the 6% native-KaTeX to canvas font/silhouette boundary."
+    },
+    {
+      "command": "npm run test:browser:canonical-host-parity",
+      "status": "passed",
+      "scope": "slice 16 cross-host paint ownership",
+      "checkedAt": "2026-07-27T02:46:27.502Z",
+      "notes": "3 Chromium tests passed across the original oracle, glyph exemplar, and reader at wide, phone, DPR 1, and DPR 2. Empty endpoint paint retains native structural clones without rewinding the persistent x."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 16 static typing",
+      "checkedAt": "2026-07-27T02:46:28.349Z",
+      "notes": "Application, node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 16 architecture boundaries",
+      "checkedAt": "2026-07-27T02:46:29.162Z",
+      "notes": "All three architecture gates passed with no new semantic-animation exceptions."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice 16 production build",
+      "checkedAt": "2026-07-27T02:46:29.975Z",
+      "notes": "Production build passed after all paint, font, fallback, and WebGL lifecycle repairs."
+    },
+    {
+      "command": "npm run visual:radical-canonical-checkpoint",
+      "status": "passed",
+      "scope": "slice 16 reopened visual checkpoint",
+      "checkedAt": "2026-07-27T02:46:30.825Z",
+      "notes": "38 wide/phone, DPR 1/2, full/reduced radical frames plus fraction controls captured to the stable HTML checkpoint. The live parity page was opened separately for human scrub review."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice 16 durable graph",
+      "checkedAt": "2026-07-27T02:47:25.594Z",
+      "notes": "Valid: 793 nodes and 12878 events after slice completion, priority resolution, and HUMAN_CHECKPOINT progress record."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Radical meta-repair reached the required visual checkpoint. The standalone reader shows the accepted solid exponent-to-radical transformation; all compiler, compositor, browser, responsive, DPR, reduced-motion, build, and architecture checks pass. Awaiting visual approval before phases 6-7."
+    "summary": "Slice 16 is complete and the repaired radical exemplar is open in the live glyph reconciliation parity page. Stop outcome is HUMAN_CHECKPOINT: await user confirmation of the x and one-half handoffs before extracting the promotion kit in slice 17."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

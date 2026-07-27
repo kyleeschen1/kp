@@ -1767,7 +1767,7 @@ test("target glyph paint follows the full scene without a late size snap", async
   await page.locator(
     '[data-kp-glyph-review][data-kp-ready="true"]'
   ).waitFor();
-  const evidence = await page.evaluate(() => {
+  const evidence = await page.evaluate(async () => {
     const realize = (window as unknown as {
       __kpRealizeFractionTypographyHandoff: (progress: number) => {
         plan: {
@@ -1803,11 +1803,17 @@ test("target glyph paint follows the full scene without a late size snap", async
         }[];
       };
     }).__kpMeasureFractionCorrelatedHandoff;
-    const paintRect = (element: HTMLElement) => {
-      const range = document.createRange();
-      range.selectNodeContents(element);
-      return range.getBoundingClientRect();
-    };
+    const moduleUrl = "/src/rendering/native-katex-paint-geometry.ts";
+    const measureTextInkRect = (
+      await import(/* @vite-ignore */ moduleUrl)
+    ).measureKpNativeKatexTextInkRect;
+    const stage = document.querySelector<HTMLElement>(
+      "[data-kp-glyph-review]"
+    )!;
+    // This gate exists to catch visible handoff motion. A Range rectangle is
+    // a line box and can remain aligned while the glyph ink itself jumps.
+    const paintRect = (element: HTMLElement) =>
+      measureTextInkRect(stage, element);
     return [
       0.001,
       0.25,

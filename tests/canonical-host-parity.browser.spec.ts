@@ -283,7 +283,7 @@ test("persistent reader x is opaque and equivalent across native handoff", async
       if (!(x instanceof HTMLElement)) return 0;
       return Number(getComputedStyle(x).opacity);
     });
-    expect(opacity).toBe(1);
+    expect(opacity, `reader x opacity at ${value}/1000`).toBe(1);
   }
 
   await seek(999);

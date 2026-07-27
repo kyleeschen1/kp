@@ -11,6 +11,9 @@ import {
   createKatexTextureAtlas,
   measureKatexTextureCaptureRect
 } from "./katex-texture-atlas.ts";
+import {
+  measureKpNativeKatexSubtreePaintRect
+} from "./native-katex-paint-geometry.ts";
 import type {
   KatexMotionToken,
   KatexTextureAtlas,
@@ -20,6 +23,7 @@ import type {
 export interface KpNativeKatexStructuralSuccessionSyncResult {
   readonly strategy: "solid-mask-succession" | "checkpoint-settlement";
   readonly status: "initializing" | "ready" | "unavailable";
+  readonly paintReady?: boolean | undefined;
   readonly reason?: string | undefined;
 }
 
@@ -46,6 +50,9 @@ interface StructuralSuccessionState {
   sourceCorrection: EndpointCorrection;
   targetCorrection: EndpointCorrection;
   currentCorrection: EndpointCorrection;
+  emptyPaintRetries: number;
+  retryFrame?: number | undefined;
+  sourceNativeInkRect?: KatexTokenRect | undefined;
   targetNativeInkRect?: KatexTokenRect | undefined;
   onSettled?: (() => void) | undefined;
 }
@@ -57,11 +64,16 @@ const identityCorrection: EndpointCorrection = {
   translateY: 0
 };
 const states = new WeakMap<HTMLElement, StructuralSuccessionState>();
-const inkAlphaThreshold = 128;
+// Calibrate the visible antialiased fringe as well as the opaque core. A
+// midpoint-only correction can be internally exact while the composited glyph
+// still grows by a pixel on each side at a renderer handoff.
+const inkAlphaThreshold = 48;
 
 export interface KpNativeKatexStructuralSuccessionInkComparison {
   readonly renderedInkRect: KatexTokenRect;
+  readonly sourceNativeInkRect: KatexTokenRect;
   readonly targetNativeInkRect: KatexTokenRect;
+  readonly referenceEndpoint: "source" | "target";
   readonly maximumGeometryResidualPx: number;
 }
 
@@ -130,11 +142,28 @@ export function syncKpNativeKatexStructuralSuccession(input: {
   if (state.status === "ready" && state.renderer !== undefined) {
     state.renderer.render(input.progress);
     applyCanvasCorrection(state);
-    state.canvas.style.opacity = input.visible ? "1" : "0";
+    const endpointProgress = sampleKatexArtifactSolidMaskMorphProgress(
+      state.intent.paintStrategy.morph,
+      input.progress
+    );
+    const requiresEndpointPaint =
+      endpointProgress === 0 || endpointProgress === 1;
+    const paintReady =
+      !requiresEndpointPaint || state.renderer.measureInk(1) !== undefined;
+    state.canvas.style.opacity = input.visible && paintReady ? "1" : "0";
+    state.canvas.dataset["kpNativeKatexStructuralPaintReady"] =
+      String(paintReady);
+    if (!paintReady) {
+      scheduleEmptyPaintRetry(input.stage, state);
+    } else {
+      state.emptyPaintRetries = 0;
+    }
     setStageStatus(input.stage, "solid-mask-succession", "ready");
     return {
       strategy: "solid-mask-succession",
-      status: "ready"
+      status: "ready",
+      paintReady,
+      ...(paintReady ? {} : { reason: "solid-mask-frame-empty" })
     };
   }
   state.canvas.style.opacity = "0";
@@ -157,9 +186,33 @@ export function disposeKpNativeKatexStructuralSuccession(
 ): void {
   const state = states.get(stage);
   if (state === undefined) return;
+  if (state.retryFrame !== undefined) {
+    stage.ownerDocument.defaultView?.cancelAnimationFrame(state.retryFrame);
+  }
   state.renderer?.dispose();
   state.canvas.remove();
   states.delete(stage);
+}
+
+function scheduleEmptyPaintRetry(
+  stage: HTMLElement,
+  state: StructuralSuccessionState
+): void {
+  const view = stage.ownerDocument.defaultView;
+  if (
+    view === null ||
+    state.retryFrame !== undefined ||
+    state.emptyPaintRetries >= 2
+  ) {
+    return;
+  }
+  state.emptyPaintRetries += 1;
+  state.retryFrame = view.requestAnimationFrame(() => {
+    state.retryFrame = undefined;
+    if (states.get(stage) === state && stage.isConnected) {
+      state.onSettled?.();
+    }
+  });
 }
 
 export function measureKpNativeKatexStructuralSuccessionInk(
@@ -169,6 +222,7 @@ export function measureKpNativeKatexStructuralSuccessionInk(
   if (
     state?.status !== "ready" ||
     state.renderer === undefined ||
+    state.sourceNativeInkRect === undefined ||
     state.targetNativeInkRect === undefined
   ) {
     return undefined;
@@ -180,12 +234,18 @@ export function measureKpNativeKatexStructuralSuccessionInk(
     measured,
     state.currentCorrection
   );
+  const referenceEndpoint = state.progress < 0.5 ? "source" : "target";
+  const nativeInkRect = referenceEndpoint === "source"
+    ? state.sourceNativeInkRect
+    : state.targetNativeInkRect;
   return {
     renderedInkRect,
+    sourceNativeInkRect: state.sourceNativeInkRect,
     targetNativeInkRect: state.targetNativeInkRect,
+    referenceEndpoint,
     maximumGeometryResidualPx: rectDelta(
       renderedInkRect,
-      state.targetNativeInkRect
+      nativeInkRect
     )
   };
 }
@@ -219,6 +279,7 @@ function createState(input: {
     status: "initializing",
     progress: 0,
     visible: false,
+    emptyPaintRetries: 0,
     sourceCorrection: identityCorrection,
     targetCorrection: identityCorrection,
     currentCorrection: identityCorrection
@@ -257,6 +318,7 @@ async function initializeState(
       [sourceToken, targetToken],
       {
         forceVisibleTokenIds: [sourceToken.id, targetToken.id],
+        preserveFontIdentityTokenIds: [sourceToken.id],
         resetTransformTokenIds: [sourceToken.id, targetToken.id]
       }
     );
@@ -269,6 +331,7 @@ async function initializeState(
       target: { tokenId: targetToken.id, rect: targetLocalRect },
       ...strategy.morph,
       ...strategy.solidMask,
+      sourceColor: parseComputedColor(state.sourceElement),
       color: parseComputedColor(state.targetElement)
     };
     state.renderer = createKatexArtifactSolidMaskMorphRenderer(
@@ -276,12 +339,15 @@ async function initializeState(
       plan,
       atlas
     );
-    const sourceInkRect = measureAtlasEndpointInk({
+    const sourceLiveInkRect = measureAtlasEndpointInk({
       atlas,
       tokenId: sourceToken.id,
       endpointRect: sourceLocalRect
     });
-    const targetInkRect = measureAtlasEndpointInk({
+    const sourceNativeInkRect =
+      measureKpNativeKatexSubtreePaintRect(stage, state.sourceElement) ??
+      sourceLiveInkRect;
+    const targetLiveInkRect = measureAtlasEndpointInk({
       atlas,
       tokenId: targetToken.id,
       endpointRect: targetLocalRect
@@ -289,14 +355,15 @@ async function initializeState(
     state.sourceCorrection = measureEndpointCorrection({
       renderer: state.renderer,
       progress: 0,
-      nativeInkRect: sourceInkRect
+      nativeInkRect: sourceNativeInkRect
     });
     state.targetCorrection = measureEndpointCorrection({
       renderer: state.renderer,
       progress: 1,
-      nativeInkRect: targetInkRect
+      nativeInkRect: targetLiveInkRect
     });
-    state.targetNativeInkRect = targetInkRect;
+    state.sourceNativeInkRect = sourceNativeInkRect;
+    state.targetNativeInkRect = targetLiveInkRect;
     state.status = "ready";
     state.renderer.render(state.progress);
     applyCanvasCorrection(state);
@@ -305,6 +372,10 @@ async function initializeState(
       "signed-distance-field";
     state.canvas.dataset["kpNativeKatexStructuralProfile"] =
       strategy.profileId;
+    state.canvas.dataset["kpNativeKatexStructuralSourceCapture"] =
+      "document-font-canvas";
+    state.canvas.dataset["kpNativeKatexStructuralSourceFont"] =
+      nativeTextFontFingerprint(state.sourceElement);
     setStageStatus(stage, "solid-mask-succession", "ready");
     // Capture is asynchronous. Reapply the latest canonical session frame so
     // a direct seek after resize cannot leave a ready canvas hidden at source.
@@ -397,6 +468,26 @@ function parseComputedColor(element: HTMLElement): {
     green: Number(components[2]) / 255,
     blue: Number(components[3]) / 255
   };
+}
+
+function nativeTextFontFingerprint(root: HTMLElement): string {
+  const fingerprints = [root, ...root.querySelectorAll<HTMLElement>("*")]
+    .filter((element) =>
+      [...element.childNodes].some((node) =>
+        node.nodeType === Node.TEXT_NODE &&
+        (node.textContent ?? "").replace(/[\s\u200b-\u200d\ufeff]+/g, "") !== ""
+      )
+    )
+    .map((element) => {
+      const computed = getComputedStyle(element);
+      return [
+        computed.fontFamily,
+        computed.fontSize,
+        computed.fontStyle,
+        computed.fontWeight
+      ].join("|");
+    });
+  return [...new Set(fingerprints)].sort().join(";");
 }
 
 function measureAtlasEndpointInk(input: {

@@ -14,6 +14,7 @@ export interface KatexAtlasPackingOptions {
 
 export interface KatexTextureCaptureOptions {
   forceVisibleTokenIds?: readonly string[] | undefined;
+  preserveFontIdentityTokenIds?: readonly string[] | undefined;
   resetTransformTokenIds?: readonly string[] | undefined;
   maxTextureSize?: number | undefined;
   padding?: number | undefined;
@@ -134,6 +135,16 @@ export async function createKatexTextureAtlas(
 
     if (shouldPaintStructuralToken(token)) {
       drawStructuralToken(context, token, region, pixelRatio);
+      continue;
+    }
+
+    if (options.preserveFontIdentityTokenIds?.includes(token.id) === true) {
+      if (!canPaintNativeTextSubtree(token.element)) {
+        throw new Error(
+          `KaTeX token ${token.id} cannot preserve native text paint.`
+        );
+      }
+      drawNativeTextSubtree(context, token, region, pixelRatio);
       continue;
     }
 
@@ -379,6 +390,179 @@ async function loadSvgImage(
   });
 
   return image;
+}
+
+function canPaintNativeTextSubtree(element: Element): element is HTMLElement {
+  return (
+    element instanceof HTMLElement &&
+    element.querySelector("svg") === null &&
+    [element, ...element.querySelectorAll<HTMLElement>("*")].some(
+      (candidate) => visibleDirectText(candidate) !== ""
+    )
+  );
+}
+
+function drawNativeTextSubtree(
+  context: CanvasRenderingContext2D,
+  token: KatexMotionToken,
+  region: KatexAtlasRegion,
+  pixelRatio: number
+): void {
+  if (!(token.element instanceof HTMLElement)) {
+    throw new Error(`KaTeX token ${token.id} has no native text owner.`);
+  }
+  const elements = [
+    token.element,
+    ...token.element.querySelectorAll<HTMLElement>("*")
+  ].filter((element) => element.closest(".katex-mathml") === null);
+
+  context.save();
+  context.translate(region.x, region.y);
+  context.scale(pixelRatio, pixelRatio);
+  for (const element of elements) {
+    const text = visibleDirectText(element);
+    if (text !== "") {
+      drawNativeTextLeaf(context, token.rect, element, text);
+    }
+    drawNativeBorders(context, token.rect, element);
+  }
+  context.restore();
+}
+
+function drawNativeTextLeaf(
+  context: CanvasRenderingContext2D,
+  captureRect: KatexTokenRect,
+  element: HTMLElement,
+  text: string
+): void {
+  const computed = getComputedStyle(element);
+  if (
+    computed.display === "none" ||
+    computed.visibility === "hidden" ||
+    Number(computed.opacity) === 0
+  ) {
+    return;
+  }
+  const range = element.ownerDocument.createRange();
+  range.selectNodeContents(element);
+  const rangeRect = range.getBoundingClientRect();
+  if (rangeRect.width <= 0 || rangeRect.height <= 0) return;
+
+  context.save();
+  context.font = [
+    computed.fontStyle,
+    computed.fontWeight,
+    computed.fontSize,
+    computed.fontFamily
+  ].join(" ");
+  if (
+    element.ownerDocument.fonts !== undefined &&
+    !element.ownerDocument.fonts.check(context.font, text)
+  ) {
+    throw new Error(
+      `Native text capture font is unavailable: ${context.font}.`
+    );
+  }
+  context.fillStyle = computed.color;
+  context.textBaseline = "alphabetic";
+  // The zero-size inline marker exposes the browser's actual inline baseline.
+  // Canvas and DOM then share both the loaded font face and its native origin.
+  context.fillText(
+    text,
+    rangeRect.left - captureRect.left,
+    measureInlineBaseline(element) - captureRect.top
+  );
+  context.restore();
+}
+
+function measureInlineBaseline(element: HTMLElement): number {
+  const marker = element.ownerDocument.createElement("span");
+  marker.setAttribute("aria-hidden", "true");
+  marker.style.cssText = [
+    "display:inline-block",
+    "width:0",
+    "height:0",
+    "padding:0",
+    "margin:0",
+    "border:0",
+    "line-height:0",
+    "vertical-align:baseline"
+  ].join(";");
+  element.append(marker);
+  try {
+    return marker.getBoundingClientRect().top;
+  } finally {
+    marker.remove();
+  }
+}
+
+function drawNativeBorders(
+  context: CanvasRenderingContext2D,
+  captureRect: KatexTokenRect,
+  element: HTMLElement
+): void {
+  const computed = getComputedStyle(element);
+  const bounds = element.getBoundingClientRect();
+  if (
+    computed.display === "none" ||
+    computed.visibility === "hidden" ||
+    Number(computed.opacity) === 0 ||
+    bounds.width <= 0 ||
+    bounds.height <= 0
+  ) {
+    return;
+  }
+  const left = bounds.left - captureRect.left;
+  const top = bounds.top - captureRect.top;
+  const borderPaint = [
+    {
+      style: computed.borderTopStyle,
+      width: Number.parseFloat(computed.borderTopWidth),
+      color: computed.borderTopColor,
+      rect: (width: number) => [left, top, bounds.width, width] as const
+    },
+    {
+      style: computed.borderRightStyle,
+      width: Number.parseFloat(computed.borderRightWidth),
+      color: computed.borderRightColor,
+      rect: (width: number) =>
+        [left + bounds.width - width, top, width, bounds.height] as const
+    },
+    {
+      style: computed.borderBottomStyle,
+      width: Number.parseFloat(computed.borderBottomWidth),
+      color: computed.borderBottomColor,
+      rect: (width: number) =>
+        [left, top + bounds.height - width, bounds.width, width] as const
+    },
+    {
+      style: computed.borderLeftStyle,
+      width: Number.parseFloat(computed.borderLeftWidth),
+      color: computed.borderLeftColor,
+      rect: (width: number) => [left, top, width, bounds.height] as const
+    }
+  ];
+  for (const border of borderPaint) {
+    if (
+      border.style === "none" ||
+      border.style === "hidden" ||
+      !(border.width > 0)
+    ) {
+      continue;
+    }
+    context.save();
+    context.fillStyle = border.color;
+    context.fillRect(...border.rect(border.width));
+    context.restore();
+  }
+}
+
+function visibleDirectText(element: HTMLElement): string {
+  return [...element.childNodes]
+    .filter((node) => node.nodeType === Node.TEXT_NODE)
+    .map((node) => node.textContent ?? "")
+    .join("")
+    .replace(/[\s\u200b-\u200d\ufeff]+/g, "");
 }
 
 function isCaptureRectElement(element: Element): boolean {
