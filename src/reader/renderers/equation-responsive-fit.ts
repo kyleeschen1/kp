@@ -23,6 +23,7 @@ export interface KpReaderEquationResponsiveFitPlan {
   readonly horizontalPadding: number;
   readonly verticalPadding?: number | undefined;
   readonly contentBounds: KpReaderLayoutRect;
+  readonly centeringBounds: KpReaderLayoutRect;
   readonly requiredScale: number;
   readonly scale: number;
   readonly translateX: number;
@@ -138,6 +139,7 @@ export function planKpReaderCertifiedEquationStageResponsiveFit(input: {
     geometrySource: "certified-stage-swept-envelope",
     alignments: [],
     contentBounds: input.layout.sweptBounds,
+    centeringBounds: input.layout.stageBounds,
     measurementIdentity: input.layout.measurementIdentity,
     viewportWidth: input.viewportWidth,
     viewportHeight: input.viewportHeight,
@@ -178,6 +180,7 @@ function planFit(input: {
   readonly geometrySource: KpReaderEquationResponsiveFitPlan["geometrySource"];
   readonly alignments: readonly KpReaderEquationPerceptualAlignmentPlan[];
   readonly contentBounds?: KpReaderLayoutRect | undefined;
+  readonly centeringBounds?: KpReaderLayoutRect | undefined;
   readonly measurementIdentity?: KpEquationStageMeasurementIdentity | undefined;
   readonly viewportWidth: number;
   readonly viewportHeight?: number | undefined;
@@ -236,6 +239,7 @@ function planFit(input: {
       ])
     )
   );
+  const centeringBounds = input.centeringBounds ?? contentBounds;
   const availableHeight = input.viewportHeight === undefined
     ? undefined
     : input.viewportHeight - verticalPadding * 2;
@@ -257,14 +261,27 @@ function planFit(input: {
         ? "contained" as const
         : "overflow" as const;
   const scale = status === "overflow" ? minScale : requiredScale;
-  const translateX =
-    horizontalPadding + (availableWidth - contentBounds.width * scale) / 2 -
-    contentBounds.left * scale;
-  const translateY = availableHeight === undefined
+  const desiredTranslateX =
+    input.viewportWidth / 2 -
+    (centeringBounds.left + centeringBounds.width / 2) * scale;
+  const translateX = clamp(
+    desiredTranslateX,
+    horizontalPadding - contentBounds.left * scale,
+    input.viewportWidth - horizontalPadding -
+      (contentBounds.left + contentBounds.width) * scale
+  );
+  const desiredTranslateY = input.viewportHeight === undefined
     ? 0
-    : verticalPadding +
-      (availableHeight - contentBounds.height * scale) / 2 -
-      contentBounds.top * scale;
+    : input.viewportHeight / 2 -
+      (centeringBounds.top + centeringBounds.height / 2) * scale;
+  const translateY = input.viewportHeight === undefined
+    ? 0
+    : clamp(
+        desiredTranslateY,
+        verticalPadding - contentBounds.top * scale,
+        input.viewportHeight - verticalPadding -
+          (contentBounds.top + contentBounds.height) * scale
+      );
 
   return {
     id: input.id,
@@ -279,6 +296,7 @@ function planFit(input: {
     horizontalPadding,
     ...(input.viewportHeight === undefined ? {} : { verticalPadding }),
     contentBounds,
+    centeringBounds,
     requiredScale,
     scale,
     translateX,
@@ -293,10 +311,14 @@ export function applyKpReaderEquationResponsiveFit(
   fit: KpReaderEquationResponsiveFitPlan
 ): void {
   surface.dataset["kpReaderEquationFitStatus"] = fit.status;
+  surface.dataset["kpReaderEquationFitGeometrySource"] = fit.geometrySource;
   surface.dataset["kpReaderEquationWrapAllowed"] = "false";
   surface.dataset["kpReaderEquationFitScale"] = String(fit.scale);
   surface.dataset["kpReaderEquationFitBounds"] = JSON.stringify(
     fit.contentBounds
+  );
+  surface.dataset["kpReaderEquationFitCenteringBounds"] = JSON.stringify(
+    fit.centeringBounds
   );
   surface.style.transformOrigin = "0 0";
   surface.style.transform =
@@ -385,4 +407,8 @@ function unionRects(rects: readonly KpReaderLayoutRect[]): KpReaderLayoutRect {
   const right = Math.max(...rects.map((rect) => rect.left + rect.width));
   const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
   return { left, top, width: right - left, height: bottom - top };
+}
+
+function clamp(value: number, minimum: number, maximum: number): number {
+  return Math.max(minimum, Math.min(maximum, value));
 }

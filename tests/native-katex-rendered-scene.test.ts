@@ -2408,6 +2408,43 @@ test("canonical copy-fan-out keeps opaque descendants on the leader until they p
   );
 });
 
+test("canonical copy-fan-out clears grouping before reflow and settles syntax last", () => {
+  const base: KpNativeKatexSceneTrack = {
+    id: "track.copy.structure",
+    componentId: "component.copy.structure",
+    lifecycle: "eliminate",
+    sourceAtomId: "source.structure",
+    visualAtomId: "source.structure",
+    paintKind: "glyph",
+    sizingMode: "rect",
+    startRect: { left: 10, top: 10, width: 8, height: 16 },
+    endRect: { left: 10, top: 10, width: 8, height: 16 },
+    startOpacity: 1,
+    endOpacity: 0
+  };
+  const introduced: KpNativeKatexSceneTrack = {
+    ...base,
+    id: "track.copy.introduced",
+    lifecycle: "introduce",
+    sourceAtomId: undefined,
+    targetAtomId: "target.introduced",
+    visualAtomId: "target.introduced",
+    startOpacity: 0,
+    endOpacity: 1
+  };
+
+  assert.equal(sampleKpNativeKatexSceneTracks([base], 0, true)[0]!.opacity, 1);
+  assert.equal(sampleKpNativeKatexSceneTracks([base], 0.08, true)[0]!.opacity, 0);
+  assert.equal(
+    sampleKpNativeKatexSceneTracks([introduced], 0.78, true)[0]!.opacity,
+    0
+  );
+  assert.equal(
+    sampleKpNativeKatexSceneTracks([introduced], 0.94, true)[0]!.opacity,
+    1
+  );
+});
+
 function createScene(
   endpoint: "source" | "target",
   ids: readonly string[]

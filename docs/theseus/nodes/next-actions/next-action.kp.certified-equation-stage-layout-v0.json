@@ -416,11 +416,46 @@
       "scope": "slice s15 proof and compiler gate",
       "checkedAt": "2026-07-27T23:11:13.991Z",
       "notes": "All TypeScript projects pass; inference remains below ceilings at types 36621, instantiations 44758, check 1.54s."
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s16 wide expanded exemplar",
+      "checkedAt": "2026-07-27T23:32:48.474Z",
+      "notes": "All 16 Chromium cases pass. The new 1100x800 expanded gate densely samples forward and rewind plus direct phase seeks, requires certified swept geometry, scale at least 0.68, centered contained row paint, and zero unrelated visible-paint overlap under bounded contact proof."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s16 certified fit and contact law",
+      "checkedAt": "2026-07-27T23:32:54.236Z",
+      "notes": "98 focused tests pass, including row-stack centering with full swept containment, bounded compositor contact evidence, and duplicate or invalid contact rejection."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice s16 choreography clearance",
+      "checkedAt": "2026-07-27T23:33:04.252Z",
+      "notes": "63 compositor tests pass; copy fan-out now clears departing grouping paint before reflow, settles introduced syntax last, and retains opaque fission descendants."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice s16 canonical renderer gate",
+      "checkedAt": "2026-07-27T23:34:33.223Z",
+      "notes": "12 canonical renderer gates pass; the certified fit and bounded contact proof reuse the single scene runtime and preserve the fixed 130000-byte core ceiling."
+    },
+    {
+      "command": "npm run typecheck; npm run check:inference",
+      "status": "passed",
+      "scope": "slice s16 proof and compiler gate",
+      "checkedAt": "2026-07-27T23:34:39.214Z",
+      "notes": "All TypeScript projects pass; inference remains within ceilings at types 36621, instantiations 44758, and check 1.6s after certified fit and collision-proof integration."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The applied foldable certificate now includes semantic material transits, centered protected corridor occupancy, and exact measurement identity consumed by the canonical compositor. Existing local paths remain authoritative unless a two-row route would leave its certified row or enter the other row; the existing above/below clearance lane then uses the corridor without moving rows or adding categories."
+    "summary": "The wide expanded exemplar now derives fit, centering, and containment from its certified swept stage envelope. Dense forward, rewind, and direct-seek sampling proves readable scale and zero unrelated visible-paint overlap; exact successor contact is bounded evidence, while arbitrary intersections still fail."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

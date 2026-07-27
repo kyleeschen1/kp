@@ -149,7 +149,8 @@
     {
       "id": "s16",
       "title": "Wide expanded exemplar",
-      "status": "planned"
+      "summary": "The 1100x800 expanded exemplar now uses the applied certificate's swept envelope for readable containment, centers the semantic row stack, preserves one-row choreography, and passes dense forward, rewind, and direct-seek visible-paint checks with no unrelated collisions.",
+      "status": "complete"
     },
     {
       "id": "s17",

@@ -1,10 +1,17 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 import {
+  kpNativeInkContactTolerancePx,
   kpNativeReorderInkContactTolerancePx
 } from "../src/rendering/equation-motion-path-planner.ts";
 import {
   kpMaximumFactoringExcursionInLocalInkHeights
 } from "../src/rendering/native-katex-factoring-choreography.ts";
+import type {
+  KpEquationVisiblePaintOverlapReport
+} from "../src/rendering/equation-visible-paint-overlap.ts";
+import {
+  evaluateKpEquationVisiblePaintCertifiedContacts
+} from "../src/rendering/equation-visible-paint-overlap.ts";
 
 const route = (
   progressPermille: number,
@@ -114,7 +121,10 @@ function summarizeXPaint(
   };
 }
 
-async function visiblePaintOverlapReport(page: Page, progress: number) {
+async function visiblePaintOverlapReport(
+  page: Page,
+  progress: number
+): Promise<KpEquationVisiblePaintOverlapReport> {
   return page.evaluate(async ({ progress }) => {
     const overlapModule =
       "/src/rendering/equation-visible-paint-overlap.ts";
@@ -133,6 +143,16 @@ async function visiblePaintOverlapReport(page: Page, progress: number) {
     if (stage === null || transition === null) {
       throw new Error("Visible-paint inspection lacks an active stage.");
     }
+    const effectiveOpacity = (element: HTMLElement): number => {
+      let opacity = 1;
+      let current: HTMLElement | null = element;
+      while (current !== null) {
+        opacity *= Number(getComputedStyle(current).opacity);
+        if (current === stage) break;
+        current = current.parentElement;
+      }
+      return opacity;
+    };
     const observations = [
       ...[...transition.querySelectorAll<HTMLElement>(
         "[data-kp-reader-native]"
@@ -144,7 +164,7 @@ async function visiblePaintOverlapReport(page: Page, progress: number) {
           "[data-kp-reader-equation-anchor-id]"
         )].filter((anchor) =>
           anchor.dataset["kpFoldableEnvelopeId"] === undefined &&
-          Number(getComputedStyle(anchor).opacity) > 0.01
+          effectiveOpacity(anchor) > 0.01
         ).flatMap((anchor) => {
           const rect = measureKpNativeKatexSubtreePaintRect(stage, anchor);
           return rect === undefined ? [] : [{
@@ -156,7 +176,7 @@ async function visiblePaintOverlapReport(page: Page, progress: number) {
             )?.dataset["kpFoldableEnvelopeId"],
             authority,
             rect,
-            opacity: Number(getComputedStyle(anchor).opacity)
+            opacity: effectiveOpacity(anchor)
           }];
         });
       }),
@@ -172,9 +192,16 @@ async function visiblePaintOverlapReport(page: Page, progress: number) {
             `material:${owner.dataset["kpEquationMaterialOwnerId"]}`,
           semanticEntityId:
             owner.dataset["kpEquationMaterialSemanticEntityId"],
+          semanticContacts: JSON.parse(
+            owner.dataset["kpEquationMaterialSemanticContacts"] ?? "[]"
+          ) as Array<{
+            id: string;
+            maximumOverlapWidthPx: number;
+            maximumOverlapHeightPx: number;
+          }>,
           authority: "material" as const,
           rect,
-          opacity: Number(getComputedStyle(owner).opacity)
+          opacity: effectiveOpacity(owner)
         }];
       })
     ];
@@ -184,7 +211,7 @@ async function visiblePaintOverlapReport(page: Page, progress: number) {
       observations,
       contactTolerancePx: 0.75
     });
-  }, { progress });
+  }, { progress }) as Promise<KpEquationVisiblePaintOverlapReport>;
 }
 
 test("visible-paint diagnostic samples the applied-layout integration", async ({
@@ -221,6 +248,86 @@ test("visible-paint diagnostic samples the applied-layout integration", async ({
     reports.some(({ intersections }) => intersections.length > 0),
     JSON.stringify(reports)
   ).toBe(true);
+});
+
+test("wide expanded stage is certified, readable, centered, and uncrowded", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  await page.goto(route(0, { kpFoldMode: "expanded" }), {
+    waitUntil: "domcontentloaded"
+  });
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-hydrated",
+    "true"
+  );
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  const sample = async (progress: number) => {
+    await scrubber.evaluate((node, nextValue) => {
+      const input = node as HTMLInputElement;
+      input.value = String(nextValue);
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }, progress);
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-progress",
+      String(progress)
+    );
+    await page.evaluate(() => new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+    ));
+    const fit = page.locator(
+      "[data-kp-reader-transition-active='true'] [data-kp-reader-fit-surface]"
+    );
+    await expect(fit).toHaveAttribute(
+      "data-kp-reader-equation-fit-geometry-source",
+      "certified-stage-swept-envelope"
+    );
+    const scale = Number(await fit.getAttribute(
+      "data-kp-reader-equation-fit-scale"
+    ));
+    expect(scale, `unreadable fit at ${progress}`).toBeGreaterThanOrEqual(0.68);
+    const report = await visiblePaintOverlapReport(page, progress / 1_000);
+    const unrelated = evaluateKpEquationVisiblePaintCertifiedContacts({
+      report,
+      contactTolerancePx: kpNativeInkContactTolerancePx
+    }).violations;
+    expect(
+      unrelated,
+      JSON.stringify({ progress, report })
+    ).toEqual([]);
+  };
+  const dense = Array.from({ length: 21 }, (_value, index) => index * 50);
+  for (const progress of dense) await sample(progress);
+  for (const progress of [...dense].reverse()) await sample(progress);
+
+  for (const progress of [100, 300, 500, 700, 900]) {
+    await page.goto(route(progress, { kpFoldMode: "expanded" }), {
+      waitUntil: "domcontentloaded"
+    });
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-progress",
+      String(progress)
+    );
+    const geometry = await equationGeometry(page);
+    expect(geometry.maximumOverflowPx, JSON.stringify({ progress, geometry }))
+      .toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(geometry.horizontalCenterDeltaPx),
+      JSON.stringify({ progress, geometry })
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(geometry.verticalCenterDeltaPx),
+      JSON.stringify({ progress, geometry })
+    ).toBeLessThanOrEqual(1);
+    const report = await visiblePaintOverlapReport(page, progress / 1_000);
+    expect(
+      evaluateKpEquationVisiblePaintCertifiedContacts({
+        report,
+        contactTolerancePx: kpNativeInkContactTolerancePx
+      }).violations,
+      JSON.stringify({ progress, report })
+    ).toEqual([]);
+  }
 });
 
 test("fold controls preserve one semantic clock and stable URL state", async ({
@@ -1277,7 +1384,8 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
         Math.min(x.right, other.right) - Math.max(x.left, other.left);
       const height =
         Math.min(x.bottom, other.bottom) - Math.max(x.top, other.top);
-      return width > 0.25 && height > 0.25
+      return width > kpNativeInkContactTolerancePx &&
+          height > kpNativeInkContactTolerancePx
         ? [{ progress: sample.progress, x, other, width, height }]
         : [];
     }));

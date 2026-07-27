@@ -6,6 +6,11 @@ export type KpEquationVisiblePaintAuthority =
 export interface KpEquationVisiblePaintObservation {
   readonly ownerId: string;
   readonly semanticEntityId?: string | undefined;
+  readonly semanticContacts?: readonly {
+    readonly id: string;
+    readonly maximumOverlapWidthPx: number;
+    readonly maximumOverlapHeightPx: number;
+  }[] | undefined;
   readonly rowId?: string | undefined;
   readonly authority: KpEquationVisiblePaintAuthority;
   readonly rect: {
@@ -28,6 +33,10 @@ export interface KpEquationVisiblePaintIntersection {
   readonly rightOwnerId: string;
   readonly leftSemanticEntityId?: string | undefined;
   readonly rightSemanticEntityId?: string | undefined;
+  readonly leftSemanticContacts?:
+    KpEquationVisiblePaintObservation["semanticContacts"];
+  readonly rightSemanticContacts?:
+    KpEquationVisiblePaintObservation["semanticContacts"];
   readonly leftRowId?: string | undefined;
   readonly rightRowId?: string | undefined;
   readonly width: number;
@@ -63,6 +72,16 @@ export interface KpEquationVisiblePaintContactEvaluation {
     readonly intersection: KpEquationVisiblePaintIntersection;
     readonly allowanceId: string;
     readonly reason: KpEquationVisiblePaintContactReason;
+  }[];
+  readonly violations: readonly KpEquationVisiblePaintIntersection[];
+}
+
+export interface KpEquationVisiblePaintCertifiedContactEvaluation {
+  readonly kind: "equation-visible-paint-certified-contact-evaluation";
+  readonly passed: boolean;
+  readonly allowed: readonly {
+    readonly intersection: KpEquationVisiblePaintIntersection;
+    readonly contactId: string;
   }[];
   readonly violations: readonly KpEquationVisiblePaintIntersection[];
 }
@@ -116,6 +135,12 @@ export function inspectKpEquationVisiblePaintOverlap(input: {
         ...(right.semanticEntityId === undefined
           ? {}
           : { rightSemanticEntityId: right.semanticEntityId }),
+        ...(left.semanticContacts === undefined
+          ? {}
+          : { leftSemanticContacts: left.semanticContacts }),
+        ...(right.semanticContacts === undefined
+          ? {}
+          : { rightSemanticContacts: right.semanticContacts }),
         ...(left.rowId === undefined ? {} : { leftRowId: left.rowId }),
         ...(right.rowId === undefined ? {} : { rightRowId: right.rowId }),
         width,
@@ -194,6 +219,49 @@ export function evaluateKpEquationVisiblePaintContact(input: {
   });
 }
 
+export function evaluateKpEquationVisiblePaintCertifiedContacts(input: {
+  readonly report: KpEquationVisiblePaintOverlapReport;
+  readonly contactTolerancePx?: number | undefined;
+}): KpEquationVisiblePaintCertifiedContactEvaluation {
+  const tolerance = nonNegative(
+    input.contactTolerancePx ?? 0.75,
+    "certified contact tolerance"
+  );
+  const allowed:
+    KpEquationVisiblePaintCertifiedContactEvaluation["allowed"][number][] = [];
+  const violations: KpEquationVisiblePaintIntersection[] = [];
+  for (const intersection of input.report.intersections) {
+    const contact = intersection.leftSemanticContacts?.find((left) => {
+      const right = intersection.rightSemanticContacts?.find(
+        ({ id }) => id === left.id
+      );
+      return right !== undefined &&
+        intersection.width <= Math.min(
+          left.maximumOverlapWidthPx,
+          right.maximumOverlapWidthPx
+        ) + tolerance &&
+        intersection.height <= Math.min(
+          left.maximumOverlapHeightPx,
+          right.maximumOverlapHeightPx
+        ) + tolerance;
+    });
+    if (contact === undefined) {
+      violations.push(intersection);
+    } else {
+      allowed.push(Object.freeze({
+        intersection,
+        contactId: contact.id
+      }));
+    }
+  }
+  return Object.freeze({
+    kind: "equation-visible-paint-certified-contact-evaluation" as const,
+    passed: violations.length === 0,
+    allowed: Object.freeze(allowed),
+    violations: Object.freeze(violations)
+  });
+}
+
 function ownerPairKey(leftOwnerId: string, rightOwnerId: string): string {
   return [leftOwnerId, rightOwnerId].sort().join("\u0000");
 }
@@ -219,6 +287,25 @@ function validateObservation(
   nonNegative(observation.rect.width, `${observation.ownerId} width`);
   nonNegative(observation.rect.height, `${observation.ownerId} height`);
   finiteUnit(observation.opacity, `${observation.ownerId} opacity`);
+  const contacts = observation.semanticContacts ?? [];
+  if (
+    contacts.some(({ id }) => id.trim() === "") ||
+    new Set(contacts.map(({ id }) => id)).size !== contacts.length
+  ) {
+    throw new Error(
+      `${observation.ownerId} semantic contacts must be non-empty and unique.`
+    );
+  }
+  for (const contact of contacts) {
+    nonNegative(
+      contact.maximumOverlapWidthPx,
+      `${observation.ownerId} ${contact.id} maximum overlap width`
+    );
+    nonNegative(
+      contact.maximumOverlapHeightPx,
+      `${observation.ownerId} ${contact.id} maximum overlap height`
+    );
+  }
 }
 
 function finite(value: number, label: string): number {

@@ -236,6 +236,8 @@ function excludeKpNativeKatexSuccessorOwnedTracks<
 
 export function partitionKpNativeKatexSuccessorOwnedTracks<
   T extends {
+    readonly lifecycle: string;
+    readonly opacityStepAt?: number | undefined;
     readonly sourceAtomId?: string | undefined;
     readonly targetAtomId?: string | undefined;
     readonly visualAtomId: string;
@@ -260,8 +262,18 @@ export function partitionKpNativeKatexSuccessorOwnedTracks<
     claimedSourceAtomIds,
     claimedTargetAtomIds
   });
+  const claimedTracks =
+    supplemental?.claimTracks(unclaimedTracks) ?? unclaimedTracks;
   return {
-    tracks: supplemental?.claimTracks(unclaimedTracks) ?? unclaimedTracks,
+    tracks: plans.length === 0
+      ? claimedTracks
+      : Object.freeze(claimedTracks.map((track) =>
+          track.lifecycle === "eliminate"
+            ? Object.freeze({ ...track, opacityStepAt: 0.08 }) as T
+            : track.lifecycle === "introduce"
+              ? Object.freeze({ ...track, opacityStepAt: 0.94 }) as T
+              : track
+        )),
     claimedTargetAtomIds: new Set([
       ...claimedTargetAtomIds,
       ...(supplemental?.claimedTargetAtomIds ?? [])
@@ -272,6 +284,7 @@ export function partitionKpNativeKatexSuccessorOwnedTracks<
 export function composeKpNativeKatexSceneMaterialOwners(input: {
   readonly frames: readonly {
     readonly trackId: string;
+    readonly componentId: string;
     readonly visualAtomId: string;
     readonly paintKind: KpNativeKatexPaintAtomObservation["paintKind"];
     readonly sizingMode: "rect" | "rule-length";
@@ -285,6 +298,7 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
   readonly supplementalOwners: readonly KpEquationMaterialLayerOwnerFrame[];
   readonly visible: boolean;
 }): readonly KpEquationMaterialLayerOwnerFrame[] {
+  const contacts = sceneMaterialContacts(input);
   return [
     ...input.frames.map((frame) => {
       const atom =
@@ -297,6 +311,7 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
         ownerId: `native-scene-owner.${frame.trackId}`,
         sourceElement: atom.sourceElement,
         semanticEntityId: atom.semanticEntityId,
+        semanticContacts: contacts.get(frame.trackId),
         rect: frame.rect,
         expectedPaintRect: frame.expectedPaintRect,
         opacity: input.visible ? frame.opacity : 0,
@@ -309,6 +324,82 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
       opacity: input.visible ? owner.opacity : 0
     }))
   ];
+}
+
+function sceneMaterialContacts(input: {
+  readonly frames: readonly {
+    readonly trackId: string;
+    readonly componentId: string;
+    readonly visualAtomId: string;
+  }[];
+  readonly sourceAtoms: ReadonlyMap<string, KpNativeKatexPaintAtomObservation>;
+  readonly targetAtoms: ReadonlyMap<string, KpNativeKatexPaintAtomObservation>;
+}): ReadonlyMap<
+  string,
+  NonNullable<KpEquationMaterialLayerOwnerFrame["semanticContacts"]>
+> {
+  const ids = new Map(input.frames.map((frame) => {
+    const atom = input.sourceAtoms.get(frame.visualAtomId) ??
+      input.targetAtoms.get(frame.visualAtomId);
+    return [frame.trackId, new Map([[
+      frame.componentId,
+      {
+        id: frame.componentId,
+        maximumOverlapWidthPx: atom?.rect.width ?? 0,
+        maximumOverlapHeightPx: atom?.rect.height ?? 0
+      }
+    ]])] as const;
+  }));
+  for (const [leftIndex, left] of input.frames.entries()) {
+    const leftAtom = input.sourceAtoms.get(left.visualAtomId) ??
+      input.targetAtoms.get(left.visualAtomId);
+    if (leftAtom === undefined) continue;
+    for (const [rightOffset, right] of input.frames.slice(leftIndex + 1)
+      .entries()) {
+      const rightAtom = input.sourceAtoms.get(right.visualAtomId) ??
+        input.targetAtoms.get(right.visualAtomId);
+      if (
+        rightAtom === undefined ||
+        leftAtom.endpoint !== rightAtom.endpoint ||
+        !rectsHaveNativeInkContact(leftAtom.rect, rightAtom.rect)
+      ) {
+        continue;
+      }
+      const contactId =
+        `native-contact.${leftIndex}.${leftIndex + rightOffset + 1}`;
+      const width = Math.min(
+        leftAtom.rect.left + leftAtom.rect.width,
+        rightAtom.rect.left + rightAtom.rect.width
+      ) - Math.max(leftAtom.rect.left, rightAtom.rect.left);
+      const height = Math.min(
+        leftAtom.rect.top + leftAtom.rect.height,
+        rightAtom.rect.top + rightAtom.rect.height
+      ) - Math.max(leftAtom.rect.top, rightAtom.rect.top);
+      const contact = {
+        id: contactId,
+        maximumOverlapWidthPx: width,
+        maximumOverlapHeightPx: height
+      };
+      ids.get(left.trackId)!.set(contactId, contact);
+      ids.get(right.trackId)!.set(contactId, contact);
+    }
+  }
+  return new Map([...ids].map(([trackId, contactIds]) => [
+    trackId,
+    Object.freeze([...contactIds.values()].map((contact) =>
+      Object.freeze(contact)
+    ))
+  ]));
+}
+
+function rectsHaveNativeInkContact(
+  left: KpNativeKatexPaintAtomObservation["rect"],
+  right: KpNativeKatexPaintAtomObservation["rect"]
+): boolean {
+  return Math.min(left.left + left.width, right.left + right.width) -
+      Math.max(left.left, right.left) > 0.75 &&
+    Math.min(left.top + left.height, right.top + right.height) -
+      Math.max(left.top, right.top) > 0.75;
 }
 
 function paintAnnotation(input: {
@@ -357,6 +448,11 @@ function ownerFrames(input: {
       sourceElement: atom.sourceElement,
       sourceMotionId: input.annotation.annotationId,
       semanticEntityId: input.annotation.annotationId,
+      semanticContacts: Object.freeze([Object.freeze({
+        id: `successor-contact.${input.plan.relationRecordId}`,
+        maximumOverlapWidthPx: atom.rect.width,
+        maximumOverlapHeightPx: atom.rect.height
+      })]),
       rect: Object.freeze({
         left: scaledCenter.x - atom.rect.width / 2,
         top: scaledCenter.y - atom.rect.height / 2,

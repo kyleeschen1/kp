@@ -67,7 +67,7 @@ const kpFanInLiftRiseEnd = 0.22;
 const kpFanInTransitStart = 0.55;
 const kpFanInLiftRatios = [0.35, 0.5, 0.75, 1, 1.25, 1.5] as const;
 // Measured paint includes antialiasing fringes that may touch in native KaTeX.
-const kpNativeInkContactTolerancePx = 0.75;
+export const kpNativeInkContactTolerancePx = 0.75;
 export const kpNativeReorderInkContactTolerancePx = 1.5;
 
 export interface KpEquationCollisionTrack {

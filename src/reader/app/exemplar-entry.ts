@@ -17,6 +17,7 @@ import {
   measureKpReaderAppliedEquationStageLayoutSnapshot,
   measureKpReaderEquationLayoutSnapshot,
   planKpReaderEquationPerceptualAlignment,
+  planKpReaderCertifiedEquationStageResponsiveFit,
   planKpReaderEquationSequenceResponsiveFit,
   projectKpCertifiedTransferMaterialPlan,
   projectKpReaderEquationIdentityWitness,
@@ -660,8 +661,26 @@ function measureLayout(revision: number): LayoutState {
     overflowStrategy: "contain"
   });
   const contexts = new Map(measured.map((context) => {
-    applyKpReaderEquationResponsiveFit(context.fitSurface, fit);
-    return [context.id, { ...context, fit }] as const;
+    const certifiedFit = context.appliedStageLayout === undefined
+      ? undefined
+      : planKpReaderCertifiedEquationStageResponsiveFit({
+          layout: context.appliedStageLayout.certificate,
+          viewportWidth: viewport.clientWidth,
+          viewportHeight: viewport.clientHeight,
+          horizontalPadding: 18,
+          verticalPadding: 18,
+          minScale: 0.68
+        });
+    if (certifiedFit?.kind === "unsatisfied") {
+      throw new Error(
+        `Certified equation stage ${context.id} requires scale ` +
+        `${certifiedFit.requiredScale.toFixed(3)}, below its readable ` +
+        `${certifiedFit.minimumReadableScale.toFixed(3)} floor.`
+      );
+    }
+    const contextFit = certifiedFit?.fit ?? fit;
+    applyKpReaderEquationResponsiveFit(context.fitSurface, contextFit);
+    return [context.id, { ...context, fit: contextFit }] as const;
   }));
   stage.dataset["kpReaderLayoutReads"] = String(rendererInspection().readCount + 1);
   lastMeasuredLayout = { contexts };

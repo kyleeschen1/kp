@@ -61,7 +61,10 @@ export function sampleKpNativeKatexSceneTrackFrames(
       opacity:
         sceneTrack.startOpacity +
         (sceneTrack.endOpacity - sceneTrack.startOpacity) *
-        sampleKpEquationMotionTrackOpacityProgress(sceneTrack, bounded)
+        (
+          copySample?.[2] ??
+          sampleKpEquationMotionTrackOpacityProgress(sceneTrack, bounded)
+        )
     });
   }));
 }

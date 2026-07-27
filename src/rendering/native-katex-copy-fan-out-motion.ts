@@ -20,7 +20,11 @@ export function sampleKpNativeKatexCopyFanOutTrack(input: {
   readonly track: KpNativeKatexSceneTrack;
   readonly tracks: readonly KpNativeKatexSceneTrack[];
   readonly progress: number;
-}): readonly [rect: KpStageRelativeRect, paintProgress: number] {
+}): readonly [
+  rect: KpStageRelativeRect,
+  paintProgress: number,
+  opacityProgress?: number
+] {
   const motion = sampleKpLessonCanonicalDistributionMotion(input.progress);
   if (input.track.lifecycle === "persist") {
     return [
@@ -33,10 +37,18 @@ export function sampleKpNativeKatexCopyFanOutTrack(input: {
   }
   if (input.track.lifecycle !== "split") {
     const paintProgress = smoothstep(input.progress);
-    return [
-      sampleKpEquationMotionTrackRect(input.track, paintProgress),
-      paintProgress
-    ];
+    const rect = sampleKpEquationMotionTrackRect(input.track, paintProgress);
+    const opacityProgress =
+      // Departing grouping paint clears before the first addend preview at
+      // 0.08, preventing native adjacency from becoming transit crowding.
+      input.track.lifecycle === "eliminate"
+        ? intervalProgress(input.progress, 0, 0.08)
+        : input.track.lifecycle === "introduce"
+          ? intervalProgress(input.progress, 0.78, 0.94)
+          : undefined;
+    return opacityProgress === undefined
+      ? [rect, paintProgress]
+      : [rect, paintProgress, opacityProgress];
   }
   if (motion.leaderProgress === 0) {
     return [{ ...input.track.startRect }, 0];
@@ -141,4 +153,8 @@ function interpolate(source: number, target: number, progress: number): number {
 
 function smoothstep(value: number): number {
   return value * value * (3 - 2 * value);
+}
+
+function intervalProgress(progress: number, start: number, end: number): number {
+  return smoothstep(Math.max(0, Math.min(1, (progress - start) / (end - start))));
 }

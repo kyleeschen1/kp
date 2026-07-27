@@ -12,6 +12,11 @@ export interface KpEquationMaterialLayerOwnerFrame {
   readonly sourceElement: HTMLElement;
   readonly sourceMotionId?: string | undefined;
   readonly semanticEntityId?: string | undefined;
+  readonly semanticContacts?: readonly {
+    readonly id: string;
+    readonly maximumOverlapWidthPx: number;
+    readonly maximumOverlapHeightPx: number;
+  }[] | undefined;
   readonly rect: {
     readonly left: number;
     readonly top: number;
@@ -105,6 +110,12 @@ export function syncKpEquationMaterialLayer(input: {
     } else {
       owner.dataset["kpEquationMaterialSemanticEntityId"] =
         frame.semanticEntityId;
+    }
+    if (frame.semanticContacts === undefined) {
+      delete owner.dataset["kpEquationMaterialSemanticContacts"];
+    } else {
+      owner.dataset["kpEquationMaterialSemanticContacts"] =
+        JSON.stringify(frame.semanticContacts);
     }
     if (frame.fragmentRole === undefined) {
       delete owner.dataset["kpEquationMaterialFragmentRole"];

@@ -164,6 +164,7 @@ test("responsive fit centers and contains the complete swept envelope", () => {
   assert.deepEqual(fit.contentBounds, layout.sweptBounds);
   assert.deepEqual(fit.measurementIdentity, layout.measurementIdentity);
   const fitted = fitRect(layout.sweptBounds, fit);
+  const fittedRows = fitRect(layout.stageBounds, fit);
   assert.ok(fitted.left >= fit.horizontalPadding - 1e-9);
   assert.ok(fitted.top >= fit.verticalPadding! - 1e-9);
   assert.ok(
@@ -176,7 +177,12 @@ test("responsive fit centers and contains the complete swept envelope", () => {
   );
   assert.ok(
     Math.abs(
-      fitted.left + fitted.width / 2 - fit.viewportWidth / 2
+      fittedRows.left + fittedRows.width / 2 - fit.viewportWidth / 2
+    ) < 1e-9
+  );
+  assert.ok(
+    Math.abs(
+      fittedRows.top + fittedRows.height / 2 - fit.viewportHeight! / 2
     ) < 1e-9
   );
 });

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  evaluateKpEquationVisiblePaintCertifiedContacts,
   evaluateKpEquationVisiblePaintContact,
   inspectKpEquationVisiblePaintOverlap,
   type KpEquationVisiblePaintObservation
@@ -155,6 +156,45 @@ test("semantic identity alone never excuses visible overlap", () => {
     allowed: [],
     violations: report.intersections
   });
+});
+
+test("visible overlap retains bounded compositor contact evidence", () => {
+  const semanticContacts = [{
+    id: "component.fusion",
+    maximumOverlapWidthPx: 8.5,
+    maximumOverlapHeightPx: 8.5
+  }];
+  const report = inspectKpEquationVisiblePaintOverlap({
+    progress: 0.5,
+    viewportId: "wide",
+    observations: [
+      observation("left", "material", 0, 0, { semanticContacts }),
+      observation("right", "material", 1, 1, { semanticContacts })
+    ]
+  });
+
+  assert.deepEqual(report.intersections[0]?.leftSemanticContacts, semanticContacts);
+  assert.deepEqual(report.intersections[0]?.rightSemanticContacts, semanticContacts);
+  assert.equal(evaluateKpEquationVisiblePaintCertifiedContacts({
+    report
+  }).passed, true);
+  assert.equal(evaluateKpEquationVisiblePaintCertifiedContacts({
+    report,
+    contactTolerancePx: 0
+  }).violations.length, 1);
+  assert.throws(
+    () => inspectKpEquationVisiblePaintOverlap({
+      progress: 0.5,
+      viewportId: "wide",
+      observations: [observation("invalid", "material", 0, 0, {
+        semanticContacts: [
+          ...semanticContacts,
+          { ...semanticContacts[0]! }
+        ]
+      })]
+    }),
+    /semantic contacts must be non-empty and unique/
+  );
 });
 
 test("contact allowances reject duplicate, self, and excessive contact", () => {
