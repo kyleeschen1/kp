@@ -206,11 +206,32 @@
       "scope": "slice s08 pure two row planner",
       "checkedAt": "2026-07-27T22:13:12.626Z",
       "notes": "All TypeScript projects accept measured typography scale and certified two-row geometry."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s09 swept transit corridor",
+      "checkedAt": "2026-07-27T22:17:58.566Z",
+      "notes": "87 tests pass, including row-separated protected corridor, direct/lifted route selection, material clearance, full swept containment, determinism, and invalid transit rejection."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice s09 corridor proof boundary",
+      "checkedAt": "2026-07-27T22:17:59.450Z",
+      "notes": "A row certificate cannot type-check as a corridor certificate; inference ceilings pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s09 swept transit corridor",
+      "checkedAt": "2026-07-27T22:18:00.256Z",
+      "notes": "All TypeScript projects accept the corridor-certified layout and transit contracts."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s08 certifies two semantic rows in declared order, centers them on one inline axis, applies one transform per row, and derives a guaranteed gutter from measured em and ink height."
+    "summary": "Slice s09 upgrades row geometry to a separate corridor certificate: material clearance expands the row gap, same-row transit lifts through the protected band, cross-row transit stays direct, and swept bounds include all motion."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

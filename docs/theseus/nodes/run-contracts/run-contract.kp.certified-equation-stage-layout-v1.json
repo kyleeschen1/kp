@@ -107,7 +107,8 @@
     {
       "id": "s09",
       "title": "Swept envelope transit corridor",
-      "status": "planned"
+      "summary": "Added proof-carrying protected transit corridors, row-derived direct/lifted routing, material-size clearance, row adjustment, and full swept-envelope containment without operation-specific geometry.",
+      "status": "complete"
     },
     {
       "id": "s10",

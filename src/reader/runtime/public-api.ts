@@ -82,6 +82,14 @@ export {
   type KpMeasuredEquationStageInput
 } from "./equation-stage-layout.ts";
 export {
+  certifyKpEquationStageTransitCorridor,
+  type KpCorridorCertifiedEquationStageLayout,
+  type KpEquationStageMaterialTransitIntent,
+  type KpEquationStageMaterialTransitPlan,
+  type KpEquationStagePoint,
+  type KpEquationStageTransitCorridor
+} from "./equation-stage-transit-corridor.ts";
+export {
   decodeKpFoldableDistributionUrl,
   encodeKpFoldableDistributionUrl,
   type KpFoldableDistributionCheckpoint,
