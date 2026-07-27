@@ -143,11 +143,32 @@
       "scope": "slice s05 measurement identity",
       "checkedAt": "2026-07-27T22:01:05.360Z",
       "notes": "All TypeScript projects accept required revision and coordinate-space propagation."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s06 measured envelope closure",
+      "checkedAt": "2026-07-27T22:05:57.556Z",
+      "notes": "76 tests pass, including actual foldable endpoint closure, missing/duplicate/cross-transition rejection, partial/foreign membership rejection, mixed identity rejection, and nested groups."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice s06 measured construction authority",
+      "checkedAt": "2026-07-27T22:05:58.473Z",
+      "notes": "Opaque proof fixtures and compiler-cost limits pass with the sole measured-input constructor."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s06 measured envelope closure",
+      "checkedAt": "2026-07-27T22:05:59.306Z",
+      "notes": "All TypeScript projects accept complete measured-envelope and branded input contracts."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s05 binds measured envelopes, certificates, applied layouts, responsive fit, and reader compositor sessions to one validated measurement revision and coordinate-space id; mixed identities fail before rendering."
+    "summary": "Slice s06 adds the only measured-input constructor: every declared row envelope must close over exact native endpoint membership in one transition, revision, and coordinate space; nested groups remain legal."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

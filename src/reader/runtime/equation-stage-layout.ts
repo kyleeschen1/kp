@@ -75,6 +75,24 @@ export interface KpEquationStageLayoutIntent<
 
 export interface KpEquationStageMeasuredEnvelope {
   readonly id: string;
+  readonly transitionId: string;
+  readonly endpointObjectId: string;
+  readonly memberOwnerIds: readonly string[];
+  readonly rect: KpEquationStageRect;
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
+}
+
+export interface KpEquationStageEnvelopeDefinition {
+  readonly id: string;
+  readonly transitionId: string;
+  readonly endpointObjectId: string;
+  readonly memberOwnerIds: readonly string[];
+}
+
+export interface KpEquationStageEnvelopeObservation {
+  readonly id: string;
+  readonly transitionId: string;
+  readonly endpointObjectId: string;
   readonly memberOwnerIds: readonly string[];
   readonly rect: KpEquationStageRect;
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
@@ -88,9 +106,12 @@ export interface KpCertifiedEquationStageRow {
   readonly translateY: number;
 }
 
-declare const measuredEquationStageInputAuthority: unique symbol;
-declare const certifiedEquationStageLayoutAuthority: unique symbol;
-declare const appliedEquationStageLayoutAuthority: unique symbol;
+const measuredEquationStageInputAuthority: unique symbol =
+  Symbol("kp.measured-equation-stage-input");
+const certifiedEquationStageLayoutAuthority: unique symbol =
+  Symbol("kp.certified-equation-stage-layout");
+const appliedEquationStageLayoutAuthority: unique symbol =
+  Symbol("kp.applied-equation-stage-layout");
 
 export interface KpMeasuredEquationStageInput {
   readonly schemaVersion: "kp.measured-equation-stage-input.v1";
@@ -120,5 +141,135 @@ export interface KpAppliedEquationStageLayout {
   readonly [appliedEquationStageLayoutAuthority]: true;
 }
 
+export function compileKpMeasuredEquationStageInput(input: {
+  readonly intent: KpEquationStagePhaseIntent;
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
+  readonly definitions: readonly KpEquationStageEnvelopeDefinition[];
+  readonly observations: readonly KpEquationStageEnvelopeObservation[];
+}): KpMeasuredEquationStageInput {
+  const measurementIdentity =
+    createKpEquationStageMeasurementIdentity(input.measurementIdentity);
+  assertNonEmptyId(input.intent.nodeId, "Equation stage phase");
+  const rowIds = input.intent.rows.map(({ id }) => id);
+  assertUniqueIds(rowIds, "Equation stage row");
+  const requestedEnvelopeIds = input.intent.rows.flatMap((row) => {
+    if (row.envelopeIds.length === 0) {
+      throw new Error(`Equation stage row ${row.id} has no envelopes.`);
+    }
+    return row.envelopeIds;
+  });
+  assertUniqueIds(requestedEnvelopeIds, "Equation stage row envelope");
+  const definitions = indexEnvelopes(input.definitions, "definition");
+  const observations = indexEnvelopes(input.observations, "observation");
+  const envelopes = requestedEnvelopeIds.map((id) => {
+    const definition = definitions.get(id);
+    if (definition === undefined) {
+      throw new Error(`Equation stage envelope ${id} has no semantic definition.`);
+    }
+    const observation = observations.get(id);
+    if (observation === undefined) {
+      throw new Error(`Equation stage envelope ${id} has no native observation.`);
+    }
+    if (
+      definition.transitionId !== input.intent.nodeId ||
+      observation.transitionId !== input.intent.nodeId
+    ) {
+      throw new Error(
+        `Equation stage envelope ${id} crosses transition ${input.intent.nodeId}.`
+      );
+    }
+    if (definition.endpointObjectId !== observation.endpointObjectId) {
+      throw new Error(`Equation stage envelope ${id} changed endpoint ownership.`);
+    }
+    const expectedMembers = validatedMemberIds(
+      definition.memberOwnerIds,
+      `Equation stage envelope ${id} definition`
+    );
+    const observedMembers = validatedMemberIds(
+      observation.memberOwnerIds,
+      `Equation stage envelope ${id} observation`
+    );
+    if (!sameMembers(expectedMembers, observedMembers)) {
+      throw new Error(
+        `Equation stage envelope ${id} is partially active or has foreign members.`
+      );
+    }
+    assertKpEquationStageMeasurementIdentity(
+      measurementIdentity,
+      observation.measurementIdentity,
+      `Equation stage envelope ${id}`
+    );
+    assertStageRect(observation.rect, `Equation stage envelope ${id}`);
+    return Object.freeze({
+      id,
+      transitionId: input.intent.nodeId,
+      endpointObjectId: definition.endpointObjectId,
+      memberOwnerIds: Object.freeze([...expectedMembers]),
+      rect: Object.freeze({ ...observation.rect }),
+      measurementIdentity
+    });
+  });
+
+  return Object.freeze({
+    schemaVersion: "kp.measured-equation-stage-input.v1" as const,
+    executionState: "measured" as const,
+    measurementIdentity,
+    intent: input.intent,
+    envelopes: Object.freeze(envelopes),
+    [measuredEquationStageInputAuthority]: true as const
+  });
+}
+
 // These states are deliberately opaque: later compiler, certifier, and DOM
 // application functions own the only runtime paths that can create them.
+
+function indexEnvelopes<T extends { readonly id: string }>(
+  values: readonly T[],
+  kind: "definition" | "observation"
+): ReadonlyMap<string, T> {
+  const result = new Map<string, T>();
+  for (const value of values) {
+    assertNonEmptyId(value.id, `Equation stage envelope ${kind}`);
+    if (result.has(value.id)) {
+      throw new Error(`Equation stage envelope repeats ${kind} ${value.id}.`);
+    }
+    result.set(value.id, value);
+  }
+  return result;
+}
+
+function validatedMemberIds(
+  values: readonly string[],
+  label: string
+): readonly string[] {
+  if (values.length === 0) throw new Error(`${label} has no native members.`);
+  for (const value of values) assertNonEmptyId(value, `${label} member`);
+  assertUniqueIds(values, `${label} member`);
+  return values;
+}
+
+function sameMembers(left: readonly string[], right: readonly string[]): boolean {
+  if (left.length !== right.length) return false;
+  const rightMembers = new Set(right);
+  return left.every((member) => rightMembers.has(member));
+}
+
+function assertUniqueIds(values: readonly string[], label: string): void {
+  if (new Set(values).size !== values.length) {
+    throw new Error(`${label} ids must be unique.`);
+  }
+}
+
+function assertNonEmptyId(value: string, label: string): void {
+  if (value.trim() === "") throw new Error(`${label} id must be non-empty.`);
+}
+
+function assertStageRect(rect: KpEquationStageRect, label: string): void {
+  if (
+    ![rect.left, rect.top, rect.width, rect.height].every(Number.isFinite) ||
+    rect.width <= 0 ||
+    rect.height <= 0
+  ) {
+    throw new Error(`${label} must have finite positive native geometry.`);
+  }
+}

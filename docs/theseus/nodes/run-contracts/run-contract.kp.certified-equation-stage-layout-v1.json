@@ -89,7 +89,8 @@
     {
       "id": "s06",
       "title": "Measured envelope closure",
-      "status": "planned"
+      "summary": "Compiled exact semantic envelope definitions plus native observations into branded measured stage input, rejecting missing, duplicate, cross-transition, partial, foreign, invalid, or mixed-identity evidence.",
+      "status": "complete"
     },
     {
       "id": "s07",
