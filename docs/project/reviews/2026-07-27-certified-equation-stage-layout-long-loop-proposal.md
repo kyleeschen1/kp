@@ -1,7 +1,10 @@
 # Certified Equation Stage Layout Long-Loop Proposal
 
 Date: 2026-07-27
-Status: proposed; execution requires explicit user approval
+Status: approved
+Approved by: user
+Execution contract:
+`run-contract.kp.certified-equation-stage-layout-v1`
 
 ## Objective
 

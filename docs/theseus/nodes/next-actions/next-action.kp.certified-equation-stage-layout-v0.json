@@ -35,6 +35,14 @@
       "path": "docs/theseus/nodes/next-actions/next-action.kp.bound-native-fan-in-motion-v0.json"
     }
   ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.foldable-distribution-collection-exemplar-v0"
+    ]
+  },
+  "affects": [
+    "run-contract.kp.certified-equation-stage-layout-v1"
+  ],
   "verification": [
     "npm run test:foldable-distribution",
     "npm run visual:foldable-distribution",
@@ -43,5 +51,45 @@
     "npm test",
     "npm run build",
     "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "theseus workspace validate; theseus plan run",
+      "status": "passed",
+      "scope": "s01 approved control plane",
+      "checkedAt": "2026-07-27T21:41:28.468Z",
+      "notes": "Workspace validates with 807 nodes; complete v1 contract has 26 approved slices, broad verification, exact stop conditions, mandatory slice 24 checkpoint, and the target done-contract gate passes."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Approved 26-slice v1 contract is active and ready. The incomplete unstarted v0 record is superseded; proposal approval, target done contract, explicit deferrals, and the downstream x-fusion dependency are durable."
+  },
+  "expectedLearning": [
+    "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."
+  ],
+  "allowedWork": [
+    "Measured stage layout certificates, semantic envelope measurement, responsive fit integration, local compositor occupancy input, one foldable distribution exemplar, bounded canonical lifecycle and motif typing, tests, visual evidence, and Theseus records."
+  ],
+  "disallowedWork": [
+    "Second runtime, renderer, compositor, clock, lifecycle category, scheduler category, operation specific coordinates, browser wrapping, glyph text inference, persisted DOM geometry, unrelated deferred work, or user owned dirty files."
+  ],
+  "criteria": [
+    {
+      "id": "applied-certified-layout",
+      "weight": "high"
+    },
+    {
+      "id": "zero-unrelated-overlap",
+      "weight": "high"
+    },
+    {
+      "id": "simultaneous-opaque-x-fusion",
+      "weight": "high"
+    },
+    {
+      "id": "cross-exemplar-regression-free",
+      "weight": "high"
+    }
   ]
 }

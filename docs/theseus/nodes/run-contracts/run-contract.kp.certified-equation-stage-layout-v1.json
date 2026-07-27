@@ -1,0 +1,191 @@
+{
+  "id": "run-contract.kp.certified-equation-stage-layout-v1",
+  "kind": "run-contract",
+  "title": "Certified equation stage layout",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.certified-equation-stage-layout-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-27-certified-equation-stage-layout-long-loop-proposal.md",
+      "summary": "User approved exact 26 slice proposal with mandatory slice 24 visual checkpoint and explicit deferrals."
+    }
+  ],
+  "verification": [
+    "npm run test:foldable-distribution",
+    "npm run visual:foldable-distribution",
+    "npm run test:canonical-equation-renderer",
+    "npm run test:canonical-animation-construction",
+    "npm run test:animation-library-display",
+    "npm run visual:linear-equation",
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run check:reader-production",
+    "npm run check:reader-budgets",
+    "npm run check:dev-review-production",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Generic measured stage layout certificates, semantic envelope measurement, row and corridor planning, responsive fitting, deterministic stage fold or condense fallback, local compositor occupancy input, the foldable distribution exemplar, bounded canonical lifecycle and motif typing, stable tests, visual harnesses, production checks, and durable Theseus evidence.",
+    "The existing foldable distribution reader and Animation Library host may be changed only as required to consume the certified layout and present simultaneous opaque x fusion."
+  ],
+  "disallowedWork": [
+    "Second renderer, compositor, runtime, tree, clock, lifecycle category, scheduler category, operation specific coordinates, glyph text inference, browser wrapping, persisted DOM geometry, global equation migration, or simultaneous legacy and canonical paint.",
+    "Repository wide ownership migration, exact checkpoint generalization, nominal promotion rollout, HTML sanitation consolidation, bundle budget repair, unrelated domain work, or edits to user owned dirty roadmap, thread, exploration, and publication files."
+  ],
+  "goal": "Execute semantic row intent as measured, certified, and applied geometry before canonical glyph measurement; eliminate foldable distribution overlap at wide and phone sizes; preserve measured paint alignment; and complete simultaneous opaque x fusion.",
+  "target": "next-action.kp.certified-equation-stage-layout-v0",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and its completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if exact mathematics, semantic lineage, fold truth, accessibility, or native settlement changes.",
+    "Stop if layout requires operation specific coordinates, browser wrapping, glyph text inference, persisted DOM geometry, or a second geometry authority.",
+    "Stop if work introduces a renderer, compositor, runtime, tree, clock, lifecycle category, scheduler category, route catalog, or simultaneous legacy and canonical paint.",
+    "Stop on any solve x, fraction, radical, linear equation, seek, rewind, typography, resource, accessibility, or production closure regression.",
+    "Stop if a layout certificate can be produced without runtime proof or consumed across measurement revisions.",
+    "Stop if required work touches user owned dirty files or exceeds the approved deferrals.",
+    "Stop at HUMAN_CHECKPOINT after slice s24; slices s25 and s26 require fresh user visual approval.",
+    "Stop on a required verification failure that cannot be repaired within the current slice and preservation boundary."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Reconcile control plane",
+      "summary": "Established the complete approved v1 contract, corrected the proposal approval record, gave the target a full done contract and prerequisite, superseded the underspecified unstarted v0 record, validated the workspace, and restored active-run readiness.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Baseline visible paint diagnostic",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Semantic contact law",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Proof carrying layout types",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Measurement revision identity",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Measured envelope closure",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Pure single row planner",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Pure two row planner",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Swept envelope transit corridor",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Certified responsive fit",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Readable fit result",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Deterministic fit fallback",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Apply layout before paint measurement",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Reader consumes applied layout",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Compositor consumes occupancy",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Wide expanded exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Phone expanded exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Fold projection conformance",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Layout determinism",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Measured paint non regression",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Opaque lifecycle track types",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Typed factoring motif cohort",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Simultaneous opaque x fusion",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Human visual checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Cross exemplar release boundaries",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Full release closeout",
+      "status": "planned"
+    }
+  ]
+}
