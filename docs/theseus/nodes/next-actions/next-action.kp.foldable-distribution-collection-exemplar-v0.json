@@ -50,11 +50,25 @@
       "scope": "repository",
       "checkedAt": "2026-07-27T05:29:02.042Z",
       "notes": "Full architecture, inference, catalog, and 2,539-test regression suite passes with zero failures."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/foldable-distribution-preservation-manifest.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-27T05:33:04.491Z",
+      "notes": "Manifest freezes the exact expression chain, reference exemplars, four semantic visual motifs, opaque lineage, no-fade policies, viewport matrix, and frozen architecture boundary."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-27T05:33:09.101Z",
+      "notes": "The preservation manifest is accepted across app, node, test, and domain TypeScript projects."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-2 established the approved run and restored a clean compositor-adapter regression baseline by updating only stale browser-contract test doubles; production compositor code is unchanged, typecheck passes, and all 2,539 tests pass."
+    "summary": "Slice 3 froze the exact four-state equation chain, reference exemplars, semantic motif obligations, opaque-lineage/no-fade paint contract, fold truth, accessibility, responsive matrix, and no-core-growth boundary before implementation."
   },
   "expectedLearning": [
     "Whether one immutable evaluation tree can project expanded, collapsed, automatic, and pinned pedagogy without a second runtime.",

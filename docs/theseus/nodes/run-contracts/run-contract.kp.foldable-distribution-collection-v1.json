@@ -70,7 +70,8 @@
     {
       "id": "s03",
       "title": "Freeze-preservation-manifest",
-      "status": "planned"
+      "summary": "Froze exact source states, reference exemplars, four proper semantic motifs, opaque/no-fade paint rules, responsive review matrix, accessibility truth, and the frozen compositor/runtime boundary.",
+      "status": "complete"
     },
     {
       "id": "s04",
