@@ -13,6 +13,9 @@ import type {
   KpAppliedEquationStageLayout,
   KpEquationStageMeasurementIdentity
 } from "../runtime/equation-stage-layout.ts";
+import type {
+  KpCorridorCertifiedEquationStageLayout
+} from "../runtime/equation-stage-transit-corridor.ts";
 import {
   assertKpAppliedEquationStageLayout
 } from "../runtime/equation-stage-layout.ts";
@@ -29,7 +32,9 @@ export interface KpReaderCanonicalEquationSession {
     readonly presentationRevision: string;
     readonly measurementIdentity: KpEquationStageMeasurementIdentity;
     readonly appliedStageLayout?:
-      KpAppliedEquationStageLayout | undefined;
+      KpAppliedEquationStageLayout<
+        KpCorridorCertifiedEquationStageLayout
+      > | undefined;
   }) => boolean;
   readonly invalidate: () => void;
   readonly dispose: () => void;
@@ -162,6 +167,9 @@ export function createKpReaderCanonicalEquationSession(input: {
           transitionId,
           motionMode: frame.motionMode,
           measurementIdentity: frame.measurementIdentity,
+          ...(frame.appliedStageLayout === undefined
+            ? {}
+            : { stageLayout: frame.appliedStageLayout.certificate }),
           source,
           target
         });

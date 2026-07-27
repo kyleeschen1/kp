@@ -22,9 +22,16 @@ import {
   type KpNativeKatexFactoringChoreographyIntent
 } from "../../rendering/native-katex-factoring-choreography.ts";
 import {
+  assertKpEquationStageMeasurementIdentity,
   createKpEquationStageMeasurementIdentity,
   type KpEquationStageMeasurementIdentity
 } from "../runtime/equation-stage-layout.ts";
+import type {
+  KpCorridorCertifiedEquationStageLayout
+} from "../runtime/equation-stage-transit-corridor.ts";
+import type {
+  KpEquationMotionStageOccupancy
+} from "../../rendering/equation-motion-path-planner.ts";
 
 export interface KpReaderEquationMeasuredRendererSession
   extends KpNativeKatexRendererSession {
@@ -37,6 +44,8 @@ export function createKpReaderEquationSceneCompositorSession(input: {
   readonly transitionId: string;
   readonly motionMode?: "continuous" | "essential" | "checkpoint" | undefined;
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
+  readonly stageLayout?:
+    KpCorridorCertifiedEquationStageLayout | undefined;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
 }): KpReaderEquationMeasuredRendererSession {
@@ -44,6 +53,9 @@ export function createKpReaderEquationSceneCompositorSession(input: {
     input.measurementIdentity
   );
   const { renderTransition, materialTransition } = resolveTransitionPair(input);
+  const stageOccupancy = input.stageLayout === undefined
+    ? undefined
+    : projectStageOccupancy(input.stageLayout, measurementIdentity);
   const relations = projectReaderRelations({
     renderTransition,
     materialTransition
@@ -89,6 +101,7 @@ export function createKpReaderEquationSceneCompositorSession(input: {
     ...(renderTransition.visualMotif?.kind === "semantic-reorder-and-group"
       ? { reorderRouting: true }
       : {}),
+    ...(stageOccupancy === undefined ? {} : { stageOccupancy }),
     ...(renderTransition.successorSyntheses === undefined
       ? {}
       : {
@@ -157,6 +170,28 @@ export function createKpReaderEquationSceneCompositorSession(input: {
   return Object.freeze({
     ...canonical.session,
     measurementIdentity
+  });
+}
+
+function projectStageOccupancy(
+  layout: KpCorridorCertifiedEquationStageLayout,
+  measurementIdentity: KpEquationStageMeasurementIdentity
+): KpEquationMotionStageOccupancy {
+  assertKpEquationStageMeasurementIdentity(
+    layout.measurementIdentity,
+    measurementIdentity,
+    "Reader equation compositor stage occupancy"
+  );
+  return Object.freeze({
+    measurementIdentity,
+    rows: Object.freeze(layout.rows.map(({ id, rect }) => Object.freeze({
+      id,
+      rect: Object.freeze({ ...rect })
+    }))),
+    protectedCorridor: Object.freeze({
+      ...layout.protectedTransitCorridor.rect
+    }),
+    geometryAuthority: "certified-stage-layout" as const
   });
 }
 

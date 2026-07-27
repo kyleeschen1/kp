@@ -4,7 +4,8 @@ import {
   kpMaximumFanInExcursionInLocalInkHeights,
   kpEquationMotionTrackScale,
   sampleKpEquationMotionTrackPaintRect,
-  type KpEquationCollisionTrack
+  type KpEquationCollisionTrack,
+  type KpEquationMotionStageOccupancy
 } from "./equation-motion-path-planner.ts";
 import {
   evaluateKpMotionQuality,
@@ -90,8 +91,14 @@ export function evaluateKpNativeKatexFanInMotionQuality(
 
 export function compileKpQualityBoundedFanInTracks<
   Track extends KpEquationCollisionTrack
->(tracks: readonly Track[]): readonly Track[] {
-  const compiled = compileKpCollisionSafeFanInTracks(tracks);
+>(
+  tracks: readonly Track[],
+  stageOccupancy?: KpEquationMotionStageOccupancy
+): readonly Track[] {
+  const compiled = compileKpCollisionSafeFanInTracks(
+    tracks,
+    stageOccupancy
+  );
   const quality = evaluateKpNativeKatexFanInMotionQuality(compiled);
   if (!quality.passed) {
     const diagnostics = Object.values(quality.trackReports)

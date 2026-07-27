@@ -56,6 +56,7 @@ import {
   sampleKpReaderAnimationFrame,
   resetKpAppliedEquationStageLayout,
   type KpAppliedEquationStageLayout,
+  type KpCorridorCertifiedEquationStageLayout,
   type KpReaderClockSample,
   type KpReaderContinuousScrollClock,
   type KpReaderFocusSnapshot,
@@ -91,7 +92,9 @@ interface TransitionContext {
   readonly alignment: KpReaderEquationPerceptualAlignmentPlan;
   readonly fit: KpReaderEquationResponsiveFitPlan;
   readonly appliedStageLayout?:
-    KpAppliedEquationStageLayout | undefined;
+    KpAppliedEquationStageLayout<
+      KpCorridorCertifiedEquationStageLayout
+    > | undefined;
 }
 
 interface LayoutState {
@@ -590,7 +593,10 @@ function measureLayout(revision: number): LayoutState {
     });
     const phaseIntent = stageLayoutIntent?.phases[index];
     const cohort = phaseCohorts[index];
-    let appliedStageLayout: KpAppliedEquationStageLayout | undefined;
+    let appliedStageLayout:
+      KpAppliedEquationStageLayout<
+        KpCorridorCertifiedEquationStageLayout
+      > | undefined;
     if (
       stageLayoutCompiler !== undefined &&
       phaseIntent !== undefined &&

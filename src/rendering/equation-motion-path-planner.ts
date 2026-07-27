@@ -44,6 +44,19 @@ export type KpEquationMotionPathSampling =
   | "planned-curve"
   | "canonical-clearance-lane";
 
+export interface KpEquationMotionStageOccupancy {
+  readonly measurementIdentity: {
+    readonly revision: number;
+    readonly coordinateSpaceId: string;
+  };
+  readonly rows: readonly {
+    readonly id: string;
+    readonly rect: KpEquationLayoutRect;
+  }[];
+  readonly protectedCorridor: KpEquationLayoutRect;
+  readonly geometryAuthority: "certified-stage-layout";
+}
+
 export const kpMaximumFanInExcursionInLocalInkHeights = 1.5;
 export const kpMaximumFanInSettlementAspectRatio = 5;
 const kpFanInContextMotionRange = Object.freeze({ start: 0.35, end: 0.55 });
@@ -251,7 +264,13 @@ export function sampleKpEquationMotionPathWithSampling(
 
 export function compileKpCollisionSafeFanInTracks<
   Track extends KpEquationCollisionTrack
->(tracks: readonly Track[]): readonly Track[] {
+>(
+  tracks: readonly Track[],
+  stageOccupancy?: KpEquationMotionStageOccupancy
+): readonly Track[] {
+  if (stageOccupancy !== undefined) {
+    assertKpEquationMotionStageOccupancy(stageOccupancy);
+  }
   const mergeTracks = tracks.filter(({ lifecycle }) => lifecycle === "merge");
   if (mergeTracks.length === 0) return tracks;
   const groupTravel = Math.max(...mergeTracks.map((track) => {
@@ -277,7 +296,11 @@ export function compileKpCollisionSafeFanInTracks<
   }) as Track);
   const obstructedMergeTrackIds = new Set(mergeTracks
     .filter((track) =>
-      !evaluateFanInTrackClearance(scheduled, [track.id]).passed
+      !evaluateFanInTrackClearance(
+        scheduled,
+        [track.id],
+        stageOccupancy
+      ).passed
     )
     .map(({ id }) => id));
   if (obstructedMergeTrackIds.size === 0) {
@@ -295,7 +318,8 @@ export function compileKpCollisionSafeFanInTracks<
             motionPath: Object.freeze(planTrackPath(
               track,
               "arc-above",
-              localInkScale * liftRatio
+              localInkScale * liftRatio,
+              stageOccupancy
             )),
             motionPathSampling: "canonical-clearance-lane" as const,
             motionGroupTravel: groupTravel
@@ -303,7 +327,8 @@ export function compileKpCollisionSafeFanInTracks<
     );
     const clearance = evaluateFanInTrackClearance(
       candidates,
-      [...obstructedMergeTrackIds]
+      [...obstructedMergeTrackIds],
+      stageOccupancy
     );
     if (clearance.passed) {
       return Object.freeze(candidates);
@@ -319,7 +344,13 @@ export function compileKpCollisionSafeFanInTracks<
 
 export function compileKpCollisionSafeReorderTracks<
   Track extends KpEquationCollisionTrack
->(tracks: readonly Track[]): readonly Track[] {
+>(
+  tracks: readonly Track[],
+  stageOccupancy?: KpEquationMotionStageOccupancy
+): readonly Track[] {
+  if (stageOccupancy !== undefined) {
+    assertKpEquationMotionStageOccupancy(stageOccupancy);
+  }
   const persistComponents = groupTrackGeometry(
     tracks.filter(({ lifecycle }) => lifecycle === "persist")
   );
@@ -396,7 +427,8 @@ export function compileKpCollisionSafeReorderTracks<
               ) < 0
                 ? "arc-above"
                 : "arc-below",
-              localInkScale * liftRatio
+              localInkScale * liftRatio,
+              stageOccupancy
             )),
             motionPathSampling: "canonical-clearance-lane" as const,
             motionGroupTravel: groupTravel,
@@ -407,7 +439,8 @@ export function compileKpCollisionSafeReorderTracks<
     const clearance = evaluateTrackClearance(
       candidates,
       movingTrackIds,
-      kpNativeReorderInkContactTolerancePx
+      kpNativeReorderInkContactTolerancePx,
+      stageOccupancy
     );
     if (clearance.passed) return Object.freeze(candidates);
     blockers = clearance.blockers;
@@ -470,21 +503,70 @@ export function sampleKpEquationMotionTrackOpacityProgress(
 function planTrackPath(
   track: KpEquationCollisionTrack,
   variant: "direct" | "arc-above" | "arc-below",
-  clearance: number
+  clearance: number,
+  stageOccupancy?: KpEquationMotionStageOccupancy
 ): KpEquationMotionPathCandidate {
-  return planKpEquationMotionPathBetweenPoints({
-    id: `paint-path.${track.id}.${variant}.${clearance}`,
-    start: rectCenter(track.startPaintRect ?? track.startRect),
-    end: rectCenter(track.endPaintRect ?? track.endRect),
+  const start = rectCenter(track.startPaintRect ?? track.startRect);
+  const end = rectCenter(track.endPaintRect ?? track.endRect);
+  const planned = (
+    selectedVariant: "direct" | "arc-above" | "arc-below",
+    selectedClearance: number
+  ) => planKpEquationMotionPathBetweenPoints({
+    id: `paint-path.${track.id}.${selectedVariant}.${selectedClearance}`,
+    start,
+    end,
     moverRadius: 0,
-    variants: [variant],
-    clearance
+    variants: [selectedVariant],
+    clearance: selectedClearance
   }).selected;
+  const localPath = planned(variant, clearance);
+  if (
+    stageOccupancy === undefined ||
+    pathStaysWithinCertifiedOccupancy(track, localPath, stageOccupancy)
+  ) {
+    return localPath;
+  }
+  const lane = resolveCertifiedClearanceLane(track, stageOccupancy);
+  if (lane === undefined) return localPath;
+  return planned(lane.variant, Math.min(clearance, lane.clearance));
+}
+
+function pathStaysWithinCertifiedOccupancy(
+  track: KpEquationCollisionTrack,
+  path: KpEquationMotionPathCandidate,
+  occupancy: KpEquationMotionStageOccupancy
+): boolean {
+  const lane = resolveCertifiedClearanceLane(track, occupancy);
+  if (lane === undefined) return false;
+  if (occupancy.rows.length === 1) {
+    // With no competing row, existing paint-to-paint clearance remains the
+    // tighter local authority; the corridor still bounds responsive fit.
+    return true;
+  }
+  const allowedBounds = unionRects([
+    lane.row.rect,
+    occupancy.protectedCorridor
+  ]);
+  const routedTrack = {
+    ...track,
+    motionPath: path,
+    motionPathSampling: "canonical-clearance-lane" as const
+  };
+  return Array.from({ length: 19 }, (_value, index) =>
+    sampleKpEquationMotionTrackPaintRect(routedTrack, (index + 1) / 20)
+  ).every((paint) =>
+    containsRect(allowedBounds, paint, kpNativeInkContactTolerancePx) &&
+    occupancy.rows.every(({ id, rect }) =>
+      id === lane.row.id ||
+      !intersectsRect(rect, paint, kpNativeInkContactTolerancePx)
+    )
+  );
 }
 
 function evaluateFanInTrackClearance(
   tracks: readonly KpEquationCollisionTrack[],
-  movingTrackIds?: readonly string[]
+  movingTrackIds?: readonly string[],
+  stageOccupancy?: KpEquationMotionStageOccupancy
 ): { readonly passed: boolean; readonly blockers: readonly string[] } {
   const selectedIds = movingTrackIds === undefined
     ? undefined
@@ -494,14 +576,17 @@ function evaluateFanInTrackClearance(
   );
   return evaluateTrackClearance(
     tracks,
-    mergeTracks.map(({ id }) => id)
+    mergeTracks.map(({ id }) => id),
+    kpNativeInkContactTolerancePx,
+    stageOccupancy
   );
 }
 
 function evaluateTrackClearance(
   tracks: readonly KpEquationCollisionTrack[],
   movingTrackIds: readonly string[],
-  inkInset = kpNativeInkContactTolerancePx
+  inkInset = kpNativeInkContactTolerancePx,
+  stageOccupancy?: KpEquationMotionStageOccupancy
 ): { readonly passed: boolean; readonly blockers: readonly string[] } {
   const movingIds = new Set(movingTrackIds);
   const requirements = tracks
@@ -521,9 +606,6 @@ function evaluateTrackClearance(
             minClearancePx: 0.001
           }];
     });
-  if (requirements.length === 0) {
-    return { passed: true, blockers: [] };
-  }
   const frames = Array.from({ length: 19 }, (_value, index) => {
     const progress = (index + 1) / 20;
     const easedProgress = smoothstep(progress);
@@ -542,25 +624,137 @@ function evaluateTrackClearance(
       })
     };
   });
-  const report = evaluateKpEquationMotionClearanceSequence({
-    frames,
-    requirements,
-    maxSpatialStepPx: 1,
-    maxProgressStep: 0.01
-  });
+  const report = requirements.length === 0
+    ? undefined
+    : evaluateKpEquationMotionClearanceSequence({
+        frames,
+        requirements,
+        maxSpatialStepPx: 1,
+        maxProgressStep: 0.01
+      });
   const blockerProgress = new Map<string, number>();
-  for (const diagnostic of report.diagnostics) {
+  for (const diagnostic of report?.diagnostics ?? []) {
     const pair = `${diagnostic.movingId}->${diagnostic.protectedId}`;
     if (!blockerProgress.has(pair)) {
       blockerProgress.set(pair, diagnostic.progress);
     }
   }
+  if (stageOccupancy !== undefined) {
+    for (const track of tracks.filter(({ id }) => movingIds.has(id))) {
+      const lane = resolveCertifiedClearanceLane(track, stageOccupancy);
+      if (lane === undefined) {
+        blockerProgress.set(`${track.id}->uncertified-stage-row`, 0);
+        continue;
+      }
+      if (stageOccupancy.rows.length === 1) continue;
+      const allowedBounds = unionRects([
+        lane.row.rect,
+        stageOccupancy.protectedCorridor
+      ]);
+      for (const frame of frames) {
+        const paint = frame.ink.find(({ id }) => id === track.id)!;
+        if (!containsRect(allowedBounds, paint, kpNativeInkContactTolerancePx)) {
+          blockerProgress.set(
+            `${track.id}->outside-certified-occupancy`,
+            frame.progress
+          );
+          break;
+        }
+        const foreignRow = stageOccupancy.rows.find(({ id, rect }) =>
+          id !== lane.row.id &&
+          intersectsRect(rect, paint, kpNativeInkContactTolerancePx)
+        );
+        if (foreignRow !== undefined) {
+          blockerProgress.set(
+            `${track.id}->${foreignRow.id}`,
+            frame.progress
+          );
+          break;
+        }
+      }
+    }
+  }
   return {
-    passed: report.passed,
+    passed: (report?.passed ?? true) && blockerProgress.size === 0,
     blockers: [...blockerProgress].map(([pair, progress]) =>
       `${pair}@${progress.toFixed(3)}`
     )
   };
+}
+
+function resolveCertifiedClearanceLane(
+  track: KpEquationCollisionTrack,
+  occupancy: KpEquationMotionStageOccupancy
+): {
+  readonly row: KpEquationMotionStageOccupancy["rows"][number];
+  readonly variant: "arc-above" | "arc-below";
+  readonly clearance: number;
+} | undefined {
+  const start = rectCenter(track.startPaintRect ?? track.startRect);
+  const end = rectCenter(track.endPaintRect ?? track.endRect);
+  const sourceRows = occupancy.rows.filter(({ rect }) =>
+    containsPoint(rect, start, kpNativeInkContactTolerancePx)
+  );
+  const targetRows = occupancy.rows.filter(({ rect }) =>
+    containsPoint(rect, end, kpNativeInkContactTolerancePx)
+  );
+  if (
+    sourceRows.length !== 1 ||
+    targetRows.length !== 1 ||
+    sourceRows[0]!.id !== targetRows[0]!.id
+  ) {
+    return undefined;
+  }
+  const corridorY = rectCenter(occupancy.protectedCorridor).y;
+  const midpointY = (start.y + end.y) / 2;
+  return {
+    row: sourceRows[0]!,
+    variant: corridorY < midpointY ? "arc-above" : "arc-below",
+    // The caller may use less lift, but never more than the measured distance
+    // to the certified lane; local routing stays the first authority.
+    clearance: Math.abs(corridorY - midpointY)
+  };
+}
+
+export function assertKpEquationMotionStageOccupancy(
+  occupancy: KpEquationMotionStageOccupancy
+): void {
+  if (
+    occupancy.geometryAuthority !== "certified-stage-layout" ||
+    occupancy.rows.length < 1 ||
+    occupancy.rows.length > 2 ||
+    occupancy.measurementIdentity.coordinateSpaceId.trim() === "" ||
+    !Number.isInteger(occupancy.measurementIdentity.revision) ||
+    occupancy.measurementIdentity.revision < 0
+  ) {
+    throw new Error("Equation motion stage occupancy is not certified.");
+  }
+  const ids = occupancy.rows.map(({ id }) => id);
+  if (
+    ids.some((id) => id.trim() === "") ||
+    new Set(ids).size !== ids.length
+  ) {
+    throw new Error("Equation motion stage occupancy rows must be unique.");
+  }
+  for (const [label, rect] of [
+    ...occupancy.rows.map(({ id, rect }) => [`row ${id}`, rect] as const),
+    ["protected corridor", occupancy.protectedCorridor] as const
+  ]) {
+    if (
+      ![rect.left, rect.top, rect.width, rect.height].every(Number.isFinite) ||
+      rect.width <= 0 ||
+      rect.height <= 0
+    ) {
+      throw new Error(`Equation motion stage ${label} has invalid geometry.`);
+    }
+  }
+  if (occupancy.rows.some(({ rect }) =>
+    intersectsRect(rect, occupancy.protectedCorridor, 0)
+  )) {
+    throw new Error(
+      "Equation motion protected corridor intersects certified row occupancy."
+    );
+  }
 }
 
 interface KpTrackComponentGeometry {
@@ -637,6 +831,39 @@ function unionRects(
   const right = Math.max(...rects.map((rect) => rect.left + rect.width));
   const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
   return { left, top, width: right - left, height: bottom - top };
+}
+
+function containsPoint(
+  rect: KpEquationLayoutRect,
+  point: KpEquationLayoutPoint,
+  tolerance: number
+): boolean {
+  return point.x >= rect.left - tolerance &&
+    point.x <= rect.left + rect.width + tolerance &&
+    point.y >= rect.top - tolerance &&
+    point.y <= rect.top + rect.height + tolerance;
+}
+
+function containsRect(
+  outer: KpEquationLayoutRect,
+  inner: KpEquationLayoutRect,
+  tolerance: number
+): boolean {
+  return inner.left >= outer.left - tolerance &&
+    inner.top >= outer.top - tolerance &&
+    inner.left + inner.width <= outer.left + outer.width + tolerance &&
+    inner.top + inner.height <= outer.top + outer.height + tolerance;
+}
+
+function intersectsRect(
+  left: KpEquationLayoutRect,
+  right: KpEquationLayoutRect,
+  tolerance: number
+): boolean {
+  return Math.min(left.left + left.width, right.left + right.width) -
+      Math.max(left.left, right.left) > tolerance &&
+    Math.min(left.top + left.height, right.top + right.height) -
+      Math.max(left.top, right.top) > tolerance;
 }
 
 function layoutRectAt(

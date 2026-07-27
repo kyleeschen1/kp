@@ -1776,6 +1776,65 @@ test("semantic reorder lifts one opaque crossing cohort before grouping enters",
   assert.equal(afterGrouping[3]!.opacity, 1);
 });
 
+test("semantic reorder uses the certified stage corridor without moving rows", () => {
+  const track = (
+    id: string,
+    componentId: string,
+    startLeft: number,
+    endLeft: number
+  ): KpNativeKatexSceneTrack => ({
+    id,
+    componentId,
+    lifecycle: "persist",
+    sourceAtomId: `source.${id}`,
+    targetAtomId: `target.${id}`,
+    visualAtomId: `source.${id}`,
+    paintKind: "glyph",
+    sizingMode: "rect",
+    startRect: { left: startLeft, top: 20, width: 8, height: 16 },
+    endRect: { left: endLeft, top: 20, width: 8, height: 16 },
+    startOpacity: 1,
+    endOpacity: 1
+  });
+  const row = Object.freeze({
+    id: "row.certified",
+    rect: Object.freeze({ left: 0, top: 10, width: 140, height: 36 })
+  });
+  const occupancy = Object.freeze({
+    measurementIdentity: Object.freeze({
+      revision: 4,
+      coordinateSpaceId: "reader.stage"
+    }),
+    rows: Object.freeze([
+      row,
+      Object.freeze({
+        id: "row.protected",
+        rect: Object.freeze({ left: 0, top: 76, width: 140, height: 36 })
+      })
+    ]),
+    protectedCorridor: Object.freeze({
+      left: 0,
+      top: 46,
+      width: 140,
+      height: 30
+    }),
+    geometryAuthority: "certified-stage-layout" as const
+  });
+  const compiled = compileKpCollisionSafeReorderTracks([
+    track("mover.digit", "component.mover", 80, 20),
+    track("mover.variable", "component.mover", 90, 30),
+    track("context", "component.context", 40, 60)
+  ], occupancy);
+
+  assert.equal(compiled[0]!.motionPath?.variant, "arc-below");
+  assert.equal(compiled[1]!.motionPath?.variant, "arc-below");
+  assert.deepEqual(occupancy.rows[0], row);
+  assert.equal(
+    compiled[0]!.motionPathSampling,
+    "canonical-clearance-lane"
+  );
+});
+
 test("merge-fan-in fails closed when its native target remains occluded", () => {
   const merge: KpNativeKatexSceneTrack = {
     id: "track.merge.x",

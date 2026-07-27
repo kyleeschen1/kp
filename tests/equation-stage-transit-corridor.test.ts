@@ -91,6 +91,9 @@ function corridor() {
 }
 
 test("corridor separates rows and chooses direct versus lifted transit", () => {
+  const base = baseLayout();
+  const baseCenterY =
+    base.stageBounds.top + base.stageBounds.height / 2;
   const certificate = corridor();
   const [first, second] = certificate.rows;
   const protectedRect = certificate.protectedTransitCorridor.rect;
@@ -104,6 +107,10 @@ test("corridor separates rows and chooses direct versus lifted transit", () => {
   assert.ok(
     protectedRect.height >=
     16 + certificate.protectedTransitCorridor.clearancePx * 2
+  );
+  assert.equal(
+    certificate.stageBounds.top + certificate.stageBounds.height / 2,
+    baseCenterY
   );
 });
 

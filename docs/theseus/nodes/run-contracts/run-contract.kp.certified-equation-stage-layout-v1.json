@@ -143,7 +143,8 @@
     {
       "id": "s15",
       "title": "Compositor consumes occupancy",
-      "status": "planned"
+      "summary": "Certified semantic transits and protected row occupancy now reach the existing local fan-in and reorder clearance planners with exact revision identity. Two-row paths may use the existing canonical lane but cannot enter foreign rows or move row geometry; one-row choreography remains unchanged.",
+      "status": "complete"
     },
     {
       "id": "s16",

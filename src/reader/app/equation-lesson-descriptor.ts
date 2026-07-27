@@ -9,6 +9,9 @@ import type {
   KpEquationStageMeasurementIdentity,
   KpEquationStagePhaseIntent
 } from "../runtime/equation-stage-layout.ts";
+import type {
+  KpCorridorCertifiedEquationStageLayout
+} from "../runtime/equation-stage-transit-corridor.ts";
 
 export interface KpReaderEquationStageLayoutCompiler {
   readonly apply: (input: {
@@ -17,7 +20,7 @@ export interface KpReaderEquationStageLayoutCompiler {
     readonly targetObjectIds: readonly string[];
     readonly measurementRoot: HTMLElement;
     readonly measurementIdentity: KpEquationStageMeasurementIdentity;
-  }) => KpAppliedEquationStageLayout;
+  }) => KpAppliedEquationStageLayout<KpCorridorCertifiedEquationStageLayout>;
 }
 
 export interface KpReaderEquationLessonDescriptor {

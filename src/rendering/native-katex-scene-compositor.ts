@@ -18,7 +18,8 @@ import type {
 } from "../animation/structural-succession-presentation.ts";
 import {
   compileKpCollisionSafeReorderTracks,
-  type KpEquationCollisionTrack
+  type KpEquationCollisionTrack,
+  type KpEquationMotionStageOccupancy as O
 } from "./equation-motion-path-planner.ts";
 import {
   compileKpQualityBoundedFanInTracks
@@ -1640,15 +1641,15 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly relations: readonly KpNativeKatexSemanticPaintRelation[];
-  readonly structuralSuccession?:
-    KpEquationStructuralSuccessionIntent | undefined;
-  readonly structuralMotion?: "full" | "checkpoint" | undefined;
+  readonly structuralSuccession?: KpEquationStructuralSuccessionIntent;
+  readonly structuralMotion?: "full" | "checkpoint";
   readonly successorSyntheses?:
     readonly KpNativeKatexSuccessorSynthesisIntent[] | undefined;
   readonly factoring?: KpNativeKatexFactoringSceneBinding;
-  readonly fanInRouting?: boolean | undefined;
-  readonly copyFanOutRouting?: boolean | undefined;
-  readonly reorderRouting?: boolean | undefined;
+  readonly fanInRouting?: boolean;
+  readonly copyFanOutRouting?: boolean;
+  readonly reorderRouting?: boolean;
+  readonly stageOccupancy?: O;
 }): KpCanonicalNativeKatexSceneSession {
   if (input.source.stage !== input.target.stage) {
     throw new Error("Canonical native KaTeX endpoints must share one stage.");
@@ -1675,10 +1676,10 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     input.factoring
   );
   const routed = input.reorderRouting === true
-    ? compileKpCollisionSafeReorderTracks(ownership.tracks)
+    ? compileKpCollisionSafeReorderTracks(ownership.tracks, input.stageOccupancy)
     : ownership.tracks;
   const tracks = input.fanInRouting === true
-    ? compileKpQualityBoundedFanInTracks(routed)
+    ? compileKpQualityBoundedFanInTracks(routed, input.stageOccupancy)
     : routed;
   const correlations = correlateKpNativeKatexSceneHandoff({
     reconciliation,

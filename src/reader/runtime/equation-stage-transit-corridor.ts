@@ -114,12 +114,18 @@ function placeCorridorRows(
   const currentGutter =
     second!.rect.top - (first!.rect.top + first!.rect.height);
   const shiftY = Math.max(0, corridorHeight - currentGutter);
+  const firstShiftY = -shiftY / 2;
+  const secondShiftY = shiftY / 2;
   return Object.freeze([
-    first!,
+    Object.freeze({
+      ...first!,
+      rect: translateRect(first!.rect, 0, firstShiftY),
+      translateY: first!.translateY + firstShiftY
+    }),
     Object.freeze({
       ...second!,
-      rect: translateRect(second!.rect, 0, shiftY),
-      translateY: second!.translateY + shiftY
+      rect: translateRect(second!.rect, 0, secondShiftY),
+      translateY: second!.translateY + secondShiftY
     })
   ]);
 }

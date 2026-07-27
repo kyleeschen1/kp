@@ -16,6 +16,10 @@ import {
   type KpEquationStageMeasurementIdentity,
   type KpEquationStagePhaseIntent
 } from "../runtime/equation-stage-layout.ts";
+import {
+  certifyKpEquationStageTransitCorridor,
+  type KpCorridorCertifiedEquationStageLayout
+} from "../runtime/equation-stage-transit-corridor.ts";
 
 export function applyKpFoldableDistributionPhaseStageLayout(input: {
   readonly phaseIntent: KpEquationStagePhaseIntent;
@@ -23,7 +27,7 @@ export function applyKpFoldableDistributionPhaseStageLayout(input: {
   readonly targetObjectIds: readonly string[];
   readonly measurementRoot: HTMLElement;
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
-}): KpAppliedEquationStageLayout {
+}): KpAppliedEquationStageLayout<KpCorridorCertifiedEquationStageLayout> {
   const endpointById = new Map(
     createKpFoldableDistributionAnnotatedEndpoints().map((endpoint) => [
       endpoint.objectId,
@@ -116,9 +120,35 @@ export function applyKpFoldableDistributionPhaseStageLayout(input: {
     definitions,
     observations
   });
-  const certificate = input.phaseIntent.policy === "single-row"
+  const rowCertificate = input.phaseIntent.policy === "single-row"
     ? certifyKpSingleRowEquationStageLayout(measured)
     : certifyKpTwoRowEquationStageLayout(measured);
+  const sourceObjectIds = new Set(input.sourceObjectIds);
+  const targetObjectIds = new Set(input.targetObjectIds);
+  const certificate = certifyKpEquationStageTransitCorridor({
+    layout: rowCertificate,
+    transits: rowCertificate.rows.map((row) => {
+      const source = exactlyOneEndpointEnvelope(
+        row.envelopeIds,
+        measured.envelopes,
+        sourceObjectIds,
+        `${row.id} source`
+      );
+      const target = exactlyOneEndpointEnvelope(
+        row.envelopeIds,
+        measured.envelopes,
+        targetObjectIds,
+        `${row.id} target`
+      );
+      return {
+        id: `${input.phaseIntent.nodeId}.${row.id}.transit`,
+        sourceRowId: row.id,
+        targetRowId: row.id,
+        sourceRect: source.rect,
+        targetRect: target.rect
+      };
+    })
+  });
   return applyKpCertifiedEquationStageLayout({
     certificate,
     measurementIdentity: input.measurementIdentity,
@@ -135,6 +165,23 @@ export function applyKpFoldableDistributionPhaseStageLayout(input: {
       }))
     }))
   });
+}
+
+function exactlyOneEndpointEnvelope(
+  envelopeIds: readonly string[],
+  envelopes: readonly KpEquationStageEnvelopeObservation[],
+  endpointObjectIds: ReadonlySet<string>,
+  label: string
+): KpEquationStageEnvelopeObservation {
+  const matches = envelopeIds
+    .map((id) => envelopes.find((envelope) => envelope.id === id)!)
+    .filter(({ endpointObjectId }) => endpointObjectIds.has(endpointObjectId));
+  if (matches.length !== 1) {
+    throw new Error(
+      `Foldable stage ${label} must resolve to exactly one semantic envelope.`
+    );
+  }
+  return matches[0]!;
 }
 
 function measuredEmSize(element: HTMLElement): number {
