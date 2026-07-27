@@ -125,7 +125,8 @@
     {
       "id": "s12",
       "title": "Deterministic fit fallback",
-      "status": "planned"
+      "summary": "Added one deterministic requested-stage-fold-condense ladder and exact branded phase-fit resolver; all candidates preserve the shared semantic trace, checkpoints, and accessibility content, with explicit failure when none fits readably.",
+      "status": "complete"
     },
     {
       "id": "s13",

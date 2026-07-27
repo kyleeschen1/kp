@@ -101,6 +101,18 @@ export {
   type KpReaderEquationResponsiveFitPlan
 } from "./equation-responsive-fit.ts";
 export {
+  planKpFoldableDistributionFitFallback,
+  resolveKpFoldableDistributionFitFallback,
+  type KpFoldableDistributionFitFallbackAssessment,
+  type KpFoldableDistributionFitFallbackCandidate,
+  type KpFoldableDistributionFitFallbackPlan,
+  type KpFoldableDistributionFitFallbackPreservation,
+  type KpFoldableDistributionFitFallbackResolution,
+  type KpFoldableDistributionFitFallbackSatisfied,
+  type KpFoldableDistributionFitFallbackStrategy,
+  type KpFoldableDistributionFitFallbackUnsatisfied
+} from "./foldable-distribution-fit-fallback.ts";
+export {
   createKpDistributionAreaLayoutSnapshot,
   createKpDistributionAreaWidthLayoutSnapshot,
   measureKpDistributionAreaLayout,

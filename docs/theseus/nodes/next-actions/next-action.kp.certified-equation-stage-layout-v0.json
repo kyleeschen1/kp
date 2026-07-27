@@ -297,11 +297,32 @@
       "scope": "slice s11 readable fit result",
       "checkedAt": "2026-07-27T22:26:44.736Z",
       "notes": "Canonical renderer convergence remains unchanged by the fit-result boundary."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s12 deterministic fit fallback",
+      "checkedAt": "2026-07-27T22:36:07.292Z",
+      "notes": "94 tests pass, including deterministic stage-fold-condense ordering, semantic truth equivalence, real branded fit resolution, and explicit no-readable-fallback."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s12 deterministic fit fallback",
+      "checkedAt": "2026-07-27T22:36:08.226Z",
+      "notes": "All TypeScript projects accept the fallback planner and resolver over certified phase fit results."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice s12 deterministic fit fallback",
+      "checkedAt": "2026-07-27T22:36:09.135Z",
+      "notes": "Inference contracts remain below ceilings; the fallback module does not enlarge the lightweight proof fixture graph."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Certified stage fitting now returns a typed satisfied-or-unsatisfied result; below-floor layouts expose deterministic readability evidence and cannot masquerade as contained success."
+    "summary": "Unsatisfied certified layouts now have one deterministic requested-stage-fold-condense ladder; resolution accepts exact branded phase fit closure, preserves the shared trace and accessibility identities, and reports explicit failure if no readable semantic projection fits."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."
