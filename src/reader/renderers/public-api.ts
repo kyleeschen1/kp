@@ -91,7 +91,9 @@ export {
   applyKpReaderEquationResponsiveFit,
   checkKpReaderEquationMotionConformance,
   planKpReaderEquationResponsiveFit,
+  planKpReaderCertifiedEquationStageResponsiveFit,
   planKpReaderEquationSequenceResponsiveFit,
+  type KpReaderCertifiedEquationStageResponsiveFitPlan,
   type KpReaderEquationConformanceIssue,
   type KpReaderEquationResponsiveFitPlan
 } from "./equation-responsive-fit.ts";

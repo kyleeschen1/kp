@@ -57,6 +57,7 @@ test("a sequence shares one fit transform across transition envelopes", () => {
     height: 20
   });
   assert.equal(fit.translateX, 5);
+  assert.equal(fit.geometrySource, "alignment-envelope");
   assert.deepEqual(fit.measurementIdentity, measurementIdentity);
 });
 

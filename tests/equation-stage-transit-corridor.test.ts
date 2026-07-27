@@ -12,6 +12,9 @@ import {
 import {
   certifyKpEquationStageTransitCorridor
 } from "../src/reader/runtime/equation-stage-transit-corridor.ts";
+import {
+  planKpReaderCertifiedEquationStageResponsiveFit
+} from "../src/reader/renderers/equation-responsive-fit.ts";
 
 const identity = createKpEquationStageMeasurementIdentity({
   revision: 9,
@@ -135,6 +138,40 @@ test("full swept bounds contain rows, corridor, and every transit", () => {
   assert.deepEqual(corridor(), certificate);
 });
 
+test("responsive fit centers and contains the complete swept envelope", () => {
+  const layout = corridor();
+  const fit = planKpReaderCertifiedEquationStageResponsiveFit({
+    layout,
+    viewportWidth: 260,
+    viewportHeight: 140,
+    horizontalPadding: 12,
+    verticalPadding: 10,
+    minScale: 0.68,
+    overflowStrategy: "contain"
+  });
+
+  assert.equal(fit.geometrySource, "certified-stage-swept-envelope");
+  assert.equal(fit.stageLayout, layout);
+  assert.deepEqual(fit.contentBounds, layout.sweptBounds);
+  assert.deepEqual(fit.measurementIdentity, layout.measurementIdentity);
+  const fitted = fitRect(layout.sweptBounds, fit);
+  assert.ok(fitted.left >= fit.horizontalPadding - 1e-9);
+  assert.ok(fitted.top >= fit.verticalPadding! - 1e-9);
+  assert.ok(
+    fitted.left + fitted.width <=
+    fit.viewportWidth - fit.horizontalPadding + 1e-9
+  );
+  assert.ok(
+    fitted.top + fitted.height <=
+    fit.viewportHeight! - fit.verticalPadding! + 1e-9
+  );
+  assert.ok(
+    Math.abs(
+      fitted.left + fitted.width / 2 - fit.viewportWidth / 2
+    ) < 1e-9
+  );
+});
+
 test("corridor rejects duplicate, unknown-row, and escaped transit evidence", () => {
   const valid = {
     id: "transit.valid",
@@ -181,4 +218,20 @@ function contains(outer: KpEquationStageRect, inner: KpEquationStageRect) {
     inner.top >= outer.top &&
     inner.left + inner.width <= outer.left + outer.width &&
     inner.top + inner.height <= outer.top + outer.height;
+}
+
+function fitRect(
+  rect: KpEquationStageRect,
+  fit: {
+    readonly scale: number;
+    readonly translateX: number;
+    readonly translateY: number;
+  }
+): KpEquationStageRect {
+  return {
+    left: rect.left * fit.scale + fit.translateX,
+    top: rect.top * fit.scale + fit.translateY,
+    width: rect.width * fit.scale,
+    height: rect.height * fit.scale
+  };
 }

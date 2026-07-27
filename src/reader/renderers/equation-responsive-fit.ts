@@ -6,12 +6,18 @@ import {
   createKpEquationStageMeasurementIdentity,
   type KpEquationStageMeasurementIdentity
 } from "../runtime/equation-stage-layout.ts";
+import type {
+  KpCorridorCertifiedEquationStageLayout
+} from "../runtime/equation-stage-transit-corridor.ts";
 
 export interface KpReaderEquationResponsiveFitPlan {
   readonly id: string;
   readonly kind: "reader-equation-responsive-fit-plan";
   readonly alignmentPlanId: string;
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
+  readonly geometrySource:
+    | "alignment-envelope"
+    | "certified-stage-swept-envelope";
   readonly viewportWidth: number;
   readonly viewportHeight?: number | undefined;
   readonly horizontalPadding: number;
@@ -23,6 +29,16 @@ export interface KpReaderEquationResponsiveFitPlan {
   readonly translateY: number;
   readonly status: "native" | "scaled" | "contained" | "overflow";
   readonly wrapAllowed: false;
+}
+
+const certifiedEquationStageResponsiveFitAuthority: unique symbol =
+  Symbol("kp.certified-equation-stage-responsive-fit");
+
+export interface KpReaderCertifiedEquationStageResponsiveFitPlan
+  extends KpReaderEquationResponsiveFitPlan {
+  readonly geometrySource: "certified-stage-swept-envelope";
+  readonly stageLayout: KpCorridorCertifiedEquationStageLayout;
+  readonly [certifiedEquationStageResponsiveFitAuthority]: true;
 }
 
 export interface KpReaderEquationConformanceIssue {
@@ -46,6 +62,7 @@ export function planKpReaderEquationResponsiveFit(input: {
   return planFit({
     id: `fit.${input.alignment.id}.${input.viewportWidth}`,
     alignmentPlanId: input.alignment.id,
+    geometrySource: "alignment-envelope",
     alignments: [input.alignment],
     viewportWidth: input.viewportWidth,
     viewportHeight: input.viewportHeight,
@@ -72,6 +89,7 @@ export function planKpReaderEquationSequenceResponsiveFit(input: {
   return planFit({
     id: `fit.sequence.${input.id}.${input.viewportWidth}`,
     alignmentPlanId: `sequence.${input.id}`,
+    geometrySource: "alignment-envelope",
     alignments: input.alignments,
     viewportWidth: input.viewportWidth,
     viewportHeight: input.viewportHeight,
@@ -82,10 +100,47 @@ export function planKpReaderEquationSequenceResponsiveFit(input: {
   });
 }
 
+export function planKpReaderCertifiedEquationStageResponsiveFit(input: {
+  readonly layout: KpCorridorCertifiedEquationStageLayout;
+  readonly viewportWidth: number;
+  readonly viewportHeight?: number | undefined;
+  readonly horizontalPadding?: number | undefined;
+  readonly verticalPadding?: number | undefined;
+  readonly minScale?: number | undefined;
+  readonly overflowStrategy?: "report" | "contain" | undefined;
+}): KpReaderCertifiedEquationStageResponsiveFitPlan {
+  const fit = planFit({
+    id:
+      `fit.stage.${input.layout.measuredInput.intent.nodeId}.` +
+      `${input.layout.measurementIdentity.revision}.${input.viewportWidth}`,
+    alignmentPlanId:
+      `certified-stage.${input.layout.measuredInput.intent.nodeId}`,
+    geometrySource: "certified-stage-swept-envelope",
+    alignments: [],
+    contentBounds: input.layout.sweptBounds,
+    measurementIdentity: input.layout.measurementIdentity,
+    viewportWidth: input.viewportWidth,
+    viewportHeight: input.viewportHeight,
+    horizontalPadding: input.horizontalPadding,
+    verticalPadding: input.verticalPadding,
+    minScale: input.minScale,
+    overflowStrategy: input.overflowStrategy
+  });
+  return Object.freeze({
+    ...fit,
+    geometrySource: "certified-stage-swept-envelope" as const,
+    stageLayout: input.layout,
+    [certifiedEquationStageResponsiveFitAuthority]: true as const
+  });
+}
+
 function planFit(input: {
   readonly id: string;
   readonly alignmentPlanId: string;
+  readonly geometrySource: KpReaderEquationResponsiveFitPlan["geometrySource"];
   readonly alignments: readonly KpReaderEquationPerceptualAlignmentPlan[];
+  readonly contentBounds?: KpReaderLayoutRect | undefined;
+  readonly measurementIdentity?: KpEquationStageMeasurementIdentity | undefined;
   readonly viewportWidth: number;
   readonly viewportHeight?: number | undefined;
   readonly horizontalPadding?: number | undefined;
@@ -93,7 +148,8 @@ function planFit(input: {
   readonly minScale?: number | undefined;
   readonly overflowStrategy?: "report" | "contain" | undefined;
 }): KpReaderEquationResponsiveFitPlan {
-  const firstIdentity = input.alignments[0]?.measurementIdentity;
+  const firstIdentity =
+    input.measurementIdentity ?? input.alignments[0]?.measurementIdentity;
   if (firstIdentity === undefined) {
     throw new Error("Equation responsive fit requires measured alignment identity.");
   }
@@ -134,12 +190,14 @@ function planFit(input: {
   if (availableWidth <= 0) {
     throw new Error("Equation fit padding leaves no available inline space.");
   }
-  const contentBounds = unionRects(input.alignments.flatMap((alignment) =>
-    alignment.owners.flatMap((owner) => [
-      ...(owner.sourceBounds === undefined ? [] : [owner.sourceBounds]),
-      ...(owner.targetBounds === undefined ? [] : [owner.targetBounds])
-    ])
-  ));
+  const contentBounds = input.contentBounds ?? unionRects(
+    input.alignments.flatMap((alignment) =>
+      alignment.owners.flatMap((owner) => [
+        ...(owner.sourceBounds === undefined ? [] : [owner.sourceBounds]),
+        ...(owner.targetBounds === undefined ? [] : [owner.targetBounds])
+      ])
+    )
+  );
   const availableHeight = input.viewportHeight === undefined
     ? undefined
     : input.viewportHeight - verticalPadding * 2;
@@ -175,6 +233,7 @@ function planFit(input: {
     kind: "reader-equation-responsive-fit-plan",
     alignmentPlanId: input.alignmentPlanId,
     measurementIdentity,
+    geometrySource: input.geometrySource,
     viewportWidth: input.viewportWidth,
     ...(input.viewportHeight === undefined
       ? {}

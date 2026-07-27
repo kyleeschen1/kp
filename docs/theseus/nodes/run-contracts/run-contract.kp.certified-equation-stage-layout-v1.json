@@ -113,7 +113,8 @@
     {
       "id": "s10",
       "title": "Certified responsive fit",
-      "status": "planned"
+      "summary": "Integrated corridor-certified swept geometry into responsive fit, preserved measurement identity and legacy fit behavior, added a stable browser command, and passed foldable, canonical renderer, inference, type, responsive browser, and 39-state linear visual gates.",
+      "status": "complete"
     },
     {
       "id": "s11",

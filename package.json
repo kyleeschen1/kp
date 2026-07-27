@@ -64,6 +64,7 @@
     "smoke:linear-equation": "playwright test tests/linear-equation-concept-room-smoke.browser.spec.ts --project=chromium",
     "visual:editor-cards": "node --disable-warning=ExperimentalWarning scripts/capture-editor-cards.ts",
     "visual:linear-equation": "node --disable-warning=ExperimentalWarning scripts/capture-linear-equation-visual-baseline.ts",
+    "visual:equation-responsive-fit": "playwright test tests/semantic-reader-responsive-fit.browser.spec.ts --project=chromium --workers=1",
     "visual:cancellation": "playwright test tests/semantic-reader-cancellation.browser.spec.ts tests/semantic-reader-divide-both-sides.browser.spec.ts tests/semantic-reader-presentation-profile.browser.spec.ts tests/equation-canonical-cross-surface-parity.browser.spec.ts --project=chromium --workers=1",
     "visual:distribution-area": "playwright test tests/semantic-reader-distribution-area.browser.spec.ts --project=chromium --workers=1",
     "visual:exponent-radical": "node --disable-warning=ExperimentalWarning scripts/capture-exponent-radical-visual.ts",

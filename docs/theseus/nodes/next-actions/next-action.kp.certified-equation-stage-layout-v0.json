@@ -227,11 +227,53 @@
       "scope": "slice s09 swept transit corridor",
       "checkedAt": "2026-07-27T22:18:00.256Z",
       "notes": "All TypeScript projects accept the corridor-certified layout and transit contracts."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s10 certified responsive fit",
+      "checkedAt": "2026-07-27T22:22:39.067Z",
+      "notes": "88 tests pass; the staged fit consumes full swept bounds, carries measurement identity, centers both axes, and contains the complete corridor certificate."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice s10 cross exemplar renderer boundary",
+      "checkedAt": "2026-07-27T22:22:39.923Z",
+      "notes": "12 canonical renderer tests pass, including fraction responsive behavior and solve-x readiness boundaries."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice s10 compiler cost",
+      "checkedAt": "2026-07-27T22:22:40.745Z",
+      "notes": "Inference contracts pass below ceilings after keeping the heavy responsive module out of the lightweight negative fixture graph."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s10 certified responsive fit",
+      "checkedAt": "2026-07-27T22:22:41.558Z",
+      "notes": "All TypeScript projects accept the branded swept-layout fit path and legacy alignment path separation."
+    },
+    {
+      "command": "npm run visual:equation-responsive-fit",
+      "status": "passed",
+      "scope": "slice s10 browser fit boundary",
+      "checkedAt": "2026-07-27T22:22:42.369Z",
+      "notes": "Scoped Chromium check passes centered no-wrap responsive application."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "slice s10 solve-x non regression",
+      "checkedAt": "2026-07-27T22:22:43.193Z",
+      "notes": "All 39 desktop/phone linear-equation baseline states captured successfully."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s09 upgrades row geometry to a separate corridor certificate: material clearance expands the row gap, same-row transit lifts through the protected band, cross-row transit stays direct, and swept bounds include all motion."
+    "summary": "Slice s10 adds a branded responsive-fit path whose only staged input is a corridor certificate; its content bounds are the full swept envelope. Legacy exemplars retain their alignment-envelope API until migrated."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."
