@@ -156,3 +156,25 @@ approved.
 Approval authorizes contract creation and execution through slice 23. It does
 not waive the required human checkpoint. Slices 24-26 resume only after
 explicit visual approval.
+
+## Approved Repair Amendment
+
+On 2026-07-27, the slice-20 browser gate proved that distribution fan-out uses
+opaque canonical compositor ownership, while both product evaluations fall
+through to incompatible eliminate/introduce paint because their successor
+glyphs have different visual keys. The user approved the previously gated
+compositor-core repair as a bounded prerequisite to finishing slice 20.
+
+The repair must preserve every boundary above: multiple successor-synthesis
+intents may share the existing canonical session, clock, and DOM material
+layer, but the repair may not add a compositor, runtime, lifecycle category,
+WebGL lease, or operation-specific geometry. Contributors must gather
+opaquely, the successor must become recognizable only after arrival, and
+contributors must retire through structural ownership rather than a generic
+crossfade. Both product evaluations must work as one parallel cohort and must
+retain exact seek, rewind, reduced-motion, phone, accessibility, export, and
+native-settlement behavior.
+
+The smallest rollback unit is the generic successor-synthesis projection and
+material ownership path plus its focused tests. After that unit passes, the
+already-started accessibility and export work in slice 20 resumes unchanged.

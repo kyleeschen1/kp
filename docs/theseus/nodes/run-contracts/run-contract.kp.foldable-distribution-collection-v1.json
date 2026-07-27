@@ -171,9 +171,9 @@
     },
     {
       "id": "s20",
-      "title": "Preserve-accessibility-and-export",
-      "summary": "STOP_CONDITION: product successor glyphs require a generic multi-intent structural succession or another canonical compositor repair beyond the approved frozen compositor boundary. Slice 20 is returned to ready with partial local accessibility/export work preserved for an explicitly approved repair run.",
-      "status": "ready"
+      "title": "Repair-successor-and-preserve-accessibility-export",
+      "summary": "Starting approved repair prerequisite with failing ownership coverage before paint implementation; accessibility and export partial work remains preserved.",
+      "status": "in-progress"
     },
     {
       "id": "s21",
