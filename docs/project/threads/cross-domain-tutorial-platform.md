@@ -1,9 +1,9 @@
 # Cross-domain Tutorial Platform Thread
 
 Status: active
-Last Updated: 2026-07-26
-Current Next Action: Review a bounded radical-succession reader-exemplar
-and promotion-kit proposal; no successor implementation queue is active.
+Last Updated: 2026-07-27
+Current Next Action: Review a bounded foldable distribution and collection
+proposal; no successor implementation queue is active.
 
 ## Goal
 
@@ -51,16 +51,19 @@ The decision and reconciliation are recorded in
 `decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md` and
 `reviews/2026-07-26-canonical-animation-construction-governed-round-trip-closeout.md`.
 
-The accepted successor direction keeps that single implementation and returns
-to library growth after one radical adoption gate. Transformation/evaluation
-trees remain immutable semantic traces; learner-visible expanded, collapsed,
-automatic, and pinned views are deterministic presentation projections.
-Semantic layout planning owns stable groups, rows, lanes, and fold disclosure,
-while the local compositor owns measured short-range paint routing and native
-settlement. The first tree exemplar is
-`3(x + 2) + 2(x - 1) -> 5x + 4`. The decision and six-loop horizon are recorded
-in `decisions/2026-07-26-kp-foldable-evaluation-tree-library-expansion.md` and
-`reviews/2026-07-26-kp-six-loop-library-expansion-direction.md`.
+The radical adoption gate, shared promotion kit, bounded WebGL lease pool, and
+unit-exponent cost proof are now complete. The accepted successor direction
+keeps that single implementation and returns to library growth.
+Transformation/evaluation trees remain immutable semantic traces;
+learner-visible expanded, collapsed, automatic, and pinned views are
+deterministic presentation projections. Semantic layout planning owns stable
+groups, rows, lanes, and fold disclosure, while the local compositor owns
+measured short-range paint routing and native settlement. The first tree
+exemplar is `3(x + 2) + 2(x - 1) -> 5x + 4`. The decision, six-loop horizon,
+and foundation closeout are recorded in
+`decisions/2026-07-26-kp-foldable-evaluation-tree-library-expansion.md`,
+`reviews/2026-07-26-kp-six-loop-library-expansion-direction.md`, and
+`reviews/2026-07-27-radical-reader-promotion-kit-closeout.md`.
 
 FTC remains a valuable reviewable artifact, but its human review and the BFS,
 economics, programming, and physics breadth sequence are parked until the

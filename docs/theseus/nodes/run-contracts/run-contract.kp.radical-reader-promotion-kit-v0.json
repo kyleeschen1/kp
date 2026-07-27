@@ -2,8 +2,9 @@
   "id": "run-contract.kp.radical-reader-promotion-kit-v0",
   "kind": "run-contract",
   "title": "Canonical radical reader adoption and promotion kit",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -240,7 +241,8 @@
     {
       "id": "slice-20",
       "title": "close-and-hand-off",
-      "status": "planned",
+      "summary": "Closed the foundation tranche with a durable project-memory handoff. The roadmap, active and supporting threads, plan revision, and next-action evidence now record the approved canonical radical result, generic paint-space repair, bounded two-lease WebGL policy, shared promotion kit, no-route unit-exponent cost proof, production gates, and the next reviewed foldable distribution proposal. Existing atlas and portable-publication edits remain preserved; no successor implementation queue or radical-family rollout was activated.",
+      "status": "complete",
       "planPhaseId": "canonical-radical-reader-promotion-kit"
     }
   ]

@@ -1,11 +1,11 @@
 # Semantic Runtime Thread
 
 Status: stable-supporting
-Last Updated: 2026-07-26
-Current Next Action: Preserve the released canonical construction and native
-KaTeX session while the active product thread reviews one bounded radical
-reader adoption and promotion kit. No global equation-family migration is
-authorized.
+Last Updated: 2026-07-27
+Current Next Action: Preserve the released canonical construction, native KaTeX
+session, radical promotion kit, and bounded resource leases while the active
+product thread reviews one foldable distribution exemplar. No global
+equation-family migration is authorized.
 
 ## Goal
 
@@ -214,14 +214,14 @@ fallbacks; the local compositor continues to own measured paint routes and
 native DOM settlement. Generic hierarchy, swept-envelope, temporal-lane, and
 group-motion improvements are promoted only under exemplar evidence.
 
-One radical reader adoption and promotion kit is the final recommended
-foundation gate. Its unit-exponent dry run must require no compositor core
-change, lifecycle or scheduler category, notation-specific geometry, or second
-runtime artifact. The next product exemplar is foldable distribution and
-collection, followed directionally by exact arithmetic, vector/matrix
+The radical reader adoption and promotion kit closed the final recommended
+foundation gate. Its unit-exponent dry run required no compositor-core change,
+lifecycle or scheduler category, notation-specific geometry, product route, or
+second runtime artifact. The next product proposal is foldable distribution
+and collection, followed directionally by exact arithmetic, vector/matrix
 operations, an equation-graph derivative bridge, and integral accumulation.
-See
-`../decisions/2026-07-26-kp-foldable-evaluation-tree-library-expansion.md`.
+See `../decisions/2026-07-26-kp-foldable-evaluation-tree-library-expansion.md`
+and `../reviews/2026-07-27-radical-reader-promotion-kit-closeout.md`.
 
 The accepted grill-me decisions additionally separate immutable semantic
 choreography from configurable, versioned gestalt styles. New generated work

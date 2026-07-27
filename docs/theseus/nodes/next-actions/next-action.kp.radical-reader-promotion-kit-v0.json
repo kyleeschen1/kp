@@ -2,8 +2,9 @@
   "id": "next-action.kp.radical-reader-promotion-kit-v0",
   "kind": "next-action",
   "title": "Canonical radical reader adoption and promotion kit",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Canonical radical reader adoption, resource hardening, shared promotion kit, test-only unit-exponent cost proof, production closure, and project-memory handoff are complete. Foldable distribution remains the next reviewed proposal target and is not yet an executable queue item.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +14,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-26-radical-choreography-meta-repair-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-27-radical-reader-promotion-kit-closeout.md"
     }
   ],
   "dependsOn": {
@@ -807,11 +812,18 @@
       "scope": "slice 18 architecture boundaries",
       "checkedAt": "2026-07-27T03:46:40.033Z",
       "notes": "All three architecture gates passed; the dry run adds no production import edge."
+    },
+    {
+      "command": "npm run build; npm run check:reader-production; npm run check:reader-budgets; npm run test:canonical-equation-renderer; npm run test:canonical-animation-construction; npm run test:radical-reader-promotion; npm run test:real-katex-glyph-compositor; npm run test:browser:real-katex-glyph-compositor; npm run test:browser:radical-reader-promotion; npm run visual:radical-canonical-checkpoint; npm run check:architecture; theseus workspace validate",
+      "status": "passed",
+      "scope": "final production and closeout matrix",
+      "checkedAt": "2026-07-27T03:59:39.815Z",
+      "notes": "Build/typecheck, 9-route closure, measured budgets, 12 renderer, 60 construction, 45 promotion, 52 compositor unit, 44 compositor browser, 12 radical browser, 38 visual captures, architecture, and workspace integrity all passed. Only measured budget ratchets changed; lifecycle, vocabulary, runtime, raw-size, and 5 percent growth guards remain."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "The user-approved short resource-hardening unit is complete and verified: structural WebGL contexts are capped, lazily acquired, released at native endpoints, automatically resumed from exact native fallback, and recovered after context loss. Slice 17 now continues with the originally approved promotion-kit extraction."
+    "state": "complete",
+    "summary": "The radical reader is canonical and visually approved; generic endpoint paint and resource hardening are retained; fraction and radical share the promotion kit; the test-only unit-exponent adoption passes the zero-growth cost ratchet; production and memory closeout are complete."
   },
   "expectedLearning": [
     "Whether radical succession can become a canonical reader exemplar with exact native endpoints and no new runtime category.",

@@ -25,6 +25,10 @@
       "kind": "file",
       "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v9.json",
       "summary": "Approved predecessor retaining the complete architecture-pressure and domain-coverage roadmap."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-27-radical-reader-promotion-kit-closeout.md"
     }
   ],
   "affects": [
@@ -34,7 +38,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Canonical construction is complete. No implementation queue is active; the next reviewed candidate is one radical reader adoption and promotion kit, followed by foldable distribution and domain-library expansion."
+    "summary": "The canonical radical reader, generic endpoint-paint repair, bounded structural WebGL leases, shared promotion kit, unit-exponent cost proof, and production gates are complete. The next reviewed candidate is foldable distribution and collection; no successor implementation queue is active."
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",

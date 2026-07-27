@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-26
+Last Updated: 2026-07-27
 Status: active
 Active Thread: `threads/cross-domain-tutorial-platform.md`
 Supporting Thread: `threads/semantic-runtime.md`
@@ -88,21 +88,19 @@ failed generic invariant.
 
 ## Active Focus
 
-**Canonical construction and the fraction reader migration are complete.** The
-canonical renderer now owns the approved solve-x and fraction split/merge
-transitions; the older material layer is compatibility-only for non-migrated
-transitions and never paints alongside them. Governed fraction, exponent,
-radical, and compound fixtures share one verified construction and
-renderer-session path. The next recommended product proposal is one bounded
-radical-succession reader exemplar, stopping for visual review before any
-radical-family generalization.
+**Canonical construction, the fraction reader migration, and the radical reader
+promotion kit are complete.** The canonical renderer owns the approved solve-x,
+fraction split/merge, and radical succession transitions; the older material
+layer is compatibility-only for non-migrated transitions and never paints
+alongside them. Governed fraction, exponent, radical, and compound fixtures
+share one verified construction and renderer-session path.
 
-The proposed radical work is deliberately a promotion-cost proof, not another
-open-ended compositor program. Its successor unit-exponent dry run must require
-zero compositor-core changes, zero new lifecycle or scheduler categories, zero
-notation-specific geometry, and no second runtime artifact. After that proof,
-the next product exemplar is foldable distribution and collection for
-`3(x + 2) + 2(x - 1) -> 5x + 4`.
+The unit-exponent dry run passed the promotion-cost ratchet with zero
+compositor-core, lifecycle, scheduler, notation-geometry, or runtime-artifact
+growth. Structural WebGL work is bounded by a lazy two-context lease pool with
+native fallback. The next recommended product proposal is foldable distribution
+and collection for `3(x + 2) + 2(x - 1) -> 5x + 4`; no successor implementation
+queue is active until its exemplar contract is reviewed.
 
 The migration remains complexity-negative replacement work. Semantic traces,
 lineage, clocks, native accessibility, authoring guidance, and accepted legacy
@@ -362,26 +360,25 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Preserve the completed canonical construction guide, fraction reader
-   migration, governed cohort, live review gallery, and fixed release gates.
-2. Adopt one radical-succession reader exemplar through the same canonical
-   session, extract a promotion kit, and stop at its visual checkpoint before
-   broader radical promotion.
-3. Prove the kit with a short unit-exponent dry run that adds no compositor,
-   lifecycle, scheduler, geometry, or runtime category.
-4. Build foldable distribution and collection for
+1. Preserve the completed canonical construction guide, fraction and radical
+   reader migrations, promotion kit, bounded resource leases, governed cohort,
+   live review gallery, and fixed release gates.
+2. Review one bounded foldable distribution and collection proposal for
    `3(x + 2) + 2(x - 1) -> 5x + 4`, keeping one immutable canonical trace and
    treating folds as presentation projections.
-5. Expand next through exact arithmetic evaluation trees, vector and matrix
+3. Prove expanded, collapsed, automatic, and pinned fold projections with
+   deterministic seek/rewind, disclosed compression, and one visual checkpoint
+   before generalization.
+4. Expand next through exact arithmetic evaluation trees, vector and matrix
    operations, an equation-graph derivative bridge, and integral accumulation,
    one exemplar checkpoint at a time.
-6. Improve hierarchical layout, temporal lanes, group motion, or deterministic
+5. Improve hierarchical layout, temporal lanes, group motion, or deterministic
    staging only when those product exemplars expose a failed generic
    non-crowding invariant.
-7. Keep governed models limited to verified semantic operations, laws, and
+6. Keep governed models limited to verified semantic operations, laws, and
    suggested fold/focus intent; deterministic compilers retain mathematics,
    timing, geometry, typography, rendering, validation, and repair authority.
-8. Keep BFS, economics, programming, physics, course-scale curriculum, dynamic
+7. Keep BFS, economics, programming, physics, course-scale curriculum, dynamic
    package loading, and broad WebGL work parked until a new priority decision
    explicitly advances them.
 
