@@ -69,6 +69,43 @@ test("DOM application is absolute, complete, and idempotent", () => {
   ));
 });
 
+test("DOM application serializes subpixel residuals as valid CSS dimensions", () => {
+  const { certificate, elements } = fixture();
+  const residualCertificate = {
+    ...certificate,
+    rows: certificate.rows.map((row, index) => ({
+      ...row,
+      translateX: index === 0
+        ? 116.45364856562225
+        : -Number.EPSILON,
+      translateY: index === 0
+        ? -48.01333454184624
+        : Number.EPSILON
+    }))
+  };
+
+  applyKpCertifiedEquationStageLayout({
+    certificate: residualCertificate,
+    measurementIdentity: identity,
+    rows: residualCertificate.rows.map((row) => ({
+      rowId: row.id,
+      members: row.envelopeIds.flatMap((envelopeId) =>
+        residualCertificate.measuredInput.envelopes.find(
+          ({ id }) => id === envelopeId
+        )!.memberOwnerIds.map((ownerId) => ({
+          ownerId,
+          element: elements.get(ownerId)!
+        }))
+      )
+    }))
+  });
+
+  assert.deepEqual(
+    [...elements.values()].map(({ style }) => style.translate),
+    ["116.454px -48.013px", "0.000px 0.000px"]
+  );
+});
+
 test("DOM application rejects stale, partial, duplicate, and foreign authority", () => {
   const { certificate, elements } = fixture();
   const source = elements.get("source.a")!;

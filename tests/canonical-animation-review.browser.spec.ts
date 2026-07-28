@@ -16,6 +16,8 @@ test.beforeEach(async ({ page }) => {
 test("Animation Library lists all metadata but mounts only the selected host", async ({
   page
 }) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
   const documentRequests: string[] = [];
   page.on("request", (request) => {
     if (request.resourceType() === "document") {
@@ -124,6 +126,7 @@ test("Animation Library lists all metadata but mounts only the selected host", a
     "/reader/foldable-distribution/"
   ]);
   await expect(page.locator("[data-kp-dev-review-shell]")).toHaveCount(1);
+  expect(pageErrors).toEqual([]);
 });
 
 test("deep links preserve representation and phone preview without overflow", async ({
@@ -157,6 +160,171 @@ test("deep links preserve representation and phone preview without overflow", as
     document.documentElement.scrollWidth -
     document.documentElement.clientWidth
   )).toBeLessThanOrEqual(1);
+});
+
+test("foldable distribution review matrix stays canonical in one wide or phone host", async ({
+  page
+}) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await page.setViewportSize({ width: 1_440, height: 1_000 });
+  await page.goto(
+    "/canonical-animation-review.html" +
+    `?animation=${encodeURIComponent(foldableDistributionId)}`
+  );
+  const library = page.locator("[data-kp-animation-library]");
+  const frameElement = page.locator("[data-animation-library-frame]");
+  const frame = page.frameLocator("[data-animation-library-frame]");
+  await expect(library).toHaveAttribute(
+    "data-animation-id",
+    foldableDistributionId
+  );
+  await expect(frameElement).toHaveCount(1);
+  await expect(frameElement).toHaveAttribute(
+    "src",
+    "/reader/foldable-distribution/"
+  );
+  await frame.locator("[data-kp-reader-equation-stage]").waitFor();
+  await frame.locator("select[data-kp-reader-fold-mode]")
+    .selectOption("expanded");
+
+  const seek = async (progress: number) => {
+    const scrubber = frame.locator(
+      "[data-kp-reader-attention-scrubber]"
+    );
+    await scrubber.evaluate((node, nextValue) => {
+      const input = node as HTMLInputElement;
+      input.value = String(nextValue);
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }, progress);
+    await expect(frame.locator("body")).toHaveAttribute(
+      "data-kp-reader-progress",
+      String(progress)
+    );
+    await expect(frame.locator(
+      "[data-kp-reader-accessible-equation] " +
+      "[data-kp-reader-accessible-equation-state]:not([hidden])"
+    )).toHaveCount(1);
+    await frame.locator("body").evaluate(() =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+      )
+    );
+  };
+  const fitSurface = frame.locator(
+    "[data-kp-reader-transition-active='true'] " +
+    "[data-kp-reader-fit-surface]"
+  );
+
+  for (const viewport of ["wide", "phone"] as const) {
+    await page.locator(
+      `[data-animation-library-viewport="${viewport}"]`
+    ).click();
+    await expect(
+      page.locator("[data-animation-library-viewport-shell]")
+    ).toHaveAttribute(
+      "data-animation-library-viewport-shell",
+      viewport
+    );
+    await page.waitForTimeout(220);
+    await frame.locator("body").evaluate(() =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+      )
+    );
+    await seek(140);
+    await expect(fitSurface).toHaveAttribute(
+      "data-kp-native-katex-motion-profile",
+      "canonical-copy-fan-out"
+    );
+    if (viewport === "phone") {
+      await expect(
+        frame.locator("[data-kp-reader-equation-stage]")
+      ).toHaveAttribute(
+        "data-kp-reader-fold-layout-policy",
+        "semantic-two-row-stage"
+      );
+    }
+    await seek(340);
+    await expect(fitSurface).toHaveAttribute(
+      "data-kp-native-katex-successor-synthesis-count",
+      "2"
+    );
+    await seek(520);
+    await expect(fitSurface).toHaveAttribute(
+      "data-kp-native-katex-motion-profile",
+      "canonical-semantic-reorder-and-group"
+    );
+    await seek(740);
+    await expect(fitSurface).toHaveAttribute(
+      "data-kp-native-katex-motion-profile",
+      "canonical-factoring-fission-fusion"
+    );
+    await expect(fitSurface).toHaveAttribute(
+      "data-kp-native-katex-factoring-synchronization",
+      "simultaneous"
+    );
+    await seek(900);
+    await expect(fitSurface).toHaveAttribute(
+      "data-kp-native-katex-successor-synthesis-count",
+      "2"
+    );
+
+    const geometry = await frame.locator("body").evaluate(() => {
+      const active = document.querySelector<HTMLElement>(
+        "[data-kp-reader-transition-active='true']"
+      );
+      const fit = active?.querySelector<HTMLElement>(
+        "[data-kp-reader-fit-surface]"
+      );
+      const stage = document.querySelector<HTMLElement>(
+        "[data-kp-reader-equation-stage]"
+      );
+      if (
+        active === null ||
+        fit === undefined ||
+        fit === null ||
+        stage === null
+      ) {
+        throw new Error("Library checkpoint lacks its active fitted stage.");
+      }
+      const accessible = document.querySelector<HTMLElement>(
+        "[data-kp-reader-accessible-equation]"
+      );
+      return {
+        documentOverflow:
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth,
+        fitStatus: fit.dataset["kpReaderEquationFitStatus"],
+        fitWrapAllowed: fit.dataset["kpReaderEquationWrapAllowed"],
+        appliedLayoutMemberCount: active.querySelectorAll(
+          '[data-kp-equation-stage-layout-authority="applied-v1"]'
+        ).length,
+        layoutPolicy: stage.dataset["kpReaderFoldLayoutPolicy"],
+        accessibleStateCount: accessible?.querySelectorAll(
+          "[data-kp-reader-accessible-equation-state]:not([hidden])"
+        ).length ?? 0
+      };
+    });
+    expect(geometry.documentOverflow, JSON.stringify({ viewport, geometry }))
+      .toBeLessThanOrEqual(1);
+    expect(geometry.fitStatus).not.toBe("overflow");
+    expect(geometry.fitWrapAllowed).toBe("false");
+    expect(geometry.appliedLayoutMemberCount).toBeGreaterThan(0);
+    expect(geometry.accessibleStateCount).toBe(1);
+    expect(["single-row", "semantic-two-row-stage"])
+      .toContain(geometry.layoutPolicy);
+  }
+
+  const review = page.locator("[data-kp-dev-review-shell]");
+  await expect(review).toHaveCount(1);
+  await expect(review.locator("button.launcher")).toBeVisible();
+  const box = await review.locator("button.launcher").boundingBox();
+  expect(box).not.toBeNull();
+  expect(box!.y + box!.height).toBeLessThanOrEqual(
+    page.viewportSize()!.height
+  );
+  expect(pageErrors).toEqual([]);
 });
 
 test("one review capture stays reachable while hosts switch and the page scrolls", async ({

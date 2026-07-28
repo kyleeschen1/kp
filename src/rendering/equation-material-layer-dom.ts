@@ -73,6 +73,12 @@ export function syncKpEquationMaterialLayer(input: {
     });
     const visual = owner.firstElementChild as HTMLElement | null;
     if (visual !== null) {
+      // KaTeX rule bounds already include their border. Without border-box,
+      // sizing the clone to its owner adds the border a second time and makes
+      // rule paint one pixel taller than the sampled native endpoint.
+      if (frame.fragmentRole?.startsWith("rule:") === true) {
+        visual.style.boxSizing = "border-box";
+      }
       visual.classList.toggle(
         "kp-focus-group",
         frame.sourceElement.classList.contains("kp-focus-group")

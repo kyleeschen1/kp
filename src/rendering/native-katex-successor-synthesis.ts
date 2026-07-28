@@ -313,7 +313,12 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
         semanticEntityId: atom.semanticEntityId,
         semanticContacts: contacts.get(frame.trackId),
         rect: frame.rect,
-        expectedPaintRect: frame.expectedPaintRect,
+        // Structural SVG paths scale through their preserved viewBox and have
+        // no HTML text/rule inset to normalize. Glyphs and CSS rules retain
+        // measured-paint alignment; paths keep their exact owner rectangle.
+        ...(frame.paintKind === "path"
+          ? {}
+          : { expectedPaintRect: frame.expectedPaintRect }),
         opacity: input.visible ? frame.opacity : 0,
         transform: "none",
         fragmentRole: `${frame.paintKind}:${frame.sizingMode}`

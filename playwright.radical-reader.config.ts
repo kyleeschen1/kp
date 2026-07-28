@@ -7,7 +7,7 @@ export default defineConfig({
   outputDir: "tmp/codex/radical-reader-test-results",
   timeout: 30_000,
   use: {
-    baseURL: "http://127.0.0.1:4176",
+    baseURL: "http://127.0.0.1:4173",
     trace: "retain-on-failure"
   },
   projects: [{
@@ -15,8 +15,10 @@ export default defineConfig({
     use: { ...devices["Desktop Chrome"] }
   }],
   webServer: {
-    command: "npm run dev:client -- --host 127.0.0.1 --port 4176",
-    url: "http://127.0.0.1:4176",
+    // Reader DEV pages mount the real review client, so this matrix must use
+    // the paired browser-test API instead of a Vite-only server returning 404.
+    command: "npm run dev:browser-test",
+    url: "http://127.0.0.1:4173",
     reuseExistingServer: false
   }
 });

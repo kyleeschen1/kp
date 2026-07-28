@@ -488,7 +488,7 @@ export function applyKpCertifiedEquationStageLayout<
   try {
     for (const { element, row } of staged) {
       element.style.translate =
-        `${row.translateX}px ${row.translateY}px`;
+        `${cssPixel(row.translateX)} ${cssPixel(row.translateY)}`;
       element.dataset["kpEquationStageLayoutAuthority"] = "applied-v1";
       element.dataset["kpEquationStageLayoutApplication"] = applicationId;
       element.dataset["kpEquationStageLayoutRow"] = row.id;
@@ -507,7 +507,10 @@ export function applyKpCertifiedEquationStageLayout<
         element.dataset["kpEquationStageLayoutApplication"] !== applicationId
       ) {
         throw new Error(
-          `Equation stage native member ${ownerId} rejected its row transform.`
+          `Equation stage native member ${ownerId} rejected its row transform ` +
+          `(expected ${row.translateX},${row.translateY}; observed ` +
+          `${element.style.translate || "<empty>"}; application ` +
+          `${element.dataset["kpEquationStageLayoutApplication"] ?? "<none>"}).`
         );
       }
     }
@@ -688,6 +691,18 @@ function cssTranslationMatches(
     : Number.parseFloat(components[1] ?? "");
   return Number.isFinite(x) &&
     Number.isFinite(y) &&
-    Math.abs(x - expectedX) <= 1e-4 &&
-    Math.abs(y - expectedY) <= 1e-4;
+    Math.abs(x - expectedX) <= 0.000501 &&
+    Math.abs(y - expectedY) <= 0.000501;
+}
+
+function cssPixel(value: number): string {
+  if (!Number.isFinite(value)) {
+    throw new Error("Equation stage CSS translation must be finite.");
+  }
+  // CSSOM executes lengths at a 0.001px serialization resolution and rejects
+  // JavaScript scientific notation. Quantize the proof boundary deliberately
+  // so intermediate responsive widths cannot turn valid geometry into invalid
+  // or apparently mismatched CSS.
+  const normalized = Math.round(value * 1_000) / 1_000;
+  return `${Object.is(normalized, -0) ? "0.000" : normalized.toFixed(3)}px`;
 }

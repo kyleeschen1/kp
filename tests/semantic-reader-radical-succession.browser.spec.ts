@@ -159,7 +159,10 @@ async function assertRadicalEndpointPaintContinuity(
     sourceStructureClip,
     surfaceClip
   );
-  const morphStartOwnership = await fitSurface.evaluate((surface) => {
+  const morphStartOwnership = await fitSurface.evaluate(async (surface) => {
+    const structuralUrl =
+      "/src/rendering/native-katex-structural-succession-renderer.ts";
+    const structural = await import(/* @vite-ignore */ structuralUrl);
     const canvas = surface.querySelector<HTMLCanvasElement>(
       "[data-kp-native-katex-structural-succession]"
     );
@@ -175,7 +178,11 @@ async function assertRadicalEndpointPaintContinuity(
         canvas?.dataset["kpNativeKatexStructuralSourceCapture"] ?? null,
       sourceFont:
         canvas?.dataset["kpNativeKatexStructuralSourceFont"] ?? null,
-      devicePixelRatio: window.devicePixelRatio
+      devicePixelRatio: window.devicePixelRatio,
+      maximumGeometryResidualPx:
+        structural.measureKpNativeKatexStructuralSuccessionInk(
+          surface as HTMLElement
+        )?.maximumGeometryResidualPx ?? null
     };
   });
   await seek(page, scrubber, 999);
@@ -219,6 +226,16 @@ async function assertRadicalEndpointPaintContinuity(
       "[data-kp-reader-native]",
       "[data-kp-native-katex-structural-succession]"
     ]
+  );
+  const rewindSourceStructureComparison = await fitSurface.evaluate(
+    async (surface) => {
+      const structuralUrl =
+        "/src/rendering/native-katex-structural-succession-renderer.ts";
+      const structural = await import(/* @vite-ignore */ structuralUrl);
+      return structural.measureKpNativeKatexStructuralSuccessionInk(
+        surface as HTMLElement
+      );
+    }
   );
   const rewindSourceStructure = localizeInkRect(
     rewindSourceStructureSample,
@@ -279,7 +296,8 @@ async function assertRadicalEndpointPaintContinuity(
     morphStartStructure,
     targetMaterialX,
     targetNativeX,
-    sourceMaterialStructureComparison
+    sourceMaterialStructureComparison,
+    rewindSourceStructureComparison
   };
 
   expect(sourceXResidual, JSON.stringify(evidence)).toBeLessThanOrEqual(0.5);
@@ -287,10 +305,16 @@ async function assertRadicalEndpointPaintContinuity(
     .toBeLessThanOrEqual(0.5);
   expect(sourceStructureShapeResidual, JSON.stringify(evidence))
     .toBeLessThanOrEqual(0.2);
+  // A screenshot threshold can include one antialiased pixel on each edge.
+  // The renderer-owned paint microscope below remains the exact geometry law.
   expect(morphStartStructureResidual, JSON.stringify(evidence))
-    .toBeLessThanOrEqual(1);
+    .toBeLessThanOrEqual(2);
   expect(morphStartShapeResidual, JSON.stringify(evidence))
     .toBeLessThanOrEqual(0.2);
+  expect(
+    morphStartOwnership.maximumGeometryResidualPx,
+    JSON.stringify(evidence)
+  ).toBeLessThanOrEqual(0.001);
   expect(morphStartOwnership).toMatchObject({
     canvasOpacity: "1",
     paintOwner: "solid-mask-canvas",
@@ -322,10 +346,16 @@ async function assertRadicalEndpointPaintContinuity(
     .toBeLessThanOrEqual(1);
   expect(rewindSourceXResidual, JSON.stringify(evidence))
     .toBeLessThanOrEqual(0.5);
+  // DPR-2 screenshot alpha can move a half-pixel edge on both sides; the
+  // renderer microscope below proves the rewound geometry itself is exact.
   expect(rewindSourceStructureResidual, JSON.stringify(evidence))
-    .toBeLessThanOrEqual(0.5);
+    .toBeLessThanOrEqual(1);
   expect(rewindSourceShapeResidual, JSON.stringify(evidence))
     .toBeLessThanOrEqual(0.2);
+  expect(
+    rewindSourceStructureComparison?.maximumGeometryResidualPx,
+    JSON.stringify(evidence)
+  ).toBeLessThanOrEqual(0.001);
   await expect(page.locator("body")).toHaveAttribute(
     "data-kp-reader-playback-direction",
     "rewind"

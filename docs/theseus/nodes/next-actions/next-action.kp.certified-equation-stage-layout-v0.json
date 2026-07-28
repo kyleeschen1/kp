@@ -563,11 +563,60 @@
       "scope": "slice s23 semantic renderer and resource closure",
       "checkedAt": "2026-07-28T00:36:30.474Z",
       "notes": "All 99 foldable tests, 12 canonical renderer gates, 10 production routes, and fixed reader budgets pass. No renderer, compositor, clock, lifecycle, scheduler, path category, or non-factoring stagger changed; shared runtime remains 110040 gzip bytes and foldable HTML remains 6391 gzip bytes."
+    },
+    {
+      "command": "npm run visual:animation-library-display",
+      "status": "passed",
+      "scope": "slice-24 single-host wide/phone review matrix",
+      "checkedAt": "2026-07-28T01:08:57.380Z",
+      "notes": "5/5 passed: one lazy host, wide and phone foldable phases, fixed Review launcher, and real local inbox persistence with zero page errors."
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "slice-24 canonical foldable exemplar",
+      "checkedAt": "2026-07-28T01:08:58.238Z",
+      "notes": "20/20 passed across phone and wide layout, motif choreography, opaque factoring fusion, direct seek, rewind, and shared fitting."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice-24 protected radical and fraction browser cohort",
+      "checkedAt": "2026-07-28T01:08:59.040Z",
+      "notes": "12/12 passed; structural path, CSS rule ink, endpoint geometry, direct seek, and WebGL recovery remain protected."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-24 static closure",
+      "checkedAt": "2026-07-28T01:08:59.814Z",
+      "notes": "Application, Node, test, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice-24 renderer architecture",
+      "checkedAt": "2026-07-28T01:09:00.616Z",
+      "notes": "12/12 passed with one canonical renderer and frozen scene vocabulary."
+    },
+    {
+      "command": "npm run test:animation-library-display",
+      "status": "passed",
+      "scope": "slice-24 display catalog",
+      "checkedAt": "2026-07-28T01:09:01.421Z",
+      "notes": "12/12 passed including fail-closed port status and persistent Review placement."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice-24 review production closure",
+      "checkedAt": "2026-07-28T01:09:02.252Z",
+      "notes": "Passed across 228 files."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The typed factor-common-x cohort now drives the visible choreography: both x contributors use exactly the same dense forward and rewind progress schedule, remain opaque until one atomic handoff to the extracted x, stay inside the measured ink corridor without crowding +2), settle to native KaTeX, and leave coefficient evaluation to the following beat."
+    "summary": "Slices s01-s24 are complete. Certified wide/phone layout, zero unrelated overlap, measured-paint x stability, and simultaneous opaque factoring fusion pass in one lazy Animation Library host with functional fixed Review capture. Mandatory HUMAN_CHECKPOINT is active; s25 cross-exemplar release boundaries and s26 full closeout remain unapproved."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

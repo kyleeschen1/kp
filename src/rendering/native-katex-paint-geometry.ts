@@ -32,6 +32,16 @@ export function attachKpNativeKatexTrackPaintGeometry<
     : atom.paintKind === "glyph" &&
         typeof atom.sourceElement.ownerDocument.createRange === "function"
       ? measureKpNativeKatexTextInkRect(stage, atom.sourceElement)
+      : atom.paintKind === "rule" &&
+          typeof atom.sourceElement.getBoundingClientRect === "function" &&
+          atom.sourceElement.ownerDocument.defaultView !== null
+        // A rule element's client rect includes layout content around the
+        // border. Track the actual border ink so clone alignment compares
+        // paint with paint, not paint with the larger layout rectangle.
+        ? measureKpNativeKatexSubtreePaintRect(
+            stage,
+            atom.sourceElement
+          ) ?? atom.rect
       : atom.rect;
   return Object.freeze(input.tracks.map((track) => {
     const sourceAtom =

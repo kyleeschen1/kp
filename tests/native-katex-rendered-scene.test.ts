@@ -38,6 +38,9 @@ import {
 import type {
   KpStageRelativeRect
 } from "../src/rendering/native-katex-fragment-observer.ts";
+import {
+  composeKpNativeKatexSceneMaterialOwners
+} from "../src/rendering/native-katex-successor-synthesis.ts";
 
 const ownerDocument = {};
 const stage = { ownerDocument } as HTMLElement;
@@ -64,6 +67,51 @@ function atom(
     fontRevision: 2
   };
 }
+
+test("structural path owners preserve their rectangle without text inset alignment", () => {
+  const path = {
+    ...atom("atom.source.path"),
+    paintKind: "path" as const,
+    visualKey: "path:radical"
+  };
+  const glyph = atom("atom.source.glyph");
+  const frames = [
+    {
+      trackId: "track.path",
+      componentId: "component.path",
+      visualAtomId: path.id,
+      paintKind: "path" as const,
+      sizingMode: "rect" as const,
+      rect: path.rect,
+      expectedPaintRect: path.rect,
+      opacity: 1
+    },
+    {
+      trackId: "track.glyph",
+      componentId: "component.glyph",
+      visualAtomId: glyph.id,
+      paintKind: "glyph" as const,
+      sizingMode: "rect" as const,
+      rect: glyph.rect,
+      expectedPaintRect: glyph.rect,
+      opacity: 1
+    }
+  ];
+  const owners = composeKpNativeKatexSceneMaterialOwners({
+    frames,
+    sourceAtoms: new Map([
+      [path.id, path],
+      [glyph.id, glyph]
+    ]),
+    targetAtoms: new Map(),
+    supplementalOwners: [],
+    visible: true
+  });
+
+  assert.equal(owners[0]?.fragmentRole, "path:rect");
+  assert.equal(owners[0]?.expectedPaintRect, undefined);
+  assert.equal(owners[1]?.expectedPaintRect, glyph.rect);
+});
 
 function handoffObservation(
   overrides: Partial<KpNativeKatexHandoffPaintObservation> = {}
