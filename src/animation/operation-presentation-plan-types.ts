@@ -4,20 +4,15 @@ import type {
 
 declare const kpVerifiedOperationPresentationPlanAuthority: unique symbol;
 
-interface KpVerifiedOperationPresentationPlanBase {
+interface KpOperationPresentationPlanDraftBase {
   readonly schemaVersion: "kp.verified-operation-presentation-plan.v1";
   readonly id: string;
   readonly transformationId: string;
   readonly roles: KpOperationPresentationRoles;
-  /**
-   * The private authority keeps semantic role assignment behind the trusted
-   * planner instead of letting renderers bless convenient local selectors.
-   */
-  readonly [kpVerifiedOperationPresentationPlanAuthority]: true;
 }
 
-export type KpVerifiedInverseCancellationPresentationPlan =
-  KpVerifiedOperationPresentationPlanBase & {
+export type KpInverseCancellationPresentationPlanDraft =
+  KpOperationPresentationPlanDraftBase & {
   readonly kind: "inverse-cancellation";
   readonly contactGroupId: string;
   readonly inverseBundleIds: readonly [string, string];
@@ -28,27 +23,41 @@ export type KpVerifiedInverseCancellationPresentationPlan =
  * describe semantic presentation structure; measured paths remain compositor
  * output and therefore cannot leak into authored or generated plans.
  */
-export type KpVerifiedOperationPresentationPlan =
-  | KpVerifiedInverseCancellationPresentationPlan
-  | (KpVerifiedOperationPresentationPlanBase & {
+export type KpOperationPresentationPlanDraft =
+  | KpInverseCancellationPresentationPlanDraft
+  | (KpOperationPresentationPlanDraftBase & {
       readonly kind: "successor-synthesis" | "factoring";
       readonly fusionGroupId: string;
       readonly resultBundleId: string;
     })
-  | (KpVerifiedOperationPresentationPlanBase & {
+  | (KpOperationPresentationPlanDraftBase & {
       readonly kind: "synchronized-balanced-introduction" | "distribution";
       readonly branchGroupId: string;
     })
-  | (KpVerifiedOperationPresentationPlanBase & {
+  | (KpOperationPresentationPlanDraftBase & {
       readonly kind: "fraction-material";
       readonly operation: "fission" | "fusion";
       readonly materialGroupId: string;
     })
-  | (KpVerifiedOperationPresentationPlanBase & {
+  | (KpOperationPresentationPlanDraftBase & {
       readonly kind: "structural-succession";
       readonly sourceBundleId: string;
       readonly targetBundleId: string;
     });
+
+/**
+ * The private authority keeps semantic role assignment behind the trusted
+ * planner instead of letting renderers bless convenient local selectors.
+ */
+export type KpVerifiedOperationPresentationPlan =
+  KpOperationPresentationPlanDraft & {
+    readonly [kpVerifiedOperationPresentationPlanAuthority]: true;
+  };
+
+export type KpVerifiedInverseCancellationPresentationPlan =
+  KpInverseCancellationPresentationPlanDraft & {
+    readonly [kpVerifiedOperationPresentationPlanAuthority]: true;
+  };
 
 export type KpExplicitStaticCheckpointReason =
   | "intentional-static"

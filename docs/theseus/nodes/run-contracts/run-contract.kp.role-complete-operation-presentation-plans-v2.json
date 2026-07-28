@@ -75,7 +75,8 @@
     {
       "id": "slice.kp.role-plan.04",
       "title": "Add-trusted-plan-validator",
-      "status": "planned"
+      "summary": "Added the trusted validator and sole mint with unique, total selector-role coverage and closed group/bundle references.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.05",
