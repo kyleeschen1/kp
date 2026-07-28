@@ -162,7 +162,9 @@ test("parallel motif phases render as one complete source-target cohort", () => 
   const animation = createKpFoldableDistributionEquationAnimationAsset();
   for (const [progress, motifKind] of [
     [0.05, "copy-fan-out"],
-    [0.3, undefined]
+    // Both reviewed arithmetic branches now retain the same executable merge
+    // motif; the cohort may preserve it without one branch claiming the other.
+    [0.3, "simplify-into"]
   ] as const) {
     const runtimeFrame = sampleKpAnimationRuntimeFrame({
       animation,

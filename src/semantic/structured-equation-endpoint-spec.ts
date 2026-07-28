@@ -12,6 +12,7 @@ export type KpStructuredEquationEndpointSegment =
 export interface KpStructuredEquationGroupEnvelope {
   readonly id: string;
   readonly memberSelectorIds: readonly string[];
+  readonly structuralAnchorIds?: readonly string[] | undefined;
 }
 
 export interface KpStructuredEquationStructuralAnchor {
@@ -59,8 +60,26 @@ export function createKpStructuredEquationEndpointSpec(
       ...left.groups,
       ...right.groups,
       Object.freeze({
+        id: `${state.id}.left-side`,
+        memberSelectorIds: Object.freeze([...left.selectorIds]),
+        structuralAnchorIds: Object.freeze(
+          left.structuralAnchors.map(({ id }) => id)
+        )
+      }),
+      Object.freeze({
+        id: `${state.id}.right-relation`,
+        memberSelectorIds: Object.freeze([equalsId, ...right.selectorIds]),
+        structuralAnchorIds: Object.freeze(
+          right.structuralAnchors.map(({ id }) => id)
+        )
+      }),
+      Object.freeze({
         id: `${state.id}.equation`,
-        memberSelectorIds: Object.freeze(selectorIds)
+        memberSelectorIds: Object.freeze(selectorIds),
+        structuralAnchorIds: Object.freeze([
+          ...left.structuralAnchors,
+          ...right.structuralAnchors
+        ].map(({ id }) => id))
       })
     ]),
     structuralAnchors: Object.freeze([

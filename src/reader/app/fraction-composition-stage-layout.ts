@@ -1,6 +1,6 @@
 import {
-  createKpFoldableDistributionAnnotatedEndpoints
-} from "../../rendering/foldable-distribution-selector-annotated-latex.ts";
+  createKpFractionCompositionAnnotatedEndpoints
+} from "../../rendering/fraction-composition-selector-annotated-latex.ts";
 import type {
   KpAppliedEquationStageLayout,
   KpEquationStageMeasurementIdentity,
@@ -13,7 +13,7 @@ import {
   applyKpSemanticEnvelopeEquationStageLayout
 } from "./semantic-envelope-stage-layout.ts";
 
-export function applyKpFoldableDistributionPhaseStageLayout(input: {
+export function applyKpFractionCompositionPhaseStageLayout(input: {
   readonly phaseIntent: KpEquationStagePhaseIntent;
   readonly sourceObjectIds: readonly string[];
   readonly targetObjectIds: readonly string[];
@@ -22,12 +22,15 @@ export function applyKpFoldableDistributionPhaseStageLayout(input: {
 }): KpAppliedEquationStageLayout<KpCorridorCertifiedEquationStageLayout> {
   return applyKpSemanticEnvelopeEquationStageLayout({
     ...input,
-    endpoints: createKpFoldableDistributionAnnotatedEndpoints().map(
-      ({ objectId, groupEnvelopes }) => ({ objectId, groupEnvelopes })
+    endpoints: createKpFractionCompositionAnnotatedEndpoints().map(
+      ({ stateId, groupEnvelopes }) => ({
+        objectId: stateId,
+        groupEnvelopes
+      })
     ),
-    envelopeDataKey: "kpFoldableEnvelopeId",
-    memberDataKey: "kpFoldableLayoutMemberId",
-    envelopeObservation: "wrapped",
-    diagnosticLabel: "Foldable distribution"
+    envelopeDataKey: "kpEquationStageEnvelopeId",
+    memberDataKey: "kpEquationStageMemberId",
+    envelopeObservation: "member-paint-union",
+    diagnosticLabel: "Fraction composition"
   });
 }

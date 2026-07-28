@@ -610,7 +610,10 @@ function measureLayout(revision: number): LayoutState {
   }
   const measured: Omit<TransitionContext, "fit">[] = [];
   const stageLayoutIntent =
-    foldableDistributionControls?.readStageLayoutIntent();
+    foldableDistributionControls?.readStageLayoutIntent() ??
+    lessonDescriptor.createStageLayoutIntent?.({
+      viewport: window.innerWidth > 880 ? "wide" : "phone"
+    });
   const stageLayoutCompiler = lessonDescriptor.stageLayoutCompiler;
   if ((stageLayoutIntent === undefined) !== (stageLayoutCompiler === undefined)) {
     throw new Error(
@@ -667,6 +670,8 @@ function measureLayout(revision: number): LayoutState {
       element.dataset["kpReaderStageLayoutApplied"] =
         appliedStageLayout.applicationId;
       element.dataset["kpReaderStageLayoutPhase"] = phaseIntent.nodeId;
+      element.dataset["kpReaderStageLayoutPolicy"] =
+        appliedStageLayout.certificate.policy;
     }
     const layout = appliedStageLayout === undefined
       ? measureKpReaderEquationLayoutSnapshot({

@@ -63,6 +63,13 @@ export {
   type KpFoldableDistributionViewport
 } from "./foldable-distribution-layout.ts";
 export {
+  planKpFractionCompositionLayout,
+  type KpFractionCompositionLayoutIntent,
+  type KpFractionCompositionLayoutRow,
+  type KpFractionCompositionPhaseLayout,
+  type KpFractionCompositionViewport
+} from "./fraction-composition-layout.ts";
+export {
   applyKpCertifiedEquationStageLayout,
   assertKpAppliedEquationStageLayout,
   assertKpEquationStageMeasurementIdentity,

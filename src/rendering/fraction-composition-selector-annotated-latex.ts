@@ -9,6 +9,9 @@ import type {
   KpSemanticAssetObject
 } from "../semantic/asset.ts";
 import {
+  bindKpStructuredEquationSemanticEnvelopes
+} from "./structured-equation-semantic-envelopes.ts";
+import {
   createKpSelectorAnnotatedLatex
 } from "./selector-annotated-latex.ts";
 
@@ -57,5 +60,17 @@ export function bindKpFractionCompositionStructuralAnchors(input: {
   bindKpStructuredEquationStructuralAnchors({
     root: input.root,
     endpoint
+  });
+  bindKpStructuredEquationSemanticEnvelopes({
+    root: input.root,
+    endpoint,
+    envelopeIds: [
+      `${input.state.id}.equation`,
+      `${input.state.id}.left-side`,
+      `${input.state.id}.right-relation`
+    ],
+    // Fractions are nested KaTeX DOM, so their stage envelope is a measured
+    // paint set rather than a Range wrapper across non-contiguous descendants.
+    realization: "virtual"
   });
 }

@@ -5,6 +5,7 @@ import {
   compileKpAnimationTransformationPhaseCohorts
 } from "../../animation/transformation-phase-cohorts.ts";
 import type {
+  KpEquationStageLayoutIntent,
   KpAppliedEquationStageLayout,
   KpEquationStageMeasurementIdentity,
   KpEquationStagePhaseIntent
@@ -41,6 +42,9 @@ export interface KpReaderEquationLessonDescriptor {
   ) => string | undefined) | undefined;
   readonly compactTranscriptAvailable: boolean;
   readonly readerControls?: "foldable-distribution-v1" | undefined;
+  readonly createStageLayoutIntent?: ((input: {
+    readonly viewport: "wide" | "phone";
+  }) => KpEquationStageLayoutIntent) | undefined;
   readonly stageLayoutCompiler?:
     KpReaderEquationStageLayoutCompiler | undefined;
 }
