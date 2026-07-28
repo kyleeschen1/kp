@@ -291,7 +291,6 @@ const viewportAnchorCache = createKpReaderViewportAnchorCache(
 );
 let activeBeat = beats[0];
 let scrollClock = createScrollClock();
-let scrollFrame: number | undefined;
 let previousReviewFrameAtMs: number | undefined;
 let previousReviewScrollY = window.scrollY;
 let urlAuthorityReady = false;
@@ -618,11 +617,12 @@ function releaseControlAuthority(): void {
 }
 
 function scheduleScrollSample(): void {
-  if (scrollFrame !== undefined) return;
-  scrollFrame = window.requestAnimationFrame(() => {
-    scrollFrame = undefined;
-    renderWithAdapter(controlSample ?? scrollClock.samplePosition(readerPosition()));
-  });
+  // The mounted adapter already coalesces to the latest sample at the next
+  // frame. A second rAF here added one frame of latency and let stale samples
+  // reach an otherwise latest-wins scheduler.
+  renderWithAdapter(
+    controlSample ?? scrollClock.samplePosition(readerPosition())
+  );
 }
 
 function measureLayout(revision: number): LayoutState {
@@ -1560,7 +1560,6 @@ function requireDescendant<T extends Element>(root: Element, selector: string): 
 }
 
 function dispose(): void {
-  if (scrollFrame !== undefined) window.cancelAnimationFrame(scrollFrame);
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);
   motionSelect.removeEventListener("change", onMotionPreferenceChange);

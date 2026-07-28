@@ -70,7 +70,7 @@
     "test:browser:canonical-reader-contract:webkit": "playwright test tests/semantic-reader-fraction-composition-motif-fidelity.browser.spec.ts --project=webkit --workers=1",
     "perf:fraction-composition-scroll": "playwright test tests/semantic-reader-fraction-composition-performance.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "perf:fraction-composition-scroll:chromium": "playwright test tests/semantic-reader-fraction-composition-performance.browser.spec.ts --project=chromium --workers=1",
-    "test:reader-runtime-hardening": "node --disable-warning=ExperimentalWarning --test tests/reader-compositor-geometry-cache-identity.test.ts tests/reader-viewport-anchor-cache.test.ts",
+    "test:reader-runtime-hardening": "node --disable-warning=ExperimentalWarning --test tests/reader-compositor-geometry-cache-identity.test.ts tests/reader-viewport-anchor-cache.test.ts tests/semantic-reader-frame-scheduler.test.ts tests/semantic-reader-scheduled-adapter.test.ts",
     "test:browser:real-katex-glyph-compositor": "playwright test tests/native-katex-fragment-observer.browser.spec.ts --project=chromium --workers=1",
     "test:browser:dashboard": "playwright test tests/project-dashboard.browser.spec.ts --project=chromium",
     "test:browser:animation-workbench": "playwright test tests/semantic-animation-workbench.browser.spec.ts --project=chromium --workers=1",

@@ -96,7 +96,8 @@
     {
       "id": "slice.kp.reader-hardening.08",
       "title": "Unify-frame-scheduling",
-      "status": "planned"
+      "summary": "Removed the duplicate composition-root rAF; the mounted adapter now solely coalesces latest samples, with scheduler, direct-seek, rapid-scroll, and motif contracts passing.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.09",

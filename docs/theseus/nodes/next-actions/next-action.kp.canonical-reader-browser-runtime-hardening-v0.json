@@ -125,6 +125,27 @@
       "scope": "slice 07 anchor invalidation integration",
       "checkedAt": "2026-07-28T21:12:18.366Z",
       "notes": "Application, Node, tests, and domains compile."
+    },
+    {
+      "command": "npm run test:reader-runtime-hardening",
+      "status": "passed",
+      "scope": "slice 08 single scheduler ownership",
+      "checkedAt": "2026-07-28T21:15:57.756Z",
+      "notes": "Eight focused tests pass, including latest-input coalescing, read-plan-write ordering, separate invalidation, direct renderNow exactness, adapter ownership, and disposal."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll:chromium",
+      "status": "passed",
+      "scope": "slice 08 rapid scroll after scheduler unification",
+      "checkedAt": "2026-07-28T21:16:06.818Z",
+      "notes": "30 latest-wins adapter frames pass with zero geometry reads; removal of the outer rAF exposes all 30 alternating cold session builds, intentionally retained for the pure-plan cache slices."
+    },
+    {
+      "command": "npm run visual:fraction-composition-motif-fidelity",
+      "status": "passed",
+      "scope": "slice 08 exact direct seek and motif preservation",
+      "checkedAt": "2026-07-28T21:16:14.197Z",
+      "notes": "Chromium and Firefox passed wide/phone measured-paint, direct seek, rewind, authority, endpoint, fit, and launcher checks. Existing shared phone readable-floor diagnostics remain separately classified."
     }
   ],
   "expectedLearning": [
