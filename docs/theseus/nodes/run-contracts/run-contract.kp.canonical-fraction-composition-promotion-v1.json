@@ -159,7 +159,8 @@
     {
       "id": "s17",
       "title": "certify-promotion-and-authoring",
-      "status": "planned"
+      "summary": "Added a constructor-only nominal fraction-composition review-readiness certificate over eight concrete prerequisites, compile-time anti-forgery fixtures, exact governed-authority rejection for math/timing/DOM/geometry, and a bounded no-growth diff ratchet; human visual review remains unresolved.",
+      "status": "complete"
     },
     {
       "id": "s18",
