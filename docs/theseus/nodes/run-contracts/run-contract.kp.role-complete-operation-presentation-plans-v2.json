@@ -93,7 +93,8 @@
     {
       "id": "slice.kp.role-plan.07",
       "title": "Adapt-successor-synthesis",
-      "status": "planned"
+      "summary": "Adapted canonical product, quotient, difference, and sum synthesis bindings into verified successor plans while retaining the existing renderer path and motion laws.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.08",

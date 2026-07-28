@@ -22,12 +22,13 @@ import {
   compileKpAnimationTransformationPhaseCohorts,
   findKpAnimationTransformationPhaseCohort
 } from "../../animation/transformation-phase-cohorts.ts";
-import type {
-  KpSuccessorSynthesisBinding
-} from "../../animation/successor-synthesis.ts";
 import {
   createKpEquationSuccessorSynthesisBindings
 } from "../../rendering/equation-linear-rearrangement-bindings.ts";
+import {
+  compileKpRegisteredSuccessorSynthesisPresentationPlan,
+  type KpRegisteredSuccessorSynthesisBinding
+} from "../../animation/successor-synthesis-presentation-plan.ts";
 import {
   compileKpFactorCommonTermMotifBinding,
   type KpFactorCommonTermMotifBinding
@@ -64,7 +65,8 @@ export interface KpReaderEquationTransitionPlan {
     KpFactorCommonTermMotifBinding | undefined;
   readonly structuralSuccession?:
     KpEquationStructuralSuccessionIntent | undefined;
-  readonly successorSyntheses?: readonly KpSuccessorSynthesisBinding[] | undefined;
+  readonly successorSyntheses?:
+    readonly KpRegisteredSuccessorSynthesisBinding[] | undefined;
   readonly operationChoreography?:
     KpEquationOperationChoreography | undefined;
   readonly semanticStatus: "ready" | "fallback";
@@ -181,9 +183,24 @@ export function projectKpReaderEquationRenderPlan(input: {
           motif: visualMotif,
           direction: input.runtimeFrame.clock.direction
         });
-    const successorSyntheses = createKpEquationSuccessorSynthesisBindings({
-      animation: input.animation,
-      transformation
+    const successorSynthesisBindings =
+      createKpEquationSuccessorSynthesisBindings({
+        animation: input.animation,
+        transformation
+      });
+    // During the exemplar phase the canonical renderer still consumes the
+    // established binding fields; the nested verified plan proves the future
+    // cutover without creating a second paint path.
+    const successorSyntheses = successorSynthesisBindings.map((binding) => {
+      const operationPresentationPlan =
+        compileKpRegisteredSuccessorSynthesisPresentationPlan({
+          transformationId: transformation.id,
+          transformationKind: transformation.transformType,
+          binding
+        });
+      return operationPresentationPlan === undefined
+        ? binding
+        : Object.freeze({ ...binding, operationPresentationPlan });
     });
     const operationChoreography = compileKpEquationOperationChoreography({
       animation: input.animation,

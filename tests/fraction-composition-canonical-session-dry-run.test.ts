@@ -109,6 +109,15 @@ test("canonical planning retains structural motifs and opaque arithmetic synthes
     true
   );
   assert.equal(
+    transitions
+      .filter(({ transformType }) => transformType.startsWith("simplifyConstant"))
+      .every(({ successorSyntheses }) =>
+        successorSyntheses?.[0]?.operationPresentationPlan?.planKind ===
+          "successor-synthesis"
+      ),
+    true
+  );
+  assert.equal(
     transitions[7]?.operationChoreography?.kind,
     "synchronized-balanced-introduction"
   );

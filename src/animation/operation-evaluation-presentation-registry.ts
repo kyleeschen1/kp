@@ -45,17 +45,18 @@ export type {
 export const kpOperationEvaluationPresentationExtensionLimit = 32;
 export const kpOperationEvaluationPresentationsPerPackLimit = 64;
 
+export const kpSuccessorSynthesisPresentationPlanCompiler =
+  Object.freeze({
+    id: "kp.presentation-plan-compiler.successor-synthesis",
+    version: "1.0.0",
+    planKind: "successor-synthesis",
+    motifKind: "successor-synthesis",
+    lawIds: Object.freeze([...kpCoreOperationPresentationLawIds])
+  } satisfies KpOperationEvaluationPresentationPlanCompilerDescriptor);
+
 export const kpOperationEvaluationPresentationPlanCompilers:
   readonly KpOperationEvaluationPresentationPlanCompilerDescriptor[] =
-  Object.freeze([
-    Object.freeze({
-      id: "kp.presentation-plan-compiler.successor-synthesis",
-      version: "1.0.0",
-      planKind: "successor-synthesis",
-      motifKind: "successor-synthesis",
-      lawIds: Object.freeze([...kpCoreOperationPresentationLawIds])
-    })
-  ]);
+  Object.freeze([kpSuccessorSynthesisPresentationPlanCompiler]);
 
 export const kpOperationEvaluationPresentationCorePack =
   createKpOperationEvaluationPresentationPack({
@@ -415,8 +416,8 @@ function coreEntry(input: {
     transformationKind: input.transformationKind,
     motifKind: "successor-synthesis",
     planCompiler: Object.freeze({
-      id: "kp.presentation-plan-compiler.successor-synthesis",
-      version: "1.0.0"
+      id: kpSuccessorSynthesisPresentationPlanCompiler.id,
+      version: kpSuccessorSynthesisPresentationPlanCompiler.version
     }),
     definitionIds: Object.freeze(
       input.definitionId === undefined ? [] : [input.definitionId]

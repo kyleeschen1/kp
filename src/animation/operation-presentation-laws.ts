@@ -79,6 +79,24 @@ export function runKpOperationPresentationLaws(input: {
           });
         }
       });
+    input.plan.roles.groups
+      .filter(({ groupKind }) => groupKind === "fusion")
+      .forEach((group) => {
+        const roles = group.bundleIds.map((id) => bundleById.get(id)?.role);
+        if (
+          !roles.includes("source-material") ||
+          !roles.includes("target-material")
+        ) {
+          diagnostics.push({
+            lawId: "presentation.lineage",
+            code: "lineage.fusion-not-source-to-target",
+            path: `roles.groups[${group.id}]`,
+            message:
+              `Fusion group ${group.id} must connect source and target ` +
+              "material bundles."
+          });
+        }
+      });
   }
 
   if (lawIds.has("presentation.ownership")) {
