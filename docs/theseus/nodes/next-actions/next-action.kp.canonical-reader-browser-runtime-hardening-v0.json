@@ -195,6 +195,27 @@
       "scope": "slice 11 presentation diff integration",
       "checkedAt": "2026-07-28T21:25:28.323Z",
       "notes": "Rapid canonical sweep passes with unchanged ownership and work counters."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 12 retained material owner records",
+      "checkedAt": "2026-07-28T21:29:45.835Z",
+      "notes": "Retained mounted-record and diff helpers compile across all projects."
+    },
+    {
+      "command": "npm run visual:fraction-composition-motif-fidelity",
+      "status": "passed",
+      "scope": "slice 12 clone identity and measured-ink handoff",
+      "checkedAt": "2026-07-28T21:29:52.294Z",
+      "notes": "Chromium and Firefox wide/phone motif, paint-overlap, seek/rewind, authority, endpoint, fit, and launcher checks pass."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll:chromium",
+      "status": "passed",
+      "scope": "slice 12 material owner rapid-scroll integration",
+      "checkedAt": "2026-07-28T21:30:00.529Z",
+      "notes": "Rapid sweep passes with zero owner add/remove churn and unchanged exclusive visual authority."
     }
   ],
   "expectedLearning": [

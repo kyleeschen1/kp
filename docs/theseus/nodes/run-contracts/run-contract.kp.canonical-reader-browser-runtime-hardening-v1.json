@@ -120,7 +120,8 @@
     {
       "id": "slice.kp.reader-hardening.12",
       "title": "Diff-material-owner-DOM",
-      "status": "planned"
+      "summary": "Material layers now retain mounted owner records and diff owner/visual mutations while preserving clone identity, measured-ink alignment, and exact handoff.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.13",

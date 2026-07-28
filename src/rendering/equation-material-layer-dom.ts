@@ -38,6 +38,13 @@ export interface KpEquationMaterialLayerOwnerFrame {
   readonly fragmentRole?: string | undefined;
 }
 
+interface KpEquationMaterialLayerState {
+  readonly owners: Map<string, HTMLElement>;
+}
+
+const materialLayerStates =
+  new WeakMap<HTMLElement, KpEquationMaterialLayerState>();
+
 export function syncKpEquationMaterialLayer(input: {
   readonly stage: HTMLElement;
   readonly owners: readonly KpEquationMaterialLayerOwnerFrame[];
@@ -48,23 +55,23 @@ export function syncKpEquationMaterialLayer(input: {
   if (layer === null) {
     throw new Error("Equation stage is missing its persistent material layer.");
   }
+  const state = materialLayerState(layer);
   const activeOwnerIds = new Set(input.owners.map((owner) => owner.ownerId));
-  layer.querySelectorAll<HTMLElement>("[data-kp-equation-material-owner-id]")
-    .forEach((owner) => {
-      const ownerId = owner.dataset["kpEquationMaterialOwnerId"];
-      if (ownerId === undefined || !activeOwnerIds.has(ownerId)) owner.remove();
-    });
+  for (const [ownerId, owner] of state.owners) {
+    if (activeOwnerIds.has(ownerId)) continue;
+    owner.remove();
+    state.owners.delete(ownerId);
+  }
 
   for (const frame of input.owners) {
-    let owner = layer.querySelector<HTMLElement>(
-      `[data-kp-equation-material-owner-id="${CSS.escape(frame.ownerId)}"]`
-    );
-    if (owner === null) {
+    let owner = state.owners.get(frame.ownerId);
+    if (owner === undefined) {
       owner = document.createElement("span");
       owner.className = "editor-equation-stage__material-owner";
       owner.dataset["kpEquationMaterialOwnerId"] = frame.ownerId;
       makeKpMaterialOwnerInert(owner);
       layer.append(owner);
+      state.owners.set(frame.ownerId, owner);
     }
     setKpEquationMaterialOwnerVisual({
       owner,
@@ -77,12 +84,12 @@ export function syncKpEquationMaterialLayer(input: {
       // sizing the clone to its owner adds the border a second time and makes
       // rule paint one pixel taller than the sampled native endpoint.
       if (frame.fragmentRole?.startsWith("rule:") === true) {
-        visual.style.boxSizing = "border-box";
+        setStyle(visual.style, "boxSizing", "border-box");
       }
-      visual.classList.toggle(
-        "kp-focus-group",
-        frame.sourceElement.classList.contains("kp-focus-group")
-      );
+      const focused = frame.sourceElement.classList.contains("kp-focus-group");
+      if (visual.classList.contains("kp-focus-group") !== focused) {
+        visual.classList.toggle("kp-focus-group", focused);
+      }
       for (const property of [
         "--kp-focus-z",
         "--kp-focus-scale",
@@ -91,48 +98,60 @@ export function syncKpEquationMaterialLayer(input: {
         "--kp-focus-context-dimming"
       ]) {
         const value = frame.sourceElement.style.getPropertyValue(property);
-        if (value === "") visual.style.removeProperty(property);
-        else visual.style.setProperty(property, value);
+        if (
+          value === "" &&
+          visual.style.getPropertyValue(property) !== ""
+        ) {
+          visual.style.removeProperty(property);
+        } else if (
+          value !== "" &&
+          visual.style.getPropertyValue(property) !== value
+        ) {
+          visual.style.setProperty(property, value);
+        }
       }
-      visual.style.clipPath = frame.clipPath ?? "none";
-      visual.style.transform = frame.visualTransform ?? "none";
+      setStyle(visual.style, "clipPath", frame.clipPath ?? "none");
+      setStyle(visual.style, "transform", frame.visualTransform ?? "none");
     }
-    owner.style.left = `${frame.rect.left}px`;
-    owner.style.top = `${frame.rect.top}px`;
-    owner.style.width = `${frame.rect.width}px`;
-    owner.style.height = `${frame.rect.height}px`;
-    owner.style.opacity = String(frame.opacity);
-    owner.style.transform = frame.transform;
-    owner.style.filter = frame.filter ?? "none";
-    if (frame.semanticDepth === undefined) {
-      delete owner.dataset["kpEquationSemanticDepth"];
-    } else {
-      owner.dataset["kpEquationSemanticDepth"] = frame.semanticDepth;
-    }
-    owner.dataset["kpEquationMaterialSourceMotionId"] =
-      frame.sourceMotionId ?? frame.sourceElement.dataset["kpMotionId"] ?? "";
-    if (frame.semanticEntityId === undefined) {
-      delete owner.dataset["kpEquationMaterialSemanticEntityId"];
-    } else {
-      owner.dataset["kpEquationMaterialSemanticEntityId"] =
-        frame.semanticEntityId;
-    }
-    if (frame.semanticContacts === undefined) {
-      delete owner.dataset["kpEquationMaterialSemanticContacts"];
-    } else {
-      owner.dataset["kpEquationMaterialSemanticContacts"] =
-        JSON.stringify(frame.semanticContacts);
-    }
-    if (frame.fragmentRole === undefined) {
-      delete owner.dataset["kpEquationMaterialFragmentRole"];
-    } else {
-      owner.dataset["kpEquationMaterialFragmentRole"] = frame.fragmentRole;
-    }
+    setStyle(owner.style, "left", `${frame.rect.left}px`);
+    setStyle(owner.style, "top", `${frame.rect.top}px`);
+    setStyle(owner.style, "width", `${frame.rect.width}px`);
+    setStyle(owner.style, "height", `${frame.rect.height}px`);
+    setStyle(owner.style, "opacity", String(frame.opacity));
+    setStyle(owner.style, "transform", frame.transform);
+    setStyle(owner.style, "filter", frame.filter ?? "none");
+    setOptionalDataset(
+      owner,
+      "kpEquationSemanticDepth",
+      frame.semanticDepth
+    );
+    setDataset(
+      owner,
+      "kpEquationMaterialSourceMotionId",
+      frame.sourceMotionId ?? frame.sourceElement.dataset["kpMotionId"] ?? ""
+    );
+    setOptionalDataset(
+      owner,
+      "kpEquationMaterialSemanticEntityId",
+      frame.semanticEntityId
+    );
+    setOptionalDataset(
+      owner,
+      "kpEquationMaterialSemanticContacts",
+      frame.semanticContacts === undefined
+        ? undefined
+        : JSON.stringify(frame.semanticContacts)
+    );
+    setOptionalDataset(
+      owner,
+      "kpEquationMaterialFragmentRole",
+      frame.fragmentRole
+    );
     if (frame.expectedPaintRect === undefined || visual === null) {
-      delete owner.dataset["kpEquationMaterialPaintAlignment"];
-      delete owner.dataset["kpEquationMaterialPaintAlignmentKey"];
-      delete owner.dataset["kpEquationMaterialPaintInsetX"];
-      delete owner.dataset["kpEquationMaterialPaintInsetY"];
+      setOptionalDataset(owner, "kpEquationMaterialPaintAlignment", undefined);
+      setOptionalDataset(owner, "kpEquationMaterialPaintAlignmentKey", undefined);
+      setOptionalDataset(owner, "kpEquationMaterialPaintInsetX", undefined);
+      setOptionalDataset(owner, "kpEquationMaterialPaintInsetY", undefined);
     } else {
       const alignmentKey = [
         owner.dataset["kpEquationMaterialVisualRevision"],
@@ -165,12 +184,16 @@ export function syncKpEquationMaterialLayer(input: {
             `(${widthResidual.toFixed(2)}px × ${heightResidual.toFixed(2)}px).`
           );
         }
-        owner.dataset["kpEquationMaterialPaintAlignmentKey"] = alignmentKey;
-        owner.dataset["kpEquationMaterialPaintInsetX"] = String(
-          measured.left - frame.rect.left
+        setDataset(owner, "kpEquationMaterialPaintAlignmentKey", alignmentKey);
+        setDataset(
+          owner,
+          "kpEquationMaterialPaintInsetX",
+          String(measured.left - frame.rect.left)
         );
-        owner.dataset["kpEquationMaterialPaintInsetY"] = String(
-          measured.top - frame.rect.top
+        setDataset(
+          owner,
+          "kpEquationMaterialPaintInsetY",
+          String(measured.top - frame.rect.top)
         );
       }
       // Clone-internal KaTeX offsets can differ from the native wrapper even
@@ -184,15 +207,67 @@ export function syncKpEquationMaterialLayer(input: {
         frame.expectedPaintRect.top -
         frame.rect.top -
         Number(owner.dataset["kpEquationMaterialPaintInsetY"]);
-      owner.style.left = `${
-        frame.rect.left + correctionX
-      }px`;
-      owner.style.top = `${
-        frame.rect.top + correctionY
-      }px`;
-      owner.dataset["kpEquationMaterialPaintAlignment"] = "measured-ink";
+      setStyle(owner.style, "left", `${frame.rect.left + correctionX}px`);
+      setStyle(owner.style, "top", `${frame.rect.top + correctionY}px`);
+      setDataset(
+        owner,
+        "kpEquationMaterialPaintAlignment",
+        "measured-ink"
+      );
     }
   }
+}
+
+function materialLayerState(layer: HTMLElement): KpEquationMaterialLayerState {
+  const existing = materialLayerStates.get(layer);
+  if (existing !== undefined) return existing;
+  const owners = new Map<string, HTMLElement>();
+  for (const owner of layer.querySelectorAll<HTMLElement>(
+    "[data-kp-equation-material-owner-id]"
+  )) {
+    const ownerId = owner.dataset["kpEquationMaterialOwnerId"];
+    if (ownerId !== undefined) owners.set(ownerId, owner);
+  }
+  const created = { owners };
+  materialLayerStates.set(layer, created);
+  return created;
+}
+
+function setDataset(
+  element: HTMLElement,
+  key: string,
+  value: string
+): void {
+  if (element.dataset[key] !== value) element.dataset[key] = value;
+}
+
+function setOptionalDataset(
+  element: HTMLElement,
+  key: string,
+  value: string | undefined
+): void {
+  if (value === undefined) {
+    if (element.dataset[key] !== undefined) delete element.dataset[key];
+  } else {
+    setDataset(element, key, value);
+  }
+}
+
+function setStyle(
+  style: CSSStyleDeclaration,
+  key:
+    | "boxSizing"
+    | "clipPath"
+    | "filter"
+    | "height"
+    | "left"
+    | "opacity"
+    | "top"
+    | "transform"
+    | "width",
+  value: string
+): void {
+  if (style[key] !== value) style[key] = value;
 }
 
 export function setKpEquationMaterialOwnerVisual(input: {
