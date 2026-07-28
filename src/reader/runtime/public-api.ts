@@ -1,4 +1,8 @@
 export {
+  createKpReaderCompositorPurePlanCache,
+  type KpReaderCompositorPurePlanCache
+} from "./compositor-pure-plan-cache.ts";
+export {
   createKpReaderCompositorGeometryCacheIdentity,
   type KpReaderCompositorGeometryCacheIdentity,
   type KpReaderCompositorGeometryCacheIdentityInput
@@ -8,6 +12,8 @@ export {
   recordKpReaderCanonicalSessionApply,
   recordKpReaderCanonicalSessionBuild,
   recordKpReaderCanonicalSessionReuse,
+  recordKpReaderPurePlanCacheHit,
+  recordKpReaderPurePlanCompilation,
   recordKpReaderScrollAnchorRead,
   recordKpReaderScrollGeometryRead,
   resetKpReaderRuntimeMetrics,

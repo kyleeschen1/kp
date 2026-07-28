@@ -14,7 +14,7 @@ export interface KpReaderCompositorGeometryCacheIdentityInput {
   readonly transitionId: string;
   readonly renderPlanId: string;
   readonly materialPlanId: string;
-  readonly fontRevision: string;
+  readonly fontRevision: number;
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly layoutApplicationId: string;
   readonly viewportWidthPx: number;
@@ -31,7 +31,6 @@ export function createKpReaderCompositorGeometryCacheIdentity(
     input.transitionId,
     input.renderPlanId,
     input.materialPlanId,
-    input.fontRevision,
     input.measurementIdentity.coordinateSpaceId,
     input.layoutApplicationId,
     input.presentationGeometryRevision
@@ -42,11 +41,13 @@ export function createKpReaderCompositorGeometryCacheIdentity(
     );
   }
   if (
+    !Number.isSafeInteger(input.fontRevision) ||
+    input.fontRevision < 0 ||
     !Number.isSafeInteger(input.measurementIdentity.revision) ||
     input.measurementIdentity.revision < 0
   ) {
     throw new Error(
-      "Reader compositor geometry cache identity requires a non-negative measurement revision."
+      "Reader compositor geometry cache identity requires non-negative font and measurement revisions."
     );
   }
   for (const [label, value] of [

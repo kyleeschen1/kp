@@ -132,7 +132,8 @@
     {
       "id": "slice.kp.reader-hardening.14",
       "title": "Cache-pure-compositor-plans",
-      "status": "planned"
+      "summary": "Cached only DOM-free pure compositor plans behind a bounded branded total-geometry identity; exact semantic/style validation and bounded 1/64px geometry reuse reject stale plans while absorbing renderer float noise.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.15",

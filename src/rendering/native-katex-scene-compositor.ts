@@ -142,6 +142,7 @@ export interface KpCanonicalNativeKatexPureScenePlan {
   readonly kind: "canonical-native-katex-pure-scene-plan";
   readonly lifecycle: "pure-measured-plan";
   readonly inputTrackSignature: string;
+  readonly inputGeometry: readonly number[];
   readonly tracks: readonly KpNativeKatexSceneTrack[];
   readonly protectedTransit: KpEquationProtectedTransitCertificate;
 }
@@ -1640,6 +1641,7 @@ export function compileKpCanonicalNativeKatexPureScenePlan(
     kind: "canonical-native-katex-pure-scene-plan",
     lifecycle: "pure-measured-plan",
     inputTrackSignature: prepared.inputTrackSignature,
+    inputGeometry: pureSceneInputGeometry(input),
     tracks: protectedTransit.tracks,
     protectedTransit: protectedTransit.certificate
   });
@@ -1656,8 +1658,26 @@ export function createKpCanonicalNativeKatexSceneSession(
     input.purePlan !== undefined &&
     input.purePlan.inputTrackSignature !== prepared.inputTrackSignature
   ) {
+    const mismatch = firstStringDifference(
+      input.purePlan.inputTrackSignature,
+      prepared.inputTrackSignature
+    );
     throw new Error(
-      "Canonical native KaTeX pure plan does not match measured scene tracks."
+      "Canonical native KaTeX pure plan does not match measured scene tracks " +
+      `(first difference ${mismatch.index}: cached ${mismatch.left}, ` +
+      `current ${mismatch.right}).`
+    );
+  }
+  if (
+    input.purePlan !== undefined &&
+    !pureSceneGeometryMatches(
+      input.purePlan.inputGeometry,
+      pureSceneInputGeometry(input)
+    )
+  ) {
+    throw new Error(
+      "Canonical native KaTeX pure plan exceeds the measured geometry " +
+      "reuse tolerance."
     );
   }
   const protectedTransit = input.purePlan === undefined
@@ -1890,10 +1910,90 @@ function prepareKpCanonicalNativeKatexScene(
     syntheses,
     ownership,
     motifRoutedTracks,
-    inputTrackSignature: JSON.stringify([
-      input.copyFanOutRouting === true,
-      motifRoutedTracks
-    ])
+    inputTrackSignature: pureSceneInputSignature(input)
+  };
+}
+
+function pureSceneInputSignature(
+  input: Omit<KpCanonicalNativeKatexSceneInput, "purePlan">
+): string {
+  const atoms = (scene: KpNativeKatexRenderedSceneObservation) =>
+    scene.atoms.map((atom) => ({
+      id: atom.id,
+      semanticEntityId: atom.semanticEntityId,
+      presentationGroupId: atom.presentationGroupId,
+      paintKind: atom.paintKind,
+      visualKey: atom.visualKey,
+      styleFingerprint: atom.styleFingerprint,
+      zOrder: atom.zOrder,
+      fontRevision: atom.fontRevision
+    }));
+  return JSON.stringify({
+    source: atoms(input.source),
+    target: atoms(input.target),
+    relations: input.relations,
+    fanInRouting: input.fanInRouting === true,
+    copyFanOutRouting: input.copyFanOutRouting === true,
+    reorderRouting: input.reorderRouting === true,
+    stageOccupancy: input.stageOccupancy === undefined
+      ? undefined
+      : {
+          measurementIdentity: input.stageOccupancy.measurementIdentity,
+          rowIds: input.stageOccupancy.rows.map(({ id }) => id),
+          geometryAuthority: input.stageOccupancy.geometryAuthority
+        }
+  });
+}
+
+function pureSceneInputGeometry(
+  input: Omit<KpCanonicalNativeKatexSceneInput, "purePlan">
+): readonly number[] {
+  const rect = (value: KpStageRelativeRect): readonly number[] => [
+    value.left,
+    value.top,
+    value.width,
+    value.height
+  ];
+  return Object.freeze([
+    ...input.source.atoms.flatMap((atom) => rect(atom.rect)),
+    ...input.target.atoms.flatMap((atom) => rect(atom.rect)),
+    ...(input.stageOccupancy?.rows.flatMap((row) => rect(row.rect)) ?? []),
+    ...(input.stageOccupancy === undefined
+      ? []
+      : rect(input.stageOccupancy.protectedCorridor))
+  ]);
+}
+
+function pureSceneGeometryMatches(
+  cached: readonly number[],
+  current: readonly number[]
+): boolean {
+  if (cached.length !== current.length) return false;
+  // Browser layout can report the same painted edge with ~1e-4 CSS-pixel
+  // scroll-dependent noise. The explicit 1/64px bound is below physical paint
+  // resolution; larger drift must miss so stale motion geometry cannot mount.
+  return cached.every((value, index) =>
+    Math.abs(value - current[index]!) <= 1 / 64
+  );
+}
+
+function firstStringDifference(
+  left: string,
+  right: string
+): {
+  readonly index: number;
+  readonly left: string;
+  readonly right: string;
+} {
+  const maxShared = Math.min(left.length, right.length);
+  let index = 0;
+  while (index < maxShared && left[index] === right[index]) index += 1;
+  const contextStart = Math.max(0, index - 32);
+  const contextEnd = index + 64;
+  return {
+    index,
+    left: JSON.stringify(left.slice(contextStart, contextEnd)),
+    right: JSON.stringify(right.slice(contextStart, contextEnd))
   };
 }
 

@@ -19,9 +19,13 @@ import type {
 } from "../runtime/public-api.ts";
 import {
   assertKpAppliedEquationStageLayout,
+  createKpReaderCompositorGeometryCacheIdentity,
+  createKpReaderCompositorPurePlanCache,
   recordKpReaderCanonicalSessionApply,
   recordKpReaderCanonicalSessionBuild,
-  recordKpReaderCanonicalSessionReuse
+  recordKpReaderCanonicalSessionReuse,
+  recordKpReaderPurePlanCacheHit,
+  recordKpReaderPurePlanCompilation
 } from "../runtime/public-api.ts";
 
 export interface KpReaderCanonicalEquationSession {
@@ -65,6 +69,9 @@ export function createKpReaderCanonicalEquationSession(input: {
   let structuralSessionKey: string | undefined;
   let structuralFitSurface: HTMLElement | undefined;
   let materialLayer: HTMLElement | undefined;
+  const purePlanCache = createKpReaderCompositorPurePlanCache<
+    ReturnType<KpReaderEquationPureScenePlanCompiler>
+  >();
   const releaseCurrentSession = (
     preserveStructuralSuccession = false
   ): void => {
@@ -168,6 +175,21 @@ export function createKpReaderCanonicalEquationSession(input: {
           presentationGroupId: `${transitionId}.target`,
           fontReadiness: frame.fontReadiness
         });
+        const geometryIdentity =
+          createKpReaderCompositorGeometryCacheIdentity({
+            transitionId,
+            renderPlanId: frame.renderPlan.id,
+            materialPlanId: frame.materialPlan.id,
+            fontRevision: frame.fontReadiness.revision,
+            measurementIdentity: frame.measurementIdentity,
+            layoutApplicationId:
+              frame.appliedStageLayout?.applicationId ?? "native",
+            viewportWidthPx: frame.fitSurface.offsetWidth,
+            viewportHeightPx: frame.fitSurface.offsetHeight,
+            devicePixelRatio: ownerWindow?.devicePixelRatio ?? 1,
+            motionMode: frame.motionMode,
+            presentationGeometryRevision: frame.presentationRevision
+          });
         const sceneInput = {
           renderPlan: frame.renderPlan,
           materialPlan: frame.materialPlan,
@@ -180,7 +202,16 @@ export function createKpReaderCanonicalEquationSession(input: {
           source,
           target
         };
-        const purePlan = input.compilePurePlan(sceneInput);
+        let purePlan = purePlanCache.get(geometryIdentity);
+        if (purePlan === undefined) {
+          purePlan = input.compilePurePlan(sceneInput);
+          purePlanCache.set(geometryIdentity, purePlan);
+          if (ownerWindow !== null) {
+            recordKpReaderPurePlanCompilation(ownerWindow);
+          }
+        } else if (ownerWindow !== null) {
+          recordKpReaderPurePlanCacheHit(ownerWindow);
+        }
         session = input.createSession({ ...sceneInput, purePlan });
         sessionKey = nextKey;
         structuralSessionKey = nextStructuralSessionKey;
@@ -212,7 +243,10 @@ export function createKpReaderCanonicalEquationSession(input: {
       return true;
     },
     invalidate: releaseCurrentSession,
-    dispose: releaseCurrentSession
+    dispose() {
+      releaseCurrentSession();
+      purePlanCache.clear();
+    }
   };
 }
 

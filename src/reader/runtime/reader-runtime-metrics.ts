@@ -5,6 +5,8 @@ export interface KpReaderRuntimeMetricsSnapshot {
   readonly canonicalSessionBuildDurationMs: number;
   readonly canonicalSessionReuses: number;
   readonly canonicalSessionApplies: number;
+  readonly purePlanCompilations: number;
+  readonly purePlanCacheHits: number;
 }
 
 interface MutableKpReaderRuntimeMetrics {
@@ -14,6 +16,8 @@ interface MutableKpReaderRuntimeMetrics {
   canonicalSessionBuildDurationMs: number;
   canonicalSessionReuses: number;
   canonicalSessionApplies: number;
+  purePlanCompilations: number;
+  purePlanCacheHits: number;
 }
 
 const metricsByWindow = new WeakMap<Window, MutableKpReaderRuntimeMetrics>();
@@ -57,6 +61,14 @@ export function recordKpReaderCanonicalSessionApply(
   metricsFor(ownerWindow).canonicalSessionApplies += 1;
 }
 
+export function recordKpReaderPurePlanCompilation(ownerWindow: Window): void {
+  metricsFor(ownerWindow).purePlanCompilations += 1;
+}
+
+export function recordKpReaderPurePlanCacheHit(ownerWindow: Window): void {
+  metricsFor(ownerWindow).purePlanCacheHits += 1;
+}
+
 function metricsFor(ownerWindow: Window): MutableKpReaderRuntimeMetrics {
   const existing = metricsByWindow.get(ownerWindow);
   if (existing !== undefined) return existing;
@@ -72,6 +84,8 @@ function createMetrics(): MutableKpReaderRuntimeMetrics {
     canonicalSessionBuilds: 0,
     canonicalSessionBuildDurationMs: 0,
     canonicalSessionReuses: 0,
-    canonicalSessionApplies: 0
+    canonicalSessionApplies: 0,
+    purePlanCompilations: 0,
+    purePlanCacheHits: 0
   };
 }

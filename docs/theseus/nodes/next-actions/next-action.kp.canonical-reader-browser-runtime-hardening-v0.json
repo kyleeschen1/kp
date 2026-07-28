@@ -244,6 +244,34 @@
       "scope": "slice 13 reader pure-plan integration",
       "checkedAt": "2026-07-28T21:39:33.209Z",
       "notes": "Rapid sweep passes with unchanged visual authority; plan compilation is now separately callable but intentionally uncached until slice 14."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll:chromium",
+      "status": "passed",
+      "scope": "slice 14 bounded pure-plan cache",
+      "checkedAt": "2026-07-28T21:51:25.201Z",
+      "notes": "Thirty warm bidirectional scroll frames hit the total-identity cache with zero pure-plan recompilations, zero geometry or anchor reads, and thirty successful ephemeral session mounts/applies."
+    },
+    {
+      "command": "npm run test:reader-runtime-hardening",
+      "status": "passed",
+      "scope": "slice 14 cache identity and LRU",
+      "checkedAt": "2026-07-28T21:51:26.130Z",
+      "notes": "All 15 runtime tests pass, including total geometry-authority invalidation and bounded branded-key LRU behavior."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 14 cache ownership",
+      "checkedAt": "2026-07-28T21:51:26.934Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass with cache access restricted to the branded total geometry identity."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 14 compositor cache boundary",
+      "checkedAt": "2026-07-28T21:51:27.757Z",
+      "notes": "Reader, semantic animation, concept-room, and operation-presentation boundaries pass; only DOM-free plans are cached while mounted sessions remain ephemeral."
     }
   ],
   "expectedLearning": [

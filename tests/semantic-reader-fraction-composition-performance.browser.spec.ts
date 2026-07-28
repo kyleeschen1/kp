@@ -148,7 +148,9 @@ test("rapid bidirectional scroll emits canonical reader runtime evidence", async
     scrollAnchorReads: 0,
     canonicalSessionBuilds: 30,
     canonicalSessionReuses: 0,
-    canonicalSessionApplies: 30
+    canonicalSessionApplies: 30,
+    purePlanCompilations: 0,
+    purePlanCacheHits: 30
   });
   expect(evidence.materialOwnerChurn).toEqual({
     added: 0,
