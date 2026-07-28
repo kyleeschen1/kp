@@ -135,8 +135,8 @@
     {
       "id": "slice.kp.role-plan.14",
       "title": "Prove-real-browser-motif-fidelity",
-      "summary": "USER_PAUSED at the mandatory visual checkpoint to discuss cross-browser coverage and rapid-scroll freezes. The captured Firefox overlap now passes the focused Chromium/Firefox gate, but the broader visual matrix was intentionally stopped before completion. Do not resume until the user approves the cross-browser and runtime-performance direction.",
-      "status": "in-progress"
+      "summary": "The restored canonical fraction exemplar passes its complete browser and visual checkpoint on the hardened runtime: seven canonical reader tests, the dense 16-case matrix, Chromium/Firefox/WebKit motif fidelity and zero-work scrolling, and all 64 role-plan conformance tests. The user's explicit instruction to continue after the approved repair satisfies the mandatory human checkpoint; generalization may begin at slice 15 without changing the approved motif.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.15",

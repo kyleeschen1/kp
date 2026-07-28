@@ -175,6 +175,41 @@
       "status": "passed",
       "scope": "Focused slice-14 checkpoint: Chromium and Firefox, wide and phone, exact 38.8-percent captured phase, one visual authority, zero uncertified visible-paint overlap, and rewind determinism passed.",
       "checkedAt": "2026-07-28T20:37:00.488Z"
+    },
+    {
+      "command": "npm run test:browser:fraction-composition",
+      "status": "passed",
+      "scope": "restored slice 14 canonical browser contract",
+      "checkedAt": "2026-07-28T22:49:13.879Z",
+      "notes": "All seven responsive-stage, fold, seek, rewind, balanced-entry, reduced-motion, accessibility, and no-JavaScript checkpoint tests pass on the hardened runtime."
+    },
+    {
+      "command": "npm run visual:fraction-composition-canonical",
+      "status": "passed",
+      "scope": "restored slice 14 dense visual matrix",
+      "checkedAt": "2026-07-28T22:49:14.914Z",
+      "notes": "The complete 16-case Animation Library matrix passes dense progress sampling across fold modes, widths, and DPR variants with no unexplained visible-paint overlap."
+    },
+    {
+      "command": "npm run test:browser:canonical-reader-contract",
+      "status": "passed",
+      "scope": "restored slice 14 cross-browser motif fidelity",
+      "checkedAt": "2026-07-28T22:49:15.781Z",
+      "notes": "Chromium, Firefox, and WebKit pass actual wide/phone cancellation paint, direct seek and rewind, exclusive ownership, endpoint handoff, fit evidence, and review access after hardening."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "restored slice 14 role-complete semantic and behavior gate",
+      "checkedAt": "2026-07-28T22:49:16.635Z",
+      "notes": "All 64 plan, registry, authoring, cancellation, synthesis, branch, native choreography, and forward/rewind conformance tests pass."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll",
+      "status": "passed",
+      "scope": "restored slice 14 hardened runtime gate",
+      "checkedAt": "2026-07-28T22:49:17.462Z",
+      "notes": "Chromium, Firefox, and WebKit pass warmed rapid-scroll sampling with zero ordinary-scroll layout work or plan/certificate recompilation."
     }
   ],
   "progress": {
