@@ -13,10 +13,10 @@ import {
   type KpFoldableDistributionLayoutIntent,
   type KpFoldableDistributionPhaseLayout,
   type KpFoldableDistributionViewport
-} from "../runtime/foldable-distribution-layout.ts";
+} from "../runtime/public-api.ts";
 import type {
   KpEquationStagePhaseIntent
-} from "../runtime/equation-stage-layout.ts";
+} from "../runtime/public-api.ts";
 import type {
   KpReaderCertifiedEquationStageFitResult,
   KpReaderCertifiedEquationStageResponsiveFitPlan

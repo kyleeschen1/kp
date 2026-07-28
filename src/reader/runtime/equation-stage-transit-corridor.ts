@@ -34,6 +34,7 @@ export interface KpEquationStageTransitCorridor {
 
 const corridorCertifiedEquationStageLayoutAuthority: unique symbol =
   Symbol("kp.corridor-certified-equation-stage-layout");
+const geometryContainmentEpsilonPx = 1e-6;
 
 export interface KpCorridorCertifiedEquationStageLayout
   extends KpCertifiedEquationStageLayout {
@@ -218,10 +219,14 @@ function center(rect: KpEquationStageRect): KpEquationStagePoint {
 }
 
 function contains(outer: KpEquationStageRect, inner: KpEquationStageRect): boolean {
-  return inner.left >= outer.left &&
-    inner.top >= outer.top &&
-    inner.left + inner.width <= outer.left + outer.width &&
-    inner.top + inner.height <= outer.top + outer.height;
+  // DOMRect union arithmetic can differ at a shared edge by machine epsilon
+  // while a responsive host is between fractional CSS widths.
+  return inner.left >= outer.left - geometryContainmentEpsilonPx &&
+    inner.top >= outer.top - geometryContainmentEpsilonPx &&
+    inner.left + inner.width <=
+      outer.left + outer.width + geometryContainmentEpsilonPx &&
+    inner.top + inner.height <=
+      outer.top + outer.height + geometryContainmentEpsilonPx;
 }
 
 function unionRects(rects: readonly KpEquationStageRect[]):

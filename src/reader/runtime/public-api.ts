@@ -22,6 +22,7 @@ export {
 } from "./clock-authority.ts";
 export {
   createKpReaderContinuousScrollClock,
+  sampleKpReaderScrollPosition,
   sampleKpReaderScrollProgress,
   type KpReaderContinuousScrollClock,
   type KpReaderLinearScrollGeometry,
@@ -149,6 +150,7 @@ export {
 } from "./attention-projector.ts";
 export {
   KP_READER_WIDE_MIN_WIDTH,
+  resolveKpReaderViewportAnchorFraction,
   resolveKpReaderResponsiveProjection,
   type KpReaderResponsiveProjection
 } from "./responsive-projection.ts";

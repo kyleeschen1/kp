@@ -346,7 +346,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
     conformance: equationConformance({
       documentId: "lesson.algebra.foldable-distribution",
       progressPermille: 563,
-      beatId: "beat.products-evaluated",
+      beatId: "beat.grouped",
       searchableText:
         "Distribute each factor, gather like terms, and collect the result"
     }),

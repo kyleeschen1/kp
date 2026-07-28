@@ -50,16 +50,19 @@ import {
   projectKpReaderMotion,
   parseKpReaderMotionPreference,
   projectKpReaderAttention,
+  resolveKpReaderViewportAnchorFraction,
   resolveKpReaderResponsiveProjection,
   resolveKpReaderEquationPresentationProfile,
   resolveKpReaderMotionPolicy,
   selectKpReaderEquationPresentation,
+  sampleKpReaderScrollPosition,
   sampleKpReaderAnimationFrame,
   resetKpAppliedEquationStageLayout,
   type KpAppliedEquationStageLayout,
   type KpCorridorCertifiedEquationStageLayout,
   type KpReaderClockSample,
   type KpReaderContinuousScrollClock,
+  type KpReaderPiecewiseScrollGeometry,
   type KpReaderFocusSnapshot,
   type KpReaderMotionPreference,
   type KpReaderAttentionProjection
@@ -504,17 +507,18 @@ function applyResponsiveProjection(): void {
     });
 }
 
-function scrollGeometry(): { readonly startPx: number; readonly endPx: number } {
-  const first = beats[0];
-  const last = beats.at(-1);
-  if (first === undefined || last === undefined) {
+function scrollGeometry(): KpReaderPiecewiseScrollGeometry {
+  if (beats.length < 2) {
     throw new Error("The semantic reader exemplar requires explanation beats.");
   }
-  const firstRect = first.getBoundingClientRect();
-  const lastRect = last.getBoundingClientRect();
-  const startPx = window.scrollY + firstRect.top + firstRect.height * 0.36;
-  const endPx = window.scrollY + lastRect.top + lastRect.height * 0.64;
-  return endPx > startPx ? { startPx, endPx } : { startPx, endPx: startPx + 1 };
+  return {
+    // Semantic checkpoints belong at their authored narrative beats. A linear
+    // first/last interpolation drifted unequal timelines away from their copy.
+    stops: beats.map((beat) => ({
+      positionPx: window.scrollY + beatNarrativeCenter(beat),
+      progressPermille: Number(requiredData(beat, "kpCheckpoint"))
+    }))
+  };
 }
 
 function readerPosition(): number {
@@ -522,9 +526,51 @@ function readerPosition(): number {
 }
 
 function readerViewportAnchorFraction(): number {
-  // In the stacked layout, the reading focus sits below the sticky visual;
-  // desktop keeps the text and diagram centered side by side.
-  return window.matchMedia("(max-width: 880px)").matches ? 0.66 : 0.48;
+  const stickyVisualBottomPx = stickyVisualBottom();
+  return resolveKpReaderViewportAnchorFraction({
+    viewportWidth: window.innerWidth,
+    viewportHeight: window.innerHeight,
+    stickyVisualBottomPx,
+    maximumNarrativeHeightPx: stickyVisualBottomPx === undefined
+      ? undefined
+      : maximumBeatNarrativeHeight(),
+    clearancePx: 12
+  });
+}
+
+function stickyVisualBottom(): number | undefined {
+  const style = getComputedStyle(staticSurface);
+  if (style.position !== "sticky") return undefined;
+  const top = Number.parseFloat(style.top);
+  if (!Number.isFinite(top)) return undefined;
+  // Use the declared sticky position rather than the current rect: before the
+  // story reaches the viewport, the rect still reflects document flow.
+  return top + staticSurface.getBoundingClientRect().height;
+}
+
+function maximumBeatNarrativeHeight(): number {
+  return Math.max(0, ...beats.map((beat) => beatNarrativeBounds(beat).height));
+}
+
+function beatNarrativeCenter(beat: HTMLElement): number {
+  const bounds = beatNarrativeBounds(beat);
+  return bounds.top + bounds.height / 2;
+}
+
+function beatNarrativeBounds(beat: HTMLElement): {
+  readonly top: number;
+  readonly height: number;
+} {
+  const rects = [...beat.children]
+    .map((element) => element.getBoundingClientRect())
+    .filter((rect) => rect.width > 0 && rect.height > 0);
+  if (rects.length === 0) {
+    const rect = beat.getBoundingClientRect();
+    return { top: rect.top, height: rect.height };
+  }
+  const top = Math.min(...rects.map((rect) => rect.top));
+  const bottom = Math.max(...rects.map((rect) => rect.bottom));
+  return { top, height: bottom - top };
 }
 
 function onScroll(): void {
@@ -1387,7 +1433,9 @@ function restoreUrlLocation(): void {
     setExplicitProgress(progress, "url", false);
     scrollFocusWorkspaceIntoView();
   } else {
-    scrollToProgress(progress);
+    // URL state is exact semantic authority. Browser scroll positions can
+    // quantize an inverse piecewise mapping by a fraction of a pixel.
+    setExplicitProgress(progress, "url", false);
   }
 }
 
@@ -1404,8 +1452,10 @@ function scrollFocusWorkspaceIntoView(): void {
 
 function scrollToProgress(progressPermille: number): void {
   const geometry = scrollGeometry();
-  const scrollPosition = geometry.startPx +
-    (geometry.endPx - geometry.startPx) * progressPermille / 1_000;
+  const scrollPosition = sampleKpReaderScrollPosition(
+    progressPermille / 1_000,
+    geometry
+  );
   window.scrollTo({
     top: scrollPosition - window.innerHeight * readerViewportAnchorFraction()
   });

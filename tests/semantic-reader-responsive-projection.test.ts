@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   KP_READER_WIDE_MIN_WIDTH,
+  resolveKpReaderViewportAnchorFraction,
   resolveKpReaderResponsiveProjection
 } from "../src/reader/runtime/public-api.ts";
 
@@ -40,4 +41,34 @@ test("stories must opt in before missing attention becomes a compact transcript"
     viewportWidth: 390,
     attentionAvailable: false
   }), "fallback");
+});
+
+test("narrow sticky stories reserve measured room for active narrative", () => {
+  assert.equal(resolveKpReaderViewportAnchorFraction({
+    viewportWidth: 1_440,
+    viewportHeight: 1_000
+  }), 0.48);
+  assert.equal(resolveKpReaderViewportAnchorFraction({
+    viewportWidth: 390,
+    viewportHeight: 680
+  }), 0.66);
+  assert.equal(resolveKpReaderViewportAnchorFraction({
+    viewportWidth: 390,
+    viewportHeight: 680,
+    stickyVisualBottomPx: 430,
+    maximumNarrativeHeightPx: 120,
+    clearancePx: 16
+  }), 506 / 680);
+});
+
+test("viewport anchors reject incomplete or invalid measured geometry", () => {
+  assert.throws(() => resolveKpReaderViewportAnchorFraction({
+    viewportWidth: 390,
+    viewportHeight: 680,
+    stickyVisualBottomPx: 430
+  }), /both be provided/);
+  assert.throws(() => resolveKpReaderViewportAnchorFraction({
+    viewportWidth: 390,
+    viewportHeight: 0
+  }), /positive and finite/);
 });

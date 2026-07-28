@@ -255,6 +255,159 @@ test("foldable distribution review matrix stays canonical in one wide or phone h
       "data-kp-native-katex-motion-profile",
       "canonical-semantic-reorder-and-group"
     );
+    await seek(644);
+    const overlapEvidence = await frame.locator("body").evaluate(
+      async () => {
+        const overlapModule =
+          "/src/rendering/equation-visible-paint-overlap.ts";
+        const geometryModule =
+          "/src/rendering/native-katex-paint-geometry.ts";
+        const {
+          evaluateKpEquationVisiblePaintCertifiedContacts,
+          inspectKpEquationVisiblePaintOverlap
+        } = await import(overlapModule);
+        const { measureKpNativeKatexSubtreePaintRect } =
+          await import(geometryModule);
+        const stage = document.querySelector<HTMLElement>(
+          "[data-kp-reader-equation-viewport]"
+        );
+        const transition = document.querySelector<HTMLElement>(
+          "[data-kp-reader-transition-active='true']"
+        );
+        if (stage === null || transition === null) {
+          throw new Error("Library overlap checkpoint lacks its stage.");
+        }
+        const effectiveOpacity = (element: HTMLElement): number => {
+          let opacity = 1;
+          let current: HTMLElement | null = element;
+          while (current !== null) {
+            opacity *= Number(getComputedStyle(current).opacity);
+            if (current === stage) break;
+            current = current.parentElement;
+          }
+          return opacity;
+        };
+        const observations = [
+          ...[...transition.querySelectorAll<HTMLElement>(
+            "[data-kp-reader-native]"
+          )].flatMap((root) => {
+            const authority = root.dataset["kpReaderNative"] === "source"
+              ? "source-native" as const
+              : "target-native" as const;
+            return [...root.querySelectorAll<HTMLElement>(
+              "[data-kp-reader-equation-anchor-id]"
+            )].filter((anchor) =>
+              anchor.dataset["kpFoldableEnvelopeId"] === undefined &&
+              effectiveOpacity(anchor) > 0.01
+            ).flatMap((anchor) => {
+              const rect = measureKpNativeKatexSubtreePaintRect(stage, anchor);
+              return rect === undefined ? [] : [{
+                ownerId:
+                  `native:${authority}:${
+                    anchor.dataset["kpReaderEquationAnchorId"]
+                  }`,
+                semanticEntityId: anchor.dataset["kpReaderSelectorId"],
+                rowId: anchor.closest<HTMLElement>(
+                  "[data-kp-foldable-envelope-id]"
+                )?.dataset["kpFoldableEnvelopeId"],
+                authority,
+                rect,
+                opacity: effectiveOpacity(anchor)
+              }];
+            });
+          }),
+          ...[...document.querySelectorAll<HTMLElement>(
+            "[data-kp-equation-material-owner-id]"
+          )].flatMap((owner) => {
+            const visual = owner.firstElementChild as HTMLElement | null;
+            const rect = visual === null
+              ? undefined
+              : measureKpNativeKatexSubtreePaintRect(stage, visual);
+            return rect === undefined ? [] : [{
+              ownerId:
+                `material:${
+                  owner.dataset["kpEquationMaterialOwnerId"]
+                }`,
+              semanticEntityId:
+                owner.dataset["kpEquationMaterialSemanticEntityId"],
+              semanticContacts: JSON.parse(
+                owner.dataset["kpEquationMaterialSemanticContacts"] ?? "[]"
+              ) as Array<{
+                id: string;
+                maximumOverlapWidthPx: number;
+                maximumOverlapHeightPx: number;
+              }>,
+              authority: "material" as const,
+              rect,
+              opacity: effectiveOpacity(owner)
+            }];
+          })
+        ];
+        const report = inspectKpEquationVisiblePaintOverlap({
+          progress: 0.644,
+          viewportId: `${window.innerWidth}x${window.innerHeight}`,
+          observations,
+          contactTolerancePx: 0.75
+        });
+        return {
+          viewportWidth: window.innerWidth,
+          stageWidth: stage.getBoundingClientRect().width,
+          layoutPolicy: document.querySelector<HTMLElement>(
+            "[data-kp-reader-equation-stage]"
+          )?.dataset["kpReaderFoldLayoutPolicy"],
+          presentationOverlap: (() => {
+            if (window.innerWidth > 880) return undefined;
+            const stickyVisual = document.querySelector<HTMLElement>(
+              "[data-kp-animation-static]"
+            );
+            const activeBeat = document.querySelector<HTMLElement>(
+              "[data-kp-beat-active='true']"
+            );
+            if (stickyVisual === null || activeBeat === null) {
+              throw new Error(
+                "Phone overlap checkpoint lacks its sticky visual or active beat."
+              );
+            }
+            const contentRects = [...activeBeat.children]
+              .map((element) => element.getBoundingClientRect())
+              .filter((rect) => rect.width > 0 && rect.height > 0);
+            if (contentRects.length === 0) {
+              throw new Error("Active phone beat lacks measurable narrative.");
+            }
+            const visualRect = stickyVisual.getBoundingClientRect();
+            const contentTop = Math.min(...contentRects.map(({ top }) => top));
+            const contentLeft = Math.min(...contentRects.map(({ left }) => left));
+            const contentRight = Math.max(...contentRects.map(({ right }) => right));
+            const horizontallyIntersects =
+              contentRight > visualRect.left && contentLeft < visualRect.right;
+            return {
+              activeBeatId: activeBeat.dataset["kpBeat"],
+              anchor: Number(
+                document.body.dataset["kpReaderViewportAnchor"]
+              ),
+              contentTop,
+              protectedVisualBottom: visualRect.bottom + 12,
+              overlaps:
+                horizontallyIntersects &&
+                contentTop < visualRect.bottom + 12
+            };
+          })(),
+          report,
+          violations: evaluateKpEquationVisiblePaintCertifiedContacts({
+            report,
+            contactTolerancePx: 0.75
+          }).violations
+        };
+      }
+    );
+    expect(
+      overlapEvidence.violations,
+      JSON.stringify({ viewport, overlapEvidence })
+    ).toEqual([]);
+    expect(
+      overlapEvidence.presentationOverlap?.overlaps ?? false,
+      JSON.stringify({ viewport, overlapEvidence })
+    ).toBe(false);
     await seek(740);
     await expect(fitSurface).toHaveAttribute(
       "data-kp-native-katex-motion-profile",

@@ -54,6 +54,7 @@ export function mountKpDevReview(input: {
   ownerWindow.addEventListener("resize", syncPlacement, { passive: true });
 
   const client = new KpDevReviewClient();
+  shell.host.dataset["kpDevReviewAvailable"] = "pending";
   let currentUnread = 0;
   const currentRound = client
     .query({ unreadBy: "codex.main" })
@@ -65,10 +66,6 @@ export function mountKpDevReview(input: {
     .then((round) => {
       shell.setReviewRound(round.label, round.sequence, round.synthetic);
       return round;
-    })
-    .catch((error: unknown) => {
-      shell.reviewRound.value = "Review round unavailable";
-      throw error;
     });
   const sessionId = getOrCreateKpDevReviewSessionId({
     buildFingerprint: __KP_DEV_REVIEW_BUILD__.fingerprint,
@@ -101,50 +98,62 @@ export function mountKpDevReview(input: {
     passive: true
   });
 
-  const composer = mountKpDevReviewComposer({
-    shell,
-    capture: async () => {
-      await input.beforeCapture?.();
-      const capturedAtMs = ownerWindow.performance.now();
-      const capture = await registry.capture({
-        route: new URL(ownerWindow.location.href),
-        capturedAtMs,
-        eventTarget: pointer?.target ?? null,
-        pointer: pointer?.geometry
-      });
-      if (capture === undefined) {
-        throw new Error("No visual review capture provider is ready");
-      }
-      const result: KpDevReviewCaptureV1 = {
-        route: ownerWindow.location.href,
-        capturedAt: new Date().toISOString(),
-        environment: captureKpDevReviewEnvironment(
-          browserKpDevReviewEnvironmentSource(
-            ownerWindow,
-            ownerWindow.navigator
+  let disposed = false;
+  let composer: ReturnType<typeof mountKpDevReviewComposer> | undefined;
+  void currentRound.then((round) => {
+    if (disposed) return;
+    composer = mountKpDevReviewComposer({
+      shell,
+      capture: async () => {
+        await input.beforeCapture?.();
+        const capturedAtMs = ownerWindow.performance.now();
+        const capture = await registry.capture({
+          route: new URL(ownerWindow.location.href),
+          capturedAtMs,
+          eventTarget: pointer?.target ?? null,
+          pointer: pointer?.geometry
+        });
+        if (capture === undefined) {
+          throw new Error("No visual review capture provider is ready");
+        }
+        const result: KpDevReviewCaptureV1 = {
+          route: ownerWindow.location.href,
+          capturedAt: new Date().toISOString(),
+          environment: captureKpDevReviewEnvironment(
+            browserKpDevReviewEnvironmentSource(
+              ownerWindow,
+              ownerWindow.navigator
+            ),
+            __KP_DEV_REVIEW_BUILD__
           ),
-          __KP_DEV_REVIEW_BUILD__
-        ),
-        ...capture.evidence
-      };
-      return result;
-    },
-    submit: async ({ comment, capture }) => {
-      const round = await currentRound;
-      const note = await client.createNote({
-        schemaVersion: KP_DEV_REVIEW_SCHEMA_VERSION_V2,
-        roundId: round.id,
-        sessionId,
-        comment,
-        capture
-      });
-      currentUnread += 1;
-      return { sequence: note.sequence, inboxCount: currentUnread };
-    }
+          ...capture.evidence
+        };
+        return result;
+      },
+      submit: async ({ comment, capture }) => {
+        const note = await client.createNote({
+          schemaVersion: KP_DEV_REVIEW_SCHEMA_VERSION_V2,
+          roundId: round.id,
+          sessionId,
+          comment,
+          capture
+        });
+        currentUnread += 1;
+        return { sequence: note.sequence, inboxCount: currentUnread };
+      }
+    });
+    shell.host.dataset["kpDevReviewAvailable"] = "true";
+    ownerDocument.body.dataset["kpDevReviewReady"] = "true";
+  }).catch(() => {
+    if (disposed) return;
+    // A mounted shell is not a working inbox. Keep the control reachable, but
+    // never advertise readiness until the persistence service has answered.
+    shell.host.dataset["kpDevReviewAvailable"] = "false";
+    shell.reviewRound.value = "Review service unavailable";
+    shell.status.value =
+      "Review notes cannot be saved. Start this workspace with npm run dev.";
   });
 
-  ownerDocument.body.dataset["kpDevReviewReady"] = "true";
-  let disposed = false;
   const dispose = (): void => {
     if (disposed) return;
     disposed = true;
@@ -153,7 +162,7 @@ export function mountKpDevReview(input: {
     ownerWindow.removeEventListener("resize", syncPlacement);
     ownerWindow.removeEventListener("pagehide", dispose);
     unregisterProvider();
-    composer.dispose();
+    composer?.dispose();
     shell.dispose();
     input.onDispose?.();
   };

@@ -12,13 +12,13 @@ import {
 import type {
   KpAppliedEquationStageLayout,
   KpEquationStageMeasurementIdentity
-} from "../runtime/equation-stage-layout.ts";
+} from "../runtime/public-api.ts";
 import type {
   KpCorridorCertifiedEquationStageLayout
-} from "../runtime/equation-stage-transit-corridor.ts";
+} from "../runtime/public-api.ts";
 import {
   assertKpAppliedEquationStageLayout
-} from "../runtime/equation-stage-layout.ts";
+} from "../runtime/public-api.ts";
 
 export interface KpReaderCanonicalEquationSession {
   readonly transitionIds: readonly string[];

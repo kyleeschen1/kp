@@ -15,11 +15,11 @@ import {
   type KpEquationStageEnvelopeObservation,
   type KpEquationStageMeasurementIdentity,
   type KpEquationStagePhaseIntent
-} from "../runtime/equation-stage-layout.ts";
+} from "../runtime/public-api.ts";
 import {
   certifyKpEquationStageTransitCorridor,
   type KpCorridorCertifiedEquationStageLayout
-} from "../runtime/equation-stage-transit-corridor.ts";
+} from "../runtime/public-api.ts";
 
 export function applyKpFoldableDistributionPhaseStageLayout(input: {
   readonly phaseIntent: KpEquationStagePhaseIntent;

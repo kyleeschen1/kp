@@ -9,7 +9,7 @@ import type {
 } from "./equation-layout-snapshot.ts";
 import type {
   KpEquationStageMeasurementIdentity
-} from "../runtime/equation-stage-layout.ts";
+} from "../runtime/public-api.ts";
 
 export interface KpReaderEquationPerceptualAlignmentPolicy {
   readonly maxInlineCorrectionPx: number;

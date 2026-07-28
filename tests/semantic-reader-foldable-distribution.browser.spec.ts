@@ -345,7 +345,10 @@ test("phone expanded stage is certified, readable, and uncrowded", async ({
       JSON.stringify({ progress, report })
     ).toEqual([]);
   };
-  const dense = Array.from({ length: 21 }, (_value, index) => index * 50);
+  const dense = [
+    ...Array.from({ length: 21 }, (_value, index) => index * 50),
+    644
+  ].sort((left, right) => left - right);
   for (const progress of dense) await sample(progress);
   for (const progress of [...dense].reverse()) await sample(progress);
 
@@ -419,7 +422,10 @@ test("wide expanded stage is certified, readable, centered, and uncrowded", asyn
       JSON.stringify({ progress, report })
     ).toEqual([]);
   };
-  const dense = Array.from({ length: 21 }, (_value, index) => index * 50);
+  const dense = [
+    ...Array.from({ length: 21 }, (_value, index) => index * 50),
+    644
+  ].sort((left, right) => left - right);
   for (const progress of dense) await sample(progress);
   for (const progress of [...dense].reverse()) await sample(progress);
 
@@ -1580,10 +1586,13 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
   ).toBe(false);
 
   const factoringPaintSamples = [];
-  for (const progress of Array.from(
-    { length: 18 },
-    (_value, index) => 650 + index * 10
-  )) {
+  for (const progress of [
+    644,
+    ...Array.from(
+      { length: 18 },
+      (_value, index) => 650 + index * 10
+    )
+  ]) {
     await page.goto(route(progress, { kpFoldMode: "expanded" }), {
       waitUntil: "domcontentloaded"
     });

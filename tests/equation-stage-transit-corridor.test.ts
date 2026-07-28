@@ -259,6 +259,40 @@ test("corridor rejects duplicate, unknown-row, and escaped transit evidence", ()
   );
 });
 
+test("corridor containment tolerates only floating-point boundary noise", () => {
+  const layout = baseLayout();
+  assert.doesNotThrow(() => certifyKpEquationStageTransitCorridor({
+    layout,
+    transits: [{
+      id: "transit.subpixel-rounding",
+      sourceRowId: "row.first",
+      targetRowId: "row.second",
+      sourceRect: {
+        left: layout.rows[0]!.rect.left - 1e-8,
+        top: 12,
+        width: 12,
+        height: 16
+      },
+      targetRect: { left: 76, top: 14, width: 12, height: 16 }
+    }]
+  }));
+  assert.throws(() => certifyKpEquationStageTransitCorridor({
+    layout,
+    transits: [{
+      id: "transit.real-escape",
+      sourceRowId: "row.first",
+      targetRowId: "row.second",
+      sourceRect: {
+        left: layout.rows[0]!.rect.left - 0.01,
+        top: 12,
+        width: 12,
+        height: 16
+      },
+      targetRect: { left: 76, top: 14, width: 12, height: 16 }
+    }]
+  }), /escapes its semantic row occupancy/);
+});
+
 function intersects(left: KpEquationStageRect, right: KpEquationStageRect) {
   return Math.min(left.left + left.width, right.left + right.width) >
     Math.max(left.left, right.left) &&

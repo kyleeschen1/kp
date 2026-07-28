@@ -24,10 +24,10 @@ import {
   assertKpEquationStageMeasurementIdentity,
   createKpEquationStageMeasurementIdentity,
   type KpEquationStageMeasurementIdentity
-} from "../runtime/equation-stage-layout.ts";
+} from "../runtime/public-api.ts";
 import type {
   KpCorridorCertifiedEquationStageLayout
-} from "../runtime/equation-stage-transit-corridor.ts";
+} from "../runtime/public-api.ts";
 import type {
   KpEquationMotionStageOccupancy
 } from "../../rendering/equation-motion-path-planner.ts";

@@ -103,6 +103,21 @@ export function sampleKpReaderScrollProgress(
   return progressAt(positionPx, validateGeometry(geometry));
 }
 
+export function sampleKpReaderScrollPosition(
+  progress: number,
+  geometry: KpReaderScrollGeometry
+): number {
+  if (!Number.isFinite(progress) || progress < 0 || progress > 1) {
+    throw new RangeError("scroll progress must be finite from zero through one");
+  }
+  const validated = validateGeometry(geometry);
+  if (!("stops" in validated)) {
+    return validated.startPx +
+      (validated.endPx - validated.startPx) * progress;
+  }
+  return piecewisePositionAt(progress, validated.stops);
+}
+
 function progressAt(positionPx: number, geometry: KpReaderScrollGeometry): number {
   if (!Number.isFinite(positionPx)) throw new Error("scroll position must be finite");
   if ("stops" in geometry) return piecewiseProgressAt(positionPx, geometry.stops);
@@ -165,6 +180,30 @@ function piecewiseProgressAt(
     }
   }
   return 1;
+}
+
+function piecewisePositionAt(
+  progress: number,
+  stops: readonly KpReaderPiecewiseScrollStop[]
+): number {
+  const progressPermille = progress * 1_000;
+  if (progressPermille <= stops[0]!.progressPermille) {
+    return stops[0]!.positionPx;
+  }
+  for (let index = 1; index < stops.length; index += 1) {
+    const before = stops[index - 1]!;
+    const after = stops[index]!;
+    if (progressPermille <= after.progressPermille) {
+      const progressSpan =
+        after.progressPermille - before.progressPermille;
+      if (progressSpan === 0) return after.positionPx;
+      const local =
+        (progressPermille - before.progressPermille) / progressSpan;
+      return before.positionPx +
+        (after.positionPx - before.positionPx) * local;
+    }
+  }
+  return stops.at(-1)!.positionPx;
 }
 
 function validateCheckpoints(

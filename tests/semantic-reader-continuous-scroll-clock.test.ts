@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   createKpReaderContinuousScrollClock,
+  sampleKpReaderScrollPosition,
   sampleKpReaderScrollProgress
 } from "../src/reader/runtime/public-api.ts";
 
@@ -86,6 +87,8 @@ test("piecewise beat stops interpolate continuously across unequal narrative spa
   assert.equal(sampleKpReaderScrollProgress(200, piecewise), 0.215);
   assert.equal(sampleKpReaderScrollProgress(600, piecewise), 0.605);
   assert.equal(sampleKpReaderScrollProgress(1_200, piecewise), 1);
+  assert.equal(sampleKpReaderScrollPosition(0.215, piecewise), 200);
+  assert.equal(sampleKpReaderScrollPosition(0.605, piecewise), 600);
 
   const clock = createKpReaderContinuousScrollClock({
     id: "clock.story.piecewise",

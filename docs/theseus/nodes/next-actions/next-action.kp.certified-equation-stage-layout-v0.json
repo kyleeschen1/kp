@@ -612,11 +612,39 @@
       "scope": "slice-24 review production closure",
       "checkedAt": "2026-07-28T01:09:02.252Z",
       "notes": "Passed across 228 files."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full repository regression suite",
+      "checkedAt": "2026-07-28T02:47:50.955Z",
+      "notes": "2671 tests passed; 0 failed. Includes architecture, inference, concept catalog, stage-layout, motif, synchronization, and review-service contracts."
+    },
+    {
+      "command": "npm run visual:animation-library-display",
+      "status": "passed",
+      "scope": "repaired slice-24 exact 64.4 percent checkpoint",
+      "checkedAt": "2026-07-28T02:47:57.062Z",
+      "notes": "5 Chromium cases passed. Exact 644-permille samples at wide and phone widths prove certified equation paint contacts and require the active phone transcript to clear the sticky equation stage. The real review API accepts POST 201 and the saved note survives a fresh query."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production build after checkpoint repair",
+      "checkedAt": "2026-07-28T02:48:01.194Z",
+      "notes": "Application, Node, test, and domain typechecks pass; Vite production build completes. Existing chunk-size advisory remains non-blocking."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "repaired checkpoint durable control plane",
+      "checkedAt": "2026-07-28T02:48:42.772Z",
+      "notes": "807 nodes and 13370 events validate with s24 complete, the HUMAN_CHECKPOINT active, and s25-s26 still planned."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices s01-s24 are complete. Certified wide/phone layout, zero unrelated overlap, measured-paint x stability, and simultaneous opaque factoring fusion pass in one lazy Animation Library host with functional fixed Review capture. Mandatory HUMAN_CHECKPOINT is active; s25 cross-exemplar release boundaries and s26 full closeout remain unapproved."
+    "summary": "Slices s01-s24 are complete after checkpoint repair. Exact 64.4 percent wide and phone geometry clears the active transcript, synchronized opaque x fusion remains intact, and the canonical Review composer saves and reloads notes through the live local inbox. HUMAN_CHECKPOINT is active; s25 and s26 remain planned and require fresh approval."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

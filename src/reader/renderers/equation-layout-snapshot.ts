@@ -8,7 +8,7 @@ import {
   createKpEquationStageMeasurementIdentity,
   type KpAppliedEquationStageLayout,
   type KpEquationStageMeasurementIdentity
-} from "../runtime/equation-stage-layout.ts";
+} from "../runtime/public-api.ts";
 
 export interface KpReaderLayoutRect {
   readonly left: number;

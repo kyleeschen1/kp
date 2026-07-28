@@ -8,10 +8,10 @@ import type {
   KpAppliedEquationStageLayout,
   KpEquationStageMeasurementIdentity,
   KpEquationStagePhaseIntent
-} from "../runtime/equation-stage-layout.ts";
+} from "../runtime/public-api.ts";
 import type {
   KpCorridorCertifiedEquationStageLayout
-} from "../runtime/equation-stage-transit-corridor.ts";
+} from "../runtime/public-api.ts";
 
 export interface KpReaderEquationStageLayoutCompiler {
   readonly apply: (input: {

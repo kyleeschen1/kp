@@ -1,5 +1,37 @@
 import { expect, test } from "@playwright/test";
 
+test("review shell reports an unavailable inbox without claiming readiness", async ({
+  page
+}) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await page.route("**/api/dev/reviews/v2/query", async (route) => {
+    await route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "review service unavailable" })
+    });
+  });
+
+  await page.goto("/reader/solve-x/");
+  const host = page.locator("[data-kp-dev-review-shell]");
+  await expect(host).toHaveAttribute(
+    "data-kp-dev-review-available",
+    "false"
+  );
+  await expect(page.locator("body")).not.toHaveAttribute(
+    "data-kp-dev-review-ready",
+    "true"
+  );
+  await host.locator("button.launcher").click();
+  await expect(host.locator("output.review-round")).toHaveText(
+    "Review service unavailable"
+  );
+  await expect(host.locator("output.status")).toContainText("npm run dev");
+  await expect(host.locator("textarea")).toHaveCount(0);
+  expect(pageErrors).toEqual([]);
+});
+
 test("reader mounts the review shell by default in Vite development", async ({ page }) => {
   await page.goto("/reader/solve-x/");
   await expect(page.locator("body")).toHaveAttribute("data-kp-dev-review-ready", "true");
