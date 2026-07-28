@@ -156,7 +156,8 @@
     {
       "id": "slice.kp.reader-hardening.18",
       "title": "Add-WebKit-geometry-resource-gates",
-      "status": "planned"
+      "summary": "STOP_CONDITION: WebKit passes measured radical target handoff and WebGL lease/fallback gates but source endpoint continuity differs by 1px, above the 0.5px generic contract. No browser-specific geometry exception was added; slices 19-20 remain planned.",
+      "status": "in-progress"
     },
     {
       "id": "slice.kp.reader-hardening.19",

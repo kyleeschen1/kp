@@ -10,10 +10,16 @@ export default defineConfig({
     baseURL: "http://127.0.0.1:4173",
     trace: "retain-on-failure"
   },
-  projects: [{
-    name: "chromium",
-    use: { ...devices["Desktop Chrome"] }
-  }],
+  projects: [
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] }
+    },
+    {
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] }
+    }
+  ],
   webServer: {
     // Reader DEV pages mount the real review client, so this matrix must use
     // the paired browser-test API instead of a Vite-only server returning 404.

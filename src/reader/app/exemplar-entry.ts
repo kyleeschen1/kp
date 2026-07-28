@@ -376,6 +376,10 @@ const readerCanonicalEquationSession: KpReaderCanonicalEquationSession | undefin
         compilePurePlan:
           readerCanonicalEquationSessionAdapter
             .compileKpReaderEquationPureScenePlan,
+        enableAdjacentPrewarm:
+          lessonDescriptor.id === "fraction-composition",
+        enablePurePlanCache:
+          lessonDescriptor.id === "fraction-composition",
         requireAppliedStageLayout:
           lessonDescriptor.stageLayoutCompiler !== undefined
       });
@@ -906,6 +910,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   }
   applyKpReaderEquationResponsiveFit(materialFitSurface, context.fit);
   const presentationRevision = [
+    activeBeat === undefined ? "no-active-beat" : requiredData(activeBeat, "kpBeat"),
     focusSnapshot.activeSource ?? "none",
     ...focusedRefs
   ].join(":");

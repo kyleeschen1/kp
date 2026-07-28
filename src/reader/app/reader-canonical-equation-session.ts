@@ -64,6 +64,8 @@ export function createKpReaderCanonicalEquationSession(input: {
   readonly createSession: KpReaderEquationSceneCompositorFactory;
   readonly compilePurePlan: KpReaderEquationPureScenePlanCompiler;
   readonly requireAppliedStageLayout?: boolean | undefined;
+  readonly enablePurePlanCache?: boolean | undefined;
+  readonly enableAdjacentPrewarm?: boolean | undefined;
 }): KpReaderCanonicalEquationSession {
   if (
     input.transitionIds.length === 0 ||
@@ -228,12 +230,19 @@ export function createKpReaderCanonicalEquationSession(input: {
         materialLayer = createMaterialLayer(frame.fitSurface);
         const geometryIdentity = geometryIdentityFor(frame, transitionId);
         const sceneInput = purePlanInputFor(frame, transitionId, false);
-        let purePlan = purePlanCache.get(geometryIdentity);
+        let purePlan = input.enablePurePlanCache === true
+          ? purePlanCache.get(geometryIdentity)
+          : undefined;
         if (purePlan === undefined) {
           purePlan = input.compilePurePlan(sceneInput);
-          purePlanCache.set(geometryIdentity, purePlan);
+          if (input.enablePurePlanCache === true) {
+            purePlanCache.set(geometryIdentity, purePlan);
+          }
           recordPureCompilation(ownerWindow);
-        } else if (ownerWindow !== null) {
+        } else if (
+          input.enablePurePlanCache === true &&
+          ownerWindow !== null
+        ) {
           recordKpReaderPurePlanCacheHit(ownerWindow);
           // A pure-plan hit carries the exact protected-transit certificate;
           // the mounted session may attach current DOM but cannot recertify.
@@ -284,6 +293,10 @@ export function createKpReaderCanonicalEquationSession(input: {
       return true;
     },
     prewarm(frames) {
+      // Prewarming is promoted exemplar-by-exemplar because presentation
+      // style is part of a pure plan. Unreviewed families retain safe
+      // synchronous cache misses rather than speculatively sharing styles.
+      if (input.enableAdjacentPrewarm !== true) return;
       const firstWindow =
         frames[0]?.fitSurface.ownerDocument.defaultView ?? null;
       if (firstWindow === null) return;
