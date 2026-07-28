@@ -1,0 +1,17 @@
+{
+  "id": "next-action.kp.role-complete-operation-presentation-plans-v0",
+  "kind": "next-action",
+  "title": "Compile role-complete operation presentation plans",
+  "status": "ready",
+  "domain": "architecture",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-28-role-complete-operation-presentation-long-loop-proposal.md"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "A 24-slice long-loop proposal is materialized and awaiting explicit approval of its exact contract. No implementation has begun. The mandatory exemplar checkpoint follows slice 14 before any cross-family generalization."
+  }
+}
