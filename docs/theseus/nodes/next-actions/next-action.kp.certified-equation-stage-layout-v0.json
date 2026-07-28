@@ -2,7 +2,7 @@
   "id": "next-action.kp.certified-equation-stage-layout-v0",
   "kind": "next-action",
   "title": "Certify and execute equation stage layout",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "summary": "Execute semantic row intent as measured, certified, and applied stage geometry before canonical glyph measurement; eliminate foldable distribution crowding at wide and phone sizes; preserve measured-paint alignment; then complete simultaneous opaque x fusion.",
   "sourceRefs": [
@@ -806,11 +806,47 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-07-28T04:41:57.051Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full",
+      "checkedAt": "2026-07-28T04:47:02.843Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "full",
+      "checkedAt": "2026-07-28T04:47:03.773Z"
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "full",
+      "checkedAt": "2026-07-28T04:47:04.654Z"
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "full",
+      "checkedAt": "2026-07-28T04:47:05.489Z"
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "full",
+      "checkedAt": "2026-07-28T04:47:06.314Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "full",
+      "checkedAt": "2026-07-28T04:47:17.207Z"
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Slices s01-s25 complete. Cross-exemplar and production boundaries pass; s26 full-suite closeout remains. The separate optional Review-plus-glyph bundle ceiling remains deferred under next-action.kp.review-glyph-bundle-budget-v0."
+    "state": "complete",
+    "summary": "All 26 approved slices are complete. Certified stage geometry executes before paint measurement, wide and phone foldable layouts are uncrowded, exact pair-scoped contacts and typed opaque fusion prevent the observed permission regressions, x fusion is simultaneous, and all required cross-exemplar, browser, production, resource, and full-suite gates pass."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

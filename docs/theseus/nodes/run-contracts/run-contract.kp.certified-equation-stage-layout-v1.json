@@ -2,8 +2,9 @@
   "id": "run-contract.kp.certified-equation-stage-layout-v1",
   "kind": "run-contract",
   "title": "Certified equation stage layout",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -209,7 +210,8 @@
     {
       "id": "s26",
       "title": "Full release closeout",
-      "status": "planned"
+      "summary": "Full closeout passed 2672 tests, architecture and inference gates, typecheck and production build, reader production and route budgets, dev-review production closure, and Theseus validation. The incorporated fan-in action is resolved; the optional Review-plus-glyph budget remains linked and deferred.",
+      "status": "complete"
     }
   ]
 }
