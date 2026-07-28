@@ -138,7 +138,8 @@
     {
       "id": "slice.kp.reader-hardening.15",
       "title": "Reuse-collision-certificates",
-      "status": "planned"
+      "summary": "Made protected-transit compilation and certificate reuse explicit runtime evidence; prepared revisits reuse the exact cached certificate with zero collision recompilation, while cancellation and operation motif gates pass unchanged.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.16",

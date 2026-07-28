@@ -7,6 +7,8 @@ export interface KpReaderRuntimeMetricsSnapshot {
   readonly canonicalSessionApplies: number;
   readonly purePlanCompilations: number;
   readonly purePlanCacheHits: number;
+  readonly protectedTransitCompilations: number;
+  readonly protectedTransitCertificateReuses: number;
 }
 
 interface MutableKpReaderRuntimeMetrics {
@@ -18,6 +20,8 @@ interface MutableKpReaderRuntimeMetrics {
   canonicalSessionApplies: number;
   purePlanCompilations: number;
   purePlanCacheHits: number;
+  protectedTransitCompilations: number;
+  protectedTransitCertificateReuses: number;
 }
 
 const metricsByWindow = new WeakMap<Window, MutableKpReaderRuntimeMetrics>();
@@ -69,6 +73,18 @@ export function recordKpReaderPurePlanCacheHit(ownerWindow: Window): void {
   metricsFor(ownerWindow).purePlanCacheHits += 1;
 }
 
+export function recordKpReaderProtectedTransitCompilation(
+  ownerWindow: Window
+): void {
+  metricsFor(ownerWindow).protectedTransitCompilations += 1;
+}
+
+export function recordKpReaderProtectedTransitCertificateReuse(
+  ownerWindow: Window
+): void {
+  metricsFor(ownerWindow).protectedTransitCertificateReuses += 1;
+}
+
 function metricsFor(ownerWindow: Window): MutableKpReaderRuntimeMetrics {
   const existing = metricsByWindow.get(ownerWindow);
   if (existing !== undefined) return existing;
@@ -86,6 +102,8 @@ function createMetrics(): MutableKpReaderRuntimeMetrics {
     canonicalSessionReuses: 0,
     canonicalSessionApplies: 0,
     purePlanCompilations: 0,
-    purePlanCacheHits: 0
+    purePlanCacheHits: 0,
+    protectedTransitCompilations: 0,
+    protectedTransitCertificateReuses: 0
   };
 }

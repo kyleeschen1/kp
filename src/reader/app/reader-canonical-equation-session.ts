@@ -25,7 +25,9 @@ import {
   recordKpReaderCanonicalSessionBuild,
   recordKpReaderCanonicalSessionReuse,
   recordKpReaderPurePlanCacheHit,
-  recordKpReaderPurePlanCompilation
+  recordKpReaderPurePlanCompilation,
+  recordKpReaderProtectedTransitCertificateReuse,
+  recordKpReaderProtectedTransitCompilation
 } from "../runtime/public-api.ts";
 
 export interface KpReaderCanonicalEquationSession {
@@ -208,9 +210,13 @@ export function createKpReaderCanonicalEquationSession(input: {
           purePlanCache.set(geometryIdentity, purePlan);
           if (ownerWindow !== null) {
             recordKpReaderPurePlanCompilation(ownerWindow);
+            recordKpReaderProtectedTransitCompilation(ownerWindow);
           }
         } else if (ownerWindow !== null) {
           recordKpReaderPurePlanCacheHit(ownerWindow);
+          // A pure-plan hit carries the exact protected-transit certificate;
+          // the mounted session may attach current DOM but cannot recertify.
+          recordKpReaderProtectedTransitCertificateReuse(ownerWindow);
         }
         session = input.createSession({ ...sceneInput, purePlan });
         sessionKey = nextKey;

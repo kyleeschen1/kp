@@ -272,6 +272,27 @@
       "scope": "slice 14 compositor cache boundary",
       "checkedAt": "2026-07-28T21:51:27.757Z",
       "notes": "Reader, semantic animation, concept-room, and operation-presentation boundaries pass; only DOM-free plans are cached while mounted sessions remain ephemeral."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll:chromium",
+      "status": "passed",
+      "scope": "slice 15 collision-certificate reuse",
+      "checkedAt": "2026-07-28T21:53:59.509Z",
+      "notes": "Thirty prepared revisits report zero protected-transit compilations and thirty exact certificate reuses, alongside zero pure-plan recompilations and successful ephemeral mounts."
+    },
+    {
+      "command": "npm run visual:fraction-composition-motif-fidelity",
+      "status": "passed",
+      "scope": "slice 15 cancellation choreography preservation",
+      "checkedAt": "2026-07-28T21:54:00.370Z",
+      "notes": "Chromium and Firefox wide/phone measured-paint, direct seek, rewind, cancellation motif, opacity, ownership, endpoint, fit, and review-launcher gates pass."
+    },
+    {
+      "command": "npm run test:operation-evaluation-presentation",
+      "status": "passed",
+      "scope": "slice 15 operation-plan preservation",
+      "checkedAt": "2026-07-28T21:54:01.202Z",
+      "notes": "All 19 motif registry, no-fade arithmetic synthesis, cancellation, structural opacity, extension, and pinning tests pass."
     }
   ],
   "expectedLearning": [

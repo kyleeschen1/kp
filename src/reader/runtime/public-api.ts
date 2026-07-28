@@ -14,6 +14,8 @@ export {
   recordKpReaderCanonicalSessionReuse,
   recordKpReaderPurePlanCacheHit,
   recordKpReaderPurePlanCompilation,
+  recordKpReaderProtectedTransitCertificateReuse,
+  recordKpReaderProtectedTransitCompilation,
   recordKpReaderScrollAnchorRead,
   recordKpReaderScrollGeometryRead,
   resetKpReaderRuntimeMetrics,
