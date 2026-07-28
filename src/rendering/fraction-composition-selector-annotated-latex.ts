@@ -1,26 +1,34 @@
 import {
-  createKpLawfulFractionSolveMacro
-} from "../semantic/fraction-solve-macro.ts";
+  createKpFractionCompositionEndpointSpecs
+} from "../semantic/fraction-composition-endpoint-spec.ts";
 import {
-  createKpStructuredEquationAnnotatedEndpoint,
   type KpStructuredEquationAnnotatedEndpoint
 } from "./structured-equation-selector-annotated-latex.ts";
+import {
+  createKpSelectorAnnotatedLatex
+} from "./selector-annotated-latex.ts";
 
 export function createKpFractionCompositionAnnotatedEndpoints():
 readonly KpStructuredEquationAnnotatedEndpoint[] {
-  const macro = createKpLawfulFractionSolveMacro();
-  const endpoints = macro.states.map(createKpStructuredEquationAnnotatedEndpoint);
-  if (
-    endpoints.length !== macro.verification.stateCount ||
-    endpoints.some(
-      (endpoint, index) => endpoint.stateId !== macro.verification.stateIds[index]
-    )
-  ) {
-    throw new Error(
-      "Fraction composition endpoint compiler must consume the certified state chain exactly."
-    );
-  }
-  return Object.freeze(endpoints);
+  return Object.freeze(createKpFractionCompositionEndpointSpecs().map((spec) => {
+    const annotated = createKpSelectorAnnotatedLatex({
+      id: `fraction-composition.${spec.stateId}`,
+      expectedSelectorIds: spec.selectorIds,
+      segments: spec.segments
+    });
+    return Object.freeze({
+      stateId: spec.stateId,
+      label: spec.label,
+      annotated: Object.freeze({
+        ...annotated,
+        annotations: Object.freeze(
+          annotated.annotations.map((entry) => Object.freeze(entry))
+        )
+      }),
+      groupEnvelopes: spec.groupEnvelopes,
+      structuralAnchors: spec.structuralAnchors
+    });
+  }));
 }
 
 export function createKpFractionCompositionSelectorAnnotatedLatex(

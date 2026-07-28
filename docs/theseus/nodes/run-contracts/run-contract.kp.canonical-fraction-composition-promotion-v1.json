@@ -117,7 +117,8 @@
     {
       "id": "s10",
       "title": "dry-run-canonical-session",
-      "status": "planned"
+      "summary": "Compiled one renderer-neutral 14-state semantic asset into the existing canonical animation/session contract; all 13 adjacent transitions are total, reversible, motif-backed, and native-settling without whole-equation fades or alternate runtime authority.",
+      "status": "complete"
     },
     {
       "id": "s11",

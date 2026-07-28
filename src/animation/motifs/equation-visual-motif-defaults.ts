@@ -71,6 +71,30 @@ export const defaultEquationTransformVisualMotifRules:
         "Opaque signed terms reorder before their grouping structure settles."
     },
     {
+      transformationKind: "multiplyBothSides",
+      descriptor: descriptorForEquationMotif("append-after-shift"),
+      canonicalOperationIds: ["kp.core.persist", "kp.core.introduce"],
+      trustedMotifIds: ["persist", "introduce"],
+      summary:
+        "Persistent equation terms reserve space before matched multipliers enter both sides."
+    },
+    {
+      transformationKind: "simplifyConstantProduct",
+      descriptor: descriptorForEquationMotif("simplify-into"),
+      canonicalOperationIds: ["kp.core.persist", "kp.core.merge"],
+      trustedMotifIds: ["persist", "merge"],
+      summary:
+        "The successor-synthesis owner gathers both factors and their operator into one exact product."
+    },
+    {
+      transformationKind: "normalizeFractionNumerators",
+      descriptor: descriptorForEquationMotif("fraction-factor-split"),
+      canonicalOperationIds: ["kp.core.persist", "kp.core.reorder", "kp.core.wrap"],
+      trustedMotifIds: ["persist", "reorder", "wrap"],
+      summary:
+        "Persistent outside factors reflow under their existing native numerator bars."
+    },
+    {
       transformationKind: "applyDerivativePowerRule",
       descriptor: descriptorForEquationMotif("derivative-power"),
       summary:

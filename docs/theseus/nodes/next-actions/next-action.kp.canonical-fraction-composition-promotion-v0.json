@@ -104,6 +104,13 @@
       "scope": "s09 exact motif coverage for all 13 certified fraction composition operations",
       "checkedAt": "2026-07-28T05:40:25.266Z",
       "notes": "Thirty-three fraction checks and sixty governed construction checks pass. All steps bind to existing opaque motifs: copy fan-out, fraction structural reflow, balanced append, cancellation, or reviewed successor synthesis. Arithmetic operands and operators share one merge cohort; no artifact replacement or source-out target-in fade is admitted."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture; npm run test:canonical-animation-construction; npm run test:canonical-equation-renderer; npm run test:real-katex-glyph-compositor; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "s10 semantic lineage, animation asset, render and material totality, and canonical session dry run",
+      "checkedAt": "2026-07-28T05:51:03.939Z",
+      "notes": "All 13 adjacent transformations pass forward and rewind totality; arithmetic retains opaque successor synthesis; endpoint specs now preserve renderer-neutral dependency direction; canonical renderer and compositor suites pass."
     }
   ],
   "progress": {
