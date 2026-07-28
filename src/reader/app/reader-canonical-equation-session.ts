@@ -6,6 +6,7 @@ import type {
 } from "../../rendering/equation-font-readiness.ts";
 import {
   type KpReaderEquationMaterialPlan,
+  type KpReaderEquationPureScenePlanCompiler,
   type KpReaderEquationRenderPlan,
   type KpReaderEquationSceneCompositorFactory
 } from "../renderers/public-api.ts";
@@ -17,13 +18,11 @@ import type {
   KpCorridorCertifiedEquationStageLayout
 } from "../runtime/public-api.ts";
 import {
-  assertKpAppliedEquationStageLayout
-} from "../runtime/public-api.ts";
-import {
+  assertKpAppliedEquationStageLayout,
   recordKpReaderCanonicalSessionApply,
   recordKpReaderCanonicalSessionBuild,
   recordKpReaderCanonicalSessionReuse
-} from "../runtime/reader-runtime-metrics.ts";
+} from "../runtime/public-api.ts";
 
 export interface KpReaderCanonicalEquationSession {
   readonly transitionIds: readonly string[];
@@ -48,6 +47,7 @@ export interface KpReaderCanonicalEquationSession {
 export function createKpReaderCanonicalEquationSession(input: {
   readonly transitionIds: readonly string[];
   readonly createSession: KpReaderEquationSceneCompositorFactory;
+  readonly compilePurePlan: KpReaderEquationPureScenePlanCompiler;
   readonly requireAppliedStageLayout?: boolean | undefined;
 }): KpReaderCanonicalEquationSession {
   if (
@@ -168,7 +168,7 @@ export function createKpReaderCanonicalEquationSession(input: {
           presentationGroupId: `${transitionId}.target`,
           fontReadiness: frame.fontReadiness
         });
-        session = input.createSession({
+        const sceneInput = {
           renderPlan: frame.renderPlan,
           materialPlan: frame.materialPlan,
           transitionId,
@@ -179,7 +179,9 @@ export function createKpReaderCanonicalEquationSession(input: {
             : { stageLayout: frame.appliedStageLayout.certificate }),
           source,
           target
-        });
+        };
+        const purePlan = input.compilePurePlan(sceneInput);
+        session = input.createSession({ ...sceneInput, purePlan });
         sessionKey = nextKey;
         structuralSessionKey = nextStructuralSessionKey;
         structuralFitSurface = frame.fitSurface;

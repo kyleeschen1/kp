@@ -126,7 +126,8 @@
     {
       "id": "slice.kp.reader-hardening.13",
       "title": "Split-pure-plan-from-mounted-session",
-      "status": "planned"
+      "summary": "Split DOM-free measured track/collision compilation from ephemeral mounted session ownership through the existing canonical reader adapter; no second compositor or lifecycle was introduced.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.14",

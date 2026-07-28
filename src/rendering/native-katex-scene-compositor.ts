@@ -138,6 +138,31 @@ export interface KpCanonicalNativeKatexSceneSession {
   readonly session: KpNativeKatexRendererSession;
 }
 
+export interface KpCanonicalNativeKatexPureScenePlan {
+  readonly kind: "canonical-native-katex-pure-scene-plan";
+  readonly lifecycle: "pure-measured-plan";
+  readonly inputTrackSignature: string;
+  readonly tracks: readonly KpNativeKatexSceneTrack[];
+  readonly protectedTransit: KpEquationProtectedTransitCertificate;
+}
+
+export interface KpCanonicalNativeKatexSceneInput {
+  readonly source: KpNativeKatexRenderedSceneObservation;
+  readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly relations: readonly KpNativeKatexSemanticPaintRelation[];
+  readonly structuralSuccession?: KpEquationStructuralSuccessionIntent;
+  readonly structuralMotion?: "full" | "checkpoint";
+  readonly successorSyntheses?:
+    readonly KpNativeKatexSuccessorSynthesisIntent[] | undefined;
+  readonly factoring?: KpNativeKatexFactoringSceneBinding;
+  readonly operationChoreography?: KpEquationOperationChoreography;
+  readonly fanInRouting?: boolean;
+  readonly copyFanOutRouting?: boolean;
+  readonly reorderRouting?: boolean;
+  readonly stageOccupancy?: O;
+  readonly purePlan?: KpCanonicalNativeKatexPureScenePlan | undefined;
+}
+
 export function decideKpNativeKatexRendererDisposition(input: {
   readonly ambiguityIds: readonly string[];
   readonly blockedGeometryIds: readonly string[];
@@ -1597,59 +1622,12 @@ export function createKpNativeKatexRendererSession(input: {
   });
 }
 
-export function createKpCanonicalNativeKatexSceneSession(input: {
-  readonly source: KpNativeKatexRenderedSceneObservation;
-  readonly target: KpNativeKatexRenderedSceneObservation;
-  readonly relations: readonly KpNativeKatexSemanticPaintRelation[];
-  readonly structuralSuccession?: KpEquationStructuralSuccessionIntent;
-  readonly structuralMotion?: "full" | "checkpoint";
-  readonly successorSyntheses?:
-    readonly KpNativeKatexSuccessorSynthesisIntent[] | undefined;
-  readonly factoring?: KpNativeKatexFactoringSceneBinding;
-  readonly operationChoreography?: KpEquationOperationChoreography;
-  readonly fanInRouting?: boolean;
-  readonly copyFanOutRouting?: boolean;
-  readonly reorderRouting?: boolean;
-  readonly stageOccupancy?: O;
-}): KpCanonicalNativeKatexSceneSession {
-  if (input.source.stage !== input.target.stage) {
-    throw new Error("Canonical native KaTeX endpoints must share one stage.");
-  }
-  const reconciliation = reconcileKpNativeKatexScenes({
-    source: input.source,
-    target: input.target,
-    relations: input.relations
-  });
-  const hierarchy = compileKpNativeKatexHierarchicalScenePlan(reconciliation);
-  const allTracks = attachKpNativeKatexTrackPaintGeometry({
-    tracks: compileKpNativeKatexSceneTracks(hierarchy),
-    source: input.source,
-    target: input.target
-  });
-  const syntheses = compileKpNativeKatexSuccessorSynthesisScenePlans({
-    source: input.source,
-    target: input.target,
-    intents: input.successorSyntheses ?? []
-  });
-  const operationTracks = applyKpNativeKatexOperationChoreography({
-    tracks: allTracks,
-    source: input.source,
-    target: input.target,
-    choreography: input.operationChoreography
-  });
-  const ownership = partitionKpNativeKatexSuccessorOwnedTracks(
-    syntheses,
-    operationTracks,
-    input.factoring
-  );
-  const routed = input.reorderRouting === true
-    ? compileKpCollisionSafeReorderTracks(ownership.tracks, input.stageOccupancy)
-    : ownership.tracks;
-  const motifRoutedTracks = input.fanInRouting === true
-    ? compileKpQualityBoundedFanInTracks(routed, input.stageOccupancy)
-    : routed;
+export function compileKpCanonicalNativeKatexPureScenePlan(
+  input: Omit<KpCanonicalNativeKatexSceneInput, "purePlan">
+): KpCanonicalNativeKatexPureScenePlan {
+  const prepared = prepareKpCanonicalNativeKatexScene(input);
   const protectedTransit = compileKpCollisionSafeTransitTracks({
-    tracks: motifRoutedTracks,
+    tracks: prepared.motifRoutedTracks,
     stageOccupancy: input.stageOccupancy,
     sampleFrames: (candidateTracks, progress) =>
       sampleKpNativeKatexSceneTrackFrames(
@@ -1658,6 +1636,52 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
         input.copyFanOutRouting === true
       )
   });
+  return Object.freeze({
+    kind: "canonical-native-katex-pure-scene-plan",
+    lifecycle: "pure-measured-plan",
+    inputTrackSignature: prepared.inputTrackSignature,
+    tracks: protectedTransit.tracks,
+    protectedTransit: protectedTransit.certificate
+  });
+}
+
+export function createKpCanonicalNativeKatexSceneSession(
+  input: KpCanonicalNativeKatexSceneInput
+): KpCanonicalNativeKatexSceneSession {
+  if (input.source.stage !== input.target.stage) {
+    throw new Error("Canonical native KaTeX endpoints must share one stage.");
+  }
+  const prepared = prepareKpCanonicalNativeKatexScene(input);
+  if (
+    input.purePlan !== undefined &&
+    input.purePlan.inputTrackSignature !== prepared.inputTrackSignature
+  ) {
+    throw new Error(
+      "Canonical native KaTeX pure plan does not match measured scene tracks."
+    );
+  }
+  const protectedTransit = input.purePlan === undefined
+    ? compileKpCollisionSafeTransitTracks({
+        tracks: prepared.motifRoutedTracks,
+        stageOccupancy: input.stageOccupancy,
+        sampleFrames: (candidateTracks, progress) =>
+          sampleKpNativeKatexSceneTrackFrames(
+            candidateTracks,
+            progress,
+            input.copyFanOutRouting === true
+          )
+      })
+    : {
+        tracks: input.purePlan.tracks,
+        certificate: input.purePlan.protectedTransit
+      };
+  const {
+    reconciliation,
+    hierarchy,
+    allTracks,
+    syntheses,
+    ownership
+  } = prepared;
   const tracks = protectedTransit.tracks;
   const correlations = correlateKpNativeKatexSceneHandoff({
     reconciliation,
@@ -1776,7 +1800,6 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
         const canvasOwnsStructuralPaint =
           bounded >= structural.paintStrategy.morph.start &&
           structuralSync?.paintReady !== false;
-        // Keep source paint until structural shape change actually begins.
         if (canvasOwnsStructuralPaint) {
           hideStructuralAtomOwners({
             stage: input.source.stage,
@@ -1813,10 +1836,7 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
       playback.dispose();
     }
   });
-  if (input.structuralSuccession !== undefined) {
-    // Warm capture preserves a native checkpoint when paint is unavailable.
-    session.apply(0);
-  }
+  if (input.structuralSuccession !== undefined) session.apply(0);
   return Object.freeze({
     kind: "canonical-native-katex-scene-session",
     lifecycle: "renderer-session",
@@ -1825,6 +1845,56 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     protectedTransit: protectedTransit.certificate,
     session
   });
+}
+
+function prepareKpCanonicalNativeKatexScene(
+  input: Omit<KpCanonicalNativeKatexSceneInput, "purePlan">
+) {
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source: input.source,
+    target: input.target,
+    relations: input.relations
+  });
+  const hierarchy = compileKpNativeKatexHierarchicalScenePlan(reconciliation);
+  const allTracks = attachKpNativeKatexTrackPaintGeometry({
+    tracks: compileKpNativeKatexSceneTracks(hierarchy),
+    source: input.source,
+    target: input.target
+  });
+  const syntheses = compileKpNativeKatexSuccessorSynthesisScenePlans({
+    source: input.source,
+    target: input.target,
+    intents: input.successorSyntheses ?? []
+  });
+  const operationTracks = applyKpNativeKatexOperationChoreography({
+    tracks: allTracks,
+    source: input.source,
+    target: input.target,
+    choreography: input.operationChoreography
+  });
+  const ownership = partitionKpNativeKatexSuccessorOwnedTracks(
+    syntheses,
+    operationTracks,
+    input.factoring
+  );
+  const routed = input.reorderRouting === true
+    ? compileKpCollisionSafeReorderTracks(ownership.tracks, input.stageOccupancy)
+    : ownership.tracks;
+  const motifRoutedTracks = input.fanInRouting === true
+    ? compileKpQualityBoundedFanInTracks(routed, input.stageOccupancy)
+    : routed;
+  return {
+    reconciliation,
+    hierarchy,
+    allTracks,
+    syntheses,
+    ownership,
+    motifRoutedTracks,
+    inputTrackSignature: JSON.stringify([
+      input.copyFanOutRouting === true,
+      motifRoutedTracks
+    ])
+  };
 }
 
 function hideStructuralAtomOwners(input: {

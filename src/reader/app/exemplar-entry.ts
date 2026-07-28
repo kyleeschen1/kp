@@ -59,6 +59,8 @@ import {
   sampleKpReaderScrollPosition,
   sampleKpReaderAnimationFrame,
   resetKpAppliedEquationStageLayout,
+  recordKpReaderScrollAnchorRead,
+  recordKpReaderScrollGeometryRead,
   type KpAppliedEquationStageLayout,
   type KpCorridorCertifiedEquationStageLayout,
   type KpReaderClockSample,
@@ -84,10 +86,6 @@ import {
   compileKpAnimationTransformationPhaseCohorts,
   findKpAnimationTransformationPhaseCohort
 } from "../../animation/transformation-phase-cohorts.ts";
-import {
-  recordKpReaderScrollAnchorRead,
-  recordKpReaderScrollGeometryRead
-} from "../runtime/reader-runtime-metrics.ts";
 
 interface TransitionContext {
   readonly id: string;
@@ -375,6 +373,9 @@ const readerCanonicalEquationSession: KpReaderCanonicalEquationSession | undefin
         createSession:
           readerCanonicalEquationSessionAdapter
             .createKpReaderEquationSceneCompositorSession,
+        compilePurePlan:
+          readerCanonicalEquationSessionAdapter
+            .compileKpReaderEquationPureScenePlan,
         requireAppliedStageLayout:
           lessonDescriptor.stageLayoutCompiler !== undefined
       });

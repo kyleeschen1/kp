@@ -216,6 +216,34 @@
       "scope": "slice 12 material owner rapid-scroll integration",
       "checkedAt": "2026-07-28T21:30:00.529Z",
       "notes": "Rapid sweep passes with zero owner add/remove churn and unchanged exclusive visual authority."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice 13 pure-plan mounted-session split",
+      "checkedAt": "2026-07-28T21:39:14.044Z",
+      "notes": "12 convergence, lifecycle, opacity, responsive, font, and scheduler tests pass; generic core remains four modules and five/six paint/lifecycle vocabularies under a 133 KB audited ceiling reflecting the exact 2,077-byte typed split."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice 13 pure native plan contracts",
+      "checkedAt": "2026-07-28T21:39:19.666Z",
+      "notes": "All 65 native measurement, reconciliation, routing, handoff, opacity, and lifecycle tests pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 13 existing adapter boundary",
+      "checkedAt": "2026-07-28T21:39:27.821Z",
+      "notes": "All reader, semantic animation, concept-room, and operation-presentation boundaries pass; instrumentation now routes through the runtime public API."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll:chromium",
+      "status": "passed",
+      "scope": "slice 13 reader pure-plan integration",
+      "checkedAt": "2026-07-28T21:39:33.209Z",
+      "notes": "Rapid sweep passes with unchanged visual authority; plan compilation is now separately callable but intentionally uncached until slice 14."
     }
   ],
   "expectedLearning": [

@@ -1,5 +1,8 @@
 import {
+  compileKpCanonicalNativeKatexPureScenePlan,
   createKpCanonicalNativeKatexSceneSession,
+  type KpCanonicalNativeKatexPureScenePlan,
+  type KpCanonicalNativeKatexSceneInput,
   type KpNativeKatexRendererSession,
   type KpNativeKatexSemanticPaintRelation
 } from "../../rendering/native-katex-scene-compositor.ts";
@@ -40,7 +43,7 @@ export interface KpReaderEquationMeasuredRendererSession
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
 }
 
-export function createKpReaderEquationSceneCompositorSession(input: {
+export interface KpReaderEquationSceneCompositorInput {
   readonly renderPlan: KpReaderEquationRenderPlan;
   readonly materialPlan: KpReaderEquationMaterialPlan;
   readonly transitionId: string;
@@ -50,7 +53,118 @@ export function createKpReaderEquationSceneCompositorSession(input: {
     KpCorridorCertifiedEquationStageLayout | undefined;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
-}): KpReaderEquationMeasuredRendererSession {
+}
+
+export interface KpReaderEquationPureScenePlan {
+  readonly kind: "reader-equation-pure-scene-plan";
+  readonly lifecycle: "pure-measured-plan";
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
+  readonly nativePlan: KpCanonicalNativeKatexPureScenePlan;
+}
+
+export function compileKpReaderEquationPureScenePlan(
+  input: KpReaderEquationSceneCompositorInput
+): KpReaderEquationPureScenePlan {
+  const prepared = prepareReaderEquationScene(input);
+  return Object.freeze({
+    kind: "reader-equation-pure-scene-plan",
+    lifecycle: "pure-measured-plan",
+    measurementIdentity: prepared.measurementIdentity,
+    nativePlan: compileKpCanonicalNativeKatexPureScenePlan(
+      prepared.canonicalInput
+    )
+  });
+}
+
+export function createKpReaderEquationSceneCompositorSession(
+  input: KpReaderEquationSceneCompositorInput & {
+    readonly purePlan?: KpReaderEquationPureScenePlan | undefined;
+  }
+): KpReaderEquationMeasuredRendererSession {
+  const prepared = prepareReaderEquationScene(input);
+  const {
+    measurementIdentity,
+    renderTransition,
+    factoringChoreography,
+    factoring
+  } = prepared;
+  if (
+    input.purePlan !== undefined &&
+    (
+      input.purePlan.measurementIdentity.coordinateSpaceId !==
+        measurementIdentity.coordinateSpaceId ||
+      input.purePlan.measurementIdentity.revision !==
+        measurementIdentity.revision
+    )
+  ) {
+    throw new Error("Reader pure scene plan has stale measurement identity.");
+  }
+  if (input.source.stage !== input.target.stage) {
+    throw new Error("Reader equation compositor endpoints must share one stage.");
+  }
+  input.source.stage.dataset["kpNativeKatexSuccessorSynthesisCount"] =
+    String(renderTransition.successorSyntheses?.length ?? 0);
+  input.source.stage.dataset["kpNativeKatexMotionProfile"] =
+    factoringChoreography !== undefined
+      ? "canonical-factoring-fission-fusion"
+      : renderTransition.visualMotif?.kind === "copy-fan-out"
+      ? "canonical-copy-fan-out"
+      : renderTransition.visualMotif?.kind === "semantic-reorder-and-group"
+        ? "canonical-semantic-reorder-and-group"
+      : "default";
+  const canonical = createKpCanonicalNativeKatexSceneSession({
+    ...prepared.canonicalInput,
+    ...(input.purePlan === undefined
+      ? {}
+      : { purePlan: input.purePlan.nativePlan })
+  });
+  factoring?.recordEvidence();
+  if (renderTransition.structuralSuccession !== undefined) {
+    const reducedMotion =
+      input.motionMode !== undefined && input.motionMode !== "continuous";
+    const fidelity = auditKpNativeKatexChoreographyFidelity({
+      intent: renderTransition.structuralSuccession,
+      strategy: reducedMotion
+        ? {
+            kind: "checkpoint-settlement",
+            actPhaseIds: renderTransition.structuralSuccession.actPhaseIds,
+            reason: "reduced-motion"
+          }
+        : {
+            kind: "solid-mask-succession",
+            actPhaseIds: renderTransition.structuralSuccession.actPhaseIds
+          },
+      reconciliation: canonical.reconciliation,
+      tracks: canonical.session.tracks
+    });
+    if (!fidelity.passed) {
+      throw new Error(
+        `Reader structural succession failed fidelity: ${
+          fidelity.issues.map(({ code }) => code).join(", ")
+        }`
+      );
+    }
+    input.source.stage.dataset["kpNativeKatexChoreographyFidelity"] =
+      "passed";
+  }
+  return Object.freeze({
+    ...canonical.session,
+    apply(progress: number) {
+      if (renderTransition.operationChoreography === undefined) {
+        delete input.source.stage.dataset["kpNativeKatexOperationChoreography"];
+      } else {
+        input.source.stage.dataset["kpNativeKatexOperationChoreography"] =
+          renderTransition.operationChoreography.kind;
+      }
+      return canonical.session.apply(progress);
+    },
+    measurementIdentity
+  });
+}
+
+function prepareReaderEquationScene(
+  input: KpReaderEquationSceneCompositorInput
+) {
   const measurementIdentity = createKpEquationStageMeasurementIdentity(
     input.measurementIdentity
   );
@@ -80,20 +194,7 @@ export function createKpReaderEquationSceneCompositorSession(input: {
         target: input.target,
         intent: factoringChoreography
       });
-  if (input.source.stage !== input.target.stage) {
-    throw new Error("Reader equation compositor endpoints must share one stage.");
-  }
-  input.source.stage.dataset["kpNativeKatexSuccessorSynthesisCount"] =
-    String(renderTransition.successorSyntheses?.length ?? 0);
-  input.source.stage.dataset["kpNativeKatexMotionProfile"] =
-    factoringChoreography !== undefined
-      ? "canonical-factoring-fission-fusion"
-      : renderTransition.visualMotif?.kind === "copy-fan-out"
-      ? "canonical-copy-fan-out"
-      : renderTransition.visualMotif?.kind === "semantic-reorder-and-group"
-        ? "canonical-semantic-reorder-and-group"
-      : "default";
-  const canonical = createKpCanonicalNativeKatexSceneSession({
+  const canonicalInput: Omit<KpCanonicalNativeKatexSceneInput, "purePlan"> = {
     source: input.source,
     target: input.target,
     relations,
@@ -149,49 +250,14 @@ export function createKpReaderEquationSceneCompositorSession(input: {
               ? "full"
               : "checkpoint"
         })
-  });
-  factoring?.recordEvidence();
-  if (renderTransition.structuralSuccession !== undefined) {
-    const reducedMotion =
-      input.motionMode !== undefined && input.motionMode !== "continuous";
-    const fidelity = auditKpNativeKatexChoreographyFidelity({
-      intent: renderTransition.structuralSuccession,
-      strategy: reducedMotion
-        ? {
-            kind: "checkpoint-settlement",
-            actPhaseIds: renderTransition.structuralSuccession.actPhaseIds,
-            reason: "reduced-motion"
-          }
-        : {
-            kind: "solid-mask-succession",
-            actPhaseIds: renderTransition.structuralSuccession.actPhaseIds
-          },
-      reconciliation: canonical.reconciliation,
-      tracks: canonical.session.tracks
-    });
-    if (!fidelity.passed) {
-      throw new Error(
-        `Reader structural succession failed fidelity: ${
-          fidelity.issues.map(({ code }) => code).join(", ")
-        }`
-      );
-    }
-    input.source.stage.dataset["kpNativeKatexChoreographyFidelity"] =
-      "passed";
-  }
-  return Object.freeze({
-    ...canonical.session,
-    apply(progress: number) {
-      if (renderTransition.operationChoreography === undefined) {
-        delete input.source.stage.dataset["kpNativeKatexOperationChoreography"];
-      } else {
-        input.source.stage.dataset["kpNativeKatexOperationChoreography"] =
-          renderTransition.operationChoreography.kind;
-      }
-      return canonical.session.apply(progress);
-    },
-    measurementIdentity
-  });
+  };
+  return {
+    measurementIdentity,
+    renderTransition,
+    factoringChoreography,
+    factoring,
+    canonicalInput
+  };
 }
 
 function projectStageOccupancy(
