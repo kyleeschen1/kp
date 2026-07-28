@@ -21,31 +21,39 @@ import {
   assertKpAppliedEquationStageLayout,
   createKpReaderCompositorGeometryCacheIdentity,
   createKpReaderCompositorPurePlanCache,
+  createKpReaderIdlePrewarmQueue,
+  recordKpReaderAdjacentPrewarmCompilation,
   recordKpReaderCanonicalSessionApply,
   recordKpReaderCanonicalSessionBuild,
   recordKpReaderCanonicalSessionReuse,
   recordKpReaderPurePlanCacheHit,
   recordKpReaderPurePlanCompilation,
   recordKpReaderProtectedTransitCertificateReuse,
-  recordKpReaderProtectedTransitCompilation
+  recordKpReaderProtectedTransitCompilation,
+  type KpReaderIdlePrewarmQueue
 } from "../runtime/public-api.ts";
+
+export interface KpReaderCanonicalEquationFrame {
+  readonly renderPlan: KpReaderEquationRenderPlan;
+  readonly materialPlan: KpReaderEquationMaterialPlan;
+  readonly fitSurface: HTMLElement;
+  readonly progress: number;
+  readonly motionMode: "continuous" | "essential" | "checkpoint";
+  readonly fontReadiness: KpEquationFontReadiness;
+  readonly presentationRevision: string;
+  readonly measurementIdentity: KpEquationStageMeasurementIdentity;
+  readonly appliedStageLayout?:
+    KpAppliedEquationStageLayout<
+      KpCorridorCertifiedEquationStageLayout
+    > | undefined;
+}
 
 export interface KpReaderCanonicalEquationSession {
   readonly transitionIds: readonly string[];
-  readonly apply: (input: {
-    readonly renderPlan: KpReaderEquationRenderPlan;
-    readonly materialPlan: KpReaderEquationMaterialPlan;
-    readonly fitSurface: HTMLElement;
-    readonly progress: number;
-    readonly motionMode: "continuous" | "essential" | "checkpoint";
-    readonly fontReadiness: KpEquationFontReadiness;
-    readonly presentationRevision: string;
-    readonly measurementIdentity: KpEquationStageMeasurementIdentity;
-    readonly appliedStageLayout?:
-      KpAppliedEquationStageLayout<
-        KpCorridorCertifiedEquationStageLayout
-      > | undefined;
-  }) => boolean;
+  readonly apply: (input: KpReaderCanonicalEquationFrame) => boolean;
+  readonly prewarm: (
+    frames: readonly KpReaderCanonicalEquationFrame[]
+  ) => void;
   readonly invalidate: () => void;
   readonly dispose: () => void;
 }
@@ -74,6 +82,7 @@ export function createKpReaderCanonicalEquationSession(input: {
   const purePlanCache = createKpReaderCompositorPurePlanCache<
     ReturnType<KpReaderEquationPureScenePlanCompiler>
   >();
+  let prewarmQueue: KpReaderIdlePrewarmQueue | undefined;
   const releaseCurrentSession = (
     preserveStructuralSuccession = false
   ): void => {
@@ -84,6 +93,72 @@ export function createKpReaderCanonicalEquationSession(input: {
     structuralFitSurface = undefined;
     materialLayer?.remove();
     materialLayer = undefined;
+  };
+  const geometryIdentityFor = (
+    frame: KpReaderCanonicalEquationFrame,
+    transitionId: string
+  ) => createKpReaderCompositorGeometryCacheIdentity({
+    transitionId,
+    renderPlanId: frame.renderPlan.id,
+    materialPlanId: frame.materialPlan.id,
+    fontRevision: frame.fontReadiness.revision,
+    measurementIdentity: frame.measurementIdentity,
+    layoutApplicationId:
+      frame.appliedStageLayout?.applicationId ?? "native",
+    viewportWidthPx: frame.fitSurface.offsetWidth,
+    viewportHeightPx: frame.fitSurface.offsetHeight,
+    devicePixelRatio:
+      frame.fitSurface.ownerDocument.defaultView?.devicePixelRatio ?? 1,
+    motionMode: frame.motionMode,
+    presentationGeometryRevision: frame.presentationRevision
+  });
+  const purePlanInputFor = (
+    frame: KpReaderCanonicalEquationFrame,
+    transitionId: string,
+    includeHiddenPaint: boolean
+  ) => {
+    bindReaderPaintOwnership(
+      frame.renderPlan,
+      frame.materialPlan,
+      frame.fitSurface
+    );
+    const sourceRoot = requireDescendant<HTMLElement>(
+      frame.fitSurface,
+      '[data-kp-reader-native="source"]'
+    );
+    const targetRoot = requireDescendant<HTMLElement>(
+      frame.fitSurface,
+      '[data-kp-reader-native="target"]'
+    );
+    const observe = (endpoint: "source" | "target", root: HTMLElement) =>
+      observeKpNativeKatexRenderedScene({
+        endpoint,
+        stage: frame.fitSurface,
+        root,
+        semanticEntityId: `${transitionId}.${endpoint}`,
+        presentationGroupId: `${transitionId}.${endpoint}`,
+        fontReadiness: frame.fontReadiness,
+        includeHiddenPaint
+      });
+    return {
+      renderPlan: frame.renderPlan,
+      materialPlan: frame.materialPlan,
+      transitionId,
+      motionMode: frame.motionMode,
+      measurementIdentity: frame.measurementIdentity,
+      ...(frame.appliedStageLayout === undefined
+        ? {}
+        : { stageLayout: frame.appliedStageLayout.certificate }),
+      source: observe("source", sourceRoot),
+      target: observe("target", targetRoot)
+    };
+  };
+  const recordPureCompilation = (
+    ownerWindow: Window | null
+  ): void => {
+    if (ownerWindow === null) return;
+    recordKpReaderPurePlanCompilation(ownerWindow);
+    recordKpReaderProtectedTransitCompilation(ownerWindow);
   };
 
   return {
@@ -148,70 +223,13 @@ export function createKpReaderCanonicalEquationSession(input: {
             structuralSessionKey === nextStructuralSessionKey
         );
         materialLayer = createMaterialLayer(frame.fitSurface);
-        bindReaderPaintOwnership(
-          frame.renderPlan,
-          frame.materialPlan,
-          frame.fitSurface
-        );
-        const sourceRoot = requireDescendant<HTMLElement>(
-          frame.fitSurface,
-          '[data-kp-reader-native="source"]'
-        );
-        const targetRoot = requireDescendant<HTMLElement>(
-          frame.fitSurface,
-          '[data-kp-reader-native="target"]'
-        );
-        const source = observeKpNativeKatexRenderedScene({
-          endpoint: "source",
-          stage: frame.fitSurface,
-          root: sourceRoot,
-          semanticEntityId: `${transitionId}.source`,
-          presentationGroupId: `${transitionId}.source`,
-          fontReadiness: frame.fontReadiness
-        });
-        const target = observeKpNativeKatexRenderedScene({
-          endpoint: "target",
-          stage: frame.fitSurface,
-          root: targetRoot,
-          semanticEntityId: `${transitionId}.target`,
-          presentationGroupId: `${transitionId}.target`,
-          fontReadiness: frame.fontReadiness
-        });
-        const geometryIdentity =
-          createKpReaderCompositorGeometryCacheIdentity({
-            transitionId,
-            renderPlanId: frame.renderPlan.id,
-            materialPlanId: frame.materialPlan.id,
-            fontRevision: frame.fontReadiness.revision,
-            measurementIdentity: frame.measurementIdentity,
-            layoutApplicationId:
-              frame.appliedStageLayout?.applicationId ?? "native",
-            viewportWidthPx: frame.fitSurface.offsetWidth,
-            viewportHeightPx: frame.fitSurface.offsetHeight,
-            devicePixelRatio: ownerWindow?.devicePixelRatio ?? 1,
-            motionMode: frame.motionMode,
-            presentationGeometryRevision: frame.presentationRevision
-          });
-        const sceneInput = {
-          renderPlan: frame.renderPlan,
-          materialPlan: frame.materialPlan,
-          transitionId,
-          motionMode: frame.motionMode,
-          measurementIdentity: frame.measurementIdentity,
-          ...(frame.appliedStageLayout === undefined
-            ? {}
-            : { stageLayout: frame.appliedStageLayout.certificate }),
-          source,
-          target
-        };
+        const geometryIdentity = geometryIdentityFor(frame, transitionId);
+        const sceneInput = purePlanInputFor(frame, transitionId, false);
         let purePlan = purePlanCache.get(geometryIdentity);
         if (purePlan === undefined) {
           purePlan = input.compilePurePlan(sceneInput);
           purePlanCache.set(geometryIdentity, purePlan);
-          if (ownerWindow !== null) {
-            recordKpReaderPurePlanCompilation(ownerWindow);
-            recordKpReaderProtectedTransitCompilation(ownerWindow);
-          }
+          recordPureCompilation(ownerWindow);
         } else if (ownerWindow !== null) {
           recordKpReaderPurePlanCacheHit(ownerWindow);
           // A pure-plan hit carries the exact protected-transit certificate;
@@ -248,8 +266,59 @@ export function createKpReaderCanonicalEquationSession(input: {
         String(session.tracks.length);
       return true;
     },
-    invalidate: releaseCurrentSession,
+    prewarm(frames) {
+      const firstWindow =
+        frames[0]?.fitSurface.ownerDocument.defaultView ?? null;
+      if (firstWindow === null) return;
+      prewarmQueue ??= createKpReaderIdlePrewarmQueue({
+        maximumPending: 2,
+        clock: {
+          request: (callback) =>
+            typeof firstWindow.requestIdleCallback === "function"
+              ? firstWindow.requestIdleCallback(callback, { timeout: 250 })
+              : firstWindow.setTimeout(() => callback({
+                  didTimeout: true,
+                  timeRemaining: () => 0
+                }), 0),
+          cancel: (requestId) => {
+            if (typeof firstWindow.cancelIdleCallback === "function") {
+              firstWindow.cancelIdleCallback(requestId);
+            } else {
+              firstWindow.clearTimeout(requestId);
+            }
+          }
+        }
+      });
+      prewarmQueue.replace(frames.flatMap((frame) => {
+        const transitionId = frame.renderPlan.transitions[0]?.id;
+        if (
+          transitionId === undefined ||
+          !transitionIds.includes(transitionId)
+        ) {
+          return [];
+        }
+        const geometryIdentity = geometryIdentityFor(frame, transitionId);
+        return [{
+          id: geometryIdentity.key,
+          run: () => {
+            if (purePlanCache.get(geometryIdentity) !== undefined) return;
+            const sceneInput = purePlanInputFor(frame, transitionId, true);
+            purePlanCache.set(
+              geometryIdentity,
+              input.compilePurePlan(sceneInput)
+            );
+            recordPureCompilation(firstWindow);
+            recordKpReaderAdjacentPrewarmCompilation(firstWindow);
+          }
+        }];
+      }));
+    },
+    invalidate() {
+      prewarmQueue?.cancel();
+      releaseCurrentSession();
+    },
     dispose() {
+      prewarmQueue?.dispose();
       releaseCurrentSession();
       purePlanCache.clear();
     }

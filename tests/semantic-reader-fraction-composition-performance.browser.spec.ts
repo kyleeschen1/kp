@@ -40,6 +40,7 @@ test("rapid bidirectional scroll emits canonical reader runtime evidence", async
     // URL restoration starts with explicit control authority. A navigation key
     // models the first real reader gesture and hands authority back to scroll.
     dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+    const warmRuntime = metrics.inspectKpReaderRuntimeMetrics(window);
     metrics.resetKpReaderRuntimeMetrics(window);
 
     const longTasks: number[] = [];
@@ -116,6 +117,7 @@ test("rapid bidirectional scroll emits canonical reader runtime evidence", async
         maxMs: Math.max(0, ...longTasks)
       },
       runtime: metrics.inspectKpReaderRuntimeMetrics(window),
+      warmRuntime,
       materialOwnerChurn: {
         added: materialOwnersAdded,
         removed: materialOwnersRemoved
@@ -140,6 +142,7 @@ test("rapid bidirectional scroll emits canonical reader runtime evidence", async
   ).toBeGreaterThan(0);
   expect(evidence.finalScrollY).toBe(0);
   expect(evidence.maxScrollY).toBeGreaterThan(0);
+  expect(evidence.warmRuntime.adjacentPrewarmCompilations).toBeGreaterThan(0);
   // This is the pre-hardening work baseline, not an acceptable performance
   // budget. Later slices deliberately replace it with the zero-recompile
   // product contract while retaining per-engine timing attachments.
@@ -152,7 +155,8 @@ test("rapid bidirectional scroll emits canonical reader runtime evidence", async
     purePlanCompilations: 0,
     purePlanCacheHits: 30,
     protectedTransitCompilations: 0,
-    protectedTransitCertificateReuses: 30
+    protectedTransitCertificateReuses: 30,
+    adjacentPrewarmCompilations: 0
   });
   expect(evidence.materialOwnerChurn).toEqual({
     added: 0,

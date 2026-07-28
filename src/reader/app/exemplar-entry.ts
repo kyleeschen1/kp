@@ -905,20 +905,46 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     );
   }
   applyKpReaderEquationResponsiveFit(materialFitSurface, context.fit);
-  const canonicalEquationSessionApplied = readerCanonicalEquationSession?.apply({
+  const presentationRevision = [
+    focusSnapshot.activeSource ?? "none",
+    ...focusedRefs
+  ].join(":");
+  const canonicalFrame = {
     renderPlan: context.renderPlan,
     materialPlan: context.materialPlan,
     fitSurface: context.fitSurface,
     progress: phaseProgress,
     motionMode: projection.mode,
     fontReadiness,
-    presentationRevision: [
-      focusSnapshot.activeSource ?? "none",
-      ...focusedRefs
-    ].join(":"),
+    presentationRevision,
     measurementIdentity: context.fit.measurementIdentity,
     appliedStageLayout: context.appliedStageLayout
-  }) ?? false;
+  };
+  const canonicalEquationSessionApplied =
+    readerCanonicalEquationSession?.apply(canonicalFrame) ?? false;
+  if (readerCanonicalEquationSession !== undefined) {
+    const activeIndex = canonicalTransitionIds.indexOf(transitionId);
+    const adjacent = [activeIndex - 1, activeIndex + 1].flatMap((index) => {
+      const adjacentId = canonicalTransitionIds[index];
+      const adjacentContext = adjacentId === undefined
+        ? undefined
+        : layout.contexts.get(adjacentId);
+      return adjacentContext === undefined
+        ? []
+        : [{
+            ...canonicalFrame,
+            renderPlan: adjacentContext.renderPlan,
+            materialPlan: adjacentContext.materialPlan,
+            fitSurface: adjacentContext.fitSurface,
+            progress: 0,
+            measurementIdentity: adjacentContext.fit.measurementIdentity,
+            appliedStageLayout: adjacentContext.appliedStageLayout
+          }];
+    });
+    // Neighbors remain visibility:hidden; prewarming may measure their settled
+    // paint but never grants them material, native, or accessibility authority.
+    readerCanonicalEquationSession.prewarm(adjacent);
+  }
   if (canonicalEquationSessionApplied) {
     materialLayer.sync([]);
   } else {

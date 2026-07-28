@@ -293,6 +293,27 @@
       "scope": "slice 15 operation-plan preservation",
       "checkedAt": "2026-07-28T21:54:01.202Z",
       "notes": "All 19 motif registry, no-fade arithmetic synthesis, cancellation, structural opacity, extension, and pinning tests pass."
+    },
+    {
+      "command": "npm run test:reader-runtime-hardening",
+      "status": "passed",
+      "scope": "slice 16 bounded idle prewarm queue",
+      "checkedAt": "2026-07-28T22:00:34.637Z",
+      "notes": "All 16 runtime tests pass, including a two-task bound, latest-only replacement, one task per idle turn, cancellation, and disposal."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll:chromium",
+      "status": "passed",
+      "scope": "slice 16 adjacent transition prewarming",
+      "checkedAt": "2026-07-28T22:00:35.512Z",
+      "notes": "Warm-up records adjacent prewarm compilation; the measured 30-frame sweep performs zero additional prewarm, pure-plan, or protected-transit compilation while preserving zero layout reads and visual authority."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 16 hidden-paint prewarm boundary",
+      "checkedAt": "2026-07-28T22:00:36.336Z",
+      "notes": "Typed session prewarm frames, idle clock fallback, and visibility-hidden observation compile across app, Node, tests, and domains."
     }
   ],
   "expectedLearning": [

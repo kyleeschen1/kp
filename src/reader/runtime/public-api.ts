@@ -8,7 +8,15 @@ export {
   type KpReaderCompositorGeometryCacheIdentityInput
 } from "./equation-compositor-geometry-cache-identity.ts";
 export {
+  createKpReaderIdlePrewarmQueue,
+  type KpReaderIdleDeadline,
+  type KpReaderIdlePrewarmClock,
+  type KpReaderIdlePrewarmQueue,
+  type KpReaderIdlePrewarmTask
+} from "./idle-prewarm-queue.ts";
+export {
   inspectKpReaderRuntimeMetrics,
+  recordKpReaderAdjacentPrewarmCompilation,
   recordKpReaderCanonicalSessionApply,
   recordKpReaderCanonicalSessionBuild,
   recordKpReaderCanonicalSessionReuse,

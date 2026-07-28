@@ -9,6 +9,7 @@ export interface KpReaderRuntimeMetricsSnapshot {
   readonly purePlanCacheHits: number;
   readonly protectedTransitCompilations: number;
   readonly protectedTransitCertificateReuses: number;
+  readonly adjacentPrewarmCompilations: number;
 }
 
 interface MutableKpReaderRuntimeMetrics {
@@ -22,6 +23,7 @@ interface MutableKpReaderRuntimeMetrics {
   purePlanCacheHits: number;
   protectedTransitCompilations: number;
   protectedTransitCertificateReuses: number;
+  adjacentPrewarmCompilations: number;
 }
 
 const metricsByWindow = new WeakMap<Window, MutableKpReaderRuntimeMetrics>();
@@ -85,6 +87,12 @@ export function recordKpReaderProtectedTransitCertificateReuse(
   metricsFor(ownerWindow).protectedTransitCertificateReuses += 1;
 }
 
+export function recordKpReaderAdjacentPrewarmCompilation(
+  ownerWindow: Window
+): void {
+  metricsFor(ownerWindow).adjacentPrewarmCompilations += 1;
+}
+
 function metricsFor(ownerWindow: Window): MutableKpReaderRuntimeMetrics {
   const existing = metricsByWindow.get(ownerWindow);
   if (existing !== undefined) return existing;
@@ -104,6 +112,7 @@ function createMetrics(): MutableKpReaderRuntimeMetrics {
     purePlanCompilations: 0,
     purePlanCacheHits: 0,
     protectedTransitCompilations: 0,
-    protectedTransitCertificateReuses: 0
+    protectedTransitCertificateReuses: 0,
+    adjacentPrewarmCompilations: 0
   };
 }

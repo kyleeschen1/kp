@@ -144,7 +144,8 @@
     {
       "id": "slice.kp.reader-hardening.16",
       "title": "Prewarm-adjacent-transition-plans",
-      "status": "planned"
+      "summary": "Added a bounded two-neighbor idle prewarm queue with latest-only cancellation and timeout fallback; hidden adjacent stages can be measured but never mounted, and active cache misses retain synchronous compilation.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.17",

@@ -225,6 +225,7 @@ export function observeKpNativeKatexGlyphPaintAtoms(input: {
   readonly semanticEntityId: string;
   readonly presentationGroupId: string;
   readonly fontRevision: number;
+  readonly includeHiddenPaint?: boolean | undefined;
 }): readonly KpNativeKatexPaintAtomObservation[] {
   const stageRect = input.stage.getBoundingClientRect();
   const stageLayoutWidth = input.stage.offsetWidth || stageRect.width;
@@ -244,7 +245,7 @@ export function observeKpNativeKatexGlyphPaintAtoms(input: {
     const clientRect = sourceElement.getBoundingClientRect();
     if (
       computed.display === "none" ||
-      computed.visibility === "hidden" ||
+      (computed.visibility === "hidden" && input.includeHiddenPaint !== true) ||
       Number(computed.opacity) === 0 ||
       clientRect.width <= 0 ||
       clientRect.height <= 0
@@ -283,6 +284,7 @@ export function observeKpNativeKatexPaintAtoms(input: {
   readonly presentationGroupId: string;
   readonly fontRevision: number;
   readonly requireExplicitOwnership?: boolean | undefined;
+  readonly includeHiddenPaint?: boolean | undefined;
 }): readonly KpNativeKatexPaintAtomObservation[] {
   const glyphs = observeKpNativeKatexGlyphPaintAtoms(input);
   const stageRect = input.stage.getBoundingClientRect();
@@ -304,7 +306,7 @@ export function observeKpNativeKatexPaintAtoms(input: {
     if (
       paintKind === undefined ||
       computed.display === "none" ||
-      computed.visibility === "hidden" ||
+      (computed.visibility === "hidden" && input.includeHiddenPaint !== true) ||
       Number(computed.opacity) === 0 ||
       clientRect.width <= 0 ||
       clientRect.height <= 0
@@ -464,6 +466,7 @@ export function observeKpNativeKatexRenderedScene(input: {
   readonly semanticEntityId: string;
   readonly presentationGroupId: string;
   readonly fontReadiness: KpEquationFontReadiness;
+  readonly includeHiddenPaint?: boolean | undefined;
 }): KpNativeKatexRenderedSceneObservation {
   const atoms = observeKpNativeKatexPaintAtoms({
     endpoint: input.endpoint,
@@ -472,7 +475,8 @@ export function observeKpNativeKatexRenderedScene(input: {
     semanticEntityId: input.semanticEntityId,
     presentationGroupId: input.presentationGroupId,
     fontRevision: input.fontReadiness.revision,
-    requireExplicitOwnership: true
+    requireExplicitOwnership: true,
+    includeHiddenPaint: input.includeHiddenPaint
   });
   const groupElements = new Map<string, HTMLElement>();
   for (const atom of atoms) {
