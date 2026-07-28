@@ -8,6 +8,9 @@ import type {
 import type {
   KpOperationPresentationBundle
 } from "../animation/operation-presentation-roles.ts";
+import {
+  operationPresentationPlanAuthorityId
+} from "../animation/operation-presentation-plan-types.ts";
 export type {
   KpRegisteredEquationOperationChoreography as KpEquationOperationChoreography
 } from "../animation/balanced-introduction-presentation-plan.ts";
@@ -15,11 +18,16 @@ import {
   sampleKpEquationLinearRearrangementFrame
 } from "./equation-linear-rearrangement.ts";
 import {
-  planKpEquationMotionPathBetweenPoints
+  inspectKpEquationProtectedTransitTracks,
+  planKpEquationMotionPathBetweenPoints,
+  type KpProtectedTransitAudit
 } from "./equation-motion-path-planner.ts";
 import type {
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
+import {
+  sampleKpNativeKatexSceneTrackFrames
+} from "./native-katex-scene-track-sampling.ts";
 import type {
   KpNativeKatexPaintMeasuredSceneTrack
 } from "./native-katex-scene-compositor.ts";
@@ -218,6 +226,7 @@ function applyRoleCompleteCounterOrbit(
   choreography: Parameters<typeof applyCounterOrbit>[1]
 ): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
   const plan = choreography.operationPresentationPlan!;
+  const operationCohortId = operationPresentationPlanAuthorityId(plan);
   if (
     plan.transformationId !== choreography.transformationId ||
     plan.planKind !== "inverse-cancellation"
@@ -234,6 +243,17 @@ function applyRoleCompleteCounterOrbit(
     ? "eliminate"
     : "introduce";
   const atomsById = new Map(endpoint.atoms.map((atom) => [atom.id, atom]));
+  const sourceEntityByAtomId = new Map(input.source.atoms.map((atom) => [
+    atom.id,
+    atom.semanticEntityId
+  ]));
+  const targetEntityByAtomId = new Map(input.target.atoms.map((atom) => [
+    atom.id,
+    atom.semanticEntityId
+  ]));
+  const planEntityIds = new Set(plan.roles.bundles.flatMap(
+    ({ semanticEntityIds }) => semanticEntityIds
+  ));
   const bundleById = new Map(plan.roles.bundles.map((bundle) => [
     bundle.id,
     bundle
@@ -257,6 +277,25 @@ function applyRoleCompleteCounterOrbit(
       expectedLifecycle
     })
   ]));
+  const operationTrackIds = new Set(input.tracks.flatMap((track) => {
+    const sourceEntityId = track.sourceAtomId === undefined
+      ? undefined
+      : sourceEntityByAtomId.get(track.sourceAtomId);
+    const targetEntityId = track.targetAtomId === undefined
+      ? undefined
+      : targetEntityByAtomId.get(track.targetAtomId);
+    return (
+      (sourceEntityId !== undefined && planEntityIds.has(sourceEntityId)) ||
+      (targetEntityId !== undefined && planEntityIds.has(targetEntityId))
+    )
+      ? [track.id]
+      : [];
+  }));
+  const retiringTrackIds = new Set(plan.roles.bundles
+    .filter(({ role }) => role !== "continuant")
+    .flatMap((bundle) =>
+      selectedByBundleId.get(bundle.id)!.map(({ track }) => track.id)
+    ));
   const inverseTrackGroups = inverseBundles.map((bundle) => {
     const selected = selectedByBundleId.get(bundle.id)!;
     assertEntityCoverage(
@@ -271,7 +310,15 @@ function applyRoleCompleteCounterOrbit(
       endpointPaintRect(track, choreography.direction)
     ))
   );
-  const contact = center(union(inverseBounds));
+  const continuantRects = input.tracks
+    .filter(({ id }) =>
+      operationTrackIds.has(id) && !retiringTrackIds.has(id)
+    )
+    .map((track) => endpointPaintRect(track, choreography.direction));
+  const contact = selectNearestClearCancellationContact({
+    inverseBounds,
+    continuantRects
+  });
   const inverseTrackRole = new Map(
     inverseTrackGroups.flatMap((selected, bundleIndex) =>
       selected.map(({ track }) => [
@@ -303,82 +350,122 @@ function applyRoleCompleteCounterOrbit(
     );
   }
 
-  return Object.freeze(input.tracks.map((track) => {
-    const inverse = inverseTrackRole.get(track.id);
-    if (inverse !== undefined) {
-      const originalPaint = endpointPaintRect(track, choreography.direction);
+  const buildTracks = (
+    route: KpCancellationOrbitRoute
+  ): readonly KpNativeKatexPaintMeasuredSceneTrack[] =>
+    Object.freeze(input.tracks.map((track) => {
+      const inverse = inverseTrackRole.get(track.id);
+      if (inverse !== undefined) {
+        const originalPaint = endpointPaintRect(
+          track,
+          choreography.direction
+        );
+        const originalLayout = endpointLayoutRect(
+          track,
+          choreography.direction
+        );
+        const bundleCenter = center(inverse.bundleBounds);
+        const delta = {
+          x: contact.x - bundleCenter.x,
+          y: contact.y - bundleCenter.y
+        };
+        const shiftedLayout = translateRect(originalLayout, delta);
+        const shiftedPaint = translateRect(originalPaint, delta);
+        const start = choreography.direction === "forward"
+          ? center(originalPaint)
+          : center(shiftedPaint);
+        const end = choreography.direction === "forward"
+          ? center(shiftedPaint)
+          : center(originalPaint);
+        const path = planKpEquationMotionPathBetweenPoints({
+          id: `operation-path.${choreography.id}.${track.id}`,
+          relationRecordId: choreography.relationRecordId,
+          start,
+          end,
+          variants: [route.variants[inverse.bundleIndex]!],
+          obstacles: continuantRects,
+          moverRadius:
+            Math.max(originalPaint.width, originalPaint.height) / 2,
+          clearance: route.clearance
+        }).selected;
+        return Object.freeze({
+          ...track,
+          ...(choreography.direction === "forward"
+            ? {
+                endRect: Object.freeze(shiftedLayout),
+                endPaintRect: Object.freeze(shiftedPaint)
+              }
+            : {
+                startRect: Object.freeze(shiftedLayout),
+                startPaintRect: Object.freeze(shiftedPaint)
+              }),
+          motionPath: path,
+          motionPathSampling: "planned-curve" as const,
+          timingGroupId: plan.contactGroupId,
+          intentionalContactGroupId: plan.contactGroupId,
+          verifiedOperationCohortId: operationCohortId,
+          opacityScheduleAuthority: "semantic-choreography" as const,
+          sampleProgress: (progress: number) =>
+            sampleCounterOrbitProgress(choreography, progress, "meet"),
+          sampleOpacityProgress: (progress: number) =>
+            sampleCounterOrbitProgress(choreography, progress, "collapse")
+        });
+      }
+      const collapseRole = collapseTrackRole.get(track.id);
+      if (collapseRole === undefined) {
+        if (!operationTrackIds.has(track.id)) return track;
+        if (track.lifecycle !== "persist") {
+          throw new Error(
+            `Cancellation continuant ${track.id} lacks persistent lineage.`
+          );
+        }
+        // Continuants wait until the retiring cohort has collapsed. This
+        // semantic phase boundary prevents survivor reflow from crossing the
+        // very material being cancelled, independent of viewport geometry.
+        return Object.freeze({
+          ...track,
+          timingGroupId: `${plan.id}.continuants`,
+          verifiedOperationCohortId: operationCohortId,
+          sampleProgress: (progress: number) =>
+            sampleCounterOrbitProgress(choreography, progress, "reflow")
+        });
+      }
       const originalLayout = endpointLayoutRect(
         track,
         choreography.direction
       );
-      const bundleCenter = center(inverse.bundleBounds);
-      const delta = {
-        x: contact.x - bundleCenter.x,
-        y: contact.y - bundleCenter.y
-      };
-      const shiftedLayout = translateRect(originalLayout, delta);
-      const shiftedPaint = translateRect(originalPaint, delta);
-      const start = choreography.direction === "forward"
-        ? center(originalPaint)
-        : center(shiftedPaint);
-      const end = choreography.direction === "forward"
-        ? center(shiftedPaint)
-        : center(originalPaint);
-      const path = planKpEquationMotionPathBetweenPoints({
-        id: `operation-path.${choreography.id}.${track.id}`,
-        relationRecordId: choreography.relationRecordId,
-        start,
-        end,
-        variants: [
-          inverse.bundleIndex === 0 ? "arc-above" : "arc-below"
-        ],
-        clearance: 14
-      }).selected;
+      const originalPaint = endpointPaintRect(
+        track,
+        choreography.direction
+      );
+      // Catalysts and artifacts retire on the shared collapse clock but never
+      // influence orbit direction or borrow an inverse bundle's curved path.
       return Object.freeze({
         ...track,
         ...(choreography.direction === "forward"
           ? {
-              endRect: Object.freeze(shiftedLayout),
-              endPaintRect: Object.freeze(shiftedPaint)
+              endRect: Object.freeze({ ...originalLayout }),
+              endPaintRect: Object.freeze({ ...originalPaint })
             }
           : {
-              startRect: Object.freeze(shiftedLayout),
-              startPaintRect: Object.freeze(shiftedPaint)
+              startRect: Object.freeze({ ...originalLayout }),
+              startPaintRect: Object.freeze({ ...originalPaint })
             }),
-        motionPath: path,
-        motionPathSampling: "planned-curve" as const,
-        timingGroupId: plan.contactGroupId,
+        timingGroupId: `${plan.contactGroupId}.${collapseRole}`,
         intentionalContactGroupId: plan.contactGroupId,
+        verifiedOperationCohortId: operationCohortId,
+        opacityScheduleAuthority: "semantic-choreography" as const,
         sampleProgress: (progress: number) =>
-          sampleCounterOrbitProgress(choreography, progress, "meet"),
+          sampleCounterOrbitProgress(choreography, progress, "collapse"),
         sampleOpacityProgress: (progress: number) =>
           sampleCounterOrbitProgress(choreography, progress, "collapse")
       });
-    }
-    const collapseRole = collapseTrackRole.get(track.id);
-    if (collapseRole === undefined) return track;
-    const originalLayout = endpointLayoutRect(track, choreography.direction);
-    const originalPaint = endpointPaintRect(track, choreography.direction);
-    // Catalysts and artifacts retire on the shared collapse clock but never
-    // influence orbit direction or borrow an inverse bundle's curved path.
-    return Object.freeze({
-      ...track,
-      ...(choreography.direction === "forward"
-        ? {
-            endRect: Object.freeze({ ...originalLayout }),
-            endPaintRect: Object.freeze({ ...originalPaint })
-          }
-        : {
-            startRect: Object.freeze({ ...originalLayout }),
-            startPaintRect: Object.freeze({ ...originalPaint })
-          }),
-      timingGroupId: `${plan.contactGroupId}.${collapseRole}`,
-      sampleProgress: (progress: number) =>
-        sampleCounterOrbitProgress(choreography, progress, "collapse"),
-      sampleOpacityProgress: (progress: number) =>
-        sampleCounterOrbitProgress(choreography, progress, "collapse")
-    });
-  }));
+    }));
+  const route = selectCancellationOrbitRoute({
+    operationTrackIds,
+    buildTracks
+  });
+  return buildTracks(route);
 }
 
 function selectBundleTracks(input: {
@@ -441,30 +528,31 @@ function endpointLayoutRect(
 function sampleCounterOrbitProgress(
   choreography: KpCounterOrbitCancellationChoreography,
   progress: number,
-  field: "meet" | "collapse"
+  field: "meet" | "collapse" | "reflow"
 ): number {
-  if (choreography.direction === "forward") {
-    const frame = sampleKpEquationLinearRearrangementFrame(
-      choreography.linearRearrangementKind,
-      progress,
-      choreography.cancellationRecipe,
-      undefined,
-      choreography.zeroWitnessRecipe
+  if (field === "collapse") {
+    // Counter-orbit material must finish reaching the shared contact before
+    // any inverse, catalyst, or artifact loses opacity. Keeping this timing at
+    // the motif boundary prevents individual callers from reintroducing the
+    // premature-fade regression.
+    const collapse = smoothWindow(
+      choreography.direction === "forward" ? progress : 1 - progress,
+      0.68,
+      0.78
     );
-    return field === "meet"
-      ? frame.meetProgress
-      : frame.collapseProgress;
+    return choreography.direction === "forward" ? collapse : 1 - collapse;
   }
   const frame = sampleKpEquationLinearRearrangementFrame(
     choreography.linearRearrangementKind,
-    1 - progress,
+    choreography.direction === "forward" ? progress : 1 - progress,
     choreography.cancellationRecipe,
     undefined,
     choreography.zeroWitnessRecipe
   );
-  return 1 - (field === "meet"
+  const sampled = field === "meet"
     ? frame.meetProgress
-    : frame.collapseProgress);
+    : frame.persistentReflowProgress;
+  return choreography.direction === "forward" ? sampled : 1 - sampled;
 }
 
 function assertEntityCoverage(
@@ -541,7 +629,133 @@ function center(rect: Rect): { readonly x: number; readonly y: number } {
   };
 }
 
+function selectNearestClearCancellationContact(input: {
+  readonly inverseBounds: readonly Rect[];
+  readonly continuantRects: readonly Rect[];
+}): { readonly x: number; readonly y: number } {
+  const base = center(union(input.inverseBounds));
+  const offsets = Array.from({ length: 25 }, (_value, index) =>
+    (index - 12) * 4
+  );
+  const candidates = offsets.flatMap((x) =>
+    offsets.map((y) => ({
+      point: { x: base.x + x, y: base.y + y },
+      distance: Math.hypot(x, y)
+    }))
+  ).sort((left, right) => left.distance - right.distance);
+  const ranked = candidates.map(({ point, distance }) => {
+    const settled = input.inverseBounds.map((bounds) =>
+      translateRectToCenter(bounds, point)
+    );
+    const intersections = settled.flatMap((inverse) =>
+      input.continuantRects.flatMap((continuant) => {
+        const width = Math.min(
+          inverse.left + inverse.width,
+          continuant.left + continuant.width
+        ) - Math.max(inverse.left, continuant.left);
+        const height = Math.min(
+          inverse.top + inverse.height,
+          continuant.top + continuant.height
+        ) - Math.max(inverse.top, continuant.top);
+        return width > 0.75 && height > 0.75
+          ? [{ width, height }]
+          : [];
+      })
+    );
+    return {
+      point,
+      score:
+        intersections.length * 1_000_000 +
+        intersections.reduce(
+          (sum, { width, height }) => sum + width * height,
+          0
+        ) * 1_000 +
+        distance
+    };
+  }).sort((left, right) => left.score - right.score);
+  return ranked[0]!.point;
+}
+
+type KpCancellationOrbitVariant =
+  "arc-above" | "arc-below" | "around-left" | "around-right";
+
+interface KpCancellationOrbitRoute {
+  readonly variants: readonly [
+    KpCancellationOrbitVariant,
+    KpCancellationOrbitVariant
+  ];
+  readonly clearance: number;
+}
+
+function selectCancellationOrbitRoute(input: {
+  readonly operationTrackIds: ReadonlySet<string>;
+  readonly buildTracks: (
+    route: KpCancellationOrbitRoute
+  ) => readonly KpNativeKatexPaintMeasuredSceneTrack[];
+}): KpCancellationOrbitRoute {
+  const pairs: readonly KpCancellationOrbitRoute["variants"][] = [
+    ["arc-above", "arc-below"],
+    ["arc-below", "arc-above"],
+    ["around-left", "around-right"],
+    ["around-right", "around-left"]
+  ];
+  let best:
+    | {
+        readonly route: KpCancellationOrbitRoute;
+        readonly audit: KpProtectedTransitAudit;
+      }
+    | undefined;
+  for (const clearance of [14, 16, 18, 20, 24, 28, 32] as const) {
+    const candidates = pairs.map((variants) => {
+      const route = { variants, clearance } satisfies KpCancellationOrbitRoute;
+      const operationTracks = input.buildTracks(route).filter(({ id }) =>
+        input.operationTrackIds.has(id)
+      );
+      const audit = inspectKpEquationProtectedTransitTracks({
+        tracks: operationTracks,
+        sampleFrames: (tracks, progress) =>
+          sampleKpNativeKatexSceneTrackFrames(tracks, progress, false),
+        sampleCount: 100
+      });
+      return { route, audit };
+    }).sort((left, right) =>
+      compareCancellationRouteAudits(left.audit, right.audit)
+    );
+    const clear = candidates.find(
+      ({ audit }) => audit.intersections.length === 0
+    );
+    if (clear !== undefined) return clear.route;
+    if (
+      best === undefined ||
+      compareCancellationRouteAudits(candidates[0]!.audit, best.audit) < 0
+    ) {
+      best = candidates[0]!;
+    }
+  }
+  throw new Error(
+    "Verified cancellation has no bounded measured-paint orbit: " +
+    `${best?.audit.intersections.map((intersection) =>
+      `${intersection.leftTrackId}->${intersection.rightTrackId}@` +
+      `${intersection.progress.toFixed(3)}`
+    ).join(", ") ?? "no candidate geometry"}.`
+  );
+}
+
+function compareCancellationRouteAudits(
+  left: KpProtectedTransitAudit,
+  right: KpProtectedTransitAudit
+): number {
+  return left.intersections.length - right.intersections.length ||
+    left.totalIntersectionArea - right.totalIntersectionArea ||
+    left.maximumIntersectionArea - right.maximumIntersectionArea;
+}
+
 function windowProgress(progress: number, start: number, end: number): number {
   const bounded = Math.max(0, Math.min(1, progress));
   return Math.max(0, Math.min(1, (bounded - start) / (end - start)));
+}
+
+function smoothWindow(progress: number, start: number, end: number): number {
+  const local = windowProgress(progress, start, end);
+  return local * local * (3 - 2 * local);
 }

@@ -65,6 +65,7 @@
     "test:browser:fraction-composition": "playwright test tests/semantic-reader-fraction-composition.browser.spec.ts --project=chromium --workers=1",
     "test:browser:fraction-composition:determinism": "playwright test tests/semantic-reader-fraction-composition-determinism.browser.spec.ts --project=chromium --project=firefox --workers=1",
     "visual:fraction-composition-canonical": "playwright test tests/semantic-reader-fraction-composition-visual.browser.spec.ts --project=chromium --workers=1",
+    "visual:fraction-composition-motif-fidelity": "playwright test tests/semantic-reader-fraction-composition-motif-fidelity.browser.spec.ts --project=chromium --project=firefox --workers=1",
     "test:browser:real-katex-glyph-compositor": "playwright test tests/native-katex-fragment-observer.browser.spec.ts --project=chromium --workers=1",
     "test:browser:dashboard": "playwright test tests/project-dashboard.browser.spec.ts --project=chromium",
     "test:browser:animation-workbench": "playwright test tests/semantic-animation-workbench.browser.spec.ts --project=chromium --workers=1",

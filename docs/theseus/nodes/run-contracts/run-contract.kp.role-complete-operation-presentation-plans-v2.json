@@ -135,7 +135,8 @@
     {
       "id": "slice.kp.role-plan.14",
       "title": "Prove-real-browser-motif-fidelity",
-      "status": "planned"
+      "summary": "USER_PAUSED at the mandatory visual checkpoint to discuss cross-browser coverage and rapid-scroll freezes. The captured Firefox overlap now passes the focused Chromium/Firefox gate, but the broader visual matrix was intentionally stopped before completion. Do not resume until the user approves the cross-browser and runtime-performance direction.",
+      "status": "in-progress"
     },
     {
       "id": "slice.kp.role-plan.15",

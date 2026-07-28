@@ -1,6 +1,6 @@
 import type {
   KpExplicitStaticCheckpointPlan,
-  KpVerifiedInverseCancellationPresentationPlan,
+  KpInverseCancellationPresentationPlanDraft,
   KpVerifiedOperationPresentationPlan
 } from "../../src/animation/operation-presentation-plan-types.ts";
 import type {
@@ -20,7 +20,7 @@ const fabricated: KpVerifiedOperationPresentationPlan = {
   inverseBundleIds: ["bundle.left", "bundle.right"]
 };
 
-const incompleteCancellation: KpVerifiedInverseCancellationPresentationPlan = {
+const incompleteCancellation: KpInverseCancellationPresentationPlanDraft = {
   schemaVersion: "kp.verified-operation-presentation-plan.v1",
   id: "plan.incomplete",
   transformationId: "transform.incomplete",

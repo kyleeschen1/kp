@@ -7,12 +7,18 @@ import {
 import type {
   KpRegisteredEquationOperationChoreography
 } from "../src/animation/balanced-introduction-presentation-plan.ts";
+import {
+  operationPresentationPlanAuthorityId
+} from "../src/animation/operation-presentation-plan-types.ts";
 import type {
   KpSemanticTransformation
 } from "../src/semantic/asset-transformation.ts";
 import {
   compileKpEquationOperationChoreography
 } from "../src/reader/renderers/equation-operation-choreography-compiler.ts";
+import {
+  compileKpCollisionSafeTransitTracks
+} from "../src/rendering/equation-motion-path-planner.ts";
 import {
   applyKpNativeKatexOperationChoreography
 } from "../src/rendering/native-katex-operation-choreography.ts";
@@ -185,14 +191,16 @@ function assertRoleRouting(subject: ConformanceCase): void {
   const inverseBundles = plan.inverseBundleIds.map((bundleId) =>
     plan.roles.bundles.find(({ id }) => id === bundleId)!
   );
+  const orbitVariants: string[] = [];
   const contactCenters = inverseBundles.map((bundle, bundleIndex) => {
     const tracks = bundle.semanticEntityIds.map((entityId) =>
       trackByEntityId.get(entityId)!
     );
-    assert.ok(tracks.every(({ motionPath }) =>
-      motionPath?.variant ===
-        (bundleIndex === 0 ? "arc-above" : "arc-below")
+    const variants = new Set(tracks.map(({ motionPath }) =>
+      motionPath?.variant
     ));
+    assert.equal(variants.size, 1);
+    orbitVariants[bundleIndex] = [...variants][0]!;
     assertRigidBundle(tracks, subject.direction);
     return center(union(tracks.map((track) =>
       subject.direction === "forward"
@@ -200,6 +208,12 @@ function assertRoleRouting(subject: ConformanceCase): void {
         : track.startPaintRect!
     )));
   });
+  assert.ok([
+    "arc-above/arc-below",
+    "arc-below/arc-above",
+    "around-left/around-right",
+    "around-right/around-left"
+  ].includes(orbitVariants.join("/")));
   assertPointClose(contactCenters[0]!, contactCenters[1]!);
 
   const collapseTracks = plan.roles.bundles
@@ -207,6 +221,39 @@ function assertRoleRouting(subject: ConformanceCase): void {
     .flatMap(({ semanticEntityIds }) => semanticEntityIds)
     .map((entityId) => trackByEntityId.get(entityId)!);
   assert.ok(collapseTracks.every(({ motionPath }) => motionPath === undefined));
+  const protectedTransit = compileKpCollisionSafeTransitTracks({
+    tracks: subject.routed,
+    sampleFrames: (tracks, progress) =>
+      sampleKpNativeKatexSceneTrackFrames(tracks, progress, false)
+  });
+  assert.ok(protectedTransit.tracks
+    .filter(({ lifecycle }) =>
+      lifecycle === "introduce" || lifecycle === "eliminate"
+    )
+    .every(({ opacityScheduleAuthority, opacityStepAt }) =>
+      opacityScheduleAuthority === "semantic-choreography" &&
+      opacityStepAt === undefined
+    ));
+  const planEntityIds = new Set(plan.roles.bundles.flatMap(
+    ({ semanticEntityIds }) => semanticEntityIds
+  ));
+  assert.ok(subject.routed
+    .filter((track) =>
+      planEntityIds.has(subject.entityIdByTrackId.get(track.id)!)
+    )
+    .every(({ verifiedOperationCohortId }) =>
+      verifiedOperationCohortId ===
+        operationPresentationPlanAuthorityId(plan)
+    ));
+  const beforeContact = sampleKpNativeKatexSceneTrackFrames(
+    subject.routed,
+    subject.direction === "forward" ? 0.64 : 0.36,
+    false
+  ).filter(({ trackId }) => !trackId.startsWith("track.persist."));
+  assert.ok(
+    beforeContact.every(({ opacity }) => opacity === 1),
+    `${subject.transformation.id} changed opacity before contact.`
+  );
   for (const progress of [0, 0.35, 0.55, 0.8, 1]) {
     const frames = sampleKpNativeKatexSceneTrackFrames(
       subject.routed,
@@ -224,7 +271,33 @@ function assertRoleRouting(subject: ConformanceCase): void {
   }
   subject.tracks.forEach((track, index) => {
     if (track.lifecycle === "persist") {
-      assert.equal(subject.routed[index], track);
+      const {
+        verifiedOperationCohortId,
+        ...routedContinuant
+      } = subject.routed[index]!;
+      assert.equal(
+        verifiedOperationCohortId,
+        operationPresentationPlanAuthorityId(plan),
+        "Continuants must share the verified operation collision authority."
+      );
+      assert.deepEqual(
+        {
+          ...routedContinuant,
+          timingGroupId: undefined,
+          sampleProgress: undefined
+        },
+        {
+          ...track,
+          timingGroupId: undefined,
+          sampleProgress: undefined
+        },
+        "Operation authority must not alter continuant geometry or opacity."
+      );
+      assert.equal(
+        routedContinuant.timingGroupId,
+        `${plan.id}.continuants`
+      );
+      assert.equal(typeof routedContinuant.sampleProgress, "function");
     }
   });
 }

@@ -7,6 +7,7 @@ export type KpEquationVisiblePaintContactReason =
   | "native-handoff"
   | "semantic-fusion"
   | "semantic-fission"
+  | "semantic-cancellation"
   | "semantic-reconciliation"
   | "typographic-adjacency";
 

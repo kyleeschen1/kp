@@ -9,6 +9,9 @@ import {
 import type {
   KpEquationProtectedTransitCertificate
 } from "./equation-protected-transit-types.ts";
+import type {
+  KpVerifiedOperationPresentationPlanId
+} from "../animation/operation-presentation-plan-authority.ts";
 
 export type {
   KpEquationProtectedTransitCertificate
@@ -136,6 +139,12 @@ export interface KpEquationCollisionTrack {
   } | undefined;
   readonly opacityStepAt?: number | undefined;
   /**
+   * Collision repair may move a semantic timing group, but it must not replace
+   * an opacity law already owned by a verified motif choreography.
+   */
+  readonly opacityScheduleAuthority?:
+    "renderer-default" | "semantic-choreography" | undefined;
+  /**
    * Generic collision repair may retime a whole semantic operation, but must
    * never retime one member independently and break simultaneous entry.
    */
@@ -145,6 +154,13 @@ export interface KpEquationCollisionTrack {
    * ignores contact only when both tracks carry the same compiler-owned ID.
    */
   readonly intentionalContactGroupId?: string | undefined;
+  /**
+   * Binds renderer metadata to a validator-minted plan. It never waives
+   * collision checks by itself: a pair must also share an explicit contact
+   * group before the visible-paint audit can certify their overlap.
+   */
+  readonly verifiedOperationCohortId?:
+    KpVerifiedOperationPresentationPlanId | undefined;
   readonly motionGroupTravel?: number | undefined;
   readonly motionSettlementAspectRatio?: number | undefined;
 }
@@ -1093,7 +1109,7 @@ function evaluateTrackClearance(
   };
 }
 
-interface KpProtectedTransitIntersection {
+export interface KpProtectedTransitIntersection {
   readonly leftTrackId: string;
   readonly rightTrackId: string;
   readonly progress: number;
@@ -1101,11 +1117,38 @@ interface KpProtectedTransitIntersection {
   readonly height: number;
 }
 
-interface KpProtectedTransitAudit {
+export interface KpProtectedTransitAudit {
   readonly intersections: readonly KpProtectedTransitIntersection[];
   readonly inspectedPairCount: number;
   readonly totalIntersectionArea: number;
   readonly maximumIntersectionArea: number;
+}
+
+/**
+ * Exposes the same measured-paint audit used by final transit certification.
+ * Motif planners use this before choosing a route so browser-specific paint
+ * metrics cannot pass an approximate preflight and fail the final authority.
+ */
+export function inspectKpEquationProtectedTransitTracks<
+  Track extends KpEquationCollisionTrack
+>(input: {
+  readonly tracks: readonly Track[];
+  readonly sampleFrames: (
+    tracks: readonly Track[],
+    progress: number
+  ) => readonly KpEquationProtectedTransitFrame[];
+  readonly sampleCount?: number | undefined;
+}): KpProtectedTransitAudit {
+  const sampleCount = positiveInteger(
+    input.sampleCount ?? 100,
+    "protected transit inspection sample count"
+  );
+  assertUniqueCollisionTrackIds(input.tracks);
+  return inspectProtectedTransit({
+    tracks: input.tracks,
+    sampleFrames: input.sampleFrames,
+    sampleCount
+  });
 }
 
 function scheduleProtectedTransitStructuralOpacity<
@@ -1120,7 +1163,11 @@ function scheduleProtectedTransitStructuralOpacity<
     ({ leftTrackId, rightTrackId }) =>
       [leftTrackId, rightTrackId].filter((trackId) => {
         if (input.scheduledTrackIds.has(trackId)) return false;
-        const lifecycle = trackById.get(trackId)?.lifecycle;
+        const track = trackById.get(trackId);
+        if (track?.opacityScheduleAuthority === "semantic-choreography") {
+          return false;
+        }
+        const lifecycle = track?.lifecycle;
         return lifecycle === "introduce" || lifecycle === "eliminate";
       })
   ));
@@ -1133,6 +1180,7 @@ function scheduleProtectedTransitStructuralOpacity<
     if (
       track.timingGroupId !== undefined &&
       timingGroups.has(track.timingGroupId) &&
+      track.opacityScheduleAuthority !== "semantic-choreography" &&
       (track.lifecycle === "introduce" || track.lifecycle === "eliminate")
     ) {
       ids.add(track.id);

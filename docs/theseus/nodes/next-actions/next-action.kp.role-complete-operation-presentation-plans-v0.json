@@ -134,11 +134,52 @@
       "scope": "slice-13",
       "checkedAt": "2026-07-28T19:15:25.863Z",
       "notes": "Sixty-four focused tests pass. Automatic semantic discovery covers all three exemplar cancellations forward and rewind, with rigid bundles, shared contact, synchronized opacity, persistent-track identity, and exact inverse samples; inference remains 49,911 types."
+    },
+    {
+      "command": "npm run test:browser:fraction-composition",
+      "status": "passed",
+      "scope": "slice 14 canonical browser preservation",
+      "checkedAt": "2026-07-28T20:07:52.389Z",
+      "notes": "Seven browser tests passed for responsive stage, fold state, direct seek, rewind, balanced entry, reduced motion, and no-JS checkpoints."
+    },
+    {
+      "command": "npm run visual:fraction-composition-canonical",
+      "status": "passed",
+      "scope": "slice 14 dense responsive visual matrix",
+      "checkedAt": "2026-07-28T20:07:52.850Z",
+      "notes": "16 viewport, fold-mode, and DPR combinations passed dense progress sampling with no unexplained visible-paint overlap."
+    },
+    {
+      "command": "npm run visual:fraction-composition-motif-fidelity",
+      "status": "passed",
+      "scope": "slice 14 actual owner paint on wide and phone",
+      "checkedAt": "2026-07-28T20:07:53.173Z",
+      "notes": "Three discovered cancellation motifs passed measured trajectories, opposite orbits, shared contact, opacity, continuants, endpoints, deterministic seek, fit, overflow, and review-launcher checks."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "slice 14 role-complete cancellation conformance",
+      "checkedAt": "2026-07-28T20:07:53.499Z",
+      "notes": "64 tests passed; all discovered cancellations retain opaque material through contact, exact rewind, typed authority, and protected-transit behavior."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "slice 14 static and architecture budgets",
+      "checkedAt": "2026-07-28T20:08:08.721Z",
+      "notes": "All TypeScript domains and architecture gates passed; inference finished at 49,928 types, 66,215 instantiations, and 2.25 seconds."
+    },
+    {
+      "command": "npm run visual:fraction-composition-motif-fidelity",
+      "status": "passed",
+      "scope": "Focused slice-14 checkpoint: Chromium and Firefox, wide and phone, exact 38.8-percent captured phase, one visual authority, zero uncertified visible-paint overlap, and rewind determinism passed.",
+      "checkedAt": "2026-07-28T20:37:00.488Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-13 complete: every fraction-composition cancellation is automatically governed by the same role-complete forward/rewind behavior contract rather than named synthetic examples."
+    "summary": "Slices 1-13 are complete. Slice 14 remains in progress: the captured Firefox double-representation/overlap state now passes the focused Chromium/Firefox wide/phone gate, but the broad visual matrix was interrupted by the user-requested runtime-hardening detour. Preserve this exact checkpoint and resume slice 14 only after the hardening run completes."
   },
   "expectedLearning": [
     "Whether one role-complete presentation-plan boundary eliminates correct-label/wrong-realization regressions without a second renderer or closed extension taxonomy."

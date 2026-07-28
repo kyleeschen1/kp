@@ -1,6 +1,12 @@
 import type {
   KpOperationPresentationRoles
 } from "./operation-presentation-roles.ts";
+import type {
+  KpVerifiedOperationPresentationPlanId
+} from "./operation-presentation-plan-authority.ts";
+export type {
+  KpVerifiedOperationPresentationPlanId
+} from "./operation-presentation-plan-authority.ts";
 
 declare const kpVerifiedOperationPresentationPlanAuthority: unique symbol;
 
@@ -60,6 +66,14 @@ export type KpVerifiedInverseCancellationPresentationPlan =
   KpInverseCancellationPresentationPlanDraft & {
     readonly [kpVerifiedOperationPresentationPlanAuthority]: true;
   };
+
+export function operationPresentationPlanAuthorityId(
+  plan: KpVerifiedOperationPresentationPlan
+): KpVerifiedOperationPresentationPlanId {
+  // The cast is safe only because the input already carries the validator's
+  // private plan authority; raw ids never cross this function's boundary.
+  return plan.id as KpVerifiedOperationPresentationPlanId;
+}
 
 export type KpExplicitStaticCheckpointReason =
   | "intentional-static"

@@ -48,6 +48,8 @@ export interface KpNativeKatexSceneTrackFrameContract<
   readonly rect: Rect;
   readonly expectedPaintRect?: Rect | undefined;
   readonly opacity: number;
+  readonly intentionalContactGroupId?: string | undefined;
+  readonly verifiedOperationCohortId?: string | undefined;
 }
 
 export type KpNativeKatexPaintMeasuredSceneTrackFrameContract<

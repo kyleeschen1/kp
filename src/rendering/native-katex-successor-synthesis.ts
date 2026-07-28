@@ -332,6 +332,8 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
     readonly expectedPaintRect:
       NonNullable<KpEquationMaterialLayerOwnerFrame["expectedPaintRect"]>;
     readonly opacity: number;
+    readonly intentionalContactGroupId?: string | undefined;
+    readonly verifiedOperationCohortId?: string | undefined;
   }[];
   readonly sourceAtoms: ReadonlyMap<string, KpNativeKatexPaintAtomObservation>;
   readonly targetAtoms: ReadonlyMap<string, KpNativeKatexPaintAtomObservation>;
@@ -376,6 +378,8 @@ function sceneMaterialContacts(input: {
     readonly trackId: string;
     readonly componentId: string;
     readonly visualAtomId: string;
+    readonly intentionalContactGroupId?: string | undefined;
+    readonly verifiedOperationCohortId?: string | undefined;
   }[];
   readonly sourceAtoms: ReadonlyMap<string, KpNativeKatexPaintAtomObservation>;
   readonly targetAtoms: ReadonlyMap<string, KpNativeKatexPaintAtomObservation>;
@@ -400,6 +404,36 @@ function sceneMaterialContacts(input: {
         sceneMaterialOwnerId(left.trackId),
         sceneMaterialOwnerId(right.trackId)
       ] as const;
+      if (
+        left.intentionalContactGroupId !== undefined &&
+        left.intentionalContactGroupId ===
+          right.intentionalContactGroupId &&
+        left.verifiedOperationCohortId !== undefined &&
+        left.verifiedOperationCohortId ===
+          right.verifiedOperationCohortId
+      ) {
+        addContact(
+          ids,
+          left.trackId,
+          right.trackId,
+          Object.freeze({
+            id:
+              `cancellation-contact.${left.verifiedOperationCohortId}.` +
+              `${leftIndex}.${leftIndex + rightOffset + 1}`,
+            ownerIds,
+            reason: "semantic-cancellation",
+            phase: "fusion-contact",
+            maximumOverlapWidthPx: Math.min(
+              leftAtom.rect.width,
+              rightAtom.rect.width
+            ),
+            maximumOverlapHeightPx: Math.min(
+              leftAtom.rect.height,
+              rightAtom.rect.height
+            )
+          })
+        );
+      }
       if (left.componentId === right.componentId) {
         addContact(
           ids,

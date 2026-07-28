@@ -58,6 +58,18 @@ export function sampleKpNativeKatexSceneTrackFrames(
             )
           }
         : {}),
+      ...(sceneTrack.intentionalContactGroupId === undefined
+        ? {}
+        : {
+            intentionalContactGroupId:
+              sceneTrack.intentionalContactGroupId
+          }),
+      ...(sceneTrack.verifiedOperationCohortId === undefined
+        ? {}
+        : {
+            verifiedOperationCohortId:
+              sceneTrack.verifiedOperationCohortId
+          }),
       opacity:
         sceneTrack.startOpacity +
         (sceneTrack.endOpacity - sceneTrack.startOpacity) *

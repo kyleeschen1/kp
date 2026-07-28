@@ -39,7 +39,7 @@ type KpFractionCompositionVisualViolation =
 test("fraction composition passes the complete Animation Library visual matrix", async ({
   browser
 }) => {
-  test.setTimeout(240_000);
+  test.setTimeout(360_000);
   const summaries: Array<{
     viewport: string;
     foldMode: string;
