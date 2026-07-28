@@ -99,7 +99,8 @@
     {
       "id": "s07",
       "title": "project-foldable-evaluation-tree",
-      "status": "planned"
+      "summary": "Projected the exact solve into one immutable five-group evaluation tree with 13 operations, four bounded fold modes, complete hidden-work disclosure, and identical 14-state semantic truth across projections; 27 focused tests, typecheck, and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s08",
