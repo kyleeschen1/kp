@@ -1,0 +1,202 @@
+import type {
+  KpRegisteredEquationOperationChoreography
+} from "../../animation/balanced-introduction-presentation-plan.ts";
+import type {
+  KpFactorCommonTermMotifBinding
+} from "../../animation/factoring-motif-binding.ts";
+import type {
+  KpRegisteredSuccessorSynthesisBinding
+} from "../../animation/successor-synthesis-presentation-plan.ts";
+import type {
+  KpEquationStructuralSuccessionIntent,
+  KpEquationVisualMotifIntent
+} from "../../animation/structural-succession-presentation.ts";
+
+declare const kpReaderEquationPresentationPlanAuthority: unique symbol;
+
+interface KpReaderEquationPresentationPlanBase {
+  readonly schemaVersion: "kp.reader-equation-transition-presentation-plan.v1";
+  readonly kind: "reader-equation-transition-presentation-plan";
+  readonly transitionId: string;
+  readonly [kpReaderEquationPresentationPlanAuthority]: true;
+}
+
+export type KpReaderEquationTransitionPresentationPlan =
+  | (KpReaderEquationPresentationPlanBase & {
+      readonly planKind: "default-motion";
+    })
+  | (KpReaderEquationPresentationPlanBase & {
+      readonly planKind: "visual-motif";
+      readonly visualMotif: KpEquationVisualMotifIntent;
+    })
+  | (KpReaderEquationPresentationPlanBase & {
+      readonly planKind: "factoring";
+      readonly visualMotif: KpEquationVisualMotifIntent;
+      readonly factoringMotifBinding: KpFactorCommonTermMotifBinding;
+    })
+  | (KpReaderEquationPresentationPlanBase & {
+      readonly planKind: "structural-succession";
+      readonly visualMotif: KpEquationVisualMotifIntent;
+      readonly structuralSuccession: KpEquationStructuralSuccessionIntent;
+    })
+  | (KpReaderEquationPresentationPlanBase & {
+      readonly planKind: "successor-synthesis";
+      readonly visualMotif?: KpEquationVisualMotifIntent | undefined;
+      readonly successorSyntheses:
+        readonly [
+          KpRegisteredSuccessorSynthesisBinding,
+          ...KpRegisteredSuccessorSynthesisBinding[]
+        ];
+    })
+  | (KpReaderEquationPresentationPlanBase & {
+      readonly planKind: "operation-choreography";
+      readonly visualMotif: KpEquationVisualMotifIntent;
+      readonly operationChoreography:
+        KpRegisteredEquationOperationChoreography;
+    });
+
+export interface KpReaderEquationTransitionPresentationEvidence {
+  readonly visualMotif?: KpEquationVisualMotifIntent | undefined;
+  readonly factoringMotifBinding?:
+    KpFactorCommonTermMotifBinding | undefined;
+  readonly structuralSuccession?:
+    KpEquationStructuralSuccessionIntent | undefined;
+  readonly successorSyntheses?:
+    readonly KpRegisteredSuccessorSynthesisBinding[] | undefined;
+  readonly operationChoreography?:
+    KpRegisteredEquationOperationChoreography | undefined;
+}
+
+/**
+ * This is the sole reader-plan mint. Keeping the previously independent
+ * evidence inside a branded discriminated union prevents callers from
+ * assembling contradictory presentation combinations on a transition.
+ */
+export function createKpReaderEquationTransitionPresentationPlan(input: {
+  readonly transitionId: string;
+  readonly visualMotif?: KpEquationVisualMotifIntent | undefined;
+  readonly factoringMotifBinding?:
+    KpFactorCommonTermMotifBinding | undefined;
+  readonly structuralSuccession?:
+    KpEquationStructuralSuccessionIntent | undefined;
+  readonly successorSyntheses?:
+    readonly KpRegisteredSuccessorSynthesisBinding[] | undefined;
+  readonly operationChoreography?:
+    KpRegisteredEquationOperationChoreography | undefined;
+}): KpReaderEquationTransitionPresentationPlan {
+  if (input.transitionId.trim().length === 0) {
+    throw new Error("Reader equation presentation plan requires a transition id.");
+  }
+  const successorSyntheses = input.successorSyntheses ?? [];
+  const specializedCount = [
+    input.factoringMotifBinding,
+    input.structuralSuccession,
+    successorSyntheses.length === 0 ? undefined : successorSyntheses,
+    input.operationChoreography
+  ].filter((value) => value !== undefined).length;
+  if (specializedCount > 1) {
+    throw new Error(
+      `Reader transition ${input.transitionId} has competing presentation authorities.`
+    );
+  }
+  const requiresTopLevelMotif =
+    input.factoringMotifBinding !== undefined ||
+    input.structuralSuccession !== undefined ||
+    input.operationChoreography !== undefined;
+  if (requiresTopLevelMotif && input.visualMotif === undefined) {
+    throw new Error(
+      `Reader transition ${input.transitionId} has specialized presentation ` +
+      "without a canonical visual motif."
+    );
+  }
+  const base = {
+    schemaVersion:
+      "kp.reader-equation-transition-presentation-plan.v1" as const,
+    kind: "reader-equation-transition-presentation-plan" as const,
+    transitionId: input.transitionId
+  };
+  const raw =
+    input.factoringMotifBinding !== undefined
+      ? {
+          ...base,
+          planKind: "factoring" as const,
+          visualMotif: input.visualMotif!,
+          factoringMotifBinding: input.factoringMotifBinding
+        }
+      : input.structuralSuccession !== undefined
+        ? {
+            ...base,
+            planKind: "structural-succession" as const,
+            visualMotif: input.visualMotif!,
+            structuralSuccession: input.structuralSuccession
+          }
+        : successorSyntheses.length > 0
+          ? {
+              ...base,
+              planKind: "successor-synthesis" as const,
+              // A composite transition can carry several independently
+              // verified successor operations, so inventing one top-level
+              // motif label would restore the duplicate authority this plan
+              // boundary removes.
+              ...(input.visualMotif === undefined
+                ? {}
+                : { visualMotif: input.visualMotif }),
+              successorSyntheses: Object.freeze([...successorSyntheses]) as
+                readonly [
+                  KpRegisteredSuccessorSynthesisBinding,
+                  ...KpRegisteredSuccessorSynthesisBinding[]
+                ]
+            }
+          : input.operationChoreography !== undefined
+            ? {
+                ...base,
+                planKind: "operation-choreography" as const,
+                visualMotif: input.visualMotif!,
+                operationChoreography: input.operationChoreography
+              }
+            : input.visualMotif !== undefined
+              ? {
+                  ...base,
+                  planKind: "visual-motif" as const,
+                  visualMotif: input.visualMotif
+                }
+              : {
+                  ...base,
+                  planKind: "default-motion" as const
+                };
+  // Only this validated constructor can provide the private reader authority.
+  return Object.freeze(raw) as KpReaderEquationTransitionPresentationPlan;
+}
+
+export function projectKpReaderEquationTransitionPresentation(
+  plan: KpReaderEquationTransitionPresentationPlan
+): KpReaderEquationTransitionPresentationEvidence {
+  switch (plan.planKind) {
+    case "default-motion":
+      return Object.freeze({});
+    case "visual-motif":
+      return Object.freeze({ visualMotif: plan.visualMotif });
+    case "factoring":
+      return Object.freeze({
+        visualMotif: plan.visualMotif,
+        factoringMotifBinding: plan.factoringMotifBinding
+      });
+    case "structural-succession":
+      return Object.freeze({
+        visualMotif: plan.visualMotif,
+        structuralSuccession: plan.structuralSuccession
+      });
+    case "successor-synthesis":
+      return Object.freeze({
+        ...(plan.visualMotif === undefined
+          ? {}
+          : { visualMotif: plan.visualMotif }),
+        successorSyntheses: plan.successorSyntheses
+      });
+    case "operation-choreography":
+      return Object.freeze({
+        visualMotif: plan.visualMotif,
+        operationChoreography: plan.operationChoreography
+      });
+  }
+}

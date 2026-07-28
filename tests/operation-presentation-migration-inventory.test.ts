@@ -6,12 +6,12 @@ import {
   kpOperationPresentationCancellationAuthoringSites,
   kpOperationPresentationEvidenceClosures,
   kpOperationPresentationEvidenceGaps,
-  kpOperationPresentationOptionalSeams,
+  kpOperationPresentationReaderPlanSeams,
   kpOperationPresentationRendererInputs
 } from "../src/architecture/operation-presentation-migration-inventory.ts";
 
 const inventory = [
-  ...kpOperationPresentationOptionalSeams,
+  ...kpOperationPresentationReaderPlanSeams,
   ...kpOperationPresentationRendererInputs,
   ...kpOperationPresentationCancellationAuthoringSites,
   ...kpOperationPresentationEvidenceGaps,
@@ -29,20 +29,37 @@ test("operation presentation migration inventory has unique executable evidence"
   }
 });
 
-test("reader planning currently exposes five independently optional concerns", () => {
+test("reader planning exposes one required presentation plan", async () => {
   assert.deepEqual(
-    kpOperationPresentationOptionalSeams.map(({ sourceNeedle }) => sourceNeedle),
-    [
-      "visualMotif",
-      "factoringMotifBinding",
-      "structuralSuccession",
-      "successorSyntheses",
-      "operationChoreography"
-    ]
+    kpOperationPresentationReaderPlanSeams.map(({ sourceNeedle }) =>
+      sourceNeedle
+    ),
+    ["presentationPlan: KpReaderEquationTransitionPresentationPlan"]
   );
-  assert.ok(kpOperationPresentationOptionalSeams.every(
-    ({ state }) => state === "independent-optional"
+  assert.ok(kpOperationPresentationReaderPlanSeams.every(
+    ({ state }) => state === "verified-plan"
   ));
+  const source = await readFile(
+    "src/reader/renderers/equation-render-plan.ts",
+    "utf8"
+  );
+  const transitionContract = source.slice(
+    source.indexOf("export interface KpReaderEquationTransitionPlan"),
+    source.indexOf("export interface KpReaderEquationStatePlan")
+  );
+  assert.equal(
+    (transitionContract.match(/presentationPlan:/g) ?? []).length,
+    1
+  );
+  for (const formerField of [
+    "visualMotif",
+    "factoringMotifBinding",
+    "structuralSuccession",
+    "successorSyntheses",
+    "operationChoreography"
+  ]) {
+    assert.equal(transitionContract.includes(formerField), false);
+  }
 });
 
 test("canonical compositor currently accepts seven independently combinable inputs", () => {

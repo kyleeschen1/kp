@@ -11,8 +11,9 @@ import {
   sampleKpAnimationRuntimeFrame
 } from "../src/animation/runtime-sampler.ts";
 import {
-  projectKpReaderEquationRenderPlan
-} from "../src/reader/renderers/equation-render-plan.ts";
+  projectKpReaderEquationRenderPlan,
+  projectKpReaderEquationTransitionPresentation
+} from "../src/reader/renderers/public-api.ts";
 
 test("reader plan preserves compiler-owned structural succession intent", () => {
   const animation = createExponentRadicalRewriteAnimationAsset();
@@ -26,9 +27,12 @@ test("reader plan preserves compiler-owned structural succession intent", () => 
     animation,
     runtimeFrame
   }).transitions[0]!;
+  const presentation = projectKpReaderEquationTransitionPresentation(
+    transition.presentationPlan
+  );
 
-  assert.equal(transition.visualMotif?.kind, "radical-corner-transfer");
-  assert.deepEqual(transition.structuralSuccession, {
+  assert.equal(presentation.visualMotif?.kind, "radical-corner-transfer");
+  assert.deepEqual(presentation.structuralSuccession, {
     kind: "equation-structural-succession-intent",
     id: `structural-succession.${transition.id}`,
     motifKind: "radical-corner-transfer",
@@ -83,7 +87,10 @@ test("ordinary correspondence receives motif intent without structural strategy"
       progress: 0.5
     })
   }).transitions[0]!;
+  const presentation = projectKpReaderEquationTransitionPresentation(
+    transition.presentationPlan
+  );
 
-  assert.notEqual(transition.visualMotif, undefined);
-  assert.equal(transition.structuralSuccession, undefined);
+  assert.notEqual(presentation.visualMotif, undefined);
+  assert.equal(presentation.structuralSuccession, undefined);
 });

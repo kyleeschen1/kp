@@ -1,14 +1,9 @@
-export const kpOperationPresentationOptionalSeams = Object.freeze([
-  seam("visual-motif", "visualMotif",
-    "src/reader/renderers/equation-render-plan.ts"),
-  seam("factoring-binding", "factoringMotifBinding",
-    "src/reader/renderers/equation-render-plan.ts"),
-  seam("structural-succession", "structuralSuccession",
-    "src/reader/renderers/equation-render-plan.ts"),
-  seam("successor-syntheses", "successorSyntheses",
-    "src/reader/renderers/equation-render-plan.ts"),
-  seam("operation-choreography", "operationChoreography",
-    "src/reader/renderers/equation-render-plan.ts")
+export const kpOperationPresentationReaderPlanSeams = Object.freeze([
+  readerPlanSeam(
+    "required-transition-plan",
+    "presentationPlan: KpReaderEquationTransitionPresentationPlan",
+    "src/reader/renderers/equation-render-plan.ts"
+  )
 ] as const);
 
 export const kpOperationPresentationRendererInputs = Object.freeze([
@@ -87,18 +82,18 @@ export interface KpOperationPresentationMigrationInventoryEntry {
   readonly summary: string;
 }
 
-function seam(
+function readerPlanSeam(
   id: string,
   sourceNeedle: string,
   sourcePath: string
 ): KpOperationPresentationMigrationInventoryEntry {
   return Object.freeze({
-    id: `seam.${id}`,
+    id: `reader-plan-seam.${id}`,
     sourcePath,
     sourceNeedle,
-    state: "independent-optional" as const,
+    state: "verified-plan" as const,
     summary:
-      "This independently optional reader field can disagree with sibling presentation evidence."
+      "Every reader transition crosses one branded required presentation plan."
   });
 }
 

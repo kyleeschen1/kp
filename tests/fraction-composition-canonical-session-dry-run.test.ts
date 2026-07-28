@@ -13,6 +13,7 @@ import {
 import {
   compileKpReaderEquationMaterialPlan,
   projectKpReaderEquationRenderPlan,
+  projectKpReaderEquationTransitionPresentation,
   validateKpReaderEquationMaterialPlanTotality
 } from "../src/reader/renderers/public-api.ts";
 
@@ -83,9 +84,14 @@ test("canonical planning retains structural motifs and opaque arithmetic synthes
       runtimeFrame: frame
     }).transitions[0]!;
   });
+  const presentations = transitions.map((transition) =>
+    projectKpReaderEquationTransitionPresentation(
+      transition.presentationPlan
+    )
+  );
 
   assert.deepEqual(
-    transitions.map(({ visualMotif }) => visualMotif?.kind),
+    presentations.map(({ visualMotif }) => visualMotif?.kind),
     [
       "copy-fan-out",
       "fraction-factor-split",
@@ -105,36 +111,42 @@ test("canonical planning retains structural motifs and opaque arithmetic synthes
   assert.equal(
     transitions
       .filter(({ transformType }) => transformType.startsWith("simplifyConstant"))
-      .every(({ successorSyntheses }) => successorSyntheses?.length === 1),
+      .every((transition) =>
+        projectKpReaderEquationTransitionPresentation(
+          transition.presentationPlan
+        ).successorSyntheses?.length === 1
+      ),
     true
   );
   assert.equal(
     transitions
       .filter(({ transformType }) => transformType.startsWith("simplifyConstant"))
-      .every(({ successorSyntheses }) =>
-        successorSyntheses?.[0]?.operationPresentationPlan?.planKind ===
+      .every((transition) =>
+        projectKpReaderEquationTransitionPresentation(
+          transition.presentationPlan
+        ).successorSyntheses?.[0]?.operationPresentationPlan?.planKind ===
           "successor-synthesis"
       ),
     true
   );
   assert.equal(
-    transitions[7]?.operationChoreography?.kind,
+    presentations[7]?.operationChoreography?.kind,
     "synchronized-balanced-introduction"
   );
   assert.equal(
-    transitions[7]?.operationChoreography?.operationPresentationPlan
+    presentations[7]?.operationChoreography?.operationPresentationPlan
       ?.planKind,
     "synchronized-balanced-introduction"
   );
   assert.equal(
-    transitions[7]?.operationChoreography?.kind ===
+    presentations[7]?.operationChoreography?.kind ===
         "synchronized-balanced-introduction"
-      ? transitions[7].operationChoreography.branchSchedule.strategy.kind
+      ? presentations[7].operationChoreography.branchSchedule.strategy.kind
       : undefined,
     "together"
   );
   assert.equal(
-    transitions[11]?.operationChoreography?.kind,
+    presentations[11]?.operationChoreography?.kind,
     "counter-orbit-cancellation"
   );
 });

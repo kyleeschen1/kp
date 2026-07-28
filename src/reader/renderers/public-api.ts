@@ -33,6 +33,12 @@ export {
   type KpReaderEquationTransitionPlan
 } from "./equation-render-plan.ts";
 export {
+  createKpReaderEquationTransitionPresentationPlan,
+  projectKpReaderEquationTransitionPresentation,
+  type KpReaderEquationTransitionPresentationEvidence,
+  type KpReaderEquationTransitionPresentationPlan
+} from "./equation-transition-presentation-plan.ts";
+export {
   assertKpFactorCommonTermMotifBinding,
   compileKpFactorCommonTermMotifBinding,
   type KpFactoringContributorSelectorIds,

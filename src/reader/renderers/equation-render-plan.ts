@@ -15,7 +15,6 @@ import {
 } from "../../animation/motifs/equation-visual-motif-defaults.ts";
 import {
   compileKpEquationStructuralSuccessionIntent,
-  type KpEquationStructuralSuccessionIntent,
   type KpEquationVisualMotifIntent
 } from "../../animation/structural-succession-presentation.ts";
 import {
@@ -26,20 +25,22 @@ import {
   createKpEquationSuccessorSynthesisBindings
 } from "../../rendering/equation-linear-rearrangement-bindings.ts";
 import {
-  compileKpRegisteredSuccessorSynthesisPresentationPlan,
-  type KpRegisteredSuccessorSynthesisBinding
+  compileKpRegisteredSuccessorSynthesisPresentationPlan
 } from "../../animation/successor-synthesis-presentation-plan.ts";
 import {
-  compileKpFactorCommonTermMotifBinding,
-  type KpFactorCommonTermMotifBinding
+  compileKpFactorCommonTermMotifBinding
 } from "../../animation/factoring-motif-binding.ts";
 import {
-  compileKpBalancedIntroductionPresentationPlan,
-  type KpRegisteredEquationOperationChoreography
+  compileKpBalancedIntroductionPresentationPlan
 } from "../../animation/balanced-introduction-presentation-plan.ts";
 import {
   compileKpEquationOperationChoreography
 } from "./equation-operation-choreography-compiler.ts";
+import {
+  createKpReaderEquationTransitionPresentationPlan,
+  projectKpReaderEquationTransitionPresentation,
+  type KpReaderEquationTransitionPresentationPlan
+} from "./equation-transition-presentation-plan.ts";
 
 export interface KpReaderEquationRenderPlan {
   readonly id: string;
@@ -61,15 +62,7 @@ export interface KpReaderEquationTransitionPlan {
   readonly source: readonly KpReaderEquationStatePlan[];
   readonly target: readonly KpReaderEquationStatePlan[];
   readonly relations: readonly KpReaderEquationRelationPlan[];
-  readonly visualMotif?: KpEquationVisualMotifIntent | undefined;
-  readonly factoringMotifBinding?:
-    KpFactorCommonTermMotifBinding | undefined;
-  readonly structuralSuccession?:
-    KpEquationStructuralSuccessionIntent | undefined;
-  readonly successorSyntheses?:
-    readonly KpRegisteredSuccessorSynthesisBinding[] | undefined;
-  readonly operationChoreography?:
-    KpRegisteredEquationOperationChoreography | undefined;
+  readonly presentationPlan: KpReaderEquationTransitionPresentationPlan;
   readonly semanticStatus: "ready" | "fallback";
   readonly semanticDiagnostics: readonly KpSemanticEquationTransitionCompileDiagnostic[];
 }
@@ -189,9 +182,6 @@ export function projectKpReaderEquationRenderPlan(input: {
         animation: input.animation,
         transformation
       });
-    // During the exemplar phase the canonical renderer still consumes the
-    // established binding fields; the nested verified plan proves the future
-    // cutover without creating a second paint path.
     const successorSyntheses = successorSynthesisBindings.map((binding) => {
       const operationPresentationPlan =
         compileKpRegisteredSuccessorSynthesisPresentationPlan({
@@ -233,6 +223,15 @@ export function projectKpReaderEquationRenderPlan(input: {
       successorSynthesisCount: successorSyntheses.length,
       relations
     });
+    const presentationPlan =
+      createKpReaderEquationTransitionPresentationPlan({
+        transitionId: transformation.id,
+        visualMotif,
+        factoringMotifBinding,
+        structuralSuccession,
+        successorSyntheses,
+        operationChoreography
+      });
     transitions.push({
       id: transformation.id,
       title: transformation.title,
@@ -246,19 +245,7 @@ export function projectKpReaderEquationRenderPlan(input: {
         input.runtimeFrame.focusSelectorIds
       ),
       relations,
-      ...(visualMotif === undefined ? {} : { visualMotif }),
-      ...(factoringMotifBinding === undefined
-        ? {}
-        : { factoringMotifBinding }),
-      ...(structuralSuccession === undefined
-        ? {}
-        : { structuralSuccession }),
-      ...(successorSyntheses.length === 0
-        ? {}
-        : { successorSyntheses }),
-      ...(operationChoreography === undefined
-        ? {}
-        : { operationChoreography }),
+      presentationPlan,
       semanticStatus: compiled.status === "semantic" ? "ready" : "fallback",
       semanticDiagnostics: compiled.diagnostics.map((diagnostic) => ({
         ...diagnostic
@@ -310,6 +297,11 @@ function mergeParallelTransitions(
     recordIds.add(relation.recordId);
   }
   const visualMotif = sharedParallelVisualMotif(transitions);
+  const successorSyntheses = transitions.flatMap((transition) =>
+    projectKpReaderEquationTransitionPresentation(
+      transition.presentationPlan
+    ).successorSyntheses ?? []
+  );
   return {
     id: cohortId,
     title: transitions.map(({ title }) => title).join(" and "),
@@ -319,16 +311,11 @@ function mergeParallelTransitions(
     source: mergeStates(transitions.flatMap(({ source }) => source)),
     target: mergeStates(transitions.flatMap(({ target }) => target)),
     relations: transitions.flatMap(({ relations }) => relations),
-    ...(visualMotif === undefined ? {} : { visualMotif }),
-    ...(transitions.some(({ successorSyntheses }) =>
-      (successorSyntheses?.length ?? 0) > 0
-    )
-      ? {
-          successorSyntheses: transitions.flatMap(
-            ({ successorSyntheses }) => successorSyntheses ?? []
-          )
-        }
-      : {}),
+    presentationPlan: createKpReaderEquationTransitionPresentationPlan({
+      transitionId: cohortId,
+      visualMotif,
+      successorSyntheses
+    }),
     semanticStatus: transitions.every(
       ({ semanticStatus }) => semanticStatus === "ready"
     )
@@ -343,10 +330,15 @@ function mergeParallelTransitions(
 function sharedParallelVisualMotif(
   transitions: readonly KpReaderEquationTransitionPlan[]
 ): KpEquationVisualMotifIntent | undefined {
-  const first = transitions[0]?.visualMotif;
+  const presentations = transitions.map((transition) =>
+    projectKpReaderEquationTransitionPresentation(
+      transition.presentationPlan
+    )
+  );
+  const first = presentations[0]?.visualMotif;
   if (
     first === undefined ||
-    !transitions.every(({ visualMotif }) =>
+    !presentations.every(({ visualMotif }) =>
       visualMotif !== undefined &&
       visualMotif.kind === first.kind &&
       visualMotif.summary === first.summary &&

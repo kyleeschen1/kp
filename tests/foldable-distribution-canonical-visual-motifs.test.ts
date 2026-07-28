@@ -16,6 +16,7 @@ import {
 } from "../src/animation/runtime-sampler.ts";
 import {
   projectKpReaderEquationRenderPlan,
+  projectKpReaderEquationTransitionPresentation,
   compileKpReaderEquationMaterialPlan,
   validateKpReaderEquationMaterialPlanTotality
 } from "../src/reader/renderers/public-api.ts";
@@ -107,10 +108,13 @@ test("reader execution retains the signed-term reorder motif", () => {
     animation,
     runtimeFrame
   }).transitions[0]!;
+  const presentation = projectKpReaderEquationTransitionPresentation(
+    transition.presentationPlan
+  );
 
   assert.equal(transition.transformType, "groupLikeTerms");
   assert.equal(
-    transition.visualMotif?.kind,
+    presentation.visualMotif?.kind,
     "semantic-reorder-and-group"
   );
 });
@@ -130,7 +134,10 @@ test("factoring binds the exact x lineage and preserves all other context", () =
       animation,
       runtimeFrame
     }).transitions[0]!;
-    const binding = transition.factoringMotifBinding!;
+    const presentation = projectKpReaderEquationTransitionPresentation(
+      transition.presentationPlan
+    );
+    const binding = presentation.factoringMotifBinding!;
     const relation = transition.relations.find(
       ({ recordId }) => recordId === binding.relationRecordId
     )!;
@@ -175,11 +182,14 @@ test("parallel motif phases render as one complete source-target cohort", () => 
       runtimeFrame
     });
     const transition = renderPlan.transitions[0]!;
+    const presentation = projectKpReaderEquationTransitionPresentation(
+      transition.presentationPlan
+    );
 
     assert.match(transition.id, /^cohort\./);
     assert.equal(transition.transformType, "parallelSemanticCohort");
     assert.equal(
-      transition.visualMotif?.kind,
+      presentation.visualMotif?.kind,
       motifKind,
       "homogeneous parallel cohorts must retain their executable motif"
     );
@@ -209,14 +219,17 @@ test("parallel product cohort retains both successor synthesis bindings", () => 
     animation,
     runtimeFrame
   }).transitions[0]!;
+  const presentation = projectKpReaderEquationTransitionPresentation(
+    transition.presentationPlan
+  );
 
   assert.match(transition.id, /^cohort\./);
-  assert.equal(transition.successorSyntheses?.length, 2);
+  assert.equal(presentation.successorSyntheses?.length, 2);
   assert.equal(
-    new Set(transition.successorSyntheses?.map(({ id }) => id)).size,
+    new Set(presentation.successorSyntheses?.map(({ id }) => id)).size,
     2
   );
-  assert.ok(transition.successorSyntheses?.every((binding) =>
+  assert.ok(presentation.successorSyntheses?.every((binding) =>
     binding.sourceAnnotations.some(
       ({ contribution }) => contribution === "catalyst"
     )
@@ -233,13 +246,16 @@ test("final collection retains separate sum and difference successor bindings", 
     animation,
     runtimeFrame
   }).transitions[0]!;
+  const presentation = projectKpReaderEquationTransitionPresentation(
+    transition.presentationPlan
+  );
 
   assert.equal(
     transition.id,
     "transform.foldable-distribution.collect-results"
   );
   assert.deepEqual(
-    transition.successorSyntheses?.map(
+    presentation.successorSyntheses?.map(
       ({ authority }) => authority.operationId
     ).sort(),
     [
@@ -247,7 +263,7 @@ test("final collection retains separate sum and difference successor bindings", 
       "kp.algebra.simplify-constant-sum"
     ]
   );
-  assert.ok(transition.successorSyntheses?.every((binding) =>
+  assert.ok(presentation.successorSyntheses?.every((binding) =>
     binding.sourceAnnotations.filter(
       ({ contribution }) => contribution === "material-input"
     ).length === 2 &&

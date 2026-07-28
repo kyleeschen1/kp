@@ -65,12 +65,17 @@ const sceneAdapterSource = readFileSync(
   join(projectRoot, canonicalSceneAdapter),
   "utf8"
 );
-if (!sceneAdapterSource.includes(
-  "operationChoreography: renderTransition.operationChoreography"
-)) {
+if (
+  !sceneAdapterSource.includes(
+    "projectKpReaderEquationTransitionPresentation("
+  ) ||
+  !sceneAdapterSource.includes(
+    "operationChoreography: presentation.operationChoreography"
+  )
+) {
   violations.push(
-    `${canonicalSceneAdapter} must pass nominal operation choreography to ` +
-    "the canonical compositor."
+    `${canonicalSceneAdapter} must project the required reader presentation ` +
+    "plan and pass its nominal operation choreography to the canonical compositor."
   );
 }
 

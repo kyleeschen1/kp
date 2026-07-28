@@ -12,7 +12,8 @@ import {
 } from "../src/rendering/native-katex-rendered-scene.ts";
 import {
   compileKpReaderEquationMaterialPlan,
-  projectKpReaderEquationRenderPlan
+  projectKpReaderEquationRenderPlan,
+  projectKpReaderEquationTransitionPresentation
 } from "../src/reader/renderers/public-api.ts";
 import {
   createKpReaderEquationSceneCompositorSession
@@ -373,16 +374,19 @@ function fractionPlans(progress: number) {
 test("reader correspondence creates only a transient compositor session", () => {
   const { renderPlan, materialPlan } = plans();
   const transition = renderPlan.transitions[0]!;
+  const presentation = projectKpReaderEquationTransitionPresentation(
+    transition.presentationPlan
+  );
   const xRelation = transition.relations.find(
     ({ recordId }) => recordId === "x-persists"
   )!;
   assert.equal(
-    transition.operationChoreography?.kind,
+    presentation.operationChoreography?.kind,
     "counter-orbit-cancellation"
   );
   const cancelledEntityIds =
-    transition.operationChoreography?.kind === "counter-orbit-cancellation"
-      ? transition.operationChoreography.semanticEntityIds
+    presentation.operationChoreography?.kind === "counter-orbit-cancellation"
+      ? presentation.operationChoreography.semanticEntityIds
       : [];
   const session = createKpReaderEquationSceneCompositorSession({
     renderPlan,

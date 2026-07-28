@@ -35,6 +35,9 @@ import type {
   KpEquationMotionStageOccupancy
 } from "../../rendering/equation-motion-path-planner.ts";
 import {
+  projectKpReaderEquationTransitionPresentation
+} from "./equation-transition-presentation-plan.ts";
+import {
   assertKpFactorCommonTermMotifBinding
 } from "../../animation/factoring-motif-binding.ts";
 
@@ -84,7 +87,7 @@ export function createKpReaderEquationSceneCompositorSession(
   const prepared = prepareReaderEquationScene(input);
   const {
     measurementIdentity,
-    renderTransition,
+    presentation,
     factoringChoreography,
     factoring
   } = prepared;
@@ -103,13 +106,13 @@ export function createKpReaderEquationSceneCompositorSession(
     throw new Error("Reader equation compositor endpoints must share one stage.");
   }
   input.source.stage.dataset["kpNativeKatexSuccessorSynthesisCount"] =
-    String(renderTransition.successorSyntheses?.length ?? 0);
+    String(presentation.successorSyntheses?.length ?? 0);
   input.source.stage.dataset["kpNativeKatexMotionProfile"] =
     factoringChoreography !== undefined
       ? "canonical-factoring-fission-fusion"
-      : renderTransition.visualMotif?.kind === "copy-fan-out"
+      : presentation.visualMotif?.kind === "copy-fan-out"
       ? "canonical-copy-fan-out"
-      : renderTransition.visualMotif?.kind === "semantic-reorder-and-group"
+      : presentation.visualMotif?.kind === "semantic-reorder-and-group"
         ? "canonical-semantic-reorder-and-group"
       : "default";
   const canonical = createKpCanonicalNativeKatexSceneSession({
@@ -119,20 +122,20 @@ export function createKpReaderEquationSceneCompositorSession(
       : { purePlan: input.purePlan.nativePlan })
   });
   factoring?.recordEvidence();
-  if (renderTransition.structuralSuccession !== undefined) {
+  if (presentation.structuralSuccession !== undefined) {
     const reducedMotion =
       input.motionMode !== undefined && input.motionMode !== "continuous";
     const fidelity = auditKpNativeKatexChoreographyFidelity({
-      intent: renderTransition.structuralSuccession,
+      intent: presentation.structuralSuccession,
       strategy: reducedMotion
         ? {
             kind: "checkpoint-settlement",
-            actPhaseIds: renderTransition.structuralSuccession.actPhaseIds,
+            actPhaseIds: presentation.structuralSuccession.actPhaseIds,
             reason: "reduced-motion"
           }
         : {
             kind: "solid-mask-succession",
-            actPhaseIds: renderTransition.structuralSuccession.actPhaseIds
+            actPhaseIds: presentation.structuralSuccession.actPhaseIds
           },
       reconciliation: canonical.reconciliation,
       tracks: canonical.session.tracks
@@ -150,11 +153,11 @@ export function createKpReaderEquationSceneCompositorSession(
   return Object.freeze({
     ...canonical.session,
     apply(progress: number) {
-      if (renderTransition.operationChoreography === undefined) {
+      if (presentation.operationChoreography === undefined) {
         delete input.source.stage.dataset["kpNativeKatexOperationChoreography"];
       } else {
         input.source.stage.dataset["kpNativeKatexOperationChoreography"] =
-          renderTransition.operationChoreography.kind;
+          presentation.operationChoreography.kind;
       }
       return canonical.session.apply(progress);
     },
@@ -169,6 +172,9 @@ function prepareReaderEquationScene(
     input.measurementIdentity
   );
   const { renderTransition, materialTransition } = resolveTransitionPair(input);
+  const presentation = projectKpReaderEquationTransitionPresentation(
+    renderTransition.presentationPlan
+  );
   const stageOccupancy = input.stageLayout === undefined
     ? undefined
     : projectStageOccupancy(input.stageLayout, measurementIdentity);
@@ -179,13 +185,13 @@ function prepareReaderEquationScene(
   const factoringChoreography = assertKpFactorCommonTermMotifBinding({
     transitionId: renderTransition.id,
     transformType: renderTransition.transformType,
-    motifKind: renderTransition.visualMotif?.kind,
+    motifKind: presentation.visualMotif?.kind,
     direction: input.renderPlan.direction,
     semanticStatus: renderTransition.semanticStatus,
     successorSynthesisCount:
-      renderTransition.successorSyntheses?.length ?? 0,
+      presentation.successorSyntheses?.length ?? 0,
     relations: renderTransition.relations,
-    binding: renderTransition.factoringMotifBinding
+    binding: presentation.factoringMotifBinding
   });
   const factoring = factoringChoreography === undefined
     ? undefined
@@ -199,26 +205,26 @@ function prepareReaderEquationScene(
     target: input.target,
     relations,
     ...(factoringChoreography === undefined &&
-      renderTransition.visualMotif?.kind === "merge-fan-in"
+      presentation.visualMotif?.kind === "merge-fan-in"
       ? { fanInRouting: true }
       : {}),
     ...(factoring === undefined
       ? {}
       : { factoring }),
-    ...(renderTransition.operationChoreography === undefined
+    ...(presentation.operationChoreography === undefined
       ? {}
-      : { operationChoreography: renderTransition.operationChoreography }),
-    ...(renderTransition.visualMotif?.kind === "copy-fan-out"
+      : { operationChoreography: presentation.operationChoreography }),
+    ...(presentation.visualMotif?.kind === "copy-fan-out"
       ? { copyFanOutRouting: true }
       : {}),
-    ...(renderTransition.visualMotif?.kind === "semantic-reorder-and-group"
+    ...(presentation.visualMotif?.kind === "semantic-reorder-and-group"
       ? { reorderRouting: true }
       : {}),
     ...(stageOccupancy === undefined ? {} : { stageOccupancy }),
-    ...(renderTransition.successorSyntheses === undefined
+    ...(presentation.successorSyntheses === undefined
       ? {}
       : {
-          successorSyntheses: renderTransition.successorSyntheses.map(
+          successorSyntheses: presentation.successorSyntheses.map(
             (binding) => {
               const relation = renderTransition.relations.find(
                 ({ recordId }) => recordId === binding.relationRecordId
@@ -240,10 +246,10 @@ function prepareReaderEquationScene(
             }
           )
         }),
-    ...(renderTransition.structuralSuccession === undefined
+    ...(presentation.structuralSuccession === undefined
       ? {}
       : {
-          structuralSuccession: renderTransition.structuralSuccession,
+          structuralSuccession: presentation.structuralSuccession,
           structuralMotion:
             input.motionMode === undefined ||
             input.motionMode === "continuous"
@@ -254,6 +260,7 @@ function prepareReaderEquationScene(
   return {
     measurementIdentity,
     renderTransition,
+    presentation,
     factoringChoreography,
     factoring,
     canonicalInput

@@ -210,11 +210,73 @@
       "scope": "restored slice 14 hardened runtime gate",
       "checkedAt": "2026-07-28T22:49:17.462Z",
       "notes": "Chromium, Firefox, and WebKit pass warmed rapid-scroll sampling with zero ordinary-scroll layout work or plan/certificate recompilation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 15 required reader presentation-plan cutover",
+      "checkedAt": "2026-07-28T23:09:51.004Z"
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "67 role-plan and reader-plan conformance tests",
+      "checkedAt": "2026-07-28T23:09:52.169Z"
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "102 existing composite successor and factoring preservation tests",
+      "checkedAt": "2026-07-28T23:09:53.064Z"
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture",
+      "status": "passed",
+      "scope": "57 canonical fraction architecture tests",
+      "checkedAt": "2026-07-28T23:09:53.939Z"
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "45 structural-succession preservation tests",
+      "checkedAt": "2026-07-28T23:09:54.794Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "reader and operation presentation boundaries",
+      "checkedAt": "2026-07-28T23:09:55.694Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "49944 types, 66227 instantiations, 2.25 seconds",
+      "checkedAt": "2026-07-28T23:09:57.491Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production build",
+      "checkedAt": "2026-07-28T23:09:58.411Z"
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "failed",
+      "scope": "11 of 12 routes pass; intentional teacher-zero compatibility route lacks explicit static plan",
+      "checkedAt": "2026-07-28T23:09:59.425Z",
+      "notes": "Carry directly into approved slice 16 fail-closed static presentation; canonical fraction, foldable, radical, and main solve-x routes pass."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "seven legacy equation routes are 133896 gzip bytes against 126571 allowed",
+      "checkedAt": "2026-07-28T23:10:00.336Z",
+      "notes": "Accumulated role-plan runtime growth predates the 1.43 kB gzip slice-15 module; retain as release-closure debt and do not rebaseline before slice-21 compatibility retirement."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-13 are complete. Slice 14 remains in progress: the captured Firefox double-representation/overlap state now passes the focused Chromium/Firefox wide/phone gate, but the broad visual matrix was interrupted by the user-requested runtime-hardening detour. Preserve this exact checkpoint and resume slice 14 only after the hardening run completes."
+    "summary": "Slices 1-15 complete. Canonical reader transitions now carry one required branded presentation plan. Slice 16 will fail closed unsupported compatibility transitions as explicit static checkpoints; release closure retains a measured reader-route payload debt pending compatibility retirement."
   },
   "expectedLearning": [
     "Whether one role-complete presentation-plan boundary eliminates correct-label/wrong-realization regressions without a second renderer or closed extension taxonomy."
