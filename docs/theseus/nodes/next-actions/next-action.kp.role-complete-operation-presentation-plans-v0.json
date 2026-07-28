@@ -120,11 +120,18 @@
       "scope": "slice-11",
       "checkedAt": "2026-07-28T18:58:52.103Z",
       "notes": "Sixty-two focused tests pass; denominator and coefficient cancellations have total renderer-neutral plans with operators and rules assigned distinct semantic roles."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans; npm run test:canonical-equation-renderer; npm run typecheck; npm run check:architecture; npm run check:inference; real glyph compositor focused test",
+      "status": "passed",
+      "scope": "slice-12",
+      "checkedAt": "2026-07-28T19:10:38.636Z",
+      "notes": "Sixty-three role-plan tests, twelve renderer tests, seven compositor-budget tests, all TypeScript domains, and architecture pass. Inference briefly exceeded the ceiling when the full plan type entered a generic fixture path; the adapter boundary was corrected and the final budget returned to 49,911 types and 66,157 instantiations."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-11 complete: all three fraction-composition cancellation transitions now compile total verified semantic-role plans, including compound additive terms and separated multiplicative catalysts/artifacts."
+    "summary": "Slices 1-12 complete: fraction-composition cancellation role plans are now executable through the sole native compositor, with rigid compound bundles and role-specific collapse behavior under existing lifecycle primitives."
   },
   "expectedLearning": [
     "Whether one role-complete presentation-plan boundary eliminates correct-label/wrong-realization regressions without a second renderer or closed extension taxonomy."

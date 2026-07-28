@@ -1,9 +1,11 @@
 import type { KpAnimationAsset } from "../../animation/asset.ts";
 import type {
   KpCounterOrbitCancellationChoreography,
-  KpEquationOperationChoreography,
   KpSynchronizedBalancedIntroductionChoreography
 } from "../../animation/equation-operation-choreography.ts";
+import type {
+  KpRegisteredEquationOperationChoreography
+} from "../../animation/balanced-introduction-presentation-plan.ts";
 import type {
   EquationVisualMotifKind
 } from "../../animation/motifs/visual-motif.ts";
@@ -16,6 +18,9 @@ import {
 import {
   kpEquationPresentationProfile
 } from "../../rendering/equation-presentation-policy.ts";
+import {
+  compileKpFractionCompositionCancellationPresentationPlan
+} from "../../animation/fraction-composition-cancellation-presentation.ts";
 
 /**
  * This reader trust boundary is the only mint for executable operation
@@ -27,7 +32,7 @@ export function compileKpEquationOperationChoreography(input: {
   readonly transformation: KpSemanticTransformation;
   readonly motifKind?: EquationVisualMotifKind | undefined;
   readonly direction: "forward" | "rewind";
-}): KpEquationOperationChoreography | undefined {
+}): KpRegisteredEquationOperationChoreography | undefined {
   const binding = createKpEquationLinearRearrangementBinding({
     animation: input.animation,
     transformation: input.transformation
@@ -98,6 +103,10 @@ export function compileKpEquationOperationChoreography(input: {
       `Counter-orbit cancellation ${input.transformation.id} requires at least two sources.`
     );
   }
+  const operationPresentationPlan =
+    compileKpFractionCompositionCancellationPresentationPlan(
+      input.transformation
+    );
   return Object.freeze({
     schemaVersion: "kp.equation-operation-choreography.v1",
     kind: "counter-orbit-cancellation",
@@ -108,7 +117,10 @@ export function compileKpEquationOperationChoreography(input: {
     relationRecordId: cancellation.id,
     semanticEntityIds: Object.freeze([...cancellation.sourceSelectorIds]),
     cancellationRecipe: "counter-orbit-v1",
-    zeroWitnessRecipe: "none"
+    zeroWitnessRecipe: "none",
+    ...(operationPresentationPlan === undefined
+      ? {}
+      : { operationPresentationPlan })
   }) as KpCounterOrbitCancellationChoreography;
 }
 

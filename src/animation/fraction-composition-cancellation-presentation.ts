@@ -6,6 +6,12 @@ import {
   type KpCancellationPresentationAuthoringDraft,
   type KpVerifiedCancellationPresentationAuthoring
 } from "./cancellation-presentation-authoring.ts";
+import {
+  compileKpCancellationOperationPresentationPlan
+} from "./cancellation-operation-presentation-plan.ts";
+import type {
+  KpVerifiedInverseCancellationPresentationPlan
+} from "./operation-presentation-plan-types.ts";
 
 export const kpFractionCompositionAdditiveCancellationTransformationId =
   "fraction-solve.step.cancel-additive-inverses";
@@ -144,6 +150,37 @@ export function createKpFractionCompositionCoefficientCancellationAuthoring(
       transformation.correspondenceMap?.records ?? []
     )
   });
+}
+
+export function compileKpFractionCompositionCancellationPresentationPlan(
+  transformation: KpSemanticTransformation
+): KpVerifiedInverseCancellationPresentationPlan | undefined {
+  const authoring =
+    transformation.id ===
+      kpFractionCompositionAdditiveCancellationTransformationId
+      ? createKpFractionCompositionAdditiveCancellationAuthoring(
+          transformation
+        )
+      : transformation.id ===
+        kpFractionCompositionDenominatorCancellationTransformationId
+        ? createKpFractionCompositionDenominatorCancellationAuthoring(
+            transformation
+          )
+        : transformation.id ===
+          kpFractionCompositionCoefficientCancellationTransformationId
+          ? createKpFractionCompositionCoefficientCancellationAuthoring(
+              transformation
+            )
+          : undefined;
+  if (authoring === undefined) return undefined;
+  const plan = compileKpCancellationOperationPresentationPlan(authoring);
+  if (plan.planKind !== "inverse-cancellation") {
+    throw new Error(
+      `Cancellation compiler produced ${plan.planKind} for ` +
+      `${transformation.id}.`
+    );
+  }
+  return plan;
 }
 
 function requireTransformation(

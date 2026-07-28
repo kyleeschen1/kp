@@ -1,5 +1,5 @@
 import type {
-  KpEquationOperationChoreography,
+  KpCounterOrbitCancellationChoreography,
   KpSynchronizedBalancedIntroductionChoreography
 } from "./equation-operation-choreography.ts";
 import {
@@ -9,6 +9,7 @@ import {
   runKpOperationPresentationLaws
 } from "./operation-presentation-laws.ts";
 import type {
+  KpVerifiedInverseCancellationPresentationPlan,
   KpVerifiedOperationPresentationPlan
 } from "./operation-presentation-plan-types.ts";
 import {
@@ -21,10 +22,14 @@ import {
 } from "./operation-presentation-roles.ts";
 
 export type KpRegisteredEquationOperationChoreography =
-  KpEquationOperationChoreography & {
-    readonly operationPresentationPlan?:
-      KpVerifiedOperationPresentationPlan | undefined;
-  };
+  | (KpCounterOrbitCancellationChoreography & {
+      readonly operationPresentationPlan?:
+        KpVerifiedInverseCancellationPresentationPlan | undefined;
+    })
+  | (KpSynchronizedBalancedIntroductionChoreography & {
+      readonly operationPresentationPlan?:
+        KpVerifiedOperationPresentationPlan | undefined;
+    });
 
 export function compileKpBalancedIntroductionPresentationPlan(
   choreography: KpSynchronizedBalancedIntroductionChoreography

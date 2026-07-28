@@ -71,7 +71,9 @@ test("balanced branch certificate synchronizes every introduced paint atom", () 
 });
 
 test("counter-orbit certificate authors opposite paths through shared contact", () => {
-  const transformation = animation.transformations[11]!;
+  const transformation = animation.transformations.find(({ id }) =>
+    id === "fraction-solve.step.cancel-additive-inverses"
+  )!;
   const choreography = compileKpEquationOperationChoreography({
     animation,
     transformation,
@@ -80,12 +82,30 @@ test("counter-orbit certificate authors opposite paths through shared contact", 
   });
   assert.equal(choreography?.kind, "counter-orbit-cancellation");
   if (choreography?.kind !== "counter-orbit-cancellation") return;
+  const presentation = choreography.operationPresentationPlan;
+  assert.ok(presentation);
 
-  const source = scene("source", [
-    atom("source", choreography.semanticEntityIds[0]!, 10, 8),
-    atom("source", choreography.semanticEntityIds[1]!, 58, 34)
-  ]);
-  const target = scene("target", []);
+  const inverseBundles = presentation.inverseBundleIds.map((bundleId) =>
+    presentation.roles.bundles.find(({ id }) => id === bundleId)!
+  );
+  const source = scene("source", inverseBundles.flatMap(
+    (bundle, bundleIndex) => bundle.semanticEntityIds.map(
+      (entityId, entityIndex) =>
+        atom(
+          "source",
+          entityId,
+          10 + bundleIndex * 72 + entityIndex * 16,
+          20
+        )
+    )
+  ));
+  const target = scene(
+    "target",
+    presentation.roles.bundles
+      .filter(({ role }) => role === "continuant")
+      .flatMap(({ semanticEntityIds }) => semanticEntityIds)
+      .map((entityId, index) => atom("target", entityId, index * 18))
+  );
   const tracks = source.atoms.map((sourceAtom, index) =>
     eliminatedTrack(sourceAtom, index)
   );
@@ -100,7 +120,7 @@ test("counter-orbit certificate authors opposite paths through shared contact", 
 
   assert.deepEqual(
     orbiting.map(({ motionPath }) => motionPath?.variant),
-    ["arc-above", "arc-below"]
+    ["arc-above", "arc-above", "arc-below", "arc-below"]
   );
   assert.equal(
     new Set(orbiting.map(({ intentionalContactGroupId }) =>
@@ -111,13 +131,94 @@ test("counter-orbit certificate authors opposite paths through shared contact", 
   assert.ok(midpoint.every(({ opacity }) => opacity === 1));
   assert.notEqual(
     Math.sign(midpoint[0]!.rect.top - tracks[0]!.startRect.top),
-    Math.sign(midpoint[1]!.rect.top - tracks[1]!.startRect.top)
+    Math.sign(midpoint[2]!.rect.top - tracks[2]!.startRect.top)
   );
+  assert.ok(Math.abs(
+    (midpoint[1]!.rect.left - midpoint[0]!.rect.left) -
+    (tracks[1]!.startRect.left - tracks[0]!.startRect.left)
+  ) < 1e-9);
+  assert.ok(Math.abs(
+    (midpoint[3]!.rect.left - midpoint[2]!.rect.left) -
+    (tracks[3]!.startRect.left - tracks[2]!.startRect.left)
+  ) < 1e-9);
   assert.ok(settled.every(({ opacity }) => opacity === 0));
   assert.deepEqual(
     sampleKpNativeKatexSceneTrackFrames(orbiting, 0.55, false),
     midpoint
   );
+});
+
+test("role-complete cancellation retires catalysts and artifacts without orbiting them", () => {
+  const transformation = animation.transformations.find(({ id }) =>
+    id === "fraction-solve.step.cancel-denominator"
+  )!;
+  const choreography = compileKpEquationOperationChoreography({
+    animation,
+    transformation,
+    motifKind: "cancelation",
+    direction: "forward"
+  });
+  assert.equal(choreography?.kind, "counter-orbit-cancellation");
+  if (choreography?.kind !== "counter-orbit-cancellation") return;
+  const presentation = choreography.operationPresentationPlan!;
+  const movingBundles = presentation.roles.bundles.filter(
+    ({ role }) => role !== "continuant"
+  );
+  const source = scene(
+    "source",
+    movingBundles.flatMap(({ semanticEntityIds }, bundleIndex) =>
+      semanticEntityIds.map((entityId, entityIndex) =>
+        atom("source", entityId, 10 + bundleIndex * 28 + entityIndex * 12)
+      )
+    )
+  );
+  const target = scene(
+    "target",
+    presentation.roles.bundles
+      .filter(({ role }) => role === "continuant")
+      .flatMap(({ semanticEntityIds }) => semanticEntityIds)
+      .map((entityId, index) => atom("target", entityId, index * 18))
+  );
+  const tracks = source.atoms.map((sourceAtom, index) =>
+    eliminatedTrack(sourceAtom, index)
+  );
+  const routed = applyKpNativeKatexOperationChoreography({
+    tracks,
+    source,
+    target,
+    choreography
+  });
+  const roleByEntityId = new Map(presentation.roles.bundles.flatMap((bundle) =>
+    bundle.semanticEntityIds.map((entityId) => [entityId, bundle.role] as const)
+  ));
+  const routedByEntityId = new Map(routed.map((track) => [
+    source.atoms.find(({ id }) => id === track.sourceAtomId)!.semanticEntityId,
+    track
+  ]));
+
+  for (const [entityId, role] of roleByEntityId) {
+    if (role === "continuant") continue;
+    const track = routedByEntityId.get(entityId)!;
+    if (role === "source-material") {
+      assert.ok(
+        track.motionPath?.variant === "arc-above" ||
+        track.motionPath?.variant === "arc-below"
+      );
+      continue;
+    }
+    assert.equal(track.motionPath, undefined);
+    const midpoint = sampleKpNativeKatexSceneTrackFrames(
+      [track],
+      0.55,
+      false
+    )[0]!;
+    assert.deepEqual(midpoint.rect, track.startRect);
+    assert.equal(midpoint.opacity, 1);
+    assert.equal(
+      sampleKpNativeKatexSceneTrackFrames([track], 0.9, false)[0]!.opacity,
+      0
+    );
+  }
 });
 
 test("generic collision repair retimes a certified introduction cohort atomically", () => {

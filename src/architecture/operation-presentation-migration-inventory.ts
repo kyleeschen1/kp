@@ -51,10 +51,10 @@ export const kpOperationPresentationCancellationAuthoringSites = Object.freeze([
 
 export const kpOperationPresentationEvidenceGaps = Object.freeze([
   evidenceGap(
-    "two-atom-native-cancellation",
+    "enumerated-native-cancellation",
     "tests/native-katex-operation-choreography.test.ts",
-    "const transformation = animation.transformations[11]!",
-    "The native geometry proof covers the simple two-selector cancellation only."
+    "role-complete cancellation retires catalysts and artifacts",
+    "The native geometry proof names cases instead of enumerating every exemplar cancellation."
   ),
   evidenceGap(
     "browser-choreography-label",
@@ -142,4 +142,3 @@ function evidenceGap(
     summary
   });
 }
-
