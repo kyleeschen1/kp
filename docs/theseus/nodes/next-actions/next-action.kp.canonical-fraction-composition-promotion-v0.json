@@ -111,6 +111,13 @@
       "scope": "s10 semantic lineage, animation asset, render and material totality, and canonical session dry run",
       "checkedAt": "2026-07-28T05:51:03.939Z",
       "notes": "All 13 adjacent transformations pass forward and rewind totality; arithmetic retains opaque successor synthesis; endpoint specs now preserve renderer-neutral dependency direction; canonical renderer and compositor suites pass."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture; npm run test:canonical-equation-renderer; node --disable-warning=ExperimentalWarning --test reader descriptor, route manifest, promotion kit, and foldable regression suites; npm run test:browser:reader-conformance; npm run build; npm run check:reader-production; npm run check:reader-budgets; npm run check:architecture",
+      "status": "passed",
+      "scope": "s11 exclusive canonical fraction-composition reader ownership and route",
+      "checkedAt": "2026-07-28T06:02:11.953Z",
+      "notes": "Thirty-eight focused fraction checks, twelve canonical renderer checks, eight reader registry regressions, and twelve Chromium conformance checks pass. The route has one shared runtime, one descriptor, one material layer, all 13 canonical transitions, native endpoints, and no compatibility route or fade fallback. Inventory deliberately reports canonical-renderer awaiting review rather than learner-promotion."
     }
   ],
   "progress": {

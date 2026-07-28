@@ -107,6 +107,11 @@ const kpReaderEquationLessonDescriptorLoaders = {
     import("./equation-lesson-descriptors/foldable-distribution.ts")
       .then(({ foldableDistributionDescriptor }) =>
         foldableDistributionDescriptor
+      ),
+  "fraction-composition": () =>
+    import("./equation-lesson-descriptors/fraction-composition.ts")
+      .then(({ fractionCompositionDescriptor }) =>
+        fractionCompositionDescriptor
       )
 } as const;
 

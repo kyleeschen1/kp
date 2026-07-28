@@ -2,8 +2,12 @@ import {
   createKpFractionCompositionEndpointSpecs
 } from "../semantic/fraction-composition-endpoint-spec.ts";
 import {
+  bindKpStructuredEquationStructuralAnchors,
   type KpStructuredEquationAnnotatedEndpoint
 } from "./structured-equation-selector-annotated-latex.ts";
+import type {
+  KpSemanticAssetObject
+} from "../semantic/asset.ts";
 import {
   createKpSelectorAnnotatedLatex
 } from "./selector-annotated-latex.ts";
@@ -37,4 +41,21 @@ export function createKpFractionCompositionSelectorAnnotatedLatex(
   return createKpFractionCompositionAnnotatedEndpoints()
     .find((endpoint) => endpoint.stateId === stateId)
     ?.annotated;
+}
+
+export function bindKpFractionCompositionStructuralAnchors(input: {
+  readonly root: HTMLElement;
+  readonly state: KpSemanticAssetObject;
+}): void {
+  const endpoint = createKpFractionCompositionAnnotatedEndpoints()
+    .find(({ stateId }) => stateId === input.state.id);
+  if (endpoint === undefined) {
+    throw new Error(
+      `Fraction composition state ${input.state.id} has no native endpoint.`
+    );
+  }
+  bindKpStructuredEquationStructuralAnchors({
+    root: input.root,
+    endpoint
+  });
 }

@@ -78,6 +78,12 @@ export {
   compileKpFoldableDistributionLessonModel
 } from "./foldable-distribution-lesson-model.ts";
 export {
+  compileKpFractionCompositionEquationLesson
+} from "./fraction-composition-equation-lesson.ts";
+export {
+  compileKpFractionCompositionLessonModel
+} from "./fraction-composition-lesson-model.ts";
+export {
   compileKpCanonicalEquationLessonPromotion,
   type KpCanonicalEquationLessonPromotionInput
 } from "./canonical-equation-lesson-promotion-kit.ts";

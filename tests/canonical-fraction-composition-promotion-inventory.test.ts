@@ -35,15 +35,21 @@ test("fraction promotion inventory keeps five evidence stages distinct", () => {
   );
 });
 
-test("only the reviewed numerator split and merge reader owns canonical paint", () => {
+test("canonical paint ownership does not imply learner promotion", () => {
   const canonical = kpFractionCompositionPromotionInventory.filter(
     ({ paintOwner }) => paintOwner === "canonical"
   );
   assert.deepEqual(
     canonical.map(({ id }) => id),
-    ["fraction.numerator-split-merge-reader"]
+    [
+      "fraction.numerator-split-merge-reader",
+      "fraction.composition-canonical-reader"
+    ]
   );
-  assert.equal(canonical[0]?.productRoute, "/reader/split-merge-fractions/");
+  assert.deepEqual(
+    canonical.map(({ stage }) => stage),
+    ["learner-promotion", "canonical-renderer"]
+  );
 });
 
 test("inventory source references exist and target trace has no product route", async () => {
@@ -79,4 +85,3 @@ test("descriptor source distinguishes canonical and compatibility readers", asyn
     /defineKpCanonicalEquationLessonDescriptor/
   );
 });
-

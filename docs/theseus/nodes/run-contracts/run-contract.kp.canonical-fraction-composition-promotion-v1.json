@@ -123,7 +123,8 @@
     {
       "id": "s11",
       "title": "switch-exclusive-reader-ownership",
-      "status": "planned"
+      "summary": "Added one canonical fraction-composition descriptor, compiled learner route, native endpoint binding, and exclusive shared-runtime ownership for all 13 transitions; browser conformance, production closure, budgets, and reader regressions pass, while promotion inventory remains honestly at canonical-renderer pending review.",
+      "status": "complete"
     },
     {
       "id": "s12",

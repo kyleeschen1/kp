@@ -15,12 +15,13 @@ test("build manifest declares every accepted reader route exactly once", () => {
     "/reader/divide-both-sides/",
     "/reader/split-merge-fractions/",
     "/reader/radical-succession/",
+    "/reader/fraction-composition/",
     "/reader/foldable-distribution/",
     "/reader/fractional-transfer/",
     "/reader/distribution-area/",
     "/reader/quadratic-branching/"
   ]);
-  assert.equal(new Set(kpReaderRouteManifest.map(({ sourcePath }) => sourcePath)).size, 10);
+  assert.equal(new Set(kpReaderRouteManifest.map(({ sourcePath }) => sourcePath)).size, 11);
   assert.deepEqual(
     kpReaderRouteManifest.map(({ route }) => ({
       entry: kpReaderRouteEntryName(route),
@@ -33,6 +34,7 @@ test("build manifest declares every accepted reader route exactly once", () => {
       { entry: "reader-divide-both-sides", html: "reader/divide-both-sides/index.html" },
       { entry: "reader-split-merge-fractions", html: "reader/split-merge-fractions/index.html" },
       { entry: "reader-radical-succession", html: "reader/radical-succession/index.html" },
+      { entry: "reader-fraction-composition", html: "reader/fraction-composition/index.html" },
       { entry: "reader-foldable-distribution", html: "reader/foldable-distribution/index.html" },
       { entry: "reader-fractional-transfer", html: "reader/fractional-transfer/index.html" },
       { entry: "reader-distribution-area", html: "reader/distribution-area/index.html" },
@@ -84,6 +86,12 @@ test("build manifest declares every accepted reader route exactly once", () => {
         rendererAdapterId: "renderer.equation-dom"
       },
       {
+        route: "/reader/fraction-composition/",
+        documentId: "lesson.algebra.fraction-composition",
+        progressPermille: 538,
+        rendererAdapterId: "renderer.equation-dom"
+      },
+      {
         route: "/reader/foldable-distribution/",
         documentId: "lesson.algebra.foldable-distribution",
         progressPermille: 563,
@@ -118,6 +126,7 @@ test("build manifest declares every accepted reader route exactly once", () => {
       "divide-both-sides",
       "split-merge-fractions",
       "radical-succession",
+      "fraction-composition",
       "foldable-distribution",
       "fractional-transfer",
       "distribution-area",
@@ -126,7 +135,7 @@ test("build manifest declares every accepted reader route exactly once", () => {
   );
   assert.deepEqual(
     kpReaderRouteManifest.map(({ review }) => review.checkpoints.length),
-    [8, 1, 1, 1, 20, 14, 20, 1, 36, 33]
+    [8, 1, 1, 1, 20, 14, 4, 20, 1, 36, 33]
   );
   const splitMergeRoute = kpReaderRouteManifest.find(
     ({ route }) => route === "/reader/split-merge-fractions/"

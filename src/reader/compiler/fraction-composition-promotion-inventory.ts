@@ -77,5 +77,16 @@ readonly KpFractionCompositionPromotionInventoryEntry[] = Object.freeze([
       "src/reader/app/equation-lesson-descriptors/numerator-split-merge.ts",
       "docs/project/reviews/2026-07-25-glyph-compositor-promotion-closeout.md"
     ]
+  },
+  {
+    id: "fraction.composition-canonical-reader",
+    title: "Canonical fraction composition reader awaiting review",
+    stage: "canonical-renderer",
+    paintOwner: "canonical",
+    productRoute: "/reader/fraction-composition/",
+    sourceRefs: [
+      "src/reader/app/equation-lesson-descriptors/fraction-composition.ts",
+      "src/reader/compiler/fraction-composition-equation-lesson.ts"
+    ]
   }
 ] as const);

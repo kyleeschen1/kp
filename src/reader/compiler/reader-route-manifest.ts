@@ -3,6 +3,7 @@ import {
   compileKpDivideBothSidesEquationLesson,
   compileKpFractionalLinearEquationLesson,
   compileKpFractionalTransferComparisonLesson,
+  compileKpFractionCompositionEquationLesson,
   compileKpFoldableDistributionEquationLesson,
   compileKpNumeratorSplitMergeEquationLesson,
   compileKpQuadraticBranchingLesson,
@@ -341,6 +342,53 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       )
     },
     budget: routeBudget(30_000, 4_000, 120_543)
+  }),
+  defineKpReaderRoute({
+    route: "/reader/fraction-composition/",
+    sourcePath: "content/lessons/fraction-composition.md",
+    compile: compileKpFractionCompositionEquationLesson,
+    conformance: equationConformance({
+      documentId: "lesson.algebra.fraction-composition",
+      progressPermille: 538,
+      beatId: "beat.fraction-composition.difference-simplified",
+      searchableText:
+        "Distribute two thirds, normalize the numerators, and solve the equation"
+    }),
+    presentation: sharedEquationPresentation,
+    review: {
+      id: "fraction-composition",
+      title: "Kinetic Press · distribute and solve with a fraction",
+      capture: "stage",
+      columns: 3,
+      imageFit: "contain",
+      checkpoints: [
+        {
+          id: "factored",
+          label: "Factored fraction",
+          progressPermille: 0,
+          viewport: "desktop"
+        },
+        {
+          id: "normalized",
+          label: "Normalized fractions",
+          progressPermille: 154,
+          viewport: "desktop"
+        },
+        {
+          id: "isolated",
+          label: "Variable fraction isolated",
+          progressPermille: 538,
+          viewport: "desktop"
+        },
+        {
+          id: "solved",
+          label: "Solution",
+          progressPermille: 1_000,
+          viewport: "desktop"
+        }
+      ]
+    },
+    budget: routeBudget(119_364, 12_000, 160_000)
   }),
   defineKpReaderRoute({
     route: "/reader/foldable-distribution/",
