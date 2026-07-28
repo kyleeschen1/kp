@@ -55,3 +55,6 @@ export {
   type KpReaderEquationPresentationProfile,
   type KpReaderEquationPresentationProfileId
 } from "./equation-presentation.ts";
+export {
+  type KpReaderEvaluationControlsKind
+} from "./evaluation-controls.ts";

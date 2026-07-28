@@ -125,6 +125,48 @@
       "scope": "s12 generic semantic-envelope certified stage layout and responsive fraction integration",
       "checkedAt": "2026-07-28T06:13:57.947Z",
       "notes": "Forty fraction checks, 102 foldable/layout checks, twelve renderer checks, and two Chromium wide/phone stage checks pass. The shared layout pipeline measures native member paint and fraction rules, certifies swept corridors, keeps wide equations on one row, stages phone equations as stable left-expression and right-relation rows, enforces scale >=0.68, forbids wrap and operation coordinates, and preserves existing foldable distribution."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture",
+      "status": "passed",
+      "scope": "s13-reader-controls",
+      "checkedAt": "2026-07-28T06:40:12.735Z",
+      "notes": "46 fraction architecture checks prove five fold groups preserve all 13 ordered operations, exact checkpoint boundaries, URL state, native endpoints, structured speech, and exclusive canonical ownership."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "s13-preservation",
+      "checkedAt": "2026-07-28T06:40:13.521Z",
+      "notes": "All 102 distribution, fold, layout, accessibility, URL, motif, and static-export regressions pass after extracting the shared control shell and URL codec."
+    },
+    {
+      "command": "npm run test:browser:fraction-composition",
+      "status": "passed",
+      "scope": "s13-browser",
+      "checkedAt": "2026-07-28T06:40:14.337Z",
+      "notes": "Four Chromium checks pass across wide and phone stage certification, fold/pin URL reload, exact outline boundaries, direct seek, and deterministic rewind."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "s13-preservation",
+      "checkedAt": "2026-07-28T06:40:15.100Z",
+      "notes": "All 12 shared reader route and responsive conformance checks pass."
+    },
+    {
+      "command": "npm run build; npm run check:reader-production; npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s13-production",
+      "checkedAt": "2026-07-28T06:40:15.858Z",
+      "notes": "Production build and closure pass; fraction HTML is 123949 bytes within its unchanged 125333-byte limit, with no learner runtime KaTeX asset."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "s13-architecture",
+      "checkedAt": "2026-07-28T06:40:16.591Z",
+      "notes": "Application, Node, test, and domain types pass; all three architecture boundary gates pass with no new exception."
     }
   ],
   "progress": {

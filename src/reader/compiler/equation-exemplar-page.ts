@@ -6,6 +6,7 @@ import {
 } from "../../rendering/katex-adapter.ts";
 import type { KpSelectorAnnotatedLatex } from "../../rendering/selector-annotated-latex.ts";
 import type { KpReaderEquationPresentationCapability } from "../document/public-api.ts";
+import type { KpReaderEvaluationControlsKind } from "../document/public-api.ts";
 import { resolveKpReaderEquationPresentationProfile } from "../document/public-api.ts";
 import { compileKpReaderPageShell } from "./reader-page-shell.ts";
 import {
@@ -19,7 +20,7 @@ export interface KpEquationExemplarPageInput {
   readonly documentId: string;
   readonly documentVersion: string;
   readonly lessonVariant: string;
-  readonly readerControls?: "foldable-distribution-v1" | undefined;
+  readonly readerControls?: KpReaderEvaluationControlsKind | undefined;
   readonly modeLink: { readonly href: string; readonly label: string };
   readonly tocHtml: string;
   readonly articleHtml: string;
@@ -75,7 +76,7 @@ export function compileKpEquationExemplarTemplate(
     readonly presentationAnimations?: readonly KpAnimationAsset[] | undefined;
     readonly equationPresentation?: KpReaderEquationPresentationCapability | undefined;
     readonly showEquationProfileControl?: boolean | undefined;
-    readonly readerControls?: "foldable-distribution-v1" | undefined;
+    readonly readerControls?: KpReaderEvaluationControlsKind | undefined;
   }
 ): string {
   const animations = [animation, ...(options?.presentationAnimations ?? [])];
@@ -93,7 +94,7 @@ export function compileKpEquationExemplarTemplate(
     ] as const)
   )).values()];
   const accessibleStateIds =
-    options?.readerControls === "foldable-distribution-v1"
+    options?.readerControls !== undefined
       ? compileKpAnimationTransformationPhaseCohorts(
           animation
         ).flatMap((cohort, index) => [
@@ -105,6 +106,13 @@ export function compileKpEquationExemplarTemplate(
     const object = objects.get(objectId);
     if (object === undefined) {
       throw new Error(`missing accessible equation state ${objectId}`);
+    }
+    if (options?.readerControls === "fraction-composition-v1") {
+      return [
+        `<div role="math" aria-label="${attribute(accessibleTextValue(object))}" data-kp-reader-accessible-equation-state="${attribute(objectId)}"${
+          index === 0 ? "" : " hidden"
+        } data-kp-reader-accessible-source="structured-expression"></div>`
+      ].join("");
     }
     return [
       `<div data-kp-reader-accessible-equation-state="${attribute(objectId)}"${
@@ -150,8 +158,8 @@ export function compileKpEquationExemplarTemplate(
     options?.showEquationProfileControl === true && options.equationPresentation !== undefined
       ? profileControl(options.equationPresentation)
       : "",
-    options?.readerControls === "foldable-distribution-v1"
-      ? foldableDistributionControls()
+    options?.readerControls !== undefined
+      ? evaluationControls(options.readerControls)
       : "",
     `<label class="kp-reader-motion-control">`,
     `<span>Motion</span>`,
@@ -201,7 +209,40 @@ export function compileKpEquationExemplarTemplate(
   ].join("");
 }
 
-function foldableDistributionControls(): string {
+function evaluationControls(kind: KpReaderEvaluationControlsKind): string {
+  const buttons = kind === "foldable-distribution-v1"
+    ? [
+        {
+          nodeId: "evaluation.foldable-distribution.distribute",
+          label: "Distribution"
+        },
+        {
+          nodeId: "evaluation.foldable-distribution.evaluate-products",
+          label: "Products"
+        }
+      ]
+    : [
+        {
+          nodeId: "evaluation.fraction-composition.expand-fractions",
+          label: "Fractions"
+        },
+        {
+          nodeId: "evaluation.fraction-composition.evaluate-constants",
+          label: "Constants"
+        },
+        {
+          nodeId: "evaluation.fraction-composition.subtract-and-simplify",
+          label: "Subtract"
+        },
+        {
+          nodeId: "evaluation.fraction-composition.multiply-and-simplify",
+          label: "Multiply"
+        },
+        {
+          nodeId: "evaluation.fraction-composition.divide-and-solve",
+          label: "Divide"
+        }
+      ];
   return [
     `<label class="kp-reader-fold-control">`,
     `<span>Detail</span>`,
@@ -213,8 +254,9 @@ function foldableDistributionControls(): string {
     `</select>`,
     `</label>`,
     `<div class="kp-reader-fold-drills" role="group" aria-label="Pinned evaluation details">`,
-    `<button type="button" data-kp-reader-fold-node="evaluation.foldable-distribution.distribute" aria-pressed="false" aria-describedby="kp-reader-fold-status">Distribution</button>`,
-    `<button type="button" data-kp-reader-fold-node="evaluation.foldable-distribution.evaluate-products" aria-pressed="false" aria-describedby="kp-reader-fold-status">Products</button>`,
+    ...buttons.map(({ nodeId, label }) =>
+      `<button type="button" data-kp-reader-fold-node="${attribute(nodeId)}" aria-pressed="false" aria-describedby="kp-reader-fold-status">${attribute(label)}</button>`
+    ),
     `</div>`,
     `<output id="kp-reader-fold-status" class="kp-reader-fold-status" data-kp-reader-fold-status aria-live="polite">Detail follows the available space</output>`
   ].join("\n");
@@ -265,6 +307,22 @@ function latexValue(object: KpSemanticAssetObject): string {
     throw new Error(`equation object ${object.id} has no LaTeX`);
   }
   return value.latex;
+}
+
+function accessibleTextValue(object: KpSemanticAssetObject): string {
+  const value = object.value;
+  if (
+    typeof value !== "object" ||
+    value === null ||
+    !("accessibleText" in value) ||
+    typeof value.accessibleText !== "string" ||
+    value.accessibleText.trim() === ""
+  ) {
+    throw new Error(
+      `equation object ${object.id} has no structured accessible text`
+    );
+  }
+  return value.accessibleText;
 }
 
 function attribute(value: string): string {

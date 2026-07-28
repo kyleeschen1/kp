@@ -13,6 +13,9 @@ import type {
 import type {
   KpCorridorCertifiedEquationStageLayout
 } from "../runtime/public-api.ts";
+import type {
+  KpReaderEvaluationControlsKind
+} from "../document/public-api.ts";
 
 export interface KpReaderEquationStageLayoutCompiler {
   readonly apply: (input: {
@@ -41,7 +44,7 @@ export interface KpReaderEquationLessonDescriptor {
     profile: KpReaderEquationPresentationProfile
   ) => string | undefined) | undefined;
   readonly compactTranscriptAvailable: boolean;
-  readonly readerControls?: "foldable-distribution-v1" | undefined;
+  readonly readerControls?: KpReaderEvaluationControlsKind | undefined;
   readonly createStageLayoutIntent?: ((input: {
     readonly viewport: "wide" | "phone";
   }) => KpEquationStageLayoutIntent) | undefined;

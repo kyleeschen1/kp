@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  compileKpStructuredExpressionAccessibleText,
   createKpStructuredExpression,
   listKpStructuredExpressionSubtrees,
   resolveKpStructuredExpressionSubtree,
@@ -31,6 +32,17 @@ test("structured expressions preserve explicit subtree identity and authored top
   assert.notEqual(expression.root, authored);
   assert.ok(Object.isFrozen(expression));
   assert.ok(Object.isFrozen(expression.root));
+});
+
+test("structured expressions compile deterministic accessible speech", () => {
+  const expression = createKpStructuredExpression({
+    root: distributionExpression()
+  });
+
+  assert.equal(
+    compileKpStructuredExpressionAccessibleText(expression),
+    "a times the quantity b plus c"
+  );
 });
 
 test("structured expression identity survives equivalent reconstruction", () => {

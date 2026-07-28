@@ -11,6 +11,9 @@ import {
 import {
   createKpLawfulFractionSolveMacro
 } from "../src/semantic/fraction-solve-macro.ts";
+import {
+  createKpFractionCompositionEndpointSpecs
+} from "../src/semantic/fraction-composition-endpoint-spec.ts";
 
 test("fraction composition compiles all certified states into native endpoints", () => {
   const macro = createKpLawfulFractionSolveMacro();
@@ -28,6 +31,12 @@ test("fraction composition compiles all certified states into native endpoints",
     createKpFractionCompositionSelectorAnnotatedLatex("unknown"),
     undefined
   );
+  const endpointSpecs = createKpFractionCompositionEndpointSpecs();
+  assert.equal(
+    endpointSpecs[0]?.accessibleText,
+    "2 divided by 3 times the quantity x plus 6 equals 10"
+  );
+  assert.equal(endpointSpecs.at(-1)?.accessibleText, "x equals 9");
 });
 
 test("every endpoint selector and fraction rule is native and structurally addressable", () => {

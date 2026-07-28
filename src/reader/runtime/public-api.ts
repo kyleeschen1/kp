@@ -110,6 +110,19 @@ export {
   type KpFoldableDistributionUrlState
 } from "./foldable-distribution-url-codec.ts";
 export {
+  decodeKpReaderEvaluationFoldUrl,
+  encodeKpReaderEvaluationFoldUrl,
+  type KpReaderEvaluationFoldMode,
+  type KpReaderEvaluationFoldUrlContract,
+  type KpReaderEvaluationFoldUrlState
+} from "./evaluation-fold-url-codec.ts";
+export {
+  decodeKpFractionCompositionUrl,
+  encodeKpFractionCompositionUrl,
+  type KpFractionCompositionCheckpoint,
+  type KpFractionCompositionUrlState
+} from "./fraction-composition-url-codec.ts";
+export {
   createKpReaderSemanticFocusService,
   type KpReaderFocusListener,
   type KpReaderFocusSnapshot,

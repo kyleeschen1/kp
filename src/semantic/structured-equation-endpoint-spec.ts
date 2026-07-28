@@ -4,6 +4,9 @@ import type {
 import type {
   KpStructuredExpressionNode
 } from "./structured-expression.ts";
+import {
+  compileKpStructuredExpressionAccessibleText
+} from "./structured-expression.ts";
 
 export type KpStructuredEquationEndpointSegment =
   | { readonly kind: "latex"; readonly latex: string }
@@ -24,6 +27,7 @@ export interface KpStructuredEquationStructuralAnchor {
 export interface KpStructuredEquationEndpointSpec {
   readonly stateId: string;
   readonly label: string;
+  readonly accessibleText: string;
   readonly segments: readonly KpStructuredEquationEndpointSegment[];
   readonly selectorIds: readonly string[];
   readonly groupEnvelopes: readonly KpStructuredEquationGroupEnvelope[];
@@ -54,6 +58,9 @@ export function createKpStructuredEquationEndpointSpec(
   return Object.freeze({
     stateId: state.id,
     label: `Equation ${segments.map(({ latex }) => latex).join("")}`,
+    accessibleText:
+      `${compileKpStructuredExpressionAccessibleText(state.left)} equals ` +
+      compileKpStructuredExpressionAccessibleText(state.right),
     segments: Object.freeze(segments),
     selectorIds: Object.freeze(selectorIds),
     groupEnvelopes: Object.freeze([

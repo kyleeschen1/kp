@@ -66,7 +66,10 @@ KpFractionCompositionEquationAsset {
         id: endpoint.stateId,
         objectType: "equation",
         title: endpoint.label,
-        value: { latex: endpoint.segments.map(({ latex }) => latex).join("") },
+        value: {
+          latex: endpoint.segments.map(({ latex }) => latex).join(""),
+          accessibleText: endpoint.accessibleText
+        },
         selectors: [
           ...endpoint.segments.flatMap((segment) => segment.kind === "selector"
             ? [{

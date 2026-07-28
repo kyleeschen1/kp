@@ -297,21 +297,25 @@ const locationSettlement = createKpReaderLocationSettlement({
   canSettle: () => urlAuthorityReady,
   scrollRestoration: "manual"
 });
-const foldableDistributionControls =
+const evaluationControlInput = {
+  root: staticSurface,
+  stage,
+  route: readerRoute,
+  initialUrl: window.location.href,
+  onChange: () => {
+    renderer.refresh("content");
+    renderCurrentSample();
+    locationSettlement.settle();
+  }
+};
+const evaluationControls =
   lessonDescriptor.readerControls === "foldable-distribution-v1"
     ? (await import("./foldable-distribution-reader-controls.ts"))
-      .mountKpFoldableDistributionReaderControls({
-        root: staticSurface,
-        stage,
-        route: readerRoute,
-        initialUrl: window.location.href,
-        onChange: () => {
-          renderer.refresh("content");
-          renderCurrentSample();
-          locationSettlement.settle();
-        }
-      })
-    : undefined;
+      .mountKpFoldableDistributionReaderControls(evaluationControlInput)
+    : lessonDescriptor.readerControls === "fraction-composition-v1"
+      ? (await import("./fraction-composition-reader-controls.ts"))
+        .mountKpFractionCompositionReaderControls(evaluationControlInput)
+      : undefined;
 
 const staticPlans = new Map(phaseCohorts.map((cohort, index) => {
   const progress = (index + 0.5) / phaseCohorts.length;
@@ -491,7 +495,7 @@ function updateScrollGeometry(): void {
 function onResize(): void {
   const progressPermille = lastSample().progressPermille;
   applyResponsiveProjection();
-  foldableDistributionControls?.refreshViewport();
+  evaluationControls?.refreshViewport();
   updateScrollGeometry();
   // A breakpoint changes the document's geometry. Re-anchor the semantic
   // moment so responsive projection cannot silently behave like navigation.
@@ -610,7 +614,7 @@ function measureLayout(revision: number): LayoutState {
   }
   const measured: Omit<TransitionContext, "fit">[] = [];
   const stageLayoutIntent =
-    foldableDistributionControls?.readStageLayoutIntent() ??
+    evaluationControls?.readStageLayoutIntent() ??
     lessonDescriptor.createStageLayoutIntent?.({
       viewport: window.innerWidth > 880 ? "wide" : "phone"
     });
@@ -777,7 +781,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     checkpointId: attentionProjection?.checkpointId ?? projection.checkpointId
   };
   const animationProgress =
-    foldableDistributionControls?.projectAnimationProgress(
+    evaluationControls?.projectAnimationProgress(
       visualSample.progress
     ) ?? visualSample.progress;
   const forwardClock = {
@@ -1302,7 +1306,7 @@ function onTocNavigation(event: MouseEvent): void {
   event.preventDefault();
   const authoredProgress = Number(requiredData(beat, "kpCheckpoint"));
   const exactProgress =
-    foldableDistributionControls?.resolveCheckpointProgressPermille(
+    evaluationControls?.resolveCheckpointProgressPermille(
       beatId,
       authoredProgress
     ) ?? authoredProgress;
@@ -1389,7 +1393,7 @@ function readerHref(sample: KpReaderClockSample): string {
     motionPreference,
     equationPresentationProfileId: equationPresentationProfile.id
   }));
-  return foldableDistributionControls?.encodeHref({
+  return evaluationControls?.encodeHref({
     baseUrl: sessionHref,
     checkpointId: activeBeat === undefined
       ? sample.checkpointId
@@ -1554,7 +1558,7 @@ function dispose(): void {
   window.removeEventListener("scrollend", locationSettlement.settle);
   fontReviewLifecycle.dispose();
   readerCanonicalEquationSession?.dispose();
-  foldableDistributionControls?.dispose();
+  evaluationControls?.dispose();
   semanticLinkBindings.dispose();
   locationSettlement.dispose();
   rendererRegistry.disposeAll();

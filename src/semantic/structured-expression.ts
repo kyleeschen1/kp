@@ -85,6 +85,44 @@ export function resolveKpStructuredExpressionSubtree(
   return resolved;
 }
 
+export function compileKpStructuredExpressionAccessibleText(
+  expression: KpStructuredExpression
+): string {
+  return speakNode(expression.root);
+}
+
+function speakNode(node: KpStructuredExpressionNode): string {
+  switch (node.kind) {
+    case "number":
+      return String(node.value);
+    case "symbol":
+      return node.name;
+    case "negate":
+      return `negative ${speakNode(node.value)}`;
+    case "sum":
+      return node.terms.map((term, index) => {
+        if (index === 0) return speakNode(term);
+        return term.kind === "negate"
+          ? `minus ${speakNode(term.value)}`
+          : `plus ${speakNode(term)}`;
+      }).join(" ");
+    case "product":
+      return node.factors.map((factor) =>
+        factor.kind === "sum"
+          ? `the quantity ${speakNode(factor)}`
+          : speakNode(factor)
+      ).join(" times ");
+    case "quotient":
+      return `${speakNode(node.numerator)} divided by ${
+        speakNode(node.denominator)
+      }`;
+    case "power":
+      return `${speakNode(node.base)} to the power ${
+        speakNode(node.exponent)
+      }`;
+  }
+}
+
 function cloneNode(
   node: KpStructuredExpressionNode,
   ids: Set<string>,

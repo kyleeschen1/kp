@@ -1,12 +1,16 @@
 import { expect, test } from "@playwright/test";
 
-const route = (progressPermille: number) => {
+const route = (
+  progressPermille: number,
+  additions: Record<string, string> = {}
+) => {
   const parameters = new URLSearchParams({
     kpLesson: "lesson.algebra.fraction-composition",
     kpVersion: "1",
     kpProgress: String(progressPermille),
     kpMotion: "full",
-    kpProfile: "standard"
+    kpProfile: "standard",
+    ...additions
   });
   return `/reader/fraction-composition/?${parameters}`;
 };
@@ -73,3 +77,115 @@ for (const viewport of [
     )).toBe(true);
   });
 }
+
+test("fraction fold controls share the semantic clock and stable URL state", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  await page.goto(route(538), { waitUntil: "domcontentloaded" });
+  const body = page.locator("body");
+  const stage = page.locator("[data-kp-reader-equation-stage]");
+  const mode = page.getByLabel("Evaluation detail", { exact: true });
+
+  await expect(body).toHaveAttribute("data-kp-reader-hydrated", "true");
+  await expect(stage).toHaveAttribute("data-kp-reader-fold-mode", "automatic");
+  await expect(stage).toHaveAttribute("data-kp-reader-fold-total-beats", "156");
+  await expect(
+    page.locator(
+      "[data-kp-reader-accessible-equation] " +
+      "[data-kp-reader-accessible-equation-state]"
+    )
+  ).toHaveCount(14);
+  await expect(
+    page.locator(
+      "[data-kp-reader-accessible-equation-state][aria-current='step']" +
+      "[role='math'][aria-label]"
+    )
+  ).toHaveCount(1);
+
+  await mode.selectOption("collapsed");
+  await expect(stage).toHaveAttribute("data-kp-reader-fold-mode", "collapsed");
+  await expect(stage).toHaveAttribute("data-kp-reader-fold-total-beats", "52");
+  await expect(page.locator("#kp-reader-fold-status")).toContainText("Folded");
+  await expect(page.locator("#kp-reader-fold-status")).toContainText(
+    "13 operations"
+  );
+  await expect.poll(() =>
+    new URL(page.url()).searchParams.get("kpFoldMode")
+  ).toBe("collapsed");
+  expect(new URL(page.url()).searchParams.getAll("kpFold")).toHaveLength(5);
+
+  const subtraction = page.getByRole("button", { name: "Subtract" });
+  await subtraction.focus();
+  await page.keyboard.press("Space");
+  await expect(subtraction).toHaveAttribute("aria-pressed", "true");
+  await expect(mode).toHaveValue("pinned");
+  await expect(stage).toHaveAttribute(
+    "data-kp-reader-fold-pinned",
+    "evaluation.fraction-composition.subtract-and-simplify"
+  );
+  await expect(stage).toHaveAttribute("data-kp-reader-fold-total-beats", "76");
+  await expect.poll(() =>
+    new URL(page.url()).searchParams.get("kpPin")
+  ).toBe("evaluation.fraction-composition.subtract-and-simplify");
+
+  const progressBeforeReload = await body.getAttribute(
+    "data-kp-reader-progress"
+  );
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(page.getByLabel("Evaluation detail", { exact: true }))
+    .toHaveValue("pinned");
+  await expect(
+    page.getByRole("button", { name: "Subtract" })
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(body).toHaveAttribute(
+    "data-kp-reader-progress",
+    progressBeforeReload ?? "538"
+  );
+});
+
+test("fraction outline, direct seek, and rewind use exact canonical boundaries", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  await page.goto(route(769, { kpFoldMode: "expanded" }), {
+    waitUntil: "domcontentloaded"
+  });
+  const body = page.locator("body");
+  await expect(body).toHaveAttribute("data-kp-reader-hydrated", "true");
+
+  await page.locator(
+    '.kp-lesson-toc a[href="#beat.fraction-composition.difference-simplified"]'
+  ).click();
+  await expect(body).toHaveAttribute("data-kp-reader-progress", "538");
+  await expect.poll(async () => {
+    const value = await body.getAttribute("data-kp-reader-review-frame");
+    return value === null ? undefined : JSON.parse(value);
+  }).toEqual([
+    538,
+    0,
+    expect.any(String),
+    expect.any(Array)
+  ]);
+
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  const seek = async (progress: number) => {
+    await scrubber.evaluate((node, next) => {
+      const input = node as HTMLInputElement;
+      input.value = String(next);
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }, progress);
+    await expect(body).toHaveAttribute(
+      "data-kp-reader-progress",
+      String(progress)
+    );
+    return body.getAttribute("data-kp-reader-review-frame");
+  };
+  const forward = await seek(620);
+  await seek(900);
+  const rewind = await seek(620);
+  expect(rewind).toBe(forward);
+  await expect(
+    page.locator("[data-kp-reader-transition-active='true']")
+  ).toHaveCount(1);
+});

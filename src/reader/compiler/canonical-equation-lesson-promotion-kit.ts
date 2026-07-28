@@ -5,6 +5,9 @@ import type {
 import {
   createKpCompiledLessonArtifact
 } from "../document/public-api.ts";
+import type {
+  KpReaderEvaluationControlsKind
+} from "../document/public-api.ts";
 import {
   compileKpEquationExemplarPage
 } from "./equation-exemplar-page.ts";
@@ -23,7 +26,7 @@ export interface KpCanonicalEquationLessonPromotionInput {
   readonly compiledLessonId: string;
   readonly description: string;
   readonly lessonVariant: string;
-  readonly readerControls?: "foldable-distribution-v1" | undefined;
+  readonly readerControls?: KpReaderEvaluationControlsKind | undefined;
   readonly modeLink: {
     readonly href: string;
     readonly label: string;

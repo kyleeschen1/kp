@@ -39,6 +39,24 @@ test("fraction composition route owns every transition through one canonical sce
     manifest.steps.length
   );
   assert.equal(
+    [...artifact.html.matchAll(/data-kp-reader-fold-node=/g)].length,
+    5
+  );
+  assert.equal(
+    [...artifact.html.matchAll(
+      /data-kp-reader-accessible-equation-state=/g
+    )].length,
+    14
+  );
+  assert.match(
+    artifact.html,
+    /data-kp-reader-fold-node="evaluation\.fraction-composition\.subtract-and-simplify"/
+  );
+  assert.match(
+    artifact.html,
+    /role="math" aria-label="2 divided by 3 times the quantity x plus 6 equals 10"/
+  );
+  assert.equal(
     [...artifact.html.matchAll(
       /data-kp-reader-equation-material-layer="true"/g
     )].length,

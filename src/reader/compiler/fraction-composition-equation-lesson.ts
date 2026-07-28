@@ -16,6 +16,7 @@ export function compileKpFractionCompositionEquationLesson(markdown: string) {
     description:
       "Distribute two thirds across a sum, evaluate the constants, and isolate x through exact balanced operations.",
     lessonVariant: "fraction-composition",
+    readerControls: "fraction-composition-v1",
     modeLink: {
       href: "/canonical-animation-review.html",
       label: "Browse the animation library"

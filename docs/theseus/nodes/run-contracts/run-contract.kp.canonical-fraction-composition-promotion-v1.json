@@ -135,7 +135,8 @@
     {
       "id": "s13",
       "title": "build-reader-controls",
-      "status": "planned"
+      "summary": "Extracted one shared evaluation control and URL-state shell; added fraction fold timeline with all 13 operations, exact projection-derived checkpoint seeking, direct seek/rewind, fold/pin URL round-trip, and responsive layout ownership. Structured expressions now carry deterministic spoken math, preserving 14 live accessible states without duplicate endpoint HTML or runtime KaTeX. All focused, distribution, browser, conformance, type, architecture, build, production, and unchanged route-budget gates pass.",
+      "status": "complete"
     },
     {
       "id": "s14",
