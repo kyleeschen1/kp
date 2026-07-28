@@ -4,6 +4,10 @@ export {
   type KpReaderCompositorGeometryCacheIdentityInput
 } from "./equation-compositor-geometry-cache-identity.ts";
 export {
+  createKpReaderViewportAnchorCache,
+  type KpReaderViewportAnchorCache
+} from "./viewport-anchor-cache.ts";
+export {
   createKpReaderSessionSnapshot,
   type KpReaderLocation,
   type KpReaderSessionSnapshot

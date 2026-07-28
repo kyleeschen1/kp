@@ -134,7 +134,6 @@ test("rapid bidirectional scroll emits canonical reader runtime evidence", async
     contentType: "application/json"
   });
   expect(evidence.frame.samples).toBe(30);
-  expect(evidence.runtime.scrollAnchorReads).toBeGreaterThan(0);
   expect(
     evidence.runtime.canonicalSessionApplies,
     JSON.stringify(evidence, null, 2)
@@ -146,7 +145,7 @@ test("rapid bidirectional scroll emits canonical reader runtime evidence", async
   // product contract while retaining per-engine timing attachments.
   expect(evidence.runtime).toMatchObject({
     scrollGeometryReads: 0,
-    scrollAnchorReads: 30,
+    scrollAnchorReads: 0,
     canonicalSessionBuilds: 28,
     canonicalSessionReuses: 2,
     canonicalSessionApplies: 30

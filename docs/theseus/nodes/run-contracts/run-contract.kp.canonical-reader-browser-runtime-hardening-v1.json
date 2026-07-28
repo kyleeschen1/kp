@@ -90,7 +90,8 @@
     {
       "id": "slice.kp.reader-hardening.07",
       "title": "Cache-scroll-anchor-geometry",
-      "status": "planned"
+      "summary": "Cached viewport-anchor paint geometry until resize, font, or narrative-content invalidation; rapid ordinary scroll now records zero layout reads while responsive anchoring remains unchanged.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.08",

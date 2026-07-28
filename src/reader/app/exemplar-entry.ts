@@ -43,6 +43,7 @@ import {
   createKpReaderSemanticFocusService,
   createKpReaderSessionSnapshot,
   createKpReaderRuntimeRouteDescriptor,
+  createKpReaderViewportAnchorCache,
   createKpEquationStageMeasurementIdentity,
   decodeKpReaderSessionUrl,
   defineKpReaderEquationPresentationCapability,
@@ -285,6 +286,9 @@ const allowedFocusRefs = animation.bundle.objects.flatMap((object) => [
 ]);
 const equationObjectRefs = new Set(animation.bundle.objects.map((object) => object.id));
 const focus = createKpReaderSemanticFocusService(allowedFocusRefs);
+const viewportAnchorCache = createKpReaderViewportAnchorCache(
+  measureReaderViewportAnchorFraction
+);
 let activeBeat = beats[0];
 let scrollClock = createScrollClock();
 let scrollFrame: number | undefined;
@@ -418,6 +422,7 @@ const resizeObserver = new ResizeObserver(() => {
   scheduleScrollSample();
 });
 resizeObserver.observe(viewport);
+resizeObserver.observe(story);
 
 window.addEventListener("scroll", onScroll, { passive: true });
 window.addEventListener("resize", onResize, { passive: true });
@@ -457,6 +462,7 @@ const fontReviewLifecycle = createKpReaderFontReviewLifecycle({
   reviewMount: "immediate",
   renderReviewFrame: renderCurrentSample,
   onFontInvalidated: () => {
+    viewportAnchorCache.invalidate();
     renderer.refresh("fonts");
     scheduleScrollSample();
   },
@@ -488,6 +494,7 @@ function createScrollClock(): KpReaderContinuousScrollClock {
 }
 
 function updateScrollGeometry(): void {
+  viewportAnchorCache.invalidate();
   const geometry = scrollGeometry();
   document.body.dataset["kpReaderViewportAnchor"] = String(
     readerViewportAnchorFraction()
@@ -542,6 +549,10 @@ function readerPosition(): number {
 }
 
 function readerViewportAnchorFraction(): number {
+  return viewportAnchorCache.read();
+}
+
+function measureReaderViewportAnchorFraction(): number {
   recordKpReaderScrollAnchorRead(window);
   const stickyVisualBottomPx = stickyVisualBottom();
   return resolveKpReaderViewportAnchorFraction({

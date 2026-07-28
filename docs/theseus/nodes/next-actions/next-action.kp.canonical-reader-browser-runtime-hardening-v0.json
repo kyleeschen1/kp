@@ -104,6 +104,27 @@
       "scope": "slice 06 compiler inference budget",
       "checkedAt": "2026-07-28T21:07:51.148Z",
       "notes": "Passed below the unchanged ceiling at 49,928 types, 66,215 instantiations, and 2.32 seconds check time."
+    },
+    {
+      "command": "npm run test:reader-runtime-hardening",
+      "status": "passed",
+      "scope": "slice 07 viewport anchor cache",
+      "checkedAt": "2026-07-28T21:12:08.089Z",
+      "notes": "Cache retains measured anchor until explicit invalidation and preserves prior typed identity tests."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll:chromium",
+      "status": "passed",
+      "scope": "slice 07 ordinary scroll geometry contract",
+      "checkedAt": "2026-07-28T21:12:13.787Z",
+      "notes": "Rapid 30-frame sweep now performs zero scroll-geometry and zero viewport-anchor layout reads after warm-up; session rebuild baseline remains deliberately unchanged for later slices."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 07 anchor invalidation integration",
+      "checkedAt": "2026-07-28T21:12:18.366Z",
+      "notes": "Application, Node, tests, and domains compile."
     }
   ],
   "expectedLearning": [
