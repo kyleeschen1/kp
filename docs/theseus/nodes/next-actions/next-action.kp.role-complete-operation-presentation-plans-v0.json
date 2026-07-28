@@ -10,8 +10,75 @@
       "path": "docs/project/reviews/2026-07-28-role-complete-operation-presentation-long-loop-proposal.md"
     }
   ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.operation-evaluation-presentation-registry-v0",
+      "next-action.kp.canonical-fraction-composition-promotion-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm test",
+    "npm run build",
+    "npm run test:browser:fraction-composition",
+    "npm run visual:fraction-composition-canonical",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:operation-presentation-plans; npm run typecheck",
+      "status": "passed",
+      "scope": "slice 1 executable migration inventory",
+      "checkedAt": "2026-07-28T18:03:40.705Z",
+      "notes": "Four inventory laws pass and application, Node, test, and domain typechecks pass."
+    }
+  ],
   "progress": {
     "state": "partial",
-    "summary": "A 24-slice long-loop proposal is materialized and awaiting explicit approval of its exact contract. No implementation has begun. The mandatory exemplar checkpoint follows slice 14 before any cross-family generalization."
-  }
+    "summary": "Approved run contract v2 is active. Slice 1 froze the current migration surface as executable inventory: five optional reader-plan seams, seven compositor inputs, five flat cancellation authoring sites, and three metadata-versus-behavior evidence gaps."
+  },
+  "expectedLearning": [
+    "Whether one role-complete presentation-plan boundary eliminates correct-label/wrong-realization regressions without a second renderer or closed extension taxonomy."
+  ],
+  "allowedWork": [
+    "Define and migrate the approved role vocabulary, plan union, validator, laws, registry resolution, named canonical bindings, generated cancellation path, and stable verification."
+  ],
+  "disallowedWork": [
+    "No new math semantics, layout-engine redesign, compositor/runtime/lifecycle/scheduler, LLM presentation authority, or pre-checkpoint cross-family generalization."
+  ],
+  "criteria": [
+    {
+      "id": "role-complete-plan-is-total",
+      "weight": "high"
+    },
+    {
+      "id": "compound-cancellation-is-faithful",
+      "weight": "high"
+    },
+    {
+      "id": "canonical-renderer-remains-single",
+      "weight": "high"
+    },
+    {
+      "id": "generated-path-fails-closed",
+      "weight": "high"
+    },
+    {
+      "id": "extensions-remain-bounded",
+      "weight": "medium"
+    },
+    {
+      "id": "seek-rewind-layout-accessibility-preserved",
+      "weight": "high"
+    },
+    {
+      "id": "exemplar-human-approved",
+      "weight": "high"
+    }
+  ]
 }

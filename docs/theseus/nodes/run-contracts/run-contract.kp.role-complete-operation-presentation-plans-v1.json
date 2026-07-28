@@ -1,0 +1,163 @@
+{
+  "id": "run-contract.kp.role-complete-operation-presentation-plans-v1",
+  "kind": "run-contract",
+  "title": "Role-complete operation presentation plans",
+  "status": "superseded",
+  "summary": "Superseded before implementation by v2 because the initial specialist command omitted required run mode, slice ceiling, commit cadence, verification level, and stop conditions. No slice or implementation ran under v1.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.role-complete-operation-presentation-plans-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-28-role-complete-operation-presentation-long-loop-proposal.md",
+      "summary": "Approved 24-slice scope, exemplar checkpoint, preservation boundary, rollback units, promotion criteria, verification cadence, and stop conditions."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm test",
+    "npm run build",
+    "npm run test:browser:fraction-composition",
+    "npm run visual:fraction-composition-canonical",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Define renderer-neutral presentation roles, verified plan variants, validators, law diagnostics, exact-versioned resolution, and architecture guards.",
+    "Migrate the named canonical equation bindings and generated cancellation compiler without changing mathematical truth or established motif aesthetics.",
+    "Extend stable focused, browser, visual, property, performance, and promotion checks required by the reviewed proposal."
+  ],
+  "disallowedWork": [
+    "Do not add a second compositor, animation runtime, lifecycle category, or operation-specific scheduler.",
+    "Do not redesign mathematical semantics, the layout engine, or authorize LLM-authored selectors, roles, DOM, geometry, or paths.",
+    "Do not generalize beyond slice 14 until the mandatory human exemplar checkpoint is approved."
+  ],
+  "goal": "Replace drifting optional equation presentation hints with one verified role-complete plan boundary, prove additive and multiplicative cancellation on fraction composition, then generalize only after human approval.",
+  "target": "next-action.kp.role-complete-operation-presentation-plans-v0",
+  "slices": [
+    {
+      "id": "slice.kp.role-plan.01",
+      "title": "Inventory-presentation-seams",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.02",
+      "title": "Define-role-vocabulary",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.03",
+      "title": "Define-verified-plan-union",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.04",
+      "title": "Add-trusted-plan-validator",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.05",
+      "title": "Add-presentation-law-diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.06",
+      "title": "Evolve-presentation-registry",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.07",
+      "title": "Adapt-successor-synthesis",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.08",
+      "title": "Adapt-balanced-introduction",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.09",
+      "title": "Add-verified-cancellation-authoring",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.10",
+      "title": "Migrate-additive-cancellation",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.11",
+      "title": "Migrate-multiplicative-cancellation",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.12",
+      "title": "Execute-role-complete-cancellation",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.13",
+      "title": "Cover-all-exemplar-cancellations",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.14",
+      "title": "Prove-real-browser-motif-fidelity",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.15",
+      "title": "Require-one-reader-presentation-plan",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.16",
+      "title": "Fail-closed-static-presentation",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.17",
+      "title": "Migrate-existing-cancellation-families",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.18",
+      "title": "Migrate-generated-cancellation",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.19",
+      "title": "Adapt-distribution-and-factoring",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.20",
+      "title": "Adapt-fission-fusion-and-succession",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.21",
+      "title": "Cut-over-exhaustive-compositor-dispatch",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.22",
+      "title": "Add-catalog-wide-conformance",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.23",
+      "title": "Add-bounded-property-coverage",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.role-plan.24",
+      "title": "Run-release-closure",
+      "status": "planned"
+    }
+  ]
+}
