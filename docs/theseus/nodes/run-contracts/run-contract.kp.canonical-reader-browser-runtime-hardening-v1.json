@@ -162,7 +162,8 @@
     {
       "id": "slice.kp.reader-hardening.19",
       "title": "Run-cross-browser-promotion-matrices",
-      "status": "planned"
+      "summary": "Cross-browser promotion matrices pass in Chromium, Firefox, and WebKit: ordinary warmed scrolling performs zero layout/anchor reads or plan/collision/prewarm recompilation, while actual wide/phone motif paint, seek/rewind, ownership, endpoints, fit evidence, and review access remain intact.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.20",

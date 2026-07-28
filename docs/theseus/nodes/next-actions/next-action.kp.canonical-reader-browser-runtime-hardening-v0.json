@@ -377,6 +377,20 @@
       "scope": "slice 18 two-tier paint contract",
       "checkedAt": "2026-07-28T22:22:11.995Z",
       "notes": "The generic DPR-aware raster envelope and strict measured-paint evidence compile across app, Node, tests, and domains."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll",
+      "status": "passed",
+      "scope": "slice 19 three-browser ordinary-scroll performance matrix",
+      "checkedAt": "2026-07-28T22:25:23.153Z",
+      "notes": "Chromium, Firefox, and WebKit each passed 30-frame bidirectional sweeps with zero ordinary-scroll layout reads, anchor reads, pure-plan recompiles, collision-certificate recompiles, or adjacent-prewarm recompiles after warm-up; every requested sample applied and material ownership stayed stable."
+    },
+    {
+      "command": "npm run test:browser:canonical-reader-contract",
+      "status": "passed",
+      "scope": "slice 19 three-browser canonical reader visual contract",
+      "checkedAt": "2026-07-28T22:25:28.667Z",
+      "notes": "Chromium, Firefox, and WebKit passed actual wide and phone paint, cancellation motif fidelity, direct seek and rewind, exclusive ownership, endpoint handoff, fit evidence, and review launcher checks. Existing phone readable-floor diagnostics remain classified responsive-fit debt and did not change paint outcomes."
     }
   ],
   "progress": {
