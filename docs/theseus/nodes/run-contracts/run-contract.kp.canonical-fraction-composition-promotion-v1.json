@@ -111,7 +111,8 @@
     {
       "id": "s09",
       "title": "bind-canonical-motifs",
-      "status": "planned"
+      "summary": "Bound all 13 certified operations to existing canonical motifs, including opaque successor synthesis for every arithmetic operand and operator, structural fraction reflow, balanced entry, fan-out, and cancellation; exact rewind and no-fade guards pass with all construction, type, and architecture gates.",
+      "status": "complete"
     },
     {
       "id": "s10",

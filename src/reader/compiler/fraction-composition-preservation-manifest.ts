@@ -108,6 +108,25 @@ export const kpFractionCompositionPreservationManifest = Object.freeze({
       "static-step-export"
     ])
   }),
+  motifContract: Object.freeze({
+    transformTypes: Object.freeze({
+      distributeMultiplication: "copy-fan-out",
+      normalizeFractionNumerators: "fraction-factor-split",
+      simplifyConstantProduct: "successor-synthesis",
+      simplifyConstantQuotient: "successor-synthesis",
+      subtractBothSides: "append-after-shift",
+      cancelAdditiveInverses: "cancelation",
+      simplifyConstantDifference: "successor-synthesis",
+      multiplyBothSides: "append-after-shift",
+      cancelMultiplicativeInverses: "cancelation",
+      divideBothSides: "append-after-shift"
+    }),
+    forbiddenMotifKinds: Object.freeze([
+      "artifact-replace",
+      "whole-equation-fade",
+      "source-out-target-in"
+    ])
+  }),
   paintContract: Object.freeze({
     nativeEndpointAuthority: "native-katex",
     canonicalPaintPolicy: "exclusive-when-active",
@@ -142,4 +161,3 @@ export const kpFractionCompositionPreservationManifest = Object.freeze({
     existingCanonicalReadersMustRemainUnchanged: true
   })
 } as const);
-
