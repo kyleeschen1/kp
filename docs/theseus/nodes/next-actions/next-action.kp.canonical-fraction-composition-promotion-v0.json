@@ -55,6 +55,13 @@
       "scope": "s02 promotion inventory and canonical-versus-compatibility ownership",
       "checkedAt": "2026-07-28T05:14:54.757Z",
       "notes": "Nineteen focused checks pass; the inventory freezes five non-interchangeable evidence stages, confirms only numerator split/merge currently has canonical fraction paint, and confirms the composition trace has no route or paint owner. Type and architecture gates pass."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "s03 exact trace, dependencies, fold, paint, layout, and architecture preservation manifest",
+      "checkedAt": "2026-07-28T05:17:18.138Z",
+      "notes": "Twenty-three focused checks pass. All 14 states retain exact solution 9, all 13 adjacent transitions have authority and acyclic dependencies, and the frozen product boundary requires one clock/session/lease with native settlement and no operation geometry."
     }
   ],
   "progress": {

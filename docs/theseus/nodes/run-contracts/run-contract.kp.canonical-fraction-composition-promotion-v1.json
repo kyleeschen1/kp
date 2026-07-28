@@ -75,7 +75,8 @@
     {
       "id": "s03",
       "title": "audit-exact-trace",
-      "status": "planned"
+      "summary": "Froze the exact 14-state, 13-step fraction solve chain, dependency order, exact solution, fold truth, paint policy, viewports, certified-layout authority, and no-growth architecture boundary; 23 focused tests, typecheck, and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s04",
