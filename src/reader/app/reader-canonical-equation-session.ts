@@ -19,6 +19,11 @@ import type {
 import {
   assertKpAppliedEquationStageLayout
 } from "../runtime/public-api.ts";
+import {
+  recordKpReaderCanonicalSessionApply,
+  recordKpReaderCanonicalSessionBuild,
+  recordKpReaderCanonicalSessionReuse
+} from "../runtime/reader-runtime-metrics.ts";
 
 export interface KpReaderCanonicalEquationSession {
   readonly transitionIds: readonly string[];
@@ -123,6 +128,8 @@ export function createKpReaderCanonicalEquationSession(input: {
         );
       }
       if (session === undefined || sessionKey !== nextKey) {
+        const ownerWindow = frame.fitSurface.ownerDocument.defaultView;
+        const buildStartedAt = ownerWindow?.performance.now() ?? Date.now();
         // Focus-only presentation revisions rebuild their typography plan but
         // retain the expensive structural capture. The inner renderer still
         // releases its WebGL lease independently at native endpoints.
@@ -176,8 +183,23 @@ export function createKpReaderCanonicalEquationSession(input: {
         sessionKey = nextKey;
         structuralSessionKey = nextStructuralSessionKey;
         structuralFitSurface = frame.fitSurface;
+        if (ownerWindow !== null) {
+          recordKpReaderCanonicalSessionBuild(
+            ownerWindow,
+            ownerWindow.performance.now() - buildStartedAt
+          );
+        }
+      } else {
+        const ownerWindow = frame.fitSurface.ownerDocument.defaultView;
+        if (ownerWindow !== null) {
+          recordKpReaderCanonicalSessionReuse(ownerWindow);
+        }
       }
       const ownership = session.apply(frame.progress);
+      const ownerWindow = frame.fitSurface.ownerDocument.defaultView;
+      if (ownerWindow !== null) {
+        recordKpReaderCanonicalSessionApply(ownerWindow);
+      }
       frame.fitSurface.dataset["kpReaderCanonicalEquationSession"] = "active";
       frame.fitSurface.dataset["kpReaderCanonicalEquationSessionLifecycle"] =
         session.lifecycle;

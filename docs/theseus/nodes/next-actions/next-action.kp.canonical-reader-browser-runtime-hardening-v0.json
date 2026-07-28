@@ -55,6 +55,20 @@
       "status": "passed",
       "scope": "Slice 2 Playwright WebKit project and scoped browser-contract scripts typecheck across application, Node, test, and domain projects.",
       "checkedAt": "2026-07-28T20:47:43.458Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 03 runtime instrumentation types",
+      "checkedAt": "2026-07-28T20:56:16.579Z",
+      "notes": "Typed runtime metrics and browser harness compile across app, node, tests, and domains."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll:chromium",
+      "status": "passed",
+      "scope": "slice 03 rapid-scroll instrumentation",
+      "checkedAt": "2026-07-28T20:56:23.781Z",
+      "notes": "30-frame bidirectional trace passed; baseline identified 28 canonical session builds, 6758.8 ms aggregate build time, 13 frames over 50 ms, approximately 533 ms p95, zero scroll-geometry recompiles, and zero material-owner add/remove churn."
     }
   ],
   "expectedLearning": [

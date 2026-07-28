@@ -83,6 +83,10 @@ import {
   compileKpAnimationTransformationPhaseCohorts,
   findKpAnimationTransformationPhaseCohort
 } from "../../animation/transformation-phase-cohorts.ts";
+import {
+  recordKpReaderScrollAnchorRead,
+  recordKpReaderScrollGeometryRead
+} from "../runtime/reader-runtime-metrics.ts";
 
 interface TransitionContext {
   readonly id: string;
@@ -519,6 +523,7 @@ function applyResponsiveProjection(): void {
 }
 
 function scrollGeometry(): KpReaderPiecewiseScrollGeometry {
+  recordKpReaderScrollGeometryRead(window);
   if (beats.length < 2) {
     throw new Error("The semantic reader exemplar requires explanation beats.");
   }
@@ -537,6 +542,7 @@ function readerPosition(): number {
 }
 
 function readerViewportAnchorFraction(): number {
+  recordKpReaderScrollAnchorRead(window);
   const stickyVisualBottomPx = stickyVisualBottom();
   return resolveKpReaderViewportAnchorFraction({
     viewportWidth: window.innerWidth,
