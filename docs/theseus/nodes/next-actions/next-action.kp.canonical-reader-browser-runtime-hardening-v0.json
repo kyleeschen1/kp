@@ -360,7 +360,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "STOP_CONDITION at slice 18: WebKit source endpoint continuity differs by 1px from the generic 0.5px contract. Target handoff and WebGL lease/fallback pass; no browser-specific exception was added and slices 19-20 remain unexecuted."
+    "summary": "Slice 18 diagnosis: the WebKit DPR-1 1px failure is screenshot raster quantization, not compositor geometry. Direct measured-ink comparison at the failing frame is 0.116px x and 0.009px y with identical width/height; structural microscope is 0px; DPR-2 passes. Repair should keep strict measured geometry and give the coarse screenshot envelope a 1px DPR-1 allowance."
   },
   "expectedLearning": [
     "Whether one measured-paint browser contract and a pure-plan cache can make canonical equation scrolling responsive without weakening collision certification or multiplying visual runtimes."

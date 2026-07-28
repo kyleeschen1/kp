@@ -156,7 +156,7 @@
     {
       "id": "slice.kp.reader-hardening.18",
       "title": "Add-WebKit-geometry-resource-gates",
-      "summary": "STOP_CONDITION: WebKit passes measured radical target handoff and WebGL lease/fallback gates but source endpoint continuity differs by 1px, above the 0.5px generic contract. No browser-specific geometry exception was added; slices 19-20 remain planned.",
+      "summary": "Investigated prior stop: WebKit DPR-1 screenshot bounds quantize a measured 0.116px/0.009px glyph residual and exact structural geometry to one raster pixel; DPR-2 passes. Proposed repair is a generic coarse-raster 1px envelope backed by unchanged strict measured-paint and shape gates, not a geometry or motif exception.",
       "status": "in-progress"
     },
     {
