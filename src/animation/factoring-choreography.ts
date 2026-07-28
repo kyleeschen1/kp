@@ -37,6 +37,7 @@ export interface KpFactoringChoreographyPlan {
   readonly groupingArtifactIds: readonly string[];
   readonly phaseIds: readonly KpFactoringChoreographyPhaseId[];
   readonly factorMinimumScale: number;
+  readonly synchronization: "simultaneous";
   readonly fusionPlan: KpFissionFusionPlan;
 }
 
@@ -94,6 +95,9 @@ export function compileKpFactoringFusionPlan(input: {
       }]
     }),
     semanticOrder: input.factorCopyIds,
+    // Common-factor extraction is one many-to-one semantic event. Staggering
+    // identical contributors makes lineage appear sequential when it is not.
+    microStaggerSpan: 0,
     junctionScale: factorMinimumScale
   });
 }
@@ -147,6 +151,7 @@ export function compileKpFactoringChoreography(input: {
     groupingArtifactIds: [...input.groupingArtifactIds],
     phaseIds: [...kpFactoringChoreographyPhaseIds],
     factorMinimumScale,
+    synchronization: "simultaneous",
     fusionPlan
   };
 }

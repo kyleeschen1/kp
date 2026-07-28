@@ -191,7 +191,8 @@
     {
       "id": "s23",
       "title": "Simultaneous opaque x fusion",
-      "status": "planned"
+      "summary": "Factor-common-x visibly honors its typed cohort: both contributors run on one zero-stagger progress clock forward and rewind, stay opaque through one atomic ownership transfer, clear stable context within the measured corridor, settle exactly to native x, and do not evaluate coefficients in the factoring beat.",
+      "status": "complete"
     },
     {
       "id": "s24",

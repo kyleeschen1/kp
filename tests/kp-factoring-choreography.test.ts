@@ -9,7 +9,8 @@ import {
 } from "../src/animation/factoring-choreography.ts";
 import {
   evaluateKpFissionFusionLaws,
-  reverseKpFissionFusionPlan
+  reverseKpFissionFusionPlan,
+  sampleKpFissionFusion
 } from "../src/animation/fission-fusion.ts";
 
 test("factoring previews repeated-factor focus before collection", () => {
@@ -21,20 +22,63 @@ test("factoring previews repeated-factor focus before collection", () => {
   assert.ok(preview.addendCompactionProgress > 0);
   assert.ok(preview.addendCompactionProgress < 0.2);
   assert.equal(preview.groupingOpacity, 0);
-  assert.equal(preview.factorCopies[1]!.pathProgress, 0);
+  assert.equal(
+    preview.factorCopies[0]!.pathProgress,
+    preview.factorCopies[1]!.pathProgress
+  );
 });
 
-test("factor copies collect in semantic order while retaining ownership", () => {
+test("factor copies collect simultaneously while retaining ownership", () => {
   const frame = sampleKpFactoringChoreography({
     plan: factoringPlan(),
     progress: 0.5
   });
-  assert.ok(frame.factorCopies[0]!.pathProgress > frame.factorCopies[1]!.pathProgress);
+  assert.equal(
+    frame.factorCopies[0]!.pathProgress,
+    frame.factorCopies[1]!.pathProgress
+  );
   assert.equal(frame.factorCopies[0]!.opacity, 1);
   assert.equal(frame.factorCopies[1]!.opacity, 1);
   assert.equal(frame.commonFactor.opacity, 0);
   assert.equal(frame.fusion.ownership.ownerSide, "sources");
   assert.deepEqual(frame.factorCopies.map((copy) => copy.semanticIndex), [0, 1]);
+});
+
+test("factoring progress and opacity remain simultaneous through rewind", () => {
+  const plan = factoringPlan();
+  const rewind = reverseKpFissionFusionPlan({
+    id: `${plan.fusionPlan.id}.rewind`,
+    plan: plan.fusionPlan,
+    semanticOrder: plan.factorCopyIds
+  });
+  assert.equal(plan.synchronization, "simultaneous");
+  assert.equal(plan.fusionPlan.microStaggerSpan, 0);
+  assert.equal(rewind.microStaggerSpan, 0);
+
+  for (let index = 0; index <= 1_000; index += 1) {
+    const progress = index / 1_000;
+    const forward = sampleKpFactoringChoreography({ plan, progress });
+    assert.equal(
+      forward.factorCopies[0]!.pathProgress,
+      forward.factorCopies[1]!.pathProgress
+    );
+    assert.equal(
+      forward.factorCopies[0]!.opacity,
+      forward.factorCopies[1]!.opacity
+    );
+    const reverseFrame = sampleKpFissionFusion({
+      plan: rewind,
+      progress
+    });
+    assert.equal(
+      reverseFrame.targets[0]!.pathProgress,
+      reverseFrame.targets[1]!.pathProgress
+    );
+    assert.equal(
+      reverseFrame.targets[0]!.opacity,
+      reverseFrame.targets[1]!.opacity
+    );
+  }
 });
 
 test("factoring waits for every origin before one shared semantic fusion", () => {

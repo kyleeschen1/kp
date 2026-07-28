@@ -1519,6 +1519,21 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
       "[data-kp-reader-transition-active='true'] [data-kp-reader-native='target']"
     )
   ).toContainText("(3+2)x+(6−2)");
+  const factoringSurface = page.locator(
+    "[data-kp-reader-transition-active='true'] [data-kp-reader-fit-surface]"
+  );
+  await expect(factoringSurface).toHaveAttribute(
+    "data-kp-native-katex-factoring-synchronization",
+    "simultaneous"
+  );
+  await expect(factoringSurface).toHaveAttribute(
+    "data-kp-native-katex-factoring-paint-policy",
+    "opaque-many-to-one"
+  );
+  await expect(factoringSurface).toHaveAttribute(
+    "data-kp-native-katex-factoring-evaluation",
+    "deferred"
+  );
   const chromeGeometry = await page.locator(
     "[data-kp-reader-equation-stage]"
   ).evaluate((stage) => {
@@ -1880,6 +1895,87 @@ test("factoring and coefficient evaluation remain separate visual beats", async 
       Math.min(...persistentContextBaselines),
     JSON.stringify(factoringPaintSamples)
   ).toBeLessThanOrEqual(0.75);
+
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  for (const expected of [...factoringPaintSamples].reverse()) {
+    await scrubber.evaluate((node, nextValue) => {
+      const input = node as HTMLInputElement;
+      input.value = String(nextValue);
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }, expected.progress);
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-progress",
+      String(expected.progress)
+    );
+    await page.evaluate(() => new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+    ));
+    const rewind = await page.locator(
+      "[data-kp-equation-material-fragment-role^='glyph:factoring-']"
+    ).evaluateAll(async (owners) => {
+      const geometryModule =
+        "/src/rendering/native-katex-paint-geometry.ts";
+      const { measureKpNativeKatexSubtreePaintRect } =
+        await import(geometryModule);
+      const stage = document.querySelector<HTMLElement>(
+        "[data-kp-reader-equation-viewport]"
+      );
+      if (stage === null) throw new Error("Factoring rewind lacks its viewport.");
+      return owners.map((owner) => {
+        const element = owner as HTMLElement;
+        const opacity = Number(getComputedStyle(element).opacity);
+        const visual = element.firstElementChild as HTMLElement | null;
+        const rect = opacity > 0.99 && visual !== null
+          ? measureKpNativeKatexSubtreePaintRect(stage, visual)
+          : undefined;
+        return {
+          semantic:
+            element.dataset["kpEquationMaterialSemanticEntityId"],
+          role: element.dataset["kpEquationMaterialFragmentRole"],
+          opacity,
+          ...(rect === undefined
+            ? {}
+            : {
+                left: rect.left,
+                top: rect.top,
+                right: rect.left + rect.width,
+                bottom: rect.top + rect.height
+              })
+        };
+      });
+    });
+    const expectedOwners = expected.ownership.map((owner) => ({
+      semantic: owner.semantic,
+      role: owner.role,
+      opacity: owner.opacity
+    })).sort((left, right) =>
+      `${left.role}:${left.semantic}`.localeCompare(
+        `${right.role}:${right.semantic}`
+      )
+    );
+    const rewindOwners = rewind.map(({ semantic, role, opacity }) => ({
+      semantic,
+      role,
+      opacity
+    })).sort((left, right) =>
+      `${left.role}:${left.semantic}`.localeCompare(
+        `${right.role}:${right.semantic}`
+      )
+    );
+    expect(rewindOwners).toEqual(expectedOwners);
+    for (const observation of expected.observations) {
+      const actual = rewind.find(({ semantic, role }) =>
+        semantic === observation.semantic && role === observation.role
+      );
+      expect(actual, JSON.stringify({ expected, rewind })).toBeDefined();
+      for (const edge of ["left", "top", "right", "bottom"] as const) {
+        expect(
+          Math.abs(actual![edge]! - observation[edge]),
+          JSON.stringify({ expected, rewind, observation, edge })
+        ).toBeLessThanOrEqual(0.25);
+      }
+    }
+  }
 
   await page.goto(route(900, { kpFoldMode: "expanded" }), {
     waitUntil: "domcontentloaded"

@@ -91,6 +91,12 @@ export function bindKpNativeKatexFactoringScene(input: {
         "atomic-fission-fusion";
       input.source.stage.dataset["kpNativeKatexFactoringGeometry"] =
         "paint-space";
+      input.source.stage.dataset["kpNativeKatexFactoringSynchronization"] =
+        input.intent.synchronization;
+      input.source.stage.dataset["kpNativeKatexFactoringPaintPolicy"] =
+        input.intent.fusionPaintPolicy;
+      input.source.stage.dataset["kpNativeKatexFactoringEvaluation"] =
+        input.intent.coefficientEvaluation;
     }
   });
 }
@@ -100,6 +106,7 @@ export function compileKpNativeKatexFactoringScenePlan(input: {
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly intent: KpNativeKatexFactoringChoreographyIntent;
 }): KpNativeKatexFactoringScenePlan {
+  assertFactoringIntent(input.intent);
   const forwardPlan = compileKpFactoringFusionPlan({
     id: input.intent.id,
     factorCopyIds: input.intent.factorCopyIds,
@@ -171,6 +178,28 @@ export function compileKpNativeKatexFactoringScenePlan(input: {
     claimedSourceAtomIds: new Set(sourceFactors.map(({ atom }) => atom.id)),
     claimedTargetAtomIds: new Set(targetFactors.map(({ atom }) => atom.id))
   });
+}
+
+function assertFactoringIntent(
+  intent: KpNativeKatexFactoringChoreographyIntent
+): void {
+  if (
+    intent.operation !== "factorCommonTerm" ||
+    intent.motif !== "merge-fan-in" ||
+    intent.fusionPaintPolicy !== "opaque-many-to-one" ||
+    intent.synchronization !== "simultaneous" ||
+    intent.coefficientEvaluation !== "deferred" ||
+    intent.factorCopyIds.length < 2 ||
+    new Set(intent.factorCopyIds).size !== intent.factorCopyIds.length ||
+    intent.factorCopyIds.includes(intent.commonFactorId) ||
+    (
+      intent.direction === "forward"
+        ? intent.lifecycle !== "merge"
+        : intent.lifecycle !== "split"
+    )
+  ) {
+    throw new Error("Factoring scene requires one coherent typed motif cohort.");
+  }
 }
 
 export function sampleKpNativeKatexFactoringScenePlan(input: {

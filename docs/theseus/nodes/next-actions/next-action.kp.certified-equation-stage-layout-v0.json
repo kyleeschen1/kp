@@ -542,11 +542,32 @@
       "scope": "slice s22 factoring motif compiler and exemplar closure",
       "checkedAt": "2026-07-28T00:27:36.150Z",
       "notes": "All 99 foldable tests and 60 canonical construction tests pass. Forward and rewind bind the exact certified x contributor tuple and one common factor; every other selector remains one-to-one, coefficient evaluation has no successor, and detached or forged bindings fail at the adapter trust boundary."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-factoring-choreography.test.ts tests/fission-fusion.test.ts tests/distribution-area-exemplar-inverse-motion.test.ts tests/distribution-area-exemplar-forward-motion.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "slice s23 simultaneous factoring law",
+      "checkedAt": "2026-07-28T00:36:15.904Z",
+      "notes": "All 18 choreography tests and every TypeScript project pass. Factor-common extraction alone compiles with zero micro-stagger; 1,001 dense forward and reverse samples keep both contributor progress and binary opacity equal, with one atomic ownership transfer. Generic fission and other staggered motifs remain unchanged."
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s23 simultaneous opaque x fusion browser closure",
+      "checkedAt": "2026-07-28T00:36:23.651Z",
+      "notes": "All 20 Chromium cases pass. Eighteen dense factoring frames plus reverse scrubbing prove exact replay, binary opaque ownership, simultaneous typed-session evidence, bounded local-ink excursion, zero x/context crowding, stable +2) baselines, exact native settlement, and separation from coefficient arithmetic on the certified wide stage; phone, fold, seek, font, and layout gates remain green."
+    },
+    {
+      "command": "npm run test:foldable-distribution; npm run test:canonical-equation-renderer; npm run check:reader-production; npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "slice s23 semantic renderer and resource closure",
+      "checkedAt": "2026-07-28T00:36:30.474Z",
+      "notes": "All 99 foldable tests, 12 canonical renderer gates, 10 production routes, and fixed reader budgets pass. No renderer, compositor, clock, lifecycle, scheduler, path category, or non-factoring stagger changed; shared runtime remains 110040 gzip bytes and foldable HTML remains 6391 gzip bytes."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Factor-common-term now crosses a typed motif boundary before rendering: exactly one certified fan-in or reversed split names every x contributor and the common factor, all context is proven one-to-one, opacity is opaque, synchronization is simultaneous, coefficient evaluation is deferred, and the adapter rejects detached proof."
+    "summary": "The typed factor-common-x cohort now drives the visible choreography: both x contributors use exactly the same dense forward and rewind progress schedule, remain opaque until one atomic handoff to the extracted x, stay inside the measured ink corridor without crowding +2), settle to native KaTeX, and leave coefficient evaluation to the following beat."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."
