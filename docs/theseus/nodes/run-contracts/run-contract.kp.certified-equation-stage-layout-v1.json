@@ -173,7 +173,8 @@
     {
       "id": "s20",
       "title": "Measured paint non regression",
-      "status": "planned"
+      "summary": "Dense paint-level probes now ratchet the measured x fix through certified layout at distribution and factoring handoffs: baseline, height, clone insets, typography, opaque ownership, direct seek, rewind, and exact native settlement remain within the approved residual without a glyph exception.",
+      "status": "complete"
     },
     {
       "id": "s21",

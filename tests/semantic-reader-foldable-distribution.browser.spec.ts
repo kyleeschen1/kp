@@ -72,11 +72,41 @@ async function visibleXPaint(page: Page) {
       bottom: number;
       height: number;
       paintAlignment?: string | undefined;
+      paintInsetX?: number | undefined;
+      paintInsetY?: number | undefined;
+      opacity: number;
+      typography: {
+        fontFamily: string;
+        fontSize: string;
+        fontStyle: string;
+        fontWeight: string;
+        lineHeight: string;
+      };
     }> = [];
+    const typography = (element: HTMLElement) => {
+      const carrier = [
+        element,
+        ...element.querySelectorAll<HTMLElement>("*")
+      ].find((candidate) =>
+        [...candidate.childNodes].some((node) =>
+          node.nodeType === Node.TEXT_NODE &&
+          (node.textContent?.trim() ?? "") !== ""
+        )
+      ) ?? element;
+      const style = getComputedStyle(carrier);
+      return {
+        fontFamily: style.fontFamily,
+        fontSize: style.fontSize,
+        fontStyle: style.fontStyle,
+        fontWeight: style.fontWeight,
+        lineHeight: style.lineHeight
+      };
+    };
     for (const root of transition.querySelectorAll<HTMLElement>(
       "[data-kp-reader-native]"
     )) {
-      if (Number(getComputedStyle(root).opacity) <= 0.01) continue;
+      const opacity = Number(getComputedStyle(root).opacity);
+      if (opacity <= 0.01) continue;
       for (const anchor of root.querySelectorAll<HTMLElement>(
         "[data-kp-reader-selector-id$='.x']"
       )) {
@@ -86,7 +116,9 @@ async function visibleXPaint(page: Page) {
           owner: `native:${anchor.dataset["kpReaderSelectorId"]}`,
           top: rect.top,
           bottom: rect.top + rect.height,
-          height: rect.height
+          height: rect.height,
+          opacity,
+          typography: typography(anchor)
         });
       }
     }
@@ -100,9 +132,8 @@ async function visibleXPaint(page: Page) {
         continue;
       }
       const visual = owner.firstElementChild as HTMLElement | null;
-      const rect = visual === null
-        ? undefined
-        : measureKpNativeKatexSubtreePaintRect(stage, visual);
+      if (visual === null) continue;
+      const rect = measureKpNativeKatexSubtreePaintRect(stage, visual);
       if (rect === undefined) continue;
       observations.push({
         owner: `material:${owner.dataset["kpEquationMaterialOwnerId"]}`,
@@ -110,7 +141,15 @@ async function visibleXPaint(page: Page) {
         bottom: rect.top + rect.height,
         height: rect.height,
         paintAlignment:
-          owner.dataset["kpEquationMaterialPaintAlignment"]
+          owner.dataset["kpEquationMaterialPaintAlignment"],
+        paintInsetX: Number(
+          owner.dataset["kpEquationMaterialPaintInsetX"]
+        ),
+        paintInsetY: Number(
+          owner.dataset["kpEquationMaterialPaintInsetY"]
+        ),
+        opacity: Number(getComputedStyle(owner).opacity),
+        typography: typography(visual)
       });
     }
     return {
@@ -932,48 +971,182 @@ test("distribution x paint crosses its phase boundary without sag or size drift"
     ));
   };
 
-  const outgoing = summarizeXPaint(await visibleXPaint(page));
-  await seek(231);
-  const checkpoint = summarizeXPaint(await visibleXPaint(page));
-  await seek(251);
-  const forward = await visibleXPaint(page);
-  const forwardGeometry = summarizeXPaint(forward);
-  const forwardMaterials = forward.observations.filter(({ owner }) =>
-    owner.startsWith("material:")
-  );
-  expect(
-    forwardMaterials.length,
-    JSON.stringify(forward)
-  ).toBeGreaterThan(0);
-  expect(
-    forwardMaterials.every(
-      ({ paintAlignment }) => paintAlignment === "measured-ink"
-    ),
-    JSON.stringify(forward)
-  ).toBe(true);
-  await seek(300);
-  await seek(251);
-  const rewindGeometry = summarizeXPaint(await visibleXPaint(page));
-
-  for (const geometry of [
-    outgoing,
-    forwardGeometry,
-    rewindGeometry
-  ]) {
+  const forwardSamples = [];
+  for (let progress = 230; progress <= 251; progress += 1) {
+    await seek(progress);
+    const paint = await visibleXPaint(page);
+    forwardSamples.push({
+      progress,
+      paint,
+      geometry: summarizeXPaint(paint)
+    });
+  }
+  const checkpoint = forwardSamples.find(({ progress }) => progress === 231)!
+    .geometry;
+  for (const { geometry } of forwardSamples) {
     expect(Math.abs(geometry.bottom - checkpoint.bottom))
       .toBeLessThanOrEqual(0.25);
     expect(Math.abs(geometry.height - checkpoint.height))
       .toBeLessThanOrEqual(0.25);
   }
 
-  await page.goto(route(251, { kpFoldMode: "expanded" }), {
+  const materialPaint = forwardSamples.flatMap(({ paint }) =>
+    paint.observations.filter(({ owner }) => owner.startsWith("material:"))
+  );
+  expect(materialPaint.length, JSON.stringify(forwardSamples))
+    .toBeGreaterThan(0);
+  expect(
+    materialPaint.every(({ paintAlignment, opacity }) =>
+      paintAlignment === "measured-ink" && opacity > 0.99
+    ),
+    JSON.stringify(materialPaint)
+  ).toBe(true);
+  expect(
+    materialPaint.every(({ paintInsetX, paintInsetY }) =>
+      Number.isFinite(paintInsetX) && Number.isFinite(paintInsetY)
+    ),
+    JSON.stringify(materialPaint)
+  ).toBe(true);
+  expect(
+    Math.max(...materialPaint.map(({ paintInsetX }) => paintInsetX!)) -
+      Math.min(...materialPaint.map(({ paintInsetX }) => paintInsetX!)),
+    JSON.stringify(materialPaint)
+  ).toBeLessThanOrEqual(0.25);
+  expect(
+    Math.max(...materialPaint.map(({ paintInsetY }) => paintInsetY!)) -
+      Math.min(...materialPaint.map(({ paintInsetY }) => paintInsetY!)),
+    JSON.stringify(materialPaint)
+  ).toBeLessThanOrEqual(0.25);
+  const typography = new Set(forwardSamples.flatMap(({ paint }) =>
+    paint.observations.map((observation) =>
+      JSON.stringify(observation.typography)
+    )
+  ));
+  expect([...typography], JSON.stringify(forwardSamples)).toHaveLength(1);
+
+  for (let progress = 251; progress >= 230; progress -= 1) {
+    await seek(progress);
+    const rewind = summarizeXPaint(await visibleXPaint(page));
+    const forward = forwardSamples.find((sample) =>
+      sample.progress === progress
+    )!.geometry;
+    expect(Math.abs(rewind.bottom - forward.bottom))
+      .toBeLessThanOrEqual(0.25);
+    expect(Math.abs(rewind.height - forward.height))
+      .toBeLessThanOrEqual(0.25);
+  }
+
+  for (const progress of [230, 231, 240, 251]) {
+    await page.goto(route(progress, { kpFoldMode: "expanded" }), {
+      waitUntil: "domcontentloaded"
+    });
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-hydrated",
+      "true"
+    );
+    const direct = summarizeXPaint(await visibleXPaint(page));
+    const forward = forwardSamples.find((sample) =>
+      sample.progress === progress
+    )!.geometry;
+    expect(Math.abs(direct.bottom - forward.bottom))
+      .toBeLessThanOrEqual(0.25);
+    expect(Math.abs(direct.height - forward.height))
+      .toBeLessThanOrEqual(0.25);
+  }
+});
+
+test("factored x paint hands off without font, inset, or endpoint drift", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  await page.goto(route(818, { kpFoldMode: "expanded" }), {
     waitUntil: "domcontentloaded"
   });
-  const directGeometry = summarizeXPaint(await visibleXPaint(page));
-  expect(Math.abs(directGeometry.bottom - checkpoint.bottom))
-    .toBeLessThanOrEqual(0.25);
-  expect(Math.abs(directGeometry.height - checkpoint.height))
-    .toBeLessThanOrEqual(0.25);
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-hydrated",
+    "true"
+  );
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  const seek = async (progress: number) => {
+    await scrubber.evaluate((node, nextValue) => {
+      const input = node as HTMLInputElement;
+      input.value = String(nextValue);
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }, progress);
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-progress",
+      String(progress)
+    );
+    await page.evaluate(() => new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+    ));
+  };
+  const signature = (
+    paint: Awaited<ReturnType<typeof visibleXPaint>>
+  ) => paint.observations.map((observation) => ({
+    owner: observation.owner,
+    bottom: Math.round(observation.bottom * 1_000) / 1_000,
+    height: Math.round(observation.height * 1_000) / 1_000,
+    opacity: observation.opacity,
+    paintAlignment: observation.paintAlignment,
+    paintInsetX: observation.paintInsetX,
+    paintInsetY: observation.paintInsetY,
+    typography: observation.typography
+  })).sort((left, right) => left.owner.localeCompare(right.owner));
+
+  const forward = new Map<number, {
+    paint: Awaited<ReturnType<typeof visibleXPaint>>;
+    signature: ReturnType<typeof signature>;
+  }>();
+  for (let progress = 818; progress <= 824; progress += 1) {
+    await seek(progress);
+    const paint = await visibleXPaint(page);
+    forward.set(progress, { paint, signature: signature(paint) });
+  }
+  const observations = [...forward.values()].flatMap(({ paint }) =>
+    paint.observations
+  );
+  expect(
+    Math.max(...observations.map(({ height }) => height)) -
+      Math.min(...observations.map(({ height }) => height)),
+    JSON.stringify([...forward])
+  ).toBeLessThanOrEqual(0.25);
+  expect(new Set(observations.map(({ typography }) =>
+    JSON.stringify(typography)
+  )).size, JSON.stringify([...forward])).toBe(1);
+  const material = observations.filter(({ owner }) =>
+    owner.startsWith("material:")
+  );
+  expect(
+    material.every((observation) =>
+      observation.opacity > 0.99 &&
+      observation.paintAlignment === "measured-ink" &&
+      Number.isFinite(observation.paintInsetX) &&
+      Number.isFinite(observation.paintInsetY)
+    ),
+    JSON.stringify(material)
+  ).toBe(true);
+
+  for (let progress = 824; progress >= 818; progress -= 1) {
+    await seek(progress);
+    expect(signature(await visibleXPaint(page)))
+      .toEqual(forward.get(progress)!.signature);
+  }
+  for (const progress of [820, 821]) {
+    await page.goto(route(progress, { kpFoldMode: "expanded" }), {
+      waitUntil: "domcontentloaded"
+    });
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-hydrated",
+      "true"
+    );
+    expect(signature(await visibleXPaint(page)))
+      .toEqual(forward.get(progress)!.signature);
+  }
+  const before = summarizeXPaint(forward.get(820)!.paint);
+  const after = summarizeXPaint(forward.get(821)!.paint);
+  expect(Math.abs(after.bottom - before.bottom)).toBeLessThanOrEqual(0.25);
+  expect(Math.abs(after.height - before.height)).toBeLessThanOrEqual(0.25);
 });
 
 test("automatic factoring checkpoint constructs without compositor errors", async ({

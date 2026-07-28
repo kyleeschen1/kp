@@ -493,11 +493,25 @@
       "scope": "slice s19 type production and resource closure",
       "checkedAt": "2026-07-27T23:53:24.480Z",
       "notes": "Every TypeScript project passes; all 10 reader manifest routes close in production; route budgets remain under the fixed 5 percent growth policy with foldable distribution at 6391 gzip HTML bytes and shared reader runtime at 110040 gzip bytes."
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "slice s20 measured paint non regression",
+      "checkedAt": "2026-07-28T00:01:16.502Z",
+      "notes": "All 20 Chromium cases pass. The historical 230-251 sag window is sampled at every permille forward and rewind plus four direct loads; factoring handoff 818-824 is sampled forward/rewind plus direct endpoints. Actual x ink bottoms/heights stay within 0.25px, clones retain measured-ink alignment, finite stable insets, one typography fingerprint, opaque ownership, and native endpoint closure."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer; npm run typecheck",
+      "status": "passed",
+      "scope": "slice s20 canonical paint and type gate",
+      "checkedAt": "2026-07-28T00:01:24.828Z",
+      "notes": "All 12 canonical renderer/opacity/readiness gates and every TypeScript project pass; the measured-paint ratchet adds no glyph, lifecycle, renderer, session, or route category."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Certified stage geometry is now replay-independent and resource-stable: equivalent semantic state yields the same rounded CSS-pixel rows, swept bounds, centering bounds, scale, and transforms after rewind, direct load, resize round-trip, device scale changes, and font invalidation. Invalidation rotates authority and removes the stale application instead of reusing it."
+    "summary": "The earlier x sag/font-swap fix is now a dense paint-level invariant under certified layout: native and material x ink share the approved 0.25px baseline/height residual, cloned paint uses finite stable measured insets and one typography fingerprint, ownership remains opaque, and direct/rewind endpoint handoffs reproduce the same frames."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."
