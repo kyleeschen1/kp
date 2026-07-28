@@ -10,12 +10,16 @@ import {
   kpOperationEvaluationPresentationCorePack,
   kpOperationEvaluationPresentationExtensionLimit,
   kpOperationEvaluationPresentationPins,
+  kpOperationEvaluationPresentationPlanCompilers,
   requireKpCanonicalOperationEvaluationPresentation,
   resolveKpOperationEvaluationPresentation,
   ruleFromKpResolvedOperationEvaluationPresentation,
   type KpOperationEvaluationPresentationEntry,
   type KpOperationEvaluationPresentationPack
 } from "../src/animation/operation-evaluation-presentation-registry.ts";
+import {
+  kpCoreOperationPresentationLawIds
+} from "../src/animation/operation-presentation-law-types.ts";
 
 test("canonical arithmetic evaluation resolves through one exact pinned motif", () => {
   for (const transformationKind of
@@ -27,6 +31,14 @@ test("canonical arithmetic evaluation resolves through one exact pinned motif", 
     assert.equal(resolution.status, "resolved");
     if (resolution.status !== "resolved") continue;
     assert.equal(resolution.certificate.motifKind, "successor-synthesis");
+    assert.deepEqual(
+      resolution.certificate.planCompiler,
+      kpOperationEvaluationPresentationPlanCompilers[0]
+    );
+    assert.deepEqual(
+      resolution.certificate.planCompiler.lawIds,
+      kpCoreOperationPresentationLawIds
+    );
     assert.equal(
       resolution.certificate.packVersion,
       kpOperationEvaluationPresentationCorePack.version
@@ -69,7 +81,7 @@ test("resolution fails closed for unknown transformations and pin drift", () => 
       transformationKind: "simplifyConstantProduct",
       pins: createKpOperationEvaluationPresentationPins([{
         packId: kpOperationEvaluationPresentationCorePack.id,
-        version: "2.0.0"
+        version: "3.0.0"
       }])
     }).status,
     "version-mismatch"
@@ -100,7 +112,7 @@ test("a bounded exact-pinned extension can add but cannot override a presentatio
     resolution.status === "resolved"
       ? resolution.certificate.motifKind
       : undefined,
-    "semantic-reorder-and-group"
+    "successor-synthesis"
   );
 
   assert.throws(
@@ -154,6 +166,53 @@ test("extensions require the exact core and shared motif vocabulary", () => {
       ]
     }),
     /unknown shared motif project-local-fade/
+  );
+
+  assert.throws(
+    () => createKpOperationEvaluationPresentationRegistry({
+      packs: [kpOperationEvaluationPresentationCorePack, extensionPack],
+      entries: [
+        ...kpOperationEvaluationPresentationCoreEntries,
+        {
+          ...extensionPresentationEntry(1),
+          planCompiler: {
+            id: "kp.presentation-plan-compiler.successor-synthesis",
+            version: "2.0.0"
+          }
+        }
+      ]
+    }),
+    /unknown or unpinned plan compiler/
+  );
+});
+
+test("extensions cannot replace the core presentation law set", () => {
+  const extensionPack = extensionPresentationPack(2);
+  const registry = createKpOperationEvaluationPresentationRegistry({
+    packs: [kpOperationEvaluationPresentationCorePack, extensionPack],
+    entries: [
+      ...kpOperationEvaluationPresentationCoreEntries,
+      extensionPresentationEntry(2)
+    ]
+  });
+  const resolution = resolveKpOperationEvaluationPresentation({
+    registry,
+    pins: createKpOperationEvaluationPresentationPins([
+      ...kpOperationEvaluationPresentationPins.packs,
+      { packId: extensionPack.id, version: extensionPack.version }
+    ]),
+    transformationKind: "evaluateProjectOperation2"
+  });
+
+  assert.equal(resolution.status, "resolved");
+  if (resolution.status !== "resolved") return;
+  assert.deepEqual(
+    resolution.certificate.planCompiler.lawIds,
+    kpCoreOperationPresentationLawIds
+  );
+  assert.equal(
+    Object.isFrozen(resolution.certificate.planCompiler.lawIds),
+    true
   );
 });
 
@@ -238,7 +297,11 @@ function extensionPresentationEntry(
     id: `project.evaluation-${index}.result`,
     packId: `project.evaluation-${index}`,
     transformationKind: `evaluateProjectOperation${index}`,
-    motifKind: "semantic-reorder-and-group",
+    motifKind: "successor-synthesis",
+    planCompiler: {
+      id: "kp.presentation-plan-compiler.successor-synthesis",
+      version: "1.0.0"
+    },
     definitionIds: [],
     canonicalOperationIds: ["kp.core.reorder"],
     trustedMotifIds: ["reorder"],

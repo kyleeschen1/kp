@@ -27,7 +27,7 @@ function createDraft(
     schemaVersion: "kp.verified-operation-presentation-plan.v1",
     id: "plan.inverse",
     transformationId: "transform.inverse",
-    kind: "inverse-cancellation",
+    planKind: "inverse-cancellation",
     roles: createKpOperationPresentationRoles({
       bundles: [
         createKpOperationPresentationBundle({

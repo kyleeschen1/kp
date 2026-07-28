@@ -2,18 +2,17 @@ import type {
   KpOperationPresentationPlanDraft,
   KpVerifiedOperationPresentationPlan
 } from "./operation-presentation-plan-types.ts";
+import {
+  kpCoreOperationPresentationLawIds,
+  type KpOperationPresentationLawId
+} from "./operation-presentation-law-types.ts";
 
-export const kpCoreOperationPresentationLawIds = [
-  "presentation.lineage",
-  "presentation.ownership",
-  "presentation.temporal-groups",
-  "presentation.contacts",
-  "presentation.endpoint-settlement",
-  "presentation.rewind"
-] as const;
-
-export type KpOperationPresentationLawId =
-  (typeof kpCoreOperationPresentationLawIds)[number];
+export {
+  kpCoreOperationPresentationLawIds
+} from "./operation-presentation-law-types.ts";
+export type {
+  KpOperationPresentationLawId
+} from "./operation-presentation-law-types.ts";
 
 export interface KpOperationPresentationLawContext {
   readonly sourceSelectorIds: readonly string[];
@@ -137,7 +136,7 @@ export function runKpOperationPresentationLaws(input: {
 
   if (
     lawIds.has("presentation.contacts") &&
-    input.plan.kind === "inverse-cancellation"
+    input.plan.planKind === "inverse-cancellation"
   ) {
     const cancellationPlan = input.plan;
     const contact = cancellationPlan.roles.groups.find(

@@ -1,3 +1,7 @@
+import type {
+  KpOperationPresentationLawId
+} from "./operation-presentation-law-types.ts";
+
 export const kpCanonicalOperationEvaluationTransformationKinds = [
   "simplifyConstantProduct",
   "simplifyConstantQuotient",
@@ -34,17 +38,33 @@ export interface KpOperationEvaluationPresentationEntry {
    * closes this string against the current equation motif descriptors.
    */
   readonly motifKind: string;
+  readonly planCompiler:
+    KpOperationEvaluationPresentationPlanCompilerRef;
   readonly definitionIds: readonly string[];
   readonly canonicalOperationIds: readonly string[];
   readonly trustedMotifIds: readonly string[];
   readonly summary: string;
 }
 
+export interface KpOperationEvaluationPresentationPlanCompilerRef {
+  readonly id: string;
+  readonly version: string;
+}
+
+export interface KpOperationEvaluationPresentationPlanCompilerDescriptor
+  extends KpOperationEvaluationPresentationPlanCompilerRef {
+  readonly planKind: string;
+  readonly motifKind: string;
+  readonly lawIds: readonly KpOperationPresentationLawId[];
+}
+
 export interface KpOperationEvaluationPresentationRegistry {
   readonly kind: "operation-evaluation-presentation-registry";
-  readonly schemaVersion: "kp.operation-evaluation-presentation-registry.v1";
+  readonly schemaVersion: "kp.operation-evaluation-presentation-registry.v2";
   readonly packs: readonly KpOperationEvaluationPresentationPack[];
   readonly entries: readonly KpOperationEvaluationPresentationEntry[];
+  readonly planCompilers:
+    readonly KpOperationEvaluationPresentationPlanCompilerDescriptor[];
 }
 
 export interface KpOperationEvaluationPresentationPackPin {
@@ -64,12 +84,14 @@ declare const kpResolvedOperationEvaluationPresentationBrand: unique symbol;
  * not bypass version checks by reconstructing a visually similar raw rule.
  */
 export interface KpResolvedOperationEvaluationPresentation {
-  readonly schemaVersion: "kp.resolved-operation-evaluation-presentation.v1";
+  readonly schemaVersion: "kp.resolved-operation-evaluation-presentation.v2";
   readonly presentationId: string;
   readonly transformationKind: string;
   readonly packId: string;
   readonly packVersion: string;
   readonly motifKind: string;
+  readonly planCompiler:
+    KpOperationEvaluationPresentationPlanCompilerDescriptor;
   readonly definitionIds: readonly string[];
   readonly canonicalOperationIds: readonly string[];
   readonly trustedMotifIds: readonly string[];

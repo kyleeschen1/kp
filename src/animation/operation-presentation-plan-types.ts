@@ -13,7 +13,7 @@ interface KpOperationPresentationPlanDraftBase {
 
 export type KpInverseCancellationPresentationPlanDraft =
   KpOperationPresentationPlanDraftBase & {
-  readonly kind: "inverse-cancellation";
+  readonly planKind: "inverse-cancellation";
   readonly contactGroupId: string;
   readonly inverseBundleIds: readonly [string, string];
 };
@@ -26,21 +26,23 @@ export type KpInverseCancellationPresentationPlanDraft =
 export type KpOperationPresentationPlanDraft =
   | KpInverseCancellationPresentationPlanDraft
   | (KpOperationPresentationPlanDraftBase & {
-      readonly kind: "successor-synthesis" | "factoring";
+      readonly planKind: "successor-synthesis" | "factoring";
       readonly fusionGroupId: string;
       readonly resultBundleId: string;
     })
   | (KpOperationPresentationPlanDraftBase & {
-      readonly kind: "synchronized-balanced-introduction" | "distribution";
+      readonly planKind:
+        | "synchronized-balanced-introduction"
+        | "distribution";
       readonly branchGroupId: string;
     })
   | (KpOperationPresentationPlanDraftBase & {
-      readonly kind: "fraction-material";
+      readonly planKind: "fraction-material";
       readonly operation: "fission" | "fusion";
       readonly materialGroupId: string;
     })
   | (KpOperationPresentationPlanDraftBase & {
-      readonly kind: "structural-succession";
+      readonly planKind: "structural-succession";
       readonly sourceBundleId: string;
       readonly targetBundleId: string;
     });

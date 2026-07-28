@@ -71,11 +71,18 @@
       "scope": "slice-05",
       "checkedAt": "2026-07-28T18:24:05.468Z",
       "notes": "Sixteen focused laws pass; pure diagnostics cover lineage, ownership, scheduled semantic groups, exact inverse contact, native endpoint settlement, and exact rewind without rendered-coordinate inputs."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans; npm run typecheck; npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "slice-06",
+      "checkedAt": "2026-07-28T18:30:00.405Z",
+      "notes": "Twenty-three focused laws pass; exact compiler pin drift and extension law bypass fail closed; all type domains and architecture gates pass; inference remains within ceiling at 49911 types and 66157 instantiations."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-5 complete: verified plan structure is supplemented by pure semantic law diagnostics before registry integration."
+    "summary": "Slices 1-6 complete: exact-version registry resolution now selects a shared trusted plan compiler and mandatory law set, not a motif label alone."
   },
   "expectedLearning": [
     "Whether one role-complete presentation-plan boundary eliminates correct-label/wrong-realization regressions without a second renderer or closed extension taxonomy."

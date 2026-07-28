@@ -14,7 +14,7 @@ const fabricated: KpVerifiedOperationPresentationPlan = {
   schemaVersion: "kp.verified-operation-presentation-plan.v1",
   id: "plan.fabricated",
   transformationId: "transform.fabricated",
-  kind: "inverse-cancellation",
+  planKind: "inverse-cancellation",
   roles,
   contactGroupId: "group.contact",
   inverseBundleIds: ["bundle.left", "bundle.right"]
@@ -24,7 +24,7 @@ const incompleteCancellation: KpVerifiedInverseCancellationPresentationPlan = {
   schemaVersion: "kp.verified-operation-presentation-plan.v1",
   id: "plan.incomplete",
   transformationId: "transform.incomplete",
-  kind: "inverse-cancellation",
+  planKind: "inverse-cancellation",
   roles,
   contactGroupId: "group.contact",
   // @ts-expect-error Cancellation always has exactly two inverse bundles.
@@ -33,7 +33,7 @@ const incompleteCancellation: KpVerifiedInverseCancellationPresentationPlan = {
 
 declare const verified: KpVerifiedOperationPresentationPlan;
 
-if (verified.kind === "factoring") {
+if (verified.planKind === "factoring") {
   verified.resultBundleId;
   // @ts-expect-error Factoring cannot be dispatched as a branch plan.
   verified.branchGroupId;

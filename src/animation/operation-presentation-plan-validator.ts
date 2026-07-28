@@ -199,7 +199,7 @@ function validateVariantReferences(
     }
   };
 
-  switch (draft.kind) {
+  switch (draft.planKind) {
     case "inverse-cancellation":
       requireGroup(draft.contactGroupId, "contact", "contactGroupId");
       draft.inverseBundleIds.forEach((id, index) => {

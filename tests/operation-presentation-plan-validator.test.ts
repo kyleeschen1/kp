@@ -37,7 +37,7 @@ function cancellationDraft(input?: {
     schemaVersion: "kp.verified-operation-presentation-plan.v1",
     id: "plan.additive-cancellation",
     transformationId: "transform.additive-cancellation",
-    kind: "inverse-cancellation",
+    planKind: "inverse-cancellation",
     roles: createKpOperationPresentationRoles({
       bundles: [left, right, continuant],
       groups: [
@@ -67,7 +67,7 @@ test("trusted validator mints an immutable total selector-role plan", () => {
 
   assert.equal(result.status, "verified");
   if (result.status !== "verified") return;
-  assert.equal(result.plan.kind, "inverse-cancellation");
+  assert.equal(result.plan.planKind, "inverse-cancellation");
   assert.equal(Object.isFrozen(result.plan), true);
   assert.equal(Object.isFrozen(result.plan.roles), true);
   assert.equal(Object.isFrozen(result.plan.roles.bundles), true);

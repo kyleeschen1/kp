@@ -14,11 +14,16 @@ import {
   type KpOperationEvaluationPresentationPack,
   type KpOperationEvaluationPresentationPackDependency,
   type KpOperationEvaluationPresentationPackPin,
+  type KpOperationEvaluationPresentationPlanCompilerDescriptor,
+  type KpOperationEvaluationPresentationPlanCompilerRef,
   type KpOperationEvaluationPresentationPins,
   type KpOperationEvaluationPresentationRegistry,
   type KpOperationEvaluationPresentationResolution,
   type KpResolvedOperationEvaluationPresentation
 } from "./operation-evaluation-presentation-types.ts";
+import {
+  kpCoreOperationPresentationLawIds
+} from "./operation-presentation-law-types.ts";
 
 export {
   kpCanonicalOperationEvaluationTransformationKinds
@@ -29,6 +34,8 @@ export type {
   KpOperationEvaluationPresentationPack,
   KpOperationEvaluationPresentationPackDependency,
   KpOperationEvaluationPresentationPackPin,
+  KpOperationEvaluationPresentationPlanCompilerDescriptor,
+  KpOperationEvaluationPresentationPlanCompilerRef,
   KpOperationEvaluationPresentationPins,
   KpOperationEvaluationPresentationRegistry,
   KpOperationEvaluationPresentationResolution,
@@ -38,11 +45,23 @@ export type {
 export const kpOperationEvaluationPresentationExtensionLimit = 32;
 export const kpOperationEvaluationPresentationsPerPackLimit = 64;
 
+export const kpOperationEvaluationPresentationPlanCompilers:
+  readonly KpOperationEvaluationPresentationPlanCompilerDescriptor[] =
+  Object.freeze([
+    Object.freeze({
+      id: "kp.presentation-plan-compiler.successor-synthesis",
+      version: "1.0.0",
+      planKind: "successor-synthesis",
+      motifKind: "successor-synthesis",
+      lawIds: Object.freeze([...kpCoreOperationPresentationLawIds])
+    })
+  ]);
+
 export const kpOperationEvaluationPresentationCorePack =
   createKpOperationEvaluationPresentationPack({
     id: "kp.presentation.operation-evaluation",
     scope: "core",
-    version: "1.0.0",
+    version: "2.0.0",
     title: "KP operation-evaluation presentations",
     presentationIds: [
       "kp.presentation.operation-evaluation.product",
@@ -245,6 +264,19 @@ export function createKpOperationEvaluationPresentationRegistry(input: {
         `${entry.motifKind}.`
       );
     }
+    const planCompiler = resolvePlanCompiler(entry.planCompiler);
+    if (planCompiler === undefined) {
+      throw new Error(
+        `Presentation ${entry.id} references unknown or unpinned plan ` +
+        `compiler ${entry.planCompiler.id}@${entry.planCompiler.version}.`
+      );
+    }
+    if (planCompiler.motifKind !== entry.motifKind) {
+      throw new Error(
+        `Presentation ${entry.id} motif ${entry.motifKind} does not match ` +
+        `plan compiler ${planCompiler.id} motif ${planCompiler.motifKind}.`
+      );
+    }
     requireNonempty(entry.canonicalOperationIds, entry.id, "canonical operation");
     requireNonempty(entry.trustedMotifIds, entry.id, "trusted motif");
     requireUnique(entry.definitionIds, `definition id in presentation ${entry.id}`);
@@ -277,9 +309,12 @@ export function createKpOperationEvaluationPresentationRegistry(input: {
 
   return Object.freeze({
     kind: "operation-evaluation-presentation-registry",
-    schemaVersion: "kp.operation-evaluation-presentation-registry.v1",
+    schemaVersion: "kp.operation-evaluation-presentation-registry.v2",
     packs: Object.freeze(input.packs.map(clonePack)),
-    entries: Object.freeze(input.entries.map(cloneEntry))
+    entries: Object.freeze(input.entries.map(cloneEntry)),
+    planCompilers: Object.freeze(
+      kpOperationEvaluationPresentationPlanCompilers.map(clonePlanCompiler)
+    )
   });
 }
 
@@ -379,6 +414,10 @@ function coreEntry(input: {
     packId: "kp.presentation.operation-evaluation",
     transformationKind: input.transformationKind,
     motifKind: "successor-synthesis",
+    planCompiler: Object.freeze({
+      id: "kp.presentation-plan-compiler.successor-synthesis",
+      version: "1.0.0"
+    }),
     definitionIds: Object.freeze(
       input.definitionId === undefined ? [] : [input.definitionId]
     ),
@@ -397,12 +436,13 @@ function resolvedCertificate(
   entry: KpOperationEvaluationPresentationEntry
 ): KpResolvedOperationEvaluationPresentation {
   return Object.freeze({
-    schemaVersion: "kp.resolved-operation-evaluation-presentation.v1",
+    schemaVersion: "kp.resolved-operation-evaluation-presentation.v2",
     presentationId: entry.id,
     transformationKind: entry.transformationKind,
     packId: pack.id,
     packVersion: pack.version,
     motifKind: entry.motifKind,
+    planCompiler: clonePlanCompiler(resolvePlanCompiler(entry.planCompiler)!),
     definitionIds: Object.freeze([...entry.definitionIds]),
     canonicalOperationIds: Object.freeze([...entry.canonicalOperationIds]),
     trustedMotifIds: Object.freeze([...entry.trustedMotifIds]),
@@ -427,9 +467,27 @@ function cloneEntry(
 ): KpOperationEvaluationPresentationEntry {
   return Object.freeze({
     ...entry,
+    planCompiler: Object.freeze({ ...entry.planCompiler }),
     definitionIds: Object.freeze([...entry.definitionIds]),
     canonicalOperationIds: Object.freeze([...entry.canonicalOperationIds]),
     trustedMotifIds: Object.freeze([...entry.trustedMotifIds])
+  });
+}
+
+function resolvePlanCompiler(
+  ref: KpOperationEvaluationPresentationPlanCompilerRef
+): KpOperationEvaluationPresentationPlanCompilerDescriptor | undefined {
+  return kpOperationEvaluationPresentationPlanCompilers.find(
+    ({ id, version }) => id === ref.id && version === ref.version
+  );
+}
+
+function clonePlanCompiler(
+  compiler: KpOperationEvaluationPresentationPlanCompilerDescriptor
+): KpOperationEvaluationPresentationPlanCompilerDescriptor {
+  return Object.freeze({
+    ...compiler,
+    lawIds: Object.freeze([...compiler.lawIds])
   });
 }
 

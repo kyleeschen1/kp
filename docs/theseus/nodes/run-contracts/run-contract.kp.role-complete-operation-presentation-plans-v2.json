@@ -87,7 +87,8 @@
     {
       "id": "slice.kp.role-plan.06",
       "title": "Evolve-presentation-registry",
-      "status": "planned"
+      "summary": "Evolved the exact-versioned registry to resolve approved plan-compiler descriptors and immutable core laws; extensions cannot inject callbacks or bypass laws.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.07",
