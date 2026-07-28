@@ -69,6 +69,13 @@
       "scope": "slice 03 rapid-scroll instrumentation",
       "checkedAt": "2026-07-28T20:56:23.781Z",
       "notes": "30-frame bidirectional trace passed; baseline identified 28 canonical session builds, 6758.8 ms aggregate build time, 13 frames over 50 ms, approximately 533 ms p95, zero scroll-geometry recompiles, and zero material-owner add/remove churn."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll:chromium",
+      "status": "passed",
+      "scope": "slice 04 deterministic Chromium baseline, repeated twice",
+      "checkedAt": "2026-07-28T20:58:50.452Z",
+      "notes": "Both repetitions produced the frozen 30-frame work counters: 0 scroll-geometry reads, 30 anchor reads, 28 session builds, 2 reuses, 30 applies, and 0 material-owner additions or removals. Frame timing remains attached evidence rather than an environment-dependent baseline allowance."
     }
   ],
   "expectedLearning": [

@@ -72,7 +72,8 @@
     {
       "id": "slice.kp.reader-hardening.04",
       "title": "Freeze-Chromium-baseline",
-      "status": "planned"
+      "summary": "Frozen deterministic Chromium cold-path work counters after two identical runs; timing remains diagnostic evidence and the product target remains zero long tasks after warm-up.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.05",
