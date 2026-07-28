@@ -1,4 +1,9 @@
 export {
+  createKpReaderCompositorGeometryCacheIdentity,
+  type KpReaderCompositorGeometryCacheIdentity,
+  type KpReaderCompositorGeometryCacheIdentityInput
+} from "./equation-compositor-geometry-cache-identity.ts";
+export {
   createKpReaderSessionSnapshot,
   type KpReaderLocation,
   type KpReaderSessionSnapshot

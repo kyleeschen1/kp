@@ -84,7 +84,8 @@
     {
       "id": "slice.kp.reader-hardening.06",
       "title": "Define-typed-geometry-cache-identity",
-      "status": "planned"
+      "summary": "Added a factory-only nominal compositor geometry identity with exhaustive invalidation authorities, runtime validation, negative compile coverage, and unchanged inference ceilings.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.07",

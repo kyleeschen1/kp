@@ -83,6 +83,27 @@
       "scope": "slice 05 repeated three-engine work baseline",
       "checkedAt": "2026-07-28T21:02:00.473Z",
       "notes": "Chromium, Firefox, and WebKit each passed twice with equivalent observables and the exact 0/30/28/2/30 geometry-anchor-build-reuse-apply counters plus zero material-owner churn. Long Task API support is Chromium-only; frame intervals remain the portable timing signal. The prior WebKit phone readable-floor diagnostic is classified as shared responsive-fit debt, not a browser-specific compositor divergence."
+    },
+    {
+      "command": "npm run test:reader-runtime-hardening",
+      "status": "passed",
+      "scope": "slice 06 total branded geometry cache identity",
+      "checkedAt": "2026-07-28T21:07:38.028Z",
+      "notes": "Factory validation and exhaustive single-authority invalidation tests passed; compile-time fixture rejects an omitted DPR authority."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 06 nominal identity and negative compile fixture",
+      "checkedAt": "2026-07-28T21:07:42.717Z",
+      "notes": "All application, Node, test, and domain projects passed."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice 06 compiler inference budget",
+      "checkedAt": "2026-07-28T21:07:51.148Z",
+      "notes": "Passed below the unchanged ceiling at 49,928 types, 66,215 instantiations, and 2.32 seconds check time."
     }
   ],
   "expectedLearning": [
