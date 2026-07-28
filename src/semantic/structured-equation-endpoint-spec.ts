@@ -147,7 +147,13 @@ function renderNode(
       const selectorIds: string[] = [];
       children.forEach((child, index) => {
         if (index > 0) {
-          if (usesImplicitProduct(node.factors[index - 1]!, node.factors[index]!)) {
+          const left = node.factors[index - 1]!;
+          const right = node.factors[index]!;
+          if (usesTightImplicitProduct(left, right)) {
+            // KaTeX owns coefficient adjacency. A manual gap detaches the
+            // coefficient from its variable (`2 x`) instead of preserving
+            // the conventional typographic unit (`2x`).
+          } else if (usesImplicitProduct(left, right)) {
             segments.push(gap());
           } else {
             const operatorId = `${node.id}.operator.${index}`;
@@ -229,6 +235,13 @@ function usesImplicitProduct(
     (left.kind === "quotient" && right.kind === "sum") ||
     right.kind === "sum"
   );
+}
+
+function usesTightImplicitProduct(
+  left: KpStructuredExpressionNode,
+  right: KpStructuredExpressionNode
+): boolean {
+  return left.kind === "number" && right.kind === "symbol";
 }
 
 function token(selectorId: string, value: string): KpStructuredEquationEndpointSegment {

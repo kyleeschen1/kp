@@ -1,6 +1,7 @@
 import {
   expect,
   test,
+  type BrowserContext,
   type FrameLocator,
   type Page
 } from "@playwright/test";
@@ -51,16 +52,23 @@ test("fraction composition passes the complete Animation Library visual matrix",
       readonly KpFractionCompositionVisualViolation[];
   }> = [];
   let reviewRequest: KpDevReviewCreateRequestV2 | undefined;
+  const contexts = new Map<string, BrowserContext>();
 
-  for (const viewport of viewports) {
-    for (const foldMode of foldModes) {
-      for (const deviceScaleFactor of deviceScaleFactors) {
-        const context = await browser.newContext({
-          viewport: viewport.outer,
-          deviceScaleFactor
-        });
-        try {
+  try {
+    for (const viewport of viewports) {
+      for (const foldMode of foldModes) {
+        for (const deviceScaleFactor of deviceScaleFactors) {
+          const contextKey = `${viewport.id}.dpr${deviceScaleFactor}`;
+          let context = contexts.get(contextKey);
+          if (context === undefined) {
+            context = await browser.newContext({
+              viewport: viewport.outer,
+              deviceScaleFactor
+            });
+            contexts.set(contextKey, context);
+          }
           const page = await context.newPage();
+          try {
           const errors: string[] = [];
           page.on("pageerror", (error) => errors.push(error.message));
           await mockReviewInbox(page);
@@ -208,11 +216,14 @@ test("fraction composition passes the complete Animation Library visual matrix",
             deviceScaleFactor,
             sampleCount: samples.length
           });
-        } finally {
-          await context.close();
+          } finally {
+            await page.close();
+          }
         }
       }
     }
+  } finally {
+    for (const context of contexts.values()) await context.close();
   }
 
   expect(summaries).toHaveLength(16);
@@ -300,11 +311,12 @@ async function seek(
     "data-kp-reader-progress",
     String(progress)
   );
+  // The exact progress attribute is written by the scheduled reader frame.
+  // One subsequent paint is sufficient; a second frame multiplied 1,296
+  // times adds no state coverage and can consume the matrix timeout margin.
   await frame.locator("body").evaluate(() =>
     new Promise<void>((resolve) =>
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => resolve())
-      )
+      requestAnimationFrame(() => resolve())
     )
   );
 }

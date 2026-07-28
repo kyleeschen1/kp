@@ -210,7 +210,7 @@ export async function settleAndObserveKpNativeKatexRenderedScene(input: {
       atom.id !== settled.id ||
       atom.visualKey !== settled.visualKey ||
       atom.styleFingerprint !== settled.styleFingerprint ||
-      rectDelta(atom.rect, settled.rect) > tolerance
+      measureKpStageRelativeRectDelta(atom.rect, settled.rect) > tolerance
     ) {
       throw new Error(`Rendered scene atom ${atom.id} did not settle.`);
     }
@@ -502,7 +502,7 @@ export function observeKpNativeKatexRenderedScene(input: {
         ? {}
         : { parentGroupId: parent.dataset["kpPresentationGroupId"] }),
       atomIds: groupAtoms.map(({ id }) => id),
-      rect: unionRects(groupAtoms.map(({ rect }) => rect))
+      rect: unionKpStageRelativeRects(groupAtoms.map(({ rect }) => rect))
     };
   });
   const stageRect = input.stage.getBoundingClientRect();
@@ -520,7 +520,9 @@ export function observeKpNativeKatexRenderedScene(input: {
   });
 }
 
-function unionRects(rects: readonly KpStageRelativeRect[]): KpStageRelativeRect {
+export function unionKpStageRelativeRects(
+  rects: readonly KpStageRelativeRect[]
+): KpStageRelativeRect {
   const left = Math.min(...rects.map((rect) => rect.left));
   const top = Math.min(...rects.map((rect) => rect.top));
   const right = Math.max(...rects.map((rect) => rect.left + rect.width));
@@ -528,7 +530,10 @@ function unionRects(rects: readonly KpStageRelativeRect[]): KpStageRelativeRect 
   return { left, top, width: right - left, height: bottom - top };
 }
 
-function rectDelta(left: KpStageRelativeRect, right: KpStageRelativeRect): number {
+export function measureKpStageRelativeRectDelta(
+  left: KpStageRelativeRect,
+  right: KpStageRelativeRect
+): number {
   return Math.max(
     Math.abs(left.left - right.left),
     Math.abs(left.top - right.top),

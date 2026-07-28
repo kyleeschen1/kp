@@ -381,11 +381,74 @@
       "scope": "slice s18 preservation and static closure",
       "checkedAt": "2026-07-28T07:42:15.514Z",
       "notes": "All six canonical fraction reader browser checks and every TypeScript project pass. The visual failure is bounded to generic mid-transit clearance, not math, fold truth, accessibility, endpoint settlement, or static authority."
+    },
+    {
+      "command": "npm run visual:fraction-composition-canonical",
+      "status": "passed",
+      "scope": "s19 complete 16-case 1296-frame visual matrix",
+      "checkedAt": "2026-07-28T15:01:30.873Z",
+      "notes": "Zero unrelated paint contacts; endpoint, opacity, layout, fit, rewind, DPR, and review-capture gates passed in 3.8 minutes."
+    },
+    {
+      "command": "npm run test:browser:fraction-composition:determinism",
+      "status": "passed",
+      "scope": "s19 Chromium and Firefox DPR determinism",
+      "checkedAt": "2026-07-28T15:01:31.750Z",
+      "notes": "History, font invalidation, resize, endpoints, resource release, and CSS-pixel DPR invariance passed."
+    },
+    {
+      "command": "npm run typecheck && npm run check:architecture && npm run build",
+      "status": "passed",
+      "scope": "s19 type architecture and production build",
+      "checkedAt": "2026-07-28T15:01:32.571Z",
+      "notes": "Nominal protected-transit anti-forgery fixture, architecture boundaries, source ceiling, and production build passed."
+    },
+    {
+      "command": "npm run check:reader-production && npm run check:reader-budgets && theseus workspace validate",
+      "status": "passed",
+      "scope": "s19 release closure and durable graph",
+      "checkedAt": "2026-07-28T15:01:33.381Z",
+      "notes": "Eleven production routes, reader payload budgets, and 812-node Theseus graph passed."
+    },
+    {
+      "command": "npm run visual:fraction-composition-canonical",
+      "status": "passed",
+      "scope": "s19 final 16-case 1296-frame visual matrix",
+      "checkedAt": "2026-07-28T15:51:33.583Z",
+      "notes": "Passed in 3.6 minutes with zero unrelated contacts; all endpoint, opacity, fit, review capture, and settlement assertions passed."
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "s19 cross-family preservation",
+      "checkedAt": "2026-07-28T15:51:34.448Z",
+      "notes": "All 20 Chromium checks passed across phone, wide, seek, rewind, factoring, evaluation, and fit."
+    },
+    {
+      "command": "npm run test:browser:fraction-composition && npm run test:browser:fraction-composition:determinism",
+      "status": "passed",
+      "scope": "s19 browser conformance and determinism",
+      "checkedAt": "2026-07-28T15:51:35.257Z",
+      "notes": "Six Chromium conformance checks and six Chromium/Firefox determinism and resource-release checks passed."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture; npm run test:foldable-distribution; npm run test:real-katex-glyph-compositor; npm run test:canonical-equation-renderer; npm run test:canonical-animation-construction",
+      "status": "passed",
+      "scope": "s19 focused architecture and preservation",
+      "checkedAt": "2026-07-28T15:51:36.068Z",
+      "notes": "57 fraction, 102 foldable, 65 compositor, 12 renderer, and 60 construction tests passed."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; npm run build; npm run check:reader-production; npm run check:reader-budgets; theseus workspace validate",
+      "status": "passed",
+      "scope": "s19 release boundary",
+      "checkedAt": "2026-07-28T15:51:36.900Z",
+      "notes": "Types, architecture, production build, reader closure, frozen route budgets, and workspace graph validation passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: the complete Animation Library matrix preserves semantics, native handoff, opacity, responsive layout, and review capture, but nine repeatable unrelated trajectory contacts block visual approval. A bounded generic protected-transit repair is proposed for s19; ported status remains false."
+    "summary": "Slice s19 complete: generic measured-paint protected transit removes all 132 observed contacts without fraction IDs or new lifecycle vocabulary; cross-family preservation and fixed release gates pass. Release closeout remains s20."
   },
   "expectedLearning": [
     "Whether an accepted renderer-neutral fraction composition trace can reach a canonical learner reader mostly through verified content, motif, fold, layout, descriptor, and product wiring without protected-core growth.",

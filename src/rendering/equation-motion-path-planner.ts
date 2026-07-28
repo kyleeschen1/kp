@@ -66,6 +66,17 @@ const kpReorderSettlementAspectRatio = 8;
 const kpFanInLiftRiseEnd = 0.22;
 const kpFanInTransitStart = 0.55;
 const kpFanInLiftRatios = [0.35, 0.5, 0.75, 1, 1.25, 1.5] as const;
+const kpProtectedTransitContextRanges = [
+  { start: 0, end: 0.5 },
+  { start: 0, end: 0.65 },
+  { start: 0, end: 0.8 },
+  { start: 0.2, end: 1 },
+  { start: 0.35, end: 1 },
+  { start: 0.5, end: 1 },
+  { start: 0.8, end: 1 },
+  { start: 0.9, end: 1 },
+  { start: 0.94, end: 1 }
+] as const;
 // Measured paint includes antialiasing fringes that may touch in native KaTeX.
 export const kpNativeInkContactTolerancePx = 0.75;
 export const kpNativeReorderInkContactTolerancePx = 1.5;
@@ -119,6 +130,42 @@ export interface KpEquationCollisionTrack {
   readonly opacityStepAt?: number | undefined;
   readonly motionGroupTravel?: number | undefined;
   readonly motionSettlementAspectRatio?: number | undefined;
+}
+
+const kpEquationProtectedTransitCertificateBrand: unique symbol = Symbol(
+  "kp-equation-protected-transit-certificate"
+);
+
+export interface KpEquationProtectedTransitFrame {
+  readonly trackId: string;
+  readonly componentId: string;
+  readonly rect: KpEquationLayoutRect;
+  readonly expectedPaintRect?: KpEquationLayoutRect | undefined;
+  readonly opacity: number;
+}
+
+export interface KpEquationProtectedTransitCertificate {
+  readonly kind: "equation-protected-transit-certificate";
+  readonly geometryAuthority:
+    | "certified-stage-layout"
+    | "measured-visible-paint";
+  readonly measurementIdentity?:
+    KpEquationMotionStageOccupancy["measurementIdentity"] | undefined;
+  readonly sampleCount: number;
+  readonly inspectedPairCount: number;
+  readonly opacityScheduledTrackIds: readonly string[];
+  readonly rescheduledComponentIds: readonly string[];
+  readonly routedComponentIds: readonly string[];
+  readonly routedTrackIds: readonly string[];
+  readonly [kpEquationProtectedTransitCertificateBrand]: true;
+}
+
+export interface KpEquationProtectedTransitCompilation<
+  Track extends KpEquationCollisionTrack
+> {
+  readonly kind: "equation-protected-transit-compilation";
+  readonly tracks: readonly Track[];
+  readonly certificate: KpEquationProtectedTransitCertificate;
 }
 
 export function planKpEquationMotionPath(input: {
@@ -476,6 +523,323 @@ export function compileKpCollisionSafeReorderTracks<
   );
 }
 
+/**
+ * Certifies the finalized measured scene, after motif-specific routing but
+ * before paint sampling. Callers cannot claim protected transit by attaching
+ * metadata: the nominal certificate is created only after dense unrelated-pair
+ * inspection reaches zero.
+ */
+export function compileKpCollisionSafeTransitTracks<
+  Track extends KpEquationCollisionTrack
+>(input: {
+  readonly tracks: readonly Track[];
+  readonly stageOccupancy?: KpEquationMotionStageOccupancy | undefined;
+  readonly sampleFrames: (
+    tracks: readonly Track[],
+    progress: number
+  ) => readonly KpEquationProtectedTransitFrame[];
+  readonly sampleCount?: number | undefined;
+}): KpEquationProtectedTransitCompilation<Track> {
+  if (input.stageOccupancy !== undefined) {
+    assertKpEquationMotionStageOccupancy(input.stageOccupancy);
+  }
+  const sampleCount = positiveInteger(
+    input.sampleCount ?? 100,
+    "protected transit sample count"
+  );
+  assertUniqueCollisionTrackIds(input.tracks);
+  let tracks = Object.freeze([...input.tracks]);
+  const opacityScheduledTrackIds = new Set<string>();
+  const rescheduledComponentIds = new Set<string>();
+  const routedComponentIds = new Set<string>();
+  const routedTrackIds = new Set<string>();
+  let audit = inspectProtectedTransit({
+    tracks,
+    sampleFrames: input.sampleFrames,
+    sampleCount
+  });
+
+  const initiallyScheduled = scheduleProtectedTransitStructuralOpacity({
+    tracks,
+    audit,
+    scheduledTrackIds: opacityScheduledTrackIds
+  });
+  if (initiallyScheduled !== undefined) {
+    tracks = initiallyScheduled;
+    audit = inspectProtectedTransit({
+      tracks,
+      sampleFrames: input.sampleFrames,
+      sampleCount
+    });
+  }
+
+  while (audit.intersections.length > 0) {
+    const newlyScheduled = scheduleProtectedTransitStructuralOpacity({
+      tracks,
+      audit,
+      scheduledTrackIds: opacityScheduledTrackIds
+    });
+    if (newlyScheduled !== undefined) {
+      // A newly chosen route can expose a later structural contact. Reapply
+      // the same generic visibility law after every geometry decision instead
+      // of assuming the initial audit found the final obstacle set.
+      tracks = newlyScheduled;
+      audit = inspectProtectedTransit({
+        tracks,
+        sampleFrames: input.sampleFrames,
+        sampleCount
+      });
+      continue;
+    }
+    let bestTiming:
+      | {
+          readonly tracks: readonly Track[];
+          readonly audit: KpProtectedTransitAudit;
+          readonly componentId: string;
+        }
+      | undefined;
+    for (const componentId of protectedTransitContextComponentIds(
+      tracks,
+      audit.intersections
+    ).filter((id) => !rescheduledComponentIds.has(id))) {
+      for (const range of kpProtectedTransitContextRanges) {
+        const candidateTracks = Object.freeze(tracks.map((track) =>
+          track.componentId === componentId
+            ? Object.freeze({ ...track, motionProgressRange: range }) as Track
+            : track
+        ));
+        const candidateAudit = inspectProtectedTransit({
+          tracks: candidateTracks,
+          sampleFrames: input.sampleFrames,
+          sampleCount
+        });
+        if (
+          bestTiming === undefined ||
+          compareProtectedTransitAudits(candidateAudit, bestTiming.audit) < 0
+        ) {
+          bestTiming = { tracks: candidateTracks, audit: candidateAudit, componentId };
+        }
+      }
+    }
+    if (
+      bestTiming === undefined ||
+      compareProtectedTransitAudits(bestTiming.audit, audit) >= 0
+    ) break;
+    tracks = bestTiming.tracks;
+    audit = bestTiming.audit;
+    rescheduledComponentIds.add(bestTiming.componentId);
+  }
+
+  const attemptedRouteUnits = new Set<string>();
+  while (audit.intersections.length > 0) {
+    const newlyScheduled = scheduleProtectedTransitStructuralOpacity({
+      tracks,
+      audit,
+      scheduledTrackIds: opacityScheduledTrackIds
+    });
+    if (newlyScheduled !== undefined) {
+      tracks = newlyScheduled;
+      audit = inspectProtectedTransit({
+        tracks,
+        sampleFrames: input.sampleFrames,
+        sampleCount
+      });
+      continue;
+    }
+    const candidates = routeCandidateUnits(tracks, audit.intersections)
+      .filter(({ id }) => !attemptedRouteUnits.has(id));
+    let best:
+      | {
+          readonly tracks: readonly Track[];
+          readonly audit: KpProtectedTransitAudit;
+          readonly unit: KpProtectedTransitRouteUnit;
+          readonly rescheduledComponentIds: readonly string[];
+        }
+      | undefined;
+    const routeCandidates: Array<{
+      readonly tracks: readonly Track[];
+      readonly audit: KpProtectedTransitAudit;
+      readonly unit: KpProtectedTransitRouteUnit;
+    }> = [];
+    routeCandidateGeneration:
+    for (const unit of candidates) {
+      for (
+        const sampling of protectedTransitRouteSamplings(
+          tracks,
+          unit,
+          audit.intersections
+        )
+      ) {
+        for (const variant of protectedTransitRouteVariants(
+          tracks,
+          unit,
+          input.stageOccupancy
+        )) {
+          for (
+            const liftRatio of [
+              0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1,
+              1.125, 1.25, 1.375, 1.5, 1.75, 2, 2.25, 2.5,
+              2.75, 3, 3.5, 4
+            ] as const
+          ) {
+            const candidateTracks = routeProtectedTransitUnit({
+              tracks,
+              unit,
+              variant,
+              liftRatio,
+              sampling,
+              collisionScale: protectedTransitCollisionScale(
+                tracks,
+                unit,
+                audit.intersections
+              ),
+              stageOccupancy: input.stageOccupancy
+            });
+            if (candidateTracks === undefined) continue;
+            const candidateAudit = inspectProtectedTransit({
+              tracks: candidateTracks,
+              sampleFrames: input.sampleFrames,
+              sampleCount
+            });
+            routeCandidates.push({
+              tracks: candidateTracks,
+              audit: candidateAudit,
+              unit
+            });
+            if (candidateAudit.intersections.length === 0) {
+              best = {
+                tracks: candidateTracks,
+                audit: candidateAudit,
+                unit,
+                rescheduledComponentIds: []
+              };
+              break routeCandidateGeneration;
+            }
+          }
+        }
+      }
+    }
+    if (best === undefined) {
+      const beam = routeCandidates
+        .sort((left, right) =>
+          compareProtectedTransitAudits(left.audit, right.audit)
+        )
+        .slice(0, 6);
+      for (const candidate of beam) {
+        const coordinated = optimizeProtectedTransitContextTiming({
+          tracks: candidate.tracks,
+          audit: candidate.audit,
+          sampleFrames: input.sampleFrames,
+          sampleCount,
+          reschedulableComponentIds: rescheduledComponentIds
+        });
+        if (
+          best === undefined ||
+          compareProtectedTransitAudits(coordinated.audit, best.audit) < 0
+        ) {
+          best = {
+            tracks: coordinated.tracks,
+            audit: coordinated.audit,
+            unit: candidate.unit,
+            rescheduledComponentIds: coordinated.rescheduledComponentIds
+          };
+        }
+        if (coordinated.audit.intersections.length === 0) break;
+      }
+    }
+    if (
+      best === undefined ||
+      compareProtectedTransitAudits(best.audit, audit) >= 0
+    ) {
+      const coordinatedRoutes = repairProtectedTransitRouteInteraction({
+        tracks,
+        audit,
+        sampleFrames: input.sampleFrames,
+        sampleCount,
+        stageOccupancy: input.stageOccupancy,
+        routedTrackIds,
+        reschedulableComponentIds: rescheduledComponentIds
+      });
+      if (coordinatedRoutes !== undefined) {
+        tracks = coordinatedRoutes.tracks;
+        audit = coordinatedRoutes.audit;
+        coordinatedRoutes.routedComponentIds.forEach((componentId) =>
+          routedComponentIds.add(componentId)
+        );
+        coordinatedRoutes.routedTrackIds.forEach((trackId) =>
+          routedTrackIds.add(trackId)
+        );
+        coordinatedRoutes.rescheduledComponentIds.forEach((componentId) =>
+          rescheduledComponentIds.add(componentId)
+        );
+        continue;
+      }
+      throw new Error(
+        "Measured equation paint has unrelated protected-transit " +
+        `intersections: ${audit.intersections.map((entry) =>
+          `${entry.leftTrackId}->${entry.rightTrackId}@` +
+          `${entry.progress.toFixed(3)}:` +
+          `${entry.width.toFixed(2)}x${entry.height.toFixed(2)}`
+        ).join(", ")}. ` +
+        `Best bounded route: ${best === undefined
+          ? "none"
+          : `${best.unit.id}=${protectedTransitAuditSummary(best.audit)}`}; ` +
+        `current=${protectedTransitAuditSummary(audit)}. ` +
+        `Implicated geometry: ${protectedTransitImplicatedGeometry(
+          tracks,
+          audit.intersections
+        )}. ` +
+        `Route candidates: ${routeCandidateUnits(
+          tracks,
+          audit.intersections
+        ).map((unit) =>
+          `${unit.id}=${protectedTransitRouteStatus(
+            tracks,
+            unit,
+            input.stageOccupancy
+          )}`
+        ).join(", ")}.`
+      );
+    }
+    tracks = best.tracks;
+    audit = best.audit;
+    attemptedRouteUnits.add(best.unit.id);
+    routedComponentIds.add(best.unit.componentId);
+    best.unit.trackIds.forEach((trackId) => routedTrackIds.add(trackId));
+    best.rescheduledComponentIds.forEach((componentId) =>
+      rescheduledComponentIds.add(componentId)
+    );
+  }
+
+  return Object.freeze({
+    kind: "equation-protected-transit-compilation",
+    tracks,
+    certificate: Object.freeze({
+      kind: "equation-protected-transit-certificate",
+      geometryAuthority: input.stageOccupancy?.geometryAuthority ??
+        "measured-visible-paint",
+      ...(input.stageOccupancy === undefined
+        ? {}
+        : {
+            measurementIdentity: Object.freeze({
+              ...input.stageOccupancy.measurementIdentity
+            })
+          }),
+      sampleCount,
+      inspectedPairCount: audit.inspectedPairCount,
+      opacityScheduledTrackIds: Object.freeze(
+        [...opacityScheduledTrackIds].sort()
+      ),
+      rescheduledComponentIds: Object.freeze(
+        [...rescheduledComponentIds].sort()
+      ),
+      routedComponentIds: Object.freeze([...routedComponentIds].sort()),
+      routedTrackIds: Object.freeze([...routedTrackIds].sort()),
+      [kpEquationProtectedTransitCertificateBrand]: true as const
+    })
+  });
+}
+
 export function sampleKpEquationMotionTrackRect(
   track: KpEquationCollisionTrack,
   progress: number
@@ -505,6 +869,31 @@ export function projectKpEquationMotionTrackPaintRect(
   progress: number
 ): KpEquationLayoutRect {
   return paintRectAt(track, layoutRect, clamp01(progress));
+}
+
+export function applyKpEquationMotionPathOffset(
+  track: KpEquationCollisionTrack,
+  rect: KpEquationLayoutRect,
+  progress: number
+): KpEquationLayoutRect {
+  if (track.motionPath === undefined) return rect;
+  const p = clamp01(progress);
+  const routed = sampleKpEquationMotionPathWithSampling(
+    track.motionPath,
+    p,
+    track.motionPathSampling ?? "planned-curve",
+    track.motionGroupTravel,
+    track.motionSettlementAspectRatio
+  );
+  const direct = {
+    x: interpolate(track.motionPath.start.x, track.motionPath.end.x, p),
+    y: interpolate(track.motionPath.start.y, track.motionPath.end.y, p)
+  };
+  return {
+    ...rect,
+    left: rect.left + routed.x - direct.x,
+    top: rect.top + routed.y - direct.y
+  };
 }
 
 export function sampleKpEquationMotionTrackOpacityProgress(
@@ -706,6 +1095,706 @@ function evaluateTrackClearance(
   };
 }
 
+interface KpProtectedTransitIntersection {
+  readonly leftTrackId: string;
+  readonly rightTrackId: string;
+  readonly progress: number;
+  readonly width: number;
+  readonly height: number;
+}
+
+interface KpProtectedTransitAudit {
+  readonly intersections: readonly KpProtectedTransitIntersection[];
+  readonly inspectedPairCount: number;
+  readonly totalIntersectionArea: number;
+  readonly maximumIntersectionArea: number;
+}
+
+function scheduleProtectedTransitStructuralOpacity<
+  Track extends KpEquationCollisionTrack
+>(input: {
+  readonly tracks: readonly Track[];
+  readonly audit: KpProtectedTransitAudit;
+  readonly scheduledTrackIds: Set<string>;
+}): readonly Track[] | undefined {
+  const trackById = new Map(input.tracks.map((track) => [track.id, track]));
+  const ids = new Set(input.audit.intersections.flatMap(
+    ({ leftTrackId, rightTrackId }) =>
+      [leftTrackId, rightTrackId].filter((trackId) => {
+        if (input.scheduledTrackIds.has(trackId)) return false;
+        const lifecycle = trackById.get(trackId)?.lifecycle;
+        return lifecycle === "introduce" || lifecycle === "eliminate";
+      })
+  ));
+  if (ids.size === 0) return undefined;
+  // Structural paint already owns enter/exit opacity. Moving its existing
+  // visibility step outside the occupied interval avoids inventing a path or
+  // a new lifecycle merely to clear temporary syntax.
+  return Object.freeze(input.tracks.map((track) => {
+    if (!ids.has(track.id)) return track;
+    input.scheduledTrackIds.add(track.id);
+    return Object.freeze({
+      ...track,
+      opacityStepAt: track.lifecycle === "introduce" ? 0.94 : 0.08
+    }) as Track;
+  }));
+}
+
+function inspectProtectedTransit<
+  Track extends KpEquationCollisionTrack
+>(input: {
+  readonly tracks: readonly Track[];
+  readonly sampleFrames: (
+    tracks: readonly Track[],
+    progress: number
+  ) => readonly KpEquationProtectedTransitFrame[];
+  readonly sampleCount: number;
+}): KpProtectedTransitAudit {
+  const tracksById = new Map(input.tracks.map((track) => [track.id, track]));
+  const intersections: KpProtectedTransitIntersection[] = [];
+  let inspectedPairCount = 0;
+  for (let sampleIndex = 1; sampleIndex < input.sampleCount; sampleIndex += 1) {
+    const progress = sampleIndex / input.sampleCount;
+    const frames = input.sampleFrames(input.tracks, progress);
+    const frameIds = frames.map(({ trackId }) => trackId);
+    if (
+      frames.length !== input.tracks.length ||
+      new Set(frameIds).size !== frameIds.length ||
+      frameIds.some((id) => !tracksById.has(id))
+    ) {
+      throw new Error(
+        "Protected transit sampling must return every track exactly once."
+      );
+    }
+    const visible = frames.filter(({ opacity }) => opacity > 0.01);
+    for (const [leftIndex, left] of visible.entries()) {
+      for (const right of visible.slice(leftIndex + 1)) {
+        inspectedPairCount += 1;
+        if (left.componentId === right.componentId) continue;
+        const overlap = rectIntersection(
+          left.expectedPaintRect ?? left.rect,
+          right.expectedPaintRect ?? right.rect
+        );
+        if (
+          overlap.width <= kpNativeInkContactTolerancePx ||
+          overlap.height <= kpNativeInkContactTolerancePx
+        ) continue;
+        const endpointContact = protectedTransitEndpointContact(
+          tracksById.get(left.trackId)!,
+          tracksById.get(right.trackId)!
+        );
+        if (
+          endpointContact !== undefined &&
+          overlap.width <=
+            endpointContact.maximumOverlapWidthPx +
+              kpNativeInkContactTolerancePx &&
+          overlap.height <=
+            endpointContact.maximumOverlapHeightPx +
+              kpNativeInkContactTolerancePx
+        ) continue;
+        intersections.push({
+          leftTrackId: left.trackId,
+          rightTrackId: right.trackId,
+          progress,
+          width: overlap.width,
+          height: overlap.height
+        });
+      }
+    }
+  }
+  const areas = intersections.map(({ width, height }) => width * height);
+  return {
+    intersections,
+    inspectedPairCount,
+    totalIntersectionArea: areas.reduce((sum, area) => sum + area, 0),
+    maximumIntersectionArea: Math.max(0, ...areas)
+  };
+}
+
+function protectedTransitEndpointContact(
+  left: KpEquationCollisionTrack,
+  right: KpEquationCollisionTrack
+): {
+  readonly maximumOverlapWidthPx: number;
+  readonly maximumOverlapHeightPx: number;
+} | undefined {
+  const contacts = [
+    ...(left.startOpacity ?? 1) > 0.01 &&
+        (right.startOpacity ?? 1) > 0.01
+      ? [rectIntersection(
+          left.startPaintRect ?? left.startRect,
+          right.startPaintRect ?? right.startRect
+        )]
+      : [],
+    ...(left.endOpacity ?? 1) > 0.01 &&
+        (right.endOpacity ?? 1) > 0.01
+      ? [rectIntersection(
+          left.endPaintRect ?? left.endRect,
+          right.endPaintRect ?? right.endRect
+        )]
+      : []
+  ].filter(({ width, height }) =>
+    width > kpNativeInkContactTolerancePx &&
+    height > kpNativeInkContactTolerancePx
+  );
+  if (contacts.length === 0) return undefined;
+  return {
+    maximumOverlapWidthPx: Math.max(...contacts.map(({ width }) => width)),
+    maximumOverlapHeightPx: Math.max(...contacts.map(({ height }) => height))
+  };
+}
+
+/**
+ * Reconsiders one compiler-owned route together with one newly implicated
+ * route. A greedy first route can be collision-free locally yet obstruct a
+ * later mover; preserving a small beam here makes the result compositional
+ * without allowing the generic planner to overwrite motif-authored paths.
+ */
+function repairProtectedTransitRouteInteraction<
+  Track extends KpEquationCollisionTrack
+>(input: {
+  readonly tracks: readonly Track[];
+  readonly audit: KpProtectedTransitAudit;
+  readonly sampleFrames: (
+    tracks: readonly Track[],
+    progress: number
+  ) => readonly KpEquationProtectedTransitFrame[];
+  readonly sampleCount: number;
+  readonly stageOccupancy?: KpEquationMotionStageOccupancy | undefined;
+  readonly routedTrackIds: ReadonlySet<string>;
+  readonly reschedulableComponentIds: ReadonlySet<string>;
+}): {
+  readonly tracks: readonly Track[];
+  readonly audit: KpProtectedTransitAudit;
+  readonly routedComponentIds: readonly string[];
+  readonly routedTrackIds: readonly string[];
+  readonly rescheduledComponentIds: readonly string[];
+} | undefined {
+  const implicated = routeCandidateUnits(input.tracks, input.audit.intersections);
+  const revisable = implicated.filter((unit) =>
+    unit.trackIds.every((trackId) => input.routedTrackIds.has(trackId))
+  );
+  for (const priorUnit of revisable) {
+    const baseTracks = Object.freeze(input.tracks.map((track) => {
+      if (!priorUnit.trackIds.includes(track.id)) return track;
+      const {
+        motionPath: _path,
+        motionPathSampling: _sampling,
+        ...base
+      } = track;
+      return Object.freeze(base) as Track;
+    }));
+    const allPriorCandidates = protectedTransitRouteCandidates({
+      tracks: baseTracks,
+      unit: priorUnit,
+      audit: input.audit,
+      sampleFrames: input.sampleFrames,
+      sampleCount: input.sampleCount,
+      stageOccupancy: input.stageOccupancy
+    });
+    // Keep both path shapes in the bounded beam. Ranking all candidates
+    // together can fill the beam with near-identical compact curves and hide
+    // the only late-hold route that resolves a settlement collision.
+    const priorCandidates = protectedTransitRouteSamplings(
+      baseTracks,
+      priorUnit,
+      input.audit.intersections
+    ).flatMap((sampling) =>
+      allPriorCandidates.filter(({ tracks }) =>
+        tracks.find(({ id }) => priorUnit.trackIds.includes(id))
+          ?.motionPathSampling === sampling
+      ).sort((left, right) =>
+        compareProtectedTransitAudits(left.audit, right.audit)
+      ).slice(0, 3)
+    );
+    for (const priorCandidate of priorCandidates) {
+      if (priorCandidate.audit.intersections.length === 0) {
+        return {
+          tracks: priorCandidate.tracks,
+          audit: priorCandidate.audit,
+          routedComponentIds: [priorUnit.componentId],
+          routedTrackIds: priorUnit.trackIds,
+          rescheduledComponentIds: []
+        };
+      }
+      const nextUnits = routeCandidateUnits(
+        priorCandidate.tracks,
+        priorCandidate.audit.intersections
+      ).filter((unit) =>
+        unit.id !== priorUnit.id &&
+        protectedTransitRouteStatus(
+          priorCandidate.tracks,
+          unit,
+          input.stageOccupancy
+        ) !== "already-routed"
+      );
+      for (const nextUnit of nextUnits) {
+        for (const nextCandidate of protectedTransitRouteCandidates({
+          tracks: priorCandidate.tracks,
+          unit: nextUnit,
+          audit: priorCandidate.audit,
+          sampleFrames: input.sampleFrames,
+          sampleCount: input.sampleCount,
+          stageOccupancy: input.stageOccupancy
+        })) {
+          const coordinated = nextCandidate.audit.intersections.length === 0
+            ? {
+                tracks: nextCandidate.tracks,
+                audit: nextCandidate.audit,
+                rescheduledComponentIds: [] as readonly string[]
+              }
+            : optimizeProtectedTransitContextTiming({
+                tracks: nextCandidate.tracks,
+                audit: nextCandidate.audit,
+                sampleFrames: input.sampleFrames,
+                sampleCount: input.sampleCount,
+                reschedulableComponentIds:
+                  input.reschedulableComponentIds
+              });
+          if (coordinated.audit.intersections.length !== 0) continue;
+          return {
+            tracks: coordinated.tracks,
+            audit: coordinated.audit,
+            routedComponentIds: [
+              priorUnit.componentId,
+              nextUnit.componentId
+            ],
+            routedTrackIds: [
+              ...priorUnit.trackIds,
+              ...nextUnit.trackIds
+            ],
+            rescheduledComponentIds: coordinated.rescheduledComponentIds
+          };
+        }
+      }
+    }
+  }
+  return undefined;
+}
+
+function protectedTransitRouteCandidates<
+  Track extends KpEquationCollisionTrack
+>(input: {
+  readonly tracks: readonly Track[];
+  readonly unit: KpProtectedTransitRouteUnit;
+  readonly audit: KpProtectedTransitAudit;
+  readonly sampleFrames: (
+    tracks: readonly Track[],
+    progress: number
+  ) => readonly KpEquationProtectedTransitFrame[];
+  readonly sampleCount: number;
+  readonly stageOccupancy?: KpEquationMotionStageOccupancy | undefined;
+}): Array<{
+  readonly tracks: readonly Track[];
+  readonly audit: KpProtectedTransitAudit;
+}> {
+  const candidates: Array<{
+    readonly tracks: readonly Track[];
+    readonly audit: KpProtectedTransitAudit;
+  }> = [];
+  for (const variant of protectedTransitRouteVariants(
+    input.tracks,
+    input.unit,
+    input.stageOccupancy
+  )) {
+    for (const sampling of protectedTransitRouteSamplings(
+      input.tracks,
+      input.unit,
+      input.audit.intersections
+    )) {
+      for (
+        const liftRatio of [
+          0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1,
+          1.125, 1.25, 1.375, 1.5, 1.75, 2, 2.25, 2.5,
+          2.75, 3, 3.5, 4
+        ] as const
+      ) {
+        const tracks = routeProtectedTransitUnit({
+          tracks: input.tracks,
+          unit: input.unit,
+          variant,
+          liftRatio,
+          sampling,
+          collisionScale: protectedTransitCollisionScale(
+            input.tracks,
+            input.unit,
+            input.audit.intersections
+          ),
+          stageOccupancy: input.stageOccupancy
+        });
+        if (tracks === undefined) continue;
+        candidates.push({
+          tracks,
+          audit: inspectProtectedTransit({
+            tracks,
+            sampleFrames: input.sampleFrames,
+            sampleCount: input.sampleCount
+          })
+        });
+      }
+    }
+  }
+  return candidates;
+}
+
+interface KpProtectedTransitRouteUnit {
+  readonly id: string;
+  readonly componentId: string;
+  readonly trackIds: readonly string[];
+}
+
+function optimizeProtectedTransitContextTiming<
+  Track extends KpEquationCollisionTrack
+>(input: {
+  readonly tracks: readonly Track[];
+  readonly audit: KpProtectedTransitAudit;
+  readonly sampleFrames: (
+    tracks: readonly Track[],
+    progress: number
+  ) => readonly KpEquationProtectedTransitFrame[];
+  readonly sampleCount: number;
+  readonly reschedulableComponentIds: ReadonlySet<string>;
+}): {
+  readonly tracks: readonly Track[];
+  readonly audit: KpProtectedTransitAudit;
+  readonly rescheduledComponentIds: readonly string[];
+} {
+  let bestTracks = input.tracks;
+  let bestAudit = input.audit;
+  let bestComponentIds: readonly string[] = [];
+  for (const componentId of protectedTransitContextComponentIds(
+    input.tracks,
+    input.audit.intersections,
+    input.reschedulableComponentIds
+  )) {
+    for (const range of kpProtectedTransitContextRanges) {
+      const candidateTracks = Object.freeze(input.tracks.map((track) => {
+        if (track.componentId !== componentId) return track;
+        const { motionProgressRange: _existing, ...base } = track;
+        return Object.freeze({ ...base, motionProgressRange: range }) as Track;
+      }));
+      const candidateAudit = inspectProtectedTransit({
+        tracks: candidateTracks,
+        sampleFrames: input.sampleFrames,
+        sampleCount: input.sampleCount
+      });
+      if (compareProtectedTransitAudits(candidateAudit, bestAudit) < 0) {
+        bestTracks = candidateTracks;
+        bestAudit = candidateAudit;
+        bestComponentIds = [componentId];
+        if (candidateAudit.intersections.length === 0) {
+          return {
+            tracks: bestTracks,
+            audit: bestAudit,
+            rescheduledComponentIds: bestComponentIds
+          };
+        }
+      }
+    }
+  }
+  return {
+    tracks: bestTracks,
+    audit: bestAudit,
+    rescheduledComponentIds: bestComponentIds
+  };
+}
+
+function protectedTransitContextComponentIds(
+  tracks: readonly KpEquationCollisionTrack[],
+  intersections: readonly KpProtectedTransitIntersection[],
+  reschedulableComponentIds: ReadonlySet<string> = new Set()
+): readonly string[] {
+  const byId = new Map(tracks.map((track) => [track.id, track]));
+  const candidates = new Set<string>();
+  for (const intersection of intersections) {
+    const pair = [
+      byId.get(intersection.leftTrackId)!,
+      byId.get(intersection.rightTrackId)!
+    ] as const;
+    for (const [candidate, counterpart] of [pair, [pair[1], pair[0]] as const]) {
+      if (
+        candidate.lifecycle === "persist" &&
+        (
+          candidate.motionProgressRange === undefined ||
+          reschedulableComponentIds.has(candidate.componentId)
+        ) &&
+        (counterpart.lifecycle === "split" || counterpart.lifecycle === "merge")
+      ) {
+        candidates.add(candidate.componentId);
+      }
+    }
+  }
+  return [...candidates].sort();
+}
+
+function routeCandidateUnits(
+  tracks: readonly KpEquationCollisionTrack[],
+  intersections: readonly KpProtectedTransitIntersection[]
+): readonly KpProtectedTransitRouteUnit[] {
+  const byId = new Map(tracks.map((track) => [track.id, track]));
+  const implicated = [...new Set(intersections.flatMap((intersection) => [
+    intersection.leftTrackId,
+    intersection.rightTrackId
+  ]))].map((trackId) => byId.get(trackId)!);
+  const units = new Map<string, KpProtectedTransitRouteUnit>();
+  for (const track of implicated) {
+    const branch = track.lifecycle === "split" || track.lifecycle === "merge";
+    const id = branch ? `track:${track.id}` : `component:${track.componentId}`;
+    if (units.has(id)) continue;
+    units.set(id, {
+      id,
+      componentId: track.componentId,
+      trackIds: branch
+        ? Object.freeze([track.id])
+        : Object.freeze(tracks
+            .filter(({ componentId }) => componentId === track.componentId)
+            .map(({ id: trackId }) => trackId))
+    });
+  }
+  return [...units.values()].sort((leftUnit, rightUnit) => {
+    const left = tracks.filter(({ id }) => leftUnit.trackIds.includes(id));
+    const right = tracks.filter(({ id }) => rightUnit.trackIds.includes(id));
+    return routePriority(left) - routePriority(right) ||
+      Math.max(...right.map(trackTravel)) -
+        Math.max(...left.map(trackTravel)) ||
+      leftUnit.id.localeCompare(rightUnit.id);
+  });
+}
+
+function protectedTransitRouteStatus(
+  tracks: readonly KpEquationCollisionTrack[],
+  unit: KpProtectedTransitRouteUnit,
+  stageOccupancy?: KpEquationMotionStageOccupancy
+): string {
+  const routeTracks = tracks.filter((track) =>
+    unit.trackIds.includes(track.id)
+  );
+  if (routeTracks.length !== unit.trackIds.length) return "missing";
+  if (routeTracks.some(({ motionPath }) => motionPath !== undefined)) {
+    return "already-routed";
+  }
+  if (stageOccupancy === undefined) return "measured-paint-eligible";
+  const lanes = routeTracks.map((track) =>
+    resolveCertifiedClearanceLane(track, stageOccupancy)
+  );
+  if (lanes.some((lane) => lane === undefined)) {
+    return "outside-single-certified-row";
+  }
+  if (new Set(lanes.map((lane) => lane!.variant)).size > 1) {
+    return "conflicting-certified-lanes";
+  }
+  return "certified-lane-eligible";
+}
+
+function protectedTransitRouteVariants(
+  _tracks: readonly KpEquationCollisionTrack[],
+  _unit: KpProtectedTransitRouteUnit,
+  _stageOccupancy?: KpEquationMotionStageOccupancy
+): readonly ("arc-above" | "arc-below")[] {
+  // Both directions are candidates even in a two-row stage. The subsequent
+  // occupancy proof rejects a path that leaves its certified row/corridor or
+  // enters the foreign row; preselecting the corridor side can miss a smaller
+  // safe within-row correction.
+  return ["arc-above", "arc-below"];
+}
+
+function protectedTransitRouteSamplings(
+  tracks: readonly KpEquationCollisionTrack[],
+  unit: KpProtectedTransitRouteUnit,
+  intersections: readonly KpProtectedTransitIntersection[]
+): readonly KpEquationMotionPathSampling[] {
+  const relevant = intersections.filter(({ leftTrackId, rightTrackId }) =>
+    unit.trackIds.includes(leftTrackId) ||
+    unit.trackIds.includes(rightTrackId)
+  );
+  const implicatedIds = new Set(relevant.flatMap(
+    ({ leftTrackId, rightTrackId }) => [leftTrackId, rightTrackId]
+  ));
+  const hasThinPaint = tracks.some((track) => {
+    if (!implicatedIds.has(track.id)) return false;
+    const rects = [
+      track.startPaintRect ?? track.startRect,
+      track.endPaintRect ?? track.endRect
+    ];
+    return rects.some(({ width, height }) =>
+      Math.min(width, height) <= 1.5 &&
+      Math.max(width, height) >= Math.min(width, height) * 4
+    );
+  });
+  const onlyLateContacts =
+    relevant.length > 0 &&
+    relevant.every(({ progress }) => progress >= 0.72);
+  // Full-height paint that crosses late must retain clearance through
+  // settlement. Thin rules keep the compact curve first because holding their
+  // lift can sweep them across adjacent baseline glyphs.
+  return onlyLateContacts && !hasThinPaint
+    ? ["canonical-clearance-lane", "planned-curve"]
+    : ["planned-curve", "canonical-clearance-lane"];
+}
+
+function protectedTransitCollisionScale(
+  tracks: readonly KpEquationCollisionTrack[],
+  unit: KpProtectedTransitRouteUnit,
+  intersections: readonly KpProtectedTransitIntersection[]
+): number {
+  const implicatedIds = new Set(intersections.flatMap((intersection) =>
+    unit.trackIds.includes(intersection.leftTrackId) ||
+    unit.trackIds.includes(intersection.rightTrackId)
+      ? [intersection.leftTrackId, intersection.rightTrackId]
+      : []
+  ));
+  const implicated = tracks.filter(({ id }) => implicatedIds.has(id));
+  return Math.max(1, ...implicated.map(kpEquationMotionTrackScale));
+}
+
+function routePriority(
+  tracks: readonly KpEquationCollisionTrack[]
+): number {
+  if (tracks.some(({ lifecycle }) =>
+    lifecycle === "split" || lifecycle === "merge"
+  )) return 0;
+  if (tracks.some(({ lifecycle }) => lifecycle === "persist")) return 1;
+  return 2;
+}
+
+function routeProtectedTransitUnit<
+  Track extends KpEquationCollisionTrack
+>(input: {
+  readonly tracks: readonly Track[];
+  readonly unit: KpProtectedTransitRouteUnit;
+  readonly variant: "arc-above" | "arc-below";
+  readonly liftRatio: number;
+  readonly sampling: KpEquationMotionPathSampling;
+  readonly collisionScale: number;
+  readonly stageOccupancy?: KpEquationMotionStageOccupancy | undefined;
+}): readonly Track[] | undefined {
+  const routeTracks = input.tracks.filter(
+    ({ id }) => input.unit.trackIds.includes(id)
+  );
+  if (
+    routeTracks.length !== input.unit.trackIds.length ||
+    routeTracks.some(({ motionPath }) => motionPath !== undefined)
+  ) return undefined;
+  const lanes = input.stageOccupancy === undefined
+    ? []
+    : routeTracks.map((track) =>
+        resolveCertifiedClearanceLane(track, input.stageOccupancy!)
+      );
+  if (lanes.some((lane) => lane === undefined)) return undefined;
+  const localInkScale = Math.max(
+    input.collisionScale,
+    ...routeTracks.map(kpEquationMotionTrackScale)
+  );
+  const groupTravel = Math.max(...routeTracks.map(trackTravel));
+  const candidate = Object.freeze(input.tracks.map((track) => {
+    if (!input.unit.trackIds.includes(track.id)) return track;
+    const motionPath = Object.freeze(planTrackPath(
+      track,
+      input.variant,
+      localInkScale * input.liftRatio,
+      input.stageOccupancy
+    ));
+    if (
+      input.stageOccupancy !== undefined &&
+      !pathStaysWithinCertifiedOccupancy(
+        track,
+        motionPath,
+        input.stageOccupancy
+      )
+    ) return undefined;
+    return Object.freeze({
+      ...track,
+      motionPath,
+      // The compact curve remains the fast/default candidate. The clearance
+      // lane is a second generic option for late crossings that would
+      // otherwise re-enter paint during settlement.
+      motionPathSampling: input.sampling,
+      motionGroupTravel: groupTravel
+    }) as Track;
+  }));
+  return candidate.some((track) => track === undefined)
+    ? undefined
+    : candidate as readonly Track[];
+}
+
+function compareProtectedTransitAudits(
+  left: KpProtectedTransitAudit,
+  right: KpProtectedTransitAudit
+): number {
+  return left.intersections.length - right.intersections.length ||
+    left.totalIntersectionArea - right.totalIntersectionArea ||
+    left.maximumIntersectionArea - right.maximumIntersectionArea;
+}
+
+function protectedTransitAuditSummary(audit: KpProtectedTransitAudit): string {
+  return `${audit.intersections.length} contacts, ` +
+    `${audit.totalIntersectionArea.toFixed(2)} total area, ` +
+    `${audit.maximumIntersectionArea.toFixed(2)} max area`;
+}
+
+function protectedTransitImplicatedGeometry(
+  tracks: readonly KpEquationCollisionTrack[],
+  intersections: readonly KpProtectedTransitIntersection[]
+): string {
+  const ids = new Set(intersections.flatMap(({ leftTrackId, rightTrackId }) =>
+    [leftTrackId, rightTrackId]
+  ));
+  return tracks.filter(({ id }) => ids.has(id)).map((track) => {
+    const rect = (value: KpEquationLayoutRect) =>
+      `${value.left.toFixed(2)},${value.top.toFixed(2)},` +
+      `${value.width.toFixed(2)}x${value.height.toFixed(2)}`;
+    const contact = [...tracks]
+      .filter((candidate) =>
+        candidate.id !== track.id && ids.has(candidate.id)
+      )
+      .flatMap((candidate) => {
+        const bound = protectedTransitEndpointContact(track, candidate);
+        return bound === undefined
+          ? []
+          : [
+              `${candidate.id}<=` +
+              `${bound.maximumOverlapWidthPx.toFixed(2)}x` +
+              `${bound.maximumOverlapHeightPx.toFixed(2)}`
+            ];
+      });
+    return `${track.id}{startPaint=${rect(
+      track.startPaintRect ?? track.startRect
+    )};endPaint=${rect(track.endPaintRect ?? track.endRect)};` +
+      `path=${track.motionPath?.variant ?? "direct"};` +
+      `lifecycle=${track.lifecycle};` +
+      `opacityStep=${track.opacityStepAt ?? "none"};` +
+      `endpointContact=${contact.join("|") || "none"}}`;
+  }).join(", ");
+}
+
+function rectIntersection(
+  left: KpEquationLayoutRect,
+  right: KpEquationLayoutRect
+): { readonly width: number; readonly height: number } {
+  return {
+    width: Math.max(0, Math.min(
+      left.left + left.width,
+      right.left + right.width
+    ) - Math.max(left.left, right.left)),
+    height: Math.max(0, Math.min(
+      left.top + left.height,
+      right.top + right.height
+    ) - Math.max(left.top, right.top))
+  };
+}
+
+function assertUniqueCollisionTrackIds(
+  tracks: readonly KpEquationCollisionTrack[]
+): void {
+  const ids = tracks.map(({ id }) => id);
+  if (
+    ids.some((id) => id.trim() === "") ||
+    new Set(ids).size !== ids.length
+  ) {
+    throw new Error("Protected transit tracks must have unique IDs.");
+  }
+}
+
 function resolveCertifiedClearanceLane(
   track: KpEquationCollisionTrack,
   occupancy: KpEquationMotionStageOccupancy
@@ -773,7 +1862,11 @@ export function assertKpEquationMotionStageOccupancy(
     }
   }
   if (occupancy.rows.some(({ rect }) =>
-    intersectsRect(rect, occupancy.protectedCorridor, 0)
+    intersectsRect(
+      rect,
+      occupancy.protectedCorridor,
+      kpNativeInkContactTolerancePx
+    )
   )) {
     throw new Error(
       "Equation motion protected corridor intersects certified row occupancy."

@@ -81,3 +81,19 @@ test("native endpoint compilation does not introduce alternate math or geometry"
   assert.equal(serialized.includes("opacity"), false);
   assert.equal(serialized.includes("duration"), false);
 });
+
+test("implicit coefficients remain native typographic units", () => {
+  const endpoints = createKpFractionCompositionAnnotatedEndpoints();
+  const normalized = endpoints.find(
+    ({ stateId }) => stateId === "fraction-solve.state.normalized"
+  );
+  const simplified = endpoints.find(
+    ({ stateId }) =>
+      stateId === "fraction-solve.state.right-product-simplified"
+  );
+
+  assert.match(normalized?.annotated.rawLatex ?? "", /\\frac\{2x\}\{3\}/);
+  assert.match(simplified?.annotated.rawLatex ?? "", /^2x\\;/);
+  assert.doesNotMatch(normalized?.annotated.rawLatex ?? "", /2\\;x/);
+  assert.doesNotMatch(simplified?.annotated.rawLatex ?? "", /2\\;x/);
+});

@@ -1,0 +1,73 @@
+{
+  "id": "next-action.kp.operation-evaluation-presentation-registry-v0",
+  "kind": "next-action",
+  "title": "Centralize typed operation-evaluation presentation",
+  "status": "ready",
+  "domain": "architecture",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/animation/motifs/equation-visual-motif-defaults.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/successor-synthesis.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/fraction-composition-visual-motifs.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/foldable-distribution-equation-adapter.ts"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.canonical-fraction-composition-promotion-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.canonical-fraction-composition-promotion-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run test:fraction-composition-architecture"
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "User approved this as the immediate post-contract change after run-contract.kp.canonical-fraction-composition-promotion-v1 completes slice 20: centralize arithmetic evaluation motif selection behind one typed versioned registry, require nominal resolved-presentation certificates at canonical callers, remove fraction/foldable local successor-synthesis descriptors, retain runtime validation and explicit version pins for extensions, and add architecture guards against raw canonical motif declarations."
+  },
+  "expectedLearning": [
+    "Whether one typed versioned registry can own arithmetic evaluation motif selection without weakening extension packages or renderer boundaries."
+  ],
+  "allowedWork": [
+    "Centralize canonical arithmetic evaluation presentation selection, nominal resolution, versioning, caller migration, runtime validation, and architecture guards."
+  ],
+  "disallowedWork": [
+    "Do not redesign successor-synthesis choreography, add operation-specific compositor paths, change semantic math authority, or modify unrelated legacy animation families."
+  ],
+  "criteria": [
+    {
+      "id": "canonical-evaluation-registry-is-exhaustive",
+      "weight": "high"
+    },
+    {
+      "id": "canonical-callers-require-resolved-presentation",
+      "weight": "high"
+    },
+    {
+      "id": "fraction-and-foldable-local-descriptors-retired",
+      "weight": "high"
+    },
+    {
+      "id": "validated-extensions-remain-bounded",
+      "weight": "medium"
+    },
+    {
+      "id": "focused-and-architecture-gates-pass",
+      "weight": "high"
+    }
+  ]
+}

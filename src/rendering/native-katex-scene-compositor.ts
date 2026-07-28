@@ -1,8 +1,10 @@
 import {
   createKpNativeKatexHandoffTelemetry,
+  measureKpStageRelativeRectDelta as rectDelta,
   type KpNativeKatexHandoffTelemetry,
   type KpNativeKatexPaintAtomObservation,
-  type KpNativeKatexRenderedSceneObservation
+  type KpNativeKatexRenderedSceneObservation,
+  unionKpStageRelativeRects as unionRects
 } from "./native-katex-rendered-scene.ts";
 import {
   normalizeKpStageRelativeRect,
@@ -17,8 +19,10 @@ import type {
   KpEquationStructuralSuccessionIntent
 } from "../animation/structural-succession-presentation.ts";
 import {
+  compileKpCollisionSafeTransitTracks,
   compileKpCollisionSafeReorderTracks,
   type KpEquationCollisionTrack,
+  type KpEquationProtectedTransitCertificate,
   type KpEquationMotionStageOccupancy as O
 } from "./equation-motion-path-planner.ts";
 import {
@@ -129,6 +133,7 @@ export interface KpCanonicalNativeKatexSceneSession {
   readonly lifecycle: "renderer-session";
   readonly reconciliation: KpNativeKatexSceneReconciliation;
   readonly hierarchy: KpNativeKatexHierarchicalScenePlan;
+  readonly protectedTransit: KpEquationProtectedTransitCertificate;
   readonly session: KpNativeKatexRendererSession;
 }
 
@@ -1637,9 +1642,20 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
   const routed = input.reorderRouting === true
     ? compileKpCollisionSafeReorderTracks(ownership.tracks, input.stageOccupancy)
     : ownership.tracks;
-  const tracks = input.fanInRouting === true
+  const motifRoutedTracks = input.fanInRouting === true
     ? compileKpQualityBoundedFanInTracks(routed, input.stageOccupancy)
     : routed;
+  const protectedTransit = compileKpCollisionSafeTransitTracks({
+    tracks: motifRoutedTracks,
+    stageOccupancy: input.stageOccupancy,
+    sampleFrames: (candidateTracks, progress) =>
+      sampleKpNativeKatexSceneTrackFrames(
+        candidateTracks,
+        progress,
+        input.copyFanOutRouting === true
+      )
+  });
+  const tracks = protectedTransit.tracks;
   const correlations = correlateKpNativeKatexSceneHandoff({
     reconciliation,
     tracks: allTracks
@@ -1803,6 +1819,7 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     lifecycle: "renderer-session",
     reconciliation,
     hierarchy,
+    protectedTransit: protectedTransit.certificate,
     session
   });
 }
@@ -1956,14 +1973,6 @@ function assertTotalCoverage(
   if (missing.length > 0) {
     throw new Error(`Scene ${endpoint} atom ${missing[0]} has no disposition.`);
   }
-}
-
-function unionRects(rects: readonly KpStageRelativeRect[]): KpStageRelativeRect {
-  const left = Math.min(...rects.map(({ left }) => left));
-  const top = Math.min(...rects.map(({ top }) => top));
-  const right = Math.max(...rects.map(({ left, width }) => left + width));
-  const bottom = Math.max(...rects.map(({ top, height }) => top + height));
-  return { left, top, width: right - left, height: bottom - top };
 }
 
 function localRect(
@@ -2311,18 +2320,6 @@ function handoffTelemetryGroups(
     }
     return { source, material, native } as const;
   });
-}
-
-function rectDelta(
-  left: KpStageRelativeRect,
-  right: KpStageRelativeRect
-): number {
-  return maximum([
-    Math.abs(left.left - right.left),
-    Math.abs(left.top - right.top),
-    Math.abs(left.width - right.width),
-    Math.abs(left.height - right.height)
-  ]);
 }
 
 function ruleGeometryDelta(

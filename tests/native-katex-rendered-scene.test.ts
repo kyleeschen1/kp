@@ -2534,6 +2534,20 @@ test("canonical copy-fan-out clears grouping before reflow and settles syntax la
     sampleKpNativeKatexSceneTracks([introduced], 0.94, true)[0]!.opacity,
     1
   );
+  const collisionScheduled = {
+    ...introduced,
+    opacityStepAt: 0.98
+  } satisfies KpNativeKatexSceneTrack;
+  assert.equal(
+    sampleKpNativeKatexSceneTracks([collisionScheduled], 0.94, true)[0]!
+      .opacity,
+    0
+  );
+  assert.equal(
+    sampleKpNativeKatexSceneTracks([collisionScheduled], 0.98, true)[0]!
+      .opacity,
+    1
+  );
 });
 
 function createScene(

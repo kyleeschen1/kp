@@ -3,6 +3,8 @@ import {
   sampleKpLessonCanonicalDistributionMotion
 } from "../animation/distribution-motion-profile.ts";
 import {
+  applyKpEquationMotionPathOffset,
+  sampleKpEquationMotionTrackOpacityProgress,
   sampleKpEquationMotionTrackRect
 } from "./equation-motion-path-planner.ts";
 import type {
@@ -41,7 +43,14 @@ export function sampleKpNativeKatexCopyFanOutTrack(input: {
     const opacityProgress =
       // Departing grouping paint clears before the first addend preview at
       // 0.08, preventing native adjacency from becoming transit crowding.
-      input.track.lifecycle === "eliminate"
+      // A compositor-authored step has higher authority than this motif
+      // default so specialized sampling cannot bypass collision repair.
+      input.track.opacityStepAt !== undefined
+        ? sampleKpEquationMotionTrackOpacityProgress(
+            input.track,
+            input.progress
+          )
+        : input.track.lifecycle === "eliminate"
         ? intervalProgress(input.progress, 0, 0.08)
         : input.track.lifecycle === "introduce"
           ? intervalProgress(input.progress, 0.78, 0.94)
@@ -129,12 +138,12 @@ export function sampleKpNativeKatexCopyFanOutTrack(input: {
     ? leaderHeight
     : interpolate(leaderHeight, input.track.endRect.height, branchProgress);
   return [
-    {
+    applyKpEquationMotionPathOffset(input.track, {
       left: center.x - width / 2,
       top: center.y - height / 2,
       width,
       height
-    },
+    }, smoothstep(input.progress)),
     branchProgress
   ];
 }
