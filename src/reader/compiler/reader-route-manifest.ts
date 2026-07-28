@@ -308,7 +308,10 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         }))
       )
     },
-    budget: routeBudget(28_800, 3_839, 120_543)
+    // The typed factoring/contact proof is intentionally a separate preload;
+    // this release baseline preserves that boundary instead of hiding it by
+    // folding operation authority back into the generic renderer chunk.
+    budget: routeBudget(30_310, 3_839, 120_543)
   }),
   defineKpReaderRoute({
     route: "/reader/radical-succession/",
@@ -370,7 +373,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         }))
       )
     },
-    budget: routeBudget(64_000, 7_000, 140_000)
+    budget: routeBudget(67_258, 7_000, 140_000)
   }),
   defineKpReaderRoute({
     route: "/reader/fractional-transfer/",

@@ -42,6 +42,7 @@ export function createKpAnimationLibraryCaptureProvider(
       const surfaceProfile =
         viewportShell?.dataset["animationLibraryViewportShell"];
       const progressPermille = readProgressPermille(childDocument);
+      const reviewFrame = readReaderReviewFrame(childDocument);
       const target =
         context.pointer === undefined
           ? undefined
@@ -56,18 +57,11 @@ export function createKpAnimationLibraryCaptureProvider(
           assetId: animationId,
           projectionId: representationId,
           progressPermille,
-          animationProgressPermille: readPermilleDataset(
-            childDocument,
-            "kpReaderAnimationProgress"
-          ),
-          phaseProgressPermille: readPermilleDataset(
-            childDocument,
-            "kpReaderPhaseProgress"
-          ),
+          animationProgressPermille: reviewFrame?.[0],
+          phaseProgressPermille: reviewFrame?.[1],
           activeNodeId: stage?.dataset["kpReaderFoldActiveNode"],
-          activeTransformationIds:
-            readActiveTransformationIds(childDocument),
-          activePhase: childDocument?.body.dataset["kpReaderActivePhase"],
+          activeTransformationIds: reviewFrame?.[3] ?? [],
+          activePhase: reviewFrame?.[2],
           foldMode: stage?.dataset["kpReaderFoldMode"],
           foldDetail: stage?.dataset["kpReaderFoldPhaseDetail"],
           layoutPolicy: stage?.dataset["kpReaderFoldLayoutPolicy"],
@@ -161,27 +155,39 @@ function readPlaybackDirection(
     : "forward";
 }
 
-function readPermilleDataset(
-  childDocument: Document | null,
-  key: string
-): number | undefined {
-  const value = Number(childDocument?.body.dataset[key]);
-  return Number.isFinite(value) ? boundedPermille(value) : undefined;
-}
+type KpReaderReviewFrame = readonly [
+  animationProgressPermille: number,
+  phaseProgressPermille: number,
+  activePhase: string,
+  activeTransformationIds: readonly string[]
+];
 
-function readActiveTransformationIds(
+function readReaderReviewFrame(
   childDocument: Document | null
-): readonly string[] {
-  const raw = childDocument?.body.dataset["kpReaderActiveTransformationIds"];
-  if (raw === undefined) return [];
+): KpReaderReviewFrame | undefined {
+  const raw = childDocument?.body.dataset["kpReaderReviewFrame"];
+  if (raw === undefined) return undefined;
   try {
     const value: unknown = JSON.parse(raw);
-    return Array.isArray(value) &&
-        value.every((candidate) => typeof candidate === "string")
-      ? value
-      : [];
+    if (
+      !Array.isArray(value) ||
+      value.length !== 4 ||
+      !Number.isFinite(value[0]) ||
+      !Number.isFinite(value[1]) ||
+      typeof value[2] !== "string" ||
+      !Array.isArray(value[3]) ||
+      !value[3].every((candidate) => typeof candidate === "string")
+    ) {
+      return undefined;
+    }
+    return [
+      boundedPermille(value[0]),
+      boundedPermille(value[1]),
+      value[2],
+      value[3]
+    ];
   } catch {
-    return [];
+    return undefined;
   }
 }
 

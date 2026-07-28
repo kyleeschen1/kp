@@ -105,6 +105,13 @@ interface LayoutState {
   readonly contexts: ReadonlyMap<string, TransitionContext>;
 }
 
+type KpReaderReviewFrame = readonly [
+  animationProgressPermille: number,
+  phaseProgressPermille: number,
+  activePhase: string,
+  activeTransformationIds: readonly string[]
+];
+
 interface EquationRendererHost {
   readonly readLayout: (revision: number) => LayoutState;
   readonly writeFrame: (sample: KpReaderClockSample, layout: LayoutState) => void;
@@ -788,16 +795,14 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     runtimeFrame.phase.phaseIndex,
     phaseCohorts.length
   );
-  document.body.dataset["kpReaderAnimationProgress"] = String(
-    Math.round(animationProgress * 1_000)
-  );
-  document.body.dataset["kpReaderPhaseProgress"] = String(
-    Math.round(phaseProgress * 1_000)
-  );
-  document.body.dataset["kpReaderActivePhase"] = runtimeFrame.phase.phaseId;
-  document.body.dataset["kpReaderActiveTransformationIds"] = JSON.stringify(
+  // One typed envelope keeps review metadata atomic: mixing four independently
+  // updated attributes could describe a frame that never actually existed.
+  document.body.dataset["kpReaderReviewFrame"] = JSON.stringify([
+    Math.round(animationProgress * 1_000),
+    Math.round(phaseProgress * 1_000),
+    runtimeFrame.phase.phaseId,
     runtimeFrame.activeTransformationIds
-  );
+  ] satisfies KpReaderReviewFrame);
   syncAccessibleEquation(
     phaseProgress < 1
       ? context.renderPlan.transitions[0]?.source[0]?.objectId

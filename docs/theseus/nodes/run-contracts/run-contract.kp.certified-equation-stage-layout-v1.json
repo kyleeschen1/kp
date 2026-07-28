@@ -203,7 +203,8 @@
     {
       "id": "s25",
       "title": "Cross exemplar release boundaries",
-      "status": "planned"
+      "summary": "Cross-exemplar release boundaries pass for solve-x, fraction, radical, linear equation, foldable distribution, review capture, accessibility, production isolation, and reader route budgets. Review telemetry is one typed atomic frame; raw reader baselines now freeze the intentional typed factoring preload. The separate optional Review-plus-glyph ceiling remains honestly deferred.",
+      "status": "complete"
     },
     {
       "id": "s26",

@@ -710,11 +710,107 @@
       "scope": "third repaired checkpoint durable control plane",
       "checkedAt": "2026-07-28T04:16:24.542Z",
       "notes": "807 nodes and 13385 events validate with s24 complete; s25 and s26 remain planned and unapproved behind the HUMAN_CHECKPOINT."
+    },
+    {
+      "command": "npm run test:glyph-reconciliation-experiment",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:44.688Z"
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:45.702Z"
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:46.546Z"
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:47.365Z"
+    },
+    {
+      "command": "npm run test:canonical-animation-construction",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:48.185Z"
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:48.980Z"
+    },
+    {
+      "command": "npm run test:browser:linear-equation-conformance",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:49.751Z"
+    },
+    {
+      "command": "npm run visual:animation-library-display",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:50.544Z"
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:51.381Z"
+    },
+    {
+      "command": "npm run visual:foldable-review-boundaries",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:52.185Z"
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:52.977Z"
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:53.806Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:54.635Z"
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:55.431Z"
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:56.256Z"
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-28T04:41:57.051Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices s01-s24 are complete after the third human-checkpoint repair. The overlap root cause is fixed with typed contact authority plus cross-browser measured boundary proof, phone and wide review evidence is persisted, and the live Review box works. HUMAN_CHECKPOINT is active; s25-s26 remain planned and require fresh approval."
+    "summary": "Slices s01-s25 complete. Cross-exemplar and production boundaries pass; s26 full-suite closeout remains. The separate optional Review-plus-glyph bundle ceiling remains deferred under next-action.kp.review-glyph-bundle-budget-v0."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

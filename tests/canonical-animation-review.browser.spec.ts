@@ -816,16 +816,15 @@ async function collectReviewPaintEvidence(
     const equationStage = document.querySelector<HTMLElement>(
       "[data-kp-reader-equation-stage]"
     );
+    const reviewFrame = JSON.parse(
+      document.body.dataset["kpReaderReviewFrame"] ?? "[0,0,\"\",[]]"
+    ) as [number, number, string, string[]];
     return {
       semanticProgressPermille: Number(
         document.body.dataset["kpReaderProgress"]
       ),
-      animationProgressPermille: Number(
-        document.body.dataset["kpReaderAnimationProgress"]
-      ),
-      phaseProgressPermille: Number(
-        document.body.dataset["kpReaderPhaseProgress"]
-      ),
+      animationProgressPermille: reviewFrame[0],
+      phaseProgressPermille: reviewFrame[1],
       transitionId: document.body.dataset["kpReaderTransition"],
       activeNodeId: equationStage?.dataset["kpReaderFoldActiveNode"],
       foldMode: equationStage?.dataset["kpReaderFoldMode"],
