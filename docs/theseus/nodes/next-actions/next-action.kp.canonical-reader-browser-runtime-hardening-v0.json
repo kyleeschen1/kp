@@ -76,6 +76,13 @@
       "scope": "slice 04 deterministic Chromium baseline, repeated twice",
       "checkedAt": "2026-07-28T20:58:50.452Z",
       "notes": "Both repetitions produced the frozen 30-frame work counters: 0 scroll-geometry reads, 30 anchor reads, 28 session builds, 2 reuses, 30 applies, and 0 material-owner additions or removals. Frame timing remains attached evidence rather than an environment-dependent baseline allowance."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll",
+      "status": "passed",
+      "scope": "slice 05 repeated three-engine work baseline",
+      "checkedAt": "2026-07-28T21:02:00.473Z",
+      "notes": "Chromium, Firefox, and WebKit each passed twice with equivalent observables and the exact 0/30/28/2/30 geometry-anchor-build-reuse-apply counters plus zero material-owner churn. Long Task API support is Chromium-only; frame intervals remain the portable timing signal. The prior WebKit phone readable-floor diagnostic is classified as shared responsive-fit debt, not a browser-specific compositor divergence."
     }
   ],
   "expectedLearning": [

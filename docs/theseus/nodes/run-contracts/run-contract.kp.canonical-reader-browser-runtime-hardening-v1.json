@@ -78,7 +78,8 @@
     {
       "id": "slice.kp.reader-hardening.05",
       "title": "Freeze-Firefox-WebKit-baselines",
-      "status": "planned"
+      "summary": "Frozen equivalent Firefox and WebKit work baselines; only portable frame timing differs, and no engine-specific compositor failure or patch was justified.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.06",
