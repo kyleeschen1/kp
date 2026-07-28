@@ -127,11 +127,18 @@
       "scope": "slice-12",
       "checkedAt": "2026-07-28T19:10:38.636Z",
       "notes": "Sixty-three role-plan tests, twelve renderer tests, seven compositor-budget tests, all TypeScript domains, and architecture pass. Inference briefly exceeded the ceiling when the full plan type entered a generic fixture path; the adapter boundary was corrected and the final budget returned to 49,911 types and 66,157 instantiations."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans; npm run typecheck; npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "slice-13",
+      "checkedAt": "2026-07-28T19:15:25.863Z",
+      "notes": "Sixty-four focused tests pass. Automatic semantic discovery covers all three exemplar cancellations forward and rewind, with rigid bundles, shared contact, synchronized opacity, persistent-track identity, and exact inverse samples; inference remains 49,911 types."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-12 complete: fraction-composition cancellation role plans are now executable through the sole native compositor, with rigid compound bundles and role-specific collapse behavior under existing lifecycle primitives."
+    "summary": "Slices 1-13 complete: every fraction-composition cancellation is automatically governed by the same role-complete forward/rewind behavior contract rather than named synthetic examples."
   },
   "expectedLearning": [
     "Whether one role-complete presentation-plan boundary eliminates correct-label/wrong-realization regressions without a second renderer or closed extension taxonomy."

@@ -129,7 +129,8 @@
     {
       "id": "slice.kp.role-plan.13",
       "title": "Cover-all-exemplar-cancellations",
-      "status": "planned"
+      "summary": "Added automatic forward-and-rewind behavioral conformance for every discovered fraction-composition cancellation, including compound bundles and unchanged continuants.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.14",

@@ -4,6 +4,7 @@ import test from "node:test";
 
 import {
   kpOperationPresentationCancellationAuthoringSites,
+  kpOperationPresentationEvidenceClosures,
   kpOperationPresentationEvidenceGaps,
   kpOperationPresentationOptionalSeams,
   kpOperationPresentationRendererInputs
@@ -13,7 +14,8 @@ const inventory = [
   ...kpOperationPresentationOptionalSeams,
   ...kpOperationPresentationRendererInputs,
   ...kpOperationPresentationCancellationAuthoringSites,
-  ...kpOperationPresentationEvidenceGaps
+  ...kpOperationPresentationEvidenceGaps,
+  ...kpOperationPresentationEvidenceClosures
 ];
 
 test("operation presentation migration inventory has unique executable evidence", async () => {
@@ -61,6 +63,9 @@ test("raw cancellation authoring and behavior-evidence gaps remain explicit", ()
       "cancellation-authoring.generated-algebra"
     ]
   );
-  assert.equal(kpOperationPresentationEvidenceGaps.length, 3);
+  assert.equal(kpOperationPresentationEvidenceGaps.length, 2);
+  assert.deepEqual(
+    kpOperationPresentationEvidenceClosures.map(({ state }) => state),
+    ["verified-plan"]
+  );
 });
-

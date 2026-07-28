@@ -51,12 +51,6 @@ export const kpOperationPresentationCancellationAuthoringSites = Object.freeze([
 
 export const kpOperationPresentationEvidenceGaps = Object.freeze([
   evidenceGap(
-    "enumerated-native-cancellation",
-    "tests/native-katex-operation-choreography.test.ts",
-    "role-complete cancellation retires catalysts and artifacts",
-    "The native geometry proof names cases instead of enumerating every exemplar cancellation."
-  ),
-  evidenceGap(
     "browser-choreography-label",
     "tests/semantic-reader-fraction-composition.browser.spec.ts",
     "data-kp-native-katex-operation-choreography",
@@ -67,6 +61,15 @@ export const kpOperationPresentationEvidenceGaps = Object.freeze([
     "tests/semantic-reader-fraction-composition-visual.browser.spec.ts",
     "inspectKpEquationVisiblePaintOverlap",
     "The visual matrix protects ownership and overlap without proving motif geometry."
+  )
+] as const);
+
+export const kpOperationPresentationEvidenceClosures = Object.freeze([
+  evidenceClosure(
+    "enumerated-native-cancellation",
+    "tests/fraction-composition-cancellation-choreography-conformance.test.ts",
+    "every discovered cancellation obeys role-complete forward and rewind laws",
+    "Every fraction-composition cancellation is automatically checked for bundle geometry, opacity, continuants, and exact rewind."
   )
 ] as const);
 
@@ -139,6 +142,21 @@ function evidenceGap(
     sourcePath,
     sourceNeedle,
     state: "metadata-only-evidence" as const,
+    summary
+  });
+}
+
+function evidenceClosure(
+  id: string,
+  sourcePath: string,
+  sourceNeedle: string,
+  summary: string
+): KpOperationPresentationMigrationInventoryEntry {
+  return Object.freeze({
+    id: `evidence-closure.${id}`,
+    sourcePath,
+    sourceNeedle,
+    state: "verified-plan" as const,
     summary
   });
 }
