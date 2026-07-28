@@ -2,9 +2,9 @@
   "id": "run-contract.kp.canonical-fraction-composition-promotion-v1",
   "kind": "run-contract",
   "title": "Canonical fraction composition promotion",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Approved exact 20-slice canonical fraction-composition promotion run; v1 supersedes the metadata-incomplete unstarted v0 record.",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -177,7 +177,8 @@
     {
       "id": "s20",
       "title": "release-and-closeout",
-      "status": "planned"
+      "summary": "Released fraction composition from nominal approval evidence, passed all 2723 tests and fixed release gates, documented rollback and successor order, and retained exact quantity models without activation.",
+      "status": "complete"
     }
   ]
 }

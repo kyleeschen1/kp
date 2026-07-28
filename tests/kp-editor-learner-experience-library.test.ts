@@ -40,7 +40,7 @@ test("learner experience library puts the foldable distribution exemplar first",
       "Follow two thirds times x plus six through thirteen exact operations, folding or pinning the evaluation detail you want to inspect.",
     href: "/reader/fraction-composition/",
     actionLabel: "Review fraction composition",
-    status: "prototype",
+    status: "exemplar",
     animationIds: ["animation.fraction-composition.two-thirds-solve"]
   });
   assert.deepEqual(withoutPresentations(experiences[2]!), {

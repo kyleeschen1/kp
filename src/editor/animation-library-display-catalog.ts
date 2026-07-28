@@ -11,6 +11,10 @@ import type {
 import type {
   KpAnimationRepresentationRelationship
 } from "./semantic-animation-workbench-representation.ts";
+import {
+  kpVerifiedFractionCompositionReleaseApproval,
+  type KpVerifiedFractionCompositionReleaseApproval
+} from "../architecture/fraction-composition-release-approval.ts";
 
 export type KpAnimationLibraryDisplayRepresentationKind =
   | "reader"
@@ -97,18 +101,9 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
   ],
   [
     "animation.fraction-composition.two-thirds-solve",
-    {
-      animationId: "animation.fraction-composition.two-thirds-solve",
-      exclusiveCanonicalPaint: true,
-      requiredMotifParity: true,
-      responsiveRuntimeGates: true,
-      humanReviewApproved: false,
-      compatibilityPaintRetired: true,
-      releaseGatePassed: false,
-      evidenceSourceIds: [
-        "run-contract.kp.canonical-fraction-composition-promotion-v1"
-      ]
-    }
+    completeFractionCompositionCanonicalFormatEvidence(
+      kpVerifiedFractionCompositionReleaseApproval
+    )
   ],
   [
     "animation.linear-solve.solve-x",
@@ -388,6 +383,15 @@ function completeCanonicalFormatEvidence(
     releaseGatePassed: true,
     evidenceSourceIds: Object.freeze([...evidenceSourceIds])
   });
+}
+
+function completeFractionCompositionCanonicalFormatEvidence(
+  approval: KpVerifiedFractionCompositionReleaseApproval
+): KpCanonicalFormatPromotionEvidence {
+  return completeCanonicalFormatEvidence(
+    approval.animationId,
+    approval.evidenceSourceIds
+  );
 }
 
 function representationRank(

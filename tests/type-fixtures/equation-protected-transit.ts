@@ -1,6 +1,6 @@
 import type {
   KpEquationProtectedTransitCertificate
-} from "../../src/rendering/equation-motion-path-planner.ts";
+} from "../../src/rendering/equation-protected-transit-types.ts";
 
 // @ts-expect-error Dense measured-paint inspection is the only minting authority.
 const fabricated: KpEquationProtectedTransitCertificate = {

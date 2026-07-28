@@ -58,14 +58,14 @@ test("foldable distribution resolves one lazy partial reader host until approval
   );
 });
 
-test("fraction composition is discoverable but cannot report ported before review", () => {
+test("reviewed fraction composition reports its certified canonical format", () => {
   const entry = createKpAnimationLibraryDisplayCatalog().find(
     ({ animationId }) =>
       animationId === "animation.fraction-composition.two-thirds-solve"
   );
 
   assert.equal(entry?.availability, "playable");
-  assert.equal(entry?.canonicalFormat, "partial");
+  assert.equal(entry?.canonicalFormat, "ported");
   assert.equal(entry?.featured, false);
   assert.deepEqual(entry?.representations, [{
     id:
@@ -94,7 +94,7 @@ test("canonical-format status distinguishes complete, partial, and legacy hosts"
   );
   assert.equal(
     status("animation.fraction-composition.two-thirds-solve"),
-    "partial"
+    "ported"
   );
   assert.equal(
     status("animation.generated.radical.square-root-as-power"),

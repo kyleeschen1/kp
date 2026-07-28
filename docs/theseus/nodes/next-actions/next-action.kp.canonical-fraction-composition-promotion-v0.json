@@ -2,8 +2,9 @@
   "id": "next-action.kp.canonical-fraction-composition-promotion-v0",
   "kind": "next-action",
   "title": "Promote canonical fraction composition reader",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Canonical fraction composition reader is released and evidence-complete.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -24,6 +25,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-28-canonical-fraction-composition-human-visual-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-28-canonical-fraction-composition-promotion-closeout.md"
     }
   ],
   "dependsOn": {
@@ -444,11 +449,32 @@
       "scope": "s19 release boundary",
       "checkedAt": "2026-07-28T15:51:36.900Z",
       "notes": "Types, architecture, production build, reader closure, frozen route budgets, and workspace graph validation passed."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s20 full repository release gate",
+      "checkedAt": "2026-07-28T16:08:33.881Z",
+      "notes": "All 2723 tests pass; architecture, inference, and concept catalog gates are included. The one stale exemplar-count assertion exposed by promotion was updated and the full suite rerun cleanly."
+    },
+    {
+      "command": "npm run check:inference; npm run typecheck",
+      "status": "passed",
+      "scope": "s20 nominal proof and compiler-cost closure",
+      "checkedAt": "2026-07-28T16:08:34.681Z",
+      "notes": "Nominal promotion and protected-transit certificate types are lightweight; 46848 types, 62422 instantiations, and 2.08-2.14 second check time stay below fixed ceilings. All TypeScript projects pass."
+    },
+    {
+      "command": "npm run build; npm run check:reader-production; npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s20 production release closure",
+      "checkedAt": "2026-07-28T16:08:35.497Z",
+      "notes": "Production build passes across 686 modules; all 11 routes and fixed route budgets pass. Fraction composition remains inside its accepted budget."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Slice s19 complete: generic measured-paint protected transit removes all 132 observed contacts without fraction IDs or new lifecycle vocabulary; cross-family preservation and fixed release gates pass. Release closeout remains s20."
+    "state": "complete",
+    "summary": "Released as a human-reviewed canonical learner exemplar: exact semantics, motifs, folds, native settlement, protected transit, accessibility, export, deterministic playback, responsive layout, catalog promotion, full tests, production closure, budgets, and visual matrices pass."
   },
   "expectedLearning": [
     "Whether an accepted renderer-neutral fraction composition trace can reach a canonical learner reader mostly through verified content, motif, fold, layout, descriptor, and product wiring without protected-core growth.",

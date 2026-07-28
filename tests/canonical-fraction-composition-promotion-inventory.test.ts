@@ -35,7 +35,7 @@ test("fraction promotion inventory keeps five evidence stages distinct", () => {
   );
 });
 
-test("canonical paint ownership does not imply learner promotion", () => {
+test("canonical paint ownership is distinct from reviewed learner promotion", () => {
   const canonical = kpFractionCompositionPromotionInventory.filter(
     ({ paintOwner }) => paintOwner === "canonical"
   );
@@ -48,7 +48,14 @@ test("canonical paint ownership does not imply learner promotion", () => {
   );
   assert.deepEqual(
     canonical.map(({ stage }) => stage),
-    ["learner-promotion", "canonical-renderer"]
+    ["learner-promotion", "learner-promotion"]
+  );
+  assert.ok(
+    canonical.find(
+      ({ id }) => id === "fraction.composition-canonical-reader"
+    )?.sourceRefs.includes(
+      "docs/project/reviews/2026-07-28-canonical-fraction-composition-human-visual-checkpoint.md"
+    )
   );
 });
 

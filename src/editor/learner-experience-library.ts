@@ -47,9 +47,9 @@ const learnerExperienceDefinitions = [
       "Follow two thirds times x plus six through thirteen exact operations, folding or pinning the evaluation detail you want to inspect.",
     href: "/reader/fraction-composition/",
     actionLabel: "Review fraction composition",
-    // Visual approval is a separate promotion gate, so discoverability must
-    // not silently turn canonical renderer ownership into exemplar status.
-    status: "prototype",
+    // Exemplar status follows the nominal release approval consumed by the
+    // display catalog; canonical paint ownership alone was never sufficient.
+    status: "exemplar",
     animationPresentations: [
       lessonAnimation("animation.fraction-composition.two-thirds-solve")
     ]

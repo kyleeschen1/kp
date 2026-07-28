@@ -3,7 +3,9 @@
 Date: 2026-07-28
 
 Outcome: `APPROVED_REPAIR_COMPLETE` — the user-approved generic repair passes
-the complete automated visual matrix; release closeout remains slice `s20`.
+the complete automated visual matrix. Release closeout completed in slice
+`s20`; see
+`docs/project/reviews/2026-07-28-canonical-fraction-composition-promotion-closeout.md`.
 
 ## What completed
 

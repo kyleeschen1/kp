@@ -40,49 +40,27 @@ import {
 import {
   kpReaderRouteManifest
 } from "../reader/compiler/reader-route-manifest.ts";
+import {
+  kpFractionCompositionPromotionPrerequisiteIds,
+  type KpFractionCompositionPromotionPrerequisiteEvidence,
+  type KpFractionCompositionPromotionPrerequisiteId,
+  type KpFractionCompositionPromotionReadinessInput,
+  type KpVerifiedFractionCompositionPromotionReadiness
+} from "./fraction-composition-promotion-types.ts";
 
-const fractionCompositionPromotionReadinessAuthority =
-  Symbol("kp.fraction-composition-promotion-readiness");
+export {
+  kpFractionCompositionPromotionPrerequisiteIds
+} from "./fraction-composition-promotion-types.ts";
+export type {
+  KpFractionCompositionPromotionPrerequisiteEvidence,
+  KpFractionCompositionPromotionPrerequisiteId,
+  KpFractionCompositionPromotionReadinessInput,
+  KpVerifiedFractionCompositionPromotionReadiness
+} from "./fraction-composition-promotion-types.ts";
 
-export const kpFractionCompositionPromotionPrerequisiteIds = [
-  "verified-semantic-trace",
-  "canonical-motif-closure",
-  "exclusive-reader-ownership",
-  "certified-responsive-layout",
-  "compatibility-route-retired",
-  "accessible-product-seams",
-  "static-export-closure",
-  "review-host-readiness"
-] as const;
-
-export type KpFractionCompositionPromotionPrerequisiteId =
-  typeof kpFractionCompositionPromotionPrerequisiteIds[number];
-
-export interface KpFractionCompositionPromotionPrerequisiteEvidence {
-  readonly id: KpFractionCompositionPromotionPrerequisiteId;
-  readonly evidenceSourceIds: readonly string[];
-}
-
-/**
- * This is deliberately a review-readiness certificate, not a release flag.
- * The private authority makes automated evidence non-forgeable, while the
- * explicit remaining gate prevents "tests passed" from becoming "ported."
- */
-export interface KpVerifiedFractionCompositionPromotionReadiness {
-  readonly schemaVersion:
-    "kp.verified-fraction-composition-promotion-readiness.v1";
-  readonly animationId:
-    "animation.fraction-composition.two-thirds-solve";
-  readonly status: "ready-for-human-review";
-  readonly prerequisiteEvidence:
-    readonly KpFractionCompositionPromotionPrerequisiteEvidence[];
-  readonly remainingGate: "human-perceptual-review";
-  readonly [fractionCompositionPromotionReadinessAuthority]: true;
-}
-
-export function certifyKpFractionCompositionPromotionReadiness(input: {
-  readonly markdown: string;
-}): KpVerifiedFractionCompositionPromotionReadiness {
+export function certifyKpFractionCompositionPromotionReadiness(
+  input: KpFractionCompositionPromotionReadinessInput
+): KpVerifiedFractionCompositionPromotionReadiness {
   const macro = createKpLawfulFractionSolveMacro();
   const animation = createKpFractionCompositionEquationAnimationAsset();
   const motifTimeline = createKpFractionCompositionVisualMotifTimeline();
@@ -210,11 +188,13 @@ export function certifyKpFractionCompositionPromotionReadiness(input: {
     verifyPrerequisite(
       "review-host-readiness",
       libraryEntry?.availability === "playable" &&
-        libraryEntry.canonicalFormat === "partial" &&
+        (libraryEntry.canonicalFormat === "partial" ||
+          libraryEntry.canonicalFormat === "ported") &&
         libraryEntry.representations.length === 1 &&
         libraryEntry.representations[0]?.role === "canonical-host" &&
         libraryEntry.representations[0]?.href === manifest.route &&
-        learnerExperience?.status === "prototype",
+        (learnerExperience?.status === "prototype" ||
+          learnerExperience?.status === "exemplar"),
       [
         "src/editor/animation-library-display-catalog.ts",
         "src/editor/learner-experience-library.ts",
@@ -236,6 +216,8 @@ export function certifyKpFractionCompositionPromotionReadiness(input: {
     );
   }
 
+  // The public nominal brand is declared in the lightweight type module; this
+  // runtime verifier is the only boundary allowed to assert the hidden mark.
   return Object.freeze({
     schemaVersion:
       "kp.verified-fraction-composition-promotion-readiness.v1" as const,
@@ -243,9 +225,8 @@ export function certifyKpFractionCompositionPromotionReadiness(input: {
       "animation.fraction-composition.two-thirds-solve" as const,
     status: "ready-for-human-review" as const,
     prerequisiteEvidence,
-    remainingGate: "human-perceptual-review" as const,
-    [fractionCompositionPromotionReadinessAuthority]: true as const
-  });
+    remainingGate: "human-perceptual-review" as const
+  }) as KpVerifiedFractionCompositionPromotionReadiness;
 }
 
 function verifyPrerequisite<

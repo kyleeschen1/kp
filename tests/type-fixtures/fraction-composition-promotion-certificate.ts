@@ -1,10 +1,13 @@
 import type {
   KpGovernedCanonicalConstructionRequest
-} from "../../src/authoring/canonical-animation-public-api.ts";
+} from "../../src/authoring/governed-semantic-request.ts";
 import {
-  certifyKpFractionCompositionPromotionReadiness,
+  type KpFractionCompositionPromotionReadinessInput,
   type KpVerifiedFractionCompositionPromotionReadiness
-} from "../../src/architecture/fraction-composition-promotion-certificate.ts";
+} from "../../src/architecture/fraction-composition-promotion-types.ts";
+import type {
+  KpVerifiedFractionCompositionReleaseApproval
+} from "../../src/architecture/fraction-composition-release-approval.ts";
 
 // @ts-expect-error Only the complete automated verifier can mint readiness.
 const fabricatedReadiness: KpVerifiedFractionCompositionPromotionReadiness = {
@@ -15,11 +18,24 @@ const fabricatedReadiness: KpVerifiedFractionCompositionPromotionReadiness = {
   remainingGate: "human-perceptual-review"
 };
 
-certifyKpFractionCompositionPromotionReadiness({
+// @ts-expect-error Catalog callers cannot fabricate the human release token.
+const fabricatedRelease: KpVerifiedFractionCompositionReleaseApproval = {
+  schemaVersion:
+    "kp.verified-fraction-composition-release-approval.v1",
+  animationId: "animation.fraction-composition.two-thirds-solve",
+  reviewDecision: "approved-repair-complete",
+  releaseDecision: "passed",
+  evidenceSourceIds: [
+    "review.kp.canonical-fraction-composition-human-visual-checkpoint",
+    "run-contract.kp.canonical-fraction-composition-promotion-v1"
+  ]
+};
+
+const invalidReadinessInput: KpFractionCompositionPromotionReadinessInput = {
   markdown: "# Valid input boundary",
   // @ts-expect-error Authorable booleans cannot assert a passed prerequisite.
   semanticPassed: true
-});
+};
 
 const governedRequest: KpGovernedCanonicalConstructionRequest = {
   schemaVersion: "kp.governed-semantic-authoring-request.v2",
@@ -46,4 +62,9 @@ const governedRequest: KpGovernedCanonicalConstructionRequest = {
   latex: "\\frac{2}{3}(x+6)=10"
 };
 
-void [fabricatedReadiness, governedRequest];
+void [
+  fabricatedReadiness,
+  fabricatedRelease,
+  invalidReadinessInput,
+  governedRequest
+];

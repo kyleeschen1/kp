@@ -80,13 +80,14 @@ readonly KpFractionCompositionPromotionInventoryEntry[] = Object.freeze([
   },
   {
     id: "fraction.composition-canonical-reader",
-    title: "Canonical fraction composition reader awaiting review",
-    stage: "canonical-renderer",
+    title: "Human-reviewed canonical fraction composition reader",
+    stage: "learner-promotion",
     paintOwner: "canonical",
     productRoute: "/reader/fraction-composition/",
     sourceRefs: [
       "src/reader/app/equation-lesson-descriptors/fraction-composition.ts",
-      "src/reader/compiler/fraction-composition-equation-lesson.ts"
+      "src/reader/compiler/fraction-composition-equation-lesson.ts",
+      "docs/project/reviews/2026-07-28-canonical-fraction-composition-human-visual-checkpoint.md"
     ]
   }
 ] as const);

@@ -6,6 +6,13 @@ import type {
 import {
   evaluateKpEquationMotionClearanceSequence
 } from "./equation-motion-clearance.ts";
+import type {
+  KpEquationProtectedTransitCertificate
+} from "./equation-protected-transit-types.ts";
+
+export type {
+  KpEquationProtectedTransitCertificate
+} from "./equation-protected-transit-types.ts";
 
 export const kpEquationMotionPathVariantIds = [
   "direct",
@@ -132,32 +139,12 @@ export interface KpEquationCollisionTrack {
   readonly motionSettlementAspectRatio?: number | undefined;
 }
 
-const kpEquationProtectedTransitCertificateBrand: unique symbol = Symbol(
-  "kp-equation-protected-transit-certificate"
-);
-
 export interface KpEquationProtectedTransitFrame {
   readonly trackId: string;
   readonly componentId: string;
   readonly rect: KpEquationLayoutRect;
   readonly expectedPaintRect?: KpEquationLayoutRect | undefined;
   readonly opacity: number;
-}
-
-export interface KpEquationProtectedTransitCertificate {
-  readonly kind: "equation-protected-transit-certificate";
-  readonly geometryAuthority:
-    | "certified-stage-layout"
-    | "measured-visible-paint";
-  readonly measurementIdentity?:
-    KpEquationMotionStageOccupancy["measurementIdentity"] | undefined;
-  readonly sampleCount: number;
-  readonly inspectedPairCount: number;
-  readonly opacityScheduledTrackIds: readonly string[];
-  readonly rescheduledComponentIds: readonly string[];
-  readonly routedComponentIds: readonly string[];
-  readonly routedTrackIds: readonly string[];
-  readonly [kpEquationProtectedTransitCertificateBrand]: true;
 }
 
 export interface KpEquationProtectedTransitCompilation<
@@ -814,6 +801,8 @@ export function compileKpCollisionSafeTransitTracks<
   return Object.freeze({
     kind: "equation-protected-transit-compilation",
     tracks,
+    // The lightweight public type owns the hidden nominal brand. Only this
+    // dense measured-paint verifier may assert it after the audit reaches zero.
     certificate: Object.freeze({
       kind: "equation-protected-transit-certificate",
       geometryAuthority: input.stageOccupancy?.geometryAuthority ??
@@ -834,9 +823,8 @@ export function compileKpCollisionSafeTransitTracks<
         [...rescheduledComponentIds].sort()
       ),
       routedComponentIds: Object.freeze([...routedComponentIds].sort()),
-      routedTrackIds: Object.freeze([...routedTrackIds].sort()),
-      [kpEquationProtectedTransitCertificateBrand]: true as const
-    })
+      routedTrackIds: Object.freeze([...routedTrackIds].sort())
+    }) as KpEquationProtectedTransitCertificate
   });
 }
 
