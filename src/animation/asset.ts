@@ -36,12 +36,12 @@ import {
   createEditableSemanticTransformationTree,
   createSemanticTransformationLeaf,
   createSemanticTransformationSequence,
+  semanticTransformationAnnotationIdsForPhase,
   semanticTransformationForwardPhases,
   semanticTransformationLeafRefs,
   semanticTransformationRewindPhases,
   semanticTransformationTreeNodeIds,
   type EditableSemanticTransformationTree,
-  type SemanticTransformationTreeAnnotationPlacement,
   type SemanticTransformationTreeAnnotation,
   type SemanticTransformationNode
 } from "../semantic/transformation-composition.ts";
@@ -527,12 +527,14 @@ export function describeKpAnimationAssetTransformationTree(
     forwardPhases: describeTransformationTreeDirectionPhases(
       animation.id,
       "forward",
+      tree.root,
       semanticTransformationForwardPhases(tree.root),
       annotations
     ),
     rewindPhases: describeTransformationTreeDirectionPhases(
       animation.id,
       "rewind",
+      tree.root,
       semanticTransformationRewindPhases(tree.root),
       annotations
     ),
@@ -1030,6 +1032,7 @@ function describeTransformationTreeNodes(
 function describeTransformationTreeDirectionPhases(
   animationId: string,
   direction: KpAnimationAssetTransformationTreeDirection,
+  root: SemanticTransformationNode,
   nodePhases: readonly (readonly string[])[],
   annotations: readonly SemanticTransformationTreeAnnotation[]
 ): readonly KpAnimationAssetTransformationTreePhase[] {
@@ -1037,56 +1040,13 @@ function describeTransformationTreeDirectionPhases(
     id: `${animationId}.${direction}.${index}`,
     direction,
     nodeIds: [...nodeIds],
-    annotationIdsByPlacement: transformationTreeAnnotationIdsForPhase(
-      nodeIds,
+    annotationIdsByPlacement: semanticTransformationAnnotationIdsForPhase({
+      root,
+      phaseNodeIds: nodeIds,
       direction,
       annotations
-    )
+    })
   }));
-}
-
-function transformationTreeAnnotationIdsForPhase(
-  nodeIds: readonly string[],
-  direction: KpAnimationAssetTransformationTreeDirection,
-  annotations: readonly SemanticTransformationTreeAnnotation[]
-): KpAnimationAssetTreePhaseAnnotationIds {
-  const nodeIdSet = new Set(nodeIds);
-  const idsByPlacement: {
-    before: string[];
-    during: string[];
-    after: string[];
-  } = {
-    before: [],
-    during: [],
-    after: []
-  };
-
-  annotations.forEach((annotation) => {
-    if (!nodeIdSet.has(annotation.targetNodeId)) {
-      return;
-    }
-
-    const placement =
-      direction === "forward"
-        ? annotation.placement
-        : mirrorTransformationTreeAnnotationPlacement(annotation.placement);
-    idsByPlacement[placement].push(annotation.id);
-  });
-
-  return idsByPlacement;
-}
-
-function mirrorTransformationTreeAnnotationPlacement(
-  placement: SemanticTransformationTreeAnnotationPlacement
-): SemanticTransformationTreeAnnotationPlacement {
-  switch (placement) {
-    case "before":
-      return "after";
-    case "during":
-      return "during";
-    case "after":
-      return "before";
-  }
 }
 
 function cloneTransformationTreeAnnotation(

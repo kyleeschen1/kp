@@ -1,11 +1,11 @@
 import {
+  semanticTransformationAnnotationIdsForPhase,
   semanticTransformationForwardPhases,
   semanticTransformationRewindPhases,
   type EditableSemanticTransformationTree,
   type SemanticTransformationLeafNode,
   type SemanticTransformationNode,
-  type SemanticTransformationTreeAnnotation,
-  type SemanticTransformationTreeAnnotationPlacement
+  type SemanticTransformationTreeAnnotation
 } from "../../semantic/transformation-composition.ts";
 import type {
   KpLawCheckResult,
@@ -121,6 +121,7 @@ export function createTransformTreeVisualMotifTimeline<
     forwardPhases: createDirectionPhases(
       input.id,
       "forward",
+      input.tree.root,
       semanticTransformationForwardPhases(input.tree.root),
       segmentIdByNodeId,
       annotations
@@ -128,6 +129,7 @@ export function createTransformTreeVisualMotifTimeline<
     rewindPhases: createDirectionPhases(
       input.id,
       "rewind",
+      input.tree.root,
       semanticTransformationRewindPhases(input.tree.root),
       segmentIdByNodeId,
       annotations
@@ -238,6 +240,7 @@ function createSegmentForLeaf<
 function createDirectionPhases(
   timelineId: string,
   direction: TransformTreeVisualMotifDirection,
+  root: SemanticTransformationNode,
   nodePhases: readonly (readonly string[])[],
   segmentIdByNodeId: ReadonlyMap<string, string>,
   annotations: readonly SemanticTransformationTreeAnnotation[]
@@ -256,56 +259,13 @@ function createDirectionPhases(
 
       return segmentId;
     }),
-    annotationIdsByPlacement: annotationIdsForPhase(
-      nodeIds,
+    annotationIdsByPlacement: semanticTransformationAnnotationIdsForPhase({
+      root,
+      phaseNodeIds: nodeIds,
       direction,
       annotations
-    )
+    })
   }));
-}
-
-function annotationIdsForPhase(
-  nodeIds: readonly string[],
-  direction: TransformTreeVisualMotifDirection,
-  annotations: readonly SemanticTransformationTreeAnnotation[]
-): TransformTreeVisualMotifPhaseAnnotationIds {
-  const nodeIdSet = new Set(nodeIds);
-  const idsByPlacement: {
-    before: string[];
-    during: string[];
-    after: string[];
-  } = {
-    before: [],
-    during: [],
-    after: []
-  };
-
-  for (const annotation of annotations) {
-    if (!nodeIdSet.has(annotation.targetNodeId)) {
-      continue;
-    }
-
-    const placement =
-      direction === "forward"
-        ? annotation.placement
-        : mirrorPlacement(annotation.placement);
-    idsByPlacement[placement].push(annotation.id);
-  }
-
-  return idsByPlacement;
-}
-
-function mirrorPlacement(
-  placement: SemanticTransformationTreeAnnotationPlacement
-): SemanticTransformationTreeAnnotationPlacement {
-  switch (placement) {
-    case "before":
-      return "after";
-    case "during":
-      return "during";
-    case "after":
-      return "before";
-  }
 }
 
 function cloneTreeAnnotation(

@@ -141,7 +141,8 @@
     {
       "id": "s14",
       "title": "preserve-product-seams",
-      "status": "planned"
+      "summary": "Product-seams-preserved-and-group-annotations-now-project-generically-to-executable-phase-boundaries",
+      "status": "complete"
     },
     {
       "id": "s15",

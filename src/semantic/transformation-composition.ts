@@ -204,6 +204,57 @@ export function semanticTransformationRewindPhases(
   }
 }
 
+export function semanticTransformationAnnotationIdsForPhase(input: {
+  readonly root: SemanticTransformationNode;
+  readonly phaseNodeIds: readonly string[];
+  readonly direction: "forward" | "rewind";
+  readonly annotations: readonly SemanticTransformationTreeAnnotation[];
+}): {
+  readonly before: readonly string[];
+  readonly during: readonly string[];
+  readonly after: readonly string[];
+} {
+  const phaseNodeIds = new Set(input.phaseNodeIds);
+  const idsByPlacement: {
+    before: string[];
+    during: string[];
+    after: string[];
+  } = { before: [], during: [], after: [] };
+
+  for (const annotation of input.annotations) {
+    const target = findSemanticTransformationNode(
+      input.root,
+      annotation.targetNodeId
+    );
+    if (target === undefined) {
+      continue;
+    }
+    const playbackLeafIds = semanticTransformationLeafRefs(target)
+      .map(({ id }) => id);
+    if (input.direction === "rewind") {
+      playbackLeafIds.reverse();
+    }
+    const placement = input.direction === "forward"
+      ? annotation.placement
+      : mirrorSemanticTransformationAnnotationPlacement(annotation.placement);
+    // Group annotations belong to a playback boundary, not to an invisible
+    // group node. Projecting them onto descendant leaves keeps pauses and
+    // authored markers alive after a tree is compiled into executable phases.
+    const applies = placement === "during"
+      ? playbackLeafIds.some((id) => phaseNodeIds.has(id))
+      : phaseNodeIds.has(
+        placement === "before"
+          ? playbackLeafIds[0]!
+          : playbackLeafIds[playbackLeafIds.length - 1]!
+      );
+    if (applies) {
+      idsByPlacement[placement].push(annotation.id);
+    }
+  }
+
+  return idsByPlacement;
+}
+
 function createSemanticTransformationGroup(input: {
   readonly input: CreateSemanticTransformationGroupInput;
   readonly kind: SemanticTransformationGroupNode["kind"];
@@ -220,6 +271,38 @@ function createSemanticTransformationGroup(input: {
     preserves: commonPreservations(input.input.children),
     ...(input.input.summary === undefined ? {} : { summary: input.input.summary })
   };
+}
+
+function findSemanticTransformationNode(
+  node: SemanticTransformationNode,
+  nodeId: string
+): SemanticTransformationNode | undefined {
+  if (node.id === nodeId) {
+    return node;
+  }
+  if (node.kind === "leaf") {
+    return undefined;
+  }
+  for (const child of node.children) {
+    const match = findSemanticTransformationNode(child, nodeId);
+    if (match !== undefined) {
+      return match;
+    }
+  }
+  return undefined;
+}
+
+function mirrorSemanticTransformationAnnotationPlacement(
+  placement: SemanticTransformationTreeAnnotationPlacement
+): SemanticTransformationTreeAnnotationPlacement {
+  switch (placement) {
+    case "before":
+      return "after";
+    case "during":
+      return "during";
+    case "after":
+      return "before";
+  }
 }
 
 function cloneSemanticTransformationNode(

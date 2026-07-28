@@ -54,7 +54,10 @@ export function compileKpEquationExemplarLessonModel(input: {
     const index = Math.round((progressPermille / 1_000) * (states.length - 1));
     const state = states[index];
     if (state === undefined) throw new Error(`no ${input.diagnosticLabel} equation state at ${index}`);
-    return { latex: latexValue(state), label: state.title };
+    return {
+      latex: latexValue(state),
+      label: accessibleTextValue(state) ?? state.title
+    };
   });
   const prose = compileKpStaticLessonProse(document, { staticMath });
   return {
@@ -93,4 +96,16 @@ function latexValue(object: KpSemanticAssetObject): string {
     throw new Error(`equation object ${object.id} has no LaTeX`);
   }
   return value.latex;
+}
+
+function accessibleTextValue(
+  object: KpSemanticAssetObject
+): string | undefined {
+  const value = object.value;
+  return typeof value === "object" &&
+      value !== null &&
+      "accessibleText" in value &&
+      typeof value.accessibleText === "string"
+    ? value.accessibleText
+    : undefined;
 }

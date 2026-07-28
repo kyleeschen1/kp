@@ -143,12 +143,36 @@ export const kpFractionCompositionPreservationManifest = Object.freeze({
   presentation: Object.freeze({
     layoutAuthority: "certified-equation-stage",
     phonePolicy: "deterministic-staging-or-folding",
+    fullMotionSamplesPermille: Object.freeze([
+      0, 125, 250, 375, 500, 625, 750, 875, 1_000
+    ]),
+    reducedMotionEndpointsPermille: Object.freeze([0, 1_000]),
     reviewViewports: Object.freeze([
       Object.freeze({ width: 1_100, height: 800, deviceScaleFactor: 1 }),
       Object.freeze({ width: 390, height: 844, deviceScaleFactor: 1 }),
       Object.freeze({ width: 1_100, height: 800, deviceScaleFactor: 2 }),
       Object.freeze({ width: 390, height: 844, deviceScaleFactor: 2 })
     ])
+  }),
+  accessibility: Object.freeze({
+    liveStructuredMath: true,
+    staticNativeMathml: true,
+    searchableWithoutJavaScript: true,
+    semanticDomOwner: "reader",
+    movingPaintAriaHidden: true,
+    movingPaintInert: true,
+    collapsedWorkDisclosed: true
+  }),
+  learningArtifacts: Object.freeze({
+    narratedCheckpointCount: 6,
+    transcriptOperationCount: 13,
+    annotationIds: Object.freeze([
+      "annotation.fraction-composition.inspect-normalized-fractions",
+      "annotation.fraction-composition.inspect-isolated-fraction"
+    ]),
+    clozeCardId: "card.fraction-composition.exact-solution",
+    staticExportArtifactId: "artifact.fraction-composition.static-steps",
+    foldInvariant: true
   }),
   preservationBoundary: Object.freeze({
     runtimeClockCount: 1,

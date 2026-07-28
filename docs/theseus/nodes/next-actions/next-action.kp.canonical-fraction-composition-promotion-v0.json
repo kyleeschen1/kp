@@ -167,6 +167,69 @@
       "scope": "s13-architecture",
       "checkedAt": "2026-07-28T06:40:16.591Z",
       "notes": "Application, Node, test, and domain types pass; all three architecture boundary gates pass with no new exception."
+    },
+    {
+      "command": "npm-run-test-fraction-composition-architecture",
+      "status": "passed",
+      "scope": "slice-14-preservation",
+      "checkedAt": "2026-07-28T06:53:32.461Z",
+      "notes": "53-focused-architecture-tests-pass"
+    },
+    {
+      "command": "npm-run-test-browser-fraction-composition",
+      "status": "passed",
+      "scope": "slice-14-preservation",
+      "checkedAt": "2026-07-28T06:53:33.336Z",
+      "notes": "all-four-fold-modes-reduced-motion-and-no-js-pass"
+    },
+    {
+      "command": "npm-run-test-foldable-distribution",
+      "status": "passed",
+      "scope": "preservation-boundary",
+      "checkedAt": "2026-07-28T06:53:34.145Z",
+      "notes": "102-existing-canonical-family-tests-pass"
+    },
+    {
+      "command": "npm-run-test-browser-reader-conformance",
+      "status": "passed",
+      "scope": "preservation-boundary",
+      "checkedAt": "2026-07-28T06:53:34.950Z",
+      "notes": "12-shared-reader-conformance-tests-pass"
+    },
+    {
+      "command": "npm-run-build",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-07-28T06:53:35.739Z",
+      "notes": "typecheck-and-production-build-pass"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-07-28T06:53:36.569Z",
+      "notes": "all-boundary-gates-pass"
+    },
+    {
+      "command": "npm-run-check-reader-production",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-07-28T06:53:37.351Z",
+      "notes": "11-route-production-closure-pass"
+    },
+    {
+      "command": "npm-run-check-reader-budgets",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-07-28T06:53:38.143Z",
+      "notes": "fraction-route-remains-123949-raw-bytes"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "project-memory",
+      "checkedAt": "2026-07-28T06:53:38.959Z",
+      "notes": "811-nodes-13508-events-valid"
     }
   ],
   "progress": {

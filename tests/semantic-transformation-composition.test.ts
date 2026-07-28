@@ -8,6 +8,7 @@ import {
   createSemanticTransformationLeaf,
   createSemanticTransformationParallel,
   createSemanticTransformationSequence,
+  semanticTransformationAnnotationIdsForPhase,
   semanticTransformationForwardPhases,
   semanticTransformationLeafRefs,
   semanticTransformationRewindPhases
@@ -55,6 +56,46 @@ test("semantic transformation sequence composes source, target, and rewind phase
     ["transform.cancel-additive-inverse"],
     ["transform.subtract-both-sides.3"]
   ]);
+  const annotations = [
+    {
+      id: "inspect.before-solve",
+      kind: "pause" as const,
+      targetNodeId: sequence.id,
+      placement: "before" as const
+    },
+    {
+      id: "focus.during-solve",
+      kind: "focus" as const,
+      targetNodeId: sequence.id,
+      placement: "during" as const
+    },
+    {
+      id: "inspect.after-solve",
+      kind: "pause" as const,
+      targetNodeId: sequence.id,
+      placement: "after" as const
+    }
+  ];
+  assert.deepEqual(semanticTransformationAnnotationIdsForPhase({
+    root: sequence,
+    phaseNodeIds: ["transform.subtract-both-sides.3"],
+    direction: "forward",
+    annotations
+  }), {
+    before: ["inspect.before-solve"],
+    during: ["focus.during-solve"],
+    after: []
+  });
+  assert.deepEqual(semanticTransformationAnnotationIdsForPhase({
+    root: sequence,
+    phaseNodeIds: ["transform.cancel-additive-inverse"],
+    direction: "rewind",
+    annotations
+  }), {
+    before: ["inspect.after-solve"],
+    during: ["focus.during-solve"],
+    after: []
+  });
 });
 
 test("semantic transformation parallel composes independent child work into one phase", () => {

@@ -15,6 +15,28 @@ const route = (
   return `/reader/fraction-composition/?${parameters}`;
 };
 
+const foldProjectionCases = [
+  {
+    mode: "automatic",
+    additions: { kpFoldMode: "automatic" }
+  },
+  {
+    mode: "expanded",
+    additions: { kpFoldMode: "expanded" }
+  },
+  {
+    mode: "collapsed",
+    additions: { kpFoldMode: "collapsed" }
+  },
+  {
+    mode: "pinned",
+    additions: {
+      kpFoldMode: "pinned",
+      kpPin: "evaluation.fraction-composition.subtract-and-simplify"
+    }
+  }
+] as const;
+
 for (const viewport of [
   { id: "wide", width: 1_100, height: 800 },
   { id: "phone", width: 390, height: 844 }
@@ -188,4 +210,80 @@ test("fraction outline, direct seek, and rewind use exact canonical boundaries",
   await expect(
     page.locator("[data-kp-reader-transition-active='true']")
   ).toHaveCount(1);
+});
+
+test("fraction fold modes preserve accessible truth and inert paint under reduced motion", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  let transitionIds: readonly string[] | undefined;
+
+  for (const candidate of foldProjectionCases) {
+    await page.goto(route(538, {
+      ...candidate.additions,
+      kpMotion: "reduced"
+    }), { waitUntil: "domcontentloaded" });
+    const body = page.locator("body");
+    const stage = page.locator("[data-kp-reader-equation-stage]");
+    const material = page.locator("[data-kp-reader-equation-material-layer]");
+
+    await expect(body).toHaveAttribute("data-kp-reader-hydrated", "true");
+    await expect(body).toHaveAttribute("data-kp-reader-motion-mode", "essential");
+    await expect(stage).toHaveAttribute("data-kp-reader-fold-mode", candidate.mode);
+    await expect(stage).toHaveAttribute(
+      "data-kp-reader-canonical-equation-session-active",
+      "true"
+    );
+    await expect(
+      stage.locator("[data-kp-reader-transition-active='true']")
+    ).toHaveCount(1);
+    await expect(
+      stage.locator(
+        "[data-kp-reader-accessible-equation-state][aria-current='step']" +
+        "[role='math'][aria-label]"
+      )
+    ).toHaveCount(1);
+    await expect(material).toHaveAttribute("aria-hidden", "true");
+    await expect(material).toHaveAttribute("inert", "");
+    await expect(page.locator("[data-kp-beat]")).toHaveCount(6);
+    await expect(page.getByText(
+      "The same subtraction enters both sides, the additive inverses cancel, " +
+      "and ten minus four becomes six."
+    )).toHaveCount(1);
+
+    const ids = await stage.locator("[data-kp-reader-transition]")
+      .evaluateAll((elements) => elements.map((element) =>
+        element.getAttribute("data-kp-reader-transition") ?? ""
+      ));
+    expect(ids).toHaveLength(13);
+    if (transitionIds === undefined) transitionIds = ids;
+    else expect(ids).toEqual(transitionIds);
+  }
+});
+
+test("no-JavaScript fraction fold URLs expose the same six native checkpoints", async ({
+  browser
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  let checkpointIds: readonly string[] | undefined;
+
+  for (const candidate of foldProjectionCases) {
+    await page.goto(route(0, candidate.additions), {
+      waitUntil: "domcontentloaded"
+    });
+    await expect(page.locator("[data-kp-static-state]")).toHaveCount(6);
+    await expect(page.locator("[data-kp-static-state] math")).toHaveCount(6);
+    await expect(page.locator("[data-kp-reader-equation-stage]")).toHaveCount(0);
+    await expect(page.locator("[data-kp-beat]")).toHaveCount(6);
+    await expect(page.locator("body")).toContainText(
+      "the exact solution x equals nine"
+    );
+    const ids = await page.locator("[data-kp-static-state]")
+      .evaluateAll((elements) => elements.map((element) => element.id));
+    if (checkpointIds === undefined) checkpointIds = ids;
+    else expect(ids).toEqual(checkpointIds);
+  }
+
+  await context.close();
 });
