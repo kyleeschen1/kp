@@ -788,6 +788,16 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     runtimeFrame.phase.phaseIndex,
     phaseCohorts.length
   );
+  document.body.dataset["kpReaderAnimationProgress"] = String(
+    Math.round(animationProgress * 1_000)
+  );
+  document.body.dataset["kpReaderPhaseProgress"] = String(
+    Math.round(phaseProgress * 1_000)
+  );
+  document.body.dataset["kpReaderActivePhase"] = runtimeFrame.phase.phaseId;
+  document.body.dataset["kpReaderActiveTransformationIds"] = JSON.stringify(
+    runtimeFrame.activeTransformationIds
+  );
   syncAccessibleEquation(
     phaseProgress < 1
       ? context.renderPlan.transitions[0]?.source[0]?.objectId

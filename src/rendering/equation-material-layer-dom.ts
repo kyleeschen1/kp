@@ -6,17 +6,17 @@ import {
 import {
   measureKpNativeKatexSubtreePaintRect
 } from "./native-katex-paint-geometry.ts";
+import type {
+  KpEquationVisiblePaintCertifiedContact
+} from "./equation-visible-paint-overlap.ts";
 
 export interface KpEquationMaterialLayerOwnerFrame {
   readonly ownerId: string;
   readonly sourceElement: HTMLElement;
   readonly sourceMotionId?: string | undefined;
   readonly semanticEntityId?: string | undefined;
-  readonly semanticContacts?: readonly {
-    readonly id: string;
-    readonly maximumOverlapWidthPx: number;
-    readonly maximumOverlapHeightPx: number;
-  }[] | undefined;
+  readonly semanticContacts?:
+    readonly KpEquationVisiblePaintCertifiedContact[] | undefined;
   readonly rect: {
     readonly left: number;
     readonly top: number;

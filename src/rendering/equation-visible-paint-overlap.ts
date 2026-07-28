@@ -3,14 +3,38 @@ export type KpEquationVisiblePaintAuthority =
   | "target-native"
   | "material";
 
+export type KpEquationVisiblePaintContactReason =
+  | "native-handoff"
+  | "semantic-fusion"
+  | "semantic-fission"
+  | "semantic-reconciliation"
+  | "typographic-adjacency";
+
+export type KpEquationVisiblePaintContactPhase =
+  | "transit"
+  | "fusion-contact"
+  | "native-settlement"
+  | "endpoint-typography";
+
+export interface KpEquationVisiblePaintCertifiedContact {
+  readonly id: string;
+  readonly ownerIds: readonly [string, string];
+  readonly reason: KpEquationVisiblePaintContactReason;
+  readonly phase: KpEquationVisiblePaintContactPhase;
+  readonly maximumOverlapWidthPx: number;
+  readonly maximumOverlapHeightPx: number;
+}
+
 export interface KpEquationVisiblePaintObservation {
   readonly ownerId: string;
   readonly semanticEntityId?: string | undefined;
-  readonly semanticContacts?: readonly {
-    readonly id: string;
-    readonly maximumOverlapWidthPx: number;
-    readonly maximumOverlapHeightPx: number;
-  }[] | undefined;
+  /**
+   * Contact authority is pair-scoped by construction. A former relation-wide
+   * id let catalysts and persistent context inherit a fusion allowance, so an
+   * actual collision could pass the visual gate merely by sharing a synthesis.
+   */
+  readonly semanticContacts?:
+    readonly KpEquationVisiblePaintCertifiedContact[] | undefined;
   readonly rowId?: string | undefined;
   readonly authority: KpEquationVisiblePaintAuthority;
   readonly rect: {
@@ -50,12 +74,6 @@ export interface KpEquationVisiblePaintOverlapReport {
   readonly observationCount: number;
   readonly intersections: readonly KpEquationVisiblePaintIntersection[];
 }
-
-export type KpEquationVisiblePaintContactReason =
-  | "native-handoff"
-  | "semantic-fusion"
-  | "semantic-fission"
-  | "typographic-adjacency";
 
 export interface KpEquationVisiblePaintContactAllowance {
   readonly id: string;
@@ -231,11 +249,20 @@ export function evaluateKpEquationVisiblePaintCertifiedContacts(input: {
     KpEquationVisiblePaintCertifiedContactEvaluation["allowed"][number][] = [];
   const violations: KpEquationVisiblePaintIntersection[] = [];
   for (const intersection of input.report.intersections) {
+    const pairKey = ownerPairKey(
+      intersection.leftOwnerId,
+      intersection.rightOwnerId
+    );
     const contact = intersection.leftSemanticContacts?.find((left) => {
       const right = intersection.rightSemanticContacts?.find(
-        ({ id }) => id === left.id
+        (candidate) =>
+          candidate.id === left.id &&
+          ownerPairKey(...candidate.ownerIds) === pairKey
       );
       return right !== undefined &&
+        ownerPairKey(...left.ownerIds) === pairKey &&
+        left.reason === right.reason &&
+        left.phase === right.phase &&
         intersection.width <= Math.min(
           left.maximumOverlapWidthPx,
           right.maximumOverlapWidthPx
@@ -297,6 +324,19 @@ function validateObservation(
     );
   }
   for (const contact of contacts) {
+    const [leftOwnerId, rightOwnerId] = contact.ownerIds;
+    if (
+      leftOwnerId.trim() === "" ||
+      rightOwnerId.trim() === "" ||
+      leftOwnerId === rightOwnerId ||
+      (leftOwnerId !== observation.ownerId &&
+        rightOwnerId !== observation.ownerId)
+    ) {
+      throw new Error(
+        `${observation.ownerId} semantic contact ${contact.id} must name ` +
+        "this owner and exactly one distinct peer."
+      );
+    }
     nonNegative(
       contact.maximumOverlapWidthPx,
       `${observation.ownerId} ${contact.id} maximum overlap width`

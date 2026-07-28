@@ -37,7 +37,17 @@ export interface KpDevReviewCompactNoteEvidence {
   readonly build: KpDevReviewCaptureV1["environment"]["build"];
   readonly checkpointId?: string | undefined;
   readonly progressPermille?: number | undefined;
+  readonly animationProgressPermille?: number | undefined;
+  readonly phaseProgressPermille?: number | undefined;
+  readonly activeNodeId?: string | undefined;
   readonly activePhase?: string | undefined;
+  readonly foldMode?: string | undefined;
+  readonly surfaceProfile?: string | undefined;
+  readonly surfaceViewport?: {
+    readonly width: number;
+    readonly height: number;
+    readonly devicePixelRatio: number;
+  } | undefined;
   readonly capture?: KpDevReviewCaptureV1 | undefined;
 }
 

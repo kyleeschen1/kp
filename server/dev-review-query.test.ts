@@ -21,6 +21,16 @@ test("review query defaults to bounded compact evidence from the current round",
   assert.equal(result.page.nextAfterSequence, 3);
   assert.equal(result.page.notes[0]?.comment, "Current first");
   assert.equal(result.page.notes[0]?.checkpointId, "combine");
+  assert.equal(result.page.notes[0]?.animationProgressPermille, 600);
+  assert.equal(result.page.notes[0]?.phaseProgressPermille, 750);
+  assert.equal(result.page.notes[0]?.activeNodeId, "node.products");
+  assert.equal(result.page.notes[0]?.foldMode, "automatic");
+  assert.equal(result.page.notes[0]?.surfaceProfile, "phone");
+  assert.deepEqual(result.page.notes[0]?.surfaceViewport, {
+    width: 390,
+    height: 844,
+    devicePixelRatio: 2
+  });
   assert.equal("capture" in (result.page.notes[0] ?? {}), false);
   assert.deepEqual(result.counts, {
     lifetime: 5,
@@ -177,11 +187,26 @@ function capture(route: string): KpDevReviewCaptureV1 {
     semantic: {
       checkpointId: "combine",
       progressPermille: 500,
+      animationProgressPermille: 600,
+      phaseProgressPermille: 750,
+      activeNodeId: "node.products",
       activePhase: "morph",
+      foldMode: "automatic",
       activeTransformationIds: [],
       focusRefs: []
     },
-    render: { ownerIds: [] },
+    render: {
+      surface: {
+        profile: "phone",
+        shellViewport: { width: 390, height: 680 },
+        contentViewport: {
+          width: 390,
+          height: 844,
+          devicePixelRatio: 2
+        }
+      },
+      ownerIds: []
+    },
     temporalTrace: [{ offsetMs: 0, progressPermille: 500 }]
   };
 }

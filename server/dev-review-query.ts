@@ -191,7 +191,27 @@ function compactEvidence(
     ...(semantic.progressPermille === undefined
       ? {}
       : { progressPermille: semantic.progressPermille }),
+    ...(semantic.animationProgressPermille === undefined
+      ? {}
+      : { animationProgressPermille: semantic.animationProgressPermille }),
+    ...(semantic.phaseProgressPermille === undefined
+      ? {}
+      : { phaseProgressPermille: semantic.phaseProgressPermille }),
+    ...(semantic.activeNodeId === undefined
+      ? {}
+      : { activeNodeId: semantic.activeNodeId }),
     ...(semantic.activePhase === undefined ? {} : { activePhase: semantic.activePhase }),
+    ...(semantic.foldMode === undefined ? {} : { foldMode: semantic.foldMode }),
+    ...(note.capture.render.surface?.profile === undefined
+      ? {}
+      : { surfaceProfile: note.capture.render.surface.profile }),
+    ...(note.capture.render.surface === undefined
+      ? {}
+      : {
+          surfaceViewport: structuredClone(
+            note.capture.render.surface.contentViewport
+          )
+        }),
     ...(detail === "full" ? { capture: structuredClone(note.capture) } : {})
   };
 }

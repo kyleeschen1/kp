@@ -640,11 +640,81 @@
       "scope": "repaired checkpoint durable control plane",
       "checkedAt": "2026-07-28T02:48:42.772Z",
       "notes": "807 nodes and 13370 events validate with s24 complete, the HUMAN_CHECKPOINT active, and s25-s26 still planned."
+    },
+    {
+      "command": "npm run visual:foldable-review-boundaries",
+      "status": "passed",
+      "scope": "slice-24 automatic fold boundaries across Chromium and Firefox",
+      "checkedAt": "2026-07-28T04:16:00.493Z",
+      "notes": "Dense compiler-derived samples around every product-settlement boundary passed in wide and phone automatic modes, including the reported 29.0 and 46.1 percent frames."
+    },
+    {
+      "command": "npm run visual:foldable-distribution",
+      "status": "passed",
+      "scope": "slice-24 full foldable exemplar",
+      "checkedAt": "2026-07-28T04:16:01.307Z",
+      "notes": "20 of 20 Chromium cases passed after exact pair-scoped fusion authority and catalyst collapse; wide and phone dense overlap checks, factoring fusion, seek, rewind, and fitting remain green."
+    },
+    {
+      "command": "npm run visual:animation-library-display",
+      "status": "passed",
+      "scope": "slice-24 display and review capture",
+      "checkedAt": "2026-07-28T04:16:02.069Z",
+      "notes": "7 of 7 passed: real inbox persistence, phone 29.0 percent surface capture, wide and phone fold boundaries, one lazy host, and fixed review control."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full repository regression suite",
+      "checkedAt": "2026-07-28T04:16:02.847Z",
+      "notes": "2672 tests passed with zero failures; architecture, inference, review schemas, motion planning, successor synthesis, and canonical renderer contracts are green."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production build after slice-24 repair",
+      "checkedAt": "2026-07-28T04:16:03.635Z",
+      "notes": "Application, Node, test, and domain typechecks pass; Vite production build completes with the existing chunk-size advisory only."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "passed",
+      "scope": "protected glyph and fraction reader cohort",
+      "checkedAt": "2026-07-28T04:16:04.388Z",
+      "notes": "12 of 12 passed; radical handoff, fraction fission-fusion, direct seek, rewind, and WebGL lease recovery remain intact."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "protected DOM-centric linear equation cohort",
+      "checkedAt": "2026-07-28T04:16:05.147Z",
+      "notes": "All 39 stable visual states captured successfully across desktop and phone variants."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "reader production closure",
+      "checkedAt": "2026-07-28T04:16:05.903Z",
+      "notes": "Production closure passed for all 10 manifest routes."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "review production closure",
+      "checkedAt": "2026-07-28T04:16:06.670Z",
+      "notes": "Production closure passed across 230 files and the existing six forbidden-marker fixtures."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "third repaired checkpoint durable control plane",
+      "checkedAt": "2026-07-28T04:16:24.542Z",
+      "notes": "807 nodes and 13385 events validate with s24 complete; s25 and s26 remain planned and unapproved behind the HUMAN_CHECKPOINT."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices s01-s24 are complete after checkpoint repair. Exact 64.4 percent wide and phone geometry clears the active transcript, synchronized opaque x fusion remains intact, and the canonical Review composer saves and reloads notes through the live local inbox. HUMAN_CHECKPOINT is active; s25 and s26 remain planned and require fresh approval."
+    "summary": "Slices s01-s24 are complete after the third human-checkpoint repair. The overlap root cause is fixed with typed contact authority plus cross-browser measured boundary proof, phone and wide review evidence is persisted, and the live Review box works. HUMAN_CHECKPOINT is active; s25-s26 remain planned and require fresh approval."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

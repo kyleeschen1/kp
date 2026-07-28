@@ -10,6 +10,9 @@ import type {
   KpEquationMaterialLayerOwnerFrame
 } from "./equation-material-layer-dom.ts";
 import type {
+  KpEquationVisiblePaintCertifiedContact
+} from "./equation-visible-paint-overlap.ts";
+import type {
   KpNativeKatexPaintAtomObservation,
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
@@ -44,14 +47,46 @@ export interface KpNativeKatexSuccessorSynthesisScenePlan {
   readonly claimedTargetAtomIds: readonly string[];
 }
 
-export interface KpNativeKatexSuccessorMaterialOwnerFrame
-  extends KpEquationMaterialLayerOwnerFrame {
+interface KpNativeKatexSuccessorMaterialOwnerFrameBase
+  extends Omit<KpEquationMaterialLayerOwnerFrame, "semanticContacts"> {
   readonly synthesisId: string;
   readonly relationRecordId: string;
   readonly annotationId: string;
-  readonly synthesisSide: "source" | "target";
+  /**
+   * A discriminant—not a boolean—keeps catalysts outside the fusion-member
+   * type. The compositor previously attached one relation-wide allowance, so
+   * an operator or surrounding continuant could accidentally inherit it.
+   */
   readonly synthesisPhase: ReturnType<typeof sampleKpSuccessorSynthesis>["phase"];
 }
+
+export type KpNativeKatexSuccessorContactAuthority =
+    | {
+        readonly synthesisSide: "source";
+        readonly contactRole: "fusion-input";
+        readonly semanticContacts?:
+          readonly KpEquationVisiblePaintCertifiedContact[] | undefined;
+      }
+    | {
+        readonly synthesisSide: "source";
+        readonly contactRole: "catalyst";
+        readonly semanticContacts?: never;
+      }
+    | {
+        readonly synthesisSide: "target";
+        readonly contactRole: "fusion-result";
+        readonly semanticContacts?:
+          readonly KpEquationVisiblePaintCertifiedContact[] | undefined;
+      };
+
+export type KpNativeKatexSuccessorMaterialOwnerFrame =
+  KpNativeKatexSuccessorMaterialOwnerFrameBase &
+  KpNativeKatexSuccessorContactAuthority;
+
+type KpNativeKatexSuccessorFusionOwnerFrame =
+  KpNativeKatexSuccessorMaterialOwnerFrame & {
+    readonly contactRole: "fusion-input" | "fusion-result";
+  };
 
 /**
  * Successor bindings claim paint by semantic identity before visual-key
@@ -167,7 +202,7 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
         ? presentationProgress
         : 1 - presentationProgress
     });
-    return [
+    const sampledOwners = [
       ...frame.sources.flatMap((sample) => {
         const annotation = requiredAnnotation(
           plan.sources,
@@ -179,6 +214,9 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
           annotation,
           pose: sample.pose,
           side: "source",
+          contactRole: sample.contribution === "material-input"
+            ? "fusion-input"
+            : "catalyst",
           phase: frame.phase
         });
       }),
@@ -193,10 +231,12 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
           annotation,
           pose: sample.pose,
           side: "target",
+          contactRole: "fusion-result",
           phase: frame.phase
         });
       })
     ];
+    return attachSuccessorFusionContacts(sampledOwners);
   });
   return Object.freeze([
     ...owners,
@@ -343,18 +383,10 @@ function sceneMaterialContacts(input: {
   string,
   NonNullable<KpEquationMaterialLayerOwnerFrame["semanticContacts"]>
 > {
-  const ids = new Map(input.frames.map((frame) => {
-    const atom = input.sourceAtoms.get(frame.visualAtomId) ??
-      input.targetAtoms.get(frame.visualAtomId);
-    return [frame.trackId, new Map([[
-      frame.componentId,
-      {
-        id: frame.componentId,
-        maximumOverlapWidthPx: atom?.rect.width ?? 0,
-        maximumOverlapHeightPx: atom?.rect.height ?? 0
-      }
-    ]])] as const;
-  }));
+  const ids = new Map(input.frames.map((frame) => [
+    frame.trackId,
+    new Map<string, KpEquationVisiblePaintCertifiedContact>()
+  ] as const));
   for (const [leftIndex, left] of input.frames.entries()) {
     const leftAtom = input.sourceAtoms.get(left.visualAtomId) ??
       input.targetAtoms.get(left.visualAtomId);
@@ -363,15 +395,38 @@ function sceneMaterialContacts(input: {
       .entries()) {
       const rightAtom = input.sourceAtoms.get(right.visualAtomId) ??
         input.targetAtoms.get(right.visualAtomId);
+      if (rightAtom === undefined) continue;
+      const ownerIds = [
+        sceneMaterialOwnerId(left.trackId),
+        sceneMaterialOwnerId(right.trackId)
+      ] as const;
+      if (left.componentId === right.componentId) {
+        addContact(
+          ids,
+          left.trackId,
+          right.trackId,
+          Object.freeze({
+            id:
+              `component-contact.${left.componentId}.` +
+              `${leftIndex}.${leftIndex + rightOffset + 1}`,
+            ownerIds,
+            reason: "semantic-reconciliation",
+            phase: "transit",
+            maximumOverlapWidthPx: Math.min(
+              leftAtom.rect.width,
+              rightAtom.rect.width
+            ),
+            maximumOverlapHeightPx: Math.min(
+              leftAtom.rect.height,
+              rightAtom.rect.height
+            )
+          })
+        );
+      }
       if (
-        rightAtom === undefined ||
         leftAtom.endpoint !== rightAtom.endpoint ||
         !rectsHaveNativeInkContact(leftAtom.rect, rightAtom.rect)
-      ) {
-        continue;
-      }
-      const contactId =
-        `native-contact.${leftIndex}.${leftIndex + rightOffset + 1}`;
+      ) continue;
       const width = Math.min(
         leftAtom.rect.left + leftAtom.rect.width,
         rightAtom.rect.left + rightAtom.rect.width
@@ -380,13 +435,19 @@ function sceneMaterialContacts(input: {
         leftAtom.rect.top + leftAtom.rect.height,
         rightAtom.rect.top + rightAtom.rect.height
       ) - Math.max(leftAtom.rect.top, rightAtom.rect.top);
-      const contact = {
-        id: contactId,
-        maximumOverlapWidthPx: width,
-        maximumOverlapHeightPx: height
-      };
-      ids.get(left.trackId)!.set(contactId, contact);
-      ids.get(right.trackId)!.set(contactId, contact);
+      addContact(
+        ids,
+        left.trackId,
+        right.trackId,
+        Object.freeze({
+          id: `native-contact.${leftIndex}.${leftIndex + rightOffset + 1}`,
+          ownerIds,
+          reason: "typographic-adjacency",
+          phase: "endpoint-typography",
+          maximumOverlapWidthPx: width,
+          maximumOverlapHeightPx: height
+        })
+      );
     }
   }
   return new Map([...ids].map(([trackId, contactIds]) => [
@@ -395,6 +456,23 @@ function sceneMaterialContacts(input: {
       Object.freeze(contact)
     ))
   ]));
+}
+
+function sceneMaterialOwnerId(trackId: string): string {
+  return `native-scene-owner.${trackId}`;
+}
+
+function addContact(
+  contacts: Map<
+    string,
+    Map<string, KpEquationVisiblePaintCertifiedContact>
+  >,
+  leftTrackId: string,
+  rightTrackId: string,
+  contact: KpEquationVisiblePaintCertifiedContact
+): void {
+  contacts.get(leftTrackId)!.set(contact.id, contact);
+  contacts.get(rightTrackId)!.set(contact.id, contact);
 }
 
 function rectsHaveNativeInkContact(
@@ -436,9 +514,17 @@ function ownerFrames(input: {
   readonly plan: KpNativeKatexSuccessorSynthesisScenePlan;
   readonly annotation: KpNativeKatexSuccessorPaintAnnotation;
   readonly pose: KpSuccessorSynthesisPose;
-  readonly side: "source" | "target";
   readonly phase: ReturnType<typeof sampleKpSuccessorSynthesis>["phase"];
-}): readonly KpNativeKatexSuccessorMaterialOwnerFrame[] {
+} & (
+  | {
+      readonly side: "source";
+      readonly contactRole: "fusion-input" | "catalyst";
+    }
+  | {
+      readonly side: "target";
+      readonly contactRole: "fusion-result";
+    }
+)): readonly KpNativeKatexSuccessorMaterialOwnerFrame[] {
   const groupCenter = center(input.annotation.rect);
   return input.annotation.atoms.map((atom) => {
     const atomCenter = center(atom.rect);
@@ -446,6 +532,16 @@ function ownerFrames(input: {
       x: groupCenter.x + (atomCenter.x - groupCenter.x) * input.pose.scale,
       y: groupCenter.y + (atomCenter.y - groupCenter.y) * input.pose.scale
     };
+    const contactAuthority: KpNativeKatexSuccessorContactAuthority =
+      input.side === "source"
+        ? {
+            synthesisSide: "source",
+            contactRole: input.contactRole
+          }
+        : {
+            synthesisSide: "target",
+            contactRole: "fusion-result"
+          };
     return Object.freeze({
       ownerId:
         `native-scene-owner.successor.${input.plan.relationRecordId}.` +
@@ -453,11 +549,6 @@ function ownerFrames(input: {
       sourceElement: atom.sourceElement,
       sourceMotionId: input.annotation.annotationId,
       semanticEntityId: input.annotation.annotationId,
-      semanticContacts: Object.freeze([Object.freeze({
-        id: `successor-contact.${input.plan.relationRecordId}`,
-        maximumOverlapWidthPx: atom.rect.width,
-        maximumOverlapHeightPx: atom.rect.height
-      })]),
       rect: Object.freeze({
         left: scaledCenter.x - atom.rect.width / 2,
         top: scaledCenter.y - atom.rect.height / 2,
@@ -474,10 +565,63 @@ function ownerFrames(input: {
       synthesisId: input.plan.id,
       relationRecordId: input.plan.relationRecordId,
       annotationId: input.annotation.annotationId,
-      synthesisSide: input.side,
+      ...contactAuthority,
       synthesisPhase: input.phase
     });
   });
+}
+
+function attachSuccessorFusionContacts(
+  frames: readonly KpNativeKatexSuccessorMaterialOwnerFrame[]
+): readonly KpNativeKatexSuccessorMaterialOwnerFrame[] {
+  const contacts = new Map(frames.map(({ ownerId }) => [
+    ownerId,
+    [] as KpEquationVisiblePaintCertifiedContact[]
+  ] as const));
+  const participants = frames.filter(isSuccessorFusionOwner);
+  for (const [leftIndex, left] of participants.entries()) {
+    for (const [rightOffset, right] of participants.slice(leftIndex + 1)
+      .entries()) {
+      // Result glyph fragments retain native typography; they do not fuse
+      // with each other merely because they share one synthesis result.
+      if (
+        left.contactRole === "fusion-result" &&
+        right.contactRole === "fusion-result"
+      ) continue;
+      const contact = Object.freeze({
+        id:
+          `successor-contact.${left.relationRecordId}.` +
+          `${leftIndex}.${leftIndex + rightOffset + 1}`,
+        ownerIds: [left.ownerId, right.ownerId] as const,
+        reason: "semantic-fusion" as const,
+        phase: "fusion-contact" as const,
+        maximumOverlapWidthPx: Math.min(left.rect.width, right.rect.width),
+        maximumOverlapHeightPx: Math.min(left.rect.height, right.rect.height)
+      });
+      contacts.get(left.ownerId)!.push(contact);
+      contacts.get(right.ownerId)!.push(contact);
+    }
+  }
+  return Object.freeze(frames.map((frame) => {
+    const semanticContacts = contacts.get(frame.ownerId)!;
+    if (semanticContacts.length === 0) return frame;
+    if (!isSuccessorFusionOwner(frame)) {
+      throw new Error(
+        `Successor catalyst ${frame.ownerId} cannot receive fusion contact authority.`
+      );
+    }
+    return Object.freeze({
+      ...frame,
+      semanticContacts: Object.freeze(semanticContacts)
+    });
+  }));
+}
+
+function isSuccessorFusionOwner(
+  frame: KpNativeKatexSuccessorMaterialOwnerFrame
+): frame is KpNativeKatexSuccessorFusionOwnerFrame {
+  return frame.contactRole === "fusion-input" ||
+    frame.contactRole === "fusion-result";
 }
 
 function requiredAnnotation(

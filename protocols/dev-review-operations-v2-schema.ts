@@ -4,6 +4,7 @@ import {
   protocolEnum,
   protocolInteger,
   protocolLiteral,
+  protocolNumber,
   protocolObject,
   protocolOptional,
   protocolRefine,
@@ -118,7 +119,19 @@ const compactEvidence = protocolObject({
   build,
   checkpointId: protocolOptional(id),
   progressPermille: protocolOptional(protocolInteger({ min: 0, max: 1_000 })),
+  animationProgressPermille:
+    protocolOptional(protocolInteger({ min: 0, max: 1_000 })),
+  phaseProgressPermille:
+    protocolOptional(protocolInteger({ min: 0, max: 1_000 })),
+  activeNodeId: protocolOptional(id),
   activePhase: protocolOptional(id),
+  foldMode: protocolOptional(id),
+  surfaceProfile: protocolOptional(id),
+  surfaceViewport: protocolOptional(protocolObject({
+    width: protocolNumber({ min: 1, max: 100_000 }),
+    height: protocolNumber({ min: 1, max: 100_000 }),
+    devicePixelRatio: protocolNumber({ min: 0.1, max: 20 })
+  })),
   capture: protocolOptional(kpDevReviewCaptureSchema)
 });
 

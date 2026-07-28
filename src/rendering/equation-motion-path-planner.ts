@@ -70,6 +70,36 @@ const kpFanInLiftRatios = [0.35, 0.5, 0.75, 1, 1.25, 1.5] as const;
 export const kpNativeInkContactTolerancePx = 0.75;
 export const kpNativeReorderInkContactTolerancePx = 1.5;
 
+interface KpEquationReorderChoreography {
+  readonly moverRange: {
+    readonly start: number;
+    readonly end: number;
+  };
+  readonly contextRange: {
+    readonly start: number;
+    readonly end: number;
+  };
+  readonly structuralRange: {
+    readonly start: number;
+    readonly end: number;
+  };
+}
+
+const kpEnteringReorderChoreography = Object.freeze({
+  // The crossing cohort rises first, remains in the clearance lane while
+  // context vacates its destination, and only then settles. Ending mover
+  // motion before context motion made collision freedom font-engine-specific.
+  moverRange: Object.freeze({ start: 0.05, end: 0.9 }),
+  contextRange: Object.freeze({ start: 0.32, end: 0.58 }),
+  structuralRange: Object.freeze({ start: 0.9, end: 0.98 })
+}) satisfies KpEquationReorderChoreography;
+
+const kpExitingReorderChoreography = Object.freeze({
+  moverRange: Object.freeze({ start: 0.42, end: 0.95 }),
+  contextRange: Object.freeze({ start: 0.1, end: 0.38 }),
+  structuralRange: Object.freeze({ start: 0.02, end: 0.1 })
+}) satisfies KpEquationReorderChoreography;
+
 export interface KpEquationCollisionTrack {
   readonly id: string;
   readonly componentId: string;
@@ -371,29 +401,23 @@ export function compileKpCollisionSafeReorderTracks<
       : right.id
   ));
   const entering = tracks.some(({ lifecycle }) => lifecycle === "introduce");
-  const moverRange = entering
-    ? { start: 0.05, end: 0.62 }
-    : { start: 0.42, end: 0.95 };
-  const contextRange = entering
-    ? { start: 0.62, end: 0.9 }
-    : { start: 0.1, end: 0.38 };
-  const structuralRange = entering
-    ? { start: 0.9, end: 0.98 }
-    : { start: 0.02, end: 0.1 };
+  const choreography = entering
+    ? kpEnteringReorderChoreography
+    : kpExitingReorderChoreography;
   const scheduled = tracks.map((track) => Object.freeze({
     ...track,
     ...(track.lifecycle === "persist"
       ? {
           motionProgressRange: movingComponentIds.has(track.componentId)
-            ? moverRange
-            : contextRange
+            ? choreography.moverRange
+            : choreography.contextRange
         }
       : track.lifecycle === "introduce" || track.lifecycle === "eliminate"
         ? {
-            motionProgressRange: structuralRange,
+            motionProgressRange: choreography.structuralRange,
             opacityStepAt: entering
-              ? structuralRange.start
-              : structuralRange.end
+              ? choreography.structuralRange.start
+              : choreography.structuralRange.end
           }
         : {})
   }) as Track);

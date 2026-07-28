@@ -54,9 +54,15 @@ export interface KpDevReviewSemanticContextV1 {
   readonly assetId?: string | undefined;
   readonly checkpointId?: string | undefined;
   readonly progressPermille?: number | undefined;
+  readonly animationProgressPermille?: number | undefined;
+  readonly phaseProgressPermille?: number | undefined;
   readonly projectionId?: string | undefined;
+  readonly activeNodeId?: string | undefined;
   readonly activeTransformationIds: readonly string[];
   readonly activePhase?: string | undefined;
+  readonly foldMode?: string | undefined;
+  readonly foldDetail?: string | undefined;
+  readonly layoutPolicy?: string | undefined;
   readonly focusSource?: string | undefined;
   readonly focusRefs: readonly string[];
   readonly motionPreference?: string | undefined;
@@ -74,6 +80,24 @@ export interface KpDevReviewRenderContextV1 {
   readonly layoutReadCount?: number | undefined;
   readonly fontRevision?: number | undefined;
   readonly fontReady?: boolean | undefined;
+  readonly surface?: {
+    readonly profile?: string | undefined;
+    readonly shellViewport: {
+      readonly width: number;
+      readonly height: number;
+    };
+    readonly contentViewport: {
+      readonly width: number;
+      readonly height: number;
+      readonly devicePixelRatio: number;
+    };
+    readonly stageViewport?: {
+      readonly left: number;
+      readonly top: number;
+      readonly width: number;
+      readonly height: number;
+    } | undefined;
+  } | undefined;
   readonly ownerIds: readonly string[];
 }
 

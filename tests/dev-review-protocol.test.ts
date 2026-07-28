@@ -33,8 +33,14 @@ test("dev review protocol round trips renderer-neutral capture evidence", () => 
       semantic: {
         documentId: "lesson.solve-x.x-plus-3",
         progressPermille: 553,
+        animationProgressPermille: 600,
+        phaseProgressPermille: 765,
+        activeNodeId: "evaluation.solve-x.subtract",
         activeTransformationIds: ["transform.cancel-left-inverses"],
         activePhase: "collapse",
+        foldMode: "automatic",
+        foldDetail: "expanded",
+        layoutPolicy: "single-row",
         focusRefs: [],
         target: {
           materialOwnerId: "material-owner.left-inverses-cancel",
@@ -44,6 +50,21 @@ test("dev review protocol round trips renderer-neutral capture evidence", () => 
       render: {
         motionAuthority: "operation-specific",
         layoutReadCount: 1,
+        surface: {
+          profile: "phone",
+          shellViewport: { width: 390, height: 700 },
+          contentViewport: {
+            width: 390,
+            height: 700,
+            devicePixelRatio: 2
+          },
+          stageViewport: {
+            left: 0,
+            top: 80,
+            width: 390,
+            height: 420
+          }
+        },
         ownerIds: ["material-owner.left-inverses-cancel"]
       },
       temporalTrace: [{
@@ -64,4 +85,5 @@ test("dev review protocol round trips renderer-neutral capture evidence", () => 
   assert.deepEqual(JSON.parse(JSON.stringify(event)), event);
   assert.equal(event.note.capture.semantic.target?.materialOwnerId,
     "material-owner.left-inverses-cancel");
+  assert.equal(event.note.capture.render.surface?.profile, "phone");
 });

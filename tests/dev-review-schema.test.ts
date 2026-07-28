@@ -28,14 +28,31 @@ function request(): Record<string, unknown> {
       },
       semantic: {
         progressPermille: 553,
+        animationProgressPermille: 600,
+        phaseProgressPermille: 765,
+        activeNodeId: "evaluation.solve-x.subtract",
         activeTransformationIds: ["transform.cancel"],
+        foldMode: "automatic",
+        foldDetail: "expanded",
+        layoutPolicy: "single-row",
         focusRefs: [],
         target: {
           materialOwnerId: "owner.minus-three",
           normalizedPoint: { x: 0.5, y: 0.5 }
         }
       },
-      render: { ownerIds: ["owner.minus-three"] },
+      render: {
+        surface: {
+          profile: "phone",
+          shellViewport: { width: 390, height: 700 },
+          contentViewport: {
+            width: 390,
+            height: 700,
+            devicePixelRatio: 2
+          }
+        },
+        ownerIds: ["owner.minus-three"]
+      },
       temporalTrace: [{ offsetMs: -16, progressPermille: 550 }]
     }
   };
@@ -46,6 +63,7 @@ test("dev review schema accepts and clones a bounded canonical request", () => {
   const parsed = kpDevReviewCreateRequestSchema.parse(source);
   assert.notEqual(parsed, source);
   assert.equal(parsed.capture.semantic.progressPermille, 553);
+  assert.equal(parsed.capture.render.surface?.profile, "phone");
 });
 
 test("dev review schema rejects unknown, blank, oversized, and unsafe fields", () => {

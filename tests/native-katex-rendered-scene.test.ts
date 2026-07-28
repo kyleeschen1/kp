@@ -1812,7 +1812,7 @@ test("merge-fan-in settles its nearest fusion leader before contributors", () =>
   );
 });
 
-test("semantic reorder lifts one opaque crossing cohort before grouping enters", () => {
+test("semantic reorder holds one opaque crossing cohort above reflowing context", () => {
   const track = (
     id: string,
     componentId: string,
@@ -1850,17 +1850,19 @@ test("semantic reorder lifts one opaque crossing cohort before grouping enters",
   const [compiledDigit, compiledVariable, compiledContext, compiledGrouping] =
     compiled;
   const middle = sampleKpNativeKatexSceneTracks(compiled, 0.5);
-  const beforeGrouping = sampleKpNativeKatexSceneTracks(compiled, 0.85);
+  const beforeGrouping = sampleKpNativeKatexSceneTracks(compiled, 0.89);
   const afterGrouping = sampleKpNativeKatexSceneTracks(compiled, 0.91);
 
   assert.equal(compiledDigit!.motionPath?.variant, "arc-above");
   assert.equal(compiledVariable!.motionPath?.variant, "arc-above");
-  assert.equal(compiledDigit!.motionProgressRange?.end, 0.62);
-  assert.equal(compiledContext!.motionProgressRange?.start, 0.62);
+  assert.equal(compiledDigit!.motionProgressRange?.end, 0.9);
+  assert.equal(compiledContext!.motionProgressRange?.start, 0.32);
+  assert.equal(compiledContext!.motionProgressRange?.end, 0.58);
   assert.equal(compiledGrouping!.opacityStepAt, 0.9);
   assert.ok(middle[0]!.rect.top < moverDigit.startRect.top);
   assert.ok(middle[1]!.rect.top < moverVariable.startRect.top);
-  assert.deepEqual(middle[2]!.rect, context.startRect);
+  assert.notDeepEqual(middle[2]!.rect, context.startRect);
+  assert.notDeepEqual(middle[0]!.rect, moverDigit.endRect);
   assert.equal(beforeGrouping[3]!.opacity, 0);
   assert.equal(afterGrouping[3]!.opacity, 1);
 });

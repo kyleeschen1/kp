@@ -1,7 +1,21 @@
-import { expect, test, type Page } from "@playwright/test";
+import {
+  expect,
+  test,
+  type FrameLocator,
+  type Page
+} from "@playwright/test";
 import type {
   KpDevReviewCreateRequestV2
 } from "../protocols/dev-review-v2.ts";
+import {
+  createKpFoldableDistributionFoldIntent
+} from "../src/semantic/foldable-distribution-fold-intent.ts";
+import {
+  compileKpFoldableDistributionAdaptiveProjection
+} from "../src/semantic/foldable-distribution-fold-projection.ts";
+import {
+  compileKpFoldableDistributionFoldTimeline
+} from "../src/semantic/foldable-distribution-fold-timeline.ts";
 
 const radicalId =
   "animation.generated.radical.square-root-as-power";
@@ -160,6 +174,113 @@ test("deep links preserve representation and phone preview without overflow", as
     document.documentElement.scrollWidth -
     document.documentElement.clientWidth
   )).toBeLessThanOrEqual(1);
+});
+
+test("automatic fold schedules certify every product-settlement boundary frame", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_440, height: 1_000 });
+  await page.goto(
+    "/canonical-animation-review.html" +
+    `?animation=${encodeURIComponent(foldableDistributionId)}`
+  );
+  const frame = page.frameLocator("[data-animation-library-frame]");
+  await frame.locator("[data-kp-reader-equation-stage]").waitFor();
+  await expect(
+    frame.locator("select[data-kp-reader-fold-mode]")
+  ).toHaveValue("automatic");
+
+  for (const profile of ["wide", "phone"] as const) {
+    await page.locator(
+      `[data-animation-library-viewport="${profile}"]`
+    ).click();
+    await expect(
+      page.locator("[data-animation-library-viewport-shell]")
+    ).toHaveAttribute("data-animation-library-viewport-shell", profile);
+    await settleReviewFrame(frame);
+
+    const projection = compileKpFoldableDistributionAdaptiveProjection({
+      intent: createKpFoldableDistributionFoldIntent({ mode: "automatic" }),
+      detailBudget: profile === "wide" ? "roomy" : "compact"
+    });
+    const timeline =
+      compileKpFoldableDistributionFoldTimeline(projection);
+    const endpoint = timeline.checkpoints["products-evaluated"];
+    const startPermille = Math.floor((endpoint - 0.025) * 1_000);
+    const endPermille = Math.ceil((endpoint + 0.006) * 1_000);
+    const reportedMoment = profile === "wide" ? 461 : 290;
+    const samples = [...new Set([
+      reportedMoment,
+      ...Array.from(
+        { length: endPermille - startPermille + 1 },
+        (_value, index) => startPermille + index
+      )
+    ])].sort((left, right) => left - right);
+
+    for (const progress of samples) {
+      await seekReviewFrame(frame, progress);
+      const evidence = await collectReviewPaintEvidence(frame, progress);
+      expect(
+        evidence.violations,
+        JSON.stringify({ profile, endpoint, progress, evidence })
+      ).toEqual([]);
+      if (progress === reportedMoment) {
+        expect(
+          evidence.intersections,
+          JSON.stringify({ profile, endpoint, progress, evidence })
+        ).toEqual([]);
+      }
+    }
+  }
+});
+
+test("phone review capture records the rendered fold boundary, not the outer window", async ({
+  page
+}) => {
+  let request: KpDevReviewCreateRequestV2 | undefined;
+  await page.route("**/api/dev/reviews/v2/notes", async (route) => {
+    request = route.request().postDataJSON() as KpDevReviewCreateRequestV2;
+    await route.fulfill({
+      status: 201,
+      contentType: "application/json",
+      body: JSON.stringify({
+        ...request,
+        id: "note.foldable-phone-boundary",
+        sequence: 10,
+        status: "new"
+      })
+    });
+  });
+  await page.setViewportSize({ width: 1_440, height: 1_000 });
+  await page.goto(
+    "/canonical-animation-review.html" +
+    `?animation=${encodeURIComponent(foldableDistributionId)}` +
+    "&viewport=phone"
+  );
+  const frame = page.frameLocator("[data-animation-library-frame]");
+  await frame.locator("[data-kp-reader-equation-stage]").waitFor();
+  await seekReviewFrame(frame, 290);
+
+  const review = page.locator("[data-kp-dev-review-shell]");
+  await review.locator("button.launcher").click();
+  await review.locator("textarea").fill(
+    "Phone automatic boundary at 29.0 percent."
+  );
+  await review.locator("button.save").click();
+  await expect(review.locator("output.status")).toHaveText("Saved note 10.");
+
+  expect(request?.capture.semantic.progressPermille).toBe(290);
+  expect(request?.capture.semantic.animationProgressPermille)
+    .toBeGreaterThanOrEqual(0);
+  expect(request?.capture.semantic.phaseProgressPermille)
+    .toBeGreaterThanOrEqual(0);
+  expect(request?.capture.semantic.foldMode).toBe("automatic");
+  expect(request?.capture.semantic.activeNodeId).toBeTruthy();
+  expect(request?.capture.render.surface?.profile).toBe("phone");
+  expect(request?.capture.render.surface?.contentViewport.width)
+    .toBeLessThanOrEqual(390);
+  expect(request?.capture.render.surface?.shellViewport.width)
+    .toBeLessThanOrEqual(390);
 });
 
 test("foldable distribution review matrix stays canonical in one wide or phone host", async ({
@@ -325,15 +446,25 @@ test("foldable distribution review matrix stays canonical in one wide or phone h
               : measureKpNativeKatexSubtreePaintRect(stage, visual);
             return rect === undefined ? [] : [{
               ownerId:
-                `material:${
-                  owner.dataset["kpEquationMaterialOwnerId"]
-                }`,
+                owner.dataset["kpEquationMaterialOwnerId"] ?? "",
               semanticEntityId:
                 owner.dataset["kpEquationMaterialSemanticEntityId"],
               semanticContacts: JSON.parse(
                 owner.dataset["kpEquationMaterialSemanticContacts"] ?? "[]"
               ) as Array<{
                 id: string;
+                ownerIds: [string, string];
+                reason:
+                  | "native-handoff"
+                  | "semantic-fusion"
+                  | "semantic-fission"
+                  | "semantic-reconciliation"
+                  | "typographic-adjacency";
+                phase:
+                  | "transit"
+                  | "fusion-contact"
+                  | "native-settlement"
+                  | "endpoint-typography";
                 maximumOverlapWidthPx: number;
                 maximumOverlapHeightPx: number;
               }>,
@@ -554,6 +685,10 @@ test("one review capture stays reachable while hosts switch and the page scrolls
   expect(request?.capture.semantic.documentId).toBe(
     "review.animation-library"
   );
+  expect(request?.capture.render.surface?.profile).toBe("wide");
+  expect(
+    request?.capture.render.surface?.contentViewport.width
+  ).toBeGreaterThan(880);
 
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(review).toHaveAttribute(
@@ -561,6 +696,152 @@ test("one review capture stays reachable while hosts switch and the page scrolls
     "captured-moment-sheet"
   );
 });
+
+async function seekReviewFrame(
+  frame: FrameLocator,
+  progress: number
+): Promise<void> {
+  const scrubber = frame.locator("[data-kp-reader-attention-scrubber]");
+  await scrubber.evaluate((node, nextValue) => {
+    const input = node as HTMLInputElement;
+    input.value = String(nextValue);
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  }, progress);
+  await expect(frame.locator("body")).toHaveAttribute(
+    "data-kp-reader-progress",
+    String(progress)
+  );
+  await settleReviewFrame(frame);
+}
+
+async function settleReviewFrame(frame: FrameLocator): Promise<void> {
+  await frame.locator("body").evaluate(() =>
+    new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+    )
+  );
+}
+
+async function collectReviewPaintEvidence(
+  frame: FrameLocator,
+  progressPermille: number
+) {
+  return frame.locator("body").evaluate(async (_body, progress) => {
+    const overlapModule =
+      "/src/rendering/equation-visible-paint-overlap.ts";
+    const geometryModule =
+      "/src/rendering/native-katex-paint-geometry.ts";
+    const {
+      evaluateKpEquationVisiblePaintCertifiedContacts,
+      inspectKpEquationVisiblePaintOverlap
+    } = await import(overlapModule);
+    const { measureKpNativeKatexSubtreePaintRect } =
+      await import(geometryModule);
+    const stage = document.querySelector<HTMLElement>(
+      "[data-kp-reader-equation-viewport]"
+    );
+    const transition = document.querySelector<HTMLElement>(
+      "[data-kp-reader-transition-active='true']"
+    );
+    if (stage === null || transition === null) {
+      throw new Error("Review paint census lacks its active stage.");
+    }
+    const effectiveOpacity = (element: HTMLElement): number => {
+      let opacity = 1;
+      let current: HTMLElement | null = element;
+      while (current !== null) {
+        opacity *= Number(getComputedStyle(current).opacity);
+        if (current === stage) break;
+        current = current.parentElement;
+      }
+      return opacity;
+    };
+    const observations = [
+      ...[...transition.querySelectorAll<HTMLElement>(
+        "[data-kp-reader-native]"
+      )].flatMap((root) => {
+        const authority = root.dataset["kpReaderNative"] === "source"
+          ? "source-native" as const
+          : "target-native" as const;
+        return [...root.querySelectorAll<HTMLElement>(
+          "[data-kp-reader-equation-anchor-id]"
+        )].filter((anchor) =>
+          anchor.dataset["kpFoldableEnvelopeId"] === undefined &&
+          effectiveOpacity(anchor) > 0.01
+        ).flatMap((anchor) => {
+          const rect = measureKpNativeKatexSubtreePaintRect(stage, anchor);
+          return rect === undefined ? [] : [{
+            ownerId:
+              `native:${authority}:${
+                anchor.dataset["kpReaderEquationAnchorId"]
+              }`,
+            semanticEntityId: anchor.dataset["kpReaderSelectorId"],
+            authority,
+            rect,
+            opacity: effectiveOpacity(anchor)
+          }];
+        });
+      }),
+      ...[...document.querySelectorAll<HTMLElement>(
+        "[data-kp-equation-material-owner-id]"
+      )].flatMap((owner) => {
+        const visual = owner.firstElementChild as HTMLElement | null;
+        const rect = visual === null
+          ? undefined
+          : measureKpNativeKatexSubtreePaintRect(stage, visual);
+        return rect === undefined ? [] : [{
+          ownerId:
+            owner.dataset["kpEquationMaterialOwnerId"] ?? "",
+          semanticEntityId:
+            owner.dataset["kpEquationMaterialSemanticEntityId"],
+          semanticContacts: JSON.parse(
+            owner.dataset["kpEquationMaterialSemanticContacts"] ?? "[]"
+          ),
+          authority: "material" as const,
+          rect,
+          opacity: effectiveOpacity(owner)
+        }];
+      })
+    ];
+    const report = inspectKpEquationVisiblePaintOverlap({
+      progress: progress / 1_000,
+      viewportId: `${window.innerWidth}x${window.innerHeight}`,
+      observations,
+      contactTolerancePx: 0.75
+    });
+    const evaluation = evaluateKpEquationVisiblePaintCertifiedContacts({
+      report,
+      contactTolerancePx: 0.75
+    });
+    const equationStage = document.querySelector<HTMLElement>(
+      "[data-kp-reader-equation-stage]"
+    );
+    return {
+      semanticProgressPermille: Number(
+        document.body.dataset["kpReaderProgress"]
+      ),
+      animationProgressPermille: Number(
+        document.body.dataset["kpReaderAnimationProgress"]
+      ),
+      phaseProgressPermille: Number(
+        document.body.dataset["kpReaderPhaseProgress"]
+      ),
+      transitionId: document.body.dataset["kpReaderTransition"],
+      activeNodeId: equationStage?.dataset["kpReaderFoldActiveNode"],
+      foldMode: equationStage?.dataset["kpReaderFoldMode"],
+      foldDetail: equationStage?.dataset["kpReaderFoldPhaseDetail"],
+      layoutPolicy: equationStage?.dataset["kpReaderFoldLayoutPolicy"],
+      viewport: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        devicePixelRatio: window.devicePixelRatio
+      },
+      intersections: report.intersections,
+      allowed: evaluation.allowed,
+      violations: evaluation.violations
+    };
+  }, progressPermille);
+}
 
 async function mockReviewInbox(page: Page): Promise<void> {
   await page.route("**/api/dev/reviews/v2/query", async (route) => {

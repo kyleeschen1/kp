@@ -161,6 +161,9 @@ test("semantic identity alone never excuses visible overlap", () => {
 test("visible overlap retains bounded compositor contact evidence", () => {
   const semanticContacts = [{
     id: "component.fusion",
+    ownerIds: ["left", "right"] as const,
+    reason: "semantic-fusion" as const,
+    phase: "fusion-contact" as const,
     maximumOverlapWidthPx: 8.5,
     maximumOverlapHeightPx: 8.5
   }];
@@ -195,6 +198,38 @@ test("visible overlap retains bounded compositor contact evidence", () => {
     }),
     /semantic contacts must be non-empty and unique/
   );
+});
+
+test("a shared relation label cannot authorize a different owner pair", () => {
+  const leftContact = [{
+    id: "successor.relation",
+    ownerIds: ["left", "right"] as const,
+    reason: "semantic-fusion" as const,
+    phase: "fusion-contact" as const,
+    maximumOverlapWidthPx: 10,
+    maximumOverlapHeightPx: 10
+  }];
+  const rightContact = [{
+    ...leftContact[0]!,
+    ownerIds: ["right", "other"] as const
+  }];
+  const report = inspectKpEquationVisiblePaintOverlap({
+    progress: 0.9,
+    viewportId: "wide",
+    observations: [
+      observation("left", "material", 0, 0, {
+        semanticContacts: leftContact
+      }),
+      observation("right", "material", 1, 1, {
+        semanticContacts: rightContact
+      })
+    ]
+  });
+
+  assert.equal(report.intersections.length, 1);
+  assert.equal(evaluateKpEquationVisiblePaintCertifiedContacts({
+    report
+  }).passed, false);
 });
 
 test("contact allowances reject duplicate, self, and excessive contact", () => {

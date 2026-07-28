@@ -29,6 +29,18 @@ export function createKpAnimationLibraryCaptureProvider(
         "representationId"
       );
       const childDocument = frame.contentDocument;
+      const childWindow = frame.contentWindow;
+      const stage = childDocument?.querySelector<HTMLElement>(
+        "[data-kp-reader-equation-stage]"
+      );
+      const viewportShell = frame.closest<HTMLElement>(
+        "[data-animation-library-viewport-shell]"
+      );
+      const shellRect = viewportShell?.getBoundingClientRect() ??
+        frame.getBoundingClientRect();
+      const stageRect = stage?.getBoundingClientRect();
+      const surfaceProfile =
+        viewportShell?.dataset["animationLibraryViewportShell"];
       const progressPermille = readProgressPermille(childDocument);
       const target =
         context.pointer === undefined
@@ -44,7 +56,21 @@ export function createKpAnimationLibraryCaptureProvider(
           assetId: animationId,
           projectionId: representationId,
           progressPermille,
-          activeTransformationIds: [],
+          animationProgressPermille: readPermilleDataset(
+            childDocument,
+            "kpReaderAnimationProgress"
+          ),
+          phaseProgressPermille: readPermilleDataset(
+            childDocument,
+            "kpReaderPhaseProgress"
+          ),
+          activeNodeId: stage?.dataset["kpReaderFoldActiveNode"],
+          activeTransformationIds:
+            readActiveTransformationIds(childDocument),
+          activePhase: childDocument?.body.dataset["kpReaderActivePhase"],
+          foldMode: stage?.dataset["kpReaderFoldMode"],
+          foldDetail: stage?.dataset["kpReaderFoldPhaseDetail"],
+          layoutPolicy: stage?.dataset["kpReaderFoldLayoutPolicy"],
           focusRefs: [],
           playbackDirection: readPlaybackDirection(childDocument),
           ...(target === undefined ? {} : { target })
@@ -62,6 +88,38 @@ export function createKpAnimationLibraryCaptureProvider(
           fontReady:
             childDocument?.fonts.status === "loaded" &&
             ownerDocument.fonts.status === "loaded",
+          surface: {
+            ...(surfaceProfile === undefined
+              ? {}
+              : { profile: surfaceProfile }),
+            shellViewport: {
+              width: positiveDimension(shellRect.width),
+              height: positiveDimension(shellRect.height)
+            },
+            contentViewport: {
+              width: positiveDimension(
+                childWindow?.innerWidth ?? frame.clientWidth
+              ),
+              height: positiveDimension(
+                childWindow?.innerHeight ?? frame.clientHeight
+              ),
+              devicePixelRatio: positiveDimension(
+                childWindow?.devicePixelRatio ??
+                ownerDocument.defaultView?.devicePixelRatio ??
+                1
+              )
+            },
+            ...(stageRect === undefined
+              ? {}
+              : {
+                  stageViewport: {
+                    left: stageRect.left,
+                    top: stageRect.top,
+                    width: positiveDimension(stageRect.width),
+                    height: positiveDimension(stageRect.height)
+                  }
+                })
+          },
           ownerIds: [animationId, representationId]
         },
         temporalTrace: [{
@@ -103,8 +161,36 @@ function readPlaybackDirection(
     : "forward";
 }
 
+function readPermilleDataset(
+  childDocument: Document | null,
+  key: string
+): number | undefined {
+  const value = Number(childDocument?.body.dataset[key]);
+  return Number.isFinite(value) ? boundedPermille(value) : undefined;
+}
+
+function readActiveTransformationIds(
+  childDocument: Document | null
+): readonly string[] {
+  const raw = childDocument?.body.dataset["kpReaderActiveTransformationIds"];
+  if (raw === undefined) return [];
+  try {
+    const value: unknown = JSON.parse(raw);
+    return Array.isArray(value) &&
+        value.every((candidate) => typeof candidate === "string")
+      ? value
+      : [];
+  } catch {
+    return [];
+  }
+}
+
 function boundedPermille(value: number): number {
   return Math.round(Math.max(0, Math.min(1_000, value)));
+}
+
+function positiveDimension(value: number): number {
+  return Number.isFinite(value) && value > 0 ? value : 1;
 }
 
 function requiredElement<T extends HTMLElement = HTMLElement>(

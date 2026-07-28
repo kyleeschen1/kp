@@ -359,7 +359,6 @@ export function sampleKpSuccessorSynthesis(input: {
           member,
           input.plan.junction,
           activationProgress,
-          input.plan.inputJunctionScale,
           catalystRetirement
         )
       };
@@ -792,16 +791,18 @@ function catalystPose(
   member: KpSuccessorSynthesisMember,
   junction: { readonly x: number; readonly y: number },
   activationProgress: number,
-  scaleTo: number,
   retirementProgress: number
 ): KpSuccessorSynthesisPose {
   const origin = center(member.rect);
   return {
     // The operator contributes causality rather than result material, but it
     // still belongs to the consumed expression and gathers with that cohort.
+    // Unlike a material input it must collapse completely before entering the
+    // fusion contact zone; giving both roles one nonzero seed scale previously
+    // made operator/input overlap depend on browser font metrics.
     x: (junction.x - origin.x) * activationProgress,
     y: (junction.y - origin.y) * activationProgress,
-    scale: mix(1, scaleTo, activationProgress),
+    scale: mix(1, 0, activationProgress),
     opacity: 1 - retirementProgress
   };
 }

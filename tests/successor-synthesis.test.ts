@@ -49,7 +49,7 @@ test("semantic rank staggers convergence without shrinking inputs to zero", () =
   assert.ok(four.pose.scale >= 0.68);
 });
 
-test("the subtraction glyph joins the shrinking cohort without contributing material", () => {
+test("the subtraction glyph collapses with the cohort without seeding material", () => {
   const plan = createConstantDifferenceSuccessorFixture();
   const frame = sampleKpSuccessorSynthesis({
     plan,
@@ -59,7 +59,7 @@ test("the subtraction glyph joins the shrinking cohort without contributing mate
   assert.equal(minus.contribution, "catalyst");
   assert.equal(minus.arrivalProgress, 0);
   assert.ok(minus.activationProgress > 0);
-  assert.equal(minus.pose.scale, plan.inputJunctionScale);
+  assert.equal(minus.pose.scale, 0);
   assert.notEqual(minus.pose.x, 0);
   assert.ok(minus.pose.opacity > 0);
 });

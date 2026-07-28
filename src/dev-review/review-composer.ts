@@ -223,10 +223,21 @@ function renderCaptureMeta(
   capture: KpDevReviewCaptureV1
 ): void {
   const semantic = capture.semantic;
+  const surface = capture.render.surface;
   const labels = [
     "Locked",
+    surface === undefined
+      ? undefined
+      : [
+          surface.profile ?? "Rendered surface",
+          `${Math.round(surface.contentViewport.width)}×` +
+          `${Math.round(surface.contentViewport.height)}`
+        ].join(" · "),
     semantic.checkpointId ?? "Current frame",
     semantic.progressPermille === undefined ? undefined : `${semantic.progressPermille / 10}%`,
+    semantic.phaseProgressPermille === undefined
+      ? undefined
+      : `Phase ${semantic.phaseProgressPermille / 10}%`,
     semantic.activePhase
   ].filter((label): label is string => label !== undefined);
   meta.replaceChildren(...labels.map((label) => pill(meta.ownerDocument, label)));

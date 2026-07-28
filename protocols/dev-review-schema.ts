@@ -95,11 +95,19 @@ const semantic = protocolObject({
   assetId: optionalId,
   checkpointId: optionalId,
   progressPermille: protocolOptional(protocolInteger({ min: 0, max: 1_000 })),
+  animationProgressPermille:
+    protocolOptional(protocolInteger({ min: 0, max: 1_000 })),
+  phaseProgressPermille:
+    protocolOptional(protocolInteger({ min: 0, max: 1_000 })),
   projectionId: optionalId,
+  activeNodeId: optionalId,
   activeTransformationIds: protocolArray(id, {
     maxLength: kpDevReviewProtocolLimits.activeTransformations
   }),
   activePhase: optionalText,
+  foldMode: optionalText,
+  foldDetail: optionalText,
+  layoutPolicy: optionalText,
   focusSource: optionalText,
   focusRefs: protocolArray(id, { maxLength: kpDevReviewProtocolLimits.focusRefs }),
   motionPreference: optionalText,
@@ -116,6 +124,24 @@ const render = protocolObject({
   layoutReadCount: protocolOptional(protocolInteger({ min: 0 })),
   fontRevision: protocolOptional(protocolInteger({ min: 0 })),
   fontReady: protocolOptional(protocolBoolean()),
+  surface: protocolOptional(protocolObject({
+    profile: optionalText,
+    shellViewport: protocolObject({
+      width: protocolNumber({ min: 1, max: 100_000 }),
+      height: protocolNumber({ min: 1, max: 100_000 })
+    }),
+    contentViewport: protocolObject({
+      width: protocolNumber({ min: 1, max: 100_000 }),
+      height: protocolNumber({ min: 1, max: 100_000 }),
+      devicePixelRatio: protocolNumber({ min: 0.1, max: 20 })
+    }),
+    stageViewport: protocolOptional(protocolObject({
+      left: protocolNumber(),
+      top: protocolNumber(),
+      width: protocolNumber({ min: 1, max: 100_000 }),
+      height: protocolNumber({ min: 1, max: 100_000 })
+    }))
+  })),
   ownerIds: protocolArray(id, { maxLength: kpDevReviewProtocolLimits.ownerIds })
 });
 const temporalSample = protocolObject({

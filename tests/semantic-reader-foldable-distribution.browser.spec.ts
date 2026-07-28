@@ -249,14 +249,25 @@ async function visiblePaintOverlapReport(
           ? undefined
           : measureKpNativeKatexSubtreePaintRect(stage, visual);
         return rect === undefined ? [] : [{
-          ownerId:
-            `material:${owner.dataset["kpEquationMaterialOwnerId"]}`,
+          ownerId: owner.dataset["kpEquationMaterialOwnerId"] ?? "",
           semanticEntityId:
             owner.dataset["kpEquationMaterialSemanticEntityId"],
           semanticContacts: JSON.parse(
             owner.dataset["kpEquationMaterialSemanticContacts"] ?? "[]"
           ) as Array<{
             id: string;
+            ownerIds: [string, string];
+            reason:
+              | "native-handoff"
+              | "semantic-fusion"
+              | "semantic-fission"
+              | "semantic-reconciliation"
+              | "typographic-adjacency";
+            phase:
+              | "transit"
+              | "fusion-contact"
+              | "native-settlement"
+              | "endpoint-typography";
             maximumOverlapWidthPx: number;
             maximumOverlapHeightPx: number;
           }>,
