@@ -111,7 +111,8 @@
     {
       "id": "slice.kp.role-plan.10",
       "title": "Migrate-additive-cancellation",
-      "status": "planned"
+      "summary": "Migrated additive cancellation to verified +4 and -4 term bundles with correspondence-derived continuants and total dry-run plan coverage.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.11",

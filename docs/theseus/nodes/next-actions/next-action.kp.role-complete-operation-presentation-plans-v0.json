@@ -106,11 +106,18 @@
       "scope": "slice-09-preservation-check",
       "checkedAt": "2026-07-28T18:49:04.933Z",
       "notes": "Fifty-six focused tests pass after restoring the pre-existing renderer-neutral teaching-intent authoring tests beside the new trusted role-proof tests; all TypeScript domains pass."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans; npm run typecheck; npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "slice-10",
+      "checkedAt": "2026-07-28T18:53:49.376Z",
+      "notes": "Fifty-nine focused tests pass; the real additive transformation compiles +4 and -4 as two compound inverse bundles with total continuant coverage, renderer neutrality, and a correspondence-drift negative test."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-9 complete: cancellation semantics now have a strict trusted authoring boundary that rejects flat, ambiguous, foreign, incomplete, and serialized lookalikes."
+    "summary": "Slices 1-10 complete: the additive fraction-composition cancellation now has a total typed plan whose two orbit participants are whole terms, not four interchangeable glyphs."
   },
   "expectedLearning": [
     "Whether one role-complete presentation-plan boundary eliminates correct-label/wrong-realization regressions without a second renderer or closed extension taxonomy."
