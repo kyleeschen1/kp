@@ -90,6 +90,13 @@
       "scope": "s07 immutable fraction composition evaluation tree and fold projections",
       "checkedAt": "2026-07-28T05:31:22.110Z",
       "notes": "Twenty-seven focused checks pass. One deeply immutable five-group tree contains all 13 certified operations over all 14 states; expanded, collapsed, automatic, and pinned projections retain byte-equivalent semantic truth, exact solution, and reversible operation order."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture; npm run test:canonical-equation-renderer; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "s08 generic structured-equation native endpoint compiler and 14 fraction composition states",
+      "checkedAt": "2026-07-28T05:35:33.571Z",
+      "notes": "Thirty fraction checks and twelve canonical renderer checks pass. All 14 certified states compile to selector-annotated native KaTeX with validated composite envelopes and fraction-rule anchors; output contains no geometry, timing, opacity, or alternate math fields."
     }
   ],
   "progress": {

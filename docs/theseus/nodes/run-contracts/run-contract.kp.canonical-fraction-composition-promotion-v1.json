@@ -105,7 +105,8 @@
     {
       "id": "s08",
       "title": "compile-native-endpoints",
-      "status": "planned"
+      "summary": "Compiled every certified solve state through one reusable structured-equation LaTeX compiler into native annotated KaTeX endpoints, composite envelopes, and fraction-rule anchors; no geometry or timing entered the endpoint model, and all focused, renderer, type, and architecture gates pass.",
+      "status": "complete"
     },
     {
       "id": "s09",
