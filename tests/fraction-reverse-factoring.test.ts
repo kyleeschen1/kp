@@ -13,6 +13,10 @@ test("fraction factoring is the verified inverse of opaque subtree distribution"
 
   assert.equal(fixture.verification.lawId, "kp.algebra.factor.v1");
   assert.equal(fixture.verification.reverseLawId, "kp.algebra.distribute.v1");
+  assert.equal(
+    fixture.verification.schemaVersion,
+    "kp.verified-fraction-factoring-rewrite.v1"
+  );
   assert.equal(fixture.verification.sourceRootId, fixture.distributed.root.id);
   assert.equal(fixture.verification.targetRootId, fixture.factored.root.id);
   assert.deepEqual(fixture.verification.lineage[0], {

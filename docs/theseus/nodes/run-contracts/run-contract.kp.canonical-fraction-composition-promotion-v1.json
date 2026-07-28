@@ -93,7 +93,8 @@
     {
       "id": "s06",
       "title": "type-reverse-factor-and-solve",
-      "status": "planned"
+      "summary": "Branded reverse factoring as a verifier-only inverse proof and added a transitive exact solve certificate covering 14 states, 13 adjacent authority-backed steps, solution 9, composition, and reverse factoring; fabrication type fixtures and all focused gates pass.",
+      "status": "complete"
     },
     {
       "id": "s07",

@@ -1,6 +1,7 @@
 import {
   createKpFractionDistributedSumComposition,
-  type KpFractionDistributedSumComposition
+  type KpFractionDistributedSumComposition,
+  type KpVerifiedFractionDistributedSumComposition
 } from "./fraction-distributed-sum-composition.ts";
 import {
   createKpVerifiedFractionFactoringFixture,
@@ -11,6 +12,27 @@ import {
   type KpStructuredExpression,
   type KpStructuredExpressionNode
 } from "./structured-expression.ts";
+
+const verifiedFractionSolveTraceAuthority = Symbol("kp.verified-fraction-solve-trace");
+
+export interface KpVerifiedFractionSolveTrace {
+  readonly schemaVersion: "kp.verified-fraction-solve-trace.v1";
+  readonly compositionProof: KpVerifiedFractionDistributedSumComposition;
+  readonly reverseFactoringProof: KpVerifiedFractionFactoringRewrite;
+  readonly stateCount: 14;
+  readonly stepCount: 13;
+  readonly stateIds: readonly string[];
+  readonly stepIds: readonly string[];
+  readonly adjacency: readonly {
+    readonly stepId: string;
+    readonly sourceStateId: string;
+    readonly targetStateId: string;
+    readonly authorityIds: readonly string[];
+  }[];
+  readonly solution: { readonly numerator: "9"; readonly denominator: "1" };
+  // Product construction consumes this proof instead of re-solving rendered equations.
+  readonly [verifiedFractionSolveTraceAuthority]: true;
+}
 
 export interface KpFractionSolveEquationState {
   readonly id: string;
@@ -35,6 +57,7 @@ export interface KpLawfulFractionSolveMacro {
   readonly states: readonly KpFractionSolveEquationState[];
   readonly steps: readonly KpFractionSolveMacroStep[];
   readonly solution: { readonly numerator: "9"; readonly denominator: "1" };
+  readonly verification: KpVerifiedFractionSolveTrace;
 }
 
 export function createKpLawfulFractionSolveMacro(input: {
@@ -147,7 +170,12 @@ export function createKpLawfulFractionSolveMacro(input: {
       "law.arithmetic.constant-quotient"
     ])
   ];
-  verifyMacro(states, steps);
+  const verification = verifyMacro({
+    composition,
+    reverseFactoring,
+    states,
+    steps
+  });
 
   return Object.freeze({
     schemaVersion: "kp.lawful-fraction-solve-macro.v1" as const,
@@ -156,7 +184,8 @@ export function createKpLawfulFractionSolveMacro(input: {
     reverseFactoring,
     states: Object.freeze(states),
     steps: Object.freeze(steps),
-    solution: Object.freeze({ numerator: "9" as const, denominator: "1" as const })
+    solution: Object.freeze({ numerator: "9" as const, denominator: "1" as const }),
+    verification
   });
 }
 
@@ -193,10 +222,13 @@ function step(
   });
 }
 
-function verifyMacro(
-  states: readonly KpFractionSolveEquationState[],
-  steps: readonly KpFractionSolveMacroStep[]
-): void {
+function verifyMacro(input: {
+  readonly composition: KpFractionDistributedSumComposition;
+  readonly reverseFactoring: KpVerifiedFractionFactoringRewrite;
+  readonly states: readonly KpFractionSolveEquationState[];
+  readonly steps: readonly KpFractionSolveMacroStep[];
+}): KpVerifiedFractionSolveTrace {
+  const { states, steps } = input;
   if (steps.length !== states.length - 1) {
     throw new Error("Fraction solve macro must connect every adjacent equation state exactly once.");
   }
@@ -221,6 +253,26 @@ function verifyMacro(
         `${candidate.verifiedSolution.numerator}/${candidate.verifiedSolution.denominator}.`
       );
     }
+  });
+  if (states.length !== 14 || steps.length !== 13) {
+    throw new Error("Canonical fraction solve proof requires exactly 14 states and 13 steps.");
+  }
+  return Object.freeze({
+    schemaVersion: "kp.verified-fraction-solve-trace.v1" as const,
+    compositionProof: input.composition.verification,
+    reverseFactoringProof: input.reverseFactoring,
+    stateCount: 14 as const,
+    stepCount: 13 as const,
+    stateIds: Object.freeze(states.map(({ id }) => id)),
+    stepIds: Object.freeze(steps.map(({ id }) => id)),
+    adjacency: Object.freeze(steps.map((candidate) => Object.freeze({
+      stepId: candidate.id,
+      sourceStateId: candidate.sourceStateId,
+      targetStateId: candidate.targetStateId,
+      authorityIds: Object.freeze([...candidate.authorityIds])
+    }))),
+    solution: Object.freeze({ numerator: "9" as const, denominator: "1" as const }),
+    [verifiedFractionSolveTraceAuthority]: true as const
   });
 }
 

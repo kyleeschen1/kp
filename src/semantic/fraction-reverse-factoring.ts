@@ -8,6 +8,10 @@ import {
 } from "./structured-expression-rewrite.ts";
 import type { KpStructuredExpression } from "./structured-expression.ts";
 
+const verifiedFractionFactoringRewriteAuthority = Symbol(
+  "kp.verified-fraction-factoring-rewrite"
+);
+
 export interface KpVerifiedFractionFactoringRewrite {
   readonly schemaVersion: "kp.verified-fraction-factoring-rewrite.v1";
   readonly lawId: "kp.algebra.factor.v1";
@@ -19,6 +23,8 @@ export interface KpVerifiedFractionFactoringRewrite {
     readonly sourceSubtreeIds: readonly string[];
     readonly targetSubtreeIds: readonly string[];
   }[];
+  // Inverse authority is minted only after the forward distribution verifier succeeds.
+  readonly [verifiedFractionFactoringRewriteAuthority]: true;
 }
 
 export type KpFractionFactoringVerificationResult =
@@ -90,7 +96,8 @@ export function verifyKpFractionReverseFactoring(input: {
         relation: entry.relation === "fan-out" ? "fan-in" as const : "preserve" as const,
         sourceSubtreeIds: Object.freeze([...entry.targetSubtreeIds]),
         targetSubtreeIds: Object.freeze([...entry.sourceSubtreeIds])
-      })))
+      }))),
+      [verifiedFractionFactoringRewriteAuthority]: true as const
     })
   });
 }
