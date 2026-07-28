@@ -1,0 +1,43 @@
+{
+  "id": "priority-change.kp.canonical-fraction-composition-before-quantity-v0",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.canonical-fraction-composition-before-quantity-v0",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The user accepted harvesting the verified fraction-composition trace through the canonical learner path before opening exact quantity models.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The user accepted harvesting the verified fraction-composition trace through the canonical learner path before opening exact quantity models.",
+      "occurredAt": "2026-07-28T05:08:44.879Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v10"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v10"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v10",
+    "rationale": "The user accepted harvesting the verified fraction-composition trace through the canonical learner path before opening exact quantity models.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "canonical-fraction-composition",
+        "to": "now"
+      },
+      {
+        "subject": "exact-fraction-quantity-models",
+        "to": "next"
+      }
+    ],
+    "effectiveAt": "2026-07-28T05:08:44.879Z",
+    "requestedBy": "user"
+  }
+}

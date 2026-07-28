@@ -1,0 +1,165 @@
+{
+  "id": "run-contract.kp.canonical-fraction-composition-promotion-v1",
+  "kind": "run-contract",
+  "title": "Canonical fraction composition promotion",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Approved exact 20-slice canonical fraction-composition promotion run; v1 supersedes the metadata-incomplete unstarted v0 record.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.canonical-fraction-composition-promotion-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-27-canonical-fraction-composition-promotion-long-loop-proposal.md",
+      "summary": "User-approved exact 20-slice proposal, acceptance contract, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-27-kp-canonical-fraction-composition-before-quantity.md",
+      "summary": "Accepted order: canonical fraction composition before exact quantity models."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-fraction-composition-architecture-checkpoint.md",
+      "summary": "Accepted renderer-neutral semantic trace and primitive-amortization evidence."
+    }
+  ],
+  "verification": [
+    "npm run test:fraction-composition-architecture",
+    "npm run test:canonical-animation-construction",
+    "npm run test:canonical-equation-renderer",
+    "npm run test:real-katex-glyph-compositor",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run build",
+    "npm run check:reader-production",
+    "npm run check:reader-budgets",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Existing fraction composition semantic fixtures, exact verifier, one immutable evaluation tree, fold projection, native endpoint compiler, structural annotations, canonical motifs, renderer session, certified stage layout, reader, Animation Library, Review capture, accessibility, export, stable verification, bounded proof-carrying types, and durable evidence.",
+    "One independently reversible commit per verified slice; product registration only for the canonical 2/3(x+6)=10 exemplar."
+  ],
+  "disallowedWork": [
+    "No second runtime, compositor, clock, semantic trace, paint authority, lifecycle category, scheduler category, WebGL lease, fraction-specific matcher, notation-specific geometry, CSS coordinate recipe, or whole-equation fade fallback.",
+    "No broad fraction-family, exact-quantity, matrix, graph, calculus, atlas, publication, repository-wide type migration, or modification of pre-existing user-owned dirty files."
+  ],
+  "goal": "Promote the existing verified 2/3(x+6)=10 fraction-composition trace into one canonical foldable learner animation with exact native KaTeX settlement, certified responsive layout, exclusive paint ownership, and proof-carrying promotion evidence.",
+  "target": "next-action.kp.canonical-fraction-composition-promotion-v0",
+  "runMode": "run",
+  "maxSlices": 20,
+  "commitCadence": "Commit after each verified slice with its exact Theseus evidence.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop at s18 for human visual approval; do not execute s19 or s20 without explicit approval of the exemplar.",
+    "Stop if exact mathematics, lineage, fold truth, native settlement, accessibility, export truth, or another canonical exemplar regresses.",
+    "Stop if implementation needs a second runtime, clock, compositor, paint authority, lifecycle category, scheduler category, WebGL lease, fraction-specific matcher, notation-specific geometry, CSS coordinate recipe, or whole-equation fade fallback.",
+    "Stop if user-owned dirty files must be modified or a bounded proof certificate can be forged or consumed across stale evidence."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "reconcile-control-plane",
+      "summary": "Materialized the approved proposal, accepted ordering decision, source-linked target done contract, priority change, and complete zero-blocker v1 typed autonomy contract; superseded the unstarted metadata-incomplete v0 record.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "freeze-promotion-inventory",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "audit-exact-trace",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "type-whole-fraction-distribution",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "type-normalization-and-composition",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "type-reverse-factor-and-solve",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "project-foldable-evaluation-tree",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "compile-native-endpoints",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "bind-canonical-motifs",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "dry-run-canonical-session",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "switch-exclusive-reader-ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "integrate-certified-stage-layout",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "build-reader-controls",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "preserve-product-seams",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "register-library-and-review",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "prove-runtime-determinism",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "certify-promotion-and-authoring",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "human-visual-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "apply-reviewed-repair",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "release-and-closeout",
+      "status": "planned"
+    }
+  ]
+}

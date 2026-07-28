@@ -1,0 +1,89 @@
+{
+  "id": "next-action.kp.canonical-fraction-composition-promotion-v0",
+  "kind": "next-action",
+  "title": "Promote canonical fraction composition reader",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-27-canonical-fraction-composition-promotion-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-27-kp-canonical-fraction-composition-before-quantity.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-fraction-composition-architecture-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/fraction-solve-macro.ts"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.reader.fraction-composition-pressure-test-v0",
+      "next-action.kp.certified-equation-stage-layout-v0"
+    ]
+  },
+  "affects": [
+    "run-contract.kp.canonical-fraction-composition-promotion-v1"
+  ],
+  "verification": [
+    "npm run test:fraction-composition-architecture",
+    "npm run test:canonical-animation-construction",
+    "npm run test:canonical-equation-renderer",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:reader-production",
+    "npm run check:reader-budgets",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "theseus plan run; theseus workspace validate",
+      "status": "passed",
+      "scope": "s01 control-plane source, target, priority, contract hygiene, and active-run readiness",
+      "checkedAt": "2026-07-28T05:11:48.527Z",
+      "notes": "v1 owns all 20 approved slices with run mode, ceiling, cadence, verification level, stop conditions, source refs, and zero blockers; metadata-incomplete unstarted v0 is superseded."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Approved for canonical learner promotion through the exact 20-slice contract; implementation not yet started."
+  },
+  "expectedLearning": [
+    "Whether an accepted renderer-neutral fraction composition trace can reach a canonical learner reader mostly through verified content, motif, fold, layout, descriptor, and product wiring without protected-core growth.",
+    "Whether proof-carrying maturity evidence can prevent a semantic or compatibility animation from being falsely reported as a human-reviewed canonical port."
+  ],
+  "allowedWork": [
+    "The approved canonical 2/3(x+6)=10 promotion proposal, its existing semantic trace, bounded type ratchets, one reader route and library registration, stable verification, and durable evidence."
+  ],
+  "disallowedWork": [
+    "No family rollout, exact quantity models, protected compositor expansion, second runtime or clock, operation-specific geometry, or user-owned dirty files."
+  ],
+  "criteria": [
+    {
+      "id": "exact-mathematics-and-lineage",
+      "weight": "high"
+    },
+    {
+      "id": "canonical-motion-without-fade",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-fold-layout-and-playback",
+      "weight": "high"
+    },
+    {
+      "id": "native-accessible-product-seams",
+      "weight": "high"
+    },
+    {
+      "id": "proof-carrying-promotion-and-release",
+      "weight": "high"
+    }
+  ]
+}
