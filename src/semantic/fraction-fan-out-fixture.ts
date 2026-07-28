@@ -10,8 +10,27 @@ import {
 } from "./structured-expression-rewrite.ts";
 import {
   createKpStructuredExpression,
-  type KpStructuredExpression
+  resolveKpStructuredExpressionSubtree,
+  type KpStructuredExpression,
+  type KpStructuredExpressionNode
 } from "./structured-expression.ts";
+
+const verifiedOpaqueFractionDistributionAuthority = Symbol(
+  "kp.verified-opaque-fraction-distribution"
+);
+
+export interface KpVerifiedOpaqueFractionDistribution {
+  readonly schemaVersion: "kp.verified-opaque-fraction-distribution.v1";
+  readonly lawId: "kp.algebra.distribute.v1";
+  readonly sourceRootId: string;
+  readonly targetRootId: string;
+  readonly commonFactorId: string;
+  readonly copiedFactorIds: readonly [string, string];
+  readonly denominatorIds: readonly [string, string, string];
+  readonly denominatorValue: number;
+  // Only the semantic verifier may mint this proof; paint code must not infer algebra from glyphs.
+  readonly [verifiedOpaqueFractionDistributionAuthority]: true;
+}
 
 export interface KpOpaqueFractionFanOutFixture {
   readonly schemaVersion: "kp.opaque-fraction-fan-out-fixture.v1";
@@ -19,6 +38,7 @@ export interface KpOpaqueFractionFanOutFixture {
   readonly source: KpStructuredExpression;
   readonly target: KpStructuredExpression;
   readonly normalFormPlan: KpCompiledStructuredExpressionNormalForm;
+  readonly verification: KpVerifiedOpaqueFractionDistribution;
 }
 
 export function createKpOpaqueFractionFanOutFixture(input: {
@@ -114,13 +134,76 @@ export function createKpOpaqueFractionFanOutFixture(input: {
       compiled.diagnostics.map(({ path, message }) => `${path}: ${message}`).join("\n")
     );
   }
+  const verification = verifyOpaqueFractionDistribution({ source, target });
   return Object.freeze({
     schemaVersion: "kp.opaque-fraction-fan-out-fixture.v1" as const,
     id: "fixture.fraction-fan-out.two-thirds-x-plus-six" as const,
     source,
     target,
-    normalFormPlan: compiled.plan
+    normalFormPlan: compiled.plan,
+    verification
   });
+}
+
+function verifyOpaqueFractionDistribution(input: {
+  readonly source: KpStructuredExpression;
+  readonly target: KpStructuredExpression;
+}): KpVerifiedOpaqueFractionDistribution {
+  const commonFactorId = "fraction-fan-out.source.factor";
+  const copiedFactorIds = [
+    "fraction-fan-out.target.factor.x",
+    "fraction-fan-out.target.factor.6"
+  ] as const;
+  const commonFactor = requireNumericQuotient(input.source, commonFactorId);
+  const copiedFactors = copiedFactorIds.map((id) => requireNumericQuotient(input.target, id));
+  const denominatorValue = numberValue(commonFactor.denominator, commonFactorId);
+  if (
+    copiedFactors.some(
+      (factor, index) =>
+        numberValue(factor.numerator, copiedFactorIds[index]!) !==
+          numberValue(commonFactor.numerator, commonFactorId) ||
+        numberValue(factor.denominator, copiedFactorIds[index]!) !== denominatorValue
+    )
+  ) {
+    throw new Error("Opaque fraction distribution must preserve the complete quotient");
+  }
+  return Object.freeze({
+    schemaVersion: "kp.verified-opaque-fraction-distribution.v1" as const,
+    lawId: "kp.algebra.distribute.v1" as const,
+    sourceRootId: input.source.root.id,
+    targetRootId: input.target.root.id,
+    commonFactorId,
+    copiedFactorIds,
+    denominatorIds: [
+      commonFactor.denominator.id,
+      copiedFactors[0]!.denominator.id,
+      copiedFactors[1]!.denominator.id
+    ] as const,
+    denominatorValue,
+    [verifiedOpaqueFractionDistributionAuthority]: true as const
+  });
+}
+
+function requireNumericQuotient(
+  expression: KpStructuredExpression,
+  id: string
+): Extract<KpStructuredExpressionNode, { readonly kind: "quotient" }> {
+  const node = resolveKpStructuredExpressionSubtree(expression, id);
+  if (
+    node?.kind !== "quotient" ||
+    node.numerator.kind !== "number" ||
+    node.denominator.kind !== "number"
+  ) {
+    throw new Error(`${id} must be a quotient with numeric numerator and denominator`);
+  }
+  return node;
+}
+
+function numberValue(node: KpStructuredExpressionNode, ownerId: string): number {
+  if (node.kind !== "number") {
+    throw new Error(`${ownerId} must contain numeric quotient parts`);
+  }
+  return node.value;
 }
 
 function quotient(id: string, numerator: number, denominator: number) {

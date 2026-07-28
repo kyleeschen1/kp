@@ -62,6 +62,13 @@
       "scope": "s03 exact trace, dependencies, fold, paint, layout, and architecture preservation manifest",
       "checkedAt": "2026-07-28T05:17:18.138Z",
       "notes": "Twenty-three focused checks pass. All 14 states retain exact solution 9, all 13 adjacent transitions have authority and acyclic dependencies, and the frozen product boundary requires one clock/session/lease with native settlement and no operation geometry."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "s04 constructor-only whole-fraction distribution certificate",
+      "checkedAt": "2026-07-28T05:22:24.067Z",
+      "notes": "Twenty-three focused checks pass. The semantic constructor now mints an unforgeable proof for complete quotient fan-out, preserves numerator and denominator identity/value, and rejects denominator drift before paint code can consume the transform. Type and architecture gates pass."
     }
   ],
   "progress": {

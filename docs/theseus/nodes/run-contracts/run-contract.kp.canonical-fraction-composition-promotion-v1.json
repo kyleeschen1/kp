@@ -81,7 +81,8 @@
     {
       "id": "s04",
       "title": "type-whole-fraction-distribution",
-      "status": "planned"
+      "summary": "Added a constructor-only branded whole-fraction distribution certificate, runtime quotient preservation proof, negative fabrication type fixture, and explicit denominator identity evidence; 23 focused tests, typecheck, and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s05",

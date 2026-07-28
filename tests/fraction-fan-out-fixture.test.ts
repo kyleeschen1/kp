@@ -33,6 +33,35 @@ test("fraction fan-out preserves the complete quotient subtree as an opaque fact
       "fraction-fan-out.target.factor.6"
     ]
   });
+  assert.deepEqual(
+    {
+      schemaVersion: fixture.verification.schemaVersion,
+      lawId: fixture.verification.lawId,
+      sourceRootId: fixture.verification.sourceRootId,
+      targetRootId: fixture.verification.targetRootId,
+      commonFactorId: fixture.verification.commonFactorId,
+      copiedFactorIds: fixture.verification.copiedFactorIds,
+      denominatorIds: fixture.verification.denominatorIds,
+      denominatorValue: fixture.verification.denominatorValue
+    },
+    {
+      schemaVersion: "kp.verified-opaque-fraction-distribution.v1",
+      lawId: "kp.algebra.distribute.v1",
+      sourceRootId: "fraction-fan-out.source.root",
+      targetRootId: "fraction-fan-out.target.root",
+      commonFactorId: "fraction-fan-out.source.factor",
+      copiedFactorIds: [
+        "fraction-fan-out.target.factor.x",
+        "fraction-fan-out.target.factor.6"
+      ],
+      denominatorIds: [
+        "fraction-fan-out.source.factor.denominator",
+        "fraction-fan-out.target.factor.x.denominator",
+        "fraction-fan-out.target.factor.6.denominator"
+      ],
+      denominatorValue: 3
+    }
+  );
 });
 
 test("fraction fan-out retains stable authored identities below every quotient root", () => {

@@ -24,7 +24,8 @@ export interface KpFractionCompositionPromotionInventoryEntry {
  * canonical reader have different evidence and must not inherit one another's
  * promotion status.
  */
-export const kpFractionCompositionPromotionInventory = Object.freeze([
+export const kpFractionCompositionPromotionInventory:
+readonly KpFractionCompositionPromotionInventoryEntry[] = Object.freeze([
   {
     id: "fraction.transform-definitions",
     title: "Fraction transform definitions",
@@ -77,5 +78,4 @@ export const kpFractionCompositionPromotionInventory = Object.freeze([
       "docs/project/reviews/2026-07-25-glyph-compositor-promotion-closeout.md"
     ]
   }
-] as const satisfies readonly KpFractionCompositionPromotionInventoryEntry[]);
-
+] as const);
