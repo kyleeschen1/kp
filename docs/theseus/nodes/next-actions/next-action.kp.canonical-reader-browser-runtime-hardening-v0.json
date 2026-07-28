@@ -356,6 +356,27 @@
       "scope": "slice 18 WebKit gate and cache scope",
       "checkedAt": "2026-07-28T22:10:50.911Z",
       "notes": "WebKit project configuration, stable resource command, total presentation revision, and exemplar-only cache/prewarm promotion compile across all projects."
+    },
+    {
+      "command": "npm run test:browser:reader-resource-contract:webkit",
+      "status": "passed",
+      "scope": "slice 18 repaired WebKit geometry and resource contract",
+      "checkedAt": "2026-07-28T22:22:10.161Z",
+      "notes": "DPR-1/2 radical endpoint continuity, measured target handoff, and structural WebGL lease/context-loss/native-fallback gates all pass. Screenshot bounds use only 1/DPR while direct source glyph paint remains <=0.25px and measured-ink aligned."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice 18 radical semantic and resource preservation",
+      "checkedAt": "2026-07-28T22:22:11.161Z",
+      "notes": "All 45 radical promotion, semantics, native endpoint, structural succession, export, lease-capacity, waiter, and context-loss tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 18 two-tier paint contract",
+      "checkedAt": "2026-07-28T22:22:11.995Z",
+      "notes": "The generic DPR-aware raster envelope and strict measured-paint evidence compile across app, Node, tests, and domains."
     }
   ],
   "progress": {

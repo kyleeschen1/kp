@@ -12,13 +12,14 @@ test("radical endpoint ownership is continuous in paint space", async ({
       viewport: { width: 800, height: 450 }
     });
     const page = await context.newPage();
-    await assertRadicalEndpointPaintContinuity(page);
+    await assertRadicalEndpointPaintContinuity(page, deviceScaleFactor);
     await context.close();
   }
 });
 
 async function assertRadicalEndpointPaintContinuity(
-  page: import("@playwright/test").Page
+  page: import("@playwright/test").Page,
+  deviceScaleFactor: number
 ): Promise<void> {
   await page.goto(route, { waitUntil: "networkidle" });
   const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
@@ -80,6 +81,11 @@ async function assertRadicalEndpointPaintContinuity(
 
   await seek(page, scrubber, 1);
   const sourceMaterialXClip = await clipMaterialGlyph(fitSurface, "x");
+  const sourceGlyphPaint = await measureSourceGlyphPaintAlignment(
+    fitSurface,
+    '[data-kp-reader-selector-id$=".base"]',
+    "x"
+  );
   const sourceMaterialX = localizeInkRect(
     await captureInk(page, sourceMaterialXClip, structuralPaint),
     sourceMaterialXClip,
@@ -244,6 +250,10 @@ async function assertRadicalEndpointPaintContinuity(
   );
 
   const sourceXResidual = inkRectDelta(sourceNativeX, sourceMaterialX);
+  const sourceGlyphPaintResidual = inkRectDelta(
+    sourceGlyphPaint.native,
+    sourceGlyphPaint.material
+  );
   const sourceStructureResidual = inkRectDelta(
     sourceNativeStructure,
     sourceMaterialStructure
@@ -279,6 +289,8 @@ async function assertRadicalEndpointPaintContinuity(
   );
   const evidence = {
     sourceXResidual,
+    sourceGlyphPaintResidual,
+    sourceGlyphPaint,
     sourceStructureResidual,
     sourceStructureShapeResidual,
     morphStartStructureResidual,
@@ -300,9 +312,17 @@ async function assertRadicalEndpointPaintContinuity(
     rewindSourceStructureComparison
   };
 
-  expect(sourceXResidual, JSON.stringify(evidence)).toBeLessThanOrEqual(0.5);
+  // Screenshots have one physical-pixel edge granularity. The measured-paint
+  // law below remains subpixel-strict so this envelope cannot hide bad motion.
+  const rasterTolerancePx = 1 / deviceScaleFactor;
+  expect(sourceXResidual, JSON.stringify(evidence))
+    .toBeLessThanOrEqual(rasterTolerancePx);
   expect(sourceStructureResidual, JSON.stringify(evidence))
-    .toBeLessThanOrEqual(0.5);
+    .toBeLessThanOrEqual(rasterTolerancePx);
+  expect(sourceGlyphPaintResidual, JSON.stringify(evidence))
+    .toBeLessThanOrEqual(0.25);
+  expect(sourceGlyphPaint.alignment, JSON.stringify(evidence))
+    .toBe("measured-ink");
   expect(sourceStructureShapeResidual, JSON.stringify(evidence))
     .toBeLessThanOrEqual(0.2);
   // A screenshot threshold can include one antialiased pixel on each edge.
@@ -341,15 +361,14 @@ async function assertRadicalEndpointPaintContinuity(
     .toBe(true);
   expect(sourceMaterialStructureComparison.paintOwner)
     .toBe("native-material-clones");
-  expect(targetXResidual, JSON.stringify(evidence)).toBeLessThanOrEqual(1);
+  expect(targetXResidual, JSON.stringify(evidence))
+    .toBeLessThanOrEqual(rasterTolerancePx);
   expect(rewindTargetXResidual, JSON.stringify(evidence))
-    .toBeLessThanOrEqual(1);
+    .toBeLessThanOrEqual(rasterTolerancePx);
   expect(rewindSourceXResidual, JSON.stringify(evidence))
-    .toBeLessThanOrEqual(0.5);
-  // DPR-2 screenshot alpha can move a half-pixel edge on both sides; the
-  // renderer microscope below proves the rewound geometry itself is exact.
+    .toBeLessThanOrEqual(rasterTolerancePx);
   expect(rewindSourceStructureResidual, JSON.stringify(evidence))
-    .toBeLessThanOrEqual(1);
+    .toBeLessThanOrEqual(rasterTolerancePx);
   expect(rewindSourceShapeResidual, JSON.stringify(evidence))
     .toBeLessThanOrEqual(0.2);
   expect(
@@ -1072,6 +1091,59 @@ interface PaintClip {
   readonly y: number;
   readonly width: number;
   readonly height: number;
+}
+
+async function measureSourceGlyphPaintAlignment(
+  surface: import("@playwright/test").Locator,
+  sourceSelector: string,
+  materialText: string
+): Promise<{
+  readonly native: InkRect;
+  readonly material: InkRect;
+  readonly alignment: string | null;
+}> {
+  return surface.evaluate(async (root, input) => {
+    const geometryUrl =
+      "/src/rendering/native-katex-paint-geometry.ts";
+    const geometry = await import(/* @vite-ignore */ geometryUrl);
+    const source = root.querySelector<HTMLElement>(input.sourceSelector);
+    const owner = [...root.querySelectorAll<HTMLElement>(
+      "[data-kp-native-katex-scene-owner]"
+    )].find((candidate) =>
+      Number(getComputedStyle(candidate).opacity) > 0.01 &&
+      candidate.dataset["kpEquationMaterialFragmentRole"]?.startsWith(
+        "glyph:"
+      ) &&
+      candidate.textContent?.trim() === input.materialText
+    );
+    const visual = owner?.firstElementChild;
+    if (
+      source === null ||
+      owner === undefined ||
+      !(visual instanceof HTMLElement)
+    ) {
+      throw new Error("Missing source glyph paint-alignment evidence.");
+    }
+    const native =
+      geometry.measureKpNativeKatexSubtreePaintRect(
+        root as HTMLElement,
+        source
+      );
+    const material =
+      geometry.measureKpNativeKatexSubtreePaintRect(
+        root as HTMLElement,
+        visual
+      );
+    if (native === undefined || material === undefined) {
+      throw new Error("Source glyph has no measurable native or material ink.");
+    }
+    return {
+      native,
+      material,
+      alignment:
+        owner.dataset["kpEquationMaterialPaintAlignment"] ?? null
+    };
+  }, { sourceSelector, materialText });
 }
 
 async function clipElement(
