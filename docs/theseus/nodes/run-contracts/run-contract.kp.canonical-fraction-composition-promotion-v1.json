@@ -153,7 +153,8 @@
     {
       "id": "s16",
       "title": "prove-runtime-determinism",
-      "status": "planned"
+      "summary": "Proved-history-independent-frames-native-endpoints-layout-font-invalidation-DPR-and-resource-release-in-Chromium-and-Firefox",
+      "status": "complete"
     },
     {
       "id": "s17",

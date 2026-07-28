@@ -286,6 +286,55 @@
       "scope": "s15-project-memory",
       "checkedAt": "2026-07-28T07:00:30.181Z",
       "notes": "811-nodes-13519-events-valid"
+    },
+    {
+      "command": "npm-run-test-browser-fraction-composition-determinism",
+      "status": "passed",
+      "scope": "s16-cross-browser",
+      "checkedAt": "2026-07-28T07:07:27.520Z",
+      "notes": "6-Chromium-Firefox-tests-prove-seek-rewind-fold-resize-font-DPR-endpoint-and-resource-determinism"
+    },
+    {
+      "command": "npm-run-test-fraction-composition-architecture",
+      "status": "passed",
+      "scope": "s16-semantic-preservation",
+      "checkedAt": "2026-07-28T07:07:28.381Z",
+      "notes": "53-focused-tests-pass"
+    },
+    {
+      "command": "npm-run-test-canonical-equation-renderer-and-real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "s16-renderer-preservation",
+      "checkedAt": "2026-07-28T07:07:29.183Z",
+      "notes": "12-renderer-and-65-compositor-tests-pass"
+    },
+    {
+      "command": "npm-run-test-browser-fraction-composition",
+      "status": "passed",
+      "scope": "s16-reader-preservation",
+      "checkedAt": "2026-07-28T07:07:29.983Z",
+      "notes": "6-reader-browser-tests-pass"
+    },
+    {
+      "command": "npm-run-typecheck-and-check-architecture",
+      "status": "passed",
+      "scope": "s16-static-gates",
+      "checkedAt": "2026-07-28T07:07:30.774Z",
+      "notes": "application-node-test-domain-types-and-all-boundaries-pass"
+    },
+    {
+      "command": "npm-run-build-reader-production-and-budgets",
+      "status": "passed",
+      "scope": "s16-production",
+      "checkedAt": "2026-07-28T07:07:31.568Z",
+      "notes": "build-11-route-closure-and-budgets-pass"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "s16-project-memory",
+      "checkedAt": "2026-07-28T07:07:32.362Z",
+      "notes": "811-nodes-13528-events-valid"
     }
   ],
   "progress": {
