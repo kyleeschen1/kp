@@ -35,12 +35,21 @@ export function createKpReaderSemanticFocusService(
   const requireActive = (): void => {
     if (disposed) throw new Error("reader semantic focus service is disposed");
   };
-  const publish = (): void => {
-    revision += 1;
+  const publishIfChanged = (): void => {
     const activeSource = precedence.find((source) => (layers.get(source)?.length ?? 0) > 0);
+    const objectRefs = activeSource === undefined
+      ? []
+      : [...layers.get(activeSource)!];
+    if (
+      snapshot.activeSource === activeSource &&
+      equalRefs(snapshot.objectRefs, objectRefs)
+    ) {
+      return;
+    }
+    revision += 1;
     snapshot = activeSource === undefined
-      ? { objectRefs: [], revision }
-      : { activeSource, objectRefs: [...layers.get(activeSource)!], revision };
+      ? { objectRefs, revision }
+      : { activeSource, objectRefs, revision };
     listeners.forEach((listener) => listener(snapshot));
   };
   return {
@@ -55,12 +64,13 @@ export function createKpReaderSemanticFocusService(
       }
       if (refs.length === 0) layers.delete(source);
       else layers.set(source, refs);
-      publish();
+      publishIfChanged();
     },
     clear(source) {
       requireActive();
+      if (!layers.has(source)) return;
       layers.delete(source);
-      publish();
+      publishIfChanged();
     },
     subscribe(listener) {
       requireActive();
@@ -73,4 +83,12 @@ export function createKpReaderSemanticFocusService(
       listeners.clear();
     }
   };
+}
+
+function equalRefs(
+  left: readonly string[],
+  right: readonly string[]
+): boolean {
+  return left.length === right.length &&
+    left.every((ref, index) => ref === right[index]);
 }

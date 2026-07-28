@@ -146,6 +146,20 @@
       "scope": "slice 08 exact direct seek and motif preservation",
       "checkedAt": "2026-07-28T21:16:14.197Z",
       "notes": "Chromium and Firefox passed wide/phone measured-paint, direct seek, rewind, authority, endpoint, fit, and launcher checks. Existing shared phone readable-floor diagnostics remain separately classified."
+    },
+    {
+      "command": "npm run test:reader-runtime-hardening",
+      "status": "passed",
+      "scope": "slice 09 equality-aware focus",
+      "checkedAt": "2026-07-28T21:19:18.947Z",
+      "notes": "13 focused tests pass; unchanged and precedence-hidden layers no longer increment revisions or notify subscribers."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll:chromium",
+      "status": "passed",
+      "scope": "slice 09 rapid-scroll focus integration",
+      "checkedAt": "2026-07-28T21:19:26.550Z",
+      "notes": "Rapid sweep passes with zero geometry reads and unchanged canonical session work counters."
     }
   ],
   "expectedLearning": [

@@ -411,8 +411,7 @@ const renderer = rendererRegistry.mount({
 });
 stage.dataset["kpReaderRendererAdapter"] = renderer.adapterId;
 
-const unsubscribeFocus = focus.subscribe((snapshot) => {
-  applyFocus(snapshot);
+const unsubscribeFocus = focus.subscribe(() => {
   locationSettlement.updateShare();
 });
 const resizeObserver = new ResizeObserver(() => {

@@ -54,3 +54,22 @@ test("subscribers receive renderer-neutral snapshots and disposal closes service
   focus.dispose();
   assert.throws(() => focus.set("story", ["equation.x"]), /is disposed/);
 });
+
+test("unchanged or hidden layers do not republish visible focus", () => {
+  const focus = createKpReaderSemanticFocusService(allowed);
+  const revisions: number[] = [];
+  focus.subscribe((snapshot) => revisions.push(snapshot.revision));
+
+  focus.set("story", ["equation.left"]);
+  focus.set("story", ["equation.left", "equation.left"]);
+  focus.set("pointer", ["equation.right"]);
+  focus.set("story", ["equation.right"]);
+  focus.clear("url");
+
+  assert.deepEqual(revisions, [1, 2]);
+  assert.deepEqual(focus.getSnapshot(), {
+    activeSource: "pointer",
+    objectRefs: ["equation.right"],
+    revision: 2
+  });
+});
