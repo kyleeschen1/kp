@@ -6,7 +6,8 @@ import {
 } from "../animation/indexed-progress-schedule.ts";
 import {
   createKpOpaqueFractionFanOutFixture,
-  type KpOpaqueFractionFanOutFixture
+  type KpOpaqueFractionFanOutFixture,
+  type KpVerifiedOpaqueFractionDistribution
 } from "./fraction-fan-out-fixture.ts";
 import {
   createKpStructuredExpression,
@@ -15,6 +16,20 @@ import {
 } from "./structured-expression.ts";
 
 export type KpFractionNormalizationBranchId = "term.x" | "term.6";
+
+const verifiedFractionNumeratorNormalizationAuthority = Symbol(
+  "kp.verified-fraction-numerator-normalization"
+);
+
+export interface KpVerifiedFractionNumeratorNormalization {
+  readonly schemaVersion: "kp.verified-fraction-numerator-normalization.v1";
+  readonly fanOutProof: KpVerifiedOpaqueFractionDistribution;
+  readonly branchOrder: readonly ["term.x", "term.6"];
+  readonly targetRootIds: readonly [string, string];
+  readonly schedulePolicies: readonly ["parallel", "sequential"];
+  // Timing code can consume this result, but only semantic verification may mint it.
+  readonly [verifiedFractionNumeratorNormalizationAuthority]: true;
+}
 
 export interface KpFractionNumeratorNormalizationBranch {
   readonly id: KpFractionNormalizationBranchId;
@@ -36,6 +51,7 @@ export interface KpFractionNumeratorNormalizationPlan {
     readonly parallel: KpIndexedProgressSchedule<KpFractionNormalizationBranchId>;
     readonly sequential: KpIndexedProgressSchedule<KpFractionNormalizationBranchId>;
   };
+  readonly verification: KpVerifiedFractionNumeratorNormalization;
 }
 
 export function createKpFractionNumeratorNormalizationPlan(input: {
@@ -51,8 +67,21 @@ export function createKpFractionNumeratorNormalizationPlan(input: {
       "6",
       input.secondTargetDenominator ?? 3
     )
-  ]);
+  ] as const);
   const ids = ["term.x", "term.6"] as const;
+  const schedules = Object.freeze({
+    parallel: createKpIndexedProgressSchedule({
+      id: "schedule.fraction-numerator-normalization.parallel",
+      ids,
+      strategy: kpParallel()
+    }),
+    sequential: createKpIndexedProgressSchedule({
+      id: "schedule.fraction-numerator-normalization.sequential",
+      ids,
+      strategy: kpSequence()
+    })
+  });
+  const verification = verifyNormalizationPlan({ fanOut, branches, schedules });
 
   return Object.freeze({
     schemaVersion: "kp.fraction-numerator-normalization-plan.v1" as const,
@@ -61,18 +90,47 @@ export function createKpFractionNumeratorNormalizationPlan(input: {
     branches,
     // Scheduling controls reveal order only. Both policies point at the same
     // verified branch outputs, so timing cannot mutate the algebraic result.
-    schedules: Object.freeze({
-      parallel: createKpIndexedProgressSchedule({
-        id: "schedule.fraction-numerator-normalization.parallel",
-        ids,
-        strategy: kpParallel()
-      }),
-      sequential: createKpIndexedProgressSchedule({
-        id: "schedule.fraction-numerator-normalization.sequential",
-        ids,
-        strategy: kpSequence()
-      })
-    })
+    schedules,
+    verification
+  });
+}
+
+function verifyNormalizationPlan(input: {
+  readonly fanOut: KpOpaqueFractionFanOutFixture;
+  readonly branches: readonly [
+    KpFractionNumeratorNormalizationBranch,
+    KpFractionNumeratorNormalizationBranch
+  ];
+  readonly schedules: {
+    readonly parallel: KpIndexedProgressSchedule<KpFractionNormalizationBranchId>;
+    readonly sequential: KpIndexedProgressSchedule<KpFractionNormalizationBranchId>;
+  };
+}): KpVerifiedFractionNumeratorNormalization {
+  const branchOrder = input.branches.map(({ id }) => id);
+  const expectedOrder = ["term.x", "term.6"] as const;
+  const hasCanonicalOrder = expectedOrder.every(
+    (branchId, index) => branchOrder[index] === branchId
+  );
+  const schedulesShareOutcome = [input.schedules.parallel, input.schedules.sequential]
+    .every(({ ids }) =>
+      ids.length === expectedOrder.length &&
+      expectedOrder.every((branchId, index) => ids[index] === branchId)
+    );
+  if (!hasCanonicalOrder || !schedulesShareOutcome) {
+    throw new Error(
+      "Fraction numerator schedules must reference the same verified branch outcome."
+    );
+  }
+  return Object.freeze({
+    schemaVersion: "kp.verified-fraction-numerator-normalization.v1" as const,
+    fanOutProof: input.fanOut.verification,
+    branchOrder: expectedOrder,
+    targetRootIds: [
+      input.branches[0].target.root.id,
+      input.branches[1].target.root.id
+    ] as const,
+    schedulePolicies: ["parallel", "sequential"] as const,
+    [verifiedFractionNumeratorNormalizationAuthority]: true as const
   });
 }
 

@@ -69,6 +69,13 @@
       "scope": "s04 constructor-only whole-fraction distribution certificate",
       "checkedAt": "2026-07-28T05:22:24.067Z",
       "notes": "Twenty-three focused checks pass. The semantic constructor now mints an unforgeable proof for complete quotient fan-out, preserves numerator and denominator identity/value, and rejects denominator drift before paint code can consume the transform. Type and architecture gates pass."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "s05 constructor-only numerator-normalization and distributed-sum composition certificates",
+      "checkedAt": "2026-07-28T05:25:08.084Z",
+      "notes": "Twenty-three focused checks pass. Both schedule policies are proven to consume the same ordered normalized branches, and composition proof preserves branch identity/order while transitively carrying fan-out and normalization evidence. Negative type fixtures prevent fabrication."
     }
   ],
   "progress": {

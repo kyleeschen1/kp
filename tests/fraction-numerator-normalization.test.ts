@@ -61,6 +61,20 @@ test("parallel and sequential schedules share one verified semantic outcome", ()
   });
   assert.deepEqual(plan.schedules.parallel.sample(1), plan.schedules.sequential.sample(1));
   assert.deepEqual(plan.branches.map(({ target }) => target), semanticOutcome);
+  assert.equal(
+    plan.verification.schemaVersion,
+    "kp.verified-fraction-numerator-normalization.v1"
+  );
+  assert.equal(
+    plan.verification.fanOutProof.schemaVersion,
+    "kp.verified-opaque-fraction-distribution.v1"
+  );
+  assert.deepEqual(plan.verification.branchOrder, ["term.x", "term.6"]);
+  assert.deepEqual(plan.verification.targetRootIds, [
+    "fraction-normalization.target.x",
+    "fraction-normalization.target.6"
+  ]);
+  assert.deepEqual(plan.verification.schedulePolicies, ["parallel", "sequential"]);
 });
 
 test("fraction numerator normalization rejects denominator drift", () => {

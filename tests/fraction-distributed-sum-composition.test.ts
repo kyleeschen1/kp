@@ -31,6 +31,20 @@ test("normalized fraction branches compose into one ordered distributed sum", ()
       targetTermId: "fraction-normalization.target.6"
     }
   ]);
+  assert.equal(
+    composition.verification.schemaVersion,
+    "kp.verified-fraction-distributed-sum-composition.v1"
+  );
+  assert.equal(
+    composition.verification.normalizationProof.schemaVersion,
+    "kp.verified-fraction-numerator-normalization.v1"
+  );
+  assert.deepEqual(composition.verification.branchOrder, ["term.x", "term.6"]);
+  assert.equal(composition.verification.composedRootId, "fraction-composition.target.sum");
+  assert.deepEqual(composition.verification.targetTermIds, [
+    "fraction-normalization.target.x",
+    "fraction-normalization.target.6"
+  ]);
 });
 
 test("distributed-sum composition preserves authored branch order", () => {

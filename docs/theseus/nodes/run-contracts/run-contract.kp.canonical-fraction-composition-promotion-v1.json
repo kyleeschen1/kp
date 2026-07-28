@@ -87,7 +87,8 @@
     {
       "id": "s05",
       "title": "type-normalization-and-composition",
-      "status": "planned"
+      "summary": "Added constructor-only normalization and distributed-sum composition certificates, proved parallel and sequential schedules share one immutable ordered outcome, chained prior fan-out proof, and blocked type-level fabrication; 23 focused tests, typecheck, and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s06",
