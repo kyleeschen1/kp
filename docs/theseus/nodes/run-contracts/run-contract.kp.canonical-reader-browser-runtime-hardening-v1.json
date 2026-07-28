@@ -60,7 +60,8 @@
     {
       "id": "slice.kp.reader-hardening.02",
       "title": "Add-WebKit-browser-contract",
-      "status": "planned"
+      "summary": "Added the Desktop Safari/WebKit Playwright project and stable three-engine plus WebKit-only canonical-reader contract commands; pinned WebKit 26.5 passed the full focused fraction motif smoke, and repository typecheck passed.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.03",

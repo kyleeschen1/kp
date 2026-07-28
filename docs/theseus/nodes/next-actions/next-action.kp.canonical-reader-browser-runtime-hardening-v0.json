@@ -42,6 +42,19 @@
       "status": "passed",
       "scope": "Slice 1 separate hardening contract, active priority checkpoint, source-linked target done contract, and stored predecessor are graph-valid.",
       "checkedAt": "2026-07-28T20:42:52.589Z"
+    },
+    {
+      "command": "npm run test:browser:canonical-reader-contract:webkit",
+      "status": "passed",
+      "scope": "Slice 2 Playwright WebKit 26.5 canonical fraction-reader smoke: measured cancellation motif, wide and phone paint, direct seek, rewind, exclusive authority, endpoints, fit evidence, and review launcher passed.",
+      "checkedAt": "2026-07-28T20:47:30.401Z",
+      "notes": "The run also exposed existing asynchronous phone-stage readable-floor diagnostics, retained for baseline classification in slices 3-5; they did not fail the canonical motif contract."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Slice 2 Playwright WebKit project and scoped browser-contract scripts typecheck across application, Node, test, and domain projects.",
+      "checkedAt": "2026-07-28T20:47:43.458Z"
     }
   ],
   "expectedLearning": [
