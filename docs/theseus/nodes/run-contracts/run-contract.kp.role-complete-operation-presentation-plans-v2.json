@@ -117,7 +117,8 @@
     {
       "id": "slice.kp.role-plan.11",
       "title": "Migrate-multiplicative-cancellation",
-      "status": "planned"
+      "summary": "Migrated denominator and coefficient cancellations with exact inverse bundles, product-operator catalyst classification, structural rule artifacts, and total continuant coverage.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.12",
