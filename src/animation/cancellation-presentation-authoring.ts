@@ -59,6 +59,49 @@ export type KpCancellationPresentationAuthoringResult =
     };
 
 /**
+ * Survivors and retiring structure are already authoritative correspondence
+ * facts, so canonical families share this projection. Inverse pairing and
+ * catalysts remain explicitly authored because neither may be inferred from
+ * selector text, DOM order, or visual proximity.
+ */
+export function deriveKpCancellationPresentationRoleComplements(input: {
+  readonly transformation: Pick<
+    KpSemanticTransformation,
+    "correspondenceMap"
+  >;
+  readonly bundleNamespace: string;
+}): Pick<
+  KpCancellationPresentationAuthoringDraft,
+  "artifacts" | "survivors"
+> {
+  if (input.bundleNamespace.trim().length === 0) {
+    throw new Error(
+      "Cancellation presentation complements require a bundle namespace."
+    );
+  }
+  const records = input.transformation.correspondenceMap?.records ?? [];
+  return Object.freeze({
+    artifacts: Object.freeze(records
+      .filter(({ relation }) =>
+        relation === "removal" || relation === "artifact"
+      )
+      .map((record) => Object.freeze({
+        id: `${input.bundleNamespace}.artifact.${record.id}`,
+        selectorIds: Object.freeze([...record.sourceSelectorIds])
+      }))),
+    survivors: Object.freeze(records
+      .filter(({ relation }) =>
+        relation === "identity" || relation === "role-change"
+      )
+      .map((record) => Object.freeze({
+        id: `${input.bundleNamespace}.survivor.${record.id}`,
+        sourceSelectorIds: Object.freeze([...record.sourceSelectorIds]),
+        targetSelectorIds: Object.freeze([...record.targetSelectorIds])
+      })))
+  });
+}
+
+/**
  * This trusted boundary validates authored semantic roles against canonical
  * correspondence records. It never infers inverse pairs from glyph equality,
  * DOM proximity, or measured paths.

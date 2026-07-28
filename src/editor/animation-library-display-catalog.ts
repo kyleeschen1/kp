@@ -120,7 +120,7 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
       humanReviewApproved: true,
       compatibilityPaintRetired: false,
       releaseGatePassed: false,
-      presentationCoverage: "contains-explicit-static",
+      presentationCoverage: "verified-animated",
       evidenceSourceIds: [
         "review.kp.canonical-equation-renderer-convergence"
       ]

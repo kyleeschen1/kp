@@ -55,24 +55,63 @@ test("solve-x preserves branch attention across wide and narrow projections", as
   expect(new URL(page.url()).searchParams.get("kpProgress")).toBe("200");
 });
 
-test("solve-x exposes unsupported cancellation as an explicit static checkpoint", async ({ page }) => {
-  const descriptor = readers.find((candidate) => candidate.id === "reader-solve-x");
-  if (descriptor === undefined) throw new Error("Missing solve-x reader descriptor.");
-  await page.goto(descriptor.route(descriptor.progress), { waitUntil: "networkidle" });
+for (const subject of [
+  { readerId: "reader-solve-x", progress: 517, label: "solve-x additive" },
+  {
+    readerId: "reader-solve-fractional-linear",
+    progress: 250,
+    label: "fractional additive"
+  },
+  {
+    readerId: "reader-solve-fractional-linear",
+    progress: 750,
+    label: "fractional denominator",
+    expectsDelimiterPaint: true
+  },
+  {
+    readerId: "reader-divide-both-sides",
+    progress: 500,
+    label: "divide-both-sides coefficient"
+  }
+] as const) {
+  test(`${subject.label} cancellation exposes verified motion`, async ({ page }) => {
+    const pageErrors: Error[] = [];
+    page.on("pageerror", (error) => pageErrors.push(error));
+    const descriptor = readers.find(
+      (candidate) => candidate.id === subject.readerId
+    );
+    if (descriptor === undefined) {
+      throw new Error(`Missing ${subject.readerId} descriptor.`);
+    }
+    await page.goto(
+      `${descriptor.route(subject.progress)}&kpMotion=full`,
+      { waitUntil: "networkidle" }
+    );
 
-  const fitSurface = page.locator(
-    '[data-kp-reader-transition-active="true"] [data-kp-reader-fit-surface]'
-  );
-  await expect(fitSurface).toHaveAttribute(
-    "data-kp-reader-canonical-equation-presentation-mode",
-    "explicit-static-checkpoint"
-  );
-  await expect(fitSurface).toHaveAttribute(
-    "data-kp-reader-canonical-equation-session-owner",
-    "source-native"
-  );
-  await expect(fitSurface).toHaveAttribute(
-    "data-kp-reader-equation-static-checkpoint-reason",
-    "missing-verified-plan"
-  );
-});
+    const fitSurface = page.locator(
+      '[data-kp-reader-transition-active="true"] [data-kp-reader-fit-surface]'
+    );
+    await expect(fitSurface).toHaveAttribute(
+      "data-kp-reader-canonical-equation-presentation-mode",
+      "verified-motion"
+    );
+    await expect(fitSurface).toHaveAttribute(
+      "data-kp-reader-canonical-equation-session-owner",
+      "material-scene"
+    );
+    await expect(fitSurface).not.toHaveAttribute(
+      "data-kp-reader-equation-static-checkpoint-reason"
+    );
+    if ("expectsDelimiterPaint" in subject) {
+      const delimiter = fitSurface.locator(
+        '[data-kp-equation-material-fragment-role^="delimiter:"]'
+      );
+      expect(await delimiter.count()).toBeGreaterThan(0);
+      await expect(delimiter.first()).toHaveAttribute(
+        "data-kp-equation-material-paint-alignment",
+        "measured-ink"
+      );
+    }
+    expect(pageErrors).toEqual([]);
+  });
+}

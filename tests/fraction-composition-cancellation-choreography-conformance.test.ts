@@ -2,8 +2,20 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  createDivideBothSidesEquationAnimationAsset
+} from "../src/animation/divide-both-sides-equation-adapter.ts";
+import {
   createKpFractionCompositionEquationAnimationAsset
 } from "../src/animation/fraction-composition-equation-adapter.ts";
+import {
+  createFractionalLinearEquationAnimationAsset
+} from "../src/animation/fractional-linear-equation-adapter.ts";
+import {
+  createLinearSolveAnimationAsset
+} from "../src/animation/linear-solve-adapter.ts";
+import type {
+  KpAnimationAsset
+} from "../src/animation/asset.ts";
 import type {
   KpRegisteredEquationOperationChoreography
 } from "../src/animation/balanced-introduction-presentation-plan.ts";
@@ -33,8 +45,9 @@ import type {
   KpNativeKatexRenderedSceneObservation
 } from "../src/rendering/native-katex-rendered-scene.ts";
 
-const animation = createKpFractionCompositionEquationAnimationAsset();
-const cancellationTransformations = animation.transformations.filter(
+const fractionAnimation =
+  createKpFractionCompositionEquationAnimationAsset();
+const cancellationTransformations = fractionAnimation.transformations.filter(
   (transformation) => transformation.correspondenceMap?.records.some(
     ({ relation }) => relation === "cancelation"
   )
@@ -43,13 +56,53 @@ const cancellationTransformations = animation.transformations.filter(
 test("every discovered cancellation obeys role-complete forward and rewind laws", () => {
   assert.equal(cancellationTransformations.length, 3);
   for (const transformation of cancellationTransformations) {
-    const forward = conformanceCase(transformation, "forward");
-    const rewind = conformanceCase(transformation, "rewind");
+    const forward = conformanceCase(
+      fractionAnimation,
+      transformation,
+      "forward"
+    );
+    const rewind = conformanceCase(
+      fractionAnimation,
+      transformation,
+      "rewind"
+    );
 
     assertRoleRouting(forward);
     assertRoleRouting(rewind);
     assertExactRewind(forward, rewind);
   }
+});
+
+test("existing equation cancellations obey the same forward and rewind laws", () => {
+  const animations = [
+    createLinearSolveAnimationAsset(),
+    createFractionalLinearEquationAnimationAsset(),
+    createDivideBothSidesEquationAnimationAsset()
+  ];
+  let covered = 0;
+  for (const animation of animations) {
+    for (const transformation of animation.transformations.filter(
+      (candidate) => candidate.correspondenceMap?.records.some(
+        ({ relation }) => relation === "cancelation"
+      )
+    )) {
+      const forward = conformanceCase(
+        animation,
+        transformation,
+        "forward"
+      );
+      const rewind = conformanceCase(
+        animation,
+        transformation,
+        "rewind"
+      );
+      assertRoleRouting(forward);
+      assertRoleRouting(rewind);
+      assertExactRewind(forward, rewind);
+      covered += 1;
+    }
+  }
+  assert.equal(covered, 4);
 });
 
 type CancellationChoreography = Extract<
@@ -69,6 +122,7 @@ interface ConformanceCase {
 }
 
 function conformanceCase(
+  animation: KpAnimationAsset,
   transformation: KpSemanticTransformation,
   direction: "forward" | "rewind"
 ): ConformanceCase {

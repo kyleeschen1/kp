@@ -19,8 +19,8 @@ import {
   kpEquationPresentationProfile
 } from "../../rendering/equation-presentation-policy.ts";
 import {
-  compileKpFractionCompositionCancellationPresentationPlan
-} from "../../animation/fraction-composition-cancellation-presentation.ts";
+  compileKpEquationCancellationPresentationPlan
+} from "../../animation/equation-cancellation-presentation.ts";
 import {
   createKpExplicitStaticCheckpointPlan,
   type KpExplicitStaticCheckpointReason
@@ -155,7 +155,7 @@ export function decideKpEquationOperationChoreography(input: {
     );
   }
   const operationPresentationPlan =
-    compileKpFractionCompositionCancellationPresentationPlan(
+    compileKpEquationCancellationPresentationPlan(
       input.transformation
     );
   if (operationPresentationPlan === undefined) {

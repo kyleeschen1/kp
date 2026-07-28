@@ -354,6 +354,7 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
         sourceElement: atom.sourceElement,
         semanticEntityId: atom.semanticEntityId,
         semanticContacts: contacts.get(frame.trackId),
+        verifiedOperationCohortId: frame.verifiedOperationCohortId,
         rect: frame.rect,
         // Structural SVG paths scale through their preserved viewBox and have
         // no HTML text/rule inset to normalize. Glyphs and CSS rules retain

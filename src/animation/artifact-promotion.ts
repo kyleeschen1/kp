@@ -70,7 +70,7 @@ const reviewedAnimationPromotionRecords = Object.freeze([
   {
     animationId: "animation.linear-solve.solve-x",
     maturity: "gold",
-    presentationCoverage: "contains-explicit-static",
+    presentationCoverage: "verified-animated",
     evidenceSourceIds: [
       "docs/project/reviews/2026-07-21-solve-x-human-checkpoint-follow-up.md"
     ]

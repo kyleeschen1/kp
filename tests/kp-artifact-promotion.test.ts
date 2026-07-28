@@ -129,7 +129,7 @@ test("promoted animation records require verified animated coverage", () => {
   assert.equal(radical.facet.maturity, "promoted");
   assert.equal(radical.presentationCoverage, "verified-animated");
   assert.equal(solveX.facet.maturity, "gold");
-  assert.equal(solveX.presentationCoverage, "contains-explicit-static");
+  assert.equal(solveX.presentationCoverage, "verified-animated");
 });
 
 test("editor player exposes independent novelty and maturity facets", () => {

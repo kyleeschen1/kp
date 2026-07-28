@@ -32,12 +32,12 @@ export function attachKpNativeKatexTrackPaintGeometry<
     : atom.paintKind === "glyph" &&
         typeof atom.sourceElement.ownerDocument.createRange === "function"
       ? measureKpNativeKatexTextInkRect(stage, atom.sourceElement)
-      : atom.paintKind === "rule" &&
+      : (atom.paintKind === "rule" || atom.paintKind === "delimiter") &&
           typeof atom.sourceElement.getBoundingClientRect === "function" &&
           atom.sourceElement.ownerDocument.defaultView !== null
-        // A rule element's client rect includes layout content around the
-        // border. Track the actual border ink so clone alignment compares
-        // paint with paint, not paint with the larger layout rectangle.
+        // CSS rules and font-built delimiters both carry layout space beyond
+        // their visible mark. Compare cloned paint with native paint so tall
+        // parentheses cannot fail or jump because of wrapper-box geometry.
         ? measureKpNativeKatexSubtreePaintRect(
             stage,
             atom.sourceElement

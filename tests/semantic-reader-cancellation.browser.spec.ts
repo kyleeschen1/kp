@@ -33,17 +33,38 @@ test("canonical reader selects counter-orbit cancellation without enabling legac
     "[data-kp-reader-independent-zero-witness]"
   );
   await expect(independentZero).toHaveCSS("opacity", "0");
-  const guidedPaint = page.locator(
-    '[data-kp-native-katex-scene-owner][data-kp-reader-motion-guided="true"]'
+  const fitSurface = page.locator(
+    '[data-kp-reader-transition-active="true"] [data-kp-reader-fit-surface]'
   );
-  expect(await guidedPaint.count()).toBeGreaterThanOrEqual(4);
-  const centers = await guidedPaint.evaluateAll((owners) => owners.map(
+  await expect(fitSurface).toHaveAttribute(
+    "data-kp-reader-canonical-equation-presentation-mode",
+    "verified-motion"
+  );
+  const inversePaint = fitSurface.locator([
+    '[data-kp-native-katex-scene-owner]' +
+      '[data-kp-equation-material-semantic-entity-id=' +
+      '"equation.linear-solve.after-subtract.lhs.plus3"]',
+    '[data-kp-native-katex-scene-owner]' +
+      '[data-kp-equation-material-semantic-entity-id=' +
+      '"equation.linear-solve.after-subtract.lhs.minus3"]'
+  ].join(","));
+  expect(await inversePaint.count()).toBeGreaterThanOrEqual(2);
+  const cohortIds = await inversePaint.evaluateAll((owners) =>
+    [...new Set(owners.map((owner) =>
+      (owner as HTMLElement).dataset[
+        "kpEquationMaterialVerifiedOperationCohortId"
+      ]
+    ))]
+  );
+  expect(cohortIds).toHaveLength(1);
+  expect(cohortIds[0]).toMatch(/^operation-presentation\./);
+  const centers = await inversePaint.evaluateAll((owners) => owners.map(
     (owner) => {
       const rect = owner.getBoundingClientRect();
       return rect.top + rect.height / 2;
     }
   ));
-  expect(Math.max(...centers) - Math.min(...centers)).toBeGreaterThan(12);
+  expect(Math.max(...centers) - Math.min(...centers)).toBeGreaterThan(8);
 
   await page.goto(
     "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1&kpProgress=620"

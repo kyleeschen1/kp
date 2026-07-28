@@ -135,7 +135,7 @@ async function captureReaderFrame(
     presentation,
     progress,
     viewport: page.locator("[data-kp-reader-equation-viewport]"),
-    materialSelector: "[data-kp-reader-equation-material-fragment-id]",
+    materialSelector: "[data-kp-equation-material-owner-id]",
     nativeSelector:
       '[data-kp-reader-transition-active="true"] [data-kp-reader-equation-anchor-id]'
   });
@@ -166,7 +166,8 @@ async function captureSurfaceFrame(input: {
       const readerOwnerId = element.closest<HTMLElement>(
         "[data-kp-reader-equation-material-owner-id]"
       )?.dataset["kpReaderEquationMaterialOwnerId"];
-      const semanticId = element.dataset["kpEquationMaterialSourceMotionId"]
+      const semanticId = element.dataset["kpEquationMaterialSemanticEntityId"]
+        ?? element.dataset["kpEquationMaterialSourceMotionId"]
         ?? editorMotionId
         ?? readerFragmentId?.replace(/^anchor\./, "")
         ?? readerAnchorId?.replace(/^anchor\./, "");

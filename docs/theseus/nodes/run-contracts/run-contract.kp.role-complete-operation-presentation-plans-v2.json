@@ -153,7 +153,8 @@
     {
       "id": "slice.kp.role-plan.17",
       "title": "Migrate-existing-cancellation-families",
-      "status": "planned"
+      "summary": "Migrated solve-x additive, fractional-linear additive and denominator, and divide-both-sides coefficient cancellation to one exact-ID role-complete resolver; all seven canonical cancellations now share forward/rewind laws. Corrected delimiter clone geometry to compare visible ink, exposed verified cohort evidence, and prevented full family assets from entering the shared reader bundle.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.18",

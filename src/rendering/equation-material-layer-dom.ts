@@ -17,6 +17,7 @@ export interface KpEquationMaterialLayerOwnerFrame {
   readonly semanticEntityId?: string | undefined;
   readonly semanticContacts?:
     readonly KpEquationVisiblePaintCertifiedContact[] | undefined;
+  readonly verifiedOperationCohortId?: string | undefined;
   readonly rect: {
     readonly left: number;
     readonly top: number;
@@ -143,6 +144,11 @@ export function syncKpEquationMaterialLayer(input: {
       frame.semanticContacts === undefined
         ? undefined
         : JSON.stringify(frame.semanticContacts)
+    );
+    setOptionalDataset(
+      owner,
+      "kpEquationMaterialVerifiedOperationCohortId",
+      frame.verifiedOperationCohortId
     );
     setOptionalDataset(
       owner,

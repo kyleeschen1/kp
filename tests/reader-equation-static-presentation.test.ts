@@ -22,39 +22,60 @@ import {
   projectKpReaderEquationTransitionPresentation
 } from "../src/reader/renderers/public-api.ts";
 
-test("unmigrated cancellation families compile an explicit static checkpoint", () => {
-  const canonical = createLinearSolveAnimationAsset();
-  const teacherZero = createLinearSolveTeacherZeroAnimationAsset();
-
-  for (const [animation, transformationId] of [
-    [canonical, "transform.linear-solve.cancel-left-additive-inverse"],
-    [teacherZero, "transform.linear-solve.expose-left-zero"]
-  ] as const) {
-    const index = animation.transformations.findIndex(
-      ({ id }) => id === transformationId
-    );
-    const transition = projectKpReaderEquationRenderPlan({
+test("the teacher-zero compatibility transform remains explicitly static", () => {
+  const animation = createLinearSolveTeacherZeroAnimationAsset();
+  const transformationId = "transform.linear-solve.expose-left-zero";
+  const index = animation.transformations.findIndex(
+    ({ id }) => id === transformationId
+  );
+  const transition = projectKpReaderEquationRenderPlan({
+    animation,
+    runtimeFrame: sampleKpAnimationRuntimeFrame({
       animation,
-      runtimeFrame: sampleKpAnimationRuntimeFrame({
-        animation,
-        progress: (index + 0.5) / animation.transformations.length
-      })
-    }).transitions[0]!;
-    const presentation = projectKpReaderEquationTransitionPresentation(
-      transition.presentationPlan
-    );
+      progress: (index + 0.5) / animation.transformations.length
+    })
+  }).transitions[0]!;
+  const presentation = projectKpReaderEquationTransitionPresentation(
+    transition.presentationPlan
+  );
 
-    assert.equal(transition.id, transformationId);
-    assert.equal(
-      transition.presentationPlan.planKind,
-      "explicit-static-checkpoint"
-    );
-    assert.equal(
-      presentation.staticCheckpoint?.reason,
-      "missing-verified-plan"
-    );
-    assert.equal(presentation.operationChoreography, undefined);
-  }
+  assert.equal(transition.id, transformationId);
+  assert.equal(
+    transition.presentationPlan.planKind,
+    "explicit-static-checkpoint"
+  );
+  assert.equal(
+    presentation.staticCheckpoint?.reason,
+    "missing-verified-plan"
+  );
+  assert.equal(presentation.operationChoreography, undefined);
+});
+
+test("the migrated solve-x cancellation is verified animated", () => {
+  const animation = createLinearSolveAnimationAsset();
+  const transformationId =
+    "transform.linear-solve.cancel-left-additive-inverse";
+  const index = animation.transformations.findIndex(
+    ({ id }) => id === transformationId
+  );
+  const transition = projectKpReaderEquationRenderPlan({
+    animation,
+    runtimeFrame: sampleKpAnimationRuntimeFrame({
+      animation,
+      progress: (index + 0.5) / animation.transformations.length
+    })
+  }).transitions[0]!;
+
+  assert.equal(transition.id, transformationId);
+  assert.equal(transition.presentationPlan.planKind, "operation-choreography");
+  const presentation = projectKpReaderEquationTransitionPresentation(
+    transition.presentationPlan
+  );
+  assert.equal(
+    presentation.operationChoreography?.operationPresentationPlan?.planKind,
+    "inverse-cancellation"
+  );
+  assert.equal(presentation.staticCheckpoint, undefined);
 });
 
 test("the approved fraction exemplar remains verified animated", () => {

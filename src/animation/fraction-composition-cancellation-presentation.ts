@@ -2,6 +2,7 @@ import type {
   KpSemanticTransformation
 } from "../semantic/asset-transformation.ts";
 import {
+  deriveKpCancellationPresentationRoleComplements,
   validateAndMintKpCancellationPresentationAuthoring,
   type KpCancellationPresentationAuthoringDraft,
   type KpVerifiedCancellationPresentationAuthoring
@@ -32,7 +33,6 @@ export function createKpFractionCompositionAdditiveCancellationAuthoring(
       `${transformation.id}.`
     );
   }
-  const records = transformation.correspondenceMap?.records ?? [];
   const draft: KpCancellationPresentationAuthoringDraft = {
     schemaVersion: "kp.cancellation-presentation-authoring.v1",
     id: "fraction-composition.cancellation.additive-inverses",
@@ -55,16 +55,10 @@ export function createKpFractionCompositionAdditiveCancellationAuthoring(
       }
     ],
     catalysts: [],
-    artifacts: structuralBundles(records),
-    survivors: records
-      .filter(({ relation }) =>
-        relation === "identity" || relation === "role-change"
-      )
-      .map((record) => ({
-        id: `fraction-composition.survivor.${record.id}`,
-        sourceSelectorIds: record.sourceSelectorIds,
-        targetSelectorIds: record.targetSelectorIds
-      }))
+    ...deriveKpCancellationPresentationRoleComplements({
+      transformation,
+      bundleNamespace: "fraction-composition"
+    })
   };
   const result = validateAndMintKpCancellationPresentationAuthoring({
     transformation,
@@ -111,12 +105,10 @@ export function createKpFractionCompositionDenominatorCancellationAuthoring(
       id: "fraction-composition.catalyst.product-operator",
       selectorIds: ["balanced-multiplication.left.operator.1"]
     }],
-    artifacts: structuralBundles(
-      transformation.correspondenceMap?.records ?? []
-    ),
-    survivors: survivorBundles(
-      transformation.correspondenceMap?.records ?? []
-    )
+    ...deriveKpCancellationPresentationRoleComplements({
+      transformation,
+      bundleNamespace: "fraction-composition"
+    })
   });
 }
 
@@ -143,12 +135,10 @@ export function createKpFractionCompositionCoefficientCancellationAuthoring(
       }
     ],
     catalysts: [],
-    artifacts: structuralBundles(
-      transformation.correspondenceMap?.records ?? []
-    ),
-    survivors: survivorBundles(
-      transformation.correspondenceMap?.records ?? []
-    )
+    ...deriveKpCancellationPresentationRoleComplements({
+      transformation,
+      bundleNamespace: "fraction-composition"
+    })
   });
 }
 
@@ -211,35 +201,4 @@ function verifyAuthoring(
     );
   }
   return result.authoring;
-}
-
-function survivorBundles(
-  records: NonNullable<
-    KpSemanticTransformation["correspondenceMap"]
-  >["records"]
-) {
-  return records
-    .filter(({ relation }) =>
-      relation === "identity" || relation === "role-change"
-    )
-    .map((record) => ({
-      id: `fraction-composition.survivor.${record.id}`,
-      sourceSelectorIds: record.sourceSelectorIds,
-      targetSelectorIds: record.targetSelectorIds
-    }));
-}
-
-function structuralBundles(
-  records: NonNullable<
-    KpSemanticTransformation["correspondenceMap"]
-  >["records"]
-) {
-  return records
-    .filter(({ relation }) =>
-      relation === "removal" || relation === "artifact"
-    )
-    .map((record) => ({
-      id: `fraction-composition.artifact.${record.id}`,
-      selectorIds: record.sourceSelectorIds
-    }));
 }
