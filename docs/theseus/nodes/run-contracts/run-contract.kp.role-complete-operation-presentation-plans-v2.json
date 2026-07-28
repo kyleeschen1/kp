@@ -105,7 +105,8 @@
     {
       "id": "slice.kp.role-plan.09",
       "title": "Add-verified-cancellation-authoring",
-      "status": "planned"
+      "summary": "Introduced verified cancellation authoring with exactly two inverse bundles and total catalyst, artifact, survivor, source, and target coverage tied to semantic correspondence authority.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.10",
