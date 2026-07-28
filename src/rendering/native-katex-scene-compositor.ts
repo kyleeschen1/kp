@@ -45,6 +45,14 @@ import type { KpNativeKatexFactoringSceneBinding } from
 import {
   sampleKpNativeKatexSceneTrackFrames
 } from "./native-katex-scene-track-sampling.ts";
+import type {
+  KpNativeKatexPaintMeasuredSceneTrackFrameContract,
+  KpNativeKatexRendererDispositionContract,
+  KpNativeKatexRendererSessionContract,
+  KpNativeKatexSceneOwnershipFrameContract,
+  KpNativeKatexSceneTrackContract,
+  KpNativeKatexSceneTrackFrameContract
+} from "./native-katex-scene-track-contract.ts";
 
 export type KpNativeKatexAtomLifecycle =
   | "persist"
@@ -92,69 +100,29 @@ export interface KpNativeKatexHierarchicalScenePlan {
   readonly components: readonly KpNativeKatexSceneComponent[];
 }
 
-export interface KpNativeKatexSceneTrack extends KpEquationCollisionTrack {
-  readonly lifecycle: KpNativeKatexAtomLifecycle;
-  readonly sourceAtomId?: string | undefined;
-  readonly targetAtomId?: string | undefined;
-  readonly visualAtomId: string;
-  readonly paintKind: KpNativeKatexPaintAtomObservation["paintKind"];
-  readonly sizingMode: "rect" | "rule-length";
-  readonly startOpacity: number;
-  readonly endOpacity: number;
-  readonly sampleProgress?: (progress: number) => number;
-}
+export type KpNativeKatexSceneTrack =
+  KpNativeKatexSceneTrackContract<
+    KpEquationCollisionTrack,
+    KpNativeKatexPaintAtomObservation["paintKind"]
+  >;
 
 export type KpNativeKatexPaintMeasuredSceneTrack =
   KpNativeKatexPaintMeasuredTrack<KpNativeKatexSceneTrack>;
 
-export interface KpNativeKatexSceneTrackFrame {
-  readonly trackId: string;
-  readonly componentId: string;
-  readonly lifecycle: KpNativeKatexAtomLifecycle;
-  readonly visualAtomId: string;
-  readonly paintKind: KpNativeKatexPaintAtomObservation["paintKind"];
-  readonly sizingMode: "rect" | "rule-length";
-  readonly rect: KpStageRelativeRect;
-  readonly expectedPaintRect?: KpStageRelativeRect | undefined;
-  readonly opacity: number;
-}
-
-export interface KpNativeKatexPaintMeasuredSceneTrackFrame
-  extends KpNativeKatexSceneTrackFrame {
-  readonly expectedPaintRect: KpStageRelativeRect;
-}
-
-export interface KpNativeKatexSceneOwnershipFrame {
-  readonly visualOwner: "source-native" | "material-scene" | "target-native";
-  readonly sourceNativeOpacity: 0 | 1;
-  readonly materialSceneOpacity: 0 | 1;
-  readonly targetNativeOpacity: 0 | 1;
-  readonly frames: readonly KpNativeKatexSceneTrackFrame[];
-}
-export interface KpNativeKatexRendererDisposition {
-  readonly mode: "motion" | "checkpoint-settlement";
-  readonly reason:
-    | "clear"
-    | "semantic-ambiguity"
-    | "blocked-geometry"
-    | "unsupported-typography";
-  readonly affectedIds: readonly string[];
-}
-export interface KpNativeKatexRendererSession {
-  readonly kind: "native-katex-renderer-session";
-  readonly lifecycle: "renderer-session";
-  readonly mode:
-    | "native-continuity"
-    | "atom-transit"
-    | "checkpoint-settlement";
-  readonly disposition: KpNativeKatexRendererDisposition;
-  readonly tracks: readonly KpNativeKatexSceneTrack[];
-  readonly sample: (progress: number) => readonly KpNativeKatexSceneTrackFrame[];
-  readonly apply: (progress: number) => KpNativeKatexSceneOwnershipFrame;
-  readonly dispose: (options?: {
-    readonly preserveStructuralSuccession?: boolean | undefined;
-  }) => void;
-}
+export type KpNativeKatexSceneTrackFrame =
+  KpNativeKatexSceneTrackFrameContract<KpNativeKatexAtomLifecycle,
+    KpNativeKatexPaintAtomObservation["paintKind"], KpStageRelativeRect>;
+export type KpNativeKatexPaintMeasuredSceneTrackFrame =
+  KpNativeKatexPaintMeasuredSceneTrackFrameContract<
+    KpNativeKatexSceneTrackFrame, KpStageRelativeRect>;
+export type KpNativeKatexSceneOwnershipFrame =
+  KpNativeKatexSceneOwnershipFrameContract<KpNativeKatexSceneTrackFrame>;
+export type KpNativeKatexRendererDisposition =
+  KpNativeKatexRendererDispositionContract;
+export interface KpNativeKatexRendererSession extends
+  KpNativeKatexRendererSessionContract<KpNativeKatexRendererDisposition,
+    KpNativeKatexSceneTrack, KpNativeKatexSceneTrackFrame,
+    KpNativeKatexSceneOwnershipFrame> {}
 
 export interface KpCanonicalNativeKatexSceneSession {
   readonly kind: "canonical-native-katex-scene-session";
@@ -581,7 +549,7 @@ export function compileKpNativeKatexSceneTracks(
     const sources = disposition.sourceAtomIds.map((id) => sourceById.get(id)!);
     const targets = disposition.targetAtomIds.map((id) => targetById.get(id)!);
     if (disposition.lifecycle === "persist") {
-      return [track(disposition, 0, sources[0]!, targets[0]!, 1, 1)];
+      return [track(disposition, 0, sources[0]!, targets[0]!)];
     }
     if (disposition.lifecycle === "merge") {
       return sources.map((source, index) =>
@@ -589,9 +557,7 @@ export function compileKpNativeKatexSceneTracks(
           disposition,
           index,
           source,
-          targets[0]!,
-          1,
-          1
+          targets[0]!
         )
       );
     }
@@ -602,15 +568,13 @@ export function compileKpNativeKatexSceneTracks(
           index,
           sources[0]!,
           target,
-          1,
-          1,
           target.id
         )
       );
     }
     if (disposition.lifecycle === "eliminate") {
       return sources.map((source, index) => {
-        const sceneTrack = track(disposition, index, source, source, 1, 0);
+        const sceneTrack = track(disposition, index, source, source);
         return Object.freeze({
           ...sceneTrack,
           endRect: Object.freeze({
@@ -627,8 +591,6 @@ export function compileKpNativeKatexSceneTracks(
           index,
           target,
           target,
-          0,
-          1,
           target.id
         );
         return Object.freeze({
@@ -1512,11 +1474,8 @@ export function createKpNativeKatexRendererSession(input: {
   if (new Set(trackIds).size !== trackIds.length) {
     throw new Error("Renderer session requires unique track IDs.");
   }
-  if (input.tracks.some((track) =>
-    ["persist", "split", "merge"].includes(track.lifecycle) &&
-    (track.startOpacity !== 1 || track.endOpacity !== 1)
-  )) {
-    throw new Error("Lineage-backed scene tracks must remain fully opaque.");
+  for (const track of input.tracks) {
+    assertKpNativeKatexSceneTrackOpacityContract(track);
   }
   const sourceById = new Map(input.reconciliation.source.atoms.map((atom) => [
     atom.id,
@@ -2024,24 +1983,48 @@ function track(
   index: number,
   source: KpNativeKatexPaintAtomObservation,
   target: KpNativeKatexPaintAtomObservation,
-  startOpacity: number,
-  endOpacity: number,
   visualAtomId = source.id
 ): KpNativeKatexSceneTrack {
-  return Object.freeze({
+  const base = {
     id: `track.${disposition.id}.${index}`,
     componentId: `component.${disposition.id}`,
-    lifecycle: disposition.lifecycle,
     sourceAtomId: source.id,
     targetAtomId: target.id,
     visualAtomId,
     paintKind: source.paintKind,
     sizingMode: source.paintKind === "rule" ? "rule-length" : "rect",
     startRect: source.rect,
-    endRect: target.rect,
-    startOpacity,
-    endOpacity
-  });
+    endRect: target.rect
+  };
+  const lifecycle = disposition.lifecycle;
+  if (lifecycle === "unsupported") throw new Error(
+    `Unsupported scene disposition ${disposition.id} cannot compile a track.`
+  );
+  const [startOpacity, endOpacity] = lifecycle === "introduce"
+    ? [0, 1] as const : lifecycle === "eliminate"
+      ? [1, 0] as const : [1, 1] as const;
+  // This sole constructor couples lifecycle with literal opacity endpoints;
+  // the session rechecks cast or decoded inputs at its trust boundary.
+  return Object.freeze({
+    ...base,
+    lifecycle, startOpacity, endOpacity
+  }) as KpNativeKatexSceneTrack;
+}
+
+function assertKpNativeKatexSceneTrackOpacityContract(
+  track: KpNativeKatexSceneTrack
+): void {
+  const lineage = track.lifecycle === "persist" ||
+    track.lifecycle === "split" || track.lifecycle === "merge";
+  const valid = lineage
+    ? track.startOpacity === 1 && track.endOpacity === 1 &&
+      track.opacityStepAt === undefined
+    : track.lifecycle === "introduce"
+      ? track.startOpacity === 0 && track.endOpacity === 1
+      : track.startOpacity === 1 && track.endOpacity === 0;
+  if (!valid) throw new Error(lineage
+    ? "Lineage-backed scene tracks must remain fully opaque."
+    : `${track.lifecycle} scene tracks require explicit endpoint opacity.`);
 }
 
 function lerp(source: number, target: number, progress: number): number {

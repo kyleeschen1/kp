@@ -507,11 +507,32 @@
       "scope": "slice s20 canonical paint and type gate",
       "checkedAt": "2026-07-28T00:01:24.828Z",
       "notes": "All 12 canonical renderer/opacity/readiness gates and every TypeScript project pass; the measured-paint ratchet adds no glyph, lifecycle, renderer, session, or route category."
+    },
+    {
+      "command": "npm run check:inference; npm run typecheck",
+      "status": "passed",
+      "scope": "slice s21 opaque lifecycle type closure",
+      "checkedAt": "2026-07-28T00:15:55.382Z",
+      "notes": "Negative fixtures reject fading persist/split/merge, opacity-stepped merge, incoherent introduce/eliminate endpoints, and unsupported scene tracks. All TypeScript projects pass; inference remains below ceilings at types 36743, instantiations 44770, check 1.48s."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice s21 runtime and renderer closure",
+      "checkedAt": "2026-07-28T00:16:03.329Z",
+      "notes": "64 compositor tests and 12 canonical renderer gates pass. The session rejects cast lifecycle/opacity contradictions, compound track unsupported state is statically absent, and the core remains four production modules at 129889 of 130000 source bytes with unchanged paint/lifecycle vocabulary."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-glyph-reconciliation-compound-trace.test.ts",
+      "status": "passed",
+      "scope": "slice s21 compound scene type closure",
+      "checkedAt": "2026-07-28T00:16:08.724Z",
+      "notes": "All 5 compound scene tests pass after removing the now-unrepresentable runtime unsupported-track case; order, completeness, boundaries, direct seek, reverse, and drill-down remain exact."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The earlier x sag/font-swap fix is now a dense paint-level invariant under certified layout: native and material x ink share the approved 0.25px baseline/height residual, cloned paint uses finite stable measured insets and one typography fingerprint, ownership remains opaque, and direct/rewind endpoint handoffs reproduce the same frames."
+    "summary": "Canonical scene tracks now carry a discriminated opacity contract: persist, split, and merge are statically 1-to-1 and cannot own opacity steps; introduce is 0-to-1; eliminate is 1-to-0; unsupported reconciliation has no track representation. The sole constructor derives the literals and the session validates untyped inputs, without a repository-wide lifecycle migration."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

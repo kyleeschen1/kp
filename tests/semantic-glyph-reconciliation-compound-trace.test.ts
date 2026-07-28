@@ -95,7 +95,7 @@ test("compound scene boundaries, direct seek, and reverse are exact", () => {
   assert.deepEqual(plan.sample(0.437), plan.sample(0.437));
 });
 
-test("compound scene plan rejects reordered, missing, or unsupported scenes", () => {
+test("compound scene plan rejects reordered or missing scenes", () => {
   const trace = createKpGlyphReconciliationCompoundTrace();
   const scenes = scenesFor(trace.operationIds);
 
@@ -112,18 +112,6 @@ test("compound scene plan rejects reordered, missing, or unsupported scenes", ()
       scenes: scenes.slice(1)
     }),
     /exactly one scene/
-  );
-  assert.throws(
-    () => createKpNativeKatexCompoundScenePlan({
-      timeline: trace,
-      scenes: scenes.map((scene, index) => index === 0
-        ? {
-            ...scene,
-            tracks: [{ ...scene.tracks[0]!, lifecycle: "unsupported" }]
-          }
-        : scene)
-    }),
-    /unsupported/
   );
 });
 

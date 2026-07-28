@@ -179,7 +179,8 @@
     {
       "id": "s21",
       "title": "Opaque lifecycle track types",
-      "status": "planned"
+      "summary": "The canonical KaTeX path now uses a discriminated scene-track opacity contract: persist/split/merge are literal opaque tracks with no opacity step, introduce/eliminate own exact endpoint opacity, unsupported state is unrepresentable, the sole constructor derives values, and the runtime trust boundary rejects cast contradictions.",
+      "status": "complete"
     },
     {
       "id": "s22",

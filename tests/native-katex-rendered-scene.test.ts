@@ -1617,6 +1617,47 @@ test("renderer session direct seeks and reverses without hidden clock state", ()
   );
 });
 
+test("renderer session rejects casted lifecycle opacity contradictions", () => {
+  const source = createScene("source", ["source.x"]);
+  const target = createScene("target", ["target.x"]);
+  const reconciliation = reconcileKpNativeKatexScenes({ source, target });
+  const tracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+  );
+  const create = (candidate: readonly KpNativeKatexSceneTrack[]) =>
+    createKpNativeKatexRendererSession({
+      stage,
+      sourceRoot: source.root,
+      targetRoot: target.root,
+      reconciliation,
+      tracks: candidate
+    });
+
+  assert.throws(
+    () => create([{
+      ...tracks[0]!,
+      endOpacity: 0
+    } as unknown as KpNativeKatexSceneTrack]),
+    /fully opaque/
+  );
+  assert.throws(
+    () => create([{
+      ...tracks[0]!,
+      opacityStepAt: 0.5
+    } as unknown as KpNativeKatexSceneTrack]),
+    /fully opaque/
+  );
+  assert.throws(
+    () => create([{
+      ...tracks[0]!,
+      lifecycle: "introduce",
+      startOpacity: 1,
+      endOpacity: 1
+    } as unknown as KpNativeKatexSceneTrack]),
+    /explicit endpoint opacity/
+  );
+});
+
 test("merge-fan-in opens a lane before routing focal material", () => {
   const merge: KpNativeKatexSceneTrack = {
     id: "track.merge.x",

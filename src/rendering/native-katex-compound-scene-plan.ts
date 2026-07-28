@@ -83,11 +83,6 @@ export function createKpNativeKatexCompoundScenePlan(input: {
     if (scene.tracks.length === 0) {
       throw new Error(`Compound scene ${scene.id} requires generic tracks.`);
     }
-    if (scene.tracks.some(({ lifecycle }) => lifecycle === "unsupported")) {
-      throw new Error(
-        `Compound scene ${scene.id} cannot schedule unsupported tracks.`
-      );
-    }
     return Object.freeze({
       id: `compound-segment.${index}`,
       sceneId: scene.id,
