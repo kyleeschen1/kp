@@ -1,0 +1,86 @@
+{
+  "id": "next-action.kp.canonical-reader-browser-runtime-hardening-v0",
+  "kind": "next-action",
+  "title": "Harden canonical reader browser parity and rapid-scroll runtime",
+  "status": "ready",
+  "domain": "performance",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-28-canonical-reader-browser-runtime-hardening-long-loop-proposal.md",
+      "summary": "Approved 20-slice Safari/WebKit and rapid-scroll hardening detour with exact predecessor restoration boundary."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.role-complete-operation-presentation-plans-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:reader-runtime-hardening",
+    "npm run perf:fraction-composition-scroll",
+    "npm run visual:fraction-composition-motif-fidelity",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm test",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/theseus-loop-status.test.ts",
+      "status": "passed",
+      "scope": "Slice 1 control-plane status derives the new 20-slice hardening contract while the predecessor remains stored at slice 14.",
+      "checkedAt": "2026-07-28T20:42:47.318Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "Slice 1 separate hardening contract, active priority checkpoint, source-linked target done contract, and stored predecessor are graph-valid.",
+      "checkedAt": "2026-07-28T20:42:52.589Z"
+    }
+  ],
+  "expectedLearning": [
+    "Whether one measured-paint browser contract and a pure-plan cache can make canonical equation scrolling responsive without weakening collision certification or multiplying visual runtimes."
+  ],
+  "allowedWork": [
+    "Canonical fraction-reader browser verification, scheduler hot path, semantic state diffing, material-owner diffing, pure compositor-plan caching, bounded idle prewarming, and atomic latest-only handoff."
+  ],
+  "disallowedWork": [
+    "No semantic or motif changes, no second renderer or scheduler, no mounted-resource cache, no family-wide rollout, and no browser-specific geometry exception."
+  ],
+  "criteria": [
+    {
+      "id": "webkit-measured-paint-contract",
+      "weight": "high"
+    },
+    {
+      "id": "rapid-scroll-frame-budget",
+      "weight": "high"
+    },
+    {
+      "id": "ordinary-scroll-zero-layout-reads",
+      "weight": "high"
+    },
+    {
+      "id": "prepared-revisit-zero-pure-recompile",
+      "weight": "high"
+    },
+    {
+      "id": "one-mounted-visual-owner",
+      "weight": "high"
+    },
+    {
+      "id": "predecessor-resumable-at-slice-14",
+      "weight": "high"
+    },
+    {
+      "id": "accessibility-and-native-handoff-preserved",
+      "weight": "high"
+    }
+  ]
+}

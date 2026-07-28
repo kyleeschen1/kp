@@ -1,0 +1,49 @@
+{
+  "id": "priority-change.kp.canonical-reader-browser-runtime-hardening-v0",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.canonical-reader-browser-runtime-hardening-v0",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The user explicitly paused the role-complete operation-presentation run at its slice-14 visual checkpoint and approved the recommended Safari/WebKit and rapid-scroll runtime hardening detour. Preserve commit aeac631f and the unfinished slice exactly, harden one canonical fraction-reader exemplar without changing motifs or semantics, then restore the stored run as next.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The user explicitly paused the role-complete operation-presentation run at its slice-14 visual checkpoint and approved the recommended Safari/WebKit and rapid-scroll runtime hardening detour. Preserve commit aeac631f and the unfinished slice exactly, harden one canonical fraction-reader exemplar without changing motifs or semantics, then restore the stored run as next.",
+      "occurredAt": "2026-07-28T20:39:41.771Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v10"
+    ],
+    "preferred": [
+      "run-contract.kp.role-complete-operation-presentation-plans-v2"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v10",
+    "run-contract.kp.role-complete-operation-presentation-plans-v2"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v10",
+    "rationale": "The user explicitly paused the role-complete operation-presentation run at its slice-14 visual checkpoint and approved the recommended Safari/WebKit and rapid-scroll runtime hardening detour. Preserve commit aeac631f and the unfinished slice exactly, harden one canonical fraction-reader exemplar without changing motifs or semantics, then restore the stored run as next.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.role-complete-operation-presentation-plans-v2"
+    ],
+    "changes": [
+      {
+        "subject": "canonical-reader-browser-runtime-hardening",
+        "to": "now"
+      },
+      {
+        "subject": "role-complete-operation-presentation",
+        "to": "next"
+      }
+    ],
+    "effectiveAt": "2026-07-28T20:39:41.771Z",
+    "requestedBy": "user"
+  }
+}

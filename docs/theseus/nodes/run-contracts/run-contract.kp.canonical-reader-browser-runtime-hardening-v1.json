@@ -1,0 +1,156 @@
+{
+  "id": "run-contract.kp.canonical-reader-browser-runtime-hardening-v1",
+  "kind": "run-contract",
+  "title": "Canonical reader browser and runtime hardening",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.canonical-reader-browser-runtime-hardening-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-28-canonical-reader-browser-runtime-hardening-long-loop-proposal.md",
+      "summary": "User-approved exact 20-slice detour, preservation boundary, browser and performance acceptance criteria, rollback units, stop conditions, and predecessor restoration contract."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm run test:reader-runtime-hardening",
+    "npm run perf:fraction-composition-scroll",
+    "npm run visual:fraction-composition-motif-fidelity",
+    "npm test",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Instrument and optimize the canonical reader scroll, scheduler, focus, location, responsive-fit, material-owner, compositor-plan, and session-handoff paths.",
+    "Add scoped Chromium, Firefox, and WebKit browser contracts for measured paint, rapid scroll, native handoff, responsive layout, and WebGL fallback.",
+    "Introduce a bounded typed cache for pure measured compositor plans and adjacent idle prewarming; invalidate on every geometry authority field."
+  ],
+  "disallowedWork": [
+    "Do not change mathematical semantics, operation plans, established motif choreography, fold truth, accessibility, or static export behavior.",
+    "Do not create a second compositor, renderer lifecycle, scheduler, or cache mounted DOM, canvas, WebGL, or accessibility ownership.",
+    "Do not generalize beyond the canonical fraction reader before its promotion gates pass or add browser-specific motif patches."
+  ],
+  "goal": "Make the canonical fraction reader responsive under rapid bidirectional scrolling and establish WebKit as a measured-paint and resource-lifecycle contract, then restore the stored role-plan run at slice 14.",
+  "target": "next-action.kp.canonical-reader-browser-runtime-hardening-v0",
+  "runMode": "run",
+  "maxSlices": 20,
+  "commitCadence": "Commit after each independently verified slice with exact Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if mathematical truth, motif choreography, fold truth, accessibility, native endpoint authority, review capture, or static export changes.",
+    "Stop if work requires a second compositor, renderer lifecycle, scheduler, or caching mounted DOM, canvas, WebGL, or accessibility ownership.",
+    "Stop if ordinary scroll still performs layout reads or a prepared revisit repeats pure collision compilation after the bounded repair.",
+    "Stop if a cross-browser failure can be addressed only with a browser-specific motif or geometry exception.",
+    "Stop at slice 19 if automated gates pass but real Safari or subjective motion still requires human judgment; do not restore the predecessor until closure is honest."
+  ],
+  "slices": [
+    {
+      "id": "slice.kp.reader-hardening.01",
+      "title": "Preserve-predecessor-and-create-detour",
+      "summary": "Committed predecessor checkpoint aeac631f remains resumable at role-plan slice 14; approved proposal, active priority detour, complete target done contract, metadata-complete 20-slice v1 run, loop status, context receipt, and workspace validation are durable.",
+      "status": "complete"
+    },
+    {
+      "id": "slice.kp.reader-hardening.02",
+      "title": "Add-WebKit-browser-contract",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.03",
+      "title": "Add-rapid-scroll-instrumentation",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.04",
+      "title": "Freeze-Chromium-baseline",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.05",
+      "title": "Freeze-Firefox-WebKit-baselines",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.06",
+      "title": "Define-typed-geometry-cache-identity",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.07",
+      "title": "Cache-scroll-anchor-geometry",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.08",
+      "title": "Unify-frame-scheduling",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.09",
+      "title": "Diff-semantic-focus",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.10",
+      "title": "Diff-location-and-share-state",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.11",
+      "title": "Diff-reader-presentation-state",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.12",
+      "title": "Diff-material-owner-DOM",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.13",
+      "title": "Split-pure-plan-from-mounted-session",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.14",
+      "title": "Cache-pure-compositor-plans",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.15",
+      "title": "Reuse-collision-certificates",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.16",
+      "title": "Prewarm-adjacent-transition-plans",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.17",
+      "title": "Make-session-handoff-latest-only",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.18",
+      "title": "Add-WebKit-geometry-resource-gates",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.19",
+      "title": "Run-cross-browser-promotion-matrices",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.reader-hardening.20",
+      "title": "Close-hardening-and-restore-predecessor",
+      "status": "planned"
+    }
+  ]
+}
