@@ -69,7 +69,8 @@
     {
       "id": "s02",
       "title": "freeze-promotion-inventory",
-      "status": "planned"
+      "summary": "Added a typed five-stage fraction promotion inventory, proved current route and paint ownership, and established the stable 19-check fraction-composition command; type and architecture gates pass.",
+      "status": "complete"
     },
     {
       "id": "s03",

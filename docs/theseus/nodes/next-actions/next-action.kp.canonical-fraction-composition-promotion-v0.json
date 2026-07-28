@@ -48,6 +48,13 @@
       "scope": "s01 control-plane source, target, priority, contract hygiene, and active-run readiness",
       "checkedAt": "2026-07-28T05:11:48.527Z",
       "notes": "v1 owns all 20 approved slices with run mode, ceiling, cadence, verification level, stop conditions, source refs, and zero blockers; metadata-incomplete unstarted v0 is superseded."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "s02 promotion inventory and canonical-versus-compatibility ownership",
+      "checkedAt": "2026-07-28T05:14:54.757Z",
+      "notes": "Nineteen focused checks pass; the inventory freezes five non-interchangeable evidence stages, confirms only numerator split/merge currently has canonical fraction paint, and confirms the composition trace has no route or paint owner. Type and architecture gates pass."
     }
   ],
   "progress": {
