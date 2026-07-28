@@ -85,11 +85,18 @@
       "scope": "slice-07",
       "checkedAt": "2026-07-28T18:36:24.534Z",
       "notes": "Thirty-eight focused tests pass, including all established successor synthesis laws and canonical 13-transition dry-run totality; verified plans are nested beside unchanged bindings and are not yet a paint path."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans; npm run typecheck; npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "slice-08",
+      "checkedAt": "2026-07-28T18:40:19.993Z",
+      "notes": "Forty-nine focused tests pass, including together-window atomicity, branch schedule inverse laws, collision retiming, native choreography, and the canonical dry run; renderer behavior remains on the existing choreography path."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-7 complete: real arithmetic successor bindings now carry verified role-complete plan evidence without changing canonical motion."
+    "summary": "Slices 1-8 complete: arithmetic synthesis and synchronized both-sides introduction now carry verified role-complete plans beside unchanged canonical motion."
   },
   "expectedLearning": [
     "Whether one role-complete presentation-plan boundary eliminates correct-label/wrong-realization regressions without a second renderer or closed extension taxonomy."

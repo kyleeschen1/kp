@@ -99,7 +99,8 @@
     {
       "id": "slice.kp.role-plan.08",
       "title": "Adapt-balanced-introduction",
-      "status": "planned"
+      "summary": "Adapted synchronized balanced introduction to a verified two-branch target-material plan while preserving the existing together schedule and atomic collision retiming.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.09",

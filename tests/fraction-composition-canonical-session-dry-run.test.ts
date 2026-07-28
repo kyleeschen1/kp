@@ -122,6 +122,11 @@ test("canonical planning retains structural motifs and opaque arithmetic synthes
     "synchronized-balanced-introduction"
   );
   assert.equal(
+    transitions[7]?.operationChoreography?.operationPresentationPlan
+      ?.planKind,
+    "synchronized-balanced-introduction"
+  );
+  assert.equal(
     transitions[7]?.operationChoreography?.kind ===
         "synchronized-balanced-introduction"
       ? transitions[7].operationChoreography.branchSchedule.strategy.kind

@@ -34,8 +34,9 @@ import {
   type KpFactorCommonTermMotifBinding
 } from "../../animation/factoring-motif-binding.ts";
 import {
-  type KpEquationOperationChoreography
-} from "../../animation/equation-operation-choreography.ts";
+  compileKpBalancedIntroductionPresentationPlan,
+  type KpRegisteredEquationOperationChoreography
+} from "../../animation/balanced-introduction-presentation-plan.ts";
 import {
   compileKpEquationOperationChoreography
 } from "./equation-operation-choreography-compiler.ts";
@@ -68,7 +69,7 @@ export interface KpReaderEquationTransitionPlan {
   readonly successorSyntheses?:
     readonly KpRegisteredSuccessorSynthesisBinding[] | undefined;
   readonly operationChoreography?:
-    KpEquationOperationChoreography | undefined;
+    KpRegisteredEquationOperationChoreography | undefined;
   readonly semanticStatus: "ready" | "fallback";
   readonly semanticDiagnostics: readonly KpSemanticEquationTransitionCompileDiagnostic[];
 }
@@ -202,12 +203,24 @@ export function projectKpReaderEquationRenderPlan(input: {
         ? binding
         : Object.freeze({ ...binding, operationPresentationPlan });
     });
-    const operationChoreography = compileKpEquationOperationChoreography({
-      animation: input.animation,
-      transformation,
-      motifKind: visualMotif?.kind,
-      direction: input.runtimeFrame.clock.direction
-    });
+    const compiledOperationChoreography =
+      compileKpEquationOperationChoreography({
+        animation: input.animation,
+        transformation,
+        motifKind: visualMotif?.kind,
+        direction: input.runtimeFrame.clock.direction
+      });
+    const operationChoreography =
+      compiledOperationChoreography?.kind ===
+        "synchronized-balanced-introduction"
+        ? Object.freeze({
+            ...compiledOperationChoreography,
+            operationPresentationPlan:
+              compileKpBalancedIntroductionPresentationPlan(
+                compiledOperationChoreography
+              )
+          })
+        : compiledOperationChoreography;
     const relations = compiled.ir.relations.map((relation) =>
       projectRelation(relation, forward)
     );
