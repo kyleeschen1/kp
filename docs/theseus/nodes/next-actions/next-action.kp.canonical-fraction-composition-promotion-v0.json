@@ -20,6 +20,10 @@
     {
       "kind": "file",
       "path": "src/semantic/fraction-solve-macro.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-28-canonical-fraction-composition-human-visual-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -363,11 +367,25 @@
       "scope": "slice s17 production and control-plane closure",
       "checkedAt": "2026-07-28T07:19:25.058Z",
       "notes": "Production build, all 11 reader routes, fixed route budgets, and Theseus workspace validation pass. The bounded diff ratchet reports no core, lifecycle, scheduler, geometry, or runtime-artifact growth."
+    },
+    {
+      "command": "npm run visual:fraction-composition-canonical",
+      "status": "failed",
+      "scope": "slice s18 16-case human visual matrix",
+      "checkedAt": "2026-07-28T07:42:14.617Z",
+      "notes": "All 16 fold-mode viewport DPR cases and 1296 samples completed. Endpoint ownership, opacity, fit, containment, Review capture, and native settlement pass, but the hard gate found 132 occurrences of nine unique unrelated mid-transit contact pairs. The command remains red without a whitelist."
+    },
+    {
+      "command": "npm run test:browser:fraction-composition; npm run typecheck",
+      "status": "passed",
+      "scope": "slice s18 preservation and static closure",
+      "checkedAt": "2026-07-28T07:42:15.514Z",
+      "notes": "All six canonical fraction reader browser checks and every TypeScript project pass. The visual failure is bounded to generic mid-transit clearance, not math, fold truth, accessibility, endpoint settlement, or static authority."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Automated promotion readiness is now proof-carrying and non-forgeable: semantic, motif, ownership, responsive layout, route retirement, accessibility, export, and review-host prerequisites close from concrete artifacts. Human perceptual review remains the only explicit gate."
+    "summary": "HUMAN_CHECKPOINT: the complete Animation Library matrix preserves semantics, native handoff, opacity, responsive layout, and review capture, but nine repeatable unrelated trajectory contacts block visual approval. A bounded generic protected-transit repair is proposed for s19; ported status remains false."
   },
   "expectedLearning": [
     "Whether an accepted renderer-neutral fraction composition trace can reach a canonical learner reader mostly through verified content, motif, fold, layout, descriptor, and product wiring without protected-core growth.",

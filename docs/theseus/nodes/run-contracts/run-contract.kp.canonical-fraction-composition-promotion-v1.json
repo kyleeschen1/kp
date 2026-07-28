@@ -165,7 +165,8 @@
     {
       "id": "s18",
       "title": "human-visual-checkpoint",
-      "status": "planned"
+      "summary": "Completed the 16-case, 1296-frame Animation Library checkpoint and Review capture submission. Nine unique unrelated mid-transit contact pairs reproduce across modes and DPRs, so visual approval is withheld and the stable zero-contact gate remains red pending a generic clearance repair.",
+      "status": "complete"
     },
     {
       "id": "s19",
