@@ -25,6 +25,17 @@ test("fraction composition assembles one canonical 14-state animation asset", ()
   assert.deepEqual(compileKpAnimationAssetSemanticRefs(animation).diagnostics, []);
   assert.equal(animation.metadata?.["canonicalPaintPolicy"], "exclusive-when-active");
   assert.equal(JSON.stringify(animation).includes("whole-equation-fade"), false);
+  assert.deepEqual(animation.presentationProfile?.payload, {
+    kind: "equation-presentation",
+    motion: "semantic-material-v2",
+    nativeHandoff: "crossfade-v1",
+    cancellation: "counter-orbit-v1",
+    zeroWitness: "none",
+    successor: "successor-synthesis-v1",
+    depth: "flat-v1",
+    continuants: "concurrent-v1",
+    branchStrategy: "together"
+  });
 });
 
 test("every adjacent transition reaches semantic material totality in both directions", () => {
@@ -78,17 +89,17 @@ test("canonical planning retains structural motifs and opaque arithmetic synthes
     [
       "copy-fan-out",
       "fraction-factor-split",
-      "simplify-into",
-      "simplify-into",
+      "successor-synthesis",
+      "successor-synthesis",
       "append-after-shift",
       "cancelation",
-      "simplify-into",
+      "successor-synthesis",
       "append-after-shift",
       "cancelation",
-      "simplify-into",
+      "successor-synthesis",
       "append-after-shift",
       "cancelation",
-      "simplify-into"
+      "successor-synthesis"
     ]
   );
   assert.equal(
@@ -96,5 +107,20 @@ test("canonical planning retains structural motifs and opaque arithmetic synthes
       .filter(({ transformType }) => transformType.startsWith("simplifyConstant"))
       .every(({ successorSyntheses }) => successorSyntheses?.length === 1),
     true
+  );
+  assert.equal(
+    transitions[7]?.operationChoreography?.kind,
+    "synchronized-balanced-introduction"
+  );
+  assert.equal(
+    transitions[7]?.operationChoreography?.kind ===
+        "synchronized-balanced-introduction"
+      ? transitions[7].operationChoreography.branchSchedule.strategy.kind
+      : undefined,
+    "together"
+  );
+  assert.equal(
+    transitions[11]?.operationChoreography?.kind,
+    "counter-orbit-cancellation"
   );
 });

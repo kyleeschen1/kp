@@ -250,6 +250,15 @@ test("visual motif module exposes reusable equation motif descriptors", () => {
         ]
       ],
       [
+        "successor-synthesis",
+        ["merge", "shift"],
+        [
+          "gather-contributors",
+          "recognize-successor",
+          "native-settle"
+        ]
+      ],
+      [
         "substitute",
         ["transmit", "exit", "enter"],
         [

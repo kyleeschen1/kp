@@ -135,6 +135,16 @@ export interface KpEquationCollisionTrack {
     readonly end: number;
   } | undefined;
   readonly opacityStepAt?: number | undefined;
+  /**
+   * Generic collision repair may retime a whole semantic operation, but must
+   * never retime one member independently and break simultaneous entry.
+   */
+  readonly timingGroupId?: string | undefined;
+  /**
+   * Deliberate motif contact is not crowding. The protected-transit audit
+   * ignores contact only when both tracks carry the same compiler-owned ID.
+   */
+  readonly intentionalContactGroupId?: string | undefined;
   readonly motionGroupTravel?: number | undefined;
   readonly motionSettlementAspectRatio?: number | undefined;
 }
@@ -1115,6 +1125,19 @@ function scheduleProtectedTransitStructuralOpacity<
       })
   ));
   if (ids.size === 0) return undefined;
+  const timingGroups = new Set([...ids].flatMap((id) => {
+    const groupId = trackById.get(id)?.timingGroupId;
+    return groupId === undefined ? [] : [groupId];
+  }));
+  for (const track of input.tracks) {
+    if (
+      track.timingGroupId !== undefined &&
+      timingGroups.has(track.timingGroupId) &&
+      (track.lifecycle === "introduce" || track.lifecycle === "eliminate")
+    ) {
+      ids.add(track.id);
+    }
+  }
   // Structural paint already owns enter/exit opacity. Moving its existing
   // visibility step outside the occupied interval avoids inventing a path or
   // a new lifecycle merely to clear temporary syntax.
@@ -1159,6 +1182,15 @@ function inspectProtectedTransit<
       for (const right of visible.slice(leftIndex + 1)) {
         inspectedPairCount += 1;
         if (left.componentId === right.componentId) continue;
+        const leftTrack = tracksById.get(left.trackId)!;
+        const rightTrack = tracksById.get(right.trackId)!;
+        if (
+          leftTrack.intentionalContactGroupId !== undefined &&
+          leftTrack.intentionalContactGroupId ===
+            rightTrack.intentionalContactGroupId
+        ) {
+          continue;
+        }
         const overlap = rectIntersection(
           left.expectedPaintRect ?? left.rect,
           right.expectedPaintRect ?? right.rect
@@ -1168,8 +1200,8 @@ function inspectProtectedTransit<
           overlap.height <= kpNativeInkContactTolerancePx
         ) continue;
         const endpointContact = protectedTransitEndpointContact(
-          tracksById.get(left.trackId)!,
-          tracksById.get(right.trackId)!
+          leftTrack,
+          rightTrack
         );
         if (
           endpointContact !== undefined &&

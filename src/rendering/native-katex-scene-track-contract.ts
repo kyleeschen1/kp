@@ -31,6 +31,7 @@ export type KpNativeKatexSceneTrackContract<
   readonly paintKind: PaintKind;
   readonly sizingMode: "rect" | "rule-length";
   readonly sampleProgress?: (progress: number) => number;
+  readonly sampleOpacityProgress?: (progress: number) => number;
 } & KpNativeKatexSceneTrackOpacityContract;
 
 export interface KpNativeKatexSceneTrackFrameContract<

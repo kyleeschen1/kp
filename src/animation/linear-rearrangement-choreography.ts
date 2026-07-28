@@ -379,8 +379,7 @@ function createStep(
   const branchScheduling = createBalancedBranchScheduling({
     animation,
     transformation,
-    kind,
-    causalRecord
+    kind
   });
   return {
     transformationId: transformation.id,
@@ -421,7 +420,6 @@ function createBalancedBranchScheduling(input: {
   readonly animation: KpAnimationAsset;
   readonly transformation: KpSemanticTransformation;
   readonly kind: KpEquationLinearRearrangementKind;
-  readonly causalRecord: SelectorCorrespondenceRecord;
 }): Pick<
   KpLinearRearrangementStep,
   "branchOperation" | "branchSchedules" | "branchSchedule"
@@ -434,7 +432,12 @@ function createBalancedBranchScheduling(input: {
   return createKpBalancedBranchScheduling({
     transformationId: input.transformation.id,
     authorityId: `kp.algebra.${kebabCase(input.transformation.transformType)}`,
-    targetSelectorIds: input.causalRecord.targetSelectorIds,
+    // The schedule owns the complete semantic introduction cohort, not the
+    // incidental first correspondence record.
+    targetSelectorIds:
+      input.transformation.correspondenceMap?.records
+        .filter(({ relation }) => relation === "introduction")
+        .flatMap(({ targetSelectorIds }) => targetSelectorIds) ?? [],
     selectedStrategy: selected
   });
 }
@@ -547,6 +550,9 @@ function lifecycleForStep(
     })
   );
   if (kind === "balanced-introduction") {
+    const introducedEntityIds = transformation.correspondenceMap?.records
+      .filter(({ relation }) => relation === "introduction")
+      .flatMap(({ targetSelectorIds }) => targetSelectorIds) ?? [];
     records.push({
       id: `${transformation.id}.balanced-introduction`,
       kind: "introduction",
@@ -555,7 +561,7 @@ function lifecycleForStep(
         authorityId: `kp.algebra.subtract-both-sides#balanced-inverse`
       },
       sourceEntityIds: [],
-      targetEntityIds: causalRecord.targetSelectorIds,
+      targetEntityIds: introducedEntityIds,
       summary: "Equal inverse terms enter only after both sides reserve space."
     });
   } else if (kind === "divide-both-sides") {

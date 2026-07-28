@@ -55,6 +55,7 @@ export type EquationVisualMotifKind =
   | "relation-flip"
   | "semantic-reorder-and-group"
   | "simplify-into"
+  | "successor-synthesis"
   | "substitute"
   | "wrap"
   | "unwrap";
@@ -81,6 +82,8 @@ export const equationVisualMotifPhaseIds = [
   "radical-native-settle",
   "reflow-signed-terms",
   "establish-groups",
+  "gather-contributors",
+  "recognize-successor",
   "native-settle",
   "unwrap-artifact-exit",
   "wrap-artifact-enter",
@@ -304,6 +307,17 @@ export const equationVisualMotifDescriptors: readonly EquationVisualMotifDescrip
       "final-simplify-reveal"
     ],
     summary: "Source tokens collapse into a newly revealed simplified token."
+  },
+  {
+    kind: "successor-synthesis",
+    motionPrimitiveIds: ["merge", "shift"],
+    phaseIds: [
+      "gather-contributors",
+      "recognize-successor",
+      "native-settle"
+    ],
+    summary:
+      "Opaque operands and their operator gather into one exact successor."
   },
   {
     kind: "substitute",

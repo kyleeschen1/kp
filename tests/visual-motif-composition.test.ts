@@ -329,16 +329,6 @@ test("default equation visual motif rules cover promoted generated transform def
         ["definition.generated.linear-solve.cancel-additive-inverses"]
       ],
       [
-        "simplifyConstantDifference",
-        "simplify-into",
-        ["definition.generated.linear-solve.simplify-constant-difference"]
-      ],
-      [
-        "simplifyConstantSum",
-        "simplify-into",
-        ["definition.generated.linear-solve.simplify-constant-sum"]
-      ],
-      [
         "divideBothSides",
         "append-after-shift",
         ["definition.generated.linear-solve.divide-both-sides"]
@@ -347,11 +337,6 @@ test("default equation visual motif rules cover promoted generated transform def
         "cancelMultiplicativeInverses",
         "cancelation",
         ["definition.generated.linear-solve.cancel-multiplicative-inverses"]
-      ],
-      [
-        "simplifyConstantQuotient",
-        "simplify-into",
-        ["definition.generated.linear-solve.simplify-constant-quotient"]
       ],
       [
         "splitFractionFactors",
@@ -397,6 +382,21 @@ test("default equation visual motif rules cover promoted generated transform def
         "factorCommonTerm",
         "merge-fan-in",
         ["definition.generated.distribution.factor-common-term"]
+      ],
+      [
+        "simplifyConstantQuotient",
+        "successor-synthesis",
+        ["definition.generated.linear-solve.simplify-constant-quotient"]
+      ],
+      [
+        "simplifyConstantDifference",
+        "successor-synthesis",
+        ["definition.generated.linear-solve.simplify-constant-difference"]
+      ],
+      [
+        "simplifyConstantSum",
+        "successor-synthesis",
+        ["definition.generated.linear-solve.simplify-constant-sum"]
       ]
     ]
   );

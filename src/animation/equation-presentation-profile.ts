@@ -141,6 +141,29 @@ export function createKpSemanticMaterialEquationPresentationProfileV1():
   });
 }
 
+/**
+ * Balanced solve exemplars need one indivisible presentation contract:
+ * matched branches enter together and inverse terms counter-orbit. Keeping
+ * these choices in one constructor prevents an asset from selecting the
+ * semantic-material compositor while accidentally inheriting generic timing.
+ */
+export function createKpCanonicalBalancedSolveEquationPresentationProfileV1():
+  KpEquationPresentationProfileV1 {
+  return createKpEquationPresentationProfileV1({
+    payload: {
+      kind: "equation-presentation",
+      motion: "semantic-material-v2",
+      nativeHandoff: "crossfade-v1",
+      cancellation: "counter-orbit-v1",
+      zeroWitness: "none",
+      successor: "successor-synthesis-v1",
+      depth: "flat-v1",
+      continuants: "concurrent-v1",
+      branchStrategy: "together"
+    }
+  });
+}
+
 export function createKpContinuityEquationPresentationProfileV1(
   overrides: Partial<
     Omit<KpEquationPresentationDomainPayload, "kind" | "motion">

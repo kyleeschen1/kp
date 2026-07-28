@@ -32,6 +32,12 @@ import {
   compileKpFactorCommonTermMotifBinding,
   type KpFactorCommonTermMotifBinding
 } from "../../animation/factoring-motif-binding.ts";
+import {
+  type KpEquationOperationChoreography
+} from "../../animation/equation-operation-choreography.ts";
+import {
+  compileKpEquationOperationChoreography
+} from "./equation-operation-choreography-compiler.ts";
 
 export interface KpReaderEquationRenderPlan {
   readonly id: string;
@@ -59,6 +65,8 @@ export interface KpReaderEquationTransitionPlan {
   readonly structuralSuccession?:
     KpEquationStructuralSuccessionIntent | undefined;
   readonly successorSyntheses?: readonly KpSuccessorSynthesisBinding[] | undefined;
+  readonly operationChoreography?:
+    KpEquationOperationChoreography | undefined;
   readonly semanticStatus: "ready" | "fallback";
   readonly semanticDiagnostics: readonly KpSemanticEquationTransitionCompileDiagnostic[];
 }
@@ -177,6 +185,12 @@ export function projectKpReaderEquationRenderPlan(input: {
       animation: input.animation,
       transformation
     });
+    const operationChoreography = compileKpEquationOperationChoreography({
+      animation: input.animation,
+      transformation,
+      motifKind: visualMotif?.kind,
+      direction: input.runtimeFrame.clock.direction
+    });
     const relations = compiled.ir.relations.map((relation) =>
       projectRelation(relation, forward)
     );
@@ -212,6 +226,9 @@ export function projectKpReaderEquationRenderPlan(input: {
       ...(successorSyntheses.length === 0
         ? {}
         : { successorSyntheses }),
+      ...(operationChoreography === undefined
+        ? {}
+        : { operationChoreography }),
       semanticStatus: compiled.status === "semantic" ? "ready" : "fallback",
       semanticDiagnostics: compiled.diagnostics.map((diagnostic) => ({
         ...diagnostic

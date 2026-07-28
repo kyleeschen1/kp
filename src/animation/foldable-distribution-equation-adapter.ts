@@ -12,6 +12,10 @@ import {
   equationVisualMotifDescriptors
 } from "./motifs/visual-motif.ts";
 import {
+  requireKpCanonicalOperationEvaluationPresentation,
+  ruleFromKpResolvedOperationEvaluationPresentation
+} from "./operation-evaluation-presentation-registry.ts";
+import {
   createKpFoldableDistributionEquationAsset
 } from "../semantic/foldable-distribution-equation-asset.ts";
 import {
@@ -118,22 +122,13 @@ export function createKpFoldableDistributionVisualMotifTimeline() {
         ],
         trustedMotifIds: ["persist", "fan-out", "reorder"]
       },
-      {
-        transformationKind: "simplifyConstantProduct",
-        descriptor: {
-          kind: "successor-synthesis",
-          motionPrimitiveIds: ["merge", "shift"],
-          phaseIds: [
-            "gather-contributors",
-            "recognize-successor",
-            "native-settle"
-          ],
-          summary:
-            "Opaque product contributors gather into their exact successor."
-        },
-        canonicalOperationIds: ["kp.core.persist", "kp.core.merge"],
-        trustedMotifIds: ["persist", "merge"]
-      },
+      // Canonical arithmetic callers consume a nominally resolved registry
+      // certificate; a local descriptor cannot accidentally restore fading.
+      ruleFromKpResolvedOperationEvaluationPresentation(
+        requireKpCanonicalOperationEvaluationPresentation(
+          "simplifyConstantProduct"
+        )
+      ),
       {
         transformationKind: "groupLikeTerms",
         descriptor: {

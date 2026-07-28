@@ -5,16 +5,13 @@ import {
   createKpFractionCompositionEvaluationTree
 } from "../semantic/fraction-composition-evaluation-tree.ts";
 import {
-  createKpAnimationAsset
-} from "./asset.ts";
-import {
-  createKpSemanticMaterialEquationPresentationProfileV1
-} from "./equation-presentation-profile.ts";
+  createKpCanonicalBalancedSolveAnimationAsset
+} from "./canonical-balanced-solve-animation.ts";
 
 export function createKpFractionCompositionEquationAnimationAsset() {
   const source = createKpFractionCompositionEquationAsset();
   const tree = createKpFractionCompositionEvaluationTree();
-  return createKpAnimationAsset({
+  return createKpCanonicalBalancedSolveAnimationAsset({
     id: "animation.fraction-composition.two-thirds-solve",
     title: "Distribute and solve with a fraction",
     bundle: source.bundle,
@@ -62,7 +59,6 @@ export function createKpFractionCompositionEquationAnimationAsset() {
       tags: ["animation", "equation", "fraction", "solve", "foldable", "exemplar"],
       sourceRefIds: [source.sourceTraceId]
     },
-    presentationProfile: createKpSemanticMaterialEquationPresentationProfileV1(),
     metadata: {
       sourceTraceId: source.sourceTraceId,
       foldTreeId: tree.root.id,

@@ -104,6 +104,9 @@ export function createKpReaderEquationSceneCompositorSession(input: {
     ...(factoring === undefined
       ? {}
       : { factoring }),
+    ...(renderTransition.operationChoreography === undefined
+      ? {}
+      : { operationChoreography: renderTransition.operationChoreography }),
     ...(renderTransition.visualMotif?.kind === "copy-fan-out"
       ? { copyFanOutRouting: true }
       : {}),
@@ -178,6 +181,15 @@ export function createKpReaderEquationSceneCompositorSession(input: {
   }
   return Object.freeze({
     ...canonical.session,
+    apply(progress: number) {
+      if (renderTransition.operationChoreography === undefined) {
+        delete input.source.stage.dataset["kpNativeKatexOperationChoreography"];
+      } else {
+        input.source.stage.dataset["kpNativeKatexOperationChoreography"] =
+          renderTransition.operationChoreography.kind;
+      }
+      return canonical.session.apply(progress);
+    },
     measurementIdentity
   });
 }

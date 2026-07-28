@@ -77,7 +77,7 @@ export const kpSemanticMotionPromotionRequirements:
   readonly KpSemanticMotionPromotionRequirement[] = [
     requirement("subtractBothSides", "append-after-shift"),
     requirement("cancelAdditiveInverses", "cancelation"),
-    requirement("simplifyConstantDifference", "simplify-into"),
+    requirement("simplifyConstantDifference", "successor-synthesis"),
     requirement("splitFractionFactors", "fraction-factor-split"),
     requirement("mergeFractionCommonFactor", "fraction-common-factor-extract"),
     requirement("simplifyUnitFractionFactor", "fraction-unit-absorb"),

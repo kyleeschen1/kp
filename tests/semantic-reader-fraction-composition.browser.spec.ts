@@ -212,6 +212,49 @@ test("fraction outline, direct seek, and rewind use exact canonical boundaries",
   ).toHaveCount(1);
 });
 
+test("balanced factors enter together and coefficient cancellation counter-orbits", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  await page.goto(route(609, { kpFoldMode: "expanded" }), {
+    waitUntil: "domcontentloaded"
+  });
+  const body = page.locator("body");
+  const stage = page.locator("[data-kp-reader-equation-stage]");
+  const activeSurface = page.locator(
+    "[data-kp-reader-transition-active='true'] [data-kp-reader-fit-surface]"
+  );
+  await expect(body).toHaveAttribute("data-kp-reader-hydrated", "true");
+  await expect(activeSurface).toHaveAttribute(
+    "data-kp-native-katex-operation-choreography",
+    "synchronized-balanced-introduction"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-reader-equation-branch-schedule",
+    /\.together$/
+  );
+  const branchProgress = JSON.parse(
+    await stage.getAttribute("data-kp-reader-equation-branch-progress") ?? "{}"
+  ) as Record<string, number>;
+  expect(branchProgress["lhs"]).toBe(branchProgress["rhs"]);
+
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  await scrubber.evaluate((node, next) => {
+    const input = node as HTMLInputElement;
+    input.value = String(next);
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  }, 868);
+  await expect(body).toHaveAttribute("data-kp-reader-progress", "868");
+  await expect(activeSurface).toHaveAttribute(
+    "data-kp-native-katex-operation-choreography",
+    "counter-orbit-cancellation"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-reader-equation-cancellation-recipe",
+    "counter-orbit-v1"
+  );
+});
+
 test("fraction fold modes preserve accessible truth and inert paint under reduced motion", async ({
   page
 }) => {

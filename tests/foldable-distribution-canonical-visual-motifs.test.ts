@@ -164,7 +164,7 @@ test("parallel motif phases render as one complete source-target cohort", () => 
     [0.05, "copy-fan-out"],
     // Both reviewed arithmetic branches now retain the same executable merge
     // motif; the cohort may preserve it without one branch claiming the other.
-    [0.3, "simplify-into"]
+    [0.3, "successor-synthesis"]
   ] as const) {
     const runtimeFrame = sampleKpAnimationRuntimeFrame({
       animation,

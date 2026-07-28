@@ -189,11 +189,11 @@ test("linear baseline pins causal operation order and persistent equation anchor
       ],
       [
         "simplifyConstantDifference",
-        "simplify-into",
+        "successor-synthesis",
         [
-          "final-simplify-meet",
-          "final-simplify-collapse",
-          "final-simplify-reveal"
+          "gather-contributors",
+          "recognize-successor",
+          "native-settle"
         ]
       ]
     ]

@@ -89,7 +89,10 @@ test("createLinearSolveAnimationAsset adapts x plus 3 equals 7 into AnimationAss
     [
       ["transform.linear-solve.subtract-both-sides-3", "append-after-shift"],
       ["transform.linear-solve.cancel-left-additive-inverse", "cancelation"],
-      ["transform.linear-solve.simplify-right-difference", "simplify-into"]
+      [
+        "transform.linear-solve.simplify-right-difference",
+        "successor-synthesis"
+      ]
     ]
   );
   assert.deepEqual(

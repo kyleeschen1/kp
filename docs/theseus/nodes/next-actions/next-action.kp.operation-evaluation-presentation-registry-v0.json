@@ -2,8 +2,9 @@
   "id": "next-action.kp.operation-evaluation-presentation-registry-v0",
   "kind": "next-action",
   "title": "Centralize typed operation-evaluation presentation",
-  "status": "ready",
+  "status": "resolved",
   "domain": "architecture",
+  "summary": "The canonical operation-evaluation registry and the two approved fraction-composition choreography repairs are implementation- and evidence-complete; review notes remain open only for human visual confirmation.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,9 +36,39 @@
     "npm run check:architecture",
     "npm run test:fraction-composition-architecture"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full repository",
+      "checkedAt": "2026-07-28T17:08:17.479Z",
+      "notes": "2732 tests passed with zero failures."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "typed registry and canonical caller boundaries",
+      "checkedAt": "2026-07-28T17:08:23.438Z",
+      "notes": "The architecture guard requires exact registry pins, nominal resolution certificates, the canonical balanced-solve factory, and forbids local raw successor-synthesis descriptors."
+    },
+    {
+      "command": "npm run visual:fraction-composition-canonical",
+      "status": "passed",
+      "scope": "canonical fraction-composition dense viewport and direct-seek matrix",
+      "checkedAt": "2026-07-28T17:08:27.567Z",
+      "notes": "The stable visual command passed after adding typed synchronized branch entry and counter-orbit cancellation."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production typecheck and bundle",
+      "checkedAt": "2026-07-28T17:08:31.496Z",
+      "notes": "Production build completed; only the existing large-chunk advisory remains."
+    }
+  ],
   "progress": {
-    "state": "partial",
-    "summary": "User approved this as the immediate post-contract change after run-contract.kp.canonical-fraction-composition-promotion-v1 completes slice 20: centralize arithmetic evaluation motif selection behind one typed versioned registry, require nominal resolved-presentation certificates at canonical callers, remove fraction/foldable local successor-synthesis descriptors, retain runtime validation and explicit version pins for extensions, and add architecture guards against raw canonical motif declarations."
+    "state": "complete",
+    "summary": "Centralized arithmetic evaluation presentation in an exact-versioned typed registry with nominal resolution certificates and bounded extensions; migrated canonical callers; added architecture/type gates; and repaired fraction-composition review notes 23 and 24 through typed counter-orbit cancellation and synchronized balanced-side introduction."
   },
   "expectedLearning": [
     "Whether one typed versioned registry can own arithmetic evaluation motif selection without weakening extension packages or renderer boundaries."

@@ -130,11 +130,17 @@ export function createKpEquationLinearRearrangementBinding(input: {
   }
   const selectedBranchStrategy =
     resolveKpEquationPresentationBranchStrategy(animation);
+  const balancedTargetSelectorIds = transformation.correspondenceMap?.records
+    .filter(({ relation }) => relation === "introduction")
+    .flatMap(({ targetSelectorIds }) => targetSelectorIds) ?? [];
   const branchScheduling = kind === "balanced-introduction"
     ? createKpBalancedBranchScheduling({
         transformationId: transformation.id,
         authorityId: `kp.algebra.${kebabCase(transformation.transformType)}`,
-        targetSelectorIds: causalRecord.targetSelectorIds,
+        // Balanced operations commonly author one introduction record per
+        // glyph or term. Scheduling the first record alone silently desynced
+        // otherwise equivalent lhs/rhs branches.
+        targetSelectorIds: balancedTargetSelectorIds,
         selectedStrategy: selectedBranchStrategy
       })
     : undefined;

@@ -116,7 +116,7 @@ test("fraction composition passes the complete Animation Library visual matrix",
           );
           await expect(library).toHaveAttribute(
             "data-canonical-format",
-            "partial"
+            "ported"
           );
           await ready(frame);
           await setFoldMode(frame, foldMode);

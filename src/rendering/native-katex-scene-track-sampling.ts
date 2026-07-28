@@ -63,6 +63,11 @@ export function sampleKpNativeKatexSceneTrackFrames(
         (sceneTrack.endOpacity - sceneTrack.startOpacity) *
         (
           copySample?.[2] ??
+          (
+            sceneTrack.opacityStepAt === undefined
+              ? sceneTrack.sampleOpacityProgress?.(bounded)
+              : undefined
+          ) ??
           sampleKpEquationMotionTrackOpacityProgress(sceneTrack, bounded)
         )
     });

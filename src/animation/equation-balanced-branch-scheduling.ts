@@ -35,8 +35,12 @@ export function createKpBalancedBranchScheduling(input: {
       `Transformation ${input.transformationId} has unknown branch strategy ${String(input.selectedStrategy)}.`
     );
   }
-  const leftEntityIds = input.targetSelectorIds.filter((id) => id.includes(".lhs."));
-  const rightEntityIds = input.targetSelectorIds.filter((id) => id.includes(".rhs."));
+  const leftEntityIds = input.targetSelectorIds.filter((id) =>
+    branchRole(id) === "lhs"
+  );
+  const rightEntityIds = input.targetSelectorIds.filter((id) =>
+    branchRole(id) === "rhs"
+  );
   if (
     leftEntityIds.length === 0 ||
     rightEntityIds.length === 0 ||
@@ -81,6 +85,17 @@ export function createKpBalancedBranchScheduling(input: {
     branchSchedules,
     branchSchedule: branchSchedules[input.selectedStrategy]
   };
+}
+
+function branchRole(entityId: string): "lhs" | "rhs" | undefined {
+  const segments = new Set(entityId.split("."));
+  const lhs = segments.has("lhs") || segments.has("left");
+  const rhs = segments.has("rhs") || segments.has("right");
+  if (lhs === rhs) return undefined;
+  // Both established equation schemas encode a semantic side segment. This
+  // normalizer keeps that role explicit at the scheduling boundary and the
+  // totality check above rejects ambiguous or unclassified generated IDs.
+  return lhs ? "lhs" : "rhs";
 }
 
 function isStrategy(value: unknown): value is KpBalancedBranchPresentationStrategy {

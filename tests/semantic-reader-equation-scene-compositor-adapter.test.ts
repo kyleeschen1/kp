@@ -358,24 +358,41 @@ test("reader correspondence creates only a transient compositor session", () => 
   const xRelation = transition.relations.find(
     ({ recordId }) => recordId === "x-persists"
   )!;
+  assert.equal(
+    transition.operationChoreography?.kind,
+    "counter-orbit-cancellation"
+  );
+  const cancelledEntityIds =
+    transition.operationChoreography?.kind === "counter-orbit-cancellation"
+      ? transition.operationChoreography.semanticEntityIds
+      : [];
   const session = createKpReaderEquationSceneCompositorSession({
     renderPlan,
     materialPlan,
     transitionId: transition.id,
     measurementIdentity,
-    source: scene("source", xRelation.sourceSelectorIds[0]!),
-    target: scene("target", xRelation.targetSelectorIds[0]!)
+    source: fractionScene("source", [
+      xRelation.sourceSelectorIds[0]!,
+      ...cancelledEntityIds
+    ]),
+    target: fractionScene("target", [xRelation.targetSelectorIds[0]!])
   });
 
   assert.equal(session.kind, "native-katex-renderer-session");
   assert.equal(session.lifecycle, "renderer-session");
   assert.deepEqual(session.measurementIdentity, measurementIdentity);
   assert.equal(session.mode, "atom-transit");
-  assert.equal(session.tracks.length, 1);
-  assert.equal(session.tracks[0]?.lifecycle, "persist");
-  assert.equal(session.tracks[0]?.sourceAtomId, "atom.source.x");
-  assert.equal(session.tracks[0]?.targetAtomId, "atom.target.x");
-  assert.equal(session.sample(0.5)[0]?.rect.left, 50);
+  assert.equal(session.tracks.length, 3);
+  const persistent = session.tracks.find(
+    ({ lifecycle }) => lifecycle === "persist"
+  )!;
+  assert.equal(persistent.sourceAtomId, "atom.source.fraction.0");
+  assert.equal(persistent.targetAtomId, "atom.target.fraction.0");
+  assert.equal(
+    session.sample(0.5).find(({ trackId }) => trackId === persistent.id)
+      ?.rect.left,
+    50
+  );
 });
 
 test("durable reader plans and static projections contain no compositor state", () => {

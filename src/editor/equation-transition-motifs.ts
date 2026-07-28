@@ -97,6 +97,8 @@ function sourceMotion(
       return motion(progress === 1 ? 0 : 1, 0, 0, 1, 0);
     case "simplify-into":
       return motion(1 - progress, 0, 0, 1 - 0.12 * progress, 0);
+    case "successor-synthesis":
+      return motion(1 - progress, 0, 0, 1 - 0.12 * progress, 0);
     case "substitute":
       return motion(1 - progress, 0, 0, 1 - 0.08 * progress, 0);
     case "wrap":
@@ -148,6 +150,8 @@ function targetMotion(
     case "semantic-reorder-and-group":
       return motion(progress === 1 ? 1 : 0, 0, 0, 1, 0);
     case "simplify-into":
+      return motion(progress, 0, 0, 0.86 + 0.14 * progress, 0);
+    case "successor-synthesis":
       return motion(progress, 0, 0, 0.86 + 0.14 * progress, 0);
     case "substitute":
       return motion(progress, 0, 0, 0.82 + 0.18 * progress, 0);

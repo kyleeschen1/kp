@@ -20,6 +20,12 @@ import {
   canonicalCompositionForGeneratedTransform
 } from "../../semantic/generated-algebra-canonical-composition.ts";
 import { compileKpExecutableMotifComposition } from "./executable-motif-grammar.ts";
+import {
+  kpCanonicalOperationEvaluationTransformationKinds,
+  requireKpCanonicalOperationEvaluationPresentation,
+  ruleFromKpResolvedOperationEvaluationPresentation,
+  type KpCanonicalOperationEvaluationTransformationKind
+} from "../operation-evaluation-presentation-registry.ts";
 
 export type EquationTransformVisualMotifRule = TransformTreeVisualMotifRule<
   EquationVisualMotifKind,
@@ -31,6 +37,9 @@ export const defaultEquationTransformVisualMotifRules:
   readonly EquationTransformVisualMotifRule[] = [
     ...generatedAlgebraEquationMotifDefaults().map(
       createGeneratedAlgebraEquationMotifRule
+    ),
+    ...kpCanonicalOperationEvaluationTransformationKinds.map(
+      operationEvaluationRule
     ),
     {
       transformationKind: "unwrapFunction",
@@ -77,14 +86,6 @@ export const defaultEquationTransformVisualMotifRules:
       trustedMotifIds: ["persist", "introduce"],
       summary:
         "Persistent equation terms reserve space before matched multipliers enter both sides."
-    },
-    {
-      transformationKind: "simplifyConstantProduct",
-      descriptor: descriptorForEquationMotif("simplify-into"),
-      canonicalOperationIds: ["kp.core.persist", "kp.core.merge"],
-      trustedMotifIds: ["persist", "merge"],
-      summary:
-        "The successor-synthesis owner gathers both factors and their operator into one exact product."
     },
     {
       transformationKind: "normalizeFractionNumerators",
@@ -316,16 +317,6 @@ function generatedAlgebraEquationMotifDefaults():
       summary: "Additive inverse terms meet, collapse, and leave layout room."
     },
     {
-      transformType: "simplifyConstantDifference",
-      motifKind: "simplify-into",
-      summary: "A constant difference collapses into the simplified value."
-    },
-    {
-      transformType: "simplifyConstantSum",
-      motifKind: "simplify-into",
-      summary: "A constant sum collapses into the simplified value."
-    },
-    {
       transformType: "divideBothSides",
       motifKind: "append-after-shift",
       summary: "Persisted equation terms shift before division terms enter."
@@ -334,11 +325,6 @@ function generatedAlgebraEquationMotifDefaults():
       transformType: "cancelMultiplicativeInverses",
       motifKind: "cancelation",
       summary: "Multiplicative inverse terms meet, collapse, and leave layout room."
-    },
-    {
-      transformType: "simplifyConstantQuotient",
-      motifKind: "simplify-into",
-      summary: "A constant quotient collapses into the simplified value."
     },
     {
       transformType: "splitFractionFactors",
@@ -412,6 +398,16 @@ function createGeneratedAlgebraEquationMotifRule(
     trustedMotifIds: composition.steps.map((step) => step.motifId),
     summary: motifDefault.summary
   };
+}
+
+function operationEvaluationRule(
+  transformationKind: KpCanonicalOperationEvaluationTransformationKind
+): EquationTransformVisualMotifRule {
+  // Resolution, not a structurally compatible object literal, is the sole
+  // path from operation semantics to the shared presentation default.
+  return ruleFromKpResolvedOperationEvaluationPresentation(
+    requireKpCanonicalOperationEvaluationPresentation(transformationKind)
+  );
 }
 
 function findGeneratedDefinitionByTransformType(

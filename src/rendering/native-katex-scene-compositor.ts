@@ -46,6 +46,7 @@ import {
 } from "./native-katex-successor-synthesis.ts";
 import type { KpNativeKatexFactoringSceneBinding } from
   "./native-katex-factoring-choreography.ts";
+import { applyKpNativeKatexOperationChoreography, type KpEquationOperationChoreography } from "./native-katex-operation-choreography.ts";
 import {
   sampleKpNativeKatexSceneTrackFrames
 } from "./native-katex-scene-track-sampling.ts";
@@ -1062,7 +1063,6 @@ export function compareKpNativeKatexTypographyHandoffModels(input: {
       source.fontRevision === native.fontRevision &&
       source.clipPath === native.clipPath
   );
-  // Source styling owns the initial clone; target paint handles metric drift.
   const continuous =
     law.status === "continuous" || hasExactLineagePaintFrames;
   const candidates: readonly KpNativeKatexTypographyHandoffCandidate[] = [
@@ -1105,7 +1105,6 @@ export function compareKpNativeKatexTypographyHandoffModels(input: {
   return Object.freeze({
     kind: "native-katex-typography-handoff-comparison",
     lifecycle: "renderer-session",
-    // Target paint plus inverse geometry avoids interpolating font metrics.
     selectedModel: continuous
       ? "target-style-reverse-flip"
       : "native-checkpoint-settlement",
@@ -1209,7 +1208,6 @@ export function sampleKpNativeKatexTypographyStylePlan(
   }
   const bounded = Math.max(0, Math.min(1, progress));
   const eased = smoothstep(bounded);
-  // Mounted target paint avoids a late typography handoff.
   const sceneRectByOwner = sceneFrames === undefined
     ? undefined
     : new Map(sceneFrames.map((frame) => [
@@ -1551,7 +1549,6 @@ export function createKpNativeKatexRendererSession(input: {
     const materialOwns = !sourceOwns && !targetOwns;
     input.sourceRoot.style.opacity = sourceOwns ? "1" : "0";
     input.targetRoot.style.opacity = targetOwns ? "1" : "0";
-    // Endpoint DOM keeps semantics; clones own paint.
     syncKpEquationMaterialLayer({
       stage: input.stage,
       owners: mode === "atom-transit"
@@ -1600,7 +1597,6 @@ export function createKpNativeKatexRendererSession(input: {
   });
 }
 
-/** Prevents local track or handoff policy. */
 export function createKpCanonicalNativeKatexSceneSession(input: {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
@@ -1610,6 +1606,7 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
   readonly successorSyntheses?:
     readonly KpNativeKatexSuccessorSynthesisIntent[] | undefined;
   readonly factoring?: KpNativeKatexFactoringSceneBinding;
+  readonly operationChoreography?: KpEquationOperationChoreography;
   readonly fanInRouting?: boolean;
   readonly copyFanOutRouting?: boolean;
   readonly reorderRouting?: boolean;
@@ -1634,9 +1631,15 @@ export function createKpCanonicalNativeKatexSceneSession(input: {
     target: input.target,
     intents: input.successorSyntheses ?? []
   });
+  const operationTracks = applyKpNativeKatexOperationChoreography({
+    tracks: allTracks,
+    source: input.source,
+    target: input.target,
+    choreography: input.operationChoreography
+  });
   const ownership = partitionKpNativeKatexSuccessorOwnedTracks(
     syntheses,
-    allTracks,
+    operationTracks,
     input.factoring
   );
   const routed = input.reorderRouting === true
@@ -2347,7 +2350,6 @@ function correlationId(observationId: string): string {
   return observationId.replace(/\.(source|material|native)$/, "");
 }
 
-// These metrics are continuous without notation-specific knowledge.
 const kpTransformableTypographyProperties = new Set([
   "font-size",
   "line-height"

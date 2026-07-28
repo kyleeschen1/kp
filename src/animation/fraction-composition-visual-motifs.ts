@@ -8,6 +8,10 @@ import {
 import {
   equationVisualMotifDescriptors
 } from "./motifs/visual-motif.ts";
+import {
+  requireKpCanonicalOperationEvaluationPresentation,
+  ruleFromKpResolvedOperationEvaluationPresentation
+} from "./operation-evaluation-presentation-registry.ts";
 
 export type KpFractionCompositionMotifKind =
   | "append-after-shift"
@@ -74,19 +78,11 @@ function successorRule(
     | "simplifyConstantQuotient"
     | "simplifyConstantDifference"
 ): TransformTreeVisualMotifRule<string, string, string> {
-  return {
-    transformationKind,
-    // This reviewed arithmetic motif keeps every operand and operator in the
-    // merge cohort; it avoids the older source-out/target-in simplify fade.
-    descriptor: {
-      kind: "successor-synthesis",
-      motionPrimitiveIds: ["merge", "shift"],
-      phaseIds: ["gather-contributors", "recognize-successor", "native-settle"],
-      summary: "Opaque operands and their operator gather into one exact successor."
-    },
-    canonicalOperationIds: ["kp.core.persist", "kp.core.merge"],
-    trustedMotifIds: ["persist", "merge"]
-  };
+  // The nominal certificate prevents this exemplar from silently forking the
+  // reviewed arithmetic motif while still letting it compose local operations.
+  return ruleFromKpResolvedOperationEvaluationPresentation(
+    requireKpCanonicalOperationEvaluationPresentation(transformationKind)
+  );
 }
 
 function rule(

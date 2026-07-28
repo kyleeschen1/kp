@@ -205,6 +205,8 @@ test("semantic beat compiler exposes the current equation demo timeline", () => 
       ["radical-native-settle", 41, 50, "ease-in-out"],
       ["reflow-signed-terms", 0, 31, "ease-in-out"],
       ["establish-groups", 31, 45, "ease-in-out"],
+      ["gather-contributors", 0, 30, "ease-in-out"],
+      ["recognize-successor", 30, 45, "ease-in-out"],
       ["native-settle", 45, 50, "ease-in-out"],
       ["unwrap-artifact-exit", 0, 20, "ease-out"],
       ["wrap-artifact-enter", 20, 50, "ease-out"],

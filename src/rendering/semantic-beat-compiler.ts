@@ -192,6 +192,22 @@ export const linearEquationDemoBeatTimeline = compileSemanticBeatTimeline({
       summary: "Grouping structure enters only after the signed terms have cleared one another."
     },
     {
+      id: "gather-contributors",
+      startBeat: 0,
+      endBeat: 30,
+      easing: "ease-in-out",
+      summary:
+        "Every opaque operand and operator converges as one evaluation cohort."
+    },
+    {
+      id: "recognize-successor",
+      startBeat: 30,
+      endBeat: 45,
+      easing: "ease-in-out",
+      summary:
+        "The exact arithmetic successor gains authority only after its full cohort arrives."
+    },
+    {
       id: "native-settle",
       startBeat: 45,
       endBeat: 50,
