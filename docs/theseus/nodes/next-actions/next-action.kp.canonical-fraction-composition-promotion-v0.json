@@ -230,6 +230,62 @@
       "scope": "project-memory",
       "checkedAt": "2026-07-28T06:53:38.959Z",
       "notes": "811-nodes-13508-events-valid"
+    },
+    {
+      "command": "npm-run-test-animation-library-display",
+      "status": "passed",
+      "scope": "s15-library",
+      "checkedAt": "2026-07-28T07:00:24.398Z",
+      "notes": "13-catalog-lazy-host-fail-closed-status-and-placement-tests-pass"
+    },
+    {
+      "command": "npm-run-visual-animation-library-display",
+      "status": "passed",
+      "scope": "s15-browser-review",
+      "checkedAt": "2026-07-28T07:00:25.269Z",
+      "notes": "8-browser-tests-pass-including-one-host-only-phone-review-capture-and-real-inbox"
+    },
+    {
+      "command": "npm-run-test-browser-fraction-composition",
+      "status": "passed",
+      "scope": "s15-reader-preservation",
+      "checkedAt": "2026-07-28T07:00:26.097Z",
+      "notes": "6-fraction-reader-browser-tests-pass"
+    },
+    {
+      "command": "npm-run-build",
+      "status": "passed",
+      "scope": "s15-production",
+      "checkedAt": "2026-07-28T07:00:26.895Z",
+      "notes": "typecheck-and-production-build-pass"
+    },
+    {
+      "command": "npm-run-check-dev-review-production",
+      "status": "passed",
+      "scope": "s15-production-isolation",
+      "checkedAt": "2026-07-28T07:00:27.724Z",
+      "notes": "235-files-contain-none-of-6-review-markers"
+    },
+    {
+      "command": "npm-run-check-reader-production-and-budgets",
+      "status": "passed",
+      "scope": "s15-production",
+      "checkedAt": "2026-07-28T07:00:28.569Z",
+      "notes": "11-routes-close-and-byte-budgets-pass"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "s15-architecture",
+      "checkedAt": "2026-07-28T07:00:29.382Z",
+      "notes": "all-boundary-gates-pass"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "s15-project-memory",
+      "checkedAt": "2026-07-28T07:00:30.181Z",
+      "notes": "811-nodes-13519-events-valid"
     }
   ],
   "progress": {

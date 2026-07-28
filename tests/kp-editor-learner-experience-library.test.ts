@@ -12,6 +12,7 @@ test("learner experience library puts the foldable distribution exemplar first",
 
   assert.deepEqual(experiences.map(({ id }) => id), [
     "foldable-distribution-scroll-lesson",
+    "fraction-composition-scroll-lesson",
     "distribution-area-scroll-lesson",
     "divide-both-sides-scroll-lesson",
     "numerator-split-merge-scroll-lesson",
@@ -32,6 +33,17 @@ test("learner experience library puts the foldable distribution exemplar first",
     animationIds: ["animation.foldable-distribution.collect-like-terms"]
   });
   assert.deepEqual(withoutPresentations(experiences[1]!), {
+    id: "fraction-composition-scroll-lesson",
+    kind: "scroll-lesson",
+    title: "Distribute and solve with a fraction",
+    summary:
+      "Follow two thirds times x plus six through thirteen exact operations, folding or pinning the evaluation detail you want to inspect.",
+    href: "/reader/fraction-composition/",
+    actionLabel: "Review fraction composition",
+    status: "prototype",
+    animationIds: ["animation.fraction-composition.two-thirds-solve"]
+  });
+  assert.deepEqual(withoutPresentations(experiences[2]!), {
     id: "distribution-area-scroll-lesson",
     kind: "scroll-lesson",
     title: "See distribution become area",
@@ -42,7 +54,7 @@ test("learner experience library puts the foldable distribution exemplar first",
     status: "prototype",
     animationIds: ["exemplar.distribution-area.3-times-x-plus-2"]
   });
-  assert.deepEqual(withoutPresentations(experiences[2]!), {
+  assert.deepEqual(withoutPresentations(experiences[3]!), {
     id: "divide-both-sides-scroll-lesson",
     kind: "scroll-lesson",
     title: "Divide both sides",
@@ -53,7 +65,7 @@ test("learner experience library puts the foldable distribution exemplar first",
     status: "exemplar",
     animationIds: ["animation.divide-both-sides.solve-3x-equals-12"]
   });
-  assert.deepEqual(withoutPresentations(experiences[3]!), {
+  assert.deepEqual(withoutPresentations(experiences[4]!), {
     id: "numerator-split-merge-scroll-lesson",
     kind: "scroll-lesson",
     title: "Split and merge a fraction",
@@ -64,7 +76,7 @@ test("learner experience library puts the foldable distribution exemplar first",
     status: "exemplar",
     animationIds: ["animation.numerator-split-merge.round-trip"]
   });
-  assert.deepEqual(withoutPresentations(experiences[4]!), {
+  assert.deepEqual(withoutPresentations(experiences[5]!), {
     id: "fractional-transfer-comparison-scroll-lesson",
     kind: "scroll-lesson",
     title: "Compare equation views",
@@ -78,7 +90,7 @@ test("learner experience library puts the foldable distribution exemplar first",
       "animation.fractional-linear.x-over-2.fluent-projection"
     ]
   });
-  assert.deepEqual(withoutPresentations(experiences[5]!), {
+  assert.deepEqual(withoutPresentations(experiences[6]!), {
     id: "solve-fractional-linear-scroll-lesson",
     kind: "scroll-lesson",
     title: "Solve a fractional equation",
@@ -89,7 +101,7 @@ test("learner experience library puts the foldable distribution exemplar first",
     status: "prototype",
     animationIds: ["animation.fractional-linear.solve-x-over-2"]
   });
-  assert.deepEqual(withoutPresentations(experiences[6]!), {
+  assert.deepEqual(withoutPresentations(experiences[7]!), {
     id: "solve-x-scroll-lesson",
     kind: "scroll-lesson",
     title: "Solve for x",

@@ -40,6 +40,21 @@ const learnerExperienceDefinitions = [
     ]
   },
   {
+    id: "fraction-composition-scroll-lesson",
+    kind: "scroll-lesson",
+    title: "Distribute and solve with a fraction",
+    summary:
+      "Follow two thirds times x plus six through thirteen exact operations, folding or pinning the evaluation detail you want to inspect.",
+    href: "/reader/fraction-composition/",
+    actionLabel: "Review fraction composition",
+    // Visual approval is a separate promotion gate, so discoverability must
+    // not silently turn canonical renderer ownership into exemplar status.
+    status: "prototype",
+    animationPresentations: [
+      lessonAnimation("animation.fraction-composition.two-thirds-solve")
+    ]
+  },
+  {
     id: "distribution-area-scroll-lesson",
     kind: "scroll-lesson",
     title: "See distribution become area",

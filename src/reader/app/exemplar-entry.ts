@@ -954,6 +954,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   syncIndependentZeroWitness(motion.independentZeroWitness);
   progressBar.style.transform = `scaleX(${projection.progressPermille / 1_000})`;
   document.body.dataset["kpReaderProgress"] = String(projection.progressPermille);
+  document.body.dataset["kpReaderCheckpoint"] = projection.checkpointId;
   document.body.dataset["kpReaderVisualProgress"] = String(visualProgressPermille);
   document.body.dataset["kpReaderMotionMode"] = projection.mode;
   stage.dataset["kpReaderEquationEffectiveDepthRecipe"] =

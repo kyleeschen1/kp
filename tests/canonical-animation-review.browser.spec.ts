@@ -22,6 +22,8 @@ const radicalId =
 const splitMergeId = "animation.numerator-split-merge.round-trip";
 const foldableDistributionId =
   "animation.foldable-distribution.collect-like-terms";
+const fractionCompositionId =
+  "animation.fraction-composition.two-thirds-solve";
 
 test.beforeEach(async ({ page }) => {
   await mockReviewInbox(page);
@@ -281,6 +283,87 @@ test("phone review capture records the rendered fold boundary, not the outer win
     .toBeLessThanOrEqual(390);
   expect(request?.capture.render.surface?.shellViewport.width)
     .toBeLessThanOrEqual(390);
+});
+
+test("fraction composition loads alone and review capture records its exact folded checkpoint", async ({
+  page
+}) => {
+  let request: KpDevReviewCreateRequestV2 | undefined;
+  await page.route("**/api/dev/reviews/v2/notes", async (route) => {
+    request = route.request().postDataJSON() as KpDevReviewCreateRequestV2;
+    await route.fulfill({
+      status: 201,
+      contentType: "application/json",
+      body: JSON.stringify({
+        ...request,
+        id: "note.fraction-composition-phone",
+        sequence: 11,
+        status: "new"
+      })
+    });
+  });
+  const documentRequests: string[] = [];
+  page.on("request", (candidate) => {
+    if (candidate.resourceType() === "document") {
+      documentRequests.push(new URL(candidate.url()).pathname);
+    }
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(
+    "/canonical-animation-review.html" +
+    `?animation=${encodeURIComponent(fractionCompositionId)}` +
+    "&viewport=phone"
+  );
+  const library = page.locator("[data-kp-animation-library]");
+  const frame = page.frameLocator("[data-animation-library-frame]");
+  const stage = frame.locator("[data-kp-reader-equation-stage]");
+  await expect(library).toHaveAttribute("data-animation-id", fractionCompositionId);
+  await expect(library).toHaveAttribute("data-canonical-format", "partial");
+  await stage.waitFor();
+  await frame.locator("select[data-kp-reader-fold-mode]")
+    .selectOption("collapsed");
+  await seekReviewFrame(frame, 538);
+
+  const review = page.locator("[data-kp-dev-review-shell]");
+  const launcher = review.locator("button.launcher");
+  await expect(launcher).toBeVisible();
+  const launcherBox = await launcher.boundingBox();
+  expect(launcherBox).not.toBeNull();
+  expect((launcherBox?.x ?? 0) + (launcherBox?.width ?? 0))
+    .toBeLessThanOrEqual(390);
+  expect((launcherBox?.y ?? 0) + (launcherBox?.height ?? 0))
+    .toBeLessThanOrEqual(844);
+  await launcher.click();
+  await review.locator("textarea").fill(
+    "Fraction composition phone checkpoint capture."
+  );
+  await review.locator("button.save").click();
+  await expect(review.locator("output.status")).toHaveText("Saved note 11.");
+
+  expect(request?.capture.semantic.assetId).toBe(fractionCompositionId);
+  expect(request?.capture.semantic.projectionId).toBe(
+    "learner-experience.fraction-composition-scroll-lesson." +
+    fractionCompositionId
+  );
+  expect(request?.capture.semantic.checkpointId).toBe(
+    "beat.fraction-composition.difference-simplified"
+  );
+  expect(request?.capture.semantic.progressPermille).toBe(538);
+  expect(request?.capture.semantic.animationProgressPermille)
+    .toBeGreaterThanOrEqual(0);
+  expect(request?.capture.semantic.phaseProgressPermille)
+    .toBeGreaterThanOrEqual(0);
+  expect(request?.capture.semantic.activePhase).toBeTruthy();
+  expect(request?.capture.semantic.activeTransformationIds.length)
+    .toBeGreaterThan(0);
+  expect(request?.capture.semantic.foldMode).toBe("collapsed");
+  expect(request?.capture.semantic.activeNodeId).toBeTruthy();
+  expect(request?.capture.render.surface?.profile).toBe("phone");
+  expect(request?.capture.render.surface?.contentViewport.width)
+    .toBeLessThanOrEqual(390);
+  expect(
+    documentRequests.filter((path) => path.startsWith("/reader/"))
+  ).toEqual(["/reader/fraction-composition/"]);
 });
 
 test("foldable distribution review matrix stays canonical in one wide or phone host", async ({

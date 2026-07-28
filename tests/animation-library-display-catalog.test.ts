@@ -28,6 +28,9 @@ test("display catalog exposes every Workbench identity plus reader-only animatio
   assert.ok(
     ids.includes("animation.foldable-distribution.collect-like-terms")
   );
+  assert.ok(
+    ids.includes("animation.fraction-composition.two-thirds-solve")
+  );
 });
 
 test("foldable distribution resolves one lazy partial reader host until approval", () => {
@@ -55,6 +58,30 @@ test("foldable distribution resolves one lazy partial reader host until approval
   );
 });
 
+test("fraction composition is discoverable but cannot report ported before review", () => {
+  const entry = createKpAnimationLibraryDisplayCatalog().find(
+    ({ animationId }) =>
+      animationId === "animation.fraction-composition.two-thirds-solve"
+  );
+
+  assert.equal(entry?.availability, "playable");
+  assert.equal(entry?.canonicalFormat, "partial");
+  assert.equal(entry?.featured, false);
+  assert.deepEqual(entry?.representations, [{
+    id:
+      "learner-experience.fraction-composition-scroll-lesson." +
+      "animation.fraction-composition.two-thirds-solve",
+    label: "Distribute and solve with a fraction",
+    kind: "reader",
+    href: "/reader/fraction-composition/",
+    role: "canonical-host"
+  }]);
+  assert.equal(
+    entry?.primaryRepresentationId,
+    entry?.representations[0]?.id
+  );
+});
+
 test("canonical-format status distinguishes complete, partial, and legacy hosts", () => {
   const catalog = createKpAnimationLibraryDisplayCatalog();
   const status = (animationId: string) =>
@@ -63,6 +90,10 @@ test("canonical-format status distinguishes complete, partial, and legacy hosts"
 
   assert.equal(
     status("animation.foldable-distribution.collect-like-terms"),
+    "partial"
+  );
+  assert.equal(
+    status("animation.fraction-composition.two-thirds-solve"),
     "partial"
   );
   assert.equal(

@@ -56,6 +56,9 @@ export function createKpAnimationLibraryCaptureProvider(
           documentVersion: "1",
           assetId: animationId,
           projectionId: representationId,
+          checkpointId:
+            childDocument?.body.dataset["kpReaderCheckpoint"] ??
+            stage?.dataset["kpCheckpoint"],
           progressPermille,
           animationProgressPermille: reviewFrame?.[0],
           phaseProgressPermille: reviewFrame?.[1],
@@ -66,6 +69,9 @@ export function createKpAnimationLibraryCaptureProvider(
           foldDetail: stage?.dataset["kpReaderFoldPhaseDetail"],
           layoutPolicy: stage?.dataset["kpReaderFoldLayoutPolicy"],
           focusRefs: [],
+          motionPreference:
+            childDocument?.body.dataset["kpReaderMotionPreference"],
+          motionMode: childDocument?.body.dataset["kpReaderMotionMode"],
           playbackDirection: readPlaybackDirection(childDocument),
           ...(target === undefined ? {} : { target })
         },
@@ -148,6 +154,11 @@ function readProgressPermille(
 function readPlaybackDirection(
   childDocument: Document | null
 ): "forward" | "rewind" {
+  const readerDirection =
+    childDocument?.body.dataset["kpReaderPlaybackDirection"];
+  if (readerDirection === "rewind") {
+    return "rewind";
+  }
   return childDocument
     ?.querySelector<HTMLElement>("[data-kp-editor-animation-player]")
     ?.dataset["kpEditorAnimationDirection"] === "rewind"

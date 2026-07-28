@@ -96,6 +96,21 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
     }
   ],
   [
+    "animation.fraction-composition.two-thirds-solve",
+    {
+      animationId: "animation.fraction-composition.two-thirds-solve",
+      exclusiveCanonicalPaint: true,
+      requiredMotifParity: true,
+      responsiveRuntimeGates: true,
+      humanReviewApproved: false,
+      compatibilityPaintRetired: true,
+      releaseGatePassed: false,
+      evidenceSourceIds: [
+        "run-contract.kp.canonical-fraction-composition-promotion-v1"
+      ]
+    }
+  ],
+  [
     "animation.linear-solve.solve-x",
     {
       animationId: "animation.linear-solve.solve-x",
