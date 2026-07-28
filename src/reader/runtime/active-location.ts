@@ -8,9 +8,23 @@ export function createKpReaderActiveLocationService(input: {
 }): KpReaderActiveLocationService {
   const links = [...input.toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
   const beatsById = new Map(input.beats.map((beat) => [requiredBeatId(beat), beat]));
+  const linkCounts = new Map<string, number>();
+  for (const link of links) {
+    const href = link.getAttribute("href") ?? "";
+    const linkId = href.startsWith("#") ? decodeURIComponent(href.slice(1)) : "";
+    linkCounts.set(linkId, (linkCounts.get(linkId) ?? 0) + 1);
+  }
+  let currentActiveId: string | undefined;
 
   return {
     sync(activeId: string): void {
+      if (
+        !beatsById.has(activeId) ||
+        linkCounts.get(activeId) !== 1
+      ) {
+        throw new Error(`Reader expected one beat and TOC link for active location ${activeId}.`);
+      }
+      if (currentActiveId === activeId) return;
       let activeLinkCount = 0;
       for (const link of links) {
         const href = link.getAttribute("href") ?? "";
@@ -36,6 +50,7 @@ export function createKpReaderActiveLocationService(input: {
         else beat.removeAttribute("aria-current");
       }
       input.toc.dataset["kpTocActiveId"] = activeId;
+      currentActiveId = activeId;
     }
   };
 }

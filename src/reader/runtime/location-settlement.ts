@@ -18,16 +18,19 @@ export function createKpReaderLocationSettlement(input: {
   if (input.scrollRestoration !== undefined) {
     input.ownerWindow.history.scrollRestoration = input.scrollRestoration;
   }
+  let settledHref = input.ownerWindow.location?.href;
   const currentHref = (): string => String(input.href());
   const updateShare = (): string => {
     const href = currentHref();
-    input.shareLink.href = href;
+    if (input.shareLink.href !== href) input.shareLink.href = href;
     return href;
   };
   const settle = (): boolean => {
     if (disposed || input.canSettle?.() === false) return false;
     const href = updateShare();
+    if (settledHref === href) return true;
     input.ownerWindow.history.replaceState(null, "", href);
+    settledHref = href;
     return true;
   };
 

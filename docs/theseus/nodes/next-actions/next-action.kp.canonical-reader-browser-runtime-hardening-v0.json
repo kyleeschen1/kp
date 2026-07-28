@@ -160,6 +160,20 @@
       "scope": "slice 09 rapid-scroll focus integration",
       "checkedAt": "2026-07-28T21:19:26.550Z",
       "notes": "Rapid sweep passes with zero geometry reads and unchanged canonical session work counters."
+    },
+    {
+      "command": "npm run test:reader-runtime-hardening",
+      "status": "passed",
+      "scope": "slice 10 location and share diff",
+      "checkedAt": "2026-07-28T21:21:38.879Z",
+      "notes": "14 focused tests pass; repeated settled hrefs no longer write history and active location validates before its equality fast path."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll:chromium",
+      "status": "passed",
+      "scope": "slice 10 navigation diff integration",
+      "checkedAt": "2026-07-28T21:21:45.008Z",
+      "notes": "Rapid sweep remains deterministic with zero geometry reads and canonical visual authority."
     }
   ],
   "expectedLearning": [

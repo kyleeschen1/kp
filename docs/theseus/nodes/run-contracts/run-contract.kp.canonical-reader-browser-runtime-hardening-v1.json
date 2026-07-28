@@ -108,7 +108,8 @@
     {
       "id": "slice.kp.reader-hardening.10",
       "title": "Diff-location-and-share-state",
-      "status": "planned"
+      "summary": "Active location and share/history projection now skip unchanged state; history remains settlement-only and URL truth is preserved.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.11",

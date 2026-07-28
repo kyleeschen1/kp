@@ -48,6 +48,8 @@ test("location settlement atomically gates history and share state", () => {
   scheduled[1]();
   assert.deepEqual(replacements, [href]);
   assert.equal(shareLink.href, href);
+  assert.equal(settlement.settle(), true);
+  assert.deepEqual(replacements, [href]);
 
   settlement.schedule(180);
   settlement.dispose();
