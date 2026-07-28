@@ -69,7 +69,8 @@
     {
       "id": "slice.kp.role-plan.03",
       "title": "Define-verified-plan-union",
-      "status": "planned"
+      "summary": "Defined the branded discriminated verified plan union and separate explicit static checkpoint; compile fixtures reject fabrication and invalid variants without entering the public inference cohort.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.04",
