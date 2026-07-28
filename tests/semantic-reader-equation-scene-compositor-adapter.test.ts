@@ -36,6 +36,21 @@ const fakeStyle = (): FakeStyle => ({
   removeProperty: () => "",
   setProperty: () => undefined
 });
+const fakeClassList = () => {
+  const values = new Set<string>();
+  return {
+    add: (value: string) => values.add(value),
+    contains: (value: string) => values.has(value),
+    remove: (value: string) => values.delete(value),
+    toggle: (value: string, force?: boolean) => {
+      if (force === true) values.add(value);
+      else if (force === false) values.delete(value);
+      else if (values.has(value)) values.delete(value);
+      else values.add(value);
+    },
+    [Symbol.iterator]: () => values[Symbol.iterator]()
+  };
+};
 const computedProperties: Readonly<Record<string, string>> = {
   "font-family": "KaTeX_Math",
   "font-size": "16px",
@@ -96,12 +111,7 @@ const ownerDocument = {
           })
         })
       }
-    : {
-        getBoundingClientRect: () => sourceRect,
-        remove: () => undefined,
-        setAttribute: () => undefined,
-        style: fakeStyle()
-      },
+    : owner,
   createRange: () => {
     let selected: { getBoundingClientRect(): typeof sourceRect } | undefined;
     return {
@@ -118,7 +128,8 @@ const ownerDocument = {
 let ownerRectProvider = () => sourceRect;
 const visual = {
   append: () => undefined,
-  classList: { toggle: () => undefined },
+  attributes: [],
+  classList: fakeClassList(),
   childNodes: [{ nodeType: 3, textContent: "x" }],
   children: [],
   closest: () => null,
@@ -135,6 +146,10 @@ const owner = {
   firstElementChild: visual,
   ownerDocument,
   parentElement: undefined as unknown,
+  replaceChildren: (nextVisual: typeof visual) => {
+    owner.firstElementChild = nextVisual;
+  },
+  remove: () => undefined,
   style: ownerStyle,
   getBoundingClientRect: () => ({
     left: Number.parseFloat(
@@ -154,6 +169,7 @@ const owner = {
 };
 ownerRectProvider = owner.getBoundingClientRect;
 const materialLayer = {
+  append: () => undefined,
   querySelectorAll: () => [],
   querySelector: (selector: string) => {
     const ownerId = selector.match(/="([^"]+)"\]/)?.[1] ?? "";
@@ -180,7 +196,8 @@ const sourceRoot = { ownerDocument, style: fakeStyle() } as unknown as HTMLEleme
 const targetRoot = { ownerDocument, style: fakeStyle() } as unknown as HTMLElement;
 const sourceElement = {
   ownerDocument,
-  classList: { contains: () => false },
+  classList: fakeClassList(),
+  cloneNode: () => visual,
   childNodes: [],
   children: [],
   dataset: {},
@@ -191,7 +208,8 @@ const sourceElement = {
 } as unknown as HTMLElement;
 const targetElement = {
   ownerDocument,
-  classList: { contains: () => false },
+  classList: fakeClassList(),
+  cloneNode: () => visual,
   childNodes: [],
   children: [],
   dataset: {},

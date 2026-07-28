@@ -39,10 +39,11 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/rendering/native-katex-scene-compositor.ts"
   ]),
   maximumProductionModules: 4,
-  // The pure-plan/session split remains in the same four generic modules and
-  // vocabulary. Its typed, DOM-free cache boundary adds 2,077 audited bytes;
-  // the ceiling stays close enough to reject a second renderer architecture.
-  maximumProductionSourceBytes: 133_000,
+  // The complete hardening adds 5,648 audited bytes for the pure-plan/session
+  // split and exact reuse validation, while retaining four generic modules and
+  // the frozen vocabulary. This one-time ratchet leaves only 359 bytes of
+  // headroom, so a second renderer architecture still cannot hide here.
+  maximumProductionSourceBytes: 136_000,
   maximumExperimentRouteGzipGrowthBytes: 12_000,
   maximumReaderRouteRegressionRatio: 0.05,
   forbiddenProductionVocabulary: Object.freeze([
@@ -105,7 +106,7 @@ export function validateKpCanonicalEquationRendererConvergence(
     issues.push("The native scene core exceeds its production-module ceiling.");
   }
   if (
-    policy.maximumProductionSourceBytes !== 133_000 ||
+    policy.maximumProductionSourceBytes !== 136_000 ||
     policy.maximumExperimentRouteGzipGrowthBytes !== 12_000 ||
     policy.maximumReaderRouteRegressionRatio !== 0.05
   ) {

@@ -17,8 +17,8 @@ export interface KpReaderCompositorGeometryCacheIdentityInput {
   readonly fontRevision: number;
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly layoutApplicationId: string;
-  readonly viewportWidthPx: number;
-  readonly viewportHeightPx: number;
+  readonly surfaceWidthPx: number;
+  readonly surfaceHeightPx: number;
   readonly devicePixelRatio: number;
   readonly motionMode: "continuous" | "essential" | "checkpoint";
   readonly presentationGeometryRevision: string;
@@ -51,8 +51,8 @@ export function createKpReaderCompositorGeometryCacheIdentity(
     );
   }
   for (const [label, value] of [
-    ["viewport width", input.viewportWidthPx],
-    ["viewport height", input.viewportHeightPx],
+    ["surface width", input.surfaceWidthPx],
+    ["surface height", input.surfaceHeightPx],
     ["device pixel ratio", input.devicePixelRatio]
   ] as const) {
     if (!Number.isFinite(value) || value <= 0) {
@@ -73,8 +73,8 @@ export function createKpReaderCompositorGeometryCacheIdentity(
     input.measurementIdentity.coordinateSpaceId,
     input.measurementIdentity.revision,
     input.layoutApplicationId,
-    input.viewportWidthPx,
-    input.viewportHeightPx,
+    input.surfaceWidthPx,
+    input.surfaceHeightPx,
     input.devicePixelRatio,
     input.motionMode,
     input.presentationGeometryRevision

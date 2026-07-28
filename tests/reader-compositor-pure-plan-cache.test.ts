@@ -16,8 +16,8 @@ const identity = (revision: number) =>
       revision
     },
     layoutApplicationId: "fixture.layout",
-    viewportWidthPx: 800,
-    viewportHeightPx: 600,
+    surfaceWidthPx: 800,
+    surfaceHeightPx: 600,
     devicePixelRatio: 1,
     motionMode: "continuous",
     presentationGeometryRevision: "fixture.presentation"

@@ -1,0 +1,49 @@
+{
+  "id": "priority-change.kp.resume-role-plan-after-reader-hardening-v0",
+  "kind": "priority-change",
+  "title": "Resume role-complete operation presentation plans",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The approved 20-slice canonical-reader browser/runtime hardening detour is complete with all promotion criteria passing. Restore the preserved role-complete operation-presentation run exactly at its slice-14 checkpoint; do not skip its human review boundary or generalize cache/prewarm beyond the approved fraction exemplar.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The approved 20-slice canonical-reader browser/runtime hardening detour is complete with all promotion criteria passing. Restore the preserved role-complete operation-presentation run exactly at its slice-14 checkpoint; do not skip its human review boundary or generalize cache/prewarm beyond the approved fraction exemplar.",
+      "occurredAt": "2026-07-28T22:42:48.170Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v10"
+    ],
+    "preferred": [
+      "run-contract.kp.role-complete-operation-presentation-plans-v2"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v10",
+    "run-contract.kp.role-complete-operation-presentation-plans-v2"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v10",
+    "rationale": "The approved 20-slice canonical-reader browser/runtime hardening detour is complete with all promotion criteria passing. Restore the preserved role-complete operation-presentation run exactly at its slice-14 checkpoint; do not skip its human review boundary or generalize cache/prewarm beyond the approved fraction exemplar.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.role-complete-operation-presentation-plans-v2"
+    ],
+    "changes": [
+      {
+        "subject": "canonical-reader-browser-runtime-hardening",
+        "to": "done"
+      },
+      {
+        "subject": "role-complete-operation-presentation",
+        "to": "now"
+      }
+    ],
+    "effectiveAt": "2026-07-28T22:42:48.170Z",
+    "requestedBy": "user"
+  }
+}

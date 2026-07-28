@@ -66,7 +66,9 @@ export function syncKpEquationMaterialLayer(input: {
   for (const frame of input.owners) {
     let owner = state.owners.get(frame.ownerId);
     if (owner === undefined) {
-      owner = document.createElement("span");
+      // The stage document is the authority because reader surfaces may live
+      // in an iframe or a headless document with no matching global document.
+      owner = input.stage.ownerDocument.createElement("span");
       owner.className = "editor-equation-stage__material-owner";
       owner.dataset["kpEquationMaterialOwnerId"] = frame.ownerId;
       makeKpMaterialOwnerInert(owner);

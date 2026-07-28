@@ -109,8 +109,8 @@ export function createKpReaderCanonicalEquationSession(input: {
     measurementIdentity: frame.measurementIdentity,
     layoutApplicationId:
       frame.appliedStageLayout?.applicationId ?? "native",
-    viewportWidthPx: frame.fitSurface.offsetWidth,
-    viewportHeightPx: frame.fitSurface.offsetHeight,
+    surfaceWidthPx: frame.fitSurface.offsetWidth,
+    surfaceHeightPx: frame.fitSurface.offsetHeight,
     devicePixelRatio:
       frame.fitSurface.ownerDocument.defaultView?.devicePixelRatio ?? 1,
     motionMode: frame.motionMode,

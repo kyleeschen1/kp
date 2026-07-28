@@ -2,8 +2,9 @@
   "id": "run-contract.kp.canonical-reader-browser-runtime-hardening-v1",
   "kind": "run-contract",
   "title": "Canonical reader browser and runtime hardening",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -168,7 +169,8 @@
     {
       "id": "slice.kp.reader-hardening.20",
       "title": "Close-hardening-and-restore-predecessor",
-      "status": "planned"
+      "summary": "Release gate passes after repairing final integration regressions: stage-surface cache identity remains notation-neutral, material owners use the stage document, headless lifecycle tests match retained ownership, and the audited four-module source ceiling is ratcheted to the exact hardening delta. Type, architecture, inference, 2,772 unit/integration tests, build, three-browser performance/paint, WebKit resource, and workspace gates pass.",
+      "status": "complete"
     }
   ]
 }

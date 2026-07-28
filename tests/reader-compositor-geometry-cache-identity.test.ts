@@ -15,8 +15,8 @@ const baseline: KpReaderCompositorGeometryCacheIdentityInput = {
     revision: 3
   },
   layoutApplicationId: "layout.two-row.3",
-  viewportWidthPx: 390,
-  viewportHeightPx: 844,
+  surfaceWidthPx: 390,
+  surfaceHeightPx: 844,
   devicePixelRatio: 2,
   motionMode: "continuous",
   presentationGeometryRevision: "presentation.standard.1"
@@ -31,8 +31,8 @@ if (false) {
     fontRevision: 1,
     measurementIdentity: baseline.measurementIdentity,
     layoutApplicationId: "fixture.layout",
-    viewportWidthPx: 800,
-    viewportHeightPx: 600,
+    surfaceWidthPx: 800,
+    surfaceHeightPx: 600,
     motionMode: "continuous",
     presentationGeometryRevision: "fixture.presentation"
   });
@@ -61,8 +61,8 @@ test("every geometry authority invalidates the compositor cache identity", () =>
       }
     },
     { ...baseline, layoutApplicationId: "layout.single-row.3" },
-    { ...baseline, viewportWidthPx: 391 },
-    { ...baseline, viewportHeightPx: 845 },
+    { ...baseline, surfaceWidthPx: 391 },
+    { ...baseline, surfaceHeightPx: 845 },
     { ...baseline, devicePixelRatio: 1 },
     { ...baseline, motionMode: "essential" },
     {
@@ -93,9 +93,9 @@ test("invalid geometry authority cannot produce a cache identity", () => {
   assert.throws(
     () => createKpReaderCompositorGeometryCacheIdentity({
       ...baseline,
-      viewportWidthPx: 0
+      surfaceWidthPx: 0
     }),
-    /positive viewport width/
+    /positive surface width/
   );
   assert.throws(
     () => createKpReaderCompositorGeometryCacheIdentity({
