@@ -310,21 +310,45 @@ export function applyKpReaderEquationResponsiveFit(
   surface: HTMLElement,
   fit: KpReaderEquationResponsiveFitPlan
 ): void {
-  surface.dataset["kpReaderEquationFitStatus"] = fit.status;
-  surface.dataset["kpReaderEquationFitGeometrySource"] = fit.geometrySource;
-  surface.dataset["kpReaderEquationWrapAllowed"] = "false";
-  surface.dataset["kpReaderEquationFitScale"] = String(fit.scale);
-  surface.dataset["kpReaderEquationFitBounds"] = JSON.stringify(
-    fit.contentBounds
+  setDataset(surface, "kpReaderEquationFitStatus", fit.status);
+  setDataset(
+    surface,
+    "kpReaderEquationFitGeometrySource",
+    fit.geometrySource
   );
-  surface.dataset["kpReaderEquationFitCenteringBounds"] = JSON.stringify(
-    fit.centeringBounds
+  setDataset(surface, "kpReaderEquationWrapAllowed", "false");
+  setDataset(surface, "kpReaderEquationFitScale", String(fit.scale));
+  setDataset(
+    surface,
+    "kpReaderEquationFitBounds",
+    JSON.stringify(fit.contentBounds)
   );
-  surface.style.transformOrigin = "0 0";
-  surface.style.transform =
+  setDataset(
+    surface,
+    "kpReaderEquationFitCenteringBounds",
+    JSON.stringify(fit.centeringBounds)
+  );
+  setStyle(surface.style, "transformOrigin", "0 0");
+  setStyle(surface.style, "transform",
     `translate3d(${fit.translateX}px, ${fit.translateY}px, 0) ` +
-    `scale(${fit.scale})`;
-  surface.style.whiteSpace = "nowrap";
+    `scale(${fit.scale})`);
+  setStyle(surface.style, "whiteSpace", "nowrap");
+}
+
+function setDataset(
+  element: HTMLElement,
+  key: string,
+  value: string
+): void {
+  if (element.dataset[key] !== value) element.dataset[key] = value;
+}
+
+function setStyle(
+  style: CSSStyleDeclaration,
+  key: "transformOrigin" | "transform" | "whiteSpace",
+  value: string
+): void {
+  if (style[key] !== value) style[key] = value;
 }
 
 export function checkKpReaderEquationMotionConformance(input: {

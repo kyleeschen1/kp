@@ -114,7 +114,8 @@
     {
       "id": "slice.kp.reader-hardening.11",
       "title": "Diff-reader-presentation-state",
-      "status": "planned"
+      "summary": "Active transition, accessible equation, responsive fit, and core review datasets now diff before mutation while preserving endpoint and evidence truth.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.12",

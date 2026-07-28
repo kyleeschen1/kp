@@ -894,8 +894,14 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
 
   for (const candidate of layout.contexts.values()) {
     const active = candidate.id === transitionId;
-    candidate.element.hidden = !active;
-    candidate.element.dataset["kpReaderTransitionActive"] = String(active);
+    if (candidate.element.hidden === active) {
+      candidate.element.hidden = !active;
+    }
+    setDatasetIfChanged(
+      candidate.element,
+      "kpReaderTransitionActive",
+      String(active)
+    );
   }
   applyKpReaderEquationResponsiveFit(materialFitSurface, context.fit);
   const canonicalEquationSessionApplied = readerCanonicalEquationSession?.apply({
@@ -968,22 +974,53 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     projection.mode !== "essential"
   );
   syncIndependentZeroWitness(motion.independentZeroWitness);
-  progressBar.style.transform = `scaleX(${projection.progressPermille / 1_000})`;
-  document.body.dataset["kpReaderProgress"] = String(projection.progressPermille);
-  document.body.dataset["kpReaderCheckpoint"] = projection.checkpointId;
-  document.body.dataset["kpReaderVisualProgress"] = String(visualProgressPermille);
-  document.body.dataset["kpReaderMotionMode"] = projection.mode;
-  stage.dataset["kpReaderEquationEffectiveDepthRecipe"] =
-    projection.mode === "continuous" ? presentationProfile.depth : "flat-v1";
-  document.body.dataset["kpReaderMotionPreference"] = motionPreference;
-  document.body.dataset["kpReaderPlaybackDirection"] = sample.direction;
-  stage.dataset["kpReaderMotionAuthority"] = motion.samplingAuthority;
-  stage.dataset["kpReaderCanonicalEquationSessionActive"] = String(
-    canonicalEquationSessionApplied
+  setStyleIfChanged(
+    progressBar.style,
+    "transform",
+    `scaleX(${projection.progressPermille / 1_000})`
   );
-  document.body.dataset["kpReaderTransition"] = transitionId;
-  document.body.dataset["kpReaderFramePlans"] = String(
-    rendererInspection().framePlanCount + 1
+  setDatasetIfChanged(
+    document.body,
+    "kpReaderProgress",
+    String(projection.progressPermille)
+  );
+  setDatasetIfChanged(
+    document.body,
+    "kpReaderCheckpoint",
+    projection.checkpointId
+  );
+  setDatasetIfChanged(
+    document.body,
+    "kpReaderVisualProgress",
+    String(visualProgressPermille)
+  );
+  setDatasetIfChanged(document.body, "kpReaderMotionMode", projection.mode);
+  setDatasetIfChanged(
+    stage,
+    "kpReaderEquationEffectiveDepthRecipe",
+    projection.mode === "continuous" ? presentationProfile.depth : "flat-v1"
+  );
+  setDatasetIfChanged(
+    document.body,
+    "kpReaderMotionPreference",
+    motionPreference
+  );
+  setDatasetIfChanged(
+    document.body,
+    "kpReaderPlaybackDirection",
+    sample.direction
+  );
+  setDatasetIfChanged(stage, "kpReaderMotionAuthority", motion.samplingAuthority);
+  setDatasetIfChanged(
+    stage,
+    "kpReaderCanonicalEquationSessionActive",
+    String(canonicalEquationSessionApplied)
+  );
+  setDatasetIfChanged(document.body, "kpReaderTransition", transitionId);
+  setDatasetIfChanged(
+    document.body,
+    "kpReaderFramePlans",
+    String(rendererInspection().framePlanCount + 1)
   );
   if (import.meta.env.DEV) {
     const atMs = performance.now();
@@ -1028,13 +1065,17 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
 
 function syncAccessibleEquation(objectId: string | undefined): void {
   if (objectId === undefined) return;
+  if (stage.dataset["kpReaderAccessibleEquationState"] === objectId) return;
   for (const [candidateId, element] of accessibleEquationStates) {
     const active = candidateId === objectId;
-    element.hidden = !active;
-    if (active) element.setAttribute("aria-current", "step");
-    else element.removeAttribute("aria-current");
+    if (element.hidden === active) element.hidden = !active;
+    if (active && element.getAttribute("aria-current") !== "step") {
+      element.setAttribute("aria-current", "step");
+    } else if (!active && element.hasAttribute("aria-current")) {
+      element.removeAttribute("aria-current");
+    }
   }
-  stage.dataset["kpReaderAccessibleEquationState"] = objectId;
+  setDatasetIfChanged(stage, "kpReaderAccessibleEquationState", objectId);
 }
 
 function syncNativeEndpointEvidence(
@@ -1556,6 +1597,22 @@ function requireDescendant<T extends Element>(root: Element, selector: string): 
   const element = root.querySelector<T>(selector);
   if (element === null) throw new Error(`Expected ${selector}.`);
   return element;
+}
+
+function setDatasetIfChanged(
+  element: HTMLElement,
+  key: string,
+  value: string
+): void {
+  if (element.dataset[key] !== value) element.dataset[key] = value;
+}
+
+function setStyleIfChanged(
+  style: CSSStyleDeclaration,
+  key: "transform",
+  value: string
+): void {
+  if (style[key] !== value) style[key] = value;
 }
 
 function dispose(): void {
