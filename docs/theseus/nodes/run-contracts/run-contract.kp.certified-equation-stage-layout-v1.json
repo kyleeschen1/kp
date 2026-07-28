@@ -185,7 +185,8 @@
     {
       "id": "s22",
       "title": "Typed factoring motif cohort",
-      "status": "planned"
+      "summary": "Factor-common-x now compiles to one proof-carrying motif cohort before track construction: exact contributors and common factor come from one verified lineage, every other selector persists one-to-one, fusion is statically opaque and simultaneous, coefficient evaluation is deferred, and forged bindings fail closed.",
+      "status": "complete"
     },
     {
       "id": "s23",

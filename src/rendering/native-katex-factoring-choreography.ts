@@ -24,15 +24,14 @@ import type {
 import {
   type KpNativeKatexSceneTrack
 } from "./native-katex-scene-compositor.ts";
+import type {
+  KpFactorCommonTermMotifBinding
+} from "../animation/factoring-motif-binding.ts";
 
 export const kpMaximumFactoringExcursionInLocalInkHeights = 3.75;
 
-export interface KpNativeKatexFactoringChoreographyIntent {
-  readonly id: string;
-  readonly direction: "forward" | "rewind";
-  readonly factorCopyIds: readonly string[];
-  readonly commonFactorId: string;
-}
+export type KpNativeKatexFactoringChoreographyIntent =
+  KpFactorCommonTermMotifBinding;
 
 interface KpNativeKatexFactoringAtomGeometry {
   readonly atom: KpNativeKatexPaintAtomObservation;

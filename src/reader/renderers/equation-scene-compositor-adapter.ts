@@ -18,8 +18,7 @@ import {
   auditKpNativeKatexChoreographyFidelity
 } from "../../rendering/native-katex-choreography-fidelity.ts";
 import {
-  bindKpNativeKatexFactoringScene,
-  type KpNativeKatexFactoringChoreographyIntent
+  bindKpNativeKatexFactoringScene
 } from "../../rendering/native-katex-factoring-choreography.ts";
 import {
   assertKpEquationStageMeasurementIdentity,
@@ -32,6 +31,9 @@ import type {
 import type {
   KpEquationMotionStageOccupancy
 } from "../../rendering/equation-motion-path-planner.ts";
+import {
+  assertKpFactorCommonTermMotifBinding
+} from "../../animation/factoring-motif-binding.ts";
 
 export interface KpReaderEquationMeasuredRendererSession
   extends KpNativeKatexRendererSession {
@@ -60,9 +62,16 @@ export function createKpReaderEquationSceneCompositorSession(input: {
     renderTransition,
     materialTransition
   });
-  const factoringChoreography = projectFactoringChoreography({
-    renderTransition,
-    direction: input.renderPlan.direction
+  const factoringChoreography = assertKpFactorCommonTermMotifBinding({
+    transitionId: renderTransition.id,
+    transformType: renderTransition.transformType,
+    motifKind: renderTransition.visualMotif?.kind,
+    direction: input.renderPlan.direction,
+    semanticStatus: renderTransition.semanticStatus,
+    successorSynthesisCount:
+      renderTransition.successorSyntheses?.length ?? 0,
+    relations: renderTransition.relations,
+    binding: renderTransition.factoringMotifBinding
   });
   const factoring = factoringChoreography === undefined
     ? undefined
@@ -192,46 +201,6 @@ function projectStageOccupancy(
       ...layout.protectedTransitCorridor.rect
     }),
     geometryAuthority: "certified-stage-layout" as const
-  });
-}
-
-function projectFactoringChoreography(input: {
-  readonly renderTransition: KpReaderEquationTransitionPlan;
-  readonly direction: KpReaderEquationRenderPlan["direction"];
-}): KpNativeKatexFactoringChoreographyIntent | undefined {
-  if (
-    input.renderTransition.transformType !== "factorCommonTerm" ||
-    input.renderTransition.visualMotif?.kind !== "merge-fan-in"
-  ) {
-    return undefined;
-  }
-  const factorRelation = input.renderTransition.relations.find((relation) =>
-    input.direction === "forward"
-      ? relation.lifecycle === "merge" &&
-        relation.sourceSelectorIds.length >= 2 &&
-        relation.targetSelectorIds.length === 1
-      : relation.lifecycle === "split" &&
-        relation.sourceSelectorIds.length === 1 &&
-        relation.targetSelectorIds.length >= 2
-  );
-  if (factorRelation === undefined) {
-    throw new Error(
-      `Factoring transition ${input.renderTransition.id} lacks one typed ` +
-      "many-to-one factor lineage."
-    );
-  }
-  return Object.freeze({
-    id: `${input.renderTransition.id}.factoring-choreography`,
-    direction: input.direction,
-    factorCopyIds: Object.freeze([
-      ...(input.direction === "forward"
-        ? factorRelation.sourceSelectorIds
-        : factorRelation.targetSelectorIds)
-    ]),
-    commonFactorId:
-      (input.direction === "forward"
-        ? factorRelation.targetSelectorIds
-        : factorRelation.sourceSelectorIds)[0]!
   });
 }
 

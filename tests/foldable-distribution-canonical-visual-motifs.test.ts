@@ -115,6 +115,49 @@ test("reader execution retains the signed-term reorder motif", () => {
   );
 });
 
+test("factoring binds the exact x lineage and preserves all other context", () => {
+  const animation = createKpFoldableDistributionEquationAnimationAsset();
+  for (const [direction, progress] of [
+    ["forward", 0.7],
+    ["rewind", 0.3]
+  ] as const) {
+    const runtimeFrame = sampleKpAnimationRuntimeFrame({
+      animation,
+      direction,
+      progress
+    });
+    const transition = projectKpReaderEquationRenderPlan({
+      animation,
+      runtimeFrame
+    }).transitions[0]!;
+    const binding = transition.factoringMotifBinding!;
+    const relation = transition.relations.find(
+      ({ recordId }) => recordId === binding.relationRecordId
+    )!;
+
+    assert.equal(transition.transformType, "factorCommonTerm");
+    assert.equal(binding.synchronization, "simultaneous");
+    assert.equal(binding.fusionPaintPolicy, "opaque-many-to-one");
+    assert.equal(binding.coefficientEvaluation, "deferred");
+    assert.deepEqual(
+      binding.factorCopyIds,
+      direction === "forward"
+        ? relation.sourceSelectorIds
+        : relation.targetSelectorIds
+    );
+    assert.equal(
+      binding.commonFactorId,
+      (direction === "forward"
+        ? relation.targetSelectorIds
+        : relation.sourceSelectorIds)[0]
+    );
+    assert.equal(
+      binding.contextCorrespondences.length,
+      transition.relations.length - 1
+    );
+  }
+});
+
 test("parallel motif phases render as one complete source-target cohort", () => {
   const animation = createKpFoldableDistributionEquationAnimationAsset();
   for (const [progress, motifKind] of [

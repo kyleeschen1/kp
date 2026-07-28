@@ -528,11 +528,25 @@
       "scope": "slice s21 compound scene type closure",
       "checkedAt": "2026-07-28T00:16:08.724Z",
       "notes": "All 5 compound scene tests pass after removing the now-unrepresentable runtime unsupported-track case; order, completeness, boundaries, direct seek, reverse, and drill-down remain exact."
+    },
+    {
+      "command": "npm run check:inference; npm run typecheck",
+      "status": "passed",
+      "scope": "slice s22 factoring motif type closure",
+      "checkedAt": "2026-07-28T00:27:29.876Z",
+      "notes": "The negative fixture rejects fading, staggered, eager-evaluation, and one-contributor factoring bindings. All TypeScript projects pass; inference stays below ceilings at types 39297, instantiations 48402, check 1.92s."
+    },
+    {
+      "command": "npm run test:foldable-distribution; npm run test:canonical-animation-construction",
+      "status": "passed",
+      "scope": "slice s22 factoring motif compiler and exemplar closure",
+      "checkedAt": "2026-07-28T00:27:36.150Z",
+      "notes": "All 99 foldable tests and 60 canonical construction tests pass. Forward and rewind bind the exact certified x contributor tuple and one common factor; every other selector remains one-to-one, coefficient evaluation has no successor, and detached or forged bindings fail at the adapter trust boundary."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Canonical scene tracks now carry a discriminated opacity contract: persist, split, and merge are statically 1-to-1 and cannot own opacity steps; introduce is 0-to-1; eliminate is 1-to-0; unsupported reconciliation has no track representation. The sole constructor derives the literals and the session validates untyped inputs, without a repository-wide lifecycle migration."
+    "summary": "Factor-common-term now crosses a typed motif boundary before rendering: exactly one certified fan-in or reversed split names every x contributor and the common factor, all context is proven one-to-one, opacity is opaque, synchronization is simultaneous, coefficient evaluation is deferred, and the adapter rejects detached proof."
   },
   "expectedLearning": [
     "Whether proof-carrying stage layout plus measured occupancy is sufficient to eliminate crowding without operation specific motion geometry."

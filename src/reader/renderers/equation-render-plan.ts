@@ -28,6 +28,10 @@ import type {
 import {
   createKpEquationSuccessorSynthesisBindings
 } from "../../rendering/equation-linear-rearrangement-bindings.ts";
+import {
+  compileKpFactorCommonTermMotifBinding,
+  type KpFactorCommonTermMotifBinding
+} from "../../animation/factoring-motif-binding.ts";
 
 export interface KpReaderEquationRenderPlan {
   readonly id: string;
@@ -50,6 +54,8 @@ export interface KpReaderEquationTransitionPlan {
   readonly target: readonly KpReaderEquationStatePlan[];
   readonly relations: readonly KpReaderEquationRelationPlan[];
   readonly visualMotif?: KpEquationVisualMotifIntent | undefined;
+  readonly factoringMotifBinding?:
+    KpFactorCommonTermMotifBinding | undefined;
   readonly structuralSuccession?:
     KpEquationStructuralSuccessionIntent | undefined;
   readonly successorSyntheses?: readonly KpSuccessorSynthesisBinding[] | undefined;
@@ -171,6 +177,18 @@ export function projectKpReaderEquationRenderPlan(input: {
       animation: input.animation,
       transformation
     });
+    const relations = compiled.ir.relations.map((relation) =>
+      projectRelation(relation, forward)
+    );
+    const factoringMotifBinding = compileKpFactorCommonTermMotifBinding({
+      transitionId: transformation.id,
+      transformType: transformation.transformType,
+      motifKind: visualMotif?.kind,
+      direction: input.runtimeFrame.clock.direction,
+      semanticStatus: compiled.status === "semantic" ? "ready" : "fallback",
+      successorSynthesisCount: successorSyntheses.length,
+      relations
+    });
     transitions.push({
       id: transformation.id,
       title: transformation.title,
@@ -183,10 +201,11 @@ export function projectKpReaderEquationRenderPlan(input: {
         forward ? compiled.ir.target : compiled.ir.source,
         input.runtimeFrame.focusSelectorIds
       ),
-      relations: compiled.ir.relations.map((relation) =>
-        projectRelation(relation, forward)
-      ),
+      relations,
       ...(visualMotif === undefined ? {} : { visualMotif }),
+      ...(factoringMotifBinding === undefined
+        ? {}
+        : { factoringMotifBinding }),
       ...(structuralSuccession === undefined
         ? {}
         : { structuralSuccession }),
