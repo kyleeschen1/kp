@@ -8,6 +8,11 @@ export {
   type KpReaderCompositorGeometryCacheIdentityInput
 } from "./equation-compositor-geometry-cache-identity.ts";
 export {
+  createKpReaderLatestSessionHandoff,
+  type KpReaderLatestSessionHandoff,
+  type KpReaderSessionHandoffToken
+} from "./latest-session-handoff.ts";
+export {
   createKpReaderIdlePrewarmQueue,
   type KpReaderIdleDeadline,
   type KpReaderIdlePrewarmClock,

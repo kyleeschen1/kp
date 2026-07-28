@@ -22,6 +22,7 @@ import {
   createKpReaderCompositorGeometryCacheIdentity,
   createKpReaderCompositorPurePlanCache,
   createKpReaderIdlePrewarmQueue,
+  createKpReaderLatestSessionHandoff,
   recordKpReaderAdjacentPrewarmCompilation,
   recordKpReaderCanonicalSessionApply,
   recordKpReaderCanonicalSessionBuild,
@@ -82,6 +83,7 @@ export function createKpReaderCanonicalEquationSession(input: {
   const purePlanCache = createKpReaderCompositorPurePlanCache<
     ReturnType<KpReaderEquationPureScenePlanCompiler>
   >();
+  const sessionHandoff = createKpReaderLatestSessionHandoff();
   let prewarmQueue: KpReaderIdlePrewarmQueue | undefined;
   const releaseCurrentSession = (
     preserveStructuralSuccession = false
@@ -212,6 +214,7 @@ export function createKpReaderCanonicalEquationSession(input: {
         );
       }
       if (session === undefined || sessionKey !== nextKey) {
+        const handoffToken = sessionHandoff.issue();
         const ownerWindow = frame.fitSurface.ownerDocument.defaultView;
         const buildStartedAt = ownerWindow?.performance.now() ?? Date.now();
         // Focus-only presentation revisions rebuild their typography plan but
@@ -236,10 +239,18 @@ export function createKpReaderCanonicalEquationSession(input: {
           // the mounted session may attach current DOM but cannot recertify.
           recordKpReaderProtectedTransitCertificateReuse(ownerWindow);
         }
-        session = input.createSession({ ...sceneInput, purePlan });
-        sessionKey = nextKey;
-        structuralSessionKey = nextStructuralSessionKey;
-        structuralFitSurface = frame.fitSurface;
+        const candidateSession =
+          input.createSession({ ...sceneInput, purePlan });
+        const committed = sessionHandoff.commit(handoffToken, () => {
+          session = candidateSession;
+          sessionKey = nextKey;
+          structuralSessionKey = nextStructuralSessionKey;
+          structuralFitSurface = frame.fitSurface;
+        });
+        if (!committed) {
+          candidateSession.dispose();
+          return false;
+        }
         if (ownerWindow !== null) {
           recordKpReaderCanonicalSessionBuild(
             ownerWindow,
@@ -252,18 +263,24 @@ export function createKpReaderCanonicalEquationSession(input: {
           recordKpReaderCanonicalSessionReuse(ownerWindow);
         }
       }
-      const ownership = session.apply(frame.progress);
+      const activeSession = session;
+      if (activeSession === undefined) {
+        throw new Error(
+          "Reader canonical equation session handoff committed no owner."
+        );
+      }
+      const ownership = activeSession.apply(frame.progress);
       const ownerWindow = frame.fitSurface.ownerDocument.defaultView;
       if (ownerWindow !== null) {
         recordKpReaderCanonicalSessionApply(ownerWindow);
       }
       frame.fitSurface.dataset["kpReaderCanonicalEquationSession"] = "active";
       frame.fitSurface.dataset["kpReaderCanonicalEquationSessionLifecycle"] =
-        session.lifecycle;
+        activeSession.lifecycle;
       frame.fitSurface.dataset["kpReaderCanonicalEquationSessionOwner"] =
         ownership.visualOwner;
       frame.fitSurface.dataset["kpReaderCanonicalEquationSessionTrackCount"] =
-        String(session.tracks.length);
+        String(activeSession.tracks.length);
       return true;
     },
     prewarm(frames) {
@@ -314,10 +331,12 @@ export function createKpReaderCanonicalEquationSession(input: {
       }));
     },
     invalidate() {
+      sessionHandoff.invalidate();
       prewarmQueue?.cancel();
       releaseCurrentSession();
     },
     dispose() {
+      sessionHandoff.invalidate();
       prewarmQueue?.dispose();
       releaseCurrentSession();
       purePlanCache.clear();

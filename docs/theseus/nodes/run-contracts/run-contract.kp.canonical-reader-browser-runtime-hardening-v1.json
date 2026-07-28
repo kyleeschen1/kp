@@ -150,7 +150,8 @@
     {
       "id": "slice.kp.reader-hardening.17",
       "title": "Make-session-handoff-latest-only",
-      "status": "planned"
+      "summary": "Added a nominal latest-only session handoff gate; stale or invalidated cold work is disposed and cannot publish visual ownership, while current synchronous behavior and endpoint settlement remain unchanged.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.reader-hardening.18",
