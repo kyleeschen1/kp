@@ -64,11 +64,18 @@
       "scope": "slice-04",
       "checkedAt": "2026-07-28T18:20:08.235Z",
       "notes": "Twelve focused laws pass, including missing, duplicate, foreign, ambiguous, foreign-bundle, and wrong-group rejection; all TypeScript domains pass and fixed inference remains at 49884 types and 66137 instantiations."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans; npm run typecheck; npm run check:inference",
+      "status": "passed",
+      "scope": "slice-05",
+      "checkedAt": "2026-07-28T18:24:05.468Z",
+      "notes": "Sixteen focused laws pass; pure diagnostics cover lineage, ownership, scheduled semantic groups, exact inverse contact, native endpoint settlement, and exact rewind without rendered-coordinate inputs."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-4 complete: role-complete drafts can now become nominal executable plans only through a total trusted selector-role validator."
+    "summary": "Slices 1-5 complete: verified plan structure is supplemented by pure semantic law diagnostics before registry integration."
   },
   "expectedLearning": [
     "Whether one role-complete presentation-plan boundary eliminates correct-label/wrong-realization regressions without a second renderer or closed extension taxonomy."
