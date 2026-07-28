@@ -11,6 +11,9 @@ import type {
   KpEquationStructuralSuccessionIntent,
   KpEquationVisualMotifIntent
 } from "../../animation/structural-succession-presentation.ts";
+import type {
+  KpExplicitStaticCheckpointPlan
+} from "../../animation/operation-presentation-plan-types.ts";
 
 declare const kpReaderEquationPresentationPlanAuthority: unique symbol;
 
@@ -53,6 +56,10 @@ export type KpReaderEquationTransitionPresentationPlan =
       readonly visualMotif: KpEquationVisualMotifIntent;
       readonly operationChoreography:
         KpRegisteredEquationOperationChoreography;
+    })
+  | (KpReaderEquationPresentationPlanBase & {
+      readonly planKind: "explicit-static-checkpoint";
+      readonly staticCheckpoint: KpExplicitStaticCheckpointPlan;
     });
 
 export interface KpReaderEquationTransitionPresentationEvidence {
@@ -65,6 +72,7 @@ export interface KpReaderEquationTransitionPresentationEvidence {
     readonly KpRegisteredSuccessorSynthesisBinding[] | undefined;
   readonly operationChoreography?:
     KpRegisteredEquationOperationChoreography | undefined;
+  readonly staticCheckpoint?: KpExplicitStaticCheckpointPlan | undefined;
 }
 
 /**
@@ -83,6 +91,7 @@ export function createKpReaderEquationTransitionPresentationPlan(input: {
     readonly KpRegisteredSuccessorSynthesisBinding[] | undefined;
   readonly operationChoreography?:
     KpRegisteredEquationOperationChoreography | undefined;
+  readonly staticCheckpoint?: KpExplicitStaticCheckpointPlan | undefined;
 }): KpReaderEquationTransitionPresentationPlan {
   if (input.transitionId.trim().length === 0) {
     throw new Error("Reader equation presentation plan requires a transition id.");
@@ -92,7 +101,8 @@ export function createKpReaderEquationTransitionPresentationPlan(input: {
     input.factoringMotifBinding,
     input.structuralSuccession,
     successorSyntheses.length === 0 ? undefined : successorSyntheses,
-    input.operationChoreography
+    input.operationChoreography,
+    input.staticCheckpoint
   ].filter((value) => value !== undefined).length;
   if (specializedCount > 1) {
     throw new Error(
@@ -116,7 +126,13 @@ export function createKpReaderEquationTransitionPresentationPlan(input: {
     transitionId: input.transitionId
   };
   const raw =
-    input.factoringMotifBinding !== undefined
+    input.staticCheckpoint !== undefined
+      ? {
+          ...base,
+          planKind: "explicit-static-checkpoint" as const,
+          staticCheckpoint: input.staticCheckpoint
+        }
+      : input.factoringMotifBinding !== undefined
       ? {
           ...base,
           planKind: "factoring" as const,
@@ -197,6 +213,10 @@ export function projectKpReaderEquationTransitionPresentation(
       return Object.freeze({
         visualMotif: plan.visualMotif,
         operationChoreography: plan.operationChoreography
+      });
+    case "explicit-static-checkpoint":
+      return Object.freeze({
+        staticCheckpoint: plan.staticCheckpoint
       });
   }
 }

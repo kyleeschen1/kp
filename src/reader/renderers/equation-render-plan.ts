@@ -34,7 +34,7 @@ import {
   compileKpBalancedIntroductionPresentationPlan
 } from "../../animation/balanced-introduction-presentation-plan.ts";
 import {
-  compileKpEquationOperationChoreography
+  decideKpEquationOperationChoreography
 } from "./equation-operation-choreography-compiler.ts";
 import {
   createKpReaderEquationTransitionPresentationPlan,
@@ -193,13 +193,17 @@ export function projectKpReaderEquationRenderPlan(input: {
         ? binding
         : Object.freeze({ ...binding, operationPresentationPlan });
     });
-    const compiledOperationChoreography =
-      compileKpEquationOperationChoreography({
+    const choreographyDecision =
+      decideKpEquationOperationChoreography({
         animation: input.animation,
         transformation,
         motifKind: visualMotif?.kind,
         direction: input.runtimeFrame.clock.direction
       });
+    const compiledOperationChoreography =
+      choreographyDecision.status === "verified"
+        ? choreographyDecision.choreography
+        : undefined;
     const operationChoreography =
       compiledOperationChoreography?.kind ===
         "synchronized-balanced-introduction"
@@ -230,7 +234,10 @@ export function projectKpReaderEquationRenderPlan(input: {
         factoringMotifBinding,
         structuralSuccession,
         successorSyntheses,
-        operationChoreography
+        operationChoreography,
+        ...(choreographyDecision.status === "explicit-static"
+          ? { staticCheckpoint: choreographyDecision.checkpoint }
+          : {})
       });
     transitions.push({
       id: transformation.id,

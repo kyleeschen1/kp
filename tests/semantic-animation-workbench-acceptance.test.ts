@@ -96,6 +96,10 @@ function entry(
         humanReviewRequired: false,
         goldCohort: lifecycle.playability !== "planned-only"
       },
+      presentationCoverage:
+        lifecycle.playability === "planned-only"
+          ? "incomplete"
+          : "verified-animated",
       evidenceSourceIds: ["review.fixture"]
     },
     lifecycle: {

@@ -1,3 +1,7 @@
+import type {
+  KpAnimatedPresentationCoverage
+} from "./operation-presentation-plan-types.ts";
+
 export const KP_ARTIFACT_MATURITY_LEVELS = [
   "draft",
   "reviewable",
@@ -41,19 +45,32 @@ export interface KpArtifactPromotionLineage {
   readonly schemaVersion: "kp.artifact-promotion-lineage.v1";
   readonly animationId: string;
   readonly facet: KpArtifactPromotionFacet;
+  readonly presentationCoverage: KpAnimatedPresentationCoverage;
   readonly evidenceSourceIds: readonly string[];
 }
 
-interface KpReviewedAnimationPromotionRecord {
+interface KpReviewedAnimationPromotionRecordBase {
   readonly animationId: string;
-  readonly maturity: Extract<KpArtifactMaturity, "gold" | "promoted">;
   readonly evidenceSourceIds: readonly string[];
 }
+
+type KpReviewedAnimationPromotionRecord =
+  KpReviewedAnimationPromotionRecordBase & (
+    | {
+        readonly maturity: "promoted";
+        readonly presentationCoverage: "verified-animated";
+      }
+    | {
+        readonly maturity: "gold";
+        readonly presentationCoverage: KpAnimatedPresentationCoverage;
+      }
+  );
 
 const reviewedAnimationPromotionRecords = Object.freeze([
   {
     animationId: "animation.linear-solve.solve-x",
     maturity: "gold",
+    presentationCoverage: "contains-explicit-static",
     evidenceSourceIds: [
       "docs/project/reviews/2026-07-21-solve-x-human-checkpoint-follow-up.md"
     ]
@@ -61,6 +78,7 @@ const reviewedAnimationPromotionRecords = Object.freeze([
   {
     animationId: "animation.generated.radical.square-root-as-power",
     maturity: "promoted",
+    presentationCoverage: "verified-animated",
     evidenceSourceIds: [
       "docs/project/reviews/2026-07-16-material-continuity-artifact-morph-loop-closeout.md",
       "run-contract.kp.authoritative-roadmap-workbench-v1#s27"
@@ -69,6 +87,7 @@ const reviewedAnimationPromotionRecords = Object.freeze([
   {
     animationId: "animation.generated.function-wrap.apply-f",
     maturity: "gold",
+    presentationCoverage: "incomplete",
     evidenceSourceIds: [
       "docs/project/reviews/2026-07-16-phase-ordered-choreography-gestalt-style-loop-closeout.md"
     ]
@@ -76,6 +95,7 @@ const reviewedAnimationPromotionRecords = Object.freeze([
   {
     animationId: "animation.generated.distribution.expand-a-sum",
     maturity: "gold",
+    presentationCoverage: "incomplete",
     evidenceSourceIds: [
       "docs/project/reviews/2026-07-23-governed-semantic-authoring-exemplar-checkpoint.md",
       "run-contract.kp.authoritative-roadmap-workbench-v1#s29"
@@ -84,6 +104,7 @@ const reviewedAnimationPromotionRecords = Object.freeze([
   {
     animationId: "animation.derivative-rules.tangent-graph",
     maturity: "gold",
+    presentationCoverage: "incomplete",
     evidenceSourceIds: [
       "docs/project/reviews/2026-07-23-derivative-secant-tangent-checkpoint.md"
     ]
@@ -117,6 +138,8 @@ export function resolveKpAnimationPromotionLineage(input: {
       humanReviewRequired: novelty !== "composition",
       goldCohort: record !== undefined
     },
+    presentationCoverage:
+      record?.presentationCoverage ?? "incomplete",
     evidenceSourceIds:
       record?.evidenceSourceIds ??
       ["artifact-promotion.default-reviewable-composition-policy"]

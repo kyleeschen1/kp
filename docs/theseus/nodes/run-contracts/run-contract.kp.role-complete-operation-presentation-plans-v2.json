@@ -147,7 +147,8 @@
     {
       "id": "slice.kp.role-plan.16",
       "title": "Fail-closed-static-presentation",
-      "status": "planned"
+      "summary": "Unsupported cancellation and balanced-introduction presentations now fail closed as explicit native static checkpoints; verified operation choreography remains animated, reader DOM exposes presentation authority, and catalog/artifact promotion types reject static or incomplete coverage.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.17",

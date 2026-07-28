@@ -371,7 +371,7 @@ function fractionPlans(progress: number) {
   };
 }
 
-test("reader correspondence creates only a transient compositor session", () => {
+test("explicit static plans clamp the canonical session to native checkpoints", () => {
   const { renderPlan, materialPlan } = plans();
   const transition = renderPlan.transitions[0]!;
   const presentation = projectKpReaderEquationTransitionPresentation(
@@ -381,13 +381,12 @@ test("reader correspondence creates only a transient compositor session", () => 
     ({ recordId }) => recordId === "x-persists"
   )!;
   assert.equal(
-    presentation.operationChoreography?.kind,
-    "counter-orbit-cancellation"
+    presentation.staticCheckpoint?.reason,
+    "missing-verified-plan"
   );
-  const cancelledEntityIds =
-    presentation.operationChoreography?.kind === "counter-orbit-cancellation"
-      ? presentation.operationChoreography.semanticEntityIds
-      : [];
+  const cancelledEntityIds = [...new Set(transition.relations
+    .filter(({ recordId }) => recordId !== xRelation.recordId)
+    .flatMap(({ sourceSelectorIds }) => sourceSelectorIds))];
   const session = createKpReaderEquationSceneCompositorSession({
     renderPlan,
     materialPlan,
@@ -403,8 +402,9 @@ test("reader correspondence creates only a transient compositor session", () => 
   assert.equal(session.kind, "native-katex-renderer-session");
   assert.equal(session.lifecycle, "renderer-session");
   assert.deepEqual(session.measurementIdentity, measurementIdentity);
-  assert.equal(session.mode, "atom-transit");
-  assert.equal(session.tracks.length, 3);
+  assert.equal(session.mode, "checkpoint-settlement");
+  assert.equal(session.presentationMode, "explicit-static-checkpoint");
+  assert.ok(session.tracks.length >= 3);
   const persistent = session.tracks.find(
     ({ lifecycle }) => lifecycle === "persist"
   )!;
@@ -413,7 +413,13 @@ test("reader correspondence creates only a transient compositor session", () => 
   assert.equal(
     session.sample(0.5).find(({ trackId }) => trackId === persistent.id)
       ?.rect.left,
-    50
+    10
+  );
+  assert.equal(session.apply(0.5).visualOwner, "source-native");
+  assert.equal(session.apply(1).visualOwner, "target-native");
+  assert.equal(
+    stage.dataset["kpReaderEquationStaticCheckpointReason"],
+    "missing-verified-plan"
   );
 });
 

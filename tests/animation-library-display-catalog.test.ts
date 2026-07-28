@@ -116,6 +116,7 @@ test("ported status fails closed when any promotion facet is missing", () => {
     humanReviewApproved: true,
     compatibilityPaintRetired: true,
     releaseGatePassed: true,
+    presentationCoverage: "verified-animated",
     evidenceSourceIds: ["evidence.test"]
   };
   const representations = [{
@@ -133,6 +134,16 @@ test("ported status fails closed when any promotion facet is missing", () => {
   assert.equal(
     deriveKpCanonicalFormatStatus({
       evidence: { ...complete, humanReviewApproved: false },
+      representations
+    }),
+    "partial"
+  );
+  assert.equal(
+    deriveKpCanonicalFormatStatus({
+      evidence: {
+        ...complete,
+        presentationCoverage: "contains-explicit-static"
+      },
       representations
     }),
     "partial"

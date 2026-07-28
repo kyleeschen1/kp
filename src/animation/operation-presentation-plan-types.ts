@@ -97,3 +97,31 @@ export interface KpExplicitStaticCheckpointPlan {
 export type KpOperationPresentationDecision =
   | KpVerifiedOperationPresentationPlan
   | KpExplicitStaticCheckpointPlan;
+
+export type KpAnimatedPresentationCoverage =
+  | "verified-animated"
+  | "contains-explicit-static"
+  | "incomplete";
+
+export function createKpExplicitStaticCheckpointPlan(input: {
+  readonly transformationId: string;
+  readonly reason: KpExplicitStaticCheckpointReason;
+  readonly summary: string;
+}): KpExplicitStaticCheckpointPlan {
+  if (
+    input.transformationId.trim().length === 0 ||
+    input.summary.trim().length === 0
+  ) {
+    throw new Error(
+      "Explicit static checkpoint requires a transformation id and summary."
+    );
+  }
+  return Object.freeze({
+    schemaVersion: "kp.explicit-static-checkpoint-plan.v1",
+    kind: "explicit-static-checkpoint",
+    id: `static-checkpoint.${input.transformationId}`,
+    transformationId: input.transformationId,
+    reason: input.reason,
+    summary: input.summary
+  });
+}

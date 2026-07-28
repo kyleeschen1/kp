@@ -290,6 +290,10 @@ export function createKpReaderCanonicalEquationSession(input: {
         ownership.visualOwner;
       frame.fitSurface.dataset["kpReaderCanonicalEquationSessionTrackCount"] =
         String(activeSession.tracks.length);
+      // Presentation authority must remain inspectable in the mounted reader:
+      // static compatibility checkpoints may not masquerade as verified motion.
+      frame.fitSurface.dataset["kpReaderCanonicalEquationPresentationMode"] =
+        activeSession.presentationMode;
       return true;
     },
     prewarm(frames) {

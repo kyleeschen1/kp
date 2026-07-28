@@ -272,6 +272,69 @@
       "scope": "seven legacy equation routes are 133896 gzip bytes against 126571 allowed",
       "checkedAt": "2026-07-28T23:10:00.336Z",
       "notes": "Accumulated role-plan runtime growth predates the 1.43 kB gzip slice-15 module; retain as release-closure debt and do not rebaseline before slice-21 compatibility retirement."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-28T23:33:02.147Z",
+      "notes": "70/70 role-complete presentation tests pass, including fail-closed static checkpoints and verified fraction cancellation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-28T23:33:03.155Z",
+      "notes": "Promotion coverage discriminants and reader presentation variants typecheck across app, node, tests, and domains."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-28T23:33:03.998Z",
+      "notes": "All architecture gates pass; no new compositor or runtime boundary."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-28T23:33:04.825Z",
+      "notes": "Inference contracts pass at 49944 types and 66227 instantiations."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-28T23:33:05.652Z",
+      "notes": "13/13 Chromium reader checks pass; live solve-x cancellation exposes source-native explicit-static authority."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-28T23:33:06.483Z",
+      "notes": "Production build succeeds."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-28T23:33:07.326Z",
+      "notes": "All 11 reader manifest routes satisfy production closure."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-28T23:33:08.210Z",
+      "notes": "Review production closure passes across 236 files."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "slice-16",
+      "checkedAt": "2026-07-28T23:33:09.059Z",
+      "notes": "Known accumulated runtime route budget debt remains at 134457 gzip versus 126571 limit on seven shared equation routes; divide-both-sides HTML is 25 bytes over its 5 percent limit. Do not rebaseline before slice 21 compatibility retirement and slice 24 release closure."
     }
   ],
   "progress": {

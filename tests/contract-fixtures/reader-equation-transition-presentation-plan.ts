@@ -5,6 +5,9 @@ import type {
 import type {
   KpEquationVisualMotifIntent
 } from "../../src/animation/structural-succession-presentation.ts";
+import type {
+  KpCanonicalFormatPromotionEvidence
+} from "../../src/editor/animation-library-display-catalog.ts";
 
 declare const visualMotif: KpEquationVisualMotifIntent;
 
@@ -38,4 +41,21 @@ if (presentation.planKind === "operation-choreography") {
   presentation.successorSyntheses;
 }
 
-void [fabricated, missingPresentation, presentation];
+// @ts-expect-error Ported evidence must account for static presentation gaps.
+const missingCoverage: KpCanonicalFormatPromotionEvidence = {
+  animationId: "animation.fabricated",
+  exclusiveCanonicalPaint: true,
+  requiredMotifParity: true,
+  responsiveRuntimeGates: true,
+  humanReviewApproved: true,
+  compatibilityPaintRetired: true,
+  releaseGatePassed: true,
+  evidenceSourceIds: ["evidence.fabricated"]
+};
+
+void [
+  fabricated,
+  missingPresentation,
+  presentation,
+  missingCoverage
+];

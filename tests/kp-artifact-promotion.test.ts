@@ -102,6 +102,7 @@ test("canonical promotion lineage exposes durable evidence independently of desc
     animationId: "animation.generated.distribution.expand-a-sum"
   });
   assert.equal(distribution.facet.maturity, "gold");
+  assert.equal(distribution.presentationCoverage, "incomplete");
   assert.deepEqual(distribution.evidenceSourceIds, [
     "docs/project/reviews/2026-07-23-governed-semantic-authoring-exemplar-checkpoint.md",
     "run-contract.kp.authoritative-roadmap-workbench-v1#s29"
@@ -111,9 +112,24 @@ test("canonical promotion lineage exposes durable evidence independently of desc
     animationId: "animation.other"
   });
   assert.equal(ordinary.facet.maturity, "reviewable");
+  assert.equal(ordinary.presentationCoverage, "incomplete");
   assert.deepEqual(ordinary.evidenceSourceIds, [
     "artifact-promotion.default-reviewable-composition-policy"
   ]);
+});
+
+test("promoted animation records require verified animated coverage", () => {
+  const radical = resolveKpAnimationPromotionLineage({
+    animationId: "animation.generated.radical.square-root-as-power"
+  });
+  const solveX = resolveKpAnimationPromotionLineage({
+    animationId: "animation.linear-solve.solve-x"
+  });
+
+  assert.equal(radical.facet.maturity, "promoted");
+  assert.equal(radical.presentationCoverage, "verified-animated");
+  assert.equal(solveX.facet.maturity, "gold");
+  assert.equal(solveX.presentationCoverage, "contains-explicit-static");
 });
 
 test("editor player exposes independent novelty and maturity facets", () => {

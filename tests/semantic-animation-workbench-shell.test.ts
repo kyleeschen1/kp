@@ -196,6 +196,7 @@ function result(
           humanReviewRequired: false,
           goldCohort: !planned
         },
+        presentationCoverage: "incomplete",
         evidenceSourceIds: [
           planned
             ? "artifact-promotion.default-reviewable-composition-policy"

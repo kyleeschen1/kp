@@ -54,3 +54,25 @@ test("solve-x preserves branch attention across wide and narrow projections", as
   await expect(page.getByRole("button", { name: "Next explanation step" })).toBeVisible();
   expect(new URL(page.url()).searchParams.get("kpProgress")).toBe("200");
 });
+
+test("solve-x exposes unsupported cancellation as an explicit static checkpoint", async ({ page }) => {
+  const descriptor = readers.find((candidate) => candidate.id === "reader-solve-x");
+  if (descriptor === undefined) throw new Error("Missing solve-x reader descriptor.");
+  await page.goto(descriptor.route(descriptor.progress), { waitUntil: "networkidle" });
+
+  const fitSurface = page.locator(
+    '[data-kp-reader-transition-active="true"] [data-kp-reader-fit-surface]'
+  );
+  await expect(fitSurface).toHaveAttribute(
+    "data-kp-reader-canonical-equation-presentation-mode",
+    "explicit-static-checkpoint"
+  );
+  await expect(fitSurface).toHaveAttribute(
+    "data-kp-reader-canonical-equation-session-owner",
+    "source-native"
+  );
+  await expect(fitSurface).toHaveAttribute(
+    "data-kp-reader-equation-static-checkpoint-reason",
+    "missing-verified-plan"
+  );
+});

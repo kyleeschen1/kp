@@ -155,6 +155,10 @@ function entry(input: {
         humanReviewRequired: false,
         goldCohort: input.maturity !== "proposed"
       },
+      presentationCoverage:
+        input.maturity === "promoted"
+          ? "verified-animated"
+          : "incomplete",
       evidenceSourceIds: ["review.fixture"]
     },
     lifecycle: {

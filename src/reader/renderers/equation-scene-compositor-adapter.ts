@@ -44,6 +44,9 @@ import {
 export interface KpReaderEquationMeasuredRendererSession
   extends KpNativeKatexRendererSession {
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
+  readonly presentationMode:
+    | "verified-motion"
+    | "explicit-static-checkpoint";
 }
 
 export interface KpReaderEquationSceneCompositorInput {
@@ -115,6 +118,14 @@ export function createKpReaderEquationSceneCompositorSession(
       : presentation.visualMotif?.kind === "semantic-reorder-and-group"
         ? "canonical-semantic-reorder-and-group"
       : "default";
+  if (presentation.staticCheckpoint === undefined) {
+    delete input.source.stage.dataset[
+      "kpReaderEquationStaticCheckpointReason"
+    ];
+  } else {
+    input.source.stage.dataset["kpReaderEquationStaticCheckpointReason"] =
+      presentation.staticCheckpoint.reason;
+  }
   const canonical = createKpCanonicalNativeKatexSceneSession({
     ...prepared.canonicalInput,
     ...(input.purePlan === undefined
@@ -150,8 +161,23 @@ export function createKpReaderEquationSceneCompositorSession(
     input.source.stage.dataset["kpNativeKatexChoreographyFidelity"] =
       "passed";
   }
+  const checkpointProgress = (progress: number) =>
+    presentation.staticCheckpoint === undefined || progress >= 1
+      ? progress
+      : 0;
   return Object.freeze({
     ...canonical.session,
+    mode:
+      presentation.staticCheckpoint === undefined
+        ? canonical.session.mode
+        : "checkpoint-settlement",
+    presentationMode:
+      presentation.staticCheckpoint === undefined
+        ? "verified-motion"
+        : "explicit-static-checkpoint",
+    sample(progress: number) {
+      return canonical.session.sample(checkpointProgress(progress));
+    },
     apply(progress: number) {
       if (presentation.operationChoreography === undefined) {
         delete input.source.stage.dataset["kpNativeKatexOperationChoreography"];
@@ -159,7 +185,7 @@ export function createKpReaderEquationSceneCompositorSession(
         input.source.stage.dataset["kpNativeKatexOperationChoreography"] =
           presentation.operationChoreography.kind;
       }
-      return canonical.session.apply(progress);
+      return canonical.session.apply(checkpointProgress(progress));
     },
     measurementIdentity
   });

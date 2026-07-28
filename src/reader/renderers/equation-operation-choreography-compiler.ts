@@ -21,6 +21,25 @@ import {
 import {
   compileKpFractionCompositionCancellationPresentationPlan
 } from "../../animation/fraction-composition-cancellation-presentation.ts";
+import {
+  createKpExplicitStaticCheckpointPlan,
+  type KpExplicitStaticCheckpointReason
+} from "../../animation/operation-presentation-plan-types.ts";
+
+export type KpEquationOperationChoreographyDecision =
+  | {
+      readonly status: "not-applicable";
+    }
+  | {
+      readonly status: "verified";
+      readonly choreography: KpRegisteredEquationOperationChoreography;
+    }
+  | {
+      readonly status: "explicit-static";
+      readonly checkpoint: ReturnType<
+        typeof createKpExplicitStaticCheckpointPlan
+      >;
+    };
 
 /**
  * This reader trust boundary is the only mint for executable operation
@@ -33,46 +52,72 @@ export function compileKpEquationOperationChoreography(input: {
   readonly motifKind?: EquationVisualMotifKind | undefined;
   readonly direction: "forward" | "rewind";
 }): KpRegisteredEquationOperationChoreography | undefined {
+  const decision = decideKpEquationOperationChoreography(input);
+  return decision.status === "verified"
+    ? decision.choreography
+    : undefined;
+}
+
+export function decideKpEquationOperationChoreography(input: {
+  readonly animation: KpAnimationAsset;
+  readonly transformation: KpSemanticTransformation;
+  readonly motifKind?: EquationVisualMotifKind | undefined;
+  readonly direction: "forward" | "rewind";
+}): KpEquationOperationChoreographyDecision {
   const binding = createKpEquationLinearRearrangementBinding({
     animation: input.animation,
     transformation: input.transformation
   });
-  if (binding === undefined) return undefined;
+  if (binding === undefined) return { status: "not-applicable" };
 
   if (binding.kind === "balanced-introduction") {
-    // Existing profiles without branch authority keep their established
-    // compositor behavior; the canonical balanced-solve factory always
-    // supplies the certificate-producing schedule.
-    if (binding.branchSchedule === undefined) return undefined;
+    if (binding.branchSchedule === undefined) {
+      return staticDecision(
+        input.transformation.id,
+        "missing-verified-plan",
+        "Balanced introduction has no certified branch schedule."
+      );
+    }
     if (input.motifKind !== "append-after-shift") {
       throw new Error(
         `Balanced introduction ${input.transformation.id} requires append-after-shift.`
       );
     }
-    if (binding.branchSchedule.strategy.kind !== "together") return undefined;
+    if (binding.branchSchedule.strategy.kind !== "together") {
+      return staticDecision(
+        input.transformation.id,
+        "unsupported-presentation",
+        "Balanced introduction is not scheduled as one atomic branch cohort."
+      );
+    }
     const semanticEntityIds = binding.branchSchedule.operation.branches
       .flatMap(({ entityIds }) => entityIds);
     requireUniqueNonempty(
       semanticEntityIds,
       `balanced introduction ${input.transformation.id}`
     );
-    return Object.freeze({
-      schemaVersion: "kp.equation-operation-choreography.v1",
-      kind: "synchronized-balanced-introduction",
-      id: `operation-choreography.${input.transformation.id}.${input.direction}`,
-      transformationId: input.transformation.id,
-      direction: input.direction,
-      linearRearrangementKind: binding.kind,
-      semanticEntityIds: Object.freeze(semanticEntityIds),
-      branchSchedule: binding.branchSchedule
-    }) as KpSynchronizedBalancedIntroductionChoreography;
+    return {
+      status: "verified",
+      choreography: Object.freeze({
+        schemaVersion: "kp.equation-operation-choreography.v1",
+        kind: "synchronized-balanced-introduction",
+        id:
+          `operation-choreography.${input.transformation.id}.` +
+          input.direction,
+        transformationId: input.transformation.id,
+        direction: input.direction,
+        linearRearrangementKind: binding.kind,
+        semanticEntityIds: Object.freeze(semanticEntityIds),
+        branchSchedule: binding.branchSchedule
+      }) as KpSynchronizedBalancedIntroductionChoreography
+    };
   }
 
   if (
     binding.kind !== "cancel-additive-inverses" &&
     binding.kind !== "cancel-multiplicative-inverses"
   ) {
-    return undefined;
+    return { status: "not-applicable" };
   }
   if (input.motifKind !== "cancelation") {
     throw new Error(
@@ -84,14 +129,20 @@ export function compileKpEquationOperationChoreography(input: {
     profile.cancellation !== "counter-orbit-v1" ||
     profile.zeroWitness !== "none"
   ) {
-    return undefined;
+    return staticDecision(
+      input.transformation.id,
+      "unsupported-presentation",
+      "Cancellation profile has no verified canonical choreography."
+    );
   }
   const cancellation = input.transformation.correspondenceMap?.records.find(
     ({ relation }) => relation === "cancelation"
   );
   if (cancellation === undefined) {
-    throw new Error(
-      `Counter-orbit cancellation ${input.transformation.id} requires a cancellation relation.`
+    return staticDecision(
+      input.transformation.id,
+      "missing-verified-plan",
+      "Cancellation semantics do not provide a verified inverse relation."
     );
   }
   requireUniqueNonempty(
@@ -107,21 +158,51 @@ export function compileKpEquationOperationChoreography(input: {
     compileKpFractionCompositionCancellationPresentationPlan(
       input.transformation
     );
+  if (operationPresentationPlan === undefined) {
+    return staticDecision(
+      input.transformation.id,
+      "missing-verified-plan",
+      "Cancellation has no role-complete operation presentation plan."
+    );
+  }
+  return {
+    status: "verified",
+    // This compiler is the choreography mint; the private brand is applied
+    // only after semantic relation and role-complete plan validation above.
+    choreography: Object.freeze({
+      schemaVersion: "kp.equation-operation-choreography.v1",
+      kind: "counter-orbit-cancellation",
+      id:
+        `operation-choreography.${input.transformation.id}.` +
+        input.direction,
+      transformationId: input.transformation.id,
+      direction: input.direction,
+      linearRearrangementKind: binding.kind,
+      relationRecordId: cancellation.id,
+      semanticEntityIds: Object.freeze([...cancellation.sourceSelectorIds]),
+      cancellationRecipe: "counter-orbit-v1",
+      zeroWitnessRecipe: "none",
+      operationPresentationPlan
+    }) as unknown as KpCounterOrbitCancellationChoreography
+  };
+}
+
+function staticDecision(
+  transformationId: string,
+  reason: KpExplicitStaticCheckpointReason,
+  summary: string
+): Extract<
+  KpEquationOperationChoreographyDecision,
+  { readonly status: "explicit-static" }
+> {
   return Object.freeze({
-    schemaVersion: "kp.equation-operation-choreography.v1",
-    kind: "counter-orbit-cancellation",
-    id: `operation-choreography.${input.transformation.id}.${input.direction}`,
-    transformationId: input.transformation.id,
-    direction: input.direction,
-    linearRearrangementKind: binding.kind,
-    relationRecordId: cancellation.id,
-    semanticEntityIds: Object.freeze([...cancellation.sourceSelectorIds]),
-    cancellationRecipe: "counter-orbit-v1",
-    zeroWitnessRecipe: "none",
-    ...(operationPresentationPlan === undefined
-      ? {}
-      : { operationPresentationPlan })
-  }) as KpCounterOrbitCancellationChoreography;
+    status: "explicit-static",
+    checkpoint: createKpExplicitStaticCheckpointPlan({
+      transformationId,
+      reason,
+      summary
+    })
+  });
 }
 
 function requireUniqueNonempty(values: readonly string[], label: string): void {

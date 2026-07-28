@@ -15,6 +15,9 @@ import {
   kpVerifiedFractionCompositionReleaseApproval,
   type KpVerifiedFractionCompositionReleaseApproval
 } from "../architecture/fraction-composition-release-approval.ts";
+import type {
+  KpAnimatedPresentationCoverage
+} from "../animation/operation-presentation-plan-types.ts";
 
 export type KpAnimationLibraryDisplayRepresentationKind =
   | "reader"
@@ -61,6 +64,7 @@ export interface KpCanonicalFormatPromotionEvidence {
   readonly humanReviewApproved: boolean;
   readonly compatibilityPaintRetired: boolean;
   readonly releaseGatePassed: boolean;
+  readonly presentationCoverage: KpAnimatedPresentationCoverage;
   readonly evidenceSourceIds: readonly string[];
 }
 
@@ -94,6 +98,7 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
       humanReviewApproved: false,
       compatibilityPaintRetired: false,
       releaseGatePassed: false,
+      presentationCoverage: "incomplete",
       evidenceSourceIds: [
         "run-contract.kp.foldable-distribution-collection-v1"
       ]
@@ -115,6 +120,7 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
       humanReviewApproved: true,
       compatibilityPaintRetired: false,
       releaseGatePassed: false,
+      presentationCoverage: "contains-explicit-static",
       evidenceSourceIds: [
         "review.kp.canonical-equation-renderer-convergence"
       ]
@@ -365,7 +371,8 @@ export function deriveKpCanonicalFormatStatus(input: {
     input.evidence.responsiveRuntimeGates &&
     input.evidence.humanReviewApproved &&
     input.evidence.compatibilityPaintRetired &&
-    input.evidence.releaseGatePassed;
+    input.evidence.releaseGatePassed &&
+    input.evidence.presentationCoverage === "verified-animated";
   return passed ? "ported" : "partial";
 }
 
@@ -381,6 +388,7 @@ function completeCanonicalFormatEvidence(
     humanReviewApproved: true,
     compatibilityPaintRetired: true,
     releaseGatePassed: true,
+    presentationCoverage: "verified-animated",
     evidenceSourceIds: Object.freeze([...evidenceSourceIds])
   });
 }
