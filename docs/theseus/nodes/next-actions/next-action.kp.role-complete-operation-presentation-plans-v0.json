@@ -36,11 +36,18 @@
       "scope": "slice 1 executable migration inventory",
       "checkedAt": "2026-07-28T18:03:40.705Z",
       "notes": "Four inventory laws pass and application, Node, test, and domain typechecks pass."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans; npm run typecheck; npm run check:inference",
+      "status": "passed",
+      "scope": "slice 2 renderer-neutral role vocabulary",
+      "checkedAt": "2026-07-28T18:08:16.131Z",
+      "notes": "Eight focused laws pass; all TypeScript domains pass; inference remains within budget at 49,884 types, 66,137 instantiations, and 2.88 seconds."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Approved run contract v2 is active. Slice 1 froze the current migration surface as executable inventory: five optional reader-plan seams, seven compositor inputs, five flat cancellation authoring sites, and three metadata-versus-behavior evidence gaps."
+    "summary": "Slices 1-2 complete: the migration surface is inventoried and the renderer-neutral role vocabulary now provides source material, target material, continuant, catalyst, artifact, branch, contact, fusion, and fission concepts without DOM or geometry authority."
   },
   "expectedLearning": [
     "Whether one role-complete presentation-plan boundary eliminates correct-label/wrong-realization regressions without a second renderer or closed extension taxonomy."

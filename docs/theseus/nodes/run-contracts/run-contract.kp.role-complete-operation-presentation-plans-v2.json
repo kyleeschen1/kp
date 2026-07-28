@@ -63,7 +63,8 @@
     {
       "id": "slice.kp.role-plan.02",
       "title": "Define-role-vocabulary",
-      "status": "planned"
+      "summary": "Defined renderer-neutral bundle roles and bounded group constructors with tested semantic invariants.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.03",
