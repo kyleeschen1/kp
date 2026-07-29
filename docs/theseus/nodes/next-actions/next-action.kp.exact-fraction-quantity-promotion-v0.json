@@ -118,6 +118,20 @@
       "scope": "slice s06 partition identity types",
       "checkedAt": "2026-07-29T05:24:10.392Z",
       "notes": "The negative type fixture proves part IDs from different partitions cannot be mixed into a certified selection."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s07 sealed partition operation proofs",
+      "checkedAt": "2026-07-29T05:28:04.493Z",
+      "notes": "Twenty-two tests pass; new cases prove exhaustive refinement fission, selected refinement, disjoint fusion, reversible regrouping, exact conservation, incomplete/overlap rejection, and forged-proof rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s07 proof-carrying operation types",
+      "checkedAt": "2026-07-29T05:28:05.346Z",
+      "notes": "Partition and unit identities remain closed across source, target, selection, and certificate generics."
     }
   ],
   "expectedLearning": [

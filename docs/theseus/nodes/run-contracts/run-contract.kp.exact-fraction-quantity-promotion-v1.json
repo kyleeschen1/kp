@@ -155,7 +155,8 @@
     {
       "id": "s07",
       "title": "certify-refine-and-merge",
-      "status": "planned"
+      "summary": "Added module-sealed certificates for whole-partition refinement, selected refinement, disjoint selection fusion, and equivalent regrouping. Every cohort proves exact measure and exhaustive non-duplicated source/target lineage, classifies persist/fission/fusion/regroup, supports inverse regrouping, and rejects incomplete, overlapping, mismatched, or structurally forged witnesses.",
+      "status": "complete"
     },
     {
       "id": "s08",
