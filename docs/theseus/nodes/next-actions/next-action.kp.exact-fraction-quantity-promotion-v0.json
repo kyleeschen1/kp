@@ -517,6 +517,13 @@
       "scope": "slice-12 revised human checkpoint control state",
       "checkedAt": "2026-07-29T19:19:08.834Z",
       "notes": "Validated 830 nodes and 14270 events with slice 12 still in progress and later slices blocked on visual approval."
+    },
+    {
+      "command": "human visual review of revised 1 + 2 checkpoint",
+      "status": "failed",
+      "scope": "slice-12 positive motif fidelity and perceptual continuity",
+      "checkedAt": "2026-07-29T19:28:51.248Z",
+      "notes": "Rejected: visible flicker remains and the expected motif choreography has been replaced by generic shrink/open motion. Automated continuity checks did not cover this positive visual contract."
     }
   ],
   "progress": {
