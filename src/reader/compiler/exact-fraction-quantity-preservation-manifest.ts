@@ -50,25 +50,25 @@ export const kpExactFractionQuantityPreservationManifest = Object.freeze({
       id: "checkpoint.exact-fraction.establish",
       beatId: "beat.exact-fraction.establish-same-unit",
       label: "Establish thirds and sixths of one unit",
-      progressPermille: 0
+      progressPermille: 180
     }),
     Object.freeze({
       id: "checkpoint.exact-fraction.refined",
       beatId: "beat.exact-fraction.refine-third",
       label: "Refine one third into two sixths",
-      progressPermille: 240
+      progressPermille: 400
     }),
     Object.freeze({
       id: "checkpoint.exact-fraction.aligned",
       beatId: "beat.exact-fraction.align-sixths",
       label: "Align two sixths and one sixth",
-      progressPermille: 440
+      progressPermille: 560
     }),
     Object.freeze({
       id: "checkpoint.exact-fraction.merged",
       beatId: "beat.exact-fraction.merge-three-sixths",
       label: "Merge the three selected sixths",
-      progressPermille: 720
+      progressPermille: 820
     }),
     Object.freeze({
       id: "checkpoint.exact-fraction.recognized",

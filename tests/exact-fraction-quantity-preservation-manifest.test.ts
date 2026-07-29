@@ -15,10 +15,14 @@ test("exact fraction exemplar freezes five ordered checkpoints and beats", () =>
   );
   assert.deepEqual(
     manifest.checkpoints.map(({ progressPermille }) => progressPermille),
-    [0, 240, 440, 720, 1_000]
+    [180, 400, 560, 820, 1_000]
   );
   assert.equal(manifest.pacing[0]?.startPermille, 0);
   assert.equal(manifest.pacing.at(-1)?.endPermille, 1_000);
+  assert.deepEqual(
+    manifest.checkpoints.map(({ progressPermille }) => progressPermille),
+    manifest.pacing.map(({ endPermille }) => endPermille)
+  );
   assert.ok(manifest.pacing.every((beat, index) =>
     index === 0 ||
     manifest.pacing[index - 1]?.endPermille === beat.startPermille

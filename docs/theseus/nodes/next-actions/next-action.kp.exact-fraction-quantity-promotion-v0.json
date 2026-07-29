@@ -160,6 +160,20 @@
       "scope": "slice s09 mapped view obligation types",
       "checkedAt": "2026-07-29T05:37:57.745Z",
       "notes": "The required view union and mapped projection set make omission of symbolic, partitioned-circle, fraction-bar, or number-line a compile-time error."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s10 representation-neutral frame sampler",
+      "checkedAt": "2026-07-29T05:42:10.517Z",
+      "notes": "Forty-two tests pass; new cases prove exact settled beat boundaries, fission/persist/fusion cohorts, complete selected-half provenance, direction symmetry, history-independent direct sampling, clamping, immutability, and absence of renderer geometry/arithmetic."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s10 neutral frame contract",
+      "checkedAt": "2026-07-29T05:42:11.400Z",
+      "notes": "Neutral source/target states, exact forms, selections, contributor transitions, and direction compile without view-specific fields."
     }
   ],
   "expectedLearning": [

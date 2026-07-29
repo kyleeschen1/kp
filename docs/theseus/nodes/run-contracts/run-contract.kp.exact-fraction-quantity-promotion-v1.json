@@ -173,7 +173,8 @@
     {
       "id": "s10",
       "title": "sample-neutral-frames",
-      "status": "planned"
+      "summary": "Added a pure canonical-progress sampler producing immutable representation-neutral frames with beat-local progress, exact source/target states, symbolic forms, selections, sixth atoms, focus, and persist/fission/fusion cohorts. Forward and rewind share the same absolute semantic coordinate, repeated direct seeks are history-independent, and checkpoint progress now exactly equals each frozen pacing beat's settled endpoint rather than an intermediate frame.",
+      "status": "complete"
     },
     {
       "id": "s11",
