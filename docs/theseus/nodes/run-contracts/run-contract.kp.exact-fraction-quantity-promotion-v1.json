@@ -191,7 +191,8 @@
     {
       "id": "s13",
       "title": "project-fraction-bars",
-      "status": "planned"
+      "summary": "Added a responsive intrinsic fraction-bar projection with six exact extents, deterministic SVG, and explicit third-to-two-sixths divider refinement. Extracted one documented atomic projection joint now used by both circles and bars, so selected state, contributor IDs, and persist/fission/fusion lifecycles cannot drift between concrete views or be inferred from geometry.",
+      "status": "complete"
     },
     {
       "id": "s14",

@@ -1,5 +1,4 @@
 import {
-  createKpRational,
   type KpNormalizedRational
 } from "../../domains/math/exact-rational.ts";
 import {
@@ -7,8 +6,8 @@ import {
   type KpExactFractionQuantityNeutralFrame
 } from "../animation/exact-fraction-quantity-neutral-frame.ts";
 import {
-  kpExactFractionQuantityPreservationManifest as manifest
-} from "../reader/compiler/exact-fraction-quantity-preservation-manifest.ts";
+  projectKpExactFractionAtomicViewParts
+} from "./exact-fraction-quantity-atomic-projection.ts";
 
 export interface KpExactFractionCircleSector {
   readonly id: string;
@@ -51,25 +50,17 @@ const radius = 62 as const;
 export function projectKpExactFractionQuantityCircle(
   frame: KpExactFractionQuantityNeutralFrame
 ): KpExactFractionQuantityCircleFrame {
-  assertFrameAtoms(frame);
-  const targetSelectedAtoms = new Set(
-    frame.targetSelections.flatMap(({ atomicPartIds }) => atomicPartIds)
-  );
-  const sectors = Object.freeze(frame.atomicPartIds.map((atomicPartId, index) => {
-    const semanticTransition = frame.selectionTransitions.find(
-      ({ atomicPartIds }) => atomicPartIds.includes(atomicPartId)
-    );
+  const atomicParts = projectKpExactFractionAtomicViewParts(frame);
+  const sectors = Object.freeze(atomicParts.map((part, index) => {
     return Object.freeze({
-      id: `circle.sector.${atomicPartId}`,
-      atomicPartId,
-      exactMeasure: createKpRational(1n, 6n),
+      id: `circle.sector.${part.atomicPartId}`,
+      atomicPartId: part.atomicPartId,
+      exactMeasure: part.exactMeasure,
       pathData: sectorPath(index, index + 1),
-      sourceSelectionIds:
-        semanticTransition?.sourceSelectionIds ?? Object.freeze([]),
-      targetSelectionIds:
-        semanticTransition?.targetSelectionIds ?? Object.freeze([]),
-      lifecycle: semanticTransition?.lifecycle ?? "persist",
-      selected: targetSelectedAtoms.has(atomicPartId)
+      sourceSelectionIds: part.sourceSelectionIds,
+      targetSelectionIds: part.targetSelectionIds,
+      lifecycle: part.lifecycle,
+      selected: part.selected
     });
   }));
   const refinement = frame.beat.operation === "refine-partition"
@@ -153,19 +144,6 @@ function createRefinement(
     localProgress: frame.beat.localProgress,
     exactMeasure: transition.exactMeasure
   });
-}
-
-function assertFrameAtoms(frame: KpExactFractionQuantityNeutralFrame): void {
-  if (
-    frame.atomicPartIds.length !== manifest.atomicPartIds.length ||
-    frame.atomicPartIds.some(
-      (atomicPartId, index) => atomicPartId !== manifest.atomicPartIds[index]
-    )
-  ) {
-    throw new Error(
-      "Circle projection requires the canonical ordered sixth atoms."
-    );
-  }
 }
 
 function sectorPath(startSixth: number, endSixth: number): string {

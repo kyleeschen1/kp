@@ -202,6 +202,20 @@
       "scope": "slice s12 circle frame and SVG adapter",
       "checkedAt": "2026-07-29T05:53:21.553Z",
       "notes": "Circle sector, refinement, selection, lifecycle, and exact-measure contracts compile across all TypeScript projects."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s13 responsive fraction-bar projection",
+      "checkedAt": "2026-07-29T05:56:19.885Z",
+      "notes": "Fifty-five tests pass; bars conserve one exact unit, retain intrinsic responsive bounds, expose certified third refinement, render deterministically across direction, and match circle selection and lifecycle mappings through one shared atom adapter."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s13 shared atomic and bar projection contracts",
+      "checkedAt": "2026-07-29T05:56:20.744Z",
+      "notes": "Shared concrete-view identities and bar geometry remain typed without adding semantic, scheduler, or runtime authority."
     }
   ],
   "expectedLearning": [
