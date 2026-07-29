@@ -34,6 +34,13 @@
       "scope": "slice s01 approved contract and source closure",
       "checkedAt": "2026-07-29T04:56:37.839Z",
       "notes": "Valid 824 nodes and 14007 events before the control commit; autonomy gate passes with 25 slices and zero blockers."
+    },
+    {
+      "command": "theseus --format json plan revision --domain kp",
+      "status": "passed",
+      "scope": "slice s02 stable frontier reconciliation",
+      "checkedAt": "2026-07-29T05:07:02.299Z",
+      "notes": "Active revision 13 is approved and ready with zero warnings; abandoned semantic convergence slices are skipped, radical repair evidence is re-linked, and exact fraction is the sole active promotion phase."
     }
   ],
   "expectedLearning": [

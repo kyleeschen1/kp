@@ -213,9 +213,9 @@
     {
       "id": "slice-16",
       "title": "correct-oracle-and-gates",
-      "summary": "Repaired the rejected radical checkpoint at the generic renderer boundary. Glyph handoff now normalizes visible ink rather than Range line boxes; source one-half retains native KaTeX clones until typed morph start, captures through the loaded document font with inline-baseline calibration, and is screenshot-gated at the first canvas frame. Empty endpoint paint fails back to structural clones without rewinding unrelated glyphs, replaced WebGL sessions release their contexts, and full glyph/reader/parity matrices pass. Reopened for human browser review.",
+      "summary": "Retained the completed generic radical choreography repair inside the canonical radical promotion phase; the former one-off phase label was bookkeeping drift, not a separate product phase.",
       "status": "complete",
-      "planPhaseId": "radical-choreography-meta-repair"
+      "planPhaseId": "canonical-radical-reader-promotion-kit"
     },
     {
       "id": "slice-17",

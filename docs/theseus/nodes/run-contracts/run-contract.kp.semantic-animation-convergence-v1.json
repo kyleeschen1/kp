@@ -2,8 +2,8 @@
   "id": "run-contract.kp.semantic-animation-convergence-v1",
   "kind": "run-contract",
   "title": "Semantic animation convergence",
-  "status": "deferred",
-  "summary": "Deferred before execution because the initial add-run-contract invocation followed incomplete public help and omitted required typed-autonomy fields. Replaced by a fully typed execution contract; no slice started.",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -86,169 +86,197 @@
     {
       "id": "s01",
       "title": "Canonical-preservation-manifest",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s02",
       "title": "Stable-focused-suite",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s03",
       "title": "Executable-compiler-stage-inventory",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s04",
       "title": "Dependency-inversion-baseline",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s05",
       "title": "Recipe-and-compatibility-ledger",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s06",
       "title": "Deterministic-gold-baseline",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s07",
       "title": "Layer-ownership-contract",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s08",
       "title": "Ratcheting-architecture-gate",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s09",
       "title": "Neutral-equation-transition-IR-ownership",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s10",
       "title": "Semantic-equation-compiler-ownership",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s11",
       "title": "Neutral-motif-vocabulary-boundary",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s12",
       "title": "Neutral-utility-ownership",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s13",
       "title": "Close-dependency-inversions",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s14",
       "title": "Versioned-typed-presentation-profile",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s15",
       "title": "Legacy-metadata-decoder",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s16",
       "title": "Solve-x-profile-exemplar",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s17",
       "title": "Exemplar-comparison-evidence-gate",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s18",
       "title": "Promote-proven-profiles",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s19",
       "title": "Canonical-sampled-frame-envelope",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s20",
       "title": "Typed-domain-payload-convention",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s21",
       "title": "Equation-frame-adaptation",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s22",
       "title": "Graph-and-program-trace-adaptation",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s23",
       "title": "Narrow-asset-projections",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s24",
       "title": "Runtime-and-compiler-consumer-migration",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s25",
       "title": "Product-consumer-migration",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s26",
       "title": "Compatibility-status-enforcement",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s27",
       "title": "Bounded-compatibility-deletion",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     },
     {
       "id": "s28",
       "title": "Release-proof-and-final-human-checkpoint",
-      "status": "planned",
+      "summary": "Skipped during revision-11 reconciliation because this deferred scaffold never executed; run-contract.kp.semantic-animation-convergence-v2 owns the completed work.",
+      "status": "skipped",
       "planPhaseId": "semantic-animation-convergence"
     }
   ]

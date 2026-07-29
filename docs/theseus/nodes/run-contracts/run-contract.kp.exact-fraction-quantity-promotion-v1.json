@@ -118,13 +118,15 @@
     {
       "id": "s01",
       "title": "materialize-approved-contract",
-      "summary": "Materialized and committed the user-approved proposal, durable roadmap placement, stable promotion authority, target, decision, and corrected typed 25-slice run contract. The autonomy gate passes with explicit cadence, verification, stop conditions, and dirty-worktree preservation; the incomplete v0 draft is retained as superseded history.",
-      "status": "complete"
+      "summary": "Materialized the approved contract and linked the active exact-fraction promotion phase to its execution authority.",
+      "status": "complete",
+      "planPhaseId": "exact-fraction-quantity-models"
     },
     {
       "id": "s02",
       "title": "reconcile-stale-frontier",
-      "status": "planned"
+      "summary": "Activated warning-free plan revision 13. Reconciled the never-executed duplicate convergence scaffold as skipped history, linked completed radical and quadratic evidence to their terminal authorities, linked this run to exact-fraction-quantity-models, and preserved the stable content-led promotion order plus platform gates.",
+      "status": "complete"
     },
     {
       "id": "s03",

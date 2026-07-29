@@ -1,59 +1,60 @@
 {
-  "id": "plan-revision.kp.v10",
+  "id": "plan-revision.kp.v11",
   "kind": "plan-revision",
-  "title": "Kinetic Press foldable animation library expansion roadmap v10",
+  "title": "Kinetic Press stable animation promotion roadmap v11",
   "status": "superseded",
   "domain": "kp",
-  "summary": "Close canonical construction, use one radical adoption as the final foundation gate, and return to visible library expansion through foldable evaluation trees, arithmetic, linear algebra, graph bridges, and accumulation.",
+  "summary": "Mirror the accepted stable animation promotion ledger: exact fraction quantity is active, arithmetic/economics/physics demonstrations follow, public API and verified generator milestones precede deeper vector/matrix/calculus work, and LLM editorial output remains downstream of deterministic verified sessions.",
   "sourceRefs": [
     {
       "kind": "file",
-      "path": "docs/project/decisions/2026-07-26-kp-foldable-evaluation-tree-library-expansion.md",
-      "summary": "Accepted implementation-boundary, folding, timing, compositor, promotion-ratchet, and library-expansion direction."
+      "path": "docs/project/threads/animation-library-promotion.md",
+      "summary": "Sole living human-readable promotion rank and progress authority."
     },
     {
       "kind": "file",
-      "path": "docs/project/reviews/2026-07-26-kp-six-loop-library-expansion-direction.md",
-      "summary": "Reviewed six-loop horizon and progress signals; future rows remain non-authorizing."
+      "path": "docs/project/decisions/2026-07-28-kp-stable-animation-promotion-order.md",
+      "summary": "Accepted stable exemplar ordering."
     },
     {
       "kind": "file",
-      "path": "docs/project/reviews/2026-07-26-radical-reader-promotion-kit-long-loop-proposal.md",
-      "summary": "Exact proposed radical adoption loop awaiting separate explicit implementation approval."
+      "path": "docs/project/decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md",
+      "summary": "Accepted platform milestone placement."
     },
     {
       "kind": "file",
-      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v9.json",
-      "summary": "Approved predecessor retaining the complete architecture-pressure and domain-coverage roadmap."
+      "path": "docs/project/reviews/2026-07-28-exact-fraction-quantity-promotion-long-loop-proposal.md",
+      "summary": "Approved active exemplar contract."
     },
     {
       "kind": "file",
-      "path": "docs/project/reviews/2026-07-27-radical-reader-promotion-kit-closeout.md"
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v10.json",
+      "summary": "Superseded predecessor retained for rationale and history."
     }
   ],
   "affects": [
     "workflow.kp.delivery",
-    "plan-revision.kp.v9",
-    "run-contract.kp.canonical-animation-construction-governed-round-trip-v1"
+    "plan-revision.kp.v10",
+    "run-contract.kp.exact-fraction-quantity-promotion-v1"
   ],
   "progress": {
     "state": "partial",
-    "summary": "The radical foundation gate and single-display library are complete. The user approved run-contract.kp.foldable-distribution-collection-v1 as the current 26-slice product exemplar, with proper no-fade semantic motifs and a mandatory slice-23 visual checkpoint."
+    "summary": "Completed canonical foundation is reconciled. Exact fraction quantity is the only active promotion; later rows and platform gates remain non-authorizing until their own reviewed contracts."
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
-    "revision": 10,
-    "objective": "Grow one canonical semantic animation system through an evidenced radical promotion kit, then expand visible pedagogical coverage with foldable transformation trees across algebra, exact arithmetic, vector and matrix operations, equation-graph calculus bridges, integral accumulation, and the retained longer-term domain roadmap.",
+    "revision": 11,
+    "objective": "Grow one canonical, composable semantic animation library through a stable exemplar order, inserting API, verified problem-generation, deterministic explanation, safe output, and optional LLM editorial gates only where recorded caller pressure justifies them.",
     "assumptions": [
       {
         "id": "single-roadmap-authority",
-        "statement": "The active approved Theseus plan is the only product-roadmap authority; the Workbench and summaries derive from it and do not own parallel lifecycle state.",
-        "status": "active"
+        "statement": "The animation promotion thread owns human-readable rank and progress; the active Theseus plan mirrors that order, and a typed run contract alone authorizes implementation.",
+        "status": "validated"
       },
       {
         "id": "run-contract-execution-authority",
         "statement": "An approved typed run contract, not a planned roadmap row, authorizes implementation and owns live slice status and verification.",
-        "status": "active"
+        "status": "validated"
       },
       {
         "id": "architecture-pressure-order",
@@ -68,7 +69,7 @@
       {
         "id": "native-math-settlement",
         "statement": "Animated mathematical fragments may move independently, but exact native KaTeX owns the settled expression and its typography and spacing.",
-        "status": "active"
+        "status": "validated"
       },
       {
         "id": "semantic-renderer-boundary",
@@ -78,12 +79,12 @@
       {
         "id": "future-coverage-is-not-authorization",
         "statement": "Later and someday rows retain robust product coverage but do not authorize implementation until a reviewed run contract links to them.",
-        "status": "active"
+        "status": "validated"
       },
       {
         "id": "folding-is-presentation-projection",
         "statement": "Expanded, collapsed, automatic, and pinned evaluation-tree views project one immutable canonical semantic trace; they never change mathematical results, dependencies, checkpoints, accessibility, or export truth.",
-        "status": "active"
+        "status": "validated"
       },
       {
         "id": "semantic-layout-before-local-routing",
@@ -93,11 +94,26 @@
       {
         "id": "foundation-stopping-rule",
         "statement": "After the radical promotion kit, KP ships at least three domain exemplars before another platform-only compositor loop unless a real exemplar exposes a failed generic invariant.",
-        "status": "active"
+        "status": "validated"
       },
       {
         "id": "promotion-cost-ratchet",
         "statement": "The post-kit unit-exponent adoption must require no compositor-core change, lifecycle or scheduler category, notation-specific geometry, or second runtime artifact.",
+        "status": "validated"
+      },
+      {
+        "id": "content-led-platform-gates",
+        "statement": "Platform milestones occur at recorded boundaries between content promotions and do not silently become new animation ranks.",
+        "status": "validated"
+      },
+      {
+        "id": "deterministic-editorial-boundary",
+        "statement": "Verified claims and deterministic explanation structure precede optional review-time LLM wording, and playback never requires a live model.",
+        "status": "active"
+      },
+      {
+        "id": "adjacent-complexity-negative-pruning",
+        "statement": "Compatibility paths are retired beside the migration that removes their last caller rather than through a detached rewrite.",
         "status": "active"
       }
     ],
@@ -280,7 +296,10 @@
         "title": "Canonical radical reader adoption and promotion kit",
         "objective": "Adopt one radical succession reader transition through the released canonical session, preserve native reader semantics, and prove a reusable low-cost promotion kit without family-wide rollout.",
         "horizon": "now",
-        "status": "planned",
+        "status": "complete",
+        "evidence": [
+          "run-contract.kp.radical-reader-promotion-kit-v0"
+        ],
         "topic": "Platform and algebra · Canonical promotion",
         "architectureBenefit": "A second structurally distinct adoption plus an evidenced low-cost path for future exemplars.",
         "rationale": "Radical rules, indices, compound glyph structure, and exact settlement are the last bounded foundation pressure before returning to visible library growth.",
@@ -290,34 +309,132 @@
         "id": "foldable-distribution-evaluation-tree",
         "title": "Foldable distribution and collection tree",
         "objective": "Compile distribution, multiplication, like-term collection, and simplification into one immutable transformation tree with deterministic expanded, collapsed, automatic, and pinned presentation projections.",
-        "horizon": "next",
-        "status": "planned",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "run-contract.kp.foldable-distribution-collection-v1"
+        ],
         "topic": "Algebra · Composable evaluation trees",
         "architectureBenefit": "User-controlled pedagogical detail, hierarchical non-crowding layout, and timing compression without a second runtime or semantic trace.",
         "rationale": "This returns KP to visible library growth while directly testing whether established semantic laws and the canonical compositor compose under a richer multi-operation expression.",
         "canonicalExemplar": "Simplify 3(x + 2) + 2(x - 1) to 5x + 4"
       },
       {
-        "id": "derivative-reader-graph-bridge",
-        "title": "Foldable derivative equation-graph bridge",
-        "objective": "Synchronize difference-quotient algebra, secant geometry, tangent convergence, and the derivative value while allowing routine symbolic subtraces to fold without changing the shared canonical trace.",
-        "horizon": "next",
-        "status": "planned",
-        "topic": "Calculus · Derivative reader integration",
-        "architectureBenefit": "Foldable symbolic detail under one equation-graph clock and stable semantic checkpoints.",
-        "rationale": "The prior derivative exemplar proved shared-clock semantics; this phase turns that evidence into a canonical learner-facing bridge that reuses evaluation-tree folding.",
-        "canonicalExemplar": "Secant to tangent with a foldable difference quotient"
+        "id": "canonical-fraction-composition-promotion",
+        "title": "Canonical fraction composition promotion",
+        "objective": "Promote 2/3(x + 6) = 10 through the verified canonical renderer, certified layout, reader, Review, and evidence-derived release path.",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "run-contract.kp.canonical-fraction-composition-promotion-v1"
+        ],
+        "topic": "Algebra · Fractions",
+        "architectureBenefit": "Complete structured-fraction composition through one canonical implementation.",
+        "rationale": "This completed pressure test is foundation for quantity work, not the next fraction exemplar.",
+        "canonicalExemplar": "Solve 2/3(x + 6) = 10"
       },
       {
-        "id": "integral-accumulation",
-        "title": "Integral accumulation",
-        "objective": "Synchronize partition refinement, region accumulation, symbolic sums, and the limiting integral.",
+        "id": "role-complete-operation-presentation",
+        "title": "Role-complete operation presentation",
+        "objective": "Require every moving equation operation to carry one verified, exhaustive presentation plan before reader dispatch.",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "run-contract.kp.role-complete-operation-presentation-plans-v2"
+        ],
+        "topic": "Platform · Animation compiler",
+        "architectureBenefit": "Typed presentation totality and fail-closed canonical dispatch.",
+        "rationale": "The completed type boundary prevents silent fallback and false promotion.",
+        "canonicalExemplar": "Catalog-wide equation operation plan coverage"
+      },
+      {
+        "id": "exact-fraction-quantity-models",
+        "title": "Exact fraction quantity identity",
+        "objective": "Show 1/3 + 1/6 = 1/2 as one verified quantity identity across native KaTeX, partitioned circles, bars or area, and a number line.",
+        "horizon": "now",
+        "status": "active",
+        "evidence": [
+          "run-contract.kp.exact-fraction-quantity-promotion-v1"
+        ],
+        "topic": "Arithmetic · Fractions",
+        "architectureBenefit": "One quantity model projected into symbolic and concrete representations.",
+        "rationale": "Fractions are the first arithmetic cohort because they stress synchronized multi-view identity rather than only digit motion.",
+        "canonicalExemplar": "Add 1/3 and 1/6 to make 1/2"
+      },
+      {
+        "id": "multidigit-addition",
+        "title": "Multi-digit addition",
+        "objective": "Coordinate column addition, place-value exchange, regrouping marks, and a base-ten or area representation.",
         "horizon": "next",
         "status": "planned",
-        "topic": "Calculus · Integrals",
-        "architectureBenefit": "Many-object refinement and accumulation under one semantic clock.",
-        "rationale": "It follows branching because it adds large synchronized collections and limit continuity.",
-        "canonicalExemplar": "Riemann sums converging to area"
+        "topic": "Arithmetic · Addition",
+        "architectureBenefit": "Persistent place-value identity and carry scheduling.",
+        "rationale": "Addition establishes the reusable place-exchange primitive before harder written algorithms.",
+        "canonicalExemplar": "278 + 156 = 434"
+      },
+      {
+        "id": "economics-parametric",
+        "title": "Economics and parametric models",
+        "objective": "Link equations, curves, parameter changes, intersections, and narrative interpretation in supply-demand models.",
+        "horizon": "next",
+        "status": "planned",
+        "topic": "Cross-domain · Economics",
+        "architectureBenefit": "Parameterized graph systems and narrative-to-model correspondence.",
+        "rationale": "Economics reuses graph and intersection semantics with domain-specific explanatory prose.",
+        "canonicalExemplar": "Supply and demand equilibrium shift"
+      },
+      {
+        "id": "physics-work-energy",
+        "title": "Physics work and energy",
+        "objective": "Synchronize force, displacement, energy equations, graphs, and diagrams through a conserved physical model.",
+        "horizon": "next",
+        "status": "planned",
+        "topic": "Cross-domain · Physics",
+        "architectureBenefit": "Quantity conservation across symbolic, graph, and spatial representations.",
+        "rationale": "Physics combines unit-aware arithmetic, calculus, diagrams, and conservation after those primitives mature.",
+        "canonicalExemplar": "Constant-force work and kinetic-energy change"
+      },
+      {
+        "id": "public-api-tiers",
+        "title": "Public API tiers",
+        "objective": "Declare stable authoring, internal compiler and reader, and experimental API surfaces before generated-problem callers become durable integrations.",
+        "horizon": "next",
+        "status": "planned",
+        "evidence": [
+          "decision.kp.generation-editorial-pruning-placement-v0"
+        ],
+        "topic": "Platform · API",
+        "architectureBenefit": "Caller stability without freezing internal rendering evolution.",
+        "rationale": "The first externalized generator bridge should consume an intentional facade.",
+        "canonicalExemplar": "Stable generated-session authoring facade"
+      },
+      {
+        "id": "verified-linear-problem-animation-bridge",
+        "title": "Verified linear problem to animation bridge",
+        "objective": "Compile verified linear-equation traces into canonical KpAnimationAsset output with stable lineage, instance-aware readers, conformance cases, and fail-closed unsupported presentations.",
+        "horizon": "next",
+        "status": "planned",
+        "evidence": [
+          "decision.kp.generation-editorial-pruning-placement-v0"
+        ],
+        "topic": "Platform · Problem generation",
+        "architectureBenefit": "One canonical generated-problem path rather than a parallel renderer.",
+        "rationale": "Four visible exemplars provide enough pressure to test the authoring boundary without delaying library growth.",
+        "canonicalExemplar": "Generated solve-x session"
+      },
+      {
+        "id": "deterministic-explanation-spine",
+        "title": "Deterministic explanation spine",
+        "objective": "Attach ExplanationSpineV1, learner state, approved vocabulary, and verified claim references to the first generated solve-x session.",
+        "horizon": "next",
+        "status": "planned",
+        "evidence": [
+          "decision.kp.generation-editorial-pruning-placement-v0"
+        ],
+        "topic": "Platform · Pedagogy",
+        "architectureBenefit": "Separates mathematical truth and pedagogical structure from editorial wording.",
+        "rationale": "Generated sessions must work deterministically before model-written prose is useful.",
+        "canonicalExemplar": "Explanation spine for one verified solve-x trace"
       },
       {
         "id": "vector-dot-projection",
@@ -342,26 +459,37 @@
         "canonicalExemplar": "Apply a 2 by 2 matrix to a vector"
       },
       {
-        "id": "exact-fraction-quantity-models",
-        "title": "Exact fractions and quantity models",
-        "objective": "Synchronize exact KaTeX fractions with partitioned circles, bars or areas, and number-line positions through shared quantity identity.",
+        "id": "derivative-reader-graph-bridge",
+        "title": "Foldable derivative equation-graph bridge",
+        "objective": "Synchronize difference-quotient algebra, secant geometry, tangent convergence, and the derivative value while allowing routine symbolic subtraces to fold without changing the shared canonical trace.",
         "horizon": "next",
         "status": "planned",
-        "topic": "Arithmetic · Fractions",
-        "architectureBenefit": "One quantity model projected into symbolic and concrete representations.",
-        "rationale": "Fractions are the first arithmetic cohort because they stress synchronized multi-view identity rather than only digit motion.",
-        "canonicalExemplar": "Add 1/3 and 1/4 with synchronized models"
+        "topic": "Calculus · Derivative reader integration",
+        "architectureBenefit": "Foldable symbolic detail under one equation-graph clock and stable semantic checkpoints.",
+        "rationale": "The prior derivative exemplar proved shared-clock semantics; this phase turns that evidence into a canonical learner-facing bridge that reuses evaluation-tree folding.",
+        "canonicalExemplar": "Secant to tangent with a foldable difference quotient"
       },
       {
-        "id": "multidigit-addition",
-        "title": "Multi-digit addition",
-        "objective": "Coordinate column addition, place-value exchange, regrouping marks, and a base-ten or area representation.",
+        "id": "integral-accumulation",
+        "title": "Integral accumulation",
+        "objective": "Synchronize partition refinement, region accumulation, symbolic sums, and the limiting integral.",
         "horizon": "next",
         "status": "planned",
-        "topic": "Arithmetic · Addition",
-        "architectureBenefit": "Persistent place-value identity and carry scheduling.",
-        "rationale": "Addition establishes the reusable place-exchange primitive before harder written algorithms.",
-        "canonicalExemplar": "278 + 156"
+        "topic": "Calculus · Integrals",
+        "architectureBenefit": "Many-object refinement and accumulation under one semantic clock.",
+        "rationale": "It follows branching because it adds large synchronized collections and limit continuity.",
+        "canonicalExemplar": "Riemann sums converging to area"
+      },
+      {
+        "id": "quadratic-learner-promotion",
+        "title": "Quadratic learner promotion",
+        "objective": "Turn retained completing-square and plus-minus branch evidence into a reviewed learner animation synchronized with graph roots.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Algebra · Quadratics",
+        "architectureBenefit": "Learner-facing branch convergence from retained semantic evidence.",
+        "rationale": "The diagnostic quadratic is not yet a promoted learner product.",
+        "canonicalExemplar": "Complete the square and meet both graph roots"
       },
       {
         "id": "multidigit-subtraction",
@@ -499,7 +627,7 @@
         "id": "euclidean-geometry",
         "title": "Euclidean geometry",
         "objective": "Cover construction, congruence, similarity, the Pythagorean theorem, area, surface area, and volume with diagram-linked proof steps.",
-        "horizon": "someday",
+        "horizon": "later",
         "status": "planned",
         "topic": "Geometry · Euclidean",
         "architectureBenefit": "Diagram topology, proof correspondence, and spatial decomposition.",
@@ -510,7 +638,7 @@
         "id": "measurement-units-scale",
         "title": "Measurement, units, and scale",
         "objective": "Link dimensions, conversions, scale drawings, coordinate geometry, and error or precision to visible quantities.",
-        "horizon": "someday",
+        "horizon": "later",
         "status": "planned",
         "topic": "Geometry · Measurement",
         "architectureBenefit": "Typed units, dimensional invariants, and scale-preserving transforms.",
@@ -521,7 +649,7 @@
         "id": "probability",
         "title": "Probability",
         "objective": "Cover sample spaces, tree diagrams, combinatorics, conditional probability, independence, and expected value.",
-        "horizon": "someday",
+        "horizon": "later",
         "status": "planned",
         "topic": "Data · Probability",
         "architectureBenefit": "Weighted branching, path aggregation, and conditional state.",
@@ -532,7 +660,7 @@
         "id": "data-statistics",
         "title": "Data and statistics",
         "objective": "Coordinate tables, distributions, center, spread, sampling, uncertainty, and data-to-graph transformations.",
-        "horizon": "someday",
+        "horizon": "later",
         "status": "planned",
         "topic": "Data · Statistics",
         "architectureBenefit": "Dataset identity across tables, plots, summaries, and uncertainty views.",
@@ -543,7 +671,7 @@
         "id": "programming-algorithms",
         "title": "Programming and algorithms",
         "objective": "Synchronize code execution, variable state, data structures, and graph traversal for BFS and Dijkstra-style explanations.",
-        "horizon": "someday",
+        "horizon": "later",
         "status": "planned",
         "topic": "Cross-domain · Programming",
         "architectureBenefit": "Trace semantics and synchronized code-state-diagram views.",
@@ -551,26 +679,32 @@
         "canonicalExemplar": "BFS traversal across code, queue, and graph"
       },
       {
-        "id": "economics-parametric",
-        "title": "Economics and parametric models",
-        "objective": "Link equations, curves, parameter changes, intersections, and narrative interpretation in supply-demand models.",
-        "horizon": "someday",
+        "id": "context-safe-editorial-output",
+        "title": "Context-safe editorial output boundary",
+        "objective": "Provide distinct text-node, attribute, and script-JSON encoding boundaries with misuse checks before untrusted editorial text ships.",
+        "horizon": "later",
         "status": "planned",
-        "topic": "Cross-domain · Economics",
-        "architectureBenefit": "Parameterized graph systems and narrative-to-model correspondence.",
-        "rationale": "Economics reuses graph and intersection semantics with domain-specific explanatory prose.",
-        "canonicalExemplar": "Supply and demand equilibrium shift"
+        "evidence": [
+          "decision.kp.generation-editorial-pruning-placement-v0"
+        ],
+        "topic": "Platform · Security",
+        "architectureBenefit": "Generated text reaches HTML through context-correct output contracts.",
+        "rationale": "Repeated generic escaping is not a safe boundary for untrusted prose.",
+        "canonicalExemplar": "Safe generated-session editorial rendering"
       },
       {
-        "id": "physics-work-energy",
-        "title": "Physics work and energy",
-        "objective": "Synchronize force, displacement, energy equations, graphs, and diagrams through a conserved physical model.",
-        "horizon": "someday",
+        "id": "llm-editorial-candidate-service",
+        "title": "LLM editorial candidate service",
+        "objective": "Generate review-time wording candidates only from verified claims, learner state, approved vocabulary, available visual arguments, and a deterministic explanation spine.",
+        "horizon": "later",
         "status": "planned",
-        "topic": "Cross-domain · Physics",
-        "architectureBenefit": "Quantity conservation across symbolic, graph, and spatial representations.",
-        "rationale": "Physics combines unit-aware arithmetic, calculus, diagrams, and conservation after those primitives mature.",
-        "canonicalExemplar": "Work-energy theorem across force and motion"
+        "evidence": [
+          "decision.kp.generation-editorial-pruning-placement-v0"
+        ],
+        "topic": "Platform · LLM editorial",
+        "architectureBenefit": "Editorial leverage without model authority over math or playback.",
+        "rationale": "Human gold and negative examples must exist before model prose can be evaluated.",
+        "canonicalExemplar": "Human-selected wording candidates for generated solve-x"
       },
       {
         "id": "cross-domain-governed-authoring",
@@ -582,15 +716,29 @@
         "architectureBenefit": "Domain-extensible generation without provider-owned presentation.",
         "rationale": "Cross-domain generation comes last so governance is tested against mature hand-authored references in each domain.",
         "canonicalExemplar": "Governed multi-domain tutorial request"
+      },
+      {
+        "id": "versioned-shared-motif-boundary",
+        "title": "Versioned shared motif boundary",
+        "objective": "At the first intentional shared-motif redesign, version the implementation reference and prove certified callers update centrally.",
+        "horizon": "someday",
+        "status": "deferred",
+        "evidence": [
+          "decision.kp.generation-editorial-pruning-placement-v0"
+        ],
+        "topic": "Platform · Motifs",
+        "architectureBenefit": "Central motif evolution after concrete caller pressure exists.",
+        "rationale": "A universal registry remains speculative until an actual redesign demands it.",
+        "canonicalExemplar": "First intentionally redesigned shared motif"
       }
     ],
     "approval": {
       "status": "superseded",
-      "decidedAt": "2026-07-29T05:00:00.000Z",
+      "decidedAt": "2026-07-29T05:10:00.000Z",
       "decidedBy": "user",
-      "rationale": "Superseded by plan-revision.kp.v11."
+      "rationale": "Superseded by plan-revision.kp.v12."
     },
-    "supersedes": "plan-revision.kp.v9",
-    "supersededBy": "plan-revision.kp.v11"
+    "supersedes": "plan-revision.kp.v10",
+    "supersededBy": "plan-revision.kp.v12"
   }
 }
