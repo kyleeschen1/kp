@@ -208,7 +208,7 @@ export function certifyKpSelectionRefinement<
     targetSelectionId: input.target.id,
     exactMeasure: input.source.quantity.value,
     cohorts
-  }) as KpSelectionRefinementCertificate<
+  }) as unknown as KpSelectionRefinementCertificate<
     UnitId,
     SourcePartitionId,
     TargetPartitionId

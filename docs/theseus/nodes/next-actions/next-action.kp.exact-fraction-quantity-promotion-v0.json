@@ -132,6 +132,20 @@
       "scope": "slice s07 proof-carrying operation types",
       "checkedAt": "2026-07-29T05:28:05.346Z",
       "notes": "Partition and unit identities remain closed across source, target, selection, and certificate generics."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s08 immutable five-beat semantic trace",
+      "checkedAt": "2026-07-29T05:33:01.602Z",
+      "notes": "Twenty-nine tests pass; new trace cases prove checkpoint closure, explicit adjacency and dependencies, exact common-denominator/merge/recognition forms, sealed proof closure, atomic contributor closure, and deterministic renderer-neutral serialization."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s08 trace and sealed proof graph",
+      "checkedAt": "2026-07-29T05:33:02.451Z",
+      "notes": "Trace states, operations, unit/partition identities, and proof types compile across all TypeScript projects."
     }
   ],
   "expectedLearning": [

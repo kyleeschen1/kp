@@ -161,7 +161,8 @@
     {
       "id": "s08",
       "title": "build-five-beat-trace",
-      "status": "planned"
+      "summary": "Built one immutable five-state/five-beat trace for establish, refine, align, merge, and recognize. It owns explicit 1/3 to 2/6 equivalence, 2/6 + 1/6 alignment, 3/6 fusion, and 1/2 regrouping through sealed exact proofs; every state totals one half, dependencies are sequential, sixth-atom provenance closes, and serialization is deterministic and renderer-neutral.",
+      "status": "complete"
     },
     {
       "id": "s09",

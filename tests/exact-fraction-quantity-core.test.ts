@@ -11,6 +11,8 @@ import {
   certifyKpExactQuantitySum,
   createKpExactQuantity,
   createKpExactQuantityUnit,
+  isKpExactQuantityProof,
+  type KpExactQuantitySumCertificate,
   type KpExactQuantity
 } from "../domains/quantities/exact-quantity.ts";
 
@@ -62,6 +64,19 @@ test("same-unit quantities produce an exact proof-carrying sum", () => {
   });
   assert.ok(Object.isFrozen(certificate.result.value));
   assert.ok(Object.isFrozen(certificate));
+  assert.equal(isKpExactQuantityProof(certificate), true);
+});
+
+test("a structurally copied quantity certificate is not sealed", () => {
+  const unit = createKpExactQuantityUnit("unit.whole", "one whole");
+  const third = createKpExactQuantity(unit, createKpRational(1n, 3n));
+  const sixth = createKpExactQuantity(unit, createKpRational(1n, 6n));
+  const real = certifyKpExactQuantitySum(third, sixth);
+  const forged = { ...real } as unknown as
+    KpExactQuantitySumCertificate<typeof unit.id>;
+
+  assert.equal(isKpExactQuantityProof(real), true);
+  assert.equal(isKpExactQuantityProof(forged), false);
 });
 
 test("decoded or widened cross-unit inputs cannot mint a certificate", () => {

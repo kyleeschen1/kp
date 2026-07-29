@@ -5,6 +5,9 @@ import {
 } from "../math/exact-rational.ts";
 
 declare const kpQuantityUnitBrand: unique symbol;
+declare const kpQuantityProofBrand: unique symbol;
+
+const sealedQuantityProofs = new WeakSet<object>();
 
 export interface KpExactQuantityUnit<UnitId extends string> {
   readonly schemaVersion: "kp.exact-quantity-unit.v1";
@@ -26,6 +29,7 @@ export interface KpExactQuantitySumCertificate<UnitId extends string> {
   readonly left: KpExactQuantity<UnitId>;
   readonly right: KpExactQuantity<UnitId>;
   readonly result: KpExactQuantity<UnitId>;
+  readonly [kpQuantityProofBrand]: "sum";
 }
 
 export function createKpExactQuantityUnit<const UnitId extends string>(
@@ -71,7 +75,7 @@ export function certifyKpExactQuantitySum<UnitId extends string>(
     left.unit,
     addKpRationals(left.value, right.value)
   );
-  return Object.freeze({
+  const certificate = Object.freeze({
     schemaVersion: "kp.exact-quantity-sum-certificate.v1",
     lawId: "law.quantity.add-same-unit",
     unitId: left.unit.id,
@@ -79,4 +83,12 @@ export function certifyKpExactQuantitySum<UnitId extends string>(
     right,
     result
   });
+  sealedQuantityProofs.add(certificate);
+  return certificate as KpExactQuantitySumCertificate<UnitId>;
+}
+
+export function isKpExactQuantityProof(value: unknown): boolean {
+  return typeof value === "object" &&
+    value !== null &&
+    sealedQuantityProofs.has(value);
 }
