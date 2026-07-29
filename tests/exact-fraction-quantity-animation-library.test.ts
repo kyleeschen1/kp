@@ -44,7 +44,7 @@ test("exact quantity asset is one valid lazy four-view library exemplar", async 
   );
   assert.deepEqual(
     asset.exportTargets.map(({ kind }) => kind),
-    ["static-step", "frame-sequence"]
+    ["static-step"]
   );
 
   assert.equal(kpAnimationCatalogPackId(asset.id), "exact-quantity");

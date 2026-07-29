@@ -163,6 +163,48 @@ export const kpExactFractionQuantityPreservationManifest = Object.freeze({
     reducedMotionEndpointsPermille: Object.freeze([0, 1_000]),
     reviewViewports: layoutPolicy.reviewViewports
   }),
+  browserAudit: Object.freeze({
+    browsers: Object.freeze(["chromium", "firefox", "webkit"]),
+    denseProgressPermille: Object.freeze([
+      0,
+      90,
+      179,
+      180,
+      181,
+      399,
+      400,
+      401,
+      559,
+      560,
+      561,
+      819,
+      820,
+      821,
+      999,
+      1_000
+    ]),
+    deviceScaleFactors: Object.freeze([1, 2]),
+    maximumScrubP95Ms: 50,
+    maximumScrubSampleMs: 150,
+    maximumSymbolicSessionCount: 1,
+    maximumWebglLeaseCount: 0
+  }),
+  review: Object.freeze({
+    host: "editor-animation-library",
+    noteSchemaVersion: "kp.dev-review-note.v2",
+    placement: "shared-fixed-review-slot",
+    captureAtomic: true,
+    contactSheetProfiles: Object.freeze(["wide", "phone"]),
+    phoneViewSequence: Object.freeze([
+      "symbolic",
+      "partitioned-circle",
+      "fraction-bar",
+      "number-line",
+      "symbolic"
+    ]),
+    lazyContactSheetHydration: true,
+    addsDisplayPage: false
+  }),
   preservationBoundary: Object.freeze({
     addendUnitIdsMustMatch: true,
     exactValuesMustNormalize: true,

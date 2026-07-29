@@ -272,6 +272,88 @@ test("Review remains reachable and records the wide four-view layout", async ({
   });
 });
 
+test("lazy wide and phone checkpoint review stays connected to the live player", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  await page.goto(`/?animation=${descriptorId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const sheet = player.locator("[data-kp-exact-review-sheet]");
+  const content = sheet.locator(
+    "[data-kp-exact-review-sheet-content]"
+  );
+  const review = page.locator("[data-kp-dev-review-shell]");
+
+  await expect(sheet).toBeVisible();
+  await expect(content).toHaveAttribute(
+    "data-kp-exact-review-sheet-status",
+    "idle"
+  );
+  await expect(sheet.locator("[data-kp-exact-review-progress]"))
+    .toHaveCount(0);
+  await expect(review.locator("button.launcher")).toBeVisible();
+
+  await sheet.locator("summary").click();
+  await expect(content).toHaveAttribute(
+    "data-kp-exact-review-sheet-status",
+    "ready"
+  );
+  const wideCards = sheet.locator(
+    "[data-kp-exact-review-card-profile=\"wide\"]"
+  );
+  const phoneCards = sheet.locator(
+    "[data-kp-exact-review-card-profile=\"phone\"]"
+  );
+  await expect(wideCards).toHaveCount(5);
+  await expect(phoneCards).toHaveCount(5);
+  await expect(wideCards.locator(
+    "[data-kp-exact-review-preview-view]"
+  )).toHaveCount(20);
+  await expect(phoneCards.locator(
+    "[data-kp-exact-review-preview-view]"
+  )).toHaveCount(5);
+
+  const aligned = wideCards.locator(
+    "[data-kp-exact-review-progress=\"560\"]"
+  );
+  await aligned.click();
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-progress-permille",
+    "560"
+  );
+  await expect(aligned).toHaveAttribute("aria-current", "step");
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  const mergedNumberLine = phoneCards.locator(
+    "[data-kp-exact-review-progress=\"820\"]"
+  );
+  await expect(mergedNumberLine).toHaveAttribute(
+    "data-kp-exact-review-view",
+    "number-line"
+  );
+  await mergedNumberLine.click();
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-progress-permille",
+    "820"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-active-representation",
+    "number-line"
+  );
+  await expect(mergedNumberLine).toHaveAttribute(
+    "aria-current",
+    "step"
+  );
+  expect(await player.locator("[data-kp-exact-view]")
+    .evaluateAll((views) => views.filter((view) =>
+      getComputedStyle(view).display !== "none"
+    ).length)).toBe(1);
+  await expect(review.locator("button.launcher")).toBeVisible();
+});
+
 test("accessibility, transcript, settled motion, and keyboard stay canonical", async ({
   page
 }) => {

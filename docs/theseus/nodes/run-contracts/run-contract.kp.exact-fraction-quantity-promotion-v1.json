@@ -203,6 +203,54 @@
       "scope": "s22 production exclusion",
       "checkedAt": "2026-07-29T07:54:42.136Z",
       "notes": "239 production files passed all 6 forbidden Review marker checks."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s23 nominal readiness certificate and static export truth",
+      "checkedAt": "2026-07-29T08:17:27.225Z"
+    },
+    {
+      "command": "npm run test:browser:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s23 three-browser live review checkpoint and determinism matrix",
+      "checkedAt": "2026-07-29T08:17:28.228Z"
+    },
+    {
+      "command": "npm run visual:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s23 three-browser wide phone DPR2 visual audit",
+      "checkedAt": "2026-07-29T08:17:29.072Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s23 type safety and production build",
+      "checkedAt": "2026-07-29T08:17:29.929Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s23 dependency and authority boundaries",
+      "checkedAt": "2026-07-29T08:17:30.807Z"
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s23 seven-marker production exclusion",
+      "checkedAt": "2026-07-29T08:17:31.729Z"
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s23 reader production closure",
+      "checkedAt": "2026-07-29T08:17:32.634Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s23 durable control-plane integrity",
+      "checkedAt": "2026-07-29T08:17:33.504Z"
     }
   ],
   "expectedLearning": [
@@ -407,7 +455,8 @@
     {
       "id": "s23",
       "title": "human-visual-checkpoint",
-      "status": "planned"
+      "summary": "Derived a nominal automated-readiness certificate from nine closed evidence classes without an authorable approval bit, removed the false frame-sequence export claim, and added a DEV-only lazy wide/phone five-checkpoint review sheet inside the existing Animation Library. Each card seeks the live canonical player, phone cards choose one deterministic view, the fixed Review composer remains reachable, and the full 27-check three-browser matrix plus 9-check visual audit pass. Production build erases the sheet and its styles under a new seventh closure marker. Mandatory human perceptual approval remains; no ported claim or release mutation was made.",
+      "status": "complete"
     },
     {
       "id": "s24",

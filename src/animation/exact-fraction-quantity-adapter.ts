@@ -132,11 +132,6 @@ KpAnimationAsset {
         id: "export.exact-fraction-quantity.static-step",
         kind: "static-step",
         artifactId: "artifact.exact-fraction-quantity.static-checkpoints"
-      },
-      {
-        id: "export.exact-fraction-quantity.frames",
-        kind: "frame-sequence",
-        artifactId: "artifact.exact-fraction-quantity.frames"
       }
     ],
     dashboard: {

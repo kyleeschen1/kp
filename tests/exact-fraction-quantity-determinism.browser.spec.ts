@@ -4,6 +4,9 @@ import {
   type Browser,
   type Page
 } from "@playwright/test";
+import {
+  kpExactFractionQuantityPreservationManifest as manifest
+} from "../src/reader/compiler/exact-fraction-quantity-preservation-manifest.ts";
 
 const descriptorId =
   "editor-animation.animation.exact-fraction-quantity.third-plus-sixth";
@@ -12,24 +15,11 @@ const animationId =
 const playerSelector =
   `[data-kp-editor-animation-player]` +
   `[data-kp-editor-animation-id="${animationId}"]`;
-const denseProgress = Object.freeze([
-  0,
-  0.09,
-  0.179,
-  0.18,
-  0.181,
-  0.399,
-  0.4,
-  0.401,
-  0.559,
-  0.56,
-  0.561,
-  0.819,
-  0.82,
-  0.821,
-  0.999,
-  1
-]);
+const denseProgress = Object.freeze(
+  manifest.browserAudit.denseProgressPermille.map(
+    (progressPermille) => progressPermille / 1_000
+  )
+);
 
 test("dense seek, reverse seek, and repeated scrub are paint deterministic", async ({
   page
@@ -156,7 +146,7 @@ test("scrub hot path stays bounded and releases its sole symbolic session", asyn
   );
   await expect(player).toHaveAttribute(
     "data-kp-exact-webgl-lease-count",
-    "0"
+    String(manifest.browserAudit.maximumWebglLeaseCount)
   );
   await expect(player.locator("canvas")).toHaveCount(0);
   await expect(player.locator(
@@ -185,8 +175,10 @@ test("scrub hot path stays bounded and releases its sole symbolic session", asyn
   await seekAndSettle(page, player, 0.72);
   const sorted = [...durations].sort((left, right) => left - right);
   const p95 = sorted[Math.floor(sorted.length * 0.95)]!;
-  expect(p95).toBeLessThan(50);
-  expect(Math.max(...durations)).toBeLessThan(150);
+  expect(p95).toBeLessThan(manifest.browserAudit.maximumScrubP95Ms);
+  expect(Math.max(...durations)).toBeLessThan(
+    manifest.browserAudit.maximumScrubSampleMs
+  );
   expect(Number(await player.getAttribute(
     "data-kp-exact-repeated-frame-reuse-count"
   ))).toBeGreaterThanOrEqual(11);
@@ -196,7 +188,9 @@ test("scrub hot path stays bounded and releases its sole symbolic session", asyn
   const disposed = Number(await player.getAttribute(
     "data-kp-exact-symbolic-playback-disposed-count"
   ));
-  expect(created - disposed).toBe(1);
+  expect(created - disposed).toBe(
+    manifest.browserAudit.maximumSymbolicSessionCount
+  );
 
   await page.evaluate((selector) => {
     const oldPlayer = document.querySelector<HTMLElement>(selector);

@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 import {
   createKpExactFractionQuantityRuntimeSession,
   sampleKpExactFractionQuantityRuntime,
@@ -56,6 +58,10 @@ import type {
   KpExactFractionSymbolicEndpoint,
   KpExactFractionSymbolicMotionInput
 } from "../rendering/exact-fraction-quantity-symbolic-projection.ts";
+import type {
+  KpExactFractionQuantityStaticStepExport,
+  KpExactFractionQuantityStaticStepFrame
+} from "../tutorial/exact-fraction-quantity-static-step-export.ts";
 import {
   KP_EDITOR_ANIMATION_DISPOSE_EVENT,
   dispatchKpEditorAnimationPlaybackAction
@@ -86,6 +92,7 @@ interface ExactSurfaceSession {
   repeatedFrameReuseCount: number;
   symbolicPlaybackCreatedCount: number;
   symbolicPlaybackDisposedCount: number;
+  disposed: boolean;
   lastUrlWriteMs: number;
 }
 
@@ -114,6 +121,7 @@ KpEditorAnimationSurfaceAdapter = {
         repeatedFrameReuseCount: 0,
         symbolicPlaybackCreatedCount: 0,
         symbolicPlaybackDisposedCount: 0,
+        disposed: false,
         lastUrlWriteMs: 0
       };
       sessions.set(player, session);
@@ -188,12 +196,30 @@ function mountSurface(
   slot.addEventListener("click", (event) => {
     const target = event.target instanceof Element
       ? event.target.closest<HTMLElement>(
-          "[data-kp-exact-checkpoint-start], [data-kp-exact-active-view]"
+          "[data-kp-exact-checkpoint-start], " +
+          "[data-kp-exact-active-view], " +
+          "[data-kp-exact-review-progress]"
         )
       : null;
     if (target === null) return;
     const checkpointStart = target.dataset["kpExactCheckpointStart"];
     const activeView = target.dataset["kpExactActiveView"];
+    const reviewProgress = target.dataset["kpExactReviewProgress"];
+    if (reviewProgress !== undefined) {
+      const progress = Number(reviewProgress) / 1_000;
+      const reviewView = target.dataset["kpExactReviewView"];
+      session.libraryState = createKpExactFractionQuantityLibraryState({
+        ...session.libraryState,
+        progress,
+        ...(isExactView(reviewView) ? { activeView: reviewView } : {})
+      });
+      writeRoute(player, session, true);
+      dispatchKpEditorAnimationPlaybackAction(player, {
+        type: "seek",
+        progress
+      });
+      return;
+    }
     if (checkpointStart !== undefined) {
       const progress = Number(checkpointStart) / 1_000;
       session.libraryState = createKpExactFractionQuantityLibraryState({
@@ -286,6 +312,15 @@ function mountSurface(
       writeRoute(player, session, true);
     }
   });
+  if (import.meta.env.DEV) {
+    const reviewSheet = slot.querySelector<HTMLDetailsElement>(
+      "[data-kp-exact-review-sheet]"
+    );
+    reviewSheet?.addEventListener("toggle", () => {
+      if (!reviewSheet.open) return;
+      void hydrateReviewSheet(player, reviewSheet, session);
+    });
+  }
 }
 
 function syncSurface(
@@ -322,6 +357,10 @@ function syncSurface(
   syncActiveView(slot, session.libraryState);
   syncFoldControls(slot, session.libraryState);
   syncCheckpointControls(slot, beatIndex);
+  syncReviewSheetControls(
+    slot,
+    frame.projection.neutralFrame.progressPermille
+  );
   syncAccessibleSurface(
     slot,
     session.libraryState,
@@ -522,11 +561,140 @@ function disposeExactSurface(
   // Incrementing the generation makes any in-flight font measurement retire
   // without publishing a session after this player has left the library.
   session.symbolicGeneration += 1;
+  session.disposed = true;
   releaseSymbolicPlayback(session);
   session.symbolicFontReadiness?.dispose();
   session.symbolicFontReadiness = undefined;
   sessions.delete(player);
   syncResourceTelemetry(player, session, "disposed");
+}
+
+async function hydrateReviewSheet(
+  player: HTMLElement,
+  details: HTMLDetailsElement,
+  session: ExactSurfaceSession
+): Promise<void> {
+  const host = required<HTMLElement>(
+    details,
+    "[data-kp-exact-review-sheet-content]"
+  );
+  if (
+    host.dataset["kpExactReviewSheetStatus"] === "ready" ||
+    host.dataset["kpExactReviewSheetStatus"] === "loading"
+  ) return;
+  host.dataset["kpExactReviewSheetStatus"] = "loading";
+  details.setAttribute("aria-busy", "true");
+  const { createKpExactFractionQuantityStaticStepExport } =
+    await import(
+      "../tutorial/exact-fraction-quantity-static-step-export.ts"
+    );
+  if (session.disposed || !player.isConnected) return;
+  const sequence = createKpExactFractionQuantityStaticStepExport();
+  host.innerHTML = renderReviewSheet(sequence);
+  host.dataset["kpExactReviewSheetStatus"] = "ready";
+  details.removeAttribute("aria-busy");
+  if (session.lastFrame !== undefined) {
+    syncReviewSheetControls(
+      details,
+      session.lastFrame.projection.neutralFrame.progressPermille
+    );
+  }
+}
+
+function renderReviewSheet(
+  sequence: KpExactFractionQuantityStaticStepExport
+): string {
+  return `
+    <section aria-labelledby="kp-exact-wide-review-title">
+      <h5 id="kp-exact-wide-review-title">Wide · four synchronized views</h5>
+      <div class="kp-exact-review-sheet__grid kp-exact-review-sheet__grid--wide">
+        ${sequence.steps.map(({ frame }, index) =>
+          renderReviewCard(frame, index, "wide")
+        ).join("")}
+      </div>
+    </section>
+    <section aria-labelledby="kp-exact-phone-review-title">
+      <h5 id="kp-exact-phone-review-title">Phone · one focused view</h5>
+      <div class="kp-exact-review-sheet__grid kp-exact-review-sheet__grid--phone">
+        ${sequence.steps.map(({ frame }, index) =>
+          renderReviewCard(frame, index, "phone")
+        ).join("")}
+      </div>
+    </section>`;
+}
+
+function renderReviewCard(
+  frame: KpExactFractionQuantityStaticStepFrame,
+  index: number,
+  profile: "wide" | "phone"
+): string {
+  const progressPermille = Math.round(frame.progress * 1_000);
+  const phoneView =
+    manifest.review.phoneViewSequence[index]! as
+      KpExactFractionQuantityViewKind;
+  const preview = profile === "wide"
+    ? (manifest.viewObligations as readonly KpExactFractionQuantityViewKind[])
+        .map((view) => `
+          <span class="kp-exact-review-sheet__view" data-kp-exact-review-preview-view="${view}">
+            ${staticRepresentationHtml(frame, view)}
+          </span>`)
+        .join("")
+    : `<span class="kp-exact-review-sheet__view" data-kp-exact-review-preview-view="${phoneView}">
+        ${staticRepresentationHtml(frame, phoneView)}
+      </span>`;
+  return `
+    <article class="kp-exact-review-sheet__card" data-kp-exact-review-card-profile="${profile}">
+      <button type="button"
+        data-kp-exact-review-progress="${progressPermille}"
+        ${profile === "phone"
+          ? `data-kp-exact-review-view="${phoneView}"`
+          : ""}
+        aria-label="${escapeHtml(
+          `${profile} checkpoint ${index + 1}: ${frame.state.description}`
+        )}">
+        <span class="kp-exact-review-sheet__meta">
+          <b>${String(index + 1).padStart(2, "0")}</b>
+          <span>${escapeHtml(frame.state.description)}</span>
+          <code>${progressPermille / 10}%</code>
+        </span>
+        <span class="kp-exact-review-sheet__preview kp-exact-review-sheet__preview--${profile}" aria-hidden="true">
+          ${preview}
+        </span>
+      </button>
+    </article>`;
+}
+
+function staticRepresentationHtml(
+  frame: KpExactFractionQuantityStaticStepFrame,
+  view: KpExactFractionQuantityViewKind
+): string {
+  switch (view) {
+    case "symbolic":
+      return frame.representations.symbolic.htmlAndMathml;
+    case "partitioned-circle":
+      return frame.representations.partitionedCircle.svg;
+    case "fraction-bar":
+      return frame.representations.fractionBar.svg;
+    case "number-line":
+      return frame.representations.numberLine.svg;
+  }
+}
+
+function syncReviewSheetControls(
+  root: ParentNode,
+  progressPermille: number
+): void {
+  root.querySelectorAll<HTMLElement>("[data-kp-exact-review-progress]")
+    .forEach((button) => {
+      if (
+        Number(button.dataset["kpExactReviewProgress"]) ===
+        progressPermille
+      ) {
+        button.setAttribute("aria-current", "step");
+      } else {
+        button.removeAttribute("aria-current");
+      }
+    });
 }
 
 function releaseSymbolicPlayback(session: ExactSurfaceSession): void {
@@ -855,6 +1023,7 @@ function renderSurfaceShell(
         .kp-exact-sr-only { position:absolute !important; width:1px !important; height:1px !important; padding:0 !important; margin:-1px !important; overflow:hidden !important; clip:rect(0,0,0,0) !important; white-space:nowrap !important; border:0 !important; }
         .kp-exact-quantity__transcript { margin-block:1rem 0; }
         .kp-exact-quantity__transcript li[aria-current="step"] { font-weight:700; }
+        ${import.meta.env.DEV ? reviewSheetStyles() : ""}
         @media (max-width:${kpExactFractionQuantityLayoutPolicy.wideMinWidthPx - 1}px) {
           .kp-exact-quantity__grid { grid-template-columns:1fr; min-height:18rem; }
           .kp-exact-quantity__view { display:none; min-height:18rem; }
@@ -899,7 +1068,40 @@ function renderSurfaceShell(
         ${viewShell("number-line", "Number line")}
       </div>
       ${renderAccessibleTranscript(accessibility)}
+      ${import.meta.env.DEV ? renderReviewSheetShell() : ""}
     </section>`;
+}
+
+function renderReviewSheetShell(): string {
+  return `
+    <details class="kp-exact-review-sheet" data-kp-exact-review-sheet>
+      <summary>Visual checkpoint review · wide + phone</summary>
+      <div class="kp-exact-review-sheet__content" data-kp-exact-review-sheet-content data-kp-exact-review-sheet-status="idle">
+        <p>Open this review sheet to load the five static checkpoints. Select any card to seek the live animation; the Review box remains available for comments.</p>
+      </div>
+    </details>`;
+}
+
+function reviewSheetStyles(): string {
+  return `
+    .kp-exact-review-sheet { margin-block:1rem 0; border-top:1px solid color-mix(in srgb,var(--kp-exact-ink) 18%,transparent); padding-block-start:.8rem; }
+    .kp-exact-review-sheet > summary { cursor:pointer; font-weight:700; }
+    .kp-exact-review-sheet__content > p { color:#577181; }
+    .kp-exact-review-sheet__content section + section { margin-block-start:1.25rem; }
+    .kp-exact-review-sheet__content h5 { margin:.75rem 0 .5rem; font:700 .78rem/1.2 system-ui; letter-spacing:.05em; text-transform:uppercase; }
+    .kp-exact-review-sheet__grid { display:grid; gap:.65rem; }
+    .kp-exact-review-sheet__grid--wide { grid-template-columns:repeat(auto-fit,minmax(18rem,1fr)); }
+    .kp-exact-review-sheet__grid--phone { grid-template-columns:repeat(auto-fit,minmax(12rem,1fr)); }
+    .kp-exact-review-sheet__card { min-width:0; }
+    .kp-exact-review-sheet__card > button { display:grid; width:100%; height:100%; padding:0; overflow:hidden; border:1px solid color-mix(in srgb,var(--kp-exact-ink) 22%,transparent); border-radius:.65rem; background:white; color:var(--kp-exact-ink); text-align:start; }
+    .kp-exact-review-sheet__card > button[aria-current="step"] { outline:3px solid color-mix(in srgb,var(--kp-exact-accent) 45%,transparent); outline-offset:2px; }
+    .kp-exact-review-sheet__meta { display:grid; grid-template-columns:auto 1fr auto; gap:.5rem; align-items:start; padding:.55rem .65rem; border-bottom:1px solid color-mix(in srgb,var(--kp-exact-ink) 12%,transparent); font:.72rem/1.25 system-ui; }
+    .kp-exact-review-sheet__meta b, .kp-exact-review-sheet__meta code { color:var(--kp-exact-accent); }
+    .kp-exact-review-sheet__preview { display:grid; gap:.3rem; padding:.45rem; pointer-events:none; }
+    .kp-exact-review-sheet__preview--wide { grid-template-columns:repeat(2,minmax(0,1fr)); min-height:12rem; }
+    .kp-exact-review-sheet__preview--phone { min-height:12rem; }
+    .kp-exact-review-sheet__view { display:grid; place-items:center; min-width:0; overflow:hidden; border-radius:.35rem; background:#f7fafb; font-size:.8rem; }
+    .kp-exact-review-sheet__view svg { display:block; width:100%; max-height:5.5rem; }`;
 }
 
 function viewButtons(active: KpExactFractionQuantityViewKind): string {
