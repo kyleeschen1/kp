@@ -1,9 +1,11 @@
 # KP Roadmap
 
-Last Updated: 2026-07-27
+Last Updated: 2026-07-28
 Status: active
 Active Thread: `threads/cross-domain-tutorial-platform.md`
-Supporting Thread: `threads/semantic-runtime.md`
+Supporting Threads:
+- `threads/semantic-runtime.md`
+- `threads/animation-library-promotion.md`
 
 ## Current Source Of Truth
 
@@ -86,21 +88,50 @@ foldable transformation trees. At least three domain exemplars should ship
 before another platform-only compositor loop unless a real exemplar exposes a
 failed generic invariant.
 
+The persistent promotion order is now owned by
+`threads/animation-library-promotion.md` and accepted by
+`decisions/2026-07-28-kp-stable-animation-promotion-order.md`. Exact fraction
+quantity identity is next. Place-value arithmetic, a bounded economics
+equilibrium shift, and a bounded constant-force work-energy exemplar follow
+early for demo breadth before the recorded vector/matrix, derivative, integral,
+and later-domain sequence. Older sequence documents remain rationale but no
+longer independently determine rank.
+
+The platform milestones between those promotions are recorded in
+`decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md`.
+After the first four visible exemplars, KP will declare public API tiers and
+bridge the existing verified linear-equation generator into canonical animation
+assets. That bridge carries a deterministic explanation spine and approved
+vocabulary before any LLM editorial service is introduced. Model-generated
+wording remains a reviewable candidate layer over verified claims, never a
+source of mathematical truth or a live playback dependency. Context-specific
+output encoding precedes untrusted text, motif versioning waits for an
+intentional shared redesign, and compatibility pruning happens beside the
+migration that makes it safe.
+
 ## Active Focus
 
-**Canonical construction, the fraction reader migration, and the radical reader
-promotion kit are complete.** The canonical renderer owns the approved solve-x,
-fraction split/merge, and radical succession transitions; the older material
-layer is compatibility-only for non-migrated transitions and never paints
-alongside them. Governed fraction, exponent, radical, and compound fixtures
-share one verified construction and renderer-session path.
+**Canonical construction, the fraction and radical migrations, foldable
+distribution pressure work, canonical fraction composition, and role-complete
+operation-presentation plans are complete.** The canonical renderer owns moving
+paint for promoted transitions; the older material layer remains
+compatibility-only for non-migrated transitions and never paints alongside a
+canonical session. Catalog status remains evidence-derived, so explicit static
+checkpoints and retained compatibility debt cannot be reported as fully
+animated promotion.
 
-The unit-exponent dry run passed the promotion-cost ratchet with zero
-compositor-core, lifecycle, scheduler, notation-geometry, or runtime-artifact
-growth. Structural WebGL work is bounded by a lazy two-context lease pool with
-native fallback. The next recommended product proposal is foldable distribution
-and collection for `3(x + 2) + 2(x - 1) -> 5x + 4`; no successor implementation
-queue is active until its exemplar contract is reviewed.
+The approved content run is exact fraction quantity identity through
+`1/3 + 1/6 = 1/2`. Its bounded project-memory reconciliation is complete, and
+`npm run check:promotion-memory` now rejects drift between the ledger, roadmap,
+current queue, active Theseus phase, and evidence-derived catalog status. The
+run remains content-led and stops for human visual review before release.
+
+The generator, editorial-text, API-tier, motif-versioning, and pruning
+recommendations are durable platform milestones in
+`threads/animation-library-promotion.md`; they are not permission to interrupt
+the first four content promotions with another broad infrastructure program.
+The verified problem-to-animation bridge begins after rank 4 and before the
+vector/matrix tranche.
 
 The migration remains complexity-negative replacement work. Semantic traces,
 lineage, clocks, native accessibility, authoring guidance, and accepted legacy
@@ -109,17 +140,15 @@ ephemeral. Each migrated transition must retire or bypass its compatibility
 paint in the same rollback unit, so KP converges on one implementation without
 discarding unmigrated catalog coverage.
 
-The current breadth checkpoint is the derivative bridge. It must synchronize a
-KaTeX finite difference quotient with secant geometry, continuously converge to
-the tangent and `f'(a)`, and rewind exactly. The previous moving-tangent editor
-sample is reusable reference evidence, not the learner promotion target.
-
-The dependency order is owned by approved Theseus plan revision
-`plan-revision.kp.v10`. Planned roadmap rows preserve direction but do not
-authorize implementation; an approved typed run contract owns execution. Human
-exemplar approval remains mandatory before each subjective visual
-generalization, and existing standalone examples remain reference evidence
-rather than automatically promoted reader products.
+The durable promotion order and current status are owned by
+`threads/animation-library-promotion.md`. Approved Theseus plan revision
+`plan-revision.kp.v13` mirrors that order, while
+`run-contract.kp.exact-fraction-quantity-promotion-v1` alone authorizes the
+current implementation. Planned rows do not authorize implementation; an
+approved typed run contract owns execution. Human exemplar approval remains
+mandatory before each subjective visual generalization, and existing
+standalone examples remain reference evidence rather than automatically
+promoted reader products.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
@@ -360,27 +389,27 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Preserve the completed canonical construction guide, fraction and radical
-   reader migrations, promotion kit, bounded resource leases, governed cohort,
-   live review gallery, and fixed release gates.
-2. Review one bounded foldable distribution and collection proposal for
-   `3(x + 2) + 2(x - 1) -> 5x + 4`, keeping one immutable canonical trace and
-   treating folds as presentation projections.
-3. Prove expanded, collapsed, automatic, and pinned fold projections with
-   deterministic seek/rewind, disclosed compression, and one visual checkpoint
-   before generalization.
-4. Expand next through exact arithmetic evaluation trees, vector and matrix
-   operations, an equation-graph derivative bridge, and integral accumulation,
-   one exemplar checkpoint at a time.
+1. Preserve the completed canonical construction, fraction and radical reader
+   migrations, foldable distribution evidence, canonical fraction-composition
+   release, role-complete presentation plans, bounded resource leases, live
+   review gallery, and fixed release gates.
+2. Complete the approved exact-fraction quantity run for
+   `1/3 + 1/6 = 1/2`, projected through KaTeX and concrete quantity views, and
+   stop at its human visual checkpoint before release.
+3. Advance place-value arithmetic, a bounded supply/demand equilibrium shift,
+   and a bounded constant-force work-energy explanation early for demo breadth.
+4. Continue through vector/matrix operations, the equation-graph derivative
+   bridge, integral accumulation, and the stable later queue one exemplar
+   checkpoint at a time.
 5. Improve hierarchical layout, temporal lanes, group motion, or deterministic
    staging only when those product exemplars expose a failed generic
    non-crowding invariant.
 6. Keep governed models limited to verified semantic operations, laws, and
    suggested fold/focus intent; deterministic compilers retain mathematics,
    timing, geometry, typography, rendering, validation, and repair authority.
-7. Keep BFS, economics, programming, physics, course-scale curriculum, dynamic
-   package loading, and broad WebGL work parked until a new priority decision
-   explicitly advances them.
+7. Keep BFS, programming, course-scale curriculum, dynamic package loading,
+   broad WebGL work, economics solvers, and physics engines parked. Only the
+   bounded economics and physics demo exemplars are advanced.
 
 ## Deferred
 

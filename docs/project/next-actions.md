@@ -7,27 +7,24 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-1. In the next approved loop, reconcile roadmap, thread, catalog, and Theseus
-   promotion status against `threads/animation-library-promotion.md`; mark
-   older ordering records superseded for rank and add a drift gate.
-2. Review the bounded exact-fraction quantity exemplar
-   `1/3 + 1/6 = 1/2`.
-3. Promote place-value addition, a bounded economics equilibrium shift, and a
+1. Complete the approved exact-fraction quantity exemplar
+   `1/3 + 1/6 = 1/2`, stopping at its human visual checkpoint before release.
+2. Promote place-value addition, a bounded economics equilibrium shift, and a
    bounded constant-force work-energy exemplar in the recorded order.
-4. After that demo tranche, declare stable, internal, and experimental API
+3. After that demo tranche, declare stable, internal, and experimental API
    tiers, then prepare a separate verified linear-generator-to-canonical-
    animation bridge; do not hide either change inside a content promotion.
-5. Introduce a minimal hand-authored `ExplanationSpineV1`, learner state,
+4. Introduce a minimal hand-authored `ExplanationSpineV1`, learner state,
    vocabulary contract, and verified claim references with the first generated
    solve-x session.
-6. Before untrusted editorial output ships, consolidate repeated escaping at
+5. Before untrusted editorial output ships, consolidate repeated escaping at
    the generation boundary into context-specific text-node, attribute, and
    script-JSON encoders with misuse checks.
-7. After deterministic generated sessions and human gold and negative examples
+6. After deterministic generated sessions and human gold and negative examples
    are stable, add an offline/review-time LLM editorial candidate service.
    Keep mathematical claims verified, require human selection, and keep live
    playback independent of the model.
-8. Version a shared motif implementation only when an intentional redesign
+7. Version a shared motif implementation only when an intentional redesign
    supplies a real caller; prove certified callers update through that boundary.
    Retire adjacent compatibility paths as their last callers migrate rather
    than scheduling a detached rewrite.

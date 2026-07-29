@@ -131,7 +131,8 @@
     {
       "id": "s03",
       "title": "add-promotion-drift-gate",
-      "status": "planned"
+      "summary": "Added a repository-owned promotion-memory gate that parses the sole stable ledger, derives the first unresolved rank, checks the roadmap and current queue, requires one matching active Theseus phase and live run, and makes a promoted claim fail unless its catalog animation ID is evidence-derived as ported. Updated the living pointers to the active exact-fraction run without duplicating the rank table.",
+      "status": "complete"
     },
     {
       "id": "s04",

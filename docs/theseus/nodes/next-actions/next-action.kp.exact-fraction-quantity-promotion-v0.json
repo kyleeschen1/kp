@@ -41,6 +41,27 @@
       "scope": "slice s02 stable frontier reconciliation",
       "checkedAt": "2026-07-29T05:07:02.299Z",
       "notes": "Active revision 13 is approved and ready with zero warnings; abandoned semantic convergence slices are skipped, radical repair evidence is re-linked, and exact fraction is the sole active promotion phase."
+    },
+    {
+      "command": "npm run test:promotion-memory",
+      "status": "passed",
+      "scope": "slice s03 promotion ledger parser and drift failures",
+      "checkedAt": "2026-07-29T05:13:53.543Z",
+      "notes": "Five focused tests prove first-unresolved derivation, roadmap/queue/Theseus drift detection, and fail-closed catalog certification."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "slice s03 live repository memory alignment",
+      "checkedAt": "2026-07-29T05:13:54.403Z",
+      "notes": "Rank 1 exact fraction quantity resolves through active plan phase exact-fraction-quantity-models and the approved live run contract."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s03 typed promotion-memory gate",
+      "checkedAt": "2026-07-29T05:13:55.220Z",
+      "notes": "Application, Node scripts, tests, and domain type checks pass."
     }
   ],
   "expectedLearning": [

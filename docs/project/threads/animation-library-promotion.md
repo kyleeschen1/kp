@@ -2,9 +2,8 @@
 
 Status: active-supporting
 Last Updated: 2026-07-28
-Current Next Action: In the next approved loop, first reconcile project memory
-against this ledger, then review the exact-fraction quantity exemplar
-`1/3 + 1/6 = 1/2`.
+Current Next Action: Complete the approved exact-fraction quantity exemplar
+`1/3 + 1/6 = 1/2` and stop at its human visual checkpoint before promotion.
 
 ## Goal
 
@@ -48,32 +47,32 @@ release gate.
 
 ## Stable Frontier Order
 
-| Rank | Stable ID | Canonical exemplar | Status | Capability or demo purpose |
-| ---: | --- | --- | --- | --- |
-| 1 | `kp.promotion.exact-fraction-quantity` | `1/3 + 1/6 = 1/2` across KaTeX, partitioned circles, bars or areas, and a number line | next | Exact quantity identity across symbolic and concrete views |
-| 2 | `kp.promotion.place-value-addition` | `278 + 156 = 434` | queued | Arithmetic demo breadth; exchange with persistent place-value provenance |
-| 3 | `kp.promotion.economics-equilibrium` | Supply and demand equilibrium shift | queued | Early versatility demo; parameter, curve, intersection, and narrative correspondence |
-| 4 | `kp.promotion.physics-work-energy` | Constant-force work and kinetic-energy change | queued | Early versatility demo; units and conservation across equation, graph, and diagram without a physics engine |
-| 5 | `kp.promotion.vector-dot-projection` | Project one vector onto another | planned | Symbolic-to-spatial identity and indexed component pairing |
-| 6 | `kp.promotion.matrix-linear-map` | Apply a `2 × 2` matrix to a vector, then compose matrices from dot products | planned | Grid-aware nested evaluation and coordinated geometric transformation |
-| 7 | `kp.promotion.derivative-bridge` | Difference quotient and secant converging to `f'(a)` and the tangent | planned | Continuous shared state with foldable symbolic detail |
-| 8 | `kp.promotion.integral-accumulation` | Riemann sums converging to area | planned | Many-object refinement, aggregation, and honest patterned compression |
-| 9 | `kp.promotion.quadratic-learner` | Complete the square, branch through `±`, and meet the graph roots | planned | Promote retained branch evidence into a learner product |
-| 10 | `kp.promotion.place-value-subtraction` | `402 - 178 = 224` | later | Inverse exchange and dependency-aware borrowing |
-| 11 | `kp.promotion.multidigit-multiplication` | `23 × 14 = 322` | later | Two-dimensional distribution and partial-result composition |
-| 12 | `kp.promotion.multidigit-division` | `732 ÷ 6 = 122` | later | Iterative consumption, quotient settlement, and remainder invariants |
-| 13 | `kp.promotion.ratios-rates-percent` | Scale a recipe and convert to percent | later | Unit-aware proportional scaling across linked views |
-| 14 | `kp.promotion.rational-expressions` | Add and simplify rational expressions | later | Fraction composition, domain restrictions, and nested normalization |
-| 15 | `kp.promotion.polynomial-algebra` | Factor and divide a cubic polynomial | later | Large reversible symbolic schedules and remainder identity |
-| 16 | `kp.promotion.exponent-log-radical` | Expand and recombine logarithms; generalize fractional powers and radicals | later | Nested structural rewrites and inverse-function continuity |
-| 17 | `kp.promotion.functions-coordinate` | Transform and compose functions | later | Parameter-driven symbolic-to-graph families |
-| 18 | `kp.promotion.relations-systems` | Solve a two-variable system by elimination | later | Constraint sets, sign-sensitive operations, and coordinated equations |
-| 19 | `kp.promotion.trigonometry` | Trace sine across the unit circle and graph | later | Periodic geometric-symbolic-graph identity |
-| 20 | `kp.promotion.sequences-operators` | Build a geometric series from partial sums | later | Indexed repetition, recurrence, fold/unfold, and aggregation |
-| 21 | `kp.promotion.geometry-measurement` | Pythagorean rearrangement, then a unit-aware scale drawing | later | Diagram topology, proof correspondence, spatial decomposition, and units |
-| 22 | `kp.promotion.probability-data` | Conditional-probability tree, then linked data plots and summaries | later | Weighted branching, collection identity, and uncertainty |
-| 23 | `kp.promotion.programming-algorithms` | BFS across code, queue, and graph | later | Verifiable code-state-diagram traces |
-| 24 | `kp.promotion.cross-domain-governed-authoring` | Governed multi-domain explanation request | later | Model generation only after mature references exist in each domain |
+| Rank | Stable ID | Canonical exemplar | Status | Catalog animation ID | Capability or demo purpose |
+| ---: | --- | --- | --- | --- | --- |
+| 1 | `kp.promotion.exact-fraction-quantity` | `1/3 + 1/6 = 1/2` across KaTeX, partitioned circles, bars or areas, and a number line | next | — | Exact quantity identity across symbolic and concrete views |
+| 2 | `kp.promotion.place-value-addition` | `278 + 156 = 434` | queued | — | Arithmetic demo breadth; exchange with persistent place-value provenance |
+| 3 | `kp.promotion.economics-equilibrium` | Supply and demand equilibrium shift | queued | — | Early versatility demo; parameter, curve, intersection, and narrative correspondence |
+| 4 | `kp.promotion.physics-work-energy` | Constant-force work and kinetic-energy change | queued | — | Early versatility demo; units and conservation across equation, graph, and diagram without a physics engine |
+| 5 | `kp.promotion.vector-dot-projection` | Project one vector onto another | planned | — | Symbolic-to-spatial identity and indexed component pairing |
+| 6 | `kp.promotion.matrix-linear-map` | Apply a `2 × 2` matrix to a vector, then compose matrices from dot products | planned | — | Grid-aware nested evaluation and coordinated geometric transformation |
+| 7 | `kp.promotion.derivative-bridge` | Difference quotient and secant converging to `f'(a)` and the tangent | planned | — | Continuous shared state with foldable symbolic detail |
+| 8 | `kp.promotion.integral-accumulation` | Riemann sums converging to area | planned | — | Many-object refinement, aggregation, and honest patterned compression |
+| 9 | `kp.promotion.quadratic-learner` | Complete the square, branch through `±`, and meet the graph roots | planned | — | Promote retained branch evidence into a learner product |
+| 10 | `kp.promotion.place-value-subtraction` | `402 - 178 = 224` | later | — | Inverse exchange and dependency-aware borrowing |
+| 11 | `kp.promotion.multidigit-multiplication` | `23 × 14 = 322` | later | — | Two-dimensional distribution and partial-result composition |
+| 12 | `kp.promotion.multidigit-division` | `732 ÷ 6 = 122` | later | — | Iterative consumption, quotient settlement, and remainder invariants |
+| 13 | `kp.promotion.ratios-rates-percent` | Scale a recipe and convert to percent | later | — | Unit-aware proportional scaling across linked views |
+| 14 | `kp.promotion.rational-expressions` | Add and simplify rational expressions | later | — | Fraction composition, domain restrictions, and nested normalization |
+| 15 | `kp.promotion.polynomial-algebra` | Factor and divide a cubic polynomial | later | — | Large reversible symbolic schedules and remainder identity |
+| 16 | `kp.promotion.exponent-log-radical` | Expand and recombine logarithms; generalize fractional powers and radicals | later | — | Nested structural rewrites and inverse-function continuity |
+| 17 | `kp.promotion.functions-coordinate` | Transform and compose functions | later | — | Parameter-driven symbolic-to-graph families |
+| 18 | `kp.promotion.relations-systems` | Solve a two-variable system by elimination | later | — | Constraint sets, sign-sensitive operations, and coordinated equations |
+| 19 | `kp.promotion.trigonometry` | Trace sine across the unit circle and graph | later | — | Periodic geometric-symbolic-graph identity |
+| 20 | `kp.promotion.sequences-operators` | Build a geometric series from partial sums | later | — | Indexed repetition, recurrence, fold/unfold, and aggregation |
+| 21 | `kp.promotion.geometry-measurement` | Pythagorean rearrangement, then a unit-aware scale drawing | later | — | Diagram topology, proof correspondence, spatial decomposition, and units |
+| 22 | `kp.promotion.probability-data` | Conditional-probability tree, then linked data plots and summaries | later | — | Weighted branching, collection identity, and uncertainty |
+| 23 | `kp.promotion.programming-algorithms` | BFS across code, queue, and graph | later | — | Verifiable code-state-diagram traces |
+| 24 | `kp.promotion.cross-domain-governed-authoring` | Governed multi-domain explanation request | later | — | Model generation only after mature references exist in each domain |
 
 Ranks 2–4 intentionally move arithmetic, economics, and physics forward as
 bounded demo exemplars. They demonstrate cross-domain versatility without
@@ -148,9 +147,11 @@ After a promotion closes:
 5. resolve the approved Theseus contract without automatically activating the
    next row.
 
-The next loop should add a consistency check that rejects a roadmap or thread
-which names a completed item as current, disagrees with this thread's first
-unresolved rank, or claims promotion without the catalog certificate.
+`npm run check:promotion-memory` rejects a roadmap, queue, active Theseus phase,
+or thread which disagrees with this table's first unresolved rank. It also
+rejects a `promoted` row unless its catalog animation ID is evidence-derived as
+`ported`; the catalog ID column is intentionally blank until that certificate
+exists.
 
 ## Accepted Scope
 
