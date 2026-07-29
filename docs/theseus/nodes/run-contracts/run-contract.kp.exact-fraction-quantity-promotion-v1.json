@@ -147,6 +147,62 @@
       "scope": "s21 production exclusion",
       "checkedAt": "2026-07-29T07:22:36.192Z",
       "notes": "239 production files passed all 6 forbidden Review marker checks."
+    },
+    {
+      "command": "npm run visual:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s22 three-browser deterministic visual audit",
+      "checkedAt": "2026-07-29T07:54:35.770Z",
+      "notes": "9 Chromium, Firefox, and WebKit checks passed: dense boundaries, reverse and repeated seeks, wide/phone/DPR2 resize, font readiness, bounded scrub timing, single-session ownership, zero WebGL leases, and disposal closure."
+    },
+    {
+      "command": "npm run test:browser:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s22 complete browser and Review matrix",
+      "checkedAt": "2026-07-29T07:54:36.858Z",
+      "notes": "24 checks passed across Chromium, Firefox, and WebKit, including Animation Library, Review capture, accessibility, deterministic paint, responsiveness, performance, and resource release."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s22 exact regression suite",
+      "checkedAt": "2026-07-29T07:54:37.739Z",
+      "notes": "88 exact semantic, projection, runtime, accessibility, export, responsive, and type-law tests passed."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "s22 generic compositor regression",
+      "checkedAt": "2026-07-29T07:54:38.659Z",
+      "notes": "67 compositor tests passed, including authored presentation cohorts and measured fan-in clearance below persistent paint."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22 repository type safety",
+      "checkedAt": "2026-07-29T07:54:39.531Z",
+      "notes": "Application, node, test, protocol-dependent, and domain type checks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s22 dependency direction",
+      "checkedAt": "2026-07-29T07:54:40.393Z",
+      "notes": "All four architecture gates passed with no new runtime, scheduler, compositor, or compatibility category."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s22 production build",
+      "checkedAt": "2026-07-29T07:54:41.252Z",
+      "notes": "Production build passed after cross-browser hardening and the generic semantic-cohort routing repair."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s22 production exclusion",
+      "checkedAt": "2026-07-29T07:54:42.136Z",
+      "notes": "239 production files passed all 6 forbidden Review marker checks."
     }
   ],
   "expectedLearning": [
@@ -345,7 +401,8 @@
     {
       "id": "s22",
       "title": "prove-browser-determinism",
-      "status": "planned"
+      "summary": "Added stable exact unit, full browser, and three-browser visual entrypoints. Dense boundary, reverse, random revisit, resize, DPR2, font, accessibility, performance, resource, and disposal checks prove deterministic history-independent behavior in Chromium, Firefox, and WebKit. The audit found and repaired a real align-sixths compositor failure: authored fraction envelopes now form a typed presentation merge cohort, and the generic fan-in planner searches bounded measured lanes above or below while keeping related structural paint together. Shared player disposal now explicitly releases surface-owned sessions; the exemplar reuses identical frames, exposes bounded telemetry, owns at most one symbolic session, and acquires no WebGL lease.",
+      "status": "complete"
     },
     {
       "id": "s23",

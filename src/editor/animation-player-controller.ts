@@ -49,6 +49,8 @@ import {
 } from "../animation/render-quality.ts";
 
 export const KP_EDITOR_ANIMATION_FRAME_EVENT = "kp-editor-animation-frame";
+export const KP_EDITOR_ANIMATION_DISPOSE_EVENT =
+  "kp-editor-animation-dispose";
 export const KP_EDITOR_ANIMATION_REGENERATION_EVENT =
   "kp-editor-animation-regeneration-request";
 export const KP_EDITOR_RENDER_QUALITY_STORAGE_KEY =
@@ -89,6 +91,9 @@ export function pauseKpEditorAnimationPlayers(
 export function disposeKpEditorAnimationPlayers(root: ParentNode): void {
   root.querySelectorAll<HTMLElement>("[data-kp-editor-animation-player]")
     .forEach((player) => {
+      // Surface adapters can own observers or render sessions that WeakMap
+      // collection alone cannot release; signal them before detaching the DOM.
+      player.dispatchEvent(new Event(KP_EDITOR_ANIMATION_DISPOSE_EVENT));
       cancelPlayerFrame(player);
       player.removeEventListener("click", handlePlayerClick);
       player.removeEventListener("input", handlePlayerInput);

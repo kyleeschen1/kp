@@ -1136,6 +1136,77 @@ test("explicit semantic relations compile generic merge multiplicity", () => {
   assert.deepEqual(result.dispositions[0]?.targetAtomIds, ["target.result"]);
 });
 
+test("parallel structural merges inherit one authored presentation cohort", () => {
+  const sourceIds = [
+    "source.left.denominator",
+    "source.left.rule",
+    "source.right.denominator",
+    "source.right.rule"
+  ];
+  const sourceBase = createScene("source", sourceIds);
+  const source = createKpNativeKatexRenderedSceneObservation({
+    ...sourceBase,
+    atoms: sourceBase.atoms.map((paintAtom, index) => ({
+      ...paintAtom,
+      presentationGroupId: index < 2 ? "group.left" : "group.right"
+    })),
+    groups: [{
+      id: "group.left",
+      semanticEntityId: "entity.left-fraction",
+      atomIds: sourceIds.slice(0, 2),
+      rect: { left: 0, top: 0, width: 30, height: 20 }
+    }, {
+      id: "group.right",
+      semanticEntityId: "entity.right-fraction",
+      atomIds: sourceIds.slice(2),
+      rect: { left: 40, top: 0, width: 30, height: 20 }
+    }]
+  });
+  const targetIds = ["target.denominator", "target.rule"];
+  const targetBase = createScene("target", targetIds);
+  const target = createKpNativeKatexRenderedSceneObservation({
+    ...targetBase,
+    atoms: targetBase.atoms.map((paintAtom) => ({
+      ...paintAtom,
+      presentationGroupId: "group.sum"
+    })),
+    groups: [{
+      id: "group.sum",
+      semanticEntityId: "entity.sum-fraction",
+      atomIds: targetIds,
+      rect: { left: 0, top: 0, width: 30, height: 20 }
+    }]
+  });
+  const reconciliation = reconcileKpNativeKatexScenes({
+    source,
+    target,
+    relations: [{
+      id: "lineage.denominators",
+      relation: "merge",
+      sourceEntityIds: [
+        "entity.left.denominator",
+        "entity.right.denominator"
+      ],
+      targetEntityIds: ["entity.denominator"]
+    }, {
+      id: "lineage.rules",
+      relation: "merge",
+      sourceEntityIds: ["entity.left.rule", "entity.right.rule"],
+      targetEntityIds: ["entity.rule"]
+    }]
+  });
+  const tracks = compileKpNativeKatexSceneTracks(
+    compileKpNativeKatexHierarchicalScenePlan(reconciliation)
+  );
+  const contactGroups = new Set(tracks.map(
+    ({ intentionalContactGroupId }) => intentionalContactGroupId
+  ));
+
+  assert.equal(tracks.length, 4);
+  assert.equal(contactGroups.size, 1);
+  assert.notEqual([...contactGroups][0], undefined);
+});
+
 test("composite semantic merges preserve one-to-one paint atoms without fading", () => {
   const source = createKpNativeKatexRenderedSceneObservation({
     ...createScene("source", ["source.coefficient", "source.variable"]),
@@ -1768,6 +1839,58 @@ test("merge-fan-in opens a lane before routing focal material", () => {
   );
   assert.equal(
     evaluateKpNativeKatexFanInMotionQuality(tracks).passed,
+    true
+  );
+});
+
+test("merge-fan-in can use measured free space below persistent paint", () => {
+  const merge: KpNativeKatexSceneTrack = {
+    id: "track.merge.denominator",
+    componentId: "component.merge.denominator",
+    lifecycle: "merge",
+    sourceAtomId: "source.denominator",
+    targetAtomId: "target.denominator",
+    visualAtomId: "source.denominator",
+    paintKind: "glyph",
+    sizingMode: "rect",
+    startRect: { left: 0, top: 20, width: 12, height: 16 },
+    endRect: { left: 100, top: 20, width: 12, height: 16 },
+    startOpacity: 1,
+    endOpacity: 1
+  };
+  const numeratorBlocker: KpNativeKatexSceneTrack = {
+    ...merge,
+    id: "track.persist.numerator.0",
+    componentId: "component.persist.numerator.0",
+    lifecycle: "persist",
+    sourceAtomId: "source.numerator.0",
+    targetAtomId: "target.numerator.0",
+    visualAtomId: "source.numerator.0",
+    startRect: { left: 34, top: -16, width: 34, height: 16 },
+    endRect: { left: 34, top: -16, width: 34, height: 16 }
+  };
+  const numeratorBlockers = [-16, 0, 16].map((top, index) => ({
+    ...numeratorBlocker,
+    id: `track.persist.numerator.${index}`,
+    componentId: `component.persist.numerator.${index}`,
+    sourceAtomId: `source.numerator.${index}`,
+    targetAtomId: `target.numerator.${index}`,
+    visualAtomId: `source.numerator.${index}`,
+    startRect: { ...numeratorBlocker.startRect, top },
+    endRect: { ...numeratorBlocker.endRect, top }
+  }));
+
+  const [routed] = compileKpQualityBoundedFanInTracks([
+    merge,
+    ...numeratorBlockers
+  ]);
+
+  assert.equal(routed!.motionPath?.variant, "arc-below");
+  assert.equal(
+    evaluateKpNativeKatexFanInMotionQuality([
+      routed!,
+      ...numeratorBlockers
+    ]).passed,
     true
   );
 });

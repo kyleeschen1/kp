@@ -57,6 +57,7 @@ import type {
   KpExactFractionSymbolicMotionInput
 } from "../rendering/exact-fraction-quantity-symbolic-projection.ts";
 import {
+  KP_EDITOR_ANIMATION_DISPOSE_EVENT,
   dispatchKpEditorAnimationPlaybackAction
 } from "./animation-player-controller.ts";
 import {
@@ -81,6 +82,10 @@ interface ExactSurfaceSession {
     typeof createKpEquationFontReadiness
   > | undefined;
   lastFrame?: KpExactFractionQuantityRuntimeFrame | undefined;
+  sampleCount: number;
+  repeatedFrameReuseCount: number;
+  symbolicPlaybackCreatedCount: number;
+  symbolicPlaybackDisposedCount: number;
   lastUrlWriteMs: number;
 }
 
@@ -105,6 +110,10 @@ KpEditorAnimationSurfaceAdapter = {
         libraryState: routeState,
         initializedFromRoute: false,
         symbolicGeneration: 0,
+        sampleCount: 0,
+        repeatedFrameReuseCount: 0,
+        symbolicPlaybackCreatedCount: 0,
+        symbolicPlaybackDisposedCount: 0,
         lastUrlWriteMs: 0
       };
       sessions.set(player, session);
@@ -140,7 +149,16 @@ KpEditorAnimationSurfaceAdapter = {
         })
       }
     });
+    session.sampleCount += 1;
+    const repeatedFrame =
+      session.lastFrame?.projection.neutralFrame.progressPermille ===
+      frame.projection.neutralFrame.progressPermille;
+    if (repeatedFrame) {
+      session.repeatedFrameReuseCount += 1;
+    }
     session.lastFrame = frame;
+    syncResourceTelemetry(player, session, "active");
+    if (repeatedFrame) return;
     syncSurface(player, slot, session, frame);
   }
 };
@@ -157,6 +175,12 @@ function mountSurface(
   slot: HTMLElement,
   session: ExactSurfaceSession
 ): void {
+  player.dataset["kpExactSurfaceResources"] = "active";
+  player.addEventListener(
+    KP_EDITOR_ANIMATION_DISPOSE_EVENT,
+    () => disposeExactSurface(player, session),
+    { once: true }
+  );
   slot.innerHTML = renderSurfaceShell(
     session.libraryState,
     session.runtime.accessibility
@@ -366,8 +390,7 @@ function syncSymbolicScene(
   const beatIndex = frame.projection.neutralFrame.beat.index;
   if (session.symbolicBeatIndex !== beatIndex) {
     session.symbolicBeatIndex = beatIndex;
-    session.symbolicPlayback?.dispose();
-    session.symbolicPlayback = undefined;
+    releaseSymbolicPlayback(session);
     const generation = ++session.symbolicGeneration;
     void prepareSymbolicScene({
       slot,
@@ -469,7 +492,14 @@ async function prepareSymbolicScene(input: {
       )
     });
     input.session.symbolicPlayback = canonical.session;
+    input.session.symbolicPlaybackCreatedCount += 1;
     canonical.session.apply(input.localProgress);
+    const player = input.slot.closest<HTMLElement>(
+      "[data-kp-editor-animation-player]"
+    );
+    if (player !== null) {
+      syncResourceTelemetry(player, input.session, "active");
+    }
     stage.style.opacity = "1";
     stage.dataset["kpExactSymbolicStatus"] = "ready";
     stage.dataset["kpExactProtectedTransit"] =
@@ -483,6 +513,49 @@ async function prepareSymbolicScene(input: {
     sourceRoot.style.opacity = "0";
     targetRoot.style.opacity = "1";
   }
+}
+
+function disposeExactSurface(
+  player: HTMLElement,
+  session: ExactSurfaceSession
+): void {
+  // Incrementing the generation makes any in-flight font measurement retire
+  // without publishing a session after this player has left the library.
+  session.symbolicGeneration += 1;
+  releaseSymbolicPlayback(session);
+  session.symbolicFontReadiness?.dispose();
+  session.symbolicFontReadiness = undefined;
+  sessions.delete(player);
+  syncResourceTelemetry(player, session, "disposed");
+}
+
+function releaseSymbolicPlayback(session: ExactSurfaceSession): void {
+  if (session.symbolicPlayback === undefined) return;
+  session.symbolicPlayback.dispose();
+  session.symbolicPlayback = undefined;
+  session.symbolicPlaybackDisposedCount += 1;
+}
+
+function syncResourceTelemetry(
+  player: HTMLElement,
+  session: ExactSurfaceSession,
+  status: "active" | "disposed"
+): void {
+  player.dataset["kpExactSurfaceResources"] = status;
+  player.dataset["kpExactSampleCount"] = String(session.sampleCount);
+  player.dataset["kpExactRepeatedFrameReuseCount"] = String(
+    session.repeatedFrameReuseCount
+  );
+  player.dataset["kpExactSymbolicPlaybackCreatedCount"] = String(
+    session.symbolicPlaybackCreatedCount
+  );
+  player.dataset["kpExactSymbolicPlaybackDisposedCount"] = String(
+    session.symbolicPlaybackDisposedCount
+  );
+  player.dataset["kpExactSymbolicPlaybackActiveCount"] = String(
+    session.symbolicPlayback === undefined ? 0 : 1
+  );
+  player.dataset["kpExactWebglLeaseCount"] = "0";
 }
 
 function bindEndpointOwnership(
@@ -503,8 +576,14 @@ function bindEndpointOwnership(
       );
     }
     element.dataset["kpSemanticEntityId"] = annotation.selectorId;
+    const envelope = endpoint.groupEnvelopes.find(
+      ({ memberSelectorIds }) =>
+        memberSelectorIds.includes(annotation.selectorId)
+    );
     element.dataset["kpPresentationGroupId"] =
-      `${rootGroup}.selector.${annotation.selectorId}`;
+      envelope === undefined
+        ? `${rootGroup}.selector.${annotation.selectorId}`
+        : `${rootGroup}.envelope.${envelope.id}`;
     element.dataset["kpSemanticSelectorId"] = annotation.selectorId;
   }
   const rules = [...root.querySelectorAll<HTMLElement>(".frac-line")];
@@ -518,7 +597,7 @@ function bindEndpointOwnership(
     const rule = rules[index]!;
     rule.dataset["kpSemanticEntityId"] = anchor.id;
     rule.dataset["kpPresentationGroupId"] =
-      `${rootGroup}.structure.${anchor.id}`;
+      `${rootGroup}.envelope.${anchor.ownerNodeId}`;
   });
 }
 

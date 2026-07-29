@@ -577,11 +577,23 @@ export function compileKpNativeKatexSceneTracks(
     atom.id,
     atom
   ]));
+  const contactGroupByComponentId =
+    mergePresentationContactGroups(plan.components);
   return Object.freeze(plan.reconciliation.dispositions.flatMap((disposition) => {
     const sources = disposition.sourceAtomIds.map((id) => sourceById.get(id)!);
     const targets = disposition.targetAtomIds.map((id) => targetById.get(id)!);
+    const componentId = `component.${disposition.id}`;
+    const intentionalContactGroupId =
+      contactGroupByComponentId.get(componentId);
     if (disposition.lifecycle === "persist") {
-      return [track(disposition, 0, sources[0]!, targets[0]!)];
+      return [track(
+        disposition,
+        0,
+        sources[0]!,
+        targets[0]!,
+        sources[0]!.id,
+        intentionalContactGroupId
+      )];
     }
     if (disposition.lifecycle === "merge") {
       return sources.map((source, index) =>
@@ -589,7 +601,9 @@ export function compileKpNativeKatexSceneTracks(
           disposition,
           index,
           source,
-          targets[0]!
+          targets[0]!,
+          source.id,
+          intentionalContactGroupId
         )
       );
     }
@@ -600,7 +614,8 @@ export function compileKpNativeKatexSceneTracks(
           index,
           sources[0]!,
           target,
-          target.id
+          target.id,
+          intentionalContactGroupId
         )
       );
     }
@@ -635,6 +650,33 @@ export function compileKpNativeKatexSceneTracks(
       });
     }
     return [];
+  }));
+}
+
+function mergePresentationContactGroups(
+  components: KpNativeKatexHierarchicalScenePlan["components"]
+): ReadonlyMap<string, string> {
+  const eligible = components.filter((component) =>
+    component.lifecycle === "merge" &&
+    component.sourceGroupIds.length > 1 &&
+    component.targetGroupIds.length === 1
+  );
+  const signature = (
+    component: typeof eligible[number]
+  ) => JSON.stringify({
+    source: [...component.sourceGroupIds].sort(),
+    target: [...component.targetGroupIds].sort()
+  });
+  const counts = new Map<string, number>();
+  eligible.forEach((component) => {
+    const key = signature(component);
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  });
+  return new Map(eligible.flatMap((component) => {
+    const key = signature(component);
+    return counts.get(key) === 1
+      ? []
+      : [[component.id, `contact.presentation-merge.${key}`] as const];
   }));
 }
 
@@ -2165,7 +2207,8 @@ function track(
   index: number,
   source: KpNativeKatexPaintAtomObservation,
   target: KpNativeKatexPaintAtomObservation,
-  visualAtomId = source.id
+  visualAtomId = source.id,
+  intentionalContactGroupId?: string
 ): KpNativeKatexSceneTrack {
   const base = {
     id: `track.${disposition.id}.${index}`,
@@ -2176,7 +2219,10 @@ function track(
     paintKind: source.paintKind,
     sizingMode: source.paintKind === "rule" ? "rule-length" : "rect",
     startRect: source.rect,
-    endRect: target.rect
+    endRect: target.rect,
+    ...(intentionalContactGroupId === undefined
+      ? {}
+      : { intentionalContactGroupId })
   };
   const lifecycle = disposition.lifecycle;
   if (lifecycle === "unsupported") throw new Error(

@@ -399,37 +399,87 @@ export function compileKpCollisionSafeFanInTracks<
   // Merge-fan-in is a space-time motif: context opens the lane first, then
   // only obstructed focal paint lifts into a directly routed fusion leader.
   let blockers: readonly string[] = [];
-  for (const liftRatio of kpFanInLiftRatios) {
-    const candidates = scheduled.map((track) =>
-      !obstructedMergeTrackIds.has(track.id)
-        ? track
-        : Object.freeze({
-            ...track,
-            motionPath: Object.freeze(planTrackPath(
-              track,
-              "arc-above",
-              localInkScale * liftRatio,
-              stageOccupancy
-            )),
-            motionPathSampling: "canonical-clearance-lane" as const,
-            motionGroupTravel: groupTravel
-          }) as Track
-    );
-    const clearance = evaluateFanInTrackClearance(
-      candidates,
-      [...obstructedMergeTrackIds],
-      stageOccupancy
-    );
-    if (clearance.passed) {
-      return Object.freeze(candidates);
+  // Fractions commonly place the focal fan-in below persistent numerator
+  // paint. Search both canonical sides so clearance follows measured paint
+  // instead of encoding the historical assumption that free space is above.
+  const routeVariants = fanInRouteVariantsByComponent(
+    scheduled,
+    obstructedMergeTrackIds
+  );
+  for (const variantsByComponent of routeVariants) {
+    for (const liftRatio of kpFanInLiftRatios) {
+      const candidates = scheduled.map((track) =>
+        !obstructedMergeTrackIds.has(track.id)
+          ? track
+          : Object.freeze({
+              ...track,
+              motionPath: Object.freeze(planTrackPath(
+                track,
+                variantsByComponent.get(track.componentId) ?? "arc-above",
+                localInkScale * liftRatio,
+                stageOccupancy
+              )),
+              motionPathSampling: "canonical-clearance-lane" as const,
+              motionGroupTravel: groupTravel
+            }) as Track
+      );
+      const clearance = evaluateFanInTrackClearance(
+        candidates,
+        [...obstructedMergeTrackIds],
+        stageOccupancy
+      );
+      if (clearance.passed) {
+        return Object.freeze(candidates);
+      }
+      blockers = clearance.blockers;
     }
-    blockers = clearance.blockers;
   }
   throw new Error(
     "Fan-in material cannot clear blocking paint within its measured " +
       `motion corridor: ${[...obstructedMergeTrackIds].join(", ")}; ` +
       `blocked by ${blockers.join(", ")}.`
   );
+}
+
+function fanInRouteVariantsByComponent(
+  tracks: readonly KpEquationCollisionTrack[],
+  obstructedTrackIds: ReadonlySet<string>
+): readonly ReadonlyMap<
+  string,
+  "arc-above" | "arc-below"
+>[] {
+  const obstructedTracks = tracks.filter(
+    ({ id }) => obstructedTrackIds.has(id)
+  );
+  const routeUnitIds = [...new Set(obstructedTracks
+    .map(({ componentId, intentionalContactGroupId }) =>
+      intentionalContactGroupId ?? componentId
+    ))]
+    .sort();
+  const uniform = (variant: "arc-above" | "arc-below") =>
+    new Map(obstructedTracks.map((track) => [track.componentId, variant]));
+  const variants: ReadonlyMap<
+    string,
+    "arc-above" | "arc-below"
+  >[] = [uniform("arc-above"), uniform("arc-below")];
+  // A bounded component-level search lets related paint travel together while
+  // independent structural cohorts take opposite lanes. It avoids the
+  // per-glyph combinatorics that would make generated scenes unpredictable.
+  if (routeUnitIds.length > 1 && routeUnitIds.length <= 6) {
+    const allBelow = (1 << routeUnitIds.length) - 1;
+    for (let mask = 1; mask < allBelow; mask += 1) {
+      variants.push(new Map(obstructedTracks.map((track) => {
+        const routeUnitId =
+          track.intentionalContactGroupId ?? track.componentId;
+        const index = routeUnitIds.indexOf(routeUnitId);
+        return [
+          track.componentId,
+          (mask & (1 << index)) === 0 ? "arc-above" : "arc-below"
+        ];
+      })));
+    }
+  }
+  return Object.freeze(variants);
 }
 
 export function compileKpCollisionSafeReorderTracks<
@@ -1020,8 +1070,13 @@ function evaluateTrackClearance(
     .filter(({ id }) => movingIds.has(id))
     .flatMap((movingTrack) => {
       const protectedIds = tracks
-        .filter(({ componentId }) =>
-          componentId !== movingTrack.componentId
+        .filter(({ componentId, intentionalContactGroupId }) =>
+          componentId !== movingTrack.componentId &&
+          (
+            movingTrack.intentionalContactGroupId === undefined ||
+            intentionalContactGroupId !==
+              movingTrack.intentionalContactGroupId
+          )
         )
         .map(({ id }) => id);
       return protectedIds.length === 0
