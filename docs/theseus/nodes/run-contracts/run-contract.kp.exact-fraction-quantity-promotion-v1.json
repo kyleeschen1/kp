@@ -2,8 +2,9 @@
   "id": "run-contract.kp.exact-fraction-quantity-promotion-v1",
   "kind": "run-contract",
   "title": "Exact fraction quantity promotion",
-  "status": "ready",
+  "status": "superseded",
   "domain": "kp",
+  "summary": "Release slice superseded after the mandatory visual gate exposed a binary paint-owner discontinuity, registry bypass, and unplanned pacing compression; a separately approved compiler-convergence contract is required before promotion.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -467,8 +468,8 @@
     {
       "id": "s25",
       "title": "release-and-closeout",
-      "summary": "Human checkpoint rejected release: repair endpoint paint-owner continuity, execute visible motion in all concrete views, certify render execution, and unify Play Pause Replay before reconsidering promotion.",
-      "status": "in-progress"
+      "summary": "Skipped release and closeout because perceptual continuity and pacing criteria failed; promotion remains unresolved and transfers to the successor compiler-convergence proposal.",
+      "status": "skipped"
     }
   ]
 }

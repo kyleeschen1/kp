@@ -9,6 +9,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-28-exact-fraction-quantity-promotion-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-29-presentation-compiler-continuity-repair-long-loop-proposal.md"
     }
   ],
   "dependsOn": {
@@ -419,7 +423,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-23 complete. Automated semantic, four-view correspondence, motif, exclusive ownership, responsive layout, accessibility, static export, host Review, resource, and three-browser gates now derive one nominal ready-for-human-review certificate. Promotion remains partial pending the mandatory perceptual checkpoint."
+    "summary": "Prior release was superseded after visual rejection. A 22-slice presentation-compiler continuity repair is proposed and awaits exact contract approval; exact-fraction promotion remains unresolved."
   },
   "expectedLearning": [
     "Can one verified exact quantity identity drive native symbolic and concrete views through existing canonical infrastructure?"
