@@ -165,7 +165,8 @@
     {
       "id": "slice.kp.role-plan.19",
       "title": "Adapt-distribution-and-factoring",
-      "status": "planned"
+      "summary": "Adapted canonical distribution and factoring into verified discriminated role plans with total source and target material, continuant, structural-artifact, branch or fusion ownership, and typed extracted-result authority. Plans validate from semantic correspondence only, compile once per transformation identity, and preserve existing fold, motion, native endpoint, seek, rewind, and review behavior without compositor changes.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.20",

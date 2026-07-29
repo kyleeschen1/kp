@@ -31,6 +31,16 @@ import {
   compileKpFactorCommonTermMotifBinding
 } from "../../animation/factoring-motif-binding.ts";
 import {
+  findKpRegisteredOperationPresentationPlan,
+  registerKpOperationPresentationPlan,
+  type KpVerifiedDistributionPresentationPlan,
+  type KpVerifiedFactoringPresentationPlan,
+  type KpVerifiedOperationPresentationPlan
+} from "../../animation/operation-presentation-plan-types.ts";
+import {
+  compileKpDistributionFactoringPresentationPlan
+} from "../../animation/distribution-factoring-presentation-plan.ts";
+import {
   compileKpBalancedIntroductionPresentationPlan
 } from "../../animation/balanced-introduction-presentation-plan.ts";
 import {
@@ -218,7 +228,42 @@ export function projectKpReaderEquationRenderPlan(input: {
     const relations = compiled.ir.relations.map((relation) =>
       projectRelation(relation, forward)
     );
-    const factoringMotifBinding = compileKpFactorCommonTermMotifBinding({
+    let registeredOperationPlan =
+      findKpRegisteredOperationPresentationPlan(transformation);
+    if (registeredOperationPlan === undefined) {
+      registeredOperationPlan =
+        compileKpDistributionFactoringPresentationPlan({
+          transformation,
+          sourceSelectorIds: compiled.ir.source.flatMap(
+            ({ selectors }) => selectors.map(({ id }) => id)
+          ),
+          targetSelectorIds: compiled.ir.target.flatMap(
+            ({ selectors }) => selectors.map(({ id }) => id)
+          )
+        });
+      if (registeredOperationPlan !== undefined) {
+        registerKpOperationPresentationPlan(
+          transformation,
+          registeredOperationPlan
+        );
+      }
+    }
+    const distributionOperationPlans =
+      transformation.transformType === "distributeMultiplication" &&
+      transformation.definitionId ===
+        "definition.generated.distribution.distribute-multiplication"
+        ? [
+            requireRegisteredDistributionPlan({
+              transformationId: transformation.id,
+              motifKind: visualMotif?.kind,
+              semanticStatus:
+                compiled.status === "semantic" ? "ready" : "fallback",
+              plan: registeredOperationPlan
+            })
+          ]
+        : [];
+    const baseFactoringMotifBinding =
+      compileKpFactorCommonTermMotifBinding({
       transitionId: transformation.id,
       transformType: transformation.transformType,
       motifKind: visualMotif?.kind,
@@ -227,11 +272,25 @@ export function projectKpReaderEquationRenderPlan(input: {
       successorSynthesisCount: successorSyntheses.length,
       relations
     });
+    const factoringMotifBinding =
+      baseFactoringMotifBinding === undefined ||
+      transformation.definitionId !==
+        "definition.generated.distribution.factor-common-term"
+        ? undefined
+        : Object.freeze({
+            ...baseFactoringMotifBinding,
+            operationPresentationPlan:
+              requireRegisteredFactoringPlan(
+                transformation.id,
+                registeredOperationPlan
+              )
+          });
     const presentationPlan =
       createKpReaderEquationTransitionPresentationPlan({
         transitionId: transformation.id,
         visualMotif,
         factoringMotifBinding,
+        distributionOperationPlans,
         structuralSuccession,
         successorSyntheses,
         operationChoreography,
@@ -290,6 +349,43 @@ export function projectKpReaderEquationRenderPlan(input: {
   };
 }
 
+function requireRegisteredDistributionPlan(input: {
+  readonly transformationId: string;
+  readonly motifKind?: string | undefined;
+  readonly semanticStatus: "ready" | "fallback";
+  readonly plan?: KpVerifiedOperationPresentationPlan | undefined;
+}): KpVerifiedDistributionPresentationPlan {
+  if (
+    input.semanticStatus !== "ready" ||
+    input.motifKind !== "copy-fan-out"
+  ) {
+    throw new Error(
+      `Distribution transition ${input.transformationId} requires ` +
+      "semantic lineage and copy-fan-out."
+    );
+  }
+  if (input.plan?.planKind !== "distribution") {
+    throw new Error(
+      `Distribution transition ${input.transformationId} is missing its ` +
+      "verified distribution plan."
+    );
+  }
+  return input.plan;
+}
+
+function requireRegisteredFactoringPlan(
+  transformationId: string,
+  plan: KpVerifiedOperationPresentationPlan | undefined
+): KpVerifiedFactoringPresentationPlan {
+  if (plan?.planKind !== "factoring") {
+    throw new Error(
+      `Factoring transition ${transformationId} is missing its verified ` +
+      "factoring plan."
+    );
+  }
+  return plan;
+}
+
 function mergeParallelTransitions(
   cohortId: string,
   transitions: readonly KpReaderEquationTransitionPlan[]
@@ -309,6 +405,11 @@ function mergeParallelTransitions(
       transition.presentationPlan
     ).successorSyntheses ?? []
   );
+  const distributionOperationPlans = transitions.flatMap((transition) =>
+    projectKpReaderEquationTransitionPresentation(
+      transition.presentationPlan
+    ).distributionOperationPlans ?? []
+  );
   return {
     id: cohortId,
     title: transitions.map(({ title }) => title).join(" and "),
@@ -321,7 +422,8 @@ function mergeParallelTransitions(
     presentationPlan: createKpReaderEquationTransitionPresentationPlan({
       transitionId: cohortId,
       visualMotif,
-      successorSyntheses
+      successorSyntheses,
+      distributionOperationPlans
     }),
     semanticStatus: transitions.every(
       ({ semanticStatus }) => semanticStatus === "ready"

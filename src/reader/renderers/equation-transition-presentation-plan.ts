@@ -5,6 +5,10 @@ import type {
   KpFactorCommonTermMotifBinding
 } from "../../animation/factoring-motif-binding.ts";
 import type {
+  KpVerifiedDistributionPresentationPlan,
+  KpVerifiedFactoringPresentationPlan
+} from "../../animation/operation-presentation-plan-types.ts";
+import type {
   KpRegisteredSuccessorSynthesisBinding
 } from "../../animation/successor-synthesis-presentation-plan.ts";
 import type {
@@ -16,6 +20,12 @@ import type {
 } from "../../animation/operation-presentation-plan-types.ts";
 
 declare const kpReaderEquationPresentationPlanAuthority: unique symbol;
+
+type KpRegisteredFactorCommonTermMotifBinding =
+  KpFactorCommonTermMotifBinding & {
+    readonly operationPresentationPlan:
+      KpVerifiedFactoringPresentationPlan;
+  };
 
 interface KpReaderEquationPresentationPlanBase {
   readonly schemaVersion: "kp.reader-equation-transition-presentation-plan.v1";
@@ -35,7 +45,14 @@ export type KpReaderEquationTransitionPresentationPlan =
   | (KpReaderEquationPresentationPlanBase & {
       readonly planKind: "factoring";
       readonly visualMotif: KpEquationVisualMotifIntent;
-      readonly factoringMotifBinding: KpFactorCommonTermMotifBinding;
+      readonly factoringMotifBinding:
+        KpRegisteredFactorCommonTermMotifBinding;
+    })
+  | (KpReaderEquationPresentationPlanBase & {
+      readonly planKind: "distribution";
+      readonly visualMotif: KpEquationVisualMotifIntent;
+      readonly distributionOperationPlans:
+        readonly KpVerifiedDistributionPresentationPlan[];
     })
   | (KpReaderEquationPresentationPlanBase & {
       readonly planKind: "structural-succession";
@@ -65,7 +82,9 @@ export type KpReaderEquationTransitionPresentationPlan =
 export interface KpReaderEquationTransitionPresentationEvidence {
   readonly visualMotif?: KpEquationVisualMotifIntent | undefined;
   readonly factoringMotifBinding?:
-    KpFactorCommonTermMotifBinding | undefined;
+    KpRegisteredFactorCommonTermMotifBinding | undefined;
+  readonly distributionOperationPlans?:
+    readonly KpVerifiedDistributionPresentationPlan[] | undefined;
   readonly structuralSuccession?:
     KpEquationStructuralSuccessionIntent | undefined;
   readonly successorSyntheses?:
@@ -84,7 +103,9 @@ export function createKpReaderEquationTransitionPresentationPlan(input: {
   readonly transitionId: string;
   readonly visualMotif?: KpEquationVisualMotifIntent | undefined;
   readonly factoringMotifBinding?:
-    KpFactorCommonTermMotifBinding | undefined;
+    KpRegisteredFactorCommonTermMotifBinding | undefined;
+  readonly distributionOperationPlans?:
+    readonly KpVerifiedDistributionPresentationPlan[] | undefined;
   readonly structuralSuccession?:
     KpEquationStructuralSuccessionIntent | undefined;
   readonly successorSyntheses?:
@@ -97,8 +118,12 @@ export function createKpReaderEquationTransitionPresentationPlan(input: {
     throw new Error("Reader equation presentation plan requires a transition id.");
   }
   const successorSyntheses = input.successorSyntheses ?? [];
+  const distributionOperationPlans = input.distributionOperationPlans ?? [];
   const specializedCount = [
     input.factoringMotifBinding,
+    distributionOperationPlans.length === 0
+      ? undefined
+      : distributionOperationPlans,
     input.structuralSuccession,
     successorSyntheses.length === 0 ? undefined : successorSyntheses,
     input.operationChoreography,
@@ -111,6 +136,7 @@ export function createKpReaderEquationTransitionPresentationPlan(input: {
   }
   const requiresTopLevelMotif =
     input.factoringMotifBinding !== undefined ||
+    distributionOperationPlans.length > 0 ||
     input.structuralSuccession !== undefined ||
     input.operationChoreography !== undefined;
   if (requiresTopLevelMotif && input.visualMotif === undefined) {
@@ -139,6 +165,15 @@ export function createKpReaderEquationTransitionPresentationPlan(input: {
           visualMotif: input.visualMotif!,
           factoringMotifBinding: input.factoringMotifBinding
         }
+      : distributionOperationPlans.length > 0
+        ? {
+            ...base,
+            planKind: "distribution" as const,
+            visualMotif: input.visualMotif!,
+            distributionOperationPlans: Object.freeze([
+              ...distributionOperationPlans
+            ])
+          }
       : input.structuralSuccession !== undefined
         ? {
             ...base,
@@ -196,6 +231,11 @@ export function projectKpReaderEquationTransitionPresentation(
       return Object.freeze({
         visualMotif: plan.visualMotif,
         factoringMotifBinding: plan.factoringMotifBinding
+      });
+    case "distribution":
+      return Object.freeze({
+        visualMotif: plan.visualMotif,
+        distributionOperationPlans: plan.distributionOperationPlans
       });
     case "structural-succession":
       return Object.freeze({

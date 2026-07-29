@@ -13,6 +13,7 @@ const binding: KpFactorCommonTermMotifBinding = {
   factorCopyIds: ["source.x.0", "source.x.1"],
   commonFactorId: "target.x",
   contextCorrespondences: [],
+  structuralArtifactIds: [],
   fusionPaintPolicy: "opaque-many-to-one",
   synchronization: "simultaneous",
   coefficientEvaluation: "deferred"

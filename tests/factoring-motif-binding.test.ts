@@ -53,6 +53,7 @@ test("factor-common-term compiles one opaque simultaneous motif cohort", () => {
       sourceSelectorId: "source.three",
       targetSelectorId: "target.three"
     }],
+    structuralArtifactIds: [],
     fusionPaintPolicy: "opaque-many-to-one",
     synchronization: "simultaneous",
     coefficientEvaluation: "deferred"
@@ -82,6 +83,28 @@ test("rewind derives exact contributors from the reversed split lineage", () => 
   assert.equal(rewind?.commonFactorId, "target.x");
 });
 
+test("factoring records grouping syntax as artifacts, not material", () => {
+  const binding = compile({
+    relations: [
+      contextRelation,
+      factorRelation,
+      {
+        recordId: "relation.grouping-enters",
+        relation: "introduction",
+        lifecycle: "enter",
+        sourceSelectorIds: [],
+        targetSelectorIds: ["target.left-paren", "target.right-paren"]
+      }
+    ]
+  });
+
+  assert.deepEqual(binding?.structuralArtifactIds, [
+    "target.left-paren",
+    "target.right-paren"
+  ]);
+  assert.equal(binding?.contextCorrespondences.length, 1);
+});
+
 test("factoring fails closed on motif, cohort, or arithmetic ambiguity", () => {
   assert.throws(() => compile({ motifKind: "copy-fan-out" }), /merge-fan-in/);
   assert.throws(() => compile({
@@ -105,7 +128,7 @@ test("factoring fails closed on motif, cohort, or arithmetic ambiguity", () => {
     relations: [factorRelation, {
       ...contextRelation,
       lifecycle: "enter",
-      sourceSelectorIds: []
+      sourceSelectorIds: ["source.three"]
     }]
   }), /must be a later beat/);
 });

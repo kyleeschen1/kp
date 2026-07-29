@@ -97,6 +97,41 @@ export function runKpOperationPresentationLaws(input: {
           });
         }
       });
+    if (input.plan.planKind === "distribution") {
+      const distributionPlan = input.plan;
+      const branch = distributionPlan.roles.groups.find(
+        ({ id }) => id === distributionPlan.branchGroupId
+      );
+      const roles = branch?.bundleIds.map(
+        (id) => bundleById.get(id)?.role
+      ) ?? [];
+      if (
+        branch?.groupKind !== "branch" ||
+        roles.filter((role) => role === "source-material").length !== 1 ||
+        roles.filter((role) => role === "target-material").length < 2
+      ) {
+        diagnostics.push({
+          lawId: "presentation.lineage",
+          code: "lineage.distribution-not-total-branch",
+          path: "branchGroupId",
+          message:
+            "Distribution branch must connect one source-material bundle " +
+            "to at least two target-material bundles."
+        });
+      }
+    }
+    if (input.plan.planKind === "factoring") {
+      const result = bundleById.get(input.plan.resultBundleId);
+      if (result?.role !== "target-material") {
+        diagnostics.push({
+          lawId: "presentation.lineage",
+          code: "lineage.factoring-result-not-target",
+          path: "resultBundleId",
+          message:
+            "Factoring result must name the extracted target-material bundle."
+        });
+      }
+    }
   }
 
   if (lawIds.has("presentation.ownership")) {

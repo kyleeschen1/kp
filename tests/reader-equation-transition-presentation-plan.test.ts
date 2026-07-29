@@ -36,6 +36,7 @@ test("every canonical fraction transition owns one frozen presentation plan", ()
     for (const formerField of [
       "visualMotif",
       "factoringMotifBinding",
+      "distributionOperationPlans",
       "structuralSuccession",
       "successorSyntheses",
       "operationChoreography"

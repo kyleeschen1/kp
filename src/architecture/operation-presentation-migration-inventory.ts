@@ -65,6 +65,12 @@ export const kpOperationPresentationEvidenceClosures = Object.freeze([
     "tests/fraction-composition-cancellation-choreography-conformance.test.ts",
     "every discovered cancellation obeys role-complete forward and rewind laws",
     "Every fraction-composition cancellation is automatically checked for bundle geometry, opacity, continuants, and exact rewind."
+  ),
+  evidenceClosure(
+    "distribution-factoring-role-totality",
+    "tests/distribution-factoring-presentation-plan.test.ts",
+    "parallel foldable fan-outs retain both verified operation plans",
+    "Generated and foldable fan-out/fusion operations carry total material, continuant, artifact, and extracted-result roles."
   )
 ] as const);
 

@@ -2,6 +2,9 @@ import type {
   KpOperationPresentationRoles
 } from "./operation-presentation-roles.ts";
 import type {
+  KpSemanticTransformation
+} from "../semantic/asset-transformation.ts";
+import type {
   KpVerifiedOperationPresentationPlanId
 } from "./operation-presentation-plan-authority.ts";
 export type {
@@ -9,6 +12,8 @@ export type {
 } from "./operation-presentation-plan-authority.ts";
 
 declare const kpVerifiedOperationPresentationPlanAuthority: unique symbol;
+const registeredOperationPlans =
+  new WeakMap<object, KpVerifiedOperationPresentationPlan>();
 
 interface KpOperationPresentationPlanDraftBase {
   readonly schemaVersion: "kp.verified-operation-presentation-plan.v1";
@@ -32,14 +37,23 @@ export type KpInverseCancellationPresentationPlanDraft =
 export type KpOperationPresentationPlanDraft =
   | KpInverseCancellationPresentationPlanDraft
   | (KpOperationPresentationPlanDraftBase & {
-      readonly planKind: "successor-synthesis" | "factoring";
+      readonly planKind: "successor-synthesis";
       readonly fusionGroupId: string;
       readonly resultBundleId: string;
     })
   | (KpOperationPresentationPlanDraftBase & {
-      readonly planKind:
-        | "synchronized-balanced-introduction"
-        | "distribution";
+      readonly planKind: "factoring";
+      readonly fusionGroupId: string;
+      readonly resultBundleId: string;
+    })
+  | (KpOperationPresentationPlanDraftBase & {
+      readonly planKind: "synchronized-balanced-introduction";
+      readonly branchGroupId: string;
+    })
+  // Keep structurally similar variants separate: planKind must narrow the
+  // verified authority before a renderer can execute family-specific roles.
+  | (KpOperationPresentationPlanDraftBase & {
+      readonly planKind: "distribution";
       readonly branchGroupId: string;
     })
   | (KpOperationPresentationPlanDraftBase & {
@@ -66,6 +80,39 @@ export type KpVerifiedInverseCancellationPresentationPlan =
   KpInverseCancellationPresentationPlanDraft & {
     readonly [kpVerifiedOperationPresentationPlanAuthority]: true;
   };
+
+export type KpVerifiedDistributionPresentationPlan =
+  KpVerifiedOperationPresentationPlan & {
+    readonly planKind: "distribution";
+  };
+
+export type KpVerifiedFactoringPresentationPlan =
+  KpVerifiedOperationPresentationPlan & {
+    readonly planKind: "factoring";
+  };
+
+/**
+ * Trusted projection registers a verified plan once per transformation
+ * identity. A private weak map avoids recompilation without serializing
+ * executable presentation authority into the semantic transformation.
+ */
+export function registerKpOperationPresentationPlan(
+  transformation: KpSemanticTransformation,
+  plan: KpVerifiedOperationPresentationPlan
+): void {
+  if (plan.transformationId !== transformation.id) {
+    throw new Error(
+      `Operation plan ${plan.id} does not authorize ${transformation.id}.`
+    );
+  }
+  registeredOperationPlans.set(transformation, plan);
+}
+
+export function findKpRegisteredOperationPresentationPlan(
+  transformation: KpSemanticTransformation
+): KpVerifiedOperationPresentationPlan | undefined {
+  return registeredOperationPlans.get(transformation);
+}
 
 export function operationPresentationPlanAuthorityId(
   plan: KpVerifiedOperationPresentationPlan

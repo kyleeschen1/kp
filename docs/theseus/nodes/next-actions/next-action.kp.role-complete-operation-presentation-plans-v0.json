@@ -482,6 +482,83 @@
       "scope": "slice-18",
       "checkedAt": "2026-07-29T00:18:31.772Z",
       "notes": "Dev-review production closure passes."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "slice-19",
+      "checkedAt": "2026-07-29T01:22:22.251Z",
+      "notes": "87 tests pass: generated and foldable distribution/factoring role totality, structural artifacts, nominal cache identity, reader projection, and law coverage."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "slice-19",
+      "checkedAt": "2026-07-29T01:22:23.246Z",
+      "notes": "102 tests pass; established distribution, factoring, fold, native endpoint, and static-export behavior is preserved."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "slice-19",
+      "checkedAt": "2026-07-29T01:22:24.064Z",
+      "notes": "256 convergence tests pass without geometry-derived roles or fallback paint."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-19",
+      "checkedAt": "2026-07-29T01:22:24.910Z",
+      "notes": "Discriminated distribution and factoring authority compiles across app, node, test, and domain projects."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-19",
+      "checkedAt": "2026-07-29T01:22:25.733Z",
+      "notes": "All concept-room, reader, semantic-animation, and operation-presentation boundaries pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-19",
+      "checkedAt": "2026-07-29T01:22:26.608Z",
+      "notes": "Unchanged ceiling: types 49975, instantiations 66276, isolated check 2.48 seconds."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-19",
+      "checkedAt": "2026-07-29T01:22:27.755Z",
+      "notes": "Production build and embedded typecheck pass."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "slice-19",
+      "checkedAt": "2026-07-29T01:22:28.771Z",
+      "notes": "Clean current-tree Chromium run passes all 16 shared reader cases."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "slice-19",
+      "checkedAt": "2026-07-29T01:22:29.695Z",
+      "notes": "Reader production closure passes for 11 manifest routes."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice-19",
+      "checkedAt": "2026-07-29T01:22:30.743Z",
+      "notes": "Review production closure passes."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "slice-19-known-debt",
+      "checkedAt": "2026-07-29T01:22:31.891Z",
+      "notes": "Known release-level route baseline debt remains: shared reader runtime is 137134 gzip bytes against the stale 126571 limit and divide-both-sides HTML is 33781 against 33756. Slice 19 does not change compositor source; the plan compiler adds 1200 gzip bytes versus exact slice-18 output and is cached after first verified projection. Release budget closure remains owned by slice 24."
     }
   ],
   "progress": {

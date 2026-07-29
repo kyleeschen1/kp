@@ -20,6 +20,9 @@ export interface KpFactorCommonTermMotifBinding {
     readonly sourceSelectorId: string;
     readonly targetSelectorId: string;
   }[];
+  // Parentheses belong to the structural beat, never to factor material or
+  // coefficient continuants, so later renderers cannot merge them by accident.
+  readonly structuralArtifactIds: readonly string[];
   readonly fusionPaintPolicy: "opaque-many-to-one";
   readonly synchronization: "simultaneous";
   readonly coefficientEvaluation: "deferred";
@@ -89,27 +92,45 @@ export function compileKpFactorCommonTermMotifBinding(input: {
     );
   }
 
-  const contextCorrespondences = input.relations
-    .filter(({ recordId }) => recordId !== fusion.recordId)
-    .map((relation) => {
-      // One-to-one persistence makes coefficient evaluation impossible inside
-      // the factoring beat without teaching rendering what a coefficient is.
-      if (
-        relation.lifecycle !== "persist" ||
-        relation.sourceSelectorIds.length !== 1 ||
-        relation.targetSelectorIds.length !== 1
-      ) {
-        throw new Error(
-          `Factoring transition ${input.transitionId} changes context in ` +
-          `${relation.recordId}; coefficient evaluation must be a later beat.`
-        );
-      }
-      return Object.freeze({
+  const contextCorrespondences:
+    KpFactorCommonTermMotifBinding["contextCorrespondences"][number][] = [];
+  const structuralArtifactIds: string[] = [];
+  for (const relation of input.relations) {
+    if (relation.recordId === fusion.recordId) continue;
+    // One-to-one persistence makes coefficient evaluation impossible inside
+    // the factoring beat without teaching rendering what a coefficient is.
+    if (
+      relation.lifecycle === "persist" &&
+      relation.sourceSelectorIds.length === 1 &&
+      relation.targetSelectorIds.length === 1
+    ) {
+      contextCorrespondences.push({
         recordId: relation.recordId,
         sourceSelectorId: relation.sourceSelectorIds[0]!,
         targetSelectorId: relation.targetSelectorIds[0]!
       });
-    });
+      continue;
+    }
+    if (
+      (relation.lifecycle === "enter" &&
+        relation.sourceSelectorIds.length === 0 &&
+        relation.targetSelectorIds.length > 0) ||
+      (relation.lifecycle === "exit" &&
+        relation.sourceSelectorIds.length > 0 &&
+        relation.targetSelectorIds.length === 0)
+    ) {
+      structuralArtifactIds.push(
+        ...(relation.lifecycle === "enter"
+          ? relation.targetSelectorIds
+          : relation.sourceSelectorIds)
+      );
+      continue;
+    }
+    throw new Error(
+      `Factoring transition ${input.transitionId} changes context in ` +
+      `${relation.recordId}; coefficient evaluation must be a later beat.`
+    );
+  }
 
   return Object.freeze({
     kind: "factor-common-term-motif-binding" as const,
@@ -123,6 +144,7 @@ export function compileKpFactorCommonTermMotifBinding(input: {
       KpFactoringContributorSelectorIds,
     commonFactorId: commonFactorIds[0]!,
     contextCorrespondences: Object.freeze(contextCorrespondences),
+    structuralArtifactIds: Object.freeze(structuralArtifactIds),
     fusionPaintPolicy: "opaque-many-to-one" as const,
     synchronization: "simultaneous" as const,
     coefficientEvaluation: "deferred" as const
@@ -175,6 +197,10 @@ function sameBinding(
     expected.synchronization === actual.synchronization &&
     expected.coefficientEvaluation === actual.coefficientEvaluation &&
     sameValues(expected.factorCopyIds, actual.factorCopyIds) &&
+    sameValues(
+      expected.structuralArtifactIds,
+      actual.structuralArtifactIds
+    ) &&
     expected.contextCorrespondences.length ===
       actual.contextCorrespondences.length &&
     expected.contextCorrespondences.every((correspondence, index) => {
