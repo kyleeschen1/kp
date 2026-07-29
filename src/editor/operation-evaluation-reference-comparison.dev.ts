@@ -14,6 +14,8 @@ import type {
 
 export interface KpOperationEvaluationReferenceComparisonSession {
   readonly root: HTMLElement;
+  readonly currentStageHost: HTMLElement;
+  bindCurrentStage(stage: HTMLElement): void;
   apply(progress: number): void;
   dispose(): void;
 }
@@ -34,10 +36,10 @@ interface ReferenceMemberGroup {
  */
 export function mountKpOperationEvaluationReferenceComparison(input: {
   readonly slot: HTMLElement;
-  readonly currentStage: HTMLElement;
   readonly source: readonly KpSelectorAnnotatedLatex[];
   readonly target: readonly KpSelectorAnnotatedLatex[];
   readonly synthesis: KpSuccessorSynthesisBinding;
+  readonly measurementHostId: string;
 }): KpOperationEvaluationReferenceComparisonSession {
   const document = input.slot.ownerDocument;
   const root = document.createElement("section");
@@ -106,58 +108,105 @@ export function mountKpOperationEvaluationReferenceComparison(input: {
   bindMotionIds(referenceSource, input.source);
   bindMotionIds(referenceTarget, input.target);
 
-  required(
+  const currentStageHost = required(
     root,
     "[data-kp-operation-evaluation-current-stage-host]"
-  ).append(input.currentStage);
+  );
+  currentStageHost.dataset["kpOperationEvaluationMeasurementHostId"] =
+    input.measurementHostId;
   input.slot.replaceChildren(root);
 
-  const sourceMembers = resolveMemberGroups(
-    referenceSource,
-    input.synthesis.sourceAnnotations
-  );
-  const targetMembers = resolveMemberGroups(
-    referenceTarget,
-    input.synthesis.targetAnnotations
-  );
-  const measurements = Object.fromEntries([
-    ...input.synthesis.sourceAnnotations.map((annotation) => [
-      annotation.id,
-      unionMemberRects(requiredGroup(sourceMembers, annotation.id).members)
-    ]),
-    ...input.synthesis.targetAnnotations.map((annotation) => [
-      annotation.id,
-      unionMemberRects(requiredGroup(targetMembers, annotation.id).members)
-    ])
-  ]);
-  const plan = createKpSuccessorSynthesisPlan({
-    id: `reference.${input.synthesis.id}`,
-    authority: input.synthesis.authority,
-    sourceAnnotations: input.synthesis.sourceAnnotations,
-    targetAnnotations: input.synthesis.targetAnnotations,
-    lineages: input.synthesis.lineages,
-    measurements
-  });
-  const referenceTypography = typographyFingerprint([
-    ...sourceMembers.values(),
-    ...targetMembers.values()
-  ].flatMap(({ members }) => members.map(({ element }) => element)));
-
+  let currentStage: HTMLElement | undefined;
+  let reference:
+    | {
+        readonly sourceMembers: ReadonlyMap<string, ReferenceMemberGroup>;
+        readonly targetMembers: ReadonlyMap<string, ReferenceMemberGroup>;
+        readonly plan: ReturnType<typeof createKpSuccessorSynthesisPlan>;
+        readonly typography: string;
+      }
+    | undefined;
+  let pendingProgress = 0;
   let disposed = false;
   return {
     root,
-    apply(progress) {
+    currentStageHost,
+    bindCurrentStage(stage) {
       if (disposed) return;
-      const frame = sampleKpSuccessorSynthesis({ plan, progress });
-      applyReferenceFrame(frame, sourceMembers, targetMembers);
+      if (stage.parentElement !== currentStageHost) {
+        throw new Error(
+          "Operation evaluation must be mounted in its final host before " +
+          "native paint is measured."
+        );
+      }
+      currentStage = stage;
+      const sourceMembers = resolveMemberGroups(
+        referenceSource,
+        input.synthesis.sourceAnnotations
+      );
+      const targetMembers = resolveMemberGroups(
+        referenceTarget,
+        input.synthesis.targetAnnotations
+      );
+      const measurements = Object.fromEntries([
+        ...input.synthesis.sourceAnnotations.map((annotation) => [
+          annotation.id,
+          unionMemberRects(
+            requiredGroup(sourceMembers, annotation.id).members
+          )
+        ]),
+        ...input.synthesis.targetAnnotations.map((annotation) => [
+          annotation.id,
+          unionMemberRects(
+            requiredGroup(targetMembers, annotation.id).members
+          )
+        ])
+      ]);
+      reference = {
+        sourceMembers,
+        targetMembers,
+        plan: createKpSuccessorSynthesisPlan({
+          id: `reference.${input.synthesis.id}`,
+          authority: input.synthesis.authority,
+          sourceAnnotations: input.synthesis.sourceAnnotations,
+          targetAnnotations: input.synthesis.targetAnnotations,
+          lineages: input.synthesis.lineages,
+          measurements
+        }),
+        typography: typographyFingerprint([
+          ...sourceMembers.values(),
+          ...targetMembers.values()
+        ].flatMap(({ members }) =>
+          members.map(({ element }) => element)
+        ))
+      };
+      this.apply(pendingProgress);
+    },
+    apply(progress) {
+      pendingProgress = progress;
+      if (
+        disposed ||
+        reference === undefined ||
+        currentStage === undefined
+      ) {
+        return;
+      }
+      const frame = sampleKpSuccessorSynthesis({
+        plan: reference.plan,
+        progress
+      });
+      applyReferenceFrame(
+        frame,
+        reference.sourceMembers,
+        reference.targetMembers
+      );
       syncReferenceTelemetry(
         root,
         frame,
-        sourceMembers,
-        targetMembers,
-        referenceTypography
+        reference.sourceMembers,
+        reference.targetMembers,
+        reference.typography
       );
-      syncCurrentTelemetry(root, input.currentStage, progress);
+      syncCurrentTelemetry(root, currentStage, progress);
     },
     dispose() {
       disposed = true;

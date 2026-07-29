@@ -50,10 +50,21 @@ interface OperationEvaluationSurfaceSession {
   generation: number;
   pendingProgress: number;
   activeStage?: HTMLElement | undefined;
+  measurementCertificate?: OperationEvaluationMeasurementCertificate | undefined;
   playback?: KpReaderEquationMeasuredRendererSession | undefined;
   referenceComparison?:
     KpOperationEvaluationReferenceComparisonSession | undefined;
   disposed: boolean;
+}
+
+interface OperationEvaluationMeasurementCertificate {
+  readonly host: HTMLElement;
+  readonly hostId: string;
+  readonly width: number;
+  readonly height: number;
+  readonly devicePixelRatio: number;
+  readonly fontRevision: number;
+  readonly generation: number;
 }
 
 const sessions = new WeakMap<HTMLElement, OperationEvaluationSurfaceSession>();
@@ -108,8 +119,12 @@ KpEditorAnimationSurfaceAdapter = {
     session.pendingProgress = state.direction === "forward"
       ? state.progress
       : 1 - state.progress;
-    session.playback?.apply(session.pendingProgress);
-    session.referenceComparison?.apply(session.pendingProgress);
+    if (measurementCertificateIsCurrent(session)) {
+      session.playback?.apply(session.pendingProgress);
+      session.referenceComparison?.apply(session.pendingProgress);
+    } else if (session.playback !== undefined) {
+      invalidateOperationEvaluationMeasurement(player, session);
+    }
     syncProgressTelemetry(player, session.activeStage, state, session);
   }
 };
@@ -149,46 +164,80 @@ async function prepareOperationEvaluationSurface(input: {
   }
   const source = annotateEndpoint(transition.source);
   const target = annotateEndpoint(transition.target);
-  const stage = input.slot.ownerDocument.createElement("div");
-  stage.className =
-    "editor-equation-stage kp-operation-evaluation-stage";
-  stage.dataset["kpOperationEvaluationStage"] = "";
-  stage.dataset["kpOperationEvaluationStatus"] = "preparing";
-  stage.dataset["kpOperationEvaluationTransitionId"] = transition.id;
-  stage.dataset["kpOperationEvaluationPresentationPlanId"] =
-    transition.presentationPlan.successorSyntheses[0]
-      .operationPresentationPlan.id;
-  stage.dataset["kpOperationEvaluationPaintContinuityPlanId"] =
-    transition.presentationPlan.successorSyntheses[0]
-      .paintContinuityPlan.id;
-  stage.dataset["kpOperationEvaluationTransferTopology"] =
-    transition.presentationPlan.successorSyntheses[0]
-      .paintContinuityPlan.carriers[0]!.transferTopology;
-  stage.dataset["kpOperationEvaluationBoundaryProgress"] =
-    String(kpNativeKatexSuccessorMaterialJunctionProgress);
-  stage.setAttribute(
-    "aria-label",
-    `${source.map(({ rawLatex }) => rawLatex).join(" ")} evaluates to ` +
-    target.map(({ rawLatex }) => rawLatex).join(" ")
-  );
-  stage.innerHTML = `
-    <div class="editor-equation-stage__material-layer"
-      data-kp-editor-equation-material-layer aria-hidden="true"></div>
-    <div class="kp-operation-evaluation-stage__endpoint"
-      data-kp-operation-evaluation-source aria-hidden="true">
-      ${source.map((annotated) =>
-        renderSelectorAnnotatedLatexToHtml(annotated)).join("")}
-    </div>
-    <div class="kp-operation-evaluation-stage__endpoint"
-      data-kp-operation-evaluation-target aria-hidden="true">
-      ${target.map((annotated) =>
-        renderSelectorAnnotatedLatexToHtml(annotated)).join("")}
-    </div>`;
-  input.slot.replaceChildren(stage);
-  bindEndpointOwnership(stage, source, "source");
-  bindEndpointOwnership(stage, target, "target");
-
   try {
+    let stageHost = input.slot;
+    const measurementHostId =
+      `operation-evaluation.${input.renderPlan.animationId}.` +
+      `generation-${input.generation}`;
+    if (import.meta.env.DEV) {
+      const {
+        mountKpOperationEvaluationReferenceComparison
+      } = await import(
+        "./operation-evaluation-reference-comparison.dev.ts"
+      );
+      if (
+        input.session.disposed ||
+        input.session.generation !== input.generation
+      ) {
+        return;
+      }
+      input.session.referenceComparison?.dispose();
+      input.session.referenceComparison =
+        mountKpOperationEvaluationReferenceComparison({
+          slot: input.slot,
+          source,
+          target,
+          synthesis,
+          measurementHostId
+        });
+      stageHost = input.session.referenceComparison.currentStageHost;
+    } else {
+      stageHost.dataset["kpOperationEvaluationMeasurementHostId"] =
+        measurementHostId;
+    }
+
+    const stage = input.slot.ownerDocument.createElement("div");
+    stage.className =
+      "editor-equation-stage kp-operation-evaluation-stage";
+    stage.dataset["kpOperationEvaluationStage"] = "";
+    stage.dataset["kpOperationEvaluationStatus"] = "preparing";
+    stage.dataset["kpOperationEvaluationTransitionId"] = transition.id;
+    stage.dataset["kpOperationEvaluationPresentationPlanId"] =
+      transition.presentationPlan.successorSyntheses[0]
+        .operationPresentationPlan.id;
+    stage.dataset["kpOperationEvaluationPaintContinuityPlanId"] =
+      transition.presentationPlan.successorSyntheses[0]
+        .paintContinuityPlan.id;
+    stage.dataset["kpOperationEvaluationTransferTopology"] =
+      transition.presentationPlan.successorSyntheses[0]
+        .paintContinuityPlan.carriers[0]!.transferTopology;
+    stage.dataset["kpOperationEvaluationBoundaryProgress"] =
+      String(kpNativeKatexSuccessorMaterialJunctionProgress);
+    stage.setAttribute(
+      "aria-label",
+      `${source.map(({ rawLatex }) => rawLatex).join(" ")} evaluates to ` +
+      target.map(({ rawLatex }) => rawLatex).join(" ")
+    );
+    stage.innerHTML = `
+      <div class="editor-equation-stage__material-layer"
+        data-kp-editor-equation-material-layer aria-hidden="true"></div>
+      <div class="kp-operation-evaluation-stage__endpoint"
+        data-kp-operation-evaluation-source aria-hidden="true">
+        ${source.map((annotated) =>
+          renderSelectorAnnotatedLatexToHtml(annotated)).join("")}
+      </div>
+      <div class="kp-operation-evaluation-stage__endpoint"
+        data-kp-operation-evaluation-target aria-hidden="true">
+        ${target.map((annotated) =>
+          renderSelectorAnnotatedLatexToHtml(annotated)).join("")}
+      </div>`;
+    // Native scenes must settle in their final containing block. Moving this
+    // stage afterward invalidates every paint-space coordinate even if wrapper
+    // rectangles still look plausible.
+    stageHost.replaceChildren(stage);
+    bindEndpointOwnership(stage, source, "source");
+    bindEndpointOwnership(stage, target, "target");
+
     const sourceRoot = required(
       stage,
       "[data-kp-operation-evaluation-source]"
@@ -225,14 +274,28 @@ async function prepareOperationEvaluationSurface(input: {
     const materialPlan = compileKpReaderEquationMaterialPlan(
       input.renderPlan
     );
+    const measurementCertificate =
+      createOperationEvaluationMeasurementCertificate({
+        stage,
+        host: stageHost,
+        hostId: measurementHostId,
+        fontRevision: input.session.fontReadiness.revision,
+        generation: input.generation
+      });
     const playback = createKpReaderEquationSceneCompositorSession({
       renderPlan: input.renderPlan,
       materialPlan,
       transitionId: transition.id,
       motionMode: operationEvaluationMotionMode(input.player),
       measurementIdentity: createKpEquationStageMeasurementIdentity({
-        coordinateSpaceId: `editor.${input.renderPlan.animationId}`,
-        revision: input.session.fontReadiness.revision
+        coordinateSpaceId: [
+          `editor.${input.renderPlan.animationId}`,
+          measurementCertificate.hostId,
+          `${measurementCertificate.width}x${measurementCertificate.height}`,
+          `dpr-${measurementCertificate.devicePixelRatio}`,
+          `generation-${measurementCertificate.generation}`
+        ].join("."),
+        revision: measurementCertificate.fontRevision
       }),
       source: sourceScene,
       target: targetScene
@@ -240,37 +303,15 @@ async function prepareOperationEvaluationSurface(input: {
     input.session.playback?.dispose();
     input.session.playback = playback;
     input.session.activeStage = stage;
+    input.session.measurementCertificate = measurementCertificate;
     stage.dataset["kpOperationEvaluationStatus"] = "ready";
     stage.dataset["kpOperationEvaluationPresentationMode"] =
       playback.presentationMode;
+    input.session.referenceComparison?.bindCurrentStage(stage);
     playback.apply(input.session.pendingProgress);
-    if (import.meta.env.DEV) {
-      const {
-        mountKpOperationEvaluationReferenceComparison
-      } = await import(
-        "./operation-evaluation-reference-comparison.dev.ts"
-      );
-      if (
-        input.session.disposed ||
-        input.session.generation !== input.generation
-      ) {
-        playback.dispose();
-        stage.remove();
-        return;
-      }
-      input.session.referenceComparison?.dispose();
-      input.session.referenceComparison =
-        mountKpOperationEvaluationReferenceComparison({
-          slot: input.slot,
-          currentStage: stage,
-          source,
-          target,
-          synthesis
-        });
-      input.session.referenceComparison.apply(
-        input.session.pendingProgress
-      );
-    }
+    input.session.referenceComparison?.apply(
+      input.session.pendingProgress
+    );
     syncProgressTelemetry(
       input.player,
       stage,
@@ -341,6 +382,88 @@ function bindEndpointOwnership(
   }
 }
 
+function createOperationEvaluationMeasurementCertificate(input: {
+  readonly stage: HTMLElement;
+  readonly host: HTMLElement;
+  readonly hostId: string;
+  readonly fontRevision: number;
+  readonly generation: number;
+}): OperationEvaluationMeasurementCertificate {
+  if (input.stage.parentElement !== input.host || !input.stage.isConnected) {
+    throw new Error(
+      "Operation evaluation cannot certify a detached or reparented stage."
+    );
+  }
+  const certificate = {
+    host: input.host,
+    hostId: input.hostId,
+    width: input.host.clientWidth,
+    height: input.host.clientHeight,
+    devicePixelRatio:
+      input.host.ownerDocument.defaultView?.devicePixelRatio ?? 1,
+    fontRevision: input.fontRevision,
+    generation: input.generation
+  } satisfies OperationEvaluationMeasurementCertificate;
+  input.host.dataset["kpOperationEvaluationMeasurementHostId"] =
+    certificate.hostId;
+  input.stage.dataset["kpOperationEvaluationMeasurementHostId"] =
+    certificate.hostId;
+  input.stage.dataset["kpOperationEvaluationMeasurementWidth"] =
+    String(certificate.width);
+  input.stage.dataset["kpOperationEvaluationMeasurementHeight"] =
+    String(certificate.height);
+  input.stage.dataset["kpOperationEvaluationMeasurementDpr"] =
+    String(certificate.devicePixelRatio);
+  input.stage.dataset["kpOperationEvaluationMeasurementFontRevision"] =
+    String(certificate.fontRevision);
+  input.stage.dataset["kpOperationEvaluationMeasurementGeneration"] =
+    String(certificate.generation);
+  return certificate;
+}
+
+function measurementCertificateIsCurrent(
+  session: OperationEvaluationSurfaceSession
+): boolean {
+  const certificate = session.measurementCertificate;
+  const stage = session.activeStage;
+  if (certificate === undefined || stage === undefined) return false;
+  return !session.disposed &&
+    session.generation === certificate.generation &&
+    stage.isConnected &&
+    stage.parentElement === certificate.host &&
+    certificate.host.isConnected &&
+    certificate.host.dataset["kpOperationEvaluationMeasurementHostId"] ===
+      certificate.hostId &&
+    certificate.host.clientWidth === certificate.width &&
+    certificate.host.clientHeight === certificate.height &&
+    (certificate.host.ownerDocument.defaultView?.devicePixelRatio ?? 1) ===
+      certificate.devicePixelRatio &&
+    session.fontReadiness.revision === certificate.fontRevision;
+}
+
+function invalidateOperationEvaluationMeasurement(
+  player: HTMLElement,
+  session: OperationEvaluationSurfaceSession
+): void {
+  const stage = session.activeStage;
+  session.playback?.dispose();
+  session.playback = undefined;
+  session.measurementCertificate = undefined;
+  player.dataset["kpOperationEvaluationContinuityStatus"] =
+    "measurement-stale";
+  if (stage === undefined) return;
+  stage.dataset["kpOperationEvaluationStatus"] = "measurement-stale";
+  const source = stage.querySelector<HTMLElement>(
+    "[data-kp-operation-evaluation-source]"
+  );
+  const target = stage.querySelector<HTMLElement>(
+    "[data-kp-operation-evaluation-target]"
+  );
+  const showTarget = session.pendingProgress >= 0.5;
+  if (source !== null) source.style.opacity = showTarget ? "0" : "1";
+  if (target !== null) target.style.opacity = showTarget ? "1" : "0";
+}
+
 function syncProgressTelemetry(
   player: HTMLElement,
   stage: HTMLElement | undefined,
@@ -398,6 +521,7 @@ function disposeOperationEvaluationSurface(
   session.generation += 1;
   session.referenceComparison?.dispose();
   session.playback?.dispose();
+  session.measurementCertificate = undefined;
   session.fontReadiness.dispose();
   session.activeStage?.remove();
   sessions.delete(player);

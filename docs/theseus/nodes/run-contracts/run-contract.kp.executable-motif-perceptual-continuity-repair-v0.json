@@ -183,6 +183,13 @@
       "scope": "s03 stable focused Animation Library dashboard host",
       "checkedAt": "2026-07-29T20:43:46.229Z",
       "notes": "The repository-owned visual entrypoint passes the compact-host, single-Review, greater-than-800px width, and side-by-side comparison contract."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-continuity",
+      "status": "passed",
+      "scope": "s03 final-host measurement and actual ink geometry",
+      "checkedAt": "2026-07-29T22:29:15.909Z",
+      "notes": "30 Chromium, Firefox, and WebKit checks passed. The measured stage stays in its certified host, endpoint transient ink agrees with native KaTeX, visible paint remains contained, and forced reparenting fails closed to a native endpoint."
     }
   ],
   "allowedWork": [
@@ -228,7 +235,7 @@
     {
       "id": "s03",
       "title": "human-reference-selection-checkpoint",
-      "summary": "User approved a bounded rescue within this existing human checkpoint: freeze the observable no-fade reference, make the final host own measurement with actual ink-bound checks, present one primary candidate, then stop for human visual approval. Remaining slices and domain paths are conditional on the architecture ROI gate.",
+      "summary": "Bound final-host measurement to host identity, dimensions, DPR, font revision, and session generation; removed post-measurement reparenting; added actual ink containment and endpoint-equivalence checks plus fail-closed reparent invalidation. Cross-browser measurement cohort passes. Next: present one primary no-fade reference candidate and stop for human review.",
       "status": "in-progress"
     },
     {

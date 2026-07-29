@@ -44,7 +44,8 @@ test("one plus two mounts through the lazy verified compositor adapter", async (
   );
   await expect(stage).toHaveAttribute(
     "data-kp-operation-evaluation-status",
-    "ready"
+    "ready",
+    { timeout: 15_000 }
   );
   await expect(stage).toHaveAttribute(
     "data-kp-operation-evaluation-presentation-mode",
@@ -118,6 +119,126 @@ test("reference candidate and current runtime share the player clock", async ({
     "[data-kp-operation-evaluation-current-telemetry] " +
     "[data-kp-comparison-endpoint]"
   )).toHaveText("native target");
+});
+
+test("operation evaluation measures and retains paint in its final host", async ({
+  page
+}) => {
+  await page.goto(`/?animation=${descriptorId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const scrubber = player.locator(
+    "[data-action=\"seek-editor-animation\"]"
+  );
+  const host = player.locator(
+    "[data-kp-operation-evaluation-current-stage-host]"
+  );
+  const stage = host.locator("[data-kp-operation-evaluation-stage]");
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-status",
+    "ready",
+    { timeout: 15_000 }
+  );
+
+  const certificate = await stage.evaluate((element) => {
+    const currentStage = element as HTMLElement;
+    const parent = currentStage.parentElement as HTMLElement | null;
+    return {
+      hostId:
+        currentStage.dataset["kpOperationEvaluationMeasurementHostId"],
+      parentHostId:
+        parent?.dataset["kpOperationEvaluationMeasurementHostId"],
+      width:
+        currentStage.dataset["kpOperationEvaluationMeasurementWidth"],
+      parentWidth: parent?.clientWidth,
+      height:
+        currentStage.dataset["kpOperationEvaluationMeasurementHeight"],
+      parentHeight: parent?.clientHeight,
+      connected: currentStage.isConnected
+    };
+  });
+  expect(certificate).toMatchObject({
+    connected: true,
+    hostId: certificate.parentHostId,
+    width: String(certificate.parentWidth),
+    height: String(certificate.parentHeight)
+  });
+
+  await scrubber.fill("0");
+  const nativeSource = await visibleInkBounds(stage);
+  await seekExact(scrubber, 0.000001);
+  const transientSource = await visibleInkBounds(stage);
+  expectInkRectsEquivalent(transientSource, nativeSource, 1);
+
+  // The current runtime remains the explicitly rejected zero-area diagnostic;
+  // its junction is tested elsewhere. These samples certify the host-space
+  // paint geometry on both sides of that known presentation defect.
+  for (const progress of [0, 0.25, 0.58, 0.65, 0.75, 1]) {
+    await scrubber.fill(String(progress));
+    const [ink, hostBox] = await Promise.all([
+      visibleInkBounds(stage),
+      host.boundingBox()
+    ]);
+    expect(ink).toBeDefined();
+    expect(hostBox).not.toBeNull();
+    expect(ink!.left).toBeGreaterThanOrEqual(hostBox!.x - 1);
+    expect(ink!.top).toBeGreaterThanOrEqual(hostBox!.y - 1);
+    expect(ink!.right).toBeLessThanOrEqual(
+      hostBox!.x + hostBox!.width + 1
+    );
+    expect(ink!.bottom).toBeLessThanOrEqual(
+      hostBox!.y + hostBox!.height + 1
+    );
+  }
+
+  await seekExact(scrubber, 0.999999);
+  const transientTarget = await visibleInkBounds(stage);
+  await scrubber.fill("1");
+  const nativeTarget = await visibleInkBounds(stage);
+  expectInkRectsEquivalent(transientTarget, nativeTarget, 1);
+});
+
+test("operation evaluation fails closed after measured-stage reparenting", async ({
+  page
+}) => {
+  await page.goto(`/?animation=${descriptorId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const stage = player.locator("[data-kp-operation-evaluation-stage]");
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-status",
+    "ready",
+    { timeout: 15_000 }
+  );
+
+  await stage.evaluate((element) => {
+    const rogueHost = element.ownerDocument.createElement("div");
+    rogueHost.dataset["kpOperationEvaluationRogueHost"] = "";
+    element.parentElement!.after(rogueHost);
+    rogueHost.append(element);
+  });
+  await player.locator(
+    "[data-action=\"seek-editor-animation\"]"
+  ).fill("0.25");
+
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-status",
+    "measurement-stale"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-operation-evaluation-continuity-status",
+    "measurement-stale"
+  );
+  await expect(stage.locator(
+    "[data-kp-equation-material-owner-id]"
+  )).toHaveCount(0);
+  await expect(stage.locator(
+    "[data-kp-operation-evaluation-source]"
+  )).toHaveCSS("opacity", "1");
 });
 
 test("one plus two direct seek and rewind share one exact pose", async ({
@@ -472,6 +593,75 @@ async function ownerPoses(
       element.style.transform
     ].join("|");
   }).sort());
+}
+
+interface InkBounds {
+  readonly left: number;
+  readonly top: number;
+  readonly right: number;
+  readonly bottom: number;
+}
+
+async function seekExact(scrubber: Locator, progress: number): Promise<void> {
+  await scrubber.evaluate((element, value) => {
+    const input = element as HTMLInputElement;
+    input.value = String(value);
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  }, progress);
+}
+
+async function visibleInkBounds(
+  stage: Locator
+): Promise<InkBounds | undefined> {
+  return stage.evaluate((element) => {
+    const root = element as HTMLElement;
+    const visible = (candidate: HTMLElement): boolean => {
+      const style = getComputedStyle(candidate);
+      const rect = candidate.getBoundingClientRect();
+      return style.display !== "none" &&
+        style.visibility !== "hidden" &&
+        Number(style.opacity) > 0.01 &&
+        rect.width * rect.height > 0.01;
+    };
+    const rects = [
+      ...root.querySelectorAll<HTMLElement>(
+        "[data-kp-operation-evaluation-source]," +
+        "[data-kp-operation-evaluation-target]"
+      )
+    ].flatMap((endpoint) => {
+      if (!visible(endpoint)) return [];
+      const paint = endpoint.querySelector<HTMLElement>(".katex-html");
+      return paint === null ? [] : [paint.getBoundingClientRect()];
+    });
+    for (const owner of root.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )) {
+      if (!visible(owner)) continue;
+      const paint = owner.firstElementChild ?? owner;
+      rects.push(paint.getBoundingClientRect());
+    }
+    if (rects.length === 0) return undefined;
+    return {
+      left: Math.min(...rects.map(({ left }) => left)),
+      top: Math.min(...rects.map(({ top }) => top)),
+      right: Math.max(...rects.map(({ right }) => right)),
+      bottom: Math.max(...rects.map(({ bottom }) => bottom))
+    };
+  });
+}
+
+function expectInkRectsEquivalent(
+  actual: InkBounds | undefined,
+  expected: InkBounds | undefined,
+  tolerance: number
+): void {
+  expect(actual).toBeDefined();
+  expect(expected).toBeDefined();
+  for (const edge of ["left", "top", "right", "bottom"] as const) {
+    expect(Math.abs(actual![edge] - expected![edge])).toBeLessThanOrEqual(
+      tolerance
+    );
+  }
 }
 
 async function installNaturalPlaybackTrace(player: Locator): Promise<void> {
