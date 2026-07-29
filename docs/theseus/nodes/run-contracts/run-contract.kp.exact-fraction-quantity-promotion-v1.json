@@ -209,7 +209,8 @@
     {
       "id": "s16",
       "title": "bind-quantity-motifs",
-      "status": "planned"
+      "summary": "Bound every semantic beat to existing core presentation operations: focus, fan-out, group, merge, and persist. Added only two exemplar-proven motif payloads—partition refinement and part merge—both backed by the existing fission/fusion plan and shared canonical beat scheduler. Typed paint bindings admit only opacity 1 and existing persist/fission/fusion lifecycles, with continuous or atomic exclusive ownership rather than fades.",
+      "status": "complete"
     },
     {
       "id": "s17",

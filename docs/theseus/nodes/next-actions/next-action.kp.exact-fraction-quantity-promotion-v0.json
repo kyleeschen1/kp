@@ -244,6 +244,20 @@
       "scope": "slice s15 cross-view mapped correspondence",
       "checkedAt": "2026-07-29T06:03:43.681Z",
       "notes": "Synchronized view, atomic correspondence, selection correspondence, and sealed view-obligation types compile across all TypeScript projects."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s16 canonical motif binding",
+      "checkedAt": "2026-07-29T06:09:15.735Z",
+      "notes": "Sixty-nine tests pass; five beats bind focus, fan-out, group, merge, and persist core operations; only partition-refinement and part-merge add bounded payloads; existing fission/fusion sampling remains binary-opacity and exact-lineage."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s16 opaque lifecycle and motif types",
+      "checkedAt": "2026-07-29T06:09:16.614Z",
+      "notes": "Compile-time negative fixtures reject fractional material opacity and novel lifecycle categories; canonical operations, tuple cohorts, and shared scheduler vocabulary compile across all TypeScript projects."
     }
   ],
   "expectedLearning": [
