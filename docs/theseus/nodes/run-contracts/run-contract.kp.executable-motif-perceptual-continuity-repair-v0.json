@@ -348,6 +348,55 @@
       "scope": "s05 repository type closure",
       "checkedAt": "2026-07-29T23:35:59.213Z",
       "notes": "Application, Node, test, protocol-dependent, and domain TypeScript projects pass with the new sealed union."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s06 initial validator clone typing",
+      "checkedAt": "2026-07-29T23:44:57.504Z",
+      "notes": "Behavioral tests passed, but TypeScript required two casts at the already trusted post-validation clone boundary to preserve the discriminated program union."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s06 concurrent verification timing",
+      "checkedAt": "2026-07-29T23:44:58.610Z",
+      "notes": "The inference contracts passed semantically, but a four-way concurrent verification run took 6.67 seconds and exceeded the 5 second timing ceiling; the sequential rerun passed at 3.45 seconds."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s06 runtime validator mint and presentation regressions",
+      "checkedAt": "2026-07-29T23:44:59.530Z",
+      "notes": "135 of 135 checks passed, including all three valid variants plus forged, partial, duplicate, foreign-role, missing-phase, lineage, illegal-authority, and rendered-text-independent cases."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06 exhaustive validator type closure",
+      "checkedAt": "2026-07-29T23:45:00.439Z",
+      "notes": "All application, Node, test, protocol-dependent, and domain TypeScript projects pass after confining union-preserving casts to the exhaustive post-validation clone."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s06 program validator inference budget",
+      "checkedAt": "2026-07-29T23:45:01.419Z",
+      "notes": "Inference contracts passed sequentially at 46290 types, 57910 instantiations, and 3.45 seconds."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s06 semantic presentation authority boundaries",
+      "checkedAt": "2026-07-29T23:45:02.327Z",
+      "notes": "Architecture command exits successfully; it retains the pre-existing informational stale legacy query-view exception without introducing a new boundary failure."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s06 impact-recommended neighboring visual preservation",
+      "checkedAt": "2026-07-29T23:45:03.248Z",
+      "notes": "The stable repository-owned command captured all 39 desktop and phone visual states successfully."
     }
   ],
   "allowedWork": [
@@ -411,7 +460,8 @@
     {
       "id": "s06",
       "title": "mint-verified-motif-programs",
-      "status": "planned"
+      "summary": "Added the sole trusted runtime validator and mint for all three executable successor motif program variants. Exact schemas enforce exhaustive phase order/effects, total canonical roles, legal lineage cardinality, context preservation, accessibility, reduced motion, exact rewind, continuity, and pinned versions; WeakSet authority is immutable and non-serializable, while DOM, notation, geometry, paths, pixels, opacity, handoff, and timing are rejected without inspecting rendered glyph text.",
+      "status": "complete"
     },
     {
       "id": "s07",
