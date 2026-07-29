@@ -4,6 +4,7 @@ import {
   type FrameLocator,
   type Page
 } from "@playwright/test";
+import { execFileSync } from "node:child_process";
 import type {
   KpDevReviewCreateRequestV2
 } from "../protocols/dev-review-v2.ts";
@@ -24,6 +25,13 @@ const foldableDistributionId =
   "animation.foldable-distribution.collect-like-terms";
 const fractionCompositionId =
   "animation.fraction-composition.two-thirds-solve";
+const exactFractionQuantityId =
+  "animation.exact-fraction-quantity.third-plus-sixth";
+const expectedReviewCommit = execFileSync(
+  "git",
+  ["rev-parse", "--short=12", "HEAD"],
+  { encoding: "utf8" }
+).trim();
 
 test.beforeEach(async ({ page }) => {
   await mockReviewInbox(page);
@@ -364,6 +372,81 @@ test("fraction composition loads alone and review capture records its exact fold
   expect(
     documentRequests.filter((path) => path.startsWith("/reader/"))
   ).toEqual(["/reader/fraction-composition/"]);
+});
+
+test("exact quantity wrapper capture records the inner checkpoint, phase, view, and fold", async ({
+  page
+}) => {
+  let request: KpDevReviewCreateRequestV2 | undefined;
+  await page.route("**/api/dev/reviews/v2/notes", async (route) => {
+    request = route.request().postDataJSON() as KpDevReviewCreateRequestV2;
+    await route.fulfill({
+      status: 201,
+      contentType: "application/json",
+      body: JSON.stringify({
+        ...request,
+        id: "note.exact-fraction-wrapper",
+        sequence: 12,
+        status: "new"
+      })
+    });
+  });
+  await page.goto(
+    "/canonical-animation-review.html" +
+    `?animation=${encodeURIComponent(exactFractionQuantityId)}` +
+    "&viewport=phone"
+  );
+  const frame = page.frameLocator("[data-animation-library-frame]");
+  const player = frame.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${exactFractionQuantityId}"]`
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+  await player.locator("[data-action=\"seek-editor-animation\"]")
+    .fill("0.29");
+  await expect.poll(() => player.evaluate((root) => {
+    const committed = root.querySelector<HTMLElement>(
+      "[data-kp-exact-symbolic-scene]" +
+      "[data-kp-prepared-scene-state=\"committed\"]"
+    );
+    return committed?.dataset["kpExactSymbolicStatus"] === "ready" &&
+      committed.dataset["kpExactSymbolicSegment"] ===
+        root.dataset["kpExactSymbolicSegment"];
+  })).toBe(true);
+  await player.locator(
+    "[data-kp-exact-active-view=\"number-line\"]"
+  ).click();
+  await player.locator("[data-kp-exact-fold-mode]")
+    .selectOption("pinned");
+
+  const review = page.locator("[data-kp-dev-review-shell]");
+  await review.locator("button.launcher").click();
+  await review.locator("textarea").fill(
+    "Exact quantity canonical-host evidence."
+  );
+  await review.locator("button.save").click();
+  await expect(review.locator("output.status")).toHaveText("Saved note 12.");
+
+  expect(request?.capture.semantic).toMatchObject({
+    assetId: exactFractionQuantityId,
+    checkpointId: "checkpoint.exact-fraction.refined",
+    progressPermille: 290,
+    animationProgressPermille: 290,
+    phaseProgressPermille: 500,
+    projectionId: "number-line",
+    activePhase: "action",
+    activeTransformationIds: ["beat.exact-fraction.refine-third"],
+    foldMode: "pinned"
+  });
+  expect(request?.capture.render.rendererId).toBe(
+    "editor-animation-surface.exact-fraction-quantity.synchronized"
+  );
+  expect(request?.capture.environment.build.commit).toBe(
+    expectedReviewCommit
+  );
 });
 
 test("foldable distribution review matrix stays canonical in one wide or phone host", async ({

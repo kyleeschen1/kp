@@ -74,6 +74,19 @@ test("common denominator, merge, and recognition remain exact semantics", () => 
     ]),
     [[1n, 2n]]
   );
+  assert.deepEqual(
+    trace.proofs.commonDenominator.equivalenceMultipliers.map(
+      ({ numerator, denominator, exactValue }) => ({
+        numerator,
+        denominator,
+        exactValue: [exactValue.numerator, exactValue.denominator]
+      })
+    ),
+    [
+      { numerator: 2n, denominator: 2n, exactValue: [1n, 1n] },
+      { numerator: 1n, denominator: 1n, exactValue: [1n, 1n] }
+    ]
+  );
 });
 
 test("all trace proofs are sealed and contributor provenance closes", () => {
@@ -105,6 +118,10 @@ test("trace serialization is deterministic and renderer neutral", () => {
 
   assert.equal(first, second);
   assert.match(first, /law\.fraction\.equivalent-common-denominator/u);
+  assert.match(
+    first,
+    /"commonDenominatorMultipliers":\[\{"numerator":"2","denominator":"2"\}/u
+  );
   assert.doesNotMatch(
     first,
     /angle|radius|coordinate|pixel|svg|canvas|webgl|dom-order/iu

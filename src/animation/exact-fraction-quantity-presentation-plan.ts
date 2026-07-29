@@ -20,6 +20,10 @@ import {
   createKpSemanticLineageGraph
 } from "../semantic/semantic-lineage-graph.ts";
 
+declare const kpExactQuantityMotifInvocationBrand: unique symbol;
+
+const sealedMotifInvocations = new WeakSet<object>();
+
 export interface KpExactQuantityOpaquePaintBinding {
   readonly sourceSelectionIds: readonly string[];
   readonly targetSelectionIds: readonly string[];
@@ -31,11 +35,33 @@ export interface KpExactQuantityOpaquePaintBinding {
     | "atomic-exclusive-handoff";
 }
 
+export interface KpExactQuantityMotifInvocation {
+  readonly kind: "exact-quantity-canonical-motif-invocation";
+  readonly id: string;
+  readonly operationId: KpCanonicalOperationId;
+  readonly symbolicDispatches: readonly (
+    | "continuant"
+    | "copy-fan-out"
+    | "semantic-group"
+    | "merge-fan-in"
+    | "structural-succession"
+  )[];
+  readonly atomicDispatch:
+    | "focus"
+    | "fission"
+    | "group"
+    | "fusion"
+    | "structural-succession";
+  readonly viewContract: "all-required-views-one-visible-beat";
+  readonly [kpExactQuantityMotifInvocationBrand]: true;
+}
+
 interface KpExactFractionQuantityPresentationBeatBase {
   readonly beatId: string;
   readonly canonicalOperationId: KpCanonicalOperationId;
   readonly scheduler: "shared-canonical-beat";
   readonly paintBindings: readonly KpExactQuantityOpaquePaintBinding[];
+  readonly execution: KpExactQuantityMotifInvocation;
 }
 
 export type KpExactFractionQuantityPresentationBeat =
@@ -78,6 +104,32 @@ export interface KpExactFractionQuantityPresentationPlan {
   readonly lifecycleVocabulary:
     readonly ["persist", "fission", "fusion"];
   readonly schedulerVocabulary: readonly ["shared-canonical-beat"];
+}
+
+export interface KpExactQuantityVisiblePhaseBinding {
+  readonly view:
+    | "symbolic"
+    | "partitioned-circle"
+    | "fraction-bar"
+    | "number-line";
+  readonly invocationId: string;
+  readonly operationId: KpCanonicalOperationId;
+  readonly phase: "setup" | "action" | "settle";
+  readonly actionProgress: number;
+}
+
+export interface KpExactQuantityVisibleOperationFrame {
+  readonly invocationId: string;
+  readonly operationId: KpCanonicalOperationId;
+  readonly phase: "setup" | "action" | "settle";
+  readonly phaseProgress: number;
+  readonly actionProgress: number;
+  readonly viewBindings: readonly [
+    KpExactQuantityVisiblePhaseBinding,
+    KpExactQuantityVisiblePhaseBinding,
+    KpExactQuantityVisiblePhaseBinding,
+    KpExactQuantityVisiblePhaseBinding
+  ];
 }
 
 export function createKpExactFractionQuantityPresentationPlan(
@@ -173,6 +225,12 @@ export function createKpExactFractionQuantityPresentationPlan(
         paintBindings: paintBindings(
           neutralFrames[1]!.selectionTransitions
         ),
+        execution: createMotifInvocation({
+          beatId: trace.beats[1]!.id,
+          operationId: "kp.core.fan-out",
+          symbolicDispatches: ["copy-fan-out", "merge-fan-in"],
+          atomicDispatch: "fission"
+        }),
         motif: Object.freeze({
           kind: "partition-refinement" as const,
           sourceSelectionId: refinement.sourceSelectionIds[0]!,
@@ -194,6 +252,12 @@ export function createKpExactFractionQuantityPresentationPlan(
         paintBindings: paintBindings(
           neutralFrames[3]!.selectionTransitions
         ),
+        execution: createMotifInvocation({
+          beatId: trace.beats[3]!.id,
+          operationId: "kp.core.merge",
+          symbolicDispatches: ["merge-fan-in"],
+          atomicDispatch: "fusion"
+        }),
         motif: Object.freeze({
           kind: "part-merge" as const,
           contributorAtomicPartIds: mergeContributors,
@@ -230,6 +294,68 @@ export function createKpExactFractionQuantityPresentationPlan(
   });
 }
 
+export function isKpExactQuantityMotifInvocation(
+  value: unknown
+): value is KpExactQuantityMotifInvocation {
+  return typeof value === "object" &&
+    value !== null &&
+    sealedMotifInvocations.has(value);
+}
+
+export function sampleKpExactQuantityVisibleOperation(input: {
+  readonly beat: KpExactFractionQuantityPresentationBeat;
+  readonly localProgress: number;
+}): KpExactQuantityVisibleOperationFrame {
+  if (!isKpExactQuantityMotifInvocation(input.beat.execution)) {
+    throw new Error(
+      "Exact-quantity runtime requires a sealed executable motif invocation."
+    );
+  }
+  if (
+    input.beat.execution.operationId !== input.beat.canonicalOperationId
+  ) {
+    throw new Error(
+      "Exact-quantity motif invocation diverges from its canonical operation."
+    );
+  }
+  const progress = Math.max(0, Math.min(1, input.localProgress));
+  const phase = progress < 0.18
+    ? "setup" as const
+    : progress < 0.82
+      ? "action" as const
+      : "settle" as const;
+  const phaseProgress = phase === "setup"
+    ? progress / 0.18
+    : phase === "action"
+      ? (progress - 0.18) / 0.64
+      : (progress - 0.82) / 0.18;
+  const actionProgress = phase === "setup"
+    ? 0
+    : phase === "action"
+      ? phaseProgress
+      : 1;
+  const viewBindings = ([
+    "symbolic",
+    "partitioned-circle",
+    "fraction-bar",
+    "number-line"
+  ] as const).map((view) => Object.freeze({
+    view,
+    invocationId: input.beat.execution.id,
+    operationId: input.beat.execution.operationId,
+    phase,
+    actionProgress
+  })) as unknown as KpExactQuantityVisibleOperationFrame["viewBindings"];
+  return Object.freeze({
+    invocationId: input.beat.execution.id,
+    operationId: input.beat.execution.operationId,
+    phase,
+    phaseProgress,
+    actionProgress,
+    viewBindings: Object.freeze(viewBindings)
+  });
+}
+
 function existingBeat(
   beatId: string,
   canonicalOperationId: KpCanonicalOperationId,
@@ -244,11 +370,47 @@ function existingBeat(
     canonicalOperationId,
     scheduler: "shared-canonical-beat",
     paintBindings: paintBindings(transitions),
+    execution: createMotifInvocation({
+      beatId,
+      operationId: canonicalOperationId,
+      symbolicDispatches: [
+        motifId === "focus-continuant"
+          ? "continuant"
+          : motifId === "group-continuants"
+            ? "merge-fan-in"
+            : "structural-succession"
+      ],
+      atomicDispatch: motifId === "focus-continuant"
+        ? "focus"
+        : motifId === "group-continuants"
+          ? "group"
+          : "structural-succession"
+    }),
     motif: Object.freeze({
       kind: "existing",
       motifId
     })
   });
+}
+
+function createMotifInvocation(input: {
+  readonly beatId: string;
+  readonly operationId: KpCanonicalOperationId;
+  readonly symbolicDispatches:
+    KpExactQuantityMotifInvocation["symbolicDispatches"];
+  readonly atomicDispatch:
+    KpExactQuantityMotifInvocation["atomicDispatch"];
+}): KpExactQuantityMotifInvocation {
+  const invocation = Object.freeze({
+    kind: "exact-quantity-canonical-motif-invocation" as const,
+    id: `motif-invocation.${input.beatId}`,
+    operationId: input.operationId,
+    symbolicDispatches: Object.freeze([...input.symbolicDispatches]),
+    atomicDispatch: input.atomicDispatch,
+    viewContract: "all-required-views-one-visible-beat" as const
+  });
+  sealedMotifInvocations.add(invocation);
+  return invocation as KpExactQuantityMotifInvocation;
 }
 
 function paintBindings(

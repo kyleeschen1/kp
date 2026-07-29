@@ -18,6 +18,7 @@ test("one sealed runtime session owns one renderer and consumes the shared clock
   assert.equal(session.clockAuthority, "shared-animation-runtime-clock");
   assert.equal(session.presentation.beats.length, 5);
   assert.equal(session.symbolic.endpoints.length, 5);
+  assert.equal(session.symbolic.transientEndpoints.length, 1);
   assert.ok(Object.isFrozen(session));
 });
 
@@ -39,6 +40,11 @@ test("every beat samples through one immutable synchronized runtime frame", () =
       frame.projection.neutralFrame.beat.id
     );
     assert.equal(frame.viewPaintOwnership.length, 4);
+    assert.equal(frame.visibleOperation.viewBindings.length, 4);
+    assert.ok(frame.visibleOperation.viewBindings.every((binding) =>
+      binding.invocationId === frame.visibleOperation.invocationId &&
+      binding.phase === frame.visibleOperation.phase
+    ));
     assert.ok(Object.isFrozen(frame));
   }
 });
@@ -91,6 +97,8 @@ test("direct and rewind sampling share identical absolute visual state", () => {
 
     assert.deepEqual(forward.projection, rewind.projection);
     assert.deepEqual(forward.motifFrame, rewind.motifFrame);
+    assert.deepEqual(forward.visibleOperation, rewind.visibleOperation);
+    assert.deepEqual(forward.symbolicMotion, rewind.symbolicMotion);
     assert.deepEqual(forward.viewPaintOwnership, rewind.viewPaintOwnership);
     assert.equal(forward.ownershipPhase, rewind.ownershipPhase);
     assert.equal(forward.clock.direction, "forward");
@@ -107,6 +115,14 @@ test("motif progress is sampled once from the canonical beat coordinate", () => 
 
   assert.equal(refinement.projection.neutralFrame.beat.localProgress, 0.5);
   assert.equal(refinement.motifFrame?.progress, 0.5);
+  assert.equal(refinement.visibleOperation.phase, "action");
+  assert.equal(refinement.visibleOperation.actionProgress, 0.5);
+  assert.match(
+    refinement.symbolicMotion.segment.id,
+    /evaluate-unit-multiplier/u
+  );
+  assert.equal(refinement.symbolicMotion.segmentProgress, 0);
+  assert.equal(refinement.symbolicMotion.dispatch, "merge-fan-in");
   assert.equal(refinement.easingApplications, 1);
 });
 

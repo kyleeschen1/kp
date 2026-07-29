@@ -32,6 +32,22 @@ export default defineConfig({
   },
   plugins: [
     {
+      name: "kp-live-dev-review-build",
+      configureServer(server) {
+        server.middlewares.use(
+          "/__kp/dev-review/build",
+          (_request, response) => {
+            // The config-time define becomes stale across commits while the
+            // dev server stays open. Review evidence asks this read-only
+            // endpoint for the current worktree identity at capture time.
+            response.setHeader("content-type", "application/json");
+            response.setHeader("cache-control", "no-store");
+            response.end(JSON.stringify(readReviewBuildIdentity()));
+          }
+        );
+      }
+    },
+    {
       name: "kp-semantic-reader-route",
       transformIndexHtml: {
         order: "pre",

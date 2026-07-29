@@ -30,6 +30,16 @@ export interface KpExactFractionSymbolicIdentityTransition {
   readonly lifecycle: KpExactFractionSymbolicLifecycle;
 }
 
+export interface KpExactFractionSymbolicMotionSegment {
+  readonly id: string;
+  readonly sourceStateId: string;
+  readonly targetStateId: string;
+  readonly selectorTransitions:
+    readonly KpExactFractionSymbolicIdentityTransition[];
+  readonly structuralTransitions:
+    readonly KpExactFractionSymbolicIdentityTransition[];
+}
+
 export interface KpExactFractionSymbolicEndpoint {
   readonly stateId: string;
   readonly checkpointId: string;
@@ -42,18 +52,14 @@ export interface KpExactFractionSymbolicEndpoint {
 
 export interface KpExactFractionSymbolicMotionInput {
   readonly beatId: string;
-  readonly sourceStateId: string;
-  readonly targetStateId: string;
-  readonly selectorTransitions:
-    readonly KpExactFractionSymbolicIdentityTransition[];
-  readonly structuralTransitions:
-    readonly KpExactFractionSymbolicIdentityTransition[];
+  readonly segments: readonly KpExactFractionSymbolicMotionSegment[];
 }
 
 export interface KpExactFractionQuantitySymbolicProjection {
   readonly schemaVersion: "kp.exact-fraction-quantity-symbolic-projection.v1";
   readonly traceId: string;
   readonly endpoints: readonly KpExactFractionSymbolicEndpoint[];
+  readonly transientEndpoints: readonly KpExactFractionSymbolicEndpoint[];
   readonly motionInputs: readonly KpExactFractionSymbolicMotionInput[];
 }
 
@@ -76,7 +82,15 @@ const ids = Object.freeze({
   commonRule: "symbolic.sum.fraction-rule",
   resultNumerator: "symbolic.result.numerator",
   resultDenominator: "symbolic.result.denominator",
-  resultRule: "symbolic.result.fraction-rule"
+  resultRule: "symbolic.result.fraction-rule",
+  refinementNumeratorMultiply:
+    "symbolic.refinement.numerator.multiply",
+  refinementNumeratorFactor:
+    "symbolic.refinement.numerator.factor",
+  refinementDenominatorMultiply:
+    "symbolic.refinement.denominator.multiply",
+  refinementDenominatorFactor:
+    "symbolic.refinement.denominator.factor"
 });
 
 export function createKpExactFractionQuantitySymbolicProjection(
@@ -113,11 +127,19 @@ export function createKpExactFractionQuantitySymbolicProjection(
       structuralAnchors: definition.anchors
     });
   }));
-  const motionInputs = createMotionInputs(trace, endpoints);
+  const transientEndpoints = Object.freeze([
+    createRefinementFactorEndpoint(trace)
+  ]);
+  const motionInputs = createMotionInputs(
+    trace,
+    endpoints,
+    transientEndpoints[0]!
+  );
   return Object.freeze({
     schemaVersion: "kp.exact-fraction-quantity-symbolic-projection.v1",
     traceId: trace.id,
     endpoints,
+    transientEndpoints,
     motionInputs
   });
 }
@@ -246,6 +268,82 @@ function endpointDefinitions(
   ]);
 }
 
+function createRefinementFactorEndpoint(
+  trace: KpExactFractionQuantityTrace
+): KpExactFractionSymbolicEndpoint {
+  const multiplier =
+    trace.proofs.commonDenominator.equivalenceMultipliers[0];
+  if (
+    multiplier.numerator !== multiplier.denominator ||
+    multiplier.numerator <= 1n
+  ) {
+    throw new Error(
+      "The exact-fraction exemplar requires a visible non-trivial unit multiplier."
+    );
+  }
+  const source = trace.proofs.commonDenominator.sourceForms[0]!;
+  const sixth = trace.proofs.commonDenominator.sourceForms[1]!;
+  const thirdWithFactor = fraction(
+    "symbolic.addend.third",
+    ids.thirdNumerator,
+    ids.thirdDenominator,
+    ids.thirdRule,
+    String(source.numerator),
+    String(source.denominator),
+    [
+      selector(ids.thirdNumerator, String(source.numerator)),
+      latex("\\,"),
+      selector(ids.refinementNumeratorMultiply, "\\times"),
+      latex("\\,"),
+      selector(
+        ids.refinementNumeratorFactor,
+        String(multiplier.numerator)
+      )
+    ],
+    [
+      selector(ids.thirdDenominator, String(source.denominator)),
+      latex("\\,"),
+      selector(ids.refinementDenominatorMultiply, "\\times"),
+      latex("\\,"),
+      selector(
+        ids.refinementDenominatorFactor,
+        String(multiplier.denominator)
+      )
+    ]
+  );
+  const sixthFraction = fraction(
+    "symbolic.addend.sixth",
+    ids.sixthNumerator,
+    ids.sixthDenominator,
+    ids.sixthRule,
+    String(sixth.numerator),
+    String(sixth.denominator)
+  );
+  const definition = equation(
+    thirdWithFactor,
+    sixthFraction,
+    "one third times two over two, plus one sixth"
+  );
+  const annotated = createKpSelectorAnnotatedLatex({
+    id: "exact-fraction-quantity.refinement-unit-multiplier",
+    expectedSelectorIds: definition.segments.flatMap((segment) =>
+      segment.kind === "selector" ? [segment.selectorId] : []
+    ),
+    segments: definition.segments
+  });
+  return Object.freeze({
+    stateId: "transient.exact-fraction.refinement-unit-multiplier",
+    checkpointId: trace.states[1]!.checkpointId,
+    accessibleText: definition.accessibleText,
+    annotated: freezeAnnotated(annotated),
+    nativeHtmlAndMathml: renderLatexToHtml(annotated.rawLatex, {
+      output: "htmlAndMathml"
+    }),
+    groupEnvelopes: definition.groups,
+    structuralAnchors: definition.anchors
+  });
+}
+
 function requireTwoForms(
   state: KpExactFractionQuantityTrace["states"][number]
 ): readonly [KpExactFractionForm, KpExactFractionForm] {
@@ -296,22 +394,27 @@ function fraction(
   ruleId: string,
   numeratorLatex: string,
   denominatorLatex: string,
-  numeratorSegments?: readonly KpSelectorAnnotatedLatexSegment[]
+  numeratorSegments?: readonly KpSelectorAnnotatedLatexSegment[],
+  denominatorSegments?: readonly KpSelectorAnnotatedLatexSegment[]
 ): FractionDefinition {
   const actualNumeratorSegments = numeratorSegments ??
     [selector(numeratorId, numeratorLatex)];
+  const actualDenominatorSegments = denominatorSegments ??
+    [selector(denominatorId, denominatorLatex)];
   const memberSelectorIds = [
     ...actualNumeratorSegments.flatMap((segment) =>
       segment.kind === "selector" ? [segment.selectorId] : []
     ),
-    denominatorId
+    ...actualDenominatorSegments.flatMap((segment) =>
+      segment.kind === "selector" ? [segment.selectorId] : []
+    )
   ];
   return {
     segments: Object.freeze([
       latex("\\frac{"),
       ...actualNumeratorSegments,
       latex("}{"),
-      selector(denominatorId, denominatorLatex),
+      ...actualDenominatorSegments,
       latex("}")
     ]),
     groups: Object.freeze([Object.freeze({
@@ -329,71 +432,158 @@ function fraction(
 
 function createMotionInputs(
   trace: KpExactFractionQuantityTrace,
-  endpoints: readonly KpExactFractionSymbolicEndpoint[]
+  endpoints: readonly KpExactFractionSymbolicEndpoint[],
+  refinementFactor: KpExactFractionSymbolicEndpoint
 ): readonly KpExactFractionSymbolicMotionInput[] {
-  const transitions = [
-    {
-      selectors: persistAll(endpointSelectorIds(endpoints[0]!)),
-      structures: persistAll(endpointAnchorIds(endpoints[0]!))
-    },
-    {
-      selectors: persistAll(endpointSelectorIds(endpoints[1]!)),
-      structures: persistAll(endpointAnchorIds(endpoints[1]!))
-    },
-    {
-      selectors: [
-        persist(ids.thirdNumerator),
-        persist(ids.add),
-        persist(ids.sixthNumerator),
-        fusion([ids.thirdDenominator, ids.sixthDenominator], ids.commonDenominator)
-      ],
-      structures: [
-        fusion([ids.thirdRule, ids.sixthRule], ids.commonRule)
-      ]
-    },
-    {
-      selectors: [
-        fusion(
-          [ids.thirdNumerator, ids.add, ids.sixthNumerator],
-          ids.resultNumerator
-        ),
-        persist(ids.commonDenominator)
-      ],
-      structures: [persist(ids.commonRule)]
-    },
-    {
-      selectors: [
-        persist(ids.resultNumerator),
-        transition([ids.commonDenominator], [ids.resultDenominator], "persist")
-      ],
-      structures: [persist(ids.commonRule)]
-    }
-  ] as const;
+  const established = endpoints[0]!;
+  const refined = endpoints[1]!;
+  const aligned = endpoints[2]!;
+  const merged = endpoints[3]!;
+  const recognized = endpoints[4]!;
+  const inputs = [
+    motionInput(trace.beats[0]!.id, [
+      motionSegment(
+        `${trace.beats[0]!.id}.continuity`,
+        established,
+        established,
+        persistAll(endpointSelectorIds(established)),
+        persistAll(endpointAnchorIds(established))
+      )
+    ]),
+    motionInput(trace.beats[1]!.id, [
+      motionSegment(
+        `${trace.beats[1]!.id}.show-unit-multiplier`,
+        established,
+        refinementFactor,
+        [
+          fission(ids.thirdNumerator, [
+            ids.thirdNumerator,
+            ids.refinementNumeratorMultiply,
+            ids.refinementNumeratorFactor
+          ]),
+          fission(ids.thirdDenominator, [
+            ids.thirdDenominator,
+            ids.refinementDenominatorMultiply,
+            ids.refinementDenominatorFactor
+          ]),
+          persist(ids.add),
+          persist(ids.sixthNumerator),
+          persist(ids.sixthDenominator)
+        ],
+        persistAll(endpointAnchorIds(established))
+      ),
+      motionSegment(
+        `${trace.beats[1]!.id}.evaluate-unit-multiplier`,
+        refinementFactor,
+        refined,
+        [
+          fusion([
+            ids.thirdNumerator,
+            ids.refinementNumeratorMultiply,
+            ids.refinementNumeratorFactor
+          ], ids.thirdNumerator),
+          fusion([
+            ids.thirdDenominator,
+            ids.refinementDenominatorMultiply,
+            ids.refinementDenominatorFactor
+          ], ids.thirdDenominator),
+          persist(ids.add),
+          persist(ids.sixthNumerator),
+          persist(ids.sixthDenominator)
+        ],
+        persistAll(endpointAnchorIds(refined))
+      )
+    ]),
+    motionInput(trace.beats[2]!.id, [
+      motionSegment(
+        `${trace.beats[2]!.id}.group`,
+        refined,
+        aligned,
+        [
+          persist(ids.thirdNumerator),
+          persist(ids.add),
+          persist(ids.sixthNumerator),
+          fusion(
+            [ids.thirdDenominator, ids.sixthDenominator],
+            ids.commonDenominator
+          )
+        ],
+        [fusion([ids.thirdRule, ids.sixthRule], ids.commonRule)]
+      )
+    ]),
+    motionInput(trace.beats[3]!.id, [
+      motionSegment(
+        `${trace.beats[3]!.id}.merge`,
+        aligned,
+        merged,
+        [
+          fusion(
+            [ids.thirdNumerator, ids.add, ids.sixthNumerator],
+            ids.resultNumerator
+          ),
+          persist(ids.commonDenominator)
+        ],
+        [persist(ids.commonRule)]
+      )
+    ]),
+    motionInput(trace.beats[4]!.id, [
+      motionSegment(
+        `${trace.beats[4]!.id}.regroup`,
+        merged,
+        recognized,
+        [
+          persist(ids.resultNumerator),
+          transition(
+            [ids.commonDenominator],
+            [ids.resultDenominator],
+            "persist"
+          )
+        ],
+        [persist(ids.commonRule)]
+      )
+    ])
+  ];
+  return Object.freeze(inputs);
+}
 
-  return Object.freeze(trace.beats.map((beat, index) => {
-    const target = endpoints[index]!;
-    const source = endpoints[Math.max(0, index - 1)]!;
-    const mapping = transitions[index]!;
-    assertTransitionTotality(
-      endpointSelectorIds(source),
-      endpointSelectorIds(target),
-      mapping.selectors,
-      `${beat.id} selector`
-    );
-    assertTransitionTotality(
-      endpointAnchorIds(source),
-      endpointAnchorIds(target),
-      mapping.structures,
-      `${beat.id} structure`
-    );
-    return Object.freeze({
-      beatId: beat.id,
-      sourceStateId: source.stateId,
-      targetStateId: target.stateId,
-      selectorTransitions: Object.freeze(mapping.selectors),
-      structuralTransitions: Object.freeze(mapping.structures)
-    });
-  }));
+function motionInput(
+  beatId: string,
+  segments: readonly KpExactFractionSymbolicMotionSegment[]
+): KpExactFractionSymbolicMotionInput {
+  return Object.freeze({
+    beatId,
+    segments: Object.freeze([...segments])
+  });
+}
+
+function motionSegment(
+  id: string,
+  source: KpExactFractionSymbolicEndpoint,
+  target: KpExactFractionSymbolicEndpoint,
+  selectorTransitions:
+    readonly KpExactFractionSymbolicIdentityTransition[],
+  structuralTransitions:
+    readonly KpExactFractionSymbolicIdentityTransition[]
+): KpExactFractionSymbolicMotionSegment {
+  assertTransitionTotality(
+    endpointSelectorIds(source),
+    endpointSelectorIds(target),
+    selectorTransitions,
+    `${id} selector`
+  );
+  assertTransitionTotality(
+    endpointAnchorIds(source),
+    endpointAnchorIds(target),
+    structuralTransitions,
+    `${id} structure`
+  );
+  return Object.freeze({
+    id,
+    sourceStateId: source.stateId,
+    targetStateId: target.stateId,
+    selectorTransitions: Object.freeze([...selectorTransitions]),
+    structuralTransitions: Object.freeze([...structuralTransitions])
+  });
 }
 
 function assertTransitionTotality(
@@ -449,6 +639,13 @@ function fusion(
   targetId: string
 ): KpExactFractionSymbolicIdentityTransition {
   return transition(sourceIds, [targetId], "fusion");
+}
+
+function fission(
+  sourceId: string,
+  targetIds: readonly string[]
+): KpExactFractionSymbolicIdentityTransition {
+  return transition([sourceId], targetIds, "fission");
 }
 
 function transition(

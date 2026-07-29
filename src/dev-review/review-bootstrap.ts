@@ -30,6 +30,8 @@ declare const __KP_DEV_REVIEW_BUILD__: Readonly<{
   dirty: boolean;
 }>;
 
+type KpDevReviewBuildIdentity = typeof __KP_DEV_REVIEW_BUILD__;
+
 export function mountKpDevReview(input: {
   readonly ownerWindow?: Window;
   readonly provider: KpDevReviewCaptureProvider;
@@ -56,12 +58,14 @@ export function mountKpDevReview(input: {
   const client = new KpDevReviewClient();
   shell.host.dataset["kpDevReviewAvailable"] = "pending";
   let currentUnread = 0;
-  const currentRound = client
-    .query({ unreadBy: "codex.main" })
-    .then(async (state) => {
+  const currentRound = Promise.all([
+    client.query({ unreadBy: "codex.main" }),
+    readLiveReviewBuildIdentity(ownerWindow)
+  ])
+    .then(async ([state, build]) => {
       currentUnread = state.counts.matching;
       shell.setInboxCount(currentUnread);
-      return resolveCurrentRound(client, state);
+      return resolveCurrentRound(client, state, build);
     })
     .then((round) => {
       shell.setReviewRound(round.label, round.sequence, round.synthetic);
@@ -116,6 +120,7 @@ export function mountKpDevReview(input: {
         if (capture === undefined) {
           throw new Error("No visual review capture provider is ready");
         }
+        const build = await readLiveReviewBuildIdentity(ownerWindow);
         const result: KpDevReviewCaptureV1 = {
           route: ownerWindow.location.href,
           capturedAt: new Date().toISOString(),
@@ -124,7 +129,7 @@ export function mountKpDevReview(input: {
               ownerWindow,
               ownerWindow.navigator
             ),
-            __KP_DEV_REVIEW_BUILD__
+            build
           ),
           ...capture.evidence
         };
@@ -172,7 +177,8 @@ export function mountKpDevReview(input: {
 
 async function resolveCurrentRound(
   client: KpDevReviewClient,
-  state: KpDevReviewQueryResult
+  state: KpDevReviewQueryResult,
+  build: KpDevReviewBuildIdentity
 ): Promise<
   Pick<KpDevReviewRoundV2, "id" | "label" | "sequence" | "synthetic">
 > {
@@ -181,11 +187,37 @@ async function resolveCurrentRound(
   return client.openRound({
     label: "Current visual review",
     baseline: {
-      commit: __KP_DEV_REVIEW_BUILD__.commit,
-      fingerprint: __KP_DEV_REVIEW_BUILD__.fingerprint,
-      dirty: __KP_DEV_REVIEW_BUILD__.dirty
+      commit: build.commit,
+      fingerprint: build.fingerprint,
+      dirty: build.dirty
     }
   });
+}
+
+async function readLiveReviewBuildIdentity(
+  ownerWindow: Window
+): Promise<KpDevReviewBuildIdentity> {
+  try {
+    const response = await ownerWindow.fetch("/__kp/dev-review/build", {
+      cache: "no-store",
+      headers: { "x-kp-dev-review": "1" }
+    });
+    if (!response.ok) return __KP_DEV_REVIEW_BUILD__;
+    const value: unknown = await response.json();
+    if (
+      typeof value !== "object" ||
+      value === null ||
+      typeof (value as { commit?: unknown }).commit !== "string" ||
+      typeof (value as { fingerprint?: unknown }).fingerprint !== "string" ||
+      typeof (value as { dirty?: unknown }).dirty !== "boolean"
+    ) {
+      return __KP_DEV_REVIEW_BUILD__;
+    }
+    return Object.freeze(value as KpDevReviewBuildIdentity);
+  } catch {
+    // Production exports and isolated component tests have no live dev route.
+    return __KP_DEV_REVIEW_BUILD__;
+  }
 }
 
 function safeSessionStorage(

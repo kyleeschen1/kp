@@ -56,8 +56,13 @@ import {
 } from "../rendering/native-katex-rendered-scene.ts";
 import type {
   KpExactFractionSymbolicEndpoint,
-  KpExactFractionSymbolicMotionInput
+  KpExactFractionSymbolicMotionSegment
 } from "../rendering/exact-fraction-quantity-symbolic-projection.ts";
+import {
+  commitKpNativeSceneCandidate,
+  discardKpNativeSceneCandidate,
+  prepareKpNativeSceneCandidate
+} from "../rendering/prepared-native-scene-host.ts";
 import type {
   KpExactFractionQuantityStaticStepExport,
   KpExactFractionQuantityStaticStepFrame
@@ -82,7 +87,9 @@ interface ExactSurfaceSession {
   libraryState: KpExactFractionQuantityLibraryState;
   initializedFromRoute: boolean;
   symbolicGeneration: number;
-  symbolicBeatIndex?: number | undefined;
+  symbolicMotionSegmentId?: string | undefined;
+  symbolicPendingProgress: number;
+  symbolicActiveStage?: HTMLElement | undefined;
   symbolicPlayback?: KpNativeKatexRendererSession | undefined;
   symbolicFontReadiness?: ReturnType<
     typeof createKpEquationFontReadiness
@@ -117,6 +124,7 @@ KpEditorAnimationSurfaceAdapter = {
         libraryState: routeState,
         initializedFromRoute: false,
         symbolicGeneration: 0,
+        symbolicPendingProgress: 0,
         sampleCount: 0,
         repeatedFrameReuseCount: 0,
         symbolicPlaybackCreatedCount: 0,
@@ -335,11 +343,16 @@ function syncSurface(
     session.libraryState.activeView;
   player.dataset["kpExactFoldMode"] = session.libraryState.foldMode;
   player.dataset["kpExactPhase"] = frame.presentationBeatId;
+  player.dataset["kpExactVisiblePhase"] = frame.visibleOperation.phase;
+  player.dataset["kpExactMotifInvocationId"] =
+    frame.visibleOperation.invocationId;
+  player.dataset["kpExactSymbolicSegment"] =
+    frame.symbolicMotion.segment.id;
   player.dataset["kpExactCheckpoint"] = checkpoint.id;
   player.dataset["kpExactProgressPermille"] =
     String(frame.projection.neutralFrame.progressPermille);
   player.dataset["kpExactPhaseProgressPermille"] = String(
-    Math.round(frame.projection.neutralFrame.beat.localProgress * 1_000)
+    Math.round(frame.visibleOperation.phaseProgress * 1_000)
   );
   player.dataset["kpExactFocusRefs"] =
     frame.projection.neutralFrame.focusSelectionIds.join(",");
@@ -394,7 +407,7 @@ function syncConcreteViews(
       });
     view.querySelectorAll<SVGElement>("[data-kp-refinement-divider]")
       .forEach((divider) => {
-        const progress = Number(divider.dataset["kpProgress"] ?? 0);
+        const progress = frame.visibleOperation.actionProgress;
         divider.style.strokeDasharray = "100";
         divider.style.strokeDashoffset = String(100 * (1 - progress));
       });
@@ -426,57 +439,57 @@ function syncSymbolicScene(
   session: ExactSurfaceSession,
   frame: KpExactFractionQuantityRuntimeFrame
 ): void {
-  const beatIndex = frame.projection.neutralFrame.beat.index;
-  if (session.symbolicBeatIndex !== beatIndex) {
-    session.symbolicBeatIndex = beatIndex;
-    releaseSymbolicPlayback(session);
+  const { segment, segmentProgress } = frame.symbolicMotion;
+  session.symbolicPendingProgress = segmentProgress;
+  if (session.symbolicMotionSegmentId !== segment.id) {
+    session.symbolicMotionSegmentId = segment.id;
     const generation = ++session.symbolicGeneration;
     void prepareSymbolicScene({
       slot,
       session,
-      beatIndex,
+      segment,
       generation,
-      localProgress: frame.projection.neutralFrame.beat.localProgress
+      invocationId: frame.visibleOperation.invocationId,
+      dispatch: frame.symbolicMotion.dispatch
     });
     return;
   }
-  session.symbolicPlayback?.apply(
-    frame.projection.neutralFrame.beat.localProgress
-  );
+  session.symbolicPlayback?.apply(segmentProgress);
 }
 
 async function prepareSymbolicScene(input: {
   readonly slot: HTMLElement;
   readonly session: ExactSurfaceSession;
-  readonly beatIndex: number;
+  readonly segment: KpExactFractionSymbolicMotionSegment;
   readonly generation: number;
-  readonly localProgress: number;
+  readonly invocationId: string;
+  readonly dispatch:
+    KpExactFractionQuantityRuntimeFrame["symbolicMotion"]["dispatch"];
 }): Promise<void> {
   const host = requiredView(input.slot, "symbolic");
-  const motion = input.session.runtime.symbolic.motionInputs[input.beatIndex]!;
   const sourceEndpoint = requireEndpoint(
     input.session.runtime,
-    motion.sourceStateId
+    input.segment.sourceStateId
   );
   const targetEndpoint = requireEndpoint(
     input.session.runtime,
-    motion.targetStateId
+    input.segment.targetStateId
   );
-  host.innerHTML = `
-    <div class="kp-exact-symbolic-scene" data-kp-exact-symbolic-scene>
-      <div class="kp-exact-symbolic-material" data-kp-editor-equation-material-layer aria-hidden="true"></div>
-      <div class="kp-exact-symbolic-endpoint" data-kp-exact-symbolic-source>
-        ${renderSelectorAnnotatedLatexToHtml(sourceEndpoint.annotated)}
-      </div>
-      <div class="kp-exact-symbolic-endpoint" data-kp-exact-symbolic-target>
-        ${renderSelectorAnnotatedLatexToHtml(targetEndpoint.annotated)}
-      </div>
+  const stage = host.ownerDocument.createElement("div");
+  stage.className = "kp-exact-symbolic-scene";
+  stage.dataset["kpExactSymbolicScene"] = "";
+  stage.dataset["kpExactSymbolicSegment"] = input.segment.id;
+  stage.dataset["kpExactMotifInvocationId"] = input.invocationId;
+  stage.innerHTML = `
+    <div class="kp-exact-symbolic-material" data-kp-editor-equation-material-layer aria-hidden="true"></div>
+    <div class="kp-exact-symbolic-endpoint" data-kp-exact-symbolic-source>
+      ${renderSelectorAnnotatedLatexToHtml(sourceEndpoint.annotated)}
+    </div>
+    <div class="kp-exact-symbolic-endpoint" data-kp-exact-symbolic-target>
+      ${renderSelectorAnnotatedLatexToHtml(targetEndpoint.annotated)}
     </div>`;
-  const stage = required<HTMLElement>(
-    host,
-    "[data-kp-exact-symbolic-scene]"
-  );
-  stage.style.opacity = "0";
+  host.append(stage);
+  const candidate = prepareKpNativeSceneCandidate({ host, stage });
   const sourceRoot = required<HTMLElement>(
     stage,
     "[data-kp-exact-symbolic-source]"
@@ -487,12 +500,16 @@ async function prepareSymbolicScene(input: {
   );
   bindEndpointOwnership(sourceRoot, sourceEndpoint, "source");
   bindEndpointOwnership(targetRoot, targetEndpoint, "target");
-  if (motion.sourceStateId === motion.targetStateId) {
+  if (input.segment.sourceStateId === input.segment.targetStateId) {
     sourceRoot.style.opacity = "1";
     targetRoot.style.opacity = "0";
-    stage.style.opacity = "1";
     stage.dataset["kpExactSymbolicStatus"] = "ready";
     stage.dataset["kpExactSymbolicMode"] = "native-continuity";
+    commitPreparedSymbolicScene({
+      session: input.session,
+      candidate,
+      stage
+    });
     return;
   }
   const fontReadiness = createKpEquationFontReadiness(host.ownerDocument);
@@ -505,7 +522,8 @@ async function prepareSymbolicScene(input: {
         stage,
         root: sourceRoot,
         semanticEntityId: sourceEndpoint.stateId,
-        presentationGroupId: `group.exact-fraction.source.${input.beatIndex}`,
+        presentationGroupId:
+          `group.exact-fraction.source.${input.segment.id}`,
         fontReadiness
       }),
       settleAndObserveKpNativeKatexRenderedScene({
@@ -513,44 +531,80 @@ async function prepareSymbolicScene(input: {
         stage,
         root: targetRoot,
         semanticEntityId: targetEndpoint.stateId,
-        presentationGroupId: `group.exact-fraction.target.${input.beatIndex}`,
+        presentationGroupId:
+          `group.exact-fraction.target.${input.segment.id}`,
         fontReadiness
       })
     ]);
     if (
       input.session.symbolicGeneration !== input.generation ||
-      input.session.symbolicBeatIndex !== input.beatIndex
-    ) return;
-    const relations = symbolicPaintRelations(motion);
+      input.session.symbolicMotionSegmentId !== input.segment.id
+    ) {
+      discardKpNativeSceneCandidate(candidate);
+      return;
+    }
+    const relations = symbolicPaintRelations(input.segment);
     const canonical = createKpCanonicalNativeKatexSceneSession({
       source,
       target,
       relations,
-      fanInRouting: motion.selectorTransitions.some(
-        ({ lifecycle }) => lifecycle === "fusion"
-      )
+      fanInRouting: input.dispatch === "merge-fan-in",
+      copyFanOutRouting: input.dispatch === "copy-fan-out"
     });
-    input.session.symbolicPlayback = canonical.session;
     input.session.symbolicPlaybackCreatedCount += 1;
-    canonical.session.apply(input.localProgress);
+    canonical.session.apply(input.session.symbolicPendingProgress);
+    commitPreparedSymbolicScene({
+      session: input.session,
+      candidate,
+      stage,
+      playback: canonical.session
+    });
     const player = input.slot.closest<HTMLElement>(
       "[data-kp-editor-animation-player]"
     );
     if (player !== null) {
       syncResourceTelemetry(player, input.session, "active");
     }
-    stage.style.opacity = "1";
     stage.dataset["kpExactSymbolicStatus"] = "ready";
     stage.dataset["kpExactProtectedTransit"] =
       canonical.protectedTransit.geometryAuthority;
   } catch (error) {
-    if (input.session.symbolicGeneration !== input.generation) return;
+    if (
+      input.session.symbolicGeneration !== input.generation ||
+      input.session.symbolicMotionSegmentId !== input.segment.id
+    ) {
+      if (stage.isConnected) discardKpNativeSceneCandidate(candidate);
+      return;
+    }
     stage.dataset["kpExactSymbolicStatus"] = "error";
     stage.dataset["kpExactSymbolicError"] =
       error instanceof Error ? error.message : "unknown";
-    stage.style.opacity = "1";
     sourceRoot.style.opacity = "0";
     targetRoot.style.opacity = "1";
+    commitPreparedSymbolicScene({
+      session: input.session,
+      candidate,
+      stage
+    });
+  }
+}
+
+function commitPreparedSymbolicScene(input: {
+  readonly session: ExactSurfaceSession;
+  readonly candidate: ReturnType<typeof prepareKpNativeSceneCandidate>;
+  readonly stage: HTMLElement;
+  readonly playback?: KpNativeKatexRendererSession | undefined;
+}): void {
+  const previousPlayback = input.session.symbolicPlayback;
+  commitKpNativeSceneCandidate({
+    candidate: input.candidate,
+    previousStage: input.session.symbolicActiveStage
+  });
+  input.session.symbolicActiveStage = input.stage;
+  input.session.symbolicPlayback = input.playback;
+  if (previousPlayback !== undefined) {
+    previousPlayback.dispose();
+    input.session.symbolicPlaybackDisposedCount += 1;
   }
 }
 
@@ -770,14 +824,14 @@ function bindEndpointOwnership(
 }
 
 function symbolicPaintRelations(
-  motion: KpExactFractionSymbolicMotionInput
+  motion: KpExactFractionSymbolicMotionSegment
 ) {
   return projectKpNativeKatexSemanticPaintRelations({
     groups: [
       ...motion.selectorTransitions,
       ...motion.structuralTransitions
     ].map((transition, index) => ({
-      id: `${motion.beatId}.${index}`,
+      id: `${motion.id}.${index}`,
       kind: transition.lifecycle === "fusion"
         ? "many-to-one" as const
         : transition.lifecycle === "fission"
@@ -1132,7 +1186,10 @@ function requireEndpoint(
   session: KpExactFractionQuantityRuntimeSession,
   stateId: string
 ): KpExactFractionSymbolicEndpoint {
-  const endpoint = session.symbolic.endpoints.find(
+  const endpoint = [
+    ...session.symbolic.endpoints,
+    ...session.symbolic.transientEndpoints
+  ].find(
     (candidate) => candidate.stateId === stateId
   );
   if (endpoint === undefined) {

@@ -461,7 +461,8 @@
     {
       "id": "s24",
       "title": "apply-approved-repair",
-      "status": "planned"
+      "summary": "Repaired the approved exemplar through one typed execution path: explicit 2/2 refinement, no-fade lineage fusion, synchronized symbolic and motif progress, component-safe compositor routing, prepared native-scene handoff, and exact live Review provenance. Cross-browser and neighboring canonical gates pass; stop for human visual approval before s25 release.",
+      "status": "complete"
     },
     {
       "id": "s25",

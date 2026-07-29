@@ -31,8 +31,16 @@ export function createKpAnimationLibraryCaptureProvider(
       const childDocument = frame.contentDocument;
       const childWindow = frame.contentWindow;
       const stage = childDocument?.querySelector<HTMLElement>(
-        "[data-kp-reader-equation-stage]"
+        "[data-kp-reader-equation-stage], [data-kp-editor-animation-stage]"
       );
+      const exactPlayer = childDocument?.querySelector<HTMLElement>(
+        "[data-kp-editor-animation-player][data-kp-exact-progress-permille]"
+      );
+      const editorAdapterId = childDocument
+        ?.querySelector<HTMLElement>(
+          "[data-kp-editor-animation-adapter-id]"
+        )
+        ?.dataset["kpEditorAnimationAdapterId"];
       const viewportShell = frame.closest<HTMLElement>(
         "[data-animation-library-viewport-shell]"
       );
@@ -43,6 +51,9 @@ export function createKpAnimationLibraryCaptureProvider(
         viewportShell?.dataset["animationLibraryViewportShell"];
       const progressPermille = readProgressPermille(childDocument);
       const reviewFrame = readReaderReviewFrame(childDocument);
+      const exactPhase = exactPlayer?.dataset["kpExactVisiblePhase"];
+      const exactTransformation =
+        exactPlayer?.dataset["kpExactPhase"];
       const target =
         context.pointer === undefined
           ? undefined
@@ -55,18 +66,39 @@ export function createKpAnimationLibraryCaptureProvider(
           documentId: "review.animation-library",
           documentVersion: "1",
           assetId: animationId,
-          projectionId: representationId,
+          projectionId:
+            exactPlayer?.dataset["kpExactActiveRepresentation"] ??
+            representationId,
           checkpointId:
+            exactPlayer?.dataset["kpExactCheckpoint"] ??
             childDocument?.body.dataset["kpReaderCheckpoint"] ??
             stage?.dataset["kpCheckpoint"],
           progressPermille,
-          animationProgressPermille: reviewFrame?.[0],
-          phaseProgressPermille: reviewFrame?.[1],
+          animationProgressPermille:
+            boundedOptionalPermille(
+              exactPlayer?.dataset["kpExactInputProgressPermille"]
+            ) ??
+            reviewFrame?.[0],
+          phaseProgressPermille:
+            boundedOptionalPermille(
+              exactPlayer?.dataset["kpExactPhaseProgressPermille"]
+            ) ??
+            reviewFrame?.[1],
           activeNodeId: stage?.dataset["kpReaderFoldActiveNode"],
-          activeTransformationIds: reviewFrame?.[3] ?? [],
-          activePhase: reviewFrame?.[2],
-          foldMode: stage?.dataset["kpReaderFoldMode"],
-          foldDetail: stage?.dataset["kpReaderFoldPhaseDetail"],
+          activeTransformationIds:
+            exactTransformation === undefined
+              ? reviewFrame?.[3] ?? []
+              : [exactTransformation],
+          activePhase: exactPhase ?? reviewFrame?.[2],
+          foldMode:
+            exactPlayer?.dataset["kpExactFoldMode"] ??
+            stage?.dataset["kpReaderFoldMode"],
+          foldDetail:
+            exactPlayer?.dataset["kpExactPinnedNodeIds"] === undefined
+              ? stage?.dataset["kpReaderFoldPhaseDetail"]
+              : `pinned:${
+                  exactPlayer.dataset["kpExactPinnedNodeIds"]
+                }`,
           layoutPolicy: stage?.dataset["kpReaderFoldLayoutPolicy"],
           focusRefs: [],
           motionPreference:
@@ -77,6 +109,7 @@ export function createKpAnimationLibraryCaptureProvider(
         },
         render: {
           rendererId:
+            editorAdapterId ??
             childDocument?.body.dataset["kpReaderLessonVariant"] ??
             childDocument
               ?.querySelector<HTMLElement>(
@@ -120,7 +153,11 @@ export function createKpAnimationLibraryCaptureProvider(
                   }
                 })
           },
-          ownerIds: [animationId, representationId]
+          ownerIds: [
+            animationId,
+            representationId,
+            ...(editorAdapterId === undefined ? [] : [editorAdapterId])
+          ]
         },
         temporalTrace: [{
           offsetMs: 0,
@@ -200,6 +237,16 @@ function readReaderReviewFrame(
   } catch {
     return undefined;
   }
+}
+
+function boundedOptionalPermille(
+  value: string | undefined
+): number | undefined {
+  if (value === undefined) return undefined;
+  const parsed = Number(value);
+  return Number.isFinite(parsed)
+    ? boundedPermille(parsed)
+    : undefined;
 }
 
 function boundedPermille(value: number): number {

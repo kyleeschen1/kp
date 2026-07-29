@@ -23,7 +23,7 @@ test("every catalog equation operation has directional presentation coverage", (
   );
 
   assert.deepEqual(report.issues, []);
-  assert.equal(report.animationCount, 28);
+  assert.equal(report.animationCount, 29);
   assert.equal(report.claimedTransformationCount, 36);
   assert.equal(report.equationTransformationCount, 33);
   assert.equal(report.excludedTransformationCount, 3);

@@ -577,14 +577,16 @@ export function compileKpNativeKatexSceneTracks(
     atom.id,
     atom
   ]));
-  const contactGroupByComponentId =
-    mergePresentationContactGroups(plan.components);
+  const presentationMergeGroups =
+    compilePresentationMergeGroups(plan.components);
   return Object.freeze(plan.reconciliation.dispositions.flatMap((disposition) => {
     const sources = disposition.sourceAtomIds.map((id) => sourceById.get(id)!);
     const targets = disposition.targetAtomIds.map((id) => targetById.get(id)!);
     const componentId = `component.${disposition.id}`;
     const intentionalContactGroupId =
-      contactGroupByComponentId.get(componentId);
+      presentationMergeGroups.contactByComponentId.get(componentId);
+    const routingCohortId =
+      presentationMergeGroups.routingByComponentId.get(componentId);
     if (disposition.lifecycle === "persist") {
       return [track(
         disposition,
@@ -592,7 +594,11 @@ export function compileKpNativeKatexSceneTracks(
         sources[0]!,
         targets[0]!,
         sources[0]!.id,
-        intentionalContactGroupId
+        intentionalContactGroupId,
+        routingCohortId,
+        routingCohortId === undefined
+          ? undefined
+          : sources[0]!.presentationGroupId
       )];
     }
     if (disposition.lifecycle === "merge") {
@@ -603,7 +609,11 @@ export function compileKpNativeKatexSceneTracks(
           source,
           targets[0]!,
           source.id,
-          intentionalContactGroupId
+          intentionalContactGroupId,
+          routingCohortId,
+          routingCohortId === undefined
+            ? undefined
+            : source.presentationGroupId
         )
       );
     }
@@ -615,7 +625,11 @@ export function compileKpNativeKatexSceneTracks(
           sources[0]!,
           target,
           target.id,
-          intentionalContactGroupId
+          intentionalContactGroupId,
+          routingCohortId,
+          routingCohortId === undefined
+            ? undefined
+            : target.presentationGroupId
         )
       );
     }
@@ -653,9 +667,12 @@ export function compileKpNativeKatexSceneTracks(
   }));
 }
 
-function mergePresentationContactGroups(
+function compilePresentationMergeGroups(
   components: KpNativeKatexHierarchicalScenePlan["components"]
-): ReadonlyMap<string, string> {
+): {
+  readonly contactByComponentId: ReadonlyMap<string, string>;
+  readonly routingByComponentId: ReadonlyMap<string, string>;
+} {
   const eligible = components.filter((component) =>
     component.lifecycle === "merge" &&
     component.sourceGroupIds.length > 1 &&
@@ -672,12 +689,22 @@ function mergePresentationContactGroups(
     const key = signature(component);
     counts.set(key, (counts.get(key) ?? 0) + 1);
   });
-  return new Map(eligible.flatMap((component) => {
+  const routingByComponentId = new Map(eligible.flatMap((component) => {
     const key = signature(component);
     return counts.get(key) === 1
       ? []
-      : [[component.id, `contact.presentation-merge.${key}`] as const];
+      : [[component.id, `route.presentation-merge.${key}`] as const];
   }));
+  return Object.freeze({
+    // Contact is component-local (for example like glyph with like glyph).
+    // A shared route cohort (text paint plus its structural rule) coordinates lane
+    // choice but must not certify cross-component overlap.
+    contactByComponentId: new Map(eligible.map((component) => [
+      component.id,
+      `contact.presentation-merge.${component.id}`
+    ])),
+    routingByComponentId
+  });
 }
 
 export function sampleKpNativeKatexSceneTracks(
@@ -2208,7 +2235,9 @@ function track(
   source: KpNativeKatexPaintAtomObservation,
   target: KpNativeKatexPaintAtomObservation,
   visualAtomId = source.id,
-  intentionalContactGroupId?: string
+  intentionalContactGroupId?: string,
+  routingCohortId?: string,
+  routingMemberId?: string
 ): KpNativeKatexSceneTrack {
   const base = {
     id: `track.${disposition.id}.${index}`,
@@ -2222,7 +2251,9 @@ function track(
     endRect: target.rect,
     ...(intentionalContactGroupId === undefined
       ? {}
-      : { intentionalContactGroupId })
+      : { intentionalContactGroupId }),
+    ...(routingCohortId === undefined ? {} : { routingCohortId }),
+    ...(routingMemberId === undefined ? {} : { routingMemberId })
   };
   const lifecycle = disposition.lifecycle;
   if (lifecycle === "unsupported") throw new Error(

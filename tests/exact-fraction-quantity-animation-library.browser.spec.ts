@@ -8,6 +8,9 @@ const descriptorId =
   "editor-animation.animation.exact-fraction-quantity.third-plus-sixth";
 const animationId =
   "animation.exact-fraction-quantity.third-plus-sixth";
+const committedSceneSelector =
+  "[data-kp-exact-symbolic-scene]" +
+  "[data-kp-prepared-scene-state=\"committed\"]";
 
 test("exact quantity mounts lazily in the shared Animation Library", async ({
   page
@@ -30,16 +33,23 @@ test("exact quantity mounts lazily in the shared Animation Library", async ({
     "editor-animation-surface.exact-fraction-quantity.synchronized"
   );
   await expect(player.locator("[data-kp-exact-view]")).toHaveCount(4);
-  await expect(player.locator("[data-kp-exact-symbolic-scene]"))
+  await expect(player.locator(committedSceneSelector))
     .toHaveAttribute("data-kp-exact-symbolic-status", "ready");
   await player.locator(
     "[data-kp-exact-checkpoint-start=\"180\"]"
   ).click();
   await player.locator("[data-action=\"seek-editor-animation\"]")
     .fill("0.2");
-  await expect(player.locator("[data-kp-exact-symbolic-scene]"))
-    .toHaveAttribute("data-kp-exact-symbolic-status", "ready");
-  await expect(player.locator("[data-kp-exact-symbolic-scene]"))
+  await expect.poll(() => player.evaluate((root) => {
+    const committed = root.querySelector<HTMLElement>(
+      "[data-kp-exact-symbolic-scene]" +
+      "[data-kp-prepared-scene-state=\"committed\"]"
+    );
+    return committed?.dataset["kpExactSymbolicStatus"] === "ready" &&
+      committed.dataset["kpExactSymbolicSegment"] ===
+        root.dataset["kpExactSymbolicSegment"];
+  })).toBe(true);
+  await expect(player.locator(committedSceneSelector))
     .toHaveAttribute(
       "data-kp-canonical-native-katex-session-factory",
       "shared-v1"
@@ -174,9 +184,12 @@ test("Review atomically saves the exact phone animation moment", async ({
     checkpointId: "checkpoint.exact-fraction.merged",
     progressPermille: 720,
     animationProgressPermille: 720,
-    phaseProgressPermille: 615,
+    phaseProgressPermille: 680,
     projectionId: "number-line",
-    activePhase: "beat.exact-fraction.merge-three-sixths",
+    activePhase: "action",
+    activeTransformationIds: [
+      "beat.exact-fraction.merge-three-sixths"
+    ],
     foldMode: "pinned",
     layoutPolicy: "deterministic-active-view-focus"
   });
@@ -190,7 +203,7 @@ test("Review atomically saves the exact phone animation moment", async ({
   expect(note.capture.temporalTrace).toEqual([{
     offsetMs: 0,
     progressPermille: 720,
-    phase: "beat.exact-fraction.merge-three-sixths"
+    phase: "action"
   }]);
   expect(surface?.profile).toBe("phone");
   expect(surface?.contentViewport).toMatchObject({
@@ -464,7 +477,11 @@ test("accessibility, transcript, settled motion, and keyboard stay canonical", a
   );
   await expect(player).toHaveAttribute(
     "data-kp-exact-paint-ownership",
-    "transient"
+    "source-native"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-visible-phase",
+    "setup"
   );
 
   expect(await player.locator(

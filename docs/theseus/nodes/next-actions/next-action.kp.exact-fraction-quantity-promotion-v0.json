@@ -307,6 +307,90 @@
       "scope": "slice s19 production isolation and type closure",
       "checkedAt": "2026-07-29T06:45:48.884Z",
       "notes": "TypeScript and production build pass. Vite emits exact-quantity as an independent lazy chunk; the main entry does not import the exemplar renderer and no HTML display page was added."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s24 repaired exact quantity contract suite",
+      "checkedAt": "2026-07-29T12:35:08.296Z",
+      "notes": "93 semantic, projection, runtime, boundary, accessibility, export, responsive, and type-law checks passed."
+    },
+    {
+      "command": "npm run test:browser:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s24 repaired three-browser integration matrix",
+      "checkedAt": "2026-07-29T12:35:09.232Z",
+      "notes": "30 Chromium, Firefox, and WebKit checks passed, including captured defect moments and live Review provenance."
+    },
+    {
+      "command": "npm run visual:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s24 repaired three-browser deterministic visual audit",
+      "checkedAt": "2026-07-29T12:35:10.048Z",
+      "notes": "12 dense-seek, opaque-preparation, responsive DPR, performance, and resource-release checks passed."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "s24 generic compositor regression",
+      "checkedAt": "2026-07-29T12:35:10.867Z",
+      "notes": "67 compositor checks passed, including component-safe authored contact and context-first fan-in."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s24 shared motif execution contracts",
+      "checkedAt": "2026-07-29T12:35:11.717Z",
+      "notes": "105 operation presentation and catalog conformance checks passed."
+    },
+    {
+      "command": "npm run test:browser:fraction-composition:determinism",
+      "status": "passed",
+      "scope": "s24 neighboring canonical fraction regression",
+      "checkedAt": "2026-07-29T12:35:12.546Z",
+      "notes": "6 Chromium and Firefox deterministic fraction-composition checks passed."
+    },
+    {
+      "command": "npm run visual:fraction-composition-motif-fidelity",
+      "status": "passed",
+      "scope": "s24 neighboring canonical motif fidelity",
+      "checkedAt": "2026-07-29T12:35:13.372Z",
+      "notes": "2 Chromium and Firefox motif-fidelity checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s24 repository type safety",
+      "checkedAt": "2026-07-29T12:35:14.205Z",
+      "notes": "Application, node, test, protocol-dependent, and domain type checks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s24 dependency and authority boundaries",
+      "checkedAt": "2026-07-29T12:35:15.017Z",
+      "notes": "All architecture gates passed with the prepared host and typed execution boundary."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s24 production build",
+      "checkedAt": "2026-07-29T12:35:15.833Z",
+      "notes": "Production typecheck and Vite build passed."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s24 Review production exclusion",
+      "checkedAt": "2026-07-29T12:35:16.656Z",
+      "notes": "239 production files passed all 7 forbidden marker checks."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s24 durable control-plane integrity",
+      "checkedAt": "2026-07-29T12:35:17.489Z",
+      "notes": "Validated 827 nodes and 14161 events before slice completion."
     }
   ],
   "progress": {

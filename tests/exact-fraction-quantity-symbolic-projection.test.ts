@@ -39,7 +39,10 @@ test("symbolic projection compiles the five verified native KaTeX endpoints", ()
 test("native symbolic endpoints retain MathML and hydratable paint identities", () => {
   const projection = createKpExactFractionQuantitySymbolicProjection();
 
-  for (const endpoint of projection.endpoints) {
+  for (const endpoint of [
+    ...projection.endpoints,
+    ...projection.transientEndpoints
+  ]) {
     assert.match(endpoint.nativeHtmlAndMathml, /class="katex-mathml"/);
     assert.match(
       endpoint.nativeHtmlAndMathml,
@@ -63,35 +66,69 @@ test("native symbolic endpoints retain MathML and hydratable paint identities", 
 test("symbolic motion inputs cover every selector and rule exactly once", () => {
   const projection = createKpExactFractionQuantitySymbolicProjection();
   const byState = new Map(
-    projection.endpoints.map((endpoint) => [endpoint.stateId, endpoint])
+    [...projection.endpoints, ...projection.transientEndpoints].map(
+      (endpoint) => [endpoint.stateId, endpoint]
+    )
   );
 
   for (const input of projection.motionInputs) {
-    const source = byState.get(input.sourceStateId)!;
-    const target = byState.get(input.targetStateId)!;
-    assert.deepEqual(
-      new Set(input.selectorTransitions.flatMap(({ sourceIds }) => sourceIds)),
-      new Set(source.annotated.annotations.map(({ selectorId }) => selectorId))
-    );
-    assert.deepEqual(
-      new Set(input.selectorTransitions.flatMap(({ targetIds }) => targetIds)),
-      new Set(target.annotated.annotations.map(({ selectorId }) => selectorId))
-    );
-    assert.deepEqual(
-      new Set(input.structuralTransitions.flatMap(({ sourceIds }) => sourceIds)),
-      new Set(source.structuralAnchors.map(({ id }) => id))
-    );
-    assert.deepEqual(
-      new Set(input.structuralTransitions.flatMap(({ targetIds }) => targetIds)),
-      new Set(target.structuralAnchors.map(({ id }) => id))
-    );
+    for (const segment of input.segments) {
+      const source = byState.get(segment.sourceStateId)!;
+      const target = byState.get(segment.targetStateId)!;
+      assert.deepEqual(
+        new Set(segment.selectorTransitions.flatMap(
+          ({ sourceIds }) => sourceIds
+        )),
+        new Set(source.annotated.annotations.map(
+          ({ selectorId }) => selectorId
+        ))
+      );
+      assert.deepEqual(
+        new Set(segment.selectorTransitions.flatMap(
+          ({ targetIds }) => targetIds
+        )),
+        new Set(target.annotated.annotations.map(
+          ({ selectorId }) => selectorId
+        ))
+      );
+      assert.deepEqual(
+        new Set(segment.structuralTransitions.flatMap(
+          ({ sourceIds }) => sourceIds
+        )),
+        new Set(source.structuralAnchors.map(({ id }) => id))
+      );
+      assert.deepEqual(
+        new Set(segment.structuralTransitions.flatMap(
+          ({ targetIds }) => targetIds
+        )),
+        new Set(target.structuralAnchors.map(({ id }) => id))
+      );
+    }
   }
+});
+
+test("common-denominator refinement visibly multiplies by certified two over two", () => {
+  const projection = createKpExactFractionQuantitySymbolicProjection();
+  const factor = projection.transientEndpoints[0]!;
+  const refinement = projection.motionInputs[1]!;
+
+  assert.equal(
+    factor.annotated.rawLatex,
+    "\\frac{1\\,\\times\\,2}{3\\,\\times\\,2}\\;+\\;\\frac{1}{6}"
+  );
+  assert.equal(refinement.segments.length, 2);
+  assert.deepEqual(
+    refinement.segments.flatMap(({ selectorTransitions }) =>
+      selectorTransitions.map(({ lifecycle }) => lifecycle)
+    ).filter((lifecycle) => lifecycle !== "persist"),
+    ["fission", "fission", "fusion", "fusion"]
+  );
 });
 
 test("alignment and addition preserve native fraction structure without fades", () => {
   const projection = createKpExactFractionQuantitySymbolicProjection();
-  const alignment = projection.motionInputs[2]!;
-  const merge = projection.motionInputs[3]!;
+  const alignment = projection.motionInputs[2]!.segments[0]!;
+  const merge = projection.motionInputs[3]!.segments[0]!;
 
   assert.deepEqual(
     alignment.structuralTransitions.map((entry) => entry.lifecycle),

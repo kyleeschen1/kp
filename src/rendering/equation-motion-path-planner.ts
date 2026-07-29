@@ -69,9 +69,9 @@ export interface KpEquationMotionStageOccupancy {
 
 export const kpMaximumFanInExcursionInLocalInkHeights = 1.5;
 export const kpMaximumFanInSettlementAspectRatio = 5;
-const kpFanInContextMotionRange = Object.freeze({ start: 0.35, end: 0.55 });
-const kpFanInFocalMotionRange = Object.freeze({ start: 0.05, end: 0.95 });
-const kpFanInLeaderMotionRange = Object.freeze({ start: 0.05, end: 0.72 });
+const kpFanInContextMotionRange = Object.freeze({ start: 0.05, end: 0.34 });
+const kpFanInFocalMotionRange = Object.freeze({ start: 0.4, end: 0.95 });
+const kpFanInLeaderMotionRange = Object.freeze({ start: 0.4, end: 0.78 });
 const kpReorderSettlementAspectRatio = 8;
 const kpFanInLiftRiseEnd = 0.22;
 const kpFanInTransitStart = 0.55;
@@ -149,6 +149,17 @@ export interface KpEquationCollisionTrack {
    * never retime one member independently and break simultaneous entry.
    */
   readonly timingGroupId?: string | undefined;
+  /**
+   * Related components can retain shared routing provenance without gaining
+   * permission to overlap. Lane selection remains component-local so the
+   * collision compiler can separate members of the cohort when required.
+   */
+  readonly routingCohortId?: string | undefined;
+  /**
+   * Identifies one rigid member inside a routing cohort. Every paint component
+   * from that source member receives the same leader/follower timing and lane.
+   */
+  readonly routingMemberId?: string | undefined;
   /**
    * Deliberate motif contact is not crowding. The protected-transit audit
    * ignores contact only when both tracks carry the same compiler-owned ID.
@@ -369,16 +380,25 @@ export function compileKpCollisionSafeFanInTracks<
     return Math.hypot(end.x - start.x, end.y - start.y);
   }));
   const localInkScale = Math.max(...tracks.map(kpEquationMotionTrackScale));
-  const fusionLeaderId = [...mergeTracks].sort((left, right) =>
-    trackTravel(left) - trackTravel(right) || left.id.localeCompare(right.id)
-  )[0]!.id;
+  const motionUnits = new Map<string, typeof mergeTracks>();
+  mergeTracks.forEach((track) => {
+    const id = track.routingMemberId ?? track.id;
+    motionUnits.set(id, [...(motionUnits.get(id) ?? []), track]);
+  });
+  const fusionLeaderUnitId = [...motionUnits].sort(
+    ([leftId, leftTracks], [rightId, rightTracks]) =>
+      Math.min(...leftTracks.map(trackTravel)) -
+        Math.min(...rightTracks.map(trackTravel)) ||
+      leftId.localeCompare(rightId)
+  )[0]![0];
   const scheduled = tracks.map((track) => Object.freeze({
     ...track,
     ...(track.lifecycle === "persist"
       ? { motionProgressRange: kpFanInContextMotionRange }
       : track.lifecycle === "merge"
         ? {
-            motionProgressRange: track.id === fusionLeaderId
+            motionProgressRange:
+              (track.routingMemberId ?? track.id) === fusionLeaderUnitId
               ? kpFanInLeaderMotionRange
               : kpFanInFocalMotionRange
           }
@@ -452,8 +472,8 @@ function fanInRouteVariantsByComponent(
     ({ id }) => obstructedTrackIds.has(id)
   );
   const routeUnitIds = [...new Set(obstructedTracks
-    .map(({ componentId, intentionalContactGroupId }) =>
-      intentionalContactGroupId ?? componentId
+    .map(({ componentId, routingMemberId }) =>
+      routingMemberId ?? componentId
     ))]
     .sort();
   const uniform = (variant: "arc-above" | "arc-below") =>
@@ -469,9 +489,9 @@ function fanInRouteVariantsByComponent(
     const allBelow = (1 << routeUnitIds.length) - 1;
     for (let mask = 1; mask < allBelow; mask += 1) {
       variants.push(new Map(obstructedTracks.map((track) => {
-        const routeUnitId =
-          track.intentionalContactGroupId ?? track.componentId;
-        const index = routeUnitIds.indexOf(routeUnitId);
+        const index = routeUnitIds.indexOf(
+          track.routingMemberId ?? track.componentId
+        );
         return [
           track.componentId,
           (mask & (1 << index)) === 0 ? "arc-above" : "arc-below"

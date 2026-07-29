@@ -3,7 +3,10 @@ import type {
 } from "../animation/runtime-sampler.ts";
 import {
   createKpExactFractionQuantityPresentationPlan,
-  type KpExactFractionQuantityPresentationPlan
+  sampleKpExactQuantityVisibleOperation,
+  type KpExactFractionQuantityPresentationPlan,
+  type KpExactQuantityMotifInvocation,
+  type KpExactQuantityVisibleOperationFrame
 } from "../animation/exact-fraction-quantity-presentation-plan.ts";
 import {
   sampleKpExactFractionQuantityNeutralFrame
@@ -27,7 +30,8 @@ import {
 } from "./exact-fraction-quantity-synchronized-projection.ts";
 import {
   createKpExactFractionQuantitySymbolicProjection,
-  type KpExactFractionQuantitySymbolicProjection
+  type KpExactFractionQuantitySymbolicProjection,
+  type KpExactFractionSymbolicMotionSegment
 } from "./exact-fraction-quantity-symbolic-projection.ts";
 import {
   createKpExactFractionQuantityAccessibleProjection,
@@ -81,6 +85,13 @@ export interface KpExactFractionQuantityRuntimeFrame {
   readonly clock: KpExactFractionQuantityRuntimeClock;
   readonly projection: KpExactFractionQuantitySynchronizedFrame;
   readonly presentationBeatId: string;
+  readonly visibleOperation: KpExactQuantityVisibleOperationFrame;
+  readonly symbolicMotion: {
+    readonly segment: KpExactFractionSymbolicMotionSegment;
+    readonly segmentProgress: number;
+    readonly dispatch:
+      KpExactQuantityMotifInvocation["symbolicDispatches"][number];
+  };
   readonly motifFrame?: KpFissionFusionFrame | undefined;
   readonly ownershipPhase:
     | "source-native"
@@ -159,20 +170,44 @@ export function sampleKpExactFractionQuantityRuntime(input: {
       "Exact-fraction runtime presentation is detached from its sampled beat."
     );
   }
+  const visibleOperation = sampleKpExactQuantityVisibleOperation({
+    beat: presentationBeat,
+    localProgress: neutralFrame.beat.localProgress
+  });
+  const symbolicMotion = sampleSymbolicMotion(
+    input.session.symbolic.motionInputs[neutralFrame.beat.index]!.segments,
+    visibleOperation.actionProgress,
+    presentationBeat.execution
+  );
+  const expectedAtomicDispatch =
+    presentationBeat.motif.kind === "partition-refinement"
+      ? "fission"
+      : presentationBeat.motif.kind === "part-merge"
+        ? "fusion"
+        : presentationBeat.motif.motifId === "focus-continuant"
+          ? "focus"
+          : presentationBeat.motif.motifId === "group-continuants"
+            ? "group"
+            : "structural-succession";
+  if (presentationBeat.execution.atomicDispatch !== expectedAtomicDispatch) {
+    throw new Error(
+      "Exact-fraction executable motif diverges from its atomic renderer."
+    );
+  }
   const motifFrame = presentationBeat.motif.kind === "partition-refinement"
     ? sampleKpFissionFusion({
         plan: presentationBeat.motif.fissionPlan,
-        progress: neutralFrame.beat.localProgress
+        progress: visibleOperation.actionProgress
       })
     : presentationBeat.motif.kind === "part-merge"
       ? sampleKpFissionFusion({
           plan: presentationBeat.motif.fusionPlan,
-          progress: neutralFrame.beat.localProgress
+          progress: visibleOperation.actionProgress
         })
       : undefined;
-  const ownershipPhase = neutralFrame.beat.localProgress === 0
+  const ownershipPhase = visibleOperation.actionProgress === 0
     ? "source-native"
-    : neutralFrame.beat.localProgress === 1
+    : visibleOperation.actionProgress === 1
       ? "target-native"
       : "transient";
   return Object.freeze({
@@ -185,11 +220,40 @@ export function sampleKpExactFractionQuantityRuntime(input: {
     }),
     projection,
     presentationBeatId: presentationBeat.beatId,
+    visibleOperation,
+    symbolicMotion,
     ...(motifFrame === undefined ? {} : { motifFrame }),
     ownershipPhase,
     viewPaintOwnership: createViewPaintOwnership(ownershipPhase),
     settlementPolicy: "reuse-native-endpoint-geometry",
     easingApplications: 1
+  });
+}
+
+function sampleSymbolicMotion(
+  segments: readonly KpExactFractionSymbolicMotionSegment[],
+  actionProgress: number,
+  execution: KpExactQuantityMotifInvocation
+): KpExactFractionQuantityRuntimeFrame["symbolicMotion"] {
+  if (segments.length === 0) {
+    throw new Error("Exact-fraction symbolic beat requires a motion segment.");
+  }
+  if (execution.symbolicDispatches.length !== segments.length) {
+    throw new Error(
+      "Exact-fraction executable motif must dispatch every symbolic segment."
+    );
+  }
+  const scaled = actionProgress * segments.length;
+  const index = actionProgress === 1
+    ? segments.length - 1
+    : Math.min(segments.length - 1, Math.floor(scaled));
+  const segmentProgress = actionProgress === 1
+    ? 1
+    : scaled - index;
+  return Object.freeze({
+    segment: segments[index]!,
+    segmentProgress,
+    dispatch: execution.symbolicDispatches[index]!
   });
 }
 

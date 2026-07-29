@@ -75,12 +75,20 @@ export interface KpExactFractionQuantityBeat {
   readonly proofIds: readonly string[];
 }
 
+export interface KpFractionEquivalenceMultiplier {
+  readonly numerator: bigint;
+  readonly denominator: bigint;
+  readonly exactValue: KpNormalizedRational;
+}
+
 export interface KpCommonDenominatorCertificate {
   readonly schemaVersion: "kp.common-denominator-certificate.v1";
   readonly id: "proof.exact-fraction.common-denominator";
   readonly lawId: "law.fraction.equivalent-common-denominator";
   readonly sourceForms: readonly KpExactFractionForm[];
   readonly targetForms: readonly KpExactFractionForm[];
+  readonly equivalenceMultipliers:
+    readonly [KpFractionEquivalenceMultiplier, KpFractionEquivalenceMultiplier];
   readonly exactTotal: KpNormalizedRational;
   readonly [kpCommonDenominatorProofBrand]: true;
 }
@@ -199,7 +207,11 @@ KpExactFractionQuantityTrace {
   });
   const commonDenominator = certifyCommonDenominator(
     [fractionForm(1n, 3n), fractionForm(1n, 6n)],
-    [fractionForm(2n, 6n), fractionForm(1n, 6n)]
+    [fractionForm(2n, 6n), fractionForm(1n, 6n)],
+    [
+      equivalenceMultiplier(2n, 2n),
+      equivalenceMultiplier(1n, 1n)
+    ]
   );
   const merge = certifyKpSelectionMerge({
     contributors: [twoSixths, oneSixth],
@@ -373,6 +385,13 @@ export function serializeKpExactFractionQuantityTrace(
       trace.proofs.merge.lawId,
       trace.proofs.regrouping.lawId
     ],
+    commonDenominatorMultipliers:
+      trace.proofs.commonDenominator.equivalenceMultipliers.map(
+        ({ numerator, denominator }) => ({
+          numerator: numerator.toString(),
+          denominator: denominator.toString()
+        })
+      ),
     verification: trace.verification
   };
   return JSON.stringify(payload);
@@ -380,16 +399,32 @@ export function serializeKpExactFractionQuantityTrace(
 
 function certifyCommonDenominator(
   sourceForms: readonly [KpExactFractionForm, KpExactFractionForm],
-  targetForms: readonly [KpExactFractionForm, KpExactFractionForm]
+  targetForms: readonly [KpExactFractionForm, KpExactFractionForm],
+  equivalenceMultipliers: readonly [
+    KpFractionEquivalenceMultiplier,
+    KpFractionEquivalenceMultiplier
+  ]
 ): KpCommonDenominatorCertificate {
   if (
     !sourceForms.every((source, index) =>
       equalKpRationals(source.value, targetForms[index]!.value)
     ) ||
-    targetForms[0].denominator !== targetForms[1].denominator
+    targetForms[0].denominator !== targetForms[1].denominator ||
+    !sourceForms.every((source, index) => {
+      const target = targetForms[index]!;
+      const multiplier = equivalenceMultipliers[index];
+      return multiplier !== undefined &&
+        multiplier.numerator > 0n &&
+        multiplier.denominator > 0n &&
+        multiplier.exactValue.numerator === 1n &&
+        multiplier.exactValue.denominator === 1n &&
+        source.numerator * multiplier.numerator === target.numerator &&
+        source.denominator * multiplier.denominator === target.denominator;
+    })
   ) {
     throw new Error(
-      "Common-denominator alignment must preserve each addend and align denominators."
+      "Common-denominator alignment must preserve each addend through an " +
+      "explicit unit multiplier and align denominators."
     );
   }
   const exactTotal = addKpRationals(
@@ -402,10 +437,32 @@ function certifyCommonDenominator(
     lawId: "law.fraction.equivalent-common-denominator",
     sourceForms: Object.freeze([...sourceForms]),
     targetForms: Object.freeze([...targetForms]),
+    // The visible choreography must consume these factors; inferring a direct
+    // 1/3 → 2/6 replacement was the declaration/execution gap behind the
+    // missing common-denominator operation.
+    equivalenceMultipliers: Object.freeze([...equivalenceMultipliers]) as
+      readonly [
+        KpFractionEquivalenceMultiplier,
+        KpFractionEquivalenceMultiplier
+      ],
     exactTotal
   });
   sealedCommonDenominatorProofs.add(certificate);
   return certificate as KpCommonDenominatorCertificate;
+}
+
+function equivalenceMultiplier(
+  numerator: bigint,
+  denominator: bigint
+): KpFractionEquivalenceMultiplier {
+  if (numerator <= 0n || denominator <= 0n) {
+    throw new Error("Fraction equivalence multiplier must be positive.");
+  }
+  const exactValue = createKpRational(numerator, denominator);
+  if (exactValue.numerator !== 1n || exactValue.denominator !== 1n) {
+    throw new Error("Fraction equivalence multiplier must equal one exactly.");
+  }
+  return Object.freeze({ numerator, denominator, exactValue });
 }
 
 function fractionForm(

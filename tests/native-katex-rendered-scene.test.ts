@@ -1201,10 +1201,20 @@ test("parallel structural merges inherit one authored presentation cohort", () =
   const contactGroups = new Set(tracks.map(
     ({ intentionalContactGroupId }) => intentionalContactGroupId
   ));
+  const routingCohorts = new Set(tracks.map(
+    ({ routingCohortId }) => routingCohortId
+  ));
+  const routingMembers = new Set(tracks.map(
+    ({ routingMemberId }) => routingMemberId
+  ));
 
   assert.equal(tracks.length, 4);
-  assert.equal(contactGroups.size, 1);
-  assert.notEqual([...contactGroups][0], undefined);
+  assert.equal(contactGroups.size, 2);
+  assert.ok([...contactGroups].every((id) => id !== undefined));
+  assert.equal(routingCohorts.size, 1);
+  assert.notEqual([...routingCohorts][0], undefined);
+  assert.equal(routingMembers.size, 2);
+  assert.ok([...routingMembers].every((id) => id !== undefined));
 });
 
 test("composite semantic merges preserve one-to-one paint atoms without fading", () => {
@@ -1818,21 +1828,29 @@ test("merge-fan-in opens a lane before routing focal material", () => {
     [persistentObstacle],
     0.5
   )[0]!;
+  const mergeEarly = sampleKpNativeKatexSceneTracks(
+    [routedMerge],
+    0.2
+  )[0]!;
+  const obstacleEarly = sampleKpNativeKatexSceneTracks(
+    [persistentObstacle],
+    0.2
+  )[0]!;
   const maximumLift = Math.max(...samples.map(({ rect }) =>
     merge.startRect.top - rect.top
   ));
 
-  assert.equal(routedMerge.motionPath?.variant, "arc-above");
+  assert.equal(routedMerge.motionPath, undefined);
   assert.equal(persistentObstacle.motionPath, undefined);
   assert.deepEqual(start.rect, merge.startRect);
   assert.deepEqual(end.rect, merge.endRect);
-  assert.ok(middle.rect.top < merge.startRect.top);
+  assert.deepEqual(mergeEarly.rect, merge.startRect);
+  assert.ok(obstacleEarly.rect.left > obstacle.startRect.left);
   assert.ok(middle.rect.left > merge.startRect.left);
   assert.ok(middle.rect.left < merge.endRect.left);
-  assert.ok(maximumLift >= 4);
+  assert.equal(maximumLift, 0);
   assert.ok(maximumLift <= merge.startRect.height * 1.5);
-  assert.equal(obstacleMiddle.rect.top, obstacle.startRect.top);
-  assert.ok(obstacleMiddle.rect.left > obstacle.startRect.left);
+  assert.deepEqual(obstacleMiddle.rect, obstacle.endRect);
   assert.deepEqual(
     [start.opacity, middle.opacity, end.opacity],
     [1, 1, 1]
@@ -1926,7 +1944,7 @@ test("merge-fan-in settles its nearest fusion leader before contributors", () =>
   );
 
   assert.equal(compiledContributor!.motionProgressRange?.end, 0.95);
-  assert.equal(compiledLeader!.motionProgressRange?.end, 0.72);
+  assert.equal(compiledLeader!.motionProgressRange?.end, 0.78);
   assert.notDeepEqual(contributorFrame!.rect, contributor.endRect);
   assert.deepEqual(leaderFrame!.rect, leader.endRect);
   assert.deepEqual(

@@ -46,8 +46,9 @@ export function createKpEditorAnimationLibraryCaptureProvider(
       const animationProgressPermille = exactQuantity
         ? boundedPermille(player.dataset["kpExactInputProgressPermille"])
         : progressPermille;
+      const exactTransformation = player.dataset["kpExactPhase"];
       const activePhase =
-        player.dataset["kpExactPhase"] ??
+        player.dataset["kpExactVisiblePhase"] ??
         library.dataset["kpEditorAnimationLiveVisualPhaseId"] ??
         library
           .querySelector<HTMLElement>(
@@ -93,8 +94,11 @@ export function createKpEditorAnimationLibraryCaptureProvider(
           progressPermille,
           animationProgressPermille,
           activeTransformationIds:
-            activePhase !== undefined && isProtocolId(activePhase)
-              ? [activePhase]
+            exactTransformation !== undefined &&
+              isProtocolId(exactTransformation)
+              ? [exactTransformation]
+              : activePhase !== undefined && isProtocolId(activePhase)
+                ? [activePhase]
               : [],
           focusRefs,
           playbackDirection:

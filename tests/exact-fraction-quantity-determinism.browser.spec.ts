@@ -15,6 +15,9 @@ const animationId =
 const playerSelector =
   `[data-kp-editor-animation-player]` +
   `[data-kp-editor-animation-id="${animationId}"]`;
+const committedSceneSelector =
+  "[data-kp-exact-symbolic-scene]" +
+  "[data-kp-prepared-scene-state=\"committed\"]";
 const denseProgress = Object.freeze(
   manifest.browserAudit.denseProgressPermille.map(
     (progressPermille) => progressPermille / 1_000
@@ -50,7 +53,7 @@ test("dense seek, reverse seek, and repeated scrub are paint deterministic", asy
 
   await seekAndSettle(page, player, 1);
   const leafFonts = await player.locator(
-    "[data-kp-exact-symbolic-scene] .katex-html"
+    `${committedSceneSelector} .katex-html`
   ).evaluateAll((roots) =>
     roots.flatMap((root) =>
       [...root.querySelectorAll<HTMLElement>("span")]
@@ -71,8 +74,114 @@ test("dense seek, reverse seek, and repeated scrub are paint deterministic", asy
       "target-native"
     );
     await expect(player.locator(
-      "[data-kp-exact-symbolic-scene]"
+      committedSceneSelector
     )).toHaveAttribute("data-kp-exact-symbolic-status", "ready");
+  }
+});
+
+test("captured regression moments retain opaque committed paint during scene preparation", async ({
+  page
+}) => {
+  test.setTimeout(60_000);
+  const player = await openExactQuantity(page, {
+    width: 1_100,
+    height: 800
+  });
+  await seekAndSettle(page, player, 0.29);
+  const refinementSource = player.locator(
+    `${committedSceneSelector} ` +
+    "[data-kp-exact-symbolic-source]"
+  );
+  await expect(refinementSource).toHaveCSS("opacity", "1");
+  await expect(refinementSource.locator(".katex-html")).toContainText("×");
+  await expect(refinementSource.locator(".katex-html")).toContainText("2");
+  for (const progress of [0.34, 0.472, 0.816, 0.856, 1]) {
+    await player.locator(
+      "[data-action=\"seek-editor-animation\"]"
+    ).fill(String(progress));
+    const samples = await player.evaluate(async (root) => {
+      const frames: Array<{
+        committedCount: number;
+        symbolicStatus?: string | undefined;
+        sceneOpacity: number;
+        visibleOwnerCount: number;
+        fractionalOpacityCount: number;
+        preparingCount: number;
+      }> = [];
+      const effectiveOpacity = (element: HTMLElement): number => {
+        let opacity = 1;
+        let current: HTMLElement | null = element;
+        while (current !== null && current !== root) {
+          opacity *= Number(getComputedStyle(current).opacity);
+          current = current.parentElement;
+        }
+        return opacity;
+      };
+      for (let index = 0; index < 8; index += 1) {
+        await new Promise<void>((resolve) =>
+          requestAnimationFrame(() => resolve())
+        );
+        const committed = [
+          ...root.querySelectorAll<HTMLElement>(
+            "[data-kp-exact-symbolic-scene]" +
+            "[data-kp-prepared-scene-state=\"committed\"]"
+          )
+        ];
+        const owners = committed.flatMap((scene) => [
+          ...scene.querySelectorAll<HTMLElement>(
+            "[data-kp-exact-symbolic-source], " +
+            "[data-kp-exact-symbolic-target], " +
+            "[data-kp-equation-material-owner-id]"
+          )
+        ]);
+        const opacities = owners.map(effectiveOpacity);
+        frames.push({
+          committedCount: committed.length,
+          symbolicStatus:
+            committed[0]?.dataset["kpExactSymbolicStatus"],
+          sceneOpacity: committed.length === 1
+            ? Number(getComputedStyle(committed[0]!).opacity)
+            : 0,
+          visibleOwnerCount: owners.filter((owner, ownerIndex) => {
+            const rect = owner.getBoundingClientRect();
+            return opacities[ownerIndex]! > 0.01 &&
+              rect.width > 0 &&
+              rect.height > 0;
+          }).length,
+          fractionalOpacityCount: opacities.filter((opacity) =>
+            opacity !== 0 && opacity !== 1
+          ).length,
+          preparingCount: root.querySelectorAll(
+            "[data-kp-prepared-scene-state=\"preparing\"]"
+          ).length
+        });
+      }
+      return frames;
+    });
+    expect(samples.every((sample) =>
+      sample.committedCount === 1 &&
+      sample.symbolicStatus === "ready" &&
+      sample.sceneOpacity === 1 &&
+      sample.visibleOwnerCount > 0 &&
+      sample.fractionalOpacityCount === 0 &&
+      sample.preparingCount <= 1
+    ), JSON.stringify({ progress, samples })).toBe(true);
+    await expect.poll(() => player.evaluate((root) => {
+      const committed = root.querySelector<HTMLElement>(
+        "[data-kp-exact-symbolic-scene]" +
+        "[data-kp-prepared-scene-state=\"committed\"]"
+      );
+      return committed?.dataset["kpExactSymbolicSegment"] ===
+        root.dataset["kpExactSymbolicSegment"];
+    })).toBe(true);
+    await page.evaluate(() => new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+    ));
+    const paintContact = await exactPaintContactEvidence(player, progress);
+    expect(
+      paintContact.violations,
+      JSON.stringify({ progress, paintContact })
+    ).toEqual([]);
   }
 });
 
@@ -240,9 +349,7 @@ async function openExactQuantity(
     "true"
   );
   await page.evaluate(async () => document.fonts.ready);
-  await expect(player.locator(
-    "[data-kp-exact-symbolic-scene]"
-  )).toHaveAttribute("data-kp-exact-symbolic-status", "ready");
+  await awaitCommittedSymbolicScene(player);
   return player;
 }
 
@@ -266,12 +373,36 @@ async function seekAndSettle(
     "data-kp-exact-input-progress-permille",
     String(Math.round(progress * 1_000))
   );
-  await expect(player.locator(
-    "[data-kp-exact-symbolic-scene]"
-  )).toHaveAttribute("data-kp-exact-symbolic-status", "ready");
+  await awaitCommittedSymbolicScene(player);
   await page.evaluate(() => new Promise<void>((resolve) =>
     requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
   ));
+}
+
+async function awaitCommittedSymbolicScene(
+  player: ReturnType<Page["locator"]>
+): Promise<void> {
+  await expect.poll(async () => {
+    const state = await player.evaluate((root) => {
+      const committed = root.querySelector<HTMLElement>(
+        "[data-kp-exact-symbolic-scene]" +
+        "[data-kp-prepared-scene-state=\"committed\"]"
+      );
+      return {
+        status: committed?.dataset["kpExactSymbolicStatus"],
+        error: committed?.dataset["kpExactSymbolicError"],
+        segment: committed?.dataset["kpExactSymbolicSegment"],
+        expectedSegment: root.dataset["kpExactSymbolicSegment"]
+      };
+    });
+    if (state.status === "error") {
+      throw new Error(
+        state.error ?? "Exact symbolic scene failed without a diagnostic."
+      );
+    }
+    return state.status === "ready" &&
+      state.segment === state.expectedSegment;
+  }).toBe(true);
 }
 
 async function paintFingerprint(
@@ -288,7 +419,8 @@ async function paintFingerprint(
       ].map((value) => Math.round(value * 100) / 100);
     };
     const scene = root.querySelector<HTMLElement>(
-      "[data-kp-exact-symbolic-scene]"
+      "[data-kp-exact-symbolic-scene]" +
+      "[data-kp-prepared-scene-state=\"committed\"]"
     );
     if (scene === null) throw new Error("Missing exact symbolic scene.");
     const endpoints = [
@@ -375,4 +507,105 @@ async function overlapArea(
     }
     return Math.round(area * 100) / 100;
   });
+}
+
+async function exactPaintContactEvidence(
+  player: ReturnType<Page["locator"]>,
+  progress: number
+) {
+  return player.evaluate(async (root, sampledProgress) => {
+    const overlapModule =
+      "/src/rendering/equation-visible-paint-overlap.ts";
+    const geometryModule =
+      "/src/rendering/native-katex-paint-geometry.ts";
+    const {
+      evaluateKpEquationVisiblePaintCertifiedContacts,
+      inspectKpEquationVisiblePaintOverlap
+    } = await import(overlapModule);
+    const { measureKpNativeKatexSubtreePaintRect } =
+      await import(geometryModule);
+    const stage = root.querySelector<HTMLElement>(
+      "[data-kp-exact-symbolic-scene]" +
+      "[data-kp-prepared-scene-state=\"committed\"]"
+    );
+    if (stage === null) {
+      throw new Error("Exact paint census requires one committed scene.");
+    }
+    const effectiveOpacity = (element: HTMLElement): number => {
+      let opacity = 1;
+      let current: HTMLElement | null = element;
+      while (current !== null) {
+        opacity *= Number(getComputedStyle(current).opacity);
+        if (current === stage) break;
+        current = current.parentElement;
+      }
+      return opacity;
+    };
+    const native = [
+      ...stage.querySelectorAll<HTMLElement>(
+        "[data-kp-exact-symbolic-source], " +
+        "[data-kp-exact-symbolic-target]"
+      )
+    ].flatMap((endpoint) => {
+      const authority = endpoint.hasAttribute(
+        "data-kp-exact-symbolic-source"
+      )
+        ? "source-native" as const
+        : "target-native" as const;
+      return [
+        ...endpoint.querySelectorAll<HTMLElement>(
+          "[data-kp-semantic-selector-id], .frac-line"
+        )
+      ].flatMap((paint, index) => {
+        const rect = measureKpNativeKatexSubtreePaintRect(stage, paint);
+        return rect === undefined ? [] : [{
+          ownerId:
+            `native:${authority}:${
+              paint.dataset["kpSemanticEntityId"] ?? index
+            }`,
+          semanticEntityId: paint.dataset["kpSemanticEntityId"],
+          authority,
+          rect,
+          opacity: effectiveOpacity(paint)
+        }];
+      });
+    });
+    const material = [
+      ...stage.querySelectorAll<HTMLElement>(
+        "[data-kp-equation-material-owner-id]"
+      )
+    ].flatMap((owner) => {
+      const visual = owner.firstElementChild as HTMLElement | null;
+      const rect = visual === null
+        ? undefined
+        : measureKpNativeKatexSubtreePaintRect(stage, visual);
+      return rect === undefined ? [] : [{
+        ownerId: owner.dataset["kpEquationMaterialOwnerId"] ?? "",
+        semanticEntityId:
+          owner.dataset["kpEquationMaterialSemanticEntityId"],
+        semanticContacts: JSON.parse(
+          owner.dataset["kpEquationMaterialSemanticContacts"] ?? "[]"
+        ),
+        authority: "material" as const,
+        rect,
+        opacity: effectiveOpacity(owner)
+      }];
+    });
+    const report = inspectKpEquationVisiblePaintOverlap({
+      progress: sampledProgress,
+      viewportId: `${window.innerWidth}x${window.innerHeight}`,
+      observations: [...native, ...material],
+      contactTolerancePx: 0.75
+    });
+    const evaluated = evaluateKpEquationVisiblePaintCertifiedContacts({
+      report,
+      contactTolerancePx: 0.75
+    });
+    return {
+      observationCount: report.observationCount,
+      intersections: report.intersections,
+      allowed: evaluated.allowed,
+      violations: evaluated.violations
+    };
+  }, progress);
 }

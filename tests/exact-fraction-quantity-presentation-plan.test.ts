@@ -3,6 +3,8 @@ import test from "node:test";
 
 import {
   createKpExactFractionQuantityPresentationPlan,
+  isKpExactQuantityMotifInvocation,
+  sampleKpExactQuantityVisibleOperation,
   type KpExactFractionQuantityPresentationBeat
 } from "../src/animation/exact-fraction-quantity-presentation-plan.ts";
 import {
@@ -39,6 +41,48 @@ test("every exact-quantity beat binds one canonical operation and motif", () => 
       "part-merge",
       "existing"
     ]
+  );
+});
+
+test("motif declarations are sealed executable four-view invocations", () => {
+  const plan = createKpExactFractionQuantityPresentationPlan();
+
+  assert.deepEqual(
+    plan.beats.map(({ execution }) => execution.symbolicDispatches),
+    [
+      ["continuant"],
+      ["copy-fan-out", "merge-fan-in"],
+      ["merge-fan-in"],
+      ["merge-fan-in"],
+      ["structural-succession"]
+    ]
+  );
+  for (const beat of plan.beats) {
+    assert.ok(isKpExactQuantityMotifInvocation(beat.execution));
+    const frame = sampleKpExactQuantityVisibleOperation({
+      beat,
+      localProgress: 0.5
+    });
+    assert.equal(frame.phase, "action");
+    assert.equal(frame.actionProgress, 0.5);
+    assert.deepEqual(
+      frame.viewBindings.map(({ view }) => view),
+      ["symbolic", "partitioned-circle", "fraction-bar", "number-line"]
+    );
+    assert.ok(frame.viewBindings.every((binding) =>
+      binding.invocationId === beat.execution.id &&
+      binding.operationId === beat.canonicalOperationId
+    ));
+  }
+  assert.throws(
+    () => sampleKpExactQuantityVisibleOperation({
+      beat: {
+        ...plan.beats[0]!,
+        execution: { ...plan.beats[0]!.execution }
+      },
+      localProgress: 0.5
+    }),
+    /sealed executable motif/
   );
 });
 
