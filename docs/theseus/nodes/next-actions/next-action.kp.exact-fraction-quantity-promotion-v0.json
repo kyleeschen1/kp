@@ -104,6 +104,20 @@
       "scope": "slice s05 provider boundary",
       "checkedAt": "2026-07-29T05:21:21.798Z",
       "notes": "The linear-problem provider remains type-correct against the extracted domain-neutral arithmetic."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s06 finite partitions and selections",
+      "checkedAt": "2026-07-29T05:24:09.540Z",
+      "notes": "Sixteen tests pass; new cases prove exact totality, deterministic IDs, exact selection measure, duplicate/missing rejection, partition-scoped type identity, and absence of view geometry."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s06 partition identity types",
+      "checkedAt": "2026-07-29T05:24:10.392Z",
+      "notes": "The negative type fixture proves part IDs from different partitions cannot be mixed into a certified selection."
     }
   ],
   "expectedLearning": [

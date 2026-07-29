@@ -149,7 +149,8 @@
     {
       "id": "s06",
       "title": "model-finite-partitions",
-      "status": "planned"
+      "summary": "Added a geometry-free finite-partition domain model with exact positive measures totaling one, deterministic branded part IDs, contiguous logical ordinals, immutable partition-scoped selections, and exact derived quantities. Duplicate IDs, ordinal gaps, bad totals, repeated selections, missing parts, and cross-partition authored IDs all fail before projection.",
+      "status": "complete"
     },
     {
       "id": "s07",
