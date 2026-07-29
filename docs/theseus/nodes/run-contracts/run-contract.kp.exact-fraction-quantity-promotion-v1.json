@@ -167,7 +167,8 @@
     {
       "id": "s09",
       "title": "type-view-obligations",
-      "status": "planned"
+      "summary": "Projected the trace into one immutable evaluation tree with two disclosure groups and exact forward/rewind order. Expanded, collapsed, automatic, and pinned projections carry identical state, checkpoint, beat, unit, and final-equality truth. Added a sealed mapped-type view bundle requiring all four named projections with exact trace/selection identity and nonempty accessible summaries; missing or forged bundles fail closed.",
+      "status": "complete"
     },
     {
       "id": "s10",

@@ -146,6 +146,20 @@
       "scope": "slice s08 trace and sealed proof graph",
       "checkedAt": "2026-07-29T05:33:02.451Z",
       "notes": "Trace states, operations, unit/partition identities, and proof types compile across all TypeScript projects."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s09 fold truth and exhaustive view obligations",
+      "checkedAt": "2026-07-29T05:37:56.861Z",
+      "notes": "Thirty-six tests pass; new cases prove one five-beat tree, exact rewind, invariant semantic truth across expanded/collapsed/automatic/pinned views, pin validation, sealed four-view completeness, compile-time missing-view rejection, runtime decoded omission/mislabel/accessibility rejection, and seal integrity."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s09 mapped view obligation types",
+      "checkedAt": "2026-07-29T05:37:57.745Z",
+      "notes": "The required view union and mapped projection set make omission of symbolic, partitioned-circle, fraction-bar, or number-line a compile-time error."
     }
   ],
   "expectedLearning": [
