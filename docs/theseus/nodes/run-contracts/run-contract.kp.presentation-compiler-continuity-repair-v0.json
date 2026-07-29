@@ -89,6 +89,20 @@
       "scope": "s04 operation presentation regression",
       "checkedAt": "2026-07-29T17:38:24.002Z",
       "notes": "All 109 existing operation presentation checks remain green after adding the sealed paint-continuity authority."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s05 paint continuity mint",
+      "checkedAt": "2026-07-29T17:43:06.199Z",
+      "notes": "113 checks passed, including hard-swap rejection after unsafe cast, total/disjoint ownership, catalyst exclusion, authority matching, one-to-one equivalent pose, and immutable mint output."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s05 validator and nominal authority",
+      "checkedAt": "2026-07-29T17:43:11.192Z",
+      "notes": "Application, test, and domain type projects pass with the continuity validator and non-empty carrier preservation."
     }
   ],
   "allowedWork": [
@@ -144,7 +158,8 @@
     {
       "id": "s05",
       "title": "mint-continuity-plans",
-      "status": "planned"
+      "summary": "Implemented the sole continuity mint against verified semantic plans; it rejects hard swaps at runtime, proves total and disjoint source/target ownership, excludes catalysts and foreign bundles, constrains equivalent-pose cardinality, and freezes nominal output.",
+      "status": "complete"
     },
     {
       "id": "s06",
