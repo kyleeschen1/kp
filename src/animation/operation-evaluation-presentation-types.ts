@@ -4,6 +4,9 @@ import type {
 import type {
   KpExplicitStaticCheckpointPlan
 } from "./operation-presentation-plan-types.ts";
+import type {
+  KpVerifiedExecutableSuccessorMotifProgram
+} from "./motifs/executable-successor-motif-program.ts";
 
 export const kpCanonicalOperationEvaluationTransformationKinds = [
   "simplifyConstantProduct",
@@ -43,6 +46,8 @@ export interface KpOperationEvaluationPresentationEntry {
   readonly motifKind: string;
   readonly planCompiler:
     KpOperationEvaluationPresentationPlanCompilerRef;
+  readonly executableProgramCompiler:
+    KpOperationEvaluationExecutableProgramCompilerRef;
   readonly paintContinuityCompiler:
     KpOperationEvaluationPaintContinuityCompilerRef;
   /**
@@ -69,6 +74,16 @@ export interface KpOperationEvaluationPresentationPlanCompilerDescriptor
   readonly lawIds: readonly KpOperationPresentationLawId[];
 }
 
+export interface KpOperationEvaluationExecutableProgramCompilerRef {
+  readonly id: string;
+  readonly version: string;
+}
+
+export interface KpOperationEvaluationExecutableProgramCompilerDescriptor
+  extends KpOperationEvaluationExecutableProgramCompilerRef {
+  readonly program: KpVerifiedExecutableSuccessorMotifProgram;
+}
+
 export interface KpOperationEvaluationPaintContinuityCompilerRef {
   readonly id: string;
   readonly version: string;
@@ -84,11 +99,13 @@ export interface KpOperationEvaluationPaintContinuityCompilerDescriptor
 
 export interface KpOperationEvaluationPresentationRegistry {
   readonly kind: "operation-evaluation-presentation-registry";
-  readonly schemaVersion: "kp.operation-evaluation-presentation-registry.v3";
+  readonly schemaVersion: "kp.operation-evaluation-presentation-registry.v4";
   readonly packs: readonly KpOperationEvaluationPresentationPack[];
   readonly entries: readonly KpOperationEvaluationPresentationEntry[];
   readonly planCompilers:
     readonly KpOperationEvaluationPresentationPlanCompilerDescriptor[];
+  readonly executableProgramCompilers:
+    readonly KpOperationEvaluationExecutableProgramCompilerDescriptor[];
   readonly paintContinuityCompilers:
     readonly KpOperationEvaluationPaintContinuityCompilerDescriptor[];
 }
@@ -110,7 +127,7 @@ declare const kpResolvedOperationEvaluationPresentationBrand: unique symbol;
  * not bypass version checks by reconstructing a visually similar raw rule.
  */
 export interface KpResolvedOperationEvaluationPresentation {
-  readonly schemaVersion: "kp.resolved-operation-evaluation-presentation.v3";
+  readonly schemaVersion: "kp.resolved-operation-evaluation-presentation.v4";
   readonly presentationId: string;
   readonly transformationKind: string;
   readonly packId: string;
@@ -118,6 +135,8 @@ export interface KpResolvedOperationEvaluationPresentation {
   readonly motifKind: string;
   readonly planCompiler:
     KpOperationEvaluationPresentationPlanCompilerDescriptor;
+  readonly executableProgramCompiler:
+    KpOperationEvaluationExecutableProgramCompilerDescriptor;
   readonly paintContinuityCompiler:
     KpOperationEvaluationPaintContinuityCompilerDescriptor;
   readonly semanticOperationIds: readonly string[];

@@ -397,6 +397,48 @@
       "scope": "s06 impact-recommended neighboring visual preservation",
       "checkedAt": "2026-07-29T23:45:03.248Z",
       "notes": "The stable repository-owned command captured all 39 desktop and phone visual states successfully."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s07 concurrent registry verification timing",
+      "checkedAt": "2026-07-29T23:51:38.261Z",
+      "notes": "Contracts passed semantically, but concurrent test and typecheck load raised check time to 10.1 seconds; the isolated rerun passed at 3.78 seconds."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s07 pinned executable program registry route",
+      "checkedAt": "2026-07-29T23:51:39.342Z",
+      "notes": "136 of 136 checks passed. Canonical and extension entries resolve the same minted program; unknown compiler pins and attempted extension program replacement fail closed or resolve to canonical authority."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s07 registry v4 type closure",
+      "checkedAt": "2026-07-29T23:51:40.257Z",
+      "notes": "All application, Node, test, protocol-dependent, and domain TypeScript projects pass with the executable-program compiler descriptor and resolved certificate."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s07 registry executable-program route inference budget",
+      "checkedAt": "2026-07-29T23:51:41.223Z",
+      "notes": "Inference contracts passed sequentially at 46293 types, 57910 instantiations, and 3.78 seconds."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s07 registry program authority boundaries",
+      "checkedAt": "2026-07-29T23:51:42.159Z",
+      "notes": "Architecture command exits successfully; the pre-existing informational legacy query-view exception remains unrelated."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s07 impact-recommended neighboring visual preservation",
+      "checkedAt": "2026-07-29T23:51:43.114Z",
+      "notes": "The stable command captured all 39 desktop and phone visual states after the registry version and pin evolution."
     }
   ],
   "allowedWork": [
@@ -466,7 +508,8 @@
     {
       "id": "s07",
       "title": "evolve-presentation-registry-program-route",
-      "status": "planned"
+      "summary": "Evolved the operation-evaluation registry and resolved certificate to v4. Every supported core or extension entry now pins the sole minted operation-evaluation executable-program compiler beside its verified plan and continuity compilers; pack and compiler drift fail closed, extensions cannot inject or replace program semantics, and unsupported routes remain explicit static checkpoints.",
+      "status": "complete"
     },
     {
       "id": "s08",

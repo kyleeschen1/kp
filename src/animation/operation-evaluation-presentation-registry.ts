@@ -10,6 +10,8 @@ import {
 import {
   kpCanonicalOperationEvaluationTransformationKinds,
   type KpCanonicalOperationEvaluationTransformationKind,
+  type KpOperationEvaluationExecutableProgramCompilerDescriptor,
+  type KpOperationEvaluationExecutableProgramCompilerRef,
   type KpOperationEvaluationPresentationEntry,
   type KpOperationEvaluationPaintContinuityCompilerDescriptor,
   type KpOperationEvaluationPaintContinuityCompilerRef,
@@ -30,12 +32,18 @@ import {
 import {
   createKpExplicitStaticCheckpointPlan
 } from "./operation-presentation-plan-types.ts";
+import {
+  isKpVerifiedExecutableSuccessorMotifProgram,
+  validateAndMintKpExecutableSuccessorMotifProgram
+} from "./motifs/executable-successor-motif-program-validator.ts";
 
 export {
   kpCanonicalOperationEvaluationTransformationKinds
 } from "./operation-evaluation-presentation-types.ts";
 export type {
   KpCanonicalOperationEvaluationTransformationKind,
+  KpOperationEvaluationExecutableProgramCompilerDescriptor,
+  KpOperationEvaluationExecutableProgramCompilerRef,
   KpOperationEvaluationPresentationEntry,
   KpOperationEvaluationPaintContinuityCompilerDescriptor,
   KpOperationEvaluationPaintContinuityCompilerRef,
@@ -67,6 +75,17 @@ export const kpOperationEvaluationPresentationPlanCompilers:
   readonly KpOperationEvaluationPresentationPlanCompilerDescriptor[] =
   Object.freeze([kpSuccessorSynthesisPresentationPlanCompiler]);
 
+export const kpOperationEvaluationExecutableProgramCompiler =
+  Object.freeze({
+    id: "kp.executable-program-compiler.operation-evaluation",
+    version: "1.0.0",
+    program: mintCanonicalOperationEvaluationProgram()
+  } satisfies KpOperationEvaluationExecutableProgramCompilerDescriptor);
+
+export const kpOperationEvaluationExecutableProgramCompilers:
+  readonly KpOperationEvaluationExecutableProgramCompilerDescriptor[] =
+  Object.freeze([kpOperationEvaluationExecutableProgramCompiler]);
+
 export const kpSharedJunctionPaintContinuityCompiler =
   Object.freeze({
     id: "kp.paint-continuity-compiler.shared-junction",
@@ -85,7 +104,7 @@ export const kpOperationEvaluationPresentationCorePack =
   createKpOperationEvaluationPresentationPack({
     id: "kp.presentation.operation-evaluation",
     scope: "core",
-    version: "3.0.0",
+    version: "4.0.0",
     title: "KP operation-evaluation presentations",
     presentationIds: [
       "kp.presentation.operation-evaluation.product",
@@ -333,6 +352,27 @@ export function createKpOperationEvaluationPresentationRegistry(input: {
         `plan compiler ${planCompiler.id} motif ${planCompiler.motifKind}.`
       );
     }
+    const executableProgramCompiler = resolveExecutableProgramCompiler(
+      entry.executableProgramCompiler
+    );
+    if (executableProgramCompiler === undefined) {
+      throw new Error(
+        `Presentation ${entry.id} references unknown or unpinned executable ` +
+        `program compiler ${entry.executableProgramCompiler.id}@` +
+        `${entry.executableProgramCompiler.version}.`
+      );
+    }
+    if (
+      !isKpVerifiedExecutableSuccessorMotifProgram(
+        executableProgramCompiler.program
+      ) ||
+      executableProgramCompiler.program.kind !== "operation-evaluation"
+    ) {
+      throw new Error(
+        `Presentation ${entry.id} requires one verified operation-evaluation ` +
+        "executable program."
+      );
+    }
     const paintContinuityCompiler = resolvePaintContinuityCompiler(
       entry.paintContinuityCompiler
     );
@@ -375,11 +415,16 @@ export function createKpOperationEvaluationPresentationRegistry(input: {
 
   return Object.freeze({
     kind: "operation-evaluation-presentation-registry",
-    schemaVersion: "kp.operation-evaluation-presentation-registry.v3",
+    schemaVersion: "kp.operation-evaluation-presentation-registry.v4",
     packs: Object.freeze(input.packs.map(clonePack)),
     entries: Object.freeze(input.entries.map(cloneEntry)),
     planCompilers: Object.freeze(
       kpOperationEvaluationPresentationPlanCompilers.map(clonePlanCompiler)
+    ),
+    executableProgramCompilers: Object.freeze(
+      kpOperationEvaluationExecutableProgramCompilers.map(
+        cloneExecutableProgramCompiler
+      )
     ),
     paintContinuityCompilers: Object.freeze(
       kpOperationEvaluationPaintContinuityCompilers.map(
@@ -524,6 +569,10 @@ function coreEntry(input: {
       id: kpSuccessorSynthesisPresentationPlanCompiler.id,
       version: kpSuccessorSynthesisPresentationPlanCompiler.version
     }),
+    executableProgramCompiler: Object.freeze({
+      id: kpOperationEvaluationExecutableProgramCompiler.id,
+      version: kpOperationEvaluationExecutableProgramCompiler.version
+    }),
     paintContinuityCompiler: Object.freeze({
       id: kpSharedJunctionPaintContinuityCompiler.id,
       version: kpSharedJunctionPaintContinuityCompiler.version
@@ -547,13 +596,16 @@ function resolvedCertificate(
   entry: KpOperationEvaluationPresentationEntry
 ): KpResolvedOperationEvaluationPresentation {
   return Object.freeze({
-    schemaVersion: "kp.resolved-operation-evaluation-presentation.v3",
+    schemaVersion: "kp.resolved-operation-evaluation-presentation.v4",
     presentationId: entry.id,
     transformationKind: entry.transformationKind,
     packId: pack.id,
     packVersion: pack.version,
     motifKind: entry.motifKind,
     planCompiler: clonePlanCompiler(resolvePlanCompiler(entry.planCompiler)!),
+    executableProgramCompiler: cloneExecutableProgramCompiler(
+      resolveExecutableProgramCompiler(entry.executableProgramCompiler)!
+    ),
     paintContinuityCompiler: clonePaintContinuityCompiler(
       resolvePaintContinuityCompiler(entry.paintContinuityCompiler)!
     ),
@@ -583,6 +635,9 @@ function cloneEntry(
   return Object.freeze({
     ...entry,
     planCompiler: Object.freeze({ ...entry.planCompiler }),
+    executableProgramCompiler: Object.freeze({
+      ...entry.executableProgramCompiler
+    }),
     paintContinuityCompiler: Object.freeze({
       ...entry.paintContinuityCompiler
     }),
@@ -609,6 +664,14 @@ function resolvePaintContinuityCompiler(
   );
 }
 
+function resolveExecutableProgramCompiler(
+  ref: KpOperationEvaluationExecutableProgramCompilerRef
+): KpOperationEvaluationExecutableProgramCompilerDescriptor | undefined {
+  return kpOperationEvaluationExecutableProgramCompilers.find(
+    ({ id, version }) => id === ref.id && version === ref.version
+  );
+}
+
 function clonePlanCompiler(
   compiler: KpOperationEvaluationPresentationPlanCompilerDescriptor
 ): KpOperationEvaluationPresentationPlanCompilerDescriptor {
@@ -622,6 +685,94 @@ function clonePaintContinuityCompiler(
   compiler: KpOperationEvaluationPaintContinuityCompilerDescriptor
 ): KpOperationEvaluationPaintContinuityCompilerDescriptor {
   return Object.freeze({ ...compiler });
+}
+
+function cloneExecutableProgramCompiler(
+  compiler: KpOperationEvaluationExecutableProgramCompilerDescriptor
+): KpOperationEvaluationExecutableProgramCompilerDescriptor {
+  // Retaining the already frozen minted program preserves its private runtime
+  // authority; cloning or serializing it would intentionally lose authority.
+  return Object.freeze({
+    id: compiler.id,
+    version: compiler.version,
+    program: compiler.program
+  });
+}
+
+function mintCanonicalOperationEvaluationProgram() {
+  const result = validateAndMintKpExecutableSuccessorMotifProgram({
+    draft: {
+      schemaVersion: "kp.executable-successor-motif-program.v1",
+      programVersion: "1.0.0",
+      id: "kp.executable-program.operation-evaluation",
+      kind: "operation-evaluation",
+      allowedRoles: [
+        "material-input",
+        "causal-catalyst",
+        "result-material",
+        "continuant-context"
+      ],
+      phases: [
+        {
+          id: "orient-contributors",
+          effect: "orient",
+          requiredRoles: [
+            "material-input",
+            "causal-catalyst",
+            "continuant-context"
+          ]
+        },
+        {
+          id: "gather-contributors",
+          effect: "converge",
+          requiredRoles: ["material-input", "causal-catalyst"]
+        },
+        {
+          id: "recognize-result",
+          effect: "recognize-result",
+          requiredRoles: [
+            "material-input",
+            "causal-catalyst",
+            "result-material"
+          ]
+        },
+        {
+          id: "settle-result",
+          effect: "settle",
+          requiredRoles: ["result-material", "continuant-context"]
+        }
+      ],
+      lineage: {
+        material: "many-inputs-to-one-result",
+        catalyst: "participates-without-result-lineage",
+        context: "identity-preserving"
+      },
+      context: {
+        policy: "preserve-unclaimed-context",
+        role: "continuant-context"
+      },
+      accessibility: {
+        narration: "semantic-phase-and-role-summary",
+        reducedMotion: "native-checkpoints-with-phase-summary"
+      },
+      rewind: {
+        policy: "exact-phase-reversal",
+        restores: "source-roles-lineage-and-context"
+      },
+      continuity: {
+        minimumVisibleInk: "motif-specific",
+        intentionalVanish: "forbidden",
+        endpointSettlement: "exact-native-source-and-target"
+      }
+    }
+  });
+  if (result.status !== "verified") {
+    throw new Error(
+      "Canonical operation-evaluation executable program failed validation: " +
+      result.issues.map(({ path, message }) => `${path}: ${message}`).join("; ")
+    );
+  }
+  return result.program;
 }
 
 function requireNamespacedId(value: string, label: string): void {

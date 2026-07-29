@@ -17,7 +17,7 @@ import {
 
 // @ts-expect-error Structural lookalikes cannot bypass registry resolution.
 const fabricated: KpResolvedOperationEvaluationPresentation = {
-  schemaVersion: "kp.resolved-operation-evaluation-presentation.v3",
+  schemaVersion: "kp.resolved-operation-evaluation-presentation.v4",
   presentationId: "project.fabricated.result",
   transformationKind: "simplifyConstantProduct",
   packId: "project.fabricated",

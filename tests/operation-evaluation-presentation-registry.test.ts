@@ -9,6 +9,8 @@ import {
   kpOperationEvaluationPresentationCoreEntries,
   kpOperationEvaluationPresentationCorePack,
   kpOperationEvaluationPresentationExtensionLimit,
+  kpOperationEvaluationExecutableProgramCompiler,
+  kpOperationEvaluationExecutableProgramCompilers,
   kpOperationEvaluationPresentationPins,
   kpOperationEvaluationPaintContinuityCompilers,
   kpOperationEvaluationPresentationPlanCompilers,
@@ -20,6 +22,9 @@ import {
   type KpOperationEvaluationPresentationEntry,
   type KpOperationEvaluationPresentationPack
 } from "../src/animation/operation-evaluation-presentation-registry.ts";
+import {
+  isKpVerifiedExecutableSuccessorMotifProgram
+} from "../src/animation/motifs/executable-successor-motif-program-validator.ts";
 import {
   kpCoreOperationPresentationLawIds
 } from "../src/animation/operation-presentation-law-types.ts";
@@ -41,6 +46,20 @@ test("canonical arithmetic evaluation resolves through one exact pinned motif", 
     assert.deepEqual(
       resolution.certificate.planCompiler.lawIds,
       kpCoreOperationPresentationLawIds
+    );
+    assert.deepEqual(
+      resolution.certificate.executableProgramCompiler,
+      kpOperationEvaluationExecutableProgramCompiler
+    );
+    assert.equal(
+      resolution.certificate.executableProgramCompiler.program.kind,
+      "operation-evaluation"
+    );
+    assert.equal(
+      isKpVerifiedExecutableSuccessorMotifProgram(
+        resolution.certificate.executableProgramCompiler.program
+      ),
+      true
     );
     assert.deepEqual(
       resolution.certificate.paintContinuityCompiler,
@@ -99,7 +118,7 @@ test("resolution fails closed for unknown transformations and pin drift", () => 
       transformationKind: "simplifyConstantProduct",
       pins: createKpOperationEvaluationPresentationPins([{
         packId: kpOperationEvaluationPresentationCorePack.id,
-        version: "4.0.0"
+        version: "5.0.0"
       }])
     }).status,
     "version-mismatch"
@@ -252,6 +271,23 @@ test("extensions require the exact core and shared motif vocabulary", () => {
         ...kpOperationEvaluationPresentationCoreEntries,
         {
           ...extensionPresentationEntry(1),
+          executableProgramCompiler: {
+            id: "project.executable-program-compiler.local-evaluation",
+            version: "1.0.0"
+          }
+        }
+      ]
+    }),
+    /unknown or unpinned executable program compiler/
+  );
+
+  assert.throws(
+    () => createKpOperationEvaluationPresentationRegistry({
+      packs: [kpOperationEvaluationPresentationCorePack, extensionPack],
+      entries: [
+        ...kpOperationEvaluationPresentationCoreEntries,
+        {
+          ...extensionPresentationEntry(1),
           paintContinuityCompiler: {
             id: "project.paint-continuity.hard-swap",
             version: "1.0.0"
@@ -289,6 +325,52 @@ test("extensions cannot replace the core presentation law set", () => {
   );
   assert.equal(
     Object.isFrozen(resolution.certificate.planCompiler.lawIds),
+    true
+  );
+});
+
+test("extensions cannot replace the minted core executable program", () => {
+  const extensionPack = extensionPresentationPack(3);
+  const forgedProgram = JSON.parse(JSON.stringify(
+    kpOperationEvaluationExecutableProgramCompiler.program
+  ));
+  const registry = createKpOperationEvaluationPresentationRegistry({
+    packs: [kpOperationEvaluationPresentationCorePack, extensionPack],
+    entries: [
+      ...kpOperationEvaluationPresentationCoreEntries,
+      {
+        ...extensionPresentationEntry(3),
+        executableProgramCompiler: {
+          id: kpOperationEvaluationExecutableProgramCompiler.id,
+          version: kpOperationEvaluationExecutableProgramCompiler.version,
+          program: forgedProgram
+        }
+      }
+    ]
+  });
+  const resolution = resolveKpOperationEvaluationPresentation({
+    registry,
+    pins: createKpOperationEvaluationPresentationPins([
+      ...kpOperationEvaluationPresentationPins.packs,
+      { packId: extensionPack.id, version: extensionPack.version }
+    ]),
+    transformationKind: "evaluateProjectOperation3"
+  });
+
+  assert.equal(resolution.status, "resolved");
+  if (resolution.status !== "resolved") return;
+  assert.equal(
+    resolution.certificate.executableProgramCompiler.program,
+    kpOperationEvaluationExecutableProgramCompiler.program
+  );
+  assert.notEqual(
+    resolution.certificate.executableProgramCompiler.program,
+    forgedProgram
+  );
+  assert.equal(
+    isKpVerifiedExecutableSuccessorMotifProgram(
+      resolution.certificate.executableProgramCompiler.program
+    ),
     true
   );
 });
@@ -353,6 +435,14 @@ test("registry snapshots inputs and canonical helpers return nominal certificate
     registry.paintContinuityCompilers,
     kpOperationEvaluationPaintContinuityCompilers
   );
+  assert.deepEqual(
+    registry.executableProgramCompilers,
+    kpOperationEvaluationExecutableProgramCompilers
+  );
+  assert.equal(
+    registry.executableProgramCompilers[0]?.program,
+    kpOperationEvaluationExecutableProgramCompiler.program
+  );
 });
 
 function extensionPresentationPack(
@@ -381,6 +471,10 @@ function extensionPresentationEntry(
     motifKind: "successor-synthesis",
     planCompiler: {
       id: "kp.presentation-plan-compiler.successor-synthesis",
+      version: "1.0.0"
+    },
+    executableProgramCompiler: {
+      id: "kp.executable-program-compiler.operation-evaluation",
       version: "1.0.0"
     },
     paintContinuityCompiler: {
