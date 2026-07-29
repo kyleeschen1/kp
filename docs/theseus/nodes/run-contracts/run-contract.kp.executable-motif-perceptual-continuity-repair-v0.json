@@ -313,6 +313,20 @@
       "scope": "s03 canonical reference selection",
       "checkedAt": "2026-07-29T23:22:45.544Z",
       "notes": "User explicitly approved the repaired gather-combine-recognize animation after reviewing motion and operator placement. This supersedes the prior optical-alignment rejection and authorizes continuation to the architecture ROI gate."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/operation-presentation-migration-inventory.test.ts",
+      "status": "passed",
+      "scope": "s04 executable motif migration ledger and drift gate",
+      "checkedAt": "2026-07-29T23:30:08.539Z",
+      "notes": "7 of 7 tests passed. Every ledger source anchor resolves, all six authority categories are present, protected existing consumers are explicit, and recursive discovery finds no unlisted successor, fission/fusion, or exact-fraction legacy route."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s04 migration-ledger type closure",
+      "checkedAt": "2026-07-29T23:30:09.795Z",
+      "notes": "Application, Node, test, protocol-dependent, and domain TypeScript projects pass."
     }
   ],
   "allowedWork": [
@@ -364,7 +378,8 @@
     {
       "id": "s04",
       "title": "inventory-label-execution-disconnects",
-      "status": "planned"
+      "summary": "Committed a source-backed 25-entry executable-motif migration ledger spanning label declarations, canonical and compatibility renderer consumers, static/generic fallbacks, zero-area transfer, successor endpoint bypass, and ported evidence. Recursive discovery now fails on any silent sampler consumer. No unexpected production route exists; factoring and quadratic consumers are explicitly protected outside scope.",
+      "status": "complete"
     },
     {
       "id": "s05",

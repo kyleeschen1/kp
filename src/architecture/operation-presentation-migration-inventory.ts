@@ -158,6 +158,271 @@ export const kpOperationEvaluationContinuityMigrationInventory = Object.freeze([
   )
 ] as const);
 
+/**
+ * This ledger makes the replacement boundary reviewable before the new
+ * program types exist. A semantic label, a sampler call, and promotion
+ * evidence are separate authority seams; conflating them is how a legal motif
+ * name previously reached a generic runtime while still looking "ported".
+ */
+export const kpExecutableMotifMigrationLedger = Object.freeze([
+  executableMotifMigration(
+    "label.operation-evaluation-registry",
+    "label-declaration",
+    "src/animation/operation-evaluation-presentation-registry.ts",
+    'motifKind: "successor-synthesis"',
+    "replace-with-program",
+    "s07",
+    "The registry currently pins a shared motif label, not an executable program."
+  ),
+  executableMotifMigration(
+    "label.fraction-material-plan",
+    "label-declaration",
+    "src/animation/operation-presentation-plan-types.ts",
+    'readonly operation: "fission" | "fusion";',
+    "replace-with-program",
+    "s08",
+    "Fraction role plans name fission or fusion without carrying executable phase authority."
+  ),
+  executableMotifMigration(
+    "label.exact-fraction-local",
+    "label-declaration",
+    "src/rendering/exact-fraction-quantity-symbolic-projection.ts",
+    'readonly motif: "successor-synthesis" | "operation-evaluation";',
+    "remove-compatibility",
+    "s22",
+    "Exact fraction locally distinguishes two labels that currently share the same successor sampler."
+  ),
+  executableMotifMigration(
+    "consumer.successor-core-sampler",
+    "renderer-consumer",
+    "src/animation/successor-synthesis.ts",
+    "export function sampleKpSuccessorSynthesis(",
+    "preserve-primitive",
+    "preserve",
+    "The pure successor sampler remains an internal primitive below executable program dispatch."
+  ),
+  executableMotifMigration(
+    "consumer.reader-registry-compiler",
+    "renderer-consumer",
+    "src/reader/renderers/equation-render-plan.ts",
+    "compileKpRegisteredSuccessorSynthesisPresentation({",
+    "evolve-canonical-route",
+    "s07",
+    "The reader already resolves one registered successor presentation and will receive the program beside its role plan."
+  ),
+  executableMotifMigration(
+    "consumer.canonical-native-successor",
+    "renderer-consumer",
+    "src/rendering/native-katex-successor-synthesis.ts",
+    "sampleKpSuccessorSynthesis({",
+    "evolve-canonical-route",
+    "s09",
+    "The canonical native renderer must consume only an exhaustively dispatched program projection."
+  ),
+  executableMotifMigration(
+    "consumer.dev-reference-successor",
+    "renderer-consumer",
+    "src/editor/operation-evaluation-reference-comparison.dev.ts",
+    "sampleKpSuccessorSynthesis(input)",
+    "diagnostic-only",
+    "preserve",
+    "The selected historical sampler remains development-only review evidence and cannot become production authority."
+  ),
+  executableMotifMigration(
+    "consumer.compatibility-token-successor",
+    "renderer-consumer",
+    "src/rendering/equation-linear-rearrangement.ts",
+    "sampleKpSuccessorSynthesis({",
+    "compatibility-only",
+    "s10",
+    "The DOM-centric token renderer remains available to legacy callers but must never mint executable or ported evidence."
+  ),
+  executableMotifMigration(
+    "consumer.reader-fraction-generic-routing",
+    "renderer-consumer",
+    "src/reader/renderers/equation-scene-compositor-adapter.ts",
+    'case "fraction-material":',
+    "replace-with-program",
+    "s09",
+    "Fraction material currently selects generic routing from a motif string rather than exhaustive fission/fusion execution."
+  ),
+  executableMotifMigration(
+    "consumer.fission-fusion-core-sampler",
+    "renderer-consumer",
+    "src/animation/fission-fusion.ts",
+    "export function sampleKpFissionFusion(",
+    "preserve-primitive",
+    "preserve",
+    "The pure identity-transfer sampler remains reusable beneath the sealed program variants."
+  ),
+  executableMotifMigration(
+    "consumer.exact-fraction-fission-fusion",
+    "renderer-consumer",
+    "src/rendering/exact-fraction-quantity-runtime.ts",
+    "sampleKpFissionFusion({",
+    "replace-with-program",
+    "s20",
+    "Exact fraction directly samples local fission/fusion plans and must adopt the shared program route."
+  ),
+  executableMotifMigration(
+    "consumer.factoring-fission-fusion",
+    "renderer-consumer",
+    "src/rendering/native-katex-factoring-choreography.ts",
+    "sampleKpFissionFusion({",
+    "protected-existing-consumer",
+    "preserve",
+    "Approved factoring remains outside this bounded migration and keeps its established typed choreography."
+  ),
+  executableMotifMigration(
+    "consumer.quadratic-fission-fusion",
+    "renderer-consumer",
+    "src/animation/quadratic-branch-choreography.ts",
+    "sampleKpFissionFusion({",
+    "protected-existing-consumer",
+    "preserve",
+    "Approved quadratic branch choreography remains outside this bounded migration."
+  ),
+  executableMotifMigration(
+    "consumer.quadratic-runtime-fission-fusion",
+    "renderer-consumer",
+    "src/reader/app/quadratic-branching-runtime.ts",
+    "sampleKpFissionFusion({",
+    "protected-existing-consumer",
+    "preserve",
+    "The existing quadratic reader remains an explicitly protected direct consumer."
+  ),
+  executableMotifMigration(
+    "fallback.registry-explicit-static",
+    "generic-fallback",
+    "src/animation/operation-evaluation-presentation-registry.ts",
+    'status: "explicit-static"',
+    "preserve-fail-closed",
+    "s07",
+    "Unsupported registry work must remain an inspectable static checkpoint."
+  ),
+  executableMotifMigration(
+    "fallback.reader-explicit-static",
+    "generic-fallback",
+    "src/reader/renderers/equation-render-plan.ts",
+    'successorStaticCheckpoint?.status === "explicit-static"',
+    "preserve-fail-closed",
+    "s08",
+    "The reader must preserve explicit static output rather than substitute generic animation."
+  ),
+  executableMotifMigration(
+    "fallback.token-continuity-derivation",
+    "generic-fallback",
+    "src/rendering/equation-linear-rearrangement.ts",
+    "return sampleContinuityConstantDerivation(input);",
+    "compatibility-only",
+    "s10",
+    "Legacy token continuity may render but cannot satisfy executable-program or promotion evidence."
+  ),
+  executableMotifMigration(
+    "continuity.registry-zero-area",
+    "zero-area-transfer",
+    "src/animation/operation-evaluation-presentation-registry.ts",
+    'transferTopology: "shared-zero-area-junction"',
+    "replace-with-program-compatible-continuity",
+    "s12",
+    "The universal zero-area topology caused the rejected perceptual blank pulse."
+  ),
+  executableMotifMigration(
+    "continuity.renderer-source-collapse",
+    "zero-area-transfer",
+    "src/rendering/native-katex-successor-synthesis.ts",
+    "sharedJunctionSourcePose({",
+    "replace-with-program-compatible-continuity",
+    "s13",
+    "Source collapse may execute only when the selected program explicitly permits intentional vanishing."
+  ),
+  executableMotifMigration(
+    "continuity.renderer-target-opening",
+    "zero-area-transfer",
+    "src/rendering/native-katex-successor-synthesis.ts",
+    "sharedJunctionTargetPose({",
+    "replace-with-program-compatible-continuity",
+    "s13",
+    "Target opening must obey the selected program's visible-ink floor and ownership phases."
+  ),
+  executableMotifMigration(
+    "endpoint.successor-owned-target-bypass",
+    "endpoint-bypass",
+    "src/rendering/native-katex-scene-compositor.ts",
+    "A successor synthesis owns its target paint directly.",
+    "route-through-endpoint-microscope",
+    "s14",
+    "Successor-owned target atoms currently bypass dense typography handoff inspection."
+  ),
+  executableMotifMigration(
+    "compatibility.exact-fraction-authority",
+    "generic-fallback",
+    "src/editor/exact-fraction-quantity-surface-adapter.ts",
+    'legacyContinuityAuthority: "exact-fraction-quantity-v0"',
+    "remove-compatibility",
+    "s23",
+    "The four-view exemplar still enters the compositor through explicit legacy continuity authority."
+  ),
+  executableMotifMigration(
+    "compatibility.exact-fraction-realization",
+    "generic-fallback",
+    "src/rendering/native-katex-successor-synthesis.ts",
+    'kind: "legacy-successor-realization"',
+    "remove-compatibility",
+    "s23",
+    "The renderer exposes a legacy realization that cannot count as program execution."
+  ),
+  executableMotifMigration(
+    "promotion.operation-evaluation",
+    "promotion-evidence",
+    "src/editor/animation-library-display-catalog.ts",
+    '"run-contract.kp.presentation-compiler-continuity-repair-v0"',
+    "gate-on-executable-evidence",
+    "s10",
+    "Operation evaluation evidence still names the superseded contract and cannot support ported status."
+  ),
+  executableMotifMigration(
+    "promotion.exact-fraction",
+    "promotion-evidence",
+    "src/editor/animation-library-display-catalog.ts",
+    '"run-contract.kp.exact-fraction-quantity-promotion-v1"',
+    "gate-on-executable-evidence",
+    "s10",
+    "Exact fraction metadata claims motif parity before shared executable-program adoption."
+  )
+] as const);
+
+export type KpExecutableMotifMigrationCategory =
+  | "label-declaration"
+  | "renderer-consumer"
+  | "generic-fallback"
+  | "zero-area-transfer"
+  | "endpoint-bypass"
+  | "promotion-evidence";
+
+export type KpExecutableMotifMigrationState =
+  | "replace-with-program"
+  | "remove-compatibility"
+  | "preserve-primitive"
+  | "evolve-canonical-route"
+  | "diagnostic-only"
+  | "compatibility-only"
+  | "protected-existing-consumer"
+  | "preserve-fail-closed"
+  | "replace-with-program-compatible-continuity"
+  | "route-through-endpoint-microscope"
+  | "gate-on-executable-evidence";
+
+export interface KpExecutableMotifMigrationEntry {
+  readonly id: string;
+  readonly category: KpExecutableMotifMigrationCategory;
+  readonly sourcePath: string;
+  readonly sourceNeedle: string;
+  readonly state: KpExecutableMotifMigrationState;
+  readonly owningSlice: `s${number}` | "preserve";
+  readonly summary: string;
+}
+
 export type KpOperationEvaluationContinuityMigrationState =
   | "must-remove"
   | "removed"
@@ -255,6 +520,26 @@ function continuityMigration(
 ): KpOperationEvaluationContinuityMigrationEntry {
   return Object.freeze({
     id: `operation-continuity.${id}`,
+    sourcePath,
+    sourceNeedle,
+    state,
+    owningSlice,
+    summary
+  });
+}
+
+function executableMotifMigration(
+  id: string,
+  category: KpExecutableMotifMigrationCategory,
+  sourcePath: string,
+  sourceNeedle: string,
+  state: KpExecutableMotifMigrationState,
+  owningSlice: KpExecutableMotifMigrationEntry["owningSlice"],
+  summary: string
+): KpExecutableMotifMigrationEntry {
+  return Object.freeze({
+    id: `executable-motif.${id}`,
+    category,
     sourcePath,
     sourceNeedle,
     state,

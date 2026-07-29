@@ -1,8 +1,9 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 
 import {
+  kpExecutableMotifMigrationLedger,
   kpOperationPresentationCancellationAuthoringSites,
   kpOperationPresentationEvidenceClosures,
   kpOperationPresentationEvidenceGaps,
@@ -17,7 +18,8 @@ const inventory = [
   ...kpOperationPresentationCancellationAuthoringSites,
   ...kpOperationPresentationEvidenceGaps,
   ...kpOperationPresentationEvidenceClosures,
-  ...kpOperationEvaluationContinuityMigrationInventory
+  ...kpOperationEvaluationContinuityMigrationInventory,
+  ...kpExecutableMotifMigrationLedger
 ];
 
 test("operation presentation migration inventory has unique executable evidence", async () => {
@@ -160,3 +162,94 @@ test("operation continuity inventory exposes every known bypass and shared route
     2
   );
 });
+
+test("executable motif ledger covers every authority seam and owns every repair", () => {
+  assert.deepEqual(
+    [...new Set(kpExecutableMotifMigrationLedger.map(
+      ({ category }) => category
+    ))].sort(),
+    [
+      "endpoint-bypass",
+      "generic-fallback",
+      "label-declaration",
+      "promotion-evidence",
+      "renderer-consumer",
+      "zero-area-transfer"
+    ]
+  );
+  assert.ok(kpExecutableMotifMigrationLedger.every(
+    ({ summary }) => summary.trim().length > 0
+  ));
+  assert.ok(kpExecutableMotifMigrationLedger
+    .filter(({ owningSlice }) => owningSlice !== "preserve")
+    .every(({ owningSlice }) => {
+      const number = Number(owningSlice.slice(1));
+      return number >= 7 && number <= 23;
+    }));
+  assert.deepEqual(
+    kpExecutableMotifMigrationLedger
+      .filter(({ state }) => state === "protected-existing-consumer")
+      .map(({ id }) => id)
+      .sort(),
+    [
+      "executable-motif.consumer.factoring-fission-fusion",
+      "executable-motif.consumer.quadratic-fission-fusion",
+      "executable-motif.consumer.quadratic-runtime-fission-fusion"
+    ]
+  );
+});
+
+test("runtime sampler discovery cannot grow a silent motif route", async () => {
+  const sourceFiles = await listTypeScriptFiles("src");
+  const discovery = [
+    {
+      needle: "sampleKpSuccessorSynthesis(",
+      expected: [
+        "src/animation/successor-synthesis.ts",
+        "src/editor/operation-evaluation-reference-comparison.dev.ts",
+        "src/rendering/equation-linear-rearrangement.ts",
+        "src/rendering/native-katex-successor-synthesis.ts"
+      ]
+    },
+    {
+      needle: "sampleKpFissionFusion(",
+      expected: [
+        "src/animation/fission-fusion.ts",
+        "src/animation/quadratic-branch-choreography.ts",
+        "src/reader/app/quadratic-branching-runtime.ts",
+        "src/rendering/exact-fraction-quantity-runtime.ts",
+        "src/rendering/native-katex-factoring-choreography.ts"
+      ]
+    },
+    {
+      needle: 'legacyContinuityAuthority: "exact-fraction-quantity-v0"',
+      expected: [
+        "src/editor/exact-fraction-quantity-surface-adapter.ts",
+        "src/rendering/native-katex-successor-synthesis.ts"
+      ]
+    }
+  ] as const;
+
+  for (const { needle, expected } of discovery) {
+    const found: string[] = [];
+    for (const sourcePath of sourceFiles) {
+      if (
+        sourcePath ===
+        "src/architecture/operation-presentation-migration-inventory.ts"
+      ) continue;
+      const source = await readFile(sourcePath, "utf8");
+      if (source.includes(needle)) found.push(sourcePath);
+    }
+    assert.deepEqual(found.sort(), [...expected].sort(), needle);
+  }
+});
+
+async function listTypeScriptFiles(root: string): Promise<readonly string[]> {
+  const entries = await readdir(root, { withFileTypes: true });
+  const nested = await Promise.all(entries.map(async (entry) => {
+    const path = `${root}/${entry.name}`;
+    if (entry.isDirectory()) return listTypeScriptFiles(path);
+    return entry.isFile() && entry.name.endsWith(".ts") ? [path] : [];
+  }));
+  return nested.flat().sort();
+}
