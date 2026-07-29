@@ -1,10 +1,10 @@
 {
-  "id": "plan-revision.kp.v13",
+  "id": "plan-revision.kp.v14",
   "kind": "plan-revision",
-  "title": "Kinetic Press warning-free stable animation roadmap v13",
-  "status": "superseded",
+  "title": "Kinetic Press presentation continuity repair roadmap v14",
+  "status": "active",
   "domain": "kp",
-  "summary": "Retain revision 12's accepted rank and gates while pointing completed quadratic semantic foundation at its resolved next action and resolved governance contract rather than the superseded rejected-presentation run.",
+  "summary": "Retain revision 13's stable promotion order while moving exact-fraction execution authority from the visually rejected release contract to the approved presentation-compiler continuity repair.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -20,11 +20,6 @@
       "kind": "file",
       "path": "docs/project/decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md",
       "summary": "Accepted platform milestone placement."
-    },
-    {
-      "kind": "file",
-      "path": "docs/project/reviews/2026-07-28-exact-fraction-quantity-promotion-long-loop-proposal.md",
-      "summary": "Approved active exemplar contract."
     },
     {
       "kind": "file",
@@ -55,20 +50,25 @@
       "kind": "file",
       "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v12.json",
       "summary": "Approved predecessor whose final report isolated one terminal-evidence warning."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-29-presentation-compiler-continuity-repair-long-loop-proposal.md",
+      "summary": "Approved active compiler-continuity repair plan."
     }
   ],
   "affects": [
     "workflow.kp.delivery",
-    "plan-revision.kp.v12",
-    "run-contract.kp.exact-fraction-quantity-promotion-v1"
+    "plan-revision.kp.v13",
+    "run-contract.kp.presentation-compiler-continuity-repair-v0"
   ],
   "progress": {
     "state": "partial",
-    "summary": "Plan linkage is warning-free. Exact fraction quantity is the sole active phase with an explicit run slice; future content and platform milestones remain planned and non-authorizing."
+    "summary": "Exact fraction remains the sole active promotion, now governed by the approved compiler-continuity repair and its two mandatory visual checkpoints."
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
-    "revision": 13,
+    "revision": 14,
     "objective": "Grow one canonical, composable semantic animation library through a stable exemplar order, inserting API, verified problem-generation, deterministic explanation, safe output, and optional LLM editorial gates only where recorded caller pressure justifies them.",
     "assumptions": [
       {
@@ -376,7 +376,7 @@
         "horizon": "now",
         "status": "active",
         "evidence": [
-          "run-contract.kp.exact-fraction-quantity-promotion-v1"
+          "run-contract.kp.presentation-compiler-continuity-repair-v0"
         ],
         "topic": "Arithmetic · Fractions",
         "architectureBenefit": "One quantity model projected into symbolic and concrete representations.",
@@ -737,12 +737,11 @@
       }
     ],
     "approval": {
-      "status": "superseded",
+      "status": "approved",
       "decidedAt": "2026-07-29T17:27:12.000Z",
       "decidedBy": "user",
-      "rationale": "Superseded by plan-revision.kp.v14."
+      "rationale": "The approved compiler-continuity successor must replace the superseded exact-fraction release contract as the sole active execution authority without changing stable promotion order."
     },
-    "supersedes": "plan-revision.kp.v12",
-    "supersededBy": "plan-revision.kp.v14"
+    "supersedes": "plan-revision.kp.v13"
   }
 }

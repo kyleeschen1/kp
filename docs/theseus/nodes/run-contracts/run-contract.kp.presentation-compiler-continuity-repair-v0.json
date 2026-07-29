@@ -1,0 +1,192 @@
+{
+  "id": "run-contract.kp.presentation-compiler-continuity-repair-v0",
+  "kind": "run-contract",
+  "title": "Presentation compiler continuity repair",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.exact-fraction-quantity-promotion-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-29-presentation-compiler-continuity-repair-long-loop-proposal.md",
+      "summary": "User-approved 22-slice compiler continuity repair plan."
+    }
+  ],
+  "verification": [
+    "npm run test:operation-presentation-plans",
+    "npm run test:real-katex-glyph-compositor",
+    "npm run test:exact-fraction-quantity",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm run test:browser:exact-fraction-quantity",
+    "npm run visual:exact-fraction-quantity",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s01 exclusive promotion authority",
+      "checkedAt": "2026-07-29T17:28:07.348Z",
+      "notes": "Rank 1 exact fraction now resolves through plan revision 14 and the active continuity-repair contract."
+    },
+    {
+      "command": "theseus plan revision --domain kp",
+      "status": "passed",
+      "scope": "s01 active plan linkage",
+      "checkedAt": "2026-07-29T17:28:08.277Z",
+      "notes": "Revision 14 is approved, active, warning-free, and changes only the exact-fraction execution evidence."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s01 control-plane integrity",
+      "checkedAt": "2026-07-29T17:28:09.075Z",
+      "notes": "Validated 830 nodes and 14191 events after plan revision activation."
+    }
+  ],
+  "allowedWork": [
+    "One renderer-neutral verified paint-continuity plan and validator.",
+    "One versioned registry/compiler route for operation evaluation and explicit static fallback.",
+    "Natural-playback boundary telemetry, semantic-duration integration, one shared speed preference, the three named callers, and exact-fraction migration."
+  ],
+  "disallowedWork": [
+    "No second compositor, runtime, clock, scheduler, display page, WebGL lease, or new DOM animation backend.",
+    "No LLM-authored or exemplar-authored DOM, pixels, paths, opacity, keyframes, handoff, scheduling, or timing exceptions.",
+    "No broad motif migration, later content promotion, generator/editorial work, or unrelated dirty-file changes."
+  ],
+  "goal": "Make supported operation evaluation continuous by construction through one versioned registry/compiler path, prove one unchanged motif across 1 + 2 to 3, 5 + 2 to 7, and 3/6 to 1/2, then repair and re-review exact fraction quantity.",
+  "target": "next-action.kp.exact-fraction-quantity-promotion-v0",
+  "runMode": "run",
+  "maxSlices": 22,
+  "commitCadence": "Commit after each completed and proportionately verified slice; stop at both mandatory human visual checkpoints.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if a raw binary or non-equivalent paint-owner swap remains reachable from a promoted plan.",
+    "Stop if a caller can bypass registry resolution or continuity minting, or needs example-specific presentation code.",
+    "Stop if natural playback differs from direct seek or rewind, or flicker, fade, endpoint snap, overlap, browser divergence, performance, or resource regression remains.",
+    "Stop if a new renderer/runtime category, glyph-text inference, authored geometry, or mathematical semantic rewrite is required.",
+    "Stop at slice 12 and slice 21 for explicit human visual approval.",
+    "Stop if existing native typography, accessibility, export, fold truth, Review, production isolation, neighboring canonical animations, or unrelated user work regresses."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "materialize-approved-contract",
+      "summary": "Materialized the approved 22-slice contract, superseded stale plan evidence through typed revision 14, and proved one exclusive active promotion authority.",
+      "status": "complete",
+      "planPhaseId": "exact-fraction-quantity-models"
+    },
+    {
+      "id": "s02",
+      "title": "freeze-continuity-reference",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "inventory-presentation-bypasses",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "type-verified-paint-continuity",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "mint-continuity-plans",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "add-temporal-continuity-diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "evolve-presentation-registry",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "compile-generic-junction-plan",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "adapt-native-successor-renderer",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "compile-one-plus-two-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "prove-natural-playback",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "human-evaluation-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "add-five-plus-two-caller",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "add-fraction-quotient-caller",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "gate-three-caller-conformance",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "migrate-exact-fraction-symbolic-path",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "centralize-denominator-routing",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "integrate-semantic-duration",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "unify-player-speed-control",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "run-continuity-release-matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "human-exact-fraction-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "release-and-closeout",
+      "status": "planned"
+    }
+  ]
+}
