@@ -1,0 +1,22 @@
+{
+  "id": "decision.kp.generation-editorial-pruning-placement-v0",
+  "kind": "decision",
+  "title": "Place generation editorial and pruning milestones",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "User accepted the roadmap placement; the durable decision and promotion milestones are recorded, so execution may depend on the settled decision.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v10"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ]
+}

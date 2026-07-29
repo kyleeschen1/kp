@@ -1,0 +1,245 @@
+{
+  "id": "run-contract.kp.exact-fraction-quantity-promotion-v1",
+  "kind": "run-contract",
+  "title": "Exact fraction quantity promotion",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.exact-fraction-quantity-promotion-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-28-exact-fraction-quantity-promotion-long-loop-proposal.md",
+      "summary": "User-approved 25-slice executable plan."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/animation-library-promotion.md",
+      "summary": "Stable human-readable promotion rank and progress authority."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md",
+      "summary": "Accepted platform milestone placement and deferrals."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-kp-capability-pressure-domain-order-next-step-review.md",
+      "summary": "Exact arithmetic quantity rationale and four-view requirements."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "decision.kp.generation-editorial-pruning-placement-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery",
+    "plan-revision.kp.v10"
+  ],
+  "verification": [
+    "npm run test:exact-fraction-quantity",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run test:browser:exact-fraction-quantity",
+    "npm run visual:exact-fraction-quantity",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether exact partition refinement and contributor lineage can synchronize symbolic and concrete views without representation-owned math.",
+    "Whether existing canonical motion, clock, layout, host, Review, and promotion seams amortize a new multi-view exemplar without new runtime categories.",
+    "Whether typed completeness and evidence-derived promotion prevent missing views, identity fades, and false ported status."
+  ],
+  "allowedWork": [
+    "One exact rational quantity, unit, partition, selection, and provenance model.",
+    "One verified five-beat trace with immutable evaluation and four synchronized view projections.",
+    "Existing canonical animation, correspondence, clock, reader, responsive, static, accessibility, export, Animation Library, Review, and promotion seams.",
+    "Bounded generic contracts proven necessary by the exemplar and stable repository-owned checks."
+  ],
+  "disallowedWork": [
+    "No second renderer session, compositor, runtime, clock, scheduler, paint authority, display page, or WebGL lease.",
+    "No renderer-owned arithmetic, representation-specific semantic exception, glyph inference, or whole-scene fade replacement.",
+    "No fraction-family rollout, later promotions, problem-generator bridge, LLM editorial integration, universal motif registry, or detached cleanup.",
+    "No overwrite of unrelated user-owned dirty files."
+  ],
+  "criteria": [
+    {
+      "id": "exact-mathematics",
+      "weight": "high"
+    },
+    {
+      "id": "cross-view-identity",
+      "weight": "high"
+    },
+    {
+      "id": "no-fade-continuity",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-playback",
+      "weight": "high"
+    },
+    {
+      "id": "responsive-legibility",
+      "weight": "high"
+    },
+    {
+      "id": "accessibility-export",
+      "weight": "high"
+    },
+    {
+      "id": "canonical-ownership",
+      "weight": "high"
+    },
+    {
+      "id": "human-visual-approval",
+      "weight": "high"
+    }
+  ],
+  "goal": "Promote one canonical exact-quantity animation for 1/3 + 1/6 = 1/2 across native KaTeX, partitioned circles, fraction bars or area, and a number line, stopping for human visual review before release.",
+  "target": "next-action.kp.exact-fraction-quantity-promotion-v0",
+  "runMode": "run",
+  "maxSlices": 25,
+  "commitCadence": "Commit after each completed and proportionately verified slice; keep control, semantic, projection, product, checkpoint, repair, and release rollback units independently revertible.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if exact value, unit identity, selected-part provenance, contributor lineage, fold truth, accessibility, export truth, or settled native authority changes.",
+    "Stop if a visual projection becomes mathematical authority or persistent, fission, or fusion identity falls back to generic opacity.",
+    "Stop if implementation requires a new clock, runtime, scheduler category, equation compositor, WebGL lease, display page, or representation-specific semantic exception.",
+    "Stop if a certificate can be forged, a required view can be omitted, promotion can be claimed by an authorable flag, or another canonical reader regresses.",
+    "Stop at slice 23 for explicit human visual approval before slices 24 and 25.",
+    "Stop if unrelated user-owned dirty files must be overwritten."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "materialize-approved-contract",
+      "summary": "Materializing the approved 25-slice contract, durable roadmap decision, source refs, typed autonomy fields, and dirty-worktree preservation boundary before implementation.",
+      "status": "in-progress"
+    },
+    {
+      "id": "s02",
+      "title": "reconcile-stale-frontier",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "add-promotion-drift-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "freeze-exemplar-reference",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "add-exact-quantity-core",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "model-finite-partitions",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "certify-refine-and-merge",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "build-five-beat-trace",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "type-view-obligations",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "sample-neutral-frames",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "compile-symbolic-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "project-partitioned-circles",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "project-fraction-bars",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "project-number-line",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "compose-cross-view-identity",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "bind-quantity-motifs",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "integrate-shared-runtime",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "certify-responsive-layout",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "register-animation-library",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "wire-review-capture",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "preserve-accessibility-export",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "prove-browser-determinism",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "human-visual-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "apply-approved-repair",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "release-and-closeout",
+      "status": "planned"
+    }
+  ]
+}
