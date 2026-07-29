@@ -189,7 +189,8 @@
     {
       "id": "slice.kp.role-plan.23",
       "title": "Add-bounded-property-coverage",
-      "status": "planned"
+      "summary": "Added a finite property contract spanning nine semantic/AST shapes, five notation structures, twelve operation families, wide and phone viewports, seven boundary-sensitive seek points, both directions, and 24 compiler-owned generated algebra variants. All 182 direct plan samples are state-independent and exactly reversible within a 256-sample ceiling; three-engine paint and rapid-scroll checks plus the complete visual matrix pass without adding runtime code or inference cost.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.24",

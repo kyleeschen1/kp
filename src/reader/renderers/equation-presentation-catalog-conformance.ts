@@ -1,5 +1,6 @@
 import type {
-  KpAnimatedPresentationCoverage
+  KpAnimatedPresentationCoverage,
+  KpVerifiedOperationPresentationPlan
 } from "../../animation/operation-presentation-plan-types.ts";
 import type { KpAnimationAsset } from "../../animation/asset.ts";
 import {
@@ -40,10 +41,15 @@ export interface KpEquationPresentationCatalogEntry {
   readonly animationId: string;
   readonly transformationId: string;
   readonly direction: KpEquationPresentationCatalogDirection;
+  readonly progress: number;
   readonly status: KpEquationPresentationCatalogEntryStatus;
   readonly planKind?:
     KpReaderEquationTransitionPresentationPlan["planKind"] | undefined;
+  readonly operationPlanKind?:
+    KpVerifiedOperationPresentationPlan["planKind"] | undefined;
   readonly staticReason?: string | undefined;
+  readonly sourceObjectIds?: readonly string[] | undefined;
+  readonly targetObjectIds?: readonly string[] | undefined;
 }
 
 export interface KpEquationPresentationCatalogIssue {
@@ -185,10 +191,11 @@ export function checkKpEquationPresentationCatalog(
       equationTransformationCount += 1;
       const directional: KpEquationPresentationCatalogEntry[] = [];
       for (const direction of ["forward", "rewind"] as const) {
-        const result = inspectDirection({
+        const result = inspectKpEquationPresentationOperation({
           animation,
           transformationId,
-          direction
+          direction,
+          progress: 0.5
         });
         entries.push(result.entry);
         directional.push(result.entry);
@@ -249,15 +256,23 @@ function equationTransformationIds(
   ))]);
 }
 
-function inspectDirection(input: {
+export function inspectKpEquationPresentationOperation(input: {
   readonly animation: KpAnimationAsset;
   readonly transformationId: string;
   readonly direction: KpEquationPresentationCatalogDirection;
+  readonly progress: number;
 }): {
   readonly entry: KpEquationPresentationCatalogEntry;
   readonly issue?: KpEquationPresentationCatalogIssue | undefined;
 } {
   try {
+    if (
+      !Number.isFinite(input.progress) ||
+      input.progress < 0 ||
+      input.progress > 1
+    ) {
+      throw new Error("Catalog property progress must be between zero and one.");
+    }
     const transformation = input.animation.transformations.find(
       ({ id }) => id === input.transformationId
     )!;
@@ -289,7 +304,7 @@ function inspectDirection(input: {
         animationId: input.animation.id,
         clock: {
           direction: input.direction,
-          progress: 0.5
+          progress: input.progress
         },
         phase: {
           phaseIndex: 0,
@@ -328,19 +343,39 @@ function inspectDirection(input: {
           animationId: input.animation.id,
           transformationId: input.transformationId,
           direction: input.direction,
+          progress: input.progress,
           status: "explicit-static",
           planKind: transition.presentationPlan.planKind,
-          staticReason: transition.presentationPlan.staticCheckpoint.reason
+          staticReason: transition.presentationPlan.staticCheckpoint.reason,
+          sourceObjectIds: Object.freeze(
+            transition.source.map(({ objectId }) => objectId)
+          ),
+          targetObjectIds: Object.freeze(
+            transition.target.map(({ objectId }) => objectId)
+          )
         })
       };
     }
+    const verifiedPlanKind = operationPlanKind(
+      transition.presentationPlan
+    );
     return {
       entry: Object.freeze({
         animationId: input.animation.id,
         transformationId: input.transformationId,
         direction: input.direction,
+        progress: input.progress,
         status: "verified-animated",
-        planKind: transition.presentationPlan.planKind
+        planKind: transition.presentationPlan.planKind,
+        ...(verifiedPlanKind === undefined
+          ? {}
+          : { operationPlanKind: verifiedPlanKind }),
+        sourceObjectIds: Object.freeze(
+          transition.source.map(({ objectId }) => objectId)
+        ),
+        targetObjectIds: Object.freeze(
+          transition.target.map(({ objectId }) => objectId)
+        )
       })
     };
   } catch (error) {
@@ -357,6 +392,7 @@ function incomplete(
     readonly animation: KpAnimationAsset;
     readonly transformationId: string;
     readonly direction: KpEquationPresentationCatalogDirection;
+    readonly progress: number;
   },
   code: KpEquationPresentationCatalogIssueCode,
   message: string
@@ -369,6 +405,7 @@ function incomplete(
       animationId: input.animation.id,
       transformationId: input.transformationId,
       direction: input.direction,
+      progress: input.progress,
       status: "incomplete"
     }),
     issue: issue({
@@ -379,6 +416,29 @@ function incomplete(
       message
     })
   };
+}
+
+function operationPlanKind(
+  plan: KpReaderEquationTransitionPresentationPlan
+): KpVerifiedOperationPresentationPlan["planKind"] | undefined {
+  switch (plan.planKind) {
+    case "factoring":
+      return plan.factoringMotifBinding.operationPresentationPlan.planKind;
+    case "distribution":
+      return plan.distributionOperationPlans[0]?.planKind;
+    case "fraction-material":
+      return plan.fractionMaterialPresentationPlan.planKind;
+    case "structural-succession":
+      return plan.structuralSuccession.operationPresentationPlan.planKind;
+    case "successor-synthesis":
+      return plan.successorSyntheses[0]?.operationPresentationPlan?.planKind;
+    case "operation-choreography":
+      return plan.operationChoreography.operationPresentationPlan?.planKind;
+    case "default-motion":
+    case "visual-motif":
+    case "explicit-static-checkpoint":
+      return undefined;
+  }
 }
 
 function issue(

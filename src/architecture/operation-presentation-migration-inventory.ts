@@ -89,6 +89,12 @@ export const kpOperationPresentationEvidenceClosures = Object.freeze([
     "tests/equation-presentation-catalog-conformance.test.ts",
     "every catalog equation operation has directional presentation coverage",
     "Every catalog equation operation is planned in forward and rewind, explicit static gaps remain visible, and only a fully verified animated catalog can pass promotion."
+  ),
+  evidenceClosure(
+    "bounded-cross-axis-property-coverage",
+    "tests/operation-presentation-bounded-properties.test.ts",
+    "every bounded case is direct-seek stable and exactly reversible",
+    "A fixed-size matrix covers semantic shapes, notation structures, operation families, viewport classes, boundary seek points, rewind, and compiler-owned generated variations without random or unbounded sampling."
   )
 ] as const);
 

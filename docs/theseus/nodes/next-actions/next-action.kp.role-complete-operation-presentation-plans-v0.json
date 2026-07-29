@@ -825,6 +825,76 @@
       "scope": "slice-22-known-debt",
       "checkedAt": "2026-07-29T02:28:23.491Z",
       "notes": "Known release debt is unchanged at 138095 shared runtime gzip bytes versus 126571 and divide-both-sides HTML 33781 versus 33756. Catalog conformance adds no production import; slice 24 owns budget closure."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "slice-23",
+      "checkedAt": "2026-07-29T02:44:34.053Z",
+      "notes": "105 focused tests pass, including 182 bounded direct-seek/rewind plan samples across 12 operation families and 24 compiler-owned generated algebra cases."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/operation-presentation-migration-inventory.test.ts tests/operation-presentation-bounded-properties.test.ts tests/equation-presentation-catalog-conformance.test.ts",
+      "status": "passed",
+      "scope": "slice-23",
+      "checkedAt": "2026-07-29T02:44:35.212Z",
+      "notes": "All 11 catalog, property-budget, and executable-evidence tests pass after final inventory closure."
+    },
+    {
+      "command": "npm run test:browser:canonical-reader-contract",
+      "status": "passed",
+      "scope": "slice-23",
+      "checkedAt": "2026-07-29T02:44:36.089Z",
+      "notes": "Chromium, Firefox, and WebKit pass the actual-paint wide/phone cancellation contract. Each engine emits the pre-existing non-fatal divide-by-two readability-floor warning at about 0.61 versus 0.68; containment and tested geometry still pass, and no slice-23 runtime code changed."
+    },
+    {
+      "command": "npm run visual:fraction-composition-canonical",
+      "status": "passed",
+      "scope": "slice-23",
+      "checkedAt": "2026-07-29T02:44:36.931Z",
+      "notes": "The complete Chromium Animation Library visual matrix passes across wide/phone, fold, DPR, and dense seek states in 4.2 minutes."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll",
+      "status": "passed",
+      "scope": "slice-23",
+      "checkedAt": "2026-07-29T02:44:37.764Z",
+      "notes": "All three engines pass rapid bidirectional scroll runtime evidence and zero-work budgets."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-23",
+      "checkedAt": "2026-07-29T02:44:38.605Z",
+      "notes": "App, node, test, and domain typechecks pass with the bounded property contract."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-23",
+      "checkedAt": "2026-07-29T02:44:39.471Z",
+      "notes": "All architecture gates pass; property and catalog tooling remain outside reader runtime imports."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-23",
+      "checkedAt": "2026-07-29T02:44:40.327Z",
+      "notes": "Inference remains at types 49975 and instantiations 66276; isolated check 2.77 seconds."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-23",
+      "checkedAt": "2026-07-29T02:44:41.289Z",
+      "notes": "Production build and embedded typecheck pass with unchanged reader chunks."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "slice-23-known-debt",
+      "checkedAt": "2026-07-29T02:44:42.227Z",
+      "notes": "Known release debt remains unchanged at 138095 shared runtime gzip bytes against 126571 and divide-both-sides HTML 33781 against 33756. Property tooling is test-only; slice 24 owns budget closure."
     }
   ],
   "progress": {
