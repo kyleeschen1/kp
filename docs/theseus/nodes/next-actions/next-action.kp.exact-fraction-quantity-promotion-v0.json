@@ -258,6 +258,20 @@
       "scope": "slice s16 opaque lifecycle and motif types",
       "checkedAt": "2026-07-29T06:09:16.614Z",
       "notes": "Compile-time negative fixtures reject fractional material opacity and novel lifecycle categories; canonical operations, tuple cohorts, and shared scheduler vocabulary compile across all TypeScript projects."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s17 single shared runtime integration",
+      "checkedAt": "2026-07-29T06:13:24.111Z",
+      "notes": "Seventy-five tests pass; one sealed renderer session consumes the shared runtime clock, all beats dry-run, native endpoint ownership is exclusive at every checkpoint, transient ownership is exclusive in motion, direct/rewind visual frames match, motif progress is sampled once, and repeated seeks are history-independent."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s17 runtime session, ownership, and clock adapter",
+      "checkedAt": "2026-07-29T06:13:24.985Z",
+      "notes": "The runtime consumes the existing animation clock type, exposes one renderer-session identity, and compiles without a second clock, lifecycle, scheduler, or endpoint owner."
     }
   ],
   "expectedLearning": [

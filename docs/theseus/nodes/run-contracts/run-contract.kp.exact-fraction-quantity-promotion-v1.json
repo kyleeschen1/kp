@@ -215,7 +215,8 @@
     {
       "id": "s17",
       "title": "integrate-shared-runtime",
-      "status": "planned"
+      "summary": "Integrated trace, symbolic endpoints, motif plan, and all four views through one sealed runtime session consuming the existing shared animation clock. Absolute progress is the sole visual coordinate; direction remains control intent, so forward and rewind frames are identical. Each view has exactly one native or transient paint owner, all settled checkpoints reuse native endpoint geometry, and motif local progress receives one easing application without history or a second renderer.",
+      "status": "complete"
     },
     {
       "id": "s18",
