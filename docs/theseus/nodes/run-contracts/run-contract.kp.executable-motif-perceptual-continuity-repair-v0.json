@@ -306,6 +306,13 @@
       "scope": "s03 optical operator alignment",
       "checkedAt": "2026-07-29T23:16:05.754Z",
       "notes": "The user still perceives the plus as vertically misaligned at progress zero. Diagnostic comparison found no compositor displacement relative to unannotated native KaTeX; the remaining disagreement is between native math-axis placement and the desired optical placement. Keep the checkpoint unapproved and do not advance."
+    },
+    {
+      "command": "human visual review of renewed operation-evaluation checkpoint",
+      "status": "passed",
+      "scope": "s03 canonical reference selection",
+      "checkedAt": "2026-07-29T23:22:45.544Z",
+      "notes": "User explicitly approved the repaired gather-combine-recognize animation after reviewing motion and operator placement. This supersedes the prior optical-alignment rejection and authorizes continuation to the architecture ROI gate."
     }
   ],
   "allowedWork": [
@@ -351,8 +358,8 @@
     {
       "id": "s03",
       "title": "human-reference-selection-checkpoint",
-      "summary": "HUMAN_CHECKPOINT remains rejected. Physical motion and wrapper parity are repaired, but the user perceives the plus as optically low at progress zero. A direct comparison against unannotated native KaTeX shows the candidate preserves KaTeX's math-axis placement, so this is now an explicit product typography decision rather than an unresolved compositor offset. Do not advance until native fidelity versus optical operator centering is chosen.",
-      "status": "in-progress"
+      "summary": "Human-approved canonical reference selected: the repaired opaque gather-combine-recognize candidate preserves exact native KaTeX endpoints, visible painted motion, and the reviewed operator placement. This unlocks the executable-motif architecture slices without generalizing the development-only reference renderer.",
+      "status": "complete"
     },
     {
       "id": "s04",
