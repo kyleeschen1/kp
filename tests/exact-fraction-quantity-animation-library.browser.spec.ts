@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
 
+import {
+  kpDevReviewNoteV2Schema
+} from "../protocols/dev-review-v2-schema.ts";
+
 const descriptorId =
   "editor-animation.animation.exact-fraction-quantity.third-plus-sixth";
 const animationId =
@@ -99,4 +103,171 @@ test("checkpoint, fold, pin, representation, and seek controls round-trip", asyn
     "data-kp-exact-progress-permille",
     "400"
   );
+});
+
+test("Review atomically saves the exact phone animation moment", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`/?animation=${descriptorId}`);
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-dev-review-ready",
+    "true"
+  );
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+  await player.locator("[data-action=\"seek-editor-animation\"]")
+    .fill("0.72");
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-progress-permille",
+    "720"
+  );
+  await player.locator(
+    "[data-kp-exact-active-view=\"number-line\"]"
+  ).click();
+  await player.locator("[data-kp-exact-fold-mode]").selectOption("pinned");
+  await player.locator(
+    "[data-kp-exact-pin-node=\"evaluation.exact-fraction.compose-half\"]"
+  ).check();
+
+  const review = page.locator("[data-kp-dev-review-shell]");
+  await expect(review).toHaveAttribute(
+    "data-kp-dev-review-placement",
+    "captured-moment-sheet"
+  );
+  await review.locator("button.launcher").click();
+  await expect(review.locator(".meta")).toContainText("Locked");
+  await expect(review.locator(".meta")).toContainText("phone");
+  await review.locator("textarea").fill(
+    "Atomic exact-quantity Review wiring proof."
+  );
+
+  // Mutate the live player after the composer locks its capture. The saved
+  // note must still describe the reviewed 72% number-line moment.
+  await player.locator("[data-action=\"seek-editor-animation\"]")
+    .fill("0.91");
+  await player.locator(
+    "[data-kp-exact-active-view=\"partitioned-circle\"]"
+  ).click();
+  await player.locator("[data-kp-exact-fold-mode]")
+    .selectOption("collapsed");
+
+  const responsePromise = page.waitForResponse((response) =>
+    response.url().endsWith("/api/dev/reviews/v2/notes") &&
+    response.request().method() === "POST"
+  );
+  await review.locator("button.save").click();
+  const response = await responsePromise;
+  expect(response.status()).toBe(201);
+  const note = kpDevReviewNoteV2Schema.parse(await response.json());
+  const semantic = note.capture.semantic;
+  const surface = note.capture.render.surface;
+  expect(semantic).toMatchObject({
+    documentId: "editor.animation-library",
+    assetId: animationId,
+    checkpointId: "checkpoint.exact-fraction.merged",
+    progressPermille: 720,
+    animationProgressPermille: 720,
+    phaseProgressPermille: 615,
+    projectionId: "number-line",
+    activePhase: "beat.exact-fraction.merge-three-sixths",
+    foldMode: "pinned",
+    layoutPolicy: "deterministic-active-view-focus"
+  });
+  expect(semantic.foldDetail).toContain(
+    "evaluation.exact-fraction.common-sixths"
+  );
+  expect(semantic.foldDetail).toContain(
+    "evaluation.exact-fraction.compose-half"
+  );
+  expect(semantic.focusRefs.length).toBeGreaterThan(0);
+  expect(note.capture.temporalTrace).toEqual([{
+    offsetMs: 0,
+    progressPermille: 720,
+    phase: "beat.exact-fraction.merge-three-sixths"
+  }]);
+  expect(surface?.profile).toBe("phone");
+  expect(surface?.contentViewport).toMatchObject({
+    width: 390,
+    height: 844,
+    devicePixelRatio: await page.evaluate(() => window.devicePixelRatio)
+  });
+  expect(surface?.shellViewport.width).toBeGreaterThan(0);
+  expect(surface?.stageViewport?.height).toBeGreaterThan(0);
+
+  const visible = await page.evaluate(async (noteId) => {
+    const response = await fetch("/api/dev/reviews/v2/query", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-kp-dev-review": "1"
+      },
+      body: JSON.stringify({
+        scope: "all",
+        detail: "full",
+        limit: 100
+      })
+    });
+    const body = await response.json() as {
+      page: { notes: readonly { id: string }[] };
+    };
+    return response.ok &&
+      body.page.notes.some(({ id }) => id === noteId);
+  }, note.id);
+  expect(visible).toBe(true);
+});
+
+test("Review remains reachable and records the wide four-view layout", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  await page.goto(`/?animation=${descriptorId}`);
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-dev-review-ready",
+    "true"
+  );
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  await player.locator("[data-action=\"seek-editor-animation\"]")
+    .fill("0.24");
+
+  const review = page.locator("[data-kp-dev-review-shell]");
+  await expect(review).toHaveAttribute(
+    "data-kp-dev-review-placement",
+    "bottom-right"
+  );
+  await expect(review.locator("button.launcher")).toBeVisible();
+  await review.locator("button.launcher").click();
+  await review.locator("textarea").fill(
+    "Wide exact-quantity Review wiring proof."
+  );
+  await expect(review.locator(".meta")).toContainText("wide");
+
+  const responsePromise = page.waitForResponse((response) =>
+    response.url().endsWith("/api/dev/reviews/v2/notes") &&
+    response.request().method() === "POST"
+  );
+  await review.locator("button.save").click();
+  const note = kpDevReviewNoteV2Schema.parse(
+    await (await responsePromise).json()
+  );
+  expect(note.capture.semantic).toMatchObject({
+    assetId: animationId,
+    progressPermille: 240,
+    projectionId: "symbolic",
+    layoutPolicy: "four-view-readable-grid"
+  });
+  expect(note.capture.render.surface?.profile).toBe("wide");
+  expect(note.capture.render.surface?.contentViewport).toMatchObject({
+    width: 1_100,
+    height: 800
+  });
 });

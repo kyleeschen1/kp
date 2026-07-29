@@ -1,9 +1,9 @@
 import {
-  kpExactFractionQuantityPreservationManifest as manifest
-} from "../compiler/exact-fraction-quantity-preservation-manifest.ts";
+  kpExactFractionQuantityLayoutPolicy as layoutPolicy
+} from "../../semantic/exact-fraction-quantity-layout-policy.ts";
 import type {
   KpExactFractionQuantityRuntimeFrame
-} from "../../animation/exact-fraction-quantity-runtime.ts";
+} from "../../rendering/exact-fraction-quantity-runtime.ts";
 import type {
   KpExactFractionQuantityViewKind
 } from "../../semantic/exact-fraction-quantity-view-obligations.ts";
@@ -73,7 +73,7 @@ export function certifyKpExactFractionQuantityResponsiveLayout(input: {
 }): KpExactFractionQuantityResponsiveLayout {
   const viewport = normalizeViewport(input);
   const viewOrder =
-    manifest.viewObligations as readonly KpExactFractionQuantityViewKind[];
+    layoutPolicy.viewObligations;
   const activeView = input.activeView ?? "symbolic";
   if (!viewOrder.includes(activeView)) {
     throw new Error(`Unknown exact-fraction active view ${activeView}.`);
@@ -84,7 +84,9 @@ export function certifyKpExactFractionQuantityResponsiveLayout(input: {
       .map(({ selectionId }) => selectionId)
   );
   const mode: KpExactFractionQuantityResponsiveLayout["mode"] =
-    viewport.width >= 760 ? "wide-grid" : "phone-focus";
+    viewport.width >= layoutPolicy.wideMinWidthPx
+      ? "wide-grid"
+      : "phone-focus";
   const stageRect = mode === "wide-grid"
     ? Object.freeze({
         left: 24,
@@ -119,7 +121,7 @@ export function certifyKpExactFractionQuantityResponsiveLayout(input: {
     viewSwitcherVisible: mode === "phone-focus",
     viewOrder: Object.freeze([...viewOrder]),
     slots,
-    minimumMathFontPx: manifest.presentation.minimumMathFontPx,
+    minimumMathFontPx: layoutPolicy.minimumMathFontPx,
     readabilityFloorSatisfied: true as const,
     wrapPolicy: "no-arbitrary-wrap" as const
   };
@@ -148,7 +150,7 @@ export function checkKpExactFractionQuantityResponsiveLayout(
 ): readonly KpExactFractionQuantityLayoutIssue[] {
   const issues: KpExactFractionQuantityLayoutIssue[] = [];
   const expectedViews =
-    manifest.viewObligations as readonly KpExactFractionQuantityViewKind[];
+    layoutPolicy.viewObligations;
   const actualViews = layout.slots.map(({ view }) => view);
   if (new Set(actualViews).size !== actualViews.length) {
     issues.push(issue(

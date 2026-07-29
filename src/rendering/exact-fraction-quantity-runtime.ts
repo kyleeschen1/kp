@@ -1,34 +1,34 @@
 import type {
   KpAnimationRuntimeClock
-} from "./runtime-sampler.ts";
+} from "../animation/runtime-sampler.ts";
 import {
   createKpExactFractionQuantityPresentationPlan,
   type KpExactFractionQuantityPresentationPlan
-} from "./exact-fraction-quantity-presentation-plan.ts";
+} from "../animation/exact-fraction-quantity-presentation-plan.ts";
 import {
   sampleKpExactFractionQuantityNeutralFrame
-} from "./exact-fraction-quantity-neutral-frame.ts";
+} from "../animation/exact-fraction-quantity-neutral-frame.ts";
 import {
   sampleKpFissionFusion,
   type KpFissionFusionFrame
-} from "./fission-fusion.ts";
+} from "../animation/fission-fusion.ts";
 import {
   projectKpExactFractionQuantityBar
-} from "../rendering/exact-fraction-quantity-bar-projection.ts";
+} from "./exact-fraction-quantity-bar-projection.ts";
 import {
   projectKpExactFractionQuantityCircle
-} from "../rendering/exact-fraction-quantity-circle-projection.ts";
+} from "./exact-fraction-quantity-circle-projection.ts";
 import {
   projectKpExactFractionQuantityNumberLine
-} from "../rendering/exact-fraction-quantity-number-line-projection.ts";
+} from "./exact-fraction-quantity-number-line-projection.ts";
 import {
   certifyKpExactFractionQuantitySynchronizedFrame,
   type KpExactFractionQuantitySynchronizedFrame
-} from "../rendering/exact-fraction-quantity-synchronized-projection.ts";
+} from "./exact-fraction-quantity-synchronized-projection.ts";
 import {
   createKpExactFractionQuantitySymbolicProjection,
   type KpExactFractionQuantitySymbolicProjection
-} from "../rendering/exact-fraction-quantity-symbolic-projection.ts";
+} from "./exact-fraction-quantity-symbolic-projection.ts";
 import {
   createKpExactFractionQuantityTrace,
   type KpExactFractionQuantityTrace

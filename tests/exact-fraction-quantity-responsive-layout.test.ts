@@ -4,7 +4,7 @@ import test from "node:test";
 import {
   createKpExactFractionQuantityRuntimeSession,
   sampleKpExactFractionQuantityRuntime
-} from "../src/animation/exact-fraction-quantity-runtime.ts";
+} from "../src/rendering/exact-fraction-quantity-runtime.ts";
 import {
   certifyKpExactFractionQuantityResponsiveLayout,
   checkKpExactFractionQuantityResponsiveLayout,

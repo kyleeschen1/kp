@@ -3,7 +3,7 @@ import {
   sampleKpExactFractionQuantityRuntime,
   type KpExactFractionQuantityRuntimeFrame,
   type KpExactFractionQuantityRuntimeSession
-} from "../animation/exact-fraction-quantity-runtime.ts";
+} from "../rendering/exact-fraction-quantity-runtime.ts";
 import {
   kpExactFractionQuantityAnimationId
 } from "../animation/exact-fraction-quantity-adapter.ts";
@@ -16,6 +16,9 @@ import {
 import type {
   KpExactFractionQuantityViewKind
 } from "../semantic/exact-fraction-quantity-view-obligations.ts";
+import {
+  kpExactFractionQuantityLayoutPolicy
+} from "../semantic/exact-fraction-quantity-layout-policy.ts";
 import {
   kpExactFractionQuantityPreservationManifest as manifest
 } from "../reader/compiler/exact-fraction-quantity-preservation-manifest.ts";
@@ -187,6 +190,8 @@ function mountSurface(
           : { pinnedNodeIds: [] })
       });
       player.dataset["kpExactFoldMode"] = session.libraryState.foldMode;
+      player.dataset["kpExactPinnedNodeIds"] =
+        session.libraryState.pinnedNodeIds.join(",");
       syncFoldControls(slot, session.libraryState);
       writeRoute(player, session, true);
       return;
@@ -206,6 +211,8 @@ function mountSurface(
           : [KP_EXACT_FRACTION_FOLDABLE_NODE_IDS[0]]
       });
       player.dataset["kpExactFoldMode"] = session.libraryState.foldMode;
+      player.dataset["kpExactPinnedNodeIds"] =
+        session.libraryState.pinnedNodeIds.join(",");
       syncFoldControls(slot, session.libraryState);
       writeRoute(player, session, true);
     }
@@ -227,6 +234,13 @@ function syncSurface(
   player.dataset["kpExactCheckpoint"] = checkpoint.id;
   player.dataset["kpExactProgressPermille"] =
     String(frame.projection.neutralFrame.progressPermille);
+  player.dataset["kpExactPhaseProgressPermille"] = String(
+    Math.round(frame.projection.neutralFrame.beat.localProgress * 1_000)
+  );
+  player.dataset["kpExactFocusRefs"] =
+    frame.projection.neutralFrame.focusSelectionIds.join(",");
+  player.dataset["kpExactPinnedNodeIds"] =
+    session.libraryState.pinnedNodeIds.join(",");
   player.dataset["kpExactRendererSessionId"] = frame.rendererSessionId;
   player.dataset["kpExactPaintOwnership"] = frame.ownershipPhase;
   slot.querySelector<HTMLElement>("[data-kp-exact-phase-label]")
@@ -573,7 +587,7 @@ function renderSurfaceShell(
         .kp-exact-quantity__outline { display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; margin-block:.7rem; }
         .kp-exact-quantity__outline label { display:flex; gap:.3rem; align-items:center; }
         .kp-exact-quantity__pins { display:flex; gap:.65rem; flex-wrap:wrap; }
-        @media (max-width:759px) {
+        @media (max-width:${kpExactFractionQuantityLayoutPolicy.wideMinWidthPx - 1}px) {
           .kp-exact-quantity__grid { grid-template-columns:1fr; min-height:18rem; }
           .kp-exact-quantity__view { display:none; min-height:18rem; }
           .kp-exact-quantity[data-kp-exact-active-view="symbolic"] [data-kp-exact-view="symbolic"],
@@ -581,7 +595,7 @@ function renderSurfaceShell(
           .kp-exact-quantity[data-kp-exact-active-view="fraction-bar"] [data-kp-exact-view="fraction-bar"],
           .kp-exact-quantity[data-kp-exact-active-view="number-line"] [data-kp-exact-view="number-line"] { display:grid; }
         }
-        @media (min-width:760px) { .kp-exact-quantity__views { display:none; } }
+        @media (min-width:${kpExactFractionQuantityLayoutPolicy.wideMinWidthPx}px) { .kp-exact-quantity__views { display:none; } }
       </style>
       <header class="kp-exact-quantity__header">
         <p><strong data-kp-exact-phase-label>Exact fraction quantity</strong><br><span data-kp-exact-progress-label>0%</span></p>

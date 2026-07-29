@@ -49,6 +49,64 @@
     "npm run build",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s20 exact quantity unit and contract suite",
+      "checkedAt": "2026-07-29T07:05:58.052Z",
+      "notes": "85 exact semantics, projection, runtime, responsive, library, and type-law tests passed."
+    },
+    {
+      "command": "npm run test:browser:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s20 direct Animation Library Review integration",
+      "checkedAt": "2026-07-29T07:05:59.146Z",
+      "notes": "4 Chromium checks passed, including atomic locked-frame persistence, v2 schema parse, query visibility, phone sheet, and wide fixed placement."
+    },
+    {
+      "command": "npm run test:browser:animation-workbench",
+      "status": "passed",
+      "scope": "s20 existing Workbench Review regression",
+      "checkedAt": "2026-07-29T07:06:00.016Z",
+      "notes": "14 Chromium checks passed after reconciling the browser assertion to authoritative roadmap revision 13."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20 repository type safety",
+      "checkedAt": "2026-07-29T07:06:00.893Z",
+      "notes": "Application, node, test, protocol-dependent, and domain type checks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s20 dependency direction",
+      "checkedAt": "2026-07-29T07:06:01.762Z",
+      "notes": "All four architecture gates passed after placing renderer-composing runtime in rendering and extracting one shared layout policy."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s20 production build",
+      "checkedAt": "2026-07-29T07:06:02.641Z",
+      "notes": "Production build passed with direct Review isolated behind the DEV-only dynamic boundary."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s20 production exclusion",
+      "checkedAt": "2026-07-29T07:06:03.524Z",
+      "notes": "239 production files passed all 6 forbidden Review marker checks."
+    },
+    {
+      "command": "npm run review:logs -- audit",
+      "status": "passed",
+      "scope": "s20 durable Review inbox integrity",
+      "checkedAt": "2026-07-29T07:06:04.401Z",
+      "notes": "Real review log audit remained byte stable and identity/order stable with 25 notes."
+    }
+  ],
   "expectedLearning": [
     "Whether exact partition refinement and contributor lineage can synchronize symbolic and concrete views without representation-owned math.",
     "Whether existing canonical motion, clock, layout, host, Review, and promotion seams amortize a new multi-view exemplar without new runtime categories.",
@@ -233,7 +291,8 @@
     {
       "id": "s20",
       "title": "wire-review-capture",
-      "status": "planned"
+      "summary": "Mounted the existing Review composer on the direct single-page Animation Library through one DEV-only provider and one shared lifecycle slot. Each immutable capture now saves canonical animation identity, exact progress, phase-local progress, phase, checkpoint, active representation, fold mode and pins, focus refs, direction, renderer owners, wide/phone profile, shell/content/stage dimensions, and DPR with its comment; phone and wide browser tests prove schema round-trip, real inbox query visibility, reachability, and post-capture mutation isolation. Extracted one cross-layer layout policy and moved renderer-composing runtime out of the neutral animation layer so architecture gates pass without duplicate breakpoint or view authority; production closure proves the Review graph is erased.",
+      "status": "complete"
     },
     {
       "id": "s21",

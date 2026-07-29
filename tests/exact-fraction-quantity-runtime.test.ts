@@ -5,7 +5,7 @@ import {
   createKpExactFractionQuantityRuntimeSession,
   isKpExactFractionQuantityRuntimeSession,
   sampleKpExactFractionQuantityRuntime
-} from "../src/animation/exact-fraction-quantity-runtime.ts";
+} from "../src/rendering/exact-fraction-quantity-runtime.ts";
 import {
   kpExactFractionQuantityPreservationManifest as manifest
 } from "../src/reader/compiler/exact-fraction-quantity-preservation-manifest.ts";

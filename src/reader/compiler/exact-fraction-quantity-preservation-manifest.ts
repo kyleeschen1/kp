@@ -1,3 +1,7 @@
+import {
+  kpExactFractionQuantityLayoutPolicy as layoutPolicy
+} from "../../semantic/exact-fraction-quantity-layout-policy.ts";
+
 /**
  * Reviewed observable boundary for the first exact-quantity exemplar.
  *
@@ -104,12 +108,7 @@ export const kpExactFractionQuantityPreservationManifest = Object.freeze({
       endPermille: 1_000
     })
   ]),
-  viewObligations: Object.freeze([
-    "symbolic",
-    "partitioned-circle",
-    "fraction-bar",
-    "number-line"
-  ] as const),
+  viewObligations: layoutPolicy.viewObligations,
   foldContract: Object.freeze({
     modes: Object.freeze(["expanded", "collapsed", "automatic", "pinned"]),
     preservedTruth: Object.freeze([
@@ -155,19 +154,14 @@ export const kpExactFractionQuantityPreservationManifest = Object.freeze({
     ])
   }),
   presentation: Object.freeze({
-    widePolicy: "four-view-readable-grid",
-    phonePolicy: "deterministic-active-view-focus",
-    minimumMathFontPx: 18,
+    widePolicy: layoutPolicy.widePolicy,
+    phonePolicy: layoutPolicy.phonePolicy,
+    minimumMathFontPx: layoutPolicy.minimumMathFontPx,
     fullMotionSamplesPermille: Object.freeze([
       0, 90, 180, 240, 400, 440, 560, 720, 820, 910, 1_000
     ]),
     reducedMotionEndpointsPermille: Object.freeze([0, 1_000]),
-    reviewViewports: Object.freeze([
-      Object.freeze({ width: 1_100, height: 800, deviceScaleFactor: 1 }),
-      Object.freeze({ width: 390, height: 844, deviceScaleFactor: 1 }),
-      Object.freeze({ width: 1_100, height: 800, deviceScaleFactor: 2 }),
-      Object.freeze({ width: 390, height: 844, deviceScaleFactor: 2 })
-    ])
+    reviewViewports: layoutPolicy.reviewViewports
   }),
   preservationBoundary: Object.freeze({
     addendUnitIdsMustMatch: true,

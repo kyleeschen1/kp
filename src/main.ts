@@ -113,6 +113,9 @@ import {
   loadKpAnimationWorkbenchDevelopmentReview
 } from "./editor/semantic-animation-workbench-review-capture-loader.ts";
 import {
+  loadKpEditorAnimationLibraryDevelopmentReview
+} from "./editor/editor-animation-library-review-capture-loader.ts";
+import {
   resolveKpAnimationWorkbenchRepresentation
 } from "./editor/semantic-animation-workbench-representation-selection.ts";
 import {
@@ -170,7 +173,7 @@ let activeView:
   | "ftc-tutorial"
   | "animation-workbench" = "editor";
 let viewRevision = 0;
-let disposeAnimationWorkbenchDevelopmentReview:
+let disposeAnimationDevelopmentReview:
   | (() => void)
   | undefined;
 const graph3DWebGLVisibilityObservers = new WeakMap<
@@ -216,7 +219,7 @@ document.addEventListener("visibilitychange", () => {
 });
 
 window.addEventListener("pagehide", () => {
-  disposeAnimationWorkbenchReviewCapture();
+  disposeAnimationDevelopmentReviewCapture();
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
 });
@@ -437,8 +440,8 @@ async function compileDocument(): Promise<void> {
 
 function renderEditor(): void {
   activeView = "editor";
-  viewRevision += 1;
-  disposeAnimationWorkbenchReviewCapture();
+  const revision = ++viewRevision;
+  disposeAnimationDevelopmentReviewCapture();
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
@@ -453,12 +456,13 @@ function renderEditor(): void {
   hydrateKpEditorAnimationPlayers(appRoot);
   hydrateEquationMotionDemos(appRoot);
   hydrateGraph3DWebGL(appRoot, editorDocument.objects);
+  void mountEditorAnimationLibraryReviewCapture(revision);
 }
 
 function renderAnimationWorkbenchView(): void {
   activeView = "animation-workbench";
   const revision = ++viewRevision;
-  disposeAnimationWorkbenchReviewCapture();
+  disposeAnimationDevelopmentReviewCapture();
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
@@ -628,14 +632,25 @@ async function mountAnimationWorkbenchReviewCapture(
   if (activeView !== "animation-workbench" || revision !== viewRevision) {
     return;
   }
-  disposeAnimationWorkbenchReviewCapture();
-  disposeAnimationWorkbenchDevelopmentReview =
+  disposeAnimationDevelopmentReviewCapture();
+  disposeAnimationDevelopmentReview =
     client.mountKpAnimationWorkbenchDevReview(window);
 }
 
-function disposeAnimationWorkbenchReviewCapture(): void {
-  disposeAnimationWorkbenchDevelopmentReview?.();
-  disposeAnimationWorkbenchDevelopmentReview = undefined;
+async function mountEditorAnimationLibraryReviewCapture(
+  revision: number
+): Promise<void> {
+  if (loadKpEditorAnimationLibraryDevelopmentReview === undefined) return;
+  const client = await loadKpEditorAnimationLibraryDevelopmentReview();
+  if (activeView !== "editor" || revision !== viewRevision) return;
+  disposeAnimationDevelopmentReviewCapture();
+  disposeAnimationDevelopmentReview =
+    client.mountKpEditorAnimationLibraryDevReview(window);
+}
+
+function disposeAnimationDevelopmentReviewCapture(): void {
+  disposeAnimationDevelopmentReview?.();
+  disposeAnimationDevelopmentReview = undefined;
 }
 
 async function hydrateAnimationWorkbenchAcceptance(
@@ -1010,7 +1025,7 @@ function isEditableTarget(target: EventTarget | null): boolean {
 async function renderFtcTutorialView(): Promise<void> {
   activeView = "ftc-tutorial";
   const revision = ++viewRevision;
-  disposeAnimationWorkbenchReviewCapture();
+  disposeAnimationDevelopmentReviewCapture();
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
@@ -1087,7 +1102,7 @@ async function renderProjectDashboardView(
 ): Promise<void> {
   activeView = "dashboard";
   const revision = ++viewRevision;
-  disposeAnimationWorkbenchReviewCapture();
+  disposeAnimationDevelopmentReviewCapture();
   projectDashboardQuery = query;
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
