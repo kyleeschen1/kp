@@ -71,6 +71,23 @@ export interface KpCanonicalFormatPromotionEvidence {
 const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
   KpCanonicalFormatPromotionEvidence>([
   [
+    "animation.exact-fraction-quantity.third-plus-sixth",
+    {
+      animationId:
+        "animation.exact-fraction-quantity.third-plus-sixth",
+      exclusiveCanonicalPaint: true,
+      requiredMotifParity: true,
+      responsiveRuntimeGates: true,
+      humanReviewApproved: false,
+      compatibilityPaintRetired: true,
+      releaseGatePassed: false,
+      presentationCoverage: "verified-animated",
+      evidenceSourceIds: [
+        "run-contract.kp.exact-fraction-quantity-promotion-v1"
+      ]
+    }
+  ],
+  [
     "animation.generated.radical.square-root-as-power",
     completeCanonicalFormatEvidence(
       "animation.generated.radical.square-root-as-power",

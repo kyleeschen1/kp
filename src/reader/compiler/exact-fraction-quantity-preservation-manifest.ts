@@ -109,7 +109,7 @@ export const kpExactFractionQuantityPreservationManifest = Object.freeze({
     "partitioned-circle",
     "fraction-bar",
     "number-line"
-  ]),
+  ] as const),
   foldContract: Object.freeze({
     modes: Object.freeze(["expanded", "collapsed", "automatic", "pinned"]),
     preservedTruth: Object.freeze([

@@ -553,6 +553,38 @@
     }
   },
   {
+    "id": "editor-animation.animation.exact-fraction-quantity.third-plus-sixth",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.exact-fraction-quantity.third-plus-sixth",
+    "title": "One third plus one sixth",
+    "summary": "See 1/3 + 1/6 become the same exact half across four synchronized representations.",
+    "renderTargetKinds": [
+      "diagram"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 7500,
+    "beatCount": 5,
+    "tags": [
+      "animation",
+      "arithmetic",
+      "exact-quantity",
+      "fraction",
+      "multi-representation",
+      "reviewable"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.generated.add-zero",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.generated.add-zero",

@@ -36,10 +36,14 @@ import {
 import {
   createGeneratedLinearAlgebraProblemFixtures
 } from "../semantic/generated-linear-algebra-problem-fixture.ts";
+import {
+  createKpExactFractionQuantityAnimationAsset
+} from "./exact-fraction-quantity-adapter.ts";
 
 export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
   return [
     ...createGeneratedAlgebraAnimationAssets(),
+    createKpExactFractionQuantityAnimationAsset(),
     createAcceptedGeneratedAddZeroAnimationAsset(),
     createAcceptedGeneratedSubstitutionAnimationAsset(),
     createProvisionalIncorrectSubstitutionAnimationAsset(),

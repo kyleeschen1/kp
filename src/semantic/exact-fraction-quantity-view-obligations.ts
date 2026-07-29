@@ -9,8 +9,15 @@ declare const kpExactFractionViewBundleBrand: unique symbol;
 
 const sealedViewBundles = new WeakSet<object>();
 
+// Keep the required-view union explicit at the authoring boundary. Inferring
+// through the manifest import can widen to `string` under NodeNext project
+// references, which would silently turn the mapped set into an index signature
+// and let a missing representation typecheck.
 export type KpExactFractionQuantityViewKind =
-  typeof manifest.viewObligations[number];
+  | "symbolic"
+  | "partitioned-circle"
+  | "fraction-bar"
+  | "number-line";
 
 export interface KpExactFractionQuantityViewProjection<
   ViewKind extends KpExactFractionQuantityViewKind

@@ -286,6 +286,27 @@
       "scope": "slice s18 responsive layout certificate",
       "checkedAt": "2026-07-29T06:18:34.162Z",
       "notes": "Wide-grid, phone-focus, exhaustive view slots, 18px readability floor, unit scale, and sealed layout types compile across all TypeScript projects."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s19 lazy Animation Library integration",
+      "checkedAt": "2026-07-29T06:45:47.196Z",
+      "notes": "Eighty-five exact-quantity tests pass, including the valid asset, typed URL control round-trip, lazy pack registration, no-new-page isolation, and fail-closed partial-not-ported catalog status."
+    },
+    {
+      "command": "playwright exact fraction quantity library chromium",
+      "status": "passed",
+      "scope": "slice s19 shared browser host",
+      "checkedAt": "2026-07-29T06:45:48.082Z",
+      "notes": "Two Chromium tests pass: the exemplar loads only through exact-quantity, mounts the high-priority synchronized adapter in the existing player, reaches the shared native KaTeX compositor, exposes four views, and round-trips checkpoint, seek, fold, pin, active-view, and reload state."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice s19 production isolation and type closure",
+      "checkedAt": "2026-07-29T06:45:48.884Z",
+      "notes": "TypeScript and production build pass. Vite emits exact-quantity as an independent lazy chunk; the main entry does not import the exemplar renderer and no HTML display page was added."
     }
   ],
   "expectedLearning": [

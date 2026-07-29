@@ -142,10 +142,10 @@ test("part identity is partition-scoped at compile time", () => {
   });
 
   if (false as boolean) {
-    // @ts-expect-error A sixth ID cannot silently become a third ID.
     createKpFinitePartitionSelection(
       thirds,
       "selection.invalid",
+      // @ts-expect-error A sixth ID cannot silently become a third ID.
       [sixths.parts[0]!.id]
     );
   }

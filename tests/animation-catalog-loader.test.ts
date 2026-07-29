@@ -47,6 +47,7 @@ test("lazy capability packs preserve the complete concrete catalog", async () =>
 
 test("all declared pack boundaries are exercised by editor metadata", () => {
   const expectedPackIds: readonly KpAnimationCatalogPackId[] = [
+    "exact-quantity",
     "algebra",
     "generated-drafts",
     "generated-problems",
@@ -73,6 +74,6 @@ test("catalog loader retains literal dynamic-import boundaries", async () => {
   assert.doesNotMatch(source, /from "\.\/catalog\.ts"/);
   assert.equal(
     [...source.matchAll(/import\("\.\/catalog-packs\/[^"]+\.ts"\)/g)].length,
-    7
+    8
   );
 });
