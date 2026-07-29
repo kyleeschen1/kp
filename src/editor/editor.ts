@@ -201,6 +201,19 @@ export function renderEditorDocument(
   `;
 }
 
+export function renderEditorAnimationLibraryHost(
+  requestedDescriptorId: string | undefined
+): string {
+  // The catalog already owns animation discovery. This projection keeps the
+  // existing player and lesson context while removing the editor chrome that
+  // previously constrained review to the editor's narrow preview column.
+  return `
+    <main class="editor-animation-library-host" data-kp-editor-animation-library-host>
+      ${renderEditorAnimationLibrary(requestedDescriptorId, false)}
+    </main>
+  `;
+}
+
 function renderPreviewStage(
   document: KpDocument,
   equationAnimationId: string | undefined,
@@ -258,7 +271,8 @@ function renderKpFtcTutorialEditorLauncher(): string {
 }
 
 function renderEditorAnimationLibrary(
-  requestedDescriptorId: string | undefined
+  requestedDescriptorId: string | undefined,
+  includePicker = true
 ): string {
   const descriptors = createKpEditorAnimationLibrary();
   const selected = selectKpEditorAnimationDescriptor(
@@ -276,7 +290,7 @@ function renderEditorAnimationLibrary(
 
   return `
     <section class="editor-animation-library" data-kp-editor-animation-library data-kp-editor-animation-descriptor-id="${escapeHtml(selected.id)}" data-kp-editor-animation-id="${escapeHtml(selected.animationId)}" data-kp-editor-animation-surface="${escapeHtml(surface.kind)}" data-kp-editor-animation-maturity="${selected.promotion?.maturity ?? "unclassified"}" data-kp-editor-animation-novelty="${selected.promotion?.novelty ?? "unclassified"}" data-kp-editor-animation-gold-cohort="${selected.promotion?.goldCohort === true}"${canonicalLesson === undefined ? "" : ` data-kp-editor-animation-canonical-choreography="${escapeHtml(canonicalLesson.presentation.choreographyId)}" data-kp-editor-animation-canonical-lesson="${escapeHtml(canonicalLesson.experience.id)}"`} aria-labelledby="editor-animation-library-title">
-      ${renderKpEditorAnimationPicker(picker)}
+      ${includePicker ? renderKpEditorAnimationPicker(picker) : ""}
       <div class="editor-animation-library__selection">
         <p class="eyebrow">${canonicalLesson === undefined ? "Concrete animation asset" : "Canonical lesson projection"}</p>
         <h3 id="editor-animation-library-title">${escapeHtml(selected.title)}</h3>

@@ -182,6 +182,40 @@ test("featured exemplars resolve one primary host without duplicating runtimes",
   }
 });
 
+test("operation evaluation uses the focused dashboard host without a second runtime", () => {
+  const entry = createKpAnimationLibraryDisplayCatalog().find(
+    ({ animationId }) =>
+      animationId === "animation.operation-evaluation.one-plus-two"
+  );
+  const primary = entry?.representations.find(
+    ({ id }) => id === entry.primaryRepresentationId
+  );
+
+  assert.deepEqual(primary, {
+    id: "library.editor.operation-evaluation-focused-host",
+    label: "Animation + lesson",
+    kind: "editor",
+    href:
+      "/?view=animation-library-host&animation=" +
+      "editor-animation.animation.operation-evaluation.one-plus-two",
+    role: "canonical-host"
+  });
+  assert.equal(
+    entry?.representations.filter(
+      ({ role }) => role === "canonical-host"
+    ).length,
+    1
+  );
+  assert.ok(
+    entry?.representations.some(
+      ({ id, role }) =>
+        id ===
+          "editor-animation.animation.operation-evaluation.one-plus-two" &&
+        role === "projection"
+    )
+  );
+});
+
 test("radical and fraction review hosts point to approved canonical readers", () => {
   const catalog = createKpAnimationLibraryDisplayCatalog();
   const radical = catalog.find(

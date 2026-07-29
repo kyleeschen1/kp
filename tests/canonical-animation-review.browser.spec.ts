@@ -27,6 +27,8 @@ const fractionCompositionId =
   "animation.fraction-composition.two-thirds-solve";
 const exactFractionQuantityId =
   "animation.exact-fraction-quantity.third-plus-sixth";
+const operationEvaluationId =
+  "animation.operation-evaluation.one-plus-two";
 const expectedReviewCommit = execFileSync(
   "git",
   ["rev-parse", "--short=12", "HEAD"],
@@ -184,6 +186,51 @@ test("deep links preserve representation and phone preview without overflow", as
     document.documentElement.scrollWidth -
     document.documentElement.clientWidth
   )).toBeLessThanOrEqual(1);
+});
+
+test("operation evaluation opens in the wide focused player host", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_280, height: 900 });
+  await page.goto(
+    "/canonical-animation-review.html" +
+    `?animation=${encodeURIComponent(operationEvaluationId)}`
+  );
+
+  const library = page.locator("[data-kp-animation-library]");
+  const frameElement = page.locator("[data-animation-library-frame]");
+  const frame = page.frameLocator("[data-animation-library-frame]");
+  await expect(library).toHaveAttribute(
+    "data-representation-id",
+    "library.editor.operation-evaluation-focused-host"
+  );
+  await expect(frameElement).toHaveAttribute(
+    "src",
+    "/?view=animation-library-host&animation=" +
+      "editor-animation.animation.operation-evaluation.one-plus-two"
+  );
+  await expect(frame.locator(
+    "[data-kp-editor-animation-library-host]"
+  )).toBeVisible();
+  await expect(frame.locator(".editor-shell")).toHaveCount(0);
+  await expect(frame.locator(
+    "[data-kp-operation-evaluation-reference-comparison]"
+  )).toBeVisible();
+  await expect(frame.locator("[data-kp-dev-review-shell]")).toHaveCount(0);
+  await expect(page.locator("[data-kp-dev-review-shell]")).toHaveCount(1);
+  await expect(frameElement).toHaveCount(1);
+
+  const hostWidth = await frame.locator(
+    "[data-kp-editor-animation-library]"
+  ).evaluate((element) => element.getBoundingClientRect().width);
+  expect(hostWidth).toBeGreaterThan(800);
+  const panelTops = await frame.locator(
+    ".kp-operation-evaluation-comparison__panel"
+  ).evaluateAll((panels) =>
+    panels.map((panel) => panel.getBoundingClientRect().top)
+  );
+  expect(panelTops).toHaveLength(2);
+  expect(Math.abs(panelTops[0]! - panelTops[1]!)).toBeLessThanOrEqual(1);
 });
 
 test("automatic fold schedules certify every product-settlement boundary frame", async ({

@@ -164,6 +164,16 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
 
 const supplementalRepresentations = [
   {
+    animationId: "animation.operation-evaluation.one-plus-two",
+    id: "library.editor.operation-evaluation-focused-host",
+    label: "Animation + lesson",
+    kind: "editor",
+    href:
+      "/?view=animation-library-host&animation=" +
+      "editor-animation.animation.operation-evaluation.one-plus-two",
+    role: "canonical-host"
+  },
+  {
     animationId: "animation.generated.radical.square-root-as-power",
     id: "library.reader.radical-succession",
     label: "Reader integration",
@@ -205,6 +215,10 @@ const supplementalRepresentations = [
 )[];
 
 const preferredRepresentationByAnimation = new Map<string, string>([
+  [
+    "animation.operation-evaluation.one-plus-two",
+    "library.editor.operation-evaluation-focused-host"
+  ],
   [
     "animation.generated.radical.square-root-as-power",
     "library.reader.radical-succession"

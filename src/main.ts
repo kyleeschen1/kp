@@ -3,6 +3,7 @@ import "./styles.css";
 
 import {
   createInitialEditorDocument,
+  renderEditorAnimationLibraryHost,
   renderEditorDocument
 } from "./editor/editor.ts";
 import {
@@ -170,6 +171,7 @@ let ftcTutorialEditorClientPromise: Promise<FtcTutorialEditorClient> | undefined
 let activeView:
   | "dashboard"
   | "editor"
+  | "animation-library-host"
   | "ftc-tutorial"
   | "animation-workbench" = "editor";
 let viewRevision = 0;
@@ -204,10 +206,13 @@ registerKpEditorEquationSurfaceAdapter();
 registerKpEditorDiagramSvgAdapter();
 registerKpEditorGraphSvgViewportAdapter();
 
-if (
-  new URLSearchParams(window.location.search).get("view") === "ftc-tutorial"
-) {
+const requestedView =
+  new URLSearchParams(window.location.search).get("view");
+
+if (requestedView === "ftc-tutorial") {
   void renderFtcTutorialView();
+} else if (requestedView === "animation-library-host") {
+  renderAnimationLibraryHostView();
 } else if (readKpSemanticAnimationWorkbenchRoute(window.location.search).active) {
   renderAnimationWorkbenchView();
 } else {
@@ -459,6 +464,30 @@ function renderEditor(): void {
   void mountEditorAnimationLibraryReviewCapture(revision);
 }
 
+function renderAnimationLibraryHostView(): void {
+  activeView = "animation-library-host";
+  const revision = ++viewRevision;
+  disposeAnimationDevelopmentReviewCapture();
+  disposeKpEditorAnimationPlayers(appRoot);
+  disposeKpEditorEquationStageHotPathCaches(appRoot);
+  disposeGraph3DWebGL(appRoot);
+  appRoot.innerHTML = renderEditorAnimationLibraryHost(
+    selectedEditorAnimationDescriptorId
+  );
+  // This host is a projection of the existing player, so it follows the same
+  // hydration order and observes the same initial runtime frame.
+  hydrateKpEditorAnimationSurfaces(appRoot);
+  hydrateKpEditorAnimationLiveDiagnostics(appRoot);
+  hydrateKpEditorAnimationPlayers(appRoot);
+  if (
+    window.frameElement?.hasAttribute(
+      "data-animation-library-frame"
+    ) !== true
+  ) {
+    void mountEditorAnimationLibraryReviewCapture(revision);
+  }
+}
+
 function renderAnimationWorkbenchView(): void {
   activeView = "animation-workbench";
   const revision = ++viewRevision;
@@ -642,7 +671,11 @@ async function mountEditorAnimationLibraryReviewCapture(
 ): Promise<void> {
   if (loadKpEditorAnimationLibraryDevelopmentReview === undefined) return;
   const client = await loadKpEditorAnimationLibraryDevelopmentReview();
-  if (activeView !== "editor" || revision !== viewRevision) return;
+  if (
+    (activeView !== "editor" &&
+      activeView !== "animation-library-host") ||
+    revision !== viewRevision
+  ) return;
   disposeAnimationDevelopmentReviewCapture();
   disposeAnimationDevelopmentReview =
     client.mountKpEditorAnimationLibraryDevReview(window);

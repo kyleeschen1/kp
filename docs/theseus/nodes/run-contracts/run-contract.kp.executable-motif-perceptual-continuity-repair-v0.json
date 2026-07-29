@@ -126,6 +126,55 @@
       "scope": "s03 pre-checkpoint control-plane integrity",
       "checkedAt": "2026-07-29T20:20:04.794Z",
       "notes": "Workspace validated before the human checkpoint."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03 focused dashboard host typing",
+      "checkedAt": "2026-07-29T20:42:34.207Z",
+      "notes": "Application, test, Node, and domain TypeScript boundaries pass after adding the compact existing-player host."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/canonical-animation-review.browser.spec.ts --project=chromium --workers=1 --grep operation-evaluation-focused-host",
+      "status": "passed",
+      "scope": "s03 focused Animation Library dashboard host",
+      "checkedAt": "2026-07-29T20:42:35.253Z",
+      "notes": "The operation evaluation entry selects one compact host, removes editor chrome, retains one Review shell, exceeds 800px usable width at 1280px, and places both synchronized comparison panels side by side."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-continuity",
+      "status": "passed",
+      "scope": "s03 compositor and player preservation after dashboard projection",
+      "checkedAt": "2026-07-29T20:42:36.117Z",
+      "notes": "24 of 24 Chromium, Firefox, and WebKit checks pass across wide and phone playback, shared clock, endpoints, rewind, replay, containment, and Review capture."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s03 production dashboard projection",
+      "checkedAt": "2026-07-29T20:42:36.986Z",
+      "notes": "Typecheck and Vite production build pass; the focused catalog host reuses the existing production player and the reference comparison remains development-only."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/canonical-animation-review.browser.spec.ts --project=chromium --workers=1 --grep operation-evaluation-focused-host",
+      "status": "failed",
+      "scope": "s03 evidence-command correction",
+      "checkedAt": "2026-07-29T20:42:49.640Z",
+      "notes": "This grep matched no test title; superseded immediately by the exact human-readable title grep below."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/canonical-animation-review.browser.spec.ts --project=chromium --workers=1 --grep operation evaluation opens",
+      "status": "passed",
+      "scope": "s03 focused Animation Library dashboard host",
+      "checkedAt": "2026-07-29T20:42:50.806Z",
+      "notes": "One focused Chromium check passed: compact host selection, one outer Review owner, greater-than-800px player width, and side-by-side synchronized comparison panels."
+    },
+    {
+      "command": "npm run visual:animation-library-operation-evaluation",
+      "status": "passed",
+      "scope": "s03 stable focused Animation Library dashboard host",
+      "checkedAt": "2026-07-29T20:43:46.229Z",
+      "notes": "The repository-owned visual entrypoint passes the compact-host, single-Review, greater-than-800px width, and side-by-side comparison contract."
     }
   ],
   "allowedWork": [
@@ -171,7 +220,7 @@
     {
       "id": "s03",
       "title": "human-reference-selection-checkpoint",
-      "summary": "Mounted one lazy development-only synchronized comparison inside the existing Animation Library. The recoverable continuous-recognition sampler and rejected zero-area runtime share the existing player clock and expose phase, paint-owner, ink-estimate, typography, and native-endpoint telemetry. Automated wide, phone, Chromium, Firefox, WebKit, rewind, replay, containment, and Review capture gates pass; awaiting explicit human selection before s04.",
+      "summary": "Moved the required human comparison into the existing searchable Animation Library dashboard through one compact projection of the existing editor player. The host removes full editor chrome and its 34rem constraint, preserves the same descriptor, adapter, compositor, clock, controls, lesson context, and outer Review owner, and measures above 800px with side-by-side candidates at a 1280px viewport. Focused dashboard, type, build, and 24-check cross-browser continuity gates pass. The broader dashboard command remains red only on a stale fraction-status expectation and an unrelated live-inbox lookup; awaiting explicit human reference selection before s04.",
       "status": "in-progress"
     },
     {
