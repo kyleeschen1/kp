@@ -118,8 +118,8 @@
     {
       "id": "s01",
       "title": "materialize-approved-contract",
-      "summary": "Materializing the approved 25-slice contract, durable roadmap decision, source refs, typed autonomy fields, and dirty-worktree preservation boundary before implementation.",
-      "status": "in-progress"
+      "summary": "Materialized and committed the user-approved proposal, durable roadmap placement, stable promotion authority, target, decision, and corrected typed 25-slice run contract. The autonomy gate passes with explicit cadence, verification, stop conditions, and dirty-worktree preservation; the incomplete v0 draft is retained as superseded history.",
+      "status": "complete"
     },
     {
       "id": "s02",
