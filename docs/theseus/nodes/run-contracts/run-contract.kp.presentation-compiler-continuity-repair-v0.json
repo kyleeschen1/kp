@@ -75,6 +75,20 @@
       "status": "passed",
       "scope": "s03 inventory typing",
       "checkedAt": "2026-07-29T17:35:22.252Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s04 nominal continuity contract",
+      "checkedAt": "2026-07-29T17:38:18.650Z",
+      "notes": "Static fixtures prove raw plans cannot acquire verified authority and reject binary transfer, caller opacity, caller path, and handoff-time access."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s04 operation presentation regression",
+      "checkedAt": "2026-07-29T17:38:24.002Z",
+      "notes": "All 109 existing operation presentation checks remain green after adding the sealed paint-continuity authority."
     }
   ],
   "allowedWork": [
@@ -124,7 +138,8 @@
     {
       "id": "s04",
       "title": "type-verified-paint-continuity",
-      "status": "planned"
+      "summary": "Added a sealed renderer-neutral paint-continuity contract with only two legal transfer topologies, opaque non-zero paint, native endpoints, and nominal verifier authority; static fixtures reject raw minting and caller-authored handoff mechanics.",
+      "status": "complete"
     },
     {
       "id": "s05",
