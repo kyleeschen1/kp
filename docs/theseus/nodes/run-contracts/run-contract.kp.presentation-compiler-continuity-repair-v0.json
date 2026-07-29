@@ -150,6 +150,40 @@
       "scope": "s08 canonical reader and presentation boundaries",
       "checkedAt": "2026-07-29T18:00:23.337Z",
       "notes": "All concept-room, semantic-reader, semantic-animation, and operation-evaluation boundary gates pass; the gate still reports three certified callers."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s09 native successor shared-junction execution",
+      "checkedAt": "2026-07-29T18:13:07.306Z",
+      "notes": "119 checks passed; renderer samples prove opaque source and target paint, exact zero-area ownership transfer, exact native endpoints, and no binary policy."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "s09 native KaTeX compositor regression",
+      "checkedAt": "2026-07-29T18:13:16.101Z",
+      "notes": "68 renderer-session, typography, reconciliation, track, structural paint, lifecycle, and complexity checks passed."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s09 bounded exact-fraction compatibility",
+      "checkedAt": "2026-07-29T18:13:22.028Z",
+      "notes": "95 exact semantic, four-view, symbolic, runtime, accessibility, responsive, and no-fade checks passed while the branded compatibility route remains isolated for s16 removal."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09 renderer continuity authority",
+      "checkedAt": "2026-07-29T18:13:30.926Z",
+      "notes": "Static fixtures reject operation-only registered bindings and reject fabricating the branded exact-fraction compatibility intent from a raw successor binding."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s09 compositor and canonical route boundaries",
+      "checkedAt": "2026-07-29T18:13:38.414Z"
     }
   ],
   "allowedWork": [
@@ -229,7 +263,8 @@
     {
       "id": "s09",
       "title": "adapt-native-successor-renderer",
-      "status": "planned"
+      "summary": "Removed raw successor paintPolicy and the renderer's binary handoff; the existing native KaTeX renderer now consumes verified shared-junction authority and transfers opaque material by scale-to-zero/scale-from-zero on one semantic clock, with exact endpoints and one unforgeable exact-fraction compatibility seam scheduled for s16 removal.",
+      "status": "complete"
     },
     {
       "id": "s10",

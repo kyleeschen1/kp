@@ -101,12 +101,12 @@ test("operation continuity inventory exposes every known bypass and shared route
     [
       {
         id: "operation-continuity.raw-binding-paint-policy",
-        state: "must-remove",
+        state: "removed",
         owningSlice: "s09"
       },
       {
         id: "operation-continuity.renderer-binary-handoff",
-        state: "must-remove",
+        state: "removed",
         owningSlice: "s09"
       },
       {
@@ -151,6 +151,12 @@ test("operation continuity inventory exposes every known bypass and shared route
     kpOperationEvaluationContinuityMigrationInventory.filter(
       ({ state }) => state === "must-remove"
     ).length,
-    4
+    2
+  );
+  assert.equal(
+    kpOperationEvaluationContinuityMigrationInventory.filter(
+      ({ state }) => state === "removed"
+    ).length,
+    2
   );
 });

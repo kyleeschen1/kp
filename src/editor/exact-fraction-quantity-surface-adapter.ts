@@ -496,7 +496,8 @@ async function prepareSymbolicScene(input: {
       successorSyntheses: input.segment.successorSyntheses.map((binding) => ({
         binding,
         direction: "forward",
-        motion: "full"
+        motion: "full",
+        legacyContinuityAuthority: "exact-fraction-quantity-v0"
       })),
       endpointDwellFraction: 0.04,
       fanInRouting: input.dispatch === "merge-fan-in",

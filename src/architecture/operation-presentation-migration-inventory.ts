@@ -94,19 +94,19 @@ export const kpOperationPresentationEvidenceClosures = Object.freeze([
 export const kpOperationEvaluationContinuityMigrationInventory = Object.freeze([
   continuityMigration(
     "raw-binding-paint-policy",
-    "src/animation/successor-synthesis.ts",
-    "readonly paintPolicy?:",
-    "must-remove",
+    "tests/contract-fixtures/paint-continuity-plan-types.ts",
+    "A binary paint swap is not a legal ownership topology.",
+    "removed",
     "s09",
-    "Raw successor bindings currently let callers choose the paint handoff."
+    "Raw successor bindings no longer expose paint or handoff policy."
   ),
   continuityMigration(
     "renderer-binary-handoff",
     "src/rendering/native-katex-successor-synthesis.ts",
-    'plan.paintPolicy === "opaque-binary-handoff"',
-    "must-remove",
+    "sharedJunctionSourcePose({",
+    "removed",
     "s09",
-    "The renderer performs a non-equivalent boolean source-to-target swap."
+    "The renderer now executes geometry-continuous shared-junction transfer."
   ),
   continuityMigration(
     "exact-fraction-local-motif",
@@ -160,6 +160,7 @@ export const kpOperationEvaluationContinuityMigrationInventory = Object.freeze([
 
 export type KpOperationEvaluationContinuityMigrationState =
   | "must-remove"
+  | "removed"
   | "canonical-route"
   | "existing-shared-consumer"
   | "adoption-gap";

@@ -156,7 +156,10 @@ test("alignment and addition preserve native fraction structure without fades", 
   const serialized = JSON.stringify(projection);
   assert.ok(projection.motionInputs.flatMap(({ segments }) => segments)
     .flatMap(({ successorSyntheses }) => successorSyntheses)
-    .every(({ paintPolicy }) => paintPolicy === "opaque-binary-handoff"));
+    .every(({ motif }) =>
+      motif === "successor-synthesis" || motif === "operation-evaluation"
+    ));
+  assert.equal(serialized.includes("paintPolicy"), false);
   assert.equal(serialized.includes("opacity"), false);
   assert.equal(serialized.includes("fontFamily"), false);
   assert.equal(serialized.includes("translate"), false);

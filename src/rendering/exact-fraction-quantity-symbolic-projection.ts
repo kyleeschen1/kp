@@ -22,6 +22,8 @@ import type {
   KpSuccessorSynthesisBinding
 } from "../animation/successor-synthesis.ts";
 
+declare const kpExactFractionLegacySuccessorAuthority: unique symbol;
+
 export type KpExactFractionSymbolicLifecycle =
   | "persist"
   | "fission"
@@ -47,8 +49,8 @@ export interface KpExactFractionSymbolicMotionSegment {
 
 export type KpExactOpaqueSuccessorSynthesisBinding =
   KpSuccessorSynthesisBinding & {
-    readonly paintPolicy: "opaque-binary-handoff";
     readonly motif: "successor-synthesis" | "operation-evaluation";
+    readonly [kpExactFractionLegacySuccessorAuthority]: true;
   };
 
 export interface KpExactFractionSymbolicEndpoint {
@@ -819,9 +821,8 @@ function opaqueSuccessor(input: {
         targetAnnotations.map(({ id }) => id)
       )
     })]),
-    paintPolicy: "opaque-binary-handoff",
     motif: input.motif ?? "successor-synthesis"
-  });
+  }) as KpExactOpaqueSuccessorSynthesisBinding;
 }
 
 function selector(

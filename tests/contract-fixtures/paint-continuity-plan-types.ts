@@ -14,6 +14,9 @@ import type {
 import type {
   KpSuccessorSynthesisBinding
 } from "../../src/animation/successor-synthesis.ts";
+import type {
+  KpNativeKatexSuccessorSynthesisIntent
+} from "../../src/rendering/native-katex-successor-synthesis.ts";
 
 declare const operationPlanId: KpVerifiedOperationPresentationPlanId;
 
@@ -70,6 +73,15 @@ const operationOnlyBinding: KpRegisteredSuccessorSynthesisBinding = {
   operationPresentationPlan: operationPlan
 };
 
+const fabricatedLegacyIntent: KpNativeKatexSuccessorSynthesisIntent = {
+  // @ts-expect-error Only the branded exact-fraction compatibility compiler
+  // may use the temporary legacy route before its scheduled removal.
+  binding: rawBinding,
+  direction: "forward",
+  motion: "full",
+  legacyContinuityAuthority: "exact-fraction-quantity-v0"
+};
+
 void [
   legalDraft,
   fabricated,
@@ -77,5 +89,6 @@ void [
   callerOpacity,
   callerPath,
   verified,
-  operationOnlyBinding
+  operationOnlyBinding,
+  fabricatedLegacyIntent
 ];

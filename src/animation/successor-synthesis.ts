@@ -35,10 +35,6 @@ export interface KpSuccessorSynthesisBinding {
   readonly sourceAnnotations: readonly KpSuccessorSynthesisSourceAnnotation[];
   readonly targetAnnotations: readonly KpSuccessorSynthesisTargetAnnotation[];
   readonly lineages: readonly KpSuccessorSynthesisLineage[];
-  readonly paintPolicy?:
-    | "continuous-recognition"
-    | "opaque-binary-handoff"
-    | undefined;
 }
 
 export interface KpSuccessorSynthesisMember {
