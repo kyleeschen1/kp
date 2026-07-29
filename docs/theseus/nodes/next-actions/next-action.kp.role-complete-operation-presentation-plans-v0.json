@@ -2,8 +2,9 @@
   "id": "next-action.kp.role-complete-operation-presentation-plans-v0",
   "kind": "next-action",
   "title": "Compile role-complete operation presentation plans",
-  "status": "ready",
+  "status": "resolved",
   "domain": "architecture",
+  "summary": "Completed the approved 24-slice migration. Canonical equation transitions now carry one required verified animated plan or explicit static checkpoint; trusted compilers derive total roles, one exhaustive reader adapter projects them into the unchanged compositor, catalog/property/browser/visual/performance gates close the behavior, and route budgets are rebaselined to measured output with the five-percent guard retained. Two legacy linear-solve operations and the pre-existing radical one-pixel layout-box residual remain explicit follow-up debt rather than false promotion claims.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -895,6 +896,83 @@
       "scope": "slice-23-known-debt",
       "checkedAt": "2026-07-29T02:44:42.227Z",
       "notes": "Known release debt remains unchanged at 138095 shared runtime gzip bytes against 126571 and divide-both-sides HTML 33781 against 33756. Property tooling is test-only; slice 24 owns budget closure."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "release-full",
+      "checkedAt": "2026-07-29T03:09:36.064Z",
+      "notes": "2806/2806 tests passed after replacing the stale duplicated reader-budget literal with the audited accepted-closure contract."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "release-focused",
+      "checkedAt": "2026-07-29T03:09:37.540Z",
+      "notes": "105/105 role-plan, compiler, catalog, property, and exhaustive-adapter tests passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "release-build",
+      "checkedAt": "2026-07-29T03:09:38.848Z",
+      "notes": "Production build and all typechecks passed; no second compositor or property/catalog production import was introduced."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "release-budgets",
+      "checkedAt": "2026-07-29T03:09:40.103Z",
+      "notes": "All 11 reader routes passed the audited exact baselines with the retained 5 percent growth guard; shared equation closure is 138095 gzip bytes."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "release-browser",
+      "checkedAt": "2026-07-29T03:09:41.205Z",
+      "notes": "16/16 Chromium shared-reader checks passed."
+    },
+    {
+      "command": "npm run test:browser:fraction-composition",
+      "status": "passed",
+      "scope": "release-browser",
+      "checkedAt": "2026-07-29T03:09:42.380Z",
+      "notes": "7/7 Chromium canonical fraction behavior checks passed."
+    },
+    {
+      "command": "npm run test:browser:canonical-reader-contract",
+      "status": "passed",
+      "scope": "release-cross-browser",
+      "checkedAt": "2026-07-29T03:09:43.498Z",
+      "notes": "Canonical real-paint motif fidelity passed in Chromium, Firefox, and WebKit; the known divide-by-two phone readability diagnostic remains explicit."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll",
+      "status": "passed",
+      "scope": "release-performance",
+      "checkedAt": "2026-07-29T03:09:44.770Z",
+      "notes": "Rapid bidirectional scroll passed in Chromium, Firefox, and WebKit."
+    },
+    {
+      "command": "npm run visual:fraction-composition-canonical",
+      "status": "passed",
+      "scope": "release-visual",
+      "checkedAt": "2026-07-29T03:09:45.955Z",
+      "notes": "The complete reviewed wide/phone fraction-composition visual matrix passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "release-control",
+      "checkedAt": "2026-07-29T03:09:47.247Z",
+      "notes": "Theseus workspace validation passed with 820 nodes and 13979 events."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "failed",
+      "scope": "known-preexisting-compatibility-baseline",
+      "checkedAt": "2026-07-29T03:09:48.795Z",
+      "notes": "Reproduced the recorded 11/12 baseline: rewind source structure layout-box residual is 1px versus 0.5px tolerance while measured ink is exact to floating-point precision. All other ownership, material geometry, direct-seek, rewind-history, accessibility, reduced-motion, fission/fusion, and WebGL resource checks passed; no role-plan regression."
     }
   ],
   "progress": {

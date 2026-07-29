@@ -2,8 +2,9 @@
   "id": "run-contract.kp.role-complete-operation-presentation-plans-v2",
   "kind": "run-contract",
   "title": "Role-complete operation presentation plans",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -195,7 +196,8 @@
     {
       "id": "slice.kp.role-plan.24",
       "title": "Run-release-closure",
-      "status": "planned"
+      "summary": "Release closure complete: one required verified-or-static reader plan, exhaustive adapter dispatch, closed migration inventory, audited 138095-byte shared route baseline with five-percent guard, 2806/2806 full tests, 105/105 focused tests, cross-browser motif and performance evidence, complete visual matrix, and valid Theseus workspace. The pre-existing radical one-pixel layout-box residual remains explicit compatibility debt with exact measured ink and no role-plan regression.",
+      "status": "complete"
     }
   ]
 }

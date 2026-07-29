@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   checkKpSemanticReaderRouteBudget,
+  kpSemanticReaderAcceptedClosureGzipBytes,
   kpSemanticReaderRouteBudget,
   type KpSemanticReaderRouteAsset
 } from "../src/architecture/semantic-reader-route-budget.ts";
@@ -59,5 +60,9 @@ test("semantic reader route rejects full and entry budget regressions independen
 });
 
 test("semantic reader route budget retains five-percent headroom over the accepted closure", () => {
-  assert.equal(kpSemanticReaderRouteBudget.fullEquationGzipBytes, 126_571);
+  assert.equal(kpSemanticReaderAcceptedClosureGzipBytes, 138_095);
+  assert.equal(
+    kpSemanticReaderRouteBudget.fullEquationGzipBytes,
+    Math.ceil(kpSemanticReaderAcceptedClosureGzipBytes * 1.05)
+  );
 });

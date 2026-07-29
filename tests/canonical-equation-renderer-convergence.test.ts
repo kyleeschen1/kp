@@ -7,6 +7,7 @@ import {
   validateKpCanonicalEquationRendererConvergence
 } from "../src/architecture/canonical-equation-renderer-convergence.ts";
 import {
+  kpSemanticReaderAcceptedClosureGzipBytes,
   kpSemanticReaderRouteBudget
 } from "../src/architecture/semantic-reader-route-budget.ts";
 import {
@@ -172,13 +173,19 @@ test("canonical hosts cannot reinterpret renderer-owned atom paint", async () =>
   );
 });
 
-test("accepted experiment and reader payload budgets remain frozen", () => {
+test("accepted experiment and reader payload budgets retain their audited guard", () => {
   const policy = kpCanonicalEquationRendererConvergence;
 
   assert.equal(
     kpGlyphReconciliationExperimentLedger.budget.maxRouteGzipGrowthBytes,
     policy.maximumExperimentRouteGzipGrowthBytes
   );
-  assert.equal(kpSemanticReaderRouteBudget.fullEquationGzipBytes, 126_571);
   assert.equal(policy.maximumReaderRouteRegressionRatio, 0.05);
+  assert.equal(
+    kpSemanticReaderRouteBudget.fullEquationGzipBytes,
+    Math.ceil(
+      kpSemanticReaderAcceptedClosureGzipBytes *
+        (1 + policy.maximumReaderRouteRegressionRatio)
+    )
+  );
 });

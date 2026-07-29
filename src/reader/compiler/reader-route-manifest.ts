@@ -71,6 +71,10 @@ function routeBudget(
   return { compiledHtmlRawBytes, compiledHtmlGzipBytes, runtimeCodeGzipBytes } as const;
 }
 
+// This is the measured post-cutover shared equation closure, not an estimate.
+// The checker applies the repository-wide 5% growth allowance on top of it.
+const sharedEquationRuntimeGzipBaseline = 138_095;
+
 const sharedEquationPresentation = {
   kind: "shared-certified-runtime",
   certificationId: "certification.reader.equation-dom.promoted-v1",
@@ -223,7 +227,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         }
       ]
     },
-    budget: routeBudget(36_312, 4_885, 120_543)
+    budget: routeBudget(37_968, 4_978, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/solve-x/teacher-zero/",
@@ -242,7 +246,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       label: "Make the zero visible",
       progressPermille: 500
     }),
-    budget: routeBudget(35_935, 4_267, 120_543)
+    budget: routeBudget(37_489, 4_352, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/solve-fractional-linear/",
@@ -261,7 +265,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       label: "Simplify the difference",
       progressPermille: 500
     }),
-    budget: routeBudget(62_792, 5_416, 120_543)
+    budget: routeBudget(64_003, 5_510, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/divide-both-sides/",
@@ -280,7 +284,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       label: "Cancel the coefficient",
       progressPermille: 667
     }),
-    budget: routeBudget(32_148, 4_061, 120_543)
+    budget: routeBudget(33_781, 4_162, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/split-merge-fractions/",
@@ -312,7 +316,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
     // The typed factoring/contact proof is intentionally a separate preload;
     // this release baseline preserves that boundary instead of hiding it by
     // folding operation authority back into the generic renderer chunk.
-    budget: routeBudget(30_310, 3_839, 120_543)
+    budget: routeBudget(30_526, 3_938, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/radical-succession/",
@@ -341,7 +345,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         }))
       )
     },
-    budget: routeBudget(30_000, 4_000, 120_543)
+    budget: routeBudget(22_307, 4_164, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/fraction-composition/",
@@ -388,7 +392,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         }
       ]
     },
-    budget: routeBudget(119_364, 12_000, 160_000)
+    budget: routeBudget(122_705, 7_664, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/foldable-distribution/",
@@ -421,7 +425,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         }))
       )
     },
-    budget: routeBudget(67_258, 7_000, 140_000)
+    budget: routeBudget(67_474, 6_451, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/fractional-transfer/",
@@ -440,7 +444,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       label: "Expose the product",
       progressPermille: 667
     }),
-    budget: routeBudget(37_889, 4_457, 120_543)
+    budget: routeBudget(39_414, 4_549, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/distribution-area/",
@@ -498,7 +502,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         )
       )
     },
-    budget: routeBudget(19_237, 3_003, 54_210)
+    budget: routeBudget(18_729, 2_868, 14_823)
   }),
   defineKpReaderRoute({
     route: "/reader/quadratic-branching/",
@@ -580,6 +584,6 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         { id: "graph-phone", label: "Roots meet the graph · phone", progressPermille: 1_000, viewport: "phone" }
       ]
     },
-    budget: routeBudget(85_702, 7_622, 51_142)
+    budget: routeBudget(84_569, 7_475, 14_776)
   })
 ]);

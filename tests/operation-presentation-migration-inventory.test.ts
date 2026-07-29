@@ -63,14 +63,14 @@ test("reader planning exposes one required presentation plan", async () => {
   }
 });
 
-test("canonical compositor currently accepts seven independently combinable inputs", () => {
+test("canonical compositor primitives are only projections of one verified reader plan", () => {
   assert.equal(kpOperationPresentationRendererInputs.length, 7);
   assert.ok(kpOperationPresentationRendererInputs.every(
-    ({ state }) => state === "independent-optional"
+    ({ state }) => state === "internal-projection-primitive"
   ));
 });
 
-test("raw cancellation authoring and behavior-evidence gaps remain explicit", () => {
+test("semantic cancellation sites cross verified plans and old evidence gaps are closed", () => {
   assert.deepEqual(
     kpOperationPresentationCancellationAuthoringSites.map(({ id }) => id),
     [
@@ -81,16 +81,12 @@ test("raw cancellation authoring and behavior-evidence gaps remain explicit", ()
       "cancellation-authoring.generated-algebra"
     ]
   );
-  assert.equal(kpOperationPresentationEvidenceGaps.length, 2);
-  assert.deepEqual(
-    kpOperationPresentationEvidenceClosures.map(({ state }) => state),
-    [
-      "verified-plan",
-      "verified-plan",
-      "verified-plan",
-      "verified-plan",
-      "verified-plan",
-      "verified-plan"
-    ]
-  );
+  assert.ok(kpOperationPresentationCancellationAuthoringSites.every(
+    ({ state }) => state === "verified-plan"
+  ));
+  assert.equal(kpOperationPresentationEvidenceGaps.length, 0);
+  assert.equal(kpOperationPresentationEvidenceClosures.length, 7);
+  assert.ok(kpOperationPresentationEvidenceClosures.every(
+    ({ state }) => state === "verified-plan"
+  ));
 });

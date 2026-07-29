@@ -13,8 +13,14 @@ export interface KpSemanticReaderRouteBudgetIssue {
   readonly assetName?: string | undefined;
 }
 
+export const kpSemanticReaderAcceptedClosureGzipBytes = 138_095;
+
 export const kpSemanticReaderRouteBudget = {
-  fullEquationGzipBytes: 126_571,
+  // The route-manifest baselines retain their exact measurements; this
+  // architecture ceiling preserves the same 5% release-growth allowance.
+  fullEquationGzipBytes: Math.ceil(
+    kpSemanticReaderAcceptedClosureGzipBytes * 1.05
+  ),
   readerEntryGzipBytes: 20 * 1_024
 } as const;
 

@@ -44,20 +44,7 @@ export const kpOperationPresentationCancellationAuthoringSites = Object.freeze([
   )
 ] as const);
 
-export const kpOperationPresentationEvidenceGaps = Object.freeze([
-  evidenceGap(
-    "browser-choreography-label",
-    "tests/semantic-reader-fraction-composition.browser.spec.ts",
-    "data-kp-native-katex-operation-choreography",
-    "The browser proof observes a choreography label rather than operand paths."
-  ),
-  evidenceGap(
-    "visual-overlap-without-motif-fidelity",
-    "tests/semantic-reader-fraction-composition-visual.browser.spec.ts",
-    "inspectKpEquationVisiblePaintOverlap",
-    "The visual matrix protects ownership and overlap without proving motif geometry."
-  )
-] as const);
+export const kpOperationPresentationEvidenceGaps = Object.freeze([] as const);
 
 export const kpOperationPresentationEvidenceClosures = Object.freeze([
   evidenceClosure(
@@ -95,13 +82,17 @@ export const kpOperationPresentationEvidenceClosures = Object.freeze([
     "tests/operation-presentation-bounded-properties.test.ts",
     "every bounded case is direct-seek stable and exactly reversible",
     "A fixed-size matrix covers semantic shapes, notation structures, operation families, viewport classes, boundary seek points, rewind, and compiler-owned generated variations without random or unbounded sampling."
+  ),
+  evidenceClosure(
+    "release-authoring-boundary",
+    "docs/project/reviews/2026-07-29-role-complete-operation-presentation-plans-closeout.md",
+    "LLM authoring stops at mathematical and semantic intent.",
+    "The release record fixes the only supported authoring path from semantic intent through trusted role derivation, branded validation, exhaustive dispatch, and native paint."
   )
 ] as const);
 
 export type KpOperationPresentationMigrationState =
-  | "independent-optional"
-  | "flat-source-group"
-  | "metadata-only-evidence"
+  | "internal-projection-primitive"
   | "verified-plan";
 
 export interface KpOperationPresentationMigrationInventoryEntry {
@@ -135,9 +126,9 @@ function rendererInput(
     id: `renderer-input.${id}`,
     sourcePath: "src/rendering/native-katex-scene-compositor.ts",
     sourceNeedle,
-    state: "independent-optional" as const,
+    state: "internal-projection-primitive" as const,
     summary:
-      "The canonical compositor currently accepts this presentation concern separately."
+      "Only the exhaustive reader adapter may project a verified plan into this internal compositor primitive."
   });
 }
 
@@ -150,24 +141,9 @@ function cancellationSite(
     id: `cancellation-authoring.${id}`,
     sourcePath,
     sourceNeedle,
-    state: "flat-source-group" as const,
+    state: "verified-plan" as const,
     summary:
-      "Cancellation sources do not distinguish inverse bundles, catalysts, artifacts, or survivors."
-  });
-}
-
-function evidenceGap(
-  id: string,
-  sourcePath: string,
-  sourceNeedle: string,
-  summary: string
-): KpOperationPresentationMigrationInventoryEntry {
-  return Object.freeze({
-    id: `evidence-gap.${id}`,
-    sourcePath,
-    sourceNeedle,
-    state: "metadata-only-evidence" as const,
-    summary
+      "Semantic cancellation remains renderer-neutral; a trusted compiler derives and validates complete presentation roles before rendering."
   });
 }
 
