@@ -116,6 +116,19 @@
       "status": "passed",
       "scope": "s06 diagnostic sampling contract",
       "checkedAt": "2026-07-29T17:48:27.126Z"
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s07 versioned registry continuity route",
+      "checkedAt": "2026-07-29T17:52:49.471Z",
+      "notes": "117 checks passed; every canonical operation resolves the same pinned shared-junction continuity compiler, extensions cannot invent a hard-swap compiler, and unknown or pin-drifted operations become explicit static checkpoints."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s07 registry schema v3 and nominal route",
+      "checkedAt": "2026-07-29T17:52:54.452Z"
     }
   ],
   "allowedWork": [
@@ -183,7 +196,8 @@
     {
       "id": "s07",
       "title": "evolve-presentation-registry",
-      "status": "planned"
+      "summary": "Evolved the registry to schema v3 with an independently versioned shared-junction continuity compiler on every resolved certificate; extension packs cannot invent handoff policy, and unknown, missing-pin, or version-drift routes produce explicit static checkpoint plans.",
+      "status": "complete"
     },
     {
       "id": "s08",

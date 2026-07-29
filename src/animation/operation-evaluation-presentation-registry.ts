@@ -11,6 +11,8 @@ import {
   kpCanonicalOperationEvaluationTransformationKinds,
   type KpCanonicalOperationEvaluationTransformationKind,
   type KpOperationEvaluationPresentationEntry,
+  type KpOperationEvaluationPaintContinuityCompilerDescriptor,
+  type KpOperationEvaluationPaintContinuityCompilerRef,
   type KpOperationEvaluationPresentationPack,
   type KpOperationEvaluationPresentationPackDependency,
   type KpOperationEvaluationPresentationPackPin,
@@ -19,11 +21,15 @@ import {
   type KpOperationEvaluationPresentationPins,
   type KpOperationEvaluationPresentationRegistry,
   type KpOperationEvaluationPresentationResolution,
+  type KpOperationEvaluationPresentationRoute,
   type KpResolvedOperationEvaluationPresentation
 } from "./operation-evaluation-presentation-types.ts";
 import {
   kpCoreOperationPresentationLawIds
 } from "./operation-presentation-law-types.ts";
+import {
+  createKpExplicitStaticCheckpointPlan
+} from "./operation-presentation-plan-types.ts";
 
 export {
   kpCanonicalOperationEvaluationTransformationKinds
@@ -31,6 +37,8 @@ export {
 export type {
   KpCanonicalOperationEvaluationTransformationKind,
   KpOperationEvaluationPresentationEntry,
+  KpOperationEvaluationPaintContinuityCompilerDescriptor,
+  KpOperationEvaluationPaintContinuityCompilerRef,
   KpOperationEvaluationPresentationPack,
   KpOperationEvaluationPresentationPackDependency,
   KpOperationEvaluationPresentationPackPin,
@@ -39,6 +47,7 @@ export type {
   KpOperationEvaluationPresentationPins,
   KpOperationEvaluationPresentationRegistry,
   KpOperationEvaluationPresentationResolution,
+  KpOperationEvaluationPresentationRoute,
   KpResolvedOperationEvaluationPresentation
 } from "./operation-evaluation-presentation-types.ts";
 
@@ -58,11 +67,25 @@ export const kpOperationEvaluationPresentationPlanCompilers:
   readonly KpOperationEvaluationPresentationPlanCompilerDescriptor[] =
   Object.freeze([kpSuccessorSynthesisPresentationPlanCompiler]);
 
+export const kpSharedJunctionPaintContinuityCompiler =
+  Object.freeze({
+    id: "kp.paint-continuity-compiler.shared-junction",
+    version: "1.0.0",
+    transferTopology: "shared-zero-area-junction",
+    nonZeroPaint: "opaque",
+    endpointSettlement: "native-source-and-target",
+    boundaryLawId: "paint-continuity.t-epsilon-boundary"
+  } satisfies KpOperationEvaluationPaintContinuityCompilerDescriptor);
+
+export const kpOperationEvaluationPaintContinuityCompilers:
+  readonly KpOperationEvaluationPaintContinuityCompilerDescriptor[] =
+  Object.freeze([kpSharedJunctionPaintContinuityCompiler]);
+
 export const kpOperationEvaluationPresentationCorePack =
   createKpOperationEvaluationPresentationPack({
     id: "kp.presentation.operation-evaluation",
     scope: "core",
-    version: "2.0.0",
+    version: "3.0.0",
     title: "KP operation-evaluation presentations",
     presentationIds: [
       "kp.presentation.operation-evaluation.product",
@@ -278,6 +301,16 @@ export function createKpOperationEvaluationPresentationRegistry(input: {
         `plan compiler ${planCompiler.id} motif ${planCompiler.motifKind}.`
       );
     }
+    const paintContinuityCompiler = resolvePaintContinuityCompiler(
+      entry.paintContinuityCompiler
+    );
+    if (paintContinuityCompiler === undefined) {
+      throw new Error(
+        `Presentation ${entry.id} references unknown or unpinned paint ` +
+        `continuity compiler ${entry.paintContinuityCompiler.id}@` +
+        `${entry.paintContinuityCompiler.version}.`
+      );
+    }
     requireNonempty(entry.canonicalOperationIds, entry.id, "canonical operation");
     requireNonempty(entry.trustedMotifIds, entry.id, "trusted motif");
     requireUnique(entry.definitionIds, `definition id in presentation ${entry.id}`);
@@ -310,11 +343,16 @@ export function createKpOperationEvaluationPresentationRegistry(input: {
 
   return Object.freeze({
     kind: "operation-evaluation-presentation-registry",
-    schemaVersion: "kp.operation-evaluation-presentation-registry.v2",
+    schemaVersion: "kp.operation-evaluation-presentation-registry.v3",
     packs: Object.freeze(input.packs.map(clonePack)),
     entries: Object.freeze(input.entries.map(cloneEntry)),
     planCompilers: Object.freeze(
       kpOperationEvaluationPresentationPlanCompilers.map(clonePlanCompiler)
+    ),
+    paintContinuityCompilers: Object.freeze(
+      kpOperationEvaluationPaintContinuityCompilers.map(
+        clonePaintContinuityCompiler
+      )
     )
   });
 }
@@ -378,6 +416,25 @@ export function requireKpCanonicalOperationEvaluationPresentation(
   return resolution.certificate;
 }
 
+export function resolveKpOperationEvaluationPresentationRoute(input: {
+  readonly transformationId: string;
+  readonly transformationKind: string;
+  readonly registry?: KpOperationEvaluationPresentationRegistry | undefined;
+  readonly pins?: KpOperationEvaluationPresentationPins | undefined;
+}): KpOperationEvaluationPresentationRoute {
+  const resolution = resolveKpOperationEvaluationPresentation(input);
+  if (resolution.status === "resolved") return resolution;
+  return Object.freeze({
+    status: "explicit-static",
+    resolutionStatus: resolution.status,
+    checkpoint: createKpExplicitStaticCheckpointPlan({
+      transformationId: input.transformationId,
+      reason: "unsupported-presentation",
+      summary: resolution.message
+    })
+  });
+}
+
 export function ruleFromKpResolvedOperationEvaluationPresentation(
   certificate: KpResolvedOperationEvaluationPresentation
 ): TransformTreeVisualMotifRule<
@@ -419,6 +476,10 @@ function coreEntry(input: {
       id: kpSuccessorSynthesisPresentationPlanCompiler.id,
       version: kpSuccessorSynthesisPresentationPlanCompiler.version
     }),
+    paintContinuityCompiler: Object.freeze({
+      id: kpSharedJunctionPaintContinuityCompiler.id,
+      version: kpSharedJunctionPaintContinuityCompiler.version
+    }),
     definitionIds: Object.freeze(
       input.definitionId === undefined ? [] : [input.definitionId]
     ),
@@ -437,13 +498,16 @@ function resolvedCertificate(
   entry: KpOperationEvaluationPresentationEntry
 ): KpResolvedOperationEvaluationPresentation {
   return Object.freeze({
-    schemaVersion: "kp.resolved-operation-evaluation-presentation.v2",
+    schemaVersion: "kp.resolved-operation-evaluation-presentation.v3",
     presentationId: entry.id,
     transformationKind: entry.transformationKind,
     packId: pack.id,
     packVersion: pack.version,
     motifKind: entry.motifKind,
     planCompiler: clonePlanCompiler(resolvePlanCompiler(entry.planCompiler)!),
+    paintContinuityCompiler: clonePaintContinuityCompiler(
+      resolvePaintContinuityCompiler(entry.paintContinuityCompiler)!
+    ),
     definitionIds: Object.freeze([...entry.definitionIds]),
     canonicalOperationIds: Object.freeze([...entry.canonicalOperationIds]),
     trustedMotifIds: Object.freeze([...entry.trustedMotifIds]),
@@ -469,6 +533,9 @@ function cloneEntry(
   return Object.freeze({
     ...entry,
     planCompiler: Object.freeze({ ...entry.planCompiler }),
+    paintContinuityCompiler: Object.freeze({
+      ...entry.paintContinuityCompiler
+    }),
     definitionIds: Object.freeze([...entry.definitionIds]),
     canonicalOperationIds: Object.freeze([...entry.canonicalOperationIds]),
     trustedMotifIds: Object.freeze([...entry.trustedMotifIds])
@@ -483,6 +550,14 @@ function resolvePlanCompiler(
   );
 }
 
+function resolvePaintContinuityCompiler(
+  ref: KpOperationEvaluationPaintContinuityCompilerRef
+): KpOperationEvaluationPaintContinuityCompilerDescriptor | undefined {
+  return kpOperationEvaluationPaintContinuityCompilers.find(
+    ({ id, version }) => id === ref.id && version === ref.version
+  );
+}
+
 function clonePlanCompiler(
   compiler: KpOperationEvaluationPresentationPlanCompilerDescriptor
 ): KpOperationEvaluationPresentationPlanCompilerDescriptor {
@@ -490,6 +565,12 @@ function clonePlanCompiler(
     ...compiler,
     lawIds: Object.freeze([...compiler.lawIds])
   });
+}
+
+function clonePaintContinuityCompiler(
+  compiler: KpOperationEvaluationPaintContinuityCompilerDescriptor
+): KpOperationEvaluationPaintContinuityCompilerDescriptor {
+  return Object.freeze({ ...compiler });
 }
 
 function requireNamespacedId(value: string, label: string): void {

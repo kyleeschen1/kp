@@ -1,6 +1,9 @@
 import type {
   KpOperationPresentationLawId
 } from "./operation-presentation-law-types.ts";
+import type {
+  KpExplicitStaticCheckpointPlan
+} from "./operation-presentation-plan-types.ts";
 
 export const kpCanonicalOperationEvaluationTransformationKinds = [
   "simplifyConstantProduct",
@@ -40,6 +43,8 @@ export interface KpOperationEvaluationPresentationEntry {
   readonly motifKind: string;
   readonly planCompiler:
     KpOperationEvaluationPresentationPlanCompilerRef;
+  readonly paintContinuityCompiler:
+    KpOperationEvaluationPaintContinuityCompilerRef;
   readonly definitionIds: readonly string[];
   readonly canonicalOperationIds: readonly string[];
   readonly trustedMotifIds: readonly string[];
@@ -58,13 +63,28 @@ export interface KpOperationEvaluationPresentationPlanCompilerDescriptor
   readonly lawIds: readonly KpOperationPresentationLawId[];
 }
 
+export interface KpOperationEvaluationPaintContinuityCompilerRef {
+  readonly id: string;
+  readonly version: string;
+}
+
+export interface KpOperationEvaluationPaintContinuityCompilerDescriptor
+  extends KpOperationEvaluationPaintContinuityCompilerRef {
+  readonly transferTopology: "shared-zero-area-junction";
+  readonly nonZeroPaint: "opaque";
+  readonly endpointSettlement: "native-source-and-target";
+  readonly boundaryLawId: "paint-continuity.t-epsilon-boundary";
+}
+
 export interface KpOperationEvaluationPresentationRegistry {
   readonly kind: "operation-evaluation-presentation-registry";
-  readonly schemaVersion: "kp.operation-evaluation-presentation-registry.v2";
+  readonly schemaVersion: "kp.operation-evaluation-presentation-registry.v3";
   readonly packs: readonly KpOperationEvaluationPresentationPack[];
   readonly entries: readonly KpOperationEvaluationPresentationEntry[];
   readonly planCompilers:
     readonly KpOperationEvaluationPresentationPlanCompilerDescriptor[];
+  readonly paintContinuityCompilers:
+    readonly KpOperationEvaluationPaintContinuityCompilerDescriptor[];
 }
 
 export interface KpOperationEvaluationPresentationPackPin {
@@ -84,7 +104,7 @@ declare const kpResolvedOperationEvaluationPresentationBrand: unique symbol;
  * not bypass version checks by reconstructing a visually similar raw rule.
  */
 export interface KpResolvedOperationEvaluationPresentation {
-  readonly schemaVersion: "kp.resolved-operation-evaluation-presentation.v2";
+  readonly schemaVersion: "kp.resolved-operation-evaluation-presentation.v3";
   readonly presentationId: string;
   readonly transformationKind: string;
   readonly packId: string;
@@ -92,6 +112,8 @@ export interface KpResolvedOperationEvaluationPresentation {
   readonly motifKind: string;
   readonly planCompiler:
     KpOperationEvaluationPresentationPlanCompilerDescriptor;
+  readonly paintContinuityCompiler:
+    KpOperationEvaluationPaintContinuityCompilerDescriptor;
   readonly definitionIds: readonly string[];
   readonly canonicalOperationIds: readonly string[];
   readonly trustedMotifIds: readonly string[];
@@ -111,4 +133,18 @@ export type KpOperationEvaluationPresentationResolution =
         | "version-mismatch";
       readonly transformationKind: string;
       readonly message: string;
+    };
+
+export type KpOperationEvaluationPresentationRoute =
+  | {
+      readonly status: "resolved";
+      readonly certificate: KpResolvedOperationEvaluationPresentation;
+    }
+  | {
+      readonly status: "explicit-static";
+      readonly resolutionStatus:
+        | "unknown-transformation"
+        | "missing-pin"
+        | "version-mismatch";
+      readonly checkpoint: KpExplicitStaticCheckpointPlan;
     };

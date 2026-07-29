@@ -10,9 +10,12 @@ import {
   kpOperationEvaluationPresentationCorePack,
   kpOperationEvaluationPresentationExtensionLimit,
   kpOperationEvaluationPresentationPins,
+  kpOperationEvaluationPaintContinuityCompilers,
   kpOperationEvaluationPresentationPlanCompilers,
+  kpSharedJunctionPaintContinuityCompiler,
   requireKpCanonicalOperationEvaluationPresentation,
   resolveKpOperationEvaluationPresentation,
+  resolveKpOperationEvaluationPresentationRoute,
   ruleFromKpResolvedOperationEvaluationPresentation,
   type KpOperationEvaluationPresentationEntry,
   type KpOperationEvaluationPresentationPack
@@ -38,6 +41,14 @@ test("canonical arithmetic evaluation resolves through one exact pinned motif", 
     assert.deepEqual(
       resolution.certificate.planCompiler.lawIds,
       kpCoreOperationPresentationLawIds
+    );
+    assert.deepEqual(
+      resolution.certificate.paintContinuityCompiler,
+      kpSharedJunctionPaintContinuityCompiler
+    );
+    assert.equal(
+      resolution.certificate.paintContinuityCompiler.boundaryLawId,
+      "paint-continuity.t-epsilon-boundary"
     );
     assert.equal(
       resolution.certificate.packVersion,
@@ -81,11 +92,29 @@ test("resolution fails closed for unknown transformations and pin drift", () => 
       transformationKind: "simplifyConstantProduct",
       pins: createKpOperationEvaluationPresentationPins([{
         packId: kpOperationEvaluationPresentationCorePack.id,
-        version: "3.0.0"
+        version: "4.0.0"
       }])
     }).status,
     "version-mismatch"
   );
+  for (const [transformationKind, pins, resolutionStatus] of [
+    ["evaluateUnknownOperation", undefined, "unknown-transformation"],
+    [
+      "simplifyConstantProduct",
+      createKpOperationEvaluationPresentationPins([]),
+      "missing-pin"
+    ]
+  ] as const) {
+    const route = resolveKpOperationEvaluationPresentationRoute({
+      transformationId: `transform.${resolutionStatus}`,
+      transformationKind,
+      pins
+    });
+    assert.equal(route.status, "explicit-static");
+    if (route.status !== "explicit-static") continue;
+    assert.equal(route.resolutionStatus, resolutionStatus);
+    assert.equal(route.checkpoint.reason, "unsupported-presentation");
+  }
 });
 
 test("a bounded exact-pinned extension can add but cannot override a presentation", () => {
@@ -184,6 +213,23 @@ test("extensions require the exact core and shared motif vocabulary", () => {
     }),
     /unknown or unpinned plan compiler/
   );
+
+  assert.throws(
+    () => createKpOperationEvaluationPresentationRegistry({
+      packs: [kpOperationEvaluationPresentationCorePack, extensionPack],
+      entries: [
+        ...kpOperationEvaluationPresentationCoreEntries,
+        {
+          ...extensionPresentationEntry(1),
+          paintContinuityCompiler: {
+            id: "project.paint-continuity.hard-swap",
+            version: "1.0.0"
+          }
+        }
+      ]
+    }),
+    /unknown or unpinned paint continuity compiler/
+  );
 });
 
 test("extensions cannot replace the core presentation law set", () => {
@@ -272,6 +318,10 @@ test("registry snapshots inputs and canonical helpers return nominal certificate
   );
   assert.equal(certificate.presentationId,
     "kp.presentation.operation-evaluation.product");
+  assert.deepEqual(
+    registry.paintContinuityCompilers,
+    kpOperationEvaluationPaintContinuityCompilers
+  );
 });
 
 function extensionPresentationPack(
@@ -300,6 +350,10 @@ function extensionPresentationEntry(
     motifKind: "successor-synthesis",
     planCompiler: {
       id: "kp.presentation-plan-compiler.successor-synthesis",
+      version: "1.0.0"
+    },
+    paintContinuityCompiler: {
+      id: "kp.paint-continuity-compiler.shared-junction",
       version: "1.0.0"
     },
     definitionIds: [],
