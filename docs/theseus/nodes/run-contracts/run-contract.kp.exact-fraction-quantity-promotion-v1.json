@@ -185,7 +185,8 @@
     {
       "id": "s12",
       "title": "project-partitioned-circles",
-      "status": "planned"
+      "summary": "Added a deterministic partitioned-circle projection over the canonical neutral frame. Six stable sector IDs map directly to sixth atoms; exact coverage and selected area remain rational facts, contributor and lifecycle mappings come from the trace, refinement exposes a one-third source cohort and two target sectors without opacity, and SVG geometry cannot authorize or reorder semantic identity.",
+      "status": "complete"
     },
     {
       "id": "s13",

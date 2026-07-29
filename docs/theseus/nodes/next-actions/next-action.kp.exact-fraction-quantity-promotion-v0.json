@@ -188,6 +188,20 @@
       "scope": "slice s11 symbolic endpoint and motion contracts",
       "checkedAt": "2026-07-29T05:49:23.711Z",
       "notes": "The verified state-chain compiler, native endpoint types, and exhaustive selector and structural identity mappings compile across all TypeScript projects."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s12 partitioned-circle projection",
+      "checkedAt": "2026-07-29T05:53:20.683Z",
+      "notes": "Fifty-one tests pass; six stable atomic sectors cover one exact whole, selected contributors total one half, third refinement preserves exact area and explicit fission lineage, SVG is deterministic and direction independent, and reordered geometry cannot forge identity."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s12 circle frame and SVG adapter",
+      "checkedAt": "2026-07-29T05:53:21.553Z",
+      "notes": "Circle sector, refinement, selection, lifecycle, and exact-measure contracts compile across all TypeScript projects."
     }
   ],
   "expectedLearning": [
