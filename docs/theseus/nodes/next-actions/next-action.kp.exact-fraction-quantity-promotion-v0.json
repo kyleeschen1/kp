@@ -174,6 +174,20 @@
       "scope": "slice s10 neutral frame contract",
       "checkedAt": "2026-07-29T05:42:11.400Z",
       "notes": "Neutral source/target states, exact forms, selections, contributor transitions, and direction compile without view-specific fields."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s11 native symbolic projection",
+      "checkedAt": "2026-07-29T05:49:22.894Z",
+      "notes": "Forty-six tests pass; five trace-derived native KaTeX checkpoints retain MathML, hydratable selector identity, fraction-rule identity, total persist/fusion mappings, and contain no geometry, opacity, font, or sanitizer policy."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s11 symbolic endpoint and motion contracts",
+      "checkedAt": "2026-07-29T05:49:23.711Z",
+      "notes": "The verified state-chain compiler, native endpoint types, and exhaustive selector and structural identity mappings compile across all TypeScript projects."
     }
   ],
   "expectedLearning": [
