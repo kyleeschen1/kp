@@ -103,6 +103,19 @@
       "scope": "s05 validator and nominal authority",
       "checkedAt": "2026-07-29T17:43:11.192Z",
       "notes": "Application, test, and domain type projects pass with the continuity validator and non-empty carrier preservation."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s06 t-epsilon continuity diagnostics",
+      "checkedAt": "2026-07-29T17:48:21.865Z",
+      "notes": "117 checks passed; the pure boundary law accepts opaque zero-area transfer and rejects visible hard swaps, fades, style/font changes, and geometric discontinuity."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06 diagnostic sampling contract",
+      "checkedAt": "2026-07-29T17:48:27.126Z"
     }
   ],
   "allowedWork": [
@@ -164,7 +177,8 @@
     {
       "id": "s06",
       "title": "add-temporal-continuity-diagnostics",
-      "status": "planned"
+      "summary": "Added one pure t-epsilon paint-boundary diagnostic shared by future unit/browser/playback checks; it validates lineage/bundle topology, opaque non-zero paint, zero-area junctions, equivalent/stable owner geometry, computed style, and structure fingerprints.",
+      "status": "complete"
     },
     {
       "id": "s07",
