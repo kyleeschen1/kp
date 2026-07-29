@@ -197,7 +197,8 @@
     {
       "id": "s14",
       "title": "project-number-line",
-      "status": "planned"
+      "summary": "Added a deterministic number-line projection from the shared atomic view joint. Seven exact rational ticks and six named intervals precede pixel layout; contributor spans explicitly compose adjacent one-third and one-sixth intervals to the exact half endpoint. Rendering is responsive, direction-independent SVG, and neither coordinates nor DOM order can become mathematical authority.",
+      "status": "complete"
     },
     {
       "id": "s15",

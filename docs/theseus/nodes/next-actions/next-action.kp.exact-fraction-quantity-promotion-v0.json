@@ -216,6 +216,20 @@
       "scope": "slice s13 shared atomic and bar projection contracts",
       "checkedAt": "2026-07-29T05:56:20.744Z",
       "notes": "Shared concrete-view identities and bar geometry remain typed without adding semantic, scheduler, or runtime authority."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s14 exact number-line projection",
+      "checkedAt": "2026-07-29T05:59:12.484Z",
+      "notes": "Fifty-nine tests pass; exact rational ticks precede pixel coordinates, adjacent one-third and one-sixth contributor spans compose to the certified half endpoint, interval identities survive fusion, and SVG/frame output is direction independent and deterministic."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s14 rational tick and interval contracts",
+      "checkedAt": "2026-07-29T05:59:13.382Z",
+      "notes": "Number-line rational positions, atomic interval lineage, contributor spans, and intrinsic SVG geometry compile across all TypeScript projects."
     }
   ],
   "expectedLearning": [
