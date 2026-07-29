@@ -5,6 +5,9 @@ import {
   createKpFractionCompositionEquationAnimationAsset
 } from "../src/animation/fraction-composition-equation-adapter.ts";
 import {
+  createNumeratorSplitMergeEquationAnimationAsset
+} from "../src/animation/numerator-split-merge-equation-adapter.ts";
+import {
   sampleKpAnimationRuntimeFrame
 } from "../src/animation/runtime-sampler.ts";
 import {
@@ -37,6 +40,7 @@ test("every canonical fraction transition owns one frozen presentation plan", ()
       "visualMotif",
       "factoringMotifBinding",
       "distributionOperationPlans",
+      "fractionMaterialPresentationPlan",
       "structuralSuccession",
       "successorSyntheses",
       "operationChoreography"
@@ -52,6 +56,8 @@ test("every canonical fraction transition owns one frozen presentation plan", ()
 
 test("the presentation-plan mint preserves exactly one specialized authority", () => {
   const animation = createKpFractionCompositionEquationAnimationAsset();
+  const numeratorAnimation =
+    createNumeratorSplitMergeEquationAnimationAsset();
   const plans = animation.transformations.map((_, index) =>
     projectKpReaderEquationRenderPlan({
       animation,
@@ -73,6 +79,17 @@ test("the presentation-plan mint preserves exactly one specialized authority", (
       projectKpReaderEquationTransitionPresentation(presentationPlan)
     )
     .find(({ operationChoreography }) => operationChoreography !== undefined)!;
+  const fractionMaterial = projectKpReaderEquationTransitionPresentation(
+    projectKpReaderEquationRenderPlan({
+      animation: numeratorAnimation,
+      runtimeFrame: sampleKpAnimationRuntimeFrame({
+        id: "runtime.reader-presentation-fraction-material",
+        animation: numeratorAnimation,
+        direction: "forward",
+        progress: 0.04
+      })
+    }).transitions[0]!.presentationPlan
+  ).fractionMaterialPresentationPlan!;
 
   assert.throws(
     () => createKpReaderEquationTransitionPresentationPlan({
@@ -89,6 +106,14 @@ test("the presentation-plan mint preserves exactly one specialized authority", (
       operationChoreography: choreography.operationChoreography
     }),
     /without a canonical visual motif/
+  );
+  assert.throws(
+    () => createKpReaderEquationTransitionPresentationPlan({
+      transitionId: "transition.competing-fraction-authority",
+      fractionMaterialPresentationPlan: fractionMaterial,
+      operationChoreography: choreography.operationChoreography
+    }),
+    /competing presentation authorities/
   );
   assert.throws(
     () => createKpReaderEquationTransitionPresentationPlan({

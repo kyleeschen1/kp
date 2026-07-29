@@ -54,6 +54,7 @@ test("reader planning exposes one required presentation plan", async () => {
   for (const formerField of [
     "visualMotif",
     "factoringMotifBinding",
+    "fractionMaterialPresentationPlan",
     "structuralSuccession",
     "successorSyntheses",
     "operationChoreography"
@@ -83,6 +84,6 @@ test("raw cancellation authoring and behavior-evidence gaps remain explicit", ()
   assert.equal(kpOperationPresentationEvidenceGaps.length, 2);
   assert.deepEqual(
     kpOperationPresentationEvidenceClosures.map(({ state }) => state),
-    ["verified-plan", "verified-plan"]
+    ["verified-plan", "verified-plan", "verified-plan"]
   );
 });

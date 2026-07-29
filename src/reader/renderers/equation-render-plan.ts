@@ -32,14 +32,24 @@ import {
 } from "../../animation/factoring-motif-binding.ts";
 import {
   findKpRegisteredOperationPresentationPlan,
+  hasKpOperationPresentationPlanResolution,
   registerKpOperationPresentationPlan,
+  registerKpOperationPresentationPlanAbsence,
   type KpVerifiedDistributionPresentationPlan,
   type KpVerifiedFactoringPresentationPlan,
-  type KpVerifiedOperationPresentationPlan
+  type KpVerifiedFractionMaterialPresentationPlan,
+  type KpVerifiedOperationPresentationPlan,
+  type KpVerifiedStructuralSuccessionPresentationPlan
 } from "../../animation/operation-presentation-plan-types.ts";
 import {
   compileKpDistributionFactoringPresentationPlan
 } from "../../animation/distribution-factoring-presentation-plan.ts";
+import {
+  compileKpFractionMaterialPresentationPlan
+} from "../../animation/fraction-material-presentation-plan.ts";
+import {
+  compileKpStructuralSuccessionOperationPresentationPlan
+} from "../../animation/structural-succession-operation-presentation-plan.ts";
 import {
   compileKpBalancedIntroductionPresentationPlan
 } from "../../animation/balanced-introduction-presentation-plan.ts";
@@ -228,26 +238,40 @@ export function projectKpReaderEquationRenderPlan(input: {
     const relations = compiled.ir.relations.map((relation) =>
       projectRelation(relation, forward)
     );
-    let registeredOperationPlan =
-      findKpRegisteredOperationPresentationPlan(transformation);
-    if (registeredOperationPlan === undefined) {
-      registeredOperationPlan =
+    const sourceSelectorIds = compiled.ir.source.flatMap(
+      ({ selectors }) => selectors.map(({ id }) => id)
+    );
+    const targetSelectorIds = compiled.ir.target.flatMap(
+      ({ selectors }) => selectors.map(({ id }) => id)
+    );
+    if (!hasKpOperationPresentationPlanResolution(transformation)) {
+      const compiledPlan =
         compileKpDistributionFactoringPresentationPlan({
           transformation,
-          sourceSelectorIds: compiled.ir.source.flatMap(
-            ({ selectors }) => selectors.map(({ id }) => id)
-          ),
-          targetSelectorIds: compiled.ir.target.flatMap(
-            ({ selectors }) => selectors.map(({ id }) => id)
-          )
+          sourceSelectorIds,
+          targetSelectorIds
+        }) ??
+        compileKpFractionMaterialPresentationPlan({
+          transformation,
+          sourceSelectorIds,
+          targetSelectorIds
+        }) ??
+        compileKpStructuralSuccessionOperationPresentationPlan({
+          transformation,
+          sourceSelectorIds,
+          targetSelectorIds
         });
-      if (registeredOperationPlan !== undefined) {
+      if (compiledPlan === undefined) {
+        registerKpOperationPresentationPlanAbsence(transformation);
+      } else {
         registerKpOperationPresentationPlan(
           transformation,
-          registeredOperationPlan
+          compiledPlan
         );
       }
     }
+    const registeredOperationPlan =
+      findKpRegisteredOperationPresentationPlan(transformation);
     const distributionOperationPlans =
       transformation.transformType === "distributeMultiplication" &&
       transformation.definitionId ===
@@ -285,13 +309,32 @@ export function projectKpReaderEquationRenderPlan(input: {
                 registeredOperationPlan
               )
           });
+    const fractionMaterialPresentationPlan =
+      isFractionMaterialTransformation(transformation)
+        ? requireRegisteredFractionMaterialPlan(
+            transformation.id,
+            registeredOperationPlan
+          )
+        : undefined;
+    const registeredStructuralSuccession =
+      structuralSuccession === undefined
+        ? undefined
+        : Object.freeze({
+            ...structuralSuccession,
+            operationPresentationPlan:
+              requireRegisteredStructuralSuccessionPlan(
+                transformation.id,
+                registeredOperationPlan
+              )
+          });
     const presentationPlan =
       createKpReaderEquationTransitionPresentationPlan({
         transitionId: transformation.id,
         visualMotif,
         factoringMotifBinding,
         distributionOperationPlans,
-        structuralSuccession,
+        fractionMaterialPresentationPlan,
+        structuralSuccession: registeredStructuralSuccession,
         successorSyntheses,
         operationChoreography,
         ...(choreographyDecision.status === "explicit-static"
@@ -384,6 +427,46 @@ function requireRegisteredFactoringPlan(
     );
   }
   return plan;
+}
+
+function requireRegisteredFractionMaterialPlan(
+  transformationId: string,
+  plan: KpVerifiedOperationPresentationPlan | undefined
+): KpVerifiedFractionMaterialPresentationPlan {
+  if (plan?.planKind !== "fraction-material") {
+    throw new Error(
+      `Fraction transition ${transformationId} is missing its verified ` +
+      "fission/fusion plan."
+    );
+  }
+  return plan;
+}
+
+function requireRegisteredStructuralSuccessionPlan(
+  transformationId: string,
+  plan: KpVerifiedOperationPresentationPlan | undefined
+): KpVerifiedStructuralSuccessionPresentationPlan {
+  if (plan?.planKind !== "structural-succession") {
+    throw new Error(
+      `Structural transition ${transformationId} is missing its verified ` +
+      "succession plan."
+    );
+  }
+  return plan;
+}
+
+function isFractionMaterialTransformation(
+  transformation: KpAnimationAsset["transformations"][number]
+): boolean {
+  return (
+    transformation.transformType === "splitFractionSum" &&
+    transformation.definitionId ===
+      "definition.symbolic.algebra.split-fraction-sum"
+  ) || (
+    transformation.transformType === "mergeFractions" &&
+    transformation.definitionId ===
+      "definition.symbolic.algebra.merge-fractions"
+  );
 }
 
 function mergeParallelTransitions(

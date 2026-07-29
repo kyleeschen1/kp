@@ -71,6 +71,12 @@ export const kpOperationPresentationEvidenceClosures = Object.freeze([
     "tests/distribution-factoring-presentation-plan.test.ts",
     "parallel foldable fan-outs retain both verified operation plans",
     "Generated and foldable fan-out/fusion operations carry total material, continuant, artifact, and extracted-result roles."
+  ),
+  evidenceClosure(
+    "fraction-structure-and-succession-role-totality",
+    "tests/fraction-structural-presentation-plan.test.ts",
+    "fraction split and merge own total fission/fusion material plans",
+    "Fraction structure rewrites and radical succession carry verified renderer-neutral material ownership while preserving their established compositor behavior."
   )
 ] as const);
 

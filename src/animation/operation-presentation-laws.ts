@@ -132,6 +132,65 @@ export function runKpOperationPresentationLaws(input: {
         });
       }
     }
+    if (input.plan.planKind === "fraction-material") {
+      const fractionPlan = input.plan;
+      const material = fractionPlan.roles.groups.find(
+        ({ id }) => id === fractionPlan.materialGroupId
+      );
+      const bundles = material?.bundleIds.flatMap((id) => {
+        const bundle = bundleById.get(id);
+        return bundle === undefined ? [] : [bundle];
+      }) ?? [];
+      const sourceCount = bundles
+        .filter(({ role }) => role === "source-material")
+        .reduce(
+          (count, bundle) => count + bundle.semanticEntityIds.length,
+          0
+        );
+      const targetCount = bundles
+        .filter(({ role }) => role === "target-material")
+        .reduce(
+          (count, bundle) => count + bundle.semanticEntityIds.length,
+          0
+        );
+      if (
+        material?.groupKind !== fractionPlan.operation ||
+        sourceCount === 0 ||
+        targetCount === 0 ||
+        (fractionPlan.operation === "fission"
+          ? targetCount <= sourceCount
+          : sourceCount <= targetCount)
+      ) {
+        diagnostics.push({
+          lawId: "presentation.lineage",
+          code: "lineage.fraction-material-direction",
+          path: "materialGroupId",
+          message:
+            "Fraction material must expand through fission or contract " +
+            "through fusion with total source and target ownership."
+        });
+      }
+    }
+    if (input.plan.planKind === "structural-succession") {
+      const successionPlan = input.plan;
+      const sourceBundle = bundleById.get(successionPlan.sourceBundleId);
+      const targetBundle = bundleById.get(successionPlan.targetBundleId);
+      if (
+        sourceBundle?.role !== "source-material" ||
+        targetBundle?.role !== "target-material" ||
+        !sourceBundle.semanticEntityIds.every((id) => source.has(id)) ||
+        !targetBundle.semanticEntityIds.every((id) => target.has(id))
+      ) {
+        diagnostics.push({
+          lawId: "presentation.lineage",
+          code: "lineage.structural-succession-direction",
+          path: "sourceBundleId",
+          message:
+            "Structural succession must connect source notation material " +
+            "to target notation material."
+        });
+      }
+    }
   }
 
   if (lawIds.has("presentation.ownership")) {

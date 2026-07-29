@@ -2,14 +2,14 @@ import type {
   KpSemanticTransformation
 } from "../semantic/asset-transformation.ts";
 import {
-  runKpOperationPresentationLaws
-} from "./operation-presentation-laws.ts";
+  compileKpOperationPresentationContextBundles
+} from "./operation-presentation-correspondence.ts";
 import type {
   KpVerifiedOperationPresentationPlan
 } from "./operation-presentation-plan-types.ts";
 import {
-  validateAndMintKpOperationPresentationPlan
-} from "./operation-presentation-plan-validator.ts";
+  verifyKpOperationPresentationPlan
+} from "./operation-presentation-plan-verification.ts";
 import {
   createKpOperationPresentationBundle,
   createKpOperationPresentationGroup,
@@ -81,45 +81,10 @@ export function compileKpDistributionFactoringPresentationPlan(input: {
       semanticEntityIds: [selectorId]
     })
   );
-  const contextBundles = records
-    .filter(({ id }) => id !== transfer.id)
-    .map((record, index) => {
-      const { relation, sourceSelectorIds, targetSelectorIds } = record;
-      if (
-        (relation === "identity" || relation === "role-change") &&
-        sourceSelectorIds.length === 1 &&
-        targetSelectorIds.length === 1
-      ) {
-        return createKpOperationPresentationBundle({
-          id: `${transformation.id}.bundle.continuant.${index}`,
-          role: "continuant",
-          semanticEntityIds: [
-            sourceSelectorIds[0]!,
-            targetSelectorIds[0]!
-          ]
-        });
-      }
-      if (
-        (relation === "introduction" &&
-          sourceSelectorIds.length === 0 &&
-          targetSelectorIds.length > 0) ||
-        (relation === "removal" &&
-          sourceSelectorIds.length > 0 &&
-          targetSelectorIds.length === 0) ||
-        (relation === "artifact" &&
-          sourceSelectorIds.length + targetSelectorIds.length > 0)
-      ) {
-        return createKpOperationPresentationBundle({
-          id: `${transformation.id}.bundle.artifact.${index}`,
-          role: "artifact",
-          semanticEntityIds: [
-            ...sourceSelectorIds,
-            ...targetSelectorIds
-          ]
-        });
-      }
-      throw new Error(`${transformation.id} has unsupported context ${record.id}.`);
-    });
+  const contextBundles = compileKpOperationPresentationContextBundles({
+    transformationId: transformation.id,
+    records: records.filter(({ id }) => id !== transfer.id)
+  });
   const groupKind: "branch" | "fusion" =
     isDistribution ? "branch" : "fusion";
   const group = createKpOperationPresentationGroup({
@@ -156,28 +121,10 @@ export function compileKpDistributionFactoringPresentationPlan(input: {
         fusionGroupId: group.id,
         resultBundleId: targetBundles[0]!.id
       };
-  const validation = validateAndMintKpOperationPresentationPlan({
+  return verifyKpOperationPresentationPlan({
     draft,
-    expectedSelectorIds: [
-      ...input.sourceSelectorIds,
-      ...input.targetSelectorIds
-    ]
+    sourceSelectorIds: input.sourceSelectorIds,
+    targetSelectorIds: input.targetSelectorIds,
+    scheduledGroupIds: [group.id]
   });
-  if (validation.status !== "verified") {
-    throw new Error(validation.issues[0]!.message);
-  }
-  const diagnostics = runKpOperationPresentationLaws({
-    plan: validation.plan,
-    context: {
-      sourceSelectorIds: input.sourceSelectorIds,
-      targetSelectorIds: input.targetSelectorIds,
-      scheduledGroupIds: [group.id],
-      endpointSettlement: "native-source-and-target",
-      rewind: "exact-semantic-inverse"
-    }
-  });
-  if (diagnostics.length > 0) {
-    throw new Error(diagnostics[0]!.message);
-  }
-  return validation.plan;
 }

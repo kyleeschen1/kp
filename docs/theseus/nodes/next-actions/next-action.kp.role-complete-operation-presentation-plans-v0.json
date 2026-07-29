@@ -559,6 +559,104 @@
       "scope": "slice-19-known-debt",
       "checkedAt": "2026-07-29T01:22:31.891Z",
       "notes": "Known release-level route baseline debt remains: shared reader runtime is 137134 gzip bytes against the stale 126571 limit and divide-both-sides HTML is 33781 against 33756. Slice 19 does not change compositor source; the plan compiler adds 1200 gzip bytes versus exact slice-18 output and is cached after first verified projection. Release budget closure remains owned by slice 24."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-29T01:54:21.659Z",
+      "notes": "93 focused tests pass: fraction fission/fusion and structural succession carry total verified roles; plan fabrication, partial lineage, competing reader authorities, and uncached unsupported operations fail closed."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-29T01:54:22.752Z",
+      "notes": "12 canonical renderer tests pass; established opaque fission/fusion, native settlement, responsive containment, and the unchanged compositor vocabulary are preserved."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-29T01:54:23.573Z",
+      "notes": "45 non-browser radical promotion tests pass, including solid structural succession, lifecycle totality, native endpoints, and WebGL lease bounds."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction",
+      "status": "passed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-29T01:54:24.387Z",
+      "notes": "60 governed construction tests pass; generated inputs retain no selector, role, DOM, geometry, timing, or path authority."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-29T01:54:25.226Z",
+      "notes": "256 convergence tests pass without adding lifecycle, scheduler, or fallback-paint vocabulary."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-29T01:54:26.054Z",
+      "notes": "App, node, test, and domain projects accept exact fraction-material and structural-succession discriminants; negative type fixtures reject cross-variant fields."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-29T01:54:26.879Z",
+      "notes": "All concept-room, semantic-reader, semantic-animation, and operation-presentation boundaries pass; the compositor source is unchanged."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-29T01:54:27.691Z",
+      "notes": "Inference remains at the exact approved ceiling: types 49975, instantiations 66276, isolated check 2.15 seconds."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-29T01:54:28.514Z",
+      "notes": "Production build and embedded typecheck pass."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-29T01:54:29.323Z",
+      "notes": "All 16 shared Chromium reader cases pass across 11 routes, including split/merge and radical readers."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-29T01:54:30.144Z",
+      "notes": "Reader production closure passes for 11 manifest routes."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice-20",
+      "checkedAt": "2026-07-29T01:54:30.946Z",
+      "notes": "Review production closure passes."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "failed",
+      "scope": "slice-20-known-baseline",
+      "checkedAt": "2026-07-29T01:54:31.765Z",
+      "notes": "11 of 12 current-tree cases pass. The rewind structure layout-box residual is 1 CSS pixel against a 0.5 threshold, while measured ink matches at 5.68e-14 px. An isolated build of exact slice-19 commit 91592132 reproduces the same coordinates and failure, proving this is not a slice-20 regression."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "slice-20-known-debt",
+      "checkedAt": "2026-07-29T01:54:32.584Z",
+      "notes": "Known release debt remains: shared runtime is 138097 gzip bytes against 126571. Slice 20 adds 963 gzip bytes over exact slice-19 output while compiling and negative-caching each role plan once; compositor source and measured scroll behavior are unchanged. Release budget closure remains assigned to slice 24."
     }
   ],
   "progress": {

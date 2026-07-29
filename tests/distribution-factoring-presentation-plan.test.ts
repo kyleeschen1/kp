@@ -9,8 +9,12 @@ import {
   compileKpDistributionFactoringPresentationPlan
 } from "../src/animation/distribution-factoring-presentation-plan.ts";
 import {
-  findKpRegisteredOperationPresentationPlan
+  findKpRegisteredOperationPresentationPlan,
+  hasKpOperationPresentationPlanResolution
 } from "../src/animation/operation-presentation-plan-types.ts";
+import {
+  createLinearSolveAnimationAsset
+} from "../src/animation/linear-solve-adapter.ts";
 import {
   createKpFoldableDistributionEquationAnimationAsset
 } from "../src/animation/foldable-distribution-equation-adapter.ts";
@@ -207,6 +211,32 @@ test("distribution plan cache stays with the verified transformation identity", 
   );
   assert.equal(
     findKpRegisteredOperationPresentationPlan(structuralCopy),
+    undefined
+  );
+});
+
+test("unsupported operation-plan resolution is negatively cached", () => {
+  const animation = createLinearSolveAnimationAsset();
+  const transformation = animation.transformations[0]!;
+  assert.equal(
+    hasKpOperationPresentationPlanResolution(transformation),
+    false
+  );
+
+  projectKpReaderEquationRenderPlan({
+    animation,
+    runtimeFrame: sampleKpAnimationRuntimeFrame({
+      animation,
+      progress: 0.05
+    })
+  });
+
+  assert.equal(
+    hasKpOperationPresentationPlanResolution(transformation),
+    true
+  );
+  assert.equal(
+    findKpRegisteredOperationPresentationPlan(transformation),
     undefined
   );
 });

@@ -39,6 +39,19 @@ if (verified.planKind === "factoring") {
   verified.branchGroupId;
 }
 
+if (verified.planKind === "fraction-material") {
+  verified.materialGroupId;
+  // @ts-expect-error Fraction material is not structural succession.
+  verified.sourceBundleId;
+}
+
+if (verified.planKind === "structural-succession") {
+  verified.sourceBundleId;
+  verified.targetBundleId;
+  // @ts-expect-error Structural succession has no temporal material group.
+  verified.materialGroupId;
+}
+
 declare const staticCheckpoint: KpExplicitStaticCheckpointPlan;
 
 // @ts-expect-error An explicit static checkpoint is never an animated plan.

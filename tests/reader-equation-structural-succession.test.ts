@@ -30,9 +30,15 @@ test("reader plan preserves compiler-owned structural succession intent", () => 
   const presentation = projectKpReaderEquationTransitionPresentation(
     transition.presentationPlan
   );
+  const succession = presentation.structuralSuccession!;
+  const {
+    operationPresentationPlan,
+    ...structuralIntent
+  } = succession;
 
   assert.equal(presentation.visualMotif?.kind, "radical-corner-transfer");
-  assert.deepEqual(presentation.structuralSuccession, {
+  assert.equal(operationPresentationPlan.planKind, "structural-succession");
+  assert.deepEqual(structuralIntent, {
     kind: "equation-structural-succession-intent",
     id: `structural-succession.${transition.id}`,
     motifKind: "radical-corner-transfer",
@@ -74,6 +80,22 @@ test("reader plan preserves compiler-owned structural succession intent", () => 
       }
     }
   });
+  if (operationPresentationPlan.planKind === "structural-succession") {
+    const source = operationPresentationPlan.roles.bundles.find(
+      ({ id }) => id === operationPresentationPlan.sourceBundleId
+    );
+    const target = operationPresentationPlan.roles.bundles.find(
+      ({ id }) => id === operationPresentationPlan.targetBundleId
+    );
+    assert.equal(source?.role, "source-material");
+    assert.equal(target?.role, "target-material");
+    assert.equal(
+      operationPresentationPlan.roles.bundles.filter(
+        ({ role }) => role === "continuant"
+      ).length,
+      1
+    );
+  }
 });
 
 test("ordinary correspondence receives motif intent without structural strategy", () => {

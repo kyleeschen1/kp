@@ -13,7 +13,7 @@ export type {
 
 declare const kpVerifiedOperationPresentationPlanAuthority: unique symbol;
 const registeredOperationPlans =
-  new WeakMap<object, KpVerifiedOperationPresentationPlan>();
+  new WeakMap<object, KpVerifiedOperationPresentationPlan | null>();
 
 interface KpOperationPresentationPlanDraftBase {
   readonly schemaVersion: "kp.verified-operation-presentation-plan.v1";
@@ -91,6 +91,16 @@ export type KpVerifiedFactoringPresentationPlan =
     readonly planKind: "factoring";
   };
 
+export type KpVerifiedFractionMaterialPresentationPlan =
+  KpVerifiedOperationPresentationPlan & {
+    readonly planKind: "fraction-material";
+  };
+
+export type KpVerifiedStructuralSuccessionPresentationPlan =
+  KpVerifiedOperationPresentationPlan & {
+    readonly planKind: "structural-succession";
+  };
+
 /**
  * Trusted projection registers a verified plan once per transformation
  * identity. A private weak map avoids recompilation without serializing
@@ -111,7 +121,21 @@ export function registerKpOperationPresentationPlan(
 export function findKpRegisteredOperationPresentationPlan(
   transformation: KpSemanticTransformation
 ): KpVerifiedOperationPresentationPlan | undefined {
-  return registeredOperationPlans.get(transformation);
+  return registeredOperationPlans.get(transformation) ?? undefined;
+}
+
+export function hasKpOperationPresentationPlanResolution(
+  transformation: KpSemanticTransformation
+): boolean {
+  return registeredOperationPlans.has(transformation);
+}
+
+export function registerKpOperationPresentationPlanAbsence(
+  transformation: KpSemanticTransformation
+): void {
+  // Negative caching prevents unsupported operations from rerunning every
+  // trusted compiler during scroll projection.
+  registeredOperationPlans.set(transformation, null);
 }
 
 export function operationPresentationPlanAuthorityId(
