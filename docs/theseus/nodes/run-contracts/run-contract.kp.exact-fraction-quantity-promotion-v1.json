@@ -203,7 +203,8 @@
     {
       "id": "s15",
       "title": "compose-cross-view-identity",
-      "status": "planned"
+      "summary": "Composed the four projections into one module-sealed synchronized frame. Every sixth atom and target selection names explicit symbolic selectors, circle sectors, bar parts, number-line intervals, focus state, and transcript references. A mapped four-view obligation is certified from the trace, while trace/frame/total mismatch, missing or duplicate identities, and cross-view lifecycle disagreement fail closed without color or spatial fallback.",
+      "status": "complete"
     },
     {
       "id": "s16",

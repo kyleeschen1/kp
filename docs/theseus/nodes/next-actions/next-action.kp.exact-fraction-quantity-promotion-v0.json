@@ -230,6 +230,20 @@
       "scope": "slice s14 rational tick and interval contracts",
       "checkedAt": "2026-07-29T05:59:13.382Z",
       "notes": "Number-line rational positions, atomic interval lineage, contributor spans, and intrinsic SVG geometry compile across all TypeScript projects."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s15 sealed four-view correspondence",
+      "checkedAt": "2026-07-29T06:03:42.810Z",
+      "notes": "Sixty-four tests pass; every selected atom closes through explicit symbolic, circle, bar, and number-line references, view obligations are exhaustive and sealed, focus and transcript references persist, and missing, duplicate, divergent, color-derived, or spatially inferred identity fails closed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s15 cross-view mapped correspondence",
+      "checkedAt": "2026-07-29T06:03:43.681Z",
+      "notes": "Synchronized view, atomic correspondence, selection correspondence, and sealed view-obligation types compile across all TypeScript projects."
     }
   ],
   "expectedLearning": [
