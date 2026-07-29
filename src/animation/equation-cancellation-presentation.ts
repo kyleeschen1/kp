@@ -7,6 +7,9 @@ import {
 import {
   compileKpFractionCompositionCancellationPresentationPlan
 } from "./fraction-composition-cancellation-presentation.ts";
+import {
+  compileKpGeneratedAlgebraCancellationPresentationPlan
+} from "./generated-algebra-cancellation-presentation.ts";
 import type {
   KpVerifiedInverseCancellationPresentationPlan
 } from "./operation-presentation-plan-types.ts";
@@ -21,7 +24,8 @@ export function compileKpEquationCancellationPresentationPlan(
 ): KpVerifiedInverseCancellationPresentationPlan | undefined {
   const plans = [
     compileKpFractionCompositionCancellationPresentationPlan(transformation),
-    compileKpExistingEquationCancellationPresentationPlan(transformation)
+    compileKpExistingEquationCancellationPresentationPlan(transformation),
+    compileKpGeneratedAlgebraCancellationPresentationPlan(transformation)
   ].filter(
     (plan): plan is KpVerifiedInverseCancellationPresentationPlan =>
       plan !== undefined

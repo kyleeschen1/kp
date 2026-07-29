@@ -4,7 +4,6 @@ import {
   validateKpSemanticTransformationDefinition,
   type CreateKpSemanticTransformationDefinitionInput,
   type KpSelectorCorrespondence,
-  type KpSemanticTransformation,
   type KpSemanticTransformationDefinition,
   type KpTransformationValidationIssue
 } from "./asset-transformation.ts";
@@ -13,6 +12,10 @@ import type {
   KpLawFailure
 } from "./asset-laws.ts";
 import type { GeneratedAlgebraFixtureFamilyId } from "./generated-algebra-fixture-registry.ts";
+import {
+  mintKpCompilerGeneratedAlgebraTransformation,
+  type KpCompilerGeneratedAlgebraTransformation
+} from "./generated-algebra-transformation-authority.ts";
 import type { CorrespondenceMap } from "./correspondence.ts";
 
 export type GeneratedAlgebraTransformDefinitionStatus = "seed" | "promoted";
@@ -1087,7 +1090,7 @@ export function getGeneratedAlgebraTransformDefinition(
 
 export function createGeneratedAlgebraSemanticTransformation(
   input: CreateGeneratedAlgebraSemanticTransformationInput
-): KpSemanticTransformation {
+): KpCompilerGeneratedAlgebraTransformation {
   const definition = findGeneratedAlgebraTransformDefinitionByFamilyAndType(
     input.familyId,
     input.transformType
@@ -1099,19 +1102,87 @@ export function createGeneratedAlgebraSemanticTransformation(
     );
   }
 
-  return createKpSemanticTransformation({
-    id: input.id,
-    definitionId: definition.id,
-    transformType: definition.transformType,
-    title: input.title ?? definition.title,
-    sourceObjectIds: input.sourceObjectIds,
-    targetObjectIds: input.targetObjectIds,
-    preserves: definition.preserves,
-    assumptions: definition.assumptions,
-    lawRefs: definition.lawRefs,
-    correspondenceMap: input.correspondenceMap,
-    correspondence: input.correspondence
+  const generatedCancellationMap =
+    createGeneratedLinearSolveCancellationMap(input);
+  if (
+    generatedCancellationMap !== undefined &&
+    input.correspondenceMap !== undefined
+  ) {
+    throw new Error(
+      `Generated cancellation ${input.id} correspondence is compiler-owned.`
+    );
+  }
+  return mintKpCompilerGeneratedAlgebraTransformation({
+    familyId: input.familyId,
+    transformation: createKpSemanticTransformation({
+      id: input.id,
+      definitionId: definition.id,
+      transformType: definition.transformType,
+      title: input.title ?? definition.title,
+      sourceObjectIds: input.sourceObjectIds,
+      targetObjectIds: input.targetObjectIds,
+      preserves: definition.preserves,
+      assumptions: definition.assumptions,
+      lawRefs: definition.lawRefs,
+      correspondenceMap:
+        generatedCancellationMap ?? input.correspondenceMap,
+      correspondence: input.correspondence
+    })
   });
+}
+
+function createGeneratedLinearSolveCancellationMap(
+  input: CreateGeneratedAlgebraSemanticTransformationInput
+): CorrespondenceMap | undefined {
+  if (input.familyId !== "generated.linear-solve") return undefined;
+  const inverseSuffixes = input.transformType === "cancelAdditiveInverses"
+    ? ["lhs.addend", "lhs.subtract"] as const
+    : input.transformType === "cancelMultiplicativeInverses"
+      ? ["lhs.coefficient", "lhs.divide"] as const
+      : undefined;
+  if (inverseSuffixes === undefined) return undefined;
+  if (
+    input.sourceObjectIds.length !== 1 ||
+    input.targetObjectIds.length !== 1
+  ) {
+    throw new Error(
+      `Generated cancellation ${input.id} requires one source and one target.`
+    );
+  }
+  const sourceObjectId = input.sourceObjectIds[0]!;
+  const correspondence = input.correspondence ?? [];
+  if (correspondence.some(({ preserves }) => !preserves.includes("identity"))) {
+    throw new Error(
+      `Generated cancellation ${input.id} continuants must preserve identity.`
+    );
+  }
+
+  // These selector roles are part of the registered algebra operation
+  // template. Numeric values and glyph labels never decide inverse pairing.
+  return {
+    id: `correspondence.${input.id}`,
+    records: [
+      ...correspondence.map((entry, index) => ({
+        id: `continuant-${index + 1}`,
+        relation: "identity" as const,
+        sourceSelectorIds: [entry.sourceSelectorId],
+        targetSelectorIds: [entry.targetSelectorId],
+        summary: "The generated semantic entity persists through cancellation."
+      })),
+      {
+        id: input.transformType === "cancelAdditiveInverses"
+          ? "generated-additive-inverses-cancel"
+          : "generated-multiplicative-inverses-cancel",
+        relation: "cancelation",
+        sourceSelectorIds: inverseSuffixes.map(
+          (suffix) => `${sourceObjectId}.${suffix}`
+        ),
+        targetSelectorIds: [],
+        summary:
+          "The registered inverse pair retires through cancellation."
+      }
+    ]
+  };
 }
 
 export function validateGeneratedAlgebraTransformDefinitionRegistry(

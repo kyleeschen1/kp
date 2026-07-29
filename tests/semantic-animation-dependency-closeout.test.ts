@@ -5,7 +5,8 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import {
-  compileKpGeneratedCancellationPresentation
+  compileKpGeneratedCancellationPresentation,
+  kpGeneratedCancellationDraftSchemaVersion
 } from "../src/animation/generated-cancellation-presentation-boundary.ts";
 import {
   kpSemanticAnimationRenderingImportBaseline
@@ -17,25 +18,23 @@ test("semantic-animation dependency inversion baseline is closed", () => {
   assert.deepEqual(kpSemanticAnimationRenderingImportBaseline, []);
 });
 
-test("generated cancellation consumes an injected typed presentation seam", () => {
-  let observedSourceCount = 0;
+test("generated cancellation derives roles behind the neutral compiler seam", () => {
   const result = compileKpGeneratedCancellationPresentation(
     {
-      operationId: "kp.algebra.cancel-additive-inverses",
-      teachingGoal: "preserve-flow",
-      topology: { sourceCount: 2, sourceBaselines: "shared" }
-    },
-    ({ topology }) => {
-      observedSourceCount = topology.sourceCount;
-      return { kind: "resolved", recipe: "native-handoff-v1" };
+      schemaVersion: kpGeneratedCancellationDraftSchemaVersion,
+      familyId: "generated.linear-solve",
+      id: "generated.linear-solve.dependency-closeout",
+      title: "Generated dependency closeout",
+      variable: "x",
+      addend: 3,
+      solution: 4
     }
   );
 
-  assert.equal(observedSourceCount, 2);
-  assert.deepEqual(result, {
-    kind: "accepted",
-    resolution: { kind: "resolved", recipe: "native-handoff-v1" }
-  });
+  assert.equal(result.kind, "accepted");
+  if (result.kind !== "accepted") return;
+  assert.equal(result.presentations.length, 1);
+  assert.equal(result.presentations[0]?.plan.planKind, "inverse-cancellation");
 });
 
 test("neutral contracts exclude concrete renderer resources", () => {

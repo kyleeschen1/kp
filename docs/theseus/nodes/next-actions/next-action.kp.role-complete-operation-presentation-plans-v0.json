@@ -412,6 +412,76 @@
       "scope": "slice-17",
       "checkedAt": "2026-07-28T23:57:40.180Z",
       "notes": "Known release debt is 135088 gzip versus 126571 on seven shared legacy routes, only 631 bytes above slice 16 after avoiding a transient 177369-byte dependency fan-in; divide-both-sides HTML remains 25 bytes above its 5 percent limit. Retain for slice 21 and slice 24, without rebaseline."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "slice-18",
+      "checkedAt": "2026-07-29T00:18:23.078Z",
+      "notes": "82 role-plan tests pass, including seven generated cancellations, strict generated-draft repair, and external authority loss."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "slice-18",
+      "checkedAt": "2026-07-29T00:18:24.073Z",
+      "notes": "256 semantic-animation convergence tests pass after replacing the legacy generated recipe seam."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-18",
+      "checkedAt": "2026-07-29T00:18:24.943Z",
+      "notes": "Application, node, test, and domain typechecks pass; nominal generated authority rejects structural external transformations."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-18",
+      "checkedAt": "2026-07-29T00:18:25.898Z",
+      "notes": "All architecture gates pass with generated role derivation remaining renderer-neutral."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-18",
+      "checkedAt": "2026-07-29T00:18:26.970Z",
+      "notes": "Inference contracts pass at types=49984 and instantiations=66312, under unchanged ceilings."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "slice-18",
+      "checkedAt": "2026-07-29T00:18:27.906Z",
+      "notes": "All 16 Chromium reader conformance cases pass; existing canonical cancellation motion remains verified."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-18",
+      "checkedAt": "2026-07-29T00:18:28.912Z",
+      "notes": "Production Vite build passes."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "slice-18",
+      "checkedAt": "2026-07-29T00:18:29.829Z",
+      "notes": "Reader production closure passes for 11 manifest routes."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "slice-18",
+      "checkedAt": "2026-07-29T00:18:30.792Z",
+      "notes": "Known pre-existing slice-17 debt remains exactly unchanged at 135088 gzip on shared routes and 33781 raw bytes for divide-both-sides; no rebaseline or new regression."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice-18",
+      "checkedAt": "2026-07-29T00:18:31.772Z",
+      "notes": "Dev-review production closure passes."
     }
   ],
   "progress": {

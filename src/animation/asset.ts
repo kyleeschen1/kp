@@ -11,6 +11,9 @@ import {
   type KpLawCheckLevel,
   type KpSemanticTransformation
 } from "../semantic/asset-transformation.ts";
+import {
+  transferKpGeneratedAlgebraTransformationAuthority
+} from "../semantic/generated-algebra-transformation-authority.ts";
 import type {
   KpLawCheckResult,
   KpLawFailure
@@ -1080,7 +1083,7 @@ function cloneAnimationAssetAnnotationIdsByPlacement(
 function cloneKpSemanticTransformation(
   transformation: KpSemanticTransformation
 ): KpSemanticTransformation {
-  return createKpSemanticTransformation({
+  const clone = createKpSemanticTransformation({
     id: transformation.id,
     ...(transformation.definitionId === undefined
       ? {}
@@ -1102,6 +1105,10 @@ function cloneKpSemanticTransformation(
       ? {}
       : { lawRefs: transformation.lawRefs })
   });
+  return transferKpGeneratedAlgebraTransformationAuthority(
+    transformation,
+    clone
+  );
 }
 
 function cloneAnimationAssetTimeline(

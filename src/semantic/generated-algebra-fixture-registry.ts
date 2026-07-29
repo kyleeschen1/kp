@@ -1,10 +1,9 @@
+import type {
+  KpGeneratedAlgebraFixtureFamilyId
+} from "./generated-algebra-transformation-authority.ts";
+
 export type GeneratedAlgebraFixtureFamilyId =
-  | "generated.linear-solve"
-  | "generated.fraction-expression"
-  | "generated.exponent"
-  | "generated.radical"
-  | "generated.function-wrap"
-  | "generated.distribution";
+  KpGeneratedAlgebraFixtureFamilyId;
 
 export interface GeneratedLinearSolveTutorialFixtureSpec {
   readonly id: string;

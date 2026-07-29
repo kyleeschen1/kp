@@ -159,7 +159,8 @@
     {
       "id": "slice.kp.role-plan.18",
       "title": "Migrate-generated-cancellation",
-      "status": "planned"
+      "summary": "Generated linear-solve cancellations now receive compiler-owned lifecycle maps and role-complete plans from nominally authorized semantic transformations. External drafts can author only algebraic meaning; presentation selectors, roles, DOM, geometry, timing, paths, and recipes are rejected, while serialized or spread transformations lose authority and fail closed. All focused, convergence, type, architecture, browser, build, and production gates pass within the unchanged inference ceiling; known reader budget debt is unchanged.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.19",
