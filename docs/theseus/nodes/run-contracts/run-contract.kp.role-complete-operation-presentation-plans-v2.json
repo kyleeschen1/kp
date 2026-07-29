@@ -177,7 +177,8 @@
     {
       "id": "slice.kp.role-plan.21",
       "title": "Cut-over-exhaustive-compositor-dispatch",
-      "status": "planned"
+      "summary": "Cut the canonical reader adapter over from optional projection fields to one exhaustive dispatch over all nine branded presentation-plan variants. The never guard and architecture gate make new variants fail closed until explicitly realized, while each case maps only its verified role payload into the unchanged native compositor primitives; all shared reader, fraction, distribution, radical, seek, rewind, production-closure, and inference checks pass.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.22",

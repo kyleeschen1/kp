@@ -16,6 +16,17 @@ const canonicalSceneAdapter =
   "src/reader/renderers/equation-scene-compositor-adapter.ts";
 const canonicalCompositor =
   "src/rendering/native-katex-scene-compositor.ts";
+const readerPlanKinds = [
+  "default-motion",
+  "visual-motif",
+  "distribution",
+  "fraction-material",
+  "factoring",
+  "successor-synthesis",
+  "operation-choreography",
+  "structural-succession",
+  "explicit-static-checkpoint"
+] as const;
 const violations: string[] = [];
 
 for (const path of collectTypeScriptFiles(animationRoot)) {
@@ -65,17 +76,36 @@ const sceneAdapterSource = readFileSync(
   join(projectRoot, canonicalSceneAdapter),
   "utf8"
 );
+const readerDispatchSource = sceneAdapterSource.slice(
+  sceneAdapterSource.indexOf(
+    "function dispatchReaderEquationPresentation("
+  ),
+  sceneAdapterSource.indexOf("type KpReaderEquationRoutingFields")
+);
+const dispatchedReaderPlanKinds = Array.from(
+  readerDispatchSource.matchAll(/case "([^"]+)":/g),
+  (match) => match[1]
+);
 if (
-  !sceneAdapterSource.includes(
+  sceneAdapterSource.includes(
     "projectKpReaderEquationTransitionPresentation("
   ) ||
   !sceneAdapterSource.includes(
-    "operationChoreography: presentation.operationChoreography"
-  )
+    "function dispatchReaderEquationPresentation("
+  ) ||
+  !sceneAdapterSource.includes("switch (plan.planKind)") ||
+  !readerDispatchSource.includes(
+    "operationChoreography: plan.operationChoreography"
+  ) ||
+  !sceneAdapterSource.includes(
+    "function unreachablePresentationPlan(plan: never)"
+  ) ||
+  dispatchedReaderPlanKinds.length !== readerPlanKinds.length ||
+  readerPlanKinds.some((kind) => !dispatchedReaderPlanKinds.includes(kind))
 ) {
   violations.push(
-    `${canonicalSceneAdapter} must project the required reader presentation ` +
-    "plan and pass its nominal operation choreography to the canonical compositor."
+    `${canonicalSceneAdapter} must exhaustively dispatch the closed reader ` +
+    "presentation-plan union before constructing canonical compositor input."
   );
 }
 

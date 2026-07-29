@@ -77,6 +77,12 @@ export const kpOperationPresentationEvidenceClosures = Object.freeze([
     "tests/fraction-structural-presentation-plan.test.ts",
     "fraction split and merge own total fission/fusion material plans",
     "Fraction structure rewrites and radical succession carry verified renderer-neutral material ownership while preserving their established compositor behavior."
+  ),
+  evidenceClosure(
+    "exhaustive-reader-compositor-dispatch",
+    "tests/semantic-reader-equation-scene-compositor-adapter.test.ts",
+    "the canonical adapter exhaustively dispatches the closed reader plan union",
+    "The reader-to-compositor boundary switches once over every branded plan variant and cannot reconstruct independently optional presentation evidence."
   )
 ] as const);
 

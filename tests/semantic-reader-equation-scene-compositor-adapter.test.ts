@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
+import {
+  createLinearSolveTeacherZeroAnimationAsset
+} from "../src/animation/linear-solve-adapter.ts";
 import {
   createNumeratorSplitMergeEquationAnimationAsset
 } from "../src/animation/numerator-split-merge-equation-adapter.ts";
@@ -249,12 +252,15 @@ Object.defineProperty(globalThis, "getComputedStyle", {
 });
 
 function plans() {
-  const animation = createLinearSolveAnimationAsset();
+  const animation = createLinearSolveTeacherZeroAnimationAsset();
+  const index = animation.transformations.findIndex(
+    ({ id }) => id === "transform.linear-solve.expose-left-zero"
+  );
   const runtimeFrame = sampleKpAnimationRuntimeFrame({
     id: "runtime.reader.compositor",
     animation,
     direction: "forward",
-    progress: 0.5
+    progress: (index + 0.5) / animation.transformations.length
   });
   const renderPlan = projectKpReaderEquationRenderPlan({
     animation,
@@ -484,4 +490,39 @@ test("the same reader session adapter accepts both fraction fission and fusion p
       lifecycle === (progress < 0.5 ? "split" : "merge")
     ));
   }
+});
+
+test("the canonical adapter exhaustively dispatches the closed reader plan union", async () => {
+  const source = await readFile(
+    "src/reader/renderers/equation-scene-compositor-adapter.ts",
+    "utf8"
+  );
+  const dispatch = source.slice(
+    source.indexOf("function dispatchReaderEquationPresentation"),
+    source.indexOf("type KpReaderEquationRoutingFields")
+  );
+  const cases = [...dispatch.matchAll(/case "([^"]+)"/g)]
+    .map((match) => match[1])
+    .sort();
+
+  assert.deepEqual(cases, [
+    "default-motion",
+    "distribution",
+    "explicit-static-checkpoint",
+    "factoring",
+    "fraction-material",
+    "operation-choreography",
+    "structural-succession",
+    "successor-synthesis",
+    "visual-motif"
+  ]);
+  assert.equal(
+    (source.match(/switch \(plan\.planKind\)/g) ?? []).length,
+    1
+  );
+  assert.equal(
+    source.includes("projectKpReaderEquationTransitionPresentation"),
+    false
+  );
+  assert.match(dispatch, /default:\s*[\s\S]*unreachablePresentationPlan/);
 });

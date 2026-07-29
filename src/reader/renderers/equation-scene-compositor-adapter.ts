@@ -35,7 +35,7 @@ import type {
   KpEquationMotionStageOccupancy
 } from "../../rendering/equation-motion-path-planner.ts";
 import {
-  projectKpReaderEquationTransitionPresentation
+  type KpReaderEquationTransitionPresentationPlan
 } from "./equation-transition-presentation-plan.ts";
 import {
   assertKpFactorCommonTermMotifBinding
@@ -68,6 +68,59 @@ export interface KpReaderEquationPureScenePlan {
   readonly nativePlan: KpCanonicalNativeKatexPureScenePlan;
 }
 
+type KpReaderEquationPresentationPlanOf<
+  Kind extends KpReaderEquationTransitionPresentationPlan["planKind"]
+> = Extract<
+  KpReaderEquationTransitionPresentationPlan,
+  { readonly planKind: Kind }
+>;
+
+interface KpReaderEquationCompositorDispatchBase {
+  readonly canonicalInput:
+    Omit<KpCanonicalNativeKatexSceneInput, "purePlan">;
+  readonly motionProfile:
+    | "default"
+    | "canonical-factoring-fission-fusion"
+    | "canonical-copy-fan-out"
+    | "canonical-semantic-reorder-and-group";
+  readonly successorSynthesisCount: number;
+}
+
+type KpReaderEquationCompositorDispatch =
+  | (KpReaderEquationCompositorDispatchBase & {
+      readonly planKind:
+        | "default-motion"
+        | "visual-motif"
+        | "distribution"
+        | "fraction-material"
+        | "successor-synthesis";
+    })
+  | (KpReaderEquationCompositorDispatchBase & {
+      readonly planKind: "factoring";
+      readonly factoring: ReturnType<typeof bindKpNativeKatexFactoringScene>;
+    })
+  | (KpReaderEquationCompositorDispatchBase & {
+      readonly planKind: "structural-succession";
+      readonly structuralSuccession:
+        KpReaderEquationPresentationPlanOf<
+          "structural-succession"
+        >["structuralSuccession"];
+    })
+  | (KpReaderEquationCompositorDispatchBase & {
+      readonly planKind: "operation-choreography";
+      readonly operationChoreography:
+        KpReaderEquationPresentationPlanOf<
+          "operation-choreography"
+        >["operationChoreography"];
+    })
+  | (KpReaderEquationCompositorDispatchBase & {
+      readonly planKind: "explicit-static-checkpoint";
+      readonly staticCheckpoint:
+        KpReaderEquationPresentationPlanOf<
+          "explicit-static-checkpoint"
+        >["staticCheckpoint"];
+    });
+
 export function compileKpReaderEquationPureScenePlan(
   input: KpReaderEquationSceneCompositorInput
 ): KpReaderEquationPureScenePlan {
@@ -90,9 +143,7 @@ export function createKpReaderEquationSceneCompositorSession(
   const prepared = prepareReaderEquationScene(input);
   const {
     measurementIdentity,
-    presentation,
-    factoringChoreography,
-    factoring
+    dispatch
   } = prepared;
   if (
     input.purePlan !== undefined &&
@@ -109,22 +160,16 @@ export function createKpReaderEquationSceneCompositorSession(
     throw new Error("Reader equation compositor endpoints must share one stage.");
   }
   input.source.stage.dataset["kpNativeKatexSuccessorSynthesisCount"] =
-    String(presentation.successorSyntheses?.length ?? 0);
+    String(dispatch.successorSynthesisCount);
   input.source.stage.dataset["kpNativeKatexMotionProfile"] =
-    factoringChoreography !== undefined
-      ? "canonical-factoring-fission-fusion"
-      : presentation.visualMotif?.kind === "copy-fan-out"
-      ? "canonical-copy-fan-out"
-      : presentation.visualMotif?.kind === "semantic-reorder-and-group"
-        ? "canonical-semantic-reorder-and-group"
-      : "default";
-  if (presentation.staticCheckpoint === undefined) {
+    dispatch.motionProfile;
+  if (dispatch.planKind !== "explicit-static-checkpoint") {
     delete input.source.stage.dataset[
       "kpReaderEquationStaticCheckpointReason"
     ];
   } else {
     input.source.stage.dataset["kpReaderEquationStaticCheckpointReason"] =
-      presentation.staticCheckpoint.reason;
+      dispatch.staticCheckpoint.reason;
   }
   const canonical = createKpCanonicalNativeKatexSceneSession({
     ...prepared.canonicalInput,
@@ -132,21 +177,23 @@ export function createKpReaderEquationSceneCompositorSession(
       ? {}
       : { purePlan: input.purePlan.nativePlan })
   });
-  factoring?.recordEvidence();
-  if (presentation.structuralSuccession !== undefined) {
+  if (dispatch.planKind === "factoring") {
+    dispatch.factoring.recordEvidence();
+  }
+  if (dispatch.planKind === "structural-succession") {
     const reducedMotion =
       input.motionMode !== undefined && input.motionMode !== "continuous";
     const fidelity = auditKpNativeKatexChoreographyFidelity({
-      intent: presentation.structuralSuccession,
+      intent: dispatch.structuralSuccession,
       strategy: reducedMotion
         ? {
             kind: "checkpoint-settlement",
-            actPhaseIds: presentation.structuralSuccession.actPhaseIds,
+            actPhaseIds: dispatch.structuralSuccession.actPhaseIds,
             reason: "reduced-motion"
           }
         : {
             kind: "solid-mask-succession",
-            actPhaseIds: presentation.structuralSuccession.actPhaseIds
+            actPhaseIds: dispatch.structuralSuccession.actPhaseIds
           },
       reconciliation: canonical.reconciliation,
       tracks: canonical.session.tracks
@@ -162,28 +209,28 @@ export function createKpReaderEquationSceneCompositorSession(
       "passed";
   }
   const checkpointProgress = (progress: number) =>
-    presentation.staticCheckpoint === undefined || progress >= 1
+    dispatch.planKind !== "explicit-static-checkpoint" || progress >= 1
       ? progress
       : 0;
   return Object.freeze({
     ...canonical.session,
     mode:
-      presentation.staticCheckpoint === undefined
+      dispatch.planKind !== "explicit-static-checkpoint"
         ? canonical.session.mode
         : "checkpoint-settlement",
     presentationMode:
-      presentation.staticCheckpoint === undefined
+      dispatch.planKind !== "explicit-static-checkpoint"
         ? "verified-motion"
         : "explicit-static-checkpoint",
     sample(progress: number) {
       return canonical.session.sample(checkpointProgress(progress));
     },
     apply(progress: number) {
-      if (presentation.operationChoreography === undefined) {
+      if (dispatch.planKind !== "operation-choreography") {
         delete input.source.stage.dataset["kpNativeKatexOperationChoreography"];
       } else {
         input.source.stage.dataset["kpNativeKatexOperationChoreography"] =
-          presentation.operationChoreography.kind;
+          dispatch.operationChoreography.kind;
       }
       return canonical.session.apply(checkpointProgress(progress));
     },
@@ -198,9 +245,6 @@ function prepareReaderEquationScene(
     input.measurementIdentity
   );
   const { renderTransition, materialTransition } = resolveTransitionPair(input);
-  const presentation = projectKpReaderEquationTransitionPresentation(
-    renderTransition.presentationPlan
-  );
   const stageOccupancy = input.stageLayout === undefined
     ? undefined
     : projectStageOccupancy(input.stageLayout, measurementIdentity);
@@ -208,89 +252,248 @@ function prepareReaderEquationScene(
     renderTransition,
     materialTransition
   });
-  const factoringChoreography = assertKpFactorCommonTermMotifBinding({
-    transitionId: renderTransition.id,
-    transformType: renderTransition.transformType,
-    motifKind: presentation.visualMotif?.kind,
-    direction: input.renderPlan.direction,
-    semanticStatus: renderTransition.semanticStatus,
-    successorSynthesisCount:
-      presentation.successorSyntheses?.length ?? 0,
-    relations: renderTransition.relations,
-    binding: presentation.factoringMotifBinding
-  });
-  const factoring = factoringChoreography === undefined
-    ? undefined
-    : bindKpNativeKatexFactoringScene({
-        source: input.source,
-        target: input.target,
-        intent: factoringChoreography
-      });
-  const canonicalInput: Omit<KpCanonicalNativeKatexSceneInput, "purePlan"> = {
+  const base: Omit<
+    KpCanonicalNativeKatexSceneInput,
+    | "purePlan"
+    | "fanInRouting"
+    | "factoring"
+    | "operationChoreography"
+    | "copyFanOutRouting"
+    | "reorderRouting"
+    | "successorSyntheses"
+    | "structuralSuccession"
+    | "structuralMotion"
+  > = {
     source: input.source,
     target: input.target,
     relations,
-    ...(factoringChoreography === undefined &&
-      presentation.visualMotif?.kind === "merge-fan-in"
-      ? { fanInRouting: true }
-      : {}),
-    ...(factoring === undefined
-      ? {}
-      : { factoring }),
-    ...(presentation.operationChoreography === undefined
-      ? {}
-      : { operationChoreography: presentation.operationChoreography }),
-    ...(presentation.visualMotif?.kind === "copy-fan-out"
-      ? { copyFanOutRouting: true }
-      : {}),
-    ...(presentation.visualMotif?.kind === "semantic-reorder-and-group"
-      ? { reorderRouting: true }
-      : {}),
-    ...(stageOccupancy === undefined ? {} : { stageOccupancy }),
-    ...(presentation.successorSyntheses === undefined
-      ? {}
-      : {
-          successorSyntheses: presentation.successorSyntheses.map(
-            (binding) => {
-              const relation = renderTransition.relations.find(
-                ({ recordId }) => recordId === binding.relationRecordId
-              );
-              if (relation === undefined) {
-                throw new Error(
-                  `Successor binding ${binding.id} has no canonical correspondence.`
-                );
-              }
-              return {
-                binding,
-                direction: input.renderPlan.direction,
-                motion:
-                  input.motionMode === undefined ||
-                  input.motionMode === "continuous"
-                    ? "full" as const
-                    : "checkpoint" as const
-              };
-            }
-          )
-        }),
-    ...(presentation.structuralSuccession === undefined
-      ? {}
-      : {
-          structuralSuccession: presentation.structuralSuccession,
-          structuralMotion:
-            input.motionMode === undefined ||
-            input.motionMode === "continuous"
-              ? "full"
-              : "checkpoint"
-        })
+    ...(stageOccupancy === undefined ? {} : { stageOccupancy })
   };
+  const dispatch = dispatchReaderEquationPresentation({
+    plan: renderTransition.presentationPlan,
+    base,
+    renderTransition,
+    direction: input.renderPlan.direction,
+    motionMode: input.motionMode,
+    source: input.source,
+    target: input.target
+  });
   return {
     measurementIdentity,
     renderTransition,
-    presentation,
-    factoringChoreography,
-    factoring,
-    canonicalInput
+    dispatch,
+    canonicalInput: dispatch.canonicalInput
   };
+}
+
+function dispatchReaderEquationPresentation(input: {
+  readonly plan: KpReaderEquationTransitionPresentationPlan;
+  readonly base: Omit<
+    KpCanonicalNativeKatexSceneInput,
+    | "purePlan"
+    | "fanInRouting"
+    | "factoring"
+    | "operationChoreography"
+    | "copyFanOutRouting"
+    | "reorderRouting"
+    | "successorSyntheses"
+    | "structuralSuccession"
+    | "structuralMotion"
+  >;
+  readonly renderTransition: KpReaderEquationTransitionPlan;
+  readonly direction: KpReaderEquationRenderPlan["direction"];
+  readonly motionMode?:
+    KpReaderEquationSceneCompositorInput["motionMode"];
+  readonly source: KpNativeKatexRenderedSceneObservation;
+  readonly target: KpNativeKatexRenderedSceneObservation;
+}): KpReaderEquationCompositorDispatch {
+  const { plan } = input;
+  switch (plan.planKind) {
+    case "default-motion":
+      return plainDispatch(plan.planKind, input.base);
+    case "visual-motif":
+      return routedDispatch(
+        plan.planKind,
+        input.base,
+        plan.visualMotif.kind
+      );
+    case "distribution":
+      return routedDispatch(
+        plan.planKind,
+        input.base,
+        plan.visualMotif.kind
+      );
+    case "fraction-material":
+      return routedDispatch(
+        plan.planKind,
+        input.base,
+        plan.visualMotif?.kind
+      );
+    case "factoring": {
+      const choreography = assertKpFactorCommonTermMotifBinding({
+        transitionId: input.renderTransition.id,
+        transformType: input.renderTransition.transformType,
+        motifKind: plan.visualMotif.kind,
+        direction: input.direction,
+        semanticStatus: input.renderTransition.semanticStatus,
+        successorSynthesisCount: 0,
+        relations: input.renderTransition.relations,
+        binding: plan.factoringMotifBinding
+      });
+      if (choreography === undefined) {
+        throw new Error(
+          `Factoring transition ${input.renderTransition.id} has no dispatch.`
+        );
+      }
+      const factoring = bindKpNativeKatexFactoringScene({
+        source: input.source,
+        target: input.target,
+        intent: choreography
+      });
+      return {
+        planKind: plan.planKind,
+        canonicalInput: { ...input.base, factoring },
+        motionProfile: "canonical-factoring-fission-fusion",
+        successorSynthesisCount: 0,
+        factoring
+      };
+    }
+    case "successor-synthesis": {
+      const successorSyntheses = plan.successorSyntheses.map((binding) => {
+        const relation = input.renderTransition.relations.find(
+          ({ recordId }) => recordId === binding.relationRecordId
+        );
+        if (relation === undefined) {
+          throw new Error(
+            `Successor binding ${binding.id} has no canonical correspondence.`
+          );
+        }
+        return {
+          binding,
+          direction: input.direction,
+          motion: fullMotion(input.motionMode)
+        };
+      });
+      const routed = routingFields(plan.visualMotif?.kind);
+      return {
+        planKind: plan.planKind,
+        canonicalInput: {
+          ...input.base,
+          ...routed,
+          successorSyntheses
+        },
+        motionProfile: motionProfile(routed),
+        successorSynthesisCount: successorSyntheses.length
+      };
+    }
+    case "operation-choreography": {
+      const routed = routingFields(plan.visualMotif.kind);
+      return {
+        planKind: plan.planKind,
+        canonicalInput: {
+          ...input.base,
+          ...routed,
+          operationChoreography: plan.operationChoreography
+        },
+        motionProfile: motionProfile(routed),
+        successorSynthesisCount: 0,
+        operationChoreography: plan.operationChoreography
+      };
+    }
+    case "structural-succession":
+      return {
+        planKind: plan.planKind,
+        canonicalInput: {
+          ...input.base,
+          structuralSuccession: plan.structuralSuccession,
+          structuralMotion: fullMotion(input.motionMode)
+        },
+        motionProfile: "default",
+        successorSynthesisCount: 0,
+        structuralSuccession: plan.structuralSuccession
+      };
+    case "explicit-static-checkpoint":
+      return {
+        planKind: plan.planKind,
+        canonicalInput: input.base,
+        motionProfile: "default",
+        successorSynthesisCount: 0,
+        staticCheckpoint: plan.staticCheckpoint
+      };
+    default:
+      // The never boundary makes a new reader-plan variant fail compilation
+      // until this sole compositor dispatch gives it an explicit realization.
+      return unreachablePresentationPlan(plan);
+  }
+}
+
+type KpReaderEquationRoutingFields = Pick<
+  KpCanonicalNativeKatexSceneInput,
+  "fanInRouting" | "copyFanOutRouting" | "reorderRouting"
+>;
+
+function routingFields(
+  motifKind: string | undefined
+): KpReaderEquationRoutingFields {
+  return motifKind === "merge-fan-in"
+    ? { fanInRouting: true }
+    : motifKind === "copy-fan-out"
+      ? { copyFanOutRouting: true }
+      : motifKind === "semantic-reorder-and-group"
+        ? { reorderRouting: true }
+        : {};
+}
+
+function routedDispatch(
+  planKind:
+    | "visual-motif"
+    | "distribution"
+    | "fraction-material",
+  base: KpReaderEquationCompositorDispatchBase["canonicalInput"],
+  motifKind: string | undefined
+): KpReaderEquationCompositorDispatch {
+  const routed = routingFields(motifKind);
+  return {
+    planKind,
+    canonicalInput: { ...base, ...routed },
+    motionProfile: motionProfile(routed),
+    successorSynthesisCount: 0
+  };
+}
+
+function plainDispatch(
+  planKind: "default-motion",
+  canonicalInput:
+    KpReaderEquationCompositorDispatchBase["canonicalInput"]
+): KpReaderEquationCompositorDispatch {
+  return {
+    planKind,
+    canonicalInput,
+    motionProfile: "default",
+    successorSynthesisCount: 0
+  };
+}
+
+function motionProfile(
+  routing: KpReaderEquationRoutingFields
+): KpReaderEquationCompositorDispatchBase["motionProfile"] {
+  return routing.copyFanOutRouting === true
+    ? "canonical-copy-fan-out"
+    : routing.reorderRouting === true
+      ? "canonical-semantic-reorder-and-group"
+      : "default";
+}
+
+function fullMotion(
+  motionMode: KpReaderEquationSceneCompositorInput["motionMode"]
+): "full" | "checkpoint" {
+  return motionMode === undefined || motionMode === "continuous"
+    ? "full"
+    : "checkpoint";
+}
+
+function unreachablePresentationPlan(plan: never): never {
+  throw new Error(`Unreachable reader presentation plan: ${String(plan)}`);
 }
 
 function projectStageOccupancy(

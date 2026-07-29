@@ -657,6 +657,111 @@
       "scope": "slice-20-known-debt",
       "checkedAt": "2026-07-29T01:54:32.584Z",
       "notes": "Known release debt remains: shared runtime is 138097 gzip bytes against 126571. Slice 20 adds 963 gzip bytes over exact slice-19 output while compiling and negative-caching each role plan once; compositor source and measured scroll behavior are unchanged. Release budget closure remains assigned to slice 24."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-29T02:14:29.777Z",
+      "notes": "98 focused tests pass, including an exact nine-variant source assertion for the single exhaustive reader compositor dispatch and the retired projection helper."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-29T02:14:30.729Z",
+      "notes": "102 distribution and factoring tests pass after exhaustive dispatch cutover."
+    },
+    {
+      "command": "npm run test:radical-reader-promotion",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-29T02:14:31.586Z",
+      "notes": "45 non-browser radical promotion tests pass through structural-succession dispatch."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-29T02:14:32.426Z",
+      "notes": "12 canonical renderer tests pass; the core compositor source and accepted vocabulary remain unchanged."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-29T02:14:33.252Z",
+      "notes": "57 fraction architecture tests pass through fraction-material dispatch."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-29T02:14:34.318Z",
+      "notes": "All 256 semantic convergence tests pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-29T02:14:35.329Z",
+      "notes": "All four architecture gates pass; the operation-presentation gate now enforces the closed nine-variant dispatch and never guard."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-29T02:14:36.341Z",
+      "notes": "Inference remains at types 49975 and instantiations 66276; isolated check 4.51 seconds."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-29T02:14:37.248Z",
+      "notes": "App, node, test, and domain projects pass with exhaustive plan narrowing."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-29T02:14:38.188Z",
+      "notes": "Production build and embedded typecheck pass."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-29T02:14:39.055Z",
+      "notes": "All 16 shared Chromium reader cases pass across the 11 reader routes."
+    },
+    {
+      "command": "npm run test:browser:fraction-composition",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-29T02:14:39.913Z",
+      "notes": "All 7 fraction-composition Chromium cases pass at wide and phone widths, including direct seek and rewind."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-29T02:14:40.767Z",
+      "notes": "Reader production closure passes for all 11 manifest routes."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice-21",
+      "checkedAt": "2026-07-29T02:14:41.987Z",
+      "notes": "Review production closure passes."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "slice-21-known-debt",
+      "checkedAt": "2026-07-29T02:14:43.010Z",
+      "notes": "Known release debt remains: shared reader runtime is 138095 gzip bytes against the stale 126571 limit and divide-both-sides HTML is 33781 against 33756. The core compositor is unchanged; slice 24 owns route budget closure."
     }
   ],
   "progress": {
