@@ -76,6 +76,34 @@
       "scope": "slice s04 manifest and immutable fixture",
       "checkedAt": "2026-07-29T05:17:13.500Z",
       "notes": "Typed manifest and focused tests compile across application, Node, test, and domain projects."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s05 exact rational and quantity core",
+      "checkedAt": "2026-07-29T05:21:19.323Z",
+      "notes": "Ten tests pass for normalized immutable rationals, exact one-third plus one-sixth, proof-carrying same-unit addition, runtime cross-unit rejection, compile-time negative fixture, and the frozen exemplar."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s05 quantity unit type isolation",
+      "checkedAt": "2026-07-29T05:21:20.169Z",
+      "notes": "The @ts-expect-error fixture proves statically distinct unit identities cannot reach the certified sum constructor."
+    },
+    {
+      "command": "node --test linear problem rational and generator tests",
+      "status": "passed",
+      "scope": "slice s05 extracted rational-core compatibility",
+      "checkedAt": "2026-07-29T05:21:20.973Z",
+      "notes": "Nine provider rational, expression, and generator tests pass after delegating arithmetic to the domain-neutral core; provider-specific DTO policy remains in the provider adapter."
+    },
+    {
+      "command": "npm run typecheck:linear-provider",
+      "status": "passed",
+      "scope": "slice s05 provider boundary",
+      "checkedAt": "2026-07-29T05:21:21.798Z",
+      "notes": "The linear-problem provider remains type-correct against the extracted domain-neutral arithmetic."
     }
   ],
   "expectedLearning": [

@@ -143,7 +143,8 @@
     {
       "id": "s05",
       "title": "add-exact-quantity-core",
-      "status": "planned"
+      "summary": "Extracted the linear provider's bigint rational laws into one immutable domain-neutral core while leaving DTO and solver policy in the provider. Added nominal exact-quantity units and a proof-carrying sum constructor: NoInfer rejects authored cross-unit addition at typecheck, and an explicit runtime identity guard rejects widened or decoded mismatches before a certificate can exist.",
+      "status": "complete"
     },
     {
       "id": "s06",
