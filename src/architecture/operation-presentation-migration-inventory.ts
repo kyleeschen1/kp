@@ -83,6 +83,12 @@ export const kpOperationPresentationEvidenceClosures = Object.freeze([
     "tests/semantic-reader-equation-scene-compositor-adapter.test.ts",
     "the canonical adapter exhaustively dispatches the closed reader plan union",
     "The reader-to-compositor boundary switches once over every branded plan variant and cannot reconstruct independently optional presentation evidence."
+  ),
+  evidenceClosure(
+    "catalog-wide-directional-plan-coverage",
+    "tests/equation-presentation-catalog-conformance.test.ts",
+    "every catalog equation operation has directional presentation coverage",
+    "Every catalog equation operation is planned in forward and rewind, explicit static gaps remain visible, and only a fully verified animated catalog can pass promotion."
   )
 ] as const);
 

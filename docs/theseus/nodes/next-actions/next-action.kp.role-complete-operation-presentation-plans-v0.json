@@ -762,6 +762,69 @@
       "scope": "slice-21-known-debt",
       "checkedAt": "2026-07-29T02:14:43.010Z",
       "notes": "Known release debt remains: shared reader runtime is 138095 gzip bytes against the stale 126571 limit and divide-both-sides HTML is 33781 against 33756. The core compositor is unchanged; slice 24 owns route budget closure."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "slice-22",
+      "checkedAt": "2026-07-29T02:28:16.523Z",
+      "notes": "102 focused tests pass. Catalog conformance enumerates 28 assets, 36 equation-target claims, 33 equation transitions in both directions, three explicit cross-surface exclusions, two honest static operations, and adversarial generated-authority rejection."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "slice-22",
+      "checkedAt": "2026-07-29T02:28:17.560Z",
+      "notes": "All 256 convergence tests pass with catalog-backed projections unchanged."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction",
+      "status": "passed",
+      "scope": "slice-22",
+      "checkedAt": "2026-07-29T02:28:18.407Z",
+      "notes": "All 60 governed construction tests pass; generated/provider payloads retain no presentation authority."
+    },
+    {
+      "command": "npm run test:animation-library-display",
+      "status": "passed",
+      "scope": "slice-22",
+      "checkedAt": "2026-07-29T02:28:19.238Z",
+      "notes": "All 13 display and promotion-truth tests pass; static or incomplete coverage cannot report ported."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-22",
+      "checkedAt": "2026-07-29T02:28:20.073Z",
+      "notes": "App, node, test, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-22",
+      "checkedAt": "2026-07-29T02:28:20.906Z",
+      "notes": "All architecture gates pass with the catalog audit isolated from reader runtime imports."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-22",
+      "checkedAt": "2026-07-29T02:28:21.729Z",
+      "notes": "Inference remains at types 49975 and instantiations 66276; isolated check 2.4 seconds."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-22",
+      "checkedAt": "2026-07-29T02:28:22.581Z",
+      "notes": "Production build passes and excludes catalog-conformance tooling from reader runtime chunks."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "slice-22-known-debt",
+      "checkedAt": "2026-07-29T02:28:23.491Z",
+      "notes": "Known release debt is unchanged at 138095 shared runtime gzip bytes versus 126571 and divide-both-sides HTML 33781 versus 33756. Catalog conformance adds no production import; slice 24 owns budget closure."
     }
   ],
   "progress": {

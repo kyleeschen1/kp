@@ -183,7 +183,8 @@
     {
       "id": "slice.kp.role-plan.22",
       "title": "Add-catalog-wide-conformance",
-      "status": "planned"
+      "summary": "Added a catalog-wide, runtime-isolated presentation conformance and promotion gate. It freezes all 28 catalog assets and 36 equation-target claims, checks 33 true equation transformations in forward and rewind, explicitly inventories three cross-surface comparison exclusions, preserves two legacy operations as inspectable static checkpoints, and blocks fully animated promotion for static, incomplete, duplicated, missing, asymmetric, fallback, or externally authored presentation coverage.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.role-plan.23",

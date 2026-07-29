@@ -88,6 +88,7 @@ test("raw cancellation authoring and behavior-evidence gaps remain explicit", ()
       "verified-plan",
       "verified-plan",
       "verified-plan",
+      "verified-plan",
       "verified-plan"
     ]
   );
