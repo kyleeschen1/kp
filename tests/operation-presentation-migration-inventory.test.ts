@@ -6,6 +6,7 @@ import {
   kpOperationPresentationCancellationAuthoringSites,
   kpOperationPresentationEvidenceClosures,
   kpOperationPresentationEvidenceGaps,
+  kpOperationEvaluationContinuityMigrationInventory,
   kpOperationPresentationReaderPlanSeams,
   kpOperationPresentationRendererInputs
 } from "../src/architecture/operation-presentation-migration-inventory.ts";
@@ -15,7 +16,8 @@ const inventory = [
   ...kpOperationPresentationRendererInputs,
   ...kpOperationPresentationCancellationAuthoringSites,
   ...kpOperationPresentationEvidenceGaps,
-  ...kpOperationPresentationEvidenceClosures
+  ...kpOperationPresentationEvidenceClosures,
+  ...kpOperationEvaluationContinuityMigrationInventory
 ];
 
 test("operation presentation migration inventory has unique executable evidence", async () => {
@@ -89,4 +91,66 @@ test("semantic cancellation sites cross verified plans and old evidence gaps are
   assert.ok(kpOperationPresentationEvidenceClosures.every(
     ({ state }) => state === "verified-plan"
   ));
+});
+
+test("operation continuity inventory exposes every known bypass and shared route", () => {
+  assert.deepEqual(
+    kpOperationEvaluationContinuityMigrationInventory.map(
+      ({ id, state, owningSlice }) => ({ id, state, owningSlice })
+    ),
+    [
+      {
+        id: "operation-continuity.raw-binding-paint-policy",
+        state: "must-remove",
+        owningSlice: "s09"
+      },
+      {
+        id: "operation-continuity.renderer-binary-handoff",
+        state: "must-remove",
+        owningSlice: "s09"
+      },
+      {
+        id: "operation-continuity.exact-fraction-local-motif",
+        state: "must-remove",
+        owningSlice: "s16"
+      },
+      {
+        id: "operation-continuity.exact-fraction-local-path",
+        state: "must-remove",
+        owningSlice: "s17"
+      },
+      {
+        id: "operation-continuity.reader-registry-compiler",
+        state: "canonical-route",
+        owningSlice: "s07"
+      },
+      {
+        id: "operation-continuity.matrix-vector-duration",
+        state: "existing-shared-consumer",
+        owningSlice: "s18"
+      },
+      {
+        id: "operation-continuity.matrix-matrix-duration",
+        state: "existing-shared-consumer",
+        owningSlice: "s18"
+      },
+      {
+        id: "operation-continuity.exact-fraction-duration",
+        state: "adoption-gap",
+        owningSlice: "s18"
+      }
+    ]
+  );
+  assert.equal(
+    kpOperationEvaluationContinuityMigrationInventory.filter(
+      ({ state }) => state === "canonical-route"
+    ).length,
+    1
+  );
+  assert.equal(
+    kpOperationEvaluationContinuityMigrationInventory.filter(
+      ({ state }) => state === "must-remove"
+    ).length,
+    4
+  );
 });

@@ -62,6 +62,19 @@
       "status": "passed",
       "scope": "s02 immutable reference typing",
       "checkedAt": "2026-07-29T17:31:10.373Z"
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s03 executable bypass inventory",
+      "checkedAt": "2026-07-29T17:35:17.847Z",
+      "notes": "109 checks passed; the inventory is unique, source-backed, and pins must-remove slices for raw paint policy, binary renderer handoff, local exact-fraction motif/path authority, registry routing, and duration adoption."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03 inventory typing",
+      "checkedAt": "2026-07-29T17:35:22.252Z"
     }
   ],
   "allowedWork": [
@@ -105,7 +118,8 @@
     {
       "id": "s03",
       "title": "inventory-presentation-bypasses",
-      "status": "planned"
+      "summary": "Pinned eight source-backed presentation routes: raw paint policy, binary renderer handoff, exact-fraction motif/path/duration bypasses, the canonical registry caller, and existing semantic-duration consumers, each with an explicit disposition slice.",
+      "status": "complete"
     },
     {
       "id": "s04",

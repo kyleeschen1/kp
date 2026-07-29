@@ -91,6 +91,88 @@ export const kpOperationPresentationEvidenceClosures = Object.freeze([
   )
 ] as const);
 
+export const kpOperationEvaluationContinuityMigrationInventory = Object.freeze([
+  continuityMigration(
+    "raw-binding-paint-policy",
+    "src/animation/successor-synthesis.ts",
+    "readonly paintPolicy?:",
+    "must-remove",
+    "s09",
+    "Raw successor bindings currently let callers choose the paint handoff."
+  ),
+  continuityMigration(
+    "renderer-binary-handoff",
+    "src/rendering/native-katex-successor-synthesis.ts",
+    'plan.paintPolicy === "opaque-binary-handoff"',
+    "must-remove",
+    "s09",
+    "The renderer performs a non-equivalent boolean source-to-target swap."
+  ),
+  continuityMigration(
+    "exact-fraction-local-motif",
+    "src/rendering/exact-fraction-quantity-symbolic-projection.ts",
+    'readonly motif: "successor-synthesis" | "operation-evaluation";',
+    "must-remove",
+    "s16",
+    "The exemplar labels its own motif instead of resolving the registry."
+  ),
+  continuityMigration(
+    "exact-fraction-local-path",
+    "src/rendering/exact-fraction-quantity-symbolic-projection.ts",
+    'materialPathFamily: "arc-below"',
+    "must-remove",
+    "s17",
+    "The exemplar chooses a route that belongs to measured collision planning."
+  ),
+  continuityMigration(
+    "reader-registry-compiler",
+    "src/reader/renderers/equation-render-plan.ts",
+    "compileKpRegisteredSuccessorSynthesisPresentationPlan({",
+    "canonical-route",
+    "s07",
+    "The canonical reader already resolves registered operation evaluation."
+  ),
+  continuityMigration(
+    "matrix-vector-duration",
+    "src/animation/matrix-vector-semantic-duration.ts",
+    "planKpSemanticDuration({",
+    "existing-shared-consumer",
+    "s18",
+    "Matrix-vector work already consumes the shared semantic duration planner."
+  ),
+  continuityMigration(
+    "matrix-matrix-duration",
+    "src/animation/matrix-matrix-semantic-duration.ts",
+    "planKpSemanticDuration({",
+    "existing-shared-consumer",
+    "s18",
+    "Matrix-matrix work already consumes the shared semantic duration planner."
+  ),
+  continuityMigration(
+    "exact-fraction-duration",
+    "src/animation/exact-fraction-quantity-adapter.ts",
+    "durationMs: 7_500",
+    "adoption-gap",
+    "s18",
+    "Exact fraction hard-codes one total instead of honoring action minima."
+  )
+] as const);
+
+export type KpOperationEvaluationContinuityMigrationState =
+  | "must-remove"
+  | "canonical-route"
+  | "existing-shared-consumer"
+  | "adoption-gap";
+
+export interface KpOperationEvaluationContinuityMigrationEntry {
+  readonly id: string;
+  readonly sourcePath: string;
+  readonly sourceNeedle: string;
+  readonly state: KpOperationEvaluationContinuityMigrationState;
+  readonly owningSlice: `s${number}`;
+  readonly summary: string;
+}
+
 export type KpOperationPresentationMigrationState =
   | "internal-projection-primitive"
   | "verified-plan";
@@ -158,6 +240,24 @@ function evidenceClosure(
     sourcePath,
     sourceNeedle,
     state: "verified-plan" as const,
+    summary
+  });
+}
+
+function continuityMigration(
+  id: string,
+  sourcePath: string,
+  sourceNeedle: string,
+  state: KpOperationEvaluationContinuityMigrationState,
+  owningSlice: `s${number}`,
+  summary: string
+): KpOperationEvaluationContinuityMigrationEntry {
+  return Object.freeze({
+    id: `operation-continuity.${id}`,
+    sourcePath,
+    sourceNeedle,
+    state,
+    owningSlice,
     summary
   });
 }
