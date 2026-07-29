@@ -4,9 +4,16 @@ import {
   type KpExactFractionQuantityRuntimeFrame,
   type KpExactFractionQuantityRuntimeSession
 } from "../rendering/exact-fraction-quantity-runtime.ts";
+import type {
+  KpExactFractionQuantityAccessibleProjection
+} from "../rendering/exact-fraction-quantity-accessible-projection.ts";
 import {
   kpExactFractionQuantityAnimationId
 } from "../animation/exact-fraction-quantity-adapter.ts";
+import {
+  settleKpExactFractionQuantityAccessibilityProgress,
+  type KpExactFractionQuantityAccessibilityMode
+} from "../animation/exact-fraction-quantity-accessibility-sampling.ts";
 import {
   KP_EXACT_FRACTION_FOLDABLE_NODE_IDS,
   compileKpExactFractionQuantityFoldProjection,
@@ -73,6 +80,7 @@ interface ExactSurfaceSession {
   symbolicFontReadiness?: ReturnType<
     typeof createKpEquationFontReadiness
   > | undefined;
+  lastFrame?: KpExactFractionQuantityRuntimeFrame | undefined;
   lastUrlWriteMs: number;
 }
 
@@ -116,13 +124,23 @@ KpEditorAnimationSurfaceAdapter = {
       ...session.libraryState,
       progress: state.progress
     });
+    player.dataset["kpExactInputProgressPermille"] = String(
+      Math.round(state.progress * 1_000)
+    );
+    const accessibilityMode = exactAccessibilityMode(player);
+    player.dataset["kpExactSampledAccessibilityMode"] =
+      accessibilityMode;
     const frame = sampleKpExactFractionQuantityRuntime({
       session: session.runtime,
       clock: {
         direction: state.direction,
-        progress: state.progress
+        progress: settleKpExactFractionQuantityAccessibilityProgress({
+          progress: state.progress,
+          mode: accessibilityMode
+        })
       }
     });
+    session.lastFrame = frame;
     syncSurface(player, slot, session, frame);
   }
 };
@@ -139,7 +157,10 @@ function mountSurface(
   slot: HTMLElement,
   session: ExactSurfaceSession
 ): void {
-  slot.innerHTML = renderSurfaceShell(session.libraryState);
+  slot.innerHTML = renderSurfaceShell(
+    session.libraryState,
+    session.runtime.accessibility
+  );
   slot.addEventListener("click", (event) => {
     const target = event.target instanceof Element
       ? event.target.closest<HTMLElement>(
@@ -169,6 +190,14 @@ function mountSurface(
       });
       player.dataset["kpExactActiveRepresentation"] = activeView;
       syncActiveView(slot, session.libraryState);
+      if (session.lastFrame !== undefined) {
+        syncAccessibleSurface(
+          slot,
+          session.libraryState,
+          session.lastFrame,
+          session.runtime.accessibility
+        );
+      }
       writeRoute(player, session, true);
     }
   });
@@ -193,6 +222,14 @@ function mountSurface(
       player.dataset["kpExactPinnedNodeIds"] =
         session.libraryState.pinnedNodeIds.join(",");
       syncFoldControls(slot, session.libraryState);
+      if (session.lastFrame !== undefined) {
+        syncAccessibleSurface(
+          slot,
+          session.libraryState,
+          session.lastFrame,
+          session.runtime.accessibility
+        );
+      }
       writeRoute(player, session, true);
       return;
     }
@@ -214,6 +251,14 @@ function mountSurface(
       player.dataset["kpExactPinnedNodeIds"] =
         session.libraryState.pinnedNodeIds.join(",");
       syncFoldControls(slot, session.libraryState);
+      if (session.lastFrame !== undefined) {
+        syncAccessibleSurface(
+          slot,
+          session.libraryState,
+          session.lastFrame,
+          session.runtime.accessibility
+        );
+      }
       writeRoute(player, session, true);
     }
   });
@@ -252,6 +297,13 @@ function syncSurface(
   syncConcreteViews(slot, frame);
   syncActiveView(slot, session.libraryState);
   syncFoldControls(slot, session.libraryState);
+  syncCheckpointControls(slot, beatIndex);
+  syncAccessibleSurface(
+    slot,
+    session.libraryState,
+    frame,
+    session.runtime.accessibility
+  );
   syncSymbolicScene(slot, session, frame);
   writeRoute(player, session, stateUrlWriteIsDue(session));
 }
@@ -536,6 +588,64 @@ function syncFoldControls(
     ));
 }
 
+function syncCheckpointControls(
+  slot: HTMLElement,
+  beatIndex: number
+): void {
+  slot.querySelectorAll<HTMLElement>("[data-kp-exact-checkpoint-start]")
+    .forEach((button, index) => {
+      if (index === beatIndex) {
+        button.setAttribute("aria-current", "step");
+      } else {
+        button.removeAttribute("aria-current");
+      }
+    });
+}
+
+function syncAccessibleSurface(
+  slot: HTMLElement,
+  state: KpExactFractionQuantityLibraryState,
+  frame: KpExactFractionQuantityRuntimeFrame,
+  projection: KpExactFractionQuantityAccessibleProjection
+): void {
+  const step = frame.projection.neutralFrame.beat.index;
+  const current = projection.steps[step]!;
+  const host = required<HTMLElement>(
+    slot,
+    "[data-kp-exact-accessible-state]"
+  );
+  const stateKey = [
+    current.checkpointId,
+    state.activeView,
+    state.foldMode,
+    state.pinnedNodeIds.join(",")
+  ].join("|");
+  if (host.dataset["kpExactAccessibleStateKey"] === stateKey) return;
+  host.dataset["kpExactAccessibleStateKey"] = stateKey;
+  host.dataset["kpExactAccessibleCheckpoint"] = current.checkpointId;
+  host.dataset["kpExactAccessibleView"] = state.activeView;
+  host.dataset["kpExactAccessibleFoldMode"] = state.foldMode;
+  host.innerHTML = `
+    <h4>Current exact-quantity checkpoint</h4>
+    <div data-kp-exact-accessible-math>${current.nativeHtmlAndMathml}</div>
+    <p>${escapeHtml(current.label)}. ${escapeHtml(current.description)}</p>
+    ${state.activeView === "symbolic"
+      ? ""
+      : `<p>${escapeHtml(accessibleViewSummary(frame, state.activeView))}</p>`}
+    <p>Visual representation: ${escapeHtml(
+      state.activeView.replaceAll("-", " ")
+    )}. Evaluation detail: ${escapeHtml(state.foldMode)}. Folding changes disclosure only.</p>
+    <p>Focused quantities: ${current.focusSelectionIds.map(
+      (selectionId) =>
+        `<a href="#${escapeHtml(`transcript.selection.${selectionId}`)}">${escapeHtml(selectionLabel(selectionId))}</a>`
+    ).join(", ")}.</p>`;
+  slot.querySelectorAll<HTMLElement>("[data-kp-exact-transcript-step]")
+    .forEach((item, index) => {
+      if (index === step) item.setAttribute("aria-current", "step");
+      else item.removeAttribute("aria-current");
+    });
+}
+
 function writeRoute(
   player: HTMLElement,
   session: ExactSurfaceSession,
@@ -560,8 +670,84 @@ function stateUrlWriteIsDue(session: ExactSurfaceSession): boolean {
   return performance.now() - session.lastUrlWriteMs >= 125;
 }
 
+function exactAccessibilityMode(
+  player: HTMLElement
+): KpExactFractionQuantityAccessibilityMode {
+  const value = player.dataset["kpEditorAnimationAccessibilityMode"];
+  return value === "reduced-motion" ||
+    value === "static" ||
+    value === "narrated"
+    ? value
+    : "full-motion";
+}
+
+function accessibleViewSummary(
+  frame: KpExactFractionQuantityRuntimeFrame,
+  view: KpExactFractionQuantityViewKind
+): string {
+  switch (view) {
+    case "symbolic":
+      return "";
+    case "partitioned-circle":
+      return frame.projection.circle.accessibleSummary;
+    case "fraction-bar":
+      return frame.projection.bar.accessibleSummary;
+    case "number-line":
+      return frame.projection.numberLine.accessibleSummary;
+  }
+}
+
+function renderAccessibleTranscript(
+  projection: KpExactFractionQuantityAccessibleProjection
+): string {
+  const transcriptRefs = [...new Set(
+    projection.steps.flatMap(({ transcriptRefIds }) => transcriptRefIds)
+  )];
+  return `
+    <details class="kp-exact-quantity__transcript" data-kp-exact-transcript>
+      <summary>Accessible transcript: all five operations</summary>
+      <p>${escapeHtml(projection.introduction)}</p>
+      <ol>
+        ${projection.steps.map((step) => `
+          <li data-kp-exact-transcript-step="${escapeHtml(step.beatId)}">
+            <strong>${escapeHtml(step.label)}.</strong>
+            ${escapeHtml(step.description)}
+          </li>`
+        ).join("")}
+      </ol>
+      <p>${escapeHtml(projection.finalStatement)}</p>
+      <dl class="kp-exact-sr-only" data-kp-exact-transcript-references>
+        ${transcriptRefs.map((transcriptRefId) => {
+          const selectionId = transcriptRefId.replace(
+            "transcript.selection.",
+            ""
+          );
+          return `<div id="${escapeHtml(transcriptRefId)}"><dt>${escapeHtml(selectionLabel(selectionId))}</dt><dd>${escapeHtml(selectionId)}</dd></div>`;
+        }).join("")}
+      </dl>
+    </details>`;
+}
+
+function selectionLabel(selectionId: string): string {
+  switch (selectionId) {
+    case "selection.addend.one-third":
+      return "one-third addend";
+    case "selection.addend.one-third-as-two-sixths":
+      return "same one-third addend as two sixths";
+    case "selection.addend.one-sixth":
+      return "one-sixth addend";
+    case "selection.sum.three-sixths":
+      return "merged three-sixths result";
+    case "selection.result.one-half":
+      return "same result regrouped as one half";
+    default:
+      return "selected exact quantity";
+  }
+}
+
 function renderSurfaceShell(
-  state: KpExactFractionQuantityLibraryState
+  state: KpExactFractionQuantityLibraryState,
+  accessibility: KpExactFractionQuantityAccessibleProjection
 ): string {
   return `
     <section class="kp-exact-quantity" data-kp-exact-quantity-surface>
@@ -587,6 +773,9 @@ function renderSurfaceShell(
         .kp-exact-quantity__outline { display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; margin-block:.7rem; }
         .kp-exact-quantity__outline label { display:flex; gap:.3rem; align-items:center; }
         .kp-exact-quantity__pins { display:flex; gap:.65rem; flex-wrap:wrap; }
+        .kp-exact-sr-only { position:absolute !important; width:1px !important; height:1px !important; padding:0 !important; margin:-1px !important; overflow:hidden !important; clip:rect(0,0,0,0) !important; white-space:nowrap !important; border:0 !important; }
+        .kp-exact-quantity__transcript { margin-block:1rem 0; }
+        .kp-exact-quantity__transcript li[aria-current="step"] { font-weight:700; }
         @media (max-width:${kpExactFractionQuantityLayoutPolicy.wideMinWidthPx - 1}px) {
           .kp-exact-quantity__grid { grid-template-columns:1fr; min-height:18rem; }
           .kp-exact-quantity__view { display:none; min-height:18rem; }
@@ -623,12 +812,14 @@ function renderSurfaceShell(
           ).join("")}
         </div>
       </div>
-      <div class="kp-exact-quantity__grid">
+      <section class="kp-exact-sr-only" data-kp-exact-accessible-state aria-live="polite" aria-atomic="true"></section>
+      <div class="kp-exact-quantity__grid" aria-hidden="true">
         ${viewShell("symbolic", "Symbolic")}
         ${viewShell("partitioned-circle", "Partitioned circle")}
         ${viewShell("fraction-bar", "Fraction bar")}
         ${viewShell("number-line", "Number line")}
       </div>
+      ${renderAccessibleTranscript(accessibility)}
     </section>`;
 }
 

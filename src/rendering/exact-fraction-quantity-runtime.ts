@@ -30,6 +30,10 @@ import {
   type KpExactFractionQuantitySymbolicProjection
 } from "./exact-fraction-quantity-symbolic-projection.ts";
 import {
+  createKpExactFractionQuantityAccessibleProjection,
+  type KpExactFractionQuantityAccessibleProjection
+} from "./exact-fraction-quantity-accessible-projection.ts";
+import {
   createKpExactFractionQuantityTrace,
   type KpExactFractionQuantityTrace
 } from "../semantic/exact-fraction-quantity-trace.ts";
@@ -50,6 +54,7 @@ export interface KpExactFractionQuantityRuntimeSession {
   readonly clockAuthority: "shared-animation-runtime-clock";
   readonly trace: KpExactFractionQuantityTrace;
   readonly symbolic: KpExactFractionQuantitySymbolicProjection;
+  readonly accessibility: KpExactFractionQuantityAccessibleProjection;
   readonly presentation: KpExactFractionQuantityPresentationPlan;
   readonly [kpExactFractionQuantityRuntimeSessionBrand]: true;
 }
@@ -90,6 +95,7 @@ export interface KpExactFractionQuantityRuntimeFrame {
 export function createKpExactFractionQuantityRuntimeSession():
 KpExactFractionQuantityRuntimeSession {
   const trace = createKpExactFractionQuantityTrace();
+  const symbolic = createKpExactFractionQuantitySymbolicProjection(trace);
   const session = Object.freeze({
     schemaVersion: "kp.exact-fraction-quantity-runtime-session.v1",
     id: "runtime-session.exact-fraction-quantity.third-plus-sixth",
@@ -98,7 +104,11 @@ KpExactFractionQuantityRuntimeSession {
     rendererSessionCount: 1 as const,
     clockAuthority: "shared-animation-runtime-clock" as const,
     trace,
-    symbolic: createKpExactFractionQuantitySymbolicProjection(trace),
+    symbolic,
+    accessibility: createKpExactFractionQuantityAccessibleProjection({
+      trace,
+      symbolic
+    }),
     presentation: createKpExactFractionQuantityPresentationPlan(trace)
   });
   sealedRuntimeSessions.add(session);

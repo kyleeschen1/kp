@@ -43,6 +43,9 @@ export function createKpEditorAnimationLibraryCaptureProvider(
         : boundedProgressPermille(
             player.dataset["kpEditorAnimationProgress"]
           );
+      const animationProgressPermille = exactQuantity
+        ? boundedPermille(player.dataset["kpExactInputProgressPermille"])
+        : progressPermille;
       const activePhase =
         player.dataset["kpExactPhase"] ??
         library.dataset["kpEditorAnimationLiveVisualPhaseId"] ??
@@ -88,7 +91,7 @@ export function createKpEditorAnimationLibraryCaptureProvider(
           documentVersion: "1",
           assetId: animationId,
           progressPermille,
-          animationProgressPermille: progressPermille,
+          animationProgressPermille,
           activeTransformationIds:
             activePhase !== undefined && isProtocolId(activePhase)
               ? [activePhase]

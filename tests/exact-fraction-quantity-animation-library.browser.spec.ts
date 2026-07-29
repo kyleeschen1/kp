@@ -271,3 +271,131 @@ test("Review remains reachable and records the wide four-view layout", async ({
     height: 800
   });
 });
+
+test("accessibility, transcript, settled motion, and keyboard stay canonical", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`/?animation=${descriptorId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+  await expect(player.locator(".kp-exact-quantity__grid"))
+    .toHaveAttribute("aria-hidden", "true");
+  const accessibleState = player.locator(
+    "[data-kp-exact-accessible-state]"
+  );
+  await expect(accessibleState.locator(".katex-mathml")).toHaveCount(1);
+  await expect(
+    player.locator("[data-kp-exact-transcript-step]")
+  ).toHaveCount(5);
+  const transcript = player.locator("[data-kp-exact-transcript]");
+  const transcriptText = await transcript.textContent();
+
+  for (const foldMode of [
+    "expanded",
+    "collapsed",
+    "automatic"
+  ]) {
+    await player.locator("[data-kp-exact-fold-mode]")
+      .selectOption(foldMode);
+    await expect(transcript).toHaveText(transcriptText ?? "");
+  }
+
+  const numberLine = player.locator(
+    "button[data-kp-exact-active-view=\"number-line\"]"
+  );
+  await numberLine.focus();
+  await numberLine.press("Enter");
+  await expect(numberLine).toHaveAttribute("aria-pressed", "true");
+  await expect(numberLine).toBeFocused();
+  await expect(accessibleState).toHaveAttribute(
+    "data-kp-exact-accessible-view",
+    "number-line"
+  );
+
+  const checkpoint = player.locator(
+    "button[data-kp-exact-checkpoint-start=\"560\"]"
+  );
+  await checkpoint.focus();
+  await checkpoint.press("Enter");
+  await expect(checkpoint).toBeFocused();
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-input-progress-permille",
+    "560"
+  );
+
+  const presentation = player.locator(
+    "[data-kp-editor-animation-accessibility-control]"
+  );
+  const scrubber = player.locator(
+    "[data-action=\"seek-editor-animation\"]"
+  );
+  await presentation.selectOption("static");
+  await scrubber.fill("0.2");
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-progress-permille",
+    "180"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-paint-ownership",
+    "target-native"
+  );
+  await scrubber.fill("0.4");
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-progress-permille",
+    "400"
+  );
+  await presentation.selectOption("reduced-motion");
+  await scrubber.fill("0.6");
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-progress-permille",
+    "560"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-sampled-accessibility-mode",
+    "reduced-motion"
+  );
+  await presentation.selectOption("full-motion");
+  await scrubber.fill("0.72");
+  await expect(accessibleState).toHaveAttribute(
+    "data-kp-exact-accessible-checkpoint",
+    "checkpoint.exact-fraction.merged"
+  );
+  await expect(
+    player.locator(
+      "[data-kp-exact-transcript-step][aria-current=\"step\"]"
+    )
+  ).toHaveAttribute(
+    "data-kp-exact-transcript-step",
+    "beat.exact-fraction.merge-three-sixths"
+  );
+  await scrubber.fill("0.6");
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-progress-permille",
+    "600"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-paint-ownership",
+    "transient"
+  );
+
+  expect(await player.locator(
+    "[data-kp-exact-accessible-state] a[href^=\"#transcript.selection.\"]"
+  ).evaluateAll((links) => links.every((link) => {
+    const target = link.getAttribute("href");
+    return target !== null &&
+      document.getElementById(target.slice(1)) !== null;
+  }))).toBe(true);
+
+  const summary = transcript.locator("summary");
+  await summary.focus();
+  await summary.press("Enter");
+  await expect(transcript).toHaveAttribute("open", "");
+  await expect(summary).toBeFocused();
+});

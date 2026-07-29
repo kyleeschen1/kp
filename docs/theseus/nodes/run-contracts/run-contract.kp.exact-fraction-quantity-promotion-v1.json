@@ -105,6 +105,48 @@
       "scope": "s20 durable Review inbox integrity",
       "checkedAt": "2026-07-29T07:06:04.401Z",
       "notes": "Real review log audit remained byte stable and identity/order stable with 25 notes."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s21 exact accessibility and static export",
+      "checkedAt": "2026-07-29T07:22:31.718Z",
+      "notes": "88 exact tests passed, including one total accessible projection, five serializable four-view static checkpoints, and settled reduced/static/narrated sampling."
+    },
+    {
+      "command": "npm run test:browser:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s21 browser accessibility and keyboard behavior",
+      "checkedAt": "2026-07-29T07:22:32.732Z",
+      "notes": "5 Chromium checks passed, including one nonduplicated accessible MathML state, fold-invariant transcript, keyboard focus, settled static/reduced endpoints, and transient full motion."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21 repository type safety",
+      "checkedAt": "2026-07-29T07:22:33.592Z",
+      "notes": "Application, node, test, protocol-dependent, and domain type checks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s21 dependency direction",
+      "checkedAt": "2026-07-29T07:22:34.461Z",
+      "notes": "All four architecture gates passed; accessibility and static export preserve rendering, animation, semantic, and presentation boundaries."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s21 production build",
+      "checkedAt": "2026-07-29T07:22:35.330Z",
+      "notes": "Production build passed with the accessible and static projections included through the existing lazy exact-quantity capability."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s21 production exclusion",
+      "checkedAt": "2026-07-29T07:22:36.192Z",
+      "notes": "239 production files passed all 6 forbidden Review marker checks."
     }
   ],
   "expectedLearning": [
@@ -297,7 +339,8 @@
     {
       "id": "s21",
       "title": "preserve-accessibility-export",
-      "status": "planned"
+      "summary": "Preserved the exact five-beat causal story through one trace-derived screen-reader projection, one fold- and view-invariant transcript, keyboard-visible focus/current state, and settled reduced/static/narrated checkpoints. Added a renderable five-step static export with native symbolic HTML and MathML plus deterministic circle, bar, and number-line SVG descriptions. Visual replicas are aria-hidden, no operation exists only in motion, and no fold or active representation can alter exported or accessible truth.",
+      "status": "complete"
     },
     {
       "id": "s22",
