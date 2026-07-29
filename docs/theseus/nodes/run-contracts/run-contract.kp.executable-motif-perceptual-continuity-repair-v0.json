@@ -299,6 +299,13 @@
       "scope": "s03 renewed human checkpoint control plane",
       "checkedAt": "2026-07-29T23:08:28.499Z",
       "notes": "Validated 832 nodes and 14345 events after recording the rejection diagnosis, repair evidence, first-load flake, and completed context receipt."
+    },
+    {
+      "command": "human visual review of renewed operation-evaluation checkpoint",
+      "status": "failed",
+      "scope": "s03 optical operator alignment",
+      "checkedAt": "2026-07-29T23:16:05.754Z",
+      "notes": "The user still perceives the plus as vertically misaligned at progress zero. Diagnostic comparison found no compositor displacement relative to unannotated native KaTeX; the remaining disagreement is between native math-axis placement and the desired optical placement. Keep the checkpoint unapproved and do not advance."
     }
   ],
   "allowedWork": [
@@ -344,7 +351,7 @@
     {
       "id": "s03",
       "title": "human-reference-selection-checkpoint",
-      "summary": "HUMAN_CHECKPOINT renewed after rejection diagnosis. The reference host had omitted the shared editor-equation-stage behavioral contract, so computed transforms changed while inline KaTeX paint stayed still and its source silhouette was 1.72px vertically mismatched. Restoring that contract makes all three paint boxes exactly native at progress zero and physically mobile in Chromium, Firefox, and WebKit. Further promotion remains frozen pending human visual approval; one isolated Chromium first-load timeout is transparently retained as a flake.",
+      "summary": "HUMAN_CHECKPOINT remains rejected. Physical motion and wrapper parity are repaired, but the user perceives the plus as optically low at progress zero. A direct comparison against unannotated native KaTeX shows the candidate preserves KaTeX's math-axis placement, so this is now an explicit product typography decision rather than an unresolved compositor offset. Do not advance until native fidelity versus optical operator centering is chosen.",
       "status": "in-progress"
     },
     {
