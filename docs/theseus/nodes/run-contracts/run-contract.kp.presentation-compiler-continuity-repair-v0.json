@@ -275,7 +275,8 @@
     {
       "id": "s11",
       "title": "prove-natural-playback",
-      "status": "planned"
+      "summary": "Added a stable three-browser natural-playback matrix for 1+2 across wide and phone layouts; it proves opaque boundary paint, font stability, monotonic frames, bounded geometry, exact seek/rewind, held endpoint raster without automatic restart, explicit Replay semantics, containment, disposal, lazy loading, and Review capture.",
+      "status": "complete"
     },
     {
       "id": "s12",

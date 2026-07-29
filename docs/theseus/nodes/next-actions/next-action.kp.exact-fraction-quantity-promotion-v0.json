@@ -454,6 +454,20 @@
       "scope": "slice-s10 repository baseline audit",
       "checkedAt": "2026-07-29T18:48:37.097Z",
       "notes": "Loop-caused catalog and compound-operation failures were repaired. Three failures remain and predate slice 1: exact-quantity HTML escape ratchet cf177759, linear-provider domain boundary 01c4cc8b, and native compositor byte ceiling 0e8b4510."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-continuity",
+      "status": "passed",
+      "scope": "slice-s11 three-browser natural playback matrix",
+      "checkedAt": "2026-07-29T19:02:05.342Z",
+      "notes": "18/18 pass across Chromium, Firefox, and WebKit: wide/phone natural playback, opaque boundary paint, exact seek/rewind, held final raster, explicit Replay restart, containment, disposal, lazy host, and Review capture."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s11 committed visual harness",
+      "checkedAt": "2026-07-29T19:02:11.142Z",
+      "notes": "Application, node, browser test, and domain projects compile after adding the stable natural-playback matrix."
     }
   ],
   "progress": {
