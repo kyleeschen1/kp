@@ -75,11 +75,27 @@ export interface KpNativeKatexSuccessorSynthesisScenePlan {
     | {
         readonly kind: "legacy-exact-fraction";
       };
+  readonly motifRealization:
+    | KpCertifiedObservableSuccessorMotifRealization
+    | {
+        readonly kind: "legacy-successor-realization";
+      };
   readonly synthesis: KpSuccessorSynthesisPlan;
   readonly sources: readonly KpNativeKatexSuccessorPaintAnnotation[];
   readonly targets: readonly KpNativeKatexSuccessorPaintAnnotation[];
   readonly claimedSourceAtomIds: readonly string[];
   readonly claimedTargetAtomIds: readonly string[];
+}
+
+const kpObservableSuccessorMotifCertificate:
+unique symbol = Symbol("kp.observable-successor-motif-certificate");
+
+export interface KpCertifiedObservableSuccessorMotifRealization {
+  readonly kind: "observable-converge-recognize-settle-v1";
+  readonly minimumTravelPx: number;
+  readonly sourceTravelPx: number;
+  readonly targetTravelPx: number;
+  readonly [kpObservableSuccessorMotifCertificate]: true;
 }
 
 export type {
@@ -134,7 +150,7 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
       ...sources.map(({ annotationId, rect }) => [annotationId, rect] as const),
       ...targets.map(({ annotationId, rect }) => [annotationId, rect] as const)
     ]);
-    const synthesis = createKpSuccessorSynthesisPlan({
+    const baseSynthesis = createKpSuccessorSynthesisPlan({
       id: `native-scene.${intent.binding.id}`,
       authority: intent.binding.authority,
       sourceAnnotations: intent.binding.sourceAnnotations,
@@ -142,6 +158,15 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
       lineages: intent.binding.lineages,
       measurements
     });
+    const continuityAuthority =
+      "legacyContinuityAuthority" in intent
+        ? Object.freeze({
+            kind: "legacy-exact-fraction" as const
+          })
+        : verifiedContinuityAuthority(intent.binding);
+    const synthesis = continuityAuthority.kind === "verified"
+      ? withObservableSuccessorJunction(baseSynthesis)
+      : baseSynthesis;
     const violations = evaluateKpSuccessorSynthesisLaws(synthesis);
     if (violations.length > 0) {
       throw new Error(
@@ -155,18 +180,18 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
     const semanticTargetAtomIds = targets.flatMap(({ atoms }) =>
       atoms.map(({ id }) => id)
     );
-    const continuityAuthority =
-      "legacyContinuityAuthority" in intent
-        ? Object.freeze({
-            kind: "legacy-exact-fraction" as const
-          })
-        : verifiedContinuityAuthority(intent.binding);
+    const motifRealization = continuityAuthority.kind === "verified"
+      ? certifyObservableSuccessorMotifRealization(synthesis)
+      : Object.freeze({
+          kind: "legacy-successor-realization" as const
+        });
     return Object.freeze({
       id: synthesis.id,
       relationRecordId: intent.binding.relationRecordId,
       direction: intent.direction,
       motion: intent.motion,
       continuityAuthority,
+      motifRealization,
       synthesis,
       sources: Object.freeze(sources),
       targets: Object.freeze(targets),
@@ -225,6 +250,7 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
           annotation,
           pose: sharedJunctionSourcePose({
             plan: plan.synthesis,
+            annotationId: sample.annotationId,
             frameProgress: frame.progress,
             basePose: sample.pose,
             contribution: sample.contribution
@@ -266,7 +292,7 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
 }
 
 export const kpNativeKatexSuccessorMaterialJunctionProgress = 0.7;
-const kpNativeKatexSuccessorMaterialCollapseStart = 0.52;
+const kpNativeKatexSuccessorMaterialCollapseStart = 0.58;
 
 function verifiedContinuityAuthority(
   binding: KpRegisteredSuccessorSynthesisBinding
@@ -291,22 +317,132 @@ function verifiedContinuityAuthority(
   return Object.freeze({ kind: "verified", plan });
 }
 
+function withObservableSuccessorJunction(
+  plan: KpSuccessorSynthesisPlan
+): KpSuccessorSynthesisPlan {
+  const targetBounds = unionRects(plan.targets.map(({ rect }) => rect));
+  const targetCenter = center(targetBounds);
+  const lift = observableSuccessorArcLift(plan);
+  const family = plan.targets[0]!.pathFamily;
+  return Object.freeze({
+    ...plan,
+    // A junction at the native result center technically satisfies continuity
+    // while reducing recognition to a scale-only opening. Deriving one local
+    // ink-height of travel from measured paint preserves generic authorship
+    // and makes gather -> recognize -> settle observable for every caller.
+    junction: Object.freeze({
+      x: targetCenter.x,
+      y: targetCenter.y + (family === "arc-above" ? -lift : lift)
+    })
+  });
+}
+
+function certifyObservableSuccessorMotifRealization(
+  plan: KpSuccessorSynthesisPlan
+): KpCertifiedObservableSuccessorMotifRealization {
+  const minimumTravelPx = observableSuccessorMinimumTravel(plan);
+  const sourceTravelPx = Math.min(
+    ...[...plan.materialInputs, ...plan.catalysts].map((source) =>
+      distance(center(source.rect), plan.junction)
+    )
+  );
+  const targetTravelPx = Math.min(
+    ...plan.targets.map((target) =>
+      distance(plan.junction, center(target.rect))
+    )
+  );
+  if (
+    sourceTravelPx + 0.001 < minimumTravelPx ||
+    targetTravelPx + 0.001 < minimumTravelPx
+  ) {
+    throw new Error(
+      `Successor synthesis ${plan.id} has a scale-only motif realization: ` +
+      `source travel ${sourceTravelPx.toFixed(3)}px and target travel ` +
+      `${targetTravelPx.toFixed(3)}px must each reach ` +
+      `${minimumTravelPx.toFixed(3)}px.`
+    );
+  }
+  return Object.freeze({
+    kind: "observable-converge-recognize-settle-v1",
+    minimumTravelPx,
+    sourceTravelPx,
+    targetTravelPx,
+    [kpObservableSuccessorMotifCertificate]: true as const
+  });
+}
+
+function observableSuccessorArcLift(
+  plan: KpSuccessorSynthesisPlan
+): number {
+  const bounds = unionRects([
+    ...plan.materialInputs.map(({ rect }) => rect),
+    ...plan.catalysts.map(({ rect }) => rect),
+    ...plan.targets.map(({ rect }) => rect)
+  ]);
+  return Math.max(10, Math.min(20, bounds.height * 0.85));
+}
+
+function observableSuccessorMinimumTravel(
+  plan: KpSuccessorSynthesisPlan
+): number {
+  const bounds = unionRects([
+    ...plan.materialInputs.map(({ rect }) => rect),
+    ...plan.catalysts.map(({ rect }) => rect),
+    ...plan.targets.map(({ rect }) => rect)
+  ]);
+  return Math.max(6, Math.min(12, bounds.height * 0.5));
+}
+
 function sharedJunctionSourcePose(input: {
   readonly plan: KpSuccessorSynthesisPlan;
+  readonly annotationId: string;
   readonly frameProgress: number;
   readonly basePose: KpSuccessorSynthesisPose;
   readonly contribution: "material-input" | "catalyst";
 }): KpSuccessorSynthesisPose {
-  if (input.contribution === "catalyst") {
-    // Catalysts already collapse to zero before their retirement interval.
-    // Keeping them opaque makes retirement geometry-driven as well.
-    return Object.freeze({ ...input.basePose, opacity: 1 });
-  }
   const collapse = easeInOut(interval(
     input.frameProgress,
     kpNativeKatexSuccessorMaterialCollapseStart,
     kpNativeKatexSuccessorMaterialJunctionProgress
   ));
+  if (input.contribution === "catalyst") {
+    const catalyst = input.plan.catalysts.find(
+      ({ id }) => id === input.annotationId
+    );
+    if (catalyst === undefined) {
+      throw new Error(
+        `Successor ${input.plan.id} is missing catalyst ` +
+        `${input.annotationId}.`
+      );
+    }
+    const gather = easeInOut(interval(
+      input.frameProgress,
+      input.plan.inputArrivalStart,
+      kpNativeKatexSuccessorMaterialCollapseStart
+    ));
+    const origin = center(catalyst.rect);
+    const position = quadratic(
+      origin,
+      arcControl(
+        origin,
+        input.plan.junction,
+        catalyst.pathFamily,
+        observableSuccessorArcLift(input.plan)
+      ),
+      input.plan.junction,
+      gather
+    );
+    // The operator is causal rather than result material, but it must remain
+    // visibly inside the same cohort until the shared topology change. Letting
+    // the base sampler collapse it early made evaluation read as scale-only.
+    return Object.freeze({
+      x: position.x - origin.x,
+      y: position.y - origin.y,
+      scale:
+        mix(1, input.plan.inputJunctionScale, gather) * (1 - collapse),
+      opacity: 1
+    });
+  }
   return Object.freeze({
     ...input.basePose,
     scale: input.basePose.scale * (1 - collapse),
@@ -814,6 +950,17 @@ function center(rect: {
     x: rect.left + rect.width / 2,
     y: rect.top + rect.height / 2
   };
+}
+
+function distance(
+  left: { readonly x: number; readonly y: number },
+  right: { readonly x: number; readonly y: number }
+): number {
+  return Math.hypot(left.x - right.x, left.y - right.y);
+}
+
+function mix(from: number, to: number, progress: number): number {
+  return from + (to - from) * progress;
 }
 
 function interval(progress: number, start: number, end: number): number {

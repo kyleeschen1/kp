@@ -95,6 +95,27 @@ test("native successor renderer transfers opaque paint through zero area", () =>
   });
 
   assert.equal(plans[0]?.continuityAuthority.kind, "verified");
+  assert.equal(
+    plans[0]?.motifRealization.kind,
+    "observable-converge-recognize-settle-v1"
+  );
+  if (
+    plans[0]?.motifRealization.kind ===
+      "observable-converge-recognize-settle-v1"
+  ) {
+    assert.ok(
+      plans[0].motifRealization.sourceTravelPx >=
+        plans[0].motifRealization.minimumTravelPx
+    );
+    assert.ok(
+      plans[0].motifRealization.targetTravelPx >=
+        plans[0].motifRealization.minimumTravelPx
+    );
+  }
+  const gathered = sampleKpNativeKatexSuccessorSynthesisScenePlans({
+    plans,
+    progress: 0.58
+  });
   const before = sampleKpNativeKatexSuccessorSynthesisScenePlans({
     plans,
     progress: kpNativeKatexSuccessorMaterialJunctionProgress - 0.001
@@ -108,6 +129,12 @@ test("native successor renderer transfers opaque paint through zero area", () =>
     progress: kpNativeKatexSuccessorMaterialJunctionProgress + 0.001
   });
 
+  assert.ok(materialSources(gathered).every((owner) =>
+    scale(owner.transform) > 0.6
+  ));
+  assert.ok(catalysts(gathered).every((owner) =>
+    scale(owner.transform) > 0.6
+  ));
   assert.ok(materialSources(before).every((owner) => scale(owner.transform) > 0));
   assert.ok(targets(before).every((owner) => scale(owner.transform) === 0));
   assert.ok(materialSources(at).every((owner) => scale(owner.transform) === 0));
@@ -117,6 +144,9 @@ test("native successor renderer transfers opaque paint through zero area", () =>
   for (const owner of [...before, ...at, ...after]) {
     assert.equal(owner.opacity, 1);
   }
+  assert.ok(targets(after).every((owner) =>
+    translationDistance(owner.transform) > 6
+  ));
 });
 
 test("native successor renderer settles exact endpoints without binary policy", () => {
@@ -219,8 +249,22 @@ function targets(
   );
 }
 
+function catalysts(
+  owners: ReturnType<typeof sampleKpNativeKatexSuccessorSynthesisScenePlans>
+) {
+  return owners.filter(({ fragmentRole }) =>
+    fragmentRole === "successor-source:catalyst"
+  );
+}
+
 function scale(transform: string): number {
   const match = /scale\(([-.\d]+)\)/.exec(transform);
   assert.ok(match);
   return Number(match[1]);
+}
+
+function translationDistance(transform: string): number {
+  const match = /translate\(([^p]+)px, ([^p]+)px\)/.exec(transform);
+  assert.ok(match);
+  return Math.hypot(Number(match[1]), Number(match[2]));
 }

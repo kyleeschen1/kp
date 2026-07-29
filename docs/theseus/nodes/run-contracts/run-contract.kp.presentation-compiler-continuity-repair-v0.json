@@ -281,7 +281,8 @@
     {
       "id": "s12",
       "title": "human-evaluation-checkpoint",
-      "status": "planned"
+      "summary": "Re-presented checkpoint candidate: verified successors now require a compiler-minted observable gather/settle realization; 1 + 2 travels and collapses with the plus catalyst before 3 travels into native settlement, with no fade or handoff flicker. Awaiting human visual approval.",
+      "status": "in-progress"
     },
     {
       "id": "s13",

@@ -468,6 +468,55 @@
       "scope": "slice-s11 committed visual harness",
       "checkedAt": "2026-07-29T19:02:11.142Z",
       "notes": "Application, node, browser test, and domain projects compile after adding the stable natural-playback matrix."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/native-katex-successor-continuity.test.ts tests/successor-synthesis.test.ts",
+      "status": "passed",
+      "scope": "slice-12 observable motif and zero-area continuity",
+      "checkedAt": "2026-07-29T19:17:52.507Z",
+      "notes": "12 of 12 focused successor checks passed; verified plans now carry a minted observable motif realization."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-12 renderer contract and browser fixture types",
+      "checkedAt": "2026-07-29T19:17:53.461Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-continuity",
+      "status": "passed",
+      "scope": "slice-12 wide and phone natural playback across Chromium Firefox WebKit",
+      "checkedAt": "2026-07-29T19:17:54.297Z",
+      "notes": "21 of 21 checks passed, including observable source/catalyst travel, result settlement travel, opaque paint, endpoint stability, replay, rewind, disposal, and Review capture."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "slice-12 shared presentation compiler regression",
+      "checkedAt": "2026-07-29T19:18:42.721Z",
+      "notes": "123 of 123 operation, registry, continuity, cancellation, and successor checks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-12 presentation authority boundaries",
+      "checkedAt": "2026-07-29T19:18:43.818Z",
+      "notes": "All architecture gates passed; the operation-evaluation boundary retains three certified callers and no caller-owned motion policy."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-12 nominal motif certificate budget",
+      "checkedAt": "2026-07-29T19:18:44.663Z",
+      "notes": "Inference contracts passed at 45,905 types and 57,573 instantiations."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-12 revised human checkpoint control state",
+      "checkedAt": "2026-07-29T19:19:08.834Z",
+      "notes": "Validated 830 nodes and 14270 events with slice 12 still in progress and later slices blocked on visual approval."
     }
   ],
   "progress": {

@@ -117,6 +117,76 @@ test("one plus two direct seek and rewind share one exact pose", async ({
   );
 });
 
+test("one plus two realizes gather and settlement as visible travel", async ({
+  page
+}) => {
+  await page.goto(`/?animation=${descriptorId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const stage = player.locator("[data-kp-operation-evaluation-stage]");
+  const scrubber = player.locator(
+    "[data-action=\"seek-editor-animation\"]"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-status",
+    "ready"
+  );
+
+  await scrubber.fill("0.58");
+  await expect(player).toHaveAttribute(
+    "data-kp-operation-evaluation-mapped-progress",
+    "0.58"
+  );
+  const gathered = await stage.locator(
+    "[data-kp-equation-material-fragment-role^=\"successor-source:\"]"
+  ).evaluateAll((owners) => owners.map((owner) => {
+    const style = getComputedStyle(owner);
+    const matrix = new DOMMatrix(style.transform);
+    return {
+      role:
+        (owner as HTMLElement)
+          .dataset["kpEquationMaterialFragmentRole"] ?? "",
+      opacity: Number(style.opacity),
+      scale: matrix.a,
+      travel: Math.hypot(matrix.e, matrix.f)
+    };
+  }));
+  expect(gathered).toHaveLength(3);
+  expect(gathered.some(({ role }) =>
+    role === "successor-source:catalyst"
+  )).toBe(true);
+  expect(gathered.every(({ opacity }) => opacity > 0.99)).toBe(true);
+  expect(gathered.every(({ scale }) => scale > 0.6 && scale < 0.75)).toBe(
+    true
+  );
+  expect(gathered.every(({ travel }) => travel > 6)).toBe(true);
+
+  await scrubber.fill("0.75");
+  await expect(player).toHaveAttribute(
+    "data-kp-operation-evaluation-mapped-progress",
+    "0.75"
+  );
+  const settling = await stage.locator(
+    "[data-kp-equation-material-fragment-role=" +
+    "\"successor-target:result\"]"
+  ).evaluateAll((owners) => owners.map((owner) => {
+    const style = getComputedStyle(owner);
+    const matrix = new DOMMatrix(style.transform);
+    return {
+      opacity: Number(style.opacity),
+      scale: matrix.a,
+      travel: Math.hypot(matrix.e, matrix.f)
+    };
+  }));
+  expect(settling).toHaveLength(1);
+  expect(settling[0]!.opacity).toBeGreaterThan(0.99);
+  expect(settling[0]!.scale).toBeGreaterThan(0);
+  expect(settling[0]!.scale).toBeLessThan(1);
+  expect(settling[0]!.travel).toBeGreaterThan(6);
+});
+
 for (const viewport of [
   { id: "wide", width: 1180, height: 900 },
   { id: "phone", width: 360, height: 800 }
