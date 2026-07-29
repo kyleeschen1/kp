@@ -272,6 +272,20 @@
       "scope": "slice s17 runtime session, ownership, and clock adapter",
       "checkedAt": "2026-07-29T06:13:24.985Z",
       "notes": "The runtime consumes the existing animation clock type, exposes one renderer-session identity, and compiles without a second clock, lifecycle, scheduler, or endpoint owner."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s18 certified responsive layout",
+      "checkedAt": "2026-07-29T06:18:33.170Z",
+      "notes": "Eighty tests pass; all wide/phone/DPR review viewports certify without overlap or clipping, phone switching exposes one deterministic active view while preserving focus, intrinsic content stays centered, resize/DPR changes invalidate measurement, and classifier negatives catch crowding, escape, unreadable type, and global scaling."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s18 responsive layout certificate",
+      "checkedAt": "2026-07-29T06:18:34.162Z",
+      "notes": "Wide-grid, phone-focus, exhaustive view slots, 18px readability floor, unit scale, and sealed layout types compile across all TypeScript projects."
     }
   ],
   "expectedLearning": [

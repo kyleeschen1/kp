@@ -221,7 +221,8 @@
     {
       "id": "s18",
       "title": "certify-responsive-layout",
-      "status": "planned"
+      "summary": "Added a sealed responsive layout projection: a centered two-by-two readable grid at wide widths and one deterministic active representation on phones. All required views remain present, focus identity survives switching, intrinsic content is contained at unit scale above the 18px floor, DPR and resize produce explicit measurement invalidation keys, and the validator rejects overlap, clipping, arbitrary wrap, or emergency shrink-to-fit.",
+      "status": "complete"
     },
     {
       "id": "s19",
