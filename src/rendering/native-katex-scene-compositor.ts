@@ -160,8 +160,32 @@ export interface KpCanonicalNativeKatexSceneInput {
   readonly fanInRouting?: boolean;
   readonly copyFanOutRouting?: boolean;
   readonly reorderRouting?: boolean;
+  readonly endpointDwellFraction?: number | undefined;
   readonly stageOccupancy?: O;
   readonly purePlan?: KpCanonicalNativeKatexPureScenePlan | undefined;
+}
+
+export function sampleKpNativeKatexEndpointDwellProgress(
+  progress: number,
+  dwellFraction: number
+): number {
+  if (!Number.isFinite(progress)) {
+    throw new Error("Native KaTeX endpoint dwell progress must be finite.");
+  }
+  if (
+    !Number.isFinite(dwellFraction) ||
+    dwellFraction < 0 ||
+    dwellFraction > 0.25
+  ) {
+    throw new Error(
+      "Native KaTeX endpoint dwell ratio must be between 0 and 0.25."
+    );
+  }
+  const bounded = Math.max(0, Math.min(1, progress));
+  if (dwellFraction === 0 || bounded === 0 || bounded === 1) {
+    return bounded;
+  }
+  return Math.min(1, bounded / (1 - dwellFraction));
 }
 
 export function decideKpNativeKatexRendererDisposition(input: {
@@ -1374,9 +1398,10 @@ export function realizeKpNativeKatexTypographyStylePlan(input: {
   readonly frame?: KpNativeKatexTypographyStyleFrame | undefined;
 }): KpNativeKatexTypographyRealization {
   const targetById = new Map(input.target.atoms.map((atom) => [atom.id, atom]));
+  const styleFrame =
+    input.frame ?? sampleKpNativeKatexTypographyStylePlan(input.plan, 0);
   const frameById = new Map(
-    (input.frame ?? sampleKpNativeKatexTypographyStylePlan(input.plan, 0))
-      .entries.map((entry) => [entry.id, entry])
+    styleFrame.entries.map((entry) => [entry.id, entry])
   );
   if (frameById.size !== input.plan.entries.length) {
     throw new Error("Typography realization requires one style frame per entry.");
@@ -1418,14 +1443,19 @@ export function realizeKpNativeKatexTypographyStylePlan(input: {
       revisionKey:
         `target:${entry.targetPaintAtomId}:${entry.targetStyleFingerprint}`
     });
+    const endpointIdentity = styleFrame.progress === 1;
     owner.style.left = `${entry.targetRect.left}px`;
     owner.style.top = `${entry.targetRect.top}px`;
     owner.style.width = `${entry.targetRect.width}px`;
     owner.style.height = `${entry.targetRect.height}px`;
     owner.style.transformOrigin = "0 0";
-    owner.style.transform =
-      `translate(${frame.translateX}px, ${frame.translateY}px) ` +
-      `scale(${frame.scaleX}, ${frame.scaleY})`;
+    // An identity transform is not paint-neutral in WebKit: it can create a
+    // composited text layer with different antialiasing than native KaTeX.
+    // Remove the transform at the exact pose before the binary owner handoff.
+    owner.style.transform = endpointIdentity
+      ? "none"
+      : `translate(${frame.translateX}px, ${frame.translateY}px) ` +
+        `scale(${frame.scaleX}, ${frame.scaleY})`;
     if (visual instanceof HTMLElement) {
       owner.dataset["kpNativeKatexGlyphPaintFrame"] =
         entry.glyphPaintFrame === undefined ? "missing" : "measured";
@@ -1564,10 +1594,13 @@ export function createKpNativeKatexRendererSession(input: {
   readonly reconciliation: KpNativeKatexSceneReconciliation;
   readonly tracks: readonly KpNativeKatexSceneTrack[];
   readonly copyFanOut?: boolean | undefined;
+  readonly endpointDwellFraction?: number | undefined;
   readonly disposition?: KpNativeKatexRendererDisposition | undefined;
   readonly supplementalMaterialOwners?:
     (progress: number) => readonly KpEquationMaterialLayerOwnerFrame[];
 }): KpNativeKatexRendererSession {
+  const endpointDwellFraction = input.endpointDwellFraction ?? 0;
+  sampleKpNativeKatexEndpointDwellProgress(0, endpointDwellFraction);
   const trackIds = input.tracks.map(({ id }) => id);
   if (new Set(trackIds).size !== trackIds.length) {
     throw new Error("Renderer session requires unique track IDs.");
@@ -1622,15 +1655,19 @@ export function createKpNativeKatexRendererSession(input: {
     disposition.reason !== "clear"
       ? "checkpoint-settlement"
       : nativeCompatible ? "native-continuity" : "atom-transit";
-  const sample = (progress: number) => sampleKpNativeKatexSceneTracks(
-    tracks,
-    mode === "checkpoint-settlement" &&
-      Number.isFinite(progress) &&
-      progress < 1
-      ? 0
-      : progress,
-    input.copyFanOut
-  );
+  const sample = (progress: number) => {
+    const poseProgress = sampleKpNativeKatexEndpointDwellProgress(
+      progress,
+      endpointDwellFraction
+    );
+    return sampleKpNativeKatexSceneTracks(
+      tracks,
+      mode === "checkpoint-settlement" && poseProgress < 1
+        ? 0
+        : poseProgress,
+      input.copyFanOut
+    );
+  };
   let disposed = false;
   const apply = (progress: number): KpNativeKatexSceneOwnershipFrame => {
     if (disposed) {
@@ -1638,6 +1675,10 @@ export function createKpNativeKatexRendererSession(input: {
     }
     const frames = sample(progress);
     const bounded = Math.max(0, Math.min(1, progress));
+    const poseProgress = sampleKpNativeKatexEndpointDwellProgress(
+      bounded,
+      endpointDwellFraction
+    );
     const targetOwns = bounded === 1;
     const sourceOwns =
       bounded === 0 || (mode !== "atom-transit" && !targetOwns);
@@ -1652,7 +1693,7 @@ export function createKpNativeKatexRendererSession(input: {
             sourceAtoms: sourceById,
             targetAtoms: targetById,
             supplementalOwners:
-              input.supplementalMaterialOwners?.(bounded) ?? [],
+              input.supplementalMaterialOwners?.(poseProgress) ?? [],
             visible: materialOwns
           })
         : []
@@ -1794,6 +1835,7 @@ export function createKpCanonicalNativeKatexSceneSession(
     reconciliation,
     tracks,
     copyFanOut: input.copyFanOutRouting,
+    endpointDwellFraction: input.endpointDwellFraction,
     ...(syntheses.length === 0 && input.factoring === undefined
       ? {}
       : {
@@ -1805,22 +1847,29 @@ export function createKpCanonicalNativeKatexSceneSession(
             })
         })
   });
-  const microscope = 0.96;
-  playback.apply(microscope);
-  const typographyPlan = compileKpNativeKatexTypographyStylePlan({
-    telemetry: measureKpNativeKatexCorrelatedHandoff({
-      stage: input.source.stage,
-      reconciliation,
-      correlations: glyphLinks,
-      progress: microscope,
-      fontRevision: input.target.fontRevision,
-      viewportKey: input.target.viewportKey
-    }),
-    correlations: glyphLinks,
-    tolerancePx: 0.1,
-    maximumTranslationPx: 2,
-    maximumScaleRatio: 1.1
-  });
+  // A successor synthesis owns its target paint directly. If it claims every
+  // target glyph there is deliberately no residual native-track handoff to
+  // inspect; requiring one would reject the correctly partitioned scene.
+  const typographyPlan = glyphLinks.length === 0
+    ? undefined
+    : (() => {
+        const microscope = 0.96;
+        playback.apply(microscope);
+        return compileKpNativeKatexTypographyStylePlan({
+          telemetry: measureKpNativeKatexCorrelatedHandoff({
+            stage: input.source.stage,
+            reconciliation,
+            correlations: glyphLinks,
+            progress: microscope,
+            fontRevision: input.target.fontRevision,
+            viewportKey: input.target.viewportKey
+          }),
+          correlations: glyphLinks,
+          tolerancePx: 0.1,
+          maximumTranslationPx: 2,
+          maximumScaleRatio: 1.1
+        });
+      })();
   playback.apply(0);
   input.source.stage.dataset["kpCanonicalNativeKatexSessionFactory"] =
     "shared-v1";
@@ -1833,6 +1882,14 @@ export function createKpCanonicalNativeKatexSceneSession(
         throw new Error("Cannot apply a disposed canonical KaTeX scene session.");
       }
       const bounded = Math.max(0, Math.min(1, progress));
+      const poseProgress = sampleKpNativeKatexEndpointDwellProgress(
+        bounded,
+        input.endpointDwellFraction ?? 0
+      );
+      input.source.stage.dataset["kpNativeKatexRawProgress"] =
+        String(bounded);
+      input.source.stage.dataset["kpNativeKatexPoseProgress"] =
+        String(poseProgress);
       latestProgress = bounded;
       const structural = input.structuralSuccession;
       const fullMotion = structural !== undefined &&
@@ -1868,14 +1925,17 @@ export function createKpCanonicalNativeKatexSceneSession(
           ? 0
           : bounded;
       const ownership = playback.apply(appliedProgress);
-      if (ownership.visualOwner === "material-scene") {
+      if (
+        ownership.visualOwner === "material-scene" &&
+        typographyPlan !== undefined
+      ) {
         realizeKpNativeKatexTypographyStylePlan({
           stage: input.source.stage,
           target: input.target,
           plan: typographyPlan,
           frame: sampleKpNativeKatexTypographyStylePlan(
             typographyPlan,
-            progress,
+            poseProgress,
             ownership.frames
           )
         });

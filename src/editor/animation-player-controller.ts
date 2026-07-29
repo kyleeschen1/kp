@@ -250,12 +250,16 @@ function handlePlayerClick(event: MouseEvent): void {
 
   const nowMs = performance.now();
   switch (button.dataset["action"]) {
-    case "play-editor-animation":
-      dispatchKpEditorAnimationPlaybackAction(player, { type: "play", nowMs });
+    case "toggle-editor-animation": {
+      const session = sessions.get(player);
+      dispatchKpEditorAnimationPlaybackAction(
+        player,
+        session?.player.playbackStatus === "playing"
+          ? { type: "pause", nowMs }
+          : { type: "play", nowMs }
+      );
       return;
-    case "pause-editor-animation":
-      dispatchKpEditorAnimationPlaybackAction(player, { type: "pause", nowMs });
-      return;
+    }
     case "step-editor-animation":
       dispatchKpEditorAnimationPlaybackAction(player, { type: "step" });
       return;
@@ -686,16 +690,20 @@ function syncPlayerDom(
     "[data-kp-editor-animation-status-label]"
   )?.replaceChildren(document.createTextNode(playerStatusLabel(session)));
 
-  const playButton = player.querySelector<HTMLButtonElement>(
-    '[data-action="play-editor-animation"]'
+  const toggleButton = player.querySelector<HTMLButtonElement>(
+    '[data-action="toggle-editor-animation"]'
   );
-  const pauseButton = player.querySelector<HTMLButtonElement>(
-    '[data-action="pause-editor-animation"]'
-  );
-  if (playButton !== null) playButton.disabled =
-    state.playbackStatus === "playing" ||
-    player.dataset["kpEditorAnimationAccessibilityMode"] === "static";
-  if (pauseButton !== null) pauseButton.disabled = state.playbackStatus !== "playing";
+  if (toggleButton !== null) {
+    const label = state.playbackStatus === "playing"
+      ? "Pause"
+      : state.playbackStatus === "complete"
+        ? "Replay"
+        : "Play";
+    toggleButton.disabled =
+      player.dataset["kpEditorAnimationAccessibilityMode"] === "static";
+    toggleButton.textContent = label;
+    toggleButton.setAttribute("aria-label", `${label} animation`);
+  }
   syncGestaltInspectionAtCadence(player, session);
 
   player.dispatchEvent(new CustomEvent(KP_EDITOR_ANIMATION_FRAME_EVENT, {

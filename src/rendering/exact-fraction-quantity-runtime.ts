@@ -250,10 +250,49 @@ function sampleSymbolicMotion(
   const segmentProgress = actionProgress === 1
     ? 1
     : scaled - index;
+  const segment = segments[index]!;
+  const dispatch = execution.symbolicDispatches[index]!;
+  const successorBacked =
+    dispatch === "opaque-successor" ||
+    dispatch === "operation-evaluation";
+  if (
+    successorBacked !==
+      (segment.successorSyntheses.length > 0)
+  ) {
+    throw new Error(
+      "Changed-glyph exact-quantity work must execute through its opaque " +
+      "successor binding instead of degrading to native fades."
+    );
+  }
+  if (
+    dispatch === "operation-evaluation" &&
+    (
+      segment.successorSyntheses.length !== 1 ||
+      segment.successorSyntheses[0]?.motif !== "operation-evaluation" ||
+      segment.successorSyntheses[0]?.authority.operationId !==
+        "kp.arithmetic.divide"
+    )
+  ) {
+    throw new Error(
+      "Exact-fraction division evaluation requires one typed arithmetic " +
+      "evaluation binding; cancellation and generic replacement are invalid."
+    );
+  }
+  if (
+    dispatch === "opaque-successor" &&
+    segment.successorSyntheses.some(
+      ({ motif }) => motif !== "successor-synthesis"
+    )
+  ) {
+    throw new Error(
+      "Exact-fraction successor dispatch cannot consume an operation-" +
+      "evaluation binding."
+    );
+  }
   return Object.freeze({
-    segment: segments[index]!,
+    segment,
     segmentProgress,
-    dispatch: execution.symbolicDispatches[index]!
+    dispatch
   });
 }
 

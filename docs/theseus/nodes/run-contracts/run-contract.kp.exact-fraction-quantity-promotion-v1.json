@@ -467,7 +467,8 @@
     {
       "id": "s25",
       "title": "release-and-closeout",
-      "status": "planned"
+      "summary": "Human checkpoint rejected release: repair endpoint paint-owner continuity, execute visible motion in all concrete views, certify render execution, and unify Play Pause Replay before reconsidering promotion.",
+      "status": "in-progress"
     }
   ]
 }

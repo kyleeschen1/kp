@@ -1,6 +1,6 @@
 import type {
   KpExactQuantityOpaquePaintBinding
-} from "../../src/animation/exact-fraction-quantity-presentation-plan.ts";
+} from "../../src/animation/exact-fraction-quantity-paint-contract.ts";
 
 const opaque: KpExactQuantityOpaquePaintBinding = {
   sourceSelectionIds: ["selection.before"],

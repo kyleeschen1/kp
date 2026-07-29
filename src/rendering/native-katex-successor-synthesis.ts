@@ -40,6 +40,9 @@ export interface KpNativeKatexSuccessorSynthesisScenePlan {
   readonly relationRecordId: string;
   readonly direction: "forward" | "rewind";
   readonly motion: "full" | "checkpoint";
+  readonly paintPolicy:
+    | "continuous-recognition"
+    | "opaque-binary-handoff";
   readonly synthesis: KpSuccessorSynthesisPlan;
   readonly sources: readonly KpNativeKatexSuccessorPaintAnnotation[];
   readonly targets: readonly KpNativeKatexSuccessorPaintAnnotation[];
@@ -156,6 +159,8 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
       relationRecordId: intent.binding.relationRecordId,
       direction: intent.direction,
       motion: intent.motion,
+      paintPolicy:
+        intent.binding.paintPolicy ?? "continuous-recognition",
       synthesis,
       sources: Object.freeze(sources),
       targets: Object.freeze(targets),
@@ -212,7 +217,12 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
         return ownerFrames({
           plan,
           annotation,
-          pose: sample.pose,
+          pose: plan.paintPolicy === "opaque-binary-handoff"
+            ? {
+                ...sample.pose,
+                opacity: frame.allRequiredInputsReady ? 0 : 1
+              }
+            : sample.pose,
           side: "source",
           contactRole: sample.contribution === "material-input"
             ? "fusion-input"
@@ -229,7 +239,12 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
         return ownerFrames({
           plan,
           annotation,
-          pose: sample.pose,
+          pose: plan.paintPolicy === "opaque-binary-handoff"
+            ? {
+                ...sample.pose,
+                opacity: frame.allRequiredInputsReady ? 1 : 0
+              }
+            : sample.pose,
           side: "target",
           contactRole: "fusion-result",
           phase: frame.phase

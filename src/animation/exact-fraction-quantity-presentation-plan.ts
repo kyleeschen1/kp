@@ -19,21 +19,17 @@ import type {
 import {
   createKpSemanticLineageGraph
 } from "../semantic/semantic-lineage-graph.ts";
+import type {
+  KpExactQuantityOpaquePaintBinding
+} from "./exact-fraction-quantity-paint-contract.ts";
+
+export type {
+  KpExactQuantityOpaquePaintBinding
+} from "./exact-fraction-quantity-paint-contract.ts";
 
 declare const kpExactQuantityMotifInvocationBrand: unique symbol;
 
 const sealedMotifInvocations = new WeakSet<object>();
-
-export interface KpExactQuantityOpaquePaintBinding {
-  readonly sourceSelectionIds: readonly string[];
-  readonly targetSelectionIds: readonly string[];
-  readonly atomicPartIds: readonly string[];
-  readonly lifecycle: "persist" | "fission" | "fusion";
-  readonly paintOpacity: 1;
-  readonly ownership:
-    | "continuous-owned-paint"
-    | "atomic-exclusive-handoff";
-}
 
 export interface KpExactQuantityMotifInvocation {
   readonly kind: "exact-quantity-canonical-motif-invocation";
@@ -44,6 +40,8 @@ export interface KpExactQuantityMotifInvocation {
     | "copy-fan-out"
     | "semantic-group"
     | "merge-fan-in"
+    | "opaque-successor"
+    | "operation-evaluation"
     | "structural-succession"
   )[];
   readonly atomicDispatch:
@@ -107,15 +105,35 @@ export interface KpExactFractionQuantityPresentationPlan {
 }
 
 export interface KpExactQuantityVisiblePhaseBinding {
-  readonly view:
-    | "symbolic"
-    | "partitioned-circle"
-    | "fraction-bar"
-    | "number-line";
   readonly invocationId: string;
   readonly operationId: KpCanonicalOperationId;
   readonly phase: "setup" | "action" | "settle";
+  readonly phaseProgress: number;
   readonly actionProgress: number;
+}
+
+export type KpExactQuantityMotionTrackIds =
+  readonly [string, ...string[]];
+
+export interface KpExactQuantitySymbolicPhaseBinding extends
+  KpExactQuantityVisiblePhaseBinding {
+  readonly view: "symbolic";
+  readonly execution: {
+    readonly renderer: "native-katex-scene-tracks";
+    readonly trackIds: KpExactQuantityMotionTrackIds;
+  };
+}
+
+export interface KpExactQuantityConcretePhaseBinding extends
+  KpExactQuantityVisiblePhaseBinding {
+  readonly view:
+    | "partitioned-circle"
+    | "fraction-bar"
+    | "number-line";
+  readonly execution: {
+    readonly renderer: "persistent-svg-atomic-tracks";
+    readonly trackIds: KpExactQuantityMotionTrackIds;
+  };
 }
 
 export interface KpExactQuantityVisibleOperationFrame {
@@ -125,10 +143,10 @@ export interface KpExactQuantityVisibleOperationFrame {
   readonly phaseProgress: number;
   readonly actionProgress: number;
   readonly viewBindings: readonly [
-    KpExactQuantityVisiblePhaseBinding,
-    KpExactQuantityVisiblePhaseBinding,
-    KpExactQuantityVisiblePhaseBinding,
-    KpExactQuantityVisiblePhaseBinding
+    KpExactQuantitySymbolicPhaseBinding,
+    KpExactQuantityConcretePhaseBinding,
+    KpExactQuantityConcretePhaseBinding,
+    KpExactQuantityConcretePhaseBinding
   ];
 }
 
@@ -228,7 +246,7 @@ export function createKpExactFractionQuantityPresentationPlan(
         execution: createMotifInvocation({
           beatId: trace.beats[1]!.id,
           operationId: "kp.core.fan-out",
-          symbolicDispatches: ["copy-fan-out", "merge-fan-in"],
+          symbolicDispatches: ["opaque-successor", "opaque-successor"],
           atomicDispatch: "fission"
         }),
         motif: Object.freeze({
@@ -243,7 +261,8 @@ export function createKpExactFractionQuantityPresentationPlan(
         trace.beats[2]!.id,
         "kp.core.group",
         "group-continuants",
-        neutralFrames[2]!.selectionTransitions
+        neutralFrames[2]!.selectionTransitions,
+        ["opaque-successor"]
       ),
       Object.freeze({
         beatId: trace.beats[3]!.id,
@@ -255,7 +274,7 @@ export function createKpExactFractionQuantityPresentationPlan(
         execution: createMotifInvocation({
           beatId: trace.beats[3]!.id,
           operationId: "kp.core.merge",
-          symbolicDispatches: ["merge-fan-in"],
+          symbolicDispatches: ["opaque-successor"],
           atomicDispatch: "fusion"
         }),
         motif: Object.freeze({
@@ -270,7 +289,8 @@ export function createKpExactFractionQuantityPresentationPlan(
         trace.beats[4]!.id,
         "kp.core.persist",
         "structural-succession",
-        neutralFrames[4]!.selectionTransitions
+        neutralFrames[4]!.selectionTransitions,
+        ["operation-evaluation"]
       )
     ]);
   if (
@@ -334,26 +354,71 @@ export function sampleKpExactQuantityVisibleOperation(input: {
     : phase === "action"
       ? phaseProgress
       : 1;
-  const viewBindings = ([
-    "symbolic",
-    "partitioned-circle",
-    "fraction-bar",
-    "number-line"
-  ] as const).map((view) => Object.freeze({
-    view,
+  const common = Object.freeze({
     invocationId: input.beat.execution.id,
     operationId: input.beat.execution.operationId,
     phase,
+    phaseProgress,
     actionProgress
-  })) as unknown as KpExactQuantityVisibleOperationFrame["viewBindings"];
+  });
+  // A phase label alone once let snapshot-only views claim synchronization.
+  // Each tuple member now carries the renderer path and non-empty tracks that
+  // must execute that shared phase.
+  const concreteBinding = (
+    view: KpExactQuantityConcretePhaseBinding["view"]
+  ): KpExactQuantityConcretePhaseBinding => Object.freeze({
+    ...common,
+    view,
+    execution: Object.freeze({
+      renderer: "persistent-svg-atomic-tracks",
+      trackIds: concreteTrackIds(view, input.beat.execution.id)
+    })
+  });
+  const viewBindings: KpExactQuantityVisibleOperationFrame["viewBindings"] =
+    Object.freeze([
+      Object.freeze({
+        ...common,
+        view: "symbolic",
+        execution: Object.freeze({
+          renderer: "native-katex-scene-tracks",
+          trackIds: nonEmptyTrackIds(
+            input.beat.execution.symbolicDispatches.map(
+              (dispatch, index) =>
+                `motion.${input.beat.execution.id}.symbolic.${index}.${dispatch}`
+            )
+          )
+        })
+      }),
+      concreteBinding("partitioned-circle"),
+      concreteBinding("fraction-bar"),
+      concreteBinding("number-line")
+    ]);
   return Object.freeze({
     invocationId: input.beat.execution.id,
     operationId: input.beat.execution.operationId,
     phase,
     phaseProgress,
     actionProgress,
-    viewBindings: Object.freeze(viewBindings)
+    viewBindings
   });
+}
+
+function concreteTrackIds(
+  view: KpExactQuantityConcretePhaseBinding["view"],
+  invocationId: string
+): KpExactQuantityMotionTrackIds {
+  return nonEmptyTrackIds(manifest.atomicPartIds.map((atomicPartId) =>
+    `motion.${invocationId}.${view}.${atomicPartId}`
+  ));
+}
+
+function nonEmptyTrackIds(
+  trackIds: readonly string[]
+): KpExactQuantityMotionTrackIds {
+  if (trackIds.length === 0 || trackIds.some((trackId) => trackId === "")) {
+    throw new Error("Exact-quantity motion execution requires tracks.");
+  }
+  return Object.freeze([...trackIds]) as KpExactQuantityMotionTrackIds;
 }
 
 function existingBeat(
@@ -363,7 +428,9 @@ function existingBeat(
     | "focus-continuant"
     | "group-continuants"
     | "structural-succession",
-  transitions: readonly KpExactFractionQuantitySelectionTransition[]
+  transitions: readonly KpExactFractionQuantitySelectionTransition[],
+  symbolicDispatches?:
+    KpExactQuantityMotifInvocation["symbolicDispatches"]
 ): KpExactFractionQuantityPresentationBeat {
   return Object.freeze({
     beatId,
@@ -373,7 +440,7 @@ function existingBeat(
     execution: createMotifInvocation({
       beatId,
       operationId: canonicalOperationId,
-      symbolicDispatches: [
+      symbolicDispatches: symbolicDispatches ?? [
         motifId === "focus-continuant"
           ? "continuant"
           : motifId === "group-continuants"

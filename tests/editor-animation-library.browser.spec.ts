@@ -166,7 +166,7 @@ test("render quality persists independently and stays frozen during playback", a
 
   await quality.selectOption("full");
   await expect(player).toHaveAttribute("data-kp-editor-animation-quality-tier", "full");
-  await player.locator('[data-action="play-editor-animation"]').click();
+  await player.locator('[data-action="toggle-editor-animation"]').click();
   await expect(player).toHaveAttribute("data-kp-editor-animation-quality-frozen", "true");
 
   await quality.selectOption("efficient");

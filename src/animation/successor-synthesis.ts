@@ -11,6 +11,7 @@ export interface KpSuccessorSynthesisSourceAnnotation {
   readonly selectorIds: readonly string[];
   readonly contribution: "material-input" | "catalyst";
   readonly propagationRank: number;
+  readonly pathFamily?: KpSuccessorSynthesisPathFamily | undefined;
 }
 
 export interface KpSuccessorSynthesisTargetAnnotation {
@@ -18,6 +19,7 @@ export interface KpSuccessorSynthesisTargetAnnotation {
   readonly semanticRole: string;
   readonly selectorIds: readonly string[];
   readonly propagationRank: number;
+  readonly pathFamily?: KpSuccessorSynthesisPathFamily | undefined;
 }
 
 export interface KpSuccessorSynthesisLineage {
@@ -33,6 +35,10 @@ export interface KpSuccessorSynthesisBinding {
   readonly sourceAnnotations: readonly KpSuccessorSynthesisSourceAnnotation[];
   readonly targetAnnotations: readonly KpSuccessorSynthesisTargetAnnotation[];
   readonly lineages: readonly KpSuccessorSynthesisLineage[];
+  readonly paintPolicy?:
+    | "continuous-recognition"
+    | "opaque-binary-handoff"
+    | undefined;
 }
 
 export interface KpSuccessorSynthesisMember {
@@ -687,6 +693,7 @@ function members(
     readonly semanticRole: string;
     readonly selectorIds: readonly string[];
     readonly propagationRank: number;
+    readonly pathFamily?: KpSuccessorSynthesisPathFamily | undefined;
   }[],
   measurements: Readonly<Record<string, KpMaterialJunctionRect>>
 ): readonly KpSuccessorSynthesisMember[] {
@@ -709,7 +716,8 @@ function members(
       selectorIds: [...annotation.selectorIds],
       propagationRank: annotation.propagationRank,
       rect: { ...rect },
-      pathFamily: annotation.propagationRank % 2 === 0 ? "arc-above" : "arc-below"
+      pathFamily: annotation.pathFamily ??
+        (annotation.propagationRank % 2 === 0 ? "arc-above" : "arc-below")
     };
   });
 }

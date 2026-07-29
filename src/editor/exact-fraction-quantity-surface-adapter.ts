@@ -32,14 +32,8 @@ import {
   kpExactFractionQuantityPreservationManifest as manifest
 } from "../reader/compiler/exact-fraction-quantity-preservation-manifest.ts";
 import {
-  renderKpExactFractionQuantityBarSvg
-} from "../rendering/exact-fraction-quantity-bar-projection.ts";
-import {
-  renderKpExactFractionQuantityCircleSvg
-} from "../rendering/exact-fraction-quantity-circle-projection.ts";
-import {
-  renderKpExactFractionQuantityNumberLineSvg
-} from "../rendering/exact-fraction-quantity-number-line-projection.ts";
+  syncKpExactFractionQuantityConcreteScenes
+} from "../rendering/exact-fraction-quantity-concrete-scene.ts";
 import {
   renderSelectorAnnotatedLatexToHtml
 } from "../rendering/katex-adapter.ts";
@@ -166,9 +160,10 @@ KpEditorAnimationSurfaceAdapter = {
       }
     });
     session.sampleCount += 1;
+    // Permille is telemetry, not a cache key: adjacent sub-permille samples can
+    // have different transforms and caused history-dependent reverse scrubs.
     const repeatedFrame =
-      session.lastFrame?.projection.neutralFrame.progressPermille ===
-      frame.projection.neutralFrame.progressPermille;
+      session.lastFrame?.clock.progress === frame.clock.progress;
     if (repeatedFrame) {
       session.repeatedFrameReuseCount += 1;
     }
@@ -366,7 +361,7 @@ function syncSurface(
     ?.replaceChildren(document.createTextNode(
       `${frame.projection.neutralFrame.progressPermille / 10}%`
     ));
-  syncConcreteViews(slot, frame);
+  syncKpExactFractionQuantityConcreteScenes(slot, frame);
   syncActiveView(slot, session.libraryState);
   syncFoldControls(slot, session.libraryState);
   syncCheckpointControls(slot, beatIndex);
@@ -382,56 +377,6 @@ function syncSurface(
   );
   syncSymbolicScene(slot, session, frame);
   writeRoute(player, session, stateUrlWriteIsDue(session));
-}
-
-function syncConcreteViews(
-  slot: HTMLElement,
-  frame: KpExactFractionQuantityRuntimeFrame
-): void {
-  const circle = requiredView(slot, "partitioned-circle");
-  const bar = requiredView(slot, "fraction-bar");
-  const numberLine = requiredView(slot, "number-line");
-  circle.innerHTML =
-    renderKpExactFractionQuantityCircleSvg(frame.projection.circle);
-  bar.innerHTML = renderKpExactFractionQuantityBarSvg(frame.projection.bar);
-  numberLine.innerHTML =
-    renderKpExactFractionQuantityNumberLineSvg(frame.projection.numberLine);
-  for (const view of [circle, bar, numberLine]) {
-    view.querySelectorAll<SVGElement>("[data-kp-selected=\"true\"]")
-      .forEach((element) => {
-        element.classList.add("kp-exact-selected");
-        const scale = motifScaleForAtomicElement(frame, element);
-        element.style.transformBox = "fill-box";
-        element.style.transformOrigin = "center";
-        element.style.transform = `scale(${scale})`;
-      });
-    view.querySelectorAll<SVGElement>("[data-kp-refinement-divider]")
-      .forEach((divider) => {
-        const progress = frame.visibleOperation.actionProgress;
-        divider.style.strokeDasharray = "100";
-        divider.style.strokeDashoffset = String(100 * (1 - progress));
-      });
-  }
-}
-
-function motifScaleForAtomicElement(
-  frame: KpExactFractionQuantityRuntimeFrame,
-  element: SVGElement
-): number {
-  const atomicPartId = element.dataset["kpAtomicPartId"];
-  const motif = frame.motifFrame;
-  if (atomicPartId === undefined || motif === undefined) return 1;
-  const candidate = [...motif.sources, ...motif.targets].find(
-    ({ entityId }) => entityId === atomicPartId
-  );
-  if (candidate !== undefined) return candidate.scale;
-  const selection = frame.projection.selectionCorrespondences.find(
-    ({ atomicPartIds }) => atomicPartIds.includes(atomicPartId)
-  );
-  const group = [...motif.sources, ...motif.targets].find(
-    ({ entityId }) => entityId === selection?.selectionId
-  );
-  return group?.scale ?? 1;
 }
 
 function syncSymbolicScene(
@@ -548,6 +493,12 @@ async function prepareSymbolicScene(input: {
       source,
       target,
       relations,
+      successorSyntheses: input.segment.successorSyntheses.map((binding) => ({
+        binding,
+        direction: "forward",
+        motion: "full"
+      })),
+      endpointDwellFraction: 0.04,
       fanInRouting: input.dispatch === "merge-fan-in",
       copyFanOutRouting: input.dispatch === "copy-fan-out"
     });
@@ -1063,7 +1014,7 @@ function renderSurfaceShell(
         .kp-exact-quantity__view h4 { position:absolute; inset:.6rem auto auto .75rem; margin:0; z-index:3; font:600 .72rem/1 system-ui; letter-spacing:.06em; text-transform:uppercase; }
         .kp-exact-quantity__canvas { width:100%; min-width:0; }
         .kp-exact-quantity__canvas svg { display:block; width:100%; max-height:12rem; overflow:visible; }
-        .kp-exact-quantity__canvas svg path, .kp-exact-quantity__canvas svg rect { fill:#edf2f4; stroke:#577181; stroke-width:2; vector-effect:non-scaling-stroke; transition:transform 90ms linear; }
+        .kp-exact-quantity__canvas svg path, .kp-exact-quantity__canvas svg rect { fill:#edf2f4; stroke:#577181; stroke-width:2; vector-effect:non-scaling-stroke; }
         .kp-exact-quantity__canvas svg line { stroke:#577181; stroke-width:2; vector-effect:non-scaling-stroke; }
         .kp-exact-quantity__canvas svg text { fill:var(--kp-exact-ink); font:14px system-ui; }
         .kp-exact-quantity__canvas svg .kp-exact-selected { fill:#9ed9e6; stroke:var(--kp-exact-accent); stroke-width:3; }

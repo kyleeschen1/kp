@@ -186,6 +186,8 @@ export const kpExactFractionQuantityPreservationManifest = Object.freeze({
     deviceScaleFactors: Object.freeze([1, 2]),
     maximumScrubP95Ms: 50,
     maximumScrubSampleMs: 150,
+    maximumEndpointChangedPixelRatio: 0.005,
+    maximumEndpointMeanChannelDelta: 0.25,
     maximumSymbolicSessionCount: 1,
     maximumWebglLeaseCount: 0
   }),

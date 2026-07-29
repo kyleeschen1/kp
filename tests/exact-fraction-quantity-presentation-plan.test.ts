@@ -11,6 +11,9 @@ import {
   sampleKpFissionFusion
 } from "../src/animation/fission-fusion.ts";
 import {
+  sampleKpExactFractionQuantityConcreteMotion
+} from "../src/rendering/exact-fraction-quantity-concrete-motion.ts";
+import {
   createKpExactFractionQuantityTrace
 } from "../src/semantic/exact-fraction-quantity-trace.ts";
 
@@ -51,10 +54,10 @@ test("motif declarations are sealed executable four-view invocations", () => {
     plan.beats.map(({ execution }) => execution.symbolicDispatches),
     [
       ["continuant"],
-      ["copy-fan-out", "merge-fan-in"],
-      ["merge-fan-in"],
-      ["merge-fan-in"],
-      ["structural-succession"]
+      ["opaque-successor", "opaque-successor"],
+      ["opaque-successor"],
+      ["opaque-successor"],
+      ["operation-evaluation"]
     ]
   );
   for (const beat of plan.beats) {
@@ -69,6 +72,29 @@ test("motif declarations are sealed executable four-view invocations", () => {
       frame.viewBindings.map(({ view }) => view),
       ["symbolic", "partitioned-circle", "fraction-bar", "number-line"]
     );
+    assert.equal(
+      frame.viewBindings[0].execution.renderer,
+      "native-katex-scene-tracks"
+    );
+    assert.ok(frame.viewBindings.every(
+      ({ execution }) => execution.trackIds.length > 0
+    ));
+    for (const binding of frame.viewBindings.slice(1)) {
+      if (binding.view === "symbolic") {
+        throw new Error("Concrete binding tuple order was lost.");
+      }
+      assert.equal(
+        binding.execution.renderer,
+        "persistent-svg-atomic-tracks"
+      );
+      const motion = sampleKpExactFractionQuantityConcreteMotion(binding);
+      assert.equal(motion.tracks.length, 6);
+      assert.ok(motion.tracks.some((track) =>
+        track.translateX !== 0 ||
+        track.translateY !== 0 ||
+        track.scale !== 1
+      ));
+    }
     assert.ok(frame.viewBindings.every((binding) =>
       binding.invocationId === beat.execution.id &&
       binding.operationId === beat.canonicalOperationId

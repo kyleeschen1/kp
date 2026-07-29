@@ -122,7 +122,7 @@ test("motif progress is sampled once from the canonical beat coordinate", () => 
     /evaluate-unit-multiplier/u
   );
   assert.equal(refinement.symbolicMotion.segmentProgress, 0);
-  assert.equal(refinement.symbolicMotion.dispatch, "merge-fan-in");
+  assert.equal(refinement.symbolicMotion.dispatch, "opaque-successor");
   assert.equal(refinement.easingApplications, 1);
 });
 

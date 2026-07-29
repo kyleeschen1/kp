@@ -134,6 +134,11 @@ test("alignment and addition preserve native fraction structure without fades", 
     alignment.structuralTransitions.map((entry) => entry.lifecycle),
     ["fusion"]
   );
+  assert.ok(
+    alignment.successorSyntheses[0]?.sourceAnnotations
+      .filter(({ contribution }) => contribution === "material-input")
+      .every(({ pathFamily }) => pathFamily === "arc-below")
+  );
   assert.deepEqual(
     merge.selectorTransitions.find(
       ({ targetIds }) => targetIds.includes("symbolic.result.numerator")
@@ -149,8 +154,45 @@ test("alignment and addition preserve native fraction structure without fades", 
     }
   );
   const serialized = JSON.stringify(projection);
+  assert.ok(projection.motionInputs.flatMap(({ segments }) => segments)
+    .flatMap(({ successorSyntheses }) => successorSyntheses)
+    .every(({ paintPolicy }) => paintPolicy === "opaque-binary-handoff"));
   assert.equal(serialized.includes("opacity"), false);
   assert.equal(serialized.includes("fontFamily"), false);
   assert.equal(serialized.includes("translate"), false);
   assert.equal(serialized.includes("sanitize"), false);
+});
+
+test("three sixths executes one typed division evaluation without cancellation", () => {
+  const projection = createKpExactFractionQuantitySymbolicProjection();
+  const recognition = projection.motionInputs[4]!;
+
+  assert.equal(projection.transientEndpoints.length, 1);
+  assert.deepEqual(
+    recognition.segments.map(({ id }) => id),
+    ["beat.exact-fraction.recognize-half.evaluate-division"]
+  );
+  assert.deepEqual(
+    recognition.segments.map(({ selectorTransitions }) =>
+      selectorTransitions.filter(({ lifecycle }) => lifecycle !== "persist")
+        .map(({ lifecycle }) => lifecycle)
+    ),
+    [["fusion"]]
+  );
+  const binding = recognition.segments[0]?.successorSyntheses[0];
+  assert.equal(binding?.motif, "operation-evaluation");
+  assert.equal(binding?.authority.operationId, "kp.arithmetic.divide");
+  assert.equal(
+    binding?.sourceAnnotations.some(({ selectorIds }) =>
+      selectorIds.includes("symbolic.sum.fraction-rule")
+    ),
+    true
+  );
+  assert.equal(
+    binding?.targetAnnotations.some(({ selectorIds }) =>
+      selectorIds.includes("symbolic.sum.fraction-rule")
+    ),
+    true
+  );
+  assert.equal(JSON.stringify(recognition).includes("opacity"), false);
 });

@@ -39,8 +39,12 @@ test("editor animation player shell renders an accessible surface and declared c
 
   assert.match(html, /data-kp-editor-animation-player/);
   assert.match(html, /data-kp-editor-animation-surface-slot="equation"/);
-  assert.match(html, /data-action="play-editor-animation"/);
-  assert.match(html, /data-action="pause-editor-animation"/);
+  assert.match(
+    html,
+    /data-action="toggle-editor-animation" aria-label="Play animation">Play/
+  );
+  assert.doesNotMatch(html, /data-action="play-editor-animation"/);
+  assert.doesNotMatch(html, /data-action="pause-editor-animation"/);
   assert.match(html, /data-action="step-editor-animation"/);
   assert.match(html, /data-action="rewind-editor-animation"/);
   assert.match(html, /data-action="seek-editor-animation"/);

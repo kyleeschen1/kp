@@ -95,7 +95,16 @@ test("captured regression moments retain opaque committed paint during scene pre
   await expect(refinementSource).toHaveCSS("opacity", "1");
   await expect(refinementSource.locator(".katex-html")).toContainText("×");
   await expect(refinementSource.locator(".katex-html")).toContainText("2");
-  for (const progress of [0.34, 0.472, 0.816, 0.856, 1]) {
+  for (const progress of [
+    0.34,
+    0.472,
+    0.72,
+    0.816,
+    0.856,
+    0.9,
+    0.94,
+    1
+  ]) {
     await player.locator(
       "[data-action=\"seek-editor-animation\"]"
     ).fill(String(progress));
@@ -183,6 +192,211 @@ test("captured regression moments retain opaque committed paint during scene pre
       JSON.stringify({ progress, paintContact })
     ).toEqual([]);
   }
+});
+
+test("concrete views execute persistent atomic tracks without node replacement", async ({
+  page
+}) => {
+  const player = await openExactQuantity(page, {
+    width: 1_100,
+    height: 800
+  });
+  await seekAndSettle(page, player, 0);
+  const initialTransforms = await player.evaluate((root) => {
+    const canvases = [
+      ...root.querySelectorAll<HTMLElement>(
+        "[data-kp-exact-view-canvas=\"partitioned-circle\"], " +
+        "[data-kp-exact-view-canvas=\"fraction-bar\"], " +
+        "[data-kp-exact-view-canvas=\"number-line\"]"
+      )
+    ];
+    return canvases.map((canvas, canvasIndex) => {
+      const svg = canvas.querySelector<SVGSVGElement>("svg");
+      if (svg === null) throw new Error("Missing persistent concrete SVG.");
+      svg.dataset["kpTestIdentity"] = `svg-${canvasIndex}`;
+      return {
+        view: canvas.dataset["kpExactViewCanvas"],
+        transforms: [
+          ...svg.querySelectorAll<SVGElement>("[data-kp-atomic-part-id]")
+        ].map((element, atomIndex) => {
+          element.dataset["kpTestIdentity"] =
+            `atom-${canvasIndex}-${atomIndex}`;
+          return element.style.transform;
+        })
+      };
+    });
+  });
+  await seekAndSettle(page, player, 0.09);
+  const animated = await player.evaluate((root) => [
+    ...root.querySelectorAll<HTMLElement>(
+      "[data-kp-exact-view-canvas=\"partitioned-circle\"], " +
+      "[data-kp-exact-view-canvas=\"fraction-bar\"], " +
+      "[data-kp-exact-view-canvas=\"number-line\"]"
+    )
+  ].map((canvas) => {
+    const svg = canvas.querySelector<SVGSVGElement>("svg");
+    if (svg === null) throw new Error("Missing persistent concrete SVG.");
+    const atoms = [
+      ...svg.querySelectorAll<SVGElement>("[data-kp-atomic-part-id]")
+    ];
+    return {
+      view: canvas.dataset["kpExactViewCanvas"],
+      renderer: canvas.dataset["kpExactMotionRenderer"],
+      trackCount: canvas.dataset["kpExactMotionTrackCount"],
+      svgIdentity: svg.dataset["kpTestIdentity"],
+      atomIdentities: atoms.map(
+        (element) => element.dataset["kpTestIdentity"]
+      ),
+      trackIds: atoms.map((element) => element.dataset["kpMotionTrackId"]),
+      transforms: atoms.map((element) => element.style.transform)
+    };
+  }));
+  expect(animated).toHaveLength(3);
+  for (const [index, view] of animated.entries()) {
+    expect(view.renderer).toBe("persistent-svg-atomic-tracks");
+    expect(view.trackCount).toBe("6");
+    expect(view.svgIdentity).toBe(`svg-${index}`);
+    expect(view.atomIdentities).toEqual(
+      Array.from({ length: 6 }, (_, atomIndex) =>
+        `atom-${index}-${atomIndex}`
+      )
+    );
+    expect(view.trackIds.every(Boolean)).toBe(true);
+    expect(view.transforms).not.toEqual(initialTransforms[index]!.transforms);
+  }
+});
+
+test("endpoint settlement is raster-stable and natural playback preserves concrete nodes", async ({
+  page
+}) => {
+  test.setTimeout(60_000);
+  const player = await openExactQuantity(page, {
+    width: 1_100,
+    height: 800
+  });
+  await seekAndSettle(page, player, 0.967);
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-paint-ownership",
+    "transient"
+  );
+  const materialPose = await player.locator(
+    committedSceneSelector
+  ).screenshot({
+    path: test.info().outputPath("endpoint-material-pose.png")
+  });
+  const materialGeometry = await endpointGeometry(player);
+  await seekAndSettle(page, player, 0.968);
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-paint-ownership",
+    "target-native"
+  );
+  const nativePose = await player.locator(
+    committedSceneSelector
+  ).screenshot({
+    path: test.info().outputPath("endpoint-native-pose.png")
+  });
+  const nativeGeometry = await endpointGeometry(player);
+  const raster = await rasterDifference(page, materialPose, nativePose);
+  expect(
+    raster.changedPixelRatio,
+    JSON.stringify({ raster, materialGeometry, nativeGeometry })
+  ).toBeLessThanOrEqual(
+    manifest.browserAudit.maximumEndpointChangedPixelRatio
+  );
+  expect(raster.meanChannelDelta).toBeLessThanOrEqual(
+    manifest.browserAudit.maximumEndpointMeanChannelDelta
+  );
+
+  await seekAndSettle(page, player, 0.92);
+  await player.evaluate((root) => {
+    for (const [index, svg] of [
+      ...root.querySelectorAll<SVGSVGElement>(
+        "[data-kp-exact-persistent-svg]"
+      )
+    ].entries()) {
+      svg.dataset["kpNaturalPlayIdentity"] = `concrete-${index}`;
+    }
+    const samples: Array<{
+      progress: number;
+      checkpoint?: string | undefined;
+      sourceOpacity?: string | undefined;
+      targetOpacity?: string | undefined;
+      poseProgress?: string | undefined;
+    }> = [];
+    (root as HTMLElement & {
+      __kpEndpointNaturalSamples?: typeof samples;
+    }).__kpEndpointNaturalSamples = samples;
+    root.addEventListener("kp-editor-animation-frame", () => {
+      const scene = root.querySelector<HTMLElement>(
+        "[data-kp-exact-symbolic-scene]" +
+        "[data-kp-prepared-scene-state=\"committed\"]"
+      );
+      samples.push({
+        progress: Number(root.dataset["kpEditorAnimationProgress"]),
+        checkpoint: root.dataset["kpExactCheckpoint"],
+        sourceOpacity: scene?.querySelector<HTMLElement>(
+          "[data-kp-exact-symbolic-source]"
+        )?.style.opacity,
+        targetOpacity: scene?.querySelector<HTMLElement>(
+          "[data-kp-exact-symbolic-target]"
+        )?.style.opacity,
+        poseProgress: scene?.dataset["kpNativeKatexPoseProgress"]
+      });
+    });
+  });
+  await player.locator(
+    '[data-action="toggle-editor-animation"]'
+  ).click();
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "complete",
+    { timeout: 10_000 }
+  );
+  const toggle = player.locator(
+    '[data-action="toggle-editor-animation"]'
+  );
+  await expect(toggle).toHaveCount(1);
+  await expect(toggle).toHaveText("Replay");
+  await expect(toggle).toHaveAttribute("aria-label", "Replay animation");
+  expect(await player.evaluate((root) => [
+    ...root.querySelectorAll<SVGSVGElement>(
+      "[data-kp-exact-persistent-svg]"
+    )
+  ].map((svg) => svg.dataset["kpNaturalPlayIdentity"]))).toEqual([
+    "concrete-0",
+    "concrete-1",
+    "concrete-2"
+  ]);
+  const naturalSamples = await player.evaluate((root) =>
+    (root as HTMLElement & {
+      __kpEndpointNaturalSamples?: Array<{
+        progress: number;
+        checkpoint?: string | undefined;
+        sourceOpacity?: string | undefined;
+        targetOpacity?: string | undefined;
+        poseProgress?: string | undefined;
+      }>;
+    }).__kpEndpointNaturalSamples ?? []
+  );
+  expect(naturalSamples.length).toBeGreaterThan(2);
+  expect(naturalSamples.every((sample, index) =>
+    sample.progress >= 0.92 &&
+    (
+      index === 0 ||
+      sample.progress >= naturalSamples[index - 1]!.progress
+    ) &&
+    sample.checkpoint === manifest.checkpoints.at(-1)!.id
+  )).toBe(true);
+  const settledSamples = naturalSamples.filter(
+    ({ poseProgress }) => poseProgress === "1"
+  );
+  expect(settledSamples.length).toBeGreaterThan(0);
+  expect(settledSamples.every(
+    ({ sourceOpacity }) => sourceOpacity === "0"
+  )).toBe(true);
+  await expect(player.locator(
+    `${committedSceneSelector} [data-kp-exact-symbolic-target]`
+  )).toHaveCSS("opacity", "1");
 });
 
 test("wide, phone, restored, and DPR2 layouts preserve one semantic frame", async ({
@@ -464,6 +678,146 @@ async function paintFingerprint(
       },
       views
     });
+  });
+}
+
+async function rasterDifference(
+  page: Page,
+  left: Buffer,
+  right: Buffer
+): Promise<{
+  readonly differingPixels: number;
+  readonly maximumChannelDelta: number;
+  readonly changedPixelRatio: number;
+  readonly meanChannelDelta: number;
+  readonly bounds: readonly [number, number, number, number] | null;
+}> {
+  return page.evaluate(async ({ leftBase64, rightBase64 }) => {
+    const pixels = async (base64: string) => {
+      const image = new Image();
+      image.src = `data:image/png;base64,${base64}`;
+      await image.decode();
+      const canvas = document.createElement("canvas");
+      canvas.width = image.naturalWidth;
+      canvas.height = image.naturalHeight;
+      const context = canvas.getContext("2d");
+      if (context === null) throw new Error("Missing raster audit context.");
+      context.drawImage(image, 0, 0);
+      return {
+        data: context.getImageData(0, 0, canvas.width, canvas.height).data,
+        width: canvas.width,
+        height: canvas.height
+      };
+    };
+    const [leftImage, rightImage] = await Promise.all([
+      pixels(leftBase64),
+      pixels(rightBase64)
+    ]);
+    const leftPixels = leftImage.data;
+    const rightPixels = rightImage.data;
+    if (leftPixels.length !== rightPixels.length) {
+      throw new Error("Endpoint raster dimensions diverged.");
+    }
+    if (
+      leftImage.width !== rightImage.width ||
+      leftImage.height !== rightImage.height
+    ) {
+      throw new Error("Endpoint raster dimensions diverged.");
+    }
+    let differingPixels = 0;
+    let maximumChannelDelta = 0;
+    let totalChannelDelta = 0;
+    let minimumX = Number.POSITIVE_INFINITY;
+    let minimumY = Number.POSITIVE_INFINITY;
+    let maximumX = Number.NEGATIVE_INFINITY;
+    let maximumY = Number.NEGATIVE_INFINITY;
+    const width = leftImage.width;
+    for (let index = 0; index < leftPixels.length; index += 4) {
+      let differs = false;
+      for (let channel = 0; channel < 4; channel += 1) {
+        const delta = Math.abs(
+          leftPixels[index + channel]! - rightPixels[index + channel]!
+        );
+        maximumChannelDelta = Math.max(maximumChannelDelta, delta);
+        totalChannelDelta += delta;
+        differs ||= delta !== 0;
+      }
+      if (differs) {
+        differingPixels += 1;
+        const pixelIndex = index / 4;
+        const x = pixelIndex % width;
+        const y = Math.floor(pixelIndex / width);
+        minimumX = Math.min(minimumX, x);
+        minimumY = Math.min(minimumY, y);
+        maximumX = Math.max(maximumX, x);
+        maximumY = Math.max(maximumY, y);
+      }
+    }
+    return {
+      differingPixels,
+      maximumChannelDelta,
+      changedPixelRatio: differingPixels / (leftPixels.length / 4),
+      meanChannelDelta: totalChannelDelta / leftPixels.length,
+      bounds: differingPixels === 0
+        ? null
+        : [minimumX, minimumY, maximumX, maximumY] as const
+    };
+  }, {
+    leftBase64: left.toString("base64"),
+    rightBase64: right.toString("base64")
+  });
+}
+
+async function endpointGeometry(
+  player: ReturnType<Page["locator"]>
+): Promise<unknown> {
+  return player.evaluate((root) => {
+    const rect = (element: Element) => {
+      const value = element.getBoundingClientRect();
+      return [value.x, value.y, value.width, value.height]
+        .map((part) => Math.round(part * 1_000) / 1_000);
+    };
+    const scene = root.querySelector<HTMLElement>(
+      "[data-kp-exact-symbolic-scene]" +
+      "[data-kp-prepared-scene-state=\"committed\"]"
+    );
+    if (scene === null) throw new Error("Missing endpoint geometry scene.");
+    const material = [
+      ...scene.querySelectorAll<HTMLElement>(
+        "[data-kp-equation-material-owner-id]"
+      )
+    ].map((owner) => ({
+      id: owner.dataset["kpEquationMaterialOwnerId"],
+      owner: rect(owner),
+      transform: owner.style.transform,
+      insetX: owner.dataset["kpEquationMaterialPaintInsetX"],
+      insetY: owner.dataset["kpEquationMaterialPaintInsetY"],
+      visual: owner.firstElementChild === null
+        ? null
+        : rect(owner.firstElementChild)
+    }));
+    const target = scene.querySelector<HTMLElement>(
+      "[data-kp-exact-symbolic-target]"
+    );
+    return {
+      ownership: root.getAttribute("data-kp-exact-paint-ownership"),
+      rawProgress: scene.dataset["kpNativeKatexRawProgress"],
+      poseProgress: scene.dataset["kpNativeKatexPoseProgress"],
+      material,
+      target: target === null
+        ? []
+        : [...target.querySelectorAll<HTMLElement>("span")]
+          .filter((element) =>
+            element.children.length === 0 &&
+            (element.textContent?.trim().length ?? 0) > 0
+          )
+          .map((element) => ({
+            text: element.textContent,
+            rect: rect(element),
+            family: getComputedStyle(element).fontFamily,
+            size: getComputedStyle(element).fontSize
+          }))
+    };
   });
 }
 

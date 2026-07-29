@@ -22,6 +22,7 @@ import {
   reconcileKpNativeKatexScenes,
   reverseKpNativeKatexSemanticPaintRelations,
   selectKpNativeKatexTypographyRealizationDisposition,
+  sampleKpNativeKatexEndpointDwellProgress,
   sampleKpNativeKatexSceneTracks,
   sampleKpNativeKatexTypographyStylePlan,
   type KpNativeKatexSceneTrack
@@ -46,6 +47,20 @@ const ownerDocument = {};
 const stage = { ownerDocument } as HTMLElement;
 const root = { ownerDocument } as HTMLElement;
 const sourceElement = { ownerDocument } as HTMLElement;
+
+test("endpoint dwell reaches the exact target pose before native settlement", () => {
+  assert.equal(sampleKpNativeKatexEndpointDwellProgress(0, 0.04), 0);
+  assert.ok(
+    sampleKpNativeKatexEndpointDwellProgress(0.5, 0.04) > 0.5
+  );
+  assert.equal(sampleKpNativeKatexEndpointDwellProgress(0.96, 0.04), 1);
+  assert.equal(sampleKpNativeKatexEndpointDwellProgress(0.999, 0.04), 1);
+  assert.equal(sampleKpNativeKatexEndpointDwellProgress(1, 0.04), 1);
+  assert.throws(
+    () => sampleKpNativeKatexEndpointDwellProgress(0.5, 0.3),
+    /between 0 and 0.25/
+  );
+});
 
 function atom(
   id = "atom.source.x",

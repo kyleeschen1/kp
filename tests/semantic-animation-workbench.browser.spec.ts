@@ -687,7 +687,7 @@ test("Workbench respects system reduced motion and exposes static checkpoints", 
     "static"
   );
   await expect(
-    player.locator('[data-action="play-editor-animation"]')
+    player.locator('[data-action="toggle-editor-animation"]')
   ).toBeDisabled();
   await expect(
     page.locator("[data-kp-animation-workbench-static-hint]")

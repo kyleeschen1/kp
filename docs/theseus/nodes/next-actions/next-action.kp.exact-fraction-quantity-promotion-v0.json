@@ -391,6 +391,30 @@
       "scope": "s24 durable control-plane integrity",
       "checkedAt": "2026-07-29T12:35:17.489Z",
       "notes": "Validated 827 nodes and 14161 events before slice completion."
+    },
+    {
+      "command": "npm run test:browser:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-29T16:32:46.377Z"
+    },
+    {
+      "command": "npm run visual:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-29T16:32:54.912Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-29T16:33:02.612Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-29T16:33:11.362Z"
     }
   ],
   "progress": {

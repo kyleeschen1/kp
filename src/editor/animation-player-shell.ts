@@ -29,6 +29,11 @@ export function renderKpEditorAnimationPlayerShell(input: {
   const progress = player?.progress ?? 0;
   const surface = player?.surface ?? dispatchKpEditorAnimationSurface(descriptor);
   const progressPercent = Math.round(progress * 100);
+  const toggleLabel = playbackStatus === "playing"
+    ? "Pause"
+    : playbackStatus === "complete"
+      ? "Replay"
+      : "Play";
   const promotion = descriptor.promotion;
   const hasControl = (kind: KpEditorAnimationDescriptor["controlKinds"][number]) =>
     descriptor.controlKinds.includes(kind);
@@ -45,8 +50,7 @@ export function renderKpEditorAnimationPlayerShell(input: {
       <div class="editor-animation-player__controls" role="group" aria-label="Animation playback controls">
         <div class="editor-animation-player__transport">
           ${hasControl("playback") ? `
-            <button type="button" data-action="play-editor-animation" aria-label="Play animation">Play</button>
-            <button type="button" data-action="pause-editor-animation" aria-label="Pause animation">Pause</button>
+            <button type="button" data-action="toggle-editor-animation" aria-label="${toggleLabel} animation">${toggleLabel}</button>
           ` : ""}
           ${hasControl("step") ? `<button type="button" data-action="step-editor-animation" aria-label="Step animation forward">Step</button>` : ""}
           ${hasControl("rewind") ? `<button type="button" data-action="rewind-editor-animation" aria-label="Rewind animation">Rewind</button>` : ""}
