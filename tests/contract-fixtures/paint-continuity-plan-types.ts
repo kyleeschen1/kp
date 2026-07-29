@@ -5,6 +5,15 @@ import type {
 import type {
   KpVerifiedOperationPresentationPlanId
 } from "../../src/animation/operation-presentation-plan-authority.ts";
+import type {
+  KpVerifiedOperationPresentationPlan
+} from "../../src/animation/operation-presentation-plan-types.ts";
+import type {
+  KpRegisteredSuccessorSynthesisBinding
+} from "../../src/animation/successor-synthesis-presentation-plan.ts";
+import type {
+  KpSuccessorSynthesisBinding
+} from "../../src/animation/successor-synthesis.ts";
 
 declare const operationPlanId: KpVerifiedOperationPresentationPlanId;
 
@@ -49,9 +58,17 @@ const callerPath: KpPaintContinuityPlanDraft = {
 };
 
 declare const verified: KpVerifiedPaintContinuityPlan;
+declare const rawBinding: KpSuccessorSynthesisBinding;
+declare const operationPlan: KpVerifiedOperationPresentationPlan;
 
 // @ts-expect-error Renderers cannot recover a caller-authored handoff instant.
 verified.handoffProgress;
+
+// @ts-expect-error A registered successor cannot omit continuity authority.
+const operationOnlyBinding: KpRegisteredSuccessorSynthesisBinding = {
+  ...rawBinding,
+  operationPresentationPlan: operationPlan
+};
 
 void [
   legalDraft,
@@ -59,5 +76,6 @@ void [
   hardSwap,
   callerOpacity,
   callerPath,
-  verified
+  verified,
+  operationOnlyBinding
 ];

@@ -129,6 +129,27 @@
       "status": "passed",
       "scope": "s07 registry schema v3 and nominal route",
       "checkedAt": "2026-07-29T17:52:54.452Z"
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s08 generic continuity compiler",
+      "checkedAt": "2026-07-29T18:00:07.848Z",
+      "notes": "117 checks passed; registry-supported successor evaluation returns verified semantic and paint-continuity plans together, while unsupported transformations return explicit static checkpoints."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08 inseparable successor authorities",
+      "checkedAt": "2026-07-29T18:00:13.513Z",
+      "notes": "Static fixtures reject registered successor bindings that omit paint continuity authority."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s08 canonical reader and presentation boundaries",
+      "checkedAt": "2026-07-29T18:00:23.337Z",
+      "notes": "All concept-room, semantic-reader, semantic-animation, and operation-evaluation boundary gates pass; the gate still reports three certified callers."
     }
   ],
   "allowedWork": [
@@ -202,7 +223,8 @@
     {
       "id": "s08",
       "title": "compile-generic-junction-plan",
-      "status": "planned"
+      "summary": "The registered successor compiler now mints one total shared-junction continuity plan beside its verified semantic plan; reader bindings require both authorities, preserve raw semantic bindings unchanged, and fail closed to explicit static when registry resolution is unavailable.",
+      "status": "complete"
     },
     {
       "id": "s09",

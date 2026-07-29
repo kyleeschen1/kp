@@ -2,7 +2,8 @@ import type {
   KpResolvedOperationEvaluationPresentation
 } from "./operation-evaluation-presentation-types.ts";
 import {
-  resolveKpOperationEvaluationPresentation,
+  resolveKpOperationEvaluationPresentationRoute,
+  kpSharedJunctionPaintContinuityCompiler,
   kpSuccessorSynthesisPresentationPlanCompiler
 } from "./operation-evaluation-presentation-registry.ts";
 import {
@@ -10,6 +11,9 @@ import {
 } from "./operation-presentation-laws.ts";
 import type {
   KpVerifiedOperationPresentationPlan
+} from "./operation-presentation-plan-types.ts";
+import {
+  operationPresentationPlanAuthorityId
 } from "./operation-presentation-plan-types.ts";
 import {
   validateAndMintKpOperationPresentationPlan
@@ -22,26 +26,52 @@ import {
 import type {
   KpSuccessorSynthesisBinding
 } from "./successor-synthesis.ts";
+import type {
+  KpVerifiedPaintContinuityPlan
+} from "./paint-continuity-plan-types.ts";
+import {
+  validateAndMintKpPaintContinuityPlan
+} from "./paint-continuity-plan-validator.ts";
+import type {
+  KpExplicitStaticCheckpointPlan
+} from "./operation-presentation-plan-types.ts";
 
 export type KpRegisteredSuccessorSynthesisBinding =
   KpSuccessorSynthesisBinding & {
-    readonly operationPresentationPlan?:
-      KpVerifiedOperationPresentationPlan | undefined;
+    readonly operationPresentationPlan:
+      KpVerifiedOperationPresentationPlan;
+    readonly paintContinuityPlan: KpVerifiedPaintContinuityPlan;
   };
 
-export function compileKpRegisteredSuccessorSynthesisPresentationPlan(input: {
+export type KpSuccessorSynthesisPresentationCompilation =
+  | {
+      readonly status: "compiled";
+      readonly operationPresentationPlan:
+        KpVerifiedOperationPresentationPlan;
+      readonly paintContinuityPlan: KpVerifiedPaintContinuityPlan;
+    }
+  | {
+      readonly status: "explicit-static";
+      readonly checkpoint: KpExplicitStaticCheckpointPlan;
+    };
+
+export function compileKpRegisteredSuccessorSynthesisPresentation(input: {
   readonly transformationId: string;
   readonly transformationKind: string;
   readonly binding: KpSuccessorSynthesisBinding;
-}): KpVerifiedOperationPresentationPlan | undefined {
-  const resolution = resolveKpOperationEvaluationPresentation({
+}): KpSuccessorSynthesisPresentationCompilation {
+  const route = resolveKpOperationEvaluationPresentationRoute({
+    transformationId: input.transformationId,
     transformationKind: input.transformationKind
   });
-  if (resolution.status === "unknown-transformation") return undefined;
-  if (resolution.status !== "resolved") {
-    throw new Error(resolution.message);
+  if (route.status === "explicit-static") {
+    return Object.freeze({
+      status: "explicit-static",
+      checkpoint: route.checkpoint
+    });
   }
-  requireSuccessorCompiler(resolution.certificate);
+  requireSuccessorCompiler(route.certificate);
+  requirePaintContinuityCompiler(route.certificate);
   requireCompleteSuccessorLineage(input.binding);
 
   const sourceBundles = input.binding.sourceAnnotations.map((annotation) =>
@@ -59,6 +89,11 @@ export function compileKpRegisteredSuccessorSynthesisPresentationPlan(input: {
         ? [sourceBundles[index]!.id]
         : []
   );
+  if (materialBundleIds.length === 0) {
+    throw new Error(
+      `Successor binding ${input.binding.id} requires material input.`
+    );
+  }
   const targetBundle = createKpOperationPresentationBundle({
     id: `${input.binding.id}.bundle.target`,
     role: "target-material",
@@ -102,7 +137,7 @@ export function compileKpRegisteredSuccessorSynthesisPresentationPlan(input: {
   }
   const lawDiagnostics = runKpOperationPresentationLaws({
     plan: validation.plan,
-    lawIds: resolution.certificate.planCompiler.lawIds,
+    lawIds: route.certificate.planCompiler.lawIds,
     context: {
       sourceSelectorIds,
       targetSelectorIds,
@@ -118,7 +153,45 @@ export function compileKpRegisteredSuccessorSynthesisPresentationPlan(input: {
       ).join("\n")
     );
   }
-  return validation.plan;
+  const [firstMaterialBundleId, ...remainingMaterialBundleIds] =
+    materialBundleIds;
+  const paintValidation = validateAndMintKpPaintContinuityPlan({
+    draft: {
+      schemaVersion: "kp.paint-continuity-plan.v1",
+      id: `paint-continuity.${input.binding.id}`,
+      transformationId: input.transformationId,
+      operationPresentationPlanId:
+        operationPresentationPlanAuthorityId(validation.plan),
+      ownership: "exclusive-continuous-carrier",
+      carriers: [{
+        lineageId: `paint-lineage.${input.binding.id}.material-total`,
+        sourceBundleIds: [
+          firstMaterialBundleId!,
+          ...remainingMaterialBundleIds
+        ],
+        targetBundleIds: [targetBundle.id],
+        transferTopology:
+          route.certificate.paintContinuityCompiler.transferTopology
+      }],
+      endpointSettlement:
+        route.certificate.paintContinuityCompiler.endpointSettlement,
+      nonZeroPaint:
+        route.certificate.paintContinuityCompiler.nonZeroPaint
+    },
+    operationPlan: validation.plan
+  });
+  if (paintValidation.status !== "verified") {
+    throw new Error(
+      paintValidation.issues.map(({ path, message }) =>
+        `${path}: ${message}`
+      ).join("\n")
+    );
+  }
+  return Object.freeze({
+    status: "compiled",
+    operationPresentationPlan: validation.plan,
+    paintContinuityPlan: paintValidation.plan
+  });
 }
 
 function requireCompleteSuccessorLineage(
@@ -172,6 +245,25 @@ function requireSuccessorCompiler(
     throw new Error(
       `Presentation ${certificate.presentationId} did not resolve the ` +
       "approved successor-synthesis plan compiler."
+    );
+  }
+}
+
+function requirePaintContinuityCompiler(
+  certificate: KpResolvedOperationEvaluationPresentation
+): void {
+  const compiler = certificate.paintContinuityCompiler;
+  if (
+    compiler.id !== kpSharedJunctionPaintContinuityCompiler.id ||
+    compiler.version !== kpSharedJunctionPaintContinuityCompiler.version ||
+    compiler.transferTopology !== "shared-zero-area-junction" ||
+    compiler.nonZeroPaint !== "opaque" ||
+    compiler.endpointSettlement !== "native-source-and-target" ||
+    compiler.boundaryLawId !== "paint-continuity.t-epsilon-boundary"
+  ) {
+    throw new Error(
+      `Presentation ${certificate.presentationId} did not resolve the ` +
+      "approved shared-junction paint continuity compiler."
     );
   }
 }

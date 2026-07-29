@@ -5,7 +5,7 @@ import {
   createKpFractionCompositionEquationAnimationAsset
 } from "../src/animation/fraction-composition-equation-adapter.ts";
 import {
-  compileKpRegisteredSuccessorSynthesisPresentationPlan
+  compileKpRegisteredSuccessorSynthesisPresentation
 } from "../src/animation/successor-synthesis-presentation-plan.ts";
 import {
   createKpEquationSuccessorSynthesisBindings
@@ -21,26 +21,37 @@ test("registered successor compiler classifies material without changing motion 
     transformation
   })[0]!;
   const before = structuredClone(binding);
-  const plan = compileKpRegisteredSuccessorSynthesisPresentationPlan({
+  const result = compileKpRegisteredSuccessorSynthesisPresentation({
     transformationId: transformation.id,
     transformationKind: transformation.transformType,
     binding
   });
 
-  assert.ok(plan);
-  assert.equal(plan?.planKind, "successor-synthesis");
+  assert.equal(result.status, "compiled");
+  if (result.status !== "compiled") return;
+  const plan = result.operationPresentationPlan;
+  assert.equal(plan.planKind, "successor-synthesis");
   assert.deepEqual(binding, before);
-  assert.ok(plan?.roles.bundles.some(({ role }) =>
+  assert.ok(plan.roles.bundles.some(({ role }) =>
     role === "source-material"
   ));
-  assert.ok(plan?.roles.bundles.some(({ role }) => role === "catalyst"));
-  assert.ok(plan?.roles.bundles.some(({ role }) =>
+  assert.ok(plan.roles.bundles.some(({ role }) => role === "catalyst"));
+  assert.ok(plan.roles.bundles.some(({ role }) =>
     role === "target-material"
   ));
-  assert.equal(plan?.roles.groups[0]?.groupKind, "fusion");
+  assert.equal(plan.roles.groups[0]?.groupKind, "fusion");
+  assert.equal(
+    result.paintContinuityPlan.carriers[0]?.transferTopology,
+    "shared-zero-area-junction"
+  );
+  assert.equal(result.paintContinuityPlan.nonZeroPaint, "opaque");
+  assert.equal(
+    result.paintContinuityPlan.operationPresentationPlanId,
+    plan.id
+  );
 });
 
-test("unregistered transformations do not acquire executable plan authority", () => {
+test("unregistered transformations become explicit static checkpoints", () => {
   const animation = createKpFractionCompositionEquationAnimationAsset();
   const transformation = animation.transformations.find(
     ({ transformType }) => transformType === "simplifyConstantProduct"
@@ -50,12 +61,12 @@ test("unregistered transformations do not acquire executable plan authority", ()
     transformation
   })[0]!;
 
-  assert.equal(
-    compileKpRegisteredSuccessorSynthesisPresentationPlan({
-      transformationId: transformation.id,
-      transformationKind: "projectUnknownEvaluation",
-      binding
-    }),
-    undefined
-  );
+  const result = compileKpRegisteredSuccessorSynthesisPresentation({
+    transformationId: transformation.id,
+    transformationKind: "projectUnknownEvaluation",
+    binding
+  });
+  assert.equal(result.status, "explicit-static");
+  if (result.status !== "explicit-static") return;
+  assert.equal(result.checkpoint.reason, "unsupported-presentation");
 });

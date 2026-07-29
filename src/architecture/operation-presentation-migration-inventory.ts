@@ -127,7 +127,7 @@ export const kpOperationEvaluationContinuityMigrationInventory = Object.freeze([
   continuityMigration(
     "reader-registry-compiler",
     "src/reader/renderers/equation-render-plan.ts",
-    "compileKpRegisteredSuccessorSynthesisPresentationPlan({",
+    "compileKpRegisteredSuccessorSynthesisPresentation({",
     "canonical-route",
     "s07",
     "The canonical reader already resolves registered operation evaluation."

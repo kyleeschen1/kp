@@ -25,7 +25,7 @@ import {
   createKpEquationSuccessorSynthesisBindings
 } from "../../rendering/equation-linear-rearrangement-bindings.ts";
 import {
-  compileKpRegisteredSuccessorSynthesisPresentationPlan
+  compileKpRegisteredSuccessorSynthesisPresentation
 } from "../../animation/successor-synthesis-presentation-plan.ts";
 import {
   compileKpFactorCommonTermMotifBinding
@@ -202,17 +202,29 @@ export function projectKpReaderEquationRenderPlan(input: {
         animation: input.animation,
         transformation
       });
-    const successorSyntheses = successorSynthesisBindings.map((binding) => {
-      const operationPresentationPlan =
-        compileKpRegisteredSuccessorSynthesisPresentationPlan({
+    const successorSynthesisDecisions =
+      successorSynthesisBindings.map((binding) => ({
+        binding,
+        decision: compileKpRegisteredSuccessorSynthesisPresentation({
           transformationId: transformation.id,
           transformationKind: transformation.transformType,
           binding
-        });
-      return operationPresentationPlan === undefined
-        ? binding
-        : Object.freeze({ ...binding, operationPresentationPlan });
-    });
+        })
+      }));
+    const successorSyntheses = successorSynthesisDecisions.flatMap(
+      ({ binding, decision }) =>
+        decision.status === "compiled"
+          ? [Object.freeze({
+              ...binding,
+              operationPresentationPlan:
+                decision.operationPresentationPlan,
+              paintContinuityPlan: decision.paintContinuityPlan
+            })]
+          : []
+    );
+    const successorStaticCheckpoint = successorSynthesisDecisions.find(
+      ({ decision }) => decision.status === "explicit-static"
+    )?.decision;
     const choreographyDecision =
       decideKpEquationOperationChoreography({
         animation: input.animation,
@@ -339,7 +351,9 @@ export function projectKpReaderEquationRenderPlan(input: {
         operationChoreography,
         ...(choreographyDecision.status === "explicit-static"
           ? { staticCheckpoint: choreographyDecision.checkpoint }
-          : {})
+          : successorStaticCheckpoint?.status === "explicit-static"
+            ? { staticCheckpoint: successorStaticCheckpoint.checkpoint }
+            : {})
       });
     transitions.push({
       id: transformation.id,
