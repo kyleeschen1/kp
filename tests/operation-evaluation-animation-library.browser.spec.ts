@@ -121,6 +121,93 @@ test("reference candidate and current runtime share the player clock", async ({
   )).toHaveText("native target");
 });
 
+test("primary gather-and-recognize candidate stays opaque and continuously inked", async ({
+  page
+}) => {
+  await page.goto(`/?animation=${descriptorId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const scrubber = player.locator(
+    "[data-action=\"seek-editor-animation\"]"
+  );
+  const comparison = player.locator(
+    "[data-kp-operation-evaluation-reference-comparison]"
+  );
+  const primaryPanel = comparison.locator(
+    "[data-kp-operation-evaluation-primary-panel]"
+  );
+  const stage = primaryPanel.locator(
+    "[data-kp-operation-evaluation-reference-stage]"
+  );
+  await expect(comparison).toHaveAttribute(
+    "data-kp-operation-evaluation-primary-candidate",
+    "opaque-gather-and-recognize-v1"
+  );
+  await expect(primaryPanel).toBeVisible();
+  await expect(comparison.locator(
+    "[data-kp-operation-evaluation-diagnostic]"
+  )).toHaveAttribute("aria-hidden", "true");
+
+  for (let index = 0; index <= 100; index += 1) {
+    await seekExact(scrubber, index / 100);
+    const sample = await stage.evaluate((element) => {
+      const root = element as HTMLElement;
+      const stageRect = root.getBoundingClientRect();
+      const candidates = [
+        ...root.querySelectorAll<HTMLElement>(
+          "[data-kp-semantic-selector-id]"
+        )
+      ];
+      const visible = candidates.flatMap((candidate) => {
+        const style = getComputedStyle(candidate);
+        const rect = candidate.getBoundingClientRect();
+        return Number(style.opacity) > 0.01 &&
+          rect.width * rect.height > 0.01
+          ? [{ rect, opacity: Number(style.opacity) }]
+          : [];
+      });
+      return {
+        nonBinaryOpacityCount: candidates.filter((candidate) => {
+          const opacity = Number(getComputedStyle(candidate).opacity);
+          return Math.abs(opacity) > 1e-6 &&
+            Math.abs(opacity - 1) > 1e-6;
+        }).length,
+        visibleArea: visible.reduce((sum, { rect }) =>
+          sum + rect.width * rect.height, 0),
+        contained: visible.every(({ rect }) =>
+          rect.left >= stageRect.left - 1 &&
+          rect.top >= stageRect.top - 1 &&
+          rect.right <= stageRect.right + 1 &&
+          rect.bottom <= stageRect.bottom + 1
+        )
+      };
+    });
+    expect(sample.nonBinaryOpacityCount).toBe(0);
+    expect(sample.visibleArea).toBeGreaterThan(4);
+    expect(sample.contained).toBe(true);
+  }
+
+  await seekExact(scrubber, 0.58);
+  const gathered = await stage.locator(
+    "[data-kp-operation-evaluation-reference-source] " +
+    "[data-kp-semantic-selector-id]"
+  ).evaluateAll((elements) => elements.map((element) => {
+    const style = getComputedStyle(element);
+    const matrix = new DOMMatrix(style.transform);
+    return {
+      opacity: Number(style.opacity),
+      scale: matrix.a,
+      travel: Math.hypot(matrix.e, matrix.f)
+    };
+  }));
+  expect(gathered).toHaveLength(3);
+  expect(gathered.every(({ opacity }) => opacity === 1)).toBe(true);
+  expect(gathered.every(({ scale }) => scale > 0 && scale < 1)).toBe(true);
+  expect(gathered.every(({ travel }) => travel > 4)).toBe(true);
+});
+
 test("operation evaluation measures and retains paint in its final host", async ({
   page
 }) => {
@@ -377,7 +464,9 @@ for (const viewport of [
       `[data-kp-editor-animation-player]` +
       `[data-kp-editor-animation-id="${animationId}"]`
     );
-    const stage = player.locator("[data-kp-operation-evaluation-stage]");
+    const stage = player.locator(
+      "[data-kp-operation-evaluation-reference-stage]"
+    );
     const toggle = player.locator(
       "[data-action=\"toggle-editor-animation\"]"
     );
@@ -672,7 +761,7 @@ async function installNaturalPlaybackTrace(player: Locator): Promise<void> {
     host.__kpOperationEvaluationTrace = [];
     host.addEventListener("kp-editor-animation-frame", () => {
       const stage = host.querySelector<HTMLElement>(
-        "[data-kp-operation-evaluation-stage]"
+        "[data-kp-operation-evaluation-reference-stage]"
       );
       if (stage === null) return;
       const paint = observeVisiblePaint(stage);
@@ -707,7 +796,8 @@ async function installNaturalPlaybackTrace(player: Locator): Promise<void> {
         ...root.querySelectorAll<HTMLElement>(
           "[data-kp-operation-evaluation-source]," +
           "[data-kp-operation-evaluation-target]," +
-          "[data-kp-equation-material-owner-id]"
+          "[data-kp-equation-material-owner-id]," +
+          "[data-kp-semantic-selector-id]"
         )
       ];
       const visible = candidates.flatMap((candidate) => {

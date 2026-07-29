@@ -22,6 +22,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-07-29-kp-proof-or-simplify-execution-gate.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-29-operation-evaluation-proof-or-simplify-checkpoint.md"
     }
   ],
   "verification": [
@@ -190,6 +194,34 @@
       "scope": "s03 final-host measurement and actual ink geometry",
       "checkedAt": "2026-07-29T22:29:15.909Z",
       "notes": "30 Chromium, Firefox, and WebKit checks passed. The measured stage stays in its certified host, endpoint transient ink agrees with native KaTeX, visible paint remains contained, and forced reparenting fails closed to a native endpoint."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-continuity",
+      "status": "passed",
+      "scope": "s03 primary candidate and final-host cross-browser matrix",
+      "checkedAt": "2026-07-29T22:44:53.902Z",
+      "notes": "33 of 33 checks passed across Chromium, Firefox, and WebKit: dense opaque ink, wide and phone natural playback, endpoint equivalence, final-host containment, reparent invalidation, rewind, replay, and Review capture."
+    },
+    {
+      "command": "npm run visual:animation-library-operation-evaluation",
+      "status": "passed",
+      "scope": "s03 single primary dashboard checkpoint",
+      "checkedAt": "2026-07-29T22:44:55.023Z",
+      "notes": "The existing searchable Animation Library shows one primary proposed candidate and exposes the rejected runtime only through a diagnostic disclosure while preserving one outer Review owner."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s03 presentation authority regression",
+      "checkedAt": "2026-07-29T22:44:56.206Z",
+      "notes": "127 of 127 semantic operation, registry, lineage, continuity, cancellation, and successor presentation checks passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s03 production isolation and type closure",
+      "checkedAt": "2026-07-29T22:44:58.037Z",
+      "notes": "Repository-wide typecheck and Vite production build passed; the comparison and proposed checkpoint candidate remain development-only."
     }
   ],
   "allowedWork": [
@@ -235,7 +267,7 @@
     {
       "id": "s03",
       "title": "human-reference-selection-checkpoint",
-      "summary": "Bound final-host measurement to host identity, dimensions, DPR, font revision, and session generation; removed post-measurement reparenting; added actual ink containment and endpoint-equivalence checks plus fail-closed reparent invalidation. Cross-browser measurement cohort passes. Next: present one primary no-fade reference candidate and stop for human review.",
+      "summary": "HUMAN_CHECKPOINT: one corrected opaque gather-and-recognize candidate is primary in the Animation Library; the rejected zero-area runtime is diagnostic-only. Final-host measurement is certified and 33 cross-browser checks, 127 presentation checks, dashboard projection, and production build pass. Awaiting explicit human visual approval before completing s03 or activating the architecture ROI gate.",
       "status": "in-progress"
     },
     {

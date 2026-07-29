@@ -224,13 +224,23 @@ test("operation evaluation opens in the wide focused player host", async ({
     "[data-kp-editor-animation-library]"
   ).evaluate((element) => element.getBoundingClientRect().width);
   expect(hostWidth).toBeGreaterThan(800);
-  const panelTops = await frame.locator(
-    ".kp-operation-evaluation-comparison__panel"
-  ).evaluateAll((panels) =>
-    panels.map((panel) => panel.getBoundingClientRect().top)
+  await expect(frame.locator(
+    "[data-kp-operation-evaluation-primary-panel]"
+  )).toBeVisible();
+  const diagnostic = frame.locator(
+    "[data-kp-operation-evaluation-diagnostic]"
   );
-  expect(panelTops).toHaveLength(2);
-  expect(Math.abs(panelTops[0]! - panelTops[1]!)).toBeLessThanOrEqual(1);
+  await expect(diagnostic).toHaveAttribute("aria-hidden", "true");
+  await frame.locator(
+    "[data-action=\"toggle-operation-evaluation-diagnostic\"]"
+  ).click();
+  await expect(diagnostic).toHaveAttribute("aria-hidden", "false");
+  await expect(diagnostic.locator(
+    "[data-kp-operation-evaluation-current-panel]"
+  )).toBeVisible();
+  await expect(diagnostic.locator(
+    "[data-kp-operation-evaluation-stage]"
+  )).toHaveAttribute("data-kp-operation-evaluation-status", "ready");
 });
 
 test("automatic fold schedules certify every product-settlement boundary frame", async ({

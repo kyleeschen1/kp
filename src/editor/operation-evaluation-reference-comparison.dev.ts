@@ -45,24 +45,26 @@ export function mountKpOperationEvaluationReferenceComparison(input: {
   const root = document.createElement("section");
   root.className = "kp-operation-evaluation-comparison";
   root.dataset["kpOperationEvaluationReferenceComparison"] = "";
+  root.dataset["kpOperationEvaluationPrimaryCandidate"] =
+    "opaque-gather-and-recognize-v1";
   root.innerHTML = `
     <header class="kp-operation-evaluation-comparison__header">
       <p class="kp-operation-evaluation-comparison__eyebrow">
-        Required reference checkpoint
+        Proposed canonical checkpoint
       </p>
-      <h3>One semantic operation, one synchronized clock</h3>
+      <h3>Gather, combine, and recognize</h3>
       <p>
-        Compare choreography only. The historical candidate preserves the
-        expressive gather-and-recognize motion, but its old endpoint paint
-        handoff is not authoritative.
+        Review one corrected candidate: every contributor stays opaque while
+        motion and scale carry the evaluation into its native result.
       </p>
     </header>
     <div class="kp-operation-evaluation-comparison__panels">
       <figure class="kp-operation-evaluation-comparison__panel"
+        data-kp-operation-evaluation-primary-panel
         data-kp-operation-evaluation-reference-panel>
         <figcaption>
-          <strong>Historical choreography candidate</strong>
-          <span>Recoverable sampler · endpoint handoff excluded</span>
+          <strong>Proposed canonical candidate</strong>
+          <span>Opaque contributors · exact native endpoints</span>
         </figcaption>
         <div class="kp-operation-evaluation-stage
           kp-operation-evaluation-reference-stage"
@@ -77,17 +79,28 @@ export function mountKpOperationEvaluationReferenceComparison(input: {
         </div>
         ${telemetryMarkup("reference")}
       </figure>
+    </div>
+    <button class="kp-operation-evaluation-comparison__diagnostic-toggle"
+      type="button"
+      data-action="toggle-operation-evaluation-diagnostic"
+      aria-expanded="false">
+      Show rejected runtime diagnostic
+    </button>
+    <div class="kp-operation-evaluation-comparison__diagnostic"
+      data-kp-operation-evaluation-diagnostic
+      data-kp-operation-evaluation-diagnostic-open="false"
+      aria-hidden="true">
       <figure class="kp-operation-evaluation-comparison__panel"
         data-kp-operation-evaluation-current-panel>
-        <figcaption>
-          <strong>Current zero-area runtime</strong>
-          <span>Endpoint-stable · rejected as canonical choreography</span>
-        </figcaption>
-        <div data-kp-operation-evaluation-current-stage-host></div>
-        ${telemetryMarkup("current")}
-      </figure>
+          <figcaption>
+            <strong>Rejected zero-area runtime</strong>
+            <span>Retained for diagnosis, not product selection</span>
+          </figcaption>
+          <div data-kp-operation-evaluation-current-stage-host></div>
+          ${telemetryMarkup("current")}
+        </figure>
     </div>`;
-  required(
+  const referenceStage = required(
     root,
     "[data-kp-operation-evaluation-reference-stage]"
   );
@@ -115,6 +128,25 @@ export function mountKpOperationEvaluationReferenceComparison(input: {
   currentStageHost.dataset["kpOperationEvaluationMeasurementHostId"] =
     input.measurementHostId;
   input.slot.replaceChildren(root);
+  const diagnostic = required(
+    root,
+    "[data-kp-operation-evaluation-diagnostic]"
+  );
+  const diagnosticToggle = required(
+    root,
+    "[data-action=\"toggle-operation-evaluation-diagnostic\"]"
+  );
+  diagnosticToggle.addEventListener("click", () => {
+    const open =
+      diagnostic.dataset["kpOperationEvaluationDiagnosticOpen"] !== "true";
+    diagnostic.dataset["kpOperationEvaluationDiagnosticOpen"] =
+      String(open);
+    diagnostic.setAttribute("aria-hidden", String(!open));
+    diagnosticToggle.setAttribute("aria-expanded", String(open));
+    diagnosticToggle.textContent = open
+      ? "Hide rejected runtime diagnostic"
+      : "Show rejected runtime diagnostic";
+  });
 
   let currentStage: HTMLElement | undefined;
   let reference:
@@ -179,6 +211,9 @@ export function mountKpOperationEvaluationReferenceComparison(input: {
           members.map(({ element }) => element)
         ))
       };
+      referenceStage.dataset["kpOperationEvaluationStatus"] = "ready";
+      referenceStage.dataset["kpOperationEvaluationPresentationMode"] =
+        "opaque-gather-and-recognize";
       this.apply(pendingProgress);
     },
     apply(progress) {
@@ -190,7 +225,11 @@ export function mountKpOperationEvaluationReferenceComparison(input: {
       ) {
         return;
       }
-      const frame = sampleKpSuccessorSynthesis({
+      referenceStage.dataset["kpOperationEvaluationMappedProgress"] =
+        String(progress);
+      referenceStage.dataset["kpOperationEvaluationBoundarySide"] =
+        progress < 0.7 ? "source" : "target";
+      const frame = sampleOpaqueGatherAndRecognize({
         plan: reference.plan,
         progress
       });
@@ -212,6 +251,37 @@ export function mountKpOperationEvaluationReferenceComparison(input: {
       disposed = true;
       root.remove();
     }
+  };
+}
+
+function sampleOpaqueGatherAndRecognize(input: {
+  readonly plan: ReturnType<typeof createKpSuccessorSynthesisPlan>;
+  readonly progress: number;
+}): KpSuccessorSynthesisFrame {
+  const frame = sampleKpSuccessorSynthesis(input);
+  return {
+    ...frame,
+    sources: frame.sources.map((source) => {
+      const gatheredScale = source.contribution === "catalyst"
+        ? 1 - 0.32 * source.activationProgress
+        : source.pose.scale;
+      return {
+        ...source,
+        pose: {
+          ...source.pose,
+          scale: gatheredScale * (1 - source.retirementProgress),
+          opacity: source.retirementProgress >= 1 ? 0 : 1
+        }
+      };
+    }),
+    targets: frame.targets.map((target) => ({
+      ...target,
+      pose: {
+        ...target.pose,
+        scale: target.birthProgress,
+        opacity: target.birthProgress > 0 ? 1 : 0
+      }
+    }))
   };
 }
 
