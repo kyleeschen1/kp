@@ -62,6 +62,62 @@ test("one plus two mounts through the lazy verified compositor adapter", async (
     "data-kp-canonical-native-katex-session-factory",
     "shared-v1"
   );
+  const comparison = player.locator(
+    "[data-kp-operation-evaluation-reference-comparison]"
+  );
+  await expect(comparison).toBeVisible();
+  await expect(comparison.locator(
+    "[data-kp-operation-evaluation-reference-stage]"
+  )).toBeVisible();
+  await expect(comparison.locator(
+    "[data-kp-operation-evaluation-current-stage-host] " +
+    "[data-kp-operation-evaluation-stage]"
+  )).toHaveCount(1);
+});
+
+test("reference candidate and current runtime share the player clock", async ({
+  page
+}) => {
+  await page.goto(`/?animation=${descriptorId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const scrubber = player.locator(
+    "[data-action=\"seek-editor-animation\"]"
+  );
+  const comparison = player.locator(
+    "[data-kp-operation-evaluation-reference-comparison]"
+  );
+  await expect(comparison).toBeVisible();
+
+  await scrubber.fill("0.58");
+  await expect(player).toHaveAttribute(
+    "data-kp-operation-evaluation-mapped-progress",
+    "0.58"
+  );
+  await expect(comparison).toHaveAttribute(
+    "data-kp-operation-evaluation-reference-phase",
+    "retire"
+  );
+  await expect(comparison.locator(
+    "[data-kp-operation-evaluation-reference-telemetry] " +
+    "[data-kp-comparison-owner]"
+  )).not.toHaveText("empty");
+  await expect(comparison.locator(
+    "[data-kp-operation-evaluation-current-telemetry] " +
+    "[data-kp-comparison-phase]"
+  )).toHaveText("contract to zero");
+
+  await scrubber.fill("1");
+  await expect(comparison.locator(
+    "[data-kp-operation-evaluation-reference-telemetry] " +
+    "[data-kp-comparison-endpoint]"
+  )).toHaveText("native target pose");
+  await expect(comparison.locator(
+    "[data-kp-operation-evaluation-current-telemetry] " +
+    "[data-kp-comparison-endpoint]"
+  )).toHaveText("native target");
 });
 
 test("one plus two direct seek and rewind share one exact pose", async ({

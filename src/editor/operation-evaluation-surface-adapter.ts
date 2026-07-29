@@ -41,6 +41,9 @@ import {
 import type {
   KpSelectorAnnotatedLatex
 } from "../rendering/selector-annotated-latex.ts";
+import type {
+  KpOperationEvaluationReferenceComparisonSession
+} from "./operation-evaluation-reference-comparison.dev.ts";
 
 interface OperationEvaluationSurfaceSession {
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
@@ -48,6 +51,8 @@ interface OperationEvaluationSurfaceSession {
   pendingProgress: number;
   activeStage?: HTMLElement | undefined;
   playback?: KpReaderEquationMeasuredRendererSession | undefined;
+  referenceComparison?:
+    KpOperationEvaluationReferenceComparisonSession | undefined;
   disposed: boolean;
 }
 
@@ -103,8 +108,9 @@ KpEditorAnimationSurfaceAdapter = {
     session.pendingProgress = state.direction === "forward"
       ? state.progress
       : 1 - state.progress;
-    syncProgressTelemetry(player, session.activeStage, state, session);
     session.playback?.apply(session.pendingProgress);
+    session.referenceComparison?.apply(session.pendingProgress);
+    syncProgressTelemetry(player, session.activeStage, state, session);
   }
 };
 
@@ -123,11 +129,16 @@ async function prepareOperationEvaluationSurface(input: {
   readonly renderPlan: KpReaderEquationRenderPlan;
 }): Promise<void> {
   const transition = input.renderPlan.transitions[0];
+  const synthesis =
+    transition?.presentationPlan.planKind === "successor-synthesis"
+      ? transition.presentationPlan.successorSyntheses[0]
+      : undefined;
   if (
     transition === undefined ||
     input.renderPlan.transitions.length !== 1 ||
     transition.presentationPlan.planKind !== "successor-synthesis" ||
-    transition.presentationPlan.successorSyntheses.length !== 1
+    transition.presentationPlan.successorSyntheses.length !== 1 ||
+    synthesis === undefined
   ) {
     markCompilationFailure(
       input.player,
@@ -233,6 +244,33 @@ async function prepareOperationEvaluationSurface(input: {
     stage.dataset["kpOperationEvaluationPresentationMode"] =
       playback.presentationMode;
     playback.apply(input.session.pendingProgress);
+    if (import.meta.env.DEV) {
+      const {
+        mountKpOperationEvaluationReferenceComparison
+      } = await import(
+        "./operation-evaluation-reference-comparison.dev.ts"
+      );
+      if (
+        input.session.disposed ||
+        input.session.generation !== input.generation
+      ) {
+        playback.dispose();
+        stage.remove();
+        return;
+      }
+      input.session.referenceComparison?.dispose();
+      input.session.referenceComparison =
+        mountKpOperationEvaluationReferenceComparison({
+          slot: input.slot,
+          currentStage: stage,
+          source,
+          target,
+          synthesis
+        });
+      input.session.referenceComparison.apply(
+        input.session.pendingProgress
+      );
+    }
     syncProgressTelemetry(
       input.player,
       stage,
@@ -358,6 +396,7 @@ function disposeOperationEvaluationSurface(
 ): void {
   session.disposed = true;
   session.generation += 1;
+  session.referenceComparison?.dispose();
   session.playback?.dispose();
   session.fontReadiness.dispose();
   session.activeStage?.remove();

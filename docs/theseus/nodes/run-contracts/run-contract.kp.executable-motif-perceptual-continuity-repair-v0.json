@@ -77,6 +77,55 @@
       "scope": "s02 immutable commit provenance",
       "checkedAt": "2026-07-29T20:03:33.168Z",
       "notes": "All six full commit identities recorded by the candidate manifest exist in repository history."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s03 initial development comparison",
+      "checkedAt": "2026-07-29T20:19:59.387Z",
+      "notes": "Initial compile found one unused local in the new review-only harness; removed before all final gates."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s03 historical choreography authority",
+      "checkedAt": "2026-07-29T20:20:00.422Z",
+      "notes": "127 focused presentation, continuity, registry, and reference-provenance checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03 synchronized comparison typing",
+      "checkedAt": "2026-07-29T20:20:01.294Z",
+      "notes": "Application, node, test, protocol-dependent, and domain projects pass after the local cleanup."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-continuity",
+      "status": "passed",
+      "scope": "s03 wide phone and cross-browser comparison",
+      "checkedAt": "2026-07-29T20:20:02.175Z",
+      "notes": "24 of 24 browser checks pass in Chromium, Firefox, and WebKit, including shared-clock choreography, endpoint paint, containment, rewind, replay, and Review capture."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "s03 broad regression audit",
+      "checkedAt": "2026-07-29T20:20:03.034Z",
+      "notes": "2923 of 2926 checks passed. All three failures reproduce exactly at pre-slice commit 57f2f06d: stale HTML helper count 22 versus 21, native scene core 140641 versus 136000 bytes, and the existing linear provider domain import."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s03 production exclusion and build",
+      "checkedAt": "2026-07-29T20:20:03.911Z",
+      "notes": "Production build passes; the import.meta.env.DEV comparison is excluded from the production bundle and adds no production route or runtime."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s03 pre-checkpoint control-plane integrity",
+      "checkedAt": "2026-07-29T20:20:04.794Z",
+      "notes": "Workspace validated before the human checkpoint."
     }
   ],
   "allowedWork": [
@@ -122,7 +171,8 @@
     {
       "id": "s03",
       "title": "human-reference-selection-checkpoint",
-      "status": "planned"
+      "summary": "Mounted one lazy development-only synchronized comparison inside the existing Animation Library. The recoverable continuous-recognition sampler and rejected zero-area runtime share the existing player clock and expose phase, paint-owner, ink-estimate, typography, and native-endpoint telemetry. Automated wide, phone, Chromium, Firefox, WebKit, rewind, replay, containment, and Review capture gates pass; awaiting explicit human selection before s04.",
+      "status": "in-progress"
     },
     {
       "id": "s04",
