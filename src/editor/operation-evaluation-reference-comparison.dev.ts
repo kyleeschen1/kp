@@ -66,7 +66,9 @@ export function mountKpOperationEvaluationReferenceComparison(input: {
           <strong>Proposed canonical candidate</strong>
           <span>Opaque contributors · exact native endpoints</span>
         </figcaption>
-        <div class="kp-operation-evaluation-stage
+        <!-- The shared stage class is a behavioral contract: it makes annotated
+             KaTeX spans transformable without changing their native baseline. -->
+        <div class="editor-equation-stage kp-operation-evaluation-stage
           kp-operation-evaluation-reference-stage"
           data-kp-operation-evaluation-reference-stage
           aria-label="Historical operation evaluation choreography">

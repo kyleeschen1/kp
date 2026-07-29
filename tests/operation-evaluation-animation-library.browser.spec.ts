@@ -208,6 +208,54 @@ test("primary gather-and-recognize candidate stays opaque and continuously inked
   expect(gathered.every(({ travel }) => travel > 4)).toBe(true);
 });
 
+test("primary candidate moves painted boxes from an exact native source silhouette", async ({
+  page
+}) => {
+  await page.goto(`/?animation=${descriptorId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const scrubber = player.locator(
+    "[data-action=\"seek-editor-animation\"]"
+  );
+  const referenceSource = player.locator(
+    "[data-kp-operation-evaluation-reference-source]"
+  );
+  const nativeSource = player.locator(
+    "[data-kp-operation-evaluation-source]"
+  );
+  await expect(player.locator(
+    "[data-kp-operation-evaluation-reference-stage]"
+  )).toHaveAttribute(
+    "data-kp-operation-evaluation-status",
+    "ready",
+    { timeout: 15_000 }
+  );
+
+  await scrubber.fill("0");
+  const referenceStart = await relativeSelectorPaintGeometry(
+    referenceSource
+  );
+  const nativeStart = await relativeSelectorPaintGeometry(nativeSource);
+  expect(referenceStart).toEqual(nativeStart);
+
+  await scrubber.fill("0.58");
+  const gathered = await relativeSelectorPaintGeometry(referenceSource);
+  const startById = new Map(referenceStart.map((geometry) => [
+    geometry.id,
+    geometry
+  ]));
+  const moved = gathered.filter((geometry) => {
+    const start = startById.get(geometry.id)!;
+    return Math.hypot(
+      geometry.centerX - start.centerX,
+      geometry.centerY - start.centerY
+    ) > 4;
+  });
+  expect(moved).toHaveLength(referenceStart.length);
+});
+
 test("operation evaluation measures and retains paint in its final host", async ({
   page
 }) => {
@@ -697,6 +745,39 @@ async function seekExact(scrubber: Locator, progress: number): Promise<void> {
     input.value = String(value);
     input.dispatchEvent(new Event("input", { bubbles: true }));
   }, progress);
+}
+
+interface RelativeSelectorPaintGeometry {
+  readonly id: string;
+  readonly centerX: number;
+  readonly centerY: number;
+  readonly width: number;
+  readonly height: number;
+}
+
+async function relativeSelectorPaintGeometry(
+  endpoint: Locator
+): Promise<readonly RelativeSelectorPaintGeometry[]> {
+  return endpoint.evaluate((element) => {
+    const root = element as HTMLElement;
+    const rootRect = root.getBoundingClientRect();
+    return [
+      ...root.querySelectorAll<HTMLElement>(
+        "[data-kp-semantic-selector-id]"
+      )
+    ].map((selector) => {
+      const rect = selector.getBoundingClientRect();
+      const round = (value: number): number =>
+        Math.round(value * 100) / 100;
+      return {
+        id: selector.dataset["kpSemanticSelectorId"] ?? "",
+        centerX: round(rect.left + rect.width / 2 - rootRect.left),
+        centerY: round(rect.top + rect.height / 2 - rootRect.top),
+        width: round(rect.width),
+        height: round(rect.height)
+      };
+    }).sort((left, right) => left.id.localeCompare(right.id));
+  });
 }
 
 async function visibleInkBounds(
