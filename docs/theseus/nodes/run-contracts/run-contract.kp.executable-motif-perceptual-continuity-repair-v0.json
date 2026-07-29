@@ -327,6 +327,27 @@
       "scope": "s04 migration-ledger type closure",
       "checkedAt": "2026-07-29T23:30:09.795Z",
       "notes": "Application, Node, test, protocol-dependent, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s05 initial phase-order negative fixture",
+      "checkedAt": "2026-07-29T23:35:57.242Z",
+      "notes": "The first inference run correctly found the reordered phase errors, but the ts-expect-error comment was one AST level too high. No product code failed; fixture annotations were moved to the exact tuple elements."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s05 executable program type fixtures and compiler budget",
+      "checkedAt": "2026-07-29T23:35:58.354Z",
+      "notes": "All positive and negative type fixtures pass within the inference ceiling: 46290 types, 57910 instantiations, and 2.63 seconds check time."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s05 repository type closure",
+      "checkedAt": "2026-07-29T23:35:59.213Z",
+      "notes": "Application, Node, test, protocol-dependent, and domain TypeScript projects pass with the new sealed union."
     }
   ],
   "allowedWork": [
@@ -384,7 +405,8 @@
     {
       "id": "s05",
       "title": "define-executable-motif-program-types",
-      "status": "planned"
+      "summary": "Defined and publicly exported the sealed renderer-neutral ExecutableSuccessorMotifProgram draft/verified union for operation evaluation, identity fission, and identity fusion. Exact tuple types fix phase order/effects; variant-specific roles and lineage, context, accessibility, reduced motion, continuity, and rewind obligations are typed. Negative fixtures reject caller timing, paths, notation/DOM, phase reorder, cross-variant fields, and fabricated authority within inference budget.",
+      "status": "complete"
     },
     {
       "id": "s06",
