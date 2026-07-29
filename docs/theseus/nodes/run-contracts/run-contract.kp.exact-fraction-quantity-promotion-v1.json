@@ -137,7 +137,8 @@
     {
       "id": "s04",
       "title": "freeze-exemplar-reference",
-      "status": "planned"
+      "summary": "Froze the exact 1/3 + 1/6 = 1/2 reference as five ordered checkpoints and pacing beats over one shared unit and six stable atomic parts. Required symbolic, circle, bar, and number-line views; preserved fold, accessibility, and architecture truth; and explicitly forbade renderer arithmetic, geometry/DOM/color identity, opacity handoffs, new display pages, runtime categories, and resource growth.",
+      "status": "complete"
     },
     {
       "id": "s05",

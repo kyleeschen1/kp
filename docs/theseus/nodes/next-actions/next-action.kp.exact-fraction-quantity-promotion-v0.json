@@ -62,6 +62,20 @@
       "scope": "slice s03 typed promotion-memory gate",
       "checkedAt": "2026-07-29T05:13:55.220Z",
       "notes": "Application, Node scripts, tests, and domain type checks pass."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "slice s04 frozen exemplar reference",
+      "checkedAt": "2026-07-29T05:17:12.631Z",
+      "notes": "Five focused tests freeze the five checkpoints and pacing beats, same-unit sixth atoms, result provenance, four view obligations, no-opacity identity, fold truth, phone focus, and architecture boundary."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s04 manifest and immutable fixture",
+      "checkedAt": "2026-07-29T05:17:13.500Z",
+      "notes": "Typed manifest and focused tests compile across application, Node, test, and domain projects."
     }
   ],
   "expectedLearning": [
