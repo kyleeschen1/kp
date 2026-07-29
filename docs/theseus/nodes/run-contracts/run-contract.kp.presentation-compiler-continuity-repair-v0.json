@@ -49,6 +49,19 @@
       "scope": "s01 control-plane integrity",
       "checkedAt": "2026-07-29T17:28:09.075Z",
       "notes": "Validated 830 nodes and 14191 events after plan revision activation."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s02 frozen continuity reference",
+      "checkedAt": "2026-07-29T17:31:09.392Z",
+      "notes": "108 checks passed, including three new canonical ownership, conformance caller, browser, pacing, and forbidden-authority assertions."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02 immutable reference typing",
+      "checkedAt": "2026-07-29T17:31:10.373Z"
     }
   ],
   "allowedWork": [
@@ -86,7 +99,8 @@
     {
       "id": "s02",
       "title": "freeze-continuity-reference",
-      "status": "planned"
+      "summary": "Froze one renderer-neutral continuity reference requiring equivalent-pose or shared-zero-area transfer, opaque non-zero paint, three conformance callers, browser boundaries, readable timing, and fail-closed unsupported presentation.",
+      "status": "complete"
     },
     {
       "id": "s03",
