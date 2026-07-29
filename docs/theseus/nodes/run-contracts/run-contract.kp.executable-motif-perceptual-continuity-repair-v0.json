@@ -1,0 +1,214 @@
+{
+  "id": "run-contract.kp.executable-motif-perceptual-continuity-repair-v0",
+  "kind": "run-contract",
+  "title": "Executable motif and perceptual continuity repair",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.exact-fraction-quantity-promotion-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-29-executable-motif-perceptual-continuity-repair-long-loop-proposal.md",
+      "summary": "User-approved 26-slice executable motif and perceptual continuity replacement plan."
+    }
+  ],
+  "verification": [
+    "npm run test:operation-presentation-plans",
+    "npm run test:real-katex-glyph-compositor",
+    "npm run test:exact-fraction-quantity",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm run test:browser:exact-fraction-quantity",
+    "npm run visual:exact-fraction-quantity",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s01 exclusive replacement authority",
+      "checkedAt": "2026-07-29T19:54:46.990Z",
+      "notes": "Rank 1 exact fraction resolves through plan revision 15 and the executable-motif replacement contract only."
+    },
+    {
+      "command": "theseus plan revision --domain kp",
+      "status": "passed",
+      "scope": "s01 approved plan linkage",
+      "checkedAt": "2026-07-29T19:54:47.973Z",
+      "notes": "Revision 15 is approved and active with no phase-order changes; exact-fraction evidence names only the replacement contract."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s01 control-plane integrity",
+      "checkedAt": "2026-07-29T19:54:49.068Z",
+      "notes": "Validated 832 nodes and 14284 events after replacement activation."
+    }
+  ],
+  "allowedWork": [
+    "One development-only comparison surface inside the existing Animation Library.",
+    "One sealed executable motif program union for operation evaluation, identity fission, and identity fusion.",
+    "One registry compiler route and one exhaustive adapter over the existing canonical compositor.",
+    "Generic perceptual continuity and endpoint equivalence diagnostics, the three evaluation callers, and exact-fraction symbolic and concrete integration."
+  ],
+  "disallowedWork": [
+    "No second production renderer, compositor, runtime, player, clock, scheduler, display page, catalog, or WebGL lease.",
+    "No broad rewrite or migration of cancellation, distribution, factoring, radical, substitution, matrix, graph, or other motif families.",
+    "No caller-authored or LLM-authored DOM, pixels, paths, opacity, keyframes, handoff, scheduling, or timing.",
+    "No generic fade, whole-expression replacement, zero-area fallback, silent motif substitution, or unrelated dirty-file changes."
+  ],
+  "goal": "Make evaluation, identity fission, and identity fusion executable by construction through typed motif programs, motif-compatible perceptual continuity, one exhaustive canonical compositor adapter, and exact native endpoint settlement.",
+  "target": "next-action.kp.exact-fraction-quantity-promotion-v0",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "Commit after each completed and proportionately verified slice; stop at slices 3, 16, and 25 for explicit human visual approval.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if the historical canonical reference cannot be reproduced or the user does not select it.",
+    "Stop if a motif label can reach animated or ported status without a minted executable program and exhaustive adapter route.",
+    "Stop if continuity can change motif phases, roles, lineage, or pedagogical choreography.",
+    "Stop on unintended blank paint, generic fade, whole-expression replacement, endpoint mismatch, browser divergence, nondeterminism, overlap, performance, or resource regression.",
+    "Stop if a new renderer, compositor, runtime, clock, lifecycle, scheduler, display page, WebGL lease, or example-specific renderer branch is required.",
+    "Stop at slices 3, 16, and 25 for explicit human visual approval."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "materialize-approved-replacement",
+      "summary": "Materialized the approved 26-slice replacement, superseded the rejected continuity run while retaining its useful evidence, activated plan revision 15 without changing promotion order, and proved one exclusive executable-motif authority.",
+      "status": "complete",
+      "planPhaseId": "exact-fraction-quantity-models"
+    },
+    {
+      "id": "s02",
+      "title": "recover-historical-evaluation-references",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "human-reference-selection-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "inventory-label-execution-disconnects",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "define-executable-motif-program-types",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "mint-verified-motif-programs",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "evolve-presentation-registry-program-route",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "require-program-in-reader-plans",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "add-exhaustive-program-adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "gate-label-execution-honesty",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "define-perceptual-continuity-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "select-continuity-topology",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "compile-continuity-under-motif-phases",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "extend-successor-endpoint-microscope",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "restore-one-plus-two-evaluation",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "human-evaluation-program-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "generalize-five-plus-two",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "generalize-fraction-quotient",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "certify-three-evaluation-callers",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "migrate-exact-fraction-fission",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "migrate-exact-fraction-fusion",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "migrate-exact-fraction-evaluations",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "prove-four-view-integration",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "run-release-matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "human-exact-fraction-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "promote-and-closeout",
+      "status": "planned"
+    }
+  ]
+}

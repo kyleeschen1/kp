@@ -2,8 +2,9 @@
   "id": "run-contract.kp.presentation-compiler-continuity-repair-v0",
   "kind": "run-contract",
   "title": "Presentation compiler continuity repair",
-  "status": "ready",
+  "status": "superseded",
   "domain": "kp",
+  "summary": "Superseded after its slice-12 human checkpoint was rejected twice: zero-area continuity erased executable motif choreography and exact-fraction motif labels were not operational. Its completed semantic, registry, lineage, diagnostic, single-clock, and native-measurement evidence remains historical input to the approved executable-motif replacement.",
   "sourceRefs": [
     {
       "kind": "file",
