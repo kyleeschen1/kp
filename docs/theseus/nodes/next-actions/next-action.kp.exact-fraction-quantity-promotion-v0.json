@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-29-presentation-compiler-continuity-repair-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-29-executable-motif-perceptual-continuity-repair-long-loop-proposal.md"
     }
   ],
   "dependsOn": {
@@ -528,7 +532,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Prior release was superseded after visual rejection. A 22-slice presentation-compiler continuity repair is proposed and awaits exact contract approval; exact-fraction promotion remains unresolved."
+    "summary": "The active continuity contract is stopped at rejected slice 12. A 26-slice executable-motif and perceptual-continuity replacement proposal is materialized and awaits exact approval; no implementation or supersession has begun."
   },
   "expectedLearning": [
     "Can one verified exact quantity identity drive native symbolic and concrete views through existing canonical infrastructure?"
