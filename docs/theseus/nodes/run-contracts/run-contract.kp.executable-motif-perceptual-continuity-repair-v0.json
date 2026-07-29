@@ -49,6 +49,34 @@
       "scope": "s01 control-plane integrity",
       "checkedAt": "2026-07-29T19:54:49.068Z",
       "notes": "Validated 832 nodes and 14284 events after replacement activation."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "failed",
+      "scope": "s02 initial reference provenance fixture",
+      "checkedAt": "2026-07-29T20:03:30.432Z",
+      "notes": "The first run found one documentation-anchor mismatch in the new reference manifest; no production behavior failed."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s02 immutable historical reference candidates",
+      "checkedAt": "2026-07-29T20:03:31.455Z",
+      "notes": "127 checks passed after correcting the literal evidence anchor; one unselected continuous-recognition candidate and two distinct rejected paint wrappers are frozen."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02 reference manifest typing",
+      "checkedAt": "2026-07-29T20:03:32.307Z",
+      "notes": "Application, node, test, protocol-dependent, and domain type projects pass."
+    },
+    {
+      "command": "git cat-file -e for six frozen reference commits",
+      "status": "passed",
+      "scope": "s02 immutable commit provenance",
+      "checkedAt": "2026-07-29T20:03:33.168Z",
+      "notes": "All six full commit identities recorded by the candidate manifest exist in repository history."
     }
   ],
   "allowedWork": [
@@ -88,7 +116,8 @@
     {
       "id": "s02",
       "title": "recover-historical-evaluation-references",
-      "status": "planned"
+      "summary": "Recovered one unselected continuous-recognition reference candidate and two rejected continuity wrappers with full immutable commit provenance, positive phase behavior, known defects, and source-backed review evidence. The original motif sampler survives; later paint policies overrode it.",
+      "status": "complete"
     },
     {
       "id": "s03",
