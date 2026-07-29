@@ -49,6 +49,7 @@ export interface KpAnimationLibraryDisplayEntry {
 }
 
 const featuredAnimationIds = [
+  "animation.operation-evaluation.one-plus-two",
   "animation.generated.radical.square-root-as-power",
   "animation.numerator-split-merge.round-trip",
   "animation.linear-solve.solve-x",
@@ -70,6 +71,22 @@ export interface KpCanonicalFormatPromotionEvidence {
 
 const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
   KpCanonicalFormatPromotionEvidence>([
+  [
+    "animation.operation-evaluation.one-plus-two",
+    {
+      animationId: "animation.operation-evaluation.one-plus-two",
+      exclusiveCanonicalPaint: true,
+      requiredMotifParity: true,
+      responsiveRuntimeGates: false,
+      humanReviewApproved: false,
+      compatibilityPaintRetired: true,
+      releaseGatePassed: false,
+      presentationCoverage: "verified-animated",
+      evidenceSourceIds: [
+        "run-contract.kp.presentation-compiler-continuity-repair-v0"
+      ]
+    }
+  ],
   [
     "animation.exact-fraction-quantity.third-plus-sixth",
     {

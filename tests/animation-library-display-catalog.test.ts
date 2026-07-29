@@ -162,6 +162,7 @@ test("featured exemplars resolve one primary host without duplicating runtimes",
   assert.deepEqual(
     new Set(featured.map(({ animationId }) => animationId)),
     new Set([
+      "animation.operation-evaluation.one-plus-two",
       "animation.generated.radical.square-root-as-power",
       "animation.numerator-split-merge.round-trip",
       "animation.linear-solve.solve-x",

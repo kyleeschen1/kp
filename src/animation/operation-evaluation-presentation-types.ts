@@ -45,6 +45,12 @@ export interface KpOperationEvaluationPresentationEntry {
     KpOperationEvaluationPresentationPlanCompilerRef;
   readonly paintContinuityCompiler:
     KpOperationEvaluationPaintContinuityCompilerRef;
+  /**
+   * A compound transformation can host several distinct evaluations. Binding
+   * dispatch therefore follows the semantic operation that owns the material,
+   * not the broader parent transformation kind.
+   */
+  readonly semanticOperationIds: readonly string[];
   readonly definitionIds: readonly string[];
   readonly canonicalOperationIds: readonly string[];
   readonly trustedMotifIds: readonly string[];
@@ -114,6 +120,7 @@ export interface KpResolvedOperationEvaluationPresentation {
     KpOperationEvaluationPresentationPlanCompilerDescriptor;
   readonly paintContinuityCompiler:
     KpOperationEvaluationPaintContinuityCompilerDescriptor;
+  readonly semanticOperationIds: readonly string[];
   readonly definitionIds: readonly string[];
   readonly canonicalOperationIds: readonly string[];
   readonly trustedMotifIds: readonly string[];
@@ -129,6 +136,7 @@ export type KpOperationEvaluationPresentationResolution =
   | {
       readonly status:
         | "unknown-transformation"
+        | "unknown-operation"
         | "missing-pin"
         | "version-mismatch";
       readonly transformationKind: string;
@@ -144,6 +152,7 @@ export type KpOperationEvaluationPresentationRoute =
       readonly status: "explicit-static";
       readonly resolutionStatus:
         | "unknown-transformation"
+        | "unknown-operation"
         | "missing-pin"
         | "version-mismatch";
       readonly checkpoint: KpExplicitStaticCheckpointPlan;

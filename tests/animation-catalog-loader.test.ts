@@ -52,6 +52,7 @@ test("all declared pack boundaries are exercised by editor metadata", () => {
     "generated-drafts",
     "generated-problems",
     "graph",
+    "operation-evaluation",
     "programming",
     "comparison",
     "complex-katex"
@@ -74,6 +75,6 @@ test("catalog loader retains literal dynamic-import boundaries", async () => {
   assert.doesNotMatch(source, /from "\.\/catalog\.ts"/);
   assert.equal(
     [...source.matchAll(/import\("\.\/catalog-packs\/[^"]+\.ts"\)/g)].length,
-    8
+    9
   );
 });

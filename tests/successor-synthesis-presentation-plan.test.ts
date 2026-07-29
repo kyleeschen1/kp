@@ -51,7 +51,7 @@ test("registered successor compiler classifies material without changing motion 
   );
 });
 
-test("unregistered transformations become explicit static checkpoints", () => {
+test("unregistered semantic operations become explicit static checkpoints", () => {
   const animation = createKpFractionCompositionEquationAnimationAsset();
   const transformation = animation.transformations.find(
     ({ transformType }) => transformType === "simplifyConstantProduct"
@@ -64,7 +64,13 @@ test("unregistered transformations become explicit static checkpoints", () => {
   const result = compileKpRegisteredSuccessorSynthesisPresentation({
     transformationId: transformation.id,
     transformationKind: "projectUnknownEvaluation",
-    binding
+    binding: {
+      ...binding,
+      authority: {
+        ...binding.authority,
+        operationId: "project.unknown-evaluation"
+      }
+    }
   });
   assert.equal(result.status, "explicit-static");
   if (result.status !== "explicit-static") return;

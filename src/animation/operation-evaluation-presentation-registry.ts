@@ -99,23 +99,39 @@ export const kpOperationEvaluationPresentationCoreEntries:
   readonly KpOperationEvaluationPresentationEntry[] = [
     coreEntry({
       id: "kp.presentation.operation-evaluation.product",
-      transformationKind: "simplifyConstantProduct"
+      transformationKind: "simplifyConstantProduct",
+      semanticOperationIds: [
+        "kp.algebra.simplify-constant-product",
+        "kp.arithmetic.multiply"
+      ]
     }),
     coreEntry({
       id: "kp.presentation.operation-evaluation.quotient",
       transformationKind: "simplifyConstantQuotient",
+      semanticOperationIds: [
+        "kp.algebra.simplify-constant-quotient",
+        "kp.arithmetic.divide"
+      ],
       definitionId:
         "definition.generated.linear-solve.simplify-constant-quotient"
     }),
     coreEntry({
       id: "kp.presentation.operation-evaluation.difference",
       transformationKind: "simplifyConstantDifference",
+      semanticOperationIds: [
+        "kp.algebra.simplify-constant-difference",
+        "kp.arithmetic.subtract"
+      ],
       definitionId:
         "definition.generated.linear-solve.simplify-constant-difference"
     }),
     coreEntry({
       id: "kp.presentation.operation-evaluation.sum",
       transformationKind: "simplifyConstantSum",
+      semanticOperationIds: [
+        "kp.algebra.simplify-constant-sum",
+        "kp.arithmetic.add"
+      ],
       definitionId:
         "definition.generated.linear-solve.simplify-constant-sum"
     })
@@ -261,6 +277,10 @@ export function createKpOperationEvaluationPresentationRegistry(input: {
     input.entries.map(({ transformationKind }) => transformationKind),
     "operation-evaluation transformation"
   );
+  requireUnique(
+    input.entries.flatMap(({ semanticOperationIds }) => semanticOperationIds),
+    "operation-evaluation semantic operation"
+  );
   const entriesById = new Map(input.entries.map((entry) => [entry.id, entry]));
   input.entries.forEach((entry) => {
     requireNamespacedId(entry.id, "presentation id");
@@ -280,6 +300,18 @@ export function createKpOperationEvaluationPresentationRegistry(input: {
     if (entry.transformationKind.trim().length === 0) {
       throw new Error(`Presentation ${entry.id} transformation kind is empty.`);
     }
+    if (entry.semanticOperationIds.length === 0) {
+      throw new Error(
+        `Presentation ${entry.id} must declare a semantic operation.`
+      );
+    }
+    requireUnique(
+      entry.semanticOperationIds,
+      `semantic operation in presentation ${entry.id}`
+    );
+    entry.semanticOperationIds.forEach((id) =>
+      requireNamespacedId(id, "semantic operation id")
+    );
     if (!equationVisualMotifDescriptors.some(
       ({ kind }) => kind === entry.motifKind
     )) {
@@ -359,16 +391,30 @@ export function createKpOperationEvaluationPresentationRegistry(input: {
 
 export function resolveKpOperationEvaluationPresentation(input: {
   readonly transformationKind: string;
+  readonly semanticOperationId?: string | undefined;
   readonly registry?: KpOperationEvaluationPresentationRegistry | undefined;
   readonly pins?: KpOperationEvaluationPresentationPins | undefined;
 }): KpOperationEvaluationPresentationResolution {
   const registry = input.registry ?? kpOperationEvaluationPresentationRegistry;
   const pins = input.pins ?? kpOperationEvaluationPresentationPins;
-  const entry = registry.entries.find(
-    ({ transformationKind }) =>
-      transformationKind === input.transformationKind
-  );
+  const entry = input.semanticOperationId === undefined
+    ? registry.entries.find(
+        ({ transformationKind }) =>
+          transformationKind === input.transformationKind
+      )
+    : registry.entries.find(({ semanticOperationIds }) =>
+        semanticOperationIds.includes(input.semanticOperationId!)
+      );
   if (entry === undefined) {
+    if (input.semanticOperationId !== undefined) {
+      return {
+        status: "unknown-operation",
+        transformationKind: input.transformationKind,
+        message:
+          `Unknown operation-evaluation semantic operation ` +
+          `${input.semanticOperationId}.`
+      };
+    }
     return {
       status: "unknown-transformation",
       transformationKind: input.transformationKind,
@@ -419,6 +465,7 @@ export function requireKpCanonicalOperationEvaluationPresentation(
 export function resolveKpOperationEvaluationPresentationRoute(input: {
   readonly transformationId: string;
   readonly transformationKind: string;
+  readonly semanticOperationId?: string | undefined;
   readonly registry?: KpOperationEvaluationPresentationRegistry | undefined;
   readonly pins?: KpOperationEvaluationPresentationPins | undefined;
 }): KpOperationEvaluationPresentationRoute {
@@ -465,6 +512,7 @@ function coreEntry(input: {
   readonly id: string;
   readonly transformationKind:
     KpCanonicalOperationEvaluationTransformationKind;
+  readonly semanticOperationIds: readonly string[];
   readonly definitionId?: string | undefined;
 }): KpOperationEvaluationPresentationEntry {
   return Object.freeze({
@@ -480,6 +528,7 @@ function coreEntry(input: {
       id: kpSharedJunctionPaintContinuityCompiler.id,
       version: kpSharedJunctionPaintContinuityCompiler.version
     }),
+    semanticOperationIds: Object.freeze([...input.semanticOperationIds]),
     definitionIds: Object.freeze(
       input.definitionId === undefined ? [] : [input.definitionId]
     ),
@@ -508,6 +557,7 @@ function resolvedCertificate(
     paintContinuityCompiler: clonePaintContinuityCompiler(
       resolvePaintContinuityCompiler(entry.paintContinuityCompiler)!
     ),
+    semanticOperationIds: Object.freeze([...entry.semanticOperationIds]),
     definitionIds: Object.freeze([...entry.definitionIds]),
     canonicalOperationIds: Object.freeze([...entry.canonicalOperationIds]),
     trustedMotifIds: Object.freeze([...entry.trustedMotifIds]),
@@ -536,6 +586,7 @@ function cloneEntry(
     paintContinuityCompiler: Object.freeze({
       ...entry.paintContinuityCompiler
     }),
+    semanticOperationIds: Object.freeze([...entry.semanticOperationIds]),
     definitionIds: Object.freeze([...entry.definitionIds]),
     canonicalOperationIds: Object.freeze([...entry.canonicalOperationIds]),
     trustedMotifIds: Object.freeze([...entry.trustedMotifIds])

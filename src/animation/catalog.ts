@@ -39,10 +39,14 @@ import {
 import {
   createKpExactFractionQuantityAnimationAsset
 } from "./exact-fraction-quantity-adapter.ts";
+import {
+  createKpOnePlusTwoEvaluationAnimationAsset
+} from "./operation-evaluation-adapter.ts";
 
 export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
   return [
     ...createGeneratedAlgebraAnimationAssets(),
+    createKpOnePlusTwoEvaluationAnimationAsset(),
     createKpExactFractionQuantityAnimationAsset(),
     createAcceptedGeneratedAddZeroAnimationAsset(),
     createAcceptedGeneratedSubstitutionAnimationAsset(),

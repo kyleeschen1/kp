@@ -1985,6 +1985,28 @@ h2 {
   display: inline-block;
 }
 
+.kp-operation-evaluation-stage {
+  min-height: clamp(9rem, 28vw, 13rem);
+  place-items: center;
+  overflow: visible;
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 50% 48%, rgb(218 235 255 / 0.42), transparent 58%);
+}
+
+.kp-operation-evaluation-stage__endpoint {
+  grid-area: 1 / 1;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  color: #172033;
+  font-size: clamp(1.55rem, 8vw, 2.7rem);
+}
+
+.kp-operation-evaluation-stage__endpoint .katex-display {
+  margin: 0;
+}
+
 .editor-equation-stage__independent-zero-witness {
   font-size: var(
     --kp-editor-equation-fit-font-size,

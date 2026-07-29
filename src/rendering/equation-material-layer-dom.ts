@@ -7,37 +7,12 @@ import {
   measureKpNativeKatexSubtreePaintRect
 } from "./native-katex-paint-geometry.ts";
 import type {
-  KpEquationVisiblePaintCertifiedContact
-} from "./equation-visible-paint-overlap.ts";
+  KpEquationMaterialLayerOwnerFrame
+} from "./equation-material-layer-types.ts";
 
-export interface KpEquationMaterialLayerOwnerFrame {
-  readonly ownerId: string;
-  readonly sourceElement: HTMLElement;
-  readonly sourceMotionId?: string | undefined;
-  readonly semanticEntityId?: string | undefined;
-  readonly semanticContacts?:
-    readonly KpEquationVisiblePaintCertifiedContact[] | undefined;
-  readonly verifiedOperationCohortId?: string | undefined;
-  readonly rect: {
-    readonly left: number;
-    readonly top: number;
-    readonly width: number;
-    readonly height: number;
-  };
-  readonly expectedPaintRect?: {
-    readonly left: number;
-    readonly top: number;
-    readonly width: number;
-    readonly height: number;
-  } | undefined;
-  readonly opacity: number;
-  readonly transform: string;
-  readonly filter?: string | undefined;
-  readonly semanticDepth?: string | undefined;
-  readonly clipPath?: string | undefined;
-  readonly visualTransform?: string | undefined;
-  readonly fragmentRole?: string | undefined;
-}
+export type {
+  KpEquationMaterialLayerOwnerFrame
+} from "./equation-material-layer-types.ts";
 
 interface KpEquationMaterialLayerState {
   readonly owners: Map<string, HTMLElement>;

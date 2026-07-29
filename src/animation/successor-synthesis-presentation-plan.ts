@@ -62,7 +62,8 @@ export function compileKpRegisteredSuccessorSynthesisPresentation(input: {
 }): KpSuccessorSynthesisPresentationCompilation {
   const route = resolveKpOperationEvaluationPresentationRoute({
     transformationId: input.transformationId,
-    transformationKind: input.transformationKind
+    transformationKind: input.transformationKind,
+    semanticOperationId: input.binding.authority.operationId
   });
   if (route.status === "explicit-static") {
     return Object.freeze({

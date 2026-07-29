@@ -419,6 +419,41 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-07-29T16:33:11.362Z"
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "slice-s10 presentation compiler exemplar",
+      "checkedAt": "2026-07-29T18:48:07.351Z",
+      "notes": "123/123 pass; compound sum and difference dispatch by semantic operation authority."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-s10 production lazy pack",
+      "checkedAt": "2026-07-29T18:48:13.410Z",
+      "notes": "Typecheck and Vite build pass; operation-evaluation remains a separate lazy chunk."
+    },
+    {
+      "command": "playwright operation evaluation chromium",
+      "status": "passed",
+      "scope": "slice-s10 Animation Library integration",
+      "checkedAt": "2026-07-29T18:48:21.450Z",
+      "notes": "3/3 pass for lazy compositor mount, exact seek/rewind pose, junction telemetry, and Review capture."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-s10 lightweight nominal proof graph",
+      "checkedAt": "2026-07-29T18:48:26.897Z",
+      "notes": "45,905 types and 57,573 instantiations; unchanged 50,000 type ceiling passes after extracting runtime-independent paint contracts."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "slice-s10 repository baseline audit",
+      "checkedAt": "2026-07-29T18:48:37.097Z",
+      "notes": "Loop-caused catalog and compound-operation failures were repaired. Three failures remain and predate slice 1: exact-quantity HTML escape ratchet cf177759, linear-provider domain boundary 01c4cc8b, and native compositor byte ceiling 0e8b4510."
     }
   ],
   "progress": {

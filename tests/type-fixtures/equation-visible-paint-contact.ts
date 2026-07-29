@@ -1,10 +1,10 @@
 import type {
   KpEquationVisiblePaintCertifiedContact
-} from "../../src/rendering/equation-visible-paint-overlap.ts";
+} from "../../src/rendering/equation-visible-paint-overlap-types.ts";
 import type {
   KpNativeKatexSuccessorContactAuthority,
   KpNativeKatexSuccessorMaterialOwnerFrame
-} from "../../src/rendering/native-katex-successor-synthesis.ts";
+} from "../../src/rendering/native-katex-successor-contact-types.ts";
 
 const exactFusion: KpEquationVisiblePaintCertifiedContact = {
   id: "contact.product-to-result",

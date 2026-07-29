@@ -2,6 +2,7 @@ import type { KpAnimationAsset } from "./asset.ts";
 
 export type KpAnimationCatalogPackId =
   | "exact-quantity"
+  | "operation-evaluation"
   | "algebra"
   | "generated-drafts"
   | "generated-problems"
@@ -36,6 +37,9 @@ export async function loadKpAnimationAsset(
 export function kpAnimationCatalogPackId(
   animationId: string
 ): KpAnimationCatalogPackId {
+  if (animationId.startsWith("animation.operation-evaluation.")) {
+    return "operation-evaluation";
+  }
   if (
     animationId ===
       "animation.exact-fraction-quantity.third-plus-sixth"
@@ -91,6 +95,9 @@ async function loadUncachedPack(
     case "exact-quantity":
       return (await import("./catalog-packs/exact-quantity.ts"))
         .createKpExactQuantityAnimationPack();
+    case "operation-evaluation":
+      return (await import("./catalog-packs/operation-evaluation.ts"))
+        .createKpOperationEvaluationAnimationPack();
     case "algebra":
       return (await import("./catalog-packs/algebra.ts"))
         .createKpAlgebraAnimationPack();

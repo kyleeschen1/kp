@@ -76,6 +76,13 @@ test("canonical arithmetic evaluation resolves through one exact pinned motif", 
 test("resolution fails closed for unknown transformations and pin drift", () => {
   assert.equal(
     resolveKpOperationEvaluationPresentation({
+      transformationKind: "collectLikeTerms",
+      semanticOperationId: "project.unknown-operation"
+    }).status,
+    "unknown-operation"
+  );
+  assert.equal(
+    resolveKpOperationEvaluationPresentation({
       transformationKind: "evaluateUnknownOperation"
     }).status,
     "unknown-transformation"
@@ -156,6 +163,30 @@ test("a bounded exact-pinned extension can add but cannot override a presentatio
       ]
     }),
     /Duplicate operation-evaluation transformation simplifyConstantProduct/
+  );
+});
+
+test("compound transformations dispatch each binding by semantic operation", () => {
+  const sum = resolveKpOperationEvaluationPresentation({
+    transformationKind: "collectLikeTerms",
+    semanticOperationId: "kp.algebra.simplify-constant-sum"
+  });
+  const difference = resolveKpOperationEvaluationPresentation({
+    transformationKind: "collectLikeTerms",
+    semanticOperationId: "kp.algebra.simplify-constant-difference"
+  });
+
+  assert.equal(sum.status, "resolved");
+  assert.equal(difference.status, "resolved");
+  assert.equal(
+    sum.status === "resolved" ? sum.certificate.transformationKind : undefined,
+    "simplifyConstantSum"
+  );
+  assert.equal(
+    difference.status === "resolved"
+      ? difference.certificate.transformationKind
+      : undefined,
+    "simplifyConstantDifference"
   );
 });
 
@@ -356,6 +387,7 @@ function extensionPresentationEntry(
       id: "kp.paint-continuity-compiler.shared-junction",
       version: "1.0.0"
     },
+    semanticOperationIds: [`project.operation-${index}`],
     definitionIds: [],
     canonicalOperationIds: ["kp.core.reorder"],
     trustedMotifIds: ["reorder"],

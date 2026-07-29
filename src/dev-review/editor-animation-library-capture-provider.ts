@@ -63,11 +63,12 @@ export function createKpEditorAnimationLibraryCaptureProvider(
       const contentHeight = positiveDimension(
         ownerWindow?.innerHeight ?? ownerDocument.documentElement.clientHeight
       );
-      const surfaceProfile = exactQuantity
-        ? contentWidth < kpExactFractionQuantityLayoutPolicy.wideMinWidthPx
+      // Review diagnostics need the actual responsive regime for every
+      // animation, not a generic host label that hides phone-only failures.
+      const surfaceProfile =
+        contentWidth < kpExactFractionQuantityLayoutPolicy.wideMinWidthPx
           ? "phone"
-          : "wide"
-        : "editor-animation-library";
+          : "wide";
       const target =
         context.pointer === undefined
           ? undefined
