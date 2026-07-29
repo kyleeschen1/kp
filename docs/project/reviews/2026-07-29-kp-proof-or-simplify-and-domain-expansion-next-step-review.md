@@ -1,9 +1,9 @@
 # Proof-Or-Simplify And Domain Expansion Next-Step Review
 
 Date: 2026-07-29
-Status: proposed; non-authorizing
-Roadmap effect: none until explicit user approval
-Theseus effect: none until explicit user approval
+Status: approved for the bounded checkpoint rescue and conditional successor gate
+Roadmap effect: records the pass, fail, and mixed paths without changing promotion rank
+Theseus effect: refines the active slice-3 checkpoint; later slices remain conditional
 
 ## Decision Context
 
@@ -235,16 +235,20 @@ KP is converging when:
 - review feedback shifts from recurring engine defects toward pedagogy,
   composition, and subject-specific design.
 
-## Approval Boundary
+## Approval Record
 
-This review records a recommendation only. It does not:
+The user approved the recommended next loop on 2026-07-29. The approval:
 
-- revise or supersede the active Theseus run;
-- change the stable promotion rank;
-- authorize the checkpoint repair;
-- move programming earlier in the ledger; or
-- mark any current animation promoted.
+- authorizes the three-phase bounded checkpoint rescue inside active slice
+  `s03`;
+- records Paths A, B, and C as the exhaustive successor policy after the
+  architecture ROI gate;
+- does not authorize automatic execution of later exact-fraction or domain
+  slices before the checkpoint and ROI gate determine the applicable path;
+- does not change the stable promotion rank;
+- does not move programming earlier in the ledger; and
+- does not mark any current animation promoted.
 
-On explicit approval, materialize one reviewed executable control record rather
-than duplicating this rationale into a second manually maintained plan.
-
+The reviewed proposal remains the human-readable authority. The active Theseus
+run remains the sole executable control record, so the rescue is not duplicated
+into a second plan tree or competing run.

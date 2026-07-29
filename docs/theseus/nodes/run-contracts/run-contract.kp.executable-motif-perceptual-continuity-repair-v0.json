@@ -14,6 +14,14 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-07-29-executable-motif-perceptual-continuity-repair-long-loop-proposal.md",
       "summary": "User-approved 26-slice executable motif and perceptual continuity replacement plan."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-29-kp-proof-or-simplify-and-domain-expansion-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-29-kp-proof-or-simplify-execution-gate.md"
     }
   ],
   "verification": [
@@ -220,7 +228,7 @@
     {
       "id": "s03",
       "title": "human-reference-selection-checkpoint",
-      "summary": "Moved the required human comparison into the existing searchable Animation Library dashboard through one compact projection of the existing editor player. The host removes full editor chrome and its 34rem constraint, preserves the same descriptor, adapter, compositor, clock, controls, lesson context, and outer Review owner, and measures above 800px with side-by-side candidates at a 1280px viewport. Focused dashboard, type, build, and 24-check cross-browser continuity gates pass. The broader dashboard command remains red only on a stale fraction-status expectation and an unrelated live-inbox lookup; awaiting explicit human reference selection before s04.",
+      "summary": "User approved a bounded rescue within this existing human checkpoint: freeze the observable no-fade reference, make the final host own measurement with actual ink-bound checks, present one primary candidate, then stop for human visual approval. Remaining slices and domain paths are conditional on the architecture ROI gate.",
       "status": "in-progress"
     },
     {
