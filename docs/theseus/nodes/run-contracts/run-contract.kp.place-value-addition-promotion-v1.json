@@ -111,7 +111,9 @@
     {
       "id": "s09",
       "title": "compile-fold-and-checkpoint-plan",
-      "status": "planned"
+      "summary": "Projected the immutable trace into an evaluation tree with ones, tens, and hundreds fold groups. Expanded, collapsed, automatic, and pinned disclosures preserve identical state, operation, expression, and result truth. Outline anchors target only 0, 100, 400, 710, and 1000 permille stable boundaries, never evaluated transient states.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s10",

@@ -263,6 +263,27 @@
       "scope": "broad",
       "checkedAt": "2026-07-30T16:37:20.808Z",
       "notes": "Architecture and inference budgets pass with one domain evaluation proof and one semantic trace; no renderer or runtime was added."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "failed",
+      "scope": "s09-initial",
+      "checkedAt": "2026-07-30T16:42:33.219Z",
+      "notes": "A narrow literal Set rejected general tree node IDs during visibility lookup; the Set was explicitly widened to string while foldable IDs remain a closed tuple."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-30T16:42:34.462Z",
+      "notes": "33/33 tests pass for exact trace/tree operation identity, fold-truth invariance, deterministic automatic/pinned disclosure, and transient-safe anchors at 0, 100, 400, 710, and 1000 permille."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture and npm run check:inference",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-30T16:42:35.587Z",
+      "notes": "Type, architecture, and inference gates pass; fold groups remain semantic projections with no runtime, renderer, geometry, or timing authority."
     }
   ],
   "expectedLearning": [
