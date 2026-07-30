@@ -9,6 +9,14 @@ import {
   createKpConstantSumEvaluationAsset,
   type KpConstantSumEvaluationSpec
 } from "../semantic/constant-sum-evaluation-asset.ts";
+import {
+  createKpConstantQuotientEvaluationAsset,
+  type KpConstantQuotientEvaluationSpec
+} from "../semantic/constant-quotient-evaluation-asset.ts";
+import type { KpAssetBundle } from "../semantic/asset.ts";
+import type {
+  KpSemanticTransformation
+} from "../semantic/asset-transformation.ts";
 import { createSemanticTransformationRef } from "../semantic/animation.ts";
 import {
   createEditableSemanticTransformationTree,
@@ -25,17 +33,43 @@ export const kpOnePlusTwoEvaluationAnimationId =
   "animation.operation-evaluation.one-plus-two";
 export const kpFivePlusTwoEvaluationAnimationId =
   "animation.operation-evaluation.five-plus-two";
+export const kpThreeSixthsEvaluationAnimationId =
+  "animation.operation-evaluation.three-sixths";
 export const kpFivePlusTwoEvaluationSpec =
   Object.freeze({
     id: "five-plus-two",
     left: 5,
     right: 2
   }) satisfies KpConstantSumEvaluationSpec;
+export const kpThreeSixthsEvaluationSpec =
+  Object.freeze({
+    id: "three-sixths",
+    numerator: 3,
+    denominator: 6
+  }) satisfies KpConstantQuotientEvaluationSpec;
 
 export function createKpConstantSumEvaluationAnimationAsset(
   spec: KpConstantSumEvaluationSpec
 ): KpAnimationAsset {
-  const source = createKpConstantSumEvaluationAsset(spec);
+  return createKpOperationEvaluationAnimationAsset(
+    createKpConstantSumEvaluationAsset(spec)
+  );
+}
+
+export function createKpConstantQuotientEvaluationAnimationAsset(
+  spec: KpConstantQuotientEvaluationSpec
+): KpAnimationAsset {
+  return createKpOperationEvaluationAnimationAsset(
+    createKpConstantQuotientEvaluationAsset(spec)
+  );
+}
+
+function createKpOperationEvaluationAnimationAsset(source: {
+  readonly id: string;
+  readonly title: string;
+  readonly bundle: KpAssetBundle;
+  readonly transformation: KpSemanticTransformation;
+}): KpAnimationAsset {
   const transformation = source.transformation;
   const animationId = `animation.${source.id}`;
   const timelineId = `timeline.${source.id}.shared`;
@@ -63,8 +97,8 @@ export function createKpConstantSumEvaluationAnimationAsset(
     transformationTree: createEditableSemanticTransformationTree({ root }),
     timeline: {
       id: timelineId,
-      // The reference owns pacing until the semantic-duration planner replaces
-      // this derived total in slice 18; callers never author a duration.
+      // Shared reference pacing prevents individual arithmetic callers from
+      // quietly changing the learned evaluation motif's readable duration.
       durationMs,
       beatCount: 50
     },
@@ -146,5 +180,12 @@ export function createKpFivePlusTwoEvaluationAnimationAsset():
 KpAnimationAsset {
   return createKpConstantSumEvaluationAnimationAsset(
     kpFivePlusTwoEvaluationSpec
+  );
+}
+
+export function createKpThreeSixthsEvaluationAnimationAsset():
+KpAnimationAsset {
+  return createKpConstantQuotientEvaluationAnimationAsset(
+    kpThreeSixthsEvaluationSpec
   );
 }

@@ -32,6 +32,10 @@ const generalizedDescriptorId =
   "editor-animation.animation.operation-evaluation.five-plus-two";
 const generalizedAnimationId =
   "animation.operation-evaluation.five-plus-two";
+const quotientDescriptorId =
+  "editor-animation.animation.operation-evaluation.three-sixths";
+const quotientAnimationId =
+  "animation.operation-evaluation.three-sixths";
 const executableProgram =
   kpOperationEvaluationExecutableProgramCompiler.program;
 const continuityContractResult =
@@ -181,6 +185,134 @@ test("five plus two uses the unchanged executable evaluation runtime", async ({
     "target"
   );
 });
+
+for (const viewport of [
+  { id: "wide", width: 1180, height: 900 },
+  { id: "phone", width: 360, height: 800 }
+] as const) {
+  test(`three sixths keeps structural quotient continuity on ${viewport.id}`, async ({
+    page
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto(`/?animation=${quotientDescriptorId}`);
+    const player = page.locator(
+      `[data-kp-editor-animation-player]` +
+      `[data-kp-editor-animation-id="${quotientAnimationId}"]`
+    );
+    const stage = player.locator("[data-kp-operation-evaluation-stage]");
+    const scrubber = player.locator(
+      "[data-action=\"seek-editor-animation\"]"
+    );
+
+    await expect(stage).toHaveAttribute(
+      "data-kp-operation-evaluation-status",
+      "ready",
+      { timeout: 15_000 }
+    );
+    await expect(stage).toHaveAttribute(
+      "data-kp-executed-motif-program-id",
+      executableProgram.id
+    );
+    const nativeSourceRule = stage.locator(
+      "[data-kp-operation-evaluation-source] " +
+      "[data-kp-operation-evaluation-structural-role=\"fraction-rule\"]"
+    );
+    await expect(nativeSourceRule).toHaveCount(1);
+    await expect(nativeSourceRule).toHaveAttribute(
+      "data-kp-semantic-entity-id",
+      /fraction-rule$/
+    );
+
+    for (const progress of [0, 0.25, 0.58, 0.75, 0.99, 1]) {
+      await seekExact(scrubber, progress);
+      const paint = await stage.evaluate((element) => {
+        const root = element as HTMLElement;
+        const candidates = [
+          ...root.querySelectorAll<HTMLElement>(
+            "[data-kp-operation-evaluation-source]," +
+            "[data-kp-operation-evaluation-target]," +
+            "[data-kp-equation-material-owner-id]"
+          )
+        ];
+        return {
+          visibleCount: candidates.filter((candidate) => {
+            const style = getComputedStyle(candidate);
+            const rect = candidate.getBoundingClientRect();
+            return Number(style.opacity) > 0.01 &&
+              rect.width * rect.height > 0.01;
+          }).length,
+          nonBinaryOpacityCount: candidates.filter((candidate) => {
+            const opacity = Number(getComputedStyle(candidate).opacity);
+            return Math.abs(opacity) > 1e-6 &&
+              Math.abs(opacity - 1) > 1e-6;
+          }).length
+        };
+      });
+      expect(paint.visibleCount).toBeGreaterThan(0);
+      expect(paint.nonBinaryOpacityCount).toBe(0);
+    }
+
+    await seekExact(scrubber, 0.58);
+    const catalyst = stage.locator(
+      "[data-kp-equation-material-fragment-role=" +
+      "\"successor-source:catalyst\"]"
+    );
+    await expect(catalyst).toHaveCount(1);
+    await expect(catalyst).toHaveAttribute(
+      "data-kp-equation-material-endpoint-paint-atom-id",
+      /source\.paint\.rule\./
+    );
+    await expect(stage.locator(
+      "[data-kp-native-katex-cancellation]"
+    )).toHaveCount(0);
+
+    await seekExact(scrubber, 0.999999);
+    const materialRule = stage.locator(
+      "[data-kp-equation-material-fragment-role=" +
+      "\"successor-target:result\"]" +
+      "[data-kp-equation-material-endpoint-paint-atom-id*=" +
+      "\".paint.rule.\"]"
+    ).first();
+    const nativeTargetRule = stage.locator(
+      "[data-kp-operation-evaluation-target] .frac-line"
+    );
+    await expect(materialRule).toHaveCount(1);
+    await expect(nativeTargetRule).toHaveCount(1);
+    const [materialRuleBox, nativeTargetRuleBox] = await Promise.all([
+      materialRule.boundingBox(),
+      nativeTargetRule.boundingBox()
+    ]);
+    expect(materialRuleBox).not.toBeNull();
+    expect(nativeTargetRuleBox).not.toBeNull();
+    expect(Math.abs(
+      materialRuleBox!.x - nativeTargetRuleBox!.x
+    )).toBeLessThanOrEqual(1);
+    expect(Math.abs(
+      materialRuleBox!.y - nativeTargetRuleBox!.y
+    )).toBeLessThanOrEqual(1);
+    expect(Math.abs(
+      materialRuleBox!.width - nativeTargetRuleBox!.width
+    )).toBeLessThanOrEqual(1);
+    expect(Math.abs(
+      materialRuleBox!.height - nativeTargetRuleBox!.height
+    )).toBeLessThanOrEqual(1);
+
+    await scrubber.fill("0.25");
+    const forwardOwners = await ownerPoses(stage);
+    await player.locator(
+      "[data-action=\"rewind-editor-animation\"]"
+    ).click();
+    await player.locator(
+      "[data-action=\"toggle-editor-animation\"]"
+    ).click();
+    await scrubber.fill("0.75");
+    await expect(player).toHaveAttribute(
+      "data-kp-operation-evaluation-mapped-progress",
+      "0.25"
+    );
+    expect(await ownerPoses(stage)).toEqual(forwardOwners);
+  });
+}
 
 test("reference candidate and current runtime share the player clock", async ({
   page

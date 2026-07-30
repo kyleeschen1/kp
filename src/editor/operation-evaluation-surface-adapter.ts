@@ -241,8 +241,8 @@ async function prepareOperationEvaluationSurface(input: {
     // stage afterward invalidates every paint-space coordinate even if wrapper
     // rectangles still look plausible.
     stageHost.replaceChildren(stage);
-    bindEndpointOwnership(stage, source, "source");
-    bindEndpointOwnership(stage, target, "target");
+    bindEndpointOwnership(stage, source, transition.source, "source");
+    bindEndpointOwnership(stage, target, transition.target, "target");
 
     const sourceRoot = required(
       stage,
@@ -368,7 +368,10 @@ function annotateEndpoint(
     const annotated = createKpGenericSelectorAnnotatedLatex({
       objectId: state.objectId,
       latex: state.latex,
-      selectors: state.selectors
+      // Structural paint is bound to the native KaTeX node after rendering;
+      // wrapping a command such as \frac would incorrectly claim the entire
+      // expression as the operator instead of the actual rule paint.
+      selectors: state.selectors.filter(({ kind }) => kind !== "artifact")
     });
     if (annotated === undefined) {
       throw new Error(
@@ -382,6 +385,7 @@ function annotateEndpoint(
 function bindEndpointOwnership(
   stage: HTMLElement,
   annotatedStates: readonly KpSelectorAnnotatedLatex[],
+  states: readonly KpReaderEquationStatePlan[],
   side: "source" | "target"
 ): void {
   const root = required(
@@ -406,6 +410,51 @@ function bindEndpointOwnership(
         `${side}.selector.${annotation.selectorId}`;
     }
   }
+  bindStructuralPaintOwnership(root, states, side);
+}
+
+function bindStructuralPaintOwnership(
+  root: HTMLElement,
+  states: readonly KpReaderEquationStatePlan[],
+  side: "source" | "target"
+): void {
+  const artifacts = states.flatMap((state) =>
+    state.selectors.filter(({ kind }) => kind === "artifact")
+  );
+  // A structural atom inside one semantic result (for example the bar in the
+  // reduced target fraction) inherits that result owner's identity. Only
+  // independently declared artifacts need a separate native paint binding.
+  if (artifacts.length === 0) return;
+  const fractionRules = artifacts.filter(
+    ({ label }) => label === "fraction-rule"
+  );
+  if (fractionRules.length !== artifacts.length) {
+    const unsupported = artifacts.find(
+      ({ label }) => label !== "fraction-rule"
+    );
+    throw new Error(
+      `Operation evaluation cannot bind structural paint ` +
+      `${unsupported?.id ?? "unknown"} without a canonical artifact role.`
+    );
+  }
+  const nativeRules = [
+    ...root.querySelectorAll<HTMLElement>(".frac-line")
+  ];
+  if (nativeRules.length !== fractionRules.length) {
+    throw new Error(
+      `Operation evaluation expected ${fractionRules.length} native ` +
+      `fraction rules, received ${nativeRules.length}.`
+    );
+  }
+  fractionRules.forEach((selector, index) => {
+    const element = nativeRules[index]!;
+    element.dataset["kpSemanticEntityId"] = selector.id;
+    element.dataset["kpSemanticSelectorId"] = selector.id;
+    element.dataset["kpPresentationGroupId"] =
+      `${side}.selector.${selector.id}`;
+    element.dataset["kpOperationEvaluationStructuralRole"] =
+      "fraction-rule";
+  });
 }
 
 function createOperationEvaluationMeasurementCertificate(input: {

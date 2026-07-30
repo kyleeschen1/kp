@@ -1027,6 +1027,69 @@
       "scope": "s17 control-plane integrity",
       "checkedAt": "2026-07-30T04:42:40.787Z",
       "notes": "Validated 832 nodes and 14498 events before slice closure."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/operation-evaluation-animation-library.browser.spec.ts --project=chromium --workers=1 --grep three sixths keeps structural quotient continuity",
+      "status": "failed",
+      "scope": "s18 initial quotient browser integration",
+      "checkedAt": "2026-07-30T04:57:12.891Z",
+      "notes": "Both viewports stayed preparing because the structural binder demanded zero target rules even though the native target rule was already owned by the single semantic result. The repair now returns when no independent artifact is declared; no motion or geometry branch changed."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s18 quotient semantic program and lineage",
+      "checkedAt": "2026-07-30T04:57:14.146Z",
+      "notes": "169 checks pass. Three sixths uses simplifyConstantQuotient, the exact operation-evaluation program and continuity object, two material inputs, one fraction-rule catalyst, and no cancellation lineage."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "s18 native rule paint and endpoint contracts",
+      "checkedAt": "2026-07-30T04:57:15.029Z",
+      "notes": "73 checks pass for structural rule interpolation, paint ownership, typography, endpoint microscope, reconciliation, and lifecycle budgets."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/operation-evaluation-animation-library.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1 --grep three sixths keeps structural quotient continuity",
+      "status": "passed",
+      "scope": "s18 wide phone three-browser quotient matrix",
+      "checkedAt": "2026-07-30T04:57:15.927Z",
+      "notes": "6 of 6 pass. Native source rule binding, opaque ink floor, rule catalyst identity, absence of cancellation runtime, target rule geometry within one pixel, and exact rewind all pass."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s18 neighboring exact-fraction preservation",
+      "checkedAt": "2026-07-30T04:57:16.807Z",
+      "notes": "95 checks pass; the existing four-view quantity model still types three-sixths as division evaluation rather than cancellation."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s18 production and type closure",
+      "checkedAt": "2026-07-30T04:57:17.711Z",
+      "notes": "Repository typecheck and Vite production build pass; the three callers remain in one lazy operation-evaluation capability chunk."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "s18 aggregate inherited architecture sentinel",
+      "checkedAt": "2026-07-30T04:57:18.685Z",
+      "notes": "The aggregate stopped before slice tests on the pre-existing stale legacy.main.query-view-routing exception expecting removed get(view) equals ftc-tutorial routing."
+    },
+    {
+      "command": "direct semantic reader animation operation boundaries plus inference catalog and promotion checks",
+      "status": "passed",
+      "scope": "s18 downstream architecture and inference closure",
+      "checkedAt": "2026-07-30T04:57:19.830Z",
+      "notes": "Semantic reader passes 131 files; semantic animation passes 371 files with 0 frozen exceptions and 16 classified compatibility paths; operation evaluation passes all 3 certified callers; inference passes at 48460 types and 61210 instantiations in 2.51 seconds; concept catalog and promotion memory are fresh."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s18 durable control validation",
+      "checkedAt": "2026-07-30T04:59:02.849Z",
+      "notes": "Workspace is valid with 832 nodes and 14509 events after quotient evidence was recorded."
     }
   ],
   "allowedWork": [
@@ -1162,7 +1225,8 @@
     {
       "id": "s18",
       "title": "generalize-fraction-quotient",
-      "status": "planned"
+      "summary": "Compiled 3/6 to 1/2 through the unchanged nominal operation-evaluation program, continuity contract, compiler, and surface adapter. The native source fraction rule is one catalyst paint atom excluded from material lineage, while the target rule inherits the single semantic result owner. Six three-browser wide/phone checks prove opaque ink, structural-rule geometry, exact rewind, and absence of cancellation or fraction-specific motion.",
+      "status": "complete"
     },
     {
       "id": "s19",

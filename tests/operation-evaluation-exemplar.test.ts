@@ -9,8 +9,11 @@ import {
   kpFivePlusTwoEvaluationAnimationId,
   kpFivePlusTwoEvaluationSpec,
   kpOnePlusTwoEvaluationAnimationId,
+  kpThreeSixthsEvaluationAnimationId,
+  kpThreeSixthsEvaluationSpec,
   createKpFivePlusTwoEvaluationAnimationAsset,
-  createKpOnePlusTwoEvaluationAnimationAsset
+  createKpOnePlusTwoEvaluationAnimationAsset,
+  createKpThreeSixthsEvaluationAnimationAsset
 } from "../src/animation/operation-evaluation-adapter.ts";
 import {
   kpOperationEvaluationContinuityReference
@@ -180,6 +183,83 @@ test("five plus two reuses the exact executable evaluation route", () => {
   }
 });
 
+test("three sixths evaluates through the same program without cancellation", () => {
+  const canonical = createKpOnePlusTwoEvaluationAnimationAsset();
+  const quotient = createKpThreeSixthsEvaluationAnimationAsset();
+  const canonicalTransition =
+    renderPlanAtMidpoint(canonical).transitions[0];
+  const quotientTransition =
+    renderPlanAtMidpoint(quotient).transitions[0];
+
+  assert.equal(quotient.id, kpThreeSixthsEvaluationAnimationId);
+  assert.deepEqual(validateKpAnimationAsset(quotient), []);
+  assert.equal(animationObjectLatex(quotient, 0), "\\frac{3}{6}");
+  assert.equal(animationObjectLatex(quotient, 1), "\\frac{1}{2}");
+  assert.equal(
+    quotientTransition?.transformType,
+    "simplifyConstantQuotient"
+  );
+  assert.equal(
+    quotientTransition?.presentationPlan.planKind,
+    "successor-synthesis"
+  );
+  if (
+    canonicalTransition?.presentationPlan.planKind !== "successor-synthesis" ||
+    quotientTransition?.presentationPlan.planKind !== "successor-synthesis"
+  ) return;
+
+  assert.equal(
+    quotientTransition.presentationPlan.executableProgram,
+    canonicalTransition.presentationPlan.executableProgram
+  );
+  assert.equal(
+    quotientTransition.presentationPlan.successorSyntheses[0]
+      ?.continuityProgram,
+    canonicalTransition.presentationPlan.successorSyntheses[0]
+      ?.continuityProgram
+  );
+  assert.deepEqual(
+    quotientTransition.presentationPlan.successorSyntheses[0]
+      ?.sourceAnnotations.map(
+        ({ semanticRole, contribution, propagationRank }) => [
+          semanticRole,
+          contribution,
+          propagationRank
+        ]
+      ),
+    [
+      ["dividend", "material-input", 0],
+      ["division-operator", "catalyst", 1],
+      ["divisor", "material-input", 2]
+    ]
+  );
+  const synthesis =
+    quotientTransition.presentationPlan.successorSyntheses[0];
+  const fractionRule = quotient.bundle.objects[0]?.selectors.find(
+    ({ label }) => label === "fraction-rule"
+  );
+  assert.equal(fractionRule?.kind, "artifact");
+  assert.equal(
+    fractionRule?.metadata?.["successorContribution"],
+    "catalyst"
+  );
+  assert.equal(
+    synthesis?.lineages[0]?.sourceAnnotationIds.includes(
+      fractionRule!.id
+    ),
+    false
+  );
+  assert.doesNotMatch(
+    quotient.transformations[0]!.transformType,
+    /cancel/i
+  );
+  assert.deepEqual(Object.keys(kpThreeSixthsEvaluationSpec).sort(), [
+    "denominator",
+    "id",
+    "numerator"
+  ]);
+});
+
 test("one plus two is owned by its lazy capability pack", () => {
   assert.equal(
     kpAnimationCatalogPackId(kpOnePlusTwoEvaluationAnimationId),
@@ -187,6 +267,10 @@ test("one plus two is owned by its lazy capability pack", () => {
   );
   assert.equal(
     kpAnimationCatalogPackId(kpFivePlusTwoEvaluationAnimationId),
+    "operation-evaluation"
+  );
+  assert.equal(
+    kpAnimationCatalogPackId(kpThreeSixthsEvaluationAnimationId),
     "operation-evaluation"
   );
 });
