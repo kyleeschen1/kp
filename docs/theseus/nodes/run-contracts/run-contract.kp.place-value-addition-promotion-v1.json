@@ -139,7 +139,9 @@
     {
       "id": "s13",
       "title": "build-base-ten-projection",
-      "status": "planned"
+      "summary": "Added one projection-only deterministic SVG view over the same trace: 29 initial base-ten blocks plus two exchange outputs, exact ten-to-one parent lineage, seven immutable 434-unit frames, generic intrinsic packing, and one persistent 31-node DOM inventory. Direct seek and rewind reuse nodes and remain contained on wide and phone Chromium, Firefox, and WebKit without opacity, WebGL, remounting, or a second runtime.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s14",

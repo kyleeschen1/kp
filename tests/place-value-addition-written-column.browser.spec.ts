@@ -102,6 +102,95 @@ for (const viewport of [
       Number.parseFloat(addend.fontSize)
     );
   });
+
+  test(`${viewport.name} base-ten view reuses SVG nodes across seeking`, async ({
+    page
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const evidence = await page.evaluate(async () => {
+      const projectionUrl =
+        "/src/rendering/place-value-addition-base-ten-projection.ts";
+      const domUrl =
+        "/src/rendering/place-value-addition-base-ten-dom.ts";
+      const { compileKpPlaceValueBaseTenProjection } =
+        await import(/* @vite-ignore */ projectionUrl);
+      const { createKpPlaceValueBaseTenDomProjection } =
+        await import(/* @vite-ignore */ domUrl);
+      const projection = compileKpPlaceValueBaseTenProjection();
+      const dom = createKpPlaceValueBaseTenDomProjection({
+        document,
+        projection
+      });
+      const root = dom.root as SVGSVGElement;
+      const app = document.querySelector<HTMLElement>("#app");
+      if (app !== null) app.style.display = "none";
+      document.body.append(root);
+      Object.assign(document.body.style, {
+        margin: "0",
+        minHeight: "100vh",
+        display: "grid",
+        placeItems: "center"
+      });
+      const originalNodes = new Map(dom.blockElements);
+      const sample = (stateId: string) => {
+        dom.setState(stateId);
+        const visible = [
+          ...root.querySelectorAll<SVGRectElement>(
+            '[data-kp-base-ten-visible="true"]'
+          )
+        ];
+        const rootRect = root.getBoundingClientRect();
+        return {
+          stateId: dom.stateId(),
+          visibleCount: visible.length,
+          allCount: dom.blockElements.size,
+          reused: [...dom.blockElements].every(([id, element]) =>
+            originalNodes.get(id) === element
+          ),
+          opacityOne: [...dom.blockElements.values()].every((element) =>
+            getComputedStyle(element).opacity === "1"
+          ),
+          contained: visible.every((element) => {
+            const rect = element.getBoundingClientRect();
+            // The SVG uses a one-device-pixel non-scaling stroke, so painted
+            // bounds may extend half a pixel past the mathematical viewBox.
+            return rect.left >= rootRect.left - 1 &&
+              rect.right <= rootRect.right + 1 &&
+              rect.top >= rootRect.top - 1 &&
+              rect.bottom <= rootRect.bottom + 1;
+          }),
+          rootWidth: rootRect.width,
+          viewportWidth: window.innerWidth
+        };
+      };
+      return [
+        sample("state.place-value.established"),
+        sample("state.place-value.ones-exchanged"),
+        sample("state.place-value.settled"),
+        sample("state.place-value.established")
+      ];
+    });
+
+    expect(evidence.map(({ visibleCount }) => visibleCount)).toEqual([
+      29, 20, 11, 29
+    ]);
+    expect(evidence.map(({ stateId }) => stateId)).toEqual([
+      "state.place-value.established",
+      "state.place-value.ones-exchanged",
+      "state.place-value.settled",
+      "state.place-value.established"
+    ]);
+    expect(evidence.every(({ allCount }) => allCount === 31)).toBe(true);
+    expect(evidence.every(({ reused }) => reused)).toBe(true);
+    expect(evidence.every(({ opacityOne }) => opacityOne)).toBe(true);
+    expect(evidence.every(({ contained }) => contained)).toBe(true);
+    expect(
+      evidence.every(({ rootWidth, viewportWidth }) =>
+        rootWidth <= viewportWidth
+      )
+    ).toBe(true);
+  });
 }
 
 async function mountAndMeasure(

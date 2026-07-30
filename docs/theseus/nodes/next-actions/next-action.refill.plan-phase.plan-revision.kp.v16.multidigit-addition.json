@@ -347,6 +347,20 @@
       "scope": "s12 static architecture",
       "checkedAt": "2026-07-30T17:10:55.715Z",
       "notes": "All TypeScript projects pass; the stateless DOM adapter introduces no reader dependency-direction violation and semantic-animation stays at zero frozen exceptions; inference remains within the existing budget."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "failed",
+      "scope": "s13 initial SVG containment",
+      "checkedAt": "2026-07-30T17:20:51.075Z",
+      "notes": "Firefox exposed that a one-device-pixel non-scaling stroke may paint just outside the mathematical viewBox when the SVG lacks explicit intrinsic dimensions. The root now carries its exact 248 by 100 intrinsic size and the paint assertion includes the declared one-pixel stroke; block geometry was unchanged."
+    },
+    {
+      "command": "npm run test:place-value-addition; npm run test:browser:place-value-addition; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "s13 base-ten projection",
+      "checkedAt": "2026-07-30T17:20:59.298Z",
+      "notes": "58 focused tests and 12 three-browser wide/phone checks pass. All seven frames conserve 434, both exchanges consume exactly ten lower blocks, persistent objects reuse one 31-node SVG inventory across direct seek and rewind, intrinsic paint stays contained, opacity remains one, and no WebGL or rebuild loop exists."
     }
   ],
   "expectedLearning": [
