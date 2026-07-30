@@ -58,6 +58,41 @@ test("foldable distribution resolves one lazy partial reader host until approval
   );
 });
 
+test("place-value addition exposes one focused partial host until review", () => {
+  const entry = createKpAnimationLibraryDisplayCatalog().find(
+    ({ animationId }) =>
+      animationId === "animation.place-value-addition.278-plus-156"
+  );
+
+  assert.equal(entry?.availability, "playable");
+  assert.equal(entry?.canonicalFormat, "partial");
+  assert.equal(entry?.featured, false);
+  assert.equal(
+    entry?.primaryRepresentationId,
+    "library.editor.place-value-addition-focused-host"
+  );
+  assert.deepEqual(
+    entry?.representations.find(
+      ({ id }) => id === entry.primaryRepresentationId
+    ),
+    {
+      id: "library.editor.place-value-addition-focused-host",
+      label: "Animation + lesson",
+      kind: "editor",
+      href:
+        "/?view=animation-library-host&animation=" +
+        "editor-animation.animation.place-value-addition.278-plus-156",
+      role: "canonical-host"
+    }
+  );
+  assert.equal(
+    entry?.representations.filter(
+      ({ role }) => role === "canonical-host"
+    ).length,
+    1
+  );
+});
+
 test("reviewed fraction composition reports its certified canonical format", () => {
   const entry = createKpAnimationLibraryDisplayCatalog().find(
     ({ animationId }) =>
@@ -99,6 +134,10 @@ test("canonical-format status distinguishes complete, partial, and legacy hosts"
   assert.equal(
     status("animation.exact-fraction-quantity.third-plus-sixth"),
     "ported"
+  );
+  assert.equal(
+    status("animation.place-value-addition.278-plus-156"),
+    "partial"
   );
   assert.equal(
     status("animation.generated.radical.square-root-as-power"),

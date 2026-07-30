@@ -36,6 +36,10 @@ export function createKpAnimationLibraryCaptureProvider(
       const exactPlayer = childDocument?.querySelector<HTMLElement>(
         "[data-kp-editor-animation-player][data-kp-exact-progress-permille]"
       );
+      const placeValuePlayer = childDocument?.querySelector<HTMLElement>(
+        "[data-kp-editor-animation-player]" +
+        "[data-kp-place-value-progress-permille]"
+      );
       const editorAdapterId = childDocument
         ?.querySelector<HTMLElement>(
           "[data-kp-editor-animation-adapter-id]"
@@ -52,8 +56,12 @@ export function createKpAnimationLibraryCaptureProvider(
       const progressPermille = readProgressPermille(childDocument);
       const reviewFrame = readReaderReviewFrame(childDocument);
       const exactPhase = exactPlayer?.dataset["kpExactVisiblePhase"];
-      const exactTransformation =
-        exactPlayer?.dataset["kpExactPhase"];
+      const specializedPhase =
+        exactPhase ??
+        placeValuePlayer?.dataset["kpPlaceValueActivePhase"];
+      const specializedTransformation =
+        exactPlayer?.dataset["kpExactPhase"] ??
+        placeValuePlayer?.dataset["kpPlaceValueBeatId"];
       const target =
         context.pointer === undefined
           ? undefined
@@ -68,30 +76,38 @@ export function createKpAnimationLibraryCaptureProvider(
           assetId: animationId,
           projectionId:
             exactPlayer?.dataset["kpExactActiveRepresentation"] ??
+            placeValuePlayer
+              ?.dataset["kpPlaceValueActiveRepresentation"] ??
             representationId,
           checkpointId:
             exactPlayer?.dataset["kpExactCheckpoint"] ??
+            placeValuePlayer?.dataset["kpPlaceValueCheckpoint"] ??
             childDocument?.body.dataset["kpReaderCheckpoint"] ??
             stage?.dataset["kpCheckpoint"],
           progressPermille,
           animationProgressPermille:
             boundedOptionalPermille(
-              exactPlayer?.dataset["kpExactInputProgressPermille"]
+              exactPlayer?.dataset["kpExactInputProgressPermille"] ??
+              placeValuePlayer
+                ?.dataset["kpPlaceValueInputProgressPermille"]
             ) ??
             reviewFrame?.[0],
           phaseProgressPermille:
             boundedOptionalPermille(
-              exactPlayer?.dataset["kpExactPhaseProgressPermille"]
+              exactPlayer?.dataset["kpExactPhaseProgressPermille"] ??
+              placeValuePlayer
+                ?.dataset["kpPlaceValuePhaseProgressPermille"]
             ) ??
             reviewFrame?.[1],
           activeNodeId: stage?.dataset["kpReaderFoldActiveNode"],
           activeTransformationIds:
-            exactTransformation === undefined
+            specializedTransformation === undefined
               ? reviewFrame?.[3] ?? []
-              : [exactTransformation],
-          activePhase: exactPhase ?? reviewFrame?.[2],
+              : [specializedTransformation],
+          activePhase: specializedPhase ?? reviewFrame?.[2],
           foldMode:
             exactPlayer?.dataset["kpExactFoldMode"] ??
+            placeValuePlayer?.dataset["kpPlaceValueFoldMode"] ??
             stage?.dataset["kpReaderFoldMode"],
           foldDetail:
             exactPlayer?.dataset["kpExactPinnedNodeIds"] === undefined
@@ -99,8 +115,12 @@ export function createKpAnimationLibraryCaptureProvider(
               : `pinned:${
                   exactPlayer.dataset["kpExactPinnedNodeIds"]
                 }`,
-          layoutPolicy: stage?.dataset["kpReaderFoldLayoutPolicy"],
-          focusRefs: [],
+          layoutPolicy:
+            placeValuePlayer?.dataset["kpPlaceValueLayoutPolicy"] ??
+            stage?.dataset["kpReaderFoldLayoutPolicy"],
+          focusRefs: readIdList(
+            placeValuePlayer?.dataset["kpPlaceValueFocusRefs"]
+          ),
           motionPreference:
             childDocument?.body.dataset["kpReaderMotionPreference"],
           motionMode: childDocument?.body.dataset["kpReaderMotionMode"],
@@ -168,6 +188,13 @@ export function createKpAnimationLibraryCaptureProvider(
   };
 }
 
+function readIdList(value: string | undefined): readonly string[] {
+  if (value === undefined || value === "") return [];
+  return [...new Set(value.split(",").filter((candidate) =>
+    /^[a-zA-Z0-9][a-zA-Z0-9._:-]*$/u.test(candidate)
+  ))];
+}
+
 function readProgressPermille(
   childDocument: Document | null
 ): number {
@@ -177,6 +204,17 @@ function readProgressPermille(
   );
   if (Number.isFinite(readerProgress)) {
     return boundedPermille(readerProgress);
+  }
+  const placeValueProgress = Number(
+    childDocument
+      .querySelector<HTMLElement>(
+        "[data-kp-editor-animation-player]" +
+        "[data-kp-place-value-progress-permille]"
+      )
+      ?.dataset["kpPlaceValueProgressPermille"]
+  );
+  if (Number.isFinite(placeValueProgress)) {
+    return boundedPermille(placeValueProgress);
   }
   const editorProgress = Number(
     childDocument

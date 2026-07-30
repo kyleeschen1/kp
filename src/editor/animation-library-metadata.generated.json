@@ -678,6 +678,38 @@
     }
   },
   {
+    "id": "editor-animation.animation.place-value-addition.278-plus-156",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.place-value-addition.278-plus-156",
+    "title": "Add 278 + 156 by place value",
+    "summary": "Add 278 and 156 column by column, carrying regrouped units into the next place.",
+    "renderTargetKinds": [
+      "diagram"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 12000,
+    "beatCount": 7,
+    "tags": [
+      "animation",
+      "arithmetic",
+      "place-value",
+      "regrouping",
+      "multi-representation",
+      "reviewable"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.generated.add-zero",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.generated.add-zero",

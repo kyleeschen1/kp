@@ -107,6 +107,9 @@ export function createKpPlaceValueAdditionRuntimeController(input: {
   readonly document: Document;
   readonly viewportWidth: number;
   readonly selectedView?: KpPlaceValueRuntimeView | undefined;
+  readonly onOutlineRequest?: (
+    anchorId: KpPlaceValueAdditionOutlineAnchor["id"]
+  ) => void;
   readonly frameClock?: KpReaderFrameClock | undefined;
   readonly now?: (() => number) | undefined;
 }): KpPlaceValueAdditionRuntimeController {
@@ -275,7 +278,11 @@ export function createKpPlaceValueAdditionRuntimeController(input: {
       surface = createKpPlaceValueAdditionResponsiveSurface({
         document: input.document,
         navigation,
-        onOutlineRequest: (anchorId) => controller.seekOutline(anchorId),
+        // Embedded hosts may delegate outline seeks to their existing player.
+        // This keeps the player clock authoritative instead of creating a
+        // second progress history inside the responsive surface.
+        onOutlineRequest: input.onOutlineRequest ??
+          ((anchorId) => controller.seekOutline(anchorId)),
         onViewRequest: (view) => controller.setView(view)
       });
       host.append(surface.root);

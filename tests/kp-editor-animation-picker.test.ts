@@ -26,7 +26,7 @@ test("editor animation picker groups the concrete catalog by supported surface",
     selectedDescriptorId: descriptors[13]?.id
   });
 
-  assert.equal(model.optionCount, 32);
+  assert.equal(model.optionCount, 33);
   assert.deepEqual(
     model.groups.map((group) => [group.id, group.options.length]),
     [
@@ -34,7 +34,7 @@ test("editor animation picker groups the concrete catalog by supported surface",
       ["calculus", 4],
       ["linear-algebra", 4],
       ["equation", 12],
-      ["diagram", 2],
+      ["diagram", 3],
       ["graph", 1],
       ["programming", 1],
       ["composite", 1]
@@ -64,7 +64,7 @@ test("editor animation picker groups the concrete catalog by supported surface",
   assert.match(html, /data-action="set-editor-animation"/);
   assert.match(html, /<optgroup label="Graph catalog">/);
   assert.match(html, /data-kp-editor-animation-picker-option/);
-  assert.match(html, /data-kp-editor-animation-index="31"/);
+  assert.match(html, /data-kp-editor-animation-index="32"/);
 });
 
 test("editor animation picker exposes one family-backed option per canonical animation", () => {

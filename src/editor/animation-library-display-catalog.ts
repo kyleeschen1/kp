@@ -27,6 +27,11 @@ import {
   kpVerifiedExactFractionQuantityReleaseApproval,
   type KpVerifiedExactFractionQuantityReleaseApproval
 } from "../architecture/exact-fraction-quantity-release-approval.ts";
+import {
+  certifyKpPlaceValueAdditionPromotionReadiness,
+  isKpVerifiedPlaceValueAdditionPromotionReadiness,
+  type KpVerifiedPlaceValueAdditionPromotionReadiness
+} from "../architecture/place-value-addition-promotion-certificate.ts";
 
 export type KpAnimationLibraryDisplayRepresentationKind =
   | "reader"
@@ -82,6 +87,11 @@ export interface KpCanonicalFormatPromotionEvidence {
         readonly kind: "executable-motif-cohort";
         readonly approval?:
           KpVerifiedExactFractionQuantityReleaseApproval | undefined;
+      }
+    | {
+        readonly kind: "place-value-pre-release";
+        readonly certificate?:
+          KpVerifiedPlaceValueAdditionPromotionReadiness | undefined;
       };
   readonly exclusiveCanonicalPaint: boolean;
   readonly requiredMotifParity: boolean;
@@ -128,6 +138,26 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
     completeExactFractionQuantityCanonicalFormatEvidence(
       kpVerifiedExactFractionQuantityReleaseApproval
     )
+  ],
+  [
+    "animation.place-value-addition.278-plus-156",
+    {
+      animationId: "animation.place-value-addition.278-plus-156",
+      executionAuthority: {
+        kind: "place-value-pre-release",
+        certificate: certifyKpPlaceValueAdditionPromotionReadiness()
+      },
+      exclusiveCanonicalPaint: true,
+      requiredMotifParity: true,
+      responsiveRuntimeGates: true,
+      humanReviewApproved: false,
+      compatibilityPaintRetired: true,
+      releaseGatePassed: false,
+      presentationCoverage: "verified-animated",
+      evidenceSourceIds: [
+        "run-contract.kp.place-value-addition-promotion-v1"
+      ]
+    }
   ],
   [
     "animation.generated.radical.square-root-as-power",
@@ -208,6 +238,16 @@ const supplementalRepresentations = [
     role: "canonical-host"
   },
   {
+    animationId: "animation.place-value-addition.278-plus-156",
+    id: "library.editor.place-value-addition-focused-host",
+    label: "Animation + lesson",
+    kind: "editor",
+    href:
+      "/?view=animation-library-host&animation=" +
+      "editor-animation.animation.place-value-addition.278-plus-156",
+    role: "canonical-host"
+  },
+  {
     animationId: "animation.generated.radical.square-root-as-power",
     id: "library.reader.radical-succession",
     label: "Reader integration",
@@ -252,6 +292,10 @@ const preferredRepresentationByAnimation = new Map<string, string>([
   [
     "animation.operation-evaluation.one-plus-two",
     "library.editor.operation-evaluation-focused-host"
+  ],
+  [
+    "animation.place-value-addition.278-plus-156",
+    "library.editor.place-value-addition-focused-host"
   ],
   [
     "animation.generated.radical.square-root-as-power",
@@ -514,6 +558,14 @@ function hasKpCanonicalFormatExecutionAuthority(
           isKpVerifiedExecutableMotifPromotionCertificate(certificate) &&
           certificate.animationId === evidence.animationId
         )
+      );
+    }
+    case "place-value-pre-release": {
+      const certificate = evidence.executionAuthority.certificate;
+      return (
+        isKpVerifiedPlaceValueAdditionPromotionReadiness(certificate) &&
+        certificate.animationId === evidence.animationId &&
+        certificate.status === "ready-for-human-review"
       );
     }
   }

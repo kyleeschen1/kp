@@ -837,11 +837,67 @@
       "scope": "s22",
       "checkedAt": "2026-07-30T21:51:41.656Z",
       "notes": "Validated 837 nodes and 14789 events after slice completion."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "91 deterministic place-value tests",
+      "checkedAt": "2026-07-30T22:21:18.621Z",
+      "notes": "Canonical stacked-addition semantics, presentation, runtime, projection, accessibility, responsive policy, and pre-release certificate all pass."
+    },
+    {
+      "command": "npm run visual:place-value-addition",
+      "status": "passed",
+      "scope": "30 Playwright checks across Chromium Firefox and WebKit",
+      "checkedAt": "2026-07-30T22:21:25.825Z",
+      "notes": "Canonical review surface, existing readers, responsive and DPR coverage, seek/rewind, Review metadata, accessibility, performance, and lazy Animation Library host all pass."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/place-value-addition-animation-library.browser.spec.ts --config playwright.place-value-addition.config.ts --project=chromium --project=firefox --project=webkit --workers=1",
+      "status": "passed",
+      "scope": "9 focused Animation Library checks",
+      "checkedAt": "2026-07-30T22:21:36.858Z",
+      "notes": "Lazy mount, one toggle, player-owned outline seek, responsive view, exact Review telemetry, and deterministic session disposal pass in all three engines."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application node tests and domains",
+      "checkedAt": "2026-07-30T22:21:44.211Z",
+      "notes": "All TypeScript projects pass with the nominal pre-release certificate and typed place-value surface boundary."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production build and lazy pack boundary",
+      "checkedAt": "2026-07-30T22:21:51.452Z",
+      "notes": "Production build passes and emits the place-value capability as a distinct lazy chunk; only the existing large-chunk warning remains."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-presentation-catalog-conformance.test.ts tests/kp-editor-animation-picker.test.ts tests/kp-editor-animation-selection-route.test.ts tests/kp-editor-animation-surface-dispatch.test.ts",
+      "status": "passed",
+      "scope": "22 catalog integration checks",
+      "checkedAt": "2026-07-30T22:21:59.019Z",
+      "notes": "All intended catalog count ratchets introduced by the new asset and diagram surface pass after regenerating metadata."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "repository regression suite",
+      "checkedAt": "2026-07-30T22:22:05.931Z",
+      "notes": "Initial s23 run passed 3074 of 3081. Four intended catalog count ratchets were repaired and pass 22 of 22 focused checks; the only remaining failures are three known out-of-scope baselines: escapeHtml inventory 22 versus 21, native scene core 141543 bytes versus 136000, and the linear provider exact-rational domain import."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s23 control-plane integrity",
+      "checkedAt": "2026-07-30T22:22:35.448Z",
+      "notes": "Validated 837 nodes and 14802 events with s23 complete and the explicit human checkpoint blocking s24."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s22 hardens the canonical place-value runtime: one reader scheduler now coalesces rapid input and suppresses hidden work; direct-seek native geometry is prepared once at lazy mount; exact progress/view/viewport caching, accessibility DOM reuse, base-ten attribute diffing, performance/resource telemetry, Safari parity, and deterministic disposal pass. The exemplar remains unpromoted until the mandatory s23 Animation Library human checkpoint."
+    "summary": "Slice s23 exposes the sealed 278 + 156 exemplar in the existing lazy Animation Library through one player-owned runtime, one accessible Review entry point, responsive written/base-ten views, and a nominal pre-release certificate. Automated criteria pass, but promotion remains deliberately blocked on the mandatory human perceptual checkpoint; s24-s26 have not started."
   },
   "expectedLearning": [
     "Approved revision 16 places this active phase in now."

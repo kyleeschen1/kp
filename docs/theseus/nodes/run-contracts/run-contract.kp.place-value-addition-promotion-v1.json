@@ -209,7 +209,8 @@
     {
       "id": "s23",
       "title": "human-place-value-checkpoint",
-      "status": "planned"
+      "summary": "Mounted the canonical 278 + 156 written/base-ten exemplar in the existing lazy Animation Library, added a copy-resistant pre-release certificate whose only remaining gate is human perceptual review, and passed 91 deterministic checks plus the 30-check Chromium/Firefox/WebKit visual matrix. Stopping at the named HUMAN_CHECKPOINT before s24 generalization.",
+      "status": "complete"
     },
     {
       "id": "s24",
