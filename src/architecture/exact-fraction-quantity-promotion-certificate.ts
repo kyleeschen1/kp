@@ -210,7 +210,8 @@ KpVerifiedExactFractionQuantityPromotionReadiness {
       "reviewable-animation-library-host",
       animation.metadata?.["canonicalHost"] === manifest.review.host &&
         displayEntry?.availability === "playable" &&
-        displayEntry.canonicalFormat === "partial" &&
+        (displayEntry.canonicalFormat === "partial" ||
+          displayEntry.canonicalFormat === "ported") &&
         displayEntry.representations.filter(
           ({ role }) => role === "canonical-host"
         ).length === 1 &&
@@ -238,8 +239,8 @@ KpVerifiedExactFractionQuantityPromotionReadiness {
       ]
     ),
     prerequisite(
-      "evidence-derived-partial-status",
-      displayEntry?.canonicalFormat === "partial" &&
+      "evidence-derived-release-status",
+      displayEntry?.canonicalFormat === "ported" &&
         !JSON.stringify(displayEntry).includes(
           "humanReviewApproved\":true"
         ),

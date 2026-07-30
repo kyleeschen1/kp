@@ -110,13 +110,13 @@ test("exact renderer remains behind its lazy capability pack and adds no page", 
   assert.ok(!htmlFiles.includes("exact-fraction-quantity"));
 });
 
-test("display catalog reports the unreviewed exemplar as partial, never ported", () => {
+test("display catalog derives ported status from the approved motif cohort", () => {
   const entry = createKpAnimationLibraryDisplayCatalog().find(
     ({ animationId }) => animationId === kpExactFractionQuantityAnimationId
   );
 
   assert.equal(entry?.availability, "playable");
-  assert.equal(entry?.canonicalFormat, "partial");
+  assert.equal(entry?.canonicalFormat, "ported");
   assert.equal(
     entry?.representations.filter(
       ({ role }) => role === "canonical-host"

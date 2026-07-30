@@ -21,6 +21,7 @@ const completeEvidence = {
 
 test("gold equation cohort is small exact and visible in editor metadata", () => {
   assert.deepEqual(kpGoldEquationAnimationIds, [
+    "animation.exact-fraction-quantity.third-plus-sixth",
     "animation.linear-solve.solve-x",
     "animation.generated.radical.square-root-as-power",
     "animation.generated.function-wrap.apply-f",
@@ -31,12 +32,16 @@ test("gold equation cohort is small exact and visible in editor metadata", () =>
     assets: createKpAnimationAssets(),
     families: createSymbolicManipulationFamilyRegistry()
   });
+  const promoted = new Set([
+    "animation.exact-fraction-quantity.third-plus-sixth",
+    "animation.generated.radical.square-root-as-power"
+  ]);
   for (const animationId of kpGoldEquationAnimationIds) {
     const matches = descriptors.filter((descriptor) => descriptor.animationId === animationId);
     assert.ok(matches.length > 0);
     assert.ok(matches.every((descriptor) =>
       descriptor.promotion?.maturity === (
-        animationId === "animation.generated.radical.square-root-as-power"
+        promoted.has(animationId)
           ? "promoted"
           : "gold"
       )

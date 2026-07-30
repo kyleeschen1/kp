@@ -142,9 +142,9 @@ discarding unmigrated catalog coverage.
 
 The durable promotion order and current status are owned by
 `threads/animation-library-promotion.md`. Approved Theseus plan revision
-`plan-revision.kp.v13` mirrors that order, while
-`run-contract.kp.exact-fraction-quantity-promotion-v1` alone authorizes the
-current implementation. Planned rows do not authorize implementation; an
+`plan-revision.kp.v16` mirrors that order. Exact-fraction quantity is promoted,
+and place-value addition, `278 + 156 = 434`, is the current proposal frontier
+without an active implementation contract. Planned rows do not authorize implementation; an
 approved typed run contract owns execution. Human exemplar approval remains
 mandatory before each subjective visual generalization, and existing
 standalone examples remain reference evidence rather than automatically
@@ -393,10 +393,9 @@ Package executable animations as semantic capsules:
    migrations, foldable distribution evidence, canonical fraction-composition
    release, role-complete presentation plans, bounded resource leases, live
    review gallery, and fixed release gates.
-2. Complete the approved exact-fraction quantity run for
-   `1/3 + 1/6 = 1/2`, projected through KaTeX and concrete quantity views, and
-   stop at its human visual checkpoint before release.
-3. Advance place-value arithmetic, a bounded supply/demand equilibrium shift,
+2. Preserve the promoted exact-fraction quantity identity
+   `1/3 + 1/6 = 1/2` and its certified three-program motif cohort.
+3. Review place-value arithmetic, then a bounded supply/demand equilibrium shift,
    and a bounded constant-force work-energy explanation early for demo breadth.
 4. Continue through vector/matrix operations, the equation-graph derivative
    bridge, integral accumulation, and the stable later queue one exemplar

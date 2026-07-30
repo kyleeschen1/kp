@@ -99,6 +99,29 @@ test("aligned promotion memory resolves the first unfinished rank", () => {
   assert.deepEqual(report.diagnostics, []);
 });
 
+test("the next phase can await an approved run contract", () => {
+  const input = base();
+  const report = evaluateKpPromotionMemory({
+    ...input,
+    activePlanRevision: {
+      status: "active",
+      planRevision: {
+        approval: { status: "approved" },
+        phases: [{
+          id: "exact-fraction",
+          objective: "Show 1/3 + 1/6 = 1/2.",
+          status: "active",
+          evidence: []
+        }]
+      }
+    },
+    runContractsById: new Map()
+  });
+
+  assert.equal(report.activeRunContractId, "");
+  assert.deepEqual(report.diagnostics, []);
+});
+
 test("a stale current action and Theseus phase fail together", () => {
   const input = base();
   const report = evaluateKpPromotionMemory({

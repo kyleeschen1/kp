@@ -22,6 +22,11 @@ import {
   isKpVerifiedExecutableMotifPromotionCertificate,
   type KpVerifiedExecutableMotifPromotionCertificate
 } from "../architecture/executable-motif-promotion-evidence.ts";
+import {
+  isKpVerifiedExactFractionQuantityReleaseApproval,
+  kpVerifiedExactFractionQuantityReleaseApproval,
+  type KpVerifiedExactFractionQuantityReleaseApproval
+} from "../architecture/exact-fraction-quantity-release-approval.ts";
 
 export type KpAnimationLibraryDisplayRepresentationKind =
   | "reader"
@@ -72,6 +77,11 @@ export interface KpCanonicalFormatPromotionEvidence {
         readonly kind: "executable-motif";
         readonly certificate?:
           KpVerifiedExecutableMotifPromotionCertificate | undefined;
+      }
+    | {
+        readonly kind: "executable-motif-cohort";
+        readonly approval?:
+          KpVerifiedExactFractionQuantityReleaseApproval | undefined;
       };
   readonly exclusiveCanonicalPaint: boolean;
   readonly requiredMotifParity: boolean;
@@ -115,23 +125,9 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
   ],
   [
     "animation.exact-fraction-quantity.third-plus-sixth",
-    {
-      animationId:
-        "animation.exact-fraction-quantity.third-plus-sixth",
-      executionAuthority: {
-        kind: "executable-motif"
-      },
-      exclusiveCanonicalPaint: true,
-      requiredMotifParity: true,
-      responsiveRuntimeGates: true,
-      humanReviewApproved: false,
-      compatibilityPaintRetired: true,
-      releaseGatePassed: false,
-      presentationCoverage: "verified-animated",
-      evidenceSourceIds: [
-        "run-contract.kp.executable-motif-perceptual-continuity-repair-v0"
-      ]
-    }
+    completeExactFractionQuantityCanonicalFormatEvidence(
+      kpVerifiedExactFractionQuantityReleaseApproval
+    )
   ],
   [
     "animation.generated.radical.square-root-as-power",
@@ -503,6 +499,23 @@ function hasKpCanonicalFormatExecutionAuthority(
         certificate.animationId === evidence.animationId
       );
     }
+    case "executable-motif-cohort": {
+      const approval = evidence.executionAuthority.approval;
+      return (
+        isKpVerifiedExactFractionQuantityReleaseApproval(approval) &&
+        approval.animationId === evidence.animationId &&
+        approval.executableMotifCertificates.length === 3 &&
+        new Set(
+          approval.executableMotifCertificates.map(
+            ({ programKind }) => programKind
+          )
+        ).size === 3 &&
+        approval.executableMotifCertificates.every((certificate) =>
+          isKpVerifiedExecutableMotifPromotionCertificate(certificate) &&
+          certificate.animationId === evidence.animationId
+        )
+      );
+    }
   }
 }
 
@@ -513,6 +526,26 @@ function completeFractionCompositionCanonicalFormatEvidence(
     approval.animationId,
     approval.evidenceSourceIds
   );
+}
+
+function completeExactFractionQuantityCanonicalFormatEvidence(
+  approval: KpVerifiedExactFractionQuantityReleaseApproval
+): KpCanonicalFormatPromotionEvidence {
+  return Object.freeze({
+    animationId: approval.animationId,
+    executionAuthority: Object.freeze({
+      kind: "executable-motif-cohort" as const,
+      approval
+    }),
+    exclusiveCanonicalPaint: true,
+    requiredMotifParity: true,
+    responsiveRuntimeGates: true,
+    humanReviewApproved: true,
+    compatibilityPaintRetired: true,
+    releaseGatePassed: approval.releaseDecision === "passed",
+    presentationCoverage: "verified-animated",
+    evidenceSourceIds: approval.evidenceSourceIds
+  });
 }
 
 function representationRank(

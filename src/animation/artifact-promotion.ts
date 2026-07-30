@@ -68,6 +68,16 @@ type KpReviewedAnimationPromotionRecord =
 
 const reviewedAnimationPromotionRecords = Object.freeze([
   {
+    animationId:
+      "animation.exact-fraction-quantity.third-plus-sixth",
+    maturity: "promoted",
+    presentationCoverage: "verified-animated",
+    evidenceSourceIds: [
+      "review.kp.exact-fraction-quantity-persistent-stage-human-checkpoint",
+      "run-contract.kp.executable-motif-perceptual-continuity-repair-v0"
+    ]
+  },
+  {
     animationId: "animation.linear-solve.solve-x",
     maturity: "gold",
     presentationCoverage: "verified-animated",

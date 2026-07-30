@@ -2,9 +2,9 @@
   "id": "next-action.kp.exact-fraction-quantity-promotion-v0",
   "kind": "next-action",
   "title": "Promote exact fraction quantity identity",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Execute the approved 25-slice exemplar-first loop for 1/3 + 1/6 = 1/2 across native KaTeX, partitioned circles, bars or area, and a number line, with a mandatory slice-23 human visual checkpoint.",
+  "summary": "Promoted the human-approved persistent exact-fraction quantity exemplar through evidence-derived evaluation, identity-fission, and identity-fusion certificates; catalog and roadmap now advance to inactive place-value proposal review.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -767,6 +767,55 @@
       "scope": "s25 control-plane integrity",
       "checkedAt": "2026-07-30T14:58:36.615Z",
       "notes": "Validated 832 nodes and 14562 events with s25 still in progress for human review."
+    },
+    {
+      "command": "human visual review of persistent exact-fraction sequence",
+      "status": "passed",
+      "scope": "s25 repaired exact-fraction checkpoint",
+      "checkedAt": "2026-07-30T15:03:34.501Z",
+      "notes": "Approved by the user on 2026-07-30: the repaired exact-fraction animation looks beautiful and the prior terminal flicker is no longer visible."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "exact-fraction release unit and architecture matrix",
+      "checkedAt": "2026-07-30T15:27:25.954Z",
+      "notes": "101 of 101 checks pass, including evidence-derived cohort promotion, opaque fission/fusion, operation evaluation, exact endpoint ownership, and static/export seams."
+    },
+    {
+      "command": "npm run test:browser:exact-fraction-quantity plus targeted lazy-mount rerun",
+      "status": "passed",
+      "scope": "Chromium Firefox WebKit release matrix",
+      "checkedAt": "2026-07-30T15:27:26.887Z",
+      "notes": "The loaded full matrix passed 50 of 51; its only failure was a 5-second Chromium lazy-pack timeout while build and compilers competed for CPU. The exact failed case then passed 3 of 3 across Chromium, Firefox, and WebKit through the same stable npm entrypoint. All determinism, endpoint, flicker, seek, rewind, responsive, Review, and resource cases passed."
+    },
+    {
+      "command": "npm run typecheck and npm run build",
+      "status": "passed",
+      "scope": "release compilation and production bundle",
+      "checkedAt": "2026-07-30T15:27:27.739Z",
+      "notes": "Typecheck and production build pass; the existing large-chunk advisory remains non-blocking."
+    },
+    {
+      "command": "npm test plus focused promotion rerun",
+      "status": "passed",
+      "scope": "repository regression matrix",
+      "checkedAt": "2026-07-30T15:27:28.604Z",
+      "notes": "The repository run completed 2982 of 2986 before the exact promotion expectation was updated; its new fourth failure passed 8 of 8 on focused rerun. The remaining three failures are the unchanged pre-existing HTML escaping inventory, native scene source-byte ceiling, and linear-provider boundary baselines."
+    },
+    {
+      "command": "npm run check:architecture and npm run check:inference and npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "architecture inference and durable roadmap",
+      "checkedAt": "2026-07-30T15:27:29.498Z",
+      "notes": "All gates pass. Stable promotion rank is now place-value addition with no active implementation contract."
+    },
+    {
+      "command": "npm run check:dev-review-production and npm run check:reader-production and theseus workspace validate",
+      "status": "passed",
+      "scope": "production isolation and durable graph",
+      "checkedAt": "2026-07-30T15:27:30.368Z",
+      "notes": "Production closure passes and Theseus validates 833 nodes with 14573 events before final closeout records."
     }
   ],
   "progress": {

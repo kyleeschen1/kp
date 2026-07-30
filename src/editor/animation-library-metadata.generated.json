@@ -668,13 +668,13 @@
       "exact-quantity",
       "fraction",
       "multi-representation",
-      "reviewable"
+      "promoted"
     ],
     "promotion": {
-      "maturity": "reviewable",
+      "maturity": "promoted",
       "novelty": "composition",
       "humanReviewRequired": false,
-      "goldCohort": false
+      "goldCohort": true
     }
   },
   {

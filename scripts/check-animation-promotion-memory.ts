@@ -237,9 +237,12 @@ export function evaluateKpPromotionMemory(
   const matchingRunContracts = evidenceIds.filter((id) =>
     isActiveRunContract(input.runContractsById.get(id))
   );
-  if (matchingRunContracts.length !== 1) {
+  // A roadmap phase may be current while its proposal awaits approval. Only a
+  // typed run contract authorizes implementation, so zero is a valid planning
+  // state; multiple live contracts would create competing execution authority.
+  if (matchingRunContracts.length > 1) {
     diagnostics.push(
-      `Active Theseus phase ${activePhaseId || "(missing)"} must point to exactly one live run contract.`
+      `Active Theseus phase ${activePhaseId || "(missing)"} cannot point to multiple live run contracts.`
     );
   }
 
@@ -398,10 +401,12 @@ function run(): void {
       `Animation promotion memory drifted:\n- ${report.diagnostics.join("\n- ")}`
     );
   }
+  const execution = report.activeRunContractId.length > 0
+    ? `active contract ${report.activeRunContractId}`
+    : "proposal review; no active implementation contract";
   process.stdout.write(
     `Promotion memory aligned: rank ${report.current.rank} ` +
-    `${report.current.stableId} via ${report.activePhaseId} and ` +
-    `${report.activeRunContractId}.\n`
+    `${report.current.stableId} via ${report.activePhaseId}; ${execution}.\n`
   );
 }
 

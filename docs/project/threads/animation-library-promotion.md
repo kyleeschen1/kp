@@ -1,9 +1,9 @@
 # Animation Library Promotion Thread
 
 Status: active-supporting
-Last Updated: 2026-07-28
-Current Next Action: Complete the approved exact-fraction quantity exemplar
-`1/3 + 1/6 = 1/2` and stop at its human visual checkpoint before promotion.
+Last Updated: 2026-07-30
+Current Next Action: Review a bounded place-value addition proposal for
+`278 + 156 = 434`; no successor implementation contract is active.
 
 ## Goal
 
@@ -49,8 +49,8 @@ release gate.
 
 | Rank | Stable ID | Canonical exemplar | Status | Catalog animation ID | Capability or demo purpose |
 | ---: | --- | --- | --- | --- | --- |
-| 1 | `kp.promotion.exact-fraction-quantity` | `1/3 + 1/6 = 1/2` across KaTeX, partitioned circles, bars or areas, and a number line | next | — | Exact quantity identity across symbolic and concrete views |
-| 2 | `kp.promotion.place-value-addition` | `278 + 156 = 434` | queued | — | Arithmetic demo breadth; exchange with persistent place-value provenance |
+| 1 | `kp.promotion.exact-fraction-quantity` | `1/3 + 1/6 = 1/2` across KaTeX, partitioned circles, bars or areas, and a number line | promoted | `animation.exact-fraction-quantity.third-plus-sixth` | Exact quantity identity across symbolic and concrete views |
+| 2 | `kp.promotion.place-value-addition` | `278 + 156 = 434` | next | — | Arithmetic demo breadth; exchange with persistent place-value provenance |
 | 3 | `kp.promotion.economics-equilibrium` | Supply and demand equilibrium shift | queued | — | Early versatility demo; parameter, curve, intersection, and narrative correspondence |
 | 4 | `kp.promotion.physics-work-energy` | Constant-force work and kinetic-energy change | queued | — | Early versatility demo; units and conservation across equation, graph, and diagram without a physics engine |
 | 5 | `kp.promotion.vector-dot-projection` | Project one vector onto another | planned | — | Symbolic-to-spatial identity and indexed component pairing |

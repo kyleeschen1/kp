@@ -2,8 +2,9 @@
   "id": "run-contract.kp.executable-motif-perceptual-continuity-repair-v0",
   "kind": "run-contract",
   "title": "Executable motif and perceptual continuity repair",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -1323,13 +1324,14 @@
     {
       "id": "s25",
       "title": "human-exact-fraction-checkpoint",
-      "summary": "Repair implemented for human checkpoint: exact fraction now precompiles one six-segment symbolic sequence into one persistent native stage, proves adjacent segments share the same KaTeX endpoint root, defers hidden-phone paint measurement, and never replaces endpoint DOM during playback. Awaiting renewed human visual approval.",
-      "status": "in-progress"
+      "summary": "Human-approved the persistent exact-fraction sequence. One mounted native stage and shared adjacent endpoint roots preserve the approved motifs, geometry, mathematics, four-view synchronization, phone disclosure, and exact endpoint paint without terminal flicker.",
+      "status": "complete"
     },
     {
       "id": "s26",
       "title": "promote-and-closeout",
-      "status": "planned"
+      "summary": "Promoted the human-approved exact-fraction exemplar through evidence-derived three-program release certification, advanced the durable roadmap to place-value proposal review, passed focused type, architecture, production, browser, and promotion-memory gates, and closed the bounded continuity contract without adding a renderer, compositor, clock, lifecycle, or scheduler.",
+      "status": "complete"
     }
   ]
 }

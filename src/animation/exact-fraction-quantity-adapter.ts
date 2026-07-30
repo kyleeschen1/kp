@@ -142,7 +142,7 @@ KpAnimationAsset {
         "exact-quantity",
         "fraction",
         "multi-representation",
-        "reviewable"
+        "promoted"
       ],
       sourceRefIds: [
         trace.id,

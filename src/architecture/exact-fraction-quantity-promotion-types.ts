@@ -9,7 +9,7 @@ export const kpExactFractionQuantityPromotionPrerequisiteIds = [
   "accessible-static-export",
   "reviewable-animation-library-host",
   "three-browser-resource-contract",
-  "evidence-derived-partial-status"
+  "evidence-derived-release-status"
 ] as const;
 
 export type KpExactFractionQuantityPromotionPrerequisiteId =

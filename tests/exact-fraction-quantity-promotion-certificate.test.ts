@@ -6,6 +6,13 @@ import {
   checkKpExactFractionQuantityPromotionEvidence,
   kpExactFractionQuantityPromotionPrerequisiteIds
 } from "../src/architecture/exact-fraction-quantity-promotion-certificate.ts";
+import {
+  isKpVerifiedExactFractionQuantityReleaseApproval,
+  kpVerifiedExactFractionQuantityReleaseApproval
+} from "../src/architecture/exact-fraction-quantity-release-approval.ts";
+import {
+  isKpVerifiedExecutableMotifPromotionCertificate
+} from "../src/architecture/executable-motif-promotion-evidence.ts";
 
 test("exact quantity closes automated gates without claiming promotion", () => {
   const certificate =
@@ -49,5 +56,27 @@ test("missing, duplicated, and source-free evidence cannot close readiness", () 
       "promotion-evidence.empty-source",
       "promotion-evidence.missing"
     ]
+  );
+});
+
+test("human approval certifies evaluation, fission, and fusion as one cohort", () => {
+  const approval = kpVerifiedExactFractionQuantityReleaseApproval;
+
+  assert.equal(
+    isKpVerifiedExactFractionQuantityReleaseApproval(approval),
+    true
+  );
+  assert.deepEqual(
+    approval.executableMotifCertificates.map(({ programKind }) => programKind),
+    ["identity-fission", "identity-fusion", "operation-evaluation"]
+  );
+  assert.ok(approval.executableMotifCertificates.every(
+    isKpVerifiedExecutableMotifPromotionCertificate
+  ));
+  assert.equal(
+    isKpVerifiedExactFractionQuantityReleaseApproval({
+      ...approval
+    }),
+    false
   );
 });

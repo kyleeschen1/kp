@@ -97,6 +97,10 @@ test("canonical-format status distinguishes complete, partial, and legacy hosts"
     "ported"
   );
   assert.equal(
+    status("animation.exact-fraction-quantity.third-plus-sixth"),
+    "ported"
+  );
+  assert.equal(
     status("animation.generated.radical.square-root-as-power"),
     "ported"
   );
