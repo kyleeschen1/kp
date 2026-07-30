@@ -454,6 +454,57 @@ export function sampleKpOpaqueGatherAndRecognizeSuccessorSynthesis(input: {
 }
 
 /**
+ * Identity transfer is an exclusive shared handoff: geometry carries the
+ * split/merge while every owned atom remains fully opaque. Normalizing rank
+ * and scale here projects the renderer-neutral fission/fusion contract onto
+ * measured KaTeX annotations without caller paths or glyph-specific timing.
+ */
+export function sampleKpOpaqueIdentityTransferSuccessorSynthesis(input: {
+  readonly plan: KpSuccessorSynthesisPlan;
+  readonly progress: number;
+}): KpSuccessorSynthesisFrame {
+  const progress = clamp01(input.progress);
+  const transferProgress = input.plan.targetBirthStart;
+  const frame = sampleKpSuccessorSynthesis({
+    plan: {
+      ...input.plan,
+      inputRankStaggerSpan: 0,
+      targetRankStaggerSpan: 0,
+      inputJunctionScale: 1,
+      targetSeedScale: 1
+    },
+    progress
+  });
+  if (progress >= transferProgress && !frame.allRequiredInputsReady) {
+    throw new Error(
+      `Identity transfer ${input.plan.id} reached its shared handoff ` +
+      "before every contributor arrived."
+    );
+  }
+  const transferred = progress >= transferProgress;
+  return Object.freeze({
+    ...frame,
+    progress,
+    sources: Object.freeze(frame.sources.map((source) => Object.freeze({
+      ...source,
+      pose: Object.freeze({
+        ...source.pose,
+        scale: 1,
+        opacity: transferred ? 0 : 1
+      })
+    }))),
+    targets: Object.freeze(frame.targets.map((target) => Object.freeze({
+      ...target,
+      pose: Object.freeze({
+        ...target.pose,
+        scale: 1,
+        opacity: transferred ? 1 : 0
+      })
+    })))
+  });
+}
+
+/**
  * Counter-convergence keeps the source group readable on one inline band
  * while its material inputs approach, then retires the catalyst before the
  * result seeds during source retirement.

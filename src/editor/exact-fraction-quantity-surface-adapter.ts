@@ -498,19 +498,40 @@ async function prepareSymbolicScene(input: {
       return;
     }
     const relations = symbolicPaintRelations(input.segment);
+    const identityTransferProgram =
+      input.dispatch === "identity-fission"
+        ? input.session.runtime.identityFission.program
+        : input.dispatch === "identity-fusion"
+          ? input.session.runtime.identityFusion.program
+          : undefined;
     const canonical = createKpCanonicalNativeKatexSceneSession({
       source,
       target,
       relations,
-      successorSyntheses: input.segment.successorSyntheses.map((binding) => ({
-        binding,
-        direction: "forward",
-        motion: "full",
-        legacyContinuityAuthority: "exact-fraction-quantity-v0"
-      })),
+      successorSyntheses: input.segment.successorSyntheses.map((binding) =>
+        identityTransferProgram === undefined
+          ? {
+              binding,
+              direction: "forward" as const,
+              motion: "full" as const,
+              legacyContinuityAuthority: "exact-fraction-quantity-v0" as const
+            }
+          : {
+              binding,
+              direction: "forward" as const,
+              motion: "full" as const,
+              // The nominal program chooses the opaque shared-handoff
+              // projection; the binding only contributes measured paint.
+              executableProgram: identityTransferProgram
+            }
+      ),
       endpointDwellFraction: 0.04,
-      fanInRouting: input.dispatch === "merge-fan-in",
-      copyFanOutRouting: input.dispatch === "copy-fan-out"
+      fanInRouting:
+        input.dispatch === "merge-fan-in" ||
+        input.dispatch === "identity-fusion",
+      copyFanOutRouting:
+        input.dispatch === "copy-fan-out" ||
+        input.dispatch === "identity-fission"
     });
     input.session.symbolicPlaybackCreatedCount += 1;
     canonical.session.apply(input.session.symbolicPendingProgress);

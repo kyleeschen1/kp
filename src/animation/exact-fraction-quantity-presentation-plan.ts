@@ -26,6 +26,10 @@ import {
   kpIdentityFissionExecutableProgram,
   type KpVerifiedIdentityFissionExecutableProgram
 } from "./motifs/identity-fission-executable-program.ts";
+import {
+  kpIdentityFusionExecutableProgram,
+  type KpVerifiedIdentityFusionExecutableProgram
+} from "./motifs/identity-fusion-executable-program.ts";
 
 export type {
   KpExactQuantityOpaquePaintBinding
@@ -46,6 +50,7 @@ export interface KpExactQuantityMotifInvocation {
     | "merge-fan-in"
     | "opaque-successor"
     | "identity-fission"
+    | "identity-fusion"
     | "operation-evaluation"
     | "structural-succession"
   )[];
@@ -71,10 +76,15 @@ export type KpExactFractionQuantityPresentationBeat =
   | (KpExactFractionQuantityPresentationBeatBase & {
       readonly motif: {
         readonly kind: "existing";
-        readonly motifId:
-          | "focus-continuant"
-          | "group-continuants"
-          | "structural-succession";
+        readonly motifId: "focus-continuant" | "structural-succession";
+      };
+    })
+  | (KpExactFractionQuantityPresentationBeatBase & {
+      readonly motif: {
+        readonly kind: "existing";
+        readonly motifId: "group-continuants";
+        readonly executableProgram:
+          KpVerifiedIdentityFusionExecutableProgram;
       };
     })
   | (KpExactFractionQuantityPresentationBeatBase & {
@@ -98,6 +108,8 @@ export type KpExactFractionQuantityPresentationBeat =
         readonly targetSelectionId: string;
         readonly mergePolicy: "simultaneous-opaque-fusion";
         readonly fusionPlan: KpFissionFusionPlan;
+        readonly executableProgram:
+          KpVerifiedIdentityFusionExecutableProgram;
       };
     });
 
@@ -118,14 +130,16 @@ export interface KpExactQuantityVisiblePhaseBinding {
   readonly phaseProgress: number;
   readonly actionProgress: number;
   readonly programPhase?:
-    KpExactQuantityIdentityFissionProgramPhase | undefined;
+    KpExactQuantityExecutableProgramPhase | undefined;
 }
 
-export interface KpExactQuantityIdentityFissionProgramPhase {
-  readonly kind: "identity-fission-program-phase";
+export interface KpExactQuantityExecutableProgramPhase {
+  readonly kind:
+    | "identity-fission-program-phase"
+    | "identity-fusion-program-phase";
   readonly programId: string;
   readonly programVersion: string;
-  readonly programKind: "identity-fission";
+  readonly programKind: "identity-fission" | "identity-fusion";
   readonly phaseId: string;
   readonly phaseEffect: string;
   readonly requiredRoles: readonly string[];
@@ -133,6 +147,18 @@ export interface KpExactQuantityIdentityFissionProgramPhase {
   readonly phaseProgress: number;
   readonly programProgress: number;
 }
+
+export type KpExactQuantityIdentityFissionProgramPhase =
+  KpExactQuantityExecutableProgramPhase & {
+    readonly kind: "identity-fission-program-phase";
+    readonly programKind: "identity-fission";
+  };
+
+export type KpExactQuantityIdentityFusionProgramPhase =
+  KpExactQuantityExecutableProgramPhase & {
+    readonly kind: "identity-fusion-program-phase";
+    readonly programKind: "identity-fusion";
+  };
 
 export type KpExactQuantityMotionTrackIds =
   readonly [string, ...string[]];
@@ -165,7 +191,7 @@ export interface KpExactQuantityVisibleOperationFrame {
   readonly phaseProgress: number;
   readonly actionProgress: number;
   readonly programPhase?:
-    KpExactQuantityIdentityFissionProgramPhase | undefined;
+    KpExactQuantityExecutableProgramPhase | undefined;
   readonly viewBindings: readonly [
     KpExactQuantitySymbolicPhaseBinding,
     KpExactQuantityConcretePhaseBinding,
@@ -287,7 +313,7 @@ export function createKpExactFractionQuantityPresentationPlan(
         "kp.core.group",
         "group-continuants",
         neutralFrames[2]!.selectionTransitions,
-        ["opaque-successor"]
+        ["identity-fusion"]
       ),
       Object.freeze({
         beatId: trace.beats[3]!.id,
@@ -299,7 +325,7 @@ export function createKpExactFractionQuantityPresentationPlan(
         execution: createMotifInvocation({
           beatId: trace.beats[3]!.id,
           operationId: "kp.core.merge",
-          symbolicDispatches: ["opaque-successor"],
+          symbolicDispatches: ["identity-fusion"],
           atomicDispatch: "fusion"
         }),
         motif: Object.freeze({
@@ -307,7 +333,8 @@ export function createKpExactFractionQuantityPresentationPlan(
           contributorAtomicPartIds: mergeContributors,
           targetSelectionId: merge.targetSelectionIds[0]!,
           mergePolicy: "simultaneous-opaque-fusion" as const,
-          fusionPlan
+          fusionPlan,
+          executableProgram: kpIdentityFusionExecutableProgram
         })
       }),
       existingBeat(
@@ -430,21 +457,38 @@ function programPhaseForBeat(
   actionProgress: number
 ): {
   readonly programPhase:
-    KpExactQuantityIdentityFissionProgramPhase;
+    KpExactQuantityExecutableProgramPhase;
 } | Record<never, never> {
-  if (beat.motif.kind !== "partition-refinement") return {};
+  const executable =
+    beat.motif.kind === "partition-refinement"
+      ? {
+          program: beat.motif.executableProgram,
+          dispatch: "identity-fission" as const
+        }
+      : beat.motif.kind === "part-merge"
+        ? {
+            program: beat.motif.executableProgram,
+            dispatch: "identity-fusion" as const
+          }
+        : beat.motif.motifId === "group-continuants"
+          ? {
+              program: beat.motif.executableProgram,
+              dispatch: "identity-fusion" as const
+            }
+          : undefined;
+  if (executable === undefined) return {};
   const dispatchIndex =
-    beat.execution.symbolicDispatches.indexOf("identity-fission");
+    beat.execution.symbolicDispatches.indexOf(executable.dispatch);
   if (dispatchIndex < 0) {
     throw new Error(
-      "Partition refinement requires an identity-fission symbolic dispatch."
+      `Exact quantity ${executable.program.kind} requires its symbolic dispatch.`
     );
   }
   const dispatchCount = beat.execution.symbolicDispatches.length;
   const programProgress = clamp(
     actionProgress * dispatchCount - dispatchIndex
   );
-  const program = beat.motif.executableProgram;
+  const program = executable.program;
   const phaseIndex = programProgress >= 1
     ? program.phases.length - 1
     : Math.min(
@@ -457,7 +501,9 @@ function programPhaseForBeat(
     : programProgress * program.phases.length - phaseIndex;
   return {
     programPhase: Object.freeze({
-      kind: "identity-fission-program-phase",
+      kind: program.kind === "identity-fission"
+        ? "identity-fission-program-phase"
+        : "identity-fusion-program-phase",
       programId: program.id,
       programVersion: program.programVersion,
       programKind: program.kind,
@@ -504,7 +550,7 @@ function existingBeat(
   symbolicDispatches?:
     KpExactQuantityMotifInvocation["symbolicDispatches"]
 ): KpExactFractionQuantityPresentationBeat {
-  return Object.freeze({
+  const base = {
     beatId,
     canonicalOperationId,
     scheduler: "shared-canonical-beat",
@@ -524,7 +570,20 @@ function existingBeat(
         : motifId === "group-continuants"
           ? "group"
           : "structural-succession"
-    }),
+    })
+  } as const;
+  if (motifId === "group-continuants") {
+    return Object.freeze({
+      ...base,
+      motif: Object.freeze({
+        kind: "existing" as const,
+        motifId,
+        executableProgram: kpIdentityFusionExecutableProgram
+      })
+    });
+  }
+  return Object.freeze({
+    ...base,
     motif: Object.freeze({
       kind: "existing",
       motifId

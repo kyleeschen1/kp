@@ -564,6 +564,118 @@
       "scope": "s17 Chromium browser spot",
       "checkedAt": "2026-07-30T04:41:47.663Z",
       "notes": "The generated 5 + 2 to 7 caller reaches ready state through the same executable program, retains three opaque moving contributors, and settles at the native target. The durable test title is five plus two uses the unchanged executable evaluation runtime."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s20 identity-fission semantic runtime and projection",
+      "checkedAt": "2026-07-30T05:39:17.976Z",
+      "notes": "97 checks pass: shared nominal program, one-to-many symbolic and concrete cardinality, exact rewind, binary opacity, and settled subsegment boundaries."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/exact-fraction-quantity-determinism.browser.spec.ts --workers=1 --grep identity-fission",
+      "status": "passed",
+      "scope": "s20 cross-browser opaque fission frame",
+      "checkedAt": "2026-07-30T05:39:19.020Z",
+      "notes": "Chromium Firefox and WebKit render one program-owned four-view frame with only binary visible-owner opacity."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s20 neighboring executable motif contracts",
+      "checkedAt": "2026-07-30T05:39:19.880Z",
+      "notes": "174 checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20 application node test and domain boundaries",
+      "checkedAt": "2026-07-30T05:39:20.706Z",
+      "notes": "All TypeScript projects pass."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s20 production closure",
+      "checkedAt": "2026-07-30T05:39:21.540Z",
+      "notes": "Production build passes."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s20 inference budget",
+      "checkedAt": "2026-07-30T05:39:22.380Z",
+      "notes": "48460 types and 61210 instantiations within budget."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "failed",
+      "scope": "s20 inherited aggregate sentinel",
+      "checkedAt": "2026-07-30T05:39:23.202Z",
+      "notes": "Fails before affected boundaries on the pre-existing stale legacy.main.query-view-routing exception; semantic-animation and operation-evaluation presentation boundary scripts pass independently."
+    },
+    {
+      "command": "npm run visual:exact-fraction-quantity",
+      "status": "failed",
+      "scope": "s20 retained evaluation continuity guard",
+      "checkedAt": "2026-07-30T05:39:24.018Z",
+      "notes": "Identity-fission checkpoint passes three browsers; the existing evaluation segment at progress 0.34 exposes six legacy exact-fraction successor owners with interpolated opacity. This is the branded compatibility seam scheduled for removal in s22, not fission paint."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s21 identity-fusion semantic runtime and projection",
+      "checkedAt": "2026-07-30T06:04:12.315Z",
+      "notes": "99 checks pass: grouping and merge share one nominal program, two symbolic grouping cohorts and one numerator cohort have total many-to-one lineage, concrete fusion is simultaneous, and rewind is exact."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s21 shared executable motif and native identity-transfer contracts",
+      "checkedAt": "2026-07-30T06:04:13.190Z",
+      "notes": "175 checks pass, including the new program-selected binary measured-paint handoff and migration-inventory closure."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/exact-fraction-quantity-animation-library.browser.spec.ts tests/exact-fraction-quantity-determinism.browser.spec.ts --workers=1 --grep-invert captured-regression-moments",
+      "status": "passed",
+      "scope": "s21 wide phone three-browser integration excluding retained s22 evaluation guard",
+      "checkedAt": "2026-07-30T06:04:14.036Z",
+      "notes": "39 checks pass across Chromium Firefox and WebKit: opaque fission/fusion, plus and fraction-rule context, dense seek/rewind, natural playback, Review, responsive layout, and resource disposal."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21 nominal program and exact runtime typing",
+      "checkedAt": "2026-07-30T06:04:14.864Z",
+      "notes": "Application node test and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s21 inference budget",
+      "checkedAt": "2026-07-30T06:04:15.710Z",
+      "notes": "48460 types and 61210 instantiations remain within budget."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s21 production closure",
+      "checkedAt": "2026-07-30T06:04:16.549Z",
+      "notes": "Production build passes with the exact quantity pack remaining lazy."
+    },
+    {
+      "command": "node scripts/check-semantic-animation-boundaries.ts and check-operation-evaluation-presentation-boundaries.ts",
+      "status": "passed",
+      "scope": "s21 affected architecture boundaries",
+      "checkedAt": "2026-07-30T06:04:17.361Z",
+      "notes": "373 semantic-animation files pass with 16 classified compatibility paths; operation presentation reports 3 source-derived motif consumers."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s21 control-plane integrity",
+      "checkedAt": "2026-07-30T06:04:18.201Z",
+      "notes": "Validated 832 nodes and 14532 events before slice completion."
     }
   ],
   "progress": {

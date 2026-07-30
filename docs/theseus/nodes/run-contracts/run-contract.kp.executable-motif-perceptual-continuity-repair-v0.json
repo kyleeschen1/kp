@@ -1299,7 +1299,8 @@
     {
       "id": "s21",
       "title": "migrate-exact-fraction-fusion",
-      "status": "planned"
+      "summary": "Compiled exact-fraction denominator grouping and part merge through one nominal identity-fusion program. Two independent symbolic grouping cohorts preserve denominator and structural-rule lineage; numerator contributors retain the plus catalyst without assigning it result material; the concrete three-part merge uses the same phases and zero stagger. Native identity-transfer intents now carry the executable program into the compositor and select one measured binary-opacity shared handoff, so the motif label cannot decorate the legacy sampler. All 39 non-evaluation-guard browser checks pass across Chromium, Firefox, and WebKit; the separate legacy multiplication fade remains isolated for s22.",
+      "status": "complete"
     },
     {
       "id": "s22",

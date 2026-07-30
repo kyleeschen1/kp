@@ -567,20 +567,28 @@ function createMotionInputs(
           )
         ],
         [fusion([ids.thirdRule, ids.sixthRule], ids.commonRule)],
-        [opaqueSuccessor({
-          id: "successor.exact-fraction.align-denominators",
-          operationId: "kp.core.group",
-          materialSourceIds: [
-            ids.thirdDenominator,
-            ids.sixthDenominator
-          ],
-          // The rules are structural operation paint. Claiming them with the
-          // denominator cohort prevents a second generic owner from crossing
-          // the grouping path while the two fractions become one.
-          catalystSourceIds: [ids.thirdRule, ids.sixthRule],
-          materialPathFamily: "arc-below",
-          targetIds: [ids.commonDenominator, ids.commonRule]
-        })]
+        [
+          opaqueSuccessor({
+            id: "successor.exact-fraction.align-denominators",
+            operationId: "kp.core.group",
+            materialSourceIds: [
+              ids.thirdDenominator,
+              ids.sixthDenominator
+            ],
+            materialPathFamily: "arc-below",
+            targetIds: [ids.commonDenominator]
+          }),
+          // Fraction rules are structural material, not arithmetic catalysts:
+          // their two-to-one lineage must remain opaque and independently
+          // reversible instead of hitching a ride on denominator glyphs.
+          opaqueSuccessor({
+            id: "successor.exact-fraction.align-fraction-rules",
+            operationId: "kp.core.group",
+            materialSourceIds: [ids.thirdRule, ids.sixthRule],
+            materialPathFamily: "arc-below",
+            targetIds: [ids.commonRule]
+          })
+        ]
       )
     ]),
     motionInput(trace.beats[3]!.id, [

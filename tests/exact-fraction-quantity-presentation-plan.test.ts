@@ -14,6 +14,9 @@ import {
   kpIdentityFissionExecutableProgram
 } from "../src/animation/motifs/identity-fission-executable-program.ts";
 import {
+  kpIdentityFusionExecutableProgram
+} from "../src/animation/motifs/identity-fusion-executable-program.ts";
+import {
   isKpVerifiedExecutableSuccessorMotifProgram
 } from "../src/animation/motifs/executable-successor-motif-program-validator.ts";
 import {
@@ -61,8 +64,8 @@ test("motif declarations are sealed executable four-view invocations", () => {
     [
       ["continuant"],
       ["identity-fission", "opaque-successor"],
-      ["opaque-successor"],
-      ["opaque-successor"],
+      ["identity-fusion"],
+      ["identity-fusion"],
       ["operation-evaluation"]
     ]
   );
@@ -162,20 +165,59 @@ test("partition refinement uses existing fission with exact atom lineage", () =>
 });
 
 test("part merge uses one simultaneous existing fusion cohort", () => {
+  const plan = createKpExactFractionQuantityPresentationPlan();
+  const grouping = plan.beats[2]!;
   const merge = specializedBeat(
-    createKpExactFractionQuantityPresentationPlan().beats[3]!,
+    plan.beats[3]!,
     "part-merge"
   );
 
+  if (
+    grouping.motif.kind !== "existing" ||
+    grouping.motif.motifId !== "group-continuants"
+  ) {
+    throw new Error("Expected common-denominator grouping.");
+  }
   assert.equal(merge.canonicalOperationId, "kp.core.merge");
   assert.equal(merge.motif.fusionPlan.mode, "fusion");
   assert.equal(merge.motif.fusionPlan.microStaggerSpan, 0);
+  assert.equal(
+    grouping.motif.executableProgram,
+    kpIdentityFusionExecutableProgram
+  );
+  assert.equal(
+    merge.motif.executableProgram,
+    kpIdentityFusionExecutableProgram
+  );
+  assert.equal(
+    isKpVerifiedExecutableSuccessorMotifProgram(
+      merge.motif.executableProgram
+    ),
+    true
+  );
   assert.deepEqual(merge.motif.contributorAtomicPartIds, [
     "part.unit-sixth.0",
     "part.unit-sixth.1",
     "part.unit-sixth.2"
   ]);
   assert.equal(merge.motif.mergePolicy, "simultaneous-opaque-fusion");
+  for (const beat of [grouping, merge]) {
+    const frame = sampleKpExactQuantityVisibleOperation({
+      beat,
+      localProgress: 0.5
+    });
+    assert.equal(
+      frame.programPhase?.programId,
+      kpIdentityFusionExecutableProgram.id
+    );
+    assert.equal(
+      frame.programPhase?.programKind,
+      "identity-fusion"
+    );
+    assert.ok(frame.viewBindings.every(
+      ({ programPhase }) => programPhase === frame.programPhase
+    ));
+  }
 });
 
 test("persist fission and fusion material never receive interpolated opacity", () => {

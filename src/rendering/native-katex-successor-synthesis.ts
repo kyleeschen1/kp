@@ -3,6 +3,7 @@ import {
   evaluateKpSuccessorSynthesisLaws,
   kpOpaqueGatherAndRecognizeSettlementProgress,
   sampleKpOpaqueGatherAndRecognizeSuccessorSynthesis,
+  sampleKpOpaqueIdentityTransferSuccessorSynthesis,
   sampleKpSuccessorSynthesis,
   type KpSuccessorSynthesisPlan,
   type KpSuccessorSynthesisPose
@@ -41,6 +42,12 @@ import type {
 import {
   isKpExecutableMotifContinuityProgram
 } from "../animation/motifs/executable-motif-continuity-compiler.ts";
+import type {
+  KpVerifiedIdentityFissionExecutableProgram
+} from "../animation/motifs/identity-fission-executable-program.ts";
+import type {
+  KpVerifiedIdentityFusionExecutableProgram
+} from "../animation/motifs/identity-fusion-executable-program.ts";
 
 interface KpNativeKatexSuccessorSynthesisIntentBase {
   readonly direction: "forward" | "rewind";
@@ -50,6 +57,13 @@ interface KpNativeKatexSuccessorSynthesisIntentBase {
 export type KpNativeKatexSuccessorSynthesisIntent =
   | (KpNativeKatexSuccessorSynthesisIntentBase & {
       readonly binding: KpRegisteredSuccessorSynthesisBinding;
+      readonly legacyContinuityAuthority?: never;
+    })
+  | (KpNativeKatexSuccessorSynthesisIntentBase & {
+      readonly binding: KpExactOpaqueSuccessorSynthesisBinding;
+      readonly executableProgram:
+        | KpVerifiedIdentityFissionExecutableProgram
+        | KpVerifiedIdentityFusionExecutableProgram;
       readonly legacyContinuityAuthority?: never;
     })
   | (KpNativeKatexSuccessorSynthesisIntentBase & {
@@ -93,11 +107,21 @@ export interface KpNativeKatexSuccessorSynthesisScenePlan {
       }
     | {
         readonly kind: "legacy-exact-fraction";
+      }
+    | {
+        readonly kind: "executable-identity-transfer";
+        readonly program:
+          | KpVerifiedIdentityFissionExecutableProgram
+          | KpVerifiedIdentityFusionExecutableProgram;
       };
   readonly motifRealization:
     | KpCertifiedOpaqueGatherAndRecognizeRealization
     | {
         readonly kind: "legacy-successor-realization";
+      }
+    | {
+        readonly kind: "opaque-identity-transfer-v1";
+        readonly programKind: "identity-fission" | "identity-fusion";
       };
   readonly synthesis: KpSuccessorSynthesisPlan;
   readonly sources: readonly KpNativeKatexSuccessorPaintAnnotation[];
@@ -179,11 +203,19 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
       measurements
     });
     const continuityAuthority =
-      "legacyContinuityAuthority" in intent
+      "executableProgram" in intent &&
+        intent.executableProgram !== undefined
         ? Object.freeze({
-            kind: "legacy-exact-fraction" as const
+            kind: "executable-identity-transfer" as const,
+            program: intent.executableProgram
           })
-        : verifiedContinuityAuthority(intent.binding);
+        : "legacyContinuityAuthority" in intent
+          ? Object.freeze({
+              kind: "legacy-exact-fraction" as const
+            })
+          : verifiedContinuityAuthority(
+              requireRegisteredSuccessorBinding(intent.binding)
+            );
     const synthesis = baseSynthesis;
     const violations = evaluateKpSuccessorSynthesisLaws(synthesis);
     if (violations.length > 0) {
@@ -200,6 +232,11 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
     );
     const motifRealization = continuityAuthority.kind === "verified"
       ? certifyOpaqueGatherAndRecognizeRealization(synthesis)
+      : continuityAuthority.kind === "executable-identity-transfer"
+        ? Object.freeze({
+            kind: "opaque-identity-transfer-v1" as const,
+            programKind: continuityAuthority.program.kind
+          })
       : Object.freeze({
           kind: "legacy-successor-realization" as const
         });
@@ -258,6 +295,11 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
           plan: plan.synthesis,
           progress: semanticProgress
         })
+      : plan.continuityAuthority.kind === "executable-identity-transfer"
+        ? sampleKpOpaqueIdentityTransferSuccessorSynthesis({
+            plan: plan.synthesis,
+            progress: semanticProgress
+          })
       : sampleKpSuccessorSynthesis({
           plan: plan.synthesis,
           progress: semanticProgress
@@ -306,6 +348,19 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
 
 export const kpNativeKatexSuccessorTargetSettlementProgress =
   kpOpaqueGatherAndRecognizeSettlementProgress;
+
+function requireRegisteredSuccessorBinding(
+  binding:
+    | KpExactOpaqueSuccessorSynthesisBinding
+    | KpRegisteredSuccessorSynthesisBinding
+): KpRegisteredSuccessorSynthesisBinding {
+  if (!("operationPresentationPlan" in binding)) {
+    throw new Error(
+      `Exact successor binding ${binding.id} lacks executable or legacy authority.`
+    );
+  }
+  return binding;
+}
 
 function verifiedContinuityAuthority(
   binding: KpRegisteredSuccessorSynthesisBinding

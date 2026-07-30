@@ -123,6 +123,73 @@ test("identity fission renders one opaque program-owned four-view frame", async 
   ).toHaveCount(4);
 });
 
+test("identity fusion keeps contributors and structural context opaque", async ({
+  page
+}) => {
+  const player = await openExactQuantity(page, {
+    width: 1_100,
+    height: 800
+  });
+  for (const progress of [0.48, 0.69]) {
+    await seekAndSettle(page, player, progress);
+    await expect(player).toHaveAttribute(
+      "data-kp-exact-executable-program-id",
+      "kp.executable-program.identity-fusion"
+    );
+    await expect(player).toHaveAttribute(
+      "data-kp-exact-executable-program-phase",
+      /^(orient-contributor-identities|gather-identities|establish-ancestor|settle-ancestor)$/u
+    );
+    const opacitySample = await player.evaluate((root) => {
+      const scene = root.querySelector<HTMLElement>(
+        "[data-kp-exact-symbolic-scene]" +
+        "[data-kp-prepared-scene-state=\"committed\"]"
+      );
+      if (scene?.dataset["kpExactSymbolicStatus"] !== "ready") {
+        return { ready: false, ownerCount: 0, fractional: [] };
+      }
+      const owners = [
+        ...scene.querySelectorAll<HTMLElement>(
+          "[data-kp-exact-symbolic-source], " +
+          "[data-kp-exact-symbolic-target], " +
+          "[data-kp-equation-material-owner-id]"
+        )
+      ];
+      const fractional = owners.flatMap((owner) => {
+        let opacity = 1;
+        let current: HTMLElement | null = owner;
+        while (current !== null && current !== root) {
+          opacity *= Number(getComputedStyle(current).opacity);
+          current = current.parentElement;
+        }
+        return opacity === 0 || opacity === 1
+          ? []
+          : [{
+              ownerId: owner.dataset["kpEquationMaterialOwnerId"],
+              role: owner.dataset["kpEquationMaterialFragmentRole"],
+              sourceMotionId:
+                owner.dataset["kpEquationMaterialSourceMotionId"],
+              semanticEntityId:
+                owner.dataset["kpEquationMaterialSemanticEntityId"],
+              text: owner.textContent,
+              opacity
+            }];
+      });
+      return { ready: true, ownerCount: owners.length, fractional };
+    });
+    expect(
+      opacitySample.ready &&
+      opacitySample.ownerCount > 0 &&
+      opacitySample.fractional.length === 0,
+      JSON.stringify({ progress, opacitySample })
+    ).toBe(true);
+  }
+  const sceneText = await player.locator(
+    `${committedSceneSelector} [data-kp-editor-equation-material-layer]`
+  ).innerText();
+  expect(sceneText).toContain("+");
+});
+
 test("captured regression moments retain opaque committed paint during scene preparation", async ({
   page
 }) => {

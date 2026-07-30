@@ -12,6 +12,9 @@ import {
 import {
   kpIdentityFissionExecutableProgram
 } from "../src/animation/motifs/identity-fission-executable-program.ts";
+import {
+  kpIdentityFusionExecutableProgram
+} from "../src/animation/motifs/identity-fusion-executable-program.ts";
 
 test("one sealed runtime session owns one renderer and consumes the shared clock", () => {
   const session = createKpExactFractionQuantityRuntimeSession();
@@ -30,6 +33,14 @@ test("one sealed runtime session owns one renderer and consumes the shared clock
   assert.equal(
     session.identityFission.route.primitiveRoute,
     "fission-fusion:fission"
+  );
+  assert.equal(
+    session.identityFusion.program,
+    kpIdentityFusionExecutableProgram
+  );
+  assert.equal(
+    session.identityFusion.route.primitiveRoute,
+    "fission-fusion:fusion"
   );
 });
 
@@ -107,6 +118,88 @@ test("every beat samples through one immutable synchronized runtime frame", () =
       binding.phase === frame.visibleOperation.phase
     ));
     assert.ok(Object.isFrozen(frame));
+  }
+});
+
+test("grouping and concrete part merge share one identity-fusion program", () => {
+  const session = createKpExactFractionQuantityRuntimeSession();
+  const executions = session.identityFusion;
+  const merge = session.presentation.beats[3]!;
+  if (merge.motif.kind !== "part-merge") {
+    throw new Error("Expected part merge.");
+  }
+
+  assert.equal(
+    executions.concrete.forward.primitive.plan,
+    merge.motif.fusionPlan
+  );
+  assert.equal(executions.concrete.forward.route, executions.route);
+  assert.deepEqual(
+    executions.concrete.forward.phaseOrder,
+    executions.program.phases.map(({ id }) => id)
+  );
+  assert.deepEqual(
+    executions.concrete.rewind.phaseOrder,
+    [...executions.concrete.forward.phaseOrder].reverse()
+  );
+  assert.equal(executions.symbolic.length, 2);
+  assert.equal(executions.symbolic[0]?.forward.length, 2);
+  assert.equal(executions.symbolic[1]?.forward.length, 1);
+  for (const execution of executions.symbolic.flatMap(
+    ({ forward, rewind }) => [...forward, ...rewind]
+  )) {
+    assert.equal(execution.programId, executions.program.id);
+    assert.equal(execution.route, executions.route);
+    assert.equal(execution.primitive.plan.mode, "fusion");
+    assert.ok(execution.primitive.plan.sourceEntityIds.length >= 2);
+    assert.equal(execution.primitive.plan.targetEntityIds.length, 1);
+    assert.equal(execution.primitive.plan.microStaggerSpan, 0);
+  }
+});
+
+test("grouping and merge frames retain simultaneous opaque fusion", () => {
+  const session = createKpExactFractionQuantityRuntimeSession();
+  const grouping = sampleKpExactFractionQuantityRuntime({
+    session,
+    clock: { direction: "forward", progress: 0.48 }
+  });
+  const merge = sampleKpExactFractionQuantityRuntime({
+    session,
+    clock: { direction: "forward", progress: 0.69 }
+  });
+
+  assert.equal(grouping.symbolicMotion.dispatch, "identity-fusion");
+  assert.equal(grouping.symbolicMotion.identityFusionExecutions?.length, 2);
+  assert.equal(grouping.identityFusion?.symbolicExecutions.length, 2);
+  assert.equal(grouping.identityFusion?.concreteExecution, undefined);
+  assert.equal(merge.symbolicMotion.dispatch, "identity-fusion");
+  assert.equal(merge.symbolicMotion.identityFusionExecutions?.length, 1);
+  assert.equal(merge.identityFusion?.symbolicExecutions.length, 1);
+  assert.equal(
+    merge.identityFusion?.concreteExecution,
+    session.identityFusion.concrete.forward
+  );
+  assert.ok(merge.motifFrame !== undefined);
+  assert.ok([
+    ...merge.motifFrame.sources,
+    ...merge.motifFrame.targets
+  ].every(({ opacity }) => opacity === 0 || opacity === 1));
+  assert.equal(
+    merge.motifFrame.progress,
+    merge.visibleOperation.programPhase?.programProgress
+  );
+  for (const frame of [grouping, merge]) {
+    const phase = frame.visibleOperation.programPhase;
+    assert.equal(phase?.programKind, "identity-fusion");
+    assert.ok(frame.visibleOperation.viewBindings.every(
+      ({ programPhase }) => programPhase === phase
+    ));
+    for (const execution of frame.identityFusion!.symbolicExecutions) {
+      assert.equal(
+        execution.samplePhaseTelemetry(phase!.programProgress).activePhaseId,
+        phase!.phaseId
+      );
+    }
   }
 });
 

@@ -11,6 +11,9 @@ import {
   kpOpaqueGatherAndRecognizeRecognitionProgress
 } from "../src/animation/successor-synthesis.ts";
 import {
+  kpIdentityFusionExecutableProgram
+} from "../src/animation/motifs/identity-fusion-executable-program.ts";
+import {
   compileKpNativeKatexSuccessorSynthesisScenePlans,
   kpNativeKatexSuccessorTargetSettlementProgress,
   sampleKpNativeKatexSuccessorSynthesisScenePlans
@@ -19,6 +22,9 @@ import type {
   KpNativeKatexPaintAtomObservation,
   KpNativeKatexRenderedSceneObservation
 } from "../src/rendering/native-katex-rendered-scene.ts";
+import type {
+  KpExactOpaqueSuccessorSynthesisBinding
+} from "../src/rendering/exact-fraction-quantity-symbolic-projection.ts";
 
 const ownerDocument = {};
 const stage = { ownerDocument } as HTMLElement;
@@ -153,6 +159,53 @@ test("native successor renderer co-presents opaque contributors and result", () 
       reason === "semantic-evaluation"
     ) === true
   ));
+});
+
+test("identity-fusion program selects one binary measured-paint handoff", () => {
+  const plans = compileKpNativeKatexSuccessorSynthesisScenePlans({
+    source: scene("source", [
+      atom("source.one", "selector.one", 10, 20),
+      atom("source.plus", "selector.plus", 28, 20),
+      atom("source.two", "selector.two", 46, 20)
+    ]),
+    target: scene("target", [
+      atom("target.three", "selector.three", 28, 20)
+    ]),
+    intents: [{
+      // The legacy exact binding brand is a parser boundary; this fixture
+      // exercises the native program route with the same sealed shape.
+      binding: binding as unknown as KpExactOpaqueSuccessorSynthesisBinding,
+      executableProgram: kpIdentityFusionExecutableProgram,
+      direction: "forward",
+      motion: "full"
+    }]
+  });
+
+  assert.equal(
+    plans[0]?.continuityAuthority.kind,
+    "executable-identity-transfer"
+  );
+  assert.deepEqual(plans[0]?.motifRealization, {
+    kind: "opaque-identity-transfer-v1",
+    programKind: "identity-fusion"
+  });
+  for (let index = 0; index <= 100; index += 1) {
+    const owners = sampleKpNativeKatexSuccessorSynthesisScenePlans({
+      plans,
+      progress: index / 100
+    });
+    assert.ok(owners.every(({ opacity }) =>
+      opacity === 0 || opacity === 1
+    ));
+    const visibleSources = materialSources(owners)
+      .filter(({ opacity }) => opacity === 1);
+    const visibleTargets = targets(owners)
+      .filter(({ opacity }) => opacity === 1);
+    assert.ok(
+      (visibleSources.length > 0 && visibleTargets.length === 0) ||
+      (visibleSources.length === 0 && visibleTargets.length > 0)
+    );
+  }
 });
 
 test("native successor renderer settles exact endpoints without binary policy", () => {
