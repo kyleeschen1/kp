@@ -18,6 +18,7 @@
     "check:promotion-memory": "node --disable-warning=ExperimentalWarning scripts/check-animation-promotion-memory.ts",
     "test:promotion-memory": "node --disable-warning=ExperimentalWarning --test scripts/check-animation-promotion-memory.test.ts",
     "test:exact-fraction-quantity": "node --disable-warning=ExperimentalWarning --test tests/exact-fraction-quantity-*.test.ts",
+    "test:place-value-addition": "node --disable-warning=ExperimentalWarning --test tests/place-value-addition-*.test.ts",
     "test:browser:exact-fraction-quantity": "playwright test tests/exact-fraction-quantity-animation-library.browser.spec.ts tests/exact-fraction-quantity-determinism.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "visual:exact-fraction-quantity": "playwright test tests/exact-fraction-quantity-determinism.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "test:loop-reliability": "node --disable-warning=ExperimentalWarning --test scripts/theseus-loop-status.test.ts scripts/codex-stop-guard.test.ts scripts/theseus-loop-policy.test.ts",

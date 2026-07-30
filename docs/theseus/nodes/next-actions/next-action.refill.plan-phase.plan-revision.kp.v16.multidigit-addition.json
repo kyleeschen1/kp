@@ -46,6 +46,69 @@
       "scope": "s01 proposal and control artifacts",
       "checkedAt": "2026-07-30T15:47:19.871Z",
       "notes": "No whitespace errors; unrelated user-owned roadmap, cross-domain, publication, and semantic-medium work remains unstaged."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s02 preservation manifest",
+      "checkedAt": "2026-07-30T16:06:37.678Z",
+      "notes": "4 of 4 checks pass: canonical layout, authority resolution, ten protected core digests, and zero-growth infrastructure ceilings."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s02 executable motif baseline",
+      "checkedAt": "2026-07-30T16:06:39.288Z",
+      "notes": "175 of 175 operation presentation, continuity, caller conformance, and native successor checks pass."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s02 promoted quantity baseline",
+      "checkedAt": "2026-07-30T16:06:40.795Z",
+      "notes": "101 of 101 exact quantity, synchronized runtime, motif, responsive, accessibility, and promotion-readiness checks pass."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "s02 fold layout baseline",
+      "checkedAt": "2026-07-30T16:06:44.597Z",
+      "notes": "102 of 102 folding, checkpoint-start, semantic layout, overlap, motif, static, and reader checks pass."
+    },
+    {
+      "command": "npm run test:animation-library-display",
+      "status": "passed",
+      "scope": "s02 display and Review baseline",
+      "checkedAt": "2026-07-30T16:06:46.155Z",
+      "notes": "14 of 14 lazy host, canonical status, display budget, and Review placement checks pass."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-continuity",
+      "status": "passed",
+      "scope": "s02 cross-browser motion baseline",
+      "checkedAt": "2026-07-30T16:06:47.613Z",
+      "notes": "54 of 54 Chromium, Firefox, and WebKit checks pass for opacity, endpoint geometry, direct seek, rewind, native settlement, and Review capture."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "s02 static architecture baseline",
+      "checkedAt": "2026-07-30T16:06:48.865Z",
+      "notes": "TypeScript passes; architecture reports 373 semantic animation files with zero frozen exceptions; inference remains within 48471 types, 61210 instantiations, and 2.98 seconds."
+    },
+    {
+      "command": "npm run check:dev-review-production; npm run check:reader-production; npm run build",
+      "status": "passed",
+      "scope": "s02 production baseline",
+      "checkedAt": "2026-07-30T16:06:50.105Z",
+      "notes": "Review and reader production closure pass; Vite builds 771 modules with only the existing large-chunk warning."
+    },
+    {
+      "command": "theseus workspace validate; git diff --check",
+      "status": "passed",
+      "scope": "s02 durable evidence integrity",
+      "checkedAt": "2026-07-30T16:06:51.240Z",
+      "notes": "Theseus validates 837 nodes and 14602 events; the slice diff has no whitespace errors."
     }
   ],
   "expectedLearning": [
