@@ -1323,7 +1323,8 @@
     {
       "id": "s25",
       "title": "human-exact-fraction-checkpoint",
-      "status": "planned"
+      "summary": "Presented the repaired exact-fraction four-view exemplar in the existing focused Animation Library host at the mandatory human checkpoint. Automated release evidence is green for all approved-scope gates; promotion and slice s26 remain blocked on explicit visual approval of all beats, forward replay seek rewind, wide phone, and Review.",
+      "status": "in-progress"
     },
     {
       "id": "s26",
