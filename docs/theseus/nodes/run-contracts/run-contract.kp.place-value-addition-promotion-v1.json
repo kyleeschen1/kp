@@ -153,7 +153,9 @@
     {
       "id": "s15",
       "title": "animate-ones-evaluation",
-      "status": "planned"
+      "summary": "Animated 8 + 6 to 14 through the canonical source-derived operation-evaluation program and native KaTeX compositor. Binary paint ownership, exact source geometry, native 1/4 target settlement, and deterministic rewind are proven across Chromium, Firefox, and WebKit at wide and phone widths.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s16",

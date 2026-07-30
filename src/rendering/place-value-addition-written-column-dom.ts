@@ -120,6 +120,8 @@ export function createKpPlaceValueWrittenColumnDomProjection(input: {
   underline.dataset["kpPlaceValueRow"] = input.projection.underline.row;
   underline.dataset["kpSemanticEntityId"] =
     input.projection.underline.semanticEntityId;
+  underline.dataset["kpPresentationGroupId"] =
+    input.projection.underline.semanticEntityId;
   grid.append(underline);
   stage.append(grid);
   let currentEndpoint = input.endpoint;
@@ -148,6 +150,7 @@ function renderCell(
   root.id = cell.id;
   root.dataset["kpPlaceValueNativeRoot"] = "";
   root.dataset["kpSemanticEntityId"] = cell.semanticEntityId;
+  root.dataset["kpPresentationGroupId"] = cell.semanticEntityId;
   root.dataset["kpPlaceValueRole"] = cell.role;
   root.dataset["kpPlaceValueRow"] = cell.row;
   root.dataset["kpPlaceValueColumn"] = cell.column;

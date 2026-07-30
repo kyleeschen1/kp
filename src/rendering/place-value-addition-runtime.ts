@@ -22,6 +22,10 @@ import {
   type KpPlaceValueBaseTenFrame,
   type KpPlaceValueBaseTenProjection
 } from "./place-value-addition-base-ten-projection.ts";
+import {
+  compileKpPlaceValueOnesEvaluation,
+  type KpPlaceValueOnesEvaluation
+} from "./place-value-addition-ones-evaluation.ts";
 
 declare const kpPlaceValueRuntimeSessionBrand: unique symbol;
 declare const kpPlaceValueRuntimeFrameBrand: unique symbol;
@@ -41,6 +45,7 @@ export interface KpPlaceValueAdditionRuntimeSession {
   readonly foundation: KpVerifiedPlaceValueSemanticFoundation;
   readonly written: KpPlaceValueWrittenColumnProjection;
   readonly baseTen: KpPlaceValueBaseTenProjection;
+  readonly onesEvaluation: KpPlaceValueOnesEvaluation;
   readonly mountedViews: readonly ["written", "base-ten"];
   readonly [kpPlaceValueRuntimeSessionBrand]: true;
 }
@@ -81,6 +86,9 @@ KpPlaceValueAdditionRuntimeSession {
   const foundation = certifyKpPlaceValueSemanticFoundation();
   const written = compileKpPlaceValueWrittenColumnProjection(foundation);
   const baseTen = compileKpPlaceValueBaseTenProjection(foundation);
+  const onesEvaluation = compileKpPlaceValueOnesEvaluation(
+    foundation.presentation
+  );
   if (
     written.traceId !== foundation.trace.id ||
     baseTen.traceId !== foundation.trace.id
@@ -99,6 +107,7 @@ KpPlaceValueAdditionRuntimeSession {
     foundation,
     written,
     baseTen,
+    onesEvaluation,
     mountedViews: Object.freeze(["written", "base-ten"] as const)
   });
   sealedSessions.add(session);

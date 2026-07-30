@@ -272,8 +272,9 @@ for (const viewport of [
           "[data-kp-place-value-view]"
         ).length,
         visibleViewCount: [
-          writtenRoot,
-          baseTenRoot
+          ...dom.root.querySelectorAll<HTMLElement>(
+            "[data-kp-place-value-view]"
+          )
         ].filter((element) =>
           getComputedStyle(element).display !== "none"
         ).length,
@@ -291,6 +292,224 @@ for (const viewport of [
     expect(evidence.visibleViewCount).toBe(viewport.width >= 881 ? 2 : 1);
     expect(evidence.direction).toBe("rewind");
     expect(evidence.sequence).toBe("3");
+  });
+
+  test(`${viewport.name} ones evaluation is opaque, aligned, and reversible`, async ({
+    page
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const evidence = await page.evaluate(async ({ width }) => {
+      const runtimeUrl =
+        "/src/rendering/place-value-addition-runtime.ts";
+      const sharedDomUrl =
+        "/src/rendering/place-value-addition-shared-dom.ts";
+      const clockUrl = "/src/reader/runtime/playback-clock.ts";
+      const runtime = await import(/* @vite-ignore */ runtimeUrl);
+      const sharedDom = await import(/* @vite-ignore */ sharedDomUrl);
+      const clock = await import(/* @vite-ignore */ clockUrl);
+      const session = runtime.createKpPlaceValueAdditionRuntimeSession();
+      const sample = (
+        progress: number,
+        previousProgress: number,
+        sequence: number
+      ) => runtime.sampleKpPlaceValueAdditionRuntime({
+        session,
+        clock: clock.createKpReaderClockSample({
+          source: "controls",
+          progress,
+          previousProgress,
+          sequence
+        }),
+        viewportWidth: width,
+        selectedView: "written"
+      });
+      const dom = sharedDom.createKpPlaceValueAdditionSharedDom({
+        document,
+        session,
+        initialFrame: sample(0, 0, 0)
+      });
+      const app = document.querySelector<HTMLElement>("#app");
+      if (app !== null) app.style.display = "none";
+      document.body.append(dom.root);
+      Object.assign(document.body.style, {
+        margin: "0",
+        minHeight: "100vh",
+        display: "grid",
+        placeItems: "center"
+      });
+      await document.fonts.ready;
+
+      const writtenRoot = dom.writtenRoot as HTMLElement;
+      const initialGeometry = new Map(
+        [
+          "digit.first.ones",
+          "digit.second.ones",
+          "operator.add"
+        ].map((id) => {
+          const element = writtenRoot.querySelector<HTMLElement>(
+            `[data-kp-semantic-entity-id="${id}"]`
+          )!;
+          const rect = element.getBoundingClientRect();
+          return [id, {
+            left: rect.left,
+            top: rect.top,
+            width: rect.width,
+            height: rect.height
+          }] as const;
+        })
+      );
+      const evaluation = () => document.querySelector<HTMLElement>(
+        "[data-kp-place-value-ones-evaluation]"
+      )!;
+      const ownerSignature = () => [
+        ...evaluation().querySelectorAll<HTMLElement>(
+          "[data-kp-equation-material-owner-id]"
+        )
+      ].map((owner) => ({
+        id: owner.dataset["kpEquationMaterialOwnerId"]!,
+        semantic:
+          owner.dataset["kpEquationMaterialSemanticEntityId"] ?? "",
+        opacity: getComputedStyle(owner).opacity,
+        transform: getComputedStyle(owner).transform,
+        text: owner.textContent?.trim() ?? ""
+      })).sort((left, right) => left.id.localeCompare(right.id));
+
+      dom.apply(sample(0.1, 0, 1));
+      const sourceGeometry = new Map(
+        [
+          ...evaluation().querySelectorAll<HTMLElement>(
+            '[data-kp-place-value-operation-endpoint="source"] ' +
+            "[data-kp-place-value-native-root]"
+          )
+        ].filter((element) =>
+          initialGeometry.has(element.dataset["kpSemanticEntityId"] ?? "")
+        ).map((element) => {
+          const rect = element.getBoundingClientRect();
+          return [element.dataset["kpSemanticEntityId"]!, {
+            left: rect.left,
+            top: rect.top,
+            width: rect.width,
+            height: rect.height
+          }] as const;
+        })
+      );
+
+      dom.apply(sample(0.175, 0.1, 2));
+      const forward = ownerSignature();
+      const midpoint = {
+        phaseId: evaluation().dataset["kpOperationEvaluationPhaseId"],
+        direction:
+          evaluation().dataset["kpOperationEvaluationDirection"],
+        endpointOpacities: [
+          ...evaluation().querySelectorAll<HTMLElement>(
+            "[data-kp-place-value-operation-endpoint]"
+          )
+        ].map((element) => getComputedStyle(element).opacity),
+        visibleOwnerTexts: forward
+          .filter(({ opacity }) => opacity === "1")
+          .map(({ text }) => text)
+      };
+
+      dom.apply(sample(0.249, 0.175, 3));
+      dom.apply(sample(0.175, 0.249, 4));
+      const rewind = ownerSignature();
+
+      dom.apply(sample(0.25, 0.175, 5));
+      const endpoint = {
+        sourceOpacity: getComputedStyle(
+          evaluation().querySelector<HTMLElement>(
+            '[data-kp-place-value-operation-endpoint="source"]'
+          )!
+        ).opacity,
+        targetOpacity: getComputedStyle(
+          evaluation().querySelector<HTMLElement>(
+            '[data-kp-place-value-operation-endpoint="target"]'
+          )!
+        ).opacity,
+        targetVisible: [
+          ...evaluation().querySelectorAll<HTMLElement>(
+            '[data-kp-place-value-operation-endpoint="target"] ' +
+            "[data-kp-place-value-native-root]"
+          )
+        ].filter((element) =>
+          element.dataset["kpVisibility"] === "visible" &&
+          getComputedStyle(element).opacity === "1"
+        ).map((element) => ({
+          id: element.dataset["kpSemanticEntityId"],
+          text:
+            element.querySelector<HTMLElement>(".katex-html")
+              ?.textContent?.trim() ?? ""
+        }))
+      };
+      return {
+        initialGeometry: [...initialGeometry],
+        sourceGeometry: [...sourceGeometry],
+        forward,
+        rewind,
+        midpoint,
+        endpoint,
+        programId:
+          evaluation().dataset["kpOperationEvaluationProgramId"]
+      };
+    }, viewport);
+
+    expect(evidence.programId).toBe(
+      "kp.executable-program.operation-evaluation"
+    );
+    expect(evidence.sourceGeometry).toHaveLength(3);
+    for (const [id, initial] of evidence.initialGeometry) {
+      const source = evidence.sourceGeometry.find(
+        ([sourceId]) => sourceId === id
+      )?.[1];
+      expect(source, `missing source geometry ${id}`).toBeDefined();
+      expect(Math.abs(source!.left - initial.left)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(source!.top - initial.top)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(source!.width - initial.width)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(source!.height - initial.height)).toBeLessThanOrEqual(
+        0.5
+      );
+    }
+    expect(evidence.forward.length).toBeGreaterThan(0);
+    expect(
+      evidence.forward.every(({ opacity }) =>
+        opacity === "0" || opacity === "1"
+      )
+    ).toBe(true);
+    expect(
+      evidence.forward.some(({ opacity, transform }) =>
+        opacity === "1" && transform !== "none"
+      )
+    ).toBe(true);
+    expect(evidence.midpoint.endpointOpacities.every((opacity) =>
+      opacity === "0" || opacity === "1"
+    )).toBe(true);
+    expect(evidence.midpoint.direction).toBe("forward");
+    expect(evidence.midpoint.phaseId).toBeTruthy();
+    expect(
+      evidence.midpoint.visibleOwnerTexts.join("")
+    ).toContain("8");
+    expect(
+      evidence.midpoint.visibleOwnerTexts.join("")
+    ).toContain("6");
+    expect(
+      evidence.midpoint.visibleOwnerTexts.join("")
+    ).toContain("+");
+    expect(evidence.rewind).toEqual(evidence.forward);
+    expect(evidence.endpoint.sourceOpacity).toBe("0");
+    expect(evidence.endpoint.targetOpacity).toBe("1");
+    expect(evidence.endpoint.targetVisible).toEqual(
+      expect.arrayContaining([
+        {
+          id: "evaluation.ones.total.tens",
+          text: "1"
+        },
+        {
+          id: "evaluation.ones.total.ones",
+          text: "4"
+        }
+      ])
+    );
   });
 }
 

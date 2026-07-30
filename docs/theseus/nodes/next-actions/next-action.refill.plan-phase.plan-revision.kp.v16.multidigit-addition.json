@@ -375,6 +375,41 @@
       "scope": "s14 shared runtime session",
       "checkedAt": "2026-07-30T17:33:21.850Z",
       "notes": "64 focused tests and 18 three-browser wide/phone checks pass. One nominal session owns one reader-clock authority, one trace, one immutable frame, both projections, and one mounted host; seek, rewind, and phone view switches reuse all 12 native roots and 31 SVG nodes with one renderer-session identity."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "failed",
+      "scope": "s15-initial-browser-integration",
+      "checkedAt": "2026-07-30T17:53:47.050Z",
+      "notes": "Found and repaired missing persistent material layer and missing native-root authority on synthesized result digits; no per-digit geometry exceptions added."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s15 focused semantic and motif contract",
+      "checkedAt": "2026-07-30T17:53:58.291Z",
+      "notes": "67 of 67 checks pass, including canonical operation-evaluation reuse, exhaustive 8/6/plus roles, and inverse forward/rewind phase order."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "passed",
+      "scope": "s15 cross-browser ones choreography",
+      "checkedAt": "2026-07-30T17:53:59.250Z",
+      "notes": "24 of 24 Chromium, Firefox, and WebKit checks pass at wide and phone widths: source geometry matches the canonical stack within 0.5px, all owners are binary opaque, real transforms occur, 8/6/plus participate, 1/4 receive native endpoint ownership, and direct rewind reproduces the same owner frames."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15 static executable routing",
+      "checkedAt": "2026-07-30T17:54:00.231Z",
+      "notes": "All app, node, test, protocol-dependent, and domain projects pass after explicitly narrowing the place-value program to the operation-evaluation executable branch."
+    },
+    {
+      "command": "npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "s15 architecture and type cost",
+      "checkedAt": "2026-07-30T17:54:01.135Z",
+      "notes": "Architecture passes with 380 semantic-animation files, zero frozen exceptions, and three source-derived motif consumers; inference remains within the frozen 48471 type and 61210 instantiation budget at 2.34 seconds."
     }
   ],
   "expectedLearning": [

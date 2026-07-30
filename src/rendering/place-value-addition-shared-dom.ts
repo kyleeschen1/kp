@@ -10,6 +10,9 @@ import {
   type KpPlaceValueAdditionRuntimeFrame,
   type KpPlaceValueAdditionRuntimeSession
 } from "./place-value-addition-runtime.ts";
+import {
+  createKpPlaceValueOnesEvaluationDom
+} from "./place-value-addition-ones-evaluation.ts";
 
 export interface KpPlaceValueAdditionSharedDom {
   readonly root: HTMLElement;
@@ -47,9 +50,19 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     projection: input.session.baseTen,
     initialStateId: input.initialFrame.baseTen.stable.stateId
   });
-  written.root.dataset["kpPlaceValueView"] = "written";
+  const writtenHost = input.document.createElement("div");
+  writtenHost.dataset["kpPlaceValueView"] = "written";
+  writtenHost.style.cssText =
+    "display:grid;position:relative;width:100%;place-items:center";
+  const onesEvaluation = createKpPlaceValueOnesEvaluationDom({
+    document: input.document,
+    projection: input.session.written,
+    evaluation: input.session.onesEvaluation
+  });
+  onesEvaluation.root.style.display = "none";
+  writtenHost.append(written.root, onesEvaluation.root);
   baseTen.root.dataset["kpPlaceValueView"] = "base-ten";
-  root.append(written.root, baseTen.root);
+  root.append(writtenHost, baseTen.root);
 
   const apply = (frame: KpPlaceValueAdditionRuntimeFrame): void => {
     if (
@@ -64,8 +77,23 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     );
     baseTen.setState(frame.baseTen.stable.stateId);
     const visible = new Set(frame.responsive.visibleViews);
+    const writtenVisible = visible.has("written");
+    const onesActive =
+      frame.beat.id === "beat.place-value.evaluate-ones" ||
+      frame.beat.id === "beat.place-value.exchange-ones";
+    writtenHost.style.display = writtenVisible ? "grid" : "none";
     written.root.style.display =
-      visible.has("written") ? "grid" : "none";
+      writtenVisible && !onesActive ? "grid" : "none";
+    onesEvaluation.root.style.display =
+      writtenVisible && onesActive ? "grid" : "none";
+    if (writtenVisible && onesActive) {
+      onesEvaluation.apply(
+        frame.beat.id === "beat.place-value.evaluate-ones"
+          ? frame.beatProgress
+          : 1,
+        frame.clock.direction
+      );
+    }
     baseTen.root.style.display =
       visible.has("base-ten") ? "block" : "none";
     root.style.gridTemplateColumns =
