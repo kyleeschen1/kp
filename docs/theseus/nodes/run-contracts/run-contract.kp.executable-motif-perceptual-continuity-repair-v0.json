@@ -712,6 +712,76 @@
       "scope": "s10 development review isolation",
       "checkedAt": "2026-07-30T00:40:07.474Z",
       "notes": "Production closure passed across 247 files and seven forbidden development-review markers."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s11 renderer-neutral perceptual continuity contract",
+      "checkedAt": "2026-07-30T00:54:59.960Z",
+      "notes": "152 of 152 focused presentation, executable-program, continuity, ownership, endpoint, and adversarial-boundary checks passed; the new deterministic evidence matrix covers all 72 declared trace combinations."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s11 contract and negative type fixtures",
+      "checkedAt": "2026-07-30T00:55:06.258Z",
+      "notes": "All application, node, test, and domain TypeScript projects pass; forbidden topology and raw raster-history fields are rejected at compile time."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s11 continuity evidence inference budget",
+      "checkedAt": "2026-07-30T00:55:12.675Z",
+      "notes": "Inference contracts passed at 46293 types, 57910 instantiations, and 2.89 seconds; the first timing-only run was load-sensitive at 5.49 seconds but produced identical passing type and instantiation counts."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "failed",
+      "scope": "s11 inherited architecture baseline",
+      "checkedAt": "2026-07-30T00:55:26.556Z",
+      "notes": "The command exits on the same pre-existing stale legacy.main.query-view-routing exception recorded in s10; no s11 contract or test path participates in that exception."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s11 production build closure",
+      "checkedAt": "2026-07-30T00:55:34.868Z",
+      "notes": "All TypeScript projects and the Vite production build pass with the evidence-only contract remaining outside the renderer runtime."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s11 exact-fraction preservation",
+      "checkedAt": "2026-07-30T00:55:40.130Z",
+      "notes": "95 of 95 exact semantic, four-view, presentation, responsive, runtime, accessibility, and promotion-honesty checks passed."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s11 impact-selected neighboring visual preservation",
+      "checkedAt": "2026-07-30T00:55:46.460Z",
+      "notes": "All 39 stable desktop and phone linear-equation baseline states captured successfully; s11 changes only evidence contracts, not rendering."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s11 reader production closure",
+      "checkedAt": "2026-07-30T00:55:51.878Z",
+      "notes": "All 11 reader manifest routes retain their expected build-only closure."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s11 reader route budgets",
+      "checkedAt": "2026-07-30T00:56:02.832Z",
+      "notes": "All 11 reader routes remain within the five-percent HTML and transitive runtime growth limits."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s11 control-plane integrity",
+      "checkedAt": "2026-07-30T00:56:37.980Z",
+      "notes": "Validated 832 nodes and 14446 events after completing the perceptual-continuity contract slice."
     }
   ],
   "allowedWork": [
@@ -805,7 +875,8 @@
     {
       "id": "s11",
       "title": "define-perceptual-continuity-contract",
-      "status": "planned"
+      "summary": "Added one nominal renderer-neutral perceptual-continuity contract bound to the exact minted executable motif program. It fixes motif visible-ink floors, intentional-vanish authority, normalized adjacent geometry and raster budgets, total unambiguous atomic ownership, exact native source and target paint metrics, and a bounded 72-trace direction/seek/replay/browser/viewport/DPR evidence matrix. Program roles and lineage remain semantic truth; measurements are current-frame evidence only and raster history can never author semantics. Runtime and compile-time adversarial cases reject renderer topology, DOM, pixel-history authority, copied contracts, program drift, blank paint, jumps, ownership gaps, endpoint drift, and phase drift.",
+      "status": "complete"
     },
     {
       "id": "s12",
