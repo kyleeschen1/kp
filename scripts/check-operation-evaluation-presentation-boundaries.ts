@@ -16,6 +16,8 @@ const canonicalSceneAdapter =
   "src/reader/renderers/equation-scene-compositor-adapter.ts";
 const canonicalCompositor =
   "src/rendering/native-katex-scene-compositor.ts";
+const callerConformanceMint =
+  "src/architecture/operation-evaluation-caller-conformance.ts";
 const readerPlanKinds = [
   "default-motion",
   "visual-motif",
@@ -120,13 +122,37 @@ if (!compositorSource.includes("applyKpNativeKatexOperationChoreography")) {
   );
 }
 
+const callerConformanceSource = readFileSync(
+  join(projectRoot, callerConformanceMint),
+  "utf8"
+);
+// A persistent boundary check keeps the conformance artifact source-derived;
+// its behavioral tests then prove those imports execute instead of merely
+// trusting a caller-name list or a previously generated snapshot.
+for (const requiredSource of [
+  "createKpOnePlusTwoEvaluationAnimationAsset",
+  "createKpFivePlusTwoEvaluationAnimationAsset",
+  "createKpThreeSixthsEvaluationAnimationAsset",
+  "projectKpReaderEquationRenderPlan",
+  "compileKpExecutableSuccessorMotifProgramAdapter",
+  "resolveKpOperationEvaluationPresentationRoute",
+  "verifiedCallerConformanceManifests"
+]) {
+  if (!callerConformanceSource.includes(requiredSource)) {
+    violations.push(
+      `${callerConformanceMint} must derive conformance through ` +
+      `${requiredSource}, not names or snapshots.`
+    );
+  }
+}
+
 if (violations.length > 0) {
   violations.forEach((violation) => console.error(violation));
   process.exitCode = 1;
 } else {
   console.log(
     "operation-evaluation presentation boundary passed " +
-    `(${canonicalCallers.length} certified callers)`
+    `(${canonicalCallers.length} motif consumers; source-derived caller mint)`
   );
 }
 

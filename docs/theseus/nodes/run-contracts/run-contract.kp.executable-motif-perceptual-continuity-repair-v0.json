@@ -1090,6 +1090,62 @@
       "scope": "s18 durable control validation",
       "checkedAt": "2026-07-30T04:59:02.849Z",
       "notes": "Workspace is valid with 832 nodes and 14509 events after quotient evidence was recorded."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s19 initial conformance typing",
+      "checkedAt": "2026-07-30T05:11:04.515Z",
+      "notes": "The first compile found one route-narrowing and three indexed-reference typing errors in the new manifest only; explicit non-null reference anchors and one post-validation route refinement repaired them before final gates."
+    },
+    {
+      "command": "node focused operation-evaluation conformance exemplar and catalog tests",
+      "status": "passed",
+      "scope": "s19 source-derived three-caller certificate",
+      "checkedAt": "2026-07-30T05:11:05.567Z",
+      "notes": "15 of 15 pass. Actual 1+2, 5+2, and 3/6 assets compile through the reader and adapter; names, copied JSON, and incomplete lineage cannot mint conformance."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s19 operation presentation closure",
+      "checkedAt": "2026-07-30T05:11:06.499Z",
+      "notes": "174 of 174 pass, including positive forward/rewind phase telemetry, exact role and lineage coverage, shared program/compiler/continuity identity, and honest static fallback."
+    },
+    {
+      "command": "npm run typecheck; npm run build",
+      "status": "passed",
+      "scope": "s19 production and type closure",
+      "checkedAt": "2026-07-30T05:11:07.376Z",
+      "notes": "All TypeScript projects and the Vite production build pass with the conformance mint remaining outside production runtime entrypoints."
+    },
+    {
+      "command": "direct semantic reader semantic animation operation boundary checks; npm run check:inference",
+      "status": "passed",
+      "scope": "s19 architecture and inference closure",
+      "checkedAt": "2026-07-30T05:11:08.266Z",
+      "notes": "Reader boundaries pass 131 files; animation boundaries pass 371 files with zero frozen exceptions; the operation boundary requires a source-derived mint; inference passes at 48460 types and 61210 instantiations."
+    },
+    {
+      "command": "npm run check:architecture; npm test",
+      "status": "failed",
+      "scope": "s19 inherited aggregate architecture sentinel",
+      "checkedAt": "2026-07-30T05:11:09.143Z",
+      "notes": "Both aggregate commands stop before slice checks on the pre-existing stale legacy.main.query-view-routing exception expecting removed ftc-tutorial query routing. All downstream architecture gates pass directly."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s19 neighboring exact-fraction preservation",
+      "checkedAt": "2026-07-30T05:11:10.030Z",
+      "notes": "95 of 95 exact-fraction checks pass before the migration slices begin."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s19 durable control validation",
+      "checkedAt": "2026-07-30T05:11:26.920Z",
+      "notes": "Workspace is valid with 832 nodes and 14519 events after the source-derived conformance evidence was recorded."
     }
   ],
   "allowedWork": [
@@ -1231,7 +1287,8 @@
     {
       "id": "s19",
       "title": "certify-three-evaluation-callers",
-      "status": "planned"
+      "summary": "Added one nominal source-derived conformance manifest that recompiles the actual 1+2, 5+2, and 3/6 assets through the semantic reader, pinned registry compilers, shared continuity program, and exhaustive native adapter in both directions. It proves exact source and target selector roles, unique total material lineage with catalyst exclusion, sampled positive phase fidelity, shared program/route object identity, continuous opaque paint and native endpoints, and explicit-static unsupported fallback. Names, incomplete assets, copied JSON, generic labels, or snapshots cannot mint authority; 174 operation checks, typecheck, inference, build, downstream architecture, and 95 neighboring exact-fraction checks pass.",
+      "status": "complete"
     },
     {
       "id": "s20",
