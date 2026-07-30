@@ -104,7 +104,9 @@
     {
       "id": "s08",
       "title": "build-immutable-addition-trace",
-      "status": "planned"
+      "summary": "Built one sealed immutable trace containing seven right-to-left states and seven causally adjacent beats. It owns the two carry lineages, a certified no-exchange hundreds evaluation, exact source/result equality, deterministic contributor/output/proof IDs, and fixed reference order without presentation or renderer data.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s09",

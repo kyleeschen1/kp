@@ -235,6 +235,34 @@
       "scope": "broad",
       "checkedAt": "2026-07-30T16:32:07.120Z",
       "notes": "Architecture and inference budgets pass after adding the generic regrouping law and one semantic exemplar chain."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "failed",
+      "scope": "s08-initial",
+      "checkedAt": "2026-07-30T16:37:18.111Z",
+      "notes": "Strict indexed access correctly rejected unchecked visual-reference and state indexing; the compiler now validates the seven-beat reference cardinality and uses a fixed state tuple."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-30T16:37:19.075Z",
+      "notes": "29/29 tests pass for seven immutable states, causal beat adjacency, carry identity, exact final hundreds evaluation, and sealed trace authority."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-30T16:37:19.942Z",
+      "notes": "All projects pass with explicit seven-beat runtime cardinality validation and tuple-safe state access."
+    },
+    {
+      "command": "npm run check:architecture and npm run check:inference",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-30T16:37:20.808Z",
+      "notes": "Architecture and inference budgets pass with one domain evaluation proof and one semantic trace; no renderer or runtime was added."
     }
   ],
   "expectedLearning": [

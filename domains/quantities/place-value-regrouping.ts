@@ -9,6 +9,7 @@ import {
 import {
   createKpDecimalDigit,
   type KpBaseTenPlace,
+  type KpBaseTenPlaceId,
   type KpDecimalDigit,
   type KpNextBaseTenPlace
 } from "./place-value.ts";
@@ -37,10 +38,10 @@ export interface KpCarriedPlaceValueDigit<
 }
 
 export type KpPlaceValueSourceContributor<
-  Place extends "ones" | "tens"
+  Place extends KpBaseTenPlaceId
 > =
   | KpPlaceValueComponent<string, Place, "addend">
-  | KpCarriedPlaceValueDigit<Extract<Place, "tens">>;
+  | KpCarriedPlaceValueDigit<Extract<Place, "tens" | "hundreds">>;
 
 export interface KpCarryRemainderLineage<
   From extends "ones" | "tens" = "ones" | "tens",
@@ -63,7 +64,9 @@ export interface KpCarryRemainderLineage<
   readonly [kpCarryRemainderLineageBrand]: `${From}->${To}`;
 }
 
-function isSourceContributor<Place extends "ones" | "tens">(
+export function isKpPlaceValueSourceContributor<
+  Place extends KpBaseTenPlaceId
+>(
   value: unknown,
   expectedPlaceId: Place
 ): value is KpPlaceValueSourceContributor<Place> {
@@ -92,7 +95,10 @@ export function certifyKpCarryRemainderLineage<
   if (
     contributors.length < 2 ||
     !contributors.every((candidate) =>
-      isSourceContributor(candidate, exchange.adjacency.from.id)
+      isKpPlaceValueSourceContributor(
+        candidate,
+        exchange.adjacency.from.id
+      )
     )
   ) {
     throw new Error(
