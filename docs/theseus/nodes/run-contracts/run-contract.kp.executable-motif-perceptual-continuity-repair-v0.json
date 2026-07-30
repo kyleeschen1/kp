@@ -985,6 +985,13 @@
       "scope": "s16 pre-checkpoint control-plane integrity",
       "checkedAt": "2026-07-30T04:22:10.288Z",
       "notes": "Validated 832 nodes and 14484 events. Slice 16 remains in progress and slices 17 through 26 remain blocked behind explicit human approval."
+    },
+    {
+      "command": "human visual review of executable one-plus-two checkpoint",
+      "status": "passed",
+      "scope": "s16 canonical executable operation-evaluation approval",
+      "checkedAt": "2026-07-30T04:28:58.989Z",
+      "notes": "User explicitly approved the production-primary 1 + 2 to 3 executable runtime shown in the Animation Library. This authorizes unchanged-program generalization to 5 + 2 and 3/6 while preserving the approved opaque gather-combine-recognize choreography."
     }
   ],
   "allowedWork": [
@@ -1108,8 +1115,8 @@
     {
       "id": "s16",
       "title": "human-evaluation-program-checkpoint",
-      "summary": "Present the actual executable 1 + 2 to 3 runtime as the primary Animation Library review object. Keep the frozen reference available only as development evidence, preserve one player and Review owner, verify natural playback scrub rewind replay wide phone and all three browsers, then stop for explicit human visual approval without generalizing another caller.",
-      "status": "in-progress"
+      "summary": "Human-approved the production-primary executable 1 + 2 to 3 checkpoint in the existing Animation Library. The accepted runtime preserves opaque contributor gathering, geometric co-presence, exact native endpoints, stable typography, shared seek/rewind/replay behavior, wide/phone containment, and one Review owner across the 45-case three-browser matrix. The frozen reference remains diagnostic only; approval unlocks unchanged-program caller generalization.",
+      "status": "complete"
     },
     {
       "id": "s17",
