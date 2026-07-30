@@ -125,7 +125,9 @@
     {
       "id": "s11",
       "title": "add-adversarial-conformance",
-      "status": "planned"
+      "summary": "Sealed one nominal semantic-foundation certificate that requires the exact trace and exhaustive presentation plan, explicitly withholds promotion, and names copied authority, invalid exchange/lineage, missing catalyst, fade, decorative-only, and false-status failures before projection work begins.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s12",
