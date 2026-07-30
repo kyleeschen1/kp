@@ -120,9 +120,17 @@ test("canonical scene core exposes one ephemeral renderer session contract", asy
     /syncKpEquationMaterialLayer|(?:sourceRoot|targetRoot)\.style/
   );
   assert.doesNotMatch(exactSurface, /symbolicPlayback\.dispose/);
+  assert.doesNotMatch(
+    exactSurface,
+    /reason: "scene-replaced"/
+  );
   assert.match(
     exactSurface,
-    /reason: "scene-replaced",\s+structuralSuccession: "retire-preserving-paint"/
+    /kind: "exact-symbolic-sequence-playable"/
+  );
+  assert.match(
+    exactSurface,
+    /previous\.targetRoot !== next\.sourceRoot/
   );
 });
 

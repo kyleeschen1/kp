@@ -145,6 +145,49 @@ test("fold and view disclosure preserve one live executable session", async ({
   });
 });
 
+test("hidden phone projections defer native paint until the symbolic stage is visible", async ({
+  page
+}) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`/?animation=${descriptorId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  await expect.poll(() => player.locator(
+    committedSceneSelector
+  ).getAttribute("data-kp-exact-symbolic-status")).toBe("ready");
+
+  await player.locator(
+    "[data-kp-exact-active-view=\"number-line\"]"
+  ).click();
+  await player.locator("[data-action=\"seek-editor-animation\"]")
+    .fill("0.9");
+  await expect(player.locator(committedSceneSelector)).toHaveAttribute(
+    "data-kp-exact-symbolic-suspended",
+    "hidden"
+  );
+
+  await player.locator(
+    "[data-kp-exact-active-view=\"symbolic\"]"
+  ).click();
+  await expect(player.locator(committedSceneSelector)).not.toHaveAttribute(
+    "data-kp-exact-symbolic-suspended",
+    "hidden"
+  );
+  await expect.poll(() => player.evaluate((root) => {
+    const stage = root.querySelector<HTMLElement>(
+      "[data-kp-exact-symbolic-scene]" +
+      "[data-kp-prepared-scene-state=\"committed\"]"
+    );
+    return stage?.dataset["kpExactSymbolicSegment"] ===
+      root.dataset["kpExactSymbolicSegment"];
+  })).toBe(true);
+  expect(pageErrors).toEqual([]);
+});
+
 test("checkpoint, fold, pin, representation, and seek controls round-trip", async ({
   page
 }) => {

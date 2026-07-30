@@ -1323,7 +1323,7 @@
     {
       "id": "s25",
       "title": "human-exact-fraction-checkpoint",
-      "summary": "Rejected checkpoint repaired without changing approved motif, geometry, mathematics, or concrete-view identity. Native renderer sessions now expose only typed paint-preserving retirement; generic lifecycle cleanup cannot reset endpoints or clear transient paint. A browser audit compares every committed scene immediately before removal with detached post-retirement paint. Exact fraction 24/24 and operation evaluation 54/54 pass across Chromium Firefox and WebKit. Awaiting renewed human visual approval before s25 completion.",
+      "summary": "Repair implemented for human checkpoint: exact fraction now precompiles one six-segment symbolic sequence into one persistent native stage, proves adjacent segments share the same KaTeX endpoint root, defers hidden-phone paint measurement, and never replaces endpoint DOM during playback. Awaiting renewed human visual approval.",
       "status": "in-progress"
     },
     {

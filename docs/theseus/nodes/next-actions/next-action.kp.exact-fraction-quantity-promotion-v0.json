@@ -725,6 +725,48 @@
       "scope": "rejected-checkpoint repair control integrity",
       "checkedAt": "2026-07-30T13:24:27.424Z",
       "notes": "Valid 832 nodes and 14557 events; slice 25 remains in progress pending renewed human visual approval"
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s25 persistent symbolic sequence semantics",
+      "checkedAt": "2026-07-30T14:58:32.160Z",
+      "notes": "100 of 100 exact quantity semantic, motif, projection, accessibility, and promotion-readiness checks passed."
+    },
+    {
+      "command": "npm run test:browser:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s25 persistent stage and cross-browser checkpoint",
+      "checkedAt": "2026-07-30T14:58:33.246Z",
+      "notes": "51 of 51 Chromium, Firefox, and WebKit checks passed. Full natural playback traverses all six symbolic segments with one stage, six retained KaTeX endpoint nodes, zero endpoint removals, exact endpoint raster settlement, bounded scrubbing, phone hidden-view suspension, Review, accessibility, and resource release."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s25 typed sequence lifecycle and adjacency",
+      "checkedAt": "2026-07-30T14:58:34.092Z",
+      "notes": "Application, Node, test, protocol-dependent, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s25 production build",
+      "checkedAt": "2026-07-30T14:58:34.954Z",
+      "notes": "Typecheck and Vite production build pass with the exact-quantity capability remaining lazy."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "s25 broad regression audit",
+      "checkedAt": "2026-07-30T14:58:35.788Z",
+      "notes": "2982 of 2985 checks passed. The only failures are the same three pre-existing s03 debts: HTML escaping inventory 22 versus 21, native scene core 141543 versus 136000 bytes, and linear provider domain import. The new persistent-sequence convergence assertion passes."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s25 control-plane integrity",
+      "checkedAt": "2026-07-30T14:58:36.615Z",
+      "notes": "Validated 832 nodes and 14562 events with s25 still in progress for human review."
     }
   ],
   "progress": {

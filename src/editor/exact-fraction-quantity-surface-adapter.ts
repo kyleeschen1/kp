@@ -41,6 +41,9 @@ import {
   createKpEquationFontReadiness
 } from "../rendering/equation-font-readiness.ts";
 import {
+  syncKpEquationMaterialLayer
+} from "../rendering/equation-material-layer-dom.ts";
+import {
   createKpCanonicalNativeKatexSceneSession,
   projectKpNativeKatexSemanticPaintRelations,
   type KpNativeKatexRendererSession
@@ -84,14 +87,8 @@ interface ExactSurfaceSession {
   readonly runtime: KpExactFractionQuantityRuntimeSession;
   libraryState: KpExactFractionQuantityLibraryState;
   initializedFromRoute: boolean;
-  symbolicGeneration: number;
-  symbolicMotionSegmentId?: string | undefined;
-  symbolicPendingProgress: number;
-  symbolicActiveStage?: HTMLElement | undefined;
-  symbolicPlayback?: KpNativeKatexRendererSession | undefined;
-  symbolicFontReadiness?: ReturnType<
-    typeof createKpEquationFontReadiness
-  > | undefined;
+  symbolicSequence?: ExactSymbolicSequenceState | undefined;
+  symbolicPendingFrame?: ExactPendingSymbolicFrame | undefined;
   lastFrame?: KpExactFractionQuantityRuntimeFrame | undefined;
   sampleCount: number;
   repeatedFrameReuseCount: number;
@@ -100,6 +97,61 @@ interface ExactSurfaceSession {
   disposed: boolean;
   lastUrlWriteMs: number;
 }
+
+interface ExactPendingSymbolicFrame {
+  readonly segment: KpExactFractionSymbolicMotionSegment;
+  readonly segmentProgress: number;
+  readonly invocationId: string;
+  readonly dispatch:
+    KpExactFractionQuantityRuntimeFrame["symbolicMotion"]["dispatch"];
+}
+
+interface ExactPreparedSymbolicSegment {
+  readonly kind: "exact-prepared-symbolic-segment";
+  readonly segment: KpExactFractionSymbolicMotionSegment;
+  readonly invocationId: string;
+  readonly dispatch:
+    KpExactFractionQuantityRuntimeFrame["symbolicMotion"]["dispatch"];
+  readonly sourceRoot: HTMLElement;
+  readonly targetRoot: HTMLElement;
+  readonly playback?: KpNativeKatexRendererSession | undefined;
+}
+
+interface ExactSymbolicSequencePreparing {
+  readonly kind: "exact-symbolic-sequence-preparing";
+  readonly stage: HTMLElement;
+  readonly candidate: ReturnType<typeof prepareKpNativeSceneCandidate>;
+  readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
+  readonly endpointRoots:
+    ReadonlyMap<string, HTMLElement>;
+}
+
+interface ExactSymbolicSequencePlayable {
+  readonly kind: "exact-symbolic-sequence-playable";
+  readonly stage: HTMLElement;
+  readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
+  readonly endpointRoots:
+    ReadonlyMap<string, HTMLElement>;
+  readonly segments:
+    ReadonlyMap<string, ExactPreparedSymbolicSegment>;
+  activeSegmentId?: string | undefined;
+}
+
+interface ExactSymbolicSequenceFailed {
+  readonly kind: "exact-symbolic-sequence-failed";
+  readonly stage: HTMLElement;
+  readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
+  readonly error: string;
+}
+
+type ExactSymbolicSequenceState =
+  | ExactSymbolicSequencePreparing
+  | ExactSymbolicSequencePlayable
+  | ExactSymbolicSequenceFailed;
+
+type ExactSymbolicStagePaintability =
+  | { readonly kind: "exact-symbolic-stage-paintable" }
+  | { readonly kind: "exact-symbolic-stage-suspended-hidden" };
 
 const sessions = new WeakMap<HTMLElement, ExactSurfaceSession>();
 
@@ -121,8 +173,6 @@ KpEditorAnimationSurfaceAdapter = {
         runtime: createKpExactFractionQuantityRuntimeSession(),
         libraryState: routeState,
         initializedFromRoute: false,
-        symbolicGeneration: 0,
-        symbolicPendingProgress: 0,
         sampleCount: 0,
         repeatedFrameReuseCount: 0,
         symbolicPlaybackCreatedCount: 0,
@@ -247,6 +297,17 @@ function mountSurface(
       });
       player.dataset["kpExactActiveRepresentation"] = activeView;
       syncActiveView(slot, session.libraryState);
+      const sequence = session.symbolicSequence;
+      if (
+        activeView === "symbolic" &&
+        sequence?.kind === "exact-symbolic-sequence-playable" &&
+        session.symbolicPendingFrame !== undefined
+      ) {
+        applyPreparedSymbolicSequence(
+          sequence,
+          session.symbolicPendingFrame
+        );
+      }
       if (session.lastFrame !== undefined) {
         syncAccessibleSurface(
           slot,
@@ -408,166 +469,355 @@ function syncSymbolicScene(
   frame: KpExactFractionQuantityRuntimeFrame
 ): void {
   const { segment, segmentProgress } = frame.symbolicMotion;
-  session.symbolicPendingProgress = segmentProgress;
-  if (session.symbolicMotionSegmentId !== segment.id) {
-    session.symbolicMotionSegmentId = segment.id;
-    const generation = ++session.symbolicGeneration;
-    void prepareSymbolicScene({
-      slot,
-      session,
-      segment,
-      generation,
-      invocationId: frame.visibleOperation.invocationId,
-      dispatch: frame.symbolicMotion.dispatch
-    });
+  const pendingFrame: ExactPendingSymbolicFrame = Object.freeze({
+    segment,
+    segmentProgress,
+    invocationId: frame.visibleOperation.invocationId,
+    dispatch: frame.symbolicMotion.dispatch
+  });
+  session.symbolicPendingFrame = pendingFrame;
+  const sequence = session.symbolicSequence;
+  if (sequence === undefined) {
+    void prepareSymbolicSequence({ slot, session });
     return;
   }
-  session.symbolicPlayback?.apply(segmentProgress);
+  if (sequence.kind !== "exact-symbolic-sequence-playable") return;
+  applyPreparedSymbolicSequence(sequence, pendingFrame);
 }
 
-async function prepareSymbolicScene(input: {
+async function prepareSymbolicSequence(input: {
   readonly slot: HTMLElement;
   readonly session: ExactSurfaceSession;
-  readonly segment: KpExactFractionSymbolicMotionSegment;
-  readonly generation: number;
-  readonly invocationId: string;
-  readonly dispatch:
-    KpExactFractionQuantityRuntimeFrame["symbolicMotion"]["dispatch"];
 }): Promise<void> {
   const host = requiredView(input.slot, "symbolic");
-  const sourceEndpoint = requireEndpoint(
-    input.session.runtime,
-    input.segment.sourceStateId
-  );
-  const targetEndpoint = requireEndpoint(
-    input.session.runtime,
-    input.segment.targetStateId
-  );
   const stage = host.ownerDocument.createElement("div");
   stage.className = "kp-exact-symbolic-scene";
   stage.dataset["kpExactSymbolicScene"] = "";
-  stage.dataset["kpExactSymbolicSegment"] = input.segment.id;
-  stage.dataset["kpExactMotifInvocationId"] = input.invocationId;
+  stage.dataset["kpExactSymbolicSequence"] = "persistent";
   stage.innerHTML = `
-    <div class="kp-exact-symbolic-material" data-kp-editor-equation-material-layer aria-hidden="true"></div>
-    <div class="kp-exact-symbolic-endpoint" data-kp-exact-symbolic-source>
-      ${renderSelectorAnnotatedLatexToHtml(sourceEndpoint.annotated)}
-    </div>
-    <div class="kp-exact-symbolic-endpoint" data-kp-exact-symbolic-target>
-      ${renderSelectorAnnotatedLatexToHtml(targetEndpoint.annotated)}
-    </div>`;
+    <div class="kp-exact-symbolic-material" data-kp-editor-equation-material-layer aria-hidden="true"></div>`;
+  const endpointRoots = new Map<string, HTMLElement>();
+  for (const endpoint of exactSymbolicEndpoints(input.session.runtime)) {
+    const root = host.ownerDocument.createElement("div");
+    root.className = "kp-exact-symbolic-endpoint";
+    root.dataset["kpExactSymbolicEndpointState"] = endpoint.stateId;
+    root.innerHTML = renderSelectorAnnotatedLatexToHtml(endpoint.annotated);
+    bindEndpointOwnership(root, endpoint);
+    stage.append(root);
+    if (endpointRoots.has(endpoint.stateId)) {
+      throw new Error(
+        `Exact symbolic sequence repeats endpoint ${endpoint.stateId}.`
+      );
+    }
+    endpointRoots.set(endpoint.stateId, root);
+  }
   host.append(stage);
   const candidate = prepareKpNativeSceneCandidate({ host, stage });
-  const sourceRoot = required<HTMLElement>(
-    stage,
-    "[data-kp-exact-symbolic-source]"
-  );
-  const targetRoot = required<HTMLElement>(
-    stage,
-    "[data-kp-exact-symbolic-target]"
-  );
-  bindEndpointOwnership(sourceRoot, sourceEndpoint, "source");
-  bindEndpointOwnership(targetRoot, targetEndpoint, "target");
-  if (input.segment.sourceStateId === input.segment.targetStateId) {
-    sourceRoot.style.opacity = "1";
-    targetRoot.style.opacity = "0";
-    stage.dataset["kpExactSymbolicStatus"] = "ready";
-    stage.dataset["kpExactSymbolicMode"] = "native-continuity";
-    commitPreparedSymbolicScene({
-      session: input.session,
-      candidate,
-      stage
-    });
-    return;
-  }
   const fontReadiness = createKpEquationFontReadiness(host.ownerDocument);
-  input.session.symbolicFontReadiness?.dispose();
-  input.session.symbolicFontReadiness = fontReadiness;
+  const preparation: ExactSymbolicSequencePreparing = {
+    kind: "exact-symbolic-sequence-preparing",
+    stage,
+    candidate,
+    fontReadiness,
+    endpointRoots
+  };
+  input.session.symbolicSequence = preparation;
   try {
-    const [source, target] = await Promise.all([
-      settleAndObserveKpNativeKatexRenderedScene({
-        endpoint: "source",
-        stage,
-        root: sourceRoot,
-        semanticEntityId: sourceEndpoint.stateId,
-        presentationGroupId:
-          `group.exact-fraction.source.${input.segment.id}`,
-        fontReadiness
-      }),
-      settleAndObserveKpNativeKatexRenderedScene({
-        endpoint: "target",
-        stage,
-        root: targetRoot,
-        semanticEntityId: targetEndpoint.stateId,
-        presentationGroupId:
-          `group.exact-fraction.target.${input.segment.id}`,
-        fontReadiness
-      })
-    ]);
-    if (
-      input.session.symbolicGeneration !== input.generation ||
-      input.session.symbolicMotionSegmentId !== input.segment.id
-    ) {
+    const observations = new Map<string, {
+      readonly source: Awaited<
+        ReturnType<typeof settleAndObserveKpNativeKatexRenderedScene>
+      >;
+      readonly target: Awaited<
+        ReturnType<typeof settleAndObserveKpNativeKatexRenderedScene>
+      >;
+    }>();
+    await Promise.all(exactSymbolicEndpoints(input.session.runtime).map(
+      async (endpoint) => {
+        const root = endpointRoots.get(endpoint.stateId);
+        if (root === undefined) {
+          throw new Error(
+            `Exact symbolic sequence omitted endpoint ${endpoint.stateId}.`
+          );
+        }
+        const [source, target] = await Promise.all([
+          settleAndObserveKpNativeKatexRenderedScene({
+            endpoint: "source",
+            stage,
+            root,
+            semanticEntityId: endpoint.stateId,
+            presentationGroupId:
+              `group.exact-fraction.state.${endpoint.stateId}`,
+            fontReadiness
+          }),
+          settleAndObserveKpNativeKatexRenderedScene({
+            endpoint: "target",
+            stage,
+            root,
+            semanticEntityId: endpoint.stateId,
+            presentationGroupId:
+              `group.exact-fraction.state.${endpoint.stateId}`,
+            fontReadiness
+          })
+        ]);
+        observations.set(endpoint.stateId, { source, target });
+      }
+    ));
+    if (input.session.symbolicSequence !== preparation) {
       discardKpNativeSceneCandidate(candidate);
+      fontReadiness.dispose();
       return;
     }
-    const relations = symbolicPaintRelations(input.segment);
-    const identityTransferProgram =
-      input.dispatch === "identity-fission"
-        ? input.session.runtime.identityFission.program
-        : input.dispatch === "identity-fusion"
-          ? input.session.runtime.identityFusion.program
-          : undefined;
-    const canonical = createKpCanonicalNativeKatexSceneSession({
-      source,
-      target,
-      relations,
-      successorSyntheses: input.segment.successorSyntheses.map((binding) =>
-        exactSuccessorIntent(binding, identityTransferProgram)
-      ),
-      endpointDwellFraction: 0.04,
-      fanInRouting:
-        input.dispatch === "merge-fan-in" ||
-        input.dispatch === "identity-fusion",
-      copyFanOutRouting:
-        input.dispatch === "copy-fan-out" ||
-        input.dispatch === "identity-fission"
+    const segments = compilePreparedSymbolicSegments({
+      session: input.session.runtime,
+      observations,
+      endpointRoots
     });
-    input.session.symbolicPlaybackCreatedCount += 1;
-    canonical.session.apply(input.session.symbolicPendingProgress);
-    commitPreparedSymbolicScene({
-      session: input.session,
-      candidate,
+    assertPreparedSymbolicAdjacency(segments);
+    const playable: ExactSymbolicSequencePlayable = {
+      kind: "exact-symbolic-sequence-playable",
       stage,
-      playback: canonical.session
-    });
+      fontReadiness,
+      endpointRoots,
+      segments
+    };
+    commitKpNativeSceneCandidate({ candidate });
+    input.session.symbolicSequence = playable;
+    input.session.symbolicPlaybackCreatedCount += 1;
+    stage.dataset["kpExactSymbolicStatus"] = "ready";
+    stage.dataset["kpExactSymbolicCompiledSegmentCount"] =
+      String(segments.size);
+    const pendingFrame = input.session.symbolicPendingFrame;
+    if (pendingFrame !== undefined) {
+      applyPreparedSymbolicSequence(playable, pendingFrame);
+    }
     const player = input.slot.closest<HTMLElement>(
       "[data-kp-editor-animation-player]"
     );
     if (player !== null) {
       syncResourceTelemetry(player, input.session, "active");
     }
-    stage.dataset["kpExactSymbolicStatus"] = "ready";
-    stage.dataset["kpExactProtectedTransit"] =
-      canonical.protectedTransit.geometryAuthority;
   } catch (error) {
-    if (
-      input.session.symbolicGeneration !== input.generation ||
-      input.session.symbolicMotionSegmentId !== input.segment.id
-    ) {
+    if (input.session.symbolicSequence !== preparation) {
       if (stage.isConnected) discardKpNativeSceneCandidate(candidate);
+      fontReadiness.dispose();
       return;
     }
+    const message = error instanceof Error ? error.message : "unknown";
     stage.dataset["kpExactSymbolicStatus"] = "error";
-    stage.dataset["kpExactSymbolicError"] =
-      error instanceof Error ? error.message : "unknown";
-    sourceRoot.style.opacity = "0";
-    targetRoot.style.opacity = "1";
-    commitPreparedSymbolicScene({
-      session: input.session,
-      candidate,
-      stage
+    stage.dataset["kpExactSymbolicError"] = message;
+    showFailedSymbolicEndpoint(endpointRoots, input.session.symbolicPendingFrame);
+    commitKpNativeSceneCandidate({ candidate });
+    input.session.symbolicSequence = {
+      kind: "exact-symbolic-sequence-failed",
+      stage,
+      fontReadiness,
+      error: message
+    };
+  }
+}
+
+function exactSymbolicEndpoints(
+  session: KpExactFractionQuantityRuntimeSession
+): readonly KpExactFractionSymbolicEndpoint[] {
+  return Object.freeze([
+    ...session.symbolic.endpoints,
+    ...session.symbolic.transientEndpoints
+  ]);
+}
+
+function compilePreparedSymbolicSegments(input: {
+  readonly session: KpExactFractionQuantityRuntimeSession;
+  readonly observations: ReadonlyMap<string, {
+    readonly source: Awaited<
+      ReturnType<typeof settleAndObserveKpNativeKatexRenderedScene>
+    >;
+    readonly target: Awaited<
+      ReturnType<typeof settleAndObserveKpNativeKatexRenderedScene>
+    >;
+  }>;
+  readonly endpointRoots: ReadonlyMap<string, HTMLElement>;
+}): ReadonlyMap<string, ExactPreparedSymbolicSegment> {
+  const segments = new Map<string, ExactPreparedSymbolicSegment>();
+  input.session.symbolic.motionInputs.forEach((motionInput, beatIndex) => {
+    const beat = input.session.presentation.beats[beatIndex];
+    if (
+      beat === undefined ||
+      beat.beatId !== motionInput.beatId ||
+      beat.execution.symbolicDispatches.length !== motionInput.segments.length
+    ) {
+      throw new Error(
+        "Exact symbolic sequence cannot detach motion segments from motif dispatch."
+      );
+    }
+    motionInput.segments.forEach((segment, segmentIndex) => {
+      const dispatch = beat.execution.symbolicDispatches[segmentIndex];
+      const sourceRoot = input.endpointRoots.get(segment.sourceStateId);
+      const targetRoot = input.endpointRoots.get(segment.targetStateId);
+      const source = input.observations.get(segment.sourceStateId)?.source;
+      const target = input.observations.get(segment.targetStateId)?.target;
+      if (
+        dispatch === undefined ||
+        sourceRoot === undefined ||
+        targetRoot === undefined ||
+        source === undefined ||
+        target === undefined
+      ) {
+        throw new Error(
+          `Exact symbolic segment ${segment.id} lacks a compiled endpoint.`
+        );
+      }
+      if (segments.has(segment.id)) {
+        throw new Error(`Exact symbolic segment ${segment.id} is duplicated.`);
+      }
+      const continuity =
+        segment.sourceStateId === segment.targetStateId;
+      const identityTransferProgram =
+        dispatch === "identity-fission"
+          ? input.session.identityFission.program
+          : dispatch === "identity-fusion"
+            ? input.session.identityFusion.program
+            : undefined;
+      const canonical = continuity
+        ? undefined
+        : createKpCanonicalNativeKatexSceneSession({
+            source,
+            target,
+            relations: symbolicPaintRelations(segment),
+            successorSyntheses: segment.successorSyntheses.map((binding) =>
+              exactSuccessorIntent(binding, identityTransferProgram)
+            ),
+            endpointDwellFraction: 0.04,
+            fanInRouting:
+              dispatch === "merge-fan-in" ||
+              dispatch === "identity-fusion",
+            copyFanOutRouting:
+              dispatch === "copy-fan-out" ||
+              dispatch === "identity-fission"
+          });
+      segments.set(segment.id, {
+        kind: "exact-prepared-symbolic-segment",
+        segment,
+        invocationId: beat.execution.id,
+        dispatch,
+        sourceRoot,
+        targetRoot,
+        ...(canonical === undefined ? {} : { playback: canonical.session })
+      });
+      if (canonical !== undefined) {
+        stageProtectedTransitAuthority(
+          source.stage,
+          canonical.protectedTransit.geometryAuthority
+        );
+      }
     });
+  });
+  return segments;
+}
+
+function stageProtectedTransitAuthority(
+  stage: HTMLElement,
+  geometryAuthority: string
+): void {
+  const current = stage.dataset["kpExactProtectedTransit"];
+  const values = new Set(
+    current === undefined || current.length === 0
+      ? []
+      : current.split(",")
+  );
+  values.add(geometryAuthority);
+  stage.dataset["kpExactProtectedTransit"] = [...values].join(",");
+}
+
+function assertPreparedSymbolicAdjacency(
+  segments: ReadonlyMap<string, ExactPreparedSymbolicSegment>
+): void {
+  const ordered = [...segments.values()];
+  for (let index = 1; index < ordered.length; index += 1) {
+    const previous = ordered[index - 1]!;
+    const next = ordered[index]!;
+    // Shared endpoint identity is the temporal continuity proof: the browser
+    // must never rasterize two equivalent-but-distinct KaTeX subtrees at a
+    // segment boundary.
+    if (
+      previous.segment.targetStateId !== next.segment.sourceStateId ||
+      previous.targetRoot !== next.sourceRoot
+    ) {
+      throw new Error(
+        `Exact symbolic adjacency ${previous.segment.id} -> ${next.segment.id} ` +
+        "must share one native endpoint root."
+      );
+    }
+  }
+}
+
+function applyPreparedSymbolicSequence(
+  sequence: ExactSymbolicSequencePlayable,
+  frame: ExactPendingSymbolicFrame
+): void {
+  const prepared = sequence.segments.get(frame.segment.id);
+  if (
+    prepared === undefined ||
+    prepared.segment !== frame.segment ||
+    prepared.dispatch !== frame.dispatch ||
+    prepared.invocationId !== frame.invocationId
+  ) {
+    throw new Error(
+      `Exact symbolic frame ${frame.segment.id} is outside its compiled sequence.`
+    );
+  }
+  const paintability = inspectExactSymbolicStagePaintability(sequence.stage);
+  if (paintability.kind === "exact-symbolic-stage-suspended-hidden") {
+    // Phone view switching may hide the symbolic projection while the shared
+    // clock advances. Native paint measurement is deferred until the same
+    // persistent stage becomes visible; the pending frame remains canonical.
+    sequence.stage.dataset["kpExactSymbolicSuspended"] = "hidden";
+    return;
+  }
+  delete sequence.stage.dataset["kpExactSymbolicSuspended"];
+  const changedSegment = sequence.activeSegmentId !== frame.segment.id;
+  if (changedSegment) {
+    sequence.activeSegmentId = frame.segment.id;
+    sequence.stage.dataset["kpExactSymbolicSegment"] = frame.segment.id;
+    sequence.stage.dataset["kpExactMotifInvocationId"] = frame.invocationId;
+    for (const root of sequence.endpointRoots.values()) {
+      root.removeAttribute("data-kp-exact-symbolic-source");
+      root.removeAttribute("data-kp-exact-symbolic-target");
+      if (root !== prepared.sourceRoot && root !== prepared.targetRoot) {
+        root.style.opacity = "0";
+      }
+    }
+    prepared.sourceRoot.dataset["kpExactSymbolicSource"] = "";
+    prepared.targetRoot.dataset["kpExactSymbolicTarget"] = "";
+  }
+  if (prepared.playback === undefined) {
+    syncKpEquationMaterialLayer({ stage: sequence.stage, owners: [] });
+    prepared.sourceRoot.style.opacity = "1";
+    prepared.targetRoot.style.opacity = "1";
+    sequence.stage.dataset["kpExactSymbolicMode"] = "native-continuity";
+    return;
+  }
+  const ownership = prepared.playback.apply(frame.segmentProgress);
+  sequence.stage.dataset["kpExactSymbolicMode"] = prepared.playback.mode;
+  sequence.stage.dataset["kpExactSymbolicOwnership"] =
+    ownership.visualOwner;
+}
+
+function inspectExactSymbolicStagePaintability(
+  stage: HTMLElement
+): ExactSymbolicStagePaintability {
+  const rect = stage.getBoundingClientRect();
+  return !stage.isConnected || rect.width <= 0 || rect.height <= 0
+    ? { kind: "exact-symbolic-stage-suspended-hidden" }
+    : { kind: "exact-symbolic-stage-paintable" };
+}
+
+function showFailedSymbolicEndpoint(
+  endpointRoots: ReadonlyMap<string, HTMLElement>,
+  frame: ExactPendingSymbolicFrame | undefined
+): void {
+  const targetStateId = frame?.segment.targetStateId;
+  for (const [stateId, root] of endpointRoots) {
+    root.style.opacity = stateId === targetStateId ? "1" : "0";
   }
 }
 
@@ -600,40 +850,12 @@ function exactSuccessorIntent(
   });
 }
 
-function commitPreparedSymbolicScene(input: {
-  readonly session: ExactSurfaceSession;
-  readonly candidate: ReturnType<typeof prepareKpNativeSceneCandidate>;
-  readonly stage: HTMLElement;
-  readonly playback?: KpNativeKatexRendererSession | undefined;
-}): void {
-  const previousPlayback = input.session.symbolicPlayback;
-  commitKpNativeSceneCandidate({
-    candidate: input.candidate,
-    previousStage: input.session.symbolicActiveStage
-  });
-  input.session.symbolicActiveStage = input.stage;
-  input.session.symbolicPlayback = input.playback;
-  if (previousPlayback !== undefined) {
-    previousPlayback.retire({
-      kind: "native-katex-paint-preserving-retirement",
-      reason: "scene-replaced",
-      structuralSuccession: "retire-preserving-paint"
-    });
-    input.session.symbolicPlaybackDisposedCount += 1;
-  }
-}
-
 function disposeExactSurface(
   player: HTMLElement,
   session: ExactSurfaceSession
 ): void {
-  // Incrementing the generation makes any in-flight font measurement retire
-  // without publishing a session after this player has left the library.
-  session.symbolicGeneration += 1;
   session.disposed = true;
-  releaseSymbolicPlayback(session);
-  session.symbolicFontReadiness?.dispose();
-  session.symbolicFontReadiness = undefined;
+  releaseSymbolicSequence(session);
   sessions.delete(player);
   syncResourceTelemetry(player, session, "disposed");
 }
@@ -766,14 +988,25 @@ function syncReviewSheetControls(
     });
 }
 
-function releaseSymbolicPlayback(session: ExactSurfaceSession): void {
-  if (session.symbolicPlayback === undefined) return;
-  session.symbolicPlayback.retire({
-    kind: "native-katex-paint-preserving-retirement",
-    reason: "surface-disposed",
-    structuralSuccession: "retire-preserving-paint"
-  });
-  session.symbolicPlayback = undefined;
+function releaseSymbolicSequence(session: ExactSurfaceSession): void {
+  const sequence = session.symbolicSequence;
+  if (sequence === undefined) return;
+  session.symbolicSequence = undefined;
+  sequence.fontReadiness.dispose();
+  if (sequence.kind === "exact-symbolic-sequence-preparing") {
+    if (sequence.stage.isConnected) {
+      discardKpNativeSceneCandidate(sequence.candidate);
+    }
+    return;
+  }
+  if (sequence.kind === "exact-symbolic-sequence-failed") return;
+  for (const segment of sequence.segments.values()) {
+    segment.playback?.retire({
+      kind: "native-katex-paint-preserving-retirement",
+      reason: "surface-disposed",
+      structuralSuccession: "retire-preserving-paint"
+    });
+  }
   session.symbolicPlaybackDisposedCount += 1;
 }
 
@@ -794,17 +1027,23 @@ function syncResourceTelemetry(
     session.symbolicPlaybackDisposedCount
   );
   player.dataset["kpExactSymbolicPlaybackActiveCount"] = String(
-    session.symbolicPlayback === undefined ? 0 : 1
+    session.symbolicSequence?.kind === "exact-symbolic-sequence-playable"
+      ? 1
+      : 0
+  );
+  player.dataset["kpExactSymbolicStageCount"] = String(
+    session.symbolicSequence === undefined ? 0 : 1
   );
   player.dataset["kpExactWebglLeaseCount"] = "0";
 }
 
 function bindEndpointOwnership(
   root: HTMLElement,
-  endpoint: KpExactFractionSymbolicEndpoint,
-  side: "source" | "target"
+  endpoint: KpExactFractionSymbolicEndpoint
 ): void {
-  const rootGroup = `group.exact-fraction.${side}.${endpoint.stateId}`;
+  // Source and target are momentary roles. Stable state-owned group IDs let
+  // adjacent segments share this exact KaTeX subtree instead of cloning it.
+  const rootGroup = `group.exact-fraction.state.${endpoint.stateId}`;
   root.dataset["kpSemanticEntityId"] = endpoint.stateId;
   root.dataset["kpPresentationGroupId"] = rootGroup;
   for (const annotation of endpoint.annotated.annotations) {
@@ -1199,22 +1438,6 @@ function requiredView(
     root,
     `[data-kp-exact-view-canvas="${view}"]`
   );
-}
-
-function requireEndpoint(
-  session: KpExactFractionQuantityRuntimeSession,
-  stateId: string
-): KpExactFractionSymbolicEndpoint {
-  const endpoint = [
-    ...session.symbolic.endpoints,
-    ...session.symbolic.transientEndpoints
-  ].find(
-    (candidate) => candidate.stateId === stateId
-  );
-  if (endpoint === undefined) {
-    throw new Error(`Missing exact-fraction endpoint ${stateId}.`);
-  }
-  return endpoint;
 }
 
 function required<T extends Element>(

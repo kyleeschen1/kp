@@ -38,7 +38,7 @@ test("dense seek, reverse seek, and repeated scrub are paint deterministic", asy
   })).toBe("loaded");
 
   await seekAndSettle(page, player, 0);
-  await installRetiredScenePaintAudit(player);
+  await installPersistentSymbolicSequenceAudit(player);
   for (const progress of [
     0.18,
     0.181,
@@ -52,17 +52,14 @@ test("dense seek, reverse seek, and repeated scrub are paint deterministic", asy
   ]) {
     await seekAndSettle(page, player, progress);
   }
-  const retirements = await readRetiredScenePaintAudit(player);
-  expect(retirements.length).toBeGreaterThanOrEqual(4);
-  expect(retirements.some(
-    ({ beforeTargetOpacity }) => beforeTargetOpacity === "1"
-  )).toBe(true);
-  expect(retirements.every((retirement) =>
-    retirement.beforeSourceOpacity === retirement.afterSourceOpacity &&
-    retirement.beforeTargetOpacity === retirement.afterTargetOpacity &&
-    retirement.beforeMaterialOwnerCount ===
-      retirement.afterMaterialOwnerCount
-  ), JSON.stringify(retirements)).toBe(true);
+  const sequenceAudit = await readPersistentSymbolicSequenceAudit(player);
+  expect(sequenceAudit, JSON.stringify(sequenceAudit)).toEqual({
+    sceneCount: 1,
+    stageIdentityPreserved: true,
+    endpointIdentityPreserved: true,
+    compiledSegmentCount: 6,
+    endpointCount: 6
+  });
 
   const forward = new Map<number, string>();
   for (const progress of denseProgress) {
@@ -104,6 +101,115 @@ test("dense seek, reverse seek, and repeated scrub are paint deterministic", asy
       committedSceneSelector
     )).toHaveAttribute("data-kp-exact-symbolic-status", "ready");
   }
+});
+
+test("natural playback keeps one symbolic stage and shared endpoints across every segment", async ({
+  page
+}) => {
+  test.setTimeout(45_000);
+  const player = await openExactQuantity(page, {
+    width: 1_100,
+    height: 800
+  });
+  await seekAndSettle(page, player, 0);
+  await player.evaluate((root, selector) => {
+    const stage = root.querySelector<HTMLElement>(selector);
+    if (stage === null) throw new Error("Missing persistent symbolic stage.");
+    const endpoints = new Map([
+      ...stage.querySelectorAll<HTMLElement>(
+        "[data-kp-exact-symbolic-endpoint-state]"
+      )
+    ].map((endpoint) => [
+      endpoint.dataset["kpExactSymbolicEndpointState"]!,
+      endpoint
+    ]));
+    const audit = {
+      stage,
+      endpoints,
+      frameCount: 0,
+      mismatchCount: 0,
+      removedIdentityCount: 0,
+      segments: new Set<string>()
+    };
+    root.addEventListener("kp-editor-animation-frame", () => {
+      audit.frameCount += 1;
+      const current = root.querySelector<HTMLElement>(selector);
+      if (current !== stage) audit.mismatchCount += 1;
+      const segment = current?.dataset["kpExactSymbolicSegment"];
+      if (segment !== undefined) audit.segments.add(segment);
+      for (const endpoint of current?.querySelectorAll<HTMLElement>(
+        "[data-kp-exact-symbolic-endpoint-state]"
+      ) ?? []) {
+        if (
+          endpoints.get(
+            endpoint.dataset["kpExactSymbolicEndpointState"] ?? ""
+          ) !== endpoint
+        ) {
+          audit.mismatchCount += 1;
+        }
+      }
+    });
+    const observer = new MutationObserver((records) => {
+      for (const node of records.flatMap((record) =>
+        [...record.removedNodes]
+      )) {
+        if (
+          node === stage ||
+          (
+            node instanceof Element &&
+            (
+              node.matches("[data-kp-exact-symbolic-endpoint-state]") ||
+              node.querySelector(
+                "[data-kp-exact-symbolic-endpoint-state]"
+              ) !== null
+            )
+          )
+        ) {
+          audit.removedIdentityCount += 1;
+        }
+      }
+    });
+    observer.observe(stage.parentElement!, {
+      childList: true,
+      subtree: true
+    });
+    Object.assign(root, {
+      __kpNaturalSequenceAudit: audit,
+      __kpNaturalSequenceObserver: observer
+    });
+  }, committedSceneSelector);
+  await player.locator('[data-action="toggle-editor-animation"]').click();
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "complete",
+    { timeout: 15_000 }
+  );
+  const audit = await player.evaluate((root) => {
+    const state = root as HTMLElement & {
+      __kpNaturalSequenceAudit?: {
+        readonly frameCount: number;
+        readonly mismatchCount: number;
+        readonly removedIdentityCount: number;
+        readonly segments: Set<string>;
+      };
+      __kpNaturalSequenceObserver?: MutationObserver;
+    };
+    state.__kpNaturalSequenceObserver?.disconnect();
+    const value = state.__kpNaturalSequenceAudit;
+    if (value === undefined) {
+      throw new Error("Natural sequence audit was not installed.");
+    }
+    return {
+      frameCount: value.frameCount,
+      mismatchCount: value.mismatchCount,
+      removedIdentityCount: value.removedIdentityCount,
+      segments: [...value.segments]
+    };
+  });
+  expect(audit.frameCount).toBeGreaterThan(30);
+  expect(audit.mismatchCount).toBe(0);
+  expect(audit.removedIdentityCount).toBe(0);
+  expect(audit.segments).toHaveLength(6);
 });
 
 test("identity fission renders one opaque program-owned four-view frame", async ({
@@ -811,75 +917,69 @@ async function awaitCommittedSymbolicScene(
   }).toBe(true);
 }
 
-interface RetiredScenePaintAudit {
-  readonly segment?: string | undefined;
-  readonly beforeSourceOpacity?: string | undefined;
-  readonly beforeTargetOpacity?: string | undefined;
-  readonly beforeMaterialOwnerCount: number;
-  afterSourceOpacity?: string | undefined;
-  afterTargetOpacity?: string | undefined;
-  afterMaterialOwnerCount?: number | undefined;
-}
-
-async function installRetiredScenePaintAudit(
+async function installPersistentSymbolicSequenceAudit(
   player: ReturnType<Page["locator"]>
 ): Promise<void> {
-  await player.evaluate((root) => {
-    const retirements: RetiredScenePaintAudit[] = [];
-    const originalRemove = Element.prototype.remove;
-    Element.prototype.remove = function(this: Element) {
-      if (
-        this instanceof HTMLElement &&
-        this.hasAttribute("data-kp-exact-symbolic-scene") &&
-        this.dataset["kpPreparedSceneState"] === "committed"
-      ) {
-        const source = this.querySelector<HTMLElement>(
-          "[data-kp-exact-symbolic-source]"
-        );
-        const target = this.querySelector<HTMLElement>(
-          "[data-kp-exact-symbolic-target]"
-        );
-        const retirement: RetiredScenePaintAudit = {
-          segment: this.dataset["kpExactSymbolicSegment"],
-          beforeSourceOpacity: source?.style.opacity,
-          beforeTargetOpacity: target?.style.opacity,
-          beforeMaterialOwnerCount: this.querySelectorAll(
-            "[data-kp-equation-material-owner-id]"
-          ).length
-        };
-        retirements.push(retirement);
-        originalRemove.call(this);
-        queueMicrotask(() => {
-          retirement.afterSourceOpacity = source?.style.opacity;
-          retirement.afterTargetOpacity = target?.style.opacity;
-          retirement.afterMaterialOwnerCount = this.querySelectorAll(
-            "[data-kp-equation-material-owner-id]"
-          ).length;
-        });
-        return;
-      }
-      originalRemove.call(this);
-    };
-    Object.assign(root, {
-      __kpRetiredScenePaintAudit: retirements,
-      __kpRetiredSceneOriginalRemove: originalRemove
-    });
-  });
+  await player.evaluate((root, selector) => {
+    const stage = root.querySelector<HTMLElement>(selector);
+    if (stage === null) {
+      throw new Error("Cannot audit a missing exact symbolic sequence.");
+    }
+    const endpoints = new Map([
+      ...stage.querySelectorAll<HTMLElement>(
+        "[data-kp-exact-symbolic-endpoint-state]"
+      )
+    ].map((endpoint) => [
+      endpoint.dataset["kpExactSymbolicEndpointState"]!,
+      endpoint
+    ]));
+    Object.assign(root, { __kpPersistentSymbolicAudit: { stage, endpoints } });
+  }, committedSceneSelector);
 }
 
-async function readRetiredScenePaintAudit(
+async function readPersistentSymbolicSequenceAudit(
   player: ReturnType<Page["locator"]>
-): Promise<readonly RetiredScenePaintAudit[]> {
-  return player.evaluate((root) => {
+): Promise<{
+  readonly sceneCount: number;
+  readonly stageIdentityPreserved: boolean;
+  readonly endpointIdentityPreserved: boolean;
+  readonly compiledSegmentCount: number;
+  readonly endpointCount: number;
+}> {
+  return player.evaluate((root, selector) => {
     const state = root as HTMLElement & {
-      __kpRetiredScenePaintAudit?: RetiredScenePaintAudit[];
-      __kpRetiredSceneOriginalRemove?: typeof Element.prototype.remove;
+      __kpPersistentSymbolicAudit?: {
+        readonly stage: HTMLElement;
+        readonly endpoints: Map<string, HTMLElement>;
+      };
     };
-    if (state.__kpRetiredSceneOriginalRemove !== undefined) {
-      Element.prototype.remove = state.__kpRetiredSceneOriginalRemove;
+    const audit = state.__kpPersistentSymbolicAudit;
+    if (audit === undefined) {
+      throw new Error("Exact persistent sequence audit was not installed.");
     }
-    return state.__kpRetiredScenePaintAudit ?? [];
-  });
+    const stages = [
+      ...root.querySelectorAll<HTMLElement>(selector)
+    ];
+    const current = stages[0];
+    const currentEndpoints = current === undefined
+      ? []
+      : [...current.querySelectorAll<HTMLElement>(
+          "[data-kp-exact-symbolic-endpoint-state]"
+        )];
+    return {
+      sceneCount: stages.length,
+      stageIdentityPreserved: current === audit.stage,
+      endpointIdentityPreserved: currentEndpoints.every((endpoint) =>
+        audit.endpoints.get(
+          endpoint.dataset["kpExactSymbolicEndpointState"] ?? ""
+        ) === endpoint
+      ),
+      compiledSegmentCount: Number(
+        current?.dataset["kpExactSymbolicCompiledSegmentCount"] ?? 0
+      ),
+      endpointCount: currentEndpoints.length
+    };
+  }, committedSceneSelector);
 }
 
 async function paintFingerprint(
@@ -916,12 +1016,17 @@ async function paintFingerprint(
       ...scene.querySelectorAll<HTMLElement>(
         ".editor-equation-stage__material-owner"
       )
-    ].map((element) => ({
-      semanticId: element.dataset["kpSemanticEntityId"],
-      opacity: getComputedStyle(element).opacity,
-      transform: element.style.transform,
-      rect: normalizedRect(element)
-    }));
+    ].flatMap((element) => {
+      const opacity = getComputedStyle(element).opacity;
+      // Retained material nodes are a renderer cache, not visible paint. Their
+      // insertion order may reflect prior segments without affecting a frame.
+      return opacity === "0" ? [] : [{
+        semanticId: element.dataset["kpSemanticEntityId"],
+        opacity,
+        transform: element.style.transform,
+        rect: normalizedRect(element)
+      }];
+    });
     const views = [
       ...root.querySelectorAll<HTMLElement>("[data-kp-exact-view]")
     ].map((view) => ({
