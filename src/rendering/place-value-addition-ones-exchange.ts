@@ -5,22 +5,21 @@ import {
 import type {
   KpPlaceValueAdditionPresentationPlan
 } from "../animation/place-value-addition-presentation-plan.ts";
+import {
+  kpOpaqueIdentityTransferOwnershipProgress,
+  type KpSuccessorSynthesisBinding
+} from "../animation/successor-synthesis.ts";
 import type {
-  KpSuccessorSynthesisBinding
-} from "../animation/successor-synthesis.ts";
-import {
-  kpOpaqueIdentityTransferOwnershipProgress
-} from "../animation/successor-synthesis.ts";
-import {
-  createKpSemanticLineageGraph
-} from "../semantic/semantic-lineage-graph.ts";
+  KpPlaceValueWrittenColumn,
+  KpPlaceValueWrittenColumnProjection
+} from "../reader/compiler/place-value-addition-written-column-projection.ts";
 import {
   compileKpExecutableSuccessorMotifProgramAdapter,
   type KpExecutableSuccessorMotifProgramAdapterDispatch
 } from "../reader/renderers/executable-successor-motif-program-adapter.ts";
-import type {
-  KpPlaceValueWrittenColumnProjection
-} from "../reader/compiler/place-value-addition-written-column-projection.ts";
+import {
+  createKpSemanticLineageGraph
+} from "../semantic/semantic-lineage-graph.ts";
 import { renderLatexToHtml } from "./katex-adapter.ts";
 import type {
   KpNativeKatexSceneOwnershipFrame
@@ -34,10 +33,12 @@ import {
   createKpPlaceValueNativeSceneDom
 } from "./place-value-addition-native-scene-dom.ts";
 import {
-  createKpPlaceValueWrittenColumnDomProjection
+  createKpPlaceValueWrittenColumnDomProjection,
+  type KpPlaceValueWrittenColumnDomProjection
 } from "./place-value-addition-written-column-dom.ts";
 
 declare const kpPlaceValueOnesExchangeBrand: unique symbol;
+declare const kpPlaceValueTensExchangeBrand: unique symbol;
 
 const sealedExchanges = new WeakSet<object>();
 
@@ -46,11 +47,7 @@ type FissionDispatch = Extract<
   { readonly programKind: "identity-fission" }
 >;
 
-export interface KpPlaceValueOnesExchange {
-  readonly schemaVersion: "kp.place-value-addition-ones-exchange.v1";
-  readonly beatId: "beat.place-value.exchange-ones";
-  readonly sourceEntityId: "evaluation.ones.total";
-  readonly targetEntityIds: readonly ["result.ones", "carry.tens"];
+interface KpPlaceValueColumnExchangeBase {
   readonly transferProgress:
     typeof kpOpaqueIdentityTransferOwnershipProgress;
   readonly fissionPlan: KpFissionFusionPlan & {
@@ -64,30 +61,182 @@ export interface KpPlaceValueOnesExchange {
   readonly forward: FissionDispatch;
   readonly rewind: FissionDispatch;
   readonly opacityPolicy: "opaque";
+}
+
+export interface KpPlaceValueOnesExchange extends
+KpPlaceValueColumnExchangeBase {
+  readonly schemaVersion: "kp.place-value-addition-ones-exchange.v1";
+  readonly beatId: "beat.place-value.exchange-ones";
+  readonly place: "ones";
+  readonly sourceEntityId: "evaluation.ones.total";
+  readonly targetEntityIds: readonly ["result.ones", "carry.tens"];
+  readonly baseTenExchangeId: "exchange.ones-to-tens";
   readonly [kpPlaceValueOnesExchangeBrand]: true;
 }
 
-export interface KpPlaceValueOnesExchangeFrame {
+export interface KpPlaceValueTensExchange extends
+KpPlaceValueColumnExchangeBase {
+  readonly schemaVersion: "kp.place-value-addition-tens-exchange.v1";
+  readonly beatId: "beat.place-value.exchange-tens";
+  readonly place: "tens";
+  readonly sourceEntityId: "evaluation.tens.total";
+  readonly targetEntityIds: readonly ["result.tens", "carry.hundreds"];
+  readonly baseTenExchangeId: "exchange.tens-to-hundreds";
+  readonly [kpPlaceValueTensExchangeBrand]: true;
+}
+
+export type KpPlaceValueColumnExchange =
+  | KpPlaceValueOnesExchange
+  | KpPlaceValueTensExchange;
+
+export interface KpPlaceValueColumnExchangeFrame {
   readonly ownership: KpNativeKatexSceneOwnershipFrame;
   readonly transferOccurred: boolean;
 }
 
-export interface KpPlaceValueOnesExchangeDom {
+export interface KpPlaceValueColumnExchangeDom {
   readonly root: HTMLElement;
   readonly sourceRoot: HTMLElement;
   readonly targetRoot: HTMLElement;
   readonly apply: (
     progress: number,
     direction: "forward" | "rewind"
-  ) => KpPlaceValueOnesExchangeFrame;
+  ) => KpPlaceValueColumnExchangeFrame;
   readonly dispose: () => void;
 }
+
+export type KpPlaceValueOnesExchangeFrame =
+  KpPlaceValueColumnExchangeFrame;
+export type KpPlaceValueOnesExchangeDom =
+  KpPlaceValueColumnExchangeDom;
+export type KpPlaceValueTensExchangeDom =
+  KpPlaceValueColumnExchangeDom;
+
+interface ExchangeConfig {
+  readonly place: "ones" | "tens";
+  readonly schemaVersion:
+    | KpPlaceValueOnesExchange["schemaVersion"]
+    | KpPlaceValueTensExchange["schemaVersion"];
+  readonly beatId:
+    | KpPlaceValueOnesExchange["beatId"]
+    | KpPlaceValueTensExchange["beatId"];
+  readonly sourceEntityId:
+    | KpPlaceValueOnesExchange["sourceEntityId"]
+    | KpPlaceValueTensExchange["sourceEntityId"];
+  readonly targetEntityIds: readonly [string, string];
+  readonly baseTenExchangeId:
+    | KpPlaceValueOnesExchange["baseTenExchangeId"]
+    | KpPlaceValueTensExchange["baseTenExchangeId"];
+  readonly sourceHiddenIds: readonly string[];
+  readonly sourceVisibleIds: readonly string[];
+  readonly targetDigits: readonly [
+    {
+      readonly id: string;
+      readonly column: KpPlaceValueWrittenColumn;
+      readonly latex: string;
+    },
+    {
+      readonly id: string;
+      readonly column: KpPlaceValueWrittenColumn;
+      readonly latex: string;
+    }
+  ];
+  readonly targetVisibleIds: readonly [string, string];
+  readonly stageDataset:
+    | "kpPlaceValueOnesExchange"
+    | "kpPlaceValueTensExchange";
+}
+
+const exchangeConfigs = Object.freeze({
+  ones: Object.freeze({
+    place: "ones" as const,
+    schemaVersion: "kp.place-value-addition-ones-exchange.v1" as const,
+    beatId: "beat.place-value.exchange-ones" as const,
+    sourceEntityId: "evaluation.ones.total" as const,
+    targetEntityIds:
+      Object.freeze(["result.ones", "carry.tens"] as const),
+    baseTenExchangeId: "exchange.ones-to-tens" as const,
+    sourceHiddenIds: Object.freeze([
+      "digit.first.ones",
+      "digit.second.ones",
+      "operator.add"
+    ]),
+    sourceVisibleIds: Object.freeze([]),
+    targetDigits: Object.freeze([
+      Object.freeze({
+        id: "evaluation.ones.total.part.tens",
+        column: "tens" as const,
+        latex: "1"
+      }),
+      Object.freeze({
+        id: "evaluation.ones.total.part.ones",
+        column: "ones" as const,
+        latex: "4"
+      })
+    ] as const),
+    targetVisibleIds:
+      Object.freeze(["result.ones", "carry.tens"] as const),
+    stageDataset: "kpPlaceValueOnesExchange" as const
+  }),
+  tens: Object.freeze({
+    place: "tens" as const,
+    schemaVersion: "kp.place-value-addition-tens-exchange.v1" as const,
+    beatId: "beat.place-value.exchange-tens" as const,
+    sourceEntityId: "evaluation.tens.total" as const,
+    targetEntityIds:
+      Object.freeze(["result.tens", "carry.hundreds"] as const),
+    baseTenExchangeId: "exchange.tens-to-hundreds" as const,
+    sourceHiddenIds: Object.freeze([
+      "digit.first.ones",
+      "digit.second.ones",
+      "digit.first.tens",
+      "digit.second.tens",
+      "carry.tens",
+      "operator.add"
+    ]),
+    sourceVisibleIds: Object.freeze(["result.ones"]),
+    targetDigits: Object.freeze([
+      Object.freeze({
+        id: "evaluation.tens.total.part.hundreds",
+        column: "hundreds" as const,
+        latex: "1"
+      }),
+      Object.freeze({
+        id: "evaluation.tens.total.part.tens",
+        column: "tens" as const,
+        latex: "3"
+      })
+    ] as const),
+    targetVisibleIds:
+      Object.freeze(["result.tens", "carry.hundreds"] as const),
+    stageDataset: "kpPlaceValueTensExchange" as const
+  })
+}) satisfies Readonly<Record<"ones" | "tens", ExchangeConfig>>;
 
 export function compileKpPlaceValueOnesExchange(
   presentation: KpPlaceValueAdditionPresentationPlan
 ): KpPlaceValueOnesExchange {
+  return compileColumnExchange(
+    presentation,
+    exchangeConfigs.ones
+  ) as KpPlaceValueOnesExchange;
+}
+
+export function compileKpPlaceValueTensExchange(
+  presentation: KpPlaceValueAdditionPresentationPlan
+): KpPlaceValueTensExchange {
+  return compileColumnExchange(
+    presentation,
+    exchangeConfigs.tens
+  ) as KpPlaceValueTensExchange;
+}
+
+function compileColumnExchange(
+  presentation: KpPlaceValueAdditionPresentationPlan,
+  config: ExchangeConfig
+): KpPlaceValueColumnExchange {
   const beat = presentation.beats.find(
-    ({ beatId }) => beatId === "beat.place-value.exchange-ones"
+    ({ beatId }) => beatId === config.beatId
   );
   const carrySplit = beat?.programs.find(
     ({ kind }) => kind === "carry-split"
@@ -98,42 +247,39 @@ export function compileKpPlaceValueOnesExchange(
   if (
     beat?.kind !== "exchange-and-carry" ||
     carrySplit?.kind !== "carry-split" ||
-    carrySplit.sourceEvaluationId !== "evaluation.ones.total" ||
-    carrySplit.remainderId !== "result.ones" ||
-    carrySplit.carryId !== "carry.tens" ||
+    carrySplit.sourceEvaluationId !== config.sourceEntityId ||
+    carrySplit.remainderId !== config.targetEntityIds[0] ||
+    carrySplit.carryId !== config.targetEntityIds[1] ||
     carrySplit.executableProgram.kind !== "identity-fission" ||
     exchangeProof?.kind !== "adjacent-place-exchange" ||
     exchangeProof.proof !== carrySplit.lineage.exchange
   ) {
     throw new Error(
-      "Ones exchange requires its exact carry lineage and exchange proof."
+      `${config.place} exchange requires its exact lineage and proof.`
     );
   }
-  const sourceEntityId = "evaluation.ones.total" as const;
-  const targetEntityIds =
-    Object.freeze(["result.ones", "carry.tens"] as const);
   const fissionPlan = compileKpFissionFusionPlan({
-    id: "motion.place-value.exchange-ones",
+    id: `motion.place-value.exchange-${config.place}`,
     mode: "fission",
     lineageGraph: createKpSemanticLineageGraph({
-      id: "lineage.place-value.exchange-ones",
-      sourceEntityIds: [sourceEntityId],
-      targetEntityIds,
+      id: `lineage.place-value.exchange-${config.place}`,
+      sourceEntityIds: [config.sourceEntityId],
+      targetEntityIds: config.targetEntityIds,
       edges: [{
-        id: "edge.place-value.exchange-ones",
+        id: `edge.place-value.exchange-${config.place}`,
         relation: "split",
-        sourceEntityIds: [sourceEntityId],
-        targetEntityIds,
+        sourceEntityIds: [config.sourceEntityId],
+        targetEntityIds: config.targetEntityIds,
         summary:
-          "The evaluated fourteen establishes a settled four and the same carried ten."
+          `The evaluated ${config.place} total establishes its exact remainder and carry.`
       }]
     }),
-    semanticOrder: targetEntityIds,
+    semanticOrder: config.targetEntityIds,
     microStaggerSpan: 0,
     junctionScale: 1
   }) as KpFissionFusionPlan & { readonly mode: "fission" };
   const intent = createKpNativeKatexIdentityTransferIntent({
-    binding: createBinding(),
+    binding: createBinding(config),
     executableProgram: carrySplit.executableProgram,
     direction: "forward",
     motion: "full"
@@ -143,7 +289,7 @@ export function compileKpPlaceValueOnesExchange(
     intent.executableProgram.kind !== "identity-fission"
   ) {
     throw new Error(
-      "Ones exchange did not mint canonical identity-fission authority."
+      `${config.place} exchange lacks canonical fission authority.`
     );
   }
   const dispatch = (direction: "forward" | "rewind"): FissionDispatch => {
@@ -157,15 +303,19 @@ export function compileKpPlaceValueOnesExchange(
       }
     });
     if (candidate.programKind !== "identity-fission") {
-      throw new Error("Ones exchange resolved the wrong motif adapter.");
+      throw new Error(
+        `${config.place} exchange resolved the wrong motif adapter.`
+      );
     }
     return candidate;
   };
   const exchange = Object.freeze({
-    schemaVersion: "kp.place-value-addition-ones-exchange.v1" as const,
-    beatId: "beat.place-value.exchange-ones" as const,
-    sourceEntityId,
-    targetEntityIds,
+    schemaVersion: config.schemaVersion,
+    beatId: config.beatId,
+    place: config.place,
+    sourceEntityId: config.sourceEntityId,
+    targetEntityIds: Object.freeze([...config.targetEntityIds]),
+    baseTenExchangeId: config.baseTenExchangeId,
     transferProgress: kpOpaqueIdentityTransferOwnershipProgress,
     fissionPlan,
     intent,
@@ -174,15 +324,21 @@ export function compileKpPlaceValueOnesExchange(
     opacityPolicy: "opaque" as const
   });
   sealedExchanges.add(exchange);
-  return exchange as unknown as KpPlaceValueOnesExchange;
+  return exchange as unknown as KpPlaceValueColumnExchange;
 }
 
 export function isKpPlaceValueOnesExchange(
   value: unknown
 ): value is KpPlaceValueOnesExchange {
-  return typeof value === "object" &&
-    value !== null &&
-    sealedExchanges.has(value);
+  return isSealedExchange(value) &&
+    value.beatId === "beat.place-value.exchange-ones";
+}
+
+export function isKpPlaceValueTensExchange(
+  value: unknown
+): value is KpPlaceValueTensExchange {
+  return isSealedExchange(value) &&
+    value.beatId === "beat.place-value.exchange-tens";
 }
 
 export function createKpPlaceValueOnesExchangeDom(input: {
@@ -193,6 +349,32 @@ export function createKpPlaceValueOnesExchangeDom(input: {
   if (!isKpPlaceValueOnesExchange(input.exchange)) {
     throw new Error("Ones-exchange DOM requires compiler-owned authority.");
   }
+  return createColumnExchangeDom({
+    ...input,
+    config: exchangeConfigs.ones
+  });
+}
+
+export function createKpPlaceValueTensExchangeDom(input: {
+  readonly document: Document;
+  readonly projection: KpPlaceValueWrittenColumnProjection;
+  readonly exchange: KpPlaceValueTensExchange;
+}): KpPlaceValueTensExchangeDom {
+  if (!isKpPlaceValueTensExchange(input.exchange)) {
+    throw new Error("Tens-exchange DOM requires compiler-owned authority.");
+  }
+  return createColumnExchangeDom({
+    ...input,
+    config: exchangeConfigs.tens
+  });
+}
+
+function createColumnExchangeDom(input: {
+  readonly document: Document;
+  readonly projection: KpPlaceValueWrittenColumnProjection;
+  readonly exchange: KpPlaceValueColumnExchange;
+  readonly config: ExchangeConfig;
+}): KpPlaceValueColumnExchangeDom {
   const source = createKpPlaceValueWrittenColumnDomProjection({
     document: input.document,
     projection: input.projection,
@@ -203,45 +385,45 @@ export function createKpPlaceValueOnesExchangeDom(input: {
     projection: input.projection,
     endpoint: "initial"
   });
-  for (const hiddenId of [
-    "digit.first.ones",
-    "digit.second.ones",
-    "operator.add"
-  ]) {
-    source.cellElements.get(hiddenId)!.dataset["kpVisibility"] = "hidden";
-    target.cellElements.get(hiddenId)!.dataset["kpVisibility"] = "hidden";
+  configureSource(source, input.config);
+  configureSource(target, input.config);
+  // The operation catalyst collapses with evaluation, then returns through
+  // the compositor's typed introduction track as the exchange settles.
+  target.cellElements.get("operator.add")!.dataset["kpVisibility"] = "visible";
+  for (const id of input.config.targetVisibleIds) {
+    target.cellElements.get(id)!.dataset["kpVisibility"] = "visible";
   }
-  target.cellElements.get("result.ones")!.dataset["kpVisibility"] = "visible";
-  target.cellElements.get("carry.tens")!.dataset["kpVisibility"] = "visible";
   const sourceGrid = source.root.querySelector<HTMLElement>(
     "[data-kp-place-value-grid]"
   );
   if (sourceGrid === null) {
-    throw new Error("Ones-exchange source lacks its semantic grid.");
+    throw new Error(
+      `${input.config.place} exchange source lacks its semantic grid.`
+    );
   }
   const total = input.document.createElement("span");
   total.dataset["kpPlaceValueEvaluationTotal"] = "";
   total.dataset["kpSemanticEntityId"] = input.exchange.sourceEntityId;
   total.dataset["kpPresentationGroupId"] = input.exchange.sourceEntityId;
   total.style.display = "contents";
-  total.append(
-    totalDigit(input.document, "tens", "1"),
-    totalDigit(input.document, "ones", "4")
-  );
+  total.append(...input.config.targetDigits.map((digit) =>
+    totalDigit(input.document, digit)
+  ));
   sourceGrid.append(total);
 
   const scene = createKpPlaceValueNativeSceneDom({
     document: input.document,
     sourceRoot: source.root,
     targetRoot: target.root,
-    sourceSceneId: "scene.place-value.ones-exchange.source",
-    targetSceneId: "scene.place-value.ones-exchange.target",
+    sourceSceneId:
+      `scene.place-value.${input.config.place}-exchange.source`,
+    targetSceneId:
+      `scene.place-value.${input.config.place}-exchange.target`,
     successorSyntheses: [input.exchange.intent]
   });
-  scene.root.dataset["kpPlaceValueOnesExchange"] = "";
+  scene.root.dataset[input.config.stageDataset] = "";
   scene.root.dataset["kpIdentityFissionProgramId"] =
     input.exchange.forward.programId;
-
   return Object.freeze({
     root: scene.root,
     sourceRoot: scene.sourceRoot,
@@ -261,59 +443,65 @@ export function createKpPlaceValueOnesExchangeDom(input: {
       scene.root.dataset["kpIdentityFissionProgress"] = String(progress);
       scene.root.dataset["kpIdentityTransferOccurred"] =
         String(transferOccurred);
-      return Object.freeze({
-        ownership,
-        transferOccurred
-      });
+      return Object.freeze({ ownership, transferOccurred });
     },
     dispose: scene.dispose
   });
 }
 
-function createBinding(): KpSuccessorSynthesisBinding {
+function configureSource(
+  dom: KpPlaceValueWrittenColumnDomProjection,
+  config: ExchangeConfig
+): void {
+  for (const id of config.sourceHiddenIds) {
+    dom.cellElements.get(id)!.dataset["kpVisibility"] = "hidden";
+  }
+  for (const id of config.sourceVisibleIds) {
+    dom.cellElements.get(id)!.dataset["kpVisibility"] = "visible";
+  }
+}
+
+function createBinding(config: ExchangeConfig):
+KpSuccessorSynthesisBinding {
+  const sourceAnnotationId =
+    `annotation.${config.place}.evaluated-total`;
+  const targetAnnotationIds = [
+    `annotation.${config.place}.remainder`,
+    `annotation.${config.place}.carry`
+  ] as const;
   return Object.freeze({
-    id: "successor.place-value.exchange-ones",
-    relationRecordId: "relation.place-value.exchange-ones",
+    id: `successor.place-value.exchange-${config.place}`,
+    relationRecordId: `relation.place-value.exchange-${config.place}`,
     authority: Object.freeze({
       operationId: "kp.core.fan-out",
-      bindingId: "binding.place-value.exchange-ones"
+      bindingId: `binding.place-value.exchange-${config.place}`
     }),
     sourceAnnotations: Object.freeze([
       Object.freeze({
-        id: "annotation.ones.evaluated-total",
+        id: sourceAnnotationId,
         semanticRole: "evaluated-column-total",
-        selectorIds: Object.freeze(["evaluation.ones.total"]),
+        selectorIds: Object.freeze([config.sourceEntityId]),
         contribution: "material-input" as const,
         propagationRank: 0,
         pathFamily: "arc-above" as const
       })
     ]),
-    targetAnnotations: Object.freeze([
-      Object.freeze({
-        id: "annotation.ones.remainder",
-        semanticRole: "settled-remainder",
-        selectorIds: Object.freeze(["result.ones"]),
-        propagationRank: 0,
-        pathFamily: "arc-below" as const
-      }),
-      Object.freeze({
-        id: "annotation.ones.carry",
-        semanticRole: "carried-ten",
-        selectorIds: Object.freeze(["carry.tens"]),
-        propagationRank: 1,
-        pathFamily: "arc-above" as const
+    targetAnnotations: Object.freeze(config.targetEntityIds.map(
+      (selectorId, index) => Object.freeze({
+        id: targetAnnotationIds[index]!,
+        semanticRole:
+          index === 0 ? "settled-remainder" : "carried-next-place",
+        selectorIds: Object.freeze([selectorId]),
+        propagationRank: index,
+        pathFamily:
+          index === 0 ? "arc-below" as const : "arc-above" as const
       })
-    ]),
+    )),
     lineages: Object.freeze([
       Object.freeze({
-        id: "lineage.place-value.exchange-ones.paint",
-        sourceAnnotationIds: Object.freeze([
-          "annotation.ones.evaluated-total"
-        ]),
-        targetAnnotationIds: Object.freeze([
-          "annotation.ones.remainder",
-          "annotation.ones.carry"
-        ])
+        id: `lineage.place-value.exchange-${config.place}.paint`,
+        sourceAnnotationIds: Object.freeze([sourceAnnotationId]),
+        targetAnnotationIds: Object.freeze([...targetAnnotationIds])
       })
     ])
   });
@@ -321,18 +509,25 @@ function createBinding(): KpSuccessorSynthesisBinding {
 
 function totalDigit(
   document: Document,
-  column: "tens" | "ones",
-  latex: "1" | "4"
+  digit: ExchangeConfig["targetDigits"][number]
 ): HTMLElement {
   const root = document.createElement("span");
   root.dataset["kpPlaceValueEvaluationDigit"] = "";
   root.dataset["kpPlaceValueNativeRoot"] = "";
   root.dataset["kpPlaceValueRow"] = "result";
-  root.dataset["kpPlaceValueColumn"] = column;
+  root.dataset["kpPlaceValueColumn"] = digit.column;
   root.dataset["kpVisibility"] = "visible";
-  root.innerHTML = renderLatexToHtml(latex, {
+  root.innerHTML = renderLatexToHtml(digit.latex, {
     displayMode: false,
     output: "htmlAndMathml"
   });
   return root;
+}
+
+function isSealedExchange(
+  value: unknown
+): value is KpPlaceValueColumnExchange {
+  return typeof value === "object" &&
+    value !== null &&
+    sealedExchanges.has(value);
 }

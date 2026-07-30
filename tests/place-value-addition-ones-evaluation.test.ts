@@ -52,7 +52,7 @@ test("both numeral inputs and the plus catalyst have exhaustive roles", () => {
   ]);
   assert.deepEqual(
     evaluation.binding.lineages[0]?.sourceAnnotationIds,
-    ["annotation.ones.first", "annotation.ones.second"]
+    ["annotation.ones.material.0", "annotation.ones.material.1"]
   );
   assert.ok(
     !evaluation.binding.lineages[0]?.sourceAnnotationIds.includes(

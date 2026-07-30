@@ -557,6 +557,9 @@ for (const viewport of [
       const exchange = () => document.querySelector<HTMLElement>(
         "[data-kp-place-value-ones-exchange]"
       )!;
+      const tensEvaluation = () => document.querySelector<HTMLElement>(
+        "[data-kp-place-value-tens-evaluation]"
+      )!;
       const paintMetric = (element: HTMLElement) => {
         const paint = element.querySelector<HTMLElement>(
           ".katex-html .mord"
@@ -672,6 +675,9 @@ for (const viewport of [
       const result = endpointTarget.querySelector<HTMLElement>(
         '[data-kp-semantic-entity-id="result.ones"]'
       )!;
+      const successorSource = tensEvaluation().querySelector<HTMLElement>(
+        '[data-kp-place-value-operation-endpoint="source"]'
+      )!;
       return {
         evaluationEndpoint,
         exchangeSource,
@@ -684,6 +690,17 @@ for (const viewport of [
         endpoint: {
           sourceOpacity: getComputedStyle(endpointSource).opacity,
           targetOpacity: getComputedStyle(endpointTarget).opacity,
+          exchangeDisplay: getComputedStyle(exchange()).display,
+          successorDisplay: getComputedStyle(tensEvaluation()).display,
+          successorSourceOpacity: getComputedStyle(successorSource).opacity,
+          successorCarryText:
+            successorSource.querySelector<HTMLElement>(
+              '[data-kp-semantic-entity-id="carry.tens"] .katex-html'
+            )?.textContent?.trim(),
+          successorResultText:
+            successorSource.querySelector<HTMLElement>(
+              '[data-kp-semantic-entity-id="result.ones"] .katex-html'
+            )?.textContent?.trim(),
           carryText:
             carry.querySelector<HTMLElement>(".katex-html")
               ?.textContent?.trim(),
@@ -750,7 +767,14 @@ for (const viewport of [
     )).toBe(true);
     expect(produced(evidence.after.blocks).visible).toBe("true");
     expect(evidence.endpoint.sourceOpacity).toBe("0");
-    expect(evidence.endpoint.targetOpacity).toBe("1");
+    // Exact boundaries belong to the successor beat. The completed result
+    // must therefore be opaque in the tens source, not in the retired scene.
+    expect(evidence.endpoint.targetOpacity).toBe("0");
+    expect(evidence.endpoint.exchangeDisplay).toBe("none");
+    expect(evidence.endpoint.successorDisplay).toBe("grid");
+    expect(evidence.endpoint.successorSourceOpacity).toBe("1");
+    expect(evidence.endpoint.successorCarryText).toBe("1");
+    expect(evidence.endpoint.successorResultText).toBe("4");
     expect(evidence.endpoint.carryText).toBe("1");
     expect(evidence.endpoint.resultText).toBe("4");
     expect(Number.parseFloat(evidence.endpoint.carryFontSize)).toBeLessThan(

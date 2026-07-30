@@ -167,7 +167,9 @@
     {
       "id": "s17",
       "title": "animate-tens-evaluation-and-exchange",
-      "status": "planned"
+      "summary": "Reused one data-driven operation-evaluation and identity-fission compositor for the tens column: the carried ten is opaque material in 1+7+5=13, 13 splits into result 3 plus carried hundred, and written/base-ten ownership switches at one canonical boundary with exact successor-scene handoff.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s18",

@@ -452,6 +452,69 @@
       "scope": "s16 static architecture and cost",
       "checkedAt": "2026-07-30T18:16:59.085Z",
       "notes": "All TypeScript projects pass; architecture remains at zero frozen semantic-animation exceptions; inference stays within 48471 types, 61210 instantiations, and 2.39 seconds."
+    },
+    {
+      "command": "npm_run_test_place_value_addition",
+      "status": "passed",
+      "scope": "slice-s17",
+      "checkedAt": "2026-07-30T18:41:18.198Z",
+      "notes": "75_of_75_shared_column_semantics_and_inverse_motion"
+    },
+    {
+      "command": "npm_run_test_browser_place_value_addition",
+      "status": "passed",
+      "scope": "slice-s17",
+      "checkedAt": "2026-07-30T18:41:19.247Z",
+      "notes": "36_of_36_chromium_firefox_webkit_wide_phone"
+    },
+    {
+      "command": "npm_run_typecheck",
+      "status": "passed",
+      "scope": "slice-s17",
+      "checkedAt": "2026-07-30T18:41:20.111Z",
+      "notes": "application_node_test_and_domain_projects_pass"
+    },
+    {
+      "command": "npm_run_check_architecture",
+      "status": "passed",
+      "scope": "slice-s17",
+      "checkedAt": "2026-07-30T18:41:21.040Z",
+      "notes": "shared_operation_route_and_no_new_compatibility_exceptions"
+    },
+    {
+      "command": "npm_run_check_inference",
+      "status": "passed",
+      "scope": "slice-s17",
+      "checkedAt": "2026-07-30T18:41:21.910Z",
+      "notes": "48471_types_61210_instantiations_2_05_seconds"
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "failed",
+      "scope": "s17 initial shared-column refactor",
+      "checkedAt": "2026-07-30T18:41:31.529Z",
+      "notes": "The first run exposed ones-only annotation assertions after the compiler became data-driven; the test now addresses semantic column ownership instead of filenames."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "failed",
+      "scope": "s17 initial cross-beat composition",
+      "checkedAt": "2026-07-30T18:41:45.768Z",
+      "notes": "The first browser runs exposed a dual catalyst/persistent claim for plus and a retired-scene endpoint assertion. The shared route now collapses the catalyst, reintroduces it through the canonical typed successor channel, and verifies exact boundaries in the successor scene."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s17 final semantic and typed column contract",
+      "checkedAt": "2026-07-30T18:41:46.739Z",
+      "notes": "75 of 75 pass after the data-driven ones and tens compiler refactor."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "passed",
+      "scope": "s17 final written and base-ten choreography",
+      "checkedAt": "2026-07-30T18:41:47.580Z",
+      "notes": "36 of 36 pass across Chromium Firefox and WebKit at wide and phone widths."
     }
   ],
   "expectedLearning": [

@@ -11,10 +11,12 @@ import {
   type KpPlaceValueAdditionRuntimeSession
 } from "./place-value-addition-runtime.ts";
 import {
-  createKpPlaceValueOnesEvaluationDom
+  createKpPlaceValueOnesEvaluationDom,
+  createKpPlaceValueTensEvaluationDom
 } from "./place-value-addition-ones-evaluation.ts";
 import {
-  createKpPlaceValueOnesExchangeDom
+  createKpPlaceValueOnesExchangeDom,
+  createKpPlaceValueTensExchangeDom
 } from "./place-value-addition-ones-exchange.ts";
 
 export interface KpPlaceValueAdditionSharedDom {
@@ -69,7 +71,25 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     exchange: input.session.onesExchange
   });
   onesExchange.root.style.display = "none";
-  writtenHost.append(written.root, onesEvaluation.root, onesExchange.root);
+  const tensEvaluation = createKpPlaceValueTensEvaluationDom({
+    document: input.document,
+    projection: input.session.written,
+    evaluation: input.session.tensEvaluation
+  });
+  tensEvaluation.root.style.display = "none";
+  const tensExchange = createKpPlaceValueTensExchangeDom({
+    document: input.document,
+    projection: input.session.written,
+    exchange: input.session.tensExchange
+  });
+  tensExchange.root.style.display = "none";
+  writtenHost.append(
+    written.root,
+    onesEvaluation.root,
+    onesExchange.root,
+    tensEvaluation.root,
+    tensExchange.root
+  );
   baseTen.root.dataset["kpPlaceValueView"] = "base-ten";
   root.append(writtenHost, baseTen.root);
 
@@ -91,19 +111,31 @@ export function createKpPlaceValueAdditionSharedDom(input: {
       frame.beat.id === "beat.place-value.evaluate-ones";
     const exchangingOnes =
       frame.beat.id === "beat.place-value.exchange-ones";
-    // Until the tens choreography is installed in s17, retain the exact ones
-    // endpoint natively instead of flashing back to the empty result row.
-    const retainingOnesEndpoint =
+    const evaluatingTens =
       frame.beat.id === "beat.place-value.evaluate-tens";
-    const onesActive =
-      evaluatingOnes || exchangingOnes || retainingOnesEndpoint;
+    const exchangingTens =
+      frame.beat.id === "beat.place-value.exchange-tens";
+    // Until the hundreds choreography is installed in s18, retain the exact
+    // tens endpoint instead of flashing back to an incomplete written state.
+    const retainingTensEndpoint =
+      frame.beat.id === "beat.place-value.evaluate-hundreds";
+    const motionActive =
+      evaluatingOnes ||
+      exchangingOnes ||
+      evaluatingTens ||
+      exchangingTens ||
+      retainingTensEndpoint;
     writtenHost.style.display = writtenVisible ? "grid" : "none";
     written.root.style.display =
-      writtenVisible && !onesActive ? "grid" : "none";
+      writtenVisible && !motionActive ? "grid" : "none";
     onesEvaluation.root.style.display =
       writtenVisible && evaluatingOnes ? "grid" : "none";
     onesExchange.root.style.display =
-      writtenVisible && (exchangingOnes || retainingOnesEndpoint)
+      writtenVisible && exchangingOnes ? "grid" : "none";
+    tensEvaluation.root.style.display =
+      writtenVisible && evaluatingTens ? "grid" : "none";
+    tensExchange.root.style.display =
+      writtenVisible && (exchangingTens || retainingTensEndpoint)
         ? "grid"
         : "none";
     if (writtenVisible && evaluatingOnes) {
@@ -113,22 +145,37 @@ export function createKpPlaceValueAdditionSharedDom(input: {
       );
     }
     const exchangeFrame =
-      writtenVisible && (exchangingOnes || retainingOnesEndpoint)
-        ? onesExchange.apply(
-            exchangingOnes ? frame.beatProgress : 1,
+      writtenVisible && exchangingOnes
+        ? onesExchange.apply(frame.beatProgress, frame.clock.direction)
+        : undefined;
+    if (writtenVisible && evaluatingTens) {
+      tensEvaluation.apply(frame.beatProgress, frame.clock.direction);
+    }
+    const tensExchangeFrame =
+      writtenVisible && (exchangingTens || retainingTensEndpoint)
+        ? tensExchange.apply(
+            exchangingTens ? frame.beatProgress : 1,
             frame.clock.direction
           )
         : undefined;
     if (baseTenVisible) {
       if (exchangingOnes) {
         baseTen.applyExchange({
-          exchangeId: "exchange.ones-to-tens",
+          exchangeId: input.session.onesExchange.baseTenExchangeId,
           progress: frame.beatProgress,
           // Hidden views do no paint measurement. Both projections use the
           // canonical transfer boundary owned by the compiled exchange.
           transferOccurred:
             exchangeFrame?.transferOccurred ??
             frame.beatProgress >= input.session.onesExchange.transferProgress
+        });
+      } else if (exchangingTens) {
+        baseTen.applyExchange({
+          exchangeId: input.session.tensExchange.baseTenExchangeId,
+          progress: frame.beatProgress,
+          transferOccurred:
+            tensExchangeFrame?.transferOccurred ??
+            frame.beatProgress >= input.session.tensExchange.transferProgress
         });
       } else {
         baseTen.setState(frame.baseTen.stable.stateId);
