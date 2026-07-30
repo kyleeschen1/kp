@@ -97,7 +97,9 @@
     {
       "id": "s07",
       "title": "encode-carry-and-remainder-lineage",
-      "status": "planned"
+      "summary": "Encoded both carried digits and settled remainders as nominal compiler outputs. The exact carry object produced by the ones lineage is consumed by the tens lineage; place and quantity roles are statically retained, exact values conserve, and duplicate, copied, wrong-place, and wrong-role inputs cannot mint lineage.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s08",

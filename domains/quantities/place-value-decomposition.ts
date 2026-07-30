@@ -23,15 +23,17 @@ export type KpPlaceValueComponentId<
 
 export interface KpPlaceValueComponent<
   QuantityId extends string,
-  Place extends KpBaseTenPlaceId
+  Place extends KpBaseTenPlaceId,
+  Role extends KpPlaceValueQuantityRole = KpPlaceValueQuantityRole
 > {
   readonly schemaVersion: "kp.place-value-component.v1";
   readonly id: KpPlaceValueComponentId<QuantityId, Place>;
   readonly quantityId: QuantityId;
+  readonly quantityRole: Role;
   readonly place: KpBaseTenPlace<Place>;
   readonly digit: KpDecimalDigit;
   readonly exactValue: bigint;
-  readonly [kpPlaceValueComponentBrand]: `${QuantityId}:${Place}`;
+  readonly [kpPlaceValueComponentBrand]: `${Role}:${QuantityId}:${Place}`;
 }
 
 export interface KpPlaceValueDecomposition<
@@ -42,9 +44,9 @@ export interface KpPlaceValueDecomposition<
   readonly id: `decomposition.${QuantityId}`;
   readonly quantity: KpPlaceValueQuantity<QuantityId, Role>;
   readonly columns: {
-    readonly hundreds: KpPlaceValueComponent<QuantityId, "hundreds">;
-    readonly tens: KpPlaceValueComponent<QuantityId, "tens">;
-    readonly ones: KpPlaceValueComponent<QuantityId, "ones">;
+    readonly hundreds: KpPlaceValueComponent<QuantityId, "hundreds", Role>;
+    readonly tens: KpPlaceValueComponent<QuantityId, "tens", Role>;
+    readonly ones: KpPlaceValueComponent<QuantityId, "ones", Role>;
   };
   readonly exactTotal: bigint;
   readonly [kpPlaceValueDecompositionBrand]: `${Role}:${QuantityId}`;
@@ -52,22 +54,25 @@ export interface KpPlaceValueDecomposition<
 
 function createComponent<
   const QuantityId extends string,
+  const Role extends KpPlaceValueQuantityRole,
   const Place extends KpBaseTenPlaceId
 >(
   quantityId: QuantityId,
+  quantityRole: Role,
   place: KpBaseTenPlace<Place>,
   digitValue: KpDecimalDigitValue
-): KpPlaceValueComponent<QuantityId, Place> {
+): KpPlaceValueComponent<QuantityId, Place, Role> {
   const component = Object.freeze({
     schemaVersion: "kp.place-value-component.v1" as const,
     id: `${quantityId}.${place.id}` as const,
     quantityId,
+    quantityRole,
     place,
     digit: createKpDecimalDigit(digitValue),
     exactValue: BigInt(digitValue) * place.unitValue
   });
   sealedComponents.add(component);
-  return component as KpPlaceValueComponent<QuantityId, Place>;
+  return component as KpPlaceValueComponent<QuantityId, Place, Role>;
 }
 
 export function decomposeKpPlaceValueQuantity<
@@ -87,9 +92,24 @@ export function decomposeKpPlaceValueQuantity<
   const tens = Number((quantity.value / 10n) % 10n) as KpDecimalDigitValue;
   const ones = Number(quantity.value % 10n) as KpDecimalDigitValue;
   const columns = Object.freeze({
-    hundreds: createComponent(quantity.id, kpBaseTenPlaces.hundreds, hundreds),
-    tens: createComponent(quantity.id, kpBaseTenPlaces.tens, tens),
-    ones: createComponent(quantity.id, kpBaseTenPlaces.ones, ones)
+    hundreds: createComponent(
+      quantity.id,
+      quantity.role,
+      kpBaseTenPlaces.hundreds,
+      hundreds
+    ),
+    tens: createComponent(
+      quantity.id,
+      quantity.role,
+      kpBaseTenPlaces.tens,
+      tens
+    ),
+    ones: createComponent(
+      quantity.id,
+      quantity.role,
+      kpBaseTenPlaces.ones,
+      ones
+    )
   });
   const exactTotal =
     columns.hundreds.exactValue +

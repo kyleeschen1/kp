@@ -207,6 +207,34 @@
       "scope": "broad",
       "checkedAt": "2026-07-30T16:27:10.258Z",
       "notes": "Architecture and inference budgets pass with the generic exchange certificate isolated in the quantities domain."
+    },
+    {
+      "command": "npm run typecheck:domains",
+      "status": "failed",
+      "scope": "s07-initial",
+      "checkedAt": "2026-07-30T16:32:04.377Z",
+      "notes": "The nominal lineage return needed the repository-standard explicit unknown bridge because its private brand is intentionally absent from the structural object literal; no type was weakened."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-30T16:32:05.374Z",
+      "notes": "25/25 tests pass; the emitted carry object is the same typed contributor consumed by the next column, exact totals conserve, and duplicate, wrong-place, wrong-role, and copied lineages fail."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-30T16:32:06.244Z",
+      "notes": "All TypeScript projects pass with place and quantity role carried through every component and lineage boundary."
+    },
+    {
+      "command": "npm run check:architecture and npm run check:inference",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-30T16:32:07.120Z",
+      "notes": "Architecture and inference budgets pass after adding the generic regrouping law and one semantic exemplar chain."
     }
   ],
   "expectedLearning": [
