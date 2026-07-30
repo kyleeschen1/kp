@@ -118,7 +118,9 @@
     {
       "id": "s10",
       "title": "require-exhaustive-presentations",
-      "status": "planned"
+      "summary": "Added an exhaustive nominal presentation plan over all seven trace beats. Evaluation reuses the canonical operation program with the plus catalyst; exchange requires conservation proof plus opaque identity-fission carry split; continuants use same-entity persistence; settlement requires native KaTeX same-root ownership. Copied authority is rejected and unverified traces resolve to explicit static checkpoints, never fallback animation.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s11",

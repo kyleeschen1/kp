@@ -67,6 +67,7 @@ export const kpPlaceValueAdditionVisualReference = Object.freeze({
       })
     ]),
     underline: Object.freeze({
+      id: "rule.addition.underline",
       row: "underline",
       fromColumn: "operator",
       throughColumn: "ones",

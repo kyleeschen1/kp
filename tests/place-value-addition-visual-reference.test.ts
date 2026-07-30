@@ -36,6 +36,7 @@ test("visual reference fixes the conventional five-row four-column algorithm", (
     ]
   );
   assert.deepEqual(reference.primaryStage.underline, {
+    id: "rule.addition.underline",
     row: "underline",
     fromColumn: "operator",
     throughColumn: "ones",

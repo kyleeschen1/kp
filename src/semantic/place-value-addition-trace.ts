@@ -186,7 +186,7 @@ KpPlaceValueAdditionTrace {
       states[1].id,
       [establishReference.id],
       carryLineages.ones.contributors.map(({ id }) => id),
-      [],
+      ["evaluation.ones.total"],
       [carryLineages.ones.id]
     ),
     beat(
@@ -195,7 +195,7 @@ KpPlaceValueAdditionTrace {
       states[1].id,
       states[2].id,
       [evaluateOnesReference.id],
-      carryLineages.ones.contributors.map(({ id }) => id),
+      ["evaluation.ones.total"],
       [carryLineages.ones.remainder.id, carryLineages.ones.carry.id],
       [carryLineages.ones.exchange.id, carryLineages.ones.id]
     ),
@@ -206,7 +206,7 @@ KpPlaceValueAdditionTrace {
       states[3].id,
       [exchangeOnesReference.id],
       carryLineages.tens.contributors.map(({ id }) => id),
-      [],
+      ["evaluation.tens.total"],
       [carryLineages.tens.id]
     ),
     beat(
@@ -215,7 +215,7 @@ KpPlaceValueAdditionTrace {
       states[3].id,
       states[4].id,
       [evaluateTensReference.id],
-      carryLineages.tens.contributors.map(({ id }) => id),
+      ["evaluation.tens.total"],
       [carryLineages.tens.remainder.id, carryLineages.tens.carry.id],
       [carryLineages.tens.exchange.id, carryLineages.tens.id]
     ),
@@ -240,7 +240,7 @@ KpPlaceValueAdditionTrace {
         carryLineages.tens.remainder.id,
         carryLineages.ones.remainder.id
       ],
-      [result.id],
+      [result.quantity.id],
       [result.id]
     )
   ]);
