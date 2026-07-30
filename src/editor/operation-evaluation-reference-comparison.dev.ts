@@ -47,6 +47,23 @@ export function mountKpOperationEvaluationReferenceComparison(input: {
   root.dataset["kpOperationEvaluationReferenceComparison"] = "";
   root.dataset["kpOperationEvaluationPrimaryCandidate"] =
     "opaque-gather-and-recognize-v1";
+  const materialInputIds = input.synthesis.sourceAnnotations
+    .filter(({ contribution }) => contribution === "material-input")
+    .map(({ id }) => id);
+  const targetIds = input.synthesis.targetAnnotations.map(({ id }) => id);
+  const coveredSources = new Set(input.synthesis.lineages.flatMap(
+    ({ sourceAnnotationIds }) => sourceAnnotationIds
+  ));
+  const coveredTargets = new Set(input.synthesis.lineages.flatMap(
+    ({ targetAnnotationIds }) => targetAnnotationIds
+  ));
+  // Pair-scoped contact evidence is exposed for the diagnostic comparison;
+  // geometry alone must never invent semantic permission for paint overlap.
+  root.dataset["kpOperationEvaluationReferenceContactAuthority"] =
+    materialInputIds.every((id) => coveredSources.has(id)) &&
+    targetIds.every((id) => coveredTargets.has(id))
+      ? "complete"
+      : "incomplete";
   root.innerHTML = `
     <header class="kp-operation-evaluation-comparison__header">
       <p class="kp-operation-evaluation-comparison__eyebrow">

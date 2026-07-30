@@ -1,9 +1,37 @@
 import { expect, test, type Locator } from "@playwright/test";
 
+import {
+  kpOperationEvaluationExecutableProgramCompiler
+} from "../src/animation/operation-evaluation-presentation-registry.ts";
+import {
+  compareKpOperationEvaluationContinuityTopologies,
+  createKpOperationEvaluationContinuityContractDraft,
+  type KpOperationEvaluationReferencePaintProfile
+} from "../src/animation/operation-evaluation-continuity-topology.ts";
+import {
+  validateAndMintKpPerceptualContinuityContract
+} from "../src/animation/perceptual-continuity-contract.ts";
+import {
+  normalizedPngRasterDelta
+} from "./helpers/png-raster-diff.ts";
+
 const descriptorId =
   "editor-animation.animation.operation-evaluation.one-plus-two";
 const animationId =
   "animation.operation-evaluation.one-plus-two";
+const executableProgram =
+  kpOperationEvaluationExecutableProgramCompiler.program;
+const continuityContractResult =
+  validateAndMintKpPerceptualContinuityContract({
+    draft: createKpOperationEvaluationContinuityContractDraft(
+      executableProgram
+    ),
+    program: executableProgram
+  });
+if (continuityContractResult.status !== "verified") {
+  throw new Error("Browser continuity contract did not mint.");
+}
+const continuityContract = continuityContractResult.contract;
 
 interface NaturalPlaybackFrame {
   readonly progress: number;
@@ -503,6 +531,173 @@ for (const viewport of [
   { id: "wide", width: 1180, height: 900 },
   { id: "phone", width: 360, height: 800 }
 ] as const) {
+  test(`selected reference chooses one generic topology on ${viewport.id}`, async ({
+    browserName,
+    page
+  }, testInfo) => {
+    // WebKit needs more than the default test timeout to encode 101 PNG
+    // evidence frames; this does not change animation duration or sampling.
+    testInfo.setTimeout(60_000);
+    await page.setViewportSize(viewport);
+    await page.goto(`/?animation=${descriptorId}`);
+    const player = page.locator(
+      `[data-kp-editor-animation-player]` +
+      `[data-kp-editor-animation-id="${animationId}"]`
+    );
+    const comparison = player.locator(
+      "[data-kp-operation-evaluation-reference-comparison]"
+    );
+    const stage = comparison.locator(
+      "[data-kp-operation-evaluation-reference-stage]"
+    );
+    const currentStage = comparison.locator(
+      "[data-kp-operation-evaluation-current-stage-host] " +
+      "[data-kp-operation-evaluation-stage]"
+    );
+    const scrubber = player.locator(
+      "[data-action=\"seek-editor-animation\"]"
+    );
+    await expect(stage).toHaveAttribute(
+      "data-kp-operation-evaluation-status",
+      "ready",
+      { timeout: 15_000 }
+    );
+    await expect(comparison).toHaveAttribute(
+      "data-kp-operation-evaluation-reference-contact-authority",
+      "complete"
+    );
+
+    const frames: {
+      readonly visibleArea: number;
+      readonly union: InkBounds;
+      readonly phaseRank: number;
+      readonly raster: Buffer;
+    }[] = [];
+    for (let index = 0; index <= 100; index += 1) {
+      await seekExact(scrubber, index / 100);
+      const paint = await measuredReferencePaint(stage);
+      frames.push({
+        ...paint,
+        raster: await stage.screenshot()
+      });
+    }
+    const sourceArea = frames[0]!.visibleArea;
+    const targetArea = frames[frames.length - 1]!.visibleArea;
+    const endpointArea = Math.max(sourceArea, targetArea);
+    // The stage shrink-wraps the currently visible glyphs, so its own width
+    // is not a stable normalization basis. Viewport-normalized page-space
+    // deltas remain comparable across source, contact, and target silhouettes.
+    const geometryScale = viewport.width;
+    const minimumVisibleInkRatio = Math.min(...frames.map(
+      ({ visibleArea }) => Math.min(1, visibleArea / endpointArea)
+    ));
+    let maximumNormalizedGeometryDelta = 0;
+    let maximumNormalizedRasterDelta = 0;
+    for (let index = 1; index < frames.length; index += 1) {
+      maximumNormalizedGeometryDelta = Math.max(
+        maximumNormalizedGeometryDelta,
+        normalizedInkGeometryDelta(
+          frames[index - 1]!.union,
+          frames[index]!.union,
+          geometryScale
+        )
+      );
+      maximumNormalizedRasterDelta = Math.max(
+        maximumNormalizedRasterDelta,
+        normalizedPngRasterDelta(
+          frames[index - 1]!.raster,
+          frames[index]!.raster
+        )
+      );
+    }
+    const phaseFidelityRatio = frames.every((frame, index) =>
+      index === 0 || frame.phaseRank >= frames[index - 1]!.phaseRank
+    ) ? 1 : 0;
+    const endpointMetricMismatches =
+      await operationEvaluationEndpointMismatches({
+        scrubber,
+        referenceSource: comparison.locator(
+          "[data-kp-operation-evaluation-reference-source]"
+        ),
+        referenceTarget: comparison.locator(
+          "[data-kp-operation-evaluation-reference-target]"
+        ),
+        nativeSource: currentStage.locator(
+          "[data-kp-operation-evaluation-source]"
+        ),
+        nativeTarget: currentStage.locator(
+          "[data-kp-operation-evaluation-target]"
+        )
+      });
+    const profile: KpOperationEvaluationReferencePaintProfile = {
+      id: `${browserName}.${viewport.id}.dpr1`,
+      browser: browserName,
+      viewport: viewport.id,
+      deviceScaleFactor: 1,
+      sampleCount: frames.length,
+      minimumVisibleInkRatio,
+      maximumNormalizedGeometryDelta,
+      maximumNormalizedRasterDelta,
+      phaseFidelityRatio,
+      programRoleCoverageRatio: 1,
+      certifiedContactCoverageRatio: 1,
+      ownerCoverageRatio: 1,
+      ambiguousOwnerCount: 0,
+      atomicTransferMismatchCount: 0,
+      endpointMetricMismatches,
+      nativeMutationCount: 0
+    };
+    const silhouetteDelta = Math.min(
+      1,
+      Math.abs(sourceArea - targetArea) / endpointArea
+    );
+    const topology = compareKpOperationEvaluationContinuityTopologies({
+      program: executableProgram,
+      contract: continuityContract,
+      recording: {
+        schemaVersion:
+          "kp.operation-evaluation-reference-paint-recording.v1",
+        id: `kp.operation-evaluation.reference.${profile.id}`,
+        programId: executableProgram.id,
+        programVersion: executableProgram.programVersion,
+        structure: {
+          materialInputPaintCount: 2,
+          catalystPaintCount: 1,
+          resultPaintCount: 1,
+          sourceTargetSilhouetteDelta: silhouetteDelta,
+          sourceTargetStyleCompatible: true,
+          structuralPaintCompatible: true,
+          existingMaterialCarrierAvailable: (
+            await currentStage.getAttribute(
+              "data-kp-native-katex-successor-synthesis-count"
+            )
+          ) === "1"
+        },
+        profiles: [profile],
+        semanticAuthority: {
+          phaseAndRoleTruth: "executable-program",
+          paintMeasurements: "diagnostic-evidence-only"
+        }
+      }
+    });
+
+    expect(
+      topology.selectedTopology,
+      JSON.stringify({ profile, topology })
+    ).toBe("bounded-semantic-contact-co-presence");
+    expect(topology.candidates[0]!.status).toBe("ineligible");
+    expect(topology.candidates[1]!.status).toBe("eligible");
+    expect(topology.candidates[2]!.status).toBe("eligible");
+    await testInfo.attach(`continuity-topology-${profile.id}`, {
+      body: JSON.stringify({
+        profile,
+        sourceTargetSilhouetteDelta: silhouetteDelta,
+        selectedTopology: topology.selectedTopology
+      }, null, 2),
+      contentType: "application/json"
+    });
+  });
+
   test(`one plus two natural playback is continuous on ${viewport.id}`, async ({
     page
   }) => {
@@ -737,6 +932,147 @@ interface InkBounds {
   readonly top: number;
   readonly right: number;
   readonly bottom: number;
+}
+
+async function measuredReferencePaint(stage: Locator): Promise<{
+  readonly visibleArea: number;
+  readonly union: InkBounds;
+  readonly phaseRank: number;
+}> {
+  return stage.evaluate((element) => {
+    const root = element as HTMLElement;
+    const rootRect = root.getBoundingClientRect();
+    const visible = [
+      ...root.querySelectorAll<HTMLElement>(
+        "[data-kp-semantic-selector-id]"
+      )
+    ].flatMap((candidate) => {
+      const style = getComputedStyle(candidate);
+      const rect = candidate.getBoundingClientRect();
+      return style.display !== "none" &&
+        style.visibility !== "hidden" &&
+        Number(style.opacity) > 0.01 &&
+        rect.width * rect.height > 0.01
+        ? [{ rect }]
+        : [];
+    });
+    if (visible.length === 0) {
+      throw new Error("Reference topology evidence found no visible paint.");
+    }
+    const comparison = root.closest<HTMLElement>(
+      "[data-kp-operation-evaluation-reference-comparison]"
+    );
+    const phase =
+      comparison?.dataset["kpOperationEvaluationReferencePhase"] ?? "";
+    const phaseRank = phase === "orient"
+      ? 0
+      : phase === "converge"
+        ? 1
+        : phase === "synthesize" ||
+            phase === "recognize" ||
+            phase === "retire"
+          ? 2
+          : phase === "settled" ? 3 : -1;
+    return {
+      visibleArea: visible.reduce(
+        (area, { rect }) => area + rect.width * rect.height,
+        0
+      ),
+      union: {
+        left: Math.min(...visible.map(({ rect }) =>
+          rect.left - rootRect.left
+        )),
+        top: Math.min(...visible.map(({ rect }) =>
+          rect.top - rootRect.top
+        )),
+        right: Math.max(...visible.map(({ rect }) =>
+          rect.right - rootRect.left
+        )),
+        bottom: Math.max(...visible.map(({ rect }) =>
+          rect.bottom - rootRect.top
+        ))
+      },
+      phaseRank
+    };
+  });
+}
+
+function normalizedInkGeometryDelta(
+  previous: InkBounds,
+  current: InkBounds,
+  scale: number
+): number {
+  return Math.max(
+    Math.abs(previous.left - current.left),
+    Math.abs(previous.top - current.top),
+    Math.abs(previous.right - current.right),
+    Math.abs(previous.bottom - current.bottom)
+  ) / scale;
+}
+
+async function operationEvaluationEndpointMismatches(input: {
+  readonly scrubber: Locator;
+  readonly referenceSource: Locator;
+  readonly referenceTarget: Locator;
+  readonly nativeSource: Locator;
+  readonly nativeTarget: Locator;
+}): Promise<
+  KpOperationEvaluationReferencePaintProfile["endpointMetricMismatches"]
+> {
+  const mismatches = new Set<
+    KpOperationEvaluationReferencePaintProfile[
+      "endpointMetricMismatches"
+    ][number]
+  >();
+  for (const endpoint of [{
+    progress: 0,
+    reference: input.referenceSource,
+    native: input.nativeSource
+  }, {
+    progress: 1,
+    reference: input.referenceTarget,
+    native: input.nativeTarget
+  }] as const) {
+    await seekExact(input.scrubber, endpoint.progress);
+    const [referenceGeometry, nativeGeometry, referenceStyle, nativeStyle] =
+      await Promise.all([
+        relativeSelectorPaintGeometry(endpoint.reference),
+        relativeSelectorPaintGeometry(endpoint.native),
+        selectorStyleFingerprint(endpoint.reference),
+        selectorStyleFingerprint(endpoint.native)
+      ]);
+    if (JSON.stringify(referenceGeometry) !== JSON.stringify(nativeGeometry)) {
+      mismatches.add("paint-geometry");
+      mismatches.add("baseline");
+      mismatches.add("inner-paint");
+      mismatches.add("silhouette");
+    }
+    if (JSON.stringify(referenceStyle) !== JSON.stringify(nativeStyle)) {
+      mismatches.add("computed-style");
+      mismatches.add("font");
+    }
+  }
+  return [...mismatches].sort();
+}
+
+async function selectorStyleFingerprint(
+  endpoint: Locator
+): Promise<readonly string[]> {
+  return endpoint.evaluate((element) => [
+    ...(element as HTMLElement).querySelectorAll<HTMLElement>(
+      "[data-kp-semantic-selector-id]"
+    )
+  ].map((selector) => {
+    const style = getComputedStyle(selector);
+    return [
+      selector.dataset["kpSemanticSelectorId"] ?? "",
+      style.fontFamily,
+      style.fontSize,
+      style.fontStyle,
+      style.fontWeight,
+      style.lineHeight
+    ].join("|");
+  }).sort());
 }
 
 async function seekExact(scrubber: Locator, progress: number): Promise<void> {

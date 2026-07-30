@@ -782,6 +782,48 @@
       "scope": "s11 control-plane integrity",
       "checkedAt": "2026-07-30T00:56:37.980Z",
       "notes": "Validated 832 nodes and 14446 events after completing the perceptual-continuity contract slice."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "slice-12 topology selection and surrounding presentation contracts",
+      "checkedAt": "2026-07-30T01:47:00.071Z",
+      "notes": "161/161 pass after adding the cross-family fail-closed boundary."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-continuity",
+      "status": "passed",
+      "scope": "slice-12 measured topology matrix",
+      "checkedAt": "2026-07-30T01:47:08.164Z",
+      "notes": "42/42 checks pass across Chromium Firefox and WebKit at wide and phone viewports; each 101-frame profile selects bounded semantic-contact co-presence with exact endpoint metrics."
+    },
+    {
+      "command": "npm run typecheck; npm run check:inference; npm run build; npm run check:reader-production; npm run check:reader-budgets; npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice-12 typed production and resource boundaries",
+      "checkedAt": "2026-07-30T01:47:16.030Z",
+      "notes": "All pass. Build retains only the inherited large-chunk advisory; reader closure covers 11 routes and review capture remains production-excluded."
+    },
+    {
+      "command": "initial slice-12 browser topology measurement harness",
+      "status": "failed",
+      "scope": "diagnostic evidence calibration",
+      "checkedAt": "2026-07-30T01:47:27.235Z",
+      "notes": "Initial false failures came from shrink-wrapped-stage normalization and then page-space coordinates after screenshot auto-scroll; both evidence-only bugs were corrected to stage-relative coordinates and viewport normalization before the stable 42/42 run. A later WebKit-only 30-second harness timeout was corrected with a test-only timeout, without changing animation timing."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "failed",
+      "scope": "slice-12 architecture audit",
+      "checkedAt": "2026-07-30T01:47:34.019Z",
+      "notes": "Only inherited baseline failure: stale legacy.main.query-view-routing exception expects get(view) equals ftc-tutorial. The slice-12 paths introduce no architecture-policy violation."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-12 control-plane integrity",
+      "checkedAt": "2026-07-30T01:48:15.327Z",
+      "notes": "Validated 832 nodes and 14453 events before closing the slice."
     }
   ],
   "allowedWork": [
@@ -881,7 +923,8 @@
     {
       "id": "s12",
       "title": "select-continuity-topology",
-      "status": "planned"
+      "summary": "Selected bounded semantic-contact co-presence for many-to-one operation evaluation from a closed three-candidate comparison against the approved continuous-recognition reference. Six 101-frame browser/viewport paint profiles satisfy the s11 contract with exact endpoints; reverse FLIP remains limited to compatible one-to-one paint and visible carrier remains a bounded fallback. This slice changes diagnostic and architectural authority only, not production rendering.",
+      "status": "complete"
     },
     {
       "id": "s13",
