@@ -165,13 +165,11 @@ test("factoring binds the exact x lineage and preserves all other context", () =
   }
 });
 
-test("parallel motif phases render as one complete source-target cohort", () => {
+test("parallel motif phases retain one complete cohort and execution authority", () => {
   const animation = createKpFoldableDistributionEquationAnimationAsset();
-  for (const [progress, motifKind] of [
+  for (const [progress, executionKind] of [
     [0.05, "copy-fan-out"],
-    // Both reviewed arithmetic branches now retain the same executable merge
-    // motif; the cohort may preserve it without one branch claiming the other.
-    [0.3, "successor-synthesis"]
+    [0.3, "operation-evaluation"]
   ] as const) {
     const runtimeFrame = sampleKpAnimationRuntimeFrame({
       animation,
@@ -188,10 +186,16 @@ test("parallel motif phases render as one complete source-target cohort", () => 
 
     assert.match(transition.id, /^cohort\./);
     assert.equal(transition.transformType, "parallelSemanticCohort");
+    // Successor cohorts use the sealed program as their execution authority;
+    // retaining the older decorative motif label would let tests pass while a
+    // different runtime route actually executes.
+    const effectiveExecutionKind =
+      presentation.executableProgram?.kind ??
+      presentation.visualMotif?.kind;
     assert.equal(
-      presentation.visualMotif?.kind,
-      motifKind,
-      "homogeneous parallel cohorts must retain their executable motif"
+      effectiveExecutionKind,
+      executionKind,
+      "homogeneous parallel cohorts must retain their execution authority"
     );
     assert.equal(
       transition.relations.length,
@@ -224,6 +228,10 @@ test("parallel product cohort retains both successor synthesis bindings", () => 
   );
 
   assert.match(transition.id, /^cohort\./);
+  assert.equal(
+    presentation.executableProgram?.kind,
+    "operation-evaluation"
+  );
   assert.equal(presentation.successorSyntheses?.length, 2);
   assert.equal(
     new Set(presentation.successorSyntheses?.map(({ id }) => id)).size,

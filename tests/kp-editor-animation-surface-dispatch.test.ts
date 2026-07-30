@@ -21,7 +21,7 @@ test("editor animation surface dispatch covers every current concrete asset", ()
     families: createSymbolicManipulationFamilyRegistry()
   }).map(dispatchKpEditorAnimationSurface);
 
-  assert.equal(dispatches.length, 47);
+  assert.equal(dispatches.length, 49);
   assert.equal(
     dispatches.some((dispatch) => dispatch.kind === "unsupported"),
     false
@@ -34,7 +34,7 @@ test("editor animation surface dispatch covers every current concrete asset", ()
       ])
     ),
     {
-      equation: 34,
+      equation: 36,
       diagram: 2,
       graph: 9,
       programming: 1,

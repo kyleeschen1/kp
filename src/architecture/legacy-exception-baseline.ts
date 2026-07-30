@@ -65,7 +65,7 @@ export const kpLegacyArchitectureExceptionBaseline = [
     kind: "central-route-branch",
     sourceFile: "src/main.ts",
     evidencePatterns: [
-      'get("view") === "ftc-tutorial"',
+      'requestedView === "ftc-tutorial"',
       '| "animation-workbench" = "editor"'
     ],
     rationale:

@@ -26,14 +26,14 @@ test("editor animation picker groups the concrete catalog by supported surface",
     selectedDescriptorId: descriptors[13]?.id
   });
 
-  assert.equal(model.optionCount, 30);
+  assert.equal(model.optionCount, 32);
   assert.deepEqual(
     model.groups.map((group) => [group.id, group.options.length]),
     [
       ["algebra", 7],
       ["calculus", 4],
       ["linear-algebra", 4],
-      ["equation", 10],
+      ["equation", 12],
       ["diagram", 2],
       ["graph", 1],
       ["programming", 1],
@@ -45,12 +45,26 @@ test("editor animation picker groups the concrete catalog by supported surface",
       .filter((option) => option.selected).length,
     1
   );
+  assert.deepEqual(
+    model.groups.flatMap((group) => group.options)
+      .filter(({ animationId }) =>
+        animationId ===
+          "animation.operation-evaluation.five-plus-two" ||
+        animationId ===
+          "animation.operation-evaluation.three-sixths"
+      )
+      .map(({ animationId }) => animationId),
+    [
+      "animation.operation-evaluation.five-plus-two",
+      "animation.operation-evaluation.three-sixths"
+    ]
+  );
 
   const html = renderKpEditorAnimationPicker(model);
   assert.match(html, /data-action="set-editor-animation"/);
   assert.match(html, /<optgroup label="Graph catalog">/);
   assert.match(html, /data-kp-editor-animation-picker-option/);
-  assert.match(html, /data-kp-editor-animation-index="29"/);
+  assert.match(html, /data-kp-editor-animation-index="31"/);
 });
 
 test("editor animation picker exposes one family-backed option per canonical animation", () => {

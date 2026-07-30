@@ -1317,7 +1317,8 @@
     {
       "id": "s24",
       "title": "run-release-matrix",
-      "status": "planned"
+      "summary": "Release matrix passed: operation plans 175/175, real KaTeX 73/73, exact quantity 100/100, foldable presentation 21/21, neighboring operation browser 54/54, exact-fraction browser 45/45 across Chromium Firefox WebKit, typecheck, architecture, inference, promotion memory, production build, and workspace validation. Repaired one stale architecture sentinel, catalog ratchets for the two new canonical callers, and a distribution assertion that inspected the retired decorative label instead of executable program authority. Broad npm test is 2982/2985 with only the three pre-existing out-of-scope failures recorded at s03: HTML escaping inventory, native scene core byte ceiling, and linear provider boundary.",
+      "status": "complete"
     },
     {
       "id": "s25",
