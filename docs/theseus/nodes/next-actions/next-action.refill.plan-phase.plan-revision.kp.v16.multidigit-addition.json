@@ -690,6 +690,76 @@
       "scope": "s20 control-plane closure",
       "checkedAt": "2026-07-30T20:13:02.812Z",
       "notes": "Workspace validates 837 nodes and 14760 events before slice completion."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-30T20:54:30.768Z",
+      "notes": "87/87 place-value semantic, accessibility, static/export, navigation, and runtime checks passed."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-30T20:54:31.854Z",
+      "notes": "60/60 Chromium, Firefox, and WebKit wide/phone checks passed, including the real Review round trip."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.place-value-addition.config.ts tests/place-value-addition-responsive-surface.browser.spec.ts --grep accessibility-keyboard --project=chromium --project=firefox --project=webkit --workers=1",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-30T20:54:32.752Z",
+      "notes": "3/3 focused accessibility, keyboard, viewport/frame telemetry, and Review persistence checks passed."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "regression",
+      "checkedAt": "2026-07-30T20:54:33.632Z",
+      "notes": "101/101 existing exact-fraction accessibility, export, runtime, and presentation checks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-07-30T20:54:34.517Z",
+      "notes": "All architecture boundaries passed with no new renderer, compositor, scheduler, lifecycle, or compatibility exception."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "types",
+      "checkedAt": "2026-07-30T20:54:35.403Z",
+      "notes": "Inference contracts passed."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-07-30T20:54:36.265Z",
+      "notes": "Development Review remains excluded from production."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-07-30T20:54:37.121Z",
+      "notes": "Reader production closure passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "build",
+      "checkedAt": "2026-07-30T20:54:37.982Z",
+      "notes": "Typecheck, domain typecheck, and production build passed."
+    },
+    {
+      "command": "theseus workspace validate; git diff --check",
+      "status": "passed",
+      "scope": "s21 durable integration closure",
+      "checkedAt": "2026-07-30T20:55:11.631Z",
+      "notes": "Validated 837 nodes and 14772 events; the exact owned diff has no whitespace errors and preserved user-owned files remain unstaged."
     }
   ],
   "expectedLearning": [

@@ -40,6 +40,10 @@ import {
   compileKpPlaceValueNativeSettlement,
   type KpPlaceValueNativeSettlement
 } from "./place-value-addition-native-settlement.ts";
+import {
+  createKpPlaceValueAdditionAccessibleProjection,
+  type KpPlaceValueAdditionAccessibleProjection
+} from "./place-value-addition-accessible-projection.ts";
 
 declare const kpPlaceValueRuntimeSessionBrand: unique symbol;
 declare const kpPlaceValueRuntimeFrameBrand: unique symbol;
@@ -65,6 +69,7 @@ export interface KpPlaceValueAdditionRuntimeSession {
   readonly tensExchange: KpPlaceValueTensExchange;
   readonly hundredsEvaluation: KpPlaceValueHundredsEvaluation;
   readonly nativeSettlement: KpPlaceValueNativeSettlement;
+  readonly accessibility: KpPlaceValueAdditionAccessibleProjection;
   readonly mountedViews: readonly ["written", "base-ten"];
   readonly [kpPlaceValueRuntimeSessionBrand]: true;
 }
@@ -153,6 +158,9 @@ KpPlaceValueAdditionRuntimeSession {
     tensExchange,
     hundredsEvaluation,
     nativeSettlement,
+    accessibility: createKpPlaceValueAdditionAccessibleProjection({
+      trace: foundation.trace
+    }),
     mountedViews: Object.freeze(["written", "base-ten"] as const)
   });
   sealedSessions.add(session);

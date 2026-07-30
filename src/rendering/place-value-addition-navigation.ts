@@ -40,6 +40,9 @@ export interface KpPlaceValueAdditionNavigationSession {
   seekOutline(
     anchorId: KpPlaceValueAdditionOutlineAnchor["id"]
   ): KpPlaceValueAdditionRuntimeFrame;
+  setView(
+    view: KpPlaceValueRuntimeView
+  ): KpPlaceValueAdditionRuntimeFrame;
   setFold(input: {
     readonly mode: KpPlaceValueAdditionFoldMode;
     readonly pinnedNodeIds?: readonly string[] | undefined;
@@ -66,6 +69,7 @@ export function createKpPlaceValueAdditionNavigationSession(input: {
   const runtime = createKpPlaceValueAdditionRuntimeSession();
   let progress = 0;
   let sequence = 0;
+  let selectedView = input.selectedView ?? "written";
   let fold = compileKpPlaceValueAdditionFoldProjection({
     intent: createKpPlaceValueAdditionFoldIntent({ mode: "automatic" }),
     detailBudget: "balanced"
@@ -79,7 +83,7 @@ export function createKpPlaceValueAdditionNavigationSession(input: {
       sequence
     }),
     viewportWidth: input.viewportWidth,
-    selectedView: input.selectedView
+    selectedView
   });
 
   const sample = (
@@ -100,7 +104,7 @@ export function createKpPlaceValueAdditionNavigationSession(input: {
         ...(checkpointId === undefined ? {} : { checkpointId })
       }),
       viewportWidth: input.viewportWidth,
-      selectedView: input.selectedView
+      selectedView
     });
     progress = normalized;
     return frame;
@@ -140,6 +144,13 @@ export function createKpPlaceValueAdditionNavigationSession(input: {
         );
       }
       return next;
+    },
+    setView(view: KpPlaceValueRuntimeView) {
+      if (view !== "written" && view !== "base-ten") {
+        throw new Error(`Unknown place-value view ${String(view)}.`);
+      }
+      selectedView = view;
+      return sample(progress, "controls");
     },
     setFold(request: {
       readonly mode: KpPlaceValueAdditionFoldMode;

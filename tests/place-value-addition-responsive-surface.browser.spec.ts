@@ -5,6 +5,12 @@ import type {
 import type {
   KpPlaceValueAdditionResponsiveSurface
 } from "../src/rendering/place-value-addition-responsive-surface.ts";
+import type {
+  KpDevReviewCaptureProvider
+} from "../src/dev-review/capture-provider.ts";
+import {
+  kpDevReviewNoteV2Schema
+} from "../protocols/dev-review-v2-schema.ts";
 
 for (const viewport of [
   { name: "wide", width: 1180, height: 800 },
@@ -355,4 +361,184 @@ test("responsive layout is invariant in CSS pixels at DPR 1 and 2", async ({
   expect(Math.abs(snapshots[0]!.height - snapshots[1]!.height))
     .toBeLessThanOrEqual(0.25);
   expect(snapshots[0]!.fontSize).toBe(snapshots[1]!.fontSize);
+});
+
+test("accessibility keyboard and Review metadata share the sealed frame", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 700 });
+  await page.goto("/");
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-dev-review-ready",
+    "true"
+  );
+  const initial = await page.evaluate(async () => {
+    const navigationUrl =
+      "/src/rendering/place-value-addition-navigation.ts";
+    const surfaceUrl =
+      "/src/rendering/place-value-addition-responsive-surface.ts";
+    const reviewUrl =
+      "/src/dev-review/editor-animation-library-capture-provider.ts";
+    const navigationModule = await import(
+      /* @vite-ignore */ navigationUrl
+    );
+    const surfaceModule = await import(
+      /* @vite-ignore */ surfaceUrl
+    );
+    const reviewModule = await import(
+      /* @vite-ignore */ reviewUrl
+    );
+    const navigation =
+      navigationModule.createKpPlaceValueAdditionNavigationSession({
+        viewportWidth: 390,
+        selectedView: "written"
+      }) as KpPlaceValueAdditionNavigationSession;
+    const surface =
+      surfaceModule.createKpPlaceValueAdditionResponsiveSurface({
+        document,
+        navigation
+      }) as KpPlaceValueAdditionResponsiveSurface;
+    document.querySelector(
+      "[data-kp-editor-animation-library]"
+    )?.remove();
+    const library = document.createElement("main");
+    library.dataset["kpEditorAnimationLibrary"] = "";
+    const player = document.createElement("article");
+    player.dataset["kpEditorAnimationPlayer"] = "";
+    player.dataset["kpEditorAnimationId"] =
+      "animation.place-value-addition.278-plus-156";
+    player.dataset["kpEditorAnimationDescriptorId"] =
+      "editor-animation.animation.place-value-addition.278-plus-156";
+    player.dataset["kpEditorAnimationDirection"] = "forward";
+    const stage = document.createElement("section");
+    stage.dataset["kpEditorAnimationStage"] = "";
+    stage.dataset["kpEditorAnimationSurface"] =
+      "editor-animation-surface.place-value-addition";
+    stage.append(surface.root);
+    player.append(stage);
+    library.append(player);
+    document.body.append(library);
+    surface.apply(navigation.sampleProgress({
+      progress: 0.635,
+      source: "controls"
+    }));
+
+    const provider =
+      reviewModule.createKpEditorAnimationLibraryCaptureProvider(
+        document
+      ) as KpDevReviewCaptureProvider;
+    const captured = await provider.capture({
+      route: new URL(location.href),
+      capturedAtMs: performance.now(),
+      eventTarget: null
+    });
+    return {
+      visualAriaHidden:
+        surface.shared.root.getAttribute("aria-hidden"),
+      transcriptSteps: surface.transcriptRoot.querySelectorAll(
+        "[data-kp-place-value-transcript-step]"
+      ).length,
+      currentTranscript: surface.transcriptRoot.querySelector(
+        "[data-kp-place-value-transcript-step][aria-current=\"step\"]"
+      )?.getAttribute("data-kp-place-value-transcript-step"),
+      mathmlCount: surface.accessibleStateRoot.querySelectorAll(
+        ".katex-mathml"
+      ).length,
+      viewControlsDisplay:
+        getComputedStyle(surface.viewControlsRoot).display,
+      review: captured
+    };
+  });
+
+  expect(initial.visualAriaHidden).toBe("true");
+  expect(initial.transcriptSteps).toBe(7);
+  expect(initial.currentTranscript).toBe(
+    "beat.place-value.exchange-tens"
+  );
+  expect(initial.mathmlCount).toBe(1);
+  expect(initial.viewControlsDisplay).toBe("flex");
+  expect(initial.review.semantic).toMatchObject({
+    assetId: "animation.place-value-addition.278-plus-156",
+    progressPermille: 635,
+    animationProgressPermille: 635,
+    phaseProgressPermille: 500,
+    projectionId: "written",
+    checkpointId: "checkpoint.place-value.4",
+    activeTransformationIds: ["beat.place-value.exchange-tens"],
+    activePhase: "action",
+    foldMode: "automatic",
+    layoutPolicy: "phone-selected"
+  });
+  expect(initial.review.semantic.focusRefs.length).toBeGreaterThan(0);
+  expect(initial.review.render.surface?.contentViewport).toMatchObject({
+    width: 390,
+    height: 700
+  });
+
+  const baseTen = page.locator(
+    "button[data-kp-place-value-view-button=\"base-ten\"]"
+  );
+  await baseTen.focus();
+  await baseTen.press("Enter");
+  await expect(baseTen).toBeFocused();
+  await expect(baseTen).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("[data-kp-place-value-responsive-surface]"))
+    .toHaveAttribute(
+      "data-kp-place-value-active-representation",
+      "base-ten"
+    );
+
+  const tens = page.locator(
+    "button[data-kp-place-value-outline-anchor=\"outline.place-value.tens\"]"
+  );
+  await tens.focus();
+  await tens.press("Enter");
+  await expect(tens).toBeFocused();
+  await expect(tens).toHaveAttribute("aria-current", "step");
+  await expect(page.locator("[data-kp-place-value-responsive-surface]"))
+    .toHaveAttribute("data-kp-place-value-progress-permille", "400");
+  await expect(
+    page.locator("[data-kp-place-value-transcript-step][aria-current=\"step\"]")
+  ).toHaveAttribute(
+    "data-kp-place-value-transcript-step",
+    "beat.place-value.evaluate-tens"
+  );
+  await expect(
+    page.locator(
+      "[data-kp-place-value-responsive-surface] " +
+      "[data-kp-dev-review-shell]"
+    )
+  ).toHaveCount(0);
+
+  const review = page.locator("[data-kp-dev-review-shell]");
+  await expect(review.locator("button.launcher")).toBeVisible();
+  await review.locator("button.launcher").click();
+  await review.locator("textarea").fill(
+    "Place-value Review round-trip proof."
+  );
+  const responsePromise = page.waitForResponse((response) =>
+    response.url().endsWith("/api/dev/reviews/v2/notes") &&
+    response.request().method() === "POST"
+  );
+  await review.locator("button.save").click();
+  const response = await responsePromise;
+  expect(response.status()).toBe(201);
+  const note = kpDevReviewNoteV2Schema.parse(await response.json());
+  expect(note.capture.semantic).toMatchObject({
+    assetId: "animation.place-value-addition.278-plus-156",
+    progressPermille: 400,
+    animationProgressPermille: 400,
+    phaseProgressPermille: 0,
+    projectionId: "base-ten",
+    checkpointId: "checkpoint.place-value.3",
+    activeTransformationIds: ["beat.place-value.evaluate-tens"],
+    activePhase: "setup",
+    foldMode: "automatic",
+    layoutPolicy: "phone-selected"
+  });
+  expect(note.capture.render.surface?.profile).toBe("phone");
+  expect(note.capture.render.surface?.contentViewport).toMatchObject({
+    width: 390,
+    height: 700
+  });
 });

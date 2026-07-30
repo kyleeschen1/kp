@@ -195,7 +195,9 @@
     {
       "id": "s21",
       "title": "integrate-accessibility-export-and-review",
-      "status": "planned"
+      "summary": "Compiled a seven-beat accessible transcript, endpoint-only reduced and static sampling, no-JavaScript written and base-ten export, keyboard-safe phone view selection, and exact existing-Review viewport and frame telemetry over the one sealed runtime; 87 unit and 60 three-engine browser checks pass.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s22",

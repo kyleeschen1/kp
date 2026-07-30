@@ -11,8 +11,12 @@ import {
 } from "./place-value-addition-shared-dom.ts";
 import {
   isKpPlaceValueAdditionRuntimeFrame,
-  type KpPlaceValueAdditionRuntimeFrame
+  type KpPlaceValueAdditionRuntimeFrame,
+  type KpPlaceValueRuntimeView
 } from "./place-value-addition-runtime.ts";
+import type {
+  KpPlaceValueAdditionAccessibleProjection
+} from "./place-value-addition-accessible-projection.ts";
 
 export const kpPlaceValueAdditionResponsivePolicy = Object.freeze({
   schemaVersion: "kp.place-value-addition-responsive-policy.v1" as const,
@@ -29,6 +33,9 @@ export interface KpPlaceValueAdditionResponsiveSurface {
   readonly root: HTMLElement;
   readonly outlineRoot: HTMLElement;
   readonly stageRoot: HTMLElement;
+  readonly viewControlsRoot: HTMLElement;
+  readonly accessibleStateRoot: HTMLElement;
+  readonly transcriptRoot: HTMLDetailsElement;
   readonly shared: KpPlaceValueAdditionSharedDom;
   readonly anchorButtons:
     ReadonlyMap<KpPlaceValueAdditionOutlineAnchor["id"], HTMLButtonElement>;
@@ -40,6 +47,9 @@ export function createKpPlaceValueAdditionResponsiveSurface(input: {
   readonly navigation: KpPlaceValueAdditionNavigationSession;
   readonly onOutlineRequest?: (
     anchorId: KpPlaceValueAdditionOutlineAnchor["id"]
+  ) => void;
+  readonly onViewRequest?: (
+    view: KpPlaceValueRuntimeView
   ) => void;
 }): KpPlaceValueAdditionResponsiveSurface {
   if (!isKpPlaceValueAdditionNavigationSession(input.navigation)) {
@@ -58,6 +68,21 @@ export function createKpPlaceValueAdditionResponsiveSurface(input: {
   root.style.cssText =
     "box-sizing:border-box;display:grid;gap:16px;inline-size:100%;" +
     "min-inline-size:0;align-items:stretch;overflow:visible";
+  const srOnly = input.document.createElement("style");
+  srOnly.textContent = `
+    [data-kp-place-value-sr-only] {
+      position:absolute !important;
+      inline-size:1px !important;
+      block-size:1px !important;
+      padding:0 !important;
+      margin:-1px !important;
+      overflow:hidden !important;
+      clip:rect(0,0,0,0) !important;
+      white-space:nowrap !important;
+      border:0 !important;
+    }
+  `;
+  root.append(srOnly);
 
   const outline = input.document.createElement("nav");
   outline.dataset["kpPlaceValueOutline"] = "";
@@ -70,6 +95,8 @@ export function createKpPlaceValueAdditionResponsiveSurface(input: {
     KpPlaceValueAdditionOutlineAnchor["id"],
     HTMLButtonElement
   >();
+  let applyCurrentFrame:
+    ((frame: KpPlaceValueAdditionRuntimeFrame) => void) | undefined;
   for (const anchor of input.navigation.outlineAnchors) {
     const button = input.document.createElement("button");
     button.type = "button";
@@ -80,11 +107,40 @@ export function createKpPlaceValueAdditionResponsiveSurface(input: {
     button.style.cssText =
       "box-sizing:border-box;min-block-size:44px;text-align:start;" +
       "white-space:normal";
-    button.addEventListener("click", () =>
-      input.onOutlineRequest?.(anchor.id)
-    );
+    button.addEventListener("click", () => {
+      if (input.onOutlineRequest !== undefined) {
+        input.onOutlineRequest(anchor.id);
+        return;
+      }
+      applyCurrentFrame?.(input.navigation.seekOutline(anchor.id));
+    });
     outline.append(button);
     anchorButtons.set(anchor.id, button);
+  }
+
+  const viewControls = input.document.createElement("div");
+  viewControls.dataset["kpPlaceValueViewControls"] = "";
+  viewControls.setAttribute("role", "group");
+  viewControls.setAttribute("aria-label", "Place-value representation");
+  viewControls.style.cssText =
+    "display:flex;gap:8px;flex-wrap:wrap;justify-content:center";
+  const viewButtons = new Map<KpPlaceValueRuntimeView, HTMLButtonElement>();
+  for (const view of ["written", "base-ten"] as const) {
+    const button = input.document.createElement("button");
+    button.type = "button";
+    button.dataset["kpPlaceValueViewButton"] = view;
+    button.textContent =
+      view === "written" ? "Written algorithm" : "Base-ten blocks";
+    button.style.cssText = "min-block-size:44px";
+    button.addEventListener("click", () => {
+      if (input.onViewRequest !== undefined) {
+        input.onViewRequest(view);
+        return;
+      }
+      applyCurrentFrame?.(input.navigation.setView(view));
+    });
+    viewButtons.set(view, button);
+    viewControls.append(button);
   }
 
   const stage = input.document.createElement("div");
@@ -99,8 +155,22 @@ export function createKpPlaceValueAdditionResponsiveSurface(input: {
     initialFrame: input.navigation.frame
   });
   shared.root.style.maxInlineSize = "100%";
+  // The live region below is the sole accessibility projection. Hiding both
+  // visual views prevents responsive visibility from duplicating or omitting
+  // mathematical truth in the accessibility tree.
+  shared.root.setAttribute("aria-hidden", "true");
   stage.append(shared.root);
-  root.append(outline, stage);
+
+  const accessibleState = input.document.createElement("section");
+  accessibleState.dataset["kpPlaceValueAccessibleState"] = "";
+  accessibleState.dataset["kpPlaceValueSrOnly"] = "";
+  accessibleState.setAttribute("aria-live", "polite");
+  accessibleState.setAttribute("aria-atomic", "true");
+  const transcript = renderAccessibleTranscript(
+    input.document,
+    input.navigation.runtime.accessibility
+  );
+  root.append(outline, viewControls, accessibleState, stage, transcript);
 
   const apply = (frame: KpPlaceValueAdditionRuntimeFrame): void => {
     if (
@@ -120,7 +190,37 @@ export function createKpPlaceValueAdditionResponsiveSurface(input: {
       frame.responsive.mode;
     root.dataset["kpPlaceValueProgressPermille"] =
       String(frame.clock.progressPermille);
+    root.dataset["kpPlaceValueInputProgressPermille"] =
+      String(frame.clock.progressPermille);
+    root.dataset["kpPlaceValueRendererSessionId"] =
+      frame.rendererSessionId;
+    root.dataset["kpPlaceValueBeatId"] = frame.beat.id;
+    root.dataset["kpPlaceValuePhaseProgressPermille"] =
+      String(Math.round(frame.beatProgress * 1_000));
+    root.dataset["kpPlaceValueActivePhase"] =
+      activePhase(frame.beatProgress);
+    root.dataset["kpPlaceValueActiveRepresentation"] =
+      frame.responsive.selectedView;
+    root.dataset["kpPlaceValueLayoutPolicy"] =
+      frame.responsive.mode;
+    root.dataset["kpPlaceValueFoldMode"] =
+      input.navigation.fold.mode;
     outline.style.maxBlockSize = wide ? "192px" : "132px";
+    viewControls.style.display = wide ? "none" : "flex";
+    for (const [view, button] of viewButtons) {
+      button.setAttribute(
+        "aria-pressed",
+        String(frame.responsive.selectedView === view)
+      );
+    }
+    syncAccessibleState({
+      document: input.document,
+      root: accessibleState,
+      transcript,
+      projection: input.navigation.runtime.accessibility,
+      frame
+    });
+    syncReviewTelemetry(root, frame);
     for (const anchor of input.navigation.outlineAnchors) {
       const current =
         anchor.progressPermille === frame.clock.progressPermille;
@@ -129,14 +229,176 @@ export function createKpPlaceValueAdditionResponsiveSurface(input: {
       else button.removeAttribute("aria-current");
     }
   };
+  applyCurrentFrame = apply;
   apply(input.navigation.frame);
 
   return Object.freeze({
     root,
     outlineRoot: outline,
     stageRoot: stage,
+    viewControlsRoot: viewControls,
+    accessibleStateRoot: accessibleState,
+    transcriptRoot: transcript,
     shared,
     anchorButtons,
     apply
   });
+}
+
+function renderAccessibleTranscript(
+  document: Document,
+  projection: KpPlaceValueAdditionAccessibleProjection
+): HTMLDetailsElement {
+  const details = document.createElement("details");
+  details.dataset["kpPlaceValueTranscript"] = "";
+  const summary = document.createElement("summary");
+  summary.textContent = "Accessible transcript: all seven operations";
+  const introduction = document.createElement("p");
+  introduction.textContent = projection.introduction;
+  const list = document.createElement("ol");
+  for (const step of projection.steps) {
+    const item = document.createElement("li");
+    item.dataset["kpPlaceValueTranscriptStep"] = step.beatId;
+    const label = document.createElement("strong");
+    label.textContent = `${step.label}. `;
+    item.append(label, document.createTextNode(step.description));
+    list.append(item);
+  }
+  const finalStatement = document.createElement("p");
+  finalStatement.textContent = projection.finalStatement;
+  const references = document.createElement("dl");
+  references.dataset["kpPlaceValueSrOnly"] = "";
+  references.dataset["kpPlaceValueTranscriptReferences"] = "";
+  const referenceIds = new Set(
+    projection.steps.flatMap(({ transcriptRefIds }) => transcriptRefIds)
+  );
+  for (const refId of referenceIds) {
+    const entityId = refId.replace("transcript.entity.", "");
+    const group = document.createElement("div");
+    group.id = refId;
+    const term = document.createElement("dt");
+    term.textContent = entityId;
+    const description = document.createElement("dd");
+    description.textContent =
+      `Semantic material participating in ${projection.expression}.`;
+    group.append(term, description);
+    references.append(group);
+  }
+  details.append(
+    summary,
+    introduction,
+    list,
+    finalStatement,
+    references
+  );
+  return details;
+}
+
+function syncAccessibleState(input: {
+  readonly document: Document;
+  readonly root: HTMLElement;
+  readonly transcript: HTMLDetailsElement;
+  readonly projection: KpPlaceValueAdditionAccessibleProjection;
+  readonly frame: KpPlaceValueAdditionRuntimeFrame;
+}): void {
+  const step = input.projection.steps.find(
+    ({ beatId }) => beatId === input.frame.beat.id
+  );
+  if (step === undefined) {
+    throw new Error(
+      `Place-value accessibility lacks beat ${input.frame.beat.id}.`
+    );
+  }
+  input.root.dataset["kpPlaceValueAccessibleCheckpoint"] =
+    step.checkpointId;
+  input.root.dataset["kpPlaceValueAccessibleView"] =
+    input.frame.responsive.selectedView;
+  input.root.dataset["kpPlaceValueFocusRefs"] =
+    step.focusEntityIds.join(",");
+  input.root.dataset["kpPlaceValueAnnotationIds"] =
+    step.annotationIds.join(",");
+  input.root.replaceChildren();
+  const heading = input.document.createElement("h4");
+  heading.textContent = "Current place-value checkpoint";
+  const math = input.document.createElement("div");
+  math.dataset["kpPlaceValueAccessibleMath"] = "";
+  // This is compiler-owned KaTeX output, not authored or generated free text.
+  math.innerHTML = step.nativeHtmlAndMathml;
+  const description = input.document.createElement("p");
+  description.textContent = `${step.label}. ${step.description}`;
+  const focus = input.document.createElement("p");
+  focus.append(input.document.createTextNode("Focused quantities: "));
+  step.focusEntityIds.forEach((entityId, index) => {
+    if (index > 0) focus.append(input.document.createTextNode(", "));
+    const link = input.document.createElement("a");
+    link.href = `#transcript.entity.${entityId}`;
+    link.textContent = entityId;
+    focus.append(link);
+  });
+  const annotations = input.document.createElement("p");
+  annotations.textContent =
+    `Proof annotations: ${step.annotationIds.join(", ")}.`;
+  input.root.append(
+    heading,
+    math,
+    description,
+    focus,
+    annotations
+  );
+  input.transcript
+    .querySelectorAll<HTMLElement>("[data-kp-place-value-transcript-step]")
+    .forEach((item) => {
+      if (item.dataset["kpPlaceValueTranscriptStep"] === step.beatId) {
+        item.setAttribute("aria-current", "step");
+      } else {
+        item.removeAttribute("aria-current");
+      }
+    });
+}
+
+function syncReviewTelemetry(
+  root: HTMLElement,
+  frame: KpPlaceValueAdditionRuntimeFrame
+): void {
+  const player = root.closest<HTMLElement>(
+    "[data-kp-editor-animation-player]"
+  );
+  if (player === null) return;
+  const step = root.querySelector<HTMLElement>(
+    "[data-kp-place-value-accessible-state]"
+  )?.dataset["kpPlaceValueAccessibleCheckpoint"];
+  player.dataset["kpPlaceValueProgressPermille"] =
+    String(frame.clock.progressPermille);
+  player.dataset["kpPlaceValueInputProgressPermille"] =
+    String(frame.clock.progressPermille);
+  player.dataset["kpPlaceValuePhaseProgressPermille"] =
+    String(Math.round(frame.beatProgress * 1_000));
+  player.dataset["kpPlaceValueActiveRepresentation"] =
+    frame.responsive.selectedView;
+  player.dataset["kpPlaceValueBeatId"] = frame.beat.id;
+  player.dataset["kpPlaceValueActivePhase"] =
+    activePhase(frame.beatProgress);
+  player.dataset["kpPlaceValueFoldMode"] =
+    root.dataset["kpPlaceValueFoldMode"] ?? "automatic";
+  player.dataset["kpPlaceValueLayoutPolicy"] =
+    frame.responsive.mode;
+  player.dataset["kpPlaceValueRendererSessionId"] =
+    frame.rendererSessionId;
+  player.dataset["kpPlaceValueFocusRefs"] =
+    root.querySelector<HTMLElement>(
+      "[data-kp-place-value-accessible-state]"
+    )?.dataset["kpPlaceValueFocusRefs"] ?? "";
+  if (step === undefined) {
+    delete player.dataset["kpPlaceValueCheckpoint"];
+  } else {
+    player.dataset["kpPlaceValueCheckpoint"] = step;
+  }
+}
+
+function activePhase(
+  beatProgress: number
+): "setup" | "action" | "settle" {
+  if (beatProgress < 0.2) return "setup";
+  if (beatProgress < 0.82) return "action";
+  return "settle";
 }

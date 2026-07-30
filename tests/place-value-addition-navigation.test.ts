@@ -129,3 +129,30 @@ test("folding changes disclosure without changing time or truth", () => {
     /unknown place-value group/
   );
 });
+
+test("phone view selection changes one shared projection without remounting", () => {
+  const navigation = createKpPlaceValueAdditionNavigationSession({
+    viewportWidth: 390,
+    selectedView: "written"
+  });
+  const runtime = navigation.runtime;
+  const before = navigation.sampleProgress({
+    progress: 0.635,
+    source: "controls"
+  });
+  const selected = navigation.setView("base-ten");
+
+  assert.equal(selected.sessionId, before.sessionId);
+  assert.equal(selected.rendererSessionId, before.rendererSessionId);
+  assert.equal(navigation.runtime, runtime);
+  assert.equal(selected.clock.progress, before.clock.progress);
+  assert.deepEqual(selected.responsive.visibleViews, ["base-ten"]);
+  assert.deepEqual(selected.responsive.mountedViews, [
+    "written",
+    "base-ten"
+  ]);
+  assert.throws(
+    () => navigation.setView("unknown" as "written"),
+    /Unknown place-value view/
+  );
+});

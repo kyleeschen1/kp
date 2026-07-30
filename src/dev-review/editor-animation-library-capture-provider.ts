@@ -38,17 +38,30 @@ export function createKpEditorAnimationLibraryCaptureProvider(
       );
       const exactQuantity = player.dataset["kpExactProgressPermille"] !==
         undefined;
-      const progressPermille = exactQuantity
-        ? boundedPermille(player.dataset["kpExactProgressPermille"])
+      const placeValue =
+        player.dataset["kpPlaceValueProgressPermille"] !== undefined;
+      const progressPermille = exactQuantity || placeValue
+        ? boundedPermille(
+            exactQuantity
+              ? player.dataset["kpExactProgressPermille"]
+              : player.dataset["kpPlaceValueProgressPermille"]
+          )
         : boundedProgressPermille(
             player.dataset["kpEditorAnimationProgress"]
           );
-      const animationProgressPermille = exactQuantity
-        ? boundedPermille(player.dataset["kpExactInputProgressPermille"])
+      const animationProgressPermille = exactQuantity || placeValue
+        ? boundedPermille(
+            exactQuantity
+              ? player.dataset["kpExactInputProgressPermille"]
+              : player.dataset["kpPlaceValueInputProgressPermille"]
+          )
         : progressPermille;
-      const exactTransformation = player.dataset["kpExactPhase"];
+      const activeTransformation =
+        player.dataset["kpExactPhase"] ??
+        player.dataset["kpPlaceValueBeatId"];
       const activePhase =
         player.dataset["kpExactVisiblePhase"] ??
+        player.dataset["kpPlaceValueActivePhase"] ??
         library.dataset["kpEditorAnimationLiveVisualPhaseId"] ??
         library
           .querySelector<HTMLElement>(
@@ -77,11 +90,15 @@ export function createKpEditorAnimationLibraryCaptureProvider(
               context.pointer
             );
       const focusRefs = readIdList(player.dataset["kpExactFocusRefs"]);
+      const placeValueFocusRefs = readIdList(
+        player.dataset["kpPlaceValueFocusRefs"]
+      );
       const pinnedNodeIds = readIdList(
         player.dataset["kpExactPinnedNodeIds"]
       );
       const rendererSessionId =
-        player.dataset["kpExactRendererSessionId"];
+        player.dataset["kpExactRendererSessionId"] ??
+        player.dataset["kpPlaceValueRendererSessionId"];
       const adapterId = player
         .querySelector<HTMLElement>(
           "[data-kp-editor-animation-adapter-id]"
@@ -95,43 +112,66 @@ export function createKpEditorAnimationLibraryCaptureProvider(
           progressPermille,
           animationProgressPermille,
           activeTransformationIds:
-            exactTransformation !== undefined &&
-              isProtocolId(exactTransformation)
-              ? [exactTransformation]
+            activeTransformation !== undefined &&
+              isProtocolId(activeTransformation)
+              ? [activeTransformation]
               : activePhase !== undefined && isProtocolId(activePhase)
                 ? [activePhase]
-              : [],
-          focusRefs,
+                : [],
+          focusRefs: exactQuantity ? focusRefs : placeValueFocusRefs,
           playbackDirection:
             player.dataset["kpEditorAnimationDirection"] === "rewind"
               ? "rewind"
               : "forward",
           projectionId:
-            player.dataset["kpExactActiveRepresentation"] ?? descriptorId,
-          ...(player.dataset["kpExactCheckpoint"] === undefined
+            player.dataset["kpExactActiveRepresentation"] ??
+            player.dataset["kpPlaceValueActiveRepresentation"] ??
+            descriptorId,
+          ...(
+            (
+              player.dataset["kpExactCheckpoint"] ??
+              player.dataset["kpPlaceValueCheckpoint"]
+            ) === undefined
             ? {}
             : {
-                checkpointId: player.dataset["kpExactCheckpoint"]
+                checkpointId:
+                  player.dataset["kpExactCheckpoint"] ??
+                  player.dataset["kpPlaceValueCheckpoint"]
               }),
-          ...(player.dataset["kpExactPhaseProgressPermille"] === undefined
+          ...(
+            (
+              player.dataset["kpExactPhaseProgressPermille"] ??
+              player.dataset["kpPlaceValuePhaseProgressPermille"]
+            ) === undefined
             ? {}
             : {
                 phaseProgressPermille: boundedPermille(
-                  player.dataset["kpExactPhaseProgressPermille"]
+                  player.dataset["kpExactPhaseProgressPermille"] ??
+                  player.dataset["kpPlaceValuePhaseProgressPermille"]
                 )
               }),
           ...(activePhase === undefined ? {} : { activePhase }),
-          ...(player.dataset["kpExactFoldMode"] === undefined
+          ...(
+            (
+              player.dataset["kpExactFoldMode"] ??
+              player.dataset["kpPlaceValueFoldMode"]
+            ) === undefined
             ? {}
-            : { foldMode: player.dataset["kpExactFoldMode"] }),
+            : {
+                foldMode:
+                  player.dataset["kpExactFoldMode"] ??
+                  player.dataset["kpPlaceValueFoldMode"]
+              }),
           ...(pinnedNodeIds.length === 0
             ? {}
             : { foldDetail: `pinned:${pinnedNodeIds.join(",")}` }),
-          ...(exactQuantity
+          ...(exactQuantity || placeValue
             ? {
-                layoutPolicy: surfaceProfile === "phone"
-                  ? kpExactFractionQuantityLayoutPolicy.phonePolicy
-                  : kpExactFractionQuantityLayoutPolicy.widePolicy
+                layoutPolicy: placeValue
+                  ? player.dataset["kpPlaceValueLayoutPolicy"]
+                  : surfaceProfile === "phone"
+                    ? kpExactFractionQuantityLayoutPolicy.phonePolicy
+                    : kpExactFractionQuantityLayoutPolicy.widePolicy
               }
             : {}),
           ...(player.dataset["kpEditorAnimationAccessibilityPreference"] ===
