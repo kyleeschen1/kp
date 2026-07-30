@@ -191,6 +191,107 @@ for (const viewport of [
       )
     ).toBe(true);
   });
+
+  test(`${viewport.name} shared session switches views without remounting`, async ({
+    page
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const evidence = await page.evaluate(async ({ width }) => {
+      const runtimeUrl =
+        "/src/rendering/place-value-addition-runtime.ts";
+      const sharedDomUrl =
+        "/src/rendering/place-value-addition-shared-dom.ts";
+      const clockUrl = "/src/reader/runtime/playback-clock.ts";
+      const runtime = await import(/* @vite-ignore */ runtimeUrl);
+      const sharedDom = await import(/* @vite-ignore */ sharedDomUrl);
+      const clock = await import(/* @vite-ignore */ clockUrl);
+      const session = runtime.createKpPlaceValueAdditionRuntimeSession();
+      const sample = (
+        progress: number,
+        previousProgress: number,
+        sequence: number,
+        selectedView: "written" | "base-ten" = "written"
+      ) => runtime.sampleKpPlaceValueAdditionRuntime({
+        session,
+        clock: clock.createKpReaderClockSample({
+          source: "controls",
+          progress,
+          previousProgress,
+          sequence
+        }),
+        viewportWidth: width,
+        selectedView
+      });
+      const initial = sample(0, 0, 0);
+      const dom = sharedDom.createKpPlaceValueAdditionSharedDom({
+        document,
+        session,
+        initialFrame: initial
+      });
+      const app = document.querySelector<HTMLElement>("#app");
+      if (app !== null) app.style.display = "none";
+      document.body.append(dom.root);
+      const writtenRoot = dom.writtenRoot as HTMLElement;
+      const baseTenRoot = dom.baseTenRoot as SVGSVGElement;
+      const writtenCells = [
+        ...writtenRoot.querySelectorAll<HTMLElement>(
+          "[data-kp-place-value-native-root]"
+        )
+      ];
+      const baseTenBlocks = [
+        ...baseTenRoot.querySelectorAll<SVGRectElement>(
+          "[data-kp-base-ten-block]"
+        )
+      ];
+      const samples = width >= 881
+        ? [
+            sample(0.325, 0, 1),
+            sample(0.635, 0.325, 2),
+            sample(0.325, 0.635, 3)
+          ]
+        : [
+            sample(0.325, 0, 1, "base-ten"),
+            sample(0.635, 0.325, 2, "written"),
+            sample(0.325, 0.635, 3, "base-ten")
+          ];
+      for (const frame of samples) dom.apply(frame);
+      return {
+        rendererSessionCount: document.querySelectorAll(
+          "[data-kp-place-value-shared-session]"
+        ).length,
+        writtenCells: writtenCells.length,
+        baseTenBlocks: baseTenBlocks.length,
+        writtenReused: writtenCells.every((element) =>
+          element.isConnected
+        ),
+        blocksReused: baseTenBlocks.every((element) =>
+          element.isConnected
+        ),
+        mountedViewCount: dom.root.querySelectorAll(
+          "[data-kp-place-value-view]"
+        ).length,
+        visibleViewCount: [
+          writtenRoot,
+          baseTenRoot
+        ].filter((element) =>
+          getComputedStyle(element).display !== "none"
+        ).length,
+        direction: dom.root.dataset["kpPlaceValueClockDirection"],
+        sequence: dom.root.dataset["kpPlaceValueClockSequence"]
+      };
+    }, viewport);
+
+    expect(evidence.rendererSessionCount).toBe(1);
+    expect(evidence.writtenCells).toBe(12);
+    expect(evidence.baseTenBlocks).toBe(31);
+    expect(evidence.writtenReused).toBe(true);
+    expect(evidence.blocksReused).toBe(true);
+    expect(evidence.mountedViewCount).toBe(2);
+    expect(evidence.visibleViewCount).toBe(viewport.width >= 881 ? 2 : 1);
+    expect(evidence.direction).toBe("rewind");
+    expect(evidence.sequence).toBe("3");
+  });
 }
 
 async function mountAndMeasure(

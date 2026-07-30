@@ -361,6 +361,20 @@
       "scope": "s13 base-ten projection",
       "checkedAt": "2026-07-30T17:20:59.298Z",
       "notes": "58 focused tests and 12 three-browser wide/phone checks pass. All seven frames conserve 434, both exchanges consume exactly ten lower blocks, persistent objects reuse one 31-node SVG inventory across direct seek and rewind, intrinsic paint stays contained, opacity remains one, and no WebGL or rebuild loop exists."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition; npm run check:inference",
+      "status": "failed",
+      "scope": "s14 initial shared-session integration",
+      "checkedAt": "2026-07-30T17:33:10.800Z",
+      "notes": "The first browser fixture forgot to attach its host, then exposed that author display:grid overrides the HTML hidden presentation on the written root; the shared binder now toggles inline display for both view kinds without unmounting. A concurrent inference run exceeded time only under three-browser CPU contention and passed alone at 2.8 seconds with unchanged type counts."
+    },
+    {
+      "command": "npm run test:place-value-addition; npm run test:browser:place-value-addition; npm run typecheck; npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "s14 shared runtime session",
+      "checkedAt": "2026-07-30T17:33:21.850Z",
+      "notes": "64 focused tests and 18 three-browser wide/phone checks pass. One nominal session owns one reader-clock authority, one trace, one immutable frame, both projections, and one mounted host; seek, rewind, and phone view switches reuse all 12 native roots and 31 SVG nodes with one renderer-session identity."
     }
   ],
   "expectedLearning": [

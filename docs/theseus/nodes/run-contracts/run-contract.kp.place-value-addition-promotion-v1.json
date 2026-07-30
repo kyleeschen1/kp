@@ -146,7 +146,9 @@
     {
       "id": "s14",
       "title": "bind-one-shared-session",
-      "status": "planned"
+      "summary": "Bound both projections to one nominal runtime session using the existing reader playback-clock sample. One immutable frame carries absolute progress, direction intent, exact beat/source/target/stable states, written authority, and base-ten source/target frames. One persistent shared DOM host keeps both views mounted, switches phone visibility without remounting, and reuses all native and SVG nodes across seek and rewind.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s15",

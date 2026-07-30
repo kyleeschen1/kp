@@ -6,6 +6,13 @@ import {
 
 export type KpPlaceValueWrittenEndpoint = "initial" | "settled";
 
+export interface KpPlaceValueWrittenColumnDomProjection {
+  readonly root: HTMLElement;
+  readonly cellElements: ReadonlyMap<string, HTMLElement>;
+  readonly endpoint: () => KpPlaceValueWrittenEndpoint;
+  readonly setEndpoint: (endpoint: KpPlaceValueWrittenEndpoint) => void;
+}
+
 const styles = `
   [data-kp-place-value-written-projection] {
     box-sizing: border-box;
@@ -71,6 +78,14 @@ export function renderKpPlaceValueWrittenColumnElement(input: {
   readonly projection: KpPlaceValueWrittenColumnProjection;
   readonly endpoint: KpPlaceValueWrittenEndpoint;
 }): HTMLElement {
+  return createKpPlaceValueWrittenColumnDomProjection(input).root;
+}
+
+export function createKpPlaceValueWrittenColumnDomProjection(input: {
+  readonly document: Document;
+  readonly projection: KpPlaceValueWrittenColumnProjection;
+  readonly endpoint: KpPlaceValueWrittenEndpoint;
+}): KpPlaceValueWrittenColumnDomProjection {
   if (!isKpPlaceValueWrittenColumnProjection(input.projection)) {
     throw new Error(
       "Written-column DOM projection requires compiler-owned projection authority."
@@ -93,8 +108,11 @@ export function renderKpPlaceValueWrittenColumnElement(input: {
   const grid = input.document.createElement("div");
   grid.dataset["kpPlaceValueGrid"] = "";
   grid.setAttribute("aria-hidden", "true");
+  const cellElements = new Map<string, HTMLElement>();
   for (const cell of input.projection.cells) {
-    grid.append(renderCell(input.document, cell, input.endpoint));
+    const element = renderCell(input.document, cell, input.endpoint);
+    grid.append(element);
+    cellElements.set(cell.semanticEntityId, element);
   }
 
   const underline = input.document.createElement("span");
@@ -104,7 +122,21 @@ export function renderKpPlaceValueWrittenColumnElement(input: {
     input.projection.underline.semanticEntityId;
   grid.append(underline);
   stage.append(grid);
-  return stage;
+  let currentEndpoint = input.endpoint;
+  const setEndpoint = (endpoint: KpPlaceValueWrittenEndpoint): void => {
+    for (const cell of input.projection.cells) {
+      cellElements.get(cell.semanticEntityId)!.dataset["kpVisibility"] =
+        isVisible(cell, endpoint) ? "visible" : "hidden";
+    }
+    stage.dataset["kpPlaceValueEndpoint"] = endpoint;
+    currentEndpoint = endpoint;
+  };
+  return Object.freeze({
+    root: stage,
+    cellElements,
+    endpoint: () => currentEndpoint,
+    setEndpoint
+  });
 }
 
 function renderCell(
