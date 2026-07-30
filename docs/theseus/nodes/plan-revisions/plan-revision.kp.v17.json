@@ -1,10 +1,10 @@
 {
-  "id": "plan-revision.kp.v16",
+  "id": "plan-revision.kp.v17",
   "kind": "plan-revision",
-  "title": "Kinetic Press content-led promotion roadmap v16",
-  "status": "superseded",
+  "title": "Kinetic Press content-led promotion roadmap v17",
+  "status": "active",
   "domain": "kp",
-  "summary": "Preserve revision 14's stable promotion order while replacing the rejected zero-area continuity authority with the approved executable-motif and perceptual-continuity contract.",
+  "summary": "Activate the user-approved place-value addition contract while preserving the stable content-led promotion order.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -65,21 +65,33 @@
       "kind": "file",
       "path": "src/architecture/exact-fraction-quantity-release-approval.ts",
       "summary": "Evidence-derived three-program release approval for the promoted exact-fraction exemplar."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-30-place-value-addition-long-loop-proposal.md",
+      "summary": "User-approved rank-2 place-value proposal and canonical stacked-algorithm reference."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v16.json",
+      "summary": "Approved predecessor retained for rationale and history."
     }
   ],
   "affects": [
     "workflow.kp.delivery",
     "plan-revision.kp.v14",
     "run-contract.kp.presentation-compiler-continuity-repair-v0",
-    "run-contract.kp.executable-motif-perceptual-continuity-repair-v0"
+    "run-contract.kp.executable-motif-perceptual-continuity-repair-v0",
+    "run-contract.kp.place-value-addition-promotion-v0",
+    "run-contract.kp.place-value-addition-promotion-v1"
   ],
   "progress": {
     "state": "partial",
-    "summary": "Exact fraction remains the sole active promotion. Its replacement contract first restores one executable evaluation motif, then generalizes and returns to exact-fraction integration."
+    "summary": "Exact fraction is promoted. The user-approved place-value addition contract now owns the active rank-2 implementation through its mandatory human checkpoint."
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
-    "revision": 16,
+    "revision": 17,
     "objective": "Grow one canonical, composable semantic animation library through a stable exemplar order, inserting API, verified problem-generation, deterministic explanation, safe output, and optional LLM editorial gates only where recorded caller pressure justifies them.",
     "assumptions": [
       {
@@ -400,9 +412,12 @@
         "objective": "Coordinate column addition, place-value exchange, regrouping marks, and a base-ten or area representation.",
         "horizon": "now",
         "status": "active",
+        "evidence": [
+          "run-contract.kp.place-value-addition-promotion-v1"
+        ],
         "topic": "Arithmetic · Addition",
         "architectureBenefit": "Persistent place-value identity and carry scheduling.",
-        "rationale": "The stable frontier advances to place-value exchange, but implementation remains inactive until a reviewed typed run contract is approved.",
+        "rationale": "The user approved the exact 26-slice contract and clarified the stacked written algorithm as the canonical visual reference; the base-ten view remains secondary.",
         "canonicalExemplar": "278 + 156 = 434"
       },
       {
@@ -748,12 +763,11 @@
       }
     ],
     "approval": {
-      "status": "superseded",
+      "status": "approved",
       "decidedAt": "2026-07-30T15:38:18.042Z",
       "decidedBy": "user",
-      "rationale": "Superseded by plan-revision.kp.v17."
+      "rationale": "Bind approved rank-2 execution authority to the active place-value phase without changing the stable promotion order."
     },
-    "supersedes": "plan-revision.kp.v15",
-    "supersededBy": "plan-revision.kp.v17"
+    "supersedes": "plan-revision.kp.v16"
   }
 }

@@ -1,0 +1,178 @@
+{
+  "id": "run-contract.kp.place-value-addition-promotion-v0",
+  "kind": "run-contract",
+  "title": "Place-value addition promotion",
+  "status": "superseded",
+  "summary": "Superseded before product implementation by a hygiene-complete v1 contract because the first creation omitted explicit run mode, slice limit, commit cadence, verification level, and stop conditions.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.refill.plan-phase.plan-revision.kp.v16.multidigit-addition.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-30-place-value-addition-long-loop-proposal.md",
+      "summary": "User-approved 26-slice place-value addition proposal with the stacked written algorithm as canonical visual reference and a mandatory slice-23 checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/animation-library-promotion.md",
+      "summary": "Stable human-readable promotion order naming place-value addition rank 2."
+    }
+  ],
+  "verification": [
+    "npm run test:place-value-addition",
+    "npm run test:browser:place-value-addition",
+    "npm run visual:place-value-addition",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm run check:promotion-memory",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Implement only the approved 278 plus 156 exemplar, its typed place-value semantics, primary written-column projection, secondary base-ten projection, existing runtime integration, tests, evidence, and bounded generic contracts proven by this exemplar.",
+    "Use one independently reversible commit per completed slice and stop at slice 23 for explicit human visual approval."
+  ],
+  "disallowedWork": [
+    "Do not add a renderer, compositor, runtime, clock, lifecycle, scheduler, display page, WebGL lease, or example-specific geometry or timing exception.",
+    "Do not broaden into arithmetic family rollout, subtraction, multiplication, division, fraction harvest, economics, physics, API tiers, generated problems, LLM editorial work, or unrelated user-owned files."
+  ],
+  "goal": "Promote one canonical 278 plus 156 stacked-column addition animation with visible carried digits and a secondary synchronized base-ten projection through one typed semantic and rendering path.",
+  "target": "next-action.refill.plan-phase.plan-revision.kp.v16.multidigit-addition",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "materialize-approved-contract",
+      "summary": "Superseded before implementation because the specialist creation command omitted mandatory long-run metadata from its documented surface; no product code was changed under this incomplete contract.",
+      "status": "skipped"
+    },
+    {
+      "id": "s02",
+      "title": "freeze-reuse-and-preservation",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "freeze-canonical-visual-reference",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "define-place-value-domain-types",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "compile-exact-decompositions",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "certify-adjacent-place-exchange",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "encode-carry-and-remainder-lineage",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "build-immutable-addition-trace",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "compile-fold-and-checkpoint-plan",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "require-exhaustive-presentations",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "add-adversarial-conformance",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "build-written-column-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "build-base-ten-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "bind-one-shared-session",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "animate-ones-evaluation",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "animate-ones-exchange",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "animate-tens-evaluation-and-exchange",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "settle-hundreds-and-native-result",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "complete-fold-seek-and-navigation",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "certify-responsive-noncrowding-layout",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "integrate-accessibility-export-and-review",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "harden-browser-performance-and-resources",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "human-place-value-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "apply-bounded-reviewed-repairs",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "run-release-matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "promote-and-closeout",
+      "status": "planned"
+    }
+  ]
+}

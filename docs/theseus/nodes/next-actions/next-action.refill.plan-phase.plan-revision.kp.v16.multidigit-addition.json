@@ -1,0 +1,70 @@
+{
+  "id": "next-action.refill.plan-phase.plan-revision.kp.v16.multidigit-addition",
+  "kind": "next-action",
+  "title": "Advance Multi-digit addition",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Coordinate column addition, place-value exchange, regrouping marks, and a base-ten or area representation. Selection rationale: User approved the exact 26-slice place-value addition loop on 2026-07-30, clarifying the canonical visual as two right-aligned three-digit addends stacked vertically, a plus sign left of the second addend, an underline, right-to-left digit evaluation, and visible overflow digits carrying into the next column; base-ten quantities remain a secondary synchronized projection.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Approved refill option refill.plan-phase.plan-revision.kp.v16.multidigit-addition: User approved the exact 26-slice place-value addition loop on 2026-07-30, clarifying the canonical visual as two right-aligned three-digit addends stacked vertically, a plus sign left of the second addend, an underline, right-to-left digit evaluation, and visible overflow digits carrying into the next column; base-ten quantities remain a secondary synchronized projection.",
+      "occurredAt": "2026-07-30T15:38:18.042Z"
+    }
+  ],
+  "affects": [
+    "plan-revision.kp.v16"
+  ],
+  "verification": [
+    "theseus validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "theseus plan run",
+      "status": "passed",
+      "scope": "s01 active contract selection",
+      "checkedAt": "2026-07-30T15:47:16.594Z",
+      "notes": "The rank-2 target continues through hygiene-complete run-contract.kp.place-value-addition-promotion-v1 at s01; the only reported pressure is the expected unresolved target being implemented."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s01 promotion authority",
+      "checkedAt": "2026-07-30T15:47:17.812Z",
+      "notes": "Rank 2 place-value addition, active plan phase multidigit-addition, and run-contract.kp.place-value-addition-promotion-v1 agree."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s01 control-plane integrity",
+      "checkedAt": "2026-07-30T15:47:18.839Z",
+      "notes": "Validated 837 nodes and 14594 events after activating approved plan revision 17 and the hygiene-complete contract."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s01 proposal and control artifacts",
+      "checkedAt": "2026-07-30T15:47:19.871Z",
+      "notes": "No whitespace errors; unrelated user-owned roadmap, cross-domain, publication, and semantic-medium work remains unstaged."
+    }
+  ],
+  "expectedLearning": [
+    "Approved revision 16 places this active phase in now."
+  ],
+  "allowedWork": [
+    "Coordinate column addition, place-value exchange, regrouping marks, and a base-ten or area representation."
+  ],
+  "disallowedWork": [
+    "Do not broaden beyond the selected refill option without another approval."
+  ],
+  "criteria": [
+    {
+      "id": "selected-option-addressed",
+      "weight": "high"
+    },
+    {
+      "id": "selection-provenance-preserved",
+      "weight": "high"
+    }
+  ]
+}
