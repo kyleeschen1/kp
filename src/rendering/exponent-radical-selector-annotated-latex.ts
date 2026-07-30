@@ -207,6 +207,10 @@ function resolveStructuralElements(input: {
   readonly element: HTMLElement;
 })[] {
   const bindings = projectKpExponentRadicalStructuralBindings(input.state);
+  // This binder owns only exponent/radical structural selectors. A generic
+  // KaTeX fraction may contain `.frac-line`, but it must not be interpreted as
+  // a missing exponent/radical binding merely because it shares DOM structure.
+  if (bindings.length === 0) return Object.freeze([]);
   const radicalFragments = bindings.some(({ role }) =>
     role === "radical-hook" || role === "radical-overbar"
   )

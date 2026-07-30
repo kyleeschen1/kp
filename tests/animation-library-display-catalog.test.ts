@@ -2,9 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  createKpAnimationLibraryDisplayCatalog,
   deriveKpCanonicalFormatStatus,
   type KpCanonicalFormatPromotionEvidence
+} from "../src/editor/animation-library-display-catalog-builder.ts";
+import {
+  createKpAnimationLibraryDisplayCatalog
 } from "../src/editor/animation-library-display-catalog.ts";
 import {
   createKpSemanticAnimationWorkbenchIndex

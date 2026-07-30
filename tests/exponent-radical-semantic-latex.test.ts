@@ -7,7 +7,8 @@ import {
 } from "../src/animation/exponent-radical-adapter.ts";
 import {
   createKpExponentRadicalSelectorAnnotatedLatex,
-  projectKpExponentRadicalStructuralBindings
+  projectKpExponentRadicalStructuralBindings,
+  resolveKpExponentRadicalStructuralElements
 } from "../src/rendering/exponent-radical-selector-annotated-latex.ts";
 import {
   resolveKpRadicalFragmentSemantics
@@ -89,4 +90,24 @@ test("radical structural bindings cover compiler lineage without glyph matching"
       assert.equal(allBoundIds.has(selectorId), true, selectorId);
     }
   }
+});
+
+test("structural binding ignores KaTeX structure outside its semantic family", () => {
+  const root = {
+    querySelectorAll(): never {
+      throw new Error("Non-family structure must not be scanned.");
+    }
+  } as unknown as ParentNode;
+  assert.deepEqual(
+    resolveKpExponentRadicalStructuralElements({
+      root,
+      state: {
+        objectId: "equation.generic-fraction",
+        selectors: [{
+          id: "equation.generic-fraction.value"
+        }]
+      }
+    }),
+    []
+  );
 });

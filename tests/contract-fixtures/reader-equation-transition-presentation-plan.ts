@@ -7,7 +7,7 @@ import type {
 } from "../../src/animation/structural-succession-presentation.ts";
 import type {
   KpCanonicalFormatPromotionEvidence
-} from "../../src/editor/animation-library-display-catalog.ts";
+} from "../../src/editor/animation-library-display-catalog-builder.ts";
 
 declare const visualMotif: KpEquationVisualMotifIntent;
 

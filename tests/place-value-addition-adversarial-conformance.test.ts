@@ -25,7 +25,7 @@ import {
 import {
   deriveKpCanonicalFormatStatus,
   type KpCanonicalFormatPromotionEvidence
-} from "../src/editor/animation-library-display-catalog.ts";
+} from "../src/editor/animation-library-display-catalog-builder.ts";
 import {
   kpPlaceValueAdditionDecompositions as decomposition
 } from "../src/semantic/place-value-addition-decomposition.ts";

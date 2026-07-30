@@ -215,7 +215,8 @@
     {
       "id": "s24",
       "title": "apply-bounded-reviewed-repairs",
-      "status": "planned"
+      "summary": "Repaired the dashboard boundary with explicit rendered-frame readiness and error/retry UI; split generated metadata from source-rich promotion code; fixed two generic renderer ownership/geometry roots; froze bundle budgets; and passed focused, catalog-wide, build, and WebKit readiness checks.",
+      "status": "complete"
     },
     {
       "id": "s25",

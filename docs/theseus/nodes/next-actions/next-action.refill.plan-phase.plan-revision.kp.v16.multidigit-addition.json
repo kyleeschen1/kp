@@ -893,11 +893,35 @@
       "scope": "s23 control-plane integrity",
       "checkedAt": "2026-07-30T22:22:35.448Z",
       "notes": "Validated 837 nodes and 14802 events with s23 complete and the explicit human checkpoint blocking s24."
+    },
+    {
+      "command": "npm run test:animation-library-display",
+      "status": "passed",
+      "scope": "s24 metadata and passive host boundary",
+      "checkedAt": "2026-07-30T23:41:02.415Z"
+    },
+    {
+      "command": "npm run visual:animation-library-hosts",
+      "status": "passed",
+      "scope": "all 40 playable primary hosts",
+      "checkedAt": "2026-07-30T23:41:03.619Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s24 production and type boundaries",
+      "checkedAt": "2026-07-30T23:41:06.448Z"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s24 production closure budgets",
+      "checkedAt": "2026-07-30T23:41:07.769Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s23 exposes the sealed 278 + 156 exemplar in the existing lazy Animation Library through one player-owned runtime, one accessible Review entry point, responsive written/base-ten views, and a nominal pre-release certificate. Automated criteria pass, but promotion remains deliberately blocked on the mandatory human perceptual checkpoint; s24-s26 have not started."
+    "summary": "S24 repaired catalog liveness and bundle boundaries, fixed structural-family ownership and observable gather certification, and added 40-host/browser guards. Promotion remains withheld pending s25 and human review."
   },
   "expectedLearning": [
     "Approved revision 16 places this active phase in now."

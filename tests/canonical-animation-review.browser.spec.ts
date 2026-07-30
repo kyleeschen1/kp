@@ -387,7 +387,7 @@ test("fraction composition loads alone and review capture records its exact fold
   const frame = page.frameLocator("[data-animation-library-frame]");
   const stage = frame.locator("[data-kp-reader-equation-stage]");
   await expect(library).toHaveAttribute("data-animation-id", fractionCompositionId);
-  await expect(library).toHaveAttribute("data-canonical-format", "partial");
+  await expect(library).toHaveAttribute("data-canonical-format", "ported");
   await stage.waitFor();
   await frame.locator("select[data-kp-reader-fold-mode]")
     .selectOption("collapsed");

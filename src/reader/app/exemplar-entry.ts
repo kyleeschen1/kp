@@ -78,6 +78,10 @@ import { createKpReaderArtifactRef } from "../document/public-api.ts";
 import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycle.ts";
 import { mountKpReaderDevelopmentReview } from "./development-review-loader.ts";
 import {
+  installKpAnimationHostStatus,
+  markKpAnimationHostReady
+} from "../../rendering/animation-host-status.ts";
+import {
   bindKpReaderEquationLessonStructuralAnchors,
   compileKpReaderCanonicalTransitionPolicy,
   resolveKpReaderEquationLessonDescriptor
@@ -107,6 +111,11 @@ interface TransitionContext {
 interface LayoutState {
   readonly contexts: ReadonlyMap<string, TransitionContext>;
 }
+
+installKpAnimationHostStatus(
+  window,
+  `reader.${document.body.dataset["kpReader"] ?? "equation"}`
+);
 
 type KpReaderReviewFrame = readonly [
   animationProgressPermille: number,
@@ -478,6 +487,9 @@ const fontReviewLifecycle = createKpReaderFontReviewLifecycle({
     // produced its first frame; otherwise an early scrollend can persist zero.
     window.requestAnimationFrame(() => {
       urlAuthorityReady = true;
+      // Readiness belongs to the first font-stable rendered frame, not the
+      // iframe load event consumed by the outer Animation Library.
+      markKpAnimationHostReady(window);
     });
   }
 });

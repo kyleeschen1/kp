@@ -113,6 +113,8 @@ test("native successor renderer co-presents opaque contributors and result", () 
     plans[0]?.motifRealization.kind ===
       "opaque-gather-and-recognize-v1"
   ) {
+    assert.ok(plans[0].motifRealization.sourceTranslationPx > 0);
+    assert.ok(plans[0].motifRealization.sourceContractionPx > 0);
     assert.ok(
       plans[0].motifRealization.sourceTravelPx >=
         plans[0].motifRealization.minimumSourceTravelPx

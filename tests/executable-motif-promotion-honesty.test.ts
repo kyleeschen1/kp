@@ -16,7 +16,7 @@ import {
 import {
   deriveKpCanonicalFormatStatus,
   type KpCanonicalFormatPromotionEvidence
-} from "../src/editor/animation-library-display-catalog.ts";
+} from "../src/editor/animation-library-display-catalog-builder.ts";
 import {
   resolveKpExecutableSuccessorMotifProgramRoute
 } from "../src/reader/renderers/executable-successor-motif-program-adapter.ts";

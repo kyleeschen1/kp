@@ -53,6 +53,8 @@ export const KP_EDITOR_ANIMATION_DISPOSE_EVENT =
   "kp-editor-animation-dispose";
 export const KP_EDITOR_ANIMATION_REGENERATION_EVENT =
   "kp-editor-animation-regeneration-request";
+export const KP_EDITOR_ANIMATION_LOAD_EVENT =
+  "kp-editor-animation-load";
 export const KP_EDITOR_RENDER_QUALITY_STORAGE_KEY =
   "kp.editor.animation.render-quality.v1";
 
@@ -200,6 +202,10 @@ async function hydrateKpEditorAnimationPlayer(player: HTMLElement): Promise<void
   player.addEventListener("keydown", handlePlayerKeydown);
   syncLoadedDiagnostics(player, animation, catalog);
   syncPlayerDom(player, session);
+  player.dispatchEvent(new CustomEvent(KP_EDITOR_ANIMATION_LOAD_EVENT, {
+    bubbles: true,
+    detail: Object.freeze({ status: "ready" as const })
+  }));
 }
 
 function syncLoadedDiagnostics(
@@ -238,6 +244,13 @@ function markPlayerLoadFailure(player: HTMLElement, error: unknown): void {
     diagnostics.querySelector<HTMLElement>("[data-kp-editor-animation-diagnostics-counts]")
       ?.replaceChildren(document.createTextNode(message));
   }
+  player.dispatchEvent(new CustomEvent(KP_EDITOR_ANIMATION_LOAD_EVENT, {
+    bubbles: true,
+    detail: Object.freeze({
+      status: "failed" as const,
+      message
+    })
+  }));
 }
 
 function handlePlayerClick(event: MouseEvent): void {

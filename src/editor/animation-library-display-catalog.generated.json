@@ -1,0 +1,1366 @@
+[
+  {
+    "animationId": "animation.operation-evaluation.one-plus-two",
+    "title": "1 + 2 → 3",
+    "summary": "A registry-compiled arithmetic evaluation with verified opaque paint continuity and native KaTeX endpoints.",
+    "tags": [
+      "animation",
+      "arithmetic",
+      "editor",
+      "equation",
+      "operation-evaluation",
+      "presentation-compiler"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "partial",
+    "featured": true,
+    "primaryRepresentationId": "library.editor.operation-evaluation-focused-host",
+    "representations": [
+      {
+        "id": "library.editor.operation-evaluation-focused-host",
+        "label": "Animation + lesson",
+        "kind": "editor",
+        "href": "/?view=animation-library-host&animation=editor-animation.animation.operation-evaluation.one-plus-two",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.operation-evaluation.one-plus-two",
+        "label": "1 + 2 → 3",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.operation-evaluation.one-plus-two",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.derivative-rules.tangent-graph",
+    "title": "Difference quotient converging to a tangent",
+    "summary": "The x-cubed graph sample synchronizes a KaTeX finite difference quotient with secant-to-tangent convergence.",
+    "tags": [
+      "animation",
+      "calculus",
+      "card",
+      "derivative",
+      "editor",
+      "family-backed",
+      "family.calculus.derivative-rules",
+      "graph",
+      "tangent"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": true,
+    "primaryRepresentationId": "editor-animation.sample.animation.derivative-rules.tangent-graph",
+    "representations": [
+      {
+        "id": "editor-animation.sample.animation.derivative-rules.tangent-graph",
+        "label": "Difference quotient converging to a tangent",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.derivative-rules.tangent-graph",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.derivative-rules.tangent-graph",
+        "label": "Difference quotient converging to a tangent",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.derivative-rules.tangent-graph",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.derivative-rules.tangent-graph",
+        "label": "Difference quotient converging to a tangent sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.derivative-rules.tangent-graph",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.distribution.expand-a-sum",
+    "title": "Generated distribute a over sum",
+    "summary": "The expand-a-sum animation copies a shared factor into both products with a reversible sweep.",
+    "tags": [
+      "algebra",
+      "animation",
+      "card",
+      "distribution",
+      "editor",
+      "equation",
+      "family-backed",
+      "family.algebra.distribution-factoring",
+      "generated",
+      "lesson",
+      "prototype",
+      "scroll-lesson"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": true,
+    "primaryRepresentationId": "learner-experience.distribution-area-scroll-lesson.exemplar.distribution-area.3-times-x-plus-2",
+    "representations": [
+      {
+        "id": "learner-experience.distribution-area-scroll-lesson.exemplar.distribution-area.3-times-x-plus-2",
+        "label": "See distribution become area",
+        "kind": "reader",
+        "href": "/reader/distribution-area/",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.generated.distribution.expand-a-sum",
+        "label": "Generated distribute a over sum",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.distribution.expand-a-sum",
+        "role": "projection"
+      },
+      {
+        "id": "editor-animation.sample.animation.distribution.expand-a-sum",
+        "label": "Generated distribute a over sum",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.distribution.expand-a-sum",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.distribution.expand-a-sum",
+        "label": "Generated distribute a over sum sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.distribution.expand-a-sum",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.radical.square-root-as-power",
+    "title": "Power to radical",
+    "summary": "The square-root-as-power animation folds rational exponent geometry into a radical while preserving the base.",
+    "tags": [
+      "algebra",
+      "animation",
+      "card",
+      "editor",
+      "equation",
+      "family-backed",
+      "family.algebra.exponent-log-laws",
+      "generated",
+      "radical"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "ported",
+    "featured": true,
+    "primaryRepresentationId": "library.reader.radical-succession",
+    "representations": [
+      {
+        "id": "library.reader.radical-succession",
+        "label": "Reader integration",
+        "kind": "reader",
+        "href": "/reader/radical-succession/",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.generated.radical.square-root-as-power",
+        "label": "Generated rewrite square root as power",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.radical.square-root-as-power",
+        "role": "projection"
+      },
+      {
+        "id": "editor-animation.sample.animation.radical-rewrite.square-root-as-power",
+        "label": "Generated rewrite square root as power",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.radical-rewrite.square-root-as-power",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.radical-rewrite.square-root-as-power",
+        "label": "Generated rewrite square root as power sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.radical-rewrite.square-root-as-power",
+        "role": "projection"
+      },
+      {
+        "id": "library.diagnostic.radical-reconciliation",
+        "label": "Glyph diagnostics",
+        "kind": "diagnostic",
+        "href": "/glyph-reconciliation-experiment.html?radicalInventory=1&reviewGallery=radical&progress=500",
+        "role": "diagnostic"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.linear-solve.solve-x",
+    "title": "Solve x + 3 = 7",
+    "summary": "Existing x + 3 = 7 animation exercises subtract-both-sides.",
+    "tags": [
+      "algebra",
+      "animation",
+      "card",
+      "editor",
+      "equation",
+      "exemplar",
+      "family-backed",
+      "family.algebra.both-sides",
+      "family.algebra.cancel-combine",
+      "lesson",
+      "linear-solve",
+      "scroll-lesson"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "partial",
+    "featured": true,
+    "primaryRepresentationId": "learner-experience.solve-x-scroll-lesson.animation.linear-solve.solve-x",
+    "representations": [
+      {
+        "id": "learner-experience.solve-x-scroll-lesson.animation.linear-solve.solve-x",
+        "label": "Solve for x",
+        "kind": "reader",
+        "href": "/reader/solve-x/",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.linear-solve.solve-x",
+        "label": "Solve x + 3 = 7",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.linear-solve.solve-x",
+        "role": "projection"
+      },
+      {
+        "id": "editor-animation.sample.animation.solve-x.both-sides",
+        "label": "Solve x + 3 = 7",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.solve-x.both-sides",
+        "role": "projection"
+      },
+      {
+        "id": "editor-animation.sample.animation.solve-x.cancel-additive-inverses",
+        "label": "Solve x + 3 = 7",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.solve-x.cancel-additive-inverses",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.solve-x.both-sides",
+        "label": "Solve x + 3 = 7 sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.solve-x.both-sides",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.solve-x.cancel-additive-inverses",
+        "label": "Solve x + 3 = 7 sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.solve-x.cancel-additive-inverses",
+        "role": "projection"
+      },
+      {
+        "id": "library.diagnostic.solve-x-reconciliation",
+        "label": "Solve-x diagnostics",
+        "kind": "diagnostic",
+        "href": "/glyph-reconciliation-experiment.html?progress=500#glyph-experiment",
+        "role": "diagnostic"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.numerator-split-merge.round-trip",
+    "title": "Split and merge a fraction",
+    "summary": "Watch one denominator branch across a numerator sum, then run the exact structure backward.",
+    "tags": [
+      "exemplar",
+      "reader-only",
+      "scroll-lesson"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "ported",
+    "featured": true,
+    "primaryRepresentationId": "learner-experience.numerator-split-merge-scroll-lesson.animation.numerator-split-merge.round-trip",
+    "representations": [
+      {
+        "id": "learner-experience.numerator-split-merge-scroll-lesson.animation.numerator-split-merge.round-trip",
+        "label": "Split and merge a fraction",
+        "kind": "reader",
+        "href": "/reader/split-merge-fractions/",
+        "role": "canonical-host"
+      },
+      {
+        "id": "library.diagnostic.fraction-reconciliation",
+        "label": "Fraction diagnostics",
+        "kind": "diagnostic",
+        "href": "/glyph-reconciliation-experiment.html?fractionDirection=split&reviewGallery=fraction&progress=500#glyph-fraction-exemplar",
+        "role": "diagnostic"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.operation-evaluation.three-sixths",
+    "title": "\\frac{3}{6} → \\frac{1}{2}",
+    "summary": "A registry-compiled arithmetic evaluation with verified opaque paint continuity and native KaTeX endpoints.",
+    "tags": [
+      "animation",
+      "arithmetic",
+      "editor",
+      "equation",
+      "operation-evaluation",
+      "presentation-compiler"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.operation-evaluation.three-sixths",
+    "representations": [
+      {
+        "id": "editor-animation.animation.operation-evaluation.three-sixths",
+        "label": "\\frac{3}{6} → \\frac{1}{2}",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.operation-evaluation.three-sixths",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.operation-evaluation.five-plus-two",
+    "title": "5 + 2 → 7",
+    "summary": "A registry-compiled arithmetic evaluation with verified opaque paint continuity and native KaTeX endpoints.",
+    "tags": [
+      "animation",
+      "arithmetic",
+      "editor",
+      "equation",
+      "operation-evaluation",
+      "presentation-compiler"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.operation-evaluation.five-plus-two",
+    "representations": [
+      {
+        "id": "editor-animation.animation.operation-evaluation.five-plus-two",
+        "label": "5 + 2 → 7",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.operation-evaluation.five-plus-two",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.place-value-addition.278-plus-156",
+    "title": "Add 278 + 156 by place value",
+    "summary": "Add 278 and 156 column by column, carrying regrouped units into the next place.",
+    "tags": [
+      "animation",
+      "arithmetic",
+      "editor",
+      "multi-representation",
+      "place-value",
+      "regrouping",
+      "reviewable"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "partial",
+    "featured": false,
+    "primaryRepresentationId": "library.editor.place-value-addition-focused-host",
+    "representations": [
+      {
+        "id": "library.editor.place-value-addition-focused-host",
+        "label": "Animation + lesson",
+        "kind": "editor",
+        "href": "/?view=animation-library-host&animation=editor-animation.animation.place-value-addition.278-plus-156",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.place-value-addition.278-plus-156",
+        "label": "Add 278 + 156 by place value",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.place-value-addition.278-plus-156",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.programming.add.execution-trace",
+    "title": "Addition execution trace",
+    "summary": "Addition execution trace",
+    "tags": [
+      "animation",
+      "editor",
+      "execution-trace",
+      "programming",
+      "source-file"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.programming.add.execution-trace",
+    "representations": [
+      {
+        "id": "editor-animation.animation.programming.add.execution-trace",
+        "label": "Addition execution trace",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.programming.add.execution-trace",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.graph.vector.linear-map-scale",
+    "title": "Apply a scale matrix to a vector",
+    "summary": "The scale-matrix graph sample stretches a vector while preserving component provenance.",
+    "tags": [
+      "animation",
+      "card",
+      "editor",
+      "family-backed",
+      "family.linear-algebra.vector-add-scale",
+      "graph",
+      "linear-algebra",
+      "vector"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.sample.animation.vector-add-scale.basic",
+    "representations": [
+      {
+        "id": "editor-animation.sample.animation.vector-add-scale.basic",
+        "label": "Apply a scale matrix to a vector",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.vector-add-scale.basic",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.graph.vector.linear-map-scale",
+        "label": "Apply a scale matrix to a vector",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.graph.vector.linear-map-scale",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.vector-add-scale.basic",
+        "label": "Apply a scale matrix to a vector sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.vector-add-scale.basic",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.fractional-linear.x-over-2.balanced-proof",
+    "title": "Compare equation views",
+    "summary": "Switch between the complete balanced proof and a certified fluent transfer for x/2 = 4.",
+    "tags": [
+      "exemplar",
+      "reader-only",
+      "scroll-lesson"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "learner-experience.fractional-transfer-comparison-scroll-lesson.animation.fractional-linear.x-over-2.balanced-proof",
+    "representations": [
+      {
+        "id": "learner-experience.fractional-transfer-comparison-scroll-lesson.animation.fractional-linear.x-over-2.balanced-proof",
+        "label": "Compare equation views",
+        "kind": "reader",
+        "href": "/reader/fractional-transfer/",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.fractional-linear.x-over-2.fluent-projection",
+    "title": "Compare equation views",
+    "summary": "Switch between the complete balanced proof and a certified fluent transfer for x/2 = 4.",
+    "tags": [
+      "exemplar",
+      "reader-only",
+      "scroll-lesson"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "learner-experience.fractional-transfer-comparison-scroll-lesson.animation.fractional-linear.x-over-2.fluent-projection",
+    "representations": [
+      {
+        "id": "learner-experience.fractional-transfer-comparison-scroll-lesson.animation.fractional-linear.x-over-2.fluent-projection",
+        "label": "Compare equation views",
+        "kind": "reader",
+        "href": "/reader/fractional-transfer/",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.fraction-composition.two-thirds-solve",
+    "title": "Distribute and solve with a fraction",
+    "summary": "Follow two thirds times x plus six through thirteen exact operations, folding or pinning the evaluation detail you want to inspect.",
+    "tags": [
+      "exemplar",
+      "reader-only",
+      "scroll-lesson"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "ported",
+    "featured": false,
+    "primaryRepresentationId": "learner-experience.fraction-composition-scroll-lesson.animation.fraction-composition.two-thirds-solve",
+    "representations": [
+      {
+        "id": "learner-experience.fraction-composition-scroll-lesson.animation.fraction-composition.two-thirds-solve",
+        "label": "Distribute and solve with a fraction",
+        "kind": "reader",
+        "href": "/reader/fraction-composition/",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.foldable-distribution.collect-like-terms",
+    "title": "Distribute, evaluate, and collect",
+    "summary": "Follow 3(x+2)+2(x-1) to 5x+4, then fold or pin the evaluation detail you want to inspect.",
+    "tags": [
+      "exemplar",
+      "reader-only",
+      "scroll-lesson"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "partial",
+    "featured": false,
+    "primaryRepresentationId": "learner-experience.foldable-distribution-scroll-lesson.animation.foldable-distribution.collect-like-terms",
+    "representations": [
+      {
+        "id": "learner-experience.foldable-distribution-scroll-lesson.animation.foldable-distribution.collect-like-terms",
+        "label": "Distribute, evaluate, and collect",
+        "kind": "reader",
+        "href": "/reader/foldable-distribution/",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.divide-both-sides.solve-3x-equals-12",
+    "title": "Divide both sides",
+    "summary": "Watch 3x = 12 become two matched fractions, cancel, and resolve to x = 4.",
+    "tags": [
+      "exemplar",
+      "reader-only",
+      "scroll-lesson"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "learner-experience.divide-both-sides-scroll-lesson.animation.divide-both-sides.solve-3x-equals-12",
+    "representations": [
+      {
+        "id": "learner-experience.divide-both-sides-scroll-lesson.animation.divide-both-sides.solve-3x-equals-12",
+        "label": "Divide both sides",
+        "kind": "reader",
+        "href": "/reader/divide-both-sides/",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.dot-projection.basic",
+    "title": "Dot product and vector projection",
+    "summary": "The dot/projection graph computes the scalar result while animating the exact perpendicular drop.",
+    "tags": [
+      "animation",
+      "card",
+      "dot-product",
+      "editor",
+      "family-backed",
+      "family.linear-algebra.dot-projection",
+      "graph",
+      "linear-algebra",
+      "projection"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.sample.animation.dot-projection.basic",
+    "representations": [
+      {
+        "id": "editor-animation.sample.animation.dot-projection.basic",
+        "label": "Dot product and vector projection",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.dot-projection.basic",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.dot-projection.basic",
+        "label": "Dot product and vector projection",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.dot-projection.basic",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.dot-projection.basic",
+        "label": "Dot product and vector projection sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.dot-projection.basic",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.sample.fourier-transform-pair",
+    "title": "Fourier transform pair",
+    "summary": "Fourier transform pair",
+    "tags": [
+      "analysis",
+      "animation",
+      "editor",
+      "equation",
+      "fourier",
+      "sample"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.sample.fourier-transform-pair",
+    "representations": [
+      {
+        "id": "editor-animation.animation.sample.fourier-transform-pair",
+        "label": "Fourier transform pair",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.sample.fourier-transform-pair",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.sample.fundamental-theorem-calculus",
+    "title": "Fundamental Theorem of Calculus forms",
+    "summary": "The FTC comparison sample links accumulation-derivative and net-change equation forms on one clock.",
+    "tags": [
+      "animation",
+      "calculus",
+      "card",
+      "editor",
+      "equation",
+      "family-backed",
+      "family.calculus.integral-ftc",
+      "fundamental-theorem",
+      "sample"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.sample.animation.integral-ftc.basic",
+    "representations": [
+      {
+        "id": "editor-animation.sample.animation.integral-ftc.basic",
+        "label": "Fundamental Theorem of Calculus forms",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.integral-ftc.basic",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.sample.fundamental-theorem-calculus",
+        "label": "Fundamental Theorem of Calculus forms",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.sample.fundamental-theorem-calculus",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.integral-ftc.basic",
+        "label": "Fundamental Theorem of Calculus forms sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.integral-ftc.basic",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.calculus.derivative.power-rule-x-cubed",
+    "title": "Generated derivative power rule for x cubed",
+    "summary": "Generated x-cubed derivative sample exercises the power-rule exponent drop into coefficient position.",
+    "tags": [
+      "animation",
+      "calculus",
+      "card",
+      "editor",
+      "family-backed",
+      "family.calculus.derivative-rules",
+      "generated-problem",
+      "generated.calculus.derivative"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.sample.animation.derivative-rules.basic",
+    "representations": [
+      {
+        "id": "editor-animation.sample.animation.derivative-rules.basic",
+        "label": "Generated derivative power rule for x cubed",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.derivative-rules.basic",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.generated.calculus.derivative.power-rule-x-cubed",
+        "label": "Generated derivative power rule for x cubed",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.calculus.derivative.power-rule-x-cubed",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.derivative-rules.basic",
+        "label": "Generated derivative power rule for x cubed sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.derivative-rules.basic",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.calculus.derivative.sum-rule-polynomial",
+    "title": "Generated derivative sum rule for a polynomial",
+    "summary": "Generated derivative sum rule for a polynomial",
+    "tags": [
+      "animation",
+      "editor",
+      "generated-problem",
+      "generated.calculus.derivative"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.generated.calculus.derivative.sum-rule-polynomial",
+    "representations": [
+      {
+        "id": "editor-animation.animation.generated.calculus.derivative.sum-rule-polynomial",
+        "label": "Generated derivative sum rule for a polynomial",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.calculus.derivative.sum-rule-polynomial",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.linear-algebra.dot-product.three-vector",
+    "title": "Generated dot product",
+    "summary": "Generated dot product",
+    "tags": [
+      "animation",
+      "editor",
+      "generated-problem",
+      "generated.linear-algebra.dot-product"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.generated.linear-algebra.dot-product.three-vector",
+    "representations": [
+      {
+        "id": "editor-animation.animation.generated.linear-algebra.dot-product.three-vector",
+        "label": "Generated dot product",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.linear-algebra.dot-product.three-vector",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.exponent.square-as-product",
+    "title": "Generated expand square as product",
+    "summary": "The square-as-product animation rewinds repeated factors into an exponent-combine view with a persistent base.",
+    "tags": [
+      "algebra",
+      "animation",
+      "card",
+      "editor",
+      "equation",
+      "exponent",
+      "family-backed",
+      "family.algebra.exponent-log-laws",
+      "generated"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.sample.animation.exponent-combine.square-as-product",
+    "representations": [
+      {
+        "id": "editor-animation.sample.animation.exponent-combine.square-as-product",
+        "label": "Generated expand square as product",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.exponent-combine.square-as-product",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.generated.exponent.square-as-product",
+        "label": "Generated expand square as product",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.exponent.square-as-product",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.exponent-combine.square-as-product",
+        "label": "Generated expand square as product sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.exponent-combine.square-as-product",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.distribution.factor-common-a",
+    "title": "Generated factor common a",
+    "summary": "The factor-common-a animation reconciles matching factor copies before wrapping the remaining sum.",
+    "tags": [
+      "algebra",
+      "animation",
+      "card",
+      "distribution",
+      "editor",
+      "equation",
+      "family-backed",
+      "family.algebra.distribution-factoring",
+      "generated"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.sample.animation.factoring.factor-common-a",
+    "representations": [
+      {
+        "id": "editor-animation.sample.animation.factoring.factor-common-a",
+        "label": "Generated factor common a",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.factoring.factor-common-a",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.generated.distribution.factor-common-a",
+        "label": "Generated factor common a",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.distribution.factor-common-a",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.factoring.factor-common-a",
+        "label": "Generated factor common a sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.factoring.factor-common-a",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.calculus.integral.power-rule-quadratic",
+    "title": "Generated integral power rule for a quadratic",
+    "summary": "Generated integral power rule for a quadratic",
+    "tags": [
+      "animation",
+      "editor",
+      "generated-problem",
+      "generated.calculus.integral"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.generated.calculus.integral.power-rule-quadratic",
+    "representations": [
+      {
+        "id": "editor-animation.animation.generated.calculus.integral.power-rule-quadratic",
+        "label": "Generated integral power rule for a quadratic",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.calculus.integral.power-rule-quadratic",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+    "title": "Generated matrix-matrix product",
+    "summary": "Generated matrix-matrix sample multiplies two two-by-two matrices and preserves the product matrix.",
+    "tags": [
+      "animation",
+      "card",
+      "editor",
+      "family-backed",
+      "family.linear-algebra.matrix-matrix-composition",
+      "generated-problem",
+      "generated.linear-algebra.matrix-matrix",
+      "linear-algebra"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.sample.animation.matrix-matrix.basic",
+    "representations": [
+      {
+        "id": "editor-animation.sample.animation.matrix-matrix.basic",
+        "label": "Generated matrix-matrix product",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.matrix-matrix.basic",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "label": "Generated matrix-matrix product",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.matrix-matrix.basic",
+        "label": "Generated matrix-matrix product sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.matrix-matrix.basic",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.linear-algebra.matrix-vector.two-by-two",
+    "title": "Generated matrix-vector product",
+    "summary": "Generated matrix-vector sample multiplies a two-by-two matrix by a vector and preserves each result component.",
+    "tags": [
+      "animation",
+      "card",
+      "editor",
+      "family-backed",
+      "family.linear-algebra.matrix-vector",
+      "generated-problem",
+      "generated.linear-algebra.matrix-vector",
+      "linear-algebra"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.sample.animation.matrix-vector.basic",
+    "representations": [
+      {
+        "id": "editor-animation.sample.animation.matrix-vector.basic",
+        "label": "Generated matrix-vector product",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.matrix-vector.basic",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "label": "Generated matrix-vector product",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.matrix-vector.basic",
+        "label": "Generated matrix-vector product sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.matrix-vector.basic",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.fraction-expression.two-fourths",
+    "title": "Generated simplify two fourths",
+    "summary": "Basic rational-expression sample exercises split, merge, simplify, common-denominator, and reciprocal forms.",
+    "tags": [
+      "algebra",
+      "animation",
+      "card",
+      "editor",
+      "equation",
+      "family-backed",
+      "family.algebra.fraction-simplification",
+      "fraction",
+      "generated"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.sample.animation.fraction-simplification.basic",
+    "representations": [
+      {
+        "id": "editor-animation.sample.animation.fraction-simplification.basic",
+        "label": "Generated simplify two fourths",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.fraction-simplification.basic",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.generated.fraction-expression.two-fourths",
+        "label": "Generated simplify two fourths",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.fraction-expression.two-fourths",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.fraction-simplification.basic",
+        "label": "Generated simplify two fourths sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.fraction-simplification.basic",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.function-wrap.apply-f",
+    "title": "Generated wrap x with f",
+    "summary": "The apply-f animation exercises the family function-wrap motif while preserving argument identity and wrapper ownership.",
+    "tags": [
+      "algebra",
+      "animation",
+      "card",
+      "editor",
+      "equation",
+      "family-backed",
+      "family.algebra.exponent-log-laws",
+      "function-wrap",
+      "generated"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.sample.animation.function-wrap.apply-f",
+    "representations": [
+      {
+        "id": "editor-animation.sample.animation.function-wrap.apply-f",
+        "label": "Generated wrap x with f",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.function-wrap.apply-f",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.generated.function-wrap.apply-f",
+        "label": "Generated wrap x with f",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.function-wrap.apply-f",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.function-wrap.apply-f",
+        "label": "Generated wrap x with f sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.function-wrap.apply-f",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.add-zero",
+    "title": "Generated: remove additive zero",
+    "summary": "Generated: remove additive zero",
+    "tags": [
+      "animation",
+      "editor",
+      "equation",
+      "generated",
+      "llm-authored"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.generated.add-zero",
+    "representations": [
+      {
+        "id": "editor-animation.animation.generated.add-zero",
+        "label": "Generated: remove additive zero",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.add-zero",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.pipeline-diagram",
+    "title": "Generated: reveal a transformation pipeline",
+    "summary": "Generated: reveal a transformation pipeline",
+    "tags": [
+      "animation",
+      "diagram",
+      "editor",
+      "generated",
+      "llm-authored"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.generated.pipeline-diagram",
+    "representations": [
+      {
+        "id": "editor-animation.animation.generated.pipeline-diagram",
+        "label": "Generated: reveal a transformation pipeline",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.pipeline-diagram",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.substitute-three",
+    "title": "Generated: substitute 3 for x",
+    "summary": "Generated: substitute 3 for x",
+    "tags": [
+      "animation",
+      "editor",
+      "equation",
+      "generated",
+      "llm-authored"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.generated.substitute-three",
+    "representations": [
+      {
+        "id": "editor-animation.animation.generated.substitute-three",
+        "label": "Generated: substitute 3 for x",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.substitute-three",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.inequality.sign-flip.basic",
+    "title": "Inequality sign flip",
+    "summary": "Basic inequality sign-flip sample exercises relation.flip semantics for negative scaling.",
+    "tags": [
+      "algebra",
+      "animation",
+      "card",
+      "editor",
+      "equation",
+      "family-backed",
+      "family.algebra.inequality",
+      "inequality",
+      "sign-flip"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.sample.animation.inequality.sign-flip.basic",
+    "representations": [
+      {
+        "id": "editor-animation.sample.animation.inequality.sign-flip.basic",
+        "label": "Inequality sign flip",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.inequality.sign-flip.basic",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.inequality.sign-flip.basic",
+        "label": "Inequality sign flip",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.inequality.sign-flip.basic",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.inequality.sign-flip.basic",
+        "label": "Inequality sign flip sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.inequality.sign-flip.basic",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.integral-ftc.area-sweep",
+    "title": "Integral area sweep",
+    "summary": "The t-squared area sweep preserves upper-bound provenance while sampling exact accumulation.",
+    "tags": [
+      "animation",
+      "area-sweep",
+      "calculus",
+      "card",
+      "editor",
+      "family-backed",
+      "family.calculus.integral-ftc",
+      "graph",
+      "integral"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.sample.animation.integral-ftc.area-sweep",
+    "representations": [
+      {
+        "id": "editor-animation.sample.animation.integral-ftc.area-sweep",
+        "label": "Integral area sweep",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.sample.animation.integral-ftc.area-sweep",
+        "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.integral-ftc.area-sweep",
+        "label": "Integral area sweep",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.integral-ftc.area-sweep",
+        "role": "projection"
+      },
+      {
+        "id": "sample.animation.integral-ftc.area-sweep",
+        "label": "Integral area sweep sample",
+        "kind": "card",
+        "href": "/?animation=editor-animation.sample.animation.integral-ftc.area-sweep",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.comparison.jacobian-hessian",
+    "title": "Jacobian and Hessian comparison",
+    "summary": "Jacobian and Hessian comparison",
+    "tags": [
+      "animation",
+      "calculus",
+      "comparison",
+      "editor",
+      "equation",
+      "layout",
+      "linear-algebra"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.comparison.jacobian-hessian",
+    "representations": [
+      {
+        "id": "editor-animation.animation.comparison.jacobian-hessian",
+        "label": "Jacobian and Hessian comparison",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.comparison.jacobian-hessian",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.comparison.linear-solve-programming",
+    "title": "Linear solve and programming trace comparison",
+    "summary": "Linear solve and programming trace comparison",
+    "tags": [
+      "animation",
+      "comparison",
+      "editor",
+      "equation",
+      "layout",
+      "programming"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.comparison.linear-solve-programming",
+    "representations": [
+      {
+        "id": "editor-animation.animation.comparison.linear-solve-programming",
+        "label": "Linear solve and programming trace comparison",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.comparison.linear-solve-programming",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.exact-fraction-quantity.third-plus-sixth",
+    "title": "One third plus one sixth",
+    "summary": "See 1/3 + 1/6 become the same exact half across four synchronized representations.",
+    "tags": [
+      "animation",
+      "arithmetic",
+      "editor",
+      "exact-quantity",
+      "fraction",
+      "multi-representation",
+      "promoted"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "ported",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.exact-fraction-quantity.third-plus-sixth",
+    "representations": [
+      {
+        "id": "editor-animation.animation.exact-fraction-quantity.third-plus-sixth",
+        "label": "One third plus one sixth",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.exact-fraction-quantity.third-plus-sixth",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.generated.substitute-three.provisional-incorrect",
+    "title": "Provisional learner step: substitute 3 for x and 2",
+    "summary": "Provisional learner step: substitute 3 for x and 2",
+    "tags": [
+      "animation",
+      "editor",
+      "generated",
+      "incorrect",
+      "provisional"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.generated.substitute-three.provisional-incorrect",
+    "representations": [
+      {
+        "id": "editor-animation.animation.generated.substitute-three.provisional-incorrect",
+        "label": "Provisional learner step: substitute 3 for x and 2",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.substitute-three.provisional-incorrect",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.algebra.quadratic.solution-branching",
+    "title": "Quadratic solution branching",
+    "summary": "Planned animation: Quadratic solution branching.",
+    "tags": [],
+    "availability": "planned",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "representations": []
+  },
+  {
+    "animationId": "animation.graph.surface-mode.mesh-to-donut",
+    "title": "Saddle surface mesh to donut",
+    "summary": "Saddle surface mesh to donut",
+    "tags": [
+      "animation",
+      "editor",
+      "graph",
+      "surface-mode",
+      "webgl"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.graph.surface-mode.mesh-to-donut",
+    "representations": [
+      {
+        "id": "editor-animation.animation.graph.surface-mode.mesh-to-donut",
+        "label": "Saddle surface mesh to donut",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.graph.surface-mode.mesh-to-donut",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.fractional-linear.solve-x-over-2",
+    "title": "Solve a fractional equation",
+    "summary": "Watch subtraction, cancellation, and multiplication carry x through a fraction to its solution.",
+    "tags": [
+      "prototype",
+      "reader-only",
+      "scroll-lesson"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "learner-experience.solve-fractional-linear-scroll-lesson.animation.fractional-linear.solve-x-over-2",
+    "representations": [
+      {
+        "id": "learner-experience.solve-fractional-linear-scroll-lesson.animation.fractional-linear.solve-x-over-2",
+        "label": "Solve a fractional equation",
+        "kind": "reader",
+        "href": "/reader/solve-fractional-linear/",
+        "role": "canonical-host"
+      }
+    ]
+  }
+]

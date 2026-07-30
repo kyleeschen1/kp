@@ -215,6 +215,8 @@ unique symbol = Symbol("kp.opaque-gather-and-recognize-certificate");
 export interface KpCertifiedOpaqueGatherAndRecognizeRealization {
   readonly kind: "opaque-gather-and-recognize-v1";
   readonly minimumSourceTravelPx: number;
+  readonly sourceTranslationPx: number;
+  readonly sourceContractionPx: number;
   readonly sourceTravelPx: number;
   readonly targetEmergence:
     "geometry-with-continuous-source-co-presence";
@@ -512,21 +514,36 @@ function certifyOpaqueGatherAndRecognizeRealization(
   plan: KpSuccessorSynthesisPlan
 ): KpCertifiedOpaqueGatherAndRecognizeRealization {
   const minimumSourceTravelPx = observableSuccessorMinimumTravel(plan);
-  const sourceTravelPx = Math.min(
+  const sourceTranslationPx = Math.min(
     ...plan.materialInputs.map((source) =>
       distance(center(source.rect), plan.sourceJunction)
     )
   );
+  const sourceContractionPx = Math.min(
+    ...plan.materialInputs.map(({ rect }) =>
+      Math.max(rect.width, rect.height) *
+      (1 - plan.inputJunctionScale) /
+      2
+    )
+  );
+  // A viewer observes the outer paint edge, whose motion includes both center
+  // translation and contraction. Center-only certification was viewport
+  // fragile and rejected visibly identical compact layouts by subpixels.
+  const sourceTravelPx = sourceTranslationPx + sourceContractionPx;
   if (sourceTravelPx + 0.001 < minimumSourceTravelPx) {
     throw new Error(
       `Successor synthesis ${plan.id} has an unobservable gather: source ` +
-      `travel ${sourceTravelPx.toFixed(3)}px must reach ` +
+      `translation ${sourceTranslationPx.toFixed(3)}px plus contraction ` +
+      `${sourceContractionPx.toFixed(3)}px produces ` +
+      `${sourceTravelPx.toFixed(3)}px travel, which must reach ` +
       `${minimumSourceTravelPx.toFixed(3)}px.`
     );
   }
   return Object.freeze({
     kind: "opaque-gather-and-recognize-v1",
     minimumSourceTravelPx,
+    sourceTranslationPx,
+    sourceContractionPx,
     sourceTravelPx,
     targetEmergence:
       "geometry-with-continuous-source-co-presence",

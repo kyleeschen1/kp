@@ -63,8 +63,15 @@ import {
 import {
   disposeKpEditorAnimationPlayers,
   hydrateKpEditorAnimationPlayers,
+  KP_EDITOR_ANIMATION_LOAD_EVENT,
   pauseKpEditorAnimationPlayers
 } from "./editor/animation-player-controller.ts";
+import {
+  installKpAnimationHostStatus,
+  markKpAnimationHostFailed,
+  markKpAnimationHostLoading,
+  markKpAnimationHostReady
+} from "./rendering/animation-host-status.ts";
 import {
   hydrateKpEditorAnimationSurfaces
 } from "./editor/animation-surface-adapter-registry.ts";
@@ -174,6 +181,32 @@ let activeView:
   | "animation-library-host"
   | "ftc-tutorial"
   | "animation-workbench" = "editor";
+installKpAnimationHostStatus(window, "kp.application");
+appRoot.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, (event) => {
+  if (
+    (activeView !== "animation-library-host" && activeView !== "editor") ||
+    !(event instanceof CustomEvent) ||
+    !(event.target instanceof HTMLElement) ||
+    event.target.dataset["kpEditorAnimationDescriptorId"] !==
+      selectedEditorAnimationDescriptorId ||
+    typeof event.detail !== "object" ||
+    event.detail === null
+  ) return;
+  const detail = event.detail as {
+    readonly status?: unknown;
+    readonly message?: unknown;
+  };
+  if (detail.status === "ready") {
+    markKpAnimationHostReady(window);
+  } else if (detail.status === "failed") {
+    markKpAnimationHostFailed(
+      window,
+      typeof detail.message === "string"
+        ? detail.message
+        : "Animation player failed to load."
+    );
+  }
+});
 let viewRevision = 0;
 let disposeAnimationDevelopmentReview:
   | (() => void)
@@ -445,6 +478,10 @@ async function compileDocument(): Promise<void> {
 
 function renderEditor(): void {
   activeView = "editor";
+  markKpAnimationHostLoading(
+    window,
+    `editor.${selectedEditorAnimationDescriptorId}`
+  );
   const revision = ++viewRevision;
   disposeAnimationDevelopmentReviewCapture();
   disposeKpEditorAnimationPlayers(appRoot);
@@ -466,6 +503,10 @@ function renderEditor(): void {
 
 function renderAnimationLibraryHostView(): void {
   activeView = "animation-library-host";
+  markKpAnimationHostLoading(
+    window,
+    `editor-animation-library.${selectedEditorAnimationDescriptorId}`
+  );
   const revision = ++viewRevision;
   disposeAnimationDevelopmentReviewCapture();
   disposeKpEditorAnimationPlayers(appRoot);

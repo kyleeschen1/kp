@@ -59,7 +59,12 @@ import {
   observeKpNativeKatexPaintAtoms,
   settleAndObserveKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";
+import {
+  installKpAnimationHostStatus,
+  markKpAnimationHostReady
+} from "../rendering/animation-host-status.ts";
 
+installKpAnimationHostStatus(window, "experiment.glyph-reconciliation");
 const root = document.querySelector<HTMLElement>("#glyph-experiment");
 if (!root) throw Error("Missing glyph root.");
 const searchParams = new URL(location.href).searchParams;
@@ -73,7 +78,10 @@ if (searchParams.get("hostParity") === "radical")
 const isolatedReview =
   searchParams.get("hostParity") === "radical" ||
   searchParams.get("reviewGallery") === "radical";
-if (isolatedReview) reviewGallery.markReady();
+if (isolatedReview) {
+  reviewGallery.markReady();
+  markKpAnimationHostReady(window);
+}
 else {
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const fractionDirection: KpFractionExperimentDirection =
@@ -929,6 +937,7 @@ const requestedProgress = Number(
 render(requestedProgress);
 review.dataset["kpReady"] = "true";
 reviewGallery.markReady();
+markKpAnimationHostReady(window);
 
 if (import.meta.env.DEV) {
   const { mountKpDevReview } = await import("../dev-review/review-bootstrap.ts");

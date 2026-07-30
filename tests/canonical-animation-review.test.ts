@@ -16,10 +16,11 @@ test("Animation Library is one passive lazy host over existing representations",
   assert.equal((html.match(/<iframe/g) ?? []).length, 1);
   assert.equal(
     (source.match(/^import /gm) ?? []).length,
-    1,
-    "the display entry imports catalog metadata, not animation runtimes"
+    2,
+    "the display entry imports metadata and the generic host-status protocol"
   );
   assert.match(source, /animation-library-display-catalog\.ts/);
+  assert.match(source, /animation-host-status\.ts/);
   assert.match(source, /animation-library-review-bootstrap\.ts/);
   assert.match(source, /replaceChildren/);
   assert.doesNotMatch(source, /\binnerHTML\b/);

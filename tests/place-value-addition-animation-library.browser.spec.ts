@@ -38,6 +38,14 @@ test("place-value exemplar mounts lazily in the canonical Animation Library", as
     "src",
     "/?view=animation-library-host&animation=" + descriptorId
   );
+  // WebKit may parse the player shell before its lazy pack arrives. The
+  // library readiness handshake is the stable boundary for inspecting the
+  // hydrated semantic frame.
+  await expect(library).toHaveAttribute(
+    "data-preview-ready",
+    "true",
+    { timeout: 15_000 }
+  );
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-pack-id",
     "place-value"
