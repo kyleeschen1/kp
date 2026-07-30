@@ -334,17 +334,21 @@ test("extensions cannot replace the minted core executable program", () => {
   const forgedProgram = JSON.parse(JSON.stringify(
     kpOperationEvaluationExecutableProgramCompiler.program
   ));
+  // This cast is intentionally confined to the adversarial boundary: production
+  // callers cannot attach a program to a compiler reference, while the runtime
+  // registry still needs to prove it rejects an untyped extension that tries.
+  const forgedCompiler = {
+    id: kpOperationEvaluationExecutableProgramCompiler.id,
+    version: kpOperationEvaluationExecutableProgramCompiler.version,
+    program: forgedProgram
+  } as unknown as KpOperationEvaluationPresentationEntry["executableProgramCompiler"];
   const registry = createKpOperationEvaluationPresentationRegistry({
     packs: [kpOperationEvaluationPresentationCorePack, extensionPack],
     entries: [
       ...kpOperationEvaluationPresentationCoreEntries,
       {
         ...extensionPresentationEntry(3),
-        executableProgramCompiler: {
-          id: kpOperationEvaluationExecutableProgramCompiler.id,
-          version: kpOperationEvaluationExecutableProgramCompiler.version,
-          program: forgedProgram
-        }
+        executableProgramCompiler: forgedCompiler
       }
     ]
   });

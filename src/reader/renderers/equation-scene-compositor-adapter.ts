@@ -10,6 +10,9 @@ import type {
   KpNativeKatexRenderedSceneObservation
 } from "../../rendering/native-katex-rendered-scene.ts";
 import type {
+  KpNativeKatexSuccessorSynthesisIntent
+} from "../../rendering/native-katex-successor-synthesis.ts";
+import type {
   KpReaderEquationMaterialPlan,
   KpReaderEquationTransitionMaterialPlan
 } from "./equation-material-plan.ts";
@@ -40,6 +43,10 @@ import {
 import {
   assertKpFactorCommonTermMotifBinding
 } from "../../animation/factoring-motif-binding.ts";
+import {
+  compileKpExecutableSuccessorMotifProgramAdapter,
+  type KpExecutableSuccessorMotifProgramAdapterDispatch
+} from "./executable-successor-motif-program-adapter.ts";
 
 export interface KpReaderEquationMeasuredRendererSession
   extends KpNativeKatexRendererSession {
@@ -47,6 +54,8 @@ export interface KpReaderEquationMeasuredRendererSession
   readonly presentationMode:
     | "verified-motion"
     | "explicit-static-checkpoint";
+  readonly executableProgramExecution?:
+    KpExecutableSuccessorMotifProgramAdapterDispatch | undefined;
 }
 
 export interface KpReaderEquationSceneCompositorInput {
@@ -84,6 +93,8 @@ interface KpReaderEquationCompositorDispatchBase {
     | "canonical-copy-fan-out"
     | "canonical-semantic-reorder-and-group";
   readonly successorSynthesisCount: number;
+  readonly executableProgramExecution?:
+    KpExecutableSuccessorMotifProgramAdapterDispatch | undefined;
 }
 
 type KpReaderEquationCompositorDispatch =
@@ -163,6 +174,19 @@ export function createKpReaderEquationSceneCompositorSession(
     String(dispatch.successorSynthesisCount);
   input.source.stage.dataset["kpNativeKatexMotionProfile"] =
     dispatch.motionProfile;
+  if (dispatch.executableProgramExecution === undefined) {
+    delete input.source.stage.dataset["kpExecutedMotifProgramId"];
+    delete input.source.stage.dataset["kpExecutedMotifProgramVersion"];
+    delete input.source.stage.dataset["kpExecutedMotifProgramKind"];
+    delete input.source.stage.dataset["kpExecutedMotifProgramPhase"];
+  } else {
+    input.source.stage.dataset["kpExecutedMotifProgramId"] =
+      dispatch.executableProgramExecution.programId;
+    input.source.stage.dataset["kpExecutedMotifProgramVersion"] =
+      dispatch.executableProgramExecution.programVersion;
+    input.source.stage.dataset["kpExecutedMotifProgramKind"] =
+      dispatch.executableProgramExecution.programKind;
+  }
   if (dispatch.planKind !== "explicit-static-checkpoint") {
     delete input.source.stage.dataset[
       "kpReaderEquationStaticCheckpointReason"
@@ -222,10 +246,24 @@ export function createKpReaderEquationSceneCompositorSession(
       dispatch.planKind !== "explicit-static-checkpoint"
         ? "verified-motion"
         : "explicit-static-checkpoint",
+    ...(dispatch.executableProgramExecution === undefined
+      ? {}
+      : {
+          executableProgramExecution:
+            dispatch.executableProgramExecution
+        }),
     sample(progress: number) {
       return canonical.session.sample(checkpointProgress(progress));
     },
     apply(progress: number) {
+      if (dispatch.executableProgramExecution !== undefined) {
+        const telemetry =
+          dispatch.executableProgramExecution.samplePhaseTelemetry(
+            checkpointProgress(progress)
+          );
+        input.source.stage.dataset["kpExecutedMotifProgramPhase"] =
+          telemetry.activePhaseId;
+      }
       if (dispatch.planKind !== "operation-choreography") {
         delete input.source.stage.dataset["kpNativeKatexOperationChoreography"];
       } else {
@@ -359,6 +397,12 @@ function dispatchReaderEquationPresentation(input: {
       };
     }
     case "successor-synthesis": {
+      if (plan.executableProgram.kind !== "operation-evaluation") {
+        throw new Error(
+          `Successor transition ${input.renderTransition.id} requires the ` +
+          "operation-evaluation executable program."
+        );
+      }
       const successorSyntheses = plan.successorSyntheses.map((binding) => {
         const relation = input.renderTransition.relations.find(
           ({ recordId }) => recordId === binding.relationRecordId
@@ -373,19 +417,42 @@ function dispatchReaderEquationPresentation(input: {
           direction: input.direction,
           motion: fullMotion(input.motionMode)
         };
-      });
-      // Successor choreography is now owned by the minted executable program;
-      // the next adapter slice dispatches that closed union exhaustively.
+      }) as unknown as readonly [
+        KpNativeKatexSuccessorSynthesisIntent,
+        ...KpNativeKatexSuccessorSynthesisIntent[]
+      ];
+      const executableProgramExecution =
+        compileKpExecutableSuccessorMotifProgramAdapter({
+          kind: "operation-evaluation",
+          program: plan.executableProgram,
+          direction: input.direction,
+          primitive: {
+            kind: "native-katex-successor-synthesis",
+            intents: successorSyntheses
+          }
+        });
+      if (
+        executableProgramExecution.programKind !== "operation-evaluation" ||
+        executableProgramExecution.primitive.kind !==
+          "native-katex-successor-synthesis"
+      ) {
+        throw new Error(
+          `Successor transition ${input.renderTransition.id} resolved a ` +
+          "non-evaluation compositor primitive."
+        );
+      }
       const routed = routingFields(undefined);
       return {
         planKind: plan.planKind,
         canonicalInput: {
           ...input.base,
           ...routed,
-          successorSyntheses
+          successorSyntheses:
+            executableProgramExecution.primitive.intents
         },
         motionProfile: motionProfile(routed),
-        successorSynthesisCount: successorSyntheses.length
+        successorSynthesisCount: successorSyntheses.length,
+        executableProgramExecution
       };
     }
     case "operation-choreography": {

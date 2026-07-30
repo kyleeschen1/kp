@@ -6,6 +6,9 @@ import {
   createLinearSolveTeacherZeroAnimationAsset
 } from "../src/animation/linear-solve-adapter.ts";
 import {
+  createKpFractionCompositionEquationAnimationAsset
+} from "../src/animation/fraction-composition-equation-adapter.ts";
+import {
   createNumeratorSplitMergeEquationAnimationAsset
 } from "../src/animation/numerator-split-merge-equation-adapter.ts";
 import { sampleKpAnimationRuntimeFrame } from "../src/animation/runtime-sampler.ts";
@@ -137,6 +140,7 @@ const visual = {
   childNodes: [{ nodeType: 3, textContent: "x" }],
   children: [],
   closest: () => null,
+  dataset: {} as Record<string, string>,
   ownerDocument,
   parentElement: undefined as unknown,
   querySelectorAll: () => [],
@@ -377,6 +381,26 @@ function fractionPlans(progress: number) {
   };
 }
 
+function evaluationPlans() {
+  const animation = createKpFractionCompositionEquationAnimationAsset();
+  const index = animation.transformations.findIndex(
+    ({ transformType }) => transformType === "simplifyConstantProduct"
+  );
+  const runtimeFrame = sampleKpAnimationRuntimeFrame({
+    animation,
+    direction: "forward",
+    progress: (index + 0.5) / animation.transformations.length
+  });
+  const renderPlan = projectKpReaderEquationRenderPlan({
+    animation,
+    runtimeFrame
+  });
+  return {
+    renderPlan,
+    materialPlan: compileKpReaderEquationMaterialPlan(renderPlan)
+  };
+}
+
 test("explicit static plans clamp the canonical session to native checkpoints", () => {
   const { renderPlan, materialPlan } = plans();
   const transition = renderPlan.transitions[0]!;
@@ -490,6 +514,47 @@ test("the same reader session adapter accepts both fraction fission and fusion p
       lifecycle === (progress < 0.5 ? "split" : "merge")
     ));
   }
+});
+
+test("reader sessions expose the exact executed program and phase telemetry", () => {
+  const { renderPlan, materialPlan } = evaluationPlans();
+  const transition = renderPlan.transitions[0]!;
+  const sourceIds = [...new Set(transition.relations.flatMap(
+    ({ sourceSelectorIds }) => sourceSelectorIds
+  ))];
+  const targetIds = [...new Set(transition.relations.flatMap(
+    ({ targetSelectorIds }) => targetSelectorIds
+  ))];
+  const session = createKpReaderEquationSceneCompositorSession({
+    renderPlan,
+    materialPlan,
+    transitionId: transition.id,
+    measurementIdentity,
+    source: fractionScene("source", sourceIds),
+    target: fractionScene("target", targetIds)
+  });
+
+  const execution = session.executableProgramExecution;
+  assert.equal(
+    execution?.programId,
+    "kp.executable-program.operation-evaluation"
+  );
+  assert.equal(execution?.programVersion, "1.0.0");
+  assert.equal(execution?.programKind, "operation-evaluation");
+  assert.equal(
+    stage.dataset["kpExecutedMotifProgramId"],
+    execution?.programId
+  );
+  const telemetry = execution!.samplePhaseTelemetry(0.45);
+  session.apply(0.45);
+  assert.equal(
+    stage.dataset["kpExecutedMotifProgramPhase"],
+    telemetry.activePhaseId
+  );
+  assert.deepEqual(
+    execution!.samplePhaseTelemetry(0.45),
+    telemetry
+  );
 });
 
 test("the canonical adapter exhaustively dispatches the closed reader plan union", async () => {

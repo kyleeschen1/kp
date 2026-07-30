@@ -530,6 +530,104 @@
       "scope": "s08 development review production isolation",
       "checkedAt": "2026-07-30T00:00:39.433Z",
       "notes": "Production closure passed across 245 files and seven forbidden development-review markers."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s09 exhaustive executable adapter",
+      "checkedAt": "2026-07-30T00:19:23.921Z",
+      "notes": "141 of 141 focused presentation, minted-program, reader-plan, adapter, registry, continuity, and negative-boundary checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09 exhaustive adapter and reader session typing",
+      "checkedAt": "2026-07-30T00:19:25.109Z",
+      "notes": "All TypeScript projects pass after exhaustive narrowing across the three sealed program variants."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s09 adapter inference budget",
+      "checkedAt": "2026-07-30T00:19:25.984Z",
+      "notes": "Inference contracts passed at 46293 types, 57910 instantiations, and 3.06 seconds."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s09 renderer subsystem boundary",
+      "checkedAt": "2026-07-30T00:19:27.030Z",
+      "notes": "Architecture exits successfully; the sole pre-existing informational stale legacy query-view exception remains unrelated."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "s09 native KaTeX compositor preservation",
+      "checkedAt": "2026-07-30T00:19:27.938Z",
+      "notes": "68 of 68 glyph observation, paint geometry, settlement, reconciliation, no-fade, and renderer-session checks passed."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-continuity",
+      "status": "passed",
+      "scope": "s09 cross-browser executable continuity",
+      "checkedAt": "2026-07-30T00:19:28.843Z",
+      "notes": "36 of 36 Chromium, Firefox, and WebKit checks passed across wide and phone playback, rewind, visible travel, typography, endpoint, and Review capture laws."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s09 neighboring responsive visual preservation",
+      "checkedAt": "2026-07-30T00:19:29.740Z",
+      "notes": "All 39 stable desktop and phone linear-equation baseline states captured successfully."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "s09 shared reader lifecycle preservation",
+      "checkedAt": "2026-07-30T00:19:30.691Z",
+      "notes": "16 of 16 Chromium shared-reader checks passed across all routes and verified cancellation motion."
+    },
+    {
+      "command": "npm run build",
+      "status": "failed",
+      "scope": "s09 initial full test-project typecheck",
+      "checkedAt": "2026-07-30T00:19:31.630Z",
+      "notes": "The full build correctly rejected an adversarial registry fixture that attached an impossible program field as a normal typed object literal; no production source or runtime check failed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s09 production build after explicit unsafe test boundary",
+      "checkedAt": "2026-07-30T00:19:32.568Z",
+      "notes": "All application, node, test, protocol-dependent, and domain type projects pass; Vite production build completes after confining the intentionally forged field to an explicit adversarial cast."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s09 reader production closure",
+      "checkedAt": "2026-07-30T00:19:33.491Z",
+      "notes": "All 11 manifest routes form the expected build-only closure."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s09 reader route budgets",
+      "checkedAt": "2026-07-30T00:19:34.397Z",
+      "notes": "All 11 reader routes remain within the five-percent compiled HTML and transitive runtime growth limits."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s09 development review production isolation",
+      "checkedAt": "2026-07-30T00:19:35.347Z",
+      "notes": "Production closure passed across 246 files and seven forbidden development-review markers."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s09 exact-fraction semantic and four-view preservation",
+      "checkedAt": "2026-07-30T00:19:36.251Z",
+      "notes": "95 of 95 exact quantity, synchronized view, fold, accessibility, responsive, compositor, and promotion-honesty checks passed."
     }
   ],
   "allowedWork": [
@@ -611,7 +709,8 @@
     {
       "id": "s09",
       "title": "add-exhaustive-program-adapter",
-      "status": "planned"
+      "summary": "Added one exhaustive executable-program adapter over the three sealed program variants. Operation evaluation feeds the existing native successor-synthesis intents; identity fission and fusion feed the existing fission/fusion primitive. The reader still owns exactly one native compositor session while exposing immutable program ID, version, kind, forward/rewind phase order, and deterministic sampled phase telemetry. No new renderer, lifecycle, scheduler, clock, geometry, timing, or path category was introduced; wide, phone, cross-browser, production, budget, and exact-fraction preservation gates pass.",
+      "status": "complete"
     },
     {
       "id": "s10",
