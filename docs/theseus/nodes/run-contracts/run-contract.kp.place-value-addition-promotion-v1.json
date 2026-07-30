@@ -83,7 +83,9 @@
     {
       "id": "s05",
       "title": "compile-exact-decompositions",
-      "status": "planned"
+      "summary": "Compiled sealed, deterministic hundreds/tens/ones decompositions for the canonical addends and result. All components retain exact values, IDs align with the frozen semantic cells, totals round-trip, leading-zero places stay explicit, and fabricated inputs cannot cross the proof boundary.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s06",
