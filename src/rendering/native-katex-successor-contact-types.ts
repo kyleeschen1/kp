@@ -5,6 +5,12 @@ import type {
   KpEquationVisiblePaintCertifiedContact
 } from "./equation-visible-paint-overlap-types.ts";
 
+export type KpNativeKatexSuccessorEvaluationContact =
+  KpEquationVisiblePaintCertifiedContact & {
+    readonly reason: "semantic-evaluation";
+    readonly phase: "evaluation-recognition";
+  };
+
 export type KpNativeKatexSuccessorSynthesisPhase =
   | "orient"
   | "converge"
@@ -36,7 +42,13 @@ export type KpNativeKatexSuccessorContactAuthority =
   | {
       readonly synthesisSide: "source";
       readonly contactRole: "catalyst";
-      readonly semanticContacts?: never;
+      /**
+       * A catalyst may touch the emerging result without acquiring material
+       * lineage. The narrower contact type prevents that visual participation
+       * from being mistaken for fusion authority.
+       */
+      readonly semanticContacts?:
+        readonly KpNativeKatexSuccessorEvaluationContact[] | undefined;
     }
   | {
       readonly synthesisSide: "target";

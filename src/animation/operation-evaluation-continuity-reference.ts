@@ -30,7 +30,7 @@ export const kpOperationEvaluationContinuityReference = Object.freeze({
     policy: "exclusive-continuous-carrier",
     legalTransfer: Object.freeze([
       "paint-equivalent-pose",
-      "shared-zero-area-junction"
+      "bounded-semantic-contact-co-presence"
     ]),
     nonZeroPaintOpacity: 1,
     nativeEndpointAuthority: true

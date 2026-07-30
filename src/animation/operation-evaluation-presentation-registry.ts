@@ -36,6 +36,16 @@ import {
   isKpVerifiedExecutableSuccessorMotifProgram,
   validateAndMintKpExecutableSuccessorMotifProgram
 } from "./motifs/executable-successor-motif-program-validator.ts";
+import {
+  compileKpExecutableMotifContinuity,
+  isKpExecutableMotifContinuityProgram
+} from "./motifs/executable-motif-continuity-compiler.ts";
+import {
+  createKpOperationEvaluationContinuityContractDraft
+} from "./operation-evaluation-continuity-topology.ts";
+import {
+  validateAndMintKpPerceptualContinuityContract
+} from "./perceptual-continuity-contract.ts";
 
 export {
   kpCanonicalOperationEvaluationTransformationKinds
@@ -86,25 +96,28 @@ export const kpOperationEvaluationExecutableProgramCompilers:
   readonly KpOperationEvaluationExecutableProgramCompilerDescriptor[] =
   Object.freeze([kpOperationEvaluationExecutableProgramCompiler]);
 
-export const kpSharedJunctionPaintContinuityCompiler =
+export const kpBoundedSemanticContactPaintContinuityCompiler =
   Object.freeze({
-    id: "kp.paint-continuity-compiler.shared-junction",
-    version: "1.0.0",
-    transferTopology: "shared-zero-area-junction",
+    id: "kp.paint-continuity-compiler.bounded-semantic-contact",
+    version: "2.0.0",
+    transferTopology: "bounded-semantic-contact-co-presence",
     nonZeroPaint: "opaque",
     endpointSettlement: "native-source-and-target",
-    boundaryLawId: "paint-continuity.t-epsilon-boundary"
+    boundaryLawId: "paint-continuity.t-epsilon-boundary",
+    continuityProgram: mintCanonicalOperationEvaluationContinuityProgram(
+      kpOperationEvaluationExecutableProgramCompiler.program
+    )
   } satisfies KpOperationEvaluationPaintContinuityCompilerDescriptor);
 
 export const kpOperationEvaluationPaintContinuityCompilers:
   readonly KpOperationEvaluationPaintContinuityCompilerDescriptor[] =
-  Object.freeze([kpSharedJunctionPaintContinuityCompiler]);
+  Object.freeze([kpBoundedSemanticContactPaintContinuityCompiler]);
 
 export const kpOperationEvaluationPresentationCorePack =
   createKpOperationEvaluationPresentationPack({
     id: "kp.presentation.operation-evaluation",
     scope: "core",
-    version: "4.0.0",
+    version: "5.0.0",
     title: "KP operation-evaluation presentations",
     presentationIds: [
       "kp.presentation.operation-evaluation.product",
@@ -383,6 +396,22 @@ export function createKpOperationEvaluationPresentationRegistry(input: {
         `${entry.paintContinuityCompiler.version}.`
       );
     }
+    if (
+      !isKpExecutableMotifContinuityProgram(
+        paintContinuityCompiler.continuityProgram
+      ) ||
+      paintContinuityCompiler.continuityProgram.program !==
+        executableProgramCompiler.program ||
+      paintContinuityCompiler.continuityProgram.programKind !==
+        "operation-evaluation" ||
+      paintContinuityCompiler.continuityProgram.topology !==
+        "bounded-semantic-contact-co-presence"
+    ) {
+      throw new Error(
+        `Presentation ${entry.id} requires continuity compiled from its ` +
+        "exact executable operation-evaluation program."
+      );
+    }
     requireNonempty(entry.canonicalOperationIds, entry.id, "canonical operation");
     requireNonempty(entry.trustedMotifIds, entry.id, "trusted motif");
     requireUnique(entry.definitionIds, `definition id in presentation ${entry.id}`);
@@ -415,7 +444,7 @@ export function createKpOperationEvaluationPresentationRegistry(input: {
 
   return Object.freeze({
     kind: "operation-evaluation-presentation-registry",
-    schemaVersion: "kp.operation-evaluation-presentation-registry.v4",
+    schemaVersion: "kp.operation-evaluation-presentation-registry.v5",
     packs: Object.freeze(input.packs.map(clonePack)),
     entries: Object.freeze(input.entries.map(cloneEntry)),
     planCompilers: Object.freeze(
@@ -574,8 +603,8 @@ function coreEntry(input: {
       version: kpOperationEvaluationExecutableProgramCompiler.version
     }),
     paintContinuityCompiler: Object.freeze({
-      id: kpSharedJunctionPaintContinuityCompiler.id,
-      version: kpSharedJunctionPaintContinuityCompiler.version
+      id: kpBoundedSemanticContactPaintContinuityCompiler.id,
+      version: kpBoundedSemanticContactPaintContinuityCompiler.version
     }),
     semanticOperationIds: Object.freeze([...input.semanticOperationIds]),
     definitionIds: Object.freeze(
@@ -596,7 +625,7 @@ function resolvedCertificate(
   entry: KpOperationEvaluationPresentationEntry
 ): KpResolvedOperationEvaluationPresentation {
   return Object.freeze({
-    schemaVersion: "kp.resolved-operation-evaluation-presentation.v4",
+    schemaVersion: "kp.resolved-operation-evaluation-presentation.v5",
     presentationId: entry.id,
     transformationKind: entry.transformationKind,
     packId: pack.id,
@@ -684,7 +713,12 @@ function clonePlanCompiler(
 function clonePaintContinuityCompiler(
   compiler: KpOperationEvaluationPaintContinuityCompilerDescriptor
 ): KpOperationEvaluationPaintContinuityCompilerDescriptor {
-  return Object.freeze({ ...compiler });
+  // The nominal continuity program is runtime authority. Copying the visible
+  // descriptor fields must not create another executable continuity route.
+  return Object.freeze({
+    ...compiler,
+    continuityProgram: compiler.continuityProgram
+  });
 }
 
 function cloneExecutableProgramCompiler(
@@ -773,6 +807,53 @@ function mintCanonicalOperationEvaluationProgram() {
     );
   }
   return result.program;
+}
+
+function mintCanonicalOperationEvaluationContinuityProgram(
+  program: ReturnType<typeof mintCanonicalOperationEvaluationProgram>
+): KpOperationEvaluationPaintContinuityCompilerDescriptor[
+  "continuityProgram"
+] {
+  const contractResult = validateAndMintKpPerceptualContinuityContract({
+    draft: createKpOperationEvaluationContinuityContractDraft(program),
+    program
+  });
+  if (contractResult.status !== "verified") {
+    throw new Error(
+      "Canonical operation-evaluation continuity contract failed: " +
+      contractResult.issues.map(({ path, message }) =>
+        `${path}: ${message}`
+      ).join("; ")
+    );
+  }
+  const continuityResult = compileKpExecutableMotifContinuity({
+    program,
+    contract: contractResult.contract,
+    topology: "bounded-semantic-contact-co-presence"
+  });
+  if (
+    continuityResult.status !== "compiled" ||
+    continuityResult.continuityProgram.programKind !==
+      "operation-evaluation" ||
+    continuityResult.continuityProgram.topology !==
+      "bounded-semantic-contact-co-presence" ||
+    !isKpExecutableMotifContinuityProgram(
+      continuityResult.continuityProgram
+    )
+  ) {
+    const details = continuityResult.status === "invalid"
+      ? continuityResult.issues.map(({ path, message }) =>
+          `${path}: ${message}`
+        ).join("; ")
+      : "compiled authority did not retain operation-evaluation topology";
+    throw new Error(
+      `Canonical operation-evaluation continuity compilation failed: ${details}`
+    );
+  }
+  return continuityResult.continuityProgram as
+    KpOperationEvaluationPaintContinuityCompilerDescriptor[
+      "continuityProgram"
+    ];
 }
 
 function requireNamespacedId(value: string, label: string): void {

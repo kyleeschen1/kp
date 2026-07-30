@@ -103,10 +103,10 @@ export const kpOperationEvaluationContinuityMigrationInventory = Object.freeze([
   continuityMigration(
     "renderer-binary-handoff",
     "src/rendering/native-katex-successor-synthesis.ts",
-    "sharedJunctionSourcePose({",
+    "sampleKpOpaqueGatherAndRecognizeSuccessorSynthesis({",
     "removed",
-    "s09",
-    "The renderer now executes geometry-continuous shared-junction transfer."
+    "s15",
+    "The renderer now executes bounded opaque co-presence from the shared canonical sampler."
   ),
   continuityMigration(
     "exact-fraction-local-motif",
@@ -214,19 +214,19 @@ export const kpExecutableMotifMigrationLedger = Object.freeze([
     "consumer.canonical-native-successor",
     "renderer-consumer",
     "src/rendering/native-katex-successor-synthesis.ts",
-    "sampleKpSuccessorSynthesis({",
+    "sampleKpOpaqueGatherAndRecognizeSuccessorSynthesis({",
     "evolve-canonical-route",
-    "s09",
+    "s15",
     "The canonical native renderer must consume only an exhaustively dispatched program projection."
   ),
   executableMotifMigration(
     "consumer.dev-reference-successor",
     "renderer-consumer",
     "src/editor/operation-evaluation-reference-comparison.dev.ts",
-    "sampleKpSuccessorSynthesis(input)",
+    "sampleKpOpaqueGatherAndRecognizeSuccessorSynthesis({",
     "diagnostic-only",
     "preserve",
-    "The selected historical sampler remains development-only review evidence and cannot become production authority."
+    "The development comparison projects the same pure sampler; it cannot independently author production behavior."
   ),
   executableMotifMigration(
     "consumer.compatibility-token-successor",
@@ -322,28 +322,28 @@ export const kpExecutableMotifMigrationLedger = Object.freeze([
     "continuity.registry-zero-area",
     "zero-area-transfer",
     "src/animation/operation-evaluation-presentation-registry.ts",
-    'transferTopology: "shared-zero-area-junction"',
-    "replace-with-program-compatible-continuity",
-    "s12",
-    "The universal zero-area topology caused the rejected perceptual blank pulse."
+    'transferTopology: "bounded-semantic-contact-co-presence"',
+    "evolve-canonical-route",
+    "s15",
+    "The registry now carries the nominal program-compatible co-presence compiler instead of universal zero-area transfer."
   ),
   executableMotifMigration(
     "continuity.renderer-source-collapse",
     "zero-area-transfer",
-    "src/rendering/native-katex-successor-synthesis.ts",
-    "sharedJunctionSourcePose({",
-    "replace-with-program-compatible-continuity",
-    "s13",
-    "Source collapse may execute only when the selected program explicitly permits intentional vanishing."
+    "src/animation/successor-synthesis.ts",
+    "sources: Object.freeze(frame.sources.map(",
+    "evolve-canonical-route",
+    "s15",
+    "The canonical sampler retires opaque source geometry only while result paint is co-present."
   ),
   executableMotifMigration(
     "continuity.renderer-target-opening",
     "zero-area-transfer",
-    "src/rendering/native-katex-successor-synthesis.ts",
-    "sharedJunctionTargetPose({",
-    "replace-with-program-compatible-continuity",
-    "s13",
-    "Target opening must obey the selected program's visible-ink floor and ownership phases."
+    "src/animation/successor-synthesis.ts",
+    "targets: Object.freeze(frame.targets.map(",
+    "evolve-canonical-route",
+    "s15",
+    "The same canonical sampler establishes opaque target geometry before source retirement completes."
   ),
   executableMotifMigration(
     "endpoint.successor-owned-target-bypass",

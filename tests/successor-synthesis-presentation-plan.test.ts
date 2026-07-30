@@ -50,8 +50,13 @@ test("registered successor compiler classifies material without changing motion 
   assert.equal(plan.roles.groups[0]?.groupKind, "fusion");
   assert.equal(
     result.paintContinuityPlan.carriers[0]?.transferTopology,
-    "shared-zero-area-junction"
+    "bounded-semantic-contact-co-presence"
   );
+  assert.equal(
+    result.continuityProgram.topology,
+    "bounded-semantic-contact-co-presence"
+  );
+  assert.equal(result.continuityProgram.program, result.executableProgram);
   assert.equal(result.paintContinuityPlan.nonZeroPaint, "opaque");
   assert.equal(
     result.paintContinuityPlan.operationPresentationPlanId,

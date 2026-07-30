@@ -1,8 +1,9 @@
 import {
   createKpSuccessorSynthesisPlan,
   evaluateKpSuccessorSynthesisLaws,
+  kpOpaqueGatherAndRecognizeSettlementProgress,
+  sampleKpOpaqueGatherAndRecognizeSuccessorSynthesis,
   sampleKpSuccessorSynthesis,
-  type KpSuccessorSynthesisPathFamily,
   type KpSuccessorSynthesisPlan,
   type KpSuccessorSynthesisPose
 } from "../animation/successor-synthesis.ts";
@@ -22,6 +23,7 @@ import type {
   KpEquationVisiblePaintCertifiedContact
 } from "./equation-visible-paint-overlap-types.ts";
 import type {
+  KpNativeKatexSuccessorEvaluationContact,
   KpNativeKatexSuccessorContactAuthority,
   KpNativeKatexSuccessorMaterialOwnerFrame
 } from "./native-katex-successor-contact-types.ts";
@@ -33,6 +35,12 @@ import {
   measureKpNativeKatexSubtreePaintRect,
   measureKpNativeKatexTextInkRect
 } from "./native-katex-paint-geometry.ts";
+import type {
+  KpExecutableMotifContinuityProgram
+} from "../animation/motifs/executable-motif-continuity-compiler.ts";
+import {
+  isKpExecutableMotifContinuityProgram
+} from "../animation/motifs/executable-motif-continuity-compiler.ts";
 
 interface KpNativeKatexSuccessorSynthesisIntentBase {
   readonly direction: "forward" | "rewind";
@@ -49,7 +57,7 @@ export type KpNativeKatexSuccessorSynthesisIntent =
       /**
        * Exact fraction predates the registry-backed reader route. Keeping the
        * compatibility authority explicit prevents any other caller from
-       * silently omitting a verified continuity plan before its s16 removal.
+       * silently omitting a verified continuity plan before its s22 removal.
        */
       readonly legacyContinuityAuthority: "exact-fraction-quantity-v0";
     });
@@ -74,14 +82,20 @@ export interface KpNativeKatexSuccessorSynthesisScenePlan {
   readonly motion: "full" | "checkpoint";
   readonly continuityAuthority:
     | {
-        readonly kind: "verified";
-        readonly plan: KpVerifiedPaintContinuityPlan;
+      readonly kind: "verified";
+      readonly plan: KpVerifiedPaintContinuityPlan;
+      readonly program:
+        KpExecutableMotifContinuityProgram & {
+          readonly programKind: "operation-evaluation";
+          readonly topology:
+            "bounded-semantic-contact-co-presence";
+        };
       }
     | {
         readonly kind: "legacy-exact-fraction";
       };
   readonly motifRealization:
-    | KpCertifiedObservableSuccessorMotifRealization
+    | KpCertifiedOpaqueGatherAndRecognizeRealization
     | {
         readonly kind: "legacy-successor-realization";
       };
@@ -92,15 +106,16 @@ export interface KpNativeKatexSuccessorSynthesisScenePlan {
   readonly claimedTargetAtomIds: readonly string[];
 }
 
-const kpObservableSuccessorMotifCertificate:
-unique symbol = Symbol("kp.observable-successor-motif-certificate");
+const kpOpaqueGatherAndRecognizeCertificate:
+unique symbol = Symbol("kp.opaque-gather-and-recognize-certificate");
 
-export interface KpCertifiedObservableSuccessorMotifRealization {
-  readonly kind: "observable-converge-recognize-settle-v1";
-  readonly minimumTravelPx: number;
+export interface KpCertifiedOpaqueGatherAndRecognizeRealization {
+  readonly kind: "opaque-gather-and-recognize-v1";
+  readonly minimumSourceTravelPx: number;
   readonly sourceTravelPx: number;
-  readonly targetTravelPx: number;
-  readonly [kpObservableSuccessorMotifCertificate]: true;
+  readonly targetEmergence:
+    "geometry-with-continuous-source-co-presence";
+  readonly [kpOpaqueGatherAndRecognizeCertificate]: true;
 }
 
 export type {
@@ -169,9 +184,7 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
             kind: "legacy-exact-fraction" as const
           })
         : verifiedContinuityAuthority(intent.binding);
-    const synthesis = continuityAuthority.kind === "verified"
-      ? withObservableSuccessorJunction(baseSynthesis)
-      : baseSynthesis;
+    const synthesis = baseSynthesis;
     const violations = evaluateKpSuccessorSynthesisLaws(synthesis);
     if (violations.length > 0) {
       throw new Error(
@@ -186,7 +199,7 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
       atoms.map(({ id }) => id)
     );
     const motifRealization = continuityAuthority.kind === "verified"
-      ? certifyObservableSuccessorMotifRealization(synthesis)
+      ? certifyOpaqueGatherAndRecognizeRealization(synthesis)
       : Object.freeze({
           kind: "legacy-successor-realization" as const
         });
@@ -237,12 +250,18 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
   const owners = input.plans.flatMap((plan) => {
     const presentationProgress =
       plan.motion === "full" || bounded === 1 ? bounded : 0;
-    const frame = sampleKpSuccessorSynthesis({
-      plan: plan.synthesis,
-      progress: plan.direction === "forward"
-        ? presentationProgress
-        : 1 - presentationProgress
-    });
+    const semanticProgress = plan.direction === "forward"
+      ? presentationProgress
+      : 1 - presentationProgress;
+    const frame = plan.continuityAuthority.kind === "verified"
+      ? sampleKpOpaqueGatherAndRecognizeSuccessorSynthesis({
+          plan: plan.synthesis,
+          progress: semanticProgress
+        })
+      : sampleKpSuccessorSynthesis({
+          plan: plan.synthesis,
+          progress: semanticProgress
+        });
     const sampledOwners = [
       ...frame.sources.flatMap((sample) => {
         const annotation = requiredAnnotation(
@@ -253,13 +272,7 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
         return ownerFrames({
           plan,
           annotation,
-          pose: sharedJunctionSourcePose({
-            plan: plan.synthesis,
-            annotationId: sample.annotationId,
-            frameProgress: frame.progress,
-            basePose: sample.pose,
-            contribution: sample.contribution
-          }),
+          pose: sample.pose,
           side: "source",
           contactRole: sample.contribution === "material-input"
             ? "fusion-input"
@@ -276,19 +289,14 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
         return ownerFrames({
           plan,
           annotation,
-          pose: sharedJunctionTargetPose({
-            plan: plan.synthesis,
-            annotationId: sample.annotationId,
-            frameProgress: frame.progress,
-            pathFamily: sample.pathFamily
-          }),
+          pose: sample.pose,
           side: "target",
           contactRole: "fusion-result",
           phase: frame.phase
         });
       })
     ];
-    return attachSuccessorFusionContacts(sampledOwners);
+    return attachSuccessorSemanticContacts(sampledOwners);
   });
   return Object.freeze([
     ...owners,
@@ -296,9 +304,8 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
   ]);
 }
 
-export const kpNativeKatexSuccessorMaterialJunctionProgress = 0.7;
-export const kpNativeKatexSuccessorTargetSettlementProgress = 0.99;
-const kpNativeKatexSuccessorMaterialCollapseStart = 0.58;
+export const kpNativeKatexSuccessorTargetSettlementProgress =
+  kpOpaqueGatherAndRecognizeSettlementProgress;
 
 function verifiedContinuityAuthority(
   binding: KpRegisteredSuccessorSynthesisBinding
@@ -312,80 +319,53 @@ function verifiedContinuityAuthority(
     plan.carriers.length === 0 ||
     plan.carriers.some(
       ({ transferTopology }) =>
-        transferTopology !== "shared-zero-area-junction"
+        transferTopology !==
+          "bounded-semantic-contact-co-presence"
     )
   ) {
     throw new Error(
-      `Successor binding ${binding.id} lacks verified shared-junction ` +
+      `Successor binding ${binding.id} lacks verified semantic-contact ` +
       "paint continuity authority."
     );
   }
-  return Object.freeze({ kind: "verified", plan });
+  const program = binding.continuityProgram;
+  if (
+    !isKpExecutableMotifContinuityProgram(program) ||
+    program.programKind !== "operation-evaluation" ||
+    program.topology !== "bounded-semantic-contact-co-presence"
+  ) {
+    throw new Error(
+      `Successor binding ${binding.id} lacks compiled operation-evaluation ` +
+      "continuity authority."
+    );
+  }
+  return Object.freeze({ kind: "verified", plan, program });
 }
 
-function withObservableSuccessorJunction(
+function certifyOpaqueGatherAndRecognizeRealization(
   plan: KpSuccessorSynthesisPlan
-): KpSuccessorSynthesisPlan {
-  const targetBounds = unionRects(plan.targets.map(({ rect }) => rect));
-  const targetCenter = center(targetBounds);
-  const lift = observableSuccessorArcLift(plan);
-  const family = plan.targets[0]!.pathFamily;
-  return Object.freeze({
-    ...plan,
-    // A junction at the native result center technically satisfies continuity
-    // while reducing recognition to a scale-only opening. Deriving one local
-    // ink-height of travel from measured paint preserves generic authorship
-    // and makes gather -> recognize -> settle observable for every caller.
-    junction: Object.freeze({
-      x: targetCenter.x,
-      y: targetCenter.y + (family === "arc-above" ? -lift : lift)
-    })
-  });
-}
-
-function certifyObservableSuccessorMotifRealization(
-  plan: KpSuccessorSynthesisPlan
-): KpCertifiedObservableSuccessorMotifRealization {
-  const minimumTravelPx = observableSuccessorMinimumTravel(plan);
+): KpCertifiedOpaqueGatherAndRecognizeRealization {
+  const minimumSourceTravelPx = observableSuccessorMinimumTravel(plan);
   const sourceTravelPx = Math.min(
-    ...[...plan.materialInputs, ...plan.catalysts].map((source) =>
+    ...plan.materialInputs.map((source) =>
       distance(center(source.rect), plan.junction)
     )
   );
-  const targetTravelPx = Math.min(
-    ...plan.targets.map((target) =>
-      distance(plan.junction, center(target.rect))
-    )
-  );
-  if (
-    sourceTravelPx + 0.001 < minimumTravelPx ||
-    targetTravelPx + 0.001 < minimumTravelPx
-  ) {
+  if (sourceTravelPx + 0.001 < minimumSourceTravelPx) {
     throw new Error(
-      `Successor synthesis ${plan.id} has a scale-only motif realization: ` +
-      `source travel ${sourceTravelPx.toFixed(3)}px and target travel ` +
-      `${targetTravelPx.toFixed(3)}px must each reach ` +
-      `${minimumTravelPx.toFixed(3)}px.`
+      `Successor synthesis ${plan.id} has an unobservable gather: source ` +
+      `travel ${sourceTravelPx.toFixed(3)}px must reach ` +
+      `${minimumSourceTravelPx.toFixed(3)}px.`
     );
   }
   return Object.freeze({
-    kind: "observable-converge-recognize-settle-v1",
-    minimumTravelPx,
+    kind: "opaque-gather-and-recognize-v1",
+    minimumSourceTravelPx,
     sourceTravelPx,
-    targetTravelPx,
-    [kpObservableSuccessorMotifCertificate]: true as const
+    targetEmergence:
+      "geometry-with-continuous-source-co-presence",
+    [kpOpaqueGatherAndRecognizeCertificate]: true as const
   });
-}
-
-function observableSuccessorArcLift(
-  plan: KpSuccessorSynthesisPlan
-): number {
-  const bounds = unionRects([
-    ...plan.materialInputs.map(({ rect }) => rect),
-    ...plan.catalysts.map(({ rect }) => rect),
-    ...plan.targets.map(({ rect }) => rect)
-  ]);
-  return Math.max(10, Math.min(20, bounds.height * 0.85));
 }
 
 function observableSuccessorMinimumTravel(
@@ -397,102 +377,6 @@ function observableSuccessorMinimumTravel(
     ...plan.targets.map(({ rect }) => rect)
   ]);
   return Math.max(6, Math.min(12, bounds.height * 0.5));
-}
-
-function sharedJunctionSourcePose(input: {
-  readonly plan: KpSuccessorSynthesisPlan;
-  readonly annotationId: string;
-  readonly frameProgress: number;
-  readonly basePose: KpSuccessorSynthesisPose;
-  readonly contribution: "material-input" | "catalyst";
-}): KpSuccessorSynthesisPose {
-  const collapse = easeInOut(interval(
-    input.frameProgress,
-    kpNativeKatexSuccessorMaterialCollapseStart,
-    kpNativeKatexSuccessorMaterialJunctionProgress
-  ));
-  if (input.contribution === "catalyst") {
-    const catalyst = input.plan.catalysts.find(
-      ({ id }) => id === input.annotationId
-    );
-    if (catalyst === undefined) {
-      throw new Error(
-        `Successor ${input.plan.id} is missing catalyst ` +
-        `${input.annotationId}.`
-      );
-    }
-    const gather = easeInOut(interval(
-      input.frameProgress,
-      input.plan.inputArrivalStart,
-      kpNativeKatexSuccessorMaterialCollapseStart
-    ));
-    const origin = center(catalyst.rect);
-    const position = quadratic(
-      origin,
-      arcControl(
-        origin,
-        input.plan.junction,
-        catalyst.pathFamily,
-        observableSuccessorArcLift(input.plan)
-      ),
-      input.plan.junction,
-      gather
-    );
-    // The operator is causal rather than result material, but it must remain
-    // visibly inside the same cohort until the shared topology change. Letting
-    // the base sampler collapse it early made evaluation read as scale-only.
-    return Object.freeze({
-      x: position.x - origin.x,
-      y: position.y - origin.y,
-      scale:
-        mix(1, input.plan.inputJunctionScale, gather) * (1 - collapse),
-      opacity: 1
-    });
-  }
-  return Object.freeze({
-    ...input.basePose,
-    scale: input.basePose.scale * (1 - collapse),
-    opacity: 1
-  });
-}
-
-function sharedJunctionTargetPose(input: {
-  readonly plan: KpSuccessorSynthesisPlan;
-  readonly annotationId: string;
-  readonly frameProgress: number;
-  readonly pathFamily: KpSuccessorSynthesisPathFamily;
-}): KpSuccessorSynthesisPose {
-  const target = input.plan.targets.find(
-    ({ id }) => id === input.annotationId
-  );
-  if (target === undefined) {
-    throw new Error(
-      `Successor ${input.plan.id} is missing target ${input.annotationId}.`
-    );
-  }
-  const progress = easeInOut(interval(
-    input.frameProgress,
-    kpNativeKatexSuccessorMaterialJunctionProgress,
-    kpNativeKatexSuccessorTargetSettlementProgress
-  ));
-  const targetCenter = center(target.rect);
-  const position = quadratic(
-    input.plan.junction,
-    arcControl(
-      input.plan.junction,
-      targetCenter,
-      input.pathFamily,
-      6
-    ),
-    targetCenter,
-    progress
-  );
-  return Object.freeze({
-    x: position.x - targetCenter.x,
-    y: position.y - targetCenter.y,
-    scale: progress,
-    opacity: 1
-  });
 }
 
 function collectKpNativeKatexSuccessorClaimedAtomIds(
@@ -884,7 +768,7 @@ function successorAtomPaintRect(
       atom.rect;
 }
 
-function attachSuccessorFusionContacts(
+function attachSuccessorSemanticContacts(
   frames: readonly KpNativeKatexSuccessorMaterialOwnerFrame[]
 ): readonly KpNativeKatexSuccessorMaterialOwnerFrame[] {
   const contacts = new Map(frames.map(({ ownerId }) => [
@@ -915,13 +799,55 @@ function attachSuccessorFusionContacts(
       contacts.get(right.ownerId)!.push(contact);
     }
   }
+  const catalysts = frames.filter(
+    (frame) => frame.contactRole === "catalyst"
+  );
+  const targets = frames.filter(
+    (frame) => frame.contactRole === "fusion-result"
+  );
+  for (const [catalystIndex, catalyst] of catalysts.entries()) {
+    for (const [targetIndex, target] of targets.entries()) {
+      const contact = Object.freeze({
+        id:
+          `successor-evaluation-contact.${catalyst.relationRecordId}.` +
+          `${catalystIndex}.${targetIndex}`,
+        ownerIds: [catalyst.ownerId, target.ownerId] as const,
+        reason: "semantic-evaluation" as const,
+        phase: "evaluation-recognition" as const,
+        maximumOverlapWidthPx: Math.min(
+          catalyst.rect.width,
+          target.rect.width
+        ),
+        maximumOverlapHeightPx: Math.min(
+          catalyst.rect.height,
+          target.rect.height
+        )
+      });
+      contacts.get(catalyst.ownerId)!.push(contact);
+      contacts.get(target.ownerId)!.push(contact);
+    }
+  }
   return Object.freeze(frames.map((frame) => {
     const semanticContacts = contacts.get(frame.ownerId)!;
     if (semanticContacts.length === 0) return frame;
-    if (!isSuccessorFusionOwner(frame)) {
-      throw new Error(
-        `Successor catalyst ${frame.ownerId} cannot receive fusion contact authority.`
+    if (frame.contactRole === "catalyst") {
+      const evaluationContacts = semanticContacts.filter(
+        (
+          contact
+        ): contact is KpNativeKatexSuccessorEvaluationContact =>
+          contact.reason === "semantic-evaluation" &&
+          contact.phase === "evaluation-recognition"
       );
+      if (evaluationContacts.length !== semanticContacts.length) {
+        throw new Error(
+          `Successor catalyst ${frame.ownerId} cannot receive material ` +
+          "contact authority."
+        );
+      }
+      return Object.freeze({
+        ...frame,
+        semanticContacts: Object.freeze(evaluationContacts)
+      });
     }
     return Object.freeze({
       ...frame,
@@ -990,49 +916,6 @@ function distance(
   right: { readonly x: number; readonly y: number }
 ): number {
   return Math.hypot(left.x - right.x, left.y - right.y);
-}
-
-function mix(from: number, to: number, progress: number): number {
-  return from + (to - from) * progress;
-}
-
-function interval(progress: number, start: number, end: number): number {
-  if (end <= start) return progress >= end ? 1 : 0;
-  return Math.max(0, Math.min(1, (progress - start) / (end - start)));
-}
-
-function easeInOut(value: number): number {
-  return value * value * (3 - 2 * value);
-}
-
-function quadratic(
-  start: { readonly x: number; readonly y: number },
-  control: { readonly x: number; readonly y: number },
-  end: { readonly x: number; readonly y: number },
-  progress: number
-): { readonly x: number; readonly y: number } {
-  const remaining = 1 - progress;
-  return {
-    x: remaining * remaining * start.x +
-      2 * remaining * progress * control.x +
-      progress * progress * end.x,
-    y: remaining * remaining * start.y +
-      2 * remaining * progress * control.y +
-      progress * progress * end.y
-  };
-}
-
-function arcControl(
-  from: { readonly x: number; readonly y: number },
-  to: { readonly x: number; readonly y: number },
-  family: KpSuccessorSynthesisPathFamily,
-  lift: number
-): { readonly x: number; readonly y: number } {
-  return {
-    x: from.x + (to.x - from.x) *
-      (family === "arc-above" ? 0.64 : 0.36),
-    y: (from.y + to.y) / 2 + (family === "arc-above" ? -lift : lift)
-  };
 }
 
 function assertUnique(values: readonly string[], label: string): void {

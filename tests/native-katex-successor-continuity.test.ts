@@ -8,8 +8,10 @@ import type {
   KpSuccessorSynthesisBinding
 } from "../src/animation/successor-synthesis.ts";
 import {
+  kpOpaqueGatherAndRecognizeRecognitionProgress
+} from "../src/animation/successor-synthesis.ts";
+import {
   compileKpNativeKatexSuccessorSynthesisScenePlans,
-  kpNativeKatexSuccessorMaterialJunctionProgress,
   kpNativeKatexSuccessorTargetSettlementProgress,
   sampleKpNativeKatexSuccessorSynthesisScenePlans
 } from "../src/rendering/native-katex-successor-synthesis.ts";
@@ -66,7 +68,7 @@ const binding: KpSuccessorSynthesisBinding = {
   }]
 };
 
-test("native successor renderer transfers opaque paint through zero area", () => {
+test("native successor renderer co-presents opaque contributors and result", () => {
   const compilation = compileKpRegisteredSuccessorSynthesisPresentation({
     transformationId: "transform.test.one-plus-two",
     transformationKind: "simplifyConstantSum",
@@ -77,7 +79,8 @@ test("native successor renderer transfers opaque paint through zero area", () =>
   const registeredBinding = {
     ...binding,
     operationPresentationPlan: compilation.operationPresentationPlan,
-    paintContinuityPlan: compilation.paintContinuityPlan
+    paintContinuityPlan: compilation.paintContinuityPlan,
+    continuityProgram: compilation.continuityProgram
   };
   const plans = compileKpNativeKatexSuccessorSynthesisScenePlans({
     source: scene("source", [
@@ -98,19 +101,19 @@ test("native successor renderer transfers opaque paint through zero area", () =>
   assert.equal(plans[0]?.continuityAuthority.kind, "verified");
   assert.equal(
     plans[0]?.motifRealization.kind,
-    "observable-converge-recognize-settle-v1"
+    "opaque-gather-and-recognize-v1"
   );
   if (
     plans[0]?.motifRealization.kind ===
-      "observable-converge-recognize-settle-v1"
+      "opaque-gather-and-recognize-v1"
   ) {
     assert.ok(
       plans[0].motifRealization.sourceTravelPx >=
-        plans[0].motifRealization.minimumTravelPx
+        plans[0].motifRealization.minimumSourceTravelPx
     );
-    assert.ok(
-      plans[0].motifRealization.targetTravelPx >=
-        plans[0].motifRealization.minimumTravelPx
+    assert.equal(
+      plans[0].motifRealization.targetEmergence,
+      "geometry-with-continuous-source-co-presence"
     );
   }
   const gathered = sampleKpNativeKatexSuccessorSynthesisScenePlans({
@@ -119,34 +122,36 @@ test("native successor renderer transfers opaque paint through zero area", () =>
   });
   const before = sampleKpNativeKatexSuccessorSynthesisScenePlans({
     plans,
-    progress: kpNativeKatexSuccessorMaterialJunctionProgress - 0.001
+    progress: kpOpaqueGatherAndRecognizeRecognitionProgress - 0.001
   });
   const at = sampleKpNativeKatexSuccessorSynthesisScenePlans({
     plans,
-    progress: kpNativeKatexSuccessorMaterialJunctionProgress
+    progress: kpOpaqueGatherAndRecognizeRecognitionProgress
   });
   const after = sampleKpNativeKatexSuccessorSynthesisScenePlans({
     plans,
-    progress: kpNativeKatexSuccessorMaterialJunctionProgress + 0.001
+    progress: kpOpaqueGatherAndRecognizeRecognitionProgress + 0.001
   });
 
   assert.ok(materialSources(gathered).every((owner) =>
     scale(owner.transform) > 0.6
   ));
   assert.ok(catalysts(gathered).every((owner) =>
-    scale(owner.transform) > 0.6
+    scale(owner.transform) > 0
   ));
   assert.ok(materialSources(before).every((owner) => scale(owner.transform) > 0));
   assert.ok(targets(before).every((owner) => scale(owner.transform) === 0));
-  assert.ok(materialSources(at).every((owner) => scale(owner.transform) === 0));
+  assert.ok(materialSources(at).every((owner) => scale(owner.transform) > 0));
   assert.ok(targets(at).every((owner) => scale(owner.transform) === 0));
-  assert.ok(materialSources(after).every((owner) => scale(owner.transform) === 0));
+  assert.ok(materialSources(after).every((owner) => scale(owner.transform) > 0));
   assert.ok(targets(after).every((owner) => scale(owner.transform) > 0));
-  for (const owner of [...before, ...at, ...after]) {
-    assert.equal(owner.opacity, 1);
-  }
-  assert.ok(targets(after).every((owner) =>
-    translationDistance(owner.transform) > 6
+  assert.ok(targets(before).every((owner) => owner.opacity === 0));
+  assert.ok(targets(after).every((owner) => owner.opacity === 1));
+  assert.ok(materialSources(after).every((owner) => owner.opacity === 1));
+  assert.ok(catalysts(after).every((owner) =>
+    owner.semanticContacts?.every(({ reason }) =>
+      reason === "semantic-evaluation"
+    ) === true
   ));
 });
 
@@ -171,7 +176,8 @@ test("native successor renderer settles exact endpoints without binary policy", 
       binding: {
         ...binding,
         operationPresentationPlan: compilation.operationPresentationPlan,
-        paintContinuityPlan: compilation.paintContinuityPlan
+        paintContinuityPlan: compilation.paintContinuityPlan,
+        continuityProgram: compilation.continuityProgram
       },
       direction: "forward",
       motion: "full"
@@ -288,10 +294,4 @@ function scale(transform: string): number {
   const match = /scale\(([-.\d]+)\)/.exec(transform);
   assert.ok(match);
   return Number(match[1]);
-}
-
-function translationDistance(transform: string): number {
-  const match = /translate\(([^p]+)px, ([^p]+)px\)/.exec(transform);
-  assert.ok(match);
-  return Math.hypot(Number(match[1]), Number(match[2]));
 }

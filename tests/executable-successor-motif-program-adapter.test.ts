@@ -81,7 +81,8 @@ function operationInput() {
         binding: {
           ...binding,
           operationPresentationPlan: compiled.operationPresentationPlan,
-          paintContinuityPlan: compiled.paintContinuityPlan
+          paintContinuityPlan: compiled.paintContinuityPlan,
+          continuityProgram: compiled.continuityProgram
         },
         direction: "forward" as const,
         motion: "full" as const
@@ -267,6 +268,18 @@ test("one exhaustive adapter selects only existing compositor primitives", () =>
     operation.route.primitiveRoute,
     "native-katex-successor-synthesis"
   );
+  assert.equal(operation.programKind, "operation-evaluation");
+  if (operation.programKind !== "operation-evaluation") {
+    throw new Error("Operation adapter resolved the wrong program.");
+  }
+  assert.equal(
+    operation.continuityProgram,
+    operationAdapterInput.primitive.intents[0].binding.continuityProgram
+  );
+  assert.equal(
+    operation.continuityProgram.topology,
+    "bounded-semantic-contact-co-presence"
+  );
   assert.equal(fission.route.primitiveRoute, "fission-fusion:fission");
   assert.equal(fusion.route.primitiveRoute, "fission-fusion:fusion");
   assert.equal(isKpExecutableSuccessorMotifProgramRoute(operation.route), true);
@@ -312,6 +325,7 @@ test("program identity and phase telemetry are deterministic and reversible", ()
 test("variant and primitive mismatches fail before compositor work", () => {
   const fission = identityFissionInput();
   const fusion = identityFusionInput();
+  const operation = operationInput();
   assert.throws(
     () => compileKpExecutableSuccessorMotifProgramAdapter({
       ...fission,
@@ -325,6 +339,24 @@ test("variant and primitive mismatches fail before compositor work", () => {
       kind: "identity-fusion"
     } as unknown as KpExecutableSuccessorMotifProgramAdapterInput),
     /matching minted authority/
+  );
+  assert.throws(
+    () => compileKpExecutableSuccessorMotifProgramAdapter({
+      ...operation,
+      primitive: {
+        ...operation.primitive,
+        intents: [{
+          ...operation.primitive.intents[0],
+          binding: {
+            ...operation.primitive.intents[0].binding,
+            continuityProgram: JSON.parse(JSON.stringify(
+              operation.primitive.intents[0].binding.continuityProgram
+            ))
+          }
+        }]
+      }
+    } as unknown as KpExecutableSuccessorMotifProgramAdapterInput),
+    /requires one continuity program compiled from the exact executable program/
   );
 });
 

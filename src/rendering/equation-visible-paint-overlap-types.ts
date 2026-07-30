@@ -7,6 +7,7 @@ export type KpEquationVisiblePaintContactReason =
   | "native-handoff"
   | "semantic-fusion"
   | "semantic-fission"
+  | "semantic-evaluation"
   | "semantic-cancellation"
   | "semantic-reconciliation"
   | "typographic-adjacency";
@@ -14,6 +15,7 @@ export type KpEquationVisiblePaintContactReason =
 export type KpEquationVisiblePaintContactPhase =
   | "transit"
   | "fusion-contact"
+  | "evaluation-recognition"
   | "native-settlement"
   | "endpoint-typography";
 

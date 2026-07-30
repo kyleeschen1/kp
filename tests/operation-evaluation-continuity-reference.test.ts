@@ -30,11 +30,11 @@ test("operation evaluation continuity freezes one canonical compiler contract", 
   );
 });
 
-test("continuity permits only equivalent paint or one shared zero-area junction", () => {
+test("continuity permits equivalent paint or bounded semantic co-presence", () => {
   assert.equal(reference.ownership.policy, "exclusive-continuous-carrier");
   assert.deepEqual(reference.ownership.legalTransfer, [
     "paint-equivalent-pose",
-    "shared-zero-area-junction"
+    "bounded-semantic-contact-co-presence"
   ]);
   assert.equal(reference.ownership.nonZeroPaintOpacity, 1);
   assert.equal(reference.ownership.nativeEndpointAuthority, true);

@@ -21,8 +21,9 @@ import {
   settleAndObserveKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";
 import {
-  kpNativeKatexSuccessorMaterialJunctionProgress
-} from "../rendering/native-katex-successor-synthesis.ts";
+  kpOpaqueGatherAndRecognizeRecognitionProgress,
+  kpOpaqueGatherAndRecognizeSourceRetirementProgress
+} from "../animation/successor-synthesis.ts";
 import {
   projectKpReaderEquationRenderPlan,
   type KpReaderEquationRenderPlan,
@@ -217,7 +218,7 @@ async function prepareOperationEvaluationSurface(input: {
       transition.presentationPlan.successorSyntheses[0]
         .paintContinuityPlan.carriers[0]!.transferTopology;
     stage.dataset["kpOperationEvaluationBoundaryProgress"] =
-      String(kpNativeKatexSuccessorMaterialJunctionProgress);
+      String(kpOpaqueGatherAndRecognizeRecognitionProgress);
     stage.setAttribute(
       "aria-label",
       `${source.map(({ rawLatex }) => rawLatex).join(" ")} evaluates to ` +
@@ -511,11 +512,11 @@ function syncProgressTelemetry(
   stage.dataset["kpOperationEvaluationDirection"] = state.direction;
   stage.dataset["kpOperationEvaluationBoundarySide"] =
     session.pendingProgress <
-      kpNativeKatexSuccessorMaterialJunctionProgress
+      kpOpaqueGatherAndRecognizeRecognitionProgress
       ? "source"
-      : session.pendingProgress ===
-          kpNativeKatexSuccessorMaterialJunctionProgress
-        ? "junction"
+      : session.pendingProgress <
+          kpOpaqueGatherAndRecognizeSourceRetirementProgress
+        ? "co-presence"
         : "target";
 }
 

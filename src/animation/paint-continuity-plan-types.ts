@@ -6,6 +6,7 @@ declare const kpVerifiedPaintContinuityPlanAuthority: unique symbol;
 
 export type KpPaintContinuityTransferTopology =
   | "paint-equivalent-pose"
+  | "bounded-semantic-contact-co-presence"
   | "shared-zero-area-junction";
 
 export type KpNonEmptyPaintBundleIds =

@@ -50,7 +50,15 @@ test("one plus two compiles one registry-verified continuity presentation", () =
   const binding = transition.presentationPlan.successorSyntheses[0]!;
   assert.equal(
     binding.paintContinuityPlan.carriers[0]?.transferTopology,
-    "shared-zero-area-junction"
+    "bounded-semantic-contact-co-presence"
+  );
+  assert.equal(
+    binding.continuityProgram.topology,
+    "bounded-semantic-contact-co-presence"
+  );
+  assert.equal(
+    binding.continuityProgram.program,
+    transition.presentationPlan.executableProgram
   );
   assert.equal(
     binding.paintContinuityPlan.nonZeroPaint,

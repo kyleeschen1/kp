@@ -915,6 +915,48 @@
       "scope": "s14 control-plane integrity",
       "checkedAt": "2026-07-30T02:41:24.555Z",
       "notes": "Validated 832 nodes and 14470 events before slice closure."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans; npm run test:real-katex-glyph-compositor; npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s15 executable program, compositor, and neighbor contracts",
+      "checkedAt": "2026-07-30T03:30:15.274Z",
+      "notes": "167/167 operation-presentation, 73/73 glyph-compositor, and 95/95 exact-fraction checks pass. Nominal program/continuity authority, opaque co-presence, catalyst typing, endpoint settlement, rewind, and neighboring exact-fraction behavior remain covered."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-continuity",
+      "status": "passed",
+      "scope": "s15 executable one-plus-two browser and perceptual matrix",
+      "checkedAt": "2026-07-30T03:30:24.786Z",
+      "notes": "45/45 passed across Chromium Firefox and WebKit. Wide and phone natural playback, direct seek and rewind, opacity/font stability, physical paint travel, co-presence telemetry, Review capture, and DPR endpoint microscopy all exercise the shared production sampler."
+    },
+    {
+      "command": "npm run typecheck; npm run check:inference; npm run build; npm run check:reader-production; npm run check:reader-budgets; npm run check:dev-review-production; npm run check:concept-catalog; npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s15 typed, production, resource, and honesty boundaries",
+      "checkedAt": "2026-07-30T03:30:31.792Z",
+      "notes": "All pass. Inference is 48460 types, 61210 instantiations, and 2.31 seconds; 11 reader routes and Review production isolation remain closed; route budgets, catalog freshness, build, and promotion authority remain valid."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "failed",
+      "scope": "s15 aggregate architecture audit",
+      "checkedAt": "2026-07-30T03:30:41.584Z",
+      "notes": "Only the inherited stale legacy.main.query-view-routing exception for removed get(view) equals ftc-tutorial routing remains. Direct semantic-reader, semantic-animation, and operation-evaluation presentation boundary checks all pass, so the inherited early stop masks no new s15 violation."
+    },
+    {
+      "command": "check semantic reader, semantic animation, and operation-evaluation presentation boundaries directly",
+      "status": "passed",
+      "scope": "s15 downstream architecture boundaries",
+      "checkedAt": "2026-07-30T03:30:54.838Z",
+      "notes": "Semantic reader passed across 131 files; semantic animation passed across 370 files with 0 frozen exceptions and 16 classified compatibility paths; operation-evaluation presentation passed for all 3 certified callers."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s15 control-plane integrity",
+      "checkedAt": "2026-07-30T03:31:11.634Z",
+      "notes": "Validated 832 nodes and 14478 events before closing the executable exemplar slice."
     }
   ],
   "allowedWork": [
@@ -1032,7 +1074,8 @@
     {
       "id": "s15",
       "title": "restore-one-plus-two-evaluation",
-      "status": "planned"
+      "summary": "Restored 1 + 2 to 3 through the registry-minted operation-evaluation program and selected bounded semantic-contact co-presence topology. One shared pure opaque-gather-and-recognize sampler now drives the approved reference and canonical native renderer; material inputs remain opaque through recognition, catalysts have evaluation-only contact authority, and the measured target settles exactly without caller geometry, timing, numeral, notation, or browser branches. All 167 operation contracts and the 45-case three-browser wide/phone/DPR matrix pass; the candidate remains unpromoted pending slice-16 human approval.",
+      "status": "complete"
     },
     {
       "id": "s16",

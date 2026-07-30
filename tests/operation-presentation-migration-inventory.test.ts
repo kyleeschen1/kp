@@ -109,7 +109,7 @@ test("operation continuity inventory exposes every known bypass and shared route
       {
         id: "operation-continuity.renderer-binary-handoff",
         state: "removed",
-        owningSlice: "s09"
+        owningSlice: "s15"
       },
       {
         id: "operation-continuity.exact-fraction-local-motif",
@@ -206,8 +206,16 @@ test("runtime sampler discovery cannot grow a silent motif route", async () => {
       needle: "sampleKpSuccessorSynthesis(",
       expected: [
         "src/animation/successor-synthesis.ts",
-        "src/editor/operation-evaluation-reference-comparison.dev.ts",
         "src/rendering/equation-linear-rearrangement.ts",
+        "src/rendering/native-katex-successor-synthesis.ts"
+      ]
+    },
+    {
+      needle:
+        "sampleKpOpaqueGatherAndRecognizeSuccessorSynthesis(",
+      expected: [
+        "src/animation/successor-synthesis.ts",
+        "src/editor/operation-evaluation-reference-comparison.dev.ts",
         "src/rendering/native-katex-successor-synthesis.ts"
       ]
     },

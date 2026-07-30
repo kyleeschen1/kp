@@ -14,7 +14,7 @@ import {
   kpOperationEvaluationPresentationPins,
   kpOperationEvaluationPaintContinuityCompilers,
   kpOperationEvaluationPresentationPlanCompilers,
-  kpSharedJunctionPaintContinuityCompiler,
+  kpBoundedSemanticContactPaintContinuityCompiler,
   requireKpCanonicalOperationEvaluationPresentation,
   resolveKpOperationEvaluationPresentation,
   resolveKpOperationEvaluationPresentationRoute,
@@ -25,6 +25,9 @@ import {
 import {
   isKpVerifiedExecutableSuccessorMotifProgram
 } from "../src/animation/motifs/executable-successor-motif-program-validator.ts";
+import {
+  isKpExecutableMotifContinuityProgram
+} from "../src/animation/motifs/executable-motif-continuity-compiler.ts";
 import {
   kpCoreOperationPresentationLawIds
 } from "../src/animation/operation-presentation-law-types.ts";
@@ -63,7 +66,18 @@ test("canonical arithmetic evaluation resolves through one exact pinned motif", 
     );
     assert.deepEqual(
       resolution.certificate.paintContinuityCompiler,
-      kpSharedJunctionPaintContinuityCompiler
+      kpBoundedSemanticContactPaintContinuityCompiler
+    );
+    assert.equal(
+      isKpExecutableMotifContinuityProgram(
+        resolution.certificate.paintContinuityCompiler.continuityProgram
+      ),
+      true
+    );
+    assert.equal(
+      resolution.certificate.paintContinuityCompiler.continuityProgram
+        .program,
+      resolution.certificate.executableProgramCompiler.program
     );
     assert.equal(
       resolution.certificate.paintContinuityCompiler.boundaryLawId,
@@ -118,7 +132,7 @@ test("resolution fails closed for unknown transformations and pin drift", () => 
       transformationKind: "simplifyConstantProduct",
       pins: createKpOperationEvaluationPresentationPins([{
         packId: kpOperationEvaluationPresentationCorePack.id,
-        version: "5.0.0"
+        version: "4.0.0"
       }])
     }).status,
     "version-mismatch"
@@ -482,8 +496,8 @@ function extensionPresentationEntry(
       version: "1.0.0"
     },
     paintContinuityCompiler: {
-      id: "kp.paint-continuity-compiler.shared-junction",
-      version: "1.0.0"
+      id: "kp.paint-continuity-compiler.bounded-semantic-contact",
+      version: "2.0.0"
     },
     semanticOperationIds: [`project.operation-${index}`],
     definitionIds: [],

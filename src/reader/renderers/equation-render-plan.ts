@@ -218,7 +218,8 @@ export function projectKpReaderEquationRenderPlan(input: {
               ...binding,
               operationPresentationPlan:
                 decision.operationPresentationPlan,
-              paintContinuityPlan: decision.paintContinuityPlan
+              paintContinuityPlan: decision.paintContinuityPlan,
+              continuityProgram: decision.continuityProgram
             })]
           : []
     );

@@ -12,6 +12,9 @@ import {
   validateAndMintKpPerceptualContinuityContract
 } from "../src/animation/perceptual-continuity-contract.ts";
 import {
+  kpOpaqueGatherAndRecognizeRecognitionProgress
+} from "../src/animation/successor-synthesis.ts";
+import {
   evaluateKpNativeKatexSuccessorEndpoint,
   type KpNativeKatexSuccessorEndpointCheckpoint,
   type KpNativeKatexSuccessorEndpointSnapshot
@@ -86,7 +89,11 @@ test("one plus two mounts through the lazy verified compositor adapter", async (
   );
   await expect(stage).toHaveAttribute(
     "data-kp-operation-evaluation-transfer-topology",
-    "shared-zero-area-junction"
+    "bounded-semantic-contact-co-presence"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-executed-motif-continuity-topology",
+    "bounded-semantic-contact-co-presence"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-native-katex-successor-synthesis-count",
@@ -141,7 +148,7 @@ test("reference candidate and current runtime share the player clock", async ({
   await expect(comparison.locator(
     "[data-kp-operation-evaluation-current-telemetry] " +
     "[data-kp-comparison-phase]"
-  )).toHaveText("contract to zero");
+  )).toHaveText("gather contributors");
 
   await scrubber.fill("1");
   await expect(comparison.locator(
@@ -451,18 +458,20 @@ test("one plus two direct seek and rewind share one exact pose", async ({
   const rewindOwners = await ownerPoses(stage);
 
   expect(rewindOwners).toEqual(forwardOwners);
-  await scrubber.fill("0.3");
+  const rewindRecognitionProgress =
+    1 - kpOpaqueGatherAndRecognizeRecognitionProgress;
+  await scrubber.fill(String(rewindRecognitionProgress));
   await expect(player).toHaveAttribute(
     "data-kp-operation-evaluation-mapped-progress",
-    "0.7"
+    String(kpOpaqueGatherAndRecognizeRecognitionProgress)
   );
   await expect(stage).toHaveAttribute(
     "data-kp-operation-evaluation-boundary-side",
-    "junction"
+    "co-presence"
   );
 });
 
-test("one plus two realizes gather and settlement as visible travel", async ({
+test("one plus two realizes gather and geometric recognition", async ({
   page
 }) => {
   await page.goto(`/?animation=${descriptorId}`);
@@ -503,10 +512,14 @@ test("one plus two realizes gather and settlement as visible travel", async ({
     role === "successor-source:catalyst"
   )).toBe(true);
   expect(gathered.every(({ opacity }) => opacity > 0.99)).toBe(true);
-  expect(gathered.every(({ scale }) => scale > 0.6 && scale < 0.75)).toBe(
-    true
-  );
-  expect(gathered.every(({ travel }) => travel > 6)).toBe(true);
+  expect(gathered.filter(({ role }) =>
+    role === "successor-source:material-input"
+  ).every(({ scale, travel }) =>
+    scale > 0.6 && scale < 0.75 && travel > 6
+  )).toBe(true);
+  expect(gathered.filter(({ role }) =>
+    role === "successor-source:catalyst"
+  ).every(({ scale }) => scale > 0 && scale < 1)).toBe(true);
 
   await scrubber.fill("0.75");
   await expect(player).toHaveAttribute(
@@ -529,7 +542,16 @@ test("one plus two realizes gather and settlement as visible travel", async ({
   expect(settling[0]!.opacity).toBeGreaterThan(0.99);
   expect(settling[0]!.scale).toBeGreaterThan(0);
   expect(settling[0]!.scale).toBeLessThan(1);
-  expect(settling[0]!.travel).toBeGreaterThan(6);
+  expect(settling[0]!.travel).toBeLessThan(1);
+  const coPresentSources = await stage.locator(
+    "[data-kp-equation-material-fragment-role=" +
+    "\"successor-source:material-input\"]"
+  ).evaluateAll((owners) => owners.filter((owner) => {
+    const style = getComputedStyle(owner);
+    const matrix = new DOMMatrix(style.transform);
+    return Number(style.opacity) > 0.99 && matrix.a > 0;
+  }).length);
+  expect(coPresentSources).toBeGreaterThan(0);
 });
 
 for (const viewport of [
@@ -850,7 +872,13 @@ test("one plus two boundary samples retain opaque font-stable paint", async ({
   );
 
   const samples = [];
-  for (const progress of [0, 0.699, 0.7, 0.701, 1]) {
+  for (const progress of [
+    0,
+    kpOpaqueGatherAndRecognizeRecognitionProgress - 0.001,
+    kpOpaqueGatherAndRecognizeRecognitionProgress,
+    kpOpaqueGatherAndRecognizeRecognitionProgress + 0.001,
+    1
+  ]) {
     await scrubber.fill(String(progress));
     await expect(player).toHaveAttribute(
       "data-kp-operation-evaluation-mapped-progress",
@@ -861,8 +889,8 @@ test("one plus two boundary samples retain opaque font-stable paint", async ({
   expect(samples.map(({ boundarySide }) => boundarySide)).toEqual([
     "source",
     "source",
-    "junction",
-    "target",
+    "co-presence",
+    "co-presence",
     "target"
   ]);
   expect(samples.every(({ nonBinaryOpacityCount }) =>

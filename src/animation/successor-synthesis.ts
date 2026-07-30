@@ -402,6 +402,57 @@ export function sampleKpSuccessorSynthesis(input: {
   };
 }
 
+export const kpOpaqueGatherAndRecognizeSettlementProgress = 0.99;
+export const kpOpaqueGatherAndRecognizeRecognitionProgress =
+  0.6 * kpOpaqueGatherAndRecognizeSettlementProgress;
+export const kpOpaqueGatherAndRecognizeSourceRetirementProgress =
+  0.9 * kpOpaqueGatherAndRecognizeSettlementProgress;
+
+/**
+ * Canonical operation evaluation keeps source and result ink co-present during
+ * recognition. Opacity is binary because the semantic operation changes
+ * ownership; geometry carries the emergence and retirement choreography.
+ */
+export function sampleKpOpaqueGatherAndRecognizeSuccessorSynthesis(input: {
+  readonly plan: KpSuccessorSynthesisPlan;
+  readonly progress: number;
+}): KpSuccessorSynthesisFrame {
+  const progress = clamp01(input.progress);
+  const sampledProgress = progress >=
+      kpOpaqueGatherAndRecognizeSettlementProgress
+    ? 1
+    : progress / kpOpaqueGatherAndRecognizeSettlementProgress;
+  const frame = sampleKpSuccessorSynthesis({
+    plan: input.plan,
+    progress: sampledProgress
+  });
+  return Object.freeze({
+    ...frame,
+    progress,
+    sources: Object.freeze(frame.sources.map((source) => {
+      const gatheredScale = source.contribution === "catalyst"
+        ? 1 - 0.32 * source.activationProgress
+        : source.pose.scale;
+      return Object.freeze({
+        ...source,
+        pose: Object.freeze({
+          ...source.pose,
+          scale: gatheredScale * (1 - source.retirementProgress),
+          opacity: source.retirementProgress >= 1 ? 0 : 1
+        })
+      });
+    })),
+    targets: Object.freeze(frame.targets.map((target) => Object.freeze({
+      ...target,
+      pose: Object.freeze({
+        ...target.pose,
+        scale: target.birthProgress,
+        opacity: target.birthProgress > 0 ? 1 : 0
+      })
+    })))
+  });
+}
+
 /**
  * Counter-convergence keeps the source group readable on one inline band
  * while its material inputs approach, then retires the catalyst before the

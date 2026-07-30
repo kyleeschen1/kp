@@ -14,6 +14,12 @@ import type {
 import type {
   KpNativeKatexSuccessorSynthesisIntent
 } from "../../rendering/native-katex-successor-synthesis.ts";
+import type {
+  KpExecutableMotifContinuityProgram
+} from "../../animation/motifs/executable-motif-continuity-compiler.ts";
+import {
+  isKpExecutableMotifContinuityProgram
+} from "../../animation/motifs/executable-motif-continuity-compiler.ts";
 
 type KpVerifiedProgramOf<
   Kind extends KpExecutableSuccessorMotifProgramDraft["kind"]
@@ -125,6 +131,12 @@ export type KpExecutableSuccessorMotifProgramAdapterDispatch =
           ...KpNativeKatexSuccessorSynthesisIntent[]
         ];
       };
+      readonly continuityProgram:
+        KpExecutableMotifContinuityProgram & {
+          readonly programKind: "operation-evaluation";
+          readonly topology:
+            "bounded-semantic-contact-co-presence";
+        };
     })
   | (KpExecutableSuccessorMotifProgramAdapterDispatchBase & {
       readonly programKind: "identity-fission";
@@ -213,6 +225,28 @@ export function compileKpExecutableSuccessorMotifProgramAdapter(
           "Operation evaluation requires existing successor-synthesis intents."
         );
       }
+      const continuityPrograms = input.primitive.intents.map((intent) =>
+        "continuityProgram" in intent.binding
+          ? intent.binding.continuityProgram
+          : undefined
+      );
+      const continuityProgram = continuityPrograms[0];
+      if (
+        continuityProgram === undefined ||
+        !isKpExecutableMotifContinuityProgram(continuityProgram) ||
+        continuityProgram.program !== input.program ||
+        continuityProgram.programKind !== "operation-evaluation" ||
+        continuityProgram.topology !==
+          "bounded-semantic-contact-co-presence" ||
+        continuityPrograms.some((candidate) =>
+          candidate !== continuityProgram
+        )
+      ) {
+        throw new Error(
+          "Operation evaluation requires one continuity program compiled " +
+          "from the exact executable program."
+        );
+      }
       return dispatch(input, {
         kind: "native-katex-successor-synthesis",
         intents: Object.freeze([...input.primitive.intents]) as
@@ -220,7 +254,7 @@ export function compileKpExecutableSuccessorMotifProgramAdapter(
             KpNativeKatexSuccessorSynthesisIntent,
             ...KpNativeKatexSuccessorSynthesisIntent[]
           ]
-      });
+      }, continuityProgram);
     case "identity-fission":
       if (
         input.primitive.kind !== "fission-fusion" ||
@@ -254,7 +288,12 @@ export function compileKpExecutableSuccessorMotifProgramAdapter(
 
 function dispatch(
   input: KpExecutableSuccessorMotifProgramAdapterInput,
-  primitive: KpExecutableSuccessorMotifProgramAdapterDispatch["primitive"]
+  primitive: KpExecutableSuccessorMotifProgramAdapterDispatch["primitive"],
+  continuityProgram?:
+    Extract<
+      KpExecutableSuccessorMotifProgramAdapterDispatch,
+      { readonly programKind: "operation-evaluation" }
+    >["continuityProgram"]
 ): KpExecutableSuccessorMotifProgramAdapterDispatch {
   const phaseOrder = input.direction === "forward"
     ? [...input.program.phases]
@@ -275,7 +314,13 @@ function dispatch(
         progress
       })
   };
-  return Object.freeze({ ...base, primitive }) as
+  return Object.freeze({
+    ...base,
+    primitive,
+    ...(continuityProgram === undefined
+      ? {}
+      : { continuityProgram })
+  }) as
     KpExecutableSuccessorMotifProgramAdapterDispatch;
 }
 

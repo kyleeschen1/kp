@@ -94,6 +94,8 @@ export function validateAndMintKpPaintContinuityPlan(input: {
 
     if (
       carrier.transferTopology !== "paint-equivalent-pose" &&
+      carrier.transferTopology !==
+        "bounded-semantic-contact-co-presence" &&
       carrier.transferTopology !== "shared-zero-area-junction"
     ) {
       issues.push({

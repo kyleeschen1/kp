@@ -179,6 +179,7 @@ export function createKpReaderEquationSceneCompositorSession(
     delete input.source.stage.dataset["kpExecutedMotifProgramVersion"];
     delete input.source.stage.dataset["kpExecutedMotifProgramKind"];
     delete input.source.stage.dataset["kpExecutedMotifProgramPhase"];
+    delete input.source.stage.dataset["kpExecutedMotifContinuityTopology"];
   } else {
     input.source.stage.dataset["kpExecutedMotifProgramId"] =
       dispatch.executableProgramExecution.programId;
@@ -186,6 +187,17 @@ export function createKpReaderEquationSceneCompositorSession(
       dispatch.executableProgramExecution.programVersion;
     input.source.stage.dataset["kpExecutedMotifProgramKind"] =
       dispatch.executableProgramExecution.programKind;
+    if (
+      dispatch.executableProgramExecution.programKind ===
+        "operation-evaluation"
+    ) {
+      input.source.stage.dataset["kpExecutedMotifContinuityTopology"] =
+        dispatch.executableProgramExecution.continuityProgram.topology;
+    } else {
+      delete input.source.stage.dataset[
+        "kpExecutedMotifContinuityTopology"
+      ];
+    }
   }
   if (dispatch.planKind !== "explicit-static-checkpoint") {
     delete input.source.stage.dataset[

@@ -1,6 +1,8 @@
 import {
   createKpSuccessorSynthesisPlan,
-  sampleKpSuccessorSynthesis,
+  kpOpaqueGatherAndRecognizeRecognitionProgress,
+  kpOpaqueGatherAndRecognizeSourceRetirementProgress,
+  sampleKpOpaqueGatherAndRecognizeSuccessorSynthesis,
   type KpSuccessorSynthesisBinding,
   type KpSuccessorSynthesisFrame,
   type KpSuccessorSynthesisPose
@@ -247,8 +249,13 @@ export function mountKpOperationEvaluationReferenceComparison(input: {
       referenceStage.dataset["kpOperationEvaluationMappedProgress"] =
         String(progress);
       referenceStage.dataset["kpOperationEvaluationBoundarySide"] =
-        progress < 0.7 ? "source" : "target";
-      const frame = sampleOpaqueGatherAndRecognize({
+        progress < kpOpaqueGatherAndRecognizeRecognitionProgress
+          ? "source"
+          : progress <
+              kpOpaqueGatherAndRecognizeSourceRetirementProgress
+            ? "co-presence"
+            : "target";
+      const frame = sampleKpOpaqueGatherAndRecognizeSuccessorSynthesis({
         plan: reference.plan,
         progress
       });
@@ -270,37 +277,6 @@ export function mountKpOperationEvaluationReferenceComparison(input: {
       disposed = true;
       root.remove();
     }
-  };
-}
-
-function sampleOpaqueGatherAndRecognize(input: {
-  readonly plan: ReturnType<typeof createKpSuccessorSynthesisPlan>;
-  readonly progress: number;
-}): KpSuccessorSynthesisFrame {
-  const frame = sampleKpSuccessorSynthesis(input);
-  return {
-    ...frame,
-    sources: frame.sources.map((source) => {
-      const gatheredScale = source.contribution === "catalyst"
-        ? 1 - 0.32 * source.activationProgress
-        : source.pose.scale;
-      return {
-        ...source,
-        pose: {
-          ...source.pose,
-          scale: gatheredScale * (1 - source.retirementProgress),
-          opacity: source.retirementProgress >= 1 ? 0 : 1
-        }
-      };
-    }),
-    targets: frame.targets.map((target) => ({
-      ...target,
-      pose: {
-        ...target.pose,
-        scale: target.birthProgress,
-        opacity: target.birthProgress > 0 ? 1 : 0
-      }
-    }))
   };
 }
 
@@ -440,11 +416,13 @@ function syncCurrentTelemetry(
   const owner = materialVisible
     ? "material layer"
     : ownerLabel(sourceVisible, targetVisible);
-  const phase = progress < 0.7
-    ? "contract to zero"
-    : progress === 0.7
-      ? "zero-area junction"
-      : "expand from zero";
+  const phase = progress <
+      kpOpaqueGatherAndRecognizeRecognitionProgress
+    ? "gather contributors"
+    : progress ===
+        kpOpaqueGatherAndRecognizeRecognitionProgress
+      ? "establish co-presence"
+      : "recognize and settle";
   const endpoint = progress <= 0
     ? sourceVisible && !materialVisible ? "native source" : "residual paint"
     : progress >= 1

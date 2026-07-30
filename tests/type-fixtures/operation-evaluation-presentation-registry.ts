@@ -17,7 +17,7 @@ import {
 
 // @ts-expect-error Structural lookalikes cannot bypass registry resolution.
 const fabricated: KpResolvedOperationEvaluationPresentation = {
-  schemaVersion: "kp.resolved-operation-evaluation-presentation.v4",
+  schemaVersion: "kp.resolved-operation-evaluation-presentation.v5",
   presentationId: "project.fabricated.result",
   transformationKind: "simplifyConstantProduct",
   packId: "project.fabricated",
@@ -37,14 +37,9 @@ const fabricated: KpResolvedOperationEvaluationPresentation = {
       "presentation.rewind"
     ]
   },
-  paintContinuityCompiler: {
-    id: "kp.paint-continuity-compiler.shared-junction",
-    version: "1.0.0",
-    transferTopology: "shared-zero-area-junction",
-    nonZeroPaint: "opaque",
-    endpointSettlement: "native-source-and-target",
-    boundaryLawId: "paint-continuity.t-epsilon-boundary"
-  },
+  executableProgramCompiler: {} as never,
+  paintContinuityCompiler: {} as never,
+  semanticOperationIds: ["kp.arithmetic.multiply"],
   definitionIds: [],
   canonicalOperationIds: ["kp.core.merge"],
   trustedMotifIds: ["merge"],

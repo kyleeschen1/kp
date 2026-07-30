@@ -3,8 +3,8 @@ import type {
 } from "./operation-evaluation-presentation-types.ts";
 import {
   resolveKpOperationEvaluationPresentationRoute,
+  kpBoundedSemanticContactPaintContinuityCompiler,
   kpOperationEvaluationExecutableProgramCompiler,
-  kpSharedJunctionPaintContinuityCompiler,
   kpSuccessorSynthesisPresentationPlanCompiler
 } from "./operation-evaluation-presentation-registry.ts";
 import {
@@ -42,12 +42,24 @@ import type {
 import {
   isKpVerifiedExecutableSuccessorMotifProgram
 } from "./motifs/executable-successor-motif-program-validator.ts";
+import type {
+  KpExecutableMotifContinuityProgram
+} from "./motifs/executable-motif-continuity-compiler.ts";
+import {
+  isKpExecutableMotifContinuityProgram
+} from "./motifs/executable-motif-continuity-compiler.ts";
 
 export type KpRegisteredSuccessorSynthesisBinding =
   KpSuccessorSynthesisBinding & {
     readonly operationPresentationPlan:
       KpVerifiedOperationPresentationPlan;
     readonly paintContinuityPlan: KpVerifiedPaintContinuityPlan;
+    readonly continuityProgram:
+      KpExecutableMotifContinuityProgram & {
+        readonly programKind: "operation-evaluation";
+        readonly topology:
+          "bounded-semantic-contact-co-presence";
+      };
   };
 
 export type KpSuccessorSynthesisPresentationCompilation =
@@ -58,6 +70,8 @@ export type KpSuccessorSynthesisPresentationCompilation =
       readonly paintContinuityPlan: KpVerifiedPaintContinuityPlan;
       readonly executableProgram:
         KpVerifiedExecutableSuccessorMotifProgram;
+      readonly continuityProgram:
+        KpRegisteredSuccessorSynthesisBinding["continuityProgram"];
     }
   | {
       readonly status: "explicit-static";
@@ -204,7 +218,9 @@ export function compileKpRegisteredSuccessorSynthesisPresentation(input: {
     status: "compiled",
     operationPresentationPlan: validation.plan,
     paintContinuityPlan: paintValidation.plan,
-    executableProgram
+    executableProgram,
+    continuityProgram:
+      route.certificate.paintContinuityCompiler.continuityProgram
   });
 }
 
@@ -268,16 +284,22 @@ function requirePaintContinuityCompiler(
 ): void {
   const compiler = certificate.paintContinuityCompiler;
   if (
-    compiler.id !== kpSharedJunctionPaintContinuityCompiler.id ||
-    compiler.version !== kpSharedJunctionPaintContinuityCompiler.version ||
-    compiler.transferTopology !== "shared-zero-area-junction" ||
+    compiler.id !==
+      kpBoundedSemanticContactPaintContinuityCompiler.id ||
+    compiler.version !==
+      kpBoundedSemanticContactPaintContinuityCompiler.version ||
+    compiler.transferTopology !==
+      "bounded-semantic-contact-co-presence" ||
     compiler.nonZeroPaint !== "opaque" ||
     compiler.endpointSettlement !== "native-source-and-target" ||
-    compiler.boundaryLawId !== "paint-continuity.t-epsilon-boundary"
+    compiler.boundaryLawId !== "paint-continuity.t-epsilon-boundary" ||
+    !isKpExecutableMotifContinuityProgram(compiler.continuityProgram) ||
+    compiler.continuityProgram.program !==
+      certificate.executableProgramCompiler.program
   ) {
     throw new Error(
       `Presentation ${certificate.presentationId} did not resolve the ` +
-      "approved shared-junction paint continuity compiler."
+      "approved bounded semantic-contact continuity compiler."
     );
   }
 }

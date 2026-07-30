@@ -7,6 +7,9 @@ import type {
 import type {
   KpVerifiedExecutableSuccessorMotifProgram
 } from "./motifs/executable-successor-motif-program.ts";
+import type {
+  KpExecutableMotifContinuityProgram
+} from "./motifs/executable-motif-continuity-compiler.ts";
 
 export const kpCanonicalOperationEvaluationTransformationKinds = [
   "simplifyConstantProduct",
@@ -91,15 +94,25 @@ export interface KpOperationEvaluationPaintContinuityCompilerRef {
 
 export interface KpOperationEvaluationPaintContinuityCompilerDescriptor
   extends KpOperationEvaluationPaintContinuityCompilerRef {
-  readonly transferTopology: "shared-zero-area-junction";
+  readonly transferTopology:
+    "bounded-semantic-contact-co-presence";
   readonly nonZeroPaint: "opaque";
   readonly endpointSettlement: "native-source-and-target";
   readonly boundaryLawId: "paint-continuity.t-epsilon-boundary";
+  /**
+   * The descriptor retains the nominal compiler result so a matching topology
+   * string cannot bypass the program/contract compatibility proof.
+   */
+  readonly continuityProgram: KpExecutableMotifContinuityProgram & {
+    readonly programKind: "operation-evaluation";
+    readonly topology:
+      "bounded-semantic-contact-co-presence";
+  };
 }
 
 export interface KpOperationEvaluationPresentationRegistry {
   readonly kind: "operation-evaluation-presentation-registry";
-  readonly schemaVersion: "kp.operation-evaluation-presentation-registry.v4";
+  readonly schemaVersion: "kp.operation-evaluation-presentation-registry.v5";
   readonly packs: readonly KpOperationEvaluationPresentationPack[];
   readonly entries: readonly KpOperationEvaluationPresentationEntry[];
   readonly planCompilers:
@@ -127,7 +140,7 @@ declare const kpResolvedOperationEvaluationPresentationBrand: unique symbol;
  * not bypass version checks by reconstructing a visually similar raw rule.
  */
 export interface KpResolvedOperationEvaluationPresentation {
-  readonly schemaVersion: "kp.resolved-operation-evaluation-presentation.v4";
+  readonly schemaVersion: "kp.resolved-operation-evaluation-presentation.v5";
   readonly presentationId: string;
   readonly transformationKind: string;
   readonly packId: string;
