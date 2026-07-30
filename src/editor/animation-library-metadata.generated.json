@@ -584,6 +584,37 @@
     }
   },
   {
+    "id": "editor-animation.animation.operation-evaluation.five-plus-two",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.operation-evaluation.five-plus-two",
+    "title": "5 + 2 → 7",
+    "summary": "A registry-compiled arithmetic evaluation with verified opaque paint continuity and native KaTeX endpoints.",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 1719,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "arithmetic",
+      "equation",
+      "operation-evaluation",
+      "presentation-compiler"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.exact-fraction-quantity.third-plus-sixth",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.exact-fraction-quantity.third-plus-sixth",

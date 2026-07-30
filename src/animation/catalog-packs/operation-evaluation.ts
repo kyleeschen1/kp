@@ -1,5 +1,6 @@
 import type { KpAnimationAsset } from "../asset.ts";
 import {
+  createKpFivePlusTwoEvaluationAnimationAsset,
   createKpOnePlusTwoEvaluationAnimationAsset
 } from "../operation-evaluation-adapter.ts";
 // The canonical compositor adapter stays behind the arithmetic capability
@@ -8,5 +9,8 @@ import "../../editor/operation-evaluation-surface-register.ts";
 
 export function createKpOperationEvaluationAnimationPack():
 readonly KpAnimationAsset[] {
-  return [createKpOnePlusTwoEvaluationAnimationAsset()];
+  return [
+    createKpOnePlusTwoEvaluationAnimationAsset(),
+    createKpFivePlusTwoEvaluationAnimationAsset()
+  ];
 }

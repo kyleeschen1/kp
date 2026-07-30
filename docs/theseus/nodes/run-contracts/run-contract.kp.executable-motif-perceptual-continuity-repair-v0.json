@@ -992,6 +992,41 @@
       "scope": "s16 canonical executable operation-evaluation approval",
       "checkedAt": "2026-07-30T04:28:58.989Z",
       "notes": "User explicitly approved the production-primary 1 + 2 to 3 executable runtime shown in the Animation Library. This authorizes unchanged-program generalization to 5 + 2 and 3/6 while preserving the approved opaque gather-combine-recognize choreography."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s17 unchanged-program semantic and continuity generalization",
+      "checkedAt": "2026-07-30T04:42:20.602Z",
+      "notes": "168 checks pass. Five plus two resolves the exact one-plus-two minted program object and continuity program, exposes only id/left/right caller fields, and leaves the honesty catalog complete for the new verified route."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s17 caller and catalog type closure",
+      "checkedAt": "2026-07-30T04:42:21.821Z",
+      "notes": "Application, Node, test, protocol-dependent, and domain TypeScript projects pass with the second constant-sum caller."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalog-loader.test.ts",
+      "status": "passed",
+      "scope": "s17 lazy operation-evaluation capability pack",
+      "checkedAt": "2026-07-30T04:42:22.843Z",
+      "notes": "The full metadata catalog and literal lazy pack agree; five plus two loads through the existing operation-evaluation chunk."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/operation-evaluation-animation-library.browser.spec.ts --project=chromium --workers=1 --grep five plus two uses",
+      "status": "passed",
+      "scope": "s17 Chromium browser spot",
+      "checkedAt": "2026-07-30T04:42:23.810Z",
+      "notes": "The 5 + 2 to 7 caller reaches ready state through the same executable program, retains three opaque moving contributors, and settles at the native target."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s17 control-plane integrity",
+      "checkedAt": "2026-07-30T04:42:40.787Z",
+      "notes": "Validated 832 nodes and 14498 events before slice closure."
     }
   ],
   "allowedWork": [
@@ -1121,7 +1156,8 @@
     {
       "id": "s17",
       "title": "generalize-five-plus-two",
-      "status": "planned"
+      "summary": "Registered 5 + 2 to 7 as a semantic id/left/right caller of the existing constant-sum compiler. It resolves the same nominal executable program and continuity object as 1 + 2, loads through the same lazy adapter, retains three opaque moving contributors, and settles at native 7 without numeral, geometry, timing, opacity, path, or scheduler authority.",
+      "status": "complete"
     },
     {
       "id": "s18",

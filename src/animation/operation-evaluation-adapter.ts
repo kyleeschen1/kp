@@ -23,6 +23,14 @@ import {
 
 export const kpOnePlusTwoEvaluationAnimationId =
   "animation.operation-evaluation.one-plus-two";
+export const kpFivePlusTwoEvaluationAnimationId =
+  "animation.operation-evaluation.five-plus-two";
+export const kpFivePlusTwoEvaluationSpec =
+  Object.freeze({
+    id: "five-plus-two",
+    left: 5,
+    right: 2
+  }) satisfies KpConstantSumEvaluationSpec;
 
 export function createKpConstantSumEvaluationAnimationAsset(
   spec: KpConstantSumEvaluationSpec
@@ -132,4 +140,11 @@ KpAnimationAsset {
     left: 1,
     right: 2
   });
+}
+
+export function createKpFivePlusTwoEvaluationAnimationAsset():
+KpAnimationAsset {
+  return createKpConstantSumEvaluationAnimationAsset(
+    kpFivePlusTwoEvaluationSpec
+  );
 }

@@ -28,6 +28,10 @@ const descriptorId =
   "editor-animation.animation.operation-evaluation.one-plus-two";
 const animationId =
   "animation.operation-evaluation.one-plus-two";
+const generalizedDescriptorId =
+  "editor-animation.animation.operation-evaluation.five-plus-two";
+const generalizedAnimationId =
+  "animation.operation-evaluation.five-plus-two";
 const executableProgram =
   kpOperationEvaluationExecutableProgramCompiler.program;
 const continuityContractResult =
@@ -122,6 +126,60 @@ test("one plus two mounts through the lazy verified compositor adapter", async (
   await expect(comparison.locator(
     "[data-kp-operation-evaluation-diagnostic]"
   )).toHaveAttribute("aria-hidden", "true");
+});
+
+test("five plus two uses the unchanged executable evaluation runtime", async ({
+  page
+}) => {
+  await page.goto(`/?animation=${generalizedDescriptorId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${generalizedAnimationId}"]`
+  );
+  const stage = player.locator("[data-kp-operation-evaluation-stage]");
+  const scrubber = player.locator(
+    "[data-action=\"seek-editor-animation\"]"
+  );
+
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-status",
+    "ready",
+    { timeout: 15_000 }
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-executed-motif-program-id",
+    executableProgram.id
+  );
+  await expect(stage.locator(
+    "[data-kp-operation-evaluation-source]"
+  )).toContainText("5+2");
+
+  await scrubber.fill("0.58");
+  const gathered = stage.locator(
+    "[data-kp-equation-material-fragment-role^=\"successor-source:\"]"
+  );
+  await expect(gathered).toHaveCount(3);
+  const visibleTravel = await gathered.evaluateAll((owners) =>
+    owners.map((owner) => {
+      const style = getComputedStyle(owner);
+      const matrix = new DOMMatrix(style.transform);
+      return {
+        opacity: Number(style.opacity),
+        travel: Math.hypot(matrix.e, matrix.f)
+      };
+    })
+  );
+  expect(visibleTravel.every(({ opacity }) => opacity > 0.99)).toBe(true);
+  expect(visibleTravel.some(({ travel }) => travel > 4)).toBe(true);
+
+  await scrubber.fill("1");
+  await expect(stage.locator(
+    "[data-kp-operation-evaluation-target]"
+  )).toContainText("7");
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-boundary-side",
+    "target"
+  );
 });
 
 test("reference candidate and current runtime share the player clock", async ({

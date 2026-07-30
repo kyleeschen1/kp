@@ -40,6 +40,7 @@ import {
   createKpExactFractionQuantityAnimationAsset
 } from "./exact-fraction-quantity-adapter.ts";
 import {
+  createKpFivePlusTwoEvaluationAnimationAsset,
   createKpOnePlusTwoEvaluationAnimationAsset
 } from "./operation-evaluation-adapter.ts";
 
@@ -47,6 +48,7 @@ export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
   return [
     ...createGeneratedAlgebraAnimationAssets(),
     createKpOnePlusTwoEvaluationAnimationAsset(),
+    createKpFivePlusTwoEvaluationAnimationAsset(),
     createKpExactFractionQuantityAnimationAsset(),
     createAcceptedGeneratedAddZeroAnimationAsset(),
     createAcceptedGeneratedSubstitutionAnimationAsset(),

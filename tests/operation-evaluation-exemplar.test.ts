@@ -6,7 +6,10 @@ import {
   validateKpAnimationAsset
 } from "../src/animation/asset.ts";
 import {
+  kpFivePlusTwoEvaluationAnimationId,
+  kpFivePlusTwoEvaluationSpec,
   kpOnePlusTwoEvaluationAnimationId,
+  createKpFivePlusTwoEvaluationAnimationAsset,
   createKpOnePlusTwoEvaluationAnimationAsset
 } from "../src/animation/operation-evaluation-adapter.ts";
 import {
@@ -118,9 +121,121 @@ test("one plus two keeps caller authority semantic and rewinds exactly", () => {
   );
 });
 
+test("five plus two reuses the exact executable evaluation route", () => {
+  const canonical = createKpOnePlusTwoEvaluationAnimationAsset();
+  const generalized = createKpFivePlusTwoEvaluationAnimationAsset();
+  const canonicalPlan = renderPlanAtMidpoint(canonical);
+  const generalizedPlan = renderPlanAtMidpoint(generalized);
+  const canonicalTransition = canonicalPlan.transitions[0];
+  const generalizedTransition = generalizedPlan.transitions[0];
+
+  assert.equal(generalized.id, kpFivePlusTwoEvaluationAnimationId);
+  assert.deepEqual(validateKpAnimationAsset(generalized), []);
+  assert.equal(animationObjectLatex(generalized, 0), "5 + 2");
+  assert.equal(animationObjectLatex(generalized, 1), "7");
+  assert.equal(
+    generalizedTransition?.presentationPlan.planKind,
+    "successor-synthesis"
+  );
+  assert.equal(
+    canonicalTransition?.presentationPlan.planKind,
+    "successor-synthesis"
+  );
+  if (
+    canonicalTransition?.presentationPlan.planKind !== "successor-synthesis" ||
+    generalizedTransition?.presentationPlan.planKind !== "successor-synthesis"
+  ) return;
+
+  // Object identity proves callers receive the registry-minted program rather
+  // than equivalent-looking per-example presentation instructions.
+  assert.equal(
+    generalizedTransition.presentationPlan.executableProgram,
+    canonicalTransition.presentationPlan.executableProgram
+  );
+  assert.deepEqual(
+    executableRouteFingerprint(generalizedTransition.presentationPlan),
+    executableRouteFingerprint(canonicalTransition.presentationPlan)
+  );
+  assert.equal(
+    generalizedTransition.presentationPlan.successorSyntheses[0]
+      ?.continuityProgram,
+    canonicalTransition.presentationPlan.successorSyntheses[0]
+      ?.continuityProgram
+  );
+
+  assert.deepEqual(Object.keys(kpFivePlusTwoEvaluationSpec).sort(), [
+    "id",
+    "left",
+    "right"
+  ]);
+  for (
+    const field of
+    kpOperationEvaluationContinuityReference.forbiddenCallerAuthority
+  ) {
+    assert.equal(
+      Object.keys(kpFivePlusTwoEvaluationSpec).includes(field),
+      false,
+      `five plus two must not author ${field}`
+    );
+  }
+});
+
 test("one plus two is owned by its lazy capability pack", () => {
   assert.equal(
     kpAnimationCatalogPackId(kpOnePlusTwoEvaluationAnimationId),
     "operation-evaluation"
   );
+  assert.equal(
+    kpAnimationCatalogPackId(kpFivePlusTwoEvaluationAnimationId),
+    "operation-evaluation"
+  );
 });
+
+function renderPlanAtMidpoint(
+  animation: ReturnType<typeof createKpOnePlusTwoEvaluationAnimationAsset>
+) {
+  return projectKpReaderEquationRenderPlan({
+    animation,
+    runtimeFrame: sampleKpAnimationRuntimeFrame({
+      animation,
+      direction: "forward",
+      progress: 0.5
+    })
+  });
+}
+
+function executableRouteFingerprint(
+  plan: Extract<
+    ReturnType<typeof renderPlanAtMidpoint>["transitions"][number][
+      "presentationPlan"
+    ],
+    { readonly planKind: "successor-synthesis" }
+  >
+) {
+  const program = plan.executableProgram;
+  const synthesis = plan.successorSyntheses[0];
+
+  return {
+    programId: program.id,
+    programVersion: program.programVersion,
+    programKind: program.kind,
+    phases: program.phases,
+    topology: synthesis?.continuityProgram.topology,
+    forwardContinuityPhases:
+      synthesis?.continuityProgram.forwardPhases
+  };
+}
+
+function animationObjectLatex(
+  animation: ReturnType<typeof createKpOnePlusTwoEvaluationAnimationAsset>,
+  index: number
+): string | undefined {
+  const value = animation.bundle.objects[index]?.value;
+  if (
+    typeof value !== "object" ||
+    value === null ||
+    !("latex" in value) ||
+    typeof value.latex !== "string"
+  ) return undefined;
+  return value.latex;
+}
