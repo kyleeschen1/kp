@@ -181,7 +181,9 @@
     {
       "id": "s19",
       "title": "complete-fold-seek-and-navigation",
-      "status": "planned"
+      "summary": "Added one sealed navigation adjunct over the existing Animation Library player and shared reader clock. Its only transport contract is toggle; typed outline seeks land at 0/100/400/710/1000 stable starts, fold changes preserve frame and truth, and repeated scrub/rewind/replay produce identical single-stage paint across all browsers and widths.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s20",

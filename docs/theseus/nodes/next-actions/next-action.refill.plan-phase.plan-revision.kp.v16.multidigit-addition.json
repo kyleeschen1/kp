@@ -557,6 +557,55 @@
       "scope": "s18 type cost",
       "checkedAt": "2026-07-30T18:59:51.320Z",
       "notes": "Inference remains at 48471 types 61210 instantiations and 2.1 seconds."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s19 initial browser fixture typing",
+      "checkedAt": "2026-07-30T19:15:52.886Z",
+      "notes": "The first compile caught untyped dynamic-import fixture callbacks; explicit navigation and shared-DOM type boundaries restored inference without casts in product code."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "failed",
+      "scope": "s19 initial fold fixture",
+      "checkedAt": "2026-07-30T19:15:54.026Z",
+      "notes": "The first focused run caught a test using a guessed fold-group id; callers now use the compiler-owned evaluation.place-value ids."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s19 navigation and fold contract",
+      "checkedAt": "2026-07-30T19:15:54.992Z",
+      "notes": "82 of 82 pass, including one toggle authority, exact outline states, history-independent replay, and disclosure-only folding."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "passed",
+      "scope": "s19 repeated seek and stable starts",
+      "checkedAt": "2026-07-30T19:15:55.912Z",
+      "notes": "48 of 48 pass across Chromium Firefox and WebKit at wide and phone widths; all outline clicks expose one stable source or native endpoint and repeated scrub reproduces identical paint."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19 navigation typing",
+      "checkedAt": "2026-07-30T19:15:56.787Z",
+      "notes": "All TypeScript projects pass after retaining checkpoint provenance in the shared runtime frame."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s19 one-player boundary",
+      "checkedAt": "2026-07-30T19:15:57.655Z",
+      "notes": "Navigation is an adjunct to the existing editor player and shared reader clock; no runtime renderer scheduler or compatibility exception was added."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s19 type cost",
+      "checkedAt": "2026-07-30T19:15:58.541Z",
+      "notes": "Inference remains at 48471 types 61210 instantiations and 2.28 seconds."
     }
   ],
   "expectedLearning": [

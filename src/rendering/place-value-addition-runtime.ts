@@ -76,7 +76,13 @@ export interface KpPlaceValueAdditionRuntimeFrame {
     KpPlaceValueAdditionRuntimeSession["rendererSessionId"];
   readonly clock: Pick<
     KpReaderClockSample,
-    "source" | "progress" | "progressPermille" | "direction" | "sequence"
+    | "source"
+    | "progress"
+    | "progressPermille"
+    | "direction"
+    | "sequence"
+    | "settled"
+    | "checkpointId"
   >;
   readonly beat: KpPlaceValueAdditionBeat;
   readonly beatProgress: number;
@@ -280,7 +286,11 @@ function freezeClock(
     progress: clock.progress,
     progressPermille: clock.progressPermille,
     direction: clock.direction,
-    sequence: clock.sequence
+    sequence: clock.sequence,
+    settled: clock.settled,
+    ...(clock.checkpointId === undefined
+      ? {}
+      : { checkpointId: clock.checkpointId })
   });
 }
 
