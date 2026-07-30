@@ -49,6 +49,8 @@ export function mountKpOperationEvaluationReferenceComparison(input: {
   root.dataset["kpOperationEvaluationReferenceComparison"] = "";
   root.dataset["kpOperationEvaluationPrimaryCandidate"] =
     "opaque-gather-and-recognize-v1";
+  root.dataset["kpOperationEvaluationPrimaryAuthority"] =
+    "executable-runtime";
   const materialInputIds = input.synthesis.sourceAnnotations
     .filter(({ contribution }) => contribution === "material-input")
     .map(({ id }) => id);
@@ -69,56 +71,56 @@ export function mountKpOperationEvaluationReferenceComparison(input: {
   root.innerHTML = `
     <header class="kp-operation-evaluation-comparison__header">
       <p class="kp-operation-evaluation-comparison__eyebrow">
-        Proposed canonical checkpoint
+        Executable canonical checkpoint
       </p>
       <h3>Gather, combine, and recognize</h3>
       <p>
-        Review one corrected candidate: every contributor stays opaque while
-        motion and scale carry the evaluation into its native result.
+        Review the verified runtime itself: every contributor stays opaque
+        while motion and scale carry the evaluation into its native result.
       </p>
     </header>
     <div class="kp-operation-evaluation-comparison__panels">
       <figure class="kp-operation-evaluation-comparison__panel"
         data-kp-operation-evaluation-primary-panel
-        data-kp-operation-evaluation-reference-panel>
+        data-kp-operation-evaluation-current-panel>
         <figcaption>
-          <strong>Proposed canonical candidate</strong>
-          <span>Opaque contributors · exact native endpoints</span>
+          <strong>Executable canonical runtime</strong>
+          <span>Verified program · opaque paint · exact native endpoints</span>
         </figcaption>
-        <!-- The shared stage class is a behavioral contract: it makes annotated
-             KaTeX spans transformable without changing their native baseline. -->
-        <div class="editor-equation-stage kp-operation-evaluation-stage
-          kp-operation-evaluation-reference-stage"
-          data-kp-operation-evaluation-reference-stage
-          aria-label="Historical operation evaluation choreography">
-          <div class="kp-operation-evaluation-stage__endpoint"
-            data-kp-operation-evaluation-reference-source aria-hidden="true">
-          </div>
-          <div class="kp-operation-evaluation-stage__endpoint"
-            data-kp-operation-evaluation-reference-target aria-hidden="true">
-          </div>
-        </div>
-        ${telemetryMarkup("reference")}
+        <div data-kp-operation-evaluation-current-stage-host></div>
+        ${telemetryMarkup("current")}
       </figure>
     </div>
     <button class="kp-operation-evaluation-comparison__diagnostic-toggle"
       type="button"
       data-action="toggle-operation-evaluation-diagnostic"
       aria-expanded="false">
-      Show rejected runtime diagnostic
+      Show frozen reference evidence
     </button>
     <div class="kp-operation-evaluation-comparison__diagnostic"
       data-kp-operation-evaluation-diagnostic
       data-kp-operation-evaluation-diagnostic-open="false"
       aria-hidden="true">
       <figure class="kp-operation-evaluation-comparison__panel"
-        data-kp-operation-evaluation-current-panel>
+        data-kp-operation-evaluation-reference-panel>
           <figcaption>
-            <strong>Rejected zero-area runtime</strong>
-            <span>Retained for diagnosis, not product selection</span>
+            <strong>Frozen approved reference</strong>
+            <span>Development evidence, not another production renderer</span>
           </figcaption>
-          <div data-kp-operation-evaluation-current-stage-host></div>
-          ${telemetryMarkup("current")}
+          <!-- The shared stage class is a behavioral contract: it makes
+               annotated KaTeX spans transformable without changing baseline. -->
+          <div class="editor-equation-stage kp-operation-evaluation-stage
+            kp-operation-evaluation-reference-stage"
+            data-kp-operation-evaluation-reference-stage
+            aria-label="Frozen operation evaluation reference">
+            <div class="kp-operation-evaluation-stage__endpoint"
+              data-kp-operation-evaluation-reference-source aria-hidden="true">
+            </div>
+            <div class="kp-operation-evaluation-stage__endpoint"
+              data-kp-operation-evaluation-reference-target aria-hidden="true">
+            </div>
+          </div>
+          ${telemetryMarkup("reference")}
         </figure>
     </div>`;
   const referenceStage = required(
@@ -165,8 +167,8 @@ export function mountKpOperationEvaluationReferenceComparison(input: {
     diagnostic.setAttribute("aria-hidden", String(!open));
     diagnosticToggle.setAttribute("aria-expanded", String(open));
     diagnosticToggle.textContent = open
-      ? "Hide rejected runtime diagnostic"
-      : "Show rejected runtime diagnostic";
+      ? "Hide frozen reference evidence"
+      : "Show frozen reference evidence";
   });
 
   let currentStage: HTMLElement | undefined;

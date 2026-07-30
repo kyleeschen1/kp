@@ -227,6 +227,10 @@ test("operation evaluation opens in the wide focused player host", async ({
   await expect(frame.locator(
     "[data-kp-operation-evaluation-primary-panel]"
   )).toBeVisible();
+  await expect(frame.locator(
+    "[data-kp-operation-evaluation-primary-panel] " +
+    "[data-kp-operation-evaluation-stage]"
+  )).toHaveAttribute("data-kp-operation-evaluation-status", "ready");
   const diagnostic = frame.locator(
     "[data-kp-operation-evaluation-diagnostic]"
   );
@@ -236,10 +240,10 @@ test("operation evaluation opens in the wide focused player host", async ({
   ).click();
   await expect(diagnostic).toHaveAttribute("aria-hidden", "false");
   await expect(diagnostic.locator(
-    "[data-kp-operation-evaluation-current-panel]"
+    "[data-kp-operation-evaluation-reference-panel]"
   )).toBeVisible();
   await expect(diagnostic.locator(
-    "[data-kp-operation-evaluation-stage]"
+    "[data-kp-operation-evaluation-reference-stage]"
   )).toHaveAttribute("data-kp-operation-evaluation-status", "ready");
 });
 

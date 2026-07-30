@@ -957,6 +957,34 @@
       "scope": "s15 control-plane integrity",
       "checkedAt": "2026-07-30T03:31:11.634Z",
       "notes": "Validated 832 nodes and 14478 events before closing the executable exemplar slice."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-continuity",
+      "status": "passed",
+      "scope": "s16 production-primary human checkpoint matrix",
+      "checkedAt": "2026-07-30T04:21:35.953Z",
+      "notes": "45/45 passed across Chromium Firefox and WebKit. The primary sampled object is the executable runtime; wide and phone natural playback, opaque ink floor, geometry, direct seek and rewind, replay, endpoint raster, DPR microscope, disposal, and Review capture all pass. The frozen reference is opened explicitly only for diagnostic topology evidence."
+    },
+    {
+      "command": "npm run visual:animation-library-operation-evaluation; npm run typecheck",
+      "status": "passed",
+      "scope": "s16 focused dashboard host and typed closure",
+      "checkedAt": "2026-07-30T04:21:46.281Z",
+      "notes": "The existing searchable Animation Library shows the executable runtime in its primary wide focused host, keeps one outer Review owner, and exposes the frozen reference only through a diagnostic disclosure. Application Node test and domain TypeScript projects pass."
+    },
+    {
+      "command": "initial s16 production-primary browser checkpoint harness",
+      "status": "failed",
+      "scope": "s16 diagnostic capture hardening",
+      "checkedAt": "2026-07-30T04:21:54.564Z",
+      "notes": "The production-primary switch exposed two harness-only assumptions: raw PNG bytes differed when phone controls scrolled the stage by 332 CSS pixels, and collapsed/reference screenshots could round a fractional viewport origin to an extra row. Final tests decode pixels, compare relative endpoint geometry, explicitly open the diagnostic reference, and anchor only screenshot coordinates to a device pixel. No runtime geometry, opacity, timing, or browser branch changed; the final 45-case command passes."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s16 pre-checkpoint control-plane integrity",
+      "checkedAt": "2026-07-30T04:22:10.288Z",
+      "notes": "Validated 832 nodes and 14484 events. Slice 16 remains in progress and slices 17 through 26 remain blocked behind explicit human approval."
     }
   ],
   "allowedWork": [
@@ -1080,7 +1108,8 @@
     {
       "id": "s16",
       "title": "human-evaluation-program-checkpoint",
-      "status": "planned"
+      "summary": "Present the actual executable 1 + 2 to 3 runtime as the primary Animation Library review object. Keep the frozen reference available only as development evidence, preserve one player and Review owner, verify natural playback scrub rewind replay wide phone and all three browsers, then stop for explicit human visual approval without generalizing another caller.",
+      "status": "in-progress"
     },
     {
       "id": "s17",

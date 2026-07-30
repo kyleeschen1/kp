@@ -20,6 +20,7 @@ import {
   type KpNativeKatexSuccessorEndpointSnapshot
 } from "../src/rendering/native-katex-successor-endpoint-microscope.ts";
 import {
+  decodePngRgba,
   normalizedPngRasterDelta
 } from "./helpers/png-raster-diff.ts";
 
@@ -107,13 +108,20 @@ test("one plus two mounts through the lazy verified compositor adapter", async (
     "[data-kp-operation-evaluation-reference-comparison]"
   );
   await expect(comparison).toBeVisible();
+  await expect(comparison).toHaveAttribute(
+    "data-kp-operation-evaluation-primary-authority",
+    "executable-runtime"
+  );
   await expect(comparison.locator(
-    "[data-kp-operation-evaluation-reference-stage]"
+    "[data-kp-operation-evaluation-primary-panel] " +
+    "[data-kp-operation-evaluation-stage]"
   )).toBeVisible();
   await expect(comparison.locator(
-    "[data-kp-operation-evaluation-current-stage-host] " +
-    "[data-kp-operation-evaluation-stage]"
+    "[data-kp-operation-evaluation-reference-stage]"
   )).toHaveCount(1);
+  await expect(comparison.locator(
+    "[data-kp-operation-evaluation-diagnostic]"
+  )).toHaveAttribute("aria-hidden", "true");
 });
 
 test("reference candidate and current runtime share the player clock", async ({
@@ -179,7 +187,7 @@ test("primary gather-and-recognize candidate stays opaque and continuously inked
     "[data-kp-operation-evaluation-primary-panel]"
   );
   const stage = primaryPanel.locator(
-    "[data-kp-operation-evaluation-reference-stage]"
+    "[data-kp-operation-evaluation-stage]"
   );
   await expect(comparison).toHaveAttribute(
     "data-kp-operation-evaluation-primary-candidate",
@@ -197,7 +205,9 @@ test("primary gather-and-recognize candidate stays opaque and continuously inked
       const stageRect = root.getBoundingClientRect();
       const candidates = [
         ...root.querySelectorAll<HTMLElement>(
-          "[data-kp-semantic-selector-id]"
+          "[data-kp-operation-evaluation-source]," +
+          "[data-kp-operation-evaluation-target]," +
+          "[data-kp-equation-material-owner-id]"
         )
       ];
       const visible = candidates.flatMap((candidate) => {
@@ -231,12 +241,15 @@ test("primary gather-and-recognize candidate stays opaque and continuously inked
 
   await seekExact(scrubber, 0.58);
   const gathered = await stage.locator(
-    "[data-kp-operation-evaluation-reference-source] " +
-    "[data-kp-semantic-selector-id]"
+    "[data-kp-equation-material-fragment-role^=" +
+    "\"successor-source:\"]"
   ).evaluateAll((elements) => elements.map((element) => {
     const style = getComputedStyle(element);
     const matrix = new DOMMatrix(style.transform);
     return {
+      role: (element as HTMLElement).dataset[
+        "kpEquationMaterialFragmentRole"
+      ],
       opacity: Number(style.opacity),
       scale: matrix.a,
       travel: Math.hypot(matrix.e, matrix.f)
@@ -245,10 +258,14 @@ test("primary gather-and-recognize candidate stays opaque and continuously inked
   expect(gathered).toHaveLength(3);
   expect(gathered.every(({ opacity }) => opacity === 1)).toBe(true);
   expect(gathered.every(({ scale }) => scale > 0 && scale < 1)).toBe(true);
-  expect(gathered.every(({ travel }) => travel > 4)).toBe(true);
+  expect(gathered.filter(({ role }) =>
+    role === "successor-source:material-input"
+  ).every(
+    ({ travel }) => travel > 4
+  )).toBe(true);
 });
 
-test("primary candidate moves painted boxes from an exact native source silhouette", async ({
+test("frozen reference retains exact native source evidence", async ({
   page
 }) => {
   await page.goto(`/?animation=${descriptorId}`);
@@ -347,9 +364,8 @@ test("operation evaluation measures and retains paint in its final host", async 
   const transientSource = await visibleInkBounds(stage);
   expectInkRectsEquivalent(transientSource, nativeSource, 1);
 
-  // The current runtime remains the explicitly rejected zero-area diagnostic;
-  // its junction is tested elsewhere. These samples certify the host-space
-  // paint geometry on both sides of that known presentation defect.
+  // The primary runtime must remain inside the exact host where its native
+  // paint was measured; moving it would invalidate endpoint authority.
   for (const progress of [0, 0.25, 0.58, 0.65, 0.75, 1]) {
     await scrubber.fill(String(progress));
     const [ink, hostBox] = await Promise.all([
@@ -593,19 +609,33 @@ for (const viewport of [
       "data-kp-operation-evaluation-reference-contact-authority",
       "complete"
     );
+    await comparison.locator(
+      "[data-action=\"toggle-operation-evaluation-diagnostic\"]"
+    ).click();
+    await expect(comparison.locator(
+      "[data-kp-operation-evaluation-diagnostic]"
+    )).toHaveAttribute("aria-hidden", "false");
+    await settleStageForRasterCapture(stage);
 
     const frames: {
       readonly visibleArea: number;
       readonly union: InkBounds;
       readonly phaseRank: number;
       readonly raster: Buffer;
+      readonly rasterWidth: number;
+      readonly rasterHeight: number;
     }[] = [];
     for (let index = 0; index <= 100; index += 1) {
       await seekExact(scrubber, index / 100);
+      await settleStageForRasterCapture(stage);
       const paint = await measuredReferencePaint(stage);
+      const raster = await stage.screenshot();
+      const decodedRaster = decodePngRgba(raster);
       frames.push({
         ...paint,
-        raster: await stage.screenshot()
+        raster,
+        rasterWidth: decodedRaster.width,
+        rasterHeight: decodedRaster.height
       });
     }
     const sourceArea = frames[0]!.visibleArea;
@@ -621,6 +651,13 @@ for (const viewport of [
     let maximumNormalizedGeometryDelta = 0;
     let maximumNormalizedRasterDelta = 0;
     for (let index = 1; index < frames.length; index += 1) {
+      expect({
+        width: frames[index]!.rasterWidth,
+        height: frames[index]!.rasterHeight
+      }, `reference raster dimensions changed at sample ${index}`).toEqual({
+        width: frames[index - 1]!.rasterWidth,
+        height: frames[index - 1]!.rasterHeight
+      });
       maximumNormalizedGeometryDelta = Math.max(
         maximumNormalizedGeometryDelta,
         normalizedInkGeometryDelta(
@@ -727,7 +764,7 @@ for (const viewport of [
 
   test(`one plus two natural playback is continuous on ${viewport.id}`, async ({
     page
-  }) => {
+  }, testInfo) => {
     await page.setViewportSize(viewport);
     await page.goto(`/?animation=${descriptorId}`);
     const player = page.locator(
@@ -735,7 +772,8 @@ for (const viewport of [
       `[data-kp-editor-animation-id="${animationId}"]`
     );
     const stage = player.locator(
-      "[data-kp-operation-evaluation-reference-stage]"
+      "[data-kp-operation-evaluation-primary-panel] " +
+      "[data-kp-operation-evaluation-stage]"
     );
     const toggle = player.locator(
       "[data-action=\"toggle-editor-animation\"]"
@@ -752,6 +790,7 @@ for (const viewport of [
     ).selectOption("full-motion");
     await installNaturalPlaybackTrace(player);
 
+    await settleStageForRasterCapture(stage);
     const sourceRaster = await stage.screenshot();
     await toggle.click();
     await expect(player).toHaveAttribute(
@@ -794,7 +833,11 @@ for (const viewport of [
       maximumSignificantPaintStep(trace, viewport.width)
     ).toBeLessThanOrEqual(0.12);
 
-    const finalRaster = await stage.screenshot();
+    await settleStageForRasterCapture(stage);
+    const naturalEndpointPath = testInfo.outputPath("natural-endpoint.png");
+    const finalRaster = await stage.screenshot({
+      path: naturalEndpointPath
+    });
     await page.evaluate(async () => {
       await new Promise<void>((resolve) =>
         requestAnimationFrame(() =>
@@ -805,6 +848,7 @@ for (const viewport of [
     const heldRaster = await stage.screenshot();
     expect(heldRaster.equals(finalRaster)).toBe(true);
     expect(finalRaster.equals(sourceRaster)).toBe(false);
+    const naturalEndpointState = await productionEndpointRenderState(stage);
 
     const completedTraceLength = trace.length;
     await toggle.click();
@@ -824,8 +868,41 @@ for (const viewport of [
     ).toBe(true);
     await toggle.click();
     await scrubber.fill("1");
-    const directEndpointRaster = await stage.screenshot();
-    expect(directEndpointRaster.equals(finalRaster)).toBe(true);
+    await expect(player).toHaveAttribute(
+      "data-kp-editor-animation-progress",
+      "1"
+    );
+    await page.evaluate(async () => {
+      await new Promise<void>((resolve) =>
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => resolve())
+        )
+      );
+    });
+    await settleStageForRasterCapture(stage);
+    const directSeekEndpointPath = testInfo.outputPath(
+      "direct-seek-endpoint.png"
+    );
+    const directEndpointRaster = await stage.screenshot({
+      path: directSeekEndpointPath
+    });
+    const directEndpointState = await productionEndpointRenderState(stage);
+    expect(directEndpointState).toEqual(naturalEndpointState);
+    const directEndpointRasterDelta = normalizedPngRasterDelta(
+      directEndpointRaster,
+      finalRaster
+    );
+    if (directEndpointRasterDelta > 0) {
+      await testInfo.attach("natural-endpoint.png", {
+        path: naturalEndpointPath,
+        contentType: "image/png"
+      });
+      await testInfo.attach("direct-seek-endpoint.png", {
+        path: directSeekEndpointPath,
+        contentType: "image/png"
+      });
+    }
+    expect(directEndpointRasterDelta).toBe(0);
 
     const stageBounds = await stage.boundingBox();
     const slotBounds = await player.locator(
@@ -1377,6 +1454,83 @@ async function visibleInkBounds(
   });
 }
 
+async function productionEndpointRenderState(stage: Locator): Promise<{
+  readonly stage: readonly number[];
+  readonly source: readonly (string | number)[];
+  readonly target: readonly (string | number)[];
+  readonly targetPaint: readonly number[];
+  readonly materialOwners: readonly (readonly (string | number)[])[];
+}> {
+  return stage.evaluate((element) => {
+    const root = element as HTMLElement;
+    const round = (value: number): number =>
+      Math.round(value * 10_000) / 10_000;
+    const geometry = (candidate: HTMLElement): readonly (string | number)[] => {
+      const rect = candidate.getBoundingClientRect();
+      const style = getComputedStyle(candidate);
+      return [
+        round(rect.left - stageRect.left),
+        round(rect.top - stageRect.top),
+        round(rect.width),
+        round(rect.height),
+        style.opacity,
+        style.transform,
+        style.visibility,
+        style.display
+      ];
+    };
+    const source = root.querySelector<HTMLElement>(
+      "[data-kp-operation-evaluation-source]"
+    )!;
+    const target = root.querySelector<HTMLElement>(
+      "[data-kp-operation-evaluation-target]"
+    )!;
+    const targetPaint = target.querySelector<HTMLElement>(".katex-html")!;
+    const stageRect = root.getBoundingClientRect();
+    const paintRect = targetPaint.getBoundingClientRect();
+    return {
+      stage: [
+        round(stageRect.width),
+        round(stageRect.height)
+      ],
+      source: geometry(source),
+      target: geometry(target),
+      targetPaint: [
+        round(paintRect.left - stageRect.left),
+        round(paintRect.top - stageRect.top),
+        round(paintRect.width),
+        round(paintRect.height)
+      ],
+      materialOwners: [
+        ...root.querySelectorAll<HTMLElement>(
+          "[data-kp-equation-material-owner-id]"
+        )
+      ].map(geometry)
+    };
+  });
+}
+
+async function settleStageForRasterCapture(stage: Locator): Promise<void> {
+  await stage.evaluate(async (element) => {
+    const stageElement = element as HTMLElement;
+    stageElement.style.position = "relative";
+    stageElement.style.top = "0px";
+    element.scrollIntoView({ block: "center", inline: "center" });
+    await new Promise<void>((resolve) =>
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => resolve())
+      )
+    );
+    const top = element.getBoundingClientRect().top;
+    stageElement.style.top = `${Math.round(top) - top}px`;
+    await new Promise<void>((resolve) =>
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => resolve())
+      )
+    );
+  });
+}
+
 function expectInkRectsEquivalent(
   actual: InkBounds | undefined,
   expected: InkBounds | undefined,
@@ -1399,7 +1553,8 @@ async function installNaturalPlaybackTrace(player: Locator): Promise<void> {
     host.__kpOperationEvaluationTrace = [];
     host.addEventListener("kp-editor-animation-frame", () => {
       const stage = host.querySelector<HTMLElement>(
-        "[data-kp-operation-evaluation-reference-stage]"
+        "[data-kp-operation-evaluation-primary-panel] " +
+        "[data-kp-operation-evaluation-stage]"
       );
       if (stage === null) return;
       const paint = observeVisiblePaint(stage);
@@ -1434,8 +1589,7 @@ async function installNaturalPlaybackTrace(player: Locator): Promise<void> {
         ...root.querySelectorAll<HTMLElement>(
           "[data-kp-operation-evaluation-source]," +
           "[data-kp-operation-evaluation-target]," +
-          "[data-kp-equation-material-owner-id]," +
-          "[data-kp-semantic-selector-id]"
+          "[data-kp-equation-material-owner-id]"
         )
       ];
       const visible = candidates.flatMap((candidate) => {
@@ -1497,8 +1651,8 @@ function maximumSignificantPaintStep(
       (previous.right - previous.left) * (previous.bottom - previous.top);
     const currentArea =
       (current.right - current.left) * (current.bottom - current.top);
-    // Near a certified zero-area junction, position is visually irrelevant;
-    // the opaque material is intentionally shrinking into or emerging from it.
+    // A nearly retired geometric carrier has no stable visual centroid, so it
+    // cannot turn sub-pixel terminal scale into a false position jump.
     if (Math.min(previousArea, currentArea) < 4) continue;
     const previousX = (previous.left + previous.right) / 2;
     const currentX = (current.left + current.right) / 2;
