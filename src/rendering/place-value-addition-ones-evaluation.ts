@@ -106,6 +106,7 @@ export interface KpPlaceValueColumnEvaluationDom {
   readonly root: HTMLElement;
   readonly sourceRoot: HTMLElement;
   readonly targetRoot: HTMLElement;
+  readonly prepare: () => void;
   readonly apply: (
     progress: number,
     direction: "forward" | "rewind"
@@ -486,6 +487,7 @@ function createColumnEvaluationDom(input: {
     root: scene.root,
     sourceRoot: scene.sourceRoot,
     targetRoot: scene.targetRoot,
+    prepare: scene.prepare,
     apply(progress: number, direction: "forward" | "rewind") {
       const execution =
         direction === "forward"

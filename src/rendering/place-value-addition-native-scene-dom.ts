@@ -17,6 +17,7 @@ export interface KpPlaceValueNativeSceneDom {
   readonly root: HTMLElement;
   readonly sourceRoot: HTMLElement;
   readonly targetRoot: HTMLElement;
+  readonly prepare: () => void;
   readonly apply: (progress: number) => KpNativeKatexSceneOwnershipFrame;
   readonly dispose: () => void;
 }
@@ -92,6 +93,9 @@ export function createKpPlaceValueNativeSceneDom(input: {
     root,
     sourceRoot: input.sourceRoot,
     targetRoot: input.targetRoot,
+    prepare() {
+      requireRenderer();
+    },
     apply(progress: number) {
       return requireRenderer().apply(progress);
     },

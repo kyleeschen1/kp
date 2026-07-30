@@ -66,6 +66,7 @@ test("scheduler coalesces input and enforces read plan write ordering", () => {
   ]);
   assert.deepEqual(scheduler.inspect(), {
     disposed: false,
+    suspended: false,
     pending: false,
     layoutRevision: 0,
     pendingInvalidationReasons: [],
@@ -74,6 +75,36 @@ test("scheduler coalesces input and enforces read plan write ordering", () => {
     framePlanCount: 1,
     writeCount: 1
   });
+});
+
+test("suspension retains only the newest input without doing hidden work", () => {
+  const frameClock = createTestClock();
+  const writes: number[] = [];
+  const scheduler = defineKpReaderFrameScheduler<number>()({
+    frameClock: frameClock.clock,
+    readLayout: ({ revision }) => revision,
+    planLayout: (layout) => layout,
+    planFrame: ({ input }) => input,
+    writeFrame: (frame) => writes.push(frame)
+  });
+
+  scheduler.render(0.1);
+  assert.equal(frameClock.pending(), 1);
+  scheduler.setSuspended(true);
+  assert.equal(frameClock.pending(), 0);
+  scheduler.render(0.2);
+  scheduler.renderNow(0.3);
+  scheduler.invalidate("fonts");
+  assert.equal(frameClock.pending(), 0);
+  assert.deepEqual(writes, []);
+  assert.equal(scheduler.inspect().suspended, true);
+
+  scheduler.setSuspended(false);
+  assert.equal(frameClock.pending(), 1);
+  frameClock.flush();
+  assert.deepEqual(writes, [0.3]);
+  assert.equal(scheduler.inspect().readCount, 1);
+  assert.equal(scheduler.inspect().suspended, false);
 });
 
 test("ordinary frames are write-only until invalidation batches a new read", () => {

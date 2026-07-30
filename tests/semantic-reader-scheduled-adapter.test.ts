@@ -63,6 +63,7 @@ test("scheduled adapters carry production context through owned read-plan-write 
   ]);
   assert.deepEqual(mounted.inspect(), {
     disposed: false,
+    suspended: false,
     pending: false,
     layoutRevision: 0,
     pendingInvalidationReasons: [],

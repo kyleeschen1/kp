@@ -760,8 +760,89 @@
       "scope": "s21 durable integration closure",
       "checkedAt": "2026-07-30T20:55:11.631Z",
       "notes": "Validated 837 nodes and 14772 events; the exact owned diff has no whitespace errors and preserved user-owned files remain unstaged."
+    },
+    {
+      "command": "npm run visual:place-value-addition",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-30T21:50:35.879Z",
+      "notes": "21/21 stable visual-command checks passed across Chromium, Firefox, and WebKit."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-30T21:50:36.425Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-30T21:50:36.799Z",
+      "notes": "Production build passed; existing large-chunk warning remains."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-30T21:50:37.191Z",
+      "notes": "69/69 Chromium, Firefox, and WebKit checks passed across wide, phone, DPR, direct seek, rewind, accessibility, Review, and performance coverage."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-30T21:50:37.550Z",
+      "notes": "88/88 place-value tests passed, including scheduler authority and resource-policy checks."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-30T21:50:50.759Z",
+      "notes": "88/88 place-value tests passed, including scheduler authority and resource-policy checks."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-30T21:50:51.810Z",
+      "notes": "69/69 Chromium, Firefox, and WebKit checks passed across wide, phone, DPR, direct seek, rewind, accessibility, Review, and performance coverage."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "repository",
+      "checkedAt": "2026-07-30T21:50:52.703Z",
+      "notes": "3074/3077 passed. Three pre-existing baseline ratchets remain outside s22: escapeHtml inventory 22 versus 21, canonical scene core 141543 bytes versus 136000, and linear-provider exact-rational domain import."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-reader-frame-scheduler.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-30T21:50:53.531Z",
+      "notes": "5/5 shared scheduler checks passed, including retained-latest suspension and disposal."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-30T21:50:54.391Z",
+      "notes": "No whitespace errors in the complete slice diff."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-07-30T21:51:41.656Z",
+      "notes": "Validated 837 nodes and 14789 events after slice completion."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice s22 hardens the canonical place-value runtime: one reader scheduler now coalesces rapid input and suppresses hidden work; direct-seek native geometry is prepared once at lazy mount; exact progress/view/viewport caching, accessibility DOM reuse, base-ten attribute diffing, performance/resource telemetry, Safari parity, and deterministic disposal pass. The exemplar remains unpromoted until the mandatory s23 Animation Library human checkpoint."
+  },
   "expectedLearning": [
     "Approved revision 16 places this active phase in now."
   ],

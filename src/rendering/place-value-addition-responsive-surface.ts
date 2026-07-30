@@ -40,6 +40,7 @@ export interface KpPlaceValueAdditionResponsiveSurface {
   readonly anchorButtons:
     ReadonlyMap<KpPlaceValueAdditionOutlineAnchor["id"], HTMLButtonElement>;
   readonly apply: (frame: KpPlaceValueAdditionRuntimeFrame) => void;
+  readonly dispose: () => void;
 }
 
 export function createKpPlaceValueAdditionResponsiveSurface(input: {
@@ -95,8 +96,13 @@ export function createKpPlaceValueAdditionResponsiveSurface(input: {
     KpPlaceValueAdditionOutlineAnchor["id"],
     HTMLButtonElement
   >();
+  const clickBindings: Array<{
+    readonly target: HTMLButtonElement;
+    readonly listener: EventListener;
+  }> = [];
   let applyCurrentFrame:
     ((frame: KpPlaceValueAdditionRuntimeFrame) => void) | undefined;
+  let disposed = false;
   for (const anchor of input.navigation.outlineAnchors) {
     const button = input.document.createElement("button");
     button.type = "button";
@@ -107,13 +113,15 @@ export function createKpPlaceValueAdditionResponsiveSurface(input: {
     button.style.cssText =
       "box-sizing:border-box;min-block-size:44px;text-align:start;" +
       "white-space:normal";
-    button.addEventListener("click", () => {
+    const listener = (): void => {
       if (input.onOutlineRequest !== undefined) {
         input.onOutlineRequest(anchor.id);
         return;
       }
       applyCurrentFrame?.(input.navigation.seekOutline(anchor.id));
-    });
+    };
+    button.addEventListener("click", listener);
+    clickBindings.push({ target: button, listener });
     outline.append(button);
     anchorButtons.set(anchor.id, button);
   }
@@ -132,13 +140,15 @@ export function createKpPlaceValueAdditionResponsiveSurface(input: {
     button.textContent =
       view === "written" ? "Written algorithm" : "Base-ten blocks";
     button.style.cssText = "min-block-size:44px";
-    button.addEventListener("click", () => {
+    const listener = (): void => {
       if (input.onViewRequest !== undefined) {
         input.onViewRequest(view);
         return;
       }
       applyCurrentFrame?.(input.navigation.setView(view));
-    });
+    };
+    button.addEventListener("click", listener);
+    clickBindings.push({ target: button, listener });
     viewButtons.set(view, button);
     viewControls.append(button);
   }
@@ -170,9 +180,18 @@ export function createKpPlaceValueAdditionResponsiveSurface(input: {
     input.document,
     input.navigation.runtime.accessibility
   );
+  const accessibleStepRoots = new Map(
+    input.navigation.runtime.accessibility.steps.map((step) => [
+      step.beatId,
+      renderAccessibleStepState(input.document, step)
+    ] as const)
+  );
   root.append(outline, viewControls, accessibleState, stage, transcript);
 
   const apply = (frame: KpPlaceValueAdditionRuntimeFrame): void => {
+    if (disposed) {
+      throw new Error("Responsive place-value surface is disposed.");
+    }
     if (
       !isKpPlaceValueAdditionRuntimeFrame(frame) ||
       frame.sessionId !== input.navigation.runtime.id
@@ -214,10 +233,10 @@ export function createKpPlaceValueAdditionResponsiveSurface(input: {
       );
     }
     syncAccessibleState({
-      document: input.document,
       root: accessibleState,
       transcript,
       projection: input.navigation.runtime.accessibility,
+      stepRoots: accessibleStepRoots,
       frame
     });
     syncReviewTelemetry(root, frame);
@@ -231,6 +250,17 @@ export function createKpPlaceValueAdditionResponsiveSurface(input: {
   };
   applyCurrentFrame = apply;
   apply(input.navigation.frame);
+  const dispose = (): void => {
+    if (disposed) return;
+    disposed = true;
+    applyCurrentFrame = undefined;
+    for (const { target, listener } of clickBindings) {
+      target.removeEventListener("click", listener);
+    }
+    clickBindings.length = 0;
+    shared.dispose();
+    root.remove();
+  };
 
   return Object.freeze({
     root,
@@ -241,7 +271,8 @@ export function createKpPlaceValueAdditionResponsiveSurface(input: {
     transcriptRoot: transcript,
     shared,
     anchorButtons,
-    apply
+    apply,
+    dispose
   });
 }
 
@@ -295,10 +326,13 @@ function renderAccessibleTranscript(
 }
 
 function syncAccessibleState(input: {
-  readonly document: Document;
   readonly root: HTMLElement;
   readonly transcript: HTMLDetailsElement;
   readonly projection: KpPlaceValueAdditionAccessibleProjection;
+  readonly stepRoots: ReadonlyMap<
+    KpPlaceValueAdditionAccessibleProjection["steps"][number]["beatId"],
+    HTMLElement
+  >;
   readonly frame: KpPlaceValueAdditionRuntimeFrame;
 }): void {
   const step = input.projection.steps.find(
@@ -317,34 +351,17 @@ function syncAccessibleState(input: {
     step.focusEntityIds.join(",");
   input.root.dataset["kpPlaceValueAnnotationIds"] =
     step.annotationIds.join(",");
-  input.root.replaceChildren();
-  const heading = input.document.createElement("h4");
-  heading.textContent = "Current place-value checkpoint";
-  const math = input.document.createElement("div");
-  math.dataset["kpPlaceValueAccessibleMath"] = "";
-  // This is compiler-owned KaTeX output, not authored or generated free text.
-  math.innerHTML = step.nativeHtmlAndMathml;
-  const description = input.document.createElement("p");
-  description.textContent = `${step.label}. ${step.description}`;
-  const focus = input.document.createElement("p");
-  focus.append(input.document.createTextNode("Focused quantities: "));
-  step.focusEntityIds.forEach((entityId, index) => {
-    if (index > 0) focus.append(input.document.createTextNode(", "));
-    const link = input.document.createElement("a");
-    link.href = `#transcript.entity.${entityId}`;
-    link.textContent = entityId;
-    focus.append(link);
-  });
-  const annotations = input.document.createElement("p");
-  annotations.textContent =
-    `Proof annotations: ${step.annotationIds.join(", ")}.`;
-  input.root.append(
-    heading,
-    math,
-    description,
-    focus,
-    annotations
-  );
+  const stepRoot = input.stepRoots.get(step.beatId);
+  if (stepRoot === undefined) {
+    throw new Error(
+      `Place-value accessibility lacks cached DOM for ${step.beatId}.`
+    );
+  }
+  // KaTeX HTML+MathML is compiled once at lazy mount. Moving one cached step
+  // root keeps screen-reader truth live without reparsing math on scroll.
+  if (input.root.firstElementChild !== stepRoot) {
+    input.root.replaceChildren(stepRoot);
+  }
   input.transcript
     .querySelectorAll<HTMLElement>("[data-kp-place-value-transcript-step]")
     .forEach((item) => {
@@ -354,6 +371,42 @@ function syncAccessibleState(input: {
         item.removeAttribute("aria-current");
       }
     });
+}
+
+function renderAccessibleStepState(
+  document: Document,
+  step: KpPlaceValueAdditionAccessibleProjection["steps"][number]
+): HTMLElement {
+  const root = document.createElement("div");
+  root.dataset["kpPlaceValueAccessibleStep"] = step.beatId;
+  const heading = document.createElement("h4");
+  heading.textContent = "Current place-value checkpoint";
+  const math = document.createElement("div");
+  math.dataset["kpPlaceValueAccessibleMath"] = "";
+  // This is compiler-owned KaTeX output, not authored or generated free text.
+  math.innerHTML = step.nativeHtmlAndMathml;
+  const description = document.createElement("p");
+  description.textContent = `${step.label}. ${step.description}`;
+  const focus = document.createElement("p");
+  focus.append(document.createTextNode("Focused quantities: "));
+  step.focusEntityIds.forEach((entityId, index) => {
+    if (index > 0) focus.append(document.createTextNode(", "));
+    const link = document.createElement("a");
+    link.href = `#transcript.entity.${entityId}`;
+    link.textContent = entityId;
+    focus.append(link);
+  });
+  const annotations = document.createElement("p");
+  annotations.textContent =
+    `Proof annotations: ${step.annotationIds.join(", ")}.`;
+  root.append(
+    heading,
+    math,
+    description,
+    focus,
+    annotations
+  );
+  return root;
 }
 
 function syncReviewTelemetry(

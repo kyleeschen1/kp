@@ -3,7 +3,6 @@ import type {
 } from "../semantic/place-value-addition-trace.ts";
 import {
   isKpPlaceValueBaseTenProjection,
-  sampleKpPlaceValueBaseTenFrame,
   type KpPlaceValueBaseTenExchange,
   type KpPlaceValueBaseTenPlacement,
   type KpPlaceValueBaseTenProjection
@@ -72,11 +71,26 @@ export function createKpPlaceValueBaseTenDomProjection(input: {
   `;
   root.append(style);
 
+  const homePlacements = new Map(
+    input.projection.homePlacements.map((placement) =>
+      [placement.blockId, placement] as const
+    )
+  );
+  const statePlacements = new Map(
+    input.projection.frames.map((frame) => [
+      frame.stateId,
+      new Map(
+        frame.placements.map((placement) =>
+          [placement.blockId, placement] as const
+        )
+      )
+    ] as const)
+  );
   const blockElements = new Map<string, SVGRectElement>();
+  const appliedPlacements = new Map<string, KpPlaceValueBaseTenPlacement>();
+  const appliedVisibility = new Map<string, boolean>();
   for (const block of input.projection.blocks) {
-    const placement = input.projection.homePlacements.find(
-      ({ blockId }) => blockId === block.id
-    );
+    const placement = homePlacements.get(block.id);
     if (placement === undefined) {
       throw new Error(`Base-ten DOM block ${block.id} lacks geometry.`);
     }
@@ -85,28 +99,68 @@ export function createKpPlaceValueBaseTenDomProjection(input: {
     element.dataset["kpBaseTenDenomination"] = block.denomination;
     element.dataset["kpBaseTenProvenance"] = block.provenance;
     applyPlacement(element, placement);
+    appliedPlacements.set(block.id, placement);
     root.append(element);
     blockElements.set(block.id, element);
   }
 
-  let currentStateId =
+  const initialStateId =
     input.initialStateId ?? input.projection.frames[0]!.stateId;
+  let currentStateId:
+    KpPlaceValueAdditionState["id"] | undefined;
+  const setPlacement = (
+    blockId: string,
+    placement: KpPlaceValueBaseTenPlacement
+  ): void => {
+    const previous = appliedPlacements.get(blockId);
+    if (previous === undefined) {
+      applyPlacement(blockElements.get(blockId)!, placement);
+      appliedPlacements.set(blockId, placement);
+      return;
+    }
+    const element = blockElements.get(blockId)!;
+    if (previous.x !== placement.x) {
+      element.setAttribute("x", String(placement.x));
+    }
+    if (previous.y !== placement.y) {
+      element.setAttribute("y", String(placement.y));
+    }
+    if (previous.width !== placement.width) {
+      element.setAttribute("width", String(placement.width));
+    }
+    if (previous.height !== placement.height) {
+      element.setAttribute("height", String(placement.height));
+    }
+    if (
+      previous.x === placement.x &&
+      previous.y === placement.y &&
+      previous.width === placement.width &&
+      previous.height === placement.height
+    ) return;
+    appliedPlacements.set(blockId, placement);
+  };
+  const setVisibility = (blockId: string, visible: boolean): void => {
+    if (appliedVisibility.get(blockId) === visible) return;
+    blockElements.get(blockId)!.dataset["kpBaseTenVisible"] =
+      String(visible);
+    appliedVisibility.set(blockId, visible);
+  };
   const setState = (
     stateId: KpPlaceValueAdditionState["id"]
   ): void => {
-    const frame = sampleKpPlaceValueBaseTenFrame(input.projection, stateId);
-    const placements = new Map(
-      frame.placements.map((placement) => [placement.blockId, placement])
-    );
+    if (
+      currentStateId === stateId &&
+      root.dataset["kpBaseTenExchangeId"] === undefined
+    ) return;
+    const placements = statePlacements.get(stateId);
+    if (placements === undefined) {
+      throw new Error(`Unknown base-ten state ${stateId}.`);
+    }
     for (const block of input.projection.blocks) {
-      const element = blockElements.get(block.id)!;
       const placement = placements.get(block.id);
-      const home = input.projection.homePlacements.find(
-        ({ blockId }) => blockId === block.id
-      )!;
-      applyPlacement(element, placement ?? home);
-      element.dataset["kpBaseTenVisible"] =
-        placement === undefined ? "false" : "true";
+      const home = homePlacements.get(block.id)!;
+      setPlacement(block.id, placement ?? home);
+      setVisibility(block.id, placement !== undefined);
     }
     currentStateId = stateId;
     root.dataset["kpPlaceValueStateId"] = stateId;
@@ -133,20 +187,13 @@ export function createKpPlaceValueBaseTenDomProjection(input: {
       throw new Error(`Unknown base-ten exchange ${transition.exchangeId}.`);
     }
     const stateIds = exchangeStateIds(exchange.id);
-    const source = sampleKpPlaceValueBaseTenFrame(
-      input.projection,
-      stateIds.source
-    );
-    const target = sampleKpPlaceValueBaseTenFrame(
-      input.projection,
-      stateIds.target
-    );
-    const sourcePlacements = new Map(source.placements.map((placement) =>
-      [placement.blockId, placement]
-    ));
-    const targetPlacements = new Map(target.placements.map((placement) =>
-      [placement.blockId, placement]
-    ));
+    const sourcePlacements = statePlacements.get(stateIds.source);
+    const targetPlacements = statePlacements.get(stateIds.target);
+    if (sourcePlacements === undefined || targetPlacements === undefined) {
+      throw new Error(
+        `Base-ten exchange ${exchange.id} lacks compiled state geometry.`
+      );
+    }
     const produced = targetPlacements.get(exchange.producedBlockId);
     if (produced === undefined) {
       throw new Error(
@@ -160,7 +207,6 @@ export function createKpPlaceValueBaseTenDomProjection(input: {
       (transition.progress - 0.12) / 0.48
     ));
     for (const block of input.projection.blocks) {
-      const element = blockElements.get(block.id)!;
       const sourcePlacement = sourcePlacements.get(block.id);
       const targetPlacement = targetPlacements.get(block.id);
       let placement: KpPlaceValueBaseTenPlacement | undefined;
@@ -209,11 +255,9 @@ export function createKpPlaceValueBaseTenDomProjection(input: {
               : transition.transferOccurred
           );
       }
-      const home = input.projection.homePlacements.find(
-        ({ blockId }) => blockId === block.id
-      )!;
-      applyPlacement(element, placement ?? home);
-      element.dataset["kpBaseTenVisible"] = String(visible);
+      const home = homePlacements.get(block.id)!;
+      setPlacement(block.id, placement ?? home);
+      setVisibility(block.id, visible);
       if (visible) visibleBlockIds.push(block.id);
     }
     currentStateId =
@@ -233,12 +277,12 @@ export function createKpPlaceValueBaseTenDomProjection(input: {
       visibleBlockIds: Object.freeze(visibleBlockIds)
     });
   };
-  setState(currentStateId);
+  setState(initialStateId);
 
   return Object.freeze({
     root,
     blockElements,
-    stateId: () => currentStateId,
+    stateId: () => currentStateId!,
     setState,
     applyExchange
   });

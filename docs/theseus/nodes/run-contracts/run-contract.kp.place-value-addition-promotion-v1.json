@@ -202,7 +202,9 @@
     {
       "id": "s22",
       "title": "harden-browser-performance-and-resources",
-      "status": "planned"
+      "summary": "Added the typed place-value runtime controller over the existing reader frame scheduler: lazy one-session mount, connected native-scene preflight for direct seeks, latest-frame coalescing, suspension without hidden sample/paint, exact-progress reuse, cached accessible KaTeX DOM, diffed SVG placement writes, resize/view handling, deterministic disposal, zero-WebGL/resource telemetry, stable focused/browser/visual commands, and cross-engine performance/history checks. 88 focused, 69 full browser, 21 visual, typecheck, architecture/inference, and build pass; npm test retains three documented pre-existing repository ratchet failures outside the slice.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s23",

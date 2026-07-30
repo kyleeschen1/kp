@@ -11,6 +11,7 @@ export interface KpReaderFrameClock {
 
 export interface KpReaderFrameSchedulerState {
   readonly disposed: boolean;
+  readonly suspended: boolean;
   readonly pending: boolean;
   readonly layoutRevision: number;
   readonly pendingInvalidationReasons: readonly KpReaderLayoutInvalidationReason[];
@@ -24,6 +25,7 @@ export interface KpReaderFrameScheduler<TInput> {
   render(input: TInput): void;
   renderNow(input: TInput): void;
   invalidate(reason: KpReaderLayoutInvalidationReason): void;
+  setSuspended(suspended: boolean): void;
   inspect(): KpReaderFrameSchedulerState;
   dispose(): void;
 }
@@ -71,6 +73,7 @@ export function createKpReaderFrameScheduler<
     "mount"
   ]);
   let disposed = false;
+  let suspended = false;
   let scheduledRequestId: number | undefined;
   let latestInput: TInput | undefined;
   let inputRevision = 0;
@@ -83,7 +86,12 @@ export function createKpReaderFrameScheduler<
   let writeCount = 0;
 
   const schedule = (): void => {
-    if (disposed || latestInput === undefined || scheduledRequestId !== undefined) {
+    if (
+      disposed ||
+      suspended ||
+      latestInput === undefined ||
+      scheduledRequestId !== undefined
+    ) {
       return;
     }
     scheduledRequestId = frameClock.request(flush);
@@ -138,6 +146,7 @@ export function createKpReaderFrameScheduler<
       if (disposed) throw new Error("Reader frame scheduler is disposed.");
       latestInput = renderInput;
       inputRevision += 1;
+      if (suspended) return;
       if (scheduledRequestId !== undefined) {
         frameClock.cancel(scheduledRequestId);
         scheduledRequestId = undefined;
@@ -149,9 +158,21 @@ export function createKpReaderFrameScheduler<
       invalidationReasons.add(reason);
       schedule();
     },
+    setSuspended(nextSuspended) {
+      if (disposed || suspended === nextSuspended) return;
+      suspended = nextSuspended;
+      if (suspended && scheduledRequestId !== undefined) {
+        frameClock.cancel(scheduledRequestId);
+        scheduledRequestId = undefined;
+      }
+      // Keep the newest semantic input while hidden, then render it exactly
+      // once when the host becomes visible again.
+      if (!suspended) schedule();
+    },
     inspect() {
       return {
         disposed,
+        suspended,
         pending: scheduledRequestId !== undefined,
         layoutRevision,
         pendingInvalidationReasons: [...invalidationReasons],

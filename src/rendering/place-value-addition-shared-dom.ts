@@ -27,7 +27,9 @@ export interface KpPlaceValueAdditionSharedDom {
   readonly root: HTMLElement;
   readonly writtenRoot: HTMLElement;
   readonly baseTenRoot: SVGSVGElement;
+  readonly prepareNativeScenes: () => void;
   readonly apply: (frame: KpPlaceValueAdditionRuntimeFrame) => void;
+  readonly dispose: () => void;
 }
 
 export function createKpPlaceValueAdditionSharedDom(input: {
@@ -110,8 +112,62 @@ export function createKpPlaceValueAdditionSharedDom(input: {
   );
   baseTen.root.dataset["kpPlaceValueView"] = "base-ten";
   root.append(writtenHost, baseTen.root);
+  let disposed = false;
+  let nativeScenesPrepared = false;
+
+  const prepareNativeScenes = (): void => {
+    if (disposed) {
+      throw new Error("Shared place-value DOM is disposed.");
+    }
+    if (nativeScenesPrepared) return;
+    if (!root.isConnected) {
+      throw new Error(
+        "Shared place-value native scenes require a connected surface."
+      );
+    }
+    for (const scene of [
+      onesEvaluation,
+      onesExchange,
+      tensEvaluation,
+      tensExchange,
+      hundredsEvaluation
+    ]) {
+      const previous = {
+        display: scene.root.style.display,
+        visibility: scene.root.style.visibility,
+        position: scene.root.style.position,
+        inset: scene.root.style.inset,
+        pointerEvents: scene.root.style.pointerEvents
+      };
+      try {
+        // Direct seeks may activate a beat that has never painted. Measure its
+        // connected native geometry at lazy mount so first-frame scheduling
+        // never observes a just-unhidden, browser-dependent layout.
+        scene.root.style.display = "grid";
+        // This synchronous preflight finishes before the browser can paint;
+        // `visibility:hidden` cannot be used because paint geometry correctly
+        // excludes hidden native atoms.
+        scene.root.style.visibility = "visible";
+        scene.root.style.position = "absolute";
+        scene.root.style.inset = "0";
+        scene.root.style.pointerEvents = "none";
+        void scene.root.offsetWidth;
+        scene.prepare();
+      } finally {
+        scene.root.style.display = previous.display;
+        scene.root.style.visibility = previous.visibility;
+        scene.root.style.position = previous.position;
+        scene.root.style.inset = previous.inset;
+        scene.root.style.pointerEvents = previous.pointerEvents;
+      }
+    }
+    nativeScenesPrepared = true;
+  };
 
   const apply = (frame: KpPlaceValueAdditionRuntimeFrame): void => {
+    if (disposed) {
+      throw new Error("Shared place-value DOM is disposed.");
+    }
     if (
       !isKpPlaceValueAdditionRuntimeFrame(frame) ||
       frame.sessionId !== input.session.id ||
@@ -224,10 +280,25 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     root.dataset["kpPlaceValueBeatId"] = frame.beat.id;
   };
   apply(input.initialFrame);
+  const dispose = (): void => {
+    if (disposed) return;
+    disposed = true;
+    // These native-scene projections may own paint observers even though the
+    // written and base-ten endpoint DOM is otherwise stateless.
+    onesEvaluation.dispose();
+    onesExchange.dispose();
+    tensEvaluation.dispose();
+    tensExchange.dispose();
+    hundredsEvaluation.dispose();
+    nativeSettlement.dispose();
+    root.remove();
+  };
   return Object.freeze({
     root,
     writtenRoot: written.root,
     baseTenRoot: baseTen.root,
-    apply
+    prepareNativeScenes,
+    apply,
+    dispose
   });
 }
