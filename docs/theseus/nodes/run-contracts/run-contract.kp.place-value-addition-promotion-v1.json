@@ -90,7 +90,9 @@
     {
       "id": "s06",
       "title": "certify-adjacent-place-exchange",
-      "status": "planned"
+      "summary": "Certified the only two adjacent base-ten exchanges needed by the exemplar. Each sealed proof consumes exactly ten lower-place units, produces exactly one higher-place unit, conserves exact value, and rejects copied adjacency, copied certificates, and widened invalid counts.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s07",

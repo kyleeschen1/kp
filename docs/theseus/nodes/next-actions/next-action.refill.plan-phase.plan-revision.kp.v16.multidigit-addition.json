@@ -186,6 +186,27 @@
       "scope": "broad",
       "checkedAt": "2026-07-30T16:23:21.945Z",
       "notes": "Architecture boundaries and inference budgets passed after the generic domain decomposition and semantic exemplar fixture."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-30T16:27:08.272Z",
+      "notes": "21/21 place-value tests pass, including both adjacent exchange laws, copied-proof rejection, and static plus runtime count rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-30T16:27:09.289Z",
+      "notes": "All TypeScript projects pass with literal ten-to-one exchange cardinalities."
+    },
+    {
+      "command": "npm run check:architecture and npm run check:inference",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-30T16:27:10.258Z",
+      "notes": "Architecture and inference budgets pass with the generic exchange certificate isolated in the quantities domain."
     }
   ],
   "expectedLearning": [
