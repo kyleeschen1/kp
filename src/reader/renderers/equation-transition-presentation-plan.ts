@@ -20,6 +20,12 @@ import type {
 import type {
   KpExplicitStaticCheckpointPlan
 } from "../../animation/operation-presentation-plan-types.ts";
+import type {
+  KpVerifiedExecutableSuccessorMotifProgram
+} from "../../animation/motifs/executable-successor-motif-program.ts";
+import {
+  isKpVerifiedExecutableSuccessorMotifProgram
+} from "../../animation/motifs/executable-successor-motif-program-validator.ts";
 
 declare const kpReaderEquationPresentationPlanAuthority: unique symbol;
 
@@ -76,7 +82,8 @@ export type KpReaderEquationTransitionPresentationPlan =
     })
   | (KpReaderEquationPresentationPlanBase & {
       readonly planKind: "successor-synthesis";
-      readonly visualMotif?: KpEquationVisualMotifIntent | undefined;
+      readonly executableProgram:
+        KpVerifiedExecutableSuccessorMotifProgram;
       readonly successorSyntheses:
         readonly [
           KpRegisteredSuccessorSynthesisBinding,
@@ -106,6 +113,8 @@ export interface KpReaderEquationTransitionPresentationEvidence {
     KpRegisteredEquationStructuralSuccessionIntent | undefined;
   readonly successorSyntheses?:
     readonly KpRegisteredSuccessorSynthesisBinding[] | undefined;
+  readonly executableProgram?:
+    KpVerifiedExecutableSuccessorMotifProgram | undefined;
   readonly operationChoreography?:
     KpRegisteredEquationOperationChoreography | undefined;
   readonly staticCheckpoint?: KpExplicitStaticCheckpointPlan | undefined;
@@ -129,6 +138,8 @@ export function createKpReaderEquationTransitionPresentationPlan(input: {
     KpRegisteredEquationStructuralSuccessionIntent | undefined;
   readonly successorSyntheses?:
     readonly KpRegisteredSuccessorSynthesisBinding[] | undefined;
+  readonly executableProgram?:
+    KpVerifiedExecutableSuccessorMotifProgram | undefined;
   readonly operationChoreography?:
     KpRegisteredEquationOperationChoreography | undefined;
   readonly staticCheckpoint?: KpExplicitStaticCheckpointPlan | undefined;
@@ -152,6 +163,36 @@ export function createKpReaderEquationTransitionPresentationPlan(input: {
   if (specializedCount > 1) {
     throw new Error(
       `Reader transition ${input.transitionId} has competing presentation authorities.`
+    );
+  }
+  if (
+    successorSyntheses.length > 0 &&
+    input.executableProgram === undefined
+  ) {
+    throw new Error(
+      `Reader transition ${input.transitionId} requires a minted executable ` +
+      "program for successor synthesis."
+    );
+  }
+  if (
+    input.executableProgram !== undefined &&
+    successorSyntheses.length === 0
+  ) {
+    throw new Error(
+      `Reader transition ${input.transitionId} cannot carry an executable ` +
+      "program without successor synthesis."
+    );
+  }
+  if (
+    input.executableProgram !== undefined &&
+    (
+      !isKpVerifiedExecutableSuccessorMotifProgram(input.executableProgram) ||
+      input.executableProgram.kind !== "operation-evaluation"
+    )
+  ) {
+    throw new Error(
+      `Reader transition ${input.transitionId} requires a verified ` +
+      "operation-evaluation executable program."
     );
   }
   const requiresTopLevelMotif =
@@ -215,13 +256,7 @@ export function createKpReaderEquationTransitionPresentationPlan(input: {
           ? {
               ...base,
               planKind: "successor-synthesis" as const,
-              // A composite transition can carry several independently
-              // verified successor operations, so inventing one top-level
-              // motif label would restore the duplicate authority this plan
-              // boundary removes.
-              ...(input.visualMotif === undefined
-                ? {}
-                : { visualMotif: input.visualMotif }),
+              executableProgram: input.executableProgram!,
               successorSyntheses: Object.freeze([...successorSyntheses]) as
                 readonly [
                   KpRegisteredSuccessorSynthesisBinding,
@@ -282,9 +317,7 @@ export function projectKpReaderEquationTransitionPresentation(
       });
     case "successor-synthesis":
       return Object.freeze({
-        ...(plan.visualMotif === undefined
-          ? {}
-          : { visualMotif: plan.visualMotif }),
+        executableProgram: plan.executableProgram,
         successorSyntheses: plan.successorSyntheses
       });
     case "operation-choreography":

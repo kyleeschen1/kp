@@ -222,6 +222,17 @@ export function projectKpReaderEquationRenderPlan(input: {
             })]
           : []
     );
+    const successorExecutablePrograms = successorSynthesisDecisions.flatMap(
+      ({ decision }) =>
+        decision.status === "compiled"
+          ? [decision.executableProgram]
+          : []
+    );
+    const successorExecutableProgram =
+      requireSharedSuccessorExecutableProgram(
+        transformation.id,
+        successorExecutablePrograms
+      );
     const successorStaticCheckpoint = successorSynthesisDecisions.find(
       ({ decision }) => decision.status === "explicit-static"
     )?.decision;
@@ -348,6 +359,7 @@ export function projectKpReaderEquationRenderPlan(input: {
         fractionMaterialPresentationPlan,
         structuralSuccession: registeredStructuralSuccession,
         successorSyntheses,
+        executableProgram: successorExecutableProgram,
         operationChoreography,
         ...(choreographyDecision.status === "explicit-static"
           ? { staticCheckpoint: choreographyDecision.checkpoint }
@@ -502,6 +514,19 @@ function mergeParallelTransitions(
       transition.presentationPlan
     ).successorSyntheses ?? []
   );
+  const successorExecutablePrograms = transitions.flatMap((transition) => {
+    const presentation = projectKpReaderEquationTransitionPresentation(
+      transition.presentationPlan
+    );
+    return presentation.executableProgram === undefined
+      ? []
+      : [presentation.executableProgram];
+  });
+  const successorExecutableProgram =
+    requireSharedSuccessorExecutableProgram(
+      cohortId,
+      successorExecutablePrograms
+    );
   const distributionOperationPlans = transitions.flatMap((transition) =>
     projectKpReaderEquationTransitionPresentation(
       transition.presentationPlan
@@ -520,6 +545,7 @@ function mergeParallelTransitions(
       transitionId: cohortId,
       visualMotif,
       successorSyntheses,
+      executableProgram: successorExecutableProgram,
       distributionOperationPlans
     }),
     semanticStatus: transitions.every(
@@ -531,6 +557,25 @@ function mergeParallelTransitions(
       ({ semanticDiagnostics }) => semanticDiagnostics
     )
   };
+}
+
+function requireSharedSuccessorExecutableProgram(
+  transitionId: string,
+  programs: readonly import(
+    "../../animation/motifs/executable-successor-motif-program.ts"
+  ).KpVerifiedExecutableSuccessorMotifProgram[]
+) {
+  const first = programs[0];
+  if (
+    first !== undefined &&
+    programs.some((program) => program !== first)
+  ) {
+    throw new Error(
+      `Reader transition ${transitionId} resolved competing executable ` +
+      "successor programs."
+    );
+  }
+  return first;
 }
 
 function sharedParallelVisualMotif(

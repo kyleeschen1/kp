@@ -3,6 +3,7 @@ import type {
 } from "./operation-evaluation-presentation-types.ts";
 import {
   resolveKpOperationEvaluationPresentationRoute,
+  kpOperationEvaluationExecutableProgramCompiler,
   kpSharedJunctionPaintContinuityCompiler,
   kpSuccessorSynthesisPresentationPlanCompiler
 } from "./operation-evaluation-presentation-registry.ts";
@@ -35,6 +36,12 @@ import {
 import type {
   KpExplicitStaticCheckpointPlan
 } from "./operation-presentation-plan-types.ts";
+import type {
+  KpVerifiedExecutableSuccessorMotifProgram
+} from "./motifs/executable-successor-motif-program.ts";
+import {
+  isKpVerifiedExecutableSuccessorMotifProgram
+} from "./motifs/executable-successor-motif-program-validator.ts";
 
 export type KpRegisteredSuccessorSynthesisBinding =
   KpSuccessorSynthesisBinding & {
@@ -49,6 +56,8 @@ export type KpSuccessorSynthesisPresentationCompilation =
       readonly operationPresentationPlan:
         KpVerifiedOperationPresentationPlan;
       readonly paintContinuityPlan: KpVerifiedPaintContinuityPlan;
+      readonly executableProgram:
+        KpVerifiedExecutableSuccessorMotifProgram;
     }
   | {
       readonly status: "explicit-static";
@@ -73,6 +82,9 @@ export function compileKpRegisteredSuccessorSynthesisPresentation(input: {
   }
   requireSuccessorCompiler(route.certificate);
   requirePaintContinuityCompiler(route.certificate);
+  const executableProgram = requireExecutableProgramCompiler(
+    route.certificate
+  );
   requireCompleteSuccessorLineage(input.binding);
 
   const sourceBundles = input.binding.sourceAnnotations.map((annotation) =>
@@ -191,7 +203,8 @@ export function compileKpRegisteredSuccessorSynthesisPresentation(input: {
   return Object.freeze({
     status: "compiled",
     operationPresentationPlan: validation.plan,
-    paintContinuityPlan: paintValidation.plan
+    paintContinuityPlan: paintValidation.plan,
+    executableProgram
   });
 }
 
@@ -267,4 +280,23 @@ function requirePaintContinuityCompiler(
       "approved shared-junction paint continuity compiler."
     );
   }
+}
+
+function requireExecutableProgramCompiler(
+  certificate: KpResolvedOperationEvaluationPresentation
+): KpVerifiedExecutableSuccessorMotifProgram {
+  const compiler = certificate.executableProgramCompiler;
+  if (
+    compiler.id !== kpOperationEvaluationExecutableProgramCompiler.id ||
+    compiler.version !==
+      kpOperationEvaluationExecutableProgramCompiler.version ||
+    compiler.program.kind !== "operation-evaluation" ||
+    !isKpVerifiedExecutableSuccessorMotifProgram(compiler.program)
+  ) {
+    throw new Error(
+      `Presentation ${certificate.presentationId} did not resolve the ` +
+      "approved executable operation-evaluation program."
+    );
+  }
+  return compiler.program;
 }

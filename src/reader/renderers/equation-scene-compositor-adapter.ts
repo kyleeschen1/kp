@@ -374,7 +374,9 @@ function dispatchReaderEquationPresentation(input: {
           motion: fullMotion(input.motionMode)
         };
       });
-      const routed = routingFields(plan.visualMotif?.kind);
+      // Successor choreography is now owned by the minted executable program;
+      // the next adapter slice dispatches that closed union exhaustively.
+      const routed = routingFields(undefined);
       return {
         planKind: plan.planKind,
         canonicalInput: {

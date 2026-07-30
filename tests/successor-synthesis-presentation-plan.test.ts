@@ -10,6 +10,9 @@ import {
 import {
   createKpEquationSuccessorSynthesisBindings
 } from "../src/rendering/equation-linear-rearrangement-bindings.ts";
+import {
+  isKpVerifiedExecutableSuccessorMotifProgram
+} from "../src/animation/motifs/executable-successor-motif-program-validator.ts";
 
 test("registered successor compiler classifies material without changing motion binding", () => {
   const animation = createKpFractionCompositionEquationAnimationAsset();
@@ -29,6 +32,11 @@ test("registered successor compiler classifies material without changing motion 
 
   assert.equal(result.status, "compiled");
   if (result.status !== "compiled") return;
+  assert.equal(result.executableProgram.kind, "operation-evaluation");
+  assert.equal(
+    isKpVerifiedExecutableSuccessorMotifProgram(result.executableProgram),
+    true
+  );
   const plan = result.operationPresentationPlan;
   assert.equal(plan.planKind, "successor-synthesis");
   assert.deepEqual(binding, before);

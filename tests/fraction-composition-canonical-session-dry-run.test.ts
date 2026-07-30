@@ -91,21 +91,23 @@ test("canonical planning retains structural motifs and opaque arithmetic synthes
   );
 
   assert.deepEqual(
-    presentations.map(({ visualMotif }) => visualMotif?.kind),
+    presentations.map(({ visualMotif, executableProgram }) =>
+      visualMotif?.kind ?? executableProgram?.kind
+    ),
     [
       "copy-fan-out",
       "fraction-factor-split",
-      "successor-synthesis",
-      "successor-synthesis",
+      "operation-evaluation",
+      "operation-evaluation",
       "append-after-shift",
       "cancelation",
-      "successor-synthesis",
+      "operation-evaluation",
       "append-after-shift",
       "cancelation",
-      "successor-synthesis",
+      "operation-evaluation",
       "append-after-shift",
       "cancelation",
-      "successor-synthesis"
+      "operation-evaluation"
     ]
   );
   assert.equal(

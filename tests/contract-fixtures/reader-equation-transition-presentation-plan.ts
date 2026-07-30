@@ -28,6 +28,16 @@ const missingPresentation: KpReaderEquationTransitionPlan =
   withoutPresentation;
 
 declare const presentation: KpReaderEquationTransitionPresentationPlan;
+type KpReaderSuccessorPresentationPlan = Extract<
+  KpReaderEquationTransitionPresentationPlan,
+  { readonly planKind: "successor-synthesis" }
+>;
+declare const missingExecutableProgram:
+  Omit<KpReaderSuccessorPresentationPlan, "executableProgram">;
+
+// @ts-expect-error Successor plans require minted executable authority.
+const incompleteSuccessor: KpReaderSuccessorPresentationPlan =
+  missingExecutableProgram;
 
 if (presentation.planKind === "factoring") {
   presentation.factoringMotifBinding;
@@ -39,6 +49,12 @@ if (presentation.planKind === "operation-choreography") {
   presentation.operationChoreography;
   // @ts-expect-error Operation choreography cannot also carry successor plans.
   presentation.successorSyntheses;
+}
+
+if (presentation.planKind === "successor-synthesis") {
+  presentation.executableProgram;
+  // @ts-expect-error Successor plans cannot retain an independent motif label.
+  presentation.visualMotif;
 }
 
 // @ts-expect-error Ported evidence must account for static presentation gaps.
@@ -57,5 +73,6 @@ void [
   fabricated,
   missingPresentation,
   presentation,
+  incompleteSuccessor,
   missingCoverage
 ];

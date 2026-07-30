@@ -439,6 +439,97 @@
       "scope": "s07 impact-recommended neighboring visual preservation",
       "checkedAt": "2026-07-29T23:51:43.114Z",
       "notes": "The stable command captured all 39 desktop and phone visual states after the registry version and pin evolution."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "failed",
+      "scope": "s08 stale label-only dry-run assertion",
+      "checkedAt": "2026-07-30T00:00:28.349Z",
+      "notes": "135 of 136 checks passed. The only failure expected successor-synthesis visual labels; the reader plan correctly removed them, so the assertion was migrated to executable operation-evaluation program evidence."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "failed",
+      "scope": "s08 concurrent impact verification",
+      "checkedAt": "2026-07-30T00:00:29.507Z",
+      "notes": "The command emitted only the pre-existing stale legacy query-view notice but propagated a nonzero status while run concurrently with browser capture; its isolated rerun exited successfully."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s08 reader-plan executable program boundary",
+      "checkedAt": "2026-07-30T00:00:30.422Z",
+      "notes": "136 of 136 checks passed after replacing label-only successor evidence with the minted operation-evaluation program kind."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s08 exact-fraction semantic preservation",
+      "checkedAt": "2026-07-30T00:00:31.327Z",
+      "notes": "95 of 95 exact quantity, view parity, fold, accessibility, responsive, runtime, and promotion-honesty checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08 reader-plan union and negative fixture closure",
+      "checkedAt": "2026-07-30T00:00:32.262Z",
+      "notes": "All TypeScript projects pass. The successor variant statically requires executableProgram and rejects access to the removed visualMotif field."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s08 reader-plan executable authority inference budget",
+      "checkedAt": "2026-07-30T00:00:33.174Z",
+      "notes": "Inference contracts passed at 46293 types, 57910 instantiations, and 3.28 seconds."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s08 reader import and presentation boundaries",
+      "checkedAt": "2026-07-30T00:00:34.070Z",
+      "notes": "The isolated architecture command exits successfully; its pre-existing informational stale legacy exception remains unrelated."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s08 impact-selected neighboring visual preservation",
+      "checkedAt": "2026-07-30T00:00:34.959Z",
+      "notes": "All 39 stable desktop and phone baseline states captured successfully."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "s08 shared reader browser laws",
+      "checkedAt": "2026-07-30T00:00:35.848Z",
+      "notes": "The Chromium conformance cohort passed across the shared semantic reader routes, including fraction composition."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s08 production build",
+      "checkedAt": "2026-07-30T00:00:36.772Z",
+      "notes": "Repository-wide typecheck and Vite production build passed."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s08 reader production closure",
+      "checkedAt": "2026-07-30T00:00:37.650Z",
+      "notes": "All 11 manifest routes form the expected build-only closure."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s08 reader payload budgets",
+      "checkedAt": "2026-07-30T00:00:38.551Z",
+      "notes": "All 11 reader routes remain within the five-percent compiled HTML and transitive runtime growth limits."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s08 development review production isolation",
+      "checkedAt": "2026-07-30T00:00:39.433Z",
+      "notes": "Production closure passed across 245 files and seven forbidden development-review markers."
     }
   ],
   "allowedWork": [
@@ -514,7 +605,8 @@
     {
       "id": "s08",
       "title": "require-program-in-reader-plans",
-      "status": "planned"
+      "summary": "Made the reader successor-synthesis plan variant require one verified minted operation-evaluation program and removed its independent optional visual-motif label. The sole reader mint rejects missing, label-only, forged, and non-evaluation program authority; parallel cohorts require one shared program object, compilation propagates the registry-minted program, and static unsupported routes remain unchanged.",
+      "status": "complete"
     },
     {
       "id": "s09",

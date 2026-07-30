@@ -15,6 +15,9 @@ import {
   projectKpReaderEquationRenderPlan,
   projectKpReaderEquationTransitionPresentation
 } from "../src/reader/renderers/public-api.ts";
+import {
+  isKpVerifiedExecutableSuccessorMotifProgram
+} from "../src/animation/motifs/executable-successor-motif-program-validator.ts";
 
 test("every canonical fraction transition owns one frozen presentation plan", () => {
   const animation = createKpFractionCompositionEquationAnimationAsset();
@@ -74,6 +77,14 @@ test("the presentation-plan mint preserves exactly one specialized authority", (
       projectKpReaderEquationTransitionPresentation(presentationPlan)
     )
     .find(({ successorSyntheses }) => successorSyntheses !== undefined)!;
+  assert.equal(
+    isKpVerifiedExecutableSuccessorMotifProgram(
+      synthesis.executableProgram
+    ),
+    true
+  );
+  assert.equal(synthesis.executableProgram?.kind, "operation-evaluation");
+  assert.equal(Object.hasOwn(synthesis, "visualMotif"), false);
   const choreography = plans
     .map(({ presentationPlan }) =>
       projectKpReaderEquationTransitionPresentation(presentationPlan)
@@ -99,6 +110,30 @@ test("the presentation-plan mint preserves exactly one specialized authority", (
       operationChoreography: choreography.operationChoreography
     }),
     /competing presentation authorities/
+  );
+  assert.throws(
+    () => createKpReaderEquationTransitionPresentationPlan({
+      transitionId: "transition.successor-without-program",
+      successorSyntheses: synthesis.successorSyntheses
+    }),
+    /requires a minted executable program/
+  );
+  assert.throws(
+    () => createKpReaderEquationTransitionPresentationPlan({
+      transitionId: "transition.program-without-successor",
+      executableProgram: synthesis.executableProgram
+    }),
+    /without successor synthesis/
+  );
+  assert.throws(
+    () => createKpReaderEquationTransitionPresentationPlan({
+      transitionId: "transition.forged-program",
+      successorSyntheses: synthesis.successorSyntheses,
+      executableProgram: JSON.parse(JSON.stringify(
+        synthesis.executableProgram
+      ))
+    }),
+    /requires a verified operation-evaluation executable program/
   );
   assert.throws(
     () => createKpReaderEquationTransitionPresentationPlan({
