@@ -174,7 +174,9 @@
     {
       "id": "s18",
       "title": "settle-hundreds-and-native-result",
-      "status": "planned"
+      "summary": "Completed carried 1+2+1 to native 4 through the same data-driven operation compiler, reused the projection-owned result root, and settled exact native 434 without a clone handoff. Cross-beat geometry, opaque material, font/baseline, dwell, replay, resize, rewind, and successor-owned boundaries pass across all three browsers and both widths.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s19",

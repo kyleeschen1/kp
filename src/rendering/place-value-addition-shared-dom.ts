@@ -11,6 +11,7 @@ import {
   type KpPlaceValueAdditionRuntimeSession
 } from "./place-value-addition-runtime.ts";
 import {
+  createKpPlaceValueHundredsEvaluationDom,
   createKpPlaceValueOnesEvaluationDom,
   createKpPlaceValueTensEvaluationDom
 } from "./place-value-addition-ones-evaluation.ts";
@@ -18,6 +19,9 @@ import {
   createKpPlaceValueOnesExchangeDom,
   createKpPlaceValueTensExchangeDom
 } from "./place-value-addition-ones-exchange.ts";
+import {
+  createKpPlaceValueNativeSettlementDom
+} from "./place-value-addition-native-settlement.ts";
 
 export interface KpPlaceValueAdditionSharedDom {
   readonly root: HTMLElement;
@@ -83,12 +87,26 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     exchange: input.session.tensExchange
   });
   tensExchange.root.style.display = "none";
+  const hundredsEvaluation = createKpPlaceValueHundredsEvaluationDom({
+    document: input.document,
+    projection: input.session.written,
+    evaluation: input.session.hundredsEvaluation
+  });
+  hundredsEvaluation.root.style.display = "none";
+  const nativeSettlement = createKpPlaceValueNativeSettlementDom({
+    document: input.document,
+    projection: input.session.written,
+    settlement: input.session.nativeSettlement
+  });
+  nativeSettlement.root.style.display = "none";
   writtenHost.append(
     written.root,
     onesEvaluation.root,
     onesExchange.root,
     tensEvaluation.root,
-    tensExchange.root
+    tensExchange.root,
+    hundredsEvaluation.root,
+    nativeSettlement.root
   );
   baseTen.root.dataset["kpPlaceValueView"] = "base-ten";
   root.append(writtenHost, baseTen.root);
@@ -115,16 +133,17 @@ export function createKpPlaceValueAdditionSharedDom(input: {
       frame.beat.id === "beat.place-value.evaluate-tens";
     const exchangingTens =
       frame.beat.id === "beat.place-value.exchange-tens";
-    // Until the hundreds choreography is installed in s18, retain the exact
-    // tens endpoint instead of flashing back to an incomplete written state.
-    const retainingTensEndpoint =
+    const evaluatingHundreds =
       frame.beat.id === "beat.place-value.evaluate-hundreds";
+    const settling =
+      frame.beat.id === "beat.place-value.settle";
     const motionActive =
       evaluatingOnes ||
       exchangingOnes ||
       evaluatingTens ||
       exchangingTens ||
-      retainingTensEndpoint;
+      evaluatingHundreds ||
+      settling;
     writtenHost.style.display = writtenVisible ? "grid" : "none";
     written.root.style.display =
       writtenVisible && !motionActive ? "grid" : "none";
@@ -135,9 +154,11 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     tensEvaluation.root.style.display =
       writtenVisible && evaluatingTens ? "grid" : "none";
     tensExchange.root.style.display =
-      writtenVisible && (exchangingTens || retainingTensEndpoint)
-        ? "grid"
-        : "none";
+      writtenVisible && exchangingTens ? "grid" : "none";
+    hundredsEvaluation.root.style.display =
+      writtenVisible && evaluatingHundreds ? "grid" : "none";
+    nativeSettlement.root.style.display =
+      writtenVisible && settling ? "grid" : "none";
     if (writtenVisible && evaluatingOnes) {
       onesEvaluation.apply(
         frame.beatProgress,
@@ -152,12 +173,21 @@ export function createKpPlaceValueAdditionSharedDom(input: {
       tensEvaluation.apply(frame.beatProgress, frame.clock.direction);
     }
     const tensExchangeFrame =
-      writtenVisible && (exchangingTens || retainingTensEndpoint)
-        ? tensExchange.apply(
-            exchangingTens ? frame.beatProgress : 1,
-            frame.clock.direction
-          )
+      writtenVisible && exchangingTens
+        ? tensExchange.apply(frame.beatProgress, frame.clock.direction)
         : undefined;
+    if (writtenVisible && evaluatingHundreds) {
+      hundredsEvaluation.apply(
+        frame.beatProgress,
+        frame.clock.direction
+      );
+    }
+    if (writtenVisible && settling) {
+      nativeSettlement.apply(
+        frame.beatProgress,
+        frame.clock.direction
+      );
+    }
     if (baseTenVisible) {
       if (exchangingOnes) {
         baseTen.applyExchange({

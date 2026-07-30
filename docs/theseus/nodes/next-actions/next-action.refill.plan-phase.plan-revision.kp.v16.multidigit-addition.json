@@ -515,6 +515,48 @@
       "scope": "s17 final written and base-ten choreography",
       "checkedAt": "2026-07-30T18:41:47.580Z",
       "notes": "36 of 36 pass across Chromium Firefox and WebKit at wide and phone widths."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "failed",
+      "scope": "s18 initial native checkpoint",
+      "checkedAt": "2026-07-30T18:59:46.772Z",
+      "notes": "The initial settlement incorrectly invoked clone handoff between identical native 434 roots, so the handoff microscope rejected a nonexistent material owner. Settlement now exposes the canonical native checkpoint directly; the successor-boundary test was also updated to follow paint into the hundreds source."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s18 final hundreds and settlement semantics",
+      "checkedAt": "2026-07-30T18:59:47.899Z",
+      "notes": "78 of 78 pass; the carried hundred is material input, hundreds reuses the shared operation route, and settlement authority is nominal and exact."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "passed",
+      "scope": "s18 endpoint microscope and replay",
+      "checkedAt": "2026-07-30T18:59:48.745Z",
+      "notes": "42 of 42 pass across Chromium Firefox and WebKit at wide and phone widths, including cross-beat geometry, binary ownership, dwell, replay, resize, font, baseline, and exact native 434 endpoint checks."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18 static routes",
+      "checkedAt": "2026-07-30T18:59:49.609Z",
+      "notes": "All application node test domain and protocol-dependent TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s18 architecture boundary",
+      "checkedAt": "2026-07-30T18:59:50.459Z",
+      "notes": "No new runtime renderer compositor scheduler compatibility exception or operation-presentation bypass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s18 type cost",
+      "checkedAt": "2026-07-30T18:59:51.320Z",
+      "notes": "Inference remains at 48471 types 61210 instantiations and 2.1 seconds."
     }
   ],
   "expectedLearning": [

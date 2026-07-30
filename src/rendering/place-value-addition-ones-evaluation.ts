@@ -30,6 +30,7 @@ import {
 
 declare const kpPlaceValueOnesEvaluationBrand: unique symbol;
 declare const kpPlaceValueTensEvaluationBrand: unique symbol;
+declare const kpPlaceValueHundredsEvaluationBrand: unique symbol;
 
 const sealedEvaluations = new WeakSet<object>();
 
@@ -81,9 +82,25 @@ KpPlaceValueColumnEvaluationBase {
   readonly [kpPlaceValueTensEvaluationBrand]: true;
 }
 
+export interface KpPlaceValueHundredsEvaluation extends
+KpPlaceValueColumnEvaluationBase {
+  readonly schemaVersion: "kp.place-value-addition-hundreds-evaluation.v1";
+  readonly beatId: "beat.place-value.evaluate-hundreds";
+  readonly place: "hundreds";
+  readonly expression: "1 + 2 + 1 = 4";
+  readonly materialSelectorIds: readonly [
+    "carry.hundreds",
+    "digit.first.hundreds",
+    "digit.second.hundreds"
+  ];
+  readonly targetSelectorIds: readonly ["result.hundreds"];
+  readonly [kpPlaceValueHundredsEvaluationBrand]: true;
+}
+
 export type KpPlaceValueColumnEvaluation =
   | KpPlaceValueOnesEvaluation
-  | KpPlaceValueTensEvaluation;
+  | KpPlaceValueTensEvaluation
+  | KpPlaceValueHundredsEvaluation;
 
 export interface KpPlaceValueColumnEvaluationDom {
   readonly root: HTMLElement;
@@ -100,36 +117,39 @@ export type KpPlaceValueOnesEvaluationDom =
   KpPlaceValueColumnEvaluationDom;
 export type KpPlaceValueTensEvaluationDom =
   KpPlaceValueColumnEvaluationDom;
+export type KpPlaceValueHundredsEvaluationDom =
+  KpPlaceValueColumnEvaluationDom;
 
 interface EvaluationConfig {
-  readonly place: "ones" | "tens";
+  readonly place: "ones" | "tens" | "hundreds";
   readonly schemaVersion:
     | KpPlaceValueOnesEvaluation["schemaVersion"]
-    | KpPlaceValueTensEvaluation["schemaVersion"];
+    | KpPlaceValueTensEvaluation["schemaVersion"]
+    | KpPlaceValueHundredsEvaluation["schemaVersion"];
   readonly beatId:
     | KpPlaceValueOnesEvaluation["beatId"]
-    | KpPlaceValueTensEvaluation["beatId"];
+    | KpPlaceValueTensEvaluation["beatId"]
+    | KpPlaceValueHundredsEvaluation["beatId"];
   readonly expression:
     | KpPlaceValueOnesEvaluation["expression"]
-    | KpPlaceValueTensEvaluation["expression"];
+    | KpPlaceValueTensEvaluation["expression"]
+    | KpPlaceValueHundredsEvaluation["expression"];
   readonly materialSelectorIds: readonly [string, string, ...string[]];
-  readonly targetDigits: readonly [
-    {
-      readonly id: string;
-      readonly column: KpPlaceValueWrittenColumn;
-      readonly latex: string;
-    },
-    {
-      readonly id: string;
-      readonly column: KpPlaceValueWrittenColumn;
-      readonly latex: string;
-    }
-  ];
+  readonly targetDigits: readonly [{
+    readonly id: string;
+    readonly column: KpPlaceValueWrittenColumn;
+    readonly latex: string;
+  }, ...{
+    readonly id: string;
+    readonly column: KpPlaceValueWrittenColumn;
+    readonly latex: string;
+  }[]];
   readonly sourceHiddenIds: readonly string[];
   readonly sourceVisibleIds: readonly string[];
   readonly stageDataset:
     | "kpPlaceValueOnesEvaluation"
-    | "kpPlaceValueTensEvaluation";
+    | "kpPlaceValueTensEvaluation"
+    | "kpPlaceValueHundredsEvaluation";
 }
 
 const evaluationConfigs = Object.freeze({
@@ -191,8 +211,43 @@ const evaluationConfigs = Object.freeze({
       "result.ones"
     ]),
     stageDataset: "kpPlaceValueTensEvaluation" as const
+  }),
+  hundreds: Object.freeze({
+    place: "hundreds" as const,
+    schemaVersion:
+      "kp.place-value-addition-hundreds-evaluation.v1" as const,
+    beatId: "beat.place-value.evaluate-hundreds" as const,
+    expression: "1 + 2 + 1 = 4" as const,
+    materialSelectorIds: Object.freeze([
+      "carry.hundreds",
+      "digit.first.hundreds",
+      "digit.second.hundreds"
+    ] as const),
+    targetDigits: Object.freeze([
+      Object.freeze({
+        id: "result.hundreds",
+        column: "hundreds" as const,
+        latex: "4"
+      })
+    ] as const),
+    sourceHiddenIds: Object.freeze([
+      "digit.first.ones",
+      "digit.second.ones",
+      "digit.first.tens",
+      "digit.second.tens",
+      "carry.tens"
+    ]),
+    sourceVisibleIds: Object.freeze([
+      "carry.hundreds",
+      "result.tens",
+      "result.ones",
+      "operator.add"
+    ]),
+    stageDataset: "kpPlaceValueHundredsEvaluation" as const
   })
-}) satisfies Readonly<Record<"ones" | "tens", EvaluationConfig>>;
+}) satisfies Readonly<
+  Record<"ones" | "tens" | "hundreds", EvaluationConfig>
+>;
 
 export function compileKpPlaceValueOnesEvaluation(
   presentation: KpPlaceValueAdditionPresentationPlan
@@ -210,6 +265,15 @@ export function compileKpPlaceValueTensEvaluation(
     presentation,
     evaluationConfigs.tens
   ) as KpPlaceValueTensEvaluation;
+}
+
+export function compileKpPlaceValueHundredsEvaluation(
+  presentation: KpPlaceValueAdditionPresentationPlan
+): KpPlaceValueHundredsEvaluation {
+  return compileColumnEvaluation(
+    presentation,
+    evaluationConfigs.hundreds
+  ) as KpPlaceValueHundredsEvaluation;
 }
 
 function compileColumnEvaluation(
@@ -307,6 +371,13 @@ export function isKpPlaceValueTensEvaluation(
     value.beatId === "beat.place-value.evaluate-tens";
 }
 
+export function isKpPlaceValueHundredsEvaluation(
+  value: unknown
+): value is KpPlaceValueHundredsEvaluation {
+  return isSealedEvaluation(value) &&
+    value.beatId === "beat.place-value.evaluate-hundreds";
+}
+
 export function createKpPlaceValueOnesEvaluationDom(input: {
   readonly document: Document;
   readonly projection: KpPlaceValueWrittenColumnProjection;
@@ -332,6 +403,22 @@ export function createKpPlaceValueTensEvaluationDom(input: {
   return createColumnEvaluationDom({
     ...input,
     config: evaluationConfigs.tens
+  });
+}
+
+export function createKpPlaceValueHundredsEvaluationDom(input: {
+  readonly document: Document;
+  readonly projection: KpPlaceValueWrittenColumnProjection;
+  readonly evaluation: KpPlaceValueHundredsEvaluation;
+}): KpPlaceValueHundredsEvaluationDom {
+  if (!isKpPlaceValueHundredsEvaluation(input.evaluation)) {
+    throw new Error(
+      "Hundreds-evaluation DOM requires compiler-owned authority."
+    );
+  }
+  return createColumnEvaluationDom({
+    ...input,
+    config: evaluationConfigs.hundreds
   });
 }
 
@@ -367,9 +454,17 @@ function createColumnEvaluationDom(input: {
       `${input.config.place} evaluation target lacks its semantic grid.`
     );
   }
-  targetGrid.append(...input.config.targetDigits.map((digit) =>
-    evaluationDigit(input.document, digit)
-  ));
+  for (const digit of input.config.targetDigits) {
+    const nativeTarget = target.cellElements.get(digit.id);
+    if (nativeTarget !== undefined) {
+      // Final-column output already has a canonical native endpoint root.
+      // Reusing it prevents an appended transient glyph from changing font or
+      // baseline during the final settlement handoff.
+      nativeTarget.dataset["kpVisibility"] = "visible";
+    } else {
+      targetGrid.append(evaluationDigit(input.document, digit));
+    }
+  }
   const scene = createKpPlaceValueNativeSceneDom({
     document: input.document,
     sourceRoot: source.root,

@@ -23,8 +23,10 @@ import {
   type KpPlaceValueBaseTenProjection
 } from "./place-value-addition-base-ten-projection.ts";
 import {
+  compileKpPlaceValueHundredsEvaluation,
   compileKpPlaceValueOnesEvaluation,
   compileKpPlaceValueTensEvaluation,
+  type KpPlaceValueHundredsEvaluation,
   type KpPlaceValueOnesEvaluation,
   type KpPlaceValueTensEvaluation
 } from "./place-value-addition-ones-evaluation.ts";
@@ -34,6 +36,10 @@ import {
   type KpPlaceValueOnesExchange,
   type KpPlaceValueTensExchange
 } from "./place-value-addition-ones-exchange.ts";
+import {
+  compileKpPlaceValueNativeSettlement,
+  type KpPlaceValueNativeSettlement
+} from "./place-value-addition-native-settlement.ts";
 
 declare const kpPlaceValueRuntimeSessionBrand: unique symbol;
 declare const kpPlaceValueRuntimeFrameBrand: unique symbol;
@@ -57,6 +63,8 @@ export interface KpPlaceValueAdditionRuntimeSession {
   readonly onesExchange: KpPlaceValueOnesExchange;
   readonly tensEvaluation: KpPlaceValueTensEvaluation;
   readonly tensExchange: KpPlaceValueTensExchange;
+  readonly hundredsEvaluation: KpPlaceValueHundredsEvaluation;
+  readonly nativeSettlement: KpPlaceValueNativeSettlement;
   readonly mountedViews: readonly ["written", "base-ten"];
   readonly [kpPlaceValueRuntimeSessionBrand]: true;
 }
@@ -109,6 +117,12 @@ KpPlaceValueAdditionRuntimeSession {
   const tensExchange = compileKpPlaceValueTensExchange(
     foundation.presentation
   );
+  const hundredsEvaluation = compileKpPlaceValueHundredsEvaluation(
+    foundation.presentation
+  );
+  const nativeSettlement = compileKpPlaceValueNativeSettlement(
+    foundation.presentation
+  );
   if (
     written.traceId !== foundation.trace.id ||
     baseTen.traceId !== foundation.trace.id
@@ -131,6 +145,8 @@ KpPlaceValueAdditionRuntimeSession {
     onesExchange,
     tensEvaluation,
     tensExchange,
+    hundredsEvaluation,
+    nativeSettlement,
     mountedViews: Object.freeze(["written", "base-ten"] as const)
   });
   sealedSessions.add(session);

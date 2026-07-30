@@ -60,6 +60,10 @@ for (const viewport of [
       const tensExchange = () => document.querySelector<HTMLElement>(
         "[data-kp-place-value-tens-exchange]"
       )!;
+      const hundredsEvaluation = () =>
+        document.querySelector<HTMLElement>(
+          "[data-kp-place-value-hundreds-evaluation]"
+        )!;
       const metric = (element: HTMLElement) => {
         const paint = element.querySelector<HTMLElement>(
           ".katex-html .mord"
@@ -214,6 +218,10 @@ for (const viewport of [
       const result = target.querySelector<HTMLElement>(
         '[data-kp-semantic-entity-id="result.tens"]'
       )!;
+      const successorSource =
+        hundredsEvaluation().querySelector<HTMLElement>(
+          '[data-kp-place-value-operation-endpoint="source"]'
+        )!;
       return {
         priorEndpoint,
         evaluationSource,
@@ -234,6 +242,24 @@ for (const viewport of [
             )!
           ).opacity,
           targetOpacity: getComputedStyle(target).opacity,
+          exchangeDisplay: getComputedStyle(tensExchange()).display,
+          successorDisplay: getComputedStyle(
+            hundredsEvaluation()
+          ).display,
+          successorSourceOpacity:
+            getComputedStyle(successorSource).opacity,
+          successorCarryText:
+            successorSource.querySelector<HTMLElement>(
+              '[data-kp-semantic-entity-id="carry.hundreds"] .katex-html'
+            )?.textContent?.trim(),
+          successorTensText:
+            successorSource.querySelector<HTMLElement>(
+              '[data-kp-semantic-entity-id="result.tens"] .katex-html'
+            )?.textContent?.trim(),
+          successorOnesText:
+            successorSource.querySelector<HTMLElement>(
+              '[data-kp-semantic-entity-id="result.ones"] .katex-html'
+            )?.textContent?.trim(),
           carryText:
             carry.querySelector<HTMLElement>(".katex-html")
               ?.textContent?.trim(),
@@ -321,7 +347,13 @@ for (const viewport of [
     )).toBe(true);
     expect(produced(evidence.after.blocks).visible).toBe("true");
     expect(evidence.endpoint.sourceOpacity).toBe("0");
-    expect(evidence.endpoint.targetOpacity).toBe("1");
+    expect(evidence.endpoint.targetOpacity).toBe("0");
+    expect(evidence.endpoint.exchangeDisplay).toBe("none");
+    expect(evidence.endpoint.successorDisplay).toBe("grid");
+    expect(evidence.endpoint.successorSourceOpacity).toBe("1");
+    expect(evidence.endpoint.successorCarryText).toBe("1");
+    expect(evidence.endpoint.successorTensText).toBe("3");
+    expect(evidence.endpoint.successorOnesText).toBe("4");
     expect(evidence.endpoint.carryText).toBe("1");
     expect(evidence.endpoint.resultText).toBe("3");
     expect(evidence.endpoint.onesText).toBe("4");
