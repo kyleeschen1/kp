@@ -130,6 +130,41 @@
       "scope": "s03 control and source integrity",
       "checkedAt": "2026-07-30T16:10:59.800Z",
       "notes": "Theseus validates 837 nodes and 14615 events; no whitespace errors."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s04 initial static negative fixtures",
+      "checkedAt": "2026-07-30T16:16:39.354Z",
+      "notes": "The domain implementation compiled, but two expected-error comments were one line above the diagnostic site and one result-role mismatch lacked its expected-error marker; corrected without weakening the types."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s04 nominal domain model",
+      "checkedAt": "2026-07-30T16:16:40.343Z",
+      "notes": "13 of 13 preservation, visual-reference, place, digit, quantity, adjacency, runtime rejection, and static-boundary checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s04 domain and static boundaries",
+      "checkedAt": "2026-07-30T16:16:41.200Z",
+      "notes": "Application, Node, test, protocol-dependent, and domain TypeScript projects pass after placing negative-fixture annotations at the exact diagnostic sites."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s04 type-system cost",
+      "checkedAt": "2026-07-30T16:16:42.100Z",
+      "notes": "Inference remains within the frozen baseline: 48471 types, 61210 instantiations, 2.15 seconds."
+    },
+    {
+      "command": "npm run check:architecture; theseus workspace validate; git diff --check",
+      "status": "passed",
+      "scope": "s04 architecture and durable integrity",
+      "checkedAt": "2026-07-30T16:16:42.993Z",
+      "notes": "Architecture passes with 89 concept-room and 133 semantic-reader files; Theseus validates 837 nodes and 14622 events; no whitespace errors."
     }
   ],
   "expectedLearning": [

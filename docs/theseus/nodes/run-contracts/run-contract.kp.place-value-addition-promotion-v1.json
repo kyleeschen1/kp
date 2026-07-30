@@ -77,7 +77,8 @@
     {
       "id": "s04",
       "title": "define-place-value-domain-types",
-      "status": "planned"
+      "summary": "Added nominal compiler-sealed ones, tens, and hundreds denominations; decimal digits; role-bearing three-column exact quantities; and adjacent-place evidence. Runtime guards reject copied or widened inputs, while static fixtures reject non-adjacent exchange, digit overflow, and addend/result authority mismatch. Focused, type, inference, architecture, workspace, and diff gates pass.",
+      "status": "complete"
     },
     {
       "id": "s05",
