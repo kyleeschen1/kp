@@ -22,6 +22,10 @@ import {
 import type {
   KpExactQuantityOpaquePaintBinding
 } from "./exact-fraction-quantity-paint-contract.ts";
+import {
+  kpIdentityFissionExecutableProgram,
+  type KpVerifiedIdentityFissionExecutableProgram
+} from "./motifs/identity-fission-executable-program.ts";
 
 export type {
   KpExactQuantityOpaquePaintBinding
@@ -41,6 +45,7 @@ export interface KpExactQuantityMotifInvocation {
     | "semantic-group"
     | "merge-fan-in"
     | "opaque-successor"
+    | "identity-fission"
     | "operation-evaluation"
     | "structural-succession"
   )[];
@@ -80,6 +85,8 @@ export type KpExactFractionQuantityPresentationBeat =
         readonly targetAtomicPartIds: readonly [string, string];
         readonly dividerPolicy: "reveal-without-area-change";
         readonly fissionPlan: KpFissionFusionPlan;
+        readonly executableProgram:
+          KpVerifiedIdentityFissionExecutableProgram;
       };
     })
   | (KpExactFractionQuantityPresentationBeatBase & {
@@ -110,6 +117,21 @@ export interface KpExactQuantityVisiblePhaseBinding {
   readonly phase: "setup" | "action" | "settle";
   readonly phaseProgress: number;
   readonly actionProgress: number;
+  readonly programPhase?:
+    KpExactQuantityIdentityFissionProgramPhase | undefined;
+}
+
+export interface KpExactQuantityIdentityFissionProgramPhase {
+  readonly kind: "identity-fission-program-phase";
+  readonly programId: string;
+  readonly programVersion: string;
+  readonly programKind: "identity-fission";
+  readonly phaseId: string;
+  readonly phaseEffect: string;
+  readonly requiredRoles: readonly string[];
+  readonly executionOrdinal: number;
+  readonly phaseProgress: number;
+  readonly programProgress: number;
 }
 
 export type KpExactQuantityMotionTrackIds =
@@ -142,6 +164,8 @@ export interface KpExactQuantityVisibleOperationFrame {
   readonly phase: "setup" | "action" | "settle";
   readonly phaseProgress: number;
   readonly actionProgress: number;
+  readonly programPhase?:
+    KpExactQuantityIdentityFissionProgramPhase | undefined;
   readonly viewBindings: readonly [
     KpExactQuantitySymbolicPhaseBinding,
     KpExactQuantityConcretePhaseBinding,
@@ -246,7 +270,7 @@ export function createKpExactFractionQuantityPresentationPlan(
         execution: createMotifInvocation({
           beatId: trace.beats[1]!.id,
           operationId: "kp.core.fan-out",
-          symbolicDispatches: ["opaque-successor", "opaque-successor"],
+          symbolicDispatches: ["identity-fission", "opaque-successor"],
           atomicDispatch: "fission"
         }),
         motif: Object.freeze({
@@ -254,7 +278,8 @@ export function createKpExactFractionQuantityPresentationPlan(
           sourceSelectionId: refinement.sourceSelectionIds[0]!,
           targetAtomicPartIds: refinementTargets,
           dividerPolicy: "reveal-without-area-change" as const,
-          fissionPlan
+          fissionPlan,
+          executableProgram: kpIdentityFissionExecutableProgram
         })
       }),
       existingBeat(
@@ -359,7 +384,8 @@ export function sampleKpExactQuantityVisibleOperation(input: {
     operationId: input.beat.execution.operationId,
     phase,
     phaseProgress,
-    actionProgress
+    actionProgress,
+    ...programPhaseForBeat(input.beat, actionProgress)
   });
   // A phase label alone once let snapshot-only views claim synchronization.
   // Each tuple member now carries the renderer path and non-empty tracks that
@@ -394,13 +420,59 @@ export function sampleKpExactQuantityVisibleOperation(input: {
       concreteBinding("number-line")
     ]);
   return Object.freeze({
-    invocationId: input.beat.execution.id,
-    operationId: input.beat.execution.operationId,
-    phase,
-    phaseProgress,
-    actionProgress,
+    ...common,
     viewBindings
   });
+}
+
+function programPhaseForBeat(
+  beat: KpExactFractionQuantityPresentationBeat,
+  actionProgress: number
+): {
+  readonly programPhase:
+    KpExactQuantityIdentityFissionProgramPhase;
+} | Record<never, never> {
+  if (beat.motif.kind !== "partition-refinement") return {};
+  const dispatchIndex =
+    beat.execution.symbolicDispatches.indexOf("identity-fission");
+  if (dispatchIndex < 0) {
+    throw new Error(
+      "Partition refinement requires an identity-fission symbolic dispatch."
+    );
+  }
+  const dispatchCount = beat.execution.symbolicDispatches.length;
+  const programProgress = clamp(
+    actionProgress * dispatchCount - dispatchIndex
+  );
+  const program = beat.motif.executableProgram;
+  const phaseIndex = programProgress >= 1
+    ? program.phases.length - 1
+    : Math.min(
+        program.phases.length - 1,
+        Math.floor(programProgress * program.phases.length)
+      );
+  const phase = program.phases[phaseIndex]!;
+  const phaseProgress = programProgress >= 1
+    ? 1
+    : programProgress * program.phases.length - phaseIndex;
+  return {
+    programPhase: Object.freeze({
+      kind: "identity-fission-program-phase",
+      programId: program.id,
+      programVersion: program.programVersion,
+      programKind: program.kind,
+      phaseId: phase.id,
+      phaseEffect: phase.effect,
+      requiredRoles: Object.freeze([...phase.requiredRoles]),
+      executionOrdinal: phaseIndex,
+      phaseProgress,
+      programProgress
+    })
+  };
+}
+
+function clamp(value: number): number {
+  return Math.max(0, Math.min(1, value));
 }
 
 function concreteTrackIds(

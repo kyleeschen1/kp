@@ -58,7 +58,7 @@ function syncCircle(
   syncDivider(
     divider,
     projection.refinement?.dividerPathData,
-    frame.visibleOperation.actionProgress
+    refinementProgress(frame)
   );
   syncMotion(canvas, svg, frame, binding);
 }
@@ -91,9 +91,18 @@ function syncBar(
   syncDivider(
     divider,
     projection.refinement === undefined ? undefined : "",
-    frame.visibleOperation.actionProgress
+    refinementProgress(frame)
   );
   syncMotion(canvas, svg, frame, binding);
+}
+
+function refinementProgress(
+  frame: KpExactFractionQuantityRuntimeFrame
+): number {
+  return frame.visibleOperation.programPhase?.programKind ===
+      "identity-fission"
+    ? frame.visibleOperation.programPhase.programProgress
+    : frame.visibleOperation.actionProgress;
 }
 
 function syncNumberLine(

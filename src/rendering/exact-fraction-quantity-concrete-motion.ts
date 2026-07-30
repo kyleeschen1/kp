@@ -71,6 +71,13 @@ export function sampleKpExactFractionQuantityConcreteMotion(
 function motionPulse(
   binding: KpExactQuantityConcretePhaseBinding
 ): number {
+  if (binding.programPhase?.programKind === "identity-fission") {
+    // All three concrete projections follow the symbolic fission coordinate;
+    // only their measured displacement differs by view.
+    return Math.sin(
+      Math.PI * clamp(binding.programPhase.programProgress)
+    );
+  }
   if (binding.phase === "settle") return 0;
   const progress = binding.phase === "setup"
     ? binding.phaseProgress

@@ -214,7 +214,7 @@ test("Review atomically saves the exact phone animation moment", async ({
   expect(surface?.shellViewport.width).toBeGreaterThan(0);
   expect(surface?.stageViewport?.height).toBeGreaterThan(0);
 
-  const visible = await page.evaluate(async (noteId) => {
+  const visible = await page.evaluate(async ({ noteId, sequence }) => {
     const response = await fetch("/api/dev/reviews/v2/query", {
       method: "POST",
       headers: {
@@ -224,7 +224,8 @@ test("Review atomically saves the exact phone animation moment", async ({
       body: JSON.stringify({
         scope: "all",
         detail: "full",
-        limit: 100
+        limit: 100,
+        afterSequence: Math.max(0, sequence - 1)
       })
     });
     const body = await response.json() as {
@@ -232,7 +233,7 @@ test("Review atomically saves the exact phone animation moment", async ({
     };
     return response.ok &&
       body.page.notes.some(({ id }) => id === noteId);
-  }, note.id);
+  }, { noteId: note.id, sequence: note.sequence });
   expect(visible).toBe(true);
 });
 

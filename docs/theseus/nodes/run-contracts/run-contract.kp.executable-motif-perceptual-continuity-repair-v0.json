@@ -1293,7 +1293,8 @@
     {
       "id": "s20",
       "title": "migrate-exact-fraction-fission",
-      "status": "planned"
+      "summary": "Compiled exact-fraction refinement through one nominal identity-fission executable program. Symbolic numerator and denominator each preserve one-to-three independent child lineage; circle, bar, and number line share the exact sampled phase and fission primitive, direct seek and rewind are exact, and the fission checkpoint carries only opaque paint in Chromium, Firefox, and WebKit. Dense diagnostics also localized the separate legacy evaluation fade to the branded exact-fraction compatibility seam already owned by s22; the guard remains red rather than being weakened.",
+      "status": "complete"
     },
     {
       "id": "s21",

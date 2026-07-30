@@ -79,6 +79,50 @@ test("dense seek, reverse seek, and repeated scrub are paint deterministic", asy
   }
 });
 
+test("identity fission renders one opaque program-owned four-view frame", async ({
+  page
+}) => {
+  const player = await openExactQuantity(page, {
+    width: 1_100,
+    height: 800
+  });
+  await seekAndSettle(page, player, 0.25);
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-executable-program-id",
+    "kp.executable-program.identity-fission"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-executable-program-phase",
+    /^(orient-source-identity|branch-identity|establish-descendants|settle-descendants)$/u
+  );
+  await expect.poll(() => player.evaluate((root) => {
+    const scene = root.querySelector<HTMLElement>(
+      "[data-kp-exact-symbolic-scene]" +
+      "[data-kp-prepared-scene-state=\"committed\"]"
+    );
+    if (scene?.dataset["kpExactSymbolicStatus"] !== "ready") return false;
+    const owners = [
+      ...scene.querySelectorAll<HTMLElement>(
+        "[data-kp-exact-symbolic-source], " +
+        "[data-kp-exact-symbolic-target], " +
+        "[data-kp-equation-material-owner-id]"
+      )
+    ];
+    return owners.length > 0 && owners.every((owner) => {
+      let opacity = 1;
+      let current: HTMLElement | null = owner;
+      while (current !== null && current !== root) {
+        opacity *= Number(getComputedStyle(current).opacity);
+        current = current.parentElement;
+      }
+      return opacity === 0 || opacity === 1;
+    });
+  })).toBe(true);
+  await expect(
+    player.locator("[data-kp-exact-view]")
+  ).toHaveCount(4);
+});
+
 test("captured regression moments retain opaque committed paint during scene preparation", async ({
   page
 }) => {
@@ -96,6 +140,7 @@ test("captured regression moments retain opaque committed paint during scene pre
   await expect(refinementSource.locator(".katex-html")).toContainText("×");
   await expect(refinementSource.locator(".katex-html")).toContainText("2");
   for (const progress of [
+    0.25,
     0.34,
     0.472,
     0.72,
@@ -108,6 +153,16 @@ test("captured regression moments retain opaque committed paint during scene pre
     await player.locator(
       "[data-action=\"seek-editor-animation\"]"
     ).fill(String(progress));
+    if (progress === 0.25) {
+      await expect(player).toHaveAttribute(
+        "data-kp-exact-executable-program-id",
+        "kp.executable-program.identity-fission"
+      );
+      await expect(player).toHaveAttribute(
+        "data-kp-exact-executable-program-phase",
+        /^(orient-source-identity|branch-identity|establish-descendants|settle-descendants)$/u
+      );
+    }
     const samples = await player.evaluate(async (root) => {
       const frames: Array<{
         committedCount: number;
@@ -115,6 +170,16 @@ test("captured regression moments retain opaque committed paint during scene pre
         sceneOpacity: number;
         visibleOwnerCount: number;
         fractionalOpacityCount: number;
+        fractionalOwners: readonly {
+          tag: string;
+          className: string;
+          ownerId?: string | undefined;
+          sourceMotionId?: string | undefined;
+          semanticEntityId?: string | undefined;
+          endpointPaintAtomId?: string | undefined;
+          fragmentRole?: string | undefined;
+          opacity: number;
+        }[];
         preparingCount: number;
       }> = [];
       const effectiveOpacity = (element: HTMLElement): number => {
@@ -160,6 +225,26 @@ test("captured regression moments retain opaque committed paint during scene pre
           fractionalOpacityCount: opacities.filter((opacity) =>
             opacity !== 0 && opacity !== 1
           ).length,
+          fractionalOwners: owners.flatMap((owner, ownerIndex) => {
+            const opacity = opacities[ownerIndex]!;
+            return opacity === 0 || opacity === 1
+              ? []
+              : [{
+                  tag: owner.tagName,
+                  className: owner.className,
+                  ownerId:
+                    owner.dataset["kpEquationMaterialOwnerId"],
+                  sourceMotionId:
+                    owner.dataset["kpEquationMaterialSourceMotionId"],
+                  semanticEntityId:
+                    owner.dataset["kpEquationMaterialSemanticEntityId"],
+                  endpointPaintAtomId:
+                    owner.dataset["kpEquationMaterialEndpointPaintAtomId"],
+                  fragmentRole:
+                    owner.dataset["kpEquationMaterialFragmentRole"],
+                  opacity
+                }];
+          }),
           preparingCount: root.querySelectorAll(
             "[data-kp-prepared-scene-state=\"preparing\"]"
           ).length

@@ -12,8 +12,10 @@ import {
   sampleKpExactFractionQuantityNeutralFrame
 } from "../animation/exact-fraction-quantity-neutral-frame.ts";
 import {
+  compileKpFissionFusionPlan,
   sampleKpFissionFusion,
-  type KpFissionFusionFrame
+  type KpFissionFusionFrame,
+  type KpFissionFusionPlan
 } from "../animation/fission-fusion.ts";
 import {
   projectKpExactFractionQuantityBar
@@ -31,6 +33,7 @@ import {
 import {
   createKpExactFractionQuantitySymbolicProjection,
   type KpExactFractionQuantitySymbolicProjection,
+  type KpExactOpaqueSuccessorSynthesisBinding,
   type KpExactFractionSymbolicMotionSegment
 } from "./exact-fraction-quantity-symbolic-projection.ts";
 import {
@@ -41,10 +44,49 @@ import {
   createKpExactFractionQuantityTrace,
   type KpExactFractionQuantityTrace
 } from "../semantic/exact-fraction-quantity-trace.ts";
+import {
+  compileKpExecutableSuccessorMotifProgramAdapter,
+  type KpExecutableSuccessorMotifProgramAdapterDispatch,
+  type KpExecutableSuccessorMotifProgramRoute
+} from "../reader/renderers/executable-successor-motif-program-adapter.ts";
+import {
+  createKpSemanticLineageGraph
+} from "../semantic/semantic-lineage-graph.ts";
+import type {
+  KpVerifiedIdentityFissionExecutableProgram
+} from "../animation/motifs/identity-fission-executable-program.ts";
 
 declare const kpExactFractionQuantityRuntimeSessionBrand: unique symbol;
 
 const sealedRuntimeSessions = new WeakSet<object>();
+
+type KpIdentityFissionProgramExecution = Extract<
+  KpExecutableSuccessorMotifProgramAdapterDispatch,
+  { readonly programKind: "identity-fission" }
+>;
+
+interface KpExactFractionQuantityIdentityFissionExecutions {
+  readonly program: KpVerifiedIdentityFissionExecutableProgram;
+  readonly route: KpExecutableSuccessorMotifProgramRoute & {
+    readonly programKind: "identity-fission";
+    readonly primitiveRoute: "fission-fusion:fission";
+  };
+  readonly concrete: {
+    readonly forward: KpIdentityFissionProgramExecution;
+    readonly rewind: KpIdentityFissionProgramExecution;
+  };
+  readonly symbolic: readonly {
+    readonly segmentId: string;
+    readonly forward: readonly [
+      KpIdentityFissionProgramExecution,
+      ...KpIdentityFissionProgramExecution[]
+    ];
+    readonly rewind: readonly [
+      KpIdentityFissionProgramExecution,
+      ...KpIdentityFissionProgramExecution[]
+    ];
+  }[];
+}
 
 export type KpExactFractionQuantityRuntimeClock =
   Pick<KpAnimationRuntimeClock, "direction" | "progress">;
@@ -60,6 +102,8 @@ export interface KpExactFractionQuantityRuntimeSession {
   readonly symbolic: KpExactFractionQuantitySymbolicProjection;
   readonly accessibility: KpExactFractionQuantityAccessibleProjection;
   readonly presentation: KpExactFractionQuantityPresentationPlan;
+  readonly identityFission:
+    KpExactFractionQuantityIdentityFissionExecutions;
   readonly [kpExactFractionQuantityRuntimeSessionBrand]: true;
 }
 
@@ -91,7 +135,21 @@ export interface KpExactFractionQuantityRuntimeFrame {
     readonly segmentProgress: number;
     readonly dispatch:
       KpExactQuantityMotifInvocation["symbolicDispatches"][number];
+    readonly identityFissionExecutions?:
+      readonly [
+        KpIdentityFissionProgramExecution,
+        ...KpIdentityFissionProgramExecution[]
+      ] | undefined;
   };
+  readonly identityFission?: {
+    readonly programId: string;
+    readonly programVersion: string;
+    readonly primitiveRoute: "fission-fusion:fission";
+    readonly programProgress: number;
+    readonly concreteExecution: KpIdentityFissionProgramExecution;
+    readonly symbolicExecutions:
+      readonly KpIdentityFissionProgramExecution[];
+  } | undefined;
   readonly motifFrame?: KpFissionFusionFrame | undefined;
   readonly ownershipPhase:
     | "source-native"
@@ -107,6 +165,11 @@ export function createKpExactFractionQuantityRuntimeSession():
 KpExactFractionQuantityRuntimeSession {
   const trace = createKpExactFractionQuantityTrace();
   const symbolic = createKpExactFractionQuantitySymbolicProjection(trace);
+  const presentation = createKpExactFractionQuantityPresentationPlan(trace);
+  const identityFission = compileIdentityFissionExecutions({
+    symbolic,
+    presentation
+  });
   const session = Object.freeze({
     schemaVersion: "kp.exact-fraction-quantity-runtime-session.v1",
     id: "runtime-session.exact-fraction-quantity.third-plus-sixth",
@@ -120,7 +183,8 @@ KpExactFractionQuantityRuntimeSession {
       trace,
       symbolic
     }),
-    presentation: createKpExactFractionQuantityPresentationPlan(trace)
+    presentation,
+    identityFission
   });
   sealedRuntimeSessions.add(session);
   return session as KpExactFractionQuantityRuntimeSession;
@@ -174,11 +238,33 @@ export function sampleKpExactFractionQuantityRuntime(input: {
     beat: presentationBeat,
     localProgress: neutralFrame.beat.localProgress
   });
-  const symbolicMotion = sampleSymbolicMotion(
+  const sampledSymbolicMotion = sampleSymbolicMotion(
     input.session.symbolic.motionInputs[neutralFrame.beat.index]!.segments,
     visibleOperation.actionProgress,
     presentationBeat.execution
   );
+  const symbolicIdentityFission =
+    input.session.identityFission.symbolic.find(
+      ({ segmentId }) =>
+        segmentId === sampledSymbolicMotion.segment.id
+    );
+  const symbolicMotion = Object.freeze({
+    ...sampledSymbolicMotion,
+    ...(sampledSymbolicMotion.dispatch === "identity-fission"
+      ? {
+          identityFissionExecutions:
+            symbolicIdentityFission?.forward
+        }
+      : {})
+  });
+  if (
+    sampledSymbolicMotion.dispatch === "identity-fission" &&
+    symbolicIdentityFission === undefined
+  ) {
+    throw new Error(
+      "Symbolic identity fission lacks compiled program executions."
+    );
+  }
   const expectedAtomicDispatch =
     presentationBeat.motif.kind === "partition-refinement"
       ? "fission"
@@ -197,12 +283,28 @@ export function sampleKpExactFractionQuantityRuntime(input: {
   const motifFrame = presentationBeat.motif.kind === "partition-refinement"
     ? sampleKpFissionFusion({
         plan: presentationBeat.motif.fissionPlan,
-        progress: visibleOperation.actionProgress
+        progress: requireIdentityFissionProgramProgress(visibleOperation)
       })
     : presentationBeat.motif.kind === "part-merge"
       ? sampleKpFissionFusion({
           plan: presentationBeat.motif.fusionPlan,
           progress: visibleOperation.actionProgress
+        })
+      : undefined;
+  const identityFission =
+    presentationBeat.motif.kind === "partition-refinement"
+      ? Object.freeze({
+          programId: input.session.identityFission.program.id,
+          programVersion:
+            input.session.identityFission.program.programVersion,
+          primitiveRoute:
+            input.session.identityFission.route.primitiveRoute,
+          programProgress:
+            requireIdentityFissionProgramProgress(visibleOperation),
+          concreteExecution:
+            input.session.identityFission.concrete.forward,
+          symbolicExecutions:
+            symbolicIdentityFission?.forward ?? Object.freeze([])
         })
       : undefined;
   const ownershipPhase = visibleOperation.actionProgress === 0
@@ -223,6 +325,7 @@ export function sampleKpExactFractionQuantityRuntime(input: {
     visibleOperation,
     symbolicMotion,
     ...(motifFrame === undefined ? {} : { motifFrame }),
+    ...(identityFission === undefined ? {} : { identityFission }),
     ownershipPhase,
     viewPaintOwnership: createViewPaintOwnership(ownershipPhase),
     settlementPolicy: "reuse-native-endpoint-geometry",
@@ -254,6 +357,7 @@ function sampleSymbolicMotion(
   const dispatch = execution.symbolicDispatches[index]!;
   const successorBacked =
     dispatch === "opaque-successor" ||
+    dispatch === "identity-fission" ||
     dispatch === "operation-evaluation";
   if (
     successorBacked !==
@@ -262,6 +366,28 @@ function sampleSymbolicMotion(
     throw new Error(
       "Changed-glyph exact-quantity work must execute through its opaque " +
       "successor binding instead of degrading to native fades."
+    );
+  }
+  if (
+    dispatch === "identity-fission" &&
+    (
+      segment.successorSyntheses.length === 0 ||
+      segment.successorSyntheses.some((binding) =>
+        binding.motif !== "successor-synthesis" ||
+        binding.authority.operationId !== "kp.core.fan-out" ||
+        binding.sourceAnnotations.filter(
+          ({ contribution }) => contribution === "material-input"
+        ).length !== 1 ||
+        binding.sourceAnnotations.some(
+          ({ contribution }) => contribution === "catalyst"
+        ) ||
+        binding.targetAnnotations.length < 2
+      )
+    )
+  ) {
+    throw new Error(
+      "Exact-fraction identity fission requires independent one-to-many " +
+      "child lineage without catalyst material."
     );
   }
   if (
@@ -279,7 +405,8 @@ function sampleSymbolicMotion(
     );
   }
   if (
-    dispatch === "opaque-successor" &&
+    (dispatch === "opaque-successor" ||
+      dispatch === "identity-fission") &&
     segment.successorSyntheses.some(
       ({ motif }) => motif !== "successor-synthesis"
     )
@@ -294,6 +421,213 @@ function sampleSymbolicMotion(
     segmentProgress,
     dispatch
   });
+}
+
+function compileIdentityFissionExecutions(input: {
+  readonly symbolic: KpExactFractionQuantitySymbolicProjection;
+  readonly presentation: KpExactFractionQuantityPresentationPlan;
+}): KpExactFractionQuantityIdentityFissionExecutions {
+  const refinement = input.presentation.beats.find(
+    ({ motif }) => motif.kind === "partition-refinement"
+  );
+  if (refinement?.motif.kind !== "partition-refinement") {
+    throw new Error(
+      "Exact-fraction runtime requires one partition-refinement beat."
+    );
+  }
+  const program = refinement.motif.executableProgram;
+  const concreteForward = compileIdentityFissionProgram({
+    program,
+    plan: refinement.motif.fissionPlan,
+    direction: "forward"
+  });
+  const concreteRewind = compileIdentityFissionProgram({
+    program,
+    plan: refinement.motif.fissionPlan,
+    direction: "rewind"
+  });
+  const symbolic = input.symbolic.motionInputs.flatMap((motionInput) => {
+    const beat = input.presentation.beats.find(
+      ({ beatId }) => beatId === motionInput.beatId
+    );
+    if (beat === undefined) {
+      throw new Error(
+        `Symbolic motion ${motionInput.beatId} lacks a presentation beat.`
+      );
+    }
+    if (
+      beat.execution.symbolicDispatches.length !==
+      motionInput.segments.length
+    ) {
+      throw new Error(
+        `Symbolic motion ${motionInput.beatId} has dispatch drift.`
+      );
+    }
+    return motionInput.segments.flatMap((segment, index) => {
+      if (
+        beat.execution.symbolicDispatches[index] !== "identity-fission"
+      ) return [];
+      const plans = segment.successorSyntheses.map((binding) =>
+        compileSymbolicFissionPlan(segment.id, binding)
+      );
+      if (plans.length === 0) {
+        throw new Error(
+          `Symbolic identity fission ${segment.id} has no child lineage.`
+        );
+      }
+      return [Object.freeze({
+        segmentId: segment.id,
+        forward: Object.freeze(plans.map((plan) =>
+          compileIdentityFissionProgram({
+            program,
+            plan,
+            direction: "forward"
+          })
+        )) as KpExactFractionQuantityIdentityFissionExecutions[
+          "symbolic"
+        ][number]["forward"],
+        rewind: Object.freeze(plans.map((plan) =>
+          compileIdentityFissionProgram({
+            program,
+            plan,
+            direction: "rewind"
+          })
+        )) as KpExactFractionQuantityIdentityFissionExecutions[
+          "symbolic"
+        ][number]["rewind"]
+      })];
+    });
+  });
+  if (symbolic.length === 0) {
+    throw new Error(
+      "Exact-fraction symbolic projection did not compile identity fission."
+    );
+  }
+  return Object.freeze({
+    program,
+    route: concreteForward.route as
+      KpExactFractionQuantityIdentityFissionExecutions["route"],
+    concrete: Object.freeze({
+      forward: concreteForward,
+      rewind: concreteRewind
+    }),
+    symbolic: Object.freeze(symbolic)
+  });
+}
+
+function compileSymbolicFissionPlan(
+  segmentId: string,
+  binding: KpExactOpaqueSuccessorSynthesisBinding
+): KpFissionFusionPlan {
+  const material = binding.sourceAnnotations.filter(
+    ({ contribution }) => contribution === "material-input"
+  );
+  const catalysts = binding.sourceAnnotations.filter(
+    ({ contribution }) => contribution === "catalyst"
+  );
+  // Annotation identities stay distinct even when native source paint persists
+  // inside one child. Selector IDs would manufacture a split cycle and merge
+  // otherwise independent descendants before the renderer sees them.
+  const sourceEntityIds = material.map(({ id }) => id);
+  const targetEntityIds = binding.targetAnnotations.map(({ id }) => id);
+  const lineageSourceIds = binding.lineages.flatMap(
+    ({ sourceAnnotationIds }) => sourceAnnotationIds
+  );
+  const lineageTargetIds = binding.lineages.flatMap(
+    ({ targetAnnotationIds }) => targetAnnotationIds
+  );
+  if (
+    sourceEntityIds.length !== 1 ||
+    targetEntityIds.length < 2 ||
+    catalysts.length !== 0 ||
+    !sameUniqueSet(
+      material.map(({ id }) => id),
+      lineageSourceIds
+    ) ||
+    !sameUniqueSet(
+      binding.targetAnnotations.map(({ id }) => id),
+      lineageTargetIds
+    )
+  ) {
+    throw new Error(
+      `Symbolic identity fission ${binding.id} requires one source, ` +
+      "independent descendants, and total catalyst-free lineage."
+    );
+  }
+  return compileKpFissionFusionPlan({
+    id: `motion.${segmentId}.${binding.id}.identity-fission`,
+    mode: "fission",
+    lineageGraph: createKpSemanticLineageGraph({
+      id: `lineage.${segmentId}.${binding.id}.identity-fission`,
+      sourceEntityIds,
+      targetEntityIds,
+      edges: [{
+        id: `lineage-edge.${segmentId}.${binding.id}.identity-fission`,
+        relation: "split",
+        sourceEntityIds,
+        targetEntityIds,
+        summary:
+          "One symbolic identity establishes its independently tracked " +
+          "refinement descendants."
+      }]
+    }),
+    semanticOrder: targetEntityIds,
+    microStaggerSpan: 0,
+    junctionScale: 1
+  });
+}
+
+function compileIdentityFissionProgram(input: {
+  readonly program: KpVerifiedIdentityFissionExecutableProgram;
+  readonly plan: KpFissionFusionPlan;
+  readonly direction: "forward" | "rewind";
+}): KpIdentityFissionProgramExecution {
+  if (input.plan.mode !== "fission") {
+    throw new Error("Identity-fission program requires a fission plan.");
+  }
+  const execution = compileKpExecutableSuccessorMotifProgramAdapter({
+    kind: "identity-fission",
+    program: input.program,
+    direction: input.direction,
+    primitive: {
+      kind: "fission-fusion",
+      plan: input.plan as KpFissionFusionPlan & {
+        readonly mode: "fission";
+      }
+    }
+  });
+  if (
+    execution.programKind !== "identity-fission" ||
+    execution.route.primitiveRoute !== "fission-fusion:fission"
+  ) {
+    throw new Error(
+      "Identity-fission program resolved a non-fission primitive route."
+    );
+  }
+  return execution;
+}
+
+function requireIdentityFissionProgramProgress(
+  operation: KpExactQuantityVisibleOperationFrame
+): number {
+  if (
+    operation.programPhase?.kind !== "identity-fission-program-phase"
+  ) {
+    throw new Error(
+      "Partition refinement lacks shared identity-fission program phase."
+    );
+  }
+  return operation.programPhase.programProgress;
+}
+
+function sameUniqueSet(
+  left: readonly string[],
+  right: readonly string[]
+): boolean {
+  return new Set(left).size === left.length &&
+    new Set(right).size === right.length &&
+    left.length === right.length &&
+    left.every((id) => right.includes(id));
 }
 
 function createViewPaintOwnership(

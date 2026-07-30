@@ -9,6 +9,9 @@ import {
 import {
   kpExactFractionQuantityPreservationManifest as manifest
 } from "../src/reader/compiler/exact-fraction-quantity-preservation-manifest.ts";
+import {
+  kpIdentityFissionExecutableProgram
+} from "../src/animation/motifs/identity-fission-executable-program.ts";
 
 test("one sealed runtime session owns one renderer and consumes the shared clock", () => {
   const session = createKpExactFractionQuantityRuntimeSession();
@@ -20,6 +23,64 @@ test("one sealed runtime session owns one renderer and consumes the shared clock
   assert.equal(session.symbolic.endpoints.length, 5);
   assert.equal(session.symbolic.transientEndpoints.length, 1);
   assert.ok(Object.isFrozen(session));
+  assert.equal(
+    session.identityFission.program,
+    kpIdentityFissionExecutableProgram
+  );
+  assert.equal(
+    session.identityFission.route.primitiveRoute,
+    "fission-fusion:fission"
+  );
+});
+
+test("symbolic and concrete refinement share one identity-fission program", () => {
+  const session = createKpExactFractionQuantityRuntimeSession();
+  const refinement = session.presentation.beats[1]!;
+  if (refinement.motif.kind !== "partition-refinement") {
+    throw new Error("Expected partition refinement.");
+  }
+  const executions = session.identityFission;
+  const forwardPhaseIds = executions.program.phases.map(({ id }) => id);
+
+  assert.equal(
+    executions.concrete.forward.primitive.plan,
+    refinement.motif.fissionPlan
+  );
+  assert.equal(
+    executions.concrete.forward.route,
+    executions.route
+  );
+  assert.deepEqual(
+    executions.concrete.forward.phaseOrder,
+    forwardPhaseIds
+  );
+  assert.deepEqual(
+    executions.concrete.rewind.phaseOrder,
+    [...forwardPhaseIds].reverse()
+  );
+  assert.equal(executions.symbolic.length, 1);
+  assert.equal(executions.symbolic[0]?.forward.length, 2);
+  assert.equal(executions.symbolic[0]?.rewind.length, 2);
+  for (const execution of [
+    ...executions.symbolic[0]!.forward,
+    ...executions.symbolic[0]!.rewind
+  ]) {
+    assert.equal(execution.programId, executions.program.id);
+    assert.equal(execution.route, executions.route);
+    assert.equal(execution.primitive.plan.mode, "fission");
+    assert.equal(execution.primitive.plan.sourceEntityIds.length, 1);
+    assert.equal(execution.primitive.plan.targetEntityIds.length, 3);
+    assert.equal(
+      new Set(execution.primitive.plan.targetEntityIds).size,
+      execution.primitive.plan.targetEntityIds.length
+    );
+  }
+  const symbolicTargetSets = executions.symbolic[0]!.forward.map(
+    ({ primitive }) => primitive.plan.targetEntityIds
+  );
+  assert.ok(symbolicTargetSets[0]!.every(
+    (id) => !symbolicTargetSets[1]!.includes(id)
+  ));
 });
 
 test("every beat samples through one immutable synchronized runtime frame", () => {
@@ -106,7 +167,7 @@ test("direct and rewind sampling share identical absolute visual state", () => {
   }
 });
 
-test("motif progress is sampled once from the canonical beat coordinate", () => {
+test("fission settles before the multiplier evaluation subsegment", () => {
   const session = createKpExactFractionQuantityRuntimeSession();
   const refinement = sampleKpExactFractionQuantityRuntime({
     session,
@@ -114,7 +175,12 @@ test("motif progress is sampled once from the canonical beat coordinate", () => 
   });
 
   assert.equal(refinement.projection.neutralFrame.beat.localProgress, 0.5);
-  assert.equal(refinement.motifFrame?.progress, 0.5);
+  assert.equal(refinement.motifFrame?.progress, 1);
+  assert.equal(
+    refinement.visibleOperation.programPhase?.phaseId,
+    "settle-descendants"
+  );
+  assert.equal(refinement.identityFission?.symbolicExecutions.length, 0);
   assert.equal(refinement.visibleOperation.phase, "action");
   assert.equal(refinement.visibleOperation.actionProgress, 0.5);
   assert.match(
@@ -124,6 +190,41 @@ test("motif progress is sampled once from the canonical beat coordinate", () => 
   assert.equal(refinement.symbolicMotion.segmentProgress, 0);
   assert.equal(refinement.symbolicMotion.dispatch, "opaque-successor");
   assert.equal(refinement.easingApplications, 1);
+});
+
+test("all four refinement views consume the same sampled program phase", () => {
+  const session = createKpExactFractionQuantityRuntimeSession();
+  const frame = sampleKpExactFractionQuantityRuntime({
+    session,
+    clock: { direction: "forward", progress: 0.25 }
+  });
+  const phase = frame.visibleOperation.programPhase;
+
+  assert.equal(frame.symbolicMotion.dispatch, "identity-fission");
+  assert.equal(frame.symbolicMotion.identityFissionExecutions?.length, 2);
+  assert.equal(frame.identityFission?.symbolicExecutions.length, 2);
+  assert.equal(frame.identityFission?.concreteExecution,
+    session.identityFission.concrete.forward);
+  assert.ok(phase !== undefined);
+  assert.ok(frame.visibleOperation.viewBindings.every(
+    ({ programPhase }) => programPhase === phase
+  ));
+  assert.equal(frame.identityFission?.programProgress,
+    phase.programProgress);
+  for (const execution of [
+    frame.identityFission!.concreteExecution,
+    ...frame.identityFission!.symbolicExecutions
+  ]) {
+    const telemetry = execution.samplePhaseTelemetry(
+      phase.programProgress
+    );
+    assert.equal(telemetry.activePhaseId, phase.phaseId);
+  }
+  assert.equal(frame.motifFrame?.progress, phase.programProgress);
+  assert.ok([
+    ...frame.motifFrame!.sources,
+    ...frame.motifFrame!.targets
+  ].every(({ opacity }) => opacity === 0 || opacity === 1));
 });
 
 test("runtime is history independent and rejects forged sessions", () => {

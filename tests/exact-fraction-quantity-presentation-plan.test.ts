@@ -11,6 +11,12 @@ import {
   sampleKpFissionFusion
 } from "../src/animation/fission-fusion.ts";
 import {
+  kpIdentityFissionExecutableProgram
+} from "../src/animation/motifs/identity-fission-executable-program.ts";
+import {
+  isKpVerifiedExecutableSuccessorMotifProgram
+} from "../src/animation/motifs/executable-successor-motif-program-validator.ts";
+import {
   sampleKpExactFractionQuantityConcreteMotion
 } from "../src/rendering/exact-fraction-quantity-concrete-motion.ts";
 import {
@@ -54,7 +60,7 @@ test("motif declarations are sealed executable four-view invocations", () => {
     plan.beats.map(({ execution }) => execution.symbolicDispatches),
     [
       ["continuant"],
-      ["opaque-successor", "opaque-successor"],
+      ["identity-fission", "opaque-successor"],
       ["opaque-successor"],
       ["opaque-successor"],
       ["operation-evaluation"]
@@ -120,6 +126,20 @@ test("partition refinement uses existing fission with exact atom lineage", () =>
 
   assert.equal(refinement.canonicalOperationId, "kp.core.fan-out");
   assert.equal(refinement.motif.fissionPlan.mode, "fission");
+  assert.equal(
+    refinement.motif.executableProgram,
+    kpIdentityFissionExecutableProgram
+  );
+  assert.equal(
+    isKpVerifiedExecutableSuccessorMotifProgram(
+      refinement.motif.executableProgram
+    ),
+    true
+  );
+  assert.equal(
+    refinement.motif.executableProgram.kind,
+    "identity-fission"
+  );
   assert.equal(refinement.motif.fissionPlan.microStaggerSpan, 0);
   assert.equal(refinement.motif.fissionPlan.junctionScale, 1);
   assert.deepEqual(refinement.motif.targetAtomicPartIds, [
@@ -130,6 +150,15 @@ test("partition refinement uses existing fission with exact atom lineage", () =>
     refinement.motif.dividerPolicy,
     "reveal-without-area-change"
   );
+  const frame = sampleKpExactQuantityVisibleOperation({
+    beat: refinement,
+    localProgress: 0.318
+  });
+  assert.equal(frame.programPhase?.programId,
+    kpIdentityFissionExecutableProgram.id);
+  assert.ok(frame.viewBindings.every(
+    ({ programPhase }) => programPhase === frame.programPhase
+  ));
 });
 
 test("part merge uses one simultaneous existing fusion cohort", () => {

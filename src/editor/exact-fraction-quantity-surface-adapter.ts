@@ -341,6 +341,15 @@ function syncSurface(
   player.dataset["kpExactVisiblePhase"] = frame.visibleOperation.phase;
   player.dataset["kpExactMotifInvocationId"] =
     frame.visibleOperation.invocationId;
+  const programPhase = frame.visibleOperation.programPhase;
+  if (programPhase === undefined) {
+    delete player.dataset["kpExactExecutableProgramId"];
+    delete player.dataset["kpExactExecutableProgramPhase"];
+  } else {
+    player.dataset["kpExactExecutableProgramId"] = programPhase.programId;
+    player.dataset["kpExactExecutableProgramPhase"] =
+      programPhase.phaseId;
+  }
   player.dataset["kpExactSymbolicSegment"] =
     frame.symbolicMotion.segment.id;
   player.dataset["kpExactCheckpoint"] = checkpoint.id;
