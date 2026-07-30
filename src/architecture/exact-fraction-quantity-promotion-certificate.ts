@@ -6,7 +6,9 @@ import {
 } from "../editor/animation-library-display-catalog.ts";
 import {
   createKpExactFractionQuantityRuntimeSession,
-  sampleKpExactFractionQuantityRuntime
+  sampleKpExactFractionQuantityRuntime,
+  type KpExactFractionQuantityRuntimeFrame,
+  type KpExactFractionQuantityRuntimeSession
 } from "../rendering/exact-fraction-quantity-runtime.ts";
 import {
   isKpExactFractionQuantitySynchronizedFrame
@@ -24,6 +26,11 @@ import {
 import {
   createKpExactFractionQuantityStaticStepExport
 } from "../tutorial/exact-fraction-quantity-static-step-export.ts";
+import {
+  KP_EXACT_FRACTION_FOLDABLE_NODE_IDS,
+  compileKpExactFractionQuantityFoldProjection,
+  createKpExactFractionQuantityFoldIntent
+} from "../semantic/exact-fraction-quantity-evaluation-tree.ts";
 import {
   kpExactFractionQuantityPromotionPrerequisiteIds,
   type KpExactFractionQuantityPromotionEvidenceIssue,
@@ -54,6 +61,43 @@ KpVerifiedExactFractionQuantityPromotionReadiness {
       }
     })
   );
+  const denseFrames = manifest.browserAudit.denseProgressPermille.map(
+    (progressPermille) => sampleKpExactFractionQuantityRuntime({
+      session,
+      clock: {
+        direction: "forward",
+        progress: progressPermille / 1_000
+      }
+    })
+  );
+  const foldProjections = [
+    compileKpExactFractionQuantityFoldProjection({
+      intent: createKpExactFractionQuantityFoldIntent({
+        mode: "expanded"
+      })
+    }),
+    compileKpExactFractionQuantityFoldProjection({
+      intent: createKpExactFractionQuantityFoldIntent({
+        mode: "collapsed"
+      })
+    }),
+    ...(["compact", "balanced", "roomy"] as const).map(
+      (detailBudget) => compileKpExactFractionQuantityFoldProjection({
+        intent: createKpExactFractionQuantityFoldIntent({
+          mode: "automatic"
+        }),
+        detailBudget
+      })
+    ),
+    ...KP_EXACT_FRACTION_FOLDABLE_NODE_IDS.map((nodeId) =>
+      compileKpExactFractionQuantityFoldProjection({
+        intent: createKpExactFractionQuantityFoldIntent({
+          mode: "pinned",
+          pinnedNodeIds: [nodeId]
+        })
+      })
+    )
+  ];
   const animation = createKpExactFractionQuantityAnimationAsset();
   const staticExport = createKpExactFractionQuantityStaticStepExport();
   const displayEntry = createKpAnimationLibraryDisplayCatalog().find(
@@ -100,17 +144,10 @@ KpVerifiedExactFractionQuantityPromotionReadiness {
     ),
     prerequisite(
       "canonical-motif-closure",
-      session.presentation.beats.length === session.trace.beats.length &&
-        session.presentation.schedulerVocabulary.length === 1 &&
-        session.presentation.beats.every((beat) =>
-          beat.scheduler === "shared-canonical-beat" &&
-          beat.paintBindings.every(({ paintOpacity, lifecycle }) =>
-            paintOpacity === 1 &&
-            session.presentation.lifecycleVocabulary.includes(lifecycle)
-          )
-        ),
+      hasKpExactFractionExecutableIntegration(session, denseFrames),
       [
         "src/animation/exact-fraction-quantity-presentation-plan.ts",
+        "src/rendering/exact-fraction-quantity-runtime.ts",
         "tests/exact-fraction-quantity-presentation-plan.test.ts"
       ]
     ),
@@ -154,9 +191,18 @@ KpVerifiedExactFractionQuantityPromotionReadiness {
           "<math xmlns=\\\"http://www.w3.org/1998/Math/MathML\\\""
         ) &&
         (serializedExport.match(/role=\\"img\\"/gu) ?? []).length === 15 &&
-        !/"foldMode"|"activeView"/u.test(serializedExport),
+        !/"foldMode"|"activeView"/u.test(serializedExport) &&
+        foldProjections.every((projection) =>
+          projection.semanticTruth.traceId === session.trace.id &&
+          projection.semanticTruth.finalEqualityVerified &&
+          projection.beatIds.length === session.trace.beats.length &&
+          projection.semanticTruth.beatIds.every(
+            (beatId, index) => beatId === session.trace.beats[index]?.id
+          )
+        ),
       [
         "src/rendering/exact-fraction-quantity-accessible-projection.ts",
+        "src/semantic/exact-fraction-quantity-evaluation-tree.ts",
         "src/tutorial/exact-fraction-quantity-static-step-export.ts"
       ]
     ),
@@ -218,6 +264,71 @@ KpVerifiedExactFractionQuantityPromotionReadiness {
     prerequisiteEvidence: evidence,
     remainingGate: "human-perceptual-review" as const
   }) as KpVerifiedExactFractionQuantityPromotionReadiness;
+}
+
+function hasKpExactFractionExecutableIntegration(
+  session: KpExactFractionQuantityRuntimeSession,
+  denseFrames: readonly KpExactFractionQuantityRuntimeFrame[]
+): boolean {
+  const serializedSymbolic = JSON.stringify(session.symbolic.motionInputs);
+  const programClosure =
+    session.operationEvaluation.symbolic.length === 3 &&
+    session.identityFission.symbolic.length === 1 &&
+    session.identityFusion.symbolic.length === 1 &&
+    session.operationEvaluation.symbolic.every(({ forward, rewind }) =>
+      forward.route === session.operationEvaluation.route &&
+      rewind.route === session.operationEvaluation.route &&
+      forward.continuityProgram.program ===
+        session.operationEvaluation.program &&
+      rewind.continuityProgram === forward.continuityProgram
+    );
+  return (
+    programClosure &&
+    session.presentation.beats.length === session.trace.beats.length &&
+    session.presentation.schedulerVocabulary.length === 1 &&
+    !serializedSymbolic.includes("legacyContinuityAuthority") &&
+    !serializedSymbolic.includes("pathFamily") &&
+    session.presentation.beats.every((beat) =>
+      beat.scheduler === "shared-canonical-beat" &&
+      beat.paintBindings.every(({ paintOpacity, lifecycle }) =>
+        paintOpacity === 1 &&
+        session.presentation.lifecycleVocabulary.includes(lifecycle)
+      )
+    ) &&
+    denseFrames.length > 0 &&
+    denseFrames.every((frame) => {
+      const phase = frame.visibleOperation.programPhase;
+      const sharedViewPhase = frame.visibleOperation.viewBindings.every(
+        (binding) =>
+          binding.invocationId === frame.visibleOperation.invocationId &&
+          binding.phase === frame.visibleOperation.phase &&
+          binding.programPhase === phase
+      );
+      const dispatchExecution = (() => {
+        switch (frame.symbolicMotion.dispatch) {
+          case "identity-fission":
+            return frame.identityFission !== undefined &&
+              frame.symbolicMotion.identityFissionExecutions !== undefined;
+          case "identity-fusion":
+            return frame.identityFusion !== undefined &&
+              frame.symbolicMotion.identityFusionExecutions !== undefined;
+          case "operation-evaluation":
+            return frame.operationEvaluation !== undefined &&
+              frame.symbolicMotion.operationEvaluationExecution !== undefined;
+          case "continuant":
+            return frame.symbolicMotion.segment.successorSyntheses.length === 0;
+          default:
+            return false;
+        }
+      })();
+      return (
+        frame.rendererSessionId === session.rendererSessionId &&
+        frame.easingApplications === 1 &&
+        sharedViewPhase &&
+        dispatchExecution
+      );
+    })
+  );
 }
 
 export function checkKpExactFractionQuantityPromotionEvidence(

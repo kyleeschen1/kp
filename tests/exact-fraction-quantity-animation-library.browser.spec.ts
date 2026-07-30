@@ -53,7 +53,96 @@ test("exact quantity mounts lazily in the shared Animation Library", async ({
     .toHaveAttribute(
       "data-kp-canonical-native-katex-session-factory",
       "shared-v1"
+  );
+});
+
+test("fold and view disclosure preserve one live executable session", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`/?animation=${descriptorId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+  await player.locator("[data-action=\"seek-editor-animation\"]")
+    .fill("0.72");
+  await expect(player).toHaveAttribute(
+    "data-kp-exact-progress-permille",
+    "720"
+  );
+  await expect.poll(() => player.evaluate((root) => {
+    const committed = root.querySelector<HTMLElement>(
+      "[data-kp-exact-symbolic-scene]" +
+      "[data-kp-prepared-scene-state=\"committed\"]"
     );
+    if (
+      committed?.dataset["kpExactSymbolicStatus"] !== "ready" ||
+      committed.dataset["kpExactSymbolicSegment"] !==
+        root.dataset["kpExactSymbolicSegment"]
+    ) {
+      return false;
+    }
+    committed.dataset["kpIntegrationSceneIdentity"] = "retained";
+    return true;
+  })).toBe(true);
+  const before = await player.evaluate((root) => ({
+    rendererSessionId: root.dataset["kpExactRendererSessionId"],
+    invocationId: root.dataset["kpExactMotifInvocationId"],
+    segmentId: root.dataset["kpExactSymbolicSegment"],
+    programId: root.dataset["kpExactSymbolicExecutableProgramId"],
+    created: root.dataset["kpExactSymbolicPlaybackCreatedCount"],
+    disposed: root.dataset["kpExactSymbolicPlaybackDisposedCount"]
+  }));
+
+  for (const foldMode of ["expanded", "collapsed", "automatic"]) {
+    await player.locator("[data-kp-exact-fold-mode]")
+      .selectOption(foldMode);
+  }
+  for (const view of [
+    "partitioned-circle",
+    "fraction-bar",
+    "number-line",
+    "symbolic"
+  ]) {
+    await player.locator(`[data-kp-exact-active-view="${view}"]`).click();
+  }
+
+  expect(await player.evaluate((root) => {
+    const committed = root.querySelector<HTMLElement>(
+      "[data-kp-exact-symbolic-scene]" +
+      "[data-kp-prepared-scene-state=\"committed\"]"
+    );
+    return {
+      rendererSessionId: root.dataset["kpExactRendererSessionId"],
+      invocationId: root.dataset["kpExactMotifInvocationId"],
+      segmentId: root.dataset["kpExactSymbolicSegment"],
+      programId: root.dataset["kpExactSymbolicExecutableProgramId"],
+      created: root.dataset["kpExactSymbolicPlaybackCreatedCount"],
+      disposed: root.dataset["kpExactSymbolicPlaybackDisposedCount"],
+      active: root.dataset["kpExactSymbolicPlaybackActiveCount"],
+      retained:
+        committed?.dataset["kpIntegrationSceneIdentity"] === "retained",
+      status: committed?.dataset["kpExactSymbolicStatus"],
+      opacity: committed === null
+        ? 0
+        : Number(getComputedStyle(committed).opacity),
+      preparing: root.querySelectorAll(
+        "[data-kp-prepared-scene-state=\"preparing\"]"
+      ).length
+    };
+  })).toEqual({
+    ...before,
+    active: "1",
+    retained: true,
+    status: "ready",
+    opacity: 1,
+    preparing: 0
+  });
 });
 
 test("checkpoint, fold, pin, representation, and seek controls round-trip", async ({
