@@ -8,18 +8,10 @@ import {
 import type {
   KpPlaceValueAdditionPresentationPlan
 } from "../animation/place-value-addition-presentation-plan.ts";
-import {
-  createKpEquationFontReadiness
-} from "./equation-font-readiness.ts";
 import { renderLatexToHtml } from "./katex-adapter.ts";
 import {
-  createKpCanonicalNativeKatexSceneSession,
-  type KpNativeKatexSceneOwnershipFrame,
-  type KpNativeKatexRendererSession
+  type KpNativeKatexSceneOwnershipFrame
 } from "./native-katex-scene-compositor.ts";
-import {
-  observeKpNativeKatexRenderedScene
-} from "./native-katex-rendered-scene.ts";
 import {
   compileKpExecutableSuccessorMotifProgramAdapter,
   type KpExecutableSuccessorMotifProgramAdapterDispatch
@@ -30,6 +22,9 @@ import type {
 import {
   createKpPlaceValueWrittenColumnDomProjection
 } from "./place-value-addition-written-column-dom.ts";
+import {
+  createKpPlaceValueNativeSceneDom
+} from "./place-value-addition-native-scene-dom.ts";
 
 declare const kpPlaceValueOnesEvaluationBrand: unique symbol;
 
@@ -167,13 +162,6 @@ export function createKpPlaceValueOnesEvaluationDom(input: {
   if (!isKpPlaceValueOnesEvaluation(input.evaluation)) {
     throw new Error("Ones-evaluation DOM requires compiler-owned authority.");
   }
-  const root = input.document.createElement("div");
-  root.dataset["kpPlaceValueOnesEvaluation"] = "";
-  root.dataset["kpOperationEvaluationProgramId"] =
-    input.evaluation.forward.programId;
-  root.style.cssText =
-    "display:grid;position:relative;width:100%;place-items:center";
-  root.setAttribute("aria-hidden", "true");
   const source = createKpPlaceValueWrittenColumnDomProjection({
     document: input.document,
     projection: input.projection,
@@ -184,10 +172,6 @@ export function createKpPlaceValueOnesEvaluationDom(input: {
     projection: input.projection,
     endpoint: "initial"
   });
-  source.root.dataset["kpPlaceValueOperationEndpoint"] = "source";
-  target.root.dataset["kpPlaceValueOperationEndpoint"] = "target";
-  target.root.style.cssText +=
-    ";position:absolute;inset:0;opacity:0";
   for (const selectorId of [
     ...input.evaluation.materialSelectorIds,
     input.evaluation.catalystSelectorId
@@ -214,56 +198,25 @@ export function createKpPlaceValueOnesEvaluationDom(input: {
       "4"
     )
   );
-  const materialLayer = input.document.createElement("div");
-  materialLayer.dataset["kpEditorEquationMaterialLayer"] = "true";
-  materialLayer.style.cssText =
-    "position:absolute;inset:0;pointer-events:none";
-  // The canonical compositor writes only through its persistent material
-  // layer; keeping that layer inside this stage prevents a place-value
-  // projection from accidentally falling back to endpoint cross-fading.
-  root.append(source.root, target.root, materialLayer);
-
-  const fontReadiness = createKpEquationFontReadiness(input.document);
-  let renderer: KpNativeKatexRendererSession | undefined;
-  const requireRenderer = (): KpNativeKatexRendererSession => {
-    if (renderer !== undefined) return renderer;
-    if (!root.isConnected) {
-      throw new Error(
-        "Ones-evaluation DOM must be connected before paint measurement."
-      );
-    }
-    const sourceScene = observeKpNativeKatexRenderedScene({
-      endpoint: "source",
-      stage: root,
-      root: source.root,
-      semanticEntityId: "scene.place-value.ones.source",
-      presentationGroupId: "scene.place-value.ones.source",
-      fontReadiness
-    });
-    const targetScene = observeKpNativeKatexRenderedScene({
-      endpoint: "target",
-      stage: root,
-      root: target.root,
-      semanticEntityId: "scene.place-value.ones.target",
-      presentationGroupId: "scene.place-value.ones.target",
-      fontReadiness
-    });
-    renderer = createKpCanonicalNativeKatexSceneSession({
-      source: sourceScene,
-      target: targetScene,
-      relations: [],
-      successorSyntheses: [{
-        binding: input.evaluation.binding,
-        direction: "forward",
-        motion: "full"
-      }]
-    }).session;
-    return renderer;
-  };
-  return Object.freeze({
-    root,
+  const scene = createKpPlaceValueNativeSceneDom({
+    document: input.document,
     sourceRoot: source.root,
     targetRoot: target.root,
+    sourceSceneId: "scene.place-value.ones-evaluation.source",
+    targetSceneId: "scene.place-value.ones-evaluation.target",
+    successorSyntheses: [{
+      binding: input.evaluation.binding,
+      direction: "forward",
+      motion: "full"
+    }]
+  });
+  scene.root.dataset["kpPlaceValueOnesEvaluation"] = "";
+  scene.root.dataset["kpOperationEvaluationProgramId"] =
+    input.evaluation.forward.programId;
+  return Object.freeze({
+    root: scene.root,
+    sourceRoot: scene.sourceRoot,
+    targetRoot: scene.targetRoot,
     apply(
       progress: number,
       direction: "forward" | "rewind"
@@ -273,20 +226,13 @@ export function createKpPlaceValueOnesEvaluationDom(input: {
           ? input.evaluation.forward
           : input.evaluation.rewind;
       const telemetry = execution.samplePhaseTelemetry(progress);
-      root.dataset["kpOperationEvaluationDirection"] = direction;
-      root.dataset["kpOperationEvaluationPhaseId"] =
+      scene.root.dataset["kpOperationEvaluationDirection"] = direction;
+      scene.root.dataset["kpOperationEvaluationPhaseId"] =
         telemetry.activePhaseId;
-      root.dataset["kpOperationEvaluationProgress"] = String(progress);
-      return requireRenderer().apply(progress);
+      scene.root.dataset["kpOperationEvaluationProgress"] = String(progress);
+      return scene.apply(progress);
     },
-    dispose() {
-      renderer?.retire({
-        kind: "native-katex-paint-preserving-retirement",
-        reason: "surface-disposed",
-        structuralSuccession: "retire-preserving-paint"
-      });
-      fontReadiness.dispose();
-    }
+    dispose: scene.dispose
   });
 }
 

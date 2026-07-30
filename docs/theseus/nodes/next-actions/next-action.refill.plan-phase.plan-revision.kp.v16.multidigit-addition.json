@@ -410,6 +410,48 @@
       "scope": "s15 architecture and type cost",
       "checkedAt": "2026-07-30T17:54:01.135Z",
       "notes": "Architecture passes with 380 semantic-animation files, zero frozen exceptions, and three source-derived motif consumers; inference remains within the frozen 48471 type and 61210 instantiation budget at 2.34 seconds."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s16 initial nominal intent integration",
+      "checkedAt": "2026-07-30T18:16:54.567Z",
+      "notes": "The first compile exposed incomplete union narrowing for the new nominal identity-transfer branch and one untyped browser-fixture query; both were narrowed explicitly without casts or weakening the intent brand."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "failed",
+      "scope": "s16 initial successor-boundary assertion",
+      "checkedAt": "2026-07-30T18:16:55.632Z",
+      "notes": "The first full run showed the prior s15 test still expected its now-hidden evaluation target to own paint at the exact boundary. The product correctly entered the exchange source; the test now verifies that native successor plus exact s15-target-to-s16-source geometry."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s16 semantic and typed exchange contract",
+      "checkedAt": "2026-07-30T18:16:56.481Z",
+      "notes": "71 of 71 focused checks pass, including exact carry proof reuse, one-to-two fission cardinality, nominal copy resistance, canonical transfer progress, and inverse phase order."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "passed",
+      "scope": "s16 written and base-ten exchange choreography",
+      "checkedAt": "2026-07-30T18:16:57.345Z",
+      "notes": "30 of 30 Chromium, Firefox, and WebKit wide/phone checks pass. Evaluated 14 retains endpoint geometry and style, written and SVG ownership switch on the same boundary, all paint is binary opaque, carry uses native script size, hidden compositor work is skipped, and seek/rewind frames are identical."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans; npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "s16 shared motif compatibility",
+      "checkedAt": "2026-07-30T18:16:58.205Z",
+      "notes": "175 operation-presentation checks and 101 exact-fraction checks pass after adding the generic nominal identity-transfer intent; the original promoted fission/fusion caller remains unchanged."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "s16 static architecture and cost",
+      "checkedAt": "2026-07-30T18:16:59.085Z",
+      "notes": "All TypeScript projects pass; architecture remains at zero frozen semantic-animation exceptions; inference stays within 48471 types, 61210 instantiations, and 2.39 seconds."
     }
   ],
   "expectedLearning": [

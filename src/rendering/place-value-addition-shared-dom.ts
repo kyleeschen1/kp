@@ -13,6 +13,9 @@ import {
 import {
   createKpPlaceValueOnesEvaluationDom
 } from "./place-value-addition-ones-evaluation.ts";
+import {
+  createKpPlaceValueOnesExchangeDom
+} from "./place-value-addition-ones-exchange.ts";
 
 export interface KpPlaceValueAdditionSharedDom {
   readonly root: HTMLElement;
@@ -60,7 +63,13 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     evaluation: input.session.onesEvaluation
   });
   onesEvaluation.root.style.display = "none";
-  writtenHost.append(written.root, onesEvaluation.root);
+  const onesExchange = createKpPlaceValueOnesExchangeDom({
+    document: input.document,
+    projection: input.session.written,
+    exchange: input.session.onesExchange
+  });
+  onesExchange.root.style.display = "none";
+  writtenHost.append(written.root, onesEvaluation.root, onesExchange.root);
   baseTen.root.dataset["kpPlaceValueView"] = "base-ten";
   root.append(writtenHost, baseTen.root);
 
@@ -75,27 +84,58 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     written.setEndpoint(
       frame.stableState.stage === "settled" ? "settled" : "initial"
     );
-    baseTen.setState(frame.baseTen.stable.stateId);
     const visible = new Set(frame.responsive.visibleViews);
     const writtenVisible = visible.has("written");
-    const onesActive =
-      frame.beat.id === "beat.place-value.evaluate-ones" ||
+    const baseTenVisible = visible.has("base-ten");
+    const evaluatingOnes =
+      frame.beat.id === "beat.place-value.evaluate-ones";
+    const exchangingOnes =
       frame.beat.id === "beat.place-value.exchange-ones";
+    // Until the tens choreography is installed in s17, retain the exact ones
+    // endpoint natively instead of flashing back to the empty result row.
+    const retainingOnesEndpoint =
+      frame.beat.id === "beat.place-value.evaluate-tens";
+    const onesActive =
+      evaluatingOnes || exchangingOnes || retainingOnesEndpoint;
     writtenHost.style.display = writtenVisible ? "grid" : "none";
     written.root.style.display =
       writtenVisible && !onesActive ? "grid" : "none";
     onesEvaluation.root.style.display =
-      writtenVisible && onesActive ? "grid" : "none";
-    if (writtenVisible && onesActive) {
+      writtenVisible && evaluatingOnes ? "grid" : "none";
+    onesExchange.root.style.display =
+      writtenVisible && (exchangingOnes || retainingOnesEndpoint)
+        ? "grid"
+        : "none";
+    if (writtenVisible && evaluatingOnes) {
       onesEvaluation.apply(
-        frame.beat.id === "beat.place-value.evaluate-ones"
-          ? frame.beatProgress
-          : 1,
+        frame.beatProgress,
         frame.clock.direction
       );
     }
+    const exchangeFrame =
+      writtenVisible && (exchangingOnes || retainingOnesEndpoint)
+        ? onesExchange.apply(
+            exchangingOnes ? frame.beatProgress : 1,
+            frame.clock.direction
+          )
+        : undefined;
+    if (baseTenVisible) {
+      if (exchangingOnes) {
+        baseTen.applyExchange({
+          exchangeId: "exchange.ones-to-tens",
+          progress: frame.beatProgress,
+          // Hidden views do no paint measurement. Both projections use the
+          // canonical transfer boundary owned by the compiled exchange.
+          transferOccurred:
+            exchangeFrame?.transferOccurred ??
+            frame.beatProgress >= input.session.onesExchange.transferProgress
+        });
+      } else {
+        baseTen.setState(frame.baseTen.stable.stateId);
+      }
+    }
     baseTen.root.style.display =
-      visible.has("base-ten") ? "block" : "none";
+      baseTenVisible ? "block" : "none";
     root.style.gridTemplateColumns =
       frame.responsive.mode === "wide-both"
         ? "minmax(0,1fr) minmax(0,1fr)"

@@ -4,6 +4,8 @@ import type {
 import {
   isKpPlaceValueBaseTenProjection,
   sampleKpPlaceValueBaseTenFrame,
+  type KpPlaceValueBaseTenExchange,
+  type KpPlaceValueBaseTenPlacement,
   type KpPlaceValueBaseTenProjection
 } from "./place-value-addition-base-ten-projection.ts";
 
@@ -14,6 +16,20 @@ export interface KpPlaceValueBaseTenDomProjection {
   readonly blockElements: ReadonlyMap<string, SVGRectElement>;
   readonly stateId: () => KpPlaceValueAdditionState["id"];
   readonly setState: (stateId: KpPlaceValueAdditionState["id"]) => void;
+  readonly applyExchange: (input: {
+    readonly exchangeId: KpPlaceValueBaseTenExchange["id"];
+    readonly progress: number;
+    readonly transferOccurred: boolean;
+  }) => KpPlaceValueBaseTenExchangeDomFrame;
+}
+
+export interface KpPlaceValueBaseTenExchangeDomFrame {
+  readonly exchangeId: KpPlaceValueBaseTenExchange["id"];
+  readonly progress: number;
+  readonly transferOccurred: boolean;
+  readonly sourceStateId: KpPlaceValueAdditionState["id"];
+  readonly targetStateId: KpPlaceValueAdditionState["id"];
+  readonly visibleBlockIds: readonly string[];
 }
 
 export function createKpPlaceValueBaseTenDomProjection(input: {
@@ -94,6 +110,128 @@ export function createKpPlaceValueBaseTenDomProjection(input: {
     }
     currentStateId = stateId;
     root.dataset["kpPlaceValueStateId"] = stateId;
+    delete root.dataset["kpBaseTenExchangeId"];
+    delete root.dataset["kpBaseTenExchangeProgress"];
+    delete root.dataset["kpBaseTenExchangeTransferOccurred"];
+  };
+  const applyExchange = (
+    transition: Parameters<
+      KpPlaceValueBaseTenDomProjection["applyExchange"]
+    >[0]
+  ): KpPlaceValueBaseTenExchangeDomFrame => {
+    if (
+      !Number.isFinite(transition.progress) ||
+      transition.progress < 0 ||
+      transition.progress > 1
+    ) {
+      throw new Error("Base-ten exchange progress must be within zero and one.");
+    }
+    const exchange = input.projection.exchanges.find(
+      ({ id }) => id === transition.exchangeId
+    );
+    if (exchange === undefined) {
+      throw new Error(`Unknown base-ten exchange ${transition.exchangeId}.`);
+    }
+    const stateIds = exchangeStateIds(exchange.id);
+    const source = sampleKpPlaceValueBaseTenFrame(
+      input.projection,
+      stateIds.source
+    );
+    const target = sampleKpPlaceValueBaseTenFrame(
+      input.projection,
+      stateIds.target
+    );
+    const sourcePlacements = new Map(source.placements.map((placement) =>
+      [placement.blockId, placement]
+    ));
+    const targetPlacements = new Map(target.placements.map((placement) =>
+      [placement.blockId, placement]
+    ));
+    const produced = targetPlacements.get(exchange.producedBlockId);
+    if (produced === undefined) {
+      throw new Error(
+        `Base-ten exchange ${exchange.id} lacks its produced placement.`
+      );
+    }
+    const consumedIds = new Set(exchange.consumedBlockIds);
+    const visibleBlockIds: string[] = [];
+    const persistentProgress = smoothstep(transition.progress);
+    const approachProgress = smoothstep(clampUnit(
+      (transition.progress - 0.12) / 0.48
+    ));
+    for (const block of input.projection.blocks) {
+      const element = blockElements.get(block.id)!;
+      const sourcePlacement = sourcePlacements.get(block.id);
+      const targetPlacement = targetPlacements.get(block.id);
+      let placement: KpPlaceValueBaseTenPlacement | undefined;
+      let visible = false;
+      if (consumedIds.has(block.id)) {
+        const index = exchange.consumedBlockIds.indexOf(block.id);
+        if (sourcePlacement === undefined || index < 0) {
+          throw new Error(
+            `Base-ten exchange ${exchange.id} lacks consumed geometry ${block.id}.`
+          );
+        }
+        const slice = Object.freeze({
+          blockId: block.id,
+          x:
+            produced.x +
+            produced.width * index / exchange.consumedBlockIds.length,
+          y: produced.y,
+          width: produced.width / exchange.consumedBlockIds.length,
+          height: produced.height
+        });
+        placement = interpolatePlacement(
+          sourcePlacement,
+          slice,
+          approachProgress
+        );
+        visible = !transition.transferOccurred;
+      } else if (block.id === exchange.producedBlockId) {
+        placement = produced;
+        visible = transition.transferOccurred;
+      } else if (
+        sourcePlacement !== undefined &&
+        targetPlacement !== undefined
+      ) {
+        placement = interpolatePlacement(
+          sourcePlacement,
+          targetPlacement,
+          persistentProgress
+        );
+        visible = true;
+      } else {
+        placement = sourcePlacement ?? targetPlacement;
+        visible = placement !== undefined &&
+          (
+            sourcePlacement !== undefined
+              ? !transition.transferOccurred
+              : transition.transferOccurred
+          );
+      }
+      const home = input.projection.homePlacements.find(
+        ({ blockId }) => blockId === block.id
+      )!;
+      applyPlacement(element, placement ?? home);
+      element.dataset["kpBaseTenVisible"] = String(visible);
+      if (visible) visibleBlockIds.push(block.id);
+    }
+    currentStateId =
+      transition.progress === 1 ? stateIds.target : stateIds.source;
+    root.dataset["kpPlaceValueStateId"] = currentStateId;
+    root.dataset["kpBaseTenExchangeId"] = exchange.id;
+    root.dataset["kpBaseTenExchangeProgress"] =
+      String(transition.progress);
+    root.dataset["kpBaseTenExchangeTransferOccurred"] =
+      String(transition.transferOccurred);
+    return Object.freeze({
+      exchangeId: exchange.id,
+      progress: transition.progress,
+      transferOccurred: transition.transferOccurred,
+      sourceStateId: stateIds.source,
+      targetStateId: stateIds.target,
+      visibleBlockIds: Object.freeze(visibleBlockIds)
+    });
   };
   setState(currentStateId);
 
@@ -101,7 +239,8 @@ export function createKpPlaceValueBaseTenDomProjection(input: {
     root,
     blockElements,
     stateId: () => currentStateId,
-    setState
+    setState,
+    applyExchange
   });
 }
 
@@ -118,4 +257,48 @@ function applyPlacement(
   element.setAttribute("y", String(placement.y));
   element.setAttribute("width", String(placement.width));
   element.setAttribute("height", String(placement.height));
+}
+
+function exchangeStateIds(
+  exchangeId: KpPlaceValueBaseTenExchange["id"]
+): {
+  readonly source: KpPlaceValueAdditionState["id"];
+  readonly target: KpPlaceValueAdditionState["id"];
+} {
+  return exchangeId === "exchange.ones-to-tens"
+    ? {
+        source: "state.place-value.ones-evaluated",
+        target: "state.place-value.ones-exchanged"
+      }
+    : {
+        source: "state.place-value.tens-evaluated",
+        target: "state.place-value.tens-exchanged"
+      };
+}
+
+function interpolatePlacement(
+  source: KpPlaceValueBaseTenPlacement,
+  target: KpPlaceValueBaseTenPlacement,
+  progress: number
+): KpPlaceValueBaseTenPlacement {
+  return Object.freeze({
+    blockId: source.blockId,
+    x: interpolate(source.x, target.x, progress),
+    y: interpolate(source.y, target.y, progress),
+    width: interpolate(source.width, target.width, progress),
+    height: interpolate(source.height, target.height, progress)
+  });
+}
+
+function interpolate(from: number, to: number, progress: number): number {
+  return from + (to - from) * progress;
+}
+
+function clampUnit(value: number): number {
+  return Math.max(0, Math.min(1, value));
+}
+
+function smoothstep(value: number): number {
+  const bounded = clampUnit(value);
+  return bounded * bounded * (3 - 2 * bounded);
 }

@@ -272,7 +272,7 @@ for (const viewport of [
           "[data-kp-place-value-view]"
         ).length,
         visibleViewCount: [
-          ...dom.root.querySelectorAll<HTMLElement>(
+          ...document.querySelectorAll<HTMLElement>(
             "[data-kp-place-value-view]"
           )
         ].filter((element) =>
@@ -416,27 +416,27 @@ for (const viewport of [
       const rewind = ownerSignature();
 
       dom.apply(sample(0.25, 0.175, 5));
+      const exchangeEndpoint = document.querySelector<HTMLElement>(
+        "[data-kp-place-value-ones-exchange]"
+      )!;
       const endpoint = {
         sourceOpacity: getComputedStyle(
-          evaluation().querySelector<HTMLElement>(
+          exchangeEndpoint.querySelector<HTMLElement>(
             '[data-kp-place-value-operation-endpoint="source"]'
           )!
         ).opacity,
         targetOpacity: getComputedStyle(
-          evaluation().querySelector<HTMLElement>(
+          exchangeEndpoint.querySelector<HTMLElement>(
             '[data-kp-place-value-operation-endpoint="target"]'
           )!
         ).opacity,
-        targetVisible: [
-          ...evaluation().querySelectorAll<HTMLElement>(
-            '[data-kp-place-value-operation-endpoint="target"] ' +
-            "[data-kp-place-value-native-root]"
+        visibleEvaluationDigits: [
+          ...exchangeEndpoint.querySelectorAll<HTMLElement>(
+            '[data-kp-place-value-operation-endpoint="source"] ' +
+            "[data-kp-place-value-evaluation-digit]"
           )
-        ].filter((element) =>
-          element.dataset["kpVisibility"] === "visible" &&
-          getComputedStyle(element).opacity === "1"
-        ).map((element) => ({
-          id: element.dataset["kpSemanticEntityId"],
+        ].map((element) => ({
+          column: element.dataset["kpPlaceValueColumn"],
           text:
             element.querySelector<HTMLElement>(".katex-html")
               ?.textContent?.trim() ?? ""
@@ -496,19 +496,265 @@ for (const viewport of [
       evidence.midpoint.visibleOwnerTexts.join("")
     ).toContain("+");
     expect(evidence.rewind).toEqual(evidence.forward);
+    expect(evidence.endpoint.sourceOpacity).toBe("1");
+    expect(evidence.endpoint.targetOpacity).toBe("0");
+    expect(evidence.endpoint.visibleEvaluationDigits).toEqual([
+      { column: "tens", text: "1" },
+      { column: "ones", text: "4" }
+    ]);
+  });
+
+  test(`${viewport.name} ones exchange carries opaque identity across both views`, async ({
+    page
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const evidence = await page.evaluate(async ({ width }) => {
+      const runtimeUrl =
+        "/src/rendering/place-value-addition-runtime.ts";
+      const sharedDomUrl =
+        "/src/rendering/place-value-addition-shared-dom.ts";
+      const clockUrl = "/src/reader/runtime/playback-clock.ts";
+      const runtime = await import(/* @vite-ignore */ runtimeUrl);
+      const sharedDom = await import(/* @vite-ignore */ sharedDomUrl);
+      const clock = await import(/* @vite-ignore */ clockUrl);
+      const session = runtime.createKpPlaceValueAdditionRuntimeSession();
+      const sample = (
+        progress: number,
+        previousProgress: number,
+        sequence: number,
+        selectedView: "written" | "base-ten" = "written"
+      ) => runtime.sampleKpPlaceValueAdditionRuntime({
+        session,
+        clock: clock.createKpReaderClockSample({
+          source: "controls",
+          progress,
+          previousProgress,
+          sequence
+        }),
+        viewportWidth: width,
+        selectedView
+      });
+      const dom = sharedDom.createKpPlaceValueAdditionSharedDom({
+        document,
+        session,
+        initialFrame: sample(0, 0, 0)
+      });
+      const app = document.querySelector<HTMLElement>("#app");
+      if (app !== null) app.style.display = "none";
+      document.body.append(dom.root);
+      Object.assign(document.body.style, {
+        margin: "0",
+        minHeight: "100vh",
+        display: "grid",
+        placeItems: "center"
+      });
+      await document.fonts.ready;
+
+      const evaluation = () => document.querySelector<HTMLElement>(
+        "[data-kp-place-value-ones-evaluation]"
+      )!;
+      const exchange = () => document.querySelector<HTMLElement>(
+        "[data-kp-place-value-ones-exchange]"
+      )!;
+      const paintMetric = (element: HTMLElement) => {
+        const paint = element.querySelector<HTMLElement>(
+          ".katex-html .mord"
+        ) ?? element.querySelector<HTMLElement>(".katex-html")!;
+        const rect = element.getBoundingClientRect();
+        const style = getComputedStyle(paint);
+        return {
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height,
+          fontFamily: style.fontFamily,
+          fontSize: style.fontSize,
+          fontWeight: style.fontWeight
+        };
+      };
+      const ownerSignature = () => [
+        ...exchange().querySelectorAll<HTMLElement>(
+          "[data-kp-equation-material-owner-id]"
+        )
+      ].map((owner) => ({
+        id: owner.dataset["kpEquationMaterialOwnerId"]!,
+        role: owner.dataset["kpEquationMaterialFragmentRole"] ?? "",
+        opacity: getComputedStyle(owner).opacity,
+        transform: getComputedStyle(owner).transform,
+        text: owner.textContent?.trim() ?? ""
+      })).sort((left, right) => left.id.localeCompare(right.id));
+      const baseTenSignature = () => [
+        ...document.querySelectorAll<SVGRectElement>(
+          "[data-kp-base-ten-block]"
+        )
+      ].map((block) => ({
+        id: block.dataset["kpBaseTenBlock"]!,
+        visible: block.dataset["kpBaseTenVisible"],
+        x: block.getAttribute("x"),
+        y: block.getAttribute("y"),
+        width: block.getAttribute("width"),
+        height: block.getAttribute("height")
+      })).sort((left, right) => left.id.localeCompare(right.id));
+      const transferState = () => ({
+        written:
+          exchange().dataset["kpIdentityTransferOccurred"],
+        baseTen: document.querySelector<SVGSVGElement>(
+          "[data-kp-place-value-base-ten-projection]"
+        )!.dataset["kpBaseTenExchangeTransferOccurred"]
+      });
+
+      dom.apply(sample(0.175, 0, 1));
+      const evaluationTarget = evaluation().querySelector<HTMLElement>(
+        '[data-kp-place-value-operation-endpoint="target"]'
+      )!;
+      const evaluationMaterial = evaluation().querySelector<HTMLElement>(
+        "[data-kp-editor-equation-material-layer]"
+      )!;
+      evaluationTarget.style.opacity = "1";
+      evaluationMaterial.style.visibility = "hidden";
+      const evaluationEndpoint = [
+        "evaluation.ones.total.tens",
+        "evaluation.ones.total.ones"
+      ].map((id) => paintMetric(
+        evaluationTarget.querySelector<HTMLElement>(
+          `[data-kp-semantic-entity-id="${id}"]`
+        )!
+      ));
+
+      dom.apply(sample(0.25, 0.175, 2));
+      const exchangeSource = [
+        ...exchange().querySelectorAll<HTMLElement>(
+          '[data-kp-place-value-operation-endpoint="source"] ' +
+          "[data-kp-place-value-evaluation-digit]"
+        )
+      ].map(paintMetric);
+
+      dom.apply(sample(0.325, 0.25, 3));
+      const writtenForward = ownerSignature();
+      dom.apply(sample(0.37, 0.325, 4));
+      dom.apply(sample(0.325, 0.37, 5));
+      const writtenRewind = ownerSignature();
+
+      dom.apply(sample(0.325, 0.325, 6, "base-ten"));
+      const baseTenForward = baseTenSignature();
+      dom.apply(sample(0.37, 0.325, 7, "base-ten"));
+      dom.apply(sample(0.325, 0.37, 8, "base-ten"));
+      const baseTenRewind = baseTenSignature();
+
+      dom.apply(sample(0.339, 0.325, 9));
+      const beforeWritten = transferState().written;
+      dom.apply(sample(0.339, 0.339, 10, "base-ten"));
+      const before = {
+        written: beforeWritten,
+        baseTen: transferState().baseTen,
+        blocks: baseTenSignature()
+      };
+      dom.apply(sample(0.34, 0.339, 11));
+      const afterWritten = transferState().written;
+      dom.apply(sample(0.34, 0.34, 12, "base-ten"));
+      const after = {
+        written: afterWritten,
+        baseTen: transferState().baseTen,
+        blocks: baseTenSignature()
+      };
+
+      dom.apply(sample(0.4, 0.34, 13));
+      const endpointSource = exchange().querySelector<HTMLElement>(
+        '[data-kp-place-value-operation-endpoint="source"]'
+      )!;
+      const endpointTarget = exchange().querySelector<HTMLElement>(
+        '[data-kp-place-value-operation-endpoint="target"]'
+      )!;
+      const carry = endpointTarget.querySelector<HTMLElement>(
+        '[data-kp-semantic-entity-id="carry.tens"]'
+      )!;
+      const result = endpointTarget.querySelector<HTMLElement>(
+        '[data-kp-semantic-entity-id="result.ones"]'
+      )!;
+      return {
+        evaluationEndpoint,
+        exchangeSource,
+        writtenForward,
+        writtenRewind,
+        baseTenForward,
+        baseTenRewind,
+        before,
+        after,
+        endpoint: {
+          sourceOpacity: getComputedStyle(endpointSource).opacity,
+          targetOpacity: getComputedStyle(endpointTarget).opacity,
+          carryText:
+            carry.querySelector<HTMLElement>(".katex-html")
+              ?.textContent?.trim(),
+          resultText:
+            result.querySelector<HTMLElement>(".katex-html")
+              ?.textContent?.trim(),
+          carryFontSize: paintMetric(carry).fontSize,
+          resultFontSize: paintMetric(result).fontSize
+        }
+      };
+    }, viewport);
+
+    expect(evidence.exchangeSource).toHaveLength(2);
+    for (const [index, prior] of evidence.evaluationEndpoint.entries()) {
+      const source = evidence.exchangeSource[index]!;
+      expect(Math.abs(source.left - prior.left)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(source.top - prior.top)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(source.width - prior.width)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(source.height - prior.height)).toBeLessThanOrEqual(0.5);
+      expect(source.fontFamily).toBe(prior.fontFamily);
+      expect(source.fontSize).toBe(prior.fontSize);
+      expect(source.fontWeight).toBe(prior.fontWeight);
+    }
+    expect(evidence.writtenForward.length).toBeGreaterThan(0);
+    expect(evidence.writtenForward.every(({ opacity }) =>
+      opacity === "0" || opacity === "1"
+    )).toBe(true);
+    expect(evidence.writtenForward.some(({ opacity, transform }) =>
+      opacity === "1" && transform !== "none"
+    )).toBe(true);
+    expect(
+      evidence.writtenForward
+        .filter(({ opacity }) => opacity === "1")
+        .map(({ text }) => text)
+        .join("")
+    ).toContain("1");
+    expect(
+      evidence.writtenForward
+        .filter(({ opacity }) => opacity === "1")
+        .map(({ text }) => text)
+        .join("")
+    ).toContain("4");
+    expect(evidence.writtenRewind).toEqual(evidence.writtenForward);
+    expect(evidence.baseTenRewind).toEqual(evidence.baseTenForward);
+    expect(evidence.before.written).toBe("false");
+    expect(evidence.before.baseTen).toBe("false");
+    expect(evidence.after.written).toBe("true");
+    expect(evidence.after.baseTen).toBe("true");
+
+    const consumed = (blocks: typeof evidence.before.blocks) =>
+      blocks.filter(({ id }) =>
+        id.startsWith("block.first.ones.") ||
+        id === "block.second.ones.0" ||
+        id === "block.second.ones.1"
+      );
+    const produced = (blocks: typeof evidence.before.blocks) =>
+      blocks.find(({ id }) => id === "block.exchange.ones-to-tens")!;
+    expect(consumed(evidence.before.blocks).every(
+      ({ visible }) => visible === "true"
+    )).toBe(true);
+    expect(produced(evidence.before.blocks).visible).toBe("false");
+    expect(consumed(evidence.after.blocks).every(
+      ({ visible }) => visible === "false"
+    )).toBe(true);
+    expect(produced(evidence.after.blocks).visible).toBe("true");
     expect(evidence.endpoint.sourceOpacity).toBe("0");
     expect(evidence.endpoint.targetOpacity).toBe("1");
-    expect(evidence.endpoint.targetVisible).toEqual(
-      expect.arrayContaining([
-        {
-          id: "evaluation.ones.total.tens",
-          text: "1"
-        },
-        {
-          id: "evaluation.ones.total.ones",
-          text: "4"
-        }
-      ])
+    expect(evidence.endpoint.carryText).toBe("1");
+    expect(evidence.endpoint.resultText).toBe("4");
+    expect(Number.parseFloat(evidence.endpoint.carryFontSize)).toBeLessThan(
+      Number.parseFloat(evidence.endpoint.resultFontSize)
     );
   });
 }

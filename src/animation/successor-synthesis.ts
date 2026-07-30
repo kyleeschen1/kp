@@ -72,6 +72,8 @@ export interface KpSuccessorSynthesisPlan {
   readonly targetSeedScale: number;
 }
 
+export const kpOpaqueIdentityTransferOwnershipProgress = 0.6 as const;
+
 export interface KpSuccessorSynthesisPose {
   readonly x: number;
   readonly y: number;
@@ -268,7 +270,7 @@ export function createKpSuccessorSynthesisPlan(input: {
     inputArrivalStart: 0.16,
     inputArrivalEnd: 0.58,
     inputRankStaggerSpan: 0.08,
-    targetBirthStart: 0.6,
+    targetBirthStart: kpOpaqueIdentityTransferOwnershipProgress,
     targetBirthEnd: 0.82,
     targetRankStaggerSpan: 0.06,
     retirementStart: 0.7,

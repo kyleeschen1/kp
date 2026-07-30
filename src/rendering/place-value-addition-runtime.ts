@@ -26,6 +26,10 @@ import {
   compileKpPlaceValueOnesEvaluation,
   type KpPlaceValueOnesEvaluation
 } from "./place-value-addition-ones-evaluation.ts";
+import {
+  compileKpPlaceValueOnesExchange,
+  type KpPlaceValueOnesExchange
+} from "./place-value-addition-ones-exchange.ts";
 
 declare const kpPlaceValueRuntimeSessionBrand: unique symbol;
 declare const kpPlaceValueRuntimeFrameBrand: unique symbol;
@@ -46,6 +50,7 @@ export interface KpPlaceValueAdditionRuntimeSession {
   readonly written: KpPlaceValueWrittenColumnProjection;
   readonly baseTen: KpPlaceValueBaseTenProjection;
   readonly onesEvaluation: KpPlaceValueOnesEvaluation;
+  readonly onesExchange: KpPlaceValueOnesExchange;
   readonly mountedViews: readonly ["written", "base-ten"];
   readonly [kpPlaceValueRuntimeSessionBrand]: true;
 }
@@ -89,6 +94,9 @@ KpPlaceValueAdditionRuntimeSession {
   const onesEvaluation = compileKpPlaceValueOnesEvaluation(
     foundation.presentation
   );
+  const onesExchange = compileKpPlaceValueOnesExchange(
+    foundation.presentation
+  );
   if (
     written.traceId !== foundation.trace.id ||
     baseTen.traceId !== foundation.trace.id
@@ -108,6 +116,7 @@ KpPlaceValueAdditionRuntimeSession {
     written,
     baseTen,
     onesEvaluation,
+    onesExchange,
     mountedViews: Object.freeze(["written", "base-ten"] as const)
   });
   sealedSessions.add(session);

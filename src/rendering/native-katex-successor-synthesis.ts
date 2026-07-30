@@ -4,6 +4,7 @@ import {
   kpOpaqueGatherAndRecognizeSettlementProgress,
   sampleKpOpaqueGatherAndRecognizeSuccessorSynthesis,
   sampleKpOpaqueIdentityTransferSuccessorSynthesis,
+  type KpSuccessorSynthesisBinding,
   type KpSuccessorSynthesisPlan,
   type KpSuccessorSynthesisPose,
   type KpSuccessorSynthesisFrame
@@ -48,6 +49,13 @@ import type {
 import type {
   KpVerifiedIdentityFusionExecutableProgram
 } from "../animation/motifs/identity-fusion-executable-program.ts";
+import {
+  isKpVerifiedExecutableSuccessorMotifProgram
+} from "../animation/motifs/executable-successor-motif-program-validator.ts";
+
+declare const kpNativeKatexIdentityTransferIntentBrand: unique symbol;
+
+const sealedIdentityTransferIntents = new WeakSet<object>();
 
 interface KpNativeKatexSuccessorSynthesisIntentBase {
   readonly direction: "forward" | "rewind";
@@ -65,7 +73,93 @@ export type KpNativeKatexSuccessorSynthesisIntent =
         | KpVerifiedIdentityFissionExecutableProgram
         | KpVerifiedIdentityFusionExecutableProgram;
       readonly legacyContinuityAuthority?: never;
-    });
+    })
+  | KpNativeKatexIdentityTransferIntent;
+
+export interface KpNativeKatexIdentityTransferIntent extends
+KpNativeKatexSuccessorSynthesisIntentBase {
+  readonly kind: "native-katex-identity-transfer-intent";
+  readonly binding: KpSuccessorSynthesisBinding;
+  readonly executableProgram:
+    | KpVerifiedIdentityFissionExecutableProgram
+    | KpVerifiedIdentityFusionExecutableProgram;
+  readonly legacyContinuityAuthority?: never;
+  readonly [kpNativeKatexIdentityTransferIntentBrand]: true;
+}
+
+/**
+ * Identity fission/fusion used to enter the native compositor only through an
+ * exact-fraction compatibility brand. This nominal factory makes the same
+ * existing renderer path available to new typed domains without permitting a
+ * caller to label an arbitrary many-to-many replacement as identity transfer.
+ */
+export function createKpNativeKatexIdentityTransferIntent(input: {
+  readonly binding: KpSuccessorSynthesisBinding;
+  readonly executableProgram:
+    | KpVerifiedIdentityFissionExecutableProgram
+    | KpVerifiedIdentityFusionExecutableProgram;
+  readonly direction: "forward" | "rewind";
+  readonly motion: "full" | "checkpoint";
+}): KpNativeKatexIdentityTransferIntent {
+  if (
+    !isKpVerifiedExecutableSuccessorMotifProgram(input.executableProgram) ||
+    (
+      input.executableProgram.kind !== "identity-fission" &&
+      input.executableProgram.kind !== "identity-fusion"
+    )
+  ) {
+    throw new Error(
+      "Native identity transfer requires a verified fission or fusion program."
+    );
+  }
+  const binding = freezeIdentityTransferBinding(input.binding);
+  const materialSources = binding.sourceAnnotations.filter(
+    ({ contribution }) => contribution === "material-input"
+  );
+  const catalysts = binding.sourceAnnotations.filter(
+    ({ contribution }) => contribution === "catalyst"
+  );
+  const lineageSourceIds = new Set(
+    binding.lineages.flatMap(({ sourceAnnotationIds }) => sourceAnnotationIds)
+  );
+  const lineageTargetIds = new Set(
+    binding.lineages.flatMap(({ targetAnnotationIds }) => targetAnnotationIds)
+  );
+  const sourceIds = materialSources.map(({ id }) => id);
+  const targetIds = binding.targetAnnotations.map(({ id }) => id);
+  const validCardinality =
+    input.executableProgram.kind === "identity-fission"
+      ? sourceIds.length === 1 && targetIds.length >= 2
+      : sourceIds.length >= 2 && targetIds.length === 1;
+  if (
+    catalysts.length !== 0 ||
+    !validCardinality ||
+    !sameUniqueStrings(sourceIds, lineageSourceIds) ||
+    !sameUniqueStrings(targetIds, lineageTargetIds)
+  ) {
+    throw new Error(
+      `Native ${input.executableProgram.kind} requires catalyst-free exact ` +
+      "lineage with the program's one-to-many or many-to-one cardinality."
+    );
+  }
+  const intent = Object.freeze({
+    kind: "native-katex-identity-transfer-intent" as const,
+    binding,
+    executableProgram: input.executableProgram,
+    direction: input.direction,
+    motion: input.motion
+  });
+  sealedIdentityTransferIntents.add(intent);
+  return intent as unknown as KpNativeKatexIdentityTransferIntent;
+}
+
+export function isKpNativeKatexIdentityTransferIntent(
+  value: unknown
+): value is KpNativeKatexIdentityTransferIntent {
+  return typeof value === "object" &&
+    value !== null &&
+    sealedIdentityTransferIntents.has(value);
+}
 
 interface KpNativeKatexSuccessorPaintAnnotation {
   readonly annotationId: string;
@@ -147,6 +241,17 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly intents: readonly KpNativeKatexSuccessorSynthesisIntent[];
 }): readonly KpNativeKatexSuccessorSynthesisScenePlan[] {
+  for (const intent of input.intents) {
+    if (
+      "kind" in intent &&
+      intent.kind === "native-katex-identity-transfer-intent" &&
+      !isKpNativeKatexIdentityTransferIntent(intent)
+    ) {
+      throw new Error(
+        "Native identity-transfer intent requires compiler-owned authority."
+      );
+    }
+  }
   assertUnique(
     input.intents.map(({ binding }) => binding.id),
     "successor synthesis binding"
@@ -200,8 +305,7 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
       measurements
     });
     const continuityAuthority =
-      "executableProgram" in intent &&
-        intent.executableProgram !== undefined
+      "executableProgram" in intent
         ? Object.freeze({
             kind: "executable-identity-transfer" as const,
             program: intent.executableProgram
@@ -968,4 +1072,44 @@ function assertUnique(values: readonly string[], label: string): void {
   if (duplicates.length > 0) {
     throw new Error(`${label} ${duplicates[0]} is duplicated.`);
   }
+}
+
+function freezeIdentityTransferBinding(
+  binding: KpSuccessorSynthesisBinding
+): KpSuccessorSynthesisBinding {
+  return Object.freeze({
+    id: binding.id,
+    relationRecordId: binding.relationRecordId,
+    authority: Object.freeze({ ...binding.authority }),
+    sourceAnnotations: Object.freeze(binding.sourceAnnotations.map(
+      (annotation) => Object.freeze({
+        ...annotation,
+        selectorIds: Object.freeze([...annotation.selectorIds])
+      })
+    )),
+    targetAnnotations: Object.freeze(binding.targetAnnotations.map(
+      (annotation) => Object.freeze({
+        ...annotation,
+        selectorIds: Object.freeze([...annotation.selectorIds])
+      })
+    )),
+    lineages: Object.freeze(binding.lineages.map((lineage) =>
+      Object.freeze({
+        ...lineage,
+        sourceAnnotationIds:
+          Object.freeze([...lineage.sourceAnnotationIds]),
+        targetAnnotationIds:
+          Object.freeze([...lineage.targetAnnotationIds])
+      })
+    ))
+  });
+}
+
+function sameUniqueStrings(
+  expected: readonly string[],
+  actual: ReadonlySet<string>
+): boolean {
+  return expected.length === actual.size &&
+    new Set(expected).size === expected.length &&
+    expected.every((id) => actual.has(id));
 }
