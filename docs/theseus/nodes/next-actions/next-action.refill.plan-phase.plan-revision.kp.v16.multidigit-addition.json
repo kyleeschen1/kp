@@ -109,6 +109,27 @@
       "scope": "s02 durable evidence integrity",
       "checkedAt": "2026-07-30T16:06:51.240Z",
       "notes": "Theseus validates 837 nodes and 14602 events; the slice diff has no whitespace errors."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s03 canonical visual reference",
+      "checkedAt": "2026-07-30T16:10:57.970Z",
+      "notes": "8 of 8 checks pass: preservation hashes plus exact stacked cells, seven contiguous beats, carry routes, and secondary-view subordination."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "s03 typed reader boundary",
+      "checkedAt": "2026-07-30T16:10:58.927Z",
+      "notes": "TypeScript passes; semantic-reader boundary now classifies 133 files while compositor and operation-evaluation boundaries remain unchanged."
+    },
+    {
+      "command": "theseus workspace validate; git diff --check",
+      "status": "passed",
+      "scope": "s03 control and source integrity",
+      "checkedAt": "2026-07-30T16:10:59.800Z",
+      "notes": "Theseus validates 837 nodes and 14615 events; no whitespace errors."
     }
   ],
   "expectedLearning": [

@@ -71,7 +71,8 @@
     {
       "id": "s03",
       "title": "freeze-canonical-visual-reference",
-      "status": "planned"
+      "summary": "Froze the canonical stacked calculation as five semantic rows and four fixed place columns, seven contiguous opaque beats over a 12-second default, exact plus and underline placement, two continuous overflow-digit carry routes, fixed native typography obligations, dense review boundaries, and a secondary base-ten view that shares truth and time but cannot replace or crowd the primary.",
+      "status": "complete"
     },
     {
       "id": "s04",
