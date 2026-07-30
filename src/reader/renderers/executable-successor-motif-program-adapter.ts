@@ -20,6 +20,30 @@ type KpVerifiedProgramOf<
 > = KpVerifiedExecutableSuccessorMotifProgram &
   Extract<KpExecutableSuccessorMotifProgramDraft, { readonly kind: Kind }>;
 
+const kpExecutableSuccessorMotifProgramRouteAuthority = Symbol(
+  "kp.executable-successor-motif-program-route"
+);
+const verifiedProgramRoutes = new WeakSet<object>();
+const programRoutes = new WeakMap<
+  KpVerifiedExecutableSuccessorMotifProgram,
+  KpExecutableSuccessorMotifProgramRoute
+>();
+
+export type KpExecutableSuccessorMotifPrimitiveRoute =
+  | "native-katex-successor-synthesis"
+  | "fission-fusion:fission"
+  | "fission-fusion:fusion";
+
+export interface KpExecutableSuccessorMotifProgramRoute {
+  readonly kind: "executable-successor-motif-program-route";
+  readonly programId: string;
+  readonly programVersion: string;
+  readonly programKind:
+    KpExecutableSuccessorMotifProgramDraft["kind"];
+  readonly primitiveRoute: KpExecutableSuccessorMotifPrimitiveRoute;
+  readonly [kpExecutableSuccessorMotifProgramRouteAuthority]: true;
+}
+
 export type KpExecutableSuccessorMotifProgramAdapterInput =
   | {
       readonly kind: "operation-evaluation";
@@ -80,6 +104,7 @@ export interface KpExecutableSuccessorMotifPhaseTelemetry {
 
 interface KpExecutableSuccessorMotifProgramAdapterDispatchBase {
   readonly kind: "executable-successor-motif-program-adapter-dispatch";
+  readonly route: KpExecutableSuccessorMotifProgramRoute;
   readonly programId: string;
   readonly programVersion: string;
   readonly programKind:
@@ -119,6 +144,47 @@ export type KpExecutableSuccessorMotifProgramAdapterDispatch =
         };
       };
     });
+
+/**
+ * Promotion and catalog code may ask which existing primitive a program can
+ * execute without constructing renderer inputs. The sealed route is minted by
+ * the same exhaustive boundary used by real dispatch, so a matching label or
+ * copied object cannot stand in for executable support.
+ */
+export function resolveKpExecutableSuccessorMotifProgramRoute(
+  program: KpVerifiedExecutableSuccessorMotifProgram
+): KpExecutableSuccessorMotifProgramRoute {
+  if (!isKpVerifiedExecutableSuccessorMotifProgram(program)) {
+    throw new Error(
+      "Executable successor motif route requires minted program authority."
+    );
+  }
+  const existing = programRoutes.get(program);
+  if (existing !== undefined) return existing;
+
+  const primitiveRoute = primitiveRouteForProgram(program);
+  const route = Object.freeze({
+    kind: "executable-successor-motif-program-route" as const,
+    programId: program.id,
+    programVersion: program.programVersion,
+    programKind: program.kind,
+    primitiveRoute,
+    [kpExecutableSuccessorMotifProgramRouteAuthority]: true as const
+  });
+  verifiedProgramRoutes.add(route);
+  programRoutes.set(program, route);
+  return route;
+}
+
+export function isKpExecutableSuccessorMotifProgramRoute(
+  value: unknown
+): value is KpExecutableSuccessorMotifProgramRoute {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    verifiedProgramRoutes.has(value)
+  );
+}
 
 /**
  * This is the sole program-to-primitive dispatch. It selects among existing
@@ -195,6 +261,7 @@ function dispatch(
     : [...input.program.phases].reverse();
   const base = {
     kind: "executable-successor-motif-program-adapter-dispatch" as const,
+    route: resolveKpExecutableSuccessorMotifProgramRoute(input.program),
     programId: input.program.id,
     programVersion: input.program.programVersion,
     programKind: input.program.kind,
@@ -210,6 +277,21 @@ function dispatch(
   };
   return Object.freeze({ ...base, primitive }) as
     KpExecutableSuccessorMotifProgramAdapterDispatch;
+}
+
+function primitiveRouteForProgram(
+  program: KpVerifiedExecutableSuccessorMotifProgram
+): KpExecutableSuccessorMotifPrimitiveRoute {
+  switch (program.kind) {
+    case "operation-evaluation":
+      return "native-katex-successor-synthesis";
+    case "identity-fission":
+      return "fission-fusion:fission";
+    case "identity-fusion":
+      return "fission-fusion:fusion";
+    default:
+      return unreachableProgram(program);
+  }
 }
 
 function samplePhaseTelemetry(input: {

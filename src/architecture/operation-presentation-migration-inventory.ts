@@ -74,8 +74,8 @@ export const kpOperationPresentationEvidenceClosures = Object.freeze([
   evidenceClosure(
     "catalog-wide-directional-plan-coverage",
     "tests/equation-presentation-catalog-conformance.test.ts",
-    "every catalog equation operation has directional presentation coverage",
-    "Every catalog equation operation is planned in forward and rewind, explicit static gaps remain visible, and only a fully verified animated catalog can pass promotion."
+    "catalog separates executable routes from generic presentation labels",
+    "Every catalog equation operation is inspected in forward and rewind; verified routes, explicit static checkpoints, and generic label-only gaps remain distinct, and only a fresh fully executable report can pass promotion."
   ),
   evidenceClosure(
     "bounded-cross-axis-property-coverage",
@@ -376,19 +376,19 @@ export const kpExecutableMotifMigrationLedger = Object.freeze([
     "promotion.operation-evaluation",
     "promotion-evidence",
     "src/editor/animation-library-display-catalog.ts",
-    '"run-contract.kp.presentation-compiler-continuity-repair-v0"',
+    '"animation.operation-evaluation.one-plus-two"',
     "gate-on-executable-evidence",
     "s10",
-    "Operation evaluation evidence still names the superseded contract and cannot support ported status."
+    "Operation evaluation stays partial until the active run mints exact program, route, continuity, endpoint, browser, and human-review evidence."
   ),
   executableMotifMigration(
     "promotion.exact-fraction",
     "promotion-evidence",
     "src/editor/animation-library-display-catalog.ts",
-    '"run-contract.kp.exact-fraction-quantity-promotion-v1"',
+    '"animation.exact-fraction-quantity.third-plus-sixth"',
     "gate-on-executable-evidence",
     "s10",
-    "Exact fraction metadata claims motif parity before shared executable-program adoption."
+    "Exact fraction stays partial until shared executable-program adoption and complete evidence certification."
   )
 ] as const);
 

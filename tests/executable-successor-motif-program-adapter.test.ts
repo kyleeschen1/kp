@@ -19,6 +19,8 @@ import {
 } from "../src/rendering/equation-linear-rearrangement-bindings.ts";
 import {
   compileKpExecutableSuccessorMotifProgramAdapter,
+  isKpExecutableSuccessorMotifProgramRoute,
+  resolveKpExecutableSuccessorMotifProgramRoute,
   type KpExecutableSuccessorMotifProgramAdapterInput
 } from "../src/reader/renderers/executable-successor-motif-program-adapter.ts";
 import {
@@ -239,8 +241,9 @@ function identityFusionInput() {
 }
 
 test("one exhaustive adapter selects only existing compositor primitives", () => {
+  const operationAdapterInput = operationInput();
   const operation = compileKpExecutableSuccessorMotifProgramAdapter(
-    operationInput()
+    operationAdapterInput
   );
   const fission = compileKpExecutableSuccessorMotifProgramAdapter(
     identityFissionInput()
@@ -254,6 +257,25 @@ test("one exhaustive adapter selects only existing compositor primitives", () =>
   assert.equal(fusion.primitive.kind, "fission-fusion");
   assert.equal(fission.primitive.plan.mode, "fission");
   assert.equal(fusion.primitive.plan.mode, "fusion");
+  assert.equal(
+    operation.route,
+    resolveKpExecutableSuccessorMotifProgramRoute(
+      operationAdapterInput.program
+    )
+  );
+  assert.equal(
+    operation.route.primitiveRoute,
+    "native-katex-successor-synthesis"
+  );
+  assert.equal(fission.route.primitiveRoute, "fission-fusion:fission");
+  assert.equal(fusion.route.primitiveRoute, "fission-fusion:fusion");
+  assert.equal(isKpExecutableSuccessorMotifProgramRoute(operation.route), true);
+  assert.equal(
+    isKpExecutableSuccessorMotifProgramRoute(
+      JSON.parse(JSON.stringify(operation.route))
+    ),
+    false
+  );
 });
 
 test("program identity and phase telemetry are deterministic and reversible", () => {
@@ -316,7 +338,10 @@ test("adapter exhaustiveness adds no renderer lifecycle or clock", async () => {
     .sort();
   assert.deepEqual(cases, [
     "identity-fission",
+    "identity-fission",
     "identity-fusion",
+    "identity-fusion",
+    "operation-evaluation",
     "operation-evaluation"
   ]);
   assert.match(source, /default:\s*[\s\S]*unreachableProgram/);

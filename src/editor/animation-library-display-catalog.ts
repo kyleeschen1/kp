@@ -18,6 +18,10 @@ import {
 import type {
   KpAnimatedPresentationCoverage
 } from "../animation/operation-presentation-plan-types.ts";
+import {
+  isKpVerifiedExecutableMotifPromotionCertificate,
+  type KpVerifiedExecutableMotifPromotionCertificate
+} from "../architecture/executable-motif-promotion-evidence.ts";
 
 export type KpAnimationLibraryDisplayRepresentationKind =
   | "reader"
@@ -59,6 +63,16 @@ const featuredAnimationIds = [
 
 export interface KpCanonicalFormatPromotionEvidence {
   readonly animationId: string;
+  readonly executionAuthority:
+    | {
+        readonly kind: "legacy-reviewed";
+        readonly reviewId: string;
+      }
+    | {
+        readonly kind: "executable-motif";
+        readonly certificate?:
+          KpVerifiedExecutableMotifPromotionCertificate | undefined;
+      };
   readonly exclusiveCanonicalPaint: boolean;
   readonly requiredMotifParity: boolean;
   readonly responsiveRuntimeGates: boolean;
@@ -69,12 +83,24 @@ export interface KpCanonicalFormatPromotionEvidence {
   readonly evidenceSourceIds: readonly string[];
 }
 
+// These entries were promoted under reviewed contracts that predate executable
+// motif programs. The allowlist freezes that historical exception; new entries
+// cannot claim the same authority merely by copying the public evidence shape.
+const legacyReviewedCanonicalFormatAnimationIds = new Set([
+  "animation.generated.radical.square-root-as-power",
+  "animation.numerator-split-merge.round-trip",
+  "animation.fraction-composition.two-thirds-solve"
+]);
+
 const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
   KpCanonicalFormatPromotionEvidence>([
   [
     "animation.operation-evaluation.one-plus-two",
     {
       animationId: "animation.operation-evaluation.one-plus-two",
+      executionAuthority: {
+        kind: "executable-motif"
+      },
       exclusiveCanonicalPaint: true,
       requiredMotifParity: true,
       responsiveRuntimeGates: false,
@@ -83,7 +109,7 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
       releaseGatePassed: false,
       presentationCoverage: "verified-animated",
       evidenceSourceIds: [
-        "run-contract.kp.presentation-compiler-continuity-repair-v0"
+        "run-contract.kp.executable-motif-perceptual-continuity-repair-v0"
       ]
     }
   ],
@@ -92,6 +118,9 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
     {
       animationId:
         "animation.exact-fraction-quantity.third-plus-sixth",
+      executionAuthority: {
+        kind: "executable-motif"
+      },
       exclusiveCanonicalPaint: true,
       requiredMotifParity: true,
       responsiveRuntimeGates: true,
@@ -100,7 +129,7 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
       releaseGatePassed: false,
       presentationCoverage: "verified-animated",
       evidenceSourceIds: [
-        "run-contract.kp.exact-fraction-quantity-promotion-v1"
+        "run-contract.kp.executable-motif-perceptual-continuity-repair-v0"
       ]
     }
   ],
@@ -126,6 +155,11 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
     {
       animationId:
         "animation.foldable-distribution.collect-like-terms",
+      executionAuthority: {
+        kind: "legacy-reviewed",
+        reviewId:
+          "run-contract.kp.foldable-distribution-collection-v1"
+      },
       exclusiveCanonicalPaint: true,
       requiredMotifParity: false,
       responsiveRuntimeGates: true,
@@ -148,6 +182,10 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
     "animation.linear-solve.solve-x",
     {
       animationId: "animation.linear-solve.solve-x",
+      executionAuthority: {
+        kind: "legacy-reviewed",
+        reviewId: "review.kp.canonical-equation-renderer-convergence"
+      },
       exclusiveCanonicalPaint: true,
       requiredMotifParity: false,
       responsiveRuntimeGates: true,
@@ -413,6 +451,7 @@ export function deriveKpCanonicalFormatStatus(input: {
   );
   const passed =
     hasCanonicalHost &&
+    hasKpCanonicalFormatExecutionAuthority(input.evidence) &&
     input.evidence.evidenceSourceIds.length > 0 &&
     input.evidence.exclusiveCanonicalPaint &&
     input.evidence.requiredMotifParity &&
@@ -430,6 +469,10 @@ function completeCanonicalFormatEvidence(
 ): KpCanonicalFormatPromotionEvidence {
   return Object.freeze({
     animationId,
+    executionAuthority: Object.freeze({
+      kind: "legacy-reviewed" as const,
+      reviewId: evidenceSourceIds[0] ?? ""
+    }),
     exclusiveCanonicalPaint: true,
     requiredMotifParity: true,
     responsiveRuntimeGates: true,
@@ -439,6 +482,28 @@ function completeCanonicalFormatEvidence(
     presentationCoverage: "verified-animated",
     evidenceSourceIds: Object.freeze([...evidenceSourceIds])
   });
+}
+
+function hasKpCanonicalFormatExecutionAuthority(
+  evidence: KpCanonicalFormatPromotionEvidence
+): boolean {
+  switch (evidence.executionAuthority.kind) {
+    case "legacy-reviewed":
+      return (
+        legacyReviewedCanonicalFormatAnimationIds.has(evidence.animationId) &&
+        evidence.executionAuthority.reviewId.trim().length > 0 &&
+        evidence.evidenceSourceIds.includes(
+          evidence.executionAuthority.reviewId
+        )
+      );
+    case "executable-motif": {
+      const certificate = evidence.executionAuthority.certificate;
+      return (
+        isKpVerifiedExecutableMotifPromotionCertificate(certificate) &&
+        certificate.animationId === evidence.animationId
+      );
+    }
+  }
 }
 
 function completeFractionCompositionCanonicalFormatEvidence(

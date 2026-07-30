@@ -40,10 +40,14 @@ export {
 } from "./equation-transition-presentation-plan.ts";
 export {
   compileKpExecutableSuccessorMotifProgramAdapter,
+  isKpExecutableSuccessorMotifProgramRoute,
+  resolveKpExecutableSuccessorMotifProgramRoute,
   type KpExecutableSuccessorMotifPhaseTelemetry,
   type KpExecutableSuccessorMotifPhaseTelemetryEntry,
   type KpExecutableSuccessorMotifProgramAdapterDispatch,
-  type KpExecutableSuccessorMotifProgramAdapterInput
+  type KpExecutableSuccessorMotifProgramAdapterInput,
+  type KpExecutableSuccessorMotifPrimitiveRoute,
+  type KpExecutableSuccessorMotifProgramRoute
 } from "./executable-successor-motif-program-adapter.ts";
 export {
   assertKpFactorCommonTermMotifBinding,

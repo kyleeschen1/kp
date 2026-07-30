@@ -19,6 +19,15 @@ import {
 import type {
   KpReaderEquationTransitionPresentationPlan
 } from "./equation-transition-presentation-plan.ts";
+import {
+  resolveKpExecutableSuccessorMotifProgramRoute,
+  type KpExecutableSuccessorMotifPrimitiveRoute
+} from "./executable-successor-motif-program-adapter.ts";
+
+const kpEquationPresentationCatalogReportAuthority = Symbol(
+  "kp.equation-presentation-catalog-report"
+);
+const verifiedCatalogReports = new WeakSet<object>();
 
 export type KpEquationPresentationCatalogDirection =
   | "forward"
@@ -35,7 +44,24 @@ export type KpEquationPresentationCatalogIssueCode =
   | "catalog.presentation-planning-failed"
   | "catalog.missing-transition"
   | "catalog.semantic-fallback"
+  | "catalog.missing-execution-route"
+  | "catalog.unverified-report"
   | "catalog.directional-coverage-mismatch";
+
+export type KpEquationPresentationExecutionRoute =
+  | {
+      readonly kind: "verified-operation-plan";
+      readonly planKind:
+        KpVerifiedOperationPresentationPlan["planKind"];
+      readonly planIds: readonly [string, ...string[]];
+    }
+  | {
+      readonly kind: "executable-motif-program";
+      readonly programId: string;
+      readonly programVersion: string;
+      readonly programKind: "operation-evaluation";
+      readonly primitiveRoute: KpExecutableSuccessorMotifPrimitiveRoute;
+    };
 
 export interface KpEquationPresentationCatalogEntry {
   readonly animationId: string;
@@ -47,6 +73,8 @@ export interface KpEquationPresentationCatalogEntry {
     KpReaderEquationTransitionPresentationPlan["planKind"] | undefined;
   readonly operationPlanKind?:
     KpVerifiedOperationPresentationPlan["planKind"] | undefined;
+  readonly executionRoute?:
+    KpEquationPresentationExecutionRoute | undefined;
   readonly staticReason?: string | undefined;
   readonly sourceObjectIds?: readonly string[] | undefined;
   readonly targetObjectIds?: readonly string[] | undefined;
@@ -79,6 +107,7 @@ export interface KpEquationPresentationCatalogReport {
   readonly exclusions:
     readonly KpEquationPresentationCatalogExclusion[];
   readonly issues: readonly KpEquationPresentationCatalogIssue[];
+  readonly [kpEquationPresentationCatalogReportAuthority]: true;
 }
 
 export interface KpEquationPresentationCatalogPromotionDecision {
@@ -96,6 +125,17 @@ export interface KpEquationPresentationCatalogPromotionDecision {
 export function decideKpEquationPresentationCatalogPromotion(
   report: KpEquationPresentationCatalogReport
 ): KpEquationPresentationCatalogPromotionDecision {
+  if (!verifiedCatalogReports.has(report)) {
+    return Object.freeze({
+      kind: "equation-presentation-catalog-promotion-decision",
+      status: "blocked",
+      coverage: "incomplete",
+      diagnostics: Object.freeze([
+        "catalog.unverified-report: Catalog promotion requires a fresh " +
+        "conformance report, not caller-authored coverage."
+      ])
+    });
+  }
   const diagnostics = report.issues.map(({ code, message }) =>
     `${code}: ${message}`
   );
@@ -206,7 +246,9 @@ export function checkKpEquationPresentationCatalog(
         (
           directional[0]?.status !== directional[1]?.status ||
           directional[0]?.planKind !== directional[1]?.planKind ||
-          directional[0]?.staticReason !== directional[1]?.staticReason
+          directional[0]?.staticReason !== directional[1]?.staticReason ||
+          routeFingerprint(directional[0]?.executionRoute) !==
+            routeFingerprint(directional[1]?.executionRoute)
         )
       ) {
         issues.push(issue({
@@ -229,7 +271,7 @@ export function checkKpEquationPresentationCatalog(
       : entries.some(({ status }) => status === "explicit-static")
         ? "contains-explicit-static"
         : "verified-animated";
-  return Object.freeze({
+  const report = Object.freeze({
     kind: "equation-presentation-catalog-report",
     animationCount: seenAnimationIds.size,
     claimedTransformationCount,
@@ -239,8 +281,11 @@ export function checkKpEquationPresentationCatalog(
     coverage,
     entries: Object.freeze(entries),
     exclusions: Object.freeze(exclusions),
-    issues: Object.freeze(issues)
+    issues: Object.freeze(issues),
+    [kpEquationPresentationCatalogReportAuthority]: true as const
   });
+  verifiedCatalogReports.add(report);
+  return report;
 }
 
 function equationTransformationIds(
@@ -356,9 +401,41 @@ export function inspectKpEquationPresentationOperation(input: {
         })
       };
     }
-    const verifiedPlanKind = operationPlanKind(
+    const executionRoute = presentationExecutionRoute(
       transition.presentationPlan
     );
+    if (executionRoute === undefined) {
+      const message =
+        `Equation transformation ${input.transformationId} declares ` +
+        `${transition.presentationPlan.planKind} presentation without a ` +
+        "verified executable route.";
+      return {
+        entry: Object.freeze({
+          animationId: input.animation.id,
+          transformationId: input.transformationId,
+          direction: input.direction,
+          progress: input.progress,
+          status: "incomplete",
+          planKind: transition.presentationPlan.planKind,
+          sourceObjectIds: Object.freeze(
+            transition.source.map(({ objectId }) => objectId)
+          ),
+          targetObjectIds: Object.freeze(
+            transition.target.map(({ objectId }) => objectId)
+          )
+        }),
+        issue: issue({
+          code: "catalog.missing-execution-route",
+          animationId: input.animation.id,
+          transformationId: input.transformationId,
+          direction: input.direction,
+          message
+        })
+      };
+    }
+    const verifiedPlanKind = executionRoute.kind === "verified-operation-plan"
+      ? executionRoute.planKind
+      : operationPlanKind(transition.presentationPlan);
     return {
       entry: Object.freeze({
         animationId: input.animation.id,
@@ -370,6 +447,7 @@ export function inspectKpEquationPresentationOperation(input: {
         ...(verifiedPlanKind === undefined
           ? {}
           : { operationPlanKind: verifiedPlanKind }),
+        executionRoute,
         sourceObjectIds: Object.freeze(
           transition.source.map(({ objectId }) => objectId)
         ),
@@ -385,6 +463,100 @@ export function inspectKpEquationPresentationOperation(input: {
       error instanceof Error ? error.message : String(error)
     );
   }
+}
+
+function presentationExecutionRoute(
+  plan: KpReaderEquationTransitionPresentationPlan
+): KpEquationPresentationExecutionRoute | undefined {
+  switch (plan.planKind) {
+    case "factoring":
+      return verifiedOperationRoute([
+        plan.factoringMotifBinding.operationPresentationPlan
+      ]);
+    case "distribution":
+      return plan.distributionOperationPlans.length === 0
+        ? undefined
+        : verifiedOperationRoute(
+            plan.distributionOperationPlans as readonly [
+              KpVerifiedOperationPresentationPlan,
+              ...KpVerifiedOperationPresentationPlan[]
+            ]
+          );
+    case "fraction-material":
+      return verifiedOperationRoute([
+        plan.fractionMaterialPresentationPlan
+      ]);
+    case "structural-succession":
+      return verifiedOperationRoute([
+        plan.structuralSuccession.operationPresentationPlan
+      ]);
+    case "successor-synthesis": {
+      const route = resolveKpExecutableSuccessorMotifProgramRoute(
+        plan.executableProgram
+      );
+      if (
+        route.programKind !== "operation-evaluation" ||
+        route.primitiveRoute !== "native-katex-successor-synthesis"
+      ) {
+        return undefined;
+      }
+      return Object.freeze({
+        kind: "executable-motif-program",
+        programId: route.programId,
+        programVersion: route.programVersion,
+        programKind: route.programKind,
+        primitiveRoute: route.primitiveRoute
+      });
+    }
+    case "operation-choreography":
+      return plan.operationChoreography.operationPresentationPlan === undefined
+        ? undefined
+        : verifiedOperationRoute([
+            plan.operationChoreography.operationPresentationPlan
+          ]);
+    case "default-motion":
+    case "visual-motif":
+    case "explicit-static-checkpoint":
+      return undefined;
+  }
+}
+
+function verifiedOperationRoute(
+  plans: readonly [
+    KpVerifiedOperationPresentationPlan,
+    ...KpVerifiedOperationPresentationPlan[]
+  ]
+): KpEquationPresentationExecutionRoute {
+  const planKind = plans[0].planKind;
+  if (plans.some((plan) => plan.planKind !== planKind)) {
+    throw new Error(
+      "One presentation execution route cannot mix operation-plan kinds."
+    );
+  }
+  return Object.freeze({
+    kind: "verified-operation-plan",
+    planKind,
+    planIds: Object.freeze(plans.map(({ id }) => id)) as
+      readonly [string, ...string[]]
+  });
+}
+
+function routeFingerprint(
+  route: KpEquationPresentationExecutionRoute | undefined
+): string {
+  if (route === undefined) return "";
+  return route.kind === "executable-motif-program"
+    ? [
+        route.kind,
+        route.programId,
+        route.programVersion,
+        route.programKind,
+        route.primitiveRoute
+      ].join(":")
+    : [
+        route.kind,
+        route.planKind
+      ].join(":");
 }
 
 function incomplete(

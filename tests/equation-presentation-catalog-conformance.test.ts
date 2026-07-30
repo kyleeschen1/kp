@@ -17,12 +17,11 @@ import {
   decideKpEquationPresentationCatalogPromotion
 } from "../src/reader/renderers/equation-presentation-catalog-conformance.ts";
 
-test("every catalog equation operation has directional presentation coverage", () => {
+test("catalog separates executable routes from generic presentation labels", () => {
   const report = checkKpEquationPresentationCatalog(
     createKpAnimationAssets()
   );
 
-  assert.deepEqual(report.issues, []);
   assert.equal(report.animationCount, 30);
   assert.equal(report.claimedTransformationCount, 37);
   assert.equal(report.equationTransformationCount, 34);
@@ -45,7 +44,20 @@ test("every catalog equation operation has directional presentation coverage", (
     report.equationTransformationCount * 2
   );
   assert.ok(report.entries.every(({ planKind }) => planKind !== undefined));
-  assert.equal(report.coverage, "contains-explicit-static");
+  assert.equal(report.coverage, "incomplete");
+  assert.equal(report.issues.length, 48);
+  assert.ok(report.issues.every(
+    ({ code }) => code === "catalog.missing-execution-route"
+  ));
+  assert.deepEqual(
+    new Set(report.entries
+      .filter(({ status }) => status === "incomplete")
+      .map(({ planKind }) => planKind)),
+    new Set(["visual-motif", "default-motion"])
+  );
+  assert.ok(report.entries
+    .filter(({ status }) => status === "verified-animated")
+    .every(({ executionRoute }) => executionRoute !== undefined));
   assert.deepEqual(
     [...new Set(report.entries
       .filter(({ status }) => status === "explicit-static")
@@ -79,7 +91,7 @@ test("promotion requires all operations to remain verified animated", () => {
   const staticReport = checkKpEquationPresentationCatalog([
     createLinearSolveTeacherZeroAnimationAsset()
   ]);
-  assert.equal(staticReport.coverage, "contains-explicit-static");
+  assert.equal(staticReport.coverage, "incomplete");
   assert.ok(staticReport.entries.some(
     ({ status, staticReason }) =>
       status === "explicit-static" &&
@@ -88,6 +100,34 @@ test("promotion requires all operations to remain verified animated", () => {
   assert.equal(
     decideKpEquationPresentationCatalogPromotion(staticReport).status,
     "blocked"
+  );
+  assert.deepEqual(
+    [...new Set(staticReport.issues.map(({ code }) => code))],
+    ["catalog.missing-execution-route"]
+  );
+});
+
+test("caller-authored catalog coverage cannot mint promotion", () => {
+  const verified = checkKpEquationPresentationCatalog([
+    createLinearSolveAnimationAsset()
+  ]);
+  const forged = {
+    ...verified,
+    coverage: "verified-animated",
+    issues: []
+  } as unknown as typeof verified;
+
+  assert.deepEqual(
+    decideKpEquationPresentationCatalogPromotion(forged),
+    {
+      kind: "equation-presentation-catalog-promotion-decision",
+      status: "blocked",
+      coverage: "incomplete",
+      diagnostics: [
+        "catalog.unverified-report: Catalog promotion requires a fresh " +
+        "conformance report, not caller-authored coverage."
+      ]
+    }
   );
 });
 

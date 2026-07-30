@@ -81,7 +81,12 @@ export interface KpOperationPresentationPropertyCase {
     typeof kpOperationPresentationPropertyNotationStructures[number];
   readonly operationFamily:
     typeof kpOperationPresentationPropertyFamilies[number];
-  readonly expectedStatus: "verified-animated" | "explicit-static";
+  readonly expectedStatus:
+    | "verified-animated"
+    | "explicit-static"
+    | "incomplete";
+  readonly expectedIssueCode?:
+    "catalog.missing-execution-route" | undefined;
   readonly expectedPlanKind:
     KpReaderEquationTransitionPresentationPlan["planKind"];
   readonly expectedOperationPlanKind?:
@@ -97,8 +102,9 @@ export const kpOperationPresentationPropertyCases = Object.freeze([
     astShape: "identity-presentation",
     notationStructure: "inline-equation",
     operationFamily: "default-motion",
-    expectedStatus: "verified-animated",
-    expectedPlanKind: "default-motion"
+    expectedStatus: "incomplete",
+    expectedPlanKind: "default-motion",
+    expectedIssueCode: "catalog.missing-execution-route"
   }),
   propertyCase({
     id: "fraction-normalization-motif",
@@ -107,8 +113,9 @@ export const kpOperationPresentationPropertyCases = Object.freeze([
     astShape: "unary-rewrite",
     notationStructure: "mixed-fraction-equation",
     operationFamily: "visual-motif",
-    expectedStatus: "verified-animated",
-    expectedPlanKind: "visual-motif"
+    expectedStatus: "incomplete",
+    expectedPlanKind: "visual-motif",
+    expectedIssueCode: "catalog.missing-execution-route"
   }),
   propertyCase({
     id: "constant-successor",

@@ -101,7 +101,11 @@ test("every bounded case is direct-seek stable and exactly reversible", () => {
           progress
         });
         sampleCount += 1;
-        assert.equal(result.issue, undefined, candidate.id);
+        assert.equal(
+          result.issue?.code,
+          candidate.expectedIssueCode,
+          candidate.id
+        );
         assert.equal(result.entry.status, candidate.expectedStatus);
         assert.equal(result.entry.planKind, candidate.expectedPlanKind);
         assert.equal(

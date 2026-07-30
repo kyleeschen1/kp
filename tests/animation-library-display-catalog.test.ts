@@ -109,7 +109,11 @@ test("canonical-format status distinguishes complete, partial, and legacy hosts"
 
 test("ported status fails closed when any promotion facet is missing", () => {
   const complete: KpCanonicalFormatPromotionEvidence = {
-    animationId: "animation.test",
+    animationId: "animation.generated.radical.square-root-as-power",
+    executionAuthority: {
+      kind: "legacy-reviewed",
+      reviewId: "review.test"
+    },
     exclusiveCanonicalPaint: true,
     requiredMotifParity: true,
     responsiveRuntimeGates: true,
@@ -117,7 +121,7 @@ test("ported status fails closed when any promotion facet is missing", () => {
     compatibilityPaintRetired: true,
     releaseGatePassed: true,
     presentationCoverage: "verified-animated",
-    evidenceSourceIds: ["evidence.test"]
+    evidenceSourceIds: ["review.test"]
   };
   const representations = [{
     id: "reader.test",
