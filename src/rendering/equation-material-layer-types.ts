@@ -12,6 +12,11 @@ export interface KpEquationMaterialLayerOwnerFrame {
   readonly sourceElement: HTMLElement;
   readonly sourceMotionId?: string | undefined;
   readonly semanticEntityId?: string | undefined;
+  /**
+   * Renderer-session correlation only. Endpoint diagnostics use the observed
+   * atom ID instead of guessing identity from glyph text or nearby geometry.
+   */
+  readonly endpointPaintAtomId?: string | undefined;
   readonly semanticContacts?:
     readonly KpEquationVisiblePaintCertifiedContact[] | undefined;
   readonly verifiedOperationCohortId?: string | undefined;

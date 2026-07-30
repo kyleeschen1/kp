@@ -145,8 +145,13 @@ try {
 
   const player = page.locator("[data-kp-editor-animation-player]");
   await player.waitFor();
-  const pause = player.locator('[data-action="pause-editor-animation"]');
-  if (await pause.isEnabled()) await pause.click();
+  // The player deliberately exposes one play/pause toggle. Check state first
+  // so capture setup never turns an already paused deterministic frame on.
+  if (await player.getAttribute("data-kp-editor-animation-status") === "playing") {
+    await player.locator(
+      '[data-action="toggle-editor-animation"]'
+    ).click();
+  }
   const scrubber = player.locator('[data-action="seek-editor-animation"]');
   const stage = player.locator("[data-kp-editor-equation-stage]");
   await stage.waitFor();

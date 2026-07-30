@@ -115,6 +115,11 @@ export function syncKpEquationMaterialLayer(input: {
     );
     setOptionalDataset(
       owner,
+      "kpEquationMaterialEndpointPaintAtomId",
+      frame.endpointPaintAtomId
+    );
+    setOptionalDataset(
+      owner,
       "kpEquationMaterialSemanticContacts",
       frame.semanticContacts === undefined
         ? undefined
@@ -135,6 +140,10 @@ export function syncKpEquationMaterialLayer(input: {
       setOptionalDataset(owner, "kpEquationMaterialPaintAlignmentKey", undefined);
       setOptionalDataset(owner, "kpEquationMaterialPaintInsetX", undefined);
       setOptionalDataset(owner, "kpEquationMaterialPaintInsetY", undefined);
+      setOptionalDataset(owner, "kpEquationMaterialExpectedPaintInsetX", undefined);
+      setOptionalDataset(owner, "kpEquationMaterialExpectedPaintInsetY", undefined);
+      setOptionalDataset(owner, "kpEquationMaterialExpectedPaintInsetRight", undefined);
+      setOptionalDataset(owner, "kpEquationMaterialExpectedPaintInsetBottom", undefined);
     } else {
       const alignmentKey = [
         owner.dataset["kpEquationMaterialVisualRevision"],
@@ -146,10 +155,20 @@ export function syncKpEquationMaterialLayer(input: {
       if (
         owner.dataset["kpEquationMaterialPaintAlignmentKey"] !== alignmentKey
       ) {
-        const measured = measureKpNativeKatexSubtreePaintRect(
-          input.stage,
-          visual
-        );
+        // Motion transforms can begin at scale(0). Measure the clone in its
+        // stable owner box so endpoint alignment does not cache a collapsed
+        // first-frame rectangle as the clone's intrinsic paint inset.
+        const motionTransform = owner.style.transform;
+        setStyle(owner.style, "transform", "none");
+        let measured;
+        try {
+          measured = measureKpNativeKatexSubtreePaintRect(
+            input.stage,
+            visual
+          );
+        } finally {
+          setStyle(owner.style, "transform", motionTransform || "none");
+        }
         if (measured === undefined) {
           throw new Error(
             `Material owner ${frame.ownerId} has no measurable cloned paint.`
@@ -192,6 +211,34 @@ export function syncKpEquationMaterialLayer(input: {
         Number(owner.dataset["kpEquationMaterialPaintInsetY"]);
       setStyle(owner.style, "left", `${frame.rect.left + correctionX}px`);
       setStyle(owner.style, "top", `${frame.rect.top + correctionY}px`);
+      setDataset(
+        owner,
+        "kpEquationMaterialExpectedPaintInsetX",
+        String(frame.expectedPaintRect.left - frame.rect.left)
+      );
+      setDataset(
+        owner,
+        "kpEquationMaterialExpectedPaintInsetY",
+        String(frame.expectedPaintRect.top - frame.rect.top)
+      );
+      setDataset(
+        owner,
+        "kpEquationMaterialExpectedPaintInsetRight",
+        String(
+          frame.rect.left + frame.rect.width -
+          frame.expectedPaintRect.left -
+          frame.expectedPaintRect.width
+        )
+      );
+      setDataset(
+        owner,
+        "kpEquationMaterialExpectedPaintInsetBottom",
+        String(
+          frame.rect.top + frame.rect.height -
+          frame.expectedPaintRect.top -
+          frame.expectedPaintRect.height
+        )
+      );
       setDataset(
         owner,
         "kpEquationMaterialPaintAlignment",

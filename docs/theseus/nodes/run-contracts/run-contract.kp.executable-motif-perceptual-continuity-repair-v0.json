@@ -859,6 +859,62 @@
       "scope": "s13 control-plane integrity",
       "checkedAt": "2026-07-30T02:00:07.699Z",
       "notes": "Validated 832 nodes and 14460 events before slice closure."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-continuity",
+      "status": "passed",
+      "scope": "s14 endpoint microscope browser matrix",
+      "checkedAt": "2026-07-30T02:41:01.680Z",
+      "notes": "45/45 pass across Chromium Firefox and WebKit at wide and phone viewports, DPR 1 and 2. The 1-epsilon, native target, and post-settlement comparisons cover exact atom inventory, owners, paint geometry, baseline, expected inner ink inset, style/font, rules, opacity, silhouette, and raster."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor; npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s14 endpoint and presentation contracts",
+      "checkedAt": "2026-07-30T02:41:02.792Z",
+      "notes": "73/73 compositor checks and 167/167 operation-presentation checks pass. Exact endpoint dwell, deterministic comparison, fail-closed mismatch categories, and successor continuity remain covered."
+    },
+    {
+      "command": "npm run visual:radical-handoff; npm run visual:radical-handoff:dpr2; npm run visual:fraction-canonical-checkpoint",
+      "status": "passed",
+      "scope": "s14 radical and fraction neighbor preservation",
+      "checkedAt": "2026-07-30T02:41:03.695Z",
+      "notes": "Radical boundary checks pass at DPR 1 and 2; fraction checkpoint builds and captures all 20 frames. The radical harness now follows the canonical play/pause toggle."
+    },
+    {
+      "command": "npm run typecheck; npm run check:inference; npm run test:exact-fraction-quantity; npm run build; npm run check:reader-production; npm run check:reader-budgets; npm run check:dev-review-production; npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s14 typed production and preservation boundaries",
+      "checkedAt": "2026-07-30T02:41:04.602Z",
+      "notes": "All pass: inference 48390 types and 61159 instantiations at 2.27 seconds when run without parallel contention; 95 exact-fraction checks; production closure for 11 reader routes; route budgets; dev Review exclusion; and 39 linear-equation visual states."
+    },
+    {
+      "command": "initial s14 cross-browser endpoint microscope",
+      "status": "failed",
+      "scope": "diagnostic evidence and generic repair",
+      "checkedAt": "2026-07-30T02:41:05.473Z",
+      "notes": "WebKit exposed real 0.640 px paint/baseline and 0.663 px inner-position drift because successor paint lacked the target native paint rectangle. The first generic correction then exposed transform-contaminated measurement at scale(0), fixed by neutralizing only the material layer motion transform while measuring. A Firefox screenshot-mask silhouette false positive was replaced by exact atom paint-rectangle topology while independent raster comparison remains."
+    },
+    {
+      "command": "npm run test:browser:canonical-reader-contract",
+      "status": "failed",
+      "scope": "s14 inherited canonical reader audit",
+      "checkedAt": "2026-07-30T02:41:06.352Z",
+      "notes": "Inherited 18/2 to 9 scale-only motif observability failure remains. It is outside endpoint settlement and was neither weakened nor reclassified."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "failed",
+      "scope": "s14 architecture audit",
+      "checkedAt": "2026-07-30T02:41:07.221Z",
+      "notes": "Only inherited stale legacy.main.query-view-routing exception expects get(view) equals ftc-tutorial. No s14 path introduces a new architecture-policy violation."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s14 control-plane integrity",
+      "checkedAt": "2026-07-30T02:41:24.555Z",
+      "notes": "Validated 832 nodes and 14470 events before slice closure."
     }
   ],
   "allowedWork": [
@@ -970,7 +1026,8 @@
     {
       "id": "s14",
       "title": "extend-successor-endpoint-microscope",
-      "status": "planned"
+      "summary": "Added exact identity-correlated successor endpoint telemetry and a development-only microscope spanning 1-epsilon, native target, and post-settlement. Non-path successor paint now carries measured native target ink geometry; clone measurement is isolated from its own motion transform; target pose dwells exactly from 0.99 through handoff. Twelve cross-browser viewport DPR profiles pass paint baseline inset style font rule silhouette raster owner and exact post-settlement checks, with radical and fraction neighbors preserved and no notation- or browser-specific offsets.",
+      "status": "complete"
     },
     {
       "id": "s15",

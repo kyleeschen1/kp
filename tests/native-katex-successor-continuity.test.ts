@@ -10,6 +10,7 @@ import type {
 import {
   compileKpNativeKatexSuccessorSynthesisScenePlans,
   kpNativeKatexSuccessorMaterialJunctionProgress,
+  kpNativeKatexSuccessorTargetSettlementProgress,
   sampleKpNativeKatexSuccessorSynthesisScenePlans
 } from "../src/rendering/native-katex-successor-synthesis.ts";
 import type {
@@ -184,6 +185,15 @@ test("native successor renderer settles exact endpoints without binary policy", 
     plans,
     progress: 1
   });
+  const settledMaterial = sampleKpNativeKatexSuccessorSynthesisScenePlans({
+    plans,
+    progress: kpNativeKatexSuccessorTargetSettlementProgress
+  });
+  const oneMinusEpsilon =
+    sampleKpNativeKatexSuccessorSynthesisScenePlans({
+      plans,
+      progress: 0.999
+    });
 
   assert.ok(materialSources(start).every((owner) => scale(owner.transform) === 1));
   assert.ok(targets(start).every((owner) => scale(owner.transform) === 0));
@@ -191,6 +201,23 @@ test("native successor renderer settles exact endpoints without binary policy", 
   assert.ok(targets(end).every((owner) => scale(owner.transform) === 1));
   assert.ok(targets(end).every((owner) => owner.transform ===
     "translate(0px, 0px) scale(1)"));
+  const paintPose = (
+    owners: ReturnType<typeof targets>
+  ) => owners.map((owner) => ({
+    endpointPaintAtomId: owner.endpointPaintAtomId,
+    rect: owner.rect,
+    expectedPaintRect: owner.expectedPaintRect,
+    opacity: owner.opacity,
+    transform: owner.transform
+  }));
+  assert.deepEqual(
+    paintPose(targets(settledMaterial)),
+    paintPose(targets(oneMinusEpsilon))
+  );
+  assert.deepEqual(
+    paintPose(targets(oneMinusEpsilon)),
+    paintPose(targets(end))
+  );
 });
 
 function scene(

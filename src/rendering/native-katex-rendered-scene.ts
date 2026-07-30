@@ -269,7 +269,7 @@ export function observeKpNativeKatexGlyphPaintAtoms(input: {
         stageLayoutHeight,
         fragmentClientRect: clientRect
       }),
-      styleFingerprint: paintStyleFingerprint(computed),
+      styleFingerprint: fingerprintKpNativeKatexPaintStyle(computed),
       zOrder: ordinal,
       fontRevision: input.fontRevision
     })];
@@ -329,7 +329,7 @@ export function observeKpNativeKatexPaintAtoms(input: {
         stageLayoutHeight,
         fragmentClientRect: clientRect
       }),
-      styleFingerprint: paintStyleFingerprint(computed),
+      styleFingerprint: fingerprintKpNativeKatexPaintStyle(computed),
       zOrder: glyphs.length + ordinal,
       fontRevision: input.fontRevision
     })];
@@ -432,7 +432,9 @@ export function createKpNativeKatexRenderedSceneObservation(input: {
   });
 }
 
-function paintStyleFingerprint(computed: CSSStyleDeclaration): string {
+export function fingerprintKpNativeKatexPaintStyle(
+  computed: CSSStyleDeclaration
+): string {
   return [
     "font-family",
     "font-size",

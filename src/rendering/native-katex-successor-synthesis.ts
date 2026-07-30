@@ -29,6 +29,10 @@ import type {
   KpNativeKatexPaintAtomObservation,
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
+import {
+  measureKpNativeKatexSubtreePaintRect,
+  measureKpNativeKatexTextInkRect
+} from "./native-katex-paint-geometry.ts";
 
 interface KpNativeKatexSuccessorSynthesisIntentBase {
   readonly direction: "forward" | "rewind";
@@ -53,6 +57,7 @@ export type KpNativeKatexSuccessorSynthesisIntent =
 interface KpNativeKatexSuccessorPaintAnnotation {
   readonly annotationId: string;
   readonly contribution?: "material-input" | "catalyst" | undefined;
+  readonly stage: HTMLElement;
   readonly atoms: readonly KpNativeKatexPaintAtomObservation[];
   readonly rect: {
     readonly left: number;
@@ -292,6 +297,7 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
 }
 
 export const kpNativeKatexSuccessorMaterialJunctionProgress = 0.7;
+export const kpNativeKatexSuccessorTargetSettlementProgress = 0.99;
 const kpNativeKatexSuccessorMaterialCollapseStart = 0.58;
 
 function verifiedContinuityAuthority(
@@ -467,7 +473,7 @@ function sharedJunctionTargetPose(input: {
   const progress = easeInOut(interval(
     input.frameProgress,
     kpNativeKatexSuccessorMaterialJunctionProgress,
-    1
+    kpNativeKatexSuccessorTargetSettlementProgress
   ));
   const targetCenter = center(target.rect);
   const position = quadratic(
@@ -785,6 +791,7 @@ function paintAnnotation(input: {
     ...(input.contribution === undefined
       ? {}
       : { contribution: input.contribution }),
+    stage: input.scene.stage,
     atoms: Object.freeze(atoms),
     rect: Object.freeze(unionRects(atoms.map(({ rect }) => rect)))
   });
@@ -829,12 +836,21 @@ function ownerFrames(input: {
       sourceElement: atom.sourceElement,
       sourceMotionId: input.annotation.annotationId,
       semanticEntityId: input.annotation.annotationId,
+      endpointPaintAtomId: atom.id,
       rect: Object.freeze({
         left: scaledCenter.x - atom.rect.width / 2,
         top: scaledCenter.y - atom.rect.height / 2,
         width: atom.rect.width,
         height: atom.rect.height
       }),
+      ...(atom.paintKind === "path"
+        ? {}
+        : {
+            expectedPaintRect: successorAtomPaintRect(
+              input.annotation.stage,
+              atom
+            )
+          }),
       opacity: input.pose.opacity,
       transform:
         `translate(${input.pose.x}px, ${input.pose.y}px) ` +
@@ -849,6 +865,23 @@ function ownerFrames(input: {
       synthesisPhase: input.phase
     });
   });
+}
+
+function successorAtomPaintRect(
+  stage: HTMLElement,
+  atom: KpNativeKatexPaintAtomObservation
+) {
+  if (
+    typeof stage.getBoundingClientRect !== "function" ||
+    typeof atom.sourceElement.getBoundingClientRect !== "function" ||
+    typeof atom.sourceElement.ownerDocument.createRange !== "function"
+  ) {
+    return atom.rect;
+  }
+  return atom.paintKind === "glyph"
+    ? measureKpNativeKatexTextInkRect(stage, atom.sourceElement)
+    : measureKpNativeKatexSubtreePaintRect(stage, atom.sourceElement) ??
+      atom.rect;
 }
 
 function attachSuccessorFusionContacts(

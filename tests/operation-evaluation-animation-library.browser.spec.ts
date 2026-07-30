@@ -12,6 +12,11 @@ import {
   validateAndMintKpPerceptualContinuityContract
 } from "../src/animation/perceptual-continuity-contract.ts";
 import {
+  evaluateKpNativeKatexSuccessorEndpoint,
+  type KpNativeKatexSuccessorEndpointCheckpoint,
+  type KpNativeKatexSuccessorEndpointSnapshot
+} from "../src/rendering/native-katex-successor-endpoint-microscope.ts";
+import {
   normalizedPngRasterDelta
 } from "./helpers/png-raster-diff.ts";
 
@@ -874,6 +879,151 @@ test("one plus two boundary samples retain opaque font-stable paint", async ({
   expect(samples[4]!.visibleMaterialOwnerCount).toBe(0);
 });
 
+test("successor endpoint microscope closes browser viewport and DPR matrix", async ({
+  browser,
+  browserName
+}, testInfo) => {
+  testInfo.setTimeout(120_000);
+  const summaries = [];
+  for (const profile of [
+    {
+      id: "wide.dpr1",
+      viewport: { width: 1_180, height: 900 },
+      deviceScaleFactor: 1
+    },
+    {
+      id: "wide.dpr2",
+      viewport: { width: 1_180, height: 900 },
+      deviceScaleFactor: 2
+    },
+    {
+      id: "phone.dpr1",
+      viewport: { width: 360, height: 800 },
+      deviceScaleFactor: 1
+    },
+    {
+      id: "phone.dpr2",
+      viewport: { width: 360, height: 800 },
+      deviceScaleFactor: 2
+    }
+  ] as const) {
+    const context = await browser.newContext({
+      viewport: profile.viewport,
+      deviceScaleFactor: profile.deviceScaleFactor
+    });
+    const page = await context.newPage();
+    await page.goto(`/?animation=${descriptorId}`);
+    const player = page.locator(
+      `[data-kp-editor-animation-player]` +
+      `[data-kp-editor-animation-id="${animationId}"]`
+    );
+    const stage = player.locator(
+      "[data-kp-operation-evaluation-stage]"
+    );
+    const scrubber = player.locator(
+      "[data-action=\"seek-editor-animation\"]"
+    );
+    try {
+      await expect(stage).toHaveAttribute(
+        "data-kp-operation-evaluation-status",
+        "ready",
+        { timeout: 15_000 }
+      );
+    } catch (error) {
+      const surfaceError = await player.locator(
+        "[data-kp-editor-animation-surface-slot=\"equation\"]"
+      ).getAttribute("data-kp-operation-evaluation-error");
+      throw new Error(
+        `Endpoint microscope surface did not prepare: ${surfaceError}`,
+        { cause: error }
+      );
+    }
+
+    await seekExact(scrubber, 0.999);
+    await expect(player).toHaveAttribute(
+      "data-kp-operation-evaluation-mapped-progress",
+      "0.999"
+    );
+    const successor = await endpointSnapshot(
+      stage,
+      "successor-one-minus-epsilon"
+    );
+    const successorPng = await stage.screenshot({
+      animations: "disabled"
+    });
+
+    await seekExact(scrubber, 1);
+    await expect(player).toHaveAttribute(
+      "data-kp-operation-evaluation-mapped-progress",
+      "1"
+    );
+    const nativeTarget = await endpointSnapshot(stage, "native-target");
+    const nativePng = await stage.screenshot({ animations: "disabled" });
+    await stage.evaluate((element) => new Promise<void>((resolve) => {
+      const view = element.ownerDocument.defaultView!;
+      view.requestAnimationFrame(() =>
+        view.requestAnimationFrame(() => resolve())
+      );
+    }));
+    const postSettlement = await endpointSnapshot(
+      stage,
+      "post-settlement"
+    );
+    const postPng = await stage.screenshot({ animations: "disabled" });
+
+    const report = evaluateKpNativeKatexSuccessorEndpoint({
+      successor,
+      nativeTarget,
+      postSettlement,
+      normalizedSilhouetteDelta: normalizedEndpointSilhouetteDelta(
+        successor,
+        nativeTarget
+      ),
+      normalizedRasterDelta: normalizedPngRasterDelta(
+        successorPng,
+        nativePng
+      ),
+      postSettlementSilhouetteDelta: normalizedEndpointSilhouetteDelta(
+        nativeTarget,
+        postSettlement
+      ),
+      postSettlementRasterDelta: normalizedPngRasterDelta(
+        nativePng,
+        postPng
+      )
+    });
+    expect(
+      report.diagnostics,
+      `${browserName}.${profile.id}`
+    ).toEqual([]);
+    expect(report.passed).toBe(true);
+    expect(report.atomCount).toBeGreaterThan(0);
+    summaries.push({
+      browser: browserName,
+      profile: profile.id,
+      atomCount: report.atomCount,
+      geometryToleranceCssPx: report.geometryToleranceCssPx,
+      maximumGeometryDeltaCssPx:
+        report.maximumGeometryDeltaCssPx,
+      maximumBaselineDeltaCssPx:
+        report.maximumBaselineDeltaCssPx,
+      maximumInnerInsetDeltaCssPx:
+        report.maximumInnerInsetDeltaCssPx,
+      maximumRuleDeltaCssPx: report.maximumRuleDeltaCssPx,
+      normalizedSilhouetteDelta: report.normalizedSilhouetteDelta,
+      normalizedRasterDelta: report.normalizedRasterDelta
+    });
+    await context.close();
+  }
+  await testInfo.attach(
+    `successor-endpoint-microscope.${browserName}.json`,
+    {
+      body: Buffer.from(JSON.stringify(summaries, null, 2)),
+      contentType: "application/json"
+    }
+  );
+});
+
 test("Review can capture the one plus two Animation Library moment", async ({
   page
 }) => {
@@ -1081,6 +1231,49 @@ async function seekExact(scrubber: Locator, progress: number): Promise<void> {
     input.value = String(value);
     input.dispatchEvent(new Event("input", { bubbles: true }));
   }, progress);
+}
+
+async function endpointSnapshot(
+  stage: Locator,
+  checkpoint: KpNativeKatexSuccessorEndpointCheckpoint
+): Promise<KpNativeKatexSuccessorEndpointSnapshot> {
+  return stage.evaluate((element, selectedCheckpoint) => {
+    const observe = (element as HTMLElement & {
+      __kpObserveSuccessorEndpoint?: (
+        checkpoint: KpNativeKatexSuccessorEndpointCheckpoint
+      ) => KpNativeKatexSuccessorEndpointSnapshot;
+    }).__kpObserveSuccessorEndpoint;
+    if (observe === undefined) {
+      throw new Error("Successor endpoint microscope is not installed.");
+    }
+    return observe(selectedCheckpoint);
+  }, checkpoint);
+}
+
+function normalizedEndpointSilhouetteDelta(
+  left: KpNativeKatexSuccessorEndpointSnapshot,
+  right: KpNativeKatexSuccessorEndpointSnapshot
+): number {
+  const rightById = new Map(right.atoms.map((atom) =>
+    [atom.paintAtomId, atom.paintRect]
+  ));
+  const scale = Math.max(
+    1,
+    ...right.atoms.flatMap(({ paintRect }) => [
+      paintRect.width,
+      paintRect.height
+    ])
+  );
+  return Math.max(0, ...left.atoms.flatMap((atom) => {
+    const target = rightById.get(atom.paintAtomId);
+    if (target === undefined) return [1];
+    return [
+      Math.abs(atom.paintRect.left - target.left) / scale,
+      Math.abs(atom.paintRect.top - target.top) / scale,
+      Math.abs(atom.paintRect.width - target.width) / scale,
+      Math.abs(atom.paintRect.height - target.height) / scale
+    ];
+  }));
 }
 
 interface RelativeSelectorPaintGeometry {

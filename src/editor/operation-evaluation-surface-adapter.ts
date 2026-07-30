@@ -44,6 +44,9 @@ import type {
 import type {
   KpOperationEvaluationReferenceComparisonSession
 } from "./operation-evaluation-reference-comparison.dev.ts";
+import type {
+  KpOperationEvaluationEndpointMicroscopeSession
+} from "./operation-evaluation-endpoint-microscope.dev.ts";
 
 interface OperationEvaluationSurfaceSession {
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
@@ -54,6 +57,8 @@ interface OperationEvaluationSurfaceSession {
   playback?: KpReaderEquationMeasuredRendererSession | undefined;
   referenceComparison?:
     KpOperationEvaluationReferenceComparisonSession | undefined;
+  endpointMicroscope?:
+    KpOperationEvaluationEndpointMicroscopeSession | undefined;
   disposed: boolean;
 }
 
@@ -271,6 +276,26 @@ async function prepareOperationEvaluationSurface(input: {
       stage.remove();
       return;
     }
+    if (import.meta.env.DEV) {
+      const {
+        mountKpOperationEvaluationEndpointMicroscope
+      } = await import(
+        "./operation-evaluation-endpoint-microscope.dev.ts"
+      );
+      if (
+        input.session.disposed ||
+        input.session.generation !== input.generation
+      ) {
+        stage.remove();
+        return;
+      }
+      input.session.endpointMicroscope?.dispose();
+      input.session.endpointMicroscope =
+        mountKpOperationEvaluationEndpointMicroscope({
+          stage,
+          targetScene
+        });
+    }
     const materialPlan = compileKpReaderEquationMaterialPlan(
       input.renderPlan
     );
@@ -446,6 +471,8 @@ function invalidateOperationEvaluationMeasurement(
   session: OperationEvaluationSurfaceSession
 ): void {
   const stage = session.activeStage;
+  session.endpointMicroscope?.dispose();
+  session.endpointMicroscope = undefined;
   session.playback?.dispose();
   session.playback = undefined;
   session.measurementCertificate = undefined;
@@ -520,6 +547,7 @@ function disposeOperationEvaluationSurface(
   session.disposed = true;
   session.generation += 1;
   session.referenceComparison?.dispose();
+  session.endpointMicroscope?.dispose();
   session.playback?.dispose();
   session.measurementCertificate = undefined;
   session.fontReadiness.dispose();
