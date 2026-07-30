@@ -37,6 +37,33 @@ test("dense seek, reverse seek, and repeated scrub are paint deterministic", asy
     return document.fonts.status;
   })).toBe("loaded");
 
+  await seekAndSettle(page, player, 0);
+  await installRetiredScenePaintAudit(player);
+  for (const progress of [
+    0.18,
+    0.181,
+    0.4,
+    0.401,
+    0.56,
+    0.561,
+    0.82,
+    0.821,
+    1
+  ]) {
+    await seekAndSettle(page, player, progress);
+  }
+  const retirements = await readRetiredScenePaintAudit(player);
+  expect(retirements.length).toBeGreaterThanOrEqual(4);
+  expect(retirements.some(
+    ({ beforeTargetOpacity }) => beforeTargetOpacity === "1"
+  )).toBe(true);
+  expect(retirements.every((retirement) =>
+    retirement.beforeSourceOpacity === retirement.afterSourceOpacity &&
+    retirement.beforeTargetOpacity === retirement.afterTargetOpacity &&
+    retirement.beforeMaterialOwnerCount ===
+      retirement.afterMaterialOwnerCount
+  ), JSON.stringify(retirements)).toBe(true);
+
   const forward = new Map<number, string>();
   for (const progress of denseProgress) {
     await seekAndSettle(page, player, progress);
@@ -782,6 +809,77 @@ async function awaitCommittedSymbolicScene(
     return state.status === "ready" &&
       state.segment === state.expectedSegment;
   }).toBe(true);
+}
+
+interface RetiredScenePaintAudit {
+  readonly segment?: string | undefined;
+  readonly beforeSourceOpacity?: string | undefined;
+  readonly beforeTargetOpacity?: string | undefined;
+  readonly beforeMaterialOwnerCount: number;
+  afterSourceOpacity?: string | undefined;
+  afterTargetOpacity?: string | undefined;
+  afterMaterialOwnerCount?: number | undefined;
+}
+
+async function installRetiredScenePaintAudit(
+  player: ReturnType<Page["locator"]>
+): Promise<void> {
+  await player.evaluate((root) => {
+    const retirements: RetiredScenePaintAudit[] = [];
+    const originalRemove = Element.prototype.remove;
+    Element.prototype.remove = function(this: Element) {
+      if (
+        this instanceof HTMLElement &&
+        this.hasAttribute("data-kp-exact-symbolic-scene") &&
+        this.dataset["kpPreparedSceneState"] === "committed"
+      ) {
+        const source = this.querySelector<HTMLElement>(
+          "[data-kp-exact-symbolic-source]"
+        );
+        const target = this.querySelector<HTMLElement>(
+          "[data-kp-exact-symbolic-target]"
+        );
+        const retirement: RetiredScenePaintAudit = {
+          segment: this.dataset["kpExactSymbolicSegment"],
+          beforeSourceOpacity: source?.style.opacity,
+          beforeTargetOpacity: target?.style.opacity,
+          beforeMaterialOwnerCount: this.querySelectorAll(
+            "[data-kp-equation-material-owner-id]"
+          ).length
+        };
+        retirements.push(retirement);
+        originalRemove.call(this);
+        queueMicrotask(() => {
+          retirement.afterSourceOpacity = source?.style.opacity;
+          retirement.afterTargetOpacity = target?.style.opacity;
+          retirement.afterMaterialOwnerCount = this.querySelectorAll(
+            "[data-kp-equation-material-owner-id]"
+          ).length;
+        });
+        return;
+      }
+      originalRemove.call(this);
+    };
+    Object.assign(root, {
+      __kpRetiredScenePaintAudit: retirements,
+      __kpRetiredSceneOriginalRemove: originalRemove
+    });
+  });
+}
+
+async function readRetiredScenePaintAudit(
+  player: ReturnType<Page["locator"]>
+): Promise<readonly RetiredScenePaintAudit[]> {
+  return player.evaluate((root) => {
+    const state = root as HTMLElement & {
+      __kpRetiredScenePaintAudit?: RetiredScenePaintAudit[];
+      __kpRetiredSceneOriginalRemove?: typeof Element.prototype.remove;
+    };
+    if (state.__kpRetiredSceneOriginalRemove !== undefined) {
+      Element.prototype.remove = state.__kpRetiredSceneOriginalRemove;
+    }
+    return state.__kpRetiredScenePaintAudit ?? [];
+  });
 }
 
 async function paintFingerprint(

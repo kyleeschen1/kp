@@ -78,10 +78,14 @@ test("canonical scene core stays within source and vocabulary ceilings", async (
 });
 
 test("canonical scene core exposes one ephemeral renderer session contract", async () => {
-  const source = await readFile(
-    "src/rendering/native-katex-scene-compositor.ts",
-    "utf8"
-  );
+  const [source, contract, exactSurface] = await Promise.all([
+    readFile("src/rendering/native-katex-scene-compositor.ts", "utf8"),
+    readFile("src/rendering/native-katex-scene-track-contract.ts", "utf8"),
+    readFile(
+      "src/editor/exact-fraction-quantity-surface-adapter.ts",
+      "utf8"
+    )
+  ]);
 
   assert.equal(
     (source.match(/export interface KpNativeKatexRendererSession/g) ?? []).length,
@@ -100,6 +104,25 @@ test("canonical scene core exposes one ephemeral renderer session contract", asy
   assert.doesNotMatch(
     sessionSource,
     /\b(fraction|radical|quadratic|viewport|card|operation|route)\b/i
+  );
+  assert.match(contract, /readonly retire:/);
+  assert.doesNotMatch(contract, /readonly dispose:/);
+  const primitiveRetirement = sessionSource.slice(
+    sessionSource.indexOf(
+      "retire(retirement: KpNativeKatexPaintPreservingRetirement)"
+    ),
+    sessionSource.indexOf(
+      "export function compileKpCanonicalNativeKatexPureScenePlan"
+    )
+  );
+  assert.doesNotMatch(
+    primitiveRetirement,
+    /syncKpEquationMaterialLayer|(?:sourceRoot|targetRoot)\.style/
+  );
+  assert.doesNotMatch(exactSurface, /symbolicPlayback\.dispose/);
+  assert.match(
+    exactSurface,
+    /reason: "scene-replaced",\s+structuralSuccession: "retire-preserving-paint"/
   );
 });
 

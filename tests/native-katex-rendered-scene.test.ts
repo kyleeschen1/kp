@@ -1713,6 +1713,19 @@ test("renderer session preserves compatible native material without atomizing", 
   assert.equal(forward.at(-1)?.visualOwner, "target-native");
   assert.equal(sourceRoot.style.opacity, "1");
   assert.equal(targetRoot.style.opacity, "0");
+
+  session.apply(1);
+  session.retire({
+    kind: "native-katex-paint-preserving-retirement",
+    reason: "scene-replaced",
+    structuralSuccession: "retire-preserving-paint"
+  });
+  assert.equal(sourceRoot.style.opacity, "0");
+  assert.equal(targetRoot.style.opacity, "1");
+  assert.throws(
+    () => session.apply(0),
+    /disposed native KaTeX renderer session/
+  );
 });
 
 test("renderer session direct seeks and reverses without hidden clock state", () => {

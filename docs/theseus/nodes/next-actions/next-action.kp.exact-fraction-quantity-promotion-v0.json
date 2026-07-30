@@ -676,6 +676,55 @@
       "scope": "s21 control-plane integrity",
       "checkedAt": "2026-07-30T06:04:18.201Z",
       "notes": "Validated 832 nodes and 14532 events before slice completion."
+    },
+    {
+      "command": "npm run visual:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "retired-scene paint preservation and exact-fraction cross-browser continuity",
+      "checkedAt": "2026-07-30T13:23:43.582Z",
+      "notes": "24/24 passed in Chromium Firefox and WebKit; boundary audit compares paint immediately before stage removal with detached post-retirement paint"
+    },
+    {
+      "command": "npm run visual:operation-evaluation-continuity",
+      "status": "passed",
+      "scope": "shared canonical compositor consumers across browsers",
+      "checkedAt": "2026-07-30T13:24:05.182Z",
+      "notes": "54/54 passed in Chromium Firefox and WebKit after measurement-invalidated fallback remained explicit in its surface adapter"
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "exact quantity semantic and runtime contracts",
+      "checkedAt": "2026-07-30T13:24:05.594Z",
+      "notes": "100/100 focused tests passed"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typed paint-preserving retirement API",
+      "checkedAt": "2026-07-30T13:24:05.927Z",
+      "notes": "Application Node test and domain TypeScript projects passed; generic dispose is absent from the renderer-session contract"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production closure",
+      "checkedAt": "2026-07-30T13:24:06.251Z",
+      "notes": "Typecheck and Vite production build passed"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "authority and dependency boundaries",
+      "checkedAt": "2026-07-30T13:24:06.588Z",
+      "notes": "All four architecture gates passed; explicit invalid-measurement fallback remains in the operation surface rather than renderer lifecycle cleanup"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "rejected-checkpoint repair control integrity",
+      "checkedAt": "2026-07-30T13:24:27.424Z",
+      "notes": "Valid 832 nodes and 14557 events; slice 25 remains in progress pending renewed human visual approval"
     }
   ],
   "progress": {

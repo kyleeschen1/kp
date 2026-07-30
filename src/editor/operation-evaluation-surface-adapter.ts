@@ -326,7 +326,11 @@ async function prepareOperationEvaluationSurface(input: {
       source: sourceScene,
       target: targetScene
     });
-    input.session.playback?.dispose();
+    input.session.playback?.retire({
+      kind: "native-katex-paint-preserving-retirement",
+      reason: "scene-replaced",
+      structuralSuccession: "retire-preserving-paint"
+    });
     input.session.playback = playback;
     input.session.activeStage = stage;
     input.session.measurementCertificate = measurementCertificate;
@@ -523,13 +527,23 @@ function invalidateOperationEvaluationMeasurement(
   const stage = session.activeStage;
   session.endpointMicroscope?.dispose();
   session.endpointMicroscope = undefined;
-  session.playback?.dispose();
+  session.playback?.retire({
+    kind: "native-katex-paint-preserving-retirement",
+    reason: "measurement-invalidated",
+    structuralSuccession: "retire-preserving-paint"
+  });
   session.playback = undefined;
   session.measurementCertificate = undefined;
   player.dataset["kpOperationEvaluationContinuityStatus"] =
     "measurement-stale";
   if (stage === undefined) return;
   stage.dataset["kpOperationEvaluationStatus"] = "measurement-stale";
+  // This still-mounted fallback is presentation policy, not renderer cleanup.
+  // Clear transient owners here before selecting the source checkpoint so a
+  // generic session retirement never acquires hidden reset-to-source authority.
+  stage.querySelector<HTMLElement>(
+    "[data-kp-editor-equation-material-layer]"
+  )?.replaceChildren();
   const source = stage.querySelector<HTMLElement>(
     "[data-kp-operation-evaluation-source]"
   );
@@ -598,7 +612,11 @@ function disposeOperationEvaluationSurface(
   session.generation += 1;
   session.referenceComparison?.dispose();
   session.endpointMicroscope?.dispose();
-  session.playback?.dispose();
+  session.playback?.retire({
+    kind: "native-katex-paint-preserving-retirement",
+    reason: "surface-disposed",
+    structuralSuccession: "retire-preserving-paint"
+  });
   session.measurementCertificate = undefined;
   session.fontReadiness.dispose();
   session.activeStage?.remove();

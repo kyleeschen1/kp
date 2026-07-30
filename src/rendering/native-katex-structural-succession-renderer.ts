@@ -233,6 +233,25 @@ export function disposeKpNativeKatexStructuralSuccession(
   states.delete(stage);
 }
 
+export function retireKpNativeKatexStructuralSuccessionPreservingPaint(
+  stage: HTMLElement
+): void {
+  const state = states.get(stage);
+  if (state === undefined) return;
+  if (state.retryFrame !== undefined) {
+    stage.ownerDocument.defaultView?.cancelAnimationFrame(state.retryFrame);
+  }
+  if (state.idleReleaseTimer !== undefined) {
+    stage.ownerDocument.defaultView?.clearTimeout(state.idleReleaseTimer);
+  }
+  cancelKpWebglContextLeaseWait(state.canvas);
+  state.renderer?.dispose();
+  // Keep the canvas and its last raster attached. Session retirement is a
+  // resource boundary, not paint authority; the host removes the whole stage
+  // after another committed scene has taken ownership.
+  states.delete(stage);
+}
+
 function scheduleEmptyPaintRetry(
   stage: HTMLElement,
   state: StructuralSuccessionState

@@ -88,9 +88,19 @@ export function createKpReaderCanonicalEquationSession(input: {
   const sessionHandoff = createKpReaderLatestSessionHandoff();
   let prewarmQueue: KpReaderIdlePrewarmQueue | undefined;
   const releaseCurrentSession = (
+    reason:
+      | "scene-replaced"
+      | "surface-disposed"
+      | "measurement-invalidated",
     preserveStructuralSuccession = false
   ): void => {
-    session?.dispose({ preserveStructuralSuccession });
+    session?.retire({
+      kind: "native-katex-paint-preserving-retirement",
+      reason,
+      structuralSuccession: preserveStructuralSuccession
+        ? "preserve"
+        : "retire-preserving-paint"
+    });
     session = undefined;
     sessionKey = undefined;
     structuralSessionKey = undefined;
@@ -223,6 +233,7 @@ export function createKpReaderCanonicalEquationSession(input: {
         // retain the expensive structural capture. The inner renderer still
         // releases its WebGL lease independently at native endpoints.
         releaseCurrentSession(
+          "scene-replaced",
           session !== undefined &&
             structuralFitSurface === frame.fitSurface &&
             structuralSessionKey === nextStructuralSessionKey
@@ -257,7 +268,11 @@ export function createKpReaderCanonicalEquationSession(input: {
           structuralFitSurface = frame.fitSurface;
         });
         if (!committed) {
-          candidateSession.dispose();
+          candidateSession.retire({
+            kind: "native-katex-paint-preserving-retirement",
+            reason: "scene-replaced",
+            structuralSuccession: "retire-preserving-paint"
+          });
           return false;
         }
         if (ownerWindow !== null) {
@@ -350,12 +365,12 @@ export function createKpReaderCanonicalEquationSession(input: {
     invalidate() {
       sessionHandoff.invalidate();
       prewarmQueue?.cancel();
-      releaseCurrentSession();
+      releaseCurrentSession("measurement-invalidated");
     },
     dispose() {
       sessionHandoff.invalidate();
       prewarmQueue?.dispose();
-      releaseCurrentSession();
+      releaseCurrentSession("surface-disposed");
       purePlanCache.clear();
     }
   };

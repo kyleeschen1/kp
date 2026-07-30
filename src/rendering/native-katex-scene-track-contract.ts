@@ -75,6 +75,17 @@ export interface KpNativeKatexRendererDispositionContract {
   readonly affectedIds: readonly string[];
 }
 
+export interface KpNativeKatexPaintPreservingRetirement {
+  readonly kind: "native-katex-paint-preserving-retirement";
+  readonly reason:
+    | "scene-replaced"
+    | "surface-disposed"
+    | "measurement-invalidated";
+  readonly structuralSuccession:
+    | "preserve"
+    | "retire-preserving-paint";
+}
+
 export interface KpNativeKatexRendererSessionContract<
   Disposition,
   Track,
@@ -91,7 +102,10 @@ export interface KpNativeKatexRendererSessionContract<
   readonly tracks: readonly Track[];
   readonly sample: (progress: number) => readonly Frame[];
   readonly apply: (progress: number) => OwnershipFrame;
-  readonly dispose: (options?: {
-    readonly preserveStructuralSuccession?: boolean | undefined;
-  }) => void;
+  // Retirement deliberately has no reset-to-source variant. A renderer that
+  // owns visible paint may release authority, but lifecycle cleanup must not
+  // select a pose; doing so caused detached start frames to flash at handoff.
+  readonly retire: (
+    retirement: KpNativeKatexPaintPreservingRetirement
+  ) => void;
 }

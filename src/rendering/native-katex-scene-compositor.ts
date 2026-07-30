@@ -29,7 +29,7 @@ import {
   compileKpQualityBoundedFanInTracks
 } from "./native-katex-fan-in-motion.ts";
 import {
-  disposeKpNativeKatexStructuralSuccession,
+  retireKpNativeKatexStructuralSuccessionPreservingPaint,
   syncKpNativeKatexStructuralSuccession
 } from "./native-katex-structural-succession-renderer.ts";
 import {
@@ -52,6 +52,7 @@ import {
 } from "./native-katex-scene-track-sampling.ts";
 import type {
   KpNativeKatexPaintMeasuredSceneTrackFrameContract,
+  KpNativeKatexPaintPreservingRetirement,
   KpNativeKatexRendererDispositionContract,
   KpNativeKatexRendererSessionContract,
   KpNativeKatexSceneOwnershipFrameContract,
@@ -1723,12 +1724,13 @@ export function createKpNativeKatexRendererSession(input: {
     tracks,
     sample,
     apply,
-    dispose() {
+    retire(retirement: KpNativeKatexPaintPreservingRetirement) {
       if (disposed) return;
+      assertKpNativeKatexPaintPreservingRetirement(retirement);
       disposed = true;
-      syncKpEquationMaterialLayer({ stage: input.stage, owners: [] });
-      input.sourceRoot.style.opacity = "1";
-      input.targetRoot.style.opacity = "0";
+      // Preserve the last applied DOM exactly. The stage host owns replacement;
+      // a session retirement that rewinds endpoint paint can be composited for
+      // one frame even after that stage has been detached.
     }
   });
 }
@@ -1974,15 +1976,16 @@ export function createKpCanonicalNativeKatexSceneSession(
       }
       return ownership;
     },
-    dispose(options?: {
-      readonly preserveStructuralSuccession?: boolean | undefined;
-    }) {
+    retire(retirement: KpNativeKatexPaintPreservingRetirement) {
       if (disposed) return;
+      assertKpNativeKatexPaintPreservingRetirement(retirement);
       disposed = true;
-      if (options?.preserveStructuralSuccession !== true) {
-        disposeKpNativeKatexStructuralSuccession(input.source.stage);
+      if (retirement.structuralSuccession === "retire-preserving-paint") {
+        retireKpNativeKatexStructuralSuccessionPreservingPaint(
+          input.source.stage
+        );
       }
-      playback.dispose();
+      playback.retire(retirement);
     }
   });
   if (input.structuralSuccession !== undefined) session.apply(0);
@@ -1994,6 +1997,27 @@ export function createKpCanonicalNativeKatexSceneSession(
     protectedTransit: protectedTransit.certificate,
     session
   });
+}
+
+function assertKpNativeKatexPaintPreservingRetirement(
+  retirement: KpNativeKatexPaintPreservingRetirement
+): void {
+  if (
+    retirement.kind !== "native-katex-paint-preserving-retirement" ||
+    ![
+      "preserve",
+      "retire-preserving-paint"
+    ].includes(retirement.structuralSuccession) ||
+    ![
+      "scene-replaced",
+      "surface-disposed",
+      "measurement-invalidated"
+    ].includes(retirement.reason)
+  ) {
+    throw new Error(
+      "Native KaTeX sessions require paint-preserving retirement."
+    );
+  }
 }
 
 function prepareKpCanonicalNativeKatexScene(

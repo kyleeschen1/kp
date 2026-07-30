@@ -614,7 +614,11 @@ function commitPreparedSymbolicScene(input: {
   input.session.symbolicActiveStage = input.stage;
   input.session.symbolicPlayback = input.playback;
   if (previousPlayback !== undefined) {
-    previousPlayback.dispose();
+    previousPlayback.retire({
+      kind: "native-katex-paint-preserving-retirement",
+      reason: "scene-replaced",
+      structuralSuccession: "retire-preserving-paint"
+    });
     input.session.symbolicPlaybackDisposedCount += 1;
   }
 }
@@ -764,7 +768,11 @@ function syncReviewSheetControls(
 
 function releaseSymbolicPlayback(session: ExactSurfaceSession): void {
   if (session.symbolicPlayback === undefined) return;
-  session.symbolicPlayback.dispose();
+  session.symbolicPlayback.retire({
+    kind: "native-katex-paint-preserving-retirement",
+    reason: "surface-disposed",
+    structuralSuccession: "retire-preserving-paint"
+  });
   session.symbolicPlayback = undefined;
   session.symbolicPlaybackDisposedCount += 1;
 }
