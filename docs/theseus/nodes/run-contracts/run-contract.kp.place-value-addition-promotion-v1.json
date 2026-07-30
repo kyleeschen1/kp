@@ -132,7 +132,9 @@
     {
       "id": "s12",
       "title": "build-written-column-projection",
-      "status": "planned"
+      "summary": "Compiled the sealed semantic foundation into one conventional five-row, four-column written projection with twelve stable native KaTeX roots, a semantic DOM underline, reserved opaque endpoints, and a stateless DOM adapter. Wide and phone geometry, place centers, baselines, native font/style, opacity, transforms, and initial-to-settled stability pass in Chromium, Firefox, and WebKit without authored coordinates or a new runtime.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s13",

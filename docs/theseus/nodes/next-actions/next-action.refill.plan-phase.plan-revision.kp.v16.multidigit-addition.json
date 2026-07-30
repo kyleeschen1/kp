@@ -326,6 +326,27 @@
       "scope": "s11 broad boundaries",
       "checkedAt": "2026-07-30T16:57:57.687Z",
       "notes": "All TypeScript projects pass; architecture remains at zero frozen semantic-animation exceptions; inference stays within budget; promotion memory still identifies place-value addition as rank 2 while the certificate explicitly withholds ported status."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition; npm run typecheck",
+      "status": "failed",
+      "scope": "s12 initial written projection",
+      "checkedAt": "2026-07-30T17:10:40.254Z",
+      "notes": "The first broad run correctly exposed that the carry-size assertion sampled the KaTeX wrapper rather than its painted digit and that strict DOM dataset access needed indexed syntax. Measurement now targets painted glyph style; types were corrected without adding offsets or weakening the projection contract."
+    },
+    {
+      "command": "npm run test:place-value-addition; npm run test:browser:place-value-addition",
+      "status": "passed",
+      "scope": "s12 written-column projection",
+      "checkedAt": "2026-07-30T17:10:47.524Z",
+      "notes": "52 focused tests pass plus 6 Chromium, Firefox, and WebKit wide/phone checks. Initial and settled native roots retain geometry and style fingerprints; row baselines and place centers align; all opacity is one; carry uses native script paint; plus and underline occupy fixed slots; no endpoint transforms or authored offsets exist."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "s12 static architecture",
+      "checkedAt": "2026-07-30T17:10:55.715Z",
+      "notes": "All TypeScript projects pass; the stateless DOM adapter introduces no reader dependency-direction violation and semantic-animation stays at zero frozen exceptions; inference remains within the existing budget."
     }
   ],
   "expectedLearning": [
