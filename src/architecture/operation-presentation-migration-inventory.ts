@@ -109,22 +109,6 @@ export const kpOperationEvaluationContinuityMigrationInventory = Object.freeze([
     "The renderer now executes bounded opaque co-presence from the shared canonical sampler."
   ),
   continuityMigration(
-    "exact-fraction-local-motif",
-    "src/rendering/exact-fraction-quantity-symbolic-projection.ts",
-    'readonly motif: "successor-synthesis" | "operation-evaluation";',
-    "must-remove",
-    "s16",
-    "The exemplar labels its own motif instead of resolving the registry."
-  ),
-  continuityMigration(
-    "exact-fraction-local-path",
-    "src/rendering/exact-fraction-quantity-symbolic-projection.ts",
-    'materialPathFamily: "arc-below"',
-    "must-remove",
-    "s17",
-    "The exemplar chooses a route that belongs to measured collision planning."
-  ),
-  continuityMigration(
     "reader-registry-compiler",
     "src/reader/renderers/equation-render-plan.ts",
     "compileKpRegisteredSuccessorSynthesisPresentation({",
@@ -182,15 +166,6 @@ export const kpExecutableMotifMigrationLedger = Object.freeze([
     "replace-with-program",
     "s08",
     "Fraction role plans name fission or fusion without carrying executable phase authority."
-  ),
-  executableMotifMigration(
-    "label.exact-fraction-local",
-    "label-declaration",
-    "src/rendering/exact-fraction-quantity-symbolic-projection.ts",
-    'readonly motif: "successor-synthesis" | "operation-evaluation";',
-    "remove-compatibility",
-    "s22",
-    "Exact fraction locally distinguishes two labels that currently share the same successor sampler."
   ),
   executableMotifMigration(
     "consumer.successor-core-sampler",
@@ -353,24 +328,6 @@ export const kpExecutableMotifMigrationLedger = Object.freeze([
     "route-through-endpoint-microscope",
     "s14",
     "Successor-owned target atoms currently bypass dense typography handoff inspection."
-  ),
-  executableMotifMigration(
-    "compatibility.exact-fraction-authority",
-    "generic-fallback",
-    "src/editor/exact-fraction-quantity-surface-adapter.ts",
-    'legacyContinuityAuthority: "exact-fraction-quantity-v0"',
-    "remove-compatibility",
-    "s23",
-    "The four-view exemplar still enters the compositor through explicit legacy continuity authority."
-  ),
-  executableMotifMigration(
-    "compatibility.exact-fraction-realization",
-    "generic-fallback",
-    "src/rendering/native-katex-successor-synthesis.ts",
-    'kind: "legacy-successor-realization"',
-    "remove-compatibility",
-    "s23",
-    "The renderer exposes a legacy realization that cannot count as program execution."
   ),
   executableMotifMigration(
     "promotion.operation-evaluation",

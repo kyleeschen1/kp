@@ -4,9 +4,9 @@ import {
   kpOpaqueGatherAndRecognizeSettlementProgress,
   sampleKpOpaqueGatherAndRecognizeSuccessorSynthesis,
   sampleKpOpaqueIdentityTransferSuccessorSynthesis,
-  sampleKpSuccessorSynthesis,
   type KpSuccessorSynthesisPlan,
-  type KpSuccessorSynthesisPose
+  type KpSuccessorSynthesisPose,
+  type KpSuccessorSynthesisFrame
 } from "../animation/successor-synthesis.ts";
 import type {
   KpRegisteredSuccessorSynthesisBinding
@@ -65,15 +65,6 @@ export type KpNativeKatexSuccessorSynthesisIntent =
         | KpVerifiedIdentityFissionExecutableProgram
         | KpVerifiedIdentityFusionExecutableProgram;
       readonly legacyContinuityAuthority?: never;
-    })
-  | (KpNativeKatexSuccessorSynthesisIntentBase & {
-      readonly binding: KpExactOpaqueSuccessorSynthesisBinding;
-      /**
-       * Exact fraction predates the registry-backed reader route. Keeping the
-       * compatibility authority explicit prevents any other caller from
-       * silently omitting a verified continuity plan before its s22 removal.
-       */
-      readonly legacyContinuityAuthority: "exact-fraction-quantity-v0";
     });
 
 interface KpNativeKatexSuccessorPaintAnnotation {
@@ -106,9 +97,6 @@ export interface KpNativeKatexSuccessorSynthesisScenePlan {
         };
       }
     | {
-        readonly kind: "legacy-exact-fraction";
-      }
-    | {
         readonly kind: "executable-identity-transfer";
         readonly program:
           | KpVerifiedIdentityFissionExecutableProgram
@@ -116,9 +104,6 @@ export interface KpNativeKatexSuccessorSynthesisScenePlan {
       };
   readonly motifRealization:
     | KpCertifiedOpaqueGatherAndRecognizeRealization
-    | {
-        readonly kind: "legacy-successor-realization";
-      }
     | {
         readonly kind: "opaque-identity-transfer-v1";
         readonly programKind: "identity-fission" | "identity-fusion";
@@ -194,10 +179,22 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
       ...sources.map(({ annotationId, rect }) => [annotationId, rect] as const),
       ...targets.map(({ annotationId, rect }) => [annotationId, rect] as const)
     ]);
+    const sourceAnnotations =
+      "executableProgram" in intent &&
+        intent.executableProgram?.kind === "identity-fusion"
+        ? intent.binding.sourceAnnotations.map((annotation) =>
+            Object.freeze({
+              ...annotation,
+              // Fusion is one cohort, so propagation-rank parity must not
+              // send siblings to opposite sides of unrelated native paint.
+              pathFamily: annotation.pathFamily ?? "arc-below"
+            })
+          )
+        : intent.binding.sourceAnnotations;
     const baseSynthesis = createKpSuccessorSynthesisPlan({
       id: `native-scene.${intent.binding.id}`,
       authority: intent.binding.authority,
-      sourceAnnotations: intent.binding.sourceAnnotations,
+      sourceAnnotations,
       targetAnnotations: intent.binding.targetAnnotations,
       lineages: intent.binding.lineages,
       measurements
@@ -209,13 +206,9 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
             kind: "executable-identity-transfer" as const,
             program: intent.executableProgram
           })
-        : "legacyContinuityAuthority" in intent
-          ? Object.freeze({
-              kind: "legacy-exact-fraction" as const
-            })
-          : verifiedContinuityAuthority(
-              requireRegisteredSuccessorBinding(intent.binding)
-            );
+        : verifiedContinuityAuthority(
+            requireRegisteredSuccessorBinding(intent.binding)
+          );
     const synthesis = baseSynthesis;
     const violations = evaluateKpSuccessorSynthesisLaws(synthesis);
     if (violations.length > 0) {
@@ -232,13 +225,9 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
     );
     const motifRealization = continuityAuthority.kind === "verified"
       ? certifyOpaqueGatherAndRecognizeRealization(synthesis)
-      : continuityAuthority.kind === "executable-identity-transfer"
-        ? Object.freeze({
-            kind: "opaque-identity-transfer-v1" as const,
-            programKind: continuityAuthority.program.kind
-          })
       : Object.freeze({
-          kind: "legacy-successor-realization" as const
+          kind: "opaque-identity-transfer-v1" as const,
+          programKind: continuityAuthority.program.kind
         });
     return Object.freeze({
       id: synthesis.id,
@@ -295,14 +284,13 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
           plan: plan.synthesis,
           progress: semanticProgress
         })
-      : plan.continuityAuthority.kind === "executable-identity-transfer"
-        ? sampleKpOpaqueIdentityTransferSuccessorSynthesis({
-            plan: plan.synthesis,
-            progress: semanticProgress
-          })
-      : sampleKpSuccessorSynthesis({
+      : sampleKpOpaqueIdentityTransferSuccessorSynthesis({
           plan: plan.synthesis,
-          progress: semanticProgress
+          progress: semanticProgress,
+          cohortClearancePx:
+            plan.continuityAuthority.program.kind === "identity-fusion"
+              ? 10
+              : 0
         });
     const sampledOwners = [
       ...frame.sources.flatMap((sample) => {
@@ -740,7 +728,7 @@ function ownerFrames(input: {
   readonly plan: KpNativeKatexSuccessorSynthesisScenePlan;
   readonly annotation: KpNativeKatexSuccessorPaintAnnotation;
   readonly pose: KpSuccessorSynthesisPose;
-  readonly phase: ReturnType<typeof sampleKpSuccessorSynthesis>["phase"];
+  readonly phase: KpSuccessorSynthesisFrame["phase"];
 } & (
   | {
       readonly side: "source";

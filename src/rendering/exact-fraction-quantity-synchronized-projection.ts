@@ -344,9 +344,10 @@ function symbolicSelectorsBySelection(
         ["symbolic.addend.third.numerator"],
         ["symbolic.addend.sixth.numerator"]
       ]
-    : stateId === "state.exact-fraction.merged" ||
-        stateId === "state.exact-fraction.recognized"
+    : stateId === "state.exact-fraction.merged"
       ? [["symbolic.result.numerator"]]
+      : stateId === "state.exact-fraction.recognized"
+        ? [["symbolic.recognized.numerator"]]
       : [];
   if (values.length !== selectionCount) {
     throw new Error(

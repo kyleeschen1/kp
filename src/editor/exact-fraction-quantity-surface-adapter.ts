@@ -50,8 +50,12 @@ import {
 } from "../rendering/native-katex-rendered-scene.ts";
 import type {
   KpExactFractionSymbolicEndpoint,
+  KpExactFractionSuccessorSynthesisBinding,
   KpExactFractionSymbolicMotionSegment
 } from "../rendering/exact-fraction-quantity-symbolic-projection.ts";
+import type {
+  KpNativeKatexSuccessorSynthesisIntent
+} from "../rendering/native-katex-successor-synthesis.ts";
 import {
   commitKpNativeSceneCandidate,
   discardKpNativeSceneCandidate,
@@ -350,6 +354,16 @@ function syncSurface(
     player.dataset["kpExactExecutableProgramPhase"] =
       programPhase.phaseId;
   }
+  const symbolicProgram = frame.operationEvaluation;
+  if (symbolicProgram === undefined) {
+    delete player.dataset["kpExactSymbolicExecutableProgramId"];
+    delete player.dataset["kpExactSymbolicExecutableProgramPhase"];
+  } else {
+    player.dataset["kpExactSymbolicExecutableProgramId"] =
+      symbolicProgram.programId;
+    player.dataset["kpExactSymbolicExecutableProgramPhase"] =
+      symbolicProgram.phaseTelemetry.activePhaseId;
+  }
   player.dataset["kpExactSymbolicSegment"] =
     frame.symbolicMotion.segment.id;
   player.dataset["kpExactCheckpoint"] = checkpoint.id;
@@ -509,21 +523,7 @@ async function prepareSymbolicScene(input: {
       target,
       relations,
       successorSyntheses: input.segment.successorSyntheses.map((binding) =>
-        identityTransferProgram === undefined
-          ? {
-              binding,
-              direction: "forward" as const,
-              motion: "full" as const,
-              legacyContinuityAuthority: "exact-fraction-quantity-v0" as const
-            }
-          : {
-              binding,
-              direction: "forward" as const,
-              motion: "full" as const,
-              // The nominal program chooses the opaque shared-handoff
-              // projection; the binding only contributes measured paint.
-              executableProgram: identityTransferProgram
-            }
+        exactSuccessorIntent(binding, identityTransferProgram)
       ),
       endpointDwellFraction: 0.04,
       fanInRouting:
@@ -569,6 +569,35 @@ async function prepareSymbolicScene(input: {
       stage
     });
   }
+}
+
+function exactSuccessorIntent(
+  binding: KpExactFractionSuccessorSynthesisBinding,
+  identityTransferProgram:
+    | KpExactFractionQuantityRuntimeSession["identityFission"]["program"]
+    | KpExactFractionQuantityRuntimeSession["identityFusion"]["program"]
+    | undefined
+): KpNativeKatexSuccessorSynthesisIntent {
+  if (binding.motif === "operation-evaluation") {
+    return Object.freeze({
+      binding,
+      direction: "forward",
+      motion: "full"
+    });
+  }
+  if (identityTransferProgram === undefined) {
+    throw new Error(
+      "Exact identity transfer requires its executable fission/fusion program."
+    );
+  }
+  return Object.freeze({
+    binding,
+    direction: "forward",
+    motion: "full",
+    // The nominal program selects shared opaque handoff; measured selector
+    // paint remains data and cannot acquire independent path authority.
+    executableProgram: identityTransferProgram
+  });
 }
 
 function commitPreparedSymbolicScene(input: {

@@ -230,10 +230,21 @@ test("captured regression moments retain opaque committed paint during scene pre
         /^(orient-source-identity|branch-identity|establish-descendants|settle-descendants)$/u
       );
     }
+    if ([0.34, 0.72, 0.9, 0.94].includes(progress)) {
+      await expect(player).toHaveAttribute(
+        "data-kp-exact-symbolic-executable-program-id",
+        "kp.executable-program.operation-evaluation"
+      );
+      await expect(player).toHaveAttribute(
+        "data-kp-exact-symbolic-executable-program-phase",
+        /^(orient-contributors|gather-contributors|recognize-result|settle-result)$/u
+      );
+    }
     const samples = await player.evaluate(async (root) => {
       const frames: Array<{
         committedCount: number;
         symbolicStatus?: string | undefined;
+        symbolicError?: string | undefined;
         sceneOpacity: number;
         visibleOwnerCount: number;
         fractionalOpacityCount: number;
@@ -280,6 +291,8 @@ test("captured regression moments retain opaque committed paint during scene pre
           committedCount: committed.length,
           symbolicStatus:
             committed[0]?.dataset["kpExactSymbolicStatus"],
+          symbolicError:
+            committed[0]?.dataset["kpExactSymbolicError"],
           sceneOpacity: committed.length === 1
             ? Number(getComputedStyle(committed[0]!).opacity)
             : 0,

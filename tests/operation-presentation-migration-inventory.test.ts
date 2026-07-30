@@ -112,16 +112,6 @@ test("operation continuity inventory exposes every known bypass and shared route
         owningSlice: "s15"
       },
       {
-        id: "operation-continuity.exact-fraction-local-motif",
-        state: "must-remove",
-        owningSlice: "s16"
-      },
-      {
-        id: "operation-continuity.exact-fraction-local-path",
-        state: "must-remove",
-        owningSlice: "s17"
-      },
-      {
         id: "operation-continuity.reader-registry-compiler",
         state: "canonical-route",
         owningSlice: "s07"
@@ -153,7 +143,7 @@ test("operation continuity inventory exposes every known bypass and shared route
     kpOperationEvaluationContinuityMigrationInventory.filter(
       ({ state }) => state === "must-remove"
     ).length,
-    2
+    0
   );
   assert.equal(
     kpOperationEvaluationContinuityMigrationInventory.filter(
@@ -206,8 +196,7 @@ test("runtime sampler discovery cannot grow a silent motif route", async () => {
       needle: "sampleKpSuccessorSynthesis(",
       expected: [
         "src/animation/successor-synthesis.ts",
-        "src/rendering/equation-linear-rearrangement.ts",
-        "src/rendering/native-katex-successor-synthesis.ts"
+        "src/rendering/equation-linear-rearrangement.ts"
       ]
     },
     {
@@ -231,10 +220,7 @@ test("runtime sampler discovery cannot grow a silent motif route", async () => {
     },
     {
       needle: 'legacyContinuityAuthority: "exact-fraction-quantity-v0"',
-      expected: [
-        "src/editor/exact-fraction-quantity-surface-adapter.ts",
-        "src/rendering/native-katex-successor-synthesis.ts"
-      ]
+      expected: []
     }
   ] as const;
 

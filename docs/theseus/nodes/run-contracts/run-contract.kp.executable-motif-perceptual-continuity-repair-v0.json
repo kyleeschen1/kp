@@ -1305,7 +1305,8 @@
     {
       "id": "s22",
       "title": "migrate-exact-fraction-evaluations",
-      "status": "planned"
+      "summary": "Migrated exact-fraction multiplication, numerator addition, and quotient to the registry-backed canonical operation-evaluation program; removed legacy continuity, local path, and legacy sampler authority; retained all-view fission/fusion choreography; added distinct input/result selector ownership, nested program telemetry, fusion-only endpoint-neutral clearance, 100 exact tests, 175 operation-plan tests, typecheck/build/inference, and cross-engine opaque regression evidence.",
+      "status": "complete"
     },
     {
       "id": "s23",

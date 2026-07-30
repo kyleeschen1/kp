@@ -142,9 +142,8 @@ test("grouping and concrete part merge share one identity-fusion program", () =>
     executions.concrete.rewind.phaseOrder,
     [...executions.concrete.forward.phaseOrder].reverse()
   );
-  assert.equal(executions.symbolic.length, 2);
+  assert.equal(executions.symbolic.length, 1);
   assert.equal(executions.symbolic[0]?.forward.length, 2);
-  assert.equal(executions.symbolic[1]?.forward.length, 1);
   for (const execution of executions.symbolic.flatMap(
     ({ forward, rewind }) => [...forward, ...rewind]
   )) {
@@ -172,9 +171,12 @@ test("grouping and merge frames retain simultaneous opaque fusion", () => {
   assert.equal(grouping.symbolicMotion.identityFusionExecutions?.length, 2);
   assert.equal(grouping.identityFusion?.symbolicExecutions.length, 2);
   assert.equal(grouping.identityFusion?.concreteExecution, undefined);
-  assert.equal(merge.symbolicMotion.dispatch, "identity-fusion");
-  assert.equal(merge.symbolicMotion.identityFusionExecutions?.length, 1);
-  assert.equal(merge.identityFusion?.symbolicExecutions.length, 1);
+  assert.equal(merge.symbolicMotion.dispatch, "operation-evaluation");
+  assert.equal(
+    merge.symbolicMotion.operationEvaluationExecution,
+    session.operationEvaluation.symbolic[1]?.forward
+  );
+  assert.equal(merge.identityFusion?.symbolicExecutions.length, 0);
   assert.equal(
     merge.identityFusion?.concreteExecution,
     session.identityFusion.concrete.forward
@@ -200,6 +202,51 @@ test("grouping and merge frames retain simultaneous opaque fusion", () => {
         phase!.phaseId
       );
     }
+  }
+  assert.equal(
+    merge.operationEvaluation?.phaseTelemetry.activePhaseId,
+    merge.symbolicMotion.operationEvaluationExecution
+      ?.samplePhaseTelemetry(merge.symbolicMotion.segmentProgress)
+      .activePhaseId
+  );
+});
+
+test("product sum and quotient share one registered evaluation program", () => {
+  const session = createKpExactFractionQuantityRuntimeSession();
+  const executions = session.operationEvaluation;
+
+  assert.equal(
+    executions.route.primitiveRoute,
+    "native-katex-successor-synthesis"
+  );
+  assert.equal(executions.symbolic.length, 3);
+  assert.deepEqual(
+    executions.symbolic.map(
+      ({ forward }) => forward.primitive.intents.length
+    ),
+    [2, 1, 1]
+  );
+  assert.deepEqual(
+    executions.symbolic.map(({ forward }) =>
+      forward.primitive.intents.map(
+        ({ binding }) => binding.authority.operationId
+      )
+    ),
+    [
+      ["kp.arithmetic.multiply", "kp.arithmetic.multiply"],
+      ["kp.arithmetic.add"],
+      ["kp.arithmetic.divide"]
+    ]
+  );
+  for (const { forward, rewind } of executions.symbolic) {
+    assert.equal(forward.route, executions.route);
+    assert.equal(rewind.route, executions.route);
+    assert.equal(forward.continuityProgram.program, executions.program);
+    assert.equal(rewind.continuityProgram, forward.continuityProgram);
+    assert.deepEqual(
+      rewind.phaseOrder,
+      [...forward.phaseOrder].reverse()
+    );
   }
 });
 
@@ -281,7 +328,11 @@ test("fission settles before the multiplier evaluation subsegment", () => {
     /evaluate-unit-multiplier/u
   );
   assert.equal(refinement.symbolicMotion.segmentProgress, 0);
-  assert.equal(refinement.symbolicMotion.dispatch, "opaque-successor");
+  assert.equal(refinement.symbolicMotion.dispatch, "operation-evaluation");
+  assert.equal(
+    refinement.operationEvaluation?.programProgress,
+    refinement.symbolicMotion.segmentProgress
+  );
   assert.equal(refinement.easingApplications, 1);
 });
 

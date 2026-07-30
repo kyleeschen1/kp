@@ -21,6 +21,10 @@ import type {
 import type {
   KpSuccessorSynthesisBinding
 } from "../animation/successor-synthesis.ts";
+import {
+  compileKpRegisteredSuccessorSynthesisPresentation,
+  type KpRegisteredSuccessorSynthesisBinding
+} from "../animation/successor-synthesis-presentation-plan.ts";
 
 declare const kpExactFractionLegacySuccessorAuthority: unique symbol;
 
@@ -44,14 +48,23 @@ export interface KpExactFractionSymbolicMotionSegment {
   readonly structuralTransitions:
     readonly KpExactFractionSymbolicIdentityTransition[];
   readonly successorSyntheses:
-    readonly KpExactOpaqueSuccessorSynthesisBinding[];
+    readonly KpExactFractionSuccessorSynthesisBinding[];
 }
 
 export type KpExactOpaqueSuccessorSynthesisBinding =
   KpSuccessorSynthesisBinding & {
-    readonly motif: "successor-synthesis" | "operation-evaluation";
+    readonly motif: "successor-synthesis";
     readonly [kpExactFractionLegacySuccessorAuthority]: true;
   };
+
+export type KpExactOperationEvaluationSynthesisBinding =
+  KpRegisteredSuccessorSynthesisBinding & {
+    readonly motif: "operation-evaluation";
+  };
+
+export type KpExactFractionSuccessorSynthesisBinding =
+  | KpExactOpaqueSuccessorSynthesisBinding
+  | KpExactOperationEvaluationSynthesisBinding;
 
 export interface KpExactFractionSymbolicEndpoint {
   readonly stateId: string;
@@ -98,12 +111,19 @@ const ids = Object.freeze({
   resultRule: "symbolic.result.fraction-rule",
   refinementNumeratorMultiply:
     "symbolic.refinement.numerator.multiply",
+  refinementNumeratorInput:
+    "symbolic.refinement.numerator.input",
   refinementNumeratorFactor:
     "symbolic.refinement.numerator.factor",
   refinementDenominatorMultiply:
     "symbolic.refinement.denominator.multiply",
+  refinementDenominatorInput:
+    "symbolic.refinement.denominator.input",
   refinementDenominatorFactor:
-    "symbolic.refinement.denominator.factor"
+    "symbolic.refinement.denominator.factor",
+  recognizedNumerator: "symbolic.recognized.numerator",
+  recognizedDenominator: "symbolic.recognized.denominator",
+  recognizedRule: "symbolic.recognized.fraction-rule"
 });
 
 export function createKpExactFractionQuantitySymbolicProjection(
@@ -250,9 +270,9 @@ function endpointDefinitions(
   );
   const recognized = fraction(
     "symbolic.result",
-    ids.resultNumerator,
-    ids.resultDenominator,
-    ids.commonRule,
+    ids.recognizedNumerator,
+    ids.recognizedDenominator,
+    ids.recognizedRule,
     String(recognizedForm.numerator),
     String(recognizedForm.denominator)
   );
@@ -304,7 +324,7 @@ function createRefinementFactorEndpoint(
     String(source.numerator),
     String(source.denominator),
     [
-      selector(ids.thirdNumerator, String(source.numerator)),
+      selector(ids.refinementNumeratorInput, String(source.numerator)),
       latex("\\,"),
       selector(ids.refinementNumeratorMultiply, "\\times"),
       latex("\\,"),
@@ -314,7 +334,7 @@ function createRefinementFactorEndpoint(
       )
     ],
     [
-      selector(ids.thirdDenominator, String(source.denominator)),
+      selector(ids.refinementDenominatorInput, String(source.denominator)),
       latex("\\,"),
       selector(ids.refinementDenominatorMultiply, "\\times"),
       latex("\\,"),
@@ -471,12 +491,12 @@ function createMotionInputs(
         refinementFactor,
         [
           fission(ids.thirdNumerator, [
-            ids.thirdNumerator,
+            ids.refinementNumeratorInput,
             ids.refinementNumeratorMultiply,
             ids.refinementNumeratorFactor
           ]),
           fission(ids.thirdDenominator, [
-            ids.thirdDenominator,
+            ids.refinementDenominatorInput,
             ids.refinementDenominatorMultiply,
             ids.refinementDenominatorFactor
           ]),
@@ -491,7 +511,7 @@ function createMotionInputs(
             operationId: "kp.core.fan-out",
             materialSourceIds: [ids.thirdNumerator],
             targetIds: [
-              ids.thirdNumerator,
+              ids.refinementNumeratorInput,
               ids.refinementNumeratorMultiply,
               ids.refinementNumeratorFactor
             ]
@@ -501,7 +521,7 @@ function createMotionInputs(
             operationId: "kp.core.fan-out",
             materialSourceIds: [ids.thirdDenominator],
             targetIds: [
-              ids.thirdDenominator,
+              ids.refinementDenominatorInput,
               ids.refinementDenominatorMultiply,
               ids.refinementDenominatorFactor
             ]
@@ -514,12 +534,12 @@ function createMotionInputs(
         refined,
         [
           fusion([
-            ids.thirdNumerator,
+            ids.refinementNumeratorInput,
             ids.refinementNumeratorMultiply,
             ids.refinementNumeratorFactor
           ], ids.thirdNumerator),
           fusion([
-            ids.thirdDenominator,
+            ids.refinementDenominatorInput,
             ids.refinementDenominatorMultiply,
             ids.refinementDenominatorFactor
           ], ids.thirdDenominator),
@@ -532,8 +552,9 @@ function createMotionInputs(
           opaqueSuccessor({
             id: "successor.exact-fraction.refinement-numerator-product",
             operationId: "kp.arithmetic.multiply",
+            motif: "operation-evaluation",
             materialSourceIds: [
-              ids.thirdNumerator,
+              ids.refinementNumeratorInput,
               ids.refinementNumeratorFactor
             ],
             catalystSourceIds: [ids.refinementNumeratorMultiply],
@@ -542,8 +563,9 @@ function createMotionInputs(
           opaqueSuccessor({
             id: "successor.exact-fraction.refinement-denominator-product",
             operationId: "kp.arithmetic.multiply",
+            motif: "operation-evaluation",
             materialSourceIds: [
-              ids.thirdDenominator,
+              ids.refinementDenominatorInput,
               ids.refinementDenominatorFactor
             ],
             catalystSourceIds: [ids.refinementDenominatorMultiply],
@@ -575,7 +597,6 @@ function createMotionInputs(
               ids.thirdDenominator,
               ids.sixthDenominator
             ],
-            materialPathFamily: "arc-below",
             targetIds: [ids.commonDenominator]
           }),
           // Fraction rules are structural material, not arithmetic catalysts:
@@ -585,7 +606,6 @@ function createMotionInputs(
             id: "successor.exact-fraction.align-fraction-rules",
             operationId: "kp.core.group",
             materialSourceIds: [ids.thirdRule, ids.sixthRule],
-            materialPathFamily: "arc-below",
             targetIds: [ids.commonRule]
           })
         ]
@@ -607,6 +627,7 @@ function createMotionInputs(
         [opaqueSuccessor({
           id: "successor.exact-fraction.add-numerators",
           operationId: "kp.arithmetic.add",
+          motif: "operation-evaluation",
           materialSourceIds: [
             ids.thirdNumerator,
             ids.sixthNumerator
@@ -624,11 +645,11 @@ function createMotionInputs(
         [
           transition(
             [ids.resultNumerator, ids.commonDenominator],
-            [ids.resultNumerator, ids.resultDenominator],
+            [ids.recognizedNumerator, ids.recognizedDenominator],
             "fusion"
           )
         ],
-        [persist(ids.commonRule)],
+        [fusion([ids.commonRule], ids.recognizedRule)],
         [opaqueSuccessor({
           id: "successor.exact-fraction.evaluate-division",
           operationId: "kp.arithmetic.divide",
@@ -641,9 +662,9 @@ function createMotionInputs(
           // evaluation cohort and is re-expressed by the settled result.
           catalystSourceIds: [ids.commonRule],
           targetIds: [
-            ids.resultNumerator,
-            ids.resultDenominator,
-            ids.commonRule
+            ids.recognizedNumerator,
+            ids.recognizedDenominator,
+            ids.recognizedRule
           ]
         })]
       )
@@ -671,7 +692,7 @@ function motionSegment(
   structuralTransitions:
     readonly KpExactFractionSymbolicIdentityTransition[],
   successorSyntheses:
-    readonly KpExactOpaqueSuccessorSynthesisBinding[] = []
+    readonly KpExactFractionSuccessorSynthesisBinding[] = []
 ): KpExactFractionSymbolicMotionSegment {
   assertTransitionTotality(
     endpointSelectorIds(source),
@@ -774,10 +795,9 @@ function opaqueSuccessor(input: {
   readonly operationId: string;
   readonly motif?: "successor-synthesis" | "operation-evaluation" | undefined;
   readonly materialSourceIds: readonly string[];
-  readonly materialPathFamily?: "arc-above" | "arc-below" | undefined;
   readonly catalystSourceIds?: readonly string[] | undefined;
   readonly targetIds: readonly string[];
-}): KpExactOpaqueSuccessorSynthesisBinding {
+}): KpExactFractionSuccessorSynthesisBinding {
   const sourceAnnotations = [
     ...input.materialSourceIds.map((selectorId, propagationRank) =>
       Object.freeze({
@@ -785,10 +805,7 @@ function opaqueSuccessor(input: {
         semanticRole: "material-input",
         selectorIds: Object.freeze([selectorId]),
         contribution: "material-input" as const,
-        propagationRank,
-        ...(input.materialPathFamily === undefined
-          ? {}
-          : { pathFamily: input.materialPathFamily })
+        propagationRank
       })
     ),
     ...(input.catalystSourceIds ?? []).map((selectorId, index) =>
@@ -809,7 +826,7 @@ function opaqueSuccessor(input: {
       propagationRank
     })
   );
-  return Object.freeze({
+  const binding: KpSuccessorSynthesisBinding = Object.freeze({
     id: input.id,
     relationRecordId: `${input.id}.relation`,
     authority: Object.freeze({
@@ -828,9 +845,56 @@ function opaqueSuccessor(input: {
       targetAnnotationIds: Object.freeze(
         targetAnnotations.map(({ id }) => id)
       )
-    })]),
-    motif: input.motif ?? "successor-synthesis"
+    })])
+  });
+  if (input.motif === "operation-evaluation") {
+    const compilation = compileKpRegisteredSuccessorSynthesisPresentation({
+      transformationId: `transform.${input.id}`,
+      transformationKind:
+        exactEvaluationTransformationKind(input.operationId),
+      binding
+    });
+    if (
+      compilation.status !== "compiled" ||
+      compilation.executableProgram.kind !== "operation-evaluation"
+    ) {
+      throw new Error(
+        `Exact evaluation ${input.id} did not resolve executable authority.`
+      );
+    }
+    return Object.freeze({
+      ...binding,
+      motif: "operation-evaluation" as const,
+      operationPresentationPlan:
+        compilation.operationPresentationPlan,
+      paintContinuityPlan: compilation.paintContinuityPlan,
+      continuityProgram: compilation.continuityProgram
+    });
+  }
+  return Object.freeze({
+    ...binding,
+    motif: "successor-synthesis" as const
   }) as KpExactOpaqueSuccessorSynthesisBinding;
+}
+
+function exactEvaluationTransformationKind(
+  operationId: string
+):
+  | "simplifyConstantProduct"
+  | "simplifyConstantSum"
+  | "simplifyConstantQuotient" {
+  switch (operationId) {
+    case "kp.arithmetic.multiply":
+      return "simplifyConstantProduct";
+    case "kp.arithmetic.add":
+      return "simplifyConstantSum";
+    case "kp.arithmetic.divide":
+      return "simplifyConstantQuotient";
+    default:
+      throw new Error(
+        `Exact fraction has no operation-evaluation compiler for ${operationId}.`
+      );
+  }
 }
 
 function selector(

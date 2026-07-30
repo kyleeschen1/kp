@@ -73,14 +73,16 @@ const operationOnlyBinding: KpRegisteredSuccessorSynthesisBinding = {
   operationPresentationPlan: operationPlan
 };
 
-const fabricatedLegacyIntent: KpNativeKatexSuccessorSynthesisIntent = {
-  // @ts-expect-error Only the branded exact-fraction compatibility compiler
-  // may use the temporary legacy route before its scheduled removal.
+const fabricatedLegacyIntent = {
   binding: rawBinding,
   direction: "forward",
   motion: "full",
   legacyContinuityAuthority: "exact-fraction-quantity-v0"
-};
+} as const;
+
+// @ts-expect-error The removed legacy route cannot bypass registered authority.
+const impossibleLegacyIntent: KpNativeKatexSuccessorSynthesisIntent =
+  fabricatedLegacyIntent;
 
 void [
   legalDraft,
@@ -90,5 +92,6 @@ void [
   callerPath,
   verified,
   operationOnlyBinding,
-  fabricatedLegacyIntent
+  fabricatedLegacyIntent,
+  impossibleLegacyIntent
 ];

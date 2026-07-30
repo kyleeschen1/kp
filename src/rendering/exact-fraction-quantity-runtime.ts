@@ -34,6 +34,7 @@ import {
   createKpExactFractionQuantitySymbolicProjection,
   type KpExactFractionQuantitySymbolicProjection,
   type KpExactOpaqueSuccessorSynthesisBinding,
+  type KpExactOperationEvaluationSynthesisBinding,
   type KpExactFractionSymbolicMotionSegment
 } from "./exact-fraction-quantity-symbolic-projection.ts";
 import {
@@ -71,6 +72,11 @@ type KpIdentityFissionProgramExecution = Extract<
 type KpIdentityFusionProgramExecution = Extract<
   KpExecutableSuccessorMotifProgramAdapterDispatch,
   { readonly programKind: "identity-fusion" }
+>;
+
+type KpOperationEvaluationProgramExecution = Extract<
+  KpExecutableSuccessorMotifProgramAdapterDispatch,
+  { readonly programKind: "operation-evaluation" }
 >;
 
 interface KpExactFractionQuantityIdentityFissionExecutions {
@@ -119,6 +125,22 @@ interface KpExactFractionQuantityIdentityFusionExecutions {
   }[];
 }
 
+interface KpExactFractionQuantityOperationEvaluationExecutions {
+  readonly program:
+    KpExactOperationEvaluationSynthesisBinding[
+      "continuityProgram"
+    ]["program"];
+  readonly route: KpExecutableSuccessorMotifProgramRoute & {
+    readonly programKind: "operation-evaluation";
+    readonly primitiveRoute: "native-katex-successor-synthesis";
+  };
+  readonly symbolic: readonly {
+    readonly segmentId: string;
+    readonly forward: KpOperationEvaluationProgramExecution;
+    readonly rewind: KpOperationEvaluationProgramExecution;
+  }[];
+}
+
 export type KpExactFractionQuantityRuntimeClock =
   Pick<KpAnimationRuntimeClock, "direction" | "progress">;
 
@@ -137,6 +159,8 @@ export interface KpExactFractionQuantityRuntimeSession {
     KpExactFractionQuantityIdentityFissionExecutions;
   readonly identityFusion:
     KpExactFractionQuantityIdentityFusionExecutions;
+  readonly operationEvaluation:
+    KpExactFractionQuantityOperationEvaluationExecutions;
   readonly [kpExactFractionQuantityRuntimeSessionBrand]: true;
 }
 
@@ -178,6 +202,8 @@ export interface KpExactFractionQuantityRuntimeFrame {
         KpIdentityFusionProgramExecution,
         ...KpIdentityFusionProgramExecution[]
       ] | undefined;
+    readonly operationEvaluationExecution?:
+      KpOperationEvaluationProgramExecution | undefined;
   };
   readonly identityFission?: {
     readonly programId: string;
@@ -197,6 +223,16 @@ export interface KpExactFractionQuantityRuntimeFrame {
       KpIdentityFusionProgramExecution | undefined;
     readonly symbolicExecutions:
       readonly KpIdentityFusionProgramExecution[];
+  } | undefined;
+  readonly operationEvaluation?: {
+    readonly programId: string;
+    readonly programVersion: string;
+    readonly primitiveRoute: "native-katex-successor-synthesis";
+    readonly programProgress: number;
+    readonly execution: KpOperationEvaluationProgramExecution;
+    readonly phaseTelemetry: ReturnType<
+      KpOperationEvaluationProgramExecution["samplePhaseTelemetry"]
+    >;
   } | undefined;
   readonly motifFrame?: KpFissionFusionFrame | undefined;
   readonly ownershipPhase:
@@ -222,6 +258,8 @@ KpExactFractionQuantityRuntimeSession {
     symbolic,
     presentation
   });
+  const operationEvaluation =
+    compileOperationEvaluationExecutions({ symbolic, presentation });
   const session = Object.freeze({
     schemaVersion: "kp.exact-fraction-quantity-runtime-session.v1",
     id: "runtime-session.exact-fraction-quantity.third-plus-sixth",
@@ -237,7 +275,8 @@ KpExactFractionQuantityRuntimeSession {
     }),
     presentation,
     identityFission,
-    identityFusion
+    identityFusion,
+    operationEvaluation
   });
   sealedRuntimeSessions.add(session);
   return session as KpExactFractionQuantityRuntimeSession;
@@ -306,6 +345,11 @@ export function sampleKpExactFractionQuantityRuntime(input: {
       ({ segmentId }) =>
         segmentId === sampledSymbolicMotion.segment.id
     );
+  const symbolicOperationEvaluation =
+    input.session.operationEvaluation.symbolic.find(
+      ({ segmentId }) =>
+        segmentId === sampledSymbolicMotion.segment.id
+    );
   const symbolicMotion = Object.freeze({
     ...sampledSymbolicMotion,
     ...(sampledSymbolicMotion.dispatch === "identity-fission"
@@ -318,6 +362,12 @@ export function sampleKpExactFractionQuantityRuntime(input: {
       ? {
           identityFusionExecutions:
             symbolicIdentityFusion?.forward
+        }
+      : {}),
+    ...(sampledSymbolicMotion.dispatch === "operation-evaluation"
+      ? {
+          operationEvaluationExecution:
+            symbolicOperationEvaluation?.forward
         }
       : {})
   });
@@ -335,6 +385,14 @@ export function sampleKpExactFractionQuantityRuntime(input: {
   ) {
     throw new Error(
       "Symbolic identity fusion lacks compiled program executions."
+    );
+  }
+  if (
+    sampledSymbolicMotion.dispatch === "operation-evaluation" &&
+    symbolicOperationEvaluation === undefined
+  ) {
+    throw new Error(
+      "Symbolic operation evaluation lacks a compiled program execution."
     );
   }
   const expectedAtomicDispatch =
@@ -400,6 +458,21 @@ export function sampleKpExactFractionQuantityRuntime(input: {
             symbolicIdentityFission?.forward ?? Object.freeze([])
         })
       : undefined;
+  const operationEvaluation = symbolicOperationEvaluation === undefined
+    ? undefined
+    : Object.freeze({
+        programId: input.session.operationEvaluation.program.id,
+        programVersion:
+          input.session.operationEvaluation.program.programVersion,
+        primitiveRoute:
+          input.session.operationEvaluation.route.primitiveRoute,
+        programProgress: sampledSymbolicMotion.segmentProgress,
+        execution: symbolicOperationEvaluation.forward,
+        phaseTelemetry:
+          symbolicOperationEvaluation.forward.samplePhaseTelemetry(
+            sampledSymbolicMotion.segmentProgress
+          )
+      });
   const ownershipPhase = visibleOperation.actionProgress === 0
     ? "source-native"
     : visibleOperation.actionProgress === 1
@@ -420,6 +493,9 @@ export function sampleKpExactFractionQuantityRuntime(input: {
     ...(motifFrame === undefined ? {} : { motifFrame }),
     ...(identityFission === undefined ? {} : { identityFission }),
     ...(identityFusion === undefined ? {} : { identityFusion }),
+    ...(operationEvaluation === undefined
+      ? {}
+      : { operationEvaluation }),
     ownershipPhase,
     viewPaintOwnership: createViewPaintOwnership(ownershipPhase),
     settlementPolicy: "reuse-native-endpoint-geometry",
@@ -503,15 +579,16 @@ function sampleSymbolicMotion(
   if (
     dispatch === "operation-evaluation" &&
     (
-      segment.successorSyntheses.length !== 1 ||
-      segment.successorSyntheses[0]?.motif !== "operation-evaluation" ||
-      segment.successorSyntheses[0]?.authority.operationId !==
-        "kp.arithmetic.divide"
+      segment.successorSyntheses.length === 0 ||
+      segment.successorSyntheses.some((binding) =>
+        binding.motif !== "operation-evaluation" ||
+        !isExactEvaluationOperation(binding.authority.operationId)
+      )
     )
   ) {
     throw new Error(
-      "Exact-fraction division evaluation requires one typed arithmetic " +
-      "evaluation binding; cancellation and generic replacement are invalid."
+      "Exact-fraction arithmetic requires typed evaluation bindings; " +
+      "cancellation and generic replacement are invalid."
     );
   }
   if (
@@ -578,9 +655,14 @@ function compileIdentityFissionExecutions(input: {
       if (
         beat.execution.symbolicDispatches[index] !== "identity-fission"
       ) return [];
-      const plans = segment.successorSyntheses.map((binding) =>
-        compileSymbolicFissionPlan(segment.id, binding)
-      );
+      const plans = segment.successorSyntheses.map((binding) => {
+        if (binding.motif !== "successor-synthesis") {
+          throw new Error(
+            `Symbolic identity fission ${segment.id} received evaluation.`
+          );
+        }
+        return compileSymbolicFissionPlan(segment.id, binding);
+      });
       if (plans.length === 0) {
         throw new Error(
           `Symbolic identity fission ${segment.id} has no child lineage.`
@@ -776,9 +858,14 @@ function compileIdentityFusionExecutions(input: {
       if (
         beat.execution.symbolicDispatches[index] !== "identity-fusion"
       ) return [];
-      const plans = segment.successorSyntheses.map((binding) =>
-        compileSymbolicFusionPlan(segment.id, binding)
-      );
+      const plans = segment.successorSyntheses.map((binding) => {
+        if (binding.motif !== "successor-synthesis") {
+          throw new Error(
+            `Symbolic identity fusion ${segment.id} received evaluation.`
+          );
+        }
+        return compileSymbolicFusionPlan(segment.id, binding);
+      });
       if (plans.length === 0) {
         throw new Error(
           `Symbolic identity fusion ${segment.id} has no contributor lineage.`
@@ -807,9 +894,9 @@ function compileIdentityFusionExecutions(input: {
       })];
     });
   });
-  if (symbolic.length !== 2) {
+  if (symbolic.length !== 1) {
     throw new Error(
-      "Exact-fraction symbolic projection must compile grouping and merge fusion."
+      "Exact-fraction symbolic projection must compile grouping identity fusion."
     );
   }
   return Object.freeze({
@@ -888,6 +975,151 @@ function compileIdentityFusionProgram(input: {
     );
   }
   return execution;
+}
+
+function compileOperationEvaluationExecutions(input: {
+  readonly symbolic: KpExactFractionQuantitySymbolicProjection;
+  readonly presentation: KpExactFractionQuantityPresentationPlan;
+}): KpExactFractionQuantityOperationEvaluationExecutions {
+  const symbolic = input.symbolic.motionInputs.flatMap((motionInput) => {
+    const beat = input.presentation.beats.find(
+      ({ beatId }) => beatId === motionInput.beatId
+    );
+    if (
+      beat === undefined ||
+      beat.execution.symbolicDispatches.length !==
+        motionInput.segments.length
+    ) {
+      throw new Error(
+        `Symbolic evaluation ${motionInput.beatId} has dispatch drift.`
+      );
+    }
+    return motionInput.segments.flatMap((segment, index) => {
+      if (
+        beat.execution.symbolicDispatches[index] !==
+          "operation-evaluation"
+      ) return [];
+      const bindings = segment.successorSyntheses.map((binding) => {
+        if (binding.motif !== "operation-evaluation") {
+          throw new Error(
+            `Symbolic evaluation ${segment.id} lacks registered authority.`
+          );
+        }
+        return binding;
+      });
+      if (bindings.length === 0) {
+        throw new Error(
+          `Symbolic evaluation ${segment.id} has no arithmetic binding.`
+        );
+      }
+      const forward = compileOperationEvaluationProgram(
+        bindings,
+        "forward"
+      );
+      const rewind = compileOperationEvaluationProgram(
+        bindings,
+        "rewind"
+      );
+      return [Object.freeze({
+        segmentId: segment.id,
+        forward,
+        rewind
+      })];
+    });
+  });
+  if (symbolic.length !== 3) {
+    throw new Error(
+      "Exact-fraction runtime must compile product, sum, and quotient evaluation."
+    );
+  }
+  const first = symbolic[0]!.forward;
+  if (
+    symbolic.some(({ forward, rewind }) =>
+      forward.continuityProgram.program !==
+        first.continuityProgram.program ||
+      rewind.continuityProgram !== forward.continuityProgram ||
+      forward.route !== first.route ||
+      rewind.route !== first.route
+    )
+  ) {
+    throw new Error(
+      "Exact-fraction evaluations must share one canonical program and route."
+    );
+  }
+  return Object.freeze({
+    program: first.continuityProgram.program,
+    route: first.route as
+      KpExactFractionQuantityOperationEvaluationExecutions["route"],
+    symbolic: Object.freeze(symbolic)
+  });
+}
+
+function compileOperationEvaluationProgram(
+  bindings: readonly [
+    KpExactOperationEvaluationSynthesisBinding,
+    ...KpExactOperationEvaluationSynthesisBinding[]
+  ] | readonly KpExactOperationEvaluationSynthesisBinding[],
+  direction: "forward" | "rewind"
+): KpOperationEvaluationProgramExecution {
+  const first = bindings[0];
+  if (
+    first === undefined ||
+    first.continuityProgram.program.kind !== "operation-evaluation" ||
+    bindings.some((binding) =>
+      binding.continuityProgram !== first.continuityProgram
+    )
+  ) {
+    throw new Error(
+      "Operation evaluation requires one shared continuity program."
+    );
+  }
+  const program = first.continuityProgram.program;
+  const intents = Object.freeze(bindings.map((binding) => Object.freeze({
+    binding,
+    direction,
+    motion: "full" as const
+  }))) as readonly [
+    {
+      readonly binding: KpExactOperationEvaluationSynthesisBinding;
+      readonly direction: "forward" | "rewind";
+      readonly motion: "full";
+    },
+    ...{
+      readonly binding: KpExactOperationEvaluationSynthesisBinding;
+      readonly direction: "forward" | "rewind";
+      readonly motion: "full";
+    }[]
+  ];
+  const execution = compileKpExecutableSuccessorMotifProgramAdapter({
+    kind: "operation-evaluation",
+    program,
+    direction,
+    primitive: {
+      kind: "native-katex-successor-synthesis",
+      intents
+    }
+  });
+  if (
+    execution.programKind !== "operation-evaluation" ||
+    execution.route.primitiveRoute !==
+      "native-katex-successor-synthesis"
+  ) {
+    throw new Error(
+      "Operation-evaluation program resolved a non-successor route."
+    );
+  }
+  return execution;
+}
+
+function isExactEvaluationOperation(
+  operationId: string
+): operationId is
+  | "kp.arithmetic.multiply"
+  | "kp.arithmetic.add"
+  | "kp.arithmetic.divide" {
+  return operationId === "kp.arithmetic.multiply" ||
+    operationId === "kp.arithmetic.add" ||
+    operationId === "kp.arithmetic.divide";
 }
 
 function requireIdentityFissionProgramProgress(

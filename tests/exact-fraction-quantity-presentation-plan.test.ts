@@ -63,9 +63,9 @@ test("motif declarations are sealed executable four-view invocations", () => {
     plan.beats.map(({ execution }) => execution.symbolicDispatches),
     [
       ["continuant"],
-      ["identity-fission", "opaque-successor"],
+      ["identity-fission", "operation-evaluation"],
       ["identity-fusion"],
-      ["identity-fusion"],
+      ["operation-evaluation"],
       ["operation-evaluation"]
     ]
   );

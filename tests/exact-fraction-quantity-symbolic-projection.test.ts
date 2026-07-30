@@ -137,7 +137,7 @@ test("alignment and addition preserve native fraction structure without fades", 
   assert.ok(
     alignment.successorSyntheses[0]?.sourceAnnotations
       .filter(({ contribution }) => contribution === "material-input")
-      .every(({ pathFamily }) => pathFamily === "arc-below")
+      .every((annotation) => !("pathFamily" in annotation))
   );
   assert.deepEqual(
     merge.selectorTransitions.find(
@@ -193,7 +193,7 @@ test("three sixths executes one typed division evaluation without cancellation",
   );
   assert.equal(
     binding?.targetAnnotations.some(({ selectorIds }) =>
-      selectorIds.includes("symbolic.sum.fraction-rule")
+      selectorIds.includes("symbolic.recognized.fraction-rule")
     ),
     true
   );

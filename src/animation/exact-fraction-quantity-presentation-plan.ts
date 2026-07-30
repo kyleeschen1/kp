@@ -30,6 +30,9 @@ import {
   kpIdentityFusionExecutableProgram,
   type KpVerifiedIdentityFusionExecutableProgram
 } from "./motifs/identity-fusion-executable-program.ts";
+import {
+  kpOperationEvaluationExecutableProgramCompiler
+} from "./operation-evaluation-presentation-registry.ts";
 
 export type {
   KpExactQuantityOpaquePaintBinding
@@ -64,6 +67,9 @@ export interface KpExactQuantityMotifInvocation {
   readonly [kpExactQuantityMotifInvocationBrand]: true;
 }
 
+type KpVerifiedOperationEvaluationExecutableProgram =
+  typeof kpOperationEvaluationExecutableProgramCompiler.program;
+
 interface KpExactFractionQuantityPresentationBeatBase {
   readonly beatId: string;
   readonly canonicalOperationId: KpCanonicalOperationId;
@@ -76,7 +82,15 @@ export type KpExactFractionQuantityPresentationBeat =
   | (KpExactFractionQuantityPresentationBeatBase & {
       readonly motif: {
         readonly kind: "existing";
-        readonly motifId: "focus-continuant" | "structural-succession";
+        readonly motifId: "focus-continuant";
+      };
+    })
+  | (KpExactFractionQuantityPresentationBeatBase & {
+      readonly motif: {
+        readonly kind: "existing";
+        readonly motifId: "structural-succession";
+        readonly executableProgram:
+          KpVerifiedOperationEvaluationExecutableProgram;
       };
     })
   | (KpExactFractionQuantityPresentationBeatBase & {
@@ -136,10 +150,14 @@ export interface KpExactQuantityVisiblePhaseBinding {
 export interface KpExactQuantityExecutableProgramPhase {
   readonly kind:
     | "identity-fission-program-phase"
-    | "identity-fusion-program-phase";
+    | "identity-fusion-program-phase"
+    | "operation-evaluation-program-phase";
   readonly programId: string;
   readonly programVersion: string;
-  readonly programKind: "identity-fission" | "identity-fusion";
+  readonly programKind:
+    | "identity-fission"
+    | "identity-fusion"
+    | "operation-evaluation";
   readonly phaseId: string;
   readonly phaseEffect: string;
   readonly requiredRoles: readonly string[];
@@ -296,7 +314,10 @@ export function createKpExactFractionQuantityPresentationPlan(
         execution: createMotifInvocation({
           beatId: trace.beats[1]!.id,
           operationId: "kp.core.fan-out",
-          symbolicDispatches: ["identity-fission", "opaque-successor"],
+          symbolicDispatches: [
+            "identity-fission",
+            "operation-evaluation"
+          ],
           atomicDispatch: "fission"
         }),
         motif: Object.freeze({
@@ -325,7 +346,7 @@ export function createKpExactFractionQuantityPresentationPlan(
         execution: createMotifInvocation({
           beatId: trace.beats[3]!.id,
           operationId: "kp.core.merge",
-          symbolicDispatches: ["identity-fusion"],
+          symbolicDispatches: ["operation-evaluation"],
           atomicDispatch: "fusion"
         }),
         motif: Object.freeze({
@@ -463,31 +484,26 @@ function programPhaseForBeat(
     beat.motif.kind === "partition-refinement"
       ? {
           program: beat.motif.executableProgram,
-          dispatch: "identity-fission" as const
+          programProgress: clamp(actionProgress * 2)
         }
       : beat.motif.kind === "part-merge"
         ? {
             program: beat.motif.executableProgram,
-            dispatch: "identity-fusion" as const
+            programProgress: actionProgress
           }
         : beat.motif.motifId === "group-continuants"
           ? {
               program: beat.motif.executableProgram,
-              dispatch: "identity-fusion" as const
+              programProgress: actionProgress
+            }
+          : beat.motif.motifId === "structural-succession"
+            ? {
+                program: beat.motif.executableProgram,
+                programProgress: actionProgress
             }
           : undefined;
   if (executable === undefined) return {};
-  const dispatchIndex =
-    beat.execution.symbolicDispatches.indexOf(executable.dispatch);
-  if (dispatchIndex < 0) {
-    throw new Error(
-      `Exact quantity ${executable.program.kind} requires its symbolic dispatch.`
-    );
-  }
-  const dispatchCount = beat.execution.symbolicDispatches.length;
-  const programProgress = clamp(
-    actionProgress * dispatchCount - dispatchIndex
-  );
+  const programProgress = executable.programProgress;
   const program = executable.program;
   const phaseIndex = programProgress >= 1
     ? program.phases.length - 1
@@ -503,7 +519,9 @@ function programPhaseForBeat(
     programPhase: Object.freeze({
       kind: program.kind === "identity-fission"
         ? "identity-fission-program-phase"
-        : "identity-fusion-program-phase",
+        : program.kind === "identity-fusion"
+          ? "identity-fusion-program-phase"
+          : "operation-evaluation-program-phase",
       programId: program.id,
       programVersion: program.programVersion,
       programKind: program.kind,
@@ -579,6 +597,17 @@ function existingBeat(
         kind: "existing" as const,
         motifId,
         executableProgram: kpIdentityFusionExecutableProgram
+      })
+    });
+  }
+  if (motifId === "structural-succession") {
+    return Object.freeze({
+      ...base,
+      motif: Object.freeze({
+        kind: "existing" as const,
+        motifId,
+        executableProgram:
+          kpOperationEvaluationExecutableProgramCompiler.program
       })
     });
   }

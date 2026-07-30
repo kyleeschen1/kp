@@ -462,6 +462,7 @@ export function sampleKpOpaqueGatherAndRecognizeSuccessorSynthesis(input: {
 export function sampleKpOpaqueIdentityTransferSuccessorSynthesis(input: {
   readonly plan: KpSuccessorSynthesisPlan;
   readonly progress: number;
+  readonly cohortClearancePx?: number | undefined;
 }): KpSuccessorSynthesisFrame {
   const progress = clamp01(input.progress);
   const transferProgress = input.plan.targetBirthStart;
@@ -489,6 +490,14 @@ export function sampleKpOpaqueIdentityTransferSuccessorSynthesis(input: {
       ...source,
       pose: Object.freeze({
         ...source.pose,
+        // Identity cohorts stay on one side of unrelated native paint. The
+        // extra bounded lift is zero at both endpoints, so it cannot perturb
+        // measured settlement or manufacture a caller-owned route.
+        y: source.pose.y + identityTransferClearance(
+          source.arrivalProgress,
+          source.pathFamily,
+          input.cohortClearancePx ?? 0
+        ),
         scale: 1,
         opacity: transferred ? 0 : 1
       })
@@ -502,6 +511,15 @@ export function sampleKpOpaqueIdentityTransferSuccessorSynthesis(input: {
       })
     })))
   });
+}
+
+function identityTransferClearance(
+  progress: number,
+  pathFamily: KpSuccessorSynthesisPathFamily,
+  clearancePx: number
+): number {
+  const lift = clearancePx * 4 * progress * (1 - progress);
+  return pathFamily === "arc-above" ? -lift : lift;
 }
 
 /**
