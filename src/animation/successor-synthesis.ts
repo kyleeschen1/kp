@@ -35,6 +35,10 @@ export interface KpSuccessorSynthesisBinding {
   readonly sourceAnnotations: readonly KpSuccessorSynthesisSourceAnnotation[];
   readonly targetAnnotations: readonly KpSuccessorSynthesisTargetAnnotation[];
   readonly lineages: readonly KpSuccessorSynthesisLineage[];
+  readonly layoutTopology?:
+    | "shared-inline-band"
+    | "separate-source-result-bands"
+    | undefined;
 }
 
 export interface KpSuccessorSynthesisMember {
@@ -57,6 +61,12 @@ export interface KpSuccessorSynthesisPlan {
   readonly catalysts: readonly KpSuccessorSynthesisMember[];
   readonly targets: readonly KpSuccessorSynthesisMember[];
   readonly lineages: readonly KpSuccessorSynthesisLineage[];
+  readonly junctionOwner: "source" | "target";
+  readonly layoutTopology:
+    | "shared-inline-band"
+    | "separate-source-result-bands";
+  readonly layoutTopologyAuthority: "compiler" | "measured-fallback";
+  readonly sourceJunction: { readonly x: number; readonly y: number };
   readonly junction: { readonly x: number; readonly y: number };
   readonly targetSeedReadiness: number;
   readonly targetRecognition: number;
@@ -225,6 +235,11 @@ export function createKpSuccessorSynthesisPlan(input: {
   readonly targetRecognition?: number | undefined;
   readonly inputJunctionScale?: number | undefined;
   readonly targetSeedScale?: number | undefined;
+  readonly junctionOwner?: "source" | "target" | undefined;
+  readonly layoutTopology?:
+    | "shared-inline-band"
+    | "separate-source-result-bands"
+    | undefined;
 }): KpSuccessorSynthesisPlan {
   requireText(input.id, "id");
   requireText(input.authority.operationId, "authority.operationId");
@@ -251,7 +266,36 @@ export function createKpSuccessorSynthesisPlan(input: {
   requireUnit(targetRecognition, "targetRecognition");
   requireVisibleScale(inputJunctionScale, "inputJunctionScale");
   requireVisibleScale(targetSeedScale, "targetSeedScale");
+  const materialSourceRect =
+    unionRect(materialInputs.map((source) => source.rect));
   const targetRect = unionRect(targets.map((target) => target.rect));
+  // Identity fission starts its successor paths at the one source owner;
+  // evaluation and fusion converge on target geometry. Making this compiler
+  // choice explicit prevents a split from dragging its source toward the
+  // bounding-box midpoint of targets that may occupy several layout rows.
+  const targetJunction = input.junctionOwner === "source"
+    ? center(materialSourceRect)
+    : center(targetRect);
+  const layoutTopology = input.layoutTopology ??
+    (verticallyDisjoint(materialSourceRect, targetRect)
+      ? "separate-source-result-bands"
+      : "shared-inline-band");
+  const layoutTopologyAuthority = input.layoutTopology === undefined
+    ? "measured-fallback"
+    : "compiler";
+  const sourceJunction =
+    input.junctionOwner !== "source" &&
+      layoutTopology === "separate-source-result-bands"
+    ? {
+        // A separate result row can contain persistent structural paint such
+        // as an underline. Gathering inside the measured source band avoids
+        // making every source cross that unknown obstacle on its way to a
+        // target that is already born from native result geometry.
+        // Catalysts join the evaluation but cannot pull material through
+        // unrelated columns because they contribute no result quantity.
+        ...center(materialSourceRect)
+      }
+    : targetJunction;
   return {
     kind: "successor-synthesis-plan",
     id: input.id,
@@ -264,7 +308,11 @@ export function createKpSuccessorSynthesisPlan(input: {
       sourceAnnotationIds: [...lineage.sourceAnnotationIds],
       targetAnnotationIds: [...lineage.targetAnnotationIds]
     })),
-    junction: center(targetRect),
+    junctionOwner: input.junctionOwner ?? "target",
+    layoutTopology,
+    layoutTopologyAuthority,
+    sourceJunction,
+    junction: targetJunction,
     targetSeedReadiness,
     targetRecognition,
     inputArrivalStart: 0.16,
@@ -361,7 +409,13 @@ export function sampleKpSuccessorSynthesis(input: {
         pathFamily: member.pathFamily,
         pose: catalystPose(
           member,
-          input.plan.junction,
+          input.plan.layoutTopology === "separate-source-result-bands" &&
+              input.plan.layoutTopologyAuthority === "compiler"
+            // A fixed operator still participates by contracting in place;
+            // translating it across occupied columns would turn its
+            // non-material role into an obstacle-crossing paint route.
+            ? center(member.rect)
+            : input.plan.sourceJunction,
           activationProgress,
           catalystRetirement
         )
@@ -376,7 +430,10 @@ export function sampleKpSuccessorSynthesis(input: {
       target,
       input.plan.junction,
       targetBirths[index]!,
-      input.plan.targetSeedScale
+      input.plan.targetSeedScale,
+      input.plan.junctionOwner === "source" &&
+        input.plan.layoutTopology === "separate-source-result-bands" &&
+        input.plan.layoutTopologyAuthority === "compiler"
     )
   }));
   return {
@@ -663,10 +720,15 @@ export function evaluateKpSuccessorSynthesisLaws(
   if (gatheredCatalysts.some(({ annotationId, pose }) => {
     const catalyst = plan.catalysts.find(({ id }) => id === annotationId)!;
     const origin = center(catalyst.rect);
+    const expectedJunction =
+      plan.layoutTopology === "separate-source-result-bands" &&
+        plan.layoutTopologyAuthority === "compiler"
+        ? origin
+        : plan.sourceJunction;
     return pose.scale > plan.inputJunctionScale + 0.001 ||
       Math.hypot(
-        origin.x + pose.x - plan.junction.x,
-        origin.y + pose.y - plan.junction.y
+        origin.x + pose.x - expectedJunction.x,
+        origin.y + pose.y - expectedJunction.y
       ) > 0.001;
   })) {
     push(
@@ -883,12 +945,17 @@ function sourcePose(
   retirementProgress: number
 ): KpSuccessorSynthesisPose {
   const from = center(member.rect);
-  const position = quadratic(
-    from,
-    arcControl(from, slot, member.pathFamily, 10),
-    slot,
-    progress
-  );
+  // A source-owned fission junction is already at the source center. Applying
+  // an arc with identical endpoints would manufacture a loop that lifts
+  // settled paint through nearby structural rules before ownership transfers.
+  const position = Math.hypot(slot.x - from.x, slot.y - from.y) <= 0.001
+    ? from
+    : quadratic(
+        from,
+        arcControl(from, slot, member.pathFamily, 10),
+        slot,
+        progress
+      );
   return {
     x: position.x - from.x,
     y: position.y - from.y,
@@ -937,12 +1004,17 @@ function targetPose(
   member: KpSuccessorSynthesisMember,
   junction: { readonly x: number; readonly y: number },
   progress: number,
-  scaleFrom: number
+  scaleFrom: number,
+  routeOutsideDestinationColumn = false
 ): KpSuccessorSynthesisPose {
   const target = center(member.rect);
+  const verticalTransit =
+    Math.abs(target.y - junction.y) > member.rect.height * 0.5;
   const position = quadratic(
     junction,
-    arcControl(junction, target, member.pathFamily, 6),
+    routeOutsideDestinationColumn && verticalTransit
+      ? fissionTargetControl(junction, target, member)
+      : arcControl(junction, target, member.pathFamily, 6),
     target,
     progress
   );
@@ -954,14 +1026,37 @@ function targetPose(
   };
 }
 
+function fissionTargetControl(
+  from: { readonly x: number; readonly y: number },
+  target: { readonly x: number; readonly y: number },
+  member: KpSuccessorSynthesisMember
+): { readonly x: number; readonly y: number } {
+  const towardTarget = Math.sign(target.x - from.x);
+  const awayFromDestination = towardTarget === 0
+    ? member.pathFamily === "arc-above" ? 1 : -1
+    : -towardTarget;
+  return {
+    // Carries rise outside the occupied destination column and only move
+    // laterally after clearing its addend rows. Clearance derives from the
+    // measured target glyph rather than a digit or viewport-specific offset.
+    x: from.x + awayFromDestination *
+      Math.max(10, member.rect.width * 2),
+    y: (from.y + target.y) / 2 +
+      (member.pathFamily === "arc-above" ? -6 : 6)
+  };
+}
+
 function junctionSlot(
   plan: KpSuccessorSynthesisPlan,
   index: number
 ): { readonly x: number; readonly y: number } {
+  if (plan.junctionOwner === "source") {
+    return plan.sourceJunction;
+  }
   const centered = index - (plan.materialInputs.length - 1) / 2;
   return {
-    x: plan.junction.x + centered * 8,
-    y: plan.junction.y + (index % 2 === 0 ? -3.5 : 3.5)
+    x: plan.sourceJunction.x + centered * 8,
+    y: plan.sourceJunction.y + (index % 2 === 0 ? -3.5 : 3.5)
   };
 }
 
@@ -978,8 +1073,21 @@ function inlineJunctionSlot(
     // back across the preceding continuant when it contracts around a target.
     x: targetBounds.left +
       (memberCenter.x - sourceBounds.left) * plan.inputJunctionScale,
-    y: plan.junction.y
+    y: plan.sourceJunction.y
   };
+}
+
+function verticallyDisjoint(
+  left: KpMaterialJunctionRect,
+  right: KpMaterialJunctionRect
+): boolean {
+  // KaTeX wrapper rectangles can straddle an otherwise separate grid band by
+  // a subpixel even when their measured ink does not touch. Use the same
+  // paint-contact tolerance as the overlap classifier so plan topology does
+  // not flip because of browser rounding.
+  const paintBoundaryTolerancePx = 0.75;
+  return left.top + left.height <= right.top + paintBoundaryTolerancePx ||
+    right.top + right.height <= left.top + paintBoundaryTolerancePx;
 }
 
 function arcControl(

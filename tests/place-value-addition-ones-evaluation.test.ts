@@ -26,6 +26,10 @@ test("ones evaluation reuses the canonical executable operation program", () => 
     "native-katex-successor-synthesis"
   );
   assert.equal(evaluation.opacityPolicy, "opaque");
+  assert.equal(
+    evaluation.binding.layoutTopology,
+    "separate-source-result-bands"
+  );
 });
 
 test("both numeral inputs and the plus catalyst have exhaustive roles", () => {

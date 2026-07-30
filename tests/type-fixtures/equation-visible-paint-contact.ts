@@ -27,6 +27,14 @@ const result: KpNativeKatexSuccessorContactAuthority = {
   synthesisSide: "target",
   contactRole: "fusion-result"
 };
+const fissionSource: KpNativeKatexSuccessorContactAuthority = {
+  synthesisSide: "source",
+  contactRole: "fission-source"
+};
+const fissionResult: KpNativeKatexSuccessorContactAuthority = {
+  synthesisSide: "target",
+  contactRole: "fission-result"
+};
 
 // @ts-expect-error A result endpoint can never inherit catalyst authority.
 const targetCatalyst: KpNativeKatexSuccessorContactAuthority = {
@@ -37,6 +45,11 @@ const targetCatalyst: KpNativeKatexSuccessorContactAuthority = {
 const sourceResult: KpNativeKatexSuccessorContactAuthority = {
   synthesisSide: "source",
   contactRole: "fusion-result"
+};
+// @ts-expect-error A split result can only own target-side paint.
+const sourceFissionResult: KpNativeKatexSuccessorContactAuthority = {
+  synthesisSide: "source",
+  contactRole: "fission-result"
 };
 const relationWide: KpEquationVisiblePaintCertifiedContact = {
   id: "contact.relation-wide",
@@ -69,8 +82,11 @@ void [
   catalyst,
   input,
   result,
+  fissionSource,
+  fissionResult,
   targetCatalyst,
   sourceResult,
+  sourceFissionResult,
   relationWide,
   catalystFrame
 ];

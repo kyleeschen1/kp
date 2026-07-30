@@ -476,6 +476,10 @@ KpSuccessorSynthesisBinding {
       operationId: "kp.core.fan-out",
       bindingId: `binding.place-value.exchange-${config.place}`
     }),
+    // Carry targets traverse distinct result, addend, and carry bands. The
+    // typed topology selects the shared obstacle-clearing fission route
+    // without exposing coordinates or per-column motion to this caller.
+    layoutTopology: "separate-source-result-bands" as const,
     sourceAnnotations: Object.freeze([
       Object.freeze({
         id: sourceAnnotationId,

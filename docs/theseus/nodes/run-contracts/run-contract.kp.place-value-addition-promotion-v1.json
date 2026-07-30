@@ -188,7 +188,9 @@
     {
       "id": "s20",
       "title": "certify-responsive-noncrowding-layout",
-      "status": "planned"
+      "summary": "Certified one responsive surface over the shared place-value session: native 40px equations stay centered and contained at wide and 320px phone widths, the outline scrolls independently, CSS-pixel geometry is DPR-invariant, and Review remains externally owned by the Animation Library. Dense visible-paint sampling drove typed separate-band topology, source-owned fission, distinct fission contact roles, fixed catalyst participation, and measured carry clearance; all 57 browser cases pass across Chromium Firefox and WebKit without viewport-specific motion or unresolved overlap.",
+      "status": "complete",
+      "planPhaseId": "multidigit-addition"
     },
     {
       "id": "s21",

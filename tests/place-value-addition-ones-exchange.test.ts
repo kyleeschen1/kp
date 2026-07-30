@@ -18,6 +18,10 @@ import {
 test("ones exchange reuses exact carry proof and identity-fission program", () => {
   const session = createKpPlaceValueAdditionRuntimeSession();
   const exchange = session.onesExchange;
+  assert.equal(
+    exchange.intent.binding.layoutTopology,
+    "separate-source-result-bands"
+  );
   const beat = session.foundation.presentation.beats.find(
     ({ beatId }) => beatId === exchange.beatId
   );

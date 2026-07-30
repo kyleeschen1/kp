@@ -606,6 +606,90 @@
       "scope": "s19 type cost",
       "checkedAt": "2026-07-30T19:15:58.541Z",
       "notes": "Inference remains at 48471 types 61210 instantiations and 2.28 seconds."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "failed",
+      "scope": "s20 initial dense responsive overlap",
+      "checkedAt": "2026-07-30T20:11:12.608Z",
+      "notes": "Dense phone sampling exposed unresolved catalyst-material, underline-transit, persistent-column, and carry-route contacts that endpoint-only tests had missed; the slice remained open while the shared typed routing path was repaired."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition -- --project=firefox --grep phone-responsive-surface",
+      "status": "failed",
+      "scope": "s20 cross-browser topology",
+      "checkedAt": "2026-07-30T20:11:13.752Z",
+      "notes": "Firefox KaTeX wrapper boxes crossed adjacent grid bands by about 1.2 CSS pixels, proving geometry-only topology inference browser-dependent; governed place-value bindings now carry typed separate-band topology authority."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s20 responsive policy and typed routing",
+      "checkedAt": "2026-07-30T20:11:14.638Z",
+      "notes": "83 of 83 pass, including compiler-owned separate-band evaluation/exchange topology, source-owned fission, navigation, shared session, and responsive policy."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s20 shared motif preservation",
+      "checkedAt": "2026-07-30T20:11:15.515Z",
+      "notes": "177 of 177 pass; inline evaluation remains unchanged while fission source/result contact roles and separate-band routing are exhaustively typed."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "passed",
+      "scope": "s20 wide phone DPR and non-crowding",
+      "checkedAt": "2026-07-30T20:11:16.406Z",
+      "notes": "57 of 57 pass across Chromium Firefox and WebKit. Dense 2.5-percent samples plus exact beat boundaries certify containment, centering, readable native type, outline scrolling, DPR invariance, and pair-certified-only visible-paint contact."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-continuity -- --grep primary-gather-or-one-plus-two",
+      "status": "passed",
+      "scope": "s20 inline evaluation preservation",
+      "checkedAt": "2026-07-30T20:11:17.286Z",
+      "notes": "6 of 6 focused visual cases pass across all three engines; the existing inline gather and partially shrunken catalyst remain intact."
+    },
+    {
+      "command": "npm run test:browser:exact-fraction-quantity",
+      "status": "failed",
+      "scope": "s20 promoted exact-fraction preservation",
+      "checkedAt": "2026-07-30T20:11:47.212Z",
+      "notes": "50 of 51 passed across three engines; one Chromium restore/DPR case timed out waiting for unrelated lazy hydration, while all fission/fusion and deterministic paint cases passed."
+    },
+    {
+      "command": "npm run test:browser:exact-fraction-quantity -- --grep wide-phone-restored-DPR2",
+      "status": "passed",
+      "scope": "s20 exact-fraction hydration retry",
+      "checkedAt": "2026-07-30T20:11:48.264Z",
+      "notes": "The sole prior timeout passed immediately on Chromium Firefox and WebKit, classifying it as a transient hydration delay rather than a shared fission/contact regression."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20 topology and contact typing",
+      "checkedAt": "2026-07-30T20:11:49.140Z",
+      "notes": "All application node test and domain TypeScript projects pass with distinct fission source/result roles and compiler-vs-measured topology authority."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s20 one compositor and responsive surface",
+      "checkedAt": "2026-07-30T20:11:49.993Z",
+      "notes": "All architecture gates pass; responsive hosting remains an adjunct over the shared session and no runtime renderer scheduler lifecycle display page or WebGL lease was added."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s20 type cost",
+      "checkedAt": "2026-07-30T20:11:50.830Z",
+      "notes": "Inference remains bounded at 48482 types 61210 instantiations and 2.15 seconds."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s20 control-plane closure",
+      "checkedAt": "2026-07-30T20:13:02.812Z",
+      "notes": "Workspace validates 837 nodes and 14760 events before slice completion."
     }
   ],
   "expectedLearning": [

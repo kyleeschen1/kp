@@ -226,9 +226,13 @@ export type {
   KpNativeKatexSuccessorMaterialOwnerFrame
 } from "./native-katex-successor-contact-types.ts";
 
-type KpNativeKatexSuccessorFusionOwnerFrame =
+type KpNativeKatexSuccessorMaterialContactOwnerFrame =
   KpNativeKatexSuccessorMaterialOwnerFrame & {
-    readonly contactRole: "fusion-input" | "fusion-result";
+    readonly contactRole:
+      | "fusion-input"
+      | "fusion-result"
+      | "fission-source"
+      | "fission-result";
   };
 
 /**
@@ -302,7 +306,13 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
       sourceAnnotations,
       targetAnnotations: intent.binding.targetAnnotations,
       lineages: intent.binding.lineages,
-      measurements
+      layoutTopology: intent.binding.layoutTopology,
+      measurements,
+      junctionOwner:
+        "executableProgram" in intent &&
+          intent.executableProgram?.kind === "identity-fission"
+          ? "source"
+          : "target"
     });
     const continuityAuthority =
       "executableProgram" in intent
@@ -409,7 +419,11 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
           pose: sample.pose,
           side: "source",
           contactRole: sample.contribution === "material-input"
-            ? "fusion-input"
+            ? plan.continuityAuthority.kind ===
+                "executable-identity-transfer" &&
+                plan.continuityAuthority.program.kind === "identity-fission"
+              ? "fission-source"
+              : "fusion-input"
             : "catalyst",
           phase: frame.phase
         });
@@ -425,7 +439,12 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
           annotation,
           pose: sample.pose,
           side: "target",
-          contactRole: "fusion-result",
+          contactRole:
+            plan.continuityAuthority.kind ===
+                "executable-identity-transfer" &&
+                plan.continuityAuthority.program.kind === "identity-fission"
+              ? "fission-result"
+              : "fusion-result",
           phase: frame.phase
         });
       })
@@ -495,7 +514,7 @@ function certifyOpaqueGatherAndRecognizeRealization(
   const minimumSourceTravelPx = observableSuccessorMinimumTravel(plan);
   const sourceTravelPx = Math.min(
     ...plan.materialInputs.map((source) =>
-      distance(center(source.rect), plan.junction)
+      distance(center(source.rect), plan.sourceJunction)
     )
   );
   if (sourceTravelPx + 0.001 < minimumSourceTravelPx) {
@@ -523,6 +542,13 @@ function observableSuccessorMinimumTravel(
     ...plan.catalysts.map(({ rect }) => rect),
     ...plan.targets.map(({ rect }) => rect)
   ]);
+  if (distance(plan.sourceJunction, plan.junction) > 0.75) {
+    // Separate source/result bands express the gather through translation and
+    // contraction together. Requiring the inline 12px travel ceiling would
+    // push a middle-row contributor toward the structural separator merely to
+    // satisfy a metric that ignores its already-observable scale change.
+    return 6;
+  }
   return Math.max(6, Math.min(12, bounds.height * 0.5));
 }
 
@@ -836,11 +862,14 @@ function ownerFrames(input: {
 } & (
   | {
       readonly side: "source";
-      readonly contactRole: "fusion-input" | "catalyst";
+      readonly contactRole:
+        | "fusion-input"
+        | "fission-source"
+        | "catalyst";
     }
   | {
       readonly side: "target";
-      readonly contactRole: "fusion-result";
+      readonly contactRole: "fusion-result" | "fission-result";
     }
 )): readonly KpNativeKatexSuccessorMaterialOwnerFrame[] {
   const groupCenter = center(input.annotation.rect);
@@ -858,7 +887,7 @@ function ownerFrames(input: {
           }
         : {
             synthesisSide: "target",
-            contactRole: "fusion-result"
+            contactRole: input.contactRole
           };
     return Object.freeze({
       ownerId:
@@ -922,7 +951,7 @@ function attachSuccessorSemanticContacts(
     ownerId,
     [] as KpEquationVisiblePaintCertifiedContact[]
   ] as const));
-  const participants = frames.filter(isSuccessorFusionOwner);
+  const participants = frames.filter(isSuccessorMaterialContactOwner);
   for (const [leftIndex, left] of participants.entries()) {
     for (const [rightOffset, right] of participants.slice(leftIndex + 1)
       .entries()) {
@@ -932,13 +961,22 @@ function attachSuccessorSemanticContacts(
         left.contactRole === "fusion-result" &&
         right.contactRole === "fusion-result"
       ) continue;
+      const fissionContact =
+        left.contactRole === "fission-source" ||
+        left.contactRole === "fission-result" ||
+        right.contactRole === "fission-source" ||
+        right.contactRole === "fission-result";
       const contact = Object.freeze({
         id:
           `successor-contact.${left.relationRecordId}.` +
           `${leftIndex}.${leftIndex + rightOffset + 1}`,
         ownerIds: [left.ownerId, right.ownerId] as const,
-        reason: "semantic-fusion" as const,
-        phase: "fusion-contact" as const,
+        reason: fissionContact
+          ? "semantic-fission" as const
+          : "semantic-fusion" as const,
+        phase: fissionContact
+          ? "transit" as const
+          : "fusion-contact" as const,
         maximumOverlapWidthPx: Math.min(left.rect.width, right.rect.width),
         maximumOverlapHeightPx: Math.min(left.rect.height, right.rect.height)
       });
@@ -1003,11 +1041,13 @@ function attachSuccessorSemanticContacts(
   }));
 }
 
-function isSuccessorFusionOwner(
+function isSuccessorMaterialContactOwner(
   frame: KpNativeKatexSuccessorMaterialOwnerFrame
-): frame is KpNativeKatexSuccessorFusionOwnerFrame {
+): frame is KpNativeKatexSuccessorMaterialContactOwnerFrame {
   return frame.contactRole === "fusion-input" ||
-    frame.contactRole === "fusion-result";
+    frame.contactRole === "fusion-result" ||
+    frame.contactRole === "fission-source" ||
+    frame.contactRole === "fission-result";
 }
 
 function requiredAnnotation(
@@ -1081,6 +1121,9 @@ function freezeIdentityTransferBinding(
     id: binding.id,
     relationRecordId: binding.relationRecordId,
     authority: Object.freeze({ ...binding.authority }),
+    ...(binding.layoutTopology === undefined
+      ? {}
+      : { layoutTopology: binding.layoutTopology }),
     sourceAnnotations: Object.freeze(binding.sourceAnnotations.map(
       (annotation) => Object.freeze({
         ...annotation,

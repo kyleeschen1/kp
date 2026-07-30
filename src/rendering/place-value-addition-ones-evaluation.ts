@@ -547,6 +547,9 @@ function createBinding(
       operationId: "kp.arithmetic.add",
       bindingId: `binding.place-value.evaluate-${config.place}`
     }),
+    // The semantic grid—not browser-dependent KaTeX wrapper overlap—owns the
+    // fact that operands and result occupy distinct bands around the rule.
+    layoutTopology: "separate-source-result-bands" as const,
     sourceAnnotations: Object.freeze([
       ...material,
       Object.freeze({

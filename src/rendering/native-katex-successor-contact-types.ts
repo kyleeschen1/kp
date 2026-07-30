@@ -35,7 +35,7 @@ interface KpNativeKatexSuccessorMaterialOwnerFrameBase
 export type KpNativeKatexSuccessorContactAuthority =
   | {
       readonly synthesisSide: "source";
-      readonly contactRole: "fusion-input";
+      readonly contactRole: "fusion-input" | "fission-source";
       readonly semanticContacts?:
         readonly KpEquationVisiblePaintCertifiedContact[] | undefined;
     }
@@ -52,7 +52,7 @@ export type KpNativeKatexSuccessorContactAuthority =
     }
   | {
       readonly synthesisSide: "target";
-      readonly contactRole: "fusion-result";
+      readonly contactRole: "fusion-result" | "fission-result";
       readonly semanticContacts?:
         readonly KpEquationVisiblePaintCertifiedContact[] | undefined;
     };

@@ -142,8 +142,10 @@ test("native successor renderer co-presents opaque contributors and result", () 
   assert.ok(materialSources(gathered).every((owner) =>
     scale(owner.transform) > 0.6
   ));
+  // The catalyst joins the shrinking choreography without vanishing before
+  // the recognition phase or retaining full-size operator paint.
   assert.ok(catalysts(gathered).every((owner) =>
-    scale(owner.transform) > 0
+    scale(owner.transform) > 0 && scale(owner.transform) < 1
   ));
   assert.ok(materialSources(before).every((owner) => scale(owner.transform) > 0));
   assert.ok(targets(before).every((owner) => scale(owner.transform) === 0));

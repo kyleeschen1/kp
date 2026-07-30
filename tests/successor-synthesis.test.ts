@@ -106,6 +106,110 @@ test("successor synthesis settles at exact native target geometry", () => {
   ));
 });
 
+test("separate result rows gather inside the measured material source band", () => {
+  const plan = createKpSuccessorSynthesisPlan({
+    id: "successor.stacked-addition",
+    authority: {
+      operationId: "kp.arithmetic.add",
+      bindingId: "binding.stacked-addition"
+    },
+    sourceAnnotations: [
+      {
+        id: "upper",
+        semanticRole: "addend",
+        selectorIds: ["selector.upper"],
+        contribution: "material-input",
+        propagationRank: 0
+      },
+      {
+        id: "lower",
+        semanticRole: "addend",
+        selectorIds: ["selector.lower"],
+        contribution: "material-input",
+        propagationRank: 1
+      },
+      {
+        id: "plus",
+        semanticRole: "addition-operator",
+        selectorIds: ["selector.plus"],
+        contribution: "catalyst",
+        propagationRank: 0
+      }
+    ],
+    targetAnnotations: [{
+      id: "result",
+      semanticRole: "sum",
+      selectorIds: ["selector.result"],
+      propagationRank: 0
+    }],
+    lineages: [{
+      id: "lineage.stacked-addition",
+      sourceAnnotationIds: ["upper", "lower"],
+      targetAnnotationIds: ["result"]
+    }],
+    measurements: {
+      upper: { left: 40, top: 0, width: 20, height: 40 },
+      lower: { left: 40, top: 40, width: 20, height: 40.2 },
+      plus: { left: 0, top: 40, width: 20, height: 40 },
+      result: { left: 40, top: 80, width: 20, height: 40 }
+    }
+  });
+
+  assert.deepEqual(plan.sourceJunction, { x: 50, y: 40.1 });
+  assert.deepEqual(plan.junction, { x: 50, y: 100 });
+  assert.equal(plan.junctionOwner, "target");
+  assert.equal(plan.layoutTopologyAuthority, "measured-fallback");
+});
+
+test("source-owned fission does not manufacture a loop before transfer", () => {
+  const plan = createKpSuccessorSynthesisPlan({
+    id: "successor.source-owned-fission",
+    authority: {
+      operationId: "kp.core.fan-out",
+      bindingId: "binding.source-owned-fission"
+    },
+    sourceAnnotations: [{
+      id: "total",
+      semanticRole: "evaluated-total",
+      selectorIds: ["selector.total"],
+      contribution: "material-input",
+      propagationRank: 0
+    }],
+    targetAnnotations: [
+      {
+        id: "remainder",
+        semanticRole: "remainder",
+        selectorIds: ["selector.remainder"],
+        propagationRank: 0
+      },
+      {
+        id: "carry",
+        semanticRole: "carry",
+        selectorIds: ["selector.carry"],
+        propagationRank: 1
+      }
+    ],
+    lineages: [{
+      id: "lineage.source-owned-fission",
+      sourceAnnotationIds: ["total"],
+      targetAnnotationIds: ["remainder", "carry"]
+    }],
+    measurements: {
+      total: { left: 40, top: 80, width: 40, height: 20 },
+      remainder: { left: 60, top: 80, width: 20, height: 20 },
+      carry: { left: 40, top: 0, width: 20, height: 20 }
+    },
+    junctionOwner: "source"
+  });
+  const frame = sampleKpSuccessorSynthesis({ plan, progress: 0.5 });
+  const source = frame.sources[0]!;
+
+  assert.equal(plan.junctionOwner, "source");
+  assert.deepEqual(plan.sourceJunction, { x: 60, y: 90 });
+  assert.equal(source.pose.x, 0);
+  assert.equal(source.pose.y, 0);
+});
+
 test("constant-difference fixture satisfies successor synthesis laws", () => {
   assert.deepEqual(
     evaluateKpSuccessorSynthesisLaws(createConstantDifferenceSuccessorFixture()),
