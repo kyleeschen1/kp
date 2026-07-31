@@ -191,6 +191,27 @@
       "scope": "s06 isolated timing sample",
       "checkedAt": "2026-07-31T04:06:07.965Z",
       "notes": "The isolated gate passed without raising a ceiling: 49083 types, 61566 instantiations, 2.19 seconds."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s07 certified runtime mount",
+      "checkedAt": "2026-07-31T04:12:07.067Z",
+      "notes": "107 of 107 unit cases pass; the shared session owns the nominal persistent-workspace certificate."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition:scaffold",
+      "status": "passed",
+      "scope": "s07 wide and phone lifetime",
+      "checkedAt": "2026-07-31T04:12:08.309Z",
+      "notes": "Two Chromium cases prove one connected documentary projection, the same 12 native roots and underline, and one root identity through all seven beats at 960px and 390px."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s07 renderer authority path",
+      "checkedAt": "2026-07-31T04:12:09.186Z",
+      "notes": "The shared DOM accepts the certified workspace only through the sealed runtime session; application, tests, Node, and domains pass."
     }
   ],
   "allowedWork": [
@@ -253,7 +274,8 @@
     {
       "id": "s07",
       "title": "mount-one-persistent-scaffold",
-      "status": "planned"
+      "summary": "Mounted one connected written scaffold through every beat, made its conformance certificate part of the sealed runtime-session-to-renderer path, and retained each local native-scene overlay as an absolutely positioned prepared layer. Wide and phone browser checks prove stable native root identity without remounting.",
+      "status": "complete"
     },
     {
       "id": "s08",

@@ -44,6 +44,11 @@ import {
   createKpPlaceValueAdditionAccessibleProjection,
   type KpPlaceValueAdditionAccessibleProjection
 } from "./place-value-addition-accessible-projection.ts";
+import {
+  bindKpPlaceValuePersistentWorkspacePlan,
+  compileKpPlaceValuePersistentWorkspacePlan,
+  type KpPlaceValuePersistentWorkspaceConformance
+} from "../animation/place-value-addition-persistent-workspace.ts";
 
 declare const kpPlaceValueRuntimeSessionBrand: unique symbol;
 declare const kpPlaceValueRuntimeFrameBrand: unique symbol;
@@ -62,6 +67,8 @@ export interface KpPlaceValueAdditionRuntimeSession {
   readonly clockAuthority: "reader-playback-clock";
   readonly foundation: KpVerifiedPlaceValueSemanticFoundation;
   readonly written: KpPlaceValueWrittenColumnProjection;
+  readonly persistentWorkspace:
+    KpPlaceValuePersistentWorkspaceConformance;
   readonly baseTen: KpPlaceValueBaseTenProjection;
   readonly onesEvaluation: KpPlaceValueOnesEvaluation;
   readonly onesExchange: KpPlaceValueOnesExchange;
@@ -115,6 +122,12 @@ export function createKpPlaceValueAdditionRuntimeSession():
 KpPlaceValueAdditionRuntimeSession {
   const foundation = certifyKpPlaceValueSemanticFoundation();
   const written = compileKpPlaceValueWrittenColumnProjection(foundation);
+  const persistentWorkspace = bindKpPlaceValuePersistentWorkspacePlan(
+    compileKpPlaceValuePersistentWorkspacePlan({
+      foundation,
+      projection: written
+    })
+  );
   const baseTen = compileKpPlaceValueBaseTenProjection(foundation);
   const onesEvaluation = compileKpPlaceValueOnesEvaluation(
     foundation.presentation
@@ -151,6 +164,7 @@ KpPlaceValueAdditionRuntimeSession {
     clockAuthority: "reader-playback-clock" as const,
     foundation,
     written,
+    persistentWorkspace,
     baseTen,
     onesEvaluation,
     onesExchange,

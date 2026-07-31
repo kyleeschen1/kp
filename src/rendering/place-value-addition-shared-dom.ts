@@ -31,6 +31,9 @@ import {
 import type {
   KpPlaceValueOnesWrittenOwnershipPlan
 } from "./place-value-addition-written-ownership.ts";
+import {
+  isKpPlaceValuePersistentWorkspaceConformance
+} from "../animation/place-value-addition-persistent-workspace.ts";
 
 export interface KpPlaceValueAdditionSharedDom {
   readonly root: HTMLElement;
@@ -49,7 +52,10 @@ export function createKpPlaceValueAdditionSharedDom(input: {
   if (
     !isKpPlaceValueAdditionRuntimeSession(input.session) ||
     !isKpPlaceValueAdditionRuntimeFrame(input.initialFrame) ||
-    input.initialFrame.sessionId !== input.session.id
+    input.initialFrame.sessionId !== input.session.id ||
+    !isKpPlaceValuePersistentWorkspaceConformance(
+      input.session.persistentWorkspace
+    )
   ) {
     throw new Error(
       "Shared place-value DOM requires one sealed runtime session and frame."
@@ -93,25 +99,25 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     projection: input.session.written,
     evaluation: input.session.tensEvaluation
   });
-  tensEvaluation.root.style.display = "none";
+  configurePersistentWrittenOverlay(tensEvaluation.root);
   const tensExchange = createKpPlaceValueTensExchangeDom({
     document: input.document,
     projection: input.session.written,
     exchange: input.session.tensExchange
   });
-  tensExchange.root.style.display = "none";
+  configurePersistentWrittenOverlay(tensExchange.root);
   const hundredsEvaluation = createKpPlaceValueHundredsEvaluationDom({
     document: input.document,
     projection: input.session.written,
     evaluation: input.session.hundredsEvaluation
   });
-  hundredsEvaluation.root.style.display = "none";
+  configurePersistentWrittenOverlay(hundredsEvaluation.root);
   const nativeSettlement = createKpPlaceValueNativeSettlementDom({
     document: input.document,
     projection: input.session.written,
     settlement: input.session.nativeSettlement
   });
-  nativeSettlement.root.style.display = "none";
+  configurePersistentWrittenOverlay(nativeSettlement.root);
   writtenHost.append(
     written.root,
     onesEvaluation.root,
@@ -123,6 +129,8 @@ export function createKpPlaceValueAdditionSharedDom(input: {
   );
   written.root.dataset["kpPlaceValueWrittenOwnership"] =
     "persistent-documentary";
+  written.root.dataset["kpPersistentWorkspaceConformance"] =
+    input.session.persistentWorkspace.traceId;
   markPersistentWrittenRoles(written);
   baseTen.root.dataset["kpPlaceValueView"] = "base-ten";
   root.append(writtenHost, baseTen.root);
@@ -207,19 +215,10 @@ export function createKpPlaceValueAdditionSharedDom(input: {
       frame.beat.id === "beat.place-value.evaluate-hundreds";
     const settling =
       frame.beat.id === "beat.place-value.settle";
-    const motionActive =
-      evaluatingOnes ||
-      exchangingOnes ||
-      evaluatingTens ||
-      exchangingTens ||
-      evaluatingHundreds ||
-      settling;
     const persistentOnesMotion = evaluatingOnes || exchangingOnes;
     writtenHost.style.display = writtenVisible ? "grid" : "none";
     written.root.style.display =
-      writtenVisible && (!motionActive || persistentOnesMotion)
-        ? "grid"
-        : "none";
+      writtenVisible ? "grid" : "none";
     onesEvaluation.root.style.display =
       writtenVisible && evaluatingOnes ? "grid" : "none";
     onesExchange.root.style.display =

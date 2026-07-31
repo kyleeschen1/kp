@@ -11,6 +11,9 @@ import {
   sampleKpPlaceValueAdditionRuntime,
   type KpPlaceValueAdditionRuntimeSession
 } from "../src/rendering/place-value-addition-runtime.ts";
+import {
+  isKpPlaceValuePersistentWorkspaceConformance
+} from "../src/animation/place-value-addition-persistent-workspace.ts";
 
 test("one session owns both views, one trace, and one reader clock authority", () => {
   const session = createKpPlaceValueAdditionRuntimeSession();
@@ -21,6 +24,11 @@ test("one session owns both views, one trace, and one reader clock authority", (
   assert.deepEqual(session.mountedViews, ["written", "base-ten"]);
   assert.equal(session.written.traceId, session.foundation.trace.id);
   assert.equal(session.baseTen.traceId, session.foundation.trace.id);
+  assert.equal(isKpPlaceValuePersistentWorkspaceConformance(
+    session.persistentWorkspace
+  ), true);
+  assert.equal(session.persistentWorkspace.traceId,
+    session.foundation.trace.id);
 });
 
 test("one immutable sample supplies both projections and exact beat progress", () => {
