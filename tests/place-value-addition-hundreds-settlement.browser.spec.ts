@@ -59,11 +59,9 @@ for (const viewport of [
       harness.apply(0.87, 0.79);
       const boundary = {
         evaluationDisplay: getComputedStyle(finalScene()).display,
-        legacySettlementDisplay: getComputedStyle(
-          document.querySelector<HTMLElement>(
-            "[data-kp-place-value-native-settlement]"
-          )!
-        ).display,
+        supersededSettlementSceneCount: document.querySelectorAll(
+          "[data-kp-place-value-native-settlement]"
+        ).length,
         frame: nativeFrame()
       };
       harness.apply(0.9, 0.87);
@@ -101,7 +99,7 @@ for (const viewport of [
     )).toBe(true);
     expect(evidence.rewind).toEqual(evidence.forward);
     expect(evidence.boundary.evaluationDisplay).toBe("none");
-    expect(evidence.boundary.legacySettlementDisplay).toBe("none");
+    expect(evidence.boundary.supersededSettlementSceneCount).toBe(0);
     expect(evidence.boundary.frame.visibility).toEqual([
       "visible",
       "visible",

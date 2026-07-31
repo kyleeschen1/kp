@@ -291,6 +291,48 @@
       "scope": "slice-diff-hygiene",
       "checkedAt": "2026-07-31T16:14:08.715Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "superseded-settlement-source-inventory",
+      "checkedAt": "2026-07-31T16:18:21.554Z",
+      "notes": "116 of 116 pass; the runtime exposes no parallel nativeSettlement scene, the renderer file is absent, and the semantic settlement beat remains policy authority."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition -- --grep \"terminal position\"",
+      "status": "passed",
+      "scope": "persistent-scaffold-terminal-three-browser",
+      "checkedAt": "2026-07-31T16:18:22.606Z",
+      "notes": "6 of 6 wide and phone terminal cases pass across Chromium Firefox WebKit with zero superseded settlement DOM nodes."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "retired-runtime-api",
+      "checkedAt": "2026-07-31T16:18:23.468Z",
+      "notes": "Application Node test and domain projects pass after removing the runtime settlement property and module."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "retired-renderer-boundary",
+      "checkedAt": "2026-07-31T16:18:24.384Z",
+      "notes": "All architecture gates pass with no replacement compatibility path."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "retirement-compiler-cost",
+      "checkedAt": "2026-07-31T16:18:25.244Z",
+      "notes": "Passed at unchanged types=49279 instantiations=61770 in 2.79s."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "retirement-diff-hygiene",
+      "checkedAt": "2026-07-31T16:18:26.069Z",
+      "notes": "No whitespace errors."
     }
   ],
   "progress": {

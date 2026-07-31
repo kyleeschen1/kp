@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
+import { dirname, join } from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
 import {
   isKpPlaceValueColumnEvaluation
 } from "../src/rendering/place-value-addition-column-evaluation.ts";
-import {
-  isKpPlaceValueNativeSettlement
-} from "../src/rendering/place-value-addition-native-settlement.ts";
 import {
   createKpPlaceValueAdditionRuntimeSession
 } from "../src/rendering/place-value-addition-runtime.ts";
@@ -68,25 +68,20 @@ test("the carried hundred is opaque material in the final evaluation", () => {
   );
 });
 
-test("native settlement is nominal and closes the exact 434 roots", () => {
-  const { nativeSettlement } =
-    createKpPlaceValueAdditionRuntimeSession();
-
-  assert.equal(isKpPlaceValueNativeSettlement(nativeSettlement), true);
-  assert.deepEqual(nativeSettlement.sourceEntityIds, [
-    "result.hundreds",
-    "result.tens",
-    "result.ones"
-  ]);
-  assert.equal(nativeSettlement.targetEntityId, "result");
-  assert.equal(nativeSettlement.endpointOwner, "native-katex");
-  assert.equal(
-    nativeSettlement.handoffPolicy,
-    "same-paint-root-no-first-frame"
+test("the persistent scaffold is the only runtime settlement scene", () => {
+  const session = createKpPlaceValueAdditionRuntimeSession();
+  const settleBeat = session.foundation.presentation.beats.find(
+    ({ kind }) => kind === "settle"
   );
-  assert.equal(nativeSettlement.opacityPolicy, "opaque");
+  const projectRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+  assert.equal("nativeSettlement" in session, false);
+  assert.equal(settleBeat?.programs[0]?.kind, "native-settlement");
   assert.equal(
-    isKpPlaceValueNativeSettlement({ ...nativeSettlement }),
+    existsSync(join(
+      projectRoot,
+      "src/rendering/place-value-addition-native-settlement.ts"
+    )),
     false
   );
 });

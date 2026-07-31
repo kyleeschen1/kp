@@ -19,9 +19,6 @@ import {
   type KpPlaceValueColumnExchangeFrame
 } from "./place-value-addition-column-exchange.ts";
 import {
-  createKpPlaceValueNativeSettlementDom
-} from "./place-value-addition-native-settlement.ts";
-import {
   isKpPlaceValueAdditionRuntimeFrame,
   isKpPlaceValueAdditionRuntimeSession,
   type KpPlaceValueAdditionRuntimeFrame,
@@ -106,17 +103,10 @@ export function createKpPlaceValueAdditionSharedDom(input: {
   for (const scene of motionScenes) {
     configurePersistentWrittenOverlay(scene.root);
   }
-  const nativeSettlement = createKpPlaceValueNativeSettlementDom({
-    document: input.document,
-    projection: input.session.written,
-    settlement: input.session.nativeSettlement
-  });
-  configurePersistentWrittenOverlay(nativeSettlement.root);
   writtenHost.append(
     written.root,
     ...evaluationScenes.map(({ root: sceneRoot }) => sceneRoot),
-    ...exchangeScenes.map(({ root: sceneRoot }) => sceneRoot),
-    nativeSettlement.root
+    ...exchangeScenes.map(({ root: sceneRoot }) => sceneRoot)
   );
   written.root.dataset["kpPlaceValueWrittenOwnership"] =
     "persistent-documentary";
@@ -215,9 +205,6 @@ export function createKpPlaceValueAdditionSharedDom(input: {
           ? "grid"
           : "none";
     }
-    // The persistent scaffold is already the native settlement endpoint. A
-    // second result-only DOM would create duplicate owners at the last beat.
-    nativeSettlement.root.style.display = "none";
     if (writtenVisible) {
       applyPersistentDocumentaryState({
         written,
@@ -283,7 +270,6 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     if (disposed) return;
     disposed = true;
     for (const scene of motionScenes) scene.dispose();
-    nativeSettlement.dispose();
     root.remove();
   };
   return Object.freeze({

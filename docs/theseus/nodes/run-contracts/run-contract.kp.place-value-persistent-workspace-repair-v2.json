@@ -509,7 +509,8 @@
     {
       "id": "s17",
       "title": "retire-superseded-scene-path",
-      "status": "planned"
+      "summary": "Removed the superseded result-only native-settlement renderer, runtime-session property, hidden DOM mount, and disposal path. The persistent written scaffold is now the sole final-result scene; the semantic native-settlement presentation program remains as endpoint policy rather than a parallel paint owner. Source inventory, 116 unit cases, and six three-browser wide/phone terminal cases enforce the deletion.",
+      "status": "complete"
     },
     {
       "id": "s18",

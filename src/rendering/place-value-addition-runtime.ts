@@ -31,10 +31,6 @@ import {
   type KpPlaceValueColumnExchange
 } from "./place-value-addition-column-exchange.ts";
 import {
-  compileKpPlaceValueNativeSettlement,
-  type KpPlaceValueNativeSettlement
-} from "./place-value-addition-native-settlement.ts";
-import {
   createKpPlaceValueAdditionAccessibleProjection,
   type KpPlaceValueAdditionAccessibleProjection
 } from "./place-value-addition-accessible-projection.ts";
@@ -66,7 +62,6 @@ export interface KpPlaceValueAdditionRuntimeSession {
   readonly baseTen: KpPlaceValueBaseTenProjection;
   readonly columnEvaluations: readonly KpPlaceValueColumnEvaluation[];
   readonly columnExchanges: readonly KpPlaceValueColumnExchange[];
-  readonly nativeSettlement: KpPlaceValueNativeSettlement;
   readonly accessibility: KpPlaceValueAdditionAccessibleProjection;
   readonly mountedViews: readonly ["written", "base-ten"];
   readonly [kpPlaceValueRuntimeSessionBrand]: true;
@@ -126,9 +121,6 @@ KpPlaceValueAdditionRuntimeSession {
   const columnExchanges = compileKpPlaceValueColumnExchanges(
     foundation.presentation
   );
-  const nativeSettlement = compileKpPlaceValueNativeSettlement(
-    foundation.presentation
-  );
   if (
     written.traceId !== foundation.trace.id ||
     baseTen.traceId !== foundation.trace.id
@@ -150,7 +142,6 @@ KpPlaceValueAdditionRuntimeSession {
     baseTen,
     columnEvaluations,
     columnExchanges,
-    nativeSettlement,
     accessibility: createKpPlaceValueAdditionAccessibleProjection({
       trace: foundation.trace
     }),
