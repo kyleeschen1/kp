@@ -1,14 +1,17 @@
 # KP Next Actions
 
-Last Updated: 2026-07-30
+Last Updated: 2026-07-31
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-1. Review a bounded place-value addition proposal for `278 + 156 = 434`;
-   no implementation contract is active until that proposal is approved.
+1. Complete final human wide/phone review of the `multidigit-addition`
+   exemplar `278 + 156 = 434`. Automated evidence is green, but keep rank 2
+   and the catalog at `next`/`partial` until perceptual approval. Track sparse
+   direct settlement and decimal/radix rendering as explicit family proof
+   obligations rather than implying universal number support.
 2. After place-value promotion, advance a bounded economics equilibrium shift
    and bounded constant-force work-energy exemplar in the recorded order.
 3. After that demo tranche, declare stable, internal, and experimental API

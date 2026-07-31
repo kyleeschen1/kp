@@ -2,7 +2,7 @@
   "id": "next-action.kp.place-value-persistent-workspace-repair",
   "kind": "next-action",
   "title": "Repair place-value persistent workspace",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "sourceRefs": [
     {

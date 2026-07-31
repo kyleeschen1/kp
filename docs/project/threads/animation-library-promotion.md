@@ -1,10 +1,10 @@
 # Animation Library Promotion Thread
 
 Status: active-supporting
-Last Updated: 2026-07-30
-Current Next Action: Execute the approved persistent-workspace repair for
-`278 + 156 = 434` through the repaired ones-column visual checkpoint; later
-columns remain gated on human approval.
+Last Updated: 2026-07-31
+Current Next Action: Complete final human wide/phone review of rank-2
+`278 + 156 = 434` (`multidigit-addition`). Automated readiness is complete;
+do not mark it promoted or begin rank 3 until that approval.
 
 ## Goal
 
@@ -85,16 +85,19 @@ diagram framework.
 The promotion order now deliberately pressures three composition environments:
 
 1. equation succession, already proven by the canonical glyph and motif work;
-2. persistent workspace algorithms, beginning with multi-digit addition;
+2. persistent workspace algorithms, automation-complete at the final
+   multi-digit-addition human checkpoint;
 3. synchronized model views, beginning with bounded economics and physics
    exemplars.
 
-The current place-value repair may promote generic lifetime, semantic
-destination, measured route, transit-ownership, and endpoint-handoff contracts
-only where the ones-column failure demands them. It may not turn carry into a
-generic domain operation or introduce a universal scene graph. Later columns
-remain a separate generalization decision after the ones-column checkpoint.
-The accepted cadence and forward-looking domain rationale are recorded in
+The place-value repair promoted generic lifetime, semantic destination,
+measured route, transit-ownership, and endpoint-handoff contracts only where
+the documentary-workspace failure demanded them. Reusable code addresses an
+ordered sequence of radix positions rather than named columns. The repair does
+not turn carry into a generic domain operation or introduce a universal scene
+graph. Sparse single-contributor positions and decimal/radix rendering remain
+explicit family proof obligations rather than implied promotion claims. The
+accepted cadence and forward-looking domain rationale are recorded in
 `decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md`.
 
 ## Platform Integration Milestones
@@ -190,7 +193,9 @@ exists.
 
 ## Open Questions
 
-- Which exact visual model should lead the place-value addition exemplar?
+- Does final human review approve the rank-2 canonical wide/phone motion?
+- When should sparse direct settlement and decimal/radix presentation be
+  scheduled as a place-value harvest without silently delaying rank 3?
 - Can the bounded economics and constant-force physics demos reuse existing
   graph and diagram contracts without new runtime categories?
 - Which fraction harvest items become safe batch promotions after rank 1?
@@ -203,6 +208,7 @@ exists.
 - `docs/project/decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md`
 - `docs/project/decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md`
 - `docs/project/reviews/2026-07-30-place-value-persistent-workspace-repair-long-loop-proposal.md`
+- `docs/project/reviews/2026-07-31-place-value-persistent-workspace-repair-closeout.md`
 - `docs/project/reviews/2026-07-28-kp-promotion-memory-and-architecture-next-step-review.md`
 - `docs/project/reviews/2026-07-28-exact-fraction-quantity-promotion-long-loop-proposal.md`
 - `docs/project/decisions/2026-07-27-kp-canonical-fraction-composition-before-quantity.md`

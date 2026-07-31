@@ -2,8 +2,9 @@
   "id": "run-contract.kp.place-value-persistent-workspace-repair-v2",
   "kind": "run-contract",
   "title": "Place-value persistent-workspace repair",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -24,6 +25,10 @@
       "kind": "file",
       "path": "docs/project/threads/animation-library-promotion.md",
       "summary": "Stable promotion order naming place-value addition rank 2."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-31-place-value-persistent-workspace-repair-closeout.md"
     }
   ],
   "verification": [
@@ -520,6 +525,34 @@
       "scope": "s19 final control-plane validation",
       "checkedAt": "2026-07-31T17:30:35.341Z",
       "notes": "Theseus validates 841 nodes and 15008 events after all release evidence was appended."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s20 promotion memory",
+      "checkedAt": "2026-07-31T17:36:27.897Z",
+      "notes": "Rank 2 remains next and partial at the human gate; the stable queue points to multidigit-addition."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s20 closeout regression",
+      "checkedAt": "2026-07-31T17:36:29.168Z",
+      "notes": "All 116 place-value unit cases pass after the documentation-only closeout."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s20 patch hygiene",
+      "checkedAt": "2026-07-31T17:36:30.061Z",
+      "notes": "Closeout and promotion-memory edits have no whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s20 durable closeout",
+      "checkedAt": "2026-07-31T17:37:25.757Z",
+      "notes": "Workspace validates at 841 nodes and 15016 events after linking the evidence-derived closeout."
     }
   ],
   "allowedWork": [
@@ -660,7 +693,8 @@
     {
       "id": "s20",
       "title": "publish-closeout-and-next-domain-evidence",
-      "status": "planned"
+      "summary": "Published the evidence-derived closeout, made ordered-radix naming and the sparse/decimal proof obligations durable, aligned stable promotion memory without overstating catalog maturity, and opened the canonical wide review. Automated release evidence is green; the contract now stops at the required final human perceptual gate.",
+      "status": "complete"
     }
   ]
 }
