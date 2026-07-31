@@ -82,6 +82,18 @@ test("plan exposes the approved ordered position sequence", () => {
     "carry.tens"
   );
   assert.equal(plan.operations[2]!.exchangeBeatId, undefined);
+  assert.deepEqual(
+    plan.operations[2]!.outputs.map(({ role, route, destination }) => ({
+      role,
+      route: route.kind,
+      destination: destination.semanticEntityId
+    })),
+    [{
+      role: "settled-digit",
+      route: "converge",
+      destination: "result.hundreds"
+    }]
+  );
 });
 
 test("workspace plan contains policy and lineage but no geometry", () => {

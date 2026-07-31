@@ -36,6 +36,11 @@ test("ordered radix positions govern every evaluation and exchange", () => {
     programs.filter(({ exchange }) => exchange !== undefined).length
   );
   assert.equal(plan.operations.length, programs.length);
+  assert.deepEqual(
+    programs.map(({ terminalOutput }) => terminalOutput?.mode ?? null),
+    [null, null, "settle-in-terminal-position"]
+  );
+  assert.equal(programs[2]!.terminalOutput!.outputs[0].digitValue, 4n);
   assert.ok(session.columnEvaluations.every(({ writtenOwnership }) =>
     isKpPlaceValueWrittenOwnershipPlan(writtenOwnership)
   ));
@@ -48,6 +53,7 @@ test("reusable position pipeline cannot branch on familiar place names", () => {
   const reusableSources = [
     "src/animation/place-value-addition-persistent-workspace.ts",
     "src/reader/compiler/place-value-addition-position-types.ts",
+    "src/reader/compiler/place-value-addition-terminal-output.ts",
     "src/rendering/place-value-addition-column-evaluation.ts",
     "src/rendering/place-value-addition-column-exchange.ts",
     "src/rendering/place-value-addition-runtime.ts",

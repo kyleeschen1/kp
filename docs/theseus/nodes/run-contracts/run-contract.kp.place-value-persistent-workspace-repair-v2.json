@@ -479,7 +479,8 @@
     {
       "id": "s12",
       "title": "handle-terminal-overflow",
-      "status": "planned"
+      "summary": "Defined exhaustive terminal fit versus adjacent result-extension semantics over generic radix positions. Static input modes prevent carry-shaped terminal data, runtime validation enforces exact radix adjacency and one-position growth, and persistent-workspace output roles route overflow into a durable result endpoint rather than transient carry ownership. Current 278 plus 156 behavior is unchanged; the second visual overflow fixture remains s16 evidence.",
+      "status": "complete"
     },
     {
       "id": "s13",

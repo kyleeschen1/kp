@@ -67,6 +67,34 @@
       "scope": "s11 production build",
       "checkedAt": "2026-07-31T14:53:33.188Z",
       "notes": "Production build completed after full typecheck; place-value adapter remains a lazy catalog chunk."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s12 terminal overflow semantics",
+      "checkedAt": "2026-07-31T15:03:05.902Z",
+      "notes": "113 of 113 pass, including fit, overflow, exact adjacent radix, nominal copy resistance, and the reusable-source guard against named-position branches."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s12 exhaustive terminal modes",
+      "checkedAt": "2026-07-31T15:03:06.818Z",
+      "notes": "Application, Node, test, and domain projects pass. Static fixtures reject mixed terminal modes and result-extension requests missing either persistent endpoint."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s12 type-system cost",
+      "checkedAt": "2026-07-31T15:03:07.662Z",
+      "notes": "Inference remains within the unchanged ceiling at 49279 types, 61770 instantiations, and 2.71 seconds."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s12 result-versus-carry boundary",
+      "checkedAt": "2026-07-31T15:03:08.517Z",
+      "notes": "All architecture gates pass; terminal overflow extends the existing ordered-position plan without a renderer category or compatibility exception."
     }
   ],
   "progress": {

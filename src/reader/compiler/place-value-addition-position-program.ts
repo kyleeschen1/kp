@@ -1,6 +1,9 @@
 import {
   kpPlaceValueAdditionVisualReference as reference
 } from "./place-value-addition-visual-reference.ts";
+import {
+  compileKpPlaceValueTerminalOutputPolicy
+} from "./place-value-addition-terminal-output.ts";
 import type {
   KpPlaceValuePositionProgram
 } from "./place-value-addition-position-types.ts";
@@ -153,32 +156,53 @@ readonly KpPlaceValuePositionProgram[] {
         ],
         evaluatedTotalEntityId: "evaluation.hundreds.total",
         stageDataset: "kpPlaceValueHundredsEvaluation"
+      },
+      terminalOutput: {
+        evaluatedTotal: 4n,
+        targetCellId: "result.hundreds",
+        materialEntityId: "result.hundreds"
       }
     }
   ] as const;
 
-  const programs = fixture.map((entry) => Object.freeze({
-    position: Object.freeze({ ...entry.position }),
-    evaluation: Object.freeze({
-      ...entry.evaluation,
-      contributorCellIds:
-        Object.freeze([...entry.evaluation.contributorCellIds]),
-      evaluationDigits: Object.freeze(entry.evaluation.evaluationDigits.map(
-        (digit) => Object.freeze({ ...digit })
-      ))
-    }),
-    ...("exchange" in entry
-      ? {
-          exchange: Object.freeze({
-            ...entry.exchange,
-            outputCellIds: Object.freeze([...entry.exchange.outputCellIds]),
-            outputDigits: Object.freeze(entry.exchange.outputDigits.map(
-              (digit) => Object.freeze({ ...digit })
-            ))
-          })
-        }
-      : {})
-  }));
+  const programs = fixture.map((entry) => {
+    const position = Object.freeze({ ...entry.position });
+    return Object.freeze({
+      position,
+      evaluation: Object.freeze({
+        ...entry.evaluation,
+        contributorCellIds:
+          Object.freeze([...entry.evaluation.contributorCellIds]),
+        evaluationDigits: Object.freeze(entry.evaluation.evaluationDigits.map(
+          (digit) => Object.freeze({ ...digit })
+        ))
+      }),
+      ...("exchange" in entry
+        ? {
+            exchange: Object.freeze({
+              ...entry.exchange,
+              outputCellIds: Object.freeze([...entry.exchange.outputCellIds]),
+              outputDigits: Object.freeze(entry.exchange.outputDigits.map(
+                (digit) => Object.freeze({ ...digit })
+              ))
+            })
+          }
+        : {}),
+      ...("terminalOutput" in entry
+        ? {
+            terminalOutput: compileKpPlaceValueTerminalOutputPolicy({
+              mode: "settle-in-terminal-position",
+              terminalPosition: position,
+              evaluatedTotal: entry.terminalOutput.evaluatedTotal,
+              result: {
+                targetCellId: entry.terminalOutput.targetCellId,
+                materialEntityId: entry.terminalOutput.materialEntityId
+              }
+            })
+          }
+        : {})
+    });
+  });
 
   assertPositionSequence(
     programs as unknown as readonly KpPlaceValuePositionProgram[]
@@ -208,6 +232,7 @@ function assertPositionSequence(
     throw new Error("Place-value position programs cannot be empty.");
   }
   for (const [index, program] of programs.entries()) {
+    const isTerminal = index === programs.length - 1;
     if (
       program.position.sequenceIndex !== index ||
       !Number.isSafeInteger(program.position.radix) ||
@@ -223,6 +248,23 @@ function assertPositionSequence(
         (
           beatIds.has(program.exchange.beatId) ||
           !referenceBeatIds.has(program.exchange.beatId)
+        )
+      ) ||
+      (isTerminal !== (program.terminalOutput !== undefined)) ||
+      (
+        program.terminalOutput !== undefined &&
+        (
+          program.exchange !== undefined ||
+          program.terminalOutput.terminalPosition !== program.position ||
+          program.terminalOutput.outputs.some((output) =>
+            output.position.radix !== program.position.radix ||
+            (
+              output.position.sequenceIndex !==
+                program.position.sequenceIndex &&
+              output.position.sequenceIndex !==
+                program.position.sequenceIndex + 1
+            )
+          )
         )
       )
     ) {

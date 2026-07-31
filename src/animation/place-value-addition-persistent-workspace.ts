@@ -40,7 +40,10 @@ const sealedPlans = new WeakSet<object>();
 const sealedConformance = new WeakSet<object>();
 
 export interface KpPlaceValuePersistentOutputPlan {
-  readonly role: "settled-digit" | "carry-to-next-position";
+  readonly role:
+    | "settled-digit"
+    | "carry-to-next-position"
+    | "terminal-result-extension";
   readonly destination: KpSemanticDestination<"native-endpoint">;
   readonly route: KpMeasuredRouteIntent;
   readonly transit: KpTransitOwnership;
@@ -183,9 +186,9 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
     });
     const route = defineKpMeasuredRouteIntent({
       id: `route.place-value.${input.positionId}.${input.endpointEntityId}`,
-      kind: input.role === "carry-to-next-position"
-        ? "carry-arch"
-        : "converge",
+      kind: input.role === "settled-digit"
+        ? "converge"
+        : "carry-arch",
       materialEntityId: input.materialEntityId,
       fromRegion: resultBand,
       to: destination
@@ -227,15 +230,11 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
         "contributionRoutes"
       ];
       const outputSpecs = program.exchange === undefined
-        ? program.evaluation.evaluationDigits
-            .filter(({ semanticEntityId }) =>
-              endpointRegions.has(semanticEntityId)
-            )
-            .map((digit) => ({
-              endpointEntityId: digit.semanticEntityId,
-              materialEntityId: digit.semanticEntityId,
-              role: "settled-digit" as const
-            }))
+        ? program.terminalOutput?.outputs.map((output) => ({
+            endpointEntityId: output.targetCellId,
+            materialEntityId: output.materialEntityId,
+            role: output.role
+          })) ?? []
         : program.exchange.outputCellIds.map((endpointEntityId, index) => {
             const endpointCell = projection.cells.find(
               ({ semanticEntityId }) => semanticEntityId === endpointEntityId
