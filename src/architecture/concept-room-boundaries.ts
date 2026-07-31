@@ -40,7 +40,9 @@ export const kpConceptRoomBoundaries = [
     id: "domains",
     root: "domains",
     publicEntryPoint: "domains/public-api.ts",
-    mayImport: ["kernel"]
+    // Domain packs may consume environment-neutral value protocols, but never
+    // provider implementations; this keeps shared exact arithmetic below both.
+    mayImport: ["protocols", "kernel"]
   },
   {
     id: "authoring",

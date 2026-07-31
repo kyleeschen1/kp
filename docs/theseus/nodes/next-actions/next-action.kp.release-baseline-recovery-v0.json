@@ -301,11 +301,60 @@
       "scope": "impact-selection",
       "checkedAt": "2026-07-31T22:07:13.640Z",
       "notes": "The unmatched tests select the broad safe gate; focused security/ownership suites and typecheck ran now, with full suite/build retained for later release slices."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-room-import-fitness.test.ts tests/neutral-exact-rational.test.ts tests/exact-fraction-quantity-core.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T22:15:43.104Z",
+      "notes": "All 14 boundary, neutral arithmetic, compatibility-facade, immutability, normalization, zero, and quantity tests pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-07-31T22:15:48.622Z",
+      "notes": "All four architecture gates pass; domains may consume neutral protocols only through protocols/public-api.ts and still cannot import providers or deep protocol modules."
+    },
+    {
+      "command": "npm run typecheck:protocols",
+      "status": "passed",
+      "scope": "protocol",
+      "checkedAt": "2026-07-31T22:15:51.555Z",
+      "notes": "The neutral runtime protocol compiles independently."
+    },
+    {
+      "command": "npm run typecheck:domains",
+      "status": "passed",
+      "scope": "domain",
+      "checkedAt": "2026-07-31T22:15:55.284Z",
+      "notes": "The domain compatibility facade and all domain packs compile independently."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-31T22:16:00.321Z",
+      "notes": "Application, node, test, and domain projects pass; existing domain and provider public symbols are unchanged."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-provider-boundary.test.ts",
+      "status": "failed",
+      "scope": "expected-next-slice",
+      "checkedAt": "2026-07-31T22:16:05.051Z",
+      "notes": "Expected slice-10 baseline: the provider still imports the domain facade; the neutral authority exists and the provider migration has not started."
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path protocols/exact-rational.ts --path protocols/public-api.ts --path domains/math/exact-rational.ts --path src/architecture/concept-room-boundaries.ts --path tests/concept-room-import-fitness.test.ts --path tests/neutral-exact-rational.test.ts",
+      "status": "passed",
+      "scope": "impact-selection",
+      "checkedAt": "2026-07-31T22:16:10.792Z",
+      "notes": "The selector identifies architecture, protocol typecheck, full test, and build gates; focused architecture/type/unit checks ran now, with broad release closure retained for later slices."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 8 closed the HTML-helper gate with exact owner and sink laws; only the rational boundary and compositor source architecture failures remain before payload repair."
+    "summary": "Slice 9 moved exact-rational arithmetic into one neutral protocol authority, retained domain aliases as a re-export, and encoded the public-entrypoint dependency law; provider migration remains slice 10."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."

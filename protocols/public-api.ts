@@ -55,6 +55,18 @@ export {
 } from "./linear-problem-provider-v1.ts";
 
 export {
+  addExactRationals,
+  createExactRational,
+  divideExactRationals,
+  equalExactRationals,
+  isZeroExactRational,
+  multiplyExactRationals,
+  negateExactRational,
+  subtractExactRationals,
+  type NormalizedExactRational
+} from "./exact-rational.ts";
+
+export {
   KP_DEV_REVIEW_SCHEMA_VERSION,
   type KpDevReviewCaptureV1,
   type KpDevReviewCreateRequestV1,

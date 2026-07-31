@@ -10,10 +10,32 @@ test("architecture fitness allows declared dependencies through public APIs", ()
       source: 'import type {} from "../src/kernel/public-api.ts";'
     },
     {
+      path: "domains/exact-value.ts",
+      source: 'import type {} from "../protocols/public-api.ts";'
+    },
+    {
       path: "src/app-adapters/room.ts",
       source: 'const projection = import("../projections/public-api.ts");'
     }
   ]), []);
+});
+
+test("domain packs cannot deep-import neutral protocol implementations", () => {
+  assert.deepEqual(checkKpConceptRoomImports([
+    {
+      path: "domains/exact-value.ts",
+      source: 'import {} from "../protocols/exact-rational.ts";'
+    }
+  ]), [
+    {
+      sourceFile: "domains/exact-value.ts",
+      specifier: "../protocols/exact-rational.ts",
+      sourceBoundary: "domains",
+      targetBoundary: "protocols",
+      kind: "cross-boundary-deep-import",
+      message: "domains must import protocols/public-api.ts"
+    }
+  ]);
 });
 
 test("architecture fitness rejects reversed dependency direction", () => {

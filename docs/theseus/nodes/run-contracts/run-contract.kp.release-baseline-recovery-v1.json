@@ -109,7 +109,8 @@
     {
       "id": "s09",
       "title": "introduce-neutral-rational-authority",
-      "status": "planned"
+      "summary": "One neutral protocol module now owns normalized immutable bigint rational arithmetic. The domain file is an alias-only compatibility facade through the audited protocol entrypoint; no second implementation exists. Fourteen focused tests, all architecture gates, protocol/domain/full typechecks pass. Existing provider and domain symbols remain unchanged; the provider's scheduled domain import is the sole slice-10 failure.",
+      "status": "complete"
     },
     {
       "id": "s10",
