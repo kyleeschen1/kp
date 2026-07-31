@@ -66,11 +66,32 @@
       "scope": "production-boundary",
       "checkedAt": "2026-07-31T21:11:13.119Z",
       "notes": "Production closure passed across 250 files with no forbidden review markers."
+    },
+    {
+      "command": "npm run visual:animation-library-live-server",
+      "status": "passed",
+      "scope": "persistent-webview-host",
+      "checkedAt": "2026-07-31T21:21:08.645Z",
+      "notes": "All three host scenarios passed after the Vite watch repair, including a direct assertion that writing tmp/codex artifacts cannot reload the dashboard."
+    },
+    {
+      "command": "npm run visual:animation-library-hosts",
+      "status": "passed",
+      "scope": "clean-animation-host",
+      "checkedAt": "2026-07-31T21:21:10.164Z",
+      "notes": "All three host scenarios passed against a clean server with the same watch exclusion."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production-build",
+      "checkedAt": "2026-07-31T21:21:11.327Z",
+      "notes": "Type checks and the Vite production build passed after the dev-only watch boundary changed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 1 repaired and guarded the shared animation host. Pausing at HUMAN_CHECKPOINT for confirmation that the actual webview no longer reports Animation Host Did not render before release-baseline characterization begins."
+    "summary": "Slice 1 is complete and guarded. HUMAN_CHECKPOINT: confirm the actual refreshed webview renders animations without the prior host error; then resume at s02 to freeze the six remaining release failures."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."

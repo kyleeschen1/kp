@@ -88,6 +88,12 @@ export default defineConfig({
   server: {
     host: "127.0.0.1",
     port: 8000,
+    watch: {
+      // Browser checks write traces and screenshots here. Watching that
+      // scratch tree used to broadcast unrelated full-page reloads into the
+      // long-lived review webview and could strand its shared iframe host.
+      ignored: ["**/tmp/codex/**"]
+    },
     proxy: {
       "/api": {
         changeOrigin: true,

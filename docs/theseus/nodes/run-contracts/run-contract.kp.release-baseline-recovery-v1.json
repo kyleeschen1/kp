@@ -61,7 +61,7 @@
     {
       "id": "s01",
       "title": "repair-animation-host-rendering",
-      "summary": "Restarted the stale long-lived dev process, added a persistent-server liveness command, and proved catalog traversal plus rapid selection/reload on both persistent and clean hosts. Human webview confirmation gates s02 because the reported pre-restart failure was not reproducible in clean automation.",
+      "summary": "Repaired the shared host operational boundary: restarted the stale process, added persistent-server catalog and rapid-switch liveness coverage, excluded disposable tmp/codex artifacts from Vite watching, and added a regression proving scratch writes cannot reload or strand the webview. Persistent and clean hosts, display smoke, typecheck, build, and production-review closure pass.",
       "status": "complete"
     },
     {

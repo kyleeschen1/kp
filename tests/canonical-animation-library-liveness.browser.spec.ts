@@ -1,3 +1,5 @@
+import { mkdir, rm, writeFile } from "node:fs/promises";
+
 import { expect, test } from "@playwright/test";
 
 test("every playable catalog identity paints one certified primary host", async ({
@@ -86,4 +88,33 @@ test("rapid selection and reload cannot strand the shared host", async ({
   await expect(
     page.frameLocator("[data-animation-library-frame]").locator("body")
   ).toHaveAttribute("data-kp-animation-host-status", "ready");
+});
+
+test("dev scratch output cannot reload the shared host", async ({ page }) => {
+  const scratchDirectory = "tmp/codex/vite-watch-probe";
+  const scratchPath = `${scratchDirectory}/artifact.txt`;
+  await mkdir(scratchDirectory, { recursive: true });
+  await page.addInitScript(() => {
+    const loadCount = Number(sessionStorage.getItem("kpTestLoadCount") ?? 0);
+    sessionStorage.setItem("kpTestLoadCount", String(loadCount + 1));
+  });
+
+  try {
+    await page.goto("/canonical-animation-review.html");
+    const library = page.locator("[data-kp-animation-library]");
+    await expect(library).toHaveAttribute("data-preview-ready", "true");
+    const loadCount = await page.evaluate(
+      () => Number(sessionStorage.getItem("kpTestLoadCount") ?? 0)
+    );
+
+    await writeFile(scratchPath, `${Date.now()}\n`, "utf8");
+    await page.waitForTimeout(1_500);
+
+    expect(await page.evaluate(
+      () => Number(sessionStorage.getItem("kpTestLoadCount") ?? 0)
+    )).toBe(loadCount);
+    await expect(library).toHaveAttribute("data-preview-ready", "true");
+  } finally {
+    await rm(scratchDirectory, { recursive: true, force: true });
+  }
 });
