@@ -32,7 +32,7 @@ test("ones evaluation reuses the canonical executable operation program", () => 
   );
 });
 
-test("both numeral inputs and the plus catalyst have exhaustive roles", () => {
+test("semantic inputs compile to motion proxies beside stationary written cells", () => {
   const { onesEvaluation: evaluation } =
     createKpPlaceValueAdditionRuntimeSession();
   const material = evaluation.binding.sourceAnnotations
@@ -46,11 +46,31 @@ test("both numeral inputs and the plus catalyst have exhaustive roles", () => {
   );
 
   assert.deepEqual(material, [
+    "proxy.place-value.ones.first-contribution",
+    "proxy.place-value.ones.second-contribution"
+  ]);
+  assert.deepEqual(catalysts, [
+    "proxy.place-value.ones.addition-catalyst"
+  ]);
+  assert.deepEqual(
+    evaluation.writtenOwnership.contributionProxies.map(
+      ({ sourceCellId }) => sourceCellId
+    ),
+    ["digit.first.ones", "digit.second.ones"]
+  );
+  assert.equal(
+    evaluation.writtenOwnership.catalystProxy.sourceCellId,
+    "operator.add"
+  );
+  assert.deepEqual(evaluation.materialSelectorIds, [
     "digit.first.ones",
     "digit.second.ones"
   ]);
-  assert.deepEqual(catalysts, ["operator.add"]);
   assert.deepEqual(targets, [
+    "proxy.place-value.ones.total-tens",
+    "proxy.place-value.ones.total-ones"
+  ]);
+  assert.deepEqual(evaluation.targetSelectorIds, [
     "evaluation.ones.total.tens",
     "evaluation.ones.total.ones"
   ]);

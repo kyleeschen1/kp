@@ -31,6 +31,36 @@
     "npm run build",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s26 focused semantic and compositor ownership",
+      "checkedAt": "2026-07-31T00:57:18.955Z",
+      "notes": "91 of 91 passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s26 nominal ownership contract",
+      "checkedAt": "2026-07-31T00:57:19.875Z",
+      "notes": "Persistent cells and operators cannot typecheck as moving bindings."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s26 production build",
+      "checkedAt": "2026-07-31T00:57:21.350Z",
+      "notes": "Build passed; existing chunk-size advisory remains."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "passed",
+      "scope": "s26 wide and phone Chromium Firefox WebKit focused matrix",
+      "checkedAt": "2026-07-31T00:57:22.386Z",
+      "notes": "Focused written ownership, exchange, and responsive dense-overlap checks passed in all three engines."
+    }
+  ],
   "allowedWork": [
     "Implement only the approved 278 plus 156 exemplar, its typed place-value semantics, primary written-column projection, secondary base-ten projection, existing runtime integration, tests, evidence, and bounded generic contracts proven by this exemplar.",
     "Use one independently reversible commit per completed slice and stop at slice 23 for explicit human visual approval."
@@ -226,8 +256,9 @@
     },
     {
       "id": "s26",
-      "title": "promote-and-closeout",
-      "status": "planned"
+      "title": "persistent-written-ones-checkpoint",
+      "summary": "Implemented the independently reversible ones-column exemplar. Original 8 and 6 remain the same connected fixed-cell nodes, dim monotonically, and remain visible; stationary plus and underline never enter motion. Compiler-sealed contribution and derived-output proxies alone travel into 14, then hand off opaquely to persistent result 4 and carry 1. A measured pair-scoped clearance certificate prevents proxy/documentary contact. Focused unit, type, inference, build, and wide/phone Chromium Firefox WebKit checks pass. Full npm test retains four documented unrelated repository ratchet failures. HUMAN_CHECKPOINT before tens, hundreds, or final-settlement generalization.",
+      "status": "in-progress"
     }
   ]
 }

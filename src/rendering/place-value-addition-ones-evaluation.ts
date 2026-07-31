@@ -27,6 +27,12 @@ import {
   createKpPlaceValueWrittenColumnDomProjection,
   type KpPlaceValueWrittenColumnDomProjection
 } from "./place-value-addition-written-column-dom.ts";
+import {
+  bindKpPlaceValueWrittenMotionProxy,
+  compileKpPlaceValueOnesWrittenOwnership,
+  isKpPlaceValueOnesWrittenOwnershipPlan,
+  type KpPlaceValueOnesWrittenOwnershipPlan
+} from "./place-value-addition-written-ownership.ts";
 
 declare const kpPlaceValueOnesEvaluationBrand: unique symbol;
 declare const kpPlaceValueTensEvaluationBrand: unique symbol;
@@ -61,6 +67,7 @@ KpPlaceValueColumnEvaluationBase {
     "evaluation.ones.total.tens",
     "evaluation.ones.total.ones"
   ];
+  readonly writtenOwnership: KpPlaceValueOnesWrittenOwnershipPlan;
   readonly [kpPlaceValueOnesEvaluationBrand]: true;
 }
 
@@ -298,7 +305,11 @@ function compileColumnEvaluation(
     );
   }
   const executableProgram = program.executableProgram;
-  const binding = createBinding(config);
+  const writtenOwnership =
+    config.place === "ones"
+      ? compileKpPlaceValueOnesWrittenOwnership()
+      : undefined;
+  const binding = createBinding(config, writtenOwnership);
   const compiled = compileKpRegisteredSuccessorSynthesisPresentation({
     transformationId: `transformation.place-value.evaluate-${config.place}`,
     transformationKind: "simplifyConstantSum",
@@ -349,6 +360,7 @@ function compileColumnEvaluation(
     catalystSelectorId: "operator.add" as const,
     targetSelectorIds:
       Object.freeze(config.targetDigits.map(({ id }) => id)),
+    ...(writtenOwnership === undefined ? {} : { writtenOwnership }),
     binding: registered,
     forward: dispatch("forward"),
     rewind: dispatch("rewind"),
@@ -389,7 +401,8 @@ export function createKpPlaceValueOnesEvaluationDom(input: {
   }
   return createColumnEvaluationDom({
     ...input,
-    config: evaluationConfigs.ones
+    config: evaluationConfigs.ones,
+    writtenOwnership: input.evaluation.writtenOwnership
   });
 }
 
@@ -428,6 +441,7 @@ function createColumnEvaluationDom(input: {
   readonly projection: KpPlaceValueWrittenColumnProjection;
   readonly evaluation: KpPlaceValueColumnEvaluation;
   readonly config: EvaluationConfig;
+  readonly writtenOwnership?: KpPlaceValueOnesWrittenOwnershipPlan;
 }): KpPlaceValueColumnEvaluationDom {
   const source = createKpPlaceValueWrittenColumnDomProjection({
     document: input.document,
@@ -439,13 +453,21 @@ function createColumnEvaluationDom(input: {
     projection: input.projection,
     endpoint: "initial"
   });
-  configureSource(source, input.config);
-  configureSource(target, input.config);
-  for (const selectorId of [
-    ...input.evaluation.materialSelectorIds,
-    input.evaluation.catalystSelectorId
-  ]) {
-    target.cellElements.get(selectorId)!.dataset["kpVisibility"] = "hidden";
+  if (input.writtenOwnership === undefined) {
+    configureSource(source, input.config);
+    configureSource(target, input.config);
+    for (const selectorId of [
+      ...input.evaluation.materialSelectorIds,
+      input.evaluation.catalystSelectorId
+    ]) {
+      target.cellElements.get(selectorId)!.dataset["kpVisibility"] = "hidden";
+    }
+  } else {
+    configureOnesOverlayEndpoints({
+      source,
+      target,
+      ownership: input.writtenOwnership
+    });
   }
   const targetGrid = target.root.querySelector<HTMLElement>(
     "[data-kp-place-value-grid]"
@@ -455,7 +477,7 @@ function createColumnEvaluationDom(input: {
       `${input.config.place} evaluation target lacks its semantic grid.`
     );
   }
-  for (const digit of input.config.targetDigits) {
+  for (const [index, digit] of input.config.targetDigits.entries()) {
     const nativeTarget = target.cellElements.get(digit.id);
     if (nativeTarget !== undefined) {
       // Final-column output already has a canonical native endpoint root.
@@ -463,7 +485,11 @@ function createColumnEvaluationDom(input: {
       // baseline during the final settlement handoff.
       nativeTarget.dataset["kpVisibility"] = "visible";
     } else {
-      targetGrid.append(evaluationDigit(input.document, digit));
+      targetGrid.append(evaluationDigit(
+        input.document,
+        digit,
+        input.writtenOwnership?.evaluationOutputProxies[index]
+      ));
     }
   }
   const scene = createKpPlaceValueNativeSceneDom({
@@ -483,12 +509,19 @@ function createColumnEvaluationDom(input: {
   scene.root.dataset[input.config.stageDataset] = "";
   scene.root.dataset["kpOperationEvaluationProgramId"] =
     input.evaluation.forward.programId;
+  const prepare = (): void => {
+    scene.prepare();
+    if (input.writtenOwnership !== undefined) {
+      suppressPersistentSourceCopies(source, input.writtenOwnership);
+    }
+  };
   return Object.freeze({
     root: scene.root,
     sourceRoot: scene.sourceRoot,
     targetRoot: scene.targetRoot,
-    prepare: scene.prepare,
+    prepare,
     apply(progress: number, direction: "forward" | "rewind") {
+      prepare();
       const execution =
         direction === "forward"
           ? input.evaluation.forward
@@ -498,7 +531,11 @@ function createColumnEvaluationDom(input: {
       scene.root.dataset["kpOperationEvaluationPhaseId"] =
         telemetry.activePhaseId;
       scene.root.dataset["kpOperationEvaluationProgress"] = String(progress);
-      return scene.apply(progress);
+      const ownership = scene.apply(progress);
+      if (input.writtenOwnership !== undefined) {
+        suppressCompilerOnlyCatalyst(scene.root, input.writtenOwnership);
+      }
+      return ownership;
     },
     dispose: scene.dispose
   });
@@ -517,9 +554,18 @@ function configureSource(
 }
 
 function createBinding(
-  config: EvaluationConfig
+  config: EvaluationConfig,
+  ownership?: KpPlaceValueOnesWrittenOwnershipPlan
 ): KpSuccessorSynthesisBinding {
-  const material = config.materialSelectorIds.map((selectorId, index) =>
+  const materialSelectorIds = ownership === undefined
+    ? config.materialSelectorIds
+    : ownership.contributionProxies.map(
+        bindKpPlaceValueWrittenMotionProxy
+      );
+  const catalystSelectorId = ownership === undefined
+    ? "operator.add"
+    : bindKpPlaceValueWrittenMotionProxy(ownership.catalystProxy);
+  const material = materialSelectorIds.map((selectorId, index) =>
     Object.freeze({
       id: `annotation.${config.place}.material.${index}`,
       semanticRole: `${config.place}-column-contributor`,
@@ -535,7 +581,13 @@ function createBinding(
     Object.freeze({
       id: `annotation.${config.place}.total.${index}`,
       semanticRole: `evaluated-${config.place}-total-digit`,
-      selectorIds: Object.freeze([digit.id]),
+      selectorIds: Object.freeze([
+        ownership === undefined
+          ? digit.id
+          : bindKpPlaceValueWrittenMotionProxy(
+              ownership.evaluationOutputProxies[index]!
+            )
+      ]),
       propagationRank: index,
       pathFamily: index % 2 === 0
         ? "arc-above" as const
@@ -557,7 +609,7 @@ function createBinding(
       Object.freeze({
         id: `annotation.${config.place}.plus`,
         semanticRole: "addition-catalyst",
-        selectorIds: Object.freeze(["operator.add"]),
+        selectorIds: Object.freeze([catalystSelectorId]),
         contribution: "catalyst" as const,
         propagationRank: 0,
         pathFamily: "arc-below" as const
@@ -576,15 +628,114 @@ function createBinding(
   });
 }
 
+function configureOnesOverlayEndpoints(input: {
+  readonly source: KpPlaceValueWrittenColumnDomProjection;
+  readonly target: KpPlaceValueWrittenColumnDomProjection;
+  readonly ownership: KpPlaceValueOnesWrittenOwnershipPlan;
+}): void {
+  if (!isKpPlaceValueOnesWrittenOwnershipPlan(input.ownership)) {
+    throw new Error(
+      "Ones overlay endpoints require compiler-owned written authority."
+    );
+  }
+  hideProjectionPaint(input.source);
+  hideProjectionPaint(input.target);
+  for (const proxy of input.ownership.contributionProxies) {
+    configureMotionProxy(input.source, proxy);
+  }
+  configureMotionProxy(input.source, input.ownership.catalystProxy);
+}
+
+function hideProjectionPaint(
+  dom: KpPlaceValueWrittenColumnDomProjection
+): void {
+  for (const element of dom.cellElements.values()) {
+    element.dataset["kpVisibility"] = "hidden";
+  }
+  const underline = dom.root.querySelector<HTMLElement>(
+    "[data-kp-place-value-underline]"
+  );
+  if (underline !== null) underline.style.visibility = "hidden";
+}
+
+function configureMotionProxy(
+  dom: KpPlaceValueWrittenColumnDomProjection,
+  proxy: KpPlaceValueOnesWrittenOwnershipPlan[
+    "contributionProxies"
+  ][number] | KpPlaceValueOnesWrittenOwnershipPlan["catalystProxy"]
+): void {
+  const element = dom.cellElements.get(proxy.sourceCellId);
+  if (element === undefined) {
+    throw new Error(
+      `Ones overlay lacks persistent source ${proxy.sourceCellId}.`
+    );
+  }
+  element.dataset["kpVisibility"] = "visible";
+  element.dataset["kpSemanticEntityId"] =
+    bindKpPlaceValueWrittenMotionProxy(proxy);
+  element.dataset["kpPresentationGroupId"] =
+    bindKpPlaceValueWrittenMotionProxy(proxy);
+  element.dataset["kpPlaceValueMotionRole"] = proxy.role;
+  element.dataset["kpPlaceValueMotionSourceId"] = proxy.sourceCellId;
+}
+
+function suppressPersistentSourceCopies(
+  source: KpPlaceValueWrittenColumnDomProjection,
+  ownership: KpPlaceValueOnesWrittenOwnershipPlan
+): void {
+  for (const proxy of [
+    ...ownership.contributionProxies,
+    ownership.catalystProxy
+  ]) {
+    // Measurement mints the proxy from this native paint; afterwards the
+    // persistent written node remains the only documentary endpoint owner.
+    source.cellElements.get(proxy.sourceCellId)!.style.opacity = "0";
+  }
+}
+
+function suppressCompilerOnlyCatalyst(
+  root: HTMLElement,
+  ownership: KpPlaceValueOnesWrittenOwnershipPlan
+): void {
+  const selectorId =
+    bindKpPlaceValueWrittenMotionProxy(ownership.catalystProxy);
+  for (const owner of root.querySelectorAll<HTMLElement>(
+    "[data-kp-equation-material-owner-id]"
+  )) {
+    if (
+      owner.dataset["kpEquationMaterialSemanticEntityId"] ===
+        "annotation.ones.plus"
+    ) {
+      // The operation program still receives its causal catalyst, while the
+      // column-wide plus stays visibly owned by the persistent scaffold.
+      owner.style.opacity = "0";
+      owner.dataset["kpPlaceValueMotionRole"] =
+        "compiler-only-stationary-paint";
+      owner.dataset["kpPlaceValueMotionSelectorId"] = selectorId;
+    }
+  }
+}
+
 function evaluationDigit(
   document: Document,
-  digit: EvaluationConfig["targetDigits"][number]
+  digit: EvaluationConfig["targetDigits"][number],
+  proxy?: KpPlaceValueOnesWrittenOwnershipPlan[
+    "evaluationOutputProxies"
+  ][number]
 ): HTMLElement {
   const root = document.createElement("span");
   root.dataset["kpPlaceValueEvaluationDigit"] = "";
   root.dataset["kpPlaceValueNativeRoot"] = "";
-  root.dataset["kpSemanticEntityId"] = digit.id;
-  root.dataset["kpPresentationGroupId"] = digit.id;
+  const selectorId =
+    proxy === undefined
+      ? digit.id
+      : bindKpPlaceValueWrittenMotionProxy(proxy);
+  root.dataset["kpSemanticEntityId"] = selectorId;
+  root.dataset["kpPresentationGroupId"] = selectorId;
+  if (proxy !== undefined) {
+    root.dataset["kpPlaceValueMotionRole"] = proxy.role;
+    root.dataset["kpPlaceValueMotionTargetId"] = proxy.semanticEntityId;
+  }
   root.dataset["kpPlaceValueRow"] = "result";
   root.dataset["kpPlaceValueColumn"] = digit.column;
   root.dataset["kpVisibility"] = "visible";

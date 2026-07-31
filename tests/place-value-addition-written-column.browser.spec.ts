@@ -341,6 +341,18 @@ for (const viewport of [
       await document.fonts.ready;
 
       const writtenRoot = dom.writtenRoot as HTMLElement;
+      const persistentElements = new Map(
+        [
+          "digit.first.ones",
+          "digit.second.ones",
+          "operator.add"
+        ].map((id) => [
+          id,
+          writtenRoot.querySelector<HTMLElement>(
+            `[data-kp-semantic-entity-id="${id}"]`
+          )!
+        ] as const)
+      );
       const initialGeometry = new Map(
         [
           "digit.first.ones",
@@ -383,10 +395,12 @@ for (const viewport of [
             "[data-kp-place-value-native-root]"
           )
         ].filter((element) =>
-          initialGeometry.has(element.dataset["kpSemanticEntityId"] ?? "")
+          initialGeometry.has(
+            element.dataset["kpPlaceValueMotionSourceId"] ?? ""
+          )
         ).map((element) => {
           const rect = element.getBoundingClientRect();
-          return [element.dataset["kpSemanticEntityId"]!, {
+          return [element.dataset["kpPlaceValueMotionSourceId"]!, {
             left: rect.left,
             top: rect.top,
             width: rect.width,
@@ -394,6 +408,12 @@ for (const viewport of [
           }] as const;
         })
       );
+      const sourceMotionSelectors = [
+        ...evaluation().querySelectorAll<HTMLElement>(
+          '[data-kp-place-value-operation-endpoint="source"] ' +
+          "[data-kp-place-value-motion-role]"
+        )
+      ].map((element) => element.dataset["kpSemanticEntityId"]!);
 
       dom.apply(sample(0.175, 0.1, 2));
       const forward = ownerSignature();
@@ -408,7 +428,18 @@ for (const viewport of [
         ].map((element) => getComputedStyle(element).opacity),
         visibleOwnerTexts: forward
           .filter(({ opacity }) => opacity === "1")
-          .map(({ text }) => text)
+          .map(({ text }) => text),
+        persistent: [...persistentElements].map(([id, element]) => ({
+          id,
+          sameNode:
+            writtenRoot.querySelector(
+              `[data-kp-semantic-entity-id="${id}"]`
+            ) === element,
+          connected: element.isConnected,
+          opacity: getComputedStyle(element).opacity,
+          visibility: getComputedStyle(element).visibility,
+          transform: getComputedStyle(element).transform
+        }))
       };
 
       dom.apply(sample(0.249, 0.175, 3));
@@ -442,12 +473,41 @@ for (const viewport of [
               ?.textContent?.trim() ?? ""
         }))
       };
+      const continuity = [];
+      for (const [sequence, progress] of [
+        0.1, 0.101, 0.125, 0.175, 0.249, 0.25, 0.251, 0.325, 0.399
+      ].entries()) {
+        dom.apply(sample(progress, progress, 10 + sequence));
+        continuity.push({
+          progress,
+          cells: [...persistentElements].map(([id, element]) => {
+            const rect = element.getBoundingClientRect();
+            return {
+              id,
+              sameNode:
+                writtenRoot.querySelector(
+                  `[data-kp-semantic-entity-id="${id}"]`
+                ) === element,
+              connected: element.isConnected,
+              opacity: getComputedStyle(element).opacity,
+              visibility: getComputedStyle(element).visibility,
+              transform: getComputedStyle(element).transform,
+              left: rect.left,
+              top: rect.top,
+              width: rect.width,
+              height: rect.height
+            };
+          })
+        });
+      }
       return {
         initialGeometry: [...initialGeometry],
         sourceGeometry: [...sourceGeometry],
+        sourceMotionSelectors,
         forward,
         rewind,
         midpoint,
+        continuity,
         endpoint,
         programId:
           evaluation().dataset["kpOperationEvaluationProgramId"]
@@ -481,6 +541,11 @@ for (const viewport of [
         opacity === "1" && transform !== "none"
       )
     ).toBe(true);
+    expect(evidence.sourceMotionSelectors).toEqual([
+      "proxy.place-value.ones.first-contribution",
+      "proxy.place-value.ones.addition-catalyst",
+      "proxy.place-value.ones.second-contribution"
+    ]);
     expect(evidence.midpoint.endpointOpacities.every((opacity) =>
       opacity === "0" || opacity === "1"
     )).toBe(true);
@@ -492,9 +557,64 @@ for (const viewport of [
     expect(
       evidence.midpoint.visibleOwnerTexts.join("")
     ).toContain("6");
-    expect(
-      evidence.midpoint.visibleOwnerTexts.join("")
-    ).toContain("+");
+    expect(evidence.midpoint.visibleOwnerTexts.join("")).not.toContain("+");
+    expect(evidence.midpoint.persistent).toEqual([
+      {
+        id: "digit.first.ones",
+        sameNode: true,
+        connected: true,
+        opacity: "0.38",
+        visibility: "visible",
+        transform: "none"
+      },
+      {
+        id: "digit.second.ones",
+        sameNode: true,
+        connected: true,
+        opacity: "0.38",
+        visibility: "visible",
+        transform: "none"
+      },
+      {
+        id: "operator.add",
+        sameNode: true,
+        connected: true,
+        opacity: "1",
+        visibility: "visible",
+        transform: "none"
+      }
+    ]);
+    for (const sample of evidence.continuity) {
+      for (const cell of sample.cells) {
+        const initial = evidence.initialGeometry.find(
+          ([id]) => id === cell.id
+        )?.[1];
+        expect(initial).toBeDefined();
+        expect(cell.sameNode).toBe(true);
+        expect(cell.connected).toBe(true);
+        expect(cell.visibility).toBe("visible");
+        expect(cell.transform).toBe("none");
+        expect(Math.abs(cell.left - initial!.left)).toBeLessThanOrEqual(0.5);
+        expect(Math.abs(cell.top - initial!.top)).toBeLessThanOrEqual(0.5);
+        expect(Math.abs(cell.width - initial!.width))
+          .toBeLessThanOrEqual(0.5);
+        expect(Math.abs(cell.height - initial!.height))
+          .toBeLessThanOrEqual(0.5);
+        if (cell.id === "operator.add") expect(cell.opacity).toBe("1");
+      }
+    }
+    for (const id of ["digit.first.ones", "digit.second.ones"]) {
+      const opacities = evidence.continuity.map((sample) =>
+        Number(sample.cells.find((cell) => cell.id === id)!.opacity)
+      );
+      expect(
+        opacities.every(
+          (opacity, index) =>
+            index === 0 || opacity <= opacities[index - 1]! + 0.0001
+        )
+      ).toBe(true);
+      expect(opacities.at(-1)).toBeCloseTo(0.38, 4);
+    }
     expect(evidence.rewind).toEqual(evidence.forward);
     expect(evidence.endpoint.sourceOpacity).toBe("1");
     expect(evidence.endpoint.targetOpacity).toBe("0");
@@ -621,7 +741,7 @@ for (const viewport of [
         "evaluation.ones.total.ones"
       ].map((id) => paintMetric(
         evaluationTarget.querySelector<HTMLElement>(
-          `[data-kp-semantic-entity-id="${id}"]`
+          `[data-kp-place-value-motion-target-id="${id}"]`
         )!
       ));
 
@@ -655,11 +775,32 @@ for (const viewport of [
       };
       dom.apply(sample(0.34, 0.339, 11));
       const afterWritten = transferState().written;
+      const persistentHandoff = {
+        outputs: ["result.ones", "carry.tens"].map((id) => {
+          const element = (dom.writtenRoot as HTMLElement)
+            .querySelector<HTMLElement>(
+              `[data-kp-semantic-entity-id="${id}"]`
+            )!;
+          return {
+            id,
+            connected: element.isConnected,
+            visibility: getComputedStyle(element).visibility,
+            opacity: getComputedStyle(element).opacity
+          };
+        }),
+        derivedMaterialOpacities: ownerSignature()
+          .filter(({ id }) =>
+            id.includes("annotation.ones.remainder") ||
+            id.includes("annotation.ones.carry")
+          )
+          .map(({ opacity }) => opacity)
+      };
       dom.apply(sample(0.34, 0.34, 12, "base-ten"));
       const after = {
         written: afterWritten,
         baseTen: transferState().baseTen,
-        blocks: baseTenSignature()
+        blocks: baseTenSignature(),
+        persistentHandoff
       };
 
       dom.apply(sample(0.4, 0.34, 13));
@@ -670,10 +811,10 @@ for (const viewport of [
         '[data-kp-place-value-operation-endpoint="target"]'
       )!;
       const carry = endpointTarget.querySelector<HTMLElement>(
-        '[data-kp-semantic-entity-id="carry.tens"]'
+        '[data-kp-place-value-motion-target-id="carry.tens"]'
       )!;
       const result = endpointTarget.querySelector<HTMLElement>(
-        '[data-kp-semantic-entity-id="result.ones"]'
+        '[data-kp-place-value-motion-target-id="result.ones"]'
       )!;
       const successorSource = tensEvaluation().querySelector<HTMLElement>(
         '[data-kp-place-value-operation-endpoint="source"]'
@@ -749,6 +890,25 @@ for (const viewport of [
     expect(evidence.before.baseTen).toBe("false");
     expect(evidence.after.written).toBe("true");
     expect(evidence.after.baseTen).toBe("true");
+    expect(evidence.after.persistentHandoff.outputs).toEqual([
+      {
+        id: "result.ones",
+        connected: true,
+        visibility: "visible",
+        opacity: "1"
+      },
+      {
+        id: "carry.tens",
+        connected: true,
+        visibility: "visible",
+        opacity: "1"
+      }
+    ]);
+    expect(
+      evidence.after.persistentHandoff.derivedMaterialOpacities.every(
+        (opacity) => opacity === "0"
+      )
+    ).toBe(true);
 
     const consumed = (blocks: typeof evidence.before.blocks) =>
       blocks.filter(({ id }) =>

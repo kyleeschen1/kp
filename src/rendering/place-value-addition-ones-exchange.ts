@@ -36,6 +36,12 @@ import {
   createKpPlaceValueWrittenColumnDomProjection,
   type KpPlaceValueWrittenColumnDomProjection
 } from "./place-value-addition-written-column-dom.ts";
+import {
+  bindKpPlaceValueWrittenMotionProxy,
+  compileKpPlaceValueOnesWrittenOwnership,
+  isKpPlaceValueOnesWrittenOwnershipPlan,
+  type KpPlaceValueOnesWrittenOwnershipPlan
+} from "./place-value-addition-written-ownership.ts";
 
 declare const kpPlaceValueOnesExchangeBrand: unique symbol;
 declare const kpPlaceValueTensExchangeBrand: unique symbol;
@@ -71,6 +77,7 @@ KpPlaceValueColumnExchangeBase {
   readonly sourceEntityId: "evaluation.ones.total";
   readonly targetEntityIds: readonly ["result.ones", "carry.tens"];
   readonly baseTenExchangeId: "exchange.ones-to-tens";
+  readonly writtenOwnership: KpPlaceValueOnesWrittenOwnershipPlan;
   readonly [kpPlaceValueOnesExchangeBrand]: true;
 }
 
@@ -279,8 +286,12 @@ function compileColumnExchange(
     microStaggerSpan: 0,
     junctionScale: 1
   }) as KpFissionFusionPlan & { readonly mode: "fission" };
+  const writtenOwnership =
+    config.place === "ones"
+      ? compileKpPlaceValueOnesWrittenOwnership()
+      : undefined;
   const intent = createKpNativeKatexIdentityTransferIntent({
-    binding: createBinding(config),
+    binding: createBinding(config, writtenOwnership),
     executableProgram: carrySplit.executableProgram,
     direction: "forward",
     motion: "full"
@@ -322,6 +333,7 @@ function compileColumnExchange(
     intent,
     forward: dispatch("forward"),
     rewind: dispatch("rewind"),
+    ...(writtenOwnership === undefined ? {} : { writtenOwnership }),
     opacityPolicy: "opaque" as const
   });
   sealedExchanges.add(exchange);
@@ -352,7 +364,8 @@ export function createKpPlaceValueOnesExchangeDom(input: {
   }
   return createColumnExchangeDom({
     ...input,
-    config: exchangeConfigs.ones
+    config: exchangeConfigs.ones,
+    writtenOwnership: input.exchange.writtenOwnership
   });
 }
 
@@ -375,6 +388,7 @@ function createColumnExchangeDom(input: {
   readonly projection: KpPlaceValueWrittenColumnProjection;
   readonly exchange: KpPlaceValueColumnExchange;
   readonly config: ExchangeConfig;
+  readonly writtenOwnership?: KpPlaceValueOnesWrittenOwnershipPlan;
 }): KpPlaceValueColumnExchangeDom {
   const source = createKpPlaceValueWrittenColumnDomProjection({
     document: input.document,
@@ -386,13 +400,20 @@ function createColumnExchangeDom(input: {
     projection: input.projection,
     endpoint: "initial"
   });
-  configureSource(source, input.config);
-  configureSource(target, input.config);
-  // The operation catalyst collapses with evaluation, then returns through
-  // the compositor's typed introduction track as the exchange settles.
-  target.cellElements.get("operator.add")!.dataset["kpVisibility"] = "visible";
-  for (const id of input.config.targetVisibleIds) {
-    target.cellElements.get(id)!.dataset["kpVisibility"] = "visible";
+  if (input.writtenOwnership === undefined) {
+    configureSource(source, input.config);
+    configureSource(target, input.config);
+    target.cellElements.get("operator.add")!
+      .dataset["kpVisibility"] = "visible";
+    for (const id of input.config.targetVisibleIds) {
+      target.cellElements.get(id)!.dataset["kpVisibility"] = "visible";
+    }
+  } else {
+    configureOnesExchangeOverlay({
+      source,
+      target,
+      ownership: input.writtenOwnership
+    });
   }
   const sourceGrid = source.root.querySelector<HTMLElement>(
     "[data-kp-place-value-grid]"
@@ -404,8 +425,20 @@ function createColumnExchangeDom(input: {
   }
   const total = input.document.createElement("span");
   total.dataset["kpPlaceValueEvaluationTotal"] = "";
-  total.dataset["kpSemanticEntityId"] = input.exchange.sourceEntityId;
-  total.dataset["kpPresentationGroupId"] = input.exchange.sourceEntityId;
+  const totalSelectorId =
+    input.writtenOwnership === undefined
+      ? input.exchange.sourceEntityId
+      : bindKpPlaceValueWrittenMotionProxy(
+          input.writtenOwnership.evaluatedTotalProxy
+        );
+  total.dataset["kpSemanticEntityId"] = totalSelectorId;
+  total.dataset["kpPresentationGroupId"] = totalSelectorId;
+  if (input.writtenOwnership !== undefined) {
+    total.dataset["kpPlaceValueMotionRole"] =
+      input.writtenOwnership.evaluatedTotalProxy.role;
+    total.dataset["kpPlaceValueMotionSourceId"] =
+      input.writtenOwnership.evaluatedTotalProxy.semanticEntityId;
+  }
   total.style.display = "contents";
   total.append(...input.config.targetDigits.map((digit) =>
     totalDigit(input.document, digit)
@@ -425,12 +458,19 @@ function createColumnExchangeDom(input: {
   scene.root.dataset[input.config.stageDataset] = "";
   scene.root.dataset["kpIdentityFissionProgramId"] =
     input.exchange.forward.programId;
+  const prepare = (): void => {
+    scene.prepare();
+    if (input.writtenOwnership !== undefined) {
+      suppressDerivedNativeCopies(target, input.writtenOwnership);
+    }
+  };
   return Object.freeze({
     root: scene.root,
     sourceRoot: scene.sourceRoot,
     targetRoot: scene.targetRoot,
-    prepare: scene.prepare,
+    prepare,
     apply(progress: number, direction: "forward" | "rewind") {
+      prepare();
       const execution =
         direction === "forward"
           ? input.exchange.forward
@@ -445,6 +485,12 @@ function createColumnExchangeDom(input: {
       scene.root.dataset["kpIdentityFissionProgress"] = String(progress);
       scene.root.dataset["kpIdentityTransferOccurred"] =
         String(transferOccurred);
+      if (input.writtenOwnership !== undefined && transferOccurred) {
+        suppressDerivedMaterialCopies(
+          scene.root,
+          input.writtenOwnership
+        );
+      }
       return Object.freeze({ ownership, transferOccurred });
     },
     dispose: scene.dispose
@@ -463,8 +509,10 @@ function configureSource(
   }
 }
 
-function createBinding(config: ExchangeConfig):
-KpSuccessorSynthesisBinding {
+function createBinding(
+  config: ExchangeConfig,
+  ownership?: KpPlaceValueOnesWrittenOwnershipPlan
+): KpSuccessorSynthesisBinding {
   const sourceAnnotationId =
     `annotation.${config.place}.evaluated-total`;
   const targetAnnotationIds = [
@@ -486,18 +534,30 @@ KpSuccessorSynthesisBinding {
       Object.freeze({
         id: sourceAnnotationId,
         semanticRole: "evaluated-column-total",
-        selectorIds: Object.freeze([config.sourceEntityId]),
+        selectorIds: Object.freeze([
+          ownership === undefined
+            ? config.sourceEntityId
+            : bindKpPlaceValueWrittenMotionProxy(
+                ownership.evaluatedTotalProxy
+              )
+        ]),
         contribution: "material-input" as const,
         propagationRank: 0,
         pathFamily: "arc-above" as const
       })
     ]),
     targetAnnotations: Object.freeze(config.targetEntityIds.map(
-      (selectorId, index) => Object.freeze({
+      (semanticTargetId, index) => Object.freeze({
         id: targetAnnotationIds[index]!,
         semanticRole:
           index === 0 ? "settled-remainder" : "carried-next-place",
-        selectorIds: Object.freeze([selectorId]),
+        selectorIds: Object.freeze([
+          ownership === undefined
+            ? semanticTargetId
+            : bindKpPlaceValueWrittenMotionProxy(
+                ownership.derivedOutputProxies[index]!
+              )
+        ]),
         propagationRank: index,
         pathFamily:
           index === 0 ? "arc-below" as const : "arc-above" as const
@@ -511,6 +571,86 @@ KpSuccessorSynthesisBinding {
       })
     ])
   });
+}
+
+function configureOnesExchangeOverlay(input: {
+  readonly source: KpPlaceValueWrittenColumnDomProjection;
+  readonly target: KpPlaceValueWrittenColumnDomProjection;
+  readonly ownership: KpPlaceValueOnesWrittenOwnershipPlan;
+}): void {
+  if (!isKpPlaceValueOnesWrittenOwnershipPlan(input.ownership)) {
+    throw new Error(
+      "Ones exchange overlay requires compiler-owned written authority."
+    );
+  }
+  hideProjectionPaint(input.source);
+  hideProjectionPaint(input.target);
+  for (const proxy of input.ownership.derivedOutputProxies) {
+    const element = input.target.cellElements.get(proxy.targetCellId);
+    if (element === undefined) {
+      throw new Error(
+        `Ones exchange lacks persistent target ${proxy.targetCellId}.`
+      );
+    }
+    element.dataset["kpVisibility"] = "visible";
+    element.dataset["kpSemanticEntityId"] =
+      bindKpPlaceValueWrittenMotionProxy(proxy);
+    element.dataset["kpPresentationGroupId"] =
+      bindKpPlaceValueWrittenMotionProxy(proxy);
+    element.dataset["kpPlaceValueMotionRole"] = proxy.role;
+    element.dataset["kpPlaceValueMotionTargetId"] = proxy.targetCellId;
+  }
+}
+
+function hideProjectionPaint(
+  dom: KpPlaceValueWrittenColumnDomProjection
+): void {
+  for (const element of dom.cellElements.values()) {
+    element.dataset["kpVisibility"] = "hidden";
+  }
+  const underline = dom.root.querySelector<HTMLElement>(
+    "[data-kp-place-value-underline]"
+  );
+  if (underline !== null) underline.style.visibility = "hidden";
+}
+
+function suppressDerivedNativeCopies(
+  target: KpPlaceValueWrittenColumnDomProjection,
+  ownership: KpPlaceValueOnesWrittenOwnershipPlan
+): void {
+  for (const proxy of ownership.derivedOutputProxies) {
+    // The material proxy may move to this measured slot, but native settlement
+    // belongs to the already-connected cell in the documentary scaffold.
+    target.cellElements.get(proxy.targetCellId)!.style.opacity = "0";
+  }
+}
+
+function suppressDerivedMaterialCopies(
+  root: HTMLElement,
+  ownership: KpPlaceValueOnesWrittenOwnershipPlan
+): void {
+  const annotationIds = new Set([
+    "annotation.ones.remainder",
+    "annotation.ones.carry"
+  ]);
+  for (const owner of root.querySelectorAll<HTMLElement>(
+    "[data-kp-equation-material-owner-id]"
+  )) {
+    const semanticEntityId =
+      owner.dataset["kpEquationMaterialSemanticEntityId"];
+    if (
+      semanticEntityId !== undefined &&
+      annotationIds.has(semanticEntityId)
+    ) {
+      owner.style.opacity = "0";
+      const index =
+        semanticEntityId === "annotation.ones.remainder" ? 0 : 1;
+      owner.dataset["kpPlaceValueMotionSelectorId"] =
+        bindKpPlaceValueWrittenMotionProxy(
+          ownership.derivedOutputProxies[index]!
+        );
+    }
+  }
 }
 
 function totalDigit(

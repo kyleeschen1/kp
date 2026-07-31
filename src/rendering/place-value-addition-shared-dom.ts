@@ -22,6 +22,15 @@ import {
 import {
   createKpPlaceValueNativeSettlementDom
 } from "./place-value-addition-native-settlement.ts";
+import type {
+  KpEquationVisiblePaintCertifiedContact
+} from "./equation-visible-paint-overlap-types.ts";
+import {
+  measureKpNativeKatexSubtreePaintRect
+} from "./native-katex-paint-geometry.ts";
+import type {
+  KpPlaceValueOnesWrittenOwnershipPlan
+} from "./place-value-addition-written-ownership.ts";
 
 export interface KpPlaceValueAdditionSharedDom {
   readonly root: HTMLElement;
@@ -63,6 +72,8 @@ export function createKpPlaceValueAdditionSharedDom(input: {
   });
   const writtenHost = input.document.createElement("div");
   writtenHost.dataset["kpPlaceValueView"] = "written";
+  writtenHost.dataset["kpPlaceValueWrittenComposite"] =
+    "persistent-scaffold-with-motion-overlay";
   writtenHost.style.cssText =
     "display:grid;position:relative;width:100%;place-items:center";
   const onesEvaluation = createKpPlaceValueOnesEvaluationDom({
@@ -70,13 +81,13 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     projection: input.session.written,
     evaluation: input.session.onesEvaluation
   });
-  onesEvaluation.root.style.display = "none";
+  configurePersistentWrittenOverlay(onesEvaluation.root);
   const onesExchange = createKpPlaceValueOnesExchangeDom({
     document: input.document,
     projection: input.session.written,
     exchange: input.session.onesExchange
   });
-  onesExchange.root.style.display = "none";
+  configurePersistentWrittenOverlay(onesExchange.root);
   const tensEvaluation = createKpPlaceValueTensEvaluationDom({
     document: input.document,
     projection: input.session.written,
@@ -110,6 +121,9 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     hundredsEvaluation.root,
     nativeSettlement.root
   );
+  written.root.dataset["kpPlaceValueWrittenOwnership"] =
+    "persistent-documentary";
+  markPersistentWrittenRoles(written);
   baseTen.root.dataset["kpPlaceValueView"] = "base-ten";
   root.append(writtenHost, baseTen.root);
   let disposed = false;
@@ -200,9 +214,12 @@ export function createKpPlaceValueAdditionSharedDom(input: {
       exchangingTens ||
       evaluatingHundreds ||
       settling;
+    const persistentOnesMotion = evaluatingOnes || exchangingOnes;
     writtenHost.style.display = writtenVisible ? "grid" : "none";
     written.root.style.display =
-      writtenVisible && !motionActive ? "grid" : "none";
+      writtenVisible && (!motionActive || persistentOnesMotion)
+        ? "grid"
+        : "none";
     onesEvaluation.root.style.display =
       writtenVisible && evaluatingOnes ? "grid" : "none";
     onesExchange.root.style.display =
@@ -215,16 +232,41 @@ export function createKpPlaceValueAdditionSharedDom(input: {
       writtenVisible && evaluatingHundreds ? "grid" : "none";
     nativeSettlement.root.style.display =
       writtenVisible && settling ? "grid" : "none";
+    if (writtenVisible && persistentOnesMotion) {
+      applyPersistentOnesDocumentaryState({
+        written,
+        evaluationProgress:
+          evaluatingOnes ? frame.beatProgress : 1,
+        outputsVisible: false
+      });
+    }
     if (writtenVisible && evaluatingOnes) {
       onesEvaluation.apply(
         frame.beatProgress,
         frame.clock.direction
       );
+      applyPersistentContributionClearance({
+        stage: writtenHost,
+        written,
+        overlay: onesEvaluation.root,
+        ownership: input.session.onesEvaluation.writtenOwnership
+      });
+      certifyPersistentContributionContacts({
+        written,
+        overlay: onesEvaluation.root
+      });
     }
     const exchangeFrame =
       writtenVisible && exchangingOnes
         ? onesExchange.apply(frame.beatProgress, frame.clock.direction)
         : undefined;
+    if (writtenVisible && exchangingOnes) {
+      applyPersistentOnesDocumentaryState({
+        written,
+        evaluationProgress: 1,
+        outputsVisible: exchangeFrame?.transferOccurred ?? false
+      });
+    }
     if (writtenVisible && evaluatingTens) {
       tensEvaluation.apply(frame.beatProgress, frame.clock.direction);
     }
@@ -301,4 +343,200 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     apply,
     dispose
   });
+}
+
+function configurePersistentWrittenOverlay(root: HTMLElement): void {
+  root.style.cssText +=
+    ";display:none;position:absolute;inset:0;pointer-events:none";
+  root.dataset["kpPlaceValueWrittenOverlay"] = "motion-proxies-only";
+}
+
+function markPersistentWrittenRoles(
+  written: ReturnType<
+    typeof createKpPlaceValueWrittenColumnDomProjection
+  >
+): void {
+  for (const id of ["digit.first.ones", "digit.second.ones"] as const) {
+    const element = written.cellElements.get(id)!;
+    element.dataset["kpPlaceValueWrittenRole"] =
+      "persistent-written-cell";
+    element.dataset["kpEquationPaintOwnerId"] =
+      `persistent-written:${id}`;
+  }
+  const plus = written.cellElements.get("operator.add")!;
+  plus.dataset["kpPlaceValueWrittenRole"] = "stationary-operator";
+  const underline = written.root.querySelector<HTMLElement>(
+    "[data-kp-place-value-underline]"
+  );
+  if (underline === null) {
+    throw new Error("Persistent written scaffold lacks its underline.");
+  }
+  underline.dataset["kpPlaceValueWrittenRole"] = "stationary-operator";
+  for (const id of ["result.ones", "carry.tens"] as const) {
+    written.cellElements.get(id)!
+      .dataset["kpPlaceValueWrittenRole"] = "persistent-written-cell";
+  }
+}
+
+function applyPersistentContributionClearance(input: {
+  readonly stage: HTMLElement;
+  readonly written: ReturnType<
+    typeof createKpPlaceValueWrittenColumnDomProjection
+  >;
+  readonly overlay: HTMLElement;
+  readonly ownership: KpPlaceValueOnesWrittenOwnershipPlan;
+}): void {
+  for (const proxy of input.ownership.contributionProxies) {
+    const blockerId = input.ownership.contributionProxies.find(
+      ({ sourceCellId }) => sourceCellId !== proxy.sourceCellId
+    )!.sourceCellId;
+    const blocker = input.written.cellElements.get(blockerId)!;
+    const blockerPaint = measureKpNativeKatexSubtreePaintRect(
+      input.stage,
+      blocker
+    );
+    if (blockerPaint === undefined) continue;
+    for (const owner of input.overlay.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )) {
+      if (
+        owner.dataset["kpEquationMaterialSemanticEntityId"] !==
+          proxy.bindingAnnotationId ||
+        getComputedStyle(owner).opacity === "0"
+      ) {
+        continue;
+      }
+      owner.style.translate = "none";
+      const visual = owner.firstElementChild;
+      const movingPaint = visual instanceof HTMLElement
+        ? measureKpNativeKatexSubtreePaintRect(input.stage, visual)
+        : undefined;
+      if (movingPaint === undefined) continue;
+      const overlapWidth = Math.min(
+        movingPaint.left + movingPaint.width,
+        blockerPaint.left + blockerPaint.width
+      ) - Math.max(movingPaint.left, blockerPaint.left);
+      const overlapHeight = Math.min(
+        movingPaint.top + movingPaint.height,
+        blockerPaint.top + blockerPaint.height
+      ) - Math.max(movingPaint.top, blockerPaint.top);
+      if (overlapWidth <= 0.75 || overlapHeight <= 0.75) continue;
+      const direction =
+        proxy.documentaryClearanceSide === "above" ? -1 : 1;
+      owner.style.translate = `0 ${direction * (overlapHeight + 1)}px`;
+      owner.dataset["kpPlaceValueDocumentaryClearance"] =
+        proxy.documentaryClearanceSide;
+    }
+  }
+}
+
+function certifyPersistentContributionContacts(input: {
+  readonly written: ReturnType<
+    typeof createKpPlaceValueWrittenColumnDomProjection
+  >;
+  readonly overlay: HTMLElement;
+}): void {
+  const bindings = [
+    ["annotation.ones.material.0", "digit.first.ones"],
+    ["annotation.ones.material.1", "digit.second.ones"]
+  ] as const;
+  for (const [annotationId, persistentId] of bindings) {
+    const persistent = input.written.cellElements.get(persistentId)!;
+    const persistentOwnerId =
+      persistent.dataset["kpEquationPaintOwnerId"]!;
+    const rect = persistent.getBoundingClientRect();
+    for (const owner of input.overlay.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )) {
+      if (
+        owner.dataset["kpEquationMaterialSemanticEntityId"] !== annotationId
+      ) {
+        continue;
+      }
+      const materialOwnerId = owner.dataset["kpEquationMaterialOwnerId"]!;
+      const contact = Object.freeze({
+        id: `contact.place-value.ones.peel.${persistentId}`,
+        ownerIds:
+          Object.freeze([persistentOwnerId, materialOwnerId] as const),
+        reason: "semantic-reconciliation" as const,
+        phase: "transit" as const,
+        maximumOverlapWidthPx: rect.width,
+        maximumOverlapHeightPx: rect.height
+      }) satisfies KpEquationVisiblePaintCertifiedContact;
+      setCertifiedContact(persistent, contact);
+      setCertifiedContact(owner, contact);
+    }
+  }
+}
+
+function setCertifiedContact(
+  element: HTMLElement,
+  contact: KpEquationVisiblePaintCertifiedContact
+): void {
+  const datasetKey =
+    element.dataset["kpEquationMaterialOwnerId"] === undefined
+      ? "kpEquationSemanticContacts"
+      : "kpEquationMaterialSemanticContacts";
+  const existing = decodeCertifiedContacts(
+    element.dataset[datasetKey]
+  );
+  element.dataset[datasetKey] = JSON.stringify([
+    ...existing.filter(({ id }) => id !== contact.id),
+    contact
+  ]);
+}
+
+function decodeCertifiedContacts(
+  encoded: string | undefined
+): readonly KpEquationVisiblePaintCertifiedContact[] {
+  if (encoded === undefined) return [];
+  try {
+    const parsed: unknown = JSON.parse(encoded);
+    return Array.isArray(parsed)
+      ? parsed as readonly KpEquationVisiblePaintCertifiedContact[]
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function applyPersistentOnesDocumentaryState(input: {
+  readonly written: ReturnType<
+    typeof createKpPlaceValueWrittenColumnDomProjection
+  >;
+  readonly evaluationProgress: number;
+  readonly outputsVisible: boolean;
+}): void {
+  const progress = Math.max(0, Math.min(1, input.evaluationProgress));
+  const dimProgress = smoothStep(Math.min(1, progress / 0.2));
+  const documentaryOpacity = 1 - 0.62 * dimProgress;
+  for (const id of ["digit.first.ones", "digit.second.ones"] as const) {
+    const element = input.written.cellElements.get(id)!;
+    element.style.opacity = String(documentaryOpacity);
+    element.style.transform = "none";
+    element.dataset["kpVisibility"] = "visible";
+    element.dataset["kpPlaceValueConsumed"] =
+      progress > 0 ? "true" : "false";
+  }
+  const plus = input.written.cellElements.get("operator.add")!;
+  plus.style.opacity = "1";
+  plus.style.transform = "none";
+  plus.dataset["kpVisibility"] = "visible";
+  const underline = input.written.root.querySelector<HTMLElement>(
+    "[data-kp-place-value-underline]"
+  )!;
+  underline.style.opacity = "1";
+  underline.style.transform = "none";
+  underline.style.visibility = "visible";
+  for (const id of ["result.ones", "carry.tens"] as const) {
+    const output = input.written.cellElements.get(id)!;
+    output.style.opacity = "1";
+    output.style.transform = "none";
+    output.dataset["kpVisibility"] =
+      input.outputsVisible ? "visible" : "hidden";
+  }
+}
+
+function smoothStep(progress: number): number {
+  return progress * progress * (3 - 2 * progress);
 }

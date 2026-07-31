@@ -41,7 +41,7 @@ test("ones exchange reuses exact carry proof and identity-fission program", () =
   );
 });
 
-test("one evaluated identity splits into exact remainder and carry", () => {
+test("one identity splits through proxies into persistent result slots", () => {
   const { onesExchange: exchange } =
     createKpPlaceValueAdditionRuntimeSession();
   const binding = exchange.intent.binding;
@@ -57,9 +57,17 @@ test("one evaluated identity splits into exact remainder and carry", () => {
     "carry.tens"
   ]);
   assert.equal(material.length, 1);
-  assert.deepEqual(material[0]?.selectorIds, ["evaluation.ones.total"]);
+  assert.deepEqual(material[0]?.selectorIds, [
+    "proxy.place-value.ones.evaluated-total"
+  ]);
   assert.deepEqual(
     binding.targetAnnotations.flatMap(({ selectorIds }) => selectorIds),
+    ["proxy.place-value.ones.result", "proxy.place-value.ones.carry"]
+  );
+  assert.deepEqual(
+    exchange.writtenOwnership.derivedOutputProxies.map(
+      ({ targetCellId }) => targetCellId
+    ),
     ["result.ones", "carry.tens"]
   );
   assert.deepEqual(binding.lineages[0]?.sourceAnnotationIds, [

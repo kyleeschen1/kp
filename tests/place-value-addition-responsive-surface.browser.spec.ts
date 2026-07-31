@@ -80,14 +80,31 @@ for (const viewport of [
             node instanceof HTMLElement &&
             getComputedStyle(node).display !== "none"
         );
+        const persistentComposite =
+          stages.length === 2 &&
+          stages.some((stage) =>
+            stage.hasAttribute("data-kp-place-value-written-ownership")
+          ) &&
+          stages.some((stage) =>
+            stage.hasAttribute("data-kp-place-value-written-overlay")
+          );
+        if (persistentComposite) {
+          // The scaffold and its absolute proxy layer are one logical stage.
+          return writtenHost;
+        }
         if (stages.length !== 1) {
-          throw new Error(`Expected one active stage, received ${stages.length}.`);
+          throw new Error(
+            `Expected one logical active stage, received ${stages.length}.`
+          );
         }
         return stages[0]!;
       };
       const inspect = (progress: number) => {
         const stage = activeStage();
-        const endpoint = [
+        const persistent = stage.querySelector<HTMLElement>(
+          "[data-kp-place-value-written-ownership]"
+        );
+        const endpoint = persistent ?? [
           ...(stage.hasAttribute("data-kp-place-value-written-projection")
             ? [stage]
             : []),
@@ -103,11 +120,20 @@ for (const viewport of [
         const stageRect = stage.getBoundingClientRect();
         const writtenRect = writtenHost.getBoundingClientRect();
         const gridRect = grid.getBoundingClientRect();
+        const paintScopes = stage === writtenHost
+          ? [...writtenHost.children].filter(
+              (node): node is HTMLElement =>
+                node instanceof HTMLElement &&
+                getComputedStyle(node).display !== "none"
+            )
+          : [stage];
         const observations = [
-          ...[...stage.querySelectorAll<HTMLElement>(
-            "[data-kp-place-value-native-root]" +
-            "[data-kp-semantic-entity-id]"
-          )].flatMap((root) => {
+          ...paintScopes.flatMap((scope) => [
+            ...scope.querySelectorAll<HTMLElement>(
+              "[data-kp-place-value-native-root]" +
+              "[data-kp-semantic-entity-id]"
+            )
+          ]).flatMap((root) => {
             const opacity = effectiveOpacity(root, stage);
             if (
               opacity <= 0.01 ||
@@ -127,18 +153,26 @@ for (const viewport of [
                 : "source-native" as const;
             return [{
               ownerId:
-                `native:${authority}:` +
-                `${root.dataset["kpSemanticEntityId"]}`,
+                root.dataset["kpEquationPaintOwnerId"] ??
+                (
+                  `native:${ownerEndpoint ?? "persistent"}:` +
+                  `${root.dataset["kpSemanticEntityId"]}`
+                ),
               semanticEntityId: root.dataset["kpSemanticEntityId"],
+              semanticContacts: JSON.parse(
+                root.dataset["kpEquationSemanticContacts"] ?? "[]"
+              ),
               rowId: root.dataset["kpPlaceValueRow"],
               authority,
               rect,
               opacity
             }];
           }),
-          ...[...stage.querySelectorAll<HTMLElement>(
-            "[data-kp-equation-material-owner-id]"
-          )].flatMap((owner) => {
+          ...paintScopes.flatMap((scope) => [
+            ...scope.querySelectorAll<HTMLElement>(
+              "[data-kp-equation-material-owner-id]"
+            )
+          ]).flatMap((owner) => {
             const visual = owner.firstElementChild;
             const opacity = effectiveOpacity(owner, stage);
             if (!(visual instanceof HTMLElement) || opacity <= 0.01) {
@@ -200,11 +234,15 @@ for (const viewport of [
             (violation: {
               leftOwnerId: string;
               rightOwnerId: string;
+              leftSemanticContacts?: unknown;
+              rightSemanticContacts?: unknown;
               width: number;
               height: number;
             }) => ({
               left: violation.leftOwnerId,
               right: violation.rightOwnerId,
+              leftContacts: violation.leftSemanticContacts,
+              rightContacts: violation.rightSemanticContacts,
               width: violation.width,
               height: violation.height
             })
@@ -224,7 +262,14 @@ for (const viewport of [
           progress,
           source: "controls"
         }));
-        samples.push(inspect(progress));
+        try {
+          samples.push(inspect(progress));
+        } catch (error) {
+          throw new Error(
+            `Responsive paint inspection failed at ${progress}: ` +
+            `${error instanceof Error ? error.message : String(error)}`
+          );
+        }
       }
 
       const rootRect = surface.root.getBoundingClientRect();
