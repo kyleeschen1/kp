@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { dirname, relative, resolve } from "node:path";
 import test from "node:test";
 
 import {
@@ -75,6 +76,53 @@ test("canonical scene core stays within source and vocabulary ceilings", async (
       );
     }
   }
+});
+
+test("canonical scene source audit seals its direct local dependency closure", async () => {
+  const policy = kpCanonicalEquationRendererConvergence;
+  const discoveredDependencies = new Set<string>();
+
+  for (const path of policy.productionSourceFiles) {
+    const source = await readFile(path, "utf8");
+    for (const match of source.matchAll(
+      /(?:\bfrom\s*|\bimport\s*(?:\(\s*)?)["'](\.[^"']+)["']/g
+    )) {
+      const dependency = relative(
+        process.cwd(),
+        resolve(dirname(path), match[1])
+      ).replaceAll("\\", "/");
+      if (
+        dependency.startsWith("src/") &&
+        dependency.endsWith(".ts") &&
+        !policy.productionSourceFiles.includes(
+          dependency as (typeof policy.productionSourceFiles)[number]
+        )
+      ) {
+        discoveredDependencies.add(dependency);
+      }
+    }
+  }
+
+  const expectedDependencies = [...policy.productionDirectDependencySourceFiles];
+  assert.deepEqual([...discoveredDependencies].sort(), expectedDependencies);
+  assert.equal(
+    expectedDependencies.length,
+    policy.maximumProductionDirectDependencyModules
+  );
+
+  const dependencySources = await Promise.all(
+    expectedDependencies.map(async (path) => readFile(path, "utf8"))
+  );
+  const dependencySourceBytes = dependencySources.reduce(
+    (total, source) => total + Buffer.byteLength(source),
+    0
+  );
+  assert.ok(
+    dependencySourceBytes <=
+      policy.maximumProductionDirectDependencySourceBytes,
+    `Native scene direct dependencies use ${dependencySourceBytes} source bytes; ` +
+      `ceiling is ${policy.maximumProductionDirectDependencySourceBytes}.`
+  );
 });
 
 test("canonical scene core exposes one ephemeral renderer session contract", async () => {

@@ -434,11 +434,39 @@
       "scope": "impact-selection",
       "checkedAt": "2026-07-31T22:25:14.129Z",
       "notes": "The new unmatched conformance test selects full typecheck, test, and build gates; focused proof, architecture, inference, and typecheck ran now, while the known-red full release gate remains scheduled through slices 12-19."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test --test-name-pattern ^canonical scene source audit seals tests/canonical-equation-renderer-convergence.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T22:30:10.777Z",
+      "notes": "The source-derived one-hop closure exactly matches 16 classified dependencies and their frozen 248260-byte aggregate."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test --test-name-pattern source audit seals or one default or vocabulary tests/canonical-equation-renderer-convergence.test.ts",
+      "status": "failed",
+      "scope": "expected-baseline",
+      "checkedAt": "2026-07-31T22:30:11.769Z",
+      "notes": "The strengthened closure law, default-renderer law, and vocabulary law pass; the sole expected failure remains 141543 core bytes versus 136000."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-31T22:30:12.641Z",
+      "notes": "Application, node, test, and domain projects compile with the extended typed convergence policy."
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path src/architecture/canonical-equation-renderer-convergence.ts --path tests/canonical-equation-renderer-convergence.test.ts --path docs/project/reviews/2026-07-31-canonical-scene-source-closure-report.md",
+      "status": "passed",
+      "scope": "impact-selection",
+      "checkedAt": "2026-07-31T22:30:13.504Z",
+      "notes": "The conservative selector requests full visual/test/build gates for rendering-named architecture paths; no runtime source changed, focused source laws and typecheck ran now, and broad behavior checks remain assigned to reduction and closeout slices."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Rational boundary closed: protocol arithmetic is authoritative, domain aliases and provider wrappers conform, inference is green, and only the scheduled compositor architecture failure remains."
+    "summary": "Compositor audit now seals its source-derived direct dependency closure; four owners remain 5543 bytes over the unchanged core ceiling for slices 13-14."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."

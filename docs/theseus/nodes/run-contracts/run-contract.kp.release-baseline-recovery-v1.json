@@ -127,7 +127,8 @@
     {
       "id": "s12",
       "title": "make-compositor-audit-closure-aware",
-      "status": "planned"
+      "summary": "The audit derives exactly 16 direct local dependencies from the four canonical owner imports and freezes their 248260-byte aggregate, preventing unmeasured extraction. A responsibility report records core and peer bytes; no runtime code changed and the intentional 141543/136000 failure remains.",
+      "status": "complete"
     },
     {
       "id": "s13",

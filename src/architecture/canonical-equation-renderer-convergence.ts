@@ -38,12 +38,35 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/rendering/native-katex-rendered-scene.ts",
     "src/rendering/native-katex-scene-compositor.ts"
   ]),
+  productionDirectDependencySourceFiles: Object.freeze([
+    "src/animation/canonical-operation-lineage-adapter.ts",
+    "src/animation/lineage-constrained-glyph-matcher.ts",
+    "src/animation/structural-succession-presentation.ts",
+    "src/rendering/computed-style-clone.ts",
+    "src/rendering/equation-font-readiness.ts",
+    "src/rendering/equation-material-layer-dom.ts",
+    "src/rendering/equation-material-owner.ts",
+    "src/rendering/equation-motion-path-planner.ts",
+    "src/rendering/native-katex-factoring-choreography.ts",
+    "src/rendering/native-katex-fan-in-motion.ts",
+    "src/rendering/native-katex-operation-choreography.ts",
+    "src/rendering/native-katex-paint-geometry.ts",
+    "src/rendering/native-katex-scene-track-contract.ts",
+    "src/rendering/native-katex-scene-track-sampling.ts",
+    "src/rendering/native-katex-structural-succession-renderer.ts",
+    "src/rendering/native-katex-successor-synthesis.ts"
+  ]),
   maximumProductionModules: 4,
   // The complete hardening adds 5,648 audited bytes for the pure-plan/session
   // split and exact reuse validation, while retaining four generic modules and
   // the frozen vocabulary. This one-time ratchet leaves only 359 bytes of
   // headroom, so a second renderer architecture still cannot hide here.
   maximumProductionSourceBytes: 136_000,
+  // Direct dependencies remain separate responsibilities, but freezing their
+  // current closure prevents a core reduction from merely relocating bytes to
+  // an unmeasured helper.
+  maximumProductionDirectDependencyModules: 16,
+  maximumProductionDirectDependencySourceBytes: 248_260,
   maximumExperimentRouteGzipGrowthBytes: 12_000,
   maximumReaderRouteRegressionRatio: 0.05,
   forbiddenProductionVocabulary: Object.freeze([
@@ -106,7 +129,17 @@ export function validateKpCanonicalEquationRendererConvergence(
     issues.push("The native scene core exceeds its production-module ceiling.");
   }
   if (
+    policy.productionDirectDependencySourceFiles.length >
+      policy.maximumProductionDirectDependencyModules ||
+    new Set(policy.productionDirectDependencySourceFiles).size !==
+      policy.productionDirectDependencySourceFiles.length
+  ) {
+    issues.push("The native scene core has an unbounded direct dependency closure.");
+  }
+  if (
     policy.maximumProductionSourceBytes !== 136_000 ||
+    policy.maximumProductionDirectDependencyModules !== 16 ||
+    policy.maximumProductionDirectDependencySourceBytes !== 248_260 ||
     policy.maximumExperimentRouteGzipGrowthBytes !== 12_000 ||
     policy.maximumReaderRouteRegressionRatio !== 0.05
   ) {
