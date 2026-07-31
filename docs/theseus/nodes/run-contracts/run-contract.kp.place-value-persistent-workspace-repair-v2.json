@@ -58,6 +58,27 @@
       "scope": "s01",
       "checkedAt": "2026-07-31T03:38:29.250Z",
       "notes": "Roadmap, proposal, decision, and control-plane changes contain no whitespace errors."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "failed",
+      "scope": "s02 initial law fixture",
+      "checkedAt": "2026-07-31T03:45:56.142Z",
+      "notes": "The first fixture incorrectly tried to derive documentary cells from a preservation summary that does not own cell topology. The visual reference now enumerates its own canonical cells, keeping authority in the correct compiler layer."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s02 full-timeline laws",
+      "checkedAt": "2026-07-31T03:45:57.340Z",
+      "notes": "93 of 93 place-value tests pass, including the new full-lifetime workspace and no-gap carry laws."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02 reference contract",
+      "checkedAt": "2026-07-31T03:45:58.302Z",
+      "notes": "Application, Node, test, and domain projects accept the frozen literal contract without widened escape paths."
     }
   ],
   "allowedWork": [
@@ -90,7 +111,8 @@
     {
       "id": "s02",
       "title": "freeze-full-timeline-laws",
-      "status": "planned"
+      "summary": "Froze the complete documentary workspace lifetime, same-node and monotone-dimming policies, measured evaluated-total destinations, measured curved carry transit, exclusive opaque endpoint handoff, direct-seek, rewind, responsive measurement, and native settlement in the canonical visual reference. The reference owns explicit cells rather than borrowing a preservation summary.",
+      "status": "complete"
     },
     {
       "id": "s03",

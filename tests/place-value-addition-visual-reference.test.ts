@@ -99,6 +99,69 @@ test("visual reference carries overflow digits continuously into fixed slots", (
   );
 });
 
+test("visual reference freezes one full-timeline documentary workspace", () => {
+  const workspace = reference.persistentWorkspace;
+  assert.deepEqual(workspace.lifetime, {
+    startPermille: 0,
+    endPermille: 1_000,
+    nodePolicy: "same-connected-node",
+    documentaryCellIds: [
+      "digit.first.hundreds",
+      "digit.first.tens",
+      "digit.first.ones",
+      "operator.add",
+      "digit.second.hundreds",
+      "digit.second.tens",
+      "digit.second.ones",
+      "rule.addition.underline",
+      "carry.tens",
+      "carry.hundreds",
+      "result.hundreds",
+      "result.tens",
+      "result.ones"
+    ],
+    consumedSourcePolicy: "monotone-dim-never-hide",
+    stationaryMarkPolicy: "opaque-and-stationary",
+    rewindPolicy: "restore-original-opacity-on-same-node"
+  });
+  assert.deepEqual(
+    workspace.operationDestinations.map(
+      ({ semanticTotal, region, anchorColumn }) => ({
+        semanticTotal,
+        region,
+        anchorColumn
+      })
+    ),
+    [
+      { semanticTotal: "14", region: "result-band", anchorColumn: "ones" },
+      { semanticTotal: "13", region: "result-band", anchorColumn: "tens" },
+      {
+        semanticTotal: "4",
+        region: "result-band",
+        anchorColumn: "hundreds"
+      }
+    ]
+  );
+});
+
+test("visual reference forbids invisible carry ownership gaps", () => {
+  assert.deepEqual(reference.persistentWorkspace.carryTransit, {
+    routePolicy: "measured-curved-route",
+    sourcePolicy: "evaluated-total-native-paint",
+    destinationPolicy: "adjacent-native-carry-slot",
+    ownershipPolicy: "moving-paint-until-native-endpoint",
+    handoffPolicy: "exclusive-opaque-endpoint",
+    teleportAllowed: false,
+    fadeAllowed: false
+  });
+  assert.deepEqual(reference.persistentWorkspace.sampling, {
+    directSeek: "history-independent",
+    rewind: "exact",
+    endpointSettlement: "native-katex",
+    responsiveGeometry: "measure-current-connected-surface"
+  });
+});
+
 test("secondary quantity evidence cannot replace or crowd the written algorithm", () => {
   assert.deepEqual(reference.secondaryViewBoundary, {
     mathematicalAuthority: false,

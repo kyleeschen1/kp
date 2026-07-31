@@ -202,6 +202,69 @@ export const kpPlaceValueAdditionVisualReference = Object.freeze({
       consumedByBeatId: "beat.place-value.evaluate-hundreds"
     })
   ]),
+  persistentWorkspace: Object.freeze({
+    lifetime: Object.freeze({
+      startPermille: 0,
+      endPermille: 1_000,
+      nodePolicy: "same-connected-node",
+      documentaryCellIds: Object.freeze([
+        "digit.first.hundreds",
+        "digit.first.tens",
+        "digit.first.ones",
+        "operator.add",
+        "digit.second.hundreds",
+        "digit.second.tens",
+        "digit.second.ones",
+        "rule.addition.underline",
+        "carry.tens",
+        "carry.hundreds",
+        "result.hundreds",
+        "result.tens",
+        "result.ones"
+      ]),
+      consumedSourcePolicy: "monotone-dim-never-hide",
+      stationaryMarkPolicy: "opaque-and-stationary",
+      rewindPolicy: "restore-original-opacity-on-same-node"
+    }),
+    operationDestinations: Object.freeze([
+      Object.freeze({
+        beatId: "beat.place-value.evaluate-ones",
+        semanticTotal: "14",
+        destination: "measured-evaluated-total-native-paint",
+        region: "result-band",
+        anchorColumn: "ones"
+      }),
+      Object.freeze({
+        beatId: "beat.place-value.evaluate-tens",
+        semanticTotal: "13",
+        destination: "measured-evaluated-total-native-paint",
+        region: "result-band",
+        anchorColumn: "tens"
+      }),
+      Object.freeze({
+        beatId: "beat.place-value.evaluate-hundreds",
+        semanticTotal: "4",
+        destination: "measured-evaluated-total-native-paint",
+        region: "result-band",
+        anchorColumn: "hundreds"
+      })
+    ]),
+    carryTransit: Object.freeze({
+      routePolicy: "measured-curved-route",
+      sourcePolicy: "evaluated-total-native-paint",
+      destinationPolicy: "adjacent-native-carry-slot",
+      ownershipPolicy: "moving-paint-until-native-endpoint",
+      handoffPolicy: "exclusive-opaque-endpoint",
+      teleportAllowed: false,
+      fadeAllowed: false
+    }),
+    sampling: Object.freeze({
+      directSeek: "history-independent",
+      rewind: "exact",
+      endpointSettlement: "native-katex",
+      responsiveGeometry: "measure-current-connected-surface"
+    })
+  }),
   secondaryViewBoundary: Object.freeze({
     mathematicalAuthority: false,
     sharesTrace: true,
