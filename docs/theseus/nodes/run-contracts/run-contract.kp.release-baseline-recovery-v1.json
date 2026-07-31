@@ -67,7 +67,8 @@
     {
       "id": "s02",
       "title": "freeze-remaining-failure-baseline",
-      "status": "planned"
+      "summary": "Reproduced exactly four architecture and two payload failures, proved none overlap user source edits, and committed a durable characterization at f4d4a65d: 22/21 HTML helpers, 141543/136000 compositor bytes, one provider-domain import, stale promotion evidence, 495627/490000 main host, and 151256/145000 shared readers.",
+      "status": "complete"
     },
     {
       "id": "s03",

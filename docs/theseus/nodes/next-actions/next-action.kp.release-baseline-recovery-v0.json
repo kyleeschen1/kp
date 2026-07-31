@@ -12,6 +12,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-31-architecture-and-library-next-loops-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-31-release-baseline-characterization.md"
     }
   ],
   "dependsOn": {
@@ -87,11 +91,39 @@
       "scope": "production-build",
       "checkedAt": "2026-07-31T21:21:11.327Z",
       "notes": "Type checks and the Vite production build passed after the dev-only watch boundary changed."
+    },
+    {
+      "command": "human webview confirmation",
+      "status": "passed",
+      "scope": "animation-host",
+      "checkedAt": "2026-07-31T21:31:44.829Z",
+      "notes": "User confirmed the canonical Animation Library is visible after the s01 repair."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-animation-construction-inventory.test.ts tests/canonical-equation-renderer-convergence.test.ts tests/linear-provider-boundary.test.ts tests/operation-presentation-migration-inventory.test.ts",
+      "status": "failed",
+      "scope": "baseline-characterization",
+      "checkedAt": "2026-07-31T21:31:46.067Z",
+      "notes": "Expected baseline: exactly four failures reproduced—22 versus 21 escapeHtml owners, 141543 versus 136000 canonical source bytes, provider-to-domain rational import, and stale promotion evidence path."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "failed",
+      "scope": "baseline-characterization",
+      "checkedAt": "2026-07-31T21:31:47.137Z",
+      "notes": "Expected baseline: only the main host fails at 495627 versus 490000 gzip bytes; outer shell 9911 and place-value incremental 70436 remain within their ceilings."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "baseline-characterization",
+      "checkedAt": "2026-07-31T21:31:48.263Z",
+      "notes": "Expected baseline: nine shared equation-reader routes fail at 151256 versus 145000 runtime gzip bytes; the two specialized routes and all compiled-HTML metrics remain green."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 1 is complete and guarded. HUMAN_CHECKPOINT: confirm the actual refreshed webview renders animations without the prior host error; then resume at s02 to freeze the six remaining release failures."
+    "summary": "Slice 2 froze all six post-host-repair failures at f4d4a65d with exact owners, byte/count deltas, preservation sentinels, and impact-selected checks. No threshold or production behavior changed; s03 can now add stable payload closure attribution against this baseline."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."
