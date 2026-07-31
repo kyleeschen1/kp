@@ -125,6 +125,35 @@ test("canonical scene source audit seals its direct local dependency closure", a
   );
 });
 
+test("canonical scene core keeps one handoff and rectangle measurement authority", async () => {
+  const sources = await Promise.all(
+    kpCanonicalEquationRendererConvergence.productionSourceFiles.map(
+      async (path) => readFile(path, "utf8")
+    )
+  );
+  const source = sources.join("\n");
+  const compositor = await readFile(
+    "src/rendering/native-katex-scene-compositor.ts",
+    "utf8"
+  );
+
+  assert.equal(
+    [...source.matchAll(/function measureKpStageRelativeRectDelta\s*\(/g)].length,
+    1,
+    "Stage-relative rectangle deltas must have one core implementation."
+  );
+  assert.equal(
+    [...compositor.matchAll(/function measureKpNativeKatexHandoff\s*\(/g)].length,
+    1,
+    "Public handoff microscopes must share one telemetry constructor."
+  );
+  assert.equal(
+    [...compositor.matchAll(/return measureKpNativeKatexHandoff\(/g)].length,
+    3,
+    "Glyph, rule, and correlated entrypoints must use the shared constructor."
+  );
+});
+
 test("canonical scene core exposes one ephemeral renderer session contract", async () => {
   const [source, contract, exactSurface] = await Promise.all([
     readFile("src/rendering/native-katex-scene-compositor.ts", "utf8"),

@@ -145,7 +145,8 @@
     {
       "id": "s15",
       "title": "close-compositor-source-boundary",
-      "status": "planned"
+      "summary": "Closed the four-module compositor core at 135932/136000 and direct dependency closure at 248243/248260; made material owner positioning host-independent, corrected clone fidelity to compare text with live native ink and rules with moving geometry, and hardened iframe readiness against navigation and cold compilation races. Canonical unit, browser, host liveness, display, typecheck, and build gates are green.",
+      "status": "complete"
     },
     {
       "id": "s16",

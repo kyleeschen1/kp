@@ -47,6 +47,8 @@ export function syncKpEquationMaterialLayer(input: {
       owner = input.stage.ownerDocument.createElement("span");
       owner.className = "editor-equation-stage__material-owner";
       owner.dataset["kpEquationMaterialOwnerId"] = frame.ownerId;
+      // Geometry is a renderer contract; host CSS may choose only presentation.
+      owner.style.position = "absolute";
       makeKpMaterialOwnerInert(owner);
       layer.append(owner);
       state.owners.set(frame.ownerId, owner);
@@ -76,15 +78,10 @@ export function syncKpEquationMaterialLayer(input: {
         "--kp-focus-context-dimming"
       ]) {
         const value = frame.sourceElement.style.getPropertyValue(property);
-        if (
-          value === "" &&
-          visual.style.getPropertyValue(property) !== ""
-        ) {
+        if (visual.style.getPropertyValue(property) === value) continue;
+        if (value === "") {
           visual.style.removeProperty(property);
-        } else if (
-          value !== "" &&
-          visual.style.getPropertyValue(property) !== value
-        ) {
+        } else {
           visual.style.setProperty(property, value);
         }
       }
@@ -136,14 +133,16 @@ export function syncKpEquationMaterialLayer(input: {
       frame.fragmentRole
     );
     if (frame.expectedPaintRect === undefined || visual === null) {
-      setOptionalDataset(owner, "kpEquationMaterialPaintAlignment", undefined);
-      setOptionalDataset(owner, "kpEquationMaterialPaintAlignmentKey", undefined);
-      setOptionalDataset(owner, "kpEquationMaterialPaintInsetX", undefined);
-      setOptionalDataset(owner, "kpEquationMaterialPaintInsetY", undefined);
-      setOptionalDataset(owner, "kpEquationMaterialExpectedPaintInsetX", undefined);
-      setOptionalDataset(owner, "kpEquationMaterialExpectedPaintInsetY", undefined);
-      setOptionalDataset(owner, "kpEquationMaterialExpectedPaintInsetRight", undefined);
-      setOptionalDataset(owner, "kpEquationMaterialExpectedPaintInsetBottom", undefined);
+      for (const key of [
+        "kpEquationMaterialPaintAlignment",
+        "kpEquationMaterialPaintAlignmentKey",
+        "kpEquationMaterialPaintInsetX",
+        "kpEquationMaterialPaintInsetY",
+        "kpEquationMaterialExpectedPaintInsetX",
+        "kpEquationMaterialExpectedPaintInsetY",
+        "kpEquationMaterialExpectedPaintInsetRight",
+        "kpEquationMaterialExpectedPaintInsetBottom"
+      ]) setOptionalDataset(owner, key, undefined);
     } else {
       const alignmentKey = [
         owner.dataset["kpEquationMaterialVisualRevision"],
@@ -161,24 +160,34 @@ export function syncKpEquationMaterialLayer(input: {
         const motionTransform = owner.style.transform;
         setStyle(owner.style, "transform", "none");
         let measured;
+        let nativePaint;
         try {
           measured = measureKpNativeKatexSubtreePaintRect(
             input.stage,
             visual
           );
+          // Text clone fidelity follows native source ink; owner-sized rules
+          // are checked against their moving expected geometry below.
+          nativePaint = measureKpNativeKatexSubtreePaintRect(
+            input.stage,
+            frame.sourceElement
+          );
         } finally {
           setStyle(owner.style, "transform", motionTransform || "none");
         }
-        if (measured === undefined) {
+        if (measured === undefined || nativePaint === undefined) {
           throw new Error(
-            `Material owner ${frame.ownerId} has no measurable cloned paint.`
+            `Material owner ${frame.ownerId} has no measurable native clone.`
           );
         }
+        const paintReference = frame.fragmentRole?.startsWith("rule:") === true
+          ? frame.expectedPaintRect
+          : nativePaint;
         const widthResidual = Math.abs(
-          measured.width - frame.expectedPaintRect.width
+          measured.width - paintReference.width
         );
         const heightResidual = Math.abs(
-          measured.height - frame.expectedPaintRect.height
+          measured.height - paintReference.height
         );
         if (widthResidual > 0.75 || heightResidual > 0.75) {
           throw new Error(
@@ -211,39 +220,16 @@ export function syncKpEquationMaterialLayer(input: {
         Number(owner.dataset["kpEquationMaterialPaintInsetY"]);
       setStyle(owner.style, "left", `${frame.rect.left + correctionX}px`);
       setStyle(owner.style, "top", `${frame.rect.top + correctionY}px`);
-      setDataset(
-        owner,
-        "kpEquationMaterialExpectedPaintInsetX",
-        String(frame.expectedPaintRect.left - frame.rect.left)
-      );
-      setDataset(
-        owner,
-        "kpEquationMaterialExpectedPaintInsetY",
-        String(frame.expectedPaintRect.top - frame.rect.top)
-      );
-      setDataset(
-        owner,
-        "kpEquationMaterialExpectedPaintInsetRight",
-        String(
-          frame.rect.left + frame.rect.width -
-          frame.expectedPaintRect.left -
-          frame.expectedPaintRect.width
-        )
-      );
-      setDataset(
-        owner,
-        "kpEquationMaterialExpectedPaintInsetBottom",
-        String(
-          frame.rect.top + frame.rect.height -
-          frame.expectedPaintRect.top -
-          frame.expectedPaintRect.height
-        )
-      );
-      setDataset(
-        owner,
-        "kpEquationMaterialPaintAlignment",
-        "measured-ink"
-      );
+      const expected = frame.expectedPaintRect;
+      for (const [key, value] of [
+        ["kpEquationMaterialExpectedPaintInsetX", expected.left - frame.rect.left],
+        ["kpEquationMaterialExpectedPaintInsetY", expected.top - frame.rect.top],
+        ["kpEquationMaterialExpectedPaintInsetRight",
+          frame.rect.left + frame.rect.width - expected.left - expected.width],
+        ["kpEquationMaterialExpectedPaintInsetBottom",
+          frame.rect.top + frame.rect.height - expected.top - expected.height],
+        ["kpEquationMaterialPaintAlignment", "measured-ink"]
+      ] as const) setDataset(owner, key, String(value));
     }
   }
 }

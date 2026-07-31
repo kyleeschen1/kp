@@ -567,11 +567,74 @@
       "scope": "s14-control-integrity",
       "checkedAt": "2026-07-31T23:06:48.756Z",
       "notes": "Validated 847 nodes and 15237 events before closing the second compositor reduction."
+    },
+    {
+      "command": "npm run test:canonical-animation-construction",
+      "status": "passed",
+      "scope": "slice-s15",
+      "checkedAt": "2026-07-31T23:39:03.815Z",
+      "notes": "canonical construction unit and architecture suite: 60 passed"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-equation-renderer-convergence.test.ts",
+      "status": "passed",
+      "scope": "slice-s15",
+      "checkedAt": "2026-07-31T23:39:04.899Z",
+      "notes": "single source authority and 135932-byte core closure: 9 passed"
+    },
+    {
+      "command": "npm run test:browser:canonical-animation-construction",
+      "status": "passed",
+      "scope": "slice-s15",
+      "checkedAt": "2026-07-31T23:39:05.862Z",
+      "notes": "canonical browser construction: 13 passed"
+    },
+    {
+      "command": "npm run visual:animation-library-hosts",
+      "status": "passed",
+      "scope": "slice-s15",
+      "checkedAt": "2026-07-31T23:39:06.952Z",
+      "notes": "all playable Animation Library hosts remained live: 3 passed"
+    },
+    {
+      "command": "npm run visual:animation-library-display",
+      "status": "passed",
+      "scope": "slice-s15",
+      "checkedAt": "2026-07-31T23:39:08.036Z",
+      "notes": "display routing, switching, and host readiness: 10 passed"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-s15",
+      "checkedAt": "2026-07-31T23:39:09.029Z",
+      "notes": "typecheck and production build passed; direct dependency closure is 248243 bytes"
+    },
+    {
+      "command": "npm run verify:impact -- --path src/rendering/equation-material-layer-dom.ts --path tests/canonical-equation-renderer-convergence.test.ts --path tests/canonical-animation-review.browser.spec.ts --path docs/project/reviews/2026-07-31-canonical-scene-source-closure-report.md",
+      "status": "passed",
+      "scope": "slice-s15",
+      "checkedAt": "2026-07-31T23:39:10.053Z",
+      "notes": "impact selector classified the slice as high-risk and named broad release checks"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s15",
+      "checkedAt": "2026-07-31T23:39:11.085Z",
+      "notes": "no whitespace errors"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s15",
+      "checkedAt": "2026-07-31T23:39:12.092Z",
+      "notes": "valid 847 nodes and 15245 events before slice close"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Canonical scene core is now green at 135932 of 136000 bytes. Handoff telemetry has one construction path, stage-relative rectangle delta has one core authority, public microscope entrypoints and paint vocabulary remain intact, and governed fraction/radical browser captures pass."
+    "summary": "Slice 15 started: freeze the now-green four-module source closure and prove canonical host behavior unchanged before payload repair."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."

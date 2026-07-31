@@ -84,10 +84,7 @@ test("Animation Library lists all metadata but mounts only the selected host", a
   const frame = page.locator("[data-animation-library-frame]");
   await expect(frame).toHaveCount(1);
   await expect(frame).toHaveAttribute("src", "/reader/radical-succession/");
-  await page
-    .frameLocator("[data-animation-library-frame]")
-    .locator("[data-kp-reader-equation-stage]")
-    .waitFor();
+  await waitForSelectedHost(page, "/reader/radical-succession/");
   expect(
     await inspectSelectedHostLeasePool(page)
   ).toMatchObject({ limit: 2, waiting: 0 });
@@ -110,10 +107,7 @@ test("Animation Library lists all metadata but mounts only the selected host", a
     "/reader/split-merge-fractions/"
   );
   await expect(frame).toHaveCount(1);
-  await page
-    .frameLocator("[data-animation-library-frame]")
-    .locator("[data-kp-reader-equation-stage]")
-    .waitFor();
+  await waitForSelectedHost(page, "/reader/split-merge-fractions/");
   expect((await inspectSelectedHostLeasePool(page)).active).toBeLessThanOrEqual(
     1
   );
@@ -140,10 +134,7 @@ test("Animation Library lists all metadata but mounts only the selected host", a
     "src",
     "/reader/foldable-distribution/"
   );
-  await page
-    .frameLocator("[data-animation-library-frame]")
-    .locator("[data-kp-reader-equation-stage]")
-    .waitFor();
+  await waitForSelectedHost(page, "/reader/foldable-distribution/");
   expect(
     documentRequests.filter((path) => path.startsWith("/reader/"))
   ).toEqual([
@@ -230,7 +221,13 @@ test("operation evaluation opens in the wide focused player host", async ({
   await expect(frame.locator(
     "[data-kp-operation-evaluation-primary-panel] " +
     "[data-kp-operation-evaluation-stage]"
-  )).toHaveAttribute("data-kp-operation-evaluation-status", "ready");
+  )).toHaveAttribute(
+    "data-kp-operation-evaluation-status",
+    "ready",
+    // Cold Vite compilation can outlive Playwright's generic five-second UI
+    // assertion; the production liveness suite retains the route-wide budget.
+    { timeout: 15_000 }
+  );
   const diagnostic = frame.locator(
     "[data-kp-operation-evaluation-diagnostic]"
   );
@@ -1119,4 +1116,17 @@ async function inspectSelectedHostLeasePool(page: Page): Promise<{
       const pool = await import(/* @vite-ignore */ poolUrl);
       return pool.inspectKpWebglContextLeasePool(document);
     });
+}
+
+async function waitForSelectedHost(
+  page: Page,
+  pathname: string
+): Promise<void> {
+  // The iframe src attribute changes before its old document is replaced.
+  // Waiting for the child frame URL prevents inspection of a dying context.
+  await expect.poll(() => page.frames().find((frame) =>
+    frame.parentFrame() === page.mainFrame()
+  )?.url()).toContain(pathname);
+  await page.frameLocator("[data-animation-library-frame]")
+    .locator("[data-kp-reader-equation-stage]").waitFor();
 }
