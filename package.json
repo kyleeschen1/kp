@@ -39,6 +39,7 @@
     "test:browser:canonical-animation-review": "playwright test tests/canonical-animation-review.browser.spec.ts tests/canonical-animation-review-live.browser.spec.ts --project=chromium --workers=1",
     "visual:animation-library-display": "playwright test tests/canonical-animation-review.browser.spec.ts tests/canonical-animation-review-live.browser.spec.ts --project=chromium --workers=1",
     "visual:animation-library-hosts": "playwright test tests/canonical-animation-library-liveness.browser.spec.ts --project=chromium --workers=1",
+    "visual:animation-library-live-server": "playwright test --config playwright.animation-library-live.config.ts --project=chromium --workers=1",
     "visual:animation-library-operation-evaluation": "playwright test tests/canonical-animation-review.browser.spec.ts --project=chromium --workers=1 --grep \"operation evaluation opens\"",
     "visual:foldable-review-boundaries": "playwright test tests/canonical-animation-review.browser.spec.ts --grep \"automatic fold schedules\" --project=chromium --project=firefox --workers=1",
     "test:browser:canonical-animation-review:packaged": "playwright test tests/canonical-animation-export-packaged.browser.spec.ts --config playwright.canonical-animation-review-packaged.config.ts --project=chromium --workers=1",

@@ -31,6 +31,47 @@
     "npm run build",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:animation-library-live-server",
+      "status": "passed",
+      "scope": "persistent-webview-host",
+      "checkedAt": "2026-07-31T21:11:08.215Z",
+      "notes": "Both catalog traversal and rapid selection/reload passed against the long-lived server on port 8000."
+    },
+    {
+      "command": "npm run visual:animation-library-hosts",
+      "status": "passed",
+      "scope": "clean-animation-host",
+      "checkedAt": "2026-07-31T21:11:09.964Z",
+      "notes": "Both liveness scenarios passed against a clean Playwright-managed server."
+    },
+    {
+      "command": "npm run visual:animation-library-display",
+      "status": "passed",
+      "scope": "shared-animation-display",
+      "checkedAt": "2026-07-31T21:11:11.248Z",
+      "notes": "All ten dashboard, deep-link, responsive, and review-capture checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typescript-boundary",
+      "checkedAt": "2026-07-31T21:11:12.176Z",
+      "notes": "Application, node, test, and domain projects passed."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "production-boundary",
+      "checkedAt": "2026-07-31T21:11:13.119Z",
+      "notes": "Production closure passed across 250 files with no forbidden review markers."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice 1 repaired and guarded the shared animation host. Pausing at HUMAN_CHECKPOINT for confirmation that the actual webview no longer reports Animation Host Did not render before release-baseline characterization begins."
+  },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."
   ],
