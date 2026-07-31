@@ -214,3 +214,45 @@ test("handoff rejects copied authority and mismatched native endpoints", () => {
     /matching native lifetime/u
   );
 });
+
+test("one transit cannot mint duplicate visible endpoint ownership", () => {
+  const source = defineKpPersistentWorkspaceRegion({
+    id: "region.source.unique",
+    kind: "operation-destination",
+    semanticRole: "evaluated-total"
+  });
+  const endpointRegion = defineKpPersistentWorkspaceRegion({
+    id: "region.endpoint.unique",
+    kind: "native-endpoint",
+    semanticRole: "result-slot"
+  });
+  const endpoint = defineKpSemanticDestination({
+    id: "destination.endpoint.unique",
+    semanticEntityId: "result.ones",
+    region: endpointRegion
+  });
+  const transit = defineKpTransitOwnership({
+    materialEntityId: "result.material.unique",
+    route: defineKpMeasuredRouteIntent({
+      id: "route.result.unique",
+      kind: "converge",
+      materialEntityId: "result.material.unique",
+      fromRegion: source,
+      to: endpoint
+    })
+  });
+  const endpointLifetime = defineKpPersistentNativeEndpointLifetime({
+    entityId: "result.ones",
+    region: endpointRegion
+  });
+
+  defineKpEndpointHandoff({ transit, endpoint, endpointLifetime });
+  assert.throws(
+    () => defineKpEndpointHandoff({
+      transit,
+      endpoint,
+      endpointLifetime
+    }),
+    /one unclaimed route target/u
+  );
+});

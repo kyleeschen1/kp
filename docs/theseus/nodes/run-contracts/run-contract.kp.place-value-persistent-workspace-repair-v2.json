@@ -156,6 +156,41 @@
       "scope": "s05 bounded public type surface",
       "checkedAt": "2026-07-31T03:59:46.205Z",
       "notes": "After retaining nominal plan authority with runtime copy rejection and testing static stage bypasses at the small base contract, inference returned to 49083 types, 61566 instantiations, and 2.32 seconds without raising the ceiling."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s06 adversarial conformance",
+      "checkedAt": "2026-07-31T04:06:04.228Z",
+      "notes": "107 of 107 pass; scene replacement, disappearing history, copied routes, authored teleport geometry, copied ownership, copied plans, and duplicate handoff claims fail closed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06 conformance authority",
+      "checkedAt": "2026-07-31T04:06:05.324Z",
+      "notes": "All application, Node, test, domain, and static negative fixtures accept the linear handoff authority boundary."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s06 boundary classification",
+      "checkedAt": "2026-07-31T04:06:06.223Z",
+      "notes": "No renderer, runtime, compositor, or compatibility exception was introduced."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s06 first timing sample",
+      "checkedAt": "2026-07-31T04:06:07.093Z",
+      "notes": "The first parallel sample kept the exact 49083 types and 61566 instantiations but measured 7.27 seconds while other TypeScript jobs were running; no ceiling or code change followed."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s06 isolated timing sample",
+      "checkedAt": "2026-07-31T04:06:07.965Z",
+      "notes": "The isolated gate passed without raising a ceiling: 49083 types, 61566 instantiations, 2.19 seconds."
     }
   ],
   "allowedWork": [
@@ -212,7 +247,8 @@
     {
       "id": "s06",
       "title": "add-adversarial-conformance",
-      "status": "planned"
+      "summary": "Added renderer-facing nominal conformance authority and closed the remaining duplicate-paint hole by treating each transit as a single-use handoff capability. Adversarial cases for scene replacement, disappearing documentary history, wrong or copied routes, authored teleport geometry, copied plans, and duplicate endpoint claims fail before runtime.",
+      "status": "complete"
     },
     {
       "id": "s07",

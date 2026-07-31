@@ -28,8 +28,10 @@ import {
 } from "./persistent-workspace.ts";
 
 declare const kpPlaceValuePersistentWorkspaceBrand: unique symbol;
+declare const kpPlaceValuePersistentWorkspaceConformanceBrand: unique symbol;
 
 const sealedPlans = new WeakSet<object>();
+const sealedConformance = new WeakSet<object>();
 
 export interface KpPlaceValuePersistentOutputPlan {
   readonly destination: KpSemanticDestination<"native-endpoint">;
@@ -62,6 +64,16 @@ export interface KpPlaceValuePersistentWorkspacePlan {
     readonly carry: KpPlaceValuePersistentOutputPlan;
   };
   readonly [kpPlaceValuePersistentWorkspaceBrand]: true;
+}
+
+export interface KpPlaceValuePersistentWorkspaceConformance {
+  readonly plan: KpPlaceValuePersistentWorkspacePlan;
+  readonly traceId: string;
+  readonly implementationScope: "ones-cycle-only";
+  readonly documentaryPolicy: "same-connected-node-full-timeline";
+  readonly routePolicy: "measured-no-teleport";
+  readonly ownershipPolicy: "one-visible-owner";
+  readonly [kpPlaceValuePersistentWorkspaceConformanceBrand]: true;
 }
 
 export function compileKpPlaceValuePersistentWorkspacePlan(input: {
@@ -251,9 +263,85 @@ export function isKpPlaceValuePersistentWorkspacePlan(
 
 export function bindKpPlaceValuePersistentWorkspacePlan(
   plan: KpPlaceValuePersistentWorkspacePlan
-): string {
+): KpPlaceValuePersistentWorkspaceConformance {
   if (!isKpPlaceValuePersistentWorkspacePlan(plan)) {
     throw new Error("Cannot bind a copied persistent workspace plan.");
   }
-  return plan.traceId;
+  const uniqueEntities = new Set(plan.nativeEntityIds);
+  const lifetimeEntities = new Set(
+    plan.lifetimes.map(({ entityId }) => entityId)
+  );
+  const documentaryLifetimes = plan.lifetimes.filter(
+    (lifetime) => lifetime.kind === "documentary"
+  );
+  const outputs = [
+    plan.onesOperation.result,
+    plan.onesOperation.carry
+  ];
+  if (
+    uniqueEntities.size !== plan.nativeEntityIds.length ||
+    lifetimeEntities.size !== plan.lifetimes.length ||
+    plan.nativeEntityIds.some((entityId) => !lifetimeEntities.has(entityId)) ||
+    plan.lifetimes.some(
+      ({ startPermille, endPermille, nodePolicy, geometryPolicy }) =>
+        startPermille !== 0 ||
+        endPermille !== 1_000 ||
+        nodePolicy !== "same-connected-node" ||
+        geometryPolicy !== "stationary"
+    ) ||
+    documentaryLifetimes.some(
+      (lifetime) =>
+        lifetime.initialVisibility !== "visible" ||
+        (
+          lifetime.consumptionPolicy !== "monotone-dim-never-hide" &&
+          lifetime.consumptionPolicy !== "remain-opaque"
+        )
+    ) ||
+    plan.onesOperation.contributionRoutes.some(
+      (route) =>
+        route.to !== plan.onesOperation.totalDestination ||
+        route.kind !== "converge" ||
+        route.authoredGeometry !== false
+    ) ||
+    outputs.some(
+      ({ destination, route, transit, handoff }) =>
+        route.to !== destination ||
+        route.authoredGeometry !== false ||
+        transit.route !== route ||
+        transit.paintPolicy !== "visible-and-opaque-through-route" ||
+        transit.releasePolicy !== "only-after-native-endpoint-match" ||
+        handoff.transit !== transit ||
+        handoff.endpoint !== destination ||
+        handoff.ownershipPolicy !== "exclusive-at-native-match" ||
+        handoff.opacityPolicy !== "opaque"
+    ) ||
+    plan.onesOperation.result.destination.semanticEntityId !== "result.ones" ||
+    plan.onesOperation.carry.destination.semanticEntityId !== "carry.tens" ||
+    plan.onesOperation.carry.route.kind !== "carry-arch" ||
+    plan.onesOperation.result.transit.materialEntityId ===
+      plan.onesOperation.carry.transit.materialEntityId
+  ) {
+    throw new Error(
+      "Persistent workspace plan violates documentary, route, or ownership conformance."
+    );
+  }
+  const certificate = Object.freeze({
+    plan,
+    traceId: plan.traceId,
+    implementationScope: plan.implementationScope,
+    documentaryPolicy: "same-connected-node-full-timeline" as const,
+    routePolicy: "measured-no-teleport" as const,
+    ownershipPolicy: "one-visible-owner" as const
+  });
+  sealedConformance.add(certificate);
+  return certificate as unknown as
+    KpPlaceValuePersistentWorkspaceConformance;
+}
+
+export function isKpPlaceValuePersistentWorkspaceConformance(
+  value: unknown
+): value is KpPlaceValuePersistentWorkspaceConformance {
+  return typeof value === "object" &&
+    value !== null &&
+    sealedConformance.has(value);
 }

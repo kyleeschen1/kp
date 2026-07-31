@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   bindKpPlaceValuePersistentWorkspacePlan,
   compileKpPlaceValuePersistentWorkspacePlan,
+  isKpPlaceValuePersistentWorkspaceConformance,
   isKpPlaceValuePersistentWorkspacePlan
 } from "../src/animation/place-value-addition-persistent-workspace.ts";
 import {
@@ -96,8 +97,21 @@ test("workspace plan contains policy and lineage but no geometry", () => {
 
 test("workspace plan authority is nominal and copy-resistant", () => {
   const plan = compileKpPlaceValuePersistentWorkspacePlan();
+  const conformance = bindKpPlaceValuePersistentWorkspacePlan(plan);
 
-  assert.equal(bindKpPlaceValuePersistentWorkspacePlan(plan), plan.traceId);
+  assert.equal(isKpPlaceValuePersistentWorkspaceConformance(
+    conformance
+  ), true);
+  assert.equal(conformance.traceId, plan.traceId);
+  assert.equal(conformance.plan, plan);
+  assert.equal(conformance.documentaryPolicy,
+    "same-connected-node-full-timeline");
+  assert.equal(conformance.routePolicy, "measured-no-teleport");
+  assert.equal(conformance.ownershipPolicy, "one-visible-owner");
+  assert.equal(
+    isKpPlaceValuePersistentWorkspaceConformance({ ...conformance }),
+    false
+  );
   assert.equal(
     isKpPlaceValuePersistentWorkspacePlan({ ...plan }),
     false

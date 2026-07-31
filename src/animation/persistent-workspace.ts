@@ -11,6 +11,7 @@ const sealedDestinations = new WeakSet<object>();
 const sealedRoutes = new WeakSet<object>();
 const sealedTransits = new WeakSet<object>();
 const sealedHandoffs = new WeakSet<object>();
+const handedOffTransits = new WeakSet<object>();
 
 export type KpPersistentWorkspaceRegionKind =
   | "documentary"
@@ -77,6 +78,8 @@ export interface KpSemanticDestination<
   readonly [kpWorkspaceDestinationBrand]: true;
 }
 
+// Destinations describe semantic truth; renderers alone resolve their connected
+// paint geometry so a compiler cannot smuggle an authored motion path downstream.
 export interface KpMeasuredRouteIntent {
   readonly id: string;
   readonly kind: "converge" | "carry-arch";
@@ -258,10 +261,11 @@ export function defineKpEndpointHandoff(input: {
     input.endpointLifetime.kind !== "native-endpoint" ||
     input.transit.route.to !== input.endpoint ||
     input.endpoint.region !== input.endpointLifetime.region ||
-    input.endpoint.semanticEntityId !== input.endpointLifetime.entityId
+    input.endpoint.semanticEntityId !== input.endpointLifetime.entityId ||
+    handedOffTransits.has(input.transit)
   ) {
     throw new Error(
-      "Endpoint handoff requires one route target and its matching native lifetime."
+      "Endpoint handoff requires one unclaimed route target and its matching native lifetime."
     );
   }
   const handoff = Object.freeze({
@@ -269,6 +273,9 @@ export function defineKpEndpointHandoff(input: {
     ownershipPolicy: "exclusive-at-native-match" as const,
     opacityPolicy: "opaque" as const
   });
+  // A transit is a linear capability: two handoffs would briefly give the
+  // moving paint and native endpoint concurrent visible ownership.
+  handedOffTransits.add(input.transit);
   sealedHandoffs.add(handoff);
   return handoff as unknown as KpEndpointHandoff;
 }
