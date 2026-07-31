@@ -157,6 +157,22 @@ learner animation has:
 Explicit static checkpoints and diagnostic examples remain honest evidence, but
 they do not satisfy animated promotion.
 
+## Visual Discovery And Verification Cadence
+
+Subjective motif work follows the accepted exemplar-first cadence in
+`decisions/2026-07-31-kp-exemplar-first-visual-verification-cadence.md`.
+Durable semantic, ownership, clock, endpoint, accessibility, and known-
+regression contracts remain test-first. New choreography and visual language
+begin as one reversible exemplar with focused preservation checks, then stop
+for human selection. Motif-specific certification, a structurally different
+second caller, and the expensive release matrix follow approval rather than
+precede it.
+
+The current rank-2 checkpoint includes a bounded `8 + 6 → 14` source-derived
+ink-union experiment. It may reshape the compositor's existing opaque paint
+but does not yet change the shared operation-evaluation motif or authorize
+other position evaluations.
+
 ## Progress Update Protocol
 
 After a promotion closes:
@@ -207,6 +223,7 @@ exists.
 - `docs/project/decisions/2026-07-28-kp-stable-animation-promotion-order.md`
 - `docs/project/decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md`
 - `docs/project/decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md`
+- `docs/project/decisions/2026-07-31-kp-exemplar-first-visual-verification-cadence.md`
 - `docs/project/reviews/2026-07-30-place-value-persistent-workspace-repair-long-loop-proposal.md`
 - `docs/project/reviews/2026-07-31-place-value-persistent-workspace-repair-closeout.md`
 - `docs/project/reviews/2026-07-28-kp-promotion-memory-and-architecture-next-step-review.md`

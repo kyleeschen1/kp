@@ -1,0 +1,82 @@
+{
+  "id": "next-action.refill.experiment.plan-revision.kp.v18.composition-environment-sequence",
+  "kind": "next-action",
+  "title": "Test composition-environment-sequence",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Run a bounded uncertainty-reduction experiment for: KP pressures equation succession, persistent workspace algorithms, and synchronized model views in that order, extracting only failed generic invariants before returning to concrete exemplars. Selection rationale: The user approved locking the exemplar-first validation cadence into project memory and implementing one reversible ink-union evaluation exemplar before any generalization.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Approved refill option refill.experiment.plan-revision.kp.v18.composition-environment-sequence: The user approved locking the exemplar-first validation cadence into project memory and implementing one reversible ink-union evaluation exemplar before any generalization.",
+      "occurredAt": "2026-07-31T17:53:12.280Z"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-31-kp-exemplar-first-visual-verification-cadence.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/place-value-addition-ink-union-experiment.ts"
+    }
+  ],
+  "affects": [
+    "plan-revision.kp.v18"
+  ],
+  "verification": [
+    "theseus validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "focused semantic and architecture preservation",
+      "checkedAt": "2026-07-31T18:04:22.660Z",
+      "notes": "All 116 existing place-value unit cases pass; no motif-specific certification was added before visual approval."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition:ones-cycle",
+      "status": "passed",
+      "scope": "focused wide phone compositor boundary",
+      "checkedAt": "2026-07-31T18:04:23.718Z",
+      "notes": "All 12 Chromium Firefox WebKit contribution-convergence and carry-arch cases pass with the exemplar filter mounted."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typed integration",
+      "checkedAt": "2026-07-31T18:04:24.683Z",
+      "notes": "Application Node test and domain TypeScript projects pass."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "patch hygiene",
+      "checkedAt": "2026-07-31T18:04:25.757Z",
+      "notes": "Workflow documentation and exemplar implementation contain no whitespace errors."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Locked the faster exemplar-first verification cadence into project memory and implemented the reversible source-derived ink-union treatment only for sequence index 0. Existing semantic ownership clocks endpoints and sibling evaluations are preserved. Stop at human visual review before motif formalization or generalization."
+  },
+  "expectedLearning": [
+    "An approved plan depends on an active assumption without outcome evidence."
+  ],
+  "allowedWork": [
+    "Run a bounded uncertainty-reduction experiment for: KP pressures equation succession, persistent workspace algorithms, and synchronized model views in that order, extracting only failed generic invariants before returning to concrete exemplars."
+  ],
+  "disallowedWork": [
+    "Do not broaden beyond the selected refill option without another approval."
+  ],
+  "criteria": [
+    {
+      "id": "selected-option-addressed",
+      "weight": "high"
+    },
+    {
+      "id": "selection-provenance-preserved",
+      "weight": "high"
+    }
+  ]
+}

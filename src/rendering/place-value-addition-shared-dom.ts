@@ -15,6 +15,9 @@ import {
   createKpPlaceValueColumnEvaluationDom
 } from "./place-value-addition-column-evaluation.ts";
 import {
+  kpPlaceValueInkUnionExperimentKind
+} from "./place-value-addition-ink-union-experiment.ts";
+import {
   createKpPlaceValueColumnExchangeDom,
   type KpPlaceValueColumnExchangeFrame
 } from "./place-value-addition-column-exchange.ts";
@@ -90,7 +93,12 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     (evaluation) => createKpPlaceValueColumnEvaluationDom({
       document: input.document,
       projection: input.session.written,
-      evaluation
+      evaluation,
+      // The first ordered position is the reversible visual exemplar. Do not
+      // generalize this treatment until human review selects the motif.
+      ...(evaluation.program.position.sequenceIndex === 0
+        ? { visualExperiment: kpPlaceValueInkUnionExperimentKind }
+        : {})
     })
   );
   const exchangeScenes = input.session.columnExchanges.map(

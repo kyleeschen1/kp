@@ -41,6 +41,10 @@ import {
   type KpPlaceValueWrittenMotionProxy,
   type KpPlaceValueWrittenOwnershipPlan
 } from "./place-value-addition-written-ownership.ts";
+import {
+  createKpPlaceValueInkUnionExperiment,
+  kpPlaceValueInkUnionExperimentKind
+} from "./place-value-addition-ink-union-experiment.ts";
 
 declare const kpPlaceValueColumnEvaluationBrand: unique symbol;
 
@@ -193,6 +197,8 @@ export function createKpPlaceValueColumnEvaluationDom(input: {
   readonly document: Document;
   readonly projection: KpPlaceValueWrittenColumnProjection;
   readonly evaluation: KpPlaceValueColumnEvaluation;
+  readonly visualExperiment?:
+    typeof kpPlaceValueInkUnionExperimentKind | undefined;
 }): KpPlaceValueColumnEvaluationDom {
   if (!isKpPlaceValueColumnEvaluation(input.evaluation)) {
     throw new Error(
@@ -254,6 +260,12 @@ export function createKpPlaceValueColumnEvaluationDom(input: {
   scene.root.dataset["kpPlaceValuePositionId"] = program.position.id;
   scene.root.dataset["kpOperationEvaluationProgramId"] =
     input.evaluation.forward.programId;
+  const inkUnion = input.visualExperiment === undefined
+    ? undefined
+    : createKpPlaceValueInkUnionExperiment({
+        document: input.document,
+        sceneRoot: scene.root
+      });
   const prepare = (): void => {
     scene.prepare();
     suppressPersistentSourceCopies(source, ownership);
@@ -275,9 +287,13 @@ export function createKpPlaceValueColumnEvaluationDom(input: {
       scene.root.dataset["kpOperationEvaluationProgress"] = String(progress);
       const frame = scene.apply(progress);
       suppressCompilerOnlyCatalyst(scene.root, ownership);
+      inkUnion?.apply(progress);
       return frame;
     },
-    dispose: scene.dispose
+    dispose() {
+      inkUnion?.dispose();
+      scene.dispose();
+    }
   });
 }
 

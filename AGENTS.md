@@ -35,6 +35,30 @@ Apply this protocol to subjective visual, motion, interaction, and LLM-generated
 - In grill-me sessions, batch low-impact decisions behind recommended defaults and interrupt only for choices that materially affect architecture, product behavior, or aesthetics.
 - Visual run contracts must identify their exemplar checkpoint, promotion criteria, preservation boundary, rollback unit, and post-approval generalization slices.
 
+## Visual discovery and test timing
+
+Use a hybrid verification cadence for subjective visual work. Do not build a
+full certification matrix for an aesthetic treatment that has not passed its
+canonical human checkpoint.
+
+- Test durable truth first: semantic correctness, typed authority, lifecycle
+  and paint ownership, deterministic clocks, native endpoints, accessibility,
+  and previously observed regressions.
+- During visual discovery, build one reversible exemplar with only the
+  smallest smoke and preservation checks needed to keep the spike inside the
+  existing architecture.
+- Let human review select choreography, timing, shape, emphasis, and visual
+  language before encoding those choices as reusable contracts.
+- After approval, add motif-specific regression checks, pressure the motif
+  with one structurally different caller, then run the expensive responsive
+  and cross-browser release matrix.
+- A visual spike does not authorize a shared type family, general renderer
+  seam, catalog-wide rollout, or compatibility migration. Promote those only
+  when the approved exemplar and second caller demonstrate the boundary.
+- Prefer cheap unit and single-exemplar checks during discovery. Reserve dense
+  sampling, complete browser matrices, and broad product regression for
+  promotion and release boundaries.
+
 ## Plan and execution ownership
 
 - Keep one human-readable plan and one executable control record. For a
