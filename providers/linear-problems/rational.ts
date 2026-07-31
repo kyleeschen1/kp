@@ -1,20 +1,20 @@
-import type { ExactRationalDto } from "../../protocols/public-api.ts";
 import {
-  addKpRationals,
-  createKpRational,
-  divideKpRationals,
-  equalKpRationals,
-  isZeroKpRational,
-  multiplyKpRationals,
-  negateKpRational,
-  subtractKpRationals,
-  type KpNormalizedRational
-} from "../../domains/math/exact-rational.ts";
+  addExactRationals,
+  createExactRational,
+  divideExactRationals,
+  equalExactRationals,
+  isZeroExactRational,
+  multiplyExactRationals,
+  negateExactRational,
+  subtractExactRationals,
+  type ExactRationalDto,
+  type NormalizedExactRational
+} from "../../protocols/public-api.ts";
 
-export type ExactRational = KpNormalizedRational;
+export type ExactRational = NormalizedExactRational;
 
 export function rational(numerator: bigint, denominator: bigint = 1n): ExactRational {
-  return createKpRational(numerator, denominator);
+  return createExactRational(numerator, denominator);
 }
 
 export function rationalFromDto(dto: ExactRationalDto): ExactRational {
@@ -30,29 +30,29 @@ export function rationalToDto(value: ExactRational): ExactRationalDto {
 }
 
 export function addRational(left: ExactRational, right: ExactRational): ExactRational {
-  return addKpRationals(left, right);
+  return addExactRationals(left, right);
 }
 
 export function subtractRational(left: ExactRational, right: ExactRational): ExactRational {
-  return subtractKpRationals(left, right);
+  return subtractExactRationals(left, right);
 }
 
 export function multiplyRational(left: ExactRational, right: ExactRational): ExactRational {
-  return multiplyKpRationals(left, right);
+  return multiplyExactRationals(left, right);
 }
 
 export function divideRational(left: ExactRational, right: ExactRational): ExactRational {
-  return divideKpRationals(left, right);
+  return divideExactRationals(left, right);
 }
 
 export function negateRational(value: ExactRational): ExactRational {
-  return negateKpRational(value);
+  return negateExactRational(value);
 }
 
 export function equalRational(left: ExactRational, right: ExactRational): boolean {
-  return equalKpRationals(left, right);
+  return equalExactRationals(left, right);
 }
 
 export function isZeroRational(value: ExactRational): boolean {
-  return isZeroKpRational(value);
+  return isZeroExactRational(value);
 }

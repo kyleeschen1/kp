@@ -115,7 +115,8 @@
     {
       "id": "s10",
       "title": "migrate-rational-callers",
-      "status": "planned"
+      "summary": "The linear provider rational facade now delegates to the neutral protocol entrypoint while retaining every existing ExactRational, rational, DTO, and operation export. Seventeen provider tests, seven integration/mapper tests, provider/full typechecks, and architecture gates pass; no fixture or public provider behavior changed.",
+      "status": "complete"
     },
     {
       "id": "s11",
