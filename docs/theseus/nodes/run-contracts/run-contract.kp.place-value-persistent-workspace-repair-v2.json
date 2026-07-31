@@ -303,6 +303,83 @@
       "scope": "s09 isolated timing sample",
       "checkedAt": "2026-07-31T04:32:45.787Z",
       "notes": "The isolated inference gate passed at 49086 types, 61566 instantiations, and 2.63 seconds."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "failed",
+      "scope": "s10 broad pre-checkpoint matrix",
+      "checkedAt": "2026-07-31T05:02:50.460Z",
+      "notes": "75 of 96 passed before the perimeter repair. The matrix exposed one real cross-browser carry/documentary collision plus stale or intentionally pre-generalization assertions in navigation, DPR, and later-column tests. The real ones-cycle collision was repaired; no tens or hundreds work began."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition:ones-cycle",
+      "status": "passed",
+      "scope": "s10 mandatory three-browser ones checkpoint",
+      "checkedAt": "2026-07-31T05:02:59.709Z",
+      "notes": "12 of 12 pass across Chromium, Firefox, and WebKit at wide and phone widths. Dense checks cover exact 14 convergence, full-size opaque carry transit, collision-free measured perimeter arch, endpoint paint/font/baseline match, native handoff, direct seek, and rewind."
+    },
+    {
+      "command": "npm run visual:place-value-addition",
+      "status": "failed",
+      "scope": "s10 product boundary after ones repair",
+      "checkedAt": "2026-07-31T05:03:09.848Z",
+      "notes": "21 of 30 passed. All nine canonical Animation Library host checks and all nine runtime lifecycle/determinism checks passed across three browsers. Six responsive failures occur only at progress 0.4 where the approved persistent scaffold meets the still-legacy tens overlay; three DPR failures query the retired phase-local grid. These are the explicit s11 generalization/test-migration boundary, not ones-cycle failures."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s10 final focused contract",
+      "checkedAt": "2026-07-31T05:03:21.131Z",
+      "notes": "107 of 107 pass after the measured perimeter-arch repair."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s10 cross-browser route types",
+      "checkedAt": "2026-07-31T05:03:22.361Z",
+      "notes": "Application, Node, test, and domain projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s10 compositor boundary",
+      "checkedAt": "2026-07-31T05:03:23.306Z",
+      "notes": "All architecture gates pass; the repair changes the existing generic fission path and adds no renderer, runtime, lifecycle, or compatibility exception."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s10 type-system cost",
+      "checkedAt": "2026-07-31T05:03:24.220Z",
+      "notes": "Inference remains bounded at 49086 types, 61566 instantiations, and 2.5 seconds."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s10 production build",
+      "checkedAt": "2026-07-31T05:04:44.755Z",
+      "notes": "Production build passes. The existing chunk-size advisory remains unchanged."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s10 durable roadmap alignment",
+      "checkedAt": "2026-07-31T05:04:45.865Z",
+      "notes": "Rank 2 place-value addition and active persistent-workspace repair contract remain aligned."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s10 control-plane integrity",
+      "checkedAt": "2026-07-31T05:04:46.800Z",
+      "notes": "Workspace validates at 841 nodes and 14917 events before checkpoint closure."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s10 patch hygiene",
+      "checkedAt": "2026-07-31T05:04:47.694Z",
+      "notes": "Scoped product, test, package, and Theseus changes contain no whitespace errors."
     }
   ],
   "allowedWork": [
@@ -383,7 +460,8 @@
     {
       "id": "s10",
       "title": "human-ones-checkpoint",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT. Committed exemplar scope now proves the ones operation only: persistent documentary scaffold, exact measured 14 convergence, opaque full-size remainder and carry, cross-browser collision-free measured perimeter arch, and exclusive native endpoint handoff. The focused wide/phone Chromium Firefox WebKit matrix passes 12 of 12, unit/type/architecture/inference/build gates pass, and the canonical Animation Library host mounts in all three browsers. The broad visual suite remains intentionally red at progress 0.4 where the unported legacy tens overlay duplicates persistent paint, plus three stale DPR grid queries. No s11 later-column work began; explicit human visual approval is required.",
+      "status": "complete"
     },
     {
       "id": "s11",

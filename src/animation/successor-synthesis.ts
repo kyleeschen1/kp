@@ -449,7 +449,8 @@ export function sampleKpSuccessorSynthesis(input: {
       input.plan.targetSeedScale,
       input.plan.junctionOwner === "source" &&
         input.plan.layoutTopology === "separate-source-result-bands" &&
-        input.plan.layoutTopologyAuthority === "compiler"
+        input.plan.layoutTopologyAuthority === "compiler",
+      unionRect(input.plan.materialInputs.map(({ rect }) => rect))
     )
   }));
   return {
@@ -1021,19 +1022,29 @@ function targetPose(
   junction: { readonly x: number; readonly y: number },
   progress: number,
   scaleFrom: number,
-  routeOutsideDestinationColumn = false
+  routeOutsideDestinationColumn = false,
+  sourceBounds?: KpMaterialJunctionRect
 ): KpSuccessorSynthesisPose {
   const target = center(member.rect);
   const verticalTransit =
     Math.abs(target.y - junction.y) > member.rect.height * 0.5;
-  const position = quadratic(
-    junction,
-    routeOutsideDestinationColumn && verticalTransit
-      ? fissionTargetControl(junction, target, member)
-      : arcControl(junction, target, member.pathFamily, 6),
-    target,
-    progress
-  );
+  const position =
+    routeOutsideDestinationColumn &&
+      verticalTransit &&
+      sourceBounds !== undefined
+      ? fissionTargetPosition(
+          junction,
+          target,
+          sourceBounds,
+          member,
+          progress
+        )
+      : quadratic(
+          junction,
+          arcControl(junction, target, member.pathFamily, 6),
+          target,
+          progress
+        );
   return {
     x: position.x - target.x,
     y: position.y - target.y,
@@ -1042,24 +1053,35 @@ function targetPose(
   };
 }
 
-function fissionTargetControl(
+function fissionTargetPosition(
   from: { readonly x: number; readonly y: number },
   target: { readonly x: number; readonly y: number },
-  member: KpSuccessorSynthesisMember
+  sourceBounds: KpMaterialJunctionRect,
+  member: KpSuccessorSynthesisMember,
+  progress: number
 ): { readonly x: number; readonly y: number } {
-  const towardTarget = Math.sign(target.x - from.x);
-  const awayFromDestination = towardTarget === 0
-    ? member.pathFamily === "arc-above" ? 1 : -1
-    : -towardTarget;
-  return {
-    // Carries rise outside the occupied destination column and only move
-    // laterally after clearing its addend rows. Clearance derives from the
-    // measured target glyph rather than a digit or viewport-specific offset.
-    x: from.x + awayFromDestination *
-      Math.max(10, member.rect.width * 2),
-    y: (from.y + target.y) / 2 +
-      (member.pathFamily === "arc-above" ? -6 : 6)
-  };
+  const outsideDirection =
+    Math.sign(from.x - target.x) ||
+    (member.pathFamily === "arc-above" ? 1 : -1);
+  const sourceEdge = outsideDirection > 0
+    ? sourceBounds.left + sourceBounds.width
+    : sourceBounds.left;
+  const outsideX =
+    sourceEdge +
+    outsideDirection * (
+      sourceBounds.width + member.rect.width
+    );
+  // A full-size carry is wider than the inter-column gap in some browser font
+  // engines. The cubic leaves sideways while still below documentary rows,
+  // rises beyond the measured source-paint perimeter, then enters the native
+  // slot above those rows. A vertical gap route cannot make that guarantee.
+  return cubic(
+    from,
+    { x: outsideX, y: from.y },
+    { x: outsideX, y: target.y },
+    target,
+    progress
+  );
 }
 
 function junctionSlot(
@@ -1128,6 +1150,28 @@ function quadratic(
   return {
     x: remaining * remaining * start.x + 2 * remaining * progress * control.x + progress * progress * end.x,
     y: remaining * remaining * start.y + 2 * remaining * progress * control.y + progress * progress * end.y
+  };
+}
+
+function cubic(
+  start: { readonly x: number; readonly y: number },
+  firstControl: { readonly x: number; readonly y: number },
+  secondControl: { readonly x: number; readonly y: number },
+  end: { readonly x: number; readonly y: number },
+  progress: number
+): { readonly x: number; readonly y: number } {
+  const remaining = 1 - progress;
+  return {
+    x:
+      remaining ** 3 * start.x +
+      3 * remaining ** 2 * progress * firstControl.x +
+      3 * remaining * progress ** 2 * secondControl.x +
+      progress ** 3 * end.x,
+    y:
+      remaining ** 3 * start.y +
+      3 * remaining ** 2 * progress * firstControl.y +
+      3 * remaining * progress ** 2 * secondControl.y +
+      progress ** 3 * end.y
   };
 }
 

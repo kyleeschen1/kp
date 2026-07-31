@@ -287,6 +287,34 @@ for (const viewport of [
         visibility: getComputedStyle(element).visibility,
         ownership: element.dataset["kpNativeEndpointOwnership"]
       }));
+      const documentaryOverlap = (moving: ReturnType<typeof metric>) => {
+        const documentaryIds = [
+          "digit.first.hundreds",
+          "digit.first.tens",
+          "digit.first.ones",
+          "digit.second.hundreds",
+          "digit.second.tens",
+          "digit.second.ones"
+        ];
+        return documentaryIds.map((id) => {
+          const fixed = metric(
+            (dom.writtenRoot as HTMLElement)
+              .querySelector<HTMLElement>(
+                `[data-kp-semantic-entity-id="${id}"]`
+              )!
+          );
+          return {
+            width: Math.max(0, Math.min(
+              moving.left + moving.width,
+              fixed.left + fixed.width
+            ) - Math.max(moving.left, fixed.left)),
+            height: Math.max(0, Math.min(
+              moving.top + moving.height,
+              fixed.top + fixed.height
+            ) - Math.max(moving.top, fixed.top))
+          };
+        });
+      };
       const localToGlobal = (local: number) => 0.25 + local * 0.15;
       const transferSamples = [];
       let previous = 0;
@@ -320,10 +348,12 @@ for (const viewport of [
       ].entries()) {
         const progress = localToGlobal(local);
         dom.apply(sample(progress, previous, 10 + sequence));
+        const carry = metric(owner("carry"));
         route.push({
           local,
-          carry: metric(owner("carry")),
+          carry,
           remainder: metric(owner("remainder")),
+          documentaryOverlap: documentaryOverlap(carry),
           stageOwnership:
             exchange().dataset["kpNativeEndpointOwnership"],
           endpointState: endpointState()
@@ -386,6 +416,17 @@ for (const viewport of [
         visibility === "hidden" && ownership === "transit"
       )
     )).toBe(true);
+    expect(
+      evidence.route.every(({ documentaryOverlap }) =>
+        documentaryOverlap.every(({ width, height }) =>
+          width <= 0.75 || height <= 0.75
+        )
+      ),
+      JSON.stringify(evidence.route.map(({ local, documentaryOverlap }) => ({
+        local,
+        documentaryOverlap
+      })))
+    ).toBe(true);
 
     const routeStart = evidence.route[0]!.carry.center;
     const routeEnd = evidence.route.at(-1)!.carry.center;
