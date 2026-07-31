@@ -49,6 +49,14 @@ for (const viewport of [
             getComputedStyle(node).display !== "none"
           );
         const stage = activeStages[0]!;
+        const persistentComposite =
+          activeStages.length === 2 &&
+          activeStages.some((candidate) =>
+            candidate.hasAttribute("data-kp-place-value-written-ownership")
+          ) &&
+          activeStages.some((candidate) =>
+            candidate.hasAttribute("data-kp-place-value-written-overlay")
+          );
         const endpoints = [
           ...(stage.hasAttribute("data-kp-place-value-operation-endpoint") ||
               stage.hasAttribute("data-kp-place-value-written-projection")
@@ -59,7 +67,9 @@ for (const viewport of [
           )
         ];
         return {
-          activeStageCount: activeStages.length,
+          // One persistent scaffold plus one proxy-only overlay is one logical
+          // scene; neither child is a competing full-scene implementation.
+          activeStageCount: persistentComposite ? 1 : activeStages.length,
           stageMarker:
             Object.keys(stage.dataset)
               .filter((key) =>

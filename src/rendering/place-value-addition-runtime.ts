@@ -23,19 +23,13 @@ import {
   type KpPlaceValueBaseTenProjection
 } from "./place-value-addition-base-ten-projection.ts";
 import {
-  compileKpPlaceValueHundredsEvaluation,
-  compileKpPlaceValueOnesEvaluation,
-  compileKpPlaceValueTensEvaluation,
-  type KpPlaceValueHundredsEvaluation,
-  type KpPlaceValueOnesEvaluation,
-  type KpPlaceValueTensEvaluation
-} from "./place-value-addition-ones-evaluation.ts";
+  compileKpPlaceValueColumnEvaluations,
+  type KpPlaceValueColumnEvaluation
+} from "./place-value-addition-column-evaluation.ts";
 import {
-  compileKpPlaceValueOnesExchange,
-  compileKpPlaceValueTensExchange,
-  type KpPlaceValueOnesExchange,
-  type KpPlaceValueTensExchange
-} from "./place-value-addition-ones-exchange.ts";
+  compileKpPlaceValueColumnExchanges,
+  type KpPlaceValueColumnExchange
+} from "./place-value-addition-column-exchange.ts";
 import {
   compileKpPlaceValueNativeSettlement,
   type KpPlaceValueNativeSettlement
@@ -70,11 +64,8 @@ export interface KpPlaceValueAdditionRuntimeSession {
   readonly persistentWorkspace:
     KpPlaceValuePersistentWorkspaceConformance;
   readonly baseTen: KpPlaceValueBaseTenProjection;
-  readonly onesEvaluation: KpPlaceValueOnesEvaluation;
-  readonly onesExchange: KpPlaceValueOnesExchange;
-  readonly tensEvaluation: KpPlaceValueTensEvaluation;
-  readonly tensExchange: KpPlaceValueTensExchange;
-  readonly hundredsEvaluation: KpPlaceValueHundredsEvaluation;
+  readonly columnEvaluations: readonly KpPlaceValueColumnEvaluation[];
+  readonly columnExchanges: readonly KpPlaceValueColumnExchange[];
   readonly nativeSettlement: KpPlaceValueNativeSettlement;
   readonly accessibility: KpPlaceValueAdditionAccessibleProjection;
   readonly mountedViews: readonly ["written", "base-ten"];
@@ -129,19 +120,10 @@ KpPlaceValueAdditionRuntimeSession {
     })
   );
   const baseTen = compileKpPlaceValueBaseTenProjection(foundation);
-  const onesEvaluation = compileKpPlaceValueOnesEvaluation(
+  const columnEvaluations = compileKpPlaceValueColumnEvaluations(
     foundation.presentation
   );
-  const onesExchange = compileKpPlaceValueOnesExchange(
-    foundation.presentation
-  );
-  const tensEvaluation = compileKpPlaceValueTensEvaluation(
-    foundation.presentation
-  );
-  const tensExchange = compileKpPlaceValueTensExchange(
-    foundation.presentation
-  );
-  const hundredsEvaluation = compileKpPlaceValueHundredsEvaluation(
+  const columnExchanges = compileKpPlaceValueColumnExchanges(
     foundation.presentation
   );
   const nativeSettlement = compileKpPlaceValueNativeSettlement(
@@ -166,11 +148,8 @@ KpPlaceValueAdditionRuntimeSession {
     written,
     persistentWorkspace,
     baseTen,
-    onesEvaluation,
-    onesExchange,
-    tensEvaluation,
-    tensExchange,
-    hundredsEvaluation,
+    columnEvaluations,
+    columnExchanges,
     nativeSettlement,
     accessibility: createKpPlaceValueAdditionAccessibleProjection({
       trace: foundation.trace

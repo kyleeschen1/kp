@@ -542,9 +542,9 @@ for (const viewport of [
       )
     ).toBe(true);
     expect(evidence.sourceMotionSelectors).toEqual([
-      "proxy.place-value.ones.first-contribution",
-      "proxy.place-value.ones.addition-catalyst",
-      "proxy.place-value.ones.second-contribution"
+      "proxy.place-value.decimal-position-0.contribution-0",
+      "proxy.place-value.decimal-position-0.addition-catalyst",
+      "proxy.place-value.decimal-position-0.contribution-1"
     ]);
     expect(evidence.midpoint.endpointOpacities.every((opacity) =>
       opacity === "0" || opacity === "1"
@@ -790,8 +790,8 @@ for (const viewport of [
         }),
         derivedMaterialOpacities: ownerSignature()
           .filter(({ id }) =>
-            id.includes("annotation.ones.remainder") ||
-            id.includes("annotation.ones.carry")
+            id.includes("annotation.decimal-position-0.remainder") ||
+            id.includes("annotation.decimal-position-0.carry")
           )
           .map(({ opacity }) => opacity)
       };
@@ -836,10 +836,11 @@ for (const viewport of [
           successorSourceOpacity: getComputedStyle(successorSource).opacity,
           successorCarryText:
             successorSource.querySelector<HTMLElement>(
-              '[data-kp-semantic-entity-id="carry.tens"] .katex-html'
+              '[data-kp-place-value-motion-source-id="carry.tens"] ' +
+              ".katex-html"
             )?.textContent?.trim(),
           successorResultText:
-            successorSource.querySelector<HTMLElement>(
+            (dom.writtenRoot as HTMLElement).querySelector<HTMLElement>(
               '[data-kp-semantic-entity-id="result.ones"] .katex-html'
             )?.textContent?.trim(),
           carryText:

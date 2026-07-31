@@ -1,9 +1,26 @@
 import {
+  isKpPlaceValuePersistentWorkspaceConformance,
+  type KpPlaceValuePersistentPositionOperation
+} from "../animation/place-value-addition-persistent-workspace.ts";
+import {
+  kpPlaceValueAdditionVisualReference as reference
+} from "../reader/compiler/place-value-addition-visual-reference.ts";
+import {
   createKpPlaceValueBaseTenDomProjection
 } from "./place-value-addition-base-ten-dom.ts";
+import type {
+  KpPlaceValueBaseTenExchange
+} from "./place-value-addition-base-ten-projection.ts";
 import {
-  createKpPlaceValueWrittenColumnDomProjection
-} from "./place-value-addition-written-column-dom.ts";
+  createKpPlaceValueColumnEvaluationDom
+} from "./place-value-addition-column-evaluation.ts";
+import {
+  createKpPlaceValueColumnExchangeDom,
+  type KpPlaceValueColumnExchangeFrame
+} from "./place-value-addition-column-exchange.ts";
+import {
+  createKpPlaceValueNativeSettlementDom
+} from "./place-value-addition-native-settlement.ts";
 import {
   isKpPlaceValueAdditionRuntimeFrame,
   isKpPlaceValueAdditionRuntimeSession,
@@ -11,17 +28,8 @@ import {
   type KpPlaceValueAdditionRuntimeSession
 } from "./place-value-addition-runtime.ts";
 import {
-  createKpPlaceValueHundredsEvaluationDom,
-  createKpPlaceValueOnesEvaluationDom,
-  createKpPlaceValueTensEvaluationDom
-} from "./place-value-addition-ones-evaluation.ts";
-import {
-  createKpPlaceValueOnesExchangeDom,
-  createKpPlaceValueTensExchangeDom
-} from "./place-value-addition-ones-exchange.ts";
-import {
-  createKpPlaceValueNativeSettlementDom
-} from "./place-value-addition-native-settlement.ts";
+  createKpPlaceValueWrittenColumnDomProjection
+} from "./place-value-addition-written-column-dom.ts";
 import type {
   KpEquationVisiblePaintCertifiedContact
 } from "./equation-visible-paint-overlap-types.ts";
@@ -29,14 +37,8 @@ import {
   measureKpNativeKatexSubtreePaintRect
 } from "./native-katex-paint-geometry.ts";
 import type {
-  KpPlaceValueOnesWrittenOwnershipPlan
+  KpPlaceValueWrittenOwnershipPlan
 } from "./place-value-addition-written-ownership.ts";
-import {
-  isKpPlaceValuePersistentWorkspaceConformance
-} from "../animation/place-value-addition-persistent-workspace.ts";
-import {
-  kpPlaceValueAdditionVisualReference as reference
-} from "../reader/compiler/place-value-addition-visual-reference.ts";
 
 export interface KpPlaceValueAdditionSharedDom {
   readonly root: HTMLElement;
@@ -65,7 +67,8 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     );
   }
   const root = input.document.createElement("section");
-  root.dataset["kpPlaceValueSharedSession"] = input.session.rendererSessionId;
+  root.dataset["kpPlaceValueSharedSession"] =
+    input.session.rendererSessionId;
   root.style.cssText =
     "display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);" +
     "gap:24px;align-items:center;justify-items:center;width:100%";
@@ -85,36 +88,24 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     "persistent-scaffold-with-motion-overlay";
   writtenHost.style.cssText =
     "display:grid;position:relative;width:100%;place-items:center";
-  const onesEvaluation = createKpPlaceValueOnesEvaluationDom({
-    document: input.document,
-    projection: input.session.written,
-    evaluation: input.session.onesEvaluation
-  });
-  configurePersistentWrittenOverlay(onesEvaluation.root);
-  const onesExchange = createKpPlaceValueOnesExchangeDom({
-    document: input.document,
-    projection: input.session.written,
-    exchange: input.session.onesExchange
-  });
-  configurePersistentWrittenOverlay(onesExchange.root);
-  const tensEvaluation = createKpPlaceValueTensEvaluationDom({
-    document: input.document,
-    projection: input.session.written,
-    evaluation: input.session.tensEvaluation
-  });
-  configurePersistentWrittenOverlay(tensEvaluation.root);
-  const tensExchange = createKpPlaceValueTensExchangeDom({
-    document: input.document,
-    projection: input.session.written,
-    exchange: input.session.tensExchange
-  });
-  configurePersistentWrittenOverlay(tensExchange.root);
-  const hundredsEvaluation = createKpPlaceValueHundredsEvaluationDom({
-    document: input.document,
-    projection: input.session.written,
-    evaluation: input.session.hundredsEvaluation
-  });
-  configurePersistentWrittenOverlay(hundredsEvaluation.root);
+  const evaluationScenes = input.session.columnEvaluations.map(
+    (evaluation) => createKpPlaceValueColumnEvaluationDom({
+      document: input.document,
+      projection: input.session.written,
+      evaluation
+    })
+  );
+  const exchangeScenes = input.session.columnExchanges.map(
+    (exchange) => createKpPlaceValueColumnExchangeDom({
+      document: input.document,
+      projection: input.session.written,
+      exchange
+    })
+  );
+  const motionScenes = [...evaluationScenes, ...exchangeScenes];
+  for (const scene of motionScenes) {
+    configurePersistentWrittenOverlay(scene.root);
+  }
   const nativeSettlement = createKpPlaceValueNativeSettlementDom({
     document: input.document,
     projection: input.session.written,
@@ -123,46 +114,45 @@ export function createKpPlaceValueAdditionSharedDom(input: {
   configurePersistentWrittenOverlay(nativeSettlement.root);
   writtenHost.append(
     written.root,
-    onesEvaluation.root,
-    onesExchange.root,
-    tensEvaluation.root,
-    tensExchange.root,
-    hundredsEvaluation.root,
+    ...evaluationScenes.map(({ root: sceneRoot }) => sceneRoot),
+    ...exchangeScenes.map(({ root: sceneRoot }) => sceneRoot),
     nativeSettlement.root
   );
   written.root.dataset["kpPlaceValueWrittenOwnership"] =
     "persistent-documentary";
   written.root.dataset["kpPersistentWorkspaceConformance"] =
     input.session.persistentWorkspace.traceId;
-  markPersistentWrittenRoles(written);
+  markPersistentWrittenRoles({
+    written,
+    operations: input.session.persistentWorkspace.plan.operations
+  });
   baseTen.root.dataset["kpPlaceValueView"] = "base-ten";
   root.append(writtenHost, baseTen.root);
+
+  const evaluationByBeat = new Map(input.session.columnEvaluations.map(
+    (evaluation, index) => [
+      evaluation.beatId,
+      { evaluation, scene: evaluationScenes[index]! }
+    ] as const
+  ));
+  const exchangeByBeat = new Map(input.session.columnExchanges.map(
+    (exchange, index) => [
+      exchange.beatId,
+      { exchange, scene: exchangeScenes[index]! }
+    ] as const
+  ));
   let disposed = false;
   let nativeScenesPrepared = false;
-  const onesEvaluationBeat = requireReferenceBeat(
-    input.session.persistentWorkspace.plan.onesOperation.evaluationBeatId
-  );
-  const onesExchangeBeat = requireReferenceBeat(
-    input.session.persistentWorkspace.plan.onesOperation.exchangeBeatId
-  );
 
   const prepareNativeScenes = (): void => {
-    if (disposed) {
-      throw new Error("Shared place-value DOM is disposed.");
-    }
+    if (disposed) throw new Error("Shared place-value DOM is disposed.");
     if (nativeScenesPrepared) return;
     if (!root.isConnected) {
       throw new Error(
         "Shared place-value native scenes require a connected surface."
       );
     }
-    for (const scene of [
-      onesEvaluation,
-      onesExchange,
-      tensEvaluation,
-      tensExchange,
-      hundredsEvaluation
-    ]) {
+    for (const scene of motionScenes) {
       const previous = {
         display: scene.root.style.display,
         visibility: scene.root.style.visibility,
@@ -171,13 +161,9 @@ export function createKpPlaceValueAdditionSharedDom(input: {
         pointerEvents: scene.root.style.pointerEvents
       };
       try {
-        // Direct seeks may activate a beat that has never painted. Measure its
-        // connected native geometry at lazy mount so first-frame scheduling
-        // never observes a just-unhidden, browser-dependent layout.
+        // Direct seeks can activate an unpainted position. This synchronous
+        // preflight measures every position through the same connected path.
         scene.root.style.display = "grid";
-        // This synchronous preflight finishes before the browser can paint;
-        // `visibility:hidden` cannot be used because paint geometry correctly
-        // excludes hidden native atoms.
         scene.root.style.visibility = "visible";
         scene.root.style.position = "absolute";
         scene.root.style.inset = "0";
@@ -196,9 +182,7 @@ export function createKpPlaceValueAdditionSharedDom(input: {
   };
 
   const apply = (frame: KpPlaceValueAdditionRuntimeFrame): void => {
-    if (disposed) {
-      throw new Error("Shared place-value DOM is disposed.");
-    }
+    if (disposed) throw new Error("Shared place-value DOM is disposed.");
     if (
       !isKpPlaceValueAdditionRuntimeFrame(frame) ||
       frame.sessionId !== input.session.id ||
@@ -206,117 +190,77 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     ) {
       throw new Error("Shared place-value DOM rejected a foreign frame.");
     }
-    written.setEndpoint(
-      frame.stableState.stage === "settled" ? "settled" : "initial"
-    );
+    // The scaffold owns all documentary and settled paint throughout. Motion
+    // overlays never acquire authority to replace the entire written scene.
+    written.setEndpoint("initial");
     const visible = new Set(frame.responsive.visibleViews);
     const writtenVisible = visible.has("written");
     const baseTenVisible = visible.has("base-ten");
-    const evaluatingOnes =
-      frame.beat.id === "beat.place-value.evaluate-ones";
-    const exchangingOnes =
-      frame.beat.id === "beat.place-value.exchange-ones";
-    const evaluatingTens =
-      frame.beat.id === "beat.place-value.evaluate-tens";
-    const exchangingTens =
-      frame.beat.id === "beat.place-value.exchange-tens";
-    const evaluatingHundreds =
-      frame.beat.id === "beat.place-value.evaluate-hundreds";
-    const settling =
-      frame.beat.id === "beat.place-value.settle";
+    const activeEvaluation = evaluationByBeat.get(frame.beat.id);
+    const activeExchange = exchangeByBeat.get(frame.beat.id);
     writtenHost.style.display = writtenVisible ? "grid" : "none";
-    written.root.style.display =
-      writtenVisible ? "grid" : "none";
-    onesEvaluation.root.style.display =
-      writtenVisible && evaluatingOnes ? "grid" : "none";
-    onesExchange.root.style.display =
-      writtenVisible && exchangingOnes ? "grid" : "none";
-    tensEvaluation.root.style.display =
-      writtenVisible && evaluatingTens ? "grid" : "none";
-    tensExchange.root.style.display =
-      writtenVisible && exchangingTens ? "grid" : "none";
-    hundredsEvaluation.root.style.display =
-      writtenVisible && evaluatingHundreds ? "grid" : "none";
-    nativeSettlement.root.style.display =
-      writtenVisible && settling ? "grid" : "none";
+    written.root.style.display = writtenVisible ? "grid" : "none";
+    for (const { evaluation, scene } of evaluationByBeat.values()) {
+      scene.root.style.display =
+        writtenVisible && evaluation === activeEvaluation?.evaluation
+          ? "grid"
+          : "none";
+    }
+    for (const { exchange, scene } of exchangeByBeat.values()) {
+      scene.root.style.display =
+        writtenVisible && exchange === activeExchange?.exchange
+          ? "grid"
+          : "none";
+    }
+    // The persistent scaffold is already the native settlement endpoint. A
+    // second result-only DOM would create duplicate owners at the last beat.
+    nativeSettlement.root.style.display = "none";
     if (writtenVisible) {
-      applyPersistentOnesDocumentaryState({
+      applyPersistentDocumentaryState({
         written,
-        evaluationProgress: normalizedPermilleProgress(
-          frame.clock.progressPermille,
-          onesEvaluationBeat.startPermille,
-          onesEvaluationBeat.endPermille
-        ),
-        outputOwnership:
-          frame.clock.progressPermille >= onesExchangeBeat.endPermille
-            ? "native-endpoint"
-            : "transit"
+        operations: input.session.persistentWorkspace.plan.operations,
+        progressPermille: frame.clock.progressPermille
       });
     }
-    if (writtenVisible && evaluatingOnes) {
-      onesEvaluation.apply(
+    if (writtenVisible && activeEvaluation !== undefined) {
+      activeEvaluation.scene.apply(
         frame.beatProgress,
         frame.clock.direction
       );
       applyPersistentContributionClearance({
         stage: writtenHost,
         written,
-        overlay: onesEvaluation.root,
-        ownership: input.session.onesEvaluation.writtenOwnership
+        overlay: activeEvaluation.scene.root,
+        ownership: activeEvaluation.evaluation.writtenOwnership
       });
       certifyPersistentContributionContacts({
         written,
-        overlay: onesEvaluation.root
+        overlay: activeEvaluation.scene.root,
+        ownership: activeEvaluation.evaluation.writtenOwnership
       });
     }
-    const exchangeFrame =
-      writtenVisible && exchangingOnes
-        ? onesExchange.apply(frame.beatProgress, frame.clock.direction)
-        : undefined;
-    if (writtenVisible && evaluatingTens) {
-      tensEvaluation.apply(frame.beatProgress, frame.clock.direction);
-    }
-    const tensExchangeFrame =
-      writtenVisible && exchangingTens
-        ? tensExchange.apply(frame.beatProgress, frame.clock.direction)
-        : undefined;
-    if (writtenVisible && evaluatingHundreds) {
-      hundredsEvaluation.apply(
-        frame.beatProgress,
-        frame.clock.direction
-      );
-    }
-    if (writtenVisible && settling) {
-      nativeSettlement.apply(
+    let exchangeFrame: KpPlaceValueColumnExchangeFrame | undefined;
+    if (writtenVisible && activeExchange !== undefined) {
+      exchangeFrame = activeExchange.scene.apply(
         frame.beatProgress,
         frame.clock.direction
       );
     }
     if (baseTenVisible) {
-      if (exchangingOnes) {
+      if (activeExchange === undefined) {
+        baseTen.setState(frame.baseTen.stable.stateId);
+      } else {
         baseTen.applyExchange({
-          exchangeId: input.session.onesExchange.baseTenExchangeId,
+          exchangeId: activeExchange.exchange.baseTenExchangeId as
+            KpPlaceValueBaseTenExchange["id"],
           progress: frame.beatProgress,
-          // Hidden views do no paint measurement. Both projections use the
-          // canonical transfer boundary owned by the compiled exchange.
           transferOccurred:
             exchangeFrame?.semanticTransferOccurred ??
-            frame.beatProgress >= input.session.onesExchange.transferProgress
+            frame.beatProgress >= activeExchange.exchange.transferProgress
         });
-      } else if (exchangingTens) {
-        baseTen.applyExchange({
-          exchangeId: input.session.tensExchange.baseTenExchangeId,
-          progress: frame.beatProgress,
-          transferOccurred:
-            tensExchangeFrame?.semanticTransferOccurred ??
-            frame.beatProgress >= input.session.tensExchange.transferProgress
-        });
-      } else {
-        baseTen.setState(frame.baseTen.stable.stateId);
       }
     }
-    baseTen.root.style.display =
-      baseTenVisible ? "block" : "none";
+    baseTen.root.style.display = baseTenVisible ? "block" : "none";
     root.style.gridTemplateColumns =
       frame.responsive.mode === "wide-both"
         ? "minmax(0,1fr) minmax(0,1fr)"
@@ -331,13 +275,7 @@ export function createKpPlaceValueAdditionSharedDom(input: {
   const dispose = (): void => {
     if (disposed) return;
     disposed = true;
-    // These native-scene projections may own paint observers even though the
-    // written and base-ten endpoint DOM is otherwise stateless.
-    onesEvaluation.dispose();
-    onesExchange.dispose();
-    tensEvaluation.dispose();
-    tensExchange.dispose();
-    hundredsEvaluation.dispose();
+    for (const scene of motionScenes) scene.dispose();
     nativeSettlement.dispose();
     root.remove();
   };
@@ -357,31 +295,40 @@ function configurePersistentWrittenOverlay(root: HTMLElement): void {
   root.dataset["kpPlaceValueWrittenOverlay"] = "motion-proxies-only";
 }
 
-function markPersistentWrittenRoles(
-  written: ReturnType<
+function markPersistentWrittenRoles(input: {
+  readonly written: ReturnType<
     typeof createKpPlaceValueWrittenColumnDomProjection
-  >
-): void {
-  for (const id of ["digit.first.ones", "digit.second.ones"] as const) {
-    const element = written.cellElements.get(id)!;
-    element.dataset["kpPlaceValueWrittenRole"] =
-      "persistent-written-cell";
-    element.dataset["kpEquationPaintOwnerId"] =
-      `persistent-written:${id}`;
+  >;
+  readonly operations: readonly KpPlaceValuePersistentPositionOperation[];
+}): void {
+  const cells = new Map<
+    string,
+    "persistent-written-cell" | "stationary-operator"
+  >(
+    input.operations.flatMap(({ contributorCellIds, outputs }) => [
+      ...contributorCellIds.map((id) => [id, "persistent-written-cell"] as const),
+      ...outputs.map(({ destination }) => [
+        destination.semanticEntityId,
+        "persistent-written-cell"
+      ] as const)
+    ])
+  );
+  cells.set("operator.add", "stationary-operator");
+  for (const [id, role] of cells) {
+    const element = input.written.cellElements.get(id);
+    if (element === undefined) {
+      throw new Error(`Persistent written scaffold lacks cell ${id}.`);
+    }
+    element.dataset["kpPlaceValueWrittenRole"] = role;
+    element.dataset["kpEquationPaintOwnerId"] = `persistent-written:${id}`;
   }
-  const plus = written.cellElements.get("operator.add")!;
-  plus.dataset["kpPlaceValueWrittenRole"] = "stationary-operator";
-  const underline = written.root.querySelector<HTMLElement>(
+  const underline = input.written.root.querySelector<HTMLElement>(
     "[data-kp-place-value-underline]"
   );
   if (underline === null) {
     throw new Error("Persistent written scaffold lacks its underline.");
   }
   underline.dataset["kpPlaceValueWrittenRole"] = "stationary-operator";
-  for (const id of ["result.ones", "carry.tens"] as const) {
-    written.cellElements.get(id)!
-      .dataset["kpPlaceValueWrittenRole"] = "persistent-written-cell";
-  }
 }
 
 function applyPersistentContributionClearance(input: {
@@ -390,18 +337,13 @@ function applyPersistentContributionClearance(input: {
     typeof createKpPlaceValueWrittenColumnDomProjection
   >;
   readonly overlay: HTMLElement;
-  readonly ownership: KpPlaceValueOnesWrittenOwnershipPlan;
+  readonly ownership: KpPlaceValueWrittenOwnershipPlan;
 }): void {
   for (const proxy of input.ownership.contributionProxies) {
-    const blockerId = input.ownership.contributionProxies.find(
-      ({ sourceCellId }) => sourceCellId !== proxy.sourceCellId
-    )!.sourceCellId;
-    const blocker = input.written.cellElements.get(blockerId)!;
-    const blockerPaint = measureKpNativeKatexSubtreePaintRect(
-      input.stage,
-      blocker
-    );
-    if (blockerPaint === undefined) continue;
+    const blockers = input.ownership.contributionProxies
+      .filter(({ sourceCellId }) => sourceCellId !== proxy.sourceCellId)
+      .map(({ sourceCellId }) => input.written.cellElements.get(sourceCellId))
+      .filter((element): element is HTMLElement => element !== undefined);
     for (const owner of input.overlay.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id]"
     )) {
@@ -418,22 +360,65 @@ function applyPersistentContributionClearance(input: {
         ? measureKpNativeKatexSubtreePaintRect(input.stage, visual)
         : undefined;
       if (movingPaint === undefined) continue;
-      const overlapWidth = Math.min(
-        movingPaint.left + movingPaint.width,
-        blockerPaint.left + blockerPaint.width
-      ) - Math.max(movingPaint.left, blockerPaint.left);
-      const overlapHeight = Math.min(
-        movingPaint.top + movingPaint.height,
-        blockerPaint.top + blockerPaint.height
-      ) - Math.max(movingPaint.top, blockerPaint.top);
-      if (overlapWidth <= 0.75 || overlapHeight <= 0.75) continue;
-      const direction =
-        proxy.documentaryClearanceSide === "above" ? -1 : 1;
-      owner.style.translate = `0 ${direction * (overlapHeight + 1)}px`;
-      owner.dataset["kpPlaceValueDocumentaryClearance"] =
-        proxy.documentaryClearanceSide;
+      const blockingPaint = [];
+      for (const blocker of blockers) {
+        const blockerPaint = measureKpNativeKatexSubtreePaintRect(
+          input.stage,
+          blocker
+        );
+        if (blockerPaint === undefined) continue;
+        const overlapWidth = Math.min(
+          movingPaint.left + movingPaint.width,
+          blockerPaint.left + blockerPaint.width
+        ) - Math.max(movingPaint.left, blockerPaint.left);
+        if (overlapWidth > 0.75) blockingPaint.push(blockerPaint);
+      }
+      const clearance = nearestVerticalClearance({
+        movingPaint,
+        blockingPaint,
+        preferredSide: proxy.documentaryClearanceSide
+      });
+      if (clearance !== 0) {
+        owner.style.translate = `0 ${clearance}px`;
+        owner.dataset["kpPlaceValueDocumentaryClearance"] =
+          proxy.documentaryClearanceSide;
+      }
     }
   }
+}
+
+function nearestVerticalClearance(input: {
+  readonly movingPaint: {
+    readonly top: number;
+    readonly height: number;
+  };
+  readonly blockingPaint: readonly {
+    readonly top: number;
+    readonly height: number;
+  }[];
+  readonly preferredSide: "above" | "below";
+}): number {
+  const gap = 1.5;
+  const movingBottom = input.movingPaint.top + input.movingPaint.height;
+  const forbidden = input.blockingPaint.map((blocker) => ({
+    start: blocker.top - movingBottom - gap,
+    end: blocker.top + blocker.height - input.movingPaint.top + gap
+  }));
+  const allowed = (offset: number) => forbidden.every(({ start, end }) =>
+    offset <= start || offset >= end
+  );
+  if (allowed(0)) return 0;
+  // Interval boundaries are the smallest offsets that can clear a blocker.
+  // Selecting globally across every documentary cell avoids the old pairwise
+  // correction, where clearing one row could push the proxy into another.
+  return forbidden.flatMap(({ start, end }) => [start, end])
+    .filter(allowed)
+    .sort((left, right) => {
+      const distance = Math.abs(left) - Math.abs(right);
+      if (Math.abs(distance) > 0.001) return distance;
+      const preferredSign = input.preferredSide === "above" ? -1 : 1;
+      return Math.sign(left) === preferredSign ? -1 : 1;
+    })[0] ?? 0;
 }
 
 function certifyPersistentContributionContacts(input: {
@@ -441,29 +426,30 @@ function certifyPersistentContributionContacts(input: {
     typeof createKpPlaceValueWrittenColumnDomProjection
   >;
   readonly overlay: HTMLElement;
+  readonly ownership: KpPlaceValueWrittenOwnershipPlan;
 }): void {
-  const bindings = [
-    ["annotation.ones.material.0", "digit.first.ones"],
-    ["annotation.ones.material.1", "digit.second.ones"]
-  ] as const;
-  for (const [annotationId, persistentId] of bindings) {
-    const persistent = input.written.cellElements.get(persistentId)!;
-    const persistentOwnerId =
-      persistent.dataset["kpEquationPaintOwnerId"]!;
+  for (const proxy of input.ownership.contributionProxies) {
+    const persistent = input.written.cellElements.get(proxy.sourceCellId);
+    if (persistent === undefined) continue;
+    const persistentOwnerId = persistent.dataset["kpEquationPaintOwnerId"]!;
     const rect = persistent.getBoundingClientRect();
     for (const owner of input.overlay.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id]"
     )) {
       if (
-        owner.dataset["kpEquationMaterialSemanticEntityId"] !== annotationId
+        owner.dataset["kpEquationMaterialSemanticEntityId"] !==
+          proxy.bindingAnnotationId
       ) {
         continue;
       }
       const materialOwnerId = owner.dataset["kpEquationMaterialOwnerId"]!;
       const contact = Object.freeze({
-        id: `contact.place-value.ones.peel.${persistentId}`,
-        ownerIds:
-          Object.freeze([persistentOwnerId, materialOwnerId] as const),
+        id:
+          `contact.place-value.${input.ownership.position.id}.peel.${proxy.sourceCellId}`,
+        ownerIds: Object.freeze([
+          persistentOwnerId,
+          materialOwnerId
+        ] as const),
         reason: "semantic-reconciliation" as const,
         phase: "transit" as const,
         maximumOverlapWidthPx: rect.width,
@@ -483,9 +469,7 @@ function setCertifiedContact(
     element.dataset["kpEquationMaterialOwnerId"] === undefined
       ? "kpEquationSemanticContacts"
       : "kpEquationMaterialSemanticContacts";
-  const existing = decodeCertifiedContacts(
-    element.dataset[datasetKey]
-  );
+  const existing = decodeCertifiedContacts(element.dataset[datasetKey]);
   element.dataset[datasetKey] = JSON.stringify([
     ...existing.filter(({ id }) => id !== contact.id),
     contact
@@ -506,23 +490,53 @@ function decodeCertifiedContacts(
   }
 }
 
-function applyPersistentOnesDocumentaryState(input: {
+function applyPersistentDocumentaryState(input: {
   readonly written: ReturnType<
     typeof createKpPlaceValueWrittenColumnDomProjection
   >;
-  readonly evaluationProgress: number;
-  readonly outputOwnership: "transit" | "native-endpoint";
+  readonly operations: readonly KpPlaceValuePersistentPositionOperation[];
+  readonly progressPermille: number;
 }): void {
-  const progress = Math.max(0, Math.min(1, input.evaluationProgress));
-  const dimProgress = smoothStep(Math.min(1, progress / 0.2));
-  const documentaryOpacity = 1 - 0.62 * dimProgress;
-  for (const id of ["digit.first.ones", "digit.second.ones"] as const) {
-    const element = input.written.cellElements.get(id)!;
+  const producerByOutput = new Map(
+    input.operations.flatMap((operation) => operation.outputs.map((output) => [
+      output.destination.semanticEntityId,
+      operation
+    ] as const))
+  );
+  const consumerByCell = new Map<string, KpPlaceValuePersistentPositionOperation>();
+  for (const operation of input.operations) {
+    for (const cellId of operation.contributorCellIds) {
+      consumerByCell.set(cellId, operation);
+    }
+  }
+  for (const [cellId, element] of input.written.cellElements) {
+    const producer = producerByOutput.get(cellId);
+    const consumer = consumerByCell.get(cellId);
+    const producerBeat = producer === undefined
+      ? undefined
+      : requireReferenceBeat(producer.settlementBeatId);
+    const isProduced = producerBeat === undefined ||
+      input.progressPermille >= producerBeat.endPermille;
+    const consumptionProgress = consumer === undefined
+      ? 0
+      : normalizedPermilleProgress(
+          input.progressPermille,
+          requireReferenceBeat(consumer.evaluationBeatId).startPermille,
+          requireReferenceBeat(consumer.evaluationBeatId).endPermille
+        );
+    const dimProgress = smoothStep(Math.min(1, consumptionProgress / 0.2));
+    const documentaryOpacity = 1 - 0.62 * dimProgress;
     element.style.opacity = String(documentaryOpacity);
     element.style.transform = "none";
-    element.dataset["kpVisibility"] = "visible";
-    element.dataset["kpPlaceValueConsumed"] =
-      progress > 0 ? "true" : "false";
+    element.dataset["kpVisibility"] = isProduced ? "visible" : "hidden";
+    if (consumer !== undefined) {
+      element.dataset["kpPlaceValueConsumed"] =
+        consumptionProgress > 0 ? "true" : "false";
+    }
+    if (producer !== undefined) {
+      element.dataset["kpNativeEndpointOwnership"] =
+        isProduced ? "native-endpoint" : "transit";
+    }
   }
   const plus = input.written.cellElements.get("operator.add")!;
   plus.style.opacity = "1";
@@ -534,15 +548,6 @@ function applyPersistentOnesDocumentaryState(input: {
   underline.style.opacity = "1";
   underline.style.transform = "none";
   underline.style.visibility = "visible";
-  for (const id of ["result.ones", "carry.tens"] as const) {
-    const output = input.written.cellElements.get(id)!;
-    output.style.opacity = "1";
-    output.style.transform = "none";
-    output.dataset["kpVisibility"] =
-      input.outputOwnership === "native-endpoint" ? "visible" : "hidden";
-    output.dataset["kpNativeEndpointOwnership"] =
-      input.outputOwnership;
-  }
 }
 
 function requireReferenceBeat(

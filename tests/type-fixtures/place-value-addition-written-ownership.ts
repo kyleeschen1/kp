@@ -1,11 +1,11 @@
 import {
   bindKpPlaceValueWrittenMotionProxy,
-  compileKpPlaceValueOnesWrittenOwnership
+  type KpPlaceValueWrittenOwnershipPlan
 } from "../../src/rendering/place-value-addition-written-ownership.ts";
 
-const ownership = compileKpPlaceValueOnesWrittenOwnership();
+declare const ownership: KpPlaceValueWrittenOwnershipPlan;
 const contributionSelector = bindKpPlaceValueWrittenMotionProxy(
-  ownership.contributionProxies[0]
+  ownership.contributionProxies[0]!
 );
 const catalystSelector = bindKpPlaceValueWrittenMotionProxy(
   ownership.catalystProxy

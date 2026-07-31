@@ -5,19 +5,22 @@ import {
   createKpPlaceValueAdditionRuntimeSession
 } from "../src/rendering/place-value-addition-runtime.ts";
 import {
-  compileKpPlaceValueOnesEvaluation,
-  isKpPlaceValueOnesEvaluation
-} from "../src/rendering/place-value-addition-ones-evaluation.ts";
+  compileKpPlaceValueColumnEvaluation,
+  isKpPlaceValueColumnEvaluation
+} from "../src/rendering/place-value-addition-column-evaluation.ts";
+import {
+  compileKpPlaceValueAdditionPositionPrograms
+} from "../src/reader/compiler/place-value-addition-position-program.ts";
 
 test("ones evaluation reuses the canonical executable operation program", () => {
   const session = createKpPlaceValueAdditionRuntimeSession();
-  const evaluation = session.onesEvaluation;
+  const evaluation = session.columnEvaluations[0]!;
   const presentationBeat = session.foundation.presentation.beats.find(
     ({ beatId }) => beatId === evaluation.beatId
   );
   const program = presentationBeat?.programs[0];
 
-  assert.equal(isKpPlaceValueOnesEvaluation(evaluation), true);
+  assert.equal(isKpPlaceValueColumnEvaluation(evaluation), true);
   assert.equal(program?.kind, "operation-evaluation");
   assert.equal(evaluation.forward.programId, program?.executableProgram.id);
   assert.equal(evaluation.rewind.programId, program?.executableProgram.id);
@@ -41,8 +44,8 @@ test("ones evaluation reuses the canonical executable operation program", () => 
 });
 
 test("semantic inputs compile to motion proxies beside stationary written cells", () => {
-  const { onesEvaluation: evaluation } =
-    createKpPlaceValueAdditionRuntimeSession();
+  const evaluation =
+    createKpPlaceValueAdditionRuntimeSession().columnEvaluations[0]!;
   const material = evaluation.binding.sourceAnnotations
     .filter(({ contribution }) => contribution === "material-input")
     .flatMap(({ selectorIds }) => selectorIds);
@@ -54,11 +57,11 @@ test("semantic inputs compile to motion proxies beside stationary written cells"
   );
 
   assert.deepEqual(material, [
-    "proxy.place-value.ones.first-contribution",
-    "proxy.place-value.ones.second-contribution"
+    "proxy.place-value.decimal-position-0.contribution-0",
+    "proxy.place-value.decimal-position-0.contribution-1"
   ]);
   assert.deepEqual(catalysts, [
-    "proxy.place-value.ones.addition-catalyst"
+    "proxy.place-value.decimal-position-0.addition-catalyst"
   ]);
   assert.deepEqual(
     evaluation.writtenOwnership.contributionProxies.map(
@@ -75,8 +78,8 @@ test("semantic inputs compile to motion proxies beside stationary written cells"
     "digit.second.ones"
   ]);
   assert.deepEqual(targets, [
-    "proxy.place-value.ones.total-tens",
-    "proxy.place-value.ones.total-ones"
+    "proxy.place-value.decimal-position-0.evaluated-digit-0",
+    "proxy.place-value.decimal-position-0.evaluated-digit-1"
   ]);
   assert.deepEqual(evaluation.targetSelectorIds, [
     "evaluation.ones.total.tens",
@@ -84,18 +87,23 @@ test("semantic inputs compile to motion proxies beside stationary written cells"
   ]);
   assert.deepEqual(
     evaluation.binding.lineages[0]?.sourceAnnotationIds,
-    ["annotation.ones.material.0", "annotation.ones.material.1"]
+    [
+      "annotation.decimal-position-0.material.0",
+      "annotation.decimal-position-0.material.1"
+    ]
   );
   assert.ok(
     !evaluation.binding.lineages[0]?.sourceAnnotationIds.includes(
-      "annotation.ones.plus"
+      "annotation.decimal-position-0.plus"
     )
   );
 });
 
 test("forward and rewind expose inverse phase order over one absolute path", () => {
-  const evaluation = compileKpPlaceValueOnesEvaluation(
-    createKpPlaceValueAdditionRuntimeSession().foundation.presentation
+  const session = createKpPlaceValueAdditionRuntimeSession();
+  const evaluation = compileKpPlaceValueColumnEvaluation(
+    session.foundation.presentation,
+    compileKpPlaceValueAdditionPositionPrograms()[0]!
   );
   const forward = evaluation.forward.samplePhaseTelemetry(0.5);
   const rewind = evaluation.rewind.samplePhaseTelemetry(0.5);

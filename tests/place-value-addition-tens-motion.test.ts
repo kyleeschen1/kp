@@ -5,34 +5,35 @@ import {
   createKpPlaceValueAdditionRuntimeSession
 } from "../src/rendering/place-value-addition-runtime.ts";
 import {
-  isKpPlaceValueTensEvaluation
-} from "../src/rendering/place-value-addition-ones-evaluation.ts";
+  isKpPlaceValueColumnEvaluation
+} from "../src/rendering/place-value-addition-column-evaluation.ts";
 import {
-  isKpPlaceValueTensExchange
-} from "../src/rendering/place-value-addition-ones-exchange.ts";
+  isKpPlaceValueColumnExchange
+} from "../src/rendering/place-value-addition-column-exchange.ts";
 
 test("tens evaluation reuses the exact ones compiler and executable route", () => {
   const session = createKpPlaceValueAdditionRuntimeSession();
-  const { onesEvaluation, tensEvaluation } = session;
+  const referenceEvaluation = session.columnEvaluations[0]!;
+  const successorEvaluation = session.columnEvaluations[1]!;
 
-  assert.equal(isKpPlaceValueTensEvaluation(tensEvaluation), true);
-  assert.equal(tensEvaluation.expression, "1 + 7 + 5 = 13");
-  assert.deepEqual(tensEvaluation.materialSelectorIds, [
+  assert.equal(isKpPlaceValueColumnEvaluation(successorEvaluation), true);
+  assert.equal(successorEvaluation.expression, "1 + 7 + 5 = 13");
+  assert.deepEqual(successorEvaluation.materialSelectorIds, [
     "carry.tens",
     "digit.first.tens",
     "digit.second.tens"
   ]);
   assert.equal(
-    tensEvaluation.forward.programId,
-    onesEvaluation.forward.programId
+    successorEvaluation.forward.programId,
+    referenceEvaluation.forward.programId
   );
   assert.equal(
-    tensEvaluation.forward.route.primitiveRoute,
-    onesEvaluation.forward.route.primitiveRoute
+    successorEvaluation.forward.route.primitiveRoute,
+    referenceEvaluation.forward.route.primitiveRoute
   );
-  assert.equal(tensEvaluation.catalystSelectorId, "operator.add");
+  assert.equal(successorEvaluation.catalystSelectorId, "operator.add");
   assert.equal(
-    tensEvaluation.binding.sourceAnnotations.filter(
+    successorEvaluation.binding.sourceAnnotations.filter(
       ({ contribution }) => contribution === "material-input"
     ).length,
     3
@@ -40,58 +41,67 @@ test("tens evaluation reuses the exact ones compiler and executable route", () =
 });
 
 test("the carried ten is material input, never decorative context", () => {
-  const { tensEvaluation } = createKpPlaceValueAdditionRuntimeSession();
-  const carry = tensEvaluation.binding.sourceAnnotations.find(
-    ({ selectorIds }) => selectorIds.includes("carry.tens")
+  const evaluation =
+    createKpPlaceValueAdditionRuntimeSession().columnEvaluations[1]!;
+  const carryProxy = evaluation.writtenOwnership.contributionProxies.find(
+    ({ sourceCellId }) => sourceCellId === "carry.tens"
   );
-  const lineage = tensEvaluation.binding.lineages[0];
+  const carry = evaluation.binding.sourceAnnotations.find(
+    ({ selectorIds }) => selectorIds.includes(carryProxy!.proxySelectorId)
+  );
+  const lineage = evaluation.binding.lineages[0];
 
   assert.equal(carry?.contribution, "material-input");
   assert.ok(lineage?.sourceAnnotationIds.includes(carry!.id));
   assert.ok(
-    !tensEvaluation.binding.targetAnnotations.some(
-      ({ selectorIds }) => selectorIds.includes("carry.tens")
+    !evaluation.binding.targetAnnotations.some(
+      ({ selectorIds }) => selectorIds.includes(carryProxy!.proxySelectorId)
     )
   );
 });
 
 test("tens exchange uses the same nominal fission and transfer boundary", () => {
   const session = createKpPlaceValueAdditionRuntimeSession();
-  const { onesExchange, tensExchange } = session;
+  const referenceExchange = session.columnExchanges[0]!;
+  const successorExchange = session.columnExchanges[1]!;
 
-  assert.equal(isKpPlaceValueTensExchange(tensExchange), true);
-  assert.deepEqual(tensExchange.fissionPlan.sourceEntityIds, [
+  assert.equal(isKpPlaceValueColumnExchange(successorExchange), true);
+  assert.deepEqual(successorExchange.fissionPlan.sourceEntityIds, [
     "evaluation.tens.total"
   ]);
-  assert.deepEqual(tensExchange.fissionPlan.targetEntityIds, [
+  assert.deepEqual(successorExchange.fissionPlan.targetEntityIds, [
     "result.tens",
     "carry.hundreds"
   ]);
   assert.equal(
-    tensExchange.forward.programId,
-    onesExchange.forward.programId
+    successorExchange.forward.programId,
+    referenceExchange.forward.programId
   );
   assert.equal(
-    tensExchange.forward.route.primitiveRoute,
-    onesExchange.forward.route.primitiveRoute
+    successorExchange.forward.route.primitiveRoute,
+    referenceExchange.forward.route.primitiveRoute
   );
   assert.equal(
-    tensExchange.transferProgress,
-    onesExchange.transferProgress
+    successorExchange.transferProgress,
+    referenceExchange.transferProgress
   );
-  assert.equal(tensExchange.baseTenExchangeId, "exchange.tens-to-hundreds");
+  assert.equal(
+    successorExchange.baseTenExchangeId,
+    "exchange.tens-to-hundreds"
+  );
 });
 
 test("tens evaluation and exchange rewind through inverse phase order", () => {
-  const { tensEvaluation, tensExchange } =
-    createKpPlaceValueAdditionRuntimeSession();
+  const session = createKpPlaceValueAdditionRuntimeSession();
+  const evaluation = session.columnEvaluations[1]!;
+  const exchange = session.columnExchanges[1]!;
 
   assert.deepEqual(
-    tensEvaluation.rewind.phaseOrder,
-    [...tensEvaluation.forward.phaseOrder].reverse()
+    evaluation.rewind.phaseOrder,
+    [...evaluation.forward.phaseOrder].reverse()
   );
   assert.deepEqual(
-    tensExchange.rewind.phaseOrder,
-    [...tensExchange.forward.phaseOrder].reverse()
+    exchange.rewind.phaseOrder,
+    [...exchange.forward.phaseOrder].reverse()
   );
 });

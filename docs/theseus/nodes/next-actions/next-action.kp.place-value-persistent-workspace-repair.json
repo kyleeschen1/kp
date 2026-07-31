@@ -18,8 +18,59 @@
       "path": "docs/project/threads/animation-library-promotion.md"
     }
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s11 ordered-position compiler and ownership",
+      "checkedAt": "2026-07-31T14:53:27.689Z",
+      "notes": "109 of 109 pass, including the source-level guard that reusable position pipeline files contain no familiar decimal-place branch names."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s11 generic runtime surface",
+      "checkedAt": "2026-07-31T14:53:28.874Z",
+      "notes": "Application, Node, test, and domain projects accept the sequence-based session API with no named-position aliases."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition -- --grep terminal-position-navigation-responsive-ordered-position-and-exchange",
+      "status": "passed",
+      "scope": "s11 Chromium Firefox WebKit wide and phone",
+      "checkedAt": "2026-07-31T14:53:29.720Z",
+      "notes": "33 of 33 focused browser cases pass: reference cycle preservation, later-position convergence/exchange, global collision clearance, terminal native handoff, navigation, DPR invariance, and persistent carry/result lifetime."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s11 canonical boundary",
+      "checkedAt": "2026-07-31T14:53:30.582Z",
+      "notes": "All four architecture gates pass; the sequence compiler introduces no renderer category or compatibility exception."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s11 initial tuple-heavy types",
+      "checkedAt": "2026-07-31T14:53:31.482Z",
+      "notes": "The first generalized type surface measured 50945 types, above the fixed 50000 ceiling. The ceiling was not raised."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s11 lightweight nominal boundary repair",
+      "checkedAt": "2026-07-31T14:53:32.336Z",
+      "notes": "After isolating lightweight position types and replacing nested variadic tuples with sealed runtime-validated readonly collections, inference passed at 49164 types, 61673 instantiations, and 2.74 seconds."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s11 production build",
+      "checkedAt": "2026-07-31T14:53:33.188Z",
+      "notes": "Production build completed after full typecheck; place-value adapter remains a lazy catalog chunk."
+    }
+  ],
   "progress": {
     "state": "partial",
-    "summary": "Approved successor repair is materialized. Preserve one shared runtime and renderer; make documentary lifetime, semantic destination, transit ownership, and endpoint handoff explicit; stop after the repaired ones-column visual checkpoint."
+    "summary": "User visually approved the rightmost persistent-workspace exemplar and authorized resumption at s11. New promotion criterion: reusable compiler, ownership, route, and renderer APIs must be ordered-position/radix-generic—no ones, tens, hundreds, or fixed digit-count identifiers in reusable variable or type names. The 278 plus 156 labels remain fixture data; decimal and unequal-width fixtures are deferred evidence, not unverified promotion claims."
   }
 }

@@ -36,13 +36,26 @@ test("persistent workspace plan closes every native cell and trace beat", () => 
   ));
 });
 
-test("first plan exposes only the approved ones operation", () => {
+test("plan exposes the approved ordered position sequence", () => {
   const plan = compileKpPlaceValuePersistentWorkspacePlan();
+  const referenceOperation = plan.operations[0]!;
 
-  assert.equal(plan.implementationScope, "ones-cycle-only");
-  assert.equal(plan.generalizationGate, "human-ones-checkpoint");
+  assert.equal(plan.implementationScope, "ordered-position-sequence");
+  assert.equal(plan.generalizationGate, "approved-reference-exemplar");
   assert.deepEqual(
-    plan.onesOperation.contributionRoutes.map(
+    plan.operations.map(({ position }) => ({
+      sequenceIndex: position.sequenceIndex,
+      radix: position.radix,
+      exponent: position.exponent
+    })),
+    [
+      { sequenceIndex: 0, radix: 10, exponent: 0 },
+      { sequenceIndex: 1, radix: 10, exponent: 1 },
+      { sequenceIndex: 2, radix: 10, exponent: 2 }
+    ]
+  );
+  assert.deepEqual(
+    referenceOperation.contributionRoutes.map(
       ({ materialEntityId, kind, to }) => ({
         materialEntityId,
         kind,
@@ -62,16 +75,13 @@ test("first plan exposes only the approved ones operation", () => {
       }
     ]
   );
-  assert.equal(plan.onesOperation.result.route.kind, "converge");
-  assert.equal(plan.onesOperation.carry.route.kind, "carry-arch");
+  assert.equal(referenceOperation.outputs[0]!.route.kind, "converge");
+  assert.equal(referenceOperation.outputs[1]!.route.kind, "carry-arch");
   assert.equal(
-    plan.onesOperation.carry.handoff.endpoint.semanticEntityId,
+    referenceOperation.outputs[1]!.handoff.endpoint.semanticEntityId,
     "carry.tens"
   );
-  assert.equal(
-    "tensOperation" in plan || "hundredsOperation" in plan,
-    false
-  );
+  assert.equal(plan.operations[2]!.exchangeBeatId, undefined);
 });
 
 test("workspace plan contains policy and lineage but no geometry", () => {
@@ -85,10 +95,9 @@ test("workspace plan contains policy and lineage but no geometry", () => {
     ({ geometryAuthority }) =>
       geometryAuthority === "connected-native-paint"
   ));
-  assert.ok([
-    plan.onesOperation.result.transit,
-    plan.onesOperation.carry.transit
-  ].every(
+  assert.ok(plan.operations.flatMap(({ outputs }) => outputs).map(
+    ({ transit }) => transit
+  ).every(
     ({ paintPolicy, releasePolicy }) =>
       paintPolicy === "visible-and-opaque-through-route" &&
       releasePolicy === "only-after-native-endpoint-match"

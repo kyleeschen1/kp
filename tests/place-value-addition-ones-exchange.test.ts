@@ -11,13 +11,16 @@ import {
   isKpNativeKatexIdentityTransferIntent
 } from "../src/rendering/native-katex-successor-synthesis.ts";
 import {
-  compileKpPlaceValueOnesExchange,
-  isKpPlaceValueOnesExchange
-} from "../src/rendering/place-value-addition-ones-exchange.ts";
+  compileKpPlaceValueColumnExchange,
+  isKpPlaceValueColumnExchange
+} from "../src/rendering/place-value-addition-column-exchange.ts";
+import {
+  compileKpPlaceValueAdditionPositionPrograms
+} from "../src/reader/compiler/place-value-addition-position-program.ts";
 
 test("ones exchange reuses exact carry proof and identity-fission program", () => {
   const session = createKpPlaceValueAdditionRuntimeSession();
-  const exchange = session.onesExchange;
+  const exchange = session.columnExchanges[0]!;
   assert.equal(
     exchange.intent.binding.layoutTopology,
     "separate-source-result-bands"
@@ -29,7 +32,7 @@ test("ones exchange reuses exact carry proof and identity-fission program", () =
     ({ kind }) => kind === "carry-split"
   );
 
-  assert.equal(isKpPlaceValueOnesExchange(exchange), true);
+  assert.equal(isKpPlaceValueColumnExchange(exchange), true);
   assert.equal(carrySplit?.kind, "carry-split");
   assert.equal(exchange.forward.programId, carrySplit?.executableProgram.id);
   assert.equal(exchange.rewind.programId, carrySplit?.executableProgram.id);
@@ -46,8 +49,8 @@ test("ones exchange reuses exact carry proof and identity-fission program", () =
 });
 
 test("one identity splits through proxies into persistent result slots", () => {
-  const { onesExchange: exchange } =
-    createKpPlaceValueAdditionRuntimeSession();
+  const exchange =
+    createKpPlaceValueAdditionRuntimeSession().columnExchanges[0]!;
   const binding = exchange.intent.binding;
   const material = binding.sourceAnnotations.filter(
     ({ contribution }) => contribution === "material-input"
@@ -62,11 +65,14 @@ test("one identity splits through proxies into persistent result slots", () => {
   ]);
   assert.equal(material.length, 1);
   assert.deepEqual(material[0]?.selectorIds, [
-    "proxy.place-value.ones.evaluated-total"
+    "proxy.place-value.decimal-position-0.evaluated-total"
   ]);
   assert.deepEqual(
     binding.targetAnnotations.flatMap(({ selectorIds }) => selectorIds),
-    ["proxy.place-value.ones.result", "proxy.place-value.ones.carry"]
+    [
+      "proxy.place-value.decimal-position-0.settled-output-0",
+      "proxy.place-value.decimal-position-0.settled-output-1"
+    ]
   );
   assert.deepEqual(
     exchange.writtenOwnership.derivedOutputProxies.map(
@@ -75,16 +81,17 @@ test("one identity splits through proxies into persistent result slots", () => {
     ["result.ones", "carry.tens"]
   );
   assert.deepEqual(binding.lineages[0]?.sourceAnnotationIds, [
-    "annotation.ones.evaluated-total"
+    "annotation.decimal-position-0.evaluated-total"
   ]);
   assert.deepEqual(binding.lineages[0]?.targetAnnotationIds, [
-    "annotation.ones.remainder",
-    "annotation.ones.carry"
+    "annotation.decimal-position-0.remainder",
+    "annotation.decimal-position-0.carry"
   ]);
 });
 
 test("native identity-transfer authority is nominal and copy-resistant", () => {
-  const { intent } = createKpPlaceValueAdditionRuntimeSession().onesExchange;
+  const { intent } =
+    createKpPlaceValueAdditionRuntimeSession().columnExchanges[0]!;
   const copied = { ...intent };
 
   assert.equal(isKpNativeKatexIdentityTransferIntent(intent), true);
@@ -92,8 +99,10 @@ test("native identity-transfer authority is nominal and copy-resistant", () => {
 });
 
 test("forward and rewind expose inverse identity-fission phases", () => {
-  const exchange = compileKpPlaceValueOnesExchange(
-    createKpPlaceValueAdditionRuntimeSession().foundation.presentation
+  const session = createKpPlaceValueAdditionRuntimeSession();
+  const exchange = compileKpPlaceValueColumnExchange(
+    session.foundation.presentation,
+    compileKpPlaceValueAdditionPositionPrograms()[0]!
   );
   const forward = exchange.forward.samplePhaseTelemetry(0.5);
   const rewind = exchange.rewind.samplePhaseTelemetry(0.5);

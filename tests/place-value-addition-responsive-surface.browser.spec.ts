@@ -379,13 +379,8 @@ test("responsive layout is invariant in CSS pixels at DPR 1 and 2", async ({
       const written = surface.root.querySelector<HTMLElement>(
         '[data-kp-place-value-view="written"]'
       )!;
-      const active = [...written.children].find(
-        (node) =>
-          node instanceof HTMLElement &&
-          getComputedStyle(node).display !== "none"
-      ) as HTMLElement;
-      const grid = active.querySelector<HTMLElement>(
-        '[data-kp-place-value-operation-endpoint="source"] ' +
+      const grid = written.querySelector<HTMLElement>(
+        '[data-kp-place-value-written-ownership="persistent-documentary"] ' +
         "[data-kp-place-value-grid]"
       )!;
       const rect = grid.getBoundingClientRect();

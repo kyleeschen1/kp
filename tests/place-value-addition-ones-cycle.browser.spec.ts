@@ -72,7 +72,7 @@ for (const viewport of [
           )
         ].filter((owner) =>
           owner.dataset["kpEquationMaterialSemanticEntityId"]
-            ?.startsWith("annotation.ones.material.") === true
+            ?.startsWith("annotation.decimal-position-0.material.") === true
         );
         const targetDigits = [
           ...stage().querySelectorAll<HTMLElement>(
@@ -142,7 +142,7 @@ for (const viewport of [
           targetBelowRule:
             target.y > underline.top + underline.height / 2,
           destinationPolicy:
-            session.onesEvaluation.binding.convergenceAnchor
+            session.columnEvaluations[0].binding.convergenceAnchor
         };
       };
 
@@ -236,7 +236,7 @@ for (const viewport of [
       const owner = (annotation: "remainder" | "carry") =>
         exchange().querySelector<HTMLElement>(
           "[data-kp-equation-material-semantic-entity-id=" +
-          `"annotation.ones.${annotation}"]`
+          `"annotation.decimal-position-0.${annotation}"]`
         )!;
       const persistent = (id: "result.ones" | "carry.tens") =>
         (dom.writtenRoot as HTMLElement).querySelector<HTMLElement>(

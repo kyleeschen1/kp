@@ -30,19 +30,22 @@ test("adversarial matrix leaves no structural escape into the renderer", () => {
     endPermille: 400,
     consumptionPolicy: "hide-after-use"
   };
+  const referenceOperation = plan.operations[0]!;
+  const settledOutput = referenceOperation.outputs[0]!;
+  const carryOutput = referenceOperation.outputs[1]!;
   const wrongDestination = {
-    ...plan.onesOperation.carry.route,
-    to: plan.onesOperation.result.destination
+    ...carryOutput.route,
+    to: settledOutput.destination
   };
   const teleportingCarry = {
-    ...plan.onesOperation.carry.route,
+    ...carryOutput.route,
     authoredGeometry: {
       from: [0, 0],
       to: [10, 10]
     }
   };
-  const copiedTransit = { ...plan.onesOperation.carry.transit };
-  const copiedHandoff = { ...plan.onesOperation.carry.handoff };
+  const copiedTransit = { ...carryOutput.transit };
+  const copiedHandoff = { ...carryOutput.handoff };
   const copiedPlan = { ...plan };
 
   assert.equal(isKpPersistentEntityLifetime(replacedScene), false);
@@ -74,10 +77,11 @@ test("only a sealed conforming plan mints renderer-facing authority", () => {
     }),
     false
   );
-  assert.equal(certificate.plan.onesOperation.carry.route.kind,
+  const carryOutput = certificate.plan.operations[0]!.outputs[1]!;
+  assert.equal(carryOutput.route.kind,
     "carry-arch");
-  assert.equal(certificate.plan.onesOperation.carry.route.authoredGeometry,
+  assert.equal(carryOutput.route.authoredGeometry,
     false);
-  assert.equal(certificate.plan.onesOperation.carry.transit.paintPolicy,
+  assert.equal(carryOutput.transit.paintPolicy,
     "visible-and-opaque-through-route");
 });

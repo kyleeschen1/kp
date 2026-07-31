@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  isKpPlaceValueHundredsEvaluation
-} from "../src/rendering/place-value-addition-ones-evaluation.ts";
+  isKpPlaceValueColumnEvaluation
+} from "../src/rendering/place-value-addition-column-evaluation.ts";
 import {
   isKpPlaceValueNativeSettlement
 } from "../src/rendering/place-value-addition-native-settlement.ts";
@@ -13,52 +13,58 @@ import {
 
 test("hundreds evaluation reuses the shared operation route", () => {
   const session = createKpPlaceValueAdditionRuntimeSession();
-  const { onesEvaluation, hundredsEvaluation } = session;
+  const referenceEvaluation = session.columnEvaluations[0]!;
+  const finalEvaluation = session.columnEvaluations[2]!;
 
   assert.equal(
-    isKpPlaceValueHundredsEvaluation(hundredsEvaluation),
+    isKpPlaceValueColumnEvaluation(finalEvaluation),
     true
   );
-  assert.equal(hundredsEvaluation.expression, "1 + 2 + 1 = 4");
-  assert.deepEqual(hundredsEvaluation.materialSelectorIds, [
+  assert.equal(finalEvaluation.expression, "1 + 2 + 1 = 4");
+  assert.deepEqual(finalEvaluation.materialSelectorIds, [
     "carry.hundreds",
     "digit.first.hundreds",
     "digit.second.hundreds"
   ]);
-  assert.deepEqual(hundredsEvaluation.targetSelectorIds, [
+  assert.deepEqual(finalEvaluation.targetSelectorIds, [
     "result.hundreds"
   ]);
   assert.equal(
-    hundredsEvaluation.forward.programId,
-    onesEvaluation.forward.programId
+    finalEvaluation.forward.programId,
+    referenceEvaluation.forward.programId
   );
   assert.equal(
-    hundredsEvaluation.forward.route.primitiveRoute,
-    onesEvaluation.forward.route.primitiveRoute
+    finalEvaluation.forward.route.primitiveRoute,
+    referenceEvaluation.forward.route.primitiveRoute
   );
 });
 
 test("the carried hundred is opaque material in the final evaluation", () => {
-  const { hundredsEvaluation } =
-    createKpPlaceValueAdditionRuntimeSession();
-  const carry = hundredsEvaluation.binding.sourceAnnotations.find(
-    ({ selectorIds }) => selectorIds.includes("carry.hundreds")
+  const evaluation =
+    createKpPlaceValueAdditionRuntimeSession().columnEvaluations[2]!;
+  const carryProxy = evaluation.writtenOwnership.contributionProxies.find(
+    ({ sourceCellId }) => sourceCellId === "carry.hundreds"
   );
-  const plus = hundredsEvaluation.binding.sourceAnnotations.find(
-    ({ selectorIds }) => selectorIds.includes("operator.add")
+  const carry = evaluation.binding.sourceAnnotations.find(
+    ({ selectorIds }) => selectorIds.includes(carryProxy!.proxySelectorId)
+  );
+  const plus = evaluation.binding.sourceAnnotations.find(
+    ({ selectorIds }) => selectorIds.includes(
+      evaluation.writtenOwnership.catalystProxy.proxySelectorId
+    )
   );
 
   assert.equal(carry?.contribution, "material-input");
   assert.equal(plus?.contribution, "catalyst");
   assert.ok(
-    hundredsEvaluation.binding.lineages[0]?.sourceAnnotationIds.includes(
+    evaluation.binding.lineages[0]?.sourceAnnotationIds.includes(
       carry!.id
     )
   );
-  assert.equal(hundredsEvaluation.opacityPolicy, "opaque");
+  assert.equal(evaluation.opacityPolicy, "opaque");
   assert.deepEqual(
-    hundredsEvaluation.rewind.phaseOrder,
-    [...hundredsEvaluation.forward.phaseOrder].reverse()
+    evaluation.rewind.phaseOrder,
+    [...evaluation.forward.phaseOrder].reverse()
   );
 });
 

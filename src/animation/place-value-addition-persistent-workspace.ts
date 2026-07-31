@@ -4,6 +4,12 @@ import {
   type KpVerifiedPlaceValueSemanticFoundation
 } from "../architecture/place-value-addition-semantic-foundation.ts";
 import {
+  compileKpPlaceValueAdditionPositionPrograms
+} from "../reader/compiler/place-value-addition-position-program.ts";
+import type {
+  KpExactRadixPosition
+} from "../reader/compiler/place-value-addition-position-types.ts";
+import {
   compileKpPlaceValueWrittenColumnProjection,
   isKpPlaceValueWrittenColumnProjection,
   type KpPlaceValueWrittenColumnProjection
@@ -34,42 +40,43 @@ const sealedPlans = new WeakSet<object>();
 const sealedConformance = new WeakSet<object>();
 
 export interface KpPlaceValuePersistentOutputPlan {
+  readonly role: "settled-digit" | "carry-to-next-position";
   readonly destination: KpSemanticDestination<"native-endpoint">;
   readonly route: KpMeasuredRouteIntent;
   readonly transit: KpTransitOwnership;
   readonly handoff: KpEndpointHandoff;
 }
 
+export interface KpPlaceValuePersistentPositionOperation {
+  readonly position: KpExactRadixPosition;
+  readonly evaluationBeatId: string;
+  readonly exchangeBeatId?: string | undefined;
+  readonly settlementBeatId: string;
+  readonly contributorCellIds: readonly string[];
+  readonly totalDestination: KpSemanticDestination<"operation-destination">;
+  readonly contributionRoutes: readonly KpMeasuredRouteIntent[];
+  readonly outputs: readonly KpPlaceValuePersistentOutputPlan[];
+}
+
 export interface KpPlaceValuePersistentWorkspacePlan {
   readonly schemaVersion:
-    "kp.place-value-addition-persistent-workspace.v1";
+    "kp.place-value-addition-persistent-workspace.v2";
   readonly animationId: string;
   readonly traceId: string;
-  readonly implementationScope: "ones-cycle-only";
-  readonly generalizationGate: "human-ones-checkpoint";
+  readonly implementationScope: "ordered-position-sequence";
+  readonly generalizationGate: "approved-reference-exemplar";
   readonly nativeEntityIds: readonly string[];
   readonly beatIds: readonly string[];
   readonly regions: readonly KpPersistentWorkspaceRegion[];
   readonly lifetimes: readonly KpPersistentEntityLifetime[];
-  readonly onesOperation: {
-    readonly evaluationBeatId: "beat.place-value.evaluate-ones";
-    readonly exchangeBeatId: "beat.place-value.exchange-ones";
-    readonly totalDestination:
-      KpSemanticDestination<"operation-destination">;
-    readonly contributionRoutes: readonly [
-      KpMeasuredRouteIntent,
-      KpMeasuredRouteIntent
-    ];
-    readonly result: KpPlaceValuePersistentOutputPlan;
-    readonly carry: KpPlaceValuePersistentOutputPlan;
-  };
+  readonly operations: readonly KpPlaceValuePersistentPositionOperation[];
   readonly [kpPlaceValuePersistentWorkspaceBrand]: true;
 }
 
 export interface KpPlaceValuePersistentWorkspaceConformance {
   readonly plan: KpPlaceValuePersistentWorkspacePlan;
   readonly traceId: string;
-  readonly implementationScope: "ones-cycle-only";
+  readonly implementationScope: "ordered-position-sequence";
   readonly documentaryPolicy: "same-connected-node-full-timeline";
   readonly routePolicy: "measured-no-teleport";
   readonly ownershipPolicy: "one-visible-owner";
@@ -82,8 +89,7 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
 } = {}): KpPlaceValuePersistentWorkspacePlan {
   const foundation =
     input.foundation ?? certifyKpPlaceValueSemanticFoundation();
-  const projection =
-    input.projection ??
+  const projection = input.projection ??
     compileKpPlaceValueWrittenColumnProjection(foundation);
   if (
     !isKpVerifiedPlaceValueSemanticFoundation(foundation) ||
@@ -104,12 +110,12 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
   const resultBand = defineKpPersistentWorkspaceRegion({
     id: "region.place-value.result-band",
     kind: "operation-destination",
-    semanticRole: "evaluated-column-total"
+    semanticRole: "evaluated-position-total"
   });
   const transitRegion = defineKpPersistentWorkspaceRegion({
     id: "region.place-value.carry-transit",
     kind: "transit",
-    semanticRole: "adjacent-column-carry-route"
+    semanticRole: "adjacent-position-carry-route"
   });
   const documentaryIds = new Set<string>([
     ...reference.primaryStage.initialCells.map(({ id }) => id),
@@ -124,7 +130,6 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
     string,
     KpPersistentWorkspaceRegion<"native-endpoint">
   >();
-
   for (const entityId of nativeEntityIds) {
     if (documentaryIds.has(entityId)) {
       lifetimes.push(defineKpPersistentDocumentaryLifetime({
@@ -151,57 +156,46 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
     }));
   }
 
-  const totalDestination = defineKpSemanticDestination({
-    id: "destination.place-value.ones.total",
-    semanticEntityId: "evaluation.ones.total",
-    region: resultBand
-  });
-  const contributionRoute = (
-    materialEntityId: "digit.first.ones" | "digit.second.ones"
-  ): KpMeasuredRouteIntent => defineKpMeasuredRouteIntent({
-    id: `route.place-value.ones.contribution.${materialEntityId}`,
-    kind: "converge",
-    materialEntityId,
-    fromRegion: documentaryRegion,
-    to: totalDestination
-  });
-  const outputPlan = (
-    entityId: "result.ones" | "carry.tens",
-    materialEntityId:
-      | "evaluation.ones.total.ones"
-      | "evaluation.ones.total.tens",
-    kind: "converge" | "carry-arch"
-  ): KpPlaceValuePersistentOutputPlan => {
-    const region = endpointRegions.get(entityId);
-    const endpointLifetime = lifetimes.find(
-      (lifetime) =>
-        lifetime.kind === "native-endpoint" &&
-        lifetime.entityId === entityId
+  const outputPlan = (input: {
+    readonly positionId: string;
+    readonly endpointEntityId: string;
+    readonly materialEntityId: string;
+    readonly role: KpPlaceValuePersistentOutputPlan["role"];
+  }): KpPlaceValuePersistentOutputPlan => {
+    const region = endpointRegions.get(input.endpointEntityId);
+    const endpointLifetime = lifetimes.find((lifetime) =>
+      lifetime.kind === "native-endpoint" &&
+      lifetime.entityId === input.endpointEntityId
     );
     if (
       region === undefined ||
       endpointLifetime === undefined ||
       endpointLifetime.kind !== "native-endpoint"
     ) {
-      throw new Error(`Missing persistent endpoint ${entityId}.`);
+      throw new Error(
+        `Missing persistent endpoint ${input.endpointEntityId}.`
+      );
     }
     const destination = defineKpSemanticDestination({
-      id: `destination.place-value.${entityId}`,
-      semanticEntityId: entityId,
+      id: `destination.place-value.${input.endpointEntityId}`,
+      semanticEntityId: input.endpointEntityId,
       region
     });
     const route = defineKpMeasuredRouteIntent({
-      id: `route.place-value.ones.${entityId}`,
-      kind,
-      materialEntityId,
+      id: `route.place-value.${input.positionId}.${input.endpointEntityId}`,
+      kind: input.role === "carry-to-next-position"
+        ? "carry-arch"
+        : "converge",
+      materialEntityId: input.materialEntityId,
       fromRegion: resultBand,
       to: destination
     });
     const transit = defineKpTransitOwnership({
-      materialEntityId,
+      materialEntityId: input.materialEntityId,
       route
     });
     return Object.freeze({
+      role: input.role,
       destination,
       route,
       transit,
@@ -213,13 +207,87 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
     });
   };
 
+  const operations = compileKpPlaceValueAdditionPositionPrograms().map(
+    (program): KpPlaceValuePersistentPositionOperation => {
+      const totalDestination = defineKpSemanticDestination({
+        id: `destination.place-value.${program.position.id}.total`,
+        semanticEntityId: program.evaluation.evaluatedTotalEntityId,
+        region: resultBand
+      });
+      const contributionRoutes = program.evaluation.contributorCellIds.map(
+        (materialEntityId, index) => defineKpMeasuredRouteIntent({
+          id:
+            `route.place-value.${program.position.id}.contribution-${index}`,
+          kind: "converge",
+          materialEntityId,
+          fromRegion: documentaryRegion,
+          to: totalDestination
+        })
+      ) as unknown as KpPlaceValuePersistentPositionOperation[
+        "contributionRoutes"
+      ];
+      const outputSpecs = program.exchange === undefined
+        ? program.evaluation.evaluationDigits
+            .filter(({ semanticEntityId }) =>
+              endpointRegions.has(semanticEntityId)
+            )
+            .map((digit) => ({
+              endpointEntityId: digit.semanticEntityId,
+              materialEntityId: digit.semanticEntityId,
+              role: "settled-digit" as const
+            }))
+        : program.exchange.outputCellIds.map((endpointEntityId, index) => {
+            const endpointCell = projection.cells.find(
+              ({ semanticEntityId }) => semanticEntityId === endpointEntityId
+            );
+            const materialDigit = program.exchange!.outputDigits.find(
+              ({ columnId }) => columnId === endpointCell?.column
+            );
+            if (endpointCell === undefined || materialDigit === undefined) {
+              throw new Error(
+                `Position ${program.position.sequenceIndex} cannot bind its persistent output ${endpointEntityId}.`
+              );
+            }
+            return {
+              endpointEntityId,
+              materialEntityId: materialDigit.semanticEntityId,
+              role: index === 0
+                ? "settled-digit" as const
+                : "carry-to-next-position" as const
+            };
+          });
+      if (outputSpecs.length === 0) {
+        throw new Error(
+          `Position ${program.position.sequenceIndex} has no persistent output.`
+        );
+      }
+      const outputs = outputSpecs.map((spec) => outputPlan({
+        positionId: program.position.id,
+        ...spec
+      })) as unknown as KpPlaceValuePersistentPositionOperation["outputs"];
+      return Object.freeze({
+        position: program.position,
+        evaluationBeatId: program.evaluation.beatId,
+        ...(program.exchange === undefined
+          ? {}
+          : { exchangeBeatId: program.exchange.beatId }),
+        settlementBeatId:
+          program.exchange?.beatId ?? program.evaluation.beatId,
+        contributorCellIds: program.evaluation.contributorCellIds,
+        totalDestination,
+        contributionRoutes,
+        outputs
+      });
+    }
+  ) as unknown as KpPlaceValuePersistentWorkspacePlan["operations"];
+
   const plan = Object.freeze({
     schemaVersion:
-      "kp.place-value-addition-persistent-workspace.v1" as const,
+      "kp.place-value-addition-persistent-workspace.v2" as const,
     animationId: foundation.animationId,
     traceId: foundation.trace.id,
-    implementationScope: "ones-cycle-only" as const,
-    generalizationGate: "human-ones-checkpoint" as const,
+    implementationScope: "ordered-position-sequence" as const,
+    generalizationGate: "approved-reference-exemplar" as const,
     nativeEntityIds,
     beatIds: Object.freeze(reference.beats.map(({ id }) => id)),
     regions: Object.freeze([
@@ -229,25 +297,7 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
       ...endpointRegions.values()
     ]),
     lifetimes: Object.freeze(lifetimes),
-    onesOperation: Object.freeze({
-      evaluationBeatId: "beat.place-value.evaluate-ones" as const,
-      exchangeBeatId: "beat.place-value.exchange-ones" as const,
-      totalDestination,
-      contributionRoutes: Object.freeze([
-        contributionRoute("digit.first.ones"),
-        contributionRoute("digit.second.ones")
-      ] as const),
-      result: outputPlan(
-        "result.ones",
-        "evaluation.ones.total.ones",
-        "converge"
-      ),
-      carry: outputPlan(
-        "carry.tens",
-        "evaluation.ones.total.tens",
-        "carry-arch"
-      )
-    })
+    operations: Object.freeze(operations)
   });
   sealedPlans.add(plan);
   return plan as unknown as KpPlaceValuePersistentWorkspacePlan;
@@ -256,9 +306,7 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
 export function isKpPlaceValuePersistentWorkspacePlan(
   value: unknown
 ): value is KpPlaceValuePersistentWorkspacePlan {
-  return typeof value === "object" &&
-    value !== null &&
-    sealedPlans.has(value);
+  return typeof value === "object" && value !== null && sealedPlans.has(value);
 }
 
 export function bindKpPlaceValuePersistentWorkspacePlan(
@@ -274,10 +322,6 @@ export function bindKpPlaceValuePersistentWorkspacePlan(
   const documentaryLifetimes = plan.lifetimes.filter(
     (lifetime) => lifetime.kind === "documentary"
   );
-  const outputs = [
-    plan.onesOperation.result,
-    plan.onesOperation.carry
-  ];
   if (
     uniqueEntities.size !== plan.nativeEntityIds.length ||
     lifetimeEntities.size !== plan.lifetimes.length ||
@@ -289,22 +333,24 @@ export function bindKpPlaceValuePersistentWorkspacePlan(
         nodePolicy !== "same-connected-node" ||
         geometryPolicy !== "stationary"
     ) ||
-    documentaryLifetimes.some(
-      (lifetime) =>
-        lifetime.initialVisibility !== "visible" ||
-        (
-          lifetime.consumptionPolicy !== "monotone-dim-never-hide" &&
-          lifetime.consumptionPolicy !== "remain-opaque"
-        )
+    documentaryLifetimes.some((lifetime) =>
+      lifetime.initialVisibility !== "visible" ||
+      (
+        lifetime.consumptionPolicy !== "monotone-dim-never-hide" &&
+        lifetime.consumptionPolicy !== "remain-opaque"
+      )
     ) ||
-    plan.onesOperation.contributionRoutes.some(
-      (route) =>
-        route.to !== plan.onesOperation.totalDestination ||
+    plan.operations.some((operation, index) =>
+      operation.position.sequenceIndex !== index ||
+      operation.contributionRoutes.length !==
+        operation.contributorCellIds.length ||
+      operation.contributionRoutes.some((route, routeIndex) =>
+        route.to !== operation.totalDestination ||
         route.kind !== "converge" ||
-        route.authoredGeometry !== false
-    ) ||
-    outputs.some(
-      ({ destination, route, transit, handoff }) =>
+        route.authoredGeometry !== false ||
+        route.materialEntityId !== operation.contributorCellIds[routeIndex]
+      ) ||
+      operation.outputs.some(({ destination, route, transit, handoff }) =>
         route.to !== destination ||
         route.authoredGeometry !== false ||
         transit.route !== route ||
@@ -314,12 +360,8 @@ export function bindKpPlaceValuePersistentWorkspacePlan(
         handoff.endpoint !== destination ||
         handoff.ownershipPolicy !== "exclusive-at-native-match" ||
         handoff.opacityPolicy !== "opaque"
-    ) ||
-    plan.onesOperation.result.destination.semanticEntityId !== "result.ones" ||
-    plan.onesOperation.carry.destination.semanticEntityId !== "carry.tens" ||
-    plan.onesOperation.carry.route.kind !== "carry-arch" ||
-    plan.onesOperation.result.transit.materialEntityId ===
-      plan.onesOperation.carry.transit.materialEntityId
+      )
+    )
   ) {
     throw new Error(
       "Persistent workspace plan violates documentary, route, or ownership conformance."
@@ -334,8 +376,7 @@ export function bindKpPlaceValuePersistentWorkspacePlan(
     ownershipPolicy: "one-visible-owner" as const
   });
   sealedConformance.add(certificate);
-  return certificate as unknown as
-    KpPlaceValuePersistentWorkspaceConformance;
+  return certificate as unknown as KpPlaceValuePersistentWorkspaceConformance;
 }
 
 export function isKpPlaceValuePersistentWorkspaceConformance(

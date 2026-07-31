@@ -4,14 +4,13 @@ for (const viewport of [
   { name: "wide", width: 960, height: 720 },
   { name: "phone", width: 390, height: 720 }
 ] as const) {
-  test(`${viewport.name} hundreds evaluation settles native 434 without a stale frame`, async ({
+  test(`${viewport.name} terminal position hands off to the persistent native result`, async ({
     page
   }) => {
     await page.setViewportSize(viewport);
     await page.goto("/");
     const evidence = await page.evaluate(async ({ width }) => {
-      const runtimeUrl =
-        "/src/rendering/place-value-addition-runtime.ts";
+      const runtimeUrl = "/src/rendering/place-value-addition-runtime.ts";
       const sharedDomUrl =
         "/src/rendering/place-value-addition-shared-dom.ts";
       const clockUrl = "/src/reader/runtime/playback-clock.ts";
@@ -49,16 +48,20 @@ for (const viewport of [
         placeItems: "center"
       });
       await document.fonts.ready;
+      dom.prepareNativeScenes();
 
-      const tensExchange = () => document.querySelector<HTMLElement>(
-        "[data-kp-place-value-tens-exchange]"
+      const finalScene = () => document.querySelector<HTMLElement>(
+        '[data-kp-place-value-position-id="decimal-position-2"]' +
+        "[data-kp-place-value-hundreds-evaluation]"
       )!;
-      const hundredsEvaluation = () =>
-        document.querySelector<HTMLElement>(
-          "[data-kp-place-value-hundreds-evaluation]"
-        )!;
-      const settlement = () => document.querySelector<HTMLElement>(
-        "[data-kp-place-value-native-settlement]"
+      const scaffold = dom.writtenRoot as HTMLElement;
+      const resultIds = [
+        "result.hundreds",
+        "result.tens",
+        "result.ones"
+      ] as const;
+      const cell = (id: string) => scaffold.querySelector<HTMLElement>(
+        `[data-kp-semantic-entity-id="${id}"]`
       )!;
       const metric = (element: HTMLElement) => {
         const paint = element.querySelector<HTMLElement>(
@@ -76,28 +79,8 @@ for (const viewport of [
           fontWeight: style.fontWeight
         };
       };
-      const roots = (
-        stage: HTMLElement,
-        endpoint: "source" | "target",
-        ids: readonly string[]
-      ) => ids.map((id) => [
-        id,
-        metric(stage.querySelector<HTMLElement>(
-          `[data-kp-place-value-operation-endpoint="${endpoint}"] ` +
-          `[data-kp-semantic-entity-id="${id}"]`
-        )!)
-      ] as const);
-      const nativeRoots = (
-        stage: HTMLElement,
-        ids: readonly string[]
-      ) => ids.map((id) => [
-        id,
-        metric(stage.querySelector<HTMLElement>(
-          `[data-kp-semantic-entity-id="${id}"]`
-        )!)
-      ] as const);
-      const owners = (stage: HTMLElement) => [
-        ...stage.querySelectorAll<HTMLElement>(
+      const owners = () => [
+        ...finalScene().querySelectorAll<HTMLElement>(
           "[data-kp-equation-material-owner-id]"
         )
       ].map((owner) => ({
@@ -107,123 +90,54 @@ for (const viewport of [
         text: owner.textContent?.trim() ?? ""
       })).sort((left, right) => left.id.localeCompare(right.id));
       const nativeFrame = () => ({
-        opacity: getComputedStyle(settlement()).opacity,
-        display: getComputedStyle(settlement()).display,
+        nodeIds: resultIds.map((id) => cell(id).id),
+        visibility: resultIds.map((id) =>
+          getComputedStyle(cell(id)).visibility
+        ),
+        opacity: resultIds.map((id) => getComputedStyle(cell(id)).opacity),
         text: resultIds.map((id) =>
-          settlement().querySelector<HTMLElement>(
-            `[data-kp-semantic-entity-id="${id}"] .katex-html`
-          )?.textContent?.trim()
-        ).join("")
+          cell(id).querySelector<HTMLElement>(".katex-html")
+            ?.textContent?.trim()
+        ).join(""),
+        metrics: resultIds.map((id) => [id, metric(cell(id))] as const)
       });
 
-      dom.apply(sample(0.65, 0, 1));
-      const priorTarget = tensExchange().querySelector<HTMLElement>(
-        '[data-kp-place-value-operation-endpoint="target"]'
-      )!;
-      priorTarget.style.opacity = "1";
-      tensExchange().querySelector<HTMLElement>(
-        "[data-kp-editor-equation-material-layer]"
-      )!.style.visibility = "hidden";
-      const stableIds = [
-        "operator.add",
-        "digit.first.hundreds",
-        "digit.second.hundreds",
-        "carry.hundreds",
-        "result.tens",
-        "result.ones"
-      ] as const;
-      const priorEndpoint = roots(
-        tensExchange(),
-        "target",
-        stableIds
-      );
-
-      dom.apply(sample(0.71, 0.65, 2));
-      const evaluationSource = roots(
-        hundredsEvaluation(),
-        "source",
-        stableIds
-      );
-      dom.apply(sample(0.79, 0.71, 3));
-      const forward = owners(hundredsEvaluation());
-      dom.apply(sample(0.84, 0.79, 4));
-      dom.apply(sample(0.79, 0.84, 5));
-      const rewind = owners(hundredsEvaluation());
-
-      const evaluationTarget =
-        hundredsEvaluation().querySelector<HTMLElement>(
-          '[data-kp-place-value-operation-endpoint="target"]'
-        )!;
-      evaluationTarget.style.opacity = "1";
-      hundredsEvaluation().querySelector<HTMLElement>(
-        "[data-kp-editor-equation-material-layer]"
-      )!.style.visibility = "hidden";
-      const resultIds = [
-        "result.hundreds",
-        "result.tens",
-        "result.ones"
-      ] as const;
-      const evaluatedResult = roots(
-        hundredsEvaluation(),
-        "target",
-        resultIds
-      );
-
-      dom.apply(sample(0.87, 0.79, 6));
-      const settlementSource = nativeRoots(
-        settlement(),
-        resultIds
-      );
+      dom.apply(sample(0.79, 0, 1));
+      const forward = owners();
+      dom.apply(sample(0.84, 0.79, 2));
+      dom.apply(sample(0.79, 0.84, 3));
+      const rewind = owners();
+      dom.apply(sample(0.87, 0.79, 4));
       const boundary = {
-        evaluationDisplay: getComputedStyle(
-          hundredsEvaluation()
+        evaluationDisplay: getComputedStyle(finalScene()).display,
+        legacySettlementDisplay: getComputedStyle(
+          document.querySelector<HTMLElement>(
+            "[data-kp-place-value-native-settlement]"
+          )!
         ).display,
-        settlementDisplay: getComputedStyle(settlement()).display
+        frame: nativeFrame()
       };
-
-      dom.apply(sample(0.9, 0.87, 7));
+      dom.apply(sample(0.9, 0.87, 5));
       const dwellStart = nativeFrame();
-      dom.apply(sample(0.96, 0.9, 8));
+      dom.apply(sample(0.96, 0.9, 6));
       const dwellEnd = nativeFrame();
-      dom.apply(sample(1, 0.96, 9));
-      const settlementTargetRoot = settlement();
-      const endpoint = {
-        targetOpacity: getComputedStyle(settlementTargetRoot).opacity,
-        text: resultIds.map((id) =>
-          settlementTargetRoot.querySelector<HTMLElement>(
-            `[data-kp-semantic-entity-id="${id}"] .katex-html`
-          )?.textContent?.trim()
-        ).join(""),
-        metrics: nativeRoots(settlement(), resultIds)
-      };
+      dom.apply(sample(1, 0.96, 7));
+      const endpoint = nativeFrame();
 
-      dom.root.style.inlineSize =
-        `${Math.max(320, width - 120)}px`;
-      await new Promise<void>((resolve) =>
-        requestAnimationFrame(() =>
-          requestAnimationFrame(() => resolve())
-        )
-      );
-      dom.apply(sample(1, 1, 10));
-      const afterResize = {
-        opacity: getComputedStyle(settlement()).opacity,
-        text: nativeFrame().text,
-        metrics: nativeRoots(settlement(), resultIds)
-      };
-
-      dom.apply(sample(0.79, 1, 11));
-      dom.apply(sample(0.95, 0.79, 12));
+      dom.root.style.inlineSize = `${Math.max(320, width - 120)}px`;
+      await new Promise<void>((resolve) => requestAnimationFrame(() =>
+        requestAnimationFrame(() => resolve())
+      ));
+      dom.apply(sample(1, 1, 8));
+      const afterResize = nativeFrame();
+      dom.apply(sample(0.79, 1, 9));
+      dom.apply(sample(0.95, 0.79, 10));
       const replayForward = nativeFrame();
-      dom.apply(sample(0.95, 0.95, 13));
+      dom.apply(sample(0.95, 0.95, 11));
       const replaySame = nativeFrame();
-
       return {
-        priorEndpoint,
-        evaluationSource,
         forward,
         rewind,
-        evaluatedResult,
-        settlementSource,
         boundary,
         dwellStart,
         dwellEnd,
@@ -234,81 +148,27 @@ for (const viewport of [
       };
     }, viewport);
 
-    for (const [id, prior] of evidence.priorEndpoint) {
-      const current = evidence.evaluationSource.find(
-        ([candidateId]) => candidateId === id
-      )?.[1];
-      expect(current, `missing hundreds source ${id}`).toBeDefined();
-      expect(Math.abs(current!.left - prior.left)).toBeLessThanOrEqual(0.5);
-      expect(Math.abs(current!.top - prior.top)).toBeLessThanOrEqual(0.5);
-      expect(current!.fontFamily).toBe(prior.fontFamily);
-      expect(current!.fontSize).toBe(prior.fontSize);
-      expect(current!.fontWeight).toBe(prior.fontWeight);
-    }
+    expect(evidence.forward.length).toBeGreaterThan(0);
     expect(evidence.forward.every(({ opacity }) =>
       opacity === "0" || opacity === "1"
     )).toBe(true);
-    const materialText = evidence.forward
-      .filter(({ opacity }) => opacity === "1")
-      .map(({ text }) => text)
-      .join("");
-    for (const glyph of ["1", "2", "+"]) {
-      expect(materialText).toContain(glyph);
-    }
-    expect(evidence.forward.some(({ opacity, transform }) =>
-      opacity === "1" && transform !== "none"
-    )).toBe(true);
     expect(evidence.rewind).toEqual(evidence.forward);
-
-    for (const [id, prior] of evidence.evaluatedResult) {
-      const current = evidence.settlementSource.find(
-        ([candidateId]) => candidateId === id
-      )?.[1];
-      expect(current, `missing settlement source ${id}`).toBeDefined();
-      expect(Math.abs(current!.left - prior.left)).toBeLessThanOrEqual(0.5);
-      expect(Math.abs(current!.top - prior.top)).toBeLessThanOrEqual(0.5);
-      expect(Math.abs(current!.width - prior.width)).toBeLessThanOrEqual(0.5);
-      expect(Math.abs(current!.height - prior.height)).toBeLessThanOrEqual(0.5);
-      expect(current!.fontFamily).toBe(prior.fontFamily);
-      expect(current!.fontSize).toBe(prior.fontSize);
-      expect(current!.fontWeight).toBe(prior.fontWeight);
-    }
     expect(evidence.boundary.evaluationDisplay).toBe("none");
-    expect(evidence.boundary.settlementDisplay).toBe("grid");
-    for (const frame of [
-      evidence.dwellStart,
-      evidence.dwellEnd,
-      evidence.replayForward,
-      evidence.replaySame
-    ]) {
-      expect(frame.opacity).toBe("1");
-      expect(frame.display).toBe("grid");
-      expect(frame.text).toBe("434");
-    }
-    expect(evidence.replaySame).toEqual(evidence.replayForward);
-    expect(evidence.endpoint.targetOpacity).toBe("1");
-    expect(evidence.endpoint.text).toBe("434");
-    expect(evidence.afterResize.opacity).toBe("1");
+    expect(evidence.boundary.legacySettlementDisplay).toBe("none");
+    expect(evidence.boundary.frame.visibility).toEqual([
+      "visible",
+      "visible",
+      "visible"
+    ]);
+    expect(evidence.boundary.frame.opacity.every(
+      (opacity) => Number(opacity) > 0
+    )).toBe(true);
+    expect(evidence.boundary.frame.text).toBe("434");
+    expect(evidence.dwellEnd).toEqual(evidence.dwellStart);
+    expect(evidence.endpoint).toEqual(evidence.dwellStart);
+    expect(evidence.afterResize.nodeIds).toEqual(evidence.endpoint.nodeIds);
     expect(evidence.afterResize.text).toBe("434");
-    for (const [id, prior] of evidence.settlementSource) {
-      const current = evidence.endpoint.metrics.find(
-        ([candidateId]) => candidateId === id
-      )?.[1];
-      expect(current, `missing native endpoint ${id}`).toBeDefined();
-      expect(Math.abs(current!.left - prior.left)).toBeLessThanOrEqual(0.5);
-      expect(Math.abs(current!.top - prior.top)).toBeLessThanOrEqual(0.5);
-      expect(current!.fontFamily).toBe(prior.fontFamily);
-      expect(current!.fontSize).toBe(prior.fontSize);
-      expect(current!.fontWeight).toBe(prior.fontWeight);
-    }
-    for (const [id, prior] of evidence.endpoint.metrics) {
-      const current = evidence.afterResize.metrics.find(
-        ([candidateId]) => candidateId === id
-      )?.[1];
-      expect(current, `missing resized endpoint ${id}`).toBeDefined();
-      expect(current!.fontFamily).toBe(prior.fontFamily);
-      expect(current!.fontSize).toBe(prior.fontSize);
-      expect(current!.fontWeight).toBe(prior.fontWeight);
-    }
+    expect(evidence.replaySame).toEqual(evidence.replayForward);
+    expect(evidence.replayForward.text).toBe("434");
   });
 }

@@ -122,6 +122,22 @@ Use bounded Theseus context receipts, impact-aware inner-loop verification,
 browser checks at geometry boundaries, and broad gates only at the named
 checkpoint and release slices.
 
+## Approved Resumption Direction
+
+On 2026-07-31 the user approved the rightmost-column exemplar and resumed the
+loop with a stronger generalization criterion: reusable compiler, ownership,
+route, and renderer APIs model an ordered sequence of exact place descriptors,
+not `ones`, `tens`, `hundreds`, or a fixed number of columns. Decimal labels in
+the canonical example are fixture data. Position identity, radix, exact scale,
+adjacency, contributors, destination, result, carry, and terminal behavior are
+the reusable contract.
+
+Slice 11 must therefore remove the ones-only optional-ownership seam through a
+position-generic plan rather than cloning it for two named decimal places.
+Unequal-width and decimal examples remain later proof obligations; this
+resumption direction makes them architecturally admissible without falsely
+claiming they are already visually certified.
+
 ## Done Contract
 
 The loop is complete only when:
