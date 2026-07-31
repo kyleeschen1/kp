@@ -188,6 +188,11 @@ test("switching catalog selections disposes the one place-value controller", asy
     `[data-kp-editor-animation-player]` +
     `[data-kp-editor-animation-id="${animationId}"]`
   );
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-animation-host-status",
+    "ready",
+    { timeout: 15_000 }
+  );
   await expect(player.locator(
     "[data-kp-place-value-responsive-surface]"
   )).toHaveAttribute(

@@ -221,7 +221,8 @@
     {
       "id": "s25",
       "title": "run-release-matrix",
-      "status": "planned"
+      "summary": "Completed the release matrix: 91 unit checks, 78 full browser checks, 30 visual checks, type, architecture, inference, promotion memory, production bundle budgets, build, and workspace validation pass. WebKit callers now await the shared rendered-frame readiness contract instead of fixed timing.",
+      "status": "complete"
     },
     {
       "id": "s26",

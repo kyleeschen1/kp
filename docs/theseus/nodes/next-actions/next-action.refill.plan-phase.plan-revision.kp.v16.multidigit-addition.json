@@ -917,6 +917,69 @@
       "status": "passed",
       "scope": "s24 production closure budgets",
       "checkedAt": "2026-07-30T23:41:07.769Z"
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s25 semantic release matrix",
+      "checkedAt": "2026-07-30T23:59:38.276Z",
+      "notes": "91 of 91 place-value semantic, presentation, projection, accessibility, runtime, and pre-release checks passed."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "passed",
+      "scope": "s25 three-engine release matrix",
+      "checkedAt": "2026-07-30T23:59:39.428Z",
+      "notes": "78 of 78 Chromium, Firefox, and WebKit checks passed after callers waited on rendered-frame readiness."
+    },
+    {
+      "command": "npm run visual:place-value-addition",
+      "status": "passed",
+      "scope": "s25 visual release matrix",
+      "checkedAt": "2026-07-30T23:59:40.430Z",
+      "notes": "30 of 30 wide, phone, DPR, Review, lazy-host, and resource checks passed in all three engines."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s25 static release boundary",
+      "checkedAt": "2026-07-30T23:59:41.579Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s25 architecture",
+      "checkedAt": "2026-07-30T23:59:42.570Z",
+      "notes": "All concept-room, reader, animation, and operation-presentation boundaries passed with no new infrastructure exception."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s25 type-system cost",
+      "checkedAt": "2026-07-30T23:59:43.557Z",
+      "notes": "Inference remained within the frozen contract."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s25 durable priority",
+      "checkedAt": "2026-07-30T23:59:44.602Z",
+      "notes": "Rank 2, phase, and active run remain aligned."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s25 production release",
+      "checkedAt": "2026-07-30T23:59:45.590Z",
+      "notes": "Production build and generated metadata boundary passed; only the existing large main-chunk warning remains."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s25 control-plane integrity",
+      "checkedAt": "2026-07-30T23:59:46.611Z",
+      "notes": "Validated 837 nodes and 14814 events."
     }
   ],
   "progress": {
