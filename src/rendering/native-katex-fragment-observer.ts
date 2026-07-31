@@ -150,7 +150,7 @@ export async function settleAndObserveKpNativeKatexFragments(input: {
     const settled = second.fragments[index]!;
     if (
       fragment.styleFingerprint !== settled.styleFingerprint ||
-      rectDelta(fragment.rect, settled.rect) > tolerance
+      measureKpStageRelativeRectDelta(fragment.rect, settled.rect) > tolerance
     ) {
       throw new Error(
         `Native fragment ${fragment.id} did not settle across consecutive layout frames.`
@@ -312,7 +312,10 @@ function nextLayoutFrame(ownerDocument: Document): Promise<void> {
   return new Promise((resolve) => view.requestAnimationFrame(() => resolve()));
 }
 
-function rectDelta(left: KpStageRelativeRect, right: KpStageRelativeRect): number {
+export function measureKpStageRelativeRectDelta(
+  left: KpStageRelativeRect,
+  right: KpStageRelativeRect
+): number {
   return Math.max(
     Math.abs(left.left - right.left),
     Math.abs(left.top - right.top),

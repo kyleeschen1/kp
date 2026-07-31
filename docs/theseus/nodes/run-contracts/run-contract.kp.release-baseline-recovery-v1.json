@@ -139,7 +139,8 @@
     {
       "id": "s14",
       "title": "reduce-compositor-responsibility-two",
-      "status": "planned"
+      "summary": "Unified glyph, rule, and correlated handoff telemetry behind the existing public APIs; centralized stage-relative rectangle delta across all four core modules; and removed the remaining source excess without relocation or minification. Core is 135932/136000, all 73 compositor tests and 22 architecture tests pass, governed fraction and radical captures pass, and typecheck/build are green.",
+      "status": "complete"
     },
     {
       "id": "s15",

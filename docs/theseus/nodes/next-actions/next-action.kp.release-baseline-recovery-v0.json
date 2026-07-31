@@ -511,11 +511,67 @@
       "scope": "s13-control-integrity",
       "checkedAt": "2026-07-31T22:50:01.398Z",
       "notes": "Validated 847 nodes and 15223 events before closing the first compositor reduction."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T23:06:22.565Z",
+      "notes": "All 73 fragment, rendered-scene, handoff, seek/rewind, endpoint, and compositor tests pass through the unified telemetry and rectangle-delta authorities."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-animation-construction-inventory.test.ts tests/canonical-equation-renderer-convergence.test.ts tests/linear-provider-boundary.test.ts tests/operation-presentation-migration-inventory.test.ts",
+      "status": "passed",
+      "scope": "architecture-baseline",
+      "checkedAt": "2026-07-31T23:06:23.556Z",
+      "notes": "All 22 architecture and migration tests pass. The four-module core is 135932 bytes against the unchanged 136000 ceiling, with the sealed dependency closure unchanged."
+    },
+    {
+      "command": "npm run visual:fraction-canonical-checkpoint",
+      "status": "passed",
+      "scope": "governed-browser-smoke",
+      "checkedAt": "2026-07-31T23:06:24.433Z",
+      "notes": "Built the production application and captured all 20 canonical split/merge fraction checkpoints successfully."
+    },
+    {
+      "command": "npm run visual:radical-canonical-checkpoint",
+      "status": "passed",
+      "scope": "governed-browser-smoke",
+      "checkedAt": "2026-07-31T23:06:25.277Z",
+      "notes": "Built the production application and captured all 38 canonical radical checkpoints successfully."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-31T23:06:26.150Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass. The final run also sealed the capture script's renamed selection evidence and the source-audit regex capture."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production-build",
+      "checkedAt": "2026-07-31T23:06:27.003Z",
+      "notes": "The production application builds with the consolidated compositor core."
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path src/rendering/native-katex-fragment-observer.ts --path src/rendering/native-katex-glyph-compositor.ts --path src/rendering/native-katex-rendered-scene.ts --path src/rendering/native-katex-scene-compositor.ts --path scripts/capture-glyph-reconciliation-experiment.ts --path tests/canonical-equation-renderer-convergence.test.ts",
+      "status": "passed",
+      "scope": "impact-selection",
+      "checkedAt": "2026-07-31T23:06:27.858Z",
+      "notes": "The selector classifies the core rendering refactor high risk; focused compositor and architecture suites, governed fraction/radical browser checks, typecheck, and build all ran."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s14-control-integrity",
+      "checkedAt": "2026-07-31T23:06:48.756Z",
+      "notes": "Validated 847 nodes and 15237 events before closing the second compositor reduction."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "First compositor reduction removed 3268 measured core bytes by deleting a diagnostic-only three-candidate typography fork; the actual binary runtime choice and every endpoint law remain. Core is 138275, leaving 2275 bytes for slice 14. The user confirmed the repaired Animation Host is visible; the existing glyph-page paint-size hydration failure remains explicit."
+    "summary": "Canonical scene core is now green at 135932 of 136000 bytes. Handoff telemetry has one construction path, stage-relative rectangle delta has one core authority, public microscope entrypoints and paint vocabulary remain intact, and governed fraction/radical browser captures pass."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."

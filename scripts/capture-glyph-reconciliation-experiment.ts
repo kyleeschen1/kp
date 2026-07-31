@@ -380,7 +380,7 @@ try {
         ...checkpoint,
         file: path.relative(process.cwd(), file),
         visualOwner,
-        handoffComparison,
+        handoffSelection,
         ...snapshot
       });
       await page.close();

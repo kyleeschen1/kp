@@ -852,86 +852,20 @@ type KpNativeKatexHandoffMeasurementInput = {
 export function measureKpNativeKatexGlyphHandoff(
   input: KpNativeKatexHandoffMeasurementInput
 ): KpNativeKatexHandoffTelemetry {
-  return measureKpNativeKatexPaintKindHandoff(input, "glyph");
+  return measureKpNativeKatexHandoff(input, "glyph");
 }
 
 export function measureKpNativeKatexRuleHandoff(
   input: KpNativeKatexHandoffMeasurementInput
 ): KpNativeKatexHandoffTelemetry {
-  return measureKpNativeKatexPaintKindHandoff(input, "rule");
+  return measureKpNativeKatexHandoff(input, "rule");
 }
 
-function measureKpNativeKatexPaintKindHandoff(
+// One construction path prevents public handoff microscopes from drifting.
+function measureKpNativeKatexHandoff(
   input: KpNativeKatexHandoffMeasurementInput,
-  paintKind: "glyph" | "rule"
+  mode: "glyph" | "rule" | "correlated"
 ): KpNativeKatexHandoffTelemetry {
-  const targetById = new Map(input.reconciliation.target.atoms.map((atom) => [
-    atom.id,
-    atom
-  ]));
-  const correlations = input.correlations.filter((correlation) =>
-    correlation.disposition === "target-bound" &&
-    targetById.get(correlation.targetAtomId!)?.paintKind === paintKind
-  );
-  if (correlations.length === 0) {
-    throw new Error(
-      `Native handoff microscope requires correlated ${paintKind} paint.`
-    );
-  }
-  const observations = correlations.flatMap((correlation) => {
-    const target = targetById.get(correlation.targetAtomId!)!;
-    const materialOwner = input.stage.querySelector<HTMLElement>(
-      `[data-kp-equation-material-owner-id="${
-        CSS.escape(correlation.materialOwnerId)
-      }"]`
-    );
-    const materialVisual = materialOwner?.firstElementChild;
-    if (
-      materialOwner === null ||
-      !(materialVisual instanceof HTMLElement)
-    ) {
-      throw new Error(
-        `Native handoff microscope cannot find ${correlation.materialOwnerId}.`
-      );
-    }
-    return [
-      observeCorrelatedHandoffPaint({
-        id: `${correlation.id}.material`,
-        side: "material",
-        stage: input.stage,
-        element: materialVisual,
-        rectElement: materialOwner,
-        atom: target,
-        fontRevision: input.fontRevision
-      }),
-      observeCorrelatedHandoffPaint({
-        id: `${correlation.id}.native`,
-        side: "native-target",
-        stage: input.stage,
-        element: target.sourceElement,
-        rectElement: target.sourceElement,
-        atom: target,
-        fontRevision: input.fontRevision
-      })
-    ];
-  });
-  return createKpNativeKatexHandoffTelemetry({
-    stage: input.stage,
-    progress: input.progress,
-    observations,
-    fontRevision: input.fontRevision,
-    viewportKey: input.viewportKey
-  });
-}
-
-export function measureKpNativeKatexCorrelatedHandoff(input: {
-  readonly stage: HTMLElement;
-  readonly reconciliation: KpNativeKatexSceneReconciliation;
-  readonly correlations: readonly KpNativeKatexHandoffCorrelation[];
-  readonly progress: number;
-  readonly fontRevision: number;
-  readonly viewportKey: string;
-}): KpNativeKatexHandoffTelemetry {
   const sourceById = new Map(input.reconciliation.source.atoms.map((atom) => [
     atom.id,
     atom
@@ -940,14 +874,14 @@ export function measureKpNativeKatexCorrelatedHandoff(input: {
     atom.id,
     atom
   ]));
-  const paintById = new Map([
-    ...sourceById,
-    ...targetById
-  ]);
   const observations = input.correlations.flatMap((correlation) => {
     if (correlation.disposition !== "target-bound") return [];
-    const target = targetById.get(correlation.targetAtomId!);
-    const visual = paintById.get(correlation.visualAtomId);
+    const target = targetById.get(correlation.targetAtomId!)!;
+    if (mode !== "correlated" && target?.paintKind !== mode) return [];
+    const visual = mode === "correlated"
+      ? sourceById.get(correlation.visualAtomId) ??
+        targetById.get(correlation.visualAtomId)
+      : target;
     const source = correlation.sourceAtomId === undefined
       ? undefined
       : sourceById.get(correlation.sourceAtomId);
@@ -967,43 +901,44 @@ export function measureKpNativeKatexCorrelatedHandoff(input: {
       !(materialVisual instanceof HTMLElement)
     ) {
       throw new Error(
-        `Correlated handoff cannot find ${correlation.materialOwnerId}.`
+        mode === "correlated"
+          ? `Correlated handoff cannot find ${correlation.materialOwnerId}.`
+          : `Native handoff microscope cannot find ${correlation.materialOwnerId}.`
       );
     }
+    const observe = (
+      suffix: "source" | "material" | "native",
+      side: "native-source" | "material" | "native-target",
+      element: HTMLElement,
+      rectElement: HTMLElement,
+      atom: KpNativeKatexPaintAtomObservation
+    ) => observeCorrelatedHandoffPaint({
+      id: `${correlation.id}.${suffix}`,
+      side,
+      stage: input.stage,
+      element,
+      rectElement,
+      atom,
+      fontRevision: input.fontRevision
+    });
     return [
-      ...(source === undefined
-        ? []
-        : [observeCorrelatedHandoffPaint({
-            id: `${correlation.id}.source`,
-            side: "native-source",
-            stage: input.stage,
-            element: source.sourceElement,
-            rectElement: source.sourceElement,
-            atom: source,
-            fontRevision: input.fontRevision
-          })]),
-      observeCorrelatedHandoffPaint({
-        id: `${correlation.id}.material`,
-        side: "material",
-        stage: input.stage,
-        element: materialVisual,
-        rectElement: materialOwner,
-        atom: visual,
-        fontRevision: input.fontRevision
-      }),
-      observeCorrelatedHandoffPaint({
-        id: `${correlation.id}.native`,
-        side: "native-target",
-        stage: input.stage,
-        element: target.sourceElement,
-        rectElement: target.sourceElement,
-        atom: target,
-        fontRevision: input.fontRevision
-      })
+      ...(mode === "correlated" && source !== undefined
+        ? [observe(
+            "source", "native-source", source.sourceElement,
+            source.sourceElement, source
+          )]
+        : []),
+      observe("material", "material", materialVisual, materialOwner, visual),
+      observe(
+        "native", "native-target", target.sourceElement,
+        target.sourceElement, target
+      )
     ];
   });
   if (observations.length === 0) {
-    throw new Error("Correlated handoff microscope requires target-bound paint.");
+    throw new Error(mode === "correlated"
+      ? "Correlated handoff microscope requires target-bound paint."
+      : `Native handoff microscope requires correlated ${mode} paint.`);
   }
   return createKpNativeKatexHandoffTelemetry({
     stage: input.stage,
@@ -1012,6 +947,12 @@ export function measureKpNativeKatexCorrelatedHandoff(input: {
     fontRevision: input.fontRevision,
     viewportKey: input.viewportKey
   });
+}
+
+export function measureKpNativeKatexCorrelatedHandoff(
+  input: KpNativeKatexHandoffMeasurementInput
+): KpNativeKatexHandoffTelemetry {
+  return measureKpNativeKatexHandoff(input, "correlated");
 }
 
 export function assessKpNativeKatexTypographyHandoff(input: {
@@ -1429,7 +1370,7 @@ function normalizeKpNativeKatexMaterialGlyphPaint(input: {
   ) {
     return;
   }
-  const clonePaint = measureTextPaintRect(input.stage, input.visual);
+  const clonePaint = measureKpNativeKatexTextInkRect(input.stage, input.visual);
   const ownerRect = stageRelativeRect(
     input.stage,
     input.owner.getBoundingClientRect()
@@ -2360,13 +2301,6 @@ function observeCorrelatedHandoffPaint(input: {
   };
 }
 
-function measureTextPaintRect(
-  stage: HTMLElement,
-  element: HTMLElement
-): KpStageRelativeRect {
-  return measureKpNativeKatexTextInkRect(stage, element);
-}
-
 function stageRelativeRect(
   stage: HTMLElement,
   fragmentClientRect: Pick<DOMRect, "left" | "top" | "width" | "height">
@@ -2385,8 +2319,8 @@ function createGlyphPaintFrame(
   source: KpNativeKatexHandoffTelemetry["observations"][number],
   target: KpNativeKatexHandoffTelemetry["observations"][number]
 ): NonNullable<KpNativeKatexTypographyStylePlanEntry["glyphPaintFrame"]> {
-  const sourcePaint = measureTextPaintRect(stage, source.element);
-  const targetPaint = measureTextPaintRect(stage, target.element);
+  const sourcePaint = measureKpNativeKatexTextInkRect(stage, source.element);
+  const targetPaint = measureKpNativeKatexTextInkRect(stage, target.element);
   return Object.freeze({
     sourceLeft: source.rect.left,
     sourceTop: source.rect.top,

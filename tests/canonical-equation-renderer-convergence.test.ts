@@ -89,7 +89,7 @@ test("canonical scene source audit seals its direct local dependency closure", a
     )) {
       const dependency = relative(
         process.cwd(),
-        resolve(dirname(path), match[1])
+        resolve(dirname(path), match[1]!)
       ).replaceAll("\\", "/");
       if (
         dependency.startsWith("src/") &&

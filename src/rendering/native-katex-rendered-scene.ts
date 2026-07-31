@@ -1,4 +1,5 @@
 import {
+  measureKpStageRelativeRectDelta,
   normalizeKpStageRelativeRect,
   type KpStageRelativeRect
 } from "./native-katex-fragment-observer.ts";
@@ -218,7 +219,7 @@ export async function settleAndObserveKpNativeKatexRenderedScene(input: {
   return second;
 }
 
-export function observeKpNativeKatexGlyphPaintAtoms(input: {
+type KpNativeKatexPaintObservationInput = {
   readonly endpoint: "source" | "target";
   readonly stage: HTMLElement;
   readonly root: HTMLElement;
@@ -226,7 +227,11 @@ export function observeKpNativeKatexGlyphPaintAtoms(input: {
   readonly presentationGroupId: string;
   readonly fontRevision: number;
   readonly includeHiddenPaint?: boolean | undefined;
-}): readonly KpNativeKatexPaintAtomObservation[] {
+};
+
+export function observeKpNativeKatexGlyphPaintAtoms(
+  input: KpNativeKatexPaintObservationInput
+): readonly KpNativeKatexPaintAtomObservation[] {
   const stageRect = input.stage.getBoundingClientRect();
   const stageLayoutWidth = input.stage.offsetWidth || stageRect.width;
   const stageLayoutHeight = input.stage.offsetHeight || stageRect.height;
@@ -276,15 +281,9 @@ export function observeKpNativeKatexGlyphPaintAtoms(input: {
   }));
 }
 
-export function observeKpNativeKatexPaintAtoms(input: {
-  readonly endpoint: "source" | "target";
-  readonly stage: HTMLElement;
-  readonly root: HTMLElement;
-  readonly semanticEntityId: string;
-  readonly presentationGroupId: string;
-  readonly fontRevision: number;
+export function observeKpNativeKatexPaintAtoms(input:
+  KpNativeKatexPaintObservationInput & {
   readonly requireExplicitOwnership?: boolean | undefined;
-  readonly includeHiddenPaint?: boolean | undefined;
 }): readonly KpNativeKatexPaintAtomObservation[] {
   const glyphs = observeKpNativeKatexGlyphPaintAtoms(input);
   const stageRect = input.stage.getBoundingClientRect();
@@ -536,17 +535,7 @@ export function unionKpStageRelativeRects(
   return { left, top, width: right - left, height: bottom - top };
 }
 
-export function measureKpStageRelativeRectDelta(
-  left: KpStageRelativeRect,
-  right: KpStageRelativeRect
-): number {
-  return Math.max(
-    Math.abs(left.left - right.left),
-    Math.abs(left.top - right.top),
-    Math.abs(left.width - right.width),
-    Math.abs(left.height - right.height)
-  );
-}
+export { measureKpStageRelativeRectDelta };
 
 function nextSceneLayoutFrame(document: Document): Promise<void> {
   const view = document.defaultView;

@@ -4,9 +4,10 @@ import {
   stripKpMaterialCloneAuthority
 } from "./computed-style-clone.ts";
 import { sampleKpEquationMaterialOwnerHandoff } from "./equation-material-owner.ts";
-import type {
-  KpNativeKatexFragmentObservation,
-  KpStageRelativeRect
+import {
+  measureKpStageRelativeRectDelta as rectDelta,
+  type KpNativeKatexFragmentObservation,
+  type KpStageRelativeRect
 } from "./native-katex-fragment-observer.ts";
 
 export interface KpNativeKatexFragmentClone {
@@ -331,18 +332,6 @@ function placeCloneAtRect(
     height: `${rect.height}px`,
     transform: "none"
   });
-}
-
-function rectDelta(
-  left: KpStageRelativeRect,
-  right: KpStageRelativeRect
-): number {
-  return Math.max(
-    Math.abs(left.left - right.left),
-    Math.abs(left.top - right.top),
-    Math.abs(left.width - right.width),
-    Math.abs(left.height - right.height)
-  );
 }
 
 function lerp(source: number, target: number, progress: number): number {
