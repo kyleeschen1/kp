@@ -4,6 +4,9 @@ import type { KpSemanticTransformation } from "../semantic/asset-transformation.
 import type { SelectorCorrespondenceRecord } from "../semantic/correspondence.ts";
 
 export type KpSuccessorSynthesisPathFamily = "arc-above" | "arc-below";
+export type KpSuccessorSynthesisConvergenceAnchor =
+  | "source-band"
+  | "target-destination";
 
 export interface KpSuccessorSynthesisSourceAnnotation {
   readonly id: string;
@@ -39,6 +42,8 @@ export interface KpSuccessorSynthesisBinding {
     | "shared-inline-band"
     | "separate-source-result-bands"
     | undefined;
+  readonly convergenceAnchor?:
+    KpSuccessorSynthesisConvergenceAnchor | undefined;
 }
 
 export interface KpSuccessorSynthesisMember {
@@ -66,6 +71,7 @@ export interface KpSuccessorSynthesisPlan {
     | "shared-inline-band"
     | "separate-source-result-bands";
   readonly layoutTopologyAuthority: "compiler" | "measured-fallback";
+  readonly convergenceAnchor: KpSuccessorSynthesisConvergenceAnchor;
   readonly sourceJunction: { readonly x: number; readonly y: number };
   readonly junction: { readonly x: number; readonly y: number };
   readonly targetSeedReadiness: number;
@@ -240,6 +246,8 @@ export function createKpSuccessorSynthesisPlan(input: {
     | "shared-inline-band"
     | "separate-source-result-bands"
     | undefined;
+  readonly convergenceAnchor?:
+    KpSuccessorSynthesisConvergenceAnchor | undefined;
 }): KpSuccessorSynthesisPlan {
   requireText(input.id, "id");
   requireText(input.authority.operationId, "authority.operationId");
@@ -283,9 +291,16 @@ export function createKpSuccessorSynthesisPlan(input: {
   const layoutTopologyAuthority = input.layoutTopology === undefined
     ? "measured-fallback"
     : "compiler";
+  const convergenceAnchor = input.convergenceAnchor ??
+    (
+      layoutTopology === "separate-source-result-bands"
+        ? "source-band"
+        : "target-destination"
+    );
   const sourceJunction =
     input.junctionOwner !== "source" &&
-      layoutTopology === "separate-source-result-bands"
+      layoutTopology === "separate-source-result-bands" &&
+      convergenceAnchor === "source-band"
     ? {
         // A separate result row can contain persistent structural paint such
         // as an underline. Gathering inside the measured source band avoids
@@ -311,6 +326,7 @@ export function createKpSuccessorSynthesisPlan(input: {
     junctionOwner: input.junctionOwner ?? "target",
     layoutTopology,
     layoutTopologyAuthority,
+    convergenceAnchor,
     sourceJunction,
     junction: targetJunction,
     targetSeedReadiness,

@@ -212,6 +212,48 @@
       "scope": "s07 renderer authority path",
       "checkedAt": "2026-07-31T04:12:09.186Z",
       "notes": "The shared DOM accepts the certified workspace only through the sealed runtime session; application, tests, Node, and domains pass."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s08 target-anchored ones policy",
+      "checkedAt": "2026-07-31T04:19:29.998Z",
+      "notes": "107 of 107 pass; the ones ownership compiler selects the generic target-destination convergence anchor."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "failed",
+      "scope": "s08 broad shared-motif probe",
+      "checkedAt": "2026-07-31T04:19:31.115Z",
+      "notes": "177 of 178 passed, including both successor-synthesis target-anchor cases. The sole failure is a pre-existing stale inventory needle: committed runtime catalog metadata moved to a generated catalog, while the ledger still searches that runtime file for one-plus-two. The slice did not touch or mask it."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition:ones-cycle",
+      "status": "passed",
+      "scope": "s08 dense wide and phone convergence",
+      "checkedAt": "2026-07-31T04:19:32.102Z",
+      "notes": "Wide and phone Chromium samples prove opaque inputs converge within 5px of the measured native 14 center below the rule, preserve documentary clearance, and reproduce exact direct-seek and rewind geometry."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08 generic convergence policy",
+      "checkedAt": "2026-07-31T04:19:32.991Z",
+      "notes": "Typed target-destination policy threads from compiler ownership through frozen bindings into the generic renderer without untyped bypasses."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s08 generic renderer seam",
+      "checkedAt": "2026-07-31T04:19:33.882Z",
+      "notes": "No new renderer category, compatibility exception, or caller-specific geometry path was introduced."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s08 type-system cost",
+      "checkedAt": "2026-07-31T04:19:34.779Z",
+      "notes": "Inference remains bounded at 49086 types, 61566 instantiations, and 4.68 seconds."
     }
   ],
   "allowedWork": [
@@ -280,7 +322,8 @@
     {
       "id": "s08",
       "title": "anchor-ones-convergence-to-target",
-      "status": "planned"
+      "summary": "Added one generic typed target-destination convergence anchor. The ones written-workspace compiler selects it, the native compositor measures the 14 destination, and dense wide/phone browser evidence proves opaque contributors converge there below the rule with documentary clearance and deterministic direct seek/rewind. Default separate-band callers retain source-band behavior.",
+      "status": "complete"
     },
     {
       "id": "s09",

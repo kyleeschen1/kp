@@ -68,6 +68,8 @@ export interface KpPlaceValueWrittenTransientOutputProxy {
 
 export interface KpPlaceValueOnesWrittenOwnershipPlan {
   readonly schemaVersion: "kp.place-value-written-ownership.v1";
+  readonly contributionDestinationPolicy:
+    "measured-evaluated-total-native-paint";
   readonly persistentCells: readonly [
     KpPlaceValuePersistentWrittenCell,
     KpPlaceValuePersistentWrittenCell,
@@ -154,6 +156,8 @@ KpPlaceValueOnesWrittenOwnershipPlan {
   });
   const plan = Object.freeze({
     schemaVersion: "kp.place-value-written-ownership.v1" as const,
+    contributionDestinationPolicy:
+      "measured-evaluated-total-native-paint" as const,
     persistentCells: Object.freeze([
       persistentCell(
         "digit.first.ones",

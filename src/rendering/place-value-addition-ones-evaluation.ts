@@ -604,6 +604,10 @@ function createBinding(
     // The semantic grid—not browser-dependent KaTeX wrapper overlap—owns the
     // fact that operands and result occupy distinct bands around the rule.
     layoutTopology: "separate-source-result-bands" as const,
+    ...(ownership?.contributionDestinationPolicy ===
+      "measured-evaluated-total-native-paint"
+      ? { convergenceAnchor: "target-destination" as const }
+      : {}),
     sourceAnnotations: Object.freeze([
       ...material,
       Object.freeze({

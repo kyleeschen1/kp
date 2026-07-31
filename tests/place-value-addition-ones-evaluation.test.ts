@@ -30,6 +30,14 @@ test("ones evaluation reuses the canonical executable operation program", () => 
     evaluation.binding.layoutTopology,
     "separate-source-result-bands"
   );
+  assert.equal(
+    evaluation.binding.convergenceAnchor,
+    "target-destination"
+  );
+  assert.equal(
+    evaluation.writtenOwnership.contributionDestinationPolicy,
+    "measured-evaluated-total-native-paint"
+  );
 });
 
 test("semantic inputs compile to motion proxies beside stationary written cells", () => {

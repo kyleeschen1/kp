@@ -309,6 +309,7 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
       targetAnnotations: intent.binding.targetAnnotations,
       lineages: intent.binding.lineages,
       layoutTopology: intent.binding.layoutTopology,
+      convergenceAnchor: intent.binding.convergenceAnchor,
       measurements,
       junctionOwner:
         "executableProgram" in intent &&
@@ -1141,6 +1142,9 @@ function freezeIdentityTransferBinding(
     ...(binding.layoutTopology === undefined
       ? {}
       : { layoutTopology: binding.layoutTopology }),
+    ...(binding.convergenceAnchor === undefined
+      ? {}
+      : { convergenceAnchor: binding.convergenceAnchor }),
     sourceAnnotations: Object.freeze(binding.sourceAnnotations.map(
       (annotation) => Object.freeze({
         ...annotation,

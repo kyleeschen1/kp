@@ -157,8 +157,57 @@ test("separate result rows gather inside the measured material source band", () 
 
   assert.deepEqual(plan.sourceJunction, { x: 50, y: 40.1 });
   assert.deepEqual(plan.junction, { x: 50, y: 100 });
+  assert.equal(plan.convergenceAnchor, "source-band");
   assert.equal(plan.junctionOwner, "target");
   assert.equal(plan.layoutTopologyAuthority, "measured-fallback");
+});
+
+test("target-anchored separate bands gather at measured result paint", () => {
+  const plan = createKpSuccessorSynthesisPlan({
+    id: "successor.target-anchored-stacked-addition",
+    authority: {
+      operationId: "kp.arithmetic.add",
+      bindingId: "binding.target-anchored-stacked-addition"
+    },
+    sourceAnnotations: [
+      {
+        id: "upper",
+        semanticRole: "addend",
+        selectorIds: ["selector.upper"],
+        contribution: "material-input",
+        propagationRank: 0
+      },
+      {
+        id: "lower",
+        semanticRole: "addend",
+        selectorIds: ["selector.lower"],
+        contribution: "material-input",
+        propagationRank: 1
+      }
+    ],
+    targetAnnotations: [{
+      id: "result",
+      semanticRole: "sum",
+      selectorIds: ["selector.result"],
+      propagationRank: 0
+    }],
+    lineages: [{
+      id: "lineage.target-anchored-stacked-addition",
+      sourceAnnotationIds: ["upper", "lower"],
+      targetAnnotationIds: ["result"]
+    }],
+    measurements: {
+      upper: { left: 40, top: 0, width: 20, height: 40 },
+      lower: { left: 40, top: 40, width: 20, height: 40 },
+      result: { left: 30, top: 100, width: 40, height: 40 }
+    },
+    layoutTopology: "separate-source-result-bands",
+    convergenceAnchor: "target-destination"
+  });
+
+  assert.equal(plan.convergenceAnchor, "target-destination");
+  assert.deepEqual(plan.sourceJunction, plan.junction);
+  assert.deepEqual(plan.junction, { x: 50, y: 120 });
 });
 
 test("source-owned fission does not manufacture a loop before transfer", () => {
