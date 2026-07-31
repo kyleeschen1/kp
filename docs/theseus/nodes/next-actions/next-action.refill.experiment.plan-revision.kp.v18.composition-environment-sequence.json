@@ -2,9 +2,9 @@
   "id": "next-action.refill.experiment.plan-revision.kp.v18.composition-environment-sequence",
   "kind": "next-action",
   "title": "Test composition-environment-sequence",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Run a bounded uncertainty-reduction experiment for: KP pressures equation succession, persistent workspace algorithms, and synchronized model views in that order, extracting only failed generic invariants before returning to concrete exemplars. Selection rationale: The user approved locking the exemplar-first validation cadence into project memory and implementing one reversible ink-union evaluation exemplar before any generalization.",
+  "summary": "Promoted place-value addition after two human visual checkpoints, exhaustive three-position adoption, focused semantic and cross-browser gates, honest recording of inherited global ratchet debt, and durable roadmap activation of v19.",
   "sourceRefs": [
     {
       "kind": "user-intent",
@@ -131,11 +131,116 @@
       "scope": "promotion-patch-hygiene",
       "checkedAt": "2026-07-31T18:45:45.613Z",
       "notes": "Motif formalization, second caller, tests, process decision, and Theseus evidence contain no whitespace errors."
+    },
+    {
+      "command": "npm-run-test-place-value-addition",
+      "status": "passed",
+      "scope": "final-place-value-promotion",
+      "checkedAt": "2026-07-31T20:01:39.660Z",
+      "notes": "120 semantic architecture ownership route and static-boundary tests passed after exhaustive three-position fusion."
+    },
+    {
+      "command": "npm-run-test-browser-place-value-addition-contributor-fusion",
+      "status": "passed",
+      "scope": "all-promoted-position-routes",
+      "checkedAt": "2026-07-31T20:01:41.319Z",
+      "notes": "36 dense wide and phone checks passed across Chromium Firefox and WebKit for all three contributor-fusion callers."
+    },
+    {
+      "command": "npm-run-test-browser-place-value-addition",
+      "status": "passed",
+      "scope": "complete-place-value-browser-matrix",
+      "checkedAt": "2026-07-31T20:01:42.444Z",
+      "notes": "123 browser cases passed across Chromium Firefox and WebKit after the typed incoming-carry clearance repair."
+    },
+    {
+      "command": "npm-run-visual-place-value-addition",
+      "status": "passed",
+      "scope": "responsive-visual-review-matrix",
+      "checkedAt": "2026-07-31T20:01:43.681Z",
+      "notes": "All 33 scenarios passed across the initial 32-pass run plus an exact retry of one transient WebKit Review-ready timeout."
+    },
+    {
+      "command": "npm-run-build",
+      "status": "passed",
+      "scope": "production-build-and-typecheck",
+      "checkedAt": "2026-07-31T20:01:44.801Z",
+      "notes": "Application Node test and domain typechecks passed; Vite production build completed."
+    },
+    {
+      "command": "npm-run-check-inference",
+      "status": "passed",
+      "scope": "typed-promotion-cost",
+      "checkedAt": "2026-07-31T20:01:46.035Z",
+      "notes": "Inference contracts passed at 49286 types 61771 instantiations and 2.91 seconds."
+    },
+    {
+      "command": "npm-run-check-reader-production",
+      "status": "passed",
+      "scope": "reader-production-closure",
+      "checkedAt": "2026-07-31T20:01:47.168Z",
+      "notes": "All 11 manifest reader routes preserve production closure."
+    },
+    {
+      "command": "npm-run-check-dev-review-production",
+      "status": "passed",
+      "scope": "review-production-isolation",
+      "checkedAt": "2026-07-31T20:01:48.251Z",
+      "notes": "Production closure passed across 250 files and seven forbidden review markers."
+    },
+    {
+      "command": "npm-run-check-promotion-memory",
+      "status": "passed",
+      "scope": "stable-frontier-projection",
+      "checkedAt": "2026-07-31T20:01:49.400Z",
+      "notes": "Rank 3 economics equilibrium is planning-only next work with no active implementation contract."
+    },
+    {
+      "command": "npm-run-check-animation-library-display-catalog",
+      "status": "passed",
+      "scope": "generated-catalog-integrity",
+      "checkedAt": "2026-07-31T20:01:51.438Z",
+      "notes": "Generated metadata is current and place-value projects as ported only through exact nominal release approval."
+    },
+    {
+      "command": "npm-test",
+      "status": "failed",
+      "scope": "repository-wide-baseline-audit",
+      "checkedAt": "2026-07-31T20:01:53.021Z",
+      "notes": "3110 of 3114 passed. Four failures are independently owned pre-existing ratchets in untouched files: HTML escape count native compositor bytes linear provider boundary and stale operation evidence path."
+    },
+    {
+      "command": "npm-run-check-animation-library-bundle-boundary",
+      "status": "failed",
+      "scope": "global-bundle-baseline-audit",
+      "checkedAt": "2026-07-31T20:01:54.269Z",
+      "notes": "Outer shell and lazy place-value incremental boundaries did not fail; the pre-existing shared main host measured 495627 gzip bytes against 490000."
+    },
+    {
+      "command": "npm-run-check-reader-budgets",
+      "status": "failed",
+      "scope": "global-reader-baseline-audit",
+      "checkedAt": "2026-07-31T20:01:55.443Z",
+      "notes": "All legacy reader routes share a pre-existing 151256 gzip runtime closure above the 145000 ceiling; this promotion changes no reader entry or shared closure."
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "durable-project-graph",
+      "checkedAt": "2026-07-31T20:02:21.016Z",
+      "notes": "Valid 843 nodes and 15069 events before closeout."
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "final-promotion-patch-hygiene",
+      "checkedAt": "2026-07-31T20:02:22.587Z",
+      "notes": "Final code documentation and durable evidence contain no whitespace errors."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: the approved two-contributor exemplar is formalized as a sealed contributor-fusion plan, every evaluation must choose a typed visual motif, and the unchanged plan now drives the three-contributor carried-input caller with count-derived docking. The final position remains the standard rollback comparator; catalog-wide rollout and release gates await visual approval of 1 + 7 + 5 to 13."
+    "state": "complete",
+    "summary": "COMPLETE: all three canonical ordered positions use the approved typed contributor-fusion motif; incoming carry receives compiler-owned route clearance; exact nominal release authority projects the catalog entry as ported; rank 2 is closed and rank 3 economics remains planning-only."
   },
   "expectedLearning": [
     "An approved plan depends on an active assumption without outcome evidence."

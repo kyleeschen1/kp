@@ -1,10 +1,10 @@
 {
-  "id": "plan-revision.kp.v18",
+  "id": "plan-revision.kp.v19",
   "kind": "plan-revision",
-  "title": "Kinetic Press content-led promotion roadmap v18",
-  "status": "superseded",
+  "title": "Kinetic Press content-led promotion roadmap v19",
+  "status": "active",
   "domain": "kp",
-  "summary": "Continue rank-2 place-value addition through the approved persistent-workspace repair and stop at the repaired ones-column checkpoint.",
+  "summary": "Close promoted rank-2 place-value addition and make the bounded economics equilibrium-shift proposal the planning-only frontier.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -90,6 +90,21 @@
       "kind": "file",
       "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v17.json",
       "summary": "Approved predecessor retained for rationale and history."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-31-place-value-persistent-workspace-repair-closeout.md",
+      "summary": "Human-approved release evidence and explicit family limits."
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/place-value-addition-release-approval.ts",
+      "summary": "Nominal evidence-derived release authority for catalog promotion."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v18.json",
+      "summary": "Approved predecessor retained for rationale and history."
     }
   ],
   "affects": [
@@ -103,11 +118,11 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Exact fraction remains promoted. Place-value addition is active through the approved persistent-workspace repair; later-column generalization is blocked on the repaired ones-column visual checkpoint."
+    "summary": "Exact fraction and place-value addition are promoted. Economics equilibrium-shift planning is active, but implementation requires a separately reviewed run contract."
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
-    "revision": 18,
+    "revision": 19,
     "objective": "Grow one canonical, composable semantic animation library through a stable exemplar order, inserting API, verified problem-generation, deterministic explanation, safe output, and optional LLM editorial gates only where recorded caller pressure justifies them.",
     "assumptions": [
       {
@@ -432,9 +447,10 @@
         "title": "Multi-digit addition",
         "objective": "Coordinate column addition, place-value exchange, regrouping marks, and a base-ten or area representation.",
         "horizon": "now",
-        "status": "active",
+        "status": "complete",
         "evidence": [
-          "run-contract.kp.place-value-persistent-workspace-repair-v2"
+          "run-contract.kp.place-value-persistent-workspace-repair-v2",
+          "next-action.refill.experiment.plan-revision.kp.v18.composition-environment-sequence"
         ],
         "topic": "Arithmetic · Addition",
         "architectureBenefit": "Persistent place-value identity and carry scheduling.",
@@ -445,8 +461,8 @@
         "id": "economics-parametric",
         "title": "Economics and parametric models",
         "objective": "Link equations, curves, parameter changes, intersections, and narrative interpretation in supply-demand models.",
-        "horizon": "next",
-        "status": "planned",
+        "horizon": "now",
+        "status": "active",
         "topic": "Cross-domain · Economics",
         "architectureBenefit": "Parameterized graph systems and narrative-to-model correspondence.",
         "rationale": "Economics reuses graph and intersection semantics with domain-specific explanatory prose.",
@@ -784,12 +800,11 @@
       }
     ],
     "approval": {
-      "status": "superseded",
+      "status": "approved",
       "decidedAt": "2026-07-31T19:14:07.000Z",
       "decidedBy": "user",
-      "rationale": "Superseded by plan-revision.kp.v19."
+      "rationale": "Human approval and evidence-derived catalog release close rank 2; advance only the recorded planning frontier to rank 3."
     },
-    "supersedes": "plan-revision.kp.v17",
-    "supersededBy": "plan-revision.kp.v19"
+    "supersedes": "plan-revision.kp.v18"
   }
 }

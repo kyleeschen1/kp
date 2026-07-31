@@ -254,6 +254,94 @@ export async function createKpPlaceValueAdditionBrowserHarness(input: {
   const settleLayout = async (): Promise<void> => new Promise((resolve) =>
     view.requestAnimationFrame(() => view.requestAnimationFrame(() => resolve()))
   );
+  const auditContributorFusionRoute = (input: {
+    readonly positionId: string;
+    readonly globalStart: number;
+    readonly globalEnd: number;
+  }) => {
+    const evaluation = session.columnEvaluations.find(
+      ({ positionId }) => positionId === input.positionId
+    );
+    if (evaluation === undefined) {
+      throw new Error(`Missing evaluation ${input.positionId}.`);
+    }
+    const stage = operationScene(input.positionId, "evaluation");
+    const contributors = () => evaluation.writtenOwnership.contributionProxies
+      .map(({ bindingAnnotationId }) => materialOwner(
+        stage,
+        bindingAnnotationId
+      ));
+    const targetDigits = () => evaluation.targetSelectorIds.map((id) => {
+      const escaped = view.CSS.escape(id);
+      const target = stage.querySelector<HTMLElement>(
+        '[data-kp-place-value-operation-endpoint="target"] ' +
+        `[data-kp-place-value-motion-target-id="${escaped}"]`
+      );
+      if (target === null) throw new Error(`Missing fusion target ${id}.`);
+      return target;
+    });
+    const midpoint = (
+      points: readonly { readonly x: number; readonly y: number }[]
+    ) => ({
+      x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
+      y: points.reduce((sum, point) => sum + point.y, 0) / points.length
+    });
+    const snapshot = () => {
+      const owners = contributors();
+      const source = midpoint(owners.map((owner) =>
+        paintMetric(owner).center
+      ));
+      const target = unionPaintMetric(targetDigits()).center;
+      return Object.freeze({
+        offsets: Object.freeze(owners.map((owner) => Number(
+          owner.dataset["kpPlaceValueContributorArcOffsetPx"]
+        ))),
+        lateralOffsets: Object.freeze(owners.map((owner) => Number(
+          owner.dataset["kpPlaceValueContributorArcLateralOffsetPx"]
+        ))),
+        opacities: Object.freeze(owners.map((owner) =>
+          view.getComputedStyle(owner).opacity
+        )),
+        sourceOpacities: Object.freeze(
+          evaluation.writtenOwnership.contributionProxies.map(
+            ({ sourceCellId }) => view.getComputedStyle(
+              persistentCell(sourceCellId)
+            ).opacity
+          )
+        ),
+        fallbackClearances: Object.freeze(owners.map((owner) =>
+          owner.dataset["kpPlaceValueDocumentaryClearance"] ?? null
+        )),
+        distanceToTarget: Math.hypot(
+          source.x - target.x,
+          source.y - target.y
+        )
+      });
+    };
+    const localToGlobal = (local: number) =>
+      input.globalStart + local * (input.globalEnd - input.globalStart);
+    const samples = [];
+    let previous = 0;
+    for (let index = 0; index < 100; index += 1) {
+      const local = index / 100;
+      const progress = localToGlobal(local);
+      apply(progress, previous);
+      samples.push(Object.freeze({ local, ...snapshot() }));
+      previous = progress;
+    }
+    const directLocal = 0.7;
+    apply(localToGlobal(0.99), previous);
+    apply(localToGlobal(directLocal), localToGlobal(0.99));
+    const rewind = snapshot();
+    apply(localToGlobal(directLocal), localToGlobal(directLocal));
+    const sameFrame = snapshot();
+    return Object.freeze({
+      motif: stage.dataset["kpPlaceValueEvaluationVisualMotif"] ?? "",
+      samples: Object.freeze(samples),
+      rewind,
+      sameFrame
+    });
+  };
 
   return Object.freeze({
     session,
@@ -270,6 +358,7 @@ export async function createKpPlaceValueAdditionBrowserHarness(input: {
     overlap,
     endpointState,
     settleLayout,
+    auditContributorFusionRoute,
     dispose: dom.dispose
   });
 }

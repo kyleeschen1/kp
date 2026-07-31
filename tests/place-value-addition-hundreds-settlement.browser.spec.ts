@@ -116,4 +116,66 @@ for (const viewport of [
     expect(evidence.replaySame).toEqual(evidence.replayForward);
     expect(evidence.replayForward.text).toBe("434");
   });
+
+  test(`${viewport.name} terminal evaluation reuses the promoted fusion route`, async ({
+    page
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/tests/fixtures/place-value-addition-browser-host.html");
+    const evidence = await page.evaluate(async ({ width }) => {
+      const harnessUrl =
+        "/tests/support/place-value-addition-browser-harness.ts";
+      const { createKpPlaceValueAdditionBrowserHarness } =
+        await import(/* @vite-ignore */ harnessUrl) as
+          KpPlaceValueAdditionBrowserHarnessModule;
+      const harness = await createKpPlaceValueAdditionBrowserHarness({
+        document,
+        viewportWidth: width
+      });
+      const evidence = harness.auditContributorFusionRoute({
+        positionId: "decimal-position-2",
+        globalStart: 0.71,
+        globalEnd: 0.87
+      });
+      harness.dispose();
+      return evidence;
+    }, viewport);
+
+    expect(evidence.motif).toBe("source-derived-contributor-fusion-v1");
+    expect(evidence.samples.filter(({ offsets }) =>
+      offsets.length !== 3 || !offsets.every(Number.isFinite)
+    ).map(({ local, offsets }) => ({ local, offsets }))).toEqual([]);
+    expect(evidence.samples.every(({ opacities, sourceOpacities }) =>
+      opacities.every((opacity, index) =>
+        Number(opacity) > 0 || Number(sourceOpacities[index]) > 0
+      )
+    )).toBe(true);
+    expect(evidence.samples.every(({ opacities }) =>
+      opacities.every((opacity) => opacity === "0" || opacity === "1")
+    )).toBe(true);
+    expect(evidence.samples.every(({ fallbackClearances }) =>
+      fallbackClearances.every((clearance) => clearance === null)
+    )).toBe(true);
+    const maximumStep = Math.max(...evidence.samples.slice(1).flatMap(
+      (sample, index) => sample.offsets.map((offset, ownerIndex) =>
+        Math.abs(offset - evidence.samples[index]!.offsets[ownerIndex]!)
+      )
+    ));
+    expect(maximumStep).toBeLessThan(3.25);
+    expect(evidence.samples[0]!.offsets.every(
+      (offset) => Math.abs(offset) < 0.001
+    )).toBe(true);
+    expect(evidence.samples.at(-1)!.offsets.every(
+      (offset) => Math.abs(offset) < 0.001
+    )).toBe(true);
+    expect(evidence.samples[45]!.offsets.map(Math.sign)).toEqual([-1, 1, -1]);
+    expect(evidence.samples[45]!.lateralOffsets.map(Math.sign)).toEqual([
+      1,
+      0,
+      0
+    ]);
+    expect(evidence.samples[74]!.distanceToTarget).toBeLessThanOrEqual(5);
+    expect(evidence.rewind.offsets).toEqual(evidence.samples[70]!.offsets);
+    expect(evidence.sameFrame).toEqual(evidence.rewind);
+  });
 }

@@ -25,6 +25,7 @@ export interface KpPlaceValueWrittenMotionProxy {
   readonly originPolicy: "exact-source-paint-rect";
   readonly paintPolicy: "visible-motion" | "compiler-only-stationary-paint";
   readonly bindingAnnotationId: string;
+  readonly contributorKind?: "incoming-carry" | "operand-digit" | undefined;
   readonly documentaryClearanceSide?: "above" | "below" | undefined;
 }
 
@@ -110,6 +111,10 @@ export function compileKpPlaceValueWrittenOwnership(
       paintPolicy: "visible-motion" as const,
       bindingAnnotationId:
         `annotation.${namespace}.material.${index}`,
+      contributorKind:
+        sourceCellId === program.evaluation.incomingCarryCellId
+          ? "incoming-carry" as const
+          : "operand-digit" as const,
       documentaryClearanceSide:
         index % 2 === 0 ? "above" as const : "below" as const
     })

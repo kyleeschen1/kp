@@ -162,71 +162,13 @@ for (const viewport of [
         document,
         viewportWidth: width
       });
-      const stage = () => harness.operationScene(
-        "decimal-position-1",
-        "evaluation"
-      );
-      const contributors = () => harness.materialOwnerElements(stage()).filter(
-        (owner) => owner.dataset["kpEquationMaterialSemanticEntityId"]
-          ?.startsWith("annotation.decimal-position-1.material.") === true
-      );
-      const midpoint = (
-        points: readonly { readonly x: number; readonly y: number }[]
-      ) => ({
-        x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
-        y: points.reduce((sum, point) => sum + point.y, 0) / points.length
+      const evidence = harness.auditContributorFusionRoute({
+        positionId: "decimal-position-1",
+        globalStart: 0.4,
+        globalEnd: 0.56
       });
-      const snapshot = () => {
-        const owners = contributors();
-        const sourceOpacities = [
-          "carry.tens",
-          "digit.first.tens",
-          "digit.second.tens"
-        ].map((id) => getComputedStyle(harness.persistentCell(id)).opacity);
-        const targetDigits = [
-          ...stage().querySelectorAll<HTMLElement>(
-            '[data-kp-place-value-operation-endpoint="target"] ' +
-            '[data-kp-place-value-motion-target-id^="evaluation.tens.total."]'
-          )
-        ];
-        const source = midpoint(owners.map((owner) =>
-          harness.paintMetric(owner).center
-        ));
-        const target = harness.unionPaintMetric(targetDigits).center;
-        return {
-          offsets: owners.map((owner) => Number(
-            owner.dataset["kpPlaceValueContributorArcOffsetPx"]
-          )),
-          opacities: owners.map((owner) => getComputedStyle(owner).opacity),
-          sourceOpacities,
-          fallbackClearances: owners.map((owner) =>
-            owner.dataset["kpPlaceValueDocumentaryClearance"] ?? null
-          ),
-          distanceToTarget: Math.hypot(
-            source.x - target.x,
-            source.y - target.y
-          )
-        };
-      };
-      const localToGlobal = (local: number) => 0.4 + local * 0.16;
-      const samples = [];
-      let previous = 0;
-      for (let index = 0; index < 100; index += 1) {
-        const local = index / 100;
-        const progress = localToGlobal(local);
-        harness.apply(progress, previous);
-        samples.push({ local, ...snapshot() });
-        previous = progress;
-      }
-      const directLocal = 0.7;
-      harness.apply(localToGlobal(0.99), previous);
-      harness.apply(localToGlobal(directLocal), localToGlobal(0.99));
-      const rewind = snapshot();
-      harness.apply(localToGlobal(directLocal), localToGlobal(directLocal));
-      const sameFrame = snapshot();
-      const motif = stage().dataset["kpPlaceValueEvaluationVisualMotif"];
       harness.dispose();
-      return { motif, samples, rewind, sameFrame };
+      return evidence;
     }, viewport);
 
     expect(evidence.motif).toBe("source-derived-contributor-fusion-v1");
@@ -257,6 +199,11 @@ for (const viewport of [
       (offset) => Math.abs(offset) < 0.001
     )).toBe(true);
     expect(evidence.samples[45]!.offsets.map(Math.sign)).toEqual([-1, 1, -1]);
+    expect(evidence.samples[45]!.lateralOffsets.map(Math.sign)).toEqual([
+      1,
+      0,
+      0
+    ]);
     expect(evidence.samples[74]!.distanceToTarget).toBeLessThanOrEqual(5);
     expect(evidence.rewind.offsets).toEqual(evidence.samples[70]!.offsets);
     expect(evidence.sameFrame).toEqual(evidence.rewind);

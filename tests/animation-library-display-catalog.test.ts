@@ -60,14 +60,14 @@ test("foldable distribution resolves one lazy partial reader host until approval
   );
 });
 
-test("place-value addition exposes one focused partial host until review", () => {
+test("place-value addition exposes one focused ported host after review", () => {
   const entry = createKpAnimationLibraryDisplayCatalog().find(
     ({ animationId }) =>
       animationId === "animation.place-value-addition.278-plus-156"
   );
 
   assert.equal(entry?.availability, "playable");
-  assert.equal(entry?.canonicalFormat, "partial");
+  assert.equal(entry?.canonicalFormat, "ported");
   assert.equal(entry?.featured, false);
   assert.equal(
     entry?.primaryRepresentationId,
@@ -139,7 +139,7 @@ test("canonical-format status distinguishes complete, partial, and legacy hosts"
   );
   assert.equal(
     status("animation.place-value-addition.278-plus-156"),
-    "partial"
+    "ported"
   );
   assert.equal(
     status("animation.generated.radical.square-root-as-power"),

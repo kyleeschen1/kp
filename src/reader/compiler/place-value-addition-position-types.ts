@@ -20,6 +20,7 @@ export interface KpPlaceValuePositionEvaluationSpec {
   readonly beatId: string;
   readonly expression: string;
   readonly contributorCellIds: readonly string[];
+  readonly incomingCarryCellId?: string | undefined;
   readonly evaluationDigits: readonly KpPlaceValueEvaluationDigitSpec[];
   readonly evaluatedTotalEntityId: string;
   readonly stageDataset: string;

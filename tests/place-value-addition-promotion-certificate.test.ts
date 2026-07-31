@@ -11,6 +11,10 @@ import {
   createKpPlaceValueAdditionAnimationAsset
 } from "../src/animation/place-value-addition-adapter.ts";
 import {
+  isKpVerifiedPlaceValueAdditionReleaseApproval,
+  kpVerifiedPlaceValueAdditionReleaseApproval
+} from "../src/architecture/place-value-addition-release-approval.ts";
+import {
   createKpAnimationLibraryDisplayCatalog
 } from "../src/editor/animation-library-display-catalog.ts";
 
@@ -18,9 +22,6 @@ test("place-value readiness closes automation without claiming promotion", () =>
   const certificate =
     certifyKpPlaceValueAdditionPromotionReadiness();
   const animation = createKpPlaceValueAdditionAnimationAsset();
-  const entry = createKpAnimationLibraryDisplayCatalog().find(
-    ({ animationId }) => animationId === certificate.animationId
-  );
 
   assert.equal(
     certificate.schemaVersion,
@@ -34,12 +35,32 @@ test("place-value readiness closes automation without claiming promotion", () =>
   );
   assert.equal(animation.timeline?.beatCount, 7);
   assert.equal(animation.renderTargets[0]?.kind, "diagram");
-  assert.equal(entry?.availability, "playable");
-  assert.equal(entry?.canonicalFormat, "partial");
-  assert.equal(entry?.primaryRepresentationId,
-    "library.editor.place-value-addition-focused-host");
   assert.equal(
     JSON.stringify(certificate).includes("humanReviewApproved"),
+    false
+  );
+});
+
+test("human approval promotes exhaustive contributor fusion nominally", () => {
+  const approval = kpVerifiedPlaceValueAdditionReleaseApproval;
+  const entry = createKpAnimationLibraryDisplayCatalog().find(
+    ({ animationId }) => animationId === approval.animationId
+  );
+
+  assert.equal(
+    isKpVerifiedPlaceValueAdditionReleaseApproval(approval),
+    true
+  );
+  assert.equal(approval.promotedPositionCount, 3);
+  assert.equal(approval.reviewDecision, "approved-contributor-fusion");
+  assert.equal(entry?.availability, "playable");
+  assert.equal(entry?.canonicalFormat, "ported");
+  assert.equal(
+    entry?.primaryRepresentationId,
+    "library.editor.place-value-addition-focused-host"
+  );
+  assert.equal(
+    isKpVerifiedPlaceValueAdditionReleaseApproval({ ...approval }),
     false
   );
 });

@@ -14,6 +14,7 @@ const sealedPlans = new WeakSet<object>();
 export interface KpPlaceValueContributorArcPlan {
   readonly bindingAnnotationId: string;
   readonly clearanceSide: "above" | "below";
+  readonly lateralBias: "toward-lower-position" | "none";
   readonly startProgress: number;
   readonly endProgress: number;
 }
@@ -67,6 +68,9 @@ export function compileKpPlaceValueContributorFusionPlan(
     (proxy, index) => Object.freeze({
       bindingAnnotationId: proxy.bindingAnnotationId,
       clearanceSide: proxy.documentaryClearanceSide,
+      lateralBias: proxy.contributorKind === "incoming-carry"
+        ? "toward-lower-position" as const
+        : "none" as const,
       startProgress: 0.16 + index * 0.08,
       endProgress: 0.58 + index * 0.08
     })
@@ -289,6 +293,7 @@ export function applyKpPlaceValueContributorFusionArcs(input: {
       // seek telemetry complete without caching an unpainted height.
       owner.style.translate = "0 0px";
       owner.dataset["kpPlaceValueContributorArcOffsetPx"] = "0.000";
+      owner.dataset["kpPlaceValueContributorArcLateralOffsetPx"] = "0.000";
       continue;
     }
     const visual = owner.firstElementChild;
@@ -305,8 +310,17 @@ export function applyKpPlaceValueContributorFusionArcs(input: {
     }
     const direction = arcPlan.clearanceSide === "above" ? -1 : 1;
     const offset = direction * (paintHeight * 0.45 + 3) * arc;
-    owner.style.translate = `0 ${offset.toFixed(3)}px`;
+    // Incoming carry starts beside the next-higher position. A small inward
+    // bow keeps it out of that neighboring documentary column while retaining
+    // the same stationary-endpoint fusion route.
+    const lateralOffset = arcPlan.lateralBias === "toward-lower-position"
+      ? (paintHeight * 0.22 + 3.2) * arc
+      : 0;
+    owner.style.translate =
+      `${lateralOffset.toFixed(3)}px ${offset.toFixed(3)}px`;
     owner.dataset["kpPlaceValueContributorArcOffsetPx"] = offset.toFixed(3);
+    owner.dataset["kpPlaceValueContributorArcLateralOffsetPx"] =
+      lateralOffset.toFixed(3);
   }
   return true;
 }

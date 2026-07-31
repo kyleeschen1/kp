@@ -66,12 +66,12 @@ approved the canonical `8 + 6 → 14` exemplar. Its continuous contributor arcs,
 opaque lineage handoffs, measured-ink body, and dock-before-pinch schedule are
 now a compiled motif plan rather than an optional renderer experiment.
 
-The structurally different second caller is `1 + 7 + 5 → 13`: it has three
-contributors, including a carried input, and therefore compiles a later docking
-boundary from the same schedule. The final ordered position remains on the
-standard successor-synthesis treatment as a rollback comparator until this
-second caller passes human review. The motif still may not add a clock, renderer
-session, WebGL lease, semantic operation, or parallel endpoint owner.
+The structurally different second caller, `1 + 7 + 5 → 13`, passed human
+review. It has three contributors, including a carried input, and therefore
+compiles a later docking boundary from the same schedule. The final ordered
+position now uses the same typed motif, closing the rollback comparator after
+approval. The promoted motif adds no clock, renderer session, WebGL lease,
+semantic operation, or parallel endpoint owner.
 
 ## Links
 

@@ -194,6 +194,9 @@ export function compileKpPlaceValueIntegerAdditionFixture(input: {
         ...sourceDigits
       ].join(" + ")} = ${total}`,
       contributorCellIds: contributors,
+      ...(incomingCarry > 0
+        ? { incomingCarryCellId: carryId(index) }
+        : {}),
       evaluationDigits,
       evaluatedTotalEntityId: evaluationId(index),
       stageDataset: `kpPlaceValueGeneratedPosition${index}Evaluation`

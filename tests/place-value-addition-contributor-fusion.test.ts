@@ -6,7 +6,6 @@ import { fileURLToPath } from "node:url";
 
 import {
   kpPlaceValueContributorFusionMotifKind,
-  kpPlaceValueStandardEvaluationMotifKind,
   sampleKpPlaceValueContributorArc
 } from "../src/rendering/place-value-addition-contributor-fusion-motif.ts";
 import {
@@ -18,7 +17,7 @@ import {
 
 const projectRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-test("approved contributor fusion compiles an exhaustive two-caller motif choice", () => {
+test("approved contributor fusion compiles an exhaustive canonical motif choice", () => {
   const motifs = compileKpPlaceValueEvaluationVisualMotifs(
     createKpPlaceValueAdditionRuntimeSession().columnEvaluations
   );
@@ -26,7 +25,7 @@ test("approved contributor fusion compiles an exhaustive two-caller motif choice
   assert.deepEqual(motifs.map(({ kind }) => kind), [
     kpPlaceValueContributorFusionMotifKind,
     kpPlaceValueContributorFusionMotifKind,
-    kpPlaceValueStandardEvaluationMotifKind
+    kpPlaceValueContributorFusionMotifKind
   ]);
   const plans = motifs.flatMap((motif) =>
     motif.kind === kpPlaceValueContributorFusionMotifKind
@@ -35,14 +34,24 @@ test("approved contributor fusion compiles an exhaustive two-caller motif choice
   );
   assert.deepEqual(plans.map(({ contributorArcs }) => contributorArcs.length), [
     2,
+    3,
     3
   ]);
-  const landmarks = (key: "dockProgress" | "seedProgress" | "resolveProgress") =>
-    plans.map((plan) => Number(plan[key].toFixed(2)));
-  assert.deepEqual(landmarks("dockProgress"), [0.66, 0.74]);
-  assert.deepEqual(landmarks("seedProgress"), [0.76, 0.84]);
+  assert.deepEqual(plans.map(({ contributorArcs }) =>
+    contributorArcs.map(({ lateralBias }) => lateralBias)
+  ), [
+    ["none", "none"],
+    ["toward-lower-position", "none", "none"],
+    ["toward-lower-position", "none", "none"]
+  ]);
+  const landmarks = (
+    key: "dockProgress" | "seedProgress" | "resolveProgress"
+  ) => plans.map((plan) => Number(plan[key].toFixed(2)));
+  assert.deepEqual(landmarks("dockProgress"), [0.66, 0.74, 0.74]);
+  assert.deepEqual(landmarks("seedProgress"), [0.76, 0.84, 0.84]);
   assert.deepEqual(landmarks("resolveProgress"), [
     0.96,
+    0.98,
     0.98
   ]);
   assert.ok(plans.every(({ ownershipPolicy }) =>

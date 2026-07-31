@@ -32,10 +32,14 @@ import {
   type KpVerifiedExactFractionQuantityReleaseApproval
 } from "../architecture/exact-fraction-quantity-release-approval.ts";
 import {
-  certifyKpPlaceValueAdditionPromotionReadiness,
   isKpVerifiedPlaceValueAdditionPromotionReadiness,
   type KpVerifiedPlaceValueAdditionPromotionReadiness
 } from "../architecture/place-value-addition-promotion-certificate.ts";
+import {
+  isKpVerifiedPlaceValueAdditionReleaseApproval,
+  kpVerifiedPlaceValueAdditionReleaseApproval,
+  type KpVerifiedPlaceValueAdditionReleaseApproval
+} from "../architecture/place-value-addition-release-approval.ts";
 
 export type KpAnimationLibraryDisplayRepresentationKind =
   | "reader"
@@ -96,6 +100,11 @@ export interface KpCanonicalFormatPromotionEvidence {
         readonly kind: "place-value-pre-release";
         readonly certificate?:
           KpVerifiedPlaceValueAdditionPromotionReadiness | undefined;
+      }
+    | {
+        readonly kind: "place-value-release";
+        readonly approval?:
+          KpVerifiedPlaceValueAdditionReleaseApproval | undefined;
       };
   readonly exclusiveCanonicalPaint: boolean;
   readonly requiredMotifParity: boolean;
@@ -145,23 +154,9 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
   ],
   [
     "animation.place-value-addition.278-plus-156",
-    {
-      animationId: "animation.place-value-addition.278-plus-156",
-      executionAuthority: {
-        kind: "place-value-pre-release",
-        certificate: certifyKpPlaceValueAdditionPromotionReadiness()
-      },
-      exclusiveCanonicalPaint: true,
-      requiredMotifParity: true,
-      responsiveRuntimeGates: true,
-      humanReviewApproved: false,
-      compatibilityPaintRetired: true,
-      releaseGatePassed: false,
-      presentationCoverage: "verified-animated",
-      evidenceSourceIds: [
-        "run-contract.kp.place-value-addition-promotion-v1"
-      ]
-    }
+    completePlaceValueAdditionCanonicalFormatEvidence(
+      kpVerifiedPlaceValueAdditionReleaseApproval
+    )
   ],
   [
     "animation.generated.radical.square-root-as-power",
@@ -572,6 +567,16 @@ function hasKpCanonicalFormatExecutionAuthority(
         certificate.status === "ready-for-human-review"
       );
     }
+    case "place-value-release": {
+      const approval = evidence.executionAuthority.approval;
+      return (
+        isKpVerifiedPlaceValueAdditionReleaseApproval(approval) &&
+        approval.animationId === evidence.animationId &&
+        approval.releaseDecision === "passed" &&
+        approval.promotedPositionCount === 3 &&
+        isKpVerifiedPlaceValueAdditionPromotionReadiness(approval.readiness)
+      );
+    }
   }
 }
 
@@ -591,6 +596,26 @@ function completeExactFractionQuantityCanonicalFormatEvidence(
     animationId: approval.animationId,
     executionAuthority: Object.freeze({
       kind: "executable-motif-cohort" as const,
+      approval
+    }),
+    exclusiveCanonicalPaint: true,
+    requiredMotifParity: true,
+    responsiveRuntimeGates: true,
+    humanReviewApproved: true,
+    compatibilityPaintRetired: true,
+    releaseGatePassed: approval.releaseDecision === "passed",
+    presentationCoverage: "verified-animated",
+    evidenceSourceIds: approval.evidenceSourceIds
+  });
+}
+
+function completePlaceValueAdditionCanonicalFormatEvidence(
+  approval: KpVerifiedPlaceValueAdditionReleaseApproval
+): KpCanonicalFormatPromotionEvidence {
+  return Object.freeze({
+    animationId: approval.animationId,
+    executionAuthority: Object.freeze({
+      kind: "place-value-release" as const,
       approval
     }),
     exclusiveCanonicalPaint: true,

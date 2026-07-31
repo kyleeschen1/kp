@@ -106,6 +106,7 @@ readonly KpPlaceValuePositionProgram[] {
           "digit.first.tens",
           "digit.second.tens"
         ],
+        incomingCarryCellId: "carry.tens",
         evaluationDigits: [
           {
             semanticEntityId: "evaluation.tens.total.hundreds",
@@ -158,6 +159,7 @@ readonly KpPlaceValuePositionProgram[] {
           "digit.first.hundreds",
           "digit.second.hundreds"
         ],
+        incomingCarryCellId: "carry.hundreds",
         evaluationDigits: [
           {
             semanticEntityId: "result.hundreds",
@@ -297,8 +299,14 @@ function assertPositionSequence(
       (index > 0 && (
         program.position.radix !== programs[index - 1]!.position.radix ||
         program.position.exponent !==
-          programs[index - 1]!.position.exponent + 1
+          programs[index - 1]!.position.exponent + 1 ||
+        program.evaluation.incomingCarryCellId !==
+          programs[index - 1]!.exchange?.outputCellIds[1] ||
+        program.evaluation.contributorCellIds[0] !==
+          program.evaluation.incomingCarryCellId
       )) ||
+      (index === 0 &&
+        program.evaluation.incomingCarryCellId !== undefined) ||
       (
         program.terminalOutput !== undefined &&
         (

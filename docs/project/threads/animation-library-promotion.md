@@ -2,9 +2,10 @@
 
 Status: active-supporting
 Last Updated: 2026-07-31
-Current Next Action: Complete final human wide/phone review of rank-2
-`278 + 156 = 434` (`multidigit-addition`). Automated readiness is complete;
-do not mark it promoted or begin rank 3 until that approval.
+Current Next Action: Prepare the bounded rank-3 Supply and demand equilibrium
+shift (`economics-parametric`) proposal. Rank 2 is promoted; this planning
+frontier does not authorize economics implementation without a reviewed run
+contract.
 
 ## Goal
 
@@ -51,8 +52,8 @@ release gate.
 | Rank | Stable ID | Canonical exemplar | Status | Catalog animation ID | Capability or demo purpose |
 | ---: | --- | --- | --- | --- | --- |
 | 1 | `kp.promotion.exact-fraction-quantity` | `1/3 + 1/6 = 1/2` across KaTeX, partitioned circles, bars or areas, and a number line | promoted | `animation.exact-fraction-quantity.third-plus-sixth` | Exact quantity identity across symbolic and concrete views |
-| 2 | `kp.promotion.place-value-addition` | `278 + 156 = 434` | next | — | Arithmetic demo breadth; exchange with persistent place-value provenance |
-| 3 | `kp.promotion.economics-equilibrium` | Supply and demand equilibrium shift | queued | — | Early versatility demo; parameter, curve, intersection, and narrative correspondence |
+| 2 | `kp.promotion.place-value-addition` | `278 + 156 = 434` | promoted | `animation.place-value-addition.278-plus-156` | Arithmetic demo breadth; exchange with persistent place-value provenance |
+| 3 | `kp.promotion.economics-equilibrium` | Supply and demand equilibrium shift | next | — | Early versatility demo; parameter, curve, intersection, and narrative correspondence |
 | 4 | `kp.promotion.physics-work-energy` | Constant-force work and kinetic-energy change | queued | — | Early versatility demo; units and conservation across equation, graph, and diagram without a physics engine |
 | 5 | `kp.promotion.vector-dot-projection` | Project one vector onto another | planned | — | Symbolic-to-spatial identity and indexed component pairing |
 | 6 | `kp.promotion.matrix-linear-map` | Apply a `2 × 2` matrix to a vector, then compose matrices from dot products | planned | — | Grid-aware nested evaluation and coordinated geometric transformation |
@@ -85,9 +86,9 @@ diagram framework.
 The promotion order now deliberately pressures three composition environments:
 
 1. equation succession, already proven by the canonical glyph and motif work;
-2. persistent workspace algorithms, automation-complete at the final
-   multi-digit-addition human checkpoint;
-3. synchronized model views, beginning with bounded economics and physics
+2. persistent workspace algorithms, proven and promoted through canonical
+   multi-digit addition; and
+3. synchronized model views, next beginning with bounded economics and physics
    exemplars.
 
 The place-value repair promoted generic lifetime, semantic destination,
@@ -168,10 +169,11 @@ for human selection. Motif-specific certification, a structurally different
 second caller, and the expensive release matrix follow approval rather than
 precede it.
 
-The current rank-2 checkpoint includes a bounded `8 + 6 → 14` source-derived
-ink-union experiment. It may reshape the compositor's existing opaque paint
-but does not yet change the shared operation-evaluation motif or authorize
-other position evaluations.
+The rank-2 cadence approved `8 + 6 → 14`, then proved the same typed
+contributor-fusion schedule through the structurally distinct three-input
+`1 + 7 + 5 → 13` caller. All three canonical ordered-position evaluations
+now use that required motif; a nominal, evidence-derived release approval is
+the only path by which the catalog reports the exemplar as `ported`.
 
 ## Progress Update Protocol
 
@@ -209,7 +211,6 @@ exists.
 
 ## Open Questions
 
-- Does final human review approve the rank-2 canonical wide/phone motion?
 - When should sparse direct settlement and decimal/radix presentation be
   scheduled as a place-value harvest without silently delaying rank 3?
 - Can the bounded economics and constant-force physics demos reuse existing

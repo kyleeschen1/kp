@@ -32,7 +32,7 @@ test("place-value exemplar mounts lazily in the canonical Animation Library", as
   );
   await expect(library).toHaveAttribute(
     "data-canonical-format",
-    "partial"
+    "ported"
   );
   await expect(frameElement).toHaveAttribute(
     "src",

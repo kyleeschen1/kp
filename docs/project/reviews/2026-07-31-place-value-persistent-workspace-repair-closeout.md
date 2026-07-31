@@ -1,9 +1,9 @@
 # Place-Value Persistent-Workspace Repair Closeout
 
 Date: 2026-07-31
-Status: HUMAN_CHECKPOINT
+Status: promoted
 Canonical exemplar: `278 + 156 = 434`
-Catalog status: `partial` (`ready-for-human-review`)
+Catalog status: `ported`
 
 ## Outcome
 
@@ -50,6 +50,11 @@ claiming that every numeric shape has already been certified.
   Review capture, accessible/static output, responsive behavior, and no WebGL
   allocation.
 
+Human review approved both the two-contributor `8 + 6 → 14` exemplar and
+the structurally distinct three-contributor `1 + 7 + 5 → 13` caller. The
+same required, count-derived contributor-fusion motif now governs every
+canonical ordered-position evaluation; the former comparator path is gone.
+
 ## Deliberately Unproven Scope
 
 - Sparse positions with only one contributor, such as `123 + 4`, still need a
@@ -57,7 +62,9 @@ claiming that every numeric shape has already been certified.
   than silently inventing motion.
 - Decimal points and fractional radix scales have not received semantic,
   typography, adjacency, or cross-browser visual certification.
-- More than two addends has not been certified.
+- Arbitrary multi-addend written problems have not been certified; the carried
+  three-contributor canonical caller proves motif structure, not a general
+  input generator.
 
 These are explicit place-value family proof obligations, not hidden special
 cases. They can extend the ordered-position compiler without reintroducing
@@ -67,24 +74,33 @@ ready.
 
 ## Release Evidence
 
-- `npm run test:place-value-addition`: 116/116 unit cases.
-- Complete current browser matrix: 111/111 cases in one
-  Chromium/Firefox/WebKit run.
+- `npm run test:place-value-addition`: 120/120 unit cases.
+- `npm run test:browser:place-value-addition:contributor-fusion`: 36/36 dense
+  contributor-route cases across Chromium, Firefox, and WebKit at wide and
+  phone widths.
+- `npm run test:browser:place-value-addition`: 123/123 complete place-value
+  browser cases across Chromium, Firefox, and WebKit.
 - `npm run visual:place-value-addition`: 33/33 cases across all three browsers.
-- Typecheck, architecture, inference, promotion-memory, production build,
-  resource, responsive, accessibility, static/export, Review, and Theseus
-  validation gates pass.
-- Type-system cost remains bounded at 49,279 types, 61,770 instantiations, and
-  2.77 seconds.
-- The lazy place-value capability pack is 95.93 kB raw and 25.45 kB gzip.
-  Existing main and graph chunk warnings predate and remain outside this
-  repair.
+- Typecheck, production build, promotion-memory, catalog generation, reader
+  production closure, dev-review production closure, resource, responsive,
+  accessibility, static/export, Review, and Theseus validation gates pass.
+- Type-system cost remains bounded at 49,286 types, 61,771 instantiations,
+  and 2.91 seconds in an isolated inference check.
+- The lazy place-value capability chunk is 103.86 kB raw and 27.79 kB gzip;
+  the Animation Library gate reports no place-value or outer-shell violation.
+- The repository-wide unit run passed 3,110/3,114 cases. Its four failures are
+  existing, independently owned ratchets: the HTML-escaping inventory, native
+  compositor source ceiling, linear-provider dependency boundary, and a stale
+  operation-promotion evidence path left by the earlier catalog runtime split.
+  The two global payload failures likewise concern the pre-existing main-host
+  and shared-reader closures, not the lazy place-value pack. Theseus records
+  these exceptions explicitly rather than treating them as feature evidence.
 
-## Final Human Gate
+## Approval Result
 
-Automation certifies this exemplar as `ready-for-human-review`; it does not
-grant aesthetic approval. Before promotion, review the canonical animation at
-wide and phone widths and verify:
+The human approved the canonical animation after reviewing the initial
+two-contributor treatment and the structurally distinct three-contributor
+caller. The accepted observations were:
 
 1. every source mark remains visible and stationary while its documentary
    appearance dims;
@@ -94,13 +110,15 @@ wide and phone widths and verify:
 4. no flicker, overlap, font change, baseline jump, or endpoint snap occurs;
 5. rewind and direct seeking reproduce the same states as forward playback.
 
-Until that approval, rank 2 remains `next`, the catalog remains `partial`, and
-rank 3 does not begin.
+Release authority is not an authorable boolean: the catalog requires the exact
+module-owned nominal approval that combines readiness, full motif coverage,
+human decision, and named evidence sources. Rank 2 is therefore promoted and
+rank 3 becomes planning-only next work.
 
 ## Conditional Successor
 
-After human promotion, the stable frontier advances to the bounded economics
-equilibrium-shift exemplar. That work should reuse the single-host, typed
+The stable frontier now advances to the bounded Supply and demand equilibrium
+shift exemplar. That work should reuse the single-host, typed
 readiness, deterministic seeking, persistent ownership, and evidence-derived
 promotion boundaries, while testing synchronized graph, parameter, and
 narrative views. It must not turn this place-value compiler into a universal
@@ -113,10 +131,10 @@ canonical promotion without silently changing the recorded frontier order.
 ## Rollback And Evidence Chain
 
 The independently reversible implementation spans the approved repair commits
-from `07ba460c` through `6c3021e1`. The semantic trace and synchronized base-ten
-projection stayed outside the presentation rollback boundary. The approved
-contract and slice-by-slice evidence remain in Theseus contract
-`run-contract.kp.place-value-persistent-workspace-repair-v2`.
+from `07ba460c` through this closeout's promotion commit. The semantic trace
+and synchronized base-ten projection stayed outside the presentation rollback
+boundary. The approved contract and slice-by-slice evidence remain in Theseus
+contract `run-contract.kp.place-value-persistent-workspace-repair-v2`.
 
 ## Links
 

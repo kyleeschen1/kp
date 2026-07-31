@@ -7,13 +7,14 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-1. Complete final human wide/phone review of the `multidigit-addition`
-   exemplar `278 + 156 = 434`. Automated evidence is green, but keep rank 2
-   and the catalog at `next`/`partial` until perceptual approval. Track sparse
-   direct settlement and decimal/radix rendering as explicit family proof
-   obligations rather than implying universal number support.
-2. After place-value promotion, advance a bounded economics equilibrium shift
-   and bounded constant-force work-energy exemplar in the recorded order.
+1. Prepare a reviewed run contract for the bounded Supply and demand
+   equilibrium shift exemplar. Planning may identify its synchronized graph,
+   parameter, intersection, and narrative acceptance boundary, but does not
+   authorize implementation.
+2. After economics promotion, advance the bounded constant-force work-energy
+   exemplar in the recorded order. Track sparse place-value direct settlement
+   and decimal/radix rendering as explicit family proof obligations rather
+   than implying universal number support.
 3. After that demo tranche, declare stable, internal, and experimental API
    tiers, then prepare a separate verified linear-generator-to-canonical-
    animation bridge; do not hide either change inside a content promotion.

@@ -54,24 +54,23 @@ export interface KpPlaceValueAdditionSharedDom {
   readonly dispose: () => void;
 }
 
-export const kpPlaceValueContributorFusionReviewedCallerCount = 2;
+export const kpPlaceValueContributorFusionPromotedCallerCount = 3;
 
 /**
  * Visual promotion is explicit and exhaustive: every evaluation receives one
- * typed motif, while only the approved exemplar and its structurally distinct
- * second caller receive fusion. The remaining position stays an unchanged
- * rollback comparator until the second human checkpoint passes.
+ * typed motif. Promotion reached all three canonical ordered positions only
+ * after the two- and three-contributor checkpoints received human approval.
  */
 export function compileKpPlaceValueEvaluationVisualMotifs(
   evaluations: KpPlaceValueAdditionRuntimeSession["columnEvaluations"]
 ): readonly KpPlaceValueEvaluationVisualMotif[] {
   if (
-    evaluations.length < kpPlaceValueContributorFusionReviewedCallerCount
+    evaluations.length < kpPlaceValueContributorFusionPromotedCallerCount
   ) {
-    throw new Error("Contributor-fusion promotion requires two callers.");
+    throw new Error("Contributor-fusion promotion requires three callers.");
   }
   return Object.freeze(evaluations.map((evaluation, index) =>
-    index < kpPlaceValueContributorFusionReviewedCallerCount
+    index < kpPlaceValueContributorFusionPromotedCallerCount
       ? compileKpPlaceValueContributorFusionMotif(
           evaluation.writtenOwnership
         )
@@ -300,7 +299,8 @@ export function createKpPlaceValueAdditionSharedDom(input: {
       certifyPersistentContributionContacts({
         written,
         overlay: activeEvaluation.scene.root,
-        ownership: activeEvaluation.evaluation.writtenOwnership
+        ownership: activeEvaluation.evaluation.writtenOwnership,
+        visualMotif: activeEvaluation.visualMotif
       });
     }
     let exchangeFrame: KpPlaceValueColumnExchangeFrame | undefined;
@@ -539,12 +539,15 @@ function certifyPersistentContributionContacts(input: {
   >;
   readonly overlay: HTMLElement;
   readonly ownership: KpPlaceValueWrittenOwnershipPlan;
+  readonly visualMotif: KpPlaceValueEvaluationVisualMotif;
 }): void {
+  const persistentContributors = input.ownership.contributionProxies.flatMap(
+    (proxy) => {
+      const element = input.written.cellElements.get(proxy.sourceCellId);
+      return element === undefined ? [] : [{ proxy, element }];
+    }
+  );
   for (const proxy of input.ownership.contributionProxies) {
-    const persistent = input.written.cellElements.get(proxy.sourceCellId);
-    if (persistent === undefined) continue;
-    const persistentOwnerId = persistent.dataset["kpEquationPaintOwnerId"]!;
-    const rect = persistent.getBoundingClientRect();
     for (const owner of input.overlay.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id]"
     )) {
@@ -555,20 +558,43 @@ function certifyPersistentContributionContacts(input: {
         continue;
       }
       const materialOwnerId = owner.dataset["kpEquationMaterialOwnerId"]!;
-      const contact = Object.freeze({
-        id:
-          `contact.place-value.${input.ownership.position.id}.peel.${proxy.sourceCellId}`,
-        ownerIds: Object.freeze([
-          persistentOwnerId,
-          materialOwnerId
-        ] as const),
-        reason: "semantic-reconciliation" as const,
-        phase: "transit" as const,
-        maximumOverlapWidthPx: rect.width,
-        maximumOverlapHeightPx: rect.height
-      }) satisfies KpEquationVisiblePaintCertifiedContact;
-      setCertifiedContact(persistent, contact);
-      setCertifiedContact(owner, contact);
+      for (const persistent of persistentContributors) {
+        const isSourceContact =
+          persistent.proxy.sourceCellId === proxy.sourceCellId;
+        if (
+          !isSourceContact &&
+          input.visualMotif.kind !== kpPlaceValueContributorFusionMotifKind
+        ) {
+          continue;
+        }
+        const persistentOwnerId =
+          persistent.element.dataset["kpEquationPaintOwnerId"]!;
+        const rect = persistent.element.getBoundingClientRect();
+        // The fusion route deliberately crosses its own dimmed documentary
+        // row. Certify only cells and proxies from this typed evaluation so a
+        // general overlap cannot masquerade as approved choreography.
+        const contact = Object.freeze({
+          id: isSourceContact
+            ? `contact.place-value.${input.ownership.position.id}.peel.${proxy.sourceCellId}`
+            :
+              `contact.place-value.${input.ownership.position.id}.fusion.` +
+              `${persistent.proxy.sourceCellId}.${proxy.sourceCellId}`,
+          ownerIds: Object.freeze([
+            persistentOwnerId,
+            materialOwnerId
+          ] as const),
+          reason: isSourceContact
+            ? "semantic-reconciliation" as const
+            : "semantic-fusion" as const,
+          phase: isSourceContact
+            ? "transit" as const
+            : "fusion-contact" as const,
+          maximumOverlapWidthPx: rect.width,
+          maximumOverlapHeightPx: rect.height
+        }) satisfies KpEquationVisiblePaintCertifiedContact;
+        setCertifiedContact(persistent.element, contact);
+        setCertifiedContact(owner, contact);
+      }
     }
   }
 }

@@ -91,11 +91,11 @@ failed generic invariant.
 The persistent promotion order is now owned by
 `threads/animation-library-promotion.md` and accepted by
 `decisions/2026-07-28-kp-stable-animation-promotion-order.md`. Exact fraction
-quantity identity is next. Place-value arithmetic, a bounded economics
-equilibrium shift, and a bounded constant-force work-energy exemplar follow
-early for demo breadth before the recorded vector/matrix, derivative, integral,
-and later-domain sequence. Older sequence documents remain rationale but no
-longer independently determine rank.
+quantity identity and place-value arithmetic are promoted. The bounded Supply
+and demand equilibrium shift is next, followed by the bounded constant-force
+work-energy exemplar for early demo breadth before the recorded vector/matrix,
+derivative, integral, and later-domain sequence. Older sequence documents
+remain rationale but no longer independently determine rank.
 
 The platform milestones between those promotions are recorded in
 `decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md`.
@@ -128,15 +128,12 @@ canonical session. Catalog status remains evidence-derived, so explicit static
 checkpoints and retained compatibility debt cannot be reported as fully
 animated promotion.
 
-Exact fraction quantity identity through `1/3 + 1/6 = 1/2` is promoted.
-Place-value addition through `278 + 156 = 434` is the active content run. Its
-first visual checkpoint was rejected because the written addends did not
-remain documentary evidence, the ones digits converged above their final
-answer cells, and the carry teleported instead of completing a visible route
-and exclusive handoff. The approved successor repair is recorded in
-`reviews/2026-07-30-place-value-persistent-workspace-repair-long-loop-proposal.md`
-and stops again after the repaired ones-column exemplar before later-column
-generalization.
+Exact fraction quantity identity through `1/3 + 1/6 = 1/2` and place-value
+addition through `278 + 156 = 434` are promoted. The place-value repair retains
+one documentary workspace and one typed contributor-fusion motif across all
+three ordered positions. The active frontier is planning the bounded Supply
+and demand equilibrium shift; no economics implementation begins without a
+reviewed run contract.
 
 The generator, editorial-text, API-tier, motif-versioning, and pruning
 recommendations are durable platform milestones in
@@ -154,9 +151,9 @@ discarding unmigrated catalog coverage.
 
 The durable promotion order and current status are owned by
 `threads/animation-library-promotion.md`. Approved Theseus plan revision
-`plan-revision.kp.v18` mirrors that order. Exact-fraction quantity is promoted,
-and place-value addition, `278 + 156 = 434`, is at its active
-persistent-workspace repair checkpoint. Planned rows do not authorize
+`plan-revision.kp.v19` mirrors that order. Exact-fraction quantity and
+place-value addition, `278 + 156 = 434`, are promoted. The bounded Supply and
+demand equilibrium shift is the next planned row. Planned rows do not authorize
 implementation; an approved typed run contract owns execution. Human exemplar
 approval remains mandatory before each subjective visual generalization, and
 existing standalone examples remain reference evidence rather than
