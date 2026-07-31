@@ -67,6 +67,7 @@ interface KpPlaceValueColumnExchangeBase {
   readonly forward: FissionDispatch;
   readonly rewind: FissionDispatch;
   readonly opacityPolicy: "opaque";
+  readonly nativeHandoffPolicy: "only-at-route-completion";
 }
 
 export interface KpPlaceValueOnesExchange extends
@@ -98,7 +99,11 @@ export type KpPlaceValueColumnExchange =
 
 export interface KpPlaceValueColumnExchangeFrame {
   readonly ownership: KpNativeKatexSceneOwnershipFrame;
-  readonly transferOccurred: boolean;
+  // Semantic fission and endpoint arrival are different events. Keeping the
+  // endpoint owner as a discriminant prevents the old transfer boolean from
+  // being reused to reveal native paint while the carry is still in flight.
+  readonly semanticTransferOccurred: boolean;
+  readonly nativeEndpointOwnership: "transit" | "native-endpoint";
 }
 
 export interface KpPlaceValueColumnExchangeDom {
@@ -334,7 +339,8 @@ function compileColumnExchange(
     forward: dispatch("forward"),
     rewind: dispatch("rewind"),
     ...(writtenOwnership === undefined ? {} : { writtenOwnership }),
-    opacityPolicy: "opaque" as const
+    opacityPolicy: "opaque" as const,
+    nativeHandoffPolicy: "only-at-route-completion" as const
   });
   sealedExchanges.add(exchange);
   return exchange as unknown as KpPlaceValueColumnExchange;
@@ -477,21 +483,34 @@ function createColumnExchangeDom(input: {
           : input.exchange.rewind;
       const telemetry = execution.samplePhaseTelemetry(progress);
       const ownership = scene.apply(progress);
-      const transferOccurred =
+      const semanticTransferOccurred =
         progress >= input.exchange.transferProgress;
+      const nativeEndpointOwnership =
+        progress >= 1 ? "native-endpoint" as const : "transit" as const;
       scene.root.dataset["kpIdentityFissionDirection"] = direction;
       scene.root.dataset["kpIdentityFissionPhaseId"] =
         telemetry.activePhaseId;
       scene.root.dataset["kpIdentityFissionProgress"] = String(progress);
       scene.root.dataset["kpIdentityTransferOccurred"] =
-        String(transferOccurred);
-      if (input.writtenOwnership !== undefined && transferOccurred) {
+        String(semanticTransferOccurred);
+      scene.root.dataset["kpNativeEndpointOwnership"] =
+        nativeEndpointOwnership;
+      // Semantic fission happens at the shared junction; native ownership
+      // cannot begin until the moving paint has completed its measured route.
+      if (
+        input.writtenOwnership !== undefined &&
+        nativeEndpointOwnership === "native-endpoint"
+      ) {
         suppressDerivedMaterialCopies(
           scene.root,
           input.writtenOwnership
         );
       }
-      return Object.freeze({ ownership, transferOccurred });
+      return Object.freeze({
+        ownership,
+        semanticTransferOccurred,
+        nativeEndpointOwnership
+      });
     },
     dispose: scene.dispose
   });

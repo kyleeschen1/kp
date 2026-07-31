@@ -775,7 +775,7 @@ for (const viewport of [
       };
       dom.apply(sample(0.34, 0.339, 11));
       const afterWritten = transferState().written;
-      const persistentHandoff = {
+      const persistentTransit = {
         outputs: ["result.ones", "carry.tens"].map((id) => {
           const element = (dom.writtenRoot as HTMLElement)
             .querySelector<HTMLElement>(
@@ -800,7 +800,7 @@ for (const viewport of [
         written: afterWritten,
         baseTen: transferState().baseTen,
         blocks: baseTenSignature(),
-        persistentHandoff
+        persistentTransit
       };
 
       dom.apply(sample(0.4, 0.34, 13));
@@ -890,23 +890,23 @@ for (const viewport of [
     expect(evidence.before.baseTen).toBe("false");
     expect(evidence.after.written).toBe("true");
     expect(evidence.after.baseTen).toBe("true");
-    expect(evidence.after.persistentHandoff.outputs).toEqual([
+    expect(evidence.after.persistentTransit.outputs).toEqual([
       {
         id: "result.ones",
         connected: true,
-        visibility: "visible",
+        visibility: "hidden",
         opacity: "1"
       },
       {
         id: "carry.tens",
         connected: true,
-        visibility: "visible",
+        visibility: "hidden",
         opacity: "1"
       }
     ]);
     expect(
-      evidence.after.persistentHandoff.derivedMaterialOpacities.every(
-        (opacity) => opacity === "0"
+      evidence.after.persistentTransit.derivedMaterialOpacities.every(
+        (opacity) => opacity === "1"
       )
     ).toBe(true);
 

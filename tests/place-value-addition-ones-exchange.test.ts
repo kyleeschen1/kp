@@ -36,6 +36,10 @@ test("ones exchange reuses exact carry proof and identity-fission program", () =
   assert.equal(exchange.forward.route.primitiveRoute, "fission-fusion:fission");
   assert.equal(exchange.opacityPolicy, "opaque");
   assert.equal(
+    exchange.nativeHandoffPolicy,
+    "only-at-route-completion"
+  );
+  assert.equal(
     exchange.transferProgress,
     kpOpaqueIdentityTransferOwnershipProgress
   );

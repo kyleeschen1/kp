@@ -34,6 +34,9 @@ import type {
 import {
   isKpPlaceValuePersistentWorkspaceConformance
 } from "../animation/place-value-addition-persistent-workspace.ts";
+import {
+  kpPlaceValueAdditionVisualReference as reference
+} from "../reader/compiler/place-value-addition-visual-reference.ts";
 
 export interface KpPlaceValueAdditionSharedDom {
   readonly root: HTMLElement;
@@ -136,6 +139,12 @@ export function createKpPlaceValueAdditionSharedDom(input: {
   root.append(writtenHost, baseTen.root);
   let disposed = false;
   let nativeScenesPrepared = false;
+  const onesEvaluationBeat = requireReferenceBeat(
+    input.session.persistentWorkspace.plan.onesOperation.evaluationBeatId
+  );
+  const onesExchangeBeat = requireReferenceBeat(
+    input.session.persistentWorkspace.plan.onesOperation.exchangeBeatId
+  );
 
   const prepareNativeScenes = (): void => {
     if (disposed) {
@@ -215,7 +224,6 @@ export function createKpPlaceValueAdditionSharedDom(input: {
       frame.beat.id === "beat.place-value.evaluate-hundreds";
     const settling =
       frame.beat.id === "beat.place-value.settle";
-    const persistentOnesMotion = evaluatingOnes || exchangingOnes;
     writtenHost.style.display = writtenVisible ? "grid" : "none";
     written.root.style.display =
       writtenVisible ? "grid" : "none";
@@ -231,12 +239,18 @@ export function createKpPlaceValueAdditionSharedDom(input: {
       writtenVisible && evaluatingHundreds ? "grid" : "none";
     nativeSettlement.root.style.display =
       writtenVisible && settling ? "grid" : "none";
-    if (writtenVisible && persistentOnesMotion) {
+    if (writtenVisible) {
       applyPersistentOnesDocumentaryState({
         written,
-        evaluationProgress:
-          evaluatingOnes ? frame.beatProgress : 1,
-        outputsVisible: false
+        evaluationProgress: normalizedPermilleProgress(
+          frame.clock.progressPermille,
+          onesEvaluationBeat.startPermille,
+          onesEvaluationBeat.endPermille
+        ),
+        outputOwnership:
+          frame.clock.progressPermille >= onesExchangeBeat.endPermille
+            ? "native-endpoint"
+            : "transit"
       });
     }
     if (writtenVisible && evaluatingOnes) {
@@ -259,13 +273,6 @@ export function createKpPlaceValueAdditionSharedDom(input: {
       writtenVisible && exchangingOnes
         ? onesExchange.apply(frame.beatProgress, frame.clock.direction)
         : undefined;
-    if (writtenVisible && exchangingOnes) {
-      applyPersistentOnesDocumentaryState({
-        written,
-        evaluationProgress: 1,
-        outputsVisible: exchangeFrame?.transferOccurred ?? false
-      });
-    }
     if (writtenVisible && evaluatingTens) {
       tensEvaluation.apply(frame.beatProgress, frame.clock.direction);
     }
@@ -293,7 +300,7 @@ export function createKpPlaceValueAdditionSharedDom(input: {
           // Hidden views do no paint measurement. Both projections use the
           // canonical transfer boundary owned by the compiled exchange.
           transferOccurred:
-            exchangeFrame?.transferOccurred ??
+            exchangeFrame?.semanticTransferOccurred ??
             frame.beatProgress >= input.session.onesExchange.transferProgress
         });
       } else if (exchangingTens) {
@@ -301,7 +308,7 @@ export function createKpPlaceValueAdditionSharedDom(input: {
           exchangeId: input.session.tensExchange.baseTenExchangeId,
           progress: frame.beatProgress,
           transferOccurred:
-            tensExchangeFrame?.transferOccurred ??
+            tensExchangeFrame?.semanticTransferOccurred ??
             frame.beatProgress >= input.session.tensExchange.transferProgress
         });
       } else {
@@ -504,7 +511,7 @@ function applyPersistentOnesDocumentaryState(input: {
     typeof createKpPlaceValueWrittenColumnDomProjection
   >;
   readonly evaluationProgress: number;
-  readonly outputsVisible: boolean;
+  readonly outputOwnership: "transit" | "native-endpoint";
 }): void {
   const progress = Math.max(0, Math.min(1, input.evaluationProgress));
   const dimProgress = smoothStep(Math.min(1, progress / 0.2));
@@ -532,8 +539,28 @@ function applyPersistentOnesDocumentaryState(input: {
     output.style.opacity = "1";
     output.style.transform = "none";
     output.dataset["kpVisibility"] =
-      input.outputsVisible ? "visible" : "hidden";
+      input.outputOwnership === "native-endpoint" ? "visible" : "hidden";
+    output.dataset["kpNativeEndpointOwnership"] =
+      input.outputOwnership;
   }
+}
+
+function requireReferenceBeat(
+  beatId: string
+): (typeof reference.beats)[number] {
+  const beat = reference.beats.find(({ id }) => id === beatId);
+  if (beat === undefined) {
+    throw new Error(`Persistent workspace lacks reference beat ${beatId}.`);
+  }
+  return beat;
+}
+
+function normalizedPermilleProgress(
+  value: number,
+  start: number,
+  end: number
+): number {
+  return Math.max(0, Math.min(1, (value - start) / (end - start)));
 }
 
 function smoothStep(progress: number): number {

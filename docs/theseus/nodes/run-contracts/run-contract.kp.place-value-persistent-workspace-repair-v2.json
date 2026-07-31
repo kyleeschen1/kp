@@ -254,6 +254,55 @@
       "scope": "s08 type-system cost",
       "checkedAt": "2026-07-31T04:19:34.779Z",
       "notes": "Inference remains bounded at 49086 types, 61566 instantiations, and 4.68 seconds."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s09 typed semantic transfer versus native handoff",
+      "checkedAt": "2026-07-31T04:32:40.011Z",
+      "notes": "107 of 107 pass; exchange frames expose semanticTransferOccurred separately from the transit/native-endpoint ownership discriminant."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition:ones-cycle",
+      "status": "failed",
+      "scope": "s09 initial endpoint microscope",
+      "checkedAt": "2026-07-31T04:32:41.286Z",
+      "notes": "The first test sampled 0.39985, which the canonical permille clock correctly rounds to the 0.400 boundary, then compared wrapper line boxes instead of glyph paint. The product behavior was not loosened; the test now samples permille 399 and uses the shared measured-paint utility."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition:ones-cycle",
+      "status": "passed",
+      "scope": "s09 dense carry route and handoff",
+      "checkedAt": "2026-07-31T04:32:42.247Z",
+      "notes": "Four wide/phone Chromium cases prove atomic opaque fission, visible opaque remainder/carry transit, measured curved carry deviation, measured-paint/font/baseline endpoint equality, exact boundary handoff, direct seek, and rewind determinism."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09 event separation",
+      "checkedAt": "2026-07-31T04:32:43.124Z",
+      "notes": "The ambiguous exchange transferOccurred field is gone; callers must select semanticTransferOccurred or the transit/native-endpoint ownership discriminant."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s09 existing compositor route",
+      "checkedAt": "2026-07-31T04:32:44.001Z",
+      "notes": "Repair reused the existing fission route, material layer, shared clock, and native endpoints without a new renderer or lifecycle."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s09 first parallel timing sample",
+      "checkedAt": "2026-07-31T04:32:44.904Z",
+      "notes": "The parallel sample retained 49086 types and 61566 instantiations but measured 14.11 seconds while the full unit and TypeScript suites were running; no threshold changed."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s09 isolated timing sample",
+      "checkedAt": "2026-07-31T04:32:45.787Z",
+      "notes": "The isolated inference gate passed at 49086 types, 61566 instantiations, and 2.63 seconds."
     }
   ],
   "allowedWork": [
@@ -328,7 +377,8 @@
     {
       "id": "s09",
       "title": "complete-visible-carry-transit-and-handoff",
-      "status": "planned"
+      "summary": "Separated semantic fission transfer from native endpoint ownership in the typed frame and removed the ambiguous transfer boolean. Remainder and carry material now remain opaque through measured routes; the persistent scaffold reveals endpoints only at absolute route completion. Dense wide/phone paint—not wrapper-box—checks prove curvature, opacity, font/baseline settlement, seek, rewind, and atomic handoff.",
+      "status": "complete"
     },
     {
       "id": "s10",
