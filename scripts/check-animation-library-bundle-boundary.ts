@@ -1,7 +1,12 @@
 import { readFile } from "node:fs/promises";
 import { extname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { gzipSync } from "node:zlib";
+
+import {
+  kpBundleBudgetDeltaBytes,
+  measureKpBundleClosureAttribution,
+  type KpBundleFileAttribution
+} from "./bundle-closure-attribution.ts";
 
 interface ViteManifestChunk {
   readonly file: string;
@@ -18,6 +23,18 @@ export interface KpAnimationLibraryBundleBoundaryMeasurement {
   readonly placeValueIncrementalGzipBytes: number;
   readonly outerFiles: readonly string[];
   readonly forbiddenOuterFiles: readonly string[];
+  readonly fileAttribution: Readonly<{
+    outer: readonly KpBundleFileAttribution[];
+    mainHost: readonly KpBundleFileAttribution[];
+    placeValueIncremental: readonly KpBundleFileAttribution[];
+  }>;
+  readonly deltas: KpAnimationLibraryBundleBoundaryDeltas;
+}
+
+export interface KpAnimationLibraryBundleBoundaryDeltas {
+  readonly outerGzipBytes: number;
+  readonly mainHostGzipBytes: number;
+  readonly placeValueIncrementalGzipBytes: number;
 }
 
 export const kpAnimationLibraryBundleBoundary = Object.freeze({
@@ -59,21 +76,59 @@ export async function inspectKpAnimationLibraryBundleBoundary(
     [...placeValueKeys].filter((key) => !mainKeys.has(key))
   );
   const outerFiles = filesForKeys(manifest, outerKeys);
+  const mainHostFiles = filesForKeys(manifest, mainKeys);
+  const placeValueIncrementalFiles = filesForKeys(
+    manifest,
+    incrementalPlaceValueKeys
+  );
+  const [outer, mainHost, placeValueIncremental] = await Promise.all([
+    measureKpBundleClosureAttribution(distRoot, outerFiles),
+    measureKpBundleClosureAttribution(distRoot, mainHostFiles),
+    measureKpBundleClosureAttribution(distRoot, placeValueIncrementalFiles)
+  ]);
   const forbiddenOuterFiles = outerFiles.filter((file) =>
     /(?:place-value|native-katex|katex-|runtime-controller|equation-surface|graph-webgl)/i
       .test(file)
   );
+  const totals = {
+    outerGzipBytes: outer.gzipBytes,
+    mainHostGzipBytes: mainHost.gzipBytes,
+    placeValueIncrementalGzipBytes: placeValueIncremental.gzipBytes
+  };
   return Object.freeze({
-    outerGzipBytes: await gzipFiles(distRoot, outerFiles),
-    mainHostGzipBytes:
-      await gzipFiles(distRoot, filesForKeys(manifest, mainKeys)),
-    placeValueIncrementalGzipBytes:
-      await gzipFiles(
-        distRoot,
-        filesForKeys(manifest, incrementalPlaceValueKeys)
-      ),
+    ...totals,
     outerFiles: Object.freeze(outerFiles),
-    forbiddenOuterFiles: Object.freeze(forbiddenOuterFiles)
+    forbiddenOuterFiles: Object.freeze(forbiddenOuterFiles),
+    fileAttribution: Object.freeze({
+      outer: outer.files,
+      mainHost: mainHost.files,
+      placeValueIncremental: placeValueIncremental.files
+    }),
+    deltas: measureKpAnimationLibraryBundleBoundaryDeltas(totals)
+  });
+}
+
+export function measureKpAnimationLibraryBundleBoundaryDeltas(
+  measurement: Pick<
+    KpAnimationLibraryBundleBoundaryMeasurement,
+    | "outerGzipBytes"
+    | "mainHostGzipBytes"
+    | "placeValueIncrementalGzipBytes"
+  >
+): KpAnimationLibraryBundleBoundaryDeltas {
+  return Object.freeze({
+    outerGzipBytes: kpBundleBudgetDeltaBytes(
+      measurement.outerGzipBytes,
+      kpAnimationLibraryBundleBoundary.outerGzipBytes
+    ),
+    mainHostGzipBytes: kpBundleBudgetDeltaBytes(
+      measurement.mainHostGzipBytes,
+      kpAnimationLibraryBundleBoundary.mainHostGzipBytes
+    ),
+    placeValueIncrementalGzipBytes: kpBundleBudgetDeltaBytes(
+      measurement.placeValueIncrementalGzipBytes,
+      kpAnimationLibraryBundleBoundary.placeValueIncrementalGzipBytes
+    )
   });
 }
 
@@ -112,21 +167,12 @@ function filesForKeys(
     .sort();
 }
 
-async function gzipFiles(
-  distRoot: string,
-  files: readonly string[]
-): Promise<number> {
-  const sources = await Promise.all(files.map((file) =>
-    readFile(resolve(distRoot, file))
-  ));
-  return sources.reduce(
-    (total, source) => total + gzipSync(source).byteLength,
-    0
-  );
-}
-
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
   const measurement = await inspectKpAnimationLibraryBundleBoundary();
+  console.log(JSON.stringify({
+    limits: kpAnimationLibraryBundleBoundary,
+    measurement
+  }, null, 2));
   const failures = [
     measurement.outerGzipBytes >
       kpAnimationLibraryBundleBoundary.outerGzipBytes
@@ -151,8 +197,4 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
       failures.join("\n")
     }`);
   }
-  console.log(JSON.stringify({
-    limits: kpAnimationLibraryBundleBoundary,
-    measurement
-  }, null, 2));
 }

@@ -119,11 +119,46 @@
       "scope": "baseline-characterization",
       "checkedAt": "2026-07-31T21:31:48.263Z",
       "notes": "Expected baseline: nine shared equation-reader routes fail at 151256 versus 145000 runtime gzip bytes; the two specialized routes and all compiled-HTML metrics remain green."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/bundle-closure-attribution.test.ts scripts/check-animation-library-bundle-boundary.test.ts scripts/check-reader-route-budgets.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T21:41:15.046Z",
+      "notes": "Seven attribution, delta, shared-closure grouping, and existing reader-budget tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-31T21:41:16.072Z",
+      "notes": "Application, node, test, and domain TypeScript projects passed with the new inspector types."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "failed",
+      "scope": "expected-baseline",
+      "checkedAt": "2026-07-31T21:41:16.974Z",
+      "notes": "Pass/fail semantics are unchanged: main host remains 495627 versus 490000, now with stable sorted file attribution and +5627 delta; other closures remain green."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "expected-baseline",
+      "checkedAt": "2026-07-31T21:41:18.010Z",
+      "notes": "Pass/fail semantics are unchanged: the nine-route shared closure remains 151256 versus 145000, now grouped once with per-file attribution and +6256 route deltas."
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path scripts/bundle-closure-attribution.ts --path scripts/check-animation-library-bundle-boundary.ts --path scripts/check-reader-route-budgets.ts",
+      "status": "passed",
+      "scope": "impact-selection",
+      "checkedAt": "2026-07-31T21:41:19.065Z",
+      "notes": "Selector classed the previously unmatched build-inspector paths high-risk; focused tests and typecheck ran now, while known-red full test/build release gates remain owned by later contract slices."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 2 froze all six post-host-repair failures at f4d4a65d with exact owners, byte/count deltas, preservation sentinels, and impact-selected checks. No threshold or production behavior changed; s03 can now add stable payload closure attribution against this baseline."
+    "summary": "Slice 3 added deterministic sorted gzip attribution, signed ceiling deltas, and shared-reader closure grouping to the existing inspectors. Their failure semantics and all accepted totals remain unchanged, so s04 can repair the independent operation ledger."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."

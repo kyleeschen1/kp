@@ -4,6 +4,12 @@ import { pathToFileURL } from "node:url";
 import { gzipSync } from "node:zlib";
 
 import {
+  kpBundleBudgetDeltaBytes,
+  measureKpBundleClosureAttribution,
+  type KpBundleFileAttribution
+} from "./bundle-closure-attribution.ts";
+
+import {
   isKpSemanticReaderForbiddenAsset
 } from "../src/architecture/semantic-reader-route-budget.ts";
 
@@ -27,6 +33,13 @@ export interface KpReaderRouteBudgetMeasurement {
   readonly compiledHtmlGzipBytes: number;
   readonly runtimeCodeGzipBytes: number;
   readonly runtimeFiles: readonly string[];
+  readonly runtimeFileAttribution: readonly KpBundleFileAttribution[];
+}
+
+export interface KpReaderRouteBudgetDeltas {
+  readonly compiledHtmlRawBytes: number;
+  readonly compiledHtmlGzipBytes: number;
+  readonly runtimeCodeGzipBytes: number;
 }
 
 export interface KpReaderRouteBudgetIssue {
@@ -35,7 +48,24 @@ export interface KpReaderRouteBudgetIssue {
   readonly measuredBytes: number;
   readonly allowedBytes: number;
   readonly baselineBytes: number;
+  readonly deltaBytes: number;
   readonly message: string;
+}
+
+export interface KpReaderRouteBudgetInspection {
+  readonly route: string;
+  readonly measurement: KpReaderRouteBudgetMeasurement;
+  readonly deltas: KpReaderRouteBudgetDeltas;
+  readonly issues: readonly KpReaderRouteBudgetIssue[];
+}
+
+export interface KpReaderSharedRuntimeClosure {
+  readonly routes: readonly Readonly<{
+    route: string;
+    deltaBytes: number;
+  }>[];
+  readonly runtimeCodeGzipBytes: number;
+  readonly files: readonly KpBundleFileAttribution[];
 }
 
 export const kpReaderRouteBudgetGrowthPermille = 50;
@@ -53,9 +83,7 @@ export function checkKpReaderRouteBudget(input: {
   ] as const) {
     const baselineBytes = input.budget[metric];
     const measuredBytes = input.measurement[metric];
-    const allowedBytes = Math.ceil(
-      baselineBytes * (1 + kpReaderRouteBudgetGrowthPermille / 1_000)
-    );
+    const allowedBytes = allowedKpReaderRouteBytes(baselineBytes);
     if (measuredBytes <= allowedBytes) continue;
     issues.push({
       route: input.route,
@@ -63,6 +91,7 @@ export function checkKpReaderRouteBudget(input: {
       measuredBytes,
       allowedBytes,
       baselineBytes,
+      deltaBytes: measuredBytes - allowedBytes,
       message:
         `${input.route} ${metric} is ${measuredBytes} bytes; ` +
         `the approved baseline is ${baselineBytes} and the 5% limit is ${allowedBytes}.`
@@ -76,6 +105,7 @@ export function checkKpReaderRouteBudget(input: {
       measuredBytes: 0,
       allowedBytes: 0,
       baselineBytes: 0,
+      deltaBytes: 0,
       message: `${input.route} runtime closure contains forbidden learner asset ${path}.`
     });
   }
@@ -90,27 +120,42 @@ export async function measureKpReaderRouteBudget(input: {
   const htmlPath = kpReaderRouteHtmlPath(input.descriptor.route);
   const html = await readFile(resolve(input.distRoot, htmlPath));
   const runtimeFiles = collectRuntimeCodeFiles(html.toString("utf8"), input.viteManifest);
-  const runtimeBytes = await Promise.all(runtimeFiles.map((file) =>
-    readFile(resolve(input.distRoot, file))
-  ));
+  const runtime = await measureKpBundleClosureAttribution(
+    input.distRoot,
+    runtimeFiles
+  );
   return {
     compiledHtmlRawBytes: html.byteLength,
     compiledHtmlGzipBytes: gzipSync(html).byteLength,
-    runtimeCodeGzipBytes: runtimeBytes.reduce(
-      (total, source) => total + gzipSync(source).byteLength,
-      0
-    ),
-    runtimeFiles
+    runtimeCodeGzipBytes: runtime.gzipBytes,
+    runtimeFiles: Object.freeze(runtime.files.map(({ file }) => file)),
+    runtimeFileAttribution: runtime.files
   };
+}
+
+export function measureKpReaderRouteBudgetDeltas(input: {
+  readonly budget: KpReaderRouteBudgetProfile;
+  readonly measurement: KpReaderRouteBudgetMeasurement;
+}): KpReaderRouteBudgetDeltas {
+  return Object.freeze({
+    compiledHtmlRawBytes: kpBundleBudgetDeltaBytes(
+      input.measurement.compiledHtmlRawBytes,
+      allowedKpReaderRouteBytes(input.budget.compiledHtmlRawBytes)
+    ),
+    compiledHtmlGzipBytes: kpBundleBudgetDeltaBytes(
+      input.measurement.compiledHtmlGzipBytes,
+      allowedKpReaderRouteBytes(input.budget.compiledHtmlGzipBytes)
+    ),
+    runtimeCodeGzipBytes: kpBundleBudgetDeltaBytes(
+      input.measurement.runtimeCodeGzipBytes,
+      allowedKpReaderRouteBytes(input.budget.runtimeCodeGzipBytes)
+    )
+  });
 }
 
 export async function inspectKpReaderRouteBudgets(
   distRoot = resolve("dist")
-): Promise<readonly {
-  readonly route: string;
-  readonly measurement: KpReaderRouteBudgetMeasurement;
-  readonly issues: readonly KpReaderRouteBudgetIssue[];
-}[]> {
+): Promise<readonly KpReaderRouteBudgetInspection[]> {
   const viteManifest = JSON.parse(await readFile(
     resolve(distRoot, ".vite/manifest.json"),
     "utf8"
@@ -124,6 +169,10 @@ export async function inspectKpReaderRouteBudgets(
     return {
       route: descriptor.route,
       measurement,
+      deltas: measureKpReaderRouteBudgetDeltas({
+        budget: descriptor.budget,
+        measurement
+      }),
       issues: checkKpReaderRouteBudget({
         route: descriptor.route,
         budget: descriptor.budget,
@@ -131,6 +180,48 @@ export async function inspectKpReaderRouteBudgets(
       })
     };
   }));
+}
+
+export function groupKpReaderSharedRuntimeClosures(
+  reports: readonly KpReaderRouteBudgetInspection[]
+): readonly KpReaderSharedRuntimeClosure[] {
+  const groups = new Map<string, {
+    readonly runtimeCodeGzipBytes: number;
+    readonly files: readonly KpBundleFileAttribution[];
+    readonly routes: Array<{ route: string; deltaBytes: number }>;
+  }>();
+  for (const report of reports) {
+    const fingerprint = report.measurement.runtimeFileAttribution
+      .map(({ file, gzipBytes }) => `${file}:${gzipBytes}`)
+      .join("\n");
+    const group = groups.get(fingerprint) ?? {
+      runtimeCodeGzipBytes: report.measurement.runtimeCodeGzipBytes,
+      files: report.measurement.runtimeFileAttribution,
+      routes: []
+    };
+    group.routes.push({
+      route: report.route,
+      deltaBytes: report.deltas.runtimeCodeGzipBytes
+    });
+    groups.set(fingerprint, group);
+  }
+  return Object.freeze([...groups.values()]
+    .map((group) => Object.freeze({
+      runtimeCodeGzipBytes: group.runtimeCodeGzipBytes,
+      files: group.files,
+      routes: Object.freeze(group.routes
+        .sort((left, right) => left.route.localeCompare(right.route))
+        .map((route) => Object.freeze(route)))
+    }))
+    .sort((left, right) =>
+      (left.routes[0]?.route ?? "").localeCompare(right.routes[0]?.route ?? "")
+    ));
+}
+
+function allowedKpReaderRouteBytes(baselineBytes: number): number {
+  return Math.ceil(
+    baselineBytes * (1 + kpReaderRouteBudgetGrowthPermille / 1_000)
+  );
 }
 
 function collectRuntimeCodeFiles(
@@ -164,13 +255,21 @@ function collectRuntimeCodeFiles(
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
   const reports = await inspectKpReaderRouteBudgets();
   const issues = reports.flatMap((report) => report.issues);
+  console.log(JSON.stringify({
+    growthLimit: "5%",
+    routes: reports.map(({ route, measurement, deltas, issues: routeIssues }) => ({
+      route,
+      compiledHtmlRawBytes: measurement.compiledHtmlRawBytes,
+      compiledHtmlGzipBytes: measurement.compiledHtmlGzipBytes,
+      runtimeCodeGzipBytes: measurement.runtimeCodeGzipBytes,
+      deltas,
+      issues: routeIssues
+    })),
+    sharedRuntimeClosures: groupKpReaderSharedRuntimeClosures(reports)
+  }, null, 2));
   if (issues.length > 0) {
     throw new Error(`Reader route budgets failed:\n${issues
       .map((issue) => issue.message)
       .join("\n")}`);
   }
-  console.log(JSON.stringify({
-    growthLimit: "5%",
-    routes: reports.map(({ route, measurement }) => ({ route, ...measurement }))
-  }, null, 2));
 }

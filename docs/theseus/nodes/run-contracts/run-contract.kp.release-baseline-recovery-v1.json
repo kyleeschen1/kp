@@ -73,7 +73,8 @@
     {
       "id": "s03",
       "title": "add-stable-closure-attribution",
-      "status": "planned"
+      "summary": "Both payload inspectors now emit stable per-file gzip attribution and signed deltas before enforcing unchanged limits; reader output groups the identical nine-route closure once. Seven focused tests and typecheck pass, while the same 495627 and 151256 baselines remain red by design.",
+      "status": "complete"
     },
     {
       "id": "s04",
