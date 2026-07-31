@@ -1,9 +1,10 @@
 # Cross-domain Tutorial Platform Thread
 
 Status: active
-Last Updated: 2026-07-27
-Current Next Action: Review a bounded foldable distribution and collection
-proposal; no successor implementation queue is active.
+Last Updated: 2026-07-30
+Current Next Action: Execute the approved place-value persistent-workspace
+repair through the repaired ones-column visual checkpoint. Do not generalize
+later columns or begin economics or physics before that checkpoint passes.
 
 ## Goal
 
@@ -12,6 +13,17 @@ equations, graphs, diagrams, networks, code, tables, and deterministic domain
 models from one semantic storyboard and shared runtime clock.
 
 ## Current Decision
+
+The accepted composition sequence distinguishes three reusable environments:
+equation succession, persistent workspace algorithms, and synchronized model
+views. Work advances by perfecting one exemplar, extracting only the invariant
+it actually falsifies, proving that seam with a second caller, and pruning the
+superseded path beside the migration. Place-value addition currently pressures
+the persistent-workspace environment; economics and physics will pressure
+synchronized model views; programming will use the same coordination laws but
+retain subject-native trace, queue, and graph operations. This sequence is
+recorded in
+`decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md`.
 
 The immediate product order now begins with the simple linear-equation concept
 room rather than another subject expansion. KP will first prove clean

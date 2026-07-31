@@ -1,10 +1,10 @@
 {
-  "id": "plan-revision.kp.v17",
+  "id": "plan-revision.kp.v18",
   "kind": "plan-revision",
-  "title": "Kinetic Press content-led promotion roadmap v17",
-  "status": "superseded",
+  "title": "Kinetic Press content-led promotion roadmap v18",
+  "status": "active",
   "domain": "kp",
-  "summary": "Activate the user-approved place-value addition contract while preserving the stable content-led promotion order.",
+  "summary": "Continue rank-2 place-value addition through the approved persistent-workspace repair and stop at the repaired ones-column checkpoint.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -75,6 +75,21 @@
       "kind": "file",
       "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v16.json",
       "summary": "Approved predecessor retained for rationale and history."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md",
+      "summary": "Accepted composition-environment sequence and concrete-system cadence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-30-place-value-persistent-workspace-repair-long-loop-proposal.md",
+      "summary": "User-approved repair contract and mandatory ones-column checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v17.json",
+      "summary": "Approved predecessor retained for rationale and history."
     }
   ],
   "affects": [
@@ -83,15 +98,16 @@
     "run-contract.kp.presentation-compiler-continuity-repair-v0",
     "run-contract.kp.executable-motif-perceptual-continuity-repair-v0",
     "run-contract.kp.place-value-addition-promotion-v0",
-    "run-contract.kp.place-value-addition-promotion-v1"
+    "run-contract.kp.place-value-addition-promotion-v1",
+    "run-contract.kp.place-value-persistent-workspace-repair-v2"
   ],
   "progress": {
     "state": "partial",
-    "summary": "Exact fraction is promoted. The user-approved place-value addition contract now owns the active rank-2 implementation through its mandatory human checkpoint."
+    "summary": "Exact fraction remains promoted. Place-value addition is active through the approved persistent-workspace repair; later-column generalization is blocked on the repaired ones-column visual checkpoint."
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
-    "revision": 17,
+    "revision": 18,
     "objective": "Grow one canonical, composable semantic animation library through a stable exemplar order, inserting API, verified problem-generation, deterministic explanation, safe output, and optional LLM editorial gates only where recorded caller pressure justifies them.",
     "assumptions": [
       {
@@ -162,6 +178,11 @@
       {
         "id": "adjacent-complexity-negative-pruning",
         "statement": "Compatibility paths are retired beside the migration that removes their last caller rather than through a detached rewrite.",
+        "status": "active"
+      },
+      {
+        "id": "composition-environment-sequence",
+        "statement": "KP pressures equation succession, persistent workspace algorithms, and synchronized model views in that order, extracting only failed generic invariants before returning to concrete exemplars.",
         "status": "active"
       }
     ],
@@ -413,11 +434,11 @@
         "horizon": "now",
         "status": "active",
         "evidence": [
-          "run-contract.kp.place-value-addition-promotion-v1"
+          "run-contract.kp.place-value-persistent-workspace-repair-v2"
         ],
         "topic": "Arithmetic · Addition",
         "architectureBenefit": "Persistent place-value identity and carry scheduling.",
-        "rationale": "The user approved the exact 26-slice contract and clarified the stacked written algorithm as the canonical visual reference; the base-ten view remains secondary.",
+        "rationale": "The first ones-column checkpoint was rejected. The user approved a bounded persistent-workspace repair for documentary lifetime, semantic destination anchoring, visible carry transit, and exclusive handoff, with a renewed human checkpoint before later columns.",
         "canonicalExemplar": "278 + 156 = 434"
       },
       {
@@ -763,12 +784,11 @@
       }
     ],
     "approval": {
-      "status": "superseded",
+      "status": "approved",
       "decidedAt": "2026-07-31T03:40:00.000Z",
       "decidedBy": "user",
-      "rationale": "Superseded by plan-revision.kp.v18."
+      "rationale": "Replace terminal rank-2 evidence with the user-approved successor repair while preserving the stable promotion order and recording the accepted composition-environment sequence."
     },
-    "supersedes": "plan-revision.kp.v16",
-    "supersededBy": "plan-revision.kp.v18"
+    "supersedes": "plan-revision.kp.v17"
   }
 }

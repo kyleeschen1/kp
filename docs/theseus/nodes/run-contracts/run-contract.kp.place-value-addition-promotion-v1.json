@@ -2,7 +2,8 @@
   "id": "run-contract.kp.place-value-addition-promotion-v1",
   "kind": "run-contract",
   "title": "Place-value addition promotion",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -257,8 +258,8 @@
     {
       "id": "s26",
       "title": "persistent-written-ones-checkpoint",
-      "summary": "Implemented the independently reversible ones-column exemplar. Original 8 and 6 remain the same connected fixed-cell nodes, dim monotonically, and remain visible; stationary plus and underline never enter motion. Compiler-sealed contribution and derived-output proxies alone travel into 14, then hand off opaquely to persistent result 4 and carry 1. A measured pair-scoped clearance certificate prevents proxy/documentary contact. Focused unit, type, inference, build, and wide/phone Chromium Firefox WebKit checks pass. Full npm test retains four documented unrelated repository ratchet failures. HUMAN_CHECKPOINT before tens, hundreds, or final-settlement generalization.",
-      "status": "in-progress"
+      "summary": "The independently reversible ones-column implementation reached human review, where it was rejected for three presentation-contract failures: written addends did not remain documentary evidence for the full algorithm, source digits converged above rather than at their semantic result cells, and the carry changed owners before completing a visible route. The slice is complete as an evaluated checkpoint, not as promotion. The user approved the persistent-workspace successor repair and later-column generalization remains blocked.",
+      "status": "complete"
     }
   ]
 }

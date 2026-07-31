@@ -1,0 +1,25 @@
+{
+  "id": "next-action.kp.place-value-persistent-workspace-repair",
+  "kind": "next-action",
+  "title": "Repair place-value persistent workspace",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-30-place-value-persistent-workspace-repair-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/animation-library-promotion.md"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Approved successor repair is materialized. Preserve one shared runtime and renderer; make documentary lifetime, semantic destination, transit ownership, and endpoint handoff explicit; stop after the repaired ones-column visual checkpoint."
+  }
+}

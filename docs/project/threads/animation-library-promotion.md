@@ -2,8 +2,9 @@
 
 Status: active-supporting
 Last Updated: 2026-07-30
-Current Next Action: Review a bounded place-value addition proposal for
-`278 + 156 = 434`; no successor implementation contract is active.
+Current Next Action: Execute the approved persistent-workspace repair for
+`278 + 156 = 434` through the repaired ones-column visual checkpoint; later
+columns remain gated on human approval.
 
 ## Goal
 
@@ -78,6 +79,23 @@ Ranks 2–4 intentionally move arithmetic, economics, and physics forward as
 bounded demo exemplars. They demonstrate cross-domain versatility without
 authorizing a curriculum, economics solver, physics engine, or universal
 diagram framework.
+
+## Composition Environment Sequence
+
+The promotion order now deliberately pressures three composition environments:
+
+1. equation succession, already proven by the canonical glyph and motif work;
+2. persistent workspace algorithms, beginning with multi-digit addition;
+3. synchronized model views, beginning with bounded economics and physics
+   exemplars.
+
+The current place-value repair may promote generic lifetime, semantic
+destination, measured route, transit-ownership, and endpoint-handoff contracts
+only where the ones-column failure demands them. It may not turn carry into a
+generic domain operation or introduce a universal scene graph. Later columns
+remain a separate generalization decision after the ones-column checkpoint.
+The accepted cadence and forward-looking domain rationale are recorded in
+`decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md`.
 
 ## Platform Integration Milestones
 
@@ -183,6 +201,8 @@ exists.
 
 - `docs/project/decisions/2026-07-28-kp-stable-animation-promotion-order.md`
 - `docs/project/decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md`
+- `docs/project/decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md`
+- `docs/project/reviews/2026-07-30-place-value-persistent-workspace-repair-long-loop-proposal.md`
 - `docs/project/reviews/2026-07-28-kp-promotion-memory-and-architecture-next-step-review.md`
 - `docs/project/reviews/2026-07-28-exact-fraction-quantity-promotion-long-loop-proposal.md`
 - `docs/project/decisions/2026-07-27-kp-canonical-fraction-composition-before-quantity.md`

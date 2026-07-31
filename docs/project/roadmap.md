@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-28
+Last Updated: 2026-07-30
 Status: active
 Active Thread: `threads/cross-domain-tutorial-platform.md`
 Supporting Threads:
@@ -109,6 +109,14 @@ output encoding precedes untrusted text, motif versioning waits for an
 intentional shared redesign, and compatibility pruning happens beside the
 migration that makes it safe.
 
+The accepted composition sequence is recorded in
+`decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md`.
+KP will prove three bounded composition environments in order: equation
+succession, persistent workspace algorithms, and synchronized model views.
+The working cadence is exemplar, failed invariant, smallest durable seam,
+return to the exemplar, second caller, then adjacent pruning. This prevents
+both operation-specific tuning and a speculative universal scene graph.
+
 ## Active Focus
 
 **Canonical construction, the fraction and radical migrations, foldable
@@ -120,11 +128,15 @@ canonical session. Catalog status remains evidence-derived, so explicit static
 checkpoints and retained compatibility debt cannot be reported as fully
 animated promotion.
 
-The approved content run is exact fraction quantity identity through
-`1/3 + 1/6 = 1/2`. Its bounded project-memory reconciliation is complete, and
-`npm run check:promotion-memory` now rejects drift between the ledger, roadmap,
-current queue, active Theseus phase, and evidence-derived catalog status. The
-run remains content-led and stops for human visual review before release.
+Exact fraction quantity identity through `1/3 + 1/6 = 1/2` is promoted.
+Place-value addition through `278 + 156 = 434` is the active content run. Its
+first visual checkpoint was rejected because the written addends did not
+remain documentary evidence, the ones digits converged above their final
+answer cells, and the carry teleported instead of completing a visible route
+and exclusive handoff. The approved successor repair is recorded in
+`reviews/2026-07-30-place-value-persistent-workspace-repair-long-loop-proposal.md`
+and stops again after the repaired ones-column exemplar before later-column
+generalization.
 
 The generator, editorial-text, API-tier, motif-versioning, and pruning
 recommendations are durable platform milestones in
@@ -142,13 +154,13 @@ discarding unmigrated catalog coverage.
 
 The durable promotion order and current status are owned by
 `threads/animation-library-promotion.md`. Approved Theseus plan revision
-`plan-revision.kp.v16` mirrors that order. Exact-fraction quantity is promoted,
-and place-value addition, `278 + 156 = 434`, is the current proposal frontier
-without an active implementation contract. Planned rows do not authorize implementation; an
-approved typed run contract owns execution. Human exemplar approval remains
-mandatory before each subjective visual generalization, and existing
-standalone examples remain reference evidence rather than automatically
-promoted reader products.
+`plan-revision.kp.v18` mirrors that order. Exact-fraction quantity is promoted,
+and place-value addition, `278 + 156 = 434`, is at its active
+persistent-workspace repair checkpoint. Planned rows do not authorize
+implementation; an approved typed run contract owns execution. Human exemplar
+approval remains mandatory before each subjective visual generalization, and
+existing standalone examples remain reference evidence rather than
+automatically promoted reader products.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the

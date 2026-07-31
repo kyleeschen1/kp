@@ -1,0 +1,153 @@
+{
+  "id": "run-contract.kp.place-value-persistent-workspace-repair-v1",
+  "kind": "run-contract",
+  "title": "Place-value persistent-workspace repair",
+  "status": "superseded",
+  "summary": "Superseded before product work because the first compatibility invocation omitted required long-run hygiene fields. The exact approved slices and boundaries are preserved in v2 with run mode, slice limit, commit cadence, broad verification, and stop conditions.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.place-value-persistent-workspace-repair.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-30-place-value-persistent-workspace-repair-long-loop-proposal.md",
+      "summary": "User-approved 20-slice repair contract with a mandatory slice-10 visual checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md",
+      "summary": "Accepted durable roadmap sequence and abstraction-pressure cadence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/animation-library-promotion.md",
+      "summary": "Stable promotion order naming place-value addition rank 2."
+    }
+  ],
+  "verification": [
+    "npm run test:place-value-addition",
+    "npm run test:browser:place-value-addition",
+    "npm run visual:place-value-addition",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm run check:promotion-memory",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Repair only the approved 278 plus 156 persistent written-workspace presentation and the smallest generic lifetime, destination, route, transit-ownership, and handoff contracts directly falsified by it.",
+    "Reuse the existing semantic trace, runtime clock, compositor, renderer, dashboard, accessibility, export, Review, and resource boundaries. Commit independently reversible verified slices."
+  ],
+  "disallowedWork": [
+    "Do not add a runtime, renderer, compositor, scene graph, display page, scheduler, lifecycle, WebGL lease, arithmetic-family rollout, economics, physics, programming, API-tier, generated-text, or unrelated cleanup work.",
+    "Do not generalize tens, hundreds, terminal overflow, or a second caller before explicit human approval of slice s10. Do not overwrite unrelated user-owned files."
+  ],
+  "goal": "Repair the canonical 278 plus 156 exemplar so written marks persist as documentary evidence, ones contributions converge at semantic result cells, and carry material completes a measured route with exclusive endpoint handoff before any later-column generalization.",
+  "target": "next-action.kp.place-value-persistent-workspace-repair",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "reconcile-project-memory",
+      "summary": "Started the approved repair by reconciling the rejected checkpoint, stable promotion order, composition-environment decision, and exact successor proposal into one human-readable roadmap plus one executable Theseus contract.",
+      "status": "in-progress"
+    },
+    {
+      "id": "s02",
+      "title": "freeze-full-timeline-laws",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "type-lifetimes-and-regions",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "type-destination-route-transit-handoff",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "compile-persistent-workspace-plan",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "add-adversarial-conformance",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "mount-one-persistent-scaffold",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "anchor-ones-convergence-to-target",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "complete-visible-carry-transit-and-handoff",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "human-ones-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "generalize-approved-plan-to-later-columns",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "handle-terminal-overflow",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "certify-full-documentary-lifetime",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "remove-ones-specific-branches",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "consolidate-browser-harness",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "prove-second-persistent-workspace-fixture",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "retire-superseded-scene-path",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "run-product-regression",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "run-release-matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "publish-closeout-and-next-domain-evidence",
+      "status": "planned"
+    }
+  ]
+}

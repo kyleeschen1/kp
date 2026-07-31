@@ -2,7 +2,7 @@
   "id": "next-action.refill.plan-phase.plan-revision.kp.v16.multidigit-addition",
   "kind": "next-action",
   "title": "Advance Multi-digit addition",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "summary": "Coordinate column addition, place-value exchange, regrouping marks, and a base-ten or area representation. Selection rationale: User approved the exact 26-slice place-value addition loop on 2026-07-30, clarifying the canonical visual as two right-aligned three-digit addends stacked vertically, a plus sign left of the second addend, an underline, right-to-left digit evaluation, and visible overflow digits carrying into the next column; base-ten quantities remain a secondary synchronized projection.",
   "sourceRefs": [
@@ -10,6 +10,14 @@
       "kind": "user-intent",
       "intent": "Approved refill option refill.plan-phase.plan-revision.kp.v16.multidigit-addition: User approved the exact 26-slice place-value addition loop on 2026-07-30, clarifying the canonical visual as two right-aligned three-digit addends stacked vertically, a plus sign left of the second addend, an underline, right-to-left digit evaluation, and visible overflow digits carrying into the next column; base-ten quantities remain a secondary synchronized projection.",
       "occurredAt": "2026-07-30T15:38:18.042Z"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-30-place-value-persistent-workspace-repair-long-loop-proposal.md"
     }
   ],
   "affects": [
@@ -984,7 +992,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "S24 repaired catalog liveness and bundle boundaries, fixed structural-family ownership and observable gather certification, and added 40-host/browser guards. Promotion remains withheld pending s25 and human review."
+    "summary": "The first ones-column checkpoint was evaluated and rejected. An approved successor contract now narrows repair to full-lifetime documentary cells, semantic destination anchoring, measured carry transit, exclusive handoff, and a renewed visual checkpoint before later columns."
   },
   "expectedLearning": [
     "Approved revision 16 places this active phase in now."
