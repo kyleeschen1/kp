@@ -154,11 +154,32 @@
       "scope": "impact-selection",
       "checkedAt": "2026-07-31T21:41:19.065Z",
       "notes": "Selector classed the previously unmatched build-inspector paths high-risk; focused tests and typecheck ran now, while known-red full test/build release gates remain owned by later contract slices."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/operation-presentation-migration-inventory.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T21:43:59.541Z",
+      "notes": "Eight ledger tests pass, including the new split-aware law for both promotion-evidence entries."
+    },
+    {
+      "command": "npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T21:44:00.601Z",
+      "notes": "Generated display metadata remains current; no runtime catalog or output changed."
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path src/architecture/operation-presentation-migration-inventory.ts --path tests/operation-presentation-migration-inventory.test.ts",
+      "status": "passed",
+      "scope": "impact-selection",
+      "checkedAt": "2026-07-31T21:44:01.526Z",
+      "notes": "The selector conservatively marks these unmatched architecture/test paths high-risk; focused evidence is complete and the release-wide suite remains scheduled for s19."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 3 added deterministic sorted gzip attribution, signed ceiling deltas, and shared-reader closure grouping to the existing inspectors. Their failure semantics and all accepted totals remain unchanged, so s04 can repair the independent operation ledger."
+    "summary": "Slice 4 repaired the operation and exact-fraction promotion evidence paths to the source-rich catalog builder. A new split-aware law keeps certificate vocabulary and source needles out of the metadata-only runtime catalog."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."

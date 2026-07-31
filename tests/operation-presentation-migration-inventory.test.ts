@@ -33,6 +33,30 @@ test("operation presentation migration inventory has unique executable evidence"
   }
 });
 
+test("promotion evidence belongs to the source-rich catalog side of the split", async () => {
+  const promotionEvidence = kpExecutableMotifMigrationLedger.filter(
+    ({ category }) => category === "promotion-evidence"
+  );
+  assert.deepEqual(
+    [...new Set(promotionEvidence.map(({ sourcePath }) => sourcePath))],
+    ["src/editor/animation-library-display-catalog-builder.ts"]
+  );
+
+  const [builder, runtimeCatalog] = await Promise.all([
+    readFile("src/editor/animation-library-display-catalog-builder.ts", "utf8"),
+    readFile("src/editor/animation-library-display-catalog.ts", "utf8")
+  ]);
+  for (const entry of promotionEvidence) {
+    assert.ok(builder.includes(entry.sourceNeedle), entry.id);
+    assert.equal(runtimeCatalog.includes(entry.sourceNeedle), false, entry.id);
+  }
+  assert.match(runtimeCatalog, /animation-library-display-catalog\.generated\.json/);
+  assert.doesNotMatch(
+    runtimeCatalog,
+    /(?:PromotionEvidence|ReleaseApproval|PromotionCertificate)/
+  );
+});
+
 test("reader planning exposes one required presentation plan", async () => {
   assert.deepEqual(
     kpOperationPresentationReaderPlanSeams.map(({ sourceNeedle }) =>

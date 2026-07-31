@@ -79,7 +79,8 @@
     {
       "id": "s04",
       "title": "repair-operation-evidence-ledger",
-      "status": "planned"
+      "summary": "Both stale promotion-evidence records now point at animation-library-display-catalog-builder.ts; the inventory proves their needles live only there and the runtime catalog imports no promotion or approval authority. Eight focused tests and the catalog freshness check pass.",
+      "status": "complete"
     },
     {
       "id": "s05",

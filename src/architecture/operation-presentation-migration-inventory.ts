@@ -332,7 +332,7 @@ export const kpExecutableMotifMigrationLedger = Object.freeze([
   executableMotifMigration(
     "promotion.operation-evaluation",
     "promotion-evidence",
-    "src/editor/animation-library-display-catalog.ts",
+    "src/editor/animation-library-display-catalog-builder.ts",
     '"animation.operation-evaluation.one-plus-two"',
     "gate-on-executable-evidence",
     "s10",
@@ -341,7 +341,7 @@ export const kpExecutableMotifMigrationLedger = Object.freeze([
   executableMotifMigration(
     "promotion.exact-fraction",
     "promotion-evidence",
-    "src/editor/animation-library-display-catalog.ts",
+    "src/editor/animation-library-display-catalog-builder.ts",
     '"animation.exact-fraction-quantity.third-plus-sixth"',
     "gate-on-executable-evidence",
     "s10",
