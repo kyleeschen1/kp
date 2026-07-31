@@ -121,7 +121,8 @@
     {
       "id": "s11",
       "title": "prove-rational-conformance",
-      "status": "planned"
+      "summary": "Cross-boundary tests prove identical normalization, arithmetic, freezing, DTO, and error behavior. Source guards prohibit arithmetic inside compatibility facades, compile-time assignments preserve signatures, inference and architecture pass, and the four-gate baseline now has only the planned compositor byte failure.",
+      "status": "complete"
     },
     {
       "id": "s12",

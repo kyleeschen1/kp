@@ -392,11 +392,53 @@
       "scope": "impact-selection",
       "checkedAt": "2026-07-31T22:19:16.942Z",
       "notes": "The focused selector requires typecheck and architecture; both passed along with provider and integration cohorts."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/exact-rational-cross-boundary-conformance.test.ts tests/neutral-exact-rational.test.ts tests/exact-fraction-quantity-core.test.ts tests/linear-provider-boundary.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T22:25:09.484Z",
+      "notes": "All 12 behavioral, source-delegation, domain quantity, provider boundary, normalization, immutability, DTO, and error conformance tests pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "inference",
+      "checkedAt": "2026-07-31T22:25:10.551Z",
+      "notes": "Inference contracts pass at 49,306 types and 61,797 instantiations."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-07-31T22:25:11.424Z",
+      "notes": "All four architecture gates pass with one neutral rational authority and compatibility-only facades."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-31T22:25:12.345Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass, including compile-time facade signature conformance."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-animation-construction-inventory.test.ts tests/canonical-equation-renderer-convergence.test.ts tests/linear-provider-boundary.test.ts tests/operation-presentation-migration-inventory.test.ts",
+      "status": "failed",
+      "scope": "expected-baseline",
+      "checkedAt": "2026-07-31T22:25:13.220Z",
+      "notes": "Exactly one scheduled failure remains: canonical compositor source is 141543 versus 136000 bytes. Provider direction, HTML ownership, and promotion evidence are green."
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path tests/exact-rational-cross-boundary-conformance.test.ts",
+      "status": "passed",
+      "scope": "impact-selection",
+      "checkedAt": "2026-07-31T22:25:14.129Z",
+      "notes": "The new unmatched conformance test selects full typecheck, test, and build gates; focused proof, architecture, inference, and typecheck ran now, while the known-red full release gate remains scheduled through slices 12-19."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 10 removed the provider-to-domain import; all provider outputs, DTOs, generation, verification, and KP mapping behavior remain stable. Slice 11 will prove single-authority conformance and close the family."
+    "summary": "Rational boundary closed: protocol arithmetic is authoritative, domain aliases and provider wrappers conform, inference is green, and only the scheduled compositor architecture failure remains."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."
