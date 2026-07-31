@@ -7,6 +7,13 @@ export interface KpPlaceValueInkUnionExperiment {
   readonly dispose: () => void;
 }
 
+interface KpInkUnionArcOwnership {
+  readonly contributionProxies: readonly {
+    readonly bindingAnnotationId: string;
+    readonly documentaryClearanceSide: "above" | "below";
+  }[];
+}
+
 let filterSequence = 0;
 
 /**
@@ -129,17 +136,17 @@ export function createKpPlaceValueInkUnionExperiment(input: {
 }
 
 function inkUnionStrength(progress: number): number {
-  const gathering = smoothstep(0.5, 0.68, progress);
-  const resolving = 1 - smoothstep(0.8, 0.94, progress);
+  const gathering = smoothstep(0.64, 0.76, progress);
+  const resolving = 1 - smoothstep(0.84, 0.95, progress);
   return gathering * resolving;
 }
 
 function pinchAndBloomScale(progress: number): number {
   const minimumScale = 0.48;
-  const seedProgress = 0.72;
+  const seedProgress = 0.76;
   if (progress <= seedProgress) {
     return 1 - (1 - minimumScale) * smoothstep(
-      0.46,
+      0.66,
       seedProgress,
       progress
     );
@@ -163,11 +170,68 @@ function inkUnionState(
   | "blooming"
   | "resolved" {
   if (progress >= 0.96) return "resolved";
-  if (progress < 0.46) return "dormant";
+  if (progress < 0.58) return "dormant";
   if (strength <= 0.001) return "docking";
-  if (progress < 0.69) return "pinching";
+  if (progress < 0.74) return "pinching";
   if (scale <= 0.5) return "seed";
   return "blooming";
+}
+
+/**
+ * The normal workspace guard resolves unexpected paint collisions after
+ * sampling. That thresholded correction is correct as a fallback but reads as
+ * a jump in an authored exemplar. Here each contributor receives one bounded
+ * C1 arc whose endpoints coincide exactly with the compositor route.
+ */
+export function applyKpPlaceValueInkUnionContributorArcs(input: {
+  readonly overlay: HTMLElement;
+  readonly ownership: KpInkUnionArcOwnership;
+}): boolean {
+  if (
+    input.overlay.dataset["kpPlaceValueEvaluationVisualExperiment"] !==
+      kpPlaceValueInkUnionExperimentKind
+  ) {
+    return false;
+  }
+  const progress = clamp01(Number(
+    input.overlay.dataset["kpOperationEvaluationProgress"]
+  ));
+  const owners = [
+    ...input.overlay.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )
+  ];
+  input.ownership.contributionProxies.forEach((proxy, index) => {
+    const owner = owners.find((candidate) =>
+      candidate.dataset["kpEquationMaterialSemanticEntityId"] ===
+        proxy.bindingAnnotationId
+    );
+    if (owner === undefined || getComputedStyle(owner).opacity === "0") {
+      return;
+    }
+    const start = 0.16 + index * 0.08;
+    const end = 0.58 + index * 0.08;
+    const routeProgress = clamp01((progress - start) / (end - start));
+    const arcProgress = smoothstep(0, 1, routeProgress);
+    const arc = Math.sin(Math.PI * arcProgress);
+    const visual = owner.firstElementChild;
+    const cachedHeight = Number(
+      owner.dataset["kpPlaceValueInkArcHeightPx"]
+    );
+    const paintHeight = Number.isFinite(cachedHeight) && cachedHeight > 0
+      ? cachedHeight
+      : visual instanceof HTMLElement
+        ? visual.getBoundingClientRect().height
+        : 0;
+    if (!(Number.isFinite(cachedHeight) && cachedHeight > 0)) {
+      owner.dataset["kpPlaceValueInkArcHeightPx"] = String(paintHeight);
+    }
+    const direction = proxy.documentaryClearanceSide === "above" ? -1 : 1;
+    const offset = direction * (paintHeight * 0.45 + 3) * arc;
+    owner.style.translate = `0 ${offset.toFixed(3)}px`;
+    owner.dataset["kpPlaceValueInkArcOffsetPx"] = offset.toFixed(3);
+  });
+  return true;
 }
 
 function alphaThresholdMatrix(strength: number): string {

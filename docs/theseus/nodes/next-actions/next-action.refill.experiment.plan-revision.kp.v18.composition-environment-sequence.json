@@ -75,11 +75,39 @@
       "scope": "pinch-and-bloom typed integration",
       "checkedAt": "2026-07-31T18:16:25.674Z",
       "notes": "Application Node test and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm-run-test-place-value-addition",
+      "status": "passed",
+      "scope": "continuous-contributor-arc-semantic-preservation",
+      "checkedAt": "2026-07-31T18:24:20.801Z",
+      "notes": "116 tests passed; authored arc changes no arithmetic, lineage, carry, or accessibility semantics."
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "typed-renderer-boundary",
+      "checkedAt": "2026-07-31T18:24:21.326Z",
+      "notes": "Application and domain TypeScript projects pass without emit."
+    },
+    {
+      "command": "npm-run-test-browser-place-value-addition-ones-cycle",
+      "status": "passed",
+      "scope": "continuous-contributor-arcs-wide-phone-browser-boundary",
+      "checkedAt": "2026-07-31T18:24:21.768Z",
+      "notes": "12 browser checks passed across Chromium, Firefox, and WebKit at wide and phone widths."
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "patch-hygiene",
+      "checkedAt": "2026-07-31T18:24:45.270Z",
+      "notes": "Contributor arc repair and durable Theseus records contain no whitespace errors."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Repaired the exemplar after human review: removed the mid-motion filter switch and dilation, retained one installed identity-to-thin-union filter, and added a smooth 100-to-48-to-100 percent group pinch around the measured result center. Only sequence index 0 is changed; stop again for visual approval."
+    "summary": "Repaired the reviewed exemplar by replacing threshold-triggered post-paint clearance with deterministic smooth contributor arcs and delaying the ink pinch until every contributor has docked. Only sequence index 0 changes; stop for visual approval before formalization or generalization."
   },
   "expectedLearning": [
     "An approved plan depends on an active assumption without outcome evidence."

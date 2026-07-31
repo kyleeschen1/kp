@@ -15,6 +15,7 @@ import {
   createKpPlaceValueColumnEvaluationDom
 } from "./place-value-addition-column-evaluation.ts";
 import {
+  applyKpPlaceValueInkUnionContributorArcs,
   kpPlaceValueInkUnionExperimentKind
 } from "./place-value-addition-ink-union-experiment.ts";
 import {
@@ -408,6 +409,12 @@ function applyPersistentContributionClearance(input: {
   readonly overlay: HTMLElement;
   readonly ownership: KpPlaceValueWrittenOwnershipPlan;
 }): void {
+  if (applyKpPlaceValueInkUnionContributorArcs({
+    overlay: input.overlay,
+    ownership: input.ownership
+  })) {
+    return;
+  }
   for (const proxy of input.ownership.contributionProxies) {
     const blockers = input.ownership.contributionProxies
       .filter(({ sourceCellId }) => sourceCellId !== proxy.sourceCellId)
