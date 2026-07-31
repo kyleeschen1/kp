@@ -175,11 +175,39 @@
       "scope": "impact-selection",
       "checkedAt": "2026-07-31T21:44:01.526Z",
       "notes": "The selector conservatively marks these unmatched architecture/test paths high-risk; focused evidence is complete and the release-wide suite remains scheduled for s19."
+    },
+    {
+      "command": "npm run test:promotion-memory",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T21:49:23.777Z",
+      "notes": "Seven promotion-memory tests pass, including the new stale active-thread projection rejection."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T21:49:24.849Z",
+      "notes": "The ledger, roadmap, queue, catalog, v19 phase, and roadmap-selected active thread align on rank-3 economics planning."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-31T21:49:25.725Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path scripts/check-animation-promotion-memory.ts --path scripts/check-animation-promotion-memory.test.ts --path docs/project/threads/cross-domain-tutorial-platform.md",
+      "status": "passed",
+      "scope": "impact-selection",
+      "checkedAt": "2026-07-31T21:49:26.795Z",
+      "notes": "The unmatched documentation/checker paths select the broad safe gate; focused projection proof and typecheck ran now, with full release verification retained for s19."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 4 repaired the operation and exact-fraction promotion evidence paths to the source-rich catalog builder. A new split-aware law keeps certificate vocabulary and source needles out of the metadata-only runtime catalog."
+    "summary": "Slice 5 aligns the roadmap-selected cross-domain thread with the rank-3 economics planning frontier while naming the current baseline-recovery prerequisite. Promotion memory now rejects drift in that active-thread projection without duplicating the authoritative rank table."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."

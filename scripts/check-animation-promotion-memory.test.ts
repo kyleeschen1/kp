@@ -26,6 +26,11 @@ Current Next Action: Complete \`1/3 + 1/6 = 1/2\`.
 ${table}`,
   roadmapMarkdown:
     "See `threads/animation-library-promotion.md`; current is `1/3 + 1/6 = 1/2`.",
+  activeThreadMarkdown: `# Active Thread
+
+Status: active
+Current Next Action: Complete \`1/3 + 1/6 = 1/2\`.
+`,
   nextActionsMarkdown: `# Next
 
 ## Current Queue
@@ -149,6 +154,21 @@ test("a stale current action and Theseus phase fail together", () => {
       issue.includes("exactly one active phase")
     )
   );
+});
+
+test("a stale roadmap-selected active thread fails without another rank table", () => {
+  const input = base();
+  const report = evaluateKpPromotionMemory({
+    ...input,
+    activeThreadMarkdown: input.activeThreadMarkdown.replace(
+      "Complete `1/3 + 1/6 = 1/2`.",
+      "Repeat `1 + 1 = 2`."
+    )
+  });
+
+  assert.ok(report.diagnostics.some((issue) =>
+    issue.includes("Active thread Current Next Action")
+  ));
 });
 
 test("promoted is impossible without a ported catalog certificate", () => {

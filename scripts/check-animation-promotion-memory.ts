@@ -31,6 +31,7 @@ export interface KpPromotionLedgerRow {
 export interface KpPromotionMemoryInput {
   readonly threadMarkdown: string;
   readonly roadmapMarkdown: string;
+  readonly activeThreadMarkdown: string;
   readonly nextActionsMarkdown: string;
   readonly activePlanRevision: unknown;
   readonly runContractsById: ReadonlyMap<string, unknown>;
@@ -176,6 +177,17 @@ export function evaluateKpPromotionMemory(
       `Thread Current Next Action does not name ${current.referenceKey}.`
     );
   }
+  // The promotion ledger owns rank; the roadmap-selected active thread is a
+  // projection and must name that frontier without copying the rank table.
+  const activeThreadAction = extractFrontmatterField(
+    input.activeThreadMarkdown,
+    "Current Next Action"
+  );
+  if (!containsReference(activeThreadAction, current.referenceKey)) {
+    diagnostics.push(
+      `Active thread Current Next Action does not name ${current.referenceKey}.`
+    );
+  }
   if (
     !input.roadmapMarkdown.includes(
       "threads/animation-library-promotion.md"
@@ -287,12 +299,24 @@ function readWorkspaceInput(): KpPromotionMemoryInput {
     })
     .filter(([id]) => id.length > 0);
   const catalog = createKpAnimationLibraryDisplayCatalog();
+  const roadmapMarkdown = readProjectFile("docs/project/roadmap.md");
+  const activeThreadPath = stripInlineCode(extractFrontmatterField(
+    roadmapMarkdown,
+    "Active Thread"
+  ));
+  if (
+    !activeThreadPath.startsWith("threads/") ||
+    activeThreadPath.includes("..")
+  ) {
+    throw new Error(`Roadmap Active Thread is invalid: ${activeThreadPath}.`);
+  }
 
   return {
     threadMarkdown: readProjectFile(
       "docs/project/threads/animation-library-promotion.md"
     ),
-    roadmapMarkdown: readProjectFile("docs/project/roadmap.md"),
+    roadmapMarkdown,
+    activeThreadMarkdown: readProjectFile(`docs/project/${activeThreadPath}`),
     nextActionsMarkdown: readProjectFile("docs/project/next-actions.md"),
     activePlanRevision: activePlans[0],
     runContractsById: new Map(runContracts),

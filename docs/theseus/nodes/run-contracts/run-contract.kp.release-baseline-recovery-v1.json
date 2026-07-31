@@ -85,7 +85,8 @@
     {
       "id": "s05",
       "title": "repair-project-memory-projection",
-      "status": "planned"
+      "summary": "The cross-domain Current Next Action now completes baseline recovery before the bounded Supply and demand proposal, and the promotion-memory checker discovers the roadmap-selected active thread and enforces the same first unresolved reference. Seven tests, the live memory check, and typecheck pass; unrelated dirty roadmap/thread hunks remain unstaged.",
+      "status": "complete"
     },
     {
       "id": "s06",

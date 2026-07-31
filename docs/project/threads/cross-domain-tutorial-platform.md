@@ -1,10 +1,11 @@
 # Cross-domain Tutorial Platform Thread
 
 Status: active
-Last Updated: 2026-07-30
-Current Next Action: Execute the approved place-value persistent-workspace
-repair through the repaired ones-column visual checkpoint. Do not generalize
-later columns or begin economics or physics before that checkpoint passes.
+Last Updated: 2026-07-31
+Current Next Action: Complete the approved release-baseline recovery, then
+prepare the bounded rank-3 Supply and demand equilibrium shift proposal.
+Economics remains the first unresolved promotion but is not authorized by this
+thread without a reviewed run contract.
 
 ## Goal
 
