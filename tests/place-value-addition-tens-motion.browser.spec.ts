@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
 
+type KpPlaceValueAdditionBrowserHarnessModule = typeof import(
+  "./support/place-value-addition-browser-harness.ts"
+);
+
 for (const viewport of [
   { name: "wide", width: 960, height: 720 },
   { name: "phone", width: 390, height: 720 }
@@ -10,123 +14,68 @@ for (const viewport of [
     await page.setViewportSize(viewport);
     await page.goto("/");
     const evidence = await page.evaluate(async ({ width }) => {
-      const runtimeUrl = "/src/rendering/place-value-addition-runtime.ts";
-      const sharedDomUrl =
-        "/src/rendering/place-value-addition-shared-dom.ts";
-      const clockUrl = "/src/reader/runtime/playback-clock.ts";
-      const runtime = await import(/* @vite-ignore */ runtimeUrl);
-      const sharedDom = await import(/* @vite-ignore */ sharedDomUrl);
-      const clock = await import(/* @vite-ignore */ clockUrl);
-      const session = runtime.createKpPlaceValueAdditionRuntimeSession();
-      const sample = (
-        progress: number,
-        previousProgress: number,
-        sequence: number
-      ) => runtime.sampleKpPlaceValueAdditionRuntime({
-        session,
-        clock: clock.createKpReaderClockSample({
-          source: "controls",
-          progress,
-          previousProgress,
-          sequence
-        }),
-        viewportWidth: width,
-        selectedView: "written"
-      });
-      const dom = sharedDom.createKpPlaceValueAdditionSharedDom({
+      const harnessUrl =
+        "/tests/support/place-value-addition-browser-harness.ts";
+      const { createKpPlaceValueAdditionBrowserHarness } =
+        await import(/* @vite-ignore */ harnessUrl) as
+          KpPlaceValueAdditionBrowserHarnessModule;
+      const harness = await createKpPlaceValueAdditionBrowserHarness({
         document,
-        session,
-        initialFrame: sample(0, 0, 0)
+        viewportWidth: width
       });
-      const app = document.querySelector<HTMLElement>("#app");
-      if (app !== null) app.style.display = "none";
-      document.body.append(dom.root);
-      Object.assign(document.body.style, {
-        margin: "0",
-        minHeight: "100vh",
-        display: "grid",
-        placeItems: "center"
-      });
-      await document.fonts.ready;
-      dom.prepareNativeScenes();
-
-      const scaffold = () => document.querySelector<HTMLElement>(
-        '[data-kp-place-value-written-ownership="persistent-documentary"]'
-      )!;
-      const cell = (id: string) => scaffold().querySelector<HTMLElement>(
-        `[data-kp-semantic-entity-id="${id}"]`
-      )!;
-      const scene = (positionId: string, operation: string) =>
-        document.querySelector<HTMLElement>(
-          `[data-kp-place-value-position-id="${positionId}"]` +
-          `[data-kp-${operation}]`
-        )!;
-      const visible = (element: HTMLElement) =>
-        getComputedStyle(element).visibility !== "hidden" &&
-        getComputedStyle(element).display !== "none" &&
-        Number(getComputedStyle(element).opacity) > 0;
-      const owners = (stage: HTMLElement) => [
-        ...stage.querySelectorAll<HTMLElement>(
-          "[data-kp-equation-material-owner-id]"
-        )
-      ].map((owner) => ({
-        semanticId: owner.dataset["kpEquationMaterialSemanticEntityId"]!,
-        opacity: getComputedStyle(owner).opacity,
-        transform: getComputedStyle(owner).transform,
-        text: owner.textContent?.trim() ?? ""
-      })).sort((left, right) =>
-        left.semanticId.localeCompare(right.semanticId)
-      );
-      const snapshot = (stage: HTMLElement) => owners(stage).map((owner) => ({
+      const snapshot = (stage: HTMLElement) =>
+        harness.materialOwners(stage).map((owner) => ({
         semanticId: owner.semanticId,
         opacity: owner.opacity,
         transform: owner.transform
       }));
 
-      dom.apply(sample(0.48, 0, 1));
-      const secondEvaluation = scene(
+      harness.apply(0.48, 0);
+      const secondEvaluation = harness.operationScene(
         "decimal-position-1",
-        "place-value-tens-evaluation"
+        "evaluation"
       );
       const evaluationForward = snapshot(secondEvaluation);
       const secondPositionState = {
-        sceneVisible: visible(secondEvaluation),
-        materialOwners: owners(secondEvaluation).filter(({ semanticId }) =>
-          semanticId.includes(".material.")
-        ),
+        sceneVisible: harness.isVisible(secondEvaluation),
+        materialOwners: harness.materialOwners(secondEvaluation)
+          .filter(({ semanticId }) => semanticId.includes(".material.")),
         persistentInputs: [
           "carry.tens",
           "digit.first.tens",
           "digit.second.tens"
         ].map((id) => ({
           id,
-          visible: visible(cell(id)),
-          opacity: getComputedStyle(cell(id)).opacity,
-          transform: getComputedStyle(cell(id)).transform
+          visible: harness.isVisible(harness.persistentCell(id)),
+          opacity: getComputedStyle(harness.persistentCell(id)).opacity,
+          transform: getComputedStyle(harness.persistentCell(id)).transform
         })),
         priorOutputs: ["result.ones", "carry.tens"].map((id) => ({
           id,
-          visible: visible(cell(id))
+          visible: harness.isVisible(harness.persistentCell(id))
         }))
       };
-      dom.apply(sample(0.52, 0.48, 2));
-      dom.apply(sample(0.48, 0.52, 3));
+      harness.apply(0.52, 0.48);
+      harness.apply(0.48, 0.52);
       const evaluationRewind = snapshot(secondEvaluation);
 
-      dom.apply(sample(0.635, 0.48, 4));
-      const secondExchange = scene(
+      harness.apply(0.635, 0.48);
+      const secondExchange = harness.operationScene(
         "decimal-position-1",
-        "place-value-tens-exchange"
+        "exchange"
       );
       const exchangeForward = snapshot(secondExchange);
       const inFlightOutputs = ["result.tens", "carry.hundreds"].map(
-        (id) => ({ id, visible: visible(cell(id)) })
+        (id) => ({
+          id,
+          visible: harness.isVisible(harness.persistentCell(id))
+        })
       );
-      dom.apply(sample(0.69, 0.635, 5));
-      dom.apply(sample(0.635, 0.69, 6));
+      harness.apply(0.69, 0.635);
+      harness.apply(0.635, 0.69);
       const exchangeRewind = snapshot(secondExchange);
 
-      dom.apply(sample(0.71, 0.635, 7));
+      harness.apply(0.71, 0.635);
       const afterExchange = [
         "carry.tens",
         "result.ones",
@@ -134,19 +83,19 @@ for (const viewport of [
         "carry.hundreds"
       ].map((id) => ({
         id,
-        visible: visible(cell(id)),
-        opacity: getComputedStyle(cell(id)).opacity
+        visible: harness.isVisible(harness.persistentCell(id)),
+        opacity: getComputedStyle(harness.persistentCell(id)).opacity
       }));
-      const finalEvaluation = scene(
+      const finalEvaluation = harness.operationScene(
         "decimal-position-2",
-        "place-value-hundreds-evaluation"
+        "evaluation"
       );
 
-      dom.apply(sample(0.79, 0.71, 8));
-      const finalMaterialOwners = owners(finalEvaluation).filter(
+      harness.apply(0.79, 0.71);
+      const finalMaterialOwners = harness.materialOwners(finalEvaluation).filter(
         ({ semanticId }) => semanticId.includes(".material.")
       );
-      dom.apply(sample(0.87, 0.79, 9));
+      harness.apply(0.87, 0.79);
       const finalState = [
         "carry.tens",
         "carry.hundreds",
@@ -155,10 +104,10 @@ for (const viewport of [
         "result.hundreds"
       ].map((id) => ({
         id,
-        visible: visible(cell(id)),
-        opacity: getComputedStyle(cell(id)).opacity
+        visible: harness.isVisible(harness.persistentCell(id)),
+        opacity: getComputedStyle(harness.persistentCell(id)).opacity
       }));
-      dom.dispose();
+      harness.dispose();
       return {
         evaluationForward,
         evaluationRewind,

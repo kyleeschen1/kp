@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
 
+type KpPlaceValueAdditionBrowserHarnessModule = typeof import(
+  "./support/place-value-addition-browser-harness.ts"
+);
+
 for (const viewport of [
   { name: "wide", width: 960, height: 720 },
   { name: "phone", width: 390, height: 720 }
@@ -10,53 +14,19 @@ for (const viewport of [
     await page.setViewportSize(viewport);
     await page.goto("/");
     const evidence = await page.evaluate(async ({ width }) => {
-      const runtimeUrl =
-        "/src/rendering/place-value-addition-runtime.ts";
-      const sharedDomUrl =
-        "/src/rendering/place-value-addition-shared-dom.ts";
-      const clockUrl = "/src/reader/runtime/playback-clock.ts";
-      const runtime = await import(/* @vite-ignore */ runtimeUrl);
-      const sharedDom = await import(/* @vite-ignore */ sharedDomUrl);
-      const clock = await import(/* @vite-ignore */ clockUrl);
-      const session = runtime.createKpPlaceValueAdditionRuntimeSession();
-      const sample = (
-        progress: number,
-        previousProgress: number,
-        sequence: number
-      ) => runtime.sampleKpPlaceValueAdditionRuntime({
-        session,
-        clock: clock.createKpReaderClockSample({
-          source: "controls",
-          progress,
-          previousProgress,
-          sequence
-        }),
-        viewportWidth: width,
-        selectedView: "written"
-      });
-      const dom = sharedDom.createKpPlaceValueAdditionSharedDom({
+      const harnessUrl =
+        "/tests/support/place-value-addition-browser-harness.ts";
+      const { createKpPlaceValueAdditionBrowserHarness } =
+        await import(/* @vite-ignore */ harnessUrl) as
+          KpPlaceValueAdditionBrowserHarnessModule;
+      const harness = await createKpPlaceValueAdditionBrowserHarness({
         document,
-        session,
-        initialFrame: sample(0, 0, 0)
+        viewportWidth: width
       });
-      const app = document.querySelector<HTMLElement>("#app");
-      if (app !== null) app.style.display = "none";
-      document.body.append(dom.root);
-      Object.assign(document.body.style, {
-        margin: "0",
-        minHeight: "100vh",
-        display: "grid",
-        placeItems: "center"
-      });
-      await document.fonts.ready;
-
-      const stage = () => document.querySelector<HTMLElement>(
-        "[data-kp-place-value-ones-evaluation]"
-      )!;
-      const center = (rect: DOMRect) => ({
-        x: rect.left + rect.width / 2,
-        y: rect.top + rect.height / 2
-      });
+      const stage = () => harness.operationScene(
+        "decimal-position-0",
+        "evaluation"
+      );
       const midpoint = (
         points: readonly { readonly x: number; readonly y: number }[]
       ) => ({
@@ -66,11 +36,7 @@ for (const viewport of [
           points.length
       });
       const measure = () => {
-        const owners = [
-          ...stage().querySelectorAll<HTMLElement>(
-            "[data-kp-equation-material-owner-id]"
-          )
-        ].filter((owner) =>
+        const owners = harness.materialOwnerElements(stage()).filter((owner) =>
           owner.dataset["kpEquationMaterialSemanticEntityId"]
             ?.startsWith("annotation.decimal-position-0.material.") === true
         );
@@ -81,25 +47,9 @@ for (const viewport of [
             '"evaluation.ones.total."]'
           )
         ];
-        const targetRects = targetDigits.map((digit) =>
-          digit.getBoundingClientRect()
-        );
-        const targetBounds = {
-          left: Math.min(...targetRects.map(({ left }) => left)),
-          right: Math.max(...targetRects.map(
-            ({ left, width: rectWidth }) => left + rectWidth
-          )),
-          top: Math.min(...targetRects.map(({ top }) => top)),
-          bottom: Math.max(...targetRects.map(
-            ({ top, height }) => top + height
-          ))
-        };
-        const target = {
-          x: (targetBounds.left + targetBounds.right) / 2,
-          y: (targetBounds.top + targetBounds.bottom) / 2
-        };
+        const target = harness.unionPaintMetric(targetDigits).center;
         const source = midpoint(owners.map((owner) =>
-          center(owner.getBoundingClientRect())
+          harness.paintMetric(owner).center
         ));
         const maximumDocumentaryOverlapArea = Math.max(
           ...owners.map((owner) => {
@@ -108,26 +58,17 @@ for (const viewport of [
             ]?.endsWith(".0")
               ? "digit.second.ones"
               : "digit.first.ones";
-            const moving = owner.getBoundingClientRect();
-            const blocker = (dom.writtenRoot as HTMLElement)
-              .querySelector<HTMLElement>(
-                `[data-kp-semantic-entity-id="${blockerId}"]`
-              )!.getBoundingClientRect();
-            const overlapWidth = Math.max(0, Math.min(
-              moving.right,
-              blocker.right
-            ) - Math.max(moving.left, blocker.left));
-            const overlapHeight = Math.max(0, Math.min(
-              moving.bottom,
-              blocker.bottom
-            ) - Math.max(moving.top, blocker.top));
-            return overlapWidth * overlapHeight;
+            const overlap = harness.overlap(
+              harness.paintMetric(owner),
+              harness.paintMetric(harness.persistentCell(blockerId))
+            );
+            return overlap.width * overlap.height;
           })
         );
-        const underline = (dom.writtenRoot as HTMLElement)
+        const underline = (harness.dom.writtenRoot as HTMLElement)
           .querySelector<HTMLElement>(
             "[data-kp-place-value-underline]"
-          )!.getBoundingClientRect();
+          )!;
         return {
           source,
           target,
@@ -140,27 +81,27 @@ for (const viewport of [
           ),
           maximumDocumentaryOverlapArea,
           targetBelowRule:
-            target.y > underline.top + underline.height / 2,
+            target.y > harness.paintMetric(underline).center.y,
           destinationPolicy:
-            session.columnEvaluations[0].binding.convergenceAnchor
+            harness.session.columnEvaluations[0]!.binding.convergenceAnchor
         };
       };
 
       const dense = [];
       let previous = 0;
-      for (const [sequence, local] of [
+      for (const local of [
         0.56, 0.58, 0.6, 0.62, 0.64, 0.66
-      ].entries()) {
+      ]) {
         const progress = 0.1 + local * 0.15;
-        dom.apply(sample(progress, previous, sequence + 1));
+        harness.apply(progress, previous);
         dense.push({ local, ...measure() });
         previous = progress;
       }
       const directProgress = 0.1 + 0.66 * 0.15;
-      dom.apply(sample(0.249, previous, 20));
-      dom.apply(sample(directProgress, 0.249, 21));
+      harness.apply(0.249, previous);
+      harness.apply(directProgress, 0.249);
       const rewind = measure();
-      dom.apply(sample(directProgress, directProgress, 22));
+      harness.apply(directProgress, directProgress);
       const sameFrame = measure();
 
       return { dense, rewind, sameFrame };
@@ -187,107 +128,37 @@ for (const viewport of [
     await page.setViewportSize(viewport);
     await page.goto("/");
     const evidence = await page.evaluate(async ({ width }) => {
-      const runtimeUrl =
-        "/src/rendering/place-value-addition-runtime.ts";
-      const sharedDomUrl =
-        "/src/rendering/place-value-addition-shared-dom.ts";
-      const clockUrl = "/src/reader/runtime/playback-clock.ts";
-      const geometryUrl =
-        "/src/rendering/native-katex-paint-geometry.ts";
-      const runtime = await import(/* @vite-ignore */ runtimeUrl);
-      const sharedDom = await import(/* @vite-ignore */ sharedDomUrl);
-      const clock = await import(/* @vite-ignore */ clockUrl);
-      const geometry = await import(/* @vite-ignore */ geometryUrl);
-      const session = runtime.createKpPlaceValueAdditionRuntimeSession();
-      const sample = (
-        progress: number,
-        previousProgress: number,
-        sequence: number
-      ) => runtime.sampleKpPlaceValueAdditionRuntime({
-        session,
-        clock: clock.createKpReaderClockSample({
-          source: "controls",
-          progress,
-          previousProgress,
-          sequence
-        }),
-        viewportWidth: width,
-        selectedView: "written"
-      });
-      const dom = sharedDom.createKpPlaceValueAdditionSharedDom({
+      const harnessUrl =
+        "/tests/support/place-value-addition-browser-harness.ts";
+      const { createKpPlaceValueAdditionBrowserHarness } =
+        await import(/* @vite-ignore */ harnessUrl) as
+          KpPlaceValueAdditionBrowserHarnessModule;
+      const harness = await createKpPlaceValueAdditionBrowserHarness({
         document,
-        session,
-        initialFrame: sample(0, 0, 0)
+        viewportWidth: width
       });
-      const app = document.querySelector<HTMLElement>("#app");
-      if (app !== null) app.style.display = "none";
-      document.body.append(dom.root);
-      Object.assign(document.body.style, {
-        margin: "0",
-        minHeight: "100vh",
-        display: "grid",
-        placeItems: "center"
-      });
-      await document.fonts.ready;
-
-      const exchange = () => document.querySelector<HTMLElement>(
-        "[data-kp-place-value-ones-exchange]"
-      )!;
+      const exchange = () => harness.operationScene(
+        "decimal-position-0",
+        "exchange"
+      );
       const owner = (annotation: "remainder" | "carry") =>
-        exchange().querySelector<HTMLElement>(
-          "[data-kp-equation-material-semantic-entity-id=" +
-          `"annotation.decimal-position-0.${annotation}"]`
-        )!;
-      const persistent = (id: "result.ones" | "carry.tens") =>
-        (dom.writtenRoot as HTMLElement).querySelector<HTMLElement>(
-          `[data-kp-semantic-entity-id="${id}"]`
-        )!;
-      const paint = (element: HTMLElement) => {
-        const visual = element.firstElementChild;
-        return (
-          element.matches(".mord, .katex-html")
-            ? element
-            : element.querySelector<HTMLElement>(".katex-html .mord") ??
-              element.querySelector<HTMLElement>(".katex-html") ??
-              (
-                visual instanceof HTMLElement &&
-                visual.matches(".mord, .katex-html")
-                  ? visual
-                  : element
-              )
+        harness.materialOwner(
+          exchange(),
+          `annotation.decimal-position-0.${annotation}`
         );
-      };
-      const metric = (element: HTMLElement) => {
-        const rect =
-          geometry.measureKpNativeKatexSubtreePaintRect(
-            dom.root,
-            element
-          ) ?? paint(element).getBoundingClientRect();
-        const style = getComputedStyle(paint(element));
-        return {
-          left: rect.left,
-          top: rect.top,
-          width: rect.width,
-          height: rect.height,
-          center: {
-            x: rect.left + rect.width / 2,
-            y: rect.top + rect.height / 2
-          },
-          opacity: getComputedStyle(element).opacity,
-          fontFamily: style.fontFamily,
-          fontSize: style.fontSize,
-          fontWeight: style.fontWeight
-        };
-      };
-      const endpointState = () => [
-        persistent("result.ones"),
-        persistent("carry.tens")
-      ].map((element) => ({
-        id: element.dataset["kpSemanticEntityId"],
-        visibility: getComputedStyle(element).visibility,
-        ownership: element.dataset["kpNativeEndpointOwnership"]
+      const persistent = (id: "result.ones" | "carry.tens") =>
+        harness.persistentCell(id);
+      const endpointState = () => harness.endpointState([
+        "result.ones",
+        "carry.tens"
+      ]).map(({ id, visibility, ownership }) => ({
+        id,
+        visibility,
+        ownership
       }));
-      const documentaryOverlap = (moving: ReturnType<typeof metric>) => {
+      const documentaryOverlap = (
+        moving: ReturnType<typeof harness.paintMetric>
+      ) => {
         const documentaryIds = [
           "digit.first.hundreds",
           "digit.first.tens",
@@ -297,45 +168,27 @@ for (const viewport of [
           "digit.second.ones"
         ];
         return documentaryIds.map((id) => {
-          const fixed = metric(
-            (dom.writtenRoot as HTMLElement)
-              .querySelector<HTMLElement>(
-                `[data-kp-semantic-entity-id="${id}"]`
-              )!
-          );
-          return {
-            width: Math.max(0, Math.min(
-              moving.left + moving.width,
-              fixed.left + fixed.width
-            ) - Math.max(moving.left, fixed.left)),
-            height: Math.max(0, Math.min(
-              moving.top + moving.height,
-              fixed.top + fixed.height
-            ) - Math.max(moving.top, fixed.top))
-          };
+          const fixed = harness.paintMetric(harness.persistentCell(id));
+          return harness.overlap(moving, fixed);
         });
       };
       const localToGlobal = (local: number) => 0.25 + local * 0.15;
       const transferSamples = [];
       let previous = 0;
-      for (const [sequence, local] of [0.599, 0.601].entries()) {
+      for (const local of [0.599, 0.601]) {
         const progress = localToGlobal(local);
-        dom.apply(sample(progress, previous, sequence + 1));
+        harness.apply(progress, previous);
         transferSamples.push({
           local,
           stageOwnership:
             exchange().dataset["kpNativeEndpointOwnership"],
           visibleOwners: [
-            ...exchange().querySelectorAll<HTMLElement>(
-              "[data-kp-equation-material-owner-id]"
-            )
+            ...harness.materialOwnerElements(exchange())
           ].filter((element) =>
             getComputedStyle(element).opacity === "1"
           ).length,
           opacities: [
-            ...exchange().querySelectorAll<HTMLElement>(
-              "[data-kp-equation-material-owner-id]"
-            )
+            ...harness.materialOwnerElements(exchange())
           ].map((element) => getComputedStyle(element).opacity),
           endpointState: endpointState()
         });
@@ -343,16 +196,16 @@ for (const viewport of [
       }
 
       const route = [];
-      for (const [sequence, local] of [
+      for (const local of [
         0.61, 0.66, 0.71, 0.76, 0.81, 0.9, 0.993
-      ].entries()) {
+      ]) {
         const progress = localToGlobal(local);
-        dom.apply(sample(progress, previous, 10 + sequence));
-        const carry = metric(owner("carry"));
+        harness.apply(progress, previous);
+        const carry = harness.paintMetric(owner("carry"));
         route.push({
           local,
           carry,
-          remainder: metric(owner("remainder")),
+          remainder: harness.paintMetric(owner("remainder")),
           documentaryOverlap: documentaryOverlap(carry),
           stageOwnership:
             exchange().dataset["kpNativeEndpointOwnership"],
@@ -360,29 +213,29 @@ for (const viewport of [
         });
         previous = progress;
       }
-      const carryEndpointBefore = metric(persistent("carry.tens"));
-      const resultEndpointBefore = metric(persistent("result.ones"));
+      const carryEndpointBefore = harness.paintMetric(persistent("carry.tens"));
+      const resultEndpointBefore = harness.paintMetric(persistent("result.ones"));
       const rewindProgress = localToGlobal(0.76);
-      dom.apply(sample(localToGlobal(0.9), previous, 28));
-      dom.apply(sample(rewindProgress, localToGlobal(0.9), 29));
+      harness.apply(localToGlobal(0.9), previous);
+      harness.apply(rewindProgress, localToGlobal(0.9));
       const rewind = {
-        carry: metric(owner("carry")),
-        remainder: metric(owner("remainder"))
+        carry: harness.paintMetric(owner("carry")),
+        remainder: harness.paintMetric(owner("remainder"))
       };
 
-      dom.apply(sample(0.4, previous, 30));
+      harness.apply(0.4, previous);
       const boundary = {
         exchangeDisplay: getComputedStyle(exchange()).display,
         endpointState: endpointState(),
-        carry: metric(persistent("carry.tens")),
-        result: metric(persistent("result.ones"))
+        carry: harness.paintMetric(persistent("carry.tens")),
+        result: harness.paintMetric(persistent("result.ones"))
       };
-      dom.apply(sample(0.4, 0.4, 31));
+      harness.apply(0.4, 0.4);
       const sameBoundary = {
         exchangeDisplay: getComputedStyle(exchange()).display,
         endpointState: endpointState(),
-        carry: metric(persistent("carry.tens")),
-        result: metric(persistent("result.ones"))
+        carry: harness.paintMetric(persistent("carry.tens")),
+        result: harness.paintMetric(persistent("result.ones"))
       };
 
       return {

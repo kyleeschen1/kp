@@ -497,7 +497,8 @@
     {
       "id": "s15",
       "title": "consolidate-browser-harness",
-      "status": "planned"
+      "summary": "Created one ordered-position browser evidence harness for runtime mounting, absolute sampling, operation lookup, native ink geometry, direct-text typography, visibility, material ownership, overlap, endpoint state, and layout settlement. Migrated convergence, carry arch, later-position, and terminal-handoff specs across all three browsers and both widths without coverage loss. A source gate prevents private observer reimplementation; the three specs plus harness are one line smaller than before.",
+      "status": "complete"
     },
     {
       "id": "s16",

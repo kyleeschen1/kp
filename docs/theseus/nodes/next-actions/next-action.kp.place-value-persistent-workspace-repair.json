@@ -165,6 +165,69 @@
       "scope": "s14 diff-based branch inventory",
       "checkedAt": "2026-07-31T15:15:22.358Z",
       "notes": "Reusable presentation compiler declined from 23 whole-word named-position terms and 8 beat-ID equality branches to zero of each; a source test now keeps that boundary closed."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition:ones-cycle",
+      "status": "failed",
+      "scope": "s15 first harness migration",
+      "checkedAt": "2026-07-31T15:30:15.973Z",
+      "notes": "The first helper mixed stage-relative ink coordinates with viewport rule coordinates and could fingerprint an outer semantic wrapper instead of the direct KaTeX text node. All 12 cases failed consistently, proving the migration did not mask semantic drift. The harness—not product motion—was corrected."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition:ones-cycle",
+      "status": "passed",
+      "scope": "s15 shared convergence and exchange microscope",
+      "checkedAt": "2026-07-31T15:30:17.320Z",
+      "notes": "12 of 12 pass across Chromium Firefox WebKit at wide and phone widths using one shared mount, clock, paint, overlap, curvature, typography, ownership, and handoff observer."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition -- --grep every-ordered-position-or-terminal-position",
+      "status": "passed",
+      "scope": "s15 shared later-position and terminal microscope",
+      "checkedAt": "2026-07-31T15:30:18.294Z",
+      "notes": "12 of 12 pass across Chromium Firefox WebKit at wide and phone widths using the same harness."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s15 harness adoption gate",
+      "checkedAt": "2026-07-31T15:30:19.206Z",
+      "notes": "114 of 114 pass, including a source check that the three critical specs import the shared harness and cannot privately rebuild runtime or native-paint observation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15 browser harness types",
+      "checkedAt": "2026-07-31T15:30:20.091Z",
+      "notes": "Application, Node, browser tests, and domains pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s15 test-only boundary",
+      "checkedAt": "2026-07-31T15:30:21.021Z",
+      "notes": "All architecture gates pass; consolidation adds no product runtime, renderer, or compatibility path."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s15 first isolated timing sample",
+      "checkedAt": "2026-07-31T15:30:21.914Z",
+      "notes": "Type and instantiation counts were unchanged at 49279 and 61770; wall time was 5.09 seconds, 0.09 above the fixed timing ceiling. No code or threshold changed."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s15 repeated isolated timing sample",
+      "checkedAt": "2026-07-31T15:30:22.802Z",
+      "notes": "Passed at unchanged 49279 types and 61770 instantiations in 3.63 seconds."
+    },
+    {
+      "command": "browser harness line and import inventory",
+      "status": "passed",
+      "scope": "s15 consolidation size",
+      "checkedAt": "2026-07-31T15:30:23.662Z",
+      "notes": "Three critical specs fell from 854 to 603 lines; the shared harness is 250 lines, making the consolidation net negative by one line while centralizing seven repeated observation mechanisms."
     }
   ],
   "progress": {

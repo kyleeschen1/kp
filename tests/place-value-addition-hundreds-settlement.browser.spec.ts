@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
 
+type KpPlaceValueAdditionBrowserHarnessModule = typeof import(
+  "./support/place-value-addition-browser-harness.ts"
+);
+
 for (const viewport of [
   { name: "wide", width: 960, height: 720 },
   { name: "phone", width: 390, height: 720 }
@@ -10,104 +14,49 @@ for (const viewport of [
     await page.setViewportSize(viewport);
     await page.goto("/");
     const evidence = await page.evaluate(async ({ width }) => {
-      const runtimeUrl = "/src/rendering/place-value-addition-runtime.ts";
-      const sharedDomUrl =
-        "/src/rendering/place-value-addition-shared-dom.ts";
-      const clockUrl = "/src/reader/runtime/playback-clock.ts";
-      const runtime = await import(/* @vite-ignore */ runtimeUrl);
-      const sharedDom = await import(/* @vite-ignore */ sharedDomUrl);
-      const clock = await import(/* @vite-ignore */ clockUrl);
-      const session = runtime.createKpPlaceValueAdditionRuntimeSession();
-      const sample = (
-        progress: number,
-        previousProgress: number,
-        sequence: number
-      ) => runtime.sampleKpPlaceValueAdditionRuntime({
-        session,
-        clock: clock.createKpReaderClockSample({
-          source: "controls",
-          progress,
-          previousProgress,
-          sequence
-        }),
-        viewportWidth: width,
-        selectedView: "written"
-      });
-      const dom = sharedDom.createKpPlaceValueAdditionSharedDom({
+      const harnessUrl =
+        "/tests/support/place-value-addition-browser-harness.ts";
+      const { createKpPlaceValueAdditionBrowserHarness } =
+        await import(/* @vite-ignore */ harnessUrl) as
+          KpPlaceValueAdditionBrowserHarnessModule;
+      const harness = await createKpPlaceValueAdditionBrowserHarness({
         document,
-        session,
-        initialFrame: sample(0, 0, 0)
+        viewportWidth: width
       });
-      const app = document.querySelector<HTMLElement>("#app");
-      if (app !== null) app.style.display = "none";
-      document.body.append(dom.root);
-      Object.assign(document.body.style, {
-        margin: "0",
-        minHeight: "100vh",
-        display: "grid",
-        placeItems: "center"
-      });
-      await document.fonts.ready;
-      dom.prepareNativeScenes();
-
-      const finalScene = () => document.querySelector<HTMLElement>(
-        '[data-kp-place-value-position-id="decimal-position-2"]' +
-        "[data-kp-place-value-hundreds-evaluation]"
-      )!;
-      const scaffold = dom.writtenRoot as HTMLElement;
+      const finalScene = () => harness.operationScene(
+        "decimal-position-2",
+        "evaluation"
+      );
       const resultIds = [
         "result.hundreds",
         "result.tens",
         "result.ones"
       ] as const;
-      const cell = (id: string) => scaffold.querySelector<HTMLElement>(
-        `[data-kp-semantic-entity-id="${id}"]`
-      )!;
-      const metric = (element: HTMLElement) => {
-        const paint = element.querySelector<HTMLElement>(
-          ".katex-html .mord"
-        ) ?? element.querySelector<HTMLElement>(".katex-html")!;
-        const rect = element.getBoundingClientRect();
-        const style = getComputedStyle(paint);
-        return {
-          left: rect.left,
-          top: rect.top,
-          width: rect.width,
-          height: rect.height,
-          fontFamily: style.fontFamily,
-          fontSize: style.fontSize,
-          fontWeight: style.fontWeight
-        };
-      };
-      const owners = () => [
-        ...finalScene().querySelectorAll<HTMLElement>(
-          "[data-kp-equation-material-owner-id]"
-        )
-      ].map((owner) => ({
-        id: owner.dataset["kpEquationMaterialOwnerId"]!,
-        opacity: getComputedStyle(owner).opacity,
-        transform: getComputedStyle(owner).transform,
-        text: owner.textContent?.trim() ?? ""
-      })).sort((left, right) => left.id.localeCompare(right.id));
+      const owners = () => harness.materialOwners(finalScene());
       const nativeFrame = () => ({
-        nodeIds: resultIds.map((id) => cell(id).id),
+        nodeIds: resultIds.map((id) => harness.persistentCell(id).id),
         visibility: resultIds.map((id) =>
-          getComputedStyle(cell(id)).visibility
+          getComputedStyle(harness.persistentCell(id)).visibility
         ),
-        opacity: resultIds.map((id) => getComputedStyle(cell(id)).opacity),
+        opacity: resultIds.map((id) =>
+          getComputedStyle(harness.persistentCell(id)).opacity
+        ),
         text: resultIds.map((id) =>
-          cell(id).querySelector<HTMLElement>(".katex-html")
+          harness.persistentCell(id).querySelector<HTMLElement>(".katex-html")
             ?.textContent?.trim()
         ).join(""),
-        metrics: resultIds.map((id) => [id, metric(cell(id))] as const)
+        metrics: resultIds.map((id) => [
+          id,
+          harness.paintMetric(harness.persistentCell(id))
+        ] as const)
       });
 
-      dom.apply(sample(0.79, 0, 1));
+      harness.apply(0.79, 0);
       const forward = owners();
-      dom.apply(sample(0.84, 0.79, 2));
-      dom.apply(sample(0.79, 0.84, 3));
+      harness.apply(0.84, 0.79);
+      harness.apply(0.79, 0.84);
       const rewind = owners();
-      dom.apply(sample(0.87, 0.79, 4));
+      harness.apply(0.87, 0.79);
       const boundary = {
         evaluationDisplay: getComputedStyle(finalScene()).display,
         legacySettlementDisplay: getComputedStyle(
@@ -117,23 +66,21 @@ for (const viewport of [
         ).display,
         frame: nativeFrame()
       };
-      dom.apply(sample(0.9, 0.87, 5));
+      harness.apply(0.9, 0.87);
       const dwellStart = nativeFrame();
-      dom.apply(sample(0.96, 0.9, 6));
+      harness.apply(0.96, 0.9);
       const dwellEnd = nativeFrame();
-      dom.apply(sample(1, 0.96, 7));
+      harness.apply(1, 0.96);
       const endpoint = nativeFrame();
 
-      dom.root.style.inlineSize = `${Math.max(320, width - 120)}px`;
-      await new Promise<void>((resolve) => requestAnimationFrame(() =>
-        requestAnimationFrame(() => resolve())
-      ));
-      dom.apply(sample(1, 1, 8));
+      harness.dom.root.style.inlineSize = `${Math.max(320, width - 120)}px`;
+      await harness.settleLayout();
+      harness.apply(1, 1);
       const afterResize = nativeFrame();
-      dom.apply(sample(0.79, 1, 9));
-      dom.apply(sample(0.95, 0.79, 10));
+      harness.apply(0.79, 1);
+      harness.apply(0.95, 0.79);
       const replayForward = nativeFrame();
-      dom.apply(sample(0.95, 0.95, 11));
+      harness.apply(0.95, 0.95);
       const replaySame = nativeFrame();
       return {
         forward,

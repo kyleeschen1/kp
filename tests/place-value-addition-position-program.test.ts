@@ -59,7 +59,8 @@ test("reusable position pipeline cannot branch on familiar place names", () => {
     "src/rendering/place-value-addition-column-exchange.ts",
     "src/rendering/place-value-addition-runtime.ts",
     "src/rendering/place-value-addition-shared-dom.ts",
-    "src/rendering/place-value-addition-written-ownership.ts"
+    "src/rendering/place-value-addition-written-ownership.ts",
+    "tests/support/place-value-addition-browser-harness.ts"
   ];
   for (const sourcePath of reusableSources) {
     const source = readFileSync(join(projectRoot, sourcePath), "utf8");
@@ -67,6 +68,27 @@ test("reusable position pipeline cannot branch on familiar place names", () => {
       source,
       /\b(?:ones|tens|hundreds)\b/u,
       `${sourcePath} must consume ordered position metadata`
+    );
+  }
+});
+
+test("critical motion specs share one browser evidence harness", () => {
+  const migratedSpecs = [
+    "tests/place-value-addition-ones-cycle.browser.spec.ts",
+    "tests/place-value-addition-tens-motion.browser.spec.ts",
+    "tests/place-value-addition-hundreds-settlement.browser.spec.ts"
+  ];
+  for (const sourcePath of migratedSpecs) {
+    const source = readFileSync(join(projectRoot, sourcePath), "utf8");
+    assert.match(
+      source,
+      /place-value-addition-browser-harness\.ts/u,
+      `${sourcePath} must use the shared browser evidence harness`
+    );
+    assert.doesNotMatch(
+      source,
+      /(?:place-value-addition-runtime|place-value-addition-shared-dom|native-katex-paint-geometry)\.ts/u,
+      `${sourcePath} cannot rebuild runtime or paint observation privately`
     );
   }
 });
