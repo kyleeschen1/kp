@@ -79,6 +79,27 @@
       "scope": "s02 reference contract",
       "checkedAt": "2026-07-31T03:45:58.302Z",
       "notes": "Application, Node, test, and domain projects accept the frozen literal contract without widened escape paths."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s03 lifetime and region contracts",
+      "checkedAt": "2026-07-31T03:49:42.683Z",
+      "notes": "97 of 97 pass, including copied-region rejection and full-timeline lifetime laws."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03 static negative fixtures",
+      "checkedAt": "2026-07-31T03:49:43.732Z",
+      "notes": "Documentary, endpoint, and transit region roles cannot cross lifetime constructors; direct literal authority remains nominally sealed."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s03 type-system cost",
+      "checkedAt": "2026-07-31T03:49:44.561Z",
+      "notes": "Inference remains bounded at 48906 types, 61513 instantiations, and 2.66 seconds."
     }
   ],
   "allowedWork": [
@@ -117,7 +138,8 @@
     {
       "id": "s03",
       "title": "type-lifetimes-and-regions",
-      "status": "planned"
+      "summary": "Added one geometry-free persistent-workspace contract with nominal sealed semantic regions and discriminated full-timeline documentary versus native-endpoint lifetimes. Documentary sources can only remain opaque or dim monotonically; endpoints remain mounted and can reveal only by exclusive handoff. Static and runtime cases reject copied authority and wrong region roles.",
+      "status": "complete"
     },
     {
       "id": "s04",
