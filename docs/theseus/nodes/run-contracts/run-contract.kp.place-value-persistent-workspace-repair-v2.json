@@ -121,6 +121,41 @@
       "scope": "s04 type-system cost",
       "checkedAt": "2026-07-31T03:53:06.665Z",
       "notes": "Inference remains bounded at 49083 types, 61566 instantiations, and 2.24 seconds."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s05 sealed ones workspace plan",
+      "checkedAt": "2026-07-31T03:59:42.429Z",
+      "notes": "104 of 104 pass; the plan closes 13 native entities and seven beats while exposing only the gated ones operation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s05 compiler closure",
+      "checkedAt": "2026-07-31T03:59:43.671Z",
+      "notes": "Application, Node, test, and domain projects pass after the sealed plan compiler."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s05 architecture boundary",
+      "checkedAt": "2026-07-31T03:59:44.508Z",
+      "notes": "The plan remains a semantic-presentation compiler contract; no runtime, renderer, compositor, or compatibility exception was introduced."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s05 initial negative fixture",
+      "checkedAt": "2026-07-31T03:59:45.366Z",
+      "notes": "A whole-plan structural negative fixture imported the full place-value compiler graph into the inference-only project and exceeded the type-count ceiling. The fixture tested compiler workload rather than the nominal boundary."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s05 bounded public type surface",
+      "checkedAt": "2026-07-31T03:59:46.205Z",
+      "notes": "After retaining nominal plan authority with runtime copy rejection and testing static stage bypasses at the small base contract, inference returned to 49083 types, 61566 instantiations, and 2.32 seconds without raising the ceiling."
     }
   ],
   "allowedWork": [
@@ -171,7 +206,8 @@
     {
       "id": "s05",
       "title": "compile-persistent-workspace-plan",
-      "status": "planned"
+      "summary": "Compiled one nominal geometry-free place-value persistent-workspace plan from the sealed foundation and matching written projection. It closes all 13 native entities and seven trace beats, declares full-timeline lifetimes, and exposes only ones contribution convergence, result settlement, and carry-arch handoff behind the human generalization gate. Removed an over-broad negative type fixture rather than accepting compiler-cost growth.",
+      "status": "complete"
     },
     {
       "id": "s06",
