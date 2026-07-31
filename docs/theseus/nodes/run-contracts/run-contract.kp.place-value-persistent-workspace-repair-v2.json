@@ -387,6 +387,20 @@
       "scope": "s10 human checkpoint availability",
       "checkedAt": "2026-07-31T13:50:38.240Z",
       "notes": "After stopping the exact stale scripts/dev.ts process tree and starting one coherent npm run dev session, the host-network request to canonical-animation-review.html returned HTTP 200 on port 8000. The place-value checkpoint was reopened with a cache-busting URL; no product code changed."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s18 product boundaries",
+      "checkedAt": "2026-07-31T16:26:08.567Z",
+      "notes": "116 of 116 pass, including accessibility projection, static and no-JavaScript export, reduced modes, semantic invariants, generic ordered-position compilation, persistent ownership, source guards, and generated unequal-width overflow proof."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition -- product-boundary specs",
+      "status": "passed",
+      "scope": "s18 cross-browser product regression",
+      "checkedAt": "2026-07-31T16:26:09.341Z",
+      "notes": "48 of 48 pass across Chromium Firefox WebKit: canonical Animation Library lazy mount, phone Review capture, Review note save path, catalog disposal, navigation and direct seek, wide and phone responsive geometry, DPR invariance, accessibility metadata, scheduler coalescing and suspension, resource disposal, and persistent documentary scaffold."
     }
   ],
   "allowedWork": [
@@ -515,7 +529,8 @@
     {
       "id": "s18",
       "title": "run-product-regression",
-      "status": "planned"
+      "summary": "Broad product regression is green: 116 unit cases plus 48 real-browser cases across Chromium Firefox WebKit. Accessibility, static export, reduced modes, Animation Library lazy loading, Review capture and note save, navigation, responsive wide phone and DPR geometry, scheduler coalescing suspension disposal, direct-seek determinism, and one persistent documentary scaffold all pass. Browser dev servers emit nonfatal ResizeObserver delivery warnings during responsive relayout; no assertion, console-owned product failure, or resource invariant failed.",
+      "status": "complete"
     },
     {
       "id": "s19",
