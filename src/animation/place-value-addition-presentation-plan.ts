@@ -1,8 +1,9 @@
 import type {
   KpAdjacentPlaceExchangeCertificate
 } from "../../domains/quantities/place-value-exchange.ts";
-import type {
-  KpCarryRemainderLineage
+import {
+  isKpCarryRemainderLineage,
+  type KpCarryRemainderLineage
 } from "../../domains/quantities/place-value-regrouping.ts";
 import {
   createKpExplicitStaticCheckpointPlan,
@@ -18,6 +19,12 @@ import {
 import {
   kpPlaceValueAdditionVisualReference as reference
 } from "../reader/compiler/place-value-addition-visual-reference.ts";
+import {
+  compileKpPlaceValueAdditionPositionPrograms
+} from "../reader/compiler/place-value-addition-position-program.ts";
+import type {
+  KpPlaceValuePositionProgram
+} from "../reader/compiler/place-value-addition-position-types.ts";
 import {
   isKpPlaceValueAdditionTrace,
   kpPlaceValueAdditionTrace,
@@ -48,24 +55,20 @@ export type KpPlaceValuePresentationProgram =
       readonly contributorIds: readonly [string, string, ...string[]];
       readonly catalystId: "operator.add";
       readonly resultId: string;
-      readonly expression: "8 + 6 = 14" | "1 + 7 + 5 = 13" | "1 + 2 + 1 = 4";
+      readonly expression: string;
       readonly executableProgram: KpOperationEvaluationExecutableProgram;
     })
   | (KpPlaceValuePresentationProgramBase & {
       readonly kind: "adjacent-place-exchange";
       readonly role: "conservation-proof";
-      readonly proof:
-        | KpAdjacentPlaceExchangeCertificate<"ones", "tens">
-        | KpAdjacentPlaceExchangeCertificate<"tens", "hundreds">;
+      readonly proof: KpAdjacentPlaceExchangeCertificate;
     })
   | (KpPlaceValuePresentationProgramBase & {
       readonly kind: "carry-split";
       readonly sourceEvaluationId: string;
       readonly remainderId: string;
       readonly carryId: string;
-      readonly lineage:
-        | KpCarryRemainderLineage<"ones", "tens">
-        | KpCarryRemainderLineage<"tens", "hundreds">;
+      readonly lineage: KpCarryRemainderLineage;
       readonly executableProgram: KpVerifiedIdentityFissionExecutableProgram;
     })
   | (KpPlaceValuePresentationProgramBase & {
@@ -153,8 +156,9 @@ export function createKpPlaceValueAdditionPresentationPlan(
       "Animated place-value presentation requires a compiler-owned trace."
     );
   }
+  const positionPrograms = compileKpPlaceValueAdditionPositionPrograms();
   const beats = Object.freeze(
-    trace.beats.map((beat) => compileBeat(trace, beat))
+    trace.beats.map((beat) => compileBeat(trace, beat, positionPrograms))
   );
   if (
     beats.length !== trace.beats.length ||
@@ -220,7 +224,8 @@ export function isKpPlaceValueAdditionPresentationPlan(
 
 function compileBeat(
   trace: KpPlaceValueAdditionTrace,
-  beat: KpPlaceValueAdditionBeat
+  beat: KpPlaceValueAdditionBeat,
+  positionPrograms: readonly KpPlaceValuePositionProgram[]
 ): KpPlaceValueAdditionPresentationBeat {
   const persistence = persistentProgram(trace, beat);
   switch (beat.operation) {
@@ -237,7 +242,7 @@ function compileBeat(
         traceOperation: beat.operation,
         kind: "evaluate" as const,
         programs: Object.freeze([
-          evaluationProgram(trace, beat),
+          evaluationProgram(beat, positionPrograms),
           persistence
         ] as const)
       });
@@ -247,8 +252,8 @@ function compileBeat(
         traceOperation: beat.operation,
         kind: "exchange-and-carry" as const,
         programs: Object.freeze([
-          exchangeProgram(trace, beat),
-          carrySplitProgram(trace, beat),
+          exchangeProgram(trace, beat, positionPrograms),
+          carrySplitProgram(trace, beat, positionPrograms),
           persistence
         ] as const)
       });
@@ -258,7 +263,7 @@ function compileBeat(
         traceOperation: beat.operation,
         kind: "settle" as const,
         programs: Object.freeze([
-          nativeSettlementProgram(trace, beat),
+          nativeSettlementProgram(beat, positionPrograms),
           persistence
         ] as const)
       });
@@ -268,31 +273,23 @@ function compileBeat(
 }
 
 function evaluationProgram(
-  trace: KpPlaceValueAdditionTrace,
-  beat: KpPlaceValueAdditionBeat
+  beat: KpPlaceValueAdditionBeat,
+  positionPrograms: readonly KpPlaceValuePositionProgram[]
 ): ProgramOf<"operation-evaluation"> {
-  const details =
-    beat.id === "beat.place-value.evaluate-ones"
-      ? {
-          expression: "8 + 6 = 14" as const,
-          resultId: "evaluation.ones.total"
-        }
-      : beat.id === "beat.place-value.evaluate-tens"
-        ? {
-            expression: "1 + 7 + 5 = 13" as const,
-            resultId: "evaluation.tens.total"
-          }
-        : beat.id === "beat.place-value.evaluate-hundreds"
-          ? {
-              expression: "1 + 2 + 1 = 4" as const,
-              resultId: trace.proofs.hundreds.result.id
-            }
-          : undefined;
+  const program = positionPrograms.find(
+    ({ evaluation }) => evaluation.beatId === beat.id
+  );
+  const resultId = program?.exchange === undefined &&
+      program?.terminalOutput?.outputs.length === 1
+    ? program.terminalOutput.outputs[0].targetCellId
+    : program?.evaluation.evaluatedTotalEntityId;
   if (
-    details === undefined ||
+    program === undefined ||
+    resultId === undefined ||
     beat.contributorIds.length < 2 ||
     beat.outputIds.length !== 1 ||
-    beat.outputIds[0] !== details.resultId
+    beat.outputIds[0] !== resultId ||
+    !sameIds(beat.contributorIds, program.evaluation.contributorCellIds)
   ) {
     throw new Error(`Evaluation beat ${beat.id} lacks exact presentation inputs.`);
   }
@@ -305,25 +302,18 @@ function evaluationProgram(
     contributorIds: Object.freeze([...beat.contributorIds]) as
       readonly [string, string, ...string[]],
     catalystId: "operator.add" as const,
-    resultId: details.resultId,
-    expression: details.expression,
+    resultId,
+    expression: program.evaluation.expression,
     executableProgram: kpOperationEvaluationExecutableProgramCompiler.program
   });
 }
 
 function exchangeProgram(
   trace: KpPlaceValueAdditionTrace,
-  beat: KpPlaceValueAdditionBeat
+  beat: KpPlaceValueAdditionBeat,
+  positionPrograms: readonly KpPlaceValuePositionProgram[]
 ): ProgramOf<"adjacent-place-exchange"> {
-  const proof =
-    beat.id === "beat.place-value.exchange-ones"
-      ? trace.proofs.ones.exchange
-      : beat.id === "beat.place-value.exchange-tens"
-        ? trace.proofs.tens.exchange
-        : undefined;
-  if (proof === undefined) {
-    throw new Error(`Exchange beat ${beat.id} lacks adjacent-place proof.`);
-  }
+  const { lineage } = resolveExchangeContext(trace, beat, positionPrograms);
   return mintProgram({
     id: `presentation.${beat.id}.adjacent-place-exchange`,
     beatId: beat.id,
@@ -331,22 +321,17 @@ function exchangeProgram(
     opacityPolicy: "opaque" as const,
     kind: "adjacent-place-exchange" as const,
     role: "conservation-proof" as const,
-    proof
+    proof: lineage.exchange
   });
 }
 
 function carrySplitProgram(
   trace: KpPlaceValueAdditionTrace,
-  beat: KpPlaceValueAdditionBeat
+  beat: KpPlaceValueAdditionBeat,
+  positionPrograms: readonly KpPlaceValuePositionProgram[]
 ): ProgramOf<"carry-split"> {
-  const lineage =
-    beat.id === "beat.place-value.exchange-ones"
-      ? trace.proofs.ones
-      : beat.id === "beat.place-value.exchange-tens"
-        ? trace.proofs.tens
-        : undefined;
+  const { lineage } = resolveExchangeContext(trace, beat, positionPrograms);
   if (
-    lineage === undefined ||
     beat.contributorIds.length !== 1 ||
     beat.outputIds.length !== 2
   ) {
@@ -407,13 +392,20 @@ function persistentProgram(
 }
 
 function nativeSettlementProgram(
-  trace: KpPlaceValueAdditionTrace,
-  beat: KpPlaceValueAdditionBeat
+  beat: KpPlaceValueAdditionBeat,
+  positionPrograms: readonly KpPlaceValuePositionProgram[]
 ): ProgramOf<"native-settlement"> {
+  const settledOutputIds = positionPrograms.flatMap((program) =>
+    program.exchange?.outputCellIds[0] ??
+      program.terminalOutput?.outputs
+        .filter(({ role }) => role === "settled-digit")
+        .map(({ targetCellId }) => targetCellId) ?? []
+  );
   if (
-    beat.id !== "beat.place-value.settle" ||
+    beat.operation !== "settle-native-result" ||
     beat.contributorIds.length < 1 ||
-    beat.outputIds[0] !== trace.proofs.hundreds.result.quantityId
+    beat.outputIds.length !== 1 ||
+    !sameIdSet(beat.contributorIds, settledOutputIds)
   ) {
     throw new Error("Native settlement must close the exact result decomposition.");
   }
@@ -431,12 +423,62 @@ function nativeSettlementProgram(
   });
 }
 
+function resolveExchangeContext(
+  trace: KpPlaceValueAdditionTrace,
+  beat: KpPlaceValueAdditionBeat,
+  positionPrograms: readonly KpPlaceValuePositionProgram[]
+): {
+  readonly program: KpPlaceValuePositionProgram & {
+    readonly exchange: NonNullable<KpPlaceValuePositionProgram["exchange"]>;
+  };
+  readonly lineage: KpCarryRemainderLineage;
+} {
+  const candidate = positionPrograms.find(
+    ({ exchange }) => exchange?.beatId === beat.id
+  );
+  const lineages: KpCarryRemainderLineage[] = [];
+  for (const proof of Object.values(trace.proofs)) {
+    if (isKpCarryRemainderLineage(proof)) lineages.push(proof);
+  }
+  const lineage = candidate?.exchange === undefined
+    ? undefined
+    : lineages.find(({ exchange }) =>
+        exchange.id === candidate.exchange!.baseTenExchangeId
+      );
+  if (
+    candidate?.exchange === undefined ||
+    lineage === undefined ||
+    !beat.proofIds.includes(lineage.id) ||
+    !beat.proofIds.includes(lineage.exchange.id) ||
+    !sameIds(beat.outputIds, candidate.exchange.outputCellIds)
+  ) {
+    throw new Error(`Exchange beat ${beat.id} lacks exact position proof.`);
+  }
+  return Object.freeze({
+    program: candidate as KpPlaceValuePositionProgram & {
+      readonly exchange: NonNullable<KpPlaceValuePositionProgram["exchange"]>;
+    },
+    lineage
+  });
+}
+
 function mintProgram<const Program extends object>(
   program: Program
 ): Program & KpPlaceValuePresentationProgramBase {
   const sealed = Object.freeze(program);
   sealedPresentationPrograms.add(sealed);
   return sealed as Program & KpPlaceValuePresentationProgramBase;
+}
+
+function sameIds(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length &&
+    left.every((id, index) => id === right[index]);
+}
+
+function sameIdSet(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length &&
+    new Set(left).size === left.length &&
+    left.every((id) => right.includes(id));
 }
 
 function assertNever(value: never): never {

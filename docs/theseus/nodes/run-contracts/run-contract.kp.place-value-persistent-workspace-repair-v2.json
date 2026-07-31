@@ -491,7 +491,8 @@
     {
       "id": "s14",
       "title": "remove-ones-specific-branches",
-      "status": "planned"
+      "summary": "Removed the final named-position authority branches from the reusable presentation compiler. Evaluations now resolve through ordered position specs; exchange and carry programs resolve through nominal lineage proof identity; terminal versus nonterminal output topology determines result ownership; and native settlement validates the complete compiled settled-output set. The compiler moved from 23 named-position terms and eight beat-ID branches to zero, with a source-level regression gate and 12-case cross-browser motion proof.",
+      "status": "complete"
     },
     {
       "id": "s15",

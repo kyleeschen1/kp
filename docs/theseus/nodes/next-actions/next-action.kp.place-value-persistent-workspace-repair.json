@@ -116,6 +116,55 @@
       "scope": "s13 browser evidence types",
       "checkedAt": "2026-07-31T15:08:27.329Z",
       "notes": "Application, Node, browser test, and domain projects pass."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "failed",
+      "scope": "s14 first branch-free presentation compiler",
+      "checkedAt": "2026-07-31T15:15:16.384Z",
+      "notes": "The first derivation treated every evaluation result as a transient evaluated-total ID. Focused tests exposed that a non-exchanging terminal position already targets its persistent result endpoint. The fix encodes exchange versus terminal topology generically; no named-position branch was restored."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s14 branch-free authority lookup",
+      "checkedAt": "2026-07-31T15:15:17.552Z",
+      "notes": "113 of 113 pass after evaluations resolve from ordered position specs, exchange/carry authority resolves by nominal lineage proof, and settlement closes the compiled settled-output set."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s14 generic presentation surface",
+      "checkedAt": "2026-07-31T15:15:18.656Z",
+      "notes": "Application, Node, tests, and domains pass with string-valued fixture expressions and generic exchange/lineage proof interfaces."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s14 architecture boundary",
+      "checkedAt": "2026-07-31T15:15:19.690Z",
+      "notes": "All architecture gates pass; no renderer category, compatibility exception, or new runtime was added."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s14 type-system cost",
+      "checkedAt": "2026-07-31T15:15:20.613Z",
+      "notes": "Inference passes within the unchanged ceiling at 49279 types, 61770 instantiations, and 3 seconds."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition -- --grep every-ordered-position-or-terminal-position",
+      "status": "passed",
+      "scope": "s14 Chromium Firefox WebKit wide and phone",
+      "checkedAt": "2026-07-31T15:15:21.494Z",
+      "notes": "12 of 12 later-position and terminal-motion cases pass with unchanged visual behavior."
+    },
+    {
+      "command": "git show HEAD presentation plan and current source scan",
+      "status": "passed",
+      "scope": "s14 diff-based branch inventory",
+      "checkedAt": "2026-07-31T15:15:22.358Z",
+      "notes": "Reusable presentation compiler declined from 23 whole-word named-position terms and 8 beat-ID equality branches to zero of each; a source test now keeps that boundary closed."
     }
   ],
   "progress": {
