@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
@@ -15,4 +16,17 @@ test("animation library closure deltas retain accepted limits", () => {
     mainHostGzipBytes: 5_627,
     placeValueIncrementalGzipBytes: -4_564
   });
+});
+
+test("main host loads the optional workbench at its route boundary", async () => {
+  const source = await readFile("src/main.ts", "utf8");
+
+  assert.doesNotMatch(
+    source,
+    /from "\.\/editor\/semantic-animation-workbench-view\.ts"/
+  );
+  assert.match(
+    source,
+    /import\(\s*"\.\/editor\/semantic-animation-workbench-view\.ts"\s*\)/
+  );
 });

@@ -91,16 +91,6 @@ import {
   readKpSemanticAnimationWorkbenchRoute
 } from "./editor/semantic-animation-workbench-route.ts";
 import {
-  renderKpSemanticAnimationWorkbenchResults,
-  renderKpSemanticAnimationWorkbenchShell
-} from "./editor/semantic-animation-workbench-shell.ts";
-import {
-  createKpSemanticAnimationWorkbenchIndex
-} from "./editor/semantic-animation-workbench-data.ts";
-import {
-  queryKpSemanticAnimationWorkbench
-} from "./editor/semantic-animation-workbench-query.ts";
-import {
   writeKpSemanticAnimationWorkbenchRoute
 } from "./editor/semantic-animation-workbench-route.ts";
 import { loadKpAnimationAsset } from "./animation/catalog-loader.ts";
@@ -123,26 +113,12 @@ import {
 import {
   loadKpEditorAnimationLibraryDevelopmentReview
 } from "./editor/editor-animation-library-review-capture-loader.ts";
-import {
-  resolveKpAnimationWorkbenchRepresentation
-} from "./editor/semantic-animation-workbench-representation-selection.ts";
-import {
-  discoverKpActiveApprovedPlan
-} from "./editor/semantic-animation-workbench-roadmap-source.ts";
-import {
-  projectKpWorkbenchRoadmap
-} from "./editor/semantic-animation-workbench-roadmap.ts";
-import {
-  projectKpWorkbenchRoadmapAnimationLinks
-} from "./editor/semantic-animation-workbench-roadmap-links.ts";
-import {
-  listKpWorkbenchRoadmapTopics,
-  queryKpWorkbenchRoadmap,
-  type KpWorkbenchRoadmapQuery
-} from "./editor/semantic-animation-workbench-roadmap-query.ts";
 import type {
   KpSemanticAnimationWorkbenchRoadmapRouteState
 } from "./editor/semantic-animation-workbench-route.ts";
+import type {
+  KpSemanticAnimationWorkbenchIndex
+} from "./editor/semantic-animation-workbench-index.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -167,6 +143,9 @@ type ProjectDashboardDataClient = typeof import("./project-dashboard/data.ts");
 type ProjectDashboardRenderClient = typeof import("./project-dashboard/render.ts");
 type FtcTutorialSurfaceClient = typeof import("./tutorial/ftc-surface.ts");
 type FtcTutorialEditorClient = typeof import("./editor/ftc-tutorial-editor-surface.ts");
+type AnimationWorkbenchViewClient = typeof import(
+  "./editor/semantic-animation-workbench-view.ts"
+);
 let graph3DWebGLClient: Graph3DWebGLClient | undefined;
 let graph3DWebGLClientPromise: Promise<Graph3DWebGLClient> | undefined;
 let projectDashboardClientPromise: Promise<{
@@ -175,6 +154,9 @@ let projectDashboardClientPromise: Promise<{
 }> | undefined;
 let ftcTutorialSurfaceClientPromise: Promise<FtcTutorialSurfaceClient> | undefined;
 let ftcTutorialEditorClientPromise: Promise<FtcTutorialEditorClient> | undefined;
+let animationWorkbenchViewClientPromise:
+  | Promise<AnimationWorkbenchViewClient>
+  | undefined;
 let activeView:
   | "dashboard"
   | "editor"
@@ -215,16 +197,6 @@ const graph3DWebGLVisibilityObservers = new WeakMap<
   HTMLElement,
   IntersectionObserver
 >();
-const animationWorkbenchIndex =
-  createKpSemanticAnimationWorkbenchIndex();
-const animationWorkbenchRoadmap =
-  projectKpWorkbenchRoadmap(discoverKpActiveApprovedPlan());
-const animationWorkbenchRoadmapAnimationLinks =
-  projectKpWorkbenchRoadmapAnimationLinks({
-    roadmap: animationWorkbenchRoadmap,
-    index: animationWorkbenchIndex
-  });
-
 declare global {
   interface Window {
     __kpEquationMotionSetProgress?: (
@@ -247,7 +219,7 @@ if (requestedView === "ftc-tutorial") {
 } else if (requestedView === "animation-library-host") {
   renderAnimationLibraryHostView();
 } else if (readKpSemanticAnimationWorkbenchRoute(window.location.search).active) {
-  renderAnimationWorkbenchView();
+  void renderAnimationWorkbenchView();
 } else {
   renderEditor();
 }
@@ -319,16 +291,16 @@ appRoot.addEventListener("click", (event) => {
       return;
     case "show-animation-workbench":
       navigateToView("animation-workbench");
-      renderAnimationWorkbenchView();
+      void renderAnimationWorkbenchView();
       return;
     case "select-animation-workbench-result":
-      selectAnimationWorkbenchResult(button);
+      void selectAnimationWorkbenchResult(button);
       return;
     case "select-animation-workbench-representation":
-      selectAnimationWorkbenchRepresentation(button);
+      void selectAnimationWorkbenchRepresentation(button);
       return;
     case "select-animation-workbench-roadmap-link":
-      selectAnimationWorkbenchRoadmapLink(button);
+      void selectAnimationWorkbenchRoadmapLink(button);
       return;
     case "show-ftc-tutorial":
       navigateToView("ftc-tutorial");
@@ -410,7 +382,7 @@ appRoot.addEventListener("change", (event) => {
   }
 
   if (event.target.dataset["action"]?.includes("animation-workbench-roadmap")) {
-    updateAnimationWorkbenchRoadmapQuery(event.target);
+    void updateAnimationWorkbenchRoadmapQuery(event.target);
   }
 });
 
@@ -454,7 +426,7 @@ appRoot.addEventListener("input", (event) => {
       toggleProjectDashboardTocFromInput(event.target);
       return;
     case "filter-animation-workbench":
-      filterAnimationWorkbenchFromInput(event.target);
+      void filterAnimationWorkbenchFromInput(event.target);
       return;
   }
 });
@@ -529,66 +501,24 @@ function renderAnimationLibraryHostView(): void {
   }
 }
 
-function renderAnimationWorkbenchView(): void {
+async function renderAnimationWorkbenchView(): Promise<void> {
   activeView = "animation-workbench";
   const revision = ++viewRevision;
   disposeAnimationDevelopmentReviewCapture();
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
+  const client = await loadAnimationWorkbenchViewClient();
+  if (activeView !== "animation-workbench" || revision !== viewRevision) return;
   const route = readKpSemanticAnimationWorkbenchRoute(
     window.location.search
   );
-  const results = queryKpSemanticAnimationWorkbench(
-    animationWorkbenchIndex,
-    route.query
-  );
-  const selectedEntry =
-    animationWorkbenchIndex.entries.find(
-      ({ identity }) => identity.animationId === route.animationId
-    ) ?? results[0]?.entry;
-  const selectedAnimationId = selectedEntry?.identity.animationId;
-  const representationSelection =
-    selectedEntry === undefined
-      ? {}
-      : resolveKpAnimationWorkbenchRepresentation({
-          entry: selectedEntry,
-          ...(route.representationId === undefined
-            ? {}
-            : { requestedRepresentationId: route.representationId }),
-          descriptors: editorAnimationDescriptors
-        });
-  const roadmapQuery = animationWorkbenchRoadmapQuery(route.roadmap);
-  appRoot.innerHTML = renderKpSemanticAnimationWorkbenchShell({
-    query: route.query,
-    results,
-    ...(selectedAnimationId === undefined ? {} : { selectedAnimationId }),
-    ...(representationSelection.descriptor === undefined
-      ? {}
-      : { selectedDescriptor: representationSelection.descriptor }),
-    ...(representationSelection.relationship === undefined
-      ? {}
-      : {
-          selectedRepresentationId:
-            representationSelection.relationship.representationId
-        }),
-    ...(representationSelection.playbackRelationship === undefined
-      ? {}
-      : {
-          selectedPlaybackRepresentationId:
-            representationSelection.playbackRelationship.representationId
-        }),
-    roadmap: animationWorkbenchRoadmap,
-    roadmapRows: queryKpWorkbenchRoadmap(
-      animationWorkbenchRoadmap.rows,
-      roadmapQuery
-    ),
-    roadmapQuery,
-    roadmapTopics: listKpWorkbenchRoadmapTopics(
-      animationWorkbenchRoadmap.rows
-    ),
-    roadmapAnimationLinks: animationWorkbenchRoadmapAnimationLinks
+  const projection = client.renderKpSemanticAnimationWorkbenchView({
+    route,
+    descriptors: editorAnimationDescriptors
   });
+  const selectedEntry = projection.selectedEntry;
+  appRoot.innerHTML = projection.html;
   hydrateKpEditorAnimationSurfaces(appRoot);
   hydrateKpEditorAnimationLiveDiagnostics(appRoot);
   hydrateKpEditorAnimationPlayers(appRoot);
@@ -602,26 +532,15 @@ function renderAnimationWorkbenchView(): void {
     void hydrateAnimationWorkbenchReview(
       appRoot,
       selectedEntry,
+      client.kpSemanticAnimationWorkbenchIndex,
       revision
     );
   }
 }
 
-function animationWorkbenchRoadmapQuery(
-  route: KpSemanticAnimationWorkbenchRoadmapRouteState
-): KpWorkbenchRoadmapQuery {
-  return {
-    sortBy: route.sortBy,
-    direction: route.direction,
-    ...(route.topic === undefined ? {} : { topics: [route.topic] }),
-    ...(route.horizon === undefined ? {} : { horizons: [route.horizon] }),
-    ...(route.state === undefined ? {} : { states: [route.state] })
-  };
-}
-
-function updateAnimationWorkbenchRoadmapQuery(
+async function updateAnimationWorkbenchRoadmapQuery(
   select: HTMLSelectElement
-): void {
+): Promise<void> {
   const route = readKpSemanticAnimationWorkbenchRoute(
     window.location.search
   );
@@ -686,7 +605,7 @@ function updateAnimationWorkbenchRoadmapQuery(
     })
   );
   const action = select.dataset["action"];
-  renderAnimationWorkbenchView();
+  await renderAnimationWorkbenchView();
   if (action !== undefined) {
     appRoot
       .querySelector<HTMLSelectElement>(`select[data-action="${action}"]`)
@@ -764,6 +683,7 @@ async function hydrateAnimationWorkbenchAcceptance(
 async function hydrateAnimationWorkbenchReview(
   root: ParentNode,
   entry: KpSemanticAnimationWorkbenchIndexEntry,
+  index: KpSemanticAnimationWorkbenchIndex,
   revision: number
 ): Promise<void> {
   const reviewContainer = root.querySelector<HTMLElement>(
@@ -779,10 +699,10 @@ async function hydrateAnimationWorkbenchReview(
   }
   try {
     const result = await loadKpAnimationWorkbenchReviewEvidence({
-      identities: animationWorkbenchIndex.entries.map(
+      identities: index.entries.map(
         ({ identity }) => identity
       ),
-      relationships: animationWorkbenchIndex.entries.flatMap(
+      relationships: index.entries.flatMap(
         ({ representations }) => representations
       )
     });
@@ -867,7 +787,9 @@ async function refreshAnimationWorkbenchAcceptance(
   );
 }
 
-function filterAnimationWorkbenchFromInput(input: HTMLInputElement): void {
+async function filterAnimationWorkbenchFromInput(
+  input: HTMLInputElement
+): Promise<void> {
   const route = readKpSemanticAnimationWorkbenchRoute(
     window.location.search
   );
@@ -892,25 +814,25 @@ function filterAnimationWorkbenchFromInput(input: HTMLInputElement): void {
       roadmap: route.roadmap
     })
   );
-  const results = queryKpSemanticAnimationWorkbench(
-    animationWorkbenchIndex,
-    input.value
-  );
+  const client = await loadAnimationWorkbenchViewClient();
+  if (activeView !== "animation-workbench" || !input.isConnected) return;
   const resultsContainer = appRoot.querySelector<HTMLElement>(
     "[data-kp-animation-workbench-results]"
   );
   if (resultsContainer === null) {
-    renderAnimationWorkbenchView();
+    await renderAnimationWorkbenchView();
     return;
   }
   resultsContainer.outerHTML =
-    renderKpSemanticAnimationWorkbenchResults(
-      results,
+    client.renderKpSemanticAnimationWorkbenchQueryResults(
+      input.value,
       selectedAnimationId
     );
 }
 
-function selectAnimationWorkbenchResult(button: HTMLButtonElement): void {
+async function selectAnimationWorkbenchResult(
+  button: HTMLButtonElement
+): Promise<void> {
   const animationId = button.dataset["kpAnimationId"];
   if (animationId === undefined) return;
   const route = readKpSemanticAnimationWorkbenchRoute(
@@ -925,7 +847,7 @@ function selectAnimationWorkbenchResult(button: HTMLButtonElement): void {
       roadmap: route.roadmap
     })
   );
-  renderAnimationWorkbenchView();
+  await renderAnimationWorkbenchView();
   appRoot
     .querySelector<HTMLButtonElement>(
       `[data-action="select-animation-workbench-result"][data-kp-animation-id="${animationId}"]`
@@ -933,9 +855,9 @@ function selectAnimationWorkbenchResult(button: HTMLButtonElement): void {
     ?.focus();
 }
 
-function selectAnimationWorkbenchRepresentation(
+async function selectAnimationWorkbenchRepresentation(
   button: HTMLButtonElement
-): void {
+): Promise<void> {
   const representationId = button.dataset["kpRepresentationId"];
   if (representationId === undefined) return;
   const route = readKpSemanticAnimationWorkbenchRoute(
@@ -957,7 +879,7 @@ function selectAnimationWorkbenchRepresentation(
       roadmap: route.roadmap
     })
   );
-  renderAnimationWorkbenchView();
+  await renderAnimationWorkbenchView();
   appRoot
     .querySelector<HTMLButtonElement>(
       `[data-action="select-animation-workbench-representation"][data-kp-representation-id="${representationId}"]`
@@ -965,9 +887,9 @@ function selectAnimationWorkbenchRepresentation(
     ?.focus();
 }
 
-function selectAnimationWorkbenchRoadmapLink(
+async function selectAnimationWorkbenchRoadmapLink(
   button: HTMLButtonElement
-): void {
+): Promise<void> {
   const animationId = button.dataset["kpAnimationId"];
   const representationId = button.dataset["kpRepresentationId"];
   if (animationId === undefined || representationId === undefined) return;
@@ -984,7 +906,17 @@ function selectAnimationWorkbenchRoadmapLink(
       roadmap: route.roadmap
     })
   );
-  renderAnimationWorkbenchView();
+  await renderAnimationWorkbenchView();
+}
+
+function loadAnimationWorkbenchViewClient(): Promise<
+  AnimationWorkbenchViewClient
+> {
+  // Workbench search and roadmap projection belong to their optional route,
+  // not the shared editor and Animation Library host closure.
+  return animationWorkbenchViewClientPromise ??= import(
+    "./editor/semantic-animation-workbench-view.ts"
+  );
 }
 
 function handleAnimationWorkbenchKeydown(event: KeyboardEvent): boolean {

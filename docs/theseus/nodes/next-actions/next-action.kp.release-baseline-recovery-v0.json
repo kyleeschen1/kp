@@ -630,6 +630,69 @@
       "scope": "slice-s15",
       "checkedAt": "2026-07-31T23:39:12.092Z",
       "notes": "valid 847 nodes and 15245 events before slice close"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/check-animation-library-bundle-boundary.test.ts tests/semantic-animation-workbench-query.test.ts tests/semantic-animation-workbench-roadmap-query.test.ts tests/semantic-animation-workbench-route.test.ts tests/semantic-animation-workbench-shell.test.ts",
+      "status": "passed",
+      "scope": "slice-s16",
+      "checkedAt": "2026-07-31T23:57:19.828Z",
+      "notes": "bundle route law and workbench query/shell contracts: 16 passed"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-import-fitness.test.ts tests/semantic-animation-import-baseline.test.ts tests/semantic-animation-dependency-closeout.test.ts tests/legacy-exception-baseline.test.ts",
+      "status": "passed",
+      "scope": "slice-s16",
+      "checkedAt": "2026-07-31T23:57:20.837Z",
+      "notes": "static and dynamic import boundary laws: 11 passed"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-s16",
+      "checkedAt": "2026-07-31T23:57:21.723Z",
+      "notes": "typecheck, domain typecheck, and production build passed"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice-s16",
+      "checkedAt": "2026-07-31T23:57:22.599Z",
+      "notes": "main host 376886/490000, outer shell 9911/50000, place-value incremental 70039/75000"
+    },
+    {
+      "command": "npm run visual:animation-library-hosts",
+      "status": "passed",
+      "scope": "slice-s16",
+      "checkedAt": "2026-07-31T23:57:23.466Z",
+      "notes": "every playable identity, rapid selection/reload, and scratch-write isolation: 3 passed"
+    },
+    {
+      "command": "npm run test:browser:animation-workbench",
+      "status": "passed",
+      "scope": "slice-s16",
+      "checkedAt": "2026-07-31T23:57:24.379Z",
+      "notes": "clean-state workbench route, player, Review, query, keyboard, reload, and narrow layout: 14 passed"
+    },
+    {
+      "command": "npm run verify:impact -- --path src/main.ts --path src/editor/semantic-animation-workbench-view.ts --path scripts/check-animation-library-bundle-boundary.test.ts --path tests/semantic-animation-workbench.browser.spec.ts",
+      "status": "passed",
+      "scope": "slice-s16",
+      "checkedAt": "2026-07-31T23:57:25.265Z",
+      "notes": "impact selector classified the route-boundary change as high risk"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s16",
+      "checkedAt": "2026-07-31T23:57:26.159Z",
+      "notes": "no whitespace errors"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s16",
+      "checkedAt": "2026-07-31T23:57:27.006Z",
+      "notes": "valid 847 nodes and 15257 events before slice close"
     }
   ],
   "progress": {

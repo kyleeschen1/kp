@@ -286,7 +286,7 @@ test("Workbench renders and queries the authoritative roadmap table", async ({
     `/?view=animation-workbench&q=radical&workbenchAnimation=${radicalId}`
   );
   const roadmap = page.locator("[data-kp-animation-workbench-roadmap]");
-  await expect(roadmap).toContainText("Product roadmap · revision 13");
+  await expect(roadmap).toContainText("Product roadmap · revision 19");
   await expect(
     roadmap.locator("[data-kp-animation-workbench-roadmap-row]")
   ).toHaveCount(49);
@@ -314,7 +314,7 @@ test("Workbench renders and queries the authoritative roadmap table", async ({
   const rows = page.locator("[data-kp-animation-workbench-roadmap-row]");
   await expect(rows).toHaveCount(1);
   await expect(rows.first()).toContainText("Multi-digit addition");
-  await expect(rows.first()).toContainText("planned");
+  await expect(rows.first()).toContainText("complete");
   await page.reload();
   await expect(
     page.locator("[data-kp-animation-workbench-roadmap-row]")

@@ -151,7 +151,8 @@
     {
       "id": "s16",
       "title": "repair-main-host-payload",
-      "status": "planned"
+      "summary": "Moved the semantic Animation Workbench projection, search, and roadmap behind its existing optional route boundary while preserving the main editor and Animation Library routes. The main host fell from 495702 to 376886 gzip bytes without changing the 490000 ceiling; outer shell remains 9911 and place-value incremental closure 70039. Source/import laws, build, all-host liveness, and the clean-state 14-test workbench browser suite pass.",
+      "status": "complete"
     },
     {
       "id": "s17",
