@@ -133,7 +133,8 @@
     {
       "id": "s13",
       "title": "reduce-compositor-responsibility-one",
-      "status": "planned"
+      "summary": "Removed the unexecuted dual-endpoint typography candidate and comparison diagnostics, retained the exact runtime binary selection and all handoff laws, and reduced governed core from 141543 to 138275 bytes. Seventy-three compositor tests, typecheck, and build pass. The unchanged 136000 ceiling and the existing glyph-page hydration failure remain explicit for subsequent slices.",
+      "status": "complete"
     },
     {
       "id": "s14",

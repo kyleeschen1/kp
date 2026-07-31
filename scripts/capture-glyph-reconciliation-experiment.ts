@@ -7,7 +7,7 @@ import {
   kpFractionEndpointCheckpoints
 } from "./glyph-reconciliation-endpoint-checkpoints.ts";
 import {
-  compareKpNativeKatexTypographyHandoffModels
+  selectKpNativeKatexTypographyHandoffModel
 } from "../src/rendering/native-katex-scene-compositor.ts";
 import type {
   KpNativeKatexHandoffTelemetry
@@ -315,7 +315,7 @@ try {
           `Incomplete correlated endpoint telemetry at ${checkpoint.id}.`
         );
       }
-      const handoffComparison = compareKpNativeKatexTypographyHandoffModels({
+      const handoffSelection = selectKpNativeKatexTypographyHandoffModel({
         telemetry: {
           kind: "native-katex-handoff-telemetry",
           lifecycle: "renderer-session",
@@ -330,11 +330,11 @@ try {
         maximumTranslationPx: 2,
         maximumScaleRatio: 1.1
       });
-      if (handoffComparison.selectedModel !== "target-style-reverse-flip") {
+      if (handoffSelection.selectedModel !== "target-style-reverse-flip") {
         throw new Error(
           `Dense endpoint ${checkpoint.id} requires ${
-            handoffComparison.selectedModel
-          }: ${JSON.stringify(handoffComparison.law.unsupportedIds)}.`
+            handoffSelection.selectedModel
+          }: ${JSON.stringify(handoffSelection.law.unsupportedIds)}.`
         );
       }
       const visualOwner = await review.getAttribute(

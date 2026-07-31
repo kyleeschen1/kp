@@ -462,11 +462,60 @@
       "scope": "impact-selection",
       "checkedAt": "2026-07-31T22:30:13.504Z",
       "notes": "The conservative selector requests full visual/test/build gates for rendering-named architecture paths; no runtime source changed, focused source laws and typecheck ran now, and broad behavior checks remain assigned to reduction and closeout slices."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/native-katex-rendered-scene.test.ts tests/canonical-equation-renderer-convergence.test.ts",
+      "status": "failed",
+      "scope": "expected-baseline",
+      "checkedAt": "2026-07-31T22:49:39.596Z",
+      "notes": "Sixty-one of sixty-two tests pass; all renderer, seek, rewind, and typography-selection laws are green. The sole planned failure is the reduced canonical core at 138275 versus the unchanged 136000 ceiling."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T22:49:40.628Z",
+      "notes": "All 73 native KaTeX compositor unit tests pass after replacing the unused three-candidate diagnostic comparison with the runtime's actual binary model selector."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-31T22:49:41.548Z",
+      "notes": "Application, node, test, and domain TypeScript projects compile with the narrower typography selection API."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production-build",
+      "checkedAt": "2026-07-31T22:49:42.478Z",
+      "notes": "The production application builds after the responsibility reduction."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor",
+      "status": "failed",
+      "scope": "existing-browser-baseline",
+      "checkedAt": "2026-07-31T22:49:43.393Z",
+      "notes": "The shared glyph page fails its pre-existing cloned-paint-size invariant while hydrating the default fraction scene, so the scoped fixture cannot become ready. This failure is not introduced by the selector change and is recorded without a false pass."
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path src/rendering/native-katex-scene-compositor.ts --path scripts/capture-glyph-reconciliation-experiment.ts --path tests/native-katex-rendered-scene.test.ts --path tests/canonical-equation-renderer-convergence.test.ts",
+      "status": "passed",
+      "scope": "impact-selection",
+      "checkedAt": "2026-07-31T22:49:44.287Z",
+      "notes": "The conservative selector classifies this rendering change as high risk and requests broad visual, test, typecheck, and build gates; focused behavior, typecheck, and build ran, while the browser baseline failure remains explicit."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s13-control-integrity",
+      "checkedAt": "2026-07-31T22:50:01.398Z",
+      "notes": "Validated 847 nodes and 15223 events before closing the first compositor reduction."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Compositor audit now seals its source-derived direct dependency closure; four owners remain 5543 bytes over the unchanged core ceiling for slices 13-14."
+    "summary": "First compositor reduction removed 3268 measured core bytes by deleting a diagnostic-only three-candidate typography fork; the actual binary runtime choice and every endpoint law remain. Core is 138275, leaving 2275 bytes for slice 14. The user confirmed the repaired Animation Host is visible; the existing glyph-page paint-size hydration failure remains explicit."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."

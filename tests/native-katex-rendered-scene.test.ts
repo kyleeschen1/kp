@@ -9,7 +9,6 @@ import {
 } from "../src/rendering/native-katex-rendered-scene.ts";
 import {
   assessKpNativeKatexTypographyHandoff,
-  compareKpNativeKatexTypographyHandoffModels,
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexSceneTracks,
   compileKpNativeKatexTypographyStylePlan,
@@ -25,6 +24,7 @@ import {
   sampleKpNativeKatexEndpointDwellProgress,
   sampleKpNativeKatexSceneTracks,
   sampleKpNativeKatexTypographyStylePlan,
+  selectKpNativeKatexTypographyHandoffModel,
   type KpNativeKatexSceneTrack
 } from "../src/rendering/native-katex-scene-compositor.ts";
 import {
@@ -372,7 +372,7 @@ test("typography handoff law rejects invalid generic bounds", () => {
   );
 });
 
-test("model comparison selects exact target paint over live style interpolation", () => {
+test("typography handoff selects exact target paint", () => {
   const telemetry = alignmentTelemetry({
     pairs: [{
       id: "pair.transform",
@@ -386,54 +386,20 @@ test("model comparison selects exact target paint over live style interpolation"
         "font-family:KaTeX_Main|font-size:46.0768px|line-height:55.2922px|color:black"
     }]
   });
-  const comparison = compareKpNativeKatexTypographyHandoffModels({
+  const selection = selectKpNativeKatexTypographyHandoffModel({
     telemetry,
     tolerancePx: 0.1,
     maximumTranslationPx: 2,
     maximumScaleRatio: 1.1
   });
 
-  assert.equal(comparison.selectedModel, "target-style-reverse-flip");
-  assert.deepEqual(comparison.candidates.map((candidate) => ({
-    id: candidate.id,
-    status: candidate.status,
-    endpointGuarantee: candidate.endpointGuarantee,
-    maximumEndpointResidualPx: candidate.maximumEndpointResidualPx,
-    requiresLiveStyleInterpolation:
-      candidate.requiresLiveStyleInterpolation,
-    nativeMutationCount: candidate.nativeMutationCount
-  })), [{
-    id: "target-style-reverse-flip",
-    status: "eligible",
-    endpointGuarantee: "exact",
-    maximumEndpointResidualPx: 0,
-    requiresLiveStyleInterpolation: false,
-    nativeMutationCount: 0
-  }, {
-    id: "dual-endpoint-interpolation",
-    status: "eligible",
-    endpointGuarantee: "bounded",
-    maximumEndpointResidualPx: 0.1,
-    requiresLiveStyleInterpolation: true,
-    nativeMutationCount: 0
-  }, {
-    id: "native-checkpoint-settlement",
-    status: "eligible",
-    endpointGuarantee: "exact",
-    maximumEndpointResidualPx: 0,
-    requiresLiveStyleInterpolation: false,
-    nativeMutationCount: 0
-  }]);
-  assert.ok(
-    Math.abs(
-      comparison.candidates[0]!.maximumPreSettlementResidualPx - 1.47
-    ) < 1e-12
-  );
-  assert.equal(Object.isFrozen(comparison.candidates), true);
+  assert.equal(selection.selectedModel, "target-style-reverse-flip");
+  assert.equal(selection.law.status, "continuous");
+  assert.equal(Object.isFrozen(selection), true);
 });
 
-test("model comparison selects checkpoint settlement for unsupported paint", () => {
-  const comparison = compareKpNativeKatexTypographyHandoffModels({
+test("typography handoff selects checkpoint settlement for unsupported paint", () => {
+  const selection = selectKpNativeKatexTypographyHandoffModel({
     telemetry: alignmentTelemetry({
       pairs: [{
         id: "pair.incompatible",
@@ -448,23 +414,11 @@ test("model comparison selects checkpoint settlement for unsupported paint", () 
     maximumScaleRatio: 1.1
   });
 
-  assert.equal(comparison.selectedModel, "native-checkpoint-settlement");
-  assert.deepEqual(
-    comparison.candidates.map(({ id, status }) => ({ id, status })),
-    [{
-      id: "target-style-reverse-flip",
-      status: "ineligible"
-    }, {
-      id: "dual-endpoint-interpolation",
-      status: "ineligible"
-    }, {
-      id: "native-checkpoint-settlement",
-      status: "eligible"
-    }]
-  );
+  assert.equal(selection.selectedModel, "native-checkpoint-settlement");
+  assert.deepEqual(selection.law.unsupportedIds, ["pair.incompatible"]);
 });
 
-test("model comparison is permutation deterministic and bounded", () => {
+test("typography handoff selection is permutation deterministic and bounded", () => {
   const pairs = [{
     id: "pair.b",
     materialRect: { left: 20, top: 20, width: 12, height: 24 },
@@ -474,23 +428,23 @@ test("model comparison is permutation deterministic and bounded", () => {
     materialRect: { left: 10, top: 20, width: 12, height: 24 },
     nativeRect: { left: 10.25, top: 19.75, width: 12, height: 24 }
   }] as const;
-  const compare = (
+  const select = (
     orderedPairs: Parameters<typeof alignmentTelemetry>[0]["pairs"]
-  ) => compareKpNativeKatexTypographyHandoffModels({
+  ) => selectKpNativeKatexTypographyHandoffModel({
     telemetry: alignmentTelemetry({ pairs: orderedPairs }),
     tolerancePx: 0.1,
     maximumTranslationPx: 2,
     maximumScaleRatio: 1.1
   });
-  const forward = compare(pairs);
-  const permuted = compare([...pairs].reverse());
+  const forward = select(pairs);
+  const permuted = select([...pairs].reverse());
   assert.deepEqual(permuted, forward);
 
   const startedAt = performance.now();
-  for (let index = 0; index < 5_000; index += 1) compare(pairs);
+  for (let index = 0; index < 5_000; index += 1) select(pairs);
   assert.ok(
     performance.now() - startedAt < 2_000,
-    "5,000 pure model comparisons should remain a bounded microcheck"
+    "5,000 pure model selections should remain a bounded microcheck"
   );
 });
 

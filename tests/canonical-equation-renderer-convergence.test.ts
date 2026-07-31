@@ -180,6 +180,8 @@ test("canonical scene core exposes one ephemeral renderer session contract", asy
     exactSurface,
     /previous\.targetRoot !== next\.sourceRoot/
   );
+  assert.doesNotMatch(source, /dual-endpoint-interpolation/);
+  assert.doesNotMatch(source, /compareKpNativeKatexTypographyHandoffModels/);
 });
 
 test("reader keeps no compositor query switch and one adapter loader", async () => {

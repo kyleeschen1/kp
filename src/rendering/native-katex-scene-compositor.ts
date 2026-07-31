@@ -273,28 +273,13 @@ export interface KpNativeKatexTypographyHandoffLaw {
   readonly unsupportedIds: readonly string[];
 }
 
-export type KpNativeKatexTypographyHandoffModelId =
-  | "target-style-reverse-flip"
-  | "dual-endpoint-interpolation"
-  | "native-checkpoint-settlement";
-
-export interface KpNativeKatexTypographyHandoffCandidate {
-  readonly id: KpNativeKatexTypographyHandoffModelId;
-  readonly status: "eligible" | "ineligible";
-  readonly endpointGuarantee: "exact" | "bounded";
-  readonly maximumEndpointResidualPx: number;
-  readonly maximumPreSettlementResidualPx: number;
-  readonly requiresLiveStyleInterpolation: boolean;
-  readonly nativeMutationCount: 0;
-  readonly reasons: readonly string[];
-}
-
-export interface KpNativeKatexTypographyHandoffComparison {
-  readonly kind: "native-katex-typography-handoff-comparison";
+export interface KpNativeKatexTypographyHandoffSelection {
+  readonly kind: "native-katex-typography-handoff-selection";
   readonly lifecycle: "renderer-session";
-  readonly selectedModel: KpNativeKatexTypographyHandoffModelId;
+  readonly selectedModel:
+    | "target-style-reverse-flip"
+    | "native-checkpoint-settlement";
   readonly law: KpNativeKatexTypographyHandoffLaw;
-  readonly candidates: readonly KpNativeKatexTypographyHandoffCandidate[];
 }
 
 export interface KpNativeKatexTypographyStylePlanEntry {
@@ -1155,24 +1140,14 @@ export function evaluateKpNativeKatexTypographyHandoffLaw(input: {
   });
 }
 
-export function compareKpNativeKatexTypographyHandoffModels(input: {
+export function selectKpNativeKatexTypographyHandoffModel(input: {
   readonly telemetry: KpNativeKatexHandoffTelemetry;
   readonly tolerancePx: number;
   readonly maximumTranslationPx: number;
   readonly maximumScaleRatio: number;
-}): KpNativeKatexTypographyHandoffComparison {
+}): KpNativeKatexTypographyHandoffSelection {
   const law = evaluateKpNativeKatexTypographyHandoffLaw(input);
   const groups = handoffTelemetryGroups(input.telemetry);
-  const observedResidual = maximum(groups
-    .flatMap(({ material, native }) => [
-      Math.abs(native.rect.left - material.rect.left),
-      Math.abs(native.rect.top - material.rect.top),
-      Math.abs(native.rect.width - material.rect.width),
-      Math.abs(native.rect.height - material.rect.height),
-      material.baselineY === null || native.baselineY === null
-        ? 0
-        : Math.abs(native.baselineY - material.baselineY)
-    ]));
   const hasExactLineagePaintFrames = groups.every(
     ({ source, material, native }) =>
       source !== undefined &&
@@ -1183,53 +1158,13 @@ export function compareKpNativeKatexTypographyHandoffModels(input: {
       source.fontRevision === native.fontRevision &&
       source.clipPath === native.clipPath
   );
-  const continuous =
-    law.status === "continuous" || hasExactLineagePaintFrames;
-  const candidates: readonly KpNativeKatexTypographyHandoffCandidate[] = [
-    handoffCandidate({
-      id: "target-style-reverse-flip",
-      status: continuous ? "eligible" : "ineligible",
-      endpointGuarantee: "exact",
-      maximumEndpointResidualPx: continuous ? 0 : observedResidual,
-      maximumPreSettlementResidualPx: observedResidual,
-      requiresLiveStyleInterpolation: false,
-      reasons: continuous
-        ? hasExactLineagePaintFrames && law.status !== "continuous"
-          ? ["lineage-paint-frame-normalization"]
-          : []
-        : law.unsupportedIds.map((id) => `${id}:unsupported`)
-    }),
-    handoffCandidate({
-      id: "dual-endpoint-interpolation",
-      status: continuous ? "eligible" : "ineligible",
-      endpointGuarantee: "bounded",
-      maximumEndpointResidualPx: continuous
-        ? input.tolerancePx
-        : observedResidual,
-      maximumPreSettlementResidualPx: observedResidual,
-      requiresLiveStyleInterpolation: true,
-      reasons: continuous
-        ? ["live-style-interpolation-cannot-certify-native-paint"]
-        : law.unsupportedIds.map((id) => `${id}:unsupported`)
-    }),
-    handoffCandidate({
-      id: "native-checkpoint-settlement",
-      status: "eligible",
-      endpointGuarantee: "exact",
-      maximumEndpointResidualPx: 0,
-      maximumPreSettlementResidualPx: observedResidual,
-      requiresLiveStyleInterpolation: false,
-      reasons: continuous ? ["visible-pre-checkpoint-residual"] : []
-    })
-  ];
   return Object.freeze({
-    kind: "native-katex-typography-handoff-comparison",
+    kind: "native-katex-typography-handoff-selection",
     lifecycle: "renderer-session",
-    selectedModel: continuous
+    selectedModel: law.status === "continuous" || hasExactLineagePaintFrames
       ? "target-style-reverse-flip"
       : "native-checkpoint-settlement",
-    law,
-    candidates: Object.freeze(candidates)
+    law
   });
 }
 
@@ -1240,9 +1175,9 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
   readonly maximumTranslationPx: number;
   readonly maximumScaleRatio: number;
 }): KpNativeKatexTypographyStylePlan {
-  const comparison = compareKpNativeKatexTypographyHandoffModels(input);
-  const model = comparison.selectedModel === "target-style-reverse-flip"
-    ? comparison.selectedModel
+  const selection = selectKpNativeKatexTypographyHandoffModel(input);
+  const model = selection.selectedModel === "target-style-reverse-flip"
+    ? selection.selectedModel
     : "native-checkpoint-settlement";
   const targetBound = input.correlations.filter(
     ({ disposition }) => disposition === "target-bound"
@@ -2742,23 +2677,6 @@ function safeScale(to: number, from: number): number {
 
 function symmetricScaleRatio(scale: number): number {
   return scale <= 0 ? Number.POSITIVE_INFINITY : Math.max(scale, 1 / scale);
-}
-
-function handoffCandidate(input: {
-  readonly id: KpNativeKatexTypographyHandoffModelId;
-  readonly status: KpNativeKatexTypographyHandoffCandidate["status"];
-  readonly endpointGuarantee:
-    KpNativeKatexTypographyHandoffCandidate["endpointGuarantee"];
-  readonly maximumEndpointResidualPx: number;
-  readonly maximumPreSettlementResidualPx: number;
-  readonly requiresLiveStyleInterpolation: boolean;
-  readonly reasons: readonly string[];
-}): KpNativeKatexTypographyHandoffCandidate {
-  return Object.freeze({
-    ...input,
-    nativeMutationCount: 0,
-    reasons: Object.freeze([...input.reasons])
-  });
 }
 
 function freezeTypographyStylePlanEntry(
