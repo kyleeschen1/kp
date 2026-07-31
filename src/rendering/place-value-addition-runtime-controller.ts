@@ -67,6 +67,8 @@ export interface KpPlaceValueAdditionRuntimeControllerState {
   readonly hiddenRequestCount: number;
   readonly nativeScenePreparationCount: number;
   readonly nativeScenePreparationDurationMs: number;
+  readonly nativeScenesReady: boolean;
+  readonly preparationBufferedRequestCount: number;
   readonly maximumPlanDurationMs: number;
   readonly maximumApplyDurationMs: number;
   readonly rendererSessionActiveCount: 0 | 1;
@@ -81,6 +83,7 @@ export interface KpPlaceValueAdditionRuntimeController {
   readonly root: HTMLElement | undefined;
   readonly surface: KpPlaceValueAdditionResponsiveSurface | undefined;
   mount(host: HTMLElement): KpPlaceValueAdditionResponsiveSurface;
+  whenReady(): Promise<void>;
   requestProgress(input: {
     readonly progress: number;
     readonly source: KpReaderClockSource;
@@ -136,6 +139,11 @@ export function createKpPlaceValueAdditionRuntimeController(input: {
   let hiddenRequestCount = 0;
   let nativeScenePreparationCount = 0;
   let nativeScenePreparationDurationMs = 0;
+  let nativeScenesReady = false;
+  let preparationBufferedRequestCount = 0;
+  let preparationBufferedImmediatePlan:
+    KpPlaceValueAdditionPlannedFrame | undefined;
+  let readiness: Promise<void> | undefined;
   let maximumPlanDurationMs = 0;
   let maximumApplyDurationMs = 0;
   let rendererSessionActiveCount: 0 | 1 = 0;
@@ -168,14 +176,30 @@ export function createKpPlaceValueAdditionRuntimeController(input: {
     immediate: boolean
   ): void => {
     const mounted = requireMounted();
-    const schedulerState = mounted.scheduler.inspect();
     requestCount += 1;
+    desired = freezeRequest(next);
+    if (!nativeScenesReady) {
+      // The card remains on its stable initial frame while fonts and native
+      // geometry settle. Retaining only the latest request prevents a cold
+      // compositor build from being smuggled into a scroll callback.
+      preparationBufferedRequestCount += 1;
+      if (immediate) {
+        const planned = sampleRequest(desired);
+        sampleCount += planned.sampleDelta;
+        if (planned.reused) repeatedFrameReuseCount += 1;
+        preparationBufferedImmediatePlan = planned;
+      } else {
+        preparationBufferedImmediatePlan = undefined;
+      }
+      syncTelemetry();
+      return;
+    }
+    const schedulerState = mounted.scheduler.inspect();
     if (schedulerState.suspended) {
       hiddenRequestCount += 1;
     } else if (schedulerState.pending) {
       coalescedRequestCount += 1;
     }
-    desired = freezeRequest(next);
     if (immediate) mounted.scheduler.renderNow(desired);
     else mounted.scheduler.render(desired);
     syncTelemetry();
@@ -241,6 +265,10 @@ export function createKpPlaceValueAdditionRuntimeController(input: {
       String(nativeScenePreparationCount);
     root.dataset["kpPlaceValueNativeScenePreparationDurationMs"] =
       String(nativeScenePreparationDurationMs);
+    root.dataset["kpPlaceValueNativeScenesReady"] =
+      String(nativeScenesReady);
+    root.dataset["kpPlaceValuePreparationBufferedRequestCount"] =
+      String(preparationBufferedRequestCount);
     root.dataset["kpPlaceValueMaximumPlanDurationMs"] =
       String(maximumPlanDurationMs);
     root.dataset["kpPlaceValueMaximumApplyDurationMs"] =
@@ -289,8 +317,6 @@ export function createKpPlaceValueAdditionRuntimeController(input: {
       const preparationStartedAt = now();
       surface.shared.prepareNativeScenes();
       nativeScenePreparationCount += 1;
-      nativeScenePreparationDurationMs =
-        now() - preparationStartedAt;
       lastAppliedRequest = desired;
       mountCount += 1;
       sampleCount += 1;
@@ -331,8 +357,38 @@ export function createKpPlaceValueAdditionRuntimeController(input: {
           syncTelemetry();
         }
       });
+      const mountedSurface = surface;
+      const mountedScheduler = scheduler;
+      readiness = mountedSurface.shared.prepareNativeScenesWhenReady().then(
+        () => {
+          if (status === "disposed" || surface !== mountedSurface) return;
+          nativeScenesReady = true;
+          nativeScenePreparationDurationMs = now() - preparationStartedAt;
+          const preparedPlan = preparationBufferedImmediatePlan;
+          preparationBufferedImmediatePlan = undefined;
+          if (
+            preparedPlan !== undefined &&
+            sameVisualRequest(desired, preparedPlan.request) &&
+            !preparedPlan.reused
+          ) {
+            mountedSurface.apply(preparedPlan.frame);
+            applyCount += 1;
+            lastAppliedRequest = preparedPlan.request;
+          } else if (!sameVisualRequest(desired, lastAppliedRequest)) {
+            mountedScheduler.render(desired);
+          }
+          syncTelemetry();
+        }
+      );
       syncTelemetry();
       return surface;
+    },
+    whenReady() {
+      requireMounted();
+      if (readiness === undefined) {
+        throw new Error("Place-value runtime readiness was not initialized.");
+      }
+      return readiness;
     },
     requestProgress(request) {
       queue({
@@ -409,6 +465,8 @@ export function createKpPlaceValueAdditionRuntimeController(input: {
         hiddenRequestCount,
         nativeScenePreparationCount,
         nativeScenePreparationDurationMs,
+        nativeScenesReady,
+        preparationBufferedRequestCount,
         maximumPlanDurationMs,
         maximumApplyDurationMs,
         rendererSessionActiveCount,

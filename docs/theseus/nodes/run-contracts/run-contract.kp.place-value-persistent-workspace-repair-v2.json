@@ -401,6 +401,125 @@
       "scope": "s18 cross-browser product regression",
       "checkedAt": "2026-07-31T16:26:09.341Z",
       "notes": "48 of 48 pass across Chromium Firefox WebKit: canonical Animation Library lazy mount, phone Review capture, Review note save path, catalog disposal, navigation and direct seek, wide and phone responsive geometry, DPR invariance, accessibility metadata, scheduler coalescing and suspension, resource disposal, and persistent documentary scaffold."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "failed",
+      "scope": "s19 first full browser pass",
+      "checkedAt": "2026-07-31T16:41:36.156Z",
+      "notes": "106 of 108 passed. Firefox-wide runtime performance produced one 91 ms frame against the 80 ms gate despite the same case passing in s18; Firefox-phone base-ten SVG reuse timed out after the dev Review query proxy emitted EPIPE, while the same test passed in Chromium WebKit and previously focused coverage. Classified provisionally as load-sensitive timing and test-server transport instability; rerunning isolated before repair."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition -- isolated Firefox reruns",
+      "status": "passed",
+      "scope": "s19 failure classification",
+      "checkedAt": "2026-07-31T16:43:42.251Z",
+      "notes": "Both first-pass failures passed unchanged in isolation: the phone SVG reuse case completed in 5.3 seconds, and the wide controller completed inside the original 80 ms frame/apply gates. This confirms the Review proxy EPIPE timeout and transient frame stall were run-environment failures rather than deterministic product regressions; thresholds and product code remain unchanged."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s19 final unit matrix",
+      "checkedAt": "2026-07-31T17:14:18.405Z",
+      "notes": "116 of 116 pass after the readiness repair, including generic ordered-radix source guards, generated unequal-width overflow, accessibility, export, ownership, and lifecycle laws."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "passed",
+      "scope": "s19 final cross-browser matrix",
+      "checkedAt": "2026-07-31T17:14:19.614Z",
+      "notes": "108 of 108 pass across Chromium Firefox WebKit after moving cold native-scene preparation outside interaction frames. The previously repeatable Firefox-wide frame stall now passes in its original full-suite order without relaxing the 80 ms gate."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition:runtime",
+      "status": "passed",
+      "scope": "s19 readiness and resource matrix",
+      "checkedAt": "2026-07-31T17:14:20.609Z",
+      "notes": "12 of 12 pass across Chromium Firefox WebKit, including early progress buffering, latest-frame application, immediate-seek direction preservation, scheduler coalescing, suspension, disposal, zero WebGL leases, and the unchanged 80 ms interaction-frame ceiling."
+    },
+    {
+      "command": "npm run visual:place-value-addition",
+      "status": "passed",
+      "scope": "s19 scoped visual matrix",
+      "checkedAt": "2026-07-31T17:14:21.687Z",
+      "notes": "33 of 33 pass across Chromium Firefox WebKit for canonical host integration, Review capture, responsive wide phone and DPR geometry, readiness buffering, direct-seek determinism, performance, and resource release."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19 final static boundary",
+      "checkedAt": "2026-07-31T17:14:22.701Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass with the explicit runtime readiness method and typed readiness telemetry."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s19 final architecture boundary",
+      "checkedAt": "2026-07-31T17:14:23.837Z",
+      "notes": "All four architecture gates pass: no new semantic-animation exceptions or parallel renderer category was introduced."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s19 final inference budget",
+      "checkedAt": "2026-07-31T17:14:24.910Z",
+      "notes": "Inference remains bounded at 49279 types, 61770 instantiations, and 2.77 seconds."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s19 stable roadmap memory",
+      "checkedAt": "2026-07-31T17:14:26.201Z",
+      "notes": "Rank 2 place-value addition and active contract v2 remain aligned."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s19 production build",
+      "checkedAt": "2026-07-31T17:14:27.602Z",
+      "notes": "Production build passes. Place-value stays lazy at 95.93 kB raw and 25.45 kB gzip; existing repository main and graph chunk warnings remain visible and unchanged in kind."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s19 control-plane validation",
+      "checkedAt": "2026-07-31T17:14:28.745Z",
+      "notes": "Theseus validates 841 nodes and 14995 events before slice closure."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "failed",
+      "scope": "s19 current 111-case combined rerun",
+      "checkedAt": "2026-07-31T17:26:01.415Z",
+      "notes": "110 of 111 passed under a heavily loaded 7.8-minute run. The sole failure was an existing WebKit Animation Library phone surface locator exceeding its 5-second assertion window; animation, readiness, geometry, performance, resources, and all other WebKit cases passed. The same host case then passed unchanged in isolation and in the full WebKit project."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition -- --project=webkit",
+      "status": "passed",
+      "scope": "s19 current WebKit partition",
+      "checkedAt": "2026-07-31T17:26:03.393Z",
+      "notes": "37 of 37 current WebKit cases pass, including the previously timed-out Animation Library phone Review case, new readiness buffer guard, responsive geometry, persistent ownership, generated unequal-width overflow, performance, navigation, and disposal."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition",
+      "status": "passed",
+      "scope": "s19 final current full browser matrix",
+      "checkedAt": "2026-07-31T17:30:12.930Z",
+      "notes": "111 of 111 current cases pass in one uninterrupted Chromium Firefox WebKit run. This includes the new pre-readiness progress buffer guard and the original full-suite Firefox-wide 80 ms frame budget in the exact load order that previously produced 91 to 133 ms cold compositor frames."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s19 final patch hygiene",
+      "checkedAt": "2026-07-31T17:30:34.226Z",
+      "notes": "Release repair and control-plane changes contain no whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s19 final control-plane validation",
+      "checkedAt": "2026-07-31T17:30:35.341Z",
+      "notes": "Theseus validates 841 nodes and 15008 events after all release evidence was appended."
     }
   ],
   "allowedWork": [
@@ -535,7 +654,8 @@
     {
       "id": "s19",
       "title": "run-release-matrix",
-      "status": "planned"
+      "summary": "Release matrix complete. The full current browser suite passes 111 of 111 in one Chromium Firefox WebKit run; scoped visual coverage passes 33 of 33; units pass 116 of 116; type, architecture, inference, promotion-memory, production-build, patch-hygiene, and Theseus gates pass. The matrix exposed a real cold-direct-seek weakness: first position compositor construction could consume 91 to 133 ms inside a Firefox scroll frame after cumulative browser load. Native scenes now prepare only after fonts and two connected layout frames, early progress coalesces behind typed readiness, immediate seek history retains direction, and the unchanged 80 ms interaction gate passes in the former failure order. This preserves slice-16 paint-coordinate correctness and adds no named decimal-place branch; reusable code remains ordered-radix and scale-adjacency based. Existing main and graph build chunk warnings remain outside this repair; place-value stays lazy at 95.93 kB raw and 25.45 kB gzip.",
+      "status": "complete"
     },
     {
       "id": "s20",

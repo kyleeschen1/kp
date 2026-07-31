@@ -46,7 +46,7 @@ for (const viewport of [
       host.style.inlineSize = `${width}px`;
       document.body.append(host);
       const surface = controller.mount(host);
-      await document.fonts.ready;
+      await controller.whenReady();
       const afterMount = controller.inspect();
 
       const burstStartedAt = performance.now();
@@ -151,6 +151,8 @@ for (const viewport of [
     expect(evidence.afterMount.nativeScenePreparationCount).toBe(1);
     expect(evidence.afterMount.nativeScenePreparationDurationMs)
       .toBeLessThan(1_000);
+    expect(evidence.afterMount.nativeScenesReady).toBe(true);
+    expect(evidence.afterMount.preparationBufferedRequestCount).toBe(0);
 
     expect(evidence.afterBurst.lastAppliedProgress).toBe(0.73125);
     expect(evidence.afterBurst.sampleCount).toBe(2);
@@ -201,6 +203,49 @@ for (const viewport of [
   });
 }
 
+test("preparation buffers the latest progress without a cold interaction frame", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1180, height: 800 });
+  await page.goto("/");
+  const evidence = await page.evaluate(async () => {
+    const controllerUrl =
+      "/src/rendering/place-value-addition-runtime-controller.ts";
+    const controllerModule = await import(/* @vite-ignore */ controllerUrl);
+    const app = document.querySelector<HTMLElement>("#app");
+    if (app !== null) app.style.display = "none";
+    const host = document.createElement("main");
+    document.body.append(host);
+    const controller =
+      controllerModule.createKpPlaceValueAdditionRuntimeController({
+        document,
+        viewportWidth: 1180
+      });
+    controller.mount(host);
+    controller.requestProgress({ progress: 0.2, source: "scroll" });
+    controller.requestProgress({ progress: 0.78, source: "scroll" });
+    controller.requestProgress({ progress: 0.54125, source: "scroll" });
+    const preparing = controller.inspect();
+    await controller.whenReady();
+    await new Promise<void>((resolve) => requestAnimationFrame(() =>
+      requestAnimationFrame(() => resolve())
+    ));
+    const ready = controller.inspect();
+    controller.dispose();
+    return { preparing, ready };
+  });
+
+  expect(evidence.preparing.nativeScenesReady).toBe(false);
+  expect(evidence.preparing.preparationBufferedRequestCount).toBe(3);
+  expect(evidence.preparing.sampleCount).toBe(1);
+  expect(evidence.preparing.applyCount).toBe(1);
+  expect(evidence.ready.nativeScenesReady).toBe(true);
+  expect(evidence.ready.lastAppliedProgress).toBe(0.54125);
+  expect(evidence.ready.sampleCount).toBe(2);
+  expect(evidence.ready.applyCount).toBe(2);
+  expect(evidence.ready.maximumApplyDurationMs).toBeLessThan(80);
+});
+
 test("rapid seeking and direct seeking produce the same visible frame", async ({
   page
 }) => {
@@ -233,6 +278,7 @@ test("rapid seeking and direct seeking produce the same visible frame", async ({
     indirect.renderProgressNow({ progress: 0.78, source: "controls" });
     indirect.renderProgressNow({ progress: 0.54125, source: "controls" });
     direct.renderProgressNow({ progress: 0.54125, source: "controls" });
+    await Promise.all([indirect.whenReady(), direct.whenReady()]);
 
     const fingerprint = (root: HTMLElement) =>
       [...root.querySelectorAll<HTMLElement | SVGElement>("*")]

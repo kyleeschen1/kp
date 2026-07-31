@@ -42,6 +42,7 @@ export interface KpPlaceValueAdditionSharedDom {
   readonly writtenRoot: HTMLElement;
   readonly baseTenRoot: SVGSVGElement;
   readonly prepareNativeScenes: () => void;
+  readonly prepareNativeScenesWhenReady: () => Promise<void>;
   readonly apply: (frame: KpPlaceValueAdditionRuntimeFrame) => void;
   readonly dispose: () => void;
 }
@@ -132,11 +133,12 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     ] as const
   ));
   let disposed = false;
-  let nativeScenesPrepared = false;
+  let nativeSceneLayoutsWarmed = false;
+  let nativeScenePreparation: Promise<void> | undefined;
 
   const prepareNativeScenes = (): void => {
     if (disposed) throw new Error("Shared place-value DOM is disposed.");
-    if (nativeScenesPrepared) return;
+    if (nativeSceneLayoutsWarmed) return;
     if (!root.isConnected) {
       throw new Error(
         "Shared place-value native scenes require a connected surface."
@@ -171,7 +173,36 @@ export function createKpPlaceValueAdditionSharedDom(input: {
         scene.root.style.pointerEvents = previous.pointerEvents;
       }
     }
-    nativeScenesPrepared = true;
+    nativeSceneLayoutsWarmed = true;
+  };
+
+  const prepareNativeScenesWhenReady = (): Promise<void> => {
+    if (nativeScenePreparation !== undefined) {
+      return nativeScenePreparation;
+    }
+    const view = input.document.defaultView;
+    if (view === null) {
+      return Promise.reject(
+        new Error("Shared place-value native scenes require a live window.")
+      );
+    }
+    nativeScenePreparation = (async () => {
+      await input.document.fonts.ready;
+      await nextLayoutFrame(view);
+      await nextLayoutFrame(view);
+      for (const scene of motionScenes) {
+        if (disposed) return;
+        await nextTask(view);
+        if (disposed) return;
+        withVisibleNativeScene(scene.root, () => {
+          // Preparing only after fonts and two connected layout frames keeps
+          // cold compositor construction out of scroll callbacks without
+          // reviving the stale hidden-preflight geometry fixed in slice 16.
+          scene.prepare();
+        });
+      }
+    })();
+    return nativeScenePreparation;
   };
 
   const apply = (frame: KpPlaceValueAdditionRuntimeFrame): void => {
@@ -277,9 +308,46 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     writtenRoot: written.root,
     baseTenRoot: baseTen.root,
     prepareNativeScenes,
+    prepareNativeScenesWhenReady,
     apply,
     dispose
   });
+}
+
+function withVisibleNativeScene(
+  root: HTMLElement,
+  action: () => void
+): void {
+  const previous = {
+    display: root.style.display,
+    visibility: root.style.visibility,
+    position: root.style.position,
+    inset: root.style.inset,
+    pointerEvents: root.style.pointerEvents
+  };
+  try {
+    root.style.display = "grid";
+    root.style.visibility = "visible";
+    root.style.position = "absolute";
+    root.style.inset = "0";
+    root.style.pointerEvents = "none";
+    void root.offsetWidth;
+    action();
+  } finally {
+    root.style.display = previous.display;
+    root.style.visibility = previous.visibility;
+    root.style.position = previous.position;
+    root.style.inset = previous.inset;
+    root.style.pointerEvents = previous.pointerEvents;
+  }
+}
+
+function nextLayoutFrame(view: Window): Promise<void> {
+  return new Promise((resolve) => view.requestAnimationFrame(() => resolve()));
+}
+
+function nextTask(view: Window): Promise<void> {
+  return new Promise((resolve) => view.setTimeout(resolve, 0));
 }
 
 function configurePersistentWrittenOverlay(root: HTMLElement): void {
