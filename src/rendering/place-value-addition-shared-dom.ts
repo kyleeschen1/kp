@@ -15,9 +15,12 @@ import {
   createKpPlaceValueColumnEvaluationDom
 } from "./place-value-addition-column-evaluation.ts";
 import {
-  applyKpPlaceValueInkUnionContributorArcs,
-  kpPlaceValueInkUnionExperimentKind
-} from "./place-value-addition-ink-union-experiment.ts";
+  applyKpPlaceValueContributorFusionArcs,
+  compileKpPlaceValueContributorFusionMotif,
+  kpPlaceValueContributorFusionMotifKind,
+  kpPlaceValueStandardEvaluationMotif,
+  type KpPlaceValueEvaluationVisualMotif
+} from "./place-value-addition-contributor-fusion-motif.ts";
 import {
   createKpPlaceValueColumnExchangeDom,
   type KpPlaceValueColumnExchangeFrame
@@ -49,6 +52,31 @@ export interface KpPlaceValueAdditionSharedDom {
   readonly prepareNativeScenesWhenReady: () => Promise<void>;
   readonly apply: (frame: KpPlaceValueAdditionRuntimeFrame) => void;
   readonly dispose: () => void;
+}
+
+export const kpPlaceValueContributorFusionReviewedCallerCount = 2;
+
+/**
+ * Visual promotion is explicit and exhaustive: every evaluation receives one
+ * typed motif, while only the approved exemplar and its structurally distinct
+ * second caller receive fusion. The remaining position stays an unchanged
+ * rollback comparator until the second human checkpoint passes.
+ */
+export function compileKpPlaceValueEvaluationVisualMotifs(
+  evaluations: KpPlaceValueAdditionRuntimeSession["columnEvaluations"]
+): readonly KpPlaceValueEvaluationVisualMotif[] {
+  if (
+    evaluations.length < kpPlaceValueContributorFusionReviewedCallerCount
+  ) {
+    throw new Error("Contributor-fusion promotion requires two callers.");
+  }
+  return Object.freeze(evaluations.map((evaluation, index) =>
+    index < kpPlaceValueContributorFusionReviewedCallerCount
+      ? compileKpPlaceValueContributorFusionMotif(
+          evaluation.writtenOwnership
+        )
+      : kpPlaceValueStandardEvaluationMotif
+  ));
 }
 
 export function createKpPlaceValueAdditionSharedDom(input: {
@@ -90,16 +118,15 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     "persistent-scaffold-with-motion-overlay";
   writtenHost.style.cssText =
     "display:grid;position:relative;width:100%;place-items:center";
+  const evaluationVisualMotifs = compileKpPlaceValueEvaluationVisualMotifs(
+    input.session.columnEvaluations
+  );
   const evaluationScenes = input.session.columnEvaluations.map(
-    (evaluation) => createKpPlaceValueColumnEvaluationDom({
+    (evaluation, index) => createKpPlaceValueColumnEvaluationDom({
       document: input.document,
       projection: input.session.written,
       evaluation,
-      // The first ordered position is the reversible visual exemplar. Do not
-      // generalize this treatment until human review selects the motif.
-      ...(evaluation.program.position.sequenceIndex === 0
-        ? { visualExperiment: kpPlaceValueInkUnionExperimentKind }
-        : {})
+      visualMotif: evaluationVisualMotifs[index]!
     })
   );
   const exchangeScenes = input.session.columnExchanges.map(
@@ -132,7 +159,11 @@ export function createKpPlaceValueAdditionSharedDom(input: {
   const evaluationByBeat = new Map(input.session.columnEvaluations.map(
     (evaluation, index) => [
       evaluation.beatId,
-      { evaluation, scene: evaluationScenes[index]! }
+      {
+        evaluation,
+        scene: evaluationScenes[index]!,
+        visualMotif: evaluationVisualMotifs[index]!
+      }
     ] as const
   ));
   const exchangeByBeat = new Map(input.session.columnExchanges.map(
@@ -263,7 +294,8 @@ export function createKpPlaceValueAdditionSharedDom(input: {
         stage: writtenHost,
         written,
         overlay: activeEvaluation.scene.root,
-        ownership: activeEvaluation.evaluation.writtenOwnership
+        ownership: activeEvaluation.evaluation.writtenOwnership,
+        visualMotif: activeEvaluation.visualMotif
       });
       certifyPersistentContributionContacts({
         written,
@@ -408,11 +440,15 @@ function applyPersistentContributionClearance(input: {
   >;
   readonly overlay: HTMLElement;
   readonly ownership: KpPlaceValueWrittenOwnershipPlan;
+  readonly visualMotif: KpPlaceValueEvaluationVisualMotif;
 }): void {
-  if (applyKpPlaceValueInkUnionContributorArcs({
-    overlay: input.overlay,
-    ownership: input.ownership
-  })) {
+  if (
+    input.visualMotif.kind === kpPlaceValueContributorFusionMotifKind &&
+    applyKpPlaceValueContributorFusionArcs({
+      overlay: input.overlay,
+      plan: input.visualMotif.plan
+    })
+  ) {
     return;
   }
   for (const proxy of input.ownership.contributionProxies) {

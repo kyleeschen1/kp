@@ -146,4 +146,119 @@ for (const viewport of [
       true
     );
   });
+
+  test(`${viewport.name} three-contributor fusion keeps one continuous authored route`, async ({
+    page
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/tests/fixtures/place-value-addition-browser-host.html");
+    const evidence = await page.evaluate(async ({ width }) => {
+      const harnessUrl =
+        "/tests/support/place-value-addition-browser-harness.ts";
+      const { createKpPlaceValueAdditionBrowserHarness } =
+        await import(/* @vite-ignore */ harnessUrl) as
+          KpPlaceValueAdditionBrowserHarnessModule;
+      const harness = await createKpPlaceValueAdditionBrowserHarness({
+        document,
+        viewportWidth: width
+      });
+      const stage = () => harness.operationScene(
+        "decimal-position-1",
+        "evaluation"
+      );
+      const contributors = () => harness.materialOwnerElements(stage()).filter(
+        (owner) => owner.dataset["kpEquationMaterialSemanticEntityId"]
+          ?.startsWith("annotation.decimal-position-1.material.") === true
+      );
+      const midpoint = (
+        points: readonly { readonly x: number; readonly y: number }[]
+      ) => ({
+        x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
+        y: points.reduce((sum, point) => sum + point.y, 0) / points.length
+      });
+      const snapshot = () => {
+        const owners = contributors();
+        const sourceOpacities = [
+          "carry.tens",
+          "digit.first.tens",
+          "digit.second.tens"
+        ].map((id) => getComputedStyle(harness.persistentCell(id)).opacity);
+        const targetDigits = [
+          ...stage().querySelectorAll<HTMLElement>(
+            '[data-kp-place-value-operation-endpoint="target"] ' +
+            '[data-kp-place-value-motion-target-id^="evaluation.tens.total."]'
+          )
+        ];
+        const source = midpoint(owners.map((owner) =>
+          harness.paintMetric(owner).center
+        ));
+        const target = harness.unionPaintMetric(targetDigits).center;
+        return {
+          offsets: owners.map((owner) => Number(
+            owner.dataset["kpPlaceValueContributorArcOffsetPx"]
+          )),
+          opacities: owners.map((owner) => getComputedStyle(owner).opacity),
+          sourceOpacities,
+          fallbackClearances: owners.map((owner) =>
+            owner.dataset["kpPlaceValueDocumentaryClearance"] ?? null
+          ),
+          distanceToTarget: Math.hypot(
+            source.x - target.x,
+            source.y - target.y
+          )
+        };
+      };
+      const localToGlobal = (local: number) => 0.4 + local * 0.16;
+      const samples = [];
+      let previous = 0;
+      for (let index = 0; index < 100; index += 1) {
+        const local = index / 100;
+        const progress = localToGlobal(local);
+        harness.apply(progress, previous);
+        samples.push({ local, ...snapshot() });
+        previous = progress;
+      }
+      const directLocal = 0.7;
+      harness.apply(localToGlobal(0.99), previous);
+      harness.apply(localToGlobal(directLocal), localToGlobal(0.99));
+      const rewind = snapshot();
+      harness.apply(localToGlobal(directLocal), localToGlobal(directLocal));
+      const sameFrame = snapshot();
+      const motif = stage().dataset["kpPlaceValueEvaluationVisualMotif"];
+      harness.dispose();
+      return { motif, samples, rewind, sameFrame };
+    }, viewport);
+
+    expect(evidence.motif).toBe("source-derived-contributor-fusion-v1");
+    expect(evidence.samples.filter(({ offsets }) =>
+      offsets.length !== 3 || !offsets.every(Number.isFinite)
+    ).map(({ local, offsets }) => ({ local, offsets }))).toEqual([]);
+    expect(evidence.samples.every(({ opacities, sourceOpacities }) =>
+      opacities.every((opacity, index) =>
+        Number(opacity) > 0 || Number(sourceOpacities[index]) > 0
+      )
+    )).toBe(true);
+    expect(evidence.samples.every(({ opacities }) =>
+      opacities.every((opacity) => opacity === "0" || opacity === "1")
+    )).toBe(true);
+    expect(evidence.samples.every(({ fallbackClearances }) =>
+      fallbackClearances.every((clearance) => clearance === null)
+    )).toBe(true);
+    const maximumStep = Math.max(...evidence.samples.slice(1).flatMap(
+      (sample, index) => sample.offsets.map((offset, ownerIndex) =>
+        Math.abs(offset - evidence.samples[index]!.offsets[ownerIndex]!)
+      )
+    ));
+    expect(maximumStep).toBeLessThan(3.25);
+    expect(evidence.samples[0]!.offsets.every(
+      (offset) => Math.abs(offset) < 0.001
+    )).toBe(true);
+    expect(evidence.samples.at(-1)!.offsets.every(
+      (offset) => Math.abs(offset) < 0.001
+    )).toBe(true);
+    expect(evidence.samples[45]!.offsets.map(Math.sign)).toEqual([-1, 1, -1]);
+    expect(evidence.samples[74]!.distanceToTarget).toBeLessThanOrEqual(5);
+    expect(evidence.rewind.offsets).toEqual(evidence.samples[70]!.offsets);
+    expect(evidence.sameFrame).toEqual(evidence.rewind);
+  });
 }

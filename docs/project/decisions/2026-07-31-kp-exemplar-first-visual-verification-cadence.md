@@ -60,13 +60,18 @@ release boundaries.
 
 ## Current Exemplar
 
-The first application of this cadence is the experimental source-derived
-ink-union treatment for the initial ordered-position evaluation in
-`278 + 156 = 434`. The current persistent-workspace renderer is the rollback
-boundary. The experiment may reshape existing fully opaque compositor paint,
-but may not add a clock, renderer session, WebGL lease, semantic operation, or
-parallel endpoint owner. Other position evaluations remain unchanged until the
-canonical `8 + 6 → 14` motion is approved.
+The first application of this cadence is the source-derived contributor-fusion
+motif for ordered-position evaluation in `278 + 156 = 434`. Human review
+approved the canonical `8 + 6 → 14` exemplar. Its continuous contributor arcs,
+opaque lineage handoffs, measured-ink body, and dock-before-pinch schedule are
+now a compiled motif plan rather than an optional renderer experiment.
+
+The structurally different second caller is `1 + 7 + 5 → 13`: it has three
+contributors, including a carried input, and therefore compiles a later docking
+boundary from the same schedule. The final ordered position remains on the
+standard successor-synthesis treatment as a rollback comparator until this
+second caller passes human review. The motif still may not add a clock, renderer
+session, WebGL lease, semantic operation, or parallel endpoint owner.
 
 ## Links
 

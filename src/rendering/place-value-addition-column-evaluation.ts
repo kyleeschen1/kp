@@ -42,9 +42,11 @@ import {
   type KpPlaceValueWrittenOwnershipPlan
 } from "./place-value-addition-written-ownership.ts";
 import {
-  createKpPlaceValueInkUnionExperiment,
-  kpPlaceValueInkUnionExperimentKind
-} from "./place-value-addition-ink-union-experiment.ts";
+  createKpPlaceValueContributorFusionRenderer,
+  isKpPlaceValueContributorFusionPlan,
+  kpPlaceValueContributorFusionMotifKind,
+  type KpPlaceValueEvaluationVisualMotif
+} from "./place-value-addition-contributor-fusion-motif.ts";
 
 declare const kpPlaceValueColumnEvaluationBrand: unique symbol;
 
@@ -197,8 +199,7 @@ export function createKpPlaceValueColumnEvaluationDom(input: {
   readonly document: Document;
   readonly projection: KpPlaceValueWrittenColumnProjection;
   readonly evaluation: KpPlaceValueColumnEvaluation;
-  readonly visualExperiment?:
-    typeof kpPlaceValueInkUnionExperimentKind | undefined;
+  readonly visualMotif: KpPlaceValueEvaluationVisualMotif;
 }): KpPlaceValueColumnEvaluationDom {
   if (!isKpPlaceValueColumnEvaluation(input.evaluation)) {
     throw new Error(
@@ -260,11 +261,33 @@ export function createKpPlaceValueColumnEvaluationDom(input: {
   scene.root.dataset["kpPlaceValuePositionId"] = program.position.id;
   scene.root.dataset["kpOperationEvaluationProgramId"] =
     input.evaluation.forward.programId;
-  const inkUnion = input.visualExperiment === undefined
+  scene.root.dataset["kpPlaceValueEvaluationVisualMotif"] =
+    input.visualMotif.kind;
+  if (
+    input.visualMotif.kind === kpPlaceValueContributorFusionMotifKind &&
+    (
+      !isKpPlaceValueContributorFusionPlan(input.visualMotif.plan) ||
+      !sameIds(
+        input.visualMotif.plan.contributorArcs.map(
+          ({ bindingAnnotationId }) => bindingAnnotationId
+        ),
+        ownership.contributionProxies.map(
+          ({ bindingAnnotationId }) => bindingAnnotationId
+        )
+      )
+    )
+  ) {
+    throw new Error(
+      "Contributor-fusion motif must be compiled from this evaluation's ownership."
+    );
+  }
+  const contributorFusion =
+    input.visualMotif.kind !== kpPlaceValueContributorFusionMotifKind
     ? undefined
-    : createKpPlaceValueInkUnionExperiment({
+    : createKpPlaceValueContributorFusionRenderer({
         document: input.document,
-        sceneRoot: scene.root
+        sceneRoot: scene.root,
+        plan: input.visualMotif.plan
       });
   const prepare = (): void => {
     scene.prepare();
@@ -287,11 +310,11 @@ export function createKpPlaceValueColumnEvaluationDom(input: {
       scene.root.dataset["kpOperationEvaluationProgress"] = String(progress);
       const frame = scene.apply(progress);
       suppressCompilerOnlyCatalyst(scene.root, ownership);
-      inkUnion?.apply(progress);
+      contributorFusion?.apply(progress);
       return frame;
     },
     dispose() {
-      inkUnion?.dispose();
+      contributorFusion?.dispose();
       scene.dispose();
     }
   });

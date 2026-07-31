@@ -17,7 +17,7 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/place-value-addition-ink-union-experiment.ts"
+      "path": "src/rendering/place-value-addition-contributor-fusion-motif.ts"
     }
   ],
   "affects": [
@@ -103,11 +103,39 @@
       "scope": "patch-hygiene",
       "checkedAt": "2026-07-31T18:24:45.270Z",
       "notes": "Contributor arc repair and durable Theseus records contain no whitespace errors."
+    },
+    {
+      "command": "npm-run-test-browser-place-value-addition-contributor-fusion",
+      "status": "passed",
+      "scope": "two-and-three-contributor-wide-phone-cross-browser",
+      "checkedAt": "2026-07-31T18:45:43.949Z",
+      "notes": "24 checks passed across Chromium Firefox WebKit at wide and phone widths; dense second-caller samples prove continuous authored arcs, opaque lineage, no fallback clearance, endpoint docking, and deterministic seek rewind."
+    },
+    {
+      "command": "npm-run-test-place-value-addition",
+      "status": "passed",
+      "scope": "approved-motif-formalization",
+      "checkedAt": "2026-07-31T18:45:44.767Z",
+      "notes": "119 place-value semantic, architecture, ownership, route-plan, and static-boundary tests passed."
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "required-visual-motif-boundary",
+      "checkedAt": "2026-07-31T18:45:45.208Z",
+      "notes": "Application Node test and domain TypeScript projects pass with the optional experiment path removed."
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "promotion-patch-hygiene",
+      "checkedAt": "2026-07-31T18:45:45.613Z",
+      "notes": "Motif formalization, second caller, tests, process decision, and Theseus evidence contain no whitespace errors."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Repaired the reviewed exemplar by replacing threshold-triggered post-paint clearance with deterministic smooth contributor arcs and delaying the ink pinch until every contributor has docked. Only sequence index 0 changes; stop for visual approval before formalization or generalization."
+    "summary": "HUMAN_CHECKPOINT: the approved two-contributor exemplar is formalized as a sealed contributor-fusion plan, every evaluation must choose a typed visual motif, and the unchanged plan now drives the three-contributor carried-input caller with count-derived docking. The final position remains the standard rollback comparator; catalog-wide rollout and release gates await visual approval of 1 + 7 + 5 to 13."
   },
   "expectedLearning": [
     "An approved plan depends on an active assumption without outcome evidence."

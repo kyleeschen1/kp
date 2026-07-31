@@ -19,6 +19,9 @@ import {
   createKpPlaceValueColumnEvaluationDom
 } from "../../src/rendering/place-value-addition-column-evaluation.ts";
 import {
+  kpPlaceValueStandardEvaluationMotif
+} from "../../src/rendering/place-value-addition-contributor-fusion-motif.ts";
+import {
   compileKpPlaceValueColumnExchange,
   createKpPlaceValueColumnExchangeDom
 } from "../../src/rendering/place-value-addition-column-exchange.ts";
@@ -299,7 +302,10 @@ export async function createKpGeneratedPlaceValueAdditionBrowserHarness(input: {
       evaluation: compileKpPlaceValueColumnEvaluation(
         fixture.presentation,
         program
-      )
+      ),
+      // Generated fixtures remain on the standard route until a separate
+      // promotion certificate explicitly opts them into the visual motif.
+      visualMotif: kpPlaceValueStandardEvaluationMotif
     })
   }));
   const exchanges = fixture.positionPrograms.flatMap((program) =>

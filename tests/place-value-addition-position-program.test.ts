@@ -58,6 +58,7 @@ test("reusable position pipeline cannot branch on familiar place names", () => {
     "src/reader/compiler/place-value-addition-terminal-output.ts",
     "src/reader/compiler/place-value-addition-written-column-projection.ts",
     "src/rendering/place-value-addition-column-evaluation.ts",
+    "src/rendering/place-value-addition-contributor-fusion-motif.ts",
     "src/rendering/place-value-addition-column-exchange.ts",
     "src/rendering/place-value-addition-runtime.ts",
     "src/rendering/place-value-addition-shared-dom.ts",
