@@ -276,7 +276,7 @@ export function createKpPlaceValueColumnExchangeDom(input: {
     ownership.evaluatedTotalProxy.semanticEntityId;
   total.style.display = "contents";
   total.append(...program.exchange.outputDigits.map((digit) =>
-    totalDigit(input.document, digit)
+    totalDigit(input.document, input.projection, digit)
   ));
   sourceGrid.append(total);
 
@@ -463,14 +463,21 @@ function suppressDerivedMaterialCopies(
 
 function totalDigit(
   document: Document,
+  projection: KpPlaceValueWrittenColumnProjection,
   digit: KpPlaceValueEvaluationDigitSpec
 ): HTMLElement {
   const root = document.createElement("span");
   root.dataset["kpPlaceValueEvaluationDigit"] = "";
   root.dataset["kpPlaceValueNativeRoot"] = "";
-  root.dataset["kpPlaceValueRow"] = "result";
-  root.dataset["kpPlaceValueColumn"] = digit.columnId;
   root.dataset["kpVisibility"] = "visible";
+  const resultRow = projection.cells.find(
+    ({ role }) => role === "result-digit"
+  )?.row;
+  if (resultRow === undefined) {
+    throw new Error("Exchange total requires a result row.");
+  }
+  root.dataset["kpPlaceValueRow"] = resultRow;
+  root.dataset["kpPlaceValueColumn"] = digit.columnId;
   root.innerHTML = renderLatexToHtml(digit.latex, {
     displayMode: false,
     output: "htmlAndMathml"

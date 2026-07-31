@@ -5,7 +5,11 @@ import {
   compileKpPlaceValueTerminalOutputPolicy
 } from "./place-value-addition-terminal-output.ts";
 import type {
-  KpPlaceValuePositionProgram
+  KpExactRadixPosition,
+  KpPlaceValuePositionEvaluationSpec,
+  KpPlaceValuePositionExchangeSpec,
+  KpPlaceValuePositionProgram,
+  KpPlaceValueTerminalOutputPolicy
 } from "./place-value-addition-position-types.ts";
 
 export type {
@@ -17,6 +21,13 @@ export type {
 } from "./place-value-addition-position-types.ts";
 
 const sealedPrograms = new WeakSet<object>();
+
+export interface KpPlaceValuePositionProgramSpec {
+  readonly position: KpExactRadixPosition;
+  readonly evaluation: KpPlaceValuePositionEvaluationSpec;
+  readonly exchange?: KpPlaceValuePositionExchangeSpec | undefined;
+  readonly terminalOutput?: KpPlaceValueTerminalOutputPolicy | undefined;
+}
 
 /**
  * This fixture adapter is the only layer allowed to know familiar decimal
@@ -165,27 +176,23 @@ readonly KpPlaceValuePositionProgram[] {
     }
   ] as const;
 
-  const programs = fixture.map((entry) => {
+  const programs = compileKpPlaceValuePositionProgramSequence({
+    specs: fixture.map((entry) => {
     const position = Object.freeze({ ...entry.position });
-    return Object.freeze({
+    return {
       position,
-      evaluation: Object.freeze({
+      evaluation: {
         ...entry.evaluation,
-        contributorCellIds:
-          Object.freeze([...entry.evaluation.contributorCellIds]),
-        evaluationDigits: Object.freeze(entry.evaluation.evaluationDigits.map(
-          (digit) => Object.freeze({ ...digit })
-        ))
-      }),
+        contributorCellIds: [...entry.evaluation.contributorCellIds],
+        evaluationDigits: entry.evaluation.evaluationDigits
+      },
       ...("exchange" in entry
         ? {
-            exchange: Object.freeze({
+            exchange: {
               ...entry.exchange,
-              outputCellIds: Object.freeze([...entry.exchange.outputCellIds]),
-              outputDigits: Object.freeze(entry.exchange.outputDigits.map(
-                (digit) => Object.freeze({ ...digit })
-              ))
-            })
+              outputCellIds: [...entry.exchange.outputCellIds],
+              outputDigits: entry.exchange.outputDigits
+            }
           }
         : {}),
       ...("terminalOutput" in entry
@@ -201,15 +208,52 @@ readonly KpPlaceValuePositionProgram[] {
             })
           }
         : {})
-    });
+    };
+    }),
+    allowedBeatIds: reference.beats.map(({ id }) => id)
   });
+  return programs;
+}
 
-  assertPositionSequence(
-    programs as unknown as readonly KpPlaceValuePositionProgram[]
-  );
+/**
+ * Seals a complete ordered radix program sequence. Callers provide semantic
+ * IDs and exact positions; the compiler rejects named-place shortcuts,
+ * out-of-order adjacency, and terminal output attached to a nonterminal step.
+ */
+export function compileKpPlaceValuePositionProgramSequence(input: {
+  readonly specs: readonly KpPlaceValuePositionProgramSpec[];
+  readonly allowedBeatIds: readonly string[];
+}): readonly KpPlaceValuePositionProgram[] {
+  const programs = input.specs.map((spec) => Object.freeze({
+    // Terminal output authority is intentionally tied to this exact position
+    // object; cloning it here would break the nominal adjacency proof.
+    position: Object.freeze(spec.position),
+    evaluation: Object.freeze({
+      ...spec.evaluation,
+      contributorCellIds:
+        Object.freeze([...spec.evaluation.contributorCellIds]),
+      evaluationDigits: Object.freeze(spec.evaluation.evaluationDigits.map(
+        (digit) => Object.freeze({ ...digit })
+      ))
+    }),
+    ...(spec.exchange === undefined
+      ? {}
+      : {
+          exchange: Object.freeze({
+            ...spec.exchange,
+            outputCellIds: Object.freeze([...spec.exchange.outputCellIds]),
+            outputDigits: Object.freeze(spec.exchange.outputDigits.map(
+              (digit) => Object.freeze({ ...digit })
+            )) as KpPlaceValuePositionExchangeSpec["outputDigits"]
+          })
+        }),
+    ...(spec.terminalOutput === undefined
+      ? {}
+      : { terminalOutput: spec.terminalOutput })
+  })) as unknown as readonly KpPlaceValuePositionProgram[];
+  assertPositionSequence(programs, input.allowedBeatIds);
   for (const program of programs) sealedPrograms.add(program);
-  return Object.freeze(programs) as unknown as
-    readonly KpPlaceValuePositionProgram[];
+  return Object.freeze(programs);
 }
 
 export function isKpPlaceValuePositionProgram(
@@ -221,11 +265,10 @@ export function isKpPlaceValuePositionProgram(
 }
 
 function assertPositionSequence(
-  programs: readonly KpPlaceValuePositionProgram[]
+  programs: readonly KpPlaceValuePositionProgram[],
+  allowedBeatIds: readonly string[]
 ): void {
-  const referenceBeatIds = new Set<string>(
-    reference.beats.map(({ id }) => id)
-  );
+  const referenceBeatIds = new Set<string>(allowedBeatIds);
   const positionIds = new Set<string>();
   const beatIds = new Set<string>();
   if (programs.length === 0) {
@@ -251,6 +294,11 @@ function assertPositionSequence(
         )
       ) ||
       (isTerminal !== (program.terminalOutput !== undefined)) ||
+      (index > 0 && (
+        program.position.radix !== programs[index - 1]!.position.radix ||
+        program.position.exponent !==
+          programs[index - 1]!.position.exponent + 1
+      )) ||
       (
         program.terminalOutput !== undefined &&
         (

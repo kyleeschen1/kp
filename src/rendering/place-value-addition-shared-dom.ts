@@ -168,8 +168,11 @@ export function createKpPlaceValueAdditionSharedDom(input: {
         scene.root.style.position = "absolute";
         scene.root.style.inset = "0";
         scene.root.style.pointerEvents = "none";
+        // Hidden preflight may warm layout, but it must not mint persistent
+        // compositor geometry. On a cold Chromium mount the containing grid
+        // can move after this probe; the first visible apply below is the
+        // earliest point at which endpoint coordinates are authoritative.
         void scene.root.offsetWidth;
-        scene.prepare();
       } finally {
         scene.root.style.display = previous.display;
         scene.root.style.visibility = previous.visibility;
@@ -223,6 +226,8 @@ export function createKpPlaceValueAdditionSharedDom(input: {
       });
     }
     if (writtenVisible && activeEvaluation !== undefined) {
+      void activeEvaluation.scene.root.offsetWidth;
+      activeEvaluation.scene.prepare();
       activeEvaluation.scene.apply(
         frame.beatProgress,
         frame.clock.direction
@@ -241,6 +246,8 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     }
     let exchangeFrame: KpPlaceValueColumnExchangeFrame | undefined;
     if (writtenVisible && activeExchange !== undefined) {
+      void activeExchange.scene.root.offsetWidth;
+      activeExchange.scene.prepare();
       exchangeFrame = activeExchange.scene.apply(
         frame.beatProgress,
         frame.clock.direction

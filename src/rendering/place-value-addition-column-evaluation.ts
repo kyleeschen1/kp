@@ -226,7 +226,12 @@ export function createKpPlaceValueColumnEvaluationDom(input: {
     }
     const nativeTarget = target.cellElements.get(digit.semanticEntityId);
     if (nativeTarget === undefined) {
-      targetGrid.append(evaluationDigit(input.document, digit, proxy));
+      targetGrid.append(evaluationDigit(
+        input.document,
+        input.projection,
+        digit,
+        proxy
+      ));
     } else {
       configureEvaluationTarget(nativeTarget, proxy);
     }
@@ -438,6 +443,7 @@ function suppressCompilerOnlyCatalyst(
 
 function evaluationDigit(
   document: Document,
+  projection: KpPlaceValueWrittenColumnProjection,
   digit: KpPlaceValueEvaluationDigitSpec,
   proxy: KpPlaceValueWrittenOwnershipPlan[
     "evaluationOutputProxies"
@@ -447,7 +453,13 @@ function evaluationDigit(
   root.dataset["kpPlaceValueEvaluationDigit"] = "";
   root.dataset["kpPlaceValueNativeRoot"] = "";
   configureEvaluationTarget(root, proxy);
-  root.dataset["kpPlaceValueRow"] = "result";
+  const resultRow = projection.cells.find(
+    ({ role }) => role === "result-digit"
+  )?.row;
+  if (resultRow === undefined) {
+    throw new Error("Evaluation target requires a result row.");
+  }
+  root.dataset["kpPlaceValueRow"] = resultRow;
   root.dataset["kpPlaceValueColumn"] = digit.columnId;
   root.innerHTML = renderLatexToHtml(digit.latex, {
     displayMode: false,

@@ -12,7 +12,7 @@ for (const viewport of [
     page
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/");
+    await page.goto("/tests/fixtures/place-value-addition-browser-host.html");
     const evidence = await page.evaluate(async ({ width }) => {
       const harnessUrl =
         "/tests/support/place-value-addition-browser-harness.ts";
@@ -126,7 +126,7 @@ for (const viewport of [
     page
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/");
+    await page.goto("/tests/fixtures/place-value-addition-browser-host.html");
     const evidence = await page.evaluate(async ({ width }) => {
       const harnessUrl =
         "/tests/support/place-value-addition-browser-harness.ts";

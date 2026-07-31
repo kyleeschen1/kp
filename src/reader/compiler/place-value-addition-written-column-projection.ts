@@ -12,11 +12,9 @@ declare const kpPlaceValueWrittenColumnProjectionBrand: unique symbol;
 
 const sealedWrittenColumnProjections = new WeakSet<object>();
 
-export type KpPlaceValueWrittenRow =
-  (typeof reference.primaryStage.rows)[number];
+export type KpPlaceValueWrittenRow = string;
 
-export type KpPlaceValueWrittenColumn =
-  (typeof reference.primaryStage.columns)[number];
+export type KpPlaceValueWrittenColumn = string;
 
 export type KpPlaceValueWrittenCellRole =
   | "addend-digit"
@@ -43,11 +41,11 @@ export interface KpPlaceValueNativeCellRoot {
 }
 
 export interface KpPlaceValueWrittenRuleRoot {
-  readonly id: "rule.addition.underline";
-  readonly semanticEntityId: "rule.addition.underline";
-  readonly row: "underline";
-  readonly fromColumn: "operator";
-  readonly throughColumn: "ones";
+  readonly id: string;
+  readonly semanticEntityId: string;
+  readonly row: KpPlaceValueWrittenRow;
+  readonly fromColumn: KpPlaceValueWrittenColumn;
+  readonly throughColumn: KpPlaceValueWrittenColumn;
   readonly nativeOwner: "semantic-grid-dom";
   readonly measurementAuthority: "native-painted-dom";
 }
@@ -55,12 +53,12 @@ export interface KpPlaceValueWrittenRuleRoot {
 export interface KpPlaceValueWrittenColumnProjection {
   readonly schemaVersion:
     "kp.place-value-addition-written-column-projection.v1";
-  readonly animationId: KpVerifiedPlaceValueSemanticFoundation["animationId"];
-  readonly traceId: KpVerifiedPlaceValueSemanticFoundation["trace"]["id"];
+  readonly animationId: string;
+  readonly traceId: string;
   readonly status: "ready-for-runtime-binding";
   readonly promotionStatus: "not-promoted";
-  readonly rows: typeof reference.primaryStage.rows;
-  readonly columns: typeof reference.primaryStage.columns;
+  readonly rows: readonly KpPlaceValueWrittenRow[];
+  readonly columns: readonly KpPlaceValueWrittenColumn[];
   readonly cells: readonly KpPlaceValueNativeCellRoot[];
   readonly underline: KpPlaceValueWrittenRuleRoot;
   readonly layoutContract: {
@@ -75,13 +73,8 @@ export interface KpPlaceValueWrittenColumnProjection {
     readonly globalScaleFallback: false;
   };
   readonly accessibility: {
-    readonly expression: "278 + 156 = 434";
-    readonly readingOrder: readonly [
-      "first-addend",
-      "operator",
-      "second-addend",
-      "result"
-    ];
+    readonly expression: string;
+    readonly readingOrder: readonly string[];
   };
   readonly [kpPlaceValueWrittenColumnProjectionBrand]: true;
 }
@@ -100,15 +93,81 @@ export function compileKpPlaceValueWrittenColumnProjection(
     );
   }
 
-  const established = reference.primaryStage.initialCells.map((cell) =>
+  return compileKpPlaceValueWrittenColumnProjectionSpec({
+    animationId: foundation.animationId,
+    traceId: foundation.trace.id,
+    rows: reference.primaryStage.rows,
+    columns: reference.primaryStage.columns,
+    initialCells: reference.primaryStage.initialCells,
+    carrySlots: reference.primaryStage.carrySlots,
+    resultSlots: reference.primaryStage.resultSlots,
+    underline: reference.primaryStage.underline,
+    accessibility: {
+      expression: "278 + 156 = 434",
+      readingOrder: [
+        "first-addend",
+        "operator",
+        "second-addend",
+        "result"
+      ]
+    }
+  });
+}
+
+export interface KpPlaceValueWrittenColumnProjectionSpec {
+  readonly animationId: string;
+  readonly traceId: string;
+  readonly rows: readonly KpPlaceValueWrittenRow[];
+  readonly columns: readonly KpPlaceValueWrittenColumn[];
+  readonly initialCells: readonly {
+    readonly id: string;
+    readonly row: KpPlaceValueWrittenRow;
+    readonly column: KpPlaceValueWrittenColumn;
+    readonly latex: string;
+  }[];
+  readonly carrySlots: readonly {
+    readonly id: string;
+    readonly row: KpPlaceValueWrittenRow;
+    readonly column: KpPlaceValueWrittenColumn;
+    readonly latex: string;
+  }[];
+  readonly resultSlots: readonly {
+    readonly id: string;
+    readonly row: KpPlaceValueWrittenRow;
+    readonly column: KpPlaceValueWrittenColumn;
+    readonly latex: string;
+  }[];
+  readonly underline: {
+    readonly id: string;
+    readonly row: KpPlaceValueWrittenRow;
+    readonly fromColumn: KpPlaceValueWrittenColumn;
+    readonly throughColumn: KpPlaceValueWrittenColumn;
+  };
+  readonly accessibility: {
+    readonly expression: string;
+    readonly readingOrder: readonly string[];
+  };
+}
+
+/**
+ * Compiles a semantic grid without giving familiar decimal place labels any
+ * layout authority. This is the reusable boundary for unequal widths and for
+ * future positions with negative exponents; fixture adapters may still use
+ * reader-friendly labels in their data.
+ */
+export function compileKpPlaceValueWrittenColumnProjectionSpec(
+  spec: KpPlaceValueWrittenColumnProjectionSpec
+): KpPlaceValueWrittenColumnProjection {
+  assertProjectionSpec(spec);
+  const established = spec.initialCells.map((cell) =>
     nativeCell({
       ...cell,
-      role: cell.id === "operator.add" ? "operator" : "addend-digit",
+      role: cell.latex === "+" ? "operator" : "addend-digit",
       mathStyle: "display",
       visibility: "established"
     })
   );
-  const carries = reference.primaryStage.carrySlots.map((cell) =>
+  const carries = spec.carrySlots.map((cell) =>
     nativeCell({
       ...cell,
       role: "carry-digit",
@@ -116,7 +175,7 @@ export function compileKpPlaceValueWrittenColumnProjection(
       visibility: "trace-governed-carry"
     })
   );
-  const results = reference.primaryStage.resultSlots.map((cell) =>
+  const results = spec.resultSlots.map((cell) =>
     nativeCell({
       ...cell,
       role: "result-digit",
@@ -125,24 +184,24 @@ export function compileKpPlaceValueWrittenColumnProjection(
     })
   );
   const cells = Object.freeze([...established, ...carries, ...results]);
-  assertCanonicalCellTopology(cells);
+  assertCellTopology(cells, spec);
 
   const projection = Object.freeze({
     schemaVersion:
       "kp.place-value-addition-written-column-projection.v1" as const,
-    animationId: foundation.animationId,
-    traceId: foundation.trace.id,
+    animationId: spec.animationId,
+    traceId: spec.traceId,
     status: "ready-for-runtime-binding" as const,
     promotionStatus: "not-promoted" as const,
-    rows: reference.primaryStage.rows,
-    columns: reference.primaryStage.columns,
+    rows: Object.freeze([...spec.rows]),
+    columns: Object.freeze([...spec.columns]),
     cells,
     underline: Object.freeze({
-      id: reference.primaryStage.underline.id,
-      semanticEntityId: reference.primaryStage.underline.id,
-      row: reference.primaryStage.underline.row,
-      fromColumn: reference.primaryStage.underline.fromColumn,
-      throughColumn: reference.primaryStage.underline.throughColumn,
+      id: spec.underline.id,
+      semanticEntityId: spec.underline.id,
+      row: spec.underline.row,
+      fromColumn: spec.underline.fromColumn,
+      throughColumn: spec.underline.throughColumn,
       nativeOwner: "semantic-grid-dom" as const,
       measurementAuthority: "native-painted-dom" as const
     }),
@@ -161,13 +220,8 @@ export function compileKpPlaceValueWrittenColumnProjection(
       globalScaleFallback: false as const
     }),
     accessibility: Object.freeze({
-      expression: "278 + 156 = 434" as const,
-      readingOrder: Object.freeze([
-        "first-addend",
-        "operator",
-        "second-addend",
-        "result"
-      ] as const)
+      expression: spec.accessibility.expression,
+      readingOrder: Object.freeze([...spec.accessibility.readingOrder])
     })
   });
   sealedWrittenColumnProjections.add(projection);
@@ -219,13 +273,44 @@ function nativeCell(input: {
   });
 }
 
-function assertCanonicalCellTopology(
-  cells: readonly KpPlaceValueNativeCellRoot[]
+function assertProjectionSpec(
+  spec: KpPlaceValueWrittenColumnProjectionSpec
+): void {
+  if (
+    spec.animationId.trim().length === 0 ||
+    spec.traceId.trim().length === 0 ||
+    spec.rows.length === 0 ||
+    spec.columns.length < 2 ||
+    new Set(spec.rows).size !== spec.rows.length ||
+    new Set(spec.columns).size !== spec.columns.length ||
+    !spec.rows.includes(spec.underline.row) ||
+    !spec.columns.includes(spec.underline.fromColumn) ||
+    !spec.columns.includes(spec.underline.throughColumn) ||
+    spec.accessibility.expression.trim().length === 0
+  ) {
+    throw new Error(
+      "Written-column projection requires one exact semantic grid."
+    );
+  }
+  for (const cell of [
+    ...spec.initialCells,
+    ...spec.carrySlots,
+    ...spec.resultSlots
+  ]) {
+    if (!spec.rows.includes(cell.row) || !spec.columns.includes(cell.column)) {
+      throw new Error(`Written-column cell ${cell.id} is outside its grid.`);
+    }
+  }
+}
+
+function assertCellTopology(
+  cells: readonly KpPlaceValueNativeCellRoot[],
+  spec: KpPlaceValueWrittenColumnProjectionSpec
 ): void {
   const expectedIds = [
-    ...reference.primaryStage.initialCells.map(({ id }) => id),
-    ...reference.primaryStage.carrySlots.map(({ id }) => id),
-    ...reference.primaryStage.resultSlots.map(({ id }) => id)
+    ...spec.initialCells.map(({ id }) => id),
+    ...spec.carrySlots.map(({ id }) => id),
+    ...spec.resultSlots.map(({ id }) => id)
   ];
   if (
     cells.length !== expectedIds.length ||

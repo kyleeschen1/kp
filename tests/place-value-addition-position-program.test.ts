@@ -52,13 +52,16 @@ test("ordered radix positions govern every evaluation and exchange", () => {
 test("reusable position pipeline cannot branch on familiar place names", () => {
   const reusableSources = [
     "src/animation/place-value-addition-persistent-workspace.ts",
+    "src/animation/place-value-addition-generated-fixture.ts",
     "src/animation/place-value-addition-presentation-plan.ts",
     "src/reader/compiler/place-value-addition-position-types.ts",
     "src/reader/compiler/place-value-addition-terminal-output.ts",
+    "src/reader/compiler/place-value-addition-written-column-projection.ts",
     "src/rendering/place-value-addition-column-evaluation.ts",
     "src/rendering/place-value-addition-column-exchange.ts",
     "src/rendering/place-value-addition-runtime.ts",
     "src/rendering/place-value-addition-shared-dom.ts",
+    "src/rendering/place-value-addition-written-column-dom.ts",
     "src/rendering/place-value-addition-written-ownership.ts",
     "tests/support/place-value-addition-browser-harness.ts"
   ];

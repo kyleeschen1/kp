@@ -25,8 +25,6 @@ const styles = `
     color: #172033;
     display: grid;
     font-size: 40px;
-    grid-template-columns: max-content max-content max-content max-content;
-    grid-template-rows: repeat(5, max-content);
     column-gap: 0.22em;
     row-gap: 0.08em;
     inline-size: max-content;
@@ -47,21 +45,10 @@ const styles = `
   [data-kp-place-value-native-root][data-kp-visibility="hidden"] {
     visibility: hidden;
   }
-  [data-kp-place-value-row="carry"] { grid-row: 1; }
-  [data-kp-place-value-row="first-addend"] { grid-row: 2; }
-  [data-kp-place-value-row="second-addend"] { grid-row: 3; }
-  [data-kp-place-value-row="underline"] { grid-row: 4; }
-  [data-kp-place-value-row="result"] { grid-row: 5; }
-  [data-kp-place-value-column="operator"] { grid-column: 1; }
-  [data-kp-place-value-column="hundreds"] { grid-column: 2; }
-  [data-kp-place-value-column="tens"] { grid-column: 3; }
-  [data-kp-place-value-column="ones"] { grid-column: 4; }
   [data-kp-place-value-underline] {
     align-self: center;
     border-block-start: 0.055em solid currentColor;
     box-sizing: border-box;
-    grid-column: 1 / -1;
-    grid-row: 4;
     inline-size: 100%;
     block-size: 0;
   }
@@ -102,7 +89,7 @@ export function createKpPlaceValueWrittenColumnDomProjection(input: {
 
   const style = input.document.createElement("style");
   style.dataset["kpPlaceValueWrittenStyles"] = "";
-  style.textContent = styles;
+  style.textContent = `${styles}\n${projectionGridStyles(input.projection)}`;
   stage.append(style);
 
   const grid = input.document.createElement("div");
@@ -110,7 +97,7 @@ export function createKpPlaceValueWrittenColumnDomProjection(input: {
   grid.setAttribute("aria-hidden", "true");
   const cellElements = new Map<string, HTMLElement>();
   for (const cell of input.projection.cells) {
-    const element = renderCell(input.document, cell, input.endpoint);
+    const element = renderCell(input, cell);
     grid.append(element);
     cellElements.set(cell.semanticEntityId, element);
   }
@@ -142,11 +129,14 @@ export function createKpPlaceValueWrittenColumnDomProjection(input: {
 }
 
 function renderCell(
-  document: Document,
-  cell: KpPlaceValueNativeCellRoot,
-  endpoint: KpPlaceValueWrittenEndpoint
+  input: {
+    readonly document: Document;
+    readonly projection: KpPlaceValueWrittenColumnProjection;
+    readonly endpoint: KpPlaceValueWrittenEndpoint;
+  },
+  cell: KpPlaceValueNativeCellRoot
 ): HTMLElement {
-  const root = document.createElement("span");
+  const root = input.document.createElement("span");
   root.id = cell.id;
   root.dataset["kpPlaceValueNativeRoot"] = "";
   root.dataset["kpSemanticEntityId"] = cell.semanticEntityId;
@@ -157,9 +147,48 @@ function renderCell(
   root.dataset["kpNativeOwner"] = cell.nativeOwner;
   root.dataset["kpEndpointOwnership"] = cell.endpointOwnership;
   root.dataset["kpVisibility"] =
-    isVisible(cell, endpoint) ? "visible" : "hidden";
+    isVisible(cell, input.endpoint) ? "visible" : "hidden";
   root.innerHTML = cell.nativeHtmlAndMathml;
   return root;
+}
+
+function projectionGridStyles(
+  projection: KpPlaceValueWrittenColumnProjection
+): string {
+  const tracks = (count: number) => Array.from(
+    { length: count },
+    () => "max-content"
+  ).join(" ");
+  const rows = projection.rows.map((row, index) =>
+    `[data-kp-place-value-row="${cssAttributeValue(row)}"] { grid-row: ${index + 1}; }`
+  );
+  const columns = projection.columns.map((column, index) =>
+    `[data-kp-place-value-column="${cssAttributeValue(column)}"] { grid-column: ${index + 1}; }`
+  );
+  const underlineStart = projection.columns.indexOf(
+    projection.underline.fromColumn
+  );
+  const underlineEnd = projection.columns.indexOf(
+    projection.underline.throughColumn
+  );
+  if (underlineStart < 0 || underlineEnd < underlineStart) {
+    throw new Error("Written-column underline requires an ordered column span.");
+  }
+  // Keep semantic grid placement in stylesheet rules rather than inline
+  // declarations. The compositor clones paint roots; layout-only inline style
+  // would leak into those clones and corrupt their stage-relative geometry.
+  return [
+    `[data-kp-place-value-grid] { grid-template-columns: ${tracks(
+      projection.columns.length
+    )}; grid-template-rows: ${tracks(projection.rows.length)}; }`,
+    ...rows,
+    ...columns,
+    `[data-kp-place-value-underline] { grid-column: ${underlineStart + 1} / ${underlineEnd + 2}; }`
+  ].join("\n");
+}
+
+function cssAttributeValue(value: string): string {
+  return value.replaceAll("\\", "\\\\").replaceAll('"', '\\"');
 }
 
 function isVisible(

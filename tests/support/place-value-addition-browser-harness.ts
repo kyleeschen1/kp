@@ -11,6 +11,20 @@ import {
 import {
   createKpPlaceValueAdditionSharedDom
 } from "../../src/rendering/place-value-addition-shared-dom.ts";
+import {
+  compileKpPlaceValueIntegerAdditionFixture
+} from "../../src/animation/place-value-addition-generated-fixture.ts";
+import {
+  compileKpPlaceValueColumnEvaluation,
+  createKpPlaceValueColumnEvaluationDom
+} from "../../src/rendering/place-value-addition-column-evaluation.ts";
+import {
+  compileKpPlaceValueColumnExchange,
+  createKpPlaceValueColumnExchangeDom
+} from "../../src/rendering/place-value-addition-column-exchange.ts";
+import {
+  createKpPlaceValueWrittenColumnDomProjection
+} from "../../src/rendering/place-value-addition-written-column-dom.ts";
 
 export interface KpPlaceValueBrowserPaintMetric {
   readonly left: number;
@@ -63,14 +77,22 @@ export async function createKpPlaceValueAdditionBrowserHarness(input: {
   });
   const app = input.document.querySelector<HTMLElement>("#app");
   if (app !== null) app.style.display = "none";
-  input.document.body.append(dom.root);
   Object.assign(input.document.body.style, {
     margin: "0",
     minHeight: "100vh",
     display: "grid",
     placeItems: "center"
   });
-  await input.document.fonts.ready;
+  input.document.body.append(dom.root);
+  const initialView = input.document.defaultView;
+  if (initialView === null) {
+    throw new Error("Browser harness requires a live window.");
+  }
+  await primeKpPlaceValueNativeScenes({
+    document: input.document,
+    view: initialView,
+    root: dom.root
+  });
   dom.prepareNativeScenes();
   const view = input.document.defaultView;
   if (view === null) throw new Error("Browser harness requires a live window.");
@@ -247,4 +269,238 @@ export async function createKpPlaceValueAdditionBrowserHarness(input: {
     settleLayout,
     dispose: dom.dispose
   });
+}
+
+/**
+ * Mounts a generated fixture through the same written-grid, evaluation,
+ * exchange, compositor, and native-paint observers as the canonical runtime.
+ * It deliberately supplies no fixture-specific renderer or geometry branch.
+ */
+export async function createKpGeneratedPlaceValueAdditionBrowserHarness(input: {
+  readonly document: Document;
+  readonly viewportWidth: number;
+  readonly id: string;
+  readonly addends: readonly [string, string];
+}) {
+  const fixture = compileKpPlaceValueIntegerAdditionFixture({
+    id: input.id,
+    addends: input.addends
+  });
+  const written = createKpPlaceValueWrittenColumnDomProjection({
+    document: input.document,
+    projection: fixture.projection,
+    endpoint: "initial"
+  });
+  const evaluations = fixture.positionPrograms.map((program) => ({
+    program,
+    scene: createKpPlaceValueColumnEvaluationDom({
+      document: input.document,
+      projection: fixture.projection,
+      evaluation: compileKpPlaceValueColumnEvaluation(
+        fixture.presentation,
+        program
+      )
+    })
+  }));
+  const exchanges = fixture.positionPrograms.flatMap((program) =>
+    program.exchange === undefined
+      ? []
+      : [{
+          program,
+          scene: createKpPlaceValueColumnExchangeDom({
+            document: input.document,
+            projection: fixture.projection,
+            exchange: compileKpPlaceValueColumnExchange(
+              fixture.presentation,
+              program
+            )
+          })
+        }]
+  );
+  const scenes = [
+    ...evaluations.map(({ scene }) => scene),
+    ...exchanges.map(({ scene }) => scene)
+  ];
+  const root = input.document.createElement("section");
+  root.dataset["kpGeneratedPlaceValueFixture"] = fixture.id;
+  root.style.cssText =
+    `display:grid;position:relative;place-items:center;inline-size:${Math.max(
+      320,
+      input.viewportWidth - 32
+    )}px;min-block-size:360px;overflow:visible`;
+  root.append(written.root, ...scenes.map(({ root: sceneRoot }) => {
+    sceneRoot.style.cssText +=
+      ";display:none;position:absolute;inset:0;pointer-events:none";
+    return sceneRoot;
+  }));
+  const app = input.document.querySelector<HTMLElement>("#app");
+  if (app !== null) app.style.display = "none";
+  Object.assign(input.document.body.style, {
+    margin: "0",
+    minHeight: "100vh",
+    display: "grid",
+    placeItems: "center"
+  });
+  input.document.body.append(root);
+  const initialView = input.document.defaultView;
+  if (initialView === null) {
+    throw new Error("Generated browser harness requires a live window.");
+  }
+  await primeKpPlaceValueNativeScenes({
+    document: input.document,
+    view: initialView,
+    root
+  });
+  const view = input.document.defaultView;
+  if (view === null) {
+    throw new Error("Generated browser harness requires a live window.");
+  }
+  const persistentCell = (semanticEntityId: string): HTMLElement => {
+    const element = written.cellElements.get(semanticEntityId);
+    if (element === undefined) {
+      throw new Error(`Missing generated persistent cell ${semanticEntityId}.`);
+    }
+    return element;
+  };
+  const operationScene = (
+    positionId: string,
+    operation: "evaluation" | "exchange"
+  ): HTMLElement => {
+    const entry = operation === "evaluation"
+      ? evaluations.find(({ program }) => program.position.id === positionId)
+      : exchanges.find(({ program }) => program.position.id === positionId);
+    if (entry === undefined) {
+      throw new Error(`Missing generated ${operation} scene ${positionId}.`);
+    }
+    return entry.scene.root;
+  };
+  const applyOperation = (input: {
+    readonly positionId: string;
+    readonly operation: "evaluation" | "exchange";
+    readonly progress: number;
+    readonly direction: "forward" | "rewind";
+  }): void => {
+    for (const scene of scenes) scene.root.style.display = "none";
+    const entry = input.operation === "evaluation"
+      ? evaluations.find(({ program }) =>
+          program.position.id === input.positionId
+        )
+      : exchanges.find(({ program }) =>
+          program.position.id === input.positionId
+        );
+    if (entry === undefined) {
+      throw new Error(
+        `Missing generated ${input.operation} operation ${input.positionId}.`
+      );
+    }
+    entry.scene.root.style.display = "grid";
+    void entry.scene.root.offsetWidth;
+    entry.scene.prepare();
+    entry.scene.apply(input.progress, input.direction);
+  };
+  const materialOwners = (stage: HTMLElement) => Object.freeze([
+    ...stage.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )
+  ].map((owner) => {
+    const style = view.getComputedStyle(owner);
+    return Object.freeze({
+      id: owner.dataset["kpEquationMaterialOwnerId"] ?? "",
+      semanticId:
+        owner.dataset["kpEquationMaterialSemanticEntityId"] ?? "",
+      opacity: style.opacity,
+      transform: style.transform,
+      text: owner.textContent?.trim() ?? ""
+    });
+  }).sort((left, right) => left.id.localeCompare(right.id)));
+  const paintMetric = (element: HTMLElement) => {
+    const rect = measureKpNativeKatexSubtreePaintRect(root, element) ??
+      element.getBoundingClientRect();
+    return Object.freeze({
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+      center: Object.freeze({
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2
+      })
+    });
+  };
+  const settleLayout = async (): Promise<void> => new Promise((resolve) =>
+    view.requestAnimationFrame(() => view.requestAnimationFrame(() => resolve()))
+  );
+  return Object.freeze({
+    fixture,
+    root,
+    written,
+    persistentCell,
+    operationScene,
+    applyOperation,
+    materialOwners,
+    paintMetric,
+    settleLayout,
+    settleResult() {
+      written.setEndpoint("settled");
+      for (const cell of fixture.projection.cells) {
+        if (cell.role === "carry-digit") {
+          persistentCell(cell.semanticEntityId).dataset["kpVisibility"] =
+            "hidden";
+        }
+      }
+    },
+    dispose() {
+      for (const scene of scenes) scene.dispose();
+      root.remove();
+    }
+  });
+}
+
+async function primeKpPlaceValueNativeScenes(input: {
+  readonly document: Document;
+  readonly view: Window;
+  readonly root: HTMLElement;
+}): Promise<void> {
+  const scenes = [
+    ...input.root.querySelectorAll<HTMLElement>(
+      "[data-kp-place-value-native-scene]"
+    )
+  ];
+  const previous = scenes.map((scene) => ({
+    scene,
+    display: scene.style.display,
+    visibility: scene.style.visibility,
+    position: scene.style.position,
+    inset: scene.style.inset,
+    pointerEvents: scene.style.pointerEvents
+  }));
+  try {
+    for (const { scene } of previous) {
+      scene.style.display = "grid";
+      scene.style.visibility = "hidden";
+      scene.style.position = "absolute";
+      scene.style.inset = "0";
+      scene.style.pointerEvents = "none";
+    }
+    // Hidden motion endpoints otherwise do not request their KaTeX fonts on a
+    // cold browser. Warm every endpoint before `fonts.ready`, then give grid
+    // and ResizeObserver invalidations two frames to settle before measurement.
+    void input.root.offsetWidth;
+    await Promise.all([
+      input.document.fonts.load("40px KaTeX_Main"),
+      input.document.fonts.load("40px KaTeX_Math")
+    ]);
+    await input.document.fonts.ready;
+    await new Promise<void>((resolve) => input.view.requestAnimationFrame(() =>
+      input.view.requestAnimationFrame(() => resolve())
+    ));
+  } finally {
+    for (const state of previous) {
+      state.scene.style.display = state.display;
+      state.scene.style.visibility = state.visibility;
+      state.scene.style.position = state.position;
+      state.scene.style.inset = state.inset;
+      state.scene.style.pointerEvents = state.pointerEvents;
+    }
+  }
 }

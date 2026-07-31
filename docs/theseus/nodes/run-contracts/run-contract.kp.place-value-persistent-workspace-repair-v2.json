@@ -503,7 +503,8 @@
     {
       "id": "s16",
       "title": "prove-second-persistent-workspace-fixture",
-      "status": "planned"
+      "summary": "Compiled and browser-proved the second generated fixture 999 plus 1 equals 1000. A nominal semantic trace, generic semantic-grid projection, ordered position sequence, presentation authority, and persistent workspace share the canonical compositor with no fixture renderer branch. Dynamic row and column CSS keeps layout metadata out of cloned paint roots; hidden preflight no longer seals compositor coordinates before visible layout. Six generated-fixture and twenty-four canonical browser cases pass across Chromium Firefox WebKit at wide and phone widths. Sparse single-contributor positions and decimal-point rendering remain explicit future gates, not promotion claims.",
+      "status": "complete"
     },
     {
       "id": "s17",

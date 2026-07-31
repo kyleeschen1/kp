@@ -4,19 +4,18 @@ import {
   type KpVerifiedPlaceValueSemanticFoundation
 } from "../architecture/place-value-addition-semantic-foundation.ts";
 import {
-  compileKpPlaceValueAdditionPositionPrograms
+  compileKpPlaceValueAdditionPositionPrograms,
+  isKpPlaceValuePositionProgram
 } from "../reader/compiler/place-value-addition-position-program.ts";
 import type {
-  KpExactRadixPosition
+  KpExactRadixPosition,
+  KpPlaceValuePositionProgram
 } from "../reader/compiler/place-value-addition-position-types.ts";
 import {
   compileKpPlaceValueWrittenColumnProjection,
   isKpPlaceValueWrittenColumnProjection,
   type KpPlaceValueWrittenColumnProjection
 } from "../reader/compiler/place-value-addition-written-column-projection.ts";
-import {
-  kpPlaceValueAdditionVisualReference as reference
-} from "../reader/compiler/place-value-addition-visual-reference.ts";
 import {
   defineKpEndpointHandoff,
   defineKpMeasuredRouteIntent,
@@ -89,16 +88,38 @@ export interface KpPlaceValuePersistentWorkspaceConformance {
 export function compileKpPlaceValuePersistentWorkspacePlan(input: {
   readonly foundation?: KpVerifiedPlaceValueSemanticFoundation;
   readonly projection?: KpPlaceValueWrittenColumnProjection;
+  readonly positionPrograms?: readonly KpPlaceValuePositionProgram[];
+  readonly beatIds?: readonly string[];
 } = {}): KpPlaceValuePersistentWorkspacePlan {
-  const foundation =
-    input.foundation ?? certifyKpPlaceValueSemanticFoundation();
-  const projection = input.projection ??
-    compileKpPlaceValueWrittenColumnProjection(foundation);
+  const fixtureOverride =
+    input.projection !== undefined ||
+    input.positionPrograms !== undefined ||
+    input.beatIds !== undefined;
+  const foundation = input.foundation ?? (
+    fixtureOverride ? undefined : certifyKpPlaceValueSemanticFoundation()
+  );
+  const projection = input.projection ?? (
+    foundation === undefined
+      ? undefined
+      : compileKpPlaceValueWrittenColumnProjection(foundation)
+  );
+  const positionPrograms = input.positionPrograms ??
+    compileKpPlaceValueAdditionPositionPrograms();
+  const beatIds = input.beatIds ?? foundation?.trace.beats.map(({ id }) => id);
   if (
-    !isKpVerifiedPlaceValueSemanticFoundation(foundation) ||
+    projection === undefined ||
+    beatIds === undefined ||
     !isKpPlaceValueWrittenColumnProjection(projection) ||
-    foundation.animationId !== projection.animationId ||
-    foundation.trace.id !== projection.traceId
+    !positionPrograms.every(isKpPlaceValuePositionProgram) ||
+    (
+      foundation !== undefined &&
+      (
+        !isKpVerifiedPlaceValueSemanticFoundation(foundation) ||
+        foundation.animationId !== projection.animationId ||
+        foundation.trace.id !== projection.traceId
+      )
+    ) ||
+    beatIds.length === 0
   ) {
     throw new Error(
       "Persistent place-value workspace requires one sealed foundation and matching written projection."
@@ -121,8 +142,10 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
     semanticRole: "adjacent-position-carry-route"
   });
   const documentaryIds = new Set<string>([
-    ...reference.primaryStage.initialCells.map(({ id }) => id),
-    reference.primaryStage.underline.id
+    ...projection.cells
+      .filter(({ role }) => role === "addend-digit" || role === "operator")
+      .map(({ semanticEntityId }) => semanticEntityId),
+    projection.underline.semanticEntityId
   ]);
   const nativeEntityIds = Object.freeze([
     ...projection.cells.map(({ semanticEntityId }) => semanticEntityId),
@@ -210,7 +233,7 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
     });
   };
 
-  const operations = compileKpPlaceValueAdditionPositionPrograms().map(
+  const operations = positionPrograms.map(
     (program): KpPlaceValuePersistentPositionOperation => {
       const totalDestination = defineKpSemanticDestination({
         id: `destination.place-value.${program.position.id}.total`,
@@ -283,12 +306,12 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
   const plan = Object.freeze({
     schemaVersion:
       "kp.place-value-addition-persistent-workspace.v2" as const,
-    animationId: foundation.animationId,
-    traceId: foundation.trace.id,
+    animationId: projection.animationId,
+    traceId: projection.traceId,
     implementationScope: "ordered-position-sequence" as const,
     generalizationGate: "approved-reference-exemplar" as const,
     nativeEntityIds,
-    beatIds: Object.freeze(reference.beats.map(({ id }) => id)),
+    beatIds: Object.freeze([...beatIds]),
     regions: Object.freeze([
       documentaryRegion,
       resultBand,

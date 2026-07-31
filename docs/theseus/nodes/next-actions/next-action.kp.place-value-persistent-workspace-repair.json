@@ -228,10 +228,73 @@
       "scope": "s15 consolidation size",
       "checkedAt": "2026-07-31T15:30:23.662Z",
       "notes": "Three critical specs fell from 854 to 603 lines; the shared harness is 250 lines, making the consolidation net negative by one line while centralizing seven repeated observation mechanisms."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "semantic-trace-workspace-and-source-guards",
+      "checkedAt": "2026-07-31T16:14:00.204Z",
+      "notes": "116 of 116 place-value tests passed, including unequal-width terminal extension, nominal generated trace, and fail-closed sparse-position input."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition:generated-fixture",
+      "status": "passed",
+      "scope": "second-generated-fixture-wide-phone-three-browser",
+      "checkedAt": "2026-07-31T16:14:01.446Z",
+      "notes": "6 of 6 passed for 999 plus 1 across Chromium, Firefox, and WebKit at wide and phone widths; seek replay, ordered layout, persistent nodes, and terminal result extension were stable."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition:ones-cycle",
+      "status": "passed",
+      "scope": "canonical-reference-regression-three-browser",
+      "checkedAt": "2026-07-31T16:14:02.661Z",
+      "notes": "12 of 12 canonical convergence and carry-arch cases passed after generic semantic-grid routing and isolated evidence-host hardening."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition -- --grep \"every ordered position|terminal position\"",
+      "status": "passed",
+      "scope": "later-position-and-terminal-regression",
+      "checkedAt": "2026-07-31T16:14:03.610Z",
+      "notes": "12 of 12 later-position and terminal-handoff cases passed across three browsers and two widths."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application-node-test-and-domain-types",
+      "checkedAt": "2026-07-31T16:14:04.624Z",
+      "notes": "All TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture-boundaries",
+      "checkedAt": "2026-07-31T16:14:05.522Z",
+      "notes": "All four architecture boundary checks passed."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "compiler-cost-wall-clock",
+      "checkedAt": "2026-07-31T16:14:06.599Z",
+      "notes": "Three transient attempts reported unchanged counts but wall-clock checks of 6.57s, 5.64s, and 6.06s above the 5s ceiling; no threshold or source concession was made."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "compiler-cost-wall-clock-retry",
+      "checkedAt": "2026-07-31T16:14:07.555Z",
+      "notes": "Passed with unchanged types=49279 and instantiations=61770 at 3.9s."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-diff-hygiene",
+      "checkedAt": "2026-07-31T16:14:08.715Z",
+      "notes": "No whitespace errors."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "User visually approved the rightmost persistent-workspace exemplar and authorized resumption at s11. New promotion criterion: reusable compiler, ownership, route, and renderer APIs must be ordered-position/radix-generic—no ones, tens, hundreds, or fixed digit-count identifiers in reusable variable or type names. The 278 plus 156 labels remain fixture data; decimal and unequal-width fixtures are deferred evidence, not unverified promotion claims."
+    "summary": "Second generated fixture 999 plus 1 now proves a nominal seven-beat semantic trace, unequal-width input alignment, ordered radix programs, persistent workspace compilation, and terminal result extension through the same compositor across three browsers and two widths. Reusable sources are guarded against named-place branching. This slice does not certify arbitrary sparse positions or decimal-point presentation: single-contributor positions fail closed pending a typed direct-settlement operation, and decimal rendering remains a later fixture gate."
   }
 }

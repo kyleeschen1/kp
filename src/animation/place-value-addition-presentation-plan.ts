@@ -1,6 +1,3 @@
-import type {
-  KpAdjacentPlaceExchangeCertificate
-} from "../../domains/quantities/place-value-exchange.ts";
 import {
   isKpCarryRemainderLineage,
   type KpCarryRemainderLineage
@@ -20,7 +17,8 @@ import {
   kpPlaceValueAdditionVisualReference as reference
 } from "../reader/compiler/place-value-addition-visual-reference.ts";
 import {
-  compileKpPlaceValueAdditionPositionPrograms
+  compileKpPlaceValueAdditionPositionPrograms,
+  isKpPlaceValuePositionProgram
 } from "../reader/compiler/place-value-addition-position-program.ts";
 import type {
   KpPlaceValuePositionProgram
@@ -43,7 +41,7 @@ type KpOperationEvaluationExecutableProgram =
 
 interface KpPlaceValuePresentationProgramBase {
   readonly id: string;
-  readonly beatId: KpPlaceValueAdditionBeat["id"];
+  readonly beatId: string;
   readonly scheduler: "shared-canonical-beat";
   readonly opacityPolicy: "opaque";
   readonly [kpPlaceValuePresentationProgramBrand]: true;
@@ -61,14 +59,14 @@ export type KpPlaceValuePresentationProgram =
   | (KpPlaceValuePresentationProgramBase & {
       readonly kind: "adjacent-place-exchange";
       readonly role: "conservation-proof";
-      readonly proof: KpAdjacentPlaceExchangeCertificate;
+      readonly proof: KpPlaceValueAdjacentExchangeProof;
     })
   | (KpPlaceValuePresentationProgramBase & {
       readonly kind: "carry-split";
       readonly sourceEvaluationId: string;
       readonly remainderId: string;
       readonly carryId: string;
-      readonly lineage: KpCarryRemainderLineage;
+      readonly lineage: KpPlaceValueCarryLineageProof;
       readonly executableProgram: KpVerifiedIdentityFissionExecutableProgram;
     })
   | (KpPlaceValuePresentationProgramBase & {
@@ -88,7 +86,7 @@ type ProgramOf<Kind extends KpPlaceValuePresentationProgram["kind"]> =
   Extract<KpPlaceValuePresentationProgram, { readonly kind: Kind }>;
 
 interface KpPlaceValuePresentationBeatBase {
-  readonly beatId: KpPlaceValueAdditionBeat["id"];
+  readonly beatId: string;
   readonly traceOperation: KpPlaceValueAdditionBeat["operation"];
 }
 
@@ -124,7 +122,7 @@ export type KpPlaceValueAdditionPresentationBeat =
 
 export interface KpPlaceValueAdditionPresentationPlan {
   readonly schemaVersion: "kp.place-value-addition-presentation-plan.v1";
-  readonly traceId: typeof kpPlaceValueAdditionTrace.id;
+  readonly traceId: string;
   readonly beats: readonly KpPlaceValueAdditionPresentationBeat[];
   readonly programVocabulary: readonly [
     "operation-evaluation",
@@ -136,6 +134,17 @@ export interface KpPlaceValueAdditionPresentationPlan {
   readonly fallbackPolicy: "reject-animation";
   readonly schedulerVocabulary: readonly ["shared-canonical-beat"];
   readonly [kpPlaceValuePresentationPlanBrand]: true;
+}
+
+export interface KpPlaceValueAdjacentExchangeProof {
+  readonly id: string;
+}
+
+export interface KpPlaceValueCarryLineageProof {
+  readonly id: string;
+  readonly exchange: KpPlaceValueAdjacentExchangeProof;
+  readonly remainder: { readonly id: string };
+  readonly carry: { readonly id: string };
 }
 
 export type KpPlaceValueAdditionPresentationResolution =
@@ -172,6 +181,113 @@ export function createKpPlaceValueAdditionPresentationPlan(
     schemaVersion: "kp.place-value-addition-presentation-plan.v1" as const,
     traceId: trace.id,
     beats,
+    programVocabulary: Object.freeze([
+      "operation-evaluation",
+      "adjacent-place-exchange",
+      "carry-split",
+      "persistent-translation",
+      "native-settlement"
+    ] as const),
+    fallbackPolicy: "reject-animation" as const,
+    schedulerVocabulary: Object.freeze(["shared-canonical-beat"] as const)
+  });
+  sealedPresentationPlans.add(plan);
+  return plan as unknown as KpPlaceValueAdditionPresentationPlan;
+}
+
+/**
+ * Builds executable motion authority from an already certified ordered
+ * position sequence. The renderer consumes this nominal plan without knowing
+ * a fixture's width or familiar place labels.
+ */
+export function createKpGeneratedPlaceValueAdditionPresentationPlan(input: {
+  readonly traceId: string;
+  readonly positionPrograms: readonly KpPlaceValuePositionProgram[];
+}): KpPlaceValueAdditionPresentationPlan {
+  if (
+    input.traceId.trim().length === 0 ||
+    input.positionPrograms.length === 0 ||
+    !input.positionPrograms.every(isKpPlaceValuePositionProgram)
+  ) {
+    throw new Error(
+      "Generated place-value presentation requires a certified position sequence."
+    );
+  }
+  const beats: KpPlaceValueAdditionPresentationBeat[] = [];
+  for (const program of input.positionPrograms) {
+    const evaluation = mintProgram({
+      id: `presentation.${program.evaluation.beatId}.operation-evaluation`,
+      beatId: program.evaluation.beatId,
+      scheduler: "shared-canonical-beat" as const,
+      opacityPolicy: "opaque" as const,
+      kind: "operation-evaluation" as const,
+      contributorIds: program.evaluation.contributorCellIds as
+        readonly [string, string, ...string[]],
+      catalystId: "operator.add" as const,
+      resultId: program.exchange === undefined
+        ? program.terminalOutput!.outputs[0].targetCellId
+        : program.evaluation.evaluatedTotalEntityId,
+      expression: program.evaluation.expression,
+      executableProgram: kpOperationEvaluationExecutableProgramCompiler.program
+    });
+    beats.push(Object.freeze({
+      beatId: program.evaluation.beatId,
+      traceOperation: "evaluate-column" as const,
+      kind: "evaluate" as const,
+      programs: Object.freeze([
+        evaluation,
+        generatedPersistence(program.evaluation.beatId, [
+          ...program.evaluation.contributorCellIds,
+          "operator.add"
+        ])
+      ] as const)
+    }));
+    if (program.exchange !== undefined) {
+      const proof = Object.freeze({ id: program.exchange.baseTenExchangeId });
+      const lineage = Object.freeze({
+        id: `lineage.${program.position.id}.carry`,
+        exchange: proof,
+        remainder: Object.freeze({ id: program.exchange.outputCellIds[0] }),
+        carry: Object.freeze({ id: program.exchange.outputCellIds[1] })
+      });
+      beats.push(Object.freeze({
+        beatId: program.exchange.beatId,
+        traceOperation: "exchange-adjacent-place" as const,
+        kind: "exchange-and-carry" as const,
+        programs: Object.freeze([
+          mintProgram({
+            id: `presentation.${program.exchange.beatId}.adjacent-place-exchange`,
+            beatId: program.exchange.beatId,
+            scheduler: "shared-canonical-beat" as const,
+            opacityPolicy: "opaque" as const,
+            kind: "adjacent-place-exchange" as const,
+            role: "conservation-proof" as const,
+            proof
+          }),
+          mintProgram({
+            id: `presentation.${program.exchange.beatId}.carry-split`,
+            beatId: program.exchange.beatId,
+            scheduler: "shared-canonical-beat" as const,
+            opacityPolicy: "opaque" as const,
+            kind: "carry-split" as const,
+            sourceEvaluationId: program.evaluation.evaluatedTotalEntityId,
+            remainderId: program.exchange.outputCellIds[0],
+            carryId: program.exchange.outputCellIds[1],
+            lineage,
+            executableProgram: kpIdentityFissionExecutableProgram
+          }),
+          generatedPersistence(program.exchange.beatId, [
+            ...program.exchange.outputCellIds,
+            "operator.add"
+          ])
+        ] as const)
+      }));
+    }
+  }
+  const plan = Object.freeze({
+    schemaVersion: "kp.place-value-addition-presentation-plan.v1" as const,
+    traceId: input.traceId,
+    beats: Object.freeze(beats),
     programVocabulary: Object.freeze([
       "operation-evaluation",
       "adjacent-place-exchange",
@@ -387,6 +503,25 @@ function persistentProgram(
     opacityPolicy: "opaque" as const,
     kind: "persistent-translation" as const,
     entityIds: Object.freeze([...entityIds]) as readonly [string, ...string[]],
+    identityPolicy: "same-entity-continuous" as const
+  });
+}
+
+function generatedPersistence(
+  beatId: string,
+  entityIds: readonly string[]
+): ProgramOf<"persistent-translation"> {
+  if (entityIds.length === 0) {
+    throw new Error(`Generated presentation beat ${beatId} has no continuants.`);
+  }
+  return mintProgram({
+    id: `presentation.${beatId}.persistent-translation`,
+    beatId,
+    scheduler: "shared-canonical-beat" as const,
+    opacityPolicy: "opaque" as const,
+    kind: "persistent-translation" as const,
+    entityIds: Object.freeze([...entityIds]) as
+      readonly [string, ...string[]],
     identityPolicy: "same-entity-continuous" as const
   });
 }
