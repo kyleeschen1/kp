@@ -50,20 +50,11 @@ export function createKpPlaceValueInkUnionExperiment(input: {
   filter.setAttribute("height", "340%");
   filter.setAttribute("color-interpolation-filters", "sRGB");
 
-  const dilate = input.document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "feMorphology"
-  );
-  dilate.setAttribute("in", "SourceGraphic");
-  dilate.setAttribute("operator", "dilate");
-  dilate.setAttribute("radius", "0");
-  dilate.setAttribute("result", "expandedInk");
-
   const blur = input.document.createElementNS(
     "http://www.w3.org/2000/svg",
     "feGaussianBlur"
   );
-  blur.setAttribute("in", "expandedInk");
+  blur.setAttribute("in", "SourceGraphic");
   blur.setAttribute("stdDeviation", "0");
   blur.setAttribute("result", "pooledInk");
 
@@ -75,7 +66,7 @@ export function createKpPlaceValueInkUnionExperiment(input: {
   threshold.setAttribute("type", "matrix");
   threshold.setAttribute("values", alphaThresholdMatrix(0));
   threshold.setAttribute("result", "inkUnion");
-  filter.append(dilate, blur, threshold);
+  filter.append(blur, threshold);
   defs.append(filter);
   svg.append(defs);
   input.sceneRoot.prepend(svg);
@@ -83,34 +74,39 @@ export function createKpPlaceValueInkUnionExperiment(input: {
   input.sceneRoot.dataset["kpPlaceValueEvaluationVisualExperiment"] =
     kpPlaceValueInkUnionExperimentKind;
   input.sceneRoot.dataset["kpPlaceValueInkUnionState"] = "dormant";
-  materialLayer.style.willChange = "filter";
+  // Keep the filter pipeline installed from the first material-owned frame.
+  // Switching between `none` and a URL mid-motion rasterized the glyphs as a
+  // new surface and made an otherwise continuous approach look like a jump.
+  materialLayer.style.filter = `url(#${filterId})`;
+  materialLayer.style.transform = "scale(1)";
+  materialLayer.style.willChange = "filter, transform";
 
   let disposed = false;
+  let seedOriginPrepared = false;
   const apply = (progress: number): void => {
     if (disposed) {
       throw new Error("Cannot apply a disposed ink-union experiment.");
     }
     const bounded = clamp01(progress);
+    if (!seedOriginPrepared) {
+      prepareSeedOrigin(input.sceneRoot, materialLayer);
+      seedOriginPrepared = true;
+    }
     const strength = inkUnionStrength(bounded);
+    const scale = pinchAndBloomScale(bounded);
     input.sceneRoot.dataset["kpPlaceValueInkUnionStrengthPermille"] =
       String(Math.round(strength * 1_000));
+    input.sceneRoot.dataset["kpPlaceValueInkUnionScalePermille"] =
+      String(Math.round(scale * 1_000));
     input.sceneRoot.dataset["kpPlaceValueInkUnionState"] =
-      inkUnionState(bounded, strength);
-    if (strength <= 0.001) {
-      materialLayer.style.filter = "none";
-      dilate.setAttribute("radius", "0");
-      blur.setAttribute("stdDeviation", "0");
-      threshold.setAttribute("values", alphaThresholdMatrix(0));
-      return;
-    }
+      inkUnionState(bounded, strength, scale);
 
-    // Dilation preserves a result-sized material body while blur plus an
-    // alpha threshold joins only nearby glyph contours into organic lobes.
-    // All quantities return continuously to zero before native handoff.
-    dilate.setAttribute("radius", (0.8 * strength).toFixed(3));
-    blur.setAttribute("stdDeviation", (2.8 * strength).toFixed(3));
+    // Geometry brings the glyphs into contact; the much narrower filter only
+    // rounds their seam. This keeps the bridge calligraphic instead of using
+    // dilation to manufacture a thick body between distant paint.
+    blur.setAttribute("stdDeviation", (1.15 * strength).toFixed(3));
     threshold.setAttribute("values", alphaThresholdMatrix(strength));
-    materialLayer.style.filter = `url(#${filterId})`;
+    materialLayer.style.transform = `scale(${scale.toFixed(4)})`;
   };
 
   return Object.freeze({
@@ -120,40 +116,93 @@ export function createKpPlaceValueInkUnionExperiment(input: {
       if (disposed) return;
       disposed = true;
       materialLayer.style.filter = "none";
+      materialLayer.style.transform = "none";
+      materialLayer.style.transformOrigin = "";
       materialLayer.style.willChange = "auto";
       svg.remove();
       delete input.sceneRoot.dataset["kpPlaceValueEvaluationVisualExperiment"];
       delete input.sceneRoot.dataset["kpPlaceValueInkUnionState"];
       delete input.sceneRoot.dataset["kpPlaceValueInkUnionStrengthPermille"];
+      delete input.sceneRoot.dataset["kpPlaceValueInkUnionScalePermille"];
     }
   });
 }
 
 function inkUnionStrength(progress: number): number {
-  const gathering = smoothstep(0.36, 0.6, progress);
-  const resolving = 1 - smoothstep(0.82, 0.97, progress);
+  const gathering = smoothstep(0.5, 0.68, progress);
+  const resolving = 1 - smoothstep(0.8, 0.94, progress);
   return gathering * resolving;
+}
+
+function pinchAndBloomScale(progress: number): number {
+  const minimumScale = 0.48;
+  const seedProgress = 0.72;
+  if (progress <= seedProgress) {
+    return 1 - (1 - minimumScale) * smoothstep(
+      0.46,
+      seedProgress,
+      progress
+    );
+  }
+  return minimumScale + (1 - minimumScale) * smoothstep(
+    seedProgress,
+    0.96,
+    progress
+  );
 }
 
 function inkUnionState(
   progress: number,
-  strength: number
-): "dormant" | "forming" | "pooled" | "resolving" {
-  if (strength <= 0.001) return "dormant";
-  if (progress < 0.6) return "forming";
-  if (progress < 0.82) return "pooled";
-  return "resolving";
+  strength: number,
+  scale: number
+):
+  | "dormant"
+  | "docking"
+  | "pinching"
+  | "seed"
+  | "blooming"
+  | "resolved" {
+  if (progress >= 0.96) return "resolved";
+  if (progress < 0.46) return "dormant";
+  if (strength <= 0.001) return "docking";
+  if (progress < 0.69) return "pinching";
+  if (scale <= 0.5) return "seed";
+  return "blooming";
 }
 
 function alphaThresholdMatrix(strength: number): string {
-  const alphaScale = 1 + 17 * strength;
-  const alphaOffset = -7 * strength;
+  const alphaScale = 1 + 7 * strength;
+  const alphaOffset = -2.5 * strength;
   return [
     "1 0 0 0 0",
     "0 1 0 0 0",
     "0 0 1 0 0",
     `0 0 0 ${alphaScale.toFixed(3)} ${alphaOffset.toFixed(3)}`
   ].join(" ");
+}
+
+function prepareSeedOrigin(
+  sceneRoot: HTMLElement,
+  materialLayer: HTMLElement
+): void {
+  const targets = [
+    ...sceneRoot.querySelectorAll<HTMLElement>(
+      '[data-kp-place-value-operation-endpoint="target"] ' +
+      "[data-kp-place-value-motion-target-id]"
+    )
+  ].map((target) => target.getBoundingClientRect())
+    .filter(({ width, height }) => width > 0 && height > 0);
+  if (targets.length === 0) {
+    throw new Error("Ink-union experiment requires measurable result paint.");
+  }
+  const layer = materialLayer.getBoundingClientRect();
+  const left = Math.min(...targets.map((target) => target.left));
+  const top = Math.min(...targets.map((target) => target.top));
+  const right = Math.max(...targets.map((target) => target.right));
+  const bottom = Math.max(...targets.map((target) => target.bottom));
+  materialLayer.style.transformOrigin =
+    `${((left + right) / 2 - layer.left).toFixed(3)}px ` +
+    `${((top + bottom) / 2 - layer.top).toFixed(3)}px`;
 }
 
 function smoothstep(start: number, end: number, value: number): number {
