@@ -203,11 +203,39 @@
       "scope": "impact-selection",
       "checkedAt": "2026-07-31T21:49:26.795Z",
       "notes": "The unmatched documentation/checker paths select the broad safe gate; focused projection proof and typecheck ran now, with full release verification retained for s19."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/html-output-encoding-inventory.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T21:58:14.059Z",
+      "notes": "Three tests prove all 22 local generic helpers are classified, exactly one editor HTML consumer is selected, and HTML versus SVG text/attribute contexts remain distinct."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-animation-construction-inventory.test.ts",
+      "status": "failed",
+      "scope": "expected-baseline",
+      "checkedAt": "2026-07-31T21:58:15.129Z",
+      "notes": "The only failure remains the intentional 22-versus-21 helper ratchet; slice 6 records the selected deletion but does not perform slice 7 consolidation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-31T21:58:16.036Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass with the typed output-context inventory."
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path src/architecture/html-output-encoding-inventory.ts --path tests/html-output-encoding-inventory.test.ts",
+      "status": "passed",
+      "scope": "impact-selection",
+      "checkedAt": "2026-07-31T21:58:17.042Z",
+      "notes": "The unmatched architecture paths select the broad safe gate; focused proof and typecheck ran now while the known-red full suite remains owned by later slices."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 5 aligns the roadmap-selected cross-domain thread with the rank-3 economics planning frontier while naming the current baseline-recovery prerequisite. Promotion memory now rejects drift in that active-thread projection without duplicating the authoritative rank table."
+    "summary": "Slice 6 classified all 22 generic helpers by parser sink and selected the exact-fraction editor HTML consumer for context-specific consolidation in slice 7."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."

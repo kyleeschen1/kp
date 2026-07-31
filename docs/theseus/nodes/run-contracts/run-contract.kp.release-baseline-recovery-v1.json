@@ -91,7 +91,8 @@
     {
       "id": "s06",
       "title": "classify-html-output-contexts",
-      "status": "planned"
+      "summary": "A typed inventory now classifies all 22 local escapeHtml owners across HTML and SVG text/attribute sinks. The post-ratchet exact-fraction editor surface is the sole selected consolidation candidate; focused tests and typecheck pass, and the original 22/21 ratchet remains the expected slice-7 failure.",
+      "status": "complete"
     },
     {
       "id": "s07",
