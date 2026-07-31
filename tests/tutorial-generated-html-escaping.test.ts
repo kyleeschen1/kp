@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
@@ -9,15 +9,49 @@ import {
 } from "../src/tutorial/generated-html-escaping.ts";
 
 const consumers = [
-  "src/tutorial/card-html-shell.ts",
-  "src/tutorial/frame-sequence-preview.ts",
-  "src/tutorial/iframe-export-document.ts",
-  "src/tutorial/programming-card-sample.ts",
-  "src/tutorial/programming-execution-trace-card-sample.ts",
-  "src/tutorial/programming-execution-trace-panel.ts",
-  "src/tutorial/static-step-export-smoke-fixture.ts",
-  "src/tutorial/synchronized-comparison-card.ts"
+  {
+    path: "src/tutorial/card-html-shell.ts",
+    contexts: ["text", "attribute"]
+  },
+  {
+    path: "src/tutorial/frame-sequence-preview.ts",
+    contexts: ["text", "attribute", "script-json"]
+  },
+  {
+    path: "src/tutorial/iframe-export-document.ts",
+    contexts: ["text", "attribute", "script-json"]
+  },
+  {
+    path: "src/tutorial/place-value-addition-static-step-export.ts",
+    contexts: ["text", "attribute"]
+  },
+  {
+    path: "src/tutorial/programming-card-sample.ts",
+    contexts: ["text", "attribute"]
+  },
+  {
+    path: "src/tutorial/programming-execution-trace-card-sample.ts",
+    contexts: ["text", "attribute"]
+  },
+  {
+    path: "src/tutorial/programming-execution-trace-panel.ts",
+    contexts: ["text", "attribute"]
+  },
+  {
+    path: "src/tutorial/static-step-export-smoke-fixture.ts",
+    contexts: ["text", "attribute", "script-json"]
+  },
+  {
+    path: "src/tutorial/synchronized-comparison-card.ts",
+    contexts: ["text", "attribute"]
+  }
 ] as const;
+
+const contextSymbols = {
+  text: "escapeKpTutorialHtmlText",
+  attribute: "escapeKpTutorialHtmlAttribute",
+  "script-json": "escapeKpTutorialScriptJson"
+} as const;
 
 test("generated tutorial text and attributes escape their exact HTML contexts", () => {
   const adversarial = `&<>"'=/\u2028\u2029`;
@@ -56,7 +90,19 @@ test("script JSON remains parseable while HTML terminators and separators are in
 });
 
 test("only generated tutorial document consumers share the utility", async () => {
-  for (const path of consumers) {
+  const tutorialSources = await sourceFiles("src/tutorial");
+  const actualConsumers = (await Promise.all(tutorialSources.map(
+    async (path) => ({ path, source: await readFile(path, "utf8") })
+  )))
+    .filter(({ source }) => /from "\.\/generated-html-escaping\.ts"/.test(source))
+    .map(({ path }) => path)
+    .sort();
+  assert.deepEqual(
+    actualConsumers,
+    consumers.map(({ path }) => path).slice().sort()
+  );
+
+  for (const { path, contexts } of consumers) {
     const source = await readFile(path, "utf8");
     assert.match(source, /generated-html-escaping\.ts/, path);
     assert.doesNotMatch(
@@ -64,5 +110,18 @@ test("only generated tutorial document consumers share the utility", async () =>
       /function (?:escapeHtml|escapeAttr|escapeScriptJson)/,
       path
     );
+    for (const [context, symbol] of Object.entries(contextSymbols)) {
+      const expected = (contexts as readonly string[]).includes(context);
+      assert.equal(source.includes(symbol), expected, `${path}: ${context}`);
+    }
   }
 });
+
+async function sourceFiles(root: string): Promise<string[]> {
+  const entries = await readdir(root, { withFileTypes: true });
+  return (await Promise.all(entries.map((entry) => {
+    const child = `${root}/${entry.name}`;
+    if (entry.isDirectory()) return sourceFiles(child);
+    return /\.(?:mjs|ts|tsx)$/.test(entry.name) ? [child] : [];
+  }))).flat();
+}

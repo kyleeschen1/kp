@@ -2,6 +2,11 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
+import {
+  kpHtmlEncodingConsolidations,
+  kpHtmlEncodingOwners
+} from "../src/architecture/html-output-encoding-inventory.ts";
+
 const inventoryPath =
   "docs/project/reviews/2026-07-25-canonical-animation-construction-path-inventory.md";
 
@@ -79,32 +84,20 @@ test("clone authority sanitation is already one shared browser contract", async 
   }
 });
 
-test("escaping inventory ratchets only the proven tutorial consolidation", async () => {
-  const files = await sourceFiles(["src", "scripts"]);
-  const sources = await Promise.all(files.map(async (path) => ({
-    path,
-    source: await readFile(path, "utf8")
-  })));
-  assert.equal(
-    sources.filter(({ source }) => /function escapeHtml/.test(source)).length,
-    21
+test("escaping inventory ratchets the selected context consolidation", async () => {
+  assert.equal(kpHtmlEncodingOwners.length, 21);
+  assert.deepEqual(
+    kpHtmlEncodingConsolidations.map(({ sourceFile }) => sourceFile),
+    ["src/editor/exact-fraction-quantity-surface-adapter.ts"]
   );
-  assert.equal(
-    sources.filter(({ source }) =>
-      /function (?:escapeAttr|escapeAttribute)/.test(source)
-    ).length,
-    1
+
+  const selected = await readFile(
+    kpHtmlEncodingConsolidations[0].sourceFile,
+    "utf8"
   );
-  assert.equal(
-    sources.filter(({ source }) => /function escapeScriptJson/.test(source)).length,
-    0
-  );
-  assert.equal(
-    sources.filter(({ source }) =>
-      /generated-html-escaping\.ts/.test(source)
-    ).length,
-    8
-  );
+  assert.match(selected, /encodeKpEditorHtmlText/);
+  assert.match(selected, /encodeKpEditorHtmlAttribute/);
+  assert.doesNotMatch(selected, /function escapeHtml/);
 });
 
 test("canonical animation exports stay out of the concept authoring barrel", async () => {
@@ -123,19 +116,6 @@ test("canonical animation exports stay out of the concept authoring barrel", asy
     assert.match(canonicalApi, new RegExp(symbol), symbol);
   }
 });
-
-async function sourceFiles(roots: readonly string[]): Promise<readonly string[]> {
-  const { readdir } = await import("node:fs/promises");
-  const visit = async (path: string): Promise<string[]> => {
-    const entries = await readdir(path, { withFileTypes: true });
-    return (await Promise.all(entries.map((entry) => {
-      const child = `${path}/${entry.name}`;
-      if (entry.isDirectory()) return visit(child);
-      return /\.(?:mjs|ts|tsx)$/.test(entry.name) ? [child] : [];
-    }))).flat();
-  };
-  return (await Promise.all(roots.map(visit))).flat();
-}
 
 function escapeRegex(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

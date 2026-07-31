@@ -266,11 +266,46 @@
       "scope": "impact-selection",
       "checkedAt": "2026-07-31T22:03:19.840Z",
       "notes": "The unmatched paths select the broad safe gate; focused consumer suites and typecheck ran now, with full suite and build retained for later release slices."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-animation-construction-inventory.test.ts tests/html-output-encoding-inventory.test.ts tests/editor-html-output-encoding.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T22:07:10.146Z",
+      "notes": "All 11 owner, consolidation, adversarial encoding, and consumer-misuse laws pass; the accepted local helper inventory is restored to 21."
+    },
+    {
+      "command": "npm run test:tutorial-generated-html-escaping",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T22:07:11.047Z",
+      "notes": "All 24 tests pass; exact discovery now proves all nine legitimate consumers and their text, attribute, and script-JSON symbol sets instead of a stale raw count."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-31T22:07:11.915Z",
+      "notes": "Application, node, test, and domain projects pass after the source-law rewrite."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-animation-construction-inventory.test.ts tests/canonical-equation-renderer-convergence.test.ts tests/linear-provider-boundary.test.ts tests/operation-presentation-migration-inventory.test.ts",
+      "status": "failed",
+      "scope": "expected-baseline",
+      "checkedAt": "2026-07-31T22:07:12.778Z",
+      "notes": "HTML ownership and operation evidence are green. Exactly the two scheduled architecture failures remain: 141543/136000 compositor source and the provider-to-domain rational import."
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path tests/canonical-animation-construction-inventory.test.ts --path tests/tutorial-generated-html-escaping.test.ts --path tests/editor-html-output-encoding.test.ts",
+      "status": "passed",
+      "scope": "impact-selection",
+      "checkedAt": "2026-07-31T22:07:13.640Z",
+      "notes": "The unmatched tests select the broad safe gate; focused security/ownership suites and typecheck ran now, with full suite/build retained for later release slices."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 7 deleted the selected generic helper, migrated exact-fraction text and attribute sinks to the editor encoder, and restored 21 local owners; slice 8 owns the hidden stale tutorial-consumer count."
+    "summary": "Slice 8 closed the HTML-helper gate with exact owner and sink laws; only the rational boundary and compositor source architecture failures remain before payload repair."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."

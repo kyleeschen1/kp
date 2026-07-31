@@ -103,7 +103,8 @@
     {
       "id": "s08",
       "title": "enforce-context-encoding-laws",
-      "status": "planned"
+      "summary": "The brittle generated-helper counts are replaced by exact source discovery and declared text, double-quoted attribute, and script-JSON symbol sets. The editor consumer has adversarial encoders and source misuse guards; all 11 focused laws, 24 generated-tutorial tests, and typecheck pass. The four-test architecture baseline now has only the scheduled rational and compositor failures.",
+      "status": "complete"
     },
     {
       "id": "s09",
