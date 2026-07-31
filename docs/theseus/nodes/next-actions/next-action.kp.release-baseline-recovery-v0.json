@@ -231,11 +231,46 @@
       "scope": "impact-selection",
       "checkedAt": "2026-07-31T21:58:17.042Z",
       "notes": "The unmatched architecture paths select the broad safe gate; focused proof and typecheck ran now while the known-red full suite remains owned by later slices."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T22:03:16.131Z",
+      "notes": "All 101 exact-fraction semantic, presentation, accessibility, layout, and runtime tests pass after the encoder migration."
+    },
+    {
+      "command": "npm run test:tutorial-generated-html-escaping",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-31T22:03:17.147Z",
+      "notes": "All 24 existing text, attribute, script-JSON, tutorial-document, and consumer-boundary tests pass unchanged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-31T22:03:18.051Z",
+      "notes": "Application, node, test, and domain projects pass with the new editor encoder boundary."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/editor-html-output-encoding.test.ts tests/html-output-encoding-inventory.test.ts tests/canonical-animation-construction-inventory.test.ts",
+      "status": "failed",
+      "scope": "expected-next-slice",
+      "checkedAt": "2026-07-31T22:03:18.966Z",
+      "notes": "Nine of ten tests pass: helper ownership is restored to 21 and both context encoders pass; the newly reachable stale assertion expects 8 shared tutorial consumers although 9 legitimate consumers already pass their canonical boundary suite. Slice 8 replaces the raw count with context laws."
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path src/editor/html-output-encoding.ts --path src/editor/exact-fraction-quantity-surface-adapter.ts --path src/architecture/html-output-encoding-inventory.ts --path tests/editor-html-output-encoding.test.ts --path tests/html-output-encoding-inventory.test.ts",
+      "status": "passed",
+      "scope": "impact-selection",
+      "checkedAt": "2026-07-31T22:03:19.840Z",
+      "notes": "The unmatched paths select the broad safe gate; focused consumer suites and typecheck ran now, with full suite and build retained for later release slices."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 6 classified all 22 generic helpers by parser sink and selected the exact-fraction editor HTML consumer for context-specific consolidation in slice 7."
+    "summary": "Slice 7 deleted the selected generic helper, migrated exact-fraction text and attribute sinks to the editor encoder, and restored 21 local owners; slice 8 owns the hidden stale tutorial-consumer count."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."

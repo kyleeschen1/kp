@@ -5,19 +5,21 @@ export type KpHtmlOutputContext =
   | "svg-attribute";
 
 export type KpHtmlEncodingOwnerDisposition =
-  | {
-      readonly kind: "retain-local";
-      readonly boundary: "application" | "compiler" | "editor" | "rendering" | "review-tool" | "tutorial";
-    }
-  | {
-      readonly kind: "consolidate";
-      readonly boundary: "editor-context-encoder";
-    };
+  {
+    readonly kind: "retain-local";
+    readonly boundary: "application" | "compiler" | "editor" | "rendering" | "review-tool" | "tutorial";
+  };
 
 export interface KpHtmlEncodingOwner {
   readonly sourceFile: string;
   readonly outputContexts: readonly KpHtmlOutputContext[];
   readonly disposition: KpHtmlEncodingOwnerDisposition;
+}
+
+export interface KpHtmlEncodingConsolidation {
+  readonly sourceFile: string;
+  readonly outputContexts: readonly KpHtmlOutputContext[];
+  readonly boundary: "src/editor/html-output-encoding.ts";
 }
 
 const retain = (
@@ -77,14 +79,6 @@ export const kpHtmlEncodingOwners = [
     "html-text",
     "html-attribute"
   ]),
-  {
-    sourceFile: "src/editor/exact-fraction-quantity-surface-adapter.ts",
-    outputContexts: ["html-text", "html-attribute"],
-    disposition: {
-      kind: "consolidate",
-      boundary: "editor-context-encoder"
-    }
-  },
   retain("src/editor/graph-svg-viewport.ts", "editor", [
     "html-attribute",
     "svg-attribute"
@@ -129,3 +123,11 @@ export const kpHtmlEncodingOwners = [
     "html-attribute"
   ])
 ] as const satisfies readonly KpHtmlEncodingOwner[];
+
+export const kpHtmlEncodingConsolidations = [
+  {
+    sourceFile: "src/editor/exact-fraction-quantity-surface-adapter.ts",
+    outputContexts: ["html-text", "html-attribute"],
+    boundary: "src/editor/html-output-encoding.ts"
+  }
+] as const satisfies readonly KpHtmlEncodingConsolidation[];

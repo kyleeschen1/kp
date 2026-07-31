@@ -82,6 +82,10 @@ import {
   writeKpExactFractionQuantityLibraryState,
   type KpExactFractionQuantityLibraryState
 } from "./exact-fraction-quantity-library-state.ts";
+import {
+  encodeKpEditorHtmlAttribute,
+  encodeKpEditorHtmlText
+} from "./html-output-encoding.ts";
 
 interface ExactSurfaceSession {
   readonly runtime: KpExactFractionQuantityRuntimeSession;
@@ -940,12 +944,12 @@ function renderReviewCard(
         ${profile === "phone"
           ? `data-kp-exact-review-view="${phoneView}"`
           : ""}
-        aria-label="${escapeHtml(
+        aria-label="${encodeKpEditorHtmlAttribute(
           `${profile} checkpoint ${index + 1}: ${frame.state.description}`
         )}">
         <span class="kp-exact-review-sheet__meta">
           <b>${String(index + 1).padStart(2, "0")}</b>
-          <span>${escapeHtml(frame.state.description)}</span>
+          <span>${encodeKpEditorHtmlText(frame.state.description)}</span>
           <code>${progressPermille / 10}%</code>
         </span>
         <span class="kp-exact-review-sheet__preview kp-exact-review-sheet__preview--${profile}" aria-hidden="true">
@@ -1187,16 +1191,16 @@ function syncAccessibleSurface(
   host.innerHTML = `
     <h4>Current exact-quantity checkpoint</h4>
     <div data-kp-exact-accessible-math>${current.nativeHtmlAndMathml}</div>
-    <p>${escapeHtml(current.label)}. ${escapeHtml(current.description)}</p>
+    <p>${encodeKpEditorHtmlText(current.label)}. ${encodeKpEditorHtmlText(current.description)}</p>
     ${state.activeView === "symbolic"
       ? ""
-      : `<p>${escapeHtml(accessibleViewSummary(frame, state.activeView))}</p>`}
-    <p>Visual representation: ${escapeHtml(
+      : `<p>${encodeKpEditorHtmlText(accessibleViewSummary(frame, state.activeView))}</p>`}
+    <p>Visual representation: ${encodeKpEditorHtmlText(
       state.activeView.replaceAll("-", " ")
-    )}. Evaluation detail: ${escapeHtml(state.foldMode)}. Folding changes disclosure only.</p>
+    )}. Evaluation detail: ${encodeKpEditorHtmlText(state.foldMode)}. Folding changes disclosure only.</p>
     <p>Focused quantities: ${current.focusSelectionIds.map(
       (selectionId) =>
-        `<a href="#${escapeHtml(`transcript.selection.${selectionId}`)}">${escapeHtml(selectionLabel(selectionId))}</a>`
+        `<a href="#${encodeKpEditorHtmlAttribute(`transcript.selection.${selectionId}`)}">${encodeKpEditorHtmlText(selectionLabel(selectionId))}</a>`
     ).join(", ")}.</p>`;
   slot.querySelectorAll<HTMLElement>("[data-kp-exact-transcript-step]")
     .forEach((item, index) => {
@@ -1265,23 +1269,23 @@ function renderAccessibleTranscript(
   return `
     <details class="kp-exact-quantity__transcript" data-kp-exact-transcript>
       <summary>Accessible transcript: all five operations</summary>
-      <p>${escapeHtml(projection.introduction)}</p>
+      <p>${encodeKpEditorHtmlText(projection.introduction)}</p>
       <ol>
         ${projection.steps.map((step) => `
-          <li data-kp-exact-transcript-step="${escapeHtml(step.beatId)}">
-            <strong>${escapeHtml(step.label)}.</strong>
-            ${escapeHtml(step.description)}
+          <li data-kp-exact-transcript-step="${encodeKpEditorHtmlAttribute(step.beatId)}">
+            <strong>${encodeKpEditorHtmlText(step.label)}.</strong>
+            ${encodeKpEditorHtmlText(step.description)}
           </li>`
         ).join("")}
       </ol>
-      <p>${escapeHtml(projection.finalStatement)}</p>
+      <p>${encodeKpEditorHtmlText(projection.finalStatement)}</p>
       <dl class="kp-exact-sr-only" data-kp-exact-transcript-references>
         ${transcriptRefs.map((transcriptRefId) => {
           const selectionId = transcriptRefId.replace(
             "transcript.selection.",
             ""
           );
-          return `<div id="${escapeHtml(transcriptRefId)}"><dt>${escapeHtml(selectionLabel(selectionId))}</dt><dd>${escapeHtml(selectionId)}</dd></div>`;
+          return `<div id="${encodeKpEditorHtmlAttribute(transcriptRefId)}"><dt>${encodeKpEditorHtmlText(selectionLabel(selectionId))}</dt><dd>${encodeKpEditorHtmlText(selectionId)}</dd></div>`;
         }).join("")}
       </dl>
     </details>`;
@@ -1354,7 +1358,7 @@ function renderSurfaceShell(
       </header>
       <nav class="kp-exact-quantity__checkpoints" aria-label="Animation checkpoint starts">
         ${manifest.checkpoints.map((checkpoint, index) =>
-          `<button type="button" data-kp-exact-checkpoint-start="${manifest.pacing[index]!.startPermille}">${escapeHtml(checkpoint.label)}</button>`
+          `<button type="button" data-kp-exact-checkpoint-start="${manifest.pacing[index]!.startPermille}">${encodeKpEditorHtmlText(checkpoint.label)}</button>`
         ).join("")}
       </nav>
       <div class="kp-exact-quantity__outline">
@@ -1419,7 +1423,7 @@ function reviewSheetStyles(): string {
 function viewButtons(active: KpExactFractionQuantityViewKind): string {
   return (manifest.viewObligations as readonly KpExactFractionQuantityViewKind[])
     .map((view) =>
-      `<button type="button" data-kp-exact-active-view="${view}" aria-pressed="${view === active}">${escapeHtml(view.replaceAll("-", " "))}</button>`
+      `<button type="button" data-kp-exact-active-view="${view}" aria-pressed="${view === active}">${encodeKpEditorHtmlText(view.replaceAll("-", " "))}</button>`
     ).join("");
 }
 
@@ -1454,12 +1458,4 @@ function isExactView(
 ): value is KpExactFractionQuantityViewKind {
   return value !== undefined &&
     (manifest.viewObligations as readonly string[]).includes(value);
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
 }

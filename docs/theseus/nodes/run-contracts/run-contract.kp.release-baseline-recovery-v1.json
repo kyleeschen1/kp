@@ -97,7 +97,8 @@
     {
       "id": "s07",
       "title": "consolidate-one-html-consumer",
-      "status": "planned"
+      "summary": "The exact-fraction surface now calls distinct editor HTML text and double-quoted attribute encoders and no longer defines generic escapeHtml. All 101 consumer tests, 24 generated tutorial escaping tests, encoder tests, inventory ownership, and typecheck pass. The original helper ratchet is 21; a previously masked 9-versus-8 legitimate shared-consumer count remains explicitly assigned to slice 8's context-law repair.",
+      "status": "complete"
     },
     {
       "id": "s08",

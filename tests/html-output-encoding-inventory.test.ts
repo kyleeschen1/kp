@@ -3,6 +3,7 @@ import { readdir, readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
+  kpHtmlEncodingConsolidations,
   kpHtmlEncodingOwners,
   type KpHtmlOutputContext
 } from "../src/architecture/html-output-encoding-inventory.ts";
@@ -27,25 +28,19 @@ test("every local generic HTML helper has one classified sink owner", async () =
 });
 
 test("the excess helper has one context-specific consolidation target", () => {
-  const selected = kpHtmlEncodingOwners.filter(
-    ({ disposition }) => disposition.kind === "consolidate"
-  );
-
-  assert.deepEqual(selected, [
+  assert.deepEqual(kpHtmlEncodingConsolidations, [
     {
       sourceFile: "src/editor/exact-fraction-quantity-surface-adapter.ts",
       outputContexts: ["html-text", "html-attribute"],
-      disposition: {
-        kind: "consolidate",
-        boundary: "editor-context-encoder"
-      }
+      boundary: "src/editor/html-output-encoding.ts"
     }
   ]);
 });
 
 test("the inventory does not erase parser-context distinctions", () => {
   const represented = new Set<KpHtmlOutputContext>(
-    kpHtmlEncodingOwners.flatMap(({ outputContexts }) => outputContexts)
+    [...kpHtmlEncodingOwners, ...kpHtmlEncodingConsolidations]
+      .flatMap(({ outputContexts }) => outputContexts)
   );
 
   assert.deepEqual(
