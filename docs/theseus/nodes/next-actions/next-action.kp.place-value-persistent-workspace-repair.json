@@ -95,6 +95,27 @@
       "scope": "s12 result-versus-carry boundary",
       "checkedAt": "2026-07-31T15:03:08.517Z",
       "notes": "All architecture gates pass; terminal overflow extends the existing ordered-position plan without a renderer category or compatibility exception."
+    },
+    {
+      "command": "npm run test:browser:place-value-addition:scaffold",
+      "status": "passed",
+      "scope": "s13 Chromium Firefox WebKit wide and phone",
+      "checkedAt": "2026-07-31T15:08:25.498Z",
+      "notes": "12 of 12 pass. Dense full-timeline samples prove the same eight documentary nodes and geometry remain connected, addends dim monotonically but never disappear, stationary marks remain opaque, and rewind plus scrambled direct seek exactly reproduce forward frames."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "s13 semantic and lifecycle regression",
+      "checkedAt": "2026-07-31T15:08:26.467Z",
+      "notes": "113 of 113 focused unit cases pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s13 browser evidence types",
+      "checkedAt": "2026-07-31T15:08:27.329Z",
+      "notes": "Application, Node, browser test, and domain projects pass."
     }
   ],
   "progress": {
