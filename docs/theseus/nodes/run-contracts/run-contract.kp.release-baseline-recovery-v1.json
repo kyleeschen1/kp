@@ -1,0 +1,162 @@
+{
+  "id": "run-contract.kp.release-baseline-recovery-v1",
+  "kind": "run-contract",
+  "title": "KP release-baseline recovery",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.release-baseline-recovery-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-31-release-baseline-recovery-long-loop-proposal.md",
+      "summary": "User-approved 20-slice proposal amended to repair Animation Host rendering first."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-31-architecture-and-library-next-loops-review.md",
+      "summary": "Strategic sequence placing bounded baseline recovery before economics without changing promotion rank."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "npm test",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:animation-library-bundle-boundary",
+    "npm run check:reader-budgets",
+    "npm run check:reader-production",
+    "npm run check:promotion-memory",
+    "npm run visual:animation-library-hosts",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Repair only the approved Animation Host failure and six named architecture or payload failures.",
+    "Extend existing attribution, context-encoding, dependency-boundary, payload, and project-memory checks when directly required.",
+    "Commit each completed slice with exact Theseus evidence while preserving unrelated dirty files."
+  ],
+  "disallowedWork": [
+    "Do not raise numeric ceilings, weaken audits, or move code outside measured closures.",
+    "Do not add a renderer, runtime, clock, scene graph, display page, universal sanitizer, or duplicated rational authority.",
+    "Do not change place-value choreography or begin economics, physics, API tiers, generator, LLM, motif, or harvest work."
+  ],
+  "goal": "Repair Animation Host rendering first, then restore the six named architecture and payload gates without raising ceilings or beginning economics.",
+  "target": "next-action.kp.release-baseline-recovery-v0",
+  "runMode": "run",
+  "maxSlices": 20,
+  "commitCadence": "Commit after each completed and proportionately verified slice; stop for human review on any visible behavior change.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if Animation Host rendering cannot be reproduced deterministically or its repair changes visible loading, layout, interaction, or animation behavior.",
+    "Stop if a numeric ceiling must be raised, an audit weakened, or code moved outside a measured closure.",
+    "Stop if public API, routes, canonical typography, motion, ownership, accessibility, Review, or export behavior must change.",
+    "Stop if a new renderer, runtime, clock, scene graph, duplicated rational authority, or unrelated project is required.",
+    "Stop if approved work overlaps inseparably with unrelated user changes or a subjective browser judgment is required.",
+    "Stop before economics implementation and finish as STOP_CONDITION if any named release gate remains red."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "repair-animation-host-rendering",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "freeze-remaining-failure-baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "add-stable-closure-attribution",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "repair-operation-evidence-ledger",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "repair-project-memory-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "classify-html-output-contexts",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "consolidate-one-html-consumer",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "enforce-context-encoding-laws",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "introduce-neutral-rational-authority",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "migrate-rational-callers",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "prove-rational-conformance",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "make-compositor-audit-closure-aware",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "reduce-compositor-responsibility-one",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "reduce-compositor-responsibility-two",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "close-compositor-source-boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "repair-main-host-payload",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "repair-shared-reader-payload",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "prove-reader-route-budgets",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "run-complete-release-matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "close-baseline-and-restore-economics-frontier",
+      "status": "planned"
+    }
+  ]
+}

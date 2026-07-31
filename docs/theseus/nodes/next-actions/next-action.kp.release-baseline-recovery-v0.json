@@ -1,0 +1,57 @@
+{
+  "id": "next-action.kp.release-baseline-recovery-v0",
+  "kind": "next-action",
+  "title": "Restore KP release baseline before economics",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-31-release-baseline-recovery-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-31-architecture-and-library-next-loops-review.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v19"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v19"
+  ],
+  "verification": [
+    "npm run visual:animation-library-hosts",
+    "npm test",
+    "npm run check:animation-library-bundle-boundary",
+    "npm run check:reader-budgets",
+    "npm run typecheck",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."
+  ],
+  "allowedWork": [
+    "Execute only run-contract.kp.release-baseline-recovery-v1."
+  ],
+  "disallowedWork": [
+    "Do not begin economics or broaden beyond the approved host-first recovery."
+  ],
+  "criteria": [
+    {
+      "id": "animation-host-renders",
+      "weight": "high"
+    },
+    {
+      "id": "six-release-gates-green",
+      "weight": "high"
+    },
+    {
+      "id": "no-budget-or-visible-behavior-drift",
+      "weight": "high"
+    }
+  ]
+}
