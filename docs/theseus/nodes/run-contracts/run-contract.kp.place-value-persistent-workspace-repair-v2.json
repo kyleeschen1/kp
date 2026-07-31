@@ -380,6 +380,13 @@
       "scope": "s10 patch hygiene",
       "checkedAt": "2026-07-31T05:04:47.694Z",
       "notes": "Scoped product, test, package, and Theseus changes contain no whitespace errors."
+    },
+    {
+      "command": "curl -I canonical-animation-review live host",
+      "status": "passed",
+      "scope": "s10 human checkpoint availability",
+      "checkedAt": "2026-07-31T13:50:38.240Z",
+      "notes": "After stopping the exact stale scripts/dev.ts process tree and starting one coherent npm run dev session, the host-network request to canonical-animation-review.html returned HTTP 200 on port 8000. The place-value checkpoint was reopened with a cache-busting URL; no product code changed."
     }
   ],
   "allowedWork": [
