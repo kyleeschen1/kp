@@ -2,9 +2,14 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  defineKpEndpointHandoff,
+  defineKpMeasuredRouteIntent,
   defineKpPersistentDocumentaryLifetime,
   defineKpPersistentNativeEndpointLifetime,
   defineKpPersistentWorkspaceRegion,
+  defineKpSemanticDestination,
+  defineKpTransitOwnership,
+  isKpEndpointHandoff,
   isKpPersistentEntityLifetime,
   isKpPersistentWorkspaceRegion
 } from "../src/animation/persistent-workspace.ts";
@@ -85,5 +90,127 @@ test("lifetime compilers reject copied or wrong-kind region authority", () => {
       region: { ...endpoint } as typeof endpoint
     }),
     /sealed native-endpoint region/u
+  );
+});
+
+test("semantic destination and measured route remain separate contracts", () => {
+  const source = defineKpPersistentWorkspaceRegion({
+    id: "region.place-value.evaluated-total",
+    kind: "operation-destination",
+    semanticRole: "evaluated-total"
+  });
+  const endpointRegion = defineKpPersistentWorkspaceRegion({
+    id: "region.place-value.carry.tens",
+    kind: "native-endpoint",
+    semanticRole: "carry-slot"
+  });
+  const endpoint = defineKpSemanticDestination({
+    id: "destination.place-value.carry.tens",
+    semanticEntityId: "carry.tens",
+    region: endpointRegion
+  });
+  const route = defineKpMeasuredRouteIntent({
+    id: "route.place-value.ones-carry",
+    kind: "carry-arch",
+    materialEntityId: "carry.ones-to-tens",
+    fromRegion: source,
+    to: endpoint
+  });
+
+  assert.equal(endpoint.anchorPolicy, "measure-native-paint");
+  assert.equal(route.geometryPolicy, "renderer-resolves-connected-paint");
+  assert.equal(route.authoredGeometry, false);
+  assert.equal(
+    "x" in route || "y" in route || "controlPoint" in route,
+    false
+  );
+});
+
+test("transit owns opaque paint until one matching native handoff", () => {
+  const source = defineKpPersistentWorkspaceRegion({
+    id: "region.place-value.evaluated-total",
+    kind: "operation-destination",
+    semanticRole: "evaluated-total"
+  });
+  const endpointRegion = defineKpPersistentWorkspaceRegion({
+    id: "region.place-value.carry.tens",
+    kind: "native-endpoint",
+    semanticRole: "carry-slot"
+  });
+  const endpoint = defineKpSemanticDestination({
+    id: "destination.place-value.carry.tens",
+    semanticEntityId: "carry.tens",
+    region: endpointRegion
+  });
+  const route = defineKpMeasuredRouteIntent({
+    id: "route.place-value.ones-carry",
+    kind: "carry-arch",
+    materialEntityId: "carry.ones-to-tens",
+    fromRegion: source,
+    to: endpoint
+  });
+  const transit = defineKpTransitOwnership({
+    materialEntityId: route.materialEntityId,
+    route
+  });
+  const endpointLifetime = defineKpPersistentNativeEndpointLifetime({
+    entityId: "carry.tens",
+    region: endpointRegion
+  });
+  const handoff = defineKpEndpointHandoff({
+    transit,
+    endpoint,
+    endpointLifetime
+  });
+
+  assert.equal(transit.paintPolicy, "visible-and-opaque-through-route");
+  assert.equal(transit.releasePolicy, "only-after-native-endpoint-match");
+  assert.equal(isKpEndpointHandoff(handoff), true);
+  assert.equal(handoff.ownershipPolicy, "exclusive-at-native-match");
+  assert.equal(handoff.opacityPolicy, "opaque");
+  assert.deepEqual(
+    JSON.parse(JSON.stringify(handoff)),
+    JSON.parse(JSON.stringify(handoff))
+  );
+});
+
+test("handoff rejects copied authority and mismatched native endpoints", () => {
+  const source = defineKpPersistentWorkspaceRegion({
+    id: "region.source",
+    kind: "operation-destination",
+    semanticRole: "evaluated-total"
+  });
+  const endpointRegion = defineKpPersistentWorkspaceRegion({
+    id: "region.endpoint",
+    kind: "native-endpoint",
+    semanticRole: "carry-slot"
+  });
+  const endpoint = defineKpSemanticDestination({
+    id: "destination.endpoint",
+    semanticEntityId: "carry.tens",
+    region: endpointRegion
+  });
+  const route = defineKpMeasuredRouteIntent({
+    id: "route.carry",
+    kind: "carry-arch",
+    materialEntityId: "carry.material",
+    fromRegion: source,
+    to: endpoint
+  });
+  const transit = defineKpTransitOwnership({
+    materialEntityId: "carry.material",
+    route
+  });
+
+  assert.throws(
+    () => defineKpEndpointHandoff({
+      transit: { ...transit } as typeof transit,
+      endpoint,
+      endpointLifetime: defineKpPersistentNativeEndpointLifetime({
+        entityId: "carry.tens",
+        region: endpointRegion
+      })
+    }),
+    /matching native lifetime/u
   );
 });

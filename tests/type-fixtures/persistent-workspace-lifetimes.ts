@@ -1,7 +1,11 @@
 import {
+  defineKpEndpointHandoff,
+  defineKpMeasuredRouteIntent,
   defineKpPersistentDocumentaryLifetime,
   defineKpPersistentNativeEndpointLifetime,
-  defineKpPersistentWorkspaceRegion
+  defineKpPersistentWorkspaceRegion,
+  defineKpSemanticDestination,
+  defineKpTransitOwnership
 } from "../../src/animation/persistent-workspace.ts";
 
 const documentary = defineKpPersistentWorkspaceRegion({
@@ -40,4 +44,48 @@ defineKpPersistentNativeEndpointLifetime({
   entityId: "invalid.transit-as-endpoint",
   // @ts-expect-error Transit regions cannot acquire native endpoint lifetime.
   region: transit
+});
+
+const operationDestination = defineKpSemanticDestination({
+  id: "destination.operation",
+  semanticEntityId: "evaluation.ones.total",
+  region: defineKpPersistentWorkspaceRegion({
+    id: "region.operation",
+    kind: "operation-destination",
+    semanticRole: "evaluated-total"
+  })
+});
+const nativeDestination = defineKpSemanticDestination({
+  id: "destination.native",
+  semanticEntityId: "result.ones",
+  region: endpoint
+});
+const route = defineKpMeasuredRouteIntent({
+  id: "route.result",
+  kind: "carry-arch",
+  materialEntityId: "material.result",
+  fromRegion: transit,
+  to: nativeDestination
+});
+const ownership = defineKpTransitOwnership({
+  materialEntityId: "material.result",
+  route
+});
+
+defineKpEndpointHandoff({
+  transit: ownership,
+  endpoint: nativeDestination,
+  endpointLifetime: defineKpPersistentNativeEndpointLifetime({
+    entityId: "result.ones",
+    region: endpoint
+  })
+});
+defineKpEndpointHandoff({
+  transit: ownership,
+  // @ts-expect-error Operation destinations cannot receive native handoff.
+  endpoint: operationDestination,
+  endpointLifetime: defineKpPersistentNativeEndpointLifetime({
+    entityId: "result.ones",
+    region: endpoint
+  })
 });

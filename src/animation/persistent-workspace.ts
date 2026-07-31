@@ -1,8 +1,16 @@
 declare const kpWorkspaceRegionBrand: unique symbol;
 declare const kpWorkspaceLifetimeBrand: unique symbol;
+declare const kpWorkspaceDestinationBrand: unique symbol;
+declare const kpWorkspaceRouteBrand: unique symbol;
+declare const kpWorkspaceTransitBrand: unique symbol;
+declare const kpWorkspaceHandoffBrand: unique symbol;
 
 const sealedRegions = new WeakSet<object>();
 const sealedLifetimes = new WeakSet<object>();
+const sealedDestinations = new WeakSet<object>();
+const sealedRoutes = new WeakSet<object>();
+const sealedTransits = new WeakSet<object>();
+const sealedHandoffs = new WeakSet<object>();
 
 export type KpPersistentWorkspaceRegionKind =
   | "documentary"
@@ -53,6 +61,49 @@ export interface KpPersistentNativeEndpointLifetime
 export type KpPersistentEntityLifetime =
   | KpPersistentDocumentaryLifetime
   | KpPersistentNativeEndpointLifetime;
+
+export type KpSemanticDestinationRegionKind =
+  | "operation-destination"
+  | "native-endpoint";
+
+export interface KpSemanticDestination<
+  Kind extends KpSemanticDestinationRegionKind =
+    KpSemanticDestinationRegionKind
+> {
+  readonly id: string;
+  readonly semanticEntityId: string;
+  readonly region: KpPersistentWorkspaceRegion<Kind>;
+  readonly anchorPolicy: "measure-native-paint";
+  readonly [kpWorkspaceDestinationBrand]: true;
+}
+
+export interface KpMeasuredRouteIntent {
+  readonly id: string;
+  readonly kind: "converge" | "carry-arch";
+  readonly materialEntityId: string;
+  readonly fromRegion: KpPersistentWorkspaceRegion;
+  readonly to: KpSemanticDestination;
+  readonly geometryPolicy: "renderer-resolves-connected-paint";
+  readonly authoredGeometry: false;
+  readonly [kpWorkspaceRouteBrand]: true;
+}
+
+export interface KpTransitOwnership {
+  readonly materialEntityId: string;
+  readonly route: KpMeasuredRouteIntent;
+  readonly paintPolicy: "visible-and-opaque-through-route";
+  readonly releasePolicy: "only-after-native-endpoint-match";
+  readonly [kpWorkspaceTransitBrand]: true;
+}
+
+export interface KpEndpointHandoff {
+  readonly transit: KpTransitOwnership;
+  readonly endpoint: KpSemanticDestination<"native-endpoint">;
+  readonly endpointLifetime: KpPersistentNativeEndpointLifetime;
+  readonly ownershipPolicy: "exclusive-at-native-match";
+  readonly opacityPolicy: "opaque";
+  readonly [kpWorkspaceHandoffBrand]: true;
+}
 
 export function defineKpPersistentWorkspaceRegion<
   const Kind extends KpPersistentWorkspaceRegionKind
@@ -118,6 +169,110 @@ export function defineKpPersistentNativeEndpointLifetime(input: {
   return lifetime as unknown as KpPersistentNativeEndpointLifetime;
 }
 
+export function defineKpSemanticDestination<
+  const Kind extends KpSemanticDestinationRegionKind
+>(input: {
+  readonly id: string;
+  readonly semanticEntityId: string;
+  readonly region: KpPersistentWorkspaceRegion<Kind>;
+}): KpSemanticDestination<Kind> {
+  assertIdentifier(input.id, "semantic destination");
+  assertIdentifier(input.semanticEntityId, "destination entity");
+  if (
+    !isKpPersistentWorkspaceRegion(input.region) ||
+    (
+      input.region.kind !== "operation-destination" &&
+      input.region.kind !== "native-endpoint"
+    )
+  ) {
+    throw new Error(
+      "Semantic destination requires a sealed destination or endpoint region."
+    );
+  }
+  const destination = Object.freeze({
+    ...input,
+    anchorPolicy: "measure-native-paint" as const
+  });
+  sealedDestinations.add(destination);
+  return destination as unknown as KpSemanticDestination<Kind>;
+}
+
+export function defineKpMeasuredRouteIntent(input: {
+  readonly id: string;
+  readonly kind: KpMeasuredRouteIntent["kind"];
+  readonly materialEntityId: string;
+  readonly fromRegion: KpPersistentWorkspaceRegion;
+  readonly to: KpSemanticDestination;
+}): KpMeasuredRouteIntent {
+  assertIdentifier(input.id, "route intent");
+  assertIdentifier(input.materialEntityId, "route material");
+  if (
+    !isKpPersistentWorkspaceRegion(input.fromRegion) ||
+    !isKpSemanticDestination(input.to)
+  ) {
+    throw new Error(
+      "Measured routes require sealed semantic regions and destinations."
+    );
+  }
+  const route = Object.freeze({
+    ...input,
+    geometryPolicy: "renderer-resolves-connected-paint" as const,
+    authoredGeometry: false as const
+  });
+  sealedRoutes.add(route);
+  return route as unknown as KpMeasuredRouteIntent;
+}
+
+export function defineKpTransitOwnership(input: {
+  readonly materialEntityId: string;
+  readonly route: KpMeasuredRouteIntent;
+}): KpTransitOwnership {
+  assertIdentifier(input.materialEntityId, "transit material");
+  if (
+    !isKpMeasuredRouteIntent(input.route) ||
+    input.materialEntityId !== input.route.materialEntityId
+  ) {
+    throw new Error(
+      "Transit ownership must match one sealed measured route material."
+    );
+  }
+  const transit = Object.freeze({
+    ...input,
+    paintPolicy: "visible-and-opaque-through-route" as const,
+    releasePolicy: "only-after-native-endpoint-match" as const
+  });
+  sealedTransits.add(transit);
+  return transit as unknown as KpTransitOwnership;
+}
+
+export function defineKpEndpointHandoff(input: {
+  readonly transit: KpTransitOwnership;
+  readonly endpoint: KpSemanticDestination<"native-endpoint">;
+  readonly endpointLifetime: KpPersistentNativeEndpointLifetime;
+}): KpEndpointHandoff {
+  if (
+    !isKpTransitOwnership(input.transit) ||
+    !isKpSemanticDestination(input.endpoint) ||
+    input.endpoint.region.kind !== "native-endpoint" ||
+    !isKpPersistentEntityLifetime(input.endpointLifetime) ||
+    input.endpointLifetime.kind !== "native-endpoint" ||
+    input.transit.route.to !== input.endpoint ||
+    input.endpoint.region !== input.endpointLifetime.region ||
+    input.endpoint.semanticEntityId !== input.endpointLifetime.entityId
+  ) {
+    throw new Error(
+      "Endpoint handoff requires one route target and its matching native lifetime."
+    );
+  }
+  const handoff = Object.freeze({
+    ...input,
+    ownershipPolicy: "exclusive-at-native-match" as const,
+    opacityPolicy: "opaque" as const
+  });
+  sealedHandoffs.add(handoff);
+  return handoff as unknown as KpEndpointHandoff;
+}
+
 export function isKpPersistentWorkspaceRegion(
   value: unknown
 ): value is KpPersistentWorkspaceRegion {
@@ -132,6 +287,38 @@ export function isKpPersistentEntityLifetime(
   return typeof value === "object" &&
     value !== null &&
     sealedLifetimes.has(value);
+}
+
+export function isKpSemanticDestination(
+  value: unknown
+): value is KpSemanticDestination {
+  return typeof value === "object" &&
+    value !== null &&
+    sealedDestinations.has(value);
+}
+
+export function isKpMeasuredRouteIntent(
+  value: unknown
+): value is KpMeasuredRouteIntent {
+  return typeof value === "object" &&
+    value !== null &&
+    sealedRoutes.has(value);
+}
+
+export function isKpTransitOwnership(
+  value: unknown
+): value is KpTransitOwnership {
+  return typeof value === "object" &&
+    value !== null &&
+    sealedTransits.has(value);
+}
+
+export function isKpEndpointHandoff(
+  value: unknown
+): value is KpEndpointHandoff {
+  return typeof value === "object" &&
+    value !== null &&
+    sealedHandoffs.has(value);
 }
 
 function assertRegion(
