@@ -179,11 +179,17 @@ and treats Jacobian/Hessian as a diagnostic/retirement candidate whose unique
 semantic and conformance evidence must be replaced before deletion.
 
 The exact economics model, synchronized view, native SVG host, parameters,
-accessibility, seek/rewind, and revised visual capture are complete. The local
-dimensional-continuity profile now gives the 2D graph a warm orthographic plane,
-sparse construction grid, role-based line hierarchy, and KaTeX for every
-mathematical label without changing the semantic or runtime boundary. Human
-visual approval remains pending.
+accessibility, seek/rewind, and revised visual capture are complete and human
+approved. The local dimensional-continuity profile gives the 2D graph a warm
+orthographic plane, sparse construction grid, role-based line hierarchy, KaTeX
+for every mathematical label, fixed two-decimal moving readouts, and a smaller
+equilibrium marker without changing the semantic or runtime boundary. Static
+ticks remain integers; exact rationals remain authoritative behind rounded
+display values.
+
+Consumer/producer-surplus shading is postponed as an optional follow-on, and
+deadweight loss is reserved for a distinct inefficiency model. The active
+contract now continues to the exact constant-force work-energy second caller.
 
 The repaired route-specific performance audit now completes. It proves no
 Three.js request, CLS near 0.025, 26/42 ms normal/constrained interaction paint,
@@ -460,10 +466,10 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Revise and human-review the exact Supply and demand equilibrium shift under
-   the dimensional-continuity graph language, including a repaired
-   route-specific performance proof; then build one exact constant-force
-   work-energy second caller without domain engines.
+1. Use the approved exact Supply and demand equilibrium shift and repaired
+   route-specific performance proof as the first dimensional-continuity caller;
+   now build one exact constant-force work-energy second caller without domain
+   engines.
 2. Classify API tiers and extract or version only seams proven by both callers;
    prune obsolete compatibility paths only beside their last-caller migration.
 3. Preserve the approved persistent catalogue shell and bounded curation;

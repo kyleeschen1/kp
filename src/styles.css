@@ -1960,13 +1960,14 @@ h2 {
 .editor-graph-stage__economics-equilibrium {
   fill: var(--kp-graph-focal);
   stroke: var(--kp-graph-plane);
-  stroke-width: 2.5;
+  stroke-width: 2;
   vector-effect: non-scaling-stroke;
 }
 .editor-graph-stage__economics-equilibrium--reference {
   fill: var(--kp-graph-plane);
   stroke: #708998;
   stroke-dasharray: 3 2;
+  stroke-width: 1.5;
 }
 .editor-graph-stage__economics-math-foreign-object {
   overflow: visible;
@@ -1993,6 +1994,7 @@ h2 {
   font-size: 14px;
 }
 .editor-graph-stage__economics-math-label--equilibrium {
+  width: 148px;
   color: var(--kp-graph-focal);
   font-size: 12px;
   font-weight: 700;
@@ -2040,10 +2042,15 @@ h2 {
   text-transform: none;
 }
 .editor-graph-stage__economics-equations {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
+  display: grid;
+  grid-template-columns: 0.72fr 1fr 1.55fr;
+  gap: 4px 8px;
   align-items: center;
+}
+.editor-graph-stage__economics-equation {
+  display: block;
+  min-width: 0;
+  white-space: nowrap;
 }
 .editor-graph-stage__economics-equations .katex { font-size: 0.98em; }
 .editor-graph-stage__economics-explanation p {

@@ -2,12 +2,11 @@
 
 Status: active
 Last Updated: 2026-08-01
-Current Next Action: Human-review the revised bounded Supply and demand
-equilibrium shift at rank 3 under the accepted dimensional-continuity graph
-language and restored catalogue-route performance evidence. After explicit
-approval, build constant-force work-energy at rank 4. The catalogue UX and
-bounded curation checkpoint is complete. Consolidate API tiers and motifs only
-after both callers provide evidence.
+Current Next Action: Use the human-approved bounded Supply and demand
+equilibrium shift at rank 3 as the first dimensional-continuity caller and
+build constant-force work-energy at rank 4. The catalogue UX and bounded
+curation checkpoint is complete. Consolidate API tiers and motifs only after
+both callers provide evidence.
 
 ## Goal
 
@@ -190,18 +189,24 @@ The accepted contract in
 `decisions/2026-08-01-kp-dimensional-continuity-graph-and-diagram-language.md`
 governs the active synchronized-model exemplars. Two-dimensional graphs use the
 same restrained technical language as orthographic poses of KP's 3D graphs,
-without requiring WebGL. Mathematical labels use exact LaTeX rendered through
-KaTeX; prose remains semantic HTML. Renderer-owned role tokens, named poses,
-honest scale and units, collision-aware labels, redundant non-color cues,
-dynamic descriptions, and responsive density are promotion requirements.
+without requiring WebGL. Mathematical labels use LaTeX rendered through KaTeX;
+static values remain exact, while declared fixed-precision moving readouts use
+approximation notation and retain exact semantic/accessibility truth. Prose
+remains semantic HTML. Renderer-owned role tokens, named poses, honest scale
+and units, collision-aware labels, redundant non-color cues, dynamic
+descriptions, and responsive density are promotion requirements.
 
-The revised economics graph is exact and mechanically verified but still waits
-for visual approval. Its local profile replaces raw SVG math and the dense flat
-grid with a warm orthographic plane, sparse data grid, role-based hierarchy,
-and direct KaTeX labels. This is exemplar evidence, not a reusable profile. The
-revised economics caller remains the checkpoint; physics is the second caller.
-Only their shared, human-approved seams may become a versioned profile or
-generated-artifact conformance gate.
+The revised economics graph is exact, mechanically verified, and human
+approved. Its local profile replaces raw SVG math and the dense flat grid with
+a warm orthographic plane, sparse data grid, role-based hierarchy, direct
+KaTeX labels, stable two-decimal moving readouts, and a smaller focal marker.
+This is exemplar evidence, not a reusable profile. Physics is the second
+caller. Only their shared, human-approved seams may become a versioned profile
+or generated-artifact conformance gate.
+
+Consumer and producer surplus remain a possible optional follow-on rather than
+default choreography. Deadweight loss is deferred to a separate model with an
+actual inefficiency wedge. Neither expands the current promotion contract.
 
 `perf:animation` now drives the direct economics catalogue route and records
 transfer, fonts, LCP, CLS, interaction paint, long tasks, and frame timing. It

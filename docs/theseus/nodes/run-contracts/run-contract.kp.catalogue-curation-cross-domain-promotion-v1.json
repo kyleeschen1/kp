@@ -293,6 +293,55 @@
       "scope": "s22 durable graph integrity",
       "checkedAt": "2026-08-01T19:09:26.656Z",
       "notes": "854 nodes and 15730 events validated before commit."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-economics-equilibrium-synchronized-view.test.ts tests/kp-economics-equilibrium-parameters.test.ts tests/kp-economics-equilibrium-static-svg.test.ts tests/kp-economics-equilibrium-runtime-frame.test.ts",
+      "status": "passed",
+      "scope": "s22 fixed-decimal presentation and exact semantic preservation",
+      "checkedAt": "2026-08-01T19:43:54.843Z",
+      "notes": "14 focused tests passed, including rounded moving display values, exact nonvisual truth, and the smaller equilibrium marker."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "s22 approved economics polish",
+      "checkedAt": "2026-08-01T19:43:56.185Z",
+      "notes": "Start, shift, settle, custom, and narrow captures passed stable readout dimensions, two-decimal display, marker radius, collision, KaTeX, and exact-frame checks."
+    },
+    {
+      "command": "npm run test:browser:economics-equilibrium",
+      "status": "passed",
+      "scope": "s22 cross-browser approved economics polish",
+      "checkedAt": "2026-08-01T19:43:57.433Z",
+      "notes": "Chromium, Firefox, and WebKit passed fixed readouts, exact state, accessibility, review capture, parameters, history, seek, and rewind."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s22 repository regression",
+      "checkedAt": "2026-08-01T19:43:58.944Z",
+      "notes": "3231 tests passed; the inference timing gate passed at 2.38 seconds after stale duplicate verification workers were terminated."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s22 production build",
+      "checkedAt": "2026-08-01T19:44:00.142Z",
+      "notes": "TypeScript, domain TypeScript, and Vite production build passed; the existing chunk-size advisory remains."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s22 bundle boundary",
+      "checkedAt": "2026-08-01T19:44:01.229Z",
+      "notes": "Outer 10232, main host 400526, and place-value incremental 71739 gzip-byte measurements pass their ratchets."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s22 review capture production closure",
+      "checkedAt": "2026-08-01T19:44:02.381Z",
+      "notes": "262 files and seven intentional markers passed."
     }
   ],
   "allowedWork": [
@@ -453,8 +502,8 @@
     {
       "id": "s22",
       "title": "Human review economics",
-      "summary": "HUMAN_CHECKPOINT: the revised economics exemplar now uses the local dimensional-continuity profile, orthographic 2D technical styling, KaTeX for every mathematical graph label, restrained role colors, sparse scaled grid and axes, and quiet synchronized explanation. Exact semantics, deterministic clock, native SVG ownership, bounded parameter control, accessibility, Review capture, seek and rewind remain preserved. Visual, three-browser, full repository, build, bundle-boundary, and production-review checks pass. The route-scoped performance proof has no baseline regressions and records good normal LCP/CLS/interaction response, while retaining explicit debt for initial script transfer, constrained LCP, and constrained frame p95. Physics and shared motif or API extraction remain paused pending explicit human approval.",
-      "status": "in-progress"
+      "summary": "Human approved the revised economics dimensional-continuity language. Final polish fixes moving demand and equilibrium readouts at two decimals with trailing zeros, uses approximation notation only during interpolation, reserves stable display dimensions, keeps static ticks integral, preserves exact rational semantic/data/accessibility truth, and reduces the current/reference intersection markers. Start, shift, settle, custom-target, narrow, Chromium, Firefox, WebKit, 3231 repository tests, type/build, bundle, dev-review, and patch-hygiene evidence pass. Consumer and producer surplus are postponed as optional follow-on pedagogy; deadweight loss is reserved for a distinct inefficiency model. Proceed to the contracted constant-force work-energy second caller without extracting shared APIs or motifs yet.",
+      "status": "complete"
     },
     {
       "id": "s23",

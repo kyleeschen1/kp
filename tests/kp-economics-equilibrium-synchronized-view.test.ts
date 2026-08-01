@@ -32,8 +32,8 @@ test("economics synchronized view derives equations and claims from exact frame"
 
   assert.deepEqual(view.equations, {
     supplyLatex: "P = 2 + Q",
-    demandLatex: "P = 16 - Q",
-    equilibriumLatex: "E = (Q, P) = (7, 9)"
+    demandLatex: "P \\approx 16.00 - Q",
+    equilibriumLatex: "E = (Q, P) \\approx (7.00, 9.00)"
   });
   assert.equal(view.narrative.id, "narrative.economics.shift-demand");
   assert.deepEqual(view.narrative.claimIds, [
@@ -64,8 +64,32 @@ test("economics narrative follows choreography while graph truth stays synchroni
       "narrative.economics.settle-equilibrium"
     ]
   );
-  assert.equal(samples[0]?.equations.equilibriumLatex, "E = (Q, P) = (6, 8)");
-  assert.equal(samples[3]?.equations.equilibriumLatex, "E = (Q, P) = (8, 10)");
+  assert.equal(
+    samples[0]?.equations.equilibriumLatex,
+    "E = (Q, P) = (6.00, 8.00)"
+  );
+  assert.equal(
+    samples[3]?.equations.equilibriumLatex,
+    "E = (Q, P) = (8.00, 10.00)"
+  );
+});
+
+test("economics display rounds moving values while preserving exact nonvisual truth", () => {
+  const animation = createEconomicsEquilibriumAnimationAsset();
+  const runtime = sampleKpEconomicsEquilibriumRuntimeFrame({
+    animation,
+    runtimeFrame: sampleKpAnimationRuntimeFrame({ animation, progress: 0.3 })
+  });
+  const view = createKpEconomicsEquilibriumSynchronizedView(runtime);
+
+  assert.equal(view.equations.demandLatex, "P \\approx 14.63 - Q");
+  assert.equal(
+    view.equations.equilibriumLatex,
+    "E = (Q, P) \\approx (6.31, 8.31)"
+  );
+  assert.doesNotMatch(view.equations.demandLatex, /\\frac/);
+  assert.doesNotMatch(view.equations.equilibriumLatex, /\\frac/);
+  assert.match(view.nonvisualSummary, /quantity 101 over 16 and price 133 over 16/);
 });
 
 test("runtime SVG paints inline KaTeX and matching narrative evidence", () => {
@@ -81,7 +105,7 @@ test("runtime SVG paints inline KaTeX and matching narrative evidence", () => {
 
   assert.match(html, /data-kp-economics-synchronized-view/);
   assert.match(html, /data-kp-economics-equation-role="supply"/);
-  assert.match(html, /data-kp-latex="P = 16 - Q"/);
+  assert.match(html, /data-kp-latex="P \\approx 16\.00 - Q"/);
   assert.match(html, /class="katex"/);
   assert.match(html, /data-kp-economics-narrative-id="narrative\.economics\.shift-demand"/);
   assert.match(html, /data-kp-economics-claim-ids="claim\.economics\.supply-fixed claim\.economics\.demand-intercept-shift claim\.economics\.market-clears"/);

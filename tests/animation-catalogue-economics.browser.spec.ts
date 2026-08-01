@@ -51,11 +51,22 @@ test("economics catalogue preserves exact accessible seek, rewind, parameters, R
   await expect(graph.locator("[data-kp-economics-math-label]"))
     .toHaveCount(14);
   await expect(graph.locator('[data-kp-latex="D_0"]')).toBeVisible();
-  await expect(graph.locator('[data-kp-latex="E_0 = (6, 8)"]'))
+  await expect(graph.locator('[data-kp-latex="E_0 = (6.00, 8.00)"]'))
     .toBeVisible();
+  await expect(graph.locator("[data-kp-economics-equilibrium-view]"))
+    .toHaveAttribute("data-kp-economics-display-precision", "2");
+  await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
+    .toHaveAttribute("r", "4.5");
   await expect(graph.locator("text")).toHaveCount(0);
   await expect(graph.locator("#kp-economics-graph-description"))
     .toContainText("current equilibrium is quantity 6 and price 8");
+  const startingDemandWidth = await graph.locator(
+    '[data-kp-economics-equation-role="demand"]'
+  ).evaluate((element) => element.getBoundingClientRect().width);
+  const startingEquilibriumWidth = await graph.locator(
+    '[data-kp-economics-math-label="equilibrium-current"] ' +
+    ".editor-graph-stage__economics-math-label"
+  ).evaluate((element) => element.getBoundingClientRect().width);
 
   await page.evaluate(() => {
     (window as typeof window & { __kpCatalogueDocumentToken?: string })
@@ -75,11 +86,22 @@ test("economics catalogue preserves exact accessible seek, rewind, parameters, R
     .toHaveAttribute("data-kp-economics-equilibrium-quantity", "7");
   await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
     .toHaveAttribute("data-kp-economics-equilibrium-price", "9");
-  await expect(graph.locator('[data-kp-latex="P = 16 - Q"]'))
-    .toBeVisible();
+  await expect(graph.locator('[data-kp-economics-equation-role="demand"]'))
+    .toHaveAttribute("data-kp-latex", "P \\approx 16.00 - Q");
   await expect(graph.locator('[data-kp-latex="D_t"]')).toBeVisible();
-  await expect(graph.locator('[data-kp-latex="E_t = (7, 9)"]'))
-    .toBeVisible();
+  await expect(graph.locator(
+    '[data-kp-economics-math-label="equilibrium-current"] [data-kp-latex]'
+  ))
+    .toHaveAttribute("data-kp-latex", "E_t \\approx (7.00, 9.00)");
+  expect(await graph.locator(
+    '[data-kp-economics-equation-role="demand"]'
+  ).evaluate((element) => element.getBoundingClientRect().width))
+    .toBeCloseTo(startingDemandWidth, 1);
+  expect(await graph.locator(
+    '[data-kp-economics-math-label="equilibrium-current"] ' +
+    ".editor-graph-stage__economics-math-label"
+  ).evaluate((element) => element.getBoundingClientRect().width))
+    .toBeCloseTo(startingEquilibriumWidth, 1);
 
   await player.press("End");
   await expect(graph.locator("[data-kp-economics-equilibrium-view]"))
@@ -122,6 +144,11 @@ test("economics catalogue preserves exact accessible seek, rewind, parameters, R
     .toHaveAttribute("data-kp-economics-equilibrium-quantity", "15/2");
   await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
     .toHaveAttribute("data-kp-economics-equilibrium-price", "19/2");
+  await expect(graph.locator('[data-kp-economics-equation-role="demand"]'))
+    .toHaveAttribute("data-kp-latex", "P \\approx 17.00 - Q");
+  await expect(graph.locator(
+    '[data-kp-economics-math-label="equilibrium-current"] [data-kp-latex]'
+  )).toHaveAttribute("data-kp-latex", "E_t \\approx (7.50, 9.50)");
   await expect(graph.locator("#kp-economics-graph-description"))
     .toContainText("demand intercept rises toward 20");
   expect(new URL(page.url()).searchParams.get("demandIntercept")).toBe("20");

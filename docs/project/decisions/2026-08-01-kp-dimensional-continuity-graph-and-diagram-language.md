@@ -19,8 +19,11 @@ be hidden inside one ambiguous transition.
 
 ## Mathematical Typography
 
-All mathematical text is authored as exact LaTeX and rendered with KaTeX by
-default. This includes:
+All mathematical text is authored as LaTeX and rendered with KaTeX by default.
+Static authored values remain exact. A continuously moving readout may use a
+declared fixed decimal precision for legibility and stable dimensions, but it
+must use approximation notation when the displayed value is rounded and retain
+the exact value in semantic and accessible state. This includes:
 
 - axis variables and units;
 - tick values;
@@ -92,7 +95,9 @@ minimum contract includes:
 
 - a graph-language profile reference and renderer capability policy;
 - semantic visual roles rather than arbitrary colors or CSS;
-- exact label values with LaTeX provenance and accessible text;
+- exact semantic label values with LaTeX provenance and accessible text;
+- declared fixed-precision display formatting for moving numeric readouts,
+  using approximation notation whenever the displayed decimal is not exact;
 - projection, named pose, and distinct flattening state;
 - scale, unit, tick-density, and responsive-density intent; and
 - a dynamic nonvisual description.
@@ -122,14 +127,26 @@ The revised checkpoint now uses the local
 `kp.graph.dimensional-continuity.economics.v1` profile: warm orthographic plot
 plane, sparse data-scaled construction grid, arrowed structural axes, stable
 teal supply, changing rust demand, low-opacity historical state, and direct
-KaTeX labels for axes, ticks, curves, and equilibrium. It remains pending human
-visual approval and is not yet a shared profile or catalog-wide rule.
+KaTeX labels for axes, ticks, curves, and equilibrium. Human review approved
+this visual language on 2026-08-01. The final polish uses two fixed decimal
+places for moving demand/equilibrium readouts, preserves integer tick labels,
+marks interpolated display values as approximate, and reduces the equilibrium
+marker. Exact rationals remain authoritative in the semantic frame, DOM data,
+Review capture, and nonvisual description. This is not yet a shared profile or
+catalog-wide rule.
 
 Revision preserves the exact economics model, semantic identities, shared
 clock, parameter contract, catalogue shell, review capture, and one paint
 owner. The smallest rollback unit is the economics presenter, its local visual
 styles, and focused visual/conformance evidence. Physics and shared motif/API
-extraction remain behind the revised human checkpoint.
+extraction may now proceed in their approved order.
+
+Consumer-surplus, producer-surplus, and deadweight-loss overlays are deferred.
+The default economics exemplar teaches comparative statics only. Any future
+surplus layer must be optional and name consumer and producer surplus
+explicitly so it cannot be confused with excess supply. Deadweight loss
+requires a distinct inefficiency model such as a tax, price control, monopoly,
+or externality; it must not be implied by this competitive-equilibrium scene.
 
 ## Performance Invariants
 

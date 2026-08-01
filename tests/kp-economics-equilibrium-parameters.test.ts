@@ -73,8 +73,11 @@ test("parameterized asset carries exact model truth into runtime views", () => {
     quantity: { numerator: "9", denominator: "1" },
     price: { numerator: "11", denominator: "1" }
   });
-  assert.equal(view.equations.demandLatex, "P = 20 - Q");
-  assert.equal(view.equations.equilibriumLatex, "E = (Q, P) = (9, 11)");
+  assert.equal(view.equations.demandLatex, "P = 20.00 - Q");
+  assert.equal(
+    view.equations.equilibriumLatex,
+    "E = (Q, P) = (9.00, 11.00)"
+  );
 });
 
 test("catalogue exposes one compact economics control behind Parameters", () => {
@@ -96,4 +99,3 @@ test("catalogue exposes one compact economics control behind Parameters", () => 
   assert.equal([...html.matchAll(/<input/g)].length, 1);
   assert.doesNotMatch(html, /ontology|registry|advanced/i);
 });
-

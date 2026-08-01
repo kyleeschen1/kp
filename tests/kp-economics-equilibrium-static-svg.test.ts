@@ -53,7 +53,9 @@ test("static economics SVG paints exact curves and initial equilibrium", () => {
   assert.match(html, /data-kp-economics-math-label="curve-demand-current"/);
   assert.match(html, /data-kp-economics-math-label="equilibrium-current"/);
   assert.match(html, /data-kp-latex="D_0"/);
-  assert.match(html, /data-kp-latex="E_0 = \(6, 8\)"/);
+  assert.match(html, /data-kp-latex="E_0 = \(6\.00, 8\.00\)"/);
+  assert.match(html, /data-kp-economics-display-precision="2"/);
+  assert.match(html, /data-kp-economics-equilibrium-point[^>]*r="4\.5"/);
   assert.match(html, /data-kp-economics-grid-axis="quantity"/);
   assert.match(html, /data-kp-economics-grid-axis="price"/);
   assert.match(html, /data-kp-economics-tick-axis="quantity"/);

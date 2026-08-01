@@ -557,6 +557,8 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
       progress: "0",
       stage: "establish",
       demandEquation: "P=14-Q",
+      demandDisplay: "P = 14.00 - Q",
+      equilibriumDisplay: "E_0 = (6.00, 8.00)",
       equilibriumQuantity: "6",
       equilibriumPrice: "8"
     },
@@ -565,6 +567,8 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
       progress: "0.44",
       stage: "shift",
       demandEquation: "P=16-Q",
+      demandDisplay: "P \\approx 16.00 - Q",
+      equilibriumDisplay: "E_t \\approx (7.00, 9.00)",
       equilibriumQuantity: "7",
       equilibriumPrice: "9"
     },
@@ -573,6 +577,8 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
       progress: "1",
       stage: "settle",
       demandEquation: "P=18-Q",
+      demandDisplay: "P = 18.00 - Q",
+      equilibriumDisplay: "E_1 = (8.00, 10.00)",
       equilibriumQuantity: "8",
       equilibriumPrice: "10"
     }
@@ -608,12 +614,20 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
     const mathLabelCount = await graph.locator(
       "[data-kp-economics-math-label]"
     ).count();
+    const pointRadius = await graph.locator(
+      "[data-kp-economics-equilibrium-point]"
+    ).getAttribute("r");
     if (presentationProfile !==
         "kp.graph.dimensional-continuity.economics.v1" ||
-      rawSvgTextCount !== 0 || mathLabelCount < 14) {
+      rawSvgTextCount !== 0 || mathLabelCount < 14 || pointRadius !== "4.5") {
       throw new Error(
         "Economics graph lost its dimensional-continuity or KaTeX contract: " +
-        JSON.stringify({ presentationProfile, rawSvgTextCount, mathLabelCount })
+        JSON.stringify({
+          presentationProfile,
+          rawSvgTextCount,
+          mathLabelCount,
+          pointRadius
+        })
       );
     }
 
@@ -656,6 +670,9 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
       );
     }
 
+    let stableDynamicWidths:
+      | { readonly demand: number; readonly equilibrium: number }
+      | undefined;
     for (const checkpoint of checkpoints) {
       await scrubber.fill(checkpoint.progress);
       await page.waitForFunction((expectedProgress) =>
@@ -671,6 +688,13 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
       const equilibriumPoint = graph.locator(
         "[data-kp-economics-equilibrium-point]"
       );
+      const demandDisplay = graph.locator(
+        '[data-kp-economics-equation-role="demand"]'
+      );
+      const equilibriumDisplay = graph.locator(
+        '[data-kp-economics-math-label="equilibrium-current"] ' +
+        "[data-kp-latex]"
+      );
       if (await equilibriumView.getAttribute(
         "data-kp-economics-choreography-stage"
       ) !== checkpoint.stage || await demandLine.getAttribute(
@@ -680,9 +704,34 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
       ) !== checkpoint.equilibriumQuantity ||
         await equilibriumPoint.getAttribute(
           "data-kp-economics-equilibrium-price"
-        ) !== checkpoint.equilibriumPrice) {
+        ) !== checkpoint.equilibriumPrice || await equilibriumView.getAttribute(
+          "data-kp-economics-display-precision"
+        ) !== "2" || await demandDisplay.getAttribute(
+          "data-kp-latex"
+        ) !== checkpoint.demandDisplay || await equilibriumDisplay.getAttribute(
+          "data-kp-latex"
+        ) !== checkpoint.equilibriumDisplay) {
         throw new Error(
-          `Economics ${checkpoint.name} checkpoint lost exact frame truth.`
+          `Economics ${checkpoint.name} checkpoint lost frame or display truth.`
+        );
+      }
+      const dynamicWidths = {
+        demand: await demandDisplay.evaluate((element) =>
+          element.getBoundingClientRect().width
+        ),
+        equilibrium: await equilibriumDisplay.evaluate((element) =>
+          element.getBoundingClientRect().width
+        )
+      };
+      if (stableDynamicWidths === undefined) {
+        stableDynamicWidths = dynamicWidths;
+      } else if (Math.abs(stableDynamicWidths.demand - dynamicWidths.demand) >
+          0.5 || Math.abs(
+        stableDynamicWidths.equilibrium - dynamicWidths.equilibrium
+      ) > 0.5) {
+        throw new Error(
+          `Economics ${checkpoint.name} dynamic readouts changed size: ` +
+          JSON.stringify({ stableDynamicWidths, dynamicWidths })
         );
       }
       const labels = await page.evaluate(() => {
@@ -740,6 +789,16 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
         "data-kp-economics-equilibrium-price"
       ) !== "19/2") {
       throw new Error("Economics custom-target checkpoint lost exact truth.");
+    }
+    if (await graph.locator(
+      '[data-kp-economics-equation-role="demand"]'
+    ).getAttribute("data-kp-latex") !== "P \\approx 17.00 - Q" ||
+      await graph.locator(
+        '[data-kp-economics-math-label="equilibrium-current"] ' +
+        "[data-kp-latex]"
+      ).getAttribute("data-kp-latex") !==
+        "E_t \\approx (7.50, 9.50)") {
+      throw new Error("Economics custom-target display lost fixed decimals.");
     }
     const customScreenshot = path.join(outputRoot, "economics-custom-20.png");
     await page.screenshot({
@@ -853,7 +912,9 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
           profile: presentationProfile,
           mathTypography: "katex",
           rawSvgTextCount,
-          minimumMathLabelCount: mathLabelCount
+          minimumMathLabelCount: mathLabelCount,
+          dynamicDisplayDecimals: 2,
+          equilibriumPointRadius: Number(pointRadius)
         },
         screenshots
       }, null, 2)}\n`,

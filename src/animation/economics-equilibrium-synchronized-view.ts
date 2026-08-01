@@ -19,6 +19,8 @@ export interface KpEconomicsEquilibriumSynchronizedView {
   readonly nonvisualSummary: string;
 }
 
+export const kpEconomicsDynamicDisplayDecimals = 2;
+
 export function createKpEconomicsEquilibriumSynchronizedView(
   frame: KpEconomicsEquilibriumRuntimeFrame
 ): KpEconomicsEquilibriumSynchronizedView {
@@ -28,14 +30,22 @@ export function createKpEconomicsEquilibriumSynchronizedView(
     slope: semantic.supply.priceChangePerQuantity,
     direction: "plus"
   });
-  const demandLatex = linearLatex({
+  const exactDemandLatex = linearLatex({
     intercept: semantic.demand.priceInterceptCurrent,
     slope: semantic.demand.priceChangePerQuantity,
     direction: "minus"
   });
+  const relation = kpEconomicsDynamicDisplayRelation(frame.stage);
+  const demandLatex = dynamicLinearLatex({
+    intercept: semantic.demand.priceInterceptCurrent,
+    slope: semantic.demand.priceChangePerQuantity,
+    direction: "minus",
+    relation
+  });
   const equilibriumLatex =
-    `E = (Q, P) = (${exactLatex(semantic.equilibrium.quantity)}, ` +
-    `${exactLatex(semantic.equilibrium.price)})`;
+    `E = (Q, P) ${relation} (` +
+    `${formatKpEconomicsDynamicDisplay(semantic.equilibrium.quantity)}, ` +
+    `${formatKpEconomicsDynamicDisplay(semantic.equilibrium.price)})`;
   const narrative = narrativeFor(frame);
   const equilibriumSpoken =
     `quantity ${exactSpoken(semantic.equilibrium.quantity)} and ` +
@@ -49,9 +59,24 @@ export function createKpEconomicsEquilibriumSynchronizedView(
     nonvisualSummary:
       `Quantity Q is horizontal and price P is vertical. ` +
       `Supply is ${equationSpoken(supplyLatex)}. ` +
-      `Demand is ${equationSpoken(demandLatex)}. ` +
+      `Demand is ${equationSpoken(exactDemandLatex)}. ` +
       `The current equilibrium is ${equilibriumSpoken}. ${narrative.text}`
   });
+}
+
+export function kpEconomicsDynamicDisplayRelation(
+  stage: KpEconomicsEquilibriumRuntimeFrame["stage"]
+): "=" | "\\approx" {
+  return stage === "shift" ? "\\approx" : "=";
+}
+
+export function formatKpEconomicsDynamicDisplay(
+  value: ExactRationalDto
+): string {
+  // Moving readouts need stable visual dimensions; semantic frames and the
+  // nonvisual description retain the exact rational value behind this view.
+  const numeric = Number(value.numerator) / Number(value.denominator);
+  return numeric.toFixed(kpEconomicsDynamicDisplayDecimals);
 }
 
 function narrativeFor(
@@ -120,6 +145,19 @@ function linearLatex(input: {
   return `P = ${exactLatex(input.intercept)} ${
     input.direction === "plus" ? "+" : "-"
   } ${quantityTerm}`;
+}
+
+function dynamicLinearLatex(input: {
+  readonly intercept: ExactRationalDto;
+  readonly slope: ExactRationalDto;
+  readonly direction: "plus" | "minus";
+  readonly relation: "=" | "\\approx";
+}): string {
+  const slope = exactLatex(input.slope);
+  const quantityTerm = slope === "1" ? "Q" : `${slope}Q`;
+  return `P ${input.relation} ${
+    formatKpEconomicsDynamicDisplay(input.intercept)
+  } ${input.direction === "plus" ? "+" : "-"} ${quantityTerm}`;
 }
 
 function exactLatex(value: ExactRationalDto): string {
