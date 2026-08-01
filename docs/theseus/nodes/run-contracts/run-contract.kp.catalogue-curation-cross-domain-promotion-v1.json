@@ -119,7 +119,8 @@
     {
       "id": "s11",
       "title": "Freeze economics model contract",
-      "status": "planned"
+      "summary": "Froze the exemplar-first economics contract: Q horizontal, P vertical, supply P=2+Q, demand P=14-Q shifting to P=18-Q, exact equilibrium (6,8) to (8,10), stable curve/parameter/side/claim roles, no solver or new runtime category. Published acceptance, preservation, and rollback boundaries. Two focused tests, all TypeScript projects, diff hygiene, and workspace validation pass.",
+      "status": "complete"
     },
     {
       "id": "s12",

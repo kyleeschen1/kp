@@ -206,6 +206,34 @@
       "scope": "project-memory",
       "checkedAt": "2026-08-01T16:51:06.045Z",
       "notes": "Workspace graph validates after the bounded curation record."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-economics-equilibrium-contract.test.ts",
+      "status": "passed",
+      "scope": "s11 economics contract",
+      "checkedAt": "2026-08-01T16:55:49.850Z",
+      "notes": "Two focused tests freeze exact axes, line forms, parameter identity, side meanings, and preservation roles."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s11 economics contract",
+      "checkedAt": "2026-08-01T16:55:50.859Z",
+      "notes": "App, node, test, and domain TypeScript projects accept the new bounded domain contract."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s11 focused",
+      "checkedAt": "2026-08-01T16:55:51.742Z",
+      "notes": "Economics contract and review record pass diff hygiene."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s11 control record",
+      "checkedAt": "2026-08-01T16:55:52.764Z",
+      "notes": "Workspace graph validates after starting the economics contract slice."
     }
   ],
   "progress": {
