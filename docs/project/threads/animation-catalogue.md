@@ -33,6 +33,11 @@ the surrounding shell while preserving the animation's semantics,
 choreography, timing, player, direct seek/rewind, and accessibility behavior.
 The exemplar must stop for human desktop review before the shell is generalized.
 
+The catalogue now reuses the development review pipeline for artifact ID,
+playhead, render ownership, viewport, and build identity. That protocol does
+not currently persist a bitmap screenshot; screenshot attachment remains an
+explicit capture gap and must not be represented as complete evidence.
+
 After approval, a fast catalogue-wide hosting pass will make current reality
 visible. `Ready`, `Review`, and `Broken` are derived health states, not promotion
 claims. Missing adapters remain visible gaps. Human disposition is a separate

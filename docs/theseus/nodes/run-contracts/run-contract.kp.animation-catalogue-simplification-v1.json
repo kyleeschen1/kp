@@ -167,7 +167,8 @@
     {
       "id": "s17",
       "title": "Dock compact review capture lower left",
-      "status": "planned"
+      "summary": "Docked a compact development-only Review box in the lower-left rail and reused the established capture pipeline for solve-x artifact identity, playhead, render ownership, viewport, and build state. The open capture path is live-verified and production-erased. The existing protocol has no bitmap screenshot field, so screenshot attachment is recorded as an explicit remaining evidence gap rather than falsely claimed.",
+      "status": "complete"
     },
     {
       "id": "s18",

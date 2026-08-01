@@ -140,6 +140,18 @@
     {
       "kind": "file",
       "path": "tests/animation-catalogue-search.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/dev-review/animation-catalogue-capture-provider.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/dev-review/animation-catalogue-review-bootstrap.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-review-capture-loader.ts"
     }
   ],
   "dependsOn": {
@@ -587,6 +599,34 @@
       "status": "passed",
       "scope": "slice s16 type safety",
       "checkedAt": "2026-08-01T04:50:33.910Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test focused dev-review protocol, provider, placement, client, schema, session, and acceptance tests",
+      "status": "passed",
+      "scope": "slice s17 review capture preservation",
+      "checkedAt": "2026-08-01T05:00:35.019Z",
+      "notes": "27 tests passed; existing review protocol and consumers remain intact, with a catalogue-specific wide rail placement and narrow captured-moment sheet."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s17 live catalogue review capture",
+      "checkedAt": "2026-08-01T05:00:35.854Z",
+      "notes": "Chromium verified the launcher stays inside the lower-left rail, opens with h3-scale semantics, and locks the solve-x current frame at 0 percent through the real capture provider before closing."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice s17 production erasure",
+      "checkedAt": "2026-08-01T05:00:36.685Z",
+      "notes": "Production closure passed across 258 files and seven forbidden review markers."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s17 type safety",
+      "checkedAt": "2026-08-01T05:00:37.521Z",
       "notes": "Application, Node, test, and domain TypeScript projects passed."
     }
   ],

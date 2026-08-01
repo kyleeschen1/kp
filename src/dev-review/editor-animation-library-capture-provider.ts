@@ -8,19 +8,28 @@ import {
 import { captureKpDevReviewSemanticTarget } from "./semantic-target.ts";
 
 export function createKpEditorAnimationLibraryCaptureProvider(
-  ownerDocument: Document
+  ownerDocument: Document,
+  options: {
+    readonly providerId?: string | undefined;
+    readonly rootSelector?: string | undefined;
+    readonly documentId?: string | undefined;
+  } = {}
 ): KpDevReviewCaptureProvider {
+  const providerId = options.providerId ?? "editor.animation-library";
+  const rootSelector = options.rootSelector ??
+    "[data-kp-editor-animation-library]";
+  const documentId = options.documentId ?? "editor.animation-library";
   return {
-    id: "editor.animation-library",
+    id: providerId,
     priority: 100,
     matches: () =>
       ownerDocument.querySelector(
-        "[data-kp-editor-animation-library] [data-kp-editor-animation-player]"
+        `${rootSelector} [data-kp-editor-animation-player]`
       ) !== null,
     capture(context: KpDevReviewCaptureContext) {
       const library = requiredElement(
         ownerDocument,
-        "[data-kp-editor-animation-library]"
+        rootSelector
       );
       const player = requiredElement(
         library,
@@ -106,7 +115,7 @@ export function createKpEditorAnimationLibraryCaptureProvider(
         ?.dataset["kpEditorAnimationAdapterId"];
       return {
         semantic: {
-          documentId: "editor.animation-library",
+          documentId,
           documentVersion: "1",
           assetId: animationId,
           progressPermille,

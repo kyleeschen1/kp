@@ -2,11 +2,13 @@ export type KpDevReviewSurface =
   | "default"
   | "semantic-reader"
   | "animation-workbench"
+  | "animation-catalogue"
   | "animation-library";
 
 export type KpDevReviewPlacement =
   | "bottom-right"
   | "left-prose-rail"
+  | "catalogue-rail"
   | "captured-moment-sheet";
 
 export interface KpDevReviewPlacementInput {
@@ -26,6 +28,11 @@ export function resolveKpDevReviewPlacement(
   if (input.surface === "animation-library") {
     return input.viewportWidth >= KP_DEV_REVIEW_READER_WIDE_MIN_WIDTH
       ? "bottom-right"
+      : "captured-moment-sheet";
+  }
+  if (input.surface === "animation-catalogue") {
+    return input.viewportWidth >= KP_DEV_REVIEW_READER_WIDE_MIN_WIDTH
+      ? "catalogue-rail"
       : "captured-moment-sheet";
   }
   return input.viewportWidth >= KP_DEV_REVIEW_READER_WIDE_MIN_WIDTH

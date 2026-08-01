@@ -70,7 +70,9 @@ export function mountKpDevReviewShell(
   const eyebrow = ownerDocument.createElement("span");
   eyebrow.className = "eyebrow";
   eyebrow.textContent = "Developer feedback";
-  const title = ownerDocument.createElement("h2");
+  const title = ownerDocument.createElement(
+    options.placement === "catalogue-rail" ? "h3" : "h2"
+  );
   title.id = "review-title";
   title.textContent = "Review this moment";
   const reviewRound = ownerDocument.createElement("output");
@@ -197,11 +199,25 @@ const shellStyles = `
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-synthesis: none;
     line-height: 1.4;
+    box-sizing: border-box;
     pointer-events: none;
   }
   :host([data-kp-dev-review-placement="left-prose-rail"]) {
     right: auto;
     left: 18px;
+  }
+  :host([data-kp-dev-review-placement="catalogue-rail"]) {
+    right: auto;
+    bottom: 0;
+    left: 0;
+    width: max(14rem, 18vw);
+    padding: .75rem;
+  }
+  :host([data-kp-dev-review-placement="catalogue-rail"]) .launcher {
+    width: 100%;
+    justify-content: center;
+    border-radius: 0;
+    box-shadow: none;
   }
   :host([data-kp-dev-review-placement="captured-moment-sheet"]) {
     right: 12px;
@@ -289,7 +305,7 @@ const shellStyles = `
     letter-spacing: .13em;
     text-transform: uppercase;
   }
-  h2 {
+  h2, h3 {
     margin: 0;
     font-family: Iowan Old Style, Palatino Linotype, Book Antiqua, Palatino, Georgia, serif;
     font-size: 1.12rem;
@@ -397,6 +413,9 @@ const shellStyles = `
     :host { right: 12px; bottom: 12px; }
     .panel { width: calc(100vw - 24px); }
     :host([data-kp-dev-review-placement="captured-moment-sheet"]) .panel { width: 100%; }
+  }
+  @media (min-width: 521px) and (max-width: 56rem) {
+    :host([data-kp-dev-review-placement="catalogue-rail"]) { width: 11rem; }
   }
   @media print { :host { display: none; } }
 `;

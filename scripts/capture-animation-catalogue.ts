@@ -96,6 +96,54 @@ try {
       `Catalogue expected 33 flat asset rows, found ${allResultCount}.`
     );
   }
+  const review = page.locator("[data-kp-dev-review-shell]");
+  await review.waitFor();
+  if (await review.getAttribute("data-kp-dev-review-placement") !==
+    "catalogue-rail") {
+    throw new Error("Catalogue review capture is not docked in its rail.");
+  }
+  const reviewLauncher = review.locator("button.launcher");
+  const railBounds = await page.locator(
+    '[data-kp-animation-catalogue-region="rail"]'
+  ).boundingBox();
+  const launcherBounds = await reviewLauncher.boundingBox();
+  if (
+    railBounds === null || launcherBounds === null ||
+    launcherBounds.x < railBounds.x ||
+    launcherBounds.x + launcherBounds.width >
+      railBounds.x + railBounds.width + 1 ||
+    launcherBounds.y + launcherBounds.height <
+      railBounds.y + railBounds.height - 12
+  ) {
+    throw new Error("Catalogue review launcher escaped the lower-left dock.");
+  }
+  await page.waitForFunction(() =>
+    document.body.dataset["kpDevReviewReady"] === "true"
+  );
+  await reviewLauncher.click();
+  const reviewPanel = review.locator('[role="dialog"]');
+  await reviewPanel.waitFor();
+  if (
+    await reviewPanel.locator("h2").count() !== 0 ||
+    await reviewPanel.locator("h3").count() !== 1
+  ) {
+    throw new Error("Catalogue review panel did not use compact h3 semantics.");
+  }
+  await reviewPanel.locator("textarea").fill("Catalogue capture probe");
+  await page.waitForFunction(() => {
+    const host = document.querySelector<HTMLElement>(
+      "[data-kp-dev-review-shell]"
+    );
+    return host?.shadowRoot?.querySelector(".meta")?.textContent
+      ?.includes("Locked") === true;
+  });
+  const reviewMeta = await reviewPanel.locator(".meta").textContent();
+  if (!reviewMeta?.includes("Current frame") || !reviewMeta.includes("0%")) {
+    throw new Error(
+      `Catalogue review did not capture current playhead state: ${reviewMeta}`
+    );
+  }
+  await reviewPanel.locator("button.close").click();
 
   const screenshot = path.join(outputRoot, "desktop.png");
   await page.screenshot({

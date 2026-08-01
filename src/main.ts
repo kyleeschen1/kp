@@ -142,6 +142,9 @@ import {
 import {
   loadKpEditorAnimationLibraryDevelopmentReview
 } from "./editor/editor-animation-library-review-capture-loader.ts";
+import {
+  loadKpAnimationCatalogueDevelopmentReview
+} from "./editor/animation-catalogue-review-capture-loader.ts";
 import type {
   KpSemanticAnimationWorkbenchRoadmapRouteState
 } from "./editor/semantic-animation-workbench-route.ts";
@@ -601,6 +604,7 @@ async function renderAnimationCatalogueView(): Promise<void> {
     hydrateKpEditorAnimationSurfaces(appRoot);
     hydrateKpEditorAnimationLiveDiagnostics(appRoot);
     hydrateKpEditorAnimationPlayers(appRoot);
+    void mountAnimationCatalogueReviewCapture(revision);
   } catch (error: unknown) {
     if (activeView !== "animation-catalogue" || revision !== viewRevision) {
       return;
@@ -800,6 +804,19 @@ async function mountAnimationWorkbenchReviewCapture(
   disposeAnimationDevelopmentReviewCapture();
   disposeAnimationDevelopmentReview =
     client.mountKpAnimationWorkbenchDevReview(window);
+}
+
+async function mountAnimationCatalogueReviewCapture(
+  revision: number
+): Promise<void> {
+  if (loadKpAnimationCatalogueDevelopmentReview === undefined) return;
+  const client = await loadKpAnimationCatalogueDevelopmentReview();
+  if (activeView !== "animation-catalogue" || revision !== viewRevision) {
+    return;
+  }
+  disposeAnimationDevelopmentReviewCapture();
+  disposeAnimationDevelopmentReview =
+    client.mountKpAnimationCatalogueDevReview(window);
 }
 
 async function mountEditorAnimationLibraryReviewCapture(

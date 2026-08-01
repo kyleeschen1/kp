@@ -46,6 +46,17 @@ test("the Animation Library keeps its review launcher opposite the catalog rail"
   }), "captured-moment-sheet");
 });
 
+test("the animation catalogue docks review in its lower-left rail", () => {
+  assert.equal(resolveKpDevReviewPlacement({
+    surface: "animation-catalogue",
+    viewportWidth: KP_DEV_REVIEW_READER_WIDE_MIN_WIDTH
+  }), "catalogue-rail");
+  assert.equal(resolveKpDevReviewPlacement({
+    surface: "animation-catalogue",
+    viewportWidth: 390
+  }), "captured-moment-sheet");
+});
+
 test("review placement rejects unusable viewport evidence", () => {
   assert.throws(() => resolveKpDevReviewPlacement({
     surface: "semantic-reader",
