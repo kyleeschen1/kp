@@ -26,6 +26,11 @@ import {
   type Graph3DWebGLSceneModel,
   type Graph3DWebGLSurfaceModel
 } from "./graph-webgl.ts";
+import {
+  acquireKpWebglContextLease,
+  cancelKpWebglContextLeaseWait,
+  type KpWebglContextLease
+} from "./webgl-context-lease-pool.ts";
 
 export interface Graph3DWebGLThreeScene {
   axisObjects: readonly Group[];
@@ -47,9 +52,17 @@ const SURFACE_BORDER_RADIUS = 0.012;
 const THREE_Y_AXIS = new Vector3(0, 1, 0);
 interface ActiveGraph3DWebGLRenderer {
   animationFrameId?: number;
+  lease: KpWebglContextLease;
   renderer: WebGLRenderer;
   scene?: Scene;
 }
+
+export type Graph3DWebGLHydrationOutcome =
+  | { readonly status: "ready" }
+  | { readonly status: "capacity" }
+  | { readonly status: "unavailable" }
+  | { readonly status: "invalid" }
+  | { readonly status: "fallback"; readonly reason: string };
 
 export interface Graph3DWebGLHydrationOptions {
   previousObjects?: readonly KpSemanticObject[] | undefined;
@@ -171,7 +184,7 @@ export function hydrateGraph3DWebGLShell(
   shell: HTMLElement,
   objects: readonly KpSemanticObject[],
   options: Graph3DWebGLHydrationOptions = {}
-): boolean {
+): Graph3DWebGLHydrationOutcome {
   const graphId = shell.dataset["kpObject"];
   const canvas = shell.querySelector<HTMLCanvasElement>(".graph-webgl__canvas");
   const graph = objects.find(
@@ -180,10 +193,34 @@ export function hydrateGraph3DWebGLShell(
   );
 
   if (graphId === undefined || canvas === null || graph === undefined) {
-    return false;
+    return { status: "invalid" };
   }
 
   disposeGraph3DWebGLShell(shell);
+
+  const acquisition = acquireKpWebglContextLease({
+    canvas,
+    attributes: { antialias: true },
+    onAvailable: () => {
+      if (shell.isConnected) hydrateGraph3DWebGLShell(shell, objects, options);
+    },
+    onContextLost: () => {
+      disposeActiveGraph3DWebGLRenderer(shell);
+      markGraph3DWebGLFallback(shell, "WebGL context lost.");
+    }
+  });
+  if (acquisition.status !== "acquired") {
+    shell.dataset["kpWebglStatus"] = acquisition.status === "capacity"
+      ? "waiting"
+      : "fallback";
+    setAccessibleStatus(
+      shell,
+      acquisition.status === "capacity"
+        ? "Static graph available. Waiting for 3D rendering capacity."
+        : "Static graph shown because WebGL is unavailable."
+    );
+    return acquisition;
+  }
 
   try {
     const shouldAnimate = shouldAnimateGraph3DTransition(
@@ -196,18 +233,22 @@ export function hydrateGraph3DWebGLShell(
     });
     const renderer = new WebGLRenderer({
       antialias: true,
-      canvas
+      canvas,
+      context: acquisition.lease.context
     });
-    const activeRenderer: ActiveGraph3DWebGLRenderer = { renderer };
+    const activeRenderer: ActiveGraph3DWebGLRenderer = {
+      lease: acquisition.lease,
+      renderer
+    };
 
     renderer.setClearColor(0xfffdf8, 1);
     renderer.setPixelRatio(graph3DWebGLPixelRatio());
     renderer.setSize(graph.width, graph.height, false);
 
     activeGraph3DWebGLRenderers.set(shell, activeRenderer);
-    canvas.setAttribute("aria-hidden", "false");
     shell.dataset["kpWebglStatus"] = "ready";
     shell.dataset["kpWebglError"] = "";
+    setAccessibleStatus(shell, "Interactive 3D graph ready.");
     renderGraph3DWebGLFrame(activeRenderer, graph, model);
 
     if (shouldAnimate) {
@@ -223,13 +264,15 @@ export function hydrateGraph3DWebGLShell(
       shell.dataset["kpWebglTransition"] = "static";
     }
 
-    return true;
+    return { status: "ready" };
   } catch (error: unknown) {
-    shell.dataset["kpWebglStatus"] = "fallback";
-    shell.dataset["kpWebglError"] =
-      error instanceof Error ? error.message : "WebGL render failed.";
+    acquisition.lease.release();
+    const reason = error instanceof Error
+      ? error.message
+      : "WebGL render failed.";
+    markGraph3DWebGLFallback(shell, reason);
 
-    return false;
+    return { status: "fallback", reason };
   }
 }
 
@@ -341,6 +384,12 @@ function disposeGraph3DWebGLThreeScene(scene: Scene): void {
 }
 
 export function disposeGraph3DWebGLShell(shell: HTMLElement): void {
+  const canvas = shell.querySelector<HTMLCanvasElement>(".graph-webgl__canvas");
+  if (canvas !== null) cancelKpWebglContextLeaseWait(canvas);
+  disposeActiveGraph3DWebGLRenderer(shell);
+}
+
+function disposeActiveGraph3DWebGLRenderer(shell: HTMLElement): void {
   const activeRenderer = activeGraph3DWebGLRenderers.get(shell);
 
   if (activeRenderer === undefined) {
@@ -356,6 +405,7 @@ export function disposeGraph3DWebGLShell(shell: HTMLElement): void {
   }
 
   activeRenderer.renderer.dispose();
+  activeRenderer.lease.release();
   activeGraph3DWebGLRenderers.delete(shell);
 }
 
@@ -363,6 +413,22 @@ export function disposeGraph3DWebGLShells(root: ParentNode): void {
   root
     .querySelectorAll<HTMLElement>(".graph-webgl")
     .forEach((shell) => disposeGraph3DWebGLShell(shell));
+}
+
+function markGraph3DWebGLFallback(
+  shell: HTMLElement,
+  reason: string
+): void {
+  shell.dataset["kpWebglStatus"] = "fallback";
+  shell.dataset["kpWebglError"] = reason;
+  setAccessibleStatus(shell, "Static graph shown because the 3D view is unavailable.");
+}
+
+function setAccessibleStatus(shell: HTMLElement, status: string): void {
+  const output = shell.querySelector<HTMLElement>(
+    "[data-kp-webgl-accessible-status]"
+  );
+  if (output !== null) output.textContent = status;
 }
 
 function createSurfaceMesh(surface: Graph3DWebGLSurfaceModel): Mesh {

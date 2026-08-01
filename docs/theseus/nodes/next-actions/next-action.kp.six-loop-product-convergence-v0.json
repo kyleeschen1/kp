@@ -17,6 +17,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-01-animation-catalogue-meaningful-hostability-contract.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/graph-3d-surface-contract.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-01-native-graph3d-catalogue-host-contract.md"
     }
   ],
   "dependsOn": {
@@ -66,6 +74,36 @@
       "scope": "s01 generated catalogue identity",
       "checkedAt": "2026-08-01T22:51:17.324Z",
       "notes": "Generated display metadata remains current after correcting derived hostability truth."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-health.test.ts tests/editor-graph-3d-host-contract.test.ts tests/graph-webgl.test.ts tests/webgl-context-lease-pool.test.ts",
+      "status": "passed",
+      "scope": "s02 Graph3D semantic, lifecycle, resource, rewind, fallback, and catalogue-health checks",
+      "checkedAt": "2026-08-01T23:01:46.102Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02 TypeScript application, node, test, and domain boundaries",
+      "checkedAt": "2026-08-01T23:01:46.993Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s02 architecture boundaries",
+      "checkedAt": "2026-08-01T23:01:47.851Z"
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s02 promotion authority remains rank 5",
+      "checkedAt": "2026-08-01T23:01:48.749Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s02 whitespace audit",
+      "checkedAt": "2026-08-01T23:01:49.636Z"
     }
   ],
   "expectedLearning": [

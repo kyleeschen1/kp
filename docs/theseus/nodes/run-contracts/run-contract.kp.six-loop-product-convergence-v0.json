@@ -65,7 +65,9 @@
     {
       "id": "s02",
       "title": "Define native 3D host contract",
-      "status": "planned"
+      "summary": "Defined the exact native Graph3D catalogue host contract over the existing semantic model and Three capability; added typed lifecycle outcomes, shared WebGL leases, context-loss/static fallback, accessible state, and complementary rewind projection without mounting a second runtime.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s03",

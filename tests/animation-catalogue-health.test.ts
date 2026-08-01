@@ -110,7 +110,7 @@ test("current unobserved catalogue health is honest about review and breakage", 
         health.filter((entry) => entry.status === status).length
       ])
     ),
-    { ready: 0, review: 33, broken: 2 }
+    { ready: 0, review: 32, broken: 3 }
   );
   assert.deepEqual(
     health
@@ -119,6 +119,7 @@ test("current unobserved catalogue health is honest about review and breakage", 
       .sort(),
     [
       "animation.comparison.linear-solve-programming",
+      "animation.graph.surface-mode.mesh-to-donut",
       "animation.programming.add.execution-trace"
     ]
   );

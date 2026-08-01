@@ -161,11 +161,12 @@ export function renderGraph3DWebGLShell(
   const height = graph.height;
 
   return `
-    <div class="graph-webgl" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-webgl-shell" data-kp-type="graph-3d" data-kp-renderer="webgl" data-kp-webgl-backend="${descriptor.backend}" data-kp-webgl-status="pending">
+    <div class="graph-webgl" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-webgl-shell" data-kp-type="graph-3d" data-kp-renderer="webgl" data-kp-webgl-backend="${descriptor.backend}" data-kp-webgl-status="pending" role="img" aria-label="${escapeHtml(graph.label)}" aria-describedby="rn-${escapeHtml(graph.id)}-webgl-status">
       <canvas class="graph-webgl__canvas" width="${width}" height="${height}" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-webgl-canvas" data-kp-type="graph-3d" aria-hidden="true"></canvas>
-      <div class="graph-webgl__fallback" data-kp-renderer-fallback="svg">
+      <div class="graph-webgl__fallback" data-kp-renderer-fallback="svg" aria-hidden="true">
         ${renderGraph3DWebGLFallback(objects, graph)}
       </div>
+      <span class="visually-hidden" id="rn-${escapeHtml(graph.id)}-webgl-status" data-kp-webgl-accessible-status>Static graph available while the 3D view loads.</span>
     </div>
   `;
 }
