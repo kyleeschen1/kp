@@ -83,7 +83,8 @@
     {
       "id": "s03",
       "title": "Separate concrete from planned identities",
-      "status": "planned"
+      "summary": "Catalogue membership now equals the 33 lazy-loadable concrete identities exactly; the one planned quadratic identity remains immutable context outside catalogue rows, and projection drift fails closed without mutating caller-owned records.",
+      "status": "complete"
     },
     {
       "id": "s04",

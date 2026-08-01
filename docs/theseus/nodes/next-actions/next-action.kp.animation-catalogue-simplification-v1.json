@@ -32,6 +32,14 @@
     {
       "kind": "file",
       "path": "tests/animation-catalogue-loadable-registry.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-identity-boundary.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-identity-boundary.test.ts"
     }
   ],
   "dependsOn": {
@@ -151,6 +159,34 @@
       "scope": "slice-s02 control integrity",
       "checkedAt": "2026-08-01T03:30:34.472Z",
       "notes": "Workspace validates after recording typed-registry progress."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-identity-boundary.test.ts tests/animation-catalogue-loadable-registry.test.ts tests/semantic-animation-workbench-identity.test.ts tests/semantic-animation-workbench-index.test.ts",
+      "status": "passed",
+      "scope": "slice s03 focused identity boundary",
+      "checkedAt": "2026-08-01T03:40:50.587Z",
+      "notes": "12/12 passed."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice s03 full deterministic matrix",
+      "checkedAt": "2026-08-01T03:40:51.424Z",
+      "notes": "3136/3136 passed; an earlier concurrent run hit only the wall-clock inference sentinel, while the unloaded rerun completed in 2.3s with identical type counts."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice s03 production build",
+      "checkedAt": "2026-08-01T03:40:52.270Z",
+      "notes": "Typecheck and Vite production build passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s03 durable control state",
+      "checkedAt": "2026-08-01T03:40:53.143Z",
+      "notes": "Workspace valid before slice completion."
     }
   ],
   "expectedLearning": [
