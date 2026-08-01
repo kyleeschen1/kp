@@ -83,6 +83,7 @@ test("selected row is compact asset identity with derived health", () => {
   assert.match(html, /<h3 id="kp-animation-catalogue-details-title">Details<\/h3>/);
   assert.match(html, /data-kp-animation-catalogue-stage-persistent="true"/);
   assert.match(html, /data-kp-editor-animation-player/);
+  assert.match(html, /data-kp-editor-animation-math-layout="inline"/);
   assert.match(html, /data-kp-editor-animation-surface-slot="equation"/);
   assert.match(html, /data-action="toggle-editor-animation"/);
   assert.match(html, /data-action="seek-editor-animation"/);
@@ -95,6 +96,7 @@ test("selected row is compact asset identity with derived health", () => {
     /data-kp-editor-animation-(?:accessibility|quality|gestalt-style|focus-experiment)-control/
   );
   assert.doesNotMatch(html, /data-kp-editor-animation-authoring-controls/);
+  assert.doesNotMatch(html, /<h2(?:\s|>)/);
   assert.doesNotMatch(
     html,
     /iframe|Animation Studio|Animation Workbench|representation picker|ontology/i

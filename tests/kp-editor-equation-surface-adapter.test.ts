@@ -69,3 +69,31 @@ test("equation stage identity persists when playback direction changes", () => {
   assert.equal(forward.globalProgress, 0.35);
   assert.equal(rewind.globalProgress, 0.65);
 });
+
+test("equation stage math layout changes content without changing identity", () => {
+  const display = stageFrame(0.25);
+  const catalog = createKpAnimationAssets();
+  const descriptor = createKpEditorAnimationLibrary().find(
+    (candidate) => candidate.animationId === "animation.linear-solve.solve-x"
+  );
+  const animation = catalog.find(
+    (candidate) => candidate.id === descriptor?.animationId
+  );
+  assert.ok(descriptor);
+  assert.ok(animation);
+  const inline = createKpEditorEquationStageFrame({
+    animation,
+    state: createKpEditorAnimationPlayerState({
+      descriptor,
+      animation,
+      catalog,
+      progress: 0.25
+    }),
+    mathLayout: "inline"
+  });
+
+  assert.equal(display.mathLayout, "display");
+  assert.equal(inline.mathLayout, "inline");
+  assert.equal(display.stageIdentityKey, inline.stageIdentityKey);
+  assert.notEqual(display.contentKey, inline.contentKey);
+});

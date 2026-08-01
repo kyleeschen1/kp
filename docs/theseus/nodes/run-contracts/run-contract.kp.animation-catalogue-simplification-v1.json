@@ -155,7 +155,8 @@
     {
       "id": "s15",
       "title": "Apply inline math and compact heading scale",
-      "status": "planned"
+      "summary": "Made inline KaTeX an explicit catalogue-player layout request consumed by the established equation adapter; the full editor remains display-mode by default. Layout participates in replaceable content identity but not stable stage or runtime identity. The shell keeps one clipped semantic h1, no visible h1/h2, and h3-scale visible Details typography.",
+      "status": "complete"
     },
     {
       "id": "s16",

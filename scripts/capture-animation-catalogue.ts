@@ -34,6 +34,31 @@ try {
     return player?.dataset["kpEditorAnimationHydrated"] === "true" &&
       surface?.dataset["kpEditorAnimationAdapterStatus"] === "ready";
   });
+  const displayMathCount = await page.locator(
+    "[data-kp-animation-catalogue-stage] .katex-display"
+  ).count();
+  if (displayMathCount !== 0) {
+    throw new Error(
+      `Catalogue stage expected inline KaTeX, found ${displayMathCount} display wrappers.`
+    );
+  }
+  const inlineMathCount = await page.locator(
+    "[data-kp-animation-catalogue-stage] .katex"
+  ).count();
+  if (inlineMathCount === 0) {
+    throw new Error("Catalogue stage did not render inline KaTeX.");
+  }
+  const visibleLargeHeadingCount = await page.locator(
+    ".kp-animation-catalogue-shell h1, .kp-animation-catalogue-shell h2"
+  ).evaluateAll((headings) => headings.filter((heading) => {
+    const bounds = heading.getBoundingClientRect();
+    const style = getComputedStyle(heading);
+    return bounds.width > 1 && bounds.height > 1 &&
+      style.display !== "none" && style.visibility !== "hidden";
+  }).length);
+  if (visibleLargeHeadingCount !== 0) {
+    throw new Error("Catalogue shell exposed a visible h1 or h2 heading.");
+  }
 
   const screenshot = path.join(outputRoot, "desktop.png");
   await page.screenshot({

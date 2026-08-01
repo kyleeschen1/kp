@@ -245,6 +245,7 @@ export interface KpEditorEquationStageFrame {
   readonly stageIdentityKey: string;
   readonly contentKey: string;
   readonly materialIdentityKey: string;
+  readonly mathLayout: "display" | "inline";
   readonly projection: KpEditorEquationRuntimeFrameProjection;
   readonly globalProgress: number;
   readonly semanticProgress: number;
@@ -289,6 +290,7 @@ export function createKpEditorEquationStageFrame(input: {
   readonly state: KpEditorAnimationPlayerState;
   readonly authoringRevision?: number | undefined;
   readonly gestaltChannels?: KpGestaltStyleChannels | undefined;
+  readonly mathLayout?: "display" | "inline" | undefined;
 }): KpEditorEquationStageFrame {
   const projection = projectKpEditorEquationRuntimeFrame({
     animation: input.animation,
@@ -358,9 +360,10 @@ export function createKpEditorEquationStageFrame(input: {
     localProgress
   );
   const stageIdentityKey = projection.animationId;
+  const mathLayout = input.mathLayout ?? "display";
   const contentKey = `${projection.direction}:${projection.transitions
     .map((transition) => transition.id)
-    .join(":")}:authoring-${input.authoringRevision ?? 0}`;
+    .join(":")}:authoring-${input.authoringRevision ?? 0}:math-${mathLayout}`;
   const materialIdentityKey = `${projection.animationId}:${projection.transitions
     .map((transition) => transition.id)
     .join(":")}:authoring-${input.authoringRevision ?? 0}`;
@@ -369,6 +372,7 @@ export function createKpEditorEquationStageFrame(input: {
     stageIdentityKey,
     contentKey,
     materialIdentityKey,
+    mathLayout,
     projection,
     globalProgress: input.state.progress,
     semanticProgress,
@@ -418,7 +422,11 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       animation,
       state,
       authoringRevision,
-      gestaltChannels
+      gestaltChannels,
+      mathLayout:
+        player.dataset["kpEditorAnimationMathLayout"] === "inline"
+          ? "inline"
+          : "display"
     });
     if (frame.projection.transitions.length === 0) {
       renderUnavailable(
@@ -2504,10 +2512,10 @@ function renderStageContent(frame: KpEditorEquationStageFrame): string {
   return `${frame.projection.transitions.map((transition, index) => `
         <article class="editor-equation-stage__transition" data-kp-editor-equation-transition-id="${escapeHtml(transition.id)}" data-kp-editor-equation-transition-index="${index}" data-kp-editor-equation-motif="${frame.motifs[index]?.kind ?? "artifact-replace"}" data-kp-editor-equation-semantic-status="${transition.semanticStatus}" aria-label="${escapeHtml(transition.title)}">
           <div class="editor-equation-stage__layer editor-equation-stage__layer--source" data-kp-editor-equation-source>
-            ${renderEquationObjects(transition.source)}
+            ${renderEquationObjects(transition.source, frame.mathLayout)}
           </div>
           <div class="editor-equation-stage__layer editor-equation-stage__layer--target" data-kp-editor-equation-target>
-            ${renderEquationObjects(transition.target)}
+            ${renderEquationObjects(transition.target, frame.mathLayout)}
           </div>
           <div class="editor-equation-stage__caption">
             <span data-kp-editor-equation-motif-label>${escapeHtml(motifLabel(frame.motifs[index]?.kind ?? "artifact-replace"))}</span>
@@ -2549,15 +2557,20 @@ function replaceStageContent(
 }
 
 function renderEquationObjects(
-  objects: readonly KpEditorEquationObjectProjection[]
+  objects: readonly KpEditorEquationObjectProjection[],
+  mathLayout: KpEditorEquationStageFrame["mathLayout"]
 ): string {
   return objects.map((object) => {
     const annotated = annotatedLatexForObject(object);
     return `
     <div class="editor-equation-stage__object" data-kp-editor-equation-object-id="${escapeHtml(object.id)}">
       ${annotated === undefined
-        ? renderLatexToHtml(object.latex)
-        : renderSelectorAnnotatedLatexToHtml(annotated)}
+        ? renderLatexToHtml(object.latex, {
+            displayMode: mathLayout === "display"
+          })
+        : renderSelectorAnnotatedLatexToHtml(annotated, {
+            displayMode: mathLayout === "display"
+          })}
     </div>
   `;
   }).join("");

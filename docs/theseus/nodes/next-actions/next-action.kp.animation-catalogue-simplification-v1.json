@@ -124,6 +124,14 @@
     {
       "kind": "file",
       "path": "tests/kp-editor-animation-player-shell.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-equation-surface-adapter.test.ts"
     }
   ],
   "dependsOn": {
@@ -529,6 +537,27 @@
       "status": "passed",
       "scope": "slice s14 player chrome types",
       "checkedAt": "2026-08-01T04:32:40.290Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-equation-surface-adapter.test.ts tests/kp-editor-animation-player-shell.test.ts tests/animation-catalogue-shell.test.ts tests/kp-editor-equation-semantic-motion.test.ts",
+      "status": "passed",
+      "scope": "slice s15 inline math and shell heading contracts",
+      "checkedAt": "2026-08-01T04:39:15.369Z",
+      "notes": "9 tests passed; catalogue chrome requests inline math, full chrome requests display math, and layout changes content identity without changing stage identity."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s15 inline KaTeX and compact heading browser check",
+      "checkedAt": "2026-08-01T04:39:16.281Z",
+      "notes": "Stable capture found rendered KaTeX and zero display wrappers in the catalogue stage, no genuinely visible h1/h2, and the Details h3 remained at the compact shell scale. Screenshot inspection passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s15 math-layout types",
+      "checkedAt": "2026-08-01T04:39:17.270Z",
       "notes": "Application, Node, test, and domain TypeScript projects passed."
     }
   ],

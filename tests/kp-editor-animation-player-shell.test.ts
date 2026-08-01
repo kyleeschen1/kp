@@ -38,6 +38,7 @@ test("editor animation player shell renders an accessible surface and declared c
   });
 
   assert.match(html, /data-kp-editor-animation-player/);
+  assert.match(html, /data-kp-editor-animation-math-layout="display"/);
   assert.match(html, /data-kp-editor-animation-surface-slot="equation"/);
   assert.match(
     html,
@@ -113,6 +114,7 @@ test("catalogue chrome renders only universal transport while retaining keyboard
   });
 
   assert.match(html, /data-action="toggle-editor-animation"/);
+  assert.match(html, /data-kp-editor-animation-math-layout="inline"/);
   assert.match(html, /data-action="seek-editor-animation"/);
   assert.doesNotMatch(
     html,
