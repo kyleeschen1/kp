@@ -169,7 +169,8 @@
     {
       "id": "s19",
       "title": "run-complete-release-matrix",
-      "status": "planned"
+      "summary": "The complete release matrix is green. An initial 3129/3130 run exposed one stale place-value preservation manifest; history proved its three compositor sources were intentionally reviewed and unchanged since a94146d0, so only the manifest baseline and exact digests were rebased. The final run passes 3130/3130, typecheck/build pass, host payloads are 10011/50000 outer, 372064/490000 main, and 71736/75000 place-value incremental, readers are 144927/145000 across the shared closure with all 11 production routes closed, promotion memory aligns, browser liveness is 3/3, and workspace validation passes.",
+      "status": "complete"
     },
     {
       "id": "s20",

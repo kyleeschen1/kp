@@ -812,6 +812,90 @@
       "scope": "slice-s18 control integrity",
       "checkedAt": "2026-08-01T02:50:17.514Z",
       "notes": "Valid 847 nodes and 15289 events after deterministic reader proof."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "slice-s19 initial matrix",
+      "checkedAt": "2026-08-01T03:01:34.682Z",
+      "notes": "3129/3130 passed; the sole failure was the place-value preservation manifest still hashing the intentional slice-14 compositor sources from its pre-recovery baseline."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/place-value-addition-preservation-manifest.test.ts",
+      "status": "passed",
+      "scope": "slice-s19 control repair",
+      "checkedAt": "2026-08-01T03:01:35.704Z",
+      "notes": "4/4 pass after rebasing only the manifest commit marker and three exact compositor digests to reviewed close commit a94146d0."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-s19 complete unit matrix",
+      "checkedAt": "2026-08-01T03:01:36.627Z",
+      "notes": "3130/3130 pass, including architecture, inference, concept catalog, promotion memory, server, and all source tests."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s19 static types",
+      "checkedAt": "2026-08-01T03:01:37.525Z",
+      "notes": "Application, node, test, and domain projects pass."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-s19 production build",
+      "checkedAt": "2026-08-01T03:01:38.460Z",
+      "notes": "Typecheck and Vite production build pass from the final matrix state."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice-s19 animation host payload",
+      "checkedAt": "2026-08-01T03:01:39.342Z",
+      "notes": "Outer 10011/50000, main host 372064/490000, place-value incremental 71736/75000."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "slice-s19 reader payload",
+      "checkedAt": "2026-08-01T03:01:40.293Z",
+      "notes": "All 11 routes pass; nine-route shared closure remains 144927/145000."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "slice-s19 reader production",
+      "checkedAt": "2026-08-01T03:01:41.213Z",
+      "notes": "All 11 manifest routes close."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "slice-s19 memory projection",
+      "checkedAt": "2026-08-01T03:01:42.107Z",
+      "notes": "Promotion-memory alignment passes with no active economics implementation contract."
+    },
+    {
+      "command": "npm run visual:animation-library-hosts",
+      "status": "passed",
+      "scope": "slice-s19 browser liveness",
+      "checkedAt": "2026-08-01T03:01:43.056Z",
+      "notes": "3/3 playable catalog, rapid switch/reload, and scratch isolation checks pass."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s19 hygiene",
+      "checkedAt": "2026-08-01T03:01:43.967Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s19 control integrity",
+      "checkedAt": "2026-08-01T03:01:44.897Z",
+      "notes": "Valid 847 nodes and 15291 events before slice close."
     }
   ],
   "progress": {
