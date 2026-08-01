@@ -71,7 +71,8 @@
     {
       "id": "s03",
       "title": "Define persistent selection controller",
-      "status": "planned"
+      "summary": "Added a pure typed catalogue navigation controller. Ordinary same-origin same-path known-asset links produce pushed in-shell selections; same-row links stay; prevented, non-primary, modified, targeted, download, cross-origin, cross-path, other-view, and unknown links retain native fallback. History distinguishes known selection with bounded playhead, unknown artifact, and leaving the catalogue. Six focused tests, typecheck, architecture, and diff hygiene pass; main browser lifecycle is unchanged.",
+      "status": "complete"
     },
     {
       "id": "s04",

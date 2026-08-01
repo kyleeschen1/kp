@@ -59,11 +59,32 @@
       "scope": "focused",
       "checkedAt": "2026-08-01T15:37:20.697Z",
       "notes": "Observed solve-x to radical as document-navigation: document, shell, and review composer replaced; query, Parameters mode, and unsaved draft reset; 33-row hostability still settles."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-navigation.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-01T15:41:35.784Z",
+      "notes": "Six cases prove ordinary select/stay, native gesture fallbacks, unsafe destination fallbacks, and history selection/not-found/leave decisions."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-01T15:41:36.704Z",
+      "notes": "Typed navigation decisions compile across app, node, test, and domain configurations."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-01T15:41:37.561Z",
+      "notes": "All concept-room, semantic-reader, semantic-animation, and operation-presentation boundaries pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Frozen the current full-document catalogue selection behavior in the stable visual command and published the desired selected-asset-only replacement boundary."
+    "summary": "Defined a pure catalogue navigation decision for native fallbacks, same-row stays, pushed asset selections, and history resolution without browser or lifecycle mutation."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",
