@@ -96,6 +96,14 @@
     {
       "kind": "file",
       "path": "tests/animation-catalogue-route.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-selection.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-selection.test.ts"
     }
   ],
   "dependsOn": {
@@ -411,6 +419,27 @@
       "scope": "slice s10 route boundaries",
       "checkedAt": "2026-08-01T04:14:21.298Z",
       "notes": "All four architecture gates passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-route.test.ts tests/animation-catalogue-selection.test.ts tests/animation-catalogue-projection.test.ts tests/animation-catalog-loader.test.ts",
+      "status": "passed",
+      "scope": "slice s11 solve-x route, projection, and lazy asset binding",
+      "checkedAt": "2026-08-01T04:19:06.208Z",
+      "notes": "14 tests passed; default and explicit selection bind the exact solve-x entry and algebra pack, while sibling and unknown IDs remain honest deferred/not-found states."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s11 explicit solve-x deep-link smoke",
+      "checkedAt": "2026-08-01T04:19:07.045Z",
+      "notes": "The stable desktop capture loaded /?artifact=animation.linear-solve.solve-x and observed the exact selected catalogue state; screenshot inspection confirmed no legacy dashboard surface."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s11 selection and loader types",
+      "checkedAt": "2026-08-01T04:19:07.875Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
     }
   ],
   "expectedLearning": [

@@ -10,8 +10,14 @@ import {
   renderKpAnimationCatalogueBootstrap
 } from "./editor/animation-catalogue-bootstrap.ts";
 import {
+  createKpAnimationCatalogueProjection
+} from "./editor/animation-catalogue-projection.ts";
+import {
   readKpAnimationCatalogueRoute
 } from "./editor/animation-catalogue-route.ts";
+import {
+  resolveKpAnimationCatalogueSelection
+} from "./editor/animation-catalogue-selection.ts";
 import {
   createKpEditorAnimationLibrary,
   selectKpEditorAnimationDescriptor
@@ -228,7 +234,7 @@ if (requestedView === "ftc-tutorial") {
 } else if (readKpSemanticAnimationWorkbenchRoute(window.location.search).active) {
   void renderAnimationWorkbenchView();
 } else if (readKpAnimationCatalogueRoute(window.location.search).active) {
-  renderAnimationCatalogueView();
+  void renderAnimationCatalogueView();
 } else {
   renderEditor();
 }
@@ -482,15 +488,79 @@ function renderEditor(): void {
   void mountEditorAnimationLibraryReviewCapture(revision);
 }
 
-function renderAnimationCatalogueView(): void {
+async function renderAnimationCatalogueView(): Promise<void> {
   activeView = "animation-catalogue";
   const revision = ++viewRevision;
   disposeAnimationDevelopmentReviewCapture();
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
-  appRoot.innerHTML = renderKpAnimationCatalogueBootstrap();
-  if (revision === viewRevision) markKpAnimationHostReady(window);
+  const route = readKpAnimationCatalogueRoute(window.location.search);
+  const selection = resolveKpAnimationCatalogueSelection({
+    projection: createKpAnimationCatalogueProjection(),
+    artifactId: route.artifactId
+  });
+
+  if (selection.status === "not-found") {
+    appRoot.innerHTML = renderKpAnimationCatalogueBootstrap({
+      status: "not-found",
+      animationId: selection.requestedArtifactId
+    });
+    markKpAnimationHostReady(window);
+    return;
+  }
+  if (selection.status === "deferred") {
+    appRoot.innerHTML = renderKpAnimationCatalogueBootstrap({
+      status: "deferred",
+      animationId: selection.entry.animationId,
+      title: selection.entry.title
+    });
+    markKpAnimationHostReady(window);
+    return;
+  }
+
+  const { entry } = selection;
+  markKpAnimationHostLoading(window, `catalogue.${entry.animationId}`);
+  appRoot.innerHTML = renderKpAnimationCatalogueBootstrap({
+    status: "loading",
+    animationId: entry.animationId,
+    title: entry.title
+  });
+  try {
+    const loaded = await loadKpAnimationAsset(entry.animationId);
+    if (activeView !== "animation-catalogue" || revision !== viewRevision) {
+      return;
+    }
+    if (
+      loaded.animation.id !== entry.animationId ||
+      loaded.packId !== entry.packId
+    ) {
+      throw new Error(
+        `Loaded catalogue asset ${loaded.animation.id} from ${loaded.packId}; ` +
+        `expected ${entry.animationId} from ${entry.packId}.`
+      );
+    }
+    appRoot.innerHTML = renderKpAnimationCatalogueBootstrap({
+      status: "selected",
+      animationId: entry.animationId,
+      title: entry.title,
+      packId: entry.packId
+    });
+    markKpAnimationHostReady(window);
+  } catch (error: unknown) {
+    if (activeView !== "animation-catalogue" || revision !== viewRevision) {
+      return;
+    }
+    const message = error instanceof Error
+      ? error.message
+      : "The selected catalogue asset failed to load.";
+    appRoot.innerHTML = renderKpAnimationCatalogueBootstrap({
+      status: "error",
+      animationId: entry.animationId,
+      message
+    });
+    markKpAnimationHostFailed(window, message);
+  }
 }
 
 function renderAnimationLibraryHostView(): void {

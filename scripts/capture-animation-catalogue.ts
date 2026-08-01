@@ -17,10 +17,13 @@ const browser = await chromium.launch({ headless: true });
 try {
   const page = await browser.newPage({ viewport });
   const url = new URL("/", baseUrl);
+  url.searchParams.set("artifact", animationId);
 
   await page.goto(url.toString(), { waitUntil: "networkidle" });
   await page.evaluate(async () => document.fonts.ready);
-  await page.locator("[data-kp-animation-catalogue]").waitFor();
+  await page.locator(
+    `[data-kp-animation-catalogue-state="selected"][data-kp-animation-catalogue-selection="${animationId}"]`
+  ).waitFor();
 
   const screenshot = path.join(outputRoot, "desktop.png");
   await page.screenshot({
@@ -35,7 +38,7 @@ try {
     `${JSON.stringify({
       schemaVersion: "kp.animation-catalogue-visual-capture.v1",
       animationId,
-      routeState: "catalogue-default-bootstrap",
+      routeState: "catalogue-explicit-exemplar",
       url: url.toString(),
       viewport,
       screenshot: path.relative(process.cwd(), screenshot)
