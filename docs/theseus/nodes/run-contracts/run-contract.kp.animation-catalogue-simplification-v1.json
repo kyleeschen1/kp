@@ -4,7 +4,7 @@
   "title": "KP animation catalogue simplification",
   "status": "ready",
   "domain": "kp",
-  "summary": "Approved catalogue-first execution: establish catalogue truth, build one reversible solve-x shell exemplar, require human review, then generalize only the accepted boundary.",
+  "summary": "Approved catalogue-first execution: establish catalogue truth, build and approve one reversible solve-x shell exemplar, then generalize only the accepted boundary and prepare a catalogue-wide morning audit.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,7 +14,7 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-31-animation-catalogue-simplification-next-step-review.md",
-      "summary": "Approved 26-slice exemplar-first catalogue implementation plan."
+      "summary": "Approved exemplar-first catalogue implementation plan; slices s24-s30 unfold its approved post-checkpoint phases under the 2026-08-01 overnight authorization."
     },
     {
       "kind": "file",
@@ -43,6 +43,7 @@
     "Catalogue truth, projection, hostability, search, shell, review capture, Details, and typed parameters and tuning.",
     "Solve-x shell-only exemplar work that preserves its semantic model, renderer, deterministic clock, paint ownership, and authoring contracts.",
     "After explicit human approval only, catalogue-wide hosting through existing adapters and an honest inventory of Ready, Review, and Broken assets.",
+    "Evidence-derived suggested dispositions and port hypotheses that remain provisional until morning human review.",
     "Focused tests, stable visual scripts, and project documentation directly required by this catalogue tranche."
   ],
   "disallowedWork": [
@@ -50,13 +51,14 @@
     "Iframe fallback, a new renderer, a new runtime or clock, scene-graph changes, or a universal control schema.",
     "Repairing every broken artifact during inventory instead of recording honest hostability and disposition evidence.",
     "Economics, physics, public-site, curriculum, broad LLM editorial, or unrelated dashboard implementation.",
-    "Broad route deletion before unique evidence and consumers have been inventoried."
+    "Broad route deletion before unique evidence and consumers have been inventoried.",
+    "Assigning human dispositions or implementing a canonical port during the overnight tranche."
   ],
-  "goal": "Establish one honest asset-indexed catalogue, perfect the solve-x shell, stop for human desktop approval, and only after approval host all concrete assets and derive a human-reviewed canonical port queue.",
+  "goal": "Establish one honest asset-indexed catalogue, approve the solve-x shell, host all concrete assets honestly, and publish evidence for a morning human audit without assigning dispositions or implementing ports.",
   "target": "next-action.kp.animation-catalogue-simplification-v1",
   "runMode": "run",
-  "maxSlices": 26,
-  "commitCadence": "Commit each independently reversible slice; stop after the solve-x visual checkpoint and do not resume generalization without explicit user approval.",
+  "maxSlices": 30,
+  "commitCadence": "Commit each independently reversible slice; the s23 approval permits bounded generalization through s30, then stop at the morning inventory checkpoint.",
   "verificationLevel": "broad",
   "stopConditions": [
     "Stop at s23 until the user explicitly approves the running desktop solve-x shell.",
@@ -65,7 +67,8 @@
     "Stop and record the seam if the concrete registry cannot distinguish existence from hostability without a small typed split.",
     "Stop if generalization requires asset-specific shell exceptions or weakening a shared contract.",
     "Stop before economics, public-site, curriculum, broad LLM work, or canonical port repairs begin.",
-    "Do not delete old routes before their unique evidence has been inventoried."
+    "Do not delete old routes before their unique evidence has been inventoried.",
+    "Stop after publishing the s30 provisional seam and port evidence for morning human review."
   ],
   "slices": [
     {
@@ -203,7 +206,8 @@
     {
       "id": "s23",
       "title": "Human review solve-x shell",
-      "status": "planned"
+      "summary": "User explicitly approved the running solve-x desktop shell and the overnight continuation. Approval promotes only the surrounding catalogue boundary; sibling behavior remains evidence through existing assets and adapters. Canonical ports, route deletion, universal renderer work, and human disposition assignment remain prohibited.",
+      "status": "complete"
     },
     {
       "id": "s24",
@@ -212,12 +216,38 @@
     },
     {
       "id": "s25",
-      "title": "Run catalogue-wide hostability pass",
+      "title": "Define typed catalogue host outcomes",
+      "summary": "Refine the existing hostability seam into explicit painted, capability-gap, and load-failure evidence without inventing a renderer or repairing assets.",
       "status": "planned"
     },
     {
       "id": "s26",
-      "title": "Audit dispositions and derive port queue",
+      "title": "Probe all concrete asset loading and routing",
+      "summary": "Exercise every concrete row through its exact lazy pack and canonical route, retaining one row per asset and honest failure evidence.",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Dispatch and inventory catalogue hostability",
+      "summary": "Dispatch every loaded asset through existing adapters, record observable health and capability gaps, and never use iframe or asset-specific shell fallback.",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Pressure shell with a distinct caller",
+      "summary": "Use one structurally different already-hostable asset to pressure the approved shell, keyboard, focus, reduced-motion, and narrow functional boundary without declaring a canonical port.",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Attach screenshot evidence to review capture",
+      "summary": "Close the known bitmap evidence gap with bounded screenshot attachment, exact capture-state identity, production erasure, and no duplicated review history.",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "Publish catalogue seam atlas and provisional queue",
+      "summary": "Publish the 33-asset seam atlas, context consolidation clusters, capability gaps, suggested dispositions, and evidence-ranked port hypotheses while human dispositions remain Unreviewed; run broad verification and stop for morning review.",
       "status": "planned"
     }
   ]

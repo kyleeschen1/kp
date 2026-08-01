@@ -33,3 +33,12 @@ approve sibling choreography, asset repairs, canonical port status, route
 deletion, a universal renderer, or a universal parameter schema. Each sibling
 must retain its existing asset, runtime, and domain-adapter ownership or expose
 an explicit capability gap.
+
+## Human outcome
+
+The user approved the running shell and the bounded overnight tranche on
+2026-08-01. The approval authorizes catalogue-wide evidence gathering through
+the existing adapters, one structurally distinct pressure caller, screenshot
+capture closure, and a provisional seam and port-order audit. Human
+dispositions remain `Unreviewed`, and the tranche stops before route deletion,
+canonical port implementation, or asset-specific visual repair.
