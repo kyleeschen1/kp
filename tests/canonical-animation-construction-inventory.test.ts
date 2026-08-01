@@ -85,7 +85,7 @@ test("clone authority sanitation is already one shared browser contract", async 
 });
 
 test("escaping inventory ratchets the selected context consolidation", async () => {
-  assert.equal(kpHtmlEncodingOwners.length, 24);
+  assert.equal(kpHtmlEncodingOwners.length, 25);
   assert.deepEqual(
     kpHtmlEncodingConsolidations.map(({ sourceFile }) => sourceFile),
     ["src/editor/exact-fraction-quantity-surface-adapter.ts"]

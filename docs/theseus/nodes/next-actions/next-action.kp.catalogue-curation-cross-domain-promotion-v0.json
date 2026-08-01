@@ -498,11 +498,57 @@
       "status": "passed",
       "scope": "s24 patch hygiene",
       "checkedAt": "2026-08-01T20:05:16.791Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-constant-force-work-energy-contract.test.ts tests/kp-constant-force-work-energy-model.test.ts tests/kp-constant-force-work-energy-frame.test.ts tests/kp-constant-force-work-energy-animation-asset.test.ts tests/kp-constant-force-work-energy-runtime-frame.test.ts tests/kp-constant-force-work-energy-synchronized-view.test.ts tests/kp-constant-force-work-energy-static-svg.test.ts tests/kp-editor-graph-svg-viewport.test.ts",
+      "status": "passed",
+      "scope": "s25 exact physics frame, semantic asset, synchronized narrative, SVG, viewport, seek, and rewind",
+      "checkedAt": "2026-08-01T20:30:35.228Z",
+      "notes": "20 focused tests passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/html-output-encoding-inventory.test.ts tests/canonical-animation-construction-inventory.test.ts",
+      "status": "passed",
+      "scope": "s25 explicit rendering sink ownership",
+      "checkedAt": "2026-08-01T20:30:36.095Z",
+      "notes": "Eight inventory and construction ratchet tests passed with the new renderer classified as one local rendering boundary."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s25 all application, node, test, and domain TypeScript projects",
+      "checkedAt": "2026-08-01T20:30:36.944Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s25 semantic animation and domain-presentation boundaries",
+      "checkedAt": "2026-08-01T20:30:37.815Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s25 production build",
+      "checkedAt": "2026-08-01T20:30:38.666Z",
+      "notes": "Production bundle passed; the existing large-chunk advisory remains."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s25 canonical graph-adjacent preservation",
+      "checkedAt": "2026-08-01T20:30:39.519Z",
+      "notes": "All 39 deterministic linear-equation baseline states captured successfully."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s25 patch hygiene",
+      "checkedAt": "2026-08-01T20:30:40.371Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Implemented the exact domain-native work-energy model. It validates the frozen scenario, SI dimensions and unit references, graph and parameter bounds, and canonical results; samples any exact in-range position; recomputes exact work and kinetic energy for 1-5 N; freezes cloned state; and adds no presenter, engine, or shared API."
+    "summary": "Built one unregistered native work-energy presenter on the existing graph viewport and shared clock: exact graph, moving-block diagram, energy bar, inline KaTeX equation band, staged narrative, direct seek and rewind, accessible exact state, and a local dimensional-continuity physics profile. No shared renderer, API, or motif family was extracted."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",

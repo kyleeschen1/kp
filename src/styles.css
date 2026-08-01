@@ -2057,6 +2057,212 @@ h2 {
   margin: 0;
   color: #5c6d77;
 }
+
+.editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.physics.v1"] {
+  --kp-graph-plane: #fffdf8;
+  --kp-graph-axis: #3f5261;
+  --kp-graph-grid: #9bb9c8;
+  --kp-graph-stable: #1f7a83;
+  --kp-graph-active: #bd5b35;
+  --kp-graph-focal: #263845;
+  color: var(--kp-graph-focal);
+  background: var(--kp-graph-plane);
+}
+
+.editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.physics.v1"] .editor-graph-stage__plot-plane {
+  fill: var(--kp-graph-plane);
+}
+
+.editor-graph-stage__physics-axis {
+  stroke: var(--kp-graph-axis);
+  stroke-linecap: round;
+  stroke-width: 1.8;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__physics-grid-line {
+  stroke: var(--kp-graph-grid);
+  stroke-width: 0.8;
+  opacity: 0.28;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__physics-tick {
+  stroke: var(--kp-graph-axis);
+  stroke-width: 1.35;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__physics-work-area {
+  fill: var(--kp-graph-active);
+  stroke: var(--kp-graph-active);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__physics-force-line {
+  fill: none;
+  stroke: var(--kp-graph-stable);
+  stroke-linecap: round;
+  stroke-width: 3.1;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__physics-work-boundary {
+  stroke: var(--kp-graph-active);
+  stroke-dasharray: 4 4;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__physics-surface {
+  stroke: #8799a5;
+  stroke-linecap: round;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__physics-object {
+  fill: #f4f1e9;
+  stroke: var(--kp-graph-focal);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__physics-force-arrow {
+  stroke: var(--kp-graph-active);
+  stroke-linecap: round;
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__physics-displacement {
+  stroke: var(--kp-graph-stable);
+  stroke-dasharray: 5 4;
+  stroke-width: 1.6;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__physics-energy-track {
+  fill: #eef1ef;
+  stroke: #9aa8ad;
+  stroke-width: 1;
+}
+
+.editor-graph-stage__physics-energy-initial {
+  fill: var(--kp-graph-stable);
+  opacity: 0.74;
+}
+
+.editor-graph-stage__physics-energy-work {
+  fill: var(--kp-graph-active);
+  opacity: 0.78;
+}
+
+.editor-graph-stage__physics-math-foreign-object {
+  overflow: visible;
+  pointer-events: none;
+}
+
+.editor-graph-stage__physics-math-label {
+  box-sizing: border-box;
+  width: max-content;
+  max-width: 100%;
+  padding: 2px 4px;
+  color: var(--kp-graph-focal);
+  background: rgb(255 253 248 / 0.84);
+  font-size: 11px;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.editor-graph-stage__physics-math-label .katex { font-size: 1em; }
+
+.editor-graph-stage__physics-math-label--axis {
+  padding: 0;
+  background: transparent;
+  color: var(--kp-graph-axis);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.editor-graph-stage__physics-math-label--force {
+  color: var(--kp-graph-active);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.editor-graph-stage__physics-math-label--tick {
+  display: grid;
+  width: 100%;
+  padding: 0;
+  place-items: start center;
+  background: transparent;
+  color: #667b88;
+  font-size: 9px;
+}
+
+.editor-graph-stage__physics-math-label--tick-force {
+  place-items: center end;
+  padding-right: 2px;
+}
+
+.editor-graph-stage__physics-math-label--diagram,
+.editor-graph-stage__physics-math-label--energy {
+  width: 100%;
+  background: transparent;
+  text-align: center;
+}
+
+.editor-graph-stage__physics-math-label--unit {
+  width: 100%;
+  color: var(--kp-graph-active);
+  background: transparent;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.editor-graph-stage__physics-explanation-foreign-object {
+  overflow: visible;
+}
+
+.editor-graph-stage__physics-explanation {
+  box-sizing: border-box;
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  border-bottom: 1px solid rgb(112 137 152 / 0.34);
+  padding: 3px 5px 5px;
+  color: #43545f;
+  background: rgb(255 253 248 / 0.82);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.25;
+  text-transform: none;
+}
+
+.editor-graph-stage__physics-equations {
+  display: grid;
+  grid-template-columns: 0.64fr 1.46fr 1.4fr 0.76fr;
+  gap: 4px 7px;
+  align-items: center;
+}
+
+.editor-graph-stage__physics-equation {
+  display: block;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.editor-graph-stage__physics-equations .katex { font-size: 0.95em; }
+
+.editor-graph-stage__physics-explanation p {
+  margin: 0;
+  color: #5c6d77;
+}
+
 .editor-graph-stage__area { fill: rgb(30 136 168 / 0.3); stroke: #1e88a8; stroke-width: 2; }
 .editor-graph-stage__label { fill: #334155; font-size: 14px; font-weight: 800; }
 .editor-graph-stage__annotation {

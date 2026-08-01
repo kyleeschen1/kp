@@ -520,7 +520,8 @@
     {
       "id": "s25",
       "title": "Build synchronized physics presenter",
-      "status": "planned"
+      "summary": "Built a single centered native SVG work-energy composition over the exact physics model and existing runtime clock. Its force-position graph, growing work area, moving object and force arrow, displacement, kinetic-energy bar, inline KaTeX equations, narrative, and exact nonvisual state remain synchronized across establish, accumulate, connect, and settle. Dynamic values use stable two-decimal display while semantic state remains exact; direct seek and rewind are history-independent. The new styling stays local to kp.graph.dimensional-continuity.physics.v1, economics and canonical equation visuals remain preserved, and no shared API or motif was extracted. Twenty focused checks, eight sink/inventory checks, all TypeScript projects, architecture, production build, 39-state linear-equation preservation, and patch hygiene pass.",
+      "status": "complete"
     },
     {
       "id": "s26",
