@@ -13,11 +13,6 @@ export type KpAnimationCatalogueSelection =
       readonly entry: KpAnimationCatalogueEntry;
     }>
   | Readonly<{
-      readonly status: "deferred";
-      readonly source: "route";
-      readonly entry: KpAnimationCatalogueEntry;
-    }>
-  | Readonly<{
       readonly status: "not-found";
       readonly source: "route";
       readonly requestedArtifactId: string;
@@ -43,17 +38,6 @@ export function resolveKpAnimationCatalogueSelection(input: {
       status: "not-found" as const,
       source: "route" as const,
       requestedArtifactId
-    });
-  }
-
-  if (entry.animationId !== KP_ANIMATION_CATALOGUE_EXEMPLAR_ID) {
-    // Catalogue identity can exist before its shell treatment is approved.
-    // Keeping this state explicit prevents the exemplar spike from silently
-    // becoming a catalogue-wide renderer rollout.
-    return Object.freeze({
-      status: "deferred" as const,
-      source: "route" as const,
-      entry
     });
   }
 

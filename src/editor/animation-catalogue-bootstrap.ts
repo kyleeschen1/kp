@@ -11,11 +11,6 @@ export type KpAnimationCatalogueBootstrapState =
       readonly packId: string;
     }>
   | Readonly<{
-      readonly status: "deferred";
-      readonly animationId: string;
-      readonly title: string;
-    }>
-  | Readonly<{
       readonly status: "not-found";
       readonly animationId: string;
     }>
@@ -43,8 +38,6 @@ function renderStatus(state: KpAnimationCatalogueBootstrapState): string {
       return `<p role="status">Preparing ${escapeHtml(state.title)}…</p>`;
     case "selected":
       return `<p role="status"><strong>${escapeHtml(state.title)}</strong> is selected.</p>`;
-    case "deferred":
-      return `<p role="status"><strong>${escapeHtml(state.title)}</strong> is catalogued. Hosting waits for solve-x exemplar approval.</p>`;
     case "not-found":
       return `<p role="alert">Artifact <code>${escapeHtml(state.animationId)}</code> was not found.</p>`;
     case "error":

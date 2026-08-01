@@ -72,6 +72,14 @@ test("solve-x shell has exactly three flat sibling regions", () => {
     [...html.matchAll(/data-kp-animation-catalogue-row=/g)].length,
     33
   );
+  assert.equal([...html.matchAll(
+    /class="kp-animation-catalogue-shell__result-link"/g
+  )].length, 33);
+  assert.match(
+    html,
+    /href="\/\?artifact=animation\.generated\.radical\.square-root-as-power"/
+  );
+  assert.match(html, /aria-current="page"/);
   assert.equal(
     new Set([...html.matchAll(
       /data-kp-animation-catalogue-row="([^"]+)"/g

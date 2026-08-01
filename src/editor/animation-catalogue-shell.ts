@@ -7,6 +7,9 @@ import type {
 import {
   searchKpAnimationCatalogueEntries
 } from "./animation-catalogue-search.ts";
+import {
+  writeKpAnimationCatalogueRoute
+} from "./animation-catalogue-route.ts";
 import type {
   KpEditorAnimationDescriptor
 } from "./animation-descriptor.ts";
@@ -91,7 +94,7 @@ export function renderKpAnimationCatalogueInspector(input: {
     </div>
     <section data-kp-animation-catalogue-inspector-panel="parameters" hidden>
       <h3>Parameters</h3>
-      <p>This asset has no exposed semantic parameters. Its equation and operations remain authored artifact state.</p>
+      <p>This asset has no exposed semantic parameters. Its semantics remain authored artifact state.</p>
     </section>
     <section data-kp-animation-catalogue-inspector-panel="tuning" hidden>
       <h3>Tuning</h3>
@@ -196,12 +199,17 @@ export function renderKpAnimationCatalogueResults(input: {
   const rows = results.map((entry) => {
     const selected = entry.animationId === input.selectedAnimationId;
     const status = selected ? input.selectedHealth.status : "review";
-    return `<li class="kp-animation-catalogue-shell__result" data-kp-animation-catalogue-row="${escapeHtml(entry.animationId)}"${selected ? ' aria-current="true"' : ""}>
-      <span class="kp-animation-catalogue-shell__result-title">${escapeHtml(entry.title)}</span>
-      <span class="kp-animation-catalogue-shell__result-meta">
-        <span>${escapeHtml(domainLabel(entry))}</span>
-        <span class="kp-animation-catalogue-shell__health" data-kp-animation-catalogue-health="${status}" data-kp-animation-catalogue-health-evidence="${selected ? "selected-host" : "pending"}">${healthLabel(status)}</span>
-      </span>
+    const href = writeKpAnimationCatalogueRoute("", {
+      artifactId: entry.animationId
+    });
+    return `<li class="kp-animation-catalogue-shell__result" data-kp-animation-catalogue-row="${escapeHtml(entry.animationId)}"${selected ? ' data-kp-animation-catalogue-row-selected="true"' : ""}>
+      <a class="kp-animation-catalogue-shell__result-link" href="/${escapeHtml(href)}"${selected ? ' aria-current="page"' : ""}>
+        <span class="kp-animation-catalogue-shell__result-title">${escapeHtml(entry.title)}</span>
+        <span class="kp-animation-catalogue-shell__result-meta">
+          <span>${escapeHtml(domainLabel(entry))}</span>
+          <span class="kp-animation-catalogue-shell__health" data-kp-animation-catalogue-health="${status}" data-kp-animation-catalogue-health-evidence="${selected ? "selected-host" : "pending"}">${healthLabel(status)}</span>
+        </span>
+      </a>
     </li>`;
   }).join("");
 

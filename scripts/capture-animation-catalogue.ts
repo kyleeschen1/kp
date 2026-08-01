@@ -4,6 +4,8 @@ import path from "node:path";
 import { chromium } from "playwright";
 
 const animationId = "animation.linear-solve.solve-x";
+const promotedSiblingId =
+  "animation.generated.radical.square-root-as-power";
 const baseUrl =
   process.env["KP_VISUAL_BASE_URL"] ?? "http://127.0.0.1:8000";
 const outputRoot = path.resolve(
@@ -292,6 +294,31 @@ try {
       player.dataset["kpEditorAnimationProgress"] === "0.5";
   });
   await reducedMotionPage.close();
+
+  const siblingPage = await browser.newPage({ viewport });
+  const siblingUrl = new URL("/", baseUrl);
+  siblingUrl.searchParams.set("artifact", promotedSiblingId);
+  await siblingPage.goto(siblingUrl.toString(), { waitUntil: "networkidle" });
+  await siblingPage.waitForFunction((expectedAnimationId) => {
+    const shell = document.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue-state=\"selected\"]"
+    );
+    const player = shell?.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+    );
+    const surface = player?.querySelector<HTMLElement>(
+      "[data-kp-editor-animation-surface-slot]"
+    );
+    return shell?.dataset["kpAnimationCatalogueSelection"] ===
+      expectedAnimationId &&
+      player?.dataset["kpEditorAnimationId"] === expectedAnimationId &&
+      player.dataset["kpEditorAnimationHydrated"] === "true" &&
+      surface?.dataset["kpEditorAnimationAdapterStatus"] === "ready";
+  }, promotedSiblingId);
+  if (await siblingPage.locator("iframe").count() !== 0) {
+    throw new Error("Promoted catalogue sibling used an iframe fallback.");
+  }
+  await siblingPage.close();
 } finally {
   await browser.close();
 }

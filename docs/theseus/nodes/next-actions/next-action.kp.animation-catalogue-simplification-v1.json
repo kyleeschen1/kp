@@ -767,6 +767,34 @@
       "scope": "slice s22 desktop exemplar capture",
       "checkedAt": "2026-08-01T05:34:45.179Z",
       "notes": "Stable Chromium flow captured solve-x at 1440 by 1000 with three flat regions, persistent frameless stage, compact transport, inline KaTeX, one inspector mode, and lower-left Review launcher."
+    },
+    {
+      "command": "focused catalogue promotion tests",
+      "status": "passed",
+      "scope": "slice s24 routing links shell and solve-x preservation",
+      "checkedAt": "2026-08-01T05:40:36.119Z",
+      "notes": "19 focused tests passed; known siblings select exact rows, unknown IDs fail closed, all 33 flat rows are canonical links, and the solve-x preservation boundary remains green."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s24 approved shell promotion",
+      "checkedAt": "2026-08-01T05:40:36.976Z",
+      "notes": "Chromium retained the approved solve-x exemplar and additionally loaded the generated radical sibling through the same shell and native equation adapter with no iframe fallback."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s24 type safety",
+      "checkedAt": "2026-08-01T05:40:37.813Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed after removing the deferred selection state."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s24 shell promotion boundary",
+      "checkedAt": "2026-08-01T05:40:38.633Z",
+      "notes": "All architecture gates passed with zero semantic-animation exceptions."
     }
   ],
   "expectedLearning": [

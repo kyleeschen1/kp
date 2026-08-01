@@ -576,16 +576,6 @@ async function renderAnimationCatalogueView(): Promise<void> {
     markKpAnimationHostReady(window);
     return;
   }
-  if (selection.status === "deferred") {
-    appRoot.innerHTML = renderKpAnimationCatalogueBootstrap({
-      status: "deferred",
-      animationId: selection.entry.animationId,
-      title: selection.entry.title
-    });
-    markKpAnimationHostReady(window);
-    return;
-  }
-
   const { entry } = selection;
   markKpAnimationHostLoading(window, `catalogue.${entry.animationId}`);
   appRoot.innerHTML = renderKpAnimationCatalogueBootstrap({

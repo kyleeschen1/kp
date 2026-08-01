@@ -48,7 +48,7 @@ test("the selected projection entry resolves the exact lazy asset", async () => 
   assert.equal(loaded.packId, selection.entry.packId);
 });
 
-test("sibling and unknown artifacts never silently replace the exemplar", () => {
+test("known siblings select their exact row while unknown artifacts fail closed", () => {
   const sibling = resolveKpAnimationCatalogueSelection({
     projection,
     artifactId: "animation.generated.radical.square-root-as-power"
@@ -58,11 +58,12 @@ test("sibling and unknown artifacts never silently replace the exemplar", () => 
     artifactId: "animation.unknown"
   });
 
-  assert.equal(sibling.status, "deferred");
+  assert.equal(sibling.status, "selected");
   assert.equal(
-    sibling.status === "deferred" ? sibling.entry.animationId : undefined,
+    sibling.status === "selected" ? sibling.entry.animationId : undefined,
     "animation.generated.radical.square-root-as-power"
   );
+  assert.equal(sibling.source, "route");
   assert.deepEqual(unknown, {
     status: "not-found",
     source: "route",
