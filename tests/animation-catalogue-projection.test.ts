@@ -40,6 +40,9 @@ test("asset-first projection keeps one lightweight entry with subordinate contex
     [...new Set(solveX.relatedContexts.map(({ kind }) => kind))].sort(),
     ["card", "diagnostic", "editor", "reader"]
   );
+  assert.ok(solveX.relatedContexts
+    .filter(({ kind }) => kind === "editor" || kind === "card")
+    .every(({ href }) => href.includes("view=editor")));
   assert.equal(
     Object.keys(solveX).includes("representations"),
     false

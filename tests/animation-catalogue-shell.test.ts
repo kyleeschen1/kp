@@ -18,6 +18,7 @@ import {
   createKpEditorAnimationPlayerState
 } from "../src/editor/animation-player-state.ts";
 import {
+  renderKpAnimationCatalogueDetails,
   renderKpAnimationCatalogueShell
 } from "../src/editor/animation-catalogue-shell.ts";
 
@@ -128,4 +129,58 @@ test("shell rejects health attached to a different asset", () => {
     }),
     /does not match health/
   );
+});
+
+test("Details is one linear projection in stable evidence order", () => {
+  const html = renderKpAnimationCatalogueDetails({ entry, health });
+  const sections = [...html.matchAll(
+    /data-kp-animation-catalogue-details-section="([^"]+)"/g
+  )].map((match) => match[1]);
+
+  assert.deepEqual(sections, [
+    "identity",
+    "semantics",
+    "playback",
+    "capabilities",
+    "health",
+    "related-contexts"
+  ]);
+  assert.match(html, /family\.algebra\.both-sides/);
+  assert.match(html, /sample\.animation\.solve-x\.both-sides/);
+  assert.match(html, /<dt>Duration<\/dt><dd>2\.4 s<\/dd>/);
+  assert.match(html, /<dt>Beats<\/dt><dd>50<\/dd>/);
+  assert.match(html, /Render targets/);
+  assert.equal([...html.matchAll(/<a href=/g)].length, 7);
+  assert.match(html, /view=editor/);
+  assert.match(html, /The asset has not yet painted in the catalogue host/);
+  assert.doesNotMatch(html, /searchTerms|role="tab"|<button/);
+  assert.doesNotMatch(html, /<h2(?:\s|>)/);
+});
+
+test("Details omits empty optional sections instead of showing machinery", () => {
+  const {
+    durationMs: _durationMs,
+    beatCount: _beatCount,
+    ...requiredEntry
+  } = entry;
+  const html = renderKpAnimationCatalogueDetails({
+    entry: {
+      ...requiredEntry,
+      familyIds: [],
+      sampleIds: [],
+      renderTargetKinds: [],
+      controlKinds: [],
+      tags: [],
+      relatedContexts: []
+    },
+    health: { ...health, reasons: [] }
+  });
+
+  assert.deepEqual(
+    [...html.matchAll(
+      /data-kp-animation-catalogue-details-section="([^"]+)"/g
+    )].map((match) => match[1]),
+    ["identity", "health"]
+  );
+  assert.doesNotMatch(html, /Semantics|Playback|Capabilities|Related contexts/);
 });

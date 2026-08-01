@@ -628,6 +628,27 @@
       "scope": "slice s17 type safety",
       "checkedAt": "2026-08-01T05:00:37.521Z",
       "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-shell.test.ts tests/animation-catalogue-projection.test.ts tests/animation-catalogue-search.test.ts tests/animation-catalogue-health.test.ts",
+      "status": "passed",
+      "scope": "slice s18 linear Details projection",
+      "checkedAt": "2026-08-01T05:06:17.226Z",
+      "notes": "16 tests passed; stable identity, semantics, playback, capabilities, health, and related-context order; empty optional sections vanish; no tabs, buttons, or search machinery appear."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s18 live Details inspector",
+      "checkedAt": "2026-08-01T05:06:18.375Z",
+      "notes": "Chromium verified the six-section linear order, no tab interface, independently scrolling inspector, fixed stage, live review capture, and compact heading contract."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s18 type safety",
+      "checkedAt": "2026-08-01T05:06:19.454Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed after removing the obsolete shell-local domain value."
     }
   ],
   "expectedLearning": [

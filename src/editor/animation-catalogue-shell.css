@@ -208,6 +208,12 @@
   line-height: 1.25;
 }
 
+.kp-animation-catalogue-shell__inspector section + section {
+  padding-top: 1rem;
+  margin-top: 1rem;
+  border-top: 1px solid var(--kp-catalogue-border);
+}
+
 .kp-animation-catalogue-shell__stage-host .katex {
   font-size: 1em;
 }
@@ -223,6 +229,53 @@
   display: grid;
   gap: 0.8rem;
   margin: 0;
+}
+
+.kp-animation-catalogue-shell__value-list,
+.kp-animation-catalogue-shell__plain-list,
+.kp-animation-catalogue-shell__context-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.kp-animation-catalogue-shell__value-list,
+.kp-animation-catalogue-shell__plain-list {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.kp-animation-catalogue-shell__plain-list {
+  color: #555149;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.kp-animation-catalogue-shell__health-summary {
+  color: #805a2f;
+  font-weight: 700;
+}
+
+.kp-animation-catalogue-shell__context-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.kp-animation-catalogue-shell__context-list li {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.kp-animation-catalogue-shell__context-list a {
+  color: #345c67;
+  font-size: 0.75rem;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.kp-animation-catalogue-shell__context-list span {
+  color: var(--kp-catalogue-muted);
+  font-size: 0.64rem;
 }
 
 .kp-animation-catalogue-shell__inspector dl div {

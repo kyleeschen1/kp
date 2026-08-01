@@ -173,7 +173,8 @@
     {
       "id": "s18",
       "title": "Add linear Details inspector",
-      "status": "planned"
+      "summary": "Expanded the one right-hand Details inspector into a stable linear projection: identity, semantics, playback, capabilities, health evidence, and related contexts. Empty sections disappear; there are no tabs, cards, buttons, or nested navigation. Preserved editor-context links now explicitly name view=editor after the catalogue became the default route.",
+      "status": "complete"
     },
     {
       "id": "s19",

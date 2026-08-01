@@ -170,10 +170,17 @@ function projectRelatedContexts(
         id: context.id,
         label: context.label,
         kind: context.kind,
-        href: context.href,
+        href: explicitLegacyViewHref(context.href),
         role: context.role
       }))
   );
+}
+
+function explicitLegacyViewHref(href: string): string {
+  if (!href.startsWith("/?animation=") || href.includes("view=")) return href;
+  // The empty-query route is now the catalogue, so old editor projections
+  // must name their preserved host instead of relying on the former default.
+  return `${href}&view=editor`;
 }
 
 function uniqueById<T extends { readonly id: string }>(

@@ -59,6 +59,30 @@ try {
   if (visibleLargeHeadingCount !== 0) {
     throw new Error("Catalogue shell exposed a visible h1 or h2 heading.");
   }
+  const detailsSectionOrder = await page.locator(
+    "[data-kp-animation-catalogue-inspector=\"details\"] " +
+    "[data-kp-animation-catalogue-details-section]"
+  ).evaluateAll((sections) => sections.map((section) =>
+    (section as HTMLElement).dataset["kpAnimationCatalogueDetailsSection"]
+  ));
+  const expectedDetailsOrder = [
+    "identity",
+    "semantics",
+    "playback",
+    "capabilities",
+    "health",
+    "related-contexts"
+  ];
+  if (JSON.stringify(detailsSectionOrder) !== JSON.stringify(expectedDetailsOrder)) {
+    throw new Error(
+      `Catalogue Details order was ${JSON.stringify(detailsSectionOrder)}.`
+    );
+  }
+  if (await page.locator(
+    "[data-kp-animation-catalogue-inspector=\"details\"] [role=\"tab\"]"
+  ).count() !== 0) {
+    throw new Error("Catalogue Details exposed a tab interface.");
+  }
   const search = page.locator(
     '[data-action="filter-animation-catalogue"]'
   );

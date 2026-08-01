@@ -40,7 +40,6 @@ export function renderKpAnimationCatalogueShell(input: {
     );
   }
   const { entry, health } = input;
-  const domain = domainLabel(entry);
 
   return `<main class="kp-animation-catalogue-shell" data-kp-animation-catalogue data-kp-animation-catalogue-state="selected" data-kp-animation-catalogue-selection="${escapeHtml(entry.animationId)}" data-kp-animation-catalogue-selected-health="${health.status}" aria-labelledby="kp-animation-catalogue-title">
     <h1 id="kp-animation-catalogue-title" class="kp-animation-catalogue-shell__visually-hidden">Animation catalogue</h1>
@@ -66,17 +65,76 @@ export function renderKpAnimationCatalogueShell(input: {
       </div>
     </section>
     <aside class="kp-animation-catalogue-shell__inspector" data-kp-animation-catalogue-region="inspector" aria-label="Artifact inspector">
-      <section aria-labelledby="kp-animation-catalogue-details-title">
-        <h3 id="kp-animation-catalogue-details-title">Details</h3>
-        <p>${escapeHtml(entry.summary)}</p>
-        <dl>
-          <div><dt>Domain</dt><dd>${escapeHtml(domain)}</dd></div>
-          <div><dt>Health</dt><dd>${healthLabel(health.status)}</dd></div>
-          <div><dt>Asset</dt><dd><code>${escapeHtml(entry.animationId)}</code></dd></div>
-        </dl>
-      </section>
+      ${renderKpAnimationCatalogueDetails({ entry, health })}
     </aside>
   </main>`;
+}
+
+export function renderKpAnimationCatalogueDetails(input: {
+  readonly entry: KpAnimationCatalogueEntry;
+  readonly health: KpAnimationCatalogueHealth;
+}): string {
+  const { entry, health } = input;
+  if (entry.animationId !== health.animationId) {
+    throw new Error(
+      `Catalogue details entry ${entry.animationId} does not match ` +
+      `health ${health.animationId}.`
+    );
+  }
+  const semanticRows = [
+    detailValues("Families", entry.familyIds, true),
+    detailValues("Samples", entry.sampleIds, true)
+  ].filter(Boolean).join("");
+  const playbackRows = [
+    entry.durationMs === undefined
+      ? ""
+      : detailValue("Duration", formatDuration(entry.durationMs)),
+    entry.beatCount === undefined
+      ? ""
+      : detailValue("Beats", String(entry.beatCount))
+  ].join("");
+  const capabilityRows = [
+    detailValues("Render targets", entry.renderTargetKinds.map(titleCase)),
+    detailValues("Controls", entry.controlKinds.map(titleCase)),
+    detailValues("Tags", entry.tags, true)
+  ].filter(Boolean).join("");
+  const healthReasons = health.reasons.length === 0
+    ? ""
+    : `<ul class="kp-animation-catalogue-shell__plain-list">${health.reasons
+        .map(({ message }) => `<li>${escapeHtml(message)}</li>`)
+        .join("")}</ul>`;
+  const relatedContexts = entry.relatedContexts.length === 0
+    ? ""
+    : `<section data-kp-animation-catalogue-details-section="related-contexts">
+        <h3>Related contexts</h3>
+        <ul class="kp-animation-catalogue-shell__context-list">${entry.relatedContexts
+          .map((context) => `<li>
+            <a href="${escapeHtml(context.href)}">${escapeHtml(context.label)}</a>
+            <span>${escapeHtml(titleCase(context.kind))} · ${escapeHtml(titleCase(context.role))}</span>
+          </li>`)
+          .join("")}</ul>
+      </section>`;
+
+  return `<div data-kp-animation-catalogue-inspector="details">
+    <section aria-labelledby="kp-animation-catalogue-details-title" data-kp-animation-catalogue-details-section="identity">
+      <h3 id="kp-animation-catalogue-details-title">Details</h3>
+      <p>${escapeHtml(entry.summary)}</p>
+      <dl>
+        ${detailValue("Domain", domainLabel(entry))}
+        ${detailValue("Asset", entry.animationId, true)}
+        ${detailValue("Pack", titleCase(entry.packId))}
+      </dl>
+    </section>
+    ${detailSection("Semantics", "semantics", semanticRows)}
+    ${detailSection("Playback", "playback", playbackRows)}
+    ${detailSection("Capabilities", "capabilities", capabilityRows)}
+    <section data-kp-animation-catalogue-details-section="health">
+      <h3>Health</h3>
+      <p class="kp-animation-catalogue-shell__health-summary" data-kp-animation-catalogue-health="${health.status}">${healthLabel(health.status)}</p>
+      ${healthReasons}
+    </section>
+    ${relatedContexts}
+  </div>`;
 }
 
 export function renderKpAnimationCatalogueResults(input: {
@@ -108,6 +166,48 @@ export function renderKpAnimationCatalogueResults(input: {
 function domainLabel(entry: KpAnimationCatalogueEntry): string {
   const source = entry.domains[0] ?? entry.packId;
   return source
+    .split("-")
+    .map((part) => part.length === 0
+      ? part
+      : `${part[0]?.toUpperCase()}${part.slice(1)}`)
+    .join(" ");
+}
+
+function detailSection(
+  title: string,
+  id: string,
+  rows: string
+): string {
+  if (rows.length === 0) return "";
+  return `<section data-kp-animation-catalogue-details-section="${id}">
+    <h3>${escapeHtml(title)}</h3>
+    <dl>${rows}</dl>
+  </section>`;
+}
+
+function detailValue(label: string, value: string, code = false): string {
+  const escaped = escapeHtml(value);
+  return `<div><dt>${escapeHtml(label)}</dt><dd>${code ? `<code>${escaped}</code>` : escaped}</dd></div>`;
+}
+
+function detailValues(
+  label: string,
+  values: readonly string[],
+  code = false
+): string {
+  if (values.length === 0) return "";
+  return `<div><dt>${escapeHtml(label)}</dt><dd><ul class="kp-animation-catalogue-shell__value-list">${values
+    .map((value) => `<li>${code ? `<code>${escapeHtml(value)}</code>` : escapeHtml(value)}</li>`)
+    .join("")}</ul></dd></div>`;
+}
+
+function formatDuration(durationMs: number): string {
+  const seconds = durationMs / 1_000;
+  return `${Number.isInteger(seconds) ? seconds : seconds.toFixed(1)} s`;
+}
+
+function titleCase(value: string): string {
+  return value
     .split("-")
     .map((part) => part.length === 0
       ? part
