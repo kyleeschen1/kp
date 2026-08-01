@@ -376,7 +376,8 @@
     {
       "id": "s22",
       "title": "Human review economics",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: economics exemplar is live at the canonical catalogue route with exact start, shift, settle, custom target, wide, and narrow evidence complete. Awaiting an explicit human verdict on choreography, scale, centering, explanation density, and the bounded parameter before any physics second caller or shared seam extraction.",
+      "status": "in-progress"
     },
     {
       "id": "s23",
