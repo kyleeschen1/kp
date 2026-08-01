@@ -68,6 +68,14 @@
     {
       "kind": "file",
       "path": "tests/animation-catalogue-row-identity.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-health.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-health.test.ts"
     }
   ],
   "dependsOn": {
@@ -327,6 +335,20 @@
       "scope": "slice s07 durable control state",
       "checkedAt": "2026-08-01T04:00:24.798Z",
       "notes": "Workspace valid before slice completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-health.test.ts",
+      "status": "passed",
+      "scope": "slice s08 focused catalogue health characterization",
+      "checkedAt": "2026-08-01T04:06:23.705Z",
+      "notes": "4 tests passed; observable paint gates Ready and broken evidence takes precedence."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s08 TypeScript contracts",
+      "checkedAt": "2026-08-01T04:06:24.538Z",
+      "notes": "Application, Node, tests, and domain projects passed."
     }
   ],
   "expectedLearning": [

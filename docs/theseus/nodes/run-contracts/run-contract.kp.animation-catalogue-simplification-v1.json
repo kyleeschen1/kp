@@ -113,7 +113,8 @@
     {
       "id": "s08",
       "title": "Derive honest catalogue health",
-      "status": "planned"
+      "summary": "Derived honest catalogue health from adapter hostability, observed paint, diagnostics, and explicit review need: the pre-host baseline is 0 Ready, 31 Review, and 2 Broken, independent from promotion and reviewer disposition.",
+      "status": "complete"
     },
     {
       "id": "s09",
