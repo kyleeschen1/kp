@@ -40,6 +40,14 @@
     {
       "kind": "file",
       "path": "tests/animation-catalogue-identity-boundary.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-surface-hostability.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-surface-hostability.test.ts"
     }
   ],
   "dependsOn": {
@@ -186,6 +194,41 @@
       "status": "passed",
       "scope": "slice s03 durable control state",
       "checkedAt": "2026-08-01T03:40:53.143Z",
+      "notes": "Workspace valid before slice completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-surface-hostability.test.ts tests/kp-editor-animation-surface-adapter-registry.test.ts tests/kp-editor-animation-surface-dispatch.test.ts tests/animation-catalogue-loadable-registry.test.ts",
+      "status": "passed",
+      "scope": "slice s04 adapter hostability",
+      "checkedAt": "2026-08-01T03:45:25.051Z",
+      "notes": "10/10 passed; 31 concrete assets resolve every slot, while the programming trace and equation/programming comparison expose the missing programming adapter."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s04 static types",
+      "checkedAt": "2026-08-01T03:45:25.866Z",
+      "notes": "All TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s04 dependency boundaries",
+      "checkedAt": "2026-08-01T03:45:26.653Z",
+      "notes": "All architecture gates passed; the inspection seam adds no adapter imports to production runtime."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/editor/animation-catalogue-surface-hostability.ts --path tests/animation-catalogue-surface-hostability.test.ts",
+      "status": "passed",
+      "scope": "slice s04 impact selection",
+      "checkedAt": "2026-08-01T03:45:27.454Z",
+      "notes": "New unmatched paths conservatively select broad gates; discovery cadence used focused characterization, typecheck, and architecture against the immediately preceding green 3136-test and production-build baseline."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s04 durable control state",
+      "checkedAt": "2026-08-01T03:45:28.252Z",
       "notes": "Workspace valid before slice completion."
     }
   ],

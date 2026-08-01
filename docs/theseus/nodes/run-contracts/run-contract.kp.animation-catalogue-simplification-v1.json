@@ -89,7 +89,8 @@
     {
       "id": "s04",
       "title": "Map surface adapter hostability",
-      "status": "planned"
+      "summary": "Added a read-only hostability seam that distinguishes target dispatch from actual adapter resolution. The current 33-asset map is 31 ready, 2 missing-adapter, and 0 unsupported-surface: programming.add and the synchronized equation/programming comparison lack a programming adapter. Generic and specialized priority ownership remains intact; no renderer, loader, runtime, or visual behavior changed.",
+      "status": "complete"
     },
     {
       "id": "s05",
