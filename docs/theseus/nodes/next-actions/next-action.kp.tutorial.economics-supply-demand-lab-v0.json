@@ -2,9 +2,9 @@
   "id": "next-action.kp.tutorial.economics-supply-demand-lab-v0",
   "kind": "next-action",
   "title": "Build Parametric Supply Demand Policy Lab",
-  "status": "deferred",
+  "status": "superseded",
   "domain": "kp.tutorial",
-  "summary": "Parked while KP proves the simple front-door concept-room architecture and product language.",
+  "summary": "Replaced by the approved cross-domain promotion target and run-contract.kp.catalogue-curation-cross-domain-promotion-v1; the old BFS dependency and concept-room pause are stale.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,10 +25,10 @@
     "Parameter-state determinism and correspondence tests",
     "Interactive graph accessibility and browser gates"
   ],
-  "expectedLearning": [
-    "Whether the shared interaction model can preserve semantic region identity through quantitative parameter changes."
-  ],
   "revisitWhen": [
     "The linear-equation architecture, symbolic exemplar, balance projection, and missing-middle demo have passed their review checkpoints."
+  ],
+  "expectedLearning": [
+    "Whether the shared interaction model can preserve semantic region identity through quantitative parameter changes."
   ]
 }

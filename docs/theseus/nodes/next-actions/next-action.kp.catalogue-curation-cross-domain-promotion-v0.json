@@ -31,6 +31,26 @@
     "npm run visual:animation-library-hosts",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-01T15:31:26.809Z",
+      "notes": "Rank 3 economics remains authoritative; current catalogue checkpoint and later cross-domain order are aligned."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-01T15:31:27.817Z",
+      "notes": "Validated 854 nodes and 15559 events before completion evidence."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Durable roadmap, queue, catalogue, promotion, and cross-domain threads now reflect catalogue UX, economics, physics, then caller-proven consolidation; stale BFS-gated economics action is superseded."
+  },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",
     "Whether economics and physics share a synchronized-model projection seam without sharing domain truth.",

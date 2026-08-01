@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-31
+Last Updated: 2026-08-01
 Status: active
 Active Thread: `threads/animation-catalogue.md`
 Supporting Threads:
@@ -31,14 +31,19 @@ semantic transformations, visual motifs, renderer-neutral frames, catalogue
 authoring actions, and verified export inputs before expanding into media,
 curriculum, or dynamic package loading.
 
-The immediate catalogue-first simplification is recorded in
+The catalogue-first simplification is recorded in
 `decisions/2026-07-31-kp-animation-catalogue-first-simplification.md`, with the
 living boundary in `threads/animation-catalogue.md` and the approval-gated plan
 in
 `reviews/2026-07-31-animation-catalogue-simplification-next-step-review.md`.
-KP has finished release-baseline recovery. It will now perfect one solve-x shell
-exemplar, stop for human review, and only then run a fast catalogue-wide host
-inventory. The inventory will determine canonical port order.
+That loop is complete: the default shell is approved, all 33 concrete assets
+load, 31 paint natively, two expose the missing programming adapter, and none
+use an iframe. The approved successor in
+`reviews/2026-08-01-catalogue-curation-cross-domain-promotion-long-loop-proposal.md`
+first perfects persistent catalogue switching and one solve-x compact-stage
+exemplar. After its human checkpoint, KP performs bounded curation, resumes the
+Supply and demand equilibrium shift and constant-force work-energy promotions,
+and only then consolidates caller-proven APIs or motifs.
 
 The symbolic manipulation family plan recorded in
 `decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`
@@ -79,8 +84,8 @@ A retained portable-publication lane is recorded in
 `threads/portable-publication-platform.md`, with preliminary boundary guidance
 in `decisions/2026-07-24-kp-portable-artifact-and-host-joints.md`. Its site,
 CLI, Markdown, embed, and Studio possibilities remain useful boundary evidence,
-but public-facing implementation is paused during the catalogue inventory. It
-does not change the active execution contract.
+but public-facing implementation remains outside the active curation and
+cross-domain promotion contract. It does not change current execution order.
 
 The capability-pressure and arithmetic expansion decision is recorded in
 `decisions/2026-07-23-kp-capability-pressure-and-arithmetic-expansion.md`.
@@ -118,9 +123,10 @@ The persistent promotion order is now owned by
 quantity identity and place-value arithmetic are promoted. The bounded Supply
 and demand equilibrium shift remains the first unresolved promotion, followed
 by the bounded constant-force work-energy exemplar and the recorded later-domain
-sequence. This stable order is paused, not replaced, while the catalogue
-inventory determines the intervening port work. Older sequence documents remain
-rationale but no longer independently determine rank.
+sequence. The completed catalogue audit did not recompute this order; the
+approved successor resumes the first two unresolved rows after one bounded
+catalogue UX/curation checkpoint. Older sequence documents remain rationale but
+no longer independently determine rank.
 
 The platform milestones between those promotions are recorded in
 `decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md`.
@@ -158,11 +164,12 @@ addition through `278 + 156 = 434` are promoted. The place-value repair retains
 one documentary workspace and one typed contributor-fusion motif across all
 three ordered positions.
 
-The release-baseline recovery matrix is green and its final closeout hands off
-to the approved catalogue proposal rather than activating economics. The next
-visual target is a shell-only solve-x exemplar with a mandatory human
-checkpoint. Its approved shell will then host the concrete asset registry
-catalogue-wide so KP can see real adapter gaps and decide what to port.
+The release-baseline recovery and catalogue simplification matrices are green.
+The catalogue now hosts the concrete registry directly and has reduced the
+observed gap to one absent programming adapter shared by two rows. The next
+visual target is a presentation-only solve-x catalogue UX exemplar: persistent
+in-shell selection, surface-aware centering, and a compact visual step strip,
+with a mandatory human checkpoint before sibling generalization.
 
 The generator, editorial-text, API-tier, motif-versioning, and pruning
 recommendations are durable platform milestones in
@@ -182,11 +189,13 @@ The durable domain-promotion order and current status remain owned by
 `threads/animation-library-promotion.md`. Approved Theseus plan revision
 `plan-revision.kp.v19` mirrors that order. Exact-fraction quantity and
 place-value addition, `278 + 156 = 434`, are promoted. The bounded Supply and
-demand equilibrium shift remains the next domain row but is paused behind the
-catalogue audit. Planned rows do not authorize implementation; an approved
-typed run contract owns execution. Human exemplar approval remains mandatory
-before each subjective visual generalization, and existing standalone examples
-remain reference evidence rather than automatically promoted reader products.
+demand equilibrium shift remains the next domain row and is authorized inside
+`run-contract.kp.catalogue-curation-cross-domain-promotion-v1` after the
+catalogue UX/curation checkpoint. Constant-force work-energy follows as the
+structurally different synchronized-model caller. Human exemplar approval
+remains mandatory before each subjective visual generalization, and existing
+standalone examples remain reference evidence rather than automatically
+promoted reader products.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
@@ -412,8 +421,9 @@ Build the verified learning layer:
   animation motifs.
 
 The accepted cross-domain tutorial kernel remains retained platform composition
-work. It is paused behind the catalogue inventory. Full curriculum generation,
-learner memory, and course-scale assessment remain parked under this phase.
+work. Its bounded economics and physics exemplars are active through the
+promotion contract, while full curriculum generation, learner memory, and
+course-scale assessment remain parked under this phase.
 
 ### Phase 9: Export And Embed
 
@@ -428,19 +438,20 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Begin the materialized catalogue run contract at its catalogue-truth slices
-   from the recovered green release baseline.
-2. Preserve all promoted semantic, timing, paint-ownership, accessibility, and
-   review contracts while building one reversible solve-x catalogue shell.
-3. Stop for human desktop review of tiling, stage prominence, controls,
-   typography, inspectors, search density, and lower-left capture.
-4. After approval, make the catalogue the default internal home and run a fast
-   no-iframe host pass over every concrete loadable animation asset.
-5. Browse the resulting inventory together, assign human dispositions, and
-   derive canonical port order from information gained per effort.
-6. Keep the stable domain-promotion order, publication work, curriculum, public
-   website, and LLM editorial track paused until that audit chooses the next
-   tranche.
+1. Preserve the approved catalogue shell while making ordinary asset selection
+   replace only selected-asset ownership, not the document or surrounding
+   review workspace.
+2. Center and visually compact solve-x inside a bounded catalogue-only stage
+   treatment, then stop for human review before sibling generalization.
+3. Record bounded catalogue curation without inferring dispositions; treat the
+   Jacobian/Hessian comparison as a diagnostic/retirement candidate while
+   retaining its semantic and conformance evidence.
+4. Build and human-review one exact Supply and demand equilibrium shift, then
+   one exact constant-force work-energy second caller, without domain engines.
+5. Classify API tiers and extract or version only seams proven by both callers;
+   prune obsolete compatibility paths only beside their last-caller migration.
+6. Keep programming trace, publication, curriculum, public website, and broad
+   LLM editorial work outside this contract.
 
 ## Deferred
 
@@ -460,6 +471,7 @@ Package executable animations as semantic capsules:
   accepted cross-domain exemplars.
 - Broad Theseus planner infrastructure is deferred unless it directly blocks KP
   roadmap execution.
-- Economics and physics promotion, the public website, full curriculum,
-  learner/teacher product systems, and broad LLM editorial work are deferred
-  until the catalogue inventory and disposition review choose a next tranche.
+- The public website, full curriculum, learner/teacher product systems,
+  programming execution trace, and broad LLM editorial work remain deferred.
+  Economics and physics are now bounded approved exemplars inside the active
+  contract, not permission for domain engines or curriculum expansion.

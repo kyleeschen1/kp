@@ -1,0 +1,57 @@
+{
+  "id": "priority-change.kp.catalogue-curation-cross-domain-promotion-v0",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.catalogue-curation-cross-domain-promotion-v0",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The completed catalogue audit collapsed the host backlog. User approved a bounded catalogue UX and curation pass, then rank-3 economics, rank-4 physics, and only caller-proven consolidation.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The completed catalogue audit collapsed the host backlog. User approved a bounded catalogue UX and curation pass, then rank-3 economics, rank-4 physics, and only caller-proven consolidation.",
+      "occurredAt": "2026-08-01T15:30:51.541Z",
+      "summary": "Priority change disposition: replan."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v19"
+    ],
+    "preferred": [
+      "run-contract.kp.catalogue-curation-cross-domain-promotion-v1"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v19",
+    "run-contract.kp.catalogue-curation-cross-domain-promotion-v1"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v19",
+    "rationale": "The completed catalogue audit collapsed the host backlog. User approved a bounded catalogue UX and curation pass, then rank-3 economics, rank-4 physics, and only caller-proven consolidation.",
+    "disposition": "replan",
+    "affectedRunIds": [
+      "run-contract.kp.catalogue-curation-cross-domain-promotion-v1"
+    ],
+    "changes": [
+      {
+        "subject": "catalogue-ux",
+        "to": "now"
+      },
+      {
+        "subject": "economics",
+        "to": "next"
+      },
+      {
+        "subject": "physics",
+        "to": "after-economics"
+      },
+      {
+        "subject": "api-and-motif-consolidation",
+        "to": "after-two-approved-callers"
+      }
+    ],
+    "effectiveAt": "2026-08-01T15:30:51.541Z",
+    "requestedBy": "user"
+  }
+}

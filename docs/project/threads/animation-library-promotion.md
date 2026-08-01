@@ -1,11 +1,12 @@
 # Animation Library Promotion Thread
 
-Status: paused-supporting
-Last Updated: 2026-07-31
-Current Next Action: Preserve the stable promotion order while the active
-Animation Catalogue inventory determines the intervening host and canonical
-port work. The Supply and demand equilibrium shift remains rank 3, but no
-economics proposal or implementation begins during the catalogue tranche.
+Status: active-supporting
+Last Updated: 2026-08-01
+Current Next Action: Preserve the stable promotion order while the approved
+catalogue UX and curation checkpoint completes, then build and human-review the
+Supply and demand equilibrium shift at rank 3, followed by constant-force
+work-energy at rank 4. Consolidate API tiers and motifs only after both callers
+provide evidence.
 
 ## Goal
 
@@ -28,11 +29,12 @@ but a model must not silently recompute the sequence from older reviews.
 Short harvest promotions may run after their prerequisite frontier exemplar is
 approved. They expand a proven family without changing the frontier order.
 
-The catalogue-first decision pauses execution of this order without
-recomputing it. Catalogue health and human disposition are evidence for a
-separate port queue; they do not silently reorder domain promotion rank. When
-the catalogue audit closes, an explicit decision will either resume rank 3 or
-record a new intervening tranche.
+The catalogue-first decision paused execution without recomputing this order.
+The completed host audit found 31 painted assets, two programming gaps, no load
+failures, and no iframe ports. The approved successor performs one bounded
+catalogue UX/curation checkpoint and then resumes ranks 3 and 4 in the same
+typed contract. Catalogue health and disposition remain separate evidence and
+do not reorder the domain ranks.
 
 ## Completed Foundation
 

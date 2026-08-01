@@ -2,11 +2,11 @@
 
 Status: active
 Last Updated: 2026-08-01
-Current Next Action: Review the running 33-asset catalogue and the provisional
-seam atlas with the user. Assign human dispositions only during that review,
-then approve or revise the programming execution-trace tranche before any port
-implementation. Supply and demand equilibrium shift remains the first
-unresolved domain promotion, but economics stays paused.
+Current Next Action: Improve the running catalogue with persistent in-shell
+asset selection and one solve-x centering/compact-step exemplar, then stop for
+human visual review. After approval, finish bounded catalogue curation and
+resume the Supply and demand equilibrium shift as the first unresolved domain
+promotion. Programming execution trace remains deferred.
 
 ## Goal
 
@@ -43,6 +43,14 @@ adapter gaps, with zero load failures and zero iframes. `Ready`, `Review`, and
 disposition is still `Unreviewed`. The seam atlas suggests questions and an
 evidence-ranked programming tranche, but does not assign dispositions or
 authorize a port.
+
+The approved successor loop does not select that provisional programming
+tranche. It first removes full-document navigation between catalogue assets,
+centers and compacts solve-x as one presentation-only exemplar, and records
+only bounded curation evidence. It then resumes the stable domain order through
+economics and physics before consolidating caller-proven APIs or motifs. The
+Jacobian/Hessian comparison may be demoted as a diagnostic/retirement candidate
+without deleting its semantic fixture or conformance value.
 
 ## Accepted Scope
 

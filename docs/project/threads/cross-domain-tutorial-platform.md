@@ -1,11 +1,11 @@
 # Cross-domain Tutorial Platform Thread
 
-Status: paused-supporting
-Last Updated: 2026-07-31
-Current Next Action: Support the active catalogue-first simplification and
-inventory from the recovered green baseline. Economics remains the first
-unresolved domain promotion but is paused until that audit selects the next
-tranche.
+Status: active-supporting
+Last Updated: 2026-08-01
+Current Next Action: Support the approved catalogue UX and curation checkpoint,
+then deliver the bounded Supply and demand equilibrium shift and constant-force
+work-energy exemplars as two synchronized-model-view callers. No domain engine
+or generalized motif is authorized before exemplar review.
 
 ## Goal
 
@@ -25,9 +25,10 @@ this thread retains the tutorial, model, and synchronized-view contracts.
 
 The current animation-promotion rank and progress are owned by
 `threads/animation-library-promotion.md`. Exact fraction quantity and
-place-value addition are promoted. The bounded economics equilibrium shift
-remains the first unresolved domain rank, followed by constant-force
-work-energy, but both are paused during the catalogue tranche. Older symbolic,
+place-value addition are promoted. The bounded economics equilibrium shift is
+the first unresolved domain rank, followed by constant-force work-energy. The
+completed catalogue host audit and approved successor now authorize those two
+exemplars after one catalogue UX/curation checkpoint. Older symbolic,
 capability-pressure, and six-loop records retain rationale but do not
 independently override this stable ledger.
 

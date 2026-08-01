@@ -1,23 +1,23 @@
 # KP Next Actions
 
-Last Updated: 2026-07-31
+Last Updated: 2026-08-01
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-1. Prepare a reviewed run contract for the bounded Supply and demand
-   equilibrium shift exemplar. Planning may identify its synchronized graph,
-   parameter, intersection, and narrative acceptance boundary, but does not
-   authorize implementation.
-2. After economics promotion, advance the bounded constant-force work-energy
-   exemplar in the recorded order. Track sparse place-value direct settlement
-   and decimal/radix rendering as explicit family proof obligations rather
-   than implying universal number support.
-3. After that demo tranche, declare stable, internal, and experimental API
-   tiers, then prepare a separate verified linear-generator-to-canonical-
-   animation bridge; do not hide either change inside a content promotion.
+1. Execute the approved catalogue curation and cross-domain promotion contract:
+   first perfect persistent catalogue switching and the solve-x compact-stage
+   exemplar, then deliver the bounded Supply and demand equilibrium shift and
+   constant-force work-energy exemplars behind their human checkpoints.
+2. After both synchronized-model callers are approved, declare stable,
+   internal, and experimental API tiers and extract only shared invariants
+   proven by those callers. Version a motif only when an intentional shared
+   redesign has human approval.
+3. Retire adjacent compatibility paths only when the same bounded change proves
+   their last caller migrated. Keep Jacobian/Hessian semantic and conformance
+   evidence even if its catalogue presentation is demoted.
 4. Introduce a minimal hand-authored `ExplanationSpineV1`, learner state,
    vocabulary contract, and verified claim references with the first generated
    solve-x session.
