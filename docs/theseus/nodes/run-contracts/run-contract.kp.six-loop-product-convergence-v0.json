@@ -86,7 +86,9 @@
     {
       "id": "s05",
       "title": "Freeze generated trace bridge",
-      "status": "planned"
+      "summary": "Frozen exact-provider generated trace bridge with stable instance identity, subtract/divide support, provenance retention, and typed fail-closed diagnostics; 9 focused tests plus type and architecture gates pass.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s06",

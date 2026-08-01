@@ -41,6 +41,14 @@
     {
       "kind": "file",
       "path": "scripts/capture-animation-catalogue.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-01-verified-linear-problem-animation-bridge-contract.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/integrations/verified-linear-problem-animation-bridge.ts"
     }
   ],
   "dependsOn": {
@@ -198,6 +206,24 @@
       "status": "passed",
       "scope": "s04 whitespace audit",
       "checkedAt": "2026-08-01T23:24:20.813Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-problem-trace-mapper.test.ts tests/verified-linear-problem-animation-bridge.test.ts",
+      "status": "passed",
+      "scope": "9 provider trace bridge conformance and fail-closed tests",
+      "checkedAt": "2026-08-01T23:31:18.239Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application node test and domain TypeScript boundaries",
+      "checkedAt": "2026-08-01T23:31:19.155Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "concept reader semantic animation and motif ownership gates",
+      "checkedAt": "2026-08-01T23:31:20.073Z"
     }
   ],
   "expectedLearning": [
