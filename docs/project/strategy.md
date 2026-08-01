@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-07-25
+Last Updated: 2026-07-31
 
 ## North Star
 
@@ -31,6 +31,13 @@ seek/rewind, responsive execution, accessibility, hover, annotations, Cloze,
 and renderer-independent compilation. Bespoke motion planning is not itself a
 product thesis.
 
+KP is learner-facing in the long term. The first learner product should deepen
+understanding for people who have already encountered the notation rather than
+claim to be a complete curriculum. Before shaping that public product, the
+internal Animation Catalogue is the immediate pressure lab: it should make the
+executable library easy to search, play, tune, review, and compare across
+domains while revealing which abstractions and host seams are actually shared.
+
 ## Strategic Architecture
 
 The project should keep four layers distinct:
@@ -41,9 +48,9 @@ The project should keep four layers distinct:
    sequencing, parallel composition, and layout state.
 3. **Renderer layer:** KaTeX, SVG, WebGL, DOM, code, diagram, and table
    renderers that consume explicit frames.
-4. **Authoring layer:** dashboard/catalog, animation specs, LLM-editable
-   scripts, tutorial cards, comparison cards, report cards, and project
-   navigation.
+4. **Authoring layer:** an asset-first Animation Catalogue, animation specs,
+   review and tuning tools, LLM-editable scripts, tutorial cards, comparison
+   cards, report cards, and diagnostic project navigation.
 
 Within the executable animation path, keep only three stages: canonical
 semantic trace, ephemeral presentation planning, and rendering. Authoring
@@ -79,8 +86,10 @@ Use Theseus for executable control:
 - progress and blocker state;
 - dashboard exports.
 
-The dashboard should increasingly read from both: project docs for the human
-story and Theseus for the live operational graph.
+The Animation Catalogue should read executable asset, hostability, verification,
+and review evidence for artifact inspection. It must not duplicate the roadmap
+or Theseus operational graph. Project docs retain the human story and Theseus
+retains live execution authority.
 
 ## Prioritization Criteria
 
@@ -90,8 +99,8 @@ When choosing the next slice, prefer work that improves:
   correspondence, and provenance semantics;
 - **runtime reliability:** deterministic seek, rewind, composition, and
   renderer-neutral sampling;
-- **authoring workflow:** dashboard search, samples, report cards, and project
-  navigation;
+- **authoring workflow:** asset search, continuously visible playback,
+  progressive inspection, parameters/tuning, and exact-state review capture;
 - **reusable primitives:** capabilities and motifs that many animations can
   reuse;
 - **demo value:** visible equation/graph/animation behavior that proves the
@@ -109,10 +118,16 @@ contract is stable enough to support it.
 - Do not encode every math adjective as a runtime subclass.
 - Do not make graph/WebGL a separate animation system.
 - Do not make every embed ship the full runtime or Three.js.
-- Do not let dashboard rows drift from source refs, tests, or Theseus records.
+- Do not turn the catalogue into a roadmap, ontology browser, planned-work
+  index, or peer representation switcher.
+- Do not claim an asset is healthy when its required surface adapter or primary
+  host is missing; expose the capability gap without an iframe fallback.
 - Do not pursue unrelated Theseus planner infrastructure while KP semantic
   runtime work is the selected frontier.
 - Do not infer semantic lineage from visual glyph equality.
 - Do not grow operation-specific scheduling exceptions as a substitute for a
   general presentation law; unsupported work must fall back conservatively or
   remain lesson-authored.
+- Do not begin the public website, full curriculum, learner/teacher systems, or
+  broad LLM editorial layer before the internal catalogue audit establishes
+  what KP can host and what should be canonically ported.

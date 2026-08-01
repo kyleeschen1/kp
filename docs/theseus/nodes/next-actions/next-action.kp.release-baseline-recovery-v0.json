@@ -2,8 +2,9 @@
   "id": "next-action.kp.release-baseline-recovery-v0",
   "kind": "next-action",
   "title": "Restore KP release baseline before economics",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Release baseline recovery completed all 20 approved slices with 3130 tests green, typecheck and build green, animation-host and reader budgets below unchanged ceilings, reader production closure green, and the approved catalogue successor materialized without starting out-of-scope implementation.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -896,11 +897,46 @@
       "scope": "slice-s19 control integrity",
       "checkedAt": "2026-08-01T03:01:44.897Z",
       "notes": "Valid 847 nodes and 15291 events before slice close."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "slice-s20 catalogue handoff",
+      "checkedAt": "2026-08-01T03:13:30.721Z",
+      "notes": "Roadmap, active catalogue thread, stable rank-3 economics ledger, and absence of an economics implementation contract remain aligned."
+    },
+    {
+      "command": "theseus plan checks quick",
+      "status": "passed",
+      "scope": "slice-s20 successor readiness",
+      "checkedAt": "2026-08-01T03:13:31.882Z",
+      "notes": "Source refs, done contracts, run-contract hygiene, and workflow queue checks all pass with zero active done-contract gaps."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s20 control integrity",
+      "checkedAt": "2026-08-01T03:13:32.843Z",
+      "notes": "Workspace validates after resolving recovery and materializing the 26-slice catalogue successor."
+    },
+    {
+      "command": "npm run --silent loop:status",
+      "status": "passed",
+      "scope": "slice-s20 durable progress",
+      "checkedAt": "2026-08-01T03:13:33.734Z",
+      "notes": "Catalogue successor is selected at slice 1 of 26 with zero blockers; recovery is complete."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s20 handoff hygiene",
+      "checkedAt": "2026-08-01T03:13:34.755Z",
+      "notes": "The catalogue decision, plan, thread, roadmap projections, and Theseus control records contain no whitespace errors."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Slice 15 started: freeze the now-green four-module source closure and prove canonical host behavior unchanged before payload repair."
+    "state": "complete",
+    "summary": "All 20 recovery slices are complete, the full release matrix is green, the recovery run and target are resolved, and the catalogue successor is ready at slice s01 with zero blockers."
   },
   "expectedLearning": [
     "Whether the host failure and six red release gates can be repaired through bounded deletion, boundary restoration, and lazy loading without changing visible behavior or accepted budgets."

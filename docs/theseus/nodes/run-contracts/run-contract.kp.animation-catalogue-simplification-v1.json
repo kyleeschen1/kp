@@ -1,0 +1,202 @@
+{
+  "id": "run-contract.kp.animation-catalogue-simplification-v1",
+  "kind": "run-contract",
+  "title": "KP animation catalogue simplification",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Approved catalogue-first execution: establish catalogue truth, build one reversible solve-x shell exemplar, require human review, then generalize only the accepted boundary.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation-catalogue-simplification-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-31-animation-catalogue-simplification-next-step-review.md",
+      "summary": "Approved 26-slice exemplar-first catalogue implementation plan."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-31-kp-animation-catalogue-first-simplification.md",
+      "summary": "Approved asset-first catalogue product and architecture decision."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/animation-catalogue.md",
+      "summary": "Living catalogue scope and preservation boundary."
+    }
+  ],
+  "verification": [
+    "npm run --silent verify:impact",
+    "npm test",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:architecture",
+    "npm run check:promotion-memory",
+    "npm run check:dev-review-production",
+    "npm run visual:animation-catalogue",
+    "npm run visual:animation-library-hosts",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Catalogue truth, projection, hostability, search, shell, review capture, Details, and typed parameters and tuning.",
+    "Solve-x shell-only exemplar work that preserves its semantic model, renderer, deterministic clock, paint ownership, and authoring contracts.",
+    "After explicit human approval only, catalogue-wide hosting through existing adapters and an honest inventory of Ready, Review, and Broken assets.",
+    "Focused tests, stable visual scripts, and project documentation directly required by this catalogue tranche."
+  ],
+  "disallowedWork": [
+    "Visual generalization before the s23 human checkpoint is explicitly approved.",
+    "Iframe fallback, a new renderer, a new runtime or clock, scene-graph changes, or a universal control schema.",
+    "Repairing every broken artifact during inventory instead of recording honest hostability and disposition evidence.",
+    "Economics, physics, public-site, curriculum, broad LLM editorial, or unrelated dashboard implementation.",
+    "Broad route deletion before unique evidence and consumers have been inventoried."
+  ],
+  "goal": "Establish one honest asset-indexed catalogue, perfect the solve-x shell, stop for human desktop approval, and only after approval host all concrete assets and derive a human-reviewed canonical port queue.",
+  "target": "next-action.kp.animation-catalogue-simplification-v1",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "Commit each independently reversible slice; stop after the solve-x visual checkpoint and do not resume generalization without explicit user approval.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop at s23 until the user explicitly approves the running desktop solve-x shell.",
+    "Stop if the shell requires semantic model, runtime, renderer, deterministic clock, or paint-ownership changes.",
+    "Stop if the default experience requires an iframe, representation picker, nested catalogue, ontology tree, or universal renderer.",
+    "Stop and record the seam if the concrete registry cannot distinguish existence from hostability without a small typed split.",
+    "Stop if generalization requires asset-specific shell exceptions or weakening a shared contract.",
+    "Stop before economics, public-site, curriculum, broad LLM work, or canonical port repairs begin.",
+    "Do not delete old routes before their unique evidence has been inventoried."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Freeze catalogue source inventory",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Characterize loadable asset registry",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Separate concrete from planned identities",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Map surface adapter hostability",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Map related context sprawl",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Build asset-first catalogue projection",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Prove one row per concrete asset",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Derive honest catalogue health",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Add stable catalogue visual command",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Establish default catalogue route",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Bind solve-x exemplar selection",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Build three-region desktop shell",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Make center stage frameless and persistent",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Reduce universal controls to transport",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Apply inline math and compact heading scale",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Add flat fuzzy search rail",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Dock compact review capture lower left",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Add linear Details inspector",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Separate parameters from review tuning",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Preserve URL keyboard and accessibility state",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Prove solve-x preservation boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Capture desktop solve-x exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Human review solve-x shell",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Promote approved shell boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Run catalogue-wide hostability pass",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Audit dispositions and derive port queue",
+      "status": "planned"
+    }
+  ]
+}

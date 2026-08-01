@@ -1,11 +1,11 @@
 # Animation Library Promotion Thread
 
-Status: active-supporting
+Status: paused-supporting
 Last Updated: 2026-07-31
-Current Next Action: Prepare the bounded rank-3 Supply and demand equilibrium
-shift (`economics-parametric`) proposal. Rank 2 is promoted; this planning
-frontier does not authorize economics implementation without a reviewed run
-contract.
+Current Next Action: Preserve the stable promotion order while the active
+Animation Catalogue inventory determines the intervening host and canonical
+port work. The Supply and demand equilibrium shift remains rank 3, but no
+economics proposal or implementation begins during the catalogue tranche.
 
 ## Goal
 
@@ -27,6 +27,12 @@ but a model must not silently recompute the sequence from older reviews.
 
 Short harvest promotions may run after their prerequisite frontier exemplar is
 approved. They expand a proven family without changing the frontier order.
+
+The catalogue-first decision pauses execution of this order without
+recomputing it. Catalogue health and human disposition are evidence for a
+separate port queue; they do not silently reorder domain promotion rank. When
+the catalogue audit closes, an explicit decision will either resume rank 3 or
+record a new intervening tranche.
 
 ## Completed Foundation
 
@@ -221,6 +227,8 @@ exists.
 
 ## Links
 
+- `docs/project/threads/animation-catalogue.md`
+- `docs/project/decisions/2026-07-31-kp-animation-catalogue-first-simplification.md`
 - `docs/project/decisions/2026-07-28-kp-stable-animation-promotion-order.md`
 - `docs/project/decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md`
 - `docs/project/decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md`

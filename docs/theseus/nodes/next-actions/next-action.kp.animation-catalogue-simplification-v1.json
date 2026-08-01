@@ -1,0 +1,74 @@
+{
+  "id": "next-action.kp.animation-catalogue-simplification-v1",
+  "kind": "next-action",
+  "title": "Simplify KP around the animation catalogue",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Implement the approved asset-first catalogue, perfect the solve-x shell exemplar first, stop for human review before generalization, then inventory concrete assets and derive the canonical port queue.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-31-kp-animation-catalogue-first-simplification.md",
+      "summary": "Approved catalogue-first product and architecture decision."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-31-animation-catalogue-simplification-next-step-review.md",
+      "summary": "Approved exemplar-first implementation plan and human checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/animation-catalogue.md",
+      "summary": "Living catalogue scope, boundaries, and current next action."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.release-baseline-recovery-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm test",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:architecture",
+    "npm run check:promotion-memory",
+    "npm run check:dev-review-production",
+    "npm run visual:animation-catalogue",
+    "npm run visual:animation-library-hosts",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Which registry is the smallest truthful authority for concrete loadable catalogue identity.",
+    "Which existing adapters can host assets without iframe or renderer changes, and where hostability gaps actually lie.",
+    "Whether the approved solve-x shell remains simple under one structurally different caller after human approval.",
+    "Which human dispositions and high-information seams should determine the canonical port queue."
+  ],
+  "allowedWork": [
+    "Execute only run-contract.kp.animation-catalogue-simplification-v1 within its stored slice order, checkpoint, preservation boundary, and stop conditions."
+  ],
+  "disallowedWork": [
+    "Do not generalize visual treatment before human approval or begin economics, public-site, curriculum, broad LLM editorial, universal renderer, or unrelated dashboard work."
+  ],
+  "criteria": [
+    {
+      "id": "asset-indexed-catalogue-truth",
+      "weight": "high"
+    },
+    {
+      "id": "solve-x-shell-human-approval",
+      "weight": "high"
+    },
+    {
+      "id": "no-iframe-existing-contract-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "honest-hostability-and-port-queue",
+      "weight": "high"
+    }
+  ]
+}

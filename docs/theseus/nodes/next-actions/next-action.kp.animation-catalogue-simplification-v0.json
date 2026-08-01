@@ -1,0 +1,40 @@
+{
+  "id": "next-action.kp.animation-catalogue-simplification-v0",
+  "kind": "next-action",
+  "title": "Simplify",
+  "status": "superseded",
+  "domain": "kp",
+  "summary": "Superseded before queue registration because shell argument grouping truncated its descriptive fields; no implementation depended on this draft.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-31-kp-animation-catalogue-first-simplification.md",
+      "summary": "Approved"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-31-animation-catalogue-simplification-next-step-review.md",
+      "summary": "Approved"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/animation-catalogue.md",
+      "summary": "Living"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.release-baseline-recovery-v0"
+    ]
+  },
+  "verification": [
+    "npm",
+    "npm",
+    "npm",
+    "npm",
+    "npm",
+    "npm",
+    "npm",
+    "theseus"
+  ]
+}

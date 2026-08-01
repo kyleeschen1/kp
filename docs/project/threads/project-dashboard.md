@@ -1,39 +1,46 @@
 # Project Dashboard Thread
 
-Status: active
-Last Updated: 2026-07-10
-Current Next Action: Keep dashboard rows aligned with the semantic runtime
-roadmap and use sample targets to open live rendered examples from catalog rows.
+Status: superseded
+Last Updated: 2026-07-31
+Current Next Action: Preserve unique dashboard evidence and data sources while
+the Animation Catalogue absorbs useful artifact inspection. Do not extend the
+dashboard as KP's primary operating surface.
 
 ## Goal
 
-Make the dashboard the KP operating surface for project state, object and
-transform catalogs, report cards, blockers, samples, and future authoring
-flows.
+Preserve the project dashboard as a diagnostic view of project state, report
+cards, blockers, and historical catalogue sources while its former primary
+authoring role is replaced by the asset-first Animation Catalogue.
 
 ## Current Decision
 
-Use agenda-style rows rather than card-heavy layouts. Every work item, report,
-object, transform, visual, API group, sample, and future tutorial artifact
-should be discoverable as a row with search text, tags, status, source refs,
-verification, and a selected-row preview.
+The dashboard no longer defines catalogue identity and is not the default
+internal home. Planned work, Theseus state, objects, transforms, reports, and
+animation assets should not share one selectable row model. Useful source refs,
+verification records, and diagnostic projections may be preserved or linked
+from catalogue Details without turning those contexts into peer
+representations.
 
 ## Accepted Scope
 
-- search over work, reports, gallery items, API rows, transforms, and samples;
-- foldable sections and selected-row preview;
-- sample target metadata;
-- live actions into editor samples and API cards;
-- project docs and Theseus records as long-term data sources.
+- read-only project and historical diagnostic views;
+- source refs, verification records, and report evidence not yet available
+  elsewhere;
+- temporary links to old editor, sample, and API diagnostics during migration;
+- project docs and Theseus records as the authority for direction and execution.
 
 ## Out Of Scope
 
 - browser writeback before structured docs/JSON validation is settled;
 - dashboard-only samples that do not connect to source refs;
-- replacing the editor surface before the semantic runtime is stable.
+- new asset identity, representation selection, or authoring workflow;
+- roadmap and catalogue state merged into one row index;
+- restoring the dashboard as the default internal surface.
 
 ## Links
 
+- `docs/project/threads/animation-catalogue.md`
+- `docs/project/decisions/2026-07-31-kp-animation-catalogue-first-simplification.md`
 - `docs/project/roadmap.md`
 - `docs/project/strategy.md`
 - `src/project-dashboard/data.ts`

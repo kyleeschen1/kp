@@ -1,11 +1,11 @@
 # Cross-domain Tutorial Platform Thread
 
-Status: active
+Status: paused-supporting
 Last Updated: 2026-07-31
-Current Next Action: Complete the approved release-baseline recovery, then
-prepare the bounded rank-3 Supply and demand equilibrium shift proposal.
-Economics remains the first unresolved promotion but is not authorized by this
-thread without a reviewed run contract.
+Current Next Action: Support the active catalogue-first simplification and
+inventory from the recovered green baseline. Economics remains the first
+unresolved domain promotion but is paused until that audit selects the next
+tranche.
 
 ## Goal
 
@@ -14,6 +14,33 @@ equations, graphs, diagrams, networks, code, tables, and deterministic domain
 models from one semantic storyboard and shared runtime clock.
 
 ## Current Decision
+
+The catalogue-first pivot in
+`decisions/2026-07-31-kp-animation-catalogue-first-simplification.md` changes
+the immediate operating surface and next tranche, not the durable cross-domain
+architecture. Existing domains now provide catalogue pressure and second-caller
+evidence. They do not need competing dashboards, nested catalogues, or peer
+representation choices. The active catalogue thread owns immediate work while
+this thread retains the tutorial, model, and synchronized-view contracts.
+
+The current animation-promotion rank and progress are owned by
+`threads/animation-library-promotion.md`. Exact fraction quantity and
+place-value addition are promoted. The bounded economics equilibrium shift
+remains the first unresolved domain rank, followed by constant-force
+work-energy, but both are paused during the catalogue tranche. Older symbolic,
+capability-pressure, and six-loop records retain rationale but do not
+independently override this stable ledger.
+
+The same ledger now owns the platform gates around that content order. After
+the four early visible exemplars, KP will declare public API tiers and compile
+the existing verified linear-problem trace into the canonical animation asset
+path. The first generated solve-x session carries a deterministic explanation
+spine, learner state, approved vocabulary, and verified claim references.
+Context-specific output encoding must precede untrusted editorial text. An LLM
+may later propose review-time wording only after deterministic sessions and
+human gold and negative examples stabilize; it does not invent claims or sit in
+the playback loop. Motif versioning and compatibility retirement remain
+pressure-driven, adjacent simplifications rather than speculative frameworks.
 
 The accepted composition sequence distinguishes three reusable environments:
 equation succession, persistent workspace algorithms, and synchronized model
@@ -78,14 +105,15 @@ and foundation closeout are recorded in
 `reviews/2026-07-26-kp-six-loop-library-expansion-direction.md`, and
 `reviews/2026-07-27-radical-reader-promotion-kit-closeout.md`.
 
-FTC remains a valuable reviewable artifact, but its human review and the BFS,
-economics, programming, and physics breadth sequence are parked until the
-front-door product language and architecture are proven.
+FTC remains a valuable reviewable artifact. BFS and programming stay parked,
+while one bounded economics equilibrium shift and one bounded constant-force
+work-energy exemplar move into the near-term promotion ledger. This does not
+authorize economics or physics engines.
 
-The accepted post-checkpoint sequence now inserts radicals, exponents, and
-functional wrapping after fractions and before derivatives. It then proceeds
-through integral accumulation, vector/projection, and matrix-vector/linear-map
-coordination. The decision and responsive attention constraint are recorded in
+The older post-checkpoint sequence remains rationale for symbolic and
+responsive-attention requirements, but it is superseded for promotion rank by
+`threads/animation-library-promotion.md`. Its decision and responsive attention
+constraint remain recorded in
 `decisions/2026-07-21-kp-symbolic-exemplar-sequence-and-responsive-attention.md`.
 
 The derivative step is now explicitly a pre-calculus-to-calculus bridge:
@@ -113,6 +141,12 @@ presentation-only branch schedules and their exact inverse on one exemplar.
 The retained cross-domain decision is to expand through capability-opening
 vertical exemplars instead of either perfecting every equation indefinitely or
 building universal renderer abstractions in advance.
+
+The semantic explanatory atlas is now retained as an exploratory design lane.
+Its programming-language and topology specs define subject-native semantic
+packs and exemplar checkpoints without authorizing implementation or changing
+the active product order. The decision is recorded in
+`decisions/2026-07-21-kp-semantic-explanatory-atlas-exploration.md`.
 
 The core pedagogical principle is the hermeneutic loop, realized as sparse
 typed interpretive cycles that establish a whole, isolate a part, relate it
@@ -194,16 +228,27 @@ is a new combination of tutorial, graph, equation, and interaction vocabulary.
 
 ## Links
 
+- `docs/project/threads/animation-catalogue.md`
+- `docs/project/decisions/2026-07-31-kp-animation-catalogue-first-simplification.md`
+- `docs/project/threads/animation-library-promotion.md`
+- `docs/project/decisions/2026-07-28-kp-stable-animation-promotion-order.md`
+- `docs/project/decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md`
+- `docs/project/reviews/2026-07-28-kp-promotion-memory-and-architecture-next-step-review.md`
 - `docs/project/decisions/2026-07-19-kp-concept-room-architecture-review.md`
 - `docs/project/reviews/2026-07-19-linear-equation-visual-exemplar-loop-proposal.md`
 - `docs/project/reviews/2026-07-19-concept-room-architecture-walking-skeleton-closeout.md`
 - `docs/project/decisions/2026-07-19-kp-concept-room-architecture.md`
 - `docs/project/reviews/2026-07-19-linear-equation-architecture-stabilization-proposal.md`
 - `docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md`
+- `docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json`
+- `docs/theseus/nodes/run-contracts/run-contract.kp.product-roadmap-v5-program-v0.json`
+- `docs/project/decisions/2026-07-21-kp-semantic-explanatory-atlas-exploration.md`
 - `docs/project/decisions/2026-07-23-kp-capability-pressure-and-arithmetic-expansion.md`
 - `docs/project/decisions/2026-07-24-kp-semantic-glyph-reconciliation-experiment.md`
 - `docs/project/reviews/2026-07-24-semantic-glyph-reconciliation-experiment-long-loop-proposal.md`
 - `docs/project/reviews/2026-07-23-kp-capability-pressure-domain-order-next-step-review.md`
+- `docs/superpowers/specs/2026-07-21-semantic-programming-language-theater-design.md`
+- `docs/superpowers/specs/2026-07-21-semantic-topology-explanations-design.md`
 - `docs/project/decisions/2026-07-17-kp-hermeneutic-cross-domain-tutorial-contract.md`
 - `docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md`
 - `docs/project/reviews/2026-07-18-reviewable-ftc-tutorial-loop-closeout.md`

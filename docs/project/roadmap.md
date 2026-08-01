@@ -1,19 +1,21 @@
 # KP Roadmap
 
-Last Updated: 2026-07-30
+Last Updated: 2026-07-31
 Status: active
-Active Thread: `threads/cross-domain-tutorial-platform.md`
+Active Thread: `threads/animation-catalogue.md`
 Supporting Threads:
 - `threads/semantic-runtime.md`
 - `threads/animation-library-promotion.md`
+- `threads/cross-domain-tutorial-platform.md`
 
 ## Current Source Of Truth
 
 The active direction is to make KP's semantic animation runtime the center of
-the project, with the project dashboard as the operational catalog and authoring
-surface. The primary artifact is a composable semantic animation; tutorials,
-cards, exports, generated solutions, and flashcards are use cases of that
-artifact. The ordering principle is:
+the project, with the internal Animation Catalogue as the operational pressure
+lab for its executable library. The primary artifact is a composable semantic
+animation. Tutorials, cards, exports, generated solutions, editor views, and
+flashcards are related contexts and consumers rather than peer representations.
+The ordering principle is:
 
 ```text
 semantics first
@@ -25,9 +27,18 @@ semantics first
 The accepted long-term plan is recorded in
 `decisions/2026-07-13-kp-long-term-semantic-product-plan.md`. KP should keep
 turning generated examples and visible demos into reusable semantic objects,
-semantic transformations, visual motifs, renderer-neutral frames, dashboard
+semantic transformations, visual motifs, renderer-neutral frames, catalogue
 authoring actions, and verified export inputs before expanding into media,
 curriculum, or dynamic package loading.
+
+The immediate catalogue-first simplification is recorded in
+`decisions/2026-07-31-kp-animation-catalogue-first-simplification.md`, with the
+living boundary in `threads/animation-catalogue.md` and the approval-gated plan
+in
+`reviews/2026-07-31-animation-catalogue-simplification-next-step-review.md`.
+KP has finished release-baseline recovery. It will now perfect one solve-x shell
+exemplar, stop for human review, and only then run a fast catalogue-wide host
+inventory. The inventory will determine canonical port order.
 
 The symbolic manipulation family plan recorded in
 `decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`
@@ -57,6 +68,19 @@ on 2026-07-19. The accepted review decisions are recorded in
 `decisions/2026-07-19-kp-concept-room-architecture-review.md`. The provider
 input and content-specific composition seams remain intentionally local until a
 second concept supplies evidence for promotion.
+
+An exploratory semantic-explanatory-atlas direction is recorded in
+`decisions/2026-07-21-kp-semantic-explanatory-atlas-exploration.md`. It captures
+programming-language semantic theater and topology explanation designs for
+future bounded exemplars. It does not change the active solve-x checkpoint or
+the approved symbolic exemplar order.
+
+A retained portable-publication lane is recorded in
+`threads/portable-publication-platform.md`, with preliminary boundary guidance
+in `decisions/2026-07-24-kp-portable-artifact-and-host-joints.md`. Its site,
+CLI, Markdown, embed, and Studio possibilities remain useful boundary evidence,
+but public-facing implementation is paused during the catalogue inventory. It
+does not change the active execution contract.
 
 The capability-pressure and arithmetic expansion decision is recorded in
 `decisions/2026-07-23-kp-capability-pressure-and-arithmetic-expansion.md`.
@@ -92,10 +116,11 @@ The persistent promotion order is now owned by
 `threads/animation-library-promotion.md` and accepted by
 `decisions/2026-07-28-kp-stable-animation-promotion-order.md`. Exact fraction
 quantity identity and place-value arithmetic are promoted. The bounded Supply
-and demand equilibrium shift is next, followed by the bounded constant-force
-work-energy exemplar for early demo breadth before the recorded vector/matrix,
-derivative, integral, and later-domain sequence. Older sequence documents
-remain rationale but no longer independently determine rank.
+and demand equilibrium shift remains the first unresolved promotion, followed
+by the bounded constant-force work-energy exemplar and the recorded later-domain
+sequence. This stable order is paused, not replaced, while the catalogue
+inventory determines the intervening port work. Older sequence documents remain
+rationale but no longer independently determine rank.
 
 The platform milestones between those promotions are recorded in
 `decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md`.
@@ -131,9 +156,13 @@ animated promotion.
 Exact fraction quantity identity through `1/3 + 1/6 = 1/2` and place-value
 addition through `278 + 156 = 434` are promoted. The place-value repair retains
 one documentary workspace and one typed contributor-fusion motif across all
-three ordered positions. The active frontier is planning the bounded Supply
-and demand equilibrium shift; no economics implementation begins without a
-reviewed run contract.
+three ordered positions.
+
+The release-baseline recovery matrix is green and its final closeout hands off
+to the approved catalogue proposal rather than activating economics. The next
+visual target is a shell-only solve-x exemplar with a mandatory human
+checkpoint. Its approved shell will then host the concrete asset registry
+catalogue-wide so KP can see real adapter gaps and decide what to port.
 
 The generator, editorial-text, API-tier, motif-versioning, and pruning
 recommendations are durable platform milestones in
@@ -149,15 +178,15 @@ ephemeral. Each migrated transition must retire or bypass its compatibility
 paint in the same rollback unit, so KP converges on one implementation without
 discarding unmigrated catalog coverage.
 
-The durable promotion order and current status are owned by
+The durable domain-promotion order and current status remain owned by
 `threads/animation-library-promotion.md`. Approved Theseus plan revision
 `plan-revision.kp.v19` mirrors that order. Exact-fraction quantity and
 place-value addition, `278 + 156 = 434`, are promoted. The bounded Supply and
-demand equilibrium shift is the next planned row. Planned rows do not authorize
-implementation; an approved typed run contract owns execution. Human exemplar
-approval remains mandatory before each subjective visual generalization, and
-existing standalone examples remain reference evidence rather than
-automatically promoted reader products.
+demand equilibrium shift remains the next domain row but is paused behind the
+catalogue audit. Planned rows do not authorize implementation; an approved
+typed run contract owns execution. Human exemplar approval remains mandatory
+before each subjective visual generalization, and existing standalone examples
+remain reference evidence rather than automatically promoted reader products.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
@@ -340,20 +369,21 @@ Bring graph behavior onto the same clock and transformation model:
 
 Graph renderers should consume sampled frames, not own semantic timing.
 
-### Phase 6: Dashboard As Authoring Catalog
+### Phase 6: Animation Catalogue As Pressure Lab
 
 Status: active
 
-Promote the dashboard from project tracker to authoring/catalog surface:
+Replace the mixed dashboard/workbench front door with an asset-first catalogue:
 
-- one row per work item, object, transform, visual, sample, report card, and
-  protocol;
-- fuzzy search across everything;
-- selected-row previews;
-- sample actions into live editor cards;
-- API sample targets;
-- visible blockers, maturity, source refs, and verification records;
-- future writeback from structured docs/JSON and Theseus nodes.
+- one top-level row per concrete loadable animation asset ID;
+- flat fuzzy search across artifact metadata;
+- one continuously visible stage and minimal universal player;
+- one Details, Parameters, or Tuning inspector at a time;
+- review capture attached to exact playback and control state;
+- honest hostability-derived health and separately assigned disposition;
+- related reader, lesson, card, editor, review, and export contexts under
+  Details;
+- project roadmap and Theseus state kept outside the catalogue.
 
 ### Phase 7: Animation Composition And Layout Objects
 
@@ -381,9 +411,9 @@ Build the verified learning layer:
 - concept graph with prerequisites, misconceptions, canonical objects, and
   animation motifs.
 
-The accepted cross-domain tutorial kernel is platform composition work and is
-now queued next. Full curriculum generation, learner memory, and course-scale
-assessment remain parked under this phase.
+The accepted cross-domain tutorial kernel remains retained platform composition
+work. It is paused behind the catalogue inventory. Full curriculum generation,
+learner memory, and course-scale assessment remain parked under this phase.
 
 ### Phase 9: Export And Embed
 
@@ -398,26 +428,19 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Preserve the completed canonical construction, fraction and radical reader
-   migrations, foldable distribution evidence, canonical fraction-composition
-   release, role-complete presentation plans, bounded resource leases, live
-   review gallery, and fixed release gates.
-2. Preserve the promoted exact-fraction quantity identity
-   `1/3 + 1/6 = 1/2` and its certified three-program motif cohort.
-3. Review place-value arithmetic, then a bounded supply/demand equilibrium shift,
-   and a bounded constant-force work-energy explanation early for demo breadth.
-4. Continue through vector/matrix operations, the equation-graph derivative
-   bridge, integral accumulation, and the stable later queue one exemplar
-   checkpoint at a time.
-5. Improve hierarchical layout, temporal lanes, group motion, or deterministic
-   staging only when those product exemplars expose a failed generic
-   non-crowding invariant.
-6. Keep governed models limited to verified semantic operations, laws, and
-   suggested fold/focus intent; deterministic compilers retain mathematics,
-   timing, geometry, typography, rendering, validation, and repair authority.
-7. Keep BFS, programming, course-scale curriculum, dynamic package loading,
-   broad WebGL work, economics solvers, and physics engines parked. Only the
-   bounded economics and physics demo exemplars are advanced.
+1. Begin the materialized catalogue run contract at its catalogue-truth slices
+   from the recovered green release baseline.
+2. Preserve all promoted semantic, timing, paint-ownership, accessibility, and
+   review contracts while building one reversible solve-x catalogue shell.
+3. Stop for human desktop review of tiling, stage prominence, controls,
+   typography, inspectors, search density, and lower-left capture.
+4. After approval, make the catalogue the default internal home and run a fast
+   no-iframe host pass over every concrete loadable animation asset.
+5. Browse the resulting inventory together, assign human dispositions, and
+   derive canonical port order from information gained per effort.
+6. Keep the stable domain-promotion order, publication work, curriculum, public
+   website, and LLM editorial track paused until that audit chooses the next
+   tranche.
 
 ## Deferred
 
@@ -437,3 +460,6 @@ Package executable animations as semantic capsules:
   accepted cross-domain exemplars.
 - Broad Theseus planner infrastructure is deferred unless it directly blocks KP
   roadmap execution.
+- Economics and physics promotion, the public website, full curriculum,
+  learner/teacher product systems, and broad LLM editorial work are deferred
+  until the catalogue inventory and disposition review choose a next tranche.

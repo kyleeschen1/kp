@@ -16,6 +16,7 @@
       "path": "docs/project/reviews/2026-07-24-semantic-glyph-reconciliation-experiment-long-loop-proposal.md"
     }
   ],
+  "decisions": [],
   "nextActions": [
     "next-action.kp.perfect-the-reader-gold-equation-card-v0",
     "next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability",
@@ -27,7 +28,8 @@
     "next-action.kp.bound-native-fan-in-motion-v0",
     "next-action.kp.exact-fraction-quantity-promotion-v0",
     "next-action.refill.plan-phase.plan-revision.kp.v16.multidigit-addition",
-    "next-action.refill.experiment.plan-revision.kp.v18.composition-environment-sequence"
+    "next-action.refill.experiment.plan-revision.kp.v18.composition-environment-sequence",
+    "next-action.kp.animation-catalogue-simplification-v1"
   ],
   "verificationRecords": [
     {

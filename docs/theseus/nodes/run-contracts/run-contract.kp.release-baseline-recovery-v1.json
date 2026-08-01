@@ -2,8 +2,9 @@
   "id": "run-contract.kp.release-baseline-recovery-v1",
   "kind": "run-contract",
   "title": "KP release-baseline recovery",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -174,8 +175,9 @@
     },
     {
       "id": "s20",
-      "title": "close-baseline-and-restore-economics-frontier",
-      "status": "planned"
+      "title": "close-baseline-and-hand-off-to-catalogue",
+      "summary": "Closed the green release baseline and handed authority to ready successor run-contract.kp.animation-catalogue-simplification-v1. Project memory now records the approved asset-first catalogue, solve-x exemplar checkpoint, paused economics frontier, catalogue-wide inventory only after human approval, and deferred public-site and broad LLM work. No catalogue source implementation began inside recovery.",
+      "status": "complete"
     }
   ]
 }
