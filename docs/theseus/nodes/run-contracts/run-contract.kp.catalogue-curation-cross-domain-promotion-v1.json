@@ -167,6 +167,55 @@
       "scope": "durable project state",
       "checkedAt": "2026-08-01T17:56:36.286Z",
       "notes": "Workspace valid with 854 nodes and 15697 events before slice completion evidence."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "s21 economics visual exemplar and catalogue hostability",
+      "checkedAt": "2026-08-01T18:10:08.767Z",
+      "notes": "Stable Chromium capture passes all 34 catalogue rows and exact economics start, shift, settle, custom-target, and 720px narrow checkpoints. Wide graph center delta is effectively zero and controls fit without document scroll. Manual image inspection exposed a narrow Review/transport overlap; the harness now rejects that collision and the final capture shows Review beside Play and the scrubber."
+    },
+    {
+      "command": "npm run test:browser:economics-equilibrium",
+      "status": "passed",
+      "scope": "s21 cross-browser exemplar preservation",
+      "checkedAt": "2026-08-01T18:10:10.004Z",
+      "notes": "Chromium, Firefox, and WebKit all pass exact seek, rewind, custom parameter, accessibility, Review capture, and in-shell history behavior after the narrow spacing repair."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21 capture and layout types",
+      "checkedAt": "2026-08-01T18:10:10.994Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass with the committed visual harness extension."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s21 preservation boundary",
+      "checkedAt": "2026-08-01T18:10:11.955Z",
+      "notes": "All architecture gates pass; no renderer or compatibility exception was introduced."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s21 Review capture boundary",
+      "checkedAt": "2026-08-01T18:10:12.891Z",
+      "notes": "Production closure passes across 262 files with the same 7 intentional markers."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s21 patch hygiene",
+      "checkedAt": "2026-08-01T18:10:13.869Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s21 durable control integrity",
+      "checkedAt": "2026-08-01T18:10:14.964Z",
+      "notes": "Workspace valid with 854 nodes and 15707 events before final slice evidence."
     }
   ],
   "allowedWork": [
@@ -321,7 +370,8 @@
     {
       "id": "s21",
       "title": "Capture economics exemplar",
-      "status": "planned"
+      "summary": "Captured the economics exemplar through the stable catalogue visual harness at exact start, midpoint shift, settled endpoint, custom demand target 20, and a 720px narrow viewport. The harness proves inline KaTeX, native SVG hosting, centered no-scroll geometry, exact frame labels, and all 34 catalogue hostability rows. Manual capture inspection found and repaired one narrow Review/transport collision by reserving the lower-left capture strip; final visual, three-browser behavior, types, architecture, dev-review closure, hygiene, and workspace gates pass. Added the explicit human checkpoint with promotion, preservation, and rollback boundaries.",
+      "status": "complete"
     },
     {
       "id": "s22",

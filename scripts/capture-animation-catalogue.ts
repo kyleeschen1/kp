@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { chromium, type Browser } from "playwright";
+import { chromium, type Browser, type Page } from "playwright";
 
 import {
   createKpAnimationCatalogueProjection
@@ -12,6 +12,8 @@ const promotedSiblingId =
   "animation.generated.radical.square-root-as-power";
 const distinctCallerId =
   "animation.exact-fraction-quantity.third-plus-sixth";
+const economicsExemplarId =
+  "animation.economics.supply-demand-equilibrium-shift";
 const baseUrl =
   process.env["KP_VISUAL_BASE_URL"] ?? "http://127.0.0.1:8000";
 const outputRoot = path.resolve(
@@ -520,6 +522,8 @@ try {
 
   await pressureDistinctCaller(browser);
 
+  await captureEconomicsExemplar(browser);
+
   const hostabilityResults = await captureCatalogueHostability(browser);
   const hostabilityManifest = path.join(outputRoot, "hostability.json");
   await writeFile(
@@ -544,6 +548,296 @@ try {
   );
 } finally {
   await browser.close();
+}
+
+async function captureEconomicsExemplar(browser: Browser): Promise<void> {
+  const checkpoints = [
+    {
+      name: "start",
+      progress: "0",
+      stage: "establish",
+      demandEquation: "P=14-Q",
+      equilibriumQuantity: "6",
+      equilibriumPrice: "8"
+    },
+    {
+      name: "shift",
+      progress: "0.44",
+      stage: "shift",
+      demandEquation: "P=16-Q",
+      equilibriumQuantity: "7",
+      equilibriumPrice: "9"
+    },
+    {
+      name: "settle",
+      progress: "1",
+      stage: "settle",
+      demandEquation: "P=18-Q",
+      equilibriumQuantity: "8",
+      equilibriumPrice: "10"
+    }
+  ] as const;
+  const economicsUrl = new URL("/", baseUrl);
+  economicsUrl.searchParams.set("artifact", economicsExemplarId);
+  const page = await browser.newPage({ viewport });
+  const screenshots: Record<string, string> = {};
+
+  try {
+    await page.goto(economicsUrl.toString(), { waitUntil: "networkidle" });
+    await page.evaluate(async () => document.fonts.ready);
+    await waitForEconomicsExemplar(page);
+
+    const player = page.locator(
+      "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+    );
+    const graph = player.locator("[data-kp-editor-graph-svg]");
+    const scrubber = player.locator(
+      '[data-action="seek-editor-animation"]'
+    );
+    if (await page.locator("iframe").count() !== 0) {
+      throw new Error("Economics exemplar used an iframe fallback.");
+    }
+    if (await player.locator(".katex-display").count() !== 0 ||
+      await player.locator(".katex").count() < 3) {
+      throw new Error("Economics exemplar did not keep its equations inline.");
+    }
+
+    const geometry = await page.evaluate(() => {
+      const visualStage = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue-stage] .editor-animation-player__stage"
+      );
+      const graph = visualStage?.querySelector<SVGSVGElement>(
+        "[data-kp-editor-graph-svg]"
+      );
+      const controls = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue-stage] .editor-animation-player__controls"
+      );
+      if (visualStage === null || visualStage === undefined ||
+        graph === null || graph === undefined || controls === null) {
+        throw new Error("Economics geometry targets are missing.");
+      }
+      const stageRect = visualStage.getBoundingClientRect();
+      const graphRect = graph.getBoundingClientRect();
+      const controlsRect = controls.getBoundingClientRect();
+      return {
+        stage: { width: stageRect.width, height: stageRect.height },
+        graph: { width: graphRect.width, height: graphRect.height },
+        centerDelta: {
+          x: graphRect.left + graphRect.width / 2 -
+            (stageRect.left + stageRect.width / 2),
+          y: graphRect.top + graphRect.height / 2 -
+            (stageRect.top + stageRect.height / 2)
+        },
+        controlsVisibleWithoutDocumentScroll:
+          controlsRect.bottom <= window.innerHeight + 1 &&
+          document.documentElement.scrollHeight <= window.innerHeight + 1
+      };
+    });
+    if (Math.abs(geometry.centerDelta.x) > 2 ||
+      Math.abs(geometry.centerDelta.y) > 2 ||
+      !geometry.controlsVisibleWithoutDocumentScroll) {
+      throw new Error(
+        `Economics catalogue geometry drifted: ${JSON.stringify(geometry)}`
+      );
+    }
+
+    for (const checkpoint of checkpoints) {
+      await scrubber.fill(checkpoint.progress);
+      await page.waitForFunction((expectedProgress) =>
+        document.querySelector<HTMLElement>(
+          "[data-kp-animation-catalogue-stage] " +
+          "[data-kp-editor-animation-player]"
+        )?.dataset["kpEditorAnimationProgress"] === expectedProgress,
+      checkpoint.progress);
+      const equilibriumView = graph.locator(
+        "[data-kp-economics-equilibrium-view]"
+      );
+      const demandLine = graph.locator("[data-kp-economics-demand-line]");
+      const equilibriumPoint = graph.locator(
+        "[data-kp-economics-equilibrium-point]"
+      );
+      if (await equilibriumView.getAttribute(
+        "data-kp-economics-choreography-stage"
+      ) !== checkpoint.stage || await demandLine.getAttribute(
+        "data-kp-economics-equation"
+      ) !== checkpoint.demandEquation || await equilibriumPoint.getAttribute(
+        "data-kp-economics-equilibrium-quantity"
+      ) !== checkpoint.equilibriumQuantity ||
+        await equilibriumPoint.getAttribute(
+          "data-kp-economics-equilibrium-price"
+        ) !== checkpoint.equilibriumPrice) {
+        throw new Error(
+          `Economics ${checkpoint.name} checkpoint lost exact frame truth.`
+        );
+      }
+      const screenshot = path.join(
+        outputRoot,
+        `economics-${checkpoint.name}.png`
+      );
+      await page.screenshot({
+        path: screenshot,
+        fullPage: true,
+        animations: "disabled"
+      });
+      screenshots[checkpoint.name] = path.relative(process.cwd(), screenshot);
+    }
+
+    await page.locator(
+      '[data-action="select-animation-catalogue-inspector"]'
+    ).selectOption("parameters");
+    await page.locator(
+      '[data-action="set-economics-demand-intercept"]'
+    ).fill("20");
+    await scrubber.fill("0.44");
+    const customDemand = graph.locator("[data-kp-economics-demand-line]");
+    const customPoint = graph.locator(
+      "[data-kp-economics-equilibrium-point]"
+    );
+    if (await customDemand.getAttribute("data-kp-economics-equation") !==
+      "P=17-Q" || await customPoint.getAttribute(
+        "data-kp-economics-equilibrium-quantity"
+      ) !== "15/2" || await customPoint.getAttribute(
+        "data-kp-economics-equilibrium-price"
+      ) !== "19/2") {
+      throw new Error("Economics custom-target checkpoint lost exact truth.");
+    }
+    const customScreenshot = path.join(outputRoot, "economics-custom-20.png");
+    await page.screenshot({
+      path: customScreenshot,
+      fullPage: true,
+      animations: "disabled"
+    });
+    screenshots["custom-20"] = path.relative(
+      process.cwd(),
+      customScreenshot
+    );
+
+    const narrow = await browser.newPage({
+      viewport: { width: 720, height: 900 }
+    });
+    try {
+      const narrowUrl = new URL(economicsUrl);
+      narrowUrl.searchParams.set("playhead", "0.44");
+      await narrow.goto(narrowUrl.toString(), { waitUntil: "networkidle" });
+      await narrow.evaluate(async () => document.fonts.ready);
+      await waitForEconomicsExemplar(narrow);
+      const narrowGeometry = await narrow.evaluate(() => {
+        const controls = document.querySelector<HTMLElement>(
+          "[data-kp-animation-catalogue-stage] " +
+          ".editor-animation-player__controls"
+        );
+        const reviewHost = document.querySelector<HTMLElement>(
+          "[data-kp-dev-review-shell]"
+        );
+        const launcher = reviewHost?.shadowRoot?.querySelector<HTMLElement>(
+          ".launcher"
+        );
+        const play = controls?.querySelector<HTMLElement>(
+          '[data-action="toggle-editor-animation"]'
+        );
+        const scrubber = controls?.querySelector<HTMLElement>(
+          '[data-action="seek-editor-animation"]'
+        );
+        if (controls === null || reviewHost === null || launcher === null ||
+          launcher === undefined || play === null || play === undefined ||
+          scrubber === null || scrubber === undefined) {
+          throw new Error("Narrow economics control geometry is missing.");
+        }
+        const controlsRect = controls.getBoundingClientRect();
+        const hostRect = reviewHost.getBoundingClientRect();
+        const launcherRect = launcher.getBoundingClientRect();
+        const playRect = play.getBoundingClientRect();
+        const scrubberRect = scrubber.getBoundingClientRect();
+        const hostStyle = getComputedStyle(reviewHost);
+        const firstTransportLeft = Math.min(
+          playRect.left,
+          scrubberRect.left
+        );
+        return {
+          controlsTop: controlsRect.top,
+          host: {
+            top: hostRect.top,
+            bottom: hostRect.bottom,
+            height: hostRect.height,
+            placement: reviewHost.dataset["kpDevReviewPlacement"],
+            computedBottom: hostStyle.bottom,
+            computedPosition: hostStyle.position,
+            viewportWidth: window.innerWidth,
+            devicePixelRatio: window.devicePixelRatio
+          },
+          launcherTop: launcherRect.top,
+          launcherBottom: launcherRect.bottom,
+          launcherRight: launcherRect.right,
+          firstTransportLeft,
+          reviewClearsTransport:
+            launcherRect.bottom <= controlsRect.top - 2 ||
+            launcherRect.right <= firstTransportLeft - 2,
+          controlsVisibleWithoutDocumentScroll:
+            controlsRect.bottom <= window.innerHeight + 1 &&
+            document.documentElement.scrollHeight <= window.innerHeight + 1
+        };
+      });
+      if (!narrowGeometry.reviewClearsTransport ||
+        !narrowGeometry.controlsVisibleWithoutDocumentScroll) {
+        throw new Error(
+          `Narrow economics controls collided: ${JSON.stringify(narrowGeometry)}`
+        );
+      }
+      const narrowScreenshot = path.join(
+        outputRoot,
+        "economics-narrow-shift.png"
+      );
+      await narrow.screenshot({
+        path: narrowScreenshot,
+        fullPage: true,
+        animations: "disabled"
+      });
+      screenshots["narrow-shift"] = path.relative(
+        process.cwd(),
+        narrowScreenshot
+      );
+    } finally {
+      await narrow.close();
+    }
+
+    const manifest = path.join(outputRoot, "economics-exemplar.json");
+    await writeFile(
+      manifest,
+      `${JSON.stringify({
+        schemaVersion: "kp.animation-catalogue-economics-exemplar.v1",
+        animationId: economicsExemplarId,
+        url: economicsUrl.toString(),
+        viewport,
+        geometry,
+        screenshots
+      }, null, 2)}\n`,
+      "utf8"
+    );
+    console.log(
+      `animation catalogue economics exemplar: ${path.relative(process.cwd(), manifest)}`
+    );
+  } finally {
+    await page.close();
+  }
+}
+
+async function waitForEconomicsExemplar(page: Page) {
+  await page.waitForFunction((expectedAnimationId) => {
+    const shell = document.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue]"
+    );
+    const player = shell?.querySelector<HTMLElement>(
+      "[data-kp-editor-animation-player]"
+    );
+    const slot = player?.querySelector<HTMLElement>(
+      '[data-kp-editor-animation-surface-slot="graph"]'
+    );
+    return shell?.dataset["kpAnimationCatalogueSelection"] ===
+      expectedAnimationId &&
+      shell.dataset["kpAnimationCatalogueHostOutcome"] === "painted" &&
+      player?.dataset["kpEditorAnimationHydrated"] === "true" &&
+      slot?.dataset["kpEditorAnimationAdapterStatus"] === "ready";
+  }, economicsExemplarId);
 }
 
 async function captureCatalogueInteractionSelection(browser: Browser) {

@@ -491,4 +491,10 @@
     outline: 2px solid rgb(117 88 75 / 45%);
     outline-offset: 1px;
   }
+
+  /* The narrow Review launcher occupies the lower-left capture sheet seam;
+     reserve that same strip so compact playback remains fully operable. */
+  .kp-animation-catalogue-shell__stage-host .editor-animation-player__controls {
+    padding-left: 9rem;
+  }
 }
