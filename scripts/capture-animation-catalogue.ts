@@ -10,6 +10,8 @@ import {
 const animationId = "animation.linear-solve.solve-x";
 const promotedSiblingId =
   "animation.generated.radical.square-root-as-power";
+const distinctCallerId =
+  "animation.exact-fraction-quantity.third-plus-sixth";
 const baseUrl =
   process.env["KP_VISUAL_BASE_URL"] ?? "http://127.0.0.1:8000";
 const outputRoot = path.resolve(
@@ -324,6 +326,8 @@ try {
   }
   await siblingPage.close();
 
+  await pressureDistinctCaller(browser);
+
   const hostabilityResults = await captureCatalogueHostability(browser);
   const hostabilityManifest = path.join(outputRoot, "hostability.json");
   await writeFile(
@@ -348,6 +352,209 @@ try {
   );
 } finally {
   await browser.close();
+}
+
+async function pressureDistinctCaller(browser: Browser): Promise<void> {
+  const callerUrl = new URL("/", baseUrl);
+  callerUrl.searchParams.set("artifact", distinctCallerId);
+  const page = await browser.newPage({ viewport });
+
+  try {
+    await page.goto(callerUrl.toString(), { waitUntil: "networkidle" });
+    await page.waitForFunction((expectedAnimationId) => {
+      const shell = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue]"
+      );
+      const player = shell?.querySelector<HTMLElement>(
+        "[data-kp-editor-animation-player]"
+      );
+      const slot = player?.querySelector<HTMLElement>(
+        '[data-kp-editor-animation-surface-slot="diagram"]'
+      );
+      return shell?.dataset["kpAnimationCatalogueSelection"] ===
+        expectedAnimationId &&
+        shell.dataset["kpAnimationCatalogueHostOutcome"] === "painted" &&
+        shell.dataset["kpAnimationCatalogueSelectedHealth"] === "ready" &&
+        player?.dataset["kpEditorAnimationHydrated"] === "true" &&
+        slot?.dataset["kpEditorAnimationAdapterId"] ===
+          "editor-animation-surface.exact-fraction-quantity.synchronized";
+    }, distinctCallerId);
+
+    const player = page.locator(
+      "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+    );
+    if (await page.locator("iframe").count() !== 0) {
+      throw new Error("Distinct catalogue caller used an iframe fallback.");
+    }
+    if (await player.locator(
+      '[data-action="toggle-editor-animation"]'
+    ).count() !== 1 || await player.locator(
+      '[data-action="seek-editor-animation"]'
+    ).count() !== 1 || await player.locator(
+      '[data-action="step-editor-animation"], ' +
+      '[data-action="rewind-editor-animation"], ' +
+      '[data-action="reset-editor-animation"]'
+    ).count() !== 0) {
+      throw new Error("Distinct caller escaped compact catalogue transport.");
+    }
+    if (await page.locator(
+      '[data-action="toggle-animation-catalogue-overlay"]:visible'
+    ).count() !== 0) {
+      throw new Error("Narrow panel controls leaked into the desktop shell.");
+    }
+
+    await player.focus();
+    await page.keyboard.press("ArrowRight");
+    await page.waitForFunction(() => {
+      const playhead = Number(
+        new URL(window.location.href).searchParams.get("playhead")
+      );
+      return Number.isFinite(playhead) && playhead > 0;
+    });
+    await page.keyboard.press("End");
+    await page.waitForFunction(() =>
+      new URL(window.location.href).searchParams.get("playhead") === "1"
+    );
+    await page.keyboard.press("Home");
+    await page.waitForFunction(() =>
+      !new URL(window.location.href).searchParams.has("playhead")
+    );
+    await page.keyboard.press("Space");
+    await page.waitForFunction(() =>
+      document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue-stage] " +
+        "[data-kp-editor-animation-player]"
+      )?.dataset["kpEditorAnimationStatus"] === "playing"
+    );
+    await page.keyboard.press("Space");
+    await page.waitForFunction(() =>
+      document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue-stage] " +
+        "[data-kp-editor-animation-player]"
+      )?.dataset["kpEditorAnimationStatus"] === "paused"
+    );
+  } finally {
+    await page.close();
+  }
+
+  const reducedMotionPage = await browser.newPage({ viewport });
+  try {
+    await reducedMotionPage.emulateMedia({ reducedMotion: "reduce" });
+    const reducedUrl = new URL(callerUrl);
+    reducedUrl.searchParams.set("playhead", "0.5");
+    await reducedMotionPage.goto(reducedUrl.toString(), {
+      waitUntil: "networkidle"
+    });
+    await reducedMotionPage.waitForFunction((expectedAnimationId) => {
+      const shell = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue]"
+      );
+      const player = shell?.querySelector<HTMLElement>(
+        "[data-kp-editor-animation-player]"
+      );
+      return shell?.dataset["kpAnimationCatalogueSelection"] ===
+        expectedAnimationId &&
+        shell.dataset["kpAnimationCatalogueHostOutcome"] === "painted" &&
+        player?.dataset["kpEditorAnimationAccessibilityMode"] ===
+          "reduced-motion" &&
+        player.dataset["kpEditorAnimationProgress"] === "0.5";
+    }, distinctCallerId);
+  } finally {
+    await reducedMotionPage.close();
+  }
+
+  const narrowPage = await browser.newPage({
+    viewport: { width: 720, height: 900 }
+  });
+  try {
+    await narrowPage.goto(callerUrl.toString(), { waitUntil: "networkidle" });
+    await narrowPage.waitForFunction((expectedAnimationId) => {
+      const shell = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue]"
+      );
+      return shell?.dataset["kpAnimationCatalogueSelection"] ===
+        expectedAnimationId &&
+        shell.dataset["kpAnimationCatalogueHostOutcome"] === "painted";
+    }, distinctCallerId);
+    const shell = narrowPage.locator("[data-kp-animation-catalogue]");
+    const railButton = narrowPage.locator(
+      '[data-kp-animation-catalogue-overlay-target="rail"]'
+    );
+    const inspectorButton = narrowPage.locator(
+      '[data-kp-animation-catalogue-overlay-target="inspector"]'
+    );
+    await railButton.click();
+    if (await shell.getAttribute("data-kp-animation-catalogue-overlay") !==
+      "rail" || await railButton.getAttribute("aria-expanded") !== "true") {
+      throw new Error("Narrow artifact rail did not open accessibly.");
+    }
+    const search = narrowPage.locator(
+      '[data-action="filter-animation-catalogue"]'
+    );
+    try {
+      await narrowPage.waitForFunction(
+        () => document.querySelector<HTMLInputElement>(
+          '[data-action="filter-animation-catalogue"]'
+        ) === document.activeElement,
+        undefined,
+        { timeout: 2_000 }
+      );
+    } catch (error: unknown) {
+      const focus = await narrowPage.evaluate(() => {
+        const search = document.querySelector(
+          '[data-action="filter-animation-catalogue"]'
+        );
+        return {
+          activeTag: document.activeElement?.tagName,
+          activeAction: (document.activeElement as HTMLElement | null)
+            ?.dataset["action"],
+          railExists: document.querySelector(
+            "#kp-animation-catalogue-rail"
+          ) !== null,
+          searchExists: search !== null,
+          searchVisibility: search === null
+            ? undefined
+            : getComputedStyle(search).visibility,
+          overlay: document.querySelector<HTMLElement>(
+            "[data-kp-animation-catalogue]"
+          )?.dataset["kpAnimationCatalogueOverlay"]
+        };
+      });
+      throw new Error(
+        `Narrow artifact focus was ${JSON.stringify(focus)}: ` +
+        `${error instanceof Error ? error.message : String(error)}`
+      );
+    }
+    if (!await search.isVisible()) {
+      throw new Error("Narrow artifact rail search remained hidden.");
+    }
+    await narrowPage.keyboard.press("Escape");
+    if (await shell.getAttribute("data-kp-animation-catalogue-overlay") !==
+      null || !await railButton.evaluate((node) =>
+        node === document.activeElement
+      )) {
+      throw new Error("Narrow artifact rail did not close back to its trigger.");
+    }
+    await inspectorButton.click();
+    const inspectorSelect = narrowPage.locator(
+      '[data-action="select-animation-catalogue-inspector"]'
+    );
+    await narrowPage.waitForFunction(() =>
+      document.querySelector<HTMLSelectElement>(
+        '[data-action="select-animation-catalogue-inspector"]'
+      ) === document.activeElement
+    );
+    if (await shell.getAttribute("data-kp-animation-catalogue-overlay") !==
+      "inspector" || !await inspectorSelect.isVisible() ||
+      !await inspectorSelect.evaluate((node) => node === document.activeElement)) {
+      throw new Error("Narrow inspector did not open with functional focus.");
+    }
+    if (await narrowPage.locator("iframe").count() !== 0) {
+      throw new Error("Narrow catalogue caller used an iframe fallback.");
+    }
+  } finally {
+    await narrowPage.close();
+  }
 }
 
 async function captureCatalogueHostability(browser: Browser) {

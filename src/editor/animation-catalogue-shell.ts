@@ -50,7 +50,7 @@ export function renderKpAnimationCatalogueShell(input: {
 
   return `<main class="kp-animation-catalogue-shell" data-kp-animation-catalogue data-kp-animation-catalogue-state="selected" data-kp-animation-catalogue-selection="${escapeHtml(entry.animationId)}" data-kp-animation-catalogue-selected-health="${health.status}" aria-labelledby="kp-animation-catalogue-title">
     <h1 id="kp-animation-catalogue-title" class="kp-animation-catalogue-shell__visually-hidden">Animation catalogue</h1>
-    <aside class="kp-animation-catalogue-shell__rail" data-kp-animation-catalogue-region="rail" aria-label="Artifact catalogue">
+    <aside id="kp-animation-catalogue-rail" class="kp-animation-catalogue-shell__rail" data-kp-animation-catalogue-region="rail" aria-label="Artifact catalogue">
       <div class="kp-animation-catalogue-shell__rail-results">
         <p class="kp-animation-catalogue-shell__label">Artifacts</p>
         <input class="kp-animation-catalogue-shell__search" type="search" placeholder="Search artifacts" aria-label="Search artifacts" autocomplete="off" data-action="filter-animation-catalogue">
@@ -63,6 +63,10 @@ export function renderKpAnimationCatalogueShell(input: {
       <div class="kp-animation-catalogue-shell__review-slot" data-kp-animation-catalogue-review-dock aria-hidden="true"></div>
     </aside>
     <section class="kp-animation-catalogue-shell__stage" data-kp-animation-catalogue-region="stage" aria-label="Selected animation stage">
+      <div class="kp-animation-catalogue-shell__narrow-nav" aria-label="Catalogue panels">
+        <button type="button" data-action="toggle-animation-catalogue-overlay" data-kp-animation-catalogue-overlay-target="rail" aria-controls="kp-animation-catalogue-rail" aria-expanded="false">Artifacts</button>
+        <button type="button" data-action="toggle-animation-catalogue-overlay" data-kp-animation-catalogue-overlay-target="inspector" aria-controls="kp-animation-catalogue-inspector" aria-expanded="false">Info</button>
+      </div>
       <div class="kp-animation-catalogue-shell__stage-host" data-kp-animation-catalogue-stage data-kp-animation-catalogue-stage-persistent="true">
         ${renderKpEditorAnimationPlayerShell({
           descriptor: input.descriptor,
@@ -71,7 +75,7 @@ export function renderKpAnimationCatalogueShell(input: {
         })}
       </div>
     </section>
-    <aside class="kp-animation-catalogue-shell__inspector" data-kp-animation-catalogue-region="inspector" aria-label="Artifact inspector">
+    <aside id="kp-animation-catalogue-inspector" class="kp-animation-catalogue-shell__inspector" data-kp-animation-catalogue-region="inspector" aria-label="Artifact inspector">
       ${renderKpAnimationCatalogueInspector({ entry, health })}
     </aside>
   </main>`;

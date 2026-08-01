@@ -56,6 +56,14 @@ export const kpHtmlEncodingOwners = [
     "html-text",
     "html-attribute"
   ]),
+  retain("src/editor/animation-catalogue-bootstrap.ts", "editor", [
+    "html-text",
+    "html-attribute"
+  ]),
+  retain("src/editor/animation-catalogue-shell.ts", "editor", [
+    "html-text",
+    "html-attribute"
+  ]),
   retain("src/editor/animation-diagnostics.ts", "editor", [
     "html-text",
     "html-attribute"

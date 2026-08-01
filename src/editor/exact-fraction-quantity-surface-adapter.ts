@@ -77,6 +77,7 @@ import {
   type KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
 import {
+  KP_EXACT_FRACTION_LIBRARY_QUERY_PARAMS,
   createKpExactFractionQuantityLibraryState,
   readKpExactFractionQuantityLibraryState,
   writeKpExactFractionQuantityLibraryState,
@@ -170,13 +171,17 @@ KpEditorAnimationSurfaceAdapter = {
   render({ player, slot, state }) {
     let session = sessions.get(player);
     if (session === undefined) {
-      const routeState = readKpExactFractionQuantityLibraryState(
-        player.ownerDocument.defaultView?.location.search ?? ""
+      const search = player.ownerDocument.defaultView?.location.search ?? "";
+      const routeState = readKpExactFractionQuantityLibraryState(search);
+      const hasExplicitExactProgress = new URLSearchParams(search).has(
+        KP_EXACT_FRACTION_LIBRARY_QUERY_PARAMS.progress
       );
       session = {
         runtime: createKpExactFractionQuantityRuntimeSession(),
         libraryState: routeState,
-        initializedFromRoute: false,
+        // The shared player owns progress unless this specialized caller
+        // explicitly supplied its legacy exactProgress coordinate.
+        initializedFromRoute: !hasExplicitExactProgress,
         sampleCount: 0,
         repeatedFrameReuseCount: 0,
         symbolicPlaybackCreatedCount: 0,

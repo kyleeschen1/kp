@@ -172,10 +172,15 @@
 }
 
 .kp-animation-catalogue-shell__stage {
+  position: relative;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
   background: #fffefa;
+}
+
+.kp-animation-catalogue-shell__narrow-nav {
+  display: none;
 }
 
 .kp-animation-catalogue-shell__stage-host {
@@ -357,6 +362,69 @@
 
 @media (max-width: 56rem) {
   .kp-animation-catalogue-shell {
-    grid-template-columns: 11rem minmax(22rem, 1fr) 13rem;
+    position: relative;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kp-animation-catalogue-shell__stage {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .kp-animation-catalogue-shell__rail,
+  .kp-animation-catalogue-shell__inspector {
+    position: absolute;
+    z-index: 20;
+    top: 0;
+    bottom: 0;
+    width: min(18rem, calc(100vw - 3rem));
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 140ms ease, visibility 0s linear 140ms;
+  }
+
+  .kp-animation-catalogue-shell__rail {
+    left: 0;
+    transform: translateX(-100%);
+  }
+
+  .kp-animation-catalogue-shell__inspector {
+    right: 0;
+    transform: translateX(100%);
+  }
+
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-overlay="rail"]
+    .kp-animation-catalogue-shell__rail,
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-overlay="inspector"]
+    .kp-animation-catalogue-shell__inspector {
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(0);
+    transition-delay: 0s;
+  }
+
+  .kp-animation-catalogue-shell__narrow-nav {
+    position: absolute;
+    z-index: 10;
+    top: 0.55rem;
+    left: 0.55rem;
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .kp-animation-catalogue-shell__narrow-nav button {
+    border: 1px solid var(--kp-catalogue-border);
+    border-radius: 0;
+    padding: 0.35rem 0.48rem;
+    color: #403d37;
+    background: rgb(251 250 247 / 92%);
+    font: inherit;
+    font-size: 0.68rem;
+    font-weight: 700;
+  }
+
+  .kp-animation-catalogue-shell__narrow-nav button:focus-visible {
+    outline: 2px solid rgb(117 88 75 / 45%);
+    outline-offset: 1px;
   }
 }

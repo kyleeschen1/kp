@@ -41,7 +41,9 @@ test("one load failure stays attached to its row without aborting the batch", as
       return loadKpAnimationAsset(animationId);
     }
   });
-  const failures = results.filter(({ status }) => status === "load-failure");
+  const failures = results.filter(
+    (result) => result.status === "load-failure"
+  );
 
   assert.equal(results.length, 33);
   assert.equal(failures.length, 1);

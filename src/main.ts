@@ -390,6 +390,9 @@ appRoot.addEventListener("click", (event) => {
     case "select-api-outline-item":
       selectApiCatalogItem(button);
       return;
+    case "toggle-animation-catalogue-overlay":
+      toggleAnimationCatalogueOverlay(button);
+      return;
     case "select-katex-transform-fixture":
       selectKatexTransformFixture(button);
       return;
@@ -406,6 +409,10 @@ appRoot.addEventListener("click", (event) => {
 });
 
 appRoot.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && closeAnimationCatalogueOverlay(event.target)) {
+    event.preventDefault();
+    return;
+  }
   handleEquationMotionDemoKeydown(event);
 });
 
@@ -736,6 +743,68 @@ function filterAnimationCatalogueFromInput(input: HTMLInputElement): void {
     },
     query: input.value
   });
+}
+
+function toggleAnimationCatalogueOverlay(button: HTMLButtonElement): void {
+  const shell = button.closest<HTMLElement>("[data-kp-animation-catalogue]");
+  const target = button.dataset["kpAnimationCatalogueOverlayTarget"];
+  if (
+    shell === null ||
+    (target !== "rail" && target !== "inspector")
+  ) return;
+  const next = shell.dataset["kpAnimationCatalogueOverlay"] === target
+    ? undefined
+    : target;
+  if (next === undefined) {
+    delete shell.dataset["kpAnimationCatalogueOverlay"];
+  } else {
+    shell.dataset["kpAnimationCatalogueOverlay"] = next;
+  }
+  shell.querySelectorAll<HTMLButtonElement>(
+    '[data-action="toggle-animation-catalogue-overlay"]'
+  ).forEach((candidate) => {
+    candidate.setAttribute(
+      "aria-expanded",
+      String(candidate.dataset["kpAnimationCatalogueOverlayTarget"] === next)
+    );
+  });
+  if (next !== undefined) {
+    const panel = shell.querySelector<HTMLElement>(
+      next === "rail"
+        ? "#kp-animation-catalogue-rail"
+        : "#kp-animation-catalogue-inspector"
+    );
+    const focusTarget = panel?.querySelector<HTMLElement>(
+      "input, select, button, a"
+    );
+    // Defer past the button's native click focus and the off-canvas visibility
+    // change; otherwise the browser restores focus to the trigger.
+    setTimeout(() => focusTarget?.focus(), 0);
+  }
+}
+
+function closeAnimationCatalogueOverlay(
+  target: EventTarget | null
+): boolean {
+  if (!(target instanceof Element)) return false;
+  const shell = target.closest<HTMLElement>("[data-kp-animation-catalogue]");
+  if (
+    shell === null ||
+    shell.dataset["kpAnimationCatalogueOverlay"] === undefined
+  ) return false;
+  const openTarget = shell.dataset["kpAnimationCatalogueOverlay"];
+  delete shell.dataset["kpAnimationCatalogueOverlay"];
+  shell.querySelectorAll<HTMLButtonElement>(
+    '[data-action="toggle-animation-catalogue-overlay"]'
+  ).forEach((button) => {
+    button.setAttribute("aria-expanded", "false");
+    // On narrow screens the closed panel is inert, so restore focus to its
+    // stage-level trigger instead of leaving focus inside hidden content.
+    if (button.dataset["kpAnimationCatalogueOverlayTarget"] === openTarget) {
+      button.focus();
+    }
+  });
+  return true;
 }
 
 function selectAnimationCatalogueInspectorFromSelect(
