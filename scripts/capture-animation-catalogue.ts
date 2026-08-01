@@ -312,6 +312,10 @@ try {
     animations: "disabled"
   });
 
+  const interactionBaseline = await captureCatalogueInteractionBaseline(
+    browser
+  );
+
   const manifest = path.join(outputRoot, "manifest.json");
   await writeFile(
     manifest,
@@ -321,7 +325,8 @@ try {
       routeState: "catalogue-explicit-exemplar",
       url: url.toString(),
       viewport,
-      screenshot: path.relative(process.cwd(), screenshot)
+      screenshot: path.relative(process.cwd(), screenshot),
+      interactionBaseline
     }, null, 2)}\n`,
     "utf8"
   );
@@ -398,6 +403,136 @@ try {
   );
 } finally {
   await browser.close();
+}
+
+async function captureCatalogueInteractionBaseline(browser: Browser) {
+  const page = await browser.newPage({ viewport });
+  const sourceUrl = new URL("/", baseUrl);
+  sourceUrl.searchParams.set("artifact", animationId);
+
+  try {
+    await page.goto(sourceUrl.toString(), { waitUntil: "networkidle" });
+    await page.waitForFunction((expectedAnimationId) => {
+      const shell = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue]"
+      );
+      return shell?.dataset["kpAnimationCatalogueSelection"] ===
+        expectedAnimationId &&
+        shell.dataset["kpAnimationCatalogueHostOutcome"] === "painted";
+    }, animationId);
+
+    const search = page.locator(
+      '[data-action="filter-animation-catalogue"]'
+    );
+    await search.fill("radical");
+    await page.locator(
+      '[data-action="select-animation-catalogue-inspector"]'
+    ).selectOption("parameters");
+    const review = page.locator("[data-kp-dev-review-shell]");
+    await review.locator("button.launcher").click();
+    await review.locator('[role="dialog"] textarea').fill(
+      "Unsaved catalogue navigation baseline"
+    );
+
+    await page.evaluate(() => {
+      const probeWindow = window as Window & {
+        kpCatalogueDocumentProbe?: string;
+      };
+      probeWindow.kpCatalogueDocumentProbe = "before-navigation";
+      const shell = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue]"
+      );
+      const reviewHost = document.querySelector<HTMLElement>(
+        "[data-kp-dev-review-shell]"
+      );
+      shell?.setAttribute("data-kp-catalogue-interaction-probe", "mounted");
+      reviewHost?.setAttribute(
+        "data-kp-catalogue-review-interaction-probe",
+        "mounted"
+      );
+    });
+
+    const navigation = page.waitForNavigation({ waitUntil: "networkidle" });
+    await page.evaluate((nextAnimationId) => {
+      const link = document.querySelector<HTMLAnchorElement>(
+        `[data-kp-animation-catalogue-row="${nextAnimationId}"] a`
+      );
+      if (link === null) {
+        throw new Error(`Catalogue row ${nextAnimationId} is missing.`);
+      }
+      link.click();
+    }, promotedSiblingId);
+    await navigation;
+    await page.waitForFunction((expectedAnimationId) => {
+      const shell = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue]"
+      );
+      return shell?.dataset["kpAnimationCatalogueSelection"] ===
+        expectedAnimationId &&
+        shell.dataset["kpAnimationCatalogueHostOutcome"] === "painted";
+    }, promotedSiblingId);
+
+    const after = await page.evaluate(() => {
+      const probeWindow = window as Window & {
+        kpCatalogueDocumentProbe?: string;
+      };
+      const shell = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue]"
+      );
+      const reviewHost = document.querySelector<HTMLElement>(
+        "[data-kp-dev-review-shell]"
+      );
+      return {
+        documentIdentityPreserved:
+          probeWindow.kpCatalogueDocumentProbe === "before-navigation",
+        shellIdentityPreserved:
+          shell?.dataset["kpCatalogueInteractionProbe"] === "mounted",
+        reviewComposerIdentityPreserved:
+          reviewHost?.dataset["kpCatalogueReviewInteractionProbe"] ===
+            "mounted",
+        railQuery: document.querySelector<HTMLInputElement>(
+          '[data-action="filter-animation-catalogue"]'
+        )?.value ?? "",
+        inspectorMode: document.querySelector<HTMLSelectElement>(
+          '[data-action="select-animation-catalogue-inspector"]'
+        )?.value ?? "",
+        navigationType: performance.getEntriesByType("navigation")
+          .map((entry) => (entry as PerformanceNavigationTiming).type)
+          .at(-1) ?? "unknown"
+      };
+    });
+    const replacementReview = page.locator("[data-kp-dev-review-shell]");
+    await replacementReview.locator("button.launcher").click();
+    const reviewDraft = await replacementReview.locator(
+      '[role="dialog"] textarea'
+    ).inputValue();
+
+    if (
+      after.documentIdentityPreserved ||
+      after.shellIdentityPreserved ||
+      after.reviewComposerIdentityPreserved ||
+      after.railQuery !== "" ||
+      after.inspectorMode !== "details" ||
+      reviewDraft !== ""
+    ) {
+      throw new Error(
+        `Catalogue interaction baseline drifted: ${JSON.stringify({
+          ...after,
+          reviewDraft
+        })}`
+      );
+    }
+
+    return {
+      schemaVersion: "kp.animation-catalogue-interaction-baseline.v1",
+      selection: `${animationId} -> ${promotedSiblingId}`,
+      mode: "document-navigation",
+      ...after,
+      reviewDraftPreserved: reviewDraft.length > 0
+    } as const;
+  } finally {
+    await page.close();
+  }
 }
 
 async function pressureDistinctCaller(browser: Browser): Promise<void> {

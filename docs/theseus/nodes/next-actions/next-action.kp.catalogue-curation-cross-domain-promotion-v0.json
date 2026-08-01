@@ -45,11 +45,25 @@
       "scope": "focused",
       "checkedAt": "2026-08-01T15:31:27.817Z",
       "notes": "Validated 854 nodes and 15559 events before completion evidence."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-01T15:37:19.610Z",
+      "notes": "The stable interaction-baseline script typechecks across app, node, tests, and domain boundaries."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-01T15:37:20.697Z",
+      "notes": "Observed solve-x to radical as document-navigation: document, shell, and review composer replaced; query, Parameters mode, and unsaved draft reset; 33-row hostability still settles."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Durable roadmap, queue, catalogue, promotion, and cross-domain threads now reflect catalogue UX, economics, physics, then caller-proven consolidation; stale BFS-gated economics action is superseded."
+    "summary": "Frozen the current full-document catalogue selection behavior in the stable visual command and published the desired selected-asset-only replacement boundary."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",

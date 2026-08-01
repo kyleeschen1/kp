@@ -65,7 +65,8 @@
     {
       "id": "s02",
       "title": "Freeze catalogue interaction baseline",
-      "status": "planned"
+      "summary": "Extended the stable catalogue visual command with a browser-observed full-navigation before-state from solve-x to radical. It proves document, shell, and review composer replacement plus reset query, Details mode, and empty draft, while preserving correct asset URL and 33-row hostability. Published the desired selected-asset-only replacement boundary. Typecheck, visual catalogue, diff hygiene, and workspace validation pass.",
+      "status": "complete"
     },
     {
       "id": "s03",
