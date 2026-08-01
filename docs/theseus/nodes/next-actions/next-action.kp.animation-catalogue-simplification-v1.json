@@ -64,6 +64,10 @@
     {
       "kind": "file",
       "path": "tests/animation-catalogue-projection.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-row-identity.test.ts"
     }
   ],
   "dependsOn": {
@@ -301,6 +305,27 @@
       "status": "passed",
       "scope": "slice s06 durable control state",
       "checkedAt": "2026-08-01T03:57:30.659Z",
+      "notes": "Workspace valid before slice completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-row-identity.test.ts tests/animation-catalogue-projection.test.ts tests/animation-catalogue-loadable-registry.test.ts tests/animation-catalog-loader.test.ts",
+      "status": "passed",
+      "scope": "slice s07 one-row identity",
+      "checkedAt": "2026-08-01T04:00:22.922Z",
+      "notes": "13/13 passed; 33 unique rows equal 33 registry and resolved asset IDs with exact pack ownership, while 50 descriptors and 74 contexts stay subordinate."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s07 static types",
+      "checkedAt": "2026-08-01T04:00:23.759Z",
+      "notes": "All TypeScript projects passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s07 durable control state",
+      "checkedAt": "2026-08-01T04:00:24.798Z",
       "notes": "Workspace valid before slice completion."
     }
   ],

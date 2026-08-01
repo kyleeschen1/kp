@@ -107,7 +107,8 @@
     {
       "id": "s07",
       "title": "Prove one row per concrete asset",
-      "status": "planned"
+      "summary": "Proved the catalogue cardinality law: 33 unique projected row IDs exactly equal the 33 loadable registry IDs and the 33 assets resolved from their exact packs. The 50 descriptors and 74 globally unique related contexts remain subordinate metadata, and duplicate loadable membership fails before a row can render.",
+      "status": "complete"
     },
     {
       "id": "s08",
