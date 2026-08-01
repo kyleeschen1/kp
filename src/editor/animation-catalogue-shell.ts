@@ -4,15 +4,35 @@ import type {
 import type {
   KpAnimationCatalogueEntry
 } from "./animation-catalogue-projection.ts";
+import type {
+  KpEditorAnimationDescriptor
+} from "./animation-descriptor.ts";
+import {
+  renderKpEditorAnimationPlayerShell
+} from "./animation-player-shell.ts";
+import type {
+  KpEditorAnimationPlayerState
+} from "./animation-player-state.ts";
 
 export function renderKpAnimationCatalogueShell(input: {
   readonly entry: KpAnimationCatalogueEntry;
   readonly health: KpAnimationCatalogueHealth;
+  readonly descriptor: KpEditorAnimationDescriptor;
+  readonly player: KpEditorAnimationPlayerState;
 }): string {
   if (input.entry.animationId !== input.health.animationId) {
     throw new Error(
       `Catalogue shell entry ${input.entry.animationId} does not match ` +
       `health ${input.health.animationId}.`
+    );
+  }
+  if (
+    input.descriptor.id !== input.entry.primaryDescriptorId ||
+    input.player.descriptorId !== input.descriptor.id ||
+    input.player.animationId !== input.entry.animationId
+  ) {
+    throw new Error(
+      `Catalogue shell player does not match entry ${input.entry.animationId}.`
     );
   }
   const { entry, health } = input;
@@ -36,9 +56,11 @@ export function renderKpAnimationCatalogueShell(input: {
       <div class="kp-animation-catalogue-shell__review-slot" data-kp-animation-catalogue-review-dock aria-hidden="true"></div>
     </aside>
     <section class="kp-animation-catalogue-shell__stage" data-kp-animation-catalogue-region="stage" aria-label="Selected animation stage">
-      <div class="kp-animation-catalogue-shell__stage-host" data-kp-animation-catalogue-stage>
-        <p class="kp-animation-catalogue-shell__stage-title">${escapeHtml(entry.title)}</p>
-        <p class="kp-animation-catalogue-shell__stage-status" role="status">Stage host ready</p>
+      <div class="kp-animation-catalogue-shell__stage-host" data-kp-animation-catalogue-stage data-kp-animation-catalogue-stage-persistent="true">
+        ${renderKpEditorAnimationPlayerShell({
+          descriptor: input.descriptor,
+          player: input.player
+        })}
       </div>
     </section>
     <aside class="kp-animation-catalogue-shell__inspector" data-kp-animation-catalogue-region="inspector" aria-label="Artifact inspector">

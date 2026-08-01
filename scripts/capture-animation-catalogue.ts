@@ -24,6 +24,16 @@ try {
   await page.locator(
     `[data-kp-animation-catalogue-state="selected"][data-kp-animation-catalogue-selection="${animationId}"]`
   ).waitFor();
+  await page.waitForFunction(() => {
+    const player = document.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+    );
+    const surface = player?.querySelector<HTMLElement>(
+      "[data-kp-editor-animation-surface-slot]"
+    );
+    return player?.dataset["kpEditorAnimationHydrated"] === "true" &&
+      surface?.dataset["kpEditorAnimationAdapterStatus"] === "ready";
+  });
 
   const screenshot = path.join(outputRoot, "desktop.png");
   await page.screenshot({

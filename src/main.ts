@@ -194,12 +194,18 @@ let activeView:
   | "animation-workbench" = "editor";
 installKpAnimationHostStatus(window, "kp.application");
 appRoot.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, (event) => {
+  const cataloguePlayer =
+    activeView === "animation-catalogue" &&
+    event.target instanceof HTMLElement &&
+    event.target.closest("[data-kp-animation-catalogue]") !== null;
+  const editorPlayer =
+    (activeView === "animation-library-host" || activeView === "editor") &&
+    event.target instanceof HTMLElement &&
+    event.target.dataset["kpEditorAnimationDescriptorId"] ===
+      selectedEditorAnimationDescriptorId;
   if (
-    (activeView !== "animation-library-host" && activeView !== "editor") ||
     !(event instanceof CustomEvent) ||
-    !(event.target instanceof HTMLElement) ||
-    event.target.dataset["kpEditorAnimationDescriptorId"] !==
-      selectedEditorAnimationDescriptorId ||
+    (!cataloguePlayer && !editorPlayer) ||
     typeof event.detail !== "object" ||
     event.detail === null
   ) return;
@@ -580,9 +586,15 @@ async function renderAnimationCatalogueView(): Promise<void> {
     });
     appRoot.innerHTML = renderKpAnimationCatalogueShell({
       entry,
-      health
+      health,
+      descriptor,
+      player: playerState
     });
-    markKpAnimationHostReady(window);
+    // Preserve the established listener order so the first sampled frame
+    // reaches its surface adapter before the controller announces readiness.
+    hydrateKpEditorAnimationSurfaces(appRoot);
+    hydrateKpEditorAnimationLiveDiagnostics(appRoot);
+    hydrateKpEditorAnimationPlayers(appRoot);
   } catch (error: unknown) {
     if (activeView !== "animation-catalogue" || revision !== viewRevision) {
       return;

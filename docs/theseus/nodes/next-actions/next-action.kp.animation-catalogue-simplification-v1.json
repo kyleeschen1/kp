@@ -480,6 +480,27 @@
       "scope": "slice s12 shell boundaries",
       "checkedAt": "2026-08-01T04:24:04.983Z",
       "notes": "All four architecture gates passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-shell.test.ts tests/kp-editor-animation-player-shell.test.ts tests/kp-editor-animation-surface-adapter-registry.test.ts tests/linear-solve-runtime-visual-frame-sample.test.ts",
+      "status": "passed",
+      "scope": "slice s13 solve-x player and surface preservation",
+      "checkedAt": "2026-08-01T04:28:38.303Z",
+      "notes": "8 tests passed; the shell mounts the established player and equation slot while the player, adapter priority, and solve-x runtime visual-frame contracts remain green."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s13 persistent frameless stage browser smoke",
+      "checkedAt": "2026-08-01T04:28:39.305Z",
+      "notes": "Stable desktop capture waited for player hydration and a ready equation adapter. Visual inspection confirmed solve-x paint is immediately visible in the fixed center region without catalogue card, border, radius, shadow, gradient, iframe, or page scroll."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s13 player host types",
+      "checkedAt": "2026-08-01T04:28:40.210Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
     }
   ],
   "expectedLearning": [

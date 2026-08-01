@@ -143,7 +143,8 @@
     {
       "id": "s13",
       "title": "Make center stage frameless and persistent",
-      "status": "planned"
+      "summary": "Mounted the established solve-x player and equation adapter directly inside the fixed center region with the existing listener/hydration order and deterministic initial state. Catalogue stage chrome is removed and the stage remains visible without page scrolling. The inherited settings still visible below the stage are intentionally left for the immediately following transport-reduction slice.",
+      "status": "complete"
     },
     {
       "id": "s14",
