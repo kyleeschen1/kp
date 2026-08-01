@@ -67,6 +67,8 @@ export {
 } from "./exact-rational.ts";
 
 export {
+  KP_DEV_REVIEW_SCREENSHOT_REQUEST_SCHEMA_VERSION,
+  KP_DEV_REVIEW_SCREENSHOT_SCHEMA_VERSION,
   KP_DEV_REVIEW_SCHEMA_VERSION,
   type KpDevReviewCaptureV1,
   type KpDevReviewCreateRequestV1,
@@ -77,6 +79,8 @@ export {
   type KpDevReviewRenderContextV1,
   type KpDevReviewSemanticContextV1,
   type KpDevReviewSemanticTargetV1,
+  type KpDevReviewScreenshotV1,
+  type KpDevReviewScreenshotRequestV1,
   type KpDevReviewStatusV1,
   type KpDevReviewTemporalSampleV1,
   type KpDevReviewViewportV1
@@ -87,6 +91,8 @@ export {
   kpDevReviewInboxSchema,
   kpDevReviewNoteSchema,
   kpDevReviewEventSchema,
+  kpDevReviewScreenshotSchema,
+  kpDevReviewScreenshotRequestSchema,
   kpDevReviewProtocolLimits
 } from "./dev-review-schema.ts";
 

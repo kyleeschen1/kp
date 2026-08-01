@@ -243,16 +243,62 @@ try {
   ) {
     throw new Error("Catalogue review panel did not use compact h3 semantics.");
   }
+  const screenshotResponsePromise = page.waitForResponse((response) =>
+    response.url().endsWith("/api/dev/reviews/v2/screenshots") &&
+    response.request().method() === "POST"
+  );
   await reviewPanel.locator("textarea").fill("Catalogue capture probe");
-  await page.waitForFunction(() => {
-    const host = document.querySelector<HTMLElement>(
-      "[data-kp-dev-review-shell]"
+  const screenshotResponse = await screenshotResponsePromise;
+  if (!screenshotResponse.ok()) {
+    throw new Error(
+      `Catalogue screenshot service returned ${screenshotResponse.status()}.`
     );
-    return host?.shadowRoot?.querySelector(".meta")?.textContent
-      ?.includes("Locked") === true;
-  });
+  }
+  const screenshotAttachment = await screenshotResponse.json() as {
+    dataUrl?: string;
+    pixelWidth?: number;
+    pixelHeight?: number;
+    scope?: string;
+    sourceViewport?: {
+      width?: number;
+      height?: number;
+    };
+  };
+  if (
+    !screenshotAttachment.dataUrl?.startsWith("data:image/jpeg;base64,") ||
+    screenshotAttachment.dataUrl.length > 75_000 ||
+    (screenshotAttachment.pixelWidth ?? 0) < 1 ||
+    (screenshotAttachment.pixelHeight ?? 0) < 1 ||
+    screenshotAttachment.scope !== "selected-stage" ||
+    (screenshotAttachment.sourceViewport?.width ?? 0) < 1 ||
+    (screenshotAttachment.sourceViewport?.height ?? 0) < 1
+  ) {
+    throw new Error("Catalogue screenshot response was not bounded stage evidence.");
+  }
+  try {
+    await page.waitForFunction(() => {
+      const host = document.querySelector<HTMLElement>(
+        "[data-kp-dev-review-shell]"
+      );
+      return host?.shadowRoot?.querySelector(".meta")?.textContent
+        ?.includes("Locked") === true;
+    });
+  } catch (error: unknown) {
+    const reviewState = await review.evaluate((host) => ({
+      meta: host.shadowRoot?.querySelector(".meta")?.textContent,
+      status: host.shadowRoot?.querySelector(".status")?.textContent
+    }));
+    throw new Error(
+      `Catalogue review capture did not lock: ${JSON.stringify(reviewState)} ` +
+      `${error instanceof Error ? error.message : String(error)}`
+    );
+  }
   const reviewMeta = await reviewPanel.locator(".meta").textContent();
-  if (!reviewMeta?.includes("Current frame") || !reviewMeta.includes("0%")) {
+  if (
+    !reviewMeta?.includes("Current frame") ||
+    !reviewMeta.includes("0%") ||
+    !reviewMeta.includes("Screenshot attached")
+  ) {
     throw new Error(
       `Catalogue review did not capture current playhead state: ${reviewMeta}`
     );

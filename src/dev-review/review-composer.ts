@@ -226,6 +226,7 @@ function renderCaptureMeta(
   const surface = capture.render.surface;
   const labels = [
     "Locked",
+    capture.screenshot === undefined ? undefined : "Screenshot attached",
     surface === undefined
       ? undefined
       : [

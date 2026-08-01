@@ -11,7 +11,8 @@ const devReviewServices = await createKpDevReviewServicesFromEnvironment(process
 const server = createAppServer({
   linearProblemProvider: createExactRationalLinearProblemProvider(),
   devReviewService: devReviewServices?.legacy,
-  devReviewRoundService: devReviewServices?.rounds
+  devReviewRoundService: devReviewServices?.rounds,
+  devReviewScreenshotService: devReviewServices?.screenshots
 });
 
 server.listen(port, host, () => {

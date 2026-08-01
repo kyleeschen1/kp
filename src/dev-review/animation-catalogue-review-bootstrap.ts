@@ -12,6 +12,7 @@ export function mountKpAnimationCatalogueDevReview(
     provider: createKpAnimationCatalogueCaptureProvider(
       ownerWindow.document
     ),
+    screenshotSurface: "animation-catalogue",
     placement: (viewportWidth) =>
       resolveKpDevReviewPlacement({
         surface: "animation-catalogue",

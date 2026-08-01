@@ -196,6 +196,10 @@
     {
       "kind": "file",
       "path": "tests/animation-catalogue-host-observation.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-31-animation-catalogue-review-screenshot-closure.md"
     }
   ],
   "dependsOn": {
@@ -889,6 +893,34 @@
       "scope": "slice s27 host observation architecture",
       "checkedAt": "2026-08-01T05:59:42.757Z",
       "notes": "All architecture gates passed; the shell observes adapter-owned paint and does not acquire renderer or runtime ownership."
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "slice-s29-screenshot-type-safety",
+      "checkedAt": "2026-08-01T06:49:46.511Z",
+      "notes": "Application,"
+    },
+    {
+      "command": "focused-dev-review-tests",
+      "status": "passed",
+      "scope": "slice-s29-protocol-storage-and-safety",
+      "checkedAt": "2026-08-01T06:49:47.338Z",
+      "notes": "19"
+    },
+    {
+      "command": "npm-run-visual-animation-catalogue",
+      "status": "passed",
+      "scope": "slice-s29-live-screenshot-evidence",
+      "checkedAt": "2026-08-01T06:49:48.153Z",
+      "notes": "Live"
+    },
+    {
+      "command": "npm-run-check-dev-review-production",
+      "status": "passed",
+      "scope": "slice-s29-production-erasure",
+      "checkedAt": "2026-08-01T06:49:48.996Z",
+      "notes": "Production"
     }
   ],
   "expectedLearning": [

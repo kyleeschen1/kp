@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  KP_DEV_REVIEW_SCREENSHOT_SCHEMA_VERSION,
   KP_DEV_REVIEW_SCHEMA_VERSION,
   type KpDevReviewCreateRequestV1,
   type KpDevReviewEventV1
@@ -76,7 +77,22 @@ test("dev review protocol round trips renderer-neutral capture evidence", () => 
         progressPermille: 548,
         frameIntervalMs: 16,
         transitionId: "transform.cancel-left-inverses"
-      }]
+      }],
+      screenshot: {
+        schemaVersion: KP_DEV_REVIEW_SCREENSHOT_SCHEMA_VERSION,
+        kind: "bitmap-data-url",
+        scope: "selected-stage",
+        mediaType: "image/jpeg",
+        dataUrl: "data:image/jpeg;base64,/9j/2Q==",
+        pixelWidth: 640,
+        pixelHeight: 360,
+        sourceViewport: {
+          left: 320,
+          top: 80,
+          width: 640,
+          height: 420
+        }
+      }
     }
   };
   const event: KpDevReviewEventV1 = {
@@ -93,5 +109,9 @@ test("dev review protocol round trips renderer-neutral capture evidence", () => 
   assert.equal(
     event.note.capture.semantic.tuning?.["gestalt-style"],
     "kp.organic-subtle@1.0.0"
+  );
+  assert.equal(
+    event.note.capture.screenshot?.scope,
+    "selected-stage"
   );
 });

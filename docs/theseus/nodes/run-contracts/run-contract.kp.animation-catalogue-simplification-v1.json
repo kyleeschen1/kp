@@ -242,8 +242,8 @@
     {
       "id": "s29",
       "title": "Attach screenshot evidence to review capture",
-      "summary": "Close the known bitmap evidence gap with bounded screenshot attachment, exact capture-state identity, production erasure, and no duplicated review history.",
-      "status": "planned"
+      "summary": "Attached one bounded selected-stage JPEG to the existing immutable review capture through a development-only loopback replay service. Exact asset, playhead, parameter, tuning, viewport, motion, and colour-scheme state are restored. Remote routes, oversized viewports, prior screenshots, and payloads above 75000 characters are rejected. Default queries stay compact. Append-only tests prove no duplicate review history. Production erasure, 19 focused tests, and the live catalogue check pass. A pre-existing Firefox singleton-shell harness collision is outside this screenshot path.",
+      "status": "complete"
     },
     {
       "id": "s30",

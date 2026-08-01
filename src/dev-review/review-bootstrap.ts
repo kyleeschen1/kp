@@ -1,5 +1,8 @@
 import type { KpDevReviewCaptureV1 } from "../../protocols/dev-review-v1.ts";
 import {
+  KP_DEV_REVIEW_SCREENSHOT_REQUEST_SCHEMA_VERSION
+} from "../../protocols/dev-review-v1.ts";
+import {
   KP_DEV_REVIEW_SCHEMA_VERSION_V2,
   type KpDevReviewRoundV2
 } from "../../protocols/dev-review-v2.ts";
@@ -37,6 +40,7 @@ export function mountKpDevReview(input: {
   readonly provider: KpDevReviewCaptureProvider;
   readonly placement: (viewportWidth: number) => KpDevReviewPlacement;
   readonly beforeCapture?: (() => Promise<void>) | undefined;
+  readonly screenshotSurface?: "animation-catalogue" | undefined;
   readonly onDispose?: (() => void) | undefined;
 }): () => void {
   const ownerWindow = input.ownerWindow ?? window;
@@ -133,7 +137,13 @@ export function mountKpDevReview(input: {
           ),
           ...capture.evidence
         };
-        return result;
+        if (input.screenshotSurface === undefined) return result;
+        const screenshot = await client.captureScreenshot({
+          schemaVersion: KP_DEV_REVIEW_SCREENSHOT_REQUEST_SCHEMA_VERSION,
+          surface: input.screenshotSurface,
+          capture: result
+        });
+        return { ...result, screenshot };
       },
       submit: async ({ comment, capture }) => {
         const note = await client.createNote({

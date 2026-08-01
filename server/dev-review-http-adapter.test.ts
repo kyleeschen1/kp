@@ -50,7 +50,19 @@ test("dev review routes are absent unless the service and capability header are 
   const enabled = createAppServer({
     linearProblemProvider: createExactRationalLinearProblemProvider(),
     devReviewService: service,
-    devReviewRoundService: roundService
+    devReviewRoundService: roundService,
+    devReviewScreenshotService: {
+      capture: async () => ({
+        schemaVersion: "kp.dev-review-screenshot.v1",
+        kind: "bitmap-data-url",
+        scope: "selected-stage",
+        mediaType: "image/jpeg",
+        dataUrl: "data:image/jpeg;base64,/9j/2Q==",
+        pixelWidth: 640,
+        pixelHeight: 360,
+        sourceViewport: { left: 0, top: 80, width: 640, height: 420 }
+      })
+    }
   });
   context.after(() => close(enabled));
   const baseUrl = await listen(enabled);
@@ -71,6 +83,17 @@ test("dev review routes are absent unless the service and capability header are 
   const query = await postV2(baseUrl, "query", {});
   assert.equal(query.status, 200);
   assert.equal((await query.json() as { counts: { current: number } }).counts.current, 1);
+
+  const screenshot = await postV2(baseUrl, "screenshots", {
+    schemaVersion: "kp.dev-review-screenshot-request.v1",
+    surface: "animation-catalogue",
+    capture: (reviewRequest() as { capture: unknown }).capture
+  });
+  assert.equal(screenshot.status, 201);
+  assert.equal(
+    (await screenshot.json() as { scope: string }).scope,
+    "selected-stage"
+  );
 
   assert.equal((await postV2(baseUrl, "rounds/close", { reason: "New pass" })).status, 200);
   const opened = await postV2(baseUrl, "rounds/open", {

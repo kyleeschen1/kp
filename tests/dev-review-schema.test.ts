@@ -2,8 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  KP_DEV_REVIEW_SCREENSHOT_REQUEST_SCHEMA_VERSION,
+  KP_DEV_REVIEW_SCREENSHOT_SCHEMA_VERSION,
   KP_DEV_REVIEW_SCHEMA_VERSION,
   kpDevReviewCreateRequestSchema,
+  kpDevReviewScreenshotRequestSchema,
   kpDevReviewProtocolLimits
 } from "../protocols/public-api.ts";
 
@@ -64,6 +67,16 @@ function request(): Record<string, unknown> {
 
 test("dev review schema accepts and clones a bounded canonical request", () => {
   const source = request();
+  (source["capture"] as Record<string, unknown>)["screenshot"] = {
+    schemaVersion: KP_DEV_REVIEW_SCREENSHOT_SCHEMA_VERSION,
+    kind: "bitmap-data-url",
+    scope: "selected-stage",
+    mediaType: "image/jpeg",
+    dataUrl: "data:image/jpeg;base64,/9j/2Q==",
+    pixelWidth: 640,
+    pixelHeight: 360,
+    sourceViewport: { left: 0, top: 80, width: 640, height: 420 }
+  };
   const parsed = kpDevReviewCreateRequestSchema.parse(source);
   assert.notEqual(parsed, source);
   assert.equal(parsed.capture.semantic.progressPermille, 553);
@@ -72,6 +85,69 @@ test("dev review schema accepts and clones a bounded canonical request", () => {
     "flat"
   );
   assert.equal(parsed.capture.render.surface?.profile, "phone");
+  assert.equal(parsed.capture.screenshot?.pixelWidth, 640);
+});
+
+test("dev review schema bounds bitmap screenshot attachments", () => {
+  const invalidMime = request();
+  (invalidMime["capture"] as Record<string, unknown>)["screenshot"] = {
+    schemaVersion: KP_DEV_REVIEW_SCREENSHOT_SCHEMA_VERSION,
+    kind: "bitmap-data-url",
+    scope: "selected-stage",
+    mediaType: "image/jpeg",
+    dataUrl: "data:image/png;base64,UklGRg==",
+    pixelWidth: 640,
+    pixelHeight: 360,
+    sourceViewport: { left: 0, top: 0, width: 640, height: 360 }
+  };
+  assert.equal(
+    kpDevReviewCreateRequestSchema.safeParse(invalidMime).success,
+    false
+  );
+
+  const oversized = request();
+  (oversized["capture"] as Record<string, unknown>)["screenshot"] = {
+    schemaVersion: KP_DEV_REVIEW_SCREENSHOT_SCHEMA_VERSION,
+    kind: "bitmap-data-url",
+    scope: "selected-stage",
+    mediaType: "image/jpeg",
+    dataUrl: "data:image/jpeg;base64," + "A".repeat(
+      kpDevReviewProtocolLimits.screenshotDataUrlCharacters
+    ),
+    pixelWidth: 640,
+    pixelHeight: 360,
+    sourceViewport: { left: 0, top: 0, width: 640, height: 360 }
+  };
+  assert.equal(
+    kpDevReviewCreateRequestSchema.safeParse(oversized).success,
+    false
+  );
+});
+
+test("screenshot requests carry capture state but never an existing bitmap", () => {
+  const capture = (request()["capture"] as Record<string, unknown>);
+  assert.equal(kpDevReviewScreenshotRequestSchema.safeParse({
+    schemaVersion: KP_DEV_REVIEW_SCREENSHOT_REQUEST_SCHEMA_VERSION,
+    surface: "animation-catalogue",
+    capture
+  }).success, true);
+  assert.equal(kpDevReviewScreenshotRequestSchema.safeParse({
+    schemaVersion: KP_DEV_REVIEW_SCREENSHOT_REQUEST_SCHEMA_VERSION,
+    surface: "animation-catalogue",
+    capture: {
+      ...capture,
+      screenshot: {
+        schemaVersion: KP_DEV_REVIEW_SCREENSHOT_SCHEMA_VERSION,
+        kind: "bitmap-data-url",
+        scope: "selected-stage",
+        mediaType: "image/jpeg",
+        dataUrl: "data:image/jpeg;base64,/9j/2Q==",
+        pixelWidth: 2,
+        pixelHeight: 2,
+        sourceViewport: { left: 0, top: 0, width: 2, height: 2 }
+      }
+    }
+  }).success, false);
 });
 
 test("dev review schema rejects unknown, blank, oversized, and unsafe fields", () => {

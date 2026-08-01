@@ -1,4 +1,8 @@
 export const KP_DEV_REVIEW_SCHEMA_VERSION = "kp.dev-review.v1" as const;
+export const KP_DEV_REVIEW_SCREENSHOT_SCHEMA_VERSION =
+  "kp.dev-review-screenshot.v1" as const;
+export const KP_DEV_REVIEW_SCREENSHOT_REQUEST_SCHEMA_VERSION =
+  "kp.dev-review-screenshot-request.v1" as const;
 
 export type KpDevReviewStatusV1 =
   | "new"
@@ -113,6 +117,29 @@ export interface KpDevReviewTemporalSampleV1 {
   readonly layoutRevision?: number | undefined;
 }
 
+export interface KpDevReviewScreenshotV1 {
+  readonly schemaVersion: typeof KP_DEV_REVIEW_SCREENSHOT_SCHEMA_VERSION;
+  readonly kind: "bitmap-data-url";
+  readonly scope: "selected-stage";
+  readonly mediaType: "image/jpeg";
+  readonly dataUrl: string;
+  readonly pixelWidth: number;
+  readonly pixelHeight: number;
+  readonly sourceViewport: {
+    readonly left: number;
+    readonly top: number;
+    readonly width: number;
+    readonly height: number;
+  };
+}
+
+export interface KpDevReviewScreenshotRequestV1 {
+  readonly schemaVersion:
+    typeof KP_DEV_REVIEW_SCREENSHOT_REQUEST_SCHEMA_VERSION;
+  readonly surface: "animation-catalogue";
+  readonly capture: KpDevReviewCaptureV1;
+}
+
 export interface KpDevReviewCaptureV1 {
   readonly route: string;
   readonly capturedAt: string;
@@ -120,6 +147,7 @@ export interface KpDevReviewCaptureV1 {
   readonly semantic: KpDevReviewSemanticContextV1;
   readonly render: KpDevReviewRenderContextV1;
   readonly temporalTrace: readonly KpDevReviewTemporalSampleV1[];
+  readonly screenshot?: KpDevReviewScreenshotV1 | undefined;
 }
 
 export interface KpDevReviewCreateRequestV1 {

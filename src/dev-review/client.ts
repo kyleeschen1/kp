@@ -1,12 +1,16 @@
 import {
   kpDevReviewCreateRequestSchema,
   kpDevReviewInboxSchema,
-  kpDevReviewNoteSchema
+  kpDevReviewNoteSchema,
+  kpDevReviewScreenshotRequestSchema,
+  kpDevReviewScreenshotSchema
 } from "../../protocols/dev-review-schema.ts";
 import type {
   KpDevReviewCreateRequestV1,
   KpDevReviewInboxV1,
-  KpDevReviewNoteV1
+  KpDevReviewNoteV1,
+  KpDevReviewScreenshotRequestV1,
+  KpDevReviewScreenshotV1
 } from "../../protocols/dev-review-v1.ts";
 import {
   kpDevReviewAdvanceCursorOperationV2Schema,
@@ -90,6 +94,16 @@ export class KpDevReviewClient {
   async createNote(request: KpDevReviewCreateRequestV2): Promise<KpDevReviewNoteV2> {
     return this.#postV2("notes", kpDevReviewCreateRequestV2Schema.parse(request),
       (input) => kpDevReviewNoteV2Schema.parse(input));
+  }
+
+  async captureScreenshot(
+    request: KpDevReviewScreenshotRequestV1
+  ): Promise<KpDevReviewScreenshotV1> {
+    return this.#postV2(
+      "screenshots",
+      kpDevReviewScreenshotRequestSchema.parse(request),
+      (input) => kpDevReviewScreenshotSchema.parse(input)
+    );
   }
 
   async setStatus(request: KpDevReviewSetStatusOperationV2): Promise<void> {

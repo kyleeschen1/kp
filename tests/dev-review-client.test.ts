@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import type { KpDevReviewCreateRequestV1 } from "../protocols/dev-review-v1.ts";
+import {
+  KP_DEV_REVIEW_SCREENSHOT_REQUEST_SCHEMA_VERSION,
+  KP_DEV_REVIEW_SCREENSHOT_SCHEMA_VERSION,
+  type KpDevReviewCreateRequestV1
+} from "../protocols/dev-review-v1.ts";
 import { KpDevReviewClient, KpDevReviewClientError } from "../src/dev-review/client.ts";
 
 function request(): KpDevReviewCreateRequestV1 {
@@ -82,4 +86,37 @@ test("v2 client validates operation inputs and returned round state", async () =
     () => client.query({ scope: "all", roundId: "round.1" }),
     /cannot be combined/
   );
+});
+
+test("typed client requests one bounded screenshot for captured state", async () => {
+  let observed: { input: string; body: unknown } | undefined;
+  const screenshot = {
+    schemaVersion: KP_DEV_REVIEW_SCREENSHOT_SCHEMA_VERSION,
+    kind: "bitmap-data-url" as const,
+    scope: "selected-stage" as const,
+    mediaType: "image/jpeg" as const,
+    dataUrl: "data:image/jpeg;base64,/9j/2Q==",
+    pixelWidth: 640,
+    pixelHeight: 360,
+    sourceViewport: { left: 0, top: 80, width: 640, height: 420 }
+  };
+  const client = new KpDevReviewClient({
+    fetch: async (input, init) => {
+      observed = { input, body: JSON.parse(String(init?.body)) };
+      return Response.json(screenshot, { status: 201 });
+    }
+  });
+  const result = await client.captureScreenshot({
+    schemaVersion: KP_DEV_REVIEW_SCREENSHOT_REQUEST_SCHEMA_VERSION,
+    surface: "animation-catalogue",
+    capture: request().capture
+  });
+
+  assert.deepEqual(result, screenshot);
+  assert.equal(observed?.input, "/api/dev/reviews/v2/screenshots");
+  assert.deepEqual(observed?.body, {
+    schemaVersion: KP_DEV_REVIEW_SCREENSHOT_REQUEST_SCHEMA_VERSION,
+    surface: "animation-catalogue",
+    capture: request().capture
+  });
 });

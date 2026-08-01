@@ -13,9 +13,12 @@ import {
   type ProtocolSchema
 } from "./runtime-schema.ts";
 import {
+  KP_DEV_REVIEW_SCREENSHOT_REQUEST_SCHEMA_VERSION,
+  KP_DEV_REVIEW_SCREENSHOT_SCHEMA_VERSION,
   KP_DEV_REVIEW_SCHEMA_VERSION,
   type KpDevReviewCreateRequestV1,
-  type KpDevReviewEventV1
+  type KpDevReviewEventV1,
+  type KpDevReviewScreenshotRequestV1
 } from "./dev-review-v1.ts";
 
 export const kpDevReviewProtocolLimits = Object.freeze({
@@ -26,7 +29,9 @@ export const kpDevReviewProtocolLimits = Object.freeze({
   activeTransformations: 32,
   focusRefs: 64,
   ownerIds: 128,
-  temporalSamples: 180
+  temporalSamples: 180,
+  screenshotDataUrlCharacters: 75_000,
+  screenshotPixelDimension: 1_600
 });
 
 const id = protocolString({
@@ -155,6 +160,31 @@ const temporalSample = protocolObject({
   phase: optionalText,
   layoutRevision: protocolOptional(protocolInteger({ min: 0 }))
 });
+export const kpDevReviewScreenshotSchema = protocolObject({
+  schemaVersion: protocolLiteral(KP_DEV_REVIEW_SCREENSHOT_SCHEMA_VERSION),
+  kind: protocolLiteral("bitmap-data-url"),
+  scope: protocolLiteral("selected-stage"),
+  mediaType: protocolLiteral("image/jpeg"),
+  dataUrl: protocolRefine(protocolString({
+    minLength: "data:image/jpeg;base64,".length + 4,
+    maxLength: kpDevReviewProtocolLimits.screenshotDataUrlCharacters
+  }), (value) => /^data:image\/jpeg;base64,[a-zA-Z0-9+/]+={0,2}$/.test(value),
+  "expected a bounded JPEG data URL"),
+  pixelWidth: protocolInteger({
+    min: 1,
+    max: kpDevReviewProtocolLimits.screenshotPixelDimension
+  }),
+  pixelHeight: protocolInteger({
+    min: 1,
+    max: kpDevReviewProtocolLimits.screenshotPixelDimension
+  }),
+  sourceViewport: protocolObject({
+    left: protocolNumber(),
+    top: protocolNumber(),
+    width: protocolNumber({ min: 1, max: 100_000 }),
+    height: protocolNumber({ min: 1, max: 100_000 })
+  })
+});
 export const kpDevReviewCaptureSchema = protocolObject({
   route,
   capturedAt: isoTimestamp,
@@ -163,8 +193,21 @@ export const kpDevReviewCaptureSchema = protocolObject({
   render,
   temporalTrace: protocolArray(temporalSample, {
     maxLength: kpDevReviewProtocolLimits.temporalSamples
-  })
+  }),
+  screenshot: protocolOptional(kpDevReviewScreenshotSchema)
 });
+
+export const kpDevReviewScreenshotRequestSchema = protocolRefine(
+  protocolObject({
+    schemaVersion: protocolLiteral(
+      KP_DEV_REVIEW_SCREENSHOT_REQUEST_SCHEMA_VERSION
+    ),
+    surface: protocolLiteral("animation-catalogue"),
+    capture: kpDevReviewCaptureSchema
+  }),
+  (value) => value.capture.screenshot === undefined,
+  "screenshot requests must not contain an existing screenshot"
+) as ProtocolSchema<KpDevReviewScreenshotRequestV1>;
 
 export const kpDevReviewCreateRequestSchema = protocolObject({
   schemaVersion: protocolLiteral(KP_DEV_REVIEW_SCHEMA_VERSION),

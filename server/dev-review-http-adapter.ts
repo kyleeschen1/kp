@@ -9,13 +9,15 @@ import {
 } from "../protocols/dev-review-operations-v2-schema.ts";
 import { KpDevReviewInboxService } from "./dev-review-inbox.ts";
 import { KpDevReviewRoundInboxService } from "./dev-review-round-inbox.ts";
+import type { KpDevReviewScreenshotService } from "./dev-review-screenshot.ts";
 
 const requestBodyLimitBytes = 128 * 1024;
 const capabilityHeader = "x-kp-dev-review";
 
 export function createKpDevReviewHttpAdapter(
   service: KpDevReviewInboxService | undefined,
-  roundService?: KpDevReviewRoundInboxService | undefined
+  roundService?: KpDevReviewRoundInboxService | undefined,
+  screenshotService?: KpDevReviewScreenshotService | undefined
 ): {
   handle(request: IncomingMessage, response: ServerResponse, url: URL): Promise<boolean>;
 } {
@@ -25,7 +27,13 @@ export function createKpDevReviewHttpAdapter(
       if (request.headers[capabilityHeader] !== "1") return false;
       if (url.pathname.startsWith("/api/dev/reviews/v2/")) {
         if (roundService === undefined) return false;
-        return handleRoundRequest(roundService, request, response, url);
+        return handleRoundRequest(
+          roundService,
+          request,
+          response,
+          url,
+          screenshotService
+        );
       }
       if (url.pathname !== "/api/dev/reviews" || service === undefined) return false;
 
@@ -62,7 +70,8 @@ async function handleRoundRequest(
   service: KpDevReviewRoundInboxService,
   request: IncomingMessage,
   response: ServerResponse,
-  url: URL
+  url: URL,
+  screenshotService: KpDevReviewScreenshotService | undefined
 ): Promise<boolean> {
   const routes = new Set([
     "/api/dev/reviews/v2/query",
@@ -70,9 +79,14 @@ async function handleRoundRequest(
     "/api/dev/reviews/v2/rounds/close",
     "/api/dev/reviews/v2/notes",
     "/api/dev/reviews/v2/notes/status",
-    "/api/dev/reviews/v2/cursors/advance"
+    "/api/dev/reviews/v2/cursors/advance",
+    "/api/dev/reviews/v2/screenshots"
   ]);
   if (!routes.has(url.pathname)) return false;
+  if (
+    url.pathname === "/api/dev/reviews/v2/screenshots" &&
+    screenshotService === undefined
+  ) return false;
   if (request.method !== "POST") {
     sendJson(response, 405, { error: "method_not_allowed" });
     return true;
@@ -83,7 +97,10 @@ async function handleRoundRequest(
   }
   try {
     const body = await readBoundedJson(request);
-    if (url.pathname === "/api/dev/reviews/v2/query") {
+    if (url.pathname === "/api/dev/reviews/v2/screenshots") {
+      if (screenshotService === undefined) return false;
+      sendJson(response, 201, await screenshotService.capture(body));
+    } else if (url.pathname === "/api/dev/reviews/v2/query") {
       sendJson(response, 200, service.query(kpDevReviewQueryInputSchema.parse(body)));
     } else if (url.pathname === "/api/dev/reviews/v2/rounds/open") {
       sendJson(response, 201, await service.openRound(kpDevReviewOpenRoundOperationV2Schema.parse(body)));
@@ -106,6 +123,9 @@ async function handleRoundRequest(
     if (error instanceof KpDevReviewPayloadTooLargeError) {
       sendJson(response, 413, { error: "payload_too_large" });
       return true;
+    }
+    if (url.pathname === "/api/dev/reviews/v2/screenshots") {
+      console.error("[dev-review] screenshot capture failed", error);
     }
     sendJson(response, 400, { error: "invalid_request" });
   }
