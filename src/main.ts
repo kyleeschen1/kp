@@ -14,6 +14,12 @@ import {
   deriveKpAnimationCatalogueHealth
 } from "./editor/animation-catalogue-health.ts";
 import {
+  observeKpAnimationCatalogueHost
+} from "./editor/animation-catalogue-host-observation.ts";
+import {
+  deriveKpAnimationCatalogueHostOutcome
+} from "./editor/animation-catalogue-host-outcome.ts";
+import {
   createKpAnimationCatalogueProjection
 } from "./editor/animation-catalogue-projection.ts";
 import {
@@ -24,6 +30,7 @@ import {
   resolveKpAnimationCatalogueSelection
 } from "./editor/animation-catalogue-selection.ts";
 import {
+  applyKpAnimationCatalogueObservedHealth,
   renderKpAnimationCatalogueResults,
   renderKpAnimationCatalogueShell
 } from "./editor/animation-catalogue-shell.ts";
@@ -631,6 +638,56 @@ async function renderAnimationCatalogueView(): Promise<void> {
     // reaches its surface adapter before the controller announces readiness.
     hydrateKpEditorAnimationSurfaces(appRoot);
     hydrateKpEditorAnimationLiveDiagnostics(appRoot);
+    const cataloguePlayer = appRoot.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+    );
+    const catalogueStage = appRoot.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue-stage]"
+    );
+    let hostEvidenceObserver: MutationObserver | undefined;
+    const publishTerminalHostEvidence = () => {
+      const hostObservation = observeKpAnimationCatalogueHost(appRoot);
+      const hostOutcome = deriveKpAnimationCatalogueHostOutcome({
+        entry,
+        hostability,
+        hostObservation
+      });
+      if (hostOutcome === undefined) return;
+      hostEvidenceObserver?.disconnect();
+      const observedHealth = deriveKpAnimationCatalogueHealth({
+        hostability,
+        hostObservation
+      });
+      const shell = appRoot.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue]"
+      );
+      if (shell === null) return;
+      applyKpAnimationCatalogueObservedHealth({
+        shell,
+        entry,
+        health: observedHealth
+      });
+      shell.dataset["kpAnimationCatalogueHostOutcome"] =
+        hostOutcome.status;
+    };
+    if (catalogueStage !== null) {
+      // Generic adapters paint synchronously while specialized adapters may
+      // settle after font measurement. One bounded observer covers both
+      // without adding an asset-specific shell exception.
+      hostEvidenceObserver = new MutationObserver(
+        publishTerminalHostEvidence
+      );
+      hostEvidenceObserver.observe(catalogueStage, {
+        attributes: true,
+        childList: true,
+        subtree: true
+      });
+    }
+    cataloguePlayer?.addEventListener(
+      KP_EDITOR_ANIMATION_FRAME_EVENT,
+      publishTerminalHostEvidence,
+      { once: true }
+    );
     hydrateKpEditorAnimationPlayers(appRoot);
     void mountAnimationCatalogueReviewCapture(revision);
   } catch (error: unknown) {

@@ -188,6 +188,14 @@
     {
       "kind": "file",
       "path": "tests/animation-catalogue-load-probe.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-host-observation.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-host-observation.test.ts"
     }
   ],
   "dependsOn": {
@@ -853,6 +861,34 @@
       "scope": "slice s26 loading boundary",
       "checkedAt": "2026-08-01T05:46:27.967Z",
       "notes": "All architecture gates passed; the probe reuses canonical route, selection, descriptor, and lazy loader authorities."
+    },
+    {
+      "command": "focused catalogue host observation tests",
+      "status": "passed",
+      "scope": "slice s27 terminal paint classification",
+      "checkedAt": "2026-08-01T05:59:40.301Z",
+      "notes": "19 tests passed across slot evidence, terminal outcomes, health derivation, and shell projection; placeholder or pending slots cannot mint paint, missing adapters stay hostability gaps, and unavailable output is a paint failure."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s27 live 33-asset hostability inventory",
+      "checkedAt": "2026-08-01T05:59:41.129Z",
+      "notes": "Chromium visited all 33 canonical rows: 31 painted and became Ready, 2 exposed missing-programming-adapter capability gaps and remained Broken, 0 load failures, and 0 iframes. Specialized async hosts settled through the same bounded observation seam."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s27 host observation type safety",
+      "checkedAt": "2026-08-01T05:59:41.943Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s27 host observation architecture",
+      "checkedAt": "2026-08-01T05:59:42.757Z",
+      "notes": "All architecture gates passed; the shell observes adapter-owned paint and does not acquire renderer or runtime ownership."
     }
   ],
   "expectedLearning": [

@@ -230,8 +230,8 @@
     {
       "id": "s27",
       "title": "Dispatch and inventory catalogue hostability",
-      "summary": "Dispatch every loaded asset through existing adapters, record observable health and capability gaps, and never use iframe or asset-specific shell fallback.",
-      "status": "planned"
+      "summary": "Added generic terminal paint observation over the existing adapter registry. Selected health now becomes Ready only after every required slot has an adapter ID and real rendered content; specialized font-measured hosts settle through one bounded MutationObserver, missing adapters remain Broken capability gaps, and renderer-unavailable output is a paint failure. The stable Chromium command visited all 33 rows: 31 painted, 2 missing-programming-adapter gaps, 0 load failures, and 0 iframes. Focused 19/19, live inventory, typecheck, and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s28",

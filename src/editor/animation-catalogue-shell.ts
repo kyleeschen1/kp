@@ -77,6 +77,46 @@ export function renderKpAnimationCatalogueShell(input: {
   </main>`;
 }
 
+export function applyKpAnimationCatalogueObservedHealth(input: {
+  readonly shell: HTMLElement;
+  readonly entry: KpAnimationCatalogueEntry;
+  readonly health: KpAnimationCatalogueHealth;
+}): void {
+  const selectedAnimationId =
+    input.shell.dataset["kpAnimationCatalogueSelection"];
+  if (
+    selectedAnimationId !== input.entry.animationId ||
+    input.health.animationId !== input.entry.animationId
+  ) {
+    throw new Error(
+      `Cannot apply observed health for ${input.entry.animationId} to ` +
+      `${selectedAnimationId ?? "an unselected shell"}.`
+    );
+  }
+  input.shell.dataset["kpAnimationCatalogueSelectedHealth"] =
+    input.health.status;
+  const selectedRow = input.shell.querySelector<HTMLElement>(
+    `[data-kp-animation-catalogue-row="${cssEscape(input.entry.animationId)}"]`
+  );
+  const badge = selectedRow?.querySelector<HTMLElement>(
+    "[data-kp-animation-catalogue-health]"
+  );
+  if (badge !== undefined && badge !== null) {
+    badge.dataset["kpAnimationCatalogueHealth"] = input.health.status;
+    badge.dataset["kpAnimationCatalogueHealthEvidence"] = "observed-host";
+    badge.textContent = healthLabel(input.health.status);
+  }
+  const details = input.shell.querySelector<HTMLElement>(
+    '[data-kp-animation-catalogue-inspector-panel="details"]'
+  );
+  if (details !== null) {
+    details.innerHTML = renderKpAnimationCatalogueDetails({
+      entry: input.entry,
+      health: input.health
+    });
+  }
+}
+
 export function renderKpAnimationCatalogueInspector(input: {
   readonly entry: KpAnimationCatalogueEntry;
   readonly health: KpAnimationCatalogueHealth;
@@ -286,4 +326,10 @@ function escapeHtml(value: string): string {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function cssEscape(value: string): string {
+  return typeof CSS === "undefined"
+    ? value.replaceAll('"', '\\"')
+    : CSS.escape(value);
 }

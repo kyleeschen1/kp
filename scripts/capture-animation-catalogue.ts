@@ -1,7 +1,11 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { chromium } from "playwright";
+import { chromium, type Browser } from "playwright";
+
+import {
+  createKpAnimationCatalogueProjection
+} from "../src/editor/animation-catalogue-projection.ts";
 
 const animationId = "animation.linear-solve.solve-x";
 const promotedSiblingId =
@@ -319,6 +323,178 @@ try {
     throw new Error("Promoted catalogue sibling used an iframe fallback.");
   }
   await siblingPage.close();
+
+  const hostabilityResults = await captureCatalogueHostability(browser);
+  const hostabilityManifest = path.join(outputRoot, "hostability.json");
+  await writeFile(
+    hostabilityManifest,
+    `${JSON.stringify({
+      schemaVersion: "kp.animation-catalogue-hostability-capture.v1",
+      capturedAt: new Date().toISOString(),
+      viewport,
+      counts: Object.fromEntries(
+        ["painted", "capability-gap", "load-failure"].map((status) => [
+          status,
+          hostabilityResults.filter((result) => result.outcome === status)
+            .length
+        ])
+      ),
+      results: hostabilityResults
+    }, null, 2)}\n`,
+    "utf8"
+  );
+  console.log(
+    `animation catalogue hostability: ${path.relative(process.cwd(), hostabilityManifest)}`
+  );
 } finally {
   await browser.close();
+}
+
+async function captureCatalogueHostability(browser: Browser) {
+  const entries = createKpAnimationCatalogueProjection().entries;
+  const page = await browser.newPage({ viewport });
+  const results: Array<{
+    animationId: string;
+    packId: string;
+    outcome: string;
+    health: string;
+    surfaceKind?: string | undefined;
+    adapterIds: readonly string[];
+    gapKind?: string | undefined;
+    iframeCount: number;
+  }> = [];
+
+  try {
+    for (const entry of entries) {
+      const entryUrl = new URL("/", baseUrl);
+      entryUrl.searchParams.set("artifact", entry.animationId);
+      await page.goto(entryUrl.toString(), { waitUntil: "networkidle" });
+      try {
+        await page.waitForFunction((expectedAnimationId) => {
+          const catalogue = document.querySelector<HTMLElement>(
+            "[data-kp-animation-catalogue]"
+          );
+          return catalogue?.dataset["kpAnimationCatalogueSelection"] ===
+            expectedAnimationId && (
+              catalogue.dataset["kpAnimationCatalogueHostOutcome"] !==
+                undefined ||
+              catalogue.dataset["kpAnimationCatalogueState"] === "error"
+            );
+        }, entry.animationId);
+      } catch (error: unknown) {
+        const unsettled = await page.evaluate(() => {
+          const catalogue = document.querySelector<HTMLElement>(
+            "[data-kp-animation-catalogue]"
+          );
+          const player = catalogue?.querySelector<HTMLElement>(
+            "[data-kp-editor-animation-player]"
+          );
+          return {
+            state: catalogue?.dataset["kpAnimationCatalogueState"],
+            selection:
+              catalogue?.dataset["kpAnimationCatalogueSelection"],
+            outcome:
+              catalogue?.dataset["kpAnimationCatalogueHostOutcome"],
+            health:
+              catalogue?.dataset["kpAnimationCatalogueSelectedHealth"],
+            hydrated: player?.dataset["kpEditorAnimationHydrated"],
+            slots: [...(catalogue?.querySelectorAll<HTMLElement>(
+              "[data-kp-editor-animation-surface-slot]"
+            ) ?? [])].map((slot) => ({
+              kind: slot.dataset["kpEditorAnimationSurfaceSlot"],
+              status: slot.dataset["kpEditorAnimationAdapterStatus"],
+              adapter: slot.dataset["kpEditorAnimationAdapterId"],
+              html: slot.innerHTML.slice(0, 160)
+            }))
+          };
+        });
+        throw new Error(
+          `Catalogue hostability did not settle ${entry.animationId}: ` +
+          `${error instanceof Error ? error.message : String(error)} ` +
+          `${JSON.stringify(unsettled)}`
+        );
+      }
+      const evidence = await page.evaluate((expectedAnimationId) => {
+        const catalogue = document.querySelector<HTMLElement>(
+          "[data-kp-animation-catalogue]"
+        );
+        if (
+          catalogue === null ||
+          catalogue.dataset["kpAnimationCatalogueSelection"] !==
+            expectedAnimationId
+        ) {
+          throw new Error(`Catalogue did not select ${expectedAnimationId}.`);
+        }
+        const slots = [...catalogue.querySelectorAll<HTMLElement>(
+          "[data-kp-editor-animation-surface-slot]"
+        )];
+        const outcome = catalogue.dataset["kpAnimationCatalogueHostOutcome"] ??
+          "load-failure";
+        const surfaceKind = catalogue.querySelector<HTMLElement>(
+          "[data-kp-editor-animation-stage]"
+        )?.dataset["kpEditorAnimationSurface"];
+        const missingAdapter = slots.some((slot) =>
+          slot.dataset["kpEditorAnimationAdapterStatus"] === "missing"
+        );
+        return {
+          outcome,
+          health:
+            catalogue.dataset["kpAnimationCatalogueSelectedHealth"] ??
+            (outcome === "load-failure" ? "broken" : "unknown"),
+          ...(surfaceKind === undefined ? {} : { surfaceKind }),
+          adapterIds: slots.flatMap((slot) => {
+            const id = slot.dataset["kpEditorAnimationAdapterId"];
+            return id === undefined ? [] : [id];
+          }),
+          ...(outcome !== "capability-gap"
+            ? {}
+            : {
+                gapKind: missingAdapter
+                  ? "missing-adapter"
+                  : surfaceKind === "unsupported"
+                    ? "unsupported-surface"
+                    : "paint-failed"
+              }),
+          iframeCount: catalogue.querySelectorAll("iframe").length
+        };
+      }, entry.animationId);
+      results.push({
+        animationId: entry.animationId,
+        packId: entry.packId,
+        ...evidence
+      });
+    }
+  } finally {
+    await page.close();
+  }
+
+  if (results.length !== entries.length ||
+    new Set(results.map(({ animationId }) => animationId)).size !==
+      entries.length) {
+    throw new Error("Catalogue hostability probe lost or duplicated rows.");
+  }
+  if (results.some(({ outcome }) =>
+    outcome !== "painted" && outcome !== "capability-gap" &&
+      outcome !== "load-failure"
+  )) {
+    throw new Error("Catalogue hostability probe retained nonterminal rows.");
+  }
+  if (results.some(({ iframeCount }) => iframeCount !== 0)) {
+    throw new Error("Catalogue hostability probe found an iframe fallback.");
+  }
+  const missingAdapterIds = results
+    .filter(({ gapKind }) => gapKind === "missing-adapter")
+    .map(({ animationId }) => animationId)
+    .sort();
+  const expectedMissingAdapterIds = [
+    "animation.comparison.linear-solve-programming",
+    "animation.programming.add.execution-trace"
+  ];
+  if (JSON.stringify(missingAdapterIds) !==
+    JSON.stringify(expectedMissingAdapterIds)) {
+    throw new Error(
+      `Catalogue missing-adapter inventory was ${JSON.stringify(missingAdapterIds)}.`
+    );
+  }
+  return results;
 }
