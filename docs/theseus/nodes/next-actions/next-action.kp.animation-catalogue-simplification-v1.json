@@ -56,6 +56,14 @@
     {
       "kind": "file",
       "path": "tests/animation-catalogue-related-context-inventory.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-projection.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-projection.test.ts"
     }
   ],
   "dependsOn": {
@@ -265,6 +273,34 @@
       "status": "passed",
       "scope": "slice s05 durable control state",
       "checkedAt": "2026-08-01T03:50:23.098Z",
+      "notes": "Workspace valid before slice completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-projection.test.ts tests/animation-catalogue-loadable-registry.test.ts tests/animation-catalogue-related-context-inventory.test.ts tests/animation-library-metadata.test.ts tests/animation-library-display-catalog.test.ts",
+      "status": "passed",
+      "scope": "slice s06 asset-first projection",
+      "checkedAt": "2026-08-01T03:57:27.908Z",
+      "notes": "21/21 passed; the projection has 33 concrete entries, keeps solve-x contexts subordinate, and excludes planned plus display-only playable identities."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s06 static types",
+      "checkedAt": "2026-08-01T03:57:28.793Z",
+      "notes": "All TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s06 dependency boundaries",
+      "checkedAt": "2026-08-01T03:57:29.721Z",
+      "notes": "All architecture gates passed; a source audit also excludes Workbench, concrete catalog, adapter, renderer, and Theseus imports."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s06 durable control state",
+      "checkedAt": "2026-08-01T03:57:30.659Z",
       "notes": "Workspace valid before slice completion."
     }
   ],

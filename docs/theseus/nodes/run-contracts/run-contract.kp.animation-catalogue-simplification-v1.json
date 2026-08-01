@@ -101,7 +101,8 @@
     {
       "id": "s06",
       "title": "Build asset-first catalogue projection",
-      "status": "planned"
+      "summary": "Built the lightweight asset-first projection: each loadable registry member receives primary metadata, pack identity, explicit domains/families/samples, honest tags, separate fuzzy-search terms, and exact-ID related contexts. Planned and display-only playable identities cannot enter. The runtime projection imports generated metadata only and carries no Workbench, project-control, promotion, hostability, adapter, renderer, or asset-pack implementation state.",
+      "status": "complete"
     },
     {
       "id": "s07",
