@@ -125,7 +125,8 @@
     {
       "id": "s12",
       "title": "Implement exact supply-demand model",
-      "status": "planned"
+      "summary": "Implemented the bounded exact rational supply-demand model. It validates axes, positive slopes, and upward demand-intercept shift; solves exact before/after intersections; evaluates both curves; classifies surplus, shortage, and clearing with exact magnitudes; normalizes and freezes serializable state. Default and fractional cases plus invalid inputs pass six focused tests; typecheck, architecture, diff hygiene, and workspace validation pass.",
+      "status": "complete"
     },
     {
       "id": "s13",

@@ -234,6 +234,41 @@
       "scope": "s11 control record",
       "checkedAt": "2026-08-01T16:55:52.764Z",
       "notes": "Workspace graph validates after starting the economics contract slice."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-economics-equilibrium-contract.test.ts tests/kp-economics-equilibrium-model.test.ts",
+      "status": "passed",
+      "scope": "s12 exact domain model",
+      "checkedAt": "2026-08-01T16:59:58.815Z",
+      "notes": "Six tests prove exact default and fractional equilibria, curve evaluation, market-side classification, and invalid-contract rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s12 domain boundary",
+      "checkedAt": "2026-08-01T16:59:59.975Z",
+      "notes": "All app, node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s12 domain boundary",
+      "checkedAt": "2026-08-01T17:00:01.186Z",
+      "notes": "All four architecture gates pass with the domain-local exact model."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s12 focused",
+      "checkedAt": "2026-08-01T17:00:02.452Z",
+      "notes": "Exact model and tests pass diff hygiene."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s12 control record",
+      "checkedAt": "2026-08-01T17:00:03.619Z",
+      "notes": "Workspace graph validates with exact-model evidence."
     }
   ],
   "progress": {
