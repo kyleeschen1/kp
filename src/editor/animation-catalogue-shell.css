@@ -230,6 +230,41 @@
   min-height: 100%;
 }
 
+/* Keep this visual treatment on the reviewed solve-x exemplar until the
+   catalogue checkpoint establishes which geometry belongs across families. */
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.linear-solve.solve-x"]
+  .kp-animation-catalogue-shell__stage-host .editor-equation-stage {
+  place-items: center;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.linear-solve.solve-x"]
+  .kp-animation-catalogue-shell__stage-host .editor-equation-stage__content {
+  display: grid;
+  width: min(48rem, calc(100% - 2rem));
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.linear-solve.solve-x"]
+  .kp-animation-catalogue-shell__stage-host .editor-equation-stage__transition {
+  grid-template-rows: minmax(7.5rem, auto) auto auto;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.linear-solve.solve-x"]
+  .kp-animation-catalogue-shell__stage-host .editor-equation-stage__object {
+  text-align: center;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.linear-solve.solve-x"]
+  .kp-animation-catalogue-shell__stage-host .editor-equation-stage__sequence {
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.linear-solve.solve-x"]
+  .kp-animation-catalogue-shell__stage-host .editor-equation-stage__sequence li {
+  align-self: center;
+}
+
 .kp-animation-catalogue-shell__stage-host .editor-animation-player__controls {
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;

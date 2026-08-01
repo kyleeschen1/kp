@@ -89,7 +89,8 @@
     {
       "id": "s06",
       "title": "Build solve-x centered compact-stage exemplar",
-      "status": "planned"
+      "summary": "Built the solve-x-only catalogue visual exemplar. A selection-scoped CSS boundary groups the previously independent transition and step nodes into one centered 48rem-or-narrower unit, centers the inline equation, and constrains all four step chips to compact intrinsic height. Playback controls stay fixed below and the runtime, timeline, semantic model, renderer, paint ownership, accessibility, and authoring contracts are unchanged. Stable visual interaction and 33-host smoke plus diff hygiene pass.",
+      "status": "complete"
     },
     {
       "id": "s07",

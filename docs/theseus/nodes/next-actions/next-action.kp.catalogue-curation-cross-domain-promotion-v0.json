@@ -143,11 +143,18 @@
       "scope": "s05 preserved review boundary",
       "checkedAt": "2026-08-01T16:07:39.703Z",
       "notes": "Production review closure passed after persistent review-host navigation."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "s06 solve-x-only visual exemplar smoke",
+      "checkedAt": "2026-08-01T16:12:27.801Z",
+      "notes": "Solve-x renders as one vertically and horizontally centered unit with a compact four-step row; in-shell interaction and all 33 hostability rows still pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Catalogue selection now restores through browser Back and Forward without document or shell reload and preserves query, inspector mode, rail position, review host, draft, and focus across row, inspector, search, and review composer contexts. The solve-x visual geometry exemplar remains next."
+    "summary": "Solve-x now provides the bounded catalogue geometry exemplar: its equation, explanation strip, and compact four-step sequence form one centered unit while the player controls remain fixed below. The treatment is selection-scoped pending human review."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",
