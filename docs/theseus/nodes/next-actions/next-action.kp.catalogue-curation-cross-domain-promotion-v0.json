@@ -269,6 +269,41 @@
       "scope": "s12 control record",
       "checkedAt": "2026-08-01T17:00:03.619Z",
       "notes": "Workspace graph validates with exact-model evidence."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-economics-equilibrium-contract.test.ts tests/kp-economics-equilibrium-model.test.ts tests/kp-economics-equilibrium-frame.test.ts",
+      "status": "passed",
+      "scope": "s13 deterministic frame projection",
+      "checkedAt": "2026-08-01T17:03:28.769Z",
+      "notes": "Ten economics tests pass, including exact midpoint truth and five-sample forward/rewind symmetry."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s13 domain projection",
+      "checkedAt": "2026-08-01T17:03:30.026Z",
+      "notes": "All TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s13 domain projection",
+      "checkedAt": "2026-08-01T17:03:31.206Z",
+      "notes": "Architecture gates pass after adding renderer-neutral economics frames."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s13 focused",
+      "checkedAt": "2026-08-01T17:03:32.351Z",
+      "notes": "Frame projection and focused tests pass diff hygiene."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s13 control record",
+      "checkedAt": "2026-08-01T17:03:33.324Z",
+      "notes": "Workspace graph validates with deterministic-frame evidence."
     }
   ],
   "progress": {

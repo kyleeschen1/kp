@@ -131,7 +131,8 @@
     {
       "id": "s13",
       "title": "Project deterministic economics frames",
-      "status": "planned"
+      "summary": "Added renderer-neutral exact economics frames. Each frame preserves Q/P axes, supply, demand, equilibrium, intercept-parameter, surplus-side, shortage-side, and active semantic identities while interpolating exact rational model truth; midpoint is demand P=16-Q and equilibrium (7,9). Forward t and rewind 1-t produce identical model states. Ten economics tests, typecheck, architecture, diff hygiene, and workspace validation pass.",
+      "status": "complete"
     },
     {
       "id": "s14",
