@@ -110,6 +110,24 @@ The rollback unit is the new economics asset pack entry, its exact semantic
 model and presenter, catalogue metadata, and focused checks. It must not alter
 existing algebra, graph, or diagram callers to make the exemplar pass.
 
+### Economics checkpoint revision
+
+At the 2026-08-01 human checkpoint, the exact model, native hosting,
+accessibility, controls, and synchronized evidence were retained, but the
+visual treatment was not approved. The accepted revision contract is
+`decisions/2026-08-01-kp-dimensional-continuity-graph-and-diagram-language.md`.
+The graph must become a 2D orthographic member of KP's 3D technical language
+and all mathematical labels must use exact LaTeX rendered with KaTeX.
+
+The revision also restores the catalogue-route performance harness before the
+exemplar is promoted. This is a bounded proof of selected-capability loading,
+reserved geometry, layout stability, interaction latency, and animation-frame
+health, not a broad site-performance program. The accepted semantic model,
+clock, seek/rewind, native SVG ownership, parameter contract, catalogue shell,
+and review history remain the preservation boundary. Physics and shared
+API/motif extraction remain paused until the revised economics view receives
+explicit human approval.
+
 ## Physics Second-Caller Boundary
 
 After economics approval, one constant-force work-energy exemplar pressures the

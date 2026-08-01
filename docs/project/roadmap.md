@@ -42,9 +42,13 @@ use an iframe. The approved successor in
 `reviews/2026-08-01-catalogue-curation-cross-domain-promotion-long-loop-proposal.md`
 has now delivered persistent catalogue switching, an approved solve-x
 compact-stage exemplar, compatible equation-surface centering, and bounded
-curation without inferred dispositions. KP now resumes the Supply and demand
-equilibrium shift and constant-force work-energy promotions, and only then
-consolidates caller-proven APIs or motifs.
+curation without inferred dispositions. The exact Supply and demand exemplar
+has reached its human checkpoint, but its current visual treatment was returned
+for revision under the accepted dimensional-continuity graph language in
+`decisions/2026-08-01-kp-dimensional-continuity-graph-and-diagram-language.md`.
+KP revises and re-reviews that same bounded exemplar, then continues to
+constant-force work-energy and only afterward consolidates caller-proven APIs
+or motifs.
 
 The symbolic manipulation family plan recorded in
 `decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`
@@ -173,6 +177,16 @@ stage; compatible equation centering passed radical and diagram pressure. The
 bounded curation record preserves all 33 rows, assigns no human dispositions,
 and treats Jacobian/Hessian as a diagnostic/retirement candidate whose unique
 semantic and conformance evidence must be replaced before deletion.
+
+The exact economics model, synchronized view, native SVG host, parameters,
+accessibility, seek/rewind, and visual capture are complete, but the appearance
+is not approved. The revision must make the 2D graph an orthographic member of
+the 3D technical visual language, render all mathematical labels with KaTeX,
+and preserve the existing semantic and runtime boundary. The current bundle
+ratchets pass, but Core Web Vitals are uncertified because the animation
+performance harness still targets the retired editor picker. The bounded
+economics revision therefore includes repair of route-specific performance
+evidence; it does not authorize a broad platform detour.
 
 The generator, editorial-text, API-tier, motif-versioning, and pruning
 recommendations are durable platform milestones in
@@ -441,8 +455,10 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Build and human-review one exact Supply and demand equilibrium shift, then
-   one exact constant-force work-energy second caller, without domain engines.
+1. Revise and human-review the exact Supply and demand equilibrium shift under
+   the dimensional-continuity graph language, including a repaired
+   route-specific performance proof; then build one exact constant-force
+   work-energy second caller without domain engines.
 2. Classify API tiers and extract or version only seams proven by both callers;
    prune obsolete compatibility paths only beside their last-caller migration.
 3. Preserve the approved persistent catalogue shell and bounded curation;

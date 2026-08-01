@@ -2,10 +2,12 @@
 
 Status: active
 Last Updated: 2026-08-01
-Current Next Action: Build and human-review the bounded Supply and demand
-equilibrium shift at rank 3, followed by constant-force work-energy at rank 4.
-The catalogue UX and bounded curation checkpoint is complete. Consolidate API
-tiers and motifs only after both callers provide evidence.
+Current Next Action: Revise and human-review the bounded Supply and demand
+equilibrium shift at rank 3 under the accepted dimensional-continuity graph
+language, including restored catalogue-route performance evidence. Then build
+constant-force work-energy at rank 4. The catalogue UX and bounded curation
+checkpoint is complete. Consolidate API tiers and motifs only after both
+callers provide evidence.
 
 ## Goal
 
@@ -182,6 +184,31 @@ contributor-fusion schedule through the structurally distinct three-input
 now use that required motif; a nominal, evidence-derived release approval is
 the only path by which the catalog reports the exemplar as `ported`.
 
+### Graph and diagram language
+
+The accepted contract in
+`decisions/2026-08-01-kp-dimensional-continuity-graph-and-diagram-language.md`
+governs the active synchronized-model exemplars. Two-dimensional graphs use the
+same restrained technical language as orthographic poses of KP's 3D graphs,
+without requiring WebGL. Mathematical labels use exact LaTeX rendered through
+KaTeX; prose remains semantic HTML. Renderer-owned role tokens, named poses,
+honest scale and units, collision-aware labels, redundant non-color cues,
+dynamic descriptions, and responsive density are promotion requirements.
+
+The present economics graph is exact and mechanically verified but not visually
+approved. Its current raw SVG math labels and flat dense graph treatment are a
+revision target, not a reusable reference. The revised economics caller remains
+the exemplar checkpoint; physics is the second caller. Only their shared,
+human-approved seams may become a versioned profile or generated-artifact
+conformance gate.
+
+The current bundle boundary passes, but the catalogue experience has no current
+Core Web Vitals certificate because `perf:animation` still drives a retired
+editor selector. Repair that scoped route harness during economics revision.
+Do not equate the 490,000-byte main-host regression ceiling with a product
+target, and do not ship KaTeX, code, or WebGL capability merely because the
+catalogue can select an asset that uses it.
+
 ## Progress Update Protocol
 
 After a promotion closes:
@@ -221,7 +248,8 @@ exists.
 - When should sparse direct settlement and decimal/radix presentation be
   scheduled as a place-value harvest without silently delaying rank 3?
 - Can the bounded economics and constant-force physics demos reuse existing
-  graph and diagram contracts without new runtime categories?
+  graph and diagram contracts without new runtime categories, while proving
+  one typed dimensional-continuity presentation profile?
 - Which fraction harvest items become safe batch promotions after rank 1?
 - Which exact caller pressure should trigger the first versioned motif
   implementation boundary after the generated solve-x bridge?
@@ -234,6 +262,8 @@ exists.
 - `docs/project/decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md`
 - `docs/project/decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md`
 - `docs/project/decisions/2026-07-31-kp-exemplar-first-visual-verification-cadence.md`
+- `docs/project/decisions/2026-08-01-kp-dimensional-continuity-graph-and-diagram-language.md`
+- `docs/project/reviews/2026-08-01-visualization-generation-and-web-performance-next-step-review.md`
 - `docs/project/reviews/2026-07-30-place-value-persistent-workspace-repair-long-loop-proposal.md`
 - `docs/project/reviews/2026-07-31-place-value-persistent-workspace-repair-closeout.md`
 - `docs/project/reviews/2026-07-28-kp-promotion-memory-and-architecture-next-step-review.md`
