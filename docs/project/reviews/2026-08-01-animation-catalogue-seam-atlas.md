@@ -1,0 +1,134 @@
+# Animation Catalogue Seam Atlas and Provisional Queue
+
+Date: 2026-08-01
+Status: morning human checkpoint after catalogue simplification slice s30
+
+## Outcome
+
+The internal catalogue now has one row for each of 33 concrete lazy-loadable
+assets across 10 packs. The stable browser pass loaded and routed every row:
+31 painted through an existing native adapter, two stopped at an explicit
+missing-programming-adapter gap, none failed loading, and none used an iframe.
+
+This collapses the apparent port backlog. There is no catalogue-host port to
+perform for the 31 painted assets. The only observed hosting seam is
+programming, shared by one pure execution trace and one composite comparison.
+
+Every human disposition remains `Unreviewed`. The final column below is a
+provisional question, not approval: `Keep?` means only that the asset is
+hostable and ready for visual/content review; `Repair?` identifies observed
+missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
+
+## Atlas
+
+| Concrete asset | Pack | Surface | Observed host | Contexts | Provisional question |
+| --- | --- | --- | --- | ---: | --- |
+| `animation.comparison.jacobian-hessian` | comparison | equation | Painted · KaTeX | 1 | Keep? |
+| `animation.comparison.linear-solve-programming` | comparison | composite | Gap · programming adapter | 1 | Repair? |
+| `animation.derivative-rules.tangent-graph` | graph | graph | Painted · SVG graph | 3 | Keep? |
+| `animation.dot-projection.basic` | graph | graph | Painted · SVG graph | 3 | Keep? |
+| `animation.exact-fraction-quantity.third-plus-sixth` | exact-quantity | diagram | Painted · synchronized fraction | 1 | Keep? |
+| `animation.generated.add-zero` | generated-drafts | equation | Painted · KaTeX | 1 | Keep? |
+| `animation.generated.calculus.derivative.power-rule-x-cubed` | generated-problems | equation | Painted · KaTeX | 3 | Keep? |
+| `animation.generated.calculus.derivative.sum-rule-polynomial` | generated-problems | equation | Painted · KaTeX | 1 | Keep? |
+| `animation.generated.calculus.integral.power-rule-quadratic` | generated-problems | equation | Painted · KaTeX | 1 | Keep? |
+| `animation.generated.distribution.expand-a-sum` | algebra | equation | Painted · KaTeX | 4 | Keep? |
+| `animation.generated.distribution.factor-common-a` | algebra | equation | Painted · KaTeX | 3 | Keep? |
+| `animation.generated.exponent.square-as-product` | algebra | equation | Painted · KaTeX | 3 | Keep? |
+| `animation.generated.fraction-expression.two-fourths` | algebra | equation | Painted · KaTeX | 3 | Keep? |
+| `animation.generated.function-wrap.apply-f` | algebra | equation | Painted · KaTeX | 3 | Keep? |
+| `animation.generated.linear-algebra.dot-product.three-vector` | generated-problems | equation | Painted · KaTeX | 1 | Keep? |
+| `animation.generated.linear-algebra.matrix-matrix.two-by-two` | generated-problems | equation | Painted · KaTeX | 3 | Keep? |
+| `animation.generated.linear-algebra.matrix-vector.two-by-two` | generated-problems | equation | Painted · KaTeX | 3 | Keep? |
+| `animation.generated.pipeline-diagram` | generated-drafts | diagram | Painted · SVG diagram | 1 | Keep? |
+| `animation.generated.radical.square-root-as-power` | algebra | equation | Painted · KaTeX | 5 | Keep? |
+| `animation.generated.substitute-three` | generated-drafts | equation | Painted · KaTeX | 1 | Keep? |
+| `animation.generated.substitute-three.provisional-incorrect` | generated-drafts | equation | Painted · KaTeX | 1 | Keep or Retire? |
+| `animation.graph.surface-mode.mesh-to-donut` | graph | graph | Painted · SVG graph | 1 | Keep? |
+| `animation.graph.vector.linear-map-scale` | graph | graph | Painted · SVG graph | 3 | Keep? |
+| `animation.inequality.sign-flip.basic` | algebra | equation | Painted · KaTeX | 3 | Keep? |
+| `animation.integral-ftc.area-sweep` | graph | graph | Painted · SVG graph | 3 | Keep? |
+| `animation.linear-solve.solve-x` | algebra | equation | Painted · KaTeX | 7 | Keep? |
+| `animation.operation-evaluation.five-plus-two` | operation-evaluation | equation | Painted · native KaTeX operation | 1 | Keep? |
+| `animation.operation-evaluation.one-plus-two` | operation-evaluation | equation | Painted · native KaTeX operation | 2 | Keep? |
+| `animation.operation-evaluation.three-sixths` | operation-evaluation | equation | Painted · native KaTeX operation | 1 | Keep? |
+| `animation.place-value-addition.278-plus-156` | place-value | diagram | Painted · synchronized place value | 2 | Keep? |
+| `animation.programming.add.execution-trace` | programming | programming | Gap · programming adapter | 1 | Repair? |
+| `animation.sample.fourier-transform-pair` | complex-katex | equation | Painted · KaTeX | 1 | Keep? |
+| `animation.sample.fundamental-theorem-calculus` | complex-katex | equation | Painted · KaTeX | 3 | Keep? |
+
+## Shared Seams
+
+The catalogue crosses five surface shapes: 23 equation, five graph, three
+diagram, one composite, and one programming asset. Adapter reuse is strong:
+the general KaTeX adapter participates in 21 rows, the graph adapter in five,
+the canonical operation-evaluation adapter in three, and three specialized
+diagram adapters each cover one row. This is evidence for keeping the adapter
+registry seam, not for inventing a universal renderer.
+
+The exact-fraction caller pressure-tested the shell without a caller-specific
+exception. It demonstrates a useful specialized adapter boundary, but it is
+not a new canonical-port candidate merely because it rendered successfully.
+
+## Context Consolidation Queue
+
+The 33 assets currently carry 74 related display contexts: 52 editor, 17 card,
+three reader, and two diagnostic. These contexts stay under Details and do not
+mint additional catalogue rows.
+
+The highest-information consolidation audits are:
+
+1. `animation.linear-solve.solve-x`: seven contexts across editor, card,
+   reader, and diagnostic hosts;
+2. `animation.generated.radical.square-root-as-power`: five contexts;
+3. `animation.generated.distribution.expand-a-sum`: four contexts;
+4. thirteen assets with three contexts each.
+
+Seven display entries labelled playable still do not resolve to concrete
+loadable assets. They remain compatibility evidence, not confirmed duplicates:
+
+- `animation.divide-both-sides.solve-3x-equals-12`
+- `animation.foldable-distribution.collect-like-terms`
+- `animation.fraction-composition.two-thirds-solve`
+- `animation.fractional-linear.solve-x-over-2`
+- `animation.fractional-linear.x-over-2.balanced-proof`
+- `animation.fractional-linear.x-over-2.fluent-projection`
+- `animation.numerator-split-merge.round-trip`
+
+Each needs a human `Keep`, `Merge`, `Canonical port`, or `Retire` decision
+before any route is removed. The current inventory does not prove that any two
+are semantically interchangeable.
+
+## Evidence-Ranked Port Hypotheses
+
+1. Define the programming execution-trace semantic model and canonical visual
+   exemplar. Information gain is high because the execution trace does not yet
+   exist as a verified catalogue surface. This is the long pole, not shell
+   wiring.
+2. Add one programming surface adapter for
+   `animation.programming.add.execution-trace`. Once the trace contract exists,
+   the catalogue port itself should be bounded and relatively fast.
+3. Reuse that adapter in
+   `animation.comparison.linear-solve-programming` and verify synchronized
+   composite timing. This tests whether the seam genuinely crosses callers.
+4. Stop. The inventory currently supplies no evidence for another canonical
+   port. Review and context consolidation should choose the next candidate.
+
+This order answers the verification concern directly: implementing only a host
+would be fast but would certify nothing useful. Establishing execution-trace
+semantics, choreography, and acceptance evidence is the larger piece.
+
+## Morning Review
+
+The next session should browse the running catalogue and decide, in batches:
+
+1. which painted assets are credible `Keep` candidates versus visually or
+   semantically in need of `Repair`;
+2. whether the provisional-incorrect substitution is an intentional teaching
+   artifact or a retirement candidate;
+3. whether the programming execution trace is the next approved exemplar;
+4. which high-fan-out contexts carry unique value before consolidation.
+
+No economics, public-site, LLM explanation, route deletion, universal
+renderer, canonical port, or human disposition assignment was performed in
+this overnight tranche.

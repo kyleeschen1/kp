@@ -2,9 +2,9 @@
   "id": "run-contract.kp.animation-catalogue-simplification-v1",
   "kind": "run-contract",
   "title": "KP animation catalogue simplification",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Approved catalogue-first execution: establish catalogue truth, build and approve one reversible solve-x shell exemplar, then generalize only the accepted boundary and prepare a catalogue-wide morning audit.",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -248,8 +248,8 @@
     {
       "id": "s30",
       "title": "Publish catalogue seam atlas and provisional queue",
-      "summary": "Publish the 33-asset seam atlas, context consolidation clusters, capability gaps, suggested dispositions, and evidence-ranked port hypotheses while human dispositions remain Unreviewed; run broad verification and stop for morning review.",
-      "status": "planned"
+      "summary": "Published a durable 33-asset seam atlas. All 33 rows load across 10 packs. Browser evidence records 31 native painted hosts, two missing programming-adapter gaps, zero load failures, and zero iframes. Every human disposition is visibly and structurally Unreviewed. The provisional queue ranks programming trace semantics before the bounded adapter and composite reuse, identifies high-fan-out context audits, and authorizes no port or route deletion. Focused 14 tests, the full 3196-test matrix, build, production erasure, catalogue Chromium, library-host Chromium, promotion memory, diff hygiene, and workspace validation pass. Stop at the morning human checkpoint.",
+      "status": "complete"
     }
   ]
 }

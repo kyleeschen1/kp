@@ -111,6 +111,10 @@ test("selected row is compact asset identity with derived health", () => {
   );
   assert.match(html, /<h3 id="kp-animation-catalogue-details-title">Details<\/h3>/);
   assert.match(html, /data-kp-animation-catalogue-stage-persistent="true"/);
+  assert.match(
+    html,
+    /data-kp-animation-catalogue-human-disposition="unreviewed"/
+  );
   assert.match(html, /data-kp-editor-animation-player/);
   assert.match(html, /data-kp-editor-animation-math-layout="inline"/);
   assert.match(html, /data-kp-editor-animation-surface-slot="equation"/);
@@ -163,6 +167,10 @@ test("Details is one linear projection in stable evidence order", () => {
   assert.match(html, /sample\.animation\.solve-x\.both-sides/);
   assert.match(html, /<dt>Duration<\/dt><dd>2\.4 s<\/dd>/);
   assert.match(html, /<dt>Beats<\/dt><dd>50<\/dd>/);
+  assert.match(
+    html,
+    /<dt>Human disposition<\/dt><dd>Unreviewed<\/dd>/
+  );
   assert.match(html, /Render targets/);
   assert.equal([...html.matchAll(/<a href=/g)].length, 7);
   assert.match(html, /view=editor/);

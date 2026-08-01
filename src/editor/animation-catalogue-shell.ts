@@ -48,7 +48,7 @@ export function renderKpAnimationCatalogueShell(input: {
   }
   const { entry, health } = input;
 
-  return `<main class="kp-animation-catalogue-shell" data-kp-animation-catalogue data-kp-animation-catalogue-state="selected" data-kp-animation-catalogue-selection="${escapeHtml(entry.animationId)}" data-kp-animation-catalogue-selected-health="${health.status}" aria-labelledby="kp-animation-catalogue-title">
+  return `<main class="kp-animation-catalogue-shell" data-kp-animation-catalogue data-kp-animation-catalogue-state="selected" data-kp-animation-catalogue-selection="${escapeHtml(entry.animationId)}" data-kp-animation-catalogue-selected-health="${health.status}" data-kp-animation-catalogue-human-disposition="${entry.humanDisposition}" aria-labelledby="kp-animation-catalogue-title">
     <h1 id="kp-animation-catalogue-title" class="kp-animation-catalogue-shell__visually-hidden">Animation catalogue</h1>
     <aside id="kp-animation-catalogue-rail" class="kp-animation-catalogue-shell__rail" data-kp-animation-catalogue-region="rail" aria-label="Artifact catalogue">
       <div class="kp-animation-catalogue-shell__rail-results">
@@ -215,6 +215,7 @@ export function renderKpAnimationCatalogueDetails(input: {
         ${detailValue("Domain", domainLabel(entry))}
         ${detailValue("Asset", entry.animationId, true)}
         ${detailValue("Pack", titleCase(entry.packId))}
+        ${detailValue("Human disposition", titleCase(entry.humanDisposition))}
       </dl>
     </section>
     ${detailSection("Semantics", "semantics", semanticRows)}

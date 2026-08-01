@@ -2,7 +2,7 @@
   "id": "next-action.kp.animation-catalogue-simplification-v1",
   "kind": "next-action",
   "title": "Simplify KP around the animation catalogue",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "summary": "Implement the approved asset-first catalogue, perfect the solve-x shell exemplar first, stop for human review before generalization, then inventory concrete assets and derive the canonical port queue.",
   "sourceRefs": [
@@ -200,6 +200,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-31-animation-catalogue-review-screenshot-closure.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-01-animation-catalogue-seam-atlas.md"
     }
   ],
   "dependsOn": {
@@ -921,6 +925,55 @@
       "scope": "slice-s29-production-erasure",
       "checkedAt": "2026-08-01T06:49:48.996Z",
       "notes": "Production"
+    },
+    {
+      "command": "focused-catalogue-atlas-tests",
+      "status": "passed",
+      "scope": "slice-s30-atlas-and-human-disposition",
+      "checkedAt": "2026-08-01T07:02:04.356Z",
+      "notes": "14 tests passed. The atlas enumerates the exact 33 concrete registry IDs and all runtime entries remain human Unreviewed."
+    },
+    {
+      "command": "npm-test",
+      "status": "passed",
+      "scope": "slice-s30-broad-deterministic-matrix",
+      "checkedAt": "2026-08-01T07:02:05.159Z",
+      "notes": "3196 tests passed with architecture, inference, concept-catalog, and promotion-memory gates."
+    },
+    {
+      "command": "npm-run-build",
+      "status": "passed",
+      "scope": "slice-s30-production-build",
+      "checkedAt": "2026-08-01T07:02:05.991Z",
+      "notes": "Application, Node, test, and domain types passed. Vite built 832 modules."
+    },
+    {
+      "command": "npm-run-visual-animation-catalogue",
+      "status": "passed",
+      "scope": "slice-s30-live-catalogue-atlas",
+      "checkedAt": "2026-08-01T07:02:06.796Z",
+      "notes": "Stable Chromium visited all 33 rows with 31 painted, two programming adapter gaps, zero load failures, and zero iframes. The visible Details field remains Unreviewed."
+    },
+    {
+      "command": "npm-run-visual-animation-library-hosts",
+      "status": "passed",
+      "scope": "slice-s30-preserved-canonical-library-hosts",
+      "checkedAt": "2026-08-01T07:02:07.611Z",
+      "notes": "Three Chromium liveness, rapid-selection, reload, and scratch-isolation browser checks passed."
+    },
+    {
+      "command": "npm-run-check-dev-review-production",
+      "status": "passed",
+      "scope": "slice-s30-production-review-erasure",
+      "checkedAt": "2026-08-01T07:02:08.427Z",
+      "notes": "Production closure passed across 259 files and seven forbidden markers."
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "slice-s30-durable-control-integrity",
+      "checkedAt": "2026-08-01T07:02:09.253Z",
+      "notes": "Workspace validated with 850 nodes and 15538 events before final slice completion."
     }
   ],
   "expectedLearning": [

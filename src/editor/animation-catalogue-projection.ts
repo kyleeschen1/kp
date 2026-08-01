@@ -30,6 +30,14 @@ export interface KpAnimationCatalogueRelatedContext {
   readonly role: "canonical-host" | "projection" | "diagnostic";
 }
 
+export type KpAnimationCatalogueHumanDisposition =
+  | "unreviewed"
+  | "keep"
+  | "repair"
+  | "canonical-port"
+  | "merge"
+  | "retire";
+
 export interface KpAnimationCatalogueEntry {
   readonly schemaVersion: "kp.animation-catalogue-entry.v1";
   readonly kind: "animation-catalogue-entry";
@@ -38,6 +46,7 @@ export interface KpAnimationCatalogueEntry {
   readonly packId: KpAnimationCatalogPackId;
   readonly title: string;
   readonly summary: string;
+  readonly humanDisposition: KpAnimationCatalogueHumanDisposition;
   readonly domains: readonly KpSymbolicManipulationDomain[];
   readonly familyIds: readonly string[];
   readonly sampleIds: readonly string[];
@@ -103,6 +112,9 @@ export function createKpAnimationCatalogueProjection(input: {
       packId: loadableEntry.packId,
       title: primary.title,
       summary: primary.summary,
+      // Catalogue health is derived automatically; disposition begins as an
+      // explicit human unknown and cannot be inferred from successful paint.
+      humanDisposition: "unreviewed" as const,
       domains: freezeUnique(
         relatedDescriptors.flatMap(({ domain }) =>
           domain === undefined ? [] : [domain]
@@ -133,6 +145,7 @@ export function createKpAnimationCatalogueProjection(input: {
         loadableEntry.animationId,
         primary.title,
         primary.summary,
+        "unreviewed",
         ...relatedDescriptors.flatMap(({ tags }) => tags),
         ...relatedDescriptors.map(({ title }) => title),
         ...relatedDescriptors.flatMap(({ familyId, sampleId }) => [

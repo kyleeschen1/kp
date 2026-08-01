@@ -1,13 +1,12 @@
 # Animation Catalogue Thread
 
 Status: active
-Last Updated: 2026-07-31
-Current Next Action: Start
-`run-contract.kp.animation-catalogue-simplification-v1` at its catalogue-truth
-slices and advance into the solve-x shell exemplar. Stop at its mandatory
-desktop human checkpoint before generalizing. The Supply and demand equilibrium
-shift remains the first unresolved domain promotion, but it is paused during
-this catalogue tranche.
+Last Updated: 2026-08-01
+Current Next Action: Review the running 33-asset catalogue and the provisional
+seam atlas with the user. Assign human dispositions only during that review,
+then approve or revise the programming execution-trace tranche before any port
+implementation. Supply and demand equilibrium shift remains the first
+unresolved domain promotion, but economics stays paused.
 
 ## Goal
 
@@ -34,15 +33,16 @@ choreography, timing, player, direct seek/rewind, and accessibility behavior.
 The exemplar must stop for human desktop review before the shell is generalized.
 
 The catalogue now reuses the development review pipeline for artifact ID,
-playhead, render ownership, viewport, and build identity. That protocol does
-not currently persist a bitmap screenshot; screenshot attachment remains an
-explicit capture gap and must not be represented as complete evidence.
+playhead, parameters, tuning, render ownership, viewport, build identity, and
+one bounded selected-stage screenshot. The bitmap is attached to the same
+immutable note; it does not create a parallel review history.
 
-After approval, a fast catalogue-wide hosting pass will make current reality
-visible. `Ready`, `Review`, and `Broken` are derived health states, not promotion
-claims. Missing adapters remain visible gaps. Human disposition is a separate
-audit decision. The inventory, not the old roadmap rank, will determine the
-first canonical port order.
+The catalogue-wide pass now shows 31 painted assets and two honest programming
+adapter gaps, with zero load failures and zero iframes. `Ready`, `Review`, and
+`Broken` remain derived health states, not promotion claims. Every human
+disposition is still `Unreviewed`. The seam atlas suggests questions and an
+evidence-ranked programming tranche, but does not assign dispositions or
+authorize a port.
 
 ## Accepted Scope
 
@@ -92,6 +92,8 @@ first canonical port order.
 ## Links
 
 - `docs/project/reviews/2026-07-31-animation-catalogue-related-context-inventory.md`
+- `docs/project/reviews/2026-07-31-animation-catalogue-review-screenshot-closure.md`
+- `docs/project/reviews/2026-08-01-animation-catalogue-seam-atlas.md`
 - `docs/project/reviews/2026-07-31-animation-catalogue-source-inventory.md`
 - `docs/project/decisions/2026-07-31-kp-animation-catalogue-first-simplification.md`
 - `docs/project/reviews/2026-07-31-animation-catalogue-simplification-next-step-review.md`

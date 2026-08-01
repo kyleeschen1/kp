@@ -22,6 +22,13 @@ test("asset-first projection keeps one lightweight entry with subordinate contex
     "editor-animation.animation.linear-solve.solve-x");
   assert.equal(solveX.packId, "algebra");
   assert.equal(solveX.title, "Solve x + 3 = 7");
+  assert.equal(solveX.humanDisposition, "unreviewed");
+  assert.equal(
+    projection.entries.every(
+      ({ humanDisposition }) => humanDisposition === "unreviewed"
+    ),
+    true
+  );
   assert.deepEqual(solveX.domains, ["algebra"]);
   assert.deepEqual(solveX.familyIds, [
     "family.algebra.both-sides",
@@ -36,6 +43,7 @@ test("asset-first projection keeps one lightweight entry with subordinate contex
   assert.equal(solveX.searchTerms.includes(
     "sample.animation.solve-x.both-sides"
   ), true);
+  assert.equal(solveX.searchTerms.includes("unreviewed"), true);
   assert.deepEqual(
     [...new Set(solveX.relatedContexts.map(({ kind }) => kind))].sort(),
     ["card", "diagnostic", "editor", "reader"]
