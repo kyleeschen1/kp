@@ -532,7 +532,8 @@
     {
       "id": "s27",
       "title": "Human review physics",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: Review the registered constant-force work-energy exemplar at its canonical route. Await explicit approval or revision before API-tier classification and any shared seam promotion.",
+      "status": "in-progress"
     },
     {
       "id": "s28",
