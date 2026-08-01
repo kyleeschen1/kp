@@ -163,7 +163,8 @@
     {
       "id": "s18",
       "title": "prove-reader-route-budgets",
-      "status": "planned"
+      "summary": "Rebuilt the committed payload repair and reproduced every reader metric exactly: all 11 routes pass, the nine shared equation readers remain 144927/145000 gzip, and production closure is complete. Updated only the stale compositor-adapter fake DOM fixture to expose subtree queries, closest lookup, and direct text ink required by slice 15's native-paint fidelity check; the targeted test is 6/6 and the complete operation-presentation suite is 180/180. Typecheck and diff hygiene pass.",
+      "status": "complete"
     },
     {
       "id": "s19",

@@ -206,11 +206,14 @@ const sourceElement = {
   ownerDocument,
   classList: fakeClassList(),
   cloneNode: () => visual,
-  childNodes: [],
+  // Paint-fidelity checks walk the native subtree and its direct text ink.
+  childNodes: [{ nodeType: 3, textContent: "x" }],
   children: [],
+  closest: () => null,
   dataset: {},
   getBoundingClientRect: () => sourceRect,
   parentElement: wrapper,
+  querySelectorAll: () => [],
   style: fakeStyle(),
   textContent: "x"
 } as unknown as HTMLElement;
@@ -218,11 +221,13 @@ const targetElement = {
   ownerDocument,
   classList: fakeClassList(),
   cloneNode: () => visual,
-  childNodes: [],
+  childNodes: [{ nodeType: 3, textContent: "x" }],
   children: [],
+  closest: () => null,
   dataset: {},
   getBoundingClientRect: () => targetRect,
   parentElement: wrapper,
+  querySelectorAll: () => [],
   style: fakeStyle(),
   textContent: "x"
 } as unknown as HTMLElement;

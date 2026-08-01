@@ -756,6 +756,62 @@
       "scope": "slice-s17 control integrity",
       "checkedAt": "2026-08-01T02:45:25.318Z",
       "notes": "Valid 847 nodes and 15278 events after closing the slice and context receipt."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-s18 clean production build",
+      "checkedAt": "2026-08-01T02:49:47.412Z",
+      "notes": "Committed reader split rebuilt successfully from typecheck through Vite production output."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "slice-s18 deterministic route budgets",
+      "checkedAt": "2026-08-01T02:49:48.731Z",
+      "notes": "All 11 routes pass; shared equation readers reproduce exactly at 144927/145000 gzip."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "slice-s18 reader closure",
+      "checkedAt": "2026-08-01T02:49:49.917Z",
+      "notes": "All 11 manifest routes resolve through production closure."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "slice-s18 broad operation regression",
+      "checkedAt": "2026-08-01T02:49:50.947Z",
+      "notes": "180/180 tests pass after updating the obsolete fake DOM fixture to expose the native subtree shape used since slice 15."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s18 static types",
+      "checkedAt": "2026-08-01T02:49:51.897Z",
+      "notes": "Application, node, test, and domain typechecks pass after the fixture repair."
+    },
+    {
+      "command": "npm run verify:impact -- --path tests/semantic-reader-equation-scene-compositor-adapter.test.ts",
+      "status": "passed",
+      "scope": "slice-s18 impact selection",
+      "checkedAt": "2026-08-01T02:49:52.804Z",
+      "notes": "Selector classed the test-fixture path high risk and recommended typecheck plus solve-x capture; both checks are green in the current run."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s18 hygiene",
+      "checkedAt": "2026-08-01T02:49:53.726Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s18 control integrity",
+      "checkedAt": "2026-08-01T02:50:17.514Z",
+      "notes": "Valid 847 nodes and 15289 events after deterministic reader proof."
     }
   ],
   "progress": {
