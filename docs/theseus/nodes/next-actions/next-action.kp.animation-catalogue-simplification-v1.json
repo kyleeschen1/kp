@@ -160,6 +160,14 @@
     {
       "kind": "file",
       "path": "src/editor/animation-player-controller.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-solve-x-preservation.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-01-animation-catalogue-solve-x-preservation-proof.md"
     }
   ],
   "dependsOn": {
@@ -713,6 +721,41 @@
       "scope": "slice s20 type safety",
       "checkedAt": "2026-08-01T05:18:43.183Z",
       "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "focused solve-x preservation matrix",
+      "status": "passed",
+      "scope": "slice s21 identity runtime reverse adapter and ownership proof",
+      "checkedAt": "2026-08-01T05:33:25.359Z",
+      "notes": "45 focused tests passed across catalogue identity and route, direct runtime frame equivalence, dense rewind laws, player session, native equation stage, visual-frame sampling, canonical reverse choreography, and architecture ownership."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s21 live solve-x preservation smoke",
+      "checkedAt": "2026-08-01T05:33:26.178Z",
+      "notes": "Chromium capture passed with the established player and equation surface mounted in the catalogue shell."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s21 type safety",
+      "checkedAt": "2026-08-01T05:33:27.107Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s21 preservation architecture",
+      "checkedAt": "2026-08-01T05:33:28.020Z",
+      "notes": "All architecture gates passed with zero semantic-animation exceptions."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice s21 production boundary",
+      "checkedAt": "2026-08-01T05:33:28.845Z",
+      "notes": "Development review production closure passed."
     }
   ],
   "expectedLearning": [

@@ -191,7 +191,8 @@
     {
       "id": "s21",
       "title": "Prove solve-x preservation boundary",
-      "status": "planned"
+      "summary": "Proved the solve-x catalogue is a host projection over the established lazy algebra asset, primary descriptor, player/runtime clock, dense reverse law, equation dispatch, and native KaTeX adapter. A focused executable boundary compares forward and rewind frames directly and forbids catalogue ownership of runtime, renderer, asset-pack, or solve-x implementation imports. Focused 45/45, live Chromium, typecheck, architecture, and production-review closure pass.",
+      "status": "complete"
     },
     {
       "id": "s22",
