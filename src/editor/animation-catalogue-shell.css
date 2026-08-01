@@ -29,6 +29,49 @@
   background: #f5f3ee;
 }
 
+.kp-animation-catalogue-shell__inspector-switcher {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 1rem;
+  color: var(--kp-catalogue-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.kp-animation-catalogue-shell__inspector-switcher select,
+.kp-animation-catalogue-shell__tuning-controls select {
+  min-width: 0;
+  border: 1px solid var(--kp-catalogue-border);
+  border-radius: 0;
+  padding: 0.42rem 0.48rem;
+  color: #25231f;
+  background: #fffefa;
+  font: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.kp-animation-catalogue-shell__inspector [hidden] {
+  display: none;
+}
+
+.kp-animation-catalogue-shell__tuning-controls {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.kp-animation-catalogue-shell__tuning-controls label {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--kp-catalogue-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
 .kp-animation-catalogue-shell__rail {
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;

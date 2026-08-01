@@ -68,6 +68,8 @@ export interface KpDevReviewSemanticContextV1 {
   readonly motionPreference?: string | undefined;
   readonly motionMode?: string | undefined;
   readonly playbackDirection?: "forward" | "rewind" | undefined;
+  readonly parameters?: Readonly<Record<string, string>> | undefined;
+  readonly tuning?: Readonly<Record<string, string>> | undefined;
   readonly target?: KpDevReviewSemanticTargetV1 | undefined;
 }
 

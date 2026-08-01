@@ -179,7 +179,8 @@
     {
       "id": "s19",
       "title": "Separate parameters from review tuning",
-      "status": "planned"
+      "summary": "Added one compact inspector selector that shows Details, Parameters, or Tuning one at a time. Solve-x honestly has no exposed semantic Parameters. Tuning contains only the existing Style and Focus review controls, routed through the established player authority without remount or duplicate clock. Review capture now carries bounded parameter/tuning evidence maps; no universal artifact control schema was introduced.",
+      "status": "complete"
     },
     {
       "id": "s20",

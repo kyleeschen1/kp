@@ -41,6 +41,10 @@ test("dev review protocol round trips renderer-neutral capture evidence", () => 
         foldMode: "automatic",
         foldDetail: "expanded",
         layoutPolicy: "single-row",
+        tuning: {
+          "gestalt-style": "kp.organic-subtle@1.0.0",
+          "focus-experiment": "flat"
+        },
         focusRefs: [],
         target: {
           materialOwnerId: "material-owner.left-inverses-cancel",
@@ -86,4 +90,8 @@ test("dev review protocol round trips renderer-neutral capture evidence", () => 
   assert.equal(event.note.capture.semantic.target?.materialOwnerId,
     "material-owner.left-inverses-cancel");
   assert.equal(event.note.capture.render.surface?.profile, "phone");
+  assert.equal(
+    event.note.capture.semantic.tuning?.["gestalt-style"],
+    "kp.organic-subtle@1.0.0"
+  );
 });

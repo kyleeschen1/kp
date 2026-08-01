@@ -19,6 +19,7 @@ import {
 } from "../src/editor/animation-player-state.ts";
 import {
   renderKpAnimationCatalogueDetails,
+  renderKpAnimationCatalogueInspector,
   renderKpAnimationCatalogueShell
 } from "../src/editor/animation-catalogue-shell.ts";
 
@@ -183,4 +184,27 @@ test("Details omits empty optional sections instead of showing machinery", () =>
     ["identity", "health"]
   );
   assert.doesNotMatch(html, /Semantics|Playback|Capabilities|Related contexts/);
+});
+
+test("inspector keeps absent Parameters separate from review-only Tuning", () => {
+  const html = renderKpAnimationCatalogueInspector({ entry, health });
+
+  assert.match(html, /data-kp-animation-catalogue-inspector-view="details"/);
+  assert.match(html, /data-action="select-animation-catalogue-inspector"/);
+  assert.match(html, /data-kp-animation-catalogue-inspector-panel="details"/);
+  assert.match(
+    html,
+    /data-kp-animation-catalogue-inspector-panel="parameters" hidden/
+  );
+  assert.match(
+    html,
+    /data-kp-animation-catalogue-inspector-panel="tuning" hidden/
+  );
+  assert.match(html, /no exposed semantic parameters/);
+  assert.equal([...html.matchAll(
+    /data-action="tune-animation-catalogue"/g
+  )].length, 2);
+  assert.match(html, /data-kp-animation-catalogue-tuning="gestalt-style"/);
+  assert.match(html, /data-kp-animation-catalogue-tuning="focus-experiment"/);
+  assert.doesNotMatch(html, /role="tab"|data-kp-animation-authoring-control/);
 });

@@ -16,6 +16,10 @@ import {
 import type {
   KpEditorAnimationPlayerState
 } from "./animation-player-state.ts";
+import {
+  kpOrganicSubtleStyleRef,
+  kpRestrainedEditorialStyleRef
+} from "../animation/gestalt-base-styles.ts";
 
 export function renderKpAnimationCatalogueShell(input: {
   readonly entry: KpAnimationCatalogueEntry;
@@ -65,9 +69,50 @@ export function renderKpAnimationCatalogueShell(input: {
       </div>
     </section>
     <aside class="kp-animation-catalogue-shell__inspector" data-kp-animation-catalogue-region="inspector" aria-label="Artifact inspector">
-      ${renderKpAnimationCatalogueDetails({ entry, health })}
+      ${renderKpAnimationCatalogueInspector({ entry, health })}
     </aside>
   </main>`;
+}
+
+export function renderKpAnimationCatalogueInspector(input: {
+  readonly entry: KpAnimationCatalogueEntry;
+  readonly health: KpAnimationCatalogueHealth;
+}): string {
+  return `<div class="kp-animation-catalogue-shell__inspector-view" data-kp-animation-catalogue-inspector-view="details">
+    <label class="kp-animation-catalogue-shell__inspector-switcher">Show
+      <select data-action="select-animation-catalogue-inspector" aria-label="Inspector view">
+        <option value="details" selected>Details</option>
+        <option value="parameters">Parameters</option>
+        <option value="tuning">Tuning</option>
+      </select>
+    </label>
+    <div data-kp-animation-catalogue-inspector-panel="details">
+      ${renderKpAnimationCatalogueDetails(input)}
+    </div>
+    <section data-kp-animation-catalogue-inspector-panel="parameters" hidden>
+      <h3>Parameters</h3>
+      <p>This asset has no exposed semantic parameters. Its equation and operations remain authored artifact state.</p>
+    </section>
+    <section data-kp-animation-catalogue-inspector-panel="tuning" hidden>
+      <h3>Tuning</h3>
+      <p>Temporary presentation choices for review. They do not change the authored artifact.</p>
+      <div class="kp-animation-catalogue-shell__tuning-controls">
+        <label>Style
+          <select data-action="tune-animation-catalogue" data-kp-animation-catalogue-tuning="gestalt-style">
+            <option value="${styleRefKey(kpOrganicSubtleStyleRef)}" selected>Organic subtle</option>
+            <option value="${styleRefKey(kpRestrainedEditorialStyleRef)}">Restrained editorial</option>
+          </select>
+        </label>
+        <label>Focus
+          <select data-action="tune-animation-catalogue" data-kp-animation-catalogue-tuning="focus-experiment">
+            <option value="flat" selected>Flat</option>
+            <option value="elevated">Elevated 2.5D</option>
+            <option value="no-depth">No depth</option>
+          </select>
+        </label>
+      </div>
+    </section>
+  </div>`;
 }
 
 export function renderKpAnimationCatalogueDetails(input: {
@@ -213,6 +258,13 @@ function titleCase(value: string): string {
       ? part
       : `${part[0]?.toUpperCase()}${part.slice(1)}`)
     .join(" ");
+}
+
+function styleRefKey(ref: {
+  readonly id: string;
+  readonly version: string;
+}): string {
+  return `${ref.id}@${ref.version}`;
 }
 
 function healthLabel(status: KpAnimationCatalogueHealth["status"]): string {

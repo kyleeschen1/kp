@@ -35,6 +35,10 @@ function request(): Record<string, unknown> {
         foldMode: "automatic",
         foldDetail: "expanded",
         layoutPolicy: "single-row",
+        tuning: {
+          "gestalt-style": "kp.organic-subtle@1.0.0",
+          "focus-experiment": "flat"
+        },
         focusRefs: [],
         target: {
           materialOwnerId: "owner.minus-three",
@@ -63,6 +67,10 @@ test("dev review schema accepts and clones a bounded canonical request", () => {
   const parsed = kpDevReviewCreateRequestSchema.parse(source);
   assert.notEqual(parsed, source);
   assert.equal(parsed.capture.semantic.progressPermille, 553);
+  assert.equal(
+    parsed.capture.semantic.tuning?.["focus-experiment"],
+    "flat"
+  );
   assert.equal(parsed.capture.render.surface?.profile, "phone");
 });
 

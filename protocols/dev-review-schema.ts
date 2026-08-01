@@ -113,6 +113,8 @@ const semantic = protocolObject({
   motionPreference: optionalText,
   motionMode: optionalText,
   playbackDirection: protocolOptional(protocolEnum(["forward", "rewind"])),
+  parameters: protocolOptional(protocolRecord(boundedText, id)),
+  tuning: protocolOptional(protocolRecord(boundedText, id)),
   target: protocolOptional(target)
 });
 const render = protocolObject({

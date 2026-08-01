@@ -152,6 +152,14 @@
     {
       "kind": "file",
       "path": "src/editor/animation-catalogue-review-capture-loader.ts"
+    },
+    {
+      "kind": "file",
+      "path": "protocols/dev-review-v1.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-player-controller.ts"
     }
   ],
   "dependsOn": {
@@ -649,6 +657,41 @@
       "scope": "slice s18 type safety",
       "checkedAt": "2026-08-01T05:06:19.454Z",
       "notes": "Application, Node, test, and domain TypeScript projects passed after removing the obsolete shell-local domain value."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-shell.test.ts tests/dev-review-schema.test.ts tests/dev-review-protocol.test.ts tests/kp-editor-animation-player-shell.test.ts tests/kp-editor-animation-playback-session.test.ts",
+      "status": "passed",
+      "scope": "slice s19 Parameters, Tuning, and runtime preservation",
+      "checkedAt": "2026-08-01T05:13:50.035Z",
+      "notes": "18 tests passed; solve-x exposes no invented Parameters, only two review Tuning controls, bounded review evidence, unchanged compact chrome, and unchanged deterministic playback laws."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test focused dev-review protocol, provider, placement, client, schema, session, and acceptance tests",
+      "status": "passed",
+      "scope": "slice s19 review evidence compatibility",
+      "checkedAt": "2026-08-01T05:13:50.885Z",
+      "notes": "27 review tests passed after adding optional bounded parameter and tuning string maps."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s19 live inspector and tuning bridge",
+      "checkedAt": "2026-08-01T05:13:51.735Z",
+      "notes": "Chromium switched Details to Parameters to Tuning, applied existing restrained-style and elevated-focus controls without remounting, captured both values through the catalogue provider, restored defaults, and returned to Details."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice s19 review production erasure",
+      "checkedAt": "2026-08-01T05:13:52.574Z",
+      "notes": "Production closure passed across 258 files and seven forbidden review markers."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s19 type safety",
+      "checkedAt": "2026-08-01T05:13:53.420Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
     }
   ],
   "expectedLearning": [

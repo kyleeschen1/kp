@@ -87,6 +87,7 @@ import {
   disposeKpEditorAnimationPlayers,
   hydrateKpEditorAnimationPlayers,
   KP_EDITOR_ANIMATION_LOAD_EVENT,
+  applyKpEditorAnimationPresentationTuning,
   pauseKpEditorAnimationPlayers
 } from "./editor/animation-player-controller.ts";
 import {
@@ -423,6 +424,17 @@ appRoot.addEventListener("change", (event) => {
     return;
   }
 
+  if (event.target.dataset["action"] ===
+    "select-animation-catalogue-inspector") {
+    selectAnimationCatalogueInspectorFromSelect(event.target);
+    return;
+  }
+
+  if (event.target.dataset["action"] === "tune-animation-catalogue") {
+    tuneAnimationCatalogueFromSelect(event.target);
+    return;
+  }
+
   if (event.target.dataset["action"]?.includes("animation-workbench-roadmap")) {
     void updateAnimationWorkbenchRoadmapQuery(event.target);
   }
@@ -651,6 +663,41 @@ function filterAnimationCatalogueFromInput(input: HTMLInputElement): void {
     },
     query: input.value
   });
+}
+
+function selectAnimationCatalogueInspectorFromSelect(
+  select: HTMLSelectElement
+): void {
+  const view = select.closest<HTMLElement>(
+    "[data-kp-animation-catalogue-inspector-view]"
+  );
+  if (
+    view === null ||
+    (select.value !== "details" &&
+      select.value !== "parameters" &&
+      select.value !== "tuning")
+  ) return;
+  view.dataset["kpAnimationCatalogueInspectorView"] = select.value;
+  view.querySelectorAll<HTMLElement>(
+    "[data-kp-animation-catalogue-inspector-panel]"
+  ).forEach((panel) => {
+    panel.hidden = panel.dataset["kpAnimationCatalogueInspectorPanel"] !==
+      select.value;
+  });
+}
+
+function tuneAnimationCatalogueFromSelect(select: HTMLSelectElement): void {
+  const kind = select.dataset["kpAnimationCatalogueTuning"];
+  if (kind !== "gestalt-style" && kind !== "focus-experiment") return;
+  const player = appRoot.querySelector<HTMLElement>(
+    "[data-kp-animation-catalogue] [data-kp-editor-animation-player]"
+  );
+  if (player === null) return;
+  applyKpEditorAnimationPresentationTuning(
+    player,
+    kind,
+    select.value
+  );
 }
 
 function renderAnimationLibraryHostView(): void {

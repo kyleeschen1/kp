@@ -58,6 +58,10 @@ export const KP_EDITOR_ANIMATION_LOAD_EVENT =
 export const KP_EDITOR_RENDER_QUALITY_STORAGE_KEY =
   "kp.editor.animation.render-quality.v1";
 
+export type KpEditorAnimationPresentationTuningKind =
+  | "gestalt-style"
+  | "focus-experiment";
+
 const sessions = new WeakMap<HTMLElement, KpEditorAnimationPlaybackSession>();
 const authoringStates = new WeakMap<HTMLElement, KpEditorAnimationAuthoringState>();
 const gestaltStyles = new WeakMap<HTMLElement, KpGestaltStyleRef>();
@@ -145,6 +149,18 @@ export function dispatchKpEditorAnimationPlaybackAction(
   } else {
     cancelPlayerFrame(player);
   }
+}
+
+export function applyKpEditorAnimationPresentationTuning(
+  player: HTMLElement,
+  kind: KpEditorAnimationPresentationTuningKind,
+  value: string
+): void {
+  if (kind === "gestalt-style") {
+    selectGestaltStyle(player, value);
+    return;
+  }
+  selectFocusExperiment(player, value);
 }
 
 async function hydrateKpEditorAnimationPlayer(player: HTMLElement): Promise<void> {

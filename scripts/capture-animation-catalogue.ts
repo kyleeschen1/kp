@@ -120,6 +120,56 @@ try {
       `Catalogue expected 33 flat asset rows, found ${allResultCount}.`
     );
   }
+  const inspectorSelect = page.locator(
+    '[data-action="select-animation-catalogue-inspector"]'
+  );
+  await inspectorSelect.selectOption("parameters");
+  if (!await page.locator(
+    '[data-kp-animation-catalogue-inspector-panel="parameters"]'
+  ).isVisible()) {
+    throw new Error("Catalogue Parameters view did not open.");
+  }
+  await inspectorSelect.selectOption("tuning");
+  const styleTuning = page.locator(
+    '[data-kp-animation-catalogue-tuning="gestalt-style"]'
+  );
+  const focusTuning = page.locator(
+    '[data-kp-animation-catalogue-tuning="focus-experiment"]'
+  );
+  await styleTuning.selectOption("kp.restrained-editorial@1.0.0");
+  await focusTuning.selectOption("elevated");
+  await page.waitForFunction(() => {
+    const player = document.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue] [data-kp-editor-animation-player]"
+    );
+    return player?.dataset["kpEditorAnimationGestaltSelectedStyle"] ===
+      "kp.restrained-editorial@1.0.0" &&
+      player.dataset["kpEditorAnimationFocusExperiment"] === "elevated";
+  });
+  const capturedTuning = await page.evaluate(async () => {
+    const modulePath =
+      "/src/dev-review/animation-catalogue-capture-provider.ts";
+    const { createKpAnimationCatalogueCaptureProvider } = await import(
+      modulePath
+    );
+    return (await createKpAnimationCatalogueCaptureProvider(document).capture({
+      route: new URL(window.location.href),
+      capturedAtMs: performance.now(),
+      eventTarget: null
+    })).semantic.tuning;
+  });
+  if (
+    capturedTuning?.["gestalt-style"] !==
+      "kp.restrained-editorial@1.0.0" ||
+    capturedTuning["focus-experiment"] !== "elevated"
+  ) {
+    throw new Error(
+      `Catalogue capture lost tuning state: ${JSON.stringify(capturedTuning)}`
+    );
+  }
+  await styleTuning.selectOption("kp.organic-subtle@1.0.0");
+  await focusTuning.selectOption("flat");
+  await inspectorSelect.selectOption("details");
   const review = page.locator("[data-kp-dev-review-shell]");
   await review.waitFor();
   if (await review.getAttribute("data-kp-dev-review-placement") !==
