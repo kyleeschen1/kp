@@ -164,11 +164,18 @@
       "scope": "s07 capture and manifest contract",
       "checkedAt": "2026-08-01T16:17:50.465Z",
       "notes": "App, node, test, and domain TypeScript projects passed with geometry and midpoint evidence."
+    },
+    {
+      "command": "human review: catalogue UX exemplar",
+      "status": "passed",
+      "scope": "s08 required visual checkpoint",
+      "checkedAt": "2026-08-01T16:39:04.156Z",
+      "notes": "User explicitly approved the persistent in-shell catalogue interaction and solve-x centered compact-stage direction on 2026-08-01."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Catalogue UX exemplar is ready for human review with live solve-x, deterministic start and midpoint captures, quantified centered/compact geometry, in-shell history/focus/review preservation, and a documented rollback unit."
+    "summary": "Human approval promotes the catalogue interaction and solve-x visual direction for bounded cross-family pressure testing; exact solve-x dimensions remain exemplar-specific until structurally different surfaces prove them."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",

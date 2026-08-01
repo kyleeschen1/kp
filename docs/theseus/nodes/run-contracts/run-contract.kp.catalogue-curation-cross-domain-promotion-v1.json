@@ -101,8 +101,8 @@
     {
       "id": "s08",
       "title": "Human review catalogue UX",
-      "summary": "HUMAN_CHECKPOINT: awaiting explicit approval or requested adjustment of the live catalogue interaction and solve-x centered compact-stage direction before any cross-family generalization.",
-      "status": "in-progress"
+      "summary": "HUMAN APPROVED. The user explicitly approved the live persistent catalogue interaction and solve-x centered compact-stage direction. This authorizes s09 to generalize only surface-compatible geometry proven against structurally different callers; it does not authorize universal dimensions, runtime changes, or semantic/renderer/authoring changes.",
+      "status": "complete"
     },
     {
       "id": "s09",
