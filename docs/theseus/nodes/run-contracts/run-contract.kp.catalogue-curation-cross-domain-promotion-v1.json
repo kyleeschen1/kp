@@ -95,12 +95,14 @@
     {
       "id": "s07",
       "title": "Capture catalogue UX exemplar",
-      "status": "planned"
+      "summary": "Published deterministic catalogue UX checkpoint evidence. The stable browser command now measures solve-x centering, compact content and step height, and no-document-scroll control visibility; captures both start and 50 percent frames; retains the in-shell history, focus, review, and 33-host proofs; and emits all evidence in its manifest. Added a concise review note naming the live URL, acceptance evidence, preservation boundary, promotion meaning, and exact rollback units. Visual capture, typecheck, and diff hygiene pass.",
+      "status": "complete"
     },
     {
       "id": "s08",
       "title": "Human review catalogue UX",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: awaiting explicit approval or requested adjustment of the live catalogue interaction and solve-x centered compact-stage direction before any cross-family generalization.",
+      "status": "in-progress"
     },
     {
       "id": "s09",

@@ -67,6 +67,61 @@ try {
   if (visibleLargeHeadingCount !== 0) {
     throw new Error("Catalogue shell exposed a visible h1 or h2 heading.");
   }
+  const exemplarGeometry = await page.evaluate(() => {
+    const stage = document.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue-stage]"
+    );
+    if (stage === null) {
+      throw new Error("Solve-x exemplar stage is missing.");
+    }
+    const content = stage.querySelector<HTMLElement>(
+      ".editor-equation-stage__content"
+    );
+    const visualStage = stage.querySelector<HTMLElement>(
+      ".editor-animation-player__stage"
+    );
+    const controls = stage.querySelector<HTMLElement>(
+      ".editor-animation-player__controls"
+    );
+    const stepRects = [...stage.querySelectorAll<HTMLElement>(
+      "[data-kp-editor-solve-x-step]"
+    )].map((step) => step.getBoundingClientRect());
+    if (
+      visualStage === null || content === null || controls === null
+    ) {
+      throw new Error("Solve-x exemplar geometry targets are missing.");
+    }
+    const stageRect = visualStage.getBoundingClientRect();
+    const contentRect = content.getBoundingClientRect();
+    const controlsRect = controls.getBoundingClientRect();
+    return {
+      stage: { width: stageRect.width, height: stageRect.height },
+      content: { width: contentRect.width, height: contentRect.height },
+      centerDelta: {
+        x: contentRect.left + contentRect.width / 2 -
+          (stageRect.left + stageRect.width / 2),
+        y: contentRect.top + contentRect.height / 2 -
+          (stageRect.top + stageRect.height / 2)
+      },
+      stepCount: stepRects.length,
+      maxStepHeight: Math.max(0, ...stepRects.map((rect) => rect.height)),
+      controlsVisibleWithoutDocumentScroll:
+        controlsRect.bottom <= window.innerHeight + 1 &&
+        document.documentElement.scrollHeight <= window.innerHeight + 1
+    };
+  });
+  if (
+    Math.abs(exemplarGeometry.centerDelta.x) > 2 ||
+    Math.abs(exemplarGeometry.centerDelta.y) > 2 ||
+    exemplarGeometry.content.height > 220 ||
+    exemplarGeometry.stepCount !== 4 ||
+    exemplarGeometry.maxStepHeight > 34 ||
+    !exemplarGeometry.controlsVisibleWithoutDocumentScroll
+  ) {
+    throw new Error(
+      `Solve-x catalogue geometry drifted: ${JSON.stringify(exemplarGeometry)}`
+    );
+  }
   const detailsSectionOrder = await page.locator(
     "[data-kp-animation-catalogue-inspector=\"details\"] " +
     "[data-kp-animation-catalogue-details-section]"
@@ -311,6 +366,23 @@ try {
     fullPage: true,
     animations: "disabled"
   });
+  const midpointScreenshot = path.join(outputRoot, "desktop-midpoint.png");
+  const scrubber = page.locator(
+    "[data-kp-animation-catalogue-stage] " +
+    ".editor-animation-player__scrubber input"
+  );
+  await scrubber.fill("0.5");
+  await page.waitForFunction(() =>
+    document.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+    )?.dataset["kpEditorAnimationProgress"] === "0.5"
+  );
+  await page.screenshot({
+    path: midpointScreenshot,
+    fullPage: true,
+    animations: "disabled"
+  });
+  await scrubber.fill("0");
 
   const interaction = await captureCatalogueInteractionSelection(
     browser
@@ -326,6 +398,8 @@ try {
       url: url.toString(),
       viewport,
       screenshot: path.relative(process.cwd(), screenshot),
+      midpointScreenshot: path.relative(process.cwd(), midpointScreenshot),
+      exemplarGeometry,
       interaction
     }, null, 2)}\n`,
     "utf8"

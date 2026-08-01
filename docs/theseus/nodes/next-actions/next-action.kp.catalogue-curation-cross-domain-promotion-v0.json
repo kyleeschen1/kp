@@ -150,11 +150,25 @@
       "scope": "s06 solve-x-only visual exemplar smoke",
       "checkedAt": "2026-08-01T16:12:27.801Z",
       "notes": "Solve-x renders as one vertically and horizontally centered unit with a compact four-step row; in-shell interaction and all 33 hostability rows still pass."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "s07 deterministic catalogue UX exemplar capture",
+      "checkedAt": "2026-08-01T16:17:49.565Z",
+      "notes": "Start and midpoint captures recorded; centered content delta stayed under 0.01px, content height was 196.52px, four steps maxed at 26.46px, controls required no document scroll, interaction preservation and all 33 hosts passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s07 capture and manifest contract",
+      "checkedAt": "2026-08-01T16:17:50.465Z",
+      "notes": "App, node, test, and domain TypeScript projects passed with geometry and midpoint evidence."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Solve-x now provides the bounded catalogue geometry exemplar: its equation, explanation strip, and compact four-step sequence form one centered unit while the player controls remain fixed below. The treatment is selection-scoped pending human review."
+    "summary": "Catalogue UX exemplar is ready for human review with live solve-x, deterministic start and midpoint captures, quantified centered/compact geometry, in-shell history/focus/review preservation, and a documented rollback unit."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",
