@@ -1,12 +1,12 @@
 # Animation Catalogue Thread
 
-Status: active
+Status: active-supporting
 Last Updated: 2026-08-01
-Current Next Action: Improve the running catalogue with persistent in-shell
-asset selection and one solve-x centering/compact-step exemplar, then stop for
-human visual review. After approval, finish bounded catalogue curation and
-resume the Supply and demand equilibrium shift as the first unresolved domain
-promotion. Programming execution trace remains deferred.
+Current Next Action: Preserve the approved persistent shell and bounded
+surface-aware centering while the Supply and demand equilibrium shift becomes
+the active domain exemplar. Resume batched human asset review later without
+adding visible ontology or disposition machinery. Programming execution trace
+remains deferred.
 
 ## Goal
 
@@ -27,10 +27,13 @@ dashboard rows or a hand-maintained ontology. The asset is the selected thing;
 reader, lesson, card, editor, export, and review surfaces are related contexts
 shown under Details.
 
-The first reversible exemplar is `animation.linear-solve.solve-x`. It changes
-the surrounding shell while preserving the animation's semantics,
+The approved reversible exemplar is `animation.linear-solve.solve-x`. It
+changed the surrounding shell while preserving the animation's semantics,
 choreography, timing, player, direct seek/rewind, and accessibility behavior.
-The exemplar must stop for human desktop review before the shell is generalized.
+Human review approved persistent selection and the compact centered unit.
+Surface-compatible equation centering was then pressure-tested with the
+radical and exact-fraction callers; solve-x dimensions and step treatment stay
+selection-specific.
 
 The catalogue now reuses the development review pipeline for artifact ID,
 playhead, parameters, tuning, render ownership, viewport, build identity, and
@@ -44,13 +47,15 @@ disposition is still `Unreviewed`. The seam atlas suggests questions and an
 evidence-ranked programming tranche, but does not assign dispositions or
 authorize a port.
 
-The approved successor loop does not select that provisional programming
-tranche. It first removes full-document navigation between catalogue assets,
-centers and compacts solve-x as one presentation-only exemplar, and records
-only bounded curation evidence. It then resumes the stable domain order through
-economics and physics before consolidating caller-proven APIs or motifs. The
-Jacobian/Hessian comparison may be demoted as a diagnostic/retirement candidate
-without deleting its semantic fixture or conformance value.
+The successor loop removed full-document navigation between catalogue assets,
+approved and pressure-tested the solve-x presentation, and completed bounded
+curation without assigning human dispositions. It now resumes the stable
+domain order through economics and physics before consolidating caller-proven
+APIs or motifs. The Jacobian/Hessian comparison is recorded as a
+diagnostic/retirement candidate, but its semantic fixture and conformance value
+remain until real callers replace them. The provisional incorrect substitution
+remains an explicitly disclosed epistemic negative example pending human
+content review.
 
 ## Accepted Scope
 
@@ -102,6 +107,7 @@ without deleting its semantic fixture or conformance value.
 - `docs/project/reviews/2026-07-31-animation-catalogue-related-context-inventory.md`
 - `docs/project/reviews/2026-07-31-animation-catalogue-review-screenshot-closure.md`
 - `docs/project/reviews/2026-08-01-animation-catalogue-seam-atlas.md`
+- `docs/project/reviews/2026-08-01-animation-catalogue-bounded-curation.md`
 - `docs/project/reviews/2026-07-31-animation-catalogue-source-inventory.md`
 - `docs/project/decisions/2026-07-31-kp-animation-catalogue-first-simplification.md`
 - `docs/project/reviews/2026-07-31-animation-catalogue-simplification-next-step-review.md`

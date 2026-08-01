@@ -8,9 +8,10 @@ with source refs, verification, run-contract slices, and completion evidence.
 ## Current Queue
 
 1. Execute the approved catalogue curation and cross-domain promotion contract:
-   first perfect persistent catalogue switching and the solve-x compact-stage
-   exemplar, then deliver the bounded Supply and demand equilibrium shift and
-   constant-force work-energy exemplars behind their human checkpoints.
+   the persistent catalogue shell, solve-x compact-stage exemplar, and bounded
+   curation are complete; now deliver the exact Supply and demand equilibrium
+   shift and constant-force work-energy exemplars behind their human
+   checkpoints.
 2. After both synchronized-model callers are approved, declare stable,
    internal, and experimental API tiers and extract only shared invariants
    proven by those callers. Version a motif only when an intentional shared

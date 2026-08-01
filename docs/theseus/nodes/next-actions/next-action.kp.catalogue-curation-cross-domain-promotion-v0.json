@@ -185,11 +185,32 @@
       "scope": "s09 stable pressure capture",
       "checkedAt": "2026-08-01T16:45:34.694Z",
       "notes": "All app, node, test, and domain TypeScript projects passed after the generalized equation-only CSS and pressure manifest."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "project-memory",
+      "checkedAt": "2026-08-01T16:51:04.052Z",
+      "notes": "Promotion ledger, roadmap, queue, and active-thread direction align on rank 3 economics."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-01T16:51:05.060Z",
+      "notes": "Documentation and Theseus changes pass diff hygiene."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "project-memory",
+      "checkedAt": "2026-08-01T16:51:06.045Z",
+      "notes": "Workspace graph validates after the bounded curation record."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Approved centering is now a catalogue equation-surface rule with no universal width: equation content forms one centered grid and native math centers horizontally. Solve-x alone retains its 48rem width and compact sequence recipe; graph and diagram surfaces remain independent."
+    "summary": "Bounded curation is complete: all 33 concrete rows remain, human dispositions stay unassigned, Jacobian/Hessian is a diagnostic retirement candidate with explicit replacement gates, the provisional incorrect substitution remains disclosed negative evidence, and durable direction now advances to economics."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",

@@ -2,10 +2,10 @@
 
 Last Updated: 2026-08-01
 Status: active
-Active Thread: `threads/animation-catalogue.md`
+Active Thread: `threads/animation-library-promotion.md`
 Supporting Threads:
 - `threads/semantic-runtime.md`
-- `threads/animation-library-promotion.md`
+- `threads/animation-catalogue.md`
 - `threads/cross-domain-tutorial-platform.md`
 
 ## Current Source Of Truth
@@ -40,10 +40,11 @@ That loop is complete: the default shell is approved, all 33 concrete assets
 load, 31 paint natively, two expose the missing programming adapter, and none
 use an iframe. The approved successor in
 `reviews/2026-08-01-catalogue-curation-cross-domain-promotion-long-loop-proposal.md`
-first perfects persistent catalogue switching and one solve-x compact-stage
-exemplar. After its human checkpoint, KP performs bounded curation, resumes the
-Supply and demand equilibrium shift and constant-force work-energy promotions,
-and only then consolidates caller-proven APIs or motifs.
+has now delivered persistent catalogue switching, an approved solve-x
+compact-stage exemplar, compatible equation-surface centering, and bounded
+curation without inferred dispositions. KP now resumes the Supply and demand
+equilibrium shift and constant-force work-energy promotions, and only then
+consolidates caller-proven APIs or motifs.
 
 The symbolic manipulation family plan recorded in
 `decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`
@@ -165,11 +166,13 @@ one documentary workspace and one typed contributor-fusion motif across all
 three ordered positions.
 
 The release-baseline recovery and catalogue simplification matrices are green.
-The catalogue now hosts the concrete registry directly and has reduced the
-observed gap to one absent programming adapter shared by two rows. The next
-visual target is a presentation-only solve-x catalogue UX exemplar: persistent
-in-shell selection, surface-aware centering, and a compact visual step strip,
-with a mandatory human checkpoint before sibling generalization.
+The catalogue hosts the concrete registry directly, switches assets inside one
+persistent shell, and has reduced the observed gap to one absent programming
+adapter shared by two rows. Human review approved the solve-x compact centered
+stage; compatible equation centering passed radical and diagram pressure. The
+bounded curation record preserves all 33 rows, assigns no human dispositions,
+and treats Jacobian/Hessian as a diagnostic/retirement candidate whose unique
+semantic and conformance evidence must be replaced before deletion.
 
 The generator, editorial-text, API-tier, motif-versioning, and pruning
 recommendations are durable platform milestones in
@@ -438,19 +441,14 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Preserve the approved catalogue shell while making ordinary asset selection
-   replace only selected-asset ownership, not the document or surrounding
-   review workspace.
-2. Center and visually compact solve-x inside a bounded catalogue-only stage
-   treatment, then stop for human review before sibling generalization.
-3. Record bounded catalogue curation without inferring dispositions; treat the
-   Jacobian/Hessian comparison as a diagnostic/retirement candidate while
-   retaining its semantic and conformance evidence.
-4. Build and human-review one exact Supply and demand equilibrium shift, then
+1. Build and human-review one exact Supply and demand equilibrium shift, then
    one exact constant-force work-energy second caller, without domain engines.
-5. Classify API tiers and extract or version only seams proven by both callers;
+2. Classify API tiers and extract or version only seams proven by both callers;
    prune obsolete compatibility paths only beside their last-caller migration.
-6. Keep programming trace, publication, curriculum, public website, and broad
+3. Preserve the approved persistent catalogue shell and bounded curation;
+   resume human disposition review later in batches without visible ontology
+   or filter machinery.
+4. Keep programming trace, publication, curriculum, public website, and broad
    LLM editorial work outside this contract.
 
 ## Deferred

@@ -1,12 +1,11 @@
 # Animation Library Promotion Thread
 
-Status: active-supporting
+Status: active
 Last Updated: 2026-08-01
-Current Next Action: Preserve the stable promotion order while the approved
-catalogue UX and curation checkpoint completes, then build and human-review the
-Supply and demand equilibrium shift at rank 3, followed by constant-force
-work-energy at rank 4. Consolidate API tiers and motifs only after both callers
-provide evidence.
+Current Next Action: Build and human-review the bounded Supply and demand
+equilibrium shift at rank 3, followed by constant-force work-energy at rank 4.
+The catalogue UX and bounded curation checkpoint is complete. Consolidate API
+tiers and motifs only after both callers provide evidence.
 
 ## Goal
 
