@@ -1,7 +1,7 @@
 # Animation Catalogue Seam Atlas and Provisional Queue
 
 Date: 2026-08-01
-Status: morning human checkpoint after catalogue simplification slice s30
+Status: updated after approved economics and physics cross-domain exemplars
 
 ## Outcome
 
@@ -27,7 +27,7 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 | `animation.comparison.linear-solve-programming` | comparison | composite | Gap · programming adapter | 1 | Repair? |
 | `animation.derivative-rules.tangent-graph` | graph | graph | Painted · SVG graph | 3 | Keep? |
 | `animation.dot-projection.basic` | graph | graph | Painted · SVG graph | 3 | Keep? |
-| `animation.economics.supply-demand-equilibrium-shift` | economics | graph | Painted · exact SVG graph | 1 | Human exemplar review pending |
+| `animation.economics.supply-demand-equilibrium-shift` | economics | graph | Painted · exact SVG graph | 1 | Approved exemplar |
 | `animation.exact-fraction-quantity.third-plus-sixth` | exact-quantity | diagram | Painted · synchronized fraction | 1 | Keep? |
 | `animation.generated.add-zero` | generated-drafts | equation | Painted · KaTeX | 1 | Keep? |
 | `animation.generated.calculus.derivative.power-rule-x-cubed` | generated-problems | equation | Painted · KaTeX | 3 | Keep? |
@@ -54,7 +54,7 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 | `animation.operation-evaluation.one-plus-two` | operation-evaluation | equation | Painted · native KaTeX operation | 2 | Keep? |
 | `animation.operation-evaluation.three-sixths` | operation-evaluation | equation | Painted · native KaTeX operation | 1 | Keep? |
 | `animation.place-value-addition.278-plus-156` | place-value | diagram | Painted · synchronized place value | 2 | Keep? |
-| `animation.physics.constant-force-work-energy` | physics | graph | Painted · exact SVG graph/diagram | 1 | Human exemplar review pending |
+| `animation.physics.constant-force-work-energy` | physics | graph | Painted · exact SVG graph/diagram | 1 | Approved exemplar |
 | `animation.programming.add.execution-trace` | programming | programming | Gap · programming adapter | 1 | Repair? |
 | `animation.sample.fourier-transform-pair` | complex-katex | equation | Painted · KaTeX | 1 | Keep? |
 | `animation.sample.fundamental-theorem-calculus` | complex-katex | equation | Painted · KaTeX | 3 | Keep? |
@@ -134,3 +134,13 @@ The next session should browse the running catalogue and decide, in batches:
 The economics and physics rows were added afterward as bounded cross-domain
 exemplars. No public-site, LLM explanation, route deletion, universal renderer,
 canonical port, or human disposition assignment was performed.
+
+## Cross-Domain API Audit
+
+The two approved exemplars now justify promoting only reversible presentation
+progress, the dimensional-continuity graph profile, fixed moving-value display,
+and bounded integer query encoding. Their models, narratives, SVG compositions,
+and parameter-to-model construction remain domain-owned. The executable tier
+classification and pruning boundary are recorded in
+`src/architecture/cross-domain-animation-api-audit.ts` and
+`docs/project/reviews/2026-08-01-cross-domain-api-motif-audit.md`.

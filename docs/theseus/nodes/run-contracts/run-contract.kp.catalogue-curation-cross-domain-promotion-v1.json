@@ -538,7 +538,8 @@
     {
       "id": "s28",
       "title": "Audit and classify API tiers",
-      "status": "planned"
+      "summary": "Added a source-backed executable API-tier ledger and human-readable audit. It distinguishes platform, domain, experimental, compatibility, and retirement boundaries; proves four narrow shared contracts from economics and physics; and authorizes only the zero-caller rendering motif facades for deletion in s29.",
+      "status": "complete"
     },
     {
       "id": "s29",

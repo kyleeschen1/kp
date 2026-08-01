@@ -624,11 +624,42 @@
       "scope": "s27 canonical route, choreography, graph, diagram, equation, parameter, and catalogue presentation",
       "checkedAt": "2026-08-01T21:04:39.038Z",
       "notes": "User response: Looks great."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/cross-domain-animation-api-audit.test.ts tests/neutral-animation-motif-boundary.test.ts",
+      "status": "passed",
+      "scope": "s28 executable API tiers, two-caller promotion evidence, domain preservation, motif facade retirement boundary",
+      "checkedAt": "2026-08-01T21:13:57.496Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s28 typed audit ledger",
+      "checkedAt": "2026-08-01T21:13:58.460Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s28 architecture and compatibility classification",
+      "checkedAt": "2026-08-01T21:13:59.317Z"
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path src/architecture/cross-domain-animation-api-audit.ts --path tests/cross-domain-animation-api-audit.test.ts",
+      "status": "passed",
+      "scope": "s28 impact selection",
+      "checkedAt": "2026-08-01T21:14:00.170Z",
+      "notes": "Selector chose the broad release gate because the new audit path has no focused rule; focused audit, typecheck, architecture, and hygiene pass now, with full test/build reserved for s30."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s28 patch hygiene",
+      "checkedAt": "2026-08-01T21:14:01.224Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The economics and physics graph-led exemplars are now both human-approved. Proceeding to classify existing APIs and representations against evidence from the two callers; no universal renderer or motif is assumed."
+    "summary": "Classified 16 observed API and presentation seams. Four two-caller contracts qualify for bounded promotion: reversible projection progress, dimensional-continuity graph profile, dynamic exact display policy, and bounded integer query codec. Domain models/renderers/narratives remain local; four zero-caller rendering motif re-export facades qualify for retirement; Jacobian/Hessian remains presentation-only retirement candidate with semantic evidence preserved."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",
