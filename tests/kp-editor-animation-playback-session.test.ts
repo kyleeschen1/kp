@@ -5,7 +5,8 @@ import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import { createKpEditorAnimationLibrary } from "../src/editor/animation-library.ts";
 import {
   createKpEditorAnimationPlaybackSession,
-  reduceKpEditorAnimationPlaybackSession
+  reduceKpEditorAnimationPlaybackSession,
+  replaceKpEditorAnimationPlaybackSessionAsset
 } from "../src/editor/animation-playback-session.ts";
 
 function createSolveXSession() {
@@ -147,4 +148,39 @@ test("editor playback applies authoring tempo without changing the shared clock 
   assert.equal(faster.tempoMultiplier, 2);
   assert.equal(advanced.player.progress, 0.25);
   assert.equal(advanced.player.runtimeFrame.clock.progress, 0.25);
+});
+
+test("same-identity parameter replacement preserves playhead and pauses playback", () => {
+  const playing = reduceKpEditorAnimationPlaybackSession(
+    reduceKpEditorAnimationPlaybackSession(createSolveXSession(), {
+      type: "seek",
+      progress: 0.5
+    }),
+    { type: "play", nowMs: 1_000 }
+  );
+  const replacement = {
+    ...playing.animation,
+    title: "Parameterized same-identity solve-x"
+  };
+  const next = replaceKpEditorAnimationPlaybackSessionAsset({
+    session: playing,
+    animation: replacement
+  });
+
+  assert.equal(next.animation, replacement);
+  assert.equal(next.player.progress, 0.5);
+  assert.equal(next.player.direction, "forward");
+  assert.equal(next.player.playbackStatus, "paused");
+  assert.equal(next.lastTickMs, undefined);
+  assert.equal(
+    next.catalog.find(({ id }) => id === replacement.id),
+    replacement
+  );
+  assert.throws(
+    () => replaceKpEditorAnimationPlaybackSessionAsset({
+      session: playing,
+      animation: { ...replacement, id: "animation.other" }
+    }),
+    /Cannot replace/
+  );
 });

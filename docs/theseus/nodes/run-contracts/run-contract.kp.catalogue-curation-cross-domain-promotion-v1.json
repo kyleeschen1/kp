@@ -27,6 +27,43 @@
     "npm run visual:animation-library-hosts",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-economics-equilibrium-parameters.test.ts tests/kp-economics-equilibrium-animation-asset.test.ts tests/kp-economics-equilibrium-runtime-frame.test.ts tests/kp-economics-equilibrium-synchronized-view.test.ts tests/animation-catalogue-shell.test.ts tests/kp-editor-animation-playback-session.test.ts",
+      "status": "passed",
+      "scope": "s18 bounded parameter, exact model replacement, shell, and session contracts",
+      "checkedAt": "2026-08-01T17:29:12.618Z",
+      "notes": "24 focused checks pass: bounded/default URL state, parameterized exact model truth, one hidden control, asset closure, choreography, synchronized view, and playhead-preserving paused replacement."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18 repository type safety",
+      "checkedAt": "2026-08-01T17:29:13.689Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s18 architecture boundaries",
+      "checkedAt": "2026-08-01T17:29:14.605Z",
+      "notes": "Concept room, semantic reader, semantic animation, and operation presentation gates pass; no new compatibility exception."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s18 patch hygiene",
+      "checkedAt": "2026-08-01T17:29:15.555Z",
+      "notes": "Patch has no whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s18 durable control integrity",
+      "checkedAt": "2026-08-01T17:29:16.547Z",
+      "notes": "Workspace is valid with 854 nodes and 15681 events before final slice evidence."
+    }
+  ],
   "allowedWork": [
     "Catalogue in-shell selection, history restoration, focus and review preservation, surface-aware stage geometry, compact visual step layout, and bounded editorial curation.",
     "One exact supply-and-demand equilibrium asset and one exact constant-force work-energy asset using existing runtime, host, graph, equation, diagram, accessibility, and review seams.",
@@ -161,7 +198,8 @@
     {
       "id": "s18",
       "title": "Expose bounded economics parameters",
-      "status": "planned"
+      "summary": "Exposed one economics-only demand-intercept slider under the hidden Parameters panel, bounded to integer 15–20 with default 18 omitted from the URL. Parameter changes rebuild exact model truth, replace the same-identity asset without resetting its playhead, pause active playback, update graph/equations/narrative together, and enter Review evidence. Twenty-four focused checks plus typecheck, architecture, patch hygiene, and workspace validation pass.",
+      "status": "complete"
     },
     {
       "id": "s19",

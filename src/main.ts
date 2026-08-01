@@ -105,8 +105,18 @@ import {
   KP_EDITOR_ANIMATION_FRAME_EVENT,
   KP_EDITOR_ANIMATION_LOAD_EVENT,
   applyKpEditorAnimationPresentationTuning,
-  pauseKpEditorAnimationPlayers
+  pauseKpEditorAnimationPlayers,
+  replaceKpEditorAnimationPlaybackAsset
 } from "./editor/animation-player-controller.ts";
+import {
+  createKpEconomicsEquilibriumParameterState,
+  createParameterizedEconomicsEquilibriumAnimation,
+  readKpEconomicsEquilibriumParameters,
+  writeKpEconomicsEquilibriumParameters
+} from "./editor/economics-equilibrium-parameters.ts";
+import {
+  economicsEquilibriumAnimationId
+} from "./animation/economics-equilibrium-adapter.ts";
 import {
   installKpAnimationHostStatus,
   markKpAnimationHostFailed,
@@ -610,6 +620,9 @@ appRoot.addEventListener("input", (event) => {
     case "filter-animation-catalogue":
       filterAnimationCatalogueFromInput(event.target);
       return;
+    case "set-economics-demand-intercept":
+      updateEconomicsDemandInterceptFromInput(event.target);
+      return;
   }
 });
 
@@ -697,7 +710,8 @@ async function renderAnimationCatalogueView(): Promise<void> {
       health: prepared.health,
       entries: animationCatalogueProjection.entries,
       descriptor: prepared.descriptor,
-      player: prepared.player
+      player: prepared.player,
+      economicsParameters: prepared.economicsParameters
     });
     const shell = appRoot.querySelector<HTMLElement>(
       "[data-kp-animation-catalogue]"
@@ -708,7 +722,8 @@ async function renderAnimationCatalogueView(): Promise<void> {
     hydrateAnimationCatalogueSelection({
       shell,
       entry,
-      hostability: prepared.hostability
+      hostability: prepared.hostability,
+      animation: prepared.animation
     });
     void mountAnimationCatalogueReviewCapture(revision);
   } catch (error: unknown) {
@@ -783,6 +798,13 @@ async function renderAnimationCatalogueSelectionInShell(input: {
       prepared.health.status;
     input.shell.dataset["kpAnimationCatalogueHumanDisposition"] =
       input.entry.humanDisposition;
+    if (prepared.economicsParameters === undefined) {
+      delete input.shell.dataset["kpEconomicsDemandIntercept"];
+    } else {
+      input.shell.dataset["kpEconomicsDemandIntercept"] = String(
+        prepared.economicsParameters.demandInterceptAfter
+      );
+    }
     delete input.shell.dataset["kpAnimationCatalogueHostOutcome"];
     stage.removeAttribute("aria-busy");
     stage.dataset["kpAnimationCatalogueStageState"] = "selected";
@@ -793,7 +815,8 @@ async function renderAnimationCatalogueSelectionInShell(input: {
     });
     inspector.innerHTML = renderKpAnimationCatalogueInspector({
       entry: input.entry,
-      health: prepared.health
+      health: prepared.health,
+      economicsParameters: prepared.economicsParameters
     });
     const nextInspectorSelect = inspector.querySelector<HTMLSelectElement>(
       '[data-action="select-animation-catalogue-inspector"]'
@@ -818,7 +841,8 @@ async function renderAnimationCatalogueSelectionInShell(input: {
     hydrateAnimationCatalogueSelection({
       shell: input.shell,
       entry: input.entry,
-      hostability: prepared.hostability
+      hostability: prepared.hostability,
+      animation: prepared.animation
     });
     restoreAnimationCatalogueFocus(input.shell, focusSnapshot);
     if (disposeAnimationDevelopmentReview === undefined) {
@@ -921,10 +945,23 @@ async function prepareAnimationCatalogueSelection(input: {
       `${input.entry.primaryDescriptorId}.`
     );
   }
+  const economicsParameters = input.entry.animationId ===
+      economicsEquilibriumAnimationId
+    ? readKpEconomicsEquilibriumParameters(window.location.search)
+    : undefined;
+  const animation = economicsParameters === undefined
+    ? loaded.animation
+    : createParameterizedEconomicsEquilibriumAnimation(economicsParameters)
+        .animation;
+  const catalog = loaded.catalog.some(({ id }) => id === animation.id)
+    ? loaded.catalog.map((candidate) =>
+        candidate.id === animation.id ? animation : candidate
+      )
+    : [...loaded.catalog, animation];
   const player = createKpEditorAnimationPlayerState({
     descriptor,
-    animation: loaded.animation,
-    catalog: loaded.catalog,
+    animation,
+    catalog,
     progress: input.playhead ?? 0
   });
   const hostability = inspectKpAnimationCatalogueSurfaceHostability({
@@ -932,8 +969,10 @@ async function prepareAnimationCatalogueSelection(input: {
     registry: kpEditorAnimationSurfaceAdapterRegistry
   });
   return {
+    animation,
     descriptor,
     player,
+    economicsParameters,
     hostability,
     health: deriveKpAnimationCatalogueHealth({
       hostability,
@@ -948,6 +987,9 @@ function hydrateAnimationCatalogueSelection(input: {
   readonly hostability: ReturnType<
     typeof inspectKpAnimationCatalogueSurfaceHostability
   >;
+  readonly animation: Awaited<
+    ReturnType<typeof loadKpAnimationAsset>
+  >["animation"];
 }): void {
   disposeAnimationCatalogueHostEvidenceObserver();
   // Surface listeners attach first so the controller's initial runtime frame
@@ -1014,7 +1056,9 @@ function hydrateAnimationCatalogueSelection(input: {
     { once: true }
   );
   disposeAnimationCatalogueHostEvidence = dispose;
-  hydrateKpEditorAnimationPlayers(input.shell);
+  hydrateKpEditorAnimationPlayers(input.shell, {
+    animationOverrides: [input.animation]
+  });
 }
 
 function disposeAnimationCatalogueHostEvidenceObserver(): void {
@@ -1162,6 +1206,44 @@ function tuneAnimationCatalogueFromSelect(select: HTMLSelectElement): void {
     player,
     kind,
     select.value
+  );
+}
+
+function updateEconomicsDemandInterceptFromInput(
+  input: HTMLInputElement
+): void {
+  const shell = input.closest<HTMLElement>("[data-kp-animation-catalogue]");
+  if (
+    shell?.dataset["kpAnimationCatalogueSelection"] !==
+      economicsEquilibriumAnimationId
+  ) return;
+  const player = shell.querySelector<HTMLElement>(
+    "[data-kp-editor-animation-player]"
+  );
+  if (player === null) return;
+
+  const state = createKpEconomicsEquilibriumParameterState(input.value);
+  const parameterized =
+    createParameterizedEconomicsEquilibriumAnimation(state);
+  replaceKpEditorAnimationPlaybackAsset(player, parameterized.animation);
+  input.value = String(state.demandInterceptAfter);
+  shell.dataset["kpEconomicsDemandIntercept"] = String(
+    state.demandInterceptAfter
+  );
+  input.closest("[data-kp-economics-parameters]")
+    ?.querySelector<HTMLOutputElement>(
+      "[data-kp-economics-demand-intercept-output]"
+    )
+    ?.replaceChildren(document.createTextNode(String(state.demandInterceptAfter)));
+
+  const search = writeKpEconomicsEquilibriumParameters({
+    search: window.location.search,
+    state
+  });
+  window.history.replaceState(
+    window.history.state,
+    "",
+    `${window.location.pathname}${search}${window.location.hash}`
   );
 }
 

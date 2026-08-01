@@ -23,6 +23,13 @@ import {
   kpOrganicSubtleStyleRef,
   kpRestrainedEditorialStyleRef
 } from "../animation/gestalt-base-styles.ts";
+import {
+  kpEconomicsDemandInterceptParameter,
+  type KpEconomicsEquilibriumParameterState
+} from "./economics-equilibrium-parameters.ts";
+import {
+  economicsEquilibriumAnimationId
+} from "../animation/economics-equilibrium-adapter.ts";
 
 export function renderKpAnimationCatalogueShell(input: {
   readonly entry: KpAnimationCatalogueEntry;
@@ -30,6 +37,9 @@ export function renderKpAnimationCatalogueShell(input: {
   readonly entries: readonly KpAnimationCatalogueEntry[];
   readonly descriptor: KpEditorAnimationDescriptor;
   readonly player: KpEditorAnimationPlayerState;
+  readonly economicsParameters?:
+    | KpEconomicsEquilibriumParameterState
+    | undefined;
 }): string {
   if (input.entry.animationId !== input.health.animationId) {
     throw new Error(
@@ -48,7 +58,11 @@ export function renderKpAnimationCatalogueShell(input: {
   }
   const { entry, health } = input;
 
-  return `<main class="kp-animation-catalogue-shell" data-kp-animation-catalogue data-kp-animation-catalogue-state="selected" data-kp-animation-catalogue-selection="${escapeHtml(entry.animationId)}" data-kp-animation-catalogue-selected-health="${health.status}" data-kp-animation-catalogue-human-disposition="${entry.humanDisposition}" aria-labelledby="kp-animation-catalogue-title">
+  const economicsParameterData = input.economicsParameters === undefined
+    ? ""
+    : ` data-kp-economics-demand-intercept="${input.economicsParameters.demandInterceptAfter}"`;
+
+  return `<main class="kp-animation-catalogue-shell" data-kp-animation-catalogue data-kp-animation-catalogue-state="selected" data-kp-animation-catalogue-selection="${escapeHtml(entry.animationId)}" data-kp-animation-catalogue-selected-health="${health.status}" data-kp-animation-catalogue-human-disposition="${entry.humanDisposition}"${economicsParameterData} aria-labelledby="kp-animation-catalogue-title">
     <h1 id="kp-animation-catalogue-title" class="kp-animation-catalogue-shell__visually-hidden">Animation catalogue</h1>
     <aside id="kp-animation-catalogue-rail" class="kp-animation-catalogue-shell__rail" data-kp-animation-catalogue-region="rail" aria-label="Artifact catalogue">
       <div class="kp-animation-catalogue-shell__rail-results">
@@ -76,7 +90,11 @@ export function renderKpAnimationCatalogueShell(input: {
       </div>
     </section>
     <aside id="kp-animation-catalogue-inspector" class="kp-animation-catalogue-shell__inspector" data-kp-animation-catalogue-region="inspector" aria-label="Artifact inspector">
-      ${renderKpAnimationCatalogueInspector({ entry, health })}
+      ${renderKpAnimationCatalogueInspector({
+        entry,
+        health,
+        economicsParameters: input.economicsParameters
+      })}
     </aside>
   </main>`;
 }
@@ -124,6 +142,9 @@ export function applyKpAnimationCatalogueObservedHealth(input: {
 export function renderKpAnimationCatalogueInspector(input: {
   readonly entry: KpAnimationCatalogueEntry;
   readonly health: KpAnimationCatalogueHealth;
+  readonly economicsParameters?:
+    | KpEconomicsEquilibriumParameterState
+    | undefined;
 }): string {
   return `<div class="kp-animation-catalogue-shell__inspector-view" data-kp-animation-catalogue-inspector-view="details">
     <label class="kp-animation-catalogue-shell__inspector-switcher">Show
@@ -137,8 +158,7 @@ export function renderKpAnimationCatalogueInspector(input: {
       ${renderKpAnimationCatalogueDetails(input)}
     </div>
     <section data-kp-animation-catalogue-inspector-panel="parameters" hidden>
-      <h3>Parameters</h3>
-      <p>This asset has no exposed semantic parameters. Its semantics remain authored artifact state.</p>
+      ${renderKpAnimationCatalogueParameters(input)}
     </section>
     <section data-kp-animation-catalogue-inspector-panel="tuning" hidden>
       <h3>Tuning</h3>
@@ -160,6 +180,30 @@ export function renderKpAnimationCatalogueInspector(input: {
       </div>
     </section>
   </div>`;
+}
+
+export function renderKpAnimationCatalogueParameters(input: {
+  readonly entry: KpAnimationCatalogueEntry;
+  readonly economicsParameters?:
+    | KpEconomicsEquilibriumParameterState
+    | undefined;
+}): string {
+  if (input.entry.animationId !== economicsEquilibriumAnimationId) {
+    return `<h3>Parameters</h3>
+      <p>This asset has no exposed semantic parameters. Its semantics remain authored artifact state.</p>`;
+  }
+  const state = input.economicsParameters ?? {
+    schemaVersion: "kp.economics-equilibrium-parameters.v1" as const,
+    demandInterceptAfter: kpEconomicsDemandInterceptParameter.defaultValue
+  };
+  return `<h3>Parameters</h3>
+    <p>Change the new demand intercept; supply and the initial demand state remain fixed.</p>
+    <div class="kp-animation-catalogue-shell__parameter-controls" data-kp-economics-parameters>
+      <label>New demand intercept
+        <input type="range" min="${kpEconomicsDemandInterceptParameter.minimum}" max="${kpEconomicsDemandInterceptParameter.maximum}" step="${kpEconomicsDemandInterceptParameter.step}" value="${state.demandInterceptAfter}" data-action="set-economics-demand-intercept" aria-label="Set new demand price intercept" />
+        <output data-kp-economics-demand-intercept-output>${state.demandInterceptAfter}</output>
+      </label>
+    </div>`;
 }
 
 export function renderKpAnimationCatalogueDetails(input: {

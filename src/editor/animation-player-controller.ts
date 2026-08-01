@@ -5,6 +5,7 @@ import {
 } from "./animation-library.ts";
 import {
   createKpEditorAnimationPlaybackSession,
+  replaceKpEditorAnimationPlaybackSessionAsset,
   reduceKpEditorAnimationPlaybackSession,
   type KpEditorAnimationPlaybackAction,
   type KpEditorAnimationPlaybackSession
@@ -73,10 +74,19 @@ const inspectionCadenceStates = new WeakMap<
   KpEditorAnimationDiagnosticsCadenceState
 >();
 
-export function hydrateKpEditorAnimationPlayers(root: ParentNode): void {
+export function hydrateKpEditorAnimationPlayers(
+  root: ParentNode,
+  options: {
+    readonly animationOverrides?: readonly KpAnimationAsset[] | undefined;
+  } = {}
+): void {
   root.querySelectorAll<HTMLElement>("[data-kp-editor-animation-player]")
     .forEach((player) => {
-      void hydrateKpEditorAnimationPlayer(player).catch((error: unknown) => {
+      const animationId = player.dataset["kpEditorAnimationId"];
+      const override = options.animationOverrides?.find(
+        ({ id }) => id === animationId
+      );
+      void hydrateKpEditorAnimationPlayer(player, override).catch((error: unknown) => {
         markPlayerLoadFailure(player, error);
       });
     });
@@ -151,6 +161,24 @@ export function dispatchKpEditorAnimationPlaybackAction(
   }
 }
 
+export function replaceKpEditorAnimationPlaybackAsset(
+  player: HTMLElement,
+  animation: KpAnimationAsset
+): void {
+  const session = sessions.get(player);
+  if (session === undefined) {
+    throw new Error("Cannot replace an animation before its player is hydrated.");
+  }
+  const next = replaceKpEditorAnimationPlaybackSessionAsset({
+    session,
+    animation
+  });
+  sessions.set(player, next);
+  cancelPlayerFrame(player);
+  syncLoadedDiagnostics(player, next.animation, next.catalog);
+  syncPlayerDom(player, next);
+}
+
 export function applyKpEditorAnimationPresentationTuning(
   player: HTMLElement,
   kind: KpEditorAnimationPresentationTuningKind,
@@ -163,7 +191,10 @@ export function applyKpEditorAnimationPresentationTuning(
   selectFocusExperiment(player, value);
 }
 
-async function hydrateKpEditorAnimationPlayer(player: HTMLElement): Promise<void> {
+async function hydrateKpEditorAnimationPlayer(
+  player: HTMLElement,
+  animationOverride?: KpAnimationAsset | undefined
+): Promise<void> {
   if (player.dataset["kpEditorAnimationHydrated"] === "true" ||
     player.dataset["kpEditorAnimationLoading"] === "true") return;
   player.dataset["kpEditorAnimationLoading"] = "true";
@@ -178,7 +209,19 @@ async function hydrateKpEditorAnimationPlayer(player: HTMLElement): Promise<void
       `Cannot hydrate editor animation player for ${descriptorId ?? "unknown descriptor"} / ${animationId ?? "unknown animation"}.`
     );
   }
-  const { animation, catalog, packId } = await loadKpAnimationAsset(animationId);
+  const loaded = await loadKpAnimationAsset(animationId);
+  const animation = animationOverride ?? loaded.animation;
+  if (animation.id !== animationId) {
+    throw new Error(
+      `Animation override ${animation.id} does not match player ${animationId}.`
+    );
+  }
+  const catalog = loaded.catalog.some(({ id }) => id === animation.id)
+    ? loaded.catalog.map((candidate) =>
+        candidate.id === animation.id ? animation : candidate
+      )
+    : [...loaded.catalog, animation];
+  const { packId } = loaded;
   if (!player.isConnected || player.dataset["kpEditorAnimationDisposed"] === "true") {
     return;
   }

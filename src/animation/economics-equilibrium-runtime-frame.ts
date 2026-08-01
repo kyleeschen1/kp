@@ -68,7 +68,7 @@ export function sampleKpEconomicsEquilibriumRuntimeFrame(input: {
     input.runtimeFrame.clock.direction === "forward" ? progress : 1 - progress
   );
   const choreography = sampleChoreography(presentationProgress);
-  const model = input.model ?? createKpSupplyDemandEquilibriumModel();
+  const model = input.model ?? economicsModelFromAnimation(input.animation);
   const semanticFrame = sampleKpSupplyDemandEquilibriumFrame({
     model,
     progress: decimalExact(choreography.modelProgress)
@@ -94,6 +94,31 @@ export function sampleKpEconomicsEquilibriumRuntimeFrame(input: {
     }),
     semanticFrame
   });
+}
+
+function economicsModelFromAnimation(
+  animation: KpAnimationAsset
+): KpSupplyDemandEquilibriumModelV1 {
+  const target = animation.renderTargets.find(
+    ({ metadata }) =>
+      metadata?.["graphMotionKind"] ===
+      "economics-supply-demand-equilibrium-shift"
+  );
+  const modelObjectId = target?.metadata?.["modelObjectId"];
+  const object = animation.bundle.objects.find(
+    ({ id }) => id === modelObjectId
+  );
+  const value = object?.value as
+    | Partial<KpSupplyDemandEquilibriumModelV1>
+    | undefined;
+  if (value?.input === undefined) {
+    throw new Error(
+      `Animation ${animation.id} does not contain its exact economics model.`
+    );
+  }
+  // Reconstructing validates parameterized asset state instead of trusting a
+  // renderer-side cache or mutable object payload.
+  return createKpSupplyDemandEquilibriumModel(value.input);
 }
 
 function sampleChoreography(progress: number): {

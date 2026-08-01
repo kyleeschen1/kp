@@ -69,6 +69,15 @@ export function createEconomicsEquilibriumAnimationAsset(
   const graphObject = semanticObject(graph, [
     { id: `${graphId}.viewport`, kind: "viewport", label: "market graph" }
   ]);
+  const modelObject = createKpSemanticAssetObject({
+    id: model.id,
+    objectType: "economics-supply-demand-model",
+    title: "Exact supply-demand model",
+    value: model,
+    selectors: [
+      { id: `${model.id}.model`, kind: "domain-model", label: "Exact market model" }
+    ]
+  });
   const quantityAxisObject = semanticObject(quantityAxis, [
     { id: `${quantityAxis.id}.axis`, kind: "quantity-axis", label: "Quantity Q" }
   ]);
@@ -156,6 +165,7 @@ export function createEconomicsEquilibriumAnimationAsset(
     model.states.after
   );
   const objects = [
+    modelObject,
     graphObject,
     quantityAxisObject,
     priceAxisObject,
@@ -174,6 +184,7 @@ export function createEconomicsEquilibriumAnimationAsset(
     title: "Increase demand and move market equilibrium",
     sourceObjectIds: [
       graphId,
+      model.id,
       quantityAxis.id,
       priceAxis.id,
       model.input.supply.id,
@@ -185,6 +196,7 @@ export function createEconomicsEquilibriumAnimationAsset(
     ],
     targetObjectIds: [
       graphId,
+      model.id,
       quantityAxis.id,
       priceAxis.id,
       model.input.supply.id,
@@ -197,6 +209,7 @@ export function createEconomicsEquilibriumAnimationAsset(
     preserves: ["identity", "role", "structure"],
     correspondence: [
       persistent(`${graphId}.viewport`),
+      persistent(`${model.id}.model`, ["identity", "value", "structure"]),
       persistent(`${quantityAxis.id}.axis`),
       persistent(`${priceAxis.id}.axis`),
       persistent(`${model.input.supply.id}.body`, ["identity", "value", "presentation"]),
@@ -296,6 +309,7 @@ export function createEconomicsEquilibriumAnimationAsset(
         metadata: {
           graphMotionKind: "economics-supply-demand-equilibrium-shift",
           graphId,
+          modelObjectId: model.id,
           supplyCurveId: model.input.supply.id,
           demandCurveId: model.input.demand.id,
           equilibriumId: model.input.equilibriumId,
@@ -390,4 +404,3 @@ function exactNumber(value: {
 }): number {
   return Number(value.numerator) / Number(value.denominator);
 }
-

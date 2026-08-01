@@ -21,6 +21,10 @@ test("economics equilibrium asset defines persistent graph surface semantics", (
   assert.deepEqual(
     animation.bundle.objects.map(({ id, objectType }) => [id, objectType]),
     [
+      [
+        "model.economics.supply-demand.demand-intercept-shift",
+        "economics-supply-demand-model"
+      ],
       ["graph.economics.supply-demand", "graph-2d"],
       ["axis.economics.quantity", "axis-2d"],
       ["axis.economics.price", "axis-2d"],
@@ -37,6 +41,7 @@ test("economics equilibrium asset defines persistent graph surface semantics", (
   assert.deepEqual(target?.metadata, {
     graphMotionKind: "economics-supply-demand-equilibrium-shift",
     graphId: "graph.economics.supply-demand",
+    modelObjectId: "model.economics.supply-demand.demand-intercept-shift",
     supplyCurveId: "curve.economics.supply",
     demandCurveId: "curve.economics.demand",
     equilibriumId: "equilibrium.economics.supply-demand",
@@ -100,4 +105,3 @@ test("economics graph asset closes semantic and runtime references", () => {
     )
   );
 });
-

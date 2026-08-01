@@ -22,10 +22,23 @@ export function createKpAnimationCatalogueCaptureProvider(
       if (player === null) {
         throw new Error("Animation catalogue tuning capture requires a player");
       }
+      const shell = player.closest<HTMLElement>(
+        "[data-kp-animation-catalogue]"
+      );
+      const demandIntercept =
+        shell?.dataset["kpEconomicsDemandIntercept"];
       return {
         ...evidence,
         semantic: {
           ...evidence.semantic,
+          ...(demandIntercept === undefined
+            ? {}
+            : {
+                parameters: {
+                  ...(evidence.semantic.parameters ?? {}),
+                  "demand-price-intercept": demandIntercept
+                }
+              }),
           tuning: {
             "gestalt-style": requiredDataset(
               player,

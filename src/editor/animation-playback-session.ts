@@ -60,6 +60,42 @@ export function createKpEditorAnimationPlaybackSession(input: {
   };
 }
 
+export function replaceKpEditorAnimationPlaybackSessionAsset(input: {
+  readonly session: KpEditorAnimationPlaybackSession;
+  readonly animation: KpAnimationAsset;
+}): KpEditorAnimationPlaybackSession {
+  if (input.animation.id !== input.session.animation.id) {
+    throw new Error(
+      `Cannot replace ${input.session.animation.id} with ${input.animation.id}.`
+    );
+  }
+  const catalog = input.session.catalog.some(
+    ({ id }) => id === input.animation.id
+  )
+    ? input.session.catalog.map((candidate) =>
+        candidate.id === input.animation.id ? input.animation : candidate
+      )
+    : [...input.session.catalog, input.animation];
+  const playbackStatus = input.session.player.playbackStatus === "playing"
+    ? "paused"
+    : input.session.player.playbackStatus;
+
+  return {
+    ...input.session,
+    animation: input.animation,
+    catalog,
+    lastTickMs: undefined,
+    player: createKpEditorAnimationPlayerState({
+      descriptor: input.session.descriptor,
+      animation: input.animation,
+      catalog,
+      playbackStatus,
+      direction: input.session.player.direction,
+      progress: input.session.player.progress
+    })
+  };
+}
+
 export function reduceKpEditorAnimationPlaybackSession(
   session: KpEditorAnimationPlaybackSession,
   action: KpEditorAnimationPlaybackAction
