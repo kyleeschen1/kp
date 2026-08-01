@@ -66,7 +66,10 @@ export const kpEditorGraphSvgViewportAdapter: KpEditorAnimationSurfaceAdapter = 
       svg.dataset["kpEditorGraphProgress"] = String(state.progress);
       svg.dataset["kpEditorGraphDirection"] = state.direction;
       const content = svg.querySelector<SVGGElement>("[data-kp-editor-graph-content]");
-      if (content !== null) content.innerHTML = renderRuntimeContent(animation, state, model);
+      if (content !== null) {
+        content.innerHTML = renderRuntimeContent(animation, state, model);
+        syncGraphAccessibility(svg, content);
+      }
     }
   }
 };
@@ -75,6 +78,22 @@ export function registerKpEditorGraphSvgViewportAdapter(): () => void {
   return kpEditorAnimationSurfaceAdapterRegistry.register(
     kpEditorGraphSvgViewportAdapter
   );
+}
+
+function syncGraphAccessibility(
+  svg: SVGSVGElement,
+  content: SVGGElement
+): void {
+  const description = content.querySelector<SVGDescElement>(
+    "[data-kp-economics-nonvisual-summary]"
+  );
+  if (description?.id === undefined || description.id.length === 0) {
+    svg.removeAttribute("aria-describedby");
+    return;
+  }
+  // The graph stays one image in the accessibility tree while its exact
+  // frame summary follows direct seek, rewind, and parameter replacement.
+  svg.setAttribute("aria-describedby", description.id);
 }
 
 function renderViewport(

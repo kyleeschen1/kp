@@ -151,7 +151,7 @@ function renderSynchronizedView(
   view: KpEconomicsEquilibriumSynchronizedView,
   viewport: KpEconomicsGraphViewport
 ): string {
-  return `<desc data-kp-economics-nonvisual-summary>${escapeHtml(view.nonvisualSummary)}</desc>
+  return `<desc id="kp-economics-graph-description" data-kp-economics-nonvisual-summary>${escapeHtml(view.nonvisualSummary)}</desc>
     <foreignObject class="editor-graph-stage__economics-explanation-foreign-object" x="${Math.max(118, viewport.width / 2 - 156)}" y="16" width="312" height="116">
       <div xmlns="http://www.w3.org/1999/xhtml" class="editor-graph-stage__economics-explanation" data-kp-economics-synchronized-view data-kp-economics-narrative-id="${view.narrative.id}" data-kp-economics-claim-ids="${view.narrative.claimIds.join(" ")}">
         <div class="editor-graph-stage__economics-equations">

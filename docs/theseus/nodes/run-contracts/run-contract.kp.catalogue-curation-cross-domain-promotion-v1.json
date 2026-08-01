@@ -111,6 +111,62 @@
       "scope": "s19 durable control integrity",
       "checkedAt": "2026-08-01T17:37:49.750Z",
       "notes": "Workspace is valid with 854 nodes and 15688 events before final slice evidence."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-economics-equilibrium-runtime-frame.test.ts tests/kp-economics-equilibrium-synchronized-view.test.ts tests/kp-economics-equilibrium-parameters.test.ts tests/kp-editor-graph-svg-viewport.test.ts",
+      "status": "passed",
+      "scope": "economics exact runtime and accessibility",
+      "checkedAt": "2026-08-01T17:56:29.588Z",
+      "notes": "12 tests pass; includes 303 exact forward/rewind pairs across bounded demand targets 15, 18, and 20."
+    },
+    {
+      "command": "npm run test:browser:economics-equilibrium",
+      "status": "passed",
+      "scope": "economics catalogue browser behavior",
+      "checkedAt": "2026-08-01T17:56:30.654Z",
+      "notes": "Chromium, Firefox, and WebKit pass direct seek, rewind, parameter replacement, URL/history, no-reload navigation, accessibility summary, and Review capture."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "repository regression",
+      "checkedAt": "2026-08-01T17:56:31.601Z",
+      "notes": "3229 tests pass after updating catalogue-count and output-encoding inventory ratchets for the new 34th row."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "static types",
+      "checkedAt": "2026-08-01T17:56:32.538Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production bundle",
+      "checkedAt": "2026-08-01T17:56:33.470Z",
+      "notes": "Production build passes and emits the economics adapter as a separate lazy chunk."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "review boundary",
+      "checkedAt": "2026-08-01T17:56:34.410Z",
+      "notes": "Production review-marker closure passes: 262 files checked, 7 intentional markers."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "patch hygiene",
+      "checkedAt": "2026-08-01T17:56:35.348Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "durable project state",
+      "checkedAt": "2026-08-01T17:56:36.286Z",
+      "notes": "Workspace valid with 854 nodes and 15697 events before slice completion evidence."
     }
   ],
   "allowedWork": [
@@ -259,7 +315,8 @@
     {
       "id": "s20",
       "title": "Prove economics accessibility seek rewind",
-      "status": "planned"
+      "summary": "Proved exact accessibility and reversibility across 303 forward/rewind pairs and all three bounded demand targets, plus Chromium, Firefox, and WebKit in-shell direct seek, rewind, custom parameter, URL history, no-reload navigation, and Review capture. Fixed narrative target derivation; the SVG graph now exposes its dynamic exact description through aria-describedby. All 3229 repository tests, types, architecture, dev-review closure, production build, patch hygiene, and workspace validation pass.",
+      "status": "complete"
     },
     {
       "id": "s21",

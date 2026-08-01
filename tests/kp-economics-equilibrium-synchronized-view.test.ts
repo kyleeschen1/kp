@@ -15,6 +15,10 @@ import {
   createKpEditorGraphSvgViewportModel
 } from "../src/editor/graph-svg-viewport.ts";
 import {
+  createKpEconomicsEquilibriumParameterState,
+  createParameterizedEconomicsEquilibriumAnimation
+} from "../src/editor/economics-equilibrium-parameters.ts";
+import {
   renderKpEconomicsEquilibriumRuntimeContent
 } from "../src/rendering/economics-equilibrium-svg.ts";
 
@@ -84,3 +88,24 @@ test("runtime SVG paints inline KaTeX and matching narrative evidence", () => {
   assert.match(html, /data-kp-economics-nonvisual-summary/);
 });
 
+test("parameterized narrative speaks the authored target rather than a default", () => {
+  const animation = createParameterizedEconomicsEquilibriumAnimation(
+    createKpEconomicsEquilibriumParameterState(20)
+  ).animation;
+  const runtime = sampleKpEconomicsEquilibriumRuntimeFrame({
+    animation,
+    runtimeFrame: sampleKpAnimationRuntimeFrame({
+      animation,
+      progress: 0.44
+    })
+  });
+  const view = createKpEconomicsEquilibriumSynchronizedView(runtime);
+
+  assert.match(view.narrative.text, /rises toward 20/);
+  assert.doesNotMatch(view.narrative.text, /toward 18/);
+  assert.match(view.nonvisualSummary, /Demand is P equals 17 minus Q/);
+  assert.match(
+    view.nonvisualSummary,
+    /current equilibrium is quantity 15 over 2 and price 19 over 2/
+  );
+});

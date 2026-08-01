@@ -1,0 +1,164 @@
+import { expect, test } from "@playwright/test";
+
+const animationId =
+  "animation.economics.supply-demand-equilibrium-shift";
+const solveXId = "animation.linear-solve.solve-x";
+
+test("economics catalogue preserves exact accessible seek, rewind, parameters, Review, and history", async ({
+  page
+}) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await page.goto(`/?artifact=${animationId}`);
+
+  const shell = page.locator("[data-kp-animation-catalogue]");
+  const player = shell.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const graphSlot = player.locator(
+    '[data-kp-editor-animation-surface-slot="graph"]'
+  );
+  const graph = graphSlot.locator("[data-kp-editor-graph-svg]");
+  const scrubber = player.locator(
+    '[data-action="seek-editor-animation"]'
+  );
+
+  await expect(shell).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    animationId
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-pack-id",
+    "economics"
+  );
+  await expect(graphSlot).toHaveAttribute(
+    "data-kp-editor-animation-adapter-id",
+    "editor-animation-surface.graph.svg"
+  );
+  await expect(graph).toHaveAttribute(
+    "aria-describedby",
+    "kp-economics-graph-description"
+  );
+  await expect(graph.locator("#kp-economics-graph-description"))
+    .toContainText("current equilibrium is quantity 6 and price 8");
+
+  await page.evaluate(() => {
+    (window as typeof window & { __kpCatalogueDocumentToken?: string })
+      .__kpCatalogueDocumentToken = "economics-persistent-shell";
+  });
+
+  await scrubber.fill("0.44");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "0.44"
+  );
+  await expect(graph.locator("[data-kp-economics-equilibrium-view]"))
+    .toHaveAttribute("data-kp-economics-choreography-stage", "shift");
+  await expect(graph.locator("[data-kp-economics-demand-line]"))
+    .toHaveAttribute("data-kp-economics-equation", "P=16-Q");
+  await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
+    .toHaveAttribute("data-kp-economics-equilibrium-quantity", "7");
+  await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
+    .toHaveAttribute("data-kp-economics-equilibrium-price", "9");
+  await expect(graph.locator('[data-kp-latex="P = 16 - Q"]'))
+    .toBeVisible();
+
+  await player.press("End");
+  await expect(graph.locator("[data-kp-economics-equilibrium-view]"))
+    .toHaveAttribute("data-kp-economics-choreography-stage", "settle");
+  await player.press("R");
+  await scrubber.fill("0.56");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-direction",
+    "rewind"
+  );
+  await expect(graph.locator("[data-kp-economics-demand-line]"))
+    .toHaveAttribute("data-kp-economics-equation", "P=16-Q");
+  await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
+    .toHaveAttribute("data-kp-economics-equilibrium-quantity", "7");
+  await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
+    .toHaveAttribute("data-kp-economics-equilibrium-price", "9");
+
+  await shell.locator(
+    '[data-action="select-animation-catalogue-inspector"]'
+  ).selectOption("parameters");
+  const parameter = shell.locator(
+    '[data-action="set-economics-demand-intercept"]'
+  );
+  await parameter.fill("20");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "0.56"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-direction",
+    "rewind"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "paused"
+  );
+  await expect(graph.locator("[data-kp-economics-demand-line]"))
+    .toHaveAttribute("data-kp-economics-equation", "P=17-Q");
+  await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
+    .toHaveAttribute("data-kp-economics-equilibrium-quantity", "15/2");
+  await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
+    .toHaveAttribute("data-kp-economics-equilibrium-price", "19/2");
+  await expect(graph.locator("#kp-economics-graph-description"))
+    .toContainText("demand intercept rises toward 20");
+  expect(new URL(page.url()).searchParams.get("demandIntercept")).toBe("20");
+
+  const capture = await page.evaluate(async (providerPath) => {
+    const module = await import(providerPath);
+    return module.createKpAnimationCatalogueCaptureProvider(document).capture({
+      route: new URL(window.location.href),
+      capturedAtMs: performance.now(),
+      eventTarget: document.body
+    });
+  }, "/src/dev-review/animation-catalogue-capture-provider.ts");
+  expect(capture.semantic).toMatchObject({
+    documentId: "animation.catalogue",
+    assetId: animationId,
+    progressPermille: 560,
+    playbackDirection: "rewind",
+    parameters: {
+      "demand-price-intercept": "20"
+    }
+  });
+
+  await shell.locator(
+    `[data-kp-animation-catalogue-row="${solveXId}"] ` +
+    ".kp-animation-catalogue-shell__result-link"
+  ).click();
+  await expect(shell).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    solveXId
+  );
+  expect(await page.evaluate(() =>
+    (window as typeof window & { __kpCatalogueDocumentToken?: string })
+      .__kpCatalogueDocumentToken
+  )).toBe("economics-persistent-shell");
+
+  await page.goBack();
+  await expect(shell).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    animationId
+  );
+  await expect(shell).toHaveAttribute(
+    "data-kp-economics-demand-intercept",
+    "20"
+  );
+  await expect(shell.locator(
+    '[data-action="set-economics-demand-intercept"]'
+  )).toHaveValue("20");
+  expect(await page.evaluate(() =>
+    (window as typeof window & { __kpCatalogueDocumentToken?: string })
+      .__kpCatalogueDocumentToken
+  )).toBe("economics-persistent-shell");
+  expect(pageErrors).toEqual([]);
+});

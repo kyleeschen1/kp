@@ -75,7 +75,8 @@ function narrativeFor(
       return Object.freeze({
         id: "narrative.economics.shift-demand",
         text:
-          `The demand intercept rises toward 18. Demand and the exact ` +
+          `The demand intercept rises toward ` +
+          `${exactSpoken(semantic.demand.priceInterceptAfter)}. Demand and the exact ` +
           `intersection move up and right while supply stays fixed.`,
         claimIds: Object.freeze([
           "claim.economics.supply-fixed",
@@ -136,4 +137,3 @@ function exactSpoken(value: ExactRationalDto): string {
 function equationSpoken(latex: string): string {
   return latex.replaceAll("=", "equals").replaceAll("+", "plus").replaceAll("-", "minus");
 }
-

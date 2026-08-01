@@ -115,6 +115,11 @@ export const kpHtmlEncodingOwners = [
     "html-text",
     "html-attribute"
   ]),
+  retain("src/rendering/economics-equilibrium-svg.ts", "rendering", [
+    "html-text",
+    "html-attribute",
+    "svg-text"
+  ]),
   retain("src/rendering/graph-svg.ts", "rendering", [
     "svg-text",
     "svg-attribute"
