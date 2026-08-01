@@ -172,6 +172,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-01-animation-catalogue-solve-x-desktop-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-host-outcome.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-host-outcome.test.ts"
     }
   ],
   "dependsOn": {
@@ -795,6 +803,27 @@
       "scope": "slice s24 shell promotion boundary",
       "checkedAt": "2026-08-01T05:40:38.633Z",
       "notes": "All architecture gates passed with zero semantic-animation exceptions."
+    },
+    {
+      "command": "focused catalogue host outcome tests",
+      "status": "passed",
+      "scope": "slice s25 terminal host evidence",
+      "checkedAt": "2026-08-01T05:43:38.871Z",
+      "notes": "12 tests passed across painted evidence, nonterminal unobserved state, missing-adapter, unsupported-surface, paint-failed, load-failure, health, and cross-asset identity rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s25 type safety",
+      "checkedAt": "2026-08-01T05:43:39.685Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed with the closed host outcome union."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s25 evidence boundary",
+      "checkedAt": "2026-08-01T05:43:40.503Z",
+      "notes": "All architecture gates passed; the outcome seam imports no renderer, runtime, promotion, workbench, disposition, or Theseus authority."
     }
   ],
   "expectedLearning": [

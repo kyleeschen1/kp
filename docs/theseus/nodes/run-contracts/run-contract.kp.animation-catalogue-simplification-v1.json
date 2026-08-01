@@ -218,8 +218,8 @@
     {
       "id": "s25",
       "title": "Define typed catalogue host outcomes",
-      "summary": "Refine the existing hostability seam into explicit painted, capability-gap, and load-failure evidence without inventing a renderer or repairing assets.",
-      "status": "planned"
+      "summary": "Added a closed terminal host-evidence union: painted records exact surface and adapter IDs, capability-gap distinguishes missing adapter, unsupported surface, and failed paint, and load-failure preserves asset, descriptor, and pack identity without host claims. Ready hostability remains nonterminal until paint is actually observed. The seam rejects cross-asset evidence and contains no promotion or human disposition authority. Focused 12/12, typecheck, and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s26",
