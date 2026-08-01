@@ -228,29 +228,28 @@
 
 .kp-animation-catalogue-shell__stage-host .editor-equation-stage {
   min-height: 100%;
-}
-
-/* Keep this visual treatment on the reviewed solve-x exemplar until the
-   catalogue checkpoint establishes which geometry belongs across families. */
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.linear-solve.solve-x"]
-  .kp-animation-catalogue-shell__stage-host .editor-equation-stage {
   place-items: center;
 }
 
+.kp-animation-catalogue-shell__stage-host .editor-equation-stage__content {
+  display: grid;
+  width: 100%;
+}
+
+.kp-animation-catalogue-shell__stage-host .editor-equation-stage__object {
+  text-align: center;
+}
+
+/* The exact width and sequence treatment remain solve-x-specific; only the
+   surface-compatible centering seam graduated from its approved checkpoint. */
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.linear-solve.solve-x"]
   .kp-animation-catalogue-shell__stage-host .editor-equation-stage__content {
-  display: grid;
   width: min(48rem, calc(100% - 2rem));
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.linear-solve.solve-x"]
   .kp-animation-catalogue-shell__stage-host .editor-equation-stage__transition {
   grid-template-rows: minmax(7.5rem, auto) auto auto;
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.linear-solve.solve-x"]
-  .kp-animation-catalogue-shell__stage-host .editor-equation-stage__object {
-  text-align: center;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.linear-solve.solve-x"]

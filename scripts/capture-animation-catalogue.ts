@@ -446,9 +446,76 @@ try {
       player.dataset["kpEditorAnimationHydrated"] === "true" &&
       surface?.dataset["kpEditorAnimationAdapterStatus"] === "ready";
   }, promotedSiblingId);
+  const equationPressureScreenshot = path.join(
+    outputRoot,
+    "equation-pressure.png"
+  );
+  await siblingPage.screenshot({
+    path: equationPressureScreenshot,
+    fullPage: true,
+    animations: "disabled"
+  });
+  const equationPressureGeometry = await siblingPage.evaluate(() => {
+    const visualStage = document.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue-stage] .editor-animation-player__stage"
+    );
+    const content = visualStage?.querySelector<HTMLElement>(
+      ".editor-equation-stage__content"
+    );
+    const ink = content?.querySelector<HTMLElement>(
+      ".editor-equation-stage__object .katex"
+    );
+    if (visualStage === null || content === null || ink === null ||
+      visualStage === undefined || content === undefined || ink === undefined) {
+      throw new Error("Equation pressure geometry targets are missing.");
+    }
+    const stageRect = visualStage.getBoundingClientRect();
+    const contentRect = content.getBoundingClientRect();
+    const inkRect = ink.getBoundingClientRect();
+    return {
+      contentDisplay: getComputedStyle(content).display,
+      contentHeight: contentRect.height,
+      contentCenterDeltaY:
+        contentRect.top + contentRect.height / 2 -
+        (stageRect.top + stageRect.height / 2),
+      inkCenterDeltaX:
+        inkRect.left + inkRect.width / 2 -
+        (stageRect.left + stageRect.width / 2)
+    };
+  });
+  if (
+    equationPressureGeometry.contentDisplay !== "grid" ||
+    equationPressureGeometry.contentHeight > 220 ||
+    Math.abs(equationPressureGeometry.contentCenterDeltaY) > 2 ||
+    Math.abs(equationPressureGeometry.inkCenterDeltaX) > 2
+  ) {
+    throw new Error(
+      `Equation pressure geometry drifted: ${JSON.stringify(equationPressureGeometry)}`
+    );
+  }
+  const equationPressureManifest = path.join(
+    outputRoot,
+    "equation-pressure.json"
+  );
+  await writeFile(
+    equationPressureManifest,
+    `${JSON.stringify({
+      schemaVersion: "kp.animation-catalogue-equation-pressure.v1",
+      animationId: promotedSiblingId,
+      screenshot: path.relative(process.cwd(), equationPressureScreenshot),
+      geometry: equationPressureGeometry
+    }, null, 2)}\n`,
+    "utf8"
+  );
   if (await siblingPage.locator("iframe").count() !== 0) {
     throw new Error("Promoted catalogue sibling used an iframe fallback.");
   }
+  console.log(
+    `animation catalogue equation pressure: ${path.relative(process.cwd(), equationPressureScreenshot)}`
+  );
+  console.log(
+    `animation catalogue equation pressure manifest: ${path.relative(process.cwd(), equationPressureManifest)}`
+  );
   await siblingPage.close();
 
   await pressureDistinctCaller(browser);
@@ -766,6 +833,13 @@ async function pressureDistinctCaller(browser: Browser): Promise<void> {
     );
     if (await page.locator("iframe").count() !== 0) {
       throw new Error("Distinct catalogue caller used an iframe fallback.");
+    }
+    if (await player.locator(
+      ".editor-equation-stage__content"
+    ).count() !== 0) {
+      throw new Error(
+        "Equation-only stage geometry leaked into the diagram pressure caller."
+      );
     }
     if (await player.locator(
       '[data-action="toggle-editor-animation"]'

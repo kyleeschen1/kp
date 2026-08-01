@@ -107,7 +107,8 @@
     {
       "id": "s09",
       "title": "Generalize approved stage geometry",
-      "status": "planned"
+      "summary": "Generalized the human-approved, surface-compatible centering seam across catalogue equation stages only. Equation content now forms one full-width centered grid with centered native math; exact width and compact step styling remain solve-x-specific. The structurally different radical caller proves compact centering without inheriting solve-x dimensions, while the exact-fraction diagram caller proves the CSS boundary does not leak across render targets. Stable pressure manifests, interaction/history/focus/review checks, reduced-motion and narrow checks, all 33 hosts, typecheck, and diff hygiene pass.",
+      "status": "complete"
     },
     {
       "id": "s10",

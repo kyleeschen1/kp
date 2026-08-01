@@ -171,11 +171,25 @@
       "scope": "s08 required visual checkpoint",
       "checkedAt": "2026-08-01T16:39:04.156Z",
       "notes": "User explicitly approved the persistent in-shell catalogue interaction and solve-x centered compact-stage direction on 2026-08-01."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "s09 promoted equation-centering seam and cross-surface pressure",
+      "checkedAt": "2026-08-01T16:45:33.678Z",
+      "notes": "Radical equation content centered at 154.69px height with 0px vertical and under 0.01px ink horizontal offset; exact-fraction diagram had no equation-stage geometry; solve-x interaction, narrow/reduced-motion pressure, and all 33 hosts passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09 stable pressure capture",
+      "checkedAt": "2026-08-01T16:45:34.694Z",
+      "notes": "All app, node, test, and domain TypeScript projects passed after the generalized equation-only CSS and pressure manifest."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Human approval promotes the catalogue interaction and solve-x visual direction for bounded cross-family pressure testing; exact solve-x dimensions remain exemplar-specific until structurally different surfaces prove them."
+    "summary": "Approved centering is now a catalogue equation-surface rule with no universal width: equation content forms one centered grid and native math centers horizontally. Solve-x alone retains its 48rem width and compact sequence recipe; graph and diagram surfaces remain independent."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",
