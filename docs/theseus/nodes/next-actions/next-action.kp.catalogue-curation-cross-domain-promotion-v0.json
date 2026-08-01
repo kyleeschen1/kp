@@ -468,11 +468,41 @@
       "status": "passed",
       "scope": "s23 patch hygiene",
       "checkedAt": "2026-08-01T19:55:21.777Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-constant-force-work-energy-contract.test.ts tests/kp-constant-force-work-energy-model.test.ts",
+      "status": "passed",
+      "scope": "s24 exact default, fractional sampling, bounded force, SI unit law, graph domain, and canonical truth",
+      "checkedAt": "2026-08-01T20:05:13.339Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s24 all TypeScript projects and production bundle",
+      "checkedAt": "2026-08-01T20:05:14.236Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s24 repository deterministic, architecture, inference, concept, and promotion regression",
+      "checkedAt": "2026-08-01T20:05:15.092Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s24 domain boundary",
+      "checkedAt": "2026-08-01T20:05:15.949Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s24 patch hygiene",
+      "checkedAt": "2026-08-01T20:05:16.791Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Froze the constant-force work-energy second-caller contract: 3 N over 4 m, 12 J work and kinetic-energy change, explicit SI dimensions, one bounded hidden force parameter, synchronized diagram/graph/equation roles, local dimensional-continuity presentation boundary, and no shared API extraction."
+    "summary": "Implemented the exact domain-native work-energy model. It validates the frozen scenario, SI dimensions and unit references, graph and parameter bounds, and canonical results; samples any exact in-range position; recomputes exact work and kinetic energy for 1-5 N; freezes cloned state; and adds no presenter, engine, or shared API."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",

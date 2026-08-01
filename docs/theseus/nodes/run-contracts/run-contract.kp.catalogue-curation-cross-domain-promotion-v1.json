@@ -514,7 +514,8 @@
     {
       "id": "s24",
       "title": "Implement exact physics model",
-      "status": "planned"
+      "summary": "Implemented a bounded exact work-energy model over the frozen physics contract. Default states prove 3 N across 4 m yields 12 J of work, 12 J of kinetic-energy change, and a final 16 J from 4 J; fractional positions remain rational; the 1-5 N parameter recomputes exact truth without mutating the contract. Validation rejects malformed rationals, SI-dimension and unit-reference drift, invalid axes or intervals, parameter violations, and mismatched canonical results. Seven focused checks, the full repository suite, all TypeScript projects, production build, architecture gates, and patch hygiene pass; no presentation or shared API changed.",
+      "status": "complete"
     },
     {
       "id": "s25",
