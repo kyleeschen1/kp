@@ -24,6 +24,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-31-animation-catalogue-source-inventory.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-loadable-registry.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-loadable-registry.test.ts"
     }
   ],
   "dependsOn": {
@@ -101,6 +109,48 @@
       "scope": "slice-s01 control integrity",
       "checkedAt": "2026-08-01T03:26:23.685Z",
       "notes": "Workspace validates with 850 nodes and 15338 events after source-inventory evidence was recorded."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-loadable-registry.test.ts tests/animation-catalog-loader.test.ts tests/animation-library-metadata.test.ts",
+      "status": "passed",
+      "scope": "slice-s02 loadable registry",
+      "checkedAt": "2026-08-01T03:30:30.321Z",
+      "notes": "8 focused tests passed, including 33 unique IDs, all 10 packs, exact lazy loading, compact shape, and exclusion of seven reader-only plus one planned identity."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s02 static types",
+      "checkedAt": "2026-08-01T03:30:31.145Z",
+      "notes": "Application, node, test, and domain TypeScript projects passed with the new registry contract."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s02 dependency boundaries",
+      "checkedAt": "2026-08-01T03:30:31.992Z",
+      "notes": "All concept-room, reader, semantic-animation, and operation-presentation architecture gates passed."
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path src/editor/animation-catalogue-loadable-registry.ts --path tests/animation-catalogue-loadable-registry.test.ts",
+      "status": "passed",
+      "scope": "slice-s02 impact selection",
+      "checkedAt": "2026-08-01T03:30:32.824Z",
+      "notes": "The unmatched new paths select broad gates; discovery cadence uses focused characterization, architecture, and typecheck now, with the full 3130-test and production-build baseline already green in s01."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s02 hygiene",
+      "checkedAt": "2026-08-01T03:30:33.647Z",
+      "notes": "No whitespace errors in the typed registry or characterization test."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s02 control integrity",
+      "checkedAt": "2026-08-01T03:30:34.472Z",
+      "notes": "Workspace validates after recording typed-registry progress."
     }
   ],
   "expectedLearning": [

@@ -77,7 +77,8 @@
     {
       "id": "s02",
       "title": "Characterize loadable asset registry",
-      "status": "planned"
+      "summary": "Added a compact typed loadable registry that groups the generated editor metadata by concrete animation ID, requires one exact asset-level descriptor, records one lazy pack owner, and carries no renderer, representation, lifecycle, or roadmap state. Characterization proves one entry for each of the 33 concrete assets, successful resolution across all 10 packs, and exclusion of seven reader-only playable display IDs plus the planned quadratic identity. Eight focused tests, full typecheck, architecture, diff hygiene, and workspace validation pass; no runtime consumer or visual behavior changed.",
+      "status": "complete"
     },
     {
       "id": "s03",
