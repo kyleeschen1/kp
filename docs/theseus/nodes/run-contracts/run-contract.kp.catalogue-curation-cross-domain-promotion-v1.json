@@ -137,7 +137,8 @@
     {
       "id": "s14",
       "title": "Define economics graph surface semantics",
-      "status": "planned"
+      "summary": "Defined isolated economics graph-surface semantics as a native KpAnimationAsset without registering or rendering it. Persistent graph, Q/P axes, supply, demand, intercept parameter, equilibrium role, surplus/shortage sides, exact source/target states, and one shiftDemandIntercept transformation close references and preserve required correspondences. Thirteen economics tests, typecheck, architecture, diff hygiene, and workspace validation pass.",
+      "status": "complete"
     },
     {
       "id": "s15",
