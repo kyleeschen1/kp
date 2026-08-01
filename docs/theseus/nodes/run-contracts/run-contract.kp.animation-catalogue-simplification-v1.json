@@ -71,7 +71,8 @@
     {
       "id": "s01",
       "title": "Freeze catalogue source inventory",
-      "status": "planned"
+      "summary": "Frozen the pre-change catalogue source map. The baseline distinguishes 33 concrete assets and 10 lazy packs from 50 descriptors, 34 Workbench identities, 41 display rows, 69 Workbench relationships, and 82 display representations. It records concrete identity/loading, mixed projection, adapter, route, and review-capture ownership; preserves all existing routes; and fixes the next boundary at one row per concrete loadable ID without changing runtime or visual behavior. Focused 21/21, full 3130/3130, typecheck, build, promotion memory, diff hygiene, and workspace validation pass.",
+      "status": "complete"
     },
     {
       "id": "s02",

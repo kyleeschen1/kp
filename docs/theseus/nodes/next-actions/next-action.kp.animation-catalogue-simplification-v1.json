@@ -20,6 +20,10 @@
       "kind": "file",
       "path": "docs/project/threads/animation-catalogue.md",
       "summary": "Living catalogue scope, boundaries, and current next action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-31-animation-catalogue-source-inventory.md"
     }
   ],
   "dependsOn": {
@@ -40,6 +44,64 @@
     "npm run visual:animation-catalogue",
     "npm run visual:animation-library-hosts",
     "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalog-loader.test.ts tests/animation-library-metadata.test.ts tests/kp-editor-animation-catalog-projection.test.ts tests/semantic-animation-workbench-index.test.ts tests/animation-library-display-catalog.test.ts tests/kp-editor-animation-surface-adapter-registry.test.ts",
+      "status": "passed",
+      "scope": "slice-s01 source inventory",
+      "checkedAt": "2026-08-01T03:26:02.978Z",
+      "notes": "21 focused identity, pack, projection, display, and adapter-registry tests passed."
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path docs/project/reviews/2026-07-31-animation-catalogue-source-inventory.md --path docs/project/threads/animation-catalogue.md",
+      "status": "passed",
+      "scope": "slice-s01 impact selection",
+      "checkedAt": "2026-08-01T03:26:03.906Z",
+      "notes": "Selector conservatively required the broad test, typecheck, and build gates because the project-memory paths are unmatched."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-s01 complete deterministic matrix",
+      "checkedAt": "2026-08-01T03:26:04.826Z",
+      "notes": "3130 of 3130 tests passed from the frozen inventory state."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s01 static types",
+      "checkedAt": "2026-08-01T03:26:05.867Z",
+      "notes": "Application, node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-s01 production build",
+      "checkedAt": "2026-08-01T03:26:07.029Z",
+      "notes": "Type checks and Vite production build passed without source changes."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "slice-s01 priority preservation",
+      "checkedAt": "2026-08-01T03:26:08.040Z",
+      "notes": "The catalogue remains active while rank-3 economics stays paused with no implementation contract."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s01 hygiene",
+      "checkedAt": "2026-08-01T03:26:09.052Z",
+      "notes": "The source-inventory document and thread link contain no whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s01 control integrity",
+      "checkedAt": "2026-08-01T03:26:23.685Z",
+      "notes": "Workspace validates with 850 nodes and 15338 events after source-inventory evidence was recorded."
+    }
   ],
   "expectedLearning": [
     "Which registry is the smallest truthful authority for concrete loadable catalogue identity.",

@@ -86,6 +86,7 @@ first canonical port order.
 
 ## Links
 
+- `docs/project/reviews/2026-07-31-animation-catalogue-source-inventory.md`
 - `docs/project/decisions/2026-07-31-kp-animation-catalogue-first-simplification.md`
 - `docs/project/reviews/2026-07-31-animation-catalogue-simplification-next-step-review.md`
 - `docs/project/decisions/2026-07-31-kp-exemplar-first-visual-verification-cadence.md`
