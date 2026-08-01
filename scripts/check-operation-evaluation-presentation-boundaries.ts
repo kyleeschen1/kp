@@ -18,6 +18,47 @@ const canonicalCompositor =
   "src/rendering/native-katex-scene-compositor.ts";
 const callerConformanceMint =
   "src/architecture/operation-evaluation-caller-conformance.ts";
+const sharedContinuityRuntimeCallers = [
+  "src/animation/operation-evaluation-presentation-registry.ts",
+  "src/animation/operation-evaluation-presentation-types.ts",
+  "src/animation/operation-evaluation-continuity-program.ts",
+  "src/animation/successor-synthesis-presentation-plan.ts",
+  "src/reader/renderers/executable-successor-motif-program-adapter.ts",
+  "src/rendering/native-katex-successor-synthesis.ts"
+] as const;
+const continuityAuthoringModules = [
+  "executable-motif-continuity-compiler.ts",
+  "executable-successor-motif-program-validator.ts",
+  "operation-evaluation-continuity-contract.ts",
+  "operation-evaluation-continuity-topology.ts",
+  "perceptual-continuity-contract-authority.ts",
+  "perceptual-continuity-contract.ts"
+] as const;
+const continuityAuthorityCallers = new Map([
+  [
+    "registerKpVerifiedPerceptualContinuityContractAuthority",
+    new Set([
+      "src/animation/perceptual-continuity-contract-authority.ts",
+      "src/animation/perceptual-continuity-contract.ts"
+    ])
+  ],
+  [
+    "registerKpExecutableMotifContinuityProgramAuthority",
+    new Set([
+      "src/animation/motifs/executable-motif-continuity-program.ts",
+      "src/animation/motifs/executable-motif-continuity-compiler.ts",
+      "src/animation/operation-evaluation-continuity-program.ts"
+    ])
+  ],
+  [
+    "registerKpVerifiedExecutableSuccessorMotifProgramAuthority",
+    new Set([
+      "src/animation/motifs/executable-successor-motif-program-authority.ts",
+      "src/animation/motifs/executable-successor-motif-program-validator.ts",
+      "src/animation/motifs/operation-evaluation-executable-program.ts"
+    ])
+  ]
+] as const);
 const readerPlanKinds = [
   "default-motion",
   "visual-motif",
@@ -30,6 +71,30 @@ const readerPlanKinds = [
   "explicit-static-checkpoint"
 ] as const;
 const violations: string[] = [];
+
+for (const repositoryPath of sharedContinuityRuntimeCallers) {
+  const source = readFileSync(join(projectRoot, repositoryPath), "utf8");
+  for (const authoringModule of continuityAuthoringModules) {
+    if (source.includes(authoringModule)) {
+      violations.push(
+        `${repositoryPath} imports continuity authoring module ` +
+        `${authoringModule} into the shared reader closure.`
+      );
+    }
+  }
+}
+
+for (const path of collectTypeScriptFiles(animationRoot)) {
+  const repositoryPath = relative(projectRoot, path);
+  const source = readFileSync(path, "utf8");
+  for (const [authority, allowedCallers] of continuityAuthorityCallers) {
+    if (source.includes(authority) && !allowedCallers.has(repositoryPath)) {
+      violations.push(
+        `${repositoryPath} uses closed continuity authority ${authority}.`
+      );
+    }
+  }
+}
 
 for (const path of collectTypeScriptFiles(animationRoot)) {
   const repositoryPath = relative(projectRoot, path);

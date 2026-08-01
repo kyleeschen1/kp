@@ -29,11 +29,13 @@ import { createKpReaderArtifactRef } from "../document/public-api.ts";
 import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycle.ts";
 import { mountKpReaderDevelopmentReview } from "./development-review-loader.ts";
 import {
-  installKpAnimationHostStatus,
-  markKpAnimationHostReady
-} from "../../rendering/animation-host-status.ts";
+  installKpReaderAnimationHostStatus
+} from "./reader-animation-host-status.ts";
 
-installKpAnimationHostStatus(window, "reader.distribution-area");
+const markKpAnimationHostReady = installKpReaderAnimationHostStatus(
+  window,
+  "reader.distribution-area"
+);
 
 const {
   createKpReaderAdapterRegistry,
@@ -232,7 +234,7 @@ const fontReviewLifecycle = createKpReaderFontReviewLifecycle({
     // The outer library may declare this host live only after the
     // font-stable renderer has produced its first frame.
     window.requestAnimationFrame(() => {
-      markKpAnimationHostReady(window);
+      markKpAnimationHostReady();
     });
   }
 });

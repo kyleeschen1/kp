@@ -7,7 +7,7 @@ import type {
 } from "../../animation/motifs/executable-successor-motif-program.ts";
 import {
   isKpVerifiedExecutableSuccessorMotifProgram
-} from "../../animation/motifs/executable-successor-motif-program-validator.ts";
+} from "../../animation/motifs/executable-successor-motif-program-authority.ts";
 import type {
   KpFissionFusionPlan
 } from "../../animation/fission-fusion.ts";
@@ -15,11 +15,11 @@ import type {
   KpNativeKatexSuccessorSynthesisIntent
 } from "../../rendering/native-katex-successor-synthesis.ts";
 import type {
-  KpExecutableMotifContinuityProgram
-} from "../../animation/motifs/executable-motif-continuity-compiler.ts";
+  KpExecutableMotifContinuityAuthority
+} from "../../animation/motifs/executable-motif-continuity-program.ts";
 import {
   isKpExecutableMotifContinuityProgram
-} from "../../animation/motifs/executable-motif-continuity-compiler.ts";
+} from "../../animation/motifs/executable-motif-continuity-program.ts";
 
 type KpVerifiedProgramOf<
   Kind extends KpExecutableSuccessorMotifProgramDraft["kind"]
@@ -132,7 +132,7 @@ export type KpExecutableSuccessorMotifProgramAdapterDispatch =
         ];
       };
       readonly continuityProgram:
-        KpExecutableMotifContinuityProgram & {
+        KpExecutableMotifContinuityAuthority & {
           readonly programKind: "operation-evaluation";
           readonly topology:
             "bounded-semantic-contact-co-presence";

@@ -3,27 +3,29 @@ import type {
 } from "./motifs/executable-successor-motif-program.ts";
 import {
   isKpVerifiedExecutableSuccessorMotifProgram
-} from "./motifs/executable-successor-motif-program-validator.ts";
+} from "./motifs/executable-successor-motif-program-authority.ts";
 import {
   isKpVerifiedPerceptualContinuityContract,
   kpPerceptualContinuityEndpointMetrics,
-  type KpPerceptualContinuityContractDraft,
   type KpPerceptualContinuityEndpointMetric,
   type KpVerifiedPerceptualContinuityContract
-} from "./perceptual-continuity-contract.ts";
+} from "./perceptual-continuity-contract-authority.ts";
+import {
+  kpOperationEvaluationContinuitySelectedTopology
+} from "./operation-evaluation-continuity-topology-id.ts";
+
+export {
+  createKpOperationEvaluationContinuityContractDraft
+} from "./operation-evaluation-continuity-contract.ts";
 
 export const kpOperationEvaluationContinuityTopologyIds = Object.freeze([
   "target-style-reverse-flip",
-  "bounded-semantic-contact-co-presence",
+  kpOperationEvaluationContinuitySelectedTopology,
   "visible-motif-owned-carrier"
 ] as const);
 
 export type KpOperationEvaluationContinuityTopologyId =
   typeof kpOperationEvaluationContinuityTopologyIds[number];
-
-export type KpOperationEvaluationContinuityCandidateStatus =
-  | "eligible"
-  | "ineligible";
 
 /**
  * This is an architecture selection, not caller-authored presentation state.
@@ -33,8 +35,7 @@ export type KpOperationEvaluationContinuityCandidateStatus =
 export const kpOperationEvaluationContinuityTopologyDecision = Object.freeze({
   schemaVersion:
     "kp.operation-evaluation-continuity-topology-decision.v1",
-  selectedTopology:
-    "bounded-semantic-contact-co-presence",
+  selectedTopology: kpOperationEvaluationContinuitySelectedTopology,
   referenceId:
     "kp.operation-evaluation.reference.continuous-recognition-v1",
   selectionRule:
@@ -44,6 +45,10 @@ export const kpOperationEvaluationContinuityTopologyDecision = Object.freeze({
   visibleCarrierDisposition:
     "eligible-fallback-when-certified-co-presence-cannot-pass"
 } as const);
+
+export type KpOperationEvaluationContinuityCandidateStatus =
+  | "eligible"
+  | "ineligible";
 
 export type KpOperationEvaluationContinuityDiagnosticCode =
   | "recording.input.invalid"
@@ -151,65 +156,6 @@ export interface KpOperationEvaluationContinuityTopologyComparison {
     readonly KpOperationEvaluationContinuityCandidateAssessment[];
   readonly diagnostics:
     readonly KpOperationEvaluationContinuityDiagnostic[];
-}
-
-/**
- * The operation-evaluation thresholds are kept beside the comparison so later
- * renderers consume one quality boundary. They constrain observed paint but do
- * not grant any caller authority over topology, geometry, or timing.
- */
-export function createKpOperationEvaluationContinuityContractDraft(
-  program: KpVerifiedExecutableSuccessorMotifProgram
-): KpPerceptualContinuityContractDraft {
-  return Object.freeze({
-    schemaVersion: "kp.perceptual-continuity-contract.v1",
-    id: "kp.perceptual-continuity.operation-evaluation.v1",
-    programId: program.id,
-    programVersion: program.programVersion,
-    programKind: program.kind,
-    visibility: Object.freeze({
-      kind: "continuous-visible-ink",
-      minimumVisibleInkRatio: 0.18
-    }),
-    adjacentFrameBudgets: Object.freeze({
-      maximumNormalizedGeometryDelta: 0.08,
-      maximumNormalizedRasterDelta: 0.1
-    }),
-    ownerCoverage: Object.freeze({
-      requiredCoverageRatio: 1,
-      maximumAmbiguousOwnerCount: 0,
-      maximumAtomicTransferMismatchCount: 0
-    }),
-    endpointEquivalence: Object.freeze({
-      settlement: "exact-native-source-and-target",
-      requiredMetrics: kpPerceptualContinuityEndpointMetrics
-    }),
-    invariance: Object.freeze({
-      directions: Object.freeze(["forward", "rewind"] as const),
-      samplingModes: Object.freeze([
-        "direct-seek",
-        "natural-playback",
-        "replay"
-      ] as const),
-      browsers: Object.freeze([
-        "chromium",
-        "firefox",
-        "webkit"
-      ] as const),
-      viewports: Object.freeze(["wide", "phone"] as const),
-      deviceScaleFactors: Object.freeze([1, 2] as const)
-    }),
-    evidenceBudget: Object.freeze({
-      maximumTraceCount: 72,
-      maximumSamplesPerTrace: 257,
-      maximumTotalSamples: 18_504
-    }),
-    semanticAuthority: Object.freeze({
-      identity: "program-roles-and-lineage",
-      measurements: "current-frame-observation-only",
-      rasterHistory: "never-semantic-authority"
-    })
-  });
 }
 
 /**

@@ -41,13 +41,13 @@ import type {
 } from "./motifs/executable-successor-motif-program.ts";
 import {
   isKpVerifiedExecutableSuccessorMotifProgram
-} from "./motifs/executable-successor-motif-program-validator.ts";
+} from "./motifs/executable-successor-motif-program-authority.ts";
 import type {
-  KpExecutableMotifContinuityProgram
-} from "./motifs/executable-motif-continuity-compiler.ts";
+  KpExecutableMotifContinuityAuthority
+} from "./motifs/executable-motif-continuity-program.ts";
 import {
   isKpExecutableMotifContinuityProgram
-} from "./motifs/executable-motif-continuity-compiler.ts";
+} from "./motifs/executable-motif-continuity-program.ts";
 
 export type KpRegisteredSuccessorSynthesisBinding =
   KpSuccessorSynthesisBinding & {
@@ -55,7 +55,7 @@ export type KpRegisteredSuccessorSynthesisBinding =
       KpVerifiedOperationPresentationPlan;
     readonly paintContinuityPlan: KpVerifiedPaintContinuityPlan;
     readonly continuityProgram:
-      KpExecutableMotifContinuityProgram & {
+      KpExecutableMotifContinuityAuthority & {
         readonly programKind: "operation-evaluation";
         readonly topology:
           "bounded-semantic-contact-co-presence";

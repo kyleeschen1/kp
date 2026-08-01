@@ -3,7 +3,7 @@ import type {
 } from "../animation/motifs/executable-successor-motif-program.ts";
 import {
   isKpVerifiedExecutableSuccessorMotifProgram
-} from "../animation/motifs/executable-successor-motif-program-validator.ts";
+} from "../animation/motifs/executable-successor-motif-program-authority.ts";
 import {
   isKpExecutableSuccessorMotifProgramRoute,
   resolveKpExecutableSuccessorMotifProgramRoute,

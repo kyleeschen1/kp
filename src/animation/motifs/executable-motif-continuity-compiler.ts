@@ -2,89 +2,54 @@ import type {
   KpExecutableSuccessorMotifPhaseEffect,
   KpExecutableSuccessorMotifProgramDraft,
   KpExecutableSuccessorMotifProgramKind,
-  KpExecutableSuccessorMotifSemanticRole,
   KpVerifiedExecutableSuccessorMotifProgram
 } from "./executable-successor-motif-program.ts";
 import {
   isKpVerifiedExecutableSuccessorMotifProgram
-} from "./executable-successor-motif-program-validator.ts";
+} from "./executable-successor-motif-program-authority.ts";
 import type {
-  KpPerceptualContinuityEndpointMetric,
-  KpPerceptualContinuityVisibilityPolicy,
   KpVerifiedPerceptualContinuityContract
-} from "../perceptual-continuity-contract.ts";
+} from "../perceptual-continuity-contract-authority.ts";
 import {
   isKpVerifiedPerceptualContinuityContract
-} from "../perceptual-continuity-contract.ts";
+} from "../perceptual-continuity-contract-authority.ts";
 import {
-  kpOperationEvaluationContinuityTopologyDecision
-} from "../operation-evaluation-continuity-topology.ts";
-
-const verifiedContinuityPrograms = new WeakSet<object>();
+  kpOperationEvaluationContinuitySelectedTopology
+} from "../operation-evaluation-continuity-topology-id.ts";
+import {
+  registerKpExecutableMotifContinuityProgramAuthority,
+  type KpExecutableMotifContinuityObligation,
+  type KpExecutableMotifContinuityProgram,
+  type KpExecutableMotifContinuityTopology,
+  type KpExecutableMotifContinuousTopology
+} from "./executable-motif-continuity-program.ts";
 
 type KpVerifiedProgramOf<
   Kind extends KpExecutableSuccessorMotifProgramKind
 > = KpVerifiedExecutableSuccessorMotifProgram &
   Extract<KpExecutableSuccessorMotifProgramDraft, { readonly kind: Kind }>;
 
-export type KpExecutableMotifContinuityTopology =
-  | "bounded-semantic-contact-co-presence"
-  | "identity-preserving-branch-co-presence"
-  | "identity-preserving-gather-co-presence"
-  | "shared-zero-area-junction";
-
-export type KpExecutableMotifContinuousTopology =
-  Exclude<KpExecutableMotifContinuityTopology, "shared-zero-area-junction">;
+export {
+  isKpExecutableMotifContinuityProgram
+} from "./executable-motif-continuity-program.ts";
+export type {
+  KpExecutableMotifContinuityAuthority,
+  KpExecutableMotifContinuityObligation,
+  KpExecutableMotifContinuityPhaseBinding,
+  KpExecutableMotifContinuityProgram,
+  KpExecutableMotifContinuityTopology,
+  KpExecutableMotifContinuousTopology
+} from "./executable-motif-continuity-program.ts";
 
 export const kpExecutableMotifContinuityCompatibility = Object.freeze({
   "operation-evaluation":
-    kpOperationEvaluationContinuityTopologyDecision.selectedTopology,
+    kpOperationEvaluationContinuitySelectedTopology,
   "identity-fission": "identity-preserving-branch-co-presence",
   "identity-fusion": "identity-preserving-gather-co-presence"
 } as const satisfies Readonly<
   Record<KpExecutableSuccessorMotifProgramKind,
     KpExecutableMotifContinuousTopology>
 >);
-
-export type KpExecutableMotifContinuityObligation =
-  | "preserve-native-source-and-context"
-  | "maintain-required-role-ink"
-  | "co-present-contributors-at-certified-contact"
-  | "co-present-source-and-descendants"
-  | "co-present-contributors-and-ancestor"
-  | "settle-exact-native-target-and-context";
-
-export interface KpExecutableMotifContinuityPhaseBinding {
-  readonly phaseId: string;
-  readonly phaseEffect: KpExecutableSuccessorMotifPhaseEffect;
-  readonly requiredRoles:
-    readonly KpExecutableSuccessorMotifSemanticRole[];
-  readonly continuityObligation:
-    KpExecutableMotifContinuityObligation;
-  readonly executionOrdinal: number;
-}
-
-export interface KpExecutableMotifContinuityProgram {
-  readonly schemaVersion: "kp.executable-motif-continuity-program.v1";
-  readonly kind: "executable-motif-continuity-program";
-  readonly program: KpVerifiedExecutableSuccessorMotifProgram;
-  readonly contract: KpVerifiedPerceptualContinuityContract;
-  readonly programId: string;
-  readonly programVersion: string;
-  readonly programKind: KpExecutableSuccessorMotifProgramKind;
-  readonly topology: KpExecutableMotifContinuousTopology;
-  readonly visibility: KpPerceptualContinuityVisibilityPolicy & {
-    readonly kind: "continuous-visible-ink";
-  };
-  readonly endpointMetrics:
-    readonly KpPerceptualContinuityEndpointMetric[];
-  readonly forwardPhases:
-    readonly KpExecutableMotifContinuityPhaseBinding[];
-  readonly rewindPhases:
-    readonly KpExecutableMotifContinuityPhaseBinding[];
-  readonly phaseAuthority: "executable-program-only";
-  readonly presentationAuthority: "canonical-compositor-only";
-}
 
 export type KpExecutableMotifContinuityCompilerIssueCode =
   | "compiler.program.unverified"
@@ -191,12 +156,28 @@ export function compileKpExecutableMotifContinuity(input: {
   }
   if (issues.length > 0) return invalid(issues);
 
-  const forwardPhases = program.phases.map((phase, executionOrdinal) =>
-    Object.freeze({
+  const continuityProgram = mintValidatedContinuityProgram({
+    program,
+    contract,
+    topology: input.topology as KpExecutableMotifContinuousTopology
+  });
+  return Object.freeze({ status: "compiled", continuityProgram });
+}
+
+function mintValidatedContinuityProgram(input: {
+  readonly program: KpVerifiedExecutableSuccessorMotifProgram;
+  readonly contract: KpVerifiedPerceptualContinuityContract;
+  readonly topology: KpExecutableMotifContinuousTopology;
+}): KpExecutableMotifContinuityProgram {
+  const forwardPhases = input.program.phases.map(
+    (phase, executionOrdinal) => Object.freeze({
       phaseId: phase.id,
       phaseEffect: phase.effect,
       requiredRoles: Object.freeze([...phase.requiredRoles]),
-      continuityObligation: obligationForPhase(program, phase.effect),
+      continuityObligation: obligationForPhase(
+        input.program,
+        phase.effect
+      ),
       executionOrdinal
     })
   );
@@ -206,35 +187,25 @@ export function compileKpExecutableMotifContinuity(input: {
       executionOrdinal
     })
   );
-  const continuityProgram = Object.freeze({
-    schemaVersion: "kp.executable-motif-continuity-program.v1" as const,
-    kind: "executable-motif-continuity-program" as const,
-    program,
-    contract,
-    programId: program.id,
-    programVersion: program.programVersion,
-    programKind: program.kind,
-    topology: input.topology,
-    visibility: Object.freeze({ ...contract.visibility }),
-    endpointMetrics: Object.freeze([
-      ...contract.endpointEquivalence.requiredMetrics
-    ]),
-    forwardPhases: Object.freeze(forwardPhases),
-    rewindPhases: Object.freeze(rewindPhases),
-    phaseAuthority: "executable-program-only" as const,
-    presentationAuthority: "canonical-compositor-only" as const
-  }) as KpExecutableMotifContinuityProgram;
-  verifiedContinuityPrograms.add(continuityProgram);
-  return Object.freeze({ status: "compiled", continuityProgram });
-}
-
-export function isKpExecutableMotifContinuityProgram(
-  value: unknown
-): value is KpExecutableMotifContinuityProgram {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    verifiedContinuityPrograms.has(value)
+  return registerKpExecutableMotifContinuityProgramAuthority(
+    Object.freeze({
+      schemaVersion: "kp.executable-motif-continuity-program.v1",
+      kind: "executable-motif-continuity-program",
+      program: input.program,
+      contract: input.contract,
+      programId: input.program.id,
+      programVersion: input.program.programVersion,
+      programKind: input.program.kind,
+      topology: input.topology,
+      visibility: Object.freeze({ ...input.contract.visibility }),
+      endpointMetrics: Object.freeze([
+        ...input.contract.endpointEquivalence.requiredMetrics
+      ]),
+      forwardPhases: Object.freeze(forwardPhases),
+      rewindPhases: Object.freeze(rewindPhases),
+      phaseAuthority: "executable-program-only",
+      presentationAuthority: "canonical-compositor-only"
+    }) as KpExecutableMotifContinuityProgram
   );
 }
 

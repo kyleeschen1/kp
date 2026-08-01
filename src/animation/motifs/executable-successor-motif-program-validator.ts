@@ -7,8 +7,13 @@ import type {
   KpExecutableSuccessorMotifProgramKind,
   KpVerifiedExecutableSuccessorMotifProgram
 } from "./executable-successor-motif-program.ts";
+import {
+  registerKpVerifiedExecutableSuccessorMotifProgramAuthority
+} from "./executable-successor-motif-program-authority.ts";
 
-const verifiedPrograms = new WeakSet<object>();
+export {
+  isKpVerifiedExecutableSuccessorMotifProgram
+} from "./executable-successor-motif-program-authority.ts";
 
 const forbiddenPresentationAuthorityKeys = new Set([
   "dom",
@@ -314,17 +319,12 @@ export function validateAndMintKpExecutableSuccessorMotifProgram(input: {
 
   // The cast is confined to this exhaustive validator. WeakSet membership is
   // deliberately not serializable, so copied labels cannot retain authority.
-  const program = cloneAndFreezeProgram(
+  const program = registerKpVerifiedExecutableSuccessorMotifProgramAuthority(
+    cloneAndFreezeProgram(
     input.draft as unknown as KpExecutableSuccessorMotifProgramDraft
-  ) as KpVerifiedExecutableSuccessorMotifProgram;
-  verifiedPrograms.add(program);
+    )
+  );
   return Object.freeze({ status: "verified", program });
-}
-
-export function isKpVerifiedExecutableSuccessorMotifProgram(
-  value: unknown
-): value is KpVerifiedExecutableSuccessorMotifProgram {
-  return isRecord(value) && verifiedPrograms.has(value);
 }
 
 function validatePhases(

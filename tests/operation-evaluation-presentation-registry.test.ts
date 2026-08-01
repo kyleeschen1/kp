@@ -27,7 +27,16 @@ import {
 } from "../src/animation/motifs/executable-successor-motif-program-validator.ts";
 import {
   isKpExecutableMotifContinuityProgram
+} from "../src/animation/motifs/executable-motif-continuity-program.ts";
+import {
+  compileKpExecutableMotifContinuity
 } from "../src/animation/motifs/executable-motif-continuity-compiler.ts";
+import {
+  createKpOperationEvaluationContinuityContractDraft
+} from "../src/animation/operation-evaluation-continuity-contract.ts";
+import {
+  validateAndMintKpPerceptualContinuityContract
+} from "../src/animation/perceptual-continuity-contract.ts";
 import {
   kpCoreOperationPresentationLawIds
 } from "../src/animation/operation-presentation-law-types.ts";
@@ -104,6 +113,41 @@ test("canonical arithmetic evaluation resolves through one exact pinned motif", 
       (primitive) => ["enter", "exit", "reveal", "vanish"].includes(primitive)
     ));
   }
+});
+
+test("canonical runtime continuity equals the authoring authority projection", () => {
+  const program = kpOperationEvaluationExecutableProgramCompiler.program;
+  const contractResult = validateAndMintKpPerceptualContinuityContract({
+    draft: createKpOperationEvaluationContinuityContractDraft(program),
+    program
+  });
+  assert.equal(contractResult.status, "verified");
+  if (contractResult.status !== "verified") return;
+
+  const compilerResult = compileKpExecutableMotifContinuity({
+    program,
+    contract: contractResult.contract,
+    topology: "bounded-semantic-contact-co-presence"
+  });
+  assert.equal(compilerResult.status, "compiled");
+  if (compilerResult.status !== "compiled") return;
+
+  const runtimeProgram =
+    kpBoundedSemanticContactPaintContinuityCompiler.continuityProgram;
+  const {
+    contract: authoringContract,
+    ...authoringAuthority
+  } = compilerResult.continuityProgram;
+  assert.notEqual(runtimeProgram, compilerResult.continuityProgram);
+  assert.equal(authoringContract, contractResult.contract);
+  assert.deepEqual(runtimeProgram, authoringAuthority);
+  assert.equal(isKpExecutableMotifContinuityProgram(runtimeProgram), true);
+  assert.equal(
+    isKpExecutableMotifContinuityProgram(
+      compilerResult.continuityProgram
+    ),
+    true
+  );
 });
 
 test("resolution fails closed for unknown transformations and pin drift", () => {

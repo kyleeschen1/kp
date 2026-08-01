@@ -157,7 +157,8 @@
     {
       "id": "s17",
       "title": "repair-shared-reader-payload",
-      "status": "planned"
+      "summary": "Split generic continuity validation and evidence from the closed operation-evaluation reader authority, retained nominal program and phase/topology/visibility/endpoint obligations, and specialized the reader host-status reporter without changing its protocol. The nine-route shared closure fell from 151256 to 144927 gzip bytes under the unchanged 145000 ceiling; production closure, architecture, typecheck, 22 focused tests, 3 host-liveness checks, and 39 solve-x capture states pass. The broad compositor-adapter test's three fake-root querySelectorAll failures reproduce at pre-slice commit 2bafac6f and are not caused by this repair.",
+      "status": "complete"
     },
     {
       "id": "s18",

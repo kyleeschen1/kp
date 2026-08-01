@@ -1,95 +1,36 @@
 import type {
-  KpExecutableSuccessorMotifProgramKind,
   KpVerifiedExecutableSuccessorMotifProgram
 } from "./motifs/executable-successor-motif-program.ts";
 import {
   isKpVerifiedExecutableSuccessorMotifProgram
-} from "./motifs/executable-successor-motif-program-validator.ts";
+} from "./motifs/executable-successor-motif-program-authority.ts";
+import {
+  isKpVerifiedPerceptualContinuityContract,
+  kpPerceptualContinuityEndpointMetrics,
+  registerKpVerifiedPerceptualContinuityContractAuthority,
+  type KpPerceptualContinuityBrowser,
+  type KpPerceptualContinuityContractDraft,
+  type KpPerceptualContinuityDirection,
+  type KpPerceptualContinuityEndpointMetric,
+  type KpPerceptualContinuitySamplingMode,
+  type KpPerceptualContinuityViewport,
+  type KpVerifiedPerceptualContinuityContract
+} from "./perceptual-continuity-contract-authority.ts";
 
-const kpPerceptualContinuityContractAuthority = Symbol(
-  "kp.perceptual-continuity-contract"
-);
-const verifiedContracts = new WeakSet<object>();
-
-export const kpPerceptualContinuityEndpointMetrics = Object.freeze([
-  "paint-geometry",
-  "computed-style",
-  "font",
-  "baseline",
-  "inner-paint",
-  "structural-rule",
-  "silhouette"
-] as const);
-
-export type KpPerceptualContinuityEndpointMetric =
-  typeof kpPerceptualContinuityEndpointMetrics[number];
-export type KpPerceptualContinuityDirection = "forward" | "rewind";
-export type KpPerceptualContinuitySamplingMode =
-  | "direct-seek"
-  | "natural-playback"
-  | "replay";
-export type KpPerceptualContinuityBrowser =
-  | "chromium"
-  | "firefox"
-  | "webkit";
-export type KpPerceptualContinuityViewport = "wide" | "phone";
-
-export type KpPerceptualContinuityVisibilityPolicy =
-  | {
-      readonly kind: "continuous-visible-ink";
-      readonly minimumVisibleInkRatio: number;
-    }
-  | {
-      readonly kind: "intentional-vanish";
-      readonly minimumVisibleInkRatio: number;
-      readonly authorizedPhaseId: string;
-    };
-
-export interface KpPerceptualContinuityContractDraft {
-  readonly schemaVersion: "kp.perceptual-continuity-contract.v1";
-  readonly id: string;
-  readonly programId: string;
-  readonly programVersion: string;
-  readonly programKind: KpExecutableSuccessorMotifProgramKind;
-  readonly visibility: KpPerceptualContinuityVisibilityPolicy;
-  readonly adjacentFrameBudgets: {
-    readonly maximumNormalizedGeometryDelta: number;
-    readonly maximumNormalizedRasterDelta: number;
-  };
-  readonly ownerCoverage: {
-    readonly requiredCoverageRatio: 1;
-    readonly maximumAmbiguousOwnerCount: 0;
-    readonly maximumAtomicTransferMismatchCount: 0;
-  };
-  readonly endpointEquivalence: {
-    readonly settlement: "exact-native-source-and-target";
-    readonly requiredMetrics:
-      readonly KpPerceptualContinuityEndpointMetric[];
-  };
-  readonly invariance: {
-    readonly directions: readonly KpPerceptualContinuityDirection[];
-    readonly samplingModes: readonly KpPerceptualContinuitySamplingMode[];
-    readonly browsers: readonly KpPerceptualContinuityBrowser[];
-    readonly viewports: readonly KpPerceptualContinuityViewport[];
-    readonly deviceScaleFactors: readonly number[];
-  };
-  readonly evidenceBudget: {
-    readonly maximumTraceCount: number;
-    readonly maximumSamplesPerTrace: number;
-    readonly maximumTotalSamples: number;
-  };
-  readonly semanticAuthority: {
-    readonly identity: "program-roles-and-lineage";
-    readonly measurements: "current-frame-observation-only";
-    readonly rasterHistory: "never-semantic-authority";
-  };
-}
-
-export interface KpVerifiedPerceptualContinuityContract extends
-KpPerceptualContinuityContractDraft {
-  readonly phaseIds: readonly string[];
-  readonly [kpPerceptualContinuityContractAuthority]: true;
-}
+export {
+  isKpVerifiedPerceptualContinuityContract,
+  kpPerceptualContinuityEndpointMetrics
+} from "./perceptual-continuity-contract-authority.ts";
+export type {
+  KpPerceptualContinuityBrowser,
+  KpPerceptualContinuityContractDraft,
+  KpPerceptualContinuityDirection,
+  KpPerceptualContinuityEndpointMetric,
+  KpPerceptualContinuitySamplingMode,
+  KpPerceptualContinuityViewport,
+  KpPerceptualContinuityVisibilityPolicy,
+  KpVerifiedPerceptualContinuityContract
+} from "./perceptual-continuity-contract-authority.ts";
 
 export type KpPerceptualContinuityContractIssueCode =
   | "contract.input.invalid"
@@ -140,7 +81,7 @@ export function validateAndMintKpPerceptualContinuityContract(input: {
   }
 
   const draft = input.draft as KpPerceptualContinuityContractDraft;
-  const contract = Object.freeze({
+  const contract = registerKpVerifiedPerceptualContinuityContractAuthority({
     ...draft,
     visibility: Object.freeze({ ...draft.visibility }),
     adjacentFrameBudgets: Object.freeze({
@@ -164,21 +105,9 @@ export function validateAndMintKpPerceptualContinuityContract(input: {
     }),
     evidenceBudget: Object.freeze({ ...draft.evidenceBudget }),
     semanticAuthority: Object.freeze({ ...draft.semanticAuthority }),
-    phaseIds: Object.freeze(input.program.phases.map(({ id }) => id)),
-    [kpPerceptualContinuityContractAuthority]: true as const
-  }) as KpVerifiedPerceptualContinuityContract;
-  verifiedContracts.add(contract);
+    phaseIds: Object.freeze(input.program.phases.map(({ id }) => id))
+  });
   return Object.freeze({ status: "verified", contract });
-}
-
-export function isKpVerifiedPerceptualContinuityContract(
-  value: unknown
-): value is KpVerifiedPerceptualContinuityContract {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    verifiedContracts.has(value)
-  );
 }
 
 export interface KpPerceptualContinuitySample {

@@ -38,11 +38,11 @@ import {
   measureKpNativeKatexTextInkRect
 } from "./native-katex-paint-geometry.ts";
 import type {
-  KpExecutableMotifContinuityProgram
-} from "../animation/motifs/executable-motif-continuity-compiler.ts";
+  KpExecutableMotifContinuityAuthority
+} from "../animation/motifs/executable-motif-continuity-program.ts";
 import {
   isKpExecutableMotifContinuityProgram
-} from "../animation/motifs/executable-motif-continuity-compiler.ts";
+} from "../animation/motifs/executable-motif-continuity-program.ts";
 import type {
   KpVerifiedIdentityFissionExecutableProgram
 } from "../animation/motifs/identity-fission-executable-program.ts";
@@ -51,7 +51,7 @@ import type {
 } from "../animation/motifs/identity-fusion-executable-program.ts";
 import {
   isKpVerifiedExecutableSuccessorMotifProgram
-} from "../animation/motifs/executable-successor-motif-program-validator.ts";
+} from "../animation/motifs/executable-successor-motif-program-authority.ts";
 
 declare const kpNativeKatexIdentityTransferIntentBrand: unique symbol;
 
@@ -184,7 +184,7 @@ export interface KpNativeKatexSuccessorSynthesisScenePlan {
       readonly kind: "verified";
       readonly plan: KpVerifiedPaintContinuityPlan;
       readonly program:
-        KpExecutableMotifContinuityProgram & {
+        KpExecutableMotifContinuityAuthority & {
           readonly programKind: "operation-evaluation";
           readonly topology:
             "bounded-semantic-contact-co-presence";

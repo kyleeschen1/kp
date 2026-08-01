@@ -693,6 +693,69 @@
       "scope": "slice-s16",
       "checkedAt": "2026-07-31T23:57:27.006Z",
       "notes": "valid 847 nodes and 15257 events before slice close"
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "reader payload",
+      "checkedAt": "2026-08-01T02:44:40.744Z",
+      "notes": "All 11 routes passed; nine-route shared closure is 144927/145000 gzip without a ceiling change."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "reader production closure",
+      "checkedAt": "2026-08-01T02:44:42.127Z",
+      "notes": "All 11 manifest routes close through production assets."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "source boundaries",
+      "checkedAt": "2026-08-01T02:44:43.041Z",
+      "notes": "All architecture gates pass; runtime readers cannot import continuity authoring modules and nominal mint callsites are closed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "static types",
+      "checkedAt": "2026-08-01T02:44:43.986Z",
+      "notes": "Application, node, test, and domain typechecks pass."
+    },
+    {
+      "command": "npm run test:operation-evaluation-presentation",
+      "status": "passed",
+      "scope": "focused continuity",
+      "checkedAt": "2026-08-01T02:44:44.978Z",
+      "notes": "22/22 registry and canonical authority-projection tests pass."
+    },
+    {
+      "command": "npm run visual:animation-library-hosts",
+      "status": "passed",
+      "scope": "reader host liveness",
+      "checkedAt": "2026-08-01T02:44:45.906Z",
+      "notes": "3/3 catalog, rapid-switch, and scratch-reload liveness scenarios pass."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "solve-x preservation smoke",
+      "checkedAt": "2026-08-01T02:44:47.009Z",
+      "notes": "Captured all 39 stable visual checkpoints after starting the required full dev stack; representative division transit remains intact."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s17 hygiene",
+      "checkedAt": "2026-08-01T02:45:24.388Z",
+      "notes": "No whitespace errors in the exact payload-repair diff."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s17 control integrity",
+      "checkedAt": "2026-08-01T02:45:25.318Z",
+      "notes": "Valid 847 nodes and 15278 events after closing the slice and context receipt."
     }
   ],
   "progress": {

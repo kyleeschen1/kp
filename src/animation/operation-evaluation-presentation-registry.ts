@@ -33,19 +33,17 @@ import {
   createKpExplicitStaticCheckpointPlan
 } from "./operation-presentation-plan-types.ts";
 import {
-  isKpVerifiedExecutableSuccessorMotifProgram,
-  validateAndMintKpExecutableSuccessorMotifProgram
-} from "./motifs/executable-successor-motif-program-validator.ts";
+  isKpVerifiedExecutableSuccessorMotifProgram
+} from "./motifs/executable-successor-motif-program-authority.ts";
 import {
-  compileKpExecutableMotifContinuity,
+  createKpCanonicalOperationEvaluationExecutableProgram
+} from "./motifs/operation-evaluation-executable-program.ts";
+import {
   isKpExecutableMotifContinuityProgram
-} from "./motifs/executable-motif-continuity-compiler.ts";
+} from "./motifs/executable-motif-continuity-program.ts";
 import {
-  createKpOperationEvaluationContinuityContractDraft
-} from "./operation-evaluation-continuity-topology.ts";
-import {
-  validateAndMintKpPerceptualContinuityContract
-} from "./perceptual-continuity-contract.ts";
+  createKpCanonicalOperationEvaluationContinuityProgram
+} from "./operation-evaluation-continuity-program.ts";
 
 export {
   kpCanonicalOperationEvaluationTransformationKinds
@@ -734,79 +732,7 @@ function cloneExecutableProgramCompiler(
 }
 
 function mintCanonicalOperationEvaluationProgram() {
-  const result = validateAndMintKpExecutableSuccessorMotifProgram({
-    draft: {
-      schemaVersion: "kp.executable-successor-motif-program.v1",
-      programVersion: "1.0.0",
-      id: "kp.executable-program.operation-evaluation",
-      kind: "operation-evaluation",
-      allowedRoles: [
-        "material-input",
-        "causal-catalyst",
-        "result-material",
-        "continuant-context"
-      ],
-      phases: [
-        {
-          id: "orient-contributors",
-          effect: "orient",
-          requiredRoles: [
-            "material-input",
-            "causal-catalyst",
-            "continuant-context"
-          ]
-        },
-        {
-          id: "gather-contributors",
-          effect: "converge",
-          requiredRoles: ["material-input", "causal-catalyst"]
-        },
-        {
-          id: "recognize-result",
-          effect: "recognize-result",
-          requiredRoles: [
-            "material-input",
-            "causal-catalyst",
-            "result-material"
-          ]
-        },
-        {
-          id: "settle-result",
-          effect: "settle",
-          requiredRoles: ["result-material", "continuant-context"]
-        }
-      ],
-      lineage: {
-        material: "many-inputs-to-one-result",
-        catalyst: "participates-without-result-lineage",
-        context: "identity-preserving"
-      },
-      context: {
-        policy: "preserve-unclaimed-context",
-        role: "continuant-context"
-      },
-      accessibility: {
-        narration: "semantic-phase-and-role-summary",
-        reducedMotion: "native-checkpoints-with-phase-summary"
-      },
-      rewind: {
-        policy: "exact-phase-reversal",
-        restores: "source-roles-lineage-and-context"
-      },
-      continuity: {
-        minimumVisibleInk: "motif-specific",
-        intentionalVanish: "forbidden",
-        endpointSettlement: "exact-native-source-and-target"
-      }
-    }
-  });
-  if (result.status !== "verified") {
-    throw new Error(
-      "Canonical operation-evaluation executable program failed validation: " +
-      result.issues.map(({ path, message }) => `${path}: ${message}`).join("; ")
-    );
-  }
-  return result.program;
+  return createKpCanonicalOperationEvaluationExecutableProgram();
 }
 
 function mintCanonicalOperationEvaluationContinuityProgram(
@@ -814,46 +740,7 @@ function mintCanonicalOperationEvaluationContinuityProgram(
 ): KpOperationEvaluationPaintContinuityCompilerDescriptor[
   "continuityProgram"
 ] {
-  const contractResult = validateAndMintKpPerceptualContinuityContract({
-    draft: createKpOperationEvaluationContinuityContractDraft(program),
-    program
-  });
-  if (contractResult.status !== "verified") {
-    throw new Error(
-      "Canonical operation-evaluation continuity contract failed: " +
-      contractResult.issues.map(({ path, message }) =>
-        `${path}: ${message}`
-      ).join("; ")
-    );
-  }
-  const continuityResult = compileKpExecutableMotifContinuity({
-    program,
-    contract: contractResult.contract,
-    topology: "bounded-semantic-contact-co-presence"
-  });
-  if (
-    continuityResult.status !== "compiled" ||
-    continuityResult.continuityProgram.programKind !==
-      "operation-evaluation" ||
-    continuityResult.continuityProgram.topology !==
-      "bounded-semantic-contact-co-presence" ||
-    !isKpExecutableMotifContinuityProgram(
-      continuityResult.continuityProgram
-    )
-  ) {
-    const details = continuityResult.status === "invalid"
-      ? continuityResult.issues.map(({ path, message }) =>
-          `${path}: ${message}`
-        ).join("; ")
-      : "compiled authority did not retain operation-evaluation topology";
-    throw new Error(
-      `Canonical operation-evaluation continuity compilation failed: ${details}`
-    );
-  }
-  return continuityResult.continuityProgram as
-    KpOperationEvaluationPaintContinuityCompilerDescriptor[
-      "continuityProgram"
-    ];
+  return createKpCanonicalOperationEvaluationContinuityProgram(program);
 }
 
 function requireNamespacedId(value: string, label: string): void {

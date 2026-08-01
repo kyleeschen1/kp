@@ -1,14 +1,18 @@
-export const KP_ANIMATION_HOST_STATUS_MESSAGE =
-  "kp.animation-host-status.v1";
+import {
+  KP_ANIMATION_HOST_STATUS_MESSAGE,
+  type KpAnimationHostStatusMessage
+} from "./animation-host-status-protocol.ts";
 
-export type KpAnimationHostStatus = "loading" | "ready" | "failed";
-
-export interface KpAnimationHostStatusMessage {
-  readonly protocol: typeof KP_ANIMATION_HOST_STATUS_MESSAGE;
-  readonly status: KpAnimationHostStatus;
-  readonly hostId: string;
-  readonly message?: string | undefined;
-}
+export {
+  KP_ANIMATION_HOST_STATUS_MESSAGE
+} from "./animation-host-status-protocol.ts";
+export type {
+  KpAnimationHostStatus,
+  KpAnimationHostStatusMessage
+} from "./animation-host-status-protocol.ts";
+export {
+  isKpAnimationHostStatusMessage
+} from "./animation-host-status-message.ts";
 
 const installedWindows = new WeakSet<Window>();
 const hostIds = new WeakMap<Window, string>();
@@ -70,21 +74,6 @@ export function markKpAnimationHostFailed(
     hostId: requiredHostId(ownerWindow),
     message: message.trim() || "Animation host failed to render."
   });
-}
-
-export function isKpAnimationHostStatusMessage(
-  value: unknown
-): value is KpAnimationHostStatusMessage {
-  if (typeof value !== "object" || value === null) return false;
-  const candidate = value as Partial<KpAnimationHostStatusMessage>;
-  return candidate.protocol === KP_ANIMATION_HOST_STATUS_MESSAGE &&
-    (candidate.status === "loading" ||
-      candidate.status === "ready" ||
-      candidate.status === "failed") &&
-    typeof candidate.hostId === "string" &&
-    candidate.hostId.length > 0 &&
-    (candidate.message === undefined ||
-      typeof candidate.message === "string");
 }
 
 function reflect(

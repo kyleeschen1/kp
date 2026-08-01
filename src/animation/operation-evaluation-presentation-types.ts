@@ -8,8 +8,8 @@ import type {
   KpVerifiedExecutableSuccessorMotifProgram
 } from "./motifs/executable-successor-motif-program.ts";
 import type {
-  KpExecutableMotifContinuityProgram
-} from "./motifs/executable-motif-continuity-compiler.ts";
+  KpExecutableMotifContinuityAuthority
+} from "./motifs/executable-motif-continuity-program.ts";
 
 export const kpCanonicalOperationEvaluationTransformationKinds = [
   "simplifyConstantProduct",
@@ -103,7 +103,7 @@ export interface KpOperationEvaluationPaintContinuityCompilerDescriptor
    * The descriptor retains the nominal compiler result so a matching topology
    * string cannot bypass the program/contract compatibility proof.
    */
-  readonly continuityProgram: KpExecutableMotifContinuityProgram & {
+  readonly continuityProgram: KpExecutableMotifContinuityAuthority & {
     readonly programKind: "operation-evaluation";
     readonly topology:
       "bounded-semantic-contact-co-presence";
