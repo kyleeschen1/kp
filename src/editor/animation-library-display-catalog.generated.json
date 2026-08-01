@@ -489,6 +489,34 @@
     ]
   },
   {
+    "animationId": "animation.physics.constant-force-work-energy",
+    "title": "Constant force and kinetic-energy change",
+    "summary": "Relates constant force over displacement to graph area, net work, and kinetic-energy change.",
+    "tags": [
+      "animation",
+      "diagram",
+      "editor",
+      "force",
+      "graph",
+      "kinetic-energy",
+      "physics",
+      "work"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.physics.constant-force-work-energy",
+    "representations": [
+      {
+        "id": "editor-animation.animation.physics.constant-force-work-energy",
+        "label": "Constant force and kinetic-energy change",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.physics.constant-force-work-energy",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.fraction-composition.two-thirds-solve",
     "title": "Distribute and solve with a fraction",
     "summary": "Follow two thirds times x plus six through thirteen exact operations, folding or pinning the evaluation detail you want to inspect.",

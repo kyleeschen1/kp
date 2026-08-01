@@ -9,6 +9,7 @@ export type KpAnimationCatalogPackId =
   | "generated-problems"
   | "graph"
   | "economics"
+  | "physics"
   | "programming"
   | "comparison"
   | "complex-katex";
@@ -75,6 +76,7 @@ export function kpAnimationCatalogPackId(
     return "graph";
   }
   if (animationId.startsWith("animation.economics.")) return "economics";
+  if (animationId.startsWith("animation.physics.")) return "physics";
   if (animationId.startsWith("animation.programming.")) return "programming";
   if (animationId.startsWith("animation.comparison.")) return "comparison";
   if (animationId.startsWith("animation.sample.")) return "complex-katex";
@@ -122,6 +124,9 @@ async function loadUncachedPack(
     case "economics":
       return (await import("./catalog-packs/economics.ts"))
         .createKpEconomicsAnimationPack();
+    case "physics":
+      return (await import("./catalog-packs/physics.ts"))
+        .createKpPhysicsAnimationPack();
     case "programming":
       return (await import("./catalog-packs/programming.ts"))
         .createKpProgrammingAnimationPack();

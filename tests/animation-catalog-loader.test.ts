@@ -49,6 +49,7 @@ test("all declared pack boundaries are exercised by editor metadata", () => {
   const expectedPackIds: readonly KpAnimationCatalogPackId[] = [
     "exact-quantity",
     "economics",
+    "physics",
     "place-value",
     "algebra",
     "generated-drafts",
@@ -77,6 +78,6 @@ test("catalog loader retains literal dynamic-import boundaries", async () => {
   assert.doesNotMatch(source, /from "\.\/catalog\.ts"/);
   assert.equal(
     [...source.matchAll(/import\("\.\/catalog-packs\/[^"]+\.ts"\)/g)].length,
-    11
+    12
   );
 });

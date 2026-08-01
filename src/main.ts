@@ -118,6 +118,15 @@ import {
   economicsEquilibriumAnimationId
 } from "./animation/economics-equilibrium-adapter.ts";
 import {
+  createKpConstantForceWorkEnergyParameterState,
+  createParameterizedConstantForceWorkEnergyAnimation,
+  readKpConstantForceWorkEnergyParameters,
+  writeKpConstantForceWorkEnergyParameters
+} from "./editor/constant-force-work-energy-parameters.ts";
+import {
+  constantForceWorkEnergyAnimationId
+} from "./animation/constant-force-work-energy-adapter.ts";
+import {
   installKpAnimationHostStatus,
   markKpAnimationHostFailed,
   markKpAnimationHostLoading,
@@ -623,6 +632,9 @@ appRoot.addEventListener("input", (event) => {
     case "set-economics-demand-intercept":
       updateEconomicsDemandInterceptFromInput(event.target);
       return;
+    case "set-physics-net-force":
+      updatePhysicsNetForceFromInput(event.target);
+      return;
   }
 });
 
@@ -711,7 +723,8 @@ async function renderAnimationCatalogueView(): Promise<void> {
       entries: animationCatalogueProjection.entries,
       descriptor: prepared.descriptor,
       player: prepared.player,
-      economicsParameters: prepared.economicsParameters
+      economicsParameters: prepared.economicsParameters,
+      physicsParameters: prepared.physicsParameters
     });
     const shell = appRoot.querySelector<HTMLElement>(
       "[data-kp-animation-catalogue]"
@@ -805,6 +818,13 @@ async function renderAnimationCatalogueSelectionInShell(input: {
         prepared.economicsParameters.demandInterceptAfter
       );
     }
+    if (prepared.physicsParameters === undefined) {
+      delete input.shell.dataset["kpPhysicsNetForceNewtons"];
+    } else {
+      input.shell.dataset["kpPhysicsNetForceNewtons"] = String(
+        prepared.physicsParameters.netForceNewtons
+      );
+    }
     delete input.shell.dataset["kpAnimationCatalogueHostOutcome"];
     stage.removeAttribute("aria-busy");
     stage.dataset["kpAnimationCatalogueStageState"] = "selected";
@@ -816,7 +836,8 @@ async function renderAnimationCatalogueSelectionInShell(input: {
     inspector.innerHTML = renderKpAnimationCatalogueInspector({
       entry: input.entry,
       health: prepared.health,
-      economicsParameters: prepared.economicsParameters
+      economicsParameters: prepared.economicsParameters,
+      physicsParameters: prepared.physicsParameters
     });
     const nextInspectorSelect = inspector.querySelector<HTMLSelectElement>(
       '[data-action="select-animation-catalogue-inspector"]'
@@ -949,10 +970,17 @@ async function prepareAnimationCatalogueSelection(input: {
       economicsEquilibriumAnimationId
     ? readKpEconomicsEquilibriumParameters(window.location.search)
     : undefined;
-  const animation = economicsParameters === undefined
-    ? loaded.animation
-    : createParameterizedEconomicsEquilibriumAnimation(economicsParameters)
-        .animation;
+  const physicsParameters = input.entry.animationId ===
+      constantForceWorkEnergyAnimationId
+    ? readKpConstantForceWorkEnergyParameters(window.location.search)
+    : undefined;
+  const animation = economicsParameters !== undefined
+    ? createParameterizedEconomicsEquilibriumAnimation(economicsParameters)
+        .animation
+    : physicsParameters !== undefined
+      ? createParameterizedConstantForceWorkEnergyAnimation(physicsParameters)
+          .animation
+      : loaded.animation;
   const catalog = loaded.catalog.some(({ id }) => id === animation.id)
     ? loaded.catalog.map((candidate) =>
         candidate.id === animation.id ? animation : candidate
@@ -973,6 +1001,7 @@ async function prepareAnimationCatalogueSelection(input: {
     descriptor,
     player,
     economicsParameters,
+    physicsParameters,
     hostability,
     health: deriveKpAnimationCatalogueHealth({
       hostability,
@@ -1237,6 +1266,44 @@ function updateEconomicsDemandInterceptFromInput(
     ?.replaceChildren(document.createTextNode(String(state.demandInterceptAfter)));
 
   const search = writeKpEconomicsEquilibriumParameters({
+    search: window.location.search,
+    state
+  });
+  window.history.replaceState(
+    window.history.state,
+    "",
+    `${window.location.pathname}${search}${window.location.hash}`
+  );
+}
+
+function updatePhysicsNetForceFromInput(input: HTMLInputElement): void {
+  const shell = input.closest<HTMLElement>("[data-kp-animation-catalogue]");
+  if (
+    shell?.dataset["kpAnimationCatalogueSelection"] !==
+      constantForceWorkEnergyAnimationId
+  ) return;
+  const player = shell.querySelector<HTMLElement>(
+    "[data-kp-editor-animation-player]"
+  );
+  if (player === null) return;
+
+  const state = createKpConstantForceWorkEnergyParameterState(input.value);
+  const parameterized =
+    createParameterizedConstantForceWorkEnergyAnimation(state);
+  replaceKpEditorAnimationPlaybackAsset(player, parameterized.animation);
+  input.value = String(state.netForceNewtons);
+  shell.dataset["kpPhysicsNetForceNewtons"] = String(
+    state.netForceNewtons
+  );
+  input.closest("[data-kp-physics-work-energy-parameters]")
+    ?.querySelector<HTMLOutputElement>(
+      "[data-kp-physics-net-force-output]"
+    )
+    ?.replaceChildren(
+      document.createTextNode(`${state.netForceNewtons} N`)
+    );
+
+  const search = writeKpConstantForceWorkEnergyParameters({
     search: window.location.search,
     state
   });

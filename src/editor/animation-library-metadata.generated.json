@@ -742,6 +742,39 @@
     }
   },
   {
+    "id": "editor-animation.animation.physics.constant-force-work-energy",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.physics.constant-force-work-energy",
+    "title": "Constant force and kinetic-energy change",
+    "summary": "Relates constant force over displacement to graph area, net work, and kinetic-energy change.",
+    "renderTargetKinds": [
+      "graph"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2800,
+    "beatCount": 56,
+    "tags": [
+      "animation",
+      "physics",
+      "graph",
+      "diagram",
+      "force",
+      "work",
+      "kinetic-energy"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.generated.add-zero",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.generated.add-zero",

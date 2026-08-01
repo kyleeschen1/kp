@@ -30,6 +30,13 @@ import {
 import {
   economicsEquilibriumAnimationId
 } from "../animation/economics-equilibrium-adapter.ts";
+import {
+  constantForceWorkEnergyAnimationId
+} from "../animation/constant-force-work-energy-adapter.ts";
+import {
+  kpConstantForceWorkEnergyForceParameter,
+  type KpConstantForceWorkEnergyParameterState
+} from "./constant-force-work-energy-parameters.ts";
 
 export function renderKpAnimationCatalogueShell(input: {
   readonly entry: KpAnimationCatalogueEntry;
@@ -39,6 +46,9 @@ export function renderKpAnimationCatalogueShell(input: {
   readonly player: KpEditorAnimationPlayerState;
   readonly economicsParameters?:
     | KpEconomicsEquilibriumParameterState
+    | undefined;
+  readonly physicsParameters?:
+    | KpConstantForceWorkEnergyParameterState
     | undefined;
 }): string {
   if (input.entry.animationId !== input.health.animationId) {
@@ -61,8 +71,11 @@ export function renderKpAnimationCatalogueShell(input: {
   const economicsParameterData = input.economicsParameters === undefined
     ? ""
     : ` data-kp-economics-demand-intercept="${input.economicsParameters.demandInterceptAfter}"`;
+  const physicsParameterData = input.physicsParameters === undefined
+    ? ""
+    : ` data-kp-physics-net-force-newtons="${input.physicsParameters.netForceNewtons}"`;
 
-  return `<main class="kp-animation-catalogue-shell" data-kp-animation-catalogue data-kp-animation-catalogue-state="selected" data-kp-animation-catalogue-selection="${escapeHtml(entry.animationId)}" data-kp-animation-catalogue-selected-health="${health.status}" data-kp-animation-catalogue-human-disposition="${entry.humanDisposition}"${economicsParameterData} aria-labelledby="kp-animation-catalogue-title">
+  return `<main class="kp-animation-catalogue-shell" data-kp-animation-catalogue data-kp-animation-catalogue-state="selected" data-kp-animation-catalogue-selection="${escapeHtml(entry.animationId)}" data-kp-animation-catalogue-selected-health="${health.status}" data-kp-animation-catalogue-human-disposition="${entry.humanDisposition}"${economicsParameterData}${physicsParameterData} aria-labelledby="kp-animation-catalogue-title">
     <h1 id="kp-animation-catalogue-title" class="kp-animation-catalogue-shell__visually-hidden">Animation catalogue</h1>
     <aside id="kp-animation-catalogue-rail" class="kp-animation-catalogue-shell__rail" data-kp-animation-catalogue-region="rail" aria-label="Artifact catalogue">
       <div class="kp-animation-catalogue-shell__rail-results">
@@ -93,7 +106,8 @@ export function renderKpAnimationCatalogueShell(input: {
       ${renderKpAnimationCatalogueInspector({
         entry,
         health,
-        economicsParameters: input.economicsParameters
+        economicsParameters: input.economicsParameters,
+        physicsParameters: input.physicsParameters
       })}
     </aside>
   </main>`;
@@ -145,6 +159,9 @@ export function renderKpAnimationCatalogueInspector(input: {
   readonly economicsParameters?:
     | KpEconomicsEquilibriumParameterState
     | undefined;
+  readonly physicsParameters?:
+    | KpConstantForceWorkEnergyParameterState
+    | undefined;
 }): string {
   return `<div class="kp-animation-catalogue-shell__inspector-view" data-kp-animation-catalogue-inspector-view="details">
     <label class="kp-animation-catalogue-shell__inspector-switcher">Show
@@ -187,7 +204,24 @@ export function renderKpAnimationCatalogueParameters(input: {
   readonly economicsParameters?:
     | KpEconomicsEquilibriumParameterState
     | undefined;
+  readonly physicsParameters?:
+    | KpConstantForceWorkEnergyParameterState
+    | undefined;
 }): string {
+  if (input.entry.animationId === constantForceWorkEnergyAnimationId) {
+    const state = input.physicsParameters ?? {
+      schemaVersion: "kp.constant-force-work-energy-parameters.v1" as const,
+      netForceNewtons: kpConstantForceWorkEnergyForceParameter.defaultValue
+    };
+    return `<h3>Parameters</h3>
+      <p>Change the constant horizontal net force; displacement and initial kinetic energy remain fixed.</p>
+      <div class="kp-animation-catalogue-shell__parameter-controls" data-kp-physics-work-energy-parameters>
+        <label>Net force
+          <input type="range" min="${kpConstantForceWorkEnergyForceParameter.minimum}" max="${kpConstantForceWorkEnergyForceParameter.maximum}" step="${kpConstantForceWorkEnergyForceParameter.step}" value="${state.netForceNewtons}" data-action="set-physics-net-force" aria-label="Set horizontal net force in newtons" />
+          <output data-kp-physics-net-force-output>${state.netForceNewtons} N</output>
+        </label>
+      </div>`;
+  }
   if (input.entry.animationId !== economicsEquilibriumAnimationId) {
     return `<h3>Parameters</h3>
       <p>This asset has no exposed semantic parameters. Its semantics remain authored artifact state.</p>`;

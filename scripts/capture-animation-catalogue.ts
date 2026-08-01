@@ -14,6 +14,8 @@ const distinctCallerId =
   "animation.exact-fraction-quantity.third-plus-sixth";
 const economicsExemplarId =
   "animation.economics.supply-demand-equilibrium-shift";
+const physicsExemplarId =
+  "animation.physics.constant-force-work-energy";
 const baseUrl =
   process.env["KP_VISUAL_BASE_URL"] ?? "http://127.0.0.1:8000";
 const outputRoot = path.resolve(
@@ -180,9 +182,9 @@ try {
   const allResultCount = await page.locator(
     "[data-kp-animation-catalogue-row]"
   ).count();
-  if (allResultCount !== 34) {
+  if (allResultCount !== 35) {
     throw new Error(
-      `Catalogue expected 34 flat asset rows, found ${allResultCount}.`
+      `Catalogue expected 35 flat asset rows, found ${allResultCount}.`
     );
   }
   const inspectorSelect = page.locator(
@@ -523,6 +525,8 @@ try {
   await pressureDistinctCaller(browser);
 
   await captureEconomicsExemplar(browser);
+
+  await capturePhysicsExemplar(browser);
 
   const hostabilityResults = await captureCatalogueHostability(browser);
   const hostabilityManifest = path.join(outputRoot, "hostability.json");
@@ -928,6 +932,328 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
   }
 }
 
+async function capturePhysicsExemplar(browser: Browser): Promise<void> {
+  const checkpoints = [
+    {
+      name: "start",
+      progress: "0",
+      stage: "establish",
+      position: "0",
+      work: "0",
+      kineticEnergy: "4",
+      workDisplay:
+        "W_{\\mathrm{net}} = F_x\\Delta x = 0.00\\,\\mathrm{J}",
+      energyDisplay:
+        "K = K_0 + W_{\\mathrm{net}} = 4.00\\,\\mathrm{J}",
+      displacementDisplay: "\\Delta x = 0.00\\,\\mathrm{m}"
+    },
+    {
+      name: "accumulate",
+      progress: "0.46",
+      stage: "accumulate",
+      position: "2",
+      work: "6",
+      kineticEnergy: "10",
+      workDisplay:
+        "W_{\\mathrm{net}} = F_x\\Delta x \\approx 6.00\\,\\mathrm{J}",
+      energyDisplay:
+        "K = K_0 + W_{\\mathrm{net}} \\approx 10.00\\,\\mathrm{J}",
+      displacementDisplay: "\\Delta x \\approx 2.00\\,\\mathrm{m}"
+    },
+    {
+      name: "settle",
+      progress: "1",
+      stage: "settle",
+      position: "4",
+      work: "12",
+      kineticEnergy: "16",
+      workDisplay:
+        "W_{\\mathrm{net}} = F_x\\Delta x = 12.00\\,\\mathrm{J}",
+      energyDisplay:
+        "K = K_0 + W_{\\mathrm{net}} = 16.00\\,\\mathrm{J}",
+      displacementDisplay: "\\Delta x = 4.00\\,\\mathrm{m}"
+    }
+  ] as const;
+  const physicsUrl = new URL("/", baseUrl);
+  physicsUrl.searchParams.set("artifact", physicsExemplarId);
+  const page = await browser.newPage({ viewport });
+  const screenshots: Record<string, string> = {};
+
+  try {
+    await page.goto(physicsUrl.toString(), { waitUntil: "networkidle" });
+    await page.evaluate(async () => document.fonts.ready);
+    await waitForPhysicsExemplar(page);
+
+    const player = page.locator(
+      "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+    );
+    const graph = player.locator("[data-kp-editor-graph-svg]");
+    const scrubber = player.locator('[data-action="seek-editor-animation"]');
+    if (await page.locator("iframe").count() !== 0) {
+      throw new Error("Physics exemplar used an iframe fallback.");
+    }
+    if (await player.locator(".katex-display").count() !== 0 ||
+      await player.locator(".katex").count() < 12) {
+      throw new Error("Physics exemplar did not keep mathematical text inline.");
+    }
+    const presentationProfile = await graph.getAttribute(
+      "data-kp-graph-presentation-profile"
+    );
+    const rawSvgTextCount = await graph.locator("text").count();
+    const mathLabelCount = await graph.locator(
+      "[data-kp-physics-math-label]"
+    ).count();
+    if (presentationProfile !==
+        "kp.graph.dimensional-continuity.physics.v1" ||
+      rawSvgTextCount !== 0 || mathLabelCount < 17) {
+      throw new Error(
+        "Physics graph lost its dimensional-continuity or KaTeX contract: " +
+        JSON.stringify({
+          presentationProfile,
+          rawSvgTextCount,
+          mathLabelCount
+        })
+      );
+    }
+
+    const geometry = await page.evaluate(() => {
+      const visualStage = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue-stage] .editor-animation-player__stage"
+      );
+      const graph = visualStage?.querySelector<SVGSVGElement>(
+        "[data-kp-editor-graph-svg]"
+      );
+      const controls = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue-stage] .editor-animation-player__controls"
+      );
+      if (visualStage === null || visualStage === undefined ||
+        graph === null || graph === undefined || controls === null) {
+        throw new Error("Physics geometry targets are missing.");
+      }
+      const stageRect = visualStage.getBoundingClientRect();
+      const graphRect = graph.getBoundingClientRect();
+      const controlsRect = controls.getBoundingClientRect();
+      return {
+        stage: { width: stageRect.width, height: stageRect.height },
+        graph: { width: graphRect.width, height: graphRect.height },
+        centerDelta: {
+          x: graphRect.left + graphRect.width / 2 -
+            (stageRect.left + stageRect.width / 2),
+          y: graphRect.top + graphRect.height / 2 -
+            (stageRect.top + stageRect.height / 2)
+        },
+        controlsVisibleWithoutDocumentScroll:
+          controlsRect.bottom <= window.innerHeight + 1 &&
+          document.documentElement.scrollHeight <= window.innerHeight + 1
+      };
+    });
+    if (Math.abs(geometry.centerDelta.x) > 2 ||
+      Math.abs(geometry.centerDelta.y) > 2 ||
+      !geometry.controlsVisibleWithoutDocumentScroll) {
+      throw new Error(
+        `Physics catalogue geometry drifted: ${JSON.stringify(geometry)}`
+      );
+    }
+
+    let stableDynamicWidths:
+      | { readonly work: number; readonly energy: number; readonly displacement: number }
+      | undefined;
+    for (const checkpoint of checkpoints) {
+      await scrubber.fill(checkpoint.progress);
+      await page.waitForFunction((expectedProgress) =>
+        document.querySelector<HTMLElement>(
+          "[data-kp-animation-catalogue-stage] " +
+          "[data-kp-editor-animation-player]"
+        )?.dataset["kpEditorAnimationProgress"] === expectedProgress,
+      checkpoint.progress);
+      const view = graph.locator("[data-kp-physics-work-energy-view]");
+      const workArea = graph.locator("[data-kp-physics-work-area]");
+      const object = graph.locator("[data-kp-physics-object-position]");
+      const energy = graph.locator("[data-kp-physics-energy-total]");
+      const workDisplay = graph.locator(
+        '[data-kp-physics-equation-role="work"]'
+      );
+      const energyDisplay = graph.locator(
+        '[data-kp-physics-equation-role="energy"]'
+      );
+      const displacementDisplay = graph.locator(
+        '[data-kp-physics-math-label="diagram-displacement"] [data-kp-latex]'
+      );
+      if (await view.getAttribute("data-kp-physics-choreography-stage") !==
+          checkpoint.stage ||
+        await view.getAttribute("data-kp-physics-position") !==
+          checkpoint.position ||
+        await workArea.getAttribute("data-kp-physics-work-area") !==
+          checkpoint.work ||
+        await object.getAttribute("data-kp-physics-object-position") !==
+          checkpoint.position ||
+        await energy.getAttribute("data-kp-physics-energy-total") !==
+          checkpoint.kineticEnergy ||
+        await view.getAttribute("data-kp-physics-display-precision") !== "2" ||
+        await workDisplay.getAttribute("data-kp-latex") !==
+          checkpoint.workDisplay ||
+        await energyDisplay.getAttribute("data-kp-latex") !==
+          checkpoint.energyDisplay ||
+        await displacementDisplay.getAttribute("data-kp-latex") !==
+          checkpoint.displacementDisplay) {
+        throw new Error(
+          `Physics ${checkpoint.name} checkpoint lost frame or display truth.`
+        );
+      }
+      const dynamicWidths = {
+        work: await workDisplay.evaluate((element) =>
+          element.getBoundingClientRect().width
+        ),
+        energy: await energyDisplay.evaluate((element) =>
+          element.getBoundingClientRect().width
+        ),
+        displacement: await displacementDisplay.evaluate((element) =>
+          element.getBoundingClientRect().width
+        )
+      };
+      if (stableDynamicWidths === undefined) {
+        stableDynamicWidths = dynamicWidths;
+      } else if (Math.abs(stableDynamicWidths.work - dynamicWidths.work) >
+          0.5 || Math.abs(stableDynamicWidths.energy - dynamicWidths.energy) >
+          0.5 || Math.abs(
+        stableDynamicWidths.displacement - dynamicWidths.displacement
+      ) > 0.5) {
+        throw new Error(
+          `Physics ${checkpoint.name} dynamic readouts changed size: ` +
+          JSON.stringify({ stableDynamicWidths, dynamicWidths })
+        );
+      }
+      const screenshot = path.join(
+        outputRoot,
+        `physics-${checkpoint.name}.png`
+      );
+      await page.screenshot({
+        path: screenshot,
+        fullPage: true,
+        animations: "disabled"
+      });
+      screenshots[checkpoint.name] = path.relative(process.cwd(), screenshot);
+    }
+
+    await page.locator(
+      '[data-action="select-animation-catalogue-inspector"]'
+    ).selectOption("parameters");
+    await page.locator('[data-action="set-physics-net-force"]').fill("5");
+    await scrubber.fill("1");
+    if (await graph.locator("[data-kp-physics-constant-force-line]")
+      .getAttribute("data-kp-physics-force-value") !== "5" ||
+      await graph.locator("[data-kp-physics-work-area]")
+        .getAttribute("data-kp-physics-work-area") !== "20" ||
+      await graph.locator("[data-kp-physics-energy-total]")
+        .getAttribute("data-kp-physics-energy-total") !== "24") {
+      throw new Error("Physics custom-force checkpoint lost exact truth.");
+    }
+    const customScreenshot = path.join(outputRoot, "physics-custom-5n.png");
+    await page.screenshot({
+      path: customScreenshot,
+      fullPage: true,
+      animations: "disabled"
+    });
+    screenshots["custom-5n"] = path.relative(process.cwd(), customScreenshot);
+
+    const narrow = await browser.newPage({
+      viewport: { width: 720, height: 900 }
+    });
+    try {
+      const narrowUrl = new URL(physicsUrl);
+      narrowUrl.searchParams.set("playhead", "0.46");
+      await narrow.goto(narrowUrl.toString(), { waitUntil: "networkidle" });
+      await narrow.evaluate(async () => document.fonts.ready);
+      await waitForPhysicsExemplar(narrow);
+      const narrowGeometry = await narrow.evaluate(() => {
+        const controls = document.querySelector<HTMLElement>(
+          "[data-kp-animation-catalogue-stage] " +
+          ".editor-animation-player__controls"
+        );
+        const reviewHost = document.querySelector<HTMLElement>(
+          "[data-kp-dev-review-shell]"
+        );
+        const launcher = reviewHost?.shadowRoot?.querySelector<HTMLElement>(
+          ".launcher"
+        );
+        const play = controls?.querySelector<HTMLElement>(
+          '[data-action="toggle-editor-animation"]'
+        );
+        const scrubber = controls?.querySelector<HTMLElement>(
+          '[data-action="seek-editor-animation"]'
+        );
+        if (controls === null || reviewHost === null || launcher === null ||
+          launcher === undefined || play === null || play === undefined ||
+          scrubber === null || scrubber === undefined) {
+          throw new Error("Narrow physics control geometry is missing.");
+        }
+        const controlsRect = controls.getBoundingClientRect();
+        const launcherRect = launcher.getBoundingClientRect();
+        const playRect = play.getBoundingClientRect();
+        const scrubberRect = scrubber.getBoundingClientRect();
+        return {
+          reviewClearsTransport:
+            launcherRect.bottom <= controlsRect.top - 2 ||
+            launcherRect.right <= Math.min(
+              playRect.left,
+              scrubberRect.left
+            ) - 2,
+          controlsVisibleWithoutDocumentScroll:
+            controlsRect.bottom <= window.innerHeight + 1 &&
+            document.documentElement.scrollHeight <= window.innerHeight + 1
+        };
+      });
+      if (!narrowGeometry.reviewClearsTransport ||
+        !narrowGeometry.controlsVisibleWithoutDocumentScroll) {
+        throw new Error(
+          `Narrow physics controls collided: ${JSON.stringify(narrowGeometry)}`
+        );
+      }
+      const narrowScreenshot = path.join(
+        outputRoot,
+        "physics-narrow-accumulate.png"
+      );
+      await narrow.screenshot({
+        path: narrowScreenshot,
+        fullPage: true,
+        animations: "disabled"
+      });
+      screenshots["narrow-accumulate"] = path.relative(
+        process.cwd(),
+        narrowScreenshot
+      );
+    } finally {
+      await narrow.close();
+    }
+
+    const manifest = path.join(outputRoot, "physics-exemplar.json");
+    await writeFile(
+      manifest,
+      `${JSON.stringify({
+        schemaVersion: "kp.animation-catalogue-physics-exemplar.v1",
+        animationId: physicsExemplarId,
+        url: physicsUrl.toString(),
+        viewport,
+        geometry,
+        presentation: {
+          profile: presentationProfile,
+          mathTypography: "katex",
+          rawSvgTextCount,
+          minimumMathLabelCount: mathLabelCount,
+          dynamicDisplayDecimals: 2
+        },
+        screenshots
+      }, null, 2)}\n`,
+      "utf8"
+    );
+    console.log(
+      `animation catalogue physics exemplar: ${path.relative(process.cwd(), manifest)}`
+    );
+  } finally {
+    await page.close();
+  }
+}
+
 function rectanglesOverlap(
   left: { readonly left: number; readonly right: number; readonly top: number; readonly bottom: number },
   right: { readonly left: number; readonly right: number; readonly top: number; readonly bottom: number }
@@ -953,6 +1279,25 @@ async function waitForEconomicsExemplar(page: Page) {
       player?.dataset["kpEditorAnimationHydrated"] === "true" &&
       slot?.dataset["kpEditorAnimationAdapterStatus"] === "ready";
   }, economicsExemplarId);
+}
+
+async function waitForPhysicsExemplar(page: Page) {
+  await page.waitForFunction((expectedAnimationId) => {
+    const shell = document.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue]"
+    );
+    const player = shell?.querySelector<HTMLElement>(
+      "[data-kp-editor-animation-player]"
+    );
+    const slot = player?.querySelector<HTMLElement>(
+      '[data-kp-editor-animation-surface-slot="graph"]'
+    );
+    return shell?.dataset["kpAnimationCatalogueSelection"] ===
+      expectedAnimationId &&
+      shell.dataset["kpAnimationCatalogueHostOutcome"] === "painted" &&
+      player?.dataset["kpEditorAnimationHydrated"] === "true" &&
+      slot?.dataset["kpEditorAnimationAdapterStatus"] === "ready";
+  }, physicsExemplarId);
 }
 
 async function captureCatalogueInteractionSelection(browser: Browser) {

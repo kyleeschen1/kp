@@ -50,6 +50,9 @@ import {
 import {
   createEconomicsEquilibriumAnimationAsset
 } from "./economics-equilibrium-adapter.ts";
+import {
+  createConstantForceWorkEnergyAnimationAsset
+} from "./constant-force-work-energy-adapter.ts";
 
 export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
   return [
@@ -60,6 +63,7 @@ export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
     createKpExactFractionQuantityAnimationAsset(),
     createKpPlaceValueAdditionAnimationAsset(),
     createEconomicsEquilibriumAnimationAsset(),
+    createConstantForceWorkEnergyAnimationAsset(),
     createAcceptedGeneratedAddZeroAnimationAsset(),
     createAcceptedGeneratedSubstitutionAnimationAsset(),
     createProvisionalIncorrectSubstitutionAnimationAsset(),

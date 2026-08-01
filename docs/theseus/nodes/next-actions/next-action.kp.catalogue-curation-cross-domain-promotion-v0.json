@@ -544,11 +544,84 @@
       "status": "passed",
       "scope": "s25 patch hygiene",
       "checkedAt": "2026-08-01T20:30:40.371Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "physics catalogue registration and shell parameter wiring",
+      "checkedAt": "2026-08-01T20:55:54.009Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "repository architecture boundaries",
+      "checkedAt": "2026-08-01T20:55:55.051Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "complete deterministic suite: 3253 tests",
+      "checkedAt": "2026-08-01T20:55:55.977Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production build and lazy physics chunk",
+      "checkedAt": "2026-08-01T20:55:56.845Z"
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "35-artifact catalogue plus physics checkpoints and narrow layout",
+      "checkedAt": "2026-08-01T20:55:57.701Z"
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "39 preserved canonical baseline states",
+      "checkedAt": "2026-08-01T20:55:58.547Z"
+    },
+    {
+      "command": "npm run test:browser:physics-work-energy",
+      "status": "passed",
+      "scope": "Chromium Firefox WebKit seek rewind parameter accessibility review history",
+      "checkedAt": "2026-08-01T20:55:59.422Z"
+    },
+    {
+      "command": "npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "generated display metadata freshness",
+      "checkedAt": "2026-08-01T20:56:00.623Z"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "lazy bundle budgets",
+      "checkedAt": "2026-08-01T20:56:01.633Z"
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "production review-code exclusion",
+      "checkedAt": "2026-08-01T20:56:02.533Z"
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "performance preservation baseline",
+      "checkedAt": "2026-08-01T20:56:03.462Z",
+      "notes": "No regressions; pre-existing target gaps remain non-blocking."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "patch whitespace integrity",
+      "checkedAt": "2026-08-01T20:56:04.440Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Built one unregistered native work-energy presenter on the existing graph viewport and shared clock: exact graph, moving-block diagram, energy bar, inline KaTeX equation band, staged narrative, direct seek and rewind, accessible exact state, and a local dimensional-continuity physics profile. No shared renderer, API, or motif family was extracted."
+    "summary": "Registered the exact constant-force work-energy physics exemplar as catalogue artifact 35 with a lazy physics pack, one optional net-force control, review capture, stable visual evidence, and cross-browser deterministic behavior. Awaiting the required human exemplar checkpoint before any shared promotion."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",

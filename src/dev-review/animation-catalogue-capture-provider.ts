@@ -27,18 +27,24 @@ export function createKpAnimationCatalogueCaptureProvider(
       );
       const demandIntercept =
         shell?.dataset["kpEconomicsDemandIntercept"];
+      const netForceNewtons =
+        shell?.dataset["kpPhysicsNetForceNewtons"];
+      const parameters = {
+        ...(evidence.semantic.parameters ?? {}),
+        ...(demandIntercept === undefined
+          ? {}
+          : { "demand-price-intercept": demandIntercept }),
+        ...(netForceNewtons === undefined
+          ? {}
+          : { "net-force-newtons": netForceNewtons })
+      };
       return {
         ...evidence,
         semantic: {
           ...evidence.semantic,
-          ...(demandIntercept === undefined
+          ...(Object.keys(parameters).length === 0
             ? {}
-            : {
-                parameters: {
-                  ...(evidence.semantic.parameters ?? {}),
-                  "demand-price-intercept": demandIntercept
-                }
-              }),
+            : { parameters }),
           tuning: {
             "gestalt-style": requiredDataset(
               player,

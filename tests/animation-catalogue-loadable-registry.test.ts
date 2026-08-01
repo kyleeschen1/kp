@@ -26,8 +26,8 @@ test("loadable registry has one compact entry per concrete animation asset", asy
   const registry = createKpAnimationCatalogueLoadableRegistry();
   const expectedIds = assets.map(({ id }) => id).sort();
 
-  assert.equal(registry.length, 34);
-  assert.equal(new Set(registry.map(({ animationId }) => animationId)).size, 34);
+  assert.equal(registry.length, 35);
+  assert.equal(new Set(registry.map(({ animationId }) => animationId)).size, 35);
   assert.deepEqual(registry.map(({ animationId }) => animationId), expectedIds);
   assert.deepEqual(
     [...new Set(registry.map(({ packId }) => packId))].sort(),
@@ -41,6 +41,7 @@ test("loadable registry has one compact entry per concrete animation asset", asy
       "generated-problems",
       "graph",
       "operation-evaluation",
+      "physics",
       "place-value",
       "programming"
     ]

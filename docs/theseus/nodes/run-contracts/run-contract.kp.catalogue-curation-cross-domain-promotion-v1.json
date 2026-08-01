@@ -526,7 +526,8 @@
     {
       "id": "s26",
       "title": "Register and verify physics exemplar",
-      "status": "planned"
+      "summary": "Registered and verified the physics constant-force work-energy exemplar in the focused catalogue. All deterministic, visual, browser, build, bundle, production-closure, and performance preservation gates pass.",
+      "status": "complete"
     },
     {
       "id": "s27",

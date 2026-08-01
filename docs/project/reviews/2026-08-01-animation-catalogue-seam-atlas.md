@@ -5,13 +5,13 @@ Status: morning human checkpoint after catalogue simplification slice s30
 
 ## Outcome
 
-The internal catalogue now has one row for each of 34 concrete lazy-loadable
-assets across 11 packs. The catalogue load probe loaded and routed every row:
-32 painted through an existing native adapter, two stopped at an explicit
+The internal catalogue now has one row for each of 35 concrete lazy-loadable
+assets across 12 packs. The catalogue load probe loaded and routed every row:
+33 painted through an existing native adapter, two stopped at an explicit
 missing-programming-adapter gap, none failed loading, and none used an iframe.
 
 This collapses the apparent port backlog. There is no catalogue-host port to
-perform for the 32 painted assets. The only observed hosting seam is
+perform for the 33 painted assets. The only observed hosting seam is
 programming, shared by one pure execution trace and one composite comparison.
 
 Every human disposition remains `Unreviewed`. The final column below is a
@@ -54,15 +54,16 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 | `animation.operation-evaluation.one-plus-two` | operation-evaluation | equation | Painted · native KaTeX operation | 2 | Keep? |
 | `animation.operation-evaluation.three-sixths` | operation-evaluation | equation | Painted · native KaTeX operation | 1 | Keep? |
 | `animation.place-value-addition.278-plus-156` | place-value | diagram | Painted · synchronized place value | 2 | Keep? |
+| `animation.physics.constant-force-work-energy` | physics | graph | Painted · exact SVG graph/diagram | 1 | Human exemplar review pending |
 | `animation.programming.add.execution-trace` | programming | programming | Gap · programming adapter | 1 | Repair? |
 | `animation.sample.fourier-transform-pair` | complex-katex | equation | Painted · KaTeX | 1 | Keep? |
 | `animation.sample.fundamental-theorem-calculus` | complex-katex | equation | Painted · KaTeX | 3 | Keep? |
 
 ## Shared Seams
 
-The catalogue crosses five surface shapes: 23 equation, six graph, three
+The catalogue crosses five surface shapes: 23 equation, seven graph, three
 diagram, one composite, and one programming asset. Adapter reuse is strong:
-the general KaTeX adapter participates in 21 rows, the graph adapter in six,
+the general KaTeX adapter participates in 21 rows, the graph adapter in seven,
 the canonical operation-evaluation adapter in three, and three specialized
 diagram adapters each cover one row. This is evidence for keeping the adapter
 registry seam, not for inventing a universal renderer.
@@ -73,7 +74,7 @@ not a new canonical-port candidate merely because it rendered successfully.
 
 ## Context Consolidation Queue
 
-The 34 assets currently carry 75 related display contexts: 53 editor, 17 card,
+The 35 assets currently carry 76 related display contexts: 54 editor, 17 card,
 three reader, and two diagnostic. These contexts stay under Details and do not
 mint additional catalogue rows.
 
@@ -130,6 +131,6 @@ The next session should browse the running catalogue and decide, in batches:
 3. whether the programming execution trace is the next approved exemplar;
 4. which high-fan-out contexts carry unique value before consolidation.
 
-The economics row was added afterward as the first bounded cross-domain
-exemplar. No public-site, LLM explanation, route deletion, universal renderer,
+The economics and physics rows were added afterward as bounded cross-domain
+exemplars. No public-site, LLM explanation, route deletion, universal renderer,
 canonical port, or human disposition assignment was performed.
