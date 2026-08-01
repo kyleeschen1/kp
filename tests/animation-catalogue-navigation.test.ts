@@ -58,16 +58,16 @@ test("browser-owned link gestures retain native navigation", () => {
   ] as const;
 
   for (const gesture of gestures) {
+    const target = "target" in gesture ? gesture.target : undefined;
+    const download = "download" in gesture ? gesture.download : undefined;
     const decision = decideKpAnimationCatalogueLinkNavigation({
       projection,
       currentAnimationId: solveX,
       currentHref,
       href: `/?artifact=${radical}`,
       event: gesture.event,
-      ...(gesture.target === undefined ? {} : { target: gesture.target }),
-      ...(gesture.download === undefined
-        ? {}
-        : { download: gesture.download })
+      ...(target === undefined ? {} : { target }),
+      ...(download === undefined ? {} : { download })
     });
     assert.equal(decision.action, "native", gesture.label);
     assert.equal(

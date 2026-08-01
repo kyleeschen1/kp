@@ -22,6 +22,12 @@ import {
 import {
   createKpAnimationCatalogueProjection
 } from "./editor/animation-catalogue-projection.ts";
+import type {
+  KpAnimationCatalogueEntry
+} from "./editor/animation-catalogue-projection.ts";
+import {
+  decideKpAnimationCatalogueLinkNavigation
+} from "./editor/animation-catalogue-navigation.ts";
 import {
   readKpAnimationCatalogueRoute,
   writeKpAnimationCatalogueRoute
@@ -31,6 +37,7 @@ import {
 } from "./editor/animation-catalogue-selection.ts";
 import {
   applyKpAnimationCatalogueObservedHealth,
+  renderKpAnimationCatalogueInspector,
   renderKpAnimationCatalogueResults,
   renderKpAnimationCatalogueShell
 } from "./editor/animation-catalogue-shell.ts";
@@ -117,6 +124,9 @@ import {
 import {
   createKpEditorAnimationPlayerState
 } from "./editor/animation-player-state.ts";
+import {
+  renderKpEditorAnimationPlayerShell
+} from "./editor/animation-player-shell.ts";
 import {
   registerKpEditorEquationSurfaceAdapter
 } from "./editor/equation-surface-adapter.ts";
@@ -266,6 +276,9 @@ let viewRevision = 0;
 let disposeAnimationDevelopmentReview:
   | (() => void)
   | undefined;
+let disposeAnimationCatalogueHostEvidence:
+  | (() => void)
+  | undefined;
 const graph3DWebGLVisibilityObservers = new WeakMap<
   HTMLElement,
   IntersectionObserver
@@ -305,12 +318,55 @@ document.addEventListener("visibilitychange", () => {
 
 window.addEventListener("pagehide", () => {
   disposeAnimationDevelopmentReviewCapture();
+  disposeAnimationCatalogueHostEvidenceObserver();
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
 });
 
 appRoot.addEventListener("click", (event) => {
   if (!(event.target instanceof Element)) {
+    return;
+  }
+
+  const catalogueLink = event.target.closest<HTMLAnchorElement>(
+    "a.kp-animation-catalogue-shell__result-link"
+  );
+  const catalogueShell = catalogueLink?.closest<HTMLElement>(
+    "[data-kp-animation-catalogue]"
+  );
+  const currentAnimationId =
+    catalogueShell?.dataset["kpAnimationCatalogueSelection"];
+  if (
+    activeView === "animation-catalogue" &&
+    catalogueLink !== null && catalogueLink !== undefined &&
+    catalogueShell !== null && catalogueShell !== undefined &&
+    currentAnimationId !== undefined
+  ) {
+    const decision = decideKpAnimationCatalogueLinkNavigation({
+      projection: animationCatalogueProjection,
+      currentAnimationId,
+      currentHref: window.location.href,
+      href: catalogueLink.href,
+      event: {
+        defaultPrevented: event.defaultPrevented,
+        button: event.button,
+        altKey: event.altKey,
+        ctrlKey: event.ctrlKey,
+        metaKey: event.metaKey,
+        shiftKey: event.shiftKey
+      },
+      target: catalogueLink.target,
+      download: catalogueLink.hasAttribute("download")
+    });
+    if (decision.action === "native") return;
+    event.preventDefault();
+    if (decision.action === "stay") return;
+    window.history.pushState(null, "", decision.href);
+    void renderAnimationCatalogueSelectionInShell({
+      shell: catalogueShell,
+      entry: decision.entry,
+      playhead: decision.playhead
+    });
     return;
   }
 
@@ -573,6 +629,7 @@ async function renderAnimationCatalogueView(): Promise<void> {
   activeView = "animation-catalogue";
   const revision = ++viewRevision;
   disposeAnimationDevelopmentReviewCapture();
+  disposeAnimationCatalogueHostEvidenceObserver();
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
@@ -598,104 +655,31 @@ async function renderAnimationCatalogueView(): Promise<void> {
     title: entry.title
   });
   try {
-    const loaded = await loadKpAnimationAsset(entry.animationId);
+    const prepared = await prepareAnimationCatalogueSelection({
+      entry,
+      playhead: route.playhead
+    });
     if (activeView !== "animation-catalogue" || revision !== viewRevision) {
       return;
     }
-    if (
-      loaded.animation.id !== entry.animationId ||
-      loaded.packId !== entry.packId
-    ) {
-      throw new Error(
-        `Loaded catalogue asset ${loaded.animation.id} from ${loaded.packId}; ` +
-        `expected ${entry.animationId} from ${entry.packId}.`
-      );
-    }
-    const descriptor = editorAnimationDescriptors.find(
-      ({ id }) => id === entry.primaryDescriptorId
-    );
-    if (descriptor === undefined) {
-      throw new Error(
-        `Catalogue entry ${entry.animationId} is missing descriptor ` +
-        `${entry.primaryDescriptorId}.`
-      );
-    }
-    const playerState = createKpEditorAnimationPlayerState({
-      descriptor,
-      animation: loaded.animation,
-      catalog: loaded.catalog,
-      progress: route.playhead ?? 0
-    });
-    const hostability = inspectKpAnimationCatalogueSurfaceHostability({
-      state: playerState,
-      registry: kpEditorAnimationSurfaceAdapterRegistry
-    });
-    const health = deriveKpAnimationCatalogueHealth({
-      hostability,
-      hostObservation: { status: "not-observed" }
-    });
     appRoot.innerHTML = renderKpAnimationCatalogueShell({
       entry,
-      health,
+      health: prepared.health,
       entries: animationCatalogueProjection.entries,
-      descriptor,
-      player: playerState
+      descriptor: prepared.descriptor,
+      player: prepared.player
     });
-    // Preserve the established listener order so the first sampled frame
-    // reaches its surface adapter before the controller announces readiness.
-    hydrateKpEditorAnimationSurfaces(appRoot);
-    hydrateKpEditorAnimationLiveDiagnostics(appRoot);
-    const cataloguePlayer = appRoot.querySelector<HTMLElement>(
-      "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+    const shell = appRoot.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue]"
     );
-    const catalogueStage = appRoot.querySelector<HTMLElement>(
-      "[data-kp-animation-catalogue-stage]"
-    );
-    let hostEvidenceObserver: MutationObserver | undefined;
-    const publishTerminalHostEvidence = () => {
-      const hostObservation = observeKpAnimationCatalogueHost(appRoot);
-      const hostOutcome = deriveKpAnimationCatalogueHostOutcome({
-        entry,
-        hostability,
-        hostObservation
-      });
-      if (hostOutcome === undefined) return;
-      hostEvidenceObserver?.disconnect();
-      const observedHealth = deriveKpAnimationCatalogueHealth({
-        hostability,
-        hostObservation
-      });
-      const shell = appRoot.querySelector<HTMLElement>(
-        "[data-kp-animation-catalogue]"
-      );
-      if (shell === null) return;
-      applyKpAnimationCatalogueObservedHealth({
-        shell,
-        entry,
-        health: observedHealth
-      });
-      shell.dataset["kpAnimationCatalogueHostOutcome"] =
-        hostOutcome.status;
-    };
-    if (catalogueStage !== null) {
-      // Generic adapters paint synchronously while specialized adapters may
-      // settle after font measurement. One bounded observer covers both
-      // without adding an asset-specific shell exception.
-      hostEvidenceObserver = new MutationObserver(
-        publishTerminalHostEvidence
-      );
-      hostEvidenceObserver.observe(catalogueStage, {
-        attributes: true,
-        childList: true,
-        subtree: true
-      });
+    if (shell === null) {
+      throw new Error("Catalogue shell did not mount.");
     }
-    cataloguePlayer?.addEventListener(
-      KP_EDITOR_ANIMATION_FRAME_EVENT,
-      publishTerminalHostEvidence,
-      { once: true }
-    );
-    hydrateKpEditorAnimationPlayers(appRoot);
+    hydrateAnimationCatalogueSelection({
+      shell,
+      entry,
+      hostability: prepared.hostability
+    });
     void mountAnimationCatalogueReviewCapture(revision);
   } catch (error: unknown) {
     if (activeView !== "animation-catalogue" || revision !== viewRevision) {
@@ -711,6 +695,246 @@ async function renderAnimationCatalogueView(): Promise<void> {
     });
     markKpAnimationHostFailed(window, message);
   }
+}
+
+async function renderAnimationCatalogueSelectionInShell(input: {
+  readonly shell: HTMLElement;
+  readonly entry: KpAnimationCatalogueEntry;
+  readonly playhead?: number | undefined;
+}): Promise<void> {
+  const revision = ++viewRevision;
+  const stage = input.shell.querySelector<HTMLElement>(
+    "[data-kp-animation-catalogue-stage]"
+  );
+  const inspector = input.shell.querySelector<HTMLElement>(
+    "[data-kp-animation-catalogue-region=\"inspector\"]"
+  );
+  const results = input.shell.querySelector<HTMLOListElement>(
+    "[data-kp-animation-catalogue-results]"
+  );
+  const search = input.shell.querySelector<HTMLInputElement>(
+    '[data-action="filter-animation-catalogue"]'
+  );
+  const inspectorMode = input.shell.querySelector<HTMLSelectElement>(
+    '[data-action="select-animation-catalogue-inspector"]'
+  )?.value;
+  if (stage === null || inspector === null || results === null) {
+    window.location.assign(window.location.href);
+    return;
+  }
+
+  markKpAnimationHostLoading(window, `catalogue.${input.entry.animationId}`);
+  disposeAnimationCatalogueHostEvidenceObserver();
+  disposeKpEditorAnimationPlayers(stage);
+  disposeKpEditorEquationStageHotPathCaches(stage);
+  disposeGraph3DWebGL(stage);
+  setAnimationCatalogueStageMessage(
+    stage,
+    `Loading ${input.entry.title}…`,
+    "loading"
+  );
+
+  try {
+    const prepared = await prepareAnimationCatalogueSelection(input);
+    if (
+      activeView !== "animation-catalogue" ||
+      revision !== viewRevision ||
+      !input.shell.isConnected
+    ) return;
+
+    input.shell.dataset["kpAnimationCatalogueSelection"] =
+      input.entry.animationId;
+    input.shell.dataset["kpAnimationCatalogueSelectedHealth"] =
+      prepared.health.status;
+    input.shell.dataset["kpAnimationCatalogueHumanDisposition"] =
+      input.entry.humanDisposition;
+    delete input.shell.dataset["kpAnimationCatalogueHostOutcome"];
+    stage.removeAttribute("aria-busy");
+    stage.dataset["kpAnimationCatalogueStageState"] = "selected";
+    stage.innerHTML = renderKpEditorAnimationPlayerShell({
+      descriptor: prepared.descriptor,
+      player: prepared.player,
+      chrome: "catalogue"
+    });
+    inspector.innerHTML = renderKpAnimationCatalogueInspector({
+      entry: input.entry,
+      health: prepared.health
+    });
+    const nextInspectorSelect = inspector.querySelector<HTMLSelectElement>(
+      '[data-action="select-animation-catalogue-inspector"]'
+    );
+    if (
+      nextInspectorSelect !== null &&
+      (inspectorMode === "details" || inspectorMode === "parameters" ||
+        inspectorMode === "tuning")
+    ) {
+      nextInspectorSelect.value = inspectorMode;
+      selectAnimationCatalogueInspectorFromSelect(nextInspectorSelect);
+    }
+    results.outerHTML = renderKpAnimationCatalogueResults({
+      entries: animationCatalogueProjection.entries,
+      selectedAnimationId: input.entry.animationId,
+      selectedHealth: prepared.health,
+      query: search?.value ?? ""
+    });
+    hydrateAnimationCatalogueSelection({
+      shell: input.shell,
+      entry: input.entry,
+      hostability: prepared.hostability
+    });
+    if (disposeAnimationDevelopmentReview === undefined) {
+      void mountAnimationCatalogueReviewCapture(revision);
+    }
+  } catch (error: unknown) {
+    if (
+      activeView !== "animation-catalogue" ||
+      revision !== viewRevision ||
+      !input.shell.isConnected
+    ) return;
+    const message = error instanceof Error
+      ? error.message
+      : "The selected catalogue asset failed to load.";
+    setAnimationCatalogueStageMessage(stage, message, "error");
+    markKpAnimationHostFailed(window, message);
+  }
+}
+
+async function prepareAnimationCatalogueSelection(input: {
+  readonly entry: KpAnimationCatalogueEntry;
+  readonly playhead?: number | undefined;
+}) {
+  const loaded = await loadKpAnimationAsset(input.entry.animationId);
+  if (
+    loaded.animation.id !== input.entry.animationId ||
+    loaded.packId !== input.entry.packId
+  ) {
+    throw new Error(
+      `Loaded catalogue asset ${loaded.animation.id} from ${loaded.packId}; ` +
+      `expected ${input.entry.animationId} from ${input.entry.packId}.`
+    );
+  }
+  const descriptor = editorAnimationDescriptors.find(
+    ({ id }) => id === input.entry.primaryDescriptorId
+  );
+  if (descriptor === undefined) {
+    throw new Error(
+      `Catalogue entry ${input.entry.animationId} is missing descriptor ` +
+      `${input.entry.primaryDescriptorId}.`
+    );
+  }
+  const player = createKpEditorAnimationPlayerState({
+    descriptor,
+    animation: loaded.animation,
+    catalog: loaded.catalog,
+    progress: input.playhead ?? 0
+  });
+  const hostability = inspectKpAnimationCatalogueSurfaceHostability({
+    state: player,
+    registry: kpEditorAnimationSurfaceAdapterRegistry
+  });
+  return {
+    descriptor,
+    player,
+    hostability,
+    health: deriveKpAnimationCatalogueHealth({
+      hostability,
+      hostObservation: { status: "not-observed" }
+    })
+  } as const;
+}
+
+function hydrateAnimationCatalogueSelection(input: {
+  readonly shell: HTMLElement;
+  readonly entry: KpAnimationCatalogueEntry;
+  readonly hostability: ReturnType<
+    typeof inspectKpAnimationCatalogueSurfaceHostability
+  >;
+}): void {
+  disposeAnimationCatalogueHostEvidenceObserver();
+  // Surface listeners attach first so the controller's initial runtime frame
+  // is observable without an extra synthetic playback tick.
+  hydrateKpEditorAnimationSurfaces(input.shell);
+  hydrateKpEditorAnimationLiveDiagnostics(input.shell);
+  const cataloguePlayer = input.shell.querySelector<HTMLElement>(
+    "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+  );
+  const catalogueStage = input.shell.querySelector<HTMLElement>(
+    "[data-kp-animation-catalogue-stage]"
+  );
+  let hostEvidenceObserver: MutationObserver | undefined;
+  let disposed = false;
+  const dispose = () => {
+    if (disposed) return;
+    disposed = true;
+    hostEvidenceObserver?.disconnect();
+    cataloguePlayer?.removeEventListener(
+      KP_EDITOR_ANIMATION_FRAME_EVENT,
+      publishTerminalHostEvidence
+    );
+    if (disposeAnimationCatalogueHostEvidence === dispose) {
+      disposeAnimationCatalogueHostEvidence = undefined;
+    }
+  };
+  const publishTerminalHostEvidence = () => {
+    if (
+      input.shell.dataset["kpAnimationCatalogueSelection"] !==
+        input.entry.animationId
+    ) return;
+    const hostObservation = observeKpAnimationCatalogueHost(input.shell);
+    const hostOutcome = deriveKpAnimationCatalogueHostOutcome({
+      entry: input.entry,
+      hostability: input.hostability,
+      hostObservation
+    });
+    if (hostOutcome === undefined) return;
+    dispose();
+    applyKpAnimationCatalogueObservedHealth({
+      shell: input.shell,
+      entry: input.entry,
+      health: deriveKpAnimationCatalogueHealth({
+        hostability: input.hostability,
+        hostObservation
+      })
+    });
+    input.shell.dataset["kpAnimationCatalogueHostOutcome"] =
+      hostOutcome.status;
+  };
+  if (catalogueStage !== null) {
+    // Generic adapters paint synchronously while specialized adapters may
+    // settle after font measurement. One bounded observer covers both.
+    hostEvidenceObserver = new MutationObserver(publishTerminalHostEvidence);
+    hostEvidenceObserver.observe(catalogueStage, {
+      attributes: true,
+      childList: true,
+      subtree: true
+    });
+  }
+  cataloguePlayer?.addEventListener(
+    KP_EDITOR_ANIMATION_FRAME_EVENT,
+    publishTerminalHostEvidence,
+    { once: true }
+  );
+  disposeAnimationCatalogueHostEvidence = dispose;
+  hydrateKpEditorAnimationPlayers(input.shell);
+}
+
+function disposeAnimationCatalogueHostEvidenceObserver(): void {
+  disposeAnimationCatalogueHostEvidence?.();
+  disposeAnimationCatalogueHostEvidence = undefined;
+}
+
+function setAnimationCatalogueStageMessage(
+  stage: HTMLElement,
+  message: string,
+  state: "loading" | "error"
+): void {
+  stage.dataset["kpAnimationCatalogueStageState"] = state;
+  stage.setAttribute("aria-busy", String(state === "loading"));
+  const status = document.createElement("p");
+  status.className = "kp-animation-catalogue-shell__stage-status";
+  status.setAttribute("role", state === "error" ? "alert" : "status");
+  status.textContent = message;
+  stage.replaceChildren(status);
 }
 
 function filterAnimationCatalogueFromInput(input: HTMLInputElement): void {

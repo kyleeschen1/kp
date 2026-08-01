@@ -312,7 +312,7 @@ try {
     animations: "disabled"
   });
 
-  const interactionBaseline = await captureCatalogueInteractionBaseline(
+  const interaction = await captureCatalogueInteractionSelection(
     browser
   );
 
@@ -326,7 +326,7 @@ try {
       url: url.toString(),
       viewport,
       screenshot: path.relative(process.cwd(), screenshot),
-      interactionBaseline
+      interaction
     }, null, 2)}\n`,
     "utf8"
   );
@@ -405,7 +405,7 @@ try {
   await browser.close();
 }
 
-async function captureCatalogueInteractionBaseline(browser: Browser) {
+async function captureCatalogueInteractionSelection(browser: Browser) {
   const page = await browser.newPage({ viewport });
   const sourceUrl = new URL("/", baseUrl);
   sourceUrl.searchParams.set("artifact", animationId);
@@ -452,7 +452,6 @@ async function captureCatalogueInteractionBaseline(browser: Browser) {
       );
     });
 
-    const navigation = page.waitForNavigation({ waitUntil: "networkidle" });
     await page.evaluate((nextAnimationId) => {
       const link = document.querySelector<HTMLAnchorElement>(
         `[data-kp-animation-catalogue-row="${nextAnimationId}"] a`
@@ -462,7 +461,6 @@ async function captureCatalogueInteractionBaseline(browser: Browser) {
       }
       link.click();
     }, promotedSiblingId);
-    await navigation;
     await page.waitForFunction((expectedAnimationId) => {
       const shell = document.querySelector<HTMLElement>(
         "[data-kp-animation-catalogue]"
@@ -501,19 +499,17 @@ async function captureCatalogueInteractionBaseline(browser: Browser) {
           .at(-1) ?? "unknown"
       };
     });
-    const replacementReview = page.locator("[data-kp-dev-review-shell]");
-    await replacementReview.locator("button.launcher").click();
-    const reviewDraft = await replacementReview.locator(
+    const reviewDraft = await review.locator(
       '[role="dialog"] textarea'
     ).inputValue();
 
     if (
-      after.documentIdentityPreserved ||
-      after.shellIdentityPreserved ||
-      after.reviewComposerIdentityPreserved ||
-      after.railQuery !== "" ||
-      after.inspectorMode !== "details" ||
-      reviewDraft !== ""
+      !after.documentIdentityPreserved ||
+      !after.shellIdentityPreserved ||
+      !after.reviewComposerIdentityPreserved ||
+      after.railQuery !== "radical" ||
+      after.inspectorMode !== "parameters" ||
+      reviewDraft !== "Unsaved catalogue navigation baseline"
     ) {
       throw new Error(
         `Catalogue interaction baseline drifted: ${JSON.stringify({
@@ -524,11 +520,13 @@ async function captureCatalogueInteractionBaseline(browser: Browser) {
     }
 
     return {
-      schemaVersion: "kp.animation-catalogue-interaction-baseline.v1",
+      schemaVersion: "kp.animation-catalogue-interaction-selection.v1",
       selection: `${animationId} -> ${promotedSiblingId}`,
-      mode: "document-navigation",
+      mode: "in-shell-selection",
       ...after,
-      reviewDraftPreserved: reviewDraft.length > 0
+      documentNavigationObserved: !after.documentIdentityPreserved,
+      reviewDraftPreserved:
+        reviewDraft === "Unsaved catalogue navigation baseline"
     } as const;
   } finally {
     await page.close();

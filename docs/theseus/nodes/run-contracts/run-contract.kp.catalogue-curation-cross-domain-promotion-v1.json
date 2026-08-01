@@ -77,7 +77,8 @@
     {
       "id": "s04",
       "title": "Implement in-shell asset switching",
-      "status": "planned"
+      "summary": "Implemented bounded in-shell asset switching. Known ordinary catalogue links push a clean asset URL and replace only stage, inspector, and player ownership; shell, rail query, inspector mode, review composer, and unsaved draft persist. Native fallbacks remain intact. Stable browser proof covers the interaction plus all 33 host rows; 3202 tests, production build and typecheck, review-production boundary, impact selection, and diff hygiene pass. Back and forward plus explicit focus proof remain s05.",
+      "status": "complete"
     },
     {
       "id": "s05",

@@ -191,6 +191,17 @@
   overflow: hidden;
 }
 
+.kp-animation-catalogue-shell__stage-status {
+  display: grid;
+  min-height: 100%;
+  margin: 0;
+  place-items: center;
+  padding: 1rem;
+  color: var(--kp-catalogue-muted);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
 .kp-animation-catalogue-shell__stage-host .editor-animation-player {
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;

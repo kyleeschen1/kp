@@ -80,11 +80,46 @@
       "scope": "focused",
       "checkedAt": "2026-08-01T15:41:37.561Z",
       "notes": "All concept-room, semantic-reader, semantic-animation, and operation-presentation boundaries pass."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s04 full deterministic and architecture suite",
+      "checkedAt": "2026-08-01T15:54:52.888Z",
+      "notes": "3202 tests passed; 0 failures."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s04 production typecheck and bundle",
+      "checkedAt": "2026-08-01T15:54:54.243Z",
+      "notes": "TypeScript app, node, test, and domain projects plus Vite production build passed."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "s04 stable browser interaction and 33-row host inventory",
+      "checkedAt": "2026-08-01T15:54:55.460Z",
+      "notes": "Document, shell, review composer, query, inspector mode, and unsaved review draft survived in-shell selection."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s04 review capture production boundary",
+      "checkedAt": "2026-08-01T15:54:56.709Z",
+      "notes": "Production review boundary passed."
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path src/main.ts --path src/editor/animation-catalogue-shell.css --path src/editor/animation-catalogue-navigation.ts --path scripts/capture-animation-catalogue.ts --path tests/animation-catalogue-navigation.test.ts",
+      "status": "passed",
+      "scope": "s04 risk selection",
+      "checkedAt": "2026-08-01T15:54:58.533Z",
+      "notes": "High-risk selector requires full tests and build; both passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Defined a pure catalogue navigation decision for native fallbacks, same-row stays, pushed asset selections, and history resolution without browser or lifecycle mutation."
+    "summary": "Catalogue asset links now replace only selected-stage ownership in shell: URL history pushes, shell/query/inspector/review draft persist, and unsafe gestures retain native behavior. Back/forward and explicit focus restoration remain s05."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",
