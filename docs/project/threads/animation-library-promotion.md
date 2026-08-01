@@ -30,9 +30,10 @@ Short harvest promotions may run after their prerequisite frontier exemplar is
 approved. They expand a proven family without changing the frontier order.
 
 The catalogue-first decision paused execution without recomputing this order.
-The active meaningful-hostability audit corrects the predecessor's structural
-33-paint count to 32 semantic paints, one 3D adapter gap, two programming gaps,
-no load failures, and no iframe ports. It does not alter promotion rank. The
+The meaningful-hostability audit corrected the predecessor's structural
+33-paint count to 32 semantic paints before the bounded native Graph3D adapter
+restored a genuine 33rd paint. Two programming gaps remain, with no load
+failures or iframe ports. This does not alter promotion rank. The
 completed predecessor approved the catalogue UX, promoted ranks 3
 and 4, and consolidated only the shared seams those callers proved. Catalogue
 health and disposition remain separate evidence and do not reorder the domain

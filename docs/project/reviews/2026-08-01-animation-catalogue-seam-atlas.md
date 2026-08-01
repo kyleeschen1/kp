@@ -7,15 +7,15 @@ Status: updated after approved economics and physics cross-domain exemplars
 
 The internal catalogue now has one row for each of 35 concrete lazy-loadable
 assets across 12 packs. The catalogue load probe loaded and routed every row:
-32 meaningfully painted through an existing native adapter, three stopped at
-explicit capability gaps, none failed loading, and none used an iframe. The
-three gaps are the Graph3D surface transition and two programming slots.
+33 meaningfully painted through a native adapter, two stopped at explicit
+programming capability gaps, none failed loading, and none used an iframe. The
+Graph3D surface transition now uses the bounded lazy Three.js adapter over its
+semantic SVG fallback and shared WebGL lease pool.
 
 This collapses most of the apparent port backlog while correcting one earlier
-false positive. There is no catalogue-host port to perform for the 32
-meaningfully painted assets. The observed hosting seams are one native 3D
-adapter and programming, shared by one pure execution trace and one composite
-comparison.
+false positive. There is no catalogue-host port to perform for the 33
+meaningfully painted assets. The remaining observed hosting seam is
+programming, shared by one pure execution trace and one composite comparison.
 
 Every human disposition remains `Unreviewed`. The final column below is a
 provisional question, not approval: `Keep?` means only that the asset is
@@ -48,7 +48,7 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 | `animation.generated.radical.square-root-as-power` | algebra | equation | Painted · KaTeX | 5 | Keep? |
 | `animation.generated.substitute-three` | generated-drafts | equation | Painted · KaTeX | 1 | Keep? |
 | `animation.generated.substitute-three.provisional-incorrect` | generated-drafts | equation | Painted · KaTeX | 1 | Keep or Retire? |
-| `animation.graph.surface-mode.mesh-to-donut` | graph | graph | Gap · native 3D adapter | 1 | Repair? |
+| `animation.graph.surface-mode.mesh-to-donut` | graph | graph | Painted · lazy WebGL / semantic SVG | 1 | Keep? |
 | `animation.graph.vector.linear-map-scale` | graph | graph | Painted · SVG graph | 3 | Keep? |
 | `animation.inequality.sign-flip.basic` | algebra | equation | Painted · KaTeX | 3 | Keep? |
 | `animation.integral-ftc.area-sweep` | graph | graph | Painted · SVG graph | 3 | Keep? |
@@ -67,9 +67,10 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 The catalogue crosses five surface shapes: 23 equation, seven graph, three
 diagram, one composite, and one programming asset. Adapter reuse is strong:
 the general KaTeX adapter participates in 21 rows, the SVG graph adapter in six,
-the canonical operation-evaluation adapter in three, and three specialized
-diagram adapters each cover one row. This is evidence for keeping the adapter
-registry seam, not for inventing a universal renderer.
+the canonical operation-evaluation adapter in three, the bounded Graph3D
+adapter in one, and three specialized diagram adapters each cover one row.
+This is evidence for keeping the adapter registry seam, not for inventing a
+universal renderer.
 
 The meaningful-hostability correction is recorded in
 `docs/project/reviews/2026-08-01-animation-catalogue-meaningful-hostability-contract.md`.

@@ -81,6 +81,31 @@ test("cancelled waiters stay cancelled and context loss frees a lease", async ()
   if (secondLease.status === "acquired") secondLease.lease.release();
 });
 
+test("leases can request WebGL2 without changing the WebGL1 default", () => {
+  const ownerDocument = {} as Document;
+  const requestedKinds: string[] = [];
+  const context = {
+    getExtension: () => null
+  } as unknown as WebGL2RenderingContext;
+  const canvas = {
+    ownerDocument,
+    getContext: (kind: string) => {
+      requestedKinds.push(kind);
+      return context;
+    },
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined
+  } as unknown as HTMLCanvasElement;
+
+  const webgl2 = acquireKpWebglContextLease({
+    canvas,
+    contextKind: "webgl2"
+  });
+  assert.equal(webgl2.status, "acquired");
+  assert.deepEqual(requestedKinds, ["webgl2"]);
+  if (webgl2.status === "acquired") webgl2.lease.release();
+});
+
 function fakeCanvas(ownerDocument: Document): {
   readonly canvas: HTMLCanvasElement;
   readonly dispatchContextLost: () => void;

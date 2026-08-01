@@ -20,7 +20,7 @@ test("seam atlas enumerates every concrete asset without assigning review", asyn
 
   assert.equal(recordedIds.length, 35);
   assert.deepEqual([...recordedIds].sort(), [...projectedIds].sort());
-  assert.match(source, /32 meaningfully painted/);
-  assert.match(source, /three stopped at\s+explicit/);
+  assert.match(source, /33 meaningfully painted/);
+  assert.match(source, /two stopped at explicit\s+programming capability gaps/);
   assert.match(source, /Every human disposition remains `Unreviewed`/);
 });

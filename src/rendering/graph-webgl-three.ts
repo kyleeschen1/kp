@@ -66,6 +66,7 @@ export type Graph3DWebGLHydrationOutcome =
 
 export interface Graph3DWebGLHydrationOptions {
   previousObjects?: readonly KpSemanticObject[] | undefined;
+  transitionProgress?: number | undefined;
   transitionDurationMs?: number;
 }
 
@@ -201,6 +202,7 @@ export function hydrateGraph3DWebGLShell(
   const acquisition = acquireKpWebglContextLease({
     canvas,
     attributes: { antialias: true },
+    contextKind: "webgl2",
     onAvailable: () => {
       if (shell.isConnected) hydrateGraph3DWebGLShell(shell, objects, options);
     },
@@ -223,13 +225,14 @@ export function hydrateGraph3DWebGLShell(
   }
 
   try {
-    const shouldAnimate = shouldAnimateGraph3DTransition(
+    const shouldAnimate = options.transitionProgress === undefined &&
+      shouldAnimateGraph3DTransition(
       graph,
       options.previousObjects
     );
     const model = createGraph3DWebGLSceneModel(objects, graph, {
       previousObjects: options.previousObjects,
-      transitionProgress: shouldAnimate ? 0 : 1
+      transitionProgress: options.transitionProgress ?? (shouldAnimate ? 0 : 1)
     });
     const renderer = new WebGLRenderer({
       antialias: true,
@@ -274,6 +277,31 @@ export function hydrateGraph3DWebGLShell(
 
     return { status: "fallback", reason };
   }
+}
+
+export function renderGraph3DWebGLShellFrame(
+  shell: HTMLElement,
+  objects: readonly KpSemanticObject[],
+  graph: Graph3DObject,
+  options: Pick<
+    Graph3DWebGLHydrationOptions,
+    "previousObjects" | "transitionProgress"
+  > = {}
+): boolean {
+  const activeRenderer = activeGraph3DWebGLRenderers.get(shell);
+  if (activeRenderer === undefined) return false;
+
+  const model = createGraph3DWebGLSceneModel(objects, graph, {
+    ...(options.previousObjects === undefined
+      ? {}
+      : { previousObjects: options.previousObjects }),
+    ...(options.transitionProgress === undefined
+      ? {}
+      : { transitionProgress: options.transitionProgress })
+  });
+  renderGraph3DWebGLFrame(activeRenderer, graph, model);
+  shell.dataset["kpWebglTransition"] = "sampled";
+  return true;
 }
 
 function shouldAnimateGraph3DTransition(

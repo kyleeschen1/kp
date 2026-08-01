@@ -25,6 +25,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-01-native-graph3d-catalogue-host-contract.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/graph-3d-surface-adapter.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-01-native-graph3d-catalogue-host-integration.md"
     }
   ],
   "dependsOn": {
@@ -104,6 +112,42 @@
       "status": "passed",
       "scope": "s02 whitespace audit",
       "checkedAt": "2026-08-01T23:01:49.636Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/editor-graph-3d-host-contract.test.ts tests/editor-graph-3d-surface-adapter.test.ts tests/animation-catalogue-surface-hostability.test.ts tests/animation-catalogue-health.test.ts tests/animation-catalogue-seam-atlas.test.ts tests/graph-webgl.test.ts tests/webgl-context-lease-pool.test.ts",
+      "status": "passed",
+      "scope": "s03 Graph3D adapter, catalogue truth, renderer, WebGL2 lease, and fallback checks",
+      "checkedAt": "2026-08-01T23:14:53.352Z"
+    },
+    {
+      "command": "npm run test:browser:animation-catalogue-3d",
+      "status": "passed",
+      "scope": "s03 Chromium lazy load, in-place selection, direct seek, lease release, and context-loss fallback",
+      "checkedAt": "2026-08-01T23:14:54.229Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s03 production typecheck and literal lazy Graph3D chunk",
+      "checkedAt": "2026-08-01T23:14:55.109Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s03 architecture preservation",
+      "checkedAt": "2026-08-01T23:14:56.001Z"
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s03 rank remains vector dot projection",
+      "checkedAt": "2026-08-01T23:14:56.865Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s03 whitespace audit",
+      "checkedAt": "2026-08-01T23:14:57.737Z"
     }
   ],
   "expectedLearning": [

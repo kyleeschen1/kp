@@ -1,7 +1,7 @@
 export const KP_WEBGL_CONTEXT_LEASE_LIMIT = 2;
 
 export interface KpWebglContextLease {
-  readonly context: WebGLRenderingContext;
+  readonly context: WebGLRenderingContext | WebGL2RenderingContext;
   readonly release: () => void;
 }
 
@@ -37,6 +37,7 @@ const pools = new WeakMap<Document, KpWebglContextLeasePool>();
 export function acquireKpWebglContextLease(input: {
   readonly canvas: HTMLCanvasElement;
   readonly attributes?: WebGLContextAttributes | undefined;
+  readonly contextKind?: "webgl" | "webgl2" | undefined;
   readonly onAvailable?: (() => void) | undefined;
   readonly onContextLost?: (() => void) | undefined;
 }): KpWebglContextLeaseAcquisition {
@@ -52,7 +53,9 @@ export function acquireKpWebglContextLease(input: {
   }
 
   pool.waiters.delete(input.canvas);
-  const context = input.canvas.getContext("webgl", input.attributes);
+  const context = input.contextKind === "webgl2"
+    ? input.canvas.getContext("webgl2", input.attributes)
+    : input.canvas.getContext("webgl", input.attributes);
   if (context === null) return { status: "unavailable" };
 
   pool.activeCanvases.add(input.canvas);

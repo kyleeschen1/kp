@@ -39,14 +39,12 @@ playhead, parameters, tuning, render ownership, viewport, build identity, and
 one bounded selected-stage screenshot. The bitmap is attached to the same
 immutable note; it does not create a parallel review history.
 
-The catalogue-wide truth pass now shows 32 meaningfully painted assets, one
-honest 3D adapter gap, and two honest programming adapter gaps, with zero load
-failures and zero iframes. The earlier 33-paint count included plot chrome for
-the 3D surface row and is corrected by the executable adapter-support contract.
-The 3D gap now has a bounded native host contract over the existing `Graph3D`,
-Three.js capability, semantic SVG fallback, and shared two-context lease pool;
-it remains a gap until the next slice registers and observes the catalogue
-adapter.
+The catalogue-wide truth pass now shows 33 meaningfully painted assets and two
+honest programming adapter gaps, with zero load failures and zero iframes. The
+earlier structural 33-paint count was first corrected to 32 because plot chrome
+had masked the 3D gap; the same row now genuinely paints through a bounded
+native `Graph3D` adapter over the existing lazy Three.js capability, semantic
+SVG fallback, and shared two-context lease pool.
 `Ready`, `Review`, and
 `Broken` remain derived health states, not promotion claims. Every human
 disposition is still `Unreviewed`. The seam atlas suggests questions and an
@@ -112,6 +110,7 @@ content review.
 - `docs/project/reviews/2026-08-01-animation-catalogue-seam-atlas.md`
 - `docs/project/reviews/2026-08-01-animation-catalogue-meaningful-hostability-contract.md`
 - `docs/project/reviews/2026-08-01-native-graph3d-catalogue-host-contract.md`
+- `docs/project/reviews/2026-08-01-native-graph3d-catalogue-host-integration.md`
 - `docs/project/reviews/2026-08-01-animation-catalogue-bounded-curation.md`
 - `docs/project/reviews/2026-07-31-animation-catalogue-source-inventory.md`
 - `docs/project/decisions/2026-07-31-kp-animation-catalogue-first-simplification.md`

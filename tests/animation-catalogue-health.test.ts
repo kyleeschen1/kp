@@ -29,6 +29,9 @@ import {
   kpEditorExactFractionQuantitySurfaceAdapter
 } from "../src/editor/exact-fraction-quantity-surface-adapter.ts";
 import {
+  kpEditorGraph3DSurfaceAdapter
+} from "../src/editor/graph-3d-surface-adapter.ts";
+import {
   kpEditorGraphSvgViewportAdapter
 } from "../src/editor/graph-svg-viewport.ts";
 import {
@@ -50,6 +53,7 @@ function currentHostability(): readonly KpAnimationCatalogueSurfaceHostability[]
   const registry = createKpEditorAnimationSurfaceAdapterRegistry([
     kpEditorEquationSurfaceAdapter,
     kpEditorDiagramSvgAdapter,
+    kpEditorGraph3DSurfaceAdapter,
     kpEditorGraphSvgViewportAdapter,
     kpEditorOperationEvaluationSurfaceAdapter,
     kpEditorExactFractionQuantitySurfaceAdapter,
@@ -110,7 +114,7 @@ test("current unobserved catalogue health is honest about review and breakage", 
         health.filter((entry) => entry.status === status).length
       ])
     ),
-    { ready: 0, review: 32, broken: 3 }
+    { ready: 0, review: 33, broken: 2 }
   );
   assert.deepEqual(
     health
@@ -119,7 +123,6 @@ test("current unobserved catalogue health is honest about review and breakage", 
       .sort(),
     [
       "animation.comparison.linear-solve-programming",
-      "animation.graph.surface-mode.mesh-to-donut",
       "animation.programming.add.execution-trace"
     ]
   );

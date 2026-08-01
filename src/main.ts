@@ -151,6 +151,7 @@ import {
   registerKpEditorEquationSurfaceAdapter
 } from "./editor/equation-surface-adapter.ts";
 import { registerKpEditorGraphSvgViewportAdapter } from "./editor/graph-svg-viewport.ts";
+import { registerKpEditorGraph3DSurfaceAdapter } from "./editor/graph-3d-surface-adapter.ts";
 import { registerKpEditorDiagramSvgAdapter } from "./editor/diagram-svg-adapter.ts";
 import {
   disposeKpEditorEquationStageHotPathCaches
@@ -315,6 +316,7 @@ declare global {
 window.__kpEquationMotionSetProgress = setEquationMotionProgress;
 registerKpEditorEquationSurfaceAdapter();
 registerKpEditorDiagramSvgAdapter();
+registerKpEditorGraph3DSurfaceAdapter();
 registerKpEditorGraphSvgViewportAdapter();
 
 renderViewFromLocation();
