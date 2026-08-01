@@ -36,6 +36,11 @@ export type KpAnimationCatalogueHostOutcome =
       readonly message: string;
     }>;
 
+export type KpAnimationCatalogueLoadFailure = Extract<
+  KpAnimationCatalogueHostOutcome,
+  { readonly status: "load-failure" }
+>;
+
 export function deriveKpAnimationCatalogueHostOutcome(input: {
   readonly entry: KpAnimationCatalogueEntry;
   readonly hostability: KpAnimationCatalogueSurfaceHostability;
@@ -96,7 +101,7 @@ export function deriveKpAnimationCatalogueHostOutcome(input: {
 export function createKpAnimationCatalogueLoadFailure(input: {
   readonly entry: KpAnimationCatalogueEntry;
   readonly error: unknown;
-}): KpAnimationCatalogueHostOutcome {
+}): KpAnimationCatalogueLoadFailure {
   return Object.freeze({
     ...outcomeIdentity(input.entry),
     status: "load-failure" as const,

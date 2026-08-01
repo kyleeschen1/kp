@@ -224,8 +224,8 @@
     {
       "id": "s26",
       "title": "Probe all concrete asset loading and routing",
-      "summary": "Exercise every concrete row through its exact lazy pack and canonical route, retaining one row per asset and honest failure evidence.",
-      "status": "planned"
+      "summary": "Added a canonical catalogue-wide load probe. All 33 unique rows round-trip their artifact route, exact asset-level descriptor, and exact lazy pack across all 10 packs. The batch isolates failures per row, and any descriptor, asset, or pack drift becomes typed load-failure evidence instead of aborting inventory. Loading remains distinct from paint. Focused 15/15, typecheck, and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s27",

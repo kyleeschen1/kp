@@ -180,6 +180,14 @@
     {
       "kind": "file",
       "path": "tests/animation-catalogue-host-outcome.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-load-probe.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-load-probe.test.ts"
     }
   ],
   "dependsOn": {
@@ -824,6 +832,27 @@
       "scope": "slice s25 evidence boundary",
       "checkedAt": "2026-08-01T05:43:40.503Z",
       "notes": "All architecture gates passed; the outcome seam imports no renderer, runtime, promotion, workbench, disposition, or Theseus authority."
+    },
+    {
+      "command": "focused catalogue load probe tests",
+      "status": "passed",
+      "scope": "slice s26 all concrete routes and packs",
+      "checkedAt": "2026-08-01T05:46:26.328Z",
+      "notes": "15 tests passed; all 33 unique rows round-trip canonical routes and exact primary descriptors, all 10 packs load, injected failure stays row-local, and asset or pack drift becomes explicit load-failure evidence."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s26 load probe type safety",
+      "checkedAt": "2026-08-01T05:46:27.152Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s26 loading boundary",
+      "checkedAt": "2026-08-01T05:46:27.967Z",
+      "notes": "All architecture gates passed; the probe reuses canonical route, selection, descriptor, and lazy loader authorities."
     }
   ],
   "expectedLearning": [
