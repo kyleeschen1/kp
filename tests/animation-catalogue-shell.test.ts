@@ -25,6 +25,7 @@ const entry = createKpAnimationCatalogueProjection().entries.find(
   ({ animationId }) => animationId === KP_ANIMATION_CATALOGUE_EXEMPLAR_ID
 );
 assert.ok(entry);
+const entries = createKpAnimationCatalogueProjection().entries;
 const catalog = createKpAnimationAssets();
 const descriptor = createKpEditorAnimationLibrary().find(
   ({ id }) => id === entry.primaryDescriptorId
@@ -52,6 +53,7 @@ test("solve-x shell has exactly three flat sibling regions", () => {
   const html = renderKpAnimationCatalogueShell({
     entry,
     health,
+    entries,
     descriptor,
     player
   });
@@ -66,7 +68,13 @@ test("solve-x shell has exactly three flat sibling regions", () => {
   );
   assert.equal(
     [...html.matchAll(/data-kp-animation-catalogue-row=/g)].length,
-    1
+    33
+  );
+  assert.equal(
+    new Set([...html.matchAll(
+      /data-kp-animation-catalogue-row="([^"]+)"/g
+    )].map((match) => match[1])).size,
+    33
   );
 });
 
@@ -74,12 +82,18 @@ test("selected row is compact asset identity with derived health", () => {
   const html = renderKpAnimationCatalogueShell({
     entry,
     health,
+    entries,
     descriptor,
     player
   });
 
   assert.match(html, /Solve x \+ 3 = 7/);
-  assert.match(html, /data-kp-animation-catalogue-health="review">Review/);
+  assert.match(html, /data-action="filter-animation-catalogue"/);
+  assert.match(html, /placeholder="Search artifacts"/);
+  assert.match(
+    html,
+    /data-kp-animation-catalogue-health="review"[^>]*>Review/
+  );
   assert.match(html, /<h3 id="kp-animation-catalogue-details-title">Details<\/h3>/);
   assert.match(html, /data-kp-animation-catalogue-stage-persistent="true"/);
   assert.match(html, /data-kp-editor-animation-player/);
@@ -108,6 +122,7 @@ test("shell rejects health attached to a different asset", () => {
     () => renderKpAnimationCatalogueShell({
       entry,
       health: { ...health, animationId: "animation.other" },
+      entries,
       descriptor,
       player
     }),

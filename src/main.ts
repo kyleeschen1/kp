@@ -23,6 +23,7 @@ import {
   resolveKpAnimationCatalogueSelection
 } from "./editor/animation-catalogue-selection.ts";
 import {
+  renderKpAnimationCatalogueResults,
   renderKpAnimationCatalogueShell
 } from "./editor/animation-catalogue-shell.ts";
 import {
@@ -162,6 +163,7 @@ let projectDashboardTocOnly = false;
 let projectDashboardSelectedKatexFixtureId: string | undefined;
 let selectedEquationAnimationId: string | undefined;
 const editorAnimationDescriptors = createKpEditorAnimationLibrary();
+const animationCatalogueProjection = createKpAnimationCatalogueProjection();
 let selectedEditorAnimationDescriptorId = selectKpEditorAnimationDescriptor(
   editorAnimationDescriptors,
   readKpEditorAnimationSelection(window.location.search)
@@ -465,6 +467,9 @@ appRoot.addEventListener("input", (event) => {
     case "filter-animation-workbench":
       void filterAnimationWorkbenchFromInput(event.target);
       return;
+    case "filter-animation-catalogue":
+      filterAnimationCatalogueFromInput(event.target);
+      return;
   }
 });
 
@@ -519,7 +524,7 @@ async function renderAnimationCatalogueView(): Promise<void> {
   disposeGraph3DWebGL(appRoot);
   const route = readKpAnimationCatalogueRoute(window.location.search);
   const selection = resolveKpAnimationCatalogueSelection({
-    projection: createKpAnimationCatalogueProjection(),
+    projection: animationCatalogueProjection,
     artifactId: route.artifactId
   });
 
@@ -587,6 +592,7 @@ async function renderAnimationCatalogueView(): Promise<void> {
     appRoot.innerHTML = renderKpAnimationCatalogueShell({
       entry,
       health,
+      entries: animationCatalogueProjection.entries,
       descriptor,
       player: playerState
     });
@@ -609,6 +615,38 @@ async function renderAnimationCatalogueView(): Promise<void> {
     });
     markKpAnimationHostFailed(window, message);
   }
+}
+
+function filterAnimationCatalogueFromInput(input: HTMLInputElement): void {
+  const shell = input.closest<HTMLElement>("[data-kp-animation-catalogue]");
+  const results = shell?.querySelector<HTMLOListElement>(
+    "[data-kp-animation-catalogue-results]"
+  );
+  const selectedAnimationId = shell?.dataset["kpAnimationCatalogueSelection"];
+  const selectedStatus = shell
+    ?.dataset["kpAnimationCatalogueSelectedHealth"];
+  if (
+    results === undefined || results === null ||
+    selectedAnimationId === undefined ||
+    (selectedStatus !== "ready" &&
+      selectedStatus !== "review" &&
+      selectedStatus !== "broken")
+  ) {
+    return;
+  }
+
+  results.outerHTML = renderKpAnimationCatalogueResults({
+    entries: animationCatalogueProjection.entries,
+    selectedAnimationId,
+    selectedHealth: {
+      schemaVersion: "kp.animation-catalogue-health.v1",
+      kind: "animation-catalogue-health",
+      animationId: selectedAnimationId,
+      status: selectedStatus,
+      reasons: []
+    },
+    query: input.value
+  });
 }
 
 function renderAnimationLibraryHostView(): void {

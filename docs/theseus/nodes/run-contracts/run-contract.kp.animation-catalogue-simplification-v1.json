@@ -161,7 +161,8 @@
     {
       "id": "s16",
       "title": "Add flat fuzzy search rail",
-      "status": "planned"
+      "summary": "Added a single flat fuzzy search rail over all 33 concrete assets. Filtering replaces only the inventory list, keeps solve-x mounted, and marks unobserved siblings Review pending post-checkpoint hosting.",
+      "status": "complete"
     },
     {
       "id": "s17",

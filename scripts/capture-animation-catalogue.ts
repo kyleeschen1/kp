@@ -59,6 +59,43 @@ try {
   if (visibleLargeHeadingCount !== 0) {
     throw new Error("Catalogue shell exposed a visible h1 or h2 heading.");
   }
+  const search = page.locator(
+    '[data-action="filter-animation-catalogue"]'
+  );
+  await page.locator(
+    "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+  ).evaluate((player) => {
+    (player as HTMLElement).dataset["kpCataloguePersistenceProbe"] = "mounted";
+  });
+  await search.fill("slvx");
+  const fuzzyResultIds = await page.locator(
+    "[data-kp-animation-catalogue-row]"
+  ).evaluateAll((rows) => rows.map((row) =>
+    (row as HTMLElement).dataset["kpAnimationCatalogueRow"]
+  ));
+  if (
+    fuzzyResultIds.length !== 1 ||
+    fuzzyResultIds[0] !== animationId
+  ) {
+    throw new Error(
+      `Catalogue fuzzy search returned ${JSON.stringify(fuzzyResultIds)}.`
+    );
+  }
+  const persistenceProbe = await page.locator(
+    "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+  ).getAttribute("data-kp-catalogue-persistence-probe");
+  if (persistenceProbe !== "mounted") {
+    throw new Error("Catalogue search remounted the selected player.");
+  }
+  await search.fill("");
+  const allResultCount = await page.locator(
+    "[data-kp-animation-catalogue-row]"
+  ).count();
+  if (allResultCount !== 33) {
+    throw new Error(
+      `Catalogue expected 33 flat asset rows, found ${allResultCount}.`
+    );
+  }
 
   const screenshot = path.join(outputRoot, "desktop.png");
   await page.screenshot({

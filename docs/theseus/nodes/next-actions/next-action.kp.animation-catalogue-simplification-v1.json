@@ -132,6 +132,14 @@
     {
       "kind": "file",
       "path": "tests/kp-editor-equation-surface-adapter.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-search.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-search.test.ts"
     }
   ],
   "dependsOn": {
@@ -558,6 +566,27 @@
       "status": "passed",
       "scope": "slice s15 math-layout types",
       "checkedAt": "2026-08-01T04:39:17.270Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-search.test.ts tests/animation-catalogue-shell.test.ts tests/animation-catalogue-projection.test.ts tests/animation-catalogue-health.test.ts",
+      "status": "passed",
+      "scope": "slice s16 flat fuzzy catalogue rail",
+      "checkedAt": "2026-08-01T04:50:31.720Z",
+      "notes": "14 tests passed; 33 unique assets, selection-first blank state, bounded typo matching, cross-domain terms, and flat shell rows."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s16 live catalogue rail",
+      "checkedAt": "2026-08-01T04:50:32.740Z",
+      "notes": "Chromium verified 33 rows, slvx fuzzy isolation, inline KaTeX, compact heading scale, and unchanged mounted player across filtering."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s16 type safety",
+      "checkedAt": "2026-08-01T04:50:33.910Z",
       "notes": "Application, Node, test, and domain TypeScript projects passed."
     }
   ],
