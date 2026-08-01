@@ -7,6 +7,12 @@ import {
   renderEditorDocument
 } from "./editor/editor.ts";
 import {
+  renderKpAnimationCatalogueBootstrap
+} from "./editor/animation-catalogue-bootstrap.ts";
+import {
+  readKpAnimationCatalogueRoute
+} from "./editor/animation-catalogue-route.ts";
+import {
   createKpEditorAnimationLibrary,
   selectKpEditorAnimationDescriptor
 } from "./editor/animation-library.ts";
@@ -162,6 +168,7 @@ let activeView:
   | "editor"
   | "animation-library-host"
   | "ftc-tutorial"
+  | "animation-catalogue"
   | "animation-workbench" = "editor";
 installKpAnimationHostStatus(window, "kp.application");
 appRoot.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, (event) => {
@@ -220,6 +227,8 @@ if (requestedView === "ftc-tutorial") {
   renderAnimationLibraryHostView();
 } else if (readKpSemanticAnimationWorkbenchRoute(window.location.search).active) {
   void renderAnimationWorkbenchView();
+} else if (readKpAnimationCatalogueRoute(window.location.search).active) {
+  renderAnimationCatalogueView();
 } else {
   renderEditor();
 }
@@ -471,6 +480,17 @@ function renderEditor(): void {
   hydrateEquationMotionDemos(appRoot);
   hydrateGraph3DWebGL(appRoot, editorDocument.objects);
   void mountEditorAnimationLibraryReviewCapture(revision);
+}
+
+function renderAnimationCatalogueView(): void {
+  activeView = "animation-catalogue";
+  const revision = ++viewRevision;
+  disposeAnimationDevelopmentReviewCapture();
+  disposeKpEditorAnimationPlayers(appRoot);
+  disposeKpEditorEquationStageHotPathCaches(appRoot);
+  disposeGraph3DWebGL(appRoot);
+  appRoot.innerHTML = renderKpAnimationCatalogueBootstrap();
+  if (revision === viewRevision) markKpAnimationHostReady(window);
 }
 
 function renderAnimationLibraryHostView(): void {
@@ -1079,7 +1099,7 @@ function navigateToView(
   else if (view === "animation-workbench") {
     url.searchParams.set("view", KP_ANIMATION_WORKBENCH_VIEW);
   }
-  else url.searchParams.delete("view");
+  else url.searchParams.set("view", "editor");
   window.history.replaceState(null, "", url);
 }
 

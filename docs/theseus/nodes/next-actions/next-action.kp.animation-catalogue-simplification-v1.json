@@ -84,6 +84,18 @@
     {
       "kind": "file",
       "path": "package.json"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-route.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-bootstrap.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-route.test.ts"
     }
   ],
   "dependsOn": {
@@ -371,6 +383,34 @@
       "scope": "slice s09 capture script types",
       "checkedAt": "2026-08-01T04:10:21.859Z",
       "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-route.test.ts tests/semantic-animation-workbench-route.test.ts",
+      "status": "passed",
+      "scope": "slice s10 catalogue and preserved Workbench routes",
+      "checkedAt": "2026-08-01T04:14:18.765Z",
+      "notes": "8 tests passed; the empty query and explicit catalogue view resolve to the catalogue while editor, Workbench, library host, tutorial, and unknown views remain outside it."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s10 default catalogue browser smoke",
+      "checkedAt": "2026-08-01T04:14:19.590Z",
+      "notes": "The root route rendered the minimal catalogue-owned bootstrap at 1440 by 1000; screenshot inspection showed no Workbench, roadmap, cards, iframe, or nested interface."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s10 route types",
+      "checkedAt": "2026-08-01T04:14:20.431Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s10 route boundaries",
+      "checkedAt": "2026-08-01T04:14:21.298Z",
+      "notes": "All four architecture gates passed."
     }
   ],
   "expectedLearning": [

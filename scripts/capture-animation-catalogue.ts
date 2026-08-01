@@ -17,24 +17,10 @@ const browser = await chromium.launch({ headless: true });
 try {
   const page = await browser.newPage({ viewport });
   const url = new URL("/", baseUrl);
-  url.searchParams.set("view", "animation-workbench");
-  url.searchParams.set("q", "solve x");
-  url.searchParams.set("workbenchAnimation", animationId);
 
   await page.goto(url.toString(), { waitUntil: "networkidle" });
   await page.evaluate(async () => document.fonts.ready);
-  await page
-    .locator(`[data-kp-animation-workbench-selection="${animationId}"]`)
-    .waitFor();
-  await page.waitForFunction(
-    () => document.body.dataset["kpDevReviewReady"] === "true"
-  );
-  await page.waitForFunction(
-    () =>
-      document.querySelector<HTMLElement>(
-        "[data-kp-editor-animation-player]"
-      )?.dataset["kpEditorAnimationHydrated"] === "true"
-  );
+  await page.locator("[data-kp-animation-catalogue]").waitFor();
 
   const screenshot = path.join(outputRoot, "desktop.png");
   await page.screenshot({
@@ -49,7 +35,7 @@ try {
     `${JSON.stringify({
       schemaVersion: "kp.animation-catalogue-visual-capture.v1",
       animationId,
-      routeState: "preserved-workbench-bootstrap",
+      routeState: "catalogue-default-bootstrap",
       url: url.toString(),
       viewport,
       screenshot: path.relative(process.cwd(), screenshot)

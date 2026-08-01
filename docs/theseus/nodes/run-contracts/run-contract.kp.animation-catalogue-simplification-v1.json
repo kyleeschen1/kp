@@ -125,7 +125,8 @@
     {
       "id": "s10",
       "title": "Establish default catalogue route",
-      "status": "planned"
+      "summary": "Made the asset catalogue the canonical empty-query route with an explicit animation-catalogue alias. The editor, Workbench, library host, and tutorial remain preserved explicit views; returning to the editor now writes view=editor rather than colliding with the new default. The temporary catalogue render is intentionally minimal and contains no old dashboard machinery.",
+      "status": "complete"
     },
     {
       "id": "s11",
