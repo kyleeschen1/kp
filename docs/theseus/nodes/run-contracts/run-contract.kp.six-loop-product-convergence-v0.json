@@ -100,7 +100,9 @@
     {
       "id": "s07",
       "title": "Define ExplanationSpineV1",
-      "status": "planned"
+      "summary": "Defined closed ExplanationSpineV1 with one explicit early-algebra learner state, bounded vocabulary and notation readings, 4 ordered sections, 8 typed templates, exact beat order, and provider-verified claim/source authority; raw prose, math, layout, and renderer payloads fail closed.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s08",
