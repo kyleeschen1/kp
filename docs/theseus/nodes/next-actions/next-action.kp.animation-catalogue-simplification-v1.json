@@ -168,6 +168,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-01-animation-catalogue-solve-x-preservation-proof.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-01-animation-catalogue-solve-x-desktop-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -756,6 +760,13 @@
       "scope": "slice s21 production boundary",
       "checkedAt": "2026-08-01T05:33:28.845Z",
       "notes": "Development review production closure passed."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s22 desktop exemplar capture",
+      "checkedAt": "2026-08-01T05:34:45.179Z",
+      "notes": "Stable Chromium flow captured solve-x at 1440 by 1000 with three flat regions, persistent frameless stage, compact transport, inline KaTeX, one inspector mode, and lower-left Review launcher."
     }
   ],
   "expectedLearning": [
