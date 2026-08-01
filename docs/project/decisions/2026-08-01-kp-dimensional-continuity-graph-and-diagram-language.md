@@ -113,11 +113,17 @@ remain explicit compatibility evidence until migrated or retired.
 
 ## Current Exemplar Checkpoint
 
-The current supply-and-demand implementation preserves valid exact semantics,
-runtime, seek/rewind, accessibility, and native SVG ownership, but its visual
-treatment is not approved. Its raw SVG `P`, `Q`, `S`, `D`, and equilibrium
-labels, dense flat grid, and graph-specific hard-coded styling do not satisfy
-this decision.
+The first supply-and-demand treatment preserved valid exact semantics,
+runtime, seek/rewind, accessibility, and native SVG ownership, but its raw SVG
+`P`, `Q`, `S`, `D`, and equilibrium labels, dense flat grid, and graph-specific
+hard-coded styling did not satisfy this decision.
+
+The revised checkpoint now uses the local
+`kp.graph.dimensional-continuity.economics.v1` profile: warm orthographic plot
+plane, sparse data-scaled construction grid, arrowed structural axes, stable
+teal supply, changing rust demand, low-opacity historical state, and direct
+KaTeX labels for axes, ticks, curves, and equilibrium. It remains pending human
+visual approval and is not yet a shared profile or catalog-wide rule.
 
 Revision preserves the exact economics model, semantic identities, shared
 clock, parameter contract, catalogue shell, review capture, and one paint

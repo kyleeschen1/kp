@@ -1852,9 +1852,39 @@ h2 {
   min-height: 10rem;
 }
 
+.editor-graph-stage__plot-plane {
+  fill: url("#kp-editor-graph-grid");
+}
+
+.editor-graph-stage__default-grid-line {
+  stroke: #dce6ed;
+  stroke-width: 1;
+}
+
 .editor-graph-stage [data-kp-editor-graph-axis] {
   stroke: #526173;
   stroke-width: 1.5;
+}
+
+.editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
+  --kp-graph-plane: #fffdf8;
+  --kp-graph-axis: #3f5261;
+  --kp-graph-grid: #9bb9c8;
+  --kp-graph-stable: #1f7a83;
+  --kp-graph-changing: #bd5b35;
+  --kp-graph-focal: #263845;
+  color: var(--kp-graph-focal);
+  background: var(--kp-graph-plane);
+}
+
+.editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] .editor-graph-stage__plot-plane {
+  fill: var(--kp-graph-plane);
+}
+
+.editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] [data-kp-editor-graph-axis] {
+  stroke: var(--kp-graph-axis);
+  stroke-linecap: round;
+  stroke-width: 1.8;
 }
 
 .editor-graph-stage__curve,
@@ -1900,59 +1930,114 @@ h2 {
 .editor-graph-stage__economics-curve {
   fill: none;
   stroke-linecap: round;
-  stroke-width: 3.5;
+  stroke-width: 3.25;
+  vector-effect: non-scaling-stroke;
 }
-.editor-graph-stage__economics-curve--supply { stroke: #157b83; }
-.editor-graph-stage__economics-curve--demand { stroke: #c45d32; }
+.editor-graph-stage__economics-curve--supply { stroke: var(--kp-graph-stable); }
+.editor-graph-stage__economics-curve--demand { stroke: var(--kp-graph-changing); }
 .editor-graph-stage__economics-curve--demand-reference {
-  stroke: #c45d32;
+  stroke: var(--kp-graph-changing);
   stroke-dasharray: 7 6;
-  stroke-width: 2.5;
+  stroke-width: 2;
+}
+.editor-graph-stage__economics-grid-line {
+  stroke: var(--kp-graph-grid);
+  stroke-width: 0.8;
+  opacity: 0.28;
+  vector-effect: non-scaling-stroke;
+}
+.editor-graph-stage__economics-tick {
+  stroke: var(--kp-graph-axis);
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
 }
 .editor-graph-stage__economics-guide {
-  stroke: #64748b;
-  stroke-dasharray: 5 5;
-  stroke-width: 1.5;
+  stroke: #708998;
+  stroke-dasharray: 4 5;
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
 }
 .editor-graph-stage__economics-equilibrium {
-  fill: #172033;
-  stroke: #ffffff;
+  fill: var(--kp-graph-focal);
+  stroke: var(--kp-graph-plane);
   stroke-width: 2.5;
+  vector-effect: non-scaling-stroke;
 }
 .editor-graph-stage__economics-equilibrium--reference {
-  fill: #ffffff;
-  stroke: #64748b;
+  fill: var(--kp-graph-plane);
+  stroke: #708998;
   stroke-dasharray: 3 2;
 }
-.editor-graph-stage__economics-label,
-.editor-graph-stage__economics-axis-label {
-  fill: #334155;
-  font-size: 14px;
-  font-weight: 800;
-  paint-order: stroke;
-  stroke: #ffffff;
-  stroke-linejoin: round;
-  stroke-width: 4px;
+.editor-graph-stage__economics-math-foreign-object {
+  overflow: visible;
+  pointer-events: none;
 }
-.editor-graph-stage__economics-label--supply { fill: #126871; }
-.editor-graph-stage__economics-label--demand { fill: #a94322; }
-.editor-graph-stage__economics-label--equilibrium { font-size: 13px; }
+.editor-graph-stage__economics-math-label {
+  box-sizing: border-box;
+  width: max-content;
+  max-width: 100%;
+  padding: 2px 4px;
+  color: var(--kp-graph-focal);
+  background: rgb(255 253 248 / 0.84);
+  font-size: 12px;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.editor-graph-stage__economics-math-label .katex { font-size: 1em; }
+.editor-graph-stage__economics-math-label--supply {
+  color: var(--kp-graph-stable);
+  font-size: 14px;
+}
+.editor-graph-stage__economics-math-label--demand {
+  color: var(--kp-graph-changing);
+  font-size: 14px;
+}
+.editor-graph-stage__economics-math-label--equilibrium {
+  color: var(--kp-graph-focal);
+  font-size: 12px;
+  font-weight: 700;
+}
+.editor-graph-stage__economics-math-label--reference {
+  color: #657d8b;
+  font-size: 11px;
+}
+.editor-graph-stage__economics-math-label--axis {
+  padding: 0;
+  background: transparent;
+  color: var(--kp-graph-axis);
+  font-size: 15px;
+  font-weight: 700;
+}
+.editor-graph-stage__economics-math-label--tick {
+  display: grid;
+  width: 100%;
+  padding: 0;
+  place-items: start center;
+  background: transparent;
+  color: #667b88;
+  font-size: 9px;
+}
+.editor-graph-stage__economics-math-label--tick-price {
+  place-items: center end;
+  padding-right: 2px;
+}
 .editor-graph-stage__economics-explanation-foreign-object {
   overflow: visible;
 }
 .editor-graph-stage__economics-explanation {
   box-sizing: border-box;
   display: grid;
-  gap: 6px;
+  gap: 4px;
   width: 100%;
-  border: 1px solid rgb(148 163 184 / 0.46);
-  border-radius: 9px;
-  padding: 8px 10px;
-  color: #172033;
-  background: rgb(255 255 255 / 0.94);
-  box-shadow: 0 4px 14px rgb(15 23 42 / 0.08);
-  font-size: 11px;
-  line-height: 1.25;
+  border-bottom: 1px solid rgb(112 137 152 / 0.34);
+  padding: 5px 7px 7px;
+  color: var(--kp-graph-focal);
+  background: rgb(255 253 248 / 0.9);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.3;
+  text-transform: none;
 }
 .editor-graph-stage__economics-equations {
   display: flex;
@@ -1960,10 +2045,10 @@ h2 {
   gap: 4px 12px;
   align-items: center;
 }
-.editor-graph-stage__economics-equations .katex { font-size: 1.02em; }
+.editor-graph-stage__economics-equations .katex { font-size: 0.98em; }
 .editor-graph-stage__economics-explanation p {
   margin: 0;
-  color: #475569;
+  color: #5c6d77;
 }
 .editor-graph-stage__area { fill: rgb(30 136 168 / 0.3); stroke: #1e88a8; stroke-width: 2; }
 .editor-graph-stage__label { fill: #334155; font-size: 14px; font-weight: 800; }

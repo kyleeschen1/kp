@@ -17,6 +17,8 @@ const baselinePath = new URL(
   import.meta.url
 );
 const strictTargets = process.argv.includes("--strict-targets");
+const measuredAnimationId =
+  "animation.economics.supply-demand-equilibrium-shift";
 
 const baseline = JSON.parse(
   await readFile(baselinePath, "utf8")
@@ -129,27 +131,81 @@ async function measureRuntime(
   }
 
   const startedAt = Date.now();
-  await page.goto(baseUrl, { waitUntil: "load", timeout: 120_000 });
+  const route = new URL(baseUrl);
+  route.searchParams.set("artifact", measuredAnimationId);
+  await page.goto(route.toString(), { waitUntil: "load", timeout: 120_000 });
   await page.waitForFunction(() =>
+    document.querySelector("[data-kp-animation-catalogue]")
+      ?.getAttribute("data-kp-animation-catalogue-selection") ===
+      "animation.economics.supply-demand-equilibrium-shift" &&
     document.querySelector("[data-kp-editor-animation-player]")
       ?.getAttribute("data-kp-editor-animation-hydrated") === "true",
   undefined, { timeout: 120_000 });
   const hydrationMs = Date.now() - startedAt;
   await page.waitForTimeout(1_000);
   const resources = await resourceSummary(page);
-  await page.selectOption(
-    "[data-action=set-editor-animation]",
-    "editor-animation.sample.animation.matrix-matrix.basic"
-  );
-  await page.waitForTimeout(300);
-  const matrixFrame = await measureFrames(page);
+  const coreWebVitals = await measureCoreWebVitals(page);
+  const animationFrame = await measureFrames(page);
   await context.close();
 
   return {
+    route: route.pathname + route.search,
+    animationId: measuredAnimationId,
     hydrationMs,
     ...resources,
-    matrixFrame
+    coreWebVitals,
+    animationFrame
   };
+}
+
+async function measureCoreWebVitals(page: Page): Promise<NonNullable<
+  KpAnimationRuntimePerformance["coreWebVitals"]
+>> {
+  const loading = await page.evaluate(async () => {
+    let lcpMs = 0;
+    let cls = 0;
+    const observers: PerformanceObserver[] = [];
+    if (PerformanceObserver.supportedEntryTypes.includes(
+      "largest-contentful-paint"
+    )) {
+      const observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) lcpMs = entry.startTime;
+      });
+      observer.observe({ type: "largest-contentful-paint", buffered: true });
+      observers.push(observer);
+    }
+    if (PerformanceObserver.supportedEntryTypes.includes("layout-shift")) {
+      const observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          const shift = entry as PerformanceEntry & {
+            readonly value: number;
+            readonly hadRecentInput: boolean;
+          };
+          if (!shift.hadRecentInput) cls += shift.value;
+        }
+      });
+      observer.observe({ type: "layout-shift", buffered: true });
+      observers.push(observer);
+    }
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    observers.forEach((observer) => observer.disconnect());
+    return { lcpMs, cls };
+  });
+  const interactionPaintMs = await page.evaluate(async () => {
+    const button = document.querySelector<HTMLButtonElement>(
+      '[data-kp-editor-animation-player] [data-action="toggle-editor-animation"]'
+    );
+    if (button === null) throw new Error("Performance route lacks Play control.");
+    const startedAt = performance.now();
+    button.click();
+    await new Promise<void>((resolve) => requestAnimationFrame(() =>
+      requestAnimationFrame(() => resolve())
+    ));
+    const elapsed = performance.now() - startedAt;
+    button.click();
+    return elapsed;
+  });
+  return { ...loading, interactionPaintMs };
 }
 
 async function resourceSummary(page: Page): Promise<Pick<

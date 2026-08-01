@@ -216,6 +216,83 @@
       "scope": "s21 durable control integrity",
       "checkedAt": "2026-08-01T18:10:14.964Z",
       "notes": "Workspace valid with 854 nodes and 15707 events before final slice evidence."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s22 revised economics semantics and repository regression",
+      "checkedAt": "2026-08-01T19:08:42.710Z",
+      "notes": "3230 tests passed; architecture, inference, concept, and promotion checks passed."
+    },
+    {
+      "command": "npm run test:browser:economics-equilibrium",
+      "status": "passed",
+      "scope": "s22 cross-browser economics exemplar",
+      "checkedAt": "2026-08-01T19:08:44.355Z",
+      "notes": "Chromium, Firefox, and WebKit passed exact seek, KaTeX, review, and responsive behavior."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "s22 economics visual checkpoints",
+      "checkedAt": "2026-08-01T19:08:46.022Z",
+      "notes": "Start, shift, settle, custom, and narrow checkpoints passed profile, math-label, and collision checks."
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "s22 economics route performance proof",
+      "checkedAt": "2026-08-01T19:08:47.985Z",
+      "notes": "No regressions; targets expose existing initial-script, constrained-LCP, and constrained-frame-p95 debt without weakening budgets."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s22 production build",
+      "checkedAt": "2026-08-01T19:08:48.947Z",
+      "notes": "Production build passed; existing chunk-size warning remains tracked."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s22 catalogue bundle boundary",
+      "checkedAt": "2026-08-01T19:08:50.106Z",
+      "notes": "Outer shell, host closure, place-value increment, and forbidden-file guards passed."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s22 review capture production boundary",
+      "checkedAt": "2026-08-01T19:08:51.225Z",
+      "notes": "262 files checked; seven intentional development-only markers passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22 repository type safety",
+      "checkedAt": "2026-08-01T19:09:05.388Z",
+      "notes": "Application, node, test, and domain TypeScript projects passed after the revised exemplar."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s22 patch hygiene",
+      "checkedAt": "2026-08-01T19:09:06.519Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s22 durable promotion memory",
+      "checkedAt": "2026-08-01T19:09:07.523Z",
+      "notes": "Roadmap and active promotion thread remain consistent with the human checkpoint."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s22 durable graph integrity",
+      "checkedAt": "2026-08-01T19:09:26.656Z",
+      "notes": "854 nodes and 15730 events validated before commit."
     }
   ],
   "allowedWork": [
@@ -376,7 +453,7 @@
     {
       "id": "s22",
       "title": "Human review economics",
-      "summary": "HUMAN REVISION REQUESTED. Exact economics semantics, runtime, native SVG ownership, parameters, accessibility, seek/rewind, and capture evidence remain accepted, but the visual treatment is not approved. Revise the same exemplar under the accepted dimensional-continuity graph language: orthographic continuity with the 3D technical aesthetic, KaTeX for every mathematical label, restrained role-based hierarchy, and bounded route-specific performance proof. Preserve the existing model, clock, host, review history, and one paint owner. Physics and shared API or motif extraction remain paused until explicit human approval of the revised economics view.",
+      "summary": "HUMAN_CHECKPOINT: the revised economics exemplar now uses the local dimensional-continuity profile, orthographic 2D technical styling, KaTeX for every mathematical graph label, restrained role colors, sparse scaled grid and axes, and quiet synchronized explanation. Exact semantics, deterministic clock, native SVG ownership, bounded parameter control, accessibility, Review capture, seek and rewind remain preserved. Visual, three-browser, full repository, build, bundle-boundary, and production-review checks pass. The route-scoped performance proof has no baseline regressions and records good normal LCP/CLS/interaction response, while retaining explicit debt for initial script transfer, constrained LCP, and constrained frame p95. Physics and shared motif or API extraction remain paused pending explicit human approval.",
       "status": "in-progress"
     },
     {

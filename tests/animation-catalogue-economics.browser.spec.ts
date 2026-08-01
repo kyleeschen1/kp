@@ -44,6 +44,16 @@ test("economics catalogue preserves exact accessible seek, rewind, parameters, R
     "aria-describedby",
     "kp-economics-graph-description"
   );
+  await expect(graph).toHaveAttribute(
+    "data-kp-graph-presentation-profile",
+    "kp.graph.dimensional-continuity.economics.v1"
+  );
+  await expect(graph.locator("[data-kp-economics-math-label]"))
+    .toHaveCount(14);
+  await expect(graph.locator('[data-kp-latex="D_0"]')).toBeVisible();
+  await expect(graph.locator('[data-kp-latex="E_0 = (6, 8)"]'))
+    .toBeVisible();
+  await expect(graph.locator("text")).toHaveCount(0);
   await expect(graph.locator("#kp-economics-graph-description"))
     .toContainText("current equilibrium is quantity 6 and price 8");
 
@@ -66,6 +76,9 @@ test("economics catalogue preserves exact accessible seek, rewind, parameters, R
   await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
     .toHaveAttribute("data-kp-economics-equilibrium-price", "9");
   await expect(graph.locator('[data-kp-latex="P = 16 - Q"]'))
+    .toBeVisible();
+  await expect(graph.locator('[data-kp-latex="D_t"]')).toBeVisible();
+  await expect(graph.locator('[data-kp-latex="E_t = (7, 9)"]'))
     .toBeVisible();
 
   await player.press("End");

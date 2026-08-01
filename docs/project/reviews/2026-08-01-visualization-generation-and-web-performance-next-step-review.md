@@ -1,8 +1,7 @@
 # Visualization Generation And Web Performance Next-Step Review
 
 Date: 2026-08-01
-Status: accepted direction; implementation remains inside the economics
-checkpoint
+Status: implemented at the economics checkpoint; human visual review pending
 
 ## Recommendation
 
@@ -32,12 +31,12 @@ the new catalogue against Core Web Vitals.
 | Area | Evidence | Assessment |
 | --- | --- | --- |
 | Metadata-only review shell | 10,232 gzip bytes against a 50,000-byte ceiling; no forbidden runtime files | Strong proof that isolation is possible; this is not the default main-host route |
-| Main host closure | 399,141 gzip bytes against a 490,000-byte regression ceiling | Passing the ratchet, still too broad for a default product route |
+| Main host closure | 400,402 gzip bytes against a 490,000-byte regression ceiling after the exemplar revision | Passing the ratchet, still too broad for a default product route |
 | Place-value incremental pack | 71,739 gzip bytes against 75,000 | Passing with only 3,261 bytes of headroom |
 | KaTeX in main closure | 76,151 JS + 7,954 CSS + 18,534 texture-atlas gzip bytes, before route-used fonts | Material and currently eager through `src/main.ts` |
 | Three.js | Separate 132,210-byte gzip chunk in the current production build | Split correctly, but the old baseline observed it during initial load |
 | Economics | Separate small adapter chunk, about 3,765 gzip bytes | Good capability-pack evidence |
-| Runtime audit | `npm run perf:animation` targets retired `[data-action=set-editor-animation]` UI | Broken before measurement; current results are uncertified |
+| Runtime audit | `npm run perf:animation` now measures the direct economics catalogue route under normal and constrained profiles | Restored; records route identity, transfer, fonts, LCP, CLS, interaction-to-paint, long tasks, and frame distribution |
 | CWV coverage | Isolated layout-shift and long-task observers exist in feature tests | No catalogue-route LCP, CLS, or INP matrix |
 | Code rendering | Mostly native `pre`/`code`; no large syntax-highlighter dependency found | Good current baseline; preserve it |
 
@@ -53,12 +52,37 @@ to the retired editor flow. It recorded 489,079 initial script-transfer bytes,
 p95 frame time, and an initial Three.js request. Those measurements are useful
 historical debt evidence, not a certification of the current catalogue.
 
+## Economics Checkpoint Outcome
+
+The repaired 2026-08-01 lab run completes without a regression and does not
+request the Three.js chunk for the SVG-only economics route. It records:
+
+| Metric | Normal | Constrained | Current target | Result |
+| --- | ---: | ---: | ---: | --- |
+| Hydration | 314 ms | 3,579 ms | constrained ≤5,000 ms | Pass |
+| Initial script transfer | 411,605 bytes | 411,605 bytes | ≤250,000 bytes | Target debt |
+| Initial font transfer | 43,312 bytes | 43,312 bytes | baseline only | Measured |
+| LCP | 372 ms | 3,688 ms | ≤2,500 ms | Constrained target debt |
+| CLS | 0.0251 | 0.0250 | ≤0.1 | Pass |
+| Interaction-to-paint lab proxy | 26 ms | 42.2 ms | ≤200 ms | Pass |
+| Animation frame p95 | 17.6 ms | 33.2 ms | constrained ≤33 ms | Marginal target debt |
+| Longest task | 0 ms | 0 ms | ≤50 ms | Pass |
+
+These results replace “unknown because the harness is broken” with explicit
+route evidence. They do not turn a synthetic interaction proxy into field INP
+or bless the current main-host closure. The main-host transfer and constrained
+LCP debts are cross-route loading concerns and remain candidates for the
+post-economics/physics consolidation and pruning boundary. The marginal frame
+target should be remeasured and optimized only after the visual treatment is
+approved. Economics cannot receive its final release certificate while these
+named target debts remain unresolved or without an explicit later decision.
+
 ## Bounded Performance Plan
 
-### 1. Restore route truth
+### 1. Preserve restored route truth
 
-Retarget the stable performance harness to the persistent catalogue shell and
-make artifact selection explicit in the URL. Measure at least:
+The stable performance harness now targets the persistent catalogue shell with
+artifact selection explicit in the URL. Extend that restored pattern to:
 
 - the default catalogue route;
 - a direct economics deep link;

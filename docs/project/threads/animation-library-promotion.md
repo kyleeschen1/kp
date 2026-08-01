@@ -2,12 +2,12 @@
 
 Status: active
 Last Updated: 2026-08-01
-Current Next Action: Revise and human-review the bounded Supply and demand
+Current Next Action: Human-review the revised bounded Supply and demand
 equilibrium shift at rank 3 under the accepted dimensional-continuity graph
-language, including restored catalogue-route performance evidence. Then build
-constant-force work-energy at rank 4. The catalogue UX and bounded curation
-checkpoint is complete. Consolidate API tiers and motifs only after both
-callers provide evidence.
+language and restored catalogue-route performance evidence. After explicit
+approval, build constant-force work-energy at rank 4. The catalogue UX and
+bounded curation checkpoint is complete. Consolidate API tiers and motifs only
+after both callers provide evidence.
 
 ## Goal
 
@@ -195,19 +195,21 @@ KaTeX; prose remains semantic HTML. Renderer-owned role tokens, named poses,
 honest scale and units, collision-aware labels, redundant non-color cues,
 dynamic descriptions, and responsive density are promotion requirements.
 
-The present economics graph is exact and mechanically verified but not visually
-approved. Its current raw SVG math labels and flat dense graph treatment are a
-revision target, not a reusable reference. The revised economics caller remains
-the exemplar checkpoint; physics is the second caller. Only their shared,
-human-approved seams may become a versioned profile or generated-artifact
-conformance gate.
+The revised economics graph is exact and mechanically verified but still waits
+for visual approval. Its local profile replaces raw SVG math and the dense flat
+grid with a warm orthographic plane, sparse data grid, role-based hierarchy,
+and direct KaTeX labels. This is exemplar evidence, not a reusable profile. The
+revised economics caller remains the checkpoint; physics is the second caller.
+Only their shared, human-approved seams may become a versioned profile or
+generated-artifact conformance gate.
 
-The current bundle boundary passes, but the catalogue experience has no current
-Core Web Vitals certificate because `perf:animation` still drives a retired
-editor selector. Repair that scoped route harness during economics revision.
-Do not equate the 490,000-byte main-host regression ceiling with a product
-target, and do not ship KaTeX, code, or WebGL capability merely because the
-catalogue can select an asset that uses it.
+`perf:animation` now drives the direct economics catalogue route and records
+transfer, fonts, LCP, CLS, interaction paint, long tasks, and frame timing. It
+proves no Three.js request and passing CLS/interaction behavior, while exposing
+411,605 initial script bytes, 3.688 s constrained LCP, and 33.2 ms constrained
+frame p95 as release debt. Do not equate the 490,000-byte main-host regression
+ceiling with a product target, and do not ship KaTeX, code, or WebGL capability
+merely because the catalogue can select an asset that uses it.
 
 ## Progress Update Protocol
 

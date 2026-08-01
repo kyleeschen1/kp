@@ -6,6 +6,10 @@ This is the canonical economics exemplar for deciding whether the catalogue's
 cross-domain presentation seam is visually convincing enough to pressure with
 a structurally different physics caller.
 
+The first visual treatment was returned for revision. The current checkpoint
+implements the accepted dimensional-continuity language through one local SVG
+profile; it does not generalize the treatment to other graphs.
+
 ## Open the exemplar
 
 - Default demand shift:
@@ -30,6 +34,12 @@ settle, custom-target, and narrow-screen evidence under
 4. At a narrow viewport, confirm that **Review** remains lower-left without
    covering Play or the scrubber, and that the graph and explanation remain
    legible.
+5. Decide whether the warm orthographic plane, sparse quiet-blue grid, dark
+   arrowed axes, teal stable supply, rust changing demand, and faded historical
+   state feel like a 2D pose of the existing 3D technical language.
+6. Confirm that the direct KaTeX labels (`P`, `Q`, ticks, `D_0`/`D_t`/`D_1`,
+   `S`, and `E_0`/`E_t`/`E_1`) stay legible and collision-free at start,
+   midpoint, settlement, and narrow width.
 
 ## Observable promotion criteria
 
@@ -44,6 +54,12 @@ settle, custom-target, and narrow-screen evidence under
   and narrow captured viewports.
 - The custom parameter changes model truth while preserving playhead and
   direction, then pauses for inspection.
+- The graph carries `kp.graph.dimensional-continuity.economics.v1`, contains no
+  raw SVG mathematical text, and keeps every mathematical label in KaTeX.
+- The performance route does not request Three.js; CLS and the deterministic
+  interaction proxy pass their current targets. Initial transfer, constrained
+  LCP, and constrained frame p95 remain explicit release debt rather than
+  hidden or weakened budgets.
 
 ## Preservation and rollback boundary
 
@@ -53,16 +69,17 @@ shell, URL/history restoration, and semantic Review capture. Human approval of
 this choreography does not yet authorize a shared cross-domain renderer, a
 catalogue-wide motif rollout, or physics implementation.
 
-The smallest rollback unit is the economics visual-capture/checkpoint slice:
-the stable capture extension plus the narrow catalogue control-spacing repair.
-The economics model, runtime, registration, and deterministic behavior proof
-remain independently committed behind it.
+The smallest rollback unit is the revised economics presenter and local style
+profile plus the stable visual/performance harness changes. The economics
+model, runtime, registration, deterministic behavior proof, catalogue shell,
+and review history remain independently committed behind it.
 
 ## Verification already completed
 
 - `npm run visual:animation-catalogue`
 - `npm run test:browser:economics-equilibrium`
-- `npm test` — 3,229 tests passed
+- `npm run perf:animation` — no regression; Three.js absent; named target debt
+- `npm test` — 3,230 tests passed
 - `npm run typecheck`
 - `npm run build`
 - `npm run check:architecture`

@@ -81,8 +81,8 @@ test("performance evaluation gates diagnostics below the frame loop", () => {
     ...snapshot,
     constrained: {
       ...snapshot.constrained,
-      matrixFrame: {
-        ...snapshot.constrained.matrixFrame,
+      animationFrame: {
+        ...snapshot.constrained.animationFrame!,
         diagnosticPublishes: 41,
         inspectionPublishes: 42,
         layoutCacheBuilds: 25,
@@ -94,17 +94,43 @@ test("performance evaluation gates diagnostics below the frame loop", () => {
   assert.deepEqual(
     evaluateKpAnimationPerformance({ snapshot: chatty, baseline })
       .filter((issue) => [
-        "constrained.matrixFrame.diagnosticPublishes",
-        "constrained.matrixFrame.inspectionPublishes",
-        "constrained.matrixFrame.layoutCacheBuilds",
-        "constrained.matrixFrame.overlayGeometryMeasures"
+        "constrained.animationFrame.diagnosticPublishes",
+        "constrained.animationFrame.inspectionPublishes",
+        "constrained.animationFrame.layoutCacheBuilds",
+        "constrained.animationFrame.overlayGeometryMeasures"
       ].includes(issue.metric))
       .map((issue) => issue.metric),
     [
-      "constrained.matrixFrame.diagnosticPublishes",
-      "constrained.matrixFrame.inspectionPublishes",
-      "constrained.matrixFrame.layoutCacheBuilds",
-      "constrained.matrixFrame.overlayGeometryMeasures"
+      "constrained.animationFrame.diagnosticPublishes",
+      "constrained.animationFrame.inspectionPublishes",
+      "constrained.animationFrame.layoutCacheBuilds",
+      "constrained.animationFrame.overlayGeometryMeasures"
+    ]
+  );
+});
+
+test("performance evaluation reports route-scoped Core Web Vitals guards", () => {
+  const unstable: KpAnimationPerformanceSnapshot = {
+    ...snapshot,
+    normal: {
+      ...snapshot.normal,
+      coreWebVitals: { lcpMs: 800, cls: 0.12, interactionPaintMs: 40 }
+    },
+    constrained: {
+      ...snapshot.constrained,
+      coreWebVitals: { lcpMs: 2_600, cls: 0.14, interactionPaintMs: 220 }
+    }
+  };
+
+  assert.deepEqual(
+    evaluateKpAnimationPerformance({ snapshot: unstable, baseline })
+      .filter((issue) => issue.metric.includes("coreWebVitals"))
+      .map((issue) => issue.metric),
+    [
+      "constrained.coreWebVitals.lcpMs",
+      "normal.coreWebVitals.cls",
+      "constrained.coreWebVitals.cls",
+      "constrained.coreWebVitals.interactionPaintMs"
     ]
   );
 });
@@ -118,7 +144,7 @@ function runtime(options: {
     initialScriptTransferBytes: 489_079,
     initialFontTransferBytes: 56_028,
     initialScriptNames: ["index-current.js", "graph-webgl-three-current.js"],
-    matrixFrame: {
+    animationFrame: {
       frames: 180,
       meanMs: 16.67,
       p95Ms: options.frameP95Ms ?? 16.8,

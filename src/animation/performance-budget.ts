@@ -25,11 +25,21 @@ export interface KpAnimationPerformanceSnapshot {
 }
 
 export interface KpAnimationRuntimePerformance {
+  readonly route?: string | undefined;
+  readonly animationId?: string | undefined;
   readonly hydrationMs: number;
   readonly initialScriptTransferBytes: number;
   readonly initialFontTransferBytes: number;
   readonly initialScriptNames: readonly string[];
-  readonly matrixFrame: KpAnimationFramePerformance;
+  readonly coreWebVitals?: {
+    readonly lcpMs: number;
+    readonly cls: number;
+    // A deterministic lab proxy; public INP still requires field collection.
+    readonly interactionPaintMs: number;
+  } | undefined;
+  readonly animationFrame?: KpAnimationFramePerformance | undefined;
+  /** Retained only so the 2026-07-17 baseline remains readable. */
+  readonly matrixFrame?: KpAnimationFramePerformance | undefined;
 }
 
 export interface KpAnimationPerformanceBaseline {
@@ -59,6 +69,9 @@ export const kpAnimationPerformanceTargets = Object.freeze({
   frameWindowInspectionPublishes: 40,
   frameWindowLayoutCacheBuilds: 24,
   frameWindowOverlayGeometryMeasures: 24,
+  lcpMs: 2_500,
+  cls: 0.1,
+  interactionPaintMs: 200,
   initialThreeRequested: false
 });
 
@@ -105,29 +118,58 @@ export function evaluateKpAnimationPerformance(input: {
   );
   optionalMaximumIssue(
     issues,
-    "constrained.matrixFrame.diagnosticPublishes",
-    snapshot.constrained.matrixFrame.diagnosticPublishes,
+    "constrained.coreWebVitals.lcpMs",
+    snapshot.constrained.coreWebVitals?.lcpMs,
+    kpAnimationPerformanceTargets.lcpMs,
+    "target"
+  );
+  optionalMaximumIssue(
+    issues,
+    "normal.coreWebVitals.cls",
+    snapshot.normal.coreWebVitals?.cls,
+    kpAnimationPerformanceTargets.cls,
+    "target"
+  );
+  optionalMaximumIssue(
+    issues,
+    "constrained.coreWebVitals.cls",
+    snapshot.constrained.coreWebVitals?.cls,
+    kpAnimationPerformanceTargets.cls,
+    "target"
+  );
+  optionalMaximumIssue(
+    issues,
+    "constrained.coreWebVitals.interactionPaintMs",
+    snapshot.constrained.coreWebVitals?.interactionPaintMs,
+    kpAnimationPerformanceTargets.interactionPaintMs,
+    "target"
+  );
+  const constrainedFrame = measuredFrame(snapshot.constrained);
+  optionalMaximumIssue(
+    issues,
+    "constrained.animationFrame.diagnosticPublishes",
+    constrainedFrame.diagnosticPublishes,
     kpAnimationPerformanceTargets.frameWindowDiagnosticPublishes,
     "target"
   );
   optionalMaximumIssue(
     issues,
-    "constrained.matrixFrame.inspectionPublishes",
-    snapshot.constrained.matrixFrame.inspectionPublishes,
+    "constrained.animationFrame.inspectionPublishes",
+    constrainedFrame.inspectionPublishes,
     kpAnimationPerformanceTargets.frameWindowInspectionPublishes,
     "target"
   );
   optionalMaximumIssue(
     issues,
-    "constrained.matrixFrame.layoutCacheBuilds",
-    snapshot.constrained.matrixFrame.layoutCacheBuilds,
+    "constrained.animationFrame.layoutCacheBuilds",
+    constrainedFrame.layoutCacheBuilds,
     kpAnimationPerformanceTargets.frameWindowLayoutCacheBuilds,
     "target"
   );
   optionalMaximumIssue(
     issues,
-    "constrained.matrixFrame.overlayGeometryMeasures",
-    snapshot.constrained.matrixFrame.overlayGeometryMeasures,
+    "constrained.animationFrame.overlayGeometryMeasures",
+    constrainedFrame.overlayGeometryMeasures,
     kpAnimationPerformanceTargets.frameWindowOverlayGeometryMeasures,
     "target"
   );
@@ -140,22 +182,22 @@ export function evaluateKpAnimationPerformance(input: {
   );
   maximumIssue(
     issues,
-    "constrained.matrixFrame.p95Ms",
-    snapshot.constrained.matrixFrame.p95Ms,
+    "constrained.animationFrame.p95Ms",
+    constrainedFrame.p95Ms,
     kpAnimationPerformanceTargets.constrainedFrameP95Ms,
     "target"
   );
   maximumIssue(
     issues,
-    "constrained.matrixFrame.maxMs",
-    snapshot.constrained.matrixFrame.maxMs,
+    "constrained.animationFrame.maxMs",
+    constrainedFrame.maxMs,
     kpAnimationPerformanceTargets.constrainedFrameMaxMs,
     "target"
   );
   maximumIssue(
     issues,
-    "constrained.matrixFrame.longestTaskMs",
-    snapshot.constrained.matrixFrame.longestTaskMs,
+    "constrained.animationFrame.longestTaskMs",
+    constrainedFrame.longestTaskMs,
     kpAnimationPerformanceTargets.longestTaskMs,
     "target"
   );
@@ -174,6 +216,16 @@ export function evaluateKpAnimationPerformance(input: {
   }
 
   return issues;
+}
+
+function measuredFrame(
+  runtime: KpAnimationRuntimePerformance
+): KpAnimationFramePerformance {
+  const frame = runtime.animationFrame ?? runtime.matrixFrame;
+  if (frame === undefined) {
+    throw new Error("Animation performance snapshot lacks a measured frame window.");
+  }
+  return frame;
 }
 
 export function initialScriptTransferBytes(

@@ -601,6 +601,21 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
       await player.locator(".katex").count() < 3) {
       throw new Error("Economics exemplar did not keep its equations inline.");
     }
+    const presentationProfile = await graph.getAttribute(
+      "data-kp-graph-presentation-profile"
+    );
+    const rawSvgTextCount = await graph.locator("text").count();
+    const mathLabelCount = await graph.locator(
+      "[data-kp-economics-math-label]"
+    ).count();
+    if (presentationProfile !==
+        "kp.graph.dimensional-continuity.economics.v1" ||
+      rawSvgTextCount !== 0 || mathLabelCount < 14) {
+      throw new Error(
+        "Economics graph lost its dimensional-continuity or KaTeX contract: " +
+        JSON.stringify({ presentationProfile, rawSvgTextCount, mathLabelCount })
+      );
+    }
 
     const geometry = await page.evaluate(() => {
       const visualStage = document.querySelector<HTMLElement>(
@@ -668,6 +683,31 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
         ) !== checkpoint.equilibriumPrice) {
         throw new Error(
           `Economics ${checkpoint.name} checkpoint lost exact frame truth.`
+        );
+      }
+      const labels = await page.evaluate(() => {
+        const rect = (role: string) => {
+          const element = document.querySelector<SVGForeignObjectElement>(
+            `[data-kp-economics-math-label="${role}"]`
+          );
+          if (element === null) return undefined;
+          const bounds = element.getBoundingClientRect();
+          return {
+            left: bounds.left,
+            right: bounds.right,
+            top: bounds.top,
+            bottom: bounds.bottom
+          };
+        };
+        return {
+          demand: rect("curve-demand-current"),
+          priceAxis: rect("axis-price")
+        };
+      });
+      if (labels.demand === undefined || labels.priceAxis === undefined ||
+        rectanglesOverlap(labels.demand, labels.priceAxis)) {
+        throw new Error(
+          `Economics ${checkpoint.name} labels collided: ${JSON.stringify(labels)}`
         );
       }
       const screenshot = path.join(
@@ -809,6 +849,12 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
         url: economicsUrl.toString(),
         viewport,
         geometry,
+        presentation: {
+          profile: presentationProfile,
+          mathTypography: "katex",
+          rawSvgTextCount,
+          minimumMathLabelCount: mathLabelCount
+        },
         screenshots
       }, null, 2)}\n`,
       "utf8"
@@ -819,6 +865,14 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
   } finally {
     await page.close();
   }
+}
+
+function rectanglesOverlap(
+  left: { readonly left: number; readonly right: number; readonly top: number; readonly bottom: number },
+  right: { readonly left: number; readonly right: number; readonly top: number; readonly bottom: number }
+): boolean {
+  return left.left < right.right && left.right > right.left &&
+    left.top < right.bottom && left.bottom > right.top;
 }
 
 async function waitForEconomicsExemplar(page: Page) {

@@ -179,14 +179,19 @@ and treats Jacobian/Hessian as a diagnostic/retirement candidate whose unique
 semantic and conformance evidence must be replaced before deletion.
 
 The exact economics model, synchronized view, native SVG host, parameters,
-accessibility, seek/rewind, and visual capture are complete, but the appearance
-is not approved. The revision must make the 2D graph an orthographic member of
-the 3D technical visual language, render all mathematical labels with KaTeX,
-and preserve the existing semantic and runtime boundary. The current bundle
-ratchets pass, but Core Web Vitals are uncertified because the animation
-performance harness still targets the retired editor picker. The bounded
-economics revision therefore includes repair of route-specific performance
-evidence; it does not authorize a broad platform detour.
+accessibility, seek/rewind, and revised visual capture are complete. The local
+dimensional-continuity profile now gives the 2D graph a warm orthographic plane,
+sparse construction grid, role-based line hierarchy, and KaTeX for every
+mathematical label without changing the semantic or runtime boundary. Human
+visual approval remains pending.
+
+The repaired route-specific performance audit now completes. It proves no
+Three.js request, CLS near 0.025, 26/42 ms normal/constrained interaction paint,
+and no regression. It also records rather than hides 411,605 initial script
+bytes, 3.688 s constrained LCP, and 33.2 ms constrained frame p95 as target
+debt. Main-host loading optimization remains bounded to the later
+caller-proven consolidation/release work; it does not interrupt this human
+visual checkpoint with a broad platform detour.
 
 The generator, editorial-text, API-tier, motif-versioning, and pruning
 recommendations are durable platform milestones in

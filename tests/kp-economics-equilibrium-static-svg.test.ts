@@ -14,6 +14,7 @@ import {
   createKpEditorGraphSvgViewportModel
 } from "../src/editor/graph-svg-viewport.ts";
 import {
+  kpEconomicsGraphPresentationProfile,
   renderKpEconomicsEquilibriumStaticContent
 } from "../src/rendering/economics-equilibrium-svg.ts";
 
@@ -42,9 +43,22 @@ test("static economics SVG paints exact curves and initial equilibrium", () => {
   assert.match(html, /data-kp-economics-equation="P=14-Q"/);
   assert.match(html, /data-kp-economics-equilibrium-quantity="6"/);
   assert.match(html, /data-kp-economics-equilibrium-price="8"/);
-  assert.match(html, />E · Q=6, P=8<\/text>/);
-  assert.match(html, /data-kp-economics-quantity-axis-label[^>]*>Q<\/text>/);
-  assert.match(html, /data-kp-economics-price-axis-label[^>]*>P<\/text>/);
+  assert.equal(
+    kpEconomicsGraphPresentationProfile.id,
+    "kp.graph.dimensional-continuity.economics.v1"
+  );
+  assert.match(html, /data-kp-economics-math-label="axis-quantity"/);
+  assert.match(html, /data-kp-economics-math-label="axis-price"/);
+  assert.match(html, /data-kp-economics-math-label="curve-supply"/);
+  assert.match(html, /data-kp-economics-math-label="curve-demand-current"/);
+  assert.match(html, /data-kp-economics-math-label="equilibrium-current"/);
+  assert.match(html, /data-kp-latex="D_0"/);
+  assert.match(html, /data-kp-latex="E_0 = \(6, 8\)"/);
+  assert.match(html, /data-kp-economics-grid-axis="quantity"/);
+  assert.match(html, /data-kp-economics-grid-axis="price"/);
+  assert.match(html, /data-kp-economics-tick-axis="quantity"/);
+  assert.match(html, /data-kp-economics-tick-axis="price"/);
+  assert.doesNotMatch(html, /<text\b/);
 });
 
 test("static economics SVG is deterministic for the same exact frame", () => {
@@ -65,4 +79,3 @@ test("static economics SVG is deterministic for the same exact frame", () => {
     renderKpEconomicsEquilibriumStaticContent({ frame, viewport })
   );
 });
-

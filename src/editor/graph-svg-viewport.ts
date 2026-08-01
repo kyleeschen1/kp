@@ -9,6 +9,7 @@ import {
   sampleKpEconomicsEquilibriumRuntimeFrame
 } from "../animation/economics-equilibrium-runtime-frame.ts";
 import {
+  kpEconomicsGraphPresentationProfile,
   renderKpEconomicsEquilibriumRuntimeContent
 } from "../rendering/economics-equilibrium-svg.ts";
 import {
@@ -59,7 +60,7 @@ export const kpEditorGraphSvgViewportAdapter: KpEditorAnimationSurfaceAdapter = 
     const model = createKpEditorGraphSvgViewportModel(animation);
     let svg = slot.querySelector<SVGSVGElement>("[data-kp-editor-graph-svg]");
     if (svg === null) {
-      slot.innerHTML = renderViewport(model, state);
+      slot.innerHTML = renderViewport(animation, model, state);
       svg = slot.querySelector<SVGSVGElement>("[data-kp-editor-graph-svg]");
     }
     if (svg !== null) {
@@ -97,15 +98,24 @@ function syncGraphAccessibility(
 }
 
 function renderViewport(
+  animation: KpAnimationAsset,
   model: KpEditorGraphSvgViewportModel,
   state: KpEditorAnimationPlayerState
 ): string {
-  return `<svg class="editor-graph-stage" data-kp-editor-graph-svg data-kp-editor-graph-progress="${state.progress}" data-kp-editor-graph-direction="${state.direction}" viewBox="0 0 ${model.width} ${model.height}" role="img" aria-label="${escapeHtml(state.runtimeFrame.title)} graph animation">
-    <defs><pattern id="kp-editor-graph-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M 32 0 L 0 0 0 32" fill="none" stroke="#dce6ed" stroke-width="1" /></pattern><marker id="kp-editor-graph-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker></defs>
-    <rect width="100%" height="100%" fill="url(#kp-editor-graph-grid)" />
-    <line data-kp-editor-graph-axis="x" x1="20" y1="${model.xAxisY}" x2="${model.width - 20}" y2="${model.xAxisY}" />
-    <line data-kp-editor-graph-axis="y" x1="${model.yAxisX}" y1="20" x2="${model.yAxisX}" y2="${model.height - 20}" />
+  const economicsProfile = animation.id ===
+    "animation.economics.supply-demand-equilibrium-shift";
+  const profile = economicsProfile
+    ? kpEconomicsGraphPresentationProfile.id
+    : "kp.graph.editor-default.v1";
+  const axisMarker = economicsProfile
+    ? ' marker-end="url(#kp-editor-graph-axis-arrow)"'
+    : "";
+  return `<svg class="editor-graph-stage" data-kp-editor-graph-svg data-kp-graph-presentation-profile="${profile}" data-kp-editor-graph-progress="${state.progress}" data-kp-editor-graph-direction="${state.direction}" viewBox="0 0 ${model.width} ${model.height}" role="img" aria-label="${escapeHtml(state.runtimeFrame.title)} graph animation">
+    <defs><pattern id="kp-editor-graph-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path class="editor-graph-stage__default-grid-line" d="M 32 0 L 0 0 0 32" fill="none" /></pattern><marker id="kp-editor-graph-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker><marker id="kp-editor-graph-axis-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker></defs>
+    <rect class="editor-graph-stage__plot-plane" width="100%" height="100%" />
     <g data-kp-editor-graph-content></g>
+    <line data-kp-editor-graph-axis="x" x1="20" y1="${model.xAxisY}" x2="${model.width - 20}" y2="${model.xAxisY}"${axisMarker} />
+    <line data-kp-editor-graph-axis="y" x1="${model.yAxisX}" y1="${model.height - 20}" x2="${model.yAxisX}" y2="20"${axisMarker} />
   </svg>`;
 }
 
