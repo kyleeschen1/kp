@@ -444,11 +444,35 @@
       "scope": "s17 control record",
       "checkedAt": "2026-08-01T17:19:23.416Z",
       "notes": "Workspace graph validates with synchronized-view evidence."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-constant-force-work-energy-contract.test.ts",
+      "status": "passed",
+      "scope": "s23 exact physics contract identities, units, axes, parameter, and canonical results",
+      "checkedAt": "2026-08-01T19:55:18.836Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s23 repository TypeScript boundaries",
+      "checkedAt": "2026-08-01T19:55:19.895Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s23 domain and presentation architecture boundaries",
+      "checkedAt": "2026-08-01T19:55:20.785Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s23 patch hygiene",
+      "checkedAt": "2026-08-01T19:55:21.777Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Bounded curation is complete: all 33 concrete rows remain, human dispositions stay unassigned, Jacobian/Hessian is a diagnostic retirement candidate with explicit replacement gates, the provisional incorrect substitution remains disclosed negative evidence, and durable direction now advances to economics."
+    "summary": "Froze the constant-force work-energy second-caller contract: 3 N over 4 m, 12 J work and kinetic-energy change, explicit SI dimensions, one bounded hidden force parameter, synchronized diagram/graph/equation roles, local dimensional-continuity presentation boundary, and no shared API extraction."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",

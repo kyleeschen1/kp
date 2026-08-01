@@ -508,7 +508,8 @@
     {
       "id": "s23",
       "title": "Freeze work-energy second-caller contract",
-      "status": "planned"
+      "summary": "Froze one exact domain-native physics contract with explicit assumptions and SI unit laws: a 3 N rightward net force over 4 m grows a 12 J rectangular work area and changes kinetic energy from 4 J to 16 J. The contract preserves object, force, displacement, graph segment, work-area, energy, parameter, and claim identities across synchronized diagram, graph, equation, narrative, and accessible views. One bounded 1-5 N force control stays behind Parameters. Three focused tests, all TypeScript projects, architecture gates, and patch hygiene pass; economics and shared APIs remain unchanged.",
+      "status": "complete"
     },
     {
       "id": "s24",
