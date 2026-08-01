@@ -1,0 +1,96 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import {
+  createEconomicsEquilibriumAnimationAsset
+} from "../src/animation/economics-equilibrium-adapter.ts";
+import {
+  sampleKpEconomicsEquilibriumRuntimeFrame
+} from "../src/animation/economics-equilibrium-runtime-frame.ts";
+import { sampleKpAnimationRuntimeFrame } from "../src/animation/runtime-sampler.ts";
+import {
+  createKpEditorGraphSvgViewportModel
+} from "../src/editor/graph-svg-viewport.ts";
+import {
+  renderKpEconomicsEquilibriumRuntimeContent
+} from "../src/rendering/economics-equilibrium-svg.ts";
+
+test("economics runtime choreography holds, shifts, hands off, and settles", () => {
+  const animation = createEconomicsEquilibriumAnimationAsset();
+  const sample = (progress: number) => sampleKpEconomicsEquilibriumRuntimeFrame({
+    animation,
+    runtimeFrame: sampleKpAnimationRuntimeFrame({ animation, progress })
+  });
+  const establish = sample(0.1);
+  const shiftMidpoint = sample(0.44);
+  const handoff = sample(0.8);
+  const settle = sample(1);
+
+  assert.deepEqual(
+    [establish.stage, shiftMidpoint.stage, handoff.stage, settle.stage],
+    ["establish", "shift", "handoff", "settle"]
+  );
+  assert.deepEqual(establish.semanticFrame.equilibrium.quantity, {
+    numerator: "6",
+    denominator: "1"
+  });
+  assert.equal(shiftMidpoint.modelProgress, 0.5);
+  assert.deepEqual(shiftMidpoint.semanticFrame.equilibrium, {
+    id: "equilibrium.economics.supply-demand",
+    quantity: { numerator: "7", denominator: "1" },
+    price: { numerator: "9", denominator: "1" }
+  });
+  assert.deepEqual(handoff.semanticFrame.equilibrium, settle.semanticFrame.equilibrium);
+  assert.ok(handoff.initialEquilibriumReferenceOpacity > settle.initialEquilibriumReferenceOpacity);
+});
+
+test("economics runtime choreography has forward and rewind visual symmetry", () => {
+  const animation = createEconomicsEquilibriumAnimationAsset();
+
+  for (const progress of [0, 0.1, 0.44, 0.8, 1]) {
+    const forward = sampleKpEconomicsEquilibriumRuntimeFrame({
+      animation,
+      runtimeFrame: sampleKpAnimationRuntimeFrame({
+        animation,
+        direction: "forward",
+        progress
+      })
+    });
+    const rewind = sampleKpEconomicsEquilibriumRuntimeFrame({
+      animation,
+      runtimeFrame: sampleKpAnimationRuntimeFrame({
+        animation,
+        direction: "rewind",
+        progress: 1 - progress
+      })
+    });
+
+    assert.equal(rewind.stage, forward.stage);
+    assert.equal(rewind.modelProgress, forward.modelProgress);
+    assert.deepEqual(rewind.semanticFrame.equilibrium, forward.semanticFrame.equilibrium);
+    assert.equal(
+      rewind.initialEquilibriumReferenceOpacity,
+      forward.initialEquilibriumReferenceOpacity
+    );
+  }
+});
+
+test("runtime SVG shows the moving demand and old-equilibrium handoff", () => {
+  const animation = createEconomicsEquilibriumAnimationAsset();
+  const frame = sampleKpEconomicsEquilibriumRuntimeFrame({
+    animation,
+    runtimeFrame: sampleKpAnimationRuntimeFrame({ animation, progress: 0.44 })
+  });
+  const html = renderKpEconomicsEquilibriumRuntimeContent({
+    frame,
+    viewport: createKpEditorGraphSvgViewportModel(animation)
+  });
+
+  assert.match(html, /data-kp-economics-choreography-stage="shift"/);
+  assert.match(html, /data-kp-economics-demand-intercept="16"/);
+  assert.match(html, /data-kp-economics-equilibrium-quantity="7"/);
+  assert.match(html, /data-kp-economics-equilibrium-price="9"/);
+  assert.match(html, /data-kp-economics-initial-demand-reference/);
+  assert.match(html, /data-kp-economics-initial-equilibrium-reference/);
+});
+

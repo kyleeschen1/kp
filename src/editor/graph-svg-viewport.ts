@@ -6,13 +6,10 @@ import { sampleIntegralAreaSweepRuntimeFrame } from "../animation/integral-area-
 import { sampleDotProjectionRuntimeFrame } from "../animation/dot-projection-runtime-frame.ts";
 import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import {
-  createKpSupplyDemandEquilibriumModel
-} from "../../domains/economics/supply-demand-equilibrium-model.ts";
+  sampleKpEconomicsEquilibriumRuntimeFrame
+} from "../animation/economics-equilibrium-runtime-frame.ts";
 import {
-  sampleKpSupplyDemandEquilibriumFrame
-} from "../../domains/economics/supply-demand-equilibrium-frame.ts";
-import {
-  renderKpEconomicsEquilibriumStaticContent
+  renderKpEconomicsEquilibriumRuntimeContent
 } from "../rendering/economics-equilibrium-svg.ts";
 import {
   kpEditorAnimationSurfaceAdapterRegistry,
@@ -145,13 +142,11 @@ function renderRuntimeContent(
       return `<line class="editor-graph-stage__vector" x1="${origin[0]}" y1="${origin[1]}" x2="${left[0]}" y2="${left[1]}" marker-end="url(#kp-editor-graph-arrow)" /><line class="editor-graph-stage__vector editor-graph-stage__vector--secondary" x1="${origin[0]}" y1="${origin[1]}" x2="${right[0]}" y2="${right[1]}" marker-end="url(#kp-editor-graph-arrow)" /><line class="editor-graph-stage__projection" data-kp-editor-graph-projection data-kp-editor-graph-drop-point="${frame.dropPoint.join(",")}" x1="${left[0]}" y1="${left[1]}" x2="${drop[0]}" y2="${drop[1]}" /><circle class="editor-graph-stage__point" data-kp-editor-graph-projection-point data-kp-editor-graph-dot-product="${frame.dotProduct}" cx="${drop[0]}" cy="${drop[1]}" r="5" />${renderAnnotation(`a·b = ${formatNumber(frame.dotProduct)} · drop = (${frame.dropPoint.map(formatNumber).join(", ")})`, model)}`;
     }
     case "animation.economics.supply-demand-equilibrium-shift": {
-      // Static paint proves the native graph ownership boundary before motion
-      // choreography is selected in the next reversible slice.
-      const economicsFrame = sampleKpSupplyDemandEquilibriumFrame({
-        model: createKpSupplyDemandEquilibriumModel(),
-        progress: { numerator: "0", denominator: "1" }
+      const economicsFrame = sampleKpEconomicsEquilibriumRuntimeFrame({
+        animation,
+        runtimeFrame: state.runtimeFrame
       });
-      return renderKpEconomicsEquilibriumStaticContent({
+      return renderKpEconomicsEquilibriumRuntimeContent({
         frame: economicsFrame,
         viewport: model
       });

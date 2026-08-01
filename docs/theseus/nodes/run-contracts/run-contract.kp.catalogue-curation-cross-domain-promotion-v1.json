@@ -149,7 +149,8 @@
     {
       "id": "s16",
       "title": "Choreograph demand shift exemplar",
-      "status": "planned"
+      "summary": "Choreographed the demand-intercept shift on the existing runtime clock: a short initial hold, eased exact demand/intersection motion, a faint D0/E0 reference during handoff, and a settled new equilibrium. Complement quantization makes forward t and rewind 1-t paint-identical without a second clock. Eighteen economics tests, typecheck, architecture, diff hygiene, and workspace validation pass.",
+      "status": "complete"
     },
     {
       "id": "s17",

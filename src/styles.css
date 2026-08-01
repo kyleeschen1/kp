@@ -1904,6 +1904,11 @@ h2 {
 }
 .editor-graph-stage__economics-curve--supply { stroke: #157b83; }
 .editor-graph-stage__economics-curve--demand { stroke: #c45d32; }
+.editor-graph-stage__economics-curve--demand-reference {
+  stroke: #c45d32;
+  stroke-dasharray: 7 6;
+  stroke-width: 2.5;
+}
 .editor-graph-stage__economics-guide {
   stroke: #64748b;
   stroke-dasharray: 5 5;
@@ -1913,6 +1918,11 @@ h2 {
   fill: #172033;
   stroke: #ffffff;
   stroke-width: 2.5;
+}
+.editor-graph-stage__economics-equilibrium--reference {
+  fill: #ffffff;
+  stroke: #64748b;
+  stroke-dasharray: 3 2;
 }
 .editor-graph-stage__economics-label,
 .editor-graph-stage__economics-axis-label {
