@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-01-animation-catalogue-meaningful-hostability-contract.md"
     }
   ],
   "dependsOn": {
@@ -26,6 +30,43 @@
   "verification": [
     "npm-run-check-promotion-memory",
     "theseus-workspace-validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-surface-hostability.test.ts tests/animation-catalogue-seam-atlas.test.ts tests/animation-catalogue-host-outcome.test.ts tests/animation-catalogue-host-observation.test.ts tests/animation-catalogue-load-probe.test.ts",
+      "status": "passed",
+      "scope": "s01 catalogue identity, loadability, meaningful hostability, and evidence",
+      "checkedAt": "2026-08-01T22:51:13.755Z",
+      "notes": "16 tests pass; all 35 assets load, 32 have meaningful native paint, and Graph3D plus two programming slots remain explicit gaps."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s01 typed adapter support boundary",
+      "checkedAt": "2026-08-01T22:51:14.650Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s01 architecture preservation",
+      "checkedAt": "2026-08-01T22:51:15.536Z",
+      "notes": "All architecture gates pass; the graph adapter declares exact supported callers without a new surface taxonomy."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s01 stable frontier",
+      "checkedAt": "2026-08-01T22:51:16.429Z",
+      "notes": "Rank 5 remains vector dot projection under the active six-loop contract."
+    },
+    {
+      "command": "npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "s01 generated catalogue identity",
+      "checkedAt": "2026-08-01T22:51:17.324Z",
+      "notes": "Generated display metadata remains current after correcting derived hostability truth."
+    }
   ],
   "expectedLearning": [
     "Identify which catalogue, generated-session, vector, and programming seams are genuinely shared after concrete caller pressure.",

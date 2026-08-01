@@ -58,7 +58,9 @@
     {
       "id": "s01",
       "title": "Freeze catalogue truth contract",
-      "status": "planned"
+      "summary": "Corrected catalogue truth: all 35 assets load; 32 have meaningful native paint; Graph3D and two programming slots are explicit gaps. Generic SVG chrome no longer counts as 3D paint.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s02",

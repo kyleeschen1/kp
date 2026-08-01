@@ -78,8 +78,8 @@ test("hostability requires every concrete asset slot to resolve an adapter", () 
       ])
     ),
     {
-      ready: 33,
-      "missing-adapter": 2,
+      ready: 32,
+      "missing-adapter": 3,
       "unsupported-surface": 0
     }
   );
@@ -90,6 +90,7 @@ test("hostability requires every concrete asset slot to resolve an adapter", () 
       .sort(),
     [
       "animation.comparison.linear-solve-programming",
+      "animation.graph.surface-mode.mesh-to-donut",
       "animation.programming.add.execution-trace"
     ]
   );
@@ -127,6 +128,10 @@ test("hostability records exact generic and specialized adapter ownership", () =
       status: "ready",
       adapterId: "editor-animation-surface.graph.svg"
     }]
+  );
+  assert.deepEqual(
+    byId.get("animation.graph.surface-mode.mesh-to-donut")?.slots,
+    [{ slotKind: "graph", status: "missing-adapter" }]
   );
   assert.deepEqual(
     byId.get("animation.physics.constant-force-work-energy")?.slots,

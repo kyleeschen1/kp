@@ -42,8 +42,10 @@ successor in
 has delivered persistent catalogue switching, an approved solve-x compact
 stage, compatible equation-surface centering, bounded curation, and two exact
 human-approved synchronized-model exemplars. The catalogue now has 35 concrete
-assets: 33 paint natively, two expose the missing programming adapter, none use
-an iframe, and ordinary selection stays inside one shell. Economics and physics
+assets. The active meaningful-hostability audit now reports 32 semantic paints,
+one 3D adapter gap, and two programming gaps; the earlier 33 count included
+generic SVG plot chrome for the 3D surface row. None use an iframe, and ordinary
+selection stays inside one shell. Economics and physics
 promote four shared contracts—reversible projection progress, bounded integer
 query encoding, fixed moving-number display, and the versioned
 dimensional-continuity graph profile—while domain truth, narrative, geometry,
@@ -182,9 +184,10 @@ one documentary workspace and one typed contributor-fusion motif across all
 three ordered positions.
 
 The release-baseline recovery and catalogue simplification matrices are green.
-The catalogue hosts the concrete registry directly, switches assets inside one
-persistent shell, and has reduced the observed gap to one absent programming
-adapter shared by two rows. Human review approved the solve-x compact centered
+The catalogue hosts the concrete registry directly and switches assets inside
+one persistent shell. Its stricter meaningful-hostability contract exposes one
+native 3D adapter gap plus the programming adapter shared by two rows; all 35
+assets still load. Human review approved the solve-x compact centered
 stage; compatible equation centering passed radical and diagram pressure. The
 bounded curation record preserves all 35 rows, assigns no human dispositions,
 and treats Jacobian/Hessian as a diagnostic/retirement candidate whose unique
