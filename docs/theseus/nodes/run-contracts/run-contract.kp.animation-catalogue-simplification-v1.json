@@ -95,7 +95,8 @@
     {
       "id": "s05",
       "title": "Map related context sprawl",
-      "status": "planned"
+      "summary": "Frozen the related-context map: 33 concrete assets currently fan out to 50 descriptors, 69 Workbench relationships, and 74 concrete display contexts (52 editor, 17 card, 3 reader, 2 diagnostic). Solve-x is widest at seven contexts. Seven reader-only playable display IDs remain preserved route evidence but cannot mint catalogue rows. Generated display metadata is the runtime context source; source-rich Workbench control, review, roadmap, and promotion state stays outside catalogue membership.",
+      "status": "complete"
     },
     {
       "id": "s06",

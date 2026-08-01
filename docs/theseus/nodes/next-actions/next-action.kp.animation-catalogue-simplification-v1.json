@@ -48,6 +48,14 @@
     {
       "kind": "file",
       "path": "tests/animation-catalogue-surface-hostability.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-31-animation-catalogue-related-context-inventory.md"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-related-context-inventory.test.ts"
     }
   ],
   "dependsOn": {
@@ -229,6 +237,34 @@
       "status": "passed",
       "scope": "slice s04 durable control state",
       "checkedAt": "2026-08-01T03:45:28.252Z",
+      "notes": "Workspace valid before slice completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-related-context-inventory.test.ts tests/animation-library-display-catalog.test.ts tests/semantic-animation-workbench-index.test.ts tests/animation-catalogue-loadable-registry.test.ts",
+      "status": "passed",
+      "scope": "slice s05 related-context inventory",
+      "checkedAt": "2026-08-01T03:50:20.622Z",
+      "notes": "18/18 passed; 33 concrete assets map to 50 descriptors, 69 Workbench relationships, and 74 display contexts without admitting seven display-only playable IDs."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s05 static types",
+      "checkedAt": "2026-08-01T03:50:21.441Z",
+      "notes": "All TypeScript projects passed with the characterization test."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "slice s05 priority preservation",
+      "checkedAt": "2026-08-01T03:50:22.265Z",
+      "notes": "Economics remains rank 3 and paused with no active implementation contract."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s05 durable control state",
+      "checkedAt": "2026-08-01T03:50:23.098Z",
       "notes": "Workspace valid before slice completion."
     }
   ],
