@@ -2,11 +2,10 @@
 
 Status: active-supporting
 Last Updated: 2026-08-01
-Current Next Action: Preserve the approved persistent shell, bounded
-surface-aware centering, and two promoted synchronized-model exemplars while
-the promotion thread prepares rank 5. Resume batched human asset review later
-without adding visible ontology or disposition machinery. Programming
-execution trace remains deferred.
+Current Next Action: Use the approved six-loop convergence contract to make 3D
+hostability meaningful, preserve the compact persistent shell, and close the
+two programming host gaps with one bounded addition-trace exemplar. Prepare a
+human disposition packet without adding visible ontology or filter machinery.
 
 ## Goal
 
@@ -44,8 +43,10 @@ The catalogue-wide pass now shows 33 painted assets and two honest programming
 adapter gaps, with zero load failures and zero iframes. `Ready`, `Review`, and
 `Broken` remain derived health states, not promotion claims. Every human
 disposition is still `Unreviewed`. The seam atlas suggests questions and an
-evidence-ranked programming tranche, but does not assign dispositions or
-authorize a port.
+evidence-ranked programming tranche, but does not assign dispositions. The
+approved successor authorizes one native addition-trace host as an exemplar;
+it does not authorize arbitrary code execution, the BFS promotion, or inferred
+catalogue dispositions.
 
 The successor loop removed full-document navigation between catalogue assets,
 approved and pressure-tested the solve-x presentation, promoted exact
@@ -107,6 +108,8 @@ content review.
 - `docs/project/decisions/2026-07-31-kp-animation-catalogue-first-simplification.md`
 - `docs/project/reviews/2026-07-31-animation-catalogue-simplification-next-step-review.md`
 - `docs/project/decisions/2026-07-31-kp-exemplar-first-visual-verification-cadence.md`
+- `docs/project/decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md`
+- `docs/project/reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`
 - `docs/project/threads/animation-library-promotion.md`
 - `docs/project/threads/cross-domain-tutorial-platform.md`
 - `docs/project/threads/project-dashboard.md`

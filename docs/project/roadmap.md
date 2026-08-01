@@ -52,6 +52,16 @@ retired; their canonical animation-domain owners remain. Release evidence and
 deliberate deferrals are closed in
 `reviews/2026-08-01-catalogue-curation-cross-domain-promotion-closeout.md`.
 
+The approved successor is the chained six-loop convergence tranche recorded in
+`decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md` and
+`reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`. It
+keeps vector dot projection as the first unresolved promotion while executing
+the generated solve-x and explanation platform gate, caller-backed API
+convergence, route-performance repair, honest 3D catalogue hosting, and one
+non-promotional programming-host exemplar. Objective work may chain, but
+catalogue dispositions and visual promotions collect at one final human
+checkpoint.
+
 The symbolic manipulation family plan recorded in
 `decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`
 closed its first 28-slice implementation loop. The delivery plan in
@@ -202,13 +212,13 @@ inside its 33 ms target at 32.5 ms. Main-host loading optimization remains a
 separately bounded successor concern rather than hidden work inside the closed
 visual promotion.
 
-The generator, editorial-text, motif-versioning, and pruning
-recommendations are durable platform milestones in
-`threads/animation-library-promotion.md`; they are not permission to interrupt
-content promotions with another broad infrastructure program. API-tier
-classification is complete. The verified problem-to-animation bridge remains
-the separately approval-gated platform milestone before the vector/matrix
-tranche.
+The generator, editorial-text, motif-versioning, and pruning recommendations
+are durable platform milestones in `threads/animation-library-promotion.md`.
+API-tier classification is complete. The verified problem-to-animation bridge
+and deterministic explanation spine are now approved as the bounded M2/M3 gate
+inside the chained successor, immediately before the vector exemplar. This is
+not authorization for live LLM editorial output or a broad infrastructure
+rewrite.
 
 The migration remains complexity-negative replacement work. Semantic traces,
 lineage, clocks, native accessibility, authoring guidance, and accepted legacy
@@ -219,13 +229,15 @@ discarding unmigrated catalog coverage.
 
 The durable domain-promotion order and current status remain owned by
 `threads/animation-library-promotion.md`. Approved Theseus plan revision
-`plan-revision.kp.v20` mirrors that order. Exact-fraction quantity, place-value
+`plan-revision.kp.v21` mirrors the approved convergence tranche without
+changing rank. Exact-
+fraction quantity, place-value
 addition, Supply and demand equilibrium, and constant-force work-energy are
 promoted. Project one vector onto another is the first unresolved row and
-remains planning-only until a separately reviewed contract is approved. Human exemplar approval
-remains mandatory before each subjective visual generalization, and existing
-standalone examples remain reference evidence rather than automatically
-promoted reader products.
+is the only active visual promotion exemplar. Human exemplar approval remains
+mandatory before rank advancement or subjective visual generalization, and
+existing standalone examples remain reference evidence rather than
+automatically promoted reader products.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
@@ -468,18 +480,18 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Keep Project one vector onto another as the first unresolved promotion and
-   prepare a separately reviewed successor without treating planning as
-   implementation authority.
-2. Reconcile the recorded generated-problem bridge and deterministic
-   explanation-spine gate before activating rank 5; M1 API-tier classification
-   is complete through the cross-domain audit.
-3. Preserve the approved persistent catalogue shell, four caller-proven shared
-   contracts, and bounded curation;
-   resume human disposition review later in batches without visible ontology
-   or filter machinery.
-4. Keep programming trace, publication, curriculum, public website, and broad
-   LLM editorial work outside this contract.
+1. Execute the approved six-loop convergence contract: catalogue truth and 3D
+   hosting, generated solve-x plus `ExplanationSpineV1`, caller-backed API
+   convergence, the rank-5 vector exemplar, selected-capability performance,
+   and one native addition-trace host.
+2. Keep Project one vector onto another as the first unresolved promotion; the
+   programming addition trace closes a host gap and does not advance the later
+   BFS rank.
+3. Preserve the approved persistent catalogue shell and collect catalogue
+   dispositions plus generated-session, vector, and programming visual review
+   in one final human checkpoint.
+4. Keep publication, curriculum, the public website, broad LLM editorial work,
+   and all post-exemplar generalization outside the contract.
 
 ## Deferred
 
@@ -499,7 +511,8 @@ Package executable animations as semantic capsules:
   accepted cross-domain exemplars.
 - Broad Theseus planner infrastructure is deferred unless it directly blocks KP
   roadmap execution.
-- The public website, full curriculum, learner/teacher product systems,
-  programming execution trace, and broad LLM editorial work remain deferred.
-  Economics and physics are promoted bounded exemplars, not permission for
-  domain engines or curriculum expansion.
+- The public website, full curriculum, learner/teacher product systems, BFS
+  programming promotion, arbitrary code execution, and broad LLM editorial
+  work remain deferred. The approved addition-trace work is a bounded native-
+  host exemplar only. Economics and physics are promoted bounded exemplars,
+  not permission for domain engines or curriculum expansion.

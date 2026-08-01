@@ -1,10 +1,10 @@
 {
-  "id": "plan-revision.kp.v20",
+  "id": "plan-revision.kp.v21",
   "kind": "plan-revision",
-  "title": "Kinetic Press content-led promotion roadmap v20",
-  "status": "superseded",
+  "title": "Kinetic Press six-loop product convergence roadmap v21",
+  "status": "active",
   "domain": "kp",
-  "summary": "Promote economics and physics, close the observed API-tier milestone, and hold vector dot projection as the planning-only frontier.",
+  "summary": "Execute the approved catalogue, generated solve-x, API, vector, performance, and programming-host tranche while preserving vector as rank 5 and human review as the promotion boundary.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -120,6 +120,21 @@
       "kind": "file",
       "path": "src/architecture/cross-domain-synchronized-model-release-approval.ts",
       "summary": "Nominal release authority for the two approved synchronized-model exemplars."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md",
+      "summary": "Accepted six-loop order, scope, promotion boundary, and terminal checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md",
+      "summary": "User-approved 30-slice executable plan and verification boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.six-loop-product-convergence-v0.json",
+      "summary": "Typed execution authority for the approved umbrella tranche."
     }
   ],
   "affects": [
@@ -130,16 +145,18 @@
     "run-contract.kp.place-value-addition-promotion-v0",
     "run-contract.kp.place-value-addition-promotion-v1",
     "run-contract.kp.place-value-persistent-workspace-repair-v2",
-    "run-contract.kp.catalogue-curation-cross-domain-promotion-v1"
+    "run-contract.kp.catalogue-curation-cross-domain-promotion-v1",
+    "next-action.kp.six-loop-product-convergence-v0",
+    "run-contract.kp.six-loop-product-convergence-v0"
   ],
   "progress": {
     "state": "partial",
-    "summary": "Exact fraction, place-value addition, economics equilibrium, and physics work-energy are promoted. API tiers and four two-caller seams are recorded. Vector dot projection is the first unresolved planning row; implementation requires a separately reviewed run contract."
+    "summary": "The six-loop convergence proposal and run contract are approved. M2/M3 and the vector exemplar are active; catalogue, performance, and programming-host work remain bounded preparation rather than inserted promotion ranks."
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
-    "revision": 20,
-    "objective": "Grow one canonical, composable semantic animation library through a stable exemplar order, inserting API, verified problem-generation, deterministic explanation, safe output, and optional LLM editorial gates only where recorded caller pressure justifies them.",
+    "revision": 21,
+    "objective": "Converge KP around one honest catalogue and canonical animation path through the approved generated solve-x, API, vector, performance, and programming-host tranche without reordering promotions or inventing human approval.",
     "assumptions": [
       {
         "id": "single-roadmap-authority",
@@ -519,8 +536,11 @@
         "id": "verified-linear-problem-animation-bridge",
         "title": "Verified linear problem to animation bridge",
         "objective": "Compile verified linear-equation traces into canonical KpAnimationAsset output with stable lineage, instance-aware readers, conformance cases, and fail-closed unsupported presentations.",
-        "horizon": "next",
-        "status": "planned",
+        "horizon": "now",
+        "status": "active",
+        "evidence": [
+          "run-contract.kp.six-loop-product-convergence-v0"
+        ],
         "topic": "Platform · Problem generation",
         "architectureBenefit": "One canonical generated-problem path rather than a parallel renderer.",
         "rationale": "Four visible exemplars provide enough pressure to test the authoring boundary without delaying library growth.",
@@ -530,8 +550,11 @@
         "id": "deterministic-explanation-spine",
         "title": "Deterministic explanation spine",
         "objective": "Attach ExplanationSpineV1, learner state, approved vocabulary, and verified claim references to the first generated solve-x session.",
-        "horizon": "next",
-        "status": "planned",
+        "horizon": "now",
+        "status": "active",
+        "evidence": [
+          "run-contract.kp.six-loop-product-convergence-v0"
+        ],
         "topic": "Platform · Pedagogy",
         "architectureBenefit": "Separates mathematical truth and pedagogical structure from editorial wording.",
         "rationale": "Generated sessions must work deterministically before model-written prose is useful.",
@@ -543,6 +566,9 @@
         "objective": "Coordinate vector components, geometric projection, magnitude, angle, and dot-product notation.",
         "horizon": "now",
         "status": "active",
+        "evidence": [
+          "run-contract.kp.six-loop-product-convergence-v0"
+        ],
         "topic": "Linear algebra · Vectors",
         "architectureBenefit": "Coordinate-to-geometry identity across multiple views.",
         "rationale": "It pressure-tests persistent identity between symbolic components and spatial objects.",
@@ -825,12 +851,11 @@
       }
     ],
     "approval": {
-      "status": "superseded",
+      "status": "approved",
       "decidedAt": "2026-08-01T22:45:42.542Z",
       "decidedBy": "user",
-      "rationale": "Superseded by plan-revision.kp.v21."
+      "rationale": "The user approved the recommended six-loop sequence and one chained 30-slice Theseus contract, with vector retained as rank 5 and all subjective promotion decisions deferred to one consolidated checkpoint."
     },
-    "supersedes": "plan-revision.kp.v19",
-    "supersededBy": "plan-revision.kp.v21"
+    "supersedes": "plan-revision.kp.v20"
   }
 }

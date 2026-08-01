@@ -29,7 +29,8 @@
     "next-action.kp.exact-fraction-quantity-promotion-v0",
     "next-action.refill.plan-phase.plan-revision.kp.v16.multidigit-addition",
     "next-action.refill.experiment.plan-revision.kp.v18.composition-environment-sequence",
-    "next-action.kp.animation-catalogue-simplification-v1"
+    "next-action.kp.animation-catalogue-simplification-v1",
+    "next-action.kp.six-loop-product-convergence-v0"
   ],
   "verificationRecords": [
     {

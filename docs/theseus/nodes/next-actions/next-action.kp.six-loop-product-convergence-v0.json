@@ -1,0 +1,64 @@
+{
+  "id": "next-action.kp.six-loop-product-convergence-v0",
+  "kind": "next-action",
+  "title": "Six-loop-product-convergence",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Execute",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v21"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm-run-check-promotion-memory",
+    "theseus-workspace-validate"
+  ],
+  "expectedLearning": [
+    "Identify which catalogue, generated-session, vector, and programming seams are genuinely shared after concrete caller pressure.",
+    "Determine whether selected-capability loading can meet the existing script and LCP targets without semantic or visual compromise."
+  ],
+  "allowedWork": [
+    "Execute the 30 approved slices and their focused tests, stable visual captures, performance measurements, project-memory updates, and exact adjacent pruning.",
+    "Continue independent objective work after an exemplar becomes review-ready while stopping visual generalization and promotion for that exemplar."
+  ],
+  "disallowedWork": [
+    "Do not infer catalogue dispositions, aesthetic approval, explanation wording approval, or promotion certificates.",
+    "Do not build a universal renderer, scene graph, motif registry, arbitrary code runner, live LLM service, public website, curriculum, or domain engine."
+  ],
+  "criteria": [
+    {
+      "id": "approved-slice-scope-preserved",
+      "weight": "high"
+    },
+    {
+      "id": "semantic-and-runtime-truth-preserved",
+      "weight": "high"
+    },
+    {
+      "id": "caller-backed-simplification",
+      "weight": "high"
+    },
+    {
+      "id": "consolidated-human-review-ready",
+      "weight": "high"
+    },
+    {
+      "id": "product-targets-not-widened",
+      "weight": "high"
+    }
+  ]
+}

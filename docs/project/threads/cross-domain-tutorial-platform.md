@@ -2,10 +2,10 @@
 
 Status: active-supporting
 Last Updated: 2026-08-01
-Current Next Action: Preserve the promoted economics and physics
-synchronized-model callers and their bounded shared profile while rank 5 and
-the generated-session platform gate remain separately approval-gated. No
-domain engine or universal renderer is authorized.
+Current Next Action: Execute the approved generated solve-x and deterministic
+explanation gate, then prepare the rank-5 vector exemplar inside the chained
+six-loop contract. Preserve economics/physics and their bounded shared profile;
+no domain engine or universal renderer is authorized.
 
 ## Goal
 
@@ -33,10 +33,12 @@ capability-pressure, and six-loop records retain rationale but do not
 independently override this stable ledger.
 
 The same ledger now owns the platform gates around that content order. After
-the four early visible exemplars, KP will declare public API tiers and compile
+the four early visible exemplars, KP declared public API tiers and will compile
 the existing verified linear-problem trace into the canonical animation asset
 path. The first generated solve-x session carries a deterministic explanation
 spine, learner state, approved vocabulary, and verified claim references.
+This M2/M3 gate and the rank-5 exemplar are approved through
+`decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md`.
 Context-specific output encoding must precede untrusted editorial text. An LLM
 may later propose review-time wording only after deterministic sessions and
 human gold and negative examples stabilize; it does not invent claims or sit in
@@ -107,9 +109,10 @@ and foundation closeout are recorded in
 `reviews/2026-07-26-kp-six-loop-library-expansion-direction.md`, and
 `reviews/2026-07-27-radical-reader-promotion-kit-closeout.md`.
 
-FTC remains a valuable reviewable artifact. BFS and programming stay parked.
-The bounded economics and physics exemplars are promoted catalogue assets, not
-authorization for economics or physics engines.
+FTC remains a valuable reviewable artifact. BFS and programming-family
+promotion stay parked. The approved addition execution-trace work is a native
+hostability exemplar only. The bounded economics and physics exemplars are
+promoted catalogue assets, not authorization for economics or physics engines.
 
 The older post-checkpoint sequence remains rationale for symbolic and
 responsive-attention requirements, but it is superseded for promotion rank by

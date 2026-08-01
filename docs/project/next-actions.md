@@ -7,32 +7,30 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-1. Keep Project one vector onto another as the first unresolved promotion and
-   prepare a separately reviewed successor contract. Before activating rank 5,
-   explicitly reconcile the recorded verified problem-to-animation and
-   deterministic-explanation platform gate; planning status alone authorizes
-   no implementation.
-2. Treat the cross-domain API audit as the completed M1 tier declaration:
-   stable authoring facades, internal platform contracts, domain adapters,
-   experimental surfaces, compatibility bridges, and retirement candidates
-   remain source-backed and narrow.
-3. Preserve the four promoted shared contracts and continue pruning only beside
-   a last-caller migration. Keep Jacobian/Hessian semantic and conformance
-   evidence even if its catalogue presentation is later retired.
-4. Introduce a minimal hand-authored `ExplanationSpineV1`, learner state,
-   vocabulary contract, and verified claim references with the first generated
-   solve-x session.
-5. Before untrusted editorial output ships, consolidate repeated escaping at
-   the generation boundary into context-specific text-node, attribute, and
-   script-JSON encoders with misuse checks.
-6. After deterministic generated sessions and human gold and negative examples
-   are stable, add an offline/review-time LLM editorial candidate service.
-   Keep mathematical claims verified, require human selection, and keep live
-   playback independent of the model.
-7. Version a shared motif implementation only when an intentional redesign
-   supplies a real caller; prove certified callers update through that boundary.
-   Retire adjacent compatibility paths as their last callers migrate rather
-   than scheduling a detached rewrite.
+1. Keep Project one vector onto another as the first unresolved promotion while
+   executing the approved 30-slice six-loop convergence contract from
+   `reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`.
+   End at one consolidated human checkpoint unless a named technical stop
+   condition fires.
+2. Keep Project one vector onto another as the first unresolved promotion.
+   Complete the generated problem-to-animation bridge and deterministic
+   explanation spine immediately before its exemplar, as the approved M2/M3
+   platform gate.
+3. Treat the cross-domain API audit as M1 evidence and converge only the facade
+   used by named callers. Retire compatibility code only beside its proven
+   last-caller migration; preserve Jacobian/Hessian semantic and conformance
+   evidence until explicitly replaced.
+4. Repair the measured catalogue capability-loading and layout path against the
+   existing 250,000-byte script and 2.5-second constrained-LCP targets without
+   widening them or hiding attributed residuals.
+5. Close the two observed programming host gaps with one deterministic native
+   addition-trace exemplar. Do not treat this as BFS or rank-23 promotion.
+6. At the final checkpoint, assign only reviewed catalogue dispositions and
+   approve or revise the generated solve-x, vector, and programming exemplars.
+   Generalization and release certificates follow in a separate bounded run.
+7. Keep context-safe untrusted output and the offline/review-time LLM editorial
+   candidate service deferred until deterministic sessions and human gold and
+   negative examples are stable.
 
 ## Historical Queue Snapshot
 

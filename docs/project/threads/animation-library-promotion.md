@@ -2,11 +2,11 @@
 
 Status: active
 Last Updated: 2026-08-01
-Current Next Action: Keep Project one vector onto another as the first
-unresolved promotion at rank 5 while preparing a separately reviewed successor
-contract. Ranks 3 and 4, API classification, the two-caller
-dimensional-continuity profile, and adjacent facade pruning are complete; none
-of this automatically authorizes rank-5 implementation.
+Current Next Action: Execute the approved six-loop convergence contract. The
+verified generated-solve bridge and deterministic explanation spine run as the
+M2/M3 gate, then Project one vector onto another remains the first unresolved
+promotion at rank 5. Catalogue 3D hosting, performance repair, and the bounded
+addition-trace host are preparatory work, not inserted promotion ranks.
 
 ## Goal
 
@@ -138,8 +138,10 @@ M1 is complete through
 stable authoring facades, internal platform contracts, domain adapters,
 experimental surfaces, compatibility bridges, and retirement candidates from
 observed callers. It does not freeze domain presenters or internal rendering
-details as public APIs. M2 and M3 remain separately approval-gated before a
-rank-5 promotion contract is activated.
+details as public APIs. M2 and M3 are approved through
+`decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md` and execute
+inside the same bounded contract before the rank-5 exemplar. Their approval
+does not extend to untrusted editorial output or an LLM service.
 
 ## Fraction Harvest Queue
 
@@ -262,12 +264,11 @@ exists.
 
 - When should sparse direct settlement and decimal/radix presentation be
   scheduled as a place-value harvest without silently delaying rank 5?
-- Should the verified problem-to-animation bridge and deterministic
-  explanation spine run as the separately approved platform gate immediately
-  before rank 5, or should rank-5 planning first expose a stronger caller need?
 - Which fraction harvest items become safe batch promotions after rank 1?
 - Which exact caller pressure should trigger the first versioned motif
   implementation boundary after the generated solve-x bridge?
+- Which catalogue disposition candidates and which vector/programming visual
+  choices pass the consolidated checkpoint at the end of the active run?
 
 ## Links
 
@@ -278,6 +279,8 @@ exists.
 - `docs/project/decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md`
 - `docs/project/decisions/2026-07-31-kp-exemplar-first-visual-verification-cadence.md`
 - `docs/project/decisions/2026-08-01-kp-dimensional-continuity-graph-and-diagram-language.md`
+- `docs/project/decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md`
+- `docs/project/reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-01-cross-domain-api-motif-audit.md`
 - `docs/project/reviews/2026-08-01-catalogue-curation-cross-domain-promotion-closeout.md`
 - `docs/project/reviews/2026-08-01-visualization-generation-and-web-performance-next-step-review.md`
