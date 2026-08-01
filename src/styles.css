@@ -1937,6 +1937,34 @@ h2 {
 .editor-graph-stage__economics-label--supply { fill: #126871; }
 .editor-graph-stage__economics-label--demand { fill: #a94322; }
 .editor-graph-stage__economics-label--equilibrium { font-size: 13px; }
+.editor-graph-stage__economics-explanation-foreign-object {
+  overflow: visible;
+}
+.editor-graph-stage__economics-explanation {
+  box-sizing: border-box;
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  border: 1px solid rgb(148 163 184 / 0.46);
+  border-radius: 9px;
+  padding: 8px 10px;
+  color: #172033;
+  background: rgb(255 255 255 / 0.94);
+  box-shadow: 0 4px 14px rgb(15 23 42 / 0.08);
+  font-size: 11px;
+  line-height: 1.25;
+}
+.editor-graph-stage__economics-equations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  align-items: center;
+}
+.editor-graph-stage__economics-equations .katex { font-size: 1.02em; }
+.editor-graph-stage__economics-explanation p {
+  margin: 0;
+  color: #475569;
+}
 .editor-graph-stage__area { fill: rgb(30 136 168 / 0.3); stroke: #1e88a8; stroke-width: 2; }
 .editor-graph-stage__label { fill: #334155; font-size: 14px; font-weight: 800; }
 .editor-graph-stage__annotation {

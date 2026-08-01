@@ -5,6 +5,11 @@ import type {
 import type {
   KpEconomicsEquilibriumRuntimeFrame
 } from "../animation/economics-equilibrium-runtime-frame.ts";
+import {
+  createKpEconomicsEquilibriumSynchronizedView,
+  type KpEconomicsEquilibriumSynchronizedView
+} from "../animation/economics-equilibrium-synchronized-view.ts";
+import { renderLatexToHtml } from "./katex-adapter.ts";
 
 export interface KpEconomicsGraphViewport {
   readonly width: number;
@@ -22,7 +27,8 @@ export function renderKpEconomicsEquilibriumStaticContent(input: {
     viewport: input.viewport,
     stage: "establish",
     initialDemandReferenceOpacity: 0,
-    initialEquilibriumReferenceOpacity: 0
+    initialEquilibriumReferenceOpacity: 0,
+    initialEquilibrium: input.frame.equilibrium
   });
 }
 
@@ -30,13 +36,17 @@ export function renderKpEconomicsEquilibriumRuntimeContent(input: {
   readonly frame: KpEconomicsEquilibriumRuntimeFrame;
   readonly viewport: KpEconomicsGraphViewport;
 }): string {
+  const synchronizedView =
+    createKpEconomicsEquilibriumSynchronizedView(input.frame);
   return renderEconomicsContent({
     frame: input.frame.semanticFrame,
     viewport: input.viewport,
     stage: input.frame.stage,
     initialDemandReferenceOpacity: input.frame.initialDemandReferenceOpacity,
     initialEquilibriumReferenceOpacity:
-      input.frame.initialEquilibriumReferenceOpacity
+      input.frame.initialEquilibriumReferenceOpacity,
+    initialEquilibrium: input.frame.initialEquilibrium,
+    synchronizedView
   });
 }
 
@@ -46,6 +56,13 @@ function renderEconomicsContent(input: {
   readonly stage: string;
   readonly initialDemandReferenceOpacity: number;
   readonly initialEquilibriumReferenceOpacity: number;
+  readonly initialEquilibrium: {
+    readonly quantity: ExactRationalDto;
+    readonly price: ExactRationalDto;
+  };
+  readonly synchronizedView?:
+    | KpEconomicsEquilibriumSynchronizedView
+    | undefined;
 }): string {
   const point = (quantity: number, price: number) => [
     scale(quantity, input.viewport.xDomain, [36, input.viewport.width - 20]),
@@ -92,12 +109,15 @@ function renderEconomicsContent(input: {
   const equilibrium = point(equilibriumQuantity, equilibriumPrice);
   const quantityAxis = point(equilibriumQuantity, 0);
   const priceAxis = point(0, equilibriumPrice);
-  const initialEquilibrium = point(6, 8);
+  const initialEquilibrium = point(
+    exactNumber(input.initialEquilibrium.quantity),
+    exactNumber(input.initialEquilibrium.price)
+  );
 
   return `<g data-kp-economics-equilibrium-view data-kp-economics-equilibrium-phase="${input.frame.phase}" data-kp-economics-choreography-stage="${input.stage}" data-kp-economics-demand-intercept="${exactText(input.frame.demand.priceInterceptCurrent)}">
     <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand-reference" data-kp-economics-initial-demand-reference x1="${initialDemandStart[0]}" y1="${initialDemandStart[1]}" x2="${initialDemandEnd[0]}" y2="${initialDemandEnd[1]}" style="opacity:${input.initialDemandReferenceOpacity}" />
     <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--supply" data-kp-economics-supply-line data-kp-economics-equation="${supplyEquation(input.frame)}" x1="${supplyStart[0]}" y1="${supplyStart[1]}" x2="${supplyEnd[0]}" y2="${supplyEnd[1]}" />
-    <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand" data-kp-economics-demand-line data-kp-economics-equation="P=${formatNumber(demandIntercept)}-Q" x1="${demandStart[0]}" y1="${demandStart[1]}" x2="${demandEnd[0]}" y2="${demandEnd[1]}" />
+    <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand" data-kp-economics-demand-line data-kp-economics-equation="${demandEquation(input.frame)}" x1="${demandStart[0]}" y1="${demandStart[1]}" x2="${demandEnd[0]}" y2="${demandEnd[1]}" />
     <line class="editor-graph-stage__economics-guide" data-kp-economics-equilibrium-quantity-guide x1="${equilibrium[0]}" y1="${equilibrium[1]}" x2="${quantityAxis[0]}" y2="${quantityAxis[1]}" />
     <line class="editor-graph-stage__economics-guide" data-kp-economics-equilibrium-price-guide x1="${equilibrium[0]}" y1="${equilibrium[1]}" x2="${priceAxis[0]}" y2="${priceAxis[1]}" />
     <circle class="editor-graph-stage__economics-equilibrium" data-kp-economics-equilibrium-point data-kp-economics-equilibrium-quantity="${exactText(input.frame.equilibrium.quantity)}" data-kp-economics-equilibrium-price="${exactText(input.frame.equilibrium.price)}" cx="${equilibrium[0]}" cy="${equilibrium[1]}" r="6" />
@@ -107,6 +127,7 @@ function renderEconomicsContent(input: {
     <text class="editor-graph-stage__economics-label editor-graph-stage__economics-label--equilibrium" data-kp-economics-equilibrium-label x="${equilibrium[0] + 12}" y="${equilibrium[1] - 12}">E · Q=${formatNumber(equilibriumQuantity)}, P=${formatNumber(equilibriumPrice)}</text>
     <text class="editor-graph-stage__economics-axis-label" data-kp-economics-quantity-axis-label x="${input.viewport.width - 24}" y="${input.viewport.height - 34}">Q</text>
     <text class="editor-graph-stage__economics-axis-label" data-kp-economics-price-axis-label x="44" y="32">P</text>
+    ${input.synchronizedView === undefined ? "" : renderSynchronizedView(input.synchronizedView, input.viewport)}
   </g>`;
 }
 
@@ -114,6 +135,45 @@ function supplyEquation(frame: KpSupplyDemandEquilibriumFrameV1): string {
   const intercept = formatNumber(exactNumber(frame.supply.priceIntercept));
   const slope = formatNumber(exactNumber(frame.supply.priceChangePerQuantity));
   return `P=${intercept}+${slope === "1" ? "" : slope}Q`;
+}
+
+function demandEquation(frame: KpSupplyDemandEquilibriumFrameV1): string {
+  const intercept = formatNumber(
+    exactNumber(frame.demand.priceInterceptCurrent)
+  );
+  const slope = formatNumber(
+    exactNumber(frame.demand.priceChangePerQuantity)
+  );
+  return `P=${intercept}-${slope === "1" ? "" : slope}Q`;
+}
+
+function renderSynchronizedView(
+  view: KpEconomicsEquilibriumSynchronizedView,
+  viewport: KpEconomicsGraphViewport
+): string {
+  return `<desc data-kp-economics-nonvisual-summary>${escapeHtml(view.nonvisualSummary)}</desc>
+    <foreignObject class="editor-graph-stage__economics-explanation-foreign-object" x="${Math.max(118, viewport.width / 2 - 156)}" y="16" width="312" height="116">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="editor-graph-stage__economics-explanation" data-kp-economics-synchronized-view data-kp-economics-narrative-id="${view.narrative.id}" data-kp-economics-claim-ids="${view.narrative.claimIds.join(" ")}">
+        <div class="editor-graph-stage__economics-equations">
+          ${renderInlineEquation("supply", view.equations.supplyLatex)}
+          ${renderInlineEquation("demand", view.equations.demandLatex)}
+          ${renderInlineEquation("equilibrium", view.equations.equilibriumLatex)}
+        </div>
+        <p data-kp-economics-narrative>${escapeHtml(view.narrative.text)}</p>
+      </div>
+    </foreignObject>`;
+}
+
+function renderInlineEquation(role: string, latex: string): string {
+  return `<span data-kp-economics-equation-role="${role}" data-kp-latex="${escapeHtml(latex)}">${renderLatexToHtml(latex, { displayMode: false })}</span>`;
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
 }
 
 function exactNumber(value: ExactRationalDto): number {

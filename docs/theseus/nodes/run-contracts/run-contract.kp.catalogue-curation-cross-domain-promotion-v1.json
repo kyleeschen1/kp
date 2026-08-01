@@ -155,7 +155,8 @@
     {
       "id": "s17",
       "title": "Synchronize equation graph and narrative",
-      "status": "planned"
+      "summary": "Synchronized exact graph coordinates, three inline KaTeX equations, stage-specific narrative claims, and a nonvisual summary through one deterministic view projection. The old-equilibrium reference now comes from model truth rather than hard-coded coordinates, and custom slopes format from the frame. Twenty-one economics tests, typecheck, architecture, diff hygiene, and workspace validation pass.",
+      "status": "complete"
     },
     {
       "id": "s18",

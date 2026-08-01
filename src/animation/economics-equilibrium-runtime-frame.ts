@@ -11,6 +11,7 @@ import {
   economicsEquilibriumAnimationId
 } from "./economics-equilibrium-adapter.ts";
 import type { KpAnimationRuntimeFrame } from "./runtime-sampler.ts";
+import type { ExactRationalDto } from "../../protocols/public-api.ts";
 
 export type KpEconomicsEquilibriumChoreographyStage =
   | "establish"
@@ -30,6 +31,10 @@ export interface KpEconomicsEquilibriumRuntimeFrame {
   readonly stage: KpEconomicsEquilibriumChoreographyStage;
   readonly initialDemandReferenceOpacity: number;
   readonly initialEquilibriumReferenceOpacity: number;
+  readonly initialEquilibrium: {
+    readonly quantity: ExactRationalDto;
+    readonly price: ExactRationalDto;
+  };
   readonly semanticFrame: KpSupplyDemandEquilibriumFrameV1;
 }
 
@@ -83,6 +88,10 @@ export function sampleKpEconomicsEquilibriumRuntimeFrame(input: {
       choreography.initialDemandReferenceOpacity,
     initialEquilibriumReferenceOpacity:
       choreography.initialEquilibriumReferenceOpacity,
+    initialEquilibrium: Object.freeze({
+      quantity: model.states.before.equilibrium.quantity,
+      price: model.states.before.equilibrium.price
+    }),
     semanticFrame
   });
 }

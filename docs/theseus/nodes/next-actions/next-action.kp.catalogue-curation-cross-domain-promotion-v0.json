@@ -409,6 +409,41 @@
       "scope": "s16 control record",
       "checkedAt": "2026-08-01T17:15:49.575Z",
       "notes": "Workspace graph validates with choreography evidence."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-economics-equilibrium-synchronized-view.test.ts tests/kp-economics-equilibrium-runtime-frame.test.ts tests/kp-economics-equilibrium-static-svg.test.ts tests/kp-economics-equilibrium-animation-asset.test.ts tests/kp-economics-equilibrium-frame.test.ts tests/kp-economics-equilibrium-model.test.ts tests/kp-economics-equilibrium-contract.test.ts",
+      "status": "passed",
+      "scope": "s17 synchronized views",
+      "checkedAt": "2026-08-01T17:19:19.292Z",
+      "notes": "Twenty-one economics tests pass; exact graph state, inline KaTeX equations, stage narrative, claims, and nonvisual summary share one frame."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s17 synchronized views",
+      "checkedAt": "2026-08-01T17:19:20.342Z",
+      "notes": "All TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s17 synchronized views",
+      "checkedAt": "2026-08-01T17:19:21.321Z",
+      "notes": "Architecture gates pass with one model-to-view projection and no new runtime."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s17 focused",
+      "checkedAt": "2026-08-01T17:19:22.283Z",
+      "notes": "Synchronized view, SVG panel, styling, and tests pass diff hygiene."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s17 control record",
+      "checkedAt": "2026-08-01T17:19:23.416Z",
+      "notes": "Workspace graph validates with synchronized-view evidence."
     }
   ],
   "progress": {
