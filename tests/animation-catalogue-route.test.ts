@@ -6,8 +6,10 @@ import {
 } from "../src/editor/animation-catalogue-bootstrap.ts";
 import {
   KP_ANIMATION_CATALOGUE_ARTIFACT_PARAM,
+  KP_ANIMATION_CATALOGUE_PLAYHEAD_PARAM,
   KP_ANIMATION_CATALOGUE_VIEW,
-  readKpAnimationCatalogueRoute
+  readKpAnimationCatalogueRoute,
+  writeKpAnimationCatalogueRoute
 } from "../src/editor/animation-catalogue-route.ts";
 
 test("the empty query and explicit catalogue view resolve to the catalogue", () => {
@@ -18,6 +20,40 @@ test("the empty query and explicit catalogue view resolve to the catalogue", () 
   assert.deepEqual(
     readKpAnimationCatalogueRoute(`?view=${KP_ANIMATION_CATALOGUE_VIEW}`),
     { active: true, source: "explicit" }
+  );
+});
+
+test("catalogue route round trips a bounded shareable playhead", () => {
+  const search = writeKpAnimationCatalogueRoute("?utm_source=review", {
+    artifactId: "animation.linear-solve.solve-x",
+    playhead: 0.5534
+  });
+  const params = new URLSearchParams(search);
+
+  assert.equal(params.get(KP_ANIMATION_CATALOGUE_ARTIFACT_PARAM),
+    "animation.linear-solve.solve-x");
+  assert.equal(params.get(KP_ANIMATION_CATALOGUE_PLAYHEAD_PARAM), "0.553");
+  assert.equal(params.get("utm_source"), "review");
+  assert.deepEqual(readKpAnimationCatalogueRoute(search), {
+    active: true,
+    source: "default",
+    artifactId: "animation.linear-solve.solve-x",
+    playhead: 0.553
+  });
+});
+
+test("zero and invalid catalogue playheads stay out of canonical state", () => {
+  assert.equal(
+    writeKpAnimationCatalogueRoute("?playhead=0.5", { playhead: 0 }),
+    ""
+  );
+  assert.deepEqual(readKpAnimationCatalogueRoute("?playhead=continuous"), {
+    active: true,
+    source: "default"
+  });
+  assert.throws(
+    () => writeKpAnimationCatalogueRoute("", { playhead: 1.1 }),
+    /between zero and one/
   );
 });
 

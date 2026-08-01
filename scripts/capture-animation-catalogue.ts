@@ -170,6 +170,38 @@ try {
   await styleTuning.selectOption("kp.organic-subtle@1.0.0");
   await focusTuning.selectOption("flat");
   await inspectorSelect.selectOption("details");
+  if (new URL(page.url()).searchParams.has("playhead")) {
+    throw new Error("Transient inspector and tuning state leaked into the URL.");
+  }
+  const cataloguePlayer = page.locator(
+    "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+  );
+  await cataloguePlayer.focus();
+  await page.keyboard.press("ArrowRight");
+  await page.waitForFunction(() =>
+    new URL(window.location.href).searchParams.get("playhead") === "0.02"
+  );
+  await page.keyboard.press("End");
+  await page.waitForFunction(() =>
+    new URL(window.location.href).searchParams.get("playhead") === "1"
+  );
+  await page.keyboard.press("Home");
+  await page.waitForFunction(() =>
+    !new URL(window.location.href).searchParams.has("playhead")
+  );
+  await page.keyboard.press("Space");
+  await page.waitForFunction(() =>
+    document.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+    )?.dataset["kpEditorAnimationStatus"] === "playing"
+  );
+  await page.keyboard.press("Space");
+  await page.waitForFunction(() =>
+    document.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+    )?.dataset["kpEditorAnimationStatus"] === "paused"
+  );
+  await page.keyboard.press("Home");
   const review = page.locator("[data-kp-dev-review-shell]");
   await review.waitFor();
   if (await review.getAttribute("data-kp-dev-review-placement") !==
@@ -242,6 +274,24 @@ try {
 
   console.log(`animation catalogue capture: ${path.relative(process.cwd(), screenshot)}`);
   console.log(`animation catalogue manifest: ${path.relative(process.cwd(), manifest)}`);
+
+  const reducedMotionPage = await browser.newPage({ viewport });
+  await reducedMotionPage.emulateMedia({ reducedMotion: "reduce" });
+  const reducedMotionUrl = new URL(url);
+  reducedMotionUrl.searchParams.set("playhead", "0.5");
+  await reducedMotionPage.goto(reducedMotionUrl.toString(), {
+    waitUntil: "networkidle"
+  });
+  await reducedMotionPage.waitForFunction(() => {
+    const player = document.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
+    );
+    return player?.dataset["kpEditorAnimationHydrated"] === "true" &&
+      player.dataset["kpEditorAnimationAccessibilityPreference"] === "system" &&
+      player.dataset["kpEditorAnimationAccessibilityMode"] === "reduced-motion" &&
+      player.dataset["kpEditorAnimationProgress"] === "0.5";
+  });
+  await reducedMotionPage.close();
 } finally {
   await browser.close();
 }

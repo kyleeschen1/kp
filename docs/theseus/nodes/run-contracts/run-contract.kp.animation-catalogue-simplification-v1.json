@@ -185,7 +185,8 @@
     {
       "id": "s20",
       "title": "Preserve URL keyboard and accessibility state",
-      "status": "planned"
+      "summary": "Added bounded shareable playhead state to the catalogue route and initialized the preserved player directly from it. Runtime frame events canonically replace the URL without adding history entries; zero stays clean. Search, inspector mode, and tuning remain transient. Live checks prove Space, Arrow, Home, End, and system reduced-motion behavior through the simplified host without extra default chrome.",
+      "status": "complete"
     },
     {
       "id": "s21",

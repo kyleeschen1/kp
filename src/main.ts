@@ -17,7 +17,8 @@ import {
   createKpAnimationCatalogueProjection
 } from "./editor/animation-catalogue-projection.ts";
 import {
-  readKpAnimationCatalogueRoute
+  readKpAnimationCatalogueRoute,
+  writeKpAnimationCatalogueRoute
 } from "./editor/animation-catalogue-route.ts";
 import {
   resolveKpAnimationCatalogueSelection
@@ -86,6 +87,7 @@ import {
 import {
   disposeKpEditorAnimationPlayers,
   hydrateKpEditorAnimationPlayers,
+  KP_EDITOR_ANIMATION_FRAME_EVENT,
   KP_EDITOR_ANIMATION_LOAD_EVENT,
   applyKpEditorAnimationPresentationTuning,
   pauseKpEditorAnimationPlayers
@@ -227,6 +229,29 @@ appRoot.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, (event) => {
       typeof detail.message === "string"
         ? detail.message
         : "Animation player failed to load."
+    );
+  }
+});
+appRoot.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, (event) => {
+  if (
+    activeView !== "animation-catalogue" ||
+    !(event instanceof CustomEvent) ||
+    !(event.target instanceof HTMLElement) ||
+    event.target.closest("[data-kp-animation-catalogue]") === null ||
+    typeof event.detail !== "object" || event.detail === null
+  ) return;
+  const progress = (event.detail as { readonly progress?: unknown }).progress;
+  if (typeof progress !== "number") return;
+  const route = readKpAnimationCatalogueRoute(window.location.search);
+  const search = writeKpAnimationCatalogueRoute(window.location.search, {
+    artifactId: route.artifactId,
+    playhead: progress
+  });
+  if (search !== window.location.search) {
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${search}${window.location.hash}`
     );
   }
 });
@@ -594,7 +619,8 @@ async function renderAnimationCatalogueView(): Promise<void> {
     const playerState = createKpEditorAnimationPlayerState({
       descriptor,
       animation: loaded.animation,
-      catalog: loaded.catalog
+      catalog: loaded.catalog,
+      progress: route.playhead ?? 0
     });
     const hostability = inspectKpAnimationCatalogueSurfaceHostability({
       state: playerState,

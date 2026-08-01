@@ -692,6 +692,27 @@
       "scope": "slice s19 type safety",
       "checkedAt": "2026-08-01T05:13:53.420Z",
       "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-route.test.ts tests/animation-catalogue-selection.test.ts tests/kp-editor-animation-playback-session.test.ts tests/kp-editor-animation-player-shell.test.ts tests/animation-catalogue-shell.test.ts",
+      "status": "passed",
+      "scope": "slice s20 URL, keyboard, and player preservation",
+      "checkedAt": "2026-08-01T05:18:41.027Z",
+      "notes": "23 tests passed; bounded playhead codec, artifact selection, compact keyboard contract, deterministic clock laws, and inspector structure remain green."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s20 live shareable and accessible state",
+      "checkedAt": "2026-08-01T05:18:42.208Z",
+      "notes": "Chromium verified ArrowRight, End, Home, and Space against the catalogue player; URL playhead round-trip; transient inspector/tuning exclusion; and a separate system-reduced-motion page restored at playhead 0.5."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s20 type safety",
+      "checkedAt": "2026-08-01T05:18:43.183Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
     }
   ],
   "expectedLearning": [
