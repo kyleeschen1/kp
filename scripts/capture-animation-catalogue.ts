@@ -424,10 +424,10 @@ async function captureCatalogueInteractionSelection(browser: Browser) {
     const search = page.locator(
       '[data-action="filter-animation-catalogue"]'
     );
-    await search.fill("radical");
-    await page.locator(
+    const inspectorSelect = page.locator(
       '[data-action="select-animation-catalogue-inspector"]'
-    ).selectOption("parameters");
+    );
+    await inspectorSelect.selectOption("parameters");
     const review = page.locator("[data-kp-dev-review-shell]");
     await review.locator("button.launcher").click();
     await review.locator('[role="dialog"] textarea').fill(
@@ -452,6 +452,97 @@ async function captureCatalogueInteractionSelection(browser: Browser) {
       );
     });
 
+    const railScrollTopBefore = await page.evaluate((nextAnimationId) => {
+      const viewport = document.querySelector<HTMLElement>(
+        ".kp-animation-catalogue-shell__rail-results"
+      );
+      const link = document.querySelector<HTMLAnchorElement>(
+        `[data-kp-animation-catalogue-row="${nextAnimationId}"] a`
+      );
+      if (viewport === null || link === null) {
+        throw new Error(`Catalogue row ${nextAnimationId} is missing.`);
+      }
+      viewport.scrollTop = Math.min(
+        180,
+        Math.max(0, viewport.scrollHeight - viewport.clientHeight)
+      );
+      link.focus({ preventScroll: true });
+      return viewport.scrollTop;
+    }, promotedSiblingId);
+    await page.keyboard.press("Enter");
+    await page.waitForFunction((expectedAnimationId) => {
+      const shell = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue]"
+      );
+      return shell?.dataset["kpAnimationCatalogueSelection"] ===
+        expectedAnimationId &&
+        shell.dataset["kpAnimationCatalogueHostOutcome"] === "painted";
+    }, promotedSiblingId);
+    const firstSelection = await page.evaluate((expectedAnimationId) => {
+      const viewport = document.querySelector<HTMLElement>(
+        ".kp-animation-catalogue-shell__rail-results"
+      );
+      const focusedRow = document.activeElement?.closest<HTMLElement>(
+        "[data-kp-animation-catalogue-row]"
+      );
+      return {
+        rowFocusPreserved:
+          focusedRow?.dataset["kpAnimationCatalogueRow"] ===
+            expectedAnimationId,
+        railScrollTopAfter: viewport?.scrollTop ?? 0
+      };
+    }, promotedSiblingId);
+
+    await inspectorSelect.focus();
+    await page.evaluate(() => window.history.back());
+    await page.waitForFunction((expectedAnimationId) => {
+      const shell = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue]"
+      );
+      return shell?.dataset["kpAnimationCatalogueSelection"] ===
+        expectedAnimationId &&
+        shell.dataset["kpAnimationCatalogueHostOutcome"] === "painted";
+    }, animationId);
+    const inspectorFocusPreserved = await inspectorSelect.evaluate(
+      (select) => document.activeElement === select
+    );
+    const historyBackArtifact = new URL(page.url()).searchParams.get(
+      "artifact"
+    );
+
+    const reviewTextarea = review.locator('[role="dialog"] textarea');
+    await reviewTextarea.focus();
+    await page.evaluate(() => window.history.forward());
+    await page.waitForFunction((expectedAnimationId) => {
+      const shell = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue]"
+      );
+      return shell?.dataset["kpAnimationCatalogueSelection"] ===
+        expectedAnimationId &&
+        shell.dataset["kpAnimationCatalogueHostOutcome"] === "painted";
+    }, promotedSiblingId);
+    const reviewFocusPreserved = await reviewTextarea.evaluate((textarea) => {
+      const root = textarea.getRootNode();
+      return root instanceof ShadowRoot && root.activeElement === textarea;
+    });
+    const historyForwardArtifact = new URL(page.url()).searchParams.get(
+      "artifact"
+    );
+
+    await search.fill("radical");
+    await search.focus();
+    await page.evaluate(() => window.history.back());
+    await page.waitForFunction((expectedAnimationId) => {
+      const shell = document.querySelector<HTMLElement>(
+        "[data-kp-animation-catalogue]"
+      );
+      return shell?.dataset["kpAnimationCatalogueSelection"] ===
+        expectedAnimationId &&
+        shell.dataset["kpAnimationCatalogueHostOutcome"] === "painted";
+    }, animationId);
+    const searchFocusPreserved = await search.evaluate(
+      (input) => document.activeElement === input
+    );
     await page.evaluate((nextAnimationId) => {
       const link = document.querySelector<HTMLAnchorElement>(
         `[data-kp-animation-catalogue-row="${nextAnimationId}"] a`
@@ -507,6 +598,15 @@ async function captureCatalogueInteractionSelection(browser: Browser) {
       !after.documentIdentityPreserved ||
       !after.shellIdentityPreserved ||
       !after.reviewComposerIdentityPreserved ||
+      !firstSelection.rowFocusPreserved ||
+      Math.abs(
+        firstSelection.railScrollTopAfter - railScrollTopBefore
+      ) > 1 ||
+      !inspectorFocusPreserved ||
+      !reviewFocusPreserved ||
+      !searchFocusPreserved ||
+      historyBackArtifact !== animationId ||
+      historyForwardArtifact !== promotedSiblingId ||
       after.railQuery !== "radical" ||
       after.inspectorMode !== "parameters" ||
       reviewDraft !== "Unsaved catalogue navigation baseline"
@@ -514,6 +614,13 @@ async function captureCatalogueInteractionSelection(browser: Browser) {
       throw new Error(
         `Catalogue interaction baseline drifted: ${JSON.stringify({
           ...after,
+          firstSelection,
+          railScrollTopBefore,
+          inspectorFocusPreserved,
+          reviewFocusPreserved,
+          searchFocusPreserved,
+          historyBackArtifact,
+          historyForwardArtifact,
           reviewDraft
         })}`
       );
@@ -524,6 +631,27 @@ async function captureCatalogueInteractionSelection(browser: Browser) {
       selection: `${animationId} -> ${promotedSiblingId}`,
       mode: "in-shell-selection",
       ...after,
+      history: {
+        backArtifact: historyBackArtifact,
+        forwardArtifact: historyForwardArtifact,
+        restoredInShell:
+          historyBackArtifact === animationId &&
+          historyForwardArtifact === promotedSiblingId
+      },
+      focus: {
+        selectedRow: firstSelection.rowFocusPreserved,
+        inspector: inspectorFocusPreserved,
+        reviewComposer: reviewFocusPreserved,
+        search: searchFocusPreserved
+      },
+      railScroll: {
+        before: railScrollTopBefore,
+        after: firstSelection.railScrollTopAfter,
+        scrollable: railScrollTopBefore > 0,
+        preserved: Math.abs(
+          firstSelection.railScrollTopAfter - railScrollTopBefore
+        ) <= 1
+      },
       documentNavigationObserved: !after.documentIdentityPreserved,
       reviewDraftPreserved:
         reviewDraft === "Unsaved catalogue navigation baseline"

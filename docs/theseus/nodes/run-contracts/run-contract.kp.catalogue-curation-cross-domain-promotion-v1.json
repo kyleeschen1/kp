@@ -83,7 +83,8 @@
     {
       "id": "s05",
       "title": "Prove history focus and review preservation",
-      "status": "planned"
+      "summary": "Added catalogue-aware popstate restoration while keeping non-catalogue routing bounded to the existing view dispatcher. In-shell selection now snapshots and restores replaced row, player, inspector-view, and tuning focus without stealing newly moved focus, and preserves the rail viewport. Stable browser evidence proves Back and Forward asset restoration plus document, shell, query, inspector, rail, review host, draft, selected-row focus, inspector focus, search focus, and review-composer focus preservation. Typecheck, 3202 tests, production build, review boundary, 33-host capture, and diff hygiene pass.",
+      "status": "complete"
     },
     {
       "id": "s06",

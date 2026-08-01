@@ -26,7 +26,8 @@ import type {
   KpAnimationCatalogueEntry
 } from "./editor/animation-catalogue-projection.ts";
 import {
-  decideKpAnimationCatalogueLinkNavigation
+  decideKpAnimationCatalogueLinkNavigation,
+  resolveKpAnimationCatalogueHistoryNavigation
 } from "./editor/animation-catalogue-navigation.ts";
 import {
   readKpAnimationCatalogueRoute,
@@ -297,19 +298,48 @@ registerKpEditorEquationSurfaceAdapter();
 registerKpEditorDiagramSvgAdapter();
 registerKpEditorGraphSvgViewportAdapter();
 
-const requestedView =
-  new URLSearchParams(window.location.search).get("view");
+renderViewFromLocation();
 
-if (requestedView === "ftc-tutorial") {
-  void renderFtcTutorialView();
-} else if (requestedView === "animation-library-host") {
-  renderAnimationLibraryHostView();
-} else if (readKpSemanticAnimationWorkbenchRoute(window.location.search).active) {
-  void renderAnimationWorkbenchView();
-} else if (readKpAnimationCatalogueRoute(window.location.search).active) {
-  void renderAnimationCatalogueView();
-} else {
-  renderEditor();
+window.addEventListener("popstate", () => {
+  const decision = resolveKpAnimationCatalogueHistoryNavigation({
+    projection: animationCatalogueProjection,
+    href: window.location.href
+  });
+  const shell = appRoot.querySelector<HTMLElement>(
+    "[data-kp-animation-catalogue]"
+  );
+  if (
+    decision.action === "select" &&
+    activeView === "animation-catalogue" &&
+    shell !== null
+  ) {
+    void renderAnimationCatalogueSelectionInShell({
+      shell,
+      entry: decision.entry,
+      playhead: decision.playhead
+    });
+    return;
+  }
+  renderViewFromLocation();
+});
+
+function renderViewFromLocation(): void {
+  const requestedView = new URLSearchParams(window.location.search).get(
+    "view"
+  );
+  if (requestedView === "ftc-tutorial") {
+    void renderFtcTutorialView();
+  } else if (requestedView === "animation-library-host") {
+    renderAnimationLibraryHostView();
+  } else if (
+    readKpSemanticAnimationWorkbenchRoute(window.location.search).active
+  ) {
+    void renderAnimationWorkbenchView();
+  } else if (readKpAnimationCatalogueRoute(window.location.search).active) {
+    void renderAnimationCatalogueView();
+  } else {
+    renderEditor();
+  }
 }
 
 document.addEventListener("visibilitychange", () => {
@@ -718,6 +748,11 @@ async function renderAnimationCatalogueSelectionInShell(input: {
   const inspectorMode = input.shell.querySelector<HTMLSelectElement>(
     '[data-action="select-animation-catalogue-inspector"]'
   )?.value;
+  const focusSnapshot = captureAnimationCatalogueFocus(input.shell);
+  const resultsViewport = results?.closest<HTMLElement>(
+    ".kp-animation-catalogue-shell__rail-results"
+  );
+  const resultsScrollTop = resultsViewport?.scrollTop;
   if (stage === null || inspector === null || results === null) {
     window.location.assign(window.location.href);
     return;
@@ -777,11 +812,15 @@ async function renderAnimationCatalogueSelectionInShell(input: {
       selectedHealth: prepared.health,
       query: search?.value ?? ""
     });
+    if (resultsViewport !== null && resultsViewport !== undefined) {
+      resultsViewport.scrollTop = resultsScrollTop ?? 0;
+    }
     hydrateAnimationCatalogueSelection({
       shell: input.shell,
       entry: input.entry,
       hostability: prepared.hostability
     });
+    restoreAnimationCatalogueFocus(input.shell, focusSnapshot);
     if (disposeAnimationDevelopmentReview === undefined) {
       void mountAnimationCatalogueReviewCapture(revision);
     }
@@ -797,6 +836,66 @@ async function renderAnimationCatalogueSelectionInShell(input: {
     setAnimationCatalogueStageMessage(stage, message, "error");
     markKpAnimationHostFailed(window, message);
   }
+}
+
+type AnimationCatalogueFocusSnapshot = {
+  readonly element: HTMLElement;
+  readonly target:
+    | { readonly kind: "player" }
+    | { readonly kind: "inspector-view" }
+    | { readonly kind: "tuning"; readonly tuning: string }
+    | { readonly kind: "row"; readonly animationId: string };
+};
+
+function captureAnimationCatalogueFocus(
+  shell: HTMLElement
+): AnimationCatalogueFocusSnapshot | undefined {
+  const element = document.activeElement;
+  if (!(element instanceof HTMLElement) || !shell.contains(element)) {
+    return undefined;
+  }
+  if (element.closest("[data-kp-editor-animation-player]") !== null) {
+    return { element, target: { kind: "player" } };
+  }
+  if (element.matches('[data-action="select-animation-catalogue-inspector"]')) {
+    return { element, target: { kind: "inspector-view" } };
+  }
+  const tuning = element.dataset["kpAnimationCatalogueTuning"];
+  if (tuning !== undefined) {
+    return { element, target: { kind: "tuning", tuning } };
+  }
+  const row = element.closest<HTMLElement>(
+    "[data-kp-animation-catalogue-row]"
+  );
+  const animationId = row?.dataset["kpAnimationCatalogueRow"];
+  return animationId === undefined
+    ? undefined
+    : { element, target: { kind: "row", animationId } };
+}
+
+function restoreAnimationCatalogueFocus(
+  shell: HTMLElement,
+  snapshot: AnimationCatalogueFocusSnapshot | undefined
+): void {
+  if (
+    snapshot === undefined || snapshot.element.isConnected ||
+    (document.activeElement !== document.body &&
+      document.activeElement !== appRoot)
+  ) return;
+  const target = snapshot.target.kind === "player"
+    ? shell.querySelector<HTMLElement>("[data-kp-editor-animation-player]")
+    : snapshot.target.kind === "inspector-view"
+    ? shell.querySelector<HTMLElement>(
+      '[data-action="select-animation-catalogue-inspector"]'
+    )
+    : snapshot.target.kind === "tuning"
+    ? shell.querySelector<HTMLElement>(
+      `[data-kp-animation-catalogue-tuning="${snapshot.target.tuning}"]`
+    )
+    : shell.querySelector<HTMLElement>(
+      `[data-kp-animation-catalogue-row="${snapshot.target.animationId}"] a`
+    );
+  target?.focus({ preventScroll: true });
 }
 
 async function prepareAnimationCatalogueSelection(input: {

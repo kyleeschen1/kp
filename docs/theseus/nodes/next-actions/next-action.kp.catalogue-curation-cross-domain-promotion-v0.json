@@ -115,11 +115,39 @@
       "scope": "s04 risk selection",
       "checkedAt": "2026-08-01T15:54:58.533Z",
       "notes": "High-risk selector requires full tests and build; both passed."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "s05 history and interaction preservation",
+      "checkedAt": "2026-08-01T16:07:36.863Z",
+      "notes": "Back and Forward restored solve-x and radical in shell; document, shell, review host, draft, query, inspector mode, row focus, search focus, inspector focus, review focus, and rail position persisted; all 33 hosts settled."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s05 full deterministic and architecture suite",
+      "checkedAt": "2026-08-01T16:07:37.840Z",
+      "notes": "3202 tests passed with 0 failures after history and focus integration."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s05 production typecheck and bundle",
+      "checkedAt": "2026-08-01T16:07:38.790Z",
+      "notes": "All TypeScript projects and the Vite production bundle passed."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s05 preserved review boundary",
+      "checkedAt": "2026-08-01T16:07:39.703Z",
+      "notes": "Production review closure passed after persistent review-host navigation."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Catalogue asset links now replace only selected-stage ownership in shell: URL history pushes, shell/query/inspector/review draft persist, and unsafe gestures retain native behavior. Back/forward and explicit focus restoration remain s05."
+    "summary": "Catalogue selection now restores through browser Back and Forward without document or shell reload and preserves query, inspector mode, rail position, review host, draft, and focus across row, inspector, search, and review composer contexts. The solve-x visual geometry exemplar remains next."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",
