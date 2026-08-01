@@ -93,7 +93,9 @@
     {
       "id": "s06",
       "title": "Compile generated solve-x asset",
-      "status": "planned"
+      "summary": "Compiled the accepted subtract/divide provider trace into one canonical KpAnimationAsset with 6 instance-scoped states, 5 trusted generated transformations, exact frame/operation lineage, 2 settled checkpoints, static export, deterministic direct seek, and mirrored rewind.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s07",

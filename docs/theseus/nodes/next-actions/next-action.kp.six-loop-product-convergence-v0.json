@@ -49,6 +49,10 @@
     {
       "kind": "file",
       "path": "src/integrations/verified-linear-problem-animation-bridge.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/verified-linear-problem-animation-compiler.ts"
     }
   ],
   "dependsOn": {
@@ -224,6 +228,36 @@
       "status": "passed",
       "scope": "concept reader semantic animation and motif ownership gates",
       "checkedAt": "2026-08-01T23:31:20.073Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/verified-linear-problem-animation-bridge.test.ts tests/verified-linear-problem-animation-compiler.test.ts tests/kp-animation-runtime-laws.test.ts",
+      "status": "passed",
+      "scope": "15 bridge compiler deterministic sampling direct-seek and rewind checks",
+      "checkedAt": "2026-08-01T23:41:09.170Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-asset.test.ts tests/kp-asset-laws.test.ts tests/generated-algebra-transform-definition-registry.test.ts tests/verified-linear-problem-animation-compiler.test.ts",
+      "status": "passed",
+      "scope": "24 canonical asset lineage transformation authority and law checks",
+      "checkedAt": "2026-08-01T23:41:10.080Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06 application node test and domain TypeScript boundaries",
+      "checkedAt": "2026-08-01T23:41:10.982Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s06 concept reader semantic animation and operation presentation boundaries",
+      "checkedAt": "2026-08-01T23:41:11.884Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s06 whitespace audit",
+      "checkedAt": "2026-08-01T23:41:12.795Z"
     }
   ],
   "expectedLearning": [
