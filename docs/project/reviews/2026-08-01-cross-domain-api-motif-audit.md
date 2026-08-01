@@ -36,9 +36,9 @@ observed owners and callers.
 The canonical renderer-neutral equation motif vocabulary already lives under
 `src/animation/motifs/` and is exposed by its local `public-api.ts`. Four files
 under `src/rendering/` only re-export that vocabulary. They have no production
-caller; one boundary test is their sole import. The next slice may retire those
-facades while retaining the canonical modules and changing the boundary test
-into a no-compatibility-import ratchet.
+caller; one boundary test was their sole import. The extraction slice retired
+those facades while retaining the canonical modules and changing the boundary
+test into a no-compatibility-import ratchet.
 
 The dimensional-continuity graph language is a presentation profile, not an
 equation motion motif. Promoting its shared fields and tokens standardizes the
@@ -59,10 +59,23 @@ choreography.
   until reviewed; their labels alone do not prove equivalence to concrete
   catalogue assets.
 
-## Next Slice Boundary
+## Extraction Result
 
 The reversible unit is the four proven shared helpers/profile plus removal of
-the four zero-caller motif facades. Economics and physics must retain exact
-frames, direct seek/rewind, accessible state, rendered output, route behavior,
-and local rollback boundaries. Any change to domain equations, narrative,
-geometry, timing thresholds, or asset identity stops the extraction.
+the four zero-caller motif facades:
+
+- `src/animation/synchronized-model-projection.ts` owns reversible progress,
+  exact model-progress conversion, and the shared easing primitive;
+- `src/editor/bounded-integer-query-parameter.ts` owns only bounded integer URL
+  parsing and default omission;
+- `src/animation/dimensional-continuity-dynamic-display.ts` owns the neutral
+  moving display policy without importing renderer code;
+- `src/rendering/dimensional-continuity-graph-profile.ts` owns the approved
+  presentation roles and bounded inline KaTeX cache;
+  and
+- `src/animation/motifs/public-api.ts` remains the sole canonical motif facade.
+
+Economics and physics retain exact frames, direct seek/rewind, accessible
+state, rendered output, route behavior, and local rollback boundaries. Domain
+equations, narrative, geometry, timing thresholds, and asset identity did not
+move. The release slice owns broad verification and project-memory closure.

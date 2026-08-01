@@ -7,12 +7,17 @@ import type {
 } from "../animation/economics-equilibrium-runtime-frame.ts";
 import {
   createKpEconomicsEquilibriumSynchronizedView,
-  formatKpEconomicsDynamicDisplay,
-  kpEconomicsDynamicDisplayDecimals,
-  kpEconomicsDynamicDisplayRelation,
   type KpEconomicsEquilibriumSynchronizedView
 } from "../animation/economics-equilibrium-synchronized-view.ts";
-import { renderLatexToHtml } from "./katex-adapter.ts";
+import {
+  formatKpDimensionalContinuityDynamicDisplay,
+  kpDimensionalContinuityDynamicDisplayDecimals,
+  kpDimensionalContinuityDynamicDisplayRelation
+} from "../animation/dimensional-continuity-dynamic-display.ts";
+import {
+  createKpDimensionalContinuityGraphPresentationProfile,
+  renderKpDimensionalContinuityInlineLatex
+} from "./dimensional-continuity-graph-profile.ts";
 
 export interface KpEconomicsGraphViewport {
   readonly width: number;
@@ -21,23 +26,8 @@ export interface KpEconomicsGraphViewport {
   readonly yDomain: readonly [number, number];
 }
 
-export const kpEconomicsGraphPresentationProfile = Object.freeze({
-  schemaVersion: "kp.economics-graph-presentation-profile.v1" as const,
-  id: "kp.graph.dimensional-continuity.economics.v1",
-  renderer: "svg" as const,
-  projection: "orthographic-xy" as const,
-  mathTypography: "katex" as const,
-  visualRoles: Object.freeze({
-    stable: "teal",
-    changing: "rust",
-    focal: "ink",
-    construction: "quiet-blue",
-    plane: "warm"
-  })
-});
-
-const economicsLatexHtmlCache = new Map<string, string>();
-const economicsLatexHtmlCacheLimit = 256;
+export const kpEconomicsGraphPresentationProfile =
+  createKpDimensionalContinuityGraphPresentationProfile("economics");
 
 export function renderKpEconomicsEquilibriumStaticContent(input: {
   readonly frame: KpSupplyDemandEquilibriumFrameV1;
@@ -149,12 +139,14 @@ function renderEconomicsContent(input: {
     : input.stage === "shift"
       ? "E_t"
       : "E_1";
-  const equilibriumRelation = kpEconomicsDynamicDisplayRelation(input.stage);
+  const equilibriumRelation = kpDimensionalContinuityDynamicDisplayRelation(
+    input.stage === "shift"
+  );
   const equilibriumLatex = `${equilibriumRole} ${equilibriumRelation} (` +
-    `${formatKpEconomicsDynamicDisplay(input.frame.equilibrium.quantity)}, ` +
-    `${formatKpEconomicsDynamicDisplay(input.frame.equilibrium.price)})`;
+    `${formatKpDimensionalContinuityDynamicDisplay(input.frame.equilibrium.quantity)}, ` +
+    `${formatKpDimensionalContinuityDynamicDisplay(input.frame.equilibrium.price)})`;
 
-  return `<g data-kp-economics-equilibrium-view data-kp-economics-equilibrium-phase="${input.frame.phase}" data-kp-economics-choreography-stage="${input.stage}" data-kp-economics-display-precision="${kpEconomicsDynamicDisplayDecimals}" data-kp-economics-demand-intercept="${exactText(input.frame.demand.priceInterceptCurrent)}">
+  return `<g data-kp-economics-equilibrium-view data-kp-economics-equilibrium-phase="${input.frame.phase}" data-kp-economics-choreography-stage="${input.stage}" data-kp-economics-display-precision="${kpDimensionalContinuityDynamicDisplayDecimals}" data-kp-economics-demand-intercept="${exactText(input.frame.demand.priceInterceptCurrent)}">
     ${renderEconomicsGrid(input.viewport, point)}
     <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand-reference" data-kp-economics-initial-demand-reference x1="${initialDemandStart[0]}" y1="${initialDemandStart[1]}" x2="${initialDemandEnd[0]}" y2="${initialDemandEnd[1]}" style="opacity:${input.initialDemandReferenceOpacity}" />
     <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--supply" data-kp-economics-supply-line data-kp-economics-equation="${supplyEquation(input.frame)}" x1="${supplyStart[0]}" y1="${supplyStart[1]}" x2="${supplyEnd[0]}" y2="${supplyEnd[1]}" />
@@ -280,7 +272,7 @@ function renderMathLabel(input: {
   readonly className: string;
 }): string {
   return `<foreignObject class="editor-graph-stage__economics-math-foreign-object" data-kp-economics-math-label="${input.role}" x="${input.x}" y="${input.y}" width="${input.width}" height="${input.height}" aria-hidden="true"${input.opacity === undefined ? "" : ` style="opacity:${input.opacity}"`}>
-      <div xmlns="http://www.w3.org/1999/xhtml" class="editor-graph-stage__economics-math-label ${input.className}" data-kp-latex="${escapeHtml(input.latex)}">${renderCachedInlineLatex(input.latex)}</div>
+      <div xmlns="http://www.w3.org/1999/xhtml" class="editor-graph-stage__economics-math-label ${input.className}" data-kp-latex="${escapeHtml(input.latex)}">${renderKpDimensionalContinuityInlineLatex(input.latex)}</div>
     </foreignObject>`;
 }
 
@@ -318,23 +310,7 @@ function renderSynchronizedView(
 }
 
 function renderInlineEquation(role: string, latex: string): string {
-  return `<span class="editor-graph-stage__economics-equation editor-graph-stage__economics-equation--${role}" data-kp-economics-equation-role="${role}" data-kp-latex="${escapeHtml(latex)}">${renderCachedInlineLatex(latex)}</span>`;
-}
-
-function renderCachedInlineLatex(latex: string): string {
-  const cached = economicsLatexHtmlCache.get(latex);
-  if (cached !== undefined) return cached;
-  const rendered = renderLatexToHtml(latex, { displayMode: false });
-  // Direct-seek exploration can create many exact intermediate labels. Keep
-  // the renderer cache bounded while avoiding KaTeX work in the frame loop.
-  if (economicsLatexHtmlCache.size >= economicsLatexHtmlCacheLimit) {
-    const oldest = economicsLatexHtmlCache.keys().next().value as
-      | string
-      | undefined;
-    if (oldest !== undefined) economicsLatexHtmlCache.delete(oldest);
-  }
-  economicsLatexHtmlCache.set(latex, rendered);
-  return rendered;
+  return `<span class="editor-graph-stage__economics-equation editor-graph-stage__economics-equation--${role}" data-kp-economics-equation-role="${role}" data-kp-latex="${escapeHtml(latex)}">${renderKpDimensionalContinuityInlineLatex(latex)}</span>`;
 }
 
 function escapeHtml(value: string): string {

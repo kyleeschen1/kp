@@ -1866,7 +1866,7 @@ h2 {
   stroke-width: 1.5;
 }
 
-.editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
+.editor-graph-stage[data-kp-graph-language-profile="kp.graph.dimensional-continuity.v1"] {
   --kp-graph-plane: #fffdf8;
   --kp-graph-axis: #3f5261;
   --kp-graph-grid: #9bb9c8;
@@ -1877,11 +1877,11 @@ h2 {
   background: var(--kp-graph-plane);
 }
 
-.editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] .editor-graph-stage__plot-plane {
+.editor-graph-stage[data-kp-graph-language-profile="kp.graph.dimensional-continuity.v1"] .editor-graph-stage__plot-plane {
   fill: var(--kp-graph-plane);
 }
 
-.editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] [data-kp-editor-graph-axis] {
+.editor-graph-stage[data-kp-graph-language-profile="kp.graph.dimensional-continuity.v1"] [data-kp-editor-graph-axis] {
   stroke: var(--kp-graph-axis);
   stroke-linecap: round;
   stroke-width: 1.8;
@@ -2058,21 +2058,6 @@ h2 {
   color: #5c6d77;
 }
 
-.editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.physics.v1"] {
-  --kp-graph-plane: #fffdf8;
-  --kp-graph-axis: #3f5261;
-  --kp-graph-grid: #9bb9c8;
-  --kp-graph-stable: #1f7a83;
-  --kp-graph-active: #bd5b35;
-  --kp-graph-focal: #263845;
-  color: var(--kp-graph-focal);
-  background: var(--kp-graph-plane);
-}
-
-.editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.physics.v1"] .editor-graph-stage__plot-plane {
-  fill: var(--kp-graph-plane);
-}
-
 .editor-graph-stage__physics-axis {
   stroke: var(--kp-graph-axis);
   stroke-linecap: round;
@@ -2094,8 +2079,8 @@ h2 {
 }
 
 .editor-graph-stage__physics-work-area {
-  fill: var(--kp-graph-active);
-  stroke: var(--kp-graph-active);
+  fill: var(--kp-graph-changing);
+  stroke: var(--kp-graph-changing);
   stroke-width: 1.2;
   vector-effect: non-scaling-stroke;
 }
@@ -2109,7 +2094,7 @@ h2 {
 }
 
 .editor-graph-stage__physics-work-boundary {
-  stroke: var(--kp-graph-active);
+  stroke: var(--kp-graph-changing);
   stroke-dasharray: 4 4;
   stroke-width: 1.5;
   vector-effect: non-scaling-stroke;
@@ -2130,7 +2115,7 @@ h2 {
 }
 
 .editor-graph-stage__physics-force-arrow {
-  stroke: var(--kp-graph-active);
+  stroke: var(--kp-graph-changing);
   stroke-linecap: round;
   stroke-width: 3;
   vector-effect: non-scaling-stroke;
@@ -2155,7 +2140,7 @@ h2 {
 }
 
 .editor-graph-stage__physics-energy-work {
-  fill: var(--kp-graph-active);
+  fill: var(--kp-graph-changing);
   opacity: 0.78;
 }
 
@@ -2187,7 +2172,7 @@ h2 {
 }
 
 .editor-graph-stage__physics-math-label--force {
-  color: var(--kp-graph-active);
+  color: var(--kp-graph-changing);
   font-size: 12px;
   font-weight: 650;
 }
@@ -2216,7 +2201,7 @@ h2 {
 
 .editor-graph-stage__physics-math-label--unit {
   width: 100%;
-  color: var(--kp-graph-active);
+  color: var(--kp-graph-changing);
   background: transparent;
   font-size: 12px;
   font-weight: 700;

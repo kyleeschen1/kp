@@ -75,6 +75,7 @@ test("every compatibility path has one enforced disposition and owner", () => {
       ({ formerContractKey }) => formerContractKey
     ),
     [
+      "rendering motif re-export facades",
       "equationSequenceEnvelopeRecipe",
       "equationFractionHierarchyRecipe"
     ]

@@ -113,11 +113,16 @@ function renderViewport(
     "animation.economics.supply-demand-equilibrium-shift";
   const physicsProfile = animation.id ===
     "animation.physics.constant-force-work-energy";
-  const profile = economicsProfile
-    ? kpEconomicsGraphPresentationProfile.id
+  const dimensionalContinuityProfile = economicsProfile
+    ? kpEconomicsGraphPresentationProfile
     : physicsProfile
-      ? kpPhysicsGraphPresentationProfile.id
-      : "kp.graph.editor-default.v1";
+      ? kpPhysicsGraphPresentationProfile
+      : undefined;
+  const profile = dimensionalContinuityProfile?.id ??
+    "kp.graph.editor-default.v1";
+  const languageProfile = dimensionalContinuityProfile === undefined
+    ? ""
+    : ` data-kp-graph-language-profile="${dimensionalContinuityProfile.languageId}"`;
   const axisMarker = economicsProfile
     ? ' marker-end="url(#kp-editor-graph-axis-arrow)"'
     : "";
@@ -125,7 +130,7 @@ function renderViewport(
     ? ""
     : `<line data-kp-editor-graph-axis="x" x1="20" y1="${model.xAxisY}" x2="${model.width - 20}" y2="${model.xAxisY}"${axisMarker} />
     <line data-kp-editor-graph-axis="y" x1="${model.yAxisX}" y1="${model.height - 20}" x2="${model.yAxisX}" y2="20"${axisMarker} />`;
-  return `<svg class="editor-graph-stage" data-kp-editor-graph-svg data-kp-graph-presentation-profile="${profile}" data-kp-editor-graph-progress="${state.progress}" data-kp-editor-graph-direction="${state.direction}" viewBox="0 0 ${model.width} ${model.height}" role="img" aria-label="${escapeHtml(state.runtimeFrame.title)} graph animation">
+  return `<svg class="editor-graph-stage" data-kp-editor-graph-svg data-kp-graph-presentation-profile="${profile}"${languageProfile} data-kp-editor-graph-progress="${state.progress}" data-kp-editor-graph-direction="${state.direction}" viewBox="0 0 ${model.width} ${model.height}" role="img" aria-label="${escapeHtml(state.runtimeFrame.title)} graph animation">
     <defs><pattern id="kp-editor-graph-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path class="editor-graph-stage__default-grid-line" d="M 32 0 L 0 0 0 32" fill="none" /></pattern><marker id="kp-editor-graph-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker><marker id="kp-editor-graph-axis-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker></defs>
     <rect class="editor-graph-stage__plot-plane" width="100%" height="100%" />
     <g data-kp-editor-graph-content></g>

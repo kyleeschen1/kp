@@ -45,6 +45,10 @@ test("physics catalogue preserves exact accessible seek, rewind, parameters, Rev
     "data-kp-graph-presentation-profile",
     "kp.graph.dimensional-continuity.physics.v1"
   );
+  await expect(graph).toHaveAttribute(
+    "data-kp-graph-language-profile",
+    "kp.graph.dimensional-continuity.v1"
+  );
   await expect(graph.locator("[data-kp-physics-math-label]"))
     .toHaveCount(17);
   await expect(graph.locator("text")).toHaveCount(0);

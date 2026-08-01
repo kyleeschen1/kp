@@ -7,11 +7,17 @@ import type {
 } from "../animation/constant-force-work-energy-runtime-frame.ts";
 import {
   createKpConstantForceWorkEnergySynchronizedView,
-  formatKpPhysicsDynamicDisplay,
-  kpPhysicsDynamicDisplayDecimals,
   type KpConstantForceWorkEnergySynchronizedView
 } from "../animation/constant-force-work-energy-synchronized-view.ts";
-import { renderLatexToHtml } from "./katex-adapter.ts";
+import {
+  formatKpDimensionalContinuityDynamicDisplay,
+  kpDimensionalContinuityDynamicDisplayDecimals,
+  kpDimensionalContinuityDynamicDisplayRelation
+} from "../animation/dimensional-continuity-dynamic-display.ts";
+import {
+  createKpDimensionalContinuityGraphPresentationProfile,
+  renderKpDimensionalContinuityInlineLatex
+} from "./dimensional-continuity-graph-profile.ts";
 
 export interface KpPhysicsGraphViewport {
   readonly width: number;
@@ -20,23 +26,8 @@ export interface KpPhysicsGraphViewport {
   readonly yDomain: readonly [number, number];
 }
 
-export const kpPhysicsGraphPresentationProfile = Object.freeze({
-  schemaVersion: "kp.physics-graph-presentation-profile.v1" as const,
-  id: "kp.graph.dimensional-continuity.physics.v1",
-  renderer: "svg" as const,
-  projection: "orthographic-xy" as const,
-  mathTypography: "katex" as const,
-  visualRoles: Object.freeze({
-    stable: "teal",
-    active: "rust",
-    focal: "ink",
-    construction: "quiet-blue",
-    plane: "warm"
-  })
-});
-
-const physicsLatexHtmlCache = new Map<string, string>();
-const physicsLatexHtmlCacheLimit = 256;
+export const kpPhysicsGraphPresentationProfile =
+  createKpDimensionalContinuityGraphPresentationProfile("physics");
 
 export function renderKpConstantForceWorkEnergyStaticContent(input: {
   readonly frame: KpConstantForceWorkEnergyFrameV1;
@@ -118,7 +109,7 @@ function renderPhysicsContent(input: {
   const initialEnergyWidth = energyWidth * initialKineticEnergy / maximumEnergy;
   const workEnergyWidth = energyWidth * work / maximumEnergy;
 
-  return `<g data-kp-physics-work-energy-view data-kp-physics-work-energy-phase="${input.frame.phase}" data-kp-physics-choreography-stage="${input.stage}" data-kp-physics-display-precision="${kpPhysicsDynamicDisplayDecimals}" data-kp-physics-position="${exactText(input.frame.state.position)}" data-kp-physics-net-force="${exactText(input.frame.state.netForceMagnitude)}" style="--kp-physics-unit-opacity:${input.unitIdentityOpacity}">
+  return `<g data-kp-physics-work-energy-view data-kp-physics-work-energy-phase="${input.frame.phase}" data-kp-physics-choreography-stage="${input.stage}" data-kp-physics-display-precision="${kpDimensionalContinuityDynamicDisplayDecimals}" data-kp-physics-position="${exactText(input.frame.state.position)}" data-kp-physics-net-force="${exactText(input.frame.state.netForceMagnitude)}" style="--kp-physics-unit-opacity:${input.unitIdentityOpacity}">
     ${renderPhysicsGrid(input.viewport, graphBounds, graphPoint)}
     <line class="editor-graph-stage__physics-axis" data-kp-physics-axis="position" x1="${graphBounds.left}" y1="${graphBounds.bottom}" x2="${graphBounds.right + 8}" y2="${graphBounds.bottom}" marker-end="url(#kp-editor-graph-axis-arrow)" />
     <line class="editor-graph-stage__physics-axis" data-kp-physics-axis="force" x1="${graphBounds.left}" y1="${graphBounds.bottom}" x2="${graphBounds.left}" y2="${graphBounds.top - 8}" marker-end="url(#kp-editor-graph-axis-arrow)" />
@@ -168,7 +159,7 @@ function renderPhysicsContent(input: {
       })}
       ${renderMathLabel({
         role: "diagram-displacement",
-        latex: `\\Delta x ${dynamicRelation(input.stage)} ${formatKpPhysicsDynamicDisplay(input.frame.state.displacement)}\\,\\mathrm{m}`,
+        latex: `\\Delta x ${kpDimensionalContinuityDynamicDisplayRelation(input.stage === "accumulate")} ${formatKpDimensionalContinuityDynamicDisplay(input.frame.state.displacement)}\\,\\mathrm{m}`,
         x: input.viewport.width - 230,
         y: 262,
         width: 182,
@@ -182,7 +173,7 @@ function renderPhysicsContent(input: {
       <rect class="editor-graph-stage__physics-energy-work" data-kp-physics-energy-work="${exactText(input.frame.state.accumulatedWork)}" x="${energyX + initialEnergyWidth}" y="${energyY}" width="${workEnergyWidth}" height="22" rx="5" />
       ${renderMathLabel({
         role: "energy-total",
-        latex: `K ${dynamicRelation(input.stage)} ${formatKpPhysicsDynamicDisplay(input.frame.state.kineticEnergy)}\\,\\mathrm{J}`,
+        latex: `K ${kpDimensionalContinuityDynamicDisplayRelation(input.stage === "accumulate")} ${formatKpDimensionalContinuityDynamicDisplay(input.frame.state.kineticEnergy)}\\,\\mathrm{J}`,
         x: energyX,
         y: energyY + 30,
         width: energyWidth,
@@ -255,7 +246,7 @@ function renderSynchronizedView(
           ${renderInlineEquation("force", view.equations.forceLatex)}
           ${renderInlineEquation("work", view.equations.workLatex)}
           ${renderInlineEquation("energy", view.equations.energyLatex)}
-          <span class="editor-graph-stage__physics-equation editor-graph-stage__physics-equation--unit" style="opacity:var(--kp-physics-unit-opacity, 1)" data-kp-physics-equation-role="unit" data-kp-latex="${escapeHtml(view.equations.unitLatex)}">${renderCachedInlineLatex(view.equations.unitLatex)}</span>
+          <span class="editor-graph-stage__physics-equation editor-graph-stage__physics-equation--unit" style="opacity:var(--kp-physics-unit-opacity, 1)" data-kp-physics-equation-role="unit" data-kp-latex="${escapeHtml(view.equations.unitLatex)}">${renderKpDimensionalContinuityInlineLatex(view.equations.unitLatex)}</span>
         </div>
         <p data-kp-physics-narrative>${escapeHtml(view.narrative.text)}</p>
       </div>
@@ -263,7 +254,7 @@ function renderSynchronizedView(
 }
 
 function renderInlineEquation(role: string, latex: string): string {
-  return `<span class="editor-graph-stage__physics-equation editor-graph-stage__physics-equation--${role}" data-kp-physics-equation-role="${role}" data-kp-latex="${escapeHtml(latex)}">${renderCachedInlineLatex(latex)}</span>`;
+  return `<span class="editor-graph-stage__physics-equation editor-graph-stage__physics-equation--${role}" data-kp-physics-equation-role="${role}" data-kp-latex="${escapeHtml(latex)}">${renderKpDimensionalContinuityInlineLatex(latex)}</span>`;
 }
 
 function renderMathLabel(input: {
@@ -277,28 +268,8 @@ function renderMathLabel(input: {
   readonly className: string;
 }): string {
   return `<foreignObject class="editor-graph-stage__physics-math-foreign-object" data-kp-physics-math-label="${input.role}" x="${input.x}" y="${input.y}" width="${input.width}" height="${input.height}" aria-hidden="true"${input.opacity === undefined ? "" : ` style="opacity:${input.opacity}"`}>
-      <div xmlns="http://www.w3.org/1999/xhtml" class="editor-graph-stage__physics-math-label ${input.className}" data-kp-latex="${escapeHtml(input.latex)}">${renderCachedInlineLatex(input.latex)}</div>
+      <div xmlns="http://www.w3.org/1999/xhtml" class="editor-graph-stage__physics-math-label ${input.className}" data-kp-latex="${escapeHtml(input.latex)}">${renderKpDimensionalContinuityInlineLatex(input.latex)}</div>
     </foreignObject>`;
-}
-
-function renderCachedInlineLatex(latex: string): string {
-  const cached = physicsLatexHtmlCache.get(latex);
-  if (cached !== undefined) return cached;
-  const rendered = renderLatexToHtml(latex, { displayMode: false });
-  if (physicsLatexHtmlCache.size >= physicsLatexHtmlCacheLimit) {
-    const oldest = physicsLatexHtmlCache.keys().next().value as
-      | string
-      | undefined;
-    if (oldest !== undefined) physicsLatexHtmlCache.delete(oldest);
-  }
-  physicsLatexHtmlCache.set(latex, rendered);
-  return rendered;
-}
-
-function dynamicRelation(
-  stage: KpConstantForceWorkEnergyRuntimeFrame["stage"]
-): "=" | "\\approx" {
-  return stage === "accumulate" ? "\\approx" : "=";
 }
 
 function exactLatex(value: ExactRationalDto): string {

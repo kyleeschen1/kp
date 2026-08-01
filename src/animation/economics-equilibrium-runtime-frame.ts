@@ -12,6 +12,11 @@ import {
 } from "./economics-equilibrium-adapter.ts";
 import type { KpAnimationRuntimeFrame } from "./runtime-sampler.ts";
 import type { ExactRationalDto } from "../../protocols/public-api.ts";
+import {
+  easeKpSynchronizedModelProgress,
+  exactKpSynchronizedModelProgress,
+  sampleKpSynchronizedModelProjectionProgress
+} from "./synchronized-model-projection.ts";
 
 export type KpEconomicsEquilibriumChoreographyStage =
   | "establish"
@@ -61,17 +66,13 @@ export function sampleKpEconomicsEquilibriumRuntimeFrame(input: {
     );
   }
 
-  const progress = clamp01(input.runtimeFrame.clock.progress);
-  // Quantization removes the tiny complement drift from `1 - progress`, so
-  // direct forward seek and the matching rewind seek sample identical paint.
-  const presentationProgress = quantize01(
-    input.runtimeFrame.clock.direction === "forward" ? progress : 1 - progress
-  );
+  const { progress, presentationProgress } =
+    sampleKpSynchronizedModelProjectionProgress(input.runtimeFrame.clock);
   const choreography = sampleChoreography(presentationProgress);
   const model = input.model ?? economicsModelFromAnimation(input.animation);
   const semanticFrame = sampleKpSupplyDemandEquilibriumFrame({
     model,
-    progress: decimalExact(choreography.modelProgress)
+    progress: exactKpSynchronizedModelProgress(choreography.modelProgress)
   });
 
   return Object.freeze({
@@ -137,7 +138,7 @@ function sampleChoreography(progress: number): {
   }
   if (progress <= 0.72) {
     const local = (progress - 0.16) / 0.56;
-    const eased = smoothstep(local);
+    const eased = easeKpSynchronizedModelProgress(local);
     return {
       stage: "shift",
       modelProgress: eased,
@@ -151,7 +152,8 @@ function sampleChoreography(progress: number): {
       stage: "handoff",
       modelProgress: 1,
       initialDemandReferenceOpacity: 0.24,
-      initialEquilibriumReferenceOpacity: 0.62 - 0.34 * smoothstep(local)
+      initialEquilibriumReferenceOpacity:
+        0.62 - 0.34 * easeKpSynchronizedModelProgress(local)
     };
   }
   return {
@@ -160,26 +162,4 @@ function sampleChoreography(progress: number): {
     initialDemandReferenceOpacity: 0.24,
     initialEquilibriumReferenceOpacity: 0.28
   };
-}
-
-function decimalExact(value: number) {
-  const denominator = 1_000_000;
-  const numerator = Math.round(clamp01(value) * denominator);
-  return {
-    numerator: String(numerator),
-    denominator: String(denominator)
-  };
-}
-
-function smoothstep(value: number): number {
-  const bounded = clamp01(value);
-  return bounded * bounded * (3 - 2 * bounded);
-}
-
-function clamp01(value: number): number {
-  return Math.min(1, Math.max(0, value));
-}
-
-function quantize01(value: number): number {
-  return Math.round(clamp01(value) * 1_000_000) / 1_000_000;
 }

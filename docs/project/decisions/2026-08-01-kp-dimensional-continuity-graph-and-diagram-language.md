@@ -1,7 +1,7 @@
 # Dimensional-Continuity Graph And Diagram Language
 
 Date: 2026-08-01
-Status: accepted
+Status: accepted and promoted through two approved callers
 
 ## Decision
 
@@ -132,8 +132,16 @@ this visual language on 2026-08-01. The final polish uses two fixed decimal
 places for moving demand/equilibrium readouts, preserves integer tick labels,
 marks interpolated display values as approximate, and reduces the equilibrium
 marker. Exact rationals remain authoritative in the semantic frame, DOM data,
-Review capture, and nonvisual description. This is not yet a shared profile or
-catalog-wide rule.
+Review capture, and nonvisual description.
+
+After the structurally different constant-force work-energy caller passed its
+human checkpoint, the two implementations promoted
+`kp.dimensional-continuity-graph-presentation-profile.v1`. The shared contract
+owns the orthographic SVG capability, KaTeX typography, stable/changing/focal/
+construction/plane roles, fixed moving-value display policy, and bounded inline
+KaTeX cache. Each domain retains its own profile id, geometry, semantic model,
+choreography, labels, narrative, and accessibility derivation. This is a
+two-caller standard, not a catalog-wide migration or a universal graph renderer.
 
 Revision preserves the exact economics model, semantic identities, shared
 clock, parameter contract, catalogue shell, review capture, and one paint

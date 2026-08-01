@@ -655,11 +655,52 @@
       "status": "passed",
       "scope": "s28 patch hygiene",
       "checkedAt": "2026-08-01T21:14:01.224Z"
+    },
+    {
+      "command": "node focused cross-domain animation seam tests",
+      "status": "passed",
+      "scope": "slice-29",
+      "checkedAt": "2026-08-01T21:35:37.314Z",
+      "notes": "41 tests passed"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-29",
+      "checkedAt": "2026-08-01T21:35:38.449Z",
+      "notes": "Application node test and domain TypeScript projects passed"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-29",
+      "checkedAt": "2026-08-01T21:35:39.359Z",
+      "notes": "Architecture boundaries passed after locating display policy under animation"
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice-29",
+      "checkedAt": "2026-08-01T21:35:40.286Z",
+      "notes": "Stable captures and 35 hostability rows passed"
+    },
+    {
+      "command": "cross-browser economics and physics exemplar suites",
+      "status": "passed",
+      "scope": "slice-29",
+      "checkedAt": "2026-08-01T21:35:41.192Z",
+      "notes": "Chromium Firefox and WebKit passed for both approved exemplars"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-29",
+      "checkedAt": "2026-08-01T21:35:42.129Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Classified 16 observed API and presentation seams. Four two-caller contracts qualify for bounded promotion: reversible projection progress, dimensional-continuity graph profile, dynamic exact display policy, and bounded integer query codec. Domain models/renderers/narratives remain local; four zero-caller rendering motif re-export facades qualify for retirement; Jacobian/Hessian remains presentation-only retirement candidate with semantic evidence preserved."
+    "summary": "Extracted only the four seams proven by economics and physics and retired four zero-caller rendering motif facades"
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",

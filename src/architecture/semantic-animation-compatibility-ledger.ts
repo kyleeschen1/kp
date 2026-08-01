@@ -360,6 +360,19 @@ export const kpSemanticAnimationCompatibilityLedger = [
 
 export const kpRetiredSemanticAnimationCompatibilityPaths = [
   {
+    id: "compatibility.rendering-motif-facades",
+    formerContractKey: "rendering motif re-export facades",
+    removedFrom: [
+      "src/rendering/equation-visual-motif-defaults.ts",
+      "src/rendering/executable-motif-grammar.ts",
+      "src/rendering/visual-motif-composition.ts",
+      "src/rendering/visual-motif.ts"
+    ],
+    replacement:
+      "Typed canonical renderer-neutral vocabulary in src/animation/motifs/public-api.ts.",
+    closureTest: "tests/neutral-animation-motif-boundary.test.ts"
+  },
+  {
     id: "compatibility.metadata.equationSequenceEnvelopeRecipe",
     formerContractKey: "equationSequenceEnvelopeRecipe",
     removedFrom: [

@@ -10,6 +10,11 @@ import {
 import type { KpAnimationAsset } from "./asset.ts";
 import { constantForceWorkEnergyAnimationId } from "./constant-force-work-energy-adapter.ts";
 import type { KpAnimationRuntimeFrame } from "./runtime-sampler.ts";
+import {
+  easeKpSynchronizedModelProgress,
+  exactKpSynchronizedModelProgress,
+  sampleKpSynchronizedModelProjectionProgress
+} from "./synchronized-model-projection.ts";
 
 export type KpConstantForceWorkEnergyChoreographyStage =
   | "establish"
@@ -56,17 +61,13 @@ export function sampleKpConstantForceWorkEnergyRuntimeFrame(input: {
     );
   }
 
-  const progress = clamp01(input.runtimeFrame.clock.progress);
-  // Complement quantization keeps mirrored seek and rewind paint-identical on
-  // the existing runtime clock without adding a physics-specific clock.
-  const presentationProgress = quantize01(
-    input.runtimeFrame.clock.direction === "forward" ? progress : 1 - progress
-  );
+  const { progress, presentationProgress } =
+    sampleKpSynchronizedModelProjectionProgress(input.runtimeFrame.clock);
   const choreography = sampleChoreography(presentationProgress);
   const model = input.model ?? physicsModelFromAnimation(input.animation);
   const semanticFrame = sampleKpConstantForceWorkEnergyFrame({
     model,
-    progress: decimalExact(choreography.modelProgress)
+    progress: exactKpSynchronizedModelProgress(choreography.modelProgress)
   });
 
   return Object.freeze({
@@ -130,7 +131,7 @@ function sampleChoreography(progress: number): {
   }
   if (progress <= 0.78) {
     const local = (progress - 0.14) / 0.64;
-    const eased = smoothstep(local);
+    const eased = easeKpSynchronizedModelProgress(local);
     return {
       stage: "accumulate",
       modelProgress: eased,
@@ -146,7 +147,8 @@ function sampleChoreography(progress: number): {
       modelProgress: 1,
       workAreaOpacity: 0.56,
       forceArrowEmphasis: 1,
-      unitIdentityOpacity: 0.15 + 0.65 * smoothstep(local)
+      unitIdentityOpacity:
+        0.15 + 0.65 * easeKpSynchronizedModelProgress(local)
     };
   }
   return {
@@ -156,26 +158,4 @@ function sampleChoreography(progress: number): {
     forceArrowEmphasis: 0.92,
     unitIdentityOpacity: 1
   };
-}
-
-function decimalExact(value: number): ExactRationalDto {
-  const denominator = 1_000_000;
-  const numerator = Math.round(clamp01(value) * denominator);
-  return {
-    numerator: String(numerator),
-    denominator: String(denominator)
-  };
-}
-
-function smoothstep(value: number): number {
-  const bounded = clamp01(value);
-  return bounded * bounded * (3 - 2 * bounded);
-}
-
-function clamp01(value: number): number {
-  return Math.min(1, Math.max(0, value));
-}
-
-function quantize01(value: number): number {
-  return Math.round(clamp01(value) * 1_000_000) / 1_000_000;
 }

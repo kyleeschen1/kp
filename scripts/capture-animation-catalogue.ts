@@ -614,6 +614,9 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
     const presentationProfile = await graph.getAttribute(
       "data-kp-graph-presentation-profile"
     );
+    const languageProfile = await graph.getAttribute(
+      "data-kp-graph-language-profile"
+    );
     const rawSvgTextCount = await graph.locator("text").count();
     const mathLabelCount = await graph.locator(
       "[data-kp-economics-math-label]"
@@ -623,11 +626,13 @@ async function captureEconomicsExemplar(browser: Browser): Promise<void> {
     ).getAttribute("r");
     if (presentationProfile !==
         "kp.graph.dimensional-continuity.economics.v1" ||
+      languageProfile !== "kp.graph.dimensional-continuity.v1" ||
       rawSvgTextCount !== 0 || mathLabelCount < 14 || pointRadius !== "4.5") {
       throw new Error(
         "Economics graph lost its dimensional-continuity or KaTeX contract: " +
         JSON.stringify({
           presentationProfile,
+          languageProfile,
           rawSvgTextCount,
           mathLabelCount,
           pointRadius
@@ -999,17 +1004,22 @@ async function capturePhysicsExemplar(browser: Browser): Promise<void> {
     const presentationProfile = await graph.getAttribute(
       "data-kp-graph-presentation-profile"
     );
+    const languageProfile = await graph.getAttribute(
+      "data-kp-graph-language-profile"
+    );
     const rawSvgTextCount = await graph.locator("text").count();
     const mathLabelCount = await graph.locator(
       "[data-kp-physics-math-label]"
     ).count();
     if (presentationProfile !==
         "kp.graph.dimensional-continuity.physics.v1" ||
+      languageProfile !== "kp.graph.dimensional-continuity.v1" ||
       rawSvgTextCount !== 0 || mathLabelCount < 17) {
       throw new Error(
         "Physics graph lost its dimensional-continuity or KaTeX contract: " +
         JSON.stringify({
           presentationProfile,
+          languageProfile,
           rawSvgTextCount,
           mathLabelCount
         })

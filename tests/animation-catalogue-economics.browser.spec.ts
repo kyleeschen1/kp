@@ -48,6 +48,10 @@ test("economics catalogue preserves exact accessible seek, rewind, parameters, R
     "data-kp-graph-presentation-profile",
     "kp.graph.dimensional-continuity.economics.v1"
   );
+  await expect(graph).toHaveAttribute(
+    "data-kp-graph-language-profile",
+    "kp.graph.dimensional-continuity.v1"
+  );
   await expect(graph.locator("[data-kp-economics-math-label]"))
     .toHaveCount(14);
   await expect(graph.locator('[data-kp-latex="D_0"]')).toBeVisible();

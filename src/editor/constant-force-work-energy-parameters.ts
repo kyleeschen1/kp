@@ -8,6 +8,11 @@ import {
   constantForceWorkEnergyAnimationId,
   createConstantForceWorkEnergyAnimationAsset
 } from "../animation/constant-force-work-energy-adapter.ts";
+import {
+  normalizeKpBoundedIntegerQueryParameter,
+  readKpBoundedIntegerQueryParameter,
+  writeKpBoundedIntegerQueryParameter
+} from "./bounded-integer-query-parameter.ts";
 
 export const kpConstantForceWorkEnergyForceParameter = Object.freeze({
   id: "parameter.physics.work-energy.net-force-newtons",
@@ -26,22 +31,21 @@ export interface KpConstantForceWorkEnergyParameterState {
 export function readKpConstantForceWorkEnergyParameters(
   search: string
 ): KpConstantForceWorkEnergyParameterState {
-  const raw = new URLSearchParams(search).get(
-    kpConstantForceWorkEnergyForceParameter.queryKey
+  return createKpConstantForceWorkEnergyParameterState(
+    readKpBoundedIntegerQueryParameter({
+      search,
+      parameter: kpConstantForceWorkEnergyForceParameter
+    })
   );
-  return createKpConstantForceWorkEnergyParameterState(raw);
 }
 
 export function createKpConstantForceWorkEnergyParameterState(
   value: string | number | null | undefined
 ): KpConstantForceWorkEnergyParameterState {
-  const parsed = typeof value === "number" ? value : Number(value);
-  const netForceNewtons =
-    Number.isInteger(parsed) &&
-      parsed >= kpConstantForceWorkEnergyForceParameter.minimum &&
-      parsed <= kpConstantForceWorkEnergyForceParameter.maximum
-      ? parsed
-      : kpConstantForceWorkEnergyForceParameter.defaultValue;
+  const netForceNewtons = normalizeKpBoundedIntegerQueryParameter({
+    value,
+    parameter: kpConstantForceWorkEnergyForceParameter
+  });
   return Object.freeze({
     schemaVersion: "kp.constant-force-work-energy-parameters.v1",
     netForceNewtons
@@ -52,20 +56,11 @@ export function writeKpConstantForceWorkEnergyParameters(input: {
   readonly search: string;
   readonly state: KpConstantForceWorkEnergyParameterState;
 }): string {
-  const params = new URLSearchParams(input.search);
-  if (
-    input.state.netForceNewtons ===
-    kpConstantForceWorkEnergyForceParameter.defaultValue
-  ) {
-    params.delete(kpConstantForceWorkEnergyForceParameter.queryKey);
-  } else {
-    params.set(
-      kpConstantForceWorkEnergyForceParameter.queryKey,
-      String(input.state.netForceNewtons)
-    );
-  }
-  const value = params.toString();
-  return value.length === 0 ? "" : `?${value}`;
+  return writeKpBoundedIntegerQueryParameter({
+    search: input.search,
+    parameter: kpConstantForceWorkEnergyForceParameter,
+    value: input.state.netForceNewtons
+  });
 }
 
 export function createParameterizedConstantForceWorkEnergyAnimation(

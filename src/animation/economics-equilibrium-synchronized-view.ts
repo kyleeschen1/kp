@@ -2,6 +2,10 @@ import type { ExactRationalDto } from "../../protocols/public-api.ts";
 import type {
   KpEconomicsEquilibriumRuntimeFrame
 } from "./economics-equilibrium-runtime-frame.ts";
+import {
+  formatKpDimensionalContinuityDynamicDisplay,
+  kpDimensionalContinuityDynamicDisplayRelation
+} from "./dimensional-continuity-dynamic-display.ts";
 
 export interface KpEconomicsEquilibriumSynchronizedView {
   readonly id: string;
@@ -19,8 +23,6 @@ export interface KpEconomicsEquilibriumSynchronizedView {
   readonly nonvisualSummary: string;
 }
 
-export const kpEconomicsDynamicDisplayDecimals = 2;
-
 export function createKpEconomicsEquilibriumSynchronizedView(
   frame: KpEconomicsEquilibriumRuntimeFrame
 ): KpEconomicsEquilibriumSynchronizedView {
@@ -35,7 +37,9 @@ export function createKpEconomicsEquilibriumSynchronizedView(
     slope: semantic.demand.priceChangePerQuantity,
     direction: "minus"
   });
-  const relation = kpEconomicsDynamicDisplayRelation(frame.stage);
+  const relation = kpDimensionalContinuityDynamicDisplayRelation(
+    frame.stage === "shift"
+  );
   const demandLatex = dynamicLinearLatex({
     intercept: semantic.demand.priceInterceptCurrent,
     slope: semantic.demand.priceChangePerQuantity,
@@ -44,8 +48,8 @@ export function createKpEconomicsEquilibriumSynchronizedView(
   });
   const equilibriumLatex =
     `E = (Q, P) ${relation} (` +
-    `${formatKpEconomicsDynamicDisplay(semantic.equilibrium.quantity)}, ` +
-    `${formatKpEconomicsDynamicDisplay(semantic.equilibrium.price)})`;
+    `${formatKpDimensionalContinuityDynamicDisplay(semantic.equilibrium.quantity)}, ` +
+    `${formatKpDimensionalContinuityDynamicDisplay(semantic.equilibrium.price)})`;
   const narrative = narrativeFor(frame);
   const equilibriumSpoken =
     `quantity ${exactSpoken(semantic.equilibrium.quantity)} and ` +
@@ -62,21 +66,6 @@ export function createKpEconomicsEquilibriumSynchronizedView(
       `Demand is ${equationSpoken(exactDemandLatex)}. ` +
       `The current equilibrium is ${equilibriumSpoken}. ${narrative.text}`
   });
-}
-
-export function kpEconomicsDynamicDisplayRelation(
-  stage: KpEconomicsEquilibriumRuntimeFrame["stage"]
-): "=" | "\\approx" {
-  return stage === "shift" ? "\\approx" : "=";
-}
-
-export function formatKpEconomicsDynamicDisplay(
-  value: ExactRationalDto
-): string {
-  // Moving readouts need stable visual dimensions; semantic frames and the
-  // nonvisual description retain the exact rational value behind this view.
-  const numeric = Number(value.numerator) / Number(value.denominator);
-  return numeric.toFixed(kpEconomicsDynamicDisplayDecimals);
 }
 
 function narrativeFor(
@@ -156,7 +145,7 @@ function dynamicLinearLatex(input: {
   const slope = exactLatex(input.slope);
   const quantityTerm = slope === "1" ? "Q" : `${slope}Q`;
   return `P ${input.relation} ${
-    formatKpEconomicsDynamicDisplay(input.intercept)
+    formatKpDimensionalContinuityDynamicDisplay(input.intercept)
   } ${input.direction === "plus" ? "+" : "-"} ${quantityTerm}`;
 }
 

@@ -144,11 +144,11 @@ export const kpCrossDomainAnimationApiAudit = Object.freeze([
     id: "promotion.synchronized-model-projection-clock",
     tier: "internal-platform",
     decision: "promote-shared-contract",
-    ownerPaths: [
+    ownerPaths: ["src/animation/synchronized-model-projection.ts"],
+    callerPaths: [
       "src/animation/economics-equilibrium-runtime-frame.ts",
       "src/animation/constant-force-work-energy-runtime-frame.ts"
     ],
-    callerPaths: ["src/editor/graph-svg-viewport.ts"],
     callerAnimationIds: [
       "animation.economics.supply-demand-equilibrium-shift",
       "animation.physics.constant-force-work-energy"
@@ -160,11 +160,12 @@ export const kpCrossDomainAnimationApiAudit = Object.freeze([
     id: "promotion.dimensional-continuity-graph-profile",
     tier: "stable-authoring-facade",
     decision: "promote-shared-contract",
-    ownerPaths: [
+    ownerPaths: ["src/rendering/dimensional-continuity-graph-profile.ts"],
+    callerPaths: [
       "src/rendering/economics-equilibrium-svg.ts",
-      "src/rendering/constant-force-work-energy-svg.ts"
+      "src/rendering/constant-force-work-energy-svg.ts",
+      "src/editor/graph-svg-viewport.ts"
     ],
-    callerPaths: ["src/editor/graph-svg-viewport.ts"],
     callerAnimationIds: [
       "animation.economics.supply-demand-equilibrium-shift",
       "animation.physics.constant-force-work-energy"
@@ -177,10 +178,11 @@ export const kpCrossDomainAnimationApiAudit = Object.freeze([
     tier: "internal-platform",
     decision: "promote-shared-contract",
     ownerPaths: [
-      "src/animation/economics-equilibrium-synchronized-view.ts",
-      "src/animation/constant-force-work-energy-synchronized-view.ts"
+      "src/animation/dimensional-continuity-dynamic-display.ts"
     ],
     callerPaths: [
+      "src/animation/economics-equilibrium-synchronized-view.ts",
+      "src/animation/constant-force-work-energy-synchronized-view.ts",
       "src/rendering/economics-equilibrium-svg.ts",
       "src/rendering/constant-force-work-energy-svg.ts"
     ],
@@ -195,11 +197,11 @@ export const kpCrossDomainAnimationApiAudit = Object.freeze([
     id: "promotion.bounded-integer-query-codec",
     tier: "internal-platform",
     decision: "promote-shared-contract",
-    ownerPaths: [
+    ownerPaths: ["src/editor/bounded-integer-query-parameter.ts"],
+    callerPaths: [
       "src/editor/economics-equilibrium-parameters.ts",
       "src/editor/constant-force-work-energy-parameters.ts"
     ],
-    callerPaths: ["src/main.ts"],
     callerAnimationIds: [
       "animation.economics.supply-demand-equilibrium-shift",
       "animation.physics.constant-force-work-energy"
@@ -224,17 +226,12 @@ export const kpCrossDomainAnimationApiAudit = Object.freeze([
     id: "compatibility.rendering-motif-facades",
     tier: "compatibility-bridge",
     decision: "retire-adjacent-facade",
-    ownerPaths: [
-      "src/rendering/equation-visual-motif-defaults.ts",
-      "src/rendering/executable-motif-grammar.ts",
-      "src/rendering/visual-motif-composition.ts",
-      "src/rendering/visual-motif.ts"
-    ],
+    ownerPaths: ["src/architecture/semantic-animation-compatibility-ledger.ts"],
     callerPaths: [],
     callerAnimationIds: [],
     invariant: "The facades only re-export the canonical animation motif modules and have no production caller.",
     preservationBoundary: "Canonical animation motif exports and neutral renderer-boundary tests remain.",
-    retirementCondition: "Record the removed facade paths and ratchet source imports to the canonical motif owner."
+    retirementCondition: "Satisfied: removed facade paths are recorded and source imports are ratcheted to the canonical motif owner."
   }),
   entry({
     id: "surface.editor-api-catalog",

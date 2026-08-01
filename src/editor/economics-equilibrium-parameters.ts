@@ -9,6 +9,11 @@ import {
   createEconomicsEquilibriumAnimationAsset,
   economicsEquilibriumAnimationId
 } from "../animation/economics-equilibrium-adapter.ts";
+import {
+  normalizeKpBoundedIntegerQueryParameter,
+  readKpBoundedIntegerQueryParameter,
+  writeKpBoundedIntegerQueryParameter
+} from "./bounded-integer-query-parameter.ts";
 
 export const kpEconomicsDemandInterceptParameter = Object.freeze({
   id: "parameter.economics.demand-price-intercept",
@@ -27,22 +32,21 @@ export interface KpEconomicsEquilibriumParameterState {
 export function readKpEconomicsEquilibriumParameters(
   search: string
 ): KpEconomicsEquilibriumParameterState {
-  const raw = new URLSearchParams(search).get(
-    kpEconomicsDemandInterceptParameter.queryKey
+  return createKpEconomicsEquilibriumParameterState(
+    readKpBoundedIntegerQueryParameter({
+      search,
+      parameter: kpEconomicsDemandInterceptParameter
+    })
   );
-  return createKpEconomicsEquilibriumParameterState(raw);
 }
 
 export function createKpEconomicsEquilibriumParameterState(
   value: string | number | null | undefined
 ): KpEconomicsEquilibriumParameterState {
-  const parsed = typeof value === "number" ? value : Number(value);
-  const demandInterceptAfter =
-    Number.isInteger(parsed) &&
-      parsed >= kpEconomicsDemandInterceptParameter.minimum &&
-      parsed <= kpEconomicsDemandInterceptParameter.maximum
-      ? parsed
-      : kpEconomicsDemandInterceptParameter.defaultValue;
+  const demandInterceptAfter = normalizeKpBoundedIntegerQueryParameter({
+    value,
+    parameter: kpEconomicsDemandInterceptParameter
+  });
   return Object.freeze({
     schemaVersion: "kp.economics-equilibrium-parameters.v1",
     demandInterceptAfter
@@ -53,20 +57,11 @@ export function writeKpEconomicsEquilibriumParameters(input: {
   readonly search: string;
   readonly state: KpEconomicsEquilibriumParameterState;
 }): string {
-  const params = new URLSearchParams(input.search);
-  if (
-    input.state.demandInterceptAfter ===
-    kpEconomicsDemandInterceptParameter.defaultValue
-  ) {
-    params.delete(kpEconomicsDemandInterceptParameter.queryKey);
-  } else {
-    params.set(
-      kpEconomicsDemandInterceptParameter.queryKey,
-      String(input.state.demandInterceptAfter)
-    );
-  }
-  const value = params.toString();
-  return value.length === 0 ? "" : `?${value}`;
+  return writeKpBoundedIntegerQueryParameter({
+    search: input.search,
+    parameter: kpEconomicsDemandInterceptParameter,
+    value: input.state.demandInterceptAfter
+  });
 }
 
 export function createParameterizedEconomicsEquilibriumAnimation(
@@ -89,4 +84,3 @@ export function createParameterizedEconomicsEquilibriumAnimation(
   }
   return Object.freeze({ state, model, animation });
 }
-
