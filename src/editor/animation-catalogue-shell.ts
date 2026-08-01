@@ -59,7 +59,8 @@ export function renderKpAnimationCatalogueShell(input: {
       <div class="kp-animation-catalogue-shell__stage-host" data-kp-animation-catalogue-stage data-kp-animation-catalogue-stage-persistent="true">
         ${renderKpEditorAnimationPlayerShell({
           descriptor: input.descriptor,
-          player: input.player
+          player: input.player,
+          chrome: "catalogue"
         })}
       </div>
     </section>

@@ -91,6 +91,41 @@ test("editor animation player shell renders an accessible surface and declared c
   assert.match(html, /Plan revision 0/);
 });
 
+test("catalogue chrome renders only universal transport while retaining keyboard laws", () => {
+  const catalog = createKpAnimationAssets();
+  const descriptor = createKpEditorAnimationLibrary().find(
+    (candidate) => candidate.animationId === "animation.linear-solve.solve-x"
+  );
+  const animation = catalog.find(
+    (candidate) => candidate.id === descriptor?.animationId
+  );
+  assert.ok(descriptor);
+  assert.ok(animation);
+
+  const html = renderKpEditorAnimationPlayerShell({
+    descriptor,
+    player: createKpEditorAnimationPlayerState({
+      descriptor,
+      animation,
+      catalog
+    }),
+    chrome: "catalogue"
+  });
+
+  assert.match(html, /data-action="toggle-editor-animation"/);
+  assert.match(html, /data-action="seek-editor-animation"/);
+  assert.doesNotMatch(
+    html,
+    /data-action="(?:step|rewind|reset)-editor-animation"/
+  );
+  assert.doesNotMatch(html, /data-kp-editor-animation-authoring-controls/);
+  assert.doesNotMatch(html, /data-kp-editor-animation-gestalt-diagnostics/);
+  assert.match(
+    html,
+    /aria-keyshortcuts="Space ArrowLeft ArrowRight Home End R"/
+  );
+});
+
 test("editor document mounts the selected animation player shell", () => {
   const descriptor = createKpEditorAnimationLibrary().find(
     (candidate) => dispatchKpEditorAnimationSurface(candidate).kind === "graph"

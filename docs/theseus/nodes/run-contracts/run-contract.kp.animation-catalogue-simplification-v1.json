@@ -149,7 +149,8 @@
     {
       "id": "s14",
       "title": "Reduce universal controls to transport",
-      "status": "planned"
+      "summary": "Added an opt-in compact catalogue projection of the established player: the default surface now renders only Play/Pause and the scrubber with percentage. Extra transport buttons, settings, diagnostics, and authoring chrome remain available in the unchanged full editor projection, while the focusable player's Space, arrow, Home/End, and R keyboard laws and deterministic runtime remain intact.",
+      "status": "complete"
     },
     {
       "id": "s15",

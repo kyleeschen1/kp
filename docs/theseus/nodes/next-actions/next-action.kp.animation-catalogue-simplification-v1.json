@@ -116,6 +116,14 @@
     {
       "kind": "file",
       "path": "tests/animation-catalogue-shell.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-player-shell.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-animation-player-shell.test.ts"
     }
   ],
   "dependsOn": {
@@ -500,6 +508,27 @@
       "status": "passed",
       "scope": "slice s13 player host types",
       "checkedAt": "2026-08-01T04:28:40.210Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-animation-player-shell.test.ts tests/animation-catalogue-shell.test.ts tests/kp-editor-animation-playback-session.test.ts tests/kp-animation-runtime-laws.test.ts",
+      "status": "passed",
+      "scope": "slice s14 compact transport and keyboard/runtime preservation",
+      "checkedAt": "2026-08-01T04:32:38.615Z",
+      "notes": "17 tests passed; catalogue chrome exposes only toggle and seek controls, full editor chrome is unchanged, keyboard shortcuts remain declared, and seek/step/reset/rewind runtime laws pass."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s14 minimal transport visual smoke",
+      "checkedAt": "2026-08-01T04:32:39.456Z",
+      "notes": "Desktop capture showed solve-x filling the center with only Play and a scrubber/percentage in the visible toolbar; no settings, extra buttons, diagnostics, or authoring panels remained."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s14 player chrome types",
+      "checkedAt": "2026-08-01T04:32:40.290Z",
       "notes": "Application, Node, test, and domain TypeScript projects passed."
     }
   ],

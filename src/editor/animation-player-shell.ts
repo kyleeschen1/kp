@@ -14,14 +14,18 @@ import {
   kpRestrainedEditorialStyleRef
 } from "../animation/gestalt-base-styles.ts";
 
+export type KpEditorAnimationPlayerChrome = "full" | "catalogue";
+
 export function renderKpEditorAnimationPlayerShell(input: {
   readonly descriptor: KpEditorAnimationDescriptor;
   readonly player?: KpEditorAnimationPlayerState | undefined;
   readonly authoring?: KpEditorAnimationAuthoringState | undefined;
+  readonly chrome?: KpEditorAnimationPlayerChrome | undefined;
 }): string {
   const { descriptor } = input;
   const player = input.player;
   const authoring = input.authoring ?? createKpEditorAnimationAuthoringState();
+  const compact = input.chrome === "catalogue";
   const descriptorId = player?.descriptorId ?? descriptor.id;
   const animationId = player?.animationId ?? descriptor.animationId;
   const playbackStatus = player?.playbackStatus ?? "idle";
@@ -52,9 +56,9 @@ export function renderKpEditorAnimationPlayerShell(input: {
           ${hasControl("playback") ? `
             <button type="button" data-action="toggle-editor-animation" aria-label="${toggleLabel} animation">${toggleLabel}</button>
           ` : ""}
-          ${hasControl("step") ? `<button type="button" data-action="step-editor-animation" aria-label="Step animation forward">Step</button>` : ""}
-          ${hasControl("rewind") ? `<button type="button" data-action="rewind-editor-animation" aria-label="Rewind animation">Rewind</button>` : ""}
-          ${hasControl("playback") ? `<button type="button" data-action="reset-editor-animation" aria-label="Reset animation">Reset</button>` : ""}
+          ${compact ? "" : hasControl("step") ? `<button type="button" data-action="step-editor-animation" aria-label="Step animation forward">Step</button>` : ""}
+          ${compact ? "" : hasControl("rewind") ? `<button type="button" data-action="rewind-editor-animation" aria-label="Rewind animation">Rewind</button>` : ""}
+          ${compact ? "" : hasControl("playback") ? `<button type="button" data-action="reset-editor-animation" aria-label="Reset animation">Reset</button>` : ""}
         </div>
         ${hasControl("scrubber") ? `
           <label class="editor-animation-player__scrubber">
@@ -63,8 +67,8 @@ export function renderKpEditorAnimationPlayerShell(input: {
             <output data-kp-editor-animation-progress-label>${progressPercent}%</output>
           </label>
         ` : ""}
-        <p class="editor-animation-player__status" data-kp-editor-animation-status-label aria-live="polite">${statusLabel(playbackStatus, direction)}</p>
-        <label class="editor-animation-player__accessibility">Presentation
+        <p class="editor-animation-player__status${compact ? " editor-animation-player__visually-hidden" : ""}" data-kp-editor-animation-status-label aria-live="polite">${statusLabel(playbackStatus, direction)}</p>
+        ${compact ? "" : `<label class="editor-animation-player__accessibility">Presentation
           <select data-kp-editor-animation-accessibility-control aria-label="Animation accessibility presentation">
             <option value="full-motion">full motion</option>
             <option value="system" selected>system preference</option>
@@ -100,11 +104,11 @@ export function renderKpEditorAnimationPlayerShell(input: {
             <option value="elevated">elevated 2.5D</option>
             <option value="no-depth">no depth</option>
           </select>
-        </label>
-        <output data-kp-editor-animation-narration aria-live="polite">Animation checkpoint</output>
+        </label>`}
+        <output class="${compact ? "editor-animation-player__visually-hidden" : ""}" data-kp-editor-animation-narration aria-live="polite">Animation checkpoint</output>
       </div>
-      ${renderGestaltDiagnostics()}
-      ${renderAuthoringControls(authoring)}
+      ${compact ? "" : renderGestaltDiagnostics()}
+      ${compact ? "" : renderAuthoringControls(authoring)}
     </section>
   `;
 }
