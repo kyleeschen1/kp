@@ -40,6 +40,12 @@ import {
   kpVerifiedPlaceValueAdditionReleaseApproval,
   type KpVerifiedPlaceValueAdditionReleaseApproval
 } from "../architecture/place-value-addition-release-approval.ts";
+import {
+  isKpVerifiedCrossDomainSynchronizedModelReleaseApproval,
+  kpVerifiedEconomicsEquilibriumReleaseApproval,
+  kpVerifiedPhysicsWorkEnergyReleaseApproval,
+  type KpVerifiedCrossDomainSynchronizedModelReleaseApproval
+} from "../architecture/cross-domain-synchronized-model-release-approval.ts";
 
 export type KpAnimationLibraryDisplayRepresentationKind =
   | "reader"
@@ -105,6 +111,11 @@ export interface KpCanonicalFormatPromotionEvidence {
         readonly kind: "place-value-release";
         readonly approval?:
           KpVerifiedPlaceValueAdditionReleaseApproval | undefined;
+      }
+    | {
+        readonly kind: "cross-domain-synchronized-model-release";
+        readonly approval?:
+          KpVerifiedCrossDomainSynchronizedModelReleaseApproval | undefined;
       };
   readonly exclusiveCanonicalPaint: boolean;
   readonly requiredMotifParity: boolean;
@@ -156,6 +167,18 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
     "animation.place-value-addition.278-plus-156",
     completePlaceValueAdditionCanonicalFormatEvidence(
       kpVerifiedPlaceValueAdditionReleaseApproval
+    )
+  ],
+  [
+    "animation.economics.supply-demand-equilibrium-shift",
+    completeCrossDomainSynchronizedModelCanonicalFormatEvidence(
+      kpVerifiedEconomicsEquilibriumReleaseApproval
+    )
+  ],
+  [
+    "animation.physics.constant-force-work-energy",
+    completeCrossDomainSynchronizedModelCanonicalFormatEvidence(
+      kpVerifiedPhysicsWorkEnergyReleaseApproval
     )
   ],
   [
@@ -577,7 +600,36 @@ function hasKpCanonicalFormatExecutionAuthority(
         isKpVerifiedPlaceValueAdditionPromotionReadiness(approval.readiness)
       );
     }
+    case "cross-domain-synchronized-model-release": {
+      const approval = evidence.executionAuthority.approval;
+      return (
+        isKpVerifiedCrossDomainSynchronizedModelReleaseApproval(approval) &&
+        approval.animationId === evidence.animationId &&
+        approval.releaseDecision === "passed" &&
+        approval.sharedContractCount === 4
+      );
+    }
   }
+}
+
+function completeCrossDomainSynchronizedModelCanonicalFormatEvidence(
+  approval: KpVerifiedCrossDomainSynchronizedModelReleaseApproval
+): KpCanonicalFormatPromotionEvidence {
+  return Object.freeze({
+    animationId: approval.animationId,
+    executionAuthority: Object.freeze({
+      kind: "cross-domain-synchronized-model-release" as const,
+      approval
+    }),
+    exclusiveCanonicalPaint: true,
+    requiredMotifParity: true,
+    responsiveRuntimeGates: true,
+    humanReviewApproved: true,
+    compatibilityPaintRetired: true,
+    releaseGatePassed: true,
+    presentationCoverage: "verified-animated",
+    evidenceSourceIds: approval.evidenceSourceIds
+  });
 }
 
 function completeFractionCompositionCanonicalFormatEvidence(

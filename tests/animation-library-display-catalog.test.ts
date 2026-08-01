@@ -95,6 +95,22 @@ test("place-value addition exposes one focused ported host after review", () => 
   );
 });
 
+test("approved synchronized-model exemplars report ported canonical format", () => {
+  const catalog = createKpAnimationLibraryDisplayCatalog();
+  const status = (animationId: string) =>
+    catalog.find((entry) => entry.animationId === animationId)
+      ?.canonicalFormat;
+
+  assert.equal(
+    status("animation.economics.supply-demand-equilibrium-shift"),
+    "ported"
+  );
+  assert.equal(
+    status("animation.physics.constant-force-work-energy"),
+    "ported"
+  );
+});
+
 test("reviewed fraction composition reports its certified canonical format", () => {
   const entry = createKpAnimationLibraryDisplayCatalog().find(
     ({ animationId }) =>

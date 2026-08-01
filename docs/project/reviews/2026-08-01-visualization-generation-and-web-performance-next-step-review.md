@@ -1,7 +1,7 @@
 # Visualization Generation And Web Performance Next-Step Review
 
 Date: 2026-08-01
-Status: implemented at the economics checkpoint; human visual review pending
+Status: closed by the approved economics-and-physics successor
 
 ## Recommendation
 

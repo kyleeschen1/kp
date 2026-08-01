@@ -36,19 +36,21 @@ The catalogue-first simplification is recorded in
 living boundary in `threads/animation-catalogue.md` and the approval-gated plan
 in
 `reviews/2026-07-31-animation-catalogue-simplification-next-step-review.md`.
-That loop is complete: the default shell is approved, all 33 concrete assets
-load, 31 paint natively, two expose the missing programming adapter, and none
-use an iframe. The approved successor in
+That loop is complete: the default shell is approved, and the approved
+successor in
 `reviews/2026-08-01-catalogue-curation-cross-domain-promotion-long-loop-proposal.md`
-has now delivered persistent catalogue switching, an approved solve-x
-compact-stage exemplar, compatible equation-surface centering, and bounded
-curation without inferred dispositions. The exact Supply and demand exemplar
-has reached its human checkpoint, but its current visual treatment was returned
-for revision under the accepted dimensional-continuity graph language in
-`decisions/2026-08-01-kp-dimensional-continuity-graph-and-diagram-language.md`.
-KP revises and re-reviews that same bounded exemplar, then continues to
-constant-force work-energy and only afterward consolidates caller-proven APIs
-or motifs.
+has delivered persistent catalogue switching, an approved solve-x compact
+stage, compatible equation-surface centering, bounded curation, and two exact
+human-approved synchronized-model exemplars. The catalogue now has 35 concrete
+assets: 33 paint natively, two expose the missing programming adapter, none use
+an iframe, and ordinary selection stays inside one shell. Economics and physics
+promote four shared contracts—reversible projection progress, bounded integer
+query encoding, fixed moving-number display, and the versioned
+dimensional-continuity graph profile—while domain truth, narrative, geometry,
+and choreography remain local. Four zero-caller rendering motif facades are
+retired; their canonical animation-domain owners remain. Release evidence and
+deliberate deferrals are closed in
+`reviews/2026-08-01-catalogue-curation-cross-domain-promotion-closeout.md`.
 
 The symbolic manipulation family plan recorded in
 `decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`
@@ -125,19 +127,19 @@ failed generic invariant.
 The persistent promotion order is now owned by
 `threads/animation-library-promotion.md` and accepted by
 `decisions/2026-07-28-kp-stable-animation-promotion-order.md`. Exact fraction
-quantity identity and place-value arithmetic are promoted. The bounded Supply
-and demand equilibrium shift remains the first unresolved promotion, followed
-by the bounded constant-force work-energy exemplar and the recorded later-domain
-sequence. The completed catalogue audit did not recompute this order; the
-approved successor resumes the first two unresolved rows after one bounded
-catalogue UX/curation checkpoint. Older sequence documents remain rationale but
-no longer independently determine rank.
+quantity identity, place-value arithmetic, Supply and demand equilibrium, and
+constant-force work-energy are promoted. Vector dot projection is the first
+unresolved promotion. The completed catalogue and API audit did not recompute
+this order; older sequence documents remain rationale but no longer
+independently determine rank.
 
 The platform milestones between those promotions are recorded in
 `decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md`.
-After the first four visible exemplars, KP will declare public API tiers and
-bridge the existing verified linear-equation generator into canonical animation
-assets. That bridge carries a deterministic explanation spine and approved
+After the first four visible exemplars, KP declares public API tiers and then
+bridges the existing verified linear-equation generator into canonical animation
+assets. The tier declaration is now complete through the source-backed
+cross-domain API audit. The bridge remains separately approval-gated and
+carries a deterministic explanation spine and approved
 vocabulary before any LLM editorial service is introduced. Model-generated
 wording remains a reviewable candidate layer over verified claims, never a
 source of mathematical truth or a live playback dependency. Context-specific
@@ -174,37 +176,39 @@ The catalogue hosts the concrete registry directly, switches assets inside one
 persistent shell, and has reduced the observed gap to one absent programming
 adapter shared by two rows. Human review approved the solve-x compact centered
 stage; compatible equation centering passed radical and diagram pressure. The
-bounded curation record preserves all 33 rows, assigns no human dispositions,
+bounded curation record preserves all 35 rows, assigns no human dispositions,
 and treats Jacobian/Hessian as a diagnostic/retirement candidate whose unique
 semantic and conformance evidence must be replaced before deletion.
 
 The exact economics model, synchronized view, native SVG host, parameters,
 accessibility, seek/rewind, and revised visual capture are complete and human
-approved. The local dimensional-continuity profile gives the 2D graph a warm
+approved. Physics supplies the structurally different graph-and-diagram caller.
+Their shared dimensional-continuity profile gives both 2D views a warm
 orthographic plane, sparse construction grid, role-based line hierarchy, KaTeX
-for every mathematical label, fixed two-decimal moving readouts, and a smaller
-equilibrium marker without changing the semantic or runtime boundary. Static
-ticks remain integers; exact rationals remain authoritative behind rounded
-display values.
+for every mathematical label, and fixed two-decimal moving readouts without
+changing the semantic or runtime boundary. Static ticks remain integers; exact
+rationals remain authoritative behind rounded display values. Domain geometry,
+equations, narrative, units, and choreography remain local.
 
 Consumer/producer-surplus shading is postponed as an optional follow-on, and
-deadweight loss is reserved for a distinct inefficiency model. The active
-contract now continues to the exact constant-force work-energy second caller.
+deadweight loss is reserved for a distinct inefficiency model. The exact
+constant-force work-energy second caller is promoted.
 
-The repaired route-specific performance audit now completes. It proves no
-Three.js request, CLS near 0.025, 26/42 ms normal/constrained interaction paint,
-and no regression. It also records rather than hides 411,605 initial script
-bytes, 3.688 s constrained LCP, and 33.2 ms constrained frame p95 as target
-debt. Main-host loading optimization remains bounded to the later
-caller-proven consolidation/release work; it does not interrupt this human
-visual checkpoint with a broad platform detour.
+The release rerun of the route-specific performance audit proves no Three.js
+request, CLS near 0.025, a 45.6 ms constrained interaction-paint proxy, and no
+regression. It also records rather than hides 422,832 initial script bytes and
+3.712 s constrained LCP as product-target debt. Constrained frame p95 is now
+inside its 33 ms target at 32.5 ms. Main-host loading optimization remains a
+separately bounded successor concern rather than hidden work inside the closed
+visual promotion.
 
-The generator, editorial-text, API-tier, motif-versioning, and pruning
+The generator, editorial-text, motif-versioning, and pruning
 recommendations are durable platform milestones in
 `threads/animation-library-promotion.md`; they are not permission to interrupt
-the first four content promotions with another broad infrastructure program.
-The verified problem-to-animation bridge begins after rank 4 and before the
-vector/matrix tranche.
+content promotions with another broad infrastructure program. API-tier
+classification is complete. The verified problem-to-animation bridge remains
+the separately approval-gated platform milestone before the vector/matrix
+tranche.
 
 The migration remains complexity-negative replacement work. Semantic traces,
 lineage, clocks, native accessibility, authoring guidance, and accepted legacy
@@ -215,12 +219,10 @@ discarding unmigrated catalog coverage.
 
 The durable domain-promotion order and current status remain owned by
 `threads/animation-library-promotion.md`. Approved Theseus plan revision
-`plan-revision.kp.v19` mirrors that order. Exact-fraction quantity and
-place-value addition, `278 + 156 = 434`, are promoted. The bounded Supply and
-demand equilibrium shift remains the next domain row and is authorized inside
-`run-contract.kp.catalogue-curation-cross-domain-promotion-v1` after the
-catalogue UX/curation checkpoint. Constant-force work-energy follows as the
-structurally different synchronized-model caller. Human exemplar approval
+`plan-revision.kp.v20` mirrors that order. Exact-fraction quantity, place-value
+addition, Supply and demand equilibrium, and constant-force work-energy are
+promoted. Project one vector onto another is the first unresolved row and
+remains planning-only until a separately reviewed contract is approved. Human exemplar approval
 remains mandatory before each subjective visual generalization, and existing
 standalone examples remain reference evidence rather than automatically
 promoted reader products.
@@ -449,9 +451,9 @@ Build the verified learning layer:
   animation motifs.
 
 The accepted cross-domain tutorial kernel remains retained platform composition
-work. Its bounded economics and physics exemplars are active through the
-promotion contract, while full curriculum generation, learner memory, and
-course-scale assessment remain parked under this phase.
+work. Its bounded economics and physics exemplars are promoted, while full
+curriculum generation, learner memory, and course-scale assessment remain
+parked under this phase.
 
 ### Phase 9: Export And Embed
 
@@ -466,13 +468,14 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Use the approved exact Supply and demand equilibrium shift and repaired
-   route-specific performance proof as the first dimensional-continuity caller;
-   now build one exact constant-force work-energy second caller without domain
-   engines.
-2. Classify API tiers and extract or version only seams proven by both callers;
-   prune obsolete compatibility paths only beside their last-caller migration.
-3. Preserve the approved persistent catalogue shell and bounded curation;
+1. Keep Project one vector onto another as the first unresolved promotion and
+   prepare a separately reviewed successor without treating planning as
+   implementation authority.
+2. Reconcile the recorded generated-problem bridge and deterministic
+   explanation-spine gate before activating rank 5; M1 API-tier classification
+   is complete through the cross-domain audit.
+3. Preserve the approved persistent catalogue shell, four caller-proven shared
+   contracts, and bounded curation;
    resume human disposition review later in batches without visible ontology
    or filter machinery.
 4. Keep programming trace, publication, curriculum, public website, and broad
@@ -498,5 +501,5 @@ Package executable animations as semantic capsules:
   roadmap execution.
 - The public website, full curriculum, learner/teacher product systems,
   programming execution trace, and broad LLM editorial work remain deferred.
-  Economics and physics are now bounded approved exemplars inside the active
-  contract, not permission for domain engines or curriculum expansion.
+  Economics and physics are promoted bounded exemplars, not permission for
+  domain engines or curriculum expansion.

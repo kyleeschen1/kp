@@ -2,10 +2,10 @@
 
 Status: active-supporting
 Last Updated: 2026-08-01
-Current Next Action: Support the approved catalogue UX and curation checkpoint,
-then deliver the bounded Supply and demand equilibrium shift and constant-force
-work-energy exemplars as two synchronized-model-view callers. No domain engine
-or generalized motif is authorized before exemplar review.
+Current Next Action: Preserve the promoted economics and physics
+synchronized-model callers and their bounded shared profile while rank 5 and
+the generated-session platform gate remain separately approval-gated. No
+domain engine or universal renderer is authorized.
 
 ## Goal
 
@@ -24,11 +24,11 @@ representation choices. The active catalogue thread owns immediate work while
 this thread retains the tutorial, model, and synchronized-view contracts.
 
 The current animation-promotion rank and progress are owned by
-`threads/animation-library-promotion.md`. Exact fraction quantity and
-place-value addition are promoted. The bounded economics equilibrium shift is
-the first unresolved domain rank, followed by constant-force work-energy. The
-completed catalogue host audit and approved successor now authorize those two
-exemplars after one catalogue UX/curation checkpoint. Older symbolic,
+`threads/animation-library-promotion.md`. Exact fraction quantity, place-value
+addition, economics equilibrium, and constant-force work-energy are promoted.
+Vector dot projection is the first unresolved domain rank. The completed
+cross-domain loop also classified API tiers, promoted four narrow two-caller
+contracts, and retired four zero-caller rendering facades. Older symbolic,
 capability-pressure, and six-loop records retain rationale but do not
 independently override this stable ledger.
 
@@ -47,9 +47,10 @@ The accepted composition sequence distinguishes three reusable environments:
 equation succession, persistent workspace algorithms, and synchronized model
 views. Work advances by perfecting one exemplar, extracting only the invariant
 it actually falsifies, proving that seam with a second caller, and pruning the
-superseded path beside the migration. Place-value addition currently pressures
-the persistent-workspace environment; economics and physics will pressure
-synchronized model views; programming will use the same coordination laws but
+superseded path beside the migration. Place-value addition proved the
+persistent-workspace environment; economics and physics proved synchronized
+model views and their bounded shared seams; programming may later use the same
+coordination laws but
 retain subject-native trace, queue, and graph operations. This sequence is
 recorded in
 `decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md`.
@@ -106,10 +107,9 @@ and foundation closeout are recorded in
 `reviews/2026-07-26-kp-six-loop-library-expansion-direction.md`, and
 `reviews/2026-07-27-radical-reader-promotion-kit-closeout.md`.
 
-FTC remains a valuable reviewable artifact. BFS and programming stay parked,
-while one bounded economics equilibrium shift and one bounded constant-force
-work-energy exemplar move into the near-term promotion ledger. This does not
-authorize economics or physics engines.
+FTC remains a valuable reviewable artifact. BFS and programming stay parked.
+The bounded economics and physics exemplars are promoted catalogue assets, not
+authorization for economics or physics engines.
 
 The older post-checkpoint sequence remains rationale for symbolic and
 responsive-attention requirements, but it is superseded for promotion rank by

@@ -2,11 +2,11 @@
 
 Status: active-supporting
 Last Updated: 2026-08-01
-Current Next Action: Preserve the approved persistent shell and bounded
-surface-aware centering while the Supply and demand equilibrium shift becomes
-the active domain exemplar. Resume batched human asset review later without
-adding visible ontology or disposition machinery. Programming execution trace
-remains deferred.
+Current Next Action: Preserve the approved persistent shell, bounded
+surface-aware centering, and two promoted synchronized-model exemplars while
+the promotion thread prepares rank 5. Resume batched human asset review later
+without adding visible ontology or disposition machinery. Programming
+execution trace remains deferred.
 
 ## Goal
 
@@ -40,7 +40,7 @@ playhead, parameters, tuning, render ownership, viewport, build identity, and
 one bounded selected-stage screenshot. The bitmap is attached to the same
 immutable note; it does not create a parallel review history.
 
-The catalogue-wide pass now shows 31 painted assets and two honest programming
+The catalogue-wide pass now shows 33 painted assets and two honest programming
 adapter gaps, with zero load failures and zero iframes. `Ready`, `Review`, and
 `Broken` remain derived health states, not promotion claims. Every human
 disposition is still `Unreviewed`. The seam atlas suggests questions and an
@@ -48,10 +48,10 @@ evidence-ranked programming tranche, but does not assign dispositions or
 authorize a port.
 
 The successor loop removed full-document navigation between catalogue assets,
-approved and pressure-tested the solve-x presentation, and completed bounded
-curation without assigning human dispositions. It now resumes the stable
-domain order through economics and physics before consolidating caller-proven
-APIs or motifs. The Jacobian/Hessian comparison is recorded as a
+approved and pressure-tested the solve-x presentation, promoted exact
+economics and physics callers, extracted four caller-proven contracts, and
+completed bounded curation without assigning human dispositions. The
+Jacobian/Hessian comparison is recorded as a
 diagnostic/retirement candidate, but its semantic fixture and conformance value
 remain until real callers replace them. The provisional incorrect substitution
 remains an explicitly disclosed epistemic negative example pending human
@@ -91,14 +91,9 @@ content review.
 
 ## Open Questions
 
-- Which existing registry source is the smallest durable authority for the
-  concrete loadable index once false playability is separated from asset
-  existence?
-- Which existing review-capture and context sources can move behind Details
-  without compatibility duplication?
 - Which asset controls qualify as semantic Parameters versus temporary Tuning?
-- What does the catalogue-wide health distribution reveal about the next
-  adapter or canonical port after solve-x?
+- Which remaining catalogue rows should receive explicit human Keep, Repair,
+  Merge, or Retire dispositions in the first bounded review batch?
 - Which old editor, workbench, dashboard, and API routes still carry unique
   diagnostic value after the first inventory?
 

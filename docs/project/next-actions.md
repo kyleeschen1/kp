@@ -7,18 +7,18 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-1. Execute the approved catalogue curation and cross-domain promotion contract:
-   the persistent catalogue shell, solve-x compact-stage exemplar, and bounded
-   curation are complete; now deliver the exact Supply and demand equilibrium
-   shift and constant-force work-energy exemplars behind their human
-   checkpoints.
-2. After both synchronized-model callers are approved, declare stable,
-   internal, and experimental API tiers and extract only shared invariants
-   proven by those callers. Version a motif only when an intentional shared
-   redesign has human approval.
-3. Retire adjacent compatibility paths only when the same bounded change proves
-   their last caller migrated. Keep Jacobian/Hessian semantic and conformance
-   evidence even if its catalogue presentation is demoted.
+1. Keep Project one vector onto another as the first unresolved promotion and
+   prepare a separately reviewed successor contract. Before activating rank 5,
+   explicitly reconcile the recorded verified problem-to-animation and
+   deterministic-explanation platform gate; planning status alone authorizes
+   no implementation.
+2. Treat the cross-domain API audit as the completed M1 tier declaration:
+   stable authoring facades, internal platform contracts, domain adapters,
+   experimental surfaces, compatibility bridges, and retirement candidates
+   remain source-backed and narrow.
+3. Preserve the four promoted shared contracts and continue pruning only beside
+   a last-caller migration. Keep Jacobian/Hessian semantic and conformance
+   evidence even if its catalogue presentation is later retired.
 4. Introduce a minimal hand-authored `ExplanationSpineV1`, learner state,
    vocabulary contract, and verified claim references with the first generated
    solve-x session.

@@ -1,10 +1,10 @@
 {
-  "id": "plan-revision.kp.v19",
+  "id": "plan-revision.kp.v20",
   "kind": "plan-revision",
-  "title": "Kinetic Press content-led promotion roadmap v19",
-  "status": "superseded",
+  "title": "Kinetic Press content-led promotion roadmap v20",
+  "status": "active",
   "domain": "kp",
-  "summary": "Close promoted rank-2 place-value addition and make the bounded economics equilibrium-shift proposal the planning-only frontier.",
+  "summary": "Promote economics and physics, close the observed API-tier milestone, and hold vector dot projection as the planning-only frontier.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -105,6 +105,21 @@
       "kind": "file",
       "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v18.json",
       "summary": "Approved predecessor retained for rationale and history."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v19.json",
+      "summary": "Approved predecessor retained for rationale and history."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-01-cross-domain-api-motif-audit.md",
+      "summary": "Source-backed API tiers, caller-proven seams, and bounded retirement decisions."
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/cross-domain-synchronized-model-release-approval.ts",
+      "summary": "Nominal release authority for the two approved synchronized-model exemplars."
     }
   ],
   "affects": [
@@ -114,15 +129,16 @@
     "run-contract.kp.executable-motif-perceptual-continuity-repair-v0",
     "run-contract.kp.place-value-addition-promotion-v0",
     "run-contract.kp.place-value-addition-promotion-v1",
-    "run-contract.kp.place-value-persistent-workspace-repair-v2"
+    "run-contract.kp.place-value-persistent-workspace-repair-v2",
+    "run-contract.kp.catalogue-curation-cross-domain-promotion-v1"
   ],
   "progress": {
     "state": "partial",
-    "summary": "Exact fraction and place-value addition are promoted. Economics equilibrium-shift planning is active, but implementation requires a separately reviewed run contract."
+    "summary": "Exact fraction, place-value addition, economics equilibrium, and physics work-energy are promoted. API tiers and four two-caller seams are recorded. Vector dot projection is the first unresolved planning row; implementation requires a separately reviewed run contract."
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
-    "revision": 19,
+    "revision": 20,
     "objective": "Grow one canonical, composable semantic animation library through a stable exemplar order, inserting API, verified problem-generation, deterministic explanation, safe output, and optional LLM editorial gates only where recorded caller pressure justifies them.",
     "assumptions": [
       {
@@ -198,7 +214,7 @@
       {
         "id": "composition-environment-sequence",
         "statement": "KP pressures equation succession, persistent workspace algorithms, and synchronized model views in that order, extracting only failed generic invariants before returning to concrete exemplars.",
-        "status": "active"
+        "status": "validated"
       }
     ],
     "phases": [
@@ -462,7 +478,10 @@
         "title": "Economics and parametric models",
         "objective": "Link equations, curves, parameter changes, intersections, and narrative interpretation in supply-demand models.",
         "horizon": "now",
-        "status": "active",
+        "status": "complete",
+        "evidence": [
+          "run-contract.kp.catalogue-curation-cross-domain-promotion-v1"
+        ],
         "topic": "Cross-domain · Economics",
         "architectureBenefit": "Parameterized graph systems and narrative-to-model correspondence.",
         "rationale": "Economics reuses graph and intersection semantics with domain-specific explanatory prose.",
@@ -472,8 +491,11 @@
         "id": "physics-work-energy",
         "title": "Physics work and energy",
         "objective": "Synchronize force, displacement, energy equations, graphs, and diagrams through a conserved physical model.",
-        "horizon": "next",
-        "status": "planned",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "run-contract.kp.catalogue-curation-cross-domain-promotion-v1"
+        ],
         "topic": "Cross-domain · Physics",
         "architectureBenefit": "Quantity conservation across symbolic, graph, and spatial representations.",
         "rationale": "Physics combines unit-aware arithmetic, calculus, diagrams, and conservation after those primitives mature.",
@@ -483,8 +505,11 @@
         "id": "public-api-tiers",
         "title": "Public API tiers",
         "objective": "Declare stable authoring, internal compiler and reader, and experimental API surfaces before generated-problem callers become durable integrations.",
-        "horizon": "next",
-        "status": "planned",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "run-contract.kp.catalogue-curation-cross-domain-promotion-v1"
+        ],
         "topic": "Platform · API",
         "architectureBenefit": "Caller stability without freezing internal rendering evolution.",
         "rationale": "The first externalized generator bridge should consume an intentional facade.",
@@ -516,8 +541,8 @@
         "id": "vector-dot-projection",
         "title": "Vector and dot-product projection",
         "objective": "Coordinate vector components, geometric projection, magnitude, angle, and dot-product notation.",
-        "horizon": "next",
-        "status": "planned",
+        "horizon": "now",
+        "status": "active",
         "topic": "Linear algebra · Vectors",
         "architectureBenefit": "Coordinate-to-geometry identity across multiple views.",
         "rationale": "It pressure-tests persistent identity between symbolic components and spatial objects.",
@@ -800,12 +825,11 @@
       }
     ],
     "approval": {
-      "status": "superseded",
+      "status": "approved",
       "decidedAt": "2026-08-01T21:52:35.448Z",
       "decidedBy": "user",
-      "rationale": "Superseded by plan-revision.kp.v20."
+      "rationale": "The approved 30-slice catalogue and cross-domain loop promoted economics and physics, completed the observed API-tier milestone, extracted four two-caller contracts, and left vector dot projection as the next planning-only frontier."
     },
-    "supersedes": "plan-revision.kp.v18",
-    "supersededBy": "plan-revision.kp.v20"
+    "supersedes": "plan-revision.kp.v19"
   }
 }

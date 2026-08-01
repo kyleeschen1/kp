@@ -2,11 +2,11 @@
 
 Status: active
 Last Updated: 2026-08-01
-Current Next Action: Use the human-approved bounded Supply and demand
-equilibrium shift at rank 3 as the first dimensional-continuity caller and
-build constant-force work-energy at rank 4. The catalogue UX and bounded
-curation checkpoint is complete. Consolidate API tiers and motifs only after
-both callers provide evidence.
+Current Next Action: Keep Project one vector onto another as the first
+unresolved promotion at rank 5 while preparing a separately reviewed successor
+contract. Ranks 3 and 4, API classification, the two-caller
+dimensional-continuity profile, and adjacent facade pruning are complete; none
+of this automatically authorizes rank-5 implementation.
 
 ## Goal
 
@@ -30,11 +30,11 @@ Short harvest promotions may run after their prerequisite frontier exemplar is
 approved. They expand a proven family without changing the frontier order.
 
 The catalogue-first decision paused execution without recomputing this order.
-The completed host audit found 31 painted assets, two programming gaps, no load
-failures, and no iframe ports. The approved successor performs one bounded
-catalogue UX/curation checkpoint and then resumes ranks 3 and 4 in the same
-typed contract. Catalogue health and disposition remain separate evidence and
-do not reorder the domain ranks.
+The completed successor leaves 33 painted assets, two programming gaps, no load
+failures, and no iframe ports. It approved the catalogue UX, promoted ranks 3
+and 4, and consolidated only the shared seams those callers proved. Catalogue
+health and disposition remain separate evidence and do not reorder the domain
+ranks.
 
 ## Completed Foundation
 
@@ -61,9 +61,9 @@ release gate.
 | ---: | --- | --- | --- | --- | --- |
 | 1 | `kp.promotion.exact-fraction-quantity` | `1/3 + 1/6 = 1/2` across KaTeX, partitioned circles, bars or areas, and a number line | promoted | `animation.exact-fraction-quantity.third-plus-sixth` | Exact quantity identity across symbolic and concrete views |
 | 2 | `kp.promotion.place-value-addition` | `278 + 156 = 434` | promoted | `animation.place-value-addition.278-plus-156` | Arithmetic demo breadth; exchange with persistent place-value provenance |
-| 3 | `kp.promotion.economics-equilibrium` | Supply and demand equilibrium shift | next | — | Early versatility demo; parameter, curve, intersection, and narrative correspondence |
-| 4 | `kp.promotion.physics-work-energy` | Constant-force work and kinetic-energy change | queued | — | Early versatility demo; units and conservation across equation, graph, and diagram without a physics engine |
-| 5 | `kp.promotion.vector-dot-projection` | Project one vector onto another | planned | — | Symbolic-to-spatial identity and indexed component pairing |
+| 3 | `kp.promotion.economics-equilibrium` | Supply and demand equilibrium shift | promoted | `animation.economics.supply-demand-equilibrium-shift` | Early versatility demo; parameter, curve, intersection, and narrative correspondence |
+| 4 | `kp.promotion.physics-work-energy` | Constant-force work and kinetic-energy change | promoted | `animation.physics.constant-force-work-energy` | Early versatility demo; units and conservation across equation, graph, and diagram without a physics engine |
+| 5 | `kp.promotion.vector-dot-projection` | Project one vector onto another | next | — | Symbolic-to-spatial identity and indexed component pairing |
 | 6 | `kp.promotion.matrix-linear-map` | Apply a `2 × 2` matrix to a vector, then compose matrices from dot products | planned | — | Grid-aware nested evaluation and coordinated geometric transformation |
 | 7 | `kp.promotion.derivative-bridge` | Difference quotient and secant converging to `f'(a)` and the tangent | planned | — | Continuous shared state with foldable symbolic detail |
 | 8 | `kp.promotion.integral-accumulation` | Riemann sums converging to area | planned | — | Many-object refinement, aggregation, and honest patterned compression |
@@ -96,7 +96,7 @@ The promotion order now deliberately pressures three composition environments:
 1. equation succession, already proven by the canonical glyph and motif work;
 2. persistent workspace algorithms, proven and promoted through canonical
    multi-digit addition; and
-3. synchronized model views, next beginning with bounded economics and physics
+3. synchronized model views, proven by bounded economics and physics
    exemplars.
 
 The place-value repair promoted generic lifetime, semantic destination,
@@ -132,6 +132,14 @@ compatibility facade, legacy presentation metadata, or superseded display
 route in the same bounded change. Preserve semantic fixtures, conformance
 tests, and historical evidence. Do not schedule a broad rewrite detached from
 a working exemplar.
+
+M1 is complete through
+`reviews/2026-08-01-cross-domain-api-motif-audit.md`: the audit classifies
+stable authoring facades, internal platform contracts, domain adapters,
+experimental surfaces, compatibility bridges, and retirement candidates from
+observed callers. It does not freeze domain presenters or internal rendering
+details as public APIs. M2 and M3 remain separately approval-gated before a
+rank-5 promotion contract is activated.
 
 ## Fraction Harvest Queue
 
@@ -196,25 +204,25 @@ remains semantic HTML. Renderer-owned role tokens, named poses, honest scale
 and units, collision-aware labels, redundant non-color cues, dynamic
 descriptions, and responsive density are promotion requirements.
 
-The revised economics graph is exact, mechanically verified, and human
-approved. Its local profile replaces raw SVG math and the dense flat grid with
-a warm orthographic plane, sparse data grid, role-based hierarchy, direct
-KaTeX labels, stable two-decimal moving readouts, and a smaller focal marker.
-This is exemplar evidence, not a reusable profile. Physics is the second
-caller. Only their shared, human-approved seams may become a versioned profile
-or generated-artifact conformance gate.
+The revised economics graph and structurally different physics composition are
+exact, mechanically verified, and human approved. Together they promote
+`kp.graph.dimensional-continuity.v1`: a warm orthographic plane, sparse
+construction grid, role-based hierarchy, inline KaTeX, and stable two-decimal
+moving readouts over exact semantic truth. Domain geometry, equations,
+narrative, units, responsive composition, and choreography remain local.
 
 Consumer and producer surplus remain a possible optional follow-on rather than
 default choreography. Deadweight loss is deferred to a separate model with an
 actual inefficiency wedge. Neither expands the current promotion contract.
 
-`perf:animation` now drives the direct economics catalogue route and records
-transfer, fonts, LCP, CLS, interaction paint, long tasks, and frame timing. It
-proves no Three.js request and passing CLS/interaction behavior, while exposing
-411,605 initial script bytes, 3.688 s constrained LCP, and 33.2 ms constrained
-frame p95 as release debt. Do not equate the 490,000-byte main-host regression
-ceiling with a product target, and do not ship KaTeX, code, or WebGL capability
-merely because the catalogue can select an asset that uses it.
+`perf:animation` drives the direct economics catalogue route and records
+transfer, fonts, LCP, CLS, interaction paint, long tasks, and frame timing. The
+release rerun proves no Three.js request and passing CLS, interaction, and
+frame behavior. It exposes 422,832 initial script bytes and 3.712 s constrained
+LCP as product-target debt; constrained frame p95 is inside target at 32.5 ms.
+Do not equate the 490,000-byte main-host regression ceiling with a product
+target, and do not ship KaTeX, code, or WebGL capability merely because the
+catalogue can select an asset that uses it.
 
 ## Progress Update Protocol
 
@@ -253,10 +261,10 @@ exists.
 ## Open Questions
 
 - When should sparse direct settlement and decimal/radix presentation be
-  scheduled as a place-value harvest without silently delaying rank 3?
-- Can the bounded economics and constant-force physics demos reuse existing
-  graph and diagram contracts without new runtime categories, while proving
-  one typed dimensional-continuity presentation profile?
+  scheduled as a place-value harvest without silently delaying rank 5?
+- Should the verified problem-to-animation bridge and deterministic
+  explanation spine run as the separately approved platform gate immediately
+  before rank 5, or should rank-5 planning first expose a stronger caller need?
 - Which fraction harvest items become safe batch promotions after rank 1?
 - Which exact caller pressure should trigger the first versioned motif
   implementation boundary after the generated solve-x bridge?
@@ -270,6 +278,8 @@ exists.
 - `docs/project/decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md`
 - `docs/project/decisions/2026-07-31-kp-exemplar-first-visual-verification-cadence.md`
 - `docs/project/decisions/2026-08-01-kp-dimensional-continuity-graph-and-diagram-language.md`
+- `docs/project/reviews/2026-08-01-cross-domain-api-motif-audit.md`
+- `docs/project/reviews/2026-08-01-catalogue-curation-cross-domain-promotion-closeout.md`
 - `docs/project/reviews/2026-08-01-visualization-generation-and-web-performance-next-step-review.md`
 - `docs/project/reviews/2026-07-30-place-value-persistent-workspace-repair-long-loop-proposal.md`
 - `docs/project/reviews/2026-07-31-place-value-persistent-workspace-repair-closeout.md`

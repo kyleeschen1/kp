@@ -2,7 +2,8 @@
   "id": "run-contract.kp.catalogue-curation-cross-domain-promotion-v1",
   "kind": "run-contract",
   "title": "Catalogue curation and cross-domain promotion",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -550,7 +551,8 @@
     {
       "id": "s30",
       "title": "Run release gate and close promotion loop",
-      "status": "planned"
+      "summary": "Release gates pass, promotion evidence is nominal and two-caller backed, project memory advances to planning-only vector rank 5, and remaining loading debt is explicit.",
+      "status": "complete"
     }
   ]
 }

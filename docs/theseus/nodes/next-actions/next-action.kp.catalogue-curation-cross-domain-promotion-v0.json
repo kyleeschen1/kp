@@ -2,8 +2,9 @@
   "id": "next-action.kp.catalogue-curation-cross-domain-promotion-v0",
   "kind": "next-action",
   "title": "Catalogue",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Catalogue curation and cross-domain promotion are complete; rank 5 vector dot projection remains planning-only behind a separately reviewed successor gate.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -696,11 +697,123 @@
       "status": "passed",
       "scope": "slice-29",
       "checkedAt": "2026-08-01T21:35:42.129Z"
+    },
+    {
+      "command": "npm run --silent verify:impact -- --release",
+      "status": "passed",
+      "scope": "s30 release-impact selection",
+      "checkedAt": "2026-08-01T22:07:25.633Z",
+      "notes": "High-risk release selection returned no unmatched paths; the selected broad gates were executed directly or covered by the complete unit suite."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s30 full deterministic release suite",
+      "checkedAt": "2026-08-01T22:07:26.521Z",
+      "notes": "3264 tests passed with zero failures, skips, cancellations, or todos."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s30 repository type safety",
+      "checkedAt": "2026-08-01T22:07:27.504Z",
+      "notes": "Application, node, test, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run typecheck:protocols",
+      "status": "passed",
+      "scope": "s30 protocol type safety",
+      "checkedAt": "2026-08-01T22:07:28.478Z",
+      "notes": "Isolated public protocol TypeScript project passes."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s30 production build",
+      "checkedAt": "2026-08-01T22:07:29.357Z",
+      "notes": "Production build passes; the existing large-chunk advisory remains non-blocking and measured separately."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s30 architecture boundaries",
+      "checkedAt": "2026-08-01T22:07:30.239Z",
+      "notes": "Concept room, semantic reader, semantic animation, and operation-presentation architecture gates pass."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s30 successor memory",
+      "checkedAt": "2026-08-01T22:07:31.341Z",
+      "notes": "Promotion memory aligns on rank 5 vector dot projection as planning-only with no active implementation contract."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s30 review production closure",
+      "checkedAt": "2026-08-01T22:07:32.375Z",
+      "notes": "Development Review remains outside the production closure."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s30 reader production closure",
+      "checkedAt": "2026-08-01T22:07:33.293Z",
+      "notes": "All 11 reader manifest routes form the expected production closure."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s30 reader route budgets",
+      "checkedAt": "2026-08-01T22:07:34.186Z",
+      "notes": "All 11 reader routes and shared runtime closures remain within their five-percent growth ratchets."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "s30 catalogue visual release check",
+      "checkedAt": "2026-08-01T22:07:35.048Z",
+      "notes": "Catalogue route, concrete selection, compact controls, and hostability checks pass."
+    },
+    {
+      "command": "npm run visual:animation-library-hosts",
+      "status": "passed",
+      "scope": "s30 library host stability",
+      "checkedAt": "2026-08-01T22:07:35.913Z",
+      "notes": "All playable identities, rapid selection, and reload behavior pass in Chromium."
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "s30 route performance audit",
+      "checkedAt": "2026-08-01T22:07:36.879Z",
+      "notes": "No regressions and no Three.js request. Target debt remains explicit at 422832 initial script bytes and 3712 ms constrained LCP; constrained frame p95 passes at 32.5 ms."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/dev-review-shell.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s30 review shell preservation",
+      "checkedAt": "2026-08-01T22:07:37.941Z",
+      "notes": "Both wide interaction and narrow viewport Review shell cases pass."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s30 patch hygiene",
+      "checkedAt": "2026-08-01T22:07:38.833Z",
+      "notes": "Patch has no whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s30 durable control integrity",
+      "checkedAt": "2026-08-01T22:07:39.693Z",
+      "notes": "Workspace was valid with 855 nodes and 15816 events before final slice evidence."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Extracted only the four seams proven by economics and physics and retired four zero-caller rendering motif facades"
+    "state": "complete",
+    "summary": "Completed the approved 30-slice catalogue curation and cross-domain promotion contract with two human-approved exemplars, four caller-proven seams, adjacent facade pruning, nominal release evidence, and reconciled successor memory."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",
