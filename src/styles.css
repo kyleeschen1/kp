@@ -1897,6 +1897,36 @@ h2 {
   stroke: #ffffff;
   stroke-width: 2;
 }
+.editor-graph-stage__economics-curve {
+  fill: none;
+  stroke-linecap: round;
+  stroke-width: 3.5;
+}
+.editor-graph-stage__economics-curve--supply { stroke: #157b83; }
+.editor-graph-stage__economics-curve--demand { stroke: #c45d32; }
+.editor-graph-stage__economics-guide {
+  stroke: #64748b;
+  stroke-dasharray: 5 5;
+  stroke-width: 1.5;
+}
+.editor-graph-stage__economics-equilibrium {
+  fill: #172033;
+  stroke: #ffffff;
+  stroke-width: 2.5;
+}
+.editor-graph-stage__economics-label,
+.editor-graph-stage__economics-axis-label {
+  fill: #334155;
+  font-size: 14px;
+  font-weight: 800;
+  paint-order: stroke;
+  stroke: #ffffff;
+  stroke-linejoin: round;
+  stroke-width: 4px;
+}
+.editor-graph-stage__economics-label--supply { fill: #126871; }
+.editor-graph-stage__economics-label--demand { fill: #a94322; }
+.editor-graph-stage__economics-label--equilibrium { font-size: 13px; }
 .editor-graph-stage__area { fill: rgb(30 136 168 / 0.3); stroke: #1e88a8; stroke-width: 2; }
 .editor-graph-stage__label { fill: #334155; font-size: 14px; font-weight: 800; }
 .editor-graph-stage__annotation {

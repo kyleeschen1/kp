@@ -339,6 +339,41 @@
       "scope": "s14 control record",
       "checkedAt": "2026-08-01T17:07:26.973Z",
       "notes": "Workspace graph validates with graph-semantic evidence."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-economics-equilibrium-static-svg.test.ts tests/kp-economics-equilibrium-animation-asset.test.ts tests/kp-economics-equilibrium-frame.test.ts tests/kp-economics-equilibrium-model.test.ts tests/kp-economics-equilibrium-contract.test.ts",
+      "status": "passed",
+      "scope": "s15 static native SVG",
+      "checkedAt": "2026-08-01T17:10:40.587Z",
+      "notes": "Fifteen economics tests pass; native content paints exact curves, initial equilibrium, guides, and Q/P axis labels deterministically."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15 static native SVG",
+      "checkedAt": "2026-08-01T17:10:41.605Z",
+      "notes": "All TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s15 rendering boundary",
+      "checkedAt": "2026-08-01T17:10:42.523Z",
+      "notes": "Architecture gates pass with graph viewport ownership unchanged."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s15 focused",
+      "checkedAt": "2026-08-01T17:10:43.562Z",
+      "notes": "Static SVG, viewport case, CSS, and tests pass diff hygiene."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s15 control record",
+      "checkedAt": "2026-08-01T17:10:44.471Z",
+      "notes": "Workspace graph validates with static-render evidence."
     }
   ],
   "progress": {
