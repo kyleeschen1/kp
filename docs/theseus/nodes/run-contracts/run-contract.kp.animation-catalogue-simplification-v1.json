@@ -119,7 +119,8 @@
     {
       "id": "s09",
       "title": "Add stable catalogue visual command",
-      "status": "planned"
+      "summary": "Added stable npm run visual:animation-catalogue backed by a repo-owned Chromium capture script. It records the current solve-x Workbench bootstrap at the desktop review viewport to disposable tmp/codex output, providing an inspected before-state that later shell slices can tighten without changing the command.",
+      "status": "complete"
     },
     {
       "id": "s10",

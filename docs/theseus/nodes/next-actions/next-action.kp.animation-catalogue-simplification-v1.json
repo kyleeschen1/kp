@@ -76,6 +76,14 @@
     {
       "kind": "file",
       "path": "tests/animation-catalogue-health.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "scripts/capture-animation-catalogue.ts"
+    },
+    {
+      "kind": "file",
+      "path": "package.json"
     }
   ],
   "dependsOn": {
@@ -349,6 +357,20 @@
       "scope": "slice s08 TypeScript contracts",
       "checkedAt": "2026-08-01T04:06:24.538Z",
       "notes": "Application, Node, tests, and domain projects passed."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s09 stable desktop visual capture",
+      "checkedAt": "2026-08-01T04:10:21.035Z",
+      "notes": "Captured the preserved solve-x Workbench bootstrap at 1440 by 1000 to tmp/codex/animation-catalogue with a versioned manifest; visual inspection confirms the pre-shell sprawl baseline."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s09 capture script types",
+      "checkedAt": "2026-08-01T04:10:21.859Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
     }
   ],
   "expectedLearning": [
