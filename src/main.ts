@@ -1,5 +1,6 @@
 import "katex/dist/katex.min.css";
 import "./styles.css";
+import "./editor/animation-catalogue-shell.css";
 
 import {
   createInitialEditorDocument,
@@ -10,6 +11,9 @@ import {
   renderKpAnimationCatalogueBootstrap
 } from "./editor/animation-catalogue-bootstrap.ts";
 import {
+  deriveKpAnimationCatalogueHealth
+} from "./editor/animation-catalogue-health.ts";
+import {
   createKpAnimationCatalogueProjection
 } from "./editor/animation-catalogue-projection.ts";
 import {
@@ -18,6 +22,12 @@ import {
 import {
   resolveKpAnimationCatalogueSelection
 } from "./editor/animation-catalogue-selection.ts";
+import {
+  renderKpAnimationCatalogueShell
+} from "./editor/animation-catalogue-shell.ts";
+import {
+  inspectKpAnimationCatalogueSurfaceHostability
+} from "./editor/animation-catalogue-surface-hostability.ts";
 import {
   createKpEditorAnimationLibrary,
   selectKpEditorAnimationDescriptor
@@ -88,8 +98,14 @@ import {
   hydrateKpEditorAnimationSurfaces
 } from "./editor/animation-surface-adapter-registry.ts";
 import {
+  kpEditorAnimationSurfaceAdapterRegistry
+} from "./editor/animation-surface-adapter-registry.ts";
+import {
   hydrateKpEditorAnimationLiveDiagnostics
 } from "./editor/animation-live-diagnostics.ts";
+import {
+  createKpEditorAnimationPlayerState
+} from "./editor/animation-player-state.ts";
 import {
   registerKpEditorEquationSurfaceAdapter
 } from "./editor/equation-surface-adapter.ts";
@@ -540,11 +556,31 @@ async function renderAnimationCatalogueView(): Promise<void> {
         `expected ${entry.animationId} from ${entry.packId}.`
       );
     }
-    appRoot.innerHTML = renderKpAnimationCatalogueBootstrap({
-      status: "selected",
-      animationId: entry.animationId,
-      title: entry.title,
-      packId: entry.packId
+    const descriptor = editorAnimationDescriptors.find(
+      ({ id }) => id === entry.primaryDescriptorId
+    );
+    if (descriptor === undefined) {
+      throw new Error(
+        `Catalogue entry ${entry.animationId} is missing descriptor ` +
+        `${entry.primaryDescriptorId}.`
+      );
+    }
+    const playerState = createKpEditorAnimationPlayerState({
+      descriptor,
+      animation: loaded.animation,
+      catalog: loaded.catalog
+    });
+    const hostability = inspectKpAnimationCatalogueSurfaceHostability({
+      state: playerState,
+      registry: kpEditorAnimationSurfaceAdapterRegistry
+    });
+    const health = deriveKpAnimationCatalogueHealth({
+      hostability,
+      hostObservation: { status: "not-observed" }
+    });
+    appRoot.innerHTML = renderKpAnimationCatalogueShell({
+      entry,
+      health
     });
     markKpAnimationHostReady(window);
   } catch (error: unknown) {

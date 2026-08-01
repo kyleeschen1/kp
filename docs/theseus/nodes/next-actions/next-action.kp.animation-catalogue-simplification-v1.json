@@ -104,6 +104,18 @@
     {
       "kind": "file",
       "path": "tests/animation-catalogue-selection.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-shell.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-catalogue-shell.css"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalogue-shell.test.ts"
     }
   ],
   "dependsOn": {
@@ -440,6 +452,34 @@
       "scope": "slice s11 selection and loader types",
       "checkedAt": "2026-08-01T04:19:07.875Z",
       "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-shell.test.ts tests/animation-catalogue-health.test.ts tests/animation-catalogue-selection.test.ts tests/animation-catalogue-route.test.ts",
+      "status": "passed",
+      "scope": "slice s12 three-region shell contracts",
+      "checkedAt": "2026-08-01T04:24:02.486Z",
+      "notes": "14 tests passed; the solve-x shell has exactly three ordered sibling regions, one compact row, derived Review health, and no iframe, Workbench, studio masthead, representation picker, or ontology UI."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice s12 desktop shell visual smoke",
+      "checkedAt": "2026-08-01T04:24:03.313Z",
+      "notes": "The 1440 by 1000 capture rendered one compact left rail, a full-height frameless stage region, and one right Details inspector; visual inspection confirmed no page scroll or legacy dashboard sprawl."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s12 shell types",
+      "checkedAt": "2026-08-01T04:24:04.153Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s12 shell boundaries",
+      "checkedAt": "2026-08-01T04:24:04.983Z",
+      "notes": "All four architecture gates passed."
     }
   ],
   "expectedLearning": [

@@ -137,7 +137,8 @@
     {
       "id": "s12",
       "title": "Build three-region desktop shell",
-      "status": "planned"
+      "summary": "Built the solve-x desktop shell as exactly three full-height sibling regions: a compact flat asset rail with derived Review health, a frameless center stage host, and one linear Details inspector. It has no masthead, iframe, nested navigation, ontology tree, cards, representation picker, or sibling hosting. The stage remains a deliberate placeholder until s13 binds the preserved player.",
+      "status": "complete"
     },
     {
       "id": "s13",
