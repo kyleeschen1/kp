@@ -339,10 +339,23 @@ export function createEconomicsEquilibriumAnimationAsset(
         targetId: transformation.id
       }
     ],
+    dashboard: {
+      rowId: "animation.economics.supply-demand-equilibrium-shift",
+      tags: [
+        "animation",
+        "graph",
+        "economics",
+        "supply",
+        "demand",
+        "equilibrium"
+      ]
+    },
     metadata: {
       domain: "economics",
       graphMotionKind: "economics-supply-demand-equilibrium-shift",
-      modelId: model.id
+      modelId: model.id,
+      summary:
+        "Shifts demand on an exact supply-demand graph and follows the resulting market equilibrium."
     }
   });
 }

@@ -22,7 +22,7 @@ test("catalog separates executable routes from generic presentation labels", () 
     createKpAnimationAssets()
   );
 
-  assert.equal(report.animationCount, 33);
+  assert.equal(report.animationCount, 34);
   assert.equal(report.claimedTransformationCount, 39);
   assert.equal(report.equationTransformationCount, 36);
   assert.equal(report.excludedTransformationCount, 3);

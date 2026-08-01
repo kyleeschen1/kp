@@ -1362,5 +1362,32 @@
         "role": "canonical-host"
       }
     ]
+  },
+  {
+    "animationId": "animation.economics.supply-demand-equilibrium-shift",
+    "title": "Supply and demand equilibrium shift",
+    "summary": "Shifts demand on an exact supply-demand graph and follows the resulting market equilibrium.",
+    "tags": [
+      "animation",
+      "demand",
+      "economics",
+      "editor",
+      "equilibrium",
+      "graph",
+      "supply"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.economics.supply-demand-equilibrium-shift",
+    "representations": [
+      {
+        "id": "editor-animation.animation.economics.supply-demand-equilibrium-shift",
+        "label": "Supply and demand equilibrium shift",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.economics.supply-demand-equilibrium-shift",
+        "role": "canonical-host"
+      }
+    ]
   }
 ]

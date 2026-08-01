@@ -47,6 +47,9 @@ import {
 import {
   createKpPlaceValueAdditionAnimationAsset
 } from "./place-value-addition-adapter.ts";
+import {
+  createEconomicsEquilibriumAnimationAsset
+} from "./economics-equilibrium-adapter.ts";
 
 export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
   return [
@@ -56,6 +59,7 @@ export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
     createKpThreeSixthsEvaluationAnimationAsset(),
     createKpExactFractionQuantityAnimationAsset(),
     createKpPlaceValueAdditionAnimationAsset(),
+    createEconomicsEquilibriumAnimationAsset(),
     createAcceptedGeneratedAddZeroAnimationAsset(),
     createAcceptedGeneratedSubstitutionAnimationAsset(),
     createProvisionalIncorrectSubstitutionAnimationAsset(),

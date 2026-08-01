@@ -15,9 +15,15 @@ test("asset-first projection keeps one lightweight entry with subordinate contex
   const solveX = projection.entries.find(
     ({ animationId }) => animationId === "animation.linear-solve.solve-x"
   );
+  const economics = projection.entries.find(
+    ({ animationId }) =>
+      animationId ===
+        "animation.economics.supply-demand-equilibrium-shift"
+  );
   assert.ok(solveX);
+  assert.ok(economics);
 
-  assert.equal(projection.entries.length, 33);
+  assert.equal(projection.entries.length, 34);
   assert.equal(solveX.primaryDescriptorId,
     "editor-animation.animation.linear-solve.solve-x");
   assert.equal(solveX.packId, "algebra");
@@ -55,6 +61,23 @@ test("asset-first projection keeps one lightweight entry with subordinate contex
     Object.keys(solveX).includes("representations"),
     false
   );
+  assert.equal(economics.packId, "economics");
+  assert.equal(economics.title, "Supply and demand equilibrium shift");
+  assert.equal(
+    economics.summary,
+    "Shifts demand on an exact supply-demand graph and follows the resulting market equilibrium."
+  );
+  assert.deepEqual(economics.renderTargetKinds, ["graph"]);
+  assert.deepEqual(economics.controlKinds, [
+    "playback",
+    "step",
+    "scrubber",
+    "rewind"
+  ]);
+  assert.equal(economics.durationMs, 2400);
+  assert.equal(economics.beatCount, 48);
+  assert.ok(economics.searchTerms.includes("economics"));
+  assert.equal(economics.relatedContexts.length, 1);
 });
 
 test("display-only playability and planned identities cannot enter projection", () => {

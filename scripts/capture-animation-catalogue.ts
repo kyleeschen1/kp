@@ -178,9 +178,9 @@ try {
   const allResultCount = await page.locator(
     "[data-kp-animation-catalogue-row]"
   ).count();
-  if (allResultCount !== 33) {
+  if (allResultCount !== 34) {
     throw new Error(
-      `Catalogue expected 33 flat asset rows, found ${allResultCount}.`
+      `Catalogue expected 34 flat asset rows, found ${allResultCount}.`
     );
   }
   const inspectorSelect = page.locator(

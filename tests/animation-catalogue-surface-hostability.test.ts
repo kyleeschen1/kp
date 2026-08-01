@@ -69,7 +69,7 @@ function currentHostability() {
 test("hostability requires every concrete asset slot to resolve an adapter", () => {
   const hostability = currentHostability();
 
-  assert.equal(hostability.length, 33);
+  assert.equal(hostability.length, 34);
   assert.deepEqual(
     Object.fromEntries(
       ["ready", "missing-adapter", "unsupported-surface"].map((status) => [
@@ -78,7 +78,7 @@ test("hostability requires every concrete asset slot to resolve an adapter", () 
       ])
     ),
     {
-      ready: 31,
+      ready: 32,
       "missing-adapter": 2,
       "unsupported-surface": 0
     }
@@ -116,6 +116,16 @@ test("hostability records exact generic and specialized adapter ownership", () =
       status: "ready",
       adapterId:
         "editor-animation-surface.operation-evaluation.canonical-native-katex"
+    }]
+  );
+  assert.deepEqual(
+    byId.get(
+      "animation.economics.supply-demand-equilibrium-shift"
+    )?.slots,
+    [{
+      slotKind: "graph",
+      status: "ready",
+      adapterId: "editor-animation-surface.graph.svg"
     }]
   );
   assert.deepEqual(

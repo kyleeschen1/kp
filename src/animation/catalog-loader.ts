@@ -8,6 +8,7 @@ export type KpAnimationCatalogPackId =
   | "generated-drafts"
   | "generated-problems"
   | "graph"
+  | "economics"
   | "programming"
   | "comparison"
   | "complex-katex";
@@ -73,6 +74,7 @@ export function kpAnimationCatalogPackId(
     animationId === "animation.dot-projection.basic") {
     return "graph";
   }
+  if (animationId.startsWith("animation.economics.")) return "economics";
   if (animationId.startsWith("animation.programming.")) return "programming";
   if (animationId.startsWith("animation.comparison.")) return "comparison";
   if (animationId.startsWith("animation.sample.")) return "complex-katex";
@@ -117,6 +119,9 @@ async function loadUncachedPack(
     case "graph":
       return (await import("./catalog-packs/graph.ts"))
         .createKpGraphAnimationPack();
+    case "economics":
+      return (await import("./catalog-packs/economics.ts"))
+        .createKpEconomicsAnimationPack();
     case "programming":
       return (await import("./catalog-packs/programming.ts"))
         .createKpProgrammingAnimationPack();

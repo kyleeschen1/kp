@@ -20,8 +20,8 @@ test("blank catalogue search keeps one row per asset with selection first", () =
     selectedAnimationId: KP_ANIMATION_CATALOGUE_EXEMPLAR_ID
   });
 
-  assert.equal(results.length, 33);
-  assert.equal(new Set(results.map(({ animationId }) => animationId)).size, 33);
+  assert.equal(results.length, 34);
+  assert.equal(new Set(results.map(({ animationId }) => animationId)).size, 34);
   assert.equal(results[0]?.animationId, KP_ANIMATION_CATALOGUE_EXEMPLAR_ID);
 });
 
@@ -38,6 +38,8 @@ test("catalogue search supports direct, tokenized, and fuzzy cross-domain terms"
     KP_ANIMATION_CATALOGUE_EXEMPLAR_ID);
   assert.equal(search("tangent")[0]?.animationId,
     "animation.derivative-rules.tangent-graph");
+  assert.equal(search("demand equilibrium")[0]?.animationId,
+    "animation.economics.supply-demand-equilibrium-shift");
   assert.ok(search("matrix").some(
     ({ animationId }) => animationId.includes("matrix")
   ));
@@ -45,7 +47,7 @@ test("catalogue search supports direct, tokenized, and fuzzy cross-domain terms"
     ({ animationId }) => animationId ===
       "animation.programming.add.execution-trace"
   ));
-  assert.equal(search("unreviewed").length, 33);
+  assert.equal(search("unreviewed").length, 34);
 });
 
 test("catalogue search returns assets rather than related context rows", () => {
