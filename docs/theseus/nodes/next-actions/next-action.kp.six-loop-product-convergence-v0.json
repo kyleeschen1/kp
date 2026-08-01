@@ -61,6 +61,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-01-explanation-spine-v1-contract.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/verified-linear-problem-explanation-compiler.ts"
     }
   ],
   "dependsOn": {
@@ -290,6 +294,30 @@
       "status": "passed",
       "scope": "s07 whitespace audit",
       "checkedAt": "2026-08-01T23:47:35.532Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/explanation-spine-v1.test.ts tests/verified-linear-problem-animation-compiler.test.ts tests/verified-linear-problem-explanation-compiler.test.ts",
+      "status": "passed",
+      "scope": "14 schema asset compiler snapshot lineage negative and bounded generated-property checks",
+      "checkedAt": "2026-08-01T23:53:32.007Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08 explanation compiler TypeScript boundaries",
+      "checkedAt": "2026-08-01T23:53:32.919Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s08 architecture and ownership gates",
+      "checkedAt": "2026-08-01T23:53:33.860Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s08 whitespace audit",
+      "checkedAt": "2026-08-01T23:53:34.785Z"
     }
   ],
   "expectedLearning": [

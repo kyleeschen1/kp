@@ -107,7 +107,9 @@
     {
       "id": "s08",
       "title": "Compile deterministic explanation",
-      "status": "planned"
+      "summary": "Derived 5 exact provider-verified claims, instantiated the hand-authored 4-section/8-beat spine, and projected 8 deterministic inline-math learner cues with object/selector authority and 12-word limits. Snapshot, negative, repeated determinism, and 8 generated-instance properties pass without network or model calls.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s09",
