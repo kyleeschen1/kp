@@ -1,0 +1,210 @@
+{
+  "id": "run-contract.kp.catalogue-curation-cross-domain-promotion-v1",
+  "kind": "run-contract",
+  "title": "Catalogue curation and cross-domain promotion",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.catalogue-curation-cross-domain-promotion-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-01-catalogue-curation-cross-domain-promotion-long-loop-proposal.md",
+      "summary": "Approved rationale, scope, preservation boundaries, exemplar promotion criteria, and stop conditions."
+    }
+  ],
+  "verification": [
+    "npm run --silent verify:impact",
+    "npm test",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:architecture",
+    "npm run check:promotion-memory",
+    "npm run check:dev-review-production",
+    "npm run visual:animation-catalogue",
+    "npm run visual:animation-library-hosts",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Catalogue in-shell selection, history restoration, focus and review preservation, surface-aware stage geometry, compact visual step layout, and bounded editorial curation.",
+    "One exact supply-and-demand equilibrium asset and one exact constant-force work-energy asset using existing runtime, host, graph, equation, diagram, accessibility, and review seams.",
+    "Post-checkpoint API classification, caller-proven synchronized-model seams, versioned motif boundaries, and adjacent complexity-negative pruning.",
+    "Focused tests, stable browser checks, release verification, and project-memory reconciliation directly required by this tranche."
+  ],
+  "disallowedWork": [
+    "Visual generalization before the corresponding human exemplar checkpoint is approved.",
+    "A universal renderer, scene graph, parameter schema, motif registry, economics solver, physics engine, or parallel runtime and clock.",
+    "Programming trace implementation, public website, curriculum, learner systems, broad LLM editorial work, or unrelated dashboard work.",
+    "Broad route deletion, inferred human dispositions, deletion of semantic fixtures, or pruning without last-caller evidence."
+  ],
+  "goal": "Make catalogue review seamless, promote bounded economics and physics exemplars, then consolidate only seams proven by both callers.",
+  "target": "next-action.kp.catalogue-curation-cross-domain-promotion-v0",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit each independently reversible verified slice with its Theseus evidence; stop at s08, s22, and s27 for human exemplar review before continuing.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop at s08 until the user explicitly approves the live catalogue UX exemplar.",
+    "Stop at s22 until the user explicitly approves the live economics exemplar.",
+    "Stop at s27 until the user explicitly approves the live physics second caller.",
+    "Stop if presentation simplification requires semantic, runtime, clock, renderer, paint-ownership, accessibility, review-history, or authoring-contract changes.",
+    "Stop if a bounded domain exemplar requires an economics solver, physics engine, universal renderer, scene graph, or parallel runtime.",
+    "Stop before shared API or motif extraction unless two approved structurally different callers prove the same invariant.",
+    "Stop before pruning when any unique semantic, conformance, compatibility, or historical evidence remains.",
+    "Stop when verification evidence is missing, contradictory, or cannot be recorded durably."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Align durable project direction",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Freeze catalogue interaction baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Define persistent selection controller",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Implement in-shell asset switching",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Prove history focus and review preservation",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Build solve-x centered compact-stage exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Capture catalogue UX exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Human review catalogue UX",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Generalize approved stage geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Record bounded catalogue curation",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Freeze economics model contract",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Implement exact supply-demand model",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Project deterministic economics frames",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Define economics graph surface semantics",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Render static equilibrium view",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Choreograph demand shift exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Synchronize equation graph and narrative",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Expose bounded economics parameters",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Register economics asset and catalogue metadata",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Prove economics accessibility seek rewind",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Capture economics exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Human review economics",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Freeze work-energy second-caller contract",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Implement exact physics model",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Build synchronized physics presenter",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Register and verify physics exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Human review physics",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Audit and classify API tiers",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Extract proven seams and prune adjacent paths",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "Run release gate and close promotion loop",
+      "status": "planned"
+    }
+  ]
+}

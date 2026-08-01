@@ -1,0 +1,63 @@
+{
+  "id": "next-action.kp.catalogue-curation-cross-domain-promotion-v0",
+  "kind": "next-action",
+  "title": "Catalogue",
+  "status": "ready",
+  "domain": "kp.animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-01-catalogue-curation-cross-domain-promotion-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation-catalogue-simplification-v1"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery",
+    "milestone.kp.cross-domain-tutorial-platform-v0"
+  ],
+  "verification": [
+    "npm run --silent verify:impact",
+    "npm test",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:architecture",
+    "npm run check:promotion-memory",
+    "npm run check:dev-review-production",
+    "npm run visual:animation-catalogue",
+    "npm run visual:animation-library-hosts",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",
+    "Whether economics and physics share a synchronized-model projection seam without sharing domain truth.",
+    "Which API tiers, motifs, and compatibility paths have evidence for promotion or retirement after two distinct callers."
+  ],
+  "allowedWork": [
+    "The approved catalogue curation, economics, physics, API classification, proven motif extraction, adjacent pruning, tests, visual evidence, and project-memory reconciliation."
+  ],
+  "disallowedWork": [
+    "Programming trace work, public website, curriculum, learner systems, broad LLM editorial work, universal frameworks, inferred dispositions, or unproven deletion."
+  ],
+  "criteria": [
+    {
+      "id": "catalogue-ux-human-approved",
+      "weight": "high"
+    },
+    {
+      "id": "economics-exemplar-human-approved",
+      "weight": "high"
+    },
+    {
+      "id": "physics-second-caller-human-approved",
+      "weight": "high"
+    },
+    {
+      "id": "caller-proven-consolidation-and-release-gate",
+      "weight": "high"
+    }
+  ]
+}
