@@ -15,15 +15,20 @@ import {
   type KpEditorGraph3DHostFrame
 } from "./graph-3d-surface-contract.ts";
 import {
+  renderGraph3DWebGLFallback,
   renderGraph3DWebGLShell
 } from "../rendering/graph-webgl.ts";
-import type { Graph3DObject } from "../semantic/graph.ts";
+import type {
+  Graph3DObject,
+  Graph3DSurfaceMode
+} from "../semantic/graph.ts";
 
 type Graph3DWebGLClient = typeof import("../rendering/graph-webgl-three.ts");
 
 interface KpEditorGraph3DSurfaceSession {
   client?: Graph3DWebGLClient | undefined;
   disposed: boolean;
+  fallbackMode: Graph3DSurfaceMode;
   frame: KpEditorGraph3DHostFrame;
   loadPromise?: Promise<Graph3DWebGLClient> | undefined;
   observer?: IntersectionObserver | undefined;
@@ -60,9 +65,14 @@ export const kpEditorGraph3DSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       if (shell === null) return;
       session = {
         disposed: false,
+        fallbackMode: fallbackGraph.surfaceMode,
         frame,
         shell
       };
+      shell.setAttribute(
+        "data-kp-editor-graph-3d-fallback-mode",
+        fallbackGraph.surfaceMode
+      );
       sessions.set(player, session);
       player.addEventListener(
         KP_EDITOR_ANIMATION_DISPOSE_EVENT,
@@ -83,6 +93,7 @@ export const kpEditorGraph3DSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       "data-kp-editor-graph-3d-direction",
       frame.direction
     );
+    syncGraph3DFallback(session, frame);
     if (session.client !== undefined) {
       session.client.renderGraph3DWebGLShellFrame(
         session.shell,
@@ -157,6 +168,13 @@ function loadGraph3DCapability(session: KpEditorGraph3DSurfaceSession): void {
     session.shell.dataset["kpWebglError"] = error instanceof Error
       ? error.message
       : "The 3D capability failed to load.";
+    session.shell.querySelector<HTMLElement>(
+      "[data-kp-webgl-accessible-status]"
+    )?.replaceChildren(
+      session.shell.ownerDocument.createTextNode(
+        "Static graph shown because the 3D view is unavailable."
+      )
+    );
   });
 }
 
@@ -175,4 +193,29 @@ function graphForFallback(frame: KpEditorGraph3DHostFrame): Graph3DObject {
   return frame.sourceObjects.find(
     (object): object is Graph3DObject => object.type === "graph-3d"
   ) ?? frame.graph;
+}
+
+function syncGraph3DFallback(
+  session: KpEditorGraph3DSurfaceSession,
+  frame: KpEditorGraph3DHostFrame
+): void {
+  const useTarget = frame.transitionProgress >= 0.5;
+  const objects = useTarget ? frame.targetObjects : frame.sourceObjects;
+  const graph = objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+  if (graph === undefined || graph.surfaceMode === session.fallbackMode) return;
+  const fallback = session.shell.querySelector<HTMLElement>(
+    ".graph-webgl__fallback"
+  );
+  if (fallback === null) return;
+
+  // SVG is the static and context-loss paint owner. Recompute only when the
+  // nearest semantic endpoint changes, never on every animation frame.
+  fallback.innerHTML = renderGraph3DWebGLFallback(objects, graph);
+  session.fallbackMode = graph.surfaceMode;
+  session.shell.setAttribute(
+    "data-kp-editor-graph-3d-fallback-mode",
+    graph.surfaceMode
+  );
 }

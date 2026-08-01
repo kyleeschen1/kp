@@ -166,7 +166,7 @@ export function renderGraph3DWebGLShell(
       <div class="graph-webgl__fallback" data-kp-renderer-fallback="svg" aria-hidden="true">
         ${renderGraph3DWebGLFallback(objects, graph)}
       </div>
-      <span class="visually-hidden" id="rn-${escapeHtml(graph.id)}-webgl-status" data-kp-webgl-accessible-status>Static graph available while the 3D view loads.</span>
+      <span class="graph-webgl__accessible-status" id="rn-${escapeHtml(graph.id)}-webgl-status" data-kp-webgl-accessible-status>Static graph available while the 3D view loads.</span>
     </div>
   `;
 }

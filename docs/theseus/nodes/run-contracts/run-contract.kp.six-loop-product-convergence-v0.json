@@ -79,7 +79,9 @@
     {
       "id": "s04",
       "title": "Capture 3D and curation evidence",
-      "status": "planned"
+      "summary": "Captured and manually inspected wide, narrow, semantic SVG fallback, and context-loss Graph3D checkpoints through the stable catalogue command. Restored canonical semantic axes, contained fallback overflow, hid accessible status visually, and froze remaining scale/parity/pedagogy questions without assigning a disposition.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s05",

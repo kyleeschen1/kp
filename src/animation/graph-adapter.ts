@@ -68,6 +68,7 @@ export function createGraphSurfaceModeAnimationAsset(): KpAnimationAsset {
   const scene = createDefaultGraph3DScene();
   const graph = requireGraph3DObject(scene, "saddle-orbit-graph");
   const surface = requireSurface3DObject(scene, "saddle-surface");
+  const axes = scene.filter((object) => object.type === "axis-3d");
   const graphObject = graphSemanticAssetObject(graph, {
     selectors: [
       {
@@ -99,7 +100,17 @@ export function createGraphSurfaceModeAnimationAsset(): KpAnimationAsset {
     bundle: createKpAssetBundle({
       id: "asset.graph.surface-mode.mesh-to-donut",
       title: "Saddle surface mode assets",
-      objects: [graphObject, surfaceObject]
+      objects: [
+        graphObject,
+        ...axes.map((axis) => graphSemanticAssetObject(axis, {
+          selectors: [{
+            id: `${axis.id}.body`,
+            kind: "axis",
+            label: axis.label
+          }]
+        })),
+        surfaceObject
+      ]
     }),
     transformations: [transformation],
     transformationTree: createEditableSemanticTransformationTree({
@@ -131,7 +142,7 @@ export function createGraphSurfaceModeAnimationAsset(): KpAnimationAsset {
       {
         id: graphSurfaceModeRenderTargetId,
         kind: "graph",
-        objectIds: [graph.id, surface.id],
+        objectIds: [graph.id, ...axes.map((axis) => axis.id), surface.id],
         selectorIds: [
           "saddle-orbit-graph.surfaceMode.mesh",
           "saddle-orbit-graph.surfaceMode.donut"

@@ -111,6 +111,7 @@ content review.
 - `docs/project/reviews/2026-08-01-animation-catalogue-meaningful-hostability-contract.md`
 - `docs/project/reviews/2026-08-01-native-graph3d-catalogue-host-contract.md`
 - `docs/project/reviews/2026-08-01-native-graph3d-catalogue-host-integration.md`
+- `docs/project/reviews/2026-08-01-graph3d-catalogue-visual-evidence-and-disposition-packet.md`
 - `docs/project/reviews/2026-08-01-animation-catalogue-bounded-curation.md`
 - `docs/project/reviews/2026-07-31-animation-catalogue-source-inventory.md`
 - `docs/project/decisions/2026-07-31-kp-animation-catalogue-first-simplification.md`

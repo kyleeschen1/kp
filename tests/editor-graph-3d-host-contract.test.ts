@@ -78,6 +78,10 @@ test("Graph3D host projection preserves direct seek and exact rewind", () => {
   assert.ok(Math.abs(rewind.transitionProgress - 0.37) < 1e-12);
   assert.equal(forwardSource?.surfaceMode, "mesh");
   assert.equal(forwardTarget?.surfaceMode, "donut");
+  assert.equal(
+    forward.sourceObjects.filter((object) => object.type === "axis-3d").length,
+    3
+  );
   assert.equal(forward.description, "Saddle surface: mesh to donut, 37 percent complete.");
   assert.equal(rewind.description, forward.description);
 });

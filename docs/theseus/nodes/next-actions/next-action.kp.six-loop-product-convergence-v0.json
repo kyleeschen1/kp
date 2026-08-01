@@ -33,6 +33,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-01-native-graph3d-catalogue-host-integration.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-01-graph3d-catalogue-visual-evidence-and-disposition-packet.md"
+    },
+    {
+      "kind": "file",
+      "path": "scripts/capture-animation-catalogue.ts"
     }
   ],
   "dependsOn": {
@@ -148,6 +156,48 @@
       "status": "passed",
       "scope": "s03 whitespace audit",
       "checkedAt": "2026-08-01T23:14:57.737Z"
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "s04 stable wide, narrow, semantic SVG fallback, context-loss, full inventory, economics, physics, and shell captures",
+      "checkedAt": "2026-08-01T23:24:15.467Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-graph3d-evidence.test.ts tests/editor-graph-3d-host-contract.test.ts tests/editor-graph-3d-surface-adapter.test.ts tests/animation-catalogue-surface-hostability.test.ts tests/animation-catalogue-health.test.ts tests/animation-catalogue-seam-atlas.test.ts tests/graph-webgl.test.ts tests/webgl-context-lease-pool.test.ts",
+      "status": "passed",
+      "scope": "s04 stable evidence contract, semantic axes, fallback containment, and catalogue truth",
+      "checkedAt": "2026-08-01T23:24:16.368Z"
+    },
+    {
+      "command": "npm run test:browser:animation-catalogue-3d",
+      "status": "passed",
+      "scope": "s04 post-capture Graph3D lifecycle regression",
+      "checkedAt": "2026-08-01T23:24:17.256Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s04 capture and evidence TypeScript",
+      "checkedAt": "2026-08-01T23:24:18.154Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s04 architecture preservation",
+      "checkedAt": "2026-08-01T23:24:19.025Z"
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s04 disposition and promotion remain human-gated",
+      "checkedAt": "2026-08-01T23:24:19.919Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s04 whitespace audit",
+      "checkedAt": "2026-08-01T23:24:20.813Z"
     }
   ],
   "expectedLearning": [

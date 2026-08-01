@@ -16,6 +16,8 @@ const economicsExemplarId =
   "animation.economics.supply-demand-equilibrium-shift";
 const physicsExemplarId =
   "animation.physics.constant-force-work-energy";
+const graph3DExemplarId =
+  "animation.graph.surface-mode.mesh-to-donut";
 const baseUrl =
   process.env["KP_VISUAL_BASE_URL"] ?? "http://127.0.0.1:8000";
 const outputRoot = path.resolve(
@@ -528,6 +530,8 @@ try {
 
   await capturePhysicsExemplar(browser);
 
+  await captureGraph3DExemplar(browser);
+
   const hostabilityResults = await captureCatalogueHostability(browser);
   const hostabilityManifest = path.join(outputRoot, "hostability.json");
   await writeFile(
@@ -552,6 +556,154 @@ try {
   );
 } finally {
   await browser.close();
+}
+
+async function captureGraph3DExemplar(browser: Browser): Promise<void> {
+  const graph3DOutput = path.join(outputRoot, "graph3d");
+  await mkdir(graph3DOutput, { recursive: true });
+  const screenshots: Array<{
+    readonly id: string;
+    readonly path: string;
+    readonly viewport: { readonly width: number; readonly height: number };
+    readonly progress: number;
+    readonly webglStatus: string;
+    readonly fallbackMode: string;
+  }> = [];
+
+  const capture = async (input: {
+    readonly id: string;
+    readonly viewport: { readonly width: number; readonly height: number };
+    readonly progress: number;
+    readonly forceCapabilityFailure?: boolean | undefined;
+    readonly loseContext?: boolean | undefined;
+  }): Promise<void> => {
+    const page = await browser.newPage({ viewport: input.viewport });
+    if (input.forceCapabilityFailure === true) {
+      await page.route(/graph-webgl-three/, (route) => route.abort());
+    }
+    const url = new URL("/", baseUrl);
+    url.searchParams.set("artifact", graph3DExemplarId);
+    try {
+      await page.goto(url.toString(), { waitUntil: "networkidle" });
+      await waitForGraph3DSelection(page);
+      const scrubber = page.locator('[data-action="seek-editor-animation"]');
+      await scrubber.fill(String(input.progress));
+      const shell = page.locator(".graph-webgl");
+      await shell.waitFor();
+      if (input.forceCapabilityFailure === true) {
+        await shell.waitFor({ state: "visible" });
+        await page.waitForFunction(() =>
+          document.querySelector<HTMLElement>(".graph-webgl")
+            ?.dataset["kpWebglStatus"] === "fallback"
+        );
+      } else {
+        await page.waitForFunction(() =>
+          document.querySelector<HTMLElement>(".graph-webgl")
+            ?.dataset["kpWebglStatus"] === "ready"
+        );
+      }
+      if (input.loseContext === true) {
+        await page.locator(".graph-webgl__canvas").evaluate((canvas) => {
+          canvas.dispatchEvent(
+            new Event("webglcontextlost", { cancelable: true })
+          );
+        });
+        await page.waitForFunction(() =>
+          document.querySelector<HTMLElement>(".graph-webgl")
+            ?.dataset["kpWebglStatus"] === "fallback"
+        );
+      }
+      const imagePath = path.join(graph3DOutput, `${input.id}.png`);
+      await page.screenshot({ path: imagePath, fullPage: true });
+      const evidence = await shell.evaluate((element) => ({
+        webglStatus: element.dataset["kpWebglStatus"] ?? "unknown",
+        fallbackMode: element.getAttribute(
+          "data-kp-editor-graph-3d-fallback-mode"
+        ) ?? "unknown",
+        progress: Number(
+          element.getAttribute("data-kp-editor-graph-3d-progress") ??
+            Number.NaN
+        )
+      }));
+      if (
+        Math.abs(evidence.progress - input.progress) > 0.001 ||
+        (input.progress < 0.5 && evidence.fallbackMode !== "mesh") ||
+        (input.progress >= 0.5 && evidence.fallbackMode !== "donut")
+      ) {
+        throw new Error(
+          `Graph3D capture ${input.id} drifted: ${JSON.stringify(evidence)}`
+        );
+      }
+      screenshots.push({
+        id: input.id,
+        path: path.relative(process.cwd(), imagePath),
+        viewport: input.viewport,
+        progress: evidence.progress,
+        webglStatus: evidence.webglStatus,
+        fallbackMode: evidence.fallbackMode
+      });
+    } finally {
+      await page.close();
+    }
+  };
+
+  await capture({
+    id: "wide-webgl-40",
+    viewport,
+    progress: 0.4
+  });
+  await capture({
+    id: "narrow-webgl-70",
+    viewport: { width: 390, height: 844 },
+    progress: 0.7
+  });
+  await capture({
+    id: "semantic-svg-fallback-100",
+    viewport,
+    progress: 1,
+    forceCapabilityFailure: true
+  });
+  await capture({
+    id: "context-loss-fallback-70",
+    viewport,
+    progress: 0.7,
+    loseContext: true
+  });
+
+  const manifest = path.join(graph3DOutput, "manifest.json");
+  await writeFile(
+    manifest,
+    `${JSON.stringify({
+      schemaVersion: "kp.animation-catalogue-graph3d-exemplar.v1",
+      animationId: graph3DExemplarId,
+      disposition: "Unreviewed",
+      paintOwners: {
+        ready: "three-webgl",
+        pendingAndFallback: "semantic-svg"
+      },
+      screenshots
+    }, null, 2)}\n`,
+    "utf8"
+  );
+  console.log(
+    `animation catalogue Graph3D exemplar: ${path.relative(process.cwd(), manifest)}`
+  );
+}
+
+async function waitForGraph3DSelection(page: Page): Promise<void> {
+  await page.waitForFunction((expectedAnimationId) => {
+    const catalogue = document.querySelector<HTMLElement>(
+      "[data-kp-animation-catalogue]"
+    );
+    const slot = catalogue?.querySelector<HTMLElement>(
+      '[data-kp-editor-animation-surface-slot="graph"]'
+    );
+    return catalogue?.dataset["kpAnimationCatalogueSelection"] ===
+      expectedAnimationId &&
+      catalogue.dataset["kpAnimationCatalogueHostOutcome"] === "painted" &&
+      slot?.dataset["kpEditorAnimationAdapterId"] ===
+        "editor-animation-surface.graph.webgl-3d";
+  }, graph3DExemplarId);
 }
 
 async function captureEconomicsExemplar(browser: Browser): Promise<void> {
