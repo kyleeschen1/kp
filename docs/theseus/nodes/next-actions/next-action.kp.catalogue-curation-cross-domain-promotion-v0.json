@@ -617,11 +617,18 @@
       "status": "passed",
       "scope": "patch whitespace integrity",
       "checkedAt": "2026-08-01T20:56:04.440Z"
+    },
+    {
+      "command": "human review: physics constant-force work-energy exemplar",
+      "status": "passed",
+      "scope": "s27 canonical route, choreography, graph, diagram, equation, parameter, and catalogue presentation",
+      "checkedAt": "2026-08-01T21:04:39.038Z",
+      "notes": "User response: Looks great."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Registered the exact constant-force work-energy physics exemplar as catalogue artifact 35 with a lazy physics pack, one optional net-force control, review capture, stable visual evidence, and cross-browser deterministic behavior. Awaiting the required human exemplar checkpoint before any shared promotion."
+    "summary": "The economics and physics graph-led exemplars are now both human-approved. Proceeding to classify existing APIs and representations against evidence from the two callers; no universal renderer or motif is assumed."
   },
   "expectedLearning": [
     "Whether persistent catalogue selection can preserve review context while replacing only selected-asset ownership.",
