@@ -443,11 +443,46 @@
       "scope": "s10-performance",
       "checkedAt": "2026-08-02T16:17:38.152Z",
       "notes": "Outer 10459, main host 255362, measured catalogue 171524, and place-value incremental 71797 gzip bytes remain below frozen ceilings."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "s11-focused",
+      "checkedAt": "2026-08-02T16:21:27.132Z",
+      "notes": "34 route, navigation, preparation, host, shell, and rollback tests passed."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s11-types",
+      "checkedAt": "2026-08-02T16:21:28.158Z",
+      "notes": "Svelte checker reported zero errors and zero warnings."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "s11-browser",
+      "checkedAt": "2026-08-02T16:21:29.068Z",
+      "notes": "Six Chromium checks passed; artifact push, playhead replace, Back and Forward restoration, stale-load cancellation, and one-document lifetime were verified."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "s11-production",
+      "checkedAt": "2026-08-02T16:21:29.975Z",
+      "notes": "Production Vite build passed with 1006 transformed modules."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s11-performance",
+      "checkedAt": "2026-08-02T16:21:30.893Z",
+      "notes": "Outer 10459, main host 255291, measured catalogue 171452, and place-value incremental 71797 gzip bytes remain below frozen ceilings."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1 through 10 are complete. Cancellable in-shell asset switching now avoids document reloads; URL push, Back/Forward, and playhead restoration are next."
+    "summary": "Slices 1 through 11 are complete. In-shell history and playhead restoration now work without document reload; focus, keyboard overlays, and rail scroll preservation are next."
   },
   "expectedLearning": [
     "Approved revision 22 places this active phase in now."

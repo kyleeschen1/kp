@@ -205,7 +205,69 @@ test("Svelte in-shell selection ignores a stale pack completion", async ({
     economicsId
   );
   expect(documentRequests).toHaveLength(1);
-  expect(page.url()).toContain(`artifact=${animationId}`);
+  expect(page.url()).toContain(
+    "artifact=animation.economics.supply-demand-equilibrium-shift"
+  );
+  expect(page.url()).toContain("catalogueShell=svelte-exemplar");
+});
+
+test("Svelte history restores artifact and playhead without a document load", async ({
+  page
+}) => {
+  const documentRequests: string[] = [];
+  page.on("request", (request) => {
+    if (request.resourceType() === "document") {
+      documentRequests.push(request.url());
+    }
+  });
+  await page.goto(
+    `/?artifact=${animationId}&catalogueShell=svelte-exemplar`
+  );
+  const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
+  const search = exemplar.getByRole("searchbox", { name: "Search artifacts" });
+  const vectorPlayer = exemplar.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  await vectorPlayer.locator(
+    '[data-action="seek-editor-animation"]'
+  ).fill("0.42");
+  await expect.poll(() => page.url()).toContain("playhead=0.42");
+
+  await search.fill("demand equilibrium");
+  await exemplar.getByRole("link", { name: /Supply and demand/ }).click();
+  const economicsId =
+    "animation.economics.supply-demand-equilibrium-shift";
+  const economicsPlayer = exemplar.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${economicsId}"]`
+  );
+  await economicsPlayer.locator(
+    '[data-action="seek-editor-animation"]'
+  ).fill("0.625");
+  await expect.poll(() => page.url()).toContain("playhead=0.625");
+
+  await page.goBack();
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    animationId
+  );
+  await expect(exemplar.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  )).toHaveAttribute("data-kp-editor-animation-progress", "0.42");
+
+  await page.goForward();
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    economicsId
+  );
+  await expect(exemplar.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${economicsId}"]`
+  )).toHaveAttribute("data-kp-editor-animation-progress", "0.625");
+  expect(documentRequests).toHaveLength(1);
+  expect(page.url()).toContain("catalogueShell=svelte-exemplar");
 });
 
 test("Svelte exemplar renders the not-found terminal state in its reserved stage", async ({

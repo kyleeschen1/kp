@@ -119,7 +119,8 @@
     {
       "id": "s11",
       "title": "Port URL history and playhead restoration",
-      "status": "planned"
+      "summary": "Ported artifact history push, frame-driven playhead replacement, and Back/Forward restoration through the existing route codec and navigation decisions. The Svelte host opt-in remains separate metadata and all history selection reuses the cancellable preparation path.",
+      "status": "complete"
     },
     {
       "id": "s12",

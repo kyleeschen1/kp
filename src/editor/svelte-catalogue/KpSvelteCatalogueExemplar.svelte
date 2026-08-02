@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy, untrack } from "svelte";
+  import { onDestroy, onMount, untrack } from "svelte";
 
   import {
     KP_ANIMATION_CATALOGUE_STAGE_RESERVATION
@@ -14,8 +14,12 @@
     type KpAnimationCatalogueSelectedHostViewModel
   } from "../animation-catalogue-host-view-model.ts";
   import {
-    decideKpAnimationCatalogueLinkNavigation
+    decideKpAnimationCatalogueLinkNavigation,
+    resolveKpAnimationCatalogueHistoryNavigation
   } from "../animation-catalogue-navigation.ts";
+  import {
+    writeKpAnimationCatalogueRoute
+  } from "../animation-catalogue-route.ts";
   import {
     selectKpAnimationCatalogueInspector,
     tuneKpAnimationCataloguePresentation
@@ -27,6 +31,9 @@
     renderKpEditorAnimationPlayerShell
   } from "../animation-player-shell.ts";
   import {
+    KP_EDITOR_ANIMATION_FRAME_EVENT
+  } from "../animation-player-controller.ts";
+  import {
     applyKpAnimationCatalogueObservedHealth,
     renderKpAnimationCatalogueInspector
   } from "../animation-catalogue-shell.ts";
@@ -34,6 +41,10 @@
     KpSvelteCatalogueHostState,
     KpSvelteCatalogueSelectionHost
   } from "./svelte-catalogue-host-state.ts";
+  import {
+    KP_SVELTE_CATALOGUE_EXEMPLAR_PARAM,
+    KP_SVELTE_CATALOGUE_EXEMPLAR_VALUE
+  } from "./svelte-catalogue-exemplar-route.ts";
 
   type SelectedHostState = Extract<
     KpSvelteCatalogueHostState,
@@ -132,10 +143,50 @@
     if (decision.action === "native") return;
     event.preventDefault();
     if (decision.action === "stay") return;
+    const href = withSvelteExemplarOptIn(decision.href);
+    window.history.pushState(null, "", href);
     void prepareSelection({
       entry: decision.entry,
       playhead: decision.playhead,
-      search: new URL(decision.href, window.location.href).search,
+      search: new URL(href, window.location.href).search,
+      selectionHost: selection.selectionHost
+    });
+  }
+
+  function replacePlayhead(event: Event): void {
+    if (!(event instanceof CustomEvent) ||
+      !(event.target instanceof HTMLElement) ||
+      event.target.closest("[data-kp-svelte-catalogue-shell]") !== shell ||
+      typeof event.detail !== "object" || event.detail === null) return;
+    const progress = (event.detail as { readonly progress?: unknown }).progress;
+    if (typeof progress !== "number" || view === undefined) return;
+    const search = writeKpAnimationCatalogueRoute(window.location.search, {
+      artifactId: view.entry.animationId,
+      playhead: progress
+    });
+    if (search !== window.location.search) {
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${search}${window.location.hash}`
+      );
+    }
+  }
+
+  function restoreHistorySelection(): void {
+    if (selection === undefined) return;
+    const decision = resolveKpAnimationCatalogueHistoryNavigation({
+      projection: selection.selectionHost.projection,
+      href: window.location.href
+    });
+    if (decision.action !== "select") {
+      window.location.assign(window.location.href);
+      return;
+    }
+    void prepareSelection({
+      entry: decision.entry,
+      playhead: decision.playhead,
+      search: window.location.search,
       selectionHost: selection.selectionHost
     });
   }
@@ -219,10 +270,36 @@
     });
   });
 
+  onMount(() => {
+    const mountedShell = shell;
+    if (mountedShell === undefined) return;
+    mountedShell.addEventListener(
+      KP_EDITOR_ANIMATION_FRAME_EVENT,
+      replacePlayhead
+    );
+    window.addEventListener("popstate", restoreHistorySelection);
+    return () => {
+      mountedShell.removeEventListener(
+        KP_EDITOR_ANIMATION_FRAME_EVENT,
+        replacePlayhead
+      );
+      window.removeEventListener("popstate", restoreHistorySelection);
+    };
+  });
+
   onDestroy(() => {
     disposed = true;
     selectionRevision += 1;
   });
+
+  function withSvelteExemplarOptIn(href: string): string {
+    const destination = new URL(href, window.location.href);
+    destination.searchParams.set(
+      KP_SVELTE_CATALOGUE_EXEMPLAR_PARAM,
+      KP_SVELTE_CATALOGUE_EXEMPLAR_VALUE
+    );
+    return `${destination.pathname}${destination.search}${destination.hash}`;
+  }
 </script>
 
 {#if hostState.status === "selected" && view !== undefined}

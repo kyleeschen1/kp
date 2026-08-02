@@ -66,9 +66,12 @@ test("bootstrap keeps the imperative default and dynamically mounts the exemplar
   assert.match(component, /selectKpAnimationCatalogueInspector/);
   assert.match(component, /tuneKpAnimationCataloguePresentation/);
   assert.match(component, /decideKpAnimationCatalogueLinkNavigation/);
+  assert.match(component, /resolveKpAnimationCatalogueHistoryNavigation/);
+  assert.match(component, /window\.history\.pushState/);
+  assert.match(component, /window\.history\.replaceState/);
   assert.match(component, /selectionRevision/);
   assert.match(component, /selectionHost\.prepare/);
-  assert.doesNotMatch(component, /window\.location\.(?:assign|reload)/);
+  assert.doesNotMatch(component, /window\.location\.reload/);
   assert.match(component, /mountKpAnimationCataloguePlayerHost/);
   assert.match(component, /renderKpEditorAnimationPlayerShell/);
   assert.doesNotMatch(
