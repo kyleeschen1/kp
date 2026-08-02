@@ -28,6 +28,18 @@ export type KpAnimationCatalogueInspectorView =
 
 export type KpAnimationCatalogueOverlay = "rail" | "inspector";
 
+export type KpAnimationCatalogueParameterUpdate =
+  | Readonly<{
+      readonly kind: "economics";
+      readonly animationId: string;
+      readonly state: KpEconomicsEquilibriumParameterState;
+    }>
+  | Readonly<{
+      readonly kind: "physics";
+      readonly animationId: string;
+      readonly state: KpConstantForceWorkEnergyParameterState;
+    }>;
+
 export interface KpAnimationCatalogueHostChromeState {
   readonly query: string;
   readonly inspectorView: KpAnimationCatalogueInspectorView;
@@ -172,6 +184,31 @@ export function replaceKpAnimationCatalogueHostHealth(
     player: view.player,
     economicsParameters: view.economicsParameters,
     physicsParameters: view.physicsParameters,
+    readerCompanion: view.readerCompanion,
+    chrome: view.chrome
+  });
+}
+
+export function replaceKpAnimationCatalogueHostParameters(
+  view: KpAnimationCatalogueSelectedHostViewModel,
+  update: KpAnimationCatalogueParameterUpdate
+): KpAnimationCatalogueSelectedHostViewModel {
+  if (view.entry.animationId !== update.animationId) {
+    throw new Error(
+      `Catalogue parameter update ${update.animationId} does not match ` +
+      `${view.entry.animationId}.`
+    );
+  }
+  return createKpAnimationCatalogueSelectedHostViewModel({
+    entry: view.entry,
+    health: view.health,
+    entries: view.entries,
+    descriptor: view.descriptor,
+    player: view.player,
+    economicsParameters: update.kind === "economics"
+      ? update.state
+      : undefined,
+    physicsParameters: update.kind === "physics" ? update.state : undefined,
     readerCompanion: view.readerCompanion,
     chrome: view.chrome
   });

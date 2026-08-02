@@ -11,8 +11,12 @@
     createKpAnimationCatalogueSelectedHostViewModel,
     reduceKpAnimationCatalogueHostView,
     replaceKpAnimationCatalogueHostHealth,
+    replaceKpAnimationCatalogueHostParameters,
     type KpAnimationCatalogueSelectedHostViewModel
   } from "../animation-catalogue-host-view-model.ts";
+  import {
+    applyKpAnimationCatalogueParameterInput
+  } from "../animation-catalogue-parameter-host.ts";
   import {
     decideKpAnimationCatalogueLinkNavigation,
     resolveKpAnimationCatalogueHistoryNavigation
@@ -122,6 +126,16 @@
     }
     if (event.target.dataset["action"] === "tune-animation-catalogue") {
       tuneKpAnimationCataloguePresentation(shell, event.target);
+    }
+  }
+
+  function inputParameter(event: Event): void {
+    if (view === undefined || !(event.target instanceof HTMLInputElement)) {
+      return;
+    }
+    const update = applyKpAnimationCatalogueParameterInput(event.target);
+    if (update !== undefined) {
+      view = replaceKpAnimationCatalogueHostParameters(view, update);
     }
   }
 
@@ -358,6 +372,9 @@
     data-kp-animation-catalogue-pack-id={view.entry.packId}
     data-kp-animation-catalogue-selected-health={view.health.status}
     data-kp-animation-catalogue-human-disposition={view.entry.humanDisposition}
+    data-kp-economics-demand-intercept={view.economicsParameters
+      ?.demandInterceptAfter}
+    data-kp-physics-net-force-newtons={view.physicsParameters?.netForceNewtons}
     data-kp-animation-catalogue-host-outcome={hostOutcome}
     data-kp-animation-catalogue-overlay={view.chrome.overlay}
     aria-labelledby="kp-animation-catalogue-title"
@@ -478,6 +495,7 @@
       data-kp-animation-catalogue-region="inspector"
       aria-label="Artifact inspector"
       onchange={changeInspector}
+      oninput={inputParameter}
     >
       {@html inspectorHtml}
     </aside>

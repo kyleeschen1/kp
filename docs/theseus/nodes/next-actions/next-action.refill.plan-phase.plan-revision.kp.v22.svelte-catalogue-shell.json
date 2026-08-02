@@ -548,11 +548,81 @@
       "scope": "s13-performance",
       "checkedAt": "2026-08-02T16:30:48.852Z",
       "notes": "Outer 10459, main host 255291, measured catalogue 171577, and place-value incremental 71797 gzip bytes remain below frozen ceilings."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "failed",
+      "scope": "s14-browser-initial",
+      "checkedAt": "2026-08-02T16:38:38.574Z",
+      "notes": "Ten of eleven checks passed; the new economics test incorrectly expected a rewind-frame value at a forward playhead. Runtime produced the correct interpolated 18.81 value, so the proof will assert preserved playhead before deterministic settlement."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "failed",
+      "scope": "s14-browser-corrected",
+      "checkedAt": "2026-08-02T16:39:56.025Z",
+      "notes": "Ten of eleven checks passed; the parameter proof assumed inspector-view persistence across artifact selection, while the current host returns the new selection to Details. The proof will explicitly open Parameters for the second caller without changing inspector policy."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "s14-focused",
+      "checkedAt": "2026-08-02T16:45:15.224Z",
+      "notes": "34 shared host, parameter ownership, preparation, shell, rollback, and Svelte compiler tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s14-types",
+      "checkedAt": "2026-08-02T16:45:16.268Z",
+      "notes": "Application, node, test, Svelte, and domain typechecks passed; svelte-check reported zero errors and warnings."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "s14-browser",
+      "checkedAt": "2026-08-02T16:45:17.165Z",
+      "notes": "Eleven Chromium checks passed, including both bespoke parameter callers, one-document history restoration, and the generated solve companion with four h3 sections and inline-only KaTeX."
+    },
+    {
+      "command": "npm run test:browser:economics-equilibrium",
+      "status": "passed",
+      "scope": "s14-rollback-economics",
+      "checkedAt": "2026-08-02T16:45:18.060Z",
+      "notes": "The canonical economics parameter, Review, seek, rewind, capture, and history contract passed in Chromium, Firefox, and WebKit after extraction."
+    },
+    {
+      "command": "npm run test:browser:physics-work-energy",
+      "status": "passed",
+      "scope": "s14-rollback-physics",
+      "checkedAt": "2026-08-02T16:45:18.963Z",
+      "notes": "The canonical physics parameter, Review, seek, rewind, capture, and history contract passed in Chromium, Firefox, and WebKit after extraction."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "s14-production",
+      "checkedAt": "2026-08-02T16:45:19.857Z",
+      "notes": "Production Vite build passed with 1010 transformed modules and separate Svelte exemplar, generated reader, and parameter-host chunks."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s14-performance",
+      "checkedAt": "2026-08-02T16:45:20.750Z",
+      "notes": "Outer 10459, main host 255360, measured catalogue 172052, and place-value incremental 71797 gzip bytes remain below frozen ceilings; the generated reader remains a separate selected-only chunk."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s14-hygiene",
+      "checkedAt": "2026-08-02T16:45:21.630Z",
+      "notes": "Tracked slice changes contain no whitespace errors."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1 through 13 are complete. Lower-left Review lifecycle and draft persistence now match; bespoke economics and physics parameters plus the generated solve companion are next."
+    "summary": "Slices 1 through 14 are complete. Both shells now share bespoke economics and physics parameter adaptation, and the Svelte exemplar exposes the existing generated solve explanation companion without a second player, URL, or reader authority."
   },
   "expectedLearning": [
     "Approved revision 22 places this active phase in now."

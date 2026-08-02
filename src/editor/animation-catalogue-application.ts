@@ -2,12 +2,6 @@ import "../styles.css";
 import "./animation-catalogue-shell.css";
 
 import {
-  economicsEquilibriumAnimationId
-} from "../animation/economics-equilibrium-adapter.ts";
-import {
-  constantForceWorkEnergyAnimationId
-} from "../animation/constant-force-work-energy-adapter.ts";
-import {
   installKpAnimationHostStatus,
   markKpAnimationHostFailed,
   markKpAnimationHostLoading,
@@ -62,28 +56,20 @@ import {
   createKpAnimationCatalogueReviewHost
 } from "./animation-catalogue-review-host.ts";
 import {
+  applyKpAnimationCatalogueParameterInput
+} from "./animation-catalogue-parameter-host.ts";
+import {
   createKpEditorAnimationLibrary
 } from "./animation-library.ts";
 import {
   KP_EDITOR_ANIMATION_FRAME_EVENT,
   KP_EDITOR_ANIMATION_LOAD_EVENT,
   disposeKpEditorAnimationPlayers,
-  pauseKpEditorAnimationPlayers,
-  replaceKpEditorAnimationPlaybackAsset
+  pauseKpEditorAnimationPlayers
 } from "./animation-player-controller.ts";
 import {
   renderKpEditorAnimationPlayerShell
 } from "./animation-player-shell.ts";
-import {
-  createKpEconomicsEquilibriumParameterState,
-  createParameterizedEconomicsEquilibriumAnimation,
-  writeKpEconomicsEquilibriumParameters
-} from "./economics-equilibrium-parameters.ts";
-import {
-  createKpConstantForceWorkEnergyParameterState,
-  createParameterizedConstantForceWorkEnergyAnimation,
-  writeKpConstantForceWorkEnergyParameters
-} from "./constant-force-work-energy-parameters.ts";
 
 export function mountKpAnimationCatalogueApplication(
   root: HTMLElement
@@ -284,10 +270,8 @@ class KpAnimationCatalogueApplication {
         this.#filterFromInput(event.target);
         return;
       case "set-economics-demand-intercept":
-        this.#updateEconomics(event.target);
-        return;
       case "set-physics-net-force":
-        this.#updatePhysics(event.target);
+        applyKpAnimationCatalogueParameterInput(event.target);
         return;
     }
   };
@@ -552,63 +536,6 @@ class KpAnimationCatalogueApplication {
     tuneKpAnimationCataloguePresentation(this.#root, select);
   }
 
-  #updateEconomics(input: HTMLInputElement): void {
-    const shell = input.closest<HTMLElement>("[data-kp-animation-catalogue]");
-    if (shell?.dataset["kpAnimationCatalogueSelection"] !==
-      economicsEquilibriumAnimationId) return;
-    const player = shell.querySelector<HTMLElement>(
-      "[data-kp-editor-animation-player]"
-    );
-    if (player === null) return;
-    const state = createKpEconomicsEquilibriumParameterState(input.value);
-    const parameterized = createParameterizedEconomicsEquilibriumAnimation(state);
-    replaceKpEditorAnimationPlaybackAsset(player, parameterized.animation);
-    input.value = String(state.demandInterceptAfter);
-    shell.dataset["kpEconomicsDemandIntercept"] =
-      String(state.demandInterceptAfter);
-    input.closest("[data-kp-economics-parameters]")
-      ?.querySelector<HTMLOutputElement>(
-        "[data-kp-economics-demand-intercept-output]"
-      )?.replaceChildren(document.createTextNode(
-        String(state.demandInterceptAfter)
-      ));
-    const search = writeKpEconomicsEquilibriumParameters({
-      search: window.location.search,
-      state
-    });
-    window.history.replaceState(
-      window.history.state,
-      "",
-      `${window.location.pathname}${search}${window.location.hash}`
-    );
-  }
-
-  #updatePhysics(input: HTMLInputElement): void {
-    const shell = input.closest<HTMLElement>("[data-kp-animation-catalogue]");
-    if (shell?.dataset["kpAnimationCatalogueSelection"] !==
-      constantForceWorkEnergyAnimationId) return;
-    const player = shell.querySelector<HTMLElement>(
-      "[data-kp-editor-animation-player]"
-    );
-    if (player === null) return;
-    const state = createKpConstantForceWorkEnergyParameterState(input.value);
-    const parameterized = createParameterizedConstantForceWorkEnergyAnimation(state);
-    replaceKpEditorAnimationPlaybackAsset(player, parameterized.animation);
-    input.value = String(state.netForceNewtons);
-    shell.dataset["kpPhysicsNetForceNewtons"] = String(state.netForceNewtons);
-    input.closest("[data-kp-physics-work-energy-parameters]")
-      ?.querySelector<HTMLOutputElement>("[data-kp-physics-net-force-output]")
-      ?.replaceChildren(document.createTextNode(`${state.netForceNewtons} N`));
-    const search = writeKpConstantForceWorkEnergyParameters({
-      search: window.location.search,
-      state
-    });
-    window.history.replaceState(
-      window.history.state,
-      "",
-      `${window.location.pathname}${search}${window.location.hash}`
-    );
-  }
 }
 
 function setStageMessage(

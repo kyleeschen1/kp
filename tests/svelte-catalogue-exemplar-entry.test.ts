@@ -88,10 +88,17 @@ test("bootstrap keeps the imperative default and dynamically mounts the exemplar
 });
 
 test("both catalogue shells delegate browser lifecycles to shared hosts", async () => {
-  const [application, playerHost, interactionHost, component] = await Promise.all([
+  const [
+    application,
+    playerHost,
+    interactionHost,
+    parameterHost,
+    component
+  ] = await Promise.all([
     readFile("src/editor/animation-catalogue-application.ts", "utf8"),
     readFile("src/editor/animation-catalogue-player-host.ts", "utf8"),
     readFile("src/editor/animation-catalogue-interaction-host.ts", "utf8"),
+    readFile("src/editor/animation-catalogue-parameter-host.ts", "utf8"),
     readFile(
       "src/editor/svelte-catalogue/KpSvelteCatalogueExemplar.svelte",
       "utf8"
@@ -117,4 +124,14 @@ test("both catalogue shells delegate browser lifecycles to shared hosts", async 
     assert.match(owner, /toggleKpAnimationCatalogueOverlay/);
   }
   assert.match(interactionHost, /data-kp-animation-catalogue-results/);
+  for (const owner of [application, component]) {
+    assert.match(owner, /applyKpAnimationCatalogueParameterInput/);
+  }
+  assert.match(parameterHost, /createParameterizedEconomicsEquilibriumAnimation/);
+  assert.match(parameterHost, /createParameterizedConstantForceWorkEnergyAnimation/);
+  assert.doesNotMatch(
+    application,
+    /createParameterizedEconomicsEquilibriumAnimation|createParameterizedConstantForceWorkEnergyAnimation/
+  );
+  assert.match(component, /replaceKpAnimationCatalogueHostParameters/);
 });

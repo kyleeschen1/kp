@@ -137,7 +137,8 @@
     {
       "id": "s14",
       "title": "Port bespoke parameters and generated solve companion",
-      "status": "planned"
+      "summary": "Shared one parameter-input host across both catalogue compositions; browser-proved economics and physics updates, URL/history restoration, unchanged canonical cross-browser behavior, and the generated solve explanation with inline KaTeX and h3 sections.",
+      "status": "complete"
     },
     {
       "id": "s15",

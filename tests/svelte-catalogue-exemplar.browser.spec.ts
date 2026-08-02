@@ -380,6 +380,162 @@ test("Svelte keeps one Review composer and draft across selection", async ({
   );
 });
 
+test("Svelte ports economics and physics parameters through one player lifecycle", async ({
+  page
+}) => {
+  const documentRequests: string[] = [];
+  page.on("request", (request) => {
+    if (request.resourceType() === "document") {
+      documentRequests.push(request.url());
+    }
+  });
+  const economicsId =
+    "animation.economics.supply-demand-equilibrium-shift";
+  await page.goto(
+    `/?artifact=${economicsId}&playhead=0.56&catalogueShell=svelte-exemplar`
+  );
+
+  const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
+  const inspectorSelect = exemplar.getByRole("combobox", {
+    name: "Inspector view"
+  });
+  await inspectorSelect.selectOption("parameters");
+  const economicsPlayer = exemplar.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${economicsId}"]`
+  );
+  const economicsGraph = economicsPlayer.locator(
+    "[data-kp-editor-graph-svg]"
+  );
+  await exemplar.locator(
+    '[data-action="set-economics-demand-intercept"]'
+  ).fill("20");
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-economics-demand-intercept",
+    "20"
+  );
+  await expect(exemplar.locator(
+    "[data-kp-economics-demand-intercept-output]"
+  )).toHaveText("20");
+  await expect(economicsPlayer).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "0.56"
+  );
+  await economicsPlayer.press("End");
+  await expect(economicsGraph.locator("[data-kp-economics-demand-line]"))
+    .toHaveAttribute("data-kp-economics-equation", "P=20-Q");
+  expect(new URL(page.url()).searchParams.get("demandIntercept")).toBe("20");
+
+  const physicsId = "animation.physics.constant-force-work-energy";
+  await exemplar.locator(
+    `[data-kp-animation-catalogue-row="${physicsId}"] a`
+  ).click();
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    physicsId
+  );
+  const physicsInspectorSelect = exemplar.getByRole("combobox", {
+    name: "Inspector view"
+  });
+  await expect(physicsInspectorSelect).toHaveValue("details");
+  await physicsInspectorSelect.selectOption("parameters");
+  const physicsPlayer = exemplar.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${physicsId}"]`
+  );
+  const physicsGraph = physicsPlayer.locator("[data-kp-editor-graph-svg]");
+  await exemplar.locator('[data-action="set-physics-net-force"]').fill("5");
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-physics-net-force-newtons",
+    "5"
+  );
+  await expect(exemplar.locator("[data-kp-physics-net-force-output]"))
+    .toHaveText("5 N");
+  await expect(physicsGraph.locator("[data-kp-physics-constant-force-line]"))
+    .toHaveAttribute("data-kp-physics-force-value", "5");
+  expect(new URL(page.url()).searchParams.get("netForce")).toBe("5");
+
+  await page.goBack();
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    economicsId
+  );
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-economics-demand-intercept",
+    "20"
+  );
+  await expect(exemplar.locator(
+    '[data-action="set-economics-demand-intercept"]'
+  )).toHaveValue("20");
+  expect(documentRequests).toHaveLength(1);
+});
+
+test("Svelte exposes the generated solve companion as inline explanation", async ({
+  page
+}) => {
+  const documentRequests: string[] = [];
+  page.on("request", (request) => {
+    if (request.resourceType() === "document") {
+      documentRequests.push(request.url());
+    }
+  });
+  const generatedId =
+    "animation.generated.linear-solve.linear-68c15d41";
+  await page.goto(
+    `/?artifact=${generatedId}&catalogueShell=svelte-exemplar`
+  );
+
+  const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
+  const generatedPlayer = exemplar.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${generatedId}"]`
+  );
+  await expect(generatedPlayer).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+  await generatedPlayer.evaluate((element) => {
+    element.dataset["kpGeneratedCompanionPlayerIdentity"] = "stable";
+  });
+  const inspectorSelect = exemplar.getByRole("combobox", {
+    name: "Inspector view"
+  });
+  await expect(inspectorSelect.locator('option[value="explanation"]'))
+    .toHaveText("Explanation");
+  await inspectorSelect.selectOption("explanation");
+  const explanation = exemplar.locator("[data-kp-generated-explanation]");
+  await expect(explanation).toBeVisible();
+  await expect(explanation.locator("h3")).toHaveCount(4);
+  await expect(explanation.locator("h2")).toHaveCount(0);
+  expect(await explanation.locator(".katex").count()).toBeGreaterThan(0);
+  await expect(explanation.locator(".katex-display")).toHaveCount(0);
+  await expect(generatedPlayer).toHaveAttribute(
+    "data-kp-generated-companion-player-identity",
+    "stable"
+  );
+
+  await exemplar.locator(
+    `[data-kp-animation-catalogue-row="${animationId}"] a`
+  ).click();
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    animationId
+  );
+  const nextInspectorSelect = exemplar.getByRole("combobox", {
+    name: "Inspector view"
+  });
+  await expect(nextInspectorSelect).toHaveValue("details");
+  await expect(nextInspectorSelect.locator('option[value="explanation"]'))
+    .toHaveCount(0);
+  await expect(exemplar.locator("[data-kp-generated-explanation]"))
+    .toHaveCount(0);
+  await expect(exemplar.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  )).toHaveAttribute("data-kp-editor-animation-hydrated", "true");
+  expect(documentRequests).toHaveLength(1);
+});
+
 test("Svelte exemplar renders the not-found terminal state in its reserved stage", async ({
   page
 }) => {
