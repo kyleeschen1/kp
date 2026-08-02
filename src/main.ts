@@ -200,6 +200,9 @@ type GraphSvgSurfaceCapabilityClient = typeof import(
 type Graph3DSurfaceCapabilityClient = typeof import(
   "./editor/graph-3d-surface-capability.ts"
 );
+type ProgrammingSurfaceCapabilityClient = typeof import(
+  "./editor/programming-surface-capability.ts"
+);
 let projectDashboardClientPromise: Promise<{
   readonly data: ProjectDashboardDataClient;
   readonly render: ProjectDashboardRenderClient;
@@ -229,6 +232,9 @@ let graphSvgSurfaceCapabilityPromise:
   | undefined;
 let graph3DSurfaceCapabilityPromise:
   | Promise<Graph3DSurfaceCapabilityClient>
+  | undefined;
+let programmingSurfaceCapabilityPromise:
+  | Promise<ProgrammingSurfaceCapabilityClient>
   | undefined;
 let activeView:
   | "dashboard"
@@ -1896,6 +1902,18 @@ function loadSelectedSurfaceCapability(
         ({ id }) => id === "editor-animation-surface.graph.webgl-3d"
       )) {
         client.registerKpEditorGraph3DSurfaceCapability();
+      }
+      return client;
+    });
+  }
+  if (capability === "programming-trace") {
+    return programmingSurfaceCapabilityPromise ??= import(
+      "./editor/programming-surface-capability.ts"
+    ).then((client) => {
+      if (!kpEditorAnimationSurfaceAdapterRegistry.list().some(
+        ({ id }) => id === "editor-animation-surface.programming.trace"
+      )) {
+        client.registerKpEditorProgrammingSurfaceCapability();
       }
       return client;
     });

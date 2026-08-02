@@ -117,7 +117,7 @@ export function createProgramTraceAnimationAsset(): KpAnimationAsset {
     },
     metadata: {
       domain: "programming",
-      placeholderContract: true,
+      placeholderContract: false,
       sourceFixtureId: source.sourceFixtureId,
       behaviorId: source.behavior.id
     }

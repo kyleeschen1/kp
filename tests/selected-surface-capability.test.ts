@@ -22,7 +22,11 @@ test("selected surface capabilities keep rich renderers explicit", () => {
   assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
     animationId: "animation.programming.add.execution-trace",
     slotKinds: ["programming"]
-  }), []);
+  }), ["programming-trace"]);
+  assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
+    animationId: "animation.comparison.linear-solve-programming",
+    slotKinds: ["equation", "programming"]
+  }), ["equation-katex", "programming-trace"]);
 });
 
 test("main owns only dynamic selected-surface capability imports", async () => {
@@ -30,12 +34,14 @@ test("main owns only dynamic selected-surface capability imports", async () => {
     mainSource,
     equationCapability,
     graphCapability,
-    graph3DCapability
+    graph3DCapability,
+    programmingCapability
   ] = await Promise.all([
     readFile("src/main.ts", "utf8"),
     readFile("src/editor/equation-surface-capability.ts", "utf8"),
     readFile("src/editor/graph-svg-surface-capability.ts", "utf8"),
-    readFile("src/editor/graph-3d-surface-capability.ts", "utf8")
+    readFile("src/editor/graph-3d-surface-capability.ts", "utf8"),
+    readFile("src/editor/programming-surface-capability.ts", "utf8")
   ]);
 
   assert.doesNotMatch(mainSource, /^import "katex\/dist\/katex\.min\.css";/m);
@@ -63,12 +69,21 @@ test("main owns only dynamic selected-surface capability imports", async () => {
     mainSource,
     /import\(\s*"\.\/editor\/graph-3d-surface-capability\.ts"\s*\)/
   );
+  assert.match(
+    mainSource,
+    /import\(\s*"\.\/editor\/programming-surface-capability\.ts"\s*\)/
+  );
   assert.match(equationCapability, /import "katex\/dist\/katex\.min\.css"/);
   assert.match(graphCapability, /import "katex\/dist\/katex\.min\.css"/);
   assert.match(
     graph3DCapability,
     /from "\.\/graph-3d-surface-adapter\.ts"/
   );
+  assert.match(
+    programmingCapability,
+    /from "\.\/programming-surface-adapter\.ts"/
+  );
+  assert.doesNotMatch(programmingCapability, /katex|three|shiki|prism/i);
 });
 
 test("optional editor inspectors and WebGL controls stay behind dynamic callers", async () => {

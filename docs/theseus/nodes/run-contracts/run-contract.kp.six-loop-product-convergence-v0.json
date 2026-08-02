@@ -236,7 +236,8 @@
     {
       "id": "s28",
       "title": "Host native programming trace",
-      "status": "planned"
+      "summary": "One-lazy-native-programming-adapter-hosts-addition-and-exact-comparison-from-verified-frames-on-the-shared-player-clock-closing-all-36-native-hosts-with-no-code-runtime-or-unrelated-capabilities",
+      "status": "complete"
     },
     {
       "id": "s29",

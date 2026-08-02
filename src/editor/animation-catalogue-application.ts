@@ -110,6 +110,9 @@ type GraphSvgSurfaceCapabilityClient = typeof import(
 type Graph3DSurfaceCapabilityClient = typeof import(
   "./graph-3d-surface-capability.ts"
 );
+type ProgrammingSurfaceCapabilityClient = typeof import(
+  "./programming-surface-capability.ts"
+);
 
 export function mountKpAnimationCatalogueApplication(
   root: HTMLElement
@@ -132,6 +135,8 @@ class KpAnimationCatalogueApplication {
   #equationCapabilityPromise: Promise<EquationSurfaceCapabilityClient> | undefined;
   #graphSvgCapabilityPromise: Promise<GraphSvgSurfaceCapabilityClient> | undefined;
   #graph3DCapabilityPromise: Promise<Graph3DSurfaceCapabilityClient> | undefined;
+  #programmingCapabilityPromise:
+    Promise<ProgrammingSurfaceCapabilityClient> | undefined;
 
   constructor(root: HTMLElement) {
     this.#root = root;
@@ -690,6 +695,16 @@ class KpAnimationCatalogueApplication {
         if (!kpEditorAnimationSurfaceAdapterRegistry.list().some(
           ({ id }) => id === "editor-animation-surface.graph.webgl-3d"
         )) client.registerKpEditorGraph3DSurfaceCapability();
+        return client;
+      });
+    }
+    if (capability === "programming-trace") {
+      return this.#programmingCapabilityPromise ??= import(
+        "./programming-surface-capability.ts"
+      ).then((client) => {
+        if (!kpEditorAnimationSurfaceAdapterRegistry.list().some(
+          ({ id }) => id === "editor-animation-surface.programming.trace"
+        )) client.registerKpEditorProgrammingSurfaceCapability();
         return client;
       });
     }

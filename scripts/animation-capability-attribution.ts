@@ -138,7 +138,7 @@ export function assertKpSelectedOptionalCapabilitySignals(
     ["graph-webgl-3d"]
   );
   assertExactRouteIds(
-    "programming adapter",
+    "programming surface capability",
     signals.programmingAdapterRoutes,
     ["programming-trace"]
   );
@@ -377,7 +377,7 @@ async function captureKpAnimationCapabilityAttribution(): Promise<void> {
       ),
       programmingAdapterRoutes: routeIdsRequesting(
         routes,
-        /programming-adapter/
+        /programming-surface-capability/
       ),
       apiCatalogRoutes: routeIdsRequesting(
         routes,

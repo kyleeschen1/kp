@@ -40,6 +40,9 @@ import {
 import {
   kpEditorPlaceValueAdditionSurfaceAdapter
 } from "../src/editor/place-value-addition-surface-adapter.ts";
+import {
+  kpEditorProgrammingSurfaceAdapter
+} from "../src/editor/programming-surface-adapter.ts";
 
 function currentHostability(): readonly KpAnimationCatalogueSurfaceHostability[] {
   const catalog = createKpAnimationAssets();
@@ -57,7 +60,8 @@ function currentHostability(): readonly KpAnimationCatalogueSurfaceHostability[]
     kpEditorGraphSvgViewportAdapter,
     kpEditorOperationEvaluationSurfaceAdapter,
     kpEditorExactFractionQuantitySurfaceAdapter,
-    kpEditorPlaceValueAdditionSurfaceAdapter
+    kpEditorPlaceValueAdditionSurfaceAdapter,
+    kpEditorProgrammingSurfaceAdapter
   ]);
 
   return createKpAnimationCatalogueLoadableRegistry().map((entry) => {
@@ -114,17 +118,14 @@ test("current unobserved catalogue health is honest about review and breakage", 
         health.filter((entry) => entry.status === status).length
       ])
     ),
-    { ready: 0, review: 34, broken: 2 }
+    { ready: 0, review: 36, broken: 0 }
   );
   assert.deepEqual(
     health
       .filter(({ status }) => status === "broken")
       .map(({ animationId }) => animationId)
       .sort(),
-    [
-      "animation.comparison.linear-solve-programming",
-      "animation.programming.add.execution-trace"
-    ]
+    []
   );
 });
 

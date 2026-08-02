@@ -34,6 +34,9 @@ import {
 import {
   kpEditorPlaceValueAdditionSurfaceAdapter
 } from "../src/editor/place-value-addition-surface-adapter.ts";
+import {
+  kpEditorProgrammingSurfaceAdapter
+} from "../src/editor/programming-surface-adapter.ts";
 
 function currentHostability() {
   const catalog = createKpAnimationAssets();
@@ -51,7 +54,8 @@ function currentHostability() {
     kpEditorGraphSvgViewportAdapter,
     kpEditorOperationEvaluationSurfaceAdapter,
     kpEditorExactFractionQuantitySurfaceAdapter,
-    kpEditorPlaceValueAdditionSurfaceAdapter
+    kpEditorPlaceValueAdditionSurfaceAdapter,
+    kpEditorProgrammingSurfaceAdapter
   ]);
 
   return createKpAnimationCatalogueLoadableRegistry().map((entry) => {
@@ -82,8 +86,8 @@ test("hostability requires every concrete asset slot to resolve an adapter", () 
       ])
     ),
     {
-      ready: 34,
-      "missing-adapter": 2,
+      ready: 36,
+      "missing-adapter": 0,
       "unsupported-surface": 0
     }
   );
@@ -92,10 +96,7 @@ test("hostability requires every concrete asset slot to resolve an adapter", () 
       .filter(({ status }) => status === "missing-adapter")
       .map(({ animationId }) => animationId)
       .sort(),
-    [
-      "animation.comparison.linear-solve-programming",
-      "animation.programming.add.execution-trace"
-    ]
+    []
   );
 });
 
@@ -156,8 +157,20 @@ test("hostability records exact generic and specialized adapter ownership", () =
         status: "ready",
         adapterId: "editor-animation-surface.equation.katex"
       },
-      { slotKind: "programming", status: "missing-adapter" }
+      {
+        slotKind: "programming",
+        status: "ready",
+        adapterId: "editor-animation-surface.programming.trace"
+      }
     ]
+  );
+  assert.deepEqual(
+    byId.get("animation.programming.add.execution-trace")?.slots,
+    [{
+      slotKind: "programming",
+      status: "ready",
+      adapterId: "editor-animation-surface.programming.trace"
+    }]
   );
 });
 

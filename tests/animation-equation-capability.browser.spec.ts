@@ -62,6 +62,7 @@ test("programming and 3D selections request only their selected capabilities", a
 }) => {
   const unrelatedRequests: string[] = [];
   const graph3DRequests: string[] = [];
+  const programmingRequests: string[] = [];
   page.on("request", (request) => {
     if (/equation-surface-capability|graph-svg-surface-capability|katex(?:\.min)?\.(?:js|css)(?:\?|$)|api-catalog|animation-diagnostics-capability|shiki|highlight\.js|prismjs|code-highlighter/i
       .test(request.url())) {
@@ -70,17 +71,22 @@ test("programming and 3D selections request only their selected capabilities", a
     if (/graph-3d-surface-capability/i.test(request.url())) {
       graph3DRequests.push(request.url());
     }
+    if (/programming-surface-capability/i.test(request.url())) {
+      programmingRequests.push(request.url());
+    }
   });
 
   await page.goto(`/?artifact=${programmingId}`);
-  await waitForOutcome(page, programmingId, "capability-gap");
+  await waitForOutcome(page, programmingId, "painted");
   expect(unrelatedRequests).toEqual([]);
   expect(graph3DRequests).toEqual([]);
+  expect(programmingRequests).toHaveLength(1);
 
   await page.goto(`/?artifact=${graph3DId}`);
   await waitForOutcome(page, graph3DId, "painted");
   expect(unrelatedRequests).toEqual([]);
   expect(graph3DRequests).toHaveLength(1);
+  expect(programmingRequests).toHaveLength(1);
 });
 
 test("catalogue and full-editor runtimes load only their own application capabilities", async ({

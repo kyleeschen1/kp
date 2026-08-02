@@ -1,0 +1,203 @@
+.editor-animation-player__surface:has(.editor-programming-trace) {
+  border-style: solid;
+  color: #253139;
+  background: #fffefa;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.editor-programming-trace {
+  --kp-programming-emphasis-opacity: 0.82;
+
+  display: grid;
+  width: min(100% - 2rem, 58rem);
+  max-height: 100%;
+  overflow: hidden;
+  border: 1px solid rgb(65 73 72 / 16%);
+  border-radius: 0.55rem;
+  background: #fffefa;
+  box-shadow: 0 0.8rem 2.5rem rgb(47 52 50 / 7%);
+}
+
+.editor-programming-trace__file {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgb(65 73 72 / 13%);
+  padding: 0.52rem 0.72rem;
+  color: #66706d;
+  background: #f4f2ed;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.7rem;
+  font-weight: 650;
+}
+
+.editor-programming-trace__body {
+  display: grid;
+  grid-template-columns: minmax(19rem, 1.65fr) minmax(12rem, 0.85fr);
+  min-height: 17rem;
+}
+
+.editor-programming-trace__source {
+  display: grid;
+  align-items: center;
+  overflow: auto;
+  border-right: 1px solid rgb(65 73 72 / 12%);
+  padding: 1.25rem 0;
+  background: #faf9f5;
+}
+
+.editor-programming-trace__source ol {
+  margin: 0;
+  padding: 0 1rem 0 3.2rem;
+  color: #9b9d98;
+  font: 500 0.9rem/1.8 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+}
+
+.editor-programming-trace__source li {
+  padding-left: 0.55rem;
+}
+
+.editor-programming-trace__source code {
+  display: block;
+  color: #36413f;
+  font: inherit;
+  white-space: pre;
+}
+
+.editor-programming-trace__source mark {
+  border-radius: 0.22rem;
+  padding: 0.13rem 0.16rem;
+  color: #193b43;
+  background: rgb(181 218 212 / var(--kp-programming-emphasis-opacity));
+  box-shadow: inset 0 -1px 0 rgb(47 104 107 / 24%);
+}
+
+.editor-programming-trace__state {
+  display: grid;
+  align-content: center;
+  gap: 0;
+  min-width: 0;
+  padding: 0.8rem 1rem;
+}
+
+.editor-programming-trace__current,
+.editor-programming-trace__state-group {
+  border-bottom: 1px solid rgb(65 73 72 / 11%);
+  padding: 0.65rem 0;
+}
+
+.editor-programming-trace__state-group:last-child {
+  border-bottom: 0;
+}
+
+.editor-programming-trace__current > span,
+.editor-programming-trace__state-group h3 {
+  color: #7a817e;
+  font-size: 0.64rem;
+  font-weight: 750;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.editor-programming-trace__current h3 {
+  margin: 0.2rem 0 0;
+  color: #193b43;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.editor-programming-trace__current p,
+.editor-programming-trace__state-group p {
+  margin: 0.3rem 0 0;
+  color: #59635f;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.editor-programming-trace__state-group h3 {
+  margin: 0;
+}
+
+.editor-programming-trace__state-group ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+  margin: 0.35rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.editor-programming-trace__state-group li {
+  border-radius: 999px;
+  padding: 0.2rem 0.42rem;
+  color: #294548;
+  background: #e8efec;
+  font: 650 0.7rem/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+}
+
+.editor-programming-trace__state-group[data-kp-editor-programming-channel="output"] li {
+  min-width: 1.55rem;
+  color: #fffefa;
+  background: #315d63;
+  text-align: center;
+}
+
+.editor-programming-trace__empty {
+  opacity: 0.45;
+}
+
+@media (max-width: 700px) {
+  .editor-programming-trace {
+    width: calc(100% - 1rem);
+    max-height: calc(100% - 0.5rem);
+  }
+
+  .editor-programming-trace__body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(8rem, 1fr) auto;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  .editor-programming-trace__source {
+    min-height: 8rem;
+    border-right: 0;
+    border-bottom: 1px solid rgb(65 73 72 / 12%);
+    padding: 0.7rem 0;
+  }
+
+  .editor-programming-trace__source ol {
+    padding-right: 0.6rem;
+    padding-left: 2.7rem;
+    font-size: 0.72rem;
+  }
+
+  .editor-programming-trace__state {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-content: start;
+    padding: 0.45rem 0.65rem;
+  }
+
+  .editor-programming-trace__current {
+    grid-column: 1 / -1;
+  }
+
+  .editor-programming-trace__state-group {
+    border-right: 1px solid rgb(65 73 72 / 11%);
+    border-bottom: 0;
+    padding: 0.5rem;
+  }
+
+  .editor-programming-trace__state-group:last-child {
+    border-right: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .editor-programming-trace__source mark {
+    transition: none;
+  }
+}

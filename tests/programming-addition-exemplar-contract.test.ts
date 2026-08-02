@@ -114,7 +114,7 @@ test("the stable asset and both exact catalogue callers meet the host seam", () 
   assert.deepEqual(animation.renderTargets.map(({ kind }) => kind), [
     contract.host.slotKind
   ]);
-  assert.equal(animation.metadata?.["placeholderContract"], true);
+  assert.equal(animation.metadata?.["placeholderContract"], false);
   for (const animationId of contract.host.coveredAnimationIds) {
     const descriptor = descriptors.find((candidate) =>
       candidate.animationId === animationId

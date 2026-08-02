@@ -1,21 +1,21 @@
 # Animation Catalogue Seam Atlas and Provisional Queue
 
 Date: 2026-08-01
-Status: updated after native generated solve-x integration
+Status: updated after native programming host integration
 
 ## Outcome
 
 The internal catalogue now has one row for each of 36 concrete lazy-loadable
 assets across 12 packs. The catalogue load probe loaded and routed every row:
-34 meaningfully painted through a native adapter, two stopped at explicit
-programming capability gaps, none failed loading, and none used an iframe. The
+36 meaningfully painted through a native adapter, with no remaining native-host
+capability gaps, no loading failures, and no iframes. The
 Graph3D surface transition now uses the bounded lazy Three.js adapter over its
 semantic SVG fallback and shared WebGL lease pool.
 
 This collapses most of the apparent port backlog while correcting one earlier
-false positive. There is no catalogue-host port to perform for the 34
-meaningfully painted assets. The remaining observed hosting seam is
-programming, shared by one pure execution trace and one composite comparison.
+false positive. There is no remaining catalogue-host port in this concrete
+inventory. The programming seam is shared by one pure execution trace and one
+composite comparison through the same selected-caller native adapter.
 
 Every human disposition remains `Unreviewed`. The final column below is a
 provisional question, not approval: `Keep?` means only that the asset is
@@ -27,7 +27,7 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 | Concrete asset | Pack | Surface | Observed host | Contexts | Provisional question |
 | --- | --- | --- | --- | ---: | --- |
 | `animation.comparison.jacobian-hessian` | comparison | equation | Painted · KaTeX | 1 | Keep? |
-| `animation.comparison.linear-solve-programming` | comparison | composite | Gap · programming adapter | 1 | Repair? |
+| `animation.comparison.linear-solve-programming` | comparison | composite | Painted · KaTeX + programming trace | 1 | Keep? |
 | `animation.derivative-rules.tangent-graph` | graph | graph | Painted · SVG graph | 3 | Keep? |
 | `animation.dot-projection.basic` | graph | graph | Painted · SVG graph | 3 | Keep? |
 | `animation.economics.supply-demand-equilibrium-shift` | economics | graph | Painted · exact SVG graph | 1 | Approved exemplar |
@@ -59,7 +59,7 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 | `animation.operation-evaluation.three-sixths` | operation-evaluation | equation | Painted · native KaTeX operation | 1 | Keep? |
 | `animation.place-value-addition.278-plus-156` | place-value | diagram | Painted · synchronized place value | 2 | Keep? |
 | `animation.physics.constant-force-work-energy` | physics | graph | Painted · exact SVG graph/diagram | 1 | Approved exemplar |
-| `animation.programming.add.execution-trace` | programming | programming | Gap · programming adapter | 1 | Repair? |
+| `animation.programming.add.execution-trace` | programming | programming | Painted · native programming trace | 1 | Keep? |
 | `animation.sample.fourier-transform-pair` | complex-katex | equation | Painted · KaTeX | 1 | Keep? |
 | `animation.sample.fundamental-theorem-calculus` | complex-katex | equation | Painted · KaTeX | 3 | Keep? |
 
@@ -69,7 +69,8 @@ The catalogue crosses five surface shapes: 24 equation, seven graph, three
 diagram, one composite, and one programming asset. Adapter reuse is strong:
 the general KaTeX adapter participates in 22 rows, the SVG graph adapter in six,
 the canonical operation-evaluation adapter in three, the bounded Graph3D
-adapter in one, and three specialized diagram adapters each cover one row.
+adapter in one, the programming trace adapter in two, and three specialized
+diagram adapters each cover one row.
 This is evidence for keeping the adapter registry seam, not for inventing a
 universal renderer.
 
@@ -113,18 +114,14 @@ are semantically interchangeable.
 
 ## Evidence-Ranked Port Hypotheses
 
-1. Define the programming execution-trace semantic model and canonical visual
-   exemplar. Information gain is high because the execution trace does not yet
-   exist as a verified catalogue surface. This is the long pole, not shell
-   wiring.
-2. Add one programming surface adapter for
-   `animation.programming.add.execution-trace`. Once the trace contract exists,
-   the catalogue port itself should be bounded and relatively fast.
-3. Reuse that adapter in
-   `animation.comparison.linear-solve-programming` and verify synchronized
-   composite timing. This tests whether the seam genuinely crosses callers.
-4. Stop. The inventory currently supplies no evidence for another canonical
-   port. Review and context consolidation should choose the next candidate.
+1. The programming execution-trace semantic model and exact addition exemplar
+   are now verified.
+2. One selected-caller programming adapter hosts
+   `animation.programming.add.execution-trace`.
+3. The same adapter hosts
+   `animation.comparison.linear-solve-programming` from its sampled child frame.
+4. Stop. The inventory supplies no evidence for another canonical port. Review
+   and context consolidation should choose the next candidate.
 
 This order answers the verification concern directly: implementing only a host
 would be fast but would certify nothing useful. Establishing execution-trace

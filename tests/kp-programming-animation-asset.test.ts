@@ -70,7 +70,7 @@ test("createProgramTraceAnimationAsset wraps SourceFile execution trace semantic
   assert.equal(checkKpAnimationAssetSeekRewindLaw(animation).passed, true);
 });
 
-test("programming animation placeholders are available through the animation catalog", () => {
+test("programming animation assets are available through the animation catalog", () => {
   assert.deepEqual(
     createProgrammingAnimationAssets().map((animation) => animation.id),
     ["animation.programming.add.execution-trace"]

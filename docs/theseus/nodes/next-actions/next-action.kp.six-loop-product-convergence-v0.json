@@ -201,6 +201,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-programming-addition-runtime-frames.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-native-programming-catalogue-host.md"
     }
   ],
   "dependsOn": {
@@ -1329,11 +1333,66 @@
       "status": "passed",
       "scope": "s27-programming-runtime",
       "checkedAt": "2026-08-02T04:42:09.338Z"
+    },
+    {
+      "command": "programming-native-host-focused-tests",
+      "status": "passed",
+      "scope": "s28-programming-host",
+      "checkedAt": "2026-08-02T05:00:17.235Z",
+      "notes": "thirty-tests-pass-across-runtime-adapter-hostability-health-atlas-selected-capability-and-comparison"
+    },
+    {
+      "command": "npm-run-test-browser-programming-addition",
+      "status": "passed",
+      "scope": "s28-programming-host",
+      "checkedAt": "2026-08-02T05:00:18.572Z",
+      "notes": "four-chromium-tests-pass-source-state-rewind-reduced-comparison-and-static"
+    },
+    {
+      "command": "npm-run-test-browser-animation-equation-capability",
+      "status": "passed",
+      "scope": "s28-capability-isolation",
+      "checkedAt": "2026-08-02T05:00:19.920Z",
+      "notes": "five-chromium-tests-pass-programming-requests-only-its-own-surface-capability"
+    },
+    {
+      "command": "npm-run-build",
+      "status": "passed",
+      "scope": "s28-programming-host",
+      "checkedAt": "2026-08-02T05:00:21.290Z",
+      "notes": "typecheck-domains-and-production-build-pass-programming-capability-is-independent-chunk"
+    },
+    {
+      "command": "npm-run-perf-animation-attribution",
+      "status": "passed",
+      "scope": "s28-capability-isolation",
+      "checkedAt": "2026-08-02T05:00:22.609Z",
+      "notes": "programming-transfer-101952-gzip-90368-no-fonts-no-katex-webgl-api-diagnostics-or-highlighter"
+    },
+    {
+      "command": "npm-run-check-animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s28-programming-host",
+      "checkedAt": "2026-08-02T05:00:23.935Z",
+      "notes": "measured-catalogue-route-script-gzip-169500-under-190000-unchanged-target"
+    },
+    {
+      "command": "architecture-production-promotion-gates",
+      "status": "passed",
+      "scope": "s28-programming-host",
+      "checkedAt": "2026-08-02T05:00:25.232Z",
+      "notes": "architecture-dev-review-production-and-promotion-memory-pass"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "s28-programming-host",
+      "checkedAt": "2026-08-02T05:00:26.503Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s27-addition-runtime-frames-complete-with-deterministic-seek-rewind-reduced-static-and-accessible-state"
+    "summary": "s28-one-lazy-native-programming-adapter-closes-both-former-gaps-on-shared-clock-with-selected-caller-closure"
   },
   "expectedLearning": [
     "Identify which catalogue, generated-session, vector, and programming seams are genuinely shared after concrete caller pressure.",
