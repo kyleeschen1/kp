@@ -93,6 +93,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-verified-generated-linear-solve-visual-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/animation-api-caller-ledger.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-animation-api-exact-caller-ledger.md"
     }
   ],
   "dependsOn": {
@@ -412,6 +420,30 @@
       "status": "passed",
       "scope": "s10 whitespace integrity",
       "checkedAt": "2026-08-02T00:46:10.346Z"
+    },
+    {
+      "command": "npm run audit:animation-api-callers -- --summary",
+      "status": "passed",
+      "scope": "s11 exact source, test, and script caller counts for 15 API surfaces",
+      "checkedAt": "2026-08-02T00:54:22.726Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-api-caller-ledger.test.ts tests/cross-domain-animation-api-audit.test.ts tests/semantic-animation-compatibility-ledger.test.ts",
+      "status": "passed",
+      "scope": "s11 caller exhaustiveness, authority separation, compatibility, and non-deletion ratchets",
+      "checkedAt": "2026-08-02T00:54:23.991Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s11 API ledger and scanner TypeScript boundaries",
+      "checkedAt": "2026-08-02T00:54:25.251Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s11 whitespace integrity",
+      "checkedAt": "2026-08-02T00:54:26.515Z"
     }
   ],
   "expectedLearning": [

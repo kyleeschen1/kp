@@ -128,7 +128,9 @@
     {
       "id": "s11",
       "title": "Audit exact API callers",
-      "status": "planned"
+      "summary": "Audited 15 API surfaces with exact relative-import callers: the balanced-solve seam has exactly two production callers, the raw asset core has 126, all other public-looking facades retain distinct authority, and no retirement target has an unknown caller.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s12",

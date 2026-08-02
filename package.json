@@ -109,6 +109,7 @@
     "visual:radical-handoff": "node --disable-warning=ExperimentalWarning scripts/capture-radical-handoff.ts",
     "visual:radical-handoff:dpr2": "node --disable-warning=ExperimentalWarning scripts/capture-radical-handoff.ts --dpr=2",
     "audit:presentation-groups": "node --disable-warning=ExperimentalWarning scripts/audit-presentation-groups.ts",
+    "audit:animation-api-callers": "node --disable-warning=ExperimentalWarning scripts/audit-animation-api-callers.ts",
     "visual:presentation-continuity": "node --disable-warning=ExperimentalWarning scripts/capture-presentation-continuity.ts",
     "visual:operation-evaluation-continuity": "playwright test tests/operation-evaluation-animation-library.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "visual:function-wrap": "node --disable-warning=ExperimentalWarning scripts/capture-function-wrap-visual.ts",
