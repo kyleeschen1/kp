@@ -193,6 +193,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-animation-performance-closeout.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-programming-addition-exemplar-contract.md"
     }
   ],
   "dependsOn": {
@@ -1267,11 +1271,38 @@
       "scope": "s25-performance-closeout",
       "checkedAt": "2026-08-02T04:28:33.837Z",
       "notes": "architecture-dev-review-production-and-promotion-memory-pass"
+    },
+    {
+      "command": "programming-addition-contract-focused-tests",
+      "status": "passed",
+      "scope": "s26-programming-boundary",
+      "checkedAt": "2026-08-02T04:35:03.290Z",
+      "notes": "eleven-tests-pass-source-range-trace-frame-asset-and-promotion"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "s26-programming-boundary",
+      "checkedAt": "2026-08-02T04:35:04.539Z",
+      "notes": "app-node-test-and-domain-types-pass"
+    },
+    {
+      "command": "npm-run-check-promotion-memory",
+      "status": "passed",
+      "scope": "s26-programming-boundary",
+      "checkedAt": "2026-08-02T04:35:05.547Z",
+      "notes": "rank-5-vector-remains-next-and-rank-23-BFS-remains-later"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "s26-programming-boundary",
+      "checkedAt": "2026-08-02T04:35:06.528Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s25-route-split-cuts-economics-transfer-42-percent-script-LCP-CLS-interaction-and-frame-targets-pass-native-katex-loading-longtask-residual-attributed"
+    "summary": "s26-addition-source-trace-host-and-promotion-boundaries-frozen-with-live-execution-prohibited"
   },
   "expectedLearning": [
     "Identify which catalogue, generated-session, vector, and programming seams are genuinely shared after concrete caller pressure.",
