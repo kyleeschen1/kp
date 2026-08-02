@@ -78,7 +78,8 @@
     {
       "id": "s04",
       "title": "Audit linear-map placeholder retirement evidence",
-      "status": "planned"
+      "summary": "Audited animation.graph.vector.linear-map-scale and retained it. It uniquely owns the vector-add-scale family, [[2,0],[0,3]] example, [1,2] to [2,6] graph interpolation, Graph2D and LinearMap objects, selected SVG route, and conformance evidence. A six-part retirement gate is recorded for slice 22; no code was deleted.",
+      "status": "complete"
     },
     {
       "id": "s05",

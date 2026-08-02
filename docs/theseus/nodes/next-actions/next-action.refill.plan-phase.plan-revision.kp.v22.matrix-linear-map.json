@@ -107,11 +107,32 @@
       "scope": "control-plane",
       "checkedAt": "2026-08-02T20:39:48.454Z",
       "notes": "Workspace validated before slice s03 completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/matrix-linear-map-placeholder-retirement-audit.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T20:42:57.752Z",
+      "notes": "3/3 unique semantics, vector-add-scale descriptor, Graph SVG path, and named reference-closure checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T20:42:58.734Z",
+      "notes": "All typechecks passed with the placeholder retention audit."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-08-02T20:42:59.651Z",
+      "notes": "Workspace validated before slice s04 completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s03 froze the row-ranked two-action clock, exact handoff and settlement frames, rewind identity, inline-KaTeX overlay hooks, and dynamic narration while leaving old pill styling replaceable."
+    "summary": "Slice s04 found the graph placeholder still has unique vector-add-scale, diagonal-map, Graph2D, continuous interpolation, renderer, route, and conformance roles; it is retained behind a six-condition slice-22 retirement gate."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."
