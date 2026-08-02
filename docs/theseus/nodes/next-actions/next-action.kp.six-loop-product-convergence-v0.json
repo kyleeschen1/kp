@@ -197,6 +197,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-programming-addition-exemplar-contract.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-programming-addition-runtime-frames.md"
     }
   ],
   "dependsOn": {
@@ -1298,11 +1302,38 @@
       "status": "passed",
       "scope": "s26-programming-boundary",
       "checkedAt": "2026-08-02T04:35:06.528Z"
+    },
+    {
+      "command": "programming-addition-runtime-focused-tests",
+      "status": "passed",
+      "scope": "s27-programming-runtime",
+      "checkedAt": "2026-08-02T04:42:05.416Z",
+      "notes": "sixteen-tests-pass-across-runtime-contract-trace-frame-and-asset"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "s27-programming-runtime",
+      "checkedAt": "2026-08-02T04:42:06.722Z",
+      "notes": "app-node-test-and-domain-types-pass"
+    },
+    {
+      "command": "npm-run-check-promotion-memory",
+      "status": "passed",
+      "scope": "s27-programming-runtime",
+      "checkedAt": "2026-08-02T04:42:08.031Z",
+      "notes": "rank-5-vector-and-rank-23-BFS-priorities-unchanged"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "s27-programming-runtime",
+      "checkedAt": "2026-08-02T04:42:09.338Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s26-addition-source-trace-host-and-promotion-boundaries-frozen-with-live-execution-prohibited"
+    "summary": "s27-addition-runtime-frames-complete-with-deterministic-seek-rewind-reduced-static-and-accessible-state"
   },
   "expectedLearning": [
     "Identify which catalogue, generated-session, vector, and programming seams are genuinely shared after concrete caller pressure.",
