@@ -18,7 +18,7 @@ import type {
 } from "./animation-catalogue-surface-hostability.ts";
 import {
   KP_EDITOR_ANIMATION_FRAME_EVENT,
-  disposeKpEditorAnimationPlayers,
+  disposeKpEditorAnimationPlayer,
   hydrateKpEditorAnimationPlayers
 } from "./animation-player-controller.ts";
 import {
@@ -96,7 +96,9 @@ export function mountKpAnimationCataloguePlayerHost(input: {
     if (disposed) return;
     disposed = true;
     stopObservation();
-    disposeKpEditorAnimationPlayers(stage);
+    // Svelte can detach the old player before effect cleanup runs. Dispose the
+    // captured owner directly so GPU leases and adapter observers still close.
+    disposeKpEditorAnimationPlayer(player);
   };
 }
 

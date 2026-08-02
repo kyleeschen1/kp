@@ -173,7 +173,8 @@
     {
       "id": "s20",
       "title": "Pressure Graph3D and WebGL lifecycle",
-      "status": "planned"
+      "summary": "Pressured Graph3D and WebGL through the canonical Svelte shell and fixed detached-player disposal so the captured owner releases Three resources, observers, frames, and its bounded GPU lease even after reactive DOM replacement.",
+      "status": "complete"
     },
     {
       "id": "s21",

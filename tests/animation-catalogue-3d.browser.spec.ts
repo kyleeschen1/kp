@@ -14,6 +14,8 @@ test("catalogue loads and releases the bounded Graph3D capability in place", asy
   });
 
   await page.goto("/?artifact=animation.linear-solve.solve-x");
+  await expect(page.locator("[data-kp-animation-catalogue]"))
+    .toHaveAttribute("data-kp-svelte-catalogue-shell", "");
   await waitForPaintedSelection(page, "animation.linear-solve.solve-x");
   expect(capabilityRequests).toEqual([]);
 

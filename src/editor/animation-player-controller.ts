@@ -88,22 +88,24 @@ export function pauseKpEditorAnimationPlayers(
 
 export function disposeKpEditorAnimationPlayers(root: ParentNode): void {
   root.querySelectorAll<HTMLElement>("[data-kp-editor-animation-player]")
-    .forEach((player) => {
-      // Surface adapters can own observers or render sessions that WeakMap
-      // collection alone cannot release; signal them before detaching the DOM.
-      player.dispatchEvent(new Event(KP_EDITOR_ANIMATION_DISPOSE_EVENT));
-      cancelPlayerFrame(player);
-      player.removeEventListener("click", handlePlayerClick);
-      player.removeEventListener("input", handlePlayerInput);
-      player.removeEventListener("keydown", handlePlayerKeydown);
-      sessions.delete(player);
-      authoringStates.delete(player);
-      renderQualityStates.delete(player);
-      animationPlayerGestaltCapability
-        ?.disposeKpEditorAnimationGestaltCapability(player);
-      player.dataset["kpEditorAnimationDisposed"] = "true";
-      delete player.dataset["kpEditorAnimationHydrated"];
-    });
+    .forEach(disposeKpEditorAnimationPlayer);
+}
+
+export function disposeKpEditorAnimationPlayer(player: HTMLElement): void {
+  // Surface adapters can own observers or render sessions that WeakMap
+  // collection alone cannot release; signal them before detaching the DOM.
+  player.dispatchEvent(new Event(KP_EDITOR_ANIMATION_DISPOSE_EVENT));
+  cancelPlayerFrame(player);
+  player.removeEventListener("click", handlePlayerClick);
+  player.removeEventListener("input", handlePlayerInput);
+  player.removeEventListener("keydown", handlePlayerKeydown);
+  sessions.delete(player);
+  authoringStates.delete(player);
+  renderQualityStates.delete(player);
+  animationPlayerGestaltCapability
+    ?.disposeKpEditorAnimationGestaltCapability(player);
+  player.dataset["kpEditorAnimationDisposed"] = "true";
+  delete player.dataset["kpEditorAnimationHydrated"];
 }
 
 export function getKpEditorAnimationPlaybackSession(

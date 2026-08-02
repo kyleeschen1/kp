@@ -928,6 +928,40 @@
       "status": "passed",
       "scope": "s19 browser contracts",
       "checkedAt": "2026-08-02T18:33:06.924Z"
+    },
+    {
+      "command": "npm run test:browser:animation-catalogue-3d",
+      "status": "failed",
+      "scope": "s20 initial Graph3D lifecycle pressure",
+      "checkedAt": "2026-08-02T18:37:38.591Z",
+      "notes": "Context-loss fallback passed; switching away from Graph3D left one WebGL lease because Svelte had detached the old player before root-query cleanup ran."
+    },
+    {
+      "command": "npm run test:browser:animation-catalogue-3d",
+      "status": "passed",
+      "scope": "s20 canonical Graph3D lifecycle",
+      "checkedAt": "2026-08-02T18:37:39.636Z",
+      "notes": "Selected-only Three loading, one active lease, exact progress, direct disposal on in-shell selection, and context-loss semantic SVG fallback all pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-animation-player-controller.test.ts tests/kp-editor-animation-player-shell.test.ts tests/editor-graph-3d-surface-adapter.test.ts tests/webgl-context-lease-pool.test.ts",
+      "status": "passed",
+      "scope": "s20 player and WebGL ownership",
+      "checkedAt": "2026-08-02T18:37:40.539Z",
+      "notes": "Eight focused controller, shell, adapter, and lease-pool tests passed."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "s20 canonical shell integration",
+      "checkedAt": "2026-08-02T18:37:41.436Z",
+      "notes": "Fourteen Chromium integration checks passed after direct detached-player disposal."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20 TypeScript and Svelte contracts",
+      "checkedAt": "2026-08-02T18:37:42.365Z"
     }
   ],
   "progress": {
