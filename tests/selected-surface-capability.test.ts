@@ -37,7 +37,9 @@ test("one capability host owns all dynamic selected-surface imports", async () =
     equationCapability,
     graphCapability,
     graph3DCapability,
-    programmingCapability
+    programmingCapability,
+    selectedCapabilitySource,
+    graphSupportSource
   ] = await Promise.all([
     readFile("src/main.ts", "utf8"),
     readFile("src/editor/animation-catalogue-application.ts", "utf8"),
@@ -45,7 +47,9 @@ test("one capability host owns all dynamic selected-surface imports", async () =
     readFile("src/editor/equation-surface-capability.ts", "utf8"),
     readFile("src/editor/graph-svg-surface-capability.ts", "utf8"),
     readFile("src/editor/graph-3d-surface-capability.ts", "utf8"),
-    readFile("src/editor/programming-surface-capability.ts", "utf8")
+    readFile("src/editor/programming-surface-capability.ts", "utf8"),
+    readFile("src/editor/selected-surface-capability.ts", "utf8"),
+    readFile("src/editor/graph-svg-surface-support.ts", "utf8")
   ]);
 
   assert.doesNotMatch(mainSource, /^import "katex\/dist\/katex\.min\.css";/m);
@@ -74,6 +78,10 @@ test("one capability host owns all dynamic selected-surface imports", async () =
   assert.match(equationCapability, /import "katex\/dist\/katex\.min\.css"/);
   assert.match(graphCapability, /import "katex\/dist\/katex\.min\.css"/);
   assert.match(
+    graphCapability,
+    /import\("\.\/graph-svg-viewport\.ts"\)/
+  );
+  assert.match(
     graph3DCapability,
     /from "\.\/graph-3d-surface-adapter\.ts"/
   );
@@ -82,6 +90,14 @@ test("one capability host owns all dynamic selected-surface imports", async () =
     /from "\.\/programming-surface-adapter\.ts"/
   );
   assert.doesNotMatch(programmingCapability, /katex|three|shiki|prism/i);
+  assert.doesNotMatch(
+    selectedCapabilitySource,
+    /from "\.\/graph-svg-surface-support\.ts"/
+  );
+  assert.match(
+    graphSupportSource,
+    /from "\.\/selected-surface-capability\.ts"/
+  );
 });
 
 test("optional editor inspectors and WebGL controls stay behind dynamic callers", async () => {

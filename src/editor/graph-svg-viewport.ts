@@ -28,14 +28,6 @@ import {
   type KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
 import { getKpEditorAnimationPlaybackSession } from "./animation-player-controller.ts";
-import {
-  supportsKpEditorGraphSvgAnimation
-} from "./graph-svg-surface-support.ts";
-
-export {
-  kpEditorGraphSvgAnimationIds,
-  supportsKpEditorGraphSvgAnimation
-} from "./graph-svg-surface-support.ts";
 
 export interface KpEditorGraphSvgViewportModel {
   readonly width: number;
@@ -66,38 +58,48 @@ export function createKpEditorGraphSvgViewportModel(
   };
 }
 
-export const kpEditorGraphSvgViewportAdapter: KpEditorAnimationSurfaceAdapter = {
-  id: "editor-animation-surface.graph.svg",
-  slotKind: "graph",
-  priority: 0,
-  supports(state) {
-    return state.surface.slotKinds.includes("graph") &&
-      supportsKpEditorGraphSvgAnimation(state.animationId);
-  },
-  render({ player, slot, state }) {
-    const animation = getKpEditorAnimationPlaybackSession(player)?.animation;
-    if (animation === undefined) return;
-    const model = createKpEditorGraphSvgViewportModel(animation);
-    let svg = slot.querySelector<SVGSVGElement>("[data-kp-editor-graph-svg]");
-    if (svg === null) {
-      slot.innerHTML = renderViewport(animation, model, state);
-      svg = slot.querySelector<SVGSVGElement>("[data-kp-editor-graph-svg]");
-    }
-    if (svg !== null) {
-      svg.dataset["kpEditorGraphProgress"] = String(state.progress);
-      svg.dataset["kpEditorGraphDirection"] = state.direction;
-      const content = svg.querySelector<SVGGElement>("[data-kp-editor-graph-content]");
-      if (content !== null) {
-        content.innerHTML = renderRuntimeContent(animation, state, model);
-        syncGraphAccessibility(svg, content);
+export function createKpEditorGraphSvgViewportAdapter(
+  supportedAnimationIds: readonly string[]
+): KpEditorAnimationSurfaceAdapter {
+  const supported = new Set(supportedAnimationIds);
+  const adapter: KpEditorAnimationSurfaceAdapter = {
+    id: "editor-animation-surface.graph.svg",
+    slotKind: "graph",
+    priority: 0,
+    supports(state) {
+      return state.surface.slotKinds.includes("graph") &&
+        supported.has(state.animationId);
+    },
+    render({ player, slot, state }) {
+      const animation = getKpEditorAnimationPlaybackSession(player)?.animation;
+      if (animation === undefined) return;
+      const model = createKpEditorGraphSvgViewportModel(animation);
+      let svg = slot.querySelector<SVGSVGElement>("[data-kp-editor-graph-svg]");
+      if (svg === null) {
+        slot.innerHTML = renderViewport(animation, model, state);
+        svg = slot.querySelector<SVGSVGElement>("[data-kp-editor-graph-svg]");
+      }
+      if (svg !== null) {
+        svg.dataset["kpEditorGraphProgress"] = String(state.progress);
+        svg.dataset["kpEditorGraphDirection"] = state.direction;
+        const content = svg.querySelector<SVGGElement>(
+          "[data-kp-editor-graph-content]"
+        );
+        if (content !== null) {
+          content.innerHTML = renderRuntimeContent(animation, state, model);
+          syncGraphAccessibility(svg, content);
+        }
       }
     }
-  }
-};
+  };
+  return Object.freeze(adapter);
+}
 
-export function registerKpEditorGraphSvgViewportAdapter(): () => void {
+export function registerKpEditorGraphSvgViewportAdapter(
+  supportedAnimationIds: readonly string[]
+): () => void {
   return kpEditorAnimationSurfaceAdapterRegistry.register(
-    kpEditorGraphSvgViewportAdapter
+    createKpEditorGraphSvgViewportAdapter(supportedAnimationIds)
   );
 }
 

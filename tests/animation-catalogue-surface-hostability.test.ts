@@ -26,8 +26,11 @@ import {
   kpEditorGraph3DSurfaceAdapter
 } from "../src/editor/graph-3d-surface-adapter.ts";
 import {
-  kpEditorGraphSvgViewportAdapter
+  createKpEditorGraphSvgViewportAdapter
 } from "../src/editor/graph-svg-viewport.ts";
+import {
+  kpEditorGraphSvgAnimationIds
+} from "../src/editor/selected-surface-capability.ts";
 import {
   kpEditorOperationEvaluationSurfaceAdapter
 } from "../src/editor/operation-evaluation-surface-adapter.ts";
@@ -37,6 +40,10 @@ import {
 import {
   kpEditorProgrammingSurfaceAdapter
 } from "../src/editor/programming-surface-adapter.ts";
+
+const graphSvgViewportAdapter = createKpEditorGraphSvgViewportAdapter(
+  kpEditorGraphSvgAnimationIds
+);
 
 function currentHostability() {
   const catalog = createKpAnimationAssets();
@@ -51,7 +58,7 @@ function currentHostability() {
     kpEditorEquationSurfaceAdapter,
     kpEditorDiagramSvgAdapter,
     kpEditorGraph3DSurfaceAdapter,
-    kpEditorGraphSvgViewportAdapter,
+    graphSvgViewportAdapter,
     kpEditorOperationEvaluationSurfaceAdapter,
     kpEditorExactFractionQuantitySurfaceAdapter,
     kpEditorPlaceValueAdditionSurfaceAdapter,

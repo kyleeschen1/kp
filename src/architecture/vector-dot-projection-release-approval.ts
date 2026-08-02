@@ -1,6 +1,6 @@
 import {
   kpDimensionalContinuityGraphLanguageId
-} from "../rendering/dimensional-continuity-graph-profile.ts";
+} from "../rendering/dimensional-continuity-graph-language.ts";
 
 export const kpVectorDotProjectionAnimationId =
   "animation.dot-projection.basic" as const;

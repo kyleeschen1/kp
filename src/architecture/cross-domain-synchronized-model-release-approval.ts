@@ -3,7 +3,7 @@ import {
 } from "./cross-domain-animation-api-audit.ts";
 import {
   kpDimensionalContinuityGraphLanguageId
-} from "../rendering/dimensional-continuity-graph-profile.ts";
+} from "../rendering/dimensional-continuity-graph-language.ts";
 
 const economicsAnimationId =
   "animation.economics.supply-demand-equilibrium-shift";

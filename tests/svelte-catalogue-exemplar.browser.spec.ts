@@ -536,6 +536,84 @@ test("Svelte exposes the generated solve companion as inline explanation", async
   expect(documentRequests).toHaveLength(1);
 });
 
+test("Svelte loads rich surface capabilities only after their selection", async ({
+  page
+}) => {
+  const requestedUrls: string[] = [];
+  const documentRequests: string[] = [];
+  page.on("request", (request) => {
+    requestedUrls.push(request.url());
+    if (request.resourceType() === "document") {
+      documentRequests.push(request.url());
+    }
+  });
+  await page.goto(
+    `/?artifact=${animationId}&catalogueShell=svelte-exemplar`
+  );
+
+  const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
+  await expect(exemplar.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  )).toHaveAttribute("data-kp-editor-animation-hydrated", "true");
+  expect(requested(requestedUrls, "graph-svg-surface-capability")).toBe(true);
+  expect(requested(requestedUrls, "graph-svg-viewport")).toBe(true);
+  expect(requested(requestedUrls, "graph-3d-surface-capability")).toBe(false);
+  expect(requested(requestedUrls, "graph-webgl-three")).toBe(false);
+  expect(requested(requestedUrls, "programming-surface-capability")).toBe(false);
+  expect(requested(
+    requestedUrls,
+    "verified-generated-linear-solve-reader"
+  )).toBe(false);
+
+  const graph3DId = "animation.graph.surface-mode.mesh-to-donut";
+  await exemplar.locator(
+    `[data-kp-animation-catalogue-row="${graph3DId}"] a`
+  ).click();
+  const graph3DShell = exemplar.locator(
+    `[data-kp-editor-animation-id="${graph3DId}"] .graph-webgl`
+  );
+  await expect(graph3DShell).toHaveAttribute(
+    "data-kp-editor-graph-3d-capability",
+    /ready|fallback/
+  );
+  expect(requested(requestedUrls, "graph-3d-surface-capability")).toBe(true);
+  expect(requested(requestedUrls, "graph-webgl-three")).toBe(true);
+  expect(requested(requestedUrls, "programming-surface-capability")).toBe(false);
+  expect(requested(
+    requestedUrls,
+    "verified-generated-linear-solve-reader"
+  )).toBe(false);
+
+  const programmingId = "animation.programming.add.execution-trace";
+  await exemplar.locator(
+    `[data-kp-animation-catalogue-row="${programmingId}"] a`
+  ).click();
+  await expect(exemplar.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${programmingId}"]`
+  )).toHaveAttribute("data-kp-editor-animation-hydrated", "true");
+  expect(requested(requestedUrls, "programming-surface-capability")).toBe(true);
+  expect(requested(
+    requestedUrls,
+    "verified-generated-linear-solve-reader"
+  )).toBe(false);
+
+  const generatedId = "animation.generated.linear-solve.linear-68c15d41";
+  await exemplar.locator(
+    `[data-kp-animation-catalogue-row="${generatedId}"] a`
+  ).click();
+  await expect(exemplar.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${generatedId}"]`
+  )).toHaveAttribute("data-kp-editor-animation-hydrated", "true");
+  expect(requested(
+    requestedUrls,
+    "verified-generated-linear-solve-reader"
+  )).toBe(true);
+  expect(documentRequests).toHaveLength(1);
+});
+
 test("Svelte exemplar renders the not-found terminal state in its reserved stage", async ({
   page
 }) => {
@@ -609,4 +687,11 @@ function assertRequestedEntry(requestedUrls: readonly string[]): void {
   expect(requestedUrls.some((url) =>
     url.includes("svelte-catalogue-exemplar-entry")
   )).toBe(true);
+}
+
+function requested(
+  requestedUrls: readonly string[],
+  moduleName: string
+): boolean {
+  return requestedUrls.some((url) => url.includes(moduleName));
 }

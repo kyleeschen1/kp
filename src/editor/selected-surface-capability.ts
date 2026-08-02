@@ -1,9 +1,25 @@
 import type {
   KpEditorAnimationSurfaceSlotKind
 } from "./animation-surface-dispatch.ts";
-import {
-  supportsKpEditorGraphSvgAnimation
-} from "./graph-svg-surface-support.ts";
+
+export const kpEditorGraphSvgAnimationIds = Object.freeze([
+  "animation.graph.vector.linear-map-scale",
+  "animation.derivative-rules.tangent-graph",
+  "animation.integral-ftc.area-sweep",
+  "animation.dot-projection.basic",
+  "animation.economics.supply-demand-equilibrium-shift",
+  "animation.physics.constant-force-work-energy"
+] as const);
+
+export function supportsKpEditorGraphSvgAnimation(
+  animationId: string
+): boolean {
+  // Capability selection must stay independent of the renderer chunk. When
+  // this predicate lived beside Graph SVG, chunk coalescing pulled KaTeX into
+  // unrelated Graph3D and programming selections.
+  return (kpEditorGraphSvgAnimationIds as readonly string[])
+    .includes(animationId);
+}
 
 export type KpEditorSelectedSurfaceCapability =
   | "equation-katex"

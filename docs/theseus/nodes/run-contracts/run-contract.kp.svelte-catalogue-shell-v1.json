@@ -143,7 +143,8 @@
     {
       "id": "s15",
       "title": "Preserve selected-capability lazy loading",
-      "status": "planned"
+      "summary": "Separated the durable dimensional-continuity graph language identity from its KaTeX-backed presentation profile and kept Graph SVG paint behind a nested selected renderer boundary. Production attribution now isolates KaTeX, Graph SVG, Three, programming, and the generated reader to their selected callers; twelve Svelte browser checks prove the transition in one document and all frozen bundle ceilings pass.",
+      "status": "complete"
     },
     {
       "id": "s16",

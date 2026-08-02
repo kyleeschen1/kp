@@ -4,6 +4,7 @@ import {
 } from "./animation-surface-adapter-registry.ts";
 import {
   deriveKpEditorSelectedSurfaceCapabilities,
+  kpEditorGraphSvgAnimationIds,
   type KpEditorSelectedSurfaceCapability
 } from "./selected-surface-capability.ts";
 
@@ -90,10 +91,12 @@ async function loadCapability(
     return;
   }
   const client = await import("./graph-svg-surface-capability.ts");
-  registerOnce(
+  await registerOnceAsync(
     registry,
     "editor-animation-surface.graph.svg",
-    client.registerKpEditorGraphSvgSurfaceCapability
+    () => client.registerKpEditorGraphSvgSurfaceCapability(
+      kpEditorGraphSvgAnimationIds
+    )
   );
 }
 
@@ -103,4 +106,12 @@ function registerOnce(
   register: () => void
 ): void {
   if (!registry.list().some(({ id }) => id === adapterId)) register();
+}
+
+async function registerOnceAsync(
+  registry: KpEditorAnimationSurfaceAdapterRegistry,
+  adapterId: string,
+  register: () => Promise<void | (() => void)>
+): Promise<void> {
+  if (!registry.list().some(({ id }) => id === adapterId)) await register();
 }

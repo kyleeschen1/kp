@@ -1,7 +1,10 @@
 import { renderLatexToHtml } from "./katex-adapter.ts";
+import {
+  kpDimensionalContinuityGraphLanguageId
+} from "./dimensional-continuity-graph-language.ts";
 
-export const kpDimensionalContinuityGraphLanguageId =
-  "kp.graph.dimensional-continuity.v1" as const;
+export { kpDimensionalContinuityGraphLanguageId } from
+  "./dimensional-continuity-graph-language.ts";
 
 export interface KpDimensionalContinuityGraphPresentationProfileV1 {
   readonly schemaVersion: "kp.dimensional-continuity-graph-presentation-profile.v1";

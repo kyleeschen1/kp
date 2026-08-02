@@ -33,8 +33,11 @@ import { createKpEditorAnimationPlayerState } from
   "../src/editor/animation-player-state.ts";
 import {
   createKpEditorGraphSvgViewportModel,
-  kpEditorGraphSvgViewportAdapter
+  createKpEditorGraphSvgViewportAdapter
 } from "../src/editor/graph-svg-viewport.ts";
+import {
+  kpEditorGraphSvgAnimationIds
+} from "../src/editor/selected-surface-capability.ts";
 import {
   createKpEditorAnimationSurfaceAdapterRegistry
 } from "../src/editor/animation-surface-adapter-registry.ts";
@@ -136,7 +139,7 @@ test("vector catalogue shell exposes only compact transport by default", () => {
     inspectKpAnimationCatalogueSurfaceHostability({
       state: player,
       registry: createKpEditorAnimationSurfaceAdapterRegistry([
-        kpEditorGraphSvgViewportAdapter
+        createKpEditorGraphSvgViewportAdapter(kpEditorGraphSvgAnimationIds)
       ])
     }).slots,
     [{

@@ -618,6 +618,76 @@
       "scope": "s14-hygiene",
       "checkedAt": "2026-08-02T16:45:21.630Z",
       "notes": "Tracked slice changes contain no whitespace errors."
+    },
+    {
+      "command": "npm run perf:animation:attribution",
+      "status": "failed",
+      "scope": "slice 15 initial selected-capability attribution",
+      "checkedAt": "2026-08-02T17:02:28.102Z",
+      "notes": "Initial production attribution exposed an existing KaTeX leak on Graph3D and programming routes through catalogue metadata importing the KaTeX-backed graph profile."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "failed",
+      "scope": "slice 15 graph SVG factory boundary",
+      "checkedAt": "2026-08-02T17:02:28.598Z",
+      "notes": "The first factory-boundary typecheck exposed an implicit-any adapter object; the adapter was explicitly typed before freezing and the check passed on rerun."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "s15-focused",
+      "checkedAt": "2026-08-02T17:05:31.386Z",
+      "notes": "34 shared selection, capability-host, rollback, shell, and Svelte tooling tests passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/selected-surface-capability.test.ts tests/animation-catalogue-health.test.ts tests/animation-catalogue-surface-hostability.test.ts tests/vector-dot-projection-catalogue-integration.test.ts",
+      "status": "passed",
+      "scope": "s15-capability-boundary",
+      "checkedAt": "2026-08-02T17:05:32.765Z",
+      "notes": "15 selected capability, hostability, health, and vector integration checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15-types",
+      "checkedAt": "2026-08-02T17:05:33.866Z",
+      "notes": "Application, node, tests, Svelte diagnostics, and domain typechecks passed; Svelte reported zero errors and warnings."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "s15-browser",
+      "checkedAt": "2026-08-02T17:05:34.851Z",
+      "notes": "Twelve Chromium checks passed; the new proof selected Graph SVG, Graph3D/Three, programming, and generated reader in one document and observed each capability request only after selection."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "s15-production",
+      "checkedAt": "2026-08-02T17:05:35.927Z",
+      "notes": "Production Vite build passed with 1010 transformed modules and separate graph SVG capability and renderer chunks."
+    },
+    {
+      "command": "npm run perf:animation:attribution",
+      "status": "passed",
+      "scope": "s15-attribution",
+      "checkedAt": "2026-08-02T17:05:36.950Z",
+      "notes": "All six production route probes passed twice; KaTeX scripts are limited to equation, vector/economics SVG, and exact quantity, while Three and programming remain isolated to their selected callers."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s15-performance",
+      "checkedAt": "2026-08-02T17:05:37.932Z",
+      "notes": "Outer 10459, main host 178463, measured catalogue 77442, and place-value incremental 71797 gzip bytes remain below frozen ceilings."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s15-hygiene",
+      "checkedAt": "2026-08-02T17:05:38.951Z",
+      "notes": "Tracked slice changes contain no whitespace errors."
     }
   ],
   "progress": {
