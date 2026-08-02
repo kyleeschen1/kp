@@ -205,6 +205,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-native-programming-catalogue-host.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-programming-addition-review-package.md"
     }
   ],
   "dependsOn": {
@@ -1388,11 +1392,52 @@
       "status": "passed",
       "scope": "s28-programming-host",
       "checkedAt": "2026-08-02T05:00:26.503Z"
+    },
+    {
+      "command": "npm-run-visual-programming-addition",
+      "status": "passed",
+      "scope": "s29-programming-review",
+      "checkedAt": "2026-08-02T05:08:27.401Z",
+      "notes": "eight-exact-checkpoints-captured-and-manually-inspected-with-state-accessibility-containment-and-no-iframe"
+    },
+    {
+      "command": "programming-review-focused-tests",
+      "status": "passed",
+      "scope": "s29-programming-review",
+      "checkedAt": "2026-08-02T05:08:28.673Z",
+      "notes": "seventeen-tests-pass-runtime-adapter-hostability-health-atlas-and-review-evidence"
+    },
+    {
+      "command": "npm-run-test-browser-programming-addition",
+      "status": "passed",
+      "scope": "s29-programming-review",
+      "checkedAt": "2026-08-02T05:08:29.928Z",
+      "notes": "four-chromium-tests-pass-source-state-rewind-reduced-comparison-and-static"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "s29-programming-review",
+      "checkedAt": "2026-08-02T05:08:31.223Z",
+      "notes": "app-node-test-and-domain-types-pass"
+    },
+    {
+      "command": "npm-run-check-promotion-memory",
+      "status": "passed",
+      "scope": "s29-programming-review",
+      "checkedAt": "2026-08-02T05:08:32.495Z",
+      "notes": "programming-remains-unreviewed-and-rank-23-BFS-while-rank-5-vector-remains-next"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "s29-programming-review",
+      "checkedAt": "2026-08-02T05:08:33.747Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s28-one-lazy-native-programming-adapter-closes-both-former-gaps-on-shared-clock-with-selected-caller-closure"
+    "summary": "s29-eight-programming-checkpoints-captured-and-inspected-with-visual-generalization-and-promotion-frozen"
   },
   "expectedLearning": [
     "Identify which catalogue, generated-session, vector, and programming seams are genuinely shared after concrete caller pressure.",

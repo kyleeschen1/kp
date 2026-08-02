@@ -19,6 +19,10 @@ const physicsExemplarId =
 const graph3DExemplarId =
   "animation.graph.surface-mode.mesh-to-donut";
 const vectorDotProjectionExemplarId = "animation.dot-projection.basic";
+const programmingAdditionExemplarId =
+  "animation.programming.add.execution-trace";
+const programmingComparisonExemplarId =
+  "animation.comparison.linear-solve-programming";
 const baseUrl =
   process.env["KP_VISUAL_BASE_URL"] ?? "http://127.0.0.1:8000";
 const outputRoot = path.resolve(
@@ -29,7 +33,11 @@ const scopeArgumentIndex = process.argv.indexOf("--scope");
 const captureScope = scopeArgumentIndex === -1
   ? "all"
   : process.argv[scopeArgumentIndex + 1];
-if (captureScope !== "all" && captureScope !== "vector-dot-projection") {
+if (
+  captureScope !== "all" &&
+  captureScope !== "vector-dot-projection" &&
+  captureScope !== "programming-addition"
+) {
   throw new Error(`Unknown catalogue visual scope: ${captureScope ?? "missing"}`);
 }
 
@@ -39,6 +47,12 @@ const browser = await chromium.launch({ headless: true });
 if (captureScope === "vector-dot-projection") {
   try {
     await captureVectorDotProjectionExemplar(browser);
+  } finally {
+    await browser.close();
+  }
+} else if (captureScope === "programming-addition") {
+  try {
+    await captureProgrammingAdditionExemplar(browser);
   } finally {
     await browser.close();
   }
@@ -822,6 +836,292 @@ async function captureVectorDotProjectionExemplar(
   }, null, 2)}\n`, "utf8");
   console.log(
     `animation catalogue vector review: ${path.relative(process.cwd(), manifestPath)}`
+  );
+}
+
+async function captureProgrammingAdditionExemplar(
+  browser: Browser
+): Promise<void> {
+  const programmingOutput = path.join(outputRoot, "programming-addition");
+  await mkdir(programmingOutput, { recursive: true });
+  const checkpoints = [
+    {
+      id: "start-wide-0",
+      animationId: programmingAdditionExemplarId,
+      progress: 0,
+      expectedStep: "step.programming.add.call",
+      expectedFocus: "selector.programming.add.signature",
+      expectedLocals: ["a = 2", "b = 2"],
+      expectedOutput: [],
+      viewport
+    },
+    {
+      id: "statement-focus-wide-400",
+      animationId: programmingAdditionExemplarId,
+      progress: 0.4,
+      expectedStep: "step.programming.add.evaluate-return",
+      expectedFocus: "selector.programming.add.return",
+      expectedLocals: ["a = 2", "b = 2"],
+      expectedOutput: [],
+      viewport
+    },
+    {
+      id: "return-local-wide-750",
+      animationId: programmingAdditionExemplarId,
+      progress: 0.75,
+      expectedStep: "step.programming.add.return",
+      expectedFocus: "selector.programming.add.return",
+      expectedLocals: ["a = 2", "b = 2", "return = 4"],
+      expectedOutput: [],
+      viewport
+    },
+    {
+      id: "output-settlement-wide-1000",
+      animationId: programmingAdditionExemplarId,
+      progress: 1,
+      expectedStep: "step.programming.add.output",
+      expectedFocus: "",
+      expectedLocals: [],
+      expectedOutput: ["4"],
+      viewport
+    },
+    {
+      id: "statement-focus-narrow-400",
+      animationId: programmingAdditionExemplarId,
+      progress: 0.4,
+      expectedStep: "step.programming.add.evaluate-return",
+      expectedFocus: "selector.programming.add.return",
+      expectedLocals: ["a = 2", "b = 2"],
+      expectedOutput: [],
+      viewport: { width: 390, height: 844 }
+    },
+    {
+      id: "statement-focus-reduced-motion-400",
+      animationId: programmingAdditionExemplarId,
+      progress: 0.4,
+      expectedStep: "step.programming.add.evaluate-return",
+      expectedFocus: "selector.programming.add.return",
+      expectedLocals: ["a = 2", "b = 2"],
+      expectedOutput: [],
+      viewport,
+      reducedMotion: true
+    },
+    {
+      id: "output-static-wide-1000",
+      animationId: programmingAdditionExemplarId,
+      progress: 1,
+      expectedStep: "step.programming.add.output",
+      expectedFocus: "",
+      expectedLocals: [],
+      expectedOutput: ["4"],
+      viewport,
+      staticMode: true
+    },
+    {
+      id: "comparison-settlement-wide-1000",
+      animationId: programmingComparisonExemplarId,
+      progress: 1,
+      expectedStep: "step.programming.add.output",
+      expectedFocus: "",
+      expectedLocals: [],
+      expectedOutput: ["4"],
+      viewport,
+      comparison: true
+    }
+  ] as const;
+  const captures: Array<{
+    readonly id: string;
+    readonly path: string;
+    readonly animationId: string;
+    readonly viewport: { readonly width: number; readonly height: number };
+    readonly progress: number;
+    readonly step: string;
+    readonly focus: string;
+    readonly locals: readonly string[];
+    readonly output: readonly string[];
+    readonly accessibilityMode: string;
+    readonly contained: boolean;
+    readonly documentOverflow: boolean;
+  }> = [];
+
+  for (const checkpoint of checkpoints) {
+    const page = await browser.newPage({ viewport: checkpoint.viewport });
+    try {
+      if ("reducedMotion" in checkpoint && checkpoint.reducedMotion) {
+        await page.emulateMedia({ reducedMotion: "reduce" });
+      }
+      const url = new URL("/", baseUrl);
+      url.searchParams.set("artifact", checkpoint.animationId);
+      if (checkpoint.progress > 0) {
+        url.searchParams.set("playhead", String(checkpoint.progress));
+      }
+      await page.goto(url.toString(), { waitUntil: "networkidle" });
+      await page.waitForFunction((expected) => {
+        const catalogue = document.querySelector<HTMLElement>(
+          "[data-kp-animation-catalogue]"
+        );
+        const player = catalogue?.querySelector<HTMLElement>(
+          "[data-kp-editor-animation-player]"
+        );
+        const slot = player?.querySelector<HTMLElement>(
+          '[data-kp-editor-animation-surface-slot="programming"]'
+        );
+        return catalogue?.dataset["kpAnimationCatalogueSelection"] ===
+          expected.animationId &&
+          catalogue.dataset["kpAnimationCatalogueHostOutcome"] === "painted" &&
+          player?.dataset["kpEditorAnimationHydrated"] === "true" &&
+          Math.abs(Number(player.dataset["kpEditorAnimationProgress"]) -
+            expected.progress) < 0.001 &&
+          slot?.dataset["kpEditorAnimationAdapterId"] ===
+            "editor-animation-surface.programming.trace";
+      }, {
+        animationId: checkpoint.animationId,
+        progress: checkpoint.progress
+      });
+
+      if ("staticMode" in checkpoint && checkpoint.staticMode) {
+        await page.evaluate(() => {
+          const player = document.querySelector<HTMLElement>(
+            "[data-kp-editor-animation-player]"
+          );
+          const scrubber = player?.querySelector<HTMLInputElement>(
+            '[data-action="seek-editor-animation"]'
+          );
+          if (player === null || player === undefined || scrubber === null ||
+            scrubber === undefined) {
+            throw new Error("Static programming capture controls are missing.");
+          }
+          player.dataset["kpEditorAnimationAccessibilityMode"] = "static";
+          scrubber.dispatchEvent(new Event("input", { bubbles: true }));
+        });
+      }
+
+      await page.waitForFunction((expectedStep) =>
+        document.querySelector<HTMLElement>(
+          "[data-kp-editor-programming-trace]"
+        )?.dataset["kpEditorProgrammingStep"] === expectedStep,
+      checkpoint.expectedStep);
+      const evidence = await page.evaluate(() => {
+        const catalogue = document.querySelector<HTMLElement>(
+          "[data-kp-animation-catalogue]"
+        );
+        const stage = catalogue?.querySelector<HTMLElement>(
+          "[data-kp-animation-catalogue-stage]"
+        );
+        const player = stage?.querySelector<HTMLElement>(
+          "[data-kp-editor-animation-player]"
+        );
+        const trace = stage?.querySelector<HTMLElement>(
+          "[data-kp-editor-programming-trace]"
+        );
+        if (stage === null || stage === undefined || player === null ||
+          player === undefined || trace === null || trace === undefined) {
+          throw new Error("Programming review capture targets are missing.");
+        }
+        const stageRect = stage.getBoundingClientRect();
+        const traceRect = trace.getBoundingClientRect();
+        const values = (channel: string) => [...trace.querySelectorAll<HTMLElement>(
+          `[data-kp-editor-programming-channel="${channel}"] li`
+        )].map((item) => item.textContent?.trim() ?? "");
+        return {
+          step: trace.dataset["kpEditorProgrammingStep"] ?? "",
+          focus: trace.querySelector<HTMLElement>(
+            "[data-kp-editor-programming-source-focus]"
+          )?.dataset["kpEditorProgrammingSourceFocus"] ?? "",
+          locals: values("locals"),
+          output: values("output"),
+          accessibilityMode:
+            player.dataset["kpEditorAnimationAccessibilityMode"] ?? "",
+          accessibleDescription: trace.getAttribute("aria-label") ?? "",
+          sourceText: trace.querySelector(
+            ".editor-programming-trace__source"
+          )?.textContent ?? "",
+          iframeCount: catalogue?.querySelectorAll("iframe").length ?? -1,
+          programmingSlotCount: catalogue?.querySelectorAll(
+            '[data-kp-editor-animation-surface-slot="programming"]'
+          ).length ?? -1,
+          equationSlotCount: catalogue?.querySelectorAll(
+            '[data-kp-editor-animation-surface-slot="equation"]'
+          ).length ?? -1,
+          contained:
+            traceRect.left >= stageRect.left - 1 &&
+            traceRect.right <= stageRect.right + 1 &&
+            traceRect.top >= stageRect.top - 1 &&
+            traceRect.bottom <= stageRect.bottom + 1,
+          documentOverflow:
+            document.documentElement.scrollWidth > window.innerWidth + 1
+        };
+      });
+      const expectedMode =
+        "staticMode" in checkpoint && checkpoint.staticMode
+          ? "static"
+          : "reducedMotion" in checkpoint && checkpoint.reducedMotion
+            ? "reduced-motion"
+            : "full-motion";
+      const comparison = "comparison" in checkpoint && checkpoint.comparison;
+      if (
+        evidence.step !== checkpoint.expectedStep ||
+        evidence.focus !== checkpoint.expectedFocus ||
+        JSON.stringify(evidence.locals) !==
+          JSON.stringify(checkpoint.expectedLocals) ||
+        JSON.stringify(evidence.output) !==
+          JSON.stringify(checkpoint.expectedOutput) ||
+        evidence.accessibilityMode !== expectedMode ||
+        !evidence.sourceText.includes("export function add") ||
+        !evidence.accessibleDescription.includes("add") &&
+          !evidence.accessibleDescription.includes("final result") ||
+        evidence.iframeCount !== 0 ||
+        evidence.programmingSlotCount !== 1 ||
+        evidence.equationSlotCount !== (comparison ? 1 : 0) ||
+        !evidence.contained ||
+        evidence.documentOverflow
+      ) {
+        throw new Error(
+          `Programming capture ${checkpoint.id} drifted: ${JSON.stringify(evidence)}`
+        );
+      }
+
+      const imagePath = path.join(programmingOutput, `${checkpoint.id}.png`);
+      await page.screenshot({
+        path: imagePath,
+        fullPage: true,
+        animations: "disabled"
+      });
+      captures.push({
+        id: checkpoint.id,
+        path: path.relative(process.cwd(), imagePath),
+        animationId: checkpoint.animationId,
+        viewport: checkpoint.viewport,
+        progress: checkpoint.progress,
+        step: evidence.step,
+        focus: evidence.focus,
+        locals: evidence.locals,
+        output: evidence.output,
+        accessibilityMode: evidence.accessibilityMode,
+        contained: evidence.contained,
+        documentOverflow: evidence.documentOverflow
+      });
+    } finally {
+      await page.close();
+    }
+  }
+
+  const manifestPath = path.join(programmingOutput, "manifest.json");
+  await writeFile(manifestPath, `${JSON.stringify({
+    schemaVersion: "kp.animation-catalogue-programming-addition-review.v1",
+    animationId: programmingAdditionExemplarId,
+    comparisonAnimationId: programmingComparisonExemplarId,
+    disposition: "Unreviewed",
+    promotion: "frozen-pending-consolidated-human-checkpoint",
+    captureSemantics: {
+      staticView: "exact settled trace with catalogue animations disabled",
+      reducedMotion: "system prefers-reduced-motion projection",
+      imagesAreDisposable: true
+    },
+    captures
+  }, null, 2)}\n`, "utf8");
+  console.log(
+    `animation catalogue programming review: ${path.relative(process.cwd(), manifestPath)}`
   );
 }
 
@@ -2331,10 +2631,7 @@ async function captureCatalogueHostability(browser: Browser) {
     .filter(({ gapKind }) => gapKind === "missing-adapter")
     .map(({ animationId }) => animationId)
     .sort();
-  const expectedMissingAdapterIds = [
-    "animation.comparison.linear-solve-programming",
-    "animation.programming.add.execution-trace"
-  ];
+  const expectedMissingAdapterIds: readonly string[] = [];
   if (JSON.stringify(missingAdapterIds) !==
     JSON.stringify(expectedMissingAdapterIds)) {
     throw new Error(
