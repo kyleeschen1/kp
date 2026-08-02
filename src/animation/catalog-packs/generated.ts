@@ -6,6 +6,8 @@ import {
 } from "../generated-problem-import.ts";
 import { createKpMatrixMatrixSemanticDuration } from "../matrix-matrix-semantic-duration.ts";
 import { createKpMatrixVectorSemanticDuration } from "../matrix-vector-semantic-duration.ts";
+import { enrichKpMatrixLinearMapAsset } from
+  "../matrix-linear-map-asset-enrichment.ts";
 import {
   createGeneratedCalculusProblemFixtures
 } from "../../semantic/generated-calculus-problem-fixture.ts";
@@ -33,6 +35,6 @@ export function createKpGeneratedProblemAnimationPack():
         animation.timeline?.durationMs !== duration.totalDurationMs) {
       throw new Error(`Matrix semantic duration contract drifted for ${fixture.id}.`);
     }
-    return animation;
+    return enrichKpMatrixLinearMapAsset(animation);
   });
 }

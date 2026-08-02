@@ -56,6 +56,8 @@ import {
 import {
   createKpVerifiedGeneratedLinearSolveRuntimeAsset
 } from "./verified-generated-linear-solve-runtime-asset.ts";
+import { enrichKpMatrixLinearMapAsset } from
+  "./matrix-linear-map-asset-enrichment.ts";
 
 export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
   return [
@@ -99,7 +101,13 @@ export function createGeneratedProblemAnimationAssets():
   return [
     ...createGeneratedCalculusProblemFixtures(),
     ...createGeneratedLinearAlgebraProblemFixtures()
-  ].map(createGeneratedProblemAnimationAsset);
+  // Keep the eager test catalogue and lazy product pack on one enriched asset
+  // identity; capability loading must not change semantic object ownership.
+  ].map((fixture) =>
+    enrichKpMatrixLinearMapAsset(
+      createGeneratedProblemAnimationAsset(fixture)
+    )
+  );
 }
 
 export function animationIdsForTimelineIds(

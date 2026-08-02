@@ -102,7 +102,8 @@
     {
       "id": "s08",
       "title": "Enrich canonical asset with map and graph objects",
-      "status": "planned"
+      "summary": "Enriched the existing canonical matrix-vector asset in place with nine provenance-bearing semantic objects: Matrix, LinearMap, two standard bases, two basis images, Graph2D, v=[4,5], and T_A(v)=[13,15]. Eager test and lazy product catalogues share the enrichment function; no duplicate animation was created.",
+      "status": "complete"
     },
     {
       "id": "s09",

@@ -184,11 +184,25 @@
       "scope": "standard",
       "checkedAt": "2026-08-02T20:52:30.294Z",
       "notes": "All typechecks passed with strict matrix-to-map semantics."
+    },
+    {
+      "command": "npm run test:matrix-linear-map",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T20:55:12.254Z",
+      "notes": "31/31 checks passed; eager and lazy catalogues enrich the same asset ID with nine exact derived semantic objects."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T20:55:13.546Z",
+      "notes": "All typechecks passed after in-place semantic asset enrichment."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s07 derived one strict LinearMap from the canonical matrix with named domain/codomain standard bases, column-indexed basis images, and exact reconstruction of Av."
+    "summary": "Slice s08 enriched the canonical asset in both eager and lazy catalog paths with matrix, map, bases, mapped basis vectors, Graph2D plane, and input/output vectors while preserving the existing animation ID."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."
