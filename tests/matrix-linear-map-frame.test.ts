@@ -54,6 +54,15 @@ test("operation-bank and geometry frames share one semantic playhead", () => {
   assert.deepEqual(settled.geometry.inputCoordinates, [4, 5]);
   assert.deepEqual(settled.geometry.outputCoordinates, [13, 15]);
   assert.deepEqual(settled.geometry.mappedBasisVectors, [[2, 0], [1, 3]]);
+  assert.deepEqual(settled.geometry.currentBasisVectors, [[2, 0], [1, 3]]);
+  assert.deepEqual(settled.geometry.currentVectorCoordinates, [13, 15]);
+  assert.equal(settled.geometry.transformedGridSegments.length, 12);
+  assert.deepEqual(settled.geometry.transformedGridSegments.at(-1), {
+    id: "grid.second-basis.5",
+    family: "second-basis",
+    from: [10, 0],
+    to: [15, 15]
+  });
   assert.equal(settled.geometry.outputVectorRevealProgress, 1);
 });
 

@@ -40,9 +40,22 @@ test("rank-6 matrix-vector exemplar preserves exact row-dot playback", async ({
   );
   await expect(player.locator("[data-kp-editor-animation-stage]"))
     .toHaveAttribute("data-kp-editor-animation-surface", "composite");
-  await expect(player.locator(
+  const graphSlot = player.locator(
     '[data-kp-editor-animation-surface-slot="graph"]'
-  )).toHaveCount(1);
+  );
+  await expect(graphSlot).toHaveAttribute(
+    "data-kp-editor-animation-adapter-id",
+    "editor-animation-surface.graph.svg"
+  );
+  await expect(graphSlot).toHaveAttribute(
+    "data-kp-editor-animation-adapter-status",
+    "ready"
+  );
+  await expect(graphSlot.locator("[data-kp-editor-graph-svg]"))
+    .toHaveAttribute(
+      "data-kp-graph-language-profile",
+      "kp.graph.dimensional-continuity.v1"
+    );
 
   await scrubber.fill("0.18");
   const operationBank = transition.locator(
@@ -82,6 +95,8 @@ test("rank-6 matrix-vector exemplar preserves exact row-dot playback", async ({
   await expect(operationBank.locator(
     '[data-kp-editor-matrix-operation-fold="0"]'
   )).toContainText("8+5");
+  await expect(graphSlot.locator("[data-kp-matrix-linear-map-view]"))
+    .toHaveAttribute("data-kp-matrix-linear-map-grid-progress", "0");
 
   await scrubber.fill("0.8");
   await expect(operationBank.locator(
@@ -93,10 +108,23 @@ test("rank-6 matrix-vector exemplar preserves exact row-dot playback", async ({
   await expect(operationBank.locator(
     '[data-kp-editor-matrix-operation-fold="1"]'
   )).toContainText("0+15");
+  expect(Number(await graphSlot.locator(
+    "[data-kp-matrix-linear-map-view]"
+  ).getAttribute("data-kp-matrix-linear-map-vector-progress")))
+    .toBeGreaterThan(0);
 
   await scrubber.fill("1");
   await expect(operationBank.locator(
     '[data-kp-editor-matrix-operation-input="matrix"]'
+  )).toHaveCSS("opacity", "1");
+  await expect(graphSlot.locator(
+    "[data-kp-matrix-linear-map-output-vector]"
+  )).toHaveAttribute(
+    "data-kp-matrix-linear-map-output-coordinates",
+    "13,15"
+  );
+  await expect(graphSlot.locator(
+    "[data-kp-matrix-linear-map-output-vector]"
   )).toHaveCSS("opacity", "1");
   await expect(operationBank.locator(
     '[data-kp-editor-matrix-operation-input="vector"]'

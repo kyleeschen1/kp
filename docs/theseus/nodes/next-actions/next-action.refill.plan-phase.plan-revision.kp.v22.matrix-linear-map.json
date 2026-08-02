@@ -317,11 +317,39 @@
       "scope": "standard",
       "checkedAt": "2026-08-02T21:24:59.076Z",
       "notes": "All application, test, Svelte, and domain typechecks passed after fold rendering and assertion narrowing."
+    },
+    {
+      "command": "npm run test:matrix-linear-map",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T21:33:47.195Z",
+      "notes": "42/42 checks passed including renderer-neutral current geometry, 12 transformed-grid segments, shared graph language, exact basis images, and settled output."
+    },
+    {
+      "command": "npm run test:browser:matrix-linear-map",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-08-02T21:33:48.675Z",
+      "notes": "Chromium loads the existing lazy Graph SVG capability, paints the dimensional-continuity profile, delays grid/vector progress, and settles the output at 13,15."
+    },
+    {
+      "command": "npm run visual:matrix-linear-map",
+      "status": "passed",
+      "scope": "visual",
+      "checkedAt": "2026-08-02T21:33:50.057Z",
+      "notes": "Wide handoff shows only the anticipatory orthographic plane; settled capture shows mapped basis columns, transformed lattice, persistent source, and exact T_A(v) with inline KaTeX and no overflow."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T21:33:51.411Z",
+      "notes": "All application, test, Svelte, and domain typechecks passed after graph capability and renderer integration."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s14 rendered frame-authored products, gathered sums, and coordinate collapse in each persistent operation-bank row; the renderer performs no arithmetic."
+    "summary": "Slice s15 painted the delayed geometry through the existing lazy SVG capability from the same rank-6 frame, following the dimensional-continuity visual language."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."

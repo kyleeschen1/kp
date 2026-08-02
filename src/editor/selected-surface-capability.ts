@@ -3,6 +3,7 @@ import type {
 } from "./animation-surface-dispatch.ts";
 
 export const kpEditorGraphSvgAnimationIds = Object.freeze([
+  "animation.generated.linear-algebra.matrix-vector.two-by-two",
   "animation.graph.vector.linear-map-scale",
   "animation.derivative-rules.tangent-graph",
   "animation.integral-ftc.area-sweep",

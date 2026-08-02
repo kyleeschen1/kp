@@ -2059,6 +2059,71 @@ h2 {
   stroke: #ffffff;
   stroke-width: 2;
 }
+
+.editor-graph-stage__matrix-map-reference-grid line {
+  stroke: var(--kp-graph-grid, #9bb9c8);
+  stroke-width: 0.8;
+}
+
+.editor-graph-stage__matrix-map-grid line {
+  stroke: #7898a6;
+  stroke-width: 1;
+}
+
+.editor-graph-stage__matrix-map-grid line[
+  data-kp-matrix-linear-map-grid-family="second-basis"
+] {
+  stroke: #c08a5a;
+}
+
+.editor-graph-stage__matrix-map-path {
+  stroke: #8a9ca5;
+  stroke-dasharray: 4 5;
+  stroke-width: 1.5;
+}
+
+.editor-graph-stage__matrix-map-basis,
+.editor-graph-stage__matrix-map-source,
+.editor-graph-stage__matrix-map-vector {
+  stroke-linecap: round;
+  stroke-width: 3;
+}
+
+.editor-graph-stage__matrix-map-basis--1 { stroke: #4d7f8a; }
+.editor-graph-stage__matrix-map-basis--2 { stroke: #b77842; }
+.editor-graph-stage__matrix-map-source {
+  stroke: #71838d;
+  stroke-dasharray: 5 4;
+}
+.editor-graph-stage__matrix-map-vector { stroke: var(--kp-graph-changing, #bd5b35); }
+.editor-graph-stage__matrix-map-output {
+  fill: var(--kp-graph-changing, #bd5b35);
+  stroke: #fffdf8;
+  stroke-width: 2;
+}
+
+.editor-graph-stage__matrix-map-label {
+  overflow: visible;
+  color: var(--kp-graph-focal, #263845);
+  font-size: 12px;
+}
+
+.editor-graph-stage__matrix-map-relation {
+  overflow: visible;
+  color: var(--kp-graph-focal, #263845);
+  font-size: 12px;
+  text-align: center;
+}
+
+.editor-graph-stage__matrix-map-relation > div {
+  display: inline-grid;
+  min-height: 30px;
+  border: 1px solid rgb(112 137 152 / 0.25);
+  border-radius: 5px;
+  padding: 5px 9px;
+  place-items: center;
+  background: rgb(255 253 248 / 0.9);
+}
 .editor-graph-stage__point--secant {
   fill: #1f6f78;
   stroke: #ffffff;

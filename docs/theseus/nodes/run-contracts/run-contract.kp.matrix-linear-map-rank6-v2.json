@@ -144,7 +144,8 @@
     {
       "id": "s15",
       "title": "Render delayed geometric linear-map reveal",
-      "status": "planned"
+      "summary": "Rendered the delayed geometric view through the existing Graph SVG surface. The orthographic plane anticipates the reveal; mapped basis columns, transformed lattice, v, interpolated T_A(v), exact [13,15] settlement, inline KaTeX, and accessible description all come from the shared rank-6 frame. No second clock, graph stack, or fluid simulation was added.",
+      "status": "complete"
     },
     {
       "id": "s16",

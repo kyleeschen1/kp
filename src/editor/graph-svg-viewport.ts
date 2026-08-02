@@ -24,6 +24,16 @@ import {
   renderKpVectorDotProjectionRuntimeContent
 } from "../rendering/vector-dot-projection-svg.ts";
 import {
+  createKpMatrixLinearMapPlan,
+  sampleKpMatrixLinearMapFrame,
+  type KpMatrixLinearMapAccessibilityMode,
+  type KpMatrixLinearMapPlan
+} from "../animation/matrix-linear-map-frame.ts";
+import {
+  kpMatrixLinearMapGraphPresentationProfile,
+  renderKpMatrixLinearMapRuntimeContent
+} from "../rendering/matrix-linear-map-svg.ts";
+import {
   kpEditorAnimationSurfaceAdapterRegistry,
   type KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
@@ -37,6 +47,8 @@ export interface KpEditorGraphSvgViewportModel {
   readonly xAxisY: number;
   readonly yAxisX: number;
 }
+
+const matrixLinearMapPlanCache = new Map<string, KpMatrixLinearMapPlan>();
 
 export function createKpEditorGraphSvgViewportModel(
   animation: KpAnimationAsset
@@ -86,7 +98,12 @@ export function createKpEditorGraphSvgViewportAdapter(
           "[data-kp-editor-graph-content]"
         );
         if (content !== null) {
-          content.innerHTML = renderRuntimeContent(animation, state, model);
+          content.innerHTML = renderRuntimeContent(
+            animation,
+            state,
+            model,
+            graphAccessibilityMode(player)
+          );
           syncGraphAccessibility(svg, content);
         }
       }
@@ -110,7 +127,8 @@ function syncGraphAccessibility(
   const description = content.querySelector<SVGDescElement>(
     "[data-kp-economics-nonvisual-summary], " +
     "[data-kp-physics-nonvisual-summary], " +
-    "[data-kp-vector-nonvisual-summary]"
+    "[data-kp-vector-nonvisual-summary], " +
+    "[data-kp-matrix-linear-map-nonvisual-summary]"
   );
   if (description?.id === undefined || description.id.length === 0) {
     svg.removeAttribute("aria-describedby");
@@ -132,13 +150,17 @@ function renderViewport(
     "animation.physics.constant-force-work-energy";
   const vectorProjectionProfile = animation.id ===
     "animation.dot-projection.basic";
+  const matrixLinearMapProfile = animation.id ===
+    "animation.generated.linear-algebra.matrix-vector.two-by-two";
   const dimensionalContinuityProfile = economicsProfile
     ? kpEconomicsGraphPresentationProfile
     : physicsProfile
       ? kpPhysicsGraphPresentationProfile
       : vectorProjectionProfile
         ? kpVectorDotProjectionGraphPresentationProfile
-        : undefined;
+        : matrixLinearMapProfile
+          ? kpMatrixLinearMapGraphPresentationProfile
+          : undefined;
   const profile = dimensionalContinuityProfile?.id ??
     "kp.graph.editor-default.v1";
   const languageProfile = dimensionalContinuityProfile === undefined
@@ -162,7 +184,8 @@ function renderViewport(
 function renderRuntimeContent(
   animation: KpAnimationAsset,
   state: KpEditorAnimationPlayerState,
-  model: KpEditorGraphSvgViewportModel
+  model: KpEditorGraphSvgViewportModel,
+  accessibilityMode: KpMatrixLinearMapAccessibilityMode
 ): string {
   const point = (coordinates: readonly number[]) => [
     scale(coordinates[0] ?? 0, model.xDomain, [36, model.width - 20]),
@@ -171,6 +194,22 @@ function renderRuntimeContent(
   const origin = point([0, 0]);
 
   switch (animation.id) {
+    case "animation.generated.linear-algebra.matrix-vector.two-by-two": {
+      let plan = matrixLinearMapPlanCache.get(animation.id);
+      if (plan === undefined) {
+        plan = createKpMatrixLinearMapPlan(animation);
+        matrixLinearMapPlanCache.set(animation.id, plan);
+      }
+      return renderKpMatrixLinearMapRuntimeContent({
+        frame: sampleKpMatrixLinearMapFrame({
+          plan,
+          progress: state.progress,
+          direction: state.direction,
+          accessibilityMode
+        }),
+        viewport: model
+      });
+    }
     case "animation.graph.vector.linear-map-scale": {
       const frame = sampleLinearMapVectorGraphRuntimeFrame({ animation, runtimeFrame: state.runtimeFrame });
       const source = point(frame.sourceCoordinates);
@@ -233,6 +272,15 @@ function renderRuntimeContent(
     default:
       return "";
   }
+}
+
+function graphAccessibilityMode(
+  player: HTMLElement
+): KpMatrixLinearMapAccessibilityMode {
+  const value = player.dataset["kpEditorAnimationAccessibilityMode"];
+  return value === "reduced-motion" || value === "static" || value === "narrated"
+    ? value
+    : "full-motion";
 }
 
 function renderDerivativeMath(
