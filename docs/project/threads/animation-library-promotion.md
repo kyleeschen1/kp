@@ -2,11 +2,10 @@
 
 Status: active
 Last Updated: 2026-08-02
-Current Next Action: Review the consolidated six-loop human checkpoint. Project
-one vector onto another remains the first unresolved promotion at rank 5.
-Graph3D, generated solve-x, vector, and programming visual decisions are human-
-owned; no disposition, generalization, or promotion is inferred from the
-completed objective work.
+Current Next Action: Correct the conditionally approved Project one vector
+onto another label attenuation around `B`, present the live checkpoint, and
+certify rank 5 only after inspection. Generated solve is approved as the first
+gold deterministic generated session; Graph3D and programming stay internal.
 
 ## Goal
 
@@ -38,6 +37,12 @@ completed predecessor approved the catalogue UX, promoted ranks 3
 and 4, and consolidated only the shared seams those callers proved. Catalogue
 health and disposition remain separate evidence and do not reorder the domain
 ranks.
+
+The consolidated checkpoint now conditionally approves rank 5. Component-pair
+emphasis, residual salience, the right-angle witness, and narrow composition
+are accepted; one over-broad label attenuation or exclusion radius remains
+because `B` fades a line without actual overlap. The correction must preserve
+real collision protection and receive live inspection before promotion.
 
 ## Completed Foundation
 
@@ -128,6 +133,10 @@ them.
 | M4: context-safe generated-text boundary | Before any untrusted or model-produced editorial text ships | Replace repeated generic HTML sanitation at the generation boundary with context-specific text-node, attribute, and script-JSON encoders plus misuse checks. Do not pretend these contexts share one escaping operation. |
 | M5: LLM editorial candidate service | After deterministic generated sessions are stable and human gold and negative examples exist | Let a model propose wording only from verified claims, learner state, approved vocabulary, available visual arguments, and the explanation spine. Human selection remains explicit; playback and editing do not depend on a live model call. |
 | M6: versioned motif implementation boundary | At the first intentional redesign of a shared motif | Give the redesigned motif a versioned implementation reference, route certified callers through it, and prove the affected family centrally updates. Do not build a universal registry without that concrete pressure. |
+| M7: Svelte host exemplar | After rank 5 and before rank 6 | Replace only the catalogue's imperative host composition with one reversible Svelte 5 shell while preserving framework-neutral assets, renderer ports, shared clock, URL and Review lifecycle, selected capabilities, and current budgets. |
+| M8: Internal Studio authoring session | After rank-6 pressure and before broad public authoring | Put Catalogue and Internal Editor over one typed framework-neutral authoring session; adopt SvelteKit only after M7 and the second caller pass. |
+| M9: Public Web publication proof | After M8 and the portable publication bundle | Publish a mission page and small curated lesson set through a static-first SvelteKit host without mirroring the internal catalogue. |
+| M10: constrained Public Editor | After M4, M8, M9, and a public safety policy | Expose a policy-limited projection of the internal authoring commands; do not create a second editor or permit arbitrary DOM, code, or unverified target mathematics. |
 
 Complexity-negative pruning is continuous but adjacent: when a promotion or
 platform milestone migrates the last real caller, retire the matching
@@ -144,8 +153,9 @@ observed callers. It does not freeze domain presenters or internal rendering
 details as public APIs. M2 and M3 are objectively complete through the verified
 generated solve-x asset, its catalogue and reader hosts, and the deterministic
 four-section, eight-cue explanation spine. Their visual treatment and exact
-wording remain at the consolidated human checkpoint. Completion does not
-extend to untrusted editorial output or an LLM service.
+wording are now approved as KP's first human-gold deterministic generated
+session. Completion does not extend to untrusted editorial output or an LLM
+service; M4 and useful negative or revision evidence still precede M5.
 
 ## Fraction Harvest Queue
 
@@ -272,8 +282,10 @@ exists.
 - Which fraction harvest items become safe batch promotions after rank 1?
 - Which exact caller pressure should trigger the first versioned motif
   implementation boundary after the generated solve-x bridge?
-- Which catalogue disposition candidates and which vector/programming visual
-  choices pass the consolidated checkpoint at the end of the active run?
+- Which rank-6 matrix caller best pressures the Svelte host without promoting a
+  framework-specific animation contract?
+- Which useful negative or revision examples should join the approved
+  generated solve before M5 editorial candidates begin?
 
 ## Links
 
@@ -285,7 +297,9 @@ exists.
 - `docs/project/decisions/2026-07-31-kp-exemplar-first-visual-verification-cadence.md`
 - `docs/project/decisions/2026-08-01-kp-dimensional-continuity-graph-and-diagram-language.md`
 - `docs/project/decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md`
+- `docs/project/decisions/2026-08-02-kp-checkpoint-and-product-surface-sequence.md`
 - `docs/project/reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`
+- `docs/project/reviews/2026-08-02-product-surface-priority-next-step-review.md`
 - `docs/project/reviews/2026-08-01-cross-domain-api-motif-audit.md`
 - `docs/project/reviews/2026-08-01-catalogue-curation-cross-domain-promotion-closeout.md`
 - `docs/project/reviews/2026-08-01-visualization-generation-and-web-performance-next-step-review.md`

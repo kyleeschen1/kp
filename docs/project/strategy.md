@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-07-31
+Last Updated: 2026-08-02
 
 ## North Star
 
@@ -58,6 +58,16 @@ produces inputs and projections around that path; it does not add another
 runtime animation layer. One durable semantic animation artifact may compile
 to multiple capability-declaring backends, with static JavaScript as the
 primary full-interaction target.
+
+KP's first-party product topology has two applications over that shared
+engine. **Internal Studio** contains the Animation Catalogue and Internal
+Editor. **Public Web** contains the mission site, curated lessons and content,
+and initially a constrained Public Editor. Svelte 5 is the recommended host UI
+for these first-party applications, and SvelteKit is the eventual application
+and publication framework. Animation assets, semantic and runtime authority,
+authoring commands, publication bundles, and renderer ports remain
+framework-neutral. The public editor is a policy-limited projection of the
+same typed authoring session, not a second implementation.
 
 For structurally changing native-KaTeX equations, the canonical renderer is
 one ephemeral session driven by semantic lineage and measured native paint.
@@ -128,6 +138,13 @@ contract is stable enough to support it.
 - Do not grow operation-specific scheduling exceptions as a substitute for a
   general presentation law; unsupported work must fall back conservatively or
   remain lesson-authored.
-- Do not begin the public website, full curriculum, learner/teacher systems, or
-  broad LLM editorial layer before the internal catalogue audit establishes
-  what KP can host and what should be canonically ported.
+- Do not turn the planned public-site proof into a full curriculum,
+  learner/teacher system, or public catalogue mirror. Public Web begins only
+  after the Internal Studio and portable publication seams are proven, with a
+  mission page and a small explicitly curated lesson set.
+- Do not build the Public Editor before the framework-neutral internal
+  authoring session, context-specific untrusted-text boundary, publication
+  contract, and public safety policy are proven.
+- Do not let Svelte or SvelteKit own animation assets, semantic truth, the
+  shared playback clock, renderer-neutral frames, or public compiler/runtime
+  contracts.

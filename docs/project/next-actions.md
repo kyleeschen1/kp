@@ -7,26 +7,28 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-1. Keep Project one vector onto another as the first unresolved promotion while
-   reviewing the four groups in
-   `reviews/2026-08-02-six-loop-product-convergence-human-checkpoint.md` and
-   record each decision independently.
-2. Assign Keep, Rewrite, or Retire to the reviewed Graph3D artifact and any
-   other catalogue rows whose authored intent is now clear. Do not infer batch
-   dispositions from 36/36 native hostability.
-3. Approve or revise the generated solve-x visual treatment and its
-   four-section, eight-cue deterministic explanation spine. Keep live or
-   untrusted LLM wording deferred until gold and negative examples exist.
-4. Approve or revise Project one vector onto another. It remains the first
-   unresolved promotion at rank 5; motif generalization and a matrix second
-   caller require explicit exemplar approval.
-5. Approve or revise the deterministic addition trace and decide whether its
-   equation/programming comparison deserves to remain. This does not advance
-   the rank-23 BFS family.
-6. After review, authorize one new bounded contract for only the requested
-   revisions, dispositions, promotion proof, and post-approval certification.
-7. Keep the public KP website, curriculum, universal renderer/registry,
-   arbitrary code execution, and model-authored editorial service deferred.
+1. Complete the conditionally approved Project one vector onto another as the
+   first unresolved promotion: diagnose and reduce the over-broad `B` label
+   attenuation radius, preserve true collision protection, present the live
+   checkpoint, and certify rank 5 only after inspection.
+2. Propose one reversible Svelte 5 catalogue-shell exemplar over the existing
+   framework-neutral assets, runtime, clocks, renderer ports, URL behavior,
+   Review lifecycle, capability splits, and production budgets.
+3. Pressure the approved host with the rank-6 matrix-to-linear-map exemplar
+   before generalizing the Svelte seam or building broad editor UI.
+4. Build Internal Studio v0 only after that pressure test: keep Catalogue and
+   Internal Editor as distinct surfaces over one typed authoring session, and
+   adopt SvelteKit only after the shell gate passes.
+5. Freeze the portable publication bundle, then establish Public Web v0 with a
+   mission page and a small explicitly curated lesson set. Do not mirror all
+   internally hostable catalogue rows.
+6. Complete M4 context-specific encoding, then add M5 as an internal
+   editorial-candidate workflow over verified claims and the approved
+   generated-solve gold example.
+7. Build the constrained Public Editor last, after internal authoring,
+   publication, untrusted-text, and public safety contracts are proven.
+8. Keep Graph3D mesh-to-donut and the programming addition/comparison internal.
+   Do not spend current learner-product effort on them or advance rank-23 BFS.
 
 ## Historical Queue Snapshot
 

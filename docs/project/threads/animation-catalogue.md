@@ -1,11 +1,11 @@
 # Animation Catalogue Thread
 
 Status: active-supporting
-Last Updated: 2026-08-01
-Current Next Action: Use the approved six-loop convergence contract to make 3D
-hostability meaningful, preserve the compact persistent shell, and close the
-two programming host gaps with one bounded addition-trace exemplar. Prepare a
-human disposition packet without adding visible ontology or filter machinery.
+Last Updated: 2026-08-02
+Current Next Action: Preserve the approved compact shell while the bounded
+rank-5 vector label correction closes. After promotion, propose one reversible
+Svelte 5 shell exemplar; do not move assets, runtime clocks, or renderer ports
+into the framework.
 
 ## Goal
 
@@ -39,19 +39,16 @@ playhead, parameters, tuning, render ownership, viewport, build identity, and
 one bounded selected-stage screenshot. The bitmap is attached to the same
 immutable note; it does not create a parallel review history.
 
-The catalogue-wide truth pass now shows 33 meaningfully painted assets and two
-honest programming adapter gaps, with zero load failures and zero iframes. The
+The catalogue-wide truth pass now shows 36 meaningfully painted assets with
+zero host gaps, load failures, or iframes. The
 earlier structural 33-paint count was first corrected to 32 because plot chrome
 had masked the 3D gap; the same row now genuinely paints through a bounded
 native `Graph3D` adapter over the existing lazy Three.js capability, semantic
 SVG fallback, and shared two-context lease pool.
 `Ready`, `Review`, and
-`Broken` remain derived health states, not promotion claims. Every human
-disposition is still `Unreviewed`. The seam atlas suggests questions and an
-evidence-ranked programming tranche, but does not assign dispositions. The
-approved successor authorizes one native addition-trace host as an exemplar;
-it does not authorize arbitrary code execution, the BFS promotion, or inferred
-catalogue dispositions.
+`Broken` remain derived health states, not promotion claims. The native
+addition trace closes the former programming host gap without authorizing
+arbitrary code execution or BFS promotion.
 
 The successor loop removed full-document navigation between catalogue assets,
 approved and pressure-tested the solve-x presentation, promoted exact
@@ -62,6 +59,20 @@ diagnostic/retirement candidate, but its semantic fixture and conformance value
 remain until real callers replace them. The provisional incorrect substitution
 remains an explicitly disclosed epistemic negative example pending human
 content review.
+
+The consolidated review now records explicit bounded dispositions. Generated
+solve and its deterministic explanation are approved as the first human-gold
+generated session. Graph3D mesh-to-donut and the programming addition and
+comparison stay internal. Vector is conditionally approved pending one local
+label attenuation correction and live inspection; catalogue health remains
+separate from that promotion decision.
+
+The accepted product-surface sequence puts Catalogue and a later Internal
+Editor inside one Internal Studio, while Public Web separately owns mission,
+curated lessons, and initially a constrained Public Editor. The catalogue does
+not absorb editor forms or public publication state. A Svelte 5 shell may
+replace imperative application composition only after rank 5, behind current
+route, lifecycle, capability, and performance gates.
 
 ## Accepted Scope
 
@@ -93,13 +104,16 @@ content review.
   make the catalogue look complete;
 - public website polish, phone-first design, accounts, teacher tools, full
   curriculum, or live LLM editorial generation;
+- making Svelte components part of animation, semantic, clock, sampled-frame,
+  or renderer-port authority;
 - using catalogue state as roadmap priority, approval, or execution authority.
 
 ## Open Questions
 
 - Which asset controls qualify as semantic Parameters versus temporary Tuning?
-- Which remaining catalogue rows should receive explicit human Keep, Repair,
-  Merge, or Retire dispositions in the first bounded review batch?
+- Which remaining catalogue rows beyond the reviewed Graph3D and programming
+  diagnostics should receive explicit Keep, Repair, Merge, or Retire
+  dispositions in the next bounded review batch?
 - Which old editor, workbench, dashboard, and API routes still carry unique
   diagnostic value after the first inventory?
 
@@ -118,6 +132,8 @@ content review.
 - `docs/project/reviews/2026-07-31-animation-catalogue-simplification-next-step-review.md`
 - `docs/project/decisions/2026-07-31-kp-exemplar-first-visual-verification-cadence.md`
 - `docs/project/decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md`
+- `docs/project/decisions/2026-08-02-kp-checkpoint-and-product-surface-sequence.md`
+- `docs/project/reviews/2026-08-02-product-surface-priority-next-step-review.md`
 - `docs/project/reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`
 - `docs/project/threads/animation-library-promotion.md`
 - `docs/project/threads/cross-domain-tutorial-platform.md`

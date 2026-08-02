@@ -1,11 +1,11 @@
 # Cross-domain Tutorial Platform Thread
 
 Status: active-supporting
-Last Updated: 2026-08-01
-Current Next Action: Execute the approved generated solve-x and deterministic
-explanation gate, then prepare the rank-5 vector exemplar inside the chained
-six-loop contract. Preserve economics/physics and their bounded shared profile;
-no domain engine or universal renderer is authorized.
+Last Updated: 2026-08-02
+Current Next Action: Preserve the approved generated solve and explanation as
+the first human-gold deterministic session while the bounded rank-5 vector
+label correction closes. M4 remains the next editorial safety gate; no live
+model dependency, domain engine, or universal renderer is authorized.
 
 ## Goal
 
@@ -37,7 +37,9 @@ the four early visible exemplars, KP declared public API tiers and will compile
 the existing verified linear-problem trace into the canonical animation asset
 path. The first generated solve-x session carries a deterministic explanation
 spine, learner state, approved vocabulary, and verified claim references.
-This M2/M3 gate and the rank-5 exemplar are approved through
+Its reviewed treatment and wording are now approved as KP's first human-gold
+deterministic generated session. This M2/M3 gate and the rank-5 exemplar were
+authorized through
 `decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md`.
 Context-specific output encoding must precede untrusted editorial text. An LLM
 may later propose review-time wording only after deterministic sessions and
@@ -56,6 +58,16 @@ coordination laws but
 retain subject-native trace, queue, and graph operations. This sequence is
 recorded in
 `decisions/2026-07-30-kp-persistent-workspace-composition-sequence.md`.
+
+The accepted product-surface sequence places these tutorial consumers in two
+first-party applications over the same framework-neutral engine. Internal
+Studio owns catalogue and internal authoring; Public Web owns mission, curated
+lessons, and initially a constrained Public Editor. Svelte 5 and SvelteKit may
+own first-party application composition, but storyboard, semantic, runtime,
+claim, publication, and renderer-port contracts remain portable. Public lesson
+work begins only after the Svelte host, rank-6 pressure, Internal Studio, and
+publication-bundle gates described in
+`decisions/2026-08-02-kp-checkpoint-and-product-surface-sequence.md`.
 
 The immediate product order now begins with the simple linear-equation concept
 room rather than another subject expansion. KP will first prove clean
@@ -232,6 +244,8 @@ is a new combination of tutorial, graph, equation, and interaction vocabulary.
 
 ## Links
 
+- `docs/project/decisions/2026-08-02-kp-checkpoint-and-product-surface-sequence.md`
+- `docs/project/reviews/2026-08-02-product-surface-priority-next-step-review.md`
 - `docs/project/threads/animation-catalogue.md`
 - `docs/project/decisions/2026-07-31-kp-animation-catalogue-first-simplification.md`
 - `docs/project/threads/animation-library-promotion.md`

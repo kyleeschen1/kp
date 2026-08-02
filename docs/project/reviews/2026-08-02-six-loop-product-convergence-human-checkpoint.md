@@ -2,7 +2,7 @@
 
 Date: 2026-08-02
 Run: `run-contract.kp.six-loop-product-convergence-v0`
-Status: `HUMAN_CHECKPOINT`; objective implementation complete, subjective decisions pending
+Status: decisions recorded; conditional vector correction remains before closeout
 
 ## Outcome
 
@@ -16,6 +16,24 @@ separate from hostability and were not inferred by this run.
 This is the review index. Its linked packets own detailed checkpoint evidence;
 this document records the final cross-track state and the decisions needed to
 resume.
+
+## Recorded decisions
+
+The 2026-08-02 review is recorded in
+`docs/project/decisions/2026-08-02-kp-checkpoint-and-product-surface-sequence.md`:
+
+- Graph3D mesh-to-donut stays internal as renderer and continuity evidence.
+- Verified generated solve and `ExplanationSpineV1` are approved as the first
+  human-gold deterministic generated session.
+- Rank-5 vector projection is approved except for one bounded correction: the
+  label exclusion or attenuation radius around `B` fades a non-overlapping
+  line. Promotion waits for diagnosis, the smallest local fix, preserved true
+  collision protection, and live inspection.
+- Programming addition and its comparison stay internal without advancing the
+  rank-23 BFS family.
+
+The product-surface direction and priority placement are reviewed in
+`docs/project/reviews/2026-08-02-product-surface-priority-next-step-review.md`.
 
 ## Review groups
 
@@ -31,9 +49,8 @@ it on ownership loss or context loss, and retains a semantic SVG fallback.
 The Graph3D packet's 33-of-35 count is its earlier slice-local snapshot; the
 final 36-of-36 inventory above supersedes that count.
 
-Human decision: Keep, Rewrite, or Retire the mesh-to-donut artifact; if kept,
-choose the narrow scale, fallback visual parity, mathematical axis labels, and
-whether it belongs in a learner catalogue or an internal diagnostics section.
+Recorded decision: keep mesh-to-donut internal. Narrow scale, fallback parity,
+mathematical axis labels, and learner publication are not current work.
 
 ### 2. Verified generated solve and explanation spine
 
@@ -48,10 +65,9 @@ reader. Four ordered explanation sections project eight cues from verified
 claims. There is no network, model, provider, renderer, or timer authority in
 the compiler, and no live LLM dependency in either host.
 
-Human decision: approve or revise equation scale, moving-token legibility, the
-four-section/eight-cue wording and order, narrow reader balance, and static
-publication rhythm. This judgment creates gold editorial evidence; it does not
-authorize model-authored prose.
+Recorded decision: approve the reviewed visual treatment and
+four-section/eight-cue wording and order as the first gold deterministic
+generated session. This does not authorize model-authored prose.
 
 ### 3. Rank-5 vector projection
 
@@ -64,10 +80,10 @@ clock, uses the approved orthographic 2D graph language and inline native
 KaTeX, and remains deterministic through seek, rewind, reduced motion, and
 static SVG. Its seven captured checkpoints are objective evidence only.
 
-Human decision: approve or revise component-pair emphasis, residual salience,
-the right-angle witness, and the narrow composition. Rank 5 remains `next`, not
-`promoted`; no vector motif or matrix second caller may be generalized before
-approval.
+Recorded decision: approve component-pair emphasis, residual salience, the
+right-angle witness, and narrow composition, conditional on correcting the
+over-broad `B` label attenuation radius. Rank 5 remains `next`, not `promoted`,
+until that local repair is inspected and certified.
 
 ### 4. Programming addition trace
 
@@ -80,9 +96,9 @@ source focus, stack, locals, output, controls, and accessible state. It hosts
 the exact addition and one comparison caller from the shared parent clock. It
 does not execute code, load a highlighter, or advance the rank-23 BFS family.
 
-Human decision: approve or revise wide scale, whole-line versus expression
-focus, always-visible state channels, and whether the visually imbalanced
-equation/programming comparison should remain.
+Recorded decision: keep the addition trace and comparison internal with their
+current scale, focus, and state-channel treatment. No learner publication or
+BFS advancement follows from this disposition.
 
 ## Objective architecture and performance state
 
@@ -106,19 +122,16 @@ residual was not hidden by a wider target or a lower-fidelity fallback.
 
 ## Resume boundary
 
-The smallest useful next action is a human review of the four groups above.
-Record decisions independently: one artifact can be approved while another is
-revised or retired. After those decisions, a new bounded contract may:
+The smallest useful next action is one bounded vector correction and live
+inspection. After it passes, a new contract may certify rank 5, then propose a
+reversible Svelte 5 catalogue-shell exemplar before rank-6 matrix pressure.
+Graph3D and programming remain internal; the generated solve may supply gold
+editorial evidence after M4 without acquiring live model authority.
 
-1. apply only the requested exemplar revisions;
-2. assign explicit catalogue dispositions in reviewed batches;
-3. promote rank 5 and pressure its motif with one structurally different caller
-   only if the vector exemplar is approved; and
-4. add certification matrices after visual choices are stable.
-
-Still deferred: catalogue-wide restyling, a universal renderer or motif
-registry, arbitrary code execution, BFS promotion, untrusted/model-authored
-text, the public KP website, curriculum, and publication rollout.
+Still deferred from the immediate correction: catalogue-wide restyling, a
+universal renderer or motif registry, arbitrary code execution, BFS promotion,
+untrusted/model-authored text, Public Editor implementation, full curriculum,
+and broad publication rollout.
 
 ## Release evidence
 

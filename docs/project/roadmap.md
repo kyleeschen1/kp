@@ -56,11 +56,27 @@ deliberate deferrals are closed in
 The chained six-loop convergence tranche recorded in
 `decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md` and
 `reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md` is now
-at `HUMAN_CHECKPOINT`. It completed the generated solve-x and deterministic
-explanation gate, caller-backed API convergence, route-performance repair,
-honest 3D hosting, rank-5 vector candidate, and non-promotional programming
-host. Catalogue dispositions and subjective visual promotions remain collected
-in `reviews/2026-08-02-six-loop-product-convergence-human-checkpoint.md`.
+at a conditionally resolved human checkpoint. It completed the generated
+solve-x and deterministic explanation gate, caller-backed API convergence,
+route-performance repair, honest 3D hosting, rank-5 vector candidate, and
+non-promotional programming host. Generated solve is approved as KP's first
+human-gold deterministic generated session; Graph3D and programming stay
+internal. Vector is approved except for one bounded `B` label attenuation
+repair and live inspection before promotion. The decisions and successor order
+are recorded in
+`decisions/2026-08-02-kp-checkpoint-and-product-surface-sequence.md` and
+`reviews/2026-08-02-product-surface-priority-next-step-review.md`.
+
+The accepted first-party topology is two applications over one
+framework-neutral engine: Internal Studio contains Catalogue and Internal
+Editor, while Public Web contains the mission site, curated lessons, and
+initially a constrained Public Editor. Svelte 5 is the recommended host UI and
+SvelteKit is the eventual application/publication framework. Animation assets,
+semantic truth, runtime frames, clocks, authoring commands, publication
+bundles, and renderer ports remain outside framework authority. The ordered
+platform gates are a reversible Svelte catalogue-shell exemplar, rank-6 host
+pressure, Internal Studio v0, Public Web v0, M4/M5, and only then a constrained
+Public Editor.
 
 The symbolic manipulation family plan recorded in
 `decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`
@@ -217,9 +233,11 @@ rather than hidden behind a wider budget or lower-fidelity typography.
 The generator, editorial-text, motif-versioning, and pruning recommendations
 are durable platform milestones in `threads/animation-library-promotion.md`.
 API-tier classification is complete. The verified problem-to-animation bridge
-and deterministic explanation spine have completed their objective M2/M3 gate
-and await visual and wording review alongside the vector exemplar. This is not
-authorization for live LLM editorial output or a broad infrastructure rewrite.
+and deterministic explanation spine have completed their objective M2/M3 gate,
+and their first generated solve is now human-approved gold. This is not
+authorization for live LLM editorial output: M4 context-specific encoding and
+useful negative or revision examples still precede an internal M5 editorial
+candidate workflow.
 
 The migration remains complexity-negative replacement work. Semantic traces,
 lineage, clocks, native accessibility, authoring guidance, and accepted legacy
@@ -235,10 +253,10 @@ changing rank. Exact-
 fraction quantity, place-value
 addition, Supply and demand equilibrium, and constant-force work-energy are
 promoted. Project one vector onto another is the first unresolved row and
-is the only active visual promotion exemplar. Human exemplar approval remains
-mandatory before rank advancement or subjective visual generalization, and
-existing standalone examples remain reference evidence rather than
-automatically promoted reader products.
+is the only active visual promotion exemplar. It is conditionally approved;
+the over-broad `B` label attenuation radius must be corrected and inspected
+before rank advancement. Existing standalone examples remain reference
+evidence rather than automatically promoted reader products.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
@@ -437,6 +455,13 @@ Replace the mixed dashboard/workbench front door with an asset-first catalogue:
   Details;
 - project roadmap and Theseus state kept outside the catalogue.
 
+After the conditionally approved rank-5 correction, this phase receives one
+bounded Svelte 5 shell experiment. It may replace imperative host composition
+but must preserve framework-neutral animation assets, renderer ports, one
+shared clock, in-shell navigation, Review draft lifecycle, selected capability
+loading, and current production budgets. SvelteKit adoption waits for that
+gate and rank-6 caller pressure.
+
 ### Phase 7: Animation Composition And Layout Objects
 
 Status: active
@@ -468,6 +493,12 @@ work. Its bounded economics and physics exemplars are promoted, while full
 curriculum generation, learner memory, and course-scale assessment remain
 parked under this phase.
 
+The first public learning step is narrower than this full phase: Public Web v0
+may publish a mission page and a small explicitly curated lesson set after
+Internal Studio and the portable publication bundle are proven. Full
+curriculum, learner memory, accounts, classrooms, and course-scale assessment
+remain parked.
+
 ### Phase 9: Export And Embed
 
 Status: active
@@ -479,17 +510,27 @@ Package executable animations as semantic capsules:
 - cheap fallbacks before WebGL/Three.js loads;
 - GIF, MP4/WebM, and static-step exports.
 
+The portable publication bundle and a static-first SvelteKit host are the next
+publication pressure before media encoders. Public pages must retain meaningful
+prose, math, accessibility truth, and static fallbacks without JavaScript while
+activating heavy animation capabilities lazily.
+
 ## Near-Term Priorities
 
-1. Review the catalogue/Graph3D, generated solve-x, rank-5 vector, and
-   programming groups in the consolidated human checkpoint.
-2. Keep Project one vector onto another as the first unresolved promotion;
-   approve or revise it before any motif generalization or second caller.
-3. Assign only explicit reviewed catalogue dispositions and decide whether the
-   programming comparison and Graph3D diagnostic belong in the retained set.
-4. Authorize a new bounded revision or post-approval certification contract
-   from those decisions. Keep publication, curriculum, the public website,
-   broad LLM editorial work, and universal abstractions outside it.
+1. Correct the over-broad `B` label attenuation radius in the conditionally
+   approved Project one vector onto another exemplar, inspect it live, and
+   certify rank 5 without broad visual generalization.
+2. Propose one reversible Svelte 5 catalogue-shell exemplar over the existing
+   framework-neutral runtime and renderer ports; hold SvelteKit adoption behind
+   its lifecycle, capability, bundle, and Core Web Vitals gate.
+3. Pressure that host with rank-6 matrix-to-linear-map before generalizing the
+   framework seam.
+4. Establish Internal Studio v0 over one typed authoring session, then freeze
+   the portable publication bundle and establish Public Web v0 with a mission
+   page and curated lessons.
+5. Complete M4 before internal M5 editorial candidates, and build the
+   constrained Public Editor only after internal authoring, publication,
+   untrusted-text, and public safety contracts pass.
 
 ## Deferred
 
@@ -509,8 +550,10 @@ Package executable animations as semantic capsules:
   accepted cross-domain exemplars.
 - Broad Theseus planner infrastructure is deferred unless it directly blocks KP
   roadmap execution.
-- The public website, full curriculum, learner/teacher product systems, BFS
-  programming promotion, arbitrary code execution, and broad LLM editorial
-  work remain deferred. The approved addition-trace work is a bounded native-
-  host exemplar only. Economics and physics are promoted bounded exemplars,
-  not permission for domain engines or curriculum expansion.
+- A broad public website, full curriculum, learner/teacher product systems,
+  BFS programming promotion, arbitrary code execution, and broad LLM editorial
+  work remain deferred. Public Web v0 is now planned after Internal Studio and
+  the portable publication seam, but is limited to mission and curated lesson
+  proof. The approved addition trace stays internal. Economics and physics are
+  promoted bounded exemplars, not permission for domain engines or curriculum
+  expansion.
