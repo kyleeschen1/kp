@@ -2,10 +2,10 @@
 
 Status: active-supporting
 Last Updated: 2026-08-02
-Current Next Action: Preserve the approved compact shell while the bounded
-rank-5 vector label correction closes. After promotion, propose one reversible
-Svelte 5 shell exemplar; do not move assets, runtime clocks, or renderer ports
-into the framework.
+Current Next Action: Pressure the canonical Svelte 5 catalogue host with the
+rank-6 matrix-to-linear-map caller before generalizing the framework seam or
+adopting SvelteKit. Keep assets, runtime clocks, renderer ports, URL truth, and
+Review authority outside the framework.
 
 ## Goal
 
@@ -70,9 +70,13 @@ separate from that promotion decision.
 The accepted product-surface sequence puts Catalogue and a later Internal
 Editor inside one Internal Studio, while Public Web separately owns mission,
 curated lessons, and initially a constrained Public Editor. The catalogue does
-not absorb editor forms or public publication state. A Svelte 5 shell may
-replace imperative application composition only after rank 5, behind current
-route, lifecycle, capability, and performance gates.
+not absorb editor forms or public publication state. The bounded Svelte 5 shell
+proof passed its rank-5 human checkpoint, route, lifecycle, capability,
+cross-browser, bundle, and performance-regression gates. It is now the
+canonical catalogue host, and the obsolete imperative composition has been
+removed; the framework-neutral loader, clock, renderer, URL, and Review seams
+remain authoritative. SvelteKit adoption still waits for rank-6 caller
+pressure.
 
 ## Accepted Scope
 

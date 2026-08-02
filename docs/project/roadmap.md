@@ -74,9 +74,10 @@ initially a constrained Public Editor. Svelte 5 is the recommended host UI and
 SvelteKit is the eventual application/publication framework. Animation assets,
 semantic truth, runtime frames, clocks, authoring commands, publication
 bundles, and renderer ports remain outside framework authority. The ordered
-platform gates are a reversible Svelte catalogue-shell exemplar, rank-6 host
-pressure, Internal Studio v0, Public Web v0, M4/M5, and only then a constrained
-Public Editor.
+platform gates are rank-6 host pressure, Internal Studio v0, Public Web v0,
+M4/M5, and only then a constrained Public Editor. The preceding reversible
+Svelte catalogue-shell gate is complete: Svelte 5 now owns the canonical host
+composition without owning framework-neutral animation or publication truth.
 
 The symbolic manipulation family plan recorded in
 `decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`
@@ -455,12 +456,11 @@ Replace the mixed dashboard/workbench front door with an asset-first catalogue:
   Details;
 - project roadmap and Theseus state kept outside the catalogue.
 
-After the approved rank-5 certification, this phase receives one bounded
-Svelte 5 shell experiment. It may replace imperative host composition
-but must preserve framework-neutral animation assets, renderer ports, one
-shared clock, in-shell navigation, Review draft lifecycle, selected capability
-loading, and current production budgets. SvelteKit adoption waits for that
-gate and rank-6 caller pressure.
+The bounded Svelte 5 shell experiment after rank 5 is complete. It replaced
+imperative host composition while preserving framework-neutral animation
+assets, renderer ports, one shared clock, in-shell navigation, Review draft
+lifecycle, selected capability loading, and production budget ratchets.
+SvelteKit adoption still waits for rank-6 caller pressure.
 
 ### Phase 7: Animation Composition And Layout Objects
 
@@ -517,16 +517,12 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Propose one reversible Svelte 5 catalogue-shell exemplar over the existing
-   framework-neutral runtime and renderer ports; hold SvelteKit adoption behind
-   its lifecycle, capability, bundle, and Core Web Vitals gate before pressure
-   with `Apply a 2 × 2 matrix to a vector`.
-2. Pressure that host with rank-6 matrix-to-linear-map before generalizing the
+1. Pressure the canonical Svelte host with rank-6 matrix-to-linear-map before generalizing the
    framework seam.
-3. Establish Internal Studio v0 over one typed authoring session, then freeze
+2. Establish Internal Studio v0 over one typed authoring session, then freeze
    the portable publication bundle and establish Public Web v0 with a mission
    page and curated lessons.
-4. Complete M4 before internal M5 editorial candidates, and build the
+3. Complete M4 before internal M5 editorial candidates, and build the
    constrained Public Editor only after internal authoring, publication,
    untrusted-text, and public safety contracts pass.
 

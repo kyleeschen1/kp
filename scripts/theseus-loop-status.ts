@@ -56,7 +56,9 @@ function nonNegativeInteger(value: number | undefined): number {
 }
 
 function readStatus(): TheseusLoopStatus {
-  const result = spawnSync("theseus", ["--format", "json", "plan", "status"], {
+  // Scope the query so a resolved run cannot overflow the CLI's bounded snapshot
+  // with unrelated workspace state before the final heartbeat is rendered.
+  const result = spawnSync("theseus", ["--format", "json", "plan", "status", "--scope", "kp"], {
     encoding: "utf8"
   });
   if (result.status !== 0) {

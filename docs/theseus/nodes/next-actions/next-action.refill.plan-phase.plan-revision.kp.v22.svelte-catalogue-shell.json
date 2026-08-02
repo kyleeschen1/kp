@@ -2,7 +2,7 @@
   "id": "next-action.refill.plan-phase.plan-revision.kp.v22.svelte-catalogue-shell",
   "kind": "next-action",
   "title": "Advance Reversible Svelte 5 catalogue shell",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "summary": "Replace only imperative catalogue host composition with one reversible Svelte 5 shell while preserving framework-neutral assets, renderer ports, the shared clock, URL and Review lifecycles, selected capability loading, static truth, and production budgets. Selection rationale: User approved the exact 26-slice reversible Svelte 5 catalogue-shell contract after rank-5 certification; execute through the mandatory vector exemplar checkpoint while preserving framework-neutral animation authority.",
   "sourceRefs": [
@@ -1116,11 +1116,109 @@
       "scope": "slice s25 stable command registration and types",
       "checkedAt": "2026-08-02T19:17:53.531Z",
       "notes": "All 34 focused architecture tests passed, including stable release-command and contact-sheet registration; all TypeScript, Svelte, and domain checks passed."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full-test",
+      "checkedAt": "2026-08-02T19:30:44.560Z",
+      "notes": "3,386 tests passed; zero failures, skips, or cancellations."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production-build",
+      "checkedAt": "2026-08-02T19:30:45.733Z",
+      "notes": "TypeScript and Svelte diagnostics clean; Vite built 1,008 modules."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "catalogue-visual",
+      "checkedAt": "2026-08-02T19:30:46.714Z",
+      "notes": "All-family capture completed for equation, economics, physics, Graph3D, vector, and hostability checkpoints."
+    },
+    {
+      "command": "npm run test:browser:vector-dot-projection",
+      "status": "passed",
+      "scope": "vector-browser",
+      "checkedAt": "2026-08-02T19:30:47.676Z",
+      "notes": "Three Chromium vector exemplar and compact catalogue checks passed."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-release",
+      "status": "passed",
+      "scope": "cross-browser-release",
+      "checkedAt": "2026-08-02T19:30:48.618Z",
+      "notes": "42 checks passed across Chromium, Firefox, and WebKit."
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "performance",
+      "checkedAt": "2026-08-02T19:30:49.566Z",
+      "notes": "Regression ratchets passed; normal LCP 280 ms, CLS 0.00022, interaction 13 ms, frame p95 17.6 ms. Constrained longest task 106 ms and frame p95 33.3 ms remain targets."
+    },
+    {
+      "command": "npm run perf:animation:attribution",
+      "status": "passed",
+      "scope": "capability-attribution",
+      "checkedAt": "2026-08-02T19:30:50.489Z",
+      "notes": "Six measured routes use Svelte; no imperative or legacy catalogue route; optional capabilities remain caller-selected."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "promotion-memory",
+      "checkedAt": "2026-08-02T19:30:51.401Z",
+      "notes": "Promotion memory aligned on rank 6 matrix-linear-map with no active implementation contract."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "review-production",
+      "checkedAt": "2026-08-02T19:30:52.305Z",
+      "notes": "Production closure passed across 306 files."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "bundle-boundary",
+      "checkedAt": "2026-08-02T19:30:53.230Z",
+      "notes": "All frozen ratchets passed: outer 10,459; main 178,189; catalogue 90,158; place value 71,795 gzip bytes."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "durable-control",
+      "checkedAt": "2026-08-02T19:31:06.705Z",
+      "notes": "Workspace valid with 864 nodes and 16,489 events before slice completion."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "patch-hygiene",
+      "checkedAt": "2026-08-02T19:31:07.703Z",
+      "notes": "Final documentation and durable evidence patch has no whitespace errors."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/theseus-loop-status.test.ts",
+      "status": "passed",
+      "scope": "closeout-status-helper",
+      "checkedAt": "2026-08-02T19:32:34.963Z",
+      "notes": "Three status formatting checks passed after scoping the snapshot query to KP."
+    },
+    {
+      "command": "npm run --silent loop:status",
+      "status": "passed",
+      "scope": "final-heartbeat",
+      "checkedAt": "2026-08-02T19:32:35.905Z",
+      "notes": "Resolved run reports KP no active loop without exceeding the bounded Theseus status payload."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Slices 1 through 16 are complete. The isolated Svelte catalogue now matches the canonical vector exemplar across seven automated visual checkpoints and is available at the explicit live route; route promotion and caller generalization remain stopped pending human visual approval."
+    "state": "complete",
+    "summary": "All 26 approved slices are complete. Svelte 5 is the canonical catalogue host; obsolete imperative composition is removed; framework-neutral loader, clock, renderers, URL codec, Review service, assets, and semantic truth retain authority. Final release, visual, bundle, performance-regression, production-review, promotion-memory, and workspace gates pass. Rank 6, SvelteKit, Internal Studio, and Public Web remain deferred follow-on work."
   },
   "expectedLearning": [
     "Approved revision 22 places this active phase in now."

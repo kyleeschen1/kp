@@ -1,7 +1,32 @@
 # Reversible Svelte 5 Catalogue Shell Long-Loop Proposal
 
 Date: 2026-08-02
-Status: approved in conversation; executable order lives in Theseus
+Status: complete; all 26 slices closed in Theseus
+
+## Outcome
+
+The approved vector checkpoint passed human review, and the Svelte 5 shell is
+now the canonical catalogue host. The former imperative application
+composition was removed in a separate rollback unit after the Svelte route had
+been pressured through equation, Graph2D, Graph3D, economics, physics,
+programming, generated-reader, Review, URL, and terminal-state callers. The
+asset loader, runtime clock, renderer ports, URL codec, and Review service
+remain framework-neutral authorities.
+
+Final evidence includes 3,386 passing tests; 42 release checks across Chromium,
+Firefox, and WebKit; the seven-state Svelte visual contact sheet; all-family
+catalogue captures; production-review and promotion-memory closure; and a
+1,008-module production build with no Svelte or TypeScript diagnostics. The
+frozen bundle ratchets pass at 10,459 gzip bytes for the outer shell, 178,189
+for the main host, 90,158 for the measured catalogue route, and 71,795 for the
+place-value increment.
+
+Normal-profile performance is regression-clean at 280 ms LCP, approximately
+0.00022 CLS, 13 ms interaction paint, and 17.6 ms animation-frame p95. The
+constrained profile retains explicit optimization debt: its longest task is
+106 ms and frame p95 is 33.3 ms. No ceiling was widened. SvelteKit, Internal
+Studio, Public Web, the public editor, and rank-6 matrix-to-linear-map remain
+separate follow-on decisions and work.
 
 ## Why This Loop Is Current
 

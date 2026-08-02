@@ -2,8 +2,9 @@
   "id": "run-contract.kp.svelte-catalogue-shell-v1",
   "kind": "run-contract",
   "title": "Reversible Svelte 5 catalogue shell",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -209,7 +210,8 @@
     {
       "id": "s26",
       "title": "Run final gates and close durable records",
-      "status": "planned"
+      "summary": "Closed the promoted Svelte catalogue shell with durable outcome records, 3,386 full tests, a clean 1,008-module production build, all-family visual evidence, 42 cross-browser checks, regression-clean performance, caller-attributed lazy capabilities, frozen bundle ratchets, production Review closure, promotion-memory alignment, and a valid Theseus workspace. Constrained longest-task and frame-p95 targets remain explicit follow-on optimization debt; no ceiling widened.",
+      "status": "complete"
     }
   ]
 }
