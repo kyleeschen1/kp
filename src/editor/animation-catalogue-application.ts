@@ -25,6 +25,10 @@ import {
   createKpAnimationCatalogueSelectedHostViewModel
 } from "./animation-catalogue-host-view-model.ts";
 import {
+  selectKpAnimationCatalogueInspector,
+  tuneKpAnimationCataloguePresentation
+} from "./animation-catalogue-inspector-host.ts";
+import {
   mountKpAnimationCataloguePlayerHost
 } from "./animation-catalogue-player-host.ts";
 import {
@@ -52,7 +56,6 @@ import {
 import {
   KP_EDITOR_ANIMATION_FRAME_EVENT,
   KP_EDITOR_ANIMATION_LOAD_EVENT,
-  applyKpEditorAnimationPresentationTuning,
   disposeKpEditorAnimationPlayers,
   pauseKpEditorAnimationPlayers,
   replaceKpEditorAnimationPlaybackAsset
@@ -585,30 +588,11 @@ class KpAnimationCatalogueApplication {
   }
 
   #selectInspector(select: HTMLSelectElement): void {
-    const view = select.closest<HTMLElement>(
-      "[data-kp-animation-catalogue-inspector-view]"
-    );
-    if (view === null || ![
-      "details", "parameters", "tuning", "explanation"
-    ].includes(select.value)) return;
-    view.dataset["kpAnimationCatalogueInspectorView"] = select.value;
-    view.querySelectorAll<HTMLElement>(
-      "[data-kp-animation-catalogue-inspector-panel]"
-    ).forEach((panel) => {
-      panel.hidden = panel.dataset["kpAnimationCatalogueInspectorPanel"] !==
-        select.value;
-    });
+    selectKpAnimationCatalogueInspector(select);
   }
 
   #tunePresentation(select: HTMLSelectElement): void {
-    const kind = select.dataset["kpAnimationCatalogueTuning"];
-    if (kind !== "gestalt-style" && kind !== "focus-experiment") return;
-    const player = this.#root.querySelector<HTMLElement>(
-      "[data-kp-animation-catalogue] [data-kp-editor-animation-player]"
-    );
-    if (player !== null) {
-      applyKpEditorAnimationPresentationTuning(player, kind, select.value);
-    }
+    tuneKpAnimationCataloguePresentation(this.#root, select);
   }
 
   #updateEconomics(input: HTMLInputElement): void {

@@ -31,7 +31,10 @@ test("explicit Svelte exemplar mounts through the shared selected-host model", a
   await expect(exemplar.locator(
     "[data-kp-animation-catalogue-region]"
   )).toHaveCount(3);
-  await expect(exemplar.getByRole("heading", { level: 3 })).toHaveText("Details");
+  await expect(exemplar.getByRole("heading", {
+    level: 3,
+    name: "Details"
+  })).toBeVisible();
   const player = exemplar.locator(
     `[data-kp-editor-animation-player]` +
     `[data-kp-editor-animation-id="${animationId}"]`
@@ -60,6 +63,41 @@ test("explicit Svelte exemplar mounts through the shared selected-host model", a
     "data-kp-animation-catalogue-host-outcome",
     "painted"
   );
+  const inspector = exemplar.locator(
+    "[data-kp-animation-catalogue-inspector-view]"
+  );
+  const inspectorSelect = inspector.getByRole("combobox", {
+    name: "Inspector view"
+  });
+  await inspectorSelect.selectOption("tuning");
+  await expect(inspector).toHaveAttribute(
+    "data-kp-animation-catalogue-inspector-view",
+    "tuning"
+  );
+  await expect(inspector.locator(
+    '[data-kp-animation-catalogue-inspector-panel="details"]'
+  )).toBeHidden();
+  await expect(inspector.locator(
+    '[data-kp-animation-catalogue-inspector-panel="tuning"]'
+  )).toBeVisible();
+  const styleTuning = inspector.locator(
+    '[data-kp-animation-catalogue-tuning="gestalt-style"]'
+  );
+  await styleTuning.selectOption("kp.restrained-editorial@1.0.0");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-gestalt-selected-style",
+    "kp.restrained-editorial@1.0.0"
+  );
+  const focusTuning = inspector.locator(
+    '[data-kp-animation-catalogue-tuning="focus-experiment"]'
+  );
+  await focusTuning.selectOption("elevated");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-focus-experiment",
+    "elevated"
+  );
+  await inspectorSelect.selectOption("details");
+  await expect(styleTuning).toHaveValue("kp.restrained-editorial@1.0.0");
   await player.evaluate((element) => {
     element.dataset["kpSveltePlayerIdentity"] = "stable";
   });

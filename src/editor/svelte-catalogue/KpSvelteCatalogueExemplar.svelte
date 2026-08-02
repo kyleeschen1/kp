@@ -13,11 +13,19 @@
     type KpAnimationCatalogueSelectedHostViewModel
   } from "../animation-catalogue-host-view-model.ts";
   import {
+    selectKpAnimationCatalogueInspector,
+    tuneKpAnimationCataloguePresentation
+  } from "../animation-catalogue-inspector-host.ts";
+  import {
     mountKpAnimationCataloguePlayerHost
   } from "../animation-catalogue-player-host.ts";
   import {
     renderKpEditorAnimationPlayerShell
   } from "../animation-player-shell.ts";
+  import {
+    applyKpAnimationCatalogueObservedHealth,
+    renderKpAnimationCatalogueInspector
+  } from "../animation-catalogue-shell.ts";
   import type {
     KpSvelteCatalogueHostState
   } from "./svelte-catalogue-host-state.ts";
@@ -36,6 +44,9 @@
         player: hostState.view.player,
         chrome: "catalogue"
       })
+    : "");
+  const inspectorHtml = untrack(() => hostState.status === "selected"
+    ? renderKpAnimationCatalogueInspector(hostState.view)
     : "");
   let resultRows = $derived(view === undefined
     ? []
@@ -56,10 +67,30 @@
     });
   }
 
+  function changeInspector(event: Event): void {
+    if (view === undefined || shell === undefined ||
+      !(event.target instanceof HTMLSelectElement)) return;
+    if (event.target.dataset["action"] ===
+      "select-animation-catalogue-inspector") {
+      const inspectorView = selectKpAnimationCatalogueInspector(event.target);
+      if (inspectorView !== undefined) {
+        view = reduceKpAnimationCatalogueHostView(view, {
+          kind: "select-inspector",
+          view: inspectorView
+        });
+      }
+      return;
+    }
+    if (event.target.dataset["action"] === "tune-animation-catalogue") {
+      tuneKpAnimationCataloguePresentation(shell, event.target);
+    }
+  }
+
   onMount(() => {
     if (hostState.status !== "selected" || shell === undefined) return;
+    const mountedShell = shell;
     return mountKpAnimationCataloguePlayerHost({
-      shell,
+      shell: mountedShell,
       entry: hostState.view.entry,
       hostability: hostState.hostability,
       animation: hostState.animation,
@@ -67,6 +98,11 @@
         if (view === undefined ||
           view.entry.animationId !== observation.health.animationId) return;
         view = replaceKpAnimationCatalogueHostHealth(view, observation.health);
+        applyKpAnimationCatalogueObservedHealth({
+          shell: mountedShell,
+          entry: view.entry,
+          health: observation.health
+        });
         hostOutcome = observation.outcome.status;
       }
     });
@@ -187,11 +223,9 @@
       class="kp-animation-catalogue-shell__inspector"
       data-kp-animation-catalogue-region="inspector"
       aria-label="Artifact inspector"
+      onchange={changeInspector}
     >
-      <section aria-labelledby="kp-svelte-catalogue-details-title">
-        <h3 id="kp-svelte-catalogue-details-title">Details</h3>
-        <p>{view.entry.summary}</p>
-      </section>
+      {@html inspectorHtml}
     </aside>
   </main>
 {:else if hostState.status !== "selected"}

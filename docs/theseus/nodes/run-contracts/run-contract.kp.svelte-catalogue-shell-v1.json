@@ -107,7 +107,8 @@
     {
       "id": "s09",
       "title": "Port inspector and tuning controls",
-      "status": "planned"
+      "summary": "Mounted the canonical Details, Parameters, Tuning, and optional explanation inspector projection in Svelte. Both hosts share one inspector-control adapter; presentation tuning commands the existing player capability and panel changes preserve the inspector DOM.",
+      "status": "complete"
     },
     {
       "id": "s10",

@@ -373,11 +373,46 @@
       "scope": "s08-performance",
       "checkedAt": "2026-08-02T16:05:49.513Z",
       "notes": "Outer 10459, main host 255904, measured catalogue 171542, and place-value incremental 71797 gzip bytes remain below frozen ceilings."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "s09-focused",
+      "checkedAt": "2026-08-02T16:11:39.884Z",
+      "notes": "34 shared shell, inspector projection, host, rollback, and compiler tests passed."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s09-types",
+      "checkedAt": "2026-08-02T16:11:40.890Z",
+      "notes": "Svelte checker reported zero errors and zero warnings."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "s09-browser",
+      "checkedAt": "2026-08-02T16:11:41.759Z",
+      "notes": "Four Chromium checks passed; canonical Details, panel switching, restrained style, elevated focus, persistent tuning controls, player behavior, terminal states, and rollback were verified."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "s09-production",
+      "checkedAt": "2026-08-02T16:11:42.668Z",
+      "notes": "Production Vite build passed with 1006 transformed modules."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s09-performance",
+      "checkedAt": "2026-08-02T16:11:43.544Z",
+      "notes": "Outer 10459, main host 255773, measured catalogue 171820, and place-value incremental 71797 gzip bytes remain below frozen ceilings."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1 through 8 are complete. The Svelte stage now mounts the real player on the shared clock with observed health; selected-result navigation without page reload is next."
+    "summary": "Slices 1 through 9 are complete. Canonical inspector and presentation tuning behavior now work in the opt-in Svelte host; cancellable in-shell asset switching is next."
   },
   "expectedLearning": [
     "Approved revision 22 places this active phase in now."

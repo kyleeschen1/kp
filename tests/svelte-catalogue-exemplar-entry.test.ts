@@ -57,7 +57,9 @@ test("bootstrap keeps the imperative default and dynamically mounts the exemplar
   assert.match(component, /hostState\.status === "loading"/);
   assert.match(component, /hostState\.status === "not-found"/);
   assert.match(component, /role="alert">\{hostState\.message\}/);
-  assert.match(component, /<h3 id="kp-svelte-catalogue-details-title">Details/);
+  assert.match(component, /renderKpAnimationCatalogueInspector/);
+  assert.match(component, /selectKpAnimationCatalogueInspector/);
+  assert.match(component, /tuneKpAnimationCataloguePresentation/);
   assert.match(component, /mountKpAnimationCataloguePlayerHost/);
   assert.match(component, /renderKpEditorAnimationPlayerShell/);
   assert.doesNotMatch(
