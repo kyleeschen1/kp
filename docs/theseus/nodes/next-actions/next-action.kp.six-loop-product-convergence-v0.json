@@ -121,6 +121,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-animation-api-pruning-verdict.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/canonical-animation-api-map.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-canonical-animation-api-map.md"
     }
   ],
   "dependsOn": {
@@ -603,6 +611,42 @@
       "status": "passed",
       "scope": "s14 whitespace integrity",
       "checkedAt": "2026-08-02T01:18:41.589Z"
+    },
+    {
+      "command": "node focused canonical API map suite",
+      "status": "passed",
+      "scope": "s15 21 export, facade, caller, cross-domain, and motif-boundary tests",
+      "checkedAt": "2026-08-02T01:22:59.120Z"
+    },
+    {
+      "command": "npm run audit:animation-api-callers -- --summary",
+      "status": "passed",
+      "scope": "s15 exact caller counts after documentation conformance imports",
+      "checkedAt": "2026-08-02T01:23:00.011Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s15 concept, reader, animation, and motif authority boundaries",
+      "checkedAt": "2026-08-02T01:23:00.928Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15 API map types across application, node, tests, and domains",
+      "checkedAt": "2026-08-02T01:23:01.935Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s15 production build proving data-only architecture map adds no runtime barrel",
+      "checkedAt": "2026-08-02T01:23:02.877Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s15 whitespace integrity",
+      "checkedAt": "2026-08-02T01:23:03.766Z"
     }
   ],
   "expectedLearning": [

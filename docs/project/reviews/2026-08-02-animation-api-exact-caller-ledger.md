@@ -41,15 +41,15 @@ the sixteenth target. All 16 have zero unclassified “other” callers.
 
 | Surface | Production | Tests | Scripts | Disposition |
 | --- | ---: | ---: | ---: | --- |
-| Animation authoring facade | 2 | 3 | 0 | Canonical fraction and verified generated solve only |
+| Animation authoring facade | 2 | 4 | 0 | Canonical fraction and verified generated solve only |
 | Internal balanced-solve seam | 1 | 2 | 0 | Public facade is its sole production caller; keep implementation internal |
 | Complete animation asset core | 126 | 44 | 0 | Keep internal; generated compiler no longer imports it directly |
-| Concept authoring facade | 1 | 11 | 1 | Keep separate |
-| Provider integration facade | 6 | 8 | 0 | Keep separate |
+| Concept authoring facade | 1 | 12 | 1 | Keep separate |
+| Provider integration facade | 6 | 9 | 0 | Keep separate |
 | Reader compiler facade | 1 | 15 | 0 | Keep internal |
 | Reader runtime facade | 21 | 19 | 0 | Keep internal |
 | Reader renderer facade | 4 | 30 | 0 | Keep internal |
-| Equation motif facade | 0 | 0 | 0 | Keep separate canonical vocabulary |
+| Equation motif facade | 0 | 1 | 0 | Keep separate canonical vocabulary |
 | Experimental editor API catalogue | 5 | 2 | 0 | Defer |
 | Semantic compatibility ledger | 0 | 1 | 1 | Keep internal evidence |
 | Generated display metadata | 1 | 0 | 0 | Retain: live display projection has no exact replacement |

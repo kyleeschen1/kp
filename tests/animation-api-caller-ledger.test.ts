@@ -52,6 +52,7 @@ test("animation facade has exactly the two approved production callers", () => {
   assert.deepEqual(surface.testCallers, [
     "tests/animation-authoring-facade-caller-preservation.test.ts",
     "tests/animation-authoring-public-api.test.ts",
+    "tests/canonical-animation-api-map.test.ts",
     "tests/type-fixtures/animation-authoring-public-api.ts"
   ]);
   assert.deepEqual(surface.scriptCallers, []);
@@ -84,6 +85,9 @@ test("public-looking facades remain separated by authority", () => {
     "src/reader/app/reader-canonical-equation-session.ts"
   ]);
   assert.deepEqual(record("facade.equation-motifs").sourceCallers, []);
+  assert.deepEqual(record("facade.equation-motifs").testCallers, [
+    "tests/canonical-animation-api-map.test.ts"
+  ]);
 });
 
 test("generated-session internals expose only their observed direct callers", () => {

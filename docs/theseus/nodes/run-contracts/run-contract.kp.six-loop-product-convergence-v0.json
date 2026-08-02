@@ -156,7 +156,9 @@
     {
       "id": "s15",
       "title": "Close API convergence",
-      "status": "planned"
+      "summary": "Published an executable seven-boundary API map and concise caller guide. Exactly one supported animation-asset authoring facade remains; concept publication and provider verification are separate, equation motifs are explicitly non-universal, reader facades remain subsystem-internal, and documented runtime exports exactly equal live module exports.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s16",
