@@ -49,7 +49,11 @@ test("catalogue search supports direct, tokenized, and fuzzy cross-domain terms"
     ({ animationId }) => animationId ===
       "animation.programming.add.execution-trace"
   ));
-  assert.equal(search("unreviewed").length, 36);
+  assert.equal(search("unreviewed").length, 35);
+  assert.deepEqual(
+    search("keep").map(({ animationId }) => animationId),
+    ["animation.dot-projection.basic"]
+  );
 });
 
 test("catalogue search returns assets rather than related context rows", () => {

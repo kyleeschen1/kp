@@ -60,7 +60,7 @@ test("vector exemplar has one exact lazy graph registration and one native host"
   }]);
   assert.equal(rows.length, 1);
   assert.deepEqual(rows[0]?.renderTargetKinds, ["graph"]);
-  assert.equal(rows[0]?.humanDisposition, "unreviewed");
+  assert.equal(rows[0]?.humanDisposition, "keep");
 
   const loaded = await loadKpAnimationAsset(animationId);
   assert.equal(loaded.packId, "graph");

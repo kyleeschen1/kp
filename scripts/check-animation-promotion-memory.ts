@@ -228,7 +228,7 @@ export function evaluateKpPromotionMemory(
 
   const phases = readPlanPhases(input.activePlanRevision);
   const matchingPhases = phases.filter((phase) =>
-    phase.status === "active" &&
+    (phase.status === "active" || phase.status === "planned") &&
     containsReference(
       `${stringValue(phase.objective)} ${stringValue(phase.canonicalExemplar)}`,
       current.referenceKey
@@ -236,7 +236,7 @@ export function evaluateKpPromotionMemory(
   );
   if (matchingPhases.length !== 1) {
     diagnostics.push(
-      `Active Theseus plan must contain exactly one active phase for ${current.referenceKey}.`
+      `Active Theseus plan must contain exactly one active or planned phase for ${current.referenceKey}.`
     );
   }
   const activePhase = matchingPhases[0];
@@ -246,9 +246,11 @@ export function evaluateKpPromotionMemory(
         (candidate): candidate is string => typeof candidate === "string"
       )
     : [];
-  const matchingRunContracts = evidenceIds.filter((id) =>
-    isActiveRunContract(input.runContractsById.get(id))
-  );
+  const matchingRunContracts = activePhase?.status === "active"
+    ? evidenceIds.filter((id) =>
+        isActiveRunContract(input.runContractsById.get(id))
+      )
+    : [];
   // A roadmap phase may be current while its proposal awaits approval. Only a
   // typed run contract authorizes implementation, so zero is a valid planning
   // state; multiple live contracts would create competing execution authority.

@@ -1,10 +1,10 @@
 {
-  "id": "plan-revision.kp.v21",
+  "id": "plan-revision.kp.v22",
   "kind": "plan-revision",
-  "title": "Kinetic Press six-loop product convergence roadmap v21",
-  "status": "superseded",
+  "title": "Kinetic Press post-checkpoint product-surface roadmap v22",
+  "status": "active",
   "domain": "kp",
-  "summary": "Execute the approved catalogue, generated solve-x, API, vector, performance, and programming-host tranche while preserving vector as rank 5 and human review as the promotion boundary.",
+  "summary": "Close generated solve, explanation spine, and rank-5 vector work; prove one reversible Svelte 5 catalogue shell before rank-6 matrix pressure and the approved Internal Studio and Public Web sequence.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -135,6 +135,16 @@
       "kind": "file",
       "path": "docs/theseus/nodes/run-contracts/run-contract.kp.six-loop-product-convergence-v0.json",
       "summary": "Typed execution authority for the approved umbrella tranche."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-02-kp-checkpoint-and-product-surface-sequence.md",
+      "summary": "Accepted rank-5 outcome, Svelte host recommendation, product topology, and ordered successor gates."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-vector-dot-projection-review-package.md",
+      "summary": "Seven-checkpoint vector review and human-approved rank-5 release evidence."
     }
   ],
   "affects": [
@@ -155,8 +165,8 @@
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
-    "revision": 21,
-    "objective": "Converge KP around one honest catalogue and canonical animation path through the approved generated solve-x, API, vector, performance, and programming-host tranche without reordering promotions or inventing human approval.",
+    "revision": 22,
+    "objective": "Move from the certified rank-5 catalogue to a complexity-negative Svelte 5 host exemplar, pressure it with the rank-6 matrix caller, then build Internal Studio, portable Public Web, bounded editorial support, and a constrained Public Editor without moving animation truth into framework authority.",
     "assumptions": [
       {
         "id": "single-roadmap-authority",
@@ -232,6 +242,11 @@
         "id": "composition-environment-sequence",
         "statement": "KP pressures equation succession, persistent workspace algorithms, and synchronized model views in that order, extracting only failed generic invariants before returning to concrete exemplars.",
         "status": "validated"
+      },
+      {
+        "id": "framework-neutral-svelte-boundary",
+        "statement": "Svelte components may own application composition and lifecycle but not assets, semantic truth, runtime frames, clocks, renderer ports, authoring commands, or publication bundles.",
+        "status": "active"
       }
     ],
     "phases": [
@@ -537,7 +552,7 @@
         "title": "Verified linear problem to animation bridge",
         "objective": "Compile verified linear-equation traces into canonical KpAnimationAsset output with stable lineage, instance-aware readers, conformance cases, and fail-closed unsupported presentations.",
         "horizon": "now",
-        "status": "active",
+        "status": "complete",
         "evidence": [
           "run-contract.kp.six-loop-product-convergence-v0"
         ],
@@ -551,7 +566,7 @@
         "title": "Deterministic explanation spine",
         "objective": "Attach ExplanationSpineV1, learner state, approved vocabulary, and verified claim references to the first generated solve-x session.",
         "horizon": "now",
-        "status": "active",
+        "status": "complete",
         "evidence": [
           "run-contract.kp.six-loop-product-convergence-v0"
         ],
@@ -565,7 +580,7 @@
         "title": "Vector and dot-product projection",
         "objective": "Coordinate vector components, geometric projection, magnitude, angle, and dot-product notation.",
         "horizon": "now",
-        "status": "active",
+        "status": "complete",
         "evidence": [
           "run-contract.kp.six-loop-product-convergence-v0"
         ],
@@ -573,6 +588,17 @@
         "architectureBenefit": "Coordinate-to-geometry identity across multiple views.",
         "rationale": "It pressure-tests persistent identity between symbolic components and spatial objects.",
         "canonicalExemplar": "Project one vector onto another"
+      },
+      {
+        "id": "svelte-catalogue-shell",
+        "title": "Reversible Svelte 5 catalogue shell",
+        "objective": "Replace only imperative catalogue host composition with one reversible Svelte 5 shell while preserving framework-neutral assets, renderer ports, the shared clock, URL and Review lifecycles, selected capability loading, static truth, and production budgets.",
+        "horizon": "now",
+        "status": "active",
+        "topic": "Platform · Catalogue host",
+        "architectureBenefit": "Declarative first-party composition without moving animation authority into the application framework.",
+        "rationale": "The approved rank-5 exemplar supplies a stable host caller; matrix pressure follows before the seam generalizes.",
+        "canonicalExemplar": "Svelte 5 shell over the persistent Animation Catalogue"
       },
       {
         "id": "matrix-linear-map",
@@ -583,7 +609,7 @@
         "topic": "Linear algebra · Matrices",
         "architectureBenefit": "Grid structure, nested composition, and spatial transformation.",
         "rationale": "It compounds vector identity with structured table semantics and coordinated geometry.",
-        "canonicalExemplar": "Apply a 2 by 2 matrix to a vector"
+        "canonicalExemplar": "Apply a 2 × 2 matrix to a vector"
       },
       {
         "id": "derivative-reader-graph-bridge",
@@ -851,12 +877,11 @@
       }
     ],
     "approval": {
-      "status": "superseded",
+      "status": "approved",
       "decidedAt": "2026-08-02T12:30:00.000Z",
       "decidedBy": "user",
-      "rationale": "Superseded by plan-revision.kp.v22."
+      "rationale": "The user approved the rank-5 endpoint-halo result and the recorded product-surface sequence; the terminal convergence phases must close and the reversible Svelte gate must precede rank-6 content pressure."
     },
-    "supersedes": "plan-revision.kp.v20",
-    "supersededBy": "plan-revision.kp.v22"
+    "supersedes": "plan-revision.kp.v21"
   }
 }

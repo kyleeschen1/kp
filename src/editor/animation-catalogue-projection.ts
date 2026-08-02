@@ -1,6 +1,10 @@
 import type {
   KpAnimationAssetRenderTargetKind
 } from "../animation/asset.ts";
+import {
+  isKpVerifiedVectorDotProjectionReleaseApproval,
+  kpVerifiedVectorDotProjectionReleaseApproval
+} from "../architecture/vector-dot-projection-release-approval.ts";
 import type {
   KpAnimationCatalogPackId
 } from "../animation/catalog-loader.ts";
@@ -103,6 +107,14 @@ export function createKpAnimationCatalogueProjection(input: {
     const relatedContexts = projectRelatedContexts(
       displayByAnimationId.get(loadableEntry.animationId)
     );
+    const humanDisposition =
+      loadableEntry.animationId ===
+        kpVerifiedVectorDotProjectionReleaseApproval.animationId &&
+      isKpVerifiedVectorDotProjectionReleaseApproval(
+        kpVerifiedVectorDotProjectionReleaseApproval
+      )
+        ? kpVerifiedVectorDotProjectionReleaseApproval.catalogueDisposition
+        : "unreviewed" as const;
 
     return Object.freeze({
       schemaVersion: "kp.animation-catalogue-entry.v1" as const,
@@ -112,9 +124,10 @@ export function createKpAnimationCatalogueProjection(input: {
       packId: loadableEntry.packId,
       title: primary.title,
       summary: primary.summary,
-      // Catalogue health is derived automatically; disposition begins as an
-      // explicit human unknown and cannot be inferred from successful paint.
-      humanDisposition: "unreviewed" as const,
+      // Catalogue health cannot imply a disposition. The one reviewed vector
+      // result comes from nominal approval evidence; every other row remains
+      // an explicit human unknown.
+      humanDisposition,
       domains: freezeUnique(
         relatedDescriptors.flatMap(({ domain }) =>
           domain === undefined ? [] : [domain]
@@ -145,7 +158,7 @@ export function createKpAnimationCatalogueProjection(input: {
         loadableEntry.animationId,
         primary.title,
         primary.summary,
-        "unreviewed",
+        humanDisposition,
         ...relatedDescriptors.flatMap(({ tags }) => tags),
         ...relatedDescriptors.map(({ title }) => title),
         ...relatedDescriptors.flatMap(({ familyId, sampleId }) => [

@@ -36,7 +36,7 @@ test("convergence checkpoint preserves objective state and recorded review", asy
 
   assert.match(
     checkpoint,
-    /Status: decisions recorded; conditional vector correction remains/
+    /Status: checkpoint closed; rank-5 vector promotion certified/
   );
   assert.match(checkpoint, /36\/36 meaningful native paints/);
   assert.match(atlas, /36 meaningfully painted through a native adapter/);
@@ -51,14 +51,14 @@ test("convergence checkpoint preserves objective state and recorded review", asy
     assert.match(checkpoint, new RegExp(command));
   }
 
-  assert.match(checkpoint, /Rank 5 remains `next`, not\s+`promoted`/);
+  assert.match(checkpoint, /Rank 5 is `promoted`/);
   assert.match(
     promotionThread,
-    /Current Next Action: Correct the conditionally approved Project one vector\s+onto another/
+    /Current Next Action: Propose one reversible Svelte 5 catalogue-shell exemplar[\s\S]*Apply a 2 × 2 matrix to a vector/
   );
   assert.match(
     nextActions,
-    /Complete the conditionally approved Project one vector onto another/
+    /Propose one reversible Svelte 5 catalogue-shell exemplar[\s\S]*Apply a 2 × 2 matrix to a vector/
   );
   assert.match(decision, /Svelte 5 is the recommended declarative host UI/);
   assert.match(decision, /Graph3D mesh-to-donut:\*\* keep as an internal renderer/);

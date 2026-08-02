@@ -2,9 +2,9 @@
   "id": "next-action.kp.vector-label-attenuation-correction-v0",
   "kind": "next-action",
   "title": "Correct rank-5 vector label attenuation",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT after all three iteration slices: corrected endpoint label protection and passed focused browser, visual, type, and promotion-memory gates; rank 5 remains unpromoted.",
+  "summary": "Certified Project one vector onto another at rank 5 after the approved endpoint-halo correction; 3,369 tests, build, browser, visual, production, bundle, and Theseus gates pass.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -29,6 +29,14 @@
     {
       "kind": "file",
       "path": "tests/vector-dot-projection-exemplar.browser.spec.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/vector-dot-projection-release-approval.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v22.json"
     }
   ],
   "dependsOn": {
@@ -71,11 +79,53 @@
       "status": "passed",
       "scope": "rank 5 remains next and unpromoted",
       "checkedAt": "2026-08-02T12:12:51.656Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "repository-wide release suite",
+      "checkedAt": "2026-08-02T12:42:28.940Z",
+      "notes": "3,369 tests passed; architecture, inference, concept-catalog, and promotion-memory gates passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production build",
+      "checkedAt": "2026-08-02T12:42:29.934Z",
+      "notes": "Typecheck and Vite production build passed."
+    },
+    {
+      "command": "npm run test:browser:vector-dot-projection",
+      "status": "passed",
+      "scope": "rank-5 browser certification",
+      "checkedAt": "2026-08-02T12:42:30.845Z",
+      "notes": "Three focused Chromium tests passed for geometry, labels, rewind, reduced motion, compact catalogue routing, and lazy persistence."
+    },
+    {
+      "command": "npm run visual:vector-dot-projection",
+      "status": "passed",
+      "scope": "rank-5 seven-state visual certification",
+      "checkedAt": "2026-08-02T12:42:31.729Z",
+      "notes": "Seven deterministic wide, narrow, reduced-motion, and static-SVG checkpoints passed after human approval."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "catalogue performance ratchet",
+      "checkedAt": "2026-08-02T12:42:32.616Z",
+      "notes": "Measured catalogue route was 169,890 gzip bytes under the 190,000-byte ceiling; every tracked boundary passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "durable workspace integrity",
+      "checkedAt": "2026-08-02T12:42:33.507Z",
+      "notes": "Validated 861 nodes and 16,198 events before closeout."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: corrected the B label fade with a transparent endpoint box and one-pixel glyph halo; focused browser tests, seven-state visual capture, typecheck, and promotion memory pass; rank 5 remains unpromoted pending live human inspection."
+    "state": "complete",
+    "summary": "User approved the corrected endpoint halo; rank 5 is nominally certified as ported and Keep, promotion memory advances to rank 6, plan v22 activates the Svelte shell gate, and all release checks pass."
   },
   "revisitWhen": [
     "Human confirms the live B-label treatment and authorizes rank-5 certification."

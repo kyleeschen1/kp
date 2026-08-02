@@ -55,15 +55,15 @@ deliberate deferrals are closed in
 
 The chained six-loop convergence tranche recorded in
 `decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md` and
-`reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md` is now
-at a conditionally resolved human checkpoint. It completed the generated
+`reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md` has now
+closed its human checkpoint. It completed the generated
 solve-x and deterministic explanation gate, caller-backed API convergence,
 route-performance repair, honest 3D hosting, rank-5 vector candidate, and
 non-promotional programming host. Generated solve is approved as KP's first
 human-gold deterministic generated session; Graph3D and programming stay
-internal. Vector is approved except for one bounded `B` label attenuation
-repair and live inspection before promotion. The decisions and successor order
-are recorded in
+internal. The bounded `B` label correction passed live inspection; vector is
+now promoted through nominal release evidence. The decisions and successor
+order are recorded in
 `decisions/2026-08-02-kp-checkpoint-and-product-surface-sequence.md` and
 `reviews/2026-08-02-product-surface-priority-next-step-review.md`.
 
@@ -154,8 +154,9 @@ The persistent promotion order is now owned by
 `threads/animation-library-promotion.md` and accepted by
 `decisions/2026-07-28-kp-stable-animation-promotion-order.md`. Exact fraction
 quantity identity, place-value arithmetic, Supply and demand equilibrium, and
-constant-force work-energy are promoted. Vector dot projection is the first
-unresolved promotion. The completed catalogue and API audit did not recompute
+constant-force work-energy and vector dot projection are promoted.
+Matrix-to-linear-map is the first unresolved promotion. The completed catalogue
+and API audit did not recompute
 this order; older sequence documents remain rationale but no longer
 independently determine rank.
 
@@ -248,15 +249,14 @@ discarding unmigrated catalog coverage.
 
 The durable domain-promotion order and current status remain owned by
 `threads/animation-library-promotion.md`. Approved Theseus plan revision
-`plan-revision.kp.v21` mirrors the approved convergence tranche without
-changing rank. Exact-
-fraction quantity, place-value
-addition, Supply and demand equilibrium, and constant-force work-energy are
-promoted. Project one vector onto another is the first unresolved row and
-is the only active visual promotion exemplar. It is conditionally approved;
-the over-broad `B` label attenuation radius must be corrected and inspected
-before rank advancement. Existing standalone examples remain reference
-evidence rather than automatically promoted reader products.
+`plan-revision.kp.v22` mirrors the post-checkpoint product sequence without
+changing rank. Exact-fraction quantity, place-value addition, Supply and demand
+equilibrium, and constant-force work-energy are
+promoted. Project one vector onto another is also promoted after its bounded
+endpoint-halo correction and seven-state certification. `Apply a 2 × 2 matrix
+to a vector` is the first unresolved content row, with the reversible Svelte 5
+catalogue shell explicitly interleaved before it. Existing standalone examples
+remain reference evidence rather than automatically promoted reader products.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
@@ -455,8 +455,8 @@ Replace the mixed dashboard/workbench front door with an asset-first catalogue:
   Details;
 - project roadmap and Theseus state kept outside the catalogue.
 
-After the conditionally approved rank-5 correction, this phase receives one
-bounded Svelte 5 shell experiment. It may replace imperative host composition
+After the approved rank-5 certification, this phase receives one bounded
+Svelte 5 shell experiment. It may replace imperative host composition
 but must preserve framework-neutral animation assets, renderer ports, one
 shared clock, in-shell navigation, Review draft lifecycle, selected capability
 loading, and current production budgets. SvelteKit adoption waits for that
@@ -517,18 +517,16 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Correct the over-broad `B` label attenuation radius in the conditionally
-   approved Project one vector onto another exemplar, inspect it live, and
-   certify rank 5 without broad visual generalization.
-2. Propose one reversible Svelte 5 catalogue-shell exemplar over the existing
+1. Propose one reversible Svelte 5 catalogue-shell exemplar over the existing
    framework-neutral runtime and renderer ports; hold SvelteKit adoption behind
-   its lifecycle, capability, bundle, and Core Web Vitals gate.
-3. Pressure that host with rank-6 matrix-to-linear-map before generalizing the
+   its lifecycle, capability, bundle, and Core Web Vitals gate before pressure
+   with `Apply a 2 × 2 matrix to a vector`.
+2. Pressure that host with rank-6 matrix-to-linear-map before generalizing the
    framework seam.
-4. Establish Internal Studio v0 over one typed authoring session, then freeze
+3. Establish Internal Studio v0 over one typed authoring session, then freeze
    the portable publication bundle and establish Public Web v0 with a mission
    page and curated lessons.
-5. Complete M4 before internal M5 editorial candidates, and build the
+4. Complete M4 before internal M5 editorial candidates, and build the
    constrained Public Editor only after internal authoring, publication,
    untrusted-text, and public safety contracts pass.
 

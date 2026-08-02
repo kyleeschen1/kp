@@ -28,16 +28,19 @@ import { parseKpPromotionLedger } from
 
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 
-test("addition hosting does not advance the rank-5 frontier or rank-23 BFS", () => {
+test("addition hosting does not advance rank 6 or rank-23 BFS", () => {
   const ledger = parseKpPromotionLedger(readFileSync(
     join(projectRoot, "docs/project/threads/animation-library-promotion.md"),
     "utf8"
   ));
   const vector = ledger.find(({ rank }) => rank === 5);
+  const matrix = ledger.find(({ rank }) => rank === 6);
   const programming = ledger.find(({ rank }) => rank === 23);
 
   assert.equal(vector?.stableId, "kp.promotion.vector-dot-projection");
-  assert.equal(vector?.status, "next");
+  assert.equal(vector?.status, "promoted");
+  assert.equal(matrix?.stableId, "kp.promotion.matrix-linear-map");
+  assert.equal(matrix?.status, "next");
   assert.equal(
     programming?.stableId,
     kpProgrammingAdditionExemplarContract.promotionBoundary.deferredPromotionId

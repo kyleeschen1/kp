@@ -2,7 +2,7 @@
 
 Date: 2026-08-02
 Run: `run-contract.kp.six-loop-product-convergence-v0`
-Status: decisions recorded; conditional vector correction remains before closeout
+Status: checkpoint closed; rank-5 vector promotion certified
 
 ## Outcome
 
@@ -25,10 +25,9 @@ The 2026-08-02 review is recorded in
 - Graph3D mesh-to-donut stays internal as renderer and continuity evidence.
 - Verified generated solve and `ExplanationSpineV1` are approved as the first
   human-gold deterministic generated session.
-- Rank-5 vector projection is approved except for one bounded correction: the
-  label exclusion or attenuation radius around `B` fades a non-overlapping
-  line. Promotion waits for diagnosis, the smallest local fix, preserved true
-  collision protection, and live inspection.
+- Rank-5 vector projection is approved. Its bounded follow-up replaced the
+  over-broad padded endpoint backdrop with a tightly bounded transparent halo,
+  preserved label geometry, and passed live inspection.
 - Programming addition and its comparison stay internal without advancing the
   rank-23 BFS family.
 
@@ -81,9 +80,9 @@ KaTeX, and remains deterministic through seek, rewind, reduced motion, and
 static SVG. Its seven captured checkpoints are objective evidence only.
 
 Recorded decision: approve component-pair emphasis, residual salience, the
-right-angle witness, and narrow composition, conditional on correcting the
-over-broad `B` label attenuation radius. Rank 5 remains `next`, not `promoted`,
-until that local repair is inspected and certified.
+right-angle witness, narrow composition, and the inspected endpoint-halo
+correction. Rank 5 is `promoted` through nominal evidence for
+`animation.dot-projection.basic`; rank 6 is the next content frontier.
 
 ### 4. Programming addition trace
 
@@ -122,9 +121,8 @@ residual was not hidden by a wider target or a lower-fidelity fallback.
 
 ## Resume boundary
 
-The smallest useful next action is one bounded vector correction and live
-inspection. After it passes, a new contract may certify rank 5, then propose a
-reversible Svelte 5 catalogue-shell exemplar before rank-6 matrix pressure.
+The smallest useful next action is a reversible Svelte 5 catalogue-shell
+exemplar before rank-6 matrix pressure. Rank 5 is certified.
 Graph3D and programming remain internal; the generated solve may supply gold
 editorial evidence after M4 without acquiring live model authority.
 

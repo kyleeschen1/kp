@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("stable vector command owns seven non-dispositive review checkpoints", async () => {
+test("stable vector command owns seven approved release checkpoints", async () => {
   const [packageSource, script, packet] = await Promise.all([
     readFile(new URL("../package.json", import.meta.url), "utf8"),
     readFile(new URL(
@@ -32,10 +32,10 @@ test("stable vector command owns seven non-dispositive review checkpoints", asyn
     script,
     /kp\.animation-catalogue-vector-dot-projection-review\.v1/
   );
-  assert.match(script, /disposition: "Unreviewed"/);
+  assert.match(script, /disposition: "Keep"/);
   assert.match(
     script,
-    /promotion: "frozen-pending-consolidated-human-checkpoint"/
+    /promotion: "promoted-rank-5-after-human-approval"/
   );
   checkpointIds.forEach((id) => {
     assert.match(script, new RegExp(`id: "${id}"`));
@@ -43,5 +43,5 @@ test("stable vector command owns seven non-dispositive review checkpoints", asyn
   });
   assert.match(packet, /npm run visual:vector-dot-projection/);
   assert.match(packet, /does not promote a shared motif/);
-  assert.match(packet, /catalogue disposition\s+remains `Unreviewed`/);
+  assert.match(packet, /catalogue disposition is `Keep`/);
 });

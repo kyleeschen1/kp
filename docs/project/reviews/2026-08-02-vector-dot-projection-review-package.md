@@ -3,7 +3,7 @@
 Date: 2026-08-02
 Run: `run-contract.kp.six-loop-product-convergence-v0`
 Slice: `s20`
-Status: objective review package complete; human visual review pending
+Status: human approved; rank-5 release certified
 
 ## Review boundary
 
@@ -11,8 +11,8 @@ The canonical reference is the exact rank-5 contract in
 `docs/project/reviews/2026-08-02-vector-dot-projection-exemplar-contract.md`.
 This package reviews only `animation.dot-projection.basic` in its existing
 persistent catalogue host. It does not promote a shared motif, generalize the
-presenter, change the semantic story, or assign a Keep/Retire/Rewrite
-disposition.
+presenter, or change the semantic story. Human approval assigns `Keep` to this
+one catalogue row and supplies the rank-5 release boundary.
 
 The reproducible command is:
 
@@ -58,23 +58,25 @@ pedagogical question, not an automated defect: review should decide whether the
 current whole-graph overview is preferable to a larger, more staged narrow
 composition.
 
-## Human questions for the consolidated checkpoint
+## Resolved human questions
 
-1. Is the component-pairing beat explicit enough before the projection begins?
-2. Is the rust residual label sufficiently prominent without competing with
-   the teal source vector?
-3. Does the small right-angle witness read immediately at settlement?
-4. On phone, should the whole plane remain visible at this scale, or should a
-   later approved revision stage the symbolic strip and geometry vertically?
+1. The component-pairing beat is accepted as explicit enough before projection.
+2. The rust residual label is accepted without further salience changes.
+3. The small right-angle witness is accepted at settlement.
+4. The whole-plane phone view remains the accepted default; vertical staging
+   stays available as a later separately reviewed revision.
 
-## Freeze and rollback
+## Approval and rollback
 
-Vector visual and promotion work stops here until the consolidated human
-checkpoint in `s30`. Rank 5 remains unpromoted and the catalogue disposition
-remains `Unreviewed`. Later objective performance and programming slices may
-continue, but they must preserve this checkpoint contract.
+The consolidated checkpoint accepted the component pairing, residual salience,
+right-angle witness, and narrow composition, conditional on one endpoint-label
+repair. The follow-up removed the padded semi-opaque endpoint backdrop that
+faded a non-overlapping line near `B`, retained the label-geometry checks, and
+passed this seven-state command. The user approved the live result on
+2026-08-02. Rank 5 is promoted and the catalogue disposition is `Keep`.
 
-The independently reversible unit is the scoped capture branch, its package
-command, its focused evidence test, and this review packet. The vector semantic
-model, runtime, presenter, catalogue host, compact controls, and shared graph
-language are outside that rollback unit.
+The independently reversible release unit is the nominal approval, its derived
+catalogue status and disposition, the scoped capture metadata, focused evidence
+tests, and this review packet. The vector semantic model, runtime, presenter,
+catalogue host, compact controls, and shared graph language remain outside that
+rollback unit.

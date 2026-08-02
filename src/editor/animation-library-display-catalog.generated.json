@@ -601,7 +601,7 @@
       "projection"
     ],
     "availability": "playable",
-    "canonicalFormat": "legacy",
+    "canonicalFormat": "ported",
     "featured": false,
     "primaryRepresentationId": "editor-animation.sample.animation.dot-projection.basic",
     "representations": [

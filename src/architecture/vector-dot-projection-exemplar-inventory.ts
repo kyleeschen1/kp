@@ -78,7 +78,7 @@ export const kpVectorDotProjectionPreservationBoundary = Object.freeze([
   "canonical family definitions and exact law references",
   "KpAnimationAsset, runtime sampler, shared clock, and SVG graph host",
   "persistent catalogue shell, compact controls, URL selection, and Review capture",
-  "rank-5 next status until explicit post-checkpoint promotion approval"
+  "rank-5 promotion only through explicit nominal post-checkpoint approval"
 ]);
 
 function reference(

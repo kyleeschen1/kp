@@ -7,27 +7,24 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-1. Complete the conditionally approved Project one vector onto another as the
-   first unresolved promotion: diagnose and reduce the over-broad `B` label
-   attenuation radius, preserve true collision protection, present the live
-   checkpoint, and certify rank 5 only after inspection.
-2. Propose one reversible Svelte 5 catalogue-shell exemplar over the existing
+1. Propose one reversible Svelte 5 catalogue-shell exemplar over the existing
    framework-neutral assets, runtime, clocks, renderer ports, URL behavior,
-   Review lifecycle, capability splits, and production budgets.
-3. Pressure the approved host with the rank-6 matrix-to-linear-map exemplar
+   Review lifecycle, capability splits, and production budgets before pressure
+   with `Apply a 2 × 2 matrix to a vector`, the first unresolved promotion.
+2. Pressure the approved host with that rank-6 matrix-to-linear-map exemplar
    before generalizing the Svelte seam or building broad editor UI.
-4. Build Internal Studio v0 only after that pressure test: keep Catalogue and
+3. Build Internal Studio v0 only after that pressure test: keep Catalogue and
    Internal Editor as distinct surfaces over one typed authoring session, and
    adopt SvelteKit only after the shell gate passes.
-5. Freeze the portable publication bundle, then establish Public Web v0 with a
+4. Freeze the portable publication bundle, then establish Public Web v0 with a
    mission page and a small explicitly curated lesson set. Do not mirror all
    internally hostable catalogue rows.
-6. Complete M4 context-specific encoding, then add M5 as an internal
+5. Complete M4 context-specific encoding, then add M5 as an internal
    editorial-candidate workflow over verified claims and the approved
    generated-solve gold example.
-7. Build the constrained Public Editor last, after internal authoring,
+6. Build the constrained Public Editor last, after internal authoring,
    publication, untrusted-text, and public safety contracts are proven.
-8. Keep Graph3D mesh-to-donut and the programming addition/comparison internal.
+7. Keep Graph3D mesh-to-donut and the programming addition/comparison internal.
    Do not spend current learner-product effort on them or advance rank-23 BFS.
 
 ## Historical Queue Snapshot

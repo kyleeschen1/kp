@@ -127,6 +127,29 @@ test("the next phase can await an approved run contract", () => {
   assert.deepEqual(report.diagnostics, []);
 });
 
+test("an ordered platform gate may precede a planned content frontier", () => {
+  const input = base();
+  const report = evaluateKpPromotionMemory({
+    ...input,
+    activePlanRevision: {
+      status: "active",
+      planRevision: {
+        approval: { status: "approved" },
+        phases: [{
+          id: "exact-fraction",
+          objective: "Show 1/3 + 1/6 = 1/2 after the platform gate.",
+          status: "planned",
+          evidence: []
+        }]
+      }
+    }
+  });
+
+  assert.equal(report.activePhaseId, "exact-fraction");
+  assert.equal(report.activeRunContractId, "");
+  assert.deepEqual(report.diagnostics, []);
+});
+
 test("a stale current action and Theseus phase fail together", () => {
   const input = base();
   const report = evaluateKpPromotionMemory({
@@ -151,7 +174,7 @@ test("a stale current action and Theseus phase fail together", () => {
   );
   assert.ok(
     report.diagnostics.some((issue) =>
-      issue.includes("exactly one active phase")
+      issue.includes("exactly one active or planned phase")
     )
   );
 });

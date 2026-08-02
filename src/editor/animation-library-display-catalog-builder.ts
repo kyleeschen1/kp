@@ -46,6 +46,11 @@ import {
   kpVerifiedPhysicsWorkEnergyReleaseApproval,
   type KpVerifiedCrossDomainSynchronizedModelReleaseApproval
 } from "../architecture/cross-domain-synchronized-model-release-approval.ts";
+import {
+  isKpVerifiedVectorDotProjectionReleaseApproval,
+  kpVerifiedVectorDotProjectionReleaseApproval,
+  type KpVerifiedVectorDotProjectionReleaseApproval
+} from "../architecture/vector-dot-projection-release-approval.ts";
 
 export type KpAnimationLibraryDisplayRepresentationKind =
   | "reader"
@@ -116,6 +121,11 @@ export interface KpCanonicalFormatPromotionEvidence {
         readonly kind: "cross-domain-synchronized-model-release";
         readonly approval?:
           KpVerifiedCrossDomainSynchronizedModelReleaseApproval | undefined;
+      }
+    | {
+        readonly kind: "vector-dot-projection-release";
+        readonly approval?:
+          KpVerifiedVectorDotProjectionReleaseApproval | undefined;
       };
   readonly exclusiveCanonicalPaint: boolean;
   readonly requiredMotifParity: boolean;
@@ -179,6 +189,12 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
     "animation.physics.constant-force-work-energy",
     completeCrossDomainSynchronizedModelCanonicalFormatEvidence(
       kpVerifiedPhysicsWorkEnergyReleaseApproval
+    )
+  ],
+  [
+    "animation.dot-projection.basic",
+    completeVectorDotProjectionCanonicalFormatEvidence(
+      kpVerifiedVectorDotProjectionReleaseApproval
     )
   ],
   [
@@ -617,6 +633,15 @@ function hasKpCanonicalFormatExecutionAuthority(
         approval.sharedContractCount === 4
       );
     }
+    case "vector-dot-projection-release": {
+      const approval = evidence.executionAuthority.approval;
+      return (
+        isKpVerifiedVectorDotProjectionReleaseApproval(approval) &&
+        approval.animationId === evidence.animationId &&
+        approval.releaseDecision === "passed" &&
+        approval.checkpointCount === 7
+      );
+    }
   }
 }
 
@@ -635,6 +660,26 @@ function completeCrossDomainSynchronizedModelCanonicalFormatEvidence(
     humanReviewApproved: true,
     compatibilityPaintRetired: true,
     releaseGatePassed: true,
+    presentationCoverage: "verified-animated",
+    evidenceSourceIds: approval.evidenceSourceIds
+  });
+}
+
+function completeVectorDotProjectionCanonicalFormatEvidence(
+  approval: KpVerifiedVectorDotProjectionReleaseApproval
+): KpCanonicalFormatPromotionEvidence {
+  return Object.freeze({
+    animationId: approval.animationId,
+    executionAuthority: Object.freeze({
+      kind: "vector-dot-projection-release" as const,
+      approval
+    }),
+    exclusiveCanonicalPaint: true,
+    requiredMotifParity: true,
+    responsiveRuntimeGates: true,
+    humanReviewApproved: true,
+    compatibilityPaintRetired: true,
+    releaseGatePassed: approval.releaseDecision === "passed",
     presentationCoverage: "verified-animated",
     evidenceSourceIds: approval.evidenceSourceIds
   });

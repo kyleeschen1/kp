@@ -1,7 +1,7 @@
 # Checkpoint And Product-Surface Sequence
 
 Date: 2026-08-02
-Status: accepted; implementation requires a later approved contract
+Status: accepted; rank-5 condition satisfied and successor sequence active
 
 ## Decision
 
@@ -78,8 +78,9 @@ assets pressure each infrastructure choice.
 
 ## Consequences
 
-- The next implementation remains the bounded vector correction, not a Svelte
-  migration or public-site build.
+- The bounded vector correction is complete. The next implementation is the
+  reversible Svelte 5 catalogue-shell exemplar, not a broad migration or
+  public-site build.
 - The catalogue remains the internal browse, play, compare, health, and review
   surface. The editor becomes a distinct consumer of the same asset and
   authoring contracts rather than adding editing machinery to every catalogue
@@ -98,6 +99,15 @@ assets pressure each infrastructure choice.
 - The generated solve approval supplies one gold example. M5 still needs the
   M4 boundary and useful negative or revision examples before model-authored
   candidates become a product workflow.
+
+## Follow-up outcome
+
+The bounded endpoint-label correction removed the padded semi-opaque backdrop
+that faded the non-overlapping `B` line and replaced it with a tightly bounded
+transparent halo. The seven-state review command passed, and the user approved
+the live result on 2026-08-02. Rank 5 is therefore promoted through
+`animation.dot-projection.basic`; the reversible Svelte 5 catalogue-shell gate
+is next, immediately before rank-6 matrix-to-linear-map pressure.
 
 ## Rejected Alternatives
 

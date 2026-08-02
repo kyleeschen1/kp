@@ -30,10 +30,16 @@ test("asset-first projection keeps one lightweight entry with subordinate contex
   assert.equal(solveX.title, "Solve x + 3 = 7");
   assert.equal(solveX.humanDisposition, "unreviewed");
   assert.equal(
-    projection.entries.every(
+    projection.entries.filter(
       ({ humanDisposition }) => humanDisposition === "unreviewed"
-    ),
-    true
+    ).length,
+    35
+  );
+  assert.equal(
+    projection.entries.find(
+      ({ animationId }) => animationId === "animation.dot-projection.basic"
+    )?.humanDisposition,
+    "keep"
   );
   assert.deepEqual(solveX.domains, ["algebra"]);
   assert.deepEqual(solveX.familyIds, [

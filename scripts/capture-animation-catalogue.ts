@@ -830,8 +830,8 @@ async function captureVectorDotProjectionExemplar(
   await writeFile(manifestPath, `${JSON.stringify({
     schemaVersion: "kp.animation-catalogue-vector-dot-projection-review.v1",
     animationId: vectorDotProjectionExemplarId,
-    disposition: "Unreviewed",
-    promotion: "frozen-pending-consolidated-human-checkpoint",
+    disposition: "Keep",
+    promotion: "promoted-rank-5-after-human-approval",
     captureSemantics: {
       staticView: "settled SVG markup with browser animations disabled",
       reducedMotion: "system prefers-reduced-motion projection",

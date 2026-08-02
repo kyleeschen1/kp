@@ -2,10 +2,10 @@
 
 Status: active
 Last Updated: 2026-08-02
-Current Next Action: Correct the conditionally approved Project one vector
-onto another label attenuation around `B`, present the live checkpoint, and
-certify rank 5 only after inspection. Generated solve is approved as the first
-gold deterministic generated session; Graph3D and programming stay internal.
+Current Next Action: Propose one reversible Svelte 5 catalogue-shell exemplar
+before pressure with `Apply a 2 × 2 matrix to a vector`, the first unresolved
+content promotion. Generated solve is gold; Graph3D and programming stay
+internal.
 
 ## Goal
 
@@ -38,11 +38,12 @@ and 4, and consolidated only the shared seams those callers proved. Catalogue
 health and disposition remain separate evidence and do not reorder the domain
 ranks.
 
-The consolidated checkpoint now conditionally approves rank 5. Component-pair
-emphasis, residual salience, the right-angle witness, and narrow composition
-are accepted; one over-broad label attenuation or exclusion radius remains
-because `B` fades a line without actual overlap. The correction must preserve
-real collision protection and receive live inspection before promotion.
+The consolidated checkpoint and its bounded follow-up now approve rank 5.
+Component-pair emphasis, residual salience, the right-angle witness, and narrow
+composition are accepted. The over-broad endpoint-label backdrop was replaced
+with a tightly bounded transparent halo, preserving true label geometry and
+clearing the non-overlapping `B` line. Seven objective checkpoints and explicit
+human approval supply the nominal release evidence.
 
 ## Completed Foundation
 
@@ -71,8 +72,8 @@ release gate.
 | 2 | `kp.promotion.place-value-addition` | `278 + 156 = 434` | promoted | `animation.place-value-addition.278-plus-156` | Arithmetic demo breadth; exchange with persistent place-value provenance |
 | 3 | `kp.promotion.economics-equilibrium` | Supply and demand equilibrium shift | promoted | `animation.economics.supply-demand-equilibrium-shift` | Early versatility demo; parameter, curve, intersection, and narrative correspondence |
 | 4 | `kp.promotion.physics-work-energy` | Constant-force work and kinetic-energy change | promoted | `animation.physics.constant-force-work-energy` | Early versatility demo; units and conservation across equation, graph, and diagram without a physics engine |
-| 5 | `kp.promotion.vector-dot-projection` | Project one vector onto another | next | — | Symbolic-to-spatial identity and indexed component pairing |
-| 6 | `kp.promotion.matrix-linear-map` | Apply a `2 × 2` matrix to a vector, then compose matrices from dot products | planned | — | Grid-aware nested evaluation and coordinated geometric transformation |
+| 5 | `kp.promotion.vector-dot-projection` | Project one vector onto another | promoted | `animation.dot-projection.basic` | Symbolic-to-spatial identity and indexed component pairing |
+| 6 | `kp.promotion.matrix-linear-map` | `Apply a 2 × 2 matrix to a vector`, then compose matrices from dot products | next | — | Grid-aware nested evaluation and coordinated geometric transformation |
 | 7 | `kp.promotion.derivative-bridge` | Difference quotient and secant converging to `f'(a)` and the tangent | planned | — | Continuous shared state with foldable symbolic detail |
 | 8 | `kp.promotion.integral-accumulation` | Riemann sums converging to area | planned | — | Many-object refinement, aggregation, and honest patterned compression |
 | 9 | `kp.promotion.quadratic-learner` | Complete the square, branch through `±`, and meet the graph roots | planned | — | Promote retained branch evidence into a learner product |
@@ -252,8 +253,10 @@ After a promotion closes:
 5. resolve the approved Theseus contract without automatically activating the
    next row.
 
-`npm run check:promotion-memory` rejects a roadmap, queue, active Theseus phase,
-or thread which disagrees with this table's first unresolved rank. It also
+`npm run check:promotion-memory` rejects a roadmap, queue, approved Theseus
+phase, or thread which disagrees with this table's first unresolved rank. The
+phase may remain planned while an explicitly ordered platform gate runs before
+it; a typed run contract still authorizes implementation. The check also
 rejects a `promoted` row unless its catalog animation ID is evidence-derived as
 `ported`; the catalog ID column is intentionally blank until that certificate
 exists.

@@ -23,18 +23,28 @@ import { parseKpPromotionLedger } from
 
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 
-test("rank 5 remains the unpromoted vector dot-projection frontier", () => {
+test("rank 5 is promoted and rank 6 is the sole next frontier", () => {
   const ledger = parseKpPromotionLedger(readFileSync(
     join(projectRoot, "docs/project/threads/animation-library-promotion.md"),
     "utf8"
   ));
-  const current = ledger.find(({ rank }) => rank === 5);
+  const promoted = ledger.find(({ rank }) => rank === 5);
+  const current = ledger.find(({ rank }) => rank === 6);
 
-  assert.deepEqual(current, {
+  assert.deepEqual(promoted, {
     rank: 5,
     stableId: "kp.promotion.vector-dot-projection",
     canonicalExemplar: "Project one vector onto another",
     referenceKey: "Project one vector onto another",
+    status: "promoted",
+    catalogAnimationId: "animation.dot-projection.basic"
+  });
+  assert.deepEqual(current, {
+    rank: 6,
+    stableId: "kp.promotion.matrix-linear-map",
+    canonicalExemplar:
+      "`Apply a 2 × 2 matrix to a vector`, then compose matrices from dot products",
+    referenceKey: "Apply a 2 × 2 matrix to a vector",
     status: "next"
   });
   assert.equal(ledger.filter(({ status }) => status === "next").length, 1);
@@ -109,6 +119,6 @@ test("visual obligations reuse the promoted graph language without a new engine"
     criterion.includes("no WebGL request")
   ));
   assert.ok(kpVectorDotProjectionPreservationBoundary.some((criterion) =>
-    criterion.includes("rank-5 next status")
+    criterion.includes("explicit nominal post-checkpoint approval")
   ));
 });
