@@ -56,7 +56,7 @@ if (captureScope === "vector-dot-projection") {
   }
 } else if (captureScope === "svelte-catalogue-exemplar") {
   try {
-    await captureSvelteCatalogueExemplarParity(browser);
+    await captureSvelteCatalogueReleaseCheckpoint(browser);
   } finally {
     await browser.close();
   }
@@ -621,88 +621,36 @@ interface VectorDotProjectionCapture {
   };
 }
 
-async function captureSvelteCatalogueExemplarParity(
+async function captureSvelteCatalogueReleaseCheckpoint(
   browser: Browser
 ): Promise<void> {
-  const parityOutput = "svelte-catalogue-exemplar";
-  const reference = await captureVectorDotProjectionExemplar(browser, {
-    outputDirectory: path.join(parityOutput, "imperative-reference"),
-    shell: "imperative"
+  const releaseOutput = "svelte-catalogue-exemplar";
+  const captures = await captureVectorDotProjectionExemplar(browser, {
+    outputDirectory: path.join(releaseOutput, "svelte-canonical")
   });
-  const candidate = await captureVectorDotProjectionExemplar(browser, {
-    outputDirectory: path.join(parityOutput, "svelte-candidate"),
-    shell: "svelte-exemplar"
-  });
-  const comparisons = candidate.map((candidateCapture) => {
-    const referenceCapture = reference.find(
-      ({ id }) => id === candidateCapture.id
-    );
-    if (referenceCapture === undefined) {
-      throw new Error(
-        `Svelte vector checkpoint ${candidateCapture.id} has no reference.`
-      );
-    }
-    const referenceTruth = comparableVectorTruth(referenceCapture);
-    const candidateTruth = comparableVectorTruth(candidateCapture);
-    const matches = JSON.stringify(referenceTruth) ===
-      JSON.stringify(candidateTruth);
-    if (!matches) {
-      throw new Error(
-        `Svelte vector checkpoint ${candidateCapture.id} changed durable ` +
-        `truth: ${JSON.stringify({ referenceTruth, candidateTruth })}`
-      );
-    }
-    return Object.freeze({
-      id: candidateCapture.id,
-      status: "matched" as const,
-      reference: referenceCapture.path,
-      candidate: candidateCapture.path,
-      truth: candidateTruth
-    });
-  });
-  if (comparisons.length !== reference.length) {
-    throw new Error("Svelte vector parity did not cover every reference.");
-  }
-
-  const manifestPath = path.join(outputRoot, parityOutput, "manifest.json");
+  const manifestPath = path.join(outputRoot, releaseOutput, "manifest.json");
   await writeFile(manifestPath, `${JSON.stringify({
-    schemaVersion: "kp.svelte-catalogue-vector-parity-checkpoint.v1",
+    schemaVersion: "kp.svelte-catalogue-vector-release-checkpoint.v1",
     animationId: vectorDotProjectionExemplarId,
-    reviewState: "awaiting-human-visual-approval",
-    canonicalShell: "imperative",
-    candidateShell: "svelte-exemplar",
-    liveRoute:
-      `/?artifact=${vectorDotProjectionExemplarId}` +
-      "&catalogueShell=svelte-exemplar",
-    promotionBoundary:
-      "Do not make Svelte the default until the live exemplar is approved.",
-    durableTruthMatched: true,
-    comparisons
+    reviewState: "approved-and-promoted",
+    canonicalShell: "svelte",
+    liveRoute: `/?artifact=${vectorDotProjectionExemplarId}`,
+    preservationBoundary:
+      "Framework-neutral assets, clocks, renderer ports, URL state, and Review lifecycle remain outside Svelte.",
+    durableTruthVerified: true,
+    captures
   }, null, 2)}\n`, "utf8");
   console.log(
-    `Svelte catalogue vector parity: ${path.relative(process.cwd(), manifestPath)}`
+    `Svelte catalogue vector release: ${path.relative(process.cwd(), manifestPath)}`
   );
-}
-
-function comparableVectorTruth(
-  capture: VectorDotProjectionCapture
-): Omit<VectorDotProjectionCapture, "path" | "staticMarkup"> {
-  const {
-    path: _path,
-    staticMarkup: _staticMarkup,
-    ...truth
-  } = capture;
-  return truth;
 }
 
 async function captureVectorDotProjectionExemplar(
   browser: Browser,
   input: {
     readonly outputDirectory?: string | undefined;
-    readonly shell?: "imperative" | "svelte-exemplar" | undefined;
   } = {}
 ): Promise<readonly VectorDotProjectionCapture[]> {
-  const shell = input.shell ?? "imperative";
   const vectorOutput = path.join(
     outputRoot,
     input.outputDirectory ?? "vector-dot-projection"
@@ -767,11 +715,6 @@ async function captureVectorDotProjectionExemplar(
       }
       const url = new URL("/", baseUrl);
       url.searchParams.set("artifact", vectorDotProjectionExemplarId);
-      if (shell === "imperative") {
-        url.searchParams.set("catalogueShell", "imperative-rollback");
-      } else {
-        url.searchParams.set("catalogueShell", "svelte-exemplar");
-      }
       if (checkpoint.progress > 0) {
         url.searchParams.set("playhead", String(checkpoint.progress));
       }
@@ -790,17 +733,14 @@ async function captureVectorDotProjectionExemplar(
         return catalogue?.dataset["kpAnimationCatalogueSelection"] ===
           expected.animationId &&
           catalogue.dataset["kpAnimationCatalogueHostOutcome"] === "painted" &&
-          (expected.shell === "imperative"
-            ? !catalogue.hasAttribute("data-kp-svelte-catalogue-shell")
-            : catalogue.hasAttribute("data-kp-svelte-catalogue-shell")) &&
+          catalogue.hasAttribute("data-kp-svelte-catalogue-shell") &&
           player?.dataset["kpEditorAnimationHydrated"] === "true" &&
           Math.abs(Number(player.dataset["kpEditorAnimationProgress"]) -
             expected.progress) < 0.001 &&
           slot?.dataset["kpEditorAnimationAdapterStatus"] === "ready";
       }, {
         animationId: vectorDotProjectionExemplarId,
-        progress: checkpoint.progress,
-        shell
+        progress: checkpoint.progress
       });
 
       const graph = page.locator("[data-kp-editor-graph-svg]");
@@ -936,7 +876,7 @@ async function captureVectorDotProjectionExemplar(
   await writeFile(manifestPath, `${JSON.stringify({
     schemaVersion: "kp.animation-catalogue-vector-dot-projection-review.v1",
     animationId: vectorDotProjectionExemplarId,
-    shellComposition: shell,
+    shellComposition: "svelte",
     disposition: "Keep",
     promotion: "promoted-rank-5-after-human-approval",
     captureSemantics: {

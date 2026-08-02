@@ -53,10 +53,6 @@
     KpSvelteCatalogueHostState,
     KpSvelteCatalogueSelectionHost
   } from "./svelte-catalogue-host-state.ts";
-  import {
-    KP_SVELTE_CATALOGUE_EXEMPLAR_PARAM,
-    KP_SVELTE_CATALOGUE_EXEMPLAR_VALUE
-  } from "./svelte-catalogue-exemplar-route.ts";
 
   type SelectedHostState = Extract<
     KpSvelteCatalogueHostState,
@@ -165,7 +161,7 @@
     if (decision.action === "native") return;
     event.preventDefault();
     if (decision.action === "stay") return;
-    const href = withSvelteExemplarOptIn(decision.href);
+    const href = decision.href;
     window.history.pushState(null, "", href);
     void prepareSelection({
       entry: decision.entry,
@@ -367,15 +363,6 @@
     disposed = true;
     selectionRevision += 1;
   });
-
-  function withSvelteExemplarOptIn(href: string): string {
-    const destination = new URL(href, window.location.href);
-    destination.searchParams.set(
-      KP_SVELTE_CATALOGUE_EXEMPLAR_PARAM,
-      KP_SVELTE_CATALOGUE_EXEMPLAR_VALUE
-    );
-    return `${destination.pathname}${destination.search}${destination.hash}`;
-  }
 </script>
 
 {#if hostState.status === "selected" && view !== undefined}

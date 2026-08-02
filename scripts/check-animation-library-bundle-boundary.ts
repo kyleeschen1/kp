@@ -49,7 +49,7 @@ export const kpAnimationLibraryBundleBoundary = Object.freeze({
   // leaves less than 3% headroom while making subsequent growth explicit.
   mainHostGzipBytes: 490_000,
   // This is the production-script closure for the measured economics route:
-  // catalogue application + economics pack + selected graph/KaTeX surface.
+  // Svelte catalogue host + economics pack + selected graph/KaTeX surface.
   // Runtime transfer has a separate unchanged 250 KB product target.
   measuredCatalogueRouteScriptGzipBytes: 190_000,
   // Selecting place-value addition may pay for its pack; merely opening the
@@ -71,7 +71,7 @@ export async function inspectKpAnimationLibraryBundleBoundary(
   const mainKeys = collectClosureKeys(manifest, ["src/main.ts"]);
   const catalogueKeys = collectClosureKeys(
     manifest,
-    ["src/editor/animation-catalogue-application.ts"]
+    ["src/editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts"]
   );
   const selectedMathRoots = Object.keys(manifest).filter((key) =>
     /src\/editor\/(?:equation|graph-svg)-surface-capability\.ts/.test(key)
@@ -85,7 +85,7 @@ export async function inspectKpAnimationLibraryBundleBoundary(
   const measuredCatalogueRouteKeys = collectClosureKeys(
     manifest,
     [
-      "src/editor/animation-catalogue-application.ts",
+      "src/editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts",
       "src/animation/catalog-packs/economics.ts",
       "src/editor/graph-svg-surface-capability.ts"
     ]

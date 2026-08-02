@@ -45,14 +45,22 @@ test("Svelte migration baseline freezes catalogue ownership and ceilings", async
   });
 
   const [
-    application,
+    component,
+    entry,
     selectionPreparation,
     capabilityHost,
     playerHost,
     shell,
     bootstrap
   ] = await Promise.all([
-    readFile(baseline.rollbackEntry, "utf8"),
+    readFile(
+      "src/editor/svelte-catalogue/KpSvelteCatalogueExemplar.svelte",
+      "utf8"
+    ),
+    readFile(
+      "src/editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts",
+      "utf8"
+    ),
     readFile(
       "src/editor/animation-catalogue-selection-preparation.ts",
       "utf8"
@@ -63,7 +71,8 @@ test("Svelte migration baseline freezes catalogue ownership and ceilings", async
     readFile("src/bootstrap.ts", "utf8")
   ]);
   const lifecycleSource = [
-    application,
+    component,
+    entry,
     selectionPreparation,
     capabilityHost,
     playerHost
@@ -83,9 +92,13 @@ test("Svelte migration baseline freezes catalogue ownership and ceilings", async
   for (const action of baseline.requiredActions) {
     assert.ok(shell.includes(action), `missing shell action ${action}`);
   }
-  // The approved Svelte shell is canonical, while the imperative entry stays
-  // independently loadable as the cutover rollback until cleanup.
-  assert.match(
+  // Keep the frozen rollback path in the historical fixture, but ratchet the
+  // live bootstrap so that migration-only composition cannot return unnoticed.
+  assert.equal(
+    baseline.rollbackEntry,
+    "src/editor/animation-catalogue-application.ts"
+  );
+  assert.doesNotMatch(
     bootstrap,
     /import\(\s*"\.\/editor\/animation-catalogue-application\.ts"\s*\)/
   );

@@ -1053,6 +1053,41 @@
       "scope": "slice s23 production closure",
       "checkedAt": "2026-08-02T18:54:12.890Z",
       "notes": "Production closure passed across 310 files with all seven internal Review markers excluded."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "slice s24 canonical ownership architecture",
+      "checkedAt": "2026-08-02T19:06:45.932Z",
+      "notes": "All 34 focused tests passed after deleting the imperative application and route selector; one Svelte entry owns composition and shared hosts retain lifecycle authority."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice s24 full regression",
+      "checkedAt": "2026-08-02T19:06:51.928Z",
+      "notes": "All 3386 repository tests passed after obsolete-host removal; architecture, inference, concept catalog, and promotion-memory gates are green."
+    },
+    {
+      "command": "npm run typecheck and vite build",
+      "status": "passed",
+      "scope": "slice s24 types and production graph",
+      "checkedAt": "2026-08-02T19:06:57.391Z",
+      "notes": "TypeScript, Svelte, and domain checks passed; production build transformed 1008 modules and emitted no imperative catalogue or route-selector chunks."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar and npm run visual:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "slice s24 canonical browser and visual closure",
+      "checkedAt": "2026-08-02T19:07:04.502Z",
+      "notes": "Fourteen Chromium lifecycle checks passed on clean canonical URLs; seven promoted Svelte-only release captures passed across wide, narrow, reduced-motion, and static states."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary and npm run perf:animation:attribution",
+      "status": "passed",
+      "scope": "slice s24 canonical production ownership",
+      "checkedAt": "2026-08-02T19:07:11.339Z",
+      "notes": "Corrected the measured route root to the canonical Svelte entry: 90,158 gzip bytes versus the frozen 190,000 ceiling. All six routes remain Svelte-owned and selected capabilities remain isolated."
     }
   ],
   "progress": {

@@ -4,7 +4,7 @@ import test from "node:test";
 
 import { compile } from "svelte/compiler";
 
-test("Svelte 5 tooling compiles an isolated host without route cutover", async () => {
+test("Svelte 5 tooling compiles the canonical host", async () => {
   const [component, bootstrap, viteConfig, svelteConfig] = await Promise.all([
     readFile(
       "src/editor/svelte-catalogue/SvelteToolingCanary.svelte",
@@ -26,9 +26,13 @@ test("Svelte 5 tooling compiles an isolated host without route cutover", async (
   assert.match(viteConfig, /plugins:\s*\[/);
   assert.match(viteConfig, /\bsvelte\(\),/);
   assert.match(svelteConfig, /runes:\s*true/);
-  assert.match(
+  assert.doesNotMatch(
     bootstrap,
     /import\(\s*"\.\/editor\/animation-catalogue-application\.ts"\s*\)/
+  );
+  assert.match(
+    bootstrap,
+    /import\(\s*"\.\/editor\/svelte-catalogue\/svelte-catalogue-exemplar-entry\.ts"\s*\)/
   );
   assert.doesNotMatch(bootstrap, /SvelteToolingCanary/);
 });

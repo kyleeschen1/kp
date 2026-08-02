@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const animationId = "animation.dot-projection.basic";
 
-test("explicit Svelte exemplar mounts through the shared selected-host model", async ({
+test("canonical Svelte catalogue mounts through the shared selected-host model", async ({
   page
 }) => {
   const pageErrors: string[] = [];
@@ -10,9 +10,7 @@ test("explicit Svelte exemplar mounts through the shared selected-host model", a
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("request", (request) => requestedUrls.push(request.url()));
 
-  await page.goto(
-    `/?artifact=${animationId}&catalogueShell=svelte-exemplar`
-  );
+  await page.goto(`/?artifact=${animationId}`);
 
   const root = page.locator("#app");
   const exemplar = root.locator("[data-kp-svelte-catalogue-shell]");
@@ -171,9 +169,7 @@ test("Svelte in-shell selection ignores a stale pack completion", async ({
     }
   });
 
-  await page.goto(
-    `/?artifact=${animationId}&catalogueShell=svelte-exemplar`
-  );
+  await page.goto(`/?artifact=${animationId}`);
   const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
   const search = exemplar.getByRole("searchbox", { name: "Search artifacts" });
   const stage = exemplar.locator("[data-kp-animation-catalogue-stage]");
@@ -208,7 +204,7 @@ test("Svelte in-shell selection ignores a stale pack completion", async ({
   expect(page.url()).toContain(
     "artifact=animation.economics.supply-demand-equilibrium-shift"
   );
-  expect(page.url()).toContain("catalogueShell=svelte-exemplar");
+  expect(new URL(page.url()).searchParams.has("catalogueShell")).toBe(false);
 });
 
 test("Svelte history restores artifact and playhead without a document load", async ({
@@ -220,9 +216,7 @@ test("Svelte history restores artifact and playhead without a document load", as
       documentRequests.push(request.url());
     }
   });
-  await page.goto(
-    `/?artifact=${animationId}&catalogueShell=svelte-exemplar`
-  );
+  await page.goto(`/?artifact=${animationId}`);
   const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
   const search = exemplar.getByRole("searchbox", { name: "Search artifacts" });
   const vectorPlayer = exemplar.locator(
@@ -267,13 +261,11 @@ test("Svelte history restores artifact and playhead without a document load", as
     `[data-kp-editor-animation-id="${economicsId}"]`
   )).toHaveAttribute("data-kp-editor-animation-progress", "0.625");
   expect(documentRequests).toHaveLength(1);
-  expect(page.url()).toContain("catalogueShell=svelte-exemplar");
+  expect(new URL(page.url()).searchParams.has("catalogueShell")).toBe(false);
 });
 
 test("Svelte selection restores stage focus and rail scroll", async ({ page }) => {
-  await page.goto(
-    `/?artifact=${animationId}&catalogueShell=svelte-exemplar`
-  );
+  await page.goto(`/?artifact=${animationId}`);
   const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
   const player = exemplar.locator(
     `[data-kp-editor-animation-player]` +
@@ -314,9 +306,7 @@ test("Svelte selection restores stage focus and rail scroll", async ({ page }) =
 test("Svelte selection retains a live row focus and inspector choice", async ({
   page
 }) => {
-  await page.goto(
-    `/?artifact=animation.linear-solve.solve-x&catalogueShell=svelte-exemplar`
-  );
+  await page.goto("/?artifact=animation.linear-solve.solve-x");
   const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
   const inspectorSelect = exemplar.getByRole("combobox", {
     name: "Inspector view"
@@ -433,9 +423,7 @@ test("canonical Svelte shell projects system reduced motion without losing stati
 test("Svelte keeps one Review composer and draft across selection", async ({
   page
 }) => {
-  await page.goto(
-    `/?artifact=${animationId}&catalogueShell=svelte-exemplar`
-  );
+  await page.goto(`/?artifact=${animationId}`);
   const review = page.locator("[data-kp-dev-review-shell]");
   await expect(review).toHaveCount(1);
   await expect(review).toHaveAttribute(
@@ -480,9 +468,7 @@ test("Svelte ports economics and physics parameters through one player lifecycle
   });
   const economicsId =
     "animation.economics.supply-demand-equilibrium-shift";
-  await page.goto(
-    `/?artifact=${economicsId}&playhead=0.56&catalogueShell=svelte-exemplar`
-  );
+  await page.goto(`/?artifact=${economicsId}&playhead=0.56`);
 
   const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
   const inspectorSelect = exemplar.getByRole("combobox", {
@@ -569,9 +555,7 @@ test("Svelte exposes the generated solve companion as inline explanation", async
   });
   const generatedId =
     "animation.generated.linear-solve.linear-68c15d41";
-  await page.goto(
-    `/?artifact=${generatedId}&catalogueShell=svelte-exemplar`
-  );
+  await page.goto(`/?artifact=${generatedId}`);
 
   const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
   const generatedPlayer = exemplar.locator(
@@ -635,9 +619,7 @@ test("Svelte loads rich surface capabilities only after their selection", async 
       documentRequests.push(request.url());
     }
   });
-  await page.goto(
-    `/?artifact=${animationId}&catalogueShell=svelte-exemplar`
-  );
+  await page.goto(`/?artifact=${animationId}`);
 
   const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
   await expect(exemplar.locator(
@@ -765,25 +747,6 @@ test("canonical catalogue route mounts the approved Svelte host", async ({
   expect(requestedUrls.some((url) =>
     url.includes("svelte-catalogue-exemplar-entry")
   )).toBe(true);
-});
-
-test("explicit rollback route mounts only the imperative host", async ({
-  page
-}) => {
-  const requestedUrls: string[] = [];
-  page.on("request", (request) => requestedUrls.push(request.url()));
-  await page.goto(
-    `/?artifact=${animationId}&catalogueShell=imperative-rollback`
-  );
-
-  await expect(page.locator("[data-kp-animation-catalogue]")).toHaveAttribute(
-    "data-kp-animation-catalogue-selection",
-    animationId
-  );
-  await expect(page.locator("[data-kp-svelte-catalogue-shell]")).toHaveCount(0);
-  expect(requestedUrls.some((url) =>
-    url.includes("svelte-catalogue-exemplar-entry")
-  )).toBe(false);
 });
 
 function assertRequestedEntry(requestedUrls: readonly string[]): void {

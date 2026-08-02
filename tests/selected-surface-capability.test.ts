@@ -42,7 +42,10 @@ test("one capability host owns all dynamic selected-surface imports", async () =
     graphSupportSource
   ] = await Promise.all([
     readFile("src/main.ts", "utf8"),
-    readFile("src/editor/animation-catalogue-application.ts", "utf8"),
+    readFile(
+      "src/editor/svelte-catalogue/KpSvelteCatalogueExemplar.svelte",
+      "utf8"
+    ),
     readFile("src/editor/selected-surface-capability-host.ts", "utf8"),
     readFile("src/editor/equation-surface-capability.ts", "utf8"),
     readFile("src/editor/graph-svg-surface-capability.ts", "utf8"),
@@ -133,18 +136,22 @@ test("optional editor inspectors and WebGL controls stay behind dynamic callers"
   );
 });
 
-test("catalogue bootstrap selects the narrow application boundary", async () => {
+test("catalogue bootstrap selects the narrow Svelte entry boundary", async () => {
   const [bootstrapSource, catalogueSource, playerControllerSource] =
     await Promise.all([
       readFile("src/bootstrap.ts", "utf8"),
-      readFile("src/editor/animation-catalogue-application.ts", "utf8"),
+      readFile(
+        "src/editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts",
+        "utf8"
+      ),
       readFile("src/editor/animation-player-controller.ts", "utf8")
     ]);
 
   assert.match(
     bootstrapSource,
-    /import\(\s*"\.\/editor\/animation-catalogue-application\.ts"\s*\)/
+    /import\(\s*"\.\/editor\/svelte-catalogue\/svelte-catalogue-exemplar-entry\.ts"\s*\)/
   );
+  assert.doesNotMatch(bootstrapSource, /animation-catalogue-application/);
   assert.match(bootstrapSource, /await import\("\.\/main\.ts"\)/);
   assert.doesNotMatch(catalogueSource, /from "\.\.\/main\.ts"/);
   assert.doesNotMatch(catalogueSource, /from "\.\/api-catalog\.ts"/);

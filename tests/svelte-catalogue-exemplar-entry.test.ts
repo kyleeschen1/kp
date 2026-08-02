@@ -4,39 +4,7 @@ import test from "node:test";
 
 import { compile } from "svelte/compiler";
 
-import {
-  selectKpAnimationCatalogueShell,
-  selectsKpSvelteCatalogueExemplar
-} from "../src/editor/svelte-catalogue/svelte-catalogue-exemplar-route.ts";
-
-test("Svelte exemplar selection is explicit and independent of catalogue state", () => {
-  assert.equal(selectsKpSvelteCatalogueExemplar(""), false);
-  assert.equal(
-    selectsKpSvelteCatalogueExemplar(
-      "?artifact=animation.dot-projection.basic&catalogueShell=svelte-exemplar"
-    ),
-    true
-  );
-  assert.equal(
-    selectsKpSvelteCatalogueExemplar("?catalogueShell=unknown"),
-    false
-  );
-  assert.equal(selectKpAnimationCatalogueShell(""), "svelte");
-  assert.equal(
-    selectKpAnimationCatalogueShell("?catalogueShell=svelte-exemplar"),
-    "svelte"
-  );
-  assert.equal(
-    selectKpAnimationCatalogueShell("?catalogueShell=imperative-rollback"),
-    "imperative-rollback"
-  );
-  assert.equal(
-    selectKpAnimationCatalogueShell("?catalogueShell=unknown"),
-    "svelte"
-  );
-});
-
-test("bootstrap makes Svelte canonical and keeps an explicit imperative rollback", async () => {
+test("bootstrap has one canonical Svelte catalogue composition", async () => {
   const [bootstrap, entry, component] = await Promise.all([
     readFile("src/bootstrap.ts", "utf8"),
     readFile(
@@ -51,17 +19,13 @@ test("bootstrap makes Svelte canonical and keeps an explicit imperative rollback
 
   assert.match(
     bootstrap,
-    /selectKpAnimationCatalogueShell\(window\.location\.search\)/
-  );
-  assert.match(bootstrap, /"imperative-rollback"/);
-  assert.match(
-    bootstrap,
     /import\(\s*"\.\/editor\/svelte-catalogue\/svelte-catalogue-exemplar-entry\.ts"\s*\)/
   );
-  assert.match(
+  assert.doesNotMatch(
     bootstrap,
     /import\(\s*"\.\/editor\/animation-catalogue-application\.ts"\s*\)/
   );
+  assert.doesNotMatch(bootstrap, /catalogueShell|imperative-rollback/);
   assert.match(entry, /createKpAnimationCatalogueSelectionPreparationService/);
   assert.equal(
     [...entry.matchAll(/createKpAnimationCatalogueSelectionPreparationService/g)]
@@ -102,15 +66,13 @@ test("bootstrap makes Svelte canonical and keeps an explicit imperative rollback
   assert.match(compiled.js.code, /kp-animation-catalogue-region/);
 });
 
-test("both catalogue shells delegate browser lifecycles to shared hosts", async () => {
+test("canonical catalogue delegates browser lifecycles to shared hosts", async () => {
   const [
-    application,
     playerHost,
     interactionHost,
     parameterHost,
     component
   ] = await Promise.all([
-    readFile("src/editor/animation-catalogue-application.ts", "utf8"),
     readFile("src/editor/animation-catalogue-player-host.ts", "utf8"),
     readFile("src/editor/animation-catalogue-interaction-host.ts", "utf8"),
     readFile("src/editor/animation-catalogue-parameter-host.ts", "utf8"),
@@ -120,38 +82,25 @@ test("both catalogue shells delegate browser lifecycles to shared hosts", async 
     )
   ]);
 
-  assert.match(application, /mountKpAnimationCataloguePlayerHost/);
   assert.match(component, /mountKpAnimationCataloguePlayerHost/);
   assert.match(playerHost, /hydrateKpEditorAnimationPlayers/);
   assert.match(playerHost, /hydrateKpEditorAnimationSurfaces/);
   assert.match(playerHost, /observeKpAnimationCatalogueHost/);
   assert.doesNotMatch(
-    application,
-    /hydrateKpEditorAnimationPlayers|hydrateKpEditorAnimationSurfaces/
-  );
-  assert.doesNotMatch(
     playerHost,
     /createKpEditorAnimationPlaybackSession|sampleKpAnimationRuntimeFrame/
   );
-  for (const owner of [application, component]) {
-    assert.match(owner, /captureKpAnimationCatalogueFocus/);
-    assert.match(owner, /restoreKpAnimationCatalogueFocus/);
-    assert.match(owner, /toggleKpAnimationCatalogueOverlay/);
-  }
+  assert.match(component, /captureKpAnimationCatalogueFocus/);
+  assert.match(component, /restoreKpAnimationCatalogueFocus/);
+  assert.match(component, /toggleKpAnimationCatalogueOverlay/);
   assert.match(interactionHost, /data-kp-animation-catalogue-results/);
-  for (const owner of [application, component]) {
-    assert.match(owner, /applyKpAnimationCatalogueParameterInput/);
-  }
+  assert.match(component, /applyKpAnimationCatalogueParameterInput/);
   assert.match(parameterHost, /createParameterizedEconomicsEquilibriumAnimation/);
   assert.match(parameterHost, /createParameterizedConstantForceWorkEnergyAnimation/);
-  assert.doesNotMatch(
-    application,
-    /createParameterizedEconomicsEquilibriumAnimation|createParameterizedConstantForceWorkEnergyAnimation/
-  );
   assert.match(component, /replaceKpAnimationCatalogueHostParameters/);
 });
 
-test("stable Svelte visual command preserves the human promotion checkpoint", async () => {
+test("stable Svelte visual command verifies the promoted canonical shell", async () => {
   const [packageSource, captureScript] = await Promise.all([
     readFile("package.json", "utf8"),
     readFile("scripts/capture-animation-catalogue.ts", "utf8")
@@ -163,18 +112,12 @@ test("stable Svelte visual command preserves the human promotion checkpoint", as
   );
   assert.match(
     captureScript,
-    /kp\.svelte-catalogue-vector-parity-checkpoint\.v1/
+    /kp\.svelte-catalogue-vector-release-checkpoint\.v1/
   );
   assert.match(
     captureScript,
-    /reviewState: "awaiting-human-visual-approval"/
+    /reviewState: "approved-and-promoted"/
   );
-  assert.match(
-    captureScript,
-    /catalogueShell=svelte-exemplar/
-  );
-  assert.match(
-    captureScript,
-    /Do not make Svelte the default until the live exemplar is approved\./
-  );
+  assert.match(captureScript, /canonicalShell: "svelte"/);
+  assert.doesNotMatch(captureScript, /imperative-rollback/);
 });

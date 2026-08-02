@@ -38,6 +38,8 @@
     "hydrateKpEditorAnimationPlayers"
   ],
   "lifecycleOwnerMigrations": {
+    "AbortController": "selectionRevision",
+    "#revision": "selectionRevision",
     "#disposeReview": "createKpAnimationCatalogueReviewHost",
     "#loadSelectedCapabilities": "kpEditorSelectedSurfaceCapabilityHost"
   },

@@ -197,7 +197,8 @@
     {
       "id": "s24",
       "title": "Remove obsolete imperative host composition",
-      "status": "planned"
+      "summary": "Deleted the obsolete imperative catalogue application and rollback selector; bootstrap now has one Svelte composition, in-shell URLs stay clean, shared lifecycle owners remain framework-neutral, and the visual checkpoint is a promoted Svelte-only release check.",
+      "status": "complete"
     },
     {
       "id": "s25",

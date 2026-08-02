@@ -173,10 +173,13 @@ test("preparation fails closed on loader identity and descriptor drift", async (
   );
 });
 
-test("both catalogue hosts consume one browser-neutral preparation API", async () => {
-  const [serviceSource, applicationSource, legacySource] = await Promise.all([
+test("catalogue and legacy editor consume one browser-neutral preparation API", async () => {
+  const [serviceSource, catalogueSource, legacySource] = await Promise.all([
     readFile("src/editor/animation-catalogue-selection-preparation.ts", "utf8"),
-    readFile("src/editor/animation-catalogue-application.ts", "utf8"),
+    readFile(
+      "src/editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts",
+      "utf8"
+    ),
     readFile("src/main.ts", "utf8")
   ]);
 
@@ -193,7 +196,7 @@ test("both catalogue hosts consume one browser-neutral preparation API", async (
     /import\(\s*"\.\/verified-generated-linear-solve-reader\.ts"\s*\)/
   );
   assert.match(
-    applicationSource,
+    catalogueSource,
     /createKpAnimationCatalogueSelectionPreparationService/
   );
   assert.match(
@@ -201,7 +204,7 @@ test("both catalogue hosts consume one browser-neutral preparation API", async (
     /createKpAnimationCatalogueSelectionPreparationService/
   );
   assert.doesNotMatch(
-    applicationSource,
+    catalogueSource,
     /loadKpAnimationAsset|#loadCapability|#loadGeneratedReader/
   );
   assert.doesNotMatch(
