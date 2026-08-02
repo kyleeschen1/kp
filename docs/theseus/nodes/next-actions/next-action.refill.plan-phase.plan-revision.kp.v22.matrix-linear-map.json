@@ -128,11 +128,39 @@
       "scope": "control-plane",
       "checkedAt": "2026-08-02T20:42:59.651Z",
       "notes": "Workspace validated before slice s04 completion."
+    },
+    {
+      "command": "npm run test:matrix-linear-map",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T20:47:38.610Z",
+      "notes": "24/24 rank-6 baseline, canonical identity, choreography, placeholder audit, import, and visible plan checks passed."
+    },
+    {
+      "command": "npm run test:browser:matrix-linear-map",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-08-02T20:47:40.686Z",
+      "notes": "Chromium canonical-route row-dot playback and no-document-reload check passed."
+    },
+    {
+      "command": "npm run visual:matrix-linear-map",
+      "status": "passed",
+      "scope": "visual",
+      "checkedAt": "2026-08-02T20:47:41.907Z",
+      "notes": "Stable capture entrypoint emitted four disposable wide and narrow baseline checkpoints plus a manifest under tmp/codex."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T20:47:43.009Z",
+      "notes": "Application, node, test, Svelte, and domain typechecks passed with the stable rank-6 command surface."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s04 found the graph placeholder still has unique vector-add-scale, diagonal-map, Graph2D, continuous interpolation, renderer, route, and conformance roles; it is retained behind a six-condition slice-22 retirement gate."
+    "summary": "Slice s05 added stable focused semantic, scoped Chromium, and committed visual-capture commands; later exemplar slices can extend them without mutable scratch tooling."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."

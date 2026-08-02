@@ -84,7 +84,8 @@
     {
       "id": "s05",
       "title": "Add stable rank-6 verification commands",
-      "status": "planned"
+      "summary": "Added npm run test:matrix-linear-map, npm run test:browser:matrix-linear-map, and npm run visual:matrix-linear-map. The browser check pins canonical catalogue playback and one-document navigation; the visual entrypoint captures four disposable wide/narrow checkpoints under tmp/codex.",
+      "status": "complete"
     },
     {
       "id": "s06",
