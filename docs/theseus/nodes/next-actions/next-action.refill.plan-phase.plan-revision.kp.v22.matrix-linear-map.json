@@ -219,11 +219,25 @@
       "scope": "standard",
       "checkedAt": "2026-08-02T20:59:11.654Z",
       "notes": "All typechecks passed after coordinated target and generated descriptor updates."
+    },
+    {
+      "command": "npm run test:matrix-linear-map",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T21:02:01.570Z",
+      "notes": "33/33 checks passed; strict calculation and application transforms validate as parallel views while preserving imported root identity and reference closure."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T21:02:04.058Z",
+      "notes": "All typechecks passed after transformation composition."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s09 coordinated equation and graph target descriptors under one row layout and one shared timeline; the graph slot is present but intentionally awaits slice-s15 painting."
+    "summary": "Slice s10 composed multiplyMatrixVector and applyLinearMapToVector as parallel semantic views, routed each target to its own transform, and retained the imported composition root for durable checks."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."

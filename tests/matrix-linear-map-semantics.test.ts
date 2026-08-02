@@ -4,6 +4,7 @@ import test from "node:test";
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import {
   checkKpAnimationAssetReferenceClosure,
+  describeKpAnimationAssetTransformationTree,
   validateKpAnimationAsset
 } from "../src/animation/asset.ts";
 import {
@@ -113,6 +114,33 @@ test("equation and graph targets share one timeline and coordinated layout", () 
     metadata: { clockCoupling: "shared-progress" }
   });
   assert.equal(animation.metadata?.["clockCoupling"], "shared-progress");
+  assert.deepEqual(validateKpAnimationAsset(animation), []);
+  assert.equal(checkKpAnimationAssetReferenceClosure(animation).passed, true);
+});
+
+test("calculation and geometric application are parallel semantic views", () => {
+  const [calculation, application] = animation.transformations;
+  assert.equal(calculation?.transformType, "multiplyMatrixVector");
+  assert.equal(application?.transformType, "applyLinearMapToVector");
+  assert.equal(
+    application?.definitionId,
+    "definition.symbolic.linear-algebra.apply-linear-map"
+  );
+  assert.deepEqual(application?.lawRefs, [{
+    id: "law.linear-algebra.linear-map-application",
+    level: "strict",
+    summary: "T_A(v) equals the exact matrix-vector product Av."
+  }]);
+  assert.equal(animation.transformationTree.root.kind, "parallel");
+  assert.deepEqual(
+    describeKpAnimationAssetTransformationTree(animation)
+      .forwardPhases[0]?.nodeIds,
+    [calculation?.id, application?.id]
+  );
+  assert.deepEqual(
+    animation.renderTargets.map((target) => target.transformationIds),
+    [[calculation?.id], [application?.id]]
+  );
   assert.deepEqual(validateKpAnimationAsset(animation), []);
   assert.equal(checkKpAnimationAssetReferenceClosure(animation).passed, true);
 });

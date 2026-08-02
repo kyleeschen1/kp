@@ -114,7 +114,8 @@
     {
       "id": "s10",
       "title": "Compose calculation and application transformations",
-      "status": "planned"
+      "summary": "Added a strict applyLinearMapToVector transformation from (T_A,v) to (T_A,T_A(v)) and composed it in parallel with the existing row calculation under the preserved imported root ID. Equation and graph targets now own their respective transformations without claiming one representation mutates into the other.",
+      "status": "complete"
     },
     {
       "id": "s11",

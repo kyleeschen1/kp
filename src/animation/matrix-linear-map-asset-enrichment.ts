@@ -2,6 +2,15 @@ import type { KpAnimationAsset } from "./asset.ts";
 import { createKpAssetBundle, createKpSemanticAssetObject } from
   "../semantic/asset.ts";
 import { createGraph2DObject } from "../semantic/graph.ts";
+import { createKpSemanticTransformation } from
+  "../semantic/asset-transformation.ts";
+import { createSemanticTransformationRef } from
+  "../semantic/animation.ts";
+import {
+  createEditableSemanticTransformationTree,
+  createSemanticTransformationLeaf,
+  createSemanticTransformationParallel
+} from "../semantic/transformation-composition.ts";
 import {
   deriveKpMatrixLinearMapSemantics
 } from "./matrix-linear-map-semantics.ts";
@@ -98,6 +107,39 @@ export function enrichKpMatrixLinearMapAsset(
     );
   }
   const graphTargetId = `render.${animation.id.slice("animation.".length)}.graph`;
+  const calculationTransformation = animation.transformations[0]!;
+  const applicationTransformation = createKpSemanticTransformation({
+    id: `${calculationTransformation.id}.apply-linear-map`,
+    definitionId: "definition.symbolic.linear-algebra.apply-linear-map",
+    transformType: "applyLinearMapToVector",
+    title: "Apply the same matrix as a linear map",
+    sourceObjectIds: [semantics.linearMap.id, inputVector.id],
+    targetObjectIds: [semantics.linearMap.id, outputVector.id],
+    preserves: ["identity", "value", "structure", "role"],
+    correspondence: [
+      {
+        sourceSelectorId: `${semantics.linearMap.id}.map`,
+        targetSelectorId: `${semantics.linearMap.id}.map`,
+        preserves: ["identity", "structure"],
+        summary: "The strict LinearMap persists while it acts on the vector."
+      },
+      {
+        sourceSelectorId: `${inputVector.id}.body`,
+        targetSelectorId: `${outputVector.id}.body`,
+        preserves: ["value", "role"],
+        summary: "The input vector maps to the exact computed output vector."
+      }
+    ],
+    assumptions: [
+      `domain basis ${semantics.domainBasis.id}`,
+      `codomain basis ${semantics.codomainBasis.id}`
+    ],
+    lawRefs: [{
+      id: "law.linear-algebra.linear-map-application",
+      level: "strict",
+      summary: "T_A(v) equals the exact matrix-vector product Av."
+    }]
+  });
 
   return {
     ...animation,
@@ -105,6 +147,27 @@ export function enrichKpMatrixLinearMapAsset(
       id: animation.bundle.id,
       title: animation.bundle.title,
       objects: [...animation.bundle.objects, ...semanticObjects]
+    }),
+    transformations: [calculationTransformation, applicationTransformation],
+    // These are equivalent symbolic and geometric views of one operation,
+    // not sequential mutations of one representation into the other.
+    transformationTree: createEditableSemanticTransformationTree({
+      root: createSemanticTransformationParallel({
+        // Preserve the imported diagram root identity because strict checks
+        // and external provenance already name this composition boundary.
+        id: animation.transformationTree.root.id,
+        label: "Calculate coordinates and apply the linear map",
+        children: [
+          createSemanticTransformationLeaf(
+            createSemanticTransformationRef(calculationTransformation)
+          ),
+          createSemanticTransformationLeaf(
+            createSemanticTransformationRef(applicationTransformation)
+          )
+        ],
+        summary: "Two synchronized representations of the same exact operation."
+      }),
+      annotations: animation.transformationTree.annotations
     }),
     layout: {
       id: `layout.${animation.id.slice("animation.".length)}.equation-graph`,
@@ -124,7 +187,7 @@ export function enrichKpMatrixLinearMapAsset(
         selectorIds: semanticObjects.flatMap((object) =>
           object.selectors.map((selector) => selector.id)
         ),
-        transformationIds: [animation.transformations[0]!.id],
+        transformationIds: [applicationTransformation.id],
         timelineId: animation.timeline.id,
         summary: "Geometric action of the same exact matrix-vector calculation.",
         metadata: {
@@ -142,6 +205,16 @@ export function enrichKpMatrixLinearMapAsset(
           ...animation.dashboard,
           sampleTargetIds: [equationTarget.id, graphTargetId]
         },
+    checks: [
+      ...animation.checks,
+      {
+        id: `check.${animation.id.slice("animation.".length)}.linear-map-application`,
+        lawId: "animation.seek-rewind",
+        level: "strict",
+        targetId: applicationTransformation.id,
+        summary: "The geometric application shares exact seek and rewind state."
+      }
+    ],
     metadata: {
       ...animation.metadata,
       matrixLinearMapEnriched: true,
