@@ -135,7 +135,9 @@
     {
       "id": "s12",
       "title": "Define canonical authoring facade",
-      "status": "planned"
+      "summary": "Defined an animation authoring facade with exactly two runtime exports and three supporting types, excluding builders, exemplar compilers, domain presenters, reader/rendering state, and motif registries; verified zero production callers before staged migration.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s13",

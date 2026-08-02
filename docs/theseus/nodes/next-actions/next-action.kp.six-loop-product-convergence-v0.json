@@ -101,6 +101,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-animation-api-exact-caller-ledger.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/public-api.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-canonical-animation-authoring-facade.md"
     }
   ],
   "dependsOn": {
@@ -444,6 +452,36 @@
       "status": "passed",
       "scope": "s11 whitespace integrity",
       "checkedAt": "2026-08-02T00:54:26.515Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-authoring-public-api.test.ts tests/animation-api-caller-ledger.test.ts",
+      "status": "passed",
+      "scope": "s12 exact runtime exports, named-source boundary, negative surface exclusions, and zero-caller pre-migration ratchet",
+      "checkedAt": "2026-08-02T00:58:51.660Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s12 facade signatures and negative type-import fixtures",
+      "checkedAt": "2026-08-02T00:58:52.924Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s12 semantic, reader, concept, and presentation ownership gates",
+      "checkedAt": "2026-08-02T00:58:54.174Z"
+    },
+    {
+      "command": "npm run audit:animation-api-callers -- --summary",
+      "status": "passed",
+      "scope": "s12 sixteen-surface ledger with zero production facade callers before migration",
+      "checkedAt": "2026-08-02T00:58:55.432Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s12 whitespace integrity",
+      "checkedAt": "2026-08-02T00:58:56.692Z"
     }
   ],
   "expectedLearning": [

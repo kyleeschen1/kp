@@ -49,10 +49,20 @@ export interface KpAnimationApiSurfaceCallerRecord {
  */
 export const kpAnimationApiCallerAuditTargets = Object.freeze([
   target({
+    id: "facade.animation-authoring",
+    targetPath: "src/animation/public-api.ts",
+    tier: "authoring-seam",
+    disposition: "define-public-boundary",
+    authority:
+      "Expose the caller-proven balanced-solve KpAnimationAsset constructor, validation, and supporting types.",
+    preservationBoundary:
+      "The facade excludes builders, compilers, domain presenters, reader state, renderer state, and motif registries."
+  }),
+  target({
     id: "authoring.canonical-balanced-solve",
     targetPath: "src/animation/canonical-balanced-solve-animation.ts",
     tier: "authoring-seam",
-    disposition: "define-public-boundary",
+    disposition: "retain-internal",
     authority:
       "Construct one validated KpAnimationAsset with the canonical balanced-solve presentation profile.",
     preservationBoundary:

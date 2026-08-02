@@ -29,17 +29,29 @@ test("animation API caller ledger targets live, uniquely classified surfaces", (
   }
 });
 
-test("canonical balanced solve seam has exactly the two approved production callers", () => {
+test("internal balanced solve seam has the facade plus two approved production callers", () => {
   const surface = record("authoring.canonical-balanced-solve");
   assert.deepEqual(surface.sourceCallers, [
     "src/animation/fraction-composition-equation-adapter.ts",
+    "src/animation/public-api.ts",
     "src/animation/verified-linear-problem-animation-compiler.ts"
   ]);
   assert.deepEqual(surface.testCallers, [
+    "tests/animation-authoring-public-api.test.ts",
     "tests/type-fixtures/operation-evaluation-presentation-registry.ts"
   ]);
   assert.deepEqual(surface.scriptCallers, []);
   assert.deepEqual(surface.otherCallers, []);
+});
+
+test("new animation facade is defined before its two callers migrate", () => {
+  const surface = record("facade.animation-authoring");
+  assert.deepEqual(surface.sourceCallers, []);
+  assert.deepEqual(surface.testCallers, [
+    "tests/animation-authoring-public-api.test.ts",
+    "tests/type-fixtures/animation-authoring-public-api.ts"
+  ]);
+  assert.deepEqual(surface.scriptCallers, []);
 });
 
 test("public-looking facades remain separated by authority", () => {
@@ -114,7 +126,7 @@ test("concept authoring does not accidentally export animation asset constructio
     "utf8"
   );
   assert.doesNotMatch(conceptFacade, /KpAnimationAsset|canonical-balanced-solve/);
-  assert.equal(existsSync(join(projectRoot, "src/animation/public-api.ts")), false);
+  assert.equal(existsSync(join(projectRoot, "src/animation/public-api.ts")), true);
 });
 
 function record(id: string) {

@@ -36,12 +36,14 @@ runtime types, and compatibility surfaces.
 
 The scanner resolves static relative imports across `src/`, `tests/`, and
 `scripts/`; it does not infer callers from similar names or documentation prose.
-All 15 target surfaces have zero unclassified “other” callers.
+Slice `s11` established 15 targets. Slice `s12` added the new animation facade as
+the sixteenth target. All 16 have zero unclassified “other” callers.
 
 | Surface | Production | Tests | Scripts | Disposition |
 | --- | ---: | ---: | ---: | --- |
-| Canonical balanced-solve seam | 2 | 1 | 0 | Define narrow public boundary |
-| Complete animation asset core | 126 | 43 | 0 | Keep internal |
+| Animation authoring facade | 0 | 2 | 0 | Defined; migrate exactly two callers in `s13` |
+| Internal balanced-solve seam | 3 | 2 | 0 | Facade plus two unmigrated callers; keep implementation internal |
+| Complete animation asset core | 127 | 44 | 0 | Keep internal; new facade/test account for the increase from the `s11` baseline |
 | Concept authoring facade | 1 | 11 | 1 | Keep separate |
 | Provider integration facade | 6 | 8 | 0 | Keep separate |
 | Reader compiler facade | 1 | 15 | 0 | Keep internal |
