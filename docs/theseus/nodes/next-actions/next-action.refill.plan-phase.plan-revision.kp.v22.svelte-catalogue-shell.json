@@ -962,6 +962,34 @@
       "status": "passed",
       "scope": "s20 TypeScript and Svelte contracts",
       "checkedAt": "2026-08-02T18:37:42.365Z"
+    },
+    {
+      "command": "npm run test:browser:programming-addition",
+      "status": "passed",
+      "scope": "slice s21 programming caller pressure",
+      "checkedAt": "2026-08-02T18:42:38.713Z",
+      "notes": "Four Chromium checks passed for canonical Svelte ownership, exact source state, synchronized comparison, reduced motion, and static output."
+    },
+    {
+      "command": "npm run test:browser:generated-linear-solve",
+      "status": "passed",
+      "scope": "slice s21 generated catalogue and standalone reader",
+      "checkedAt": "2026-08-02T18:42:44.227Z",
+      "notes": "Two Chromium checks passed: canonical catalogue is Svelte and inline; standalone reader remains framework-neutral, searchable, seekable, and reduced-motion safe."
+    },
+    {
+      "command": "npm run visual:programming-addition",
+      "status": "passed",
+      "scope": "slice s21 stable visual checkpoint",
+      "checkedAt": "2026-08-02T18:42:50.301Z",
+      "notes": "The stable programming catalogue review capture completed and wrote its disposable manifest under tmp/codex."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s21 TypeScript and Svelte contracts",
+      "checkedAt": "2026-08-02T18:42:56.016Z",
+      "notes": "Application, node, test, Svelte, and domain typechecks passed."
     }
   ],
   "progress": {

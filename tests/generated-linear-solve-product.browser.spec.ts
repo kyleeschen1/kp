@@ -26,6 +26,7 @@ test("verified generated solve paints natively in the persistent catalogue", asy
 
   const shell = page.locator("[data-kp-animation-catalogue]");
   const player = shell.locator("[data-kp-editor-animation-player]");
+  await expect(shell).toHaveAttribute("data-kp-svelte-catalogue-shell", "");
   await expect(player).toHaveAttribute("data-kp-editor-animation-id", animationId);
   await expect(player.locator(".katex").first()).toBeVisible();
   await expect(shell.locator("iframe")).toHaveCount(0);
@@ -56,6 +57,7 @@ test("generated reader is searchable, direct-seekable, and reduced-motion safe",
 
   const body = page.locator("body");
   const stage = page.locator("[data-kp-reader-equation-stage]");
+  await expect(page.locator("[data-kp-animation-catalogue]")).toHaveCount(0);
   await expect(body).toHaveAttribute("data-kp-reader-hydrated", "true");
   await expect(body).toHaveAttribute("data-kp-reader-progress", "800");
   await expect(body).toHaveAttribute("data-kp-reader-motion-mode", "essential");

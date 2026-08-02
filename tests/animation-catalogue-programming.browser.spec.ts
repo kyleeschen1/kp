@@ -14,9 +14,17 @@ test("addition trace paints exact source and synchronized verified state", async
     '[data-kp-editor-animation-surface-slot="programming"]'
   );
   const trace = slot.locator("[data-kp-editor-programming-trace]");
+  await expect(page.locator("[data-kp-animation-catalogue]"))
+    .toHaveAttribute("data-kp-svelte-catalogue-shell", "");
+  await expect(page.locator("[data-kp-animation-catalogue] iframe"))
+    .toHaveCount(0);
   await expect(slot).toHaveAttribute(
     "data-kp-editor-animation-adapter-id",
     "editor-animation-surface.programming.trace"
+  );
+  await expect(slot).toHaveAttribute(
+    "data-kp-editor-animation-adapter-status",
+    "ready"
   );
   await expect(trace).toContainText("export function add(a: number, b: number)");
   await expect(trace).toHaveAttribute(
@@ -98,6 +106,8 @@ test("the exact comparison caller closes both native slots on one clock", async 
     "data-kp-editor-animation-adapter-id",
     "editor-animation-surface.programming.trace"
   );
+  await expect(page.locator("[data-kp-animation-catalogue]"))
+    .toHaveAttribute("data-kp-svelte-catalogue-shell", "");
   await seek(page, 1);
   await expect(player.locator(
     '[data-kp-editor-programming-channel="output"]'

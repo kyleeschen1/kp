@@ -179,7 +179,8 @@
     {
       "id": "s21",
       "title": "Pressure programming and generated reader callers",
-      "status": "planned"
+      "summary": "Canonical Svelte catalogue ownership is now ratcheted for programming, comparison, and verified generated-solve callers; standalone generated reader ownership remains framework-neutral.",
+      "status": "complete"
     },
     {
       "id": "s22",
