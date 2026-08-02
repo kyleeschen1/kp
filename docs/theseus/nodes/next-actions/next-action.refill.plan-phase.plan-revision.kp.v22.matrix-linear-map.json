@@ -170,11 +170,25 @@
       "scope": "standard",
       "checkedAt": "2026-08-02T20:50:09.421Z",
       "notes": "All typechecks passed with the renderer-neutral operation-bank contract."
+    },
+    {
+      "command": "npm run test:matrix-linear-map",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T20:52:29.027Z",
+      "notes": "30/30 checks passed including strict LinearMap derivation, explicit standard bases, row/column distinction, and exact basis-image reconstruction."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T20:52:30.294Z",
+      "notes": "All typechecks passed with strict matrix-to-map semantics."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s06 authored a local matrix-vector operation-bank contract derived from semantic choreography: persistent information inputs, selector-bound products, ordered row traversal, and products-to-gather-to-coordinate folds."
+    "summary": "Slice s07 derived one strict LinearMap from the canonical matrix with named domain/codomain standard bases, column-indexed basis images, and exact reconstruction of Av."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."

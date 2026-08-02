@@ -96,7 +96,8 @@
     {
       "id": "s07",
       "title": "Bind strict LinearMap and basis provenance",
-      "status": "planned"
+      "summary": "Bound A=[[2,1],[0,3]] to one strict LinearMap T_A with explicit standard-basis provenance. Rows remain output-coordinate functionals; columns are mapped basis vectors [2,0] and [1,3], which reconstruct [13,15] from [4,5].",
+      "status": "complete"
     },
     {
       "id": "s08",
