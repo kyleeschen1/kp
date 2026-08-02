@@ -135,3 +135,31 @@ test("both catalogue shells delegate browser lifecycles to shared hosts", async 
   );
   assert.match(component, /replaceKpAnimationCatalogueHostParameters/);
 });
+
+test("stable Svelte visual command preserves the human promotion checkpoint", async () => {
+  const [packageSource, captureScript] = await Promise.all([
+    readFile("package.json", "utf8"),
+    readFile("scripts/capture-animation-catalogue.ts", "utf8")
+  ]);
+
+  assert.match(
+    packageSource,
+    /"visual:svelte-catalogue-exemplar": "node --disable-warning=ExperimentalWarning scripts\/capture-animation-catalogue\.ts --scope svelte-catalogue-exemplar"/
+  );
+  assert.match(
+    captureScript,
+    /kp\.svelte-catalogue-vector-parity-checkpoint\.v1/
+  );
+  assert.match(
+    captureScript,
+    /reviewState: "awaiting-human-visual-approval"/
+  );
+  assert.match(
+    captureScript,
+    /catalogueShell=svelte-exemplar/
+  );
+  assert.match(
+    captureScript,
+    /Do not make Svelte the default until the live exemplar is approved\./
+  );
+});

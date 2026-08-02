@@ -149,7 +149,8 @@
     {
       "id": "s16",
       "title": "Capture canonical vector exemplar parity checkpoint",
-      "status": "planned"
+      "summary": "Added visual:svelte-catalogue-exemplar as the stable vector checkpoint command. It captures the imperative reference and explicit Svelte candidate across seven wide, narrow, reduced-motion, and static states; all semantic, accessibility, KaTeX, label-geometry, and static-SVG truth matches. Full tests, types, production build, capability attribution, bundle ceilings, Review production closure, and project-memory validation pass. Human visual approval is now required before s17 route promotion.",
+      "status": "complete"
     },
     {
       "id": "s17",

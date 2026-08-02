@@ -124,6 +124,7 @@
     "visual:animation-workbench": "node --disable-warning=ExperimentalWarning scripts/capture-animation-workbench.ts",
     "visual:animation-catalogue": "node --disable-warning=ExperimentalWarning scripts/capture-animation-catalogue.ts",
     "visual:vector-dot-projection": "node --disable-warning=ExperimentalWarning scripts/capture-animation-catalogue.ts --scope vector-dot-projection",
+    "visual:svelte-catalogue-exemplar": "node --disable-warning=ExperimentalWarning scripts/capture-animation-catalogue.ts --scope svelte-catalogue-exemplar",
     "visual:programming-addition": "node --disable-warning=ExperimentalWarning scripts/capture-animation-catalogue.ts --scope programming-addition",
     "visual:generated-linear-solve": "npm run build && node --disable-warning=ExperimentalWarning scripts/capture-generated-linear-solve-review.ts",
     "visual:contact-sheet": "node --disable-warning=ExperimentalWarning scripts/capture-visual-contact-sheet.ts",

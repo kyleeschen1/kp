@@ -688,11 +688,116 @@
       "scope": "s15-hygiene",
       "checkedAt": "2026-08-02T17:05:38.951Z",
       "notes": "Tracked slice changes contain no whitespace errors."
+    },
+    {
+      "command": "npm run typecheck:node",
+      "status": "failed",
+      "scope": "s16-command-correction",
+      "checkedAt": "2026-08-02T17:19:20.979Z",
+      "notes": "The exploratory command name does not exist; the repository owns node checking inside npm run typecheck, which passed in full."
+    },
+    {
+      "command": "npm run dev -- --host 127.0.0.1 --port 8000",
+      "status": "failed",
+      "scope": "s16-existing-server",
+      "checkedAt": "2026-08-02T17:19:22.028Z",
+      "notes": "A duplicate launch correctly refused because the existing KP web and review servers already owned ports 8000 and 8001; the stable visual command reused those listeners successfully."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/svelte-catalogue-exemplar-entry.test.ts tests/vector-dot-projection-review-evidence.test.ts",
+      "status": "passed",
+      "scope": "s16-focused",
+      "checkedAt": "2026-08-02T17:19:39.015Z",
+      "notes": "Five stable-command, explicit-route, lifecycle-boundary, and canonical vector evidence checks passed."
+    },
+    {
+      "command": "npm run visual:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "s16-visual-candidate",
+      "checkedAt": "2026-08-02T17:19:40.024Z",
+      "notes": "Captured seven fresh imperative-reference and seven Svelte-candidate checkpoints. Every durable truth tuple matched, all inspected labels stayed contained and non-overlapping, and settled static SVG markup had identical SHA-256."
+    },
+    {
+      "command": "npm run visual:vector-dot-projection",
+      "status": "passed",
+      "scope": "s16-visual-reference",
+      "checkedAt": "2026-08-02T17:19:40.953Z",
+      "notes": "The original seven-checkpoint canonical vector command still passed after the reusable capture refactor."
+    },
+    {
+      "command": "npm run test:browser:vector-dot-projection",
+      "status": "passed",
+      "scope": "s16-vector-browser",
+      "checkedAt": "2026-08-02T17:19:41.841Z",
+      "notes": "Three Chromium vector motion, KaTeX, geometry, label, rewind, reduced-motion, compact-shell, and lazy-loading checks passed."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "s16-svelte-browser",
+      "checkedAt": "2026-08-02T17:19:42.748Z",
+      "notes": "Twelve Chromium checks passed across selection, cancellation, history, focus, scroll, Review draft, parameters, explanation, capability loading, and terminal states."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s16-broad",
+      "checkedAt": "2026-08-02T17:19:43.695Z",
+      "notes": "All 3387 repository tests passed, including architecture, inference, concept catalog, and promotion-memory gates."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s16-types",
+      "checkedAt": "2026-08-02T17:19:44.619Z",
+      "notes": "Application, node, tests, Svelte, and domain typechecks passed; Svelte reported zero errors and warnings."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "s16-production",
+      "checkedAt": "2026-08-02T17:19:45.514Z",
+      "notes": "Production Vite build passed with 1010 transformed modules."
+    },
+    {
+      "command": "npm run perf:animation:attribution",
+      "status": "passed",
+      "scope": "s16-attribution",
+      "checkedAt": "2026-08-02T17:19:46.408Z",
+      "notes": "The exact six-route production capability attribution matrix passed; KaTeX, Graph SVG, Three, and programming remain caller-isolated."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s16-performance",
+      "checkedAt": "2026-08-02T17:19:47.291Z",
+      "notes": "Outer 10459, main 178463, measured catalogue 77442, and place-value incremental 71797 gzip bytes remain below frozen ceilings."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s16-production-review",
+      "checkedAt": "2026-08-02T17:19:48.171Z",
+      "notes": "Production closure passed across 310 files with the seven intentionally forbidden markers absent from the product closure."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s16-memory",
+      "checkedAt": "2026-08-02T17:19:49.069Z",
+      "notes": "Validated 864 nodes and 16375 events before checkpoint completion."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s16-hygiene",
+      "checkedAt": "2026-08-02T17:19:49.987Z",
+      "notes": "Tracked visual-checkpoint changes contain no whitespace errors."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1 through 14 are complete. Both shells now share bespoke economics and physics parameter adaptation, and the Svelte exemplar exposes the existing generated solve explanation companion without a second player, URL, or reader authority."
+    "summary": "Slices 1 through 16 are complete. The isolated Svelte catalogue now matches the canonical vector exemplar across seven automated visual checkpoints and is available at the explicit live route; route promotion and caller generalization remain stopped pending human visual approval."
   },
   "expectedLearning": [
     "Approved revision 22 places this active phase in now."

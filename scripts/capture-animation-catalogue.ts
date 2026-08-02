@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -38,6 +39,7 @@ const captureScope = scopeArgumentIndex === -1
 if (
   captureScope !== "all" &&
   captureScope !== "vector-dot-projection" &&
+  captureScope !== "svelte-catalogue-exemplar" &&
   captureScope !== "programming-addition"
 ) {
   throw new Error(`Unknown catalogue visual scope: ${captureScope ?? "missing"}`);
@@ -49,6 +51,12 @@ const browser = await chromium.launch({ headless: true });
 if (captureScope === "vector-dot-projection") {
   try {
     await captureVectorDotProjectionExemplar(browser);
+  } finally {
+    await browser.close();
+  }
+} else if (captureScope === "svelte-catalogue-exemplar") {
+  try {
+    await captureSvelteCatalogueExemplarParity(browser);
   } finally {
     await browser.close();
   }
@@ -595,10 +603,110 @@ try {
 }
 }
 
-async function captureVectorDotProjectionExemplar(
+interface VectorDotProjectionCapture {
+  readonly id: string;
+  readonly path: string;
+  readonly staticMarkup?: string | undefined;
+  readonly staticMarkupSha256?: string | undefined;
+  readonly viewport: { readonly width: number; readonly height: number };
+  readonly progress: number;
+  readonly beat: string;
+  readonly accessibilityMode: string;
+  readonly relationLatex: string;
+  readonly katexCount: number;
+  readonly labelGeometry: {
+    readonly inspected: boolean;
+    readonly contained: boolean;
+    readonly overlaps: boolean;
+  };
+}
+
+async function captureSvelteCatalogueExemplarParity(
   browser: Browser
 ): Promise<void> {
-  const vectorOutput = path.join(outputRoot, "vector-dot-projection");
+  const parityOutput = "svelte-catalogue-exemplar";
+  const reference = await captureVectorDotProjectionExemplar(browser, {
+    outputDirectory: path.join(parityOutput, "imperative-reference"),
+    shell: "imperative"
+  });
+  const candidate = await captureVectorDotProjectionExemplar(browser, {
+    outputDirectory: path.join(parityOutput, "svelte-candidate"),
+    shell: "svelte-exemplar"
+  });
+  const comparisons = candidate.map((candidateCapture) => {
+    const referenceCapture = reference.find(
+      ({ id }) => id === candidateCapture.id
+    );
+    if (referenceCapture === undefined) {
+      throw new Error(
+        `Svelte vector checkpoint ${candidateCapture.id} has no reference.`
+      );
+    }
+    const referenceTruth = comparableVectorTruth(referenceCapture);
+    const candidateTruth = comparableVectorTruth(candidateCapture);
+    const matches = JSON.stringify(referenceTruth) ===
+      JSON.stringify(candidateTruth);
+    if (!matches) {
+      throw new Error(
+        `Svelte vector checkpoint ${candidateCapture.id} changed durable ` +
+        `truth: ${JSON.stringify({ referenceTruth, candidateTruth })}`
+      );
+    }
+    return Object.freeze({
+      id: candidateCapture.id,
+      status: "matched" as const,
+      reference: referenceCapture.path,
+      candidate: candidateCapture.path,
+      truth: candidateTruth
+    });
+  });
+  if (comparisons.length !== reference.length) {
+    throw new Error("Svelte vector parity did not cover every reference.");
+  }
+
+  const manifestPath = path.join(outputRoot, parityOutput, "manifest.json");
+  await writeFile(manifestPath, `${JSON.stringify({
+    schemaVersion: "kp.svelte-catalogue-vector-parity-checkpoint.v1",
+    animationId: vectorDotProjectionExemplarId,
+    reviewState: "awaiting-human-visual-approval",
+    canonicalShell: "imperative",
+    candidateShell: "svelte-exemplar",
+    liveRoute:
+      `/?artifact=${vectorDotProjectionExemplarId}` +
+      "&catalogueShell=svelte-exemplar",
+    promotionBoundary:
+      "Do not make Svelte the default until the live exemplar is approved.",
+    durableTruthMatched: true,
+    comparisons
+  }, null, 2)}\n`, "utf8");
+  console.log(
+    `Svelte catalogue vector parity: ${path.relative(process.cwd(), manifestPath)}`
+  );
+}
+
+function comparableVectorTruth(
+  capture: VectorDotProjectionCapture
+): Omit<VectorDotProjectionCapture, "path" | "staticMarkup"> {
+  const {
+    path: _path,
+    staticMarkup: _staticMarkup,
+    ...truth
+  } = capture;
+  return truth;
+}
+
+async function captureVectorDotProjectionExemplar(
+  browser: Browser,
+  input: {
+    readonly outputDirectory?: string | undefined;
+    readonly shell?: "imperative" | "svelte-exemplar" | undefined;
+  } = {}
+): Promise<readonly VectorDotProjectionCapture[]> {
+  const shell = input.shell ?? "imperative";
+  const vectorOutput = path.join(
+    outputRoot,
+    input.outputDirectory ?? "vector-dot-projection"
+  );
   await mkdir(vectorOutput, { recursive: true });
   const checkpoints = [
     {
@@ -649,22 +757,7 @@ async function captureVectorDotProjectionExemplar(
       inspectLabels: true
     }
   ] as const;
-  const captures: Array<{
-    readonly id: string;
-    readonly path: string;
-    readonly staticMarkup?: string | undefined;
-    readonly viewport: { readonly width: number; readonly height: number };
-    readonly progress: number;
-    readonly beat: string;
-    readonly accessibilityMode: string;
-    readonly relationLatex: string;
-    readonly katexCount: number;
-    readonly labelGeometry: {
-      readonly inspected: boolean;
-      readonly contained: boolean;
-      readonly overlaps: boolean;
-    };
-  }> = [];
+  const captures: VectorDotProjectionCapture[] = [];
 
   for (const checkpoint of checkpoints) {
     const page = await browser.newPage({ viewport: checkpoint.viewport });
@@ -674,6 +767,9 @@ async function captureVectorDotProjectionExemplar(
       }
       const url = new URL("/", baseUrl);
       url.searchParams.set("artifact", vectorDotProjectionExemplarId);
+      if (shell === "svelte-exemplar") {
+        url.searchParams.set("catalogueShell", "svelte-exemplar");
+      }
       if (checkpoint.progress > 0) {
         url.searchParams.set("playhead", String(checkpoint.progress));
       }
@@ -692,13 +788,17 @@ async function captureVectorDotProjectionExemplar(
         return catalogue?.dataset["kpAnimationCatalogueSelection"] ===
           expected.animationId &&
           catalogue.dataset["kpAnimationCatalogueHostOutcome"] === "painted" &&
+          (expected.shell === "imperative"
+            ? !catalogue.hasAttribute("data-kp-svelte-catalogue-shell")
+            : catalogue.hasAttribute("data-kp-svelte-catalogue-shell")) &&
           player?.dataset["kpEditorAnimationHydrated"] === "true" &&
           Math.abs(Number(player.dataset["kpEditorAnimationProgress"]) -
             expected.progress) < 0.001 &&
           slot?.dataset["kpEditorAnimationAdapterStatus"] === "ready";
       }, {
         animationId: vectorDotProjectionExemplarId,
-        progress: checkpoint.progress
+        progress: checkpoint.progress,
+        shell
       });
 
       const graph = page.locator("[data-kp-editor-graph-svg]");
@@ -792,16 +892,17 @@ async function captureVectorDotProjectionExemplar(
 
       const imagePath = path.join(vectorOutput, `${checkpoint.id}.png`);
       let staticMarkup: string | undefined;
+      let staticMarkupSha256: string | undefined;
       if ("stageOnly" in checkpoint && checkpoint.stageOnly) {
         await graph.screenshot({
           path: imagePath,
           animations: "disabled"
         });
         const markupPath = path.join(vectorOutput, `${checkpoint.id}.svg`);
-        await writeFile(markupPath, `${await graph.evaluate((node) =>
-          node.outerHTML
-        )}\n`, "utf8");
+        const markup = `${await graph.evaluate((node) => node.outerHTML)}\n`;
+        await writeFile(markupPath, markup, "utf8");
         staticMarkup = path.relative(process.cwd(), markupPath);
+        staticMarkupSha256 = createHash("sha256").update(markup).digest("hex");
       } else {
         await page.screenshot({
           path: imagePath,
@@ -813,6 +914,9 @@ async function captureVectorDotProjectionExemplar(
         id: checkpoint.id,
         path: path.relative(process.cwd(), imagePath),
         ...(staticMarkup === undefined ? {} : { staticMarkup }),
+        ...(staticMarkupSha256 === undefined
+          ? {}
+          : { staticMarkupSha256 }),
         viewport: checkpoint.viewport,
         progress: checkpoint.progress,
         beat: evidence.beat,
@@ -830,6 +934,7 @@ async function captureVectorDotProjectionExemplar(
   await writeFile(manifestPath, `${JSON.stringify({
     schemaVersion: "kp.animation-catalogue-vector-dot-projection-review.v1",
     animationId: vectorDotProjectionExemplarId,
+    shellComposition: shell,
     disposition: "Keep",
     promotion: "promoted-rank-5-after-human-approval",
     captureSemantics: {
@@ -842,6 +947,7 @@ async function captureVectorDotProjectionExemplar(
   console.log(
     `animation catalogue vector review: ${path.relative(process.cwd(), manifestPath)}`
   );
+  return Object.freeze(captures);
 }
 
 async function captureProgrammingAdditionExemplar(
