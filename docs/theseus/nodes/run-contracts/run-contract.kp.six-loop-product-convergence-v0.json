@@ -114,7 +114,9 @@
     {
       "id": "s09",
       "title": "Integrate generated solve-x",
-      "status": "planned"
+      "summary": "Integrated one exact-provider generated linear solve through the searchable native catalogue and static reader route, with compact KaTeX explanation, six short steps, deterministic production asset, browser seek and rewind, and explicit 855-byte shared runtime debt deferred to the approved performance tranche.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s10",

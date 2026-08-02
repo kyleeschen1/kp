@@ -52,6 +52,7 @@ export function kpAnimationCatalogPackId(
   ) return "place-value";
   if (
     animationId === "animation.linear-solve.solve-x" ||
+    animationId.startsWith("animation.generated.linear-solve.") ||
     animationId.startsWith("animation.generated.fraction-") ||
     animationId.startsWith("animation.generated.exponent.") ||
     animationId.startsWith("animation.generated.radical.") ||

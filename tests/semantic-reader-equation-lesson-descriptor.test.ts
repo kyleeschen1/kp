@@ -25,6 +25,7 @@ type InferredVariants = Assert<Equal<
   | "radical-succession"
   | "foldable-distribution"
   | "fraction-composition"
+  | "generated-linear-solve"
 >>;
 const inferredVariants: InferredVariants = true;
 
@@ -39,7 +40,8 @@ test("equation lesson descriptors retain literal variants and runtime coverage",
     "numerator-split-merge",
     "radical-succession",
     "foldable-distribution",
-    "fraction-composition"
+    "fraction-composition",
+    "generated-linear-solve"
   ]);
 
   const standard = resolveKpReaderEquationPresentationProfile("standard");

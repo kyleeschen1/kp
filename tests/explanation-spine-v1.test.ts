@@ -113,7 +113,7 @@ test("spine rejects raw prose, latex, visual recipes, and renderer fields", () =
             renderer: "custom"
           }
         : beat)
-    } as KpExplanationSpineV1,
+    } as unknown as KpExplanationSpineV1,
     claimAuthority: claimAuthority()
   });
   assert.deepEqual(
@@ -147,7 +147,7 @@ test("spine rejects learner-state and vocabulary contract drift", () => {
         introduced: ["equal"],
         familiar: [...spine.vocabulary.familiar, "equal"]
       }
-    } as KpExplanationSpineV1,
+    } as unknown as KpExplanationSpineV1,
     claimAuthority: claimAuthority()
   });
   assert.equal(

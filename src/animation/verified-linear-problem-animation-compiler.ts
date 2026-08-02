@@ -453,9 +453,21 @@ function createEquationObjects(
         part("lhs.addend", "term", `+${addend}`, "addend"),
         part("lhs.subtract", "term", `-${addend}`, "inverse-term"),
         part("equals", "relation", "=", "relation"),
-        part("rhs.value", "term", right, "constant"),
-        part("rhs.minus", "operator", "-", "operator"),
-        part("rhs.subtrahend", "term", addend, "inverse-term")
+        part("rhs.value", "term", right, "constant", {
+          successorContribution: "material-input",
+          successorRole: "minuend",
+          successorRank: 0
+        }),
+        part("rhs.minus", "operator", "-", "operator", {
+          successorContribution: "catalyst",
+          successorRole: "subtraction-operator",
+          successorRank: 0
+        }),
+        part("rhs.subtrahend", "term", addend, "inverse-term", {
+          successorContribution: "material-input",
+          successorRole: "subtrahend",
+          successorRank: 1
+        })
       ],
       provenance: transformed(ids.initial, ids.subtract, firstOperation),
       metadata: operationMetadata(contract, 0)
@@ -468,9 +480,21 @@ function createEquationObjects(
         part("lhs.coefficient", "term", coefficient, "coefficient"),
         part("lhs.variable", "term", variable, "variable"),
         part("equals", "relation", "=", "relation"),
-        part("rhs.value", "term", right, "constant"),
-        part("rhs.minus", "operator", "-", "operator"),
-        part("rhs.subtrahend", "term", addend, "inverse-term")
+        part("rhs.value", "term", right, "constant", {
+          successorContribution: "material-input",
+          successorRole: "minuend",
+          successorRank: 0
+        }),
+        part("rhs.minus", "operator", "-", "operator", {
+          successorContribution: "catalyst",
+          successorRole: "subtraction-operator",
+          successorRank: 0
+        }),
+        part("rhs.subtrahend", "term", addend, "inverse-term", {
+          successorContribution: "material-input",
+          successorRole: "subtrahend",
+          successorRank: 1
+        })
       ],
       provenance: transformed(
         ids.subtractIntroduced,

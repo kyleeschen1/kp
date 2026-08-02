@@ -1,19 +1,19 @@
 # Animation Catalogue Seam Atlas and Provisional Queue
 
 Date: 2026-08-01
-Status: updated after approved economics and physics cross-domain exemplars
+Status: updated after native generated solve-x integration
 
 ## Outcome
 
-The internal catalogue now has one row for each of 35 concrete lazy-loadable
+The internal catalogue now has one row for each of 36 concrete lazy-loadable
 assets across 12 packs. The catalogue load probe loaded and routed every row:
-33 meaningfully painted through a native adapter, two stopped at explicit
+34 meaningfully painted through a native adapter, two stopped at explicit
 programming capability gaps, none failed loading, and none used an iframe. The
 Graph3D surface transition now uses the bounded lazy Three.js adapter over its
 semantic SVG fallback and shared WebGL lease pool.
 
 This collapses most of the apparent port backlog while correcting one earlier
-false positive. There is no catalogue-host port to perform for the 33
+false positive. There is no catalogue-host port to perform for the 34
 meaningfully painted assets. The remaining observed hosting seam is
 programming, shared by one pure execution trace and one composite comparison.
 
@@ -44,6 +44,7 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 | `animation.generated.linear-algebra.dot-product.three-vector` | generated-problems | equation | Painted · KaTeX | 1 | Keep? |
 | `animation.generated.linear-algebra.matrix-matrix.two-by-two` | generated-problems | equation | Painted · KaTeX | 3 | Keep? |
 | `animation.generated.linear-algebra.matrix-vector.two-by-two` | generated-problems | equation | Painted · KaTeX | 3 | Keep? |
+| `animation.generated.linear-solve.linear-68c15d41` | algebra | equation | Painted · verified native KaTeX | 2 | Keep? |
 | `animation.generated.pipeline-diagram` | generated-drafts | diagram | Painted · SVG diagram | 1 | Keep? |
 | `animation.generated.radical.square-root-as-power` | algebra | equation | Painted · KaTeX | 5 | Keep? |
 | `animation.generated.substitute-three` | generated-drafts | equation | Painted · KaTeX | 1 | Keep? |
@@ -64,9 +65,9 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 
 ## Shared Seams
 
-The catalogue crosses five surface shapes: 23 equation, seven graph, three
+The catalogue crosses five surface shapes: 24 equation, seven graph, three
 diagram, one composite, and one programming asset. Adapter reuse is strong:
-the general KaTeX adapter participates in 21 rows, the SVG graph adapter in six,
+the general KaTeX adapter participates in 22 rows, the SVG graph adapter in six,
 the canonical operation-evaluation adapter in three, the bounded Graph3D
 adapter in one, and three specialized diagram adapters each cover one row.
 This is evidence for keeping the adapter registry seam, not for inventing a
@@ -83,8 +84,8 @@ not a new canonical-port candidate merely because it rendered successfully.
 
 ## Context Consolidation Queue
 
-The 35 assets currently carry 76 related display contexts: 54 editor, 17 card,
-three reader, and two diagnostic. These contexts stay under Details and do not
+The 36 assets currently carry 78 related display contexts: 55 editor, 17 card,
+four reader, and two diagnostic. These contexts stay under Details and do not
 mint additional catalogue rows.
 
 The highest-information consolidation audits are:

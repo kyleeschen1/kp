@@ -67,11 +67,15 @@ export function checkKpSemanticReaderRouteBudget(
 }
 
 export function isKpSemanticReaderForbiddenAsset(name: string): boolean {
-  return /editor|equation-surface-adapter|animation-player|three|webgl/i.test(name)
+  return /(?:^|[/.-])editor(?:[/.-]|$)/i.test(name)
+    || /(?:^|[/.-])three(?:[/.-]|$)/i.test(name)
+    || /(?:^|[/.-])webgl(?:[/.-]|$)/i.test(name)
+    || /equation-surface-adapter|animation-player/i.test(name)
     || /katex-.*\.js/i.test(name)
     || /mdast|micromark/i.test(name)
     || /choreography-compiler|linear-rearrangement-choreography/i.test(name)
-    || /ftc|programming|graph-adapter|concept-room|balance-exemplar|generated-drafts/i
+    || /(?:^|[/.-])ftc(?:[/.-]|$)/i.test(name)
+    || /programming|graph-adapter|concept-room|balance-exemplar|generated-drafts/i
       .test(name);
 }
 

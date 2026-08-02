@@ -305,6 +305,14 @@ const supplementalRepresentations = [
     kind: "diagnostic",
     href: "/glyph-reconciliation-experiment.html?progress=500#glyph-experiment",
     role: "diagnostic"
+  },
+  {
+    animationId: "animation.generated.linear-solve.linear-68c15d41",
+    id: "library.reader.generated-linear-solve",
+    label: "Reader integration",
+    kind: "reader",
+    href: "/reader/generated-solve-x/",
+    role: "canonical-host"
   }
 ] as const satisfies readonly (
   KpAnimationLibraryDisplayRepresentation & { readonly animationId: string }

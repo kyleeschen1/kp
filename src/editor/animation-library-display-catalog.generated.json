@@ -1369,6 +1369,39 @@
     ]
   },
   {
+    "animationId": "animation.generated.linear-solve.linear-68c15d41",
+    "title": "Solve 2x+3=8",
+    "summary": "Solve 2x+3=8",
+    "tags": [
+      "animation",
+      "editor",
+      "equation",
+      "generated-problem",
+      "linear-solve",
+      "verified"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.generated.linear-solve.linear-68c15d41",
+    "representations": [
+      {
+        "id": "editor-animation.animation.generated.linear-solve.linear-68c15d41",
+        "label": "Solve 2x+3=8",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.linear-solve.linear-68c15d41",
+        "role": "canonical-host"
+      },
+      {
+        "id": "library.reader.generated-linear-solve",
+        "label": "Reader integration",
+        "kind": "reader",
+        "href": "/reader/generated-solve-x/",
+        "role": "projection"
+      }
+    ]
+  },
+  {
     "animationId": "animation.fractional-linear.solve-x-over-2",
     "title": "Solve a fractional equation",
     "summary": "Watch subtraction, cancellation, and multiplication carry x through a fraction to its solution.",

@@ -8,6 +8,7 @@ import {
   compileKpNumeratorSplitMergeEquationLesson,
   compileKpQuadraticBranchingLesson,
   compileKpRadicalSuccessionEquationLesson,
+  compileKpVerifiedGeneratedLinearSolveLesson,
   compileKpXPlusThreeLesson,
   compileKpXPlusThreeTeacherZeroLesson
 } from "./public-api.ts";
@@ -228,6 +229,58 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       ]
     },
     budget: routeBudget(37_968, 4_978, sharedEquationRuntimeGzipBaseline)
+  }),
+  defineKpReaderRoute({
+    route: "/reader/generated-solve-x/",
+    sourcePath: "content/lessons/generated-solve-x.md",
+    compile: compileKpVerifiedGeneratedLinearSolveLesson,
+    conformance: equationConformance({
+      documentId: "lesson.generated-solve-x.linear-68c15d41",
+      progressPermille: 600,
+      beatId: "beat.generated.simplify",
+      searchableText: "verified solution is five halves"
+    }),
+    presentation: sharedEquationPresentation,
+    review: {
+      id: "generated-solve-x",
+      title: "Kinetic Press · verified generated solve",
+      capture: "viewport",
+      columns: 2,
+      imageFit: "cover",
+      checkpoints: [
+        {
+          id: "start",
+          label: "Generated solve · start",
+          progressPermille: 0,
+          viewport: "desktop"
+        },
+        {
+          id: "operation",
+          label: "Subtract on both sides",
+          progressPermille: 200,
+          viewport: "desktop"
+        },
+        {
+          id: "settlement",
+          label: "Verified subtraction checkpoint",
+          progressPermille: 600,
+          viewport: "desktop"
+        },
+        {
+          id: "solution",
+          label: "Verified exact solution",
+          progressPermille: 1_000,
+          viewport: "desktop"
+        },
+        {
+          id: "operation-phone",
+          label: "Subtract · phone",
+          progressPermille: 200,
+          viewport: "phone"
+        }
+      ]
+    },
+    budget: routeBudget(54_321, 4_914, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/solve-x/teacher-zero/",

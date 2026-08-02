@@ -1,0 +1,243 @@
+import type { KpLinearEquationTrace } from "../../domains/public-api.ts";
+import {
+  compileVerifiedLinearProblemAnimation,
+  type KpVerifiedLinearProblemAnimationCompilation
+} from "../animation/verified-linear-problem-animation-compiler.ts";
+import {
+  inspectVerifiedLinearProblemAnimationTrace,
+  type KpVerifiedLinearProblemAnimationBridgeContract
+} from "../integrations/public-api.ts";
+import {
+  compileVerifiedLinearProblemExplanation,
+  type KpVerifiedLinearProblemExplanationCompilation
+} from "./verified-linear-problem-explanation-compiler.ts";
+import {
+  selectKpAnimationStaticStepCheckpoints
+} from "./static-step-checkpoints.ts";
+export {
+  kpVerifiedGeneratedLinearSolveAnimationId
+} from "./verified-generated-linear-solve-identity.ts";
+
+export interface KpVerifiedGeneratedLinearSolveStaticState {
+  readonly id: string;
+  readonly label: string;
+  readonly progress: number;
+  readonly beat: number;
+  readonly objectId: string;
+  readonly latex: string;
+}
+
+export interface KpVerifiedGeneratedLinearSolveStaticOutput {
+  readonly schemaVersion: "kp.verified-generated-linear-solve-static.v1";
+  readonly animationId: string;
+  readonly instanceId: string;
+  readonly sourceTraceId: string;
+  readonly states: readonly KpVerifiedGeneratedLinearSolveStaticState[];
+  readonly explanation:
+    KpVerifiedLinearProblemExplanationCompilation["projection"];
+}
+
+export interface KpVerifiedGeneratedLinearSolveSession {
+  readonly schemaVersion: "kp.verified-generated-linear-solve-session.v1";
+  readonly bridge: KpVerifiedLinearProblemAnimationBridgeContract;
+  readonly animation:
+    KpVerifiedLinearProblemAnimationCompilation;
+  readonly explanation:
+    KpVerifiedLinearProblemExplanationCompilation;
+  readonly staticOutput: KpVerifiedGeneratedLinearSolveStaticOutput;
+}
+
+let canonicalSession: KpVerifiedGeneratedLinearSolveSession | undefined;
+
+/**
+ * Replays a checked provider result through trusted KP compilers. The snapshot
+ * keeps browser and build output deterministic; provider code remains outside
+ * both production closures and tests prove the snapshot still matches it.
+ */
+export function createKpVerifiedGeneratedLinearSolveSession():
+KpVerifiedGeneratedLinearSolveSession {
+  canonicalSession ??= compileSession(canonicalVerifiedTrace);
+  return canonicalSession;
+}
+
+function compileSession(
+  trace: KpLinearEquationTrace
+): KpVerifiedGeneratedLinearSolveSession {
+  const bridged = inspectVerifiedLinearProblemAnimationTrace(trace);
+  if (bridged.status !== "accepted") {
+    throw new Error(
+      `Canonical generated trace failed its bridge: ${bridged.diagnostics[0]?.message ?? "unknown diagnostic"}`
+    );
+  }
+  const animation = compileVerifiedLinearProblemAnimation(bridged.contract);
+  if (animation.status !== "compiled") {
+    throw new Error(
+      `Canonical generated animation failed: ${animation.diagnostics[0]?.message ?? "unknown diagnostic"}`
+    );
+  }
+  const explanation = compileVerifiedLinearProblemExplanation({
+    bridge: bridged.contract,
+    animationCompilation: animation.compilation
+  });
+  if (explanation.status !== "compiled") {
+    throw new Error(
+      `Canonical generated explanation failed: ${explanation.diagnostics[0]?.message ?? "unknown diagnostic"}`
+    );
+  }
+  const objects = animation.compilation.animation.bundle.objects;
+  const checkpoints = selectKpAnimationStaticStepCheckpoints(
+    animation.compilation.animation
+  );
+  if (objects.length !== checkpoints.length) {
+    throw new Error(
+      "Canonical generated static output requires one checkpoint per equation state."
+    );
+  }
+  const states = checkpoints.map((checkpoint, index) => {
+    const object = objects[index]!;
+    const latex = object.value;
+    if (
+      typeof latex !== "object" || latex === null ||
+      !("latex" in latex) || typeof latex.latex !== "string"
+    ) {
+      throw new Error(`Generated equation object ${object.id} has no LaTeX.`);
+    }
+    return Object.freeze({
+      id: checkpoint.id,
+      label: checkpoint.label,
+      progress: checkpoint.progress,
+      beat: checkpoint.beat,
+      objectId: object.id,
+      latex: latex.latex
+    });
+  });
+  return Object.freeze({
+    schemaVersion: "kp.verified-generated-linear-solve-session.v1" as const,
+    bridge: bridged.contract,
+    animation: animation.compilation,
+    explanation: explanation.compilation,
+    staticOutput: Object.freeze({
+      schemaVersion: "kp.verified-generated-linear-solve-static.v1" as const,
+      animationId: animation.compilation.animation.id,
+      instanceId: bridged.contract.identity.instanceId,
+      sourceTraceId: bridged.contract.identity.sourceTraceId,
+      states: Object.freeze(states),
+      explanation: explanation.compilation.projection
+    })
+  });
+}
+
+const rational = (numerator: string, denominator = "1") =>
+  ({ numerator, denominator });
+
+// This value is generated by linear-problems.exact-rational@1.0.0 from the
+// named seed below. It is data provenance, not a second algebra implementation.
+const canonicalVerifiedTrace = {
+  schemaVersion: "kp.linear-equation-trace.v1",
+  id: "trace.linear-68c15d41",
+  variable: "x",
+  solution: rational("5", "2"),
+  frames: [
+    {
+      id: "frame.initial",
+      semanticIds: {
+        equation: "equation.initial",
+        leftVariable: "term.two-x",
+        leftConstant: "term.add-three",
+        rightVariable: "term.zero-x",
+        rightConstant: "term.eight"
+      },
+      equation: {
+        left: {
+          variable: "x",
+          coefficient: rational("2"),
+          constant: rational("3")
+        },
+        right: {
+          variable: "x",
+          coefficient: rational("0"),
+          constant: rational("8")
+        }
+      }
+    },
+    {
+      id: "frame.step.1",
+      semanticIds: {
+        equation: "equation.after-subtract",
+        leftVariable: "term.two-x",
+        leftConstant: "term.add-three",
+        rightVariable: "term.zero-x",
+        rightConstant: "term.eight"
+      },
+      equation: {
+        left: {
+          variable: "x",
+          coefficient: rational("2"),
+          constant: rational("0")
+        },
+        right: {
+          variable: "x",
+          coefficient: rational("0"),
+          constant: rational("5")
+        }
+      }
+    },
+    {
+      id: "frame.step.2",
+      semanticIds: {
+        equation: "equation.solved",
+        leftVariable: "term.two-x",
+        leftConstant: "term.add-three",
+        rightVariable: "term.zero-x",
+        rightConstant: "term.eight"
+      },
+      equation: {
+        left: {
+          variable: "x",
+          coefficient: rational("1"),
+          constant: rational("0")
+        },
+        right: {
+          variable: "x",
+          coefficient: rational("0"),
+          constant: rational("5", "2")
+        }
+      }
+    }
+  ],
+  operations: [
+    {
+      id: "operation.step.1",
+      semanticId: "operation.subtract-three",
+      kind: "subtract-both-sides",
+      sourceOperation: "subtract-both-sides",
+      classification: "canonical-operation",
+      fromFrameId: "frame.initial",
+      toFrameId: "frame.step.1"
+    },
+    {
+      id: "operation.step.2",
+      semanticId: "operation.divide-two",
+      kind: "divide-both-sides",
+      sourceOperation: "divide-both-sides",
+      classification: "canonical-operation",
+      fromFrameId: "frame.step.1",
+      toFrameId: "frame.step.2"
+    }
+  ],
+  assumptions: [
+    "exact-rational-arithmetic",
+    "unique-linear-solution",
+    "equivalence-preserving-steps"
+  ],
+  provenance: {
+    problemId: "linear-68c15d41",
+    providerId: "linear-problems.exact-rational",
+    providerVersion: "1.0.0",
+    protocolVersion: "linear-problem.v1",
+    seed: "canonical-2x-plus-3"
+  },
+  solutionVerified: true,
+  preservation: "strict",
+  diagnostics: []
+} as const satisfies KpLinearEquationTrace;

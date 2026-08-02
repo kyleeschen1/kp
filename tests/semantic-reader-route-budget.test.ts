@@ -42,6 +42,12 @@ test("semantic reader route rejects editor, WebGL, parser, and unrelated family 
   );
 });
 
+test("semantic reader route ignores forbidden-token collisions inside Vite hashes", () => {
+  assert.deepEqual(checkKpSemanticReaderRouteBudget([
+    asset("equation-material-plan-DAFTCHcA.js", 1)
+  ]), []);
+});
+
 test("semantic reader route rejects full and entry budget regressions independently", () => {
   const issues = checkKpSemanticReaderRouteBudget([
     asset(

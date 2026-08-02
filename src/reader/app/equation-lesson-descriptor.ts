@@ -119,6 +119,11 @@ const kpReaderEquationLessonDescriptorLoaders = {
     import("./equation-lesson-descriptors/fraction-composition.ts")
       .then(({ fractionCompositionDescriptor }) =>
         fractionCompositionDescriptor
+      ),
+  "generated-linear-solve": () =>
+    import("./equation-lesson-descriptors/generated-linear-solve.ts")
+      .then(({ generatedLinearSolveDescriptor }) =>
+        generatedLinearSolveDescriptor
       )
 } as const;
 

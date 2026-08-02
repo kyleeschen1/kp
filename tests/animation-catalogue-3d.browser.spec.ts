@@ -111,8 +111,9 @@ async function activeLeaseCount(
   page: import("@playwright/test").Page
 ): Promise<number> {
   return page.evaluate(async () => {
-    const pool = await import(
-      "/src/rendering/webgl-context-lease-pool.ts"
+    const modulePath = "/src/rendering/webgl-context-lease-pool.ts";
+    const pool = await import(/* @vite-ignore */ modulePath) as typeof import(
+      "../src/rendering/webgl-context-lease-pool.ts"
     );
     return pool.inspectKpWebglContextLeasePool(document).active;
   });

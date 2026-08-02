@@ -60,6 +60,10 @@ import {
 } from "./matrix-semantic-latex.ts";
 import { createKpGenericSelectorAnnotatedLatex } from "./generic-semantic-latex.ts";
 import {
+  bindKpGeneratedLinearSolveStructuralMotionIds,
+  createKpGeneratedLinearSolveSelectorAnnotatedLatex
+} from "../rendering/generated-linear-solve-selector-annotated-latex.ts";
+import {
   createKpDerivativePowerSelectorAnnotatedLatex
 } from "./derivative-power-semantic-latex.ts";
 import {
@@ -3556,7 +3560,8 @@ function annotatedLatexForStates(
   const annotated = states.map((state) => createKpSolveXSelectorAnnotatedLatex({
     objectId: state.objectId,
     selectorIds: state.selectors.map((selector) => selector.id)
-  }) ?? createKpFractionSelectorAnnotatedLatex(state)
+  }) ?? createKpGeneratedLinearSolveSelectorAnnotatedLatex(state)
+    ?? createKpFractionSelectorAnnotatedLatex(state)
     ?? createKpFunctionWrapSelectorAnnotatedLatex(state)
     ?? createKpDistributionSelectorAnnotatedLatex(state)
     ?? createKpExponentRadicalSelectorAnnotatedLatex(state)
@@ -3577,6 +3582,9 @@ function annotatedLatexForObject(
   return createKpSolveXSelectorAnnotatedLatex({
     objectId: object.id,
     selectorIds: object.selectors.map((selector) => selector.id)
+  }) ?? createKpGeneratedLinearSolveSelectorAnnotatedLatex({
+    objectId: object.id,
+    selectors: object.selectors
   }) ?? createKpFractionSelectorAnnotatedLatex({
     objectId: object.id,
     selectors: object.selectors
@@ -3618,7 +3626,19 @@ function bindStructuralMotionIds(
     readonly selectors: readonly { readonly id: string; readonly label?: string | undefined }[];
   }[]
 ): Readonly<Record<string, string>> {
+  const generatedLinearSolve = Object.fromEntries(states.flatMap((state) => {
+    const object = root.querySelector<HTMLElement>(
+      `[data-kp-editor-equation-object-id="${CSS.escape(state.objectId)}"]`
+    );
+    return object === null
+      ? []
+      : Object.entries(bindKpGeneratedLinearSolveStructuralMotionIds({
+          root: object,
+          state
+        }));
+  }));
   return {
+    ...generatedLinearSolve,
     ...bindKpFractionStructuralMotionIds({ root, states }),
     ...bindKpExponentRadicalStructuralMotionIds({ root, states }),
     ...bindKpMatrixStructuralMotionIds({ root, states })

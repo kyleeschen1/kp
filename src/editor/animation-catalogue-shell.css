@@ -424,6 +424,62 @@
   font-size: 0.68rem;
 }
 
+.kp-animation-catalogue-shell__explanation-intro {
+  margin-bottom: 0.8rem;
+}
+
+.kp-animation-catalogue-shell__explanation-section ol,
+.kp-animation-catalogue-shell__explanation details ol {
+  display: grid;
+  gap: 0.48rem;
+  padding-left: 1.3rem;
+  margin: 0;
+  color: #403d37;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.kp-animation-catalogue-shell__explanation-section +
+  .kp-animation-catalogue-shell__explanation-section {
+  padding-top: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.kp-animation-catalogue-shell__inline-math {
+  display: inline-block;
+  margin-inline: 0.12em;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+.kp-animation-catalogue-shell__explanation .katex {
+  font-size: 1em;
+}
+
+.kp-animation-catalogue-shell__explanation details {
+  padding-top: 0.9rem;
+  margin-top: 1rem;
+  border-top: 1px solid var(--kp-catalogue-border);
+}
+
+.kp-animation-catalogue-shell__explanation summary {
+  margin-bottom: 0.7rem;
+  color: #345c67;
+  cursor: pointer;
+  font-size: 0.74rem;
+  font-weight: 650;
+}
+
+.kp-animation-catalogue-shell__explanation details li {
+  display: grid;
+  gap: 0.16rem;
+}
+
+.kp-animation-catalogue-shell__explanation details li > span:first-child {
+  color: var(--kp-catalogue-muted);
+  font-size: 0.67rem;
+}
+
 @media (max-width: 56rem) {
   .kp-animation-catalogue-shell {
     position: relative;

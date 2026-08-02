@@ -192,6 +192,9 @@ import type {
 import type {
   KpSemanticAnimationWorkbenchIndex
 } from "./editor/semantic-animation-workbench-index.ts";
+import {
+  kpVerifiedGeneratedLinearSolveAnimationId
+} from "./tutorial/verified-generated-linear-solve-identity.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -220,6 +223,9 @@ type FtcTutorialEditorClient = typeof import("./editor/ftc-tutorial-editor-surfa
 type AnimationWorkbenchViewClient = typeof import(
   "./editor/semantic-animation-workbench-view.ts"
 );
+type GeneratedLinearSolveReaderClient = typeof import(
+  "./editor/verified-generated-linear-solve-reader.ts"
+);
 let graph3DWebGLClient: Graph3DWebGLClient | undefined;
 let graph3DWebGLClientPromise: Promise<Graph3DWebGLClient> | undefined;
 let projectDashboardClientPromise: Promise<{
@@ -230,6 +236,9 @@ let ftcTutorialSurfaceClientPromise: Promise<FtcTutorialSurfaceClient> | undefin
 let ftcTutorialEditorClientPromise: Promise<FtcTutorialEditorClient> | undefined;
 let animationWorkbenchViewClientPromise:
   | Promise<AnimationWorkbenchViewClient>
+  | undefined;
+let generatedLinearSolveReaderClientPromise:
+  | Promise<GeneratedLinearSolveReaderClient>
   | undefined;
 let activeView:
   | "dashboard"
@@ -726,7 +735,8 @@ async function renderAnimationCatalogueView(): Promise<void> {
       descriptor: prepared.descriptor,
       player: prepared.player,
       economicsParameters: prepared.economicsParameters,
-      physicsParameters: prepared.physicsParameters
+      physicsParameters: prepared.physicsParameters,
+      readerCompanion: prepared.readerCompanion
     });
     const shell = appRoot.querySelector<HTMLElement>(
       "[data-kp-animation-catalogue]"
@@ -839,7 +849,8 @@ async function renderAnimationCatalogueSelectionInShell(input: {
       entry: input.entry,
       health: prepared.health,
       economicsParameters: prepared.economicsParameters,
-      physicsParameters: prepared.physicsParameters
+      physicsParameters: prepared.physicsParameters,
+      readerCompanion: prepared.readerCompanion
     });
     const nextInspectorSelect = inspector.querySelector<HTMLSelectElement>(
       '[data-action="select-animation-catalogue-inspector"]'
@@ -847,7 +858,7 @@ async function renderAnimationCatalogueSelectionInShell(input: {
     if (
       nextInspectorSelect !== null &&
       (inspectorMode === "details" || inspectorMode === "parameters" ||
-        inspectorMode === "tuning")
+        inspectorMode === "tuning" || inspectorMode === "explanation")
     ) {
       nextInspectorSelect.value = inspectorMode;
       selectAnimationCatalogueInspectorFromSelect(nextInspectorSelect);
@@ -983,6 +994,11 @@ async function prepareAnimationCatalogueSelection(input: {
       ? createParameterizedConstantForceWorkEnergyAnimation(physicsParameters)
           .animation
       : loaded.animation;
+  const readerCompanion = input.entry.animationId ===
+      kpVerifiedGeneratedLinearSolveAnimationId
+    ? (await loadGeneratedLinearSolveReaderClient())
+        .createKpVerifiedGeneratedLinearSolveReaderCompanion()
+    : undefined;
   const catalog = loaded.catalog.some(({ id }) => id === animation.id)
     ? loaded.catalog.map((candidate) =>
         candidate.id === animation.id ? animation : candidate
@@ -1004,6 +1020,7 @@ async function prepareAnimationCatalogueSelection(input: {
     player,
     economicsParameters,
     physicsParameters,
+    readerCompanion,
     hostability,
     health: deriveKpAnimationCatalogueHealth({
       hostability,
@@ -1215,7 +1232,8 @@ function selectAnimationCatalogueInspectorFromSelect(
     view === null ||
     (select.value !== "details" &&
       select.value !== "parameters" &&
-      select.value !== "tuning")
+      select.value !== "tuning" &&
+      select.value !== "explanation")
   ) return;
   view.dataset["kpAnimationCatalogueInspectorView"] = select.value;
   view.querySelectorAll<HTMLElement>(
@@ -1772,6 +1790,16 @@ function loadAnimationWorkbenchViewClient(): Promise<
   // not the shared editor and Animation Library host closure.
   return animationWorkbenchViewClientPromise ??= import(
     "./editor/semantic-animation-workbench-view.ts"
+  );
+}
+
+function loadGeneratedLinearSolveReaderClient(): Promise<
+  GeneratedLinearSolveReaderClient
+> {
+  // Explanation compilation and inline KaTeX belong to the selected generated
+  // artifact; unrelated catalogue rows must not inherit that closure.
+  return generatedLinearSolveReaderClientPromise ??= import(
+    "./editor/verified-generated-linear-solve-reader.ts"
   );
 }
 

@@ -16,6 +16,7 @@ import {
 import {
   renderGraph3DWebGLShell
 } from "../src/rendering/graph-webgl.ts";
+import type { KpSemanticObject } from "../src/semantic/document.ts";
 import type { Graph3DObject } from "../src/semantic/graph.ts";
 
 test("bounded Graph3D catalogue contract owns lazy capability, lease, fallback, and accessibility policy", () => {
@@ -88,8 +89,10 @@ test("Graph3D host projection preserves direct seek and exact rewind", () => {
 
 test("Graph3D semantic shell exposes one accessible image and keeps canvas hidden", () => {
   const animation = createGraphSurfaceModeAnimationAsset();
-  const contract = createKpEditorGraph3DHostContract(animation);
-  const objects = animation.bundle.objects.map((object) => object.value);
+  createKpEditorGraph3DHostContract(animation);
+  const objects = animation.bundle.objects.map(
+    (object) => object.value as KpSemanticObject
+  );
   const graph = objects.find(
     (object): object is Graph3DObject =>
       typeof object === "object" && object !== null &&

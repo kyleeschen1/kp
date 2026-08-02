@@ -37,6 +37,9 @@ import {
   kpConstantForceWorkEnergyForceParameter,
   type KpConstantForceWorkEnergyParameterState
 } from "./constant-force-work-energy-parameters.ts";
+import type {
+  KpAnimationCatalogueReaderCompanion
+} from "./verified-generated-linear-solve-reader.ts";
 
 export function renderKpAnimationCatalogueShell(input: {
   readonly entry: KpAnimationCatalogueEntry;
@@ -49,6 +52,9 @@ export function renderKpAnimationCatalogueShell(input: {
     | undefined;
   readonly physicsParameters?:
     | KpConstantForceWorkEnergyParameterState
+    | undefined;
+  readonly readerCompanion?:
+    | KpAnimationCatalogueReaderCompanion
     | undefined;
 }): string {
   if (input.entry.animationId !== input.health.animationId) {
@@ -107,7 +113,8 @@ export function renderKpAnimationCatalogueShell(input: {
         entry,
         health,
         economicsParameters: input.economicsParameters,
-        physicsParameters: input.physicsParameters
+        physicsParameters: input.physicsParameters,
+        readerCompanion: input.readerCompanion
       })}
     </aside>
   </main>`;
@@ -162,13 +169,23 @@ export function renderKpAnimationCatalogueInspector(input: {
   readonly physicsParameters?:
     | KpConstantForceWorkEnergyParameterState
     | undefined;
+  readonly readerCompanion?:
+    | KpAnimationCatalogueReaderCompanion
+    | undefined;
 }): string {
+  const readerOption = input.readerCompanion === undefined
+    ? ""
+    : `<option value="explanation">${escapeHtml(input.readerCompanion.label)}</option>`;
+  const readerPanel = input.readerCompanion === undefined
+    ? ""
+    : `<section data-kp-animation-catalogue-inspector-panel="explanation" hidden>${input.readerCompanion.html}</section>`;
   return `<div class="kp-animation-catalogue-shell__inspector-view" data-kp-animation-catalogue-inspector-view="details">
     <label class="kp-animation-catalogue-shell__inspector-switcher">Show
       <select data-action="select-animation-catalogue-inspector" aria-label="Inspector view">
         <option value="details" selected>Details</option>
         <option value="parameters">Parameters</option>
         <option value="tuning">Tuning</option>
+        ${readerOption}
       </select>
     </label>
     <div data-kp-animation-catalogue-inspector-panel="details">
@@ -196,6 +213,7 @@ export function renderKpAnimationCatalogueInspector(input: {
         </label>
       </div>
     </section>
+    ${readerPanel}
   </div>`;
 }
 

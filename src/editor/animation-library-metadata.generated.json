@@ -97,6 +97,37 @@
     }
   },
   {
+    "id": "editor-animation.animation.generated.linear-solve.linear-68c15d41",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.linear-solve.linear-68c15d41",
+    "title": "Solve 2x+3=8",
+    "summary": "Solve 2x+3=8",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 3000,
+    "beatCount": 60,
+    "tags": [
+      "animation",
+      "equation",
+      "generated-problem",
+      "linear-solve",
+      "verified"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.generated.fraction-expression.two-fourths",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.generated.fraction-expression.two-fourths",

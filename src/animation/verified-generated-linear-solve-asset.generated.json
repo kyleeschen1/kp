@@ -1,0 +1,1568 @@
+{
+  "id": "animation.generated.linear-solve.linear-68c15d41",
+  "kind": "animation-asset",
+  "title": "Solve 2x+3=8",
+  "version": 1,
+  "bundle": {
+    "id": "asset.generated.linear-solve.linear-68c15d41",
+    "title": "Verified generated solve linear-68c15d41",
+    "version": 1,
+    "objects": [
+      {
+        "id": "equation.generated.linear-solve.linear-68c15d41.initial",
+        "kind": "semantic-object",
+        "objectType": "equation",
+        "title": "Verified initial equation",
+        "value": {
+          "latex": "2x+3=8"
+        },
+        "selectors": [
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.initial.lhs.coefficient",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.initial",
+            "kind": "term",
+            "label": "2",
+            "metadata": {
+              "equationStructureRole": "coefficient"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.initial.lhs.variable",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.initial",
+            "kind": "term",
+            "label": "x",
+            "metadata": {
+              "equationStructureRole": "variable"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.initial.lhs.addend",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.initial",
+            "kind": "term",
+            "label": "+3",
+            "metadata": {
+              "equationStructureRole": "addend"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.initial.equals",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.initial",
+            "kind": "relation",
+            "label": "=",
+            "metadata": {
+              "equationStructureRole": "relation"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.initial.rhs.value",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.initial",
+            "kind": "term",
+            "label": "8",
+            "metadata": {
+              "equationStructureRole": "constant"
+            }
+          }
+        ],
+        "provenance": {
+          "kind": "imported",
+          "sourceIds": [
+            "trace.linear-68c15d41",
+            "frame.initial",
+            "equation.initial"
+          ],
+          "portId": "bridge.verified-linear-problem-animation.v1"
+        },
+        "metadata": {
+          "sourceTraceId": "trace.linear-68c15d41",
+          "sourceTraceFrameId": "frame.initial",
+          "sourceEquationSemanticId": "equation.initial",
+          "generatedProblemInstanceId": "instance.generated.linear-solve.linear-68c15d41",
+          "providerVerified": true
+        }
+      },
+      {
+        "id": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+        "kind": "semantic-object",
+        "objectType": "equation",
+        "title": "Subtract the addend from both sides",
+        "value": {
+          "latex": "2x+3-3=8-3"
+        },
+        "selectors": [
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.coefficient",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+            "kind": "term",
+            "label": "2",
+            "metadata": {
+              "equationStructureRole": "coefficient"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.variable",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+            "kind": "term",
+            "label": "x",
+            "metadata": {
+              "equationStructureRole": "variable"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.addend",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+            "kind": "term",
+            "label": "+3",
+            "metadata": {
+              "equationStructureRole": "addend"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.subtract",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+            "kind": "term",
+            "label": "-3",
+            "metadata": {
+              "equationStructureRole": "inverse-term"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.equals",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+            "kind": "relation",
+            "label": "=",
+            "metadata": {
+              "equationStructureRole": "relation"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.value",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+            "kind": "term",
+            "label": "8",
+            "metadata": {
+              "equationStructureRole": "constant",
+              "successorContribution": "material-input",
+              "successorRole": "minuend",
+              "successorRank": 0
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.minus",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+            "kind": "operator",
+            "label": "-",
+            "metadata": {
+              "equationStructureRole": "operator",
+              "successorContribution": "catalyst",
+              "successorRole": "subtraction-operator",
+              "successorRank": 0
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.subtrahend",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+            "kind": "term",
+            "label": "3",
+            "metadata": {
+              "equationStructureRole": "inverse-term",
+              "successorContribution": "material-input",
+              "successorRole": "subtrahend",
+              "successorRank": 1
+            }
+          }
+        ],
+        "provenance": {
+          "kind": "transformed",
+          "sourceIds": [
+            "equation.generated.linear-solve.linear-68c15d41.initial",
+            "operation.step.1",
+            "operation.subtract-three"
+          ],
+          "transformationId": "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides",
+          "portId": "bridge.verified-linear-problem-animation.v1"
+        },
+        "metadata": {
+          "generatedProblemInstanceId": "instance.generated.linear-solve.linear-68c15d41",
+          "sourceTraceId": "trace.linear-68c15d41",
+          "sourceTraceOperationId": "operation.step.1",
+          "sourceOperationSemanticId": "operation.subtract-three",
+          "providerVerified": true
+        }
+      },
+      {
+        "id": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+        "kind": "semantic-object",
+        "objectType": "equation",
+        "title": "Cancel the additive inverses",
+        "value": {
+          "latex": "2x=8-3"
+        },
+        "selectors": [
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.lhs.coefficient",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+            "kind": "term",
+            "label": "2",
+            "metadata": {
+              "equationStructureRole": "coefficient"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.lhs.variable",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+            "kind": "term",
+            "label": "x",
+            "metadata": {
+              "equationStructureRole": "variable"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.equals",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+            "kind": "relation",
+            "label": "=",
+            "metadata": {
+              "equationStructureRole": "relation"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.value",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+            "kind": "term",
+            "label": "8",
+            "metadata": {
+              "equationStructureRole": "constant",
+              "successorContribution": "material-input",
+              "successorRole": "minuend",
+              "successorRank": 0
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.minus",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+            "kind": "operator",
+            "label": "-",
+            "metadata": {
+              "equationStructureRole": "operator",
+              "successorContribution": "catalyst",
+              "successorRole": "subtraction-operator",
+              "successorRank": 0
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.subtrahend",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+            "kind": "term",
+            "label": "3",
+            "metadata": {
+              "equationStructureRole": "inverse-term",
+              "successorContribution": "material-input",
+              "successorRole": "subtrahend",
+              "successorRank": 1
+            }
+          }
+        ],
+        "provenance": {
+          "kind": "transformed",
+          "sourceIds": [
+            "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+            "operation.step.1",
+            "operation.subtract-three"
+          ],
+          "transformationId": "transform.generated.linear-solve.linear-68c15d41.cancel-additive-inverses",
+          "portId": "bridge.verified-linear-problem-animation.v1"
+        },
+        "metadata": {
+          "generatedProblemInstanceId": "instance.generated.linear-solve.linear-68c15d41",
+          "sourceTraceId": "trace.linear-68c15d41",
+          "sourceTraceOperationId": "operation.step.1",
+          "sourceOperationSemanticId": "operation.subtract-three",
+          "providerVerified": true
+        }
+      },
+      {
+        "id": "equation.generated.linear-solve.linear-68c15d41.after-subtract",
+        "kind": "semantic-object",
+        "objectType": "equation",
+        "title": "Verified subtraction checkpoint",
+        "value": {
+          "latex": "2x=5"
+        },
+        "selectors": [
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.after-subtract.lhs.coefficient",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.after-subtract",
+            "kind": "term",
+            "label": "2",
+            "metadata": {
+              "equationStructureRole": "coefficient"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.after-subtract.lhs.variable",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.after-subtract",
+            "kind": "term",
+            "label": "x",
+            "metadata": {
+              "equationStructureRole": "variable"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.after-subtract.equals",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.after-subtract",
+            "kind": "relation",
+            "label": "=",
+            "metadata": {
+              "equationStructureRole": "relation"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.after-subtract.rhs.constant",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.after-subtract",
+            "kind": "term",
+            "label": "5",
+            "metadata": {
+              "equationStructureRole": "constant",
+              "successorTarget": true,
+              "successorRole": "evaluated-difference",
+              "successorRank": 0
+            }
+          }
+        ],
+        "provenance": {
+          "kind": "transformed",
+          "sourceIds": [
+            "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+            "trace.linear-68c15d41",
+            "frame.step.1",
+            "equation.after-subtract",
+            "operation.step.1"
+          ],
+          "transformationId": "transform.generated.linear-solve.linear-68c15d41.simplify-difference",
+          "portId": "bridge.verified-linear-problem-animation.v1"
+        },
+        "metadata": {
+          "sourceTraceId": "trace.linear-68c15d41",
+          "sourceTraceFrameId": "frame.step.1",
+          "sourceEquationSemanticId": "equation.after-subtract",
+          "generatedProblemInstanceId": "instance.generated.linear-solve.linear-68c15d41",
+          "providerVerified": true,
+          "sourceTraceOperationId": "operation.step.1",
+          "sourceOperationSemanticId": "operation.subtract-three"
+        }
+      },
+      {
+        "id": "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+        "kind": "semantic-object",
+        "objectType": "equation",
+        "title": "Divide both sides by the coefficient",
+        "value": {
+          "latex": "\\frac{2x}{2}=\\frac{5}{2}"
+        },
+        "selectors": [
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.coefficient",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+            "kind": "term",
+            "label": "2",
+            "metadata": {
+              "equationStructureRole": "coefficient"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.variable",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+            "kind": "term",
+            "label": "x",
+            "metadata": {
+              "equationStructureRole": "variable"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.rule",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+            "kind": "artifact",
+            "label": "fraction rule",
+            "metadata": {
+              "equationStructureRole": "fraction-rule"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.divide",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+            "kind": "term",
+            "label": "2",
+            "metadata": {
+              "equationStructureRole": "divisor"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.equals",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+            "kind": "relation",
+            "label": "=",
+            "metadata": {
+              "equationStructureRole": "relation"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.constant",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+            "kind": "term",
+            "label": "5",
+            "metadata": {
+              "equationStructureRole": "constant",
+              "successorContribution": "material-input",
+              "successorRole": "dividend",
+              "successorRank": 0
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.rule",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+            "kind": "artifact",
+            "label": "fraction rule",
+            "metadata": {
+              "equationStructureRole": "fraction-rule",
+              "successorContribution": "catalyst",
+              "successorRole": "division-operator",
+              "successorRank": 0
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.divisor",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+            "kind": "term",
+            "label": "2",
+            "metadata": {
+              "equationStructureRole": "divisor",
+              "successorContribution": "material-input",
+              "successorRole": "divisor",
+              "successorRank": 1
+            }
+          }
+        ],
+        "provenance": {
+          "kind": "transformed",
+          "sourceIds": [
+            "equation.generated.linear-solve.linear-68c15d41.after-subtract",
+            "operation.step.2",
+            "operation.divide-two"
+          ],
+          "transformationId": "transform.generated.linear-solve.linear-68c15d41.divide-both-sides",
+          "portId": "bridge.verified-linear-problem-animation.v1"
+        },
+        "metadata": {
+          "generatedProblemInstanceId": "instance.generated.linear-solve.linear-68c15d41",
+          "sourceTraceId": "trace.linear-68c15d41",
+          "sourceTraceOperationId": "operation.step.2",
+          "sourceOperationSemanticId": "operation.divide-two",
+          "providerVerified": true
+        }
+      },
+      {
+        "id": "equation.generated.linear-solve.linear-68c15d41.solved",
+        "kind": "semantic-object",
+        "objectType": "equation",
+        "title": "Verified solution checkpoint",
+        "value": {
+          "latex": "x=\\frac{5}{2}"
+        },
+        "selectors": [
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.solved.lhs.variable",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.solved",
+            "kind": "term",
+            "label": "x",
+            "metadata": {
+              "equationStructureRole": "variable"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.solved.equals",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.solved",
+            "kind": "relation",
+            "label": "=",
+            "metadata": {
+              "equationStructureRole": "relation"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.solved.rhs.constant",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.solved",
+            "kind": "term",
+            "label": "5",
+            "metadata": {
+              "equationStructureRole": "constant"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.solved.rhs.rule",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.solved",
+            "kind": "artifact",
+            "label": "fraction rule",
+            "metadata": {
+              "equationStructureRole": "fraction-rule"
+            }
+          },
+          {
+            "id": "equation.generated.linear-solve.linear-68c15d41.solved.rhs.divisor",
+            "objectId": "equation.generated.linear-solve.linear-68c15d41.solved",
+            "kind": "term",
+            "label": "2",
+            "metadata": {
+              "equationStructureRole": "divisor"
+            }
+          }
+        ],
+        "provenance": {
+          "kind": "transformed",
+          "sourceIds": [
+            "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+            "trace.linear-68c15d41",
+            "frame.step.2",
+            "equation.solved",
+            "operation.step.2"
+          ],
+          "transformationId": "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses",
+          "portId": "bridge.verified-linear-problem-animation.v1"
+        },
+        "metadata": {
+          "sourceTraceId": "trace.linear-68c15d41",
+          "sourceTraceFrameId": "frame.step.2",
+          "sourceEquationSemanticId": "equation.solved",
+          "generatedProblemInstanceId": "instance.generated.linear-solve.linear-68c15d41",
+          "providerVerified": true,
+          "sourceTraceOperationId": "operation.step.2",
+          "sourceOperationSemanticId": "operation.divide-two"
+        }
+      }
+    ]
+  },
+  "transformations": [
+    {
+      "id": "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides",
+      "kind": "semantic-transformation",
+      "definitionId": "definition.generated.linear-solve.subtract-both-sides",
+      "transformType": "subtractBothSides",
+      "title": "Subtract the same value from both sides",
+      "sourceObjectIds": [
+        "equation.generated.linear-solve.linear-68c15d41.initial"
+      ],
+      "targetObjectIds": [
+        "equation.generated.linear-solve.linear-68c15d41.subtract-introduced"
+      ],
+      "preserves": [
+        "value",
+        "structure"
+      ],
+      "correspondenceMap": {
+        "id": "correspondence.transform.generated.linear-solve.linear-68c15d41.subtract-both-sides",
+        "records": [
+          {
+            "id": "lhs-coefficient-persists",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.initial.lhs.coefficient"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.coefficient"
+            ],
+            "summary": "lhs.coefficient preserves semantic identity."
+          },
+          {
+            "id": "lhs-variable-persists",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.initial.lhs.variable"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.variable"
+            ],
+            "summary": "lhs.variable preserves semantic identity."
+          },
+          {
+            "id": "lhs-addend-persists",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.initial.lhs.addend"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.addend"
+            ],
+            "summary": "lhs.addend preserves semantic identity."
+          },
+          {
+            "id": "equals-persists",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.initial.equals"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.equals"
+            ],
+            "summary": "equals preserves semantic identity."
+          },
+          {
+            "id": "rhs-value-persists",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.initial.rhs.value"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.value"
+            ],
+            "summary": "rhs.value preserves semantic identity."
+          },
+          {
+            "id": "balanced-inverses-enter",
+            "relation": "introduction",
+            "sourceSelectorIds": [],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.subtract",
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.minus",
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.subtrahend"
+            ],
+            "summary": "Equal inverse terms enter on both sides."
+          }
+        ]
+      },
+      "correspondence": [
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.initial.lhs.coefficient",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.coefficient",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.initial.lhs.variable",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.variable",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.initial.lhs.addend",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.addend",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.initial.equals",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.equals",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.initial.rhs.value",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.value",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        }
+      ],
+      "assumptions": [
+        "Subtracting equal quantities preserves equality."
+      ],
+      "lawRefs": [
+        {
+          "id": "law.equation.subtract-both-sides",
+          "level": "strict"
+        }
+      ]
+    },
+    {
+      "id": "transform.generated.linear-solve.linear-68c15d41.cancel-additive-inverses",
+      "kind": "semantic-transformation",
+      "definitionId": "definition.generated.linear-solve.cancel-additive-inverses",
+      "transformType": "cancelAdditiveInverses",
+      "title": "Cancel additive inverses",
+      "sourceObjectIds": [
+        "equation.generated.linear-solve.linear-68c15d41.subtract-introduced"
+      ],
+      "targetObjectIds": [
+        "equation.generated.linear-solve.linear-68c15d41.additive-cancelled"
+      ],
+      "preserves": [
+        "value"
+      ],
+      "correspondenceMap": {
+        "id": "correspondence.transform.generated.linear-solve.linear-68c15d41.cancel-additive-inverses",
+        "records": [
+          {
+            "id": "continuant-1",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.coefficient"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.lhs.coefficient"
+            ],
+            "summary": "The generated semantic entity persists through cancellation."
+          },
+          {
+            "id": "continuant-2",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.variable"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.lhs.variable"
+            ],
+            "summary": "The generated semantic entity persists through cancellation."
+          },
+          {
+            "id": "continuant-3",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.equals"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.equals"
+            ],
+            "summary": "The generated semantic entity persists through cancellation."
+          },
+          {
+            "id": "continuant-4",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.value"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.value"
+            ],
+            "summary": "The generated semantic entity persists through cancellation."
+          },
+          {
+            "id": "continuant-5",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.minus"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.minus"
+            ],
+            "summary": "The generated semantic entity persists through cancellation."
+          },
+          {
+            "id": "continuant-6",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.subtrahend"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.subtrahend"
+            ],
+            "summary": "The generated semantic entity persists through cancellation."
+          },
+          {
+            "id": "generated-additive-inverses-cancel",
+            "relation": "cancelation",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.addend",
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.subtract"
+            ],
+            "targetSelectorIds": [],
+            "summary": "The registered inverse pair retires through cancellation."
+          }
+        ]
+      },
+      "correspondence": [
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.coefficient",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.lhs.coefficient",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.variable",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.lhs.variable",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.equals",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.equals",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.value",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.value",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.minus",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.minus",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.subtrahend",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.subtrahend",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        }
+      ],
+      "assumptions": [
+        "A term plus its additive inverse simplifies to zero."
+      ],
+      "lawRefs": [
+        {
+          "id": "law.algebra.additive-inverse",
+          "level": "strict"
+        }
+      ]
+    },
+    {
+      "id": "transform.generated.linear-solve.linear-68c15d41.simplify-difference",
+      "kind": "semantic-transformation",
+      "definitionId": "definition.generated.linear-solve.simplify-constant-difference",
+      "transformType": "simplifyConstantDifference",
+      "title": "Simplify the constant difference",
+      "sourceObjectIds": [
+        "equation.generated.linear-solve.linear-68c15d41.additive-cancelled"
+      ],
+      "targetObjectIds": [
+        "equation.generated.linear-solve.linear-68c15d41.after-subtract"
+      ],
+      "preserves": [
+        "value"
+      ],
+      "correspondenceMap": {
+        "id": "correspondence.transform.generated.linear-solve.linear-68c15d41.simplify-difference",
+        "records": [
+          {
+            "id": "lhs-coefficient-persists",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.lhs.coefficient"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.after-subtract.lhs.coefficient"
+            ],
+            "summary": "lhs.coefficient preserves semantic identity."
+          },
+          {
+            "id": "lhs-variable-persists",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.lhs.variable"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.after-subtract.lhs.variable"
+            ],
+            "summary": "lhs.variable preserves semantic identity."
+          },
+          {
+            "id": "equals-persists",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.equals"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.after-subtract.equals"
+            ],
+            "summary": "equals preserves semantic identity."
+          },
+          {
+            "id": "difference-evaluates",
+            "relation": "fan-in",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.value",
+              "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.minus",
+              "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.subtrahend"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.after-subtract.rhs.constant"
+            ],
+            "summary": "The exact constant difference derives the verified checkpoint."
+          }
+        ]
+      },
+      "correspondence": [
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.lhs.coefficient",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.after-subtract.lhs.coefficient",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.lhs.variable",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.after-subtract.lhs.variable",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.equals",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.after-subtract.equals",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        }
+      ],
+      "assumptions": [
+        "The right-hand constant difference evaluates to the solution."
+      ],
+      "lawRefs": [
+        {
+          "id": "law.arithmetic.constant-difference",
+          "level": "strict"
+        }
+      ]
+    },
+    {
+      "id": "transform.generated.linear-solve.linear-68c15d41.divide-both-sides",
+      "kind": "semantic-transformation",
+      "definitionId": "definition.generated.linear-solve.divide-both-sides",
+      "transformType": "divideBothSides",
+      "title": "Divide both sides by the coefficient",
+      "sourceObjectIds": [
+        "equation.generated.linear-solve.linear-68c15d41.after-subtract"
+      ],
+      "targetObjectIds": [
+        "equation.generated.linear-solve.linear-68c15d41.divide-introduced"
+      ],
+      "preserves": [
+        "value",
+        "structure"
+      ],
+      "correspondenceMap": {
+        "id": "correspondence.transform.generated.linear-solve.linear-68c15d41.divide-both-sides",
+        "records": [
+          {
+            "id": "coefficient-enters-numerator",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.after-subtract.lhs.coefficient"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.coefficient"
+            ],
+            "summary": "lhs.coefficient preserves semantic identity."
+          },
+          {
+            "id": "variable-enters-numerator",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.after-subtract.lhs.variable"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.variable"
+            ],
+            "summary": "lhs.variable preserves semantic identity."
+          },
+          {
+            "id": "relation-persists",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.after-subtract.equals"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.equals"
+            ],
+            "summary": "equals preserves semantic identity."
+          },
+          {
+            "id": "constant-enters-numerator",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.after-subtract.rhs.constant"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.constant"
+            ],
+            "summary": "rhs.constant preserves semantic identity."
+          },
+          {
+            "id": "matched-divisors-enter",
+            "relation": "introduction",
+            "sourceSelectorIds": [],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.divide",
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.divisor"
+            ],
+            "summary": "The same non-zero divisor enters beneath both sides."
+          },
+          {
+            "id": "fraction-rules-enter",
+            "relation": "introduction",
+            "sourceSelectorIds": [],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.rule",
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.rule"
+            ],
+            "summary": "Fraction rules expose the whole-side quotients."
+          }
+        ]
+      },
+      "correspondence": [
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.after-subtract.lhs.coefficient",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.coefficient",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.after-subtract.lhs.variable",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.variable",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.after-subtract.equals",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.equals",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.after-subtract.rhs.constant",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.constant",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        }
+      ],
+      "assumptions": [
+        "Dividing equal quantities by the same non-zero value preserves equality."
+      ],
+      "lawRefs": [
+        {
+          "id": "law.equation.divide-both-sides",
+          "level": "strict"
+        }
+      ]
+    },
+    {
+      "id": "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses",
+      "kind": "semantic-transformation",
+      "definitionId": "definition.generated.linear-solve.cancel-multiplicative-inverses",
+      "transformType": "cancelMultiplicativeInverses",
+      "title": "Cancel multiplicative inverses",
+      "sourceObjectIds": [
+        "equation.generated.linear-solve.linear-68c15d41.divide-introduced"
+      ],
+      "targetObjectIds": [
+        "equation.generated.linear-solve.linear-68c15d41.solved"
+      ],
+      "preserves": [
+        "value"
+      ],
+      "correspondenceMap": {
+        "id": "correspondence.transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses",
+        "records": [
+          {
+            "id": "continuant-1",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.variable"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.solved.lhs.variable"
+            ],
+            "summary": "The generated semantic entity persists through cancellation."
+          },
+          {
+            "id": "continuant-2",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.equals"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.solved.equals"
+            ],
+            "summary": "The generated semantic entity persists through cancellation."
+          },
+          {
+            "id": "continuant-3",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.constant"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.solved.rhs.constant"
+            ],
+            "summary": "The generated semantic entity persists through cancellation."
+          },
+          {
+            "id": "continuant-4",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.rule"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.solved.rhs.rule"
+            ],
+            "summary": "The generated semantic entity persists through cancellation."
+          },
+          {
+            "id": "continuant-5",
+            "relation": "identity",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.divisor"
+            ],
+            "targetSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.solved.rhs.divisor"
+            ],
+            "summary": "The generated semantic entity persists through cancellation."
+          },
+          {
+            "id": "generated-multiplicative-inverses-cancel",
+            "relation": "cancelation",
+            "sourceSelectorIds": [
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.coefficient",
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.divide"
+            ],
+            "targetSelectorIds": [],
+            "summary": "The registered inverse pair retires through cancellation."
+          }
+        ]
+      },
+      "correspondence": [
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.variable",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.solved.lhs.variable",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.equals",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.solved.equals",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.constant",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.solved.rhs.constant",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.rule",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.solved.rhs.rule",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        },
+        {
+          "sourceSelectorId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.divisor",
+          "targetSelectorId": "equation.generated.linear-solve.linear-68c15d41.solved.rhs.divisor",
+          "preserves": [
+            "identity",
+            "role"
+          ]
+        }
+      ],
+      "assumptions": [
+        "A non-zero factor divided by itself simplifies to one."
+      ],
+      "lawRefs": [
+        {
+          "id": "law.algebra.multiplicative-inverse",
+          "level": "strict"
+        }
+      ]
+    }
+  ],
+  "transformationTree": {
+    "root": {
+      "kind": "sequence",
+      "id": "diagram.generated.linear-solve.linear-68c15d41.sequence",
+      "label": "Verified generated linear solve",
+      "children": [
+        {
+          "kind": "leaf",
+          "id": "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides",
+          "transformation": {
+            "id": "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides",
+            "kind": "subtractBothSides",
+            "sourceObjectIds": [
+              "equation.generated.linear-solve.linear-68c15d41.initial"
+            ],
+            "targetObjectIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced"
+            ],
+            "preserves": [
+              "value",
+              "structure"
+            ],
+            "summary": "Subtract the same value from both sides"
+          },
+          "sourceObjectIds": [
+            "equation.generated.linear-solve.linear-68c15d41.initial"
+          ],
+          "targetObjectIds": [
+            "equation.generated.linear-solve.linear-68c15d41.subtract-introduced"
+          ],
+          "preserves": [
+            "value",
+            "structure"
+          ]
+        },
+        {
+          "kind": "leaf",
+          "id": "transform.generated.linear-solve.linear-68c15d41.cancel-additive-inverses",
+          "transformation": {
+            "id": "transform.generated.linear-solve.linear-68c15d41.cancel-additive-inverses",
+            "kind": "cancelAdditiveInverses",
+            "sourceObjectIds": [
+              "equation.generated.linear-solve.linear-68c15d41.subtract-introduced"
+            ],
+            "targetObjectIds": [
+              "equation.generated.linear-solve.linear-68c15d41.additive-cancelled"
+            ],
+            "preserves": [
+              "value"
+            ],
+            "summary": "Cancel additive inverses"
+          },
+          "sourceObjectIds": [
+            "equation.generated.linear-solve.linear-68c15d41.subtract-introduced"
+          ],
+          "targetObjectIds": [
+            "equation.generated.linear-solve.linear-68c15d41.additive-cancelled"
+          ],
+          "preserves": [
+            "value"
+          ]
+        },
+        {
+          "kind": "leaf",
+          "id": "transform.generated.linear-solve.linear-68c15d41.simplify-difference",
+          "transformation": {
+            "id": "transform.generated.linear-solve.linear-68c15d41.simplify-difference",
+            "kind": "simplifyConstantDifference",
+            "sourceObjectIds": [
+              "equation.generated.linear-solve.linear-68c15d41.additive-cancelled"
+            ],
+            "targetObjectIds": [
+              "equation.generated.linear-solve.linear-68c15d41.after-subtract"
+            ],
+            "preserves": [
+              "value"
+            ],
+            "summary": "Simplify the constant difference"
+          },
+          "sourceObjectIds": [
+            "equation.generated.linear-solve.linear-68c15d41.additive-cancelled"
+          ],
+          "targetObjectIds": [
+            "equation.generated.linear-solve.linear-68c15d41.after-subtract"
+          ],
+          "preserves": [
+            "value"
+          ]
+        },
+        {
+          "kind": "leaf",
+          "id": "transform.generated.linear-solve.linear-68c15d41.divide-both-sides",
+          "transformation": {
+            "id": "transform.generated.linear-solve.linear-68c15d41.divide-both-sides",
+            "kind": "divideBothSides",
+            "sourceObjectIds": [
+              "equation.generated.linear-solve.linear-68c15d41.after-subtract"
+            ],
+            "targetObjectIds": [
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced"
+            ],
+            "preserves": [
+              "value",
+              "structure"
+            ],
+            "summary": "Divide both sides by the coefficient"
+          },
+          "sourceObjectIds": [
+            "equation.generated.linear-solve.linear-68c15d41.after-subtract"
+          ],
+          "targetObjectIds": [
+            "equation.generated.linear-solve.linear-68c15d41.divide-introduced"
+          ],
+          "preserves": [
+            "value",
+            "structure"
+          ]
+        },
+        {
+          "kind": "leaf",
+          "id": "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses",
+          "transformation": {
+            "id": "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses",
+            "kind": "cancelMultiplicativeInverses",
+            "sourceObjectIds": [
+              "equation.generated.linear-solve.linear-68c15d41.divide-introduced"
+            ],
+            "targetObjectIds": [
+              "equation.generated.linear-solve.linear-68c15d41.solved"
+            ],
+            "preserves": [
+              "value"
+            ],
+            "summary": "Cancel multiplicative inverses"
+          },
+          "sourceObjectIds": [
+            "equation.generated.linear-solve.linear-68c15d41.divide-introduced"
+          ],
+          "targetObjectIds": [
+            "equation.generated.linear-solve.linear-68c15d41.solved"
+          ],
+          "preserves": [
+            "value"
+          ]
+        }
+      ],
+      "sourceObjectIds": [
+        "equation.generated.linear-solve.linear-68c15d41.initial"
+      ],
+      "targetObjectIds": [
+        "equation.generated.linear-solve.linear-68c15d41.solved"
+      ],
+      "preserves": [
+        "value"
+      ],
+      "summary": "Trusted KP operations expand two exact provider checkpoints without changing their mathematical identity."
+    },
+    "annotations": [
+      {
+        "id": "focus.generated.linear-solve.linear-68c15d41.subtract-introduction",
+        "kind": "focus",
+        "targetNodeId": "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides",
+        "placement": "during",
+        "selectorIds": [
+          "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.subtract",
+          "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.minus",
+          "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.subtrahend"
+        ]
+      },
+      {
+        "id": "focus.generated.linear-solve.linear-68c15d41.additive-cancellation",
+        "kind": "focus",
+        "targetNodeId": "transform.generated.linear-solve.linear-68c15d41.cancel-additive-inverses",
+        "placement": "during",
+        "selectorIds": [
+          "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.addend",
+          "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.subtract"
+        ]
+      },
+      {
+        "id": "pause.generated.linear-solve.linear-68c15d41.provider-after-subtract",
+        "kind": "pause",
+        "targetNodeId": "transform.generated.linear-solve.linear-68c15d41.simplify-difference",
+        "placement": "after",
+        "durationBeats": 1,
+        "summary": "Verified provider checkpoint equation.after-subtract."
+      },
+      {
+        "id": "focus.generated.linear-solve.linear-68c15d41.divide-introduction",
+        "kind": "focus",
+        "targetNodeId": "transform.generated.linear-solve.linear-68c15d41.divide-both-sides",
+        "placement": "during",
+        "selectorIds": [
+          "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.divide",
+          "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.rule",
+          "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.divisor"
+        ]
+      },
+      {
+        "id": "focus.generated.linear-solve.linear-68c15d41.multiplicative-cancellation",
+        "kind": "focus",
+        "targetNodeId": "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses",
+        "placement": "during",
+        "selectorIds": [
+          "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.coefficient",
+          "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.divide"
+        ]
+      },
+      {
+        "id": "pause.generated.linear-solve.linear-68c15d41.provider-solved",
+        "kind": "pause",
+        "targetNodeId": "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses",
+        "placement": "after",
+        "durationBeats": 1,
+        "summary": "Verified provider checkpoint equation.solved."
+      }
+    ]
+  },
+  "timeline": {
+    "id": "timeline.generated.linear-solve.linear-68c15d41",
+    "durationMs": 3000,
+    "beatCount": 60,
+    "markerIds": [
+      "pause.generated.linear-solve.linear-68c15d41.provider-after-subtract",
+      "pause.generated.linear-solve.linear-68c15d41.provider-solved"
+    ]
+  },
+  "layout": {
+    "id": "layout.generated.linear-solve.linear-68c15d41",
+    "kind": "single",
+    "targetId": "render.generated.linear-solve.linear-68c15d41.equation"
+  },
+  "renderTargets": [
+    {
+      "id": "render.generated.linear-solve.linear-68c15d41.equation",
+      "kind": "equation",
+      "objectIds": [
+        "equation.generated.linear-solve.linear-68c15d41.initial",
+        "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+        "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+        "equation.generated.linear-solve.linear-68c15d41.after-subtract",
+        "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+        "equation.generated.linear-solve.linear-68c15d41.solved"
+      ],
+      "selectorIds": [
+        "equation.generated.linear-solve.linear-68c15d41.initial.lhs.coefficient",
+        "equation.generated.linear-solve.linear-68c15d41.initial.lhs.variable",
+        "equation.generated.linear-solve.linear-68c15d41.initial.lhs.addend",
+        "equation.generated.linear-solve.linear-68c15d41.initial.equals",
+        "equation.generated.linear-solve.linear-68c15d41.initial.rhs.value",
+        "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.coefficient",
+        "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.variable",
+        "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.addend",
+        "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.subtract",
+        "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.equals",
+        "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.value",
+        "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.minus",
+        "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.subtrahend",
+        "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.lhs.coefficient",
+        "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.lhs.variable",
+        "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.equals",
+        "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.value",
+        "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.minus",
+        "equation.generated.linear-solve.linear-68c15d41.additive-cancelled.rhs.subtrahend",
+        "equation.generated.linear-solve.linear-68c15d41.after-subtract.lhs.coefficient",
+        "equation.generated.linear-solve.linear-68c15d41.after-subtract.lhs.variable",
+        "equation.generated.linear-solve.linear-68c15d41.after-subtract.equals",
+        "equation.generated.linear-solve.linear-68c15d41.after-subtract.rhs.constant",
+        "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.coefficient",
+        "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.variable",
+        "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.rule",
+        "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.divide",
+        "equation.generated.linear-solve.linear-68c15d41.divide-introduced.equals",
+        "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.constant",
+        "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.rule",
+        "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.divisor",
+        "equation.generated.linear-solve.linear-68c15d41.solved.lhs.variable",
+        "equation.generated.linear-solve.linear-68c15d41.solved.equals",
+        "equation.generated.linear-solve.linear-68c15d41.solved.rhs.constant",
+        "equation.generated.linear-solve.linear-68c15d41.solved.rhs.rule",
+        "equation.generated.linear-solve.linear-68c15d41.solved.rhs.divisor"
+      ],
+      "transformationIds": [
+        "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides",
+        "transform.generated.linear-solve.linear-68c15d41.cancel-additive-inverses",
+        "transform.generated.linear-solve.linear-68c15d41.simplify-difference",
+        "transform.generated.linear-solve.linear-68c15d41.divide-both-sides",
+        "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses"
+      ],
+      "timelineId": "timeline.generated.linear-solve.linear-68c15d41"
+    }
+  ],
+  "checks": [
+    {
+      "id": "check.generated.linear-solve.linear-68c15d41.reference-closure",
+      "lawId": "animation.reference-closure",
+      "level": "strict",
+      "targetId": "animation.generated.linear-solve.linear-68c15d41"
+    },
+    {
+      "id": "check.generated.linear-solve.linear-68c15d41.seek-rewind",
+      "lawId": "animation.seek-rewind",
+      "level": "strict",
+      "targetId": "diagram.generated.linear-solve.linear-68c15d41.sequence"
+    }
+  ],
+  "exportTargets": [
+    {
+      "id": "export.generated.linear-solve.linear-68c15d41.static-steps",
+      "kind": "static-step",
+      "artifactId": "artifact.generated.linear-solve.linear-68c15d41.static-steps"
+    },
+    {
+      "id": "export.generated.linear-solve.linear-68c15d41.frames",
+      "kind": "frame-sequence",
+      "artifactId": "artifact.generated.linear-solve.linear-68c15d41.frames"
+    }
+  ],
+  "dashboard": {
+    "rowId": "animation-generated-linear-linear-68c15d41",
+    "tags": [
+      "animation",
+      "equation",
+      "generated-problem",
+      "linear-solve",
+      "verified"
+    ],
+    "sourceRefIds": [
+      "instance.generated.linear-solve.linear-68c15d41",
+      "trace.linear-68c15d41",
+      "linear-68c15d41",
+      "operation.step.1",
+      "operation.step.2"
+    ]
+  },
+  "presentationProfile": {
+    "schemaVersion": "kp.presentation-profile.v1",
+    "domain": "equation",
+    "payload": {
+      "kind": "equation-presentation",
+      "motion": "semantic-material-v2",
+      "nativeHandoff": "crossfade-v1",
+      "cancellation": "counter-orbit-v1",
+      "zeroWitness": "none",
+      "successor": "successor-synthesis-v1",
+      "depth": "flat-v1",
+      "continuants": "concurrent-v1",
+      "branchStrategy": "together"
+    },
+    "extensions": []
+  },
+  "metadata": {
+    "generatedProblemImport": true,
+    "generatedProblemInstanceId": "instance.generated.linear-solve.linear-68c15d41",
+    "sourceTraceId": "trace.linear-68c15d41",
+    "sourceProblemId": "linear-68c15d41",
+    "providerId": "linear-problems.exact-rational",
+    "providerVersion": "1.0.0",
+    "protocolVersion": "linear-problem.v1",
+    "providerSeed": "canonical-2x-plus-3"
+  }
+}

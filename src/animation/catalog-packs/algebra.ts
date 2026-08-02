@@ -13,6 +13,9 @@ import {
 import {
   createInequalitySignFlipAnimationAsset
 } from "../inequality-sign-flip-adapter.ts";
+import {
+  createKpVerifiedGeneratedLinearSolveRuntimeAsset
+} from "../verified-generated-linear-solve-runtime-asset.ts";
 import "../fission-fusion-register.ts";
 import "../distribution-choreography-register.ts";
 import "../factoring-choreography-register.ts";
@@ -21,6 +24,7 @@ import "./algebra-reverse-runtime.ts";
 export function createKpAlgebraAnimationPack(): readonly KpAnimationAsset[] {
   return [
     createLinearSolveAnimationAsset(),
+    createKpVerifiedGeneratedLinearSolveRuntimeAsset(),
     createFractionSimplificationAnimationAsset(),
     createExponentExpansionAnimationAsset(),
     createExponentRadicalRewriteAnimationAsset(),

@@ -53,6 +53,9 @@ import {
 import {
   createConstantForceWorkEnergyAnimationAsset
 } from "./constant-force-work-energy-adapter.ts";
+import {
+  createKpVerifiedGeneratedLinearSolveRuntimeAsset
+} from "./verified-generated-linear-solve-runtime-asset.ts";
 
 export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
   return [
@@ -80,6 +83,7 @@ export function createGeneratedAlgebraAnimationAssets():
   readonly KpAnimationAsset[] {
   return [
     createLinearSolveAnimationAsset(),
+    createKpVerifiedGeneratedLinearSolveRuntimeAsset(),
     createFractionSimplificationAnimationAsset(),
     createExponentExpansionAnimationAsset(),
     createExponentRadicalRewriteAnimationAsset(),

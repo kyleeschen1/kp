@@ -73,7 +73,7 @@ function currentHostability() {
 test("hostability requires every concrete asset slot to resolve an adapter", () => {
   const hostability = currentHostability();
 
-  assert.equal(hostability.length, 35);
+  assert.equal(hostability.length, 36);
   assert.deepEqual(
     Object.fromEntries(
       ["ready", "missing-adapter", "unsupported-surface"].map((status) => [
@@ -82,7 +82,7 @@ test("hostability requires every concrete asset slot to resolve an adapter", () 
       ])
     ),
     {
-      ready: 33,
+      ready: 34,
       "missing-adapter": 2,
       "unsupported-surface": 0
     }

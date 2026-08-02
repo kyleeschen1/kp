@@ -41,6 +41,9 @@ export {
   compileKpXPlusThreeLesson,
   compileKpXPlusThreeTeacherZeroLesson
 } from "./x-plus-three-lesson.ts";
+export {
+  compileKpVerifiedGeneratedLinearSolveLesson
+} from "./verified-generated-linear-solve-lesson.ts";
 
 export {
   compileKpFractionalLinearEquationLesson

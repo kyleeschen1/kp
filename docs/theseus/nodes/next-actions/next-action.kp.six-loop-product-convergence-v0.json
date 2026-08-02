@@ -65,6 +65,26 @@
     {
       "kind": "file",
       "path": "src/tutorial/verified-linear-problem-explanation-compiler.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/verified-generated-linear-solve-session.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/verified-generated-linear-solve-runtime-asset.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/verified-generated-linear-solve-reader.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/compiler/verified-generated-linear-solve-lesson.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-01-verified-generated-linear-solve-product-integration.md"
     }
   ],
   "dependsOn": {
@@ -318,6 +338,60 @@
       "status": "passed",
       "scope": "s08 whitespace audit",
       "checkedAt": "2026-08-01T23:53:34.785Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-linear-solve-product-integration.test.ts tests/verified-generated-linear-solve-session.test.ts tests/verified-linear-problem-animation-compiler.test.ts tests/verified-linear-problem-explanation-compiler.test.ts tests/animation-catalogue-health.test.ts tests/animation-catalogue-seam-atlas.test.ts tests/animation-catalogue-surface-hostability.test.ts tests/semantic-reader-equation-lesson-descriptor.test.ts tests/semantic-reader-route-budget.test.ts",
+      "status": "passed",
+      "scope": "s09 deterministic generated session, native product integration, catalogue truth, and route budget policy",
+      "checkedAt": "2026-08-02T00:35:52.002Z"
+    },
+    {
+      "command": "npm run test:browser:generated-linear-solve",
+      "status": "passed",
+      "scope": "s09 Chromium catalogue and reader behavior including seek, rewind, reduced motion, and iframe erasure",
+      "checkedAt": "2026-08-02T00:35:53.377Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09 TypeScript boundaries across app, node, tests, and domains",
+      "checkedAt": "2026-08-02T00:35:54.650Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s09 complete production build of all routes and catalogue host",
+      "checkedAt": "2026-08-02T00:35:55.894Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s09 concept-room, reader, animation, and operation-presentation ownership",
+      "checkedAt": "2026-08-02T00:35:57.163Z"
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s09 production closure for all twelve reader routes",
+      "checkedAt": "2026-08-02T00:35:58.424Z"
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s09 production erasure for developer review machinery",
+      "checkedAt": "2026-08-02T00:35:59.667Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s09 whitespace integrity",
+      "checkedAt": "2026-08-02T00:36:00.947Z"
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "s09 measurement: shared equation-reader closure 145855 gzip bytes, 855 above its existing 145000 allowance; closure assigned to performance slices s21-s25 without widening the baseline",
+      "checkedAt": "2026-08-02T00:36:02.223Z"
     }
   ],
   "expectedLearning": [
