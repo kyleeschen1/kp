@@ -59,6 +59,9 @@ import {
   type KpAnimationCataloguePreparedSelection
 } from "./animation-catalogue-selection-preparation.ts";
 import {
+  createKpAnimationCatalogueReviewHost
+} from "./animation-catalogue-review-host.ts";
+import {
   createKpEditorAnimationLibrary
 } from "./animation-library.ts";
 import {
@@ -81,9 +84,6 @@ import {
   createParameterizedConstantForceWorkEnergyAnimation,
   writeKpConstantForceWorkEnergyParameters
 } from "./constant-force-work-energy-parameters.ts";
-import {
-  loadKpAnimationCatalogueDevelopmentReview
-} from "./animation-catalogue-review-capture-loader.ts";
 
 export function mountKpAnimationCatalogueApplication(
   root: HTMLElement
@@ -102,9 +102,9 @@ class KpAnimationCatalogueApplication {
       descriptors: this.#descriptors
     });
   readonly #events = new AbortController();
+  readonly #reviewHost = createKpAnimationCatalogueReviewHost();
   #revision = 0;
   #disposed = false;
-  #disposeReview: (() => void) | undefined;
   #disposeHostEvidence: (() => void) | undefined;
 
   constructor(root: HTMLElement) {
@@ -142,8 +142,7 @@ class KpAnimationCatalogueApplication {
     if (this.#disposed) return;
     this.#disposed = true;
     this.#events.abort();
-    this.#disposeReview?.();
-    this.#disposeReview = undefined;
+    this.#reviewHost.dispose();
     this.#disposeHostEvidenceObserver();
     disposeKpEditorAnimationPlayers(this.#root);
     delete this.#root.dataset["kpAnimationCatalogueApplication"];
@@ -356,7 +355,7 @@ class KpAnimationCatalogueApplication {
         hostability: prepared.hostability,
         animation: prepared.animation
       });
-      void this.#mountReview(revision);
+      void this.#mountReview();
     } catch (error: unknown) {
       if (this.#disposed || revision !== this.#revision) return;
       const message = error instanceof Error
@@ -467,7 +466,7 @@ class KpAnimationCatalogueApplication {
         animation: prepared.animation
       });
       restoreKpAnimationCatalogueFocus(input.shell, focus);
-      void this.#mountReview(revision);
+      void this.#mountReview();
     } catch (error: unknown) {
       if (this.#disposed || revision !== this.#revision ||
         !input.shell.isConnected) return;
@@ -507,15 +506,8 @@ class KpAnimationCatalogueApplication {
     this.#disposeHostEvidence = undefined;
   }
 
-  async #mountReview(revision: number): Promise<void> {
-    if (loadKpAnimationCatalogueDevelopmentReview === undefined ||
-      this.#disposeReview !== undefined) return;
-    const client = await loadKpAnimationCatalogueDevelopmentReview();
-    if (this.#disposed || revision !== this.#revision ||
-      this.#disposeReview !== undefined) return;
-    // The provider reads the current shell at capture time, so remounting on
-    // selection would only discard the user's unsent review draft and focus.
-    this.#disposeReview = client.mountKpAnimationCatalogueDevReview(window);
+  async #mountReview(): Promise<void> {
+    await this.#reviewHost.mount();
   }
 
   #filterFromInput(input: HTMLInputElement): void {

@@ -18,6 +18,9 @@ import {
 import {
   createKpAnimationCatalogueSelectionPreparationService
 } from "../animation-catalogue-selection-preparation.ts";
+import {
+  createKpAnimationCatalogueReviewHost
+} from "../animation-catalogue-review-host.ts";
 import { createKpEditorAnimationLibrary } from "../animation-library.ts";
 import KpSvelteCatalogueExemplar from "./KpSvelteCatalogueExemplar.svelte";
 import type {
@@ -40,6 +43,7 @@ export async function mountKpSvelteCatalogueExemplar(input: {
     projection,
     prepare: selectionPreparation.prepare
   });
+  const reviewHost = createKpAnimationCatalogueReviewHost();
   const selection = resolveKpAnimationCatalogueSelection({
     projection,
     artifactId: route.artifactId
@@ -90,6 +94,7 @@ export async function mountKpSvelteCatalogueExemplar(input: {
         }
       }
     });
+    void reviewHost.mount();
   } catch (error: unknown) {
     const message = error instanceof Error
       ? error.message
@@ -108,6 +113,7 @@ export async function mountKpSvelteCatalogueExemplar(input: {
   }
 
   return () => {
+    reviewHost.dispose();
     delete input.root.dataset["kpSvelteCatalogueExemplar"];
     void unmount(component);
   };

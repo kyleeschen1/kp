@@ -341,6 +341,45 @@ test("Svelte narrow inspector overlay returns focus on Escape", async ({ page })
   )).toBe(true);
 });
 
+test("Svelte keeps one Review composer and draft across selection", async ({
+  page
+}) => {
+  await page.goto(
+    `/?artifact=${animationId}&catalogueShell=svelte-exemplar`
+  );
+  const review = page.locator("[data-kp-dev-review-shell]");
+  await expect(review).toHaveCount(1);
+  await expect(review).toHaveAttribute(
+    "data-kp-dev-review-placement",
+    "catalogue-rail"
+  );
+  await expect(review).toHaveAttribute("data-kp-dev-review-available", "true");
+  await review.getByRole("button", { name: "Review" }).click();
+  const comment = review.getByRole("textbox", { name: "What should change?" });
+  await comment.fill("Keep this draft through the asset transition.");
+  await review.evaluate((element) => {
+    element.dataset["kpSvelteReviewIdentity"] = "stable";
+  });
+
+  const economicsId =
+    "animation.economics.supply-demand-equilibrium-shift";
+  await page.locator(
+    `[data-kp-animation-catalogue-row="${economicsId}"] a`
+  ).evaluate((link) => (link as HTMLAnchorElement).click());
+  await expect(page.locator("[data-kp-svelte-catalogue-shell]")).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    economicsId
+  );
+  await expect(page.locator("[data-kp-dev-review-shell]")).toHaveCount(1);
+  await expect(review).toHaveAttribute(
+    "data-kp-svelte-review-identity",
+    "stable"
+  );
+  await expect(comment).toHaveValue(
+    "Keep this draft through the asset transition."
+  );
+});
+
 test("Svelte exemplar renders the not-found terminal state in its reserved stage", async ({
   page
 }) => {

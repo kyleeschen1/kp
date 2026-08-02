@@ -131,7 +131,8 @@
     {
       "id": "s13",
       "title": "Preserve Review composer and draft lifecycle",
-      "status": "planned"
+      "summary": "Centralized both catalogue shells on one idempotent development Review host. It dynamically mounts the existing provider once, preserves the same composer and draft across selection and history changes, and disposes once with the owning application.",
+      "status": "complete"
     },
     {
       "id": "s14",

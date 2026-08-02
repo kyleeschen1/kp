@@ -3,23 +3,21 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 test("in-shell selection keeps one review composer lifecycle", async () => {
-  const source = await readFile(
-    "src/editor/animation-catalogue-application.ts",
-    "utf8"
-  );
-  const mountReviewStart = source.indexOf("async #mountReview");
-  const mountReview = source.slice(
-    mountReviewStart,
-    source.indexOf("  #filterFromInput", mountReviewStart)
-  );
+  const [source, host, svelteEntry] = await Promise.all([
+    readFile("src/editor/animation-catalogue-application.ts", "utf8"),
+    readFile("src/editor/animation-catalogue-review-host.ts", "utf8"),
+    readFile(
+      "src/editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts",
+      "utf8"
+    )
+  ]);
 
-  assert.match(
-    mountReview,
-    /this\.#disposeReview !== undefined\) return;/
-  );
-  assert.doesNotMatch(mountReview, /this\.#disposeReview\?\.\(\)/);
-  assert.match(
-    source,
-    /dispose\(\): void \{[\s\S]*this\.#disposeReview\?\.\(\)/
-  );
+  assert.match(source, /#reviewHost = createKpAnimationCatalogueReviewHost/);
+  assert.match(source, /this\.#reviewHost\.dispose\(\)/);
+  assert.match(svelteEntry, /const reviewHost = createKpAnimationCatalogueReviewHost/);
+  assert.match(svelteEntry, /void reviewHost\.mount\(\)/);
+  assert.match(svelteEntry, /reviewHost\.dispose\(\)/);
+  assert.match(host, /pending \?\?=/);
+  assert.match(host, /disposeReview !== undefined/);
+  assert.doesNotMatch(host, /capture\(|createNote|sessionStorage/);
 });

@@ -513,11 +513,46 @@
       "scope": "s12-performance",
       "checkedAt": "2026-08-02T16:26:25.408Z",
       "notes": "Outer 10459, main host 255291, measured catalogue 171452, and place-value incremental 71797 gzip bytes remain below frozen ceilings."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "s13-focused",
+      "checkedAt": "2026-08-02T16:30:45.180Z",
+      "notes": "34 Review lifecycle, migration ownership, host, shell, and compiler tests passed."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s13-types",
+      "checkedAt": "2026-08-02T16:30:46.180Z",
+      "notes": "Svelte checker reported zero errors and zero warnings."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "s13-browser",
+      "checkedAt": "2026-08-02T16:30:47.064Z",
+      "notes": "Nine Chromium checks passed; exactly one catalogue-rail Review host and the same unsent textarea draft survived an in-shell asset transition."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "s13-production",
+      "checkedAt": "2026-08-02T16:30:47.940Z",
+      "notes": "Production Vite build passed with 1006 transformed modules and Review retained behind its development-only dynamic loader."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s13-performance",
+      "checkedAt": "2026-08-02T16:30:48.852Z",
+      "notes": "Outer 10459, main host 255291, measured catalogue 171577, and place-value incremental 71797 gzip bytes remain below frozen ceilings."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1 through 12 are complete. URL, focus, keyboard overlay, and rail-scroll behavior now match through shared hosts; the persistent lower-left Review composer is next."
+    "summary": "Slices 1 through 13 are complete. Lower-left Review lifecycle and draft persistence now match; bespoke economics and physics parameters plus the generated solve companion are next."
   },
   "expectedLearning": [
     "Approved revision 22 places this active phase in now."

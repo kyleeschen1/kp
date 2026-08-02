@@ -38,6 +38,7 @@
     "hydrateKpEditorAnimationPlayers"
   ],
   "lifecycleOwnerMigrations": {
+    "#disposeReview": "createKpAnimationCatalogueReviewHost",
     "#loadSelectedCapabilities": "kpEditorSelectedSurfaceCapabilityHost"
   },
   "bundleLimitsGzipBytes": {
