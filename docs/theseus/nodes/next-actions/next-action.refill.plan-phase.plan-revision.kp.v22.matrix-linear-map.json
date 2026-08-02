@@ -261,11 +261,39 @@
       "scope": "standard",
       "checkedAt": "2026-08-02T21:09:28.874Z",
       "notes": "All typechecks passed after accessibility projection laws."
+    },
+    {
+      "command": "npm run test:matrix-linear-map",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T21:19:17.619Z",
+      "notes": "40/40 semantic and runtime checks remained green after the exemplar renderer binding."
+    },
+    {
+      "command": "npm run test:browser:matrix-linear-map",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-08-02T21:19:18.801Z",
+      "notes": "Chromium confirms the canonical operation bank, persistent-reference policy, no depletion, exact row playback, and visible inputs at settlement."
+    },
+    {
+      "command": "npm run visual:matrix-linear-map",
+      "status": "passed",
+      "scope": "visual",
+      "checkedAt": "2026-08-02T21:19:19.742Z",
+      "notes": "Wide and 390px captures show a contained operation bank below the equation with persistent A and v, distinct row lanes, and no document overflow; graph remains an unpainted target until s15."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T21:19:20.666Z",
+      "notes": "All typechecks passed with the rank-6 equation renderer binding."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s12 defined continuous versus discrete motion policy, finite static checkpoints, exact narrated descriptions, and normalized semantic direction without changing matrix truth."
+    "summary": "Slice s13 replaced the canonical pill overlay with a compact KaTeX operation bank whose input references persist and whose row lanes visualize information routes under the shared rank-6 frame."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."

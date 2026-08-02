@@ -137,6 +137,12 @@ import {
   type KpMatrixVectorCompositionChoreographyFrame
 } from "../animation/matrix-vector-composition-choreography.ts";
 import {
+  createKpMatrixLinearMapPlan,
+  sampleKpMatrixLinearMapFrame,
+  type KpMatrixLinearMapFrame,
+  type KpMatrixLinearMapPlan
+} from "../animation/matrix-linear-map-frame.ts";
+import {
   createKpMatrixMatrixCompositionChoreography,
   sampleKpMatrixMatrixCompositionChoreography,
   type KpMatrixMatrixCompositionChoreography,
@@ -240,6 +246,7 @@ const dotProductTraversalChoreographyCache =
   new Map<string, KpDotProductTraversalChoreography>();
 const matrixVectorCompositionChoreographyCache =
   new Map<string, KpMatrixVectorCompositionChoreography>();
+const matrixLinearMapPlanCache = new Map<string, KpMatrixLinearMapPlan>();
 const matrixMatrixCompositionChoreographyCache =
   new Map<string, KpMatrixMatrixCompositionChoreography>();
 const derivativePowerChoreographyCache =
@@ -278,6 +285,8 @@ export interface KpEditorEquationStageFrame {
   readonly matrixVectorComposition?: {
     readonly choreography: KpMatrixVectorCompositionChoreography;
     readonly frame: KpMatrixVectorCompositionChoreographyFrame;
+    readonly rank6Plan?: KpMatrixLinearMapPlan | undefined;
+    readonly rank6Frame?: KpMatrixLinearMapFrame | undefined;
   } | undefined;
   readonly matrixMatrixComposition?: {
     readonly choreography: KpMatrixMatrixCompositionChoreography;
@@ -562,7 +571,9 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
           transitionElement,
           direction: state.direction,
           choreography: frame.matrixVectorComposition.choreography,
-          frame: frame.matrixVectorComposition.frame
+          frame: frame.matrixVectorComposition.frame,
+          rank6Plan: frame.matrixVectorComposition.rank6Plan,
+          rank6Frame: frame.matrixVectorComposition.rank6Frame
         });
       }
       if (index === 0 && frame.matrixMatrixComposition !== undefined) {
@@ -1447,6 +1458,24 @@ function createMatrixVectorCompositionFrame(
     choreography = createKpMatrixVectorCompositionChoreography(animation);
     matrixVectorCompositionChoreographyCache.set(animation.id, choreography);
   }
+  let rank6Plan: KpMatrixLinearMapPlan | undefined;
+  let rank6Frame: KpMatrixLinearMapFrame | undefined;
+  if (
+    animation.id ===
+    "animation.generated.linear-algebra.matrix-vector.two-by-two"
+  ) {
+    rank6Plan = matrixLinearMapPlanCache.get(animation.id);
+    if (rank6Plan === undefined) {
+      rank6Plan = createKpMatrixLinearMapPlan(animation);
+      matrixLinearMapPlanCache.set(animation.id, rank6Plan);
+    }
+    rank6Frame = sampleKpMatrixLinearMapFrame({
+      plan: rank6Plan,
+      progress,
+      direction: state.direction,
+      accessibilityMode: "full-motion"
+    });
+  }
   return {
     choreography,
     frame: sampleKpMatrixVectorCompositionChoreography({
@@ -1454,7 +1483,10 @@ function createMatrixVectorCompositionFrame(
       progress,
       direction: state.direction,
       accessibilityMode: "full"
-    })
+    }),
+    ...(rank6Plan === undefined || rank6Frame === undefined
+      ? {}
+      : { rank6Plan, rank6Frame })
   };
 }
 
@@ -2140,6 +2172,8 @@ function applyMatrixVectorCompositionChoreography(input: {
   readonly direction: "forward" | "rewind";
   readonly choreography: KpMatrixVectorCompositionChoreography;
   readonly frame: KpMatrixVectorCompositionChoreographyFrame;
+  readonly rank6Plan?: KpMatrixLinearMapPlan | undefined;
+  readonly rank6Frame?: KpMatrixLinearMapFrame | undefined;
 }): void {
   const accessibilityMode = (() => {
     switch (editorAccessibilityMode(input.transitionElement)) {
@@ -2196,10 +2230,24 @@ function applyMatrixVectorCompositionChoreography(input: {
       token.dataset["kpEditorMatrixVectorFocusRow"] = String(focus.semanticIndex);
     });
   });
+  const presentationMode = editorAccessibilityMode(input.transitionElement);
+  const rank6Frame = input.rank6Plan === undefined || input.rank6Frame === undefined
+    ? undefined
+    : presentationMode === "full-motion"
+      ? input.rank6Frame
+      : sampleKpMatrixLinearMapFrame({
+          plan: input.rank6Plan,
+          progress: input.direction === "forward"
+            ? input.rank6Frame.semanticProgress
+            : 1 - input.rank6Frame.semanticProgress,
+          direction: input.direction,
+          accessibilityMode: presentationMode
+        });
   syncMatrixVectorCompositionOverlay(
     input.transitionElement,
     input.choreography,
-    sampled
+    sampled,
+    rank6Frame
   );
   const narration = input.transitionElement
     .closest<HTMLElement>("[data-kp-editor-animation-player]")
@@ -2209,7 +2257,7 @@ function applyMatrixVectorCompositionChoreography(input: {
       (row) => row.semanticIndex === sampled.motion.activeRowIndex
     );
     narration.replaceChildren(document.createTextNode(
-      active === undefined
+      rank6Frame?.accessibility.liveNarration ?? (active === undefined
         ? "Each resolved component persists while the next matrix row meets the vector."
         : "Row " + (active.semanticIndex + 1) + ": " +
           active.rowValues
@@ -2217,7 +2265,7 @@ function applyMatrixVectorCompositionChoreography(input: {
               value + " times " + active.vectorValues[index]
             )
             .join(" plus ") +
-          " equals " + active.result + "."
+          " equals " + active.result + ".")
     ));
   }
 }
@@ -2225,8 +2273,13 @@ function applyMatrixVectorCompositionChoreography(input: {
 function syncMatrixVectorCompositionOverlay(
   transition: HTMLElement,
   choreography: KpMatrixVectorCompositionChoreography,
-  frame: KpMatrixVectorCompositionChoreographyFrame
+  frame: KpMatrixVectorCompositionChoreographyFrame,
+  rank6Frame?: KpMatrixLinearMapFrame | undefined
 ): void {
+  if (rank6Frame !== undefined) {
+    syncMatrixLinearMapOperationBank(transition, choreography, rank6Frame);
+    return;
+  }
   let overlay = transition.querySelector<HTMLElement>(
     "[data-kp-editor-matrix-vector-overlay]"
   );
@@ -2308,6 +2361,102 @@ function syncMatrixVectorCompositionOverlay(
   ) {
     markEquationOverlayGeometryMeasured(overlay, geometryRevision);
   }
+}
+
+function syncMatrixLinearMapOperationBank(
+  transition: HTMLElement,
+  choreography: KpMatrixVectorCompositionChoreography,
+  frame: KpMatrixLinearMapFrame
+): void {
+  let bank = transition.querySelector<HTMLElement>(
+    "[data-kp-editor-matrix-operation-bank]"
+  );
+  if (bank === null) {
+    bank = document.createElement("section");
+    bank.className = "editor-equation-stage__matrix-operation-bank";
+    bank.dataset["kpEditorMatrixVectorOverlay"] = choreography.id;
+    bank.dataset["kpEditorMatrixOperationBank"] = frame.animationId;
+    bank.dataset["kpEditorMatrixOperationInputPolicy"] =
+      "persistent-reference";
+    bank.dataset["kpEditorMatrixOperationDepletion"] = "false";
+    bank.setAttribute("role", "img");
+    bank.innerHTML = `
+      <div class="editor-equation-stage__matrix-operation-inputs">
+        <span data-kp-editor-matrix-operation-input="matrix">
+          ${renderLatexToHtml(
+            String.raw`A=\begin{bmatrix}2&1\\0&3\end{bmatrix}`,
+            { displayMode: false }
+          )}
+        </span>
+        <span data-kp-editor-matrix-operation-input="vector">
+          ${renderLatexToHtml(
+            String.raw`\mathbf v=\begin{bmatrix}4\\5\end{bmatrix}`,
+            { displayMode: false }
+          )}
+        </span>
+      </div>
+      <div class="editor-equation-stage__matrix-operation-rows">
+        ${choreography.rows.map((row) => `
+          <div class="editor-equation-stage__matrix-operation-row" data-kp-editor-matrix-vector-row="${row.semanticIndex}" data-kp-editor-matrix-vector-intermediate-object-id="${row.intermediateObjectId}">
+            <span class="editor-equation-stage__matrix-operation-row-label">
+              ${renderLatexToHtml(`r_{${row.semanticIndex + 1}}`, { displayMode: false })}
+            </span>
+            <span class="editor-animation-player__visually-hidden">
+              ${renderLatexToHtml(row.rowLatex, { displayMode: false })}
+            </span>
+            <span class="editor-equation-stage__matrix-operation-flow">
+              ${row.rowValues.map((matrixValue, columnIndex) => `
+                <span class="editor-equation-stage__matrix-operation-route" data-kp-editor-matrix-operation-contribution="${row.semanticIndex}.${columnIndex}">
+                  <span>${renderLatexToHtml(
+                    `${matrixValue} \\cdot ${row.vectorValues[columnIndex]}`,
+                    { displayMode: false }
+                  )}</span>
+                  <i aria-hidden="true"></i>
+                </span>
+              `).join("")}
+            </span>
+            <span class="editor-equation-stage__matrix-operation-output" data-kp-editor-matrix-operation-output="${row.semanticIndex}">
+              ${renderLatexToHtml(String(row.result), { displayMode: false })}
+            </span>
+          </div>
+        `).join("")}
+      </div>
+    `;
+    transition.append(bank);
+  }
+  bank.setAttribute("aria-label", frame.accessibility.description);
+  bank.dataset["kpEditorMatrixOperationAccessibilityMode"] =
+    frame.accessibilityMode;
+  bank.dataset["kpEditorMatrixOperationMotionPolicy"] =
+    frame.accessibility.motionPolicy;
+  frame.operationBank.rows.forEach((row) => {
+    const rowElement = bank!.querySelector<HTMLElement>(
+      `[data-kp-editor-matrix-vector-row="${row.semanticIndex}"]`
+    );
+    if (rowElement === null) return;
+    rowElement.dataset["kpEditorMatrixVectorRowStatus"] = row.status;
+    rowElement.dataset["kpEditorMatrixVectorResult"] = String(row.result);
+    rowElement.style.setProperty(
+      "--kp-matrix-operation-row-emphasis",
+      row.status === "active" ? "1" : row.status === "resolved" ? "0.72" : "0.36"
+    );
+    row.contributions.forEach((contribution) => {
+      const route = rowElement.querySelector<HTMLElement>(
+        `[data-kp-editor-matrix-operation-contribution="${row.semanticIndex}.${contribution.columnIndex}"]`
+      );
+      route?.style.setProperty(
+        "--kp-matrix-operation-route-progress",
+        String(row.routeProgress)
+      );
+    });
+    const output = rowElement.querySelector<HTMLElement>(
+      `[data-kp-editor-matrix-operation-output="${row.semanticIndex}"]`
+    );
+    output?.style.setProperty(
+      "--kp-matrix-operation-output-progress",
+      String(row.coordinateProgress)
+    );
+  });
 }
 
 function applyMatrixMatrixCompositionChoreography(input: {

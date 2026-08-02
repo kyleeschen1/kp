@@ -45,6 +45,18 @@ test("rank-6 matrix-vector exemplar preserves exact row-dot playback", async ({
   )).toHaveCount(1);
 
   await scrubber.fill("0.18");
+  const operationBank = transition.locator(
+    "[data-kp-editor-matrix-operation-bank]"
+  );
+  await expect(operationBank).toBeVisible();
+  await expect(operationBank).toHaveAttribute(
+    "data-kp-editor-matrix-operation-input-policy",
+    "persistent-reference"
+  );
+  await expect(operationBank).toHaveAttribute(
+    "data-kp-editor-matrix-operation-depletion",
+    "false"
+  );
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-matrix-vector-active-row",
     "0"
@@ -60,6 +72,12 @@ test("rank-6 matrix-vector exemplar preserves exact row-dot playback", async ({
   );
 
   await scrubber.fill("1");
+  await expect(operationBank.locator(
+    '[data-kp-editor-matrix-operation-input="matrix"]'
+  )).toHaveCSS("opacity", "1");
+  await expect(operationBank.locator(
+    '[data-kp-editor-matrix-operation-input="vector"]'
+  )).toHaveCSS("opacity", "1");
   await expect(player.locator(
     "[data-kp-editor-equation-target] [data-kp-editor-equation-object-id]"
   )).toHaveAttribute(

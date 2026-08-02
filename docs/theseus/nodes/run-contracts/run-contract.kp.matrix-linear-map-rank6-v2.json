@@ -132,7 +132,8 @@
     {
       "id": "s13",
       "title": "Render persistent operation-bank flow",
-      "status": "planned"
+      "summary": "Rendered the canonical persistent operation-bank exemplar on the equation surface. A and v stay fully visible, two row lanes route exact operand pairs without depletion, resolved coordinates persist, accessibility descriptions are attached, and wide/narrow captures remain contained. Other matrix callers retain their prior overlay pending review and pressure.",
+      "status": "complete"
     },
     {
       "id": "s14",

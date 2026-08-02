@@ -50,8 +50,10 @@ try {
         );
         return catalogue?.dataset["kpAnimationCatalogueSelection"] ===
           expectedId &&
-          catalogue.dataset["kpAnimationCatalogueHostOutcome"] === "painted" &&
           player?.dataset["kpEditorAnimationHydrated"] === "true" &&
+          player.querySelector<HTMLElement>(
+            '[data-kp-editor-animation-surface-slot="equation"]'
+          )?.dataset["kpEditorAnimationAdapterStatus"] === "ready" &&
           Math.abs(Number(player.dataset["kpEditorAnimationProgress"]) -
             expectedProgress) < 0.001;
       }, { expectedId: animationId, expectedProgress: checkpoint.progress });
