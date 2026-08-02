@@ -156,11 +156,25 @@
       "scope": "standard",
       "checkedAt": "2026-08-02T20:47:43.009Z",
       "notes": "Application, node, test, Svelte, and domain typechecks passed with the stable rank-6 command surface."
+    },
+    {
+      "command": "npm run test:matrix-linear-map",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T20:50:07.572Z",
+      "notes": "27/27 checks passed including exact persistent-input operation-bank products, fold topology, selectors, and shared vector reuse."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T20:50:09.421Z",
+      "notes": "All typechecks passed with the renderer-neutral operation-bank contract."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s05 added stable focused semantic, scoped Chromium, and committed visual-capture commands; later exemplar slices can extend them without mutable scratch tooling."
+    "summary": "Slice s06 authored a local matrix-vector operation-bank contract derived from semantic choreography: persistent information inputs, selector-bound products, ordered row traversal, and products-to-gather-to-coordinate folds."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."

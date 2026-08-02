@@ -90,7 +90,8 @@
     {
       "id": "s06",
       "title": "Author operation-bank exemplar contract",
-      "status": "planned"
+      "summary": "Added a framework-neutral, matrix-vector-specific operation-bank contract. It binds exact selector-addressed products [8,5] and [0,15] to outputs [13,15], preserves vector inputs across rows, and explicitly forbids depletion/fluid semantics; no renderer changed.",
+      "status": "complete"
     },
     {
       "id": "s07",
