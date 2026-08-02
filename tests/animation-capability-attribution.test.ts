@@ -3,12 +3,35 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
+  assertKpSelectedApplicationCapabilitySignals,
   assertKpSelectedMathCapabilitySignals,
   assertKpSelectedOptionalCapabilitySignals,
   createKpCapabilityAssetOwnershipIndex,
   createKpCapabilityRouteMatrix,
   type KpCapabilityRouteAttribution
 } from "../scripts/animation-capability-attribution.ts";
+
+const catalogueRouteIds = [
+  "equation-solve-x",
+  "graph-svg-vector",
+  "graph-svg-economics",
+  "exact-quantity",
+  "graph-webgl-3d",
+  "programming-trace"
+] as const;
+
+test("catalogue routes own their narrow application closure", () => {
+  assert.doesNotThrow(() => assertKpSelectedApplicationCapabilitySignals({
+    catalogueApplicationRoutes: catalogueRouteIds,
+    legacyMainRoutes: [],
+    animationPlayerGestaltRoutes: []
+  }));
+  assert.throws(() => assertKpSelectedApplicationCapabilitySignals({
+    catalogueApplicationRoutes: catalogueRouteIds,
+    legacyMainRoutes: ["graph-svg-economics"],
+    animationPlayerGestaltRoutes: []
+  }), /legacy main application capability routes changed/);
+});
 
 test("selected math capability signal ratchet rejects unrelated routes", () => {
   assert.doesNotThrow(() => assertKpSelectedMathCapabilitySignals({
@@ -129,14 +152,7 @@ test("stable attribution command covers the approved six-route matrix twice", as
     packageJson.scripts?.["perf:animation:attribution"],
     "node --disable-warning=ExperimentalWarning scripts/animation-capability-attribution.ts"
   );
-  for (const routeId of [
-    "equation-solve-x",
-    "graph-svg-vector",
-    "graph-svg-economics",
-    "exact-quantity",
-    "graph-webgl-3d",
-    "programming-trace"
-  ]) {
+  for (const routeId of catalogueRouteIds) {
     assert.match(scriptSource, new RegExp(`id: "${routeId}"`));
   }
   assert.match(scriptSource, /routeRuns: 2/);
@@ -147,6 +163,26 @@ test("stable attribution command covers the approved six-route matrix twice", as
   );
   assert.match(reviewSource, /all six closures reproduced exactly/);
   assert.match(reviewSource, /250,000-byte script and 2\.5-second LCP/);
+});
+
+test("bundle boundary measures the representative catalogue route closure", async () => {
+  const source = await readFile(
+    "scripts/check-animation-library-bundle-boundary.ts",
+    "utf8"
+  );
+
+  assert.match(
+    source,
+    /"src\/animation\/catalog-packs\/economics\.ts"/
+  );
+  assert.match(
+    source,
+    /"src\/editor\/graph-svg-surface-capability\.ts"/
+  );
+  assert.match(
+    source,
+    /measuredCatalogueRouteScriptFiles[\s\S]*extname\(file\) === "\.js"/
+  );
 });
 
 function route(

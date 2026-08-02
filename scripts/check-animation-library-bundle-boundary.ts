@@ -20,14 +20,14 @@ type ViteManifest = Readonly<Record<string, ViteManifestChunk>>;
 export interface KpAnimationLibraryBundleBoundaryMeasurement {
   readonly outerGzipBytes: number;
   readonly mainHostGzipBytes: number;
-  readonly selectedMathCapabilityGzipBytes: number;
+  readonly measuredCatalogueRouteScriptGzipBytes: number;
   readonly placeValueIncrementalGzipBytes: number;
   readonly outerFiles: readonly string[];
   readonly forbiddenOuterFiles: readonly string[];
   readonly fileAttribution: Readonly<{
     outer: readonly KpBundleFileAttribution[];
     mainHost: readonly KpBundleFileAttribution[];
-    selectedMathCapability: readonly KpBundleFileAttribution[];
+    measuredCatalogueRouteScript: readonly KpBundleFileAttribution[];
     placeValueIncremental: readonly KpBundleFileAttribution[];
   }>;
   readonly deltas: KpAnimationLibraryBundleBoundaryDeltas;
@@ -36,7 +36,7 @@ export interface KpAnimationLibraryBundleBoundaryMeasurement {
 export interface KpAnimationLibraryBundleBoundaryDeltas {
   readonly outerGzipBytes: number;
   readonly mainHostGzipBytes: number;
-  readonly selectedMathCapabilityGzipBytes: number;
+  readonly measuredCatalogueRouteScriptGzipBytes: number;
   readonly placeValueIncrementalGzipBytes: number;
 }
 
@@ -48,10 +48,10 @@ export const kpAnimationLibraryBundleBoundary = Object.freeze({
   // The repaired production closure measures 476,810 bytes; the ceiling
   // leaves less than 3% headroom while making subsequent growth explicit.
   mainHostGzipBytes: 490_000,
-  // KaTeX and its equation/graph label presenters are now a selected surface
-  // capability. Keep their shared closure explicit instead of charging it to
-  // every feature pack after removing it from the default host.
-  selectedMathCapabilityGzipBytes: 190_000,
+  // This is the production-script closure for the measured economics route:
+  // catalogue application + economics pack + selected graph/KaTeX surface.
+  // Runtime transfer has a separate unchanged 250 KB product target.
+  measuredCatalogueRouteScriptGzipBytes: 190_000,
   // Selecting place-value addition may pay for its pack; merely opening the
   // library may not.
   placeValueIncrementalGzipBytes: 75_000
@@ -69,6 +69,10 @@ export async function inspectKpAnimationLibraryBundleBoundary(
     ["canonical-animation-review.html"]
   );
   const mainKeys = collectClosureKeys(manifest, ["src/main.ts"]);
+  const catalogueKeys = collectClosureKeys(
+    manifest,
+    ["src/editor/animation-catalogue-application.ts"]
+  );
   const selectedMathRoots = Object.keys(manifest).filter((key) =>
     /src\/editor\/(?:equation|graph-svg)-surface-capability\.ts/.test(key)
   );
@@ -78,8 +82,13 @@ export async function inspectKpAnimationLibraryBundleBoundary(
     );
   }
   const selectedMathKeys = collectClosureKeys(manifest, selectedMathRoots);
-  const incrementalSelectedMathKeys = new Set(
-    [...selectedMathKeys].filter((key) => !mainKeys.has(key))
+  const measuredCatalogueRouteKeys = collectClosureKeys(
+    manifest,
+    [
+      "src/editor/animation-catalogue-application.ts",
+      "src/animation/catalog-packs/economics.ts",
+      "src/editor/graph-svg-surface-capability.ts"
+    ]
   );
   const placeValueRoots = Object.entries(manifest)
     .filter(([key, chunk]) =>
@@ -93,15 +102,15 @@ export async function inspectKpAnimationLibraryBundleBoundary(
   const placeValueKeys = collectClosureKeys(manifest, placeValueRoots);
   const incrementalPlaceValueKeys = new Set(
     [...placeValueKeys].filter((key) =>
-      !mainKeys.has(key) && !selectedMathKeys.has(key)
+      !catalogueKeys.has(key) && !selectedMathKeys.has(key)
     )
   );
   const outerFiles = filesForKeys(manifest, outerKeys);
   const mainHostFiles = filesForKeys(manifest, mainKeys);
-  const selectedMathCapabilityFiles = filesForKeys(
+  const measuredCatalogueRouteScriptFiles = filesForKeys(
     manifest,
-    incrementalSelectedMathKeys
-  );
+    measuredCatalogueRouteKeys
+  ).filter((file) => extname(file) === ".js");
   const placeValueIncrementalFiles = filesForKeys(
     manifest,
     incrementalPlaceValueKeys
@@ -109,12 +118,15 @@ export async function inspectKpAnimationLibraryBundleBoundary(
   const [
     outer,
     mainHost,
-    selectedMathCapability,
+    measuredCatalogueRouteScript,
     placeValueIncremental
   ] = await Promise.all([
     measureKpBundleClosureAttribution(distRoot, outerFiles),
     measureKpBundleClosureAttribution(distRoot, mainHostFiles),
-    measureKpBundleClosureAttribution(distRoot, selectedMathCapabilityFiles),
+    measureKpBundleClosureAttribution(
+      distRoot,
+      measuredCatalogueRouteScriptFiles
+    ),
     measureKpBundleClosureAttribution(distRoot, placeValueIncrementalFiles)
   ]);
   const forbiddenOuterFiles = outerFiles.filter((file) =>
@@ -124,7 +136,8 @@ export async function inspectKpAnimationLibraryBundleBoundary(
   const totals = {
     outerGzipBytes: outer.gzipBytes,
     mainHostGzipBytes: mainHost.gzipBytes,
-    selectedMathCapabilityGzipBytes: selectedMathCapability.gzipBytes,
+    measuredCatalogueRouteScriptGzipBytes:
+      measuredCatalogueRouteScript.gzipBytes,
     placeValueIncrementalGzipBytes: placeValueIncremental.gzipBytes
   };
   return Object.freeze({
@@ -134,7 +147,7 @@ export async function inspectKpAnimationLibraryBundleBoundary(
     fileAttribution: Object.freeze({
       outer: outer.files,
       mainHost: mainHost.files,
-      selectedMathCapability: selectedMathCapability.files,
+      measuredCatalogueRouteScript: measuredCatalogueRouteScript.files,
       placeValueIncremental: placeValueIncremental.files
     }),
     deltas: measureKpAnimationLibraryBundleBoundaryDeltas(totals)
@@ -146,7 +159,7 @@ export function measureKpAnimationLibraryBundleBoundaryDeltas(
     KpAnimationLibraryBundleBoundaryMeasurement,
     | "outerGzipBytes"
     | "mainHostGzipBytes"
-    | "selectedMathCapabilityGzipBytes"
+    | "measuredCatalogueRouteScriptGzipBytes"
     | "placeValueIncrementalGzipBytes"
   >
 ): KpAnimationLibraryBundleBoundaryDeltas {
@@ -159,9 +172,9 @@ export function measureKpAnimationLibraryBundleBoundaryDeltas(
       measurement.mainHostGzipBytes,
       kpAnimationLibraryBundleBoundary.mainHostGzipBytes
     ),
-    selectedMathCapabilityGzipBytes: kpBundleBudgetDeltaBytes(
-      measurement.selectedMathCapabilityGzipBytes,
-      kpAnimationLibraryBundleBoundary.selectedMathCapabilityGzipBytes
+    measuredCatalogueRouteScriptGzipBytes: kpBundleBudgetDeltaBytes(
+      measurement.measuredCatalogueRouteScriptGzipBytes,
+      kpAnimationLibraryBundleBoundary.measuredCatalogueRouteScriptGzipBytes
     ),
     placeValueIncrementalGzipBytes: kpBundleBudgetDeltaBytes(
       measurement.placeValueIncrementalGzipBytes,
@@ -220,10 +233,10 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
       kpAnimationLibraryBundleBoundary.mainHostGzipBytes
       ? `main host is ${measurement.mainHostGzipBytes} gzip bytes`
       : undefined,
-    measurement.selectedMathCapabilityGzipBytes >
-      kpAnimationLibraryBundleBoundary.selectedMathCapabilityGzipBytes
-      ? "selected math capability is " +
-        `${measurement.selectedMathCapabilityGzipBytes} gzip bytes`
+    measurement.measuredCatalogueRouteScriptGzipBytes >
+      kpAnimationLibraryBundleBoundary.measuredCatalogueRouteScriptGzipBytes
+      ? "measured catalogue route script closure is " +
+        `${measurement.measuredCatalogueRouteScriptGzipBytes} gzip bytes`
       : undefined,
     measurement.placeValueIncrementalGzipBytes >
       kpAnimationLibraryBundleBoundary.placeValueIncrementalGzipBytes

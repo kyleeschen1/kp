@@ -189,6 +189,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-catalogue-stage-reservation-and-performance-probes.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-animation-performance-closeout.md"
     }
   ],
   "dependsOn": {
@@ -1193,11 +1197,81 @@
       "status": "passed",
       "scope": "s24-layout-metrics",
       "checkedAt": "2026-08-02T03:45:40.361Z"
+    },
+    {
+      "command": "focused-capability-boundary-and-performance-tests",
+      "status": "passed",
+      "scope": "s25-performance-closeout",
+      "checkedAt": "2026-08-02T04:28:25.198Z",
+      "notes": "24-tests-pass"
+    },
+    {
+      "command": "npm-run-build",
+      "status": "passed",
+      "scope": "s25-performance-closeout",
+      "checkedAt": "2026-08-02T04:28:26.158Z",
+      "notes": "typecheck-domains-and-production-build-pass"
+    },
+    {
+      "command": "npm-run-perf-animation-attribution",
+      "status": "passed",
+      "scope": "s25-performance-closeout",
+      "checkedAt": "2026-08-02T04:28:27.111Z",
+      "notes": "six-routes-twice-reproducible-economics-transfer-187003-catalogue-app-all-legacy-main-and-gestalt-none"
+    },
+    {
+      "command": "npm-run-perf-animation",
+      "status": "passed",
+      "scope": "s25-performance-closeout",
+      "checkedAt": "2026-08-02T04:28:28.072Z",
+      "notes": "transfer-187003-lcp-2204-cls-point-000105-interaction-35-point-8-frame-p95-17-point-6-only-loading-longtask-target-residual-117"
+    },
+    {
+      "command": "npm-run-perf-animation-strict",
+      "status": "failed",
+      "scope": "s25-exact-residual",
+      "checkedAt": "2026-08-02T04:28:29.048Z",
+      "notes": "fixed-50ms-loading-longtask-target-remains-native-katex-and-final-app-evaluation-attributed-one-noisy-frame-p95-sample-not-normalized"
+    },
+    {
+      "command": "npm-run-test-browser-economics-equilibrium",
+      "status": "passed",
+      "scope": "s25-cross-browser",
+      "checkedAt": "2026-08-02T04:28:29.975Z",
+      "notes": "chromium-firefox-webkit-review-capture-history-seek-and-parameter-test-pass"
+    },
+    {
+      "command": "npm-run-test-browser-animation-equation-capability",
+      "status": "passed",
+      "scope": "s25-route-boundary",
+      "checkedAt": "2026-08-02T04:28:30.954Z",
+      "notes": "five-chromium-tests-pass-catalogue-and-full-editor-runtime-ownership-proved"
+    },
+    {
+      "command": "catalogue-vector-3d-preservation-browser-matrix",
+      "status": "passed",
+      "scope": "s25-preservation",
+      "checkedAt": "2026-08-02T04:28:31.948Z",
+      "notes": "vector-three-and-Graph3D-two-chromium-tests-pass"
+    },
+    {
+      "command": "npm-run-check-animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s25-performance-closeout",
+      "checkedAt": "2026-08-02T04:28:32.882Z",
+      "notes": "measured-route-script-gzip-169321-under-190000-with-unchanged-ceiling"
+    },
+    {
+      "command": "architecture-production-promotion-gates",
+      "status": "passed",
+      "scope": "s25-performance-closeout",
+      "checkedAt": "2026-08-02T04:28:33.837Z",
+      "notes": "architecture-dev-review-production-and-promotion-memory-pass"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s24-shared-stage-reservation-and-startup-probes-complete-cls-below-budget-three-measured-target-residuals-assigned-to-s25"
+    "summary": "s25-route-split-cuts-economics-transfer-42-percent-script-LCP-CLS-interaction-and-frame-targets-pass-native-katex-loading-longtask-residual-attributed"
   },
   "expectedLearning": [
     "Identify which catalogue, generated-session, vector, and programming seams are genuinely shared after concrete caller pressure.",

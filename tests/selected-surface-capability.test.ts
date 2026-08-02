@@ -103,3 +103,32 @@ test("optional editor inspectors and WebGL controls stay behind dynamic callers"
     /import\("\.\/animation-diagnostics-capability\.ts"\)/
   );
 });
+
+test("catalogue bootstrap selects the narrow application boundary", async () => {
+  const [bootstrapSource, catalogueSource, playerControllerSource] =
+    await Promise.all([
+      readFile("src/bootstrap.ts", "utf8"),
+      readFile("src/editor/animation-catalogue-application.ts", "utf8"),
+      readFile("src/editor/animation-player-controller.ts", "utf8")
+    ]);
+
+  assert.match(
+    bootstrapSource,
+    /import\(\s*"\.\/editor\/animation-catalogue-application\.ts"\s*\)/
+  );
+  assert.match(bootstrapSource, /await import\("\.\/main\.ts"\)/);
+  assert.doesNotMatch(catalogueSource, /from "\.\.\/main\.ts"/);
+  assert.doesNotMatch(catalogueSource, /from "\.\/api-catalog\.ts"/);
+  assert.doesNotMatch(
+    catalogueSource,
+    /from "\.\/animation-diagnostics(?:-capability)?\.ts"/
+  );
+  assert.doesNotMatch(
+    catalogueSource,
+    /from "\.\/animation-player-gestalt-capability\.ts"/
+  );
+  assert.match(
+    playerControllerSource,
+    /import\(\s*"\.\/animation-player-gestalt-capability\.ts"\s*\)/
+  );
+});

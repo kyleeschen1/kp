@@ -37,6 +37,11 @@ export interface KpAnimationRuntimePerformance {
     // A deterministic lab proxy; public INP still requires field collection.
     readonly interactionPaintMs: number;
     readonly longestTaskMs?: number | undefined;
+    readonly longTasks?: readonly {
+      readonly startTime: number;
+      readonly duration: number;
+      readonly nearbyResources?: readonly string[] | undefined;
+    }[] | undefined;
     readonly layoutShiftSources?: readonly string[] | undefined;
     readonly observedEntryTypes?: readonly string[] | undefined;
   } | undefined;

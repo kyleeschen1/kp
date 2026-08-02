@@ -83,6 +83,12 @@ export interface KpSelectedOptionalCapabilitySignals {
   readonly codeHighlightRoutes: readonly string[];
 }
 
+export interface KpSelectedApplicationCapabilitySignals {
+  readonly catalogueApplicationRoutes: readonly string[];
+  readonly legacyMainRoutes: readonly string[];
+  readonly animationPlayerGestaltRoutes: readonly string[];
+}
+
 export function assertKpSelectedMathCapabilitySignals(
   signals: KpSelectedMathCapabilitySignals
 ): void {
@@ -143,6 +149,23 @@ export function assertKpSelectedOptionalCapabilitySignals(
     []
   );
   assertExactRouteIds("code highlighting", signals.codeHighlightRoutes, []);
+}
+
+export function assertKpSelectedApplicationCapabilitySignals(
+  signals: KpSelectedApplicationCapabilitySignals
+): void {
+  const catalogueRouteIds = routeSpecs.map(({ id }) => id);
+  assertExactRouteIds(
+    "catalogue application",
+    signals.catalogueApplicationRoutes,
+    catalogueRouteIds
+  );
+  assertExactRouteIds("legacy main application", signals.legacyMainRoutes, []);
+  assertExactRouteIds(
+    "animation-player gestalt",
+    signals.animationPlayerGestaltRoutes,
+    []
+  );
 }
 
 const routeSpecs = [
@@ -320,6 +343,18 @@ async function captureKpAnimationCapabilityAttribution(): Promise<void> {
     }
     const matrix = createKpCapabilityRouteMatrix(routes);
     const capabilitySignals = {
+      catalogueApplicationRoutes: routeIdsRequesting(
+        routes,
+        /src\/editor\/animation-catalogue-application\.ts$/
+      ),
+      legacyMainRoutes: routeIdsRequesting(
+        routes,
+        /src\/main\.ts$/
+      ),
+      animationPlayerGestaltRoutes: routeIdsRequesting(
+        routes,
+        /src\/editor\/animation-player-gestalt-capability\.ts$/
+      ),
       graph3DSurfaceRoutes: routeIdsRequesting(
         routes,
         /(?:^|\/)graph-3d-surface-capability(?:\.ts)?$/
@@ -359,6 +394,7 @@ async function captureKpAnimationCapabilityAttribution(): Promise<void> {
       katexScriptRoutes: routeIdsRequesting(routes, /(?:^|\/)katex$/),
       katexStyleRoutes: routeIdsRequesting(routes, /katex\.min\.css/)
     };
+    assertKpSelectedApplicationCapabilitySignals(capabilitySignals);
     assertKpSelectedMathCapabilitySignals(capabilitySignals);
     assertKpSelectedOptionalCapabilitySignals(capabilitySignals);
     const runtimeInstances = {

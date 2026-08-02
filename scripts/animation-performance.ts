@@ -189,7 +189,10 @@ async function measureCoreWebVitals(page: Page): Promise<NonNullable<
       __kpAnimationPerformanceProbe?: {
         lcpMs: number;
         cls: number;
-        readonly longTasks: number[];
+        readonly longTasks: readonly {
+          readonly startTime: number;
+          readonly duration: number;
+        }[];
         readonly layoutShiftSources: Set<string>;
         readonly observedEntryTypes: Set<string>;
         readonly observers: PerformanceObserver[];
@@ -200,11 +203,27 @@ async function measureCoreWebVitals(page: Page): Promise<NonNullable<
       throw new Error("Animation performance probe was not installed.");
     }
     probe.observers.forEach((observer) => observer.disconnect());
+    const resources = performance.getEntriesByType(
+      "resource"
+    ) as PerformanceResourceTiming[];
     return {
       lcpMs: probe.lcpMs,
       cls: probe.cls,
       interactionPaintMs: measuredInteractionPaintMs,
-      longestTaskMs: Math.max(0, ...probe.longTasks),
+      longestTaskMs: Math.max(0, ...probe.longTasks.map(({ duration }) =>
+        duration
+      )),
+      longTasks: probe.longTasks.map((task) => ({
+        ...task,
+        nearbyResources: resources
+          .filter((resource) =>
+            resource.responseEnd >= task.startTime - 150 &&
+            resource.responseEnd <= task.startTime + task.duration
+          )
+          .map((resource) =>
+            resource.name.split("/").at(-1) ?? resource.name
+          )
+      })),
       layoutShiftSources: [...probe.layoutShiftSources].sort(),
       observedEntryTypes: [...probe.observedEntryTypes].sort()
     };
@@ -216,7 +235,10 @@ async function installCoreWebVitalsProbe(page: Page): Promise<void> {
     type Probe = {
       lcpMs: number;
       cls: number;
-      readonly longTasks: number[];
+      readonly longTasks: {
+        readonly startTime: number;
+        readonly duration: number;
+      }[];
       readonly layoutShiftSources: Set<string>;
       readonly observedEntryTypes: Set<string>;
       readonly observers: PerformanceObserver[];
@@ -269,7 +291,10 @@ async function installCoreWebVitalsProbe(page: Page): Promise<void> {
       probe.observedEntryTypes.add("longtask");
       const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          probe.longTasks.push(entry.duration);
+          probe.longTasks.push({
+            startTime: entry.startTime,
+            duration: entry.duration
+          });
         }
       });
       observer.observe({ type: "longtask", buffered: true });
@@ -314,7 +339,9 @@ async function resourceSummary(page: Page): Promise<Pick<
         (total, resource) => total + resource.transferSize,
         0
       ),
-      initialScriptNames: scripts.map((resource) => resource.name.split("/").at(-1) ?? resource.name)
+      initialScriptNames: scripts.map((resource) =>
+        resource.name.split("/").at(-1) ?? resource.name
+      )
     };
   });
 }

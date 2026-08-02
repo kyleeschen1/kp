@@ -7,6 +7,9 @@ import {
   assertConceptPublicationFit,
   definePublicationEnvironment
 } from "./authoring/public-api.ts";
+import {
+  readKpAnimationCatalogueRoute
+} from "./editor/animation-catalogue-route.ts";
 
 const conceptCatalog: readonly GeneratedConceptCatalogEntry[] = generatedConceptCatalog;
 
@@ -18,6 +21,13 @@ async function bootstrap(): Promise<void> {
     candidate.legacyAliases.includes(window.location.pathname)
   );
   if (entry === undefined) {
+    if (readKpAnimationCatalogueRoute(window.location.search).active) {
+      const catalogue = await import(
+        "./editor/animation-catalogue-application.ts"
+      );
+      catalogue.mountKpAnimationCatalogueApplication(root);
+      return;
+    }
     await import("./main.ts");
     return;
   }

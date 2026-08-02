@@ -83,6 +83,57 @@ test("programming and 3D selections request only their selected capabilities", a
   expect(graph3DRequests).toHaveLength(1);
 });
 
+test("catalogue and full-editor runtimes load only their own application capabilities", async ({
+  page
+}) => {
+  const catalogueRequests: string[] = [];
+  const legacyMainRequests: string[] = [];
+  const gestaltRequests: string[] = [];
+  page.on("request", (request) => {
+    const url = request.url();
+    if (/animation-catalogue-application\.ts/.test(url)) {
+      catalogueRequests.push(url);
+    }
+    if (/\/src\/main\.ts(?:\?|$)/.test(url)) legacyMainRequests.push(url);
+    if (/animation-player-gestalt-capability\.ts/.test(url)) {
+      gestaltRequests.push(url);
+    }
+  });
+
+  await page.goto(
+    "/?artifact=animation.economics.supply-demand-equilibrium-shift"
+  );
+  await waitForOutcome(
+    page,
+    "animation.economics.supply-demand-equilibrium-shift",
+    "painted"
+  );
+  expect(catalogueRequests).toHaveLength(1);
+  expect(legacyMainRequests).toEqual([]);
+  expect(gestaltRequests).toEqual([]);
+  await expect(page.locator(
+    "[data-kp-editor-animation-player]"
+  )).toHaveAttribute("data-kp-editor-animation-focus-experiment", "flat");
+
+  await page.goto(
+    "/?view=animation-library-host&" +
+    "animation=editor-animation.animation.linear-solve.solve-x"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+  await expect(player.locator(
+    "[data-kp-editor-animation-quality-control]"
+  )).toHaveValue("auto");
+  await expect(page.locator(
+    "[data-kp-editor-animation-gestalt-diagnostics]"
+  )).toHaveCount(1);
+  expect(legacyMainRequests).toHaveLength(1);
+  expect(gestaltRequests).toHaveLength(1);
+});
+
 async function waitForOutcome(
   page: import("@playwright/test").Page,
   animationId: string,

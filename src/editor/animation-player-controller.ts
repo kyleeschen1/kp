@@ -18,20 +18,6 @@ import {
   type KpEditorAnimationAuthoringState
 } from "./animation-authoring-controls.ts";
 import {
-  createKpEditorAnimationGestaltInspection,
-  parseKpEditorGestaltStyleRef
-} from "./animation-gestalt-inspector.ts";
-import type { KpGestaltStyleRef } from "../animation/gestalt-style.ts";
-import {
-  createKpElevatedFocusComparison,
-  type KpFocusExperimentMode
-} from "../animation/elevated-focus-experiment.ts";
-import type { KpChoreographyEnvelopePhaseId } from "../animation/choreography-plan.ts";
-import {
-  decideKpEditorAnimationDiagnosticsCadence,
-  type KpEditorAnimationDiagnosticsCadenceState
-} from "./animation-diagnostics-cadence.ts";
-import {
   createKpRenderQualityState,
   freezeKpRenderQualityState,
   kpRenderQualityPreferencePending,
@@ -58,14 +44,17 @@ export type KpEditorAnimationPresentationTuningKind =
 
 const sessions = new WeakMap<HTMLElement, KpEditorAnimationPlaybackSession>();
 const authoringStates = new WeakMap<HTMLElement, KpEditorAnimationAuthoringState>();
-const gestaltStyles = new WeakMap<HTMLElement, KpGestaltStyleRef>();
-const focusExperimentModes = new WeakMap<HTMLElement, KpFocusExperimentMode>();
 const renderQualityStates = new WeakMap<HTMLElement, KpRenderQualityState>();
 const frameRequests = new WeakMap<HTMLElement, number>();
-const inspectionCadenceStates = new WeakMap<
-  HTMLElement,
-  KpEditorAnimationDiagnosticsCadenceState
->();
+type AnimationPlayerGestaltCapabilityClient = typeof import(
+  "./animation-player-gestalt-capability.ts"
+);
+let animationPlayerGestaltCapability:
+  | AnimationPlayerGestaltCapabilityClient
+  | undefined;
+let animationPlayerGestaltCapabilityPromise:
+  | Promise<AnimationPlayerGestaltCapabilityClient>
+  | undefined;
 
 export function hydrateKpEditorAnimationPlayers(
   root: ParentNode,
@@ -109,10 +98,9 @@ export function disposeKpEditorAnimationPlayers(root: ParentNode): void {
       player.removeEventListener("keydown", handlePlayerKeydown);
       sessions.delete(player);
       authoringStates.delete(player);
-      gestaltStyles.delete(player);
-      focusExperimentModes.delete(player);
       renderQualityStates.delete(player);
-      inspectionCadenceStates.delete(player);
+      animationPlayerGestaltCapability
+        ?.disposeKpEditorAnimationGestaltCapability(player);
       player.dataset["kpEditorAnimationDisposed"] = "true";
       delete player.dataset["kpEditorAnimationHydrated"];
     });
@@ -177,11 +165,11 @@ export function applyKpEditorAnimationPresentationTuning(
   kind: KpEditorAnimationPresentationTuningKind,
   value: string
 ): void {
-  if (kind === "gestalt-style") {
-    selectGestaltStyle(player, value);
-    return;
-  }
-  selectFocusExperiment(player, value);
+  void loadAnimationPlayerGestaltCapability().then((client) => {
+    if (!player.isConnected) return;
+    client.applyKpEditorAnimationGestaltTuning({ player, kind, value });
+    resampleAfterPresentationTuning(player);
+  });
 }
 
 async function hydrateKpEditorAnimationPlayer(
@@ -202,7 +190,13 @@ async function hydrateKpEditorAnimationPlayer(
       `Cannot hydrate editor animation player for ${descriptorId ?? "unknown descriptor"} / ${animationId ?? "unknown animation"}.`
     );
   }
-  const loaded = await loadKpAnimationAsset(animationId);
+  const [loaded, gestaltCapability] = await Promise.all([
+    loadKpAnimationAsset(animationId),
+    player.querySelector("[data-kp-editor-animation-gestalt-diagnostics]") ===
+        null
+      ? Promise.resolve(undefined)
+      : loadAnimationPlayerGestaltCapability()
+  ]);
   const animation = animationOverride ?? loaded.animation;
   if (animation.id !== animationId) {
     throw new Error(
@@ -230,13 +224,10 @@ async function hydrateKpEditorAnimationPlayer(
   sessions.set(player, session);
   const authoring = createKpEditorAnimationAuthoringState();
   authoringStates.set(player, authoring);
-  gestaltStyles.set(
-    player,
-    parseKpEditorGestaltStyleRef(
-      player.dataset["kpEditorAnimationGestaltSelectedStyle"]
-    )
-  );
-  focusExperimentModes.set(player, "flat");
+  // Review evidence needs the default even when the optional tuning inspector
+  // never loads; the value is playback state, not diagnostic machinery.
+  player.dataset["kpEditorAnimationFocusExperiment"] ??= "flat";
+  gestaltCapability?.initializeKpEditorAnimationGestaltCapability(player);
   renderQualityStates.set(player, createKpRenderQualityState({
     preference: readPersistedRenderQualityPreference(),
     capabilities: currentRenderQualityCapabilities()
@@ -245,7 +236,6 @@ async function hydrateKpEditorAnimationPlayer(
   syncAccessibilityData(player, "system");
   syncExplanationProfileData(player, "explain");
   syncRenderQualityData(player);
-  player.dataset["kpEditorAnimationDiagnosticsRevision"] = "0";
   player.dataset["kpEditorAnimationPackId"] = packId;
   player.dataset["kpEditorAnimationHydrated"] = "true";
   delete player.dataset["kpEditorAnimationLoading"];
@@ -345,7 +335,11 @@ function handlePlayerInput(event: Event): void {
     input instanceof HTMLSelectElement &&
     input.dataset["kpEditorAnimationGestaltStyleControl"] !== undefined
   ) {
-    selectGestaltStyle(player, input.value);
+    applyKpEditorAnimationPresentationTuning(
+      player,
+      "gestalt-style",
+      input.value
+    );
     return;
   }
 
@@ -353,7 +347,11 @@ function handlePlayerInput(event: Event): void {
     input instanceof HTMLSelectElement &&
     input.dataset["kpEditorAnimationFocusExperimentControl"] !== undefined
   ) {
-    selectFocusExperiment(player, input.value);
+    applyKpEditorAnimationPresentationTuning(
+      player,
+      "focus-experiment",
+      input.value
+    );
     return;
   }
 
@@ -374,7 +372,8 @@ function handlePlayerInput(event: Event): void {
 
   if (input instanceof HTMLSelectElement && input.dataset["kpEditorAnimationAccessibilityControl"] !== undefined) {
     syncAccessibilityData(player, input.value);
-    invalidatePlayerDiagnostics(player);
+    animationPlayerGestaltCapability
+      ?.invalidateKpEditorAnimationGestaltDiagnostics(player);
     const session = sessions.get(player);
     if (session !== undefined) {
       dispatchKpEditorAnimationPlaybackAction(player, {
@@ -408,33 +407,7 @@ function handlePlayerInput(event: Event): void {
   });
 }
 
-function selectFocusExperiment(player: HTMLElement, value: string): void {
-  const mode: KpFocusExperimentMode =
-    value === "elevated" || value === "no-depth" ? value : "flat";
-  focusExperimentModes.set(player, mode);
-  player.dataset["kpEditorAnimationFocusExperiment"] = mode;
-  invalidatePlayerDiagnostics(player);
-  const session = sessions.get(player);
-  if (session === undefined) return;
-  const paused = session.player.playbackStatus === "playing"
-    ? reduceKpEditorAnimationPlaybackSession(session, {
-        type: "pause",
-        nowMs: performance.now()
-      })
-    : session;
-  const resampled = reduceKpEditorAnimationPlaybackSession(paused, {
-    type: "seek",
-    progress: paused.player.progress
-  });
-  sessions.set(player, resampled);
-  cancelPlayerFrame(player);
-  syncPlayerDom(player, resampled);
-}
-
-function selectGestaltStyle(player: HTMLElement, value: string): void {
-  const selectedStyle = parseKpEditorGestaltStyleRef(value);
-  gestaltStyles.set(player, selectedStyle);
-  invalidatePlayerDiagnostics(player);
+function resampleAfterPresentationTuning(player: HTMLElement): void {
   const session = sessions.get(player);
   if (session === undefined) return;
   const paused = session.player.playbackStatus === "playing"
@@ -530,7 +503,8 @@ function selectRenderQuality(player: HTMLElement, value: string): void {
   });
   renderQualityStates.set(player, next);
   syncRenderQualityData(player);
-  invalidatePlayerDiagnostics(player);
+  animationPlayerGestaltCapability
+    ?.invalidateKpEditorAnimationGestaltDiagnostics(player);
   if (next.frozen) return;
 
   const session = sessions.get(player);
@@ -666,7 +640,8 @@ function updateAuthoringControl(
   });
   authoringStates.set(player, next);
   syncAuthoringData(player, next);
-  invalidatePlayerDiagnostics(player);
+  animationPlayerGestaltCapability
+    ?.invalidateKpEditorAnimationGestaltDiagnostics(player);
   player.dataset["kpEditorAnimationMotionPlanInvalidated"] = "true";
   player.querySelector<HTMLOutputElement>("[data-kp-editor-animation-authoring-status]")
     ?.replaceChildren(document.createTextNode(
@@ -767,7 +742,8 @@ function syncPlayerDom(
     toggleButton.textContent = label;
     toggleButton.setAttribute("aria-label", `${label} animation`);
   }
-  syncGestaltInspectionAtCadence(player, session);
+  animationPlayerGestaltCapability
+    ?.syncKpEditorAnimationGestaltAtCadence(player, session);
 
   player.dispatchEvent(new CustomEvent(KP_EDITOR_ANIMATION_FRAME_EVENT, {
     bubbles: true,
@@ -775,196 +751,14 @@ function syncPlayerDom(
   }));
 }
 
-function syncGestaltInspectionAtCadence(
-  player: HTMLElement,
-  session: KpEditorAnimationPlaybackSession
-): void {
-  const decision = decideKpEditorAnimationDiagnosticsCadence({
-    state: session.player,
-    nowMs: performance.now(),
-    revisionKey: player.dataset["kpEditorAnimationDiagnosticsRevision"],
-    previous: inspectionCadenceStates.get(player)
+function loadAnimationPlayerGestaltCapability():
+  Promise<AnimationPlayerGestaltCapabilityClient> {
+  return animationPlayerGestaltCapabilityPromise ??= import(
+    "./animation-player-gestalt-capability.ts"
+  ).then((client) => {
+    animationPlayerGestaltCapability = client;
+    return client;
   });
-  if (!decision.publish || decision.state === undefined) return;
-
-  inspectionCadenceStates.set(player, decision.state);
-  player.dataset["kpEditorAnimationInspectionPublishCount"] =
-    String(decision.state.publishCount);
-  player.dataset["kpEditorAnimationInspectionPublishReason"] = decision.reason;
-  syncGestaltInspection(player, session);
-}
-
-function invalidatePlayerDiagnostics(player: HTMLElement): void {
-  const revision = Number(
-    player.dataset["kpEditorAnimationDiagnosticsRevision"] ?? 0
-  );
-  player.dataset["kpEditorAnimationDiagnosticsRevision"] = String(
-    Number.isFinite(revision) ? revision + 1 : 1
-  );
-}
-
-function syncGestaltInspection(
-  player: HTMLElement,
-  session: KpEditorAnimationPlaybackSession
-): void {
-  const selectedStyle = gestaltStyles.get(player) ??
-    parseKpEditorGestaltStyleRef(undefined);
-  const inspection = createKpEditorAnimationGestaltInspection({
-    animation: session.animation,
-    state: session.player,
-    selectedStyle
-  });
-  player.dataset["kpEditorAnimationGestaltPinnedStyle"] =
-    inspection.pinnedStyleKey;
-  player.dataset["kpEditorAnimationGestaltSelectedStyle"] =
-    inspection.selectedStyleKey;
-  player.dataset["kpEditorAnimationGestaltStatus"] = inspection.status;
-  player.dataset["kpEditorAnimationGestaltFingerprint"] =
-    inspection.resolvedStyle.fingerprint;
-  player.dataset["kpEditorAnimationGestaltEnvelopePhase"] =
-    inspection.envelopePhaseLabel;
-  player.dataset["kpEditorAnimationDesignIssueCodes"] =
-    inspection.designDiagnosis?.issues.map((issue) => issue.code).join(" ") ??
-    "";
-  if (inspection.choreographyPlanId === undefined) {
-    delete player.dataset["kpEditorAnimationChoreographyPlanId"];
-  } else {
-    player.dataset["kpEditorAnimationChoreographyPlanId"] =
-      inspection.choreographyPlanId;
-  }
-  const styleControl = player.querySelector<HTMLSelectElement>(
-    "[data-kp-editor-animation-gestalt-style-control]"
-  );
-  if (styleControl !== null) styleControl.value = inspection.selectedStyleKey;
-  player.style.setProperty(
-    "--kp-editor-gestalt-micro-motion",
-    String(inspection.channels.microMotion?.amplitude ?? 0)
-  );
-  player.style.setProperty(
-    "--kp-editor-gestalt-focus-strength",
-    String(inspection.channels.focus?.strength ?? 0)
-  );
-  player.style.setProperty(
-    "--kp-editor-gestalt-context-dimming",
-    String(inspection.channels.context?.dimming ?? 0)
-  );
-  replaceText(
-    player,
-    "[data-kp-editor-gestalt-status]",
-    inspection.status
-  );
-  replaceText(
-    player,
-    "[data-kp-editor-gestalt-pinned-style]",
-    inspection.pinnedStyleKey
-  );
-  replaceText(
-    player,
-    "[data-kp-editor-gestalt-selected-style]",
-    inspection.selectedStyleKey
-  );
-  replaceText(
-    player,
-    "[data-kp-editor-gestalt-resolved-chain]",
-    inspection.resolvedChainLabel
-  );
-  replaceText(
-    player,
-    "[data-kp-editor-gestalt-envelope-phase]",
-    inspection.envelopePhaseLabel
-  );
-  replaceText(
-    player,
-    "[data-kp-editor-gestalt-focus-group]",
-    inspection.focusGroupLabel
-  );
-  replaceText(
-    player,
-    "[data-kp-editor-gestalt-salience]",
-    inspection.salienceLabel
-  );
-  replaceText(
-    player,
-    "[data-kp-editor-gestalt-traversal]",
-    inspection.traversalLabel
-  );
-  replaceText(
-    player,
-    "[data-kp-editor-gestalt-capabilities]",
-    inspection.capabilityLabel
-  );
-  replaceText(
-    player,
-    "[data-kp-editor-design-strategy]",
-    inspection.designStrategyLabel
-  );
-  replaceText(
-    player,
-    "[data-kp-editor-design-issues]",
-    inspection.designIssueLabel
-  );
-  const warnings = player.querySelector<HTMLElement>(
-    "[data-kp-editor-gestalt-warnings]"
-  );
-  warnings?.replaceChildren(
-    ...inspection.warnings.map((warning) => {
-      const item = document.createElement("li");
-      item.textContent = warning;
-      return item;
-    })
-  );
-  syncFocusExperiment(player, inspection);
-}
-
-function syncFocusExperiment(
-  player: HTMLElement,
-  inspection: ReturnType<typeof createKpEditorAnimationGestaltInspection>
-): void {
-  const mode = focusExperimentModes.get(player) ?? "flat";
-  const [phaseText, progressText] = inspection.envelopePhaseLabel.split(" · ");
-  const phaseId = isEnvelopePhase(phaseText) ? phaseText : "orient";
-  const phaseProgress = Math.min(
-    1,
-    Math.max(0, Number.parseFloat(progressText ?? "0") / 100)
-  );
-  const comparison = createKpElevatedFocusComparison({
-    id: `focus-experiment.${inspection.choreographyPlanId ?? "unmigrated"}`,
-    groupId: inspection.focusGroupLabel,
-    semanticEntityIds: [inspection.focusGroupLabel],
-    strength: inspection.channels.focus?.strength ?? 0.55,
-    contextDimming: inspection.channels.context?.dimming ?? 0.08,
-    phaseId,
-    phaseProgress
-  });
-  player.dataset["kpEditorAnimationFocusExperiment"] = mode;
-  player.dataset["kpEditorAnimationFocusXyInvariant"] =
-    String(comparison.invariance.passed);
-  const control = player.querySelector<HTMLSelectElement>(
-    "[data-kp-editor-animation-focus-experiment-control]"
-  );
-  if (control !== null) control.value = mode;
-  replaceText(player, "[data-kp-editor-focus-experiment]", mode);
-  replaceText(
-    player,
-    "[data-kp-editor-focus-invariance]",
-    comparison.invariance.passed ? "pass · same x/y path" : "fail"
-  );
-}
-
-function isEnvelopePhase(
-  value: string | undefined
-): value is KpChoreographyEnvelopePhaseId {
-  return value === "orient" || value === "reflow" || value === "act" ||
-    value === "settle" || value === "release";
-}
-
-function replaceText(
-  root: ParentNode,
-  selector: string,
-  value: string
-): void {
-  root.querySelector<HTMLElement>(selector)
-    ?.replaceChildren(document.createTextNode(value));
 }
 
 function playerStatusLabel(session: KpEditorAnimationPlaybackSession): string {
