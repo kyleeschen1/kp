@@ -120,7 +120,8 @@
     {
       "id": "s11",
       "title": "Add synchronized renderer-neutral rank-6 frame",
-      "status": "planned"
+      "summary": "Added a matrix-linear-map-specific renderer-neutral frame sampled from the existing 2.4-second playhead. It synchronizes persistent input flow, product/gather/coordinate folds, mapped bases, grid transform, vector motion, exact narration, and rewind without a renderer clock or universal schema.",
+      "status": "complete"
     },
     {
       "id": "s12",

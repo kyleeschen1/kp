@@ -233,11 +233,25 @@
       "scope": "standard",
       "checkedAt": "2026-08-02T21:02:04.058Z",
       "notes": "All typechecks passed after transformation composition."
+    },
+    {
+      "command": "npm run test:matrix-linear-map",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T21:05:33.224Z",
+      "notes": "36/36 checks passed including one shared frame playhead, exact operation-bank phases, delayed geometry, settlement, and semantic rewind."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T21:05:34.509Z",
+      "notes": "All typechecks passed with the renderer-neutral rank-6 plan and frame."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s10 composed multiplyMatrixVector and applyLinearMapToVector as parallel semantic views, routed each target to its own transform, and retained the imported composition root for durable checks."
+    "summary": "Slice s11 added one framework-neutral plan/frame carrying persistent operation-bank rows and delayed map geometry from the existing semantic progress and direction."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."
