@@ -173,6 +173,10 @@
     {
       "kind": "file",
       "path": "tests/vector-dot-projection-review-evidence.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-animation-capability-closure-attribution.md"
     }
   ],
   "dependsOn": {
@@ -935,6 +939,40 @@
       "status": "passed",
       "scope": "s20-vector-review",
       "checkedAt": "2026-08-02T02:24:35.042Z"
+    },
+    {
+      "command": "npm-run-build",
+      "status": "passed",
+      "scope": "s21-capability-attribution",
+      "checkedAt": "2026-08-02T02:36:50.780Z",
+      "notes": "typecheck-domains-and-production-build-pass"
+    },
+    {
+      "command": "npm-run-perf-animation-attribution",
+      "status": "passed",
+      "scope": "s21-capability-attribution",
+      "checkedAt": "2026-08-02T02:36:52.138Z",
+      "notes": "six-routes-measured-twice-exact-resource-closures-reproduced"
+    },
+    {
+      "command": "capability-attribution-focused-tests",
+      "status": "passed",
+      "scope": "s21-capability-attribution",
+      "checkedAt": "2026-08-02T02:36:53.529Z",
+      "notes": "7-tests-pass"
+    },
+    {
+      "command": "npm-run-check-animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s21-capability-attribution",
+      "checkedAt": "2026-08-02T02:36:54.616Z",
+      "notes": "main-host-420111-gzip-69889-headroom"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "s21-capability-attribution",
+      "checkedAt": "2026-08-02T02:36:55.553Z"
     }
   ],
   "expectedLearning": [

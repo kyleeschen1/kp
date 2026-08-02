@@ -194,7 +194,8 @@
     {
       "id": "s21",
       "title": "Attribute capability closure",
-      "status": "planned"
+      "summary": "Six production catalogue selections now have exact twice-reproduced script-style-font ownership evidence: 404981 gzip script bytes are common, equation-KaTeX-API-diagnostics ownership is unconditional, Three.js is correctly 3D-exclusive, and the programming capability gap remains honest.",
+      "status": "complete"
     },
     {
       "id": "s22",
