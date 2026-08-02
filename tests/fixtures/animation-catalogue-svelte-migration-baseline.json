@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "kp.animation-catalogue-svelte-migration-baseline.v1",
+  "capturedAt": "2026-08-02T14:28:28.885Z",
+  "canonicalRoute": "/?artifact=animation.dot-projection.basic",
+  "canonicalAnimationId": "animation.dot-projection.basic",
+  "rollbackEntry": "src/editor/animation-catalogue-application.ts",
+  "hostSourceLines": {
+    "application": 958,
+    "shell": 439,
+    "stylesheet": 590
+  },
+  "regions": [
+    "rail",
+    "stage",
+    "inspector"
+  ],
+  "requiredSelectors": [
+    "data-kp-animation-catalogue",
+    "data-kp-animation-catalogue-results",
+    "data-kp-animation-catalogue-stage",
+    "data-kp-animation-catalogue-inspector-view",
+    "data-kp-animation-catalogue-review-dock"
+  ],
+  "requiredActions": [
+    "filter-animation-catalogue",
+    "toggle-animation-catalogue-overlay",
+    "select-animation-catalogue-inspector",
+    "tune-animation-catalogue"
+  ],
+  "lifecycleOwners": [
+    "AbortController",
+    "popstate",
+    "pushState",
+    "replaceState",
+    "#revision",
+    "#disposeReview",
+    "#loadSelectedCapabilities",
+    "hydrateKpEditorAnimationPlayers"
+  ],
+  "bundleLimitsGzipBytes": {
+    "outer": 50000,
+    "mainHost": 490000,
+    "measuredCatalogueRouteScript": 190000,
+    "placeValueIncremental": 75000
+  },
+  "bundleMeasurementGzipBytes": {
+    "outer": 10459,
+    "mainHost": 253348,
+    "measuredCatalogueRouteScript": 169890,
+    "placeValueIncremental": 71797
+  },
+  "performanceLimits": {
+    "initialScriptTransferBytes": 250000,
+    "constrainedHydrationMs": 5000,
+    "constrainedFrameP95Ms": 33,
+    "constrainedFrameMaxMs": 100,
+    "longestTaskMs": 50,
+    "lcpMs": 2500,
+    "cls": 0.1,
+    "interactionPaintMs": 200,
+    "initialThreeRequested": false
+  },
+  "observedPerformance": {
+    "initialScriptTransferBytes": 187497,
+    "normalHydrationMs": 308,
+    "normalLcpMs": 380,
+    "normalCls": 0.00021980467579431004,
+    "normalInteractionPaintMs": 26.90000009536743,
+    "constrainedHydrationMs": 2284,
+    "constrainedLcpMs": 2524,
+    "constrainedCls": 0.00010453096586796973,
+    "constrainedInteractionPaintMs": 41.700000047683716,
+    "constrainedLongestTaskMs": 235,
+    "constrainedFrameP95Ms": 33.399999999999636
+  },
+  "knownBaselinePressure": [
+    "The capability-attribution probe sees the shared KaTeX script on graph-webgl-3d and programming-trace in addition to its asserted math cohort.",
+    "The constrained lab sample exceeded the LCP, loading-long-task, and frame-p95 product targets without crossing regression ratchets."
+  ]
+}

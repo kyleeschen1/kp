@@ -59,7 +59,8 @@
     {
       "id": "s01",
       "title": "Freeze catalogue baseline and budgets",
-      "status": "planned"
+      "summary": "Frozen the current catalogue DOM and lifecycle ownership, visual exemplar, production bundle ceilings and measurements, runtime targets and observations, plus the pre-existing KaTeX attribution discrepancy. Added a stable 14-check migration baseline command.",
+      "status": "complete"
     },
     {
       "id": "s02",
