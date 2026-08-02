@@ -1,3 +1,7 @@
+import {
+  KP_ANIMATION_CATALOGUE_STAGE_RESERVATION
+} from "./animation-catalogue-stage-reservation.ts";
+
 export type KpAnimationCatalogueBootstrapState =
   | Readonly<{
       readonly status: "loading";
@@ -28,7 +32,9 @@ export function renderKpAnimationCatalogueBootstrap(
     ? ` data-kp-animation-catalogue-pack-id="${escapeHtml(state.packId)}"`
     : "";
   return `<main class="kp-animation-catalogue-bootstrap" data-kp-animation-catalogue data-kp-animation-catalogue-state="${state.status}" data-kp-animation-catalogue-selection="${animationId}"${packAttribute} aria-label="Animation catalogue" aria-busy="${state.status === "loading"}">
-    ${renderStatus(state)}
+    <section class="kp-animation-catalogue-bootstrap__stage" data-kp-animation-catalogue-stage-reservation="${KP_ANIMATION_CATALOGUE_STAGE_RESERVATION}" aria-label="Selected animation stage">
+      ${renderStatus(state)}
+    </section>
   </main>`;
 }
 

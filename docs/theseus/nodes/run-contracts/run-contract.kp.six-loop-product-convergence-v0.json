@@ -212,7 +212,8 @@
     {
       "id": "s24",
       "title": "Reserve layout and metrics",
-      "status": "planned"
+      "summary": "Shared-stage-reservation-preserves-exact-wide-and-narrow-outer-geometry-route-agnostic-critical-host-space-cuts-CLS-below-point-zero-zero-zero-three-and-navigation-start-probes-attribute-exact-s25-transfer-LCP-and-long-task-residuals",
+      "status": "complete"
     },
     {
       "id": "s25",

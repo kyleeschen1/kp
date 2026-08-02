@@ -40,6 +40,9 @@ import {
 import type {
   KpAnimationCatalogueReaderCompanion
 } from "./verified-generated-linear-solve-reader.ts";
+import {
+  KP_ANIMATION_CATALOGUE_STAGE_RESERVATION
+} from "./animation-catalogue-stage-reservation.ts";
 
 export function renderKpAnimationCatalogueShell(input: {
   readonly entry: KpAnimationCatalogueEntry;
@@ -95,7 +98,7 @@ export function renderKpAnimationCatalogueShell(input: {
       </div>
       <div class="kp-animation-catalogue-shell__review-slot" data-kp-animation-catalogue-review-dock aria-hidden="true"></div>
     </aside>
-    <section class="kp-animation-catalogue-shell__stage" data-kp-animation-catalogue-region="stage" aria-label="Selected animation stage">
+    <section class="kp-animation-catalogue-shell__stage" data-kp-animation-catalogue-region="stage" data-kp-animation-catalogue-stage-reservation="${KP_ANIMATION_CATALOGUE_STAGE_RESERVATION}" aria-label="Selected animation stage">
       <div class="kp-animation-catalogue-shell__narrow-nav" aria-label="Catalogue panels">
         <button type="button" data-action="toggle-animation-catalogue-overlay" data-kp-animation-catalogue-overlay-target="rail" aria-controls="kp-animation-catalogue-rail" aria-expanded="false">Artifacts</button>
         <button type="button" data-action="toggle-animation-catalogue-overlay" data-kp-animation-catalogue-overlay-target="inspector" aria-controls="kp-animation-catalogue-inspector" aria-expanded="false">Info</button>

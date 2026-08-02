@@ -35,39 +35,26 @@ test("equation capability leaves an accessible loading state before settlement",
   );
 });
 
-test("equation typography settles inside reserved catalogue stage geometry", async ({
+test("equation capability settles inside one reserved wide stage", async ({
   page
 }) => {
-  await page.goto(`/?artifact=${equationId}`);
-  await waitForOutcome(page, equationId, "painted");
-  const stage = page.locator("[data-kp-animation-catalogue-stage]");
-  const before = await stage.boundingBox();
-  const shift = await page.evaluate(async () => {
-    const values: number[] = [];
-    const observer = new PerformanceObserver((list) => {
-      for (const entry of list.getEntries()) {
-        const item = entry as PerformanceEntry & {
-          readonly value: number;
-          readonly hadRecentInput: boolean;
-        };
-        if (!item.hadRecentInput) values.push(item.value);
-      }
-    });
-    observer.observe({ type: "layout-shift", buffered: false });
-    await document.fonts.ready;
-    await new Promise<void>((resolve) => requestAnimationFrame(() =>
-      requestAnimationFrame(() => resolve())
-    ));
-    observer.disconnect();
-    return values.reduce((sum, value) => sum + value, 0);
+  await expectReservedCapabilitySettlement({
+    page,
+    viewport: { width: 1280, height: 900 },
+    animationId: equationId,
+    capabilityPattern: /equation-surface-capability\.ts/
   });
-  const after = await stage.boundingBox();
+});
 
-  expect(before).not.toBeNull();
-  expect(after).not.toBeNull();
-  expect(Math.abs((after?.width ?? 0) - (before?.width ?? 0))).toBeLessThan(0.5);
-  expect(Math.abs((after?.height ?? 0) - (before?.height ?? 0))).toBeLessThan(0.5);
-  expect(shift).toBe(0);
+test("graph labels settle inside the same reserved narrow stage", async ({
+  page
+}) => {
+  await expectReservedCapabilitySettlement({
+    page,
+    viewport: { width: 390, height: 844 },
+    animationId: "animation.dot-projection.basic",
+    capabilityPattern: /graph-svg-surface-capability\.ts/
+  });
 });
 
 test("programming and 3D selections request only their selected capabilities", async ({
@@ -109,4 +96,84 @@ async function waitForOutcome(
       expectedAnimationId &&
       shell.dataset["kpAnimationCatalogueHostOutcome"] === expectedOutcome;
   }, { expectedAnimationId: animationId, expectedOutcome: outcome });
+}
+
+async function expectReservedCapabilitySettlement(input: {
+  readonly page: import("@playwright/test").Page;
+  readonly viewport: { readonly width: number; readonly height: number };
+  readonly animationId: string;
+  readonly capabilityPattern: RegExp;
+}): Promise<void> {
+  let releaseCapability = (): void => undefined;
+  const capabilityGate = new Promise<void>((resolve) => {
+    releaseCapability = resolve;
+  });
+  await input.page.setViewportSize(input.viewport);
+  await input.page.addInitScript(() => {
+    type ProbeWindow = Window & {
+      __kpCatalogueLayoutShiftProbe?: {
+        readonly values: number[];
+        readonly observer: PerformanceObserver;
+      };
+    };
+    const values: number[] = [];
+    const observer = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        const shift = entry as PerformanceEntry & {
+          readonly value: number;
+          readonly hadRecentInput: boolean;
+        };
+        if (!shift.hadRecentInput) values.push(shift.value);
+      }
+    });
+    observer.observe({ type: "layout-shift", buffered: true });
+    (window as ProbeWindow).__kpCatalogueLayoutShiftProbe = {
+      values,
+      observer
+    };
+  });
+  await input.page.route(input.capabilityPattern, async (route) => {
+    await capabilityGate;
+    await route.continue();
+  });
+
+  await input.page.goto(`/?artifact=${input.animationId}`);
+  const reservation = input.page.locator(
+    "[data-kp-animation-catalogue-stage-reservation]"
+  );
+  await expect(reservation).toHaveAttribute(
+    "data-kp-animation-catalogue-stage-reservation",
+    "kp.animation-catalogue.stage-reservation.v1"
+  );
+  const before = await reservation.boundingBox();
+
+  releaseCapability();
+  await waitForOutcome(input.page, input.animationId, "painted");
+  await input.page.evaluate(async () => {
+    await document.fonts.ready;
+    await new Promise<void>((resolve) => requestAnimationFrame(() =>
+      requestAnimationFrame(() => resolve())
+    ));
+  });
+  const after = await reservation.boundingBox();
+  const shift = await input.page.evaluate(() => {
+    type ProbeWindow = Window & {
+      __kpCatalogueLayoutShiftProbe?: {
+        readonly values: number[];
+        readonly observer: PerformanceObserver;
+      };
+    };
+    const probe = (window as ProbeWindow).__kpCatalogueLayoutShiftProbe;
+    probe?.observer.disconnect();
+    return probe?.values.reduce((sum, value) => sum + value, 0) ?? 0;
+  });
+
+  expect(before).not.toBeNull();
+  expect(after).not.toBeNull();
+  for (const dimension of ["x", "y", "width", "height"] as const) {
+    expect(Math.abs(
+      (after?.[dimension] ?? 0) - (before?.[dimension] ?? 0)
+    )).toBeLessThan(0.5);
+  }
+  expect(shift).toBeLessThan(0.001);
 }

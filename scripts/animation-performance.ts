@@ -116,6 +116,7 @@ async function measureRuntime(
 ): Promise<KpAnimationRuntimePerformance> {
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   const page = await context.newPage();
+  await installCoreWebVitalsProbe(page);
   const cdp = await context.newCDPSession(page);
   await cdp.send("Network.enable");
   await cdp.send("Network.setCacheDisabled", { cacheDisabled: true });
@@ -139,10 +140,18 @@ async function measureRuntime(
       ?.getAttribute("data-kp-animation-catalogue-selection") ===
       "animation.economics.supply-demand-equilibrium-shift" &&
     document.querySelector("[data-kp-editor-animation-player]")
-      ?.getAttribute("data-kp-editor-animation-hydrated") === "true",
+      ?.getAttribute("data-kp-editor-animation-hydrated") === "true" &&
+    document.querySelector("[data-kp-animation-catalogue]")
+      ?.getAttribute("data-kp-animation-catalogue-host-outcome") === "painted",
   undefined, { timeout: 120_000 });
   const hydrationMs = Date.now() - startedAt;
-  await page.waitForTimeout(1_000);
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await new Promise<void>((resolve) => requestAnimationFrame(() =>
+      requestAnimationFrame(() => resolve())
+    ));
+  });
+  await page.waitForTimeout(100);
   const resources = await resourceSummary(page);
   const coreWebVitals = await measureCoreWebVitals(page);
   const animationFrame = await measureFrames(page);
@@ -161,36 +170,6 @@ async function measureRuntime(
 async function measureCoreWebVitals(page: Page): Promise<NonNullable<
   KpAnimationRuntimePerformance["coreWebVitals"]
 >> {
-  const loading = await page.evaluate(async () => {
-    let lcpMs = 0;
-    let cls = 0;
-    const observers: PerformanceObserver[] = [];
-    if (PerformanceObserver.supportedEntryTypes.includes(
-      "largest-contentful-paint"
-    )) {
-      const observer = new PerformanceObserver((list) => {
-        for (const entry of list.getEntries()) lcpMs = entry.startTime;
-      });
-      observer.observe({ type: "largest-contentful-paint", buffered: true });
-      observers.push(observer);
-    }
-    if (PerformanceObserver.supportedEntryTypes.includes("layout-shift")) {
-      const observer = new PerformanceObserver((list) => {
-        for (const entry of list.getEntries()) {
-          const shift = entry as PerformanceEntry & {
-            readonly value: number;
-            readonly hadRecentInput: boolean;
-          };
-          if (!shift.hadRecentInput) cls += shift.value;
-        }
-      });
-      observer.observe({ type: "layout-shift", buffered: true });
-      observers.push(observer);
-    }
-    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-    observers.forEach((observer) => observer.disconnect());
-    return { lcpMs, cls };
-  });
   const interactionPaintMs = await page.evaluate(async () => {
     const button = document.querySelector<HTMLButtonElement>(
       '[data-kp-editor-animation-player] [data-action="toggle-editor-animation"]'
@@ -205,7 +184,117 @@ async function measureCoreWebVitals(page: Page): Promise<NonNullable<
     button.click();
     return elapsed;
   });
-  return { ...loading, interactionPaintMs };
+  return page.evaluate((measuredInteractionPaintMs) => {
+    type ProbeWindow = Window & {
+      __kpAnimationPerformanceProbe?: {
+        lcpMs: number;
+        cls: number;
+        readonly longTasks: number[];
+        readonly layoutShiftSources: Set<string>;
+        readonly observedEntryTypes: Set<string>;
+        readonly observers: PerformanceObserver[];
+      };
+    };
+    const probe = (window as ProbeWindow).__kpAnimationPerformanceProbe;
+    if (probe === undefined) {
+      throw new Error("Animation performance probe was not installed.");
+    }
+    probe.observers.forEach((observer) => observer.disconnect());
+    return {
+      lcpMs: probe.lcpMs,
+      cls: probe.cls,
+      interactionPaintMs: measuredInteractionPaintMs,
+      longestTaskMs: Math.max(0, ...probe.longTasks),
+      layoutShiftSources: [...probe.layoutShiftSources].sort(),
+      observedEntryTypes: [...probe.observedEntryTypes].sort()
+    };
+  }, interactionPaintMs);
+}
+
+async function installCoreWebVitalsProbe(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    type Probe = {
+      lcpMs: number;
+      cls: number;
+      readonly longTasks: number[];
+      readonly layoutShiftSources: Set<string>;
+      readonly observedEntryTypes: Set<string>;
+      readonly observers: PerformanceObserver[];
+    };
+    type ProbeWindow = Window & {
+      __kpAnimationPerformanceProbe?: Probe;
+    };
+    const probe: Probe = {
+      lcpMs: 0,
+      cls: 0,
+      longTasks: [],
+      layoutShiftSources: new Set(),
+      observedEntryTypes: new Set(),
+      observers: []
+    };
+    const supported = PerformanceObserver.supportedEntryTypes;
+    if (supported.includes("largest-contentful-paint")) {
+      probe.observedEntryTypes.add("largest-contentful-paint");
+      const observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) probe.lcpMs = entry.startTime;
+      });
+      observer.observe({ type: "largest-contentful-paint", buffered: true });
+      probe.observers.push(observer);
+    }
+    if (supported.includes("layout-shift")) {
+      probe.observedEntryTypes.add("layout-shift");
+      const observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          const shift = entry as PerformanceEntry & {
+            readonly value: number;
+            readonly hadRecentInput: boolean;
+            readonly sources?: readonly {
+              readonly node?: Node | null | undefined;
+            }[] | undefined;
+          };
+          if (shift.hadRecentInput) continue;
+          probe.cls += shift.value;
+          shift.sources?.forEach(({ node }) => {
+            const description = describeLayoutShiftNode(node);
+            if (description !== undefined) {
+              probe.layoutShiftSources.add(description);
+            }
+          });
+        }
+      });
+      observer.observe({ type: "layout-shift", buffered: true });
+      probe.observers.push(observer);
+    }
+    if (supported.includes("longtask")) {
+      probe.observedEntryTypes.add("longtask");
+      const observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          probe.longTasks.push(entry.duration);
+        }
+      });
+      observer.observe({ type: "longtask", buffered: true });
+      probe.observers.push(observer);
+    }
+    (window as ProbeWindow).__kpAnimationPerformanceProbe = probe;
+
+    function describeLayoutShiftNode(node: Node | null | undefined):
+      string | undefined {
+      if (!(node instanceof Element)) return undefined;
+      if (node.id.length > 0) return `#${node.id}`;
+      for (const attribute of [
+        "data-kp-animation-catalogue-stage-reservation",
+        "data-kp-animation-catalogue-region",
+        "data-kp-editor-animation-surface-slot"
+      ]) {
+        const value = node.getAttribute(attribute);
+        if (value !== null) return `[${attribute}="${value}"]`;
+      }
+      const className = [...node.classList].slice(0, 2).join(".");
+      return className.length === 0
+        ? node.tagName.toLocaleLowerCase()
+        : `${node.tagName.toLocaleLowerCase()}.${className}`;
+    }
+  });
 }
 
 async function resourceSummary(page: Page): Promise<Pick<

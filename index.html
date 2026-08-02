@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kinetic Press</title>
+    <!-- Reserve the host viewport before route CSS and async capabilities settle. -->
+    <style>
+      html, body, #app { min-height: 100%; }
+      body { min-width: 320px; min-height: 100vh; margin: 0; }
+    </style>
   </head>
   <body>
     <main id="app"></main>

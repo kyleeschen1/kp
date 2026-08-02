@@ -185,6 +185,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-selected-optional-capability-isolation.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-catalogue-stage-reservation-and-performance-probes.md"
     }
   ],
   "dependsOn": {
@@ -1143,11 +1147,57 @@
       "status": "passed",
       "scope": "s23-optional-capabilities",
       "checkedAt": "2026-08-02T03:26:32.624Z"
+    },
+    {
+      "command": "focused-catalogue-layout-performance-tests",
+      "status": "passed",
+      "scope": "s24-layout-metrics",
+      "checkedAt": "2026-08-02T03:45:34.948Z",
+      "notes": "17-tests-pass"
+    },
+    {
+      "command": "npm-run-test-browser-animation-equation-capability",
+      "status": "passed",
+      "scope": "s24-layout-metrics",
+      "checkedAt": "2026-08-02T03:45:35.884Z",
+      "notes": "four-tests-pass-wide-equation-narrow-graph-shared-reservation"
+    },
+    {
+      "command": "npm-run-test-browser-vector-dot-projection",
+      "status": "passed",
+      "scope": "s24-layout-metrics",
+      "checkedAt": "2026-08-02T03:45:36.774Z",
+      "notes": "three-frozen-exemplar-preservation-tests-pass"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "s24-layout-metrics",
+      "checkedAt": "2026-08-02T03:45:37.650Z"
+    },
+    {
+      "command": "npm-run-build",
+      "status": "passed",
+      "scope": "s24-layout-metrics",
+      "checkedAt": "2026-08-02T03:45:38.553Z"
+    },
+    {
+      "command": "npm-run-perf-animation",
+      "status": "passed",
+      "scope": "s24-layout-metrics",
+      "checkedAt": "2026-08-02T03:45:39.468Z",
+      "notes": "cls-under-point-zero-zero-zero-three-and-exact-s25-target-residuals-attributed"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "s24-layout-metrics",
+      "checkedAt": "2026-08-02T03:45:40.361Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s23 optional capabilities complete: main host 215893 gzip, programming 212933 gzip, selected graph runtimes singleton, inspector and diagnostics absent from catalogue routes"
+    "summary": "s24-shared-stage-reservation-and-startup-probes-complete-cls-below-budget-three-measured-target-residuals-assigned-to-s25"
   },
   "expectedLearning": [
     "Identify which catalogue, generated-session, vector, and programming seams are genuinely shared after concrete caller pressure.",

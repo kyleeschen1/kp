@@ -100,6 +100,10 @@ test("the default route bootstrap is minimal and catalogue-owned", () => {
   assert.match(html, /data-kp-animation-catalogue/);
   assert.match(html, /data-kp-animation-catalogue-state="selected"/);
   assert.match(html, /aria-busy="false"/);
+  assert.match(
+    html,
+    /data-kp-animation-catalogue-stage-reservation="kp\.animation-catalogue\.stage-reservation\.v1"/
+  );
   assert.doesNotMatch(
     html,
     /iframe|Animation Studio|Animation Workbench|representation|ontology/i

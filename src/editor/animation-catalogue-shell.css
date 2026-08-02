@@ -1,14 +1,43 @@
-.kp-animation-catalogue-shell {
+.kp-animation-catalogue-shell,
+.kp-animation-catalogue-bootstrap {
   --kp-catalogue-border: rgb(36 32 27 / 12%);
   --kp-catalogue-muted: #746f66;
-  display: grid;
-  grid-template-columns: minmax(14rem, 18vw) minmax(0, 1fr) minmax(16rem, 21vw);
+  --kp-catalogue-grid-columns:
+    minmax(14rem, 18vw) minmax(0, 1fr) minmax(16rem, 21vw);
   width: 100%;
   height: 100svh;
   min-height: 38rem;
-  overflow: hidden;
   color: #25231f;
   background: #fbfaf7;
+}
+
+.kp-animation-catalogue-shell {
+  display: grid;
+  grid-template-columns: var(--kp-catalogue-grid-columns);
+  overflow: hidden;
+}
+
+.kp-animation-catalogue-bootstrap {
+  display: grid;
+  grid-template-columns: var(--kp-catalogue-grid-columns);
+}
+
+.kp-animation-catalogue-bootstrap__stage {
+  display: grid;
+  grid-column: 2;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  place-items: center;
+  padding: 1rem;
+  color: var(--kp-catalogue-muted);
+  background: #fffefa;
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.kp-animation-catalogue-bootstrap__stage p {
+  margin: 0;
 }
 
 .kp-animation-catalogue-shell__visually-hidden {
@@ -481,9 +510,14 @@
 }
 
 @media (max-width: 56rem) {
-  .kp-animation-catalogue-shell {
+  .kp-animation-catalogue-shell,
+  .kp-animation-catalogue-bootstrap {
     position: relative;
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kp-animation-catalogue-bootstrap__stage {
+    grid-column: 1;
   }
 
   .kp-animation-catalogue-shell__stage {

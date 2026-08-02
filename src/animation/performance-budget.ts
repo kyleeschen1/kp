@@ -36,6 +36,9 @@ export interface KpAnimationRuntimePerformance {
     readonly cls: number;
     // A deterministic lab proxy; public INP still requires field collection.
     readonly interactionPaintMs: number;
+    readonly longestTaskMs?: number | undefined;
+    readonly layoutShiftSources?: readonly string[] | undefined;
+    readonly observedEntryTypes?: readonly string[] | undefined;
   } | undefined;
   readonly animationFrame?: KpAnimationFramePerformance | undefined;
   /** Retained only so the 2026-07-17 baseline remains readable. */
@@ -72,6 +75,7 @@ export const kpAnimationPerformanceTargets = Object.freeze({
   lcpMs: 2_500,
   cls: 0.1,
   interactionPaintMs: 200,
+  loadingLongestTaskMs: 50,
   initialThreeRequested: false
 });
 
@@ -142,6 +146,13 @@ export function evaluateKpAnimationPerformance(input: {
     "constrained.coreWebVitals.interactionPaintMs",
     snapshot.constrained.coreWebVitals?.interactionPaintMs,
     kpAnimationPerformanceTargets.interactionPaintMs,
+    "target"
+  );
+  optionalMaximumIssue(
+    issues,
+    "constrained.coreWebVitals.longestTaskMs",
+    snapshot.constrained.coreWebVitals?.longestTaskMs,
+    kpAnimationPerformanceTargets.loadingLongestTaskMs,
     "target"
   );
   const constrainedFrame = measuredFrame(snapshot.constrained);

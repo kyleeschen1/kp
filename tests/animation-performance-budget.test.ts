@@ -118,7 +118,12 @@ test("performance evaluation reports route-scoped Core Web Vitals guards", () =>
     },
     constrained: {
       ...snapshot.constrained,
-      coreWebVitals: { lcpMs: 2_600, cls: 0.14, interactionPaintMs: 220 }
+      coreWebVitals: {
+        lcpMs: 2_600,
+        cls: 0.14,
+        interactionPaintMs: 220,
+        longestTaskMs: 60
+      }
     }
   };
 
@@ -130,7 +135,8 @@ test("performance evaluation reports route-scoped Core Web Vitals guards", () =>
       "constrained.coreWebVitals.lcpMs",
       "normal.coreWebVitals.cls",
       "constrained.coreWebVitals.cls",
-      "constrained.coreWebVitals.interactionPaintMs"
+      "constrained.coreWebVitals.interactionPaintMs",
+      "constrained.coreWebVitals.longestTaskMs"
     ]
   );
 });

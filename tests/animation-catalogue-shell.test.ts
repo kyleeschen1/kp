@@ -85,6 +85,10 @@ test("solve-x shell has exactly three flat sibling regions", () => {
   )].length, 2);
   assert.match(html, /aria-controls="kp-animation-catalogue-rail"/);
   assert.match(html, /aria-controls="kp-animation-catalogue-inspector"/);
+  assert.match(
+    html,
+    /data-kp-animation-catalogue-stage-reservation="kp\.animation-catalogue\.stage-reservation\.v1"/
+  );
   assert.equal(
     new Set([...html.matchAll(
       /data-kp-animation-catalogue-row="([^"]+)"/g
