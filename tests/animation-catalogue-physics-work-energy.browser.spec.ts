@@ -21,6 +21,8 @@ test("physics catalogue preserves exact accessible seek, rewind, parameters, Rev
   const graph = graphSlot.locator("[data-kp-editor-graph-svg]");
   const scrubber = player.locator('[data-action="seek-editor-animation"]');
 
+  await expect(shell).toHaveAttribute("data-kp-svelte-catalogue-shell", "");
+  await expect(shell.locator("iframe")).toHaveCount(0);
   await expect(shell).toHaveAttribute(
     "data-kp-animation-catalogue-selection",
     animationId
@@ -36,6 +38,10 @@ test("physics catalogue preserves exact accessible seek, rewind, parameters, Rev
   await expect(graphSlot).toHaveAttribute(
     "data-kp-editor-animation-adapter-id",
     "editor-animation-surface.graph.svg"
+  );
+  await expect(graphSlot).toHaveAttribute(
+    "data-kp-editor-animation-adapter-status",
+    "ready"
   );
   await expect(graph).toHaveAttribute(
     "aria-describedby",

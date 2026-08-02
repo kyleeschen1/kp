@@ -167,7 +167,8 @@
     {
       "id": "s19",
       "title": "Pressure vector economics physics and Graph2D callers",
-      "status": "planned"
+      "summary": "Ratchet-tested vector, economics, and physics on the canonical Svelte route across the shared iframe-free Graph SVG boundary; exact state, KaTeX labels, parameter codecs, Review evidence, history, rewind, and cross-browser behavior remain intact.",
+      "status": "complete"
     },
     {
       "id": "s20",

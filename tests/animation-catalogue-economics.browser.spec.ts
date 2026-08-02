@@ -24,6 +24,8 @@ test("economics catalogue preserves exact accessible seek, rewind, parameters, R
     '[data-action="seek-editor-animation"]'
   );
 
+  await expect(shell).toHaveAttribute("data-kp-svelte-catalogue-shell", "");
+  await expect(shell.locator("iframe")).toHaveCount(0);
   await expect(shell).toHaveAttribute(
     "data-kp-animation-catalogue-selection",
     animationId
@@ -39,6 +41,10 @@ test("economics catalogue preserves exact accessible seek, rewind, parameters, R
   await expect(graphSlot).toHaveAttribute(
     "data-kp-editor-animation-adapter-id",
     "editor-animation-surface.graph.svg"
+  );
+  await expect(graphSlot).toHaveAttribute(
+    "data-kp-editor-animation-adapter-status",
+    "ready"
   );
   await expect(graph).toHaveAttribute(
     "aria-describedby",

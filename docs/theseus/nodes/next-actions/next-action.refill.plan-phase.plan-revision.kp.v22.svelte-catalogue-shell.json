@@ -888,6 +888,46 @@
       "status": "passed",
       "scope": "s18 production build",
       "checkedAt": "2026-08-02T18:27:07.406Z"
+    },
+    {
+      "command": "npm run test:browser:vector-dot-projection",
+      "status": "failed",
+      "scope": "s19 first cold caller run",
+      "checkedAt": "2026-08-02T18:33:01.532Z",
+      "notes": "Two tests passed; one in-shell transition exceeded the default assertion window on the first cold run and passed unchanged on immediate rerun."
+    },
+    {
+      "command": "npm run test:browser:vector-dot-projection",
+      "status": "passed",
+      "scope": "s19 vector and Graph2D canonical route",
+      "checkedAt": "2026-08-02T18:33:02.746Z",
+      "notes": "Three Chromium tests prove the Svelte shell, iframe-free shared SVG adapter, KaTeX labels, exact geometry, rewind, reduced motion, lazy Three exclusion, and persistent in-shell history."
+    },
+    {
+      "command": "npm run test:browser:economics-equilibrium",
+      "status": "passed",
+      "scope": "s19 economics Graph2D canonical route",
+      "checkedAt": "2026-08-02T18:33:03.844Z",
+      "notes": "Chromium, Firefox, and WebKit preserve exact model state, fixed-width moving values, inline KaTeX labels, parameter URLs, Review capture, and in-shell history."
+    },
+    {
+      "command": "npm run test:browser:physics-work-energy",
+      "status": "passed",
+      "scope": "s19 physics Graph2D canonical route",
+      "checkedAt": "2026-08-02T18:33:04.804Z",
+      "notes": "Chromium, Firefox, and WebKit preserve exact work-energy state, inline KaTeX labels, parameter URLs, Review capture, and in-shell history."
+    },
+    {
+      "command": "npm run visual:vector-dot-projection",
+      "status": "passed",
+      "scope": "s19 canonical vector visual checkpoint",
+      "checkedAt": "2026-08-02T18:33:05.865Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19 browser contracts",
+      "checkedAt": "2026-08-02T18:33:06.924Z"
     }
   ],
   "progress": {

@@ -8,6 +8,7 @@ test("vector projection keeps KaTeX, geometry, labels, rewind, and reduced motio
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(`/?artifact=${animationId}`);
 
+  const shell = page.locator("[data-kp-animation-catalogue]");
   const player = page.locator(
     `[data-kp-editor-animation-player]` +
     `[data-kp-editor-animation-id="${animationId}"]`
@@ -16,6 +17,8 @@ test("vector projection keeps KaTeX, geometry, labels, rewind, and reduced motio
   const view = graph.locator("[data-kp-vector-dot-projection-view]");
   const scrubber = player.locator('[data-action="seek-editor-animation"]');
 
+  await expect(shell).toHaveAttribute("data-kp-svelte-catalogue-shell", "");
+  await expect(shell.locator("iframe")).toHaveCount(0);
   await expect(graph).toHaveAttribute(
     "data-kp-graph-presentation-profile",
     "kp.graph.dimensional-continuity.linear-algebra.v1"
@@ -162,6 +165,7 @@ test("vector projection catalogue route stays compact, lazy, and persistent", as
   );
   const scrubber = player.locator('[data-action="seek-editor-animation"]');
 
+  await expect(shell).toHaveAttribute("data-kp-svelte-catalogue-shell", "");
   await expect(shell).toHaveAttribute(
     "data-kp-animation-catalogue-selection",
     animationId
