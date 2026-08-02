@@ -86,11 +86,32 @@
       "scope": "control-plane",
       "checkedAt": "2026-08-02T20:36:50.273Z",
       "notes": "Workspace validated before slice s02 completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/matrix-linear-map-choreography-baseline.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T20:39:46.259Z",
+      "notes": "3/3 row timing, traversal, start/mid/end/rewind, equation-frame, overlay, KaTeX, and narration characterization checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T20:39:47.447Z",
+      "notes": "All TypeScript, Svelte, and domain typechecks passed with choreography baseline coverage."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-08-02T20:39:48.454Z",
+      "notes": "Workspace validated before slice s03 completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s02 froze one exact generated fixture and one in-place catalogue asset with stable selectors, strict multiplyMatrixVector lineage, shared timeline, descriptor, family, and URL."
+    "summary": "Slice s03 froze the row-ranked two-action clock, exact handoff and settlement frames, rewind identity, inline-KaTeX overlay hooks, and dynamic narration while leaving old pill styling replaceable."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."

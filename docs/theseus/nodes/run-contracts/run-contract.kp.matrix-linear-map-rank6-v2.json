@@ -72,7 +72,8 @@
     {
       "id": "s03",
       "title": "Freeze row-dot choreography and visible behavior",
-      "status": "planned"
+      "summary": "Characterized the 200 ms lead, two 1,000 ms row actions, 200 ms release, row traversal authority, start/mid/end and exact rewind frames, persistent result order, equation overlay contracts, inline KaTeX, and narration. Presentation styling remains intentionally unfrozen.",
+      "status": "complete"
     },
     {
       "id": "s04",
