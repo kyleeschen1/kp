@@ -83,7 +83,8 @@
     {
       "id": "s05",
       "title": "Mount isolated Svelte exemplar entry",
-      "status": "planned"
+      "summary": "Mounted a migration-only Svelte 5 exemplar through one dynamic bootstrap branch. It consumes the shared preparation service and selected-host view model; canonical catalogue requests continue using the independently tested imperative rollback host without requesting the Svelte entry.",
+      "status": "complete"
     },
     {
       "id": "s06",

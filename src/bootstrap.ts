@@ -10,6 +10,9 @@ import {
 import {
   readKpAnimationCatalogueRoute
 } from "./editor/animation-catalogue-route.ts";
+import {
+  selectsKpSvelteCatalogueExemplar
+} from "./editor/svelte-catalogue/svelte-catalogue-exemplar-route.ts";
 
 const conceptCatalog: readonly GeneratedConceptCatalogEntry[] = generatedConceptCatalog;
 
@@ -22,6 +25,17 @@ async function bootstrap(): Promise<void> {
   );
   if (entry === undefined) {
     if (readKpAnimationCatalogueRoute(window.location.search).active) {
+      if (selectsKpSvelteCatalogueExemplar(window.location.search)) {
+        const exemplar = await import(
+          "./editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts"
+        );
+        const dispose = await exemplar.mountKpSvelteCatalogueExemplar({
+          root,
+          search: window.location.search
+        });
+        window.addEventListener("pagehide", dispose, { once: true });
+        return;
+      }
       const catalogue = await import(
         "./editor/animation-catalogue-application.ts"
       );
