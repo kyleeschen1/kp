@@ -29,11 +29,11 @@ test("matrix-vector duration multiplies with row work instead of accelerating", 
 });
 
 test("matrix-vector rows are authored semantic dot-product representations", () => {
-  assert.equal(choreography.rendererPlan.semanticDurationMs, 2_400);
+  assert.equal(choreography.rendererPlan.semanticDurationMs, 12_000);
   assert.equal(choreography.rendererPlan.semanticActionCount, 2);
   assert.deepEqual(
-    choreography.rows.map((row) => Math.round((row.end - row.start) * 2_400)),
-    [1_000, 1_000]
+    choreography.rows.map((row) => Math.round((row.end - row.start) * 12_000)),
+    [3_600, 3_600]
   );
   assert.deepEqual(
     choreography.rows.map((row) => ({

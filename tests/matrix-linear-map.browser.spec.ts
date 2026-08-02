@@ -56,6 +56,21 @@ test("rank-6 matrix-vector exemplar preserves exact row-dot playback", async ({
       "data-kp-graph-language-profile",
       "kp.graph.dimensional-continuity.v1"
     );
+  const equationCaption = player.locator(
+    '[data-kp-editor-animation-surface-slot="equation"] ' +
+    ".editor-equation-stage__caption"
+  );
+  const graphSvg = graphSlot.locator("[data-kp-editor-graph-svg]");
+  const [captionBox, graphBox] = await Promise.all([
+    equationCaption.boundingBox(),
+    graphSvg.boundingBox()
+  ]);
+  expect(captionBox).not.toBeNull();
+  expect(graphBox).not.toBeNull();
+  const captionToGraphGap = graphBox!.y -
+    (captionBox!.y + captionBox!.height);
+  expect(captionToGraphGap, JSON.stringify({ captionBox, graphBox }))
+    .toBeGreaterThanOrEqual(8);
 
   await scrubber.fill("0.18");
   const operationBank = transition.locator(
@@ -70,6 +85,16 @@ test("rank-6 matrix-vector exemplar preserves exact row-dot playback", async ({
     "data-kp-editor-matrix-operation-depletion",
     "false"
   );
+  await expect(operationBank).toHaveAttribute(
+    "data-kp-editor-matrix-operation-topology",
+    "persistent-input-pour"
+  );
+  await expect(operationBank.locator(
+    '[data-kp-editor-matrix-operation-source="0"]'
+  )).toContainText("4");
+  await expect(operationBank.locator(
+    '[data-kp-editor-matrix-operation-gate="0.0"]'
+  )).toContainText("×2");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-matrix-vector-active-row",
     "0"
@@ -78,7 +103,7 @@ test("rank-6 matrix-vector exemplar preserves exact row-dot playback", async ({
     '[data-kp-editor-matrix-vector-row="0"]'
   )).toContainText("2×4+1×5=13");
 
-  await scrubber.fill("0.52");
+  await scrubber.fill("0.39");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-matrix-vector-resolved-through",
     "0"
@@ -98,7 +123,7 @@ test("rank-6 matrix-vector exemplar preserves exact row-dot playback", async ({
   await expect(graphSlot.locator("[data-kp-matrix-linear-map-view]"))
     .toHaveAttribute("data-kp-matrix-linear-map-grid-progress", "0");
 
-  await scrubber.fill("0.8");
+  await scrubber.fill("0.62");
   await expect(operationBank.locator(
     '[data-kp-editor-matrix-operation-fold="1"]'
   )).toHaveAttribute(
@@ -108,6 +133,14 @@ test("rank-6 matrix-vector exemplar preserves exact row-dot playback", async ({
   await expect(operationBank.locator(
     '[data-kp-editor-matrix-operation-fold="1"]'
   )).toContainText("0+15");
+  await expect(operationBank.locator(
+    '[data-kp-editor-matrix-operation-fold="1"]'
+  )).toHaveAttribute(
+    "data-kp-editor-matrix-operation-hold-phase",
+    "sum"
+  );
+
+  await scrubber.fill("0.9");
   expect(Number(await graphSlot.locator(
     "[data-kp-matrix-linear-map-view]"
   ).getAttribute("data-kp-matrix-linear-map-vector-progress")))

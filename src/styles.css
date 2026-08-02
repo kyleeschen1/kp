@@ -1094,20 +1094,20 @@ h2 {
   z-index: 4;
   grid-area: 2 / 1;
   display: grid;
-  gap: 0.55rem;
-  width: min(100% - 1.5rem, 28rem);
+  gap: 0.4rem;
+  width: min(100% - 1.5rem, 34rem);
   margin: 0 auto 0.7rem;
   color: #273d47;
-  font-size: clamp(0.68rem, 1.15vw, 0.82rem);
+  font-size: clamp(0.7rem, 1.15vw, 0.84rem);
   pointer-events: none;
 }
 
 .editor-equation-stage__matrix-operation-inputs {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.9fr) minmax(10rem, 1.1fr);
   align-items: center;
-  justify-content: center;
-  gap: 1.1rem;
-  min-height: 2rem;
+  gap: 1rem;
+  min-height: 2.8rem;
   color: #263845;
 }
 
@@ -1115,21 +1115,84 @@ h2 {
   opacity: 1;
 }
 
+.editor-equation-stage__matrix-operation-matrix,
+.editor-equation-stage__matrix-operation-sources {
+  display: grid;
+  gap: 0.25rem;
+  place-items: center;
+}
+
+.editor-equation-stage__matrix-operation-matrix small,
+.editor-equation-stage__matrix-operation-sources small {
+  color: #7a8991;
+  font-size: 0.54rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.editor-equation-stage__matrix-operation-source-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(3.7rem, 1fr));
+  gap: 0.55rem;
+  width: 100%;
+}
+
+.editor-equation-stage__matrix-operation-source-list > span {
+  position: relative;
+  display: grid;
+  min-height: 1.75rem;
+  border: 1px solid rgb(31 122 131 / 0.42);
+  border-radius: 999px;
+  place-items: center;
+  color: #1f6870;
+  background: #f0f8f7;
+  font-weight: 750;
+}
+
+.editor-equation-stage__matrix-operation-source-list > span::after {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  height: 0.52rem;
+  border-left: 1px solid rgb(31 122 131 / 0.42);
+  content: "";
+}
+
+.editor-equation-stage__matrix-operation-instruction {
+  margin: 0;
+  color: #657983;
+  font-size: 0.6rem;
+  font-weight: 650;
+  text-align: center;
+}
+
 .editor-equation-stage__matrix-operation-rows {
   display: grid;
-  gap: 0.32rem;
+  gap: 0.42rem;
   border-top: 1px solid rgb(112 137 152 / 0.22);
-  padding-top: 0.4rem;
+  padding-top: 0.48rem;
 }
 
 .editor-equation-stage__matrix-operation-row {
   --kp-matrix-operation-row-emphasis: 0.36;
   display: grid;
-  grid-template-columns: 1.25rem minmax(0, 1fr) 3.4rem 1.8rem;
+  grid-template-columns: 1.35rem minmax(0, 1fr) 4rem 1.9rem;
   align-items: center;
-  gap: 0.4rem;
-  min-height: 2rem;
+  gap: 0.45rem;
+  min-height: 2.65rem;
+  border: 1px solid rgb(112 137 152 / 0.15);
+  border-radius: 0.45rem;
+  padding: 0.28rem 0.35rem;
+  background: rgb(251 253 252 / 0.82);
   opacity: calc(0.48 + var(--kp-matrix-operation-row-emphasis) * 0.52);
+}
+
+.editor-equation-stage__matrix-operation-row[
+  data-kp-editor-matrix-vector-row-status="active"
+] {
+  border-color: rgb(31 122 131 / 0.3);
+  background: #f8fcfb;
 }
 
 .editor-equation-stage__matrix-operation-row-label {
@@ -1140,17 +1203,72 @@ h2 {
 .editor-equation-stage__matrix-operation-flow {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.6rem;
+  gap: 0.5rem;
 }
 
 .editor-equation-stage__matrix-operation-route {
   position: relative;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: 1.35rem minmax(1.65rem, 1fr) 1.75rem 1.7rem;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.18rem;
   min-width: 0;
   white-space: nowrap;
+}
+
+.editor-equation-stage__matrix-operation-source-reference {
+  display: grid;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 1px solid rgb(31 122 131 / 0.42);
+  border-radius: 50%;
+  place-items: center;
+  color: #1f6870;
+  background: #f0f8f7;
+  font-weight: 750;
+}
+
+.editor-equation-stage__matrix-operation-channel {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 1.65rem;
+  height: 0.7rem;
+}
+
+.editor-equation-stage__matrix-operation-channel i {
+  position: absolute;
+  top: calc(50% - 0.5px);
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, #1f7a83, #bd5b35);
+  transform: scaleX(var(--kp-matrix-operation-route-progress, 0));
+  transform-origin: left center;
+}
+
+.editor-equation-stage__matrix-operation-channel b {
+  position: absolute;
+  top: calc(50% - 3px);
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #bd5b35;
+  opacity: var(--kp-matrix-operation-route-progress, 0);
+  transform: translateX(calc(
+    1.5rem * var(--kp-matrix-operation-route-progress, 0)
+  ));
+}
+
+.editor-equation-stage__matrix-operation-gate {
+  display: grid;
+  min-height: 1.35rem;
+  border: 1px solid rgb(189 91 53 / 0.3);
+  border-radius: 0.3rem;
+  place-items: center;
+  color: #8a4b08;
+  background: #fff8ee;
 }
 
 .editor-equation-stage__matrix-operation-product {
@@ -1162,9 +1280,11 @@ h2 {
 }
 
 .editor-equation-stage__matrix-operation-fold {
-  display: grid;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
   min-width: 0;
-  place-items: center;
+  justify-content: center;
   color: #8a4b08;
   opacity: var(--kp-matrix-operation-gather-progress, 0);
   transform: translateX(calc(
@@ -1172,12 +1292,13 @@ h2 {
   ));
 }
 
-.editor-equation-stage__matrix-operation-route i {
-  display: block;
-  height: 1px;
-  background: linear-gradient(90deg, #6f8d99, #bd5b35);
-  transform: scaleX(var(--kp-matrix-operation-route-progress, 0));
-  transform-origin: left center;
+.editor-equation-stage__matrix-operation-fold > i {
+  width: 0.7rem;
+  height: 1rem;
+  border-top: 1px solid rgb(189 91 53 / 0.55);
+  border-right: 1px solid rgb(189 91 53 / 0.55);
+  border-bottom: 1px solid rgb(189 91 53 / 0.55);
+  border-radius: 0 999px 999px 0;
 }
 
 .editor-equation-stage__matrix-operation-output {
@@ -1217,14 +1338,31 @@ h2 {
 
   .editor-equation-stage__matrix-operation-inputs { gap: 0.7rem; }
 
+  .editor-equation-stage__matrix-operation-inputs {
+    grid-template-columns: minmax(6.2rem, 0.8fr) minmax(8rem, 1.2fr);
+  }
+
   .editor-equation-stage__matrix-operation-flow { gap: 0.32rem; }
 
   .editor-equation-stage__matrix-operation-row {
-    grid-template-columns: 1rem minmax(0, 1fr) 2.7rem 1.55rem;
+    grid-template-columns: 1rem minmax(0, 1fr) 3rem 1.55rem;
     gap: 0.24rem;
+    padding-inline: 0.22rem;
   }
 
-  .editor-equation-stage__matrix-operation-route { gap: 0.2rem; }
+  .editor-equation-stage__matrix-operation-route {
+    grid-template-columns: 1.15rem minmax(1.1rem, 1fr) 1.5rem 1.5rem;
+    gap: 0.12rem;
+  }
+
+  .editor-equation-stage__matrix-operation-source-reference {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .editor-equation-stage__matrix-operation-instruction {
+    font-size: 0.56rem;
+  }
 }
 
 .editor-equation-stage__matrix-matrix-overlay {
@@ -1951,6 +2089,38 @@ h2 {
   background:
     radial-gradient(circle at 50% 40%, rgb(225 232 240 / 0.65), transparent 58%),
     #f8fafc;
+}
+
+.editor-animation-player__stage[data-kp-editor-animation-surface="composite"] {
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto;
+}
+
+.editor-animation-player__stage[data-kp-editor-animation-surface="composite"]
+> .editor-animation-player__surface--equation {
+  grid-area: 1 / 1;
+}
+
+.editor-animation-player__stage[data-kp-editor-animation-surface="composite"]
+> .editor-animation-player__surface--graph {
+  grid-area: 2 / 1;
+}
+
+.editor-animation-player__stage[data-kp-editor-animation-surface="composite"]
+> .editor-animation-player__surface--graph:has(
+  [data-kp-matrix-linear-map-view]
+) {
+  aspect-ratio: 13 / 9;
+  min-height: 0;
+}
+
+.editor-animation-player__stage[data-kp-editor-animation-surface="composite"]
+> .editor-animation-player__surface--graph:has(
+  [data-kp-matrix-linear-map-view]
+) .editor-graph-stage {
+  height: 100%;
+  min-height: 0;
 }
 
 .editor-animation-player__surface {

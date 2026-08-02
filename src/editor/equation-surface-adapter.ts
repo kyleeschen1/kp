@@ -2379,22 +2379,36 @@ function syncMatrixLinearMapOperationBank(
     bank.dataset["kpEditorMatrixOperationInputPolicy"] =
       "persistent-reference";
     bank.dataset["kpEditorMatrixOperationDepletion"] = "false";
+    bank.dataset["kpEditorMatrixOperationTopology"] =
+      "persistent-input-pour";
     bank.setAttribute("role", "img");
+    const inputContributions = frame.operationBank.rows[0]?.contributions ?? [];
     bank.innerHTML = `
       <div class="editor-equation-stage__matrix-operation-inputs">
-        <span data-kp-editor-matrix-operation-input="matrix">
+        <span class="editor-equation-stage__matrix-operation-matrix" data-kp-editor-matrix-operation-input="matrix">
+          <small>row operations</small>
           ${renderLatexToHtml(
             String.raw`A=\begin{bmatrix}2&1\\0&3\end{bmatrix}`,
             { displayMode: false }
           )}
         </span>
-        <span data-kp-editor-matrix-operation-input="vector">
-          ${renderLatexToHtml(
-            String.raw`\mathbf v=\begin{bmatrix}4\\5\end{bmatrix}`,
-            { displayMode: false }
-          )}
+        <span class="editor-equation-stage__matrix-operation-sources" data-kp-editor-matrix-operation-input="vector">
+          <small>persistent inputs</small>
+          <span class="editor-equation-stage__matrix-operation-source-list">
+            ${inputContributions.map((contribution) => `
+              <span data-kp-editor-matrix-operation-source="${contribution.columnIndex}">
+                ${renderLatexToHtml(
+                  `v_{${contribution.columnIndex + 1}}=${contribution.vectorValue}`,
+                  { displayMode: false }
+                )}
+              </span>
+            `).join("")}
+          </span>
         </span>
       </div>
+      <p class="editor-equation-stage__matrix-operation-instruction">
+        Pour each persistent input through every row operation; the source remains available.
+      </p>
       <div class="editor-equation-stage__matrix-operation-rows">
         ${choreography.rows.map((row) => {
           const frameRow = frame.operationBank.rows.find((candidate) =>
@@ -2411,11 +2425,17 @@ function syncMatrixLinearMapOperationBank(
               <span class="editor-equation-stage__matrix-operation-flow">
                 ${frameRow.contributions.map((contribution) => `
                   <span class="editor-equation-stage__matrix-operation-route" data-kp-editor-matrix-operation-contribution="${row.semanticIndex}.${contribution.columnIndex}">
-                    <span>${renderLatexToHtml(
-                      `${contribution.matrixValue} \\cdot ${contribution.vectorValue}`,
+                    <span class="editor-equation-stage__matrix-operation-source-reference">${renderLatexToHtml(
+                      String(contribution.vectorValue),
                       { displayMode: false }
                     )}</span>
-                    <i aria-hidden="true"></i>
+                    <span class="editor-equation-stage__matrix-operation-channel" aria-hidden="true">
+                      <i></i><b></b>
+                    </span>
+                    <span class="editor-equation-stage__matrix-operation-gate" data-kp-editor-matrix-operation-gate="${row.semanticIndex}.${contribution.columnIndex}">${renderLatexToHtml(
+                      `\\times ${contribution.matrixValue}`,
+                      { displayMode: false }
+                    )}</span>
                     <span class="editor-equation-stage__matrix-operation-product" data-kp-editor-matrix-operation-product="${row.semanticIndex}.${contribution.columnIndex}">
                       ${renderLatexToHtml(`=${contribution.product}`, { displayMode: false })}
                     </span>
@@ -2423,6 +2443,7 @@ function syncMatrixLinearMapOperationBank(
                 `).join("")}
               </span>
               <span class="editor-equation-stage__matrix-operation-fold" data-kp-editor-matrix-operation-fold="${row.semanticIndex}">
+                <i aria-hidden="true"></i>
                 ${renderLatexToHtml(
                   frameRow.contributions.map((item) => item.product).join("+"),
                   { displayMode: false }
@@ -2450,6 +2471,7 @@ function syncMatrixLinearMapOperationBank(
     if (rowElement === null) return;
     rowElement.dataset["kpEditorMatrixVectorRowStatus"] = row.status;
     rowElement.dataset["kpEditorMatrixVectorResult"] = String(row.result);
+    rowElement.dataset["kpEditorMatrixOperationHoldPhase"] = row.holdPhase;
     rowElement.style.setProperty(
       "--kp-matrix-operation-row-emphasis",
       row.status === "active" ? "1" : row.status === "resolved" ? "0.72" : "0.36"
@@ -2475,6 +2497,7 @@ function syncMatrixLinearMapOperationBank(
     );
     if (fold !== null) {
       fold.dataset["kpEditorMatrixOperationFoldPhase"] = row.foldPhase;
+      fold.dataset["kpEditorMatrixOperationHoldPhase"] = row.holdPhase;
       fold.style.setProperty(
         "--kp-matrix-operation-gather-progress",
         String(row.gatherProgress)

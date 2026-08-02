@@ -45,15 +45,15 @@ test("rank-6 baseline preserves row-ranked dot-product pacing", () => {
       rowLatex: row.rowLatex
     }))
   }, {
-    duration: 2_400,
+    duration: 12_000,
     actions: 2,
-    structure: [0.02, 1 / 12],
-    release: [11 / 12, 1],
+    structure: [0.02, 1 / 15],
+    release: [2 / 3, 1],
     rows: [
       {
         semanticIndex: 0,
-        start: 1 / 12,
-        end: 1 / 2,
+        start: 1 / 15,
+        end: 11 / 30,
         rowValues: [2, 1],
         vectorValues: [4, 5],
         result: 13,
@@ -61,8 +61,8 @@ test("rank-6 baseline preserves row-ranked dot-product pacing", () => {
       },
       {
         semanticIndex: 1,
-        start: 1 / 2,
-        end: 11 / 12,
+        start: 11 / 30,
+        end: 2 / 3,
         rowValues: [0, 3],
         vectorValues: [4, 5],
         result: 15,
@@ -98,16 +98,16 @@ test("rank-6 baseline preserves start midpoint and settlement frames", () => {
   assert.equal(start.sourceOpacity, 1);
   assert.equal(start.structureRevealProgress, 0);
 
-  const firstAct = sample(1 / 4);
+  const firstAct = sample(13 / 60);
   assert.equal(firstAct.activeRowIndex, 0);
   assert.deepEqual(firstAct.rows.map(({ status }) => status), [
     "active",
     "upcoming"
   ]);
-  assert.equal(firstAct.rows[0]?.localProgress, 0.4);
+  assert.ok(Math.abs(firstAct.rows[0]!.localProgress - 0.5) < 1e-12);
   assert.equal(firstAct.rows[0]?.calculationOpacity, 1);
 
-  const handoff = sample(1 / 2);
+  const handoff = sample(11 / 30);
   assert.equal(handoff.activeRowIndex, 1);
   assert.deepEqual(handoff.rows.map(({ status }) => status), [
     "resolved",
@@ -128,7 +128,7 @@ test("rank-6 baseline preserves start midpoint and settlement frames", () => {
 
   const rewind = sampleKpMatrixVectorCompositionChoreography({
     choreography,
-    progress: 3 / 4,
+    progress: 47 / 60,
     direction: "rewind",
     accessibilityMode: "full"
   }).motion;
@@ -152,7 +152,7 @@ test("rank-6 visible baseline exposes one exact row overlay and narration", asyn
     ["upcoming", "upcoming"]
   );
   assert.deepEqual(
-    frame(0.5).matrixVectorComposition?.frame.motion.rows.map(
+    frame(11 / 30).matrixVectorComposition?.frame.motion.rows.map(
       ({ status }) => status
     ),
     ["resolved", "active"]

@@ -19,6 +19,13 @@ import {
   matrixVectorSemanticDurationMs
 } from "./matrix-vector-duration-contract.ts";
 import {
+  hasKpMatrixLinearMapPacing,
+  KP_MATRIX_LINEAR_MAP_DURATION_MS,
+  KP_MATRIX_LINEAR_MAP_LEAD_MS,
+  KP_MATRIX_LINEAR_MAP_RELEASE_MS,
+  KP_MATRIX_LINEAR_MAP_ROW_MS
+} from "./matrix-linear-map-pacing.ts";
+import {
   sampleKpMatrixVectorCompositionProgress,
   type KpMatrixVectorCompositionPlan,
   type KpMatrixVectorCompositionProgressFrame,
@@ -70,7 +77,20 @@ export function createKpMatrixVectorCompositionChoreography(
     throw new Error("Matrix-vector row count must match the result dimension.");
   }
   const semanticDurationMs = matrixVectorSemanticDurationMs(matrixRows.length);
-  if (animation.timeline?.durationMs !== semanticDurationMs) {
+  const deliberateLinearMapPacing = hasKpMatrixLinearMapPacing(animation);
+  const playbackDurationMs = deliberateLinearMapPacing
+    ? KP_MATRIX_LINEAR_MAP_DURATION_MS
+    : semanticDurationMs;
+  const leadDurationMs = deliberateLinearMapPacing
+    ? KP_MATRIX_LINEAR_MAP_LEAD_MS
+    : KP_MATRIX_VECTOR_ENVELOPE_LEAD_MS;
+  const rowDurationMs = deliberateLinearMapPacing
+    ? KP_MATRIX_LINEAR_MAP_ROW_MS
+    : KP_MATRIX_VECTOR_ROW_MINIMUM_DURATION_MS;
+  const releaseDurationMs = deliberateLinearMapPacing
+    ? KP_MATRIX_LINEAR_MAP_RELEASE_MS
+    : KP_MATRIX_VECTOR_ENVELOPE_RELEASE_MS;
+  if (animation.timeline?.durationMs !== playbackDurationMs) {
     throw new Error("Matrix-vector timeline must preserve semantic row duration.");
   }
   const vectorSelectorIds = indexedSelectorIds(source, ".vector.component.");
@@ -167,12 +187,10 @@ export function createKpMatrixVectorCompositionChoreography(
         result: expected,
         intermediateObjectId: intermediate.id,
         rowLatex: stringValue(intermediate.value, "rowLatex"),
-        start: (KP_MATRIX_VECTOR_ENVELOPE_LEAD_MS +
-          semanticIndex * KP_MATRIX_VECTOR_ROW_MINIMUM_DURATION_MS) /
-          semanticDurationMs,
-        end: (KP_MATRIX_VECTOR_ENVELOPE_LEAD_MS +
-          (semanticIndex + 1) * KP_MATRIX_VECTOR_ROW_MINIMUM_DURATION_MS) /
-          semanticDurationMs,
+        start: (leadDurationMs + semanticIndex * rowDurationMs) /
+          playbackDurationMs,
+        end: (leadDurationMs + (semanticIndex + 1) * rowDurationMs) /
+          playbackDurationMs,
         sourceSignatures: Object.fromEntries(sourceSelectorIds.map((selectorId, index) => [
           selectorId,
           deriveKpOrganicMotionSignature({
@@ -205,14 +223,14 @@ export function createKpMatrixVectorCompositionChoreography(
       id: `renderer.${transformation.id}.matrix-vector`,
       kind: "matrix-vector-renderer-plan",
       rows,
-      semanticDurationMs,
+      semanticDurationMs: playbackDurationMs,
       semanticActionCount: matrixRows.length,
       sourceReleaseStart:
-        (semanticDurationMs - KP_MATRIX_VECTOR_ENVELOPE_RELEASE_MS) /
-        semanticDurationMs,
+        (playbackDurationMs - releaseDurationMs) /
+        playbackDurationMs,
       sourceReleaseEnd: 1,
       structureRevealStart: 0.02,
-      structureRevealEnd: KP_MATRIX_VECTOR_ENVELOPE_LEAD_MS / semanticDurationMs
+      structureRevealEnd: leadDurationMs / playbackDurationMs
     },
     rows
   };

@@ -405,11 +405,67 @@
       "scope": "workspace",
       "checkedAt": "2026-08-02T21:43:58.563Z",
       "notes": "Workspace valid with 867 nodes and 16595 events before slice completion records."
+    },
+    {
+      "command": "npm run test:matrix-linear-map",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T22:12:18.802Z",
+      "notes": "43 of 43 laws passed, including deliberate 12-second canonical pacing and five explicit readable hold phases."
+    },
+    {
+      "command": "npm run visual:matrix-linear-map",
+      "status": "passed",
+      "scope": "checkpoint",
+      "checkedAt": "2026-08-02T22:12:19.906Z",
+      "notes": "Nine corrected wide, phone, reduced-motion, and static captures passed containment, overflow, capability, and motion-policy assertions."
+    },
+    {
+      "command": "npm run test:browser:matrix-linear-map",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-08-02T22:12:20.803Z",
+      "notes": "Chromium proved persistent-input-pour topology, exact values, row and graph sequencing, and at least 8 px caption-to-SVG separation; observed gap was 12 px."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T22:12:21.687Z",
+      "notes": "TypeScript, test, Svelte, and domain checks passed with zero Svelte errors or warnings."
+    },
+    {
+      "command": "npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T22:12:22.584Z",
+      "notes": "Generated catalogue display metadata is current with the 12-second duration and 120 beats."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-08-02T22:12:23.508Z",
+      "notes": "Production build passed; corrected matrix frame remains lazy at 11.87 kB, 4.16 kB gzip."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "performance",
+      "checkedAt": "2026-08-02T22:12:24.433Z",
+      "notes": "All fixed ceilings passed: outer 10459, main 180315, catalogue route 90475, and place-value 71795 gzip bytes."
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "performance",
+      "checkedAt": "2026-08-02T22:12:25.335Z",
+      "notes": "Confirmation sample reported no regressions; constrained LCP 2488 ms, frame p95 17.6 ms, and known 126 ms loading-task target pressure."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s16 completed the responsive and accessible matrix-to-linear-map exemplar and opened its mandatory human checkpoint; promotion and caller generalization remain pending approval."
+    "summary": "Slice s17 corrected the rejected visual checkpoint with a visible persistent-input Pour, deliberate 12-second pacing and explicit holds, plus structural graph-caption separation; renewed HUMAN_CHECKPOINT before s18."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."

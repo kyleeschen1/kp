@@ -141,6 +141,8 @@ test("rank-6 upgrades the canonical catalogue asset in place", () => {
   assert.equal(descriptor.id, "editor-animation.sample.animation.matrix-vector.basic");
   assert.equal(descriptor.animationId, animationId);
   assert.equal(descriptor.familyId, "family.linear-algebra.matrix-vector");
+  assert.equal(descriptor.durationMs, 12_000);
+  assert.equal(descriptor.beatCount, 120);
   assert.equal(kpEditorAnimationSelectionHref({
     pathname: "/",
     search: "",

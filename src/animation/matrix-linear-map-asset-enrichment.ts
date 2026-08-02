@@ -14,6 +14,10 @@ import {
 import {
   deriveKpMatrixLinearMapSemantics
 } from "./matrix-linear-map-semantics.ts";
+import {
+  KP_MATRIX_LINEAR_MAP_DURATION_MS,
+  kpMatrixLinearMapPacingId
+} from "./matrix-linear-map-pacing.ts";
 
 interface KpCoordinateVectorObject {
   readonly id: string;
@@ -143,6 +147,14 @@ export function enrichKpMatrixLinearMapAsset(
 
   return {
     ...animation,
+    // This canonical learner view needs time to read each product, sum, and
+    // geometric consequence. The generated arithmetic asset keeps its compact
+    // base duration until it is enriched with this presentation contract.
+    timeline: {
+      ...animation.timeline,
+      durationMs: KP_MATRIX_LINEAR_MAP_DURATION_MS,
+      beatCount: 120
+    },
     bundle: createKpAssetBundle({
       id: animation.bundle.id,
       title: animation.bundle.title,
@@ -218,6 +230,7 @@ export function enrichKpMatrixLinearMapAsset(
     metadata: {
       ...animation.metadata,
       matrixLinearMapEnriched: true,
+      matrixLinearMapPacing: kpMatrixLinearMapPacingId,
       clockCoupling: "shared-progress"
     }
   };

@@ -19,13 +19,14 @@ const outputRoot = path.resolve(
 // become visual truth until the human checkpoint promotes a treatment.
 const checkpoints = [
   { id: "wide-row-one", label: "Wide · first-row products", viewport: { width: 1440, height: 1000 }, progress: 0.25 },
-  { id: "wide-handoff", label: "Wide · row handoff", viewport: { width: 1440, height: 1000 }, progress: 0.52 },
-  { id: "wide-gather", label: "Wide · gather and geometry", viewport: { width: 1440, height: 1000 }, progress: 0.8 },
+  { id: "wide-handoff", label: "Wide · row handoff", viewport: { width: 1440, height: 1000 }, progress: 0.39 },
+  { id: "wide-gather", label: "Wide · second-row gather", viewport: { width: 1440, height: 1000 }, progress: 0.62 },
+  { id: "wide-map", label: "Wide · geometric application", viewport: { width: 1440, height: 1000 }, progress: 0.9 },
   { id: "wide-settled", label: "Wide · exact settlement", viewport: { width: 1440, height: 1000 }, progress: 1 },
-  { id: "narrow-handoff", label: "Phone · row handoff", viewport: { width: 390, height: 844 }, progress: 0.52 },
+  { id: "narrow-handoff", label: "Phone · second-row gather", viewport: { width: 390, height: 844 }, progress: 0.62 },
   { id: "narrow-settled", label: "Phone · exact settlement", viewport: { width: 390, height: 844 }, progress: 1 },
-  { id: "reduced-gather", label: "Reduced motion · gather", viewport: { width: 1024, height: 900 }, progress: 0.8, reducedMotion: true },
-  { id: "static-row-complete", label: "Static · row completion", viewport: { width: 1024, height: 900 }, progress: 0.92, staticMode: true }
+  { id: "reduced-gather", label: "Reduced motion · mapped vector", viewport: { width: 1024, height: 900 }, progress: 0.9, reducedMotion: true },
+  { id: "static-row-complete", label: "Static · exact settlement", viewport: { width: 1024, height: 900 }, progress: 0.99, staticMode: true }
 ] as const;
 
 await mkdir(outputRoot, { recursive: true });

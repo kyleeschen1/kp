@@ -156,7 +156,8 @@
     {
       "id": "s17",
       "title": "Apply approved local visual corrections",
-      "status": "planned"
+      "summary": "Corrected the rejected checkpoint: made the persistent-input Pour topology explicit, extended canonical playback to 12 seconds with five readable holds, moved graph release after both row computations, and enforced structural caption-to-plot separation. Renewed HUMAN_CHECKPOINT before s18.",
+      "status": "complete"
     },
     {
       "id": "s18",

@@ -59,13 +59,21 @@ test("reduced and static modes expose only discrete motion values", () => {
 
 test("static playback uses finite semantic checkpoints", () => {
   const rowEnds = plan.choreography.rows.map((row) => row.end);
-  assert.deepEqual([
-    sample(0.49, "static").semanticProgress,
-    sample(0.5, "static").semanticProgress,
-    sample(0.9, "static").semanticProgress,
-    sample(0.92, "static").semanticProgress,
-    sample(1, "static").semanticProgress
-  ], [0, rowEnds[0], rowEnds[0], rowEnds[1], 1]);
+  const observed = [0.75, 0.8, 0.9, 0.96, 0.99, 1].map((progress) =>
+    sample(progress, "static").semanticProgress
+  );
+  const releaseSpan = 1 - rowEnds[1]!;
+  const expected = [
+    rowEnds[1]!,
+    rowEnds[1]! + releaseSpan * 0.32,
+    rowEnds[1]! + releaseSpan * 0.56,
+    rowEnds[1]! + releaseSpan * 0.84,
+    rowEnds[1]! + releaseSpan * 0.96,
+    1
+  ];
+  observed.forEach((value, index) =>
+    assert.ok(Math.abs(value - expected[index]!) < 1e-9)
+  );
 });
 
 test("every projection preserves exact values and an explicit description", () => {

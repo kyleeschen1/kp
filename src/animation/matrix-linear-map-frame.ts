@@ -26,6 +26,14 @@ export type KpMatrixLinearMapFoldPhase =
   | "gather"
   | "coordinate";
 
+export type KpMatrixLinearMapHoldPhase =
+  | "none"
+  | "input-pairs"
+  | "first-product"
+  | "products"
+  | "sum"
+  | "coordinate";
+
 export interface KpMatrixLinearMapPlan {
   readonly id: string;
   readonly kind: "matrix-linear-map-plan";
@@ -58,6 +66,7 @@ export interface KpMatrixLinearMapFrame {
       readonly semanticIndex: number;
       readonly status: "upcoming" | "active" | "resolved";
       readonly foldPhase: KpMatrixLinearMapFoldPhase;
+      readonly holdPhase: KpMatrixLinearMapHoldPhase;
       readonly routeProgress: number;
       readonly gatherProgress: number;
       readonly coordinateProgress: number;
@@ -147,14 +156,15 @@ export function sampleKpMatrixLinearMapFrame(input: {
       semanticIndex: row.semanticIndex,
       status: motion.status,
       foldPhase,
+      holdPhase: holdPhaseFor(motion.status, motion.localProgress),
       routeProgress: accessibleProgress(
-        smooth(windowProgress(motion.localProgress, 0.02, 0.2)), discrete
+        smooth(windowProgress(motion.localProgress, 0.04, 0.18)), discrete
       ),
       gatherProgress: accessibleProgress(
-        smooth(windowProgress(motion.localProgress, 0.48, 0.76)), discrete
+        smooth(windowProgress(motion.localProgress, 0.7, 0.8)), discrete
       ),
       coordinateProgress: accessibleProgress(
-        motion.resultRevealProgress, discrete
+        smooth(windowProgress(motion.localProgress, 0.88, 0.94)), discrete
       ),
       contributions: row.contributions.map((contribution) => ({
         columnIndex: contribution.columnIndex,
@@ -164,8 +174,8 @@ export function sampleKpMatrixLinearMapFrame(input: {
         productRevealProgress: accessibleProgress(
           smooth(windowProgress(
             motion.localProgress,
-            0.18 + contribution.columnIndex * 0.06,
-            0.42 + contribution.columnIndex * 0.06
+            contribution.columnIndex === 0 ? 0.3 : 0.48,
+            contribution.columnIndex === 0 ? 0.4 : 0.58
           )),
           discrete
         )
@@ -173,11 +183,13 @@ export function sampleKpMatrixLinearMapFrame(input: {
       result: row.result
     };
   });
+  const calculationEnd = input.plan.choreography.rows.at(-1)?.end ?? 1;
+  const geometryProgress = windowProgress(progress, calculationEnd, 1);
   const gridTransformProgress = accessibleProgress(
-    smooth(windowProgress(progress, 0.64, 0.9)), discrete
+    smooth(windowProgress(geometryProgress, 0.4, 0.56)), discrete
   );
   const vectorMapProgress = accessibleProgress(
-    smooth(windowProgress(progress, 0.72, 0.96)), discrete
+    smooth(windowProgress(geometryProgress, 0.68, 0.84)), discrete
   );
   const currentBasisVectors = input.plan.semantics.mappedBasisVectors.map(
     (vector) => vector.sourceCoordinates.map((coordinate, index) =>
@@ -197,18 +209,18 @@ export function sampleKpMatrixLinearMapFrame(input: {
   );
   const geometry = {
     visibility: accessibleProgress(
-      smooth(windowProgress(progress, 0.54, 0.64)), discrete
+      smooth(windowProgress(geometryProgress, 0.08, 0.16)), discrete
     ),
     basisRevealProgress: accessibleProgress(
-      smooth(windowProgress(progress, 0.58, 0.74)), discrete
+      smooth(windowProgress(geometryProgress, 0.18, 0.32)), discrete
     ),
     gridTransformProgress,
     sourceVectorRevealProgress: accessibleProgress(
-      smooth(windowProgress(progress, 0.62, 0.76)), discrete
+      smooth(windowProgress(geometryProgress, 0.58, 0.68)), discrete
     ),
     vectorMapProgress,
     outputVectorRevealProgress: accessibleProgress(
-      smooth(windowProgress(progress, 0.86, 1)), discrete
+      smooth(windowProgress(geometryProgress, 0.9, 0.96)), discrete
     ),
     inputCoordinates: input.plan.semantics.inputCoordinates,
     outputCoordinates: input.plan.semantics.outputCoordinates,
@@ -250,10 +262,23 @@ function phaseFor(
 ): KpMatrixLinearMapFoldPhase {
   if (status === "upcoming") return "waiting";
   if (status === "resolved") return "coordinate";
-  if (progress < 0.18) return "route";
-  if (progress < 0.48) return "products";
-  if (progress < 0.76) return "gather";
+  if (progress < 0.3) return "route";
+  if (progress < 0.7) return "products";
+  if (progress < 0.88) return "gather";
   return "coordinate";
+}
+
+function holdPhaseFor(
+  status: "upcoming" | "active" | "resolved",
+  progress: number
+): KpMatrixLinearMapHoldPhase {
+  if (status !== "active") return status === "resolved" ? "coordinate" : "none";
+  if (progress >= 0.18 && progress < 0.3) return "input-pairs";
+  if (progress >= 0.4 && progress < 0.48) return "first-product";
+  if (progress >= 0.58 && progress < 0.7) return "products";
+  if (progress >= 0.8 && progress < 0.88) return "sum";
+  if (progress >= 0.94) return "coordinate";
+  return "none";
 }
 
 function narrationFor(
@@ -290,9 +315,14 @@ function staticCheckpointProgress(
   plan: KpMatrixLinearMapPlan,
   progress: number
 ): number {
+  const calculationEnd = plan.choreography.rows.at(-1)?.end ?? 1;
+  const releaseSpan = 1 - calculationEnd;
   const checkpoints = [
     0,
     ...plan.choreography.rows.map((row) => row.end),
+    ...[0.32, 0.56, 0.84, 0.96].map((releaseProgress) =>
+      calculationEnd + releaseSpan * releaseProgress
+    ),
     1
   ];
   return checkpoints.filter((checkpoint) => checkpoint <= progress).at(-1) ?? 0;

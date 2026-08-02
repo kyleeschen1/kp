@@ -40,6 +40,8 @@ test("matrix map SVG uses the shared dimensional-continuity language", () => {
   assert.match(html, /data-kp-matrix-linear-map-view/);
   assert.match(html, /data-kp-matrix-linear-map-grid-progress="0"/);
   assert.match(html, /data-kp-matrix-linear-map-nonvisual-summary/);
+  assert.match(html, /data-kp-matrix-linear-map-plot-top="72"/);
+  assert.match(html, /data-kp-matrix-linear-map-reference-grid="x\.0"[^>]+y1="72"/);
   assert.equal((html.match(/data-kp-matrix-linear-map-grid-line=/g) ?? []).length, 12);
   assert.doesNotMatch(html, /katex-display/);
 });

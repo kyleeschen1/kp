@@ -4,9 +4,32 @@ Date: 2026-08-02
 
 Run contract: `run-contract.kp.matrix-linear-map-rank6-v2`
 
-Slice: 16 of 26 — responsive exemplar checkpoint
+Slice: 17 of 26 — corrected responsive exemplar checkpoint
 
 Status: `HUMAN_CHECKPOINT`
+
+Reviewer disposition: the slice-16 treatment was not approved. The visible
+routes did not read as Pour, the graph canvas crossed the **Matrix row
+compose** caption, and the 2.4-second playback had no readable holds. Slice 17
+implements only those requested local corrections and returns here for a
+renewed visual decision.
+
+## Slice-17 correction
+
+- The operation bank now names and draws persistent `v_1 = 4` and `v_2 = 5`
+  sources. Each row reuses those sources through a visible channel, moving
+  contribution marker, matrix gate, product, gather joint, and output well.
+- The canonical enriched asset now has a 12-second presentation timeline:
+  800 ms orientation, 3.6 seconds per row, and 4 seconds for geometric
+  application. Explicit holds preserve input pairing, the first product, both
+  products, the gathered sum, and the resolved coordinate.
+- Both symbolic rows finish before the graph begins. The graph surface owns an
+  explicit second composite row and 13:9 viewport, while its plot begins below
+  a reserved relation-label band. Browser evidence requires at least 8 px
+  between the equation caption and SVG; the reviewed layout provides 12 px.
+- The exact values, source persistence, single clock, semantic frame,
+  capability loading, and non-canonical matrix-vector duration contract remain
+  unchanged.
 
 ## Review object
 
@@ -33,9 +56,8 @@ Approve the exemplar only if all four judgments hold:
 1. **Operation-bank topology:** the fixed matrix and vector, row routes,
    products, gather, and collapse read as persistent information flow rather
    than consumed fluid or disappearing inputs.
-2. **Pacing and handoff:** row one establishes the calculation; the graph
-   plane anticipates the geometric view; mapped geometry begins during row
-   two without interrupting the symbolic explanation.
+2. **Pacing and handoff:** each pairing, product, sum, and coordinate has time
+   to register; both rows finish before the geometric application begins.
 3. **Graph hierarchy:** muted basis images and source vector remain supporting
    evidence, while the orange mapped vector and exact relation
    `T_A(v) = Av = [13, 15]` read as the conclusion.
@@ -43,10 +65,11 @@ Approve the exemplar only if all four judgments hold:
    space, and phone composition remain legible without scrolling inside the
    focused stage.
 
-Recommended disposition: approve this exemplar and reserve any desired
-typographic or timing adjustment for the independently reversible slice 17.
-The intentionally quiet pre-reveal graph and compact phone operation bank are
-the two places most worth inspecting at natural size.
+Recommended disposition: approve the corrected exemplar before any
+standalone-dot-product or matrix-matrix pressure. The intentionally quiet
+pre-reveal graph, visible input-channel metaphor, natural 12-second playback,
+and compact phone operation bank are the places most worth inspecting at
+natural size.
 
 ## Review package
 
@@ -54,9 +77,9 @@ Regenerate the deterministic package with
 `npm run visual:matrix-linear-map`. Disposable outputs live under
 `tmp/codex/matrix-linear-map/`:
 
-- `contact-sheet.png` and `index.html` provide the eight-view review index;
-- `wide-row-one.png`, `wide-handoff.png`, `wide-gather.png`, and
-  `wide-settled.png` show the full-motion sequence;
+- `contact-sheet.png` and `index.html` provide the nine-view review index;
+- `wide-row-one.png`, `wide-handoff.png`, `wide-gather.png`, `wide-map.png`,
+  and `wide-settled.png` show the full-motion sequence;
 - `narrow-handoff.png` and `narrow-settled.png` exercise the phone layout; and
 - `reduced-gather.png` and `static-row-complete.png` prove discrete accessible
   projections.
@@ -68,22 +91,22 @@ review evidence, not committed goldens.
 
 ## Automated evidence
 
-- `npm run test:matrix-linear-map`: 42/42 focused semantic, runtime, host,
+- `npm run test:matrix-linear-map`: 43/43 focused semantic, runtime, host,
   accessibility, and renderer laws pass.
 - `npm run test:browser:matrix-linear-map`: the canonical production route
   passes in Chromium. Vite also reported one non-failing `ResizeObserver`
   delivery warning; it did not affect the asserted interaction or layout.
 - `npm run build`: TypeScript, Svelte, and domain checks pass with zero Svelte
-  errors or warnings. The matrix frame remains a lazy 11.42 kB production
-  chunk (3.98 kB gzip).
+  errors or warnings. The matrix frame remains a lazy 11.87 kB production
+  chunk (4.16 kB gzip).
 - `npm run check:animation-library-bundle-boundary`: all fixed ceilings pass;
-  outer shell is 10,459/50,000 gzip bytes, main host 179,753/490,000,
-  catalogue route 90,463/190,000, and place-value increment 71,793/75,000.
-- `npm run perf:animation`: no regression fires. Normal LCP is 356 ms, CLS is
-  0.00022, and animation p95 is 17.5 ms; constrained LCP is 2,468 ms, CLS is
-  0.00010, and animation p95 is 17.6 ms.
+  outer shell is 10,459/50,000 gzip bytes, main host 180,315/490,000,
+  catalogue route 90,475/190,000, and place-value increment 71,795/75,000.
+- `npm run perf:animation`: no regression fires. The confirmation sample has
+  normal LCP 320 ms and animation p95 17.2 ms; constrained LCP is 2,488 ms and
+  animation p95 is 17.6 ms.
 - The known constrained-device target remains honest: the longest loading task
-  is 104 ms against the 50 ms target, attributed around KaTeX loading rather
+  is 126 ms against the 50 ms target, attributed around host and KaTeX loading rather
   than matrix animation-frame work.
 - `npm run perf:animation:attribution`: SVG graph capability remains isolated
   from the WebGL/Three capability and loads only on selected graph callers.
@@ -95,8 +118,9 @@ transformations, Matrix/LinearMap truth, standard-basis provenance, player
 clock, catalogue route, Review owner, and selected-capability loading.
 Presentation geometry does not move into semantic authority.
 
-The operation bank, symbolic fold, and mapped geometry are separately
-reversible through slices 13, 14, and 15. Slice 16 adds only responsive capture
-and review evidence. No shared dot-product abstraction, matrix-matrix caller,
-placeholder retirement, catalogue-wide rollout, or promotion has occurred.
-Slices 17 through 26 remain untouched until explicit human approval.
+The operation bank, symbolic fold, mapped geometry, and local correction are
+separately reversible through slices 13, 14, 15, and 17. Slice 16 adds only
+responsive capture and review evidence. No shared dot-product abstraction,
+matrix-matrix caller, placeholder retirement, catalogue-wide rollout, or
+promotion has occurred. Slices 18 through 26 remain untouched until explicit
+human approval.

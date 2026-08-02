@@ -15,13 +15,19 @@ export interface KpMatrixLinearMapGraphViewport {
 export const kpMatrixLinearMapGraphPresentationProfile =
   createKpDimensionalContinuityGraphPresentationProfile("linear-algebra");
 
+const KP_MATRIX_LINEAR_MAP_PLOT_TOP = 72;
+
 export function renderKpMatrixLinearMapRuntimeContent(input: {
   readonly frame: KpMatrixLinearMapFrame;
   readonly viewport: KpMatrixLinearMapGraphViewport;
 }): string {
   const point = (coordinates: readonly number[]) => [
     scale(coordinates[0] ?? 0, input.viewport.xDomain, [36, input.viewport.width - 20]),
-    scale(coordinates[1] ?? 0, input.viewport.yDomain, [input.viewport.height - 28, 20])
+    scale(
+      coordinates[1] ?? 0,
+      input.viewport.yDomain,
+      [input.viewport.height - 28, KP_MATRIX_LINEAR_MAP_PLOT_TOP]
+    )
   ] as const;
   const origin = point([0, 0]);
   const source = point(input.frame.geometry.inputCoordinates);
@@ -37,7 +43,7 @@ export function renderKpMatrixLinearMapRuntimeContent(input: {
     input.frame.geometry.outputVectorRevealProgress
   );
 
-  return `<g data-kp-matrix-linear-map-view data-kp-matrix-linear-map-progress="${input.frame.semanticProgress}" data-kp-matrix-linear-map-grid-progress="${input.frame.geometry.gridTransformProgress}" data-kp-matrix-linear-map-vector-progress="${input.frame.geometry.vectorMapProgress}" data-kp-matrix-linear-map-output-progress="${input.frame.geometry.outputVectorRevealProgress}" data-kp-matrix-linear-map-motion-policy="${input.frame.accessibility.motionPolicy}">
+  return `<g data-kp-matrix-linear-map-view data-kp-matrix-linear-map-progress="${input.frame.semanticProgress}" data-kp-matrix-linear-map-grid-progress="${input.frame.geometry.gridTransformProgress}" data-kp-matrix-linear-map-vector-progress="${input.frame.geometry.vectorMapProgress}" data-kp-matrix-linear-map-output-progress="${input.frame.geometry.outputVectorRevealProgress}" data-kp-matrix-linear-map-motion-policy="${input.frame.accessibility.motionPolicy}" data-kp-matrix-linear-map-plot-top="${KP_MATRIX_LINEAR_MAP_PLOT_TOP}">
     <desc id="kp-matrix-linear-map-description" data-kp-matrix-linear-map-nonvisual-summary>${escapeHtml(input.frame.accessibility.description)}</desc>
     ${renderReferenceGrid(input.viewport, point, 0.18 + visibility * 0.22)}
     <g class="editor-graph-stage__matrix-map-grid" data-kp-matrix-linear-map-grid style="opacity:${visibility * 0.54}">
@@ -92,7 +98,7 @@ function renderReferenceGrid(
     const [x] = point([value, 0]);
     const [, y] = point([0, value]);
     return [
-      `<line data-kp-matrix-linear-map-reference-grid="x.${value}" x1="${x}" y1="20" x2="${x}" y2="${viewport.height - 28}" />`,
+      `<line data-kp-matrix-linear-map-reference-grid="x.${value}" x1="${x}" y1="${KP_MATRIX_LINEAR_MAP_PLOT_TOP}" x2="${x}" y2="${viewport.height - 28}" />`,
       `<line data-kp-matrix-linear-map-reference-grid="y.${value}" x1="36" y1="${y}" x2="${viewport.width - 20}" y2="${y}" />`
     ];
   }).join("");
