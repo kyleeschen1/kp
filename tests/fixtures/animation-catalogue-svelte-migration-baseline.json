@@ -37,6 +37,9 @@
     "#loadSelectedCapabilities",
     "hydrateKpEditorAnimationPlayers"
   ],
+  "lifecycleOwnerMigrations": {
+    "#loadSelectedCapabilities": "kpEditorSelectedSurfaceCapabilityHost"
+  },
   "bundleLimitsGzipBytes": {
     "outer": 50000,
     "mainHost": 490000,

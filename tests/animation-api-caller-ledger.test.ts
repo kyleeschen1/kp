@@ -101,9 +101,7 @@ test("generated-session internals expose only their observed direct callers", ()
     "src/tutorial/verified-generated-linear-solve-session.ts"
   ]);
   assert.deepEqual(record("generated.catalogue-reader").sourceCallers, [
-    "src/editor/animation-catalogue-application.ts",
-    "src/editor/animation-catalogue-shell.ts",
-    "src/main.ts"
+    "src/editor/animation-catalogue-selection-preparation.ts"
   ]);
 });
 

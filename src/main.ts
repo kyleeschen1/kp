@@ -40,8 +40,9 @@ import {
   createKpAnimationCatalogueSelectedHostViewModel
 } from "./editor/animation-catalogue-host-view-model.ts";
 import {
-  inspectKpAnimationCatalogueSurfaceHostability
-} from "./editor/animation-catalogue-surface-hostability.ts";
+  createKpAnimationCatalogueSelectionPreparationService,
+  type KpAnimationCataloguePreparedSelection
+} from "./editor/animation-catalogue-selection-preparation.ts";
 import {
   createKpEditorAnimationLibrary,
   selectKpEditorAnimationDescriptor
@@ -73,7 +74,6 @@ import {
 import {
   createKpEconomicsEquilibriumParameterState,
   createParameterizedEconomicsEquilibriumAnimation,
-  readKpEconomicsEquilibriumParameters,
   writeKpEconomicsEquilibriumParameters
 } from "./editor/economics-equilibrium-parameters.ts";
 import {
@@ -82,7 +82,6 @@ import {
 import {
   createKpConstantForceWorkEnergyParameterState,
   createParameterizedConstantForceWorkEnergyAnimation,
-  readKpConstantForceWorkEnergyParameters,
   writeKpConstantForceWorkEnergyParameters
 } from "./editor/constant-force-work-energy-parameters.ts";
 import {
@@ -98,12 +97,6 @@ import {
   hydrateKpEditorAnimationSurfaces
 } from "./editor/animation-surface-adapter-registry.ts";
 import {
-  kpEditorAnimationSurfaceAdapterRegistry
-} from "./editor/animation-surface-adapter-registry.ts";
-import {
-  createKpEditorAnimationPlayerState
-} from "./editor/animation-player-state.ts";
-import {
   renderKpEditorAnimationPlayerShell
 } from "./editor/animation-player-shell.ts";
 import { registerKpEditorDiagramSvgAdapter } from "./editor/diagram-svg-adapter.ts";
@@ -111,6 +104,9 @@ import {
   deriveKpEditorSelectedSurfaceCapabilities,
   type KpEditorSelectedSurfaceCapability
 } from "./editor/selected-surface-capability.ts";
+import {
+  kpEditorSelectedSurfaceCapabilityHost
+} from "./editor/selected-surface-capability-host.ts";
 import {
   disposeKpEditorEquationStageHotPathCaches
 } from "./editor/equation-stage-hot-path-cache.ts";
@@ -150,10 +146,6 @@ import type {
 import type {
   KpSemanticAnimationWorkbenchIndex
 } from "./editor/semantic-animation-workbench-index.ts";
-import {
-  kpVerifiedGeneratedLinearSolveAnimationId
-} from "./tutorial/verified-generated-linear-solve-identity.ts";
-
 const app = document.querySelector<HTMLDivElement>("#app");
 
 if (app === null) {
@@ -169,6 +161,10 @@ let projectDashboardSelectedKatexFixtureId: string | undefined;
 let selectedEquationAnimationId: string | undefined;
 const editorAnimationDescriptors = createKpEditorAnimationLibrary();
 const animationCatalogueProjection = createKpAnimationCatalogueProjection();
+const animationCatalogueSelectionPreparation =
+  createKpAnimationCatalogueSelectionPreparationService({
+    descriptors: editorAnimationDescriptors
+  });
 let selectedEditorAnimationDescriptorId = selectKpEditorAnimationDescriptor(
   editorAnimationDescriptors,
   readKpEditorAnimationSelection(window.location.search)
@@ -179,9 +175,6 @@ type FtcTutorialSurfaceClient = typeof import("./tutorial/ftc-surface.ts");
 type FtcTutorialEditorClient = typeof import("./editor/ftc-tutorial-editor-surface.ts");
 type AnimationWorkbenchViewClient = typeof import(
   "./editor/semantic-animation-workbench-view.ts"
-);
-type GeneratedLinearSolveReaderClient = typeof import(
-  "./editor/verified-generated-linear-solve-reader.ts"
 );
 type EditorClient = typeof import("./editor/editor.ts");
 type ApiCatalogClient = typeof import("./editor/api-catalog.ts");
@@ -194,18 +187,6 @@ type Graph3DEditorControllerClient = typeof import(
 type Graph3DEditorController = ReturnType<
   Graph3DEditorControllerClient["createKpEditorGraph3DController"]
 >;
-type EquationSurfaceCapabilityClient = typeof import(
-  "./editor/equation-surface-capability.ts"
-);
-type GraphSvgSurfaceCapabilityClient = typeof import(
-  "./editor/graph-svg-surface-capability.ts"
-);
-type Graph3DSurfaceCapabilityClient = typeof import(
-  "./editor/graph-3d-surface-capability.ts"
-);
-type ProgrammingSurfaceCapabilityClient = typeof import(
-  "./editor/programming-surface-capability.ts"
-);
 let projectDashboardClientPromise: Promise<{
   readonly data: ProjectDashboardDataClient;
   readonly render: ProjectDashboardRenderClient;
@@ -214,9 +195,6 @@ let ftcTutorialSurfaceClientPromise: Promise<FtcTutorialSurfaceClient> | undefin
 let ftcTutorialEditorClientPromise: Promise<FtcTutorialEditorClient> | undefined;
 let animationWorkbenchViewClientPromise:
   | Promise<AnimationWorkbenchViewClient>
-  | undefined;
-let generatedLinearSolveReaderClientPromise:
-  | Promise<GeneratedLinearSolveReaderClient>
   | undefined;
 let editorClientPromise: Promise<EditorClient> | undefined;
 let apiCatalogClientPromise: Promise<ApiCatalogClient> | undefined;
@@ -227,18 +205,6 @@ let graph3DEditorControllerClientPromise:
   | Promise<Graph3DEditorControllerClient>
   | undefined;
 let graph3DEditorController: Graph3DEditorController | undefined;
-let equationSurfaceCapabilityPromise:
-  | Promise<EquationSurfaceCapabilityClient>
-  | undefined;
-let graphSvgSurfaceCapabilityPromise:
-  | Promise<GraphSvgSurfaceCapabilityClient>
-  | undefined;
-let graph3DSurfaceCapabilityPromise:
-  | Promise<Graph3DSurfaceCapabilityClient>
-  | undefined;
-let programmingSurfaceCapabilityPromise:
-  | Promise<ProgrammingSurfaceCapabilityClient>
-  | undefined;
 let activeView:
   | "dashboard"
   | "editor"
@@ -686,8 +652,9 @@ async function renderAnimationCatalogueView(): Promise<void> {
     title: entry.title
   });
   try {
-    const prepared = await prepareAnimationCatalogueSelection({
+    const prepared = await animationCatalogueSelectionPreparation.prepare({
       entry,
+      search: window.location.search,
       playhead: route.playhead
     });
     if (activeView !== "animation-catalogue" || revision !== viewRevision) {
@@ -777,7 +744,10 @@ async function renderAnimationCatalogueSelectionInShell(input: {
   );
 
   try {
-    const prepared = await prepareAnimationCatalogueSelection(input);
+    const prepared = await animationCatalogueSelectionPreparation.prepare({
+      ...input,
+      search: window.location.search
+    });
     if (
       activeView !== "animation-catalogue" ||
       revision !== viewRevision ||
@@ -923,92 +893,12 @@ function restoreAnimationCatalogueFocus(
   target?.focus({ preventScroll: true });
 }
 
-async function prepareAnimationCatalogueSelection(input: {
-  readonly entry: KpAnimationCatalogueEntry;
-  readonly playhead?: number | undefined;
-}) {
-  const loaded = await loadKpAnimationAsset(input.entry.animationId);
-  if (
-    loaded.animation.id !== input.entry.animationId ||
-    loaded.packId !== input.entry.packId
-  ) {
-    throw new Error(
-      `Loaded catalogue asset ${loaded.animation.id} from ${loaded.packId}; ` +
-      `expected ${input.entry.animationId} from ${input.entry.packId}.`
-    );
-  }
-  const descriptor = editorAnimationDescriptors.find(
-    ({ id }) => id === input.entry.primaryDescriptorId
-  );
-  if (descriptor === undefined) {
-    throw new Error(
-      `Catalogue entry ${input.entry.animationId} is missing descriptor ` +
-      `${input.entry.primaryDescriptorId}.`
-    );
-  }
-  const economicsParameters = input.entry.animationId ===
-      economicsEquilibriumAnimationId
-    ? readKpEconomicsEquilibriumParameters(window.location.search)
-    : undefined;
-  const physicsParameters = input.entry.animationId ===
-      constantForceWorkEnergyAnimationId
-    ? readKpConstantForceWorkEnergyParameters(window.location.search)
-    : undefined;
-  const animation = economicsParameters !== undefined
-    ? createParameterizedEconomicsEquilibriumAnimation(economicsParameters)
-        .animation
-    : physicsParameters !== undefined
-      ? createParameterizedConstantForceWorkEnergyAnimation(physicsParameters)
-          .animation
-      : loaded.animation;
-  const readerCompanion = input.entry.animationId ===
-      kpVerifiedGeneratedLinearSolveAnimationId
-    ? (await loadGeneratedLinearSolveReaderClient())
-        .createKpVerifiedGeneratedLinearSolveReaderCompanion()
-    : undefined;
-  const catalog = loaded.catalog.some(({ id }) => id === animation.id)
-    ? loaded.catalog.map((candidate) =>
-        candidate.id === animation.id ? animation : candidate
-      )
-    : [...loaded.catalog, animation];
-  const player = createKpEditorAnimationPlayerState({
-    descriptor,
-    animation,
-    catalog,
-    progress: input.playhead ?? 0
-  });
-  await loadSelectedSurfaceCapabilities({
-    animationId: player.animationId,
-    slotKinds: player.surface.slotKinds
-  });
-  const hostability = inspectKpAnimationCatalogueSurfaceHostability({
-    state: player,
-    registry: kpEditorAnimationSurfaceAdapterRegistry
-  });
-  return {
-    animation,
-    descriptor,
-    player,
-    economicsParameters,
-    physicsParameters,
-    readerCompanion,
-    hostability,
-    health: deriveKpAnimationCatalogueHealth({
-      hostability,
-      hostObservation: { status: "not-observed" }
-    })
-  } as const;
-}
-
 function hydrateAnimationCatalogueSelection(input: {
   readonly shell: HTMLElement;
   readonly entry: KpAnimationCatalogueEntry;
-  readonly hostability: ReturnType<
-    typeof inspectKpAnimationCatalogueSurfaceHostability
-  >;
-  readonly animation: Awaited<
-    ReturnType<typeof loadKpAnimationAsset>
-  >["animation"];
+  readonly hostability:
+    KpAnimationCataloguePreparedSelection["hostability"];
+  readonly animation: KpAnimationCataloguePreparedSelection["animation"];
 }): void {
   disposeAnimationCatalogueHostEvidenceObserver();
   // Surface listeners attach first so the controller's initial runtime frame
@@ -1770,16 +1660,6 @@ function loadAnimationWorkbenchViewClient(): Promise<
   );
 }
 
-function loadGeneratedLinearSolveReaderClient(): Promise<
-  GeneratedLinearSolveReaderClient
-> {
-  // Explanation compilation and inline KaTeX belong to the selected generated
-  // artifact; unrelated catalogue rows must not inherit that closure.
-  return generatedLinearSolveReaderClientPromise ??= import(
-    "./editor/verified-generated-linear-solve-reader.ts"
-  );
-}
-
 function loadEditorClient(): Promise<EditorClient> {
   // The editor renderer owns equation previews and KaTeX. Catalogue selections
   // must not import it merely because both views share this entry module.
@@ -1869,70 +1749,7 @@ async function loadSelectedSurfaceCapabilitiesForRoot(
         slotKinds
       }).forEach((capability) => capabilities.add(capability));
     });
-  await Promise.all([...capabilities].map(loadSelectedSurfaceCapability));
-}
-
-async function loadSelectedSurfaceCapabilities(input: {
-  readonly animationId: string;
-  readonly slotKinds: Parameters<
-    typeof deriveKpEditorSelectedSurfaceCapabilities
-  >[0]["slotKinds"];
-}): Promise<void> {
-  await Promise.all(
-    deriveKpEditorSelectedSurfaceCapabilities(input)
-      .map(loadSelectedSurfaceCapability)
-  );
-}
-
-function loadSelectedSurfaceCapability(
-  capability: KpEditorSelectedSurfaceCapability
-): Promise<unknown> {
-  if (capability === "equation-katex") {
-    return equationSurfaceCapabilityPromise ??= import(
-      "./editor/equation-surface-capability.ts"
-    ).then((client) => {
-      if (!kpEditorAnimationSurfaceAdapterRegistry.list().some(
-        ({ id }) => id === "editor-animation-surface.equation.katex"
-      )) {
-        client.registerKpEditorEquationSurfaceCapability();
-      }
-      return client;
-    });
-  }
-  if (capability === "graph-webgl-3d") {
-    return graph3DSurfaceCapabilityPromise ??= import(
-      "./editor/graph-3d-surface-capability.ts"
-    ).then((client) => {
-      if (!kpEditorAnimationSurfaceAdapterRegistry.list().some(
-        ({ id }) => id === "editor-animation-surface.graph.webgl-3d"
-      )) {
-        client.registerKpEditorGraph3DSurfaceCapability();
-      }
-      return client;
-    });
-  }
-  if (capability === "programming-trace") {
-    return programmingSurfaceCapabilityPromise ??= import(
-      "./editor/programming-surface-capability.ts"
-    ).then((client) => {
-      if (!kpEditorAnimationSurfaceAdapterRegistry.list().some(
-        ({ id }) => id === "editor-animation-surface.programming.trace"
-      )) {
-        client.registerKpEditorProgrammingSurfaceCapability();
-      }
-      return client;
-    });
-  }
-  return graphSvgSurfaceCapabilityPromise ??= import(
-    "./editor/graph-svg-surface-capability.ts"
-  ).then((client) => {
-    if (!kpEditorAnimationSurfaceAdapterRegistry.list().some(
-      ({ id }) => id === "editor-animation-surface.graph.svg"
-    )) {
-      client.registerKpEditorGraphSvgSurfaceCapability();
-    }
-    return client;
-  });
+  await kpEditorSelectedSurfaceCapabilityHost.loadAll([...capabilities]);
 }
 
 function handleAnimationWorkbenchKeydown(event: KeyboardEvent): boolean {

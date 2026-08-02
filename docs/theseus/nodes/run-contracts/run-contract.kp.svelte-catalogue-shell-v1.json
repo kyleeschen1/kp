@@ -77,7 +77,8 @@
     {
       "id": "s04",
       "title": "Extract asset preparation and capability host services",
-      "status": "planned"
+      "summary": "Centralized both catalogue hosts on one explicit-search selection preparation service and one shared four-module lazy capability host. Removed duplicate preparation methods and promise fields while leaving asset caching, runtime clocks, renderer registration, and URL authority in their existing owners.",
+      "status": "complete"
     },
     {
       "id": "s05",

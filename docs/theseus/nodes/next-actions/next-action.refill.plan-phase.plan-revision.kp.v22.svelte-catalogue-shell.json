@@ -156,11 +156,53 @@
       "scope": "s03-production",
       "checkedAt": "2026-08-02T15:10:22.499Z",
       "notes": "Production build passed with 896 modules before the type-only companion boundary extraction. Exact final typecheck and full suite passed afterward."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "s04-focused",
+      "checkedAt": "2026-08-02T15:27:48.201Z",
+      "notes": "28 focused host-model, preparation, capability, shell, navigation, lifecycle, baseline, and Svelte tooling tests passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-api-caller-ledger.test.ts",
+      "status": "passed",
+      "scope": "s04-architecture",
+      "checkedAt": "2026-08-02T15:27:49.247Z",
+      "notes": "7 caller-ledger tests passed. The generated catalogue reader now has one preparation-service caller."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s04-broad",
+      "checkedAt": "2026-08-02T15:27:50.181Z",
+      "notes": "3380 deterministic tests passed after preparation and capability consolidation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s04-types",
+      "checkedAt": "2026-08-02T15:27:51.202Z",
+      "notes": "Application, node, test, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s04-production",
+      "checkedAt": "2026-08-02T15:27:52.198Z",
+      "notes": "Production build passed with 898 transformed modules and retained literal lazy capability chunks."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s04-performance",
+      "checkedAt": "2026-08-02T15:27:53.160Z",
+      "notes": "Outer 10459, main host 254704, measured catalogue 170334, and place-value incremental 71797 gzip bytes all remain below frozen ceilings. The measured catalogue is 19666 bytes below its ceiling."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1 through 3 are complete. Catalogue baseline, isolated Svelte tooling, and the shared framework-neutral host view contract are verified. Asset preparation service extraction is next."
+    "summary": "Slices 1 through 4 are complete. Shared host state, asset preparation, and lazy capability boundaries are verified. The isolated Svelte exemplar entry is next."
   },
   "expectedLearning": [
     "Approved revision 22 places this active phase in now."

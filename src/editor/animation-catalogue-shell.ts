@@ -33,7 +33,7 @@ import {
 } from "./constant-force-work-energy-parameters.ts";
 import type {
   KpAnimationCatalogueReaderCompanion
-} from "./verified-generated-linear-solve-reader.ts";
+} from "./animation-catalogue-reader-companion.ts";
 import {
   KP_ANIMATION_CATALOGUE_STAGE_RESERVATION
 } from "./animation-catalogue-stage-reservation.ts";

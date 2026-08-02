@@ -44,13 +44,35 @@ test("Svelte migration baseline freezes catalogue ownership and ceilings", async
     initialThreeRequested: kpAnimationPerformanceTargets.initialThreeRequested
   });
 
-  const [application, shell, bootstrap] = await Promise.all([
+  const [
+    application,
+    selectionPreparation,
+    capabilityHost,
+    shell,
+    bootstrap
+  ] = await Promise.all([
     readFile(baseline.rollbackEntry, "utf8"),
+    readFile(
+      "src/editor/animation-catalogue-selection-preparation.ts",
+      "utf8"
+    ),
+    readFile("src/editor/selected-surface-capability-host.ts", "utf8"),
     readFile("src/editor/animation-catalogue-shell.ts", "utf8"),
     readFile("src/bootstrap.ts", "utf8")
   ]);
+  const lifecycleSource = [
+    application,
+    selectionPreparation,
+    capabilityHost
+  ].join("\n");
   for (const owner of baseline.lifecycleOwners) {
-    assert.ok(application.includes(owner), `missing lifecycle owner ${owner}`);
+    const migratedOwner = baseline.lifecycleOwnerMigrations[
+      owner as keyof typeof baseline.lifecycleOwnerMigrations
+    ] ?? owner;
+    assert.ok(
+      lifecycleSource.includes(migratedOwner),
+      `missing lifecycle owner ${owner} (${migratedOwner})`
+    );
   }
   for (const selector of baseline.requiredSelectors) {
     assert.ok(shell.includes(selector), `missing shell selector ${selector}`);

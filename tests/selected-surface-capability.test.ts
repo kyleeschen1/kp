@@ -29,15 +29,19 @@ test("selected surface capabilities keep rich renderers explicit", () => {
   }), ["equation-katex", "programming-trace"]);
 });
 
-test("main owns only dynamic selected-surface capability imports", async () => {
+test("one capability host owns all dynamic selected-surface imports", async () => {
   const [
     mainSource,
+    catalogueSource,
+    capabilityHostSource,
     equationCapability,
     graphCapability,
     graph3DCapability,
     programmingCapability
   ] = await Promise.all([
     readFile("src/main.ts", "utf8"),
+    readFile("src/editor/animation-catalogue-application.ts", "utf8"),
+    readFile("src/editor/selected-surface-capability-host.ts", "utf8"),
     readFile("src/editor/equation-surface-capability.ts", "utf8"),
     readFile("src/editor/graph-svg-surface-capability.ts", "utf8"),
     readFile("src/editor/graph-3d-surface-capability.ts", "utf8"),
@@ -57,21 +61,15 @@ test("main owns only dynamic selected-surface capability imports", async () => {
     mainSource,
     /^import .*graph-3d-surface-adapter\.ts/m
   );
-  assert.match(
-    mainSource,
-    /import\(\s*"\.\/editor\/equation-surface-capability\.ts"\s*\)/
-  );
-  assert.match(
-    mainSource,
-    /import\(\s*"\.\/editor\/graph-svg-surface-capability\.ts"\s*\)/
-  );
-  assert.match(
-    mainSource,
-    /import\(\s*"\.\/editor\/graph-3d-surface-capability\.ts"\s*\)/
-  );
-  assert.match(
-    mainSource,
-    /import\(\s*"\.\/editor\/programming-surface-capability\.ts"\s*\)/
+  assert.doesNotMatch(mainSource, /import\(\s*"\.\/editor\/(?:equation|graph-svg|graph-3d|programming)-surface-capability\.ts"\s*\)/);
+  assert.doesNotMatch(catalogueSource, /import\(\s*"\.\/(?:equation|graph-svg|graph-3d|programming)-surface-capability\.ts"\s*\)/);
+  assert.match(capabilityHostSource, /import\("\.\/equation-surface-capability\.ts"\)/);
+  assert.match(capabilityHostSource, /import\("\.\/graph-svg-surface-capability\.ts"\)/);
+  assert.match(capabilityHostSource, /import\("\.\/graph-3d-surface-capability\.ts"\)/);
+  assert.match(capabilityHostSource, /import\("\.\/programming-surface-capability\.ts"\)/);
+  assert.doesNotMatch(
+    capabilityHostSource,
+    /loadKpAnimationAsset|window\.|document\.|from "svelte/
   );
   assert.match(equationCapability, /import "katex\/dist\/katex\.min\.css"/);
   assert.match(graphCapability, /import "katex\/dist\/katex\.min\.css"/);
