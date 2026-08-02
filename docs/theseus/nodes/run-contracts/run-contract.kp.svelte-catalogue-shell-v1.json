@@ -191,7 +191,8 @@
     {
       "id": "s23",
       "title": "Audit bundle Core Web Vitals and capability attribution",
-      "status": "planned"
+      "summary": "Frozen production budgets and capability boundaries pass after Svelte promotion; normal Core Web Vitals are strong, while constrained-device LCP and long-task targets remain explicit optimization debt rather than migration regressions.",
+      "status": "complete"
     },
     {
       "id": "s24",

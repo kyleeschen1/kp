@@ -1018,6 +1018,41 @@
       "scope": "slice s22 focused architecture and types",
       "checkedAt": "2026-08-02T18:50:07.388Z",
       "notes": "All 35 focused shell tests passed; TypeScript, Svelte, and domain checks reported no errors or warnings."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice s23 production build",
+      "checkedAt": "2026-08-02T18:53:50.155Z",
+      "notes": "TypeScript, Svelte, domain checks, and production Vite build passed with 1010 transformed modules."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice s23 frozen bundle ceilings",
+      "checkedAt": "2026-08-02T18:53:55.373Z",
+      "notes": "Outer 10,459, main host 178,462, measured catalogue 77,475, and place-value incremental 71,794 gzip bytes all remain below frozen ceilings; no forbidden outer files."
+    },
+    {
+      "command": "npm run perf:animation:attribution",
+      "status": "passed",
+      "scope": "slice s23 selected capability attribution",
+      "checkedAt": "2026-08-02T18:54:01.787Z",
+      "notes": "All six canonical routes load through Svelte; imperative, legacy, diagnostics, and gestalt application signals remain absent, while Graph3D, Three, Graph SVG, programming, and KaTeX stay caller-isolated."
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "slice s23 Core Web Vitals and animation pressure",
+      "checkedAt": "2026-08-02T18:54:08.331Z",
+      "notes": "Regression ratchets passed. Normal LCP was 452 ms, CLS 0.00022, and frame p95 17.4 ms; constrained LCP 2.98 s and long-task/frame targets remain known product pressure, with no ceiling widened."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice s23 production closure",
+      "checkedAt": "2026-08-02T18:54:12.890Z",
+      "notes": "Production closure passed across 310 files with all seven internal Review markers excluded."
     }
   ],
   "progress": {
