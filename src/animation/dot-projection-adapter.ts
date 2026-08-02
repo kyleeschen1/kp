@@ -9,10 +9,18 @@ import { createAxis2DObject, createGraph2DObject } from "../semantic/graph.ts";
 import {
   createEditableSemanticTransformationTree,
   createSemanticTransformationLeaf,
-  createSemanticTransformationParallel
+  createSemanticTransformationSequence
 } from "../semantic/transformation-composition.ts";
+import {
+  kpVectorDotProjectionExemplarContract
+} from "./vector-dot-projection-exemplar-contract.ts";
+import {
+  compileKpVectorDotProjectionSemanticModel,
+  type KpVectorDotProjectionComponentLineage
+} from "./vector-dot-projection-semantic-model.ts";
 
-export const dotProjectionAnimationId = "animation.dot-projection.basic";
+export const dotProjectionAnimationId =
+  kpVectorDotProjectionExemplarContract.animationId;
 
 const graphId = "graph.dot-projection.vector-plane";
 const leftVectorId = "vector.dot-projection.left";
@@ -21,6 +29,10 @@ const projectionVectorId = "vector.dot-projection.projection";
 const orthogonalVectorId = "vector.dot-projection.orthogonal";
 const dotExpressionId = "expression.dot-projection.source";
 const scalarResultId = "expression.dot-projection.scalar-result";
+const projectionScaleId = "expression.dot-projection.projection-scale";
+const magnitudeRelationId = "expression.dot-projection.magnitudes";
+const angleRelationId = "expression.dot-projection.angle";
+const orthogonalityRelationId = "expression.dot-projection.orthogonality";
 const dotTransformationId = "transform.dot-projection.compute-dot";
 const projectionTransformationId = "transform.dot-projection.drop-projection";
 const timelineId = "timeline.dot-projection.basic";
@@ -31,6 +43,20 @@ interface VectorValue {
 }
 
 export function createDotProjectionAnimationAsset(): KpAnimationAsset {
+  const modelResult = compileKpVectorDotProjectionSemanticModel({
+    id: "model.dot-projection.basic",
+    sourceVectorId: leftVectorId,
+    targetVectorId: rightVectorId,
+    projectionVectorId,
+    residualVectorId: orthogonalVectorId,
+    sourceVector: kpVectorDotProjectionExemplarContract.sourceVector,
+    targetVector: kpVectorDotProjectionExemplarContract.targetVector
+  });
+  if (modelResult.status !== "compiled") {
+    throw new Error(modelResult.diagnostics[0]?.message ??
+      "Canonical vector projection model failed to compile.");
+  }
+  const model = modelResult.model;
   const graph = createGraph2DObject({
     id: graphId,
     label: "Dot product and projection plane",
@@ -57,30 +83,92 @@ export function createDotProjectionAnimationAsset(): KpAnimationAsset {
     domain: graph.yDomain,
     tickStep: 1
   });
-  const left = vectorObject(leftVectorId, "u", [3, 4]);
-  const right = vectorObject(rightVectorId, "v", [4, 0]);
-  const projection = vectorObject(projectionVectorId, "proj_v(u)", [3, 0]);
-  const orthogonal = vectorObject(orthogonalVectorId, "u - proj_v(u)", [0, 4]);
+  const left = vectorObject(leftVectorId, "a", model.sourceVector);
+  const right = vectorObject(rightVectorId, "b", model.targetVector);
+  const projection = vectorObject(
+    projectionVectorId,
+    "proj_b(a)",
+    model.projectionVector
+  );
+  const orthogonal = vectorObject(
+    orthogonalVectorId,
+    "a - proj_b(a)",
+    model.residualVector
+  );
+  const componentPairs = model.componentLineage.map(componentPairObject);
   const dotExpression = createKpSemanticAssetObject({
     id: dotExpressionId,
     objectType: "dot-product-expression",
-    title: "Dot product of u and v",
-    value: { latex: "(3,4)\\cdot(4,0)" },
+    title: "Dot product of a and b",
+    value: {
+      latex: kpVectorDotProjectionExemplarContract.exactLatex.componentDotProduct
+    },
     selectors: [
-      { id: `${dotExpressionId}.left`, kind: "vector", label: "u" },
-      { id: `${dotExpressionId}.right`, kind: "vector", label: "v" }
+      { id: `${dotExpressionId}.left`, kind: "vector", label: "a" },
+      { id: `${dotExpressionId}.right`, kind: "vector", label: "b" }
     ],
-    metadata: { latex: "(3,4)\\cdot(4,0)" }
+    metadata: {
+      latex: kpVectorDotProjectionExemplarContract.exactLatex.componentDotProduct
+    }
   });
   const scalarResult = createKpSemanticAssetObject({
     id: scalarResultId,
     objectType: "dot-product-interpretation",
     title: "Dot product scalar result",
-    value: { latex: "12", scalar: 12 },
+    value: { latex: "6", scalar: model.dotProduct },
     selectors: [
-      { id: `${scalarResultId}.value`, kind: "scalar", label: "12" }
+      { id: `${scalarResultId}.value`, kind: "scalar", label: "6" }
     ],
-    metadata: { latex: "12" }
+    metadata: { latex: "6" }
+  });
+  const projectionScale = relationObject({
+    id: projectionScaleId,
+    objectType: "projection-scale",
+    title: "Exact projection scale",
+    latex: kpVectorDotProjectionExemplarContract.exactLatex.projectionScale,
+    value: {
+      numerator: model.projectionScale.numerator,
+      denominator: model.projectionScale.denominator,
+      scalar: model.projectionScale.value
+    },
+    selectors: [
+      { id: `${projectionScaleId}.value`, kind: "scalar", label: "3" }
+    ]
+  });
+  const magnitudeRelation = relationObject({
+    id: magnitudeRelationId,
+    objectType: "vector-magnitude-relation",
+    title: "Exact vector magnitudes",
+    latex: kpVectorDotProjectionExemplarContract.exactLatex.magnitudeRelation,
+    value: {
+      sourceNormSquared: model.sourceNormSquared,
+      targetNormSquared: model.targetNormSquared
+    },
+    selectors: [
+      { id: `${magnitudeRelationId}.source`, kind: "length", label: "2√5" },
+      { id: `${magnitudeRelationId}.target`, kind: "length", label: "√2" }
+    ]
+  });
+  const angleRelation = relationObject({
+    id: angleRelationId,
+    objectType: "vector-angle-relation",
+    title: "Exact angle relation",
+    latex: kpVectorDotProjectionExemplarContract.exactLatex.angleRelation,
+    value: { cosineNumerator: 3, cosineRadicand: 10 },
+    selectors: [
+      { id: `${angleRelationId}.cosine`, kind: "angle", label: "3/√10" }
+    ]
+  });
+  const orthogonalityRelation = relationObject({
+    id: orthogonalityRelationId,
+    objectType: "vector-orthogonality-witness",
+    title: "Residual orthogonality witness",
+    latex:
+      kpVectorDotProjectionExemplarContract.exactLatex.orthogonalDecomposition,
+    value: { dotProduct: model.residualTargetDotProduct },
+    selectors: [
+      { id: `${orthogonalityRelationId}.witness`, kind: "witness", label: "0" }
+    ]
   });
   const dotTransformation = createKpSemanticTransformation({
     id: dotTransformationId,
@@ -88,17 +176,34 @@ export function createDotProjectionAnimationAsset(): KpAnimationAsset {
     transformType: "dotProduct",
     title: "Compute the component-pair dot product",
     sourceObjectIds: [dotExpression.id, left.id, right.id],
-    targetObjectIds: [scalarResult.id, left.id, right.id],
+    targetObjectIds: [
+      ...componentPairs.map(({ id }) => id),
+      scalarResult.id,
+      magnitudeRelation.id,
+      angleRelation.id,
+      left.id,
+      right.id
+    ],
     preserves: ["value", "structure", "role"],
     correspondence: [
       {
-        sourceSelectorId: `${dotExpressionId}.left`,
-        targetSelectorId: `${scalarResultId}.value`,
+        sourceSelectorId: `${leftVectorId}.x`,
+        targetSelectorId: `${componentPairs[0]!.id}.source`,
         preserves: ["value", "role"]
       },
       {
-        sourceSelectorId: `${dotExpressionId}.right`,
-        targetSelectorId: `${scalarResultId}.value`,
+        sourceSelectorId: `${rightVectorId}.x`,
+        targetSelectorId: `${componentPairs[0]!.id}.target`,
+        preserves: ["value", "role"]
+      },
+      {
+        sourceSelectorId: `${leftVectorId}.y`,
+        targetSelectorId: `${componentPairs[1]!.id}.source`,
+        preserves: ["value", "role"]
+      },
+      {
+        sourceSelectorId: `${rightVectorId}.y`,
+        targetSelectorId: `${componentPairs[1]!.id}.target`,
         preserves: ["value", "role"]
       }
     ],
@@ -110,11 +215,28 @@ export function createDotProjectionAnimationAsset(): KpAnimationAsset {
     id: projectionTransformationId,
     definitionId: "definition.symbolic.linear-algebra.vector-projection",
     transformType: "vectorProjection",
-    title: "Drop u perpendicularly onto v",
-    sourceObjectIds: [left.id, right.id],
-    targetObjectIds: [projection.id, orthogonal.id, right.id],
+    title: "Project a onto b and retain the perpendicular residual",
+    sourceObjectIds: [
+      left.id,
+      right.id,
+      scalarResult.id,
+      magnitudeRelation.id,
+      angleRelation.id
+    ],
+    targetObjectIds: [
+      projectionScale.id,
+      projection.id,
+      orthogonal.id,
+      orthogonalityRelation.id,
+      right.id
+    ],
     preserves: ["value", "structure", "role"],
     correspondence: [
+      {
+        sourceSelectorId: `${scalarResultId}.value`,
+        targetSelectorId: `${projectionScaleId}.value`,
+        preserves: ["value", "role"]
+      },
       {
         sourceSelectorId: `${leftVectorId}.body`,
         targetSelectorId: `${projectionVectorId}.body`,
@@ -126,7 +248,7 @@ export function createDotProjectionAnimationAsset(): KpAnimationAsset {
         preserves: ["identity", "value", "presentation"]
       }
     ],
-    assumptions: ["The projection target v is non-zero."],
+    assumptions: ["The projection target b is non-zero."],
     lawRefs: [
       { id: "law.linear-algebra.vector-projection", level: "strict" },
       {
@@ -137,7 +259,7 @@ export function createDotProjectionAnimationAsset(): KpAnimationAsset {
     ]
   });
   const transformations = [dotTransformation, projectionTransformation];
-  const treeRoot = createSemanticTransformationParallel({
+  const treeRoot = createSemanticTransformationSequence({
     id: "diagram.dot-projection.synchronized",
     label: "Synchronized dot product and projection",
     children: transformations.map((transformation) =>
@@ -159,10 +281,15 @@ export function createDotProjectionAnimationAsset(): KpAnimationAsset {
     semanticObject(yAxis),
     left,
     right,
+    ...componentPairs,
     projection,
     orthogonal,
     dotExpression,
-    scalarResult
+    scalarResult,
+    magnitudeRelation,
+    angleRelation,
+    projectionScale,
+    orthogonalityRelation
   ];
 
   return createKpAnimationAsset({
@@ -217,7 +344,11 @@ export function createDotProjectionAnimationAsset(): KpAnimationAsset {
           rightVectorId,
           projectionVectorId,
           orthogonalVectorId,
-          scalarResultId
+          scalarResultId,
+          projectionScaleId,
+          componentPairObjectIds: componentPairs.map(({ id }) => id).join(","),
+          semanticModelId: model.id,
+          accessibleDescription: model.accessibleDescription
         }
       }
     ],
@@ -274,6 +405,68 @@ function vectorObject(id: string, title: string, coordinates: readonly [number, 
       { id: `${id}.x`, kind: "component", label: "x" },
       { id: `${id}.y`, kind: "component", label: "y" }
     ]
+  });
+}
+
+function componentPairObject(
+  lineage: KpVectorDotProjectionComponentLineage
+) {
+  return relationObject({
+    id: lineage.productObjectId,
+    objectType: "dot-product-component-pair",
+    title: `${lineage.axis}-component product`,
+    latex:
+      `${lineage.sourceComponent}\\cdot${lineage.targetComponent}=${lineage.product}`,
+    value: {
+      index: lineage.index,
+      axis: lineage.axis,
+      sourceComponent: lineage.sourceComponent,
+      targetComponent: lineage.targetComponent,
+      product: lineage.product,
+      cumulativeDotProduct: lineage.cumulativeDotProduct,
+      sourceGeometryId: lineage.sourceGeometryId,
+      targetGeometryId: lineage.targetGeometryId,
+      projectionGeometryId: lineage.projectionGeometryId
+    },
+    selectors: [
+      {
+        id: `${lineage.productObjectId}.source`,
+        kind: "component",
+        label: String(lineage.sourceComponent)
+      },
+      {
+        id: `${lineage.productObjectId}.target`,
+        kind: "component",
+        label: String(lineage.targetComponent)
+      },
+      {
+        id: `${lineage.productObjectId}.product`,
+        kind: "scalar",
+        label: String(lineage.product)
+      }
+    ]
+  });
+}
+
+function relationObject(input: {
+  readonly id: string;
+  readonly objectType: string;
+  readonly title: string;
+  readonly latex: string;
+  readonly value: Readonly<Record<string, unknown>>;
+  readonly selectors: readonly {
+    readonly id: string;
+    readonly kind: string;
+    readonly label: string;
+  }[];
+}) {
+  return createKpSemanticAssetObject({
+    id: input.id,
+    objectType: input.objectType,
+    title: input.title,
+    value: { ...input.value, latex: input.latex },
+    selectors: input.selectors,
+    metadata: { latex: input.latex }
   });
 }
 

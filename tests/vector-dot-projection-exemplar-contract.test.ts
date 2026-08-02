@@ -74,7 +74,7 @@ test("the exact non-axis-aligned story closes every vector law", () => {
   );
 });
 
-test("current implementation baseline and every reference are explicit", () => {
+test("captured baseline, evolved implementation, and every reference are explicit", () => {
   const animation = createDotProjectionAnimationAsset();
   const vectors = animation.bundle.objects
     .filter(({ objectType }) => objectType === "vector")
@@ -82,9 +82,11 @@ test("current implementation baseline and every reference are explicit", () => {
 
   assert.equal(animation.id, kpVectorDotProjectionCurrentBaseline.animationId);
   assert.deepEqual(vectors.slice(0, 2), [
-    kpVectorDotProjectionCurrentBaseline.sourceVector,
-    kpVectorDotProjectionCurrentBaseline.targetVector
+    kpVectorDotProjectionExemplarContract.sourceVector,
+    kpVectorDotProjectionExemplarContract.targetVector
   ]);
+  assert.deepEqual(kpVectorDotProjectionCurrentBaseline.sourceVector, [3, 4]);
+  assert.deepEqual(kpVectorDotProjectionCurrentBaseline.targetVector, [4, 0]);
   assert.equal(kpVectorDotProjectionCurrentBaseline.knownPresentationGaps.length, 5);
   for (const reference of kpVectorDotProjectionReferenceInventory) {
     assert.equal(existsSync(join(projectRoot, reference.path)), true, reference.path);

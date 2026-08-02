@@ -141,6 +141,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-vector-dot-projection-exemplar-contract.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/vector-dot-projection-semantic-model.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-vector-dot-projection-semantic-runtime.md"
     }
   ],
   "dependsOn": {
@@ -701,6 +709,50 @@
       "status": "passed",
       "scope": "s16 whitespace integrity",
       "checkedAt": "2026-08-02T01:28:33.910Z"
+    },
+    {
+      "command": "vector-dot-projection-focused-tests",
+      "status": "passed",
+      "scope": "s17-semantic-runtime",
+      "checkedAt": "2026-08-02T01:42:25.697Z",
+      "notes": "29-focused-tests-pass"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "s17-semantic-runtime",
+      "checkedAt": "2026-08-02T01:42:26.559Z"
+    },
+    {
+      "command": "npm-run-build",
+      "status": "passed",
+      "scope": "s17-semantic-runtime",
+      "checkedAt": "2026-08-02T01:42:27.453Z"
+    },
+    {
+      "command": "npm-run-check-animation-library-display-catalog",
+      "status": "passed",
+      "scope": "s17-semantic-runtime",
+      "checkedAt": "2026-08-02T01:42:28.327Z"
+    },
+    {
+      "command": "npm-run-check-promotion-memory",
+      "status": "passed",
+      "scope": "s17-semantic-runtime",
+      "checkedAt": "2026-08-02T01:42:29.209Z"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "s17-semantic-runtime",
+      "checkedAt": "2026-08-02T01:42:30.089Z"
+    },
+    {
+      "command": "npm-test",
+      "status": "failed",
+      "scope": "run-broad-baseline",
+      "checkedAt": "2026-08-02T01:42:30.994Z",
+      "notes": "18-accumulated-count-route-and-frozen-hash-ratchets-outside-s17-focused-boundary-to-reconcile-at-release-slice"
     }
   ],
   "expectedLearning": [

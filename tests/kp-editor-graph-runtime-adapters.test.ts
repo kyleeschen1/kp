@@ -22,13 +22,13 @@ test("vector scaling exposes concrete start, midpoint, and end coordinates", () 
 test("dot projection drops the source point onto the target vector", () => {
   const animation = createKpAnimationAssets().find((a) => a.id === "animation.dot-projection.basic");
   assert.ok(animation);
-  const drops = [0, 0.5, 1].map((progress) =>
+  const drops = [0, 11 / 16, 1].map((progress) =>
     sampleDotProjectionRuntimeFrame({
       animation,
       runtimeFrame: sampleKpAnimationRuntimeFrame({ animation, progress })
     }).dropPoint
   );
-  assert.deepEqual(drops, [[3, 4], [3, 2], [3, 0]]);
+  assert.deepEqual(drops, [[4, 2], [3.5, 2.5], [3, 3]]);
 });
 
 test("integral sweep grows its bound and accumulated area together", () => {
