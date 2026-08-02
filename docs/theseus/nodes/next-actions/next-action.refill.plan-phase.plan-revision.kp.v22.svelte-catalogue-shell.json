@@ -841,6 +841,53 @@
       "scope": "s17 bundle closure",
       "checkedAt": "2026-08-02T18:11:18.045Z",
       "notes": "All existing byte ceilings passed without adjustment."
+    },
+    {
+      "command": "npm run test:browser:animation-equation-capability",
+      "status": "failed",
+      "scope": "s18 initial canonical caller pressure",
+      "checkedAt": "2026-08-02T18:27:01.763Z",
+      "notes": "Four equation and capability checks passed; the application-ownership assertion still expected one imperative-host request after the approved cutover."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "failed",
+      "scope": "s18 canonical interaction pressure",
+      "checkedAt": "2026-08-02T18:27:02.841Z",
+      "notes": "The first canonical run exposed Svelte row-focus and inspector-choice preservation gaps during in-shell selection; semantic and visual equation checks had already passed."
+    },
+    {
+      "command": "npm run test:browser:animation-equation-capability",
+      "status": "passed",
+      "scope": "s18 equation and solve-x callers",
+      "checkedAt": "2026-08-02T18:27:03.747Z",
+      "notes": "Five Chromium checks prove canonical Svelte ownership, inline KaTeX, h3 inspector hierarchy, four compact steps, reserved geometry, and caller-led capability loading."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "s18 Svelte interaction preservation",
+      "checkedAt": "2026-08-02T18:27:04.644Z",
+      "notes": "Fourteen Chromium checks pass, including live keyed-row focus and inspector-choice preservation through in-shell selection."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "s18 canonical catalogue visual and interaction matrix",
+      "checkedAt": "2026-08-02T18:27:05.554Z",
+      "notes": "Solve-x inline KaTeX, compact geometry, interaction continuity, economics, physics, Graph3D, vector, and hostability checkpoints passed on the canonical route."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18 TypeScript and Svelte contracts",
+      "checkedAt": "2026-08-02T18:27:06.458Z"
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "s18 production build",
+      "checkedAt": "2026-08-02T18:27:07.406Z"
     }
   ],
   "progress": {

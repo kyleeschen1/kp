@@ -2191,7 +2191,7 @@ async function captureCatalogueInteractionSelection(browser: Browser) {
 
     const railScrollTopBefore = await page.evaluate((nextAnimationId) => {
       const viewport = document.querySelector<HTMLElement>(
-        ".kp-animation-catalogue-shell__rail-results"
+        "[data-kp-animation-catalogue-results]"
       );
       const link = document.querySelector<HTMLAnchorElement>(
         `[data-kp-animation-catalogue-row="${nextAnimationId}"] a`
@@ -2217,7 +2217,7 @@ async function captureCatalogueInteractionSelection(browser: Browser) {
     }, promotedSiblingId);
     const firstSelection = await page.evaluate((expectedAnimationId) => {
       const viewport = document.querySelector<HTMLElement>(
-        ".kp-animation-catalogue-shell__rail-results"
+        "[data-kp-animation-catalogue-results]"
       );
       const focusedRow = document.activeElement?.closest<HTMLElement>(
         "[data-kp-animation-catalogue-row]"

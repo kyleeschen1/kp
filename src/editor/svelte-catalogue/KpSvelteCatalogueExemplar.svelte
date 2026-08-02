@@ -90,7 +90,7 @@
       }));
   let inspectorHtml = $state(initialSelection === undefined
     ? ""
-    : renderKpAnimationCatalogueInspector(initialSelection.view));
+    : renderSelectedInspector(initialSelection.view));
   let resultRows = $derived(view === undefined
     ? []
     : projectKpAnimationCatalogueResultRows({
@@ -244,6 +244,10 @@
     readonly selectionHost: KpSvelteCatalogueSelectionHost;
   }): Promise<void> {
     const revision = ++selectionRevision;
+    // Capture chrome intent at the selection boundary. Paint observations may
+    // replace the current view while the selected pack is loading, but they
+    // must not reset the inspector choice that initiated this transition.
+    const retainedInspectorView = view?.chrome.inspectorView ?? "details";
     const focus = shell === undefined
       ? undefined
       : captureKpAnimationCatalogueFocus(shell);
@@ -260,10 +264,10 @@
         playhead: input.playhead
       });
       if (disposed || revision !== selectionRevision) return;
-      const inspectorView = view?.chrome.inspectorView === "explanation" &&
+      const inspectorView = retainedInspectorView === "explanation" &&
         prepared.readerCompanion === undefined
           ? "details"
-          : view?.chrome.inspectorView ?? "details";
+          : retainedInspectorView;
       const nextView = createKpAnimationCatalogueSelectedHostViewModel({
         entry: input.entry,
         health: prepared.health,
@@ -287,7 +291,7 @@
         selectionHost: input.selectionHost
       };
       view = nextView;
-      inspectorHtml = renderKpAnimationCatalogueInspector(nextView);
+      inspectorHtml = renderSelectedInspector(nextView);
       stageState = "selected";
       await tick();
       if (shell !== undefined && revision === selectionRevision) {
@@ -301,6 +305,19 @@
         ? error.message
         : "The selected catalogue asset failed to load.";
     }
+  }
+
+  function renderSelectedInspector(
+    selected: KpAnimationCatalogueSelectedHostViewModel
+  ): string {
+    return renderKpAnimationCatalogueInspector({
+      entry: selected.entry,
+      health: selected.health,
+      economicsParameters: selected.economicsParameters,
+      physicsParameters: selected.physicsParameters,
+      readerCompanion: selected.readerCompanion,
+      view: selected.chrome.inspectorView
+    });
   }
 
   $effect(() => {
@@ -377,6 +394,7 @@
     data-kp-physics-net-force-newtons={view.physicsParameters?.netForceNewtons}
     data-kp-animation-catalogue-host-outcome={hostOutcome}
     data-kp-animation-catalogue-overlay={view.chrome.overlay}
+    data-kp-animation-catalogue-inspector-view={view.chrome.inspectorView}
     aria-labelledby="kp-animation-catalogue-title"
   >
     <h1

@@ -161,7 +161,8 @@
     {
       "id": "s18",
       "title": "Pressure equation KaTeX and solve-x callers",
-      "status": "planned"
+      "summary": "Pressured solve-x and equation callers through the canonical Svelte route; ratcheted inline KaTeX, h3 hierarchy, compact step geometry, and Svelte-only application ownership, while fixing keyed-row focus and inspector-view preservation exposed by the full catalogue interaction baseline.",
+      "status": "complete"
     },
     {
       "id": "s19",

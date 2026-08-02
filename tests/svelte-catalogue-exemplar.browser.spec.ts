@@ -311,6 +311,49 @@ test("Svelte selection restores stage focus and rail scroll", async ({ page }) =
     .toBe(retainedScroll);
 });
 
+test("Svelte selection retains a live row focus and inspector choice", async ({
+  page
+}) => {
+  await page.goto(
+    `/?artifact=animation.linear-solve.solve-x&catalogueShell=svelte-exemplar`
+  );
+  const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
+  const inspectorSelect = exemplar.getByRole("combobox", {
+    name: "Inspector view"
+  });
+  await inspectorSelect.selectOption("parameters");
+  await expect(inspectorSelect).toHaveValue("parameters");
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-inspector-view",
+    "parameters"
+  );
+  const nextId = "animation.generated.radical.square-root-as-power";
+  const nextLink = exemplar.locator(
+    `[data-kp-animation-catalogue-row="${nextId}"] a`
+  );
+  await nextLink.focus();
+  await nextLink.press("Enter");
+
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    nextId
+  );
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-host-outcome",
+    "painted"
+  );
+  await expect.poll(() => nextLink.evaluate((element) =>
+    document.activeElement === element
+  )).toBe(true);
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-inspector-view",
+    "parameters"
+  );
+  await expect(exemplar.getByRole("combobox", {
+    name: "Inspector view"
+  })).toHaveValue("parameters");
+});
+
 test("Svelte narrow inspector overlay returns focus on Escape", async ({ page }) => {
   await page.setViewportSize({ width: 640, height: 900 });
   await page.goto(
@@ -437,8 +480,7 @@ test("Svelte ports economics and physics parameters through one player lifecycle
   const physicsInspectorSelect = exemplar.getByRole("combobox", {
     name: "Inspector view"
   });
-  await expect(physicsInspectorSelect).toHaveValue("details");
-  await physicsInspectorSelect.selectOption("parameters");
+  await expect(physicsInspectorSelect).toHaveValue("parameters");
   const physicsPlayer = exemplar.locator(
     `[data-kp-editor-animation-player]` +
     `[data-kp-editor-animation-id="${physicsId}"]`

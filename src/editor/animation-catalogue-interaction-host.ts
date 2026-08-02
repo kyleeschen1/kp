@@ -77,9 +77,20 @@ export function restoreKpAnimationCatalogueFocus(
   shell: HTMLElement,
   snapshot: KpAnimationCatalogueFocusSnapshot | undefined
 ): void {
-  if (snapshot === undefined || snapshot.element.isConnected ||
-    (document.activeElement !== document.body &&
-      document.activeElement !== shell.closest("#app"))) return;
+  if (snapshot === undefined || document.activeElement === snapshot.element) {
+    return;
+  }
+  if (
+    document.activeElement !== document.body &&
+    document.activeElement !== shell.closest("#app")
+  ) return;
+  // Svelte can preserve a keyed row while the browser temporarily drops its
+  // focus during surrounding reactive updates. Prefer that live node before
+  // resolving a replacement for imperative full-shell rerenders.
+  if (snapshot.element.isConnected) {
+    snapshot.element.focus({ preventScroll: true });
+    return;
+  }
   const target = snapshot.target.kind === "player"
     ? shell.querySelector<HTMLElement>("[data-kp-editor-animation-player]")
     : snapshot.target.kind === "inspector-view"

@@ -44,6 +44,28 @@ test("equation capability settles inside one reserved wide stage", async ({
     animationId: equationId,
     capabilityPattern: /equation-surface-capability\.ts/
   });
+  const catalogue = page.locator("[data-kp-animation-catalogue]");
+  await expect(catalogue).toHaveAttribute("data-kp-svelte-catalogue-shell", "");
+  await expect(catalogue.locator(
+    "[data-kp-animation-catalogue-stage] .katex-display"
+  )).toHaveCount(0);
+  expect(await catalogue.locator(
+    "[data-kp-animation-catalogue-stage] .katex"
+  ).count()).toBeGreaterThan(0);
+  await expect(catalogue.getByRole("heading", {
+    level: 3,
+    name: "Details",
+    exact: true
+  })).toBeVisible();
+  await expect(catalogue.locator(
+    "[data-kp-animation-catalogue-stage] [data-kp-editor-solve-x-step]"
+  )).toHaveCount(4);
+  const stepHeights = await catalogue.locator(
+    "[data-kp-animation-catalogue-stage] [data-kp-editor-solve-x-step]"
+  ).evaluateAll((steps) => steps.map((step) =>
+    step.getBoundingClientRect().height
+  ));
+  expect(Math.max(...stepHeights)).toBeLessThanOrEqual(34);
 });
 
 test("graph labels settle inside the same reserved narrow stage", async ({
@@ -89,16 +111,20 @@ test("programming and 3D selections request only their selected capabilities", a
   expect(programmingRequests).toHaveLength(1);
 });
 
-test("catalogue and full-editor runtimes load only their own application capabilities", async ({
+test("canonical Svelte catalogue and full editor load only their application capabilities", async ({
   page
 }) => {
-  const catalogueRequests: string[] = [];
+  const svelteCatalogueRequests: string[] = [];
+  const imperativeCatalogueRequests: string[] = [];
   const legacyMainRequests: string[] = [];
   const gestaltRequests: string[] = [];
   page.on("request", (request) => {
     const url = request.url();
+    if (/svelte-catalogue-exemplar-entry\.ts/.test(url)) {
+      svelteCatalogueRequests.push(url);
+    }
     if (/animation-catalogue-application\.ts/.test(url)) {
-      catalogueRequests.push(url);
+      imperativeCatalogueRequests.push(url);
     }
     if (/\/src\/main\.ts(?:\?|$)/.test(url)) legacyMainRequests.push(url);
     if (/animation-player-gestalt-capability\.ts/.test(url)) {
@@ -114,7 +140,8 @@ test("catalogue and full-editor runtimes load only their own application capabil
     "animation.economics.supply-demand-equilibrium-shift",
     "painted"
   );
-  expect(catalogueRequests).toHaveLength(1);
+  expect(svelteCatalogueRequests).toHaveLength(1);
+  expect(imperativeCatalogueRequests).toEqual([]);
   expect(legacyMainRequests).toEqual([]);
   expect(gestaltRequests).toEqual([]);
   await expect(page.locator(
