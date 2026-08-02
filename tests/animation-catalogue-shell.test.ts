@@ -22,6 +22,9 @@ import {
   renderKpAnimationCatalogueInspector,
   renderKpAnimationCatalogueShell
 } from "../src/editor/animation-catalogue-shell.ts";
+import {
+  createKpAnimationCatalogueSelectedHostViewModel
+} from "../src/editor/animation-catalogue-host-view-model.ts";
 
 const entry = createKpAnimationCatalogueProjection().entries.find(
   ({ animationId }) => animationId === KP_ANIMATION_CATALOGUE_EXEMPLAR_ID
@@ -50,15 +53,16 @@ const health: KpAnimationCatalogueHealth = {
     message: "The asset has not yet painted in the catalogue host."
   }]
 };
+const view = createKpAnimationCatalogueSelectedHostViewModel({
+  entry,
+  health,
+  entries,
+  descriptor,
+  player
+});
 
 test("solve-x shell has exactly three flat sibling regions", () => {
-  const html = renderKpAnimationCatalogueShell({
-    entry,
-    health,
-    entries,
-    descriptor,
-    player
-  });
+  const html = renderKpAnimationCatalogueShell(view);
 
   assert.equal(
     [...html.matchAll(/data-kp-animation-catalogue-region=/g)].length,
@@ -98,13 +102,7 @@ test("solve-x shell has exactly three flat sibling regions", () => {
 });
 
 test("selected row is compact asset identity with derived health", () => {
-  const html = renderKpAnimationCatalogueShell({
-    entry,
-    health,
-    entries,
-    descriptor,
-    player
-  });
+  const html = renderKpAnimationCatalogueShell(view);
 
   assert.match(html, /Solve x \+ 3 = 7/);
   assert.match(html, /data-action="filter-animation-catalogue"/);
@@ -143,11 +141,8 @@ test("selected row is compact asset identity with derived health", () => {
 test("shell rejects health attached to a different asset", () => {
   assert.throws(
     () => renderKpAnimationCatalogueShell({
-      entry,
-      health: { ...health, animationId: "animation.other" },
-      entries,
-      descriptor,
-      player
+      ...view,
+      health: { ...health, animationId: "animation.other" }
     }),
     /does not match health/
   );

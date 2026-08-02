@@ -7,12 +7,13 @@ import type {
   KpExplanationLearnerProjectionV1,
   KpExplanationSegmentV1
 } from "../tutorial/verified-linear-problem-explanation-compiler.ts";
+import type {
+  KpAnimationCatalogueReaderCompanion
+} from "./animation-catalogue-reader-companion.ts";
 
-export interface KpAnimationCatalogueReaderCompanion {
-  readonly id: string;
-  readonly label: string;
-  readonly html: string;
-}
+export type {
+  KpAnimationCatalogueReaderCompanion
+} from "./animation-catalogue-reader-companion.ts";
 
 export function createKpVerifiedGeneratedLinearSolveReaderCompanion():
 KpAnimationCatalogueReaderCompanion {

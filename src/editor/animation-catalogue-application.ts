@@ -26,6 +26,9 @@ import {
   deriveKpAnimationCatalogueHealth
 } from "./animation-catalogue-health.ts";
 import {
+  createKpAnimationCatalogueSelectedHostViewModel
+} from "./animation-catalogue-host-view-model.ts";
+import {
   observeKpAnimationCatalogueHost
 } from "./animation-catalogue-host-observation.ts";
 import {
@@ -365,16 +368,18 @@ class KpAnimationCatalogueApplication {
         playhead: route.playhead
       });
       if (this.#disposed || revision !== this.#revision) return;
-      this.#root.innerHTML = renderKpAnimationCatalogueShell({
-        entry,
-        health: prepared.health,
-        entries: this.#projection.entries,
-        descriptor: prepared.descriptor,
-        player: prepared.player,
-        economicsParameters: prepared.economicsParameters,
-        physicsParameters: prepared.physicsParameters,
-        readerCompanion: prepared.readerCompanion
-      });
+      this.#root.innerHTML = renderKpAnimationCatalogueShell(
+        createKpAnimationCatalogueSelectedHostViewModel({
+          entry,
+          health: prepared.health,
+          entries: this.#projection.entries,
+          descriptor: prepared.descriptor,
+          player: prepared.player,
+          economicsParameters: prepared.economicsParameters,
+          physicsParameters: prepared.physicsParameters,
+          readerCompanion: prepared.readerCompanion
+        })
+      );
       const shell = this.#root.querySelector<HTMLElement>(
         "[data-kp-animation-catalogue]"
       );

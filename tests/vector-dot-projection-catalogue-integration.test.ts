@@ -22,6 +22,9 @@ import {
   renderKpAnimationCatalogueShell
 } from "../src/editor/animation-catalogue-shell.ts";
 import {
+  createKpAnimationCatalogueSelectedHostViewModel
+} from "../src/editor/animation-catalogue-host-view-model.ts";
+import {
   inspectKpAnimationCatalogueSurfaceHostability
 } from "../src/editor/animation-catalogue-surface-hostability.ts";
 import { createKpEditorAnimationLibrary } from
@@ -99,13 +102,15 @@ test("vector catalogue shell exposes only compact transport by default", () => {
       message: "Awaiting the focused visual checkpoint."
     }]
   };
-  const html = renderKpAnimationCatalogueShell({
-    entry,
-    health,
-    entries,
-    descriptor,
-    player
-  });
+  const html = renderKpAnimationCatalogueShell(
+    createKpAnimationCatalogueSelectedHostViewModel({
+      entry,
+      health,
+      entries,
+      descriptor,
+      player
+    })
+  );
 
   assert.equal([...html.matchAll(/data-action="toggle-editor-animation"/g)].length, 1);
   assert.equal([...html.matchAll(/data-action="seek-editor-animation"/g)].length, 1);

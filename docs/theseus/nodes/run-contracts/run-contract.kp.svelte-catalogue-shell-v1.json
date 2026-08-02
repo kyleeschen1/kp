@@ -71,7 +71,8 @@
     {
       "id": "s03",
       "title": "Extract framework-neutral catalogue host view model",
-      "status": "planned"
+      "summary": "Extracted one framework-neutral selected catalogue view model, pure chrome reducer, and typed host command boundary. The active imperative shell consumes it while loaders, clocks, URL, Review, renderers, and generated-session internals retain their prior authorities.",
+      "status": "complete"
     },
     {
       "id": "s04",

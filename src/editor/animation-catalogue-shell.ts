@@ -10,15 +10,9 @@ import {
 import {
   writeKpAnimationCatalogueRoute
 } from "./animation-catalogue-route.ts";
-import type {
-  KpEditorAnimationDescriptor
-} from "./animation-descriptor.ts";
 import {
   renderKpEditorAnimationPlayerShell
 } from "./animation-player-shell.ts";
-import type {
-  KpEditorAnimationPlayerState
-} from "./animation-player-state.ts";
 import {
   kpOrganicSubtleStyleRef,
   kpRestrainedEditorialStyleRef
@@ -43,38 +37,15 @@ import type {
 import {
   KP_ANIMATION_CATALOGUE_STAGE_RESERVATION
 } from "./animation-catalogue-stage-reservation.ts";
+import {
+  assertKpAnimationCatalogueSelectedHostContent,
+  type KpAnimationCatalogueSelectedHostViewModel
+} from "./animation-catalogue-host-view-model.ts";
 
-export function renderKpAnimationCatalogueShell(input: {
-  readonly entry: KpAnimationCatalogueEntry;
-  readonly health: KpAnimationCatalogueHealth;
-  readonly entries: readonly KpAnimationCatalogueEntry[];
-  readonly descriptor: KpEditorAnimationDescriptor;
-  readonly player: KpEditorAnimationPlayerState;
-  readonly economicsParameters?:
-    | KpEconomicsEquilibriumParameterState
-    | undefined;
-  readonly physicsParameters?:
-    | KpConstantForceWorkEnergyParameterState
-    | undefined;
-  readonly readerCompanion?:
-    | KpAnimationCatalogueReaderCompanion
-    | undefined;
-}): string {
-  if (input.entry.animationId !== input.health.animationId) {
-    throw new Error(
-      `Catalogue shell entry ${input.entry.animationId} does not match ` +
-      `health ${input.health.animationId}.`
-    );
-  }
-  if (
-    input.descriptor.id !== input.entry.primaryDescriptorId ||
-    input.player.descriptorId !== input.descriptor.id ||
-    input.player.animationId !== input.entry.animationId
-  ) {
-    throw new Error(
-      `Catalogue shell player does not match entry ${input.entry.animationId}.`
-    );
-  }
+export function renderKpAnimationCatalogueShell(
+  input: KpAnimationCatalogueSelectedHostViewModel
+): string {
+  assertKpAnimationCatalogueSelectedHostContent(input);
   const { entry, health } = input;
 
   const economicsParameterData = input.economicsParameters === undefined
@@ -84,24 +55,29 @@ export function renderKpAnimationCatalogueShell(input: {
     ? ""
     : ` data-kp-physics-net-force-newtons="${input.physicsParameters.netForceNewtons}"`;
 
-  return `<main class="kp-animation-catalogue-shell" data-kp-animation-catalogue data-kp-animation-catalogue-state="selected" data-kp-animation-catalogue-selection="${escapeHtml(entry.animationId)}" data-kp-animation-catalogue-selected-health="${health.status}" data-kp-animation-catalogue-human-disposition="${entry.humanDisposition}"${economicsParameterData}${physicsParameterData} aria-labelledby="kp-animation-catalogue-title">
+  const overlayData = input.chrome.overlay === undefined
+    ? ""
+    : ` data-kp-animation-catalogue-overlay="${input.chrome.overlay}"`;
+
+  return `<main class="kp-animation-catalogue-shell" data-kp-animation-catalogue data-kp-animation-catalogue-state="selected" data-kp-animation-catalogue-selection="${escapeHtml(entry.animationId)}" data-kp-animation-catalogue-selected-health="${health.status}" data-kp-animation-catalogue-human-disposition="${entry.humanDisposition}"${economicsParameterData}${physicsParameterData}${overlayData} aria-labelledby="kp-animation-catalogue-title">
     <h1 id="kp-animation-catalogue-title" class="kp-animation-catalogue-shell__visually-hidden">Animation catalogue</h1>
     <aside id="kp-animation-catalogue-rail" class="kp-animation-catalogue-shell__rail" data-kp-animation-catalogue-region="rail" aria-label="Artifact catalogue">
       <div class="kp-animation-catalogue-shell__rail-results">
         <p class="kp-animation-catalogue-shell__label">Artifacts</p>
-        <input class="kp-animation-catalogue-shell__search" type="search" placeholder="Search artifacts" aria-label="Search artifacts" autocomplete="off" data-action="filter-animation-catalogue">
+        <input class="kp-animation-catalogue-shell__search" type="search" value="${escapeHtml(input.chrome.query)}" placeholder="Search artifacts" aria-label="Search artifacts" autocomplete="off" data-action="filter-animation-catalogue">
         ${renderKpAnimationCatalogueResults({
           entries: input.entries,
           selectedAnimationId: entry.animationId,
-          selectedHealth: health
+          selectedHealth: health,
+          query: input.chrome.query
         })}
       </div>
       <div class="kp-animation-catalogue-shell__review-slot" data-kp-animation-catalogue-review-dock aria-hidden="true"></div>
     </aside>
     <section class="kp-animation-catalogue-shell__stage" data-kp-animation-catalogue-region="stage" data-kp-animation-catalogue-stage-reservation="${KP_ANIMATION_CATALOGUE_STAGE_RESERVATION}" aria-label="Selected animation stage">
       <div class="kp-animation-catalogue-shell__narrow-nav" aria-label="Catalogue panels">
-        <button type="button" data-action="toggle-animation-catalogue-overlay" data-kp-animation-catalogue-overlay-target="rail" aria-controls="kp-animation-catalogue-rail" aria-expanded="false">Artifacts</button>
-        <button type="button" data-action="toggle-animation-catalogue-overlay" data-kp-animation-catalogue-overlay-target="inspector" aria-controls="kp-animation-catalogue-inspector" aria-expanded="false">Info</button>
+        <button type="button" data-action="toggle-animation-catalogue-overlay" data-kp-animation-catalogue-overlay-target="rail" aria-controls="kp-animation-catalogue-rail" aria-expanded="${input.chrome.overlay === "rail"}">Artifacts</button>
+        <button type="button" data-action="toggle-animation-catalogue-overlay" data-kp-animation-catalogue-overlay-target="inspector" aria-controls="kp-animation-catalogue-inspector" aria-expanded="${input.chrome.overlay === "inspector"}">Info</button>
       </div>
       <div class="kp-animation-catalogue-shell__stage-host" data-kp-animation-catalogue-stage data-kp-animation-catalogue-stage-persistent="true">
         ${renderKpEditorAnimationPlayerShell({
@@ -117,7 +93,8 @@ export function renderKpAnimationCatalogueShell(input: {
         health,
         economicsParameters: input.economicsParameters,
         physicsParameters: input.physicsParameters,
-        readerCompanion: input.readerCompanion
+        readerCompanion: input.readerCompanion,
+        view: input.chrome.inspectorView
       })}
     </aside>
   </main>`;
@@ -175,29 +152,33 @@ export function renderKpAnimationCatalogueInspector(input: {
   readonly readerCompanion?:
     | KpAnimationCatalogueReaderCompanion
     | undefined;
+  readonly view?:
+    | KpAnimationCatalogueSelectedHostViewModel["chrome"]["inspectorView"]
+    | undefined;
 }): string {
+  const view = input.view ?? "details";
   const readerOption = input.readerCompanion === undefined
     ? ""
-    : `<option value="explanation">${escapeHtml(input.readerCompanion.label)}</option>`;
+    : `<option value="explanation"${selectedOption(view, "explanation")}>${escapeHtml(input.readerCompanion.label)}</option>`;
   const readerPanel = input.readerCompanion === undefined
     ? ""
-    : `<section data-kp-animation-catalogue-inspector-panel="explanation" hidden>${input.readerCompanion.html}</section>`;
-  return `<div class="kp-animation-catalogue-shell__inspector-view" data-kp-animation-catalogue-inspector-view="details">
+    : `<section data-kp-animation-catalogue-inspector-panel="explanation"${hiddenPanel(view, "explanation")}>${input.readerCompanion.html}</section>`;
+  return `<div class="kp-animation-catalogue-shell__inspector-view" data-kp-animation-catalogue-inspector-view="${view}">
     <label class="kp-animation-catalogue-shell__inspector-switcher">Show
       <select data-action="select-animation-catalogue-inspector" aria-label="Inspector view">
-        <option value="details" selected>Details</option>
-        <option value="parameters">Parameters</option>
-        <option value="tuning">Tuning</option>
+        <option value="details"${selectedOption(view, "details")}>Details</option>
+        <option value="parameters"${selectedOption(view, "parameters")}>Parameters</option>
+        <option value="tuning"${selectedOption(view, "tuning")}>Tuning</option>
         ${readerOption}
       </select>
     </label>
-    <div data-kp-animation-catalogue-inspector-panel="details">
+    <div data-kp-animation-catalogue-inspector-panel="details"${hiddenPanel(view, "details")}>
       ${renderKpAnimationCatalogueDetails(input)}
     </div>
-    <section data-kp-animation-catalogue-inspector-panel="parameters" hidden>
+    <section data-kp-animation-catalogue-inspector-panel="parameters"${hiddenPanel(view, "parameters")}>
       ${renderKpAnimationCatalogueParameters(input)}
     </section>
-    <section data-kp-animation-catalogue-inspector-panel="tuning" hidden>
+    <section data-kp-animation-catalogue-inspector-panel="tuning"${hiddenPanel(view, "tuning")}>
       <h3>Tuning</h3>
       <p>Temporary presentation choices for review. They do not change the authored artifact.</p>
       <div class="kp-animation-catalogue-shell__tuning-controls">
@@ -218,6 +199,20 @@ export function renderKpAnimationCatalogueInspector(input: {
     </section>
     ${readerPanel}
   </div>`;
+}
+
+function selectedOption(
+  current: KpAnimationCatalogueSelectedHostViewModel["chrome"]["inspectorView"],
+  candidate: KpAnimationCatalogueSelectedHostViewModel["chrome"]["inspectorView"]
+): string {
+  return current === candidate ? " selected" : "";
+}
+
+function hiddenPanel(
+  current: KpAnimationCatalogueSelectedHostViewModel["chrome"]["inspectorView"],
+  candidate: KpAnimationCatalogueSelectedHostViewModel["chrome"]["inspectorView"]
+): string {
+  return current === candidate ? "" : " hidden";
 }
 
 export function renderKpAnimationCatalogueParameters(input: {

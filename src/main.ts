@@ -37,6 +37,9 @@ import {
   renderKpAnimationCatalogueShell
 } from "./editor/animation-catalogue-shell.ts";
 import {
+  createKpAnimationCatalogueSelectedHostViewModel
+} from "./editor/animation-catalogue-host-view-model.ts";
+import {
   inspectKpAnimationCatalogueSurfaceHostability
 } from "./editor/animation-catalogue-surface-hostability.ts";
 import {
@@ -690,16 +693,18 @@ async function renderAnimationCatalogueView(): Promise<void> {
     if (activeView !== "animation-catalogue" || revision !== viewRevision) {
       return;
     }
-    appRoot.innerHTML = renderKpAnimationCatalogueShell({
-      entry,
-      health: prepared.health,
-      entries: animationCatalogueProjection.entries,
-      descriptor: prepared.descriptor,
-      player: prepared.player,
-      economicsParameters: prepared.economicsParameters,
-      physicsParameters: prepared.physicsParameters,
-      readerCompanion: prepared.readerCompanion
-    });
+    appRoot.innerHTML = renderKpAnimationCatalogueShell(
+      createKpAnimationCatalogueSelectedHostViewModel({
+        entry,
+        health: prepared.health,
+        entries: animationCatalogueProjection.entries,
+        descriptor: prepared.descriptor,
+        player: prepared.player,
+        economicsParameters: prepared.economicsParameters,
+        physicsParameters: prepared.physicsParameters,
+        readerCompanion: prepared.readerCompanion
+      })
+    );
     const shell = appRoot.querySelector<HTMLElement>(
       "[data-kp-animation-catalogue]"
     );

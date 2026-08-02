@@ -107,11 +107,60 @@
       "scope": "security",
       "checkedAt": "2026-08-02T14:44:37.573Z",
       "notes": "Production dependency audit reported 0 vulnerabilities. Full audit retains one pre-existing development-only PostCSS advisory present before Svelte installation."
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "s03-focused",
+      "checkedAt": "2026-08-02T15:09:33.598Z",
+      "notes": "19"
+    },
+    {
+      "command": "node",
+      "status": "passed",
+      "scope": "s03-architecture",
+      "checkedAt": "2026-08-02T15:09:34.882Z",
+      "notes": "7"
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "s03-focused",
+      "checkedAt": "2026-08-02T15:10:18.738Z",
+      "notes": "19 catalogue shell, host model, navigation, lifecycle, baseline, and Svelte tooling tests passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-api-caller-ledger.test.ts",
+      "status": "passed",
+      "scope": "s03-architecture",
+      "checkedAt": "2026-08-02T15:10:19.762Z",
+      "notes": "7 caller-ledger tests passed. The neutral companion contract preserved generated-session caller closure."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s03-broad",
+      "checkedAt": "2026-08-02T15:10:20.676Z",
+      "notes": "3375 deterministic tests passed after correcting the reader-companion type seam. The inference check completed in 2.9 seconds."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03-types",
+      "checkedAt": "2026-08-02T15:10:21.567Z",
+      "notes": "TypeScript, Svelte diagnostics, and domain typechecks passed with zero Svelte errors or warnings."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s03-production",
+      "checkedAt": "2026-08-02T15:10:22.499Z",
+      "notes": "Production build passed with 896 modules before the type-only companion boundary extraction. Exact final typecheck and full suite passed afterward."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices s01-s02 complete: the baseline is frozen and an exact Svelte 5 compiler/Vite/typecheck toolchain now exists without route cutover or production bundle growth."
+    "summary": "Slices 1 through 3 are complete. Catalogue baseline, isolated Svelte tooling, and the shared framework-neutral host view contract are verified. Asset preparation service extraction is next."
   },
   "expectedLearning": [
     "Approved revision 22 places this active phase in now."
