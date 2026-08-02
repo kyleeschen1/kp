@@ -1,0 +1,113 @@
+{
+  "id": "next-action.kp.vector-label-attenuation-correction-v0",
+  "kind": "next-action",
+  "title": "Correct rank-5 vector label attenuation",
+  "status": "deferred",
+  "domain": "kp",
+  "summary": "HUMAN_CHECKPOINT after all three iteration slices: corrected endpoint label protection and passed focused browser, visual, type, and promotion-memory gates; rank 5 remains unpromoted.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-02-kp-checkpoint-and-product-surface-sequence.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-vector-dot-projection-review-package.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-product-surface-priority-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/animation-library-promotion.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/styles.css"
+    },
+    {
+      "kind": "file",
+      "path": "tests/vector-dot-projection-exemplar.browser.spec.ts"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v21"
+    ],
+    "preferred": [
+      "priority-change.kp.rank5-conditional-correction-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:browser:vector-dot-projection",
+    "npm run visual:vector-dot-projection",
+    "npm run check:promotion-memory"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:browser:vector-dot-projection",
+      "status": "passed",
+      "scope": "focused vector endpoint label, semantic synchronization, rewind, reduced motion, and persistent catalogue route",
+      "checkedAt": "2026-08-02T12:08:44.696Z"
+    },
+    {
+      "command": "npm run visual:vector-dot-projection",
+      "status": "passed",
+      "scope": "seven canonical vector review states including wide, narrow, reduced-motion, and static SVG",
+      "checkedAt": "2026-08-02T12:12:49.587Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, test, and domain TypeScript boundaries",
+      "checkedAt": "2026-08-02T12:12:50.750Z"
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "rank 5 remains next and unpromoted",
+      "checkedAt": "2026-08-02T12:12:51.656Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: corrected the B label fade with a transparent endpoint box and one-pixel glyph halo; focused browser tests, seven-state visual capture, typecheck, and promotion memory pass; rank 5 remains unpromoted pending live human inspection."
+  },
+  "revisitWhen": [
+    "Human confirms the live B-label treatment and authorizes rank-5 certification."
+  ],
+  "expectedLearning": [
+    "Determine whether the defect comes from geometric collision bounds, attenuation radius, mask/filter spread, or another local paint mechanism."
+  ],
+  "allowedWork": [
+    "Diagnose label-to-line overlap or attenuation in the canonical rank-5 vector SVG exemplar.",
+    "Make the smallest presentation-only correction needed for B to leave a non-overlapping line fully visible.",
+    "Add focused regression evidence and stable visual review output."
+  ],
+  "disallowedWork": [
+    "Do not change the vector semantic model, mathematical values, animation beats, shared clock, or renderer contracts.",
+    "Do not generalize label routing, promote rank 5, begin rank 6, or begin Svelte work before human review."
+  ],
+  "criteria": [
+    {
+      "id": "non-overlap-does-not-attenuate",
+      "weight": "high"
+    },
+    {
+      "id": "true-collision-protection-remains",
+      "weight": "high"
+    },
+    {
+      "id": "semantic-runtime-authority-unchanged",
+      "weight": "high"
+    },
+    {
+      "id": "live-review-checkpoint-produced",
+      "weight": "medium"
+    }
+  ]
+}

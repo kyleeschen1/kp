@@ -1,0 +1,43 @@
+{
+  "id": "priority-change.kp.rank5-conditional-correction-v0",
+  "kind": "priority-change",
+  "title": "Rank 5 conditional correction before host work",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The user conditionally approved Project one vector onto another and required the over-broad B label attenuation to be corrected and inspected live before promotion; Svelte host work remains next.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The user conditionally approved Project one vector onto another and required the over-broad B label attenuation to be corrected and inspected live before promotion; Svelte host work remains next.",
+      "occurredAt": "2026-08-02T12:01:11.819Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v21"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v21"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v21",
+    "rationale": "The user conditionally approved Project one vector onto another and required the over-broad B label attenuation to be corrected and inspected live before promotion; Svelte host work remains next.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "vector-dot-projection",
+        "to": "now"
+      },
+      {
+        "subject": "svelte-host-exemplar",
+        "to": "next"
+      }
+    ],
+    "effectiveAt": "2026-08-02T12:01:11.819Z",
+    "requestedBy": "user"
+  }
+}

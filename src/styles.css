@@ -2366,15 +2366,22 @@ h2 {
 .editor-graph-stage__vector-math-label .katex { font-size: 1em; }
 
 .editor-graph-stage__vector-math-label--source {
+  /* Endpoint protection follows the glyph so nearby vectors are not faded. */
+  padding: 0;
   color: var(--kp-graph-stable);
+  background: transparent;
   font-size: 14px;
   font-weight: 700;
+  text-shadow: 0 0 1px rgb(255 253 248);
 }
 
 .editor-graph-stage__vector-math-label--target {
+  padding: 0;
   color: #536f7e;
+  background: transparent;
   font-size: 13px;
   font-weight: 700;
+  text-shadow: 0 0 1px rgb(255 253 248);
 }
 
 .editor-graph-stage__vector-math-label--projection {

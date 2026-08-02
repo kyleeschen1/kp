@@ -111,6 +111,33 @@ test("vector projection keeps KaTeX, geometry, labels, rewind, and reduced motio
     }
   }
 
+  const targetLabelProtection = await graph.evaluate((element) => {
+    const label = element.querySelector<HTMLElement>(
+      '[data-kp-vector-math-label="target-vector"] > div'
+    );
+    if (label === null || label === undefined) {
+      throw new Error("Target label protection geometry is unavailable.");
+    }
+    const style = getComputedStyle(label);
+    return {
+      backgroundColor: style.backgroundColor,
+      padding: [
+        style.paddingTop,
+        style.paddingRight,
+        style.paddingBottom,
+        style.paddingLeft
+      ],
+      textShadow: style.textShadow
+    };
+  });
+
+  // Protection follows the glyph so a nearby non-overlapping vector stays crisp.
+  expect(targetLabelProtection).toEqual({
+    backgroundColor: "rgba(0, 0, 0, 0)",
+    padding: ["0px", "0px", "0px", "0px"],
+    textShadow: "rgb(255, 253, 248) 0px 0px 1px"
+  });
+
   await player.press("R");
   await scrubber.fill("0.312");
   await expect(graph.locator("[data-kp-editor-graph-projection]"))
