@@ -126,7 +126,8 @@
     {
       "id": "s12",
       "title": "Prove exact playback and accessibility laws",
-      "status": "planned"
+      "summary": "Proved deterministic seek and exact rewind for full, reduced, static, and narrated projections. Reduced/static frames expose only 0-or-1 motion values; static playback uses finite row-completion checkpoints; all modes retain A, v, Av, row/column meaning, mapped bases, and live narration.",
+      "status": "complete"
     },
     {
       "id": "s13",

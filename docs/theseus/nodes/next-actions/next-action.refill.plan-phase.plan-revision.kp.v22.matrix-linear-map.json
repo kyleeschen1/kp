@@ -247,11 +247,25 @@
       "scope": "standard",
       "checkedAt": "2026-08-02T21:05:34.509Z",
       "notes": "All typechecks passed with the renderer-neutral rank-6 plan and frame."
+    },
+    {
+      "command": "npm run test:matrix-linear-map",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T21:09:27.060Z",
+      "notes": "40/40 checks passed; deterministic seek/rewind holds across four accessibility modes, reduced/static motion is discrete, and exact descriptions persist."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T21:09:28.874Z",
+      "notes": "All typechecks passed after accessibility projection laws."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s11 added one framework-neutral plan/frame carrying persistent operation-bank rows and delayed map geometry from the existing semantic progress and direction."
+    "summary": "Slice s12 defined continuous versus discrete motion policy, finite static checkpoints, exact narrated descriptions, and normalized semantic direction without changing matrix truth."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."

@@ -45,6 +45,12 @@ export interface KpMatrixLinearMapFrame {
   readonly semanticProgress: number;
   readonly direction: "forward" | "rewind";
   readonly accessibilityMode: KpMatrixLinearMapAccessibilityMode;
+  readonly accessibility: {
+    readonly motionPolicy: "continuous" | "discrete";
+    readonly checkpointProgress: number;
+    readonly description: string;
+    readonly liveNarration: string;
+  };
   readonly operationBank: {
     readonly inputOpacity: 1;
     readonly activeRowIndex: number | undefined;
@@ -104,16 +110,26 @@ export function sampleKpMatrixLinearMapFrame(input: {
   readonly direction: "forward" | "rewind";
   readonly accessibilityMode: KpMatrixLinearMapAccessibilityMode;
 }): KpMatrixLinearMapFrame {
+  const requestedSemanticProgress = roundProgress(input.direction === "forward"
+    ? clamp01(input.progress)
+    : 1 - clamp01(input.progress));
+  const effectiveSemanticProgress = input.accessibilityMode === "static"
+    ? staticCheckpointProgress(input.plan, requestedSemanticProgress)
+    : requestedSemanticProgress;
   const choreographyFrame = sampleKpMatrixVectorCompositionChoreography({
     choreography: input.plan.choreography,
-    progress: input.progress,
-    direction: input.direction,
+    // Direction has already been normalized into semantic progress. Sampling
+    // forward here prevents floating-point double inversion from drifting.
+    progress: effectiveSemanticProgress,
+    direction: "forward",
     accessibilityMode: input.accessibilityMode === "reduced-motion" ||
       input.accessibilityMode === "static"
       ? "reduced"
       : "full"
   });
   const progress = choreographyFrame.motion.semanticProgress;
+  const discrete = input.accessibilityMode === "reduced-motion" ||
+    input.accessibilityMode === "static";
   const rows = input.plan.operationBank.rows.map((row) => {
     const motion = choreographyFrame.motion.rows.find((candidate) =>
       candidate.semanticIndex === row.semanticIndex
@@ -123,36 +139,58 @@ export function sampleKpMatrixLinearMapFrame(input: {
       semanticIndex: row.semanticIndex,
       status: motion.status,
       foldPhase,
-      routeProgress: smooth(windowProgress(motion.localProgress, 0.02, 0.2)),
-      gatherProgress: smooth(windowProgress(motion.localProgress, 0.48, 0.76)),
-      coordinateProgress: motion.resultRevealProgress,
+      routeProgress: accessibleProgress(
+        smooth(windowProgress(motion.localProgress, 0.02, 0.2)), discrete
+      ),
+      gatherProgress: accessibleProgress(
+        smooth(windowProgress(motion.localProgress, 0.48, 0.76)), discrete
+      ),
+      coordinateProgress: accessibleProgress(
+        motion.resultRevealProgress, discrete
+      ),
       contributions: row.contributions.map((contribution) => ({
         columnIndex: contribution.columnIndex,
         matrixValue: contribution.matrixValue,
         vectorValue: contribution.vectorValue,
         product: contribution.product,
-        productRevealProgress: smooth(windowProgress(
-          motion.localProgress,
-          0.18 + contribution.columnIndex * 0.06,
-          0.42 + contribution.columnIndex * 0.06
-        ))
+        productRevealProgress: accessibleProgress(
+          smooth(windowProgress(
+            motion.localProgress,
+            0.18 + contribution.columnIndex * 0.06,
+            0.42 + contribution.columnIndex * 0.06
+          )),
+          discrete
+        )
       })),
       result: row.result
     };
   });
   const geometry = {
-    visibility: smooth(windowProgress(progress, 0.54, 0.64)),
-    basisRevealProgress: smooth(windowProgress(progress, 0.58, 0.74)),
-    gridTransformProgress: smooth(windowProgress(progress, 0.64, 0.9)),
-    sourceVectorRevealProgress: smooth(windowProgress(progress, 0.62, 0.76)),
-    vectorMapProgress: smooth(windowProgress(progress, 0.72, 0.96)),
-    outputVectorRevealProgress: smooth(windowProgress(progress, 0.86, 1)),
+    visibility: accessibleProgress(
+      smooth(windowProgress(progress, 0.54, 0.64)), discrete
+    ),
+    basisRevealProgress: accessibleProgress(
+      smooth(windowProgress(progress, 0.58, 0.74)), discrete
+    ),
+    gridTransformProgress: accessibleProgress(
+      smooth(windowProgress(progress, 0.64, 0.9)), discrete
+    ),
+    sourceVectorRevealProgress: accessibleProgress(
+      smooth(windowProgress(progress, 0.62, 0.76)), discrete
+    ),
+    vectorMapProgress: accessibleProgress(
+      smooth(windowProgress(progress, 0.72, 0.96)), discrete
+    ),
+    outputVectorRevealProgress: accessibleProgress(
+      smooth(windowProgress(progress, 0.86, 1)), discrete
+    ),
     inputCoordinates: input.plan.semantics.inputCoordinates,
     outputCoordinates: input.plan.semantics.outputCoordinates,
     mappedBasisVectors: input.plan.semantics.mappedBasisVectors.map(
       (vector) => vector.targetCoordinates
     )
   };
+  const narration = narrationFor(rows, geometry.outputVectorRevealProgress);
   return {
     id: `${input.plan.id}.frame`,
     kind: "matrix-linear-map-frame",
@@ -161,13 +199,19 @@ export function sampleKpMatrixLinearMapFrame(input: {
     semanticProgress: progress,
     direction: input.direction,
     accessibilityMode: input.accessibilityMode,
+    accessibility: {
+      motionPolicy: discrete ? "discrete" : "continuous",
+      checkpointProgress: progress,
+      description: accessibleDescription(input.plan),
+      liveNarration: narration
+    },
     operationBank: {
       inputOpacity: 1,
       activeRowIndex: choreographyFrame.motion.activeRowIndex,
       rows
     },
     geometry,
-    narration: narrationFor(rows, geometry.outputVectorRevealProgress)
+    narration
   };
 }
 
@@ -207,4 +251,44 @@ function windowProgress(progress: number, start: number, end: number): number {
 
 function smooth(progress: number): number {
   return progress * progress * (3 - 2 * progress);
+}
+
+function accessibleProgress(progress: number, discrete: boolean): number {
+  return discrete ? (progress >= 0.5 ? 1 : 0) : progress;
+}
+
+function staticCheckpointProgress(
+  plan: KpMatrixLinearMapPlan,
+  progress: number
+): number {
+  const checkpoints = [
+    0,
+    ...plan.choreography.rows.map((row) => row.end),
+    1
+  ];
+  return checkpoints.filter((checkpoint) => checkpoint <= progress).at(-1) ?? 0;
+}
+
+function accessibleDescription(plan: KpMatrixLinearMapPlan): string {
+  const matrix = plan.semantics.matrix.rows.map((row) =>
+    `[${row.join(", ")}]`
+  ).join(", ");
+  const basisImages = plan.semantics.mappedBasisVectors.map((vector, index) =>
+    `T_A(e_${index + 1}) = [${vector.targetCoordinates.join(", ")}]`
+  ).join("; ");
+  return `Matrix A has rows ${matrix}. It maps v = [` +
+    `${plan.semantics.inputCoordinates.join(", ")}] to [` +
+    `${plan.semantics.outputCoordinates.join(", ")}]. Rows compute output ` +
+    `coordinates; columns map standard basis vectors: ${basisImages}.`;
+}
+
+function clamp01(value: number): number {
+  if (!Number.isFinite(value)) {
+    throw new Error("Matrix linear-map progress must be finite.");
+  }
+  return Math.max(0, Math.min(1, value));
+}
+
+function roundProgress(value: number): number {
+  return Number(value.toFixed(12));
 }
