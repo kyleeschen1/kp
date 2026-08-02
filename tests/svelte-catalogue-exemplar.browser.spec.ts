@@ -666,12 +666,30 @@ test("Svelte exemplar keeps loading truth visible and contains preparation error
   await expect(exemplar).toHaveAttribute("aria-busy", "false");
 });
 
-test("canonical catalogue route still mounts the imperative rollback host", async ({
+test("canonical catalogue route mounts the approved Svelte host", async ({
   page
 }) => {
   const requestedUrls: string[] = [];
   page.on("request", (request) => requestedUrls.push(request.url()));
   await page.goto(`/?artifact=${animationId}`);
+
+  await expect(page.locator("[data-kp-svelte-catalogue-shell]")).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    animationId
+  );
+  expect(requestedUrls.some((url) =>
+    url.includes("svelte-catalogue-exemplar-entry")
+  )).toBe(true);
+});
+
+test("explicit rollback route mounts only the imperative host", async ({
+  page
+}) => {
+  const requestedUrls: string[] = [];
+  page.on("request", (request) => requestedUrls.push(request.url()));
+  await page.goto(
+    `/?artifact=${animationId}&catalogueShell=imperative-rollback`
+  );
 
   await expect(page.locator("[data-kp-animation-catalogue]")).toHaveAttribute(
     "data-kp-animation-catalogue-selection",

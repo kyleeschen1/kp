@@ -5,6 +5,7 @@ import test from "node:test";
 import { compile } from "svelte/compiler";
 
 import {
+  selectKpAnimationCatalogueShell,
   selectsKpSvelteCatalogueExemplar
 } from "../src/editor/svelte-catalogue/svelte-catalogue-exemplar-route.ts";
 
@@ -20,9 +21,22 @@ test("Svelte exemplar selection is explicit and independent of catalogue state",
     selectsKpSvelteCatalogueExemplar("?catalogueShell=unknown"),
     false
   );
+  assert.equal(selectKpAnimationCatalogueShell(""), "svelte");
+  assert.equal(
+    selectKpAnimationCatalogueShell("?catalogueShell=svelte-exemplar"),
+    "svelte"
+  );
+  assert.equal(
+    selectKpAnimationCatalogueShell("?catalogueShell=imperative-rollback"),
+    "imperative-rollback"
+  );
+  assert.equal(
+    selectKpAnimationCatalogueShell("?catalogueShell=unknown"),
+    "svelte"
+  );
 });
 
-test("bootstrap keeps the imperative default and dynamically mounts the exemplar", async () => {
+test("bootstrap makes Svelte canonical and keeps an explicit imperative rollback", async () => {
   const [bootstrap, entry, component] = await Promise.all([
     readFile("src/bootstrap.ts", "utf8"),
     readFile(
@@ -37,8 +51,9 @@ test("bootstrap keeps the imperative default and dynamically mounts the exemplar
 
   assert.match(
     bootstrap,
-    /selectsKpSvelteCatalogueExemplar\(window\.location\.search\)/
+    /selectKpAnimationCatalogueShell\(window\.location\.search\)/
   );
+  assert.match(bootstrap, /"imperative-rollback"/);
   assert.match(
     bootstrap,
     /import\(\s*"\.\/editor\/svelte-catalogue\/svelte-catalogue-exemplar-entry\.ts"\s*\)/

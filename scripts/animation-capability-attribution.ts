@@ -84,7 +84,8 @@ export interface KpSelectedOptionalCapabilitySignals {
 }
 
 export interface KpSelectedApplicationCapabilitySignals {
-  readonly catalogueApplicationRoutes: readonly string[];
+  readonly svelteCatalogueRoutes: readonly string[];
+  readonly imperativeCatalogueRoutes: readonly string[];
   readonly legacyMainRoutes: readonly string[];
   readonly animationPlayerGestaltRoutes: readonly string[];
 }
@@ -156,9 +157,14 @@ export function assertKpSelectedApplicationCapabilitySignals(
 ): void {
   const catalogueRouteIds = routeSpecs.map(({ id }) => id);
   assertExactRouteIds(
-    "catalogue application",
-    signals.catalogueApplicationRoutes,
+    "Svelte catalogue application",
+    signals.svelteCatalogueRoutes,
     catalogueRouteIds
+  );
+  assertExactRouteIds(
+    "imperative catalogue application",
+    signals.imperativeCatalogueRoutes,
+    []
   );
   assertExactRouteIds("legacy main application", signals.legacyMainRoutes, []);
   assertExactRouteIds(
@@ -343,7 +349,11 @@ async function captureKpAnimationCapabilityAttribution(): Promise<void> {
     }
     const matrix = createKpCapabilityRouteMatrix(routes);
     const capabilitySignals = {
-      catalogueApplicationRoutes: routeIdsRequesting(
+      svelteCatalogueRoutes: routeIdsRequesting(
+        routes,
+        /src\/editor\/svelte-catalogue\/svelte-catalogue-exemplar-entry\.ts$/
+      ),
+      imperativeCatalogueRoutes: routeIdsRequesting(
         routes,
         /src\/editor\/animation-catalogue-application\.ts$/
       ),
@@ -532,18 +542,45 @@ async function measureRoute(input: {
       waitUntil: "load",
       timeout: 120_000
     });
-    await page.waitForFunction((expectedAnimationId) => {
-      const catalogue = document.querySelector<HTMLElement>(
-        "[data-kp-animation-catalogue]"
+    try {
+      await page.waitForFunction((expectedAnimationId) => {
+        const catalogue = document.querySelector<HTMLElement>(
+          "[data-kp-animation-catalogue]"
+        );
+        const player = catalogue?.querySelector<HTMLElement>(
+          "[data-kp-editor-animation-player]"
+        );
+        return catalogue?.dataset["kpAnimationCatalogueSelection"] ===
+          expectedAnimationId &&
+          catalogue.dataset["kpAnimationCatalogueHostOutcome"] !== "pending" &&
+          player?.dataset["kpEditorAnimationHydrated"] === "true";
+      }, input.spec.animationId, { timeout: 120_000 });
+    } catch (error: unknown) {
+      // A route-level snapshot keeps a long matrix failure attributable without
+      // weakening the readiness contract or requiring an ad hoc browser script.
+      const state = await page.evaluate(() => {
+        const catalogue = document.querySelector<HTMLElement>(
+          "[data-kp-animation-catalogue]"
+        );
+        const player = catalogue?.querySelector<HTMLElement>(
+          "[data-kp-editor-animation-player]"
+        );
+        return {
+          catalogueState: catalogue?.dataset["kpAnimationCatalogueState"],
+          selection: catalogue?.dataset["kpAnimationCatalogueSelection"],
+          hostOutcome:
+            catalogue?.dataset["kpAnimationCatalogueHostOutcome"],
+          playerHydrated: player?.dataset["kpEditorAnimationHydrated"],
+          alert: catalogue?.querySelector<HTMLElement>("[role='alert']")
+            ?.textContent?.trim()
+        };
+      });
+      throw new Error(
+        `Capability attribution readiness failed for ${input.spec.id}: ` +
+        `${JSON.stringify(state)}`,
+        { cause: error }
       );
-      const player = catalogue?.querySelector<HTMLElement>(
-        "[data-kp-editor-animation-player]"
-      );
-      return catalogue?.dataset["kpAnimationCatalogueSelection"] ===
-        expectedAnimationId &&
-        catalogue.dataset["kpAnimationCatalogueHostOutcome"] !== "pending" &&
-        player?.dataset["kpEditorAnimationHydrated"] === "true";
-    }, input.spec.animationId, { timeout: 120_000 });
+    }
     await page.evaluate(async () => document.fonts.ready);
     await page.waitForLoadState("networkidle", { timeout: 120_000 });
     const runtime = await page.evaluate(() => {

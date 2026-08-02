@@ -767,7 +767,9 @@ async function captureVectorDotProjectionExemplar(
       }
       const url = new URL("/", baseUrl);
       url.searchParams.set("artifact", vectorDotProjectionExemplarId);
-      if (shell === "svelte-exemplar") {
+      if (shell === "imperative") {
+        url.searchParams.set("catalogueShell", "imperative-rollback");
+      } else {
         url.searchParams.set("catalogueShell", "svelte-exemplar");
       }
       if (checkpoint.progress > 0) {

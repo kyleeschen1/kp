@@ -22,15 +22,23 @@ const catalogueRouteIds = [
 
 test("catalogue routes own their narrow application closure", () => {
   assert.doesNotThrow(() => assertKpSelectedApplicationCapabilitySignals({
-    catalogueApplicationRoutes: catalogueRouteIds,
+    svelteCatalogueRoutes: catalogueRouteIds,
+    imperativeCatalogueRoutes: [],
     legacyMainRoutes: [],
     animationPlayerGestaltRoutes: []
   }));
   assert.throws(() => assertKpSelectedApplicationCapabilitySignals({
-    catalogueApplicationRoutes: catalogueRouteIds,
+    svelteCatalogueRoutes: catalogueRouteIds,
+    imperativeCatalogueRoutes: [],
     legacyMainRoutes: ["graph-svg-economics"],
     animationPlayerGestaltRoutes: []
   }), /legacy main application capability routes changed/);
+  assert.throws(() => assertKpSelectedApplicationCapabilitySignals({
+    svelteCatalogueRoutes: catalogueRouteIds,
+    imperativeCatalogueRoutes: ["graph-svg-economics"],
+    legacyMainRoutes: [],
+    animationPlayerGestaltRoutes: []
+  }), /imperative catalogue application capability routes changed/);
 });
 
 test("selected math capability signal ratchet rejects unrelated routes", () => {

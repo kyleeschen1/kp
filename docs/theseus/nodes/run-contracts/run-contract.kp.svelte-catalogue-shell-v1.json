@@ -155,7 +155,8 @@
     {
       "id": "s17",
       "title": "Promote Svelte as default catalogue route",
-      "status": "planned"
+      "summary": "Made the approved Svelte catalogue composition canonical, retained the old imperative application behind one exact rollback query, and updated capability attribution to ratchet the canonical ownership boundary.",
+      "status": "complete"
     },
     {
       "id": "s18",

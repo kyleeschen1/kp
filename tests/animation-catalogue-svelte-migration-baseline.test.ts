@@ -83,8 +83,8 @@ test("Svelte migration baseline freezes catalogue ownership and ceilings", async
   for (const action of baseline.requiredActions) {
     assert.ok(shell.includes(action), `missing shell action ${action}`);
   }
-  // The imperative entry remains the independent rollback path until the
-  // approved Svelte exemplar passes human review.
+  // The approved Svelte shell is canonical, while the imperative entry stays
+  // independently loadable as the cutover rollback until cleanup.
   assert.match(
     bootstrap,
     /import\(\s*"\.\/editor\/animation-catalogue-application\.ts"\s*\)/
