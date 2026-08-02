@@ -1,0 +1,191 @@
+{
+  "id": "run-contract.kp.matrix-linear-map-rank6-v2",
+  "kind": "run-contract",
+  "title": "Rank-6 matrix to linear map",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.refill.plan-phase.plan-revision.kp.v22.matrix-linear-map.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-matrix-linear-map-rank6-long-loop-proposal.md",
+      "summary": "Approved rationale, operation-bank pedagogy, preservation boundary, checkpoint, slice order, verification cadence, stop conditions, and deferrals."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-02-kp-checkpoint-and-product-surface-sequence.md",
+      "summary": "Accepted product sequence places rank-6 host pressure after the completed Svelte catalogue gate and before Internal Studio."
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-linear-map",
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run visual:matrix-linear-map",
+    "npm run test:browser:matrix-linear-map",
+    "npm run perf:animation",
+    "npm run perf:animation:attribution",
+    "npm run check:animation-library-bundle-boundary",
+    "npm run check:dev-review-production",
+    "npm run check:promotion-memory",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Upgrade the existing generated two-by-two matrix-vector asset in place; add exact operation-bank, dot-product fold, LinearMap, basis, graph, accessibility, browser, visual, performance, promotion, and adjacent-pruning evidence described by the approved proposal.",
+    "After the mandatory slice-16 human checkpoint is approved, pressure the same framework-neutral presentation and runtime joints with standalone dot-product and matrix-matrix callers and remove only proven-obsolete compatibility paths."
+  ],
+  "disallowedWork": [
+    "Do not move semantic truth, animation assets, clocks, runtime frames, renderer ports, URL or Review authority into Svelte; do not create a fluid simulation, second scheduler, second frame schema, or universal renderer.",
+    "Do not implement SvelteKit, Internal Studio, editable matrix parameters, arbitrary-dimensional visualization, determinant or eigen work, Jacobian or Hessian work, rank 7, LLM editorial work, Public Web, or unrelated pruning.",
+    "Do not execute s17 through s26 until the user explicitly approves the s16 visual exemplar."
+  ],
+  "goal": "Promote one exact matrix-vector learner artifact that explains row operations through persistent Pour-style information flow, dot-product gather-and-collapse, and a delayed geometric linear-map reveal under one framework-neutral clock, then prove the seam with standalone dot-product and matrix-matrix callers.",
+  "target": "next-action.refill.plan-phase.plan-revision.kp.v22.matrix-linear-map",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "Commit after each independently verified slice.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop at s16 for explicit human visual approval before local corrections, caller generalization, matrix-matrix work, or compatibility retirement.",
+    "Stop if operation-bank presentation would require literal fluid simulation, a second scheduler, a second frame schema, or a universal motif or renderer abstraction.",
+    "Stop if exact matrix, vector, result, row-versus-column semantics, basis provenance, accessibility, or framework-neutral authority cannot be preserved.",
+    "Stop if work would widen a frozen bundle or runtime ceiling, change canonical public behavior beyond the approved exemplar, or lacks durable and non-contradictory verification."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Reconcile rank-6 authority and freeze baselines",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Freeze canonical asset identity and exact truth",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Freeze row-dot choreography and visible behavior",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Audit linear-map placeholder retirement evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Add stable rank-6 verification commands",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Author operation-bank exemplar contract",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Bind strict LinearMap and basis provenance",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Enrich canonical asset with map and graph objects",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Coordinate equation and graph targets",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Compose calculation and application transformations",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Add synchronized renderer-neutral rank-6 frame",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Prove exact playback and accessibility laws",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Render persistent operation-bank flow",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Render dot-product gather and collapse",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Render delayed geometric linear-map reveal",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Capture responsive human visual checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Apply approved local visual corrections",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Pressure standalone dot-product caller",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Derive matrix-matrix composition provenance",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Add synchronized matrix-matrix frames",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Render repeated matrix-matrix input pours",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Retire proven-obsolete compatibility paths",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Complete cross-browser accessibility release matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Audit bundle and runtime performance",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Close rank-6 promotion evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Run final gates and close durable records",
+      "status": "planned"
+    }
+  ]
+}

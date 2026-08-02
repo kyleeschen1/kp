@@ -32,7 +32,8 @@
     "next-action.kp.animation-catalogue-simplification-v1",
     "next-action.kp.six-loop-product-convergence-v0",
     "next-action.kp.vector-label-attenuation-correction-v0",
-    "next-action.refill.plan-phase.plan-revision.kp.v22.svelte-catalogue-shell"
+    "next-action.refill.plan-phase.plan-revision.kp.v22.svelte-catalogue-shell",
+    "next-action.refill.plan-phase.plan-revision.kp.v22.matrix-linear-map"
   ],
   "verificationRecords": [
     {

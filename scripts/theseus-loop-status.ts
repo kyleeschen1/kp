@@ -15,6 +15,7 @@ interface TheseusSnapshotItem {
     readonly nextSlice?: { readonly id?: string; readonly title?: string };
   };
   readonly blockers?: readonly string[];
+  readonly health?: { readonly activeRunContracts?: number };
 }
 
 export interface TheseusLoopStatus {
@@ -56,16 +57,28 @@ function nonNegativeInteger(value: number | undefined): number {
 }
 
 function readStatus(): TheseusLoopStatus {
-  // Scope the query so a resolved run cannot overflow the CLI's bounded snapshot
-  // with unrelated workspace state before the final heartbeat is rendered.
-  const result = spawnSync("theseus", ["--format", "json", "plan", "status", "--scope", "kp"], {
+  const scoped = readSnapshot(["--scope", "kp"]);
+  // Scope selection does not yet retain newly-created contracts that lack a
+  // scopeId, even though its health summary can see the active global run.
+  const query = requiresUnscopedRunLookup(scoped) ? readSnapshot([]) : scoped;
+  return formatTheseusLoopStatus(query);
+}
+
+export function requiresUnscopedRunLookup(query: TheseusSnapshotQuery): boolean {
+  const snapshot = query.items?.[0];
+  return snapshot?.currentRun === undefined
+    && (snapshot?.health?.activeRunContracts ?? 0) > 0;
+}
+
+function readSnapshot(extraArgs: readonly string[]): TheseusSnapshotQuery {
+  const result = spawnSync("theseus", ["--format", "json", "plan", "status", ...extraArgs], {
     encoding: "utf8"
   });
   if (result.status !== 0) {
     const detail = result.stderr.trim() || result.stdout.trim() || "Theseus status command failed.";
     throw new Error(detail);
   }
-  return formatTheseusLoopStatus(JSON.parse(result.stdout) as TheseusSnapshotQuery);
+  return JSON.parse(result.stdout) as TheseusSnapshotQuery;
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {

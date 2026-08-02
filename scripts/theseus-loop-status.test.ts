@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { formatTheseusLoopStatus } from "./theseus-loop-status.ts";
+import {
+  formatTheseusLoopStatus,
+  requiresUnscopedRunLookup
+} from "./theseus-loop-status.ts";
 
 test("prints exact logical slice progress from the active Theseus contract", () => {
   assert.deepEqual(formatTheseusLoopStatus({
@@ -45,4 +48,19 @@ test("reports an absent active contract without inventing progress", () => {
     headline: "KP · no active loop",
     detail: "Run `theseus plan run` to select or inspect the next approved contract."
   });
+});
+
+test("falls back when scoped health sees a run but omits its contract", () => {
+  assert.equal(requiresUnscopedRunLookup({
+    items: [{
+      project: { id: "kp" },
+      health: { activeRunContracts: 1 }
+    }]
+  }), true);
+  assert.equal(requiresUnscopedRunLookup({
+    items: [{
+      project: { id: "kp" },
+      health: { activeRunContracts: 0 }
+    }]
+  }), false);
 });

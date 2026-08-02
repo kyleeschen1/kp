@@ -1,0 +1,45 @@
+{
+  "id": "next-action.refill.plan-phase.plan-revision.kp.v22.matrix-linear-map",
+  "kind": "next-action",
+  "title": "Advance Matrix-vector linear map",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Show matrix entries, row computations, basis movement, and geometric transformation as one linear map. Selection rationale: The user approved the exact 26-slice rank-6 matrix-to-linear-map long loop, revised to make the BetterExplained-inspired operation-bank flow and symbolic dot-product gather-and-collapse the canonical checkpoint before geometric reveal and matrix-matrix generalization.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Approved refill option refill.plan-phase.plan-revision.kp.v22.matrix-linear-map: The user approved the exact 26-slice rank-6 matrix-to-linear-map long loop, revised to make the BetterExplained-inspired operation-bank flow and symbolic dot-product gather-and-collapse the canonical checkpoint before geometric reveal and matrix-matrix generalization.",
+      "occurredAt": "2026-08-02T20:21:51.770Z"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "plan-revision.kp.v22"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22"
+  ],
+  "verification": [
+    "theseus validate"
+  ],
+  "expectedLearning": [
+    "Approved revision 22 places this planned phase in next."
+  ],
+  "allowedWork": [
+    "Show matrix entries, row computations, basis movement, and geometric transformation as one linear map."
+  ],
+  "disallowedWork": [
+    "Do not broaden beyond the selected refill option without another approval."
+  ],
+  "criteria": [
+    {
+      "id": "selected-option-addressed",
+      "weight": "high"
+    },
+    {
+      "id": "selection-provenance-preserved",
+      "weight": "high"
+    }
+  ]
+}
