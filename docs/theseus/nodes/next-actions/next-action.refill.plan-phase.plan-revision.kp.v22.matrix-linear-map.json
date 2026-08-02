@@ -23,6 +23,54 @@
   "verification": [
     "theseus validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/matrix-linear-map-rank6-baseline.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T20:33:42.597Z",
+      "notes": "2/2 authority-owner, production-ceiling, and framework-neutral boundary checks passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T20:33:43.623Z",
+      "notes": "TypeScript, Svelte, domain, and production Vite build gates passed at the rank-6 entry commit."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T20:33:44.510Z",
+      "notes": "Outer 10,459; main 178,189; catalogue route 90,158; place-value incremental 71,795 gzip bytes, all below unchanged ceilings."
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T20:33:45.424Z",
+      "notes": "All regression ratchets passed; constrained 128 ms longest task and 33.7 ms frame p95 remain explicit product-target pressure."
+    },
+    {
+      "command": "npm run perf:animation:attribution",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T20:33:46.326Z",
+      "notes": "One Svelte catalogue, selected Graph SVG and Three callers, and selected KaTeX cohort all passed attribution."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-08-02T20:33:47.207Z",
+      "notes": "867 nodes and 16,504 events validated before slice completion."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice s01 froze eleven authority owners, framework-neutral semantic and runtime paths, bundle ceilings and measurements, runtime observations, selected-capability attribution, and known performance pressure without changing visible behavior."
+  },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."
   ],

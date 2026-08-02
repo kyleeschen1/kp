@@ -60,7 +60,8 @@
     {
       "id": "s01",
       "title": "Reconcile rank-6 authority and freeze baselines",
-      "status": "planned"
+      "summary": "Reconciled the generated fixture, animation pack, row-dot choreography, semantic duration, strict LinearMap, equation and graph projections, surface dispatch, capability host, player clock, and Svelte composition. Frozen unchanged bundle limits and actuals plus regression-clean runtime measurements; no product behavior changed.",
+      "status": "complete"
     },
     {
       "id": "s02",

@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "kp.matrix-linear-map-rank6-baseline.v1",
+  "capturedAt": "2026-08-02T20:30:55.710Z",
+  "entryCommit": "33f17080",
+  "canonicalAnimationId": "animation.generated.linear-algebra.matrix-vector.two-by-two",
+  "authorityOwners": [
+    {
+      "role": "exact generated truth",
+      "path": "src/semantic/generated-linear-algebra-problem-fixture.ts",
+      "authorityToken": "generated.linear-algebra.matrix-vector.two-by-two"
+    },
+    {
+      "role": "catalogue asset construction",
+      "path": "src/animation/catalog-packs/generated.ts",
+      "authorityToken": "createKpGeneratedProblemAnimationPack"
+    },
+    {
+      "role": "row-dot choreography",
+      "path": "src/animation/matrix-vector-composition-choreography.ts",
+      "authorityToken": "kp.linear-algebra.matrix-vector#row-dot-products"
+    },
+    {
+      "role": "semantic duration",
+      "path": "src/animation/matrix-vector-semantic-duration.ts",
+      "authorityToken": "createKpMatrixVectorSemanticDuration"
+    },
+    {
+      "role": "strict map derivation",
+      "path": "src/semantic/linear-map.ts",
+      "authorityToken": "deriveLinearMapFromMatrix"
+    },
+    {
+      "role": "equation projection",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "authorityToken": "data-kp-editor-matrix-vector-overlay"
+    },
+    {
+      "role": "graph projection",
+      "path": "src/editor/graph-svg-viewport.ts",
+      "authorityToken": "animation.graph.vector.linear-map-scale"
+    },
+    {
+      "role": "surface dispatch",
+      "path": "src/editor/animation-surface-dispatch.ts",
+      "authorityToken": "slotKinds"
+    },
+    {
+      "role": "selected capability loading",
+      "path": "src/editor/selected-surface-capability-host.ts",
+      "authorityToken": "kpEditorSelectedSurfaceCapabilityHost"
+    },
+    {
+      "role": "player clock",
+      "path": "src/editor/animation-player-controller.ts",
+      "authorityToken": "frameRequests"
+    },
+    {
+      "role": "catalogue composition",
+      "path": "src/editor/svelte-catalogue/KpSvelteCatalogueExemplar.svelte",
+      "authorityToken": "mountKpAnimationCataloguePlayerHost"
+    }
+  ],
+  "frameworkNeutralPaths": [
+    "src/semantic/generated-linear-algebra-problem-fixture.ts",
+    "src/semantic/linear-map.ts",
+    "src/animation/catalog-packs/generated.ts",
+    "src/animation/matrix-vector-composition-choreography.ts",
+    "src/animation/matrix-vector-composition-progress.ts",
+    "src/animation/matrix-vector-semantic-duration.ts",
+    "src/animation/runtime-sampler.ts"
+  ],
+  "bundleLimitsGzipBytes": {
+    "outer": 50000,
+    "mainHost": 490000,
+    "measuredCatalogueRouteScript": 190000,
+    "placeValueIncremental": 75000
+  },
+  "bundleMeasurementGzipBytes": {
+    "outer": 10459,
+    "mainHost": 178189,
+    "measuredCatalogueRouteScript": 90158,
+    "placeValueIncremental": 71795
+  },
+  "performanceLimits": {
+    "initialScriptTransferBytes": 250000,
+    "constrainedHydrationMs": 5000,
+    "constrainedFrameP95Ms": 33,
+    "constrainedFrameMaxMs": 100,
+    "longestTaskMs": 50,
+    "lcpMs": 2500,
+    "cls": 0.1,
+    "interactionPaintMs": 200,
+    "initialThreeRequested": false
+  },
+  "observedPerformance": {
+    "initialScriptTransferBytes": 202539,
+    "normalHydrationMs": 405,
+    "normalLcpMs": 472,
+    "normalCls": 0.00021980467579431004,
+    "normalInteractionPaintMs": 26,
+    "normalLongestTaskMs": 61,
+    "normalFrameP95Ms": 17.40000000000009,
+    "constrainedHydrationMs": 2324,
+    "constrainedLcpMs": 2460,
+    "constrainedCls": 0.00010453096586796973,
+    "constrainedInteractionPaintMs": 62.59999990463257,
+    "constrainedLongestTaskMs": 128,
+    "constrainedFrameP95Ms": 33.70000000000027
+  },
+  "knownBaselinePressure": [
+    "The constrained loading longest task is 128 ms against the 50 ms product target.",
+    "The constrained animation-frame p95 is 33.7 ms against the 33 ms product target.",
+    "The normal loading sample contains one 61 ms task, while every regression ratchet still passes."
+  ]
+}
