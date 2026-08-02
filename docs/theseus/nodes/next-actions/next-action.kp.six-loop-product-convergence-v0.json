@@ -85,6 +85,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-01-verified-generated-linear-solve-product-integration.md"
+    },
+    {
+      "kind": "file",
+      "path": "scripts/capture-generated-linear-solve-review.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-verified-generated-linear-solve-visual-review.md"
     }
   ],
   "dependsOn": {
@@ -392,6 +400,18 @@
       "status": "failed",
       "scope": "s09 measurement: shared equation-reader closure 145855 gzip bytes, 855 above its existing 145000 allowance; closure assigned to performance slices s21-s25 without widening the baseline",
       "checkedAt": "2026-08-02T00:36:02.223Z"
+    },
+    {
+      "command": "npm run visual:generated-linear-solve",
+      "status": "passed",
+      "scope": "s10 production build plus seven generated solve visual, responsive, reduced-motion, and static captures",
+      "checkedAt": "2026-08-02T00:46:09.045Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s10 whitespace integrity",
+      "checkedAt": "2026-08-02T00:46:10.346Z"
     }
   ],
   "expectedLearning": [

@@ -121,7 +121,9 @@
     {
       "id": "s10",
       "title": "Capture generated-session review",
-      "status": "planned"
+      "summary": "Captured and inspected seven generated solve states across catalogue, explanation, narrow reader, reduced motion, and searchable no-JavaScript output; recorded objective checks and five human review questions, then froze all generated-session visual and editorial promotion.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s11",
