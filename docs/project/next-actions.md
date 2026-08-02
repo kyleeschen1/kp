@@ -7,24 +7,27 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-1. Propose one reversible Svelte 5 catalogue-shell exemplar over the existing
-   framework-neutral assets, runtime, clocks, renderer ports, URL behavior,
-   Review lifecycle, capability splits, and production budgets before pressure
-   with `Apply a 2 × 2 matrix to a vector`, the first unresolved promotion.
-2. Pressure the approved host with that rank-6 matrix-to-linear-map exemplar
-   before generalizing the Svelte seam or building broad editor UI.
-3. Build Internal Studio v0 only after that pressure test: keep Catalogue and
+1. Keep `Apply a 2 × 2 matrix to a vector` and its remaining run slices tabled
+   at the open visual checkpoint; select a nearer transformation family without
+   generalizing its provisional Pour treatment.
+2. Choose among place-value subtraction, fraction repartition and equivalence,
+   function-coordinate transformations, geometric dissection, distribution,
+   proportional rescaling, branching, refinement, or accumulation. The
+   recommended default is `402 - 178 = 224` as inverse-exchange pressure.
+3. Explicitly replace or waive the old matrix-specific host-pressure gate
+   before generalizing the Svelte seam or adopting SvelteKit.
+4. Build Internal Studio v0 after that decision: keep Catalogue and
    Internal Editor as distinct surfaces over one typed authoring session, and
-   adopt SvelteKit only after the shell gate passes.
-4. Freeze the portable publication bundle, then establish Public Web v0 with a
+   retain framework-neutral animation and authoring authority.
+5. Freeze the portable publication bundle, then establish Public Web v0 with a
    mission page and a small explicitly curated lesson set. Do not mirror all
    internally hostable catalogue rows.
-5. Complete M4 context-specific encoding, then add M5 as an internal
+6. Complete M4 context-specific encoding, then add M5 as an internal
    editorial-candidate workflow over verified claims and the approved
    generated-solve gold example.
-6. Build the constrained Public Editor last, after internal authoring,
+7. Build the constrained Public Editor last, after internal authoring,
    publication, untrusted-text, and public safety contracts are proven.
-7. Keep Graph3D mesh-to-donut and the programming addition/comparison internal.
+8. Keep Graph3D mesh-to-donut and the programming addition/comparison internal.
    Do not spend current learner-product effort on them or advance rank-23 BFS.
 
 ## Historical Queue Snapshot

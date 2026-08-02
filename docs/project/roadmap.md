@@ -161,6 +161,15 @@ and API audit did not recompute
 this order; older sequence documents remain rationale but no longer
 independently determine rank.
 
+The user tabled that frontier on 2026-08-02 because linear algebra is a distant
+learner target. The slice-17 matrix checkpoint remains open and preserved, but
+its remaining nine slices and motif generalization are deferred. The stable
+ledger has not been silently reranked while a replacement is being selected;
+the candidate families and recommendation are recorded in
+`reviews/2026-08-02-post-linear-algebra-transformation-candidates.md`, and the
+pause boundary is recorded in
+`decisions/2026-08-02-kp-table-linear-algebra-frontier.md`.
+
 The platform milestones between those promotions are recorded in
 `decisions/2026-07-28-kp-generation-editorial-and-pruning-roadmap-placement.md`.
 After the first four visible exemplars, KP declares public API tiers and then
@@ -255,9 +264,11 @@ changing rank. Exact-fraction quantity, place-value addition, Supply and demand
 equilibrium, and constant-force work-energy are
 promoted. Project one vector onto another is also promoted after its bounded
 endpoint-halo correction and seven-state certification. `Apply a 2 × 2 matrix
-to a vector` is the first unresolved content row, with the reversible Svelte 5
-catalogue shell explicitly interleaved before it. Existing standalone examples
-remain reference evidence rather than automatically promoted reader products.
+to a vector` remains the first unresolved ledger row, but its execution is
+tabled at the open visual checkpoint while a nearer non-linear-algebra
+transformation is selected. The reversible Svelte 5 catalogue shell is
+complete. Existing standalone examples remain reference evidence rather than
+automatically promoted reader products.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
@@ -517,17 +528,24 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Pressure the canonical Svelte host with rank-6 matrix-to-linear-map before generalizing the
-   framework seam.
-2. Establish Internal Studio v0 over one typed authoring session, then freeze
+1. Select one nearer transformation exemplar without resuming the tabled
+   matrix-to-linear-map run. The recommended default is place-value
+   subtraction; fraction equivalence, function-coordinate transformations, and
+   geometric dissection are the leading alternatives.
+2. Revisit what evidence should replace the old matrix-specific host-pressure
+   gate before generalizing the Svelte seam or adopting SvelteKit.
+3. Establish Internal Studio v0 over one typed authoring session, then freeze
    the portable publication bundle and establish Public Web v0 with a mission
    page and curated lessons.
-3. Complete M4 before internal M5 editorial candidates, and build the
+4. Complete M4 before internal M5 editorial candidates, and build the
    constrained Public Editor only after internal authoring, publication,
    untrusted-text, and public safety contracts pass.
 
 ## Deferred
 
+- Matrix-to-linear-map generalization, standalone-dot-product pressure,
+  matrix-matrix composition, and release promotion are deferred until the user
+  deliberately reopens linear algebra.
 - Promotion of Taylor/local linearization, gradient/Jacobian,
   Hessian/optimization, row operations, determinant/inverse, and basis/eigen is
   deferred until the semantic transition compiler passes its representative

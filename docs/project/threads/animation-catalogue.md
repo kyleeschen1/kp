@@ -2,10 +2,10 @@
 
 Status: active-supporting
 Last Updated: 2026-08-02
-Current Next Action: Pressure the canonical Svelte 5 catalogue host with the
-rank-6 matrix-to-linear-map caller before generalizing the framework seam or
-adopting SvelteKit. Keep assets, runtime clocks, renderer ports, URL truth, and
-Review authority outside the framework.
+Current Next Action: Preserve the canonical Svelte 5 catalogue host while the
+matrix caller remains tabled, then use the selected nearer transformation to
+identify what host pressure is still missing. Keep assets, runtime clocks,
+renderer ports, URL truth, and Review authority outside the framework.
 
 ## Goal
 

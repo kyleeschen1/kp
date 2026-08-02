@@ -1,0 +1,49 @@
+{
+  "id": "priority-change.kp.table-matrix-select-nearer-transform-v0",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.table-matrix-select-nearer-transform-v0",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The user tabled matrix and linear algebra as a distant learner target while preserving the open slice-17 visual checkpoint; select a nearer transformation before revising the stable frontier.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The user tabled matrix and linear algebra as a distant learner target while preserving the open slice-17 visual checkpoint; select a nearer transformation before revising the stable frontier.",
+      "occurredAt": "2026-08-02T22:41:27.188Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v22"
+    ],
+    "preferred": [
+      "run-contract.kp.matrix-linear-map-rank6-v2"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22",
+    "run-contract.kp.matrix-linear-map-rank6-v2"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v22",
+    "rationale": "The user tabled matrix and linear algebra as a distant learner target while preserving the open slice-17 visual checkpoint; select a nearer transformation before revising the stable frontier.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.matrix-linear-map-rank6-v2"
+    ],
+    "changes": [
+      {
+        "subject": "matrix-linear-map",
+        "to": "tabled"
+      },
+      {
+        "subject": "non-linear-algebra-transformation-selection",
+        "to": "now"
+      }
+    ],
+    "effectiveAt": "2026-08-02T22:41:27.188Z",
+    "requestedBy": "kyle"
+  }
+}

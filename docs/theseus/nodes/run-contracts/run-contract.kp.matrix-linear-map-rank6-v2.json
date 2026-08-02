@@ -2,8 +2,9 @@
   "id": "run-contract.kp.matrix-linear-map-rank6-v2",
   "kind": "run-contract",
   "title": "Rank-6 matrix to linear map",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp",
+  "summary": "USER_PAUSED with 17 of 26 slices complete; preserve the open matrix checkpoint and do not execute generalization or release slices.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -34,6 +35,9 @@
     "npm run check:dev-review-production",
     "npm run check:promotion-memory",
     "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "The user deliberately reopens linear algebra after selecting and completing nearer transformation work."
   ],
   "allowedWork": [
     "Upgrade the existing generated two-by-two matrix-vector asset in place; add exact operation-bank, dot-product fold, LinearMap, basis, graph, accessibility, browser, visual, performance, promotion, and adjacent-pruning evidence described by the approved proposal.",

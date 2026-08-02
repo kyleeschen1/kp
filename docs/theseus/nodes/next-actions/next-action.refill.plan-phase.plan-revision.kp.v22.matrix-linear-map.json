@@ -2,9 +2,9 @@
   "id": "next-action.refill.plan-phase.plan-revision.kp.v22.matrix-linear-map",
   "kind": "next-action",
   "title": "Advance Matrix-vector linear map",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp",
-  "summary": "Show matrix entries, row computations, basis movement, and geometric transformation as one linear map. Selection rationale: The user approved the exact 26-slice rank-6 matrix-to-linear-map long loop, revised to make the BetterExplained-inspired operation-bank flow and symbolic dot-product gather-and-collapse the canonical checkpoint before geometric reveal and matrix-matrix generalization.",
+  "summary": "USER_PAUSED: matrix and linear algebra are tabled as a distant target; preserve the 17-slice checkpoint and select a nearer transformation.",
   "sourceRefs": [
     {
       "kind": "user-intent",
@@ -465,8 +465,11 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s17 corrected the rejected visual checkpoint with a visible persistent-input Pour, deliberate 12-second pacing and explicit holds, plus structural graph-caption separation; renewed HUMAN_CHECKPOINT before s18."
+    "summary": "USER_PAUSED after slice 17: preserve the open matrix visual checkpoint and defer slices 18-26 while the user selects a nearer non-linear-algebra transformation."
   },
+  "revisitWhen": [
+    "The user explicitly returns to the matrix exemplar or selects linear algebra as the active frontier."
+  ],
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."
   ],

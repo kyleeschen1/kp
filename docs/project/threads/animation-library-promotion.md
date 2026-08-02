@@ -2,10 +2,10 @@
 
 Status: active
 Last Updated: 2026-08-02
-Current Next Action: Propose one reversible Svelte 5 catalogue-shell exemplar
-before pressure with `Apply a 2 × 2 matrix to a vector`, the first unresolved
-content promotion. Generated solve is gold; Graph3D and programming stay
-internal.
+Current Next Action: Keep `Apply a 2 × 2 matrix to a vector` tabled at its open
+visual checkpoint and select a nearer non-linear-algebra transformation. Do not
+resume generalization or silently rerank the ledger before that explicit human
+choice.
 
 ## Goal
 
@@ -44,6 +44,21 @@ composition are accepted. The over-broad endpoint-label backdrop was replaced
 with a tightly bounded transparent halo, preserving true label geometry and
 clearing the non-overlapping `B` line. Seven objective checkpoints and explicit
 human approval supply the nominal release evidence.
+
+## Active Execution Pause
+
+The user tabled matrix-to-linear-map on 2026-08-02 because linear algebra is a
+distant learner target. The completed slice-17 implementation remains a
+reviewable internal asset, but its Pour treatment is unapproved and slices
+18-26 are deferred. The rank-6 row below temporarily remains `next` only as the
+first unresolved ledger position; it does not authorize continued execution.
+An explicit successor choice will revise the stable ranks in one bounded
+decision.
+
+The selection review recommends place-value subtraction as the strongest new
+architectural pressure, with fraction equivalence, function-coordinate
+transformations, and geometric dissection as materially different alternatives.
+No candidate is active yet.
 
 ## Completed Foundation
 
