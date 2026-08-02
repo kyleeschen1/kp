@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { untrack } from "svelte";
+  import { onMount, untrack } from "svelte";
 
   import {
     KP_ANIMATION_CATALOGUE_STAGE_RESERVATION
@@ -9,8 +9,15 @@
   } from "../animation-catalogue-result-projection.ts";
   import {
     reduceKpAnimationCatalogueHostView,
+    replaceKpAnimationCatalogueHostHealth,
     type KpAnimationCatalogueSelectedHostViewModel
   } from "../animation-catalogue-host-view-model.ts";
+  import {
+    mountKpAnimationCataloguePlayerHost
+  } from "../animation-catalogue-player-host.ts";
+  import {
+    renderKpEditorAnimationPlayerShell
+  } from "../animation-player-shell.ts";
   import type {
     KpSvelteCatalogueHostState
   } from "./svelte-catalogue-host-state.ts";
@@ -21,6 +28,15 @@
   let view = $state<KpAnimationCatalogueSelectedHostViewModel | undefined>(
     untrack(() => hostState.status === "selected" ? hostState.view : undefined)
   );
+  let shell = $state<HTMLElement | undefined>();
+  let hostOutcome = $state<string | undefined>();
+  const playerHtml = untrack(() => hostState.status === "selected"
+    ? renderKpEditorAnimationPlayerShell({
+        descriptor: hostState.view.descriptor,
+        player: hostState.view.player,
+        chrome: "catalogue"
+      })
+    : "");
   let resultRows = $derived(view === undefined
     ? []
     : projectKpAnimationCatalogueResultRows({
@@ -39,10 +55,27 @@
       query: event.currentTarget.value
     });
   }
+
+  onMount(() => {
+    if (hostState.status !== "selected" || shell === undefined) return;
+    return mountKpAnimationCataloguePlayerHost({
+      shell,
+      entry: hostState.view.entry,
+      hostability: hostState.hostability,
+      animation: hostState.animation,
+      onObserved(observation) {
+        if (view === undefined ||
+          view.entry.animationId !== observation.health.animationId) return;
+        view = replaceKpAnimationCatalogueHostHealth(view, observation.health);
+        hostOutcome = observation.outcome.status;
+      }
+    });
+  });
 </script>
 
 {#if hostState.status === "selected" && view !== undefined}
   <main
+    bind:this={shell}
     class="kp-animation-catalogue-shell"
     data-kp-svelte-catalogue-shell
     data-kp-animation-catalogue
@@ -51,6 +84,7 @@
     data-kp-animation-catalogue-pack-id={view.entry.packId}
     data-kp-animation-catalogue-selected-health={view.health.status}
     data-kp-animation-catalogue-human-disposition={view.entry.humanDisposition}
+    data-kp-animation-catalogue-host-outcome={hostOutcome}
     aria-labelledby="kp-animation-catalogue-title"
   >
     <h1
@@ -145,9 +179,7 @@
         data-kp-animation-catalogue-stage
         data-kp-animation-catalogue-stage-persistent="true"
       >
-        <p class="kp-animation-catalogue-shell__stage-status" role="status">
-          <strong>{view.entry.title}</strong> is selected.
-        </p>
+        {@html playerHtml}
       </div>
     </section>
     <aside

@@ -101,7 +101,8 @@
     {
       "id": "s08",
       "title": "Mount existing player controller in Svelte stage",
-      "status": "planned"
+      "summary": "Mounted the existing player shell, surface registry, playback controller, and paint-observation lifecycle through one shared browser host consumed by Svelte and imperative catalogue shells. The vector graph paints and scrubs on the original clock, and rail search preserves the same player node.",
+      "status": "complete"
     },
     {
       "id": "s09",

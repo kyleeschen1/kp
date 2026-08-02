@@ -303,11 +303,81 @@
       "scope": "s07-performance",
       "checkedAt": "2026-08-02T15:56:50.954Z",
       "notes": "Outer 10459, main host 255904, measured catalogue 171542, and place-value incremental 71797 gzip bytes all remain below frozen ceilings."
+    },
+    {
+      "command": "npm-run-test-svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "s08-focused",
+      "checkedAt": "2026-08-02T16:05:23.721Z",
+      "notes": "34-focused-host-player-ownership-search-shell-rollback-and-Svelte-compiler-tests-passed"
+    },
+    {
+      "command": "npm-run-typecheck-svelte",
+      "status": "passed",
+      "scope": "s08-types",
+      "checkedAt": "2026-08-02T16:05:24.756Z",
+      "notes": "Svelte-checker-reported-zero-errors-and-zero-warnings"
+    },
+    {
+      "command": "npm-run-test-browser-svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "s08-browser",
+      "checkedAt": "2026-08-02T16:05:25.677Z",
+      "notes": "Four-Chromium-checks-proved-real-vector-paint-existing-scrubber-stable-player-DOM-through-search-terminal-states-and-imperative-rollback"
+    },
+    {
+      "command": "vite-build",
+      "status": "passed",
+      "scope": "s08-production",
+      "checkedAt": "2026-08-02T16:05:26.572Z",
+      "notes": "Production-Vite-build-passed-with-1006-transformed-modules"
+    },
+    {
+      "command": "npm-run-check-animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s08-performance",
+      "checkedAt": "2026-08-02T16:05:27.500Z",
+      "notes": "Outer-10459-main-host-255904-measured-catalogue-171542-and-place-value-incremental-71797-gzip-bytes-remain-below-frozen-ceilings"
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "s08-focused",
+      "checkedAt": "2026-08-02T16:05:45.770Z",
+      "notes": "34 focused host, player ownership, search, shell, rollback, and Svelte compiler tests passed."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s08-types",
+      "checkedAt": "2026-08-02T16:05:46.796Z",
+      "notes": "Svelte checker reported zero errors and zero warnings."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "s08-browser",
+      "checkedAt": "2026-08-02T16:05:47.705Z",
+      "notes": "Four Chromium checks proved real vector paint, the existing scrubber, stable player DOM through search, terminal states, and imperative rollback."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "s08-production",
+      "checkedAt": "2026-08-02T16:05:48.612Z",
+      "notes": "Production Vite build passed with 1006 transformed modules."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s08-performance",
+      "checkedAt": "2026-08-02T16:05:49.513Z",
+      "notes": "Outer 10459, main host 255904, measured catalogue 171542, and place-value incremental 71797 gzip bytes remain below frozen ceilings."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1 through 7 are complete. The Svelte rail now has shared fuzzy search and stable selection; mounting the existing player lifecycle into the persistent stage is next."
+    "summary": "Slices 1 through 8 are complete. The Svelte stage now mounts the real player on the shared clock with observed health; selected-result navigation without page reload is next."
   },
   "expectedLearning": [
     "Approved revision 22 places this active phase in now."

@@ -76,7 +76,14 @@ export async function mountKpSvelteCatalogueExemplar(input: {
     await unmount(component);
     component = mount(KpSvelteCatalogueExemplar, {
       target: input.root,
-      props: { state: { status: "selected", view } }
+      props: {
+        state: {
+          status: "selected",
+          view,
+          animation: prepared.animation,
+          hostability: prepared.hostability
+        }
+      }
     });
   } catch (error: unknown) {
     const message = error instanceof Error

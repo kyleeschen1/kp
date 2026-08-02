@@ -58,7 +58,12 @@ test("bootstrap keeps the imperative default and dynamically mounts the exemplar
   assert.match(component, /hostState\.status === "not-found"/);
   assert.match(component, /role="alert">\{hostState\.message\}/);
   assert.match(component, /<h3 id="kp-svelte-catalogue-details-title">Details/);
-  assert.doesNotMatch(component, /animation-player-controller|<h2(?:\s|>)/);
+  assert.match(component, /mountKpAnimationCataloguePlayerHost/);
+  assert.match(component, /renderKpEditorAnimationPlayerShell/);
+  assert.doesNotMatch(
+    component,
+    /createKpEditorAnimationPlaybackSession|sampleKpAnimationRuntimeFrame|<h2(?:\s|>)/
+  );
 
   const compiled = compile(component, {
     filename: "KpSvelteCatalogueExemplar.svelte",
@@ -66,4 +71,29 @@ test("bootstrap keeps the imperative default and dynamically mounts the exemplar
     runes: true
   });
   assert.match(compiled.js.code, /kp-animation-catalogue-region/);
+});
+
+test("both catalogue shells delegate player lifecycle to one browser host", async () => {
+  const [application, playerHost, component] = await Promise.all([
+    readFile("src/editor/animation-catalogue-application.ts", "utf8"),
+    readFile("src/editor/animation-catalogue-player-host.ts", "utf8"),
+    readFile(
+      "src/editor/svelte-catalogue/KpSvelteCatalogueExemplar.svelte",
+      "utf8"
+    )
+  ]);
+
+  assert.match(application, /mountKpAnimationCataloguePlayerHost/);
+  assert.match(component, /mountKpAnimationCataloguePlayerHost/);
+  assert.match(playerHost, /hydrateKpEditorAnimationPlayers/);
+  assert.match(playerHost, /hydrateKpEditorAnimationSurfaces/);
+  assert.match(playerHost, /observeKpAnimationCatalogueHost/);
+  assert.doesNotMatch(
+    application,
+    /hydrateKpEditorAnimationPlayers|hydrateKpEditorAnimationSurfaces/
+  );
+  assert.doesNotMatch(
+    playerHost,
+    /createKpEditorAnimationPlaybackSession|sampleKpAnimationRuntimeFrame/
+  );
 });

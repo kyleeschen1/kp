@@ -8,6 +8,7 @@ import type {
 } from "../src/editor/animation-catalogue-health.ts";
 import {
   createKpAnimationCatalogueSelectedHostViewModel,
+  replaceKpAnimationCatalogueHostHealth,
   reduceKpAnimationCatalogueHostView,
   type KpAnimationCatalogueHostCommand
 } from "../src/editor/animation-catalogue-host-view-model.ts";
@@ -113,6 +114,21 @@ test("chrome reducer is pure and projects into the existing shell", () => {
     kind: "close-overlay"
   });
   assert.equal(closed.chrome.overlay, undefined);
+});
+
+test("observed health replaces only the host evidence snapshot", () => {
+  const initial = createView();
+  const observed = replaceKpAnimationCatalogueHostHealth(initial, {
+    ...health,
+    status: "ready",
+    reasons: []
+  });
+
+  assert.equal(initial.health.status, "review");
+  assert.equal(observed.health.status, "ready");
+  assert.equal(observed.entry, initial.entry);
+  assert.equal(observed.player, initial.player);
+  assert.deepEqual(observed.chrome, initial.chrome);
 });
 
 test("host view rejects crossed selection and parallel parameter authority", () => {

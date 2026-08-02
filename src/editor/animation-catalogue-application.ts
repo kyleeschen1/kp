@@ -22,17 +22,11 @@ import {
   renderKpAnimationCatalogueShell
 } from "./animation-catalogue-shell.ts";
 import {
-  deriveKpAnimationCatalogueHealth
-} from "./animation-catalogue-health.ts";
-import {
   createKpAnimationCatalogueSelectedHostViewModel
 } from "./animation-catalogue-host-view-model.ts";
 import {
-  observeKpAnimationCatalogueHost
-} from "./animation-catalogue-host-observation.ts";
-import {
-  deriveKpAnimationCatalogueHostOutcome
-} from "./animation-catalogue-host-outcome.ts";
+  mountKpAnimationCataloguePlayerHost
+} from "./animation-catalogue-player-host.ts";
 import {
   decideKpAnimationCatalogueLinkNavigation,
   resolveKpAnimationCatalogueHistoryNavigation
@@ -60,17 +54,12 @@ import {
   KP_EDITOR_ANIMATION_LOAD_EVENT,
   applyKpEditorAnimationPresentationTuning,
   disposeKpEditorAnimationPlayers,
-  hydrateKpEditorAnimationPlayers,
   pauseKpEditorAnimationPlayers,
   replaceKpEditorAnimationPlaybackAsset
 } from "./animation-player-controller.ts";
 import {
   renderKpEditorAnimationPlayerShell
 } from "./animation-player-shell.ts";
-import {
-  hydrateKpEditorAnimationSurfaces
-} from "./animation-surface-adapter-registry.ts";
-import { registerKpEditorDiagramSvgAdapter } from "./diagram-svg-adapter.ts";
 import {
   createKpEconomicsEquilibriumParameterState,
   createParameterizedEconomicsEquilibriumAnimation,
@@ -117,7 +106,6 @@ class KpAnimationCatalogueApplication {
     }
     this.#root.dataset["kpAnimationCatalogueApplication"] = "mounted";
     installKpAnimationHostStatus(window, "kp.application");
-    registerKpEditorDiagramSvgAdapter();
     const options = { signal: this.#events.signal };
     this.#root.addEventListener("click", this.#handleClick, options);
     this.#root.addEventListener("change", this.#handleChange, options);
@@ -495,60 +483,19 @@ class KpAnimationCatalogueApplication {
     readonly animation: KpAnimationCataloguePreparedSelection["animation"];
   }): void {
     this.#disposeHostEvidenceObserver();
-    hydrateKpEditorAnimationSurfaces(input.shell);
-    const player = input.shell.querySelector<HTMLElement>(
-      "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
-    );
-    const stage = input.shell.querySelector<HTMLElement>(
-      "[data-kp-animation-catalogue-stage]"
-    );
-    let observer: MutationObserver | undefined;
-    let disposed = false;
-    const dispose = () => {
-      if (disposed) return;
-      disposed = true;
-      observer?.disconnect();
-      player?.removeEventListener(
-        KP_EDITOR_ANIMATION_FRAME_EVENT,
-        publish
-      );
-      if (this.#disposeHostEvidence === dispose) {
-        this.#disposeHostEvidence = undefined;
+    const dispose = mountKpAnimationCataloguePlayerHost({
+      ...input,
+      onObserved({ health, outcome }) {
+        applyKpAnimationCatalogueObservedHealth({
+          shell: input.shell,
+          entry: input.entry,
+          health
+        });
+        input.shell.dataset["kpAnimationCatalogueHostOutcome"] =
+          outcome.status;
       }
-    };
-    const publish = () => {
-      if (input.shell.dataset["kpAnimationCatalogueSelection"] !==
-        input.entry.animationId) return;
-      const hostObservation = observeKpAnimationCatalogueHost(input.shell);
-      const hostOutcome = deriveKpAnimationCatalogueHostOutcome({
-        entry: input.entry,
-        hostability: input.hostability,
-        hostObservation
-      });
-      if (hostOutcome === undefined) return;
-      dispose();
-      applyKpAnimationCatalogueObservedHealth({
-        shell: input.shell,
-        entry: input.entry,
-        health: deriveKpAnimationCatalogueHealth({
-          hostability: input.hostability,
-          hostObservation
-        })
-      });
-      input.shell.dataset["kpAnimationCatalogueHostOutcome"] =
-        hostOutcome.status;
-    };
-    if (stage !== null) {
-      observer = new MutationObserver(publish);
-      observer.observe(stage, { attributes: true, childList: true, subtree: true });
-    }
-    player?.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, publish, {
-      once: true
     });
     this.#disposeHostEvidence = dispose;
-    hydrateKpEditorAnimationPlayers(input.shell, {
-      animationOverrides: [input.animation]
-    });
   }
 
   #disposeHostEvidenceObserver(): void {

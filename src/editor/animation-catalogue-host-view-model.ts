@@ -160,6 +160,23 @@ export function reduceKpAnimationCatalogueHostView(
   }
 }
 
+export function replaceKpAnimationCatalogueHostHealth(
+  view: KpAnimationCatalogueSelectedHostViewModel,
+  health: KpAnimationCatalogueHealth
+): KpAnimationCatalogueSelectedHostViewModel {
+  return createKpAnimationCatalogueSelectedHostViewModel({
+    entry: view.entry,
+    health,
+    entries: view.entries,
+    descriptor: view.descriptor,
+    player: view.player,
+    economicsParameters: view.economicsParameters,
+    physicsParameters: view.physicsParameters,
+    readerCompanion: view.readerCompanion,
+    chrome: view.chrome
+  });
+}
+
 export function assertKpAnimationCatalogueSelectedHostContent(
   input: KpAnimationCatalogueSelectedHostContent
 ): void {

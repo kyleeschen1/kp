@@ -32,7 +32,43 @@ test("explicit Svelte exemplar mounts through the shared selected-host model", a
     "[data-kp-animation-catalogue-region]"
   )).toHaveCount(3);
   await expect(exemplar.getByRole("heading", { level: 3 })).toHaveText("Details");
-  await expect(exemplar.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
+  const player = exemplar.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const graphSlot = player.locator(
+    '[data-kp-editor-animation-surface-slot="graph"]'
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+  await expect(graphSlot).toHaveAttribute(
+    "data-kp-editor-animation-adapter-status",
+    "ready"
+  );
+  await expect(graphSlot).toHaveAttribute(
+    "data-kp-editor-animation-adapter-id",
+    "editor-animation-surface.graph.svg"
+  );
+  await expect(graphSlot.locator("[data-kp-editor-graph-svg]")).toBeVisible();
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-selected-health",
+    "ready"
+  );
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-host-outcome",
+    "painted"
+  );
+  await player.evaluate((element) => {
+    element.dataset["kpSveltePlayerIdentity"] = "stable";
+  });
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  await scrubber.fill("0.5");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "0.5"
+  );
   const search = exemplar.getByRole("searchbox", { name: "Search artifacts" });
   const results = exemplar.locator("[data-kp-animation-catalogue-results]");
   const originalUrl = page.url();
@@ -58,9 +94,11 @@ test("explicit Svelte exemplar mounts through the shared selected-host model", a
     "data-kp-animation-catalogue-selection",
     animationId
   );
-  await expect(exemplar.getByRole("status")).toContainText(
-    "Dot product and vector projection"
+  await expect(player).toHaveAttribute(
+    "data-kp-svelte-player-identity",
+    "stable"
   );
+  await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "0.5");
   expect(page.url()).toBe(originalUrl);
 
   await search.fill("slvx");

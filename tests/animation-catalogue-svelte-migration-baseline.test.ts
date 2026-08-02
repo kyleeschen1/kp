@@ -48,6 +48,7 @@ test("Svelte migration baseline freezes catalogue ownership and ceilings", async
     application,
     selectionPreparation,
     capabilityHost,
+    playerHost,
     shell,
     bootstrap
   ] = await Promise.all([
@@ -57,13 +58,15 @@ test("Svelte migration baseline freezes catalogue ownership and ceilings", async
       "utf8"
     ),
     readFile("src/editor/selected-surface-capability-host.ts", "utf8"),
+    readFile("src/editor/animation-catalogue-player-host.ts", "utf8"),
     readFile("src/editor/animation-catalogue-shell.ts", "utf8"),
     readFile("src/bootstrap.ts", "utf8")
   ]);
   const lifecycleSource = [
     application,
     selectionPreparation,
-    capabilityHost
+    capabilityHost,
+    playerHost
   ].join("\n");
   for (const owner of baseline.lifecycleOwners) {
     const migratedOwner = baseline.lifecycleOwnerMigrations[
