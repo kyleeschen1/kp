@@ -109,6 +109,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-canonical-animation-authoring-facade.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/fraction-composition-equation-adapter.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-animation-authoring-facade-two-caller-migration.md"
     }
   ],
   "dependsOn": {
@@ -482,6 +490,67 @@
       "status": "passed",
       "scope": "s12 whitespace integrity",
       "checkedAt": "2026-08-02T00:58:56.692Z"
+    },
+    {
+      "command": "node focused facade caller preservation suite",
+      "status": "passed",
+      "scope": "s13 24 focused facade, caller, fraction, generated-session, and product-integration tests",
+      "checkedAt": "2026-08-02T01:11:32.408Z"
+    },
+    {
+      "command": "npm run audit:animation-api-callers -- --summary",
+      "status": "passed",
+      "scope": "s13 exact two production callers, three test callers, and no unknown facade consumers",
+      "checkedAt": "2026-08-02T01:11:33.395Z"
+    },
+    {
+      "command": "npm run test:browser:generated-linear-solve",
+      "status": "passed",
+      "scope": "s13 generated catalogue and reader preservation in Chromium",
+      "checkedAt": "2026-08-02T01:11:34.453Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s13 application, node, test, and domain TypeScript boundaries",
+      "checkedAt": "2026-08-02T01:11:35.431Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s13 production bundle and route build",
+      "checkedAt": "2026-08-02T01:11:36.446Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s13 architecture ownership after caller migration",
+      "checkedAt": "2026-08-02T01:11:37.408Z"
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s13 reader production closure after caller migration",
+      "checkedAt": "2026-08-02T01:11:38.301Z"
+    },
+    {
+      "command": "npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "s13 generated catalogue metadata currency",
+      "checkedAt": "2026-08-02T01:11:39.207Z"
+    },
+    {
+      "command": "npm run visual:fraction-composition-canonical",
+      "status": "failed",
+      "scope": "s13 broad unchanged-renderer matrix",
+      "checkedAt": "2026-08-02T01:11:40.088Z",
+      "notes": "Full 16-case matrix reports six material-contact pairs. Facade and former direct imports are the same strict-identity binding, so this is separately attributable presentation debt rather than a migration delta; no whitelist added."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s13 whitespace integrity",
+      "checkedAt": "2026-08-02T01:11:40.998Z"
     }
   ],
   "expectedLearning": [

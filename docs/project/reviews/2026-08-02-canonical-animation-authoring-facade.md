@@ -1,7 +1,7 @@
 # Canonical animation authoring facade
 
 Date: 2026-08-02  
-Status: defined; production caller migration deferred to slice `s13`
+Status: defined; exactly two production callers migrated in slice `s13`
 
 ## Contract
 
@@ -19,8 +19,8 @@ It additionally exports only the types needed to describe the input, returned
 - `KpAnimationAssetValidationIssue`
 
 The facade contains no implementation and uses named exports only. Slice `s12`
-does not migrate either production caller, so this boundary can be reviewed and
-rolled back independently before import paths change.
+defined it independently; slice `s13` then moved only the canonical fraction and
+verified generated-solve imports through it.
 
 ## Why this size
 
@@ -46,9 +46,9 @@ asset module still owns cloning, validation, reference closure, seek/rewind laws
 builders, and semantic reference compilation. Provider truth, learner prose,
 timing, geometry, rendering, and host state do not cross this facade.
 
-The smallest rollback unit is this public entry point, its conformance test, its
-type fixture, and this contract. The two existing production callers remain on
-their original direct imports until slice `s13` proves preservation.
+The smallest migration rollback unit is the two import-path changes and their
+preservation test. Reverting those paths does not change the public entry point or
+either internal implementation.
 
 ## Enforcement
 
@@ -59,5 +59,7 @@ their original direct imports until slice `s13` proves preservation.
 - Type fixtures prove the supported signatures and fail if builders, exemplar
   compilers, domain presenters, reader render plans, or motif registries leak
   through the facade.
-- The caller ledger records zero production callers at this slice boundary; the
-  next slice must change that count to exactly two.
+- The caller ledger now records exactly the canonical fraction adapter and the
+  verified linear-problem animation compiler as production facade callers. The
+  internal balanced-solve module has only the public facade as a production
+  caller.

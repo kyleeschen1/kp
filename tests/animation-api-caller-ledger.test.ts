@@ -29,12 +29,10 @@ test("animation API caller ledger targets live, uniquely classified surfaces", (
   }
 });
 
-test("internal balanced solve seam has the facade plus two approved production callers", () => {
+test("internal balanced solve seam has only its public facade production caller", () => {
   const surface = record("authoring.canonical-balanced-solve");
   assert.deepEqual(surface.sourceCallers, [
-    "src/animation/fraction-composition-equation-adapter.ts",
-    "src/animation/public-api.ts",
-    "src/animation/verified-linear-problem-animation-compiler.ts"
+    "src/animation/public-api.ts"
   ]);
   assert.deepEqual(surface.testCallers, [
     "tests/animation-authoring-public-api.test.ts",
@@ -44,10 +42,14 @@ test("internal balanced solve seam has the facade plus two approved production c
   assert.deepEqual(surface.otherCallers, []);
 });
 
-test("new animation facade is defined before its two callers migrate", () => {
+test("animation facade has exactly the two approved production callers", () => {
   const surface = record("facade.animation-authoring");
-  assert.deepEqual(surface.sourceCallers, []);
+  assert.deepEqual(surface.sourceCallers, [
+    "src/animation/fraction-composition-equation-adapter.ts",
+    "src/animation/verified-linear-problem-animation-compiler.ts"
+  ]);
   assert.deepEqual(surface.testCallers, [
+    "tests/animation-authoring-facade-caller-preservation.test.ts",
     "tests/animation-authoring-public-api.test.ts",
     "tests/type-fixtures/animation-authoring-public-api.ts"
   ]);

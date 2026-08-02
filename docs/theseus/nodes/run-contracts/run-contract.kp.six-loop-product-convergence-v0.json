@@ -142,7 +142,9 @@
     {
       "id": "s13",
       "title": "Migrate two facade callers",
-      "status": "planned"
+      "summary": "Migrated exactly the canonical fraction and verified generated-solve callers through the strict-identity public facade; structural and byte parity, generated browser behavior, typecheck, architecture, production closure, metadata, and build pass. The full unchanged fraction visual matrix exposes six separately attributable material-contact pairs and remains unwhitelisted.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s14",

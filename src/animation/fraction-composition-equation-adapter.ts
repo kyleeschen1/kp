@@ -6,7 +6,7 @@ import {
 } from "../semantic/fraction-composition-evaluation-tree.ts";
 import {
   createKpCanonicalBalancedSolveAnimationAsset
-} from "./canonical-balanced-solve-animation.ts";
+} from "./public-api.ts";
 
 export function createKpFractionCompositionEquationAnimationAsset() {
   const source = createKpFractionCompositionEquationAsset();

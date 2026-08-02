@@ -30,12 +30,10 @@ import {
   createSemanticTransformationSequence
 } from "../semantic/transformation-composition.ts";
 import {
-  createKpCanonicalBalancedSolveAnimationAsset
-} from "./canonical-balanced-solve-animation.ts";
-import {
+  createKpCanonicalBalancedSolveAnimationAsset,
   validateKpAnimationAsset,
   type KpAnimationAsset
-} from "./asset.ts";
+} from "./public-api.ts";
 
 const bridgePortId = "bridge.verified-linear-problem-animation.v1";
 

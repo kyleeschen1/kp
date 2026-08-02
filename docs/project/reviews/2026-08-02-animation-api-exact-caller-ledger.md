@@ -41,9 +41,9 @@ the sixteenth target. All 16 have zero unclassified “other” callers.
 
 | Surface | Production | Tests | Scripts | Disposition |
 | --- | ---: | ---: | ---: | --- |
-| Animation authoring facade | 0 | 2 | 0 | Defined; migrate exactly two callers in `s13` |
-| Internal balanced-solve seam | 3 | 2 | 0 | Facade plus two unmigrated callers; keep implementation internal |
-| Complete animation asset core | 127 | 44 | 0 | Keep internal; new facade/test account for the increase from the `s11` baseline |
+| Animation authoring facade | 2 | 3 | 0 | Canonical fraction and verified generated solve only |
+| Internal balanced-solve seam | 1 | 2 | 0 | Public facade is its sole production caller; keep implementation internal |
+| Complete animation asset core | 126 | 44 | 0 | Keep internal; generated compiler no longer imports it directly |
 | Concept authoring facade | 1 | 11 | 1 | Keep separate |
 | Provider integration facade | 6 | 8 | 0 | Keep separate |
 | Reader compiler facade | 1 | 15 | 0 | Keep internal |
