@@ -108,7 +108,8 @@
     {
       "id": "s09",
       "title": "Coordinate equation and graph targets",
-      "status": "planned"
+      "summary": "The canonical asset now exposes equation and graph render targets in one row layout with clockCoupling=shared-progress. Generated descriptors advertise the composite surface, Chromium mounts both slots under one player, and graph paint remains deferred to s15.",
+      "status": "complete"
     },
     {
       "id": "s10",

@@ -3,6 +3,10 @@ import test from "node:test";
 
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import {
+  checkKpAnimationAssetReferenceClosure,
+  validateKpAnimationAsset
+} from "../src/animation/asset.ts";
+import {
   deriveKpMatrixLinearMapSemantics
 } from "../src/animation/matrix-linear-map-semantics.ts";
 
@@ -92,4 +96,23 @@ test("canonical catalogue asset is enriched in place with graph semantics", () =
       ?.selectors[0]?.kind,
     "viewport"
   );
+});
+
+test("equation and graph targets share one timeline and coordinated layout", () => {
+  const [equationTarget, graphTarget] = animation.renderTargets;
+  assert.equal(equationTarget?.kind, "equation");
+  assert.equal(graphTarget?.kind, "graph");
+  assert.equal(equationTarget?.timelineId, animation.timeline?.id);
+  assert.equal(graphTarget?.timelineId, animation.timeline?.id);
+  assert.equal(graphTarget?.metadata?.["graphMotionKind"], "matrix-linear-map");
+  assert.deepEqual(animation.layout, {
+    id: "layout.generated.linear-algebra.matrix-vector.two-by-two.equation-graph",
+    kind: "row",
+    childIds: [equationTarget?.id, graphTarget?.id],
+    title: "Calculation and geometric action",
+    metadata: { clockCoupling: "shared-progress" }
+  });
+  assert.equal(animation.metadata?.["clockCoupling"], "shared-progress");
+  assert.deepEqual(validateKpAnimationAsset(animation), []);
+  assert.equal(checkKpAnimationAssetReferenceClosure(animation).passed, true);
 });

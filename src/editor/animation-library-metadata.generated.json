@@ -1053,7 +1053,8 @@
     "title": "Generated matrix-vector product",
     "summary": "Generated matrix-vector product",
     "renderTargetKinds": [
-      "equation"
+      "equation",
+      "graph"
     ],
     "controlKinds": [
       "playback",
@@ -1085,7 +1086,8 @@
     "familyId": "family.linear-algebra.matrix-vector",
     "sampleId": "sample.animation.matrix-vector.basic",
     "renderTargetKinds": [
-      "equation"
+      "equation",
+      "graph"
     ],
     "controlKinds": [
       "playback",

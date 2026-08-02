@@ -198,11 +198,32 @@
       "scope": "standard",
       "checkedAt": "2026-08-02T20:55:13.546Z",
       "notes": "All typechecks passed after in-place semantic asset enrichment."
+    },
+    {
+      "command": "npm run test:matrix-linear-map",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T20:59:06.600Z",
+      "notes": "32/32 checks passed, including coordinated equation/graph targets, one timeline, reference closure, and asset validation."
+    },
+    {
+      "command": "npm run test:browser:matrix-linear-map",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-08-02T20:59:08.934Z",
+      "notes": "Chromium confirms one composite player with equation and graph slots under exact row-dot playback."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T20:59:11.654Z",
+      "notes": "All typechecks passed after coordinated target and generated descriptor updates."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s08 enriched the canonical asset in both eager and lazy catalog paths with matrix, map, bases, mapped basis vectors, Graph2D plane, and input/output vectors while preserving the existing animation ID."
+    "summary": "Slice s09 coordinated equation and graph target descriptors under one row layout and one shared timeline; the graph slot is present but intentionally awaits slice-s15 painting."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."

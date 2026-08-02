@@ -89,6 +89,15 @@ export function enrichKpMatrixLinearMapAsset(
       sourceIds: [semantics.linearMap.id, inputVector.id]
     })
   ];
+  const equationTarget = animation.renderTargets.find(
+    (target) => target.kind === "equation"
+  );
+  if (equationTarget === undefined || animation.timeline === undefined) {
+    throw new Error(
+      `Matrix linear-map animation ${animation.id} requires an equation target and shared timeline.`
+    );
+  }
+  const graphTargetId = `render.${animation.id.slice("animation.".length)}.graph`;
 
   return {
     ...animation,
@@ -97,9 +106,46 @@ export function enrichKpMatrixLinearMapAsset(
       title: animation.bundle.title,
       objects: [...animation.bundle.objects, ...semanticObjects]
     }),
+    layout: {
+      id: `layout.${animation.id.slice("animation.".length)}.equation-graph`,
+      kind: "row",
+      childIds: [equationTarget.id, graphTargetId],
+      title: "Calculation and geometric action",
+      metadata: {
+        clockCoupling: "shared-progress"
+      }
+    },
+    renderTargets: [
+      equationTarget,
+      {
+        id: graphTargetId,
+        kind: "graph",
+        objectIds: semanticObjects.map((object) => object.id),
+        selectorIds: semanticObjects.flatMap((object) =>
+          object.selectors.map((selector) => selector.id)
+        ),
+        transformationIds: [animation.transformations[0]!.id],
+        timelineId: animation.timeline.id,
+        summary: "Geometric action of the same exact matrix-vector calculation.",
+        metadata: {
+          graphMotionKind: "matrix-linear-map",
+          linearMapId: semantics.linearMap.id,
+          sourceVectorId: inputVector.id,
+          targetVectorId: outputVector.id,
+          revealPolicy: "after-row-calculation"
+        }
+      }
+    ],
+    dashboard: animation.dashboard === undefined
+      ? undefined
+      : {
+          ...animation.dashboard,
+          sampleTargetIds: [equationTarget.id, graphTargetId]
+        },
     metadata: {
       ...animation.metadata,
-      matrixLinearMapEnriched: true
+      matrixLinearMapEnriched: true,
+      clockCoupling: "shared-progress"
     }
   };
 }

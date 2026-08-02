@@ -38,6 +38,11 @@ test("rank-6 matrix-vector exemplar preserves exact row-dot playback", async ({
     "data-kp-editor-animation-adapter-id",
     "editor-animation-surface.equation.katex"
   );
+  await expect(player.locator("[data-kp-editor-animation-stage]"))
+    .toHaveAttribute("data-kp-editor-animation-surface", "composite");
+  await expect(player.locator(
+    '[data-kp-editor-animation-surface-slot="graph"]'
+  )).toHaveCount(1);
 
   await scrubber.fill("0.18");
   await expect(transition).toHaveAttribute(
