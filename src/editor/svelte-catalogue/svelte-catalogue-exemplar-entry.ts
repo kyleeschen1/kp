@@ -34,6 +34,12 @@ export async function mountKpSvelteCatalogueExemplar(input: {
   }
   const descriptors = createKpEditorAnimationLibrary();
   const projection = createKpAnimationCatalogueProjection({ descriptors });
+  const selectionPreparation =
+    createKpAnimationCatalogueSelectionPreparationService({ descriptors });
+  const selectionHost = Object.freeze({
+    projection,
+    prepare: selectionPreparation.prepare
+  });
   const selection = resolveKpAnimationCatalogueSelection({
     projection,
     artifactId: route.artifactId
@@ -56,9 +62,7 @@ export async function mountKpSvelteCatalogueExemplar(input: {
   });
   input.root.dataset["kpSvelteCatalogueExemplar"] = "mounted";
   try {
-    const prepared = await createKpAnimationCatalogueSelectionPreparationService({
-      descriptors
-    }).prepare({
+    const prepared = await selectionPreparation.prepare({
       entry: selection.entry,
       search: input.search,
       playhead: route.playhead
@@ -81,7 +85,8 @@ export async function mountKpSvelteCatalogueExemplar(input: {
           status: "selected",
           view,
           animation: prepared.animation,
-          hostability: prepared.hostability
+          hostability: prepared.hostability,
+          selectionHost
         }
       }
     });

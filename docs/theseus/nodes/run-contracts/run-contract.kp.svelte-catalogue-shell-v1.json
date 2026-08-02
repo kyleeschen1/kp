@@ -113,7 +113,8 @@
     {
       "id": "s10",
       "title": "Port cancellable in-shell asset switching",
-      "status": "planned"
+      "summary": "Ported in-shell selection through the existing projection and one shared preparation service. A monotonic revision guard ignores stale pack completions, while the three-region shell remains mounted and only the selected player lifecycle is replaced.",
+      "status": "complete"
     },
     {
       "id": "s11",

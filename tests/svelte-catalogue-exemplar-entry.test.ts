@@ -48,6 +48,11 @@ test("bootstrap keeps the imperative default and dynamically mounts the exemplar
     /import\(\s*"\.\/editor\/animation-catalogue-application\.ts"\s*\)/
   );
   assert.match(entry, /createKpAnimationCatalogueSelectionPreparationService/);
+  assert.equal(
+    [...entry.matchAll(/createKpAnimationCatalogueSelectionPreparationService/g)]
+      .length,
+    2
+  );
   assert.match(entry, /createKpAnimationCatalogueSelectedHostViewModel/);
   assert.doesNotMatch(entry, /loadKpAnimationAsset|createKpAnimationAssets/);
   assert.equal(
@@ -60,6 +65,10 @@ test("bootstrap keeps the imperative default and dynamically mounts the exemplar
   assert.match(component, /renderKpAnimationCatalogueInspector/);
   assert.match(component, /selectKpAnimationCatalogueInspector/);
   assert.match(component, /tuneKpAnimationCataloguePresentation/);
+  assert.match(component, /decideKpAnimationCatalogueLinkNavigation/);
+  assert.match(component, /selectionRevision/);
+  assert.match(component, /selectionHost\.prepare/);
+  assert.doesNotMatch(component, /window\.location\.(?:assign|reload)/);
   assert.match(component, /mountKpAnimationCataloguePlayerHost/);
   assert.match(component, /renderKpEditorAnimationPlayerShell/);
   assert.doesNotMatch(

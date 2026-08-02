@@ -153,6 +153,61 @@ test("explicit Svelte exemplar mounts through the shared selected-host model", a
   expect(pageErrors).toEqual([]);
 });
 
+test("Svelte in-shell selection ignores a stale pack completion", async ({
+  page
+}) => {
+  let releaseAlgebraRequest: (() => void) | undefined;
+  const algebraRequestGate = new Promise<void>((resolve) => {
+    releaseAlgebraRequest = resolve;
+  });
+  await page.route("**/src/animation/catalog-packs/algebra.ts*", async (route) => {
+    await algebraRequestGate;
+    await route.continue();
+  });
+  const documentRequests: string[] = [];
+  page.on("request", (request) => {
+    if (request.resourceType() === "document") {
+      documentRequests.push(request.url());
+    }
+  });
+
+  await page.goto(
+    `/?artifact=${animationId}&catalogueShell=svelte-exemplar`
+  );
+  const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
+  const search = exemplar.getByRole("searchbox", { name: "Search artifacts" });
+  const stage = exemplar.locator("[data-kp-animation-catalogue-stage]");
+
+  await search.fill("slvx");
+  await exemplar.getByRole("link", { name: /Solve x/ }).click();
+  await expect(stage).toHaveAttribute(
+    "data-kp-animation-catalogue-stage-state",
+    "loading"
+  );
+  await expect(stage.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
+
+  await search.fill("demand equilibrium");
+  await exemplar.getByRole("link", { name: /Supply and demand/ }).click();
+  const economicsId =
+    "animation.economics.supply-demand-equilibrium-shift";
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    economicsId
+  );
+  await expect(stage.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${economicsId}"]`
+  )).toHaveAttribute("data-kp-editor-animation-hydrated", "true");
+
+  releaseAlgebraRequest?.();
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    economicsId
+  );
+  expect(documentRequests).toHaveLength(1);
+  expect(page.url()).toContain(`artifact=${animationId}`);
+});
+
 test("Svelte exemplar renders the not-found terminal state in its reserved stage", async ({
   page
 }) => {
