@@ -18,16 +18,31 @@ const physicsExemplarId =
   "animation.physics.constant-force-work-energy";
 const graph3DExemplarId =
   "animation.graph.surface-mode.mesh-to-donut";
+const vectorDotProjectionExemplarId = "animation.dot-projection.basic";
 const baseUrl =
   process.env["KP_VISUAL_BASE_URL"] ?? "http://127.0.0.1:8000";
 const outputRoot = path.resolve(
   process.env["KP_VISUAL_OUTPUT"] ?? "tmp/codex/animation-catalogue"
 );
 const viewport = { width: 1440, height: 1000 } as const;
+const scopeArgumentIndex = process.argv.indexOf("--scope");
+const captureScope = scopeArgumentIndex === -1
+  ? "all"
+  : process.argv[scopeArgumentIndex + 1];
+if (captureScope !== "all" && captureScope !== "vector-dot-projection") {
+  throw new Error(`Unknown catalogue visual scope: ${captureScope ?? "missing"}`);
+}
 
 await mkdir(outputRoot, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 
+if (captureScope === "vector-dot-projection") {
+  try {
+    await captureVectorDotProjectionExemplar(browser);
+  } finally {
+    await browser.close();
+  }
+} else {
 try {
   const page = await browser.newPage({ viewport });
   const url = new URL("/", baseUrl);
@@ -184,9 +199,9 @@ try {
   const allResultCount = await page.locator(
     "[data-kp-animation-catalogue-row]"
   ).count();
-  if (allResultCount !== 35) {
+  if (allResultCount !== 36) {
     throw new Error(
-      `Catalogue expected 35 flat asset rows, found ${allResultCount}.`
+      `Catalogue expected 36 flat asset rows, found ${allResultCount}.`
     );
   }
   const inspectorSelect = page.locator(
@@ -532,6 +547,8 @@ try {
 
   await captureGraph3DExemplar(browser);
 
+  await captureVectorDotProjectionExemplar(browser);
+
   const hostabilityResults = await captureCatalogueHostability(browser);
   const hostabilityManifest = path.join(outputRoot, "hostability.json");
   await writeFile(
@@ -556,6 +573,256 @@ try {
   );
 } finally {
   await browser.close();
+}
+}
+
+async function captureVectorDotProjectionExemplar(
+  browser: Browser
+): Promise<void> {
+  const vectorOutput = path.join(outputRoot, "vector-dot-projection");
+  await mkdir(vectorOutput, { recursive: true });
+  const checkpoints = [
+    {
+      id: "start-wide-0",
+      progress: 0,
+      expectedBeat: "source-pose",
+      viewport
+    },
+    {
+      id: "component-pairing-wide-188",
+      progress: 0.188,
+      expectedBeat: "component-pair-x",
+      viewport
+    },
+    {
+      id: "projection-wide-688",
+      progress: 0.688,
+      expectedBeat: "projection-drop",
+      viewport
+    },
+    {
+      id: "settlement-wide-1000",
+      progress: 1,
+      expectedBeat: "native-settlement",
+      viewport,
+      inspectLabels: true
+    },
+    {
+      id: "projection-narrow-688",
+      progress: 0.688,
+      expectedBeat: "projection-drop",
+      viewport: { width: 390, height: 844 },
+      inspectLabels: true
+    },
+    {
+      id: "projection-reduced-motion-688",
+      progress: 0.688,
+      expectedBeat: "projection-drop",
+      viewport,
+      reducedMotion: true
+    },
+    {
+      id: "settlement-static-svg-1000",
+      progress: 1,
+      expectedBeat: "native-settlement",
+      viewport,
+      stageOnly: true,
+      inspectLabels: true
+    }
+  ] as const;
+  const captures: Array<{
+    readonly id: string;
+    readonly path: string;
+    readonly staticMarkup?: string | undefined;
+    readonly viewport: { readonly width: number; readonly height: number };
+    readonly progress: number;
+    readonly beat: string;
+    readonly accessibilityMode: string;
+    readonly relationLatex: string;
+    readonly katexCount: number;
+    readonly labelGeometry: {
+      readonly inspected: boolean;
+      readonly contained: boolean;
+      readonly overlaps: boolean;
+    };
+  }> = [];
+
+  for (const checkpoint of checkpoints) {
+    const page = await browser.newPage({ viewport: checkpoint.viewport });
+    try {
+      if ("reducedMotion" in checkpoint && checkpoint.reducedMotion) {
+        await page.emulateMedia({ reducedMotion: "reduce" });
+      }
+      const url = new URL("/", baseUrl);
+      url.searchParams.set("artifact", vectorDotProjectionExemplarId);
+      if (checkpoint.progress > 0) {
+        url.searchParams.set("playhead", String(checkpoint.progress));
+      }
+      await page.goto(url.toString(), { waitUntil: "networkidle" });
+      await page.evaluate(async () => document.fonts.ready);
+      await page.waitForFunction((expected) => {
+        const catalogue = document.querySelector<HTMLElement>(
+          "[data-kp-animation-catalogue]"
+        );
+        const player = catalogue?.querySelector<HTMLElement>(
+          "[data-kp-editor-animation-player]"
+        );
+        const slot = player?.querySelector<HTMLElement>(
+          '[data-kp-editor-animation-surface-slot="graph"]'
+        );
+        return catalogue?.dataset["kpAnimationCatalogueSelection"] ===
+          expected.animationId &&
+          catalogue.dataset["kpAnimationCatalogueHostOutcome"] === "painted" &&
+          player?.dataset["kpEditorAnimationHydrated"] === "true" &&
+          Math.abs(Number(player.dataset["kpEditorAnimationProgress"]) -
+            expected.progress) < 0.001 &&
+          slot?.dataset["kpEditorAnimationAdapterStatus"] === "ready";
+      }, {
+        animationId: vectorDotProjectionExemplarId,
+        progress: checkpoint.progress
+      });
+
+      const graph = page.locator("[data-kp-editor-graph-svg]");
+      const evidence = await page.evaluate((inspectLabels) => {
+        const graphElement = document.querySelector<SVGElement>(
+          "[data-kp-editor-graph-svg]"
+        );
+        const viewElement = graphElement?.querySelector<HTMLElement>(
+          "[data-kp-vector-dot-projection-view]"
+        );
+        const player = document.querySelector<HTMLElement>(
+          "[data-kp-editor-animation-player]"
+        );
+        const relation = graphElement?.querySelector<HTMLElement>(
+          "[data-kp-vector-current-relation]"
+        );
+        if (graphElement === null || graphElement === undefined ||
+          viewElement === null || viewElement === undefined ||
+          player === null || relation === null || relation === undefined) {
+          throw new Error("Vector review capture targets are missing.");
+        }
+        const graphRect = graphElement.getBoundingClientRect();
+        const labelRects = inspectLabels
+          ? [...graphElement.querySelectorAll<HTMLElement>(
+              '[data-kp-vector-math-label] > div'
+            )].map((label) => {
+              const rect = label.getBoundingClientRect();
+              return {
+                left: rect.left,
+                right: rect.right,
+                top: rect.top,
+                bottom: rect.bottom
+              };
+            })
+          : [];
+        const contained = labelRects.every((rect) =>
+          rect.left >= graphRect.left - 1 &&
+          rect.right <= graphRect.right + 1 &&
+          rect.top >= graphRect.top - 1 &&
+          rect.bottom <= graphRect.bottom + 1
+        );
+        const overlaps = labelRects.some((left, leftIndex) =>
+          labelRects.slice(leftIndex + 1).some((right) =>
+            left.left < right.right && left.right > right.left &&
+            left.top < right.bottom && left.bottom > right.top
+          )
+        );
+        return {
+          beat: viewElement.dataset["kpVectorDotProjectionBeat"] ?? "",
+          accessibilityMode:
+            player.dataset["kpEditorAnimationAccessibilityMode"] ?? "",
+          relationLatex: relation.dataset["kpLatex"] ?? "",
+          presentationProfile: graphElement.dataset[
+            "kpGraphPresentationProfile"
+          ] ?? "",
+          languageProfile: graphElement.dataset["kpGraphLanguageProfile"] ?? "",
+          katexCount: graphElement.querySelectorAll(".katex").length,
+          svgTextCount: graphElement.querySelectorAll("text").length,
+          description: graphElement.querySelector("desc")?.textContent ?? "",
+          hasRightAngle:
+            graphElement.querySelector("[data-kp-vector-right-angle]") !== null,
+          labelGeometry: {
+            inspected: inspectLabels,
+            contained,
+            overlaps
+          }
+        };
+      }, "inspectLabels" in checkpoint && checkpoint.inspectLabels);
+
+      const expectedAccessibilityMode =
+        "reducedMotion" in checkpoint && checkpoint.reducedMotion
+          ? "reduced-motion"
+          : "full-motion";
+      if (
+        evidence.beat !== checkpoint.expectedBeat ||
+        evidence.accessibilityMode !== expectedAccessibilityMode ||
+        evidence.presentationProfile !==
+          "kp.graph.dimensional-continuity.linear-algebra.v1" ||
+        evidence.languageProfile !== "kp.graph.dimensional-continuity.v1" ||
+        evidence.katexCount !== 17 ||
+        evidence.svgTextCount !== 0 ||
+        !evidence.description.includes("projection of a onto b is (3, 3)") ||
+        (checkpoint.progress === 1 && !evidence.hasRightAngle) ||
+        (evidence.labelGeometry.inspected &&
+          (!evidence.labelGeometry.contained || evidence.labelGeometry.overlaps))
+      ) {
+        throw new Error(
+          `Vector capture ${checkpoint.id} drifted: ${JSON.stringify(evidence)}`
+        );
+      }
+
+      const imagePath = path.join(vectorOutput, `${checkpoint.id}.png`);
+      let staticMarkup: string | undefined;
+      if ("stageOnly" in checkpoint && checkpoint.stageOnly) {
+        await graph.screenshot({
+          path: imagePath,
+          animations: "disabled"
+        });
+        const markupPath = path.join(vectorOutput, `${checkpoint.id}.svg`);
+        await writeFile(markupPath, `${await graph.evaluate((node) =>
+          node.outerHTML
+        )}\n`, "utf8");
+        staticMarkup = path.relative(process.cwd(), markupPath);
+      } else {
+        await page.screenshot({
+          path: imagePath,
+          fullPage: true,
+          animations: "disabled"
+        });
+      }
+      captures.push({
+        id: checkpoint.id,
+        path: path.relative(process.cwd(), imagePath),
+        ...(staticMarkup === undefined ? {} : { staticMarkup }),
+        viewport: checkpoint.viewport,
+        progress: checkpoint.progress,
+        beat: evidence.beat,
+        accessibilityMode: evidence.accessibilityMode,
+        relationLatex: evidence.relationLatex,
+        katexCount: evidence.katexCount,
+        labelGeometry: evidence.labelGeometry
+      });
+    } finally {
+      await page.close();
+    }
+  }
+
+  const manifestPath = path.join(vectorOutput, "manifest.json");
+  await writeFile(manifestPath, `${JSON.stringify({
+    schemaVersion: "kp.animation-catalogue-vector-dot-projection-review.v1",
+    animationId: vectorDotProjectionExemplarId,
+    disposition: "Unreviewed",
+    promotion: "frozen-pending-consolidated-human-checkpoint",
+    captureSemantics: {
+      staticView: "settled SVG markup with browser animations disabled",
+      reducedMotion: "system prefers-reduced-motion projection",
+      imagesAreDisposable: true
+    },
+    captures
+  }, null, 2)}\n`, "utf8");
+  console.log(
+    `animation catalogue vector review: ${path.relative(process.cwd(), manifestPath)}`
+  );
 }
 
 async function captureGraph3DExemplar(browser: Browser): Promise<void> {

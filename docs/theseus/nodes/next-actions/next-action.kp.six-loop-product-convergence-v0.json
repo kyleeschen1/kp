@@ -165,6 +165,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-vector-dot-projection-catalogue-integration.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-vector-dot-projection-review-package.md"
+    },
+    {
+      "kind": "file",
+      "path": "tests/vector-dot-projection-review-evidence.test.ts"
     }
   ],
   "dependsOn": {
@@ -880,6 +888,53 @@
       "status": "passed",
       "scope": "s19-catalogue-host",
       "checkedAt": "2026-08-02T02:15:56.175Z"
+    },
+    {
+      "command": "npm-run-visual-vector-dot-projection",
+      "status": "passed",
+      "scope": "s20-vector-review",
+      "checkedAt": "2026-08-02T02:24:29.494Z",
+      "notes": "seven-wide-narrow-reduced-motion-and-static-checkpoints-captured-with-exact-beat-KaTeX-description-and-label-geometry-guards"
+    },
+    {
+      "command": "manual-vector-capture-inspection",
+      "status": "passed",
+      "scope": "s20-vector-review",
+      "checkedAt": "2026-08-02T02:24:30.415Z",
+      "notes": "wide-sequence-clean-narrow-contained-reduced-parity-static-svg-clean-phone-label-scale-deferred-to-human-choice"
+    },
+    {
+      "command": "vector-review-focused-tests",
+      "status": "passed",
+      "scope": "s20-vector-review",
+      "checkedAt": "2026-08-02T02:24:31.390Z",
+      "notes": "10-tests-pass"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "s20-vector-review",
+      "checkedAt": "2026-08-02T02:24:32.327Z"
+    },
+    {
+      "command": "npm-run-test-browser-vector-dot-projection",
+      "status": "passed",
+      "scope": "s20-vector-review",
+      "checkedAt": "2026-08-02T02:24:33.253Z",
+      "notes": "3-chromium-tests-pass"
+    },
+    {
+      "command": "npm-run-check-promotion-memory",
+      "status": "passed",
+      "scope": "s20-vector-review",
+      "checkedAt": "2026-08-02T02:24:34.170Z",
+      "notes": "rank-5-remains-unpromoted"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "s20-vector-review",
+      "checkedAt": "2026-08-02T02:24:35.042Z"
     }
   ],
   "expectedLearning": [

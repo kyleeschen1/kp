@@ -188,7 +188,8 @@
     {
       "id": "s20",
       "title": "Capture vector review",
-      "status": "planned"
+      "summary": "Seven-exact-vector-checkpoints-captured-through-one-stable-scoped-command-and-manually-inspected-wide-narrow-reduced-motion-and-static-SVG-truth-clean-with-phone-scale-recorded-for-human-choice-and-all-vector-visual-promotion-work-now-frozen",
+      "status": "complete"
     },
     {
       "id": "s21",
