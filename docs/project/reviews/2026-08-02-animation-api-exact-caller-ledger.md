@@ -1,7 +1,7 @@
 # Animation API exact caller ledger
 
 Date: 2026-08-02  
-Status: source-derived audit after verified generated solve integration
+Status: source-derived audit; pruning verdict closed in slice `s14`
 
 ## Outcome
 
@@ -52,7 +52,7 @@ the sixteenth target. All 16 have zero unclassified “other” callers.
 | Equation motif facade | 0 | 0 | 0 | Keep separate canonical vocabulary |
 | Experimental editor API catalogue | 5 | 2 | 0 | Defer |
 | Semantic compatibility ledger | 0 | 1 | 1 | Keep internal evidence |
-| Generated display metadata | 1 | 0 | 0 | Candidate only after exact replacement |
+| Generated display metadata | 1 | 0 | 0 | Retain: live display projection has no exact replacement |
 | Generated search metadata | 1 | 0 | 0 | Defer |
 | Generated animation compiler | 2 | 2 | 0 | Keep internal |
 | Generated explanation compiler | 2 | 1 | 0 | Keep internal |
@@ -98,10 +98,8 @@ not export these exemplar-specific compilers.
 
 ## Safe next move
 
-Slice `s12` should create the absent animation authoring facade with only the
-types, constructor, validation/law checks, and canonical balanced-solve factory
-required by both observed production callers. Slice `s13` can then migrate those
-two callers and prove semantic/static/browser preservation. Generated display
-metadata remains a one-caller candidate, but no retirement is authorized until
-that migration proves an exact replacement for searchable labels, contexts,
-review state, and promotion evidence.
+Slices `s12-s13` defined the narrow facade and migrated the two observed callers
+with preservation evidence. That migration did not create a replacement for
+generated display metadata. Slice `s14` therefore removed its provisional
+candidate label rather than deleting a live projection or conflating it with
+search metadata.

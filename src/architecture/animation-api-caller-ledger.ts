@@ -11,11 +11,10 @@ export type KpAnimationApiSurfaceTier =
   | "generated-session-internal";
 
 export type KpAnimationApiSurfaceDisposition =
-  | "define-public-boundary"
+  | "retain-public-boundary"
   | "retain-internal"
   | "retain-separate"
-  | "defer"
-  | "candidate-after-two-caller-migration";
+  | "defer";
 
 export interface KpAnimationApiSurfaceAuditTarget {
   readonly id: string;
@@ -52,7 +51,7 @@ export const kpAnimationApiCallerAuditTargets = Object.freeze([
     id: "facade.animation-authoring",
     targetPath: "src/animation/public-api.ts",
     tier: "authoring-seam",
-    disposition: "define-public-boundary",
+    disposition: "retain-public-boundary",
     authority:
       "Expose the caller-proven balanced-solve KpAnimationAsset constructor, validation, and supporting types.",
     preservationBoundary:
@@ -154,10 +153,10 @@ export const kpAnimationApiCallerAuditTargets = Object.freeze([
     id: "metadata.animation-library-display",
     targetPath: "src/editor/animation-library-display-catalog.generated.json",
     tier: "generated-metadata",
-    disposition: "candidate-after-two-caller-migration",
+    disposition: "retain-internal",
     authority: "Materialize the editorial display projection consumed by the catalogue.",
     preservationBoundary:
-      "Do not remove searchable labels, related contexts, human review state, or promotion evidence."
+      "Its live runtime consumer requires representation roles, availability, canonical-format, review, and promotion evidence absent from search metadata."
   }),
   target({
     id: "metadata.animation-library-search",

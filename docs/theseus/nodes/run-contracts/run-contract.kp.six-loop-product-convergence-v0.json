@@ -149,7 +149,9 @@
     {
       "id": "s14",
       "title": "Retire proven last-caller paths",
-      "status": "planned"
+      "summary": "Post-migration evidence authorized no deletion: display and search metadata each have distinct live callers and schemas, compatibility and motif paths retain unique conformance authority, balanced solve remains the facade implementation, and Jacobian/Hessian remains human-deferred. Removed the stale provisional candidate label and added an executable no-inferred-deletion ratchet.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s15",

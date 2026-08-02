@@ -44,6 +44,7 @@ test("internal balanced solve seam has only its public facade production caller"
 
 test("animation facade has exactly the two approved production callers", () => {
   const surface = record("facade.animation-authoring");
+  assert.equal(surface.disposition, "retain-public-boundary");
   assert.deepEqual(surface.sourceCallers, [
     "src/animation/fraction-composition-equation-adapter.ts",
     "src/animation/verified-linear-problem-animation-compiler.ts"
@@ -102,7 +103,9 @@ test("generated-session internals expose only their observed direct callers", ()
 });
 
 test("retirement-adjacent metadata and compatibility targets have no unknown callers", () => {
-  assert.deepEqual(record("metadata.animation-library-display").sourceCallers, [
+  const displayMetadata = record("metadata.animation-library-display");
+  assert.equal(displayMetadata.disposition, "retain-internal");
+  assert.deepEqual(displayMetadata.sourceCallers, [
     "src/editor/animation-library-display-catalog.ts"
   ]);
   assert.deepEqual(record("metadata.animation-library-search").sourceCallers, [
@@ -119,6 +122,10 @@ test("retirement-adjacent metadata and compatibility targets have no unknown cal
   assert.deepEqual(
     record("ledger.semantic-animation-compatibility").scriptCallers,
     ["scripts/check-semantic-animation-boundaries.ts"]
+  );
+  assert.equal(
+    ledger.some(({ disposition }) => String(disposition).includes("candidate")),
+    false
   );
 });
 
