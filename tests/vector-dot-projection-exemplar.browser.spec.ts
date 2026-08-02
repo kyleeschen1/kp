@@ -120,3 +120,101 @@ test("vector projection keeps KaTeX, geometry, labels, rewind, and reduced motio
   await player.press("Home");
   await expect(graph.locator("[data-kp-vector-right-angle]")).toBeAttached();
 });
+
+test("vector projection catalogue route stays compact, lazy, and persistent", async ({
+  page
+}) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await page.goto(`/?artifact=${animationId}`);
+
+  const shell = page.locator("[data-kp-animation-catalogue]");
+  const player = shell.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+
+  await expect(shell).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    animationId
+  );
+  await expect(player).toHaveAttribute("data-kp-editor-animation-pack-id", "graph");
+  await expect(player.locator("button")).toHaveCount(1);
+  await expect(player.getByRole("button", { name: "Play animation" }))
+    .toBeVisible();
+  await expect(scrubber).toHaveCount(1);
+  await expect(player.locator(
+    '[data-action="step-editor-animation"], ' +
+    '[data-action="rewind-editor-animation"], ' +
+    '[data-action="reset-editor-animation"]'
+  )).toHaveCount(0);
+  await expect(player.locator(
+    "[data-kp-editor-animation-accessibility-control], " +
+    "[data-kp-editor-animation-explanation-profile-control], " +
+    "[data-kp-editor-animation-quality-control], " +
+    "[data-kp-editor-animation-authoring-controls]"
+  )).toHaveCount(0);
+  await expect(shell.locator(
+    `[data-kp-animation-catalogue-row="${animationId}"]`
+  )).toHaveCount(1);
+
+  await shell.locator(
+    '[data-action="select-animation-catalogue-inspector"]'
+  ).selectOption("parameters");
+  const parameters = shell.locator(
+    '[data-kp-animation-catalogue-inspector-panel="parameters"]'
+  );
+  await expect(parameters).toContainText("no exposed semantic parameters");
+  await expect(parameters.locator("input, select, button")).toHaveCount(0);
+
+  await page.evaluate(() => {
+    (window as typeof window & { __kpVectorCatalogueToken?: string })
+      .__kpVectorCatalogueToken = "persistent-vector-shell";
+  });
+  await scrubber.fill("0.625");
+  await expect.poll(() =>
+    new URL(page.url()).searchParams.get("playhead")
+  ).toBe("0.625");
+
+  const selectedResources = await page.evaluate(() =>
+    performance.getEntriesByType("resource").map((entry) => entry.name)
+  );
+  expect(selectedResources.some((name) =>
+    /(?:node_modules\/\.vite\/deps\/three|graph-webgl-three)/.test(name)
+  )).toBe(false);
+
+  await shell.locator(
+    '[data-kp-animation-catalogue-row="animation.linear-solve.solve-x"] ' +
+    ".kp-animation-catalogue-shell__result-link"
+  ).click();
+  await expect(shell).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    "animation.linear-solve.solve-x"
+  );
+  expect(await page.evaluate(() =>
+    (window as typeof window & { __kpVectorCatalogueToken?: string })
+      .__kpVectorCatalogueToken
+  )).toBe("persistent-vector-shell");
+
+  await page.goBack();
+  await expect(shell).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    animationId
+  );
+  await expect(shell.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"] ` +
+    '[data-action="seek-editor-animation"]'
+  )).toHaveValue("0.625");
+  await expect(shell.locator("[data-kp-editor-graph-svg]"))
+    .toHaveAttribute(
+      "data-kp-graph-presentation-profile",
+      "kp.graph.dimensional-continuity.linear-algebra.v1"
+    );
+  expect(await page.evaluate(() =>
+    (window as typeof window & { __kpVectorCatalogueToken?: string })
+      .__kpVectorCatalogueToken
+  )).toBe("persistent-vector-shell");
+  expect(pageErrors).toEqual([]);
+});

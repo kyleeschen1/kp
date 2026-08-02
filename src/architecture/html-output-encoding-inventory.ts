@@ -132,6 +132,11 @@ export const kpHtmlEncodingOwners = [
   retain("src/rendering/graph-webgl.ts", "rendering", [
     "html-attribute"
   ]),
+  retain("src/rendering/vector-dot-projection-svg.ts", "rendering", [
+    "html-attribute",
+    "svg-text",
+    "svg-attribute"
+  ]),
   retain("src/tutorial/ftc-surface.ts", "tutorial", [
     "html-text",
     "html-attribute"

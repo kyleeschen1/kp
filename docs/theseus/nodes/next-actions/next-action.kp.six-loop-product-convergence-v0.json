@@ -157,6 +157,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-vector-dot-projection-view.md"
+    },
+    {
+      "kind": "file",
+      "path": "tests/vector-dot-projection-catalogue-integration.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-vector-dot-projection-catalogue-integration.md"
     }
   ],
   "dependsOn": {
@@ -806,6 +814,72 @@
       "status": "passed",
       "scope": "s18-renderer",
       "checkedAt": "2026-08-02T01:56:39.793Z"
+    },
+    {
+      "command": "vector-catalogue-broad-cohort",
+      "status": "passed",
+      "scope": "s19-catalogue-host",
+      "checkedAt": "2026-08-02T02:15:47.419Z",
+      "notes": "94-tests-pass-with-36-assets-53-descriptors-72-workbench-and-78-display-contexts"
+    },
+    {
+      "command": "generated-route-and-dashboard-manifests",
+      "status": "passed",
+      "scope": "s19-catalogue-host",
+      "checkedAt": "2026-08-02T02:15:48.329Z",
+      "notes": "17-tests-pass"
+    },
+    {
+      "command": "npm-run-test-browser-vector-dot-projection",
+      "status": "passed",
+      "scope": "s19-catalogue-host",
+      "checkedAt": "2026-08-02T02:15:49.355Z",
+      "notes": "3-chromium-tests-pass-including-compact-lazy-persistent-catalogue-navigation"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "s19-catalogue-host",
+      "checkedAt": "2026-08-02T02:15:50.359Z"
+    },
+    {
+      "command": "npm-run-check-animation-library-display-catalog",
+      "status": "passed",
+      "scope": "s19-catalogue-host",
+      "checkedAt": "2026-08-02T02:15:51.383Z"
+    },
+    {
+      "command": "npm-run-check-promotion-memory",
+      "status": "passed",
+      "scope": "s19-catalogue-host",
+      "checkedAt": "2026-08-02T02:15:52.342Z"
+    },
+    {
+      "command": "npm-run-build",
+      "status": "passed",
+      "scope": "s19-catalogue-host",
+      "checkedAt": "2026-08-02T02:15:53.274Z",
+      "notes": "typecheck-and-production-build-pass"
+    },
+    {
+      "command": "html-output-encoding-inventory",
+      "status": "passed",
+      "scope": "s19-catalogue-host",
+      "checkedAt": "2026-08-02T02:15:54.149Z",
+      "notes": "vector-rendering-sink-classified-and-focused-test-pass"
+    },
+    {
+      "command": "npm-test",
+      "status": "failed",
+      "scope": "run-broad-baseline",
+      "checkedAt": "2026-08-02T02:15:55.169Z",
+      "notes": "3337-of-3339-passed-vector-html-inventory-fixed-after-run-one-unrelated-place-value-pre-s03-webgl-lease-digest-remains-for-s30-reconciliation"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "s19-catalogue-host",
+      "checkedAt": "2026-08-02T02:15:56.175Z"
     }
   ],
   "expectedLearning": [

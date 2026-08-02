@@ -10,6 +10,7 @@ import {
 test("build manifest declares every accepted reader route exactly once", () => {
   assert.deepEqual(kpReaderRouteManifest.map((descriptor) => descriptor.route), [
     "/reader/solve-x/",
+    "/reader/generated-solve-x/",
     "/reader/solve-x/teacher-zero/",
     "/reader/solve-fractional-linear/",
     "/reader/divide-both-sides/",
@@ -21,7 +22,7 @@ test("build manifest declares every accepted reader route exactly once", () => {
     "/reader/distribution-area/",
     "/reader/quadratic-branching/"
   ]);
-  assert.equal(new Set(kpReaderRouteManifest.map(({ sourcePath }) => sourcePath)).size, 11);
+  assert.equal(new Set(kpReaderRouteManifest.map(({ sourcePath }) => sourcePath)).size, 12);
   assert.deepEqual(
     kpReaderRouteManifest.map(({ route }) => ({
       entry: kpReaderRouteEntryName(route),
@@ -29,6 +30,7 @@ test("build manifest declares every accepted reader route exactly once", () => {
     })),
     [
       { entry: "reader-solve-x", html: "reader/solve-x/index.html" },
+      { entry: "reader-generated-solve-x", html: "reader/generated-solve-x/index.html" },
       { entry: "reader-solve-x-teacher-zero", html: "reader/solve-x/teacher-zero/index.html" },
       { entry: "reader-solve-fractional-linear", html: "reader/solve-fractional-linear/index.html" },
       { entry: "reader-divide-both-sides", html: "reader/divide-both-sides/index.html" },
@@ -53,6 +55,12 @@ test("build manifest declares every accepted reader route exactly once", () => {
         route: "/reader/solve-x/",
         documentId: "lesson.solve-x.x-plus-3",
         progressPermille: 517,
+        rendererAdapterId: "renderer.equation-dom"
+      },
+      {
+        route: "/reader/generated-solve-x/",
+        documentId: "lesson.generated-solve-x.linear-68c15d41",
+        progressPermille: 600,
         rendererAdapterId: "renderer.equation-dom"
       },
       {
@@ -121,6 +129,7 @@ test("build manifest declares every accepted reader route exactly once", () => {
     kpReaderRouteManifest.map(({ review }) => review.id),
     [
       "solve-x",
+      "generated-solve-x",
       "teacher-zero",
       "fractional-linear",
       "divide-both-sides",
@@ -135,7 +144,7 @@ test("build manifest declares every accepted reader route exactly once", () => {
   );
   assert.deepEqual(
     kpReaderRouteManifest.map(({ review }) => review.checkpoints.length),
-    [8, 1, 1, 1, 20, 14, 4, 20, 1, 36, 33]
+    [8, 5, 1, 1, 1, 20, 14, 4, 20, 1, 36, 33]
   );
   const splitMergeRoute = kpReaderRouteManifest.find(
     ({ route }) => route === "/reader/split-merge-fractions/"

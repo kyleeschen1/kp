@@ -17,6 +17,7 @@ test("generated algebra dashboard catalog exposes animation asset rows", () => {
 
   assert.deepEqual(rows.map((row) => row.id), [
     "animation-linear-solve-solve-x",
+    "animation-generated-linear-linear-68c15d41",
     "animation-generated-fraction-expression-two-fourths",
     "animation-generated-exponent-square-as-product",
     "animation-generated-radical-square-root-as-power",
@@ -25,7 +26,7 @@ test("generated algebra dashboard catalog exposes animation asset rows", () => {
     "animation-generated-distribution-factor-common-a",
     "animation-inequality-sign-flip-basic"
   ]);
-  assert.deepEqual(rows[1]?.previewFields.slice(0, 6), [
+  assert.deepEqual(rows[2]?.previewFields.slice(0, 6), [
     {
       label: "Animation asset",
       value: "animation.generated.fraction-expression.two-fourths"

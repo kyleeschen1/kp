@@ -26,7 +26,7 @@ test("catalogue membership is exactly concrete while planned identity is retaine
     canonical
   });
 
-  assert.equal(boundary.catalogue.length, 35);
+  assert.equal(boundary.catalogue.length, 36);
   assert.equal(boundary.planned.length, 1);
   assert.equal(
     boundary.planned[0]?.animationId,

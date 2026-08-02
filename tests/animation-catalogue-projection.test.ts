@@ -23,7 +23,7 @@ test("asset-first projection keeps one lightweight entry with subordinate contex
   assert.ok(solveX);
   assert.ok(economics);
 
-  assert.equal(projection.entries.length, 35);
+  assert.equal(projection.entries.length, 36);
   assert.equal(solveX.primaryDescriptorId,
     "editor-animation.animation.linear-solve.solve-x");
   assert.equal(solveX.packId, "algebra");

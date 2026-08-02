@@ -22,9 +22,9 @@ test("catalog separates executable routes from generic presentation labels", () 
     createKpAnimationAssets()
   );
 
-  assert.equal(report.animationCount, 35);
-  assert.equal(report.claimedTransformationCount, 39);
-  assert.equal(report.equationTransformationCount, 36);
+  assert.equal(report.animationCount, 36);
+  assert.equal(report.claimedTransformationCount, 44);
+  assert.equal(report.equationTransformationCount, 41);
   assert.equal(report.excludedTransformationCount, 3);
   assert.equal(
     report.claimedTransformationCount,
@@ -45,7 +45,7 @@ test("catalog separates executable routes from generic presentation labels", () 
   );
   assert.ok(report.entries.every(({ planKind }) => planKind !== undefined));
   assert.equal(report.coverage, "incomplete");
-  assert.equal(report.issues.length, 48);
+  assert.equal(report.issues.length, 50);
   assert.ok(report.issues.every(
     ({ code }) => code === "catalog.missing-execution-route"
   ));
@@ -63,6 +63,8 @@ test("catalog separates executable routes from generic presentation labels", () 
       .filter(({ status }) => status === "explicit-static")
       .map(({ transformationId }) => transformationId))],
     [
+      "transform.generated.linear-solve.linear-68c15d41.cancel-additive-inverses",
+      "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses",
       "transform.linear-solve.subtract-both-sides-3",
       "transform.linear-solve.cancel-left-additive-inverse"
     ]
