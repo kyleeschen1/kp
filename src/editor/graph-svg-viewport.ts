@@ -20,6 +20,10 @@ import {
   renderKpConstantForceWorkEnergyRuntimeContent
 } from "../rendering/constant-force-work-energy-svg.ts";
 import {
+  kpVectorDotProjectionGraphPresentationProfile,
+  renderKpVectorDotProjectionRuntimeContent
+} from "../rendering/vector-dot-projection-svg.ts";
+import {
   kpEditorAnimationSurfaceAdapterRegistry,
   type KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
@@ -113,7 +117,9 @@ function syncGraphAccessibility(
   content: SVGGElement
 ): void {
   const description = content.querySelector<SVGDescElement>(
-    "[data-kp-economics-nonvisual-summary], [data-kp-physics-nonvisual-summary]"
+    "[data-kp-economics-nonvisual-summary], " +
+    "[data-kp-physics-nonvisual-summary], " +
+    "[data-kp-vector-nonvisual-summary]"
   );
   if (description?.id === undefined || description.id.length === 0) {
     svg.removeAttribute("aria-describedby");
@@ -133,17 +139,21 @@ function renderViewport(
     "animation.economics.supply-demand-equilibrium-shift";
   const physicsProfile = animation.id ===
     "animation.physics.constant-force-work-energy";
+  const vectorProjectionProfile = animation.id ===
+    "animation.dot-projection.basic";
   const dimensionalContinuityProfile = economicsProfile
     ? kpEconomicsGraphPresentationProfile
     : physicsProfile
       ? kpPhysicsGraphPresentationProfile
-      : undefined;
+      : vectorProjectionProfile
+        ? kpVectorDotProjectionGraphPresentationProfile
+        : undefined;
   const profile = dimensionalContinuityProfile?.id ??
     "kp.graph.editor-default.v1";
   const languageProfile = dimensionalContinuityProfile === undefined
     ? ""
     : ` data-kp-graph-language-profile="${dimensionalContinuityProfile.languageId}"`;
-  const axisMarker = economicsProfile
+  const axisMarker = dimensionalContinuityProfile !== undefined
     ? ' marker-end="url(#kp-editor-graph-axis-arrow)"'
     : "";
   const axes = physicsProfile
@@ -204,10 +214,10 @@ function renderRuntimeContent(
     }
     case "animation.dot-projection.basic": {
       const frame = sampleDotProjectionRuntimeFrame({ animation, runtimeFrame: state.runtimeFrame });
-      const left = point(frame.leftVector);
-      const right = point(frame.rightVector);
-      const drop = point(frame.dropPoint);
-      return `<line class="editor-graph-stage__vector" x1="${origin[0]}" y1="${origin[1]}" x2="${left[0]}" y2="${left[1]}" marker-end="url(#kp-editor-graph-arrow)" /><line class="editor-graph-stage__vector editor-graph-stage__vector--secondary" x1="${origin[0]}" y1="${origin[1]}" x2="${right[0]}" y2="${right[1]}" marker-end="url(#kp-editor-graph-arrow)" /><line class="editor-graph-stage__projection" data-kp-editor-graph-projection data-kp-editor-graph-drop-point="${frame.dropPoint.join(",")}" x1="${left[0]}" y1="${left[1]}" x2="${drop[0]}" y2="${drop[1]}" /><circle class="editor-graph-stage__point" data-kp-editor-graph-projection-point data-kp-editor-graph-dot-product="${frame.dotProduct}" cx="${drop[0]}" cy="${drop[1]}" r="5" />${renderAnnotation(`a·b = ${formatNumber(frame.dotProduct)} · drop = (${frame.dropPoint.map(formatNumber).join(", ")})`, model)}`;
+      return renderKpVectorDotProjectionRuntimeContent({
+        frame,
+        viewport: model
+      });
     }
     case "animation.economics.supply-demand-equilibrium-shift": {
       const economicsFrame = sampleKpEconomicsEquilibriumRuntimeFrame({

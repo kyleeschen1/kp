@@ -3888,24 +3888,25 @@ test("the integral area and moving upper bound visibly sweep together", async ({
 });
 
 test("dot projection visibly drops the source point onto the target vector", async ({ page }) => {
-  await page.goto("/?animation=editor-animation.sample.animation.dot-projection.basic");
-  const player = page.locator("[data-kp-editor-animation-player]");
+  await page.goto("/?artifact=animation.dot-projection.basic");
+  const player = page.locator(
+    '[data-kp-editor-animation-player][data-kp-editor-animation-id="animation.dot-projection.basic"]'
+  );
   const projection = player.locator("[data-kp-editor-graph-projection]");
   const point = player.locator("[data-kp-editor-graph-projection-point]");
-  await expect(projection).toHaveAttribute("data-kp-editor-graph-drop-point", "3,4");
-  await expect(point).toHaveAttribute("data-kp-editor-graph-dot-product", "12");
+  await expect(projection).toHaveAttribute("data-kp-editor-graph-drop-point", "4,2");
+  await expect(point).toHaveAttribute("data-kp-editor-graph-dot-product", "6");
   const startY = Number(await projection.getAttribute("y2"));
 
   await player.locator('[data-action="seek-editor-animation"]').fill("1");
-  await expect(projection).toHaveAttribute("data-kp-editor-graph-drop-point", "3,0");
-  expect(Number(await projection.getAttribute("y2"))).toBeGreaterThan(startY);
+  await expect(projection).toHaveAttribute("data-kp-editor-graph-drop-point", "3,3");
+  expect(Number(await projection.getAttribute("y2"))).toBeLessThan(startY);
 });
 
 test("graph annotations stay synchronized with the visible runtime geometry", async ({ page }) => {
   const cases = [
     ["editor-animation.sample.animation.vector-add-scale.basic", "v(t) = (1, 2)", "v(t) = (2, 6)"],
-    ["editor-animation.sample.animation.integral-ftc.area-sweep", "b = 0 · area = 0", "b = 3 · area = 9"],
-    ["editor-animation.sample.animation.dot-projection.basic", "a·b = 12 · drop = (3, 4)", "a·b = 12 · drop = (3, 0)"]
+    ["editor-animation.sample.animation.integral-ftc.area-sweep", "b = 0 · area = 0", "b = 3 · area = 9"]
   ] as const;
 
   for (const [descriptorId, start, end] of cases) {

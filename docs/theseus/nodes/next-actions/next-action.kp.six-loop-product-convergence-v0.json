@@ -149,6 +149,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-vector-dot-projection-semantic-runtime.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/vector-dot-projection-svg.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-vector-dot-projection-view.md"
     }
   ],
   "dependsOn": {
@@ -753,6 +761,51 @@
       "scope": "run-broad-baseline",
       "checkedAt": "2026-08-02T01:42:30.994Z",
       "notes": "18-accumulated-count-route-and-frozen-hash-ratchets-outside-s17-focused-boundary-to-reconcile-at-release-slice"
+    },
+    {
+      "command": "vector-dot-projection-view-focused-tests",
+      "status": "passed",
+      "scope": "s18-renderer",
+      "checkedAt": "2026-08-02T01:56:34.399Z",
+      "notes": "22-focused-tests-pass"
+    },
+    {
+      "command": "npm-run-test-browser-vector-dot-projection",
+      "status": "passed",
+      "scope": "s18-renderer",
+      "checkedAt": "2026-08-02T01:56:35.280Z",
+      "notes": "2-chromium-tests-pass-label-bounds-collision-rewind-reduced-motion-and-legacy-smoke"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "s18-renderer",
+      "checkedAt": "2026-08-02T01:56:36.157Z"
+    },
+    {
+      "command": "npm-run-build",
+      "status": "passed",
+      "scope": "s18-renderer",
+      "checkedAt": "2026-08-02T01:56:37.029Z",
+      "notes": "production-build-pass-main-graph-path-cost-deferred-to-approved-performance-tranche"
+    },
+    {
+      "command": "npm-run-check-animation-library-display-catalog",
+      "status": "passed",
+      "scope": "s18-renderer",
+      "checkedAt": "2026-08-02T01:56:38.011Z"
+    },
+    {
+      "command": "npm-run-check-promotion-memory",
+      "status": "passed",
+      "scope": "s18-renderer",
+      "checkedAt": "2026-08-02T01:56:38.891Z"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "s18-renderer",
+      "checkedAt": "2026-08-02T01:56:39.793Z"
     }
   ],
   "expectedLearning": [

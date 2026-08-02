@@ -2248,6 +2248,229 @@ h2 {
   color: #5c6d77;
 }
 
+.editor-graph-stage__vector-grid-line {
+  stroke: var(--kp-graph-grid);
+  stroke-width: 0.8;
+  opacity: 0.24;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__vector-tick {
+  stroke: var(--kp-graph-axis);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__vector-target-span {
+  stroke: #7892a0;
+  stroke-dasharray: 5 5;
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__vector-source,
+.editor-graph-stage__vector-target,
+.editor-graph-stage__vector-projection {
+  fill: none;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__vector-source {
+  stroke: var(--kp-graph-stable);
+  stroke-width: 3.35;
+}
+
+.editor-graph-stage__vector-target {
+  stroke: #627d8b;
+  stroke-width: 2.6;
+}
+
+.editor-graph-stage__vector-projection {
+  stroke: var(--kp-graph-focal);
+  stroke-width: 3.5;
+}
+
+.editor-graph-stage__vector-residual {
+  stroke: var(--kp-graph-changing);
+  stroke-dasharray: 5 4;
+  stroke-linecap: round;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__vector-projection-point {
+  fill: var(--kp-graph-focal);
+  stroke: var(--kp-graph-plane);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__vector-component-guide {
+  fill: none;
+  stroke: #7391a1;
+  stroke-dasharray: 3 4;
+  stroke-width: 1;
+  opacity: 0.18;
+  vector-effect: non-scaling-stroke;
+}
+
+[data-kp-vector-component-status="active"]
+  .editor-graph-stage__vector-component-guide:not(
+    .editor-graph-stage__vector-component-guide--projection
+  ) {
+  stroke: var(--kp-graph-changing);
+  stroke-width: 1.55;
+  opacity: 0.72;
+}
+
+[data-kp-vector-component-status="accumulated"]
+  .editor-graph-stage__vector-component-guide:not(
+    .editor-graph-stage__vector-component-guide--projection
+  ) {
+  stroke: var(--kp-graph-stable);
+  opacity: 0.34;
+}
+
+.editor-graph-stage__vector-component-guide--projection {
+  stroke: var(--kp-graph-focal);
+}
+
+.editor-graph-stage__vector-right-angle {
+  fill: none;
+  stroke: var(--kp-graph-changing);
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.editor-graph-stage__vector-math-foreign-object,
+.editor-graph-stage__vector-equation-foreign-object {
+  overflow: visible;
+  pointer-events: none;
+}
+
+.editor-graph-stage__vector-math-label {
+  box-sizing: border-box;
+  width: max-content;
+  max-width: 100%;
+  padding: 2px 4px;
+  color: var(--kp-graph-focal);
+  background: rgb(255 253 248 / 0.84);
+  font-size: 11px;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.editor-graph-stage__vector-math-label .katex { font-size: 1em; }
+
+.editor-graph-stage__vector-math-label--source {
+  color: var(--kp-graph-stable);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.editor-graph-stage__vector-math-label--target {
+  color: #536f7e;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.editor-graph-stage__vector-math-label--projection {
+  color: var(--kp-graph-focal);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.editor-graph-stage__vector-math-label--residual {
+  color: var(--kp-graph-changing);
+  font-size: 10px;
+}
+
+.editor-graph-stage__vector-math-label--axis {
+  padding: 0;
+  color: var(--kp-graph-axis);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.editor-graph-stage__vector-math-label--tick {
+  display: grid;
+  width: 100%;
+  padding: 0;
+  place-items: start center;
+  color: #667b88;
+  background: transparent;
+  font-size: 9px;
+}
+
+.editor-graph-stage__vector-math-label--tick-y {
+  place-items: center end;
+  padding-right: 2px;
+}
+
+.editor-graph-stage__vector-equation-strip {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 7px 12px;
+  align-items: center;
+  width: 100%;
+  min-height: 54px;
+  border-bottom: 1px solid rgb(112 137 152 / 0.34);
+  padding: 6px 8px 7px;
+  color: var(--kp-graph-focal);
+  background: rgb(255 253 248 / 0.91);
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.editor-graph-stage__vector-current-relation {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.editor-graph-stage__vector-current-relation .katex { font-size: 1em; }
+
+.editor-graph-stage__vector-component-pairs {
+  display: grid;
+  grid-template-columns: repeat(2, 54px);
+  gap: 5px;
+}
+
+.editor-graph-stage__vector-component-chip {
+  box-sizing: border-box;
+  display: grid;
+  width: 54px;
+  min-height: 24px;
+  border: 1px solid rgb(112 137 152 / 0.28);
+  border-radius: 4px;
+  place-items: center;
+  color: #71838d;
+  background: rgb(255 253 248 / 0.76);
+  white-space: nowrap;
+}
+
+.editor-graph-stage__vector-component-chip .katex { font-size: 0.94em; }
+
+.editor-graph-stage__vector-component-chip[
+  data-kp-vector-component-pair-status="active"
+] {
+  border-color: rgb(189 91 53 / 0.55);
+  color: var(--kp-graph-changing);
+  background: rgb(189 91 53 / 0.08);
+}
+
+.editor-graph-stage__vector-component-chip[
+  data-kp-vector-component-pair-status="accumulated"
+] {
+  border-color: rgb(31 122 131 / 0.38);
+  color: var(--kp-graph-stable);
+}
+
 .editor-graph-stage__area { fill: rgb(30 136 168 / 0.3); stroke: #1e88a8; stroke-width: 2; }
 .editor-graph-stage__label { fill: #334155; font-size: 14px; font-weight: 800; }
 .editor-graph-stage__annotation {
