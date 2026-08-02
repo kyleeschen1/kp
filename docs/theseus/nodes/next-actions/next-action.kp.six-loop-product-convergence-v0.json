@@ -129,6 +129,18 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-canonical-animation-api-map.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/vector-dot-projection-exemplar-contract.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/vector-dot-projection-exemplar-inventory.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-vector-dot-projection-exemplar-contract.md"
     }
   ],
   "dependsOn": {
@@ -647,6 +659,48 @@
       "status": "passed",
       "scope": "s15 whitespace integrity",
       "checkedAt": "2026-08-02T01:23:03.766Z"
+    },
+    {
+      "command": "node focused vector exemplar contract suite",
+      "status": "passed",
+      "scope": "s16 22 exact vector, dot traversal, graph asset, dimensional continuity, inventory, and promotion-frontier tests",
+      "checkedAt": "2026-08-02T01:28:28.634Z"
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s16 rank 5 remains the sole next frontier under the active approved contract",
+      "checkedAt": "2026-08-02T01:28:29.536Z"
+    },
+    {
+      "command": "npm run test:animation-library-display",
+      "status": "passed",
+      "scope": "s16 legacy current catalogue identity, primary host, and Review placement preservation",
+      "checkedAt": "2026-08-02T01:28:30.402Z"
+    },
+    {
+      "command": "npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "s16 generated catalogue metadata baseline currency",
+      "checkedAt": "2026-08-02T01:28:31.302Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s16 semantic, reader, and presentation boundaries with the new data-only contract",
+      "checkedAt": "2026-08-02T01:28:32.178Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s16 exact contract and inventory types",
+      "checkedAt": "2026-08-02T01:28:33.064Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s16 whitespace integrity",
+      "checkedAt": "2026-08-02T01:28:33.910Z"
     }
   ],
   "expectedLearning": [

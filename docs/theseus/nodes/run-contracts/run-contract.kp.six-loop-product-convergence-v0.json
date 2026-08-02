@@ -163,7 +163,9 @@
     {
       "id": "s16",
       "title": "Freeze vector exemplar contract",
-      "status": "planned"
+      "summary": "Froze rank-5 around a=(4,2) projected onto non-axis-aligned b=(1,1): indexed products 4 and 2, dot 6, scale 3, projection (3,3), residual (1,-1), exact magnitudes/angle, eight beats, and six lineage obligations. Inventoried the existing asset/SVG host, five presentation gaps, dimensional-continuity acceptance, stable identities, and promotion freeze; also reconciled the retained semantic Graph3D axes in its stale asset test.",
+      "status": "complete",
+      "planPhaseId": "vector-dot-projection"
     },
     {
       "id": "s17",

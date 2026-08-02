@@ -29,6 +29,9 @@ test("createGraphSurfaceModeAnimationAsset wraps graph surface motion in an Anim
   assert.equal(animation.renderTargets[0]?.kind, "graph");
   assert.deepEqual(animation.renderTargets[0]?.objectIds, [
     "saddle-orbit-graph",
+    "saddle-orbit-x-axis",
+    "saddle-orbit-y-axis",
+    "saddle-orbit-z-axis",
     "saddle-surface"
   ]);
   assert.deepEqual(animation.renderTargets[0]?.selectorIds, [
