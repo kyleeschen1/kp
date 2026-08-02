@@ -354,14 +354,31 @@ test("Svelte selection retains a live row focus and inspector choice", async ({
   })).toHaveValue("parameters");
 });
 
-test("Svelte narrow inspector overlay returns focus on Escape", async ({ page }) => {
+test("canonical Svelte shell keeps narrow panels operable and returns focus", async ({ page }) => {
   await page.setViewportSize({ width: 640, height: 900 });
-  await page.goto(
-    `/?artifact=${animationId}&catalogueShell=svelte-exemplar`
-  );
+  await page.goto(`/?artifact=${animationId}`);
   const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
+  await expect(exemplar.getByRole("heading", {
+    level: 1,
+    name: "Animation catalogue"
+  })).toHaveCount(1);
+  await expect(exemplar.locator('aside[aria-label="Artifact catalogue"]'))
+    .toHaveCount(1);
+  await expect(exemplar.getByRole("region", {
+    name: "Selected animation stage"
+  })).toBeVisible();
+  const inspector = exemplar.locator(
+    'aside[aria-label="Artifact inspector"]'
+  );
+  await expect(inspector).toHaveCount(1);
+  const viewportGeometry = await page.evaluate(() => ({
+    documentWidth: document.documentElement.scrollWidth,
+    viewportWidth: document.documentElement.clientWidth
+  }));
+  expect(viewportGeometry.documentWidth).toBe(viewportGeometry.viewportWidth);
   const info = exemplar.getByRole("button", { name: "Info" });
   await info.click();
+  await expect(inspector).toBeVisible();
   await expect(exemplar).toHaveAttribute(
     "data-kp-animation-catalogue-overlay",
     "inspector"
@@ -382,6 +399,35 @@ test("Svelte narrow inspector overlay returns focus on Escape", async ({ page })
   await expect.poll(() => info.evaluate((element) =>
     document.activeElement === element
   )).toBe(true);
+});
+
+test("canonical Svelte shell projects system reduced motion without losing static truth", async ({
+  page
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(`/?artifact=${animationId}&playhead=1`);
+
+  const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
+  const player = exemplar.locator("[data-kp-editor-animation-player]");
+  const graph = player.locator("[data-kp-editor-graph-svg]");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-accessibility-preference",
+    "system"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-accessibility-mode",
+    "reduced-motion"
+  );
+  await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "1");
+  await expect(graph).toHaveAttribute(
+    "aria-describedby",
+    /.+/
+  );
+  await expect(graph.locator("desc")).toContainText(
+    "projection of a onto b is (3, 3)"
+  );
+  await expect(graph.locator("text")).toHaveCount(0);
+  expect(await graph.locator(".katex").count()).toBeGreaterThan(0);
 });
 
 test("Svelte keeps one Review composer and draft across selection", async ({
@@ -656,12 +702,10 @@ test("Svelte loads rich surface capabilities only after their selection", async 
   expect(documentRequests).toHaveLength(1);
 });
 
-test("Svelte exemplar renders the not-found terminal state in its reserved stage", async ({
+test("canonical Svelte shell renders the not-found terminal state in its reserved stage", async ({
   page
 }) => {
-  await page.goto(
-    "/?artifact=animation.unknown&catalogueShell=svelte-exemplar"
-  );
+  await page.goto("/?artifact=animation.unknown");
 
   const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
   await expect(exemplar).toHaveAttribute(
@@ -674,9 +718,10 @@ test("Svelte exemplar renders the not-found terminal state in its reserved stage
   await expect(exemplar.locator(
     "[data-kp-animation-catalogue-stage-reservation]"
   )).toHaveCount(1);
+  await expect(exemplar).toHaveAttribute("aria-busy", "false");
 });
 
-test("Svelte exemplar keeps loading truth visible and contains preparation errors", async ({
+test("canonical Svelte shell keeps loading truth visible and contains preparation errors", async ({
   page
 }) => {
   let releasePackRequest: (() => void) | undefined;
@@ -688,9 +733,7 @@ test("Svelte exemplar keeps loading truth visible and contains preparation error
     await route.abort("failed");
   });
 
-  await page.goto(
-    `/?artifact=${animationId}&catalogueShell=svelte-exemplar`
-  );
+  await page.goto(`/?artifact=${animationId}`);
   const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
   await expect(exemplar).toHaveAttribute(
     "data-kp-animation-catalogue-state",

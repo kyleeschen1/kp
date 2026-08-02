@@ -185,7 +185,8 @@
     {
       "id": "s22",
       "title": "Complete responsive accessibility and terminal-state matrix",
-      "status": "planned"
+      "summary": "Canonical Svelte shell now has explicit responsive, semantic landmark, narrow focus, reduced-motion, static SVG, and accessible loading/not-found/error matrix coverage.",
+      "status": "complete"
     },
     {
       "id": "s23",

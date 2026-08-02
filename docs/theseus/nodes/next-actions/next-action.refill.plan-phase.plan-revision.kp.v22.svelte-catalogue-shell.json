@@ -990,6 +990,34 @@
       "scope": "slice s21 TypeScript and Svelte contracts",
       "checkedAt": "2026-08-02T18:42:56.016Z",
       "notes": "Application, node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "failed",
+      "scope": "slice s22 initial accessibility matrix",
+      "checkedAt": "2026-08-02T18:49:50.383Z",
+      "notes": "Fourteen checks passed; the new narrow semantic assertion incorrectly expected a CSS-hidden closed panel in the accessibility tree. The test was corrected to distinguish structural presence from open-panel accessibility."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "slice s22 responsive accessibility and terminal states",
+      "checkedAt": "2026-08-02T18:49:56.909Z",
+      "notes": "Fifteen Chromium checks passed, including canonical narrow overflow and focus, semantic landmarks, system reduced motion, exact graph truth, and loading/not-found/error accessibility."
+    },
+    {
+      "command": "npm run visual:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "slice s22 wide narrow reduced and static visual matrix",
+      "checkedAt": "2026-08-02T18:50:01.582Z",
+      "notes": "Seven candidate checkpoints matched durable vector truth and label geometry across wide, narrow, reduced-motion, and settled static SVG states."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell and npm run typecheck",
+      "status": "passed",
+      "scope": "slice s22 focused architecture and types",
+      "checkedAt": "2026-08-02T18:50:07.388Z",
+      "notes": "All 35 focused shell tests passed; TypeScript, Svelte, and domain checks reported no errors or warnings."
     }
   ],
   "progress": {
