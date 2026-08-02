@@ -1,0 +1,45 @@
+{
+  "id": "next-action.refill.plan-phase.plan-revision.kp.v22.svelte-catalogue-shell",
+  "kind": "next-action",
+  "title": "Advance Reversible Svelte 5 catalogue shell",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Replace only imperative catalogue host composition with one reversible Svelte 5 shell while preserving framework-neutral assets, renderer ports, the shared clock, URL and Review lifecycles, selected capability loading, static truth, and production budgets. Selection rationale: User approved the exact 26-slice reversible Svelte 5 catalogue-shell contract after rank-5 certification; execute through the mandatory vector exemplar checkpoint while preserving framework-neutral animation authority.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Approved refill option refill.plan-phase.plan-revision.kp.v22.svelte-catalogue-shell: User approved the exact 26-slice reversible Svelte 5 catalogue-shell contract after rank-5 certification; execute through the mandatory vector exemplar checkpoint while preserving framework-neutral animation authority.",
+      "occurredAt": "2026-08-02T14:20:58.126Z"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "plan-revision.kp.v22"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22"
+  ],
+  "verification": [
+    "theseus validate"
+  ],
+  "expectedLearning": [
+    "Approved revision 22 places this active phase in now."
+  ],
+  "allowedWork": [
+    "Replace only imperative catalogue host composition with one reversible Svelte 5 shell while preserving framework-neutral assets, renderer ports, the shared clock, URL and Review lifecycles, selected capability loading, static truth, and production budgets."
+  ],
+  "disallowedWork": [
+    "Do not broaden beyond the selected refill option without another approval."
+  ],
+  "criteria": [
+    {
+      "id": "selected-option-addressed",
+      "weight": "high"
+    },
+    {
+      "id": "selection-provenance-preserved",
+      "weight": "high"
+    }
+  ]
+}

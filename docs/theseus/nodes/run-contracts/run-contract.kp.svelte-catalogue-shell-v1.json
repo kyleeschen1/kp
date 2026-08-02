@@ -1,0 +1,190 @@
+{
+  "id": "run-contract.kp.svelte-catalogue-shell-v1",
+  "kind": "run-contract",
+  "title": "Reversible Svelte 5 catalogue shell",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.refill.plan-phase.plan-revision.kp.v22.svelte-catalogue-shell.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-svelte-catalogue-shell-long-loop-proposal.md",
+      "summary": "Approved rationale, preservation boundary, visual checkpoint, promotion criteria, cadence, stops, and deferrals for the reversible Svelte catalogue-shell proof."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-02-kp-checkpoint-and-product-surface-sequence.md",
+      "summary": "Accepted product sequence places the Svelte shell gate after certified rank 5 and before rank 6."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run visual:animation-catalogue",
+    "npm run test:browser:vector-dot-projection",
+    "npm run perf:animation",
+    "npm run perf:animation:attribution",
+    "npm run check:promotion-memory",
+    "npm run check:dev-review-production",
+    "npm run check:animation-library-bundle-boundary",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Integrate pinned Svelte 5 and its Vite plugin behind an isolated catalogue entry; extract typed framework-neutral host joints; reproduce the approved catalogue shell; add focused browser, visual, architecture, and performance proof; promote only after the vector checkpoint.",
+    "Preserve the current imperative catalogue route as the rollback path until the approved visual checkpoint; commit every verified slice independently."
+  ],
+  "disallowedWork": [
+    "Do not move animation assets, semantic truth, runtime frames, clocks, renderer ports, authoring commands, or publication bundles into Svelte.",
+    "Do not implement SvelteKit, Internal Studio, Public Web, rank 6, LLM work, a motif registry, or catalogue-wide redesign in this contract.",
+    "Do not execute s17 through s26 until the user explicitly approves the s16 visual exemplar."
+  ],
+  "goal": "Replace only the catalogue's imperative application composition with a reversible Svelte 5 shell while preserving framework-neutral animation authority, route and Review lifecycles, selected capability loading, static truth, accessibility, and production budgets.",
+  "target": "next-action.refill.plan-phase.plan-revision.kp.v22.svelte-catalogue-shell",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "Commit after each independently verified slice.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop at s16 for explicit human visual approval before route promotion or caller generalization.",
+    "Stop if work would create a second loader, clock, Review history, URL authority, renderer path, or semantic state.",
+    "Stop if a selected capability enters the default startup path or an existing performance or bundle ceiling would need widening.",
+    "Stop if visual parity requires an unapproved redesign, compatibility requires changing canonical public behavior, or durable verification is missing or contradictory."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Freeze catalogue baseline and budgets",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Integrate pinned Svelte 5 tooling without route cutover",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Extract framework-neutral catalogue host view model",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Extract asset preparation and capability host services",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Mount isolated Svelte exemplar entry",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Reproduce outer shell and terminal states",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Port fuzzy search and stable selection",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Mount existing player controller in Svelte stage",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Port inspector and tuning controls",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Port cancellable in-shell asset switching",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Port URL history and playhead restoration",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Preserve focus keyboard and rail scroll behavior",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Preserve Review composer and draft lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Port bespoke parameters and generated solve companion",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Preserve selected-capability lazy loading",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Capture canonical vector exemplar parity checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Promote Svelte as default catalogue route",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Pressure equation KaTeX and solve-x callers",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Pressure vector economics physics and Graph2D callers",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Pressure Graph3D and WebGL lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Pressure programming and generated reader callers",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Complete responsive accessibility and terminal-state matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Audit bundle Core Web Vitals and capability attribution",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Remove obsolete imperative host composition",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Run cross-browser release matrix and contact sheet",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Run final gates and close durable records",
+      "status": "planned"
+    }
+  ]
+}
