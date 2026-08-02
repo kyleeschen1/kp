@@ -10,6 +10,10 @@
       "kind": "user-intent",
       "intent": "Approved refill option refill.plan-phase.plan-revision.kp.v22.matrix-linear-map: The user approved the exact 26-slice rank-6 matrix-to-linear-map long loop, revised to make the BetterExplained-inspired operation-bank flow and symbolic dot-product gather-and-collapse the canonical checkpoint before geometric reveal and matrix-matrix generalization.",
       "occurredAt": "2026-08-02T20:21:51.770Z"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-matrix-linear-map-rank6-human-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -345,11 +349,67 @@
       "scope": "standard",
       "checkedAt": "2026-08-02T21:33:51.411Z",
       "notes": "All application, test, Svelte, and domain typechecks passed after graph capability and renderer integration."
+    },
+    {
+      "command": "npm run visual:matrix-linear-map",
+      "status": "passed",
+      "scope": "checkpoint",
+      "checkedAt": "2026-08-02T21:43:51.221Z",
+      "notes": "Eight deterministic wide, phone, reduced-motion, and static captures passed containment, overflow, capability-ready, and motion-policy assertions."
+    },
+    {
+      "command": "npm run test:matrix-linear-map",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T21:43:52.263Z",
+      "notes": "42 of 42 semantic, runtime, accessibility, host, and renderer laws passed."
+    },
+    {
+      "command": "npm run test:browser:matrix-linear-map",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-08-02T21:43:53.303Z",
+      "notes": "Chromium production-route playback passed; Vite emitted one non-failing ResizeObserver delivery warning."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-08-02T21:43:54.451Z",
+      "notes": "TypeScript, Svelte, and domain typechecks passed; production build completed; matrix frame remained a lazy 11.42 kB chunk."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "performance",
+      "checkedAt": "2026-08-02T21:43:55.427Z",
+      "notes": "All fixed production bundle ceilings passed without widening."
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "performance",
+      "checkedAt": "2026-08-02T21:43:56.443Z",
+      "notes": "No regressions; normal and constrained animation p95 stayed below 18 ms. Known 104 ms constrained KaTeX loading target remains."
+    },
+    {
+      "command": "npm run perf:animation:attribution",
+      "status": "passed",
+      "scope": "performance",
+      "checkedAt": "2026-08-02T21:43:57.589Z",
+      "notes": "Selected SVG graph capability remained isolated from WebGL and Three capability loading."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "workspace",
+      "checkedAt": "2026-08-02T21:43:58.563Z",
+      "notes": "Workspace valid with 867 nodes and 16595 events before slice completion records."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s15 painted the delayed geometry through the existing lazy SVG capability from the same rank-6 frame, following the dimensional-continuity visual language."
+    "summary": "Slice s16 completed the responsive and accessible matrix-to-linear-map exemplar and opened its mandatory human checkpoint; promotion and caller generalization remain pending approval."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."

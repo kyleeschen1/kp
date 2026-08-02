@@ -150,7 +150,8 @@
     {
       "id": "s16",
       "title": "Capture responsive human visual checkpoint",
-      "status": "planned"
+      "summary": "Captured the deterministic wide, phone, reduced-motion, and static checkpoint; focused, browser, build, bundle, attribution, performance, and workspace gates pass. Stop at HUMAN_CHECKPOINT before s17.",
+      "status": "complete"
     },
     {
       "id": "s17",
