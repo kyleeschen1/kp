@@ -50,11 +50,20 @@ test("bootstrap keeps the imperative default and dynamically mounts the exemplar
   assert.match(entry, /createKpAnimationCatalogueSelectionPreparationService/);
   assert.match(entry, /createKpAnimationCatalogueSelectedHostViewModel/);
   assert.doesNotMatch(entry, /loadKpAnimationAsset|createKpAnimationAssets/);
+  assert.equal(
+    [...component.matchAll(/data-kp-animation-catalogue-region=/g)].length,
+    3
+  );
+  assert.match(component, /state\.status === "loading"/);
+  assert.match(component, /state\.status === "not-found"/);
+  assert.match(component, /role="alert">\{state\.message\}/);
+  assert.match(component, /<h3 id="kp-svelte-catalogue-details-title">Details/);
+  assert.doesNotMatch(component, /animation-player-controller|<h2(?:\s|>)/);
 
   const compiled = compile(component, {
     filename: "KpSvelteCatalogueExemplar.svelte",
     generate: "client",
     runes: true
   });
-  assert.match(compiled.js.code, /kp-svelte-catalogue-exemplar/);
+  assert.match(compiled.js.code, /kp-animation-catalogue-region/);
 });

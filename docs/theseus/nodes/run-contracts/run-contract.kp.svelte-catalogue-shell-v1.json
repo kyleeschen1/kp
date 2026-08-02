@@ -89,7 +89,8 @@
     {
       "id": "s06",
       "title": "Reproduce outer shell and terminal states",
-      "status": "planned"
+      "summary": "Reproduced the canonical three-region catalogue frame and its loading, not-found, error, and selected states in Svelte using existing CSS and stage reservation. Search behavior, player hydration, inspector controls, navigation, and Review remain explicitly deferred to later slices.",
+      "status": "complete"
     },
     {
       "id": "s07",

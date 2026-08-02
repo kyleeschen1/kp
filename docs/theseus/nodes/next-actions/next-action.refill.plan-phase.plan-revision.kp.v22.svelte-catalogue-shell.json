@@ -233,11 +233,46 @@
       "scope": "s05-performance",
       "checkedAt": "2026-08-02T15:42:50.018Z",
       "notes": "Outer 10459, main host 256205, measured catalogue 171217, and place-value incremental 71797 gzip bytes remain below frozen ceilings; the exemplar is a separate dynamic entry."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "s06-focused",
+      "checkedAt": "2026-08-02T15:50:39.668Z",
+      "notes": "30 focused host, shell, terminal-state source, rollback, and Svelte compiler tests passed."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s06-types",
+      "checkedAt": "2026-08-02T15:50:40.737Z",
+      "notes": "Svelte checker reported zero errors and zero warnings for the structural shell and typed state union."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "s06-browser",
+      "checkedAt": "2026-08-02T15:50:41.706Z",
+      "notes": "Four Chromium checks passed: selected three-region shell, not-found reservation, observable loading plus contained pack failure, and unchanged imperative rollback route."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "s06-production",
+      "checkedAt": "2026-08-02T15:50:42.735Z",
+      "notes": "Production Vite build passed with 1005 transformed modules after structural shell reproduction."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s06-performance",
+      "checkedAt": "2026-08-02T15:50:43.730Z",
+      "notes": "Outer 10459, main host 255452, measured catalogue 171090, and place-value incremental 71797 gzip bytes all remain below frozen ceilings."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1 through 5 are complete. The isolated Svelte runtime entry is browser-verified behind an explicit host flag; outer shell and terminal-state reconstruction is next."
+    "summary": "Slices 1 through 6 are complete. The opt-in Svelte entry now owns the structural shell and terminal truth; fuzzy search and stable selected-row projection are next."
   },
   "expectedLearning": [
     "Approved revision 22 places this active phase in now."
