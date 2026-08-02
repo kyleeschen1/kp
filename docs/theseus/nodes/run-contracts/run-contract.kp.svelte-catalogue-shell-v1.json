@@ -65,7 +65,8 @@
     {
       "id": "s02",
       "title": "Integrate pinned Svelte 5 tooling without route cutover",
-      "status": "planned"
+      "summary": "Integrated exact Svelte 5.56.8, Vite plugin 7.2.0, and svelte-check 4.7.4 in runes mode. Added an isolated compiler canary and stable typecheck; the imperative bootstrap, production route graph, and bundle measurements remain unchanged.",
+      "status": "complete"
     },
     {
       "id": "s03",

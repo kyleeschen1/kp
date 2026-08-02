@@ -72,11 +72,46 @@
       "scope": "visual",
       "checkedAt": "2026-08-02T14:34:45.835Z",
       "notes": "Seven deterministic wide, narrow, reduced-motion, and static vector checkpoints captured with contained non-overlapping labels."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T14:44:33.516Z",
+      "notes": "15/15 passed, including Svelte 5 compiler canary, Vite plugin presence, and unchanged imperative bootstrap rollback."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T14:44:34.669Z",
+      "notes": "svelte-check reported 0 errors and 0 warnings for the isolated runes-mode component."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T14:44:35.559Z",
+      "notes": "Expanded TypeScript and Svelte checks plus Vite production build passed; current route still transforms 895 modules."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T14:44:36.468Z",
+      "notes": "All measurements were byte-for-byte unchanged from slice 1; no Svelte runtime entered the current production route."
+    },
+    {
+      "command": "npm audit --omit=dev",
+      "status": "passed",
+      "scope": "security",
+      "checkedAt": "2026-08-02T14:44:37.573Z",
+      "notes": "Production dependency audit reported 0 vulnerabilities. Full audit retains one pre-existing development-only PostCSS advisory present before Svelte installation."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s01 froze the imperative catalogue reference, stable focused gate, bundle ceilings and actuals, runtime observations, seven-state vector contact surface, and the pre-existing KaTeX attribution pressure."
+    "summary": "Slices s01-s02 complete: the baseline is frozen and an exact Svelte 5 compiler/Vite/typecheck toolchain now exists without route cutover or production bundle growth."
   },
   "expectedLearning": [
     "Approved revision 22 places this active phase in now."
