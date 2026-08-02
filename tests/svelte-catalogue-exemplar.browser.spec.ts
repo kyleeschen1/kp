@@ -715,7 +715,9 @@ test("canonical Svelte shell keeps loading truth visible and contains preparatio
     await route.abort("failed");
   });
 
-  await page.goto(`/?artifact=${animationId}`);
+  // The intercepted pack intentionally keeps Firefox's document load pending;
+  // commit is the correct boundary for observing the already-mounted loader.
+  await page.goto(`/?artifact=${animationId}`, { waitUntil: "commit" });
   const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
   await expect(exemplar).toHaveAttribute(
     "data-kp-animation-catalogue-state",

@@ -203,7 +203,8 @@
     {
       "id": "s25",
       "title": "Run cross-browser release matrix and contact sheet",
-      "status": "planned"
+      "summary": "Added a stable 42-check Chromium/Firefox/WebKit release matrix and a seven-frame canonical contact sheet; corrected the adversarial loading test to observe navigation commit consistently across engines.",
+      "status": "complete"
     },
     {
       "id": "s26",

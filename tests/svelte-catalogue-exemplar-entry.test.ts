@@ -119,5 +119,10 @@ test("stable Svelte visual command verifies the promoted canonical shell", async
     /reviewState: "approved-and-promoted"/
   );
   assert.match(captureScript, /canonicalShell: "svelte"/);
+  assert.match(captureScript, /contact-sheet\.png/);
+  assert.match(
+    packageSource,
+    /"test:browser:svelte-catalogue-release": "playwright test tests\/svelte-catalogue-exemplar\.browser\.spec\.ts --project=chromium --project=firefox --project=webkit --workers=1"/
+  );
   assert.doesNotMatch(captureScript, /imperative-rollback/);
 });

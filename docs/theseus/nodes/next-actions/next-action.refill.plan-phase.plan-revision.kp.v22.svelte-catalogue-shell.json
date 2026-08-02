@@ -1088,6 +1088,34 @@
       "scope": "slice s24 canonical production ownership",
       "checkedAt": "2026-08-02T19:07:11.339Z",
       "notes": "Corrected the measured route root to the canonical Svelte entry: 90,158 gzip bytes versus the frozen 190,000 ceiling. All six routes remain Svelte-owned and selected capabilities remain isolated."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-release",
+      "status": "failed",
+      "scope": "slice s25 initial cross-browser matrix",
+      "checkedAt": "2026-08-02T19:17:30.671Z",
+      "notes": "Forty-one checks passed; Firefox timed out because the adversarial pack interception intentionally held its document load event. The test needed the navigation commit boundary, not full load."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-release",
+      "status": "passed",
+      "scope": "slice s25 Chromium Firefox WebKit release matrix",
+      "checkedAt": "2026-08-02T19:17:37.155Z",
+      "notes": "All 42 canonical shell lifecycle, responsive, accessibility, Review, parameter, explanation, capability, and terminal-state checks passed across Chromium, Firefox, and WebKit."
+    },
+    {
+      "command": "npm run visual:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "slice s25 canonical release contact sheet",
+      "checkedAt": "2026-08-02T19:17:42.465Z",
+      "notes": "Seven deterministic canonical checkpoints passed and were assembled into a visually inspected contact sheet under tmp/codex; wide, narrow, reduced-motion, and static frames remained coherent."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell and npm run typecheck",
+      "status": "passed",
+      "scope": "slice s25 stable command registration and types",
+      "checkedAt": "2026-08-02T19:17:53.531Z",
+      "notes": "All 34 focused architecture tests passed, including stable release-command and contact-sheet registration; all TypeScript, Svelte, and domain checks passed."
     }
   ],
   "progress": {

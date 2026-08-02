@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { chromium, type Browser, type Page } from "playwright";
@@ -7,6 +7,10 @@ import { chromium, type Browser, type Page } from "playwright";
 import {
   createKpAnimationCatalogueProjection
 } from "../src/editor/animation-catalogue-projection.ts";
+import {
+  buildKpVisualContactSheetHtml,
+  type KpVisualContactSheetItem
+} from "./capture-visual-contact-sheet.ts";
 
 const animationId = "animation.linear-solve.solve-x";
 const generatedLinearSolveExemplarId =
@@ -628,6 +632,47 @@ async function captureSvelteCatalogueReleaseCheckpoint(
   const captures = await captureVectorDotProjectionExemplar(browser, {
     outputDirectory: path.join(releaseOutput, "svelte-canonical")
   });
+  const contactSheetItems: KpVisualContactSheetItem[] = await Promise.all(
+    captures.map(async (capture) => ({
+      id: capture.id,
+      label: capture.id.replaceAll("-", " "),
+      progress: capture.progress,
+      viewport: capture.viewport,
+      file: capture.path,
+      dataUrl: `data:image/png;base64,${(
+        await readFile(path.resolve(capture.path))
+      ).toString("base64")}`
+    }))
+  );
+  const contactSheetHtml = buildKpVisualContactSheetHtml(contactSheetItems, {
+    title: "Kinetic Press · canonical catalogue",
+    columns: 2,
+    imageFit: "contain"
+  });
+  const sheetPage = await browser.newPage({
+    viewport: { width: 1440, height: 1000 }
+  });
+  const contactSheetPath = path.join(
+    outputRoot,
+    releaseOutput,
+    "contact-sheet.png"
+  );
+  const contactSheetHtmlPath = path.join(
+    outputRoot,
+    releaseOutput,
+    "index.html"
+  );
+  try {
+    await sheetPage.setContent(contactSheetHtml, { waitUntil: "load" });
+    await sheetPage.screenshot({
+      path: contactSheetPath,
+      fullPage: true,
+      animations: "disabled"
+    });
+    await writeFile(contactSheetHtmlPath, contactSheetHtml, "utf8");
+  } finally {
+    await sheetPage.close();
+  }
   const manifestPath = path.join(outputRoot, releaseOutput, "manifest.json");
   await writeFile(manifestPath, `${JSON.stringify({
     schemaVersion: "kp.svelte-catalogue-vector-release-checkpoint.v1",
@@ -638,6 +683,8 @@ async function captureSvelteCatalogueReleaseCheckpoint(
     preservationBoundary:
       "Framework-neutral assets, clocks, renderer ports, URL state, and Review lifecycle remain outside Svelte.",
     durableTruthVerified: true,
+    contactSheet: path.relative(process.cwd(), contactSheetPath),
+    contactSheetHtml: path.relative(process.cwd(), contactSheetHtmlPath),
     captures
   }, null, 2)}\n`, "utf8");
   console.log(
