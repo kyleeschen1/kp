@@ -2396,30 +2396,44 @@ function syncMatrixLinearMapOperationBank(
         </span>
       </div>
       <div class="editor-equation-stage__matrix-operation-rows">
-        ${choreography.rows.map((row) => `
-          <div class="editor-equation-stage__matrix-operation-row" data-kp-editor-matrix-vector-row="${row.semanticIndex}" data-kp-editor-matrix-vector-intermediate-object-id="${row.intermediateObjectId}">
-            <span class="editor-equation-stage__matrix-operation-row-label">
-              ${renderLatexToHtml(`r_{${row.semanticIndex + 1}}`, { displayMode: false })}
-            </span>
-            <span class="editor-animation-player__visually-hidden">
-              ${renderLatexToHtml(row.rowLatex, { displayMode: false })}
-            </span>
-            <span class="editor-equation-stage__matrix-operation-flow">
-              ${row.rowValues.map((matrixValue, columnIndex) => `
-                <span class="editor-equation-stage__matrix-operation-route" data-kp-editor-matrix-operation-contribution="${row.semanticIndex}.${columnIndex}">
-                  <span>${renderLatexToHtml(
-                    `${matrixValue} \\cdot ${row.vectorValues[columnIndex]}`,
-                    { displayMode: false }
-                  )}</span>
-                  <i aria-hidden="true"></i>
-                </span>
-              `).join("")}
-            </span>
-            <span class="editor-equation-stage__matrix-operation-output" data-kp-editor-matrix-operation-output="${row.semanticIndex}">
-              ${renderLatexToHtml(String(row.result), { displayMode: false })}
-            </span>
-          </div>
-        `).join("")}
+        ${choreography.rows.map((row) => {
+          const frameRow = frame.operationBank.rows.find((candidate) =>
+            candidate.semanticIndex === row.semanticIndex
+          )!;
+          return `
+            <div class="editor-equation-stage__matrix-operation-row" data-kp-editor-matrix-vector-row="${row.semanticIndex}" data-kp-editor-matrix-vector-intermediate-object-id="${row.intermediateObjectId}">
+              <span class="editor-equation-stage__matrix-operation-row-label">
+                ${renderLatexToHtml(`r_{${row.semanticIndex + 1}}`, { displayMode: false })}
+              </span>
+              <span class="editor-animation-player__visually-hidden">
+                ${renderLatexToHtml(row.rowLatex, { displayMode: false })}
+              </span>
+              <span class="editor-equation-stage__matrix-operation-flow">
+                ${frameRow.contributions.map((contribution) => `
+                  <span class="editor-equation-stage__matrix-operation-route" data-kp-editor-matrix-operation-contribution="${row.semanticIndex}.${contribution.columnIndex}">
+                    <span>${renderLatexToHtml(
+                      `${contribution.matrixValue} \\cdot ${contribution.vectorValue}`,
+                      { displayMode: false }
+                    )}</span>
+                    <i aria-hidden="true"></i>
+                    <span class="editor-equation-stage__matrix-operation-product" data-kp-editor-matrix-operation-product="${row.semanticIndex}.${contribution.columnIndex}">
+                      ${renderLatexToHtml(`=${contribution.product}`, { displayMode: false })}
+                    </span>
+                  </span>
+                `).join("")}
+              </span>
+              <span class="editor-equation-stage__matrix-operation-fold" data-kp-editor-matrix-operation-fold="${row.semanticIndex}">
+                ${renderLatexToHtml(
+                  frameRow.contributions.map((item) => item.product).join("+"),
+                  { displayMode: false }
+                )}
+              </span>
+              <span class="editor-equation-stage__matrix-operation-output" data-kp-editor-matrix-operation-output="${row.semanticIndex}">
+                ${renderLatexToHtml(String(row.result), { displayMode: false })}
+              </span>
+            </div>
+          `;
+        }).join("")}
       </div>
     `;
     transition.append(bank);
@@ -2448,7 +2462,28 @@ function syncMatrixLinearMapOperationBank(
         "--kp-matrix-operation-route-progress",
         String(row.routeProgress)
       );
+      const product = route?.querySelector<HTMLElement>(
+        `[data-kp-editor-matrix-operation-product="${row.semanticIndex}.${contribution.columnIndex}"]`
+      );
+      product?.style.setProperty(
+        "--kp-matrix-operation-product-progress",
+        String(contribution.productRevealProgress)
+      );
     });
+    const fold = rowElement.querySelector<HTMLElement>(
+      `[data-kp-editor-matrix-operation-fold="${row.semanticIndex}"]`
+    );
+    if (fold !== null) {
+      fold.dataset["kpEditorMatrixOperationFoldPhase"] = row.foldPhase;
+      fold.style.setProperty(
+        "--kp-matrix-operation-gather-progress",
+        String(row.gatherProgress)
+      );
+      fold.style.setProperty(
+        "--kp-matrix-operation-collapse-progress",
+        String(row.coordinateProgress)
+      );
+    }
     const output = rowElement.querySelector<HTMLElement>(
       `[data-kp-editor-matrix-operation-output="${row.semanticIndex}"]`
     );

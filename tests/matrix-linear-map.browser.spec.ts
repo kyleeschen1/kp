@@ -70,6 +70,29 @@ test("rank-6 matrix-vector exemplar preserves exact row-dot playback", async ({
     "data-kp-editor-equation-matrix-vector-resolved-through",
     "0"
   );
+  await expect(operationBank.locator(
+    '[data-kp-editor-matrix-operation-product="0.0"]'
+  )).toContainText("=8");
+  await expect(operationBank.locator(
+    '[data-kp-editor-matrix-operation-fold="0"]'
+  )).toHaveAttribute(
+    "data-kp-editor-matrix-operation-fold-phase",
+    "coordinate"
+  );
+  await expect(operationBank.locator(
+    '[data-kp-editor-matrix-operation-fold="0"]'
+  )).toContainText("8+5");
+
+  await scrubber.fill("0.8");
+  await expect(operationBank.locator(
+    '[data-kp-editor-matrix-operation-fold="1"]'
+  )).toHaveAttribute(
+    "data-kp-editor-matrix-operation-fold-phase",
+    "gather"
+  );
+  await expect(operationBank.locator(
+    '[data-kp-editor-matrix-operation-fold="1"]'
+  )).toContainText("0+15");
 
   await scrubber.fill("1");
   await expect(operationBank.locator(

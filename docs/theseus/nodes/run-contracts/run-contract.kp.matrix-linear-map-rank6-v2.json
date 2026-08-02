@@ -138,7 +138,8 @@
     {
       "id": "s14",
       "title": "Render dot-product gather and collapse",
-      "status": "planned"
+      "summary": "Rendered the dot-product fold: each operand route reveals its authored product, products gather as 8+5 or 0+15, then collapse into persistent coordinates 13 and 15. The values come from the rank-6 frame rather than renderer arithmetic, and wide/narrow visual evidence remains contained.",
+      "status": "complete"
     },
     {
       "id": "s15",

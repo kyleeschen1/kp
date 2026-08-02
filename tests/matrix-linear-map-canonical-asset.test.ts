@@ -74,6 +74,8 @@ test("rank-6 keeps one exact two-by-two matrix-vector fixture", () => {
 test("rank-6 preserves selector and transformation lineage", () => {
   const fixture = createGeneratedLinearAlgebraProblemFixture(fixtureId);
   const [initial, firstRow, secondRow, result] = fixture.bundle.objects;
+  assert.ok(firstRow);
+  assert.ok(secondRow);
   assert.deepEqual(initial?.selectors.map(({ id }) => id), [
     `${initialId}.matrix.entry.0.0`,
     `${initialId}.matrix.entry.0.1`,

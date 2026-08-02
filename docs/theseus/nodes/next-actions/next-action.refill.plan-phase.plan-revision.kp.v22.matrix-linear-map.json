@@ -289,11 +289,39 @@
       "scope": "standard",
       "checkedAt": "2026-08-02T21:19:20.666Z",
       "notes": "All typechecks passed with the rank-6 equation renderer binding."
+    },
+    {
+      "command": "npm run test:matrix-linear-map",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T21:24:55.932Z",
+      "notes": "40/40 semantic/runtime checks passed after visible fold binding."
+    },
+    {
+      "command": "npm run test:browser:matrix-linear-map",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-08-02T21:24:57.110Z",
+      "notes": "Chromium verifies authored product values, coordinate settlement, row-one gather phase, and exact fold sums 8+5 and 0+15."
+    },
+    {
+      "command": "npm run visual:matrix-linear-map",
+      "status": "passed",
+      "scope": "visual",
+      "checkedAt": "2026-08-02T21:24:58.051Z",
+      "notes": "Wide and narrow captures show products revealing along row lanes, sums gathered before the output well, and no overflow."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T21:24:59.076Z",
+      "notes": "All application, test, Svelte, and domain typechecks passed after fold rendering and assertion narrowing."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s13 replaced the canonical pill overlay with a compact KaTeX operation bank whose input references persist and whose row lanes visualize information routes under the shared rank-6 frame."
+    "summary": "Slice s14 rendered frame-authored products, gathered sums, and coordinate collapse in each persistent operation-bank row; the renderer performs no arithmetic."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."
