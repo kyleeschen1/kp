@@ -66,7 +66,8 @@
     {
       "id": "s02",
       "title": "Freeze canonical asset identity and exact truth",
-      "status": "planned"
+      "summary": "Exact characterization proves A=[[2,1],[0,3]], v=[4,5], Av=[13,15], two row intermediates, selector identities, strict multiplication law, one 2.4-second animation timeline, and the existing matrix-vector catalogue route. No duplicate asset or runtime behavior was added.",
+      "status": "complete"
     },
     {
       "id": "s03",

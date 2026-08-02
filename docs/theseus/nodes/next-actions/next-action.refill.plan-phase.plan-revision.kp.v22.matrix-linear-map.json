@@ -65,11 +65,32 @@
       "scope": "control-plane",
       "checkedAt": "2026-08-02T20:33:47.207Z",
       "notes": "867 nodes and 16,504 events validated before slice completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/matrix-linear-map-canonical-asset.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-02T20:36:48.014Z",
+      "notes": "3/3 exact fixture, selector lineage, animation identity, timeline, and catalogue-route checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-02T20:36:49.255Z",
+      "notes": "Application, node, test, Svelte, and domain typechecks passed after exact-characterization coverage."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-08-02T20:36:50.273Z",
+      "notes": "Workspace validated before slice s02 completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s01 froze eleven authority owners, framework-neutral semantic and runtime paths, bundle ceilings and measurements, runtime observations, selected-capability attribution, and known performance pressure without changing visible behavior."
+    "summary": "Slice s02 froze one exact generated fixture and one in-place catalogue asset with stable selectors, strict multiplyMatrixVector lineage, shared timeline, descriptor, family, and URL."
   },
   "expectedLearning": [
     "Approved revision 22 places this planned phase in next."
