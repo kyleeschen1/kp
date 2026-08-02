@@ -181,6 +181,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-selected-equation-katex-capability-split.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-selected-optional-capability-isolation.md"
     }
   ],
   "dependsOn": {
@@ -1044,8 +1048,107 @@
       "status": "passed",
       "scope": "s22-equation-capability",
       "checkedAt": "2026-08-02T02:57:40.282Z"
+    },
+    {
+      "command": "selected-optional-capability-focused-tests",
+      "status": "passed",
+      "scope": "s23-optional-capabilities",
+      "checkedAt": "2026-08-02T03:26:21.166Z",
+      "notes": "23-tests-pass"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "s23-optional-capabilities",
+      "checkedAt": "2026-08-02T03:26:22.021Z"
+    },
+    {
+      "command": "npm-run-build",
+      "status": "passed",
+      "scope": "s23-optional-capabilities",
+      "checkedAt": "2026-08-02T03:26:22.886Z",
+      "notes": "typecheck-domains-and-production-build-pass"
+    },
+    {
+      "command": "npm-run-perf-animation-attribution",
+      "status": "passed",
+      "scope": "s23-optional-capabilities",
+      "checkedAt": "2026-08-02T03:26:23.753Z",
+      "notes": "six-routes-twice-reproducible-main-host-215893-single-runtime-instances-api-diagnostics-code-absent"
+    },
+    {
+      "command": "npm-run-test-browser-animation-equation-capability",
+      "status": "passed",
+      "scope": "s23-optional-capabilities",
+      "checkedAt": "2026-08-02T03:26:24.627Z",
+      "notes": "3-chromium-tests-pass-including-selected-capability-request-matrix"
+    },
+    {
+      "command": "npm-run-test-browser-animation-catalogue-3d",
+      "status": "passed",
+      "scope": "s23-optional-capabilities",
+      "checkedAt": "2026-08-02T03:26:25.512Z",
+      "notes": "2-chromium-tests-pass-lease-release-and-context-loss-fallback"
+    },
+    {
+      "command": "npm-run-test-browser-dashboard",
+      "status": "passed",
+      "scope": "s23-optional-capabilities",
+      "checkedAt": "2026-08-02T03:26:26.394Z",
+      "notes": "legacy-editor-api-preview-and-graph-control-round-trip-pass"
+    },
+    {
+      "command": "catalogue-native-host-preservation-browser-matrix",
+      "status": "passed",
+      "scope": "s23-optional-capabilities",
+      "checkedAt": "2026-08-02T03:26:27.261Z",
+      "notes": "generated-2-and-vector-3-chromium-tests-pass"
+    },
+    {
+      "command": "npm-run-check-animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s23-optional-capabilities",
+      "checkedAt": "2026-08-02T03:26:28.138Z",
+      "notes": "outer-10456-main-215893-selected-math-182348-place-value-71799-within-ratchets"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "s23-optional-capabilities",
+      "checkedAt": "2026-08-02T03:26:29.029Z",
+      "notes": "resolved-main-WebGL-cross-layer-evidence-retired"
+    },
+    {
+      "command": "npm-run-check-dev-review-production",
+      "status": "passed",
+      "scope": "s23-optional-capabilities",
+      "checkedAt": "2026-08-02T03:26:29.936Z"
+    },
+    {
+      "command": "npm-run-check-promotion-memory",
+      "status": "passed",
+      "scope": "s23-optional-capabilities",
+      "checkedAt": "2026-08-02T03:26:30.849Z",
+      "notes": "rank-5-remains-unpromoted"
+    },
+    {
+      "command": "npm-test",
+      "status": "failed",
+      "scope": "run-broad-baseline",
+      "checkedAt": "2026-08-02T03:26:31.746Z",
+      "notes": "committed-html-output-owner-count-ratchet-expects-25-but-inventory-has-26;-defer-with-known-place-value-hash-to-s30-reconciliation"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "s23-optional-capabilities",
+      "checkedAt": "2026-08-02T03:26:32.624Z"
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "s23 optional capabilities complete: main host 215893 gzip, programming 212933 gzip, selected graph runtimes singleton, inspector and diagnostics absent from catalogue routes"
+  },
   "expectedLearning": [
     "Identify which catalogue, generated-session, vector, and programming seams are genuinely shared after concrete caller pressure.",
     "Determine whether selected-capability loading can meet the existing script and LCP targets without semantic or visual compromise."

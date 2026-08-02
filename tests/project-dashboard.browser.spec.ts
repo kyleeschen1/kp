@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("project-dashboard-round-trip keeps editor motion and graph controls usable", async ({
   page
 }) => {
-  await page.goto("/");
+  await page.goto("/?view=editor");
 
   await expect(page.getByRole("heading", { name: "Identity Matrix" })).toBeVisible();
   await page.getByRole("button", { name: "Project Dashboard" }).click();
@@ -135,7 +135,7 @@ test("project-dashboard-round-trip keeps editor motion and graph controls usable
   await dashboardSearch.fill("dnt");
   await expect(animationLayout).toHaveCount(0);
   await expect(page.locator("[data-kp-project-dashboard-search-count]")).toHaveText(
-    /Showing 3 of \d+ rows/
+    /Showing 4 of \d+ rows/
   );
   await expect(page.locator('[data-kp-agenda-section="work"]')).toHaveCount(0);
   await expect(

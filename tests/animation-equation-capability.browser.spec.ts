@@ -70,24 +70,30 @@ test("equation typography settles inside reserved catalogue stage geometry", asy
   expect(shift).toBe(0);
 });
 
-test("3D and programming selections request no equation or KaTeX capability", async ({
+test("programming and 3D selections request only their selected capabilities", async ({
   page
 }) => {
-  const capabilityRequests: string[] = [];
+  const unrelatedRequests: string[] = [];
+  const graph3DRequests: string[] = [];
   page.on("request", (request) => {
-    if (/equation-surface-capability|graph-svg-surface-capability|katex(?:\.min)?\.(?:js|css)(?:\?|$)/i
+    if (/equation-surface-capability|graph-svg-surface-capability|katex(?:\.min)?\.(?:js|css)(?:\?|$)|api-catalog|animation-diagnostics-capability|shiki|highlight\.js|prismjs|code-highlighter/i
       .test(request.url())) {
-      capabilityRequests.push(request.url());
+      unrelatedRequests.push(request.url());
+    }
+    if (/graph-3d-surface-capability/i.test(request.url())) {
+      graph3DRequests.push(request.url());
     }
   });
 
   await page.goto(`/?artifact=${programmingId}`);
   await waitForOutcome(page, programmingId, "capability-gap");
-  expect(capabilityRequests).toEqual([]);
+  expect(unrelatedRequests).toEqual([]);
+  expect(graph3DRequests).toEqual([]);
 
   await page.goto(`/?artifact=${graph3DId}`);
   await waitForOutcome(page, graph3DId, "painted");
-  expect(capabilityRequests).toEqual([]);
+  expect(unrelatedRequests).toEqual([]);
+  expect(graph3DRequests).toHaveLength(1);
 });
 
 async function waitForOutcome(

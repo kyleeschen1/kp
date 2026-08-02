@@ -21,12 +21,11 @@ export const kpLegacyArchitectureExceptionBaseline = [
     sourceFile: "src/main.ts",
     evidencePatterns: [
       'import("./editor/editor.ts")',
-      'from "./rendering/graph-webgl.ts"',
       'from "./semantic/document.ts"',
       'import("./tutorial/ftc-surface.ts")'
     ],
     rationale:
-      "The legacy app entrypoint still composes editor, renderer, semantic, and tutorial modules directly, although the editor is now route-lazy; the concept-room strangler must not add another cross-layer branch here."
+      "The legacy app entrypoint still composes editor, semantic, and tutorial modules directly, although the editor and rich graph controls are now route-lazy; the concept-room strangler must not add another cross-layer branch here."
   },
   {
     id: "legacy.editor.mutable-surface-registry",

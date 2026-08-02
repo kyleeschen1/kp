@@ -206,7 +206,8 @@
     {
       "id": "s23",
       "title": "Isolate optional capabilities",
-      "status": "planned"
+      "summary": "Graph3D-SVG-equation-API-diagnostics-and-code-closures-are-now-selected-caller-driven;-main-host-fell-to-215893-gzip,-programming-to-212933,-runtime-singletons-and-native-hosting-are-preserved,-and-layout-reservation-remains-s24.",
+      "status": "complete"
     },
     {
       "id": "s24",

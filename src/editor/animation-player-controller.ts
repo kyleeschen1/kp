@@ -28,13 +28,6 @@ import {
 } from "../animation/elevated-focus-experiment.ts";
 import type { KpChoreographyEnvelopePhaseId } from "../animation/choreography-plan.ts";
 import {
-  createKpEditorAnimationDiagnostics,
-  renderKpEditorAnimationDiagnostics
-} from "./animation-diagnostics.ts";
-import {
-  createLinearSolveRuntimeVisualFrameSample
-} from "../rendering/linear-solve-runtime-visual-sample.ts";
-import {
   decideKpEditorAnimationDiagnosticsCadence,
   type KpEditorAnimationDiagnosticsCadenceState
 } from "./animation-diagnostics-cadence.ts";
@@ -272,22 +265,20 @@ function syncLoadedDiagnostics(
   animation: KpAnimationAsset,
   catalog: readonly KpAnimationAsset[]
 ): void {
-  const solveXVisualSample = animation.id === "animation.linear-solve.solve-x"
-    ? createLinearSolveRuntimeVisualFrameSample({ progress: 0.5 })
-    : undefined;
-  const diagnostics = createKpEditorAnimationDiagnostics({
-    animation,
-    catalog,
-    ...(solveXVisualSample === undefined ? {} : {
-      runtimeFrame: solveXVisualSample.runtimeFrame,
-      visualFrame: solveXVisualSample.visualFrame
-    })
-  });
   const current = player.closest("[data-kp-editor-animation-library]")
     ?.querySelector<HTMLElement>("[data-kp-editor-animation-diagnostics]");
-  if (current !== null && current !== undefined) {
-    current.outerHTML = renderKpEditorAnimationDiagnostics(diagnostics);
-  }
+  if (current === null || current === undefined) return;
+  void import("./animation-diagnostics-capability.ts").then((client) => {
+    if (!player.isConnected) return;
+    client.syncKpEditorAnimationLoadedDiagnostics({
+      player,
+      animation,
+      catalog
+    });
+  }).catch(() => {
+    // Diagnostics are an optional development surface; a failed inspector
+    // chunk must not turn otherwise-valid playback into an unhandled error.
+  });
 }
 
 function markPlayerLoadFailure(player: HTMLElement, error: unknown): void {

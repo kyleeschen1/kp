@@ -47,10 +47,6 @@ import {
   kpEditorAnimationSelectionHref,
   readKpEditorAnimationSelection
 } from "./editor/animation-selection-route.ts";
-import {
-  previewApiCatalogItem,
-  selectApiCatalogItem
-} from "./editor/api-catalog.ts";
 import { compileDocumentAsset } from "./editor/compile-client.ts";
 import {
   handleEquationMotionDemoKeydown,
@@ -61,41 +57,7 @@ import {
   setEquationMotionProgress,
   stepEquationMotionDemo
 } from "./editor/equation-motion-demo-controller.ts";
-import {
-  GRAPH_3D_SURFACE_MODE_IDS,
-  GRAPH_3D_SURFACE_QUALITY_IDS,
-  GRAPH_3D_VIEW_MODE_IDS,
-  applyGraph3DLightPreset,
-  findGraph3DLightPresetId,
-  updateGraph3DAzimuth,
-  updateGraph3DLightSetting,
-  updateGraph3DOccludedAxisLightness,
-  updateGraph3DShadowEnabled,
-  updateGraph3DShadowOpacity,
-  updateGraph3DSurfaceQuality,
-  updateGraph3DSurfaceMode,
-  updateGraph3DViewMode,
-  updateSaddleSurfaceDenominator,
-  type Graph3DLightPresetId,
-  type Graph3DLightScalarSetting
-} from "./editor/state.ts";
-import { occludedAxisColor } from "./rendering/graph-svg.ts";
-import {
-  canReuseGraph3DWebGLShell,
-  renderGraph3DWebGLFallback,
-  renderGraph3DWebGLShell
-} from "./rendering/graph-webgl.ts";
-import type {
-  KpDocument,
-  KpSemanticObject
-} from "./semantic/document.ts";
-import {
-  DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
-  type Graph3DObject,
-  type Graph3DSurfaceQuality,
-  type Graph3DViewMode,
-  type Surface3DObject
-} from "./semantic/graph.ts";
+import type { KpDocument } from "./semantic/document.ts";
 import {
   disposeKpEditorAnimationPlayers,
   hydrateKpEditorAnimationPlayers,
@@ -136,15 +98,11 @@ import {
   kpEditorAnimationSurfaceAdapterRegistry
 } from "./editor/animation-surface-adapter-registry.ts";
 import {
-  hydrateKpEditorAnimationLiveDiagnostics
-} from "./editor/animation-live-diagnostics.ts";
-import {
   createKpEditorAnimationPlayerState
 } from "./editor/animation-player-state.ts";
 import {
   renderKpEditorAnimationPlayerShell
 } from "./editor/animation-player-shell.ts";
-import { registerKpEditorGraph3DSurfaceAdapter } from "./editor/graph-3d-surface-adapter.ts";
 import { registerKpEditorDiagramSvgAdapter } from "./editor/diagram-svg-adapter.ts";
 import {
   deriveKpEditorSelectedSurfaceCapabilities,
@@ -212,7 +170,6 @@ let selectedEditorAnimationDescriptorId = selectKpEditorAnimationDescriptor(
   editorAnimationDescriptors,
   readKpEditorAnimationSelection(window.location.search)
 ).id;
-type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
 type ProjectDashboardDataClient = typeof import("./project-dashboard/data.ts");
 type ProjectDashboardRenderClient = typeof import("./project-dashboard/render.ts");
 type FtcTutorialSurfaceClient = typeof import("./tutorial/ftc-surface.ts");
@@ -224,14 +181,25 @@ type GeneratedLinearSolveReaderClient = typeof import(
   "./editor/verified-generated-linear-solve-reader.ts"
 );
 type EditorClient = typeof import("./editor/editor.ts");
+type ApiCatalogClient = typeof import("./editor/api-catalog.ts");
+type AnimationDiagnosticsCapabilityClient = typeof import(
+  "./editor/animation-diagnostics-capability.ts"
+);
+type Graph3DEditorControllerClient = typeof import(
+  "./editor/graph-3d-editor-controller.ts"
+);
+type Graph3DEditorController = ReturnType<
+  Graph3DEditorControllerClient["createKpEditorGraph3DController"]
+>;
 type EquationSurfaceCapabilityClient = typeof import(
   "./editor/equation-surface-capability.ts"
 );
 type GraphSvgSurfaceCapabilityClient = typeof import(
   "./editor/graph-svg-surface-capability.ts"
 );
-let graph3DWebGLClient: Graph3DWebGLClient | undefined;
-let graph3DWebGLClientPromise: Promise<Graph3DWebGLClient> | undefined;
+type Graph3DSurfaceCapabilityClient = typeof import(
+  "./editor/graph-3d-surface-capability.ts"
+);
 let projectDashboardClientPromise: Promise<{
   readonly data: ProjectDashboardDataClient;
   readonly render: ProjectDashboardRenderClient;
@@ -245,11 +213,22 @@ let generatedLinearSolveReaderClientPromise:
   | Promise<GeneratedLinearSolveReaderClient>
   | undefined;
 let editorClientPromise: Promise<EditorClient> | undefined;
+let apiCatalogClientPromise: Promise<ApiCatalogClient> | undefined;
+let animationDiagnosticsCapabilityPromise:
+  | Promise<AnimationDiagnosticsCapabilityClient>
+  | undefined;
+let graph3DEditorControllerClientPromise:
+  | Promise<Graph3DEditorControllerClient>
+  | undefined;
+let graph3DEditorController: Graph3DEditorController | undefined;
 let equationSurfaceCapabilityPromise:
   | Promise<EquationSurfaceCapabilityClient>
   | undefined;
 let graphSvgSurfaceCapabilityPromise:
   | Promise<GraphSvgSurfaceCapabilityClient>
+  | undefined;
+let graph3DSurfaceCapabilityPromise:
+  | Promise<Graph3DSurfaceCapabilityClient>
   | undefined;
 let activeView:
   | "dashboard"
@@ -320,10 +299,6 @@ let disposeAnimationDevelopmentReview:
 let disposeAnimationCatalogueHostEvidence:
   | (() => void)
   | undefined;
-const graph3DWebGLVisibilityObservers = new WeakMap<
-  HTMLElement,
-  IntersectionObserver
->();
 declare global {
   interface Window {
     __kpEquationMotionSetProgress?: (
@@ -335,7 +310,6 @@ declare global {
 
 window.__kpEquationMotionSetProgress = setEquationMotionProgress;
 registerKpEditorDiagramSvgAdapter();
-registerKpEditorGraph3DSurfaceAdapter();
 
 renderViewFromLocation();
 
@@ -462,7 +436,7 @@ appRoot.addEventListener("click", (event) => {
   );
 
   if (graphSurfaceLink !== null) {
-    openProjectDashboardGraphSurfacePreview(graphSurfaceLink, event);
+    void openProjectDashboardGraphSurfacePreview(graphSurfaceLink, event);
     return;
   }
 
@@ -471,7 +445,7 @@ appRoot.addEventListener("click", (event) => {
   );
 
   if (apiCatalogLink !== null) {
-    openProjectDashboardApiCatalogPreview(apiCatalogLink, event);
+    void openProjectDashboardApiCatalogPreview(apiCatalogLink, event);
     return;
   }
 
@@ -513,7 +487,7 @@ appRoot.addEventListener("click", (event) => {
       void compileDocument();
       return;
     case "select-api-outline-item":
-      selectApiCatalogItem(button);
+      void selectApiCatalogItemOnDemand(button);
       return;
     case "toggle-animation-catalogue-overlay":
       toggleAnimationCatalogueOverlay(button);
@@ -546,11 +520,11 @@ document.addEventListener("keydown", (event) => {
 });
 
 appRoot.addEventListener("mouseover", (event) => {
-  previewApiCatalogItemFromEvent(event);
+  void previewApiCatalogItemFromEvent(event);
 });
 
 appRoot.addEventListener("focusin", (event) => {
-  previewApiCatalogItemFromEvent(event);
+  void previewApiCatalogItemFromEvent(event);
 });
 
 appRoot.addEventListener("change", (event) => {
@@ -558,23 +532,7 @@ appRoot.addEventListener("change", (event) => {
     return;
   }
 
-  if (event.target.dataset["action"] === "set-graph-light-preset") {
-    updateGraphLightPresetFromSelect(event.target);
-    return;
-  }
-
-  if (event.target.dataset["action"] === "set-graph-surface-mode") {
-    updateGraphSurfaceModeFromSelect(event.target);
-    return;
-  }
-
-  if (event.target.dataset["action"] === "set-graph-surface-quality") {
-    updateGraphSurfaceQualityFromSelect(event.target);
-    return;
-  }
-
-  if (event.target.dataset["action"] === "set-graph-view-mode") {
-    updateGraphViewModeFromSelect(event.target);
+  if (graph3DEditorController?.handleChange(event.target) === true) {
     return;
   }
 
@@ -609,25 +567,9 @@ appRoot.addEventListener("input", (event) => {
     return;
   }
 
+  if (graph3DEditorController?.handleInput(event.target) === true) return;
+
   switch (event.target.dataset["action"]) {
-    case "set-graph-azimuth":
-      updateGraphAzimuthFromInput(event.target);
-      return;
-    case "set-graph-occluded-axis-lightness":
-      updateGraphOccludedAxisLightnessFromInput(event.target);
-      return;
-    case "set-graph-light-setting":
-      updateGraphLightSettingFromInput(event.target);
-      return;
-    case "set-graph-shadow-enabled":
-      updateGraphShadowEnabledFromInput(event.target);
-      return;
-    case "set-graph-shadow-opacity":
-      updateGraphShadowOpacityFromInput(event.target);
-      return;
-    case "set-saddle-denominator":
-      updateSaddleDenominatorFromInput(event.target);
-      return;
     case "set-equation-motion-beat":
       setEquationMotionBeat(event.target);
       return;
@@ -686,7 +628,10 @@ async function renderEditor(): Promise<void> {
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
-  const client = await loadEditorClient();
+  const [client, graph3DController] = await Promise.all([
+    loadEditorClient(),
+    loadGraph3DEditorController()
+  ]);
   if (activeView !== "editor" || revision !== viewRevision) return;
   editorDocument ??= client.createInitialEditorDocument();
   appRoot.innerHTML = client.renderEditorDocument(editorDocument, {
@@ -698,7 +643,7 @@ async function renderEditor(): Promise<void> {
   // adapter instead of racing a missing registration.
   void hydrateSelectedAnimationPlayers(appRoot, revision, "editor");
   hydrateEquationMotionDemos(appRoot);
-  hydrateGraph3DWebGL(appRoot, editorDocument.objects);
+  graph3DController.hydrate(appRoot, editorDocument.objects);
   void mountEditorAnimationLibraryReviewCapture(revision);
 }
 
@@ -1058,7 +1003,6 @@ function hydrateAnimationCatalogueSelection(input: {
   // Surface listeners attach first so the controller's initial runtime frame
   // is observable without an extra synthetic playback tick.
   hydrateKpEditorAnimationSurfaces(input.shell);
-  hydrateKpEditorAnimationLiveDiagnostics(input.shell);
   const cataloguePlayer = input.shell.querySelector<HTMLElement>(
     "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
   );
@@ -1402,7 +1346,8 @@ async function renderAnimationWorkbenchView(): Promise<void> {
   await loadSelectedSurfaceCapabilitiesForRoot(appRoot);
   if (activeView !== "animation-workbench" || revision !== viewRevision) return;
   hydrateKpEditorAnimationSurfaces(appRoot);
-  hydrateKpEditorAnimationLiveDiagnostics(appRoot);
+  await hydrateOptionalAnimationDiagnostics(appRoot);
+  if (activeView !== "animation-workbench" || revision !== viewRevision) return;
   hydrateKpEditorAnimationPlayers(appRoot);
   void mountAnimationWorkbenchReviewCapture(revision);
   if (selectedEntry !== undefined) {
@@ -1830,6 +1775,49 @@ function loadEditorClient(): Promise<EditorClient> {
   return editorClientPromise ??= import("./editor/editor.ts");
 }
 
+async function loadGraph3DEditorController(): Promise<
+  Graph3DEditorController
+> {
+  const client = await (graph3DEditorControllerClientPromise ??= import(
+    "./editor/graph-3d-editor-controller.ts"
+  ));
+  return graph3DEditorController ??= client.createKpEditorGraph3DController({
+    root: appRoot,
+    readDocument: () => editorDocument,
+    writeDocument: (document) => {
+      editorDocument = document;
+    }
+  });
+}
+
+function disposeGraph3DWebGL(root: ParentNode): void {
+  graph3DEditorController?.dispose(root);
+}
+
+function loadApiCatalogClient(): Promise<ApiCatalogClient> {
+  // The API inventory is an editor/dashboard inspector. Catalogue playback
+  // never needs its data merely to host a selected animation.
+  return apiCatalogClientPromise ??= import("./editor/api-catalog.ts");
+}
+
+async function hydrateOptionalAnimationDiagnostics(
+  root: ParentNode
+): Promise<void> {
+  if (root.querySelector("[data-kp-editor-animation-diagnostics]") === null) {
+    return;
+  }
+  const client = await (animationDiagnosticsCapabilityPromise ??= import(
+    "./editor/animation-diagnostics-capability.ts"
+  ));
+  client.hydrateKpEditorAnimationDiagnosticsCapability(root);
+}
+
+async function selectApiCatalogItemOnDemand(
+  item: HTMLButtonElement
+): Promise<void> {
+  (await loadApiCatalogClient()).selectApiCatalogItem(item);
+}
+
 async function hydrateSelectedAnimationPlayers(
   root: ParentNode,
   revision: number,
@@ -1837,9 +1825,10 @@ async function hydrateSelectedAnimationPlayers(
 ): Promise<void> {
   await loadSelectedSurfaceCapabilitiesForRoot(root);
   if (revision !== viewRevision || activeView !== expectedView) return;
+  await hydrateOptionalAnimationDiagnostics(root);
+  if (revision !== viewRevision || activeView !== expectedView) return;
   // The listener must exist before the controller emits its initial frame.
   hydrateKpEditorAnimationSurfaces(root);
-  hydrateKpEditorAnimationLiveDiagnostics(root);
   hydrateKpEditorAnimationPlayers(root);
 }
 
@@ -1895,6 +1884,18 @@ function loadSelectedSurfaceCapability(
         ({ id }) => id === "editor-animation-surface.equation.katex"
       )) {
         client.registerKpEditorEquationSurfaceCapability();
+      }
+      return client;
+    });
+  }
+  if (capability === "graph-webgl-3d") {
+    return graph3DSurfaceCapabilityPromise ??= import(
+      "./editor/graph-3d-surface-capability.ts"
+    ).then((client) => {
+      if (!kpEditorAnimationSurfaceAdapterRegistry.list().some(
+        ({ id }) => id === "editor-animation-surface.graph.webgl-3d"
+      )) {
+        client.registerKpEditorGraph3DSurfaceCapability();
       }
       return client;
     });
@@ -2215,32 +2216,29 @@ function openProjectDashboardEditorAnimation(
     ?.scrollIntoView({ block: "start" });
 }
 
-function openProjectDashboardGraphSurfacePreview(
+async function openProjectDashboardGraphSurfacePreview(
   link: HTMLAnchorElement,
   event: Event
-): void {
+): Promise<void> {
   event.preventDefault();
 
   const graphId = link.dataset["kpPreviewGraphId"];
   const surfaceMode = link.dataset["kpPreviewGraphSurfaceMode"];
-
-  if (graphId === undefined || !isGraph3DSurfaceMode(surfaceMode)) {
-    return;
-  }
-
-  editorDocument = updateGraph3DSurfaceMode(
-    editorDocument,
-    graphId,
-    surfaceMode
-  );
-  renderEditor();
-  findGraphPreview(graphId)?.scrollIntoView({ block: "start" });
+  if (graphId === undefined || surfaceMode === undefined) return;
+  const [editorClient, controller] = await Promise.all([
+    loadEditorClient(),
+    loadGraph3DEditorController()
+  ]);
+  editorDocument ??= editorClient.createInitialEditorDocument();
+  if (!controller.setSurfaceMode(graphId, surfaceMode)) return;
+  await renderEditor();
+  controller.findPreview(graphId)?.scrollIntoView({ block: "start" });
 }
 
-function openProjectDashboardApiCatalogPreview(
+async function openProjectDashboardApiCatalogPreview(
   link: HTMLAnchorElement,
   event: Event
-): void {
+): Promise<void> {
   event.preventDefault();
 
   const itemId = link.dataset["kpPreviewApiItem"];
@@ -2249,7 +2247,7 @@ function openProjectDashboardApiCatalogPreview(
     return;
   }
 
-  renderEditor();
+  await renderEditor();
 
   const item = Array.from(
     appRoot.querySelectorAll<HTMLButtonElement>("[data-kp-api-outline-item]")
@@ -2260,11 +2258,11 @@ function openProjectDashboardApiCatalogPreview(
   }
 
   item.closest("details")?.setAttribute("open", "");
-  selectApiCatalogItem(item);
+  (await loadApiCatalogClient()).selectApiCatalogItem(item);
   item.scrollIntoView({ block: "center" });
 }
 
-function previewApiCatalogItemFromEvent(event: Event): void {
+async function previewApiCatalogItemFromEvent(event: Event): Promise<void> {
   if (!(event.target instanceof Element)) {
     return;
   }
@@ -2272,498 +2270,6 @@ function previewApiCatalogItemFromEvent(event: Event): void {
   const item = event.target.closest<HTMLElement>("[data-kp-api-outline-item]");
 
   if (item !== null) {
-    previewApiCatalogItem(item);
+    (await loadApiCatalogClient()).previewApiCatalogItem(item);
   }
-}
-
-function hydrateGraph3DWebGL(
-  root: ParentNode,
-  objects: readonly KpSemanticObject[],
-  previousObjects?: readonly KpSemanticObject[]
-): void {
-  root.querySelectorAll<HTMLElement>(".graph-webgl").forEach((shell) =>
-    hydrateGraph3DWebGLShell(shell, objects, previousObjects)
-  );
-}
-
-function hydrateGraph3DWebGLShell(
-  shell: HTMLElement,
-  objects: readonly KpSemanticObject[],
-  previousObjects?: readonly KpSemanticObject[]
-): void {
-  stopGraph3DWebGLVisibilityObserver(shell);
-
-  if (typeof IntersectionObserver === "undefined") {
-    hydrateVisibleGraph3DWebGLShell(shell, objects, previousObjects);
-    return;
-  }
-
-  // The editor keeps rich previews mounted below the fold. Loading Three for a
-  // mounted but unseen shell defeats capability splitting and spends GPU setup
-  // work before the learner has requested that surface.
-  const observer = new IntersectionObserver((entries) => {
-    if (!entries.some((entry) => entry.isIntersecting)) return;
-    stopGraph3DWebGLVisibilityObserver(shell);
-    hydrateVisibleGraph3DWebGLShell(shell, objects, previousObjects);
-  }, { rootMargin: "160px" });
-  graph3DWebGLVisibilityObservers.set(shell, observer);
-  observer.observe(shell);
-}
-
-function disposeGraph3DWebGL(root: ParentNode): void {
-  root.querySelectorAll<HTMLElement>(".graph-webgl")
-    .forEach(stopGraph3DWebGLVisibilityObserver);
-  graph3DWebGLClient?.disposeGraph3DWebGLShells(root);
-}
-
-function disposeGraph3DWebGLShell(shell: HTMLElement): void {
-  stopGraph3DWebGLVisibilityObserver(shell);
-  graph3DWebGLClient?.disposeGraph3DWebGLShell(shell);
-}
-
-function hydrateVisibleGraph3DWebGLShell(
-  shell: HTMLElement,
-  objects: readonly KpSemanticObject[],
-  previousObjects?: readonly KpSemanticObject[]
-): void {
-  void loadGraph3DWebGLClient().then((client) => {
-    if (!shell.isConnected) return;
-    client.hydrateGraph3DWebGLShell(shell, objects, { previousObjects });
-  });
-}
-
-function stopGraph3DWebGLVisibilityObserver(shell: HTMLElement): void {
-  graph3DWebGLVisibilityObservers.get(shell)?.disconnect();
-  graph3DWebGLVisibilityObservers.delete(shell);
-}
-
-function loadGraph3DWebGLClient(): Promise<Graph3DWebGLClient> {
-  if (graph3DWebGLClientPromise === undefined) {
-    graph3DWebGLClientPromise = import("./rendering/graph-webgl-three.ts").then(
-      (client) => {
-        graph3DWebGLClient = client;
-
-        return client;
-      }
-    );
-  }
-
-  return graph3DWebGLClientPromise;
-}
-
-function updateGraphAzimuthFromInput(input: HTMLInputElement): void {
-  const graphId = input.dataset["graphId"];
-  const azimuthDegrees = Number(input.value);
-
-  if (graphId === undefined || !Number.isFinite(azimuthDegrees)) {
-    return;
-  }
-
-  editorDocument = updateGraph3DAzimuth(
-    editorDocument,
-    graphId,
-    azimuthDegrees
-  );
-  syncEditorDocumentDebug();
-  renderGraph3DPreview(graphId);
-  input
-    .closest(".graph-control")
-    ?.querySelector<HTMLOutputElement>(".graph-control__value")
-    ?.replaceChildren(
-      document.createTextNode(`${formatNumber(azimuthDegrees)} deg`)
-    );
-}
-
-function updateGraphOccludedAxisLightnessFromInput(input: HTMLInputElement): void {
-  const graphId = input.dataset["graphId"];
-  const lightness = Number(input.value);
-
-  if (graphId === undefined || !Number.isFinite(lightness)) {
-    return;
-  }
-
-  editorDocument = updateGraph3DOccludedAxisLightness(
-    editorDocument,
-    graphId,
-    lightness
-  );
-  syncEditorDocumentDebug();
-  renderGraph3DPreview(graphId);
-
-  const graph = findGraph3D(graphId);
-  if (graph === undefined) {
-    return;
-  }
-
-  const occludedAxisLightness =
-    graph.occludedAxisLightness ?? DEFAULT_OCCLUDED_AXIS_LIGHTNESS;
-
-  input.value = formatNumber(occludedAxisLightness);
-  input
-    .closest(".graph-control")
-    ?.querySelector<HTMLOutputElement>(".graph-control__value")
-    ?.replaceChildren(
-      document.createTextNode(occludedAxisColor(occludedAxisLightness))
-  );
-}
-
-function updateGraphLightPresetFromSelect(select: HTMLSelectElement): void {
-  const graphId = select.dataset["graphId"];
-  const presetId = select.value;
-
-  if (
-    graphId === undefined ||
-    !isGraph3DLightPresetId(presetId)
-  ) {
-    return;
-  }
-
-  editorDocument = applyGraph3DLightPreset(editorDocument, graphId, presetId);
-  syncEditorDocumentDebug();
-  renderGraph3DPreview(graphId);
-  syncGraphLightControls(graphId);
-}
-
-function updateGraphSurfaceModeFromSelect(select: HTMLSelectElement): void {
-  const graphId = select.dataset["graphId"];
-  const surfaceMode = select.value;
-
-  if (
-    graphId === undefined ||
-    !isGraph3DSurfaceMode(surfaceMode)
-  ) {
-    return;
-  }
-
-  const previousObjects = editorDocument.objects;
-
-  editorDocument = updateGraph3DSurfaceMode(
-    editorDocument,
-    graphId,
-    surfaceMode
-  );
-  syncEditorDocumentDebug();
-  renderGraph3DPreview(graphId, previousObjects);
-  select.dataset["kpGraphSurfaceMode"] = surfaceMode;
-  setGraphControlOutput(select, surfaceMode);
-}
-
-function updateGraphSurfaceQualityFromSelect(select: HTMLSelectElement): void {
-  const graphId = select.dataset["graphId"];
-  const surfaceQuality = select.value;
-
-  if (
-    graphId === undefined ||
-    !isGraph3DSurfaceQuality(surfaceQuality)
-  ) {
-    return;
-  }
-
-  editorDocument = updateGraph3DSurfaceQuality(
-    editorDocument,
-    graphId,
-    surfaceQuality
-  );
-  syncEditorDocumentDebug();
-  renderGraph3DPreview(graphId);
-  select.dataset["kpGraphSurfaceQuality"] = surfaceQuality;
-  setGraphControlOutput(select, surfaceQuality);
-}
-
-function updateGraphViewModeFromSelect(select: HTMLSelectElement): void {
-  const graphId = select.dataset["graphId"];
-  const viewMode = select.value;
-
-  if (
-    graphId === undefined ||
-    !isGraph3DViewMode(viewMode)
-  ) {
-    return;
-  }
-
-  const previousObjects = editorDocument.objects;
-
-  editorDocument = updateGraph3DViewMode(editorDocument, graphId, viewMode);
-  syncEditorDocumentDebug();
-  renderGraph3DPreview(graphId, previousObjects);
-  select.dataset["kpGraphViewMode"] = viewMode;
-  setGraphControlOutput(select, viewMode);
-}
-
-function updateGraphLightSettingFromInput(input: HTMLInputElement): void {
-  const graphId = input.dataset["graphId"];
-  const setting = input.dataset["kpGraphLightSetting"];
-  const value = Number(input.value);
-
-  if (
-    graphId === undefined ||
-    !isGraph3DLightScalarSetting(setting) ||
-    !Number.isFinite(value)
-  ) {
-    return;
-  }
-
-  editorDocument = updateGraph3DLightSetting(
-    editorDocument,
-    graphId,
-    setting,
-    value
-  );
-  syncEditorDocumentDebug();
-  renderGraph3DPreview(graphId);
-  syncGraphLightControls(graphId);
-}
-
-function updateGraphShadowEnabledFromInput(input: HTMLInputElement): void {
-  const graphId = input.dataset["graphId"];
-
-  if (graphId === undefined) {
-    return;
-  }
-
-  editorDocument = updateGraph3DShadowEnabled(
-    editorDocument,
-    graphId,
-    input.checked
-  );
-  syncEditorDocumentDebug();
-  renderGraph3DPreview(graphId);
-  setGraphControlOutput(input, input.checked ? "on" : "off");
-}
-
-function updateGraphShadowOpacityFromInput(input: HTMLInputElement): void {
-  const graphId = input.dataset["graphId"];
-  const opacity = Number(input.value);
-
-  if (graphId === undefined || !Number.isFinite(opacity)) {
-    return;
-  }
-
-  editorDocument = updateGraph3DShadowOpacity(
-    editorDocument,
-    graphId,
-    opacity
-  );
-  syncEditorDocumentDebug();
-  renderGraph3DPreview(graphId);
-
-  const graph = findGraph3D(graphId);
-  const nextOpacity = graph?.shadow.opacity;
-
-  if (nextOpacity === undefined) {
-    return;
-  }
-
-  const value = formatNumber(nextOpacity);
-  input.value = value;
-  setGraphControlOutput(input, value);
-}
-
-function updateSaddleDenominatorFromInput(input: HTMLInputElement): void {
-  const graphId = input.dataset["graphId"];
-  const surfaceId = input.dataset["surfaceId"];
-  const denominator = Number(input.value);
-
-  if (
-    graphId === undefined ||
-    surfaceId === undefined ||
-    !Number.isFinite(denominator)
-  ) {
-    return;
-  }
-
-  editorDocument = updateSaddleSurfaceDenominator(
-    editorDocument,
-    surfaceId,
-    denominator
-  );
-  syncEditorDocumentDebug();
-  renderGraph3DPreview(graphId);
-
-  const surface = findSaddleSurface(surfaceId);
-  const nextDenominator = surface?.parameterization?.denominator;
-
-  if (nextDenominator === undefined) {
-    return;
-  }
-
-  input.value = formatNumber(nextDenominator);
-  input
-    .closest(".graph-control")
-    ?.querySelector<HTMLOutputElement>(".graph-control__value")
-    ?.replaceChildren(document.createTextNode(formatNumber(nextDenominator)));
-}
-
-function syncEditorDocumentDebug(): void {
-  // The editor no longer renders a raw JSON column; keep this hook as the
-  // place where future inspector/debug surfaces can mirror document changes.
-}
-
-function renderGraph3DPreview(
-  graphId: string,
-  previousObjects?: readonly KpSemanticObject[]
-): void {
-  const graph = findGraph3D(graphId);
-  const preview = findGraphPreview(graphId);
-  const graphContainer = preview?.querySelector<HTMLElement>(".object-preview__graph");
-
-  if (graph === undefined || graphContainer === undefined || graphContainer === null) {
-    return;
-  }
-
-  const existingShell = graphContainer.querySelector<HTMLElement>(".graph-webgl");
-
-  if (
-    existingShell !== null &&
-    canReuseGraph3DWebGLShell(existingShell.dataset["kpWebglStatus"])
-  ) {
-    const fallback = existingShell.querySelector<HTMLElement>(
-      ".graph-webgl__fallback"
-    );
-
-    if (fallback !== null) {
-      // The fallback is hidden while WebGL is ready, but it remains the semantic
-      // SVG source for metadata, accessibility, and screenshot verification.
-      fallback.innerHTML = renderGraph3DWebGLFallback(
-        editorDocument.objects,
-        graph
-      );
-    }
-
-    hydrateGraph3DWebGLShell(
-      existingShell,
-      editorDocument.objects,
-      previousObjects
-    );
-    return;
-  }
-
-  if (existingShell !== null) {
-    disposeGraph3DWebGLShell(existingShell);
-  }
-
-  graphContainer.innerHTML = renderGraph3DWebGLShell(
-    editorDocument.objects,
-    graph
-  );
-  hydrateGraph3DWebGL(graphContainer, editorDocument.objects, previousObjects);
-}
-
-function findGraph3D(graphId: string): Graph3DObject | undefined {
-  return editorDocument.objects.find(
-    (object): object is Graph3DObject =>
-      object.type === "graph-3d" && object.id === graphId
-  );
-}
-
-function findSaddleSurface(surfaceId: string): Surface3DObject | undefined {
-  return editorDocument.objects.find(
-    (object): object is Surface3DObject =>
-      object.type === "surface-3d" &&
-      object.id === surfaceId &&
-      object.parameterization?.kind === "saddle"
-  );
-}
-
-function syncGraphLightControls(graphId: string): void {
-  const graph = findGraph3D(graphId);
-  const preview = findGraphPreview(graphId);
-
-  if (graph === undefined || preview === undefined) {
-    return;
-  }
-
-  preview
-    .querySelectorAll<HTMLInputElement>('[data-action="set-graph-light-setting"]')
-    .forEach((input) => {
-      const setting = input.dataset["kpGraphLightSetting"];
-
-      if (!isGraph3DLightScalarSetting(setting)) {
-        return;
-      }
-
-      const value = formatNumber(graph.light[setting]);
-      input.value = value;
-      setGraphControlOutput(input, value);
-    });
-
-  const selectedPreset = findGraph3DLightPresetId(graph.light) ?? "custom";
-  const select = preview.querySelector<HTMLSelectElement>(
-    '[data-action="set-graph-light-preset"]'
-  );
-
-  if (select !== null) {
-    select.value = selectedPreset;
-    select.dataset["kpGraphLightPreset"] = selectedPreset;
-    setGraphControlOutput(select, selectedPreset);
-  }
-}
-
-function setGraphControlOutput(
-  control: HTMLInputElement | HTMLSelectElement,
-  value: string
-): void {
-  control
-    .closest(".graph-control")
-    ?.querySelector<HTMLOutputElement>(".graph-control__value")
-    ?.replaceChildren(document.createTextNode(value));
-}
-
-function findGraphPreview(graphId: string): HTMLElement | undefined {
-  return Array.from(appRoot.querySelectorAll<HTMLElement>(".object-preview")).find(
-    (element) =>
-      element.dataset["kpObject"] === graphId &&
-      element.dataset["kpType"] === "graph-3d"
-  );
-}
-
-function isGraph3DLightPresetId(
-  value: string | undefined
-): value is Graph3DLightPresetId {
-  return value === "studio" || value === "raking" || value === "flat";
-}
-
-function isGraph3DLightScalarSetting(
-  value: string | undefined
-): value is Graph3DLightScalarSetting {
-  return (
-    value === "ambient" ||
-    value === "diffuse" ||
-    value === "depthHaze" ||
-    value === "specular" ||
-    value === "rim"
-  );
-}
-
-function isGraph3DSurfaceMode(
-  value: string | undefined
-): value is typeof GRAPH_3D_SURFACE_MODE_IDS[number] {
-  return (
-    value !== undefined &&
-    GRAPH_3D_SURFACE_MODE_IDS.includes(
-      value as typeof GRAPH_3D_SURFACE_MODE_IDS[number]
-    )
-  );
-}
-
-function isGraph3DSurfaceQuality(
-  value: string | undefined
-): value is Graph3DSurfaceQuality {
-  return (
-    value !== undefined &&
-    GRAPH_3D_SURFACE_QUALITY_IDS.includes(value as Graph3DSurfaceQuality)
-  );
-}
-
-function isGraph3DViewMode(
-  value: string | undefined
-): value is Graph3DViewMode {
-  return (
-    value !== undefined &&
-    GRAPH_3D_VIEW_MODE_IDS.includes(value as Graph3DViewMode)
-  );
-}
-
-function formatNumber(value: number): string {
-  return Number.isInteger(value) ? String(value) : value.toFixed(3);
 }

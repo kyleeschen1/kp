@@ -4,6 +4,7 @@ import test from "node:test";
 
 import {
   assertKpSelectedMathCapabilitySignals,
+  assertKpSelectedOptionalCapabilitySignals,
   createKpCapabilityAssetOwnershipIndex,
   createKpCapabilityRouteMatrix,
   type KpCapabilityRouteAttribution
@@ -29,6 +30,33 @@ test("selected math capability signal ratchet rejects unrelated routes", () => {
     katexScriptRoutes: [],
     katexStyleRoutes: []
   }), /equation surface capability routes changed/);
+});
+
+test("optional capability signal ratchet keeps each runtime caller-led", () => {
+  assert.doesNotThrow(() => assertKpSelectedOptionalCapabilitySignals({
+    graph3DSurfaceRoutes: ["graph-webgl-3d"],
+    graphSvgSurfaceRoutes: [
+      "equation-solve-x",
+      "graph-svg-vector",
+      "graph-svg-economics"
+    ],
+    graphWebglShellRoutes: ["graph-webgl-3d"],
+    graphWebglThreeRoutes: ["graph-webgl-3d"],
+    programmingAdapterRoutes: ["programming-trace"],
+    apiCatalogRoutes: [],
+    animationDiagnosticsRoutes: [],
+    codeHighlightRoutes: []
+  }));
+  assert.throws(() => assertKpSelectedOptionalCapabilitySignals({
+    graph3DSurfaceRoutes: [],
+    graphSvgSurfaceRoutes: [],
+    graphWebglShellRoutes: [],
+    graphWebglThreeRoutes: ["graph-webgl-3d", "programming-trace"],
+    programmingAdapterRoutes: [],
+    apiCatalogRoutes: ["programming-trace"],
+    animationDiagnosticsRoutes: [],
+    codeHighlightRoutes: []
+  }), /Graph3D surface capability routes changed/);
 });
 
 test("capability ownership maps emitted files, styles, and assets to source owners", () => {

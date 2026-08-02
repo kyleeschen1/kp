@@ -72,6 +72,17 @@ export interface KpSelectedMathCapabilitySignals {
   readonly katexStyleRoutes: readonly string[];
 }
 
+export interface KpSelectedOptionalCapabilitySignals {
+  readonly graph3DSurfaceRoutes: readonly string[];
+  readonly graphSvgSurfaceRoutes: readonly string[];
+  readonly graphWebglShellRoutes: readonly string[];
+  readonly graphWebglThreeRoutes: readonly string[];
+  readonly programmingAdapterRoutes: readonly string[];
+  readonly apiCatalogRoutes: readonly string[];
+  readonly animationDiagnosticsRoutes: readonly string[];
+  readonly codeHighlightRoutes: readonly string[];
+}
+
 export function assertKpSelectedMathCapabilitySignals(
   signals: KpSelectedMathCapabilitySignals
 ): void {
@@ -95,6 +106,43 @@ export function assertKpSelectedMathCapabilitySignals(
     signals.katexStyleRoutes,
     ["equation-solve-x", "graph-svg-vector", "graph-svg-economics"]
   );
+}
+
+export function assertKpSelectedOptionalCapabilitySignals(
+  signals: KpSelectedOptionalCapabilitySignals
+): void {
+  assertExactRouteIds(
+    "Graph3D surface",
+    signals.graph3DSurfaceRoutes,
+    ["graph-webgl-3d"]
+  );
+  assertExactRouteIds(
+    "graph SVG surface",
+    signals.graphSvgSurfaceRoutes,
+    ["equation-solve-x", "graph-svg-vector", "graph-svg-economics"]
+  );
+  assertExactRouteIds(
+    "graph WebGL shell",
+    signals.graphWebglShellRoutes,
+    ["graph-webgl-3d"]
+  );
+  assertExactRouteIds(
+    "Three.js graph renderer",
+    signals.graphWebglThreeRoutes,
+    ["graph-webgl-3d"]
+  );
+  assertExactRouteIds(
+    "programming adapter",
+    signals.programmingAdapterRoutes,
+    ["programming-trace"]
+  );
+  assertExactRouteIds("API catalog", signals.apiCatalogRoutes, []);
+  assertExactRouteIds(
+    "animation diagnostics",
+    signals.animationDiagnosticsRoutes,
+    []
+  );
+  assertExactRouteIds("code highlighting", signals.codeHighlightRoutes, []);
 }
 
 const routeSpecs = [
@@ -272,9 +320,21 @@ async function captureKpAnimationCapabilityAttribution(): Promise<void> {
     }
     const matrix = createKpCapabilityRouteMatrix(routes);
     const capabilitySignals = {
+      graph3DSurfaceRoutes: routeIdsRequesting(
+        routes,
+        /(?:^|\/)graph-3d-surface-capability(?:\.ts)?$/
+      ),
+      graphSvgSurfaceRoutes: routeIdsRequesting(
+        routes,
+        /(?:^|\/)graph-svg-surface-capability(?:\.ts)?$/
+      ),
+      graphWebglShellRoutes: routeIdsRequesting(
+        routes,
+        /(?:^|\/)graph-webgl(?:\.ts)?$/
+      ),
       graphWebglThreeRoutes: routeIdsRequesting(
         routes,
-        /graph-webgl-three/
+        /(?:^|\/)graph-webgl-three(?:\.ts)?$/
       ),
       equationSurfaceRoutes: routeIdsRequesting(
         routes,
@@ -284,15 +344,48 @@ async function captureKpAnimationCapabilityAttribution(): Promise<void> {
         routes,
         /programming-adapter/
       ),
-      apiCatalogRoutes: routeIdsRequesting(routes, /api-catalog/),
+      apiCatalogRoutes: routeIdsRequesting(
+        routes,
+        /(?:^|\/)api-catalog(?:\.ts)?$/
+      ),
       animationDiagnosticsRoutes: routeIdsRequesting(
         routes,
-        /animation-diagnostics/
+        /(?:^|\/)animation-diagnostics(?:\.ts)?$/
+      ),
+      codeHighlightRoutes: routeIdsRequesting(
+        routes,
+        /(?:shiki|highlight\.js|prismjs|code-highlighter)/
       ),
       katexScriptRoutes: routeIdsRequesting(routes, /(?:^|\/)katex$/),
       katexStyleRoutes: routeIdsRequesting(routes, /katex\.min\.css/)
     };
     assertKpSelectedMathCapabilitySignals(capabilitySignals);
+    assertKpSelectedOptionalCapabilitySignals(capabilitySignals);
+    const runtimeInstances = {
+      graph3DSurfaceFiles: scriptFilesRequestedByOwner(
+        routes,
+        /(?:^|\/)graph-3d-surface-capability(?:\.ts)?$/
+      ),
+      graphSvgSurfaceFiles: scriptFilesRequestedByOwner(
+        routes,
+        /(?:^|\/)graph-svg-surface-capability(?:\.ts)?$/
+      ),
+      graphWebglShellFiles: scriptFilesRequestedByOwner(
+        routes,
+        /(?:^|\/)graph-webgl(?:\.ts)?$/
+      ),
+      graphWebglThreeFiles: scriptFilesRequestedByOwner(
+        routes,
+        /(?:^|\/)graph-webgl-three(?:\.ts)?$/
+      ),
+      katexScriptFiles: scriptFilesRequestedByOwner(
+        routes,
+        /(?:^|\/)katex$/
+      )
+    };
+    Object.entries(runtimeInstances).forEach(([label, files]) =>
+      assertExactFileCount(label, files, 1)
+    );
     const report = {
       schemaVersion: "kp.animation-capability-attribution.v1",
       capturedAt: new Date().toISOString(),
@@ -322,7 +415,8 @@ async function captureKpAnimationCapabilityAttribution(): Promise<void> {
       },
       routes,
       matrix,
-      capabilitySignals
+      capabilitySignals,
+      runtimeInstances
     };
     const outputPath = resolve(
       "tmp/codex/animation-capability-attribution.json"
@@ -343,7 +437,8 @@ async function captureKpAnimationCapabilityAttribution(): Promise<void> {
         fonts: route.totals.font,
         exclusiveFiles: matrix.exclusiveFilesByRoute[route.id]
       })),
-      capabilitySignals: report.capabilitySignals
+      capabilitySignals: report.capabilitySignals,
+      runtimeInstances: report.runtimeInstances
     }, null, 2));
   } finally {
     await browser.close();
@@ -360,6 +455,19 @@ function assertExactRouteIds(
     throw new Error(
       `${label} capability routes changed: expected ${expected.join(", ")}; ` +
       `received ${actual.join(", ")}.`
+    );
+  }
+}
+
+function assertExactFileCount(
+  label: string,
+  files: readonly string[],
+  expected: number
+): void {
+  if (files.length !== expected) {
+    throw new Error(
+      `${label} runtime count changed: expected ${expected}; received ` +
+      `${files.length} (${files.join(", ")}).`
     );
   }
 }
@@ -520,6 +628,19 @@ function routeIdsRequesting(
   return routes.filter((route) => route.resources.some(({ owners }) =>
     owners.some(({ name }) => ownerPattern.test(name))
   )).map(({ id }) => id);
+}
+
+function scriptFilesRequestedByOwner(
+  routes: readonly KpCapabilityRouteAttribution[],
+  ownerPattern: RegExp
+): readonly string[] {
+  return [...new Set(routes.flatMap((route) =>
+    route.resources
+      .filter(({ kind, owners }) => kind === "script" && owners.some(
+        ({ name }) => ownerPattern.test(name)
+      ))
+      .map(({ file }) => file)
+  ))].sort();
 }
 
 async function startPreview(): Promise<PreviewServer> {

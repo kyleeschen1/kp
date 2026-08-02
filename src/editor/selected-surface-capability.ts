@@ -7,7 +7,8 @@ import {
 
 export type KpEditorSelectedSurfaceCapability =
   | "equation-katex"
-  | "graph-svg-katex-labels";
+  | "graph-svg-katex-labels"
+  | "graph-webgl-3d";
 
 export function deriveKpEditorSelectedSurfaceCapabilities(input: {
   readonly animationId: string;
@@ -22,6 +23,12 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
     supportsKpEditorGraphSvgAnimation(input.animationId)
   ) {
     capabilities.push("graph-svg-katex-labels");
+  }
+  if (
+    input.slotKinds.includes("graph") &&
+    input.animationId === "animation.graph.surface-mode.mesh-to-donut"
+  ) {
+    capabilities.push("graph-webgl-3d");
   }
   return Object.freeze(capabilities);
 }
