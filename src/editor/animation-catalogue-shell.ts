@@ -5,11 +5,10 @@ import type {
   KpAnimationCatalogueEntry
 } from "./animation-catalogue-projection.ts";
 import {
-  searchKpAnimationCatalogueEntries
-} from "./animation-catalogue-search.ts";
-import {
-  writeKpAnimationCatalogueRoute
-} from "./animation-catalogue-route.ts";
+  formatKpAnimationCatalogueDomainLabel,
+  formatKpAnimationCatalogueHealthLabel,
+  projectKpAnimationCatalogueResultRows
+} from "./animation-catalogue-result-projection.ts";
 import {
   renderKpEditorAnimationPlayerShell
 } from "./animation-player-shell.ts";
@@ -127,7 +126,9 @@ export function applyKpAnimationCatalogueObservedHealth(input: {
   if (badge !== undefined && badge !== null) {
     badge.dataset["kpAnimationCatalogueHealth"] = input.health.status;
     badge.dataset["kpAnimationCatalogueHealthEvidence"] = "observed-host";
-    badge.textContent = healthLabel(input.health.status);
+    badge.textContent = formatKpAnimationCatalogueHealthLabel(
+      input.health.status
+    );
   }
   const details = input.shell.querySelector<HTMLElement>(
     '[data-kp-animation-catalogue-inspector-panel="details"]'
@@ -306,7 +307,7 @@ export function renderKpAnimationCatalogueDetails(input: {
       <h3 id="kp-animation-catalogue-details-title">Details</h3>
       <p>${escapeHtml(entry.summary)}</p>
       <dl>
-        ${detailValue("Domain", domainLabel(entry))}
+        ${detailValue("Domain", formatKpAnimationCatalogueDomainLabel(entry))}
         ${detailValue("Asset", entry.animationId, true)}
         ${detailValue("Pack", titleCase(entry.packId))}
         ${detailValue("Human disposition", titleCase(entry.humanDisposition))}
@@ -317,7 +318,7 @@ export function renderKpAnimationCatalogueDetails(input: {
     ${detailSection("Capabilities", "capabilities", capabilityRows)}
     <section data-kp-animation-catalogue-details-section="health">
       <h3>Health</h3>
-      <p class="kp-animation-catalogue-shell__health-summary" data-kp-animation-catalogue-health="${health.status}">${healthLabel(health.status)}</p>
+      <p class="kp-animation-catalogue-shell__health-summary" data-kp-animation-catalogue-health="${health.status}">${formatKpAnimationCatalogueHealthLabel(health.status)}</p>
       ${healthReasons}
     </section>
     ${relatedContexts}
@@ -330,39 +331,25 @@ export function renderKpAnimationCatalogueResults(input: {
   readonly selectedHealth: KpAnimationCatalogueHealth;
   readonly query?: string | undefined;
 }): string {
-  const results = searchKpAnimationCatalogueEntries({
+  const results = projectKpAnimationCatalogueResultRows({
     entries: input.entries,
-    query: input.query ?? "",
-    selectedAnimationId: input.selectedAnimationId
+    selectedAnimationId: input.selectedAnimationId,
+    selectedHealth: input.selectedHealth,
+    query: input.query
   });
-  const rows = results.map((entry) => {
-    const selected = entry.animationId === input.selectedAnimationId;
-    const status = selected ? input.selectedHealth.status : "review";
-    const href = writeKpAnimationCatalogueRoute("", {
-      artifactId: entry.animationId
-    });
-    return `<li class="kp-animation-catalogue-shell__result" data-kp-animation-catalogue-row="${escapeHtml(entry.animationId)}"${selected ? ' data-kp-animation-catalogue-row-selected="true"' : ""}>
-      <a class="kp-animation-catalogue-shell__result-link" href="/${escapeHtml(href)}"${selected ? ' aria-current="page"' : ""}>
-        <span class="kp-animation-catalogue-shell__result-title">${escapeHtml(entry.title)}</span>
+  const rows = results.map((result) => {
+    return `<li class="kp-animation-catalogue-shell__result" data-kp-animation-catalogue-row="${escapeHtml(result.entry.animationId)}"${result.selected ? ' data-kp-animation-catalogue-row-selected="true"' : ""}>
+      <a class="kp-animation-catalogue-shell__result-link" href="${escapeHtml(result.href)}"${result.selected ? ' aria-current="page"' : ""}>
+        <span class="kp-animation-catalogue-shell__result-title">${escapeHtml(result.entry.title)}</span>
         <span class="kp-animation-catalogue-shell__result-meta">
-          <span>${escapeHtml(domainLabel(entry))}</span>
-          <span class="kp-animation-catalogue-shell__health" data-kp-animation-catalogue-health="${status}" data-kp-animation-catalogue-health-evidence="${selected ? "selected-host" : "pending"}">${healthLabel(status)}</span>
+          <span>${escapeHtml(result.domainLabel)}</span>
+          <span class="kp-animation-catalogue-shell__health" data-kp-animation-catalogue-health="${result.healthStatus}" data-kp-animation-catalogue-health-evidence="${result.healthEvidence}">${result.healthLabel}</span>
         </span>
       </a>
     </li>`;
   }).join("");
 
   return `<ol class="kp-animation-catalogue-shell__result-list" data-kp-animation-catalogue-results data-kp-animation-catalogue-result-count="${results.length}">${rows}</ol>`;
-}
-
-function domainLabel(entry: KpAnimationCatalogueEntry): string {
-  const source = entry.domains[0] ?? entry.packId;
-  return source
-    .split("-")
-    .map((part) => part.length === 0
-      ? part
-      : `${part[0]?.toUpperCase()}${part.slice(1)}`)
-    .join(" ");
 }
 
 function detailSection(
@@ -412,10 +399,6 @@ function styleRefKey(ref: {
   readonly version: string;
 }): string {
   return `${ref.id}@${ref.version}`;
-}
-
-function healthLabel(status: KpAnimationCatalogueHealth["status"]): string {
-  return `${status[0]?.toUpperCase()}${status.slice(1)}`;
 }
 
 function escapeHtml(value: string): string {

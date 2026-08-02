@@ -33,6 +33,46 @@ test("explicit Svelte exemplar mounts through the shared selected-host model", a
   )).toHaveCount(3);
   await expect(exemplar.getByRole("heading", { level: 3 })).toHaveText("Details");
   await expect(exemplar.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
+  const search = exemplar.getByRole("searchbox", { name: "Search artifacts" });
+  const results = exemplar.locator("[data-kp-animation-catalogue-results]");
+  const originalUrl = page.url();
+  await expect(results).toHaveAttribute(
+    "data-kp-animation-catalogue-result-count",
+    "36"
+  );
+  await expect(results.locator("li").first()).toHaveAttribute(
+    "data-kp-animation-catalogue-row",
+    animationId
+  );
+
+  await search.fill("demand equilibrium");
+  await expect(results).toHaveAttribute(
+    "data-kp-animation-catalogue-result-count",
+    "1"
+  );
+  await expect(results.locator("li").first()).toHaveAttribute(
+    "data-kp-animation-catalogue-row",
+    "animation.economics.supply-demand-equilibrium-shift"
+  );
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-selection",
+    animationId
+  );
+  await expect(exemplar.getByRole("status")).toContainText(
+    "Dot product and vector projection"
+  );
+  expect(page.url()).toBe(originalUrl);
+
+  await search.fill("slvx");
+  await expect(results.locator("li").first()).toHaveAttribute(
+    "data-kp-animation-catalogue-row",
+    "animation.linear-solve.solve-x"
+  );
+  await search.fill("");
+  await expect(results.locator("li").first()).toHaveAttribute(
+    "data-kp-animation-catalogue-row-selected",
+    "true"
+  );
   assertRequestedEntry(requestedUrls);
   expect(pageErrors).toEqual([]);
 });

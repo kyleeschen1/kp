@@ -95,7 +95,8 @@
     {
       "id": "s07",
       "title": "Port fuzzy search and stable selection",
-      "status": "planned"
+      "summary": "Ported reactive fuzzy search through one shared framework-neutral result-row projection consumed by both hosts. Filtering changes only the rail projection; selected artifact identity, stage content, health authority, and URL remain stable.",
+      "status": "complete"
     },
     {
       "id": "s08",

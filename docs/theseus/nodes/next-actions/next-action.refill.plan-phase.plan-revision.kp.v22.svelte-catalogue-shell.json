@@ -268,11 +268,46 @@
       "scope": "s06-performance",
       "checkedAt": "2026-08-02T15:50:43.730Z",
       "notes": "Outer 10459, main host 255452, measured catalogue 171090, and place-value incremental 71797 gzip bytes all remain below frozen ceilings."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "s07-focused",
+      "checkedAt": "2026-08-02T15:56:46.836Z",
+      "notes": "32 shared result-projection, fuzzy-search, shell, host, rollback, and Svelte compiler tests passed."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s07-types",
+      "checkedAt": "2026-08-02T15:56:48.061Z",
+      "notes": "Svelte checker reported zero errors and warnings after reactive host-view reduction."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "s07-browser",
+      "checkedAt": "2026-08-02T15:56:48.994Z",
+      "notes": "Four Chromium checks passed; cross-domain and fuzzy filters changed rows while selected vector identity, stage status, and URL stayed stable."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "s07-production",
+      "checkedAt": "2026-08-02T15:56:49.940Z",
+      "notes": "Production Vite build passed with 1005 transformed modules and the Svelte host retained as an isolated dynamic entry."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s07-performance",
+      "checkedAt": "2026-08-02T15:56:50.954Z",
+      "notes": "Outer 10459, main host 255904, measured catalogue 171542, and place-value incremental 71797 gzip bytes all remain below frozen ceilings."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1 through 6 are complete. The opt-in Svelte entry now owns the structural shell and terminal truth; fuzzy search and stable selected-row projection are next."
+    "summary": "Slices 1 through 7 are complete. The Svelte rail now has shared fuzzy search and stable selection; mounting the existing player lifecycle into the persistent stage is next."
   },
   "expectedLearning": [
     "Approved revision 22 places this active phase in now."
