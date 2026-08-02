@@ -10,10 +10,12 @@ test("animation library closure deltas retain accepted limits", () => {
   assert.deepEqual(measureKpAnimationLibraryBundleBoundaryDeltas({
     outerGzipBytes: 9_911,
     mainHostGzipBytes: 495_627,
+    selectedMathCapabilityGzipBytes: 180_000,
     placeValueIncrementalGzipBytes: 70_436
   }), {
     outerGzipBytes: -40_089,
     mainHostGzipBytes: 5_627,
+    selectedMathCapabilityGzipBytes: -10_000,
     placeValueIncrementalGzipBytes: -4_564
   });
 });

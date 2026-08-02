@@ -177,6 +177,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-animation-capability-closure-attribution.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-selected-equation-katex-capability-split.md"
     }
   ],
   "dependsOn": {
@@ -973,6 +977,73 @@
       "status": "passed",
       "scope": "s21-capability-attribution",
       "checkedAt": "2026-08-02T02:36:55.553Z"
+    },
+    {
+      "command": "selected-surface-focused-tests",
+      "status": "passed",
+      "scope": "s22-equation-capability",
+      "checkedAt": "2026-08-02T02:57:32.141Z",
+      "notes": "19-tests-pass-plus-8-bundle-attribution-contract-tests"
+    },
+    {
+      "command": "npm-run-build",
+      "status": "passed",
+      "scope": "s22-equation-capability",
+      "checkedAt": "2026-08-02T02:57:33.047Z",
+      "notes": "typecheck-domains-and-production-build-pass"
+    },
+    {
+      "command": "npm-run-perf-animation-attribution",
+      "status": "passed",
+      "scope": "s22-equation-capability",
+      "checkedAt": "2026-08-02T02:57:33.926Z",
+      "notes": "six-routes-twice-reproducible-main-host-232146-no-KaTeX-on-3D-or-programming"
+    },
+    {
+      "command": "npm-run-test-browser-animation-equation-capability",
+      "status": "passed",
+      "scope": "s22-equation-capability",
+      "checkedAt": "2026-08-02T02:57:34.860Z",
+      "notes": "3-chromium-tests-pass-accessible-delay-zero-CLS-no-unrelated-KaTeX"
+    },
+    {
+      "command": "catalogue-capability-preservation-browser-matrix",
+      "status": "passed",
+      "scope": "s22-equation-capability",
+      "checkedAt": "2026-08-02T02:57:35.764Z",
+      "notes": "generated-2-vector-3-graph3d-2-chromium-tests-pass"
+    },
+    {
+      "command": "npm-run-check-animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s22-equation-capability",
+      "checkedAt": "2026-08-02T02:57:36.666Z",
+      "notes": "outer-10456-main-232146-selected-math-182343-place-value-feature-71801-all-within-ratchets"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "s22-equation-capability",
+      "checkedAt": "2026-08-02T02:57:37.612Z"
+    },
+    {
+      "command": "npm-run-check-dev-review-production",
+      "status": "passed",
+      "scope": "s22-equation-capability",
+      "checkedAt": "2026-08-02T02:57:38.494Z"
+    },
+    {
+      "command": "npm-run-check-promotion-memory",
+      "status": "passed",
+      "scope": "s22-equation-capability",
+      "checkedAt": "2026-08-02T02:57:39.384Z",
+      "notes": "rank-5-remains-unpromoted"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "s22-equation-capability",
+      "checkedAt": "2026-08-02T02:57:40.282Z"
     }
   ],
   "expectedLearning": [

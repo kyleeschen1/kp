@@ -3,10 +3,33 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
+  assertKpSelectedMathCapabilitySignals,
   createKpCapabilityAssetOwnershipIndex,
   createKpCapabilityRouteMatrix,
   type KpCapabilityRouteAttribution
 } from "../scripts/animation-capability-attribution.ts";
+
+test("selected math capability signal ratchet rejects unrelated routes", () => {
+  assert.doesNotThrow(() => assertKpSelectedMathCapabilitySignals({
+    equationSurfaceRoutes: ["equation-solve-x"],
+    katexScriptRoutes: [
+      "equation-solve-x",
+      "graph-svg-vector",
+      "graph-svg-economics",
+      "exact-quantity"
+    ],
+    katexStyleRoutes: [
+      "equation-solve-x",
+      "graph-svg-vector",
+      "graph-svg-economics"
+    ]
+  }));
+  assert.throws(() => assertKpSelectedMathCapabilitySignals({
+    equationSurfaceRoutes: ["equation-solve-x", "programming-trace"],
+    katexScriptRoutes: [],
+    katexStyleRoutes: []
+  }), /equation surface capability routes changed/);
+});
 
 test("capability ownership maps emitted files, styles, and assets to source owners", () => {
   const index = createKpCapabilityAssetOwnershipIndex({

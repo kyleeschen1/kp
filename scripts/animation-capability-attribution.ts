@@ -66,6 +66,37 @@ export interface KpCapabilityRouteMatrix {
   readonly routesByOwnerName: Readonly<Record<string, readonly string[]>>;
 }
 
+export interface KpSelectedMathCapabilitySignals {
+  readonly equationSurfaceRoutes: readonly string[];
+  readonly katexScriptRoutes: readonly string[];
+  readonly katexStyleRoutes: readonly string[];
+}
+
+export function assertKpSelectedMathCapabilitySignals(
+  signals: KpSelectedMathCapabilitySignals
+): void {
+  assertExactRouteIds(
+    "equation surface",
+    signals.equationSurfaceRoutes,
+    ["equation-solve-x"]
+  );
+  assertExactRouteIds(
+    "KaTeX script",
+    signals.katexScriptRoutes,
+    [
+      "equation-solve-x",
+      "graph-svg-vector",
+      "graph-svg-economics",
+      "exact-quantity"
+    ]
+  );
+  assertExactRouteIds(
+    "KaTeX style",
+    signals.katexStyleRoutes,
+    ["equation-solve-x", "graph-svg-vector", "graph-svg-economics"]
+  );
+}
+
 const routeSpecs = [
   {
     id: "equation-solve-x",
@@ -240,6 +271,28 @@ async function captureKpAnimationCapabilityAttribution(): Promise<void> {
       routes.push(first);
     }
     const matrix = createKpCapabilityRouteMatrix(routes);
+    const capabilitySignals = {
+      graphWebglThreeRoutes: routeIdsRequesting(
+        routes,
+        /graph-webgl-three/
+      ),
+      equationSurfaceRoutes: routeIdsRequesting(
+        routes,
+        /equation-surface-adapter/
+      ),
+      programmingAdapterRoutes: routeIdsRequesting(
+        routes,
+        /programming-adapter/
+      ),
+      apiCatalogRoutes: routeIdsRequesting(routes, /api-catalog/),
+      animationDiagnosticsRoutes: routeIdsRequesting(
+        routes,
+        /animation-diagnostics/
+      ),
+      katexScriptRoutes: routeIdsRequesting(routes, /(?:^|\/)katex$/),
+      katexStyleRoutes: routeIdsRequesting(routes, /katex\.min\.css/)
+    };
+    assertKpSelectedMathCapabilitySignals(capabilitySignals);
     const report = {
       schemaVersion: "kp.animation-capability-attribution.v1",
       capturedAt: new Date().toISOString(),
@@ -269,27 +322,7 @@ async function captureKpAnimationCapabilityAttribution(): Promise<void> {
       },
       routes,
       matrix,
-      capabilitySignals: {
-        graphWebglThreeRoutes: routeIdsRequesting(
-          routes,
-          /graph-webgl-three/
-        ),
-        equationSurfaceRoutes: routeIdsRequesting(
-          routes,
-          /equation-surface-adapter/
-        ),
-        programmingAdapterRoutes: routeIdsRequesting(
-          routes,
-          /programming-adapter/
-        ),
-        apiCatalogRoutes: routeIdsRequesting(routes, /api-catalog/),
-        animationDiagnosticsRoutes: routeIdsRequesting(
-          routes,
-          /animation-diagnostics/
-        ),
-        katexScriptRoutes: routeIdsRequesting(routes, /(?:^|\/)katex$/),
-        katexStyleRoutes: routeIdsRequesting(routes, /katex\.min\.css/)
-      }
+      capabilitySignals
     };
     const outputPath = resolve(
       "tmp/codex/animation-capability-attribution.json"
@@ -315,6 +348,19 @@ async function captureKpAnimationCapabilityAttribution(): Promise<void> {
   } finally {
     await browser.close();
     await server.close();
+  }
+}
+
+function assertExactRouteIds(
+  label: string,
+  actual: readonly string[],
+  expected: readonly string[]
+): void {
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    throw new Error(
+      `${label} capability routes changed: expected ${expected.join(", ")}; ` +
+      `received ${actual.join(", ")}.`
+    );
   }
 }
 

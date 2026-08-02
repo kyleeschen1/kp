@@ -28,6 +28,14 @@ import {
   type KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
 import { getKpEditorAnimationPlaybackSession } from "./animation-player-controller.ts";
+import {
+  supportsKpEditorGraphSvgAnimation
+} from "./graph-svg-surface-support.ts";
+
+export {
+  kpEditorGraphSvgAnimationIds,
+  supportsKpEditorGraphSvgAnimation
+} from "./graph-svg-surface-support.ts";
 
 export interface KpEditorGraphSvgViewportModel {
   readonly width: number;
@@ -36,25 +44,6 @@ export interface KpEditorGraphSvgViewportModel {
   readonly yDomain: readonly [number, number];
   readonly xAxisY: number;
   readonly yAxisX: number;
-}
-
-export const kpEditorGraphSvgAnimationIds = Object.freeze([
-  "animation.graph.vector.linear-map-scale",
-  "animation.derivative-rules.tangent-graph",
-  "animation.integral-ftc.area-sweep",
-  "animation.dot-projection.basic",
-  "animation.economics.supply-demand-equilibrium-shift",
-  "animation.physics.constant-force-work-energy"
-] as const);
-
-export function supportsKpEditorGraphSvgAnimation(
-  animationId: string
-): boolean {
-  // A plot frame is not meaningful asset paint. Keep this declaration aligned
-  // with renderRuntimeContent so a 3D or future graph cannot inherit blank SVG
-  // chrome and be reported as natively hosted.
-  return (kpEditorGraphSvgAnimationIds as readonly string[])
-    .includes(animationId);
 }
 
 export function createKpEditorGraphSvgViewportModel(

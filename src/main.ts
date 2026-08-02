@@ -1,12 +1,6 @@
-import "katex/dist/katex.min.css";
 import "./styles.css";
 import "./editor/animation-catalogue-shell.css";
 
-import {
-  createInitialEditorDocument,
-  renderEditorAnimationLibraryHost,
-  renderEditorDocument
-} from "./editor/editor.ts";
 import {
   renderKpAnimationCatalogueBootstrap
 } from "./editor/animation-catalogue-bootstrap.ts";
@@ -91,7 +85,10 @@ import {
   renderGraph3DWebGLFallback,
   renderGraph3DWebGLShell
 } from "./rendering/graph-webgl.ts";
-import type { KpSemanticObject } from "./semantic/document.ts";
+import type {
+  KpDocument,
+  KpSemanticObject
+} from "./semantic/document.ts";
 import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
   type Graph3DObject,
@@ -147,12 +144,12 @@ import {
 import {
   renderKpEditorAnimationPlayerShell
 } from "./editor/animation-player-shell.ts";
-import {
-  registerKpEditorEquationSurfaceAdapter
-} from "./editor/equation-surface-adapter.ts";
-import { registerKpEditorGraphSvgViewportAdapter } from "./editor/graph-svg-viewport.ts";
 import { registerKpEditorGraph3DSurfaceAdapter } from "./editor/graph-3d-surface-adapter.ts";
 import { registerKpEditorDiagramSvgAdapter } from "./editor/diagram-svg-adapter.ts";
+import {
+  deriveKpEditorSelectedSurfaceCapabilities,
+  type KpEditorSelectedSurfaceCapability
+} from "./editor/selected-surface-capability.ts";
 import {
   disposeKpEditorEquationStageHotPathCaches
 } from "./editor/equation-stage-hot-path-cache.ts";
@@ -203,7 +200,7 @@ if (app === null) {
 }
 
 const appRoot = app;
-let editorDocument = createInitialEditorDocument();
+let editorDocument: KpDocument;
 let projectDashboardQuery = "";
 let projectDashboardSelectedAgendaRowId: string | undefined;
 let projectDashboardTocOnly = false;
@@ -226,6 +223,13 @@ type AnimationWorkbenchViewClient = typeof import(
 type GeneratedLinearSolveReaderClient = typeof import(
   "./editor/verified-generated-linear-solve-reader.ts"
 );
+type EditorClient = typeof import("./editor/editor.ts");
+type EquationSurfaceCapabilityClient = typeof import(
+  "./editor/equation-surface-capability.ts"
+);
+type GraphSvgSurfaceCapabilityClient = typeof import(
+  "./editor/graph-svg-surface-capability.ts"
+);
 let graph3DWebGLClient: Graph3DWebGLClient | undefined;
 let graph3DWebGLClientPromise: Promise<Graph3DWebGLClient> | undefined;
 let projectDashboardClientPromise: Promise<{
@@ -239,6 +243,13 @@ let animationWorkbenchViewClientPromise:
   | undefined;
 let generatedLinearSolveReaderClientPromise:
   | Promise<GeneratedLinearSolveReaderClient>
+  | undefined;
+let editorClientPromise: Promise<EditorClient> | undefined;
+let equationSurfaceCapabilityPromise:
+  | Promise<EquationSurfaceCapabilityClient>
+  | undefined;
+let graphSvgSurfaceCapabilityPromise:
+  | Promise<GraphSvgSurfaceCapabilityClient>
   | undefined;
 let activeView:
   | "dashboard"
@@ -323,10 +334,8 @@ declare global {
 }
 
 window.__kpEquationMotionSetProgress = setEquationMotionProgress;
-registerKpEditorEquationSurfaceAdapter();
 registerKpEditorDiagramSvgAdapter();
 registerKpEditorGraph3DSurfaceAdapter();
-registerKpEditorGraphSvgViewportAdapter();
 
 renderViewFromLocation();
 
@@ -360,7 +369,7 @@ function renderViewFromLocation(): void {
   if (requestedView === "ftc-tutorial") {
     void renderFtcTutorialView();
   } else if (requestedView === "animation-library-host") {
-    renderAnimationLibraryHostView();
+    void renderAnimationLibraryHostView();
   } else if (
     readKpSemanticAnimationWorkbenchRoute(window.location.search).active
   ) {
@@ -368,7 +377,7 @@ function renderViewFromLocation(): void {
   } else if (readKpAnimationCatalogueRoute(window.location.search).active) {
     void renderAnimationCatalogueView();
   } else {
-    renderEditor();
+    void renderEditor();
   }
 }
 
@@ -666,7 +675,7 @@ async function compileDocument(): Promise<void> {
   }
 }
 
-function renderEditor(): void {
+async function renderEditor(): Promise<void> {
   activeView = "editor";
   markKpAnimationHostLoading(
     window,
@@ -677,15 +686,17 @@ function renderEditor(): void {
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
-  appRoot.innerHTML = renderEditorDocument(editorDocument, {
+  const client = await loadEditorClient();
+  if (activeView !== "editor" || revision !== viewRevision) return;
+  editorDocument ??= client.createInitialEditorDocument();
+  appRoot.innerHTML = client.renderEditorDocument(editorDocument, {
     equationAnimationId: selectedEquationAnimationId,
     editorAnimationDescriptorId: selectedEditorAnimationDescriptorId
   });
-  // Surface listeners attach first so the controller's initial runtime frame
-  // is observable without an extra synthetic playback tick.
-  hydrateKpEditorAnimationSurfaces(appRoot);
-  hydrateKpEditorAnimationLiveDiagnostics(appRoot);
-  hydrateKpEditorAnimationPlayers(appRoot);
+  // Static stage labels are in the document before optional typography loads.
+  // Player hydration waits so its one initial frame reaches the selected
+  // adapter instead of racing a missing registration.
+  void hydrateSelectedAnimationPlayers(appRoot, revision, "editor");
   hydrateEquationMotionDemos(appRoot);
   hydrateGraph3DWebGL(appRoot, editorDocument.objects);
   void mountEditorAnimationLibraryReviewCapture(revision);
@@ -1009,6 +1020,10 @@ async function prepareAnimationCatalogueSelection(input: {
     animation,
     catalog,
     progress: input.playhead ?? 0
+  });
+  await loadSelectedSurfaceCapabilities({
+    animationId: player.animationId,
+    slotKinds: player.surface.slotKinds
   });
   const hostability = inspectKpAnimationCatalogueSurfaceHostability({
     state: player,
@@ -1334,7 +1349,7 @@ function updatePhysicsNetForceFromInput(input: HTMLInputElement): void {
   );
 }
 
-function renderAnimationLibraryHostView(): void {
+async function renderAnimationLibraryHostView(): Promise<void> {
   activeView = "animation-library-host";
   markKpAnimationHostLoading(
     window,
@@ -1345,14 +1360,18 @@ function renderAnimationLibraryHostView(): void {
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
-  appRoot.innerHTML = renderEditorAnimationLibraryHost(
+  const client = await loadEditorClient();
+  if (activeView !== "animation-library-host" || revision !== viewRevision) {
+    return;
+  }
+  appRoot.innerHTML = client.renderEditorAnimationLibraryHost(
     selectedEditorAnimationDescriptorId
   );
-  // This host is a projection of the existing player, so it follows the same
-  // hydration order and observes the same initial runtime frame.
-  hydrateKpEditorAnimationSurfaces(appRoot);
-  hydrateKpEditorAnimationLiveDiagnostics(appRoot);
-  hydrateKpEditorAnimationPlayers(appRoot);
+  void hydrateSelectedAnimationPlayers(
+    appRoot,
+    revision,
+    "animation-library-host"
+  );
   if (
     window.frameElement?.hasAttribute(
       "data-animation-library-frame"
@@ -1380,6 +1399,8 @@ async function renderAnimationWorkbenchView(): Promise<void> {
   });
   const selectedEntry = projection.selectedEntry;
   appRoot.innerHTML = projection.html;
+  await loadSelectedSurfaceCapabilitiesForRoot(appRoot);
+  if (activeView !== "animation-workbench" || revision !== viewRevision) return;
   hydrateKpEditorAnimationSurfaces(appRoot);
   hydrateKpEditorAnimationLiveDiagnostics(appRoot);
   hydrateKpEditorAnimationPlayers(appRoot);
@@ -1801,6 +1822,93 @@ function loadGeneratedLinearSolveReaderClient(): Promise<
   return generatedLinearSolveReaderClientPromise ??= import(
     "./editor/verified-generated-linear-solve-reader.ts"
   );
+}
+
+function loadEditorClient(): Promise<EditorClient> {
+  // The editor renderer owns equation previews and KaTeX. Catalogue selections
+  // must not import it merely because both views share this entry module.
+  return editorClientPromise ??= import("./editor/editor.ts");
+}
+
+async function hydrateSelectedAnimationPlayers(
+  root: ParentNode,
+  revision: number,
+  expectedView: typeof activeView
+): Promise<void> {
+  await loadSelectedSurfaceCapabilitiesForRoot(root);
+  if (revision !== viewRevision || activeView !== expectedView) return;
+  // The listener must exist before the controller emits its initial frame.
+  hydrateKpEditorAnimationSurfaces(root);
+  hydrateKpEditorAnimationLiveDiagnostics(root);
+  hydrateKpEditorAnimationPlayers(root);
+}
+
+async function loadSelectedSurfaceCapabilitiesForRoot(
+  root: ParentNode
+): Promise<void> {
+  const capabilities = new Set<KpEditorSelectedSurfaceCapability>();
+  root.querySelectorAll<HTMLElement>("[data-kp-editor-animation-player]")
+    .forEach((player) => {
+      const animationId = player.dataset["kpEditorAnimationId"];
+      if (animationId === undefined) return;
+      const slotKinds: Parameters<
+        typeof deriveKpEditorSelectedSurfaceCapabilities
+      >[0]["slotKinds"] = [...player.querySelectorAll<HTMLElement>(
+        "[data-kp-editor-animation-surface-slot]"
+      )].flatMap((slot): Parameters<
+        typeof deriveKpEditorSelectedSurfaceCapabilities
+      >[0]["slotKinds"] => {
+        const slotKind = slot.dataset["kpEditorAnimationSurfaceSlot"];
+        return slotKind === "equation" || slotKind === "diagram" ||
+          slotKind === "graph" || slotKind === "programming"
+          ? [slotKind]
+          : [];
+      });
+      deriveKpEditorSelectedSurfaceCapabilities({
+        animationId,
+        slotKinds
+      }).forEach((capability) => capabilities.add(capability));
+    });
+  await Promise.all([...capabilities].map(loadSelectedSurfaceCapability));
+}
+
+async function loadSelectedSurfaceCapabilities(input: {
+  readonly animationId: string;
+  readonly slotKinds: Parameters<
+    typeof deriveKpEditorSelectedSurfaceCapabilities
+  >[0]["slotKinds"];
+}): Promise<void> {
+  await Promise.all(
+    deriveKpEditorSelectedSurfaceCapabilities(input)
+      .map(loadSelectedSurfaceCapability)
+  );
+}
+
+function loadSelectedSurfaceCapability(
+  capability: KpEditorSelectedSurfaceCapability
+): Promise<unknown> {
+  if (capability === "equation-katex") {
+    return equationSurfaceCapabilityPromise ??= import(
+      "./editor/equation-surface-capability.ts"
+    ).then((client) => {
+      if (!kpEditorAnimationSurfaceAdapterRegistry.list().some(
+        ({ id }) => id === "editor-animation-surface.equation.katex"
+      )) {
+        client.registerKpEditorEquationSurfaceCapability();
+      }
+      return client;
+    });
+  }
+  return graphSvgSurfaceCapabilityPromise ??= import(
+    "./editor/graph-svg-surface-capability.ts"
+  ).then((client) => {
+    if (!kpEditorAnimationSurfaceAdapterRegistry.list().some(
+      ({ id }) => id === "editor-animation-surface.graph.svg"
+    )) {
+      client.registerKpEditorGraphSvgSurfaceCapability();
+    }
+    return client;
+  });
 }
 
 function handleAnimationWorkbenchKeydown(event: KeyboardEvent): boolean {

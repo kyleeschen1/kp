@@ -24,6 +24,7 @@
     "test:browser:physics-work-energy": "playwright test tests/animation-catalogue-physics-work-energy.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "test:browser:vector-dot-projection": "playwright test tests/vector-dot-projection-exemplar.browser.spec.ts tests/editor-animation-visuals.browser.spec.ts --grep \"vector projection|dot projection visibly\" --project=chromium --workers=1",
     "test:browser:animation-catalogue-3d": "playwright test tests/animation-catalogue-3d.browser.spec.ts --project=chromium --workers=1",
+    "test:browser:animation-equation-capability": "playwright test tests/animation-equation-capability.browser.spec.ts --project=chromium --workers=1",
     "test:browser:generated-linear-solve": "playwright test tests/generated-linear-solve-product.browser.spec.ts --project=chromium --workers=1",
     "visual:exact-fraction-quantity": "playwright test tests/exact-fraction-quantity-determinism.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "test:loop-reliability": "node --disable-warning=ExperimentalWarning --test scripts/theseus-loop-status.test.ts scripts/codex-stop-guard.test.ts scripts/theseus-loop-policy.test.ts",
