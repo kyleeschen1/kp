@@ -31,7 +31,7 @@ test("addition program trace imports as a sampleable AnimationAsset", () => {
   assert.equal(result.animation.id, "animation.programming.add.execution-trace");
   assert.deepEqual(result.animation.metadata, {
     domain: "programming",
-    placeholderContract: true,
+    placeholderContract: false,
     sourceFixtureId: "fixture.programming.add.execution-trace",
     behaviorId: "behavior.programming.add.execution-trace",
     sourcePortId: "port.animation.fixture.programming-trace.add",

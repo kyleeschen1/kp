@@ -8,6 +8,8 @@ import {
 } from "../src/editor/animation-catalogue-projection.ts";
 
 const animationId = "animation.linear-solve.solve-x";
+const generatedLinearSolveExemplarId =
+  "animation.generated.linear-solve.linear-68c15d41";
 const promotedSiblingId =
   "animation.generated.radical.square-root-as-power";
 const distinctCallerId =
@@ -195,9 +197,12 @@ try {
   ).evaluateAll((rows) => rows.map((row) =>
     (row as HTMLElement).dataset["kpAnimationCatalogueRow"]
   ));
+  const expectedFuzzyResultIds = [
+    animationId,
+    generatedLinearSolveExemplarId
+  ];
   if (
-    fuzzyResultIds.length !== 1 ||
-    fuzzyResultIds[0] !== animationId
+    JSON.stringify(fuzzyResultIds) !== JSON.stringify(expectedFuzzyResultIds)
   ) {
     throw new Error(
       `Catalogue fuzzy search returned ${JSON.stringify(fuzzyResultIds)}.`

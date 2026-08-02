@@ -725,10 +725,13 @@ class KpAnimationCatalogueApplication {
   }
 
   async #mountReview(revision: number): Promise<void> {
-    if (loadKpAnimationCatalogueDevelopmentReview === undefined) return;
+    if (loadKpAnimationCatalogueDevelopmentReview === undefined ||
+      this.#disposeReview !== undefined) return;
     const client = await loadKpAnimationCatalogueDevelopmentReview();
-    if (this.#disposed || revision !== this.#revision) return;
-    this.#disposeReview?.();
+    if (this.#disposed || revision !== this.#revision ||
+      this.#disposeReview !== undefined) return;
+    // The provider reads the current shell at capture time, so remounting on
+    // selection would only discard the user's unsent review draft and focus.
     this.#disposeReview = client.mountKpAnimationCatalogueDevReview(window);
   }
 

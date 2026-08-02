@@ -132,7 +132,7 @@ export const kpPlaceValueAdditionPreservationManifest = Object.freeze({
     }),
     Object.freeze({
       path: "src/rendering/webgl-context-lease-pool.ts",
-      sha256: "250b09057b3d9e7900c83ece6475295bcd2ef938e6e70e633b0015ccf1bd0517"
+      sha256: "78e9e0d18edb440fc511c12d41b3f29c6bf9350d4d118017b27d6974e30dc948"
     })
   ]),
   costBoundary: Object.freeze({

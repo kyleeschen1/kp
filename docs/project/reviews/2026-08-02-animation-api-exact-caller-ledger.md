@@ -8,16 +8,16 @@ Status: source-derived audit; pruning verdict closed in slice `s14`
 The caller evidence supports one narrow new public boundary and rejects a broad
 barrel consolidation.
 
-`src/animation/canonical-balanced-solve-animation.ts` is the only current
-animation-authoring seam shared by the named canonical fraction and verified
-generated-solve callers. It has exactly two production callers:
+`src/animation/public-api.ts` is the one supported cross-subsystem animation-
+authoring boundary. The canonical fraction and verified generated-solve
+callers are its only two production consumers:
 
 1. `src/animation/fraction-composition-equation-adapter.ts`
 2. `src/animation/verified-linear-problem-animation-compiler.ts`
 
-One type fixture also imports it. No `src/animation/public-api.ts` exists yet.
-Slice `s12` may therefore define a small `KpAnimationAsset`-centric facade around
-this proven seam and the exact asset types/laws its two callers require.
+It exposes only the proven `KpAnimationAsset`-centric construction and
+validation surface. The balanced-solve implementation remains internal and has
+the public facade as its sole production caller.
 
 The public facade must not re-export the complete internal asset module. Direct
 source analysis finds 126 production and 43 test callers of
@@ -56,7 +56,7 @@ the sixteenth target. All 16 have zero unclassified “other” callers.
 | Generated search metadata | 1 | 0 | 0 | Defer |
 | Generated animation compiler | 2 | 2 | 0 | Keep internal |
 | Generated explanation compiler | 2 | 1 | 0 | Keep internal |
-| Generated catalogue reader | 2 | 1 | 0 | Keep internal |
+| Generated catalogue reader | 3 | 1 | 0 | Keep internal; persistent shell, narrow catalogue application, and full editor are exact callers |
 
 ## Authority boundaries
 

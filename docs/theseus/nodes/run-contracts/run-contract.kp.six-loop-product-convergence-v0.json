@@ -2,9 +2,9 @@
   "id": "run-contract.kp.six-loop-product-convergence-v0",
   "kind": "run-contract",
   "title": "Six-loop product convergence",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "User-approved 30-slice umbrella contract with rank and human-review boundaries.",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -33,6 +33,99 @@
     "npm run perf:animation",
     "theseus workspace validate",
     "git diff --check"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-30-broad-release",
+      "checkedAt": "2026-08-02T05:32:13.429Z",
+      "notes": "All 3367 repository tests pass with zero failures."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-30-production-build",
+      "checkedAt": "2026-08-02T05:32:14.740Z",
+      "notes": "Typecheck and production build pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-30-architecture-boundary",
+      "checkedAt": "2026-08-02T05:32:16.094Z",
+      "notes": "Architecture boundary checks pass after exact caller and encoding reconciliation."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "slice-30-production-erasure",
+      "checkedAt": "2026-08-02T05:32:17.430Z",
+      "notes": "Reader production closure passes all 12 manifest routes."
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "slice-30-catalogue-review",
+      "checkedAt": "2026-08-02T05:32:18.758Z",
+      "notes": "Stable catalogue review passes and proves in-shell navigation preserves the unsent Review draft focus and composer identity."
+    },
+    {
+      "command": "npm run visual:generated-linear-solve",
+      "status": "passed",
+      "scope": "slice-30-generated-review",
+      "checkedAt": "2026-08-02T05:32:20.065Z",
+      "notes": "Generated solve review command passes."
+    },
+    {
+      "command": "npm run visual:vector-dot-projection",
+      "status": "passed",
+      "scope": "slice-30-vector-review",
+      "checkedAt": "2026-08-02T05:32:21.372Z",
+      "notes": "Vector review command passes; visual promotion remains frozen."
+    },
+    {
+      "command": "npm run visual:programming-addition",
+      "status": "passed",
+      "scope": "slice-30-programming-review",
+      "checkedAt": "2026-08-02T05:32:22.670Z",
+      "notes": "Programming addition review command passes."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice-30-bundle-boundary",
+      "checkedAt": "2026-08-02T05:32:23.965Z",
+      "notes": "Catalogue route is 169490 gzip bytes below the unchanged 190000 ceiling; main host outer host and place-value boundaries pass."
+    },
+    {
+      "command": "npm run perf:animation:attribution",
+      "status": "passed",
+      "scope": "slice-30-capability-attribution",
+      "checkedAt": "2026-08-02T05:32:25.294Z",
+      "notes": "Economics transfer is 187174 bytes and programming transfer is 101949 bytes with no highlighter legacy main or diagnostics; selected capability signals are exact."
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "slice-30-product-performance",
+      "checkedAt": "2026-08-02T05:32:26.651Z",
+      "notes": "No baseline regressions; LCP CLS interaction and frame targets pass. The fixed 50ms constrained-loading target retains one exactly attributed 102ms native-KaTeX long-task residual."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-30-diff-hygiene",
+      "checkedAt": "2026-08-02T05:32:27.961Z",
+      "notes": "Working diff has no whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-30-durable-graph",
+      "checkedAt": "2026-08-02T05:32:43.524Z",
+      "notes": "Workspace validates with 858 nodes and 16171 events before terminal recording."
+    }
   ],
   "allowedWork": [
     "Implement only the 30 approved slices, focused tests, stable visual harness extensions, performance measurements, adjacent proven pruning, and durable project/Theseus evidence.",
@@ -248,7 +341,8 @@
     {
       "id": "s30",
       "title": "Reconcile and hand off checkpoint",
-      "status": "planned"
+      "summary": "Reconciled-all-six-tracks-into-one-four-group-human-checkpoint-fixed-catalogue-review-composer-persistence-passed-3367-tests-broad-release-visual-and-performance-gates-and-retained-only-the-exact-102ms-KaTeX-loading-residual",
+      "status": "complete"
     }
   ]
 }

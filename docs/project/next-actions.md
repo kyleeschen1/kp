@@ -1,6 +1,6 @@
 # KP Next Actions
 
-Last Updated: 2026-08-01
+Last Updated: 2026-08-02
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
@@ -8,29 +8,25 @@ with source refs, verification, run-contract slices, and completion evidence.
 ## Current Queue
 
 1. Keep Project one vector onto another as the first unresolved promotion while
-   executing the approved 30-slice six-loop convergence contract from
-   `reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`.
-   End at one consolidated human checkpoint unless a named technical stop
-   condition fires.
-2. Keep Project one vector onto another as the first unresolved promotion.
-   Complete the generated problem-to-animation bridge and deterministic
-   explanation spine immediately before its exemplar, as the approved M2/M3
-   platform gate.
-3. Treat the cross-domain API audit as M1 evidence and converge only the facade
-   used by named callers. Retire compatibility code only beside its proven
-   last-caller migration; preserve Jacobian/Hessian semantic and conformance
-   evidence until explicitly replaced.
-4. Repair the measured catalogue capability-loading and layout path against the
-   existing 250,000-byte script and 2.5-second constrained-LCP targets without
-   widening them or hiding attributed residuals.
-5. Close the two observed programming host gaps with one deterministic native
-   addition-trace exemplar. Do not treat this as BFS or rank-23 promotion.
-6. At the final checkpoint, assign only reviewed catalogue dispositions and
-   approve or revise the generated solve-x, vector, and programming exemplars.
-   Generalization and release certificates follow in a separate bounded run.
-7. Keep context-safe untrusted output and the offline/review-time LLM editorial
-   candidate service deferred until deterministic sessions and human gold and
-   negative examples are stable.
+   reviewing the four groups in
+   `reviews/2026-08-02-six-loop-product-convergence-human-checkpoint.md` and
+   record each decision independently.
+2. Assign Keep, Rewrite, or Retire to the reviewed Graph3D artifact and any
+   other catalogue rows whose authored intent is now clear. Do not infer batch
+   dispositions from 36/36 native hostability.
+3. Approve or revise the generated solve-x visual treatment and its
+   four-section, eight-cue deterministic explanation spine. Keep live or
+   untrusted LLM wording deferred until gold and negative examples exist.
+4. Approve or revise Project one vector onto another. It remains the first
+   unresolved promotion at rank 5; motif generalization and a matrix second
+   caller require explicit exemplar approval.
+5. Approve or revise the deterministic addition trace and decide whether its
+   equation/programming comparison deserves to remain. This does not advance
+   the rank-23 BFS family.
+6. After review, authorize one new bounded contract for only the requested
+   revisions, dispositions, promotion proof, and post-approval certification.
+7. Keep the public KP website, curriculum, universal renderer/registry,
+   arbitrary code execution, and model-authored editorial service deferred.
 
 ## Historical Queue Snapshot
 

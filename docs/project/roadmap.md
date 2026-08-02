@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-01
+Last Updated: 2026-08-02
 Status: active
 Active Thread: `threads/animation-library-promotion.md`
 Supporting Threads:
@@ -41,11 +41,10 @@ successor in
 `reviews/2026-08-01-catalogue-curation-cross-domain-promotion-long-loop-proposal.md`
 has delivered persistent catalogue switching, an approved solve-x compact
 stage, compatible equation-surface centering, bounded curation, and two exact
-human-approved synchronized-model exemplars. The catalogue now has 35 concrete
-assets. The meaningful-hostability audit corrected the earlier false 33 count
-to 32 semantic paints, then the bounded native Graph3D adapter restored a
-genuine 33rd paint. Two programming gaps remain. None use an iframe, and ordinary
-selection stays inside one shell. Economics and physics
+human-approved synchronized-model exemplars. The chained successor now leaves
+the catalogue with 36 concrete assets across 12 packs, 36 meaningful native
+paints, no host gaps, no load failures, and no iframes. Ordinary selection stays
+inside one shell. Economics and physics
 promote four shared contracts—reversible projection progress, bounded integer
 query encoding, fixed moving-number display, and the versioned
 dimensional-continuity graph profile—while domain truth, narrative, geometry,
@@ -54,15 +53,14 @@ retired; their canonical animation-domain owners remain. Release evidence and
 deliberate deferrals are closed in
 `reviews/2026-08-01-catalogue-curation-cross-domain-promotion-closeout.md`.
 
-The approved successor is the chained six-loop convergence tranche recorded in
+The chained six-loop convergence tranche recorded in
 `decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md` and
-`reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`. It
-keeps vector dot projection as the first unresolved promotion while executing
-the generated solve-x and explanation platform gate, caller-backed API
-convergence, route-performance repair, honest 3D catalogue hosting, and one
-non-promotional programming-host exemplar. Objective work may chain, but
-catalogue dispositions and visual promotions collect at one final human
-checkpoint.
+`reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md` is now
+at `HUMAN_CHECKPOINT`. It completed the generated solve-x and deterministic
+explanation gate, caller-backed API convergence, route-performance repair,
+honest 3D hosting, rank-5 vector candidate, and non-promotional programming
+host. Catalogue dispositions and subjective visual promotions remain collected
+in `reviews/2026-08-02-six-loop-product-convergence-human-checkpoint.md`.
 
 The symbolic manipulation family plan recorded in
 `decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`
@@ -185,13 +183,14 @@ three ordered positions.
 
 The release-baseline recovery and catalogue simplification matrices are green.
 The catalogue hosts the concrete registry directly and switches assets inside
-one persistent shell. Its stricter meaningful-hostability contract now closes
-the native 3D gap and exposes only the programming adapter shared by two rows;
-all 35 assets still load. Human review approved the solve-x compact centered
-stage; compatible equation centering passed radical and diagram pressure. The
-bounded curation record preserves all 35 rows, assigns no human dispositions,
-and treats Jacobian/Hessian as a diagnostic/retirement candidate whose unique
-semantic and conformance evidence must be replaced before deletion.
+one persistent shell. Its stricter meaningful-hostability contract now records
+36 meaningful native paints for all 36 concrete assets, including bounded
+Graph3D and programming adapters; no host gaps, load failures, or iframes
+remain. Human review approved the solve-x compact centered stage; compatible
+equation centering passed radical and diagram pressure. No new human
+dispositions were inferred, and Jacobian/Hessian remains a diagnostic or
+retirement candidate whose unique semantic and conformance evidence must be
+replaced before deletion.
 
 The exact economics model, synchronized view, native SVG host, parameters,
 accessibility, seek/rewind, and revised visual capture are complete and human
@@ -207,21 +206,20 @@ Consumer/producer-surplus shading is postponed as an optional follow-on, and
 deadweight loss is reserved for a distinct inefficiency model. The exact
 constant-force work-energy second caller is promoted.
 
-The release rerun of the route-specific performance audit proves no Three.js
-request, CLS near 0.025, a 45.6 ms constrained interaction-paint proxy, and no
-regression. It also records rather than hides 422,832 initial script bytes and
-3.712 s constrained LCP as product-target debt. Constrained frame p95 is now
-inside its 33 ms target at 32.5 ms. Main-host loading optimization remains a
-separately bounded successor concern rather than hidden work inside the closed
-visual promotion.
+The narrow catalogue application and selected-capability route split reduce
+economics initial script transfer to 187,174 bytes and the representative
+production route closure to 169,490 gzip bytes. Script, constrained LCP, CLS,
+interaction, and representative frame targets pass without widening. The
+remaining fixed-target debt is an attributed native-KaTeX evaluation and first-
+paint loading long task above 50 ms under 6x CPU throttling; it is retained
+rather than hidden behind a wider budget or lower-fidelity typography.
 
 The generator, editorial-text, motif-versioning, and pruning recommendations
 are durable platform milestones in `threads/animation-library-promotion.md`.
 API-tier classification is complete. The verified problem-to-animation bridge
-and deterministic explanation spine are now approved as the bounded M2/M3 gate
-inside the chained successor, immediately before the vector exemplar. This is
-not authorization for live LLM editorial output or a broad infrastructure
-rewrite.
+and deterministic explanation spine have completed their objective M2/M3 gate
+and await visual and wording review alongside the vector exemplar. This is not
+authorization for live LLM editorial output or a broad infrastructure rewrite.
 
 The migration remains complexity-negative replacement work. Semantic traces,
 lineage, clocks, native accessibility, authoring guidance, and accepted legacy
@@ -483,18 +481,15 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Execute the approved six-loop convergence contract: catalogue truth and 3D
-   hosting, generated solve-x plus `ExplanationSpineV1`, caller-backed API
-   convergence, the rank-5 vector exemplar, selected-capability performance,
-   and one native addition-trace host.
-2. Keep Project one vector onto another as the first unresolved promotion; the
-   programming addition trace closes a host gap and does not advance the later
-   BFS rank.
-3. Preserve the approved persistent catalogue shell and collect catalogue
-   dispositions plus generated-session, vector, and programming visual review
-   in one final human checkpoint.
-4. Keep publication, curriculum, the public website, broad LLM editorial work,
-   and all post-exemplar generalization outside the contract.
+1. Review the catalogue/Graph3D, generated solve-x, rank-5 vector, and
+   programming groups in the consolidated human checkpoint.
+2. Keep Project one vector onto another as the first unresolved promotion;
+   approve or revise it before any motif generalization or second caller.
+3. Assign only explicit reviewed catalogue dispositions and decide whether the
+   programming comparison and Graph3D diagnostic belong in the retained set.
+4. Authorize a new bounded revision or post-approval certification contract
+   from those decisions. Keep publication, curriculum, the public website,
+   broad LLM editorial work, and universal abstractions outside it.
 
 ## Deferred
 

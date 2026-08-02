@@ -87,3 +87,14 @@ target are all retained; the residual is not normalized into a wider budget.
 This closes the approved performance slice through the proposal's explicit
 "exact attributed residual" path. It does not authorize a KaTeX architecture
 rewrite or a weaker performance target.
+
+## Final convergence revalidation
+
+Slice `s30` reran the production build after the programming host and persistent
+review-composer lifecycle landed. The economics route measured 187,174 initial
+script bytes, the static route closure measured 169,490 gzip bytes, and
+constrained LCP, CLS, interaction paint, and frame p95 remained inside their
+unchanged targets. The sole reported target miss was the same attributed KaTeX
+loading boundary, observed at 102 ms against 50 ms. The small byte differences
+from the slice-25 table reflect the final committed caller closure, not a budget
+change.

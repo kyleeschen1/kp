@@ -1,12 +1,12 @@
 # Animation Library Promotion Thread
 
 Status: active
-Last Updated: 2026-08-01
-Current Next Action: Execute the approved six-loop convergence contract. The
-verified generated-solve bridge and deterministic explanation spine run as the
-M2/M3 gate, then Project one vector onto another remains the first unresolved
-promotion at rank 5. Catalogue 3D hosting, performance repair, and the bounded
-addition-trace host are preparatory work, not inserted promotion ranks.
+Last Updated: 2026-08-02
+Current Next Action: Review the consolidated six-loop human checkpoint. Project
+one vector onto another remains the first unresolved promotion at rank 5.
+Graph3D, generated solve-x, vector, and programming visual decisions are human-
+owned; no disposition, generalization, or promotion is inferred from the
+completed objective work.
 
 ## Goal
 
@@ -30,10 +30,10 @@ Short harvest promotions may run after their prerequisite frontier exemplar is
 approved. They expand a proven family without changing the frontier order.
 
 The catalogue-first decision paused execution without recomputing this order.
-The meaningful-hostability audit corrected the predecessor's structural
-33-paint count to 32 semantic paints before the bounded native Graph3D adapter
-restored a genuine 33rd paint. Two programming gaps remain, with no load
-failures or iframe ports. This does not alter promotion rank. The
+The completed convergence run now records 36 concrete assets across 12 packs,
+all meaningfully painted by native adapters with no load failures, host gaps,
+or iframe ports. Graph3D and the two programming callers close through bounded
+selected-caller adapters. This does not alter promotion rank. The
 completed predecessor approved the catalogue UX, promoted ranks 3
 and 4, and consolidated only the shared seams those callers proved. Catalogue
 health and disposition remain separate evidence and do not reorder the domain
@@ -141,10 +141,11 @@ M1 is complete through
 stable authoring facades, internal platform contracts, domain adapters,
 experimental surfaces, compatibility bridges, and retirement candidates from
 observed callers. It does not freeze domain presenters or internal rendering
-details as public APIs. M2 and M3 are approved through
-`decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md` and execute
-inside the same bounded contract before the rank-5 exemplar. Their approval
-does not extend to untrusted editorial output or an LLM service.
+details as public APIs. M2 and M3 are objectively complete through the verified
+generated solve-x asset, its catalogue and reader hosts, and the deterministic
+four-section, eight-cue explanation spine. Their visual treatment and exact
+wording remain at the consolidated human checkpoint. Completion does not
+extend to untrusted editorial output or an LLM service.
 
 ## Fraction Harvest Queue
 
@@ -222,12 +223,13 @@ actual inefficiency wedge. Neither expands the current promotion contract.
 
 `perf:animation` drives the direct economics catalogue route and records
 transfer, fonts, LCP, CLS, interaction paint, long tasks, and frame timing. The
-release rerun proves no Three.js request and passing CLS, interaction, and
-frame behavior. It exposes 422,832 initial script bytes and 3.712 s constrained
-LCP as product-target debt; constrained frame p95 is inside target at 32.5 ms.
-Do not equate the 490,000-byte main-host regression ceiling with a product
-target, and do not ship KaTeX, code, or WebGL capability merely because the
-catalogue can select an asset that uses it.
+narrow application boundary reduces initial script transfer to 187,174 bytes;
+the representative route closure is 169,490 gzip bytes. Script, constrained
+LCP, CLS, interaction, and representative frame targets pass without widening.
+One fixed-target residual remains: native KaTeX evaluation and first math paint
+can exceed the 50 ms loading-long-task target under 6x CPU throttling. Do not
+hide that residual, and do not ship KaTeX, code, or WebGL capability merely
+because the catalogue can select an asset that uses it.
 
 ## Progress Update Protocol
 
