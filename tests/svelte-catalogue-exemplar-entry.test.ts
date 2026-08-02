@@ -87,10 +87,11 @@ test("bootstrap keeps the imperative default and dynamically mounts the exemplar
   assert.match(compiled.js.code, /kp-animation-catalogue-region/);
 });
 
-test("both catalogue shells delegate player lifecycle to one browser host", async () => {
-  const [application, playerHost, component] = await Promise.all([
+test("both catalogue shells delegate browser lifecycles to shared hosts", async () => {
+  const [application, playerHost, interactionHost, component] = await Promise.all([
     readFile("src/editor/animation-catalogue-application.ts", "utf8"),
     readFile("src/editor/animation-catalogue-player-host.ts", "utf8"),
+    readFile("src/editor/animation-catalogue-interaction-host.ts", "utf8"),
     readFile(
       "src/editor/svelte-catalogue/KpSvelteCatalogueExemplar.svelte",
       "utf8"
@@ -110,4 +111,10 @@ test("both catalogue shells delegate player lifecycle to one browser host", asyn
     playerHost,
     /createKpEditorAnimationPlaybackSession|sampleKpAnimationRuntimeFrame/
   );
+  for (const owner of [application, component]) {
+    assert.match(owner, /captureKpAnimationCatalogueFocus/);
+    assert.match(owner, /restoreKpAnimationCatalogueFocus/);
+    assert.match(owner, /toggleKpAnimationCatalogueOverlay/);
+  }
+  assert.match(interactionHost, /data-kp-animation-catalogue-results/);
 });

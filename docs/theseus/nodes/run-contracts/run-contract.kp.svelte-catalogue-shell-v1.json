@@ -125,7 +125,8 @@
     {
       "id": "s12",
       "title": "Preserve focus keyboard and rail scroll behavior",
-      "status": "planned"
+      "summary": "Consolidated overlay keyboard behavior, focus snapshots and restoration, and rail scroll preservation into one interaction host used by both catalogue shells. Corrected scroll ownership to the actual result-list viewport and browser-verified selection and narrow Escape behavior.",
+      "status": "complete"
     },
     {
       "id": "s13",

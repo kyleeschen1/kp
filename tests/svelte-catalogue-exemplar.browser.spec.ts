@@ -270,6 +270,77 @@ test("Svelte history restores artifact and playhead without a document load", as
   expect(page.url()).toContain("catalogueShell=svelte-exemplar");
 });
 
+test("Svelte selection restores stage focus and rail scroll", async ({ page }) => {
+  await page.goto(
+    `/?artifact=${animationId}&catalogueShell=svelte-exemplar`
+  );
+  const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
+  const player = exemplar.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const railViewport = exemplar.locator(
+    "[data-kp-animation-catalogue-results]"
+  );
+  await player.focus();
+  await railViewport.evaluate((element) => {
+    element.scrollTop = 140;
+  });
+  const retainedScroll = await railViewport.evaluate((element) =>
+    element.scrollTop
+  );
+  expect(retainedScroll).toBeGreaterThan(0);
+
+  const economicsId =
+    "animation.economics.supply-demand-equilibrium-shift";
+  await exemplar.locator(
+    `[data-kp-animation-catalogue-row="${economicsId}"] a`
+  ).evaluate((link) => (link as HTMLAnchorElement).click());
+  const nextPlayer = exemplar.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${economicsId}"]`
+  );
+  await expect(nextPlayer).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+  await expect.poll(() => nextPlayer.evaluate((element) =>
+    document.activeElement === element
+  )).toBe(true);
+  expect(await railViewport.evaluate((element) => element.scrollTop))
+    .toBe(retainedScroll);
+});
+
+test("Svelte narrow inspector overlay returns focus on Escape", async ({ page }) => {
+  await page.setViewportSize({ width: 640, height: 900 });
+  await page.goto(
+    `/?artifact=${animationId}&catalogueShell=svelte-exemplar`
+  );
+  const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
+  const info = exemplar.getByRole("button", { name: "Info" });
+  await info.click();
+  await expect(exemplar).toHaveAttribute(
+    "data-kp-animation-catalogue-overlay",
+    "inspector"
+  );
+  await expect(info).toHaveAttribute("aria-expanded", "true");
+  const inspectorSelect = exemplar.getByRole("combobox", {
+    name: "Inspector view"
+  });
+  await expect.poll(() => inspectorSelect.evaluate((element) =>
+    document.activeElement === element
+  )).toBe(true);
+  await inspectorSelect.press("Escape");
+  await expect(exemplar).not.toHaveAttribute(
+    "data-kp-animation-catalogue-overlay",
+    /.+/
+  );
+  await expect(info).toHaveAttribute("aria-expanded", "false");
+  await expect.poll(() => info.evaluate((element) =>
+    document.activeElement === element
+  )).toBe(true);
+});
+
 test("Svelte exemplar renders the not-found terminal state in its reserved stage", async ({
   page
 }) => {

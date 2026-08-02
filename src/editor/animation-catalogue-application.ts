@@ -29,6 +29,14 @@ import {
   tuneKpAnimationCataloguePresentation
 } from "./animation-catalogue-inspector-host.ts";
 import {
+  captureKpAnimationCatalogueFocus,
+  closeKpAnimationCatalogueOverlay,
+  readKpAnimationCatalogueRailScroll,
+  restoreKpAnimationCatalogueFocus,
+  restoreKpAnimationCatalogueRailScroll,
+  toggleKpAnimationCatalogueOverlay
+} from "./animation-catalogue-interaction-host.ts";
+import {
   mountKpAnimationCataloguePlayerHost
 } from "./animation-catalogue-player-host.ts";
 import {
@@ -384,11 +392,8 @@ class KpAnimationCatalogueApplication {
     const inspectorMode = input.shell.querySelector<HTMLSelectElement>(
       '[data-action="select-animation-catalogue-inspector"]'
     )?.value;
-    const focus = captureFocus(input.shell);
-    const resultsViewport = results?.closest<HTMLElement>(
-      ".kp-animation-catalogue-shell__rail-results"
-    );
-    const scrollTop = resultsViewport?.scrollTop;
+    const focus = captureKpAnimationCatalogueFocus(input.shell);
+    const scrollTop = readKpAnimationCatalogueRailScroll(input.shell);
     if (stage === null || inspector === null || results === null) {
       window.location.assign(window.location.href);
       return;
@@ -454,18 +459,14 @@ class KpAnimationCatalogueApplication {
         selectedHealth: prepared.health,
         query: search?.value
       });
-      const nextViewport = input.shell.querySelector(
-        "[data-kp-animation-catalogue-results]"
-      )?.closest<HTMLElement>(".kp-animation-catalogue-shell__rail-results");
-      if (nextViewport !== null && nextViewport !== undefined &&
-        scrollTop !== undefined) nextViewport.scrollTop = scrollTop;
+      restoreKpAnimationCatalogueRailScroll(input.shell, scrollTop);
       this.#hydrateSelection({
         shell: input.shell,
         entry: input.entry,
         hostability: prepared.hostability,
         animation: prepared.animation
       });
-      restoreFocus(input.shell, focus);
+      restoreKpAnimationCatalogueFocus(input.shell, focus);
       void this.#mountReview(revision);
     } catch (error: unknown) {
       if (this.#disposed || revision !== this.#revision ||
@@ -544,47 +545,11 @@ class KpAnimationCatalogueApplication {
   }
 
   #toggleOverlay(button: HTMLButtonElement): void {
-    const shell = button.closest<HTMLElement>("[data-kp-animation-catalogue]");
-    const target = button.dataset["kpAnimationCatalogueOverlayTarget"];
-    if (shell === null || (target !== "rail" && target !== "inspector")) return;
-    const next = shell.dataset["kpAnimationCatalogueOverlay"] === target
-      ? undefined
-      : target;
-    if (next === undefined) delete shell.dataset["kpAnimationCatalogueOverlay"];
-    else shell.dataset["kpAnimationCatalogueOverlay"] = next;
-    shell.querySelectorAll<HTMLButtonElement>(
-      '[data-action="toggle-animation-catalogue-overlay"]'
-    ).forEach((candidate) => candidate.setAttribute(
-      "aria-expanded",
-      String(candidate.dataset["kpAnimationCatalogueOverlayTarget"] === next)
-    ));
-    if (next !== undefined) {
-      const panel = shell.querySelector<HTMLElement>(
-        next === "rail" ? "#kp-animation-catalogue-rail" :
-          "#kp-animation-catalogue-inspector"
-      );
-      setTimeout(() => panel?.querySelector<HTMLElement>(
-        "input, select, button, a"
-      )?.focus(), 0);
-    }
+    toggleKpAnimationCatalogueOverlay(button);
   }
 
   #closeOverlay(target: EventTarget | null): boolean {
-    if (!(target instanceof Element)) return false;
-    const shell = target.closest<HTMLElement>("[data-kp-animation-catalogue]");
-    if (shell === null ||
-      shell.dataset["kpAnimationCatalogueOverlay"] === undefined) return false;
-    const openTarget = shell.dataset["kpAnimationCatalogueOverlay"];
-    delete shell.dataset["kpAnimationCatalogueOverlay"];
-    shell.querySelectorAll<HTMLButtonElement>(
-      '[data-action="toggle-animation-catalogue-overlay"]'
-    ).forEach((button) => {
-      button.setAttribute("aria-expanded", "false");
-      if (button.dataset["kpAnimationCatalogueOverlayTarget"] === openTarget) {
-        button.focus();
-      }
-    });
-    return true;
+    return closeKpAnimationCatalogueOverlay(target);
   }
 
   #selectInspector(select: HTMLSelectElement): void {
@@ -666,56 +631,4 @@ function setStageMessage(
   status.setAttribute("role", state === "error" ? "alert" : "status");
   status.textContent = message;
   stage.replaceChildren(status);
-}
-
-type FocusSnapshot = Readonly<{
-  element: HTMLElement;
-  target:
-    | { kind: "player" }
-    | { kind: "inspector-view" }
-    | { kind: "tuning"; tuning: string }
-    | { kind: "row"; animationId: string };
-}>;
-
-function captureFocus(shell: HTMLElement): FocusSnapshot | undefined {
-  const element = document.activeElement;
-  if (!(element instanceof HTMLElement) || !shell.contains(element)) return;
-  if (element.closest("[data-kp-editor-animation-player]") !== null) {
-    return { element, target: { kind: "player" } };
-  }
-  if (element.dataset["action"] === "select-animation-catalogue-inspector") {
-    return { element, target: { kind: "inspector-view" } };
-  }
-  const tuning = element.dataset["kpAnimationCatalogueTuning"];
-  if (tuning !== undefined) {
-    return { element, target: { kind: "tuning", tuning } };
-  }
-  const row = element.closest<HTMLElement>("[data-kp-animation-catalogue-row]");
-  const animationId = row?.dataset["kpAnimationCatalogueRow"];
-  return animationId === undefined
-    ? undefined
-    : { element, target: { kind: "row", animationId } };
-}
-
-function restoreFocus(
-  shell: HTMLElement,
-  snapshot: FocusSnapshot | undefined
-): void {
-  if (snapshot === undefined || snapshot.element.isConnected ||
-    (document.activeElement !== document.body &&
-      document.activeElement !== shell.closest("#app"))) return;
-  const target = snapshot.target.kind === "player"
-    ? shell.querySelector<HTMLElement>("[data-kp-editor-animation-player]")
-    : snapshot.target.kind === "inspector-view"
-      ? shell.querySelector<HTMLElement>(
-          '[data-action="select-animation-catalogue-inspector"]'
-        )
-      : snapshot.target.kind === "tuning"
-        ? shell.querySelector<HTMLElement>(
-            `[data-kp-animation-catalogue-tuning="${snapshot.target.tuning}"]`
-          )
-        : shell.querySelector<HTMLElement>(
-            `[data-kp-animation-catalogue-row="${snapshot.target.animationId}"] a`
-          );
-  target?.focus({ preventScroll: true });
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy, onMount, untrack } from "svelte";
+  import { onDestroy, onMount, tick, untrack } from "svelte";
 
   import {
     KP_ANIMATION_CATALOGUE_STAGE_RESERVATION
@@ -24,6 +24,14 @@
     selectKpAnimationCatalogueInspector,
     tuneKpAnimationCataloguePresentation
   } from "../animation-catalogue-inspector-host.ts";
+  import {
+    captureKpAnimationCatalogueFocus,
+    closeKpAnimationCatalogueOverlay,
+    readKpAnimationCatalogueRailScroll,
+    restoreKpAnimationCatalogueFocus,
+    restoreKpAnimationCatalogueRailScroll,
+    toggleKpAnimationCatalogueOverlay
+  } from "../animation-catalogue-interaction-host.ts";
   import {
     mountKpAnimationCataloguePlayerHost
   } from "../animation-catalogue-player-host.ts";
@@ -153,6 +161,30 @@
     });
   }
 
+  function toggleOverlay(event: MouseEvent): void {
+    if (view === undefined || !(event.currentTarget instanceof HTMLButtonElement)) {
+      return;
+    }
+    const target = event.currentTarget.dataset[
+      "kpAnimationCatalogueOverlayTarget"
+    ];
+    if (target !== "rail" && target !== "inspector") return;
+    toggleKpAnimationCatalogueOverlay(event.currentTarget);
+    view = reduceKpAnimationCatalogueHostView(view, {
+      kind: "toggle-overlay",
+      target
+    });
+  }
+
+  function closeOverlay(event: KeyboardEvent): void {
+    if (event.key !== "Escape" || view === undefined ||
+      !closeKpAnimationCatalogueOverlay(event.target)) return;
+    event.preventDefault();
+    view = reduceKpAnimationCatalogueHostView(view, {
+      kind: "close-overlay"
+    });
+  }
+
   function replacePlayhead(event: Event): void {
     if (!(event instanceof CustomEvent) ||
       !(event.target instanceof HTMLElement) ||
@@ -198,6 +230,12 @@
     readonly selectionHost: KpSvelteCatalogueSelectionHost;
   }): Promise<void> {
     const revision = ++selectionRevision;
+    const focus = shell === undefined
+      ? undefined
+      : captureKpAnimationCatalogueFocus(shell);
+    const scrollTop = shell === undefined
+      ? undefined
+      : readKpAnimationCatalogueRailScroll(shell);
     stageState = "loading";
     stageMessage = `Loading ${input.entry.title}…`;
     hostOutcome = undefined;
@@ -237,6 +275,11 @@
       view = nextView;
       inspectorHtml = renderKpAnimationCatalogueInspector(nextView);
       stageState = "selected";
+      await tick();
+      if (shell !== undefined && revision === selectionRevision) {
+        restoreKpAnimationCatalogueRailScroll(shell, scrollTop);
+        restoreKpAnimationCatalogueFocus(shell, focus);
+      }
     } catch (error: unknown) {
       if (disposed || revision !== selectionRevision) return;
       stageState = "error";
@@ -277,12 +320,14 @@
       KP_EDITOR_ANIMATION_FRAME_EVENT,
       replacePlayhead
     );
+    mountedShell.addEventListener("keydown", closeOverlay);
     window.addEventListener("popstate", restoreHistorySelection);
     return () => {
       mountedShell.removeEventListener(
         KP_EDITOR_ANIMATION_FRAME_EVENT,
         replacePlayhead
       );
+      mountedShell.removeEventListener("keydown", closeOverlay);
       window.removeEventListener("popstate", restoreHistorySelection);
     };
   });
@@ -314,6 +359,7 @@
     data-kp-animation-catalogue-selected-health={view.health.status}
     data-kp-animation-catalogue-human-disposition={view.entry.humanDisposition}
     data-kp-animation-catalogue-host-outcome={hostOutcome}
+    data-kp-animation-catalogue-overlay={view.chrome.overlay}
     aria-labelledby="kp-animation-catalogue-title"
   >
     <h1
@@ -394,14 +440,16 @@
           data-action="toggle-animation-catalogue-overlay"
           data-kp-animation-catalogue-overlay-target="rail"
           aria-controls="kp-animation-catalogue-rail"
-          aria-expanded="false"
+          aria-expanded={view.chrome.overlay === "rail"}
+          onclick={toggleOverlay}
         >Artifacts</button>
         <button
           type="button"
           data-action="toggle-animation-catalogue-overlay"
           data-kp-animation-catalogue-overlay-target="inspector"
           aria-controls="kp-animation-catalogue-inspector"
-          aria-expanded="false"
+          aria-expanded={view.chrome.overlay === "inspector"}
+          onclick={toggleOverlay}
         >Info</button>
       </div>
       <div
