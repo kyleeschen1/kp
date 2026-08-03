@@ -1,5 +1,6 @@
 import "../../styles.css";
 import "katex/dist/katex.min.css";
+import "../kp-tutorial-scrub-bar.css";
 import "./economics-demand-shift-tutorial.css";
 
 import lessonMarkdown from
@@ -29,9 +30,18 @@ import {
   renderKpEconomicsVerificationSurface
 } from "./economics-demand-shift-verification-surface.ts";
 import {
+  kpEconomicsMotionBlocks
+} from "./economics-demand-shift-motion-blocks.ts";
+import {
   createKpEconomicsDemandShiftToc
 } from "./economics-demand-shift-toc.ts";
+import {
+  kpEconomicsDemandShiftTutorialPath
+} from "./economics-demand-shift-route.ts";
 import { renderKpTutorialToc } from "../kp-tutorial-toc.ts";
+import {
+  renderKpTutorialScrubBar
+} from "../kp-tutorial-scrub-bar-renderer.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
 
@@ -67,6 +77,16 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       hostability: prepared.hostability,
       lesson,
       tocHtml: renderKpTutorialToc(createKpEconomicsDemandShiftToc(lesson)),
+      motionScrubBarHtml: Object.fromEntries(kpEconomicsMotionBlocks.map(
+        (block) => [block.id, renderKpTutorialScrubBar({
+          blockId: block.id,
+          checkpoints: block.checkpoints.map((checkpoint) => ({
+            ...checkpoint,
+            href: `${kpEconomicsDemandShiftTutorialPath}` +
+              `#kp-checkpoint-${checkpoint.id}`
+          }))
+        })]
+      )) as Readonly<Record<(typeof kpEconomicsMotionBlocks)[number]["id"], string>>,
       verificationSurfaceHtml: renderKpEconomicsVerificationSurface(),
       initialDemandIntercept:
         prepared.economicsParameters?.demandInterceptAfter ?? 18

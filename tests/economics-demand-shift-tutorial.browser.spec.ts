@@ -2,6 +2,10 @@ import { mkdir } from "node:fs/promises";
 
 import { expect, test } from "@playwright/test";
 
+import {
+  renderKpTutorialScrubBar
+} from "../src/tutorial/kp-tutorial-scrub-bar-renderer.ts";
+
 const route = "/tutorials/economics/demand-shift/";
 const animationId =
   "animation.economics.supply-demand-equilibrium-shift";
@@ -131,16 +135,20 @@ test("approved economics prose and semantic controls form one persistent tutoria
   expect(await motionCue.evaluate((element) => ({
     tag: element.localName,
     registered: customElements.get(element.localName) === element.constructor,
-    shadow: element.shadowRoot?.mode
+    shadow: element.shadowRoot,
+    staticBoundaryCount: element.querySelectorAll(
+      "[data-kp-tutorial-scrub-static-boundary]"
+    ).length
   }))).toEqual({
     tag: "kp-tutorial-scrub-bar",
     registered: true,
-    shadow: "open"
+    shadow: null,
+    staticBoundaryCount: 1
   });
-  await expect(motionCue.getByRole("button", {
+  await expect(motionCue.getByRole("link", {
     name: "Previous semantic checkpoint"
   })).toBeVisible();
-  await expect(motionCue.getByRole("button", {
+  await expect(motionCue.getByRole("link", {
     name: "Next semantic checkpoint"
   })).toBeVisible();
   await expect(root).toHaveAttribute(
@@ -244,8 +252,8 @@ test("approved economics prose and semantic controls form one persistent tutoria
   await expect(motionCue).not.toHaveAttribute("label");
   await expect(motionCue).not.toHaveAttribute("retained-context");
   expect(await motionCue.evaluate((element) => ({
-    heading: element.shadowRoot?.querySelector(".heading") !== null,
-    status: element.shadowRoot?.querySelector("[data-status]") !== null
+    heading: element.querySelector(".heading") !== null,
+    status: element.querySelector("[data-status]") !== null
   }))).toEqual({ heading: false, status: false });
   await expect(motionCue.getByRole("button", { name: "Play" })).toBeVisible();
   await motionCue.evaluate((element) => window.scrollTo({
@@ -265,11 +273,11 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "crossing"
   );
   await expect.poll(() => motionCue.evaluate((element) => {
-    const button = element.shadowRoot?.querySelector<HTMLButtonElement>(
+    const button = element.querySelector<HTMLButtonElement>(
       "[data-action=toggle]"
     );
-    const boundary = element.shadowRoot?.querySelector<HTMLElement>(
-      ".boundary"
+    const boundary = element.querySelector<HTMLElement>(
+      ".kp-tutorial-scrub__boundary"
     );
     if (
       button === undefined ||
@@ -437,14 +445,14 @@ test("approved economics prose and semantic controls form one persistent tutoria
     path: `${evidenceDirectory}/wide-motion-divider.png`,
     fullPage: false
   });
-  await motionCue.getByRole("button", {
+  await motionCue.getByRole("link", {
     name: "Next semantic checkpoint"
   }).click();
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-checkpoint",
     "handoff"
   );
-  await motionCue.getByRole("button", {
+  await motionCue.getByRole("link", {
     name: "Next semantic checkpoint"
   }).click();
   await expect(root).toHaveAttribute(
@@ -962,8 +970,94 @@ test("reduced-motion readers retain the text-free divider without automatic seek
     "Animation timeline. Automatic scroll motion is disabled."
   );
   expect(await motionCue.evaluate((element) =>
-    element.shadowRoot?.querySelector(".heading")
+    element.querySelector(".heading")
   )).toBeNull();
+});
+
+test("static scrubber keeps native links and geometry when it upgrades", async ({
+  page
+}) => {
+  await page.goto(route);
+  const html = renderKpTutorialScrubBar({
+    blockId: "fixture",
+    checkpoints: [
+      { id: "ready", label: "Ready", progress: 0, href: "#ready" },
+      { id: "move", label: "Move", progress: 0.5, href: "#move" },
+      { id: "done", label: "Done", progress: 1, href: "#done" }
+    ]
+  });
+  await page.locator("body").evaluate((body, staticHtml) => {
+    const frame = document.createElement("iframe");
+    frame.dataset["kpScrubFixture"] = "true";
+    frame.srcdoc = `<link rel="stylesheet" href="/src/tutorial/kp-tutorial-scrub-bar.css"><main style="width:640px">${staticHtml}</main>`;
+    body.append(frame);
+  }, html);
+  const fixture = page.locator('iframe[data-kp-scrub-fixture="true"]');
+  await expect(fixture).toBeAttached();
+  const frame = page.frames().find((candidate) =>
+    candidate !== page.mainFrame() && candidate.url() === "about:srcdoc"
+  )!;
+  await frame.waitForFunction(() => document.styleSheets.length > 0);
+  const before = await frame.evaluate(() => {
+    const host = document.querySelector("kp-tutorial-scrub-bar")!;
+    const boundary = host.querySelector(
+      "[data-kp-tutorial-scrub-static-boundary]"
+    )!;
+    const input = host.querySelector("input")!;
+    (window as unknown as { kpScrubNodes: readonly Element[] }).kpScrubNodes = [
+      boundary,
+      input
+    ];
+    const rect = host.getBoundingClientRect();
+    return {
+      width: rect.width,
+      height: rect.height,
+      shadow: host.shadowRoot,
+      nextHref: host.querySelector<HTMLAnchorElement>(
+        '[data-action="next"]'
+      )!.getAttribute("href"),
+      toggleDisabled: host.querySelector<HTMLButtonElement>(
+        '[data-action="toggle"]'
+      )!.disabled
+    };
+  });
+  expect(before).toEqual({
+    width: 640,
+    height: expect.any(Number),
+    shadow: null,
+    nextHref: "#move",
+    toggleDisabled: true
+  });
+  expect(before.height).toBeGreaterThan(30);
+
+  const after = await frame.evaluate(async () => {
+    const module = await import("/src/tutorial/kp-tutorial-scrub-bar.ts");
+    module.defineKpTutorialScrubBar();
+    await customElements.whenDefined("kp-tutorial-scrub-bar");
+    const host = document.querySelector("kp-tutorial-scrub-bar")!;
+    const stored = (window as unknown as {
+      kpScrubNodes: readonly Element[];
+    }).kpScrubNodes;
+    const rect = host.getBoundingClientRect();
+    return {
+      width: rect.width,
+      height: rect.height,
+      sameBoundary: stored[0] === host.querySelector(
+        "[data-kp-tutorial-scrub-static-boundary]"
+      ),
+      sameInput: stored[1] === host.querySelector("input"),
+      enhancement: host.getAttribute("data-kp-tutorial-scrub-enhancement"),
+      shadow: host.shadowRoot
+    };
+  });
+  expect(after).toEqual({
+    width: before.width,
+    height: before.height,
+    sameBoundary: true,
+    sameInput: true,
+    enhancement: "ready",
+    shadow: null
+  });
 });
 
 test("phone tutorial keeps a stable compact stage dock with optional expansion", async ({

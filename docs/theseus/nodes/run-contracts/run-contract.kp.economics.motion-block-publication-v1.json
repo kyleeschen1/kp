@@ -374,6 +374,34 @@
       "scope": "s17",
       "checkedAt": "2026-08-03T07:25:22.251Z",
       "notes": "Active TOC-enhancement diff has no whitespace errors."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-08-03T07:33:32.112Z",
+      "notes": "Twenty-one focused tests pass, including complete static scrubber light DOM, native checkpoint hrefs, disabled pre-upgrade playback, deterministic marks, and all existing economics projections."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-08-03T07:33:33.228Z",
+      "notes": "Svelte and TypeScript diagnostics pass with zero errors and warnings after switching the host from compiled child markup to a static scrubber renderer plus attribute synchronization."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-08-03T07:33:34.149Z",
+      "notes": "Eight Chromium checks pass; existing scroll/manual/reduced-motion/phone behavior is preserved, and an isolated no-definition fixture proves native links, retained node identity, zero geometry change, and no shadow root across upgrade."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-08-03T07:33:35.075Z",
+      "notes": "Active progressive-scrubber diff has no whitespace errors."
     }
   ],
   "allowedWork": [
@@ -502,7 +530,8 @@
     {
       "id": "s18",
       "title": "Progressively-enhance-scrubber",
-      "status": "planned"
+      "summary": "Replaced client-created shadow controls with a pure static renderer that emits complete final-geometry light DOM, native checkpoint links, and disabled playback/seek fallbacks; the custom element upgrades those exact nodes in place, retains its public event contract, and changes no measured geometry.",
+      "status": "complete"
     },
     {
       "id": "s19",

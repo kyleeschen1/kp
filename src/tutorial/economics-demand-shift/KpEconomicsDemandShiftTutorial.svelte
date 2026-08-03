@@ -119,6 +119,7 @@
     hostability,
     initialDemandIntercept,
     lesson,
+    motionScrubBarHtml,
     tocHtml,
     verificationSurfaceHtml
   }: {
@@ -129,6 +130,7 @@
     readonly hostability: KpAnimationCatalogueSurfaceHostability;
     readonly initialDemandIntercept: number;
     readonly lesson: KpEconomicsDemandShiftLesson;
+    readonly motionScrubBarHtml: Readonly<Record<KpEconomicsMotionBlockId, string>>;
     readonly tocHtml: string;
     readonly verificationSurfaceHtml: string;
   } = $props();
@@ -218,6 +220,31 @@
   );
   $effect(() => {
     tutorialToc?.setActiveDestination(tocActiveDestination);
+  });
+  $effect(() => {
+    writeScrubBarAttributes(demandScrubBar, {
+      progress: semanticProgress,
+      "playback-status": playbackStatus,
+      direction: playbackDirection,
+      "controls-disabled": !ready,
+      "previous-disabled": checkpointIndex === 0,
+      "next-disabled": checkpointIndex ===
+        kpEconomicsDemandShiftCheckpoints.length - 1,
+      "manual-claimed": motionOwner === "manual" &&
+        manualMotionBlock === "demand-shift"
+    });
+  });
+  $effect(() => {
+    writeScrubBarAttributes(supplyScrubBar, {
+      progress: supplyMovementProgress,
+      "playback-status": supplyPlaybackStatus,
+      direction: supplyPlaybackDirection,
+      "controls-disabled": !ready,
+      "previous-disabled": supplyMovementProgress <= 0.001,
+      "next-disabled": supplyMovementProgress >= 0.999,
+      "manual-claimed": motionOwner === "manual" &&
+        manualMotionBlock === "supply-movement"
+    });
   });
   let readingBandStyle = $derived(
     `--kp-tutorial-reading-band-proximity:${readingBandProximity.toFixed(3)};` +
@@ -885,6 +912,12 @@
     tutorialToc = shell.querySelector<KpTutorialTocElement>(
       "kp-tutorial-toc"
     ) ?? undefined;
+    demandScrubBar = shell.querySelector<KpTutorialScrubBarElement>(
+      '[data-kp-tutorial-motion-controls="demand-shift"]'
+    ) ?? undefined;
+    supplyScrubBar = shell.querySelector<KpTutorialScrubBarElement>(
+      '[data-kp-tutorial-motion-controls="supply-movement"]'
+    ) ?? undefined;
     player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
     for (const scrubBar of [demandScrubBar, supplyScrubBar]) {
@@ -1009,6 +1042,16 @@
 
   function percent(value: number): string {
     return `${(value * 100).toFixed(4)}%`;
+  }
+
+  function writeScrubBarAttributes(
+    scrubBar: KpTutorialScrubBarElement | undefined,
+    attributes: Readonly<Record<string, string | number | boolean>>
+  ): void {
+    if (scrubBar === undefined) return;
+    for (const [name, value] of Object.entries(attributes)) {
+      scrubBar.setAttribute(name, String(value));
+    }
   }
 
   function projectAttentionFocusRect(
@@ -1151,33 +1194,9 @@
                 {/each}
               {/if}
               {#if renderedMotionBlock?.id === "demand-shift"}
-                <kp-tutorial-scrub-bar
-                  bind:this={demandScrubBar}
-                  data-kp-tutorial-motion-controls="demand-shift"
-                  data-kp-economics-tutorial-motion-divider
-                  progress={semanticProgress}
-                  playback-status={playbackStatus}
-                  direction={playbackDirection}
-                  controls-disabled={ready ? "false" : "true"}
-                  previous-disabled={checkpointIndex === 0 ? "true" : "false"}
-                  next-disabled={checkpointIndex === kpEconomicsDemandShiftCheckpoints.length - 1 ? "true" : "false"}
-                  manual-claimed={motionOwner === "manual" &&
-                      manualMotionBlock === "demand-shift" ? "true" : "false"}
-                ></kp-tutorial-scrub-bar>
+                {@html motionScrubBarHtml["demand-shift"]}
               {:else if renderedMotionBlock?.id === "supply-movement"}
-                <kp-tutorial-scrub-bar
-                  bind:this={supplyScrubBar}
-                  data-kp-tutorial-motion-controls="supply-movement"
-                  data-kp-economics-tutorial-motion-divider
-                  progress={supplyMovementProgress}
-                  playback-status={supplyPlaybackStatus}
-                  direction={supplyPlaybackDirection}
-                  controls-disabled={ready ? "false" : "true"}
-                  previous-disabled={supplyMovementProgress <= 0.001 ? "true" : "false"}
-                  next-disabled={supplyMovementProgress >= 0.999 ? "true" : "false"}
-                  manual-claimed={motionOwner === "manual" &&
-                      manualMotionBlock === "supply-movement" ? "true" : "false"}
-                ></kp-tutorial-scrub-bar>
+                {@html motionScrubBarHtml["supply-movement"]}
               {/if}
               {#if passage.id === "explore"}
                 <details class="kp-economics-tutorial__explore" bind:open={explorationOpen}>

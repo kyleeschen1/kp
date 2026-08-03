@@ -47,6 +47,9 @@ import {
 import {
   renderKpTutorialToc
 } from "../src/tutorial/kp-tutorial-toc.ts";
+import {
+  renderKpTutorialScrubBar
+} from "../src/tutorial/kp-tutorial-scrub-bar-renderer.ts";
 
 test("economics demand-shift tutorial owns one stable route", () => {
   assert.equal(
@@ -512,6 +515,26 @@ test("static tutorial TOC links every section, motion block, and checkpoint", ()
     demandShiftProgress: 1,
     supplyMovementProgress: 0.58
   }), { kind: "checkpoint", id: "movement-traced" });
+});
+
+test("static tutorial scrubber has final light DOM and native checkpoint links", () => {
+  const html = renderKpTutorialScrubBar({
+    blockId: "demand-shift",
+    checkpoints: [
+      { id: "ready", label: "Ready", progress: 0, href: "#ready" },
+      { id: "handoff", label: "Handoff", progress: 0.72, href: "#handoff" },
+      { id: "settled", label: "Settled", progress: 1, href: "#settled" }
+    ]
+  });
+
+  assert.match(html, /^<kp-tutorial-scrub-bar/);
+  assert.match(html, /data-kp-tutorial-scrub-enhancement="pending"/);
+  assert.match(html, /<a[^>]+href="#ready"[^>]+data-action="rewind"/);
+  assert.match(html, /<a[^>]+href="#handoff"[^>]+data-action="next"/);
+  assert.match(html, /<button[^>]+data-action="toggle" disabled>Play/);
+  assert.match(html, /<input[^>]+data-action="seek"[^>]+disabled/);
+  assert.match(html, /<option value="0\.72" label="Handoff">/);
+  assert.doesNotMatch(html, /<style|<script|shadow/);
 });
 
 test("semantic checkpoint navigation is ordered, bounded, and reversible", () => {
