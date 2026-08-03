@@ -25,6 +25,13 @@ The route provides:
 - inline KaTeX, compact section headings, and the lower-left Review dock;
 - a stable compact phone stage with optional temporary expansion.
 
+The salience-transmission revision adds one economics-local focus target and
+context profile per checkpoint. On wide screens, the active passage connects
+through the gutter to a graph-local curve, point, or equation landing. A subtle
+veil and semantic attenuation let incidental material recede without hiding
+the context needed for the claim. Phone layouts omit the connector and retain
+the graph-local focus treatment.
+
 ## Review questions
 
 1. Does the prose-stage cadence keep enough conceptual context without making
@@ -38,6 +45,8 @@ The route provides:
 5. Does the phone dock preserve both graph legibility and reading space?
 6. What economics-local revision, if any, is necessary before using generated
    solve-x as the structurally different second caller?
+7. Do the connector landing and focus treatment always answer “where should I
+   look?” without crossing labels, dominating the graph, or hiding context?
 
 ## Preservation and promotion boundary
 
@@ -59,3 +68,7 @@ matrix frontier.
 - `npm run check:architecture`
 - `npm run typecheck`
 - `npm run build`
+
+The broad cross-browser and release matrix remains intentionally deferred until
+human selection of this subjective salience treatment, following the accepted
+exemplar-first visual verification cadence.

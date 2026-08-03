@@ -31,6 +31,13 @@ seek/rewind, responsive execution, accessibility, hover, annotations, Cloze,
 and renderer-independent compilation. Bespoke motion planning is not itself a
 product thesis.
 
+At the learner-facing level, KP is a salience-transmission engine. Semantic
+authority establishes what is true; checkpoint attention tells the learner
+what to inspect, what context must remain visible, and how attention should
+move through the argument. This is not license for decorative highlighting or
+a universal focus schema: target, context, and attenuation are proved through
+reviewed exemplars before promotion.
+
 KP is learner-facing in the long term. The first learner product should deepen
 understanding for people who have already encountered the notation rather than
 claim to be a complete curriculum. Before shaping that public product, the

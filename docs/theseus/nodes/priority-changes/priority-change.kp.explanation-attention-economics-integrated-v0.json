@@ -65,8 +65,48 @@
       "status": "passed",
       "scope": "production typecheck and nested route build",
       "checkedAt": "2026-08-03T02:07:43.475Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "economics-local salience target coverage",
+      "checkedAt": "2026-08-03T02:23:15.025Z"
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "Svelte attention geometry and lifecycle",
+      "checkedAt": "2026-08-03T02:32:58.519Z"
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "desktop connector, semantic attenuation, spotlight, and phone fallback",
+      "checkedAt": "2026-08-03T02:32:59.201Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production typecheck and economics tutorial route build",
+      "checkedAt": "2026-08-03T02:39:46.626Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture boundary checks",
+      "checkedAt": "2026-08-03T02:39:47.800Z"
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "rank-6 matrix remains tabled",
+      "checkedAt": "2026-08-03T02:39:48.823Z"
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "Delivered all three economics-local salience exemplar slices; awaiting human visual approval before any shared promotion."
+  },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
     "planRevisionId": "plan-revision.kp.v22",

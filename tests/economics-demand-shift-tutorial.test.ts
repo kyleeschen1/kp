@@ -104,6 +104,38 @@ test("semantic checkpoint navigation is ordered, bounded, and reversible", () =>
   );
 });
 
+test("every semantic checkpoint declares one local salience target and context profile", () => {
+  assert.deepEqual(
+    kpEconomicsDemandShiftCheckpoints.map(({ id, attention }) => [
+      id,
+      attention.profile,
+      attention.target
+    ]),
+    [
+      ["orient-market", "market", "market"],
+      ["initial-equilibrium", "equilibrium", "equilibrium"],
+      ["identify-change", "demand", "demand"],
+      ["predict", "equilibrium", "equilibrium"],
+      ["ready-to-shift", "transition", "demand"],
+      ["handoff", "transition", "equilibrium"],
+      ["settled", "equilibrium", "equilibrium"],
+      ["compare-equilibria", "comparison", "supply"],
+      ["equation-check", "equations", "equations"],
+      ["scope", "boundary", "equilibrium"],
+      ["synthesis", "synthesis", "supply"],
+      ["explore", "exploration", "demand"]
+    ]
+  );
+  assert.equal(
+    kpEconomicsDemandShiftCheckpoints.every(({ attention }) =>
+      attention.targetSelector.startsWith("[data-kp-economics-") &&
+      attention.spotlightRadius >= 72 &&
+      attention.targetAnchor >= 0 && attention.targetAnchor <= 1
+    ),
+    true
+  );
+});
+
 test("reading-band selection uses hysteresis before replacing the active passage", () => {
   assert.equal(selectKpEconomicsReadingBandPassage({
     currentPassageId: "initial",

@@ -93,6 +93,11 @@ contract is promoted. The editorial checkpoint is approved. The bounded
 economics route is now built from canonical Markdown and awaits integrated
 human review:
 `reviews/2026-08-02-economics-text-animation-integrated-checkpoint.md`.
+The current economics-local revision implements the accepted learner-facing
+framing of KP as a salience-transmission engine: each checkpoint names a target
+and retained context, wide prose connects to a graph-local landing, and phone
+keeps the focus treatment without the physical connector. This remains an
+exemplar-only treatment pending the same integrated review.
 This priority change does not resume linear algebra, authorize SvelteKit or a
 public site, or move LLM wording into runtime.
 
@@ -218,8 +223,10 @@ equations verify, inserts one non-gating prediction before learner-triggered
 motion, and closes on the shift-versus-movement misconception before optional
 exploration. The local Svelte 5 host adds semantic controls, static passage
 preparation, a wide persistent stage, and a compact phone dock without changing
-the asset or runtime. No shared attention schema or second caller begins until
-this integrated cadence is approved.
+the asset or runtime. It now also carries economics-local target profiles,
+passage-to-stage connectors on wide layouts, and context-preserving graph
+attenuation. No shared attention schema or second caller begins until this
+integrated cadence and salience treatment are approved.
 
 **Canonical construction, the fraction and radical migrations, foldable
 distribution pressure work, canonical fraction composition, and role-complete
@@ -556,7 +563,8 @@ activating heavy animation capabilities lazily.
 ## Near-Term Priorities
 
 1. Human-review the integrated economics tutorial at
-   `/tutorials/economics/demand-shift/` across wide and phone layouts.
+   `/tutorials/economics/demand-shift/` across wide and phone layouts, including
+   connector landings and context-preserving focus attenuation.
 2. Make only checkpoint-requested economics-local revisions, then approve or
    reject the exemplar without promoting a shared schema.
 3. After approval, pressure the attention boundary with generated solve-x, then

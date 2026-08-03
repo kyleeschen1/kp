@@ -32,6 +32,36 @@
   } from "./economics-demand-shift-lesson-compiler.ts";
   import KpInlineMath from "./KpInlineMath.svelte";
 
+  interface KpEconomicsTutorialAttentionProjection {
+    readonly connectorVisible: boolean;
+    readonly spotlightVisible: boolean;
+    readonly viewportWidth: number;
+    readonly viewportHeight: number;
+    readonly sourceX: number;
+    readonly sourceY: number;
+    readonly relayX: number;
+    readonly relayY: number;
+    readonly targetX: number;
+    readonly targetY: number;
+    readonly spotlightX: number;
+    readonly spotlightY: number;
+  }
+
+  const emptyAttentionProjection: KpEconomicsTutorialAttentionProjection = {
+    connectorVisible: false,
+    spotlightVisible: false,
+    viewportWidth: 0,
+    viewportHeight: 0,
+    sourceX: 0,
+    sourceY: 0,
+    relayX: 0,
+    relayY: 0,
+    targetX: 0,
+    targetY: 0,
+    spotlightX: 0,
+    spotlightY: 0
+  };
+
   let {
     entry,
     descriptor,
@@ -71,6 +101,9 @@
   let explorationOpen = $state(false);
   let announcement = $state("Initial market ready.");
   let scrollFrame: number | undefined;
+  let attentionFrame: number | undefined;
+  let attentionResizeObserver: ResizeObserver | undefined;
+  let attentionProjection = $state(emptyAttentionProjection);
   let disposePlayerHost: (() => void) | undefined;
   const playerHtml = initial.playerHtml;
   let checkpoint = $derived(kpEconomicsDemandShiftCheckpoints[checkpointIndex]!);
@@ -87,6 +120,17 @@
         ? "Replay"
         : "Play"
   );
+  let attentionGutterPath = $derived(
+    createAttentionGutterPath(attentionProjection)
+  );
+  let attentionLocalPath = $derived(
+    createAttentionLocalPath(attentionProjection)
+  );
+  let spotlightStyle = $derived(
+    `--kp-tutorial-spotlight-x:${attentionProjection.spotlightX}px;` +
+    `--kp-tutorial-spotlight-y:${attentionProjection.spotlightY}px;` +
+    `--kp-tutorial-spotlight-radius:${checkpoint.attention.spotlightRadius}px`
+  );
 
   function activateCheckpoint(index: number): void {
     checkpointIndex = Math.max(
@@ -96,6 +140,7 @@
     const next = kpEconomicsDemandShiftCheckpoints[checkpointIndex]!;
     announcement = `${next.label}. Animation at ${Math.round(next.progress * 100)} percent.`;
     seek(next.progress);
+    scheduleAttentionProjection();
   }
 
   function stepCheckpoint(direction: -1 | 1): void {
@@ -161,6 +206,7 @@
       `${window.location.pathname}${search}${window.location.hash}`
     );
     announcement = `Exploration target set to demand intercept ${demandIntercept}.`;
+    scheduleAttentionProjection();
   }
 
   function restoreLessonExample(): void {
@@ -187,6 +233,7 @@
     // passage the learner is currently reading.
     seek(1);
     announcement = "Returned to the lesson example: demand intercept 14 to 18.";
+    scheduleAttentionProjection();
   }
 
   function handleFrame(event: Event): void {
@@ -212,6 +259,7 @@
       checkpointIndex = findKpEconomicsDemandShiftCheckpointIndex("settled");
       announcement = "New equilibrium. Quantity 8 and price 10.";
     }
+    scheduleAttentionProjection();
   }
 
   function handleLoad(event: Event): void {
@@ -220,12 +268,104 @@
       (event.detail as { readonly status?: unknown })?.status !== "ready"
     ) return;
     ready = true;
+    scheduleAttentionProjection();
+  }
+
+  function scheduleAttentionProjection(): void {
+    if (attentionFrame !== undefined) return;
+    attentionFrame = requestAnimationFrame(() => {
+      attentionFrame = undefined;
+      updateAttentionProjection();
+    });
+  }
+
+  function updateAttentionProjection(): void {
+    if (shell === undefined) {
+      attentionProjection = emptyAttentionProjection;
+      return;
+    }
+    const passage = shell.querySelector<HTMLElement>(
+      `[data-kp-economics-tutorial-passage="${checkpoint.passageId}"]`
+    );
+    const stage = shell.querySelector<HTMLElement>(
+      ".kp-economics-tutorial__stage-card"
+    );
+    const playerHost = shell.querySelector<HTMLElement>(
+      ".kp-economics-tutorial__player-host"
+    );
+    const target = playerHost === null
+      ? null
+      : playerHost.querySelector<Element>(checkpoint.attention.targetSelector);
+    if (
+      passage === null ||
+      stage === null ||
+      playerHost === null ||
+      target === null
+    ) {
+      attentionProjection = {
+        ...emptyAttentionProjection,
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight
+      };
+      return;
+    }
+
+    const passageRect = passage.getBoundingClientRect();
+    const stageRect = stage.getBoundingClientRect();
+    const playerHostRect = playerHost.getBoundingClientRect();
+    const targetPoint = resolveAttentionTargetPoint(
+      target,
+      checkpoint.attention.targetAnchor
+    );
+    const readingBandY = window.innerHeight * 0.38;
+    const passageInset = Math.min(24, passageRect.height / 2);
+    const passageAnchorMinimum = passageRect.top + passageInset;
+    const passageAnchorMaximum = Math.max(
+      passageAnchorMinimum,
+      passageRect.bottom - passageInset
+    );
+    const sourceY = clamp(
+      readingBandY,
+      passageAnchorMinimum,
+      passageAnchorMaximum
+    );
+    const targetX = targetPoint.x;
+    const targetY = targetPoint.y;
+    const passageIsVisible = passageRect.bottom > 0 &&
+      passageRect.top < window.innerHeight;
+    const stageIsVisible = stageRect.bottom > 0 &&
+      stageRect.top < window.innerHeight;
+
+    attentionProjection = {
+      connectorVisible: window.innerWidth > 760 &&
+        passageIsVisible && stageIsVisible,
+      spotlightVisible: playerHostRect.width > 0 && playerHostRect.height > 0,
+      viewportWidth: window.innerWidth,
+      viewportHeight: window.innerHeight,
+      sourceX: Math.min(passageRect.right + 7, stageRect.left - 18),
+      sourceY,
+      relayX: stageRect.left + 1,
+      relayY: targetY,
+      targetX,
+      targetY,
+      spotlightX: clamp(
+        targetX - playerHostRect.left,
+        0,
+        playerHostRect.width
+      ),
+      spotlightY: clamp(
+        targetY - playerHostRect.top,
+        0,
+        playerHostRect.height
+      )
+    };
   }
 
   function scheduleReadingBandSelection(): void {
     if (scrollFrame !== undefined) return;
     scrollFrame = requestAnimationFrame(() => {
       scrollFrame = undefined;
+      scheduleAttentionProjection();
       if (shell === undefined) return;
       const passages = [...shell.querySelectorAll<HTMLElement>(
         "[data-kp-economics-tutorial-passage]"
@@ -282,11 +422,21 @@
       hostability,
       animation
     });
+    attentionResizeObserver = new ResizeObserver(scheduleAttentionProjection);
+    attentionResizeObserver.observe(shell);
+    const stage = shell.querySelector<HTMLElement>(
+      ".kp-economics-tutorial__stage-card"
+    );
+    if (stage !== null) attentionResizeObserver.observe(stage);
+    void document.fonts.ready.then(scheduleAttentionProjection);
     scheduleReadingBandSelection();
+    scheduleAttentionProjection();
   });
 
   onDestroy(() => {
     if (scrollFrame !== undefined) cancelAnimationFrame(scrollFrame);
+    if (attentionFrame !== undefined) cancelAnimationFrame(attentionFrame);
+    attentionResizeObserver?.disconnect();
     player?.removeEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player?.removeEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
     window.removeEventListener("scroll", scheduleReadingBandSelection);
@@ -294,6 +444,57 @@
     window.removeEventListener("keydown", handleTutorialKeydown);
     disposePlayerHost?.();
   });
+
+  function resolveAttentionTargetPoint(
+    target: Element,
+    anchor: number
+  ): { readonly x: number; readonly y: number } {
+    // A line's bounding-box center often coincides with equilibrium. Project
+    // the authored curve anchor so the connector identifies the curve itself.
+    if (target instanceof SVGLineElement) {
+      const matrix = target.getScreenCTM();
+      const svg = target.ownerSVGElement;
+      if (matrix !== null && svg !== null) {
+        const point = svg.createSVGPoint();
+        point.x = Number(target.getAttribute("x1")) * (1 - anchor) +
+          Number(target.getAttribute("x2")) * anchor;
+        point.y = Number(target.getAttribute("y1")) * (1 - anchor) +
+          Number(target.getAttribute("y2")) * anchor;
+        const projected = point.matrixTransform(matrix);
+        return { x: projected.x, y: projected.y };
+      }
+    }
+    const targetRect = target.getBoundingClientRect();
+    return {
+      x: targetRect.left + targetRect.width / 2,
+      y: targetRect.top + targetRect.height / 2
+    };
+  }
+
+  function createAttentionGutterPath(
+    projection: KpEconomicsTutorialAttentionProjection
+  ): string {
+    const span = Math.max(0, projection.relayX - projection.sourceX);
+    return `M ${projection.sourceX} ${projection.sourceY} C ` +
+      `${projection.sourceX + span * 0.42} ${projection.sourceY}, ` +
+      `${projection.relayX - span * 0.28} ${projection.relayY}, ` +
+      `${projection.relayX} ${projection.relayY}`;
+  }
+
+  function createAttentionLocalPath(
+    projection: KpEconomicsTutorialAttentionProjection
+  ): string {
+    const startX = projection.relayX + 8;
+    const span = Math.max(0, projection.targetX - startX);
+    return `M ${startX} ${projection.relayY} C ` +
+      `${startX + span * 0.4} ${projection.relayY}, ` +
+      `${projection.targetX - span * 0.32} ${projection.targetY}, ` +
+      `${projection.targetX} ${projection.targetY}`;
+  }
+
+  function clamp(value: number, minimum: number, maximum: number): number {
+    return Math.max(minimum, Math.min(maximum, value));
+  }
 </script>
 
 <main
@@ -306,6 +507,8 @@
   data-kp-economics-demand-intercept={demandIntercept}
   data-kp-economics-tutorial-checkpoint={checkpoint.id}
   data-kp-economics-tutorial-passage={checkpoint.passageId}
+  data-kp-economics-tutorial-focus-profile={checkpoint.attention.profile}
+  data-kp-economics-tutorial-focus-target={checkpoint.attention.target}
   data-kp-economics-tutorial-equations={equationsVisible ? "visible" : "quiet"}
 >
   <h1 class="kp-economics-tutorial__visually-hidden">
@@ -388,6 +591,13 @@
           aria-busy={!ready}
         >
           {@html playerHtml}
+          <div
+            class="kp-economics-tutorial__spotlight"
+            data-kp-economics-tutorial-spotlight
+            data-kp-attention-spotlight-visible={attentionProjection.spotlightVisible}
+            style={spotlightStyle}
+            aria-hidden="true"
+          ></div>
         </div>
 
         <div
@@ -464,6 +674,57 @@
       </div>
     </aside>
   </div>
+
+  <svg
+    class="kp-economics-tutorial__attention-bridge"
+    class:kp-economics-tutorial__attention-bridge--visible={attentionProjection.connectorVisible}
+    data-kp-economics-tutorial-attention-bridge
+    data-kp-attention-bridge-visible={attentionProjection.connectorVisible}
+    width={attentionProjection.viewportWidth}
+    height={attentionProjection.viewportHeight}
+    aria-hidden="true"
+  >
+    <defs>
+      <marker
+        id="kp-economics-tutorial-attention-arrow"
+        viewBox="0 0 10 10"
+        refX="8"
+        refY="5"
+        markerWidth="6"
+        markerHeight="6"
+        orient="auto"
+      >
+        <path d="M 0 0 L 10 5 L 0 10 z"></path>
+      </marker>
+    </defs>
+    <path
+      class="kp-economics-tutorial__attention-gutter"
+      d={attentionGutterPath}
+    ></path>
+    <circle
+      class="kp-economics-tutorial__attention-source"
+      cx={attentionProjection.sourceX}
+      cy={attentionProjection.sourceY}
+      r="3"
+    ></circle>
+    <circle
+      class="kp-economics-tutorial__attention-relay"
+      cx={attentionProjection.relayX}
+      cy={attentionProjection.relayY}
+      r="4"
+    ></circle>
+    <path
+      class="kp-economics-tutorial__attention-local"
+      d={attentionLocalPath}
+      marker-end="url(#kp-economics-tutorial-attention-arrow)"
+    ></path>
+    <circle
+      class="kp-economics-tutorial__attention-target"
+      cx={attentionProjection.targetX}
+      cy={attentionProjection.targetY}
+      r="8"
+    ></circle>
+  </svg>
 
   <p class="kp-economics-tutorial__announcement" aria-live="polite">
     {announcement}

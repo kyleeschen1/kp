@@ -48,9 +48,44 @@ test("approved economics prose and semantic controls form one persistent tutoria
   await expect(root.getByRole("button", {
     name: "Next semantic checkpoint"
   })).toBeVisible();
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-focus-profile",
+    "market"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-focus-target",
+    "market"
+  );
+  await expect(root.locator("[data-kp-economics-tutorial-spotlight]"))
+    .toHaveAttribute("data-kp-attention-spotlight-visible", "true");
+  await expect(root.locator("[data-kp-economics-tutorial-attention-bridge]"))
+    .toHaveAttribute("data-kp-attention-bridge-visible", "true");
   await mkdir(evidenceDirectory, { recursive: true });
   await page.screenshot({
     path: `${evidenceDirectory}/wide-start.png`,
+    fullPage: false
+  });
+
+  const demandChange = root.locator(
+    '[data-kp-economics-tutorial-passage="demand-change"]'
+  );
+  await demandChange.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.38
+  }));
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-focus-profile",
+    "demand"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-focus-target",
+    "demand"
+  );
+  await expect.poll(() => graph.locator("[data-kp-economics-demand-line]")
+    .evaluate((element) => getComputedStyle(element).filter))
+    .toContain("opacity(1)");
+  await page.screenshot({
+    path: `${evidenceDirectory}/wide-demand-focus.png`,
     fullPage: false
   });
 
@@ -92,6 +127,22 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-economics-tutorial-checkpoint",
     "synthesis"
   );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-focus-profile",
+    "synthesis"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-focus-target",
+    "supply"
+  );
+  await expect(root.locator("[data-kp-economics-tutorial-attention-bridge]"))
+    .toHaveAttribute("data-kp-attention-bridge-visible", "true");
+  await expect.poll(() => graph.locator("[data-kp-economics-supply-line]")
+    .evaluate((element) => getComputedStyle(element).filter))
+    .toContain("opacity(1)");
+  await expect.poll(() => graph.locator("[data-kp-economics-demand-line]")
+    .evaluate((element) => getComputedStyle(element).filter))
+    .toContain("opacity(0.38)");
   await expect(player).not.toHaveAttribute(
     "data-kp-editor-animation-status",
     "playing"
@@ -141,6 +192,10 @@ test("phone tutorial keeps a stable compact stage dock with optional expansion",
     "data-kp-editor-animation-hydrated",
     "true"
   );
+  await expect(root.locator("[data-kp-economics-tutorial-attention-bridge]"))
+    .toHaveAttribute("data-kp-attention-bridge-visible", "false");
+  await expect(root.locator("[data-kp-economics-tutorial-spotlight]"))
+    .toHaveAttribute("data-kp-attention-spotlight-visible", "true");
   const compact = await stage.boundingBox();
   expect(compact).not.toBeNull();
   expect(compact!.y).toBeCloseTo(0, 0);
