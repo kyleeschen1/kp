@@ -497,6 +497,30 @@
       "status": "passed",
       "scope": "s19 patch hygiene",
       "checkedAt": "2026-08-03T18:08:58.238Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lesson-seam-ledger.test.ts",
+      "status": "passed",
+      "scope": "s20 executable seam ledger and caller inventory",
+      "checkedAt": "2026-08-03T18:15:50.233Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20 application test Svelte and domain types",
+      "checkedAt": "2026-08-03T18:15:51.356Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s20 architecture preservation",
+      "checkedAt": "2026-08-03T18:15:52.320Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s20 patch hygiene",
+      "checkedAt": "2026-08-03T18:15:53.289Z"
     }
   ],
   "allowedWork": [
@@ -637,7 +661,8 @@
     {
       "id": "s20",
       "title": "Compare economics Lisp and lesson document seams",
-      "status": "planned"
+      "summary": "Committed a typed seam ledger and field-by-field KpLessonDocument comparison. It proves two-caller extraction candidates for slices 21-25, reuses existing URL/TOC/scrubber primitives, and keeps inline rendering, stage semantics, focus geometry, and domain runtimes local. Five ledger tests, full typecheck, architecture gates, and patch hygiene pass.",
+      "status": "complete"
     },
     {
       "id": "s21",
