@@ -120,6 +120,24 @@
       "status": "passed",
       "scope": "s05 test inference",
       "checkedAt": "2026-08-03T16:50:03.294Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-lambda-application-runtime-frame.test.ts tests/kp-lisp-lambda-application-renderer.test.ts",
+      "status": "passed",
+      "scope": "s06 nine native settlement and runtime tests",
+      "checkedAt": "2026-08-03T16:52:34.354Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s06 application types",
+      "checkedAt": "2026-08-03T16:52:35.416Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s06 test inference",
+      "checkedAt": "2026-08-03T16:52:36.373Z"
     }
   ],
   "allowedWork": [
@@ -176,7 +194,8 @@
     {
       "id": "s06",
       "title": "Render native settled S-expressions",
-      "status": "planned"
+      "summary": "Added a framework-neutral Lisp HTML renderer whose application, environment, reconstructed form, and result settle as selectable native code. Transient motion has a distinct aria-hidden layer, every frame exposes equivalent live text, and nine focused tests plus app/test TypeScript checks pass.",
+      "status": "complete"
     },
     {
       "id": "s07",
