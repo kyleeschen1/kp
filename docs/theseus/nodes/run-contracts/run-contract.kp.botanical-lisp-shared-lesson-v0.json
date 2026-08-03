@@ -54,6 +54,18 @@
       "status": "passed",
       "scope": "s01 project-memory and contract patch hygiene",
       "checkedAt": "2026-08-03T16:31:58.923Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-semantic-model.test.ts",
+      "status": "passed",
+      "scope": "s02 four semantic identity and validation tests",
+      "checkedAt": "2026-08-03T16:38:51.501Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02 repository TypeScript and Svelte boundary",
+      "checkedAt": "2026-08-03T16:38:52.593Z"
     }
   ],
   "allowedWork": [
@@ -86,7 +98,8 @@
     {
       "id": "s02",
       "title": "Define minimal Lisp semantic model",
-      "status": "planned"
+      "summary": "Added a deeply immutable, validator-backed Lisp semantic model for atoms, lists, source spans, distinct binder/reference occurrences, lexical bindings, environments, typed substitution destinations, and exact integer values. Four focused tests and the full repository typecheck pass; no parser, evaluator, renderer, or framework dependency was introduced.",
+      "status": "complete"
     },
     {
       "id": "s03",
