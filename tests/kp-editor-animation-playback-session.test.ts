@@ -84,6 +84,31 @@ test("editor playback session mirrors position before advancing rewind", () => {
   assert.equal(advanced.player.runtimeFrame.clock.direction, "rewind");
 });
 
+test("editor playback session changes from rewind to forward without a frame jump", () => {
+  const sought = reduceKpEditorAnimationPlaybackSession(createSolveXSession(), {
+    type: "seek",
+    progress: 0.25
+  });
+  const rewinding = reduceKpEditorAnimationPlaybackSession(sought, {
+    type: "rewind",
+    nowMs: 2_000
+  });
+  const forwarding = reduceKpEditorAnimationPlaybackSession(rewinding, {
+    type: "forward",
+    nowMs: 2_100
+  });
+
+  assert.equal(rewinding.player.direction, "rewind");
+  assert.equal(rewinding.player.progress, 0.75);
+  assert.equal(forwarding.player.direction, "forward");
+  assert.equal(forwarding.player.progress, 0.25);
+  assert.deepEqual(forwarding.player.runtimeFrame.phase, sought.player.runtimeFrame.phase);
+  assert.deepEqual(
+    forwarding.player.runtimeFrame.activeTransformationIds,
+    sought.player.runtimeFrame.activeTransformationIds
+  );
+});
+
 test("editor playback session reset restores the forward idle frame", () => {
   const rewinding = reduceKpEditorAnimationPlaybackSession(
     reduceKpEditorAnimationPlaybackSession(createSolveXSession(), {

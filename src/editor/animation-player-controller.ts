@@ -129,7 +129,12 @@ export function dispatchKpEditorAnimationPlaybackAction(
 
   syncRenderQualityForPlaybackAction(player, session, action);
 
-  if (action.type !== "play" && action.type !== "tick" && action.type !== "rewind") {
+  if (
+    action.type !== "play" &&
+    action.type !== "forward" &&
+    action.type !== "tick" &&
+    action.type !== "rewind"
+  ) {
     cancelPlayerFrame(player);
   }
 

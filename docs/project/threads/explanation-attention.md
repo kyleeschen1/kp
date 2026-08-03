@@ -4,7 +4,7 @@ Status: active-supporting
 Last Updated: 2026-08-02
 Current Next Action: Human-review the integrated economics tutorial at
 `/tutorials/economics/demand-shift/` for reading cadence, stage coordination,
-semantic controls, the annotated one-shot motion handoff, graph-local focus
+semantic controls, the directional prose scrub boundary, graph-local focus
 attenuation, spotlight scope, stage/page continuity, and the compact phone
 dock. The rejected cross-page connector is removed; the selected local
 revision uses a soft two-aperture page wash and a contiguous wide stage. Do not
@@ -31,13 +31,13 @@ KP as a salience-transmission engine. Each checkpoint must make the primary
 target, necessary context, and attention transition evident. The economics
 implementation is local discovery evidence, not a globally enforced schema.
 
-Learners retain fine-grained control through Previous semantic checkpoint,
-Play/Pause, Next semantic checkpoint, a continuously draggable marked
-scrubber, and keyboard equivalents. The local economics exemplar now places an
-annotated Play row before the causal shift. After a short dwell in the stable
-reading band, scrolling may start the untouched authored timeline once. Scroll
+Learners retain fine-grained control through a block-level prose scrub bar with
+Rewind, Previous semantic checkpoint, Play/Pause, Next semantic checkpoint, a
+continuously draggable marked timeline, and keyboard equivalents. The local
+economics exemplar implements that control as a custom web component rather
+than Svelte UI. Crossing it downward plays; crossing it upward rewinds. Scroll
 does not scrub or seek the curves, any manual interaction takes precedence,
-reduced-motion suppresses automatic playback, and no coordination action
+reduced-motion suppresses automatic motion, and no coordination action
 auto-scrolls the page.
 
 The first exemplar is the approved economics supply-demand equilibrium asset.
@@ -59,12 +59,12 @@ The delivered exemplar includes:
 - a graph-led causal argument with equations as later verification;
 - a non-gating prediction before motion and synthesis after settlement;
 - stable passage, claim, object, and checkpoint references;
-- a persistent stage, explicit Previous/Play/Next controls, and a marked
-  continuous scrubber without page reloads;
-- one annotated inline motion cue that names the demand shift and fixed supply
-  before a 650 ms dwell may start the untouched timeline once;
-- manual timeline ownership, no scroll seeking, no incidental replay, and a
-  reduced-motion manual fallback;
+- a persistent graph-only stage plus a prose-column custom element containing
+  Rewind, Previous, Play/Pause, Next, and a marked continuous scrubber;
+- one visible animation boundary that names the demand shift and fixed supply,
+  plays when crossed downward, and rewinds when crossed upward;
+- mirrored direction changes without curve jumps, manual timeline ownership,
+  no scroll seeking, and a reduced-motion manual fallback;
 - a stable compact phone dock with temporary expansion;
 - inline KaTeX, quiet equations until verification, and the existing Review
   capture dock;
@@ -122,10 +122,9 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
   subordinate or crowded?
 - Are Previous/Play/Next and the marked scrubber sufficient for both conceptual
   and fine-grained control?
-- Does the annotated cue plus short dwell make one-shot playback feel expected
-  rather than surprising?
-- Does the authored curve motion now replace every scroll-induced jump without
-  making the reader wait too long?
+- Does the block-level scrub boundary make both downward play and upward rewind
+  feel expected rather than surprising?
+- Does mirrored direction reversal eliminate every curve jump?
 - Does attenuation make the target unmistakable without obscuring causally
   necessary context?
 - Is the hybrid page wash strong enough without making surrounding prose feel

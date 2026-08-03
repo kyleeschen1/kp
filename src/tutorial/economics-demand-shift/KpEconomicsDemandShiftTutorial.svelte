@@ -30,18 +30,28 @@
   import type {
     KpEconomicsDemandShiftLesson
   } from "./economics-demand-shift-lesson-compiler.ts";
+  import {
+    KP_TUTORIAL_SCRUB_AUTO_EVENT,
+    KP_TUTORIAL_SCRUB_NEXT_EVENT,
+    KP_TUTORIAL_SCRUB_PREVIOUS_EVENT,
+    KP_TUTORIAL_SCRUB_REWIND_EVENT,
+    KP_TUTORIAL_SCRUB_SEEK_EVENT,
+    KP_TUTORIAL_SCRUB_TOGGLE_EVENT,
+    type KpTutorialScrubAutoDetail,
+    type KpTutorialScrubBarElement,
+    type KpTutorialScrubSeekDetail
+  } from "../kp-tutorial-scrub-bar.ts";
   import KpInlineMath from "./KpInlineMath.svelte";
 
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
   type KpEconomicsTutorialScrollAutoplayStatus =
     | "idle"
-    | "armed"
     | "playing"
+    | "rewinding"
     | "complete"
+    | "rewound"
     | "manual"
     | "reduced-motion";
-
-  const scrollAutoplayDwellMs = 650;
 
   interface KpEconomicsTutorialAttentionProjection {
     readonly spotlightVisible: boolean;
@@ -98,6 +108,7 @@
   const initial = untrack(() => ({
     progress: initialPlayer.progress,
     playbackStatus: initialPlayer.playbackStatus,
+    playbackDirection: initialPlayer.direction,
     demandIntercept: initialDemandIntercept,
     playerHtml: renderKpEditorAnimationPlayerShell({
       descriptor,
@@ -107,9 +118,11 @@
   }));
   let shell = $state<HTMLElement | undefined>();
   let player = $state<HTMLElement | undefined>();
+  let scrubBar = $state<KpTutorialScrubBarElement | undefined>();
   let checkpointIndex = $state(0);
   let progress = $state(initial.progress);
   let playbackStatus = $state(initial.playbackStatus);
+  let playbackDirection = $state(initial.playbackDirection);
   let demandIntercept = $state(initial.demandIntercept);
   let ready = $state(false);
   let stageExpanded = $state(false);
@@ -121,7 +134,6 @@
   );
   let reducedMotion = $state(false);
   let scrollFrame: number | undefined;
-  let scrollAutoplayTimer: number | undefined;
   let attentionFrame: number | undefined;
   let attentionResizeObserver: ResizeObserver | undefined;
   let reducedMotionQuery: MediaQueryList | undefined;
@@ -135,34 +147,8 @@
     checkpoint.id === "synthesis" ||
     checkpoint.id === "explore"
   );
-  let playLabel = $derived(
-    playbackStatus === "playing"
-      ? "Pause"
-      : playbackStatus === "complete"
-        ? "Replay"
-        : "Play"
-  );
-  let cueButtonLabel = $derived(
-    playbackStatus === "playing"
-      ? "Pause"
-      : playbackStatus === "complete"
-        ? "Replay shift"
-        : progress > 0
-          ? "Continue shift"
-          : "Show the shift"
-  );
-  let cueStatus = $derived(
-    scrollAutoplayStatus === "reduced-motion"
-      ? "Automatic motion is off. Play when you are ready."
-      : scrollAutoplayStatus === "armed"
-        ? "The shift will begin after this cue settles into focus."
-        : scrollAutoplayStatus === "playing"
-          ? "The demand shift is playing."
-          : scrollAutoplayStatus === "complete"
-            ? "The shift is complete. Replay it whenever you need."
-            : scrollAutoplayStatus === "manual"
-              ? "You control this animation."
-              : "It will begin when this cue enters focus, or you can play it now."
+  let semanticProgress = $derived(
+    playbackDirection === "rewind" ? 1 - progress : progress
   );
   let spotlightStyle = $derived(
     `--kp-tutorial-spotlight-x:${attentionProjection.spotlightX}px;` +
@@ -197,23 +183,46 @@
     }));
   }
 
+  function selectPreviousCheckpoint(): void {
+    stepCheckpoint(-1);
+  }
+
+  function selectNextCheckpoint(): void {
+    stepCheckpoint(1);
+  }
+
   function togglePlayback(): void {
     claimManualMotion();
     if (player === undefined) return;
     const session = getKpEditorAnimationPlaybackSession(player);
     if (session === undefined) return;
+    if (session.player.playbackStatus === "playing") {
+      dispatchKpEditorAnimationPlaybackAction(player, {
+        type: "pause",
+        nowMs: performance.now()
+      });
+      return;
+    }
     dispatchKpEditorAnimationPlaybackAction(
       player,
-      session.player.playbackStatus === "playing"
-        ? { type: "pause", nowMs: performance.now() }
-        : { type: "play", nowMs: performance.now() }
+      session.player.direction === "rewind" &&
+          session.player.playbackStatus !== "complete"
+        ? { type: "rewind", nowMs: performance.now() }
+        : { type: "forward", nowMs: performance.now() }
     );
   }
 
-  function scrub(event: Event): void {
-    if (!(event.currentTarget instanceof HTMLInputElement)) return;
+  function rewindPlayback(): void {
     claimManualMotion();
-    const nextProgress = Number(event.currentTarget.value);
+    if (player === undefined) return;
+    dispatchKpEditorAnimationPlaybackAction(player, {
+      type: "rewind",
+      nowMs: performance.now()
+    });
+  }
+
+  function scrub(nextProgress: number): void {
+    claimManualMotion();
     seek(nextProgress);
     if (Math.abs(nextProgress - 0.72) < 0.015) {
       checkpointIndex = findKpEconomicsDemandShiftCheckpointIndex("handoff");
@@ -227,6 +236,12 @@
 
   function seek(nextProgress: number): void {
     if (!ready || player === undefined) return;
+    const session = getKpEditorAnimationPlaybackSession(player);
+    // The prose scrubber always represents semantic start-to-finish progress,
+    // independent of the runtime's currently sampled direction.
+    if (session?.player.direction === "rewind") {
+      dispatchKpEditorAnimationPlaybackAction(player, { type: "reset" });
+    }
     dispatchKpEditorAnimationPlaybackAction(player, {
       type: "seek",
       progress: nextProgress
@@ -294,10 +309,14 @@
       event.detail === null
     ) return;
     const detail = event.detail as {
+      readonly direction?: unknown;
       readonly progress?: unknown;
       readonly playbackStatus?: unknown;
     };
     if (typeof detail.progress === "number") progress = detail.progress;
+    if (detail.direction === "forward" || detail.direction === "rewind") {
+      playbackDirection = detail.direction;
+    }
     if (typeof detail.playbackStatus === "string") {
       playbackStatus =
         detail.playbackStatus as KpEditorAnimationPlayerState["playbackStatus"];
@@ -307,8 +326,13 @@
       detail.progress === 1 &&
       motionOwner === "scroll"
     ) {
-      scrollAutoplayStatus = "complete";
-      announcement = "Demand shift complete. Quantity 8 and price 10.";
+      if (detail.direction === "rewind") {
+        scrollAutoplayStatus = "rewound";
+        announcement = "Demand shift rewound to the initial equilibrium.";
+      } else {
+        scrollAutoplayStatus = "complete";
+        announcement = "Demand shift complete. Quantity 8 and price 10.";
+      }
     }
     if (
       detail.playbackStatus === "complete" &&
@@ -333,53 +357,49 @@
   }
 
   function claimManualMotion(): void {
-    clearScrollAutoplayTimer();
+    // A control action must win even when it lands between a scroll event and
+    // that event's deferred reading-band projection.
+    if (scrollFrame !== undefined) {
+      cancelAnimationFrame(scrollFrame);
+      scrollFrame = undefined;
+    }
     motionOwner = "manual";
     scrollAutoplayStatus = "manual";
   }
 
-  function clearScrollAutoplayTimer(): void {
-    if (scrollAutoplayTimer === undefined) return;
-    window.clearTimeout(scrollAutoplayTimer);
-    scrollAutoplayTimer = undefined;
-  }
-
-  function synchronizeScrollAutoplay(selectedPassage: string): void {
-    if (motionOwner !== "untouched") return;
-    if (selectedPassage !== "follow-shift") {
-      clearScrollAutoplayTimer();
-      scrollAutoplayStatus = "idle";
-      return;
-    }
-    if (reducedMotion) {
-      clearScrollAutoplayTimer();
-      scrollAutoplayStatus = "reduced-motion";
-      return;
-    }
-    if (!ready || player === undefined || scrollAutoplayTimer !== undefined) {
-      return;
-    }
-    scrollAutoplayStatus = "armed";
-    scrollAutoplayTimer = window.setTimeout(() => {
-      scrollAutoplayTimer = undefined;
-      if (
-        motionOwner !== "untouched" ||
-        checkpoint.passageId !== "follow-shift" ||
-        player === undefined
-      ) return;
-      motionOwner = "scroll";
-      scrollAutoplayStatus = "playing";
-      announcement = "Demand shift playing. Supply remains fixed.";
-      dispatchKpEditorAnimationPlaybackAction(player, {
-        type: "play",
-        nowMs: performance.now()
-      });
-    }, scrollAutoplayDwellMs);
-  }
-
   function handleReducedMotionChange(event: MediaQueryListEvent): void {
     reducedMotion = event.matches;
-    scheduleReadingBandSelection();
+    if (motionOwner === "untouched") {
+      scrollAutoplayStatus = event.matches ? "reduced-motion" : "idle";
+    }
+  }
+
+  function handleScrubBarAuto(event: Event): void {
+    if (
+      !(event instanceof CustomEvent) ||
+      (event.detail as KpTutorialScrubAutoDetail | undefined)?.direction ===
+        undefined ||
+      motionOwner === "manual" ||
+      reducedMotion ||
+      !ready ||
+      player === undefined
+    ) return;
+    const { direction } = event.detail as KpTutorialScrubAutoDetail;
+    motionOwner = "scroll";
+    scrollAutoplayStatus = direction === "forward" ? "playing" : "rewinding";
+    announcement = direction === "forward"
+      ? "Demand shift playing. Supply remains fixed."
+      : "Demand shift rewinding to the initial equilibrium.";
+    dispatchKpEditorAnimationPlaybackAction(player, {
+      type: direction,
+      nowMs: performance.now()
+    });
+  }
+
+  function handleScrubBarSeek(event: Event): void {
+    if (!(event instanceof CustomEvent)) return;
+    const detail = event.detail as KpTutorialScrubSeekDetail | undefined;
+    if (typeof detail?.progress === "number") scrub(detail.progress);
   }
 
   function scheduleAttentionProjection(): void {
@@ -499,7 +519,6 @@
         );
         if (nextIndex >= 0) activateCheckpoint(nextIndex, "scroll");
       }
-      synchronizeScrollAutoplay(selectedPassage);
     });
   }
 
@@ -528,6 +547,18 @@
     if (player === undefined) return;
     player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
+    scrubBar?.addEventListener(KP_TUTORIAL_SCRUB_TOGGLE_EVENT, togglePlayback);
+    scrubBar?.addEventListener(KP_TUTORIAL_SCRUB_REWIND_EVENT, rewindPlayback);
+    scrubBar?.addEventListener(
+      KP_TUTORIAL_SCRUB_PREVIOUS_EVENT,
+      selectPreviousCheckpoint
+    );
+    scrubBar?.addEventListener(
+      KP_TUTORIAL_SCRUB_NEXT_EVENT,
+      selectNextCheckpoint
+    );
+    scrubBar?.addEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, handleScrubBarSeek);
+    scrubBar?.addEventListener(KP_TUTORIAL_SCRUB_AUTO_EVENT, handleScrubBarAuto);
     window.addEventListener("scroll", scheduleReadingBandSelection, {
       passive: true
     });
@@ -547,6 +578,9 @@
     if (playerHost !== null) attentionResizeObserver.observe(playerHost);
     reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     reducedMotion = reducedMotionQuery.matches;
+    if (reducedMotion && motionOwner === "untouched") {
+      scrollAutoplayStatus = "reduced-motion";
+    }
     reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
     void document.fonts.ready.then(scheduleAttentionProjection);
     scheduleReadingBandSelection();
@@ -555,11 +589,22 @@
 
   onDestroy(() => {
     if (scrollFrame !== undefined) cancelAnimationFrame(scrollFrame);
-    clearScrollAutoplayTimer();
     if (attentionFrame !== undefined) cancelAnimationFrame(attentionFrame);
     attentionResizeObserver?.disconnect();
     player?.removeEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player?.removeEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
+    scrubBar?.removeEventListener(KP_TUTORIAL_SCRUB_TOGGLE_EVENT, togglePlayback);
+    scrubBar?.removeEventListener(KP_TUTORIAL_SCRUB_REWIND_EVENT, rewindPlayback);
+    scrubBar?.removeEventListener(
+      KP_TUTORIAL_SCRUB_PREVIOUS_EVENT,
+      selectPreviousCheckpoint
+    );
+    scrubBar?.removeEventListener(
+      KP_TUTORIAL_SCRUB_NEXT_EVENT,
+      selectNextCheckpoint
+    );
+    scrubBar?.removeEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, handleScrubBarSeek);
+    scrubBar?.removeEventListener(KP_TUTORIAL_SCRUB_AUTO_EVENT, handleScrubBarAuto);
     window.removeEventListener("scroll", scheduleReadingBandSelection);
     window.removeEventListener("resize", scheduleReadingBandSelection);
     window.removeEventListener("keydown", handleTutorialKeydown);
@@ -663,29 +708,19 @@
               data-kp-economics-tutorial-passage={passage.id}
             >
               {#if passage.id === "follow-shift"}
-                <div
-                  class="kp-economics-tutorial__motion-cue"
+                <kp-tutorial-scrub-bar
+                  bind:this={scrubBar}
                   data-kp-economics-tutorial-motion-cue
-                  role="note"
-                  aria-label="Animation ahead"
-                >
-                  <div class="kp-economics-tutorial__motion-cue-copy">
-                    <span class="kp-economics-tutorial__motion-cue-eyebrow">
-                      Animation ahead
-                    </span>
-                    <strong>Demand shifts right; supply stays fixed.</strong>
-                    <span
-                      class="kp-economics-tutorial__motion-cue-status"
-                      aria-live="polite"
-                    >{cueStatus}</span>
-                  </div>
-                  <button
-                    type="button"
-                    disabled={!ready}
-                    aria-label={`${cueButtonLabel}: demand shifts right while supply stays fixed`}
-                    onclick={togglePlayback}
-                  >{cueButtonLabel}</button>
-                </div>
+                  label="Demand shifts right"
+                  retained-context="Supply stays fixed."
+                  progress={semanticProgress}
+                  playback-status={playbackStatus}
+                  direction={playbackDirection}
+                  controls-disabled={ready ? "false" : "true"}
+                  previous-disabled={checkpointIndex === 0 ? "true" : "false"}
+                  next-disabled={checkpointIndex === kpEconomicsDemandShiftCheckpoints.length - 1 ? "true" : "false"}
+                  manual-claimed={motionOwner === "manual" ? "true" : "false"}
+                ></kp-tutorial-scrub-bar>
               {/if}
               {#if passage.id === "prediction"}
                 <p>{@html passage.paragraphs[0]!.html}</p>
@@ -705,6 +740,28 @@
                 {#each passage.paragraphs as paragraph}
                   <p>{@html paragraph.html}</p>
                 {/each}
+              {/if}
+              {#if passage.id === "explore"}
+                <details class="kp-economics-tutorial__explore" bind:open={explorationOpen}>
+                  <summary>Explore another demand shift</summary>
+                  <div class="kp-economics-tutorial__explore-panel">
+                    <label>
+                      New demand intercept
+                      <input
+                        type="range"
+                        min={kpEconomicsDemandInterceptParameter.minimum}
+                        max={kpEconomicsDemandInterceptParameter.maximum}
+                        step={kpEconomicsDemandInterceptParameter.step}
+                        value={demandIntercept}
+                        oninput={changeDemandIntercept}
+                      />
+                      <output><KpInlineMath latex={String(demandIntercept)} /></output>
+                    </label>
+                    <button type="button" onclick={restoreLessonExample}>
+                      Return to lesson example
+                    </button>
+                  </div>
+                </details>
               {/if}
             </div>
           {/each}
@@ -751,77 +808,6 @@
           ></div>
         </div>
 
-        <div
-          class="kp-economics-tutorial__controls"
-          role="group"
-          aria-label="Semantic animation controls"
-        >
-          <button
-            type="button"
-            disabled={checkpointIndex === 0 || !ready}
-            aria-label="Previous semantic checkpoint"
-            aria-keyshortcuts="Alt+ArrowLeft"
-            onclick={() => stepCheckpoint(-1)}
-          >Previous</button>
-          <button
-            type="button"
-            class="kp-economics-tutorial__play"
-            disabled={!ready}
-            aria-label={`${playLabel} demand shift`}
-            onclick={togglePlayback}
-          >{playLabel}</button>
-          <button
-            type="button"
-            disabled={checkpointIndex === kpEconomicsDemandShiftCheckpoints.length - 1 || !ready}
-            aria-label="Next semantic checkpoint"
-            aria-keyshortcuts="Alt+ArrowRight"
-            onclick={() => stepCheckpoint(1)}
-          >Next</button>
-
-          <label class="kp-economics-tutorial__scrubber">
-            <span class="kp-economics-tutorial__visually-hidden">
-              Animation progress
-            </span>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.001"
-              value={progress}
-              disabled={!ready}
-              aria-label="Scrub demand shift progress"
-              list="kp-economics-tutorial-marks"
-              oninput={scrub}
-            />
-            <datalist id="kp-economics-tutorial-marks">
-              <option value="0" label="Before"></option>
-              <option value="0.72" label="Handoff"></option>
-              <option value="1" label="After"></option>
-            </datalist>
-            <output>{Math.round(progress * 100)}%</output>
-          </label>
-
-          <details class="kp-economics-tutorial__explore" bind:open={explorationOpen}>
-            <summary>Explore</summary>
-            <div class="kp-economics-tutorial__explore-panel">
-              <label>
-                New demand intercept
-                <input
-                  type="range"
-                  min={kpEconomicsDemandInterceptParameter.minimum}
-                  max={kpEconomicsDemandInterceptParameter.maximum}
-                  step={kpEconomicsDemandInterceptParameter.step}
-                  value={demandIntercept}
-                  oninput={changeDemandIntercept}
-                />
-                <output><KpInlineMath latex={String(demandIntercept)} /></output>
-              </label>
-              <button type="button" onclick={restoreLessonExample}>
-                Return to lesson example
-              </button>
-            </div>
-          </details>
-        </div>
       </div>
     </aside>
   </div>

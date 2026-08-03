@@ -25,11 +25,13 @@ import KpEconomicsDemandShiftTutorial from
 import {
   compileKpEconomicsDemandShiftLesson
 } from "./economics-demand-shift-lesson-compiler.ts";
+import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 
 export async function mountKpEconomicsDemandShiftTutorial(input: {
   readonly root: HTMLElement;
   readonly search: string;
 }): Promise<() => void> {
+  defineKpTutorialScrubBar();
   const descriptors = createKpEditorAnimationLibrary();
   const projection = createKpAnimationCatalogueProjection({ descriptors });
   const entry = projection.entries.find(

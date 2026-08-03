@@ -85,10 +85,11 @@ with animation, recorded in
 `decisions/2026-08-02-kp-continuous-explanation-and-attention-coordination.md`
 and owned by `threads/explanation-attention.md`. KP will preserve continuous
 Markdown prose and coordinate it with one persistent semantic stage through
-static pre-motion passage preparation, an annotated one-shot motion handoff,
-manual-priority semantic controls, and a continuously draggable marked
-scrubber. Scroll may start the untouched authored timeline after a short dwell,
-but it never scrubs or seeks the curves; reduced-motion remains explicit-only.
+static pre-motion passage preparation and a block-level custom-element scrub
+boundary with manual-priority semantic controls. Crossing down plays and
+crossing up rewinds the authored timeline; scroll never assigns curve positions,
+direction changes mirror the clock without jumping, and reduced-motion remains
+explicit-only.
 The
 approved economics equilibrium asset is the canonical discovery exemplar;
 generated solve-x is the second caller before any shared passage or reader
@@ -230,10 +231,11 @@ preserves one argument over a persistent graph, lets the graph lead and
 equations verify, inserts one non-gating prediction before learner-triggered
 motion, and closes on the shift-versus-movement misconception before optional
 exploration. The local Svelte 5 host adds semantic controls, static pre-motion
-passage preparation, an annotated inline Play row with one-shot scroll handoff,
-a wide persistent stage, and a compact phone dock without changing the asset or
-runtime. Manual interaction takes timeline ownership, scrolling never seeks the
-curves forward, and reduced-motion disables automatic playback. It now also
+passage preparation, a framework-neutral prose scrub-bar custom element, a wide
+graph-only persistent stage, and a compact phone dock without changing the
+asset or runtime. Downward crossing plays, upward crossing rewinds, manual
+interaction takes timeline ownership, scrolling never seeks the curves, and
+reduced-motion disables automatic motion. It now also
 carries economics-local target profiles,
 context-preserving graph attenuation, graph-local spotlighting, and indented
 lesson paragraphs. The rejected passage-to-stage connector is removed. The
@@ -578,7 +580,7 @@ activating heavy animation capabilities lazily.
 
 1. Human-review the integrated economics tutorial at
    `/tutorials/economics/demand-shift/` across wide and phone layouts, including
-   its annotated one-shot motion handoff, curve continuity, manual precedence,
+   its directional prose scrub boundary, curve continuity, manual precedence,
    context-preserving focus attenuation, page-wash strength, aperture softness,
    contiguous wide stage, bounded phone dock, and paragraph indentation. The
    rejected connector is removed.

@@ -46,30 +46,35 @@ at the visual scale of `h3`; the reader surface does not add a large
 ### Coordinate attention without simultaneous demands
 
 Passage selection prepares a relevant static semantic checkpoint. At a causal
-bottleneck, the prose may then place one annotated action row on its own line,
-immediately before the motion it introduces. The row names what will move and
-what will remain invariant, and offers an explicit Play action.
+bottleneck, the prose places one annotated scrub-bar block on its own line,
+immediately before the motion it introduces. The block names what will move and
+what will remain invariant, then exposes Rewind, Previous, Play/Pause, Next,
+and continuous semantic progress.
 
-The economics integrated-review exemplar may also start that authored timeline
-once after the annotated row dwells in the stable reading band. This is a
-scroll-triggered handoff, not continuous scroll scrubbing: scrolling never
-directly seeks the curves to a later frame, and motion stops when its ordinary
-timeline stops. Any learner use of Play/Pause, Previous/Next, the scrubber,
-keyboard controls, or a bespoke parameter claims the timeline and suppresses
-later scroll autoplay. Minor backtracking does not replay it. Reduced-motion
-preference suppresses automatic playback while retaining the inline Play row.
+The economics integrated-review exemplar treats crossing that visible block as
+a directional handoff. Crossing downward plays the authored timeline; crossing
+upward rewinds the same timeline. This is not continuous scroll scrubbing:
+scrolling never directly assigns curve positions, and each direction runs on
+the ordinary animation clock. Reversing direction mirrors the clock at the
+current frame, so the curves do not jump. Any learner use of the controls,
+keyboard commands, or a bespoke parameter claims the timeline and suppresses
+later automatic crossings. Reduced-motion preference suppresses automatic
+playback and rewind while retaining the complete manual control block.
 
-The notice and dwell preserve the core rule: do not surprise the learner with
-causally important motion while they are absorbing unfamiliar prose. The
-economics behavior remains local discovery evidence pending integrated review;
-it is not yet a shared reader default.
+Making the boundary visible preserves the core rule: do not surprise the
+learner with causally important motion while they are absorbing unfamiliar
+prose. The control is a custom web component with shadow-DOM presentation and
+composed DOM events, not a Svelte component. Svelte binds the current exemplar
+to the runtime but does not own the control contract. This remains one-caller
+discovery evidence pending integrated review, not yet a stable shared reader
+default.
 
 The coordination is soft and bidirectional:
 
 - selecting or scrolling into a passage prepares its pre-motion static stage
   state and gives that passage a subtle positive emphasis;
-- an annotated causal handoff may start one untouched timeline after a short
-  dwell, without seeking to a later frame;
+- crossing the visible scrub boundary may play downward or rewind upward on
+  the authored clock, without scroll seeking;
 - crossing a semantic checkpoint updates the emphasized prose;
 - continuous motion between checkpoints leaves the prose emphasis stable;
 - no coordination action auto-scrolls the page;
@@ -84,12 +89,13 @@ states.
 
 ### Give the learner fine-grained semantic control
 
-The compact control strip remains visible and contains Previous semantic
-checkpoint, Play/Pause, Next semantic checkpoint, and a continuously draggable
-scrubber with semantic marks. Keyboard equivalents and optional uninterrupted
-play-through are required. Checkpoint controls move between meaningful states,
-not arbitrary fixed time increments; the scrubber remains available for
-fine-grained inspection and reversible seeking.
+The block-level prose control contains Rewind, Previous semantic checkpoint,
+Play/Pause, Next semantic checkpoint, and a continuously draggable scrubber
+with semantic marks. The persistent stage does not duplicate that strip.
+Keyboard equivalents and optional uninterrupted play-through are required.
+Checkpoint controls move between meaningful states, not arbitrary fixed time
+increments; the scrubber remains available for fine-grained inspection and
+reversible seeking.
 
 An animation may expose bespoke parameters after the guided explanation, but
 they remain secondary machinery. The economics exemplar first uses one fixed
@@ -105,11 +111,12 @@ temporary expansion when requested. The dock must not change height as labels,
 equations, or controls change.
 
 The first implementation will be a bounded internal Svelte 5 lesson surface.
-Svelte may own host composition and interaction, but Markdown, semantic assets,
-runtime frames, clocks, attention decisions, and renderer ports remain
-framework-neutral. This discovery exemplar does not authorize a SvelteKit
-migration, a public site, an authoring editor, or a catalogue-wide reader
-rollout.
+Svelte may own host composition, but the prose scrub bar is a custom element
+whose UI state and actions travel through attributes and DOM events. Markdown,
+semantic assets, runtime frames, clocks, attention decisions, controls, and
+renderer ports remain usable without Svelte. This discovery exemplar does not
+authorize a SvelteKit migration, a public site, an authoring editor, or a
+catalogue-wide reader rollout.
 
 ### Keep generation downstream of verified explanation
 
@@ -181,10 +188,10 @@ unchanged.
   stage.
 - Previous, Play/Pause, Next, scrubber, keyboard, seek, and rewind preserve
   semantic correspondence.
-- The annotated motion cue identifies both the moving object and retained
-  invariant before one-shot scroll playback can begin.
+- The scrub boundary identifies both the moving object and retained invariant
+  before directional scroll playback can begin.
 - Manual interaction always takes ownership, reduced-motion disables automatic
-  playback, and scroll never snaps a causal animation to a later frame.
+  playback/rewind, and reversing scroll direction never snaps the animation.
 - The lesson explicitly repairs the shift-versus-movement misconception.
 - The phone composition remains usable without stage-size jitter.
 - Static, reduced-motion, keyboard, and screen-reader use preserve the causal

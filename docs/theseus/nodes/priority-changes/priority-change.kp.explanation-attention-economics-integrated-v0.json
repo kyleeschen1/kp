@@ -197,11 +197,53 @@
       "status": "passed",
       "scope": "catalogue metadata preservation",
       "checkedAt": "2026-08-03T03:29:07.690Z"
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "custom element registration, downward play, upward rewind, manual ownership, reduced-motion, and phone layout",
+      "checkedAt": "2026-08-03T03:59:41.593Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-animation-playback-session.test.ts",
+      "status": "passed",
+      "scope": "symmetric rewind-to-forward clock continuity",
+      "checkedAt": "2026-08-03T03:59:43.663Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "lesson and checkpoint preservation",
+      "checkedAt": "2026-08-03T03:59:44.731Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "custom element, Svelte binding, browser tests, and domain types",
+      "checkedAt": "2026-08-03T03:59:45.724Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "framework-neutral semantic and runtime boundaries",
+      "checkedAt": "2026-08-03T03:59:46.829Z"
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "active human checkpoint and tabled matrix alignment",
+      "checkedAt": "2026-08-03T03:59:48.006Z"
+    },
+    {
+      "command": "npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "catalogue metadata preservation",
+      "checkedAt": "2026-08-03T03:59:49.132Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Added an annotated inline motion cue and one-shot reading-band autoplay for the economics exemplar. Scroll never seeks the curves forward; manual interaction owns the timeline; reduced-motion remains manual-only. Awaiting human visual review before any promotion."
+    "summary": "Replaced the Svelte-owned stage controls with a framework-neutral prose scrub-bar custom element. Downward crossing plays, upward crossing rewinds through a symmetric runtime direction change, manual controls take ownership, and reduced-motion remains explicit-only. Awaiting human visual review before second-caller pressure or shared-contract promotion."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

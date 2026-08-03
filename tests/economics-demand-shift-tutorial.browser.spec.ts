@@ -21,8 +21,9 @@ test("approved economics prose and semantic controls form one persistent tutoria
   );
   const graph = player.locator("[data-kp-editor-graph-svg]");
   const stageCard = root.locator(".kp-economics-tutorial__stage-card");
-  const tutorialScrubber = root.getByRole("slider", {
-    name: "Scrub demand shift progress"
+  const motionCue = root.locator("kp-tutorial-scrub-bar");
+  const tutorialScrubber = motionCue.getByRole("slider", {
+    name: "Scrub animation progress"
   });
 
   await expect(page.locator("#app")).toHaveAttribute(
@@ -43,6 +44,17 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "kp.graph.dimensional-continuity.economics.v1"
   );
   await expect(player.locator(".editor-animation-player__controls")).toBeHidden();
+  await expect(root.locator(".kp-economics-tutorial__controls")).toHaveCount(0);
+  await expect(motionCue).toHaveCount(1);
+  expect(await motionCue.evaluate((element) => ({
+    tag: element.localName,
+    registered: customElements.get(element.localName) === element.constructor,
+    shadow: element.shadowRoot?.mode
+  }))).toEqual({
+    tag: "kp-tutorial-scrub-bar",
+    registered: true,
+    shadow: "open"
+  });
   await expect(root.getByRole("button", {
     name: "Previous semantic checkpoint"
   })).toBeVisible();
@@ -128,20 +140,16 @@ test("approved economics prose and semantic controls form one persistent tutoria
     fullPage: false
   });
 
-  const motionCue = root.locator(
-    "[data-kp-economics-tutorial-motion-cue]"
-  );
-  await expect(motionCue).toContainText("Animation ahead");
-  await expect(motionCue).toContainText(
-    "Demand shifts right; supply stays fixed."
-  );
-  await expect(motionCue.getByRole("button")).toHaveText("Show the shift");
-  const followShift = root.locator(
-    '[data-kp-economics-tutorial-passage="follow-shift"]'
-  );
-  await followShift.evaluate((element) => window.scrollTo({
+  await expect(motionCue.getByText("Animation boundary")).toBeVisible();
+  await expect(motionCue.getByText("Demand shifts right")).toBeVisible();
+  await expect(motionCue.getByText("Supply stays fixed.")).toBeVisible();
+  await expect(motionCue.getByText(
+    "Scroll down to play · scroll up to rewind"
+  )).toBeVisible();
+  await expect(motionCue.getByRole("button", { name: "Play" })).toBeVisible();
+  await motionCue.evaluate((element) => window.scrollTo({
     top: window.scrollY + element.getBoundingClientRect().top -
-      window.innerHeight * 0.38
+      window.innerHeight * 0.38 + 4
   }));
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-motion-owner",
@@ -167,18 +175,56 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "1"
   );
 
+  await demandChange.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.38
+  }));
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-autoplay",
+    "rewinding"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-direction",
+    "rewind"
+  );
+  await expect.poll(async () => Number(
+    await player.getAttribute("data-kp-editor-animation-progress")
+  )).toBeGreaterThan(0);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-autoplay",
+    "rewound"
+  );
+  await expect(motionCue).toHaveAttribute("progress", "0");
+
+  await motionCue.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.38 + 4
+  }));
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-autoplay",
+    "playing"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-direction",
+    "forward"
+  );
+
   await page.evaluate(() => {
     (window as typeof window & { __kpTutorialDocumentToken?: string })
       .__kpTutorialDocumentToken = "persistent-economics-tutorial";
   });
-  await tutorialScrubber.fill("0.72");
-  await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-checkpoint",
-    "handoff"
-  );
+  await tutorialScrubber.evaluate((input) => {
+    if (!(input instanceof HTMLInputElement)) return;
+    input.value = "0.72";
+    input.dispatchEvent(new Event("input", { bubbles: true, composed: true }));
+  });
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-progress",
     "0.72"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-checkpoint",
+    "handoff"
   );
   await root.getByRole("button", {
     name: "Next semantic checkpoint"
@@ -230,7 +276,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "Quantity supplied rose because equilibrium selected a new point"
   );
 
-  await root.getByText("Explore", { exact: true }).click();
+  await root.getByText("Explore another demand shift", { exact: true }).click();
   const parameter = root.getByRole("slider", {
     name: "New demand intercept"
   });
@@ -264,15 +310,17 @@ test("manual playback claims the timeline before scroll autoplay", async ({
 
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const player = root.locator("[data-kp-editor-animation-player]");
-  const motionCue = root.locator(
-    "[data-kp-economics-tutorial-motion-cue]"
-  );
+  const motionCue = root.locator("kp-tutorial-scrub-bar");
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-hydrated",
     "true"
   );
 
-  await motionCue.getByRole("button").click();
+  await motionCue.evaluate((element) => {
+    element.shadowRoot?.querySelector<HTMLButtonElement>(
+      "[data-action=toggle]"
+    )?.click();
+  });
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-motion-owner",
     "manual"
@@ -284,7 +332,11 @@ test("manual playback claims the timeline before scroll autoplay", async ({
   await expect.poll(async () => Number(
     await player.getAttribute("data-kp-editor-animation-progress")
   )).toBeGreaterThan(0);
-  await motionCue.getByRole("button").click();
+  await motionCue.evaluate((element) => {
+    element.shadowRoot?.querySelector<HTMLButtonElement>(
+      "[data-action=toggle]"
+    )?.click();
+  });
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-status",
     "paused"
@@ -296,13 +348,10 @@ test("manual playback claims the timeline before scroll autoplay", async ({
   const demandChange = root.locator(
     '[data-kp-economics-tutorial-passage="demand-change"]'
   );
-  const followShift = root.locator(
-    '[data-kp-economics-tutorial-passage="follow-shift"]'
-  );
   await demandChange.scrollIntoViewIfNeeded();
-  await followShift.evaluate((element) => window.scrollTo({
+  await motionCue.evaluate((element) => window.scrollTo({
     top: window.scrollY + element.getBoundingClientRect().top -
-      window.innerHeight * 0.38
+      window.innerHeight * 0.38 + 4
   }));
   await page.waitForTimeout(800);
   expect(Number(
@@ -311,6 +360,10 @@ test("manual playback claims the timeline before scroll autoplay", async ({
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-scroll-autoplay",
     "manual"
+  );
+  await expect(motionCue).toHaveAttribute(
+    "data-kp-tutorial-scrub-manual",
+    "true"
   );
 });
 
@@ -322,16 +375,14 @@ test("reduced-motion readers receive the annotated manual cue without autoplay",
 
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const player = root.locator("[data-kp-editor-animation-player]");
-  const followShift = root.locator(
-    '[data-kp-economics-tutorial-passage="follow-shift"]'
-  );
+  const motionCue = root.locator("kp-tutorial-scrub-bar");
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-hydrated",
     "true"
   );
-  await followShift.evaluate((element) => window.scrollTo({
+  await motionCue.evaluate((element) => window.scrollTo({
     top: window.scrollY + element.getBoundingClientRect().top -
-      window.innerHeight * 0.38
+      window.innerHeight * 0.38 + 4
   }));
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-scroll-autoplay",
@@ -342,9 +393,13 @@ test("reduced-motion readers receive the annotated manual cue without autoplay",
     "data-kp-editor-animation-progress",
     "0"
   );
-  await expect(root.locator(
-    ".kp-economics-tutorial__motion-cue-status"
-  )).toContainText("Automatic motion is off");
+  await expect(motionCue).toHaveAttribute(
+    "data-kp-tutorial-scrub-reduced-motion",
+    "true"
+  );
+  await expect(motionCue.getByText(
+    "Scroll motion is off. Use the controls when ready."
+  )).toBeVisible();
 });
 
 test("phone tutorial keeps a stable compact stage dock with optional expansion", async ({

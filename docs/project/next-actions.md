@@ -12,8 +12,8 @@ with source refs, verification, run-contract slices, and completion evidence.
    This is a preservation guardrail, not authorization to resume the run.
 2. Review the integrated economics tutorial at
    `/tutorials/economics/demand-shift/`: continuous prose, persistent stage,
-   semantic controls, annotated one-shot scroll playback without curve seeking,
-   manual timeline precedence, context-preserving focus attenuation,
+   a custom-element prose scrub boundary with downward play and upward rewind,
+   no curve seeking, manual timeline precedence, context-preserving focus attenuation,
    two-aperture page-wash strength, contiguous wide stage, paragraph indents,
    and compact phone dock. The rejected connector is removed.
 3. Make only economics-local cadence or presentation revisions requested at

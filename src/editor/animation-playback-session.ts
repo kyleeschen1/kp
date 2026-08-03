@@ -24,6 +24,7 @@ export interface KpEditorAnimationPlaybackSession {
 
 export type KpEditorAnimationPlaybackAction =
   | { readonly type: "play"; readonly nowMs: number }
+  | { readonly type: "forward"; readonly nowMs: number }
   | { readonly type: "pause"; readonly nowMs?: number | undefined }
   | { readonly type: "tick"; readonly nowMs: number }
   | { readonly type: "seek"; readonly progress: number }
@@ -107,6 +108,19 @@ export function reduceKpEditorAnimationPlaybackSession(
         progress: session.player.playbackStatus === "complete"
           ? 0
           : session.player.progress,
+        lastTickMs: normalizeTimestamp(action.nowMs)
+      });
+    case "forward":
+      return resampleSession(session, {
+        playbackStatus: "playing",
+        direction: "forward",
+        // Direction changes mirror the clock so the rendered frame is
+        // continuous; replaying a completed forward run begins at its source.
+        progress: session.player.direction === "rewind"
+          ? 1 - session.player.progress
+          : session.player.playbackStatus === "complete"
+            ? 0
+            : session.player.progress,
         lastTickMs: normalizeTimestamp(action.nowMs)
       });
     case "pause": {
