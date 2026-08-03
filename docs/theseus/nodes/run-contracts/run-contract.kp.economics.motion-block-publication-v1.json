@@ -563,6 +563,20 @@
       "scope": "s25",
       "checkedAt": "2026-08-03T08:11:07.439Z",
       "notes": "Responsive and fallback slice has no whitespace errors."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s26",
+      "checkedAt": "2026-08-03T08:22:01.704Z",
+      "notes": "Production build and Chromium performance proof pass: 301382 B total transfer, 229184 B script, 46 resources, startup CLS 0.0000068, longest startup task 106 ms; 26 active samples have 33.7 ms p95 two-frame settlement, zero long tasks, CLS 0.00484, and at most one changing block-progress attribute."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s26",
+      "checkedAt": "2026-08-03T08:22:02.898Z",
+      "notes": "Performance harness and build-fixture repair have no whitespace errors."
     }
   ],
   "allowedWork": [
@@ -739,7 +753,8 @@
     {
       "id": "s26",
       "title": "Prove-tutorial-performance",
-      "status": "planned"
+      "summary": "Added a stable production-build performance command with executable ceilings for route transfer, script transfer, resource count, startup/active CLS, long tasks, and active scroll settlement; measured the economics route well inside them and proved each sample changes at most one motion block. The full build also now accepts the browser-owned pre-upgrade dynamic import.",
+      "status": "complete"
     },
     {
       "id": "s27",

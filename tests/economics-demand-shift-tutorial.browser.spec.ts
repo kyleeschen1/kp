@@ -1393,7 +1393,8 @@ test("static scrubber keeps native links and geometry when it upgrades", async (
   expect(before.height).toBeGreaterThan(30);
 
   const after = await frame.evaluate(async () => {
-    const module = await import("/src/tutorial/kp-tutorial-scrub-bar.ts");
+    const moduleUrl = "/src/tutorial/kp-tutorial-scrub-bar.ts";
+    const module = await import(/* @vite-ignore */ moduleUrl);
     module.defineKpTutorialScrubBar();
     await customElements.whenDefined("kp-tutorial-scrub-bar");
     const host = document.querySelector("kp-tutorial-scrub-bar")!;

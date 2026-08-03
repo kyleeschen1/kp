@@ -30,6 +30,8 @@
     "test:economics-demand-shift-tutorial": "node --disable-warning=ExperimentalWarning --test tests/economics-demand-shift-tutorial.test.ts tests/kp-economics-equilibrium-runtime-frame.test.ts tests/kp-economics-equilibrium-static-svg.test.ts",
     "test:browser:economics-demand-shift-tutorial": "playwright test tests/economics-demand-shift-tutorial.browser.spec.ts --project=chromium --workers=1",
     "visual:economics-demand-shift-tutorial": "playwright test tests/economics-demand-shift-tutorial.browser.spec.ts --project=chromium --workers=1",
+    "preview:economics-demand-shift-performance": "vite preview --port 4176 --strictPort",
+    "performance:economics-demand-shift-tutorial": "npm run build && playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
     "test:browser:physics-work-energy": "playwright test tests/animation-catalogue-physics-work-energy.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "test:browser:vector-dot-projection": "playwright test tests/vector-dot-projection-exemplar.browser.spec.ts tests/editor-animation-visuals.browser.spec.ts --grep \"vector projection|dot projection visibly\" --project=chromium --workers=1",
     "test:browser:animation-catalogue-3d": "playwright test tests/animation-catalogue-3d.browser.spec.ts --project=chromium --workers=1",
