@@ -138,6 +138,24 @@
       "status": "passed",
       "scope": "s06 test inference",
       "checkedAt": "2026-08-03T16:52:36.373Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-botanical-presentation-plan.test.ts tests/kp-lisp-lambda-application-renderer.test.ts",
+      "status": "passed",
+      "scope": "s07 seven local plan and settlement tests",
+      "checkedAt": "2026-08-03T16:55:29.908Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s07 application types",
+      "checkedAt": "2026-08-03T16:55:31.157Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s07 test inference",
+      "checkedAt": "2026-08-03T16:55:32.161Z"
     }
   ],
   "allowedWork": [
@@ -200,7 +218,8 @@
     {
       "id": "s07",
       "title": "Plan local botanical presentation",
-      "status": "planned"
+      "summary": "Added one experimental Lisp-local botanical presentation plan with enclosure, branch, leaf, root, bud, and fruit roles bound to exact semantic selectors. Three semantic paths account for all five material-ledger entries; native code and checkpoint crossfades remain authoritative. Seven focused tests and app/test TypeScript checks pass.",
+      "status": "complete"
     },
     {
       "id": "s08",
