@@ -35,6 +35,7 @@ At the old price of $8$, sellers still supply six hundred boxes. Under the new d
 ### How the market-clearing point changes
 
 <!-- kp:passage follow-shift -->
+<!-- kp:motion demand-shift -->
 
 Now play the shift. Watch the demand curve and its intersection with supply as one event. The old demand curve can remain as a quiet reference, while the supply curve remains fixed. The moving equilibrium point travels up and to the right because it must stay at the intersection of the changing demand curve and the unchanged supply curve.
 
@@ -43,6 +44,7 @@ Now play the shift. Watch the demand curve and its intersection with supply as o
 The graph carries the causal argument. Once demand has shifted, a price of $8$ leaves quantity demanded above quantity supplied. A higher price reduces quantity demanded along the new demand curve and increases quantity supplied along the unchanged supply curve. At $P=10$, both quantities are $Q=8$, so the market clears again. The new equilibrium is $E_1=(8,10)$.
 
 <!-- kp:passage shift-versus-movement -->
+<!-- kp:motion supply-movement -->
 
 Notice the two different kinds of change. Demand shifted: the relationship between price and quantity demanded changed. Supply did not shift: the supply relationship stayed $P=2+Q$. Yet the market moved from one point on the supply curve to another, from $(6,8)$ to $(8,10)$. That is a movement along the supply curve, caused here by the change in demand.
 

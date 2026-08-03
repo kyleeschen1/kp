@@ -73,7 +73,8 @@
     {
       "id": "s04",
       "title": "Author-second-motion-block",
-      "status": "planned"
+      "summary": "Annotated the unchanged demand-shift and shift-versus-movement prose as two unique local motion blocks and added fail-closed compiler validation.",
+      "status": "complete"
     },
     {
       "id": "s05",

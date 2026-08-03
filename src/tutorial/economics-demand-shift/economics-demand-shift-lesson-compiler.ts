@@ -1,4 +1,8 @@
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
+import {
+  findKpEconomicsMotionBlock,
+  type KpEconomicsMotionBlockId
+} from "./economics-demand-shift-motion-blocks.ts";
 
 export interface KpEconomicsDemandShiftLessonParagraph {
   readonly html: string;
@@ -6,6 +10,7 @@ export interface KpEconomicsDemandShiftLessonParagraph {
 
 export interface KpEconomicsDemandShiftLessonPassage {
   readonly id: string;
+  readonly motionBlockId?: KpEconomicsMotionBlockId | undefined;
   readonly paragraphs: readonly KpEconomicsDemandShiftLessonParagraph[];
 }
 
@@ -22,6 +27,7 @@ export interface KpEconomicsDemandShiftLesson {
 }
 
 const passageMarkerPattern = /^<!-- kp:passage ([a-z0-9-]+) -->$/;
+const motionMarkerPattern = /^<!-- kp:motion ([a-z0-9-]+) -->$/;
 
 function escapeHtml(value: string): string {
   return value
@@ -56,7 +62,11 @@ export function compileKpEconomicsDemandShiftLesson(
   let assumption = "";
   const sections: Array<{
     heading: string;
-    passages: Array<{ id: string; paragraphs: KpEconomicsDemandShiftLessonParagraph[] }>;
+    passages: Array<{
+      id: string;
+      motionBlockId?: KpEconomicsMotionBlockId | undefined;
+      paragraphs: KpEconomicsDemandShiftLessonParagraph[];
+    }>;
   }> = [];
   let section = sections.at(-1);
   let passage = section?.passages.at(-1);
@@ -111,6 +121,24 @@ export function compileKpEconomicsDemandShiftLesson(
       section.passages.push(passage);
       continue;
     }
+    const motionMarker = motionMarkerPattern.exec(line);
+    if (motionMarker !== null) {
+      flushParagraph();
+      if (passage === undefined) {
+        throw new Error("Motion annotations must follow a passage annotation.");
+      }
+      if (passage.paragraphs.length > 0 || passage.motionBlockId !== undefined) {
+        throw new Error("A motion annotation must appear once before passage prose.");
+      }
+      const motionBlock = findKpEconomicsMotionBlock(motionMarker[1]);
+      if (motionBlock === undefined || motionBlock.passageId !== passage.id) {
+        throw new Error(
+          `Motion annotation ${motionMarker[1]} does not belong to passage ${passage.id}.`
+        );
+      }
+      passage.motionBlockId = motionBlock.id;
+      continue;
+    }
     if (line.startsWith("<")) {
       throw new Error(`Unsupported lesson HTML: ${line}`);
     }
@@ -126,6 +154,14 @@ export function compileKpEconomicsDemandShiftLesson(
   }
   if (new Set(passageIds).size !== passageIds.length) {
     throw new Error("Lesson passage annotations must be unique.");
+  }
+  const motionBlockIds = sections.flatMap(({ passages }) =>
+    passages.flatMap(({ motionBlockId }) =>
+      motionBlockId === undefined ? [] : [motionBlockId]
+    )
+  );
+  if (new Set(motionBlockIds).size !== motionBlockIds.length) {
+    throw new Error("Lesson motion annotations must be unique.");
   }
   if (sections.some(({ passages }) =>
     passages.length === 0 || passages.some(({ paragraphs }) => paragraphs.length === 0)

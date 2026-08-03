@@ -146,6 +146,17 @@ test("approved Markdown compiles into the complete annotated lesson", () => {
     "synthesis",
     "explore"
   ]);
+  assert.deepEqual(
+    lesson.sections.flatMap(({ passages }) => passages.flatMap((passage) =>
+      passage.motionBlockId === undefined
+        ? []
+        : [[passage.id, passage.motionBlockId]]
+    )),
+    [
+      ["follow-shift", "demand-shift"],
+      ["shift-versus-movement", "supply-movement"]
+    ]
+  );
   assert.match(
     lesson.sections[0]!.passages[0]!.paragraphs[0]!.html,
     /data-kp-latex="Q"/

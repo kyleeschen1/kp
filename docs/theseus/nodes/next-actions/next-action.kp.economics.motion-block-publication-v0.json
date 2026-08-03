@@ -74,6 +74,18 @@
       "status": "passed",
       "scope": "s03 host type compatibility",
       "checkedAt": "2026-08-03T05:57:04.007Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s04 annotated Markdown compiler",
+      "checkedAt": "2026-08-03T05:58:45.835Z"
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s04 lesson host types",
+      "checkedAt": "2026-08-03T05:58:46.714Z"
     }
   ],
   "progress": {
