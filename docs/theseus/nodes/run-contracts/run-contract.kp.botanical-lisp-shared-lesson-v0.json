@@ -212,6 +212,18 @@
       "status": "passed",
       "scope": "s09 no botanical promotion claim",
       "checkedAt": "2026-08-03T17:06:04.622Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-lesson-prose.test.ts",
+      "status": "passed",
+      "scope": "s10 three editorial structure and semantic-boundary tests",
+      "checkedAt": "2026-08-03T17:08:14.156Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s10 lesson prose patch hygiene",
+      "checkedAt": "2026-08-03T17:08:15.266Z"
     }
   ],
   "allowedWork": [
@@ -292,7 +304,8 @@
     {
       "id": "s10",
       "title": "Author canonical Lisp lesson prose",
-      "status": "planned"
+      "summary": "Authored the canonical continuous Lisp lesson around provenance: four compact h3 sections, about 1,100 words, and two prose-surrounded motion boundaries for binding/reconstruction and evaluation/gathering. The text distinguishes occurrences, substitution, and evaluation, limits the botanical metaphor, and keeps native code authoritative. Three editorial tests pass.",
+      "status": "complete"
     },
     {
       "id": "s11",
