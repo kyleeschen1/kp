@@ -32,6 +32,12 @@ and semantic attenuation still let incidental material recede without hiding
 the context needed for the claim. Lesson body paragraphs now begin with a
 first-line indent.
 
+The selected follow-up treatment adds a gentle wide-screen page wash with two
+soft apertures: the active passage and the complete stage. The wide graph,
+header, and controls now share the page background without card border, radius,
+shadow, or a separate graph paper plane. The fixed phone dock keeps its paper
+surface and shadow. This remains economics-local discovery evidence.
+
 ## Review questions
 
 1. Does the prose-stage cadence keep enough conceptual context without making
@@ -47,10 +53,10 @@ first-line indent.
    solve-x as the structurally different second caller?
 7. Does the graph-local focus treatment answer “where should I look?” without
    dominating the graph or hiding context?
-8. Should the spotlight remain graph-local, briefly expand into a page-wide
-   veil with selected apertures, or use a quieter hybrid treatment?
-9. Should the stage remain a distinct card, or share the page background as a
-   contiguous reading-and-animation plane?
+8. Is the page wash strong enough to coordinate attention without making the
+   surrounding argument feel unavailable?
+9. Do the aperture softness and contiguous stage make text and animation feel
+   like one argument, or does either clear region still look boxed in?
 
 ## Preservation and promotion boundary
 

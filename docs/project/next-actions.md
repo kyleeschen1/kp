@@ -13,8 +13,9 @@ with source refs, verification, run-contract slices, and completion evidence.
 2. Review the integrated economics tutorial at
    `/tutorials/economics/demand-shift/`: continuous prose, persistent stage,
    semantic controls, static passage preparation, context-preserving focus
-   attenuation, spotlight scope, stage/page continuity, paragraph indents, and
-   compact phone dock. The rejected connector is removed.
+   attenuation, two-aperture page-wash strength, contiguous wide stage,
+   paragraph indents, and compact phone dock. The rejected connector is
+   removed.
 3. Make only economics-local cadence or presentation revisions requested at
    the checkpoint; do not generalize the local compiler during review.
 4. After approval, use generated solve-x as the second caller. Promote only shared document,

@@ -20,6 +20,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
     `[data-kp-editor-animation-id="${animationId}"]`
   );
   const graph = player.locator("[data-kp-editor-graph-svg]");
+  const stageCard = root.locator(".kp-economics-tutorial__stage-card");
   const tutorialScrubber = root.getByRole("slider", {
     name: "Scrub demand shift progress"
   });
@@ -60,6 +61,40 @@ test("approved economics prose and semantic controls form one persistent tutoria
     .toHaveAttribute("data-kp-attention-spotlight-visible", "true");
   await expect(root.locator("[data-kp-economics-tutorial-attention-bridge]"))
     .toHaveCount(0);
+  await expect(root.locator("[data-kp-economics-tutorial-page-veil]"))
+    .toHaveAttribute("data-kp-attention-page-veil-visible", "true");
+  await expect.poll(() => root.locator("[data-kp-attention-page-veil-passage]")
+    .evaluate((element) => (element as SVGRectElement).width.baseVal.value))
+    .toBeGreaterThan(300);
+  await expect.poll(() => root.locator("[data-kp-attention-page-veil-stage]")
+    .evaluate((element) => (element as SVGRectElement).width.baseVal.value))
+    .toBeGreaterThan(400);
+  await expect.poll(() => stageCard.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      border: style.borderTopWidth,
+      radius: style.borderTopLeftRadius,
+      background: style.backgroundColor,
+      shadow: style.boxShadow
+    };
+  })).toEqual({
+    border: "0px",
+    radius: "0px",
+    background: "rgba(0, 0, 0, 0)",
+    shadow: "none"
+  });
+  await expect.poll(() => player.locator(".editor-animation-player__stage")
+    .evaluate((element) => getComputedStyle(element).backgroundColor))
+    .toBe("rgba(0, 0, 0, 0)");
+  await expect.poll(() => player
+    .evaluate((element) => getComputedStyle(element).backgroundColor))
+    .toBe("rgba(0, 0, 0, 0)");
+  await expect.poll(() => player.locator(".editor-animation-player__surface")
+    .evaluate((element) => getComputedStyle(element).backgroundColor))
+    .toBe("rgba(0, 0, 0, 0)");
+  await expect.poll(() => graph.locator(".editor-graph-stage__plot-plane")
+    .evaluate((element) => getComputedStyle(element).fill))
+    .toBe("rgba(0, 0, 0, 0)");
   await expect.poll(() => root.locator(".kp-economics-tutorial__passage p")
     .first()
     .evaluate((element) => Number.parseFloat(getComputedStyle(element).textIndent)))
@@ -191,6 +226,7 @@ test("phone tutorial keeps a stable compact stage dock with optional expansion",
 
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const stage = root.locator(".kp-economics-tutorial__stage");
+  const stageCard = root.locator(".kp-economics-tutorial__stage-card");
   const player = root.locator("[data-kp-editor-animation-player]");
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-hydrated",
@@ -200,6 +236,20 @@ test("phone tutorial keeps a stable compact stage dock with optional expansion",
     .toHaveCount(0);
   await expect(root.locator("[data-kp-economics-tutorial-spotlight]"))
     .toHaveAttribute("data-kp-attention-spotlight-visible", "true");
+  await expect(root.locator("[data-kp-economics-tutorial-page-veil]"))
+    .toHaveAttribute("data-kp-attention-page-veil-visible", "false");
+  await expect.poll(() => stageCard.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      borderBottom: style.borderBottomWidth,
+      background: style.backgroundColor,
+      shadow: style.boxShadow
+    };
+  })).toEqual({
+    borderBottom: "1px",
+    background: "rgb(255, 253, 248)",
+    shadow: "rgba(45, 61, 69, 0.18) 0px 10px 32px 0px"
+  });
   const compact = await stage.boundingBox();
   expect(compact).not.toBeNull();
   expect(compact!.y).toBeCloseTo(0, 0);

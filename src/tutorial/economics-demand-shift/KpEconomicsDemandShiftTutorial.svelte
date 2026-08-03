@@ -36,12 +36,34 @@
     readonly spotlightVisible: boolean;
     readonly spotlightX: number;
     readonly spotlightY: number;
+    readonly pageVeilVisible: boolean;
+    readonly viewportWidth: number;
+    readonly viewportHeight: number;
+    readonly passageX: number;
+    readonly passageY: number;
+    readonly passageWidth: number;
+    readonly passageHeight: number;
+    readonly stageX: number;
+    readonly stageY: number;
+    readonly stageWidth: number;
+    readonly stageHeight: number;
   }
 
   const emptyAttentionProjection: KpEconomicsTutorialAttentionProjection = {
     spotlightVisible: false,
     spotlightX: 0,
-    spotlightY: 0
+    spotlightY: 0,
+    pageVeilVisible: false,
+    viewportWidth: 0,
+    viewportHeight: 0,
+    passageX: 0,
+    passageY: 0,
+    passageWidth: 0,
+    passageHeight: 0,
+    stageX: 0,
+    stageY: 0,
+    stageWidth: 0,
+    stageHeight: 0
   };
 
   let {
@@ -263,11 +285,19 @@
     const playerHost = shell.querySelector<HTMLElement>(
       ".kp-economics-tutorial__player-host"
     );
+    const passage = shell.querySelector<HTMLElement>(
+      `[data-kp-economics-tutorial-passage="${checkpoint.passageId}"]`
+    );
+    const stage = shell.querySelector<HTMLElement>(
+      ".kp-economics-tutorial__stage-card"
+    );
     const target = playerHost === null
       ? null
       : playerHost.querySelector<Element>(checkpoint.attention.targetSelector);
     if (
       playerHost === null ||
+      passage === null ||
+      stage === null ||
       target === null
     ) {
       attentionProjection = emptyAttentionProjection;
@@ -275,10 +305,29 @@
     }
 
     const playerHostRect = playerHost.getBoundingClientRect();
+    const passageRect = passage.getBoundingClientRect();
+    const stageRect = stage.getBoundingClientRect();
     const targetPoint = resolveAttentionTargetPoint(
       target,
       checkpoint.attention.targetAnchor
     );
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const passageFocusRect = projectAttentionFocusRect(
+      passageRect,
+      10,
+      viewportWidth,
+      viewportHeight
+    );
+    const stageFocusRect = projectAttentionFocusRect(
+      stageRect,
+      12,
+      viewportWidth,
+      viewportHeight
+    );
+    const passageIsVisible = passageRect.bottom > 0 &&
+      passageRect.top < viewportHeight;
+    const stageIsVisible = stageRect.bottom > 0 && stageRect.top < viewportHeight;
 
     attentionProjection = {
       spotlightVisible: playerHostRect.width > 0 && playerHostRect.height > 0,
@@ -291,7 +340,18 @@
         targetPoint.y - playerHostRect.top,
         0,
         playerHostRect.height
-      )
+      ),
+      pageVeilVisible: viewportWidth > 760 && passageIsVisible && stageIsVisible,
+      viewportWidth,
+      viewportHeight,
+      passageX: passageFocusRect.x,
+      passageY: passageFocusRect.y,
+      passageWidth: passageFocusRect.width,
+      passageHeight: passageFocusRect.height,
+      stageX: stageFocusRect.x,
+      stageY: stageFocusRect.y,
+      stageWidth: stageFocusRect.width,
+      stageHeight: stageFocusRect.height
     };
   }
 
@@ -357,6 +417,7 @@
       animation
     });
     attentionResizeObserver = new ResizeObserver(scheduleAttentionProjection);
+    attentionResizeObserver.observe(shell);
     const playerHost = shell.querySelector<HTMLElement>(
       ".kp-economics-tutorial__player-host"
     );
@@ -406,6 +467,29 @@
 
   function clamp(value: number, minimum: number, maximum: number): number {
     return Math.max(minimum, Math.min(maximum, value));
+  }
+
+  function projectAttentionFocusRect(
+    rect: DOMRect,
+    inset: number,
+    viewportWidth: number,
+    viewportHeight: number
+  ): {
+    readonly x: number;
+    readonly y: number;
+    readonly width: number;
+    readonly height: number;
+  } {
+    const x = clamp(rect.left - inset, 0, viewportWidth);
+    const y = clamp(rect.top - inset, 0, viewportHeight);
+    const right = clamp(rect.right + inset, 0, viewportWidth);
+    const bottom = clamp(rect.bottom + inset, 0, viewportHeight);
+    return {
+      x,
+      y,
+      width: Math.max(0, right - x),
+      height: Math.max(0, bottom - y)
+    };
   }
 </script>
 
@@ -586,6 +670,68 @@
       </div>
     </aside>
   </div>
+
+  <svg
+    class="kp-economics-tutorial__page-veil"
+    class:kp-economics-tutorial__page-veil--visible={attentionProjection.pageVeilVisible}
+    data-kp-economics-tutorial-page-veil
+    data-kp-attention-page-veil-visible={attentionProjection.pageVeilVisible}
+    width={attentionProjection.viewportWidth}
+    height={attentionProjection.viewportHeight}
+    aria-hidden="true"
+  >
+    <defs>
+      <filter
+        id="kp-economics-tutorial-page-veil-soften"
+        x="-20%"
+        y="-20%"
+        width="140%"
+        height="140%"
+      >
+        <feGaussianBlur stdDeviation="10"></feGaussianBlur>
+      </filter>
+      <mask
+        id="kp-economics-tutorial-page-veil-mask"
+        maskUnits="userSpaceOnUse"
+        x="0"
+        y="0"
+        width={attentionProjection.viewportWidth}
+        height={attentionProjection.viewportHeight}
+      >
+        <rect
+          width={attentionProjection.viewportWidth}
+          height={attentionProjection.viewportHeight}
+          fill="white"
+        ></rect>
+        <g filter="url(#kp-economics-tutorial-page-veil-soften)">
+          <rect
+            data-kp-attention-page-veil-passage
+            x={attentionProjection.passageX}
+            y={attentionProjection.passageY}
+            width={attentionProjection.passageWidth}
+            height={attentionProjection.passageHeight}
+            rx="16"
+            fill="black"
+          ></rect>
+          <rect
+            data-kp-attention-page-veil-stage
+            x={attentionProjection.stageX}
+            y={attentionProjection.stageY}
+            width={attentionProjection.stageWidth}
+            height={attentionProjection.stageHeight}
+            rx="18"
+            fill="black"
+          ></rect>
+        </g>
+      </mask>
+    </defs>
+    <rect
+      class="kp-economics-tutorial__page-veil-wash"
+      width={attentionProjection.viewportWidth}
+      height={attentionProjection.viewportHeight}
+      mask="url(#kp-economics-tutorial-page-veil-mask)"
+    ></rect>
+  </svg>
 
   <p class="kp-economics-tutorial__announcement" aria-live="polite">
     {announcement}

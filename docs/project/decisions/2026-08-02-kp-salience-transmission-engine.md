@@ -28,23 +28,28 @@ necessary curves.
 
 This treatment is presentation authority only. It does not change economics
 truth, graph geometry, runtime frames, playback, or the canonical prose source.
-Surrounding prose remains fully readable and is never dimmed or blurred.
-Lesson body paragraphs use a conventional first-line indent.
+Surrounding prose remains readable and is never blurred or hidden. On wide
+layouts, a gentle page wash lowers its contrast while leaving the active
+passage and complete stage clear. Lesson body paragraphs use a conventional
+first-line indent.
 
 ## Human review revision
 
 The first integrated review rejected the prose-to-stage connector as visually
 unhelpful. It is removed on every viewport rather than retained as a hidden or
-phone-only branch. The attention experiment continues through graph-local
-attenuation and spotlighting. A broader page veil and a stage that shares the
-page background remain design candidates, not accepted behavior; the user
-currently leans toward a contiguous page plane.
+phone-only branch. Follow-up review selected a hybrid treatment for the local
+exemplar: a soft wide-screen page veil has apertures for the active passage and
+complete stage, while graph-local attenuation identifies the exact target. The
+wide stage shares the page background without card border, radius, shadow, or
+separate graph plane. The phone stage retains a bounded paper surface because
+it is a fixed dock over scrolling prose.
 
 ## Discovery boundary
 
 This decision records the product principle without enforcing one universal
-salience schema. The attenuation levels, spotlight geometry, target selectors,
-and responsive behavior remain economics-local until the integrated human
+salience schema. The attenuation levels, page-veil geometry, spotlight
+geometry, target selectors, and responsive behavior remain economics-local
+until the integrated human
 checkpoint passes. Generated solve-x remains the structurally different second
 caller. Only the focus concepts both callers actually require may be promoted.
 
@@ -60,8 +65,11 @@ and framework-neutral runtime remain intact.
 - demand, supply, equilibrium, comparison, and equation checkpoints land on
   distinct meaningful targets;
 - no line or pointer crosses the prose-stage boundary;
+- the wide page wash leaves exactly the active passage and complete stage clear
+  without blocking interaction;
+- the wide stage reads as part of the page rather than a separate card;
 - the graph-local spotlight tracks resizing, font settlement, direct seek, and
   live animation without controlling playback;
 - reduced-motion mode removes presentation transitions;
-- the phone dock retains graph-local focus;
+- the phone dock retains graph-local focus and its necessary surface boundary;
 - no shared schema or second-caller rollout occurs before human approval.

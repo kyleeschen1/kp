@@ -98,9 +98,11 @@ framing of KP as a salience-transmission engine: each checkpoint names a target
 and retained context, while graph-local attenuation and spotlighting emphasize
 the intended landing. Human review rejected the cross-page connector, so it is
 removed on every viewport; lesson body paragraphs now use first-line indents.
-Spotlight scope and whether the stage should share the page background remain
-open exemplar questions. This remains an exemplar-only treatment pending the
-same integrated review.
+Follow-up review selected a soft wide-screen page wash with apertures for the
+active passage and complete stage, plus a contiguous wide stage without card
+chrome or a separate graph plane. The fixed phone dock keeps its surface
+boundary. Wash strength and aperture softness remain human-review questions.
+This remains an exemplar-only treatment pending the same integrated review.
 This priority change does not resume linear algebra, authorize SvelteKit or a
 public site, or move LLM wording into runtime.
 
@@ -228,9 +230,11 @@ exploration. The local Svelte 5 host adds semantic controls, static passage
 preparation, a wide persistent stage, and a compact phone dock without changing
 the asset or runtime. It now also carries economics-local target profiles,
 context-preserving graph attenuation, graph-local spotlighting, and indented
-lesson paragraphs. The rejected passage-to-stage connector is removed. No
-shared attention schema or second caller begins until this integrated cadence,
-spotlight scope, and stage/page treatment are approved.
+lesson paragraphs. The rejected passage-to-stage connector is removed. The
+selected local revision adds a two-aperture page wash and a contiguous wide
+stage while retaining the bounded phone dock. No shared attention schema or
+second caller begins until this integrated cadence and salience treatment are
+approved.
 
 **Canonical construction, the fraction and radical migrations, foldable
 distribution pressure work, canonical fraction composition, and role-complete
@@ -568,8 +572,9 @@ activating heavy animation capabilities lazily.
 
 1. Human-review the integrated economics tutorial at
    `/tutorials/economics/demand-shift/` across wide and phone layouts, including
-   context-preserving focus attenuation, spotlight scope, stage/page
-   continuity, and paragraph indentation. The rejected connector is removed.
+   context-preserving focus attenuation, page-wash strength, aperture softness,
+   contiguous wide stage, bounded phone dock, and paragraph indentation. The
+   rejected connector is removed.
 2. Make only checkpoint-requested economics-local revisions, then approve or
    reject the exemplar without promoting a shared schema.
 3. After approval, pressure the attention boundary with generated solve-x, then

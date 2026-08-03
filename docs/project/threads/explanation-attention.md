@@ -6,8 +6,9 @@ Current Next Action: Human-review the integrated economics tutorial at
 `/tutorials/economics/demand-shift/` for reading cadence, stage coordination,
 semantic controls, graph-local focus attenuation, spotlight scope, stage/page
 continuity, and the compact phone dock. The rejected cross-page connector is
-removed. Do not generalize the local lesson compiler or salience projection,
-or begin the solve-x caller, before this checkpoint is approved.
+removed; the selected local revision uses a soft two-aperture page wash and a
+contiguous wide stage. Do not generalize the local lesson compiler or salience
+projection, or begin the solve-x caller, before this checkpoint is approved.
 
 ## Goal
 
@@ -61,6 +62,10 @@ The delivered exemplar includes:
   capture dock;
 - economics-local focus profiles, semantic curve/point/equation targets,
   graph-local attenuation, and a graph-local spotlight;
+- a gentle wide-screen page wash that leaves the active passage and complete
+  stage clear;
+- a contiguous wide stage with no card border, radius, shadow, or separate
+  graph plane, while the fixed phone dock retains its surface boundary;
 - no cross-layout connector on wide or phone layouts after human rejection;
 - conventional first-line indents for lesson body paragraphs;
 - economics-local rollback and preservation boundaries.
@@ -75,7 +80,8 @@ meaning remain framework-neutral.
 The wide projection uses a persistent stage beside prose. The phone projection
 uses a stable compact stage dock at roughly one third of the viewport with
 temporary expansion. Active prose receives a subtle positive left rule or
-tint; surrounding prose is never dimmed or blurred. Mathematical text uses
+tint. A gentle wide-screen wash lowers surrounding contrast without hiding or
+blurring prose; the phone does not use the page wash. Mathematical text uses
 inline KaTeX and section headings begin at the visual scale of `h3`.
 
 ## Promotion Sequence
@@ -111,10 +117,10 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
   motion?
 - Does attenuation make the target unmistakable without obscuring causally
   necessary context?
-- Should spotlighting stay graph-local, become a brief page-wide veil with
-  selected apertures, or use a hybrid?
-- Should the animation stage remain a card or become contiguous with the page
-  background?
+- Is the hybrid page wash strong enough without making surrounding prose feel
+  unavailable?
+- Are the two apertures soft enough, and does the wide stage now feel genuinely
+  contiguous with the page?
 - Is the phone dock large enough to read while leaving enough room for prose?
 - Should any local cadence, emphasis, or control detail change before solve-x
   pressures the boundary?
