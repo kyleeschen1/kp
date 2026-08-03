@@ -330,10 +330,12 @@ package barrel or universal scene graph is created.
 
 The 2026-08-03 review makes the lesson TOC a persistent left rail whenever the
 viewport can hold the rail, prose, and stage as three non-overlapping regions.
-The rail remains independently scrollable and keeps the same complete static
-light DOM, ordinary links, active-destination semantics, and custom-element
-upgrade. At narrower widths it returns to the inline article position rather
-than overlaying prose or shrinking the graph below its useful minimum.
+The rail is vertically centered against the viewport, remains independently
+scrollable, and keeps the same complete static light DOM, ordinary links,
+active-destination semantics, and custom-element upgrade. The three reading
+regions use deliberate gutters, and prose uses a slightly more open line rhythm.
+At narrower widths the TOC returns to the inline article position rather than
+overlaying prose or shrinking the graph below its useful minimum.
 
 The reading pointer is now a stable orientation marker, not a proximity
 animation. It is larger, fully opaque, and painted above all passage washes and

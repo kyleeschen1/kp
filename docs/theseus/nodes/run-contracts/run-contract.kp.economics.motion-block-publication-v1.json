@@ -683,6 +683,27 @@
       "scope": "post-checkpoint-floating-toc-pointer",
       "checkedAt": "2026-08-03T15:57:19.613Z",
       "notes": "Svelte check found zero errors and zero warnings after removing dynamic pointer styles."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "post-checkpoint-centered-toc-spacing",
+      "checkedAt": "2026-08-03T16:03:52.865Z",
+      "notes": "Twelve Chromium scenarios passed with the TOC vertically centered, at least 20px from prose and 56px from the stage at the canonical wide viewport, and non-overlapping at 1024px. A focused rerun also proved every TOC link remains inside the rail after active-destination scrolling."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "post-checkpoint-centered-toc-spacing",
+      "checkedAt": "2026-08-03T16:03:54.234Z",
+      "notes": "All 24 focused semantic, runtime, authoring, URL, and renderer tests passed."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "post-checkpoint-centered-toc-spacing",
+      "checkedAt": "2026-08-03T16:03:55.261Z",
+      "notes": "Svelte check found zero errors and zero warnings."
     }
   ],
   "allowedWork": [

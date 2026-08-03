@@ -248,7 +248,7 @@ kp-tutorial-toc {
   color: var(--kp-tutorial-ink);
   font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(1rem, 1.18vw, 1.12rem);
-  line-height: 1.72;
+  line-height: 1.78;
 }
 
 .kp-economics-tutorial__intro {
@@ -859,23 +859,24 @@ kp-tutorial-toc {
 /* The rail becomes fixed only when two content columns plus a true gutter fit. */
 @media (min-width: 1024px) {
   .kp-economics-tutorial__layout {
-    grid-template-columns: minmax(23rem, 1fr) minmax(27rem, 1.15fr);
-    gap: 1.5rem;
-    padding: 1.2rem 1.2rem 1.2rem 11rem;
+    grid-template-columns: minmax(22.5rem, 1fr) minmax(26.5rem, 1.15fr);
+    gap: 1.75rem;
+    padding: 1.2rem 1.2rem 1.2rem 11.75rem;
   }
 
   kp-tutorial-toc {
     position: fixed;
-    top: 1.5rem;
+    top: 50%;
     left: max(1rem, calc((100vw - 94rem) / 2 + 1rem));
     z-index: 12;
-    width: 9.25rem;
+    width: 9.5rem;
     max-height: calc(100vh - 3rem);
     margin: 0;
     overflow-x: clip;
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-gutter: stable;
+    transform: translateY(-50%);
   }
 
   .kp-tutorial-toc {
@@ -907,17 +908,17 @@ kp-tutorial-toc {
 
   .kp-economics-tutorial__reading-band-marker {
     left: calc(
-      max((100vw - 94rem) / 2, 0px) + 11rem - 0.5rem
+      max((100vw - 94rem) / 2, 0px) + 11.75rem - 0.5rem
     );
   }
 }
 
 @media (min-width: 1280px) {
   .kp-economics-tutorial__layout {
-    grid-template-columns: minmax(28rem, 43rem) minmax(32rem, 1fr);
-    gap: clamp(2rem, 4vw, 5rem);
-    padding: clamp(1.5rem, 3vw, 3.5rem);
-    padding-left: clamp(13.5rem, 17vw, 15rem);
+    grid-template-columns: minmax(27.5rem, 41rem) minmax(31rem, 1fr);
+    gap: clamp(3rem, 4.75vw, 6rem);
+    padding: clamp(1.5rem, 2.5vw, 3rem);
+    padding-left: clamp(14.25rem, 18vw, 16rem);
   }
 
   kp-tutorial-toc {
@@ -928,7 +929,7 @@ kp-tutorial-toc {
   .kp-economics-tutorial__reading-band-marker {
     left: calc(
       max((100vw - 94rem) / 2, 0px) +
-      clamp(13.5rem, 17vw, 15rem) - 0.5rem
+      clamp(14.25rem, 18vw, 16rem) - 0.5rem
     );
   }
 }
@@ -948,7 +949,7 @@ kp-tutorial-toc {
   .kp-economics-tutorial__prose {
     padding: calc(38vh + 1.6rem) 1rem 0;
     font-size: 1rem;
-    line-height: 1.66;
+    line-height: 1.72;
   }
 
   .kp-economics-tutorial__intro {

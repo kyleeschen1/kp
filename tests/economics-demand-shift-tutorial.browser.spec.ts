@@ -69,20 +69,33 @@ test("approved economics prose and semantic controls form one persistent tutoria
     const bounds = element.getBoundingClientRect();
     const prose = document.querySelector<HTMLElement>(
       ".kp-economics-tutorial__prose"
-    )!.getBoundingClientRect();
+    )!;
+    const proseBounds = prose.getBoundingClientRect();
     return {
       position: getComputedStyle(element).position,
       top: bounds.top,
       right: bounds.right,
-      proseLeft: prose.left,
+      center: bounds.top + bounds.height / 2,
+      proseLeft: proseBounds.left,
+      proseRight: proseBounds.right,
+      stageLeft: document.querySelector<HTMLElement>(
+        ".kp-economics-tutorial__stage"
+      )!.getBoundingClientRect().left,
+      proseLineHeight: Number.parseFloat(getComputedStyle(prose).lineHeight),
+      proseFontSize: Number.parseFloat(getComputedStyle(prose).fontSize),
       viewportHeight: window.innerHeight,
       bottom: bounds.bottom
     };
   });
   expect(tocProjection.position).toBe("fixed");
-  expect(tocProjection.right).toBeLessThanOrEqual(tocProjection.proseLeft - 8);
+  expect(tocProjection.right).toBeLessThanOrEqual(tocProjection.proseLeft - 20);
+  expect(tocProjection.stageLeft - tocProjection.proseRight)
+    .toBeGreaterThanOrEqual(56);
   expect(tocProjection.top).toBeGreaterThanOrEqual(0);
   expect(tocProjection.bottom).toBeLessThanOrEqual(tocProjection.viewportHeight);
+  expect(tocProjection.center).toBeCloseTo(tocProjection.viewportHeight / 2, 1);
+  expect(tocProjection.proseLineHeight / tocProjection.proseFontSize)
+    .toBeGreaterThanOrEqual(1.77);
   await expect(toc.locator(
     '[data-kp-tutorial-destination-id="movement-verified"]'
   )).toHaveAttribute(
@@ -285,6 +298,23 @@ test("approved economics prose and semantic controls form one persistent tutoria
     element.getBoundingClientRect().top
   )).toBeCloseTo(tocProjection.top, 1);
   await expect.poll(() => toc.evaluate((element) => element.scrollLeft)).toBe(0);
+  const tocLinkContainment = await toc.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    return Array.from(element.querySelectorAll("a")).map((link) => {
+      const linkBounds = link.getBoundingClientRect();
+      return {
+        label: link.textContent?.trim() ?? "",
+        left: linkBounds.left,
+        right: linkBounds.right,
+        containerLeft: bounds.left,
+        containerRight: bounds.right
+      };
+    });
+  });
+  for (const link of tocLinkContainment) {
+    expect(link.left, link.label).toBeGreaterThanOrEqual(link.containerLeft);
+    expect(link.right, link.label).toBeLessThanOrEqual(link.containerRight);
+  }
   await expect.poll(() => demandChange.evaluate((element) => ({
     rail: getComputedStyle(element).borderLeftColor,
     pointer: getComputedStyle(document.querySelector(
@@ -1050,13 +1080,16 @@ test("floating tutorial TOC reserves a non-overlapping narrow-desktop gutter", a
       tocPosition: getComputedStyle(toc).position,
       tocRight: toc.getBoundingClientRect().right,
       proseLeft: prose.getBoundingClientRect().left,
+      proseRight: prose.getBoundingClientRect().right,
+      stageLeft: stage.getBoundingClientRect().left,
       stageRight: stage.getBoundingClientRect().right,
       documentWidth: document.documentElement.scrollWidth,
       viewportWidth: window.innerWidth
     };
   });
   expect(geometry.tocPosition).toBe("fixed");
-  expect(geometry.tocRight).toBeLessThanOrEqual(geometry.proseLeft - 8);
+  expect(geometry.tocRight).toBeLessThanOrEqual(geometry.proseLeft - 16);
+  expect(geometry.stageLeft - geometry.proseRight).toBeGreaterThanOrEqual(24);
   expect(geometry.stageRight).toBeLessThanOrEqual(geometry.viewportWidth);
   expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth);
 });
@@ -1508,6 +1541,12 @@ test("phone tutorial keeps a stable compact stage dock with optional expansion",
     .toHaveAttribute("data-kp-attention-page-veil-visible", "false");
   await expect(root.locator("[data-kp-economics-tutorial-reading-band]"))
     .toBeHidden();
+  await expect.poll(() => root.locator(".kp-economics-tutorial__prose")
+    .evaluate((element) => {
+      const style = getComputedStyle(element);
+      return Number.parseFloat(style.lineHeight) /
+        Number.parseFloat(style.fontSize);
+    })).toBeGreaterThanOrEqual(1.71);
   await expect.poll(() => root.evaluate((element) => {
     const graphStage = element.querySelector<HTMLElement>(
       ".editor-graph-stage"
