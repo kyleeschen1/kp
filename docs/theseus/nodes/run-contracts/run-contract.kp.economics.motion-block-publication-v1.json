@@ -577,6 +577,55 @@
       "scope": "s26",
       "checkedAt": "2026-08-03T08:22:02.898Z",
       "notes": "Performance harness and build-fixture repair have no whitespace errors."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-08-03T08:30:50.462Z",
+      "notes": "Architecture boundary scan passed: concept-room, semantic-reader, semantic-animation, and operation-evaluation constraints remain intact."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-08-03T08:30:51.502Z",
+      "notes": "Promotion memory remains aligned; rank-6 matrix work stays tabled and no universal tutorial abstraction was promoted."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-08-03T08:30:52.421Z",
+      "notes": "Full TypeScript check passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-08-03T08:30:53.359Z",
+      "notes": "Full production build passed across the current application."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "s27",
+      "checkedAt": "2026-08-03T08:30:54.344Z",
+      "notes": "Broad suite completed with 4 pre-existing/stale expectation failures outside the economics tutorial boundary: catalogue projection cardinality, two matrix editor surface expectations, and an obsolete convergence-checkpoint next-action string. Focused reproduction: 19 tests, 15 pass, 4 fail. This slice changes only the publication decision ledger and cannot cause these code/roadmap failures."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-08-03T08:30:55.290Z",
+      "notes": "No whitespace errors in the exact slice diff."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-08-03T08:30:56.249Z",
+      "notes": "Workspace valid before slice completion: 873 nodes and 16853 events."
     }
   ],
   "allowedWork": [
@@ -759,7 +808,8 @@
     {
       "id": "s27",
       "title": "Close-framework-neutral-boundaries",
-      "status": "planned"
+      "summary": "Closed the economics tutorial subsystem boundary with one durable interface ledger covering stability tiers, static and upgraded TOC/scrubber contracts, semantic URL grammar, concise authoring and static KaTeX compilation, Svelte host ownership, the honest current no-JavaScript boundary, executable performance budgets, and the second-caller promotion gate. Architecture, promotion-memory, typecheck, build, diff, and Theseus validation passed; the broad suite's four unrelated stale expectations are preserved as explicit failed evidence rather than conflated with this slice.",
+      "status": "complete"
     },
     {
       "id": "s28",

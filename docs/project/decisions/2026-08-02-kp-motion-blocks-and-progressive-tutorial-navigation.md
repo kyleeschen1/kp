@@ -202,3 +202,126 @@ internal editor, a universal scene graph, a universal motif registry, a global
 autoplay/scroll rule, live LLM prose, surplus/deadweight-loss content, or
 catalogue-wide rollout.
 
+## Implemented interface ledger
+
+This ledger records the boundary as built by the economics discovery loop. It
+does not promote a public package or authorize catalogue-wide use. Names that
+look generic identify framework-neutral candidates, not proven universal
+abstractions.
+
+### Stability tiers
+
+| Tier | Status | Contents | Change rule |
+| --- | --- | --- | --- |
+| Durable standard | Accepted | Stable prose during motion; one control set per multi-step animation; cumulative semantic projection; semantic URLs; complete light-DOM fallback; renderer and framework neutrality; one scroll coordinator; static math; bounded performance | Future tutorial work follows these principles or records a superseding decision |
+| Portable candidate | Experimental, one caller | `kp-tutorial-url.ts`, TOC model/static renderer/custom element, scrub-bar static renderer/custom element/CSS | May be reused for a second caller, but no shared schema or compatibility promise is inferred before that proof |
+| Economics-local discovery | Experimental exemplar | Motion-block registry, corridor keyframes, cumulative lesson projection, stage/slot/aperture geometry, verification reveal, deep-link reconstruction, publication compiler, scroll coordinator | Do not move into a shared reader or motif package until human approval and a structurally different second caller expose the same seam |
+| Host integration | Replaceable | `KpEconomicsDemandShiftTutorial.svelte`, its route entry, catalogue preparation, Review host, history and browser lifecycle wiring | Svelte may be replaced without changing semantic state, static renderers, URL grammar, element events, or animation assets |
+
+### Static renderer and custom-element contracts
+
+`renderKpTutorialToc(model)` returns one complete
+`<kp-tutorial-toc>` light-DOM navigation tree. Before upgrade it is ordinary
+semantic navigation. `KpTutorialTocElement.setActiveDestination({ kind, id })`
+owns only `aria-current` presentation. Activating a link emits the bubbling,
+composed, cancelable `kp:tutorial-toc-navigate` event with
+`{ kind, id, href }`. A host that cancels the event owns the transaction;
+otherwise the anchor retains native navigation.
+
+`renderKpTutorialScrubBar(model)` returns one complete
+`<kp-tutorial-scrub-bar>` control tree at final geometry. Rewind, Previous, and
+Next are native semantic links before upgrade; Play and range seeking remain
+disabled because no fallback clock exists. The custom element observes
+`progress`, `playback-status`, `direction`, `controls-disabled`,
+`previous-disabled`, `next-disabled`, and `manual-claimed`. It exposes
+`setReadingBandProjection(...)` and `releaseManualControl()`, and emits:
+
+- `kp:tutorial-scrub-toggle`;
+- `kp:tutorial-scrub-rewind`;
+- `kp:tutorial-scrub-previous`;
+- `kp:tutorial-scrub-next`; and
+- `kp:tutorial-scrub-seek` with `{ progress }`.
+
+These events bubble and cross shadow boundaries, although the elements
+themselves deliberately use no shadow root. The elements own control
+presentation and user intent only. They never own lesson state, checkpoint
+meaning, animation clocks, history, or scroll projection. Upgrade binds the
+pre-rendered nodes in place; replacing the tree is a contract violation.
+
+### Semantic URL compatibility
+
+The only accepted destination grammar is:
+
+```text
+#kp-section-<slug>
+#kp-block-<slug>
+#kp-checkpoint-<slug>
+```
+
+Slugs contain lowercase letters, digits, and single hyphen-separated segments.
+The codec rejects numeric progress, malformed encodings, renderer coordinates,
+and unknown destination kinds. Serialization replaces an existing fragment but
+preserves the route path and query. All authored TOC and control links use the
+codec rather than string concatenation. The economics route is internal today;
+after any URL is published, renaming its semantic ID requires an explicit
+alias or migration rather than silent breakage.
+
+Resolving a URL is pure: it produces the checkpoint, cumulative motion state,
+stage composition, reveal, focus, TOC state, and target scroll projection before
+mount. TOC and history changes apply that result as one transaction. Browser
+layout settlement stays under the navigation lock; only deliberate wheel,
+touch, or scroll-key input hands motion ownership back to the corridor.
+
+### Authoring syntax and compilation
+
+The economics source remains concise Markdown with one `#` title, `Kicker:`,
+`Assumption:`, `###` section headings, prose paragraphs, and these annotations:
+
+```markdown
+<!-- kp:section semantic-section-id -->
+<!-- kp:passage semantic-passage-id -->
+<!-- kp:motion registered-motion-block-id -->
+```
+
+A section annotation appears once before its passages. A passage annotation
+precedes its prose. A motion annotation appears at most once immediately after
+its passage marker, must match the registered passage, and the lesson must
+cover every registered local motion block exactly once. IDs are unique. Raw
+HTML, empty passages, unsupported headings, and unclosed inline-math delimiters
+fail compilation.
+
+Inline `$...$` math is compiled to KaTeX HTML and MathML by the publication
+compiler with `displayMode: false`; the learner runtime does not parse or
+compile LaTeX. `compileKpEconomicsDemandShiftPublication(markdown)` is the one
+assembly boundary for the lesson model, TOC HTML, both scrub-bar payloads, and
+static verification math. Authors provide annotations and prose, not custom-
+element internals.
+
+### Progressive-delivery and performance boundary
+
+The static TOC and scrub-bar payloads are useful and geometrically complete
+with JavaScript disabled, and custom-element upgrade preserves node identity
+and dimensions. The current Vite economics route still mounts its full lesson
+through the client entry; complete route-level SSR or static HTML publication
+is prepared by the pure compiler but is deferred to the publication/SvelteKit
+phase. This distinction must remain explicit in performance or accessibility
+claims.
+
+`npm run performance:economics-demand-shift-tutorial` builds the production
+route and enforces 360,000 bytes total initial transfer, 275,000 script bytes,
+48 resources, CLS at or below 0.02, a startup task below 150 ms, active two-
+frame p95 settlement below 42 ms, and no active task above 100 ms. The accepted
+2026-08-02 measurement is 301,382 transfer bytes, 229,184 script bytes, 46
+resources, startup CLS `0.0000068`, one 106 ms startup task, 33.7 ms active p95,
+zero active long tasks, and at most one changing block-progress attribute per
+sample.
+
+### Promotion gate
+
+Human approval of the economics exemplar may freeze its presentation, but it
+does not by itself promote the corridor, cumulative lesson schema, or stage
+grammar. Promotion requires one structurally different caller—currently the
+generated solve-x tutorial candidate—to reproduce the boundary without
+economics concepts, plus focused regression evidence for both callers. Until
+then, consumers import the candidate modules directly and no `tutorial`
+package barrel or universal scene graph is created.
