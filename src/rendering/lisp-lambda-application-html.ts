@@ -12,7 +12,7 @@ export function renderKpLispLambdaApplicationHtml(
         ${expression("result", frame.expressions.result, frame.expressions.resultOpacity, frame.stage === "evaluate" || frame.stage === "settle")}
       </div>
       <div class="kp-lisp-stage__motion" data-kp-lisp-motion-layer aria-hidden="true"></div>
-      <p class="kp-lisp-stage__accessible" data-kp-lisp-accessible-state aria-live="polite">${escapeHtml(frame.accessibleDescription)}</p>
+      <p class="kp-lisp-stage__accessible" data-kp-lisp-accessible-state role="status" aria-live="polite" aria-atomic="true">${escapeHtml(frame.accessibleDescription)}</p>
     </section>
   `;
 }
@@ -23,11 +23,11 @@ function expression(
   opacity: number,
   current: boolean
 ): string {
-  return `<pre class="kp-lisp-stage__expression kp-lisp-stage__expression--${role}" data-kp-lisp-expression="${role}" data-kp-lisp-current="${current}" style="--kp-lisp-expression-opacity:${opacity.toFixed(4)}"><code data-kp-lisp-native-code="${role}">${escapeHtml(source)}</code></pre>`;
+  return `<pre class="kp-lisp-stage__expression kp-lisp-stage__expression--${role}" data-kp-lisp-expression="${role}" data-kp-lisp-current="${current}" aria-hidden="${!current}" style="--kp-lisp-expression-opacity:${opacity.toFixed(4)}"><code data-kp-lisp-native-code="${role}">${escapeHtml(source)}</code></pre>`;
 }
 
 function environment(frame: KpLispLambdaApplicationRuntimeFrame): string {
-  return `<dl class="kp-lisp-stage__environment" data-kp-lisp-environment style="--kp-lisp-environment-opacity:${frame.expressions.environmentOpacity.toFixed(4)}">
+  return `<dl class="kp-lisp-stage__environment" data-kp-lisp-environment aria-hidden="${frame.stage !== "bind"}" style="--kp-lisp-environment-opacity:${frame.expressions.environmentOpacity.toFixed(4)}">
     <div><dt><code>x</code></dt><dd><code>4</code></dd></div>
   </dl>`;
 }

@@ -119,6 +119,11 @@ export function createKpLispLessonMotionController(input: {
     input.root.dataset["kpLispTutorialProgress"] = global.toFixed(4);
     input.root.dataset["kpLispTutorialActiveMotionBlock"] = activeBlockId;
     input.root.dataset["kpLispTutorialMotionOwner"] = motionOwner;
+    if (motionOwner === "manual") {
+      input.root.dataset["kpLispTutorialScrollTimeline"] = "manual";
+    } else if (motionOwner === "navigation") {
+      input.root.dataset["kpLispTutorialScrollTimeline"] = "navigation";
+    }
     input.root.dataset["kpLispTutorialActivePassage"] = salience.activePassageId;
     input.root.querySelectorAll<HTMLElement>("[data-kp-lisp-tutorial-passage]")
       .forEach((passage) => {
@@ -292,6 +297,11 @@ export function createKpLispLessonMotionController(input: {
     projectScroll: (blockId: KpLispLessonMotionBlockId, local: number) => {
       setOwner("scroll", blockId);
       seek(blockId, local);
+      input.root.dataset["kpLispTutorialScrollTimeline"] = local <= 0.001
+        ? "rewound"
+        : local >= 0.999
+          ? "complete"
+          : "seeking";
     },
     snapshot: () => {
       const global = semanticProgress(session);

@@ -415,6 +415,43 @@
       "status": "passed",
       "scope": "s17 patch hygiene",
       "checkedAt": "2026-08-03T17:53:58.108Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/kp-lisp-accessibility.browser.spec.ts tests/kp-lisp-scroll-coordination.browser.spec.ts tests/kp-lisp-lesson-navigation.browser.spec.ts --config playwright.config.ts --project=chromium --workers=1",
+      "status": "failed",
+      "scope": "s18 initial accessibility integration",
+      "checkedAt": "2026-08-03T18:01:25.728Z",
+      "notes": "Forced-color rules in route CSS lost to the later injected renderer stylesheet; renderer-local system-color overrides repaired the cascade."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-static-publication.test.ts tests/kp-lisp-botanical-stage-renderer.test.ts tests/kp-lisp-scroll-coordination.test.ts tests/kp-lisp-cumulative-motion-blocks.test.ts",
+      "status": "passed",
+      "scope": "s18 static publication, current native form, reduced renderer, and motion preservation",
+      "checkedAt": "2026-08-03T18:01:26.977Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/kp-lisp-accessibility.browser.spec.ts --config playwright.config.ts --workers=1",
+      "status": "passed",
+      "scope": "s18 Chromium Firefox WebKit phone reduced-motion high-contrast screen-reader and no-JS matrix",
+      "checkedAt": "2026-08-03T18:01:27.919Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/kp-lisp-accessibility.browser.spec.ts tests/kp-lisp-scroll-coordination.browser.spec.ts tests/kp-lisp-lesson-navigation.browser.spec.ts --config playwright.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s18 nine combined publication and interaction checks",
+      "checkedAt": "2026-08-03T18:01:28.888Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18 repository TypeScript Svelte and domain boundaries",
+      "checkedAt": "2026-08-03T18:01:29.832Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s18 patch hygiene",
+      "checkedAt": "2026-08-03T18:01:30.805Z"
     }
   ],
   "allowedWork": [
@@ -543,7 +580,8 @@
     {
       "id": "s18",
       "title": "Complete responsive and accessible projections",
-      "status": "planned"
+      "summary": "Completed phone containment, reduced-motion manual semantics, system high-contrast emphasis, one-current-form screen-reader state, and compiler-owned static/no-JS publication markup. Fifteen cross-browser accessibility checks, nine combined Chromium interactions, twelve focused tests, full typecheck, and patch hygiene pass after moving forced-color rules to the renderer-owned late stylesheet.",
+      "status": "complete"
     },
     {
       "id": "s19",

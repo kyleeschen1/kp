@@ -8,6 +8,20 @@ kp-tutorial-scrub-bar {
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
 }
 
+@media (forced-colors: active) {
+  kp-tutorial-scrub-bar {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+  }
+  kp-tutorial-scrub-bar[data-kp-tutorial-scrub-focus="crossing"] {
+    outline: 2px solid Highlight;
+    outline-offset: 3px;
+    box-shadow: none;
+  }
+  kp-tutorial-scrub-bar a { color: LinkText; }
+}
+
 .kp-tutorial-scrub__boundary {
   position: relative;
   padding: 0.55rem 0.1rem;

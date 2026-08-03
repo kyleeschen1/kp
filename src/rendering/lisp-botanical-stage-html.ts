@@ -70,6 +70,12 @@ export const kpLispBotanicalStageCss = `
 .kp-lisp-stage__environment dd { margin: 0; }
 .kp-lisp-stage__accessible { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 @media (prefers-reduced-motion: reduce) { .kp-lisp-botanical * { transition: none !important; } }
+@media (forced-colors: active) {
+  .kp-lisp-botanical [data-kp-lisp-salience] { filter: none; }
+  .kp-lisp-botanical [data-kp-lisp-salience="target"] { stroke: Highlight; }
+  .kp-lisp-botanical__leaf, .kp-lisp-botanical__bud, .kp-lisp-botanical__fruit { fill: CanvasText; }
+  .kp-lisp-botanical__leaf[data-kp-lisp-salience="target"], .kp-lisp-botanical__bud[data-kp-lisp-salience="target"], .kp-lisp-botanical__fruit[data-kp-lisp-salience="target"] { fill: Highlight; }
+}
 `;
 
 function plantNode(

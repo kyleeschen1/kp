@@ -123,6 +123,7 @@ export function createKpLispLessonScrollController(input: {
       `[data-kp-tutorial-motion-controls="${id}"]`
     )
   ])) as Record<KpLispLessonMotionBlockId, KpTutorialScrubBarElement>;
+  const reducedMotion = view.matchMedia("(prefers-reduced-motion: reduce)");
   let frame: number | undefined;
   let previousScrollY = view.scrollY;
   let latest: KpLispScrollFrameProjection | undefined;
@@ -154,10 +155,13 @@ export function createKpLispLessonScrollController(input: {
         proximity: clamp(1 - Math.abs(block.anchorTop - projection.readingBandY) / 96)
       });
     }
+    if (reducedMotion.matches) {
+      input.root.dataset["kpLispTutorialScrollTimeline"] = "reduced-motion";
+      return;
+    }
     const active = projection.blocks.find(({ ownsScroll }) => ownsScroll);
     if (
       active === undefined ||
-      view.matchMedia("(prefers-reduced-motion: reduce)").matches ||
       !scrollChanged ||
       !userIntent
     ) return;
@@ -225,6 +229,7 @@ export function createKpLispLessonScrollController(input: {
   view.addEventListener("wheel", noteIntent, { passive: true });
   view.addEventListener("touchmove", noteIntent, { passive: true });
   view.addEventListener("keydown", onKeydown);
+  reducedMotion.addEventListener("change", schedule);
   input.root.dataset["kpLispTutorialScrollCoordinator"] = "connected";
   schedule();
 
@@ -237,6 +242,7 @@ export function createKpLispLessonScrollController(input: {
       view.removeEventListener("wheel", noteIntent);
       view.removeEventListener("touchmove", noteIntent);
       view.removeEventListener("keydown", onKeydown);
+      reducedMotion.removeEventListener("change", schedule);
       delete input.root.dataset["kpLispTutorialScrollCoordinator"];
     }
   });

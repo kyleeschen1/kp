@@ -174,9 +174,19 @@ button, input { font: inherit; }
     z-index: 3;
     order: 1;
     width: 100%;
-    max-height: 48vh;
+    height: min(44vh, 22rem);
+    max-height: none;
+    overflow: hidden;
     transform: none;
     background: #f4f0e6;
+    border-bottom: 1px solid var(--kp-lisp-line);
+  }
+  .kp-lisp-tutorial__stage [data-kp-lisp-stage-host],
+  .kp-lisp-tutorial__stage .kp-lisp-botanical { height: 100%; }
+  .kp-lisp-tutorial__stage .kp-lisp-botanical { min-height: 0; }
+  .kp-lisp-tutorial__stage .kp-lisp-botanical__plant {
+    width: min(100%, 34rem);
+    max-height: calc(100% - 4.5rem);
   }
   .kp-lisp-tutorial__prose section,
   .kp-lisp-tutorial__footer { order: 2; }
@@ -186,4 +196,30 @@ button, input { font: inherit; }
   html { scroll-behavior: auto; }
   .kp-lisp-tutorial__passage { transition: none; }
   .kp-lisp-tutorial__passage[data-kp-lisp-passage-salience="target"] { transform: none; }
+}
+
+@media (forced-colors: active) {
+  .kp-lisp-tutorial {
+    --kp-lisp-ink: CanvasText;
+    --kp-lisp-muted: CanvasText;
+    --kp-lisp-line: CanvasText;
+    color: CanvasText;
+    background: Canvas;
+  }
+  .kp-lisp-tutorial__stage { background: Canvas; }
+  .kp-lisp-tutorial a { color: LinkText; }
+  .kp-lisp-tutorial__passage { forced-color-adjust: auto; }
+  .kp-lisp-tutorial__passage[data-kp-lisp-passage-salience="target"] {
+    outline: 2px solid Highlight;
+    outline-offset: 4px;
+    box-shadow: none;
+  }
+  .kp-lisp-botanical [data-kp-lisp-salience] { filter: none; }
+  .kp-lisp-botanical [data-kp-lisp-salience="target"] { stroke: Highlight; }
+  .kp-lisp-botanical__leaf,
+  .kp-lisp-botanical__bud,
+  .kp-lisp-botanical__fruit { fill: CanvasText; }
+  .kp-lisp-botanical__leaf[data-kp-lisp-salience="target"],
+  .kp-lisp-botanical__bud[data-kp-lisp-salience="target"],
+  .kp-lisp-botanical__fruit[data-kp-lisp-salience="target"] { fill: Highlight; }
 }
