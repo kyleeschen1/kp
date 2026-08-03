@@ -6,6 +6,15 @@ import {
   KP_TUTORIAL_SCRUB_TOGGLE_EVENT
 } from "../kp-tutorial-scrub-bar-events.ts";
 import type { KpTutorialScrubBarElement } from "../kp-tutorial-scrub-bar.ts";
+import {
+  KpTutorialScrollCoordinator,
+  projectKpTutorialMotionCorridor,
+  projectKpTutorialRebasedCorridor,
+  projectKpTutorialScrollFrame,
+  type KpTutorialCoordinatedScrollProjection,
+  type KpTutorialScrollBlockProjection,
+  type KpTutorialScrollFrameProjection
+} from "../kp-tutorial-motion.ts";
 import type { KpLispLessonMotionController } from "./lisp-function-application-motion-controller.ts";
 import {
   kpLispLessonMotionBlocks,
@@ -13,48 +22,18 @@ import {
   type KpLispLessonMotionCorridor
 } from "./lisp-function-application-motion-blocks.ts";
 
-export interface KpLispScrollBlockProjection {
-  readonly id: KpLispLessonMotionBlockId;
-  readonly anchorTop: number;
-  readonly travel: number;
-  readonly progress: number;
-  readonly ownsScroll: boolean;
-}
+export interface KpLispScrollBlockProjection
+  extends KpTutorialScrollBlockProjection<KpLispLessonMotionBlockId> {}
 
-export interface KpLispScrollFrameProjection {
-  readonly activeBlockId: KpLispLessonMotionBlockId | undefined;
-  readonly readingBandY: number;
-  readonly blocks: readonly KpLispScrollBlockProjection[];
-}
+export interface KpLispScrollFrameProjection
+  extends KpTutorialScrollFrameProjection<KpLispLessonMotionBlockId> {}
 
 export function projectKpLispScrollCorridor(input: {
   readonly corridor: KpLispLessonMotionCorridor;
   readonly anchorTop: number;
   readonly viewportHeight: number;
 }): { readonly travel: number; readonly progress: number } {
-  const height = finitePositive(input.viewportHeight);
-  const start = input.corridor.startViewportRatio * height;
-  const end = input.corridor.endViewportRatio * height;
-  const rawTravel = start > end && Number.isFinite(input.anchorTop)
-    ? clamp((start - input.anchorTop) / (start - end))
-    : 0;
-  const travel = snapTravel(input.corridor, rawTravel);
-  return Object.freeze({
-    travel,
-    progress: projectKpLispCorridorProgress(input.corridor, travel)
-  });
-}
-
-function snapTravel(
-  corridor: KpLispLessonMotionCorridor,
-  travel: number
-): number {
-  const nearest = [...corridor.keyframes].sort((left, right) =>
-    Math.abs(left.travel - travel) - Math.abs(right.travel - travel)
-  )[0];
-  return nearest !== undefined && Math.abs(nearest.travel - travel) <= 0.002
-    ? nearest.travel
-    : travel;
+  return projectKpTutorialMotionCorridor({ ...input, snapTolerance: 0.002 });
 }
 
 export function projectKpLispScrollFrame(input: {
@@ -65,30 +44,9 @@ export function projectKpLispScrollFrame(input: {
     readonly corridor: KpLispLessonMotionCorridor;
   }[];
 }): KpLispScrollFrameProjection {
-  const height = finitePositive(input.viewportHeight);
-  const readingBandY = height * 0.38;
-  const candidates = input.blocks.map((block) => ({
-    ...block,
-    ...projectKpLispScrollCorridor({
-      corridor: block.corridor,
-      anchorTop: block.anchorTop,
-      viewportHeight: height
-    }),
-    distance: Math.abs(block.anchorTop - readingBandY)
-  }));
-  const travelling = candidates.filter(({ travel }) => travel > 0 && travel < 1);
-  const owner = [...(travelling.length > 0 ? travelling : candidates)]
-    .sort((left, right) => left.distance - right.distance)[0];
-  return Object.freeze({
-    activeBlockId: owner?.id,
-    readingBandY,
-    blocks: Object.freeze(candidates.map((candidate) => Object.freeze({
-      id: candidate.id,
-      anchorTop: candidate.anchorTop,
-      travel: candidate.travel,
-      progress: candidate.progress,
-      ownsScroll: candidate.id === owner?.id
-    })))
+  return projectKpTutorialScrollFrame({
+    ...input,
+    blocks: input.blocks.map((block) => ({ ...block, snapTolerance: 0.002 }))
   });
 }
 
@@ -98,16 +56,7 @@ export function projectKpLispRebasedScroll(input: {
   readonly manualProgress: number;
   readonly rawTravel: number;
 }): { readonly travel: number; readonly progress: number } {
-  const manualTravel = resolveTravelForProgress(
-    input.corridor,
-    input.manualProgress,
-    input.rawTravelAtTakeover
-  );
-  const travel = clamp(manualTravel + input.rawTravel - input.rawTravelAtTakeover);
-  return Object.freeze({
-    travel,
-    progress: projectKpLispCorridorProgress(input.corridor, travel)
-  });
+  return projectKpTutorialRebasedCorridor(input);
 }
 
 export function createKpLispLessonScrollController(input: {
@@ -124,8 +73,6 @@ export function createKpLispLessonScrollController(input: {
     )
   ])) as Record<KpLispLessonMotionBlockId, KpTutorialScrubBarElement>;
   const reducedMotion = view.matchMedia("(prefers-reduced-motion: reduce)");
-  let frame: number | undefined;
-  let previousScrollY = view.scrollY;
   let latest: KpLispScrollFrameProjection | undefined;
   let userIntent = false;
   let rebase: {
@@ -134,18 +81,10 @@ export function createKpLispLessonScrollController(input: {
     readonly manualProgress: number;
   } | undefined;
 
-  const project = (): void => {
-    frame = undefined;
-    const projection = projectKpLispScrollFrame({
-      viewportHeight: view.innerHeight,
-      blocks: kpLispLessonMotionBlocks.map((block) => ({
-        id: block.id,
-        corridor: block.corridor,
-        anchorTop: controls[block.id].getBoundingClientRect().top
-      }))
-    });
-    const scrollChanged = Math.abs(view.scrollY - previousScrollY) > 0.01;
-    previousScrollY = view.scrollY;
+  const project = (
+    projection: KpTutorialCoordinatedScrollProjection<KpLispLessonMotionBlockId>
+  ): void => {
+    const scrollChanged = projection.scrollChanged;
     latest = projection;
     input.root.dataset["kpLispTutorialScrollActiveBlock"] =
       projection.activeBlockId ?? "";
@@ -183,10 +122,6 @@ export function createKpLispLessonScrollController(input: {
     userIntent = false;
   };
 
-  const schedule = (): void => {
-    if (frame !== undefined) return;
-    frame = view.requestAnimationFrame(project);
-  };
   const noteIntent = (): void => {
     userIntent = true;
   };
@@ -224,75 +159,34 @@ export function createKpLispLessonScrollController(input: {
     KP_TUTORIAL_SCRUB_NEXT_EVENT
   ];
   for (const type of manualEvents) input.root.addEventListener(type, captureRebase);
-  view.addEventListener("scroll", schedule, { passive: true });
-  view.addEventListener("resize", schedule);
   view.addEventListener("wheel", noteIntent, { passive: true });
   view.addEventListener("touchmove", noteIntent, { passive: true });
   view.addEventListener("keydown", onKeydown);
-  reducedMotion.addEventListener("change", schedule);
+  const coordinator = new KpTutorialScrollCoordinator(
+    view,
+    () => kpLispLessonMotionBlocks.map((block) => ({
+      id: block.id,
+      anchor: controls[block.id],
+      corridor: block.corridor,
+      snapTolerance: 0.002
+    })),
+    project
+  );
+  reducedMotion.addEventListener("change", coordinator.scheduleProjection);
   input.root.dataset["kpLispTutorialScrollCoordinator"] = "connected";
-  schedule();
+  coordinator.connect();
 
   return Object.freeze({
     dispose: () => {
-      if (frame !== undefined) view.cancelAnimationFrame(frame);
+      coordinator.disconnect();
       for (const type of manualEvents) input.root.removeEventListener(type, captureRebase);
-      view.removeEventListener("scroll", schedule);
-      view.removeEventListener("resize", schedule);
       view.removeEventListener("wheel", noteIntent);
       view.removeEventListener("touchmove", noteIntent);
       view.removeEventListener("keydown", onKeydown);
-      reducedMotion.removeEventListener("change", schedule);
+      reducedMotion.removeEventListener("change", coordinator.scheduleProjection);
       delete input.root.dataset["kpLispTutorialScrollCoordinator"];
     }
   });
-}
-
-function projectKpLispCorridorProgress(
-  corridor: KpLispLessonMotionCorridor,
-  travel: number
-): number {
-  const keyframes = corridor.keyframes;
-  if (keyframes.length < 2) throw new Error("Lisp scroll corridor needs two keyframes.");
-  if (travel <= keyframes[0]!.travel) return keyframes[0]!.progress;
-  for (let index = 1; index < keyframes.length; index += 1) {
-    const before = keyframes[index - 1]!;
-    const after = keyframes[index]!;
-    if (travel > after.travel) continue;
-    const span = after.travel - before.travel;
-    if (span <= 0) throw new Error("Lisp corridor travel must increase strictly.");
-    const position = (travel - before.travel) / span;
-    return before.progress + (after.progress - before.progress) * position;
-  }
-  return keyframes.at(-1)!.progress;
-}
-
-function resolveTravelForProgress(
-  corridor: KpLispLessonMotionCorridor,
-  progressValue: number,
-  preferredTravelValue: number
-): number {
-  const progress = clamp(progressValue);
-  const preferred = clamp(preferredTravelValue);
-  const candidates: number[] = [];
-  for (let index = 1; index < corridor.keyframes.length; index += 1) {
-    const before = corridor.keyframes[index - 1]!;
-    const after = corridor.keyframes[index]!;
-    const span = after.progress - before.progress;
-    if (Math.abs(span) <= Number.EPSILON) {
-      if (Math.abs(progress - before.progress) <= Number.EPSILON) {
-        candidates.push(Math.max(before.travel, Math.min(after.travel, preferred)));
-      }
-    } else {
-      const position = (progress - before.progress) / span;
-      if (position >= 0 && position <= 1) {
-        candidates.push(before.travel + (after.travel - before.travel) * position);
-      }
-    }
-  }
-  return candidates.sort((left, right) =>
-    Math.abs(left - preferred) - Math.abs(right - preferred)
-  )[0] ?? (progress <= corridor.keyframes[0]!.progress ? 0 : 1);
 }
 
 function blockFromEvent(event: Event): KpLispLessonMotionBlockId | undefined {
@@ -306,10 +200,6 @@ function required<ElementType extends Element>(root: ParentNode, selector: strin
   const element = root.querySelector<ElementType>(selector);
   if (element === null) throw new Error(`Lisp scroll coordination is missing ${selector}.`);
   return element;
-}
-
-function finitePositive(value: number): number {
-  return Number.isFinite(value) && value > 0 ? value : 1;
 }
 
 function clamp(value: number): number {

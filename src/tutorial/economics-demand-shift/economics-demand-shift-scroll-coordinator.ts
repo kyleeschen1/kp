@@ -1,157 +1,45 @@
-import type {
-  KpEconomicsMotionBlockId,
-  KpEconomicsMotionCorridor
-} from "./economics-demand-shift-motion-blocks.ts";
 import {
-  projectKpEconomicsMotionCorridor,
-  type KpEconomicsMotionCorridorProjection
-} from "./economics-demand-shift-scroll-corridor.ts";
+  KpTutorialScrollCoordinator,
+  projectKpTutorialScrollFrame,
+  type KpTutorialCoordinatedScrollProjection,
+  type KpTutorialScrollBlockGeometry,
+  type KpTutorialScrollBlockProjection,
+  type KpTutorialScrollBlockRegistration,
+  type KpTutorialScrollFrameProjection
+} from "../kp-tutorial-motion.ts";
+import type {
+  KpEconomicsMotionBlockId
+} from "./economics-demand-shift-motion-blocks.ts";
 
-export interface KpEconomicsScrollBlockGeometry {
-  readonly id: KpEconomicsMotionBlockId;
-  readonly anchorTop: number;
-  readonly corridor: KpEconomicsMotionCorridor;
-}
+export interface KpEconomicsScrollBlockGeometry
+  extends KpTutorialScrollBlockGeometry<KpEconomicsMotionBlockId> {}
 
 export interface KpEconomicsScrollBlockProjection
-  extends KpEconomicsMotionCorridorProjection {
-  readonly id: KpEconomicsMotionBlockId;
-  readonly anchorTop: number;
-  readonly distanceFromReadingBand: number;
-  readonly ownsScroll: boolean;
-}
+  extends KpTutorialScrollBlockProjection<KpEconomicsMotionBlockId> {}
 
-export interface KpEconomicsScrollFrameProjection {
-  readonly activeBlockId: KpEconomicsMotionBlockId | undefined;
-  readonly readingBandY: number;
-  readonly blocks: readonly KpEconomicsScrollBlockProjection[];
-}
+export interface KpEconomicsScrollFrameProjection
+  extends KpTutorialScrollFrameProjection<KpEconomicsMotionBlockId> {}
 
-export interface KpEconomicsScrollBlockRegistration {
-  readonly id: KpEconomicsMotionBlockId;
-  readonly anchor: HTMLElement;
-  readonly corridor: KpEconomicsMotionCorridor;
-}
+export interface KpEconomicsScrollBlockRegistration
+  extends KpTutorialScrollBlockRegistration<KpEconomicsMotionBlockId> {}
 
 export interface KpEconomicsCoordinatedScrollProjection
-  extends KpEconomicsScrollFrameProjection {
-  readonly scrollY: number;
-  readonly scrollChanged: boolean;
-}
+  extends KpTutorialCoordinatedScrollProjection<KpEconomicsMotionBlockId> {}
 
 export function projectKpEconomicsScrollFrame(input: {
   readonly blocks: readonly KpEconomicsScrollBlockGeometry[];
   readonly viewportHeight: number;
 }): KpEconomicsScrollFrameProjection {
-  const viewportHeight = Number.isFinite(input.viewportHeight) &&
-      input.viewportHeight > 0
-    ? input.viewportHeight
-    : 1;
-  const readingBandY = viewportHeight * 0.38;
-  const candidates = input.blocks.map((block) => {
-    const corridor = projectKpEconomicsMotionCorridor({
-      corridor: block.corridor,
-      anchorTop: block.anchorTop,
-      viewportHeight
-    });
-    return {
-      ...block,
-      ...corridor,
-      distanceFromReadingBand: Math.abs(block.anchorTop - readingBandY)
-    };
-  });
-  const inCorridor = candidates.filter(({ travel }) => travel > 0 && travel < 1);
-  const owner = [...(inCorridor.length > 0 ? inCorridor : candidates)]
-    .sort((left, right) =>
-      left.distanceFromReadingBand - right.distanceFromReadingBand
-    )[0];
-
-  return Object.freeze({
-    activeBlockId: owner?.id,
-    readingBandY,
-    blocks: Object.freeze(candidates.map((candidate) => Object.freeze({
-      id: candidate.id,
-      anchorTop: candidate.anchorTop,
-      travel: candidate.travel,
-      progress: candidate.progress,
-      distanceFromReadingBand: candidate.distanceFromReadingBand,
-      ownsScroll: candidate.id === owner?.id
-    })))
-  });
+  return projectKpTutorialScrollFrame(input);
 }
 
-export class KpEconomicsTutorialScrollCoordinator {
-  private readonly view: Window;
-  private readonly registrations: () =>
-    readonly KpEconomicsScrollBlockRegistration[];
-  private readonly onProjection: (
-    projection: KpEconomicsCoordinatedScrollProjection
-  ) => void;
-  private frame: number | undefined;
-  private connected = false;
-  private previousScrollY: number | undefined;
-
+export class KpEconomicsTutorialScrollCoordinator
+  extends KpTutorialScrollCoordinator<KpEconomicsMotionBlockId> {
   constructor(
     view: Window,
-    registrations: () =>
-      readonly KpEconomicsScrollBlockRegistration[],
-    onProjection: (
-      projection: KpEconomicsCoordinatedScrollProjection
-    ) => void
+    registrations: () => readonly KpEconomicsScrollBlockRegistration[],
+    onProjection: (projection: KpEconomicsCoordinatedScrollProjection) => void
   ) {
-    this.view = view;
-    this.registrations = registrations;
-    this.onProjection = onProjection;
-  }
-
-  connect(): void {
-    if (this.connected) return;
-    this.connected = true;
-    this.previousScrollY = this.view.scrollY;
-    this.view.addEventListener("scroll", this.scheduleProjection, {
-      passive: true
-    });
-    this.view.addEventListener("resize", this.scheduleProjection);
-    this.scheduleProjection();
-  }
-
-  disconnect(): void {
-    if (!this.connected) return;
-    this.connected = false;
-    this.view.removeEventListener("scroll", this.scheduleProjection);
-    this.view.removeEventListener("resize", this.scheduleProjection);
-    this.cancelPendingProjection();
-  }
-
-  readonly scheduleProjection = (): void => {
-    if (!this.connected || this.frame !== undefined) return;
-    this.frame = this.view.requestAnimationFrame(() => {
-      this.frame = undefined;
-      this.project();
-    });
-  };
-
-  cancelPendingProjection(): void {
-    if (this.frame === undefined) return;
-    this.view.cancelAnimationFrame(this.frame);
-    this.frame = undefined;
-  }
-
-  private project(): void {
-    const registrations = this.registrations();
-    const geometry = registrations.map(({ id, anchor, corridor }) => ({
-      id,
-      corridor,
-      anchorTop: anchor.getBoundingClientRect().top
-    }));
-    const projection = projectKpEconomicsScrollFrame({
-      blocks: geometry,
-      viewportHeight: this.view.innerHeight
-    });
-    const scrollY = this.view.scrollY;
-    const scrollChanged = this.previousScrollY !== undefined &&
-      Math.abs(scrollY - this.previousScrollY) > 0.01;
-    this.previousScrollY = scrollY;
-    this.onProjection(Object.freeze({ ...projection, scrollY, scrollChanged }));
+    super(view, registrations, onProjection);
   }
 }

@@ -6,6 +6,13 @@ import {
   projectKpEconomicsVerificationReveal,
   type KpEconomicsVerificationRevealProjection
 } from "./economics-demand-shift-verification.ts";
+import {
+  projectKpTutorialCumulativeMotion,
+  type KpTutorialMotionBlock,
+  type KpTutorialMotionCheckpoint,
+  type KpTutorialMotionCorridor,
+  type KpTutorialMotionCorridorKeyframe
+} from "../kp-tutorial-motion.ts";
 
 export type KpEconomicsMotionBlockId =
   | "demand-shift"
@@ -34,24 +41,21 @@ export interface KpEconomicsMotionSceneState {
   readonly presentation: KpEconomicsPresentationState;
 }
 
-export interface KpEconomicsMotionCheckpoint {
-  readonly id: KpEconomicsMotionCheckpointId;
-  readonly label: string;
-  readonly progress: number;
-}
+export interface KpEconomicsMotionCheckpoint
+  extends KpTutorialMotionCheckpoint<KpEconomicsMotionCheckpointId> {}
 
-export interface KpEconomicsMotionCorridorKeyframe {
-  readonly travel: number;
-  readonly progress: number;
-}
+export interface KpEconomicsMotionCorridorKeyframe
+  extends KpTutorialMotionCorridorKeyframe {}
 
-export interface KpEconomicsMotionCorridor {
-  readonly startViewportRatio: number;
-  readonly endViewportRatio: number;
+export interface KpEconomicsMotionCorridor extends KpTutorialMotionCorridor {
   readonly keyframes: readonly KpEconomicsMotionCorridorKeyframe[];
 }
 
-export interface KpEconomicsMotionBlock {
+export interface KpEconomicsMotionBlock
+  extends KpTutorialMotionBlock<
+    KpEconomicsMotionBlockId,
+    KpEconomicsMotionCheckpointId
+  > {
   readonly id: KpEconomicsMotionBlockId;
   readonly passageId: "follow-shift" | "shift-versus-movement";
   readonly label: string;
@@ -140,22 +144,11 @@ export function projectKpEconomicsLessonMotion(input: {
   readonly activeBlockId: KpEconomicsMotionBlockId;
   readonly localProgress: number;
 }): KpEconomicsLessonMotionProjection {
-  const activeIndex = kpEconomicsMotionBlocks.findIndex(
-    (block) => block.id === input.activeBlockId
-  );
-  if (activeIndex < 0) {
-    throw new Error(`Unknown economics motion block: ${input.activeBlockId}`);
-  }
-  const localProgress = clampProgress(input.localProgress);
-  const blocks = kpEconomicsMotionBlocks.map((block, index) => Object.freeze({
-    id: block.id,
-    status: index < activeIndex
-      ? "settled" as const
-      : index === activeIndex
-        ? "active" as const
-        : "inactive" as const,
-    progress: index < activeIndex ? 1 : index === activeIndex ? localProgress : 0
-  }));
+  const blocks = projectKpTutorialCumulativeMotion({
+    blocks: kpEconomicsMotionBlocks,
+    activeBlockId: input.activeBlockId,
+    localProgress: input.localProgress
+  });
   const demandShiftProgress = blocks[0]!.progress;
   const supplyMovementProgress = blocks[1]!.progress;
 
@@ -219,8 +212,4 @@ function corridor(
       Object.freeze({ travel, progress })
     ))
   });
-}
-
-function clampProgress(value: number): number {
-  return Number.isFinite(value) ? Math.max(0, Math.min(1, value)) : 0;
 }

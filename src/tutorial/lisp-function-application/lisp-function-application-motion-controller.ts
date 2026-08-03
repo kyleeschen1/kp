@@ -18,6 +18,7 @@ import {
   type KpTutorialScrubSeekDetail
 } from "../kp-tutorial-scrub-bar-events.ts";
 import type { KpTutorialScrubBarElement } from "../kp-tutorial-scrub-bar.ts";
+import { projectKpTutorialCumulativeMotion } from "../kp-tutorial-motion.ts";
 import {
   kpLispLessonMotionBlocks,
   type KpLispLessonMotionBlockId
@@ -134,9 +135,14 @@ export function createKpLispLessonMotionController(input: {
             ? "context"
             : "rest";
       });
+    const cumulative = projectKpTutorialCumulativeMotion({
+      blocks: kpLispLessonMotionBlocks,
+      activeBlockId,
+      localProgress: localProgress(activeBlockId, global)
+    });
     for (const block of kpLispLessonMotionBlocks) {
       const control = scrubs[block.id];
-      const blockLocal = localProgress(block.id, global);
+      const blockLocal = cumulative.find(({ id }) => id === block.id)!.progress;
       control.setAttribute("controls-disabled", "false");
       control.setAttribute("progress", blockLocal.toFixed(4));
       control.setAttribute(

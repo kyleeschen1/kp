@@ -2,24 +2,13 @@ export type KpLispLessonMotionBlockId =
   | "bind-and-reconstruct"
   | "evaluate-and-gather";
 
-export interface KpLispLessonMotionCheckpoint {
-  readonly id: string;
-  readonly label: string;
-  readonly progress: number;
-}
+export interface KpLispLessonMotionCheckpoint
+  extends KpTutorialMotionCheckpoint {}
 
-export interface KpLispLessonMotionCorridor {
-  readonly startViewportRatio: number;
-  readonly endViewportRatio: number;
-  readonly keyframes: readonly {
-    readonly travel: number;
-    readonly progress: number;
-  }[];
-}
+export interface KpLispLessonMotionCorridor extends KpTutorialMotionCorridor {}
 
-export interface KpLispLessonMotionBlock {
-  readonly id: KpLispLessonMotionBlockId;
-  readonly label: string;
+export interface KpLispLessonMotionBlock
+  extends KpTutorialMotionBlock<KpLispLessonMotionBlockId> {
   readonly checkpoints: readonly KpLispLessonMotionCheckpoint[];
   readonly corridor: KpLispLessonMotionCorridor;
 }
@@ -75,3 +64,8 @@ function corridor(
     ))
   });
 }
+import type {
+  KpTutorialMotionBlock,
+  KpTutorialMotionCheckpoint,
+  KpTutorialMotionCorridor
+} from "../kp-tutorial-motion.ts";
