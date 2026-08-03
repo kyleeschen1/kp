@@ -61,10 +61,10 @@ export const kpLispBotanicalStageCss = `
 .kp-lisp-botanical [data-kp-lisp-salience="target"] { stroke-width: 5.75; }
 .kp-lisp-botanical__leaf[data-kp-lisp-salience="target"], .kp-lisp-botanical__bud[data-kp-lisp-salience="target"], .kp-lisp-botanical__fruit[data-kp-lisp-salience="target"] { stroke: #f4f0e6; stroke-width: 2; }
 .kp-lisp-stage { position: absolute; inset: auto 0 0; display: grid; min-height: 7rem; place-items: center; }
-.kp-lisp-stage__expression, .kp-lisp-stage__environment { position: absolute; margin: 0; opacity: var(--kp-lisp-expression-opacity, var(--kp-lisp-environment-opacity, 0)); }
-.kp-lisp-stage__expression code, .kp-lisp-stage__environment code { font: 600 clamp(1.05rem, 2.7vw, 1.7rem)/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
-.kp-lisp-stage__expression--application { transform: translateY(-1.35rem); }
-.kp-lisp-stage__environment { transform: translateY(1.65rem); }
+.kp-lisp-stage__expression, .kp-lisp-stage__environment { position: absolute; left: 50%; margin: 0; opacity: var(--kp-lisp-expression-opacity, var(--kp-lisp-environment-opacity, 0)); transform: translateX(-50%); white-space: nowrap; }
+.kp-lisp-stage__expression code, .kp-lisp-stage__environment code { font: 600 clamp(.78rem, 1.6vw, 1.25rem)/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.kp-lisp-stage__expression--application { transform: translate(-50%, -1.35rem); }
+.kp-lisp-stage__environment { transform: translate(-50%, 1.65rem); }
 .kp-lisp-stage__environment > div { display: flex; align-items: baseline; gap: .55rem; }
 .kp-lisp-stage__environment dt::after { content: " ↦"; color: #8b6b46; }
 .kp-lisp-stage__environment dd { margin: 0; }

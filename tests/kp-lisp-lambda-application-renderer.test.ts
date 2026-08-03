@@ -31,7 +31,7 @@ test("renderer keeps transient motion separate from native checkpoint truth", ()
 test("each frame exposes equivalent nonvisual state", () => {
   for (const progress of [0, 0.3, 0.55, 0.85, 1]) {
     const html = render(progress);
-    assert.match(html, /data-kp-lisp-accessible-state aria-live="polite">[^<]+<\/p>/);
+    assert.match(html, /data-kp-lisp-accessible-state role="status" aria-live="polite" aria-atomic="true">[^<]+<\/p>/);
     assert.match(html, /aria-label="[^"]+"/);
   }
 });
@@ -39,5 +39,5 @@ test("each frame exposes equivalent nonvisual state", () => {
 test("renderer derives visibility from the supplied frame only", () => {
   assert.equal(render(0.55), render(0.55));
   assert.match(render(1), /data-kp-lisp-stage="settle"/);
-  assert.match(render(1), /data-kp-lisp-current="true" style="--kp-lisp-expression-opacity:1\.0000"/);
+  assert.match(render(1), /data-kp-lisp-current="true" aria-hidden="false" style="--kp-lisp-expression-opacity:1\.0000"/);
 });

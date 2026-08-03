@@ -452,6 +452,51 @@
       "status": "passed",
       "scope": "s18 patch hygiene",
       "checkedAt": "2026-08-03T18:01:30.805Z"
+    },
+    {
+      "command": "npm run test:botanical-lisp-tutorial",
+      "status": "failed",
+      "scope": "s19 initial complete local unit suite",
+      "checkedAt": "2026-08-03T18:08:52.145Z",
+      "notes": "The new aggregate command exposed two stale renderer regex assertions after intentional aria attributes; tests were aligned to the stronger accessibility contract."
+    },
+    {
+      "command": "npm run test:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "s19 58 semantic renderer lesson navigation scroll static and route tests",
+      "checkedAt": "2026-08-03T18:08:53.324Z"
+    },
+    {
+      "command": "npm run visual:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "s19 five wide checkpoints and phone result captures with native-expression containment",
+      "checkedAt": "2026-08-03T18:08:54.339Z",
+      "notes": "Visual review exposed and repaired off-center native code plus in-flight smooth-scroll captures before the final passing suite."
+    },
+    {
+      "command": "npm run performance:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "s19 production build transfer CLS long-task and active-frame budgets",
+      "checkedAt": "2026-08-03T18:08:55.307Z",
+      "notes": "96211 transfer bytes; 77436 script bytes; 24 resources; initial CLS 0; active CLS 0.000124; initial longest task 115ms; active p95 34.4ms; no active long tasks; no KaTeX Monaco or Three resources."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s19 repository architecture boundaries",
+      "checkedAt": "2026-08-03T18:08:56.290Z"
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s19 botanical motif remains experimental local",
+      "checkedAt": "2026-08-03T18:08:57.255Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s19 patch hygiene",
+      "checkedAt": "2026-08-03T18:08:58.238Z"
     }
   ],
   "allowedWork": [
@@ -586,7 +631,8 @@
     {
       "id": "s19",
       "title": "Certify local tutorial visuals and performance",
-      "status": "planned"
+      "summary": "Added stable test:botanical-lisp-tutorial, visual:botanical-lisp-tutorial, and performance:botanical-lisp-tutorial commands with committed visual and production probes. Fifty-eight local tests pass; six visual states pass containment review after centering native code and waiting for scroll settlement; production uses 96.2kB transfer/77.4kB script/24 resources with zero initial CLS, 34.4ms active p95, no active long tasks, and no KaTeX/Monaco/Three route resources. Architecture and promotion-memory checks pass; botanical remains experimental-local.",
+      "status": "complete"
     },
     {
       "id": "s20",
