@@ -102,6 +102,24 @@
       "status": "passed",
       "scope": "s04 test inference",
       "checkedAt": "2026-08-03T16:44:51.253Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-semantic-model.test.ts tests/kp-lisp-lambda-application-fixture.test.ts tests/kp-lisp-lambda-application-asset.test.ts tests/kp-lisp-lambda-application-runtime-frame.test.ts",
+      "status": "passed",
+      "scope": "s05 seventeen semantic and deterministic runtime tests",
+      "checkedAt": "2026-08-03T16:50:01.307Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s05 application types",
+      "checkedAt": "2026-08-03T16:50:02.353Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s05 test inference",
+      "checkedAt": "2026-08-03T16:50:03.294Z"
     }
   ],
   "allowedWork": [
@@ -152,7 +170,8 @@
     {
       "id": "s05",
       "title": "Project deterministic Lisp runtime frames",
-      "status": "planned"
+      "summary": "Added a pure deterministic Lisp runtime-frame sampler with five semantic stages, exact checkpoint focus, native expression payloads, accessible descriptions, and explicit per-entry material conservation. Dense seek and rewind tests plus app/test TypeScript checks pass.",
+      "status": "complete"
     },
     {
       "id": "s06",
