@@ -402,6 +402,34 @@
       "scope": "s18",
       "checkedAt": "2026-08-03T07:33:35.075Z",
       "notes": "Active progressive-scrubber diff has no whitespace errors."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-08-03T07:36:08.761Z",
+      "notes": "Twenty-two focused tests pass; concise Markdown and local motion metadata deterministically expand to a frozen complete publication, and the compiler rejects incomplete local motion annotation coverage."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-08-03T07:36:09.940Z",
+      "notes": "Svelte and TypeScript diagnostics pass with zero errors and warnings after the entry adopted the narrow publication compiler."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-08-03T07:36:10.884Z",
+      "notes": "All eight Chromium checks pass through the simplified publication assembly, including pre-upgrade geometry and existing motion behavior."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-08-03T07:36:11.813Z",
+      "notes": "Active concise-authoring diff has no whitespace errors."
     }
   ],
   "allowedWork": [
@@ -536,7 +564,8 @@
     {
       "id": "s19",
       "title": "Expand-concise-authoring",
-      "status": "planned"
+      "summary": "Added one pure economics publication compiler that expands concise Markdown section/passage/motion annotations and local motion metadata into frozen TOC, scrubber, native-link, and static KaTeX payloads; the route entry no longer assembles custom-element internals, and incomplete motion annotation coverage fails closed.",
+      "status": "complete"
     },
     {
       "id": "s20",

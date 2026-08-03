@@ -1,6 +1,7 @@
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 import {
   findKpEconomicsMotionBlock,
+  kpEconomicsMotionBlocks,
   type KpEconomicsMotionBlockId
 } from "./economics-demand-shift-motion-blocks.ts";
 
@@ -187,6 +188,14 @@ export function compileKpEconomicsDemandShiftLesson(
   );
   if (new Set(motionBlockIds).size !== motionBlockIds.length) {
     throw new Error("Lesson motion annotations must be unique.");
+  }
+  if (
+    motionBlockIds.length !== kpEconomicsMotionBlocks.length ||
+    kpEconomicsMotionBlocks.some(({ id }) => !motionBlockIds.includes(id))
+  ) {
+    throw new Error(
+      "Lesson motion annotations must cover every local motion block exactly once."
+    );
   }
   if (sections.some(({ passages }) =>
     passages.length === 0 || passages.some(({ paragraphs }) => paragraphs.length === 0)

@@ -13,6 +13,9 @@ import {
   compileKpEconomicsDemandShiftLesson
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-lesson-compiler.ts";
 import {
+  compileKpEconomicsDemandShiftPublication
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
+import {
   findKpEconomicsMotionBlock,
   findKpEconomicsMotionCheckpoint,
   kpEconomicsMotionBlocks,
@@ -535,6 +538,36 @@ test("static tutorial scrubber has final light DOM and native checkpoint links",
   assert.match(html, /<input[^>]+data-action="seek"[^>]+disabled/);
   assert.match(html, /<option value="0\.72" label="Handoff">/);
   assert.doesNotMatch(html, /<style|<script|shadow/);
+});
+
+test("concise lesson authoring expands into one complete static publication", () => {
+  const markdown = readFileSync(new URL(
+    "../content/lessons/economics-demand-shift.md",
+    import.meta.url
+  ), "utf8");
+  const publication = compileKpEconomicsDemandShiftPublication(markdown);
+
+  assert.equal(publication.lesson.sections.length, 4);
+  assert.deepEqual(Object.keys(publication.motionScrubBarHtml), [
+    "demand-shift",
+    "supply-movement"
+  ]);
+  assert.match(publication.tocHtml, /<kp-tutorial-toc/);
+  assert.match(
+    publication.motionScrubBarHtml["demand-shift"],
+    /href="\/tutorials\/economics\/demand-shift\/#kp-checkpoint-shift-handoff"/
+  );
+  assert.match(
+    publication.motionScrubBarHtml["supply-movement"],
+    /data-kp-tutorial-motion-controls="supply-movement"/
+  );
+  assert.match(publication.verificationSurfaceHtml, /<math/);
+  assert.equal(Object.isFrozen(publication), true);
+  assert.equal(Object.isFrozen(publication.motionScrubBarHtml), true);
+  assert.deepEqual(
+    compileKpEconomicsDemandShiftPublication(markdown),
+    publication
+  );
 });
 
 test("semantic checkpoint navigation is ordered, bounded, and reversible", () => {

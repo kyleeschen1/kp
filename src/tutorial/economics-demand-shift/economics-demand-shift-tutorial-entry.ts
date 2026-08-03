@@ -24,24 +24,8 @@ import { createKpEditorAnimationLibrary } from "../../editor/animation-library.t
 import KpEconomicsDemandShiftTutorial from
   "./KpEconomicsDemandShiftTutorial.svelte";
 import {
-  compileKpEconomicsDemandShiftLesson
-} from "./economics-demand-shift-lesson-compiler.ts";
-import {
-  renderKpEconomicsVerificationSurface
-} from "./economics-demand-shift-verification-surface.ts";
-import {
-  kpEconomicsMotionBlocks
-} from "./economics-demand-shift-motion-blocks.ts";
-import {
-  createKpEconomicsDemandShiftToc
-} from "./economics-demand-shift-toc.ts";
-import {
-  kpEconomicsDemandShiftTutorialPath
-} from "./economics-demand-shift-route.ts";
-import { renderKpTutorialToc } from "../kp-tutorial-toc.ts";
-import {
-  renderKpTutorialScrubBar
-} from "../kp-tutorial-scrub-bar-renderer.ts";
+  compileKpEconomicsDemandShiftPublication
+} from "./economics-demand-shift-publication.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
 
@@ -66,7 +50,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
     search: input.search,
     playhead: 0
   });
-  const lesson = compileKpEconomicsDemandShiftLesson(lessonMarkdown);
+  const publication = compileKpEconomicsDemandShiftPublication(lessonMarkdown);
   const component = mount(KpEconomicsDemandShiftTutorial, {
     target: input.root,
     props: {
@@ -75,19 +59,10 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       player: prepared.player,
       animation: prepared.animation,
       hostability: prepared.hostability,
-      lesson,
-      tocHtml: renderKpTutorialToc(createKpEconomicsDemandShiftToc(lesson)),
-      motionScrubBarHtml: Object.fromEntries(kpEconomicsMotionBlocks.map(
-        (block) => [block.id, renderKpTutorialScrubBar({
-          blockId: block.id,
-          checkpoints: block.checkpoints.map((checkpoint) => ({
-            ...checkpoint,
-            href: `${kpEconomicsDemandShiftTutorialPath}` +
-              `#kp-checkpoint-${checkpoint.id}`
-          }))
-        })]
-      )) as Readonly<Record<(typeof kpEconomicsMotionBlocks)[number]["id"], string>>,
-      verificationSurfaceHtml: renderKpEconomicsVerificationSurface(),
+      lesson: publication.lesson,
+      tocHtml: publication.tocHtml,
+      motionScrubBarHtml: publication.motionScrubBarHtml,
+      verificationSurfaceHtml: publication.verificationSurfaceHtml,
       initialDemandIntercept:
         prepared.economicsParameters?.demandInterceptAfter ?? 18
     }
