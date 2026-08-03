@@ -201,8 +201,8 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "scroll"
   );
   await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-scroll-autoplay",
-    "playing"
+    "data-kp-economics-tutorial-scroll-timeline",
+    "seeking"
   );
   await expect(motionCue).toHaveAttribute(
     "data-kp-tutorial-scrub-focus",
@@ -233,22 +233,33 @@ test("approved economics prose and semantic controls form one persistent tutoria
   });
   await expect.poll(async () => Number(
     await player.getAttribute("data-kp-editor-animation-progress")
-  )).toBeGreaterThan(0);
+  )).toBeCloseTo(0.72, 2);
+  const stoppedProgress = Number(
+    await player.getAttribute("data-kp-editor-animation-progress")
+  );
+  await page.waitForTimeout(240);
+  expect(Number(
+    await player.getAttribute("data-kp-editor-animation-progress")
+  )).toBeCloseTo(stoppedProgress, 5);
   await page.screenshot({
     path: `${evidenceDirectory}/wide-motion-cue.png`,
     fullPage: false
   });
+  await motionCue.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.16
+  }));
   await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-scroll-autoplay",
+    "data-kp-economics-tutorial-scroll-timeline",
     "complete"
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-checkpoint",
-    "ready-to-shift"
+    "settled"
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-passage",
-    "follow-shift"
+    "new-equilibrium"
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-focus-target",
@@ -260,26 +271,19 @@ test("approved economics prose and semantic controls form one persistent tutoria
   );
   await expect(beforeMotion).toHaveText(beforeMotionText ?? "");
   await expect(root.locator(".kp-economics-tutorial__stage-header strong"))
-    .toHaveText("Follow the shift");
+    .toHaveText("New equilibrium");
 
   await demandChange.evaluate((element) => window.scrollTo({
     top: window.scrollY + element.getBoundingClientRect().top -
       window.innerHeight * 0.38
   }));
   await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-scroll-autoplay",
-    "rewinding"
+    "data-kp-economics-tutorial-scroll-timeline",
+    "rewound"
   );
   await expect(player).toHaveAttribute(
-    "data-kp-editor-animation-direction",
-    "rewind"
-  );
-  await expect.poll(async () => Number(
-    await player.getAttribute("data-kp-editor-animation-progress")
-  )).toBeGreaterThan(0);
-  await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-scroll-autoplay",
-    "rewound"
+    "data-kp-editor-animation-progress",
+    "0"
   );
   await expect(motionCue).toHaveAttribute("progress", "0");
 
@@ -288,13 +292,12 @@ test("approved economics prose and semantic controls form one persistent tutoria
       window.innerHeight * 0.38 + 4
   }));
   await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-scroll-autoplay",
-    "playing"
+    "data-kp-economics-tutorial-scroll-timeline",
+    "seeking"
   );
-  await expect(player).toHaveAttribute(
-    "data-kp-editor-animation-direction",
-    "forward"
-  );
+  await expect.poll(async () => Number(
+    await player.getAttribute("data-kp-editor-animation-progress")
+  )).toBeCloseTo(0.72, 2);
 
   await page.evaluate(() => {
     (window as typeof window & { __kpTutorialDocumentToken?: string })
@@ -406,7 +409,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
   });
 });
 
-test("manual playback claims the timeline before scroll autoplay", async ({
+test("manual playback retains timeline ownership during scroll", async ({
   page
 }) => {
   await page.goto(route);
@@ -429,7 +432,7 @@ test("manual playback claims the timeline before scroll autoplay", async ({
     "manual"
   );
   await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-scroll-autoplay",
+    "data-kp-economics-tutorial-scroll-timeline",
     "manual"
   );
   await expect.poll(async () => Number(
@@ -461,7 +464,7 @@ test("manual playback claims the timeline before scroll autoplay", async ({
     await player.getAttribute("data-kp-editor-animation-progress")
   )).toBeCloseTo(pausedProgress, 5);
   await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-scroll-autoplay",
+    "data-kp-economics-tutorial-scroll-timeline",
     "manual"
   );
   await expect(motionCue).toHaveAttribute(
@@ -470,7 +473,7 @@ test("manual playback claims the timeline before scroll autoplay", async ({
   );
 });
 
-test("reduced-motion readers retain the text-free manual divider without autoplay", async ({
+test("reduced-motion readers retain the text-free divider without automatic seek", async ({
   page
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -488,7 +491,7 @@ test("reduced-motion readers retain the text-free manual divider without autopla
       window.innerHeight * 0.38 + 4
   }));
   await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-scroll-autoplay",
+    "data-kp-economics-tutorial-scroll-timeline",
     "reduced-motion"
   );
   await page.waitForTimeout(800);

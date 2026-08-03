@@ -33,10 +33,8 @@ export interface KpEconomicsScrollBlockRegistration {
   readonly corridor: KpEconomicsMotionCorridor;
 }
 
-export interface KpEconomicsCoordinatedScrollProjection
-  extends KpEconomicsScrollFrameProjection {
-  readonly crossingDirection: "forward" | "rewind" | undefined;
-}
+export type KpEconomicsCoordinatedScrollProjection =
+  KpEconomicsScrollFrameProjection;
 
 export function projectKpEconomicsScrollFrame(input: {
   readonly blocks: readonly KpEconomicsScrollBlockGeometry[];
@@ -88,8 +86,6 @@ export class KpEconomicsTutorialScrollCoordinator {
   ) => void;
   private frame: number | undefined;
   private connected = false;
-  private previousScrollY: number | undefined;
-  private readonly previousTops = new Map<KpEconomicsMotionBlockId, number>();
 
   constructor(
     view: Window,
@@ -107,13 +103,6 @@ export class KpEconomicsTutorialScrollCoordinator {
   connect(): void {
     if (this.connected) return;
     this.connected = true;
-    this.previousScrollY = this.view.scrollY;
-    for (const registration of this.registrations()) {
-      this.previousTops.set(
-        registration.id,
-        registration.anchor.getBoundingClientRect().top
-      );
-    }
     this.view.addEventListener("scroll", this.scheduleProjection, {
       passive: true
     });
@@ -127,7 +116,6 @@ export class KpEconomicsTutorialScrollCoordinator {
     this.view.removeEventListener("scroll", this.scheduleProjection);
     this.view.removeEventListener("resize", this.scheduleProjection);
     this.cancelPendingProjection();
-    this.previousTops.clear();
   }
 
   readonly scheduleProjection = (): void => {
@@ -155,31 +143,6 @@ export class KpEconomicsTutorialScrollCoordinator {
       blocks: geometry,
       viewportHeight: this.view.innerHeight
     });
-    const active = projection.blocks.find(({ ownsScroll }) => ownsScroll);
-    const previousTop = active === undefined
-      ? undefined
-      : this.previousTops.get(active.id);
-    const previousScrollY = this.previousScrollY;
-    const scrollY = this.view.scrollY;
-    let crossingDirection: "forward" | "rewind" | undefined;
-    if (active !== undefined && previousTop !== undefined &&
-        previousScrollY !== undefined) {
-      if (
-        scrollY > previousScrollY &&
-        previousTop > projection.readingBandY &&
-        active.anchorTop <= projection.readingBandY + 2
-      ) {
-        crossingDirection = "forward";
-      } else if (
-        scrollY < previousScrollY &&
-        previousTop < projection.readingBandY &&
-        active.anchorTop >= projection.readingBandY - 2
-      ) {
-        crossingDirection = "rewind";
-      }
-    }
-    this.previousScrollY = scrollY;
-    for (const block of geometry) this.previousTops.set(block.id, block.anchorTop);
-    this.onProjection(Object.freeze({ ...projection, crossingDirection }));
+    this.onProjection(projection);
   }
 }

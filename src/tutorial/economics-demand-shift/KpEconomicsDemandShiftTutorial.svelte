@@ -41,23 +41,20 @@
     type KpEconomicsScrollBlockRegistration
   } from "./economics-demand-shift-scroll-coordinator.ts";
   import {
-    KP_TUTORIAL_SCRUB_AUTO_EVENT,
     KP_TUTORIAL_SCRUB_NEXT_EVENT,
     KP_TUTORIAL_SCRUB_PREVIOUS_EVENT,
     KP_TUTORIAL_SCRUB_REWIND_EVENT,
     KP_TUTORIAL_SCRUB_SEEK_EVENT,
     KP_TUTORIAL_SCRUB_TOGGLE_EVENT,
-    type KpTutorialScrubAutoDetail,
     type KpTutorialScrubBarElement,
     type KpTutorialScrubSeekDetail
   } from "../kp-tutorial-scrub-bar.ts";
   import KpInlineMath from "./KpInlineMath.svelte";
 
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
-  type KpEconomicsTutorialScrollAutoplayStatus =
+  type KpEconomicsTutorialScrollTimelineStatus =
     | "idle"
-    | "playing"
-    | "rewinding"
+    | "seeking"
     | "complete"
     | "rewound"
     | "manual"
@@ -139,7 +136,7 @@
   let explorationOpen = $state(false);
   let announcement = $state("Initial market ready.");
   let motionOwner = $state<KpEconomicsTutorialMotionOwner>("untouched");
-  let scrollAutoplayStatus = $state<KpEconomicsTutorialScrollAutoplayStatus>(
+  let scrollTimelineStatus = $state<KpEconomicsTutorialScrollTimelineStatus>(
     "idle"
   );
   let reducedMotion = $state(false);
@@ -346,10 +343,10 @@
       motionOwner === "scroll"
     ) {
       if (detail.direction === "rewind") {
-        scrollAutoplayStatus = "rewound";
+        scrollTimelineStatus = "rewound";
         announcement = "Demand shift rewound to the initial equilibrium.";
       } else {
-        scrollAutoplayStatus = "complete";
+        scrollTimelineStatus = "complete";
         announcement = "Demand shift complete. Quantity 8 and price 10.";
       }
     }
@@ -371,36 +368,14 @@
     // the coordinator's deferred reading-band projection.
     scrollCoordinator?.cancelPendingProjection();
     motionOwner = "manual";
-    scrollAutoplayStatus = "manual";
+    scrollTimelineStatus = "manual";
   }
 
   function handleReducedMotionChange(event: MediaQueryListEvent): void {
     reducedMotion = event.matches;
     if (motionOwner === "untouched") {
-      scrollAutoplayStatus = event.matches ? "reduced-motion" : "idle";
+      scrollTimelineStatus = event.matches ? "reduced-motion" : "idle";
     }
-  }
-
-  function handleScrubBarAuto(event: Event): void {
-    if (
-      !(event instanceof CustomEvent) ||
-      (event.detail as KpTutorialScrubAutoDetail | undefined)?.direction ===
-        undefined ||
-      motionOwner === "manual" ||
-      reducedMotion ||
-      !ready ||
-      player === undefined
-    ) return;
-    const { direction } = event.detail as KpTutorialScrubAutoDetail;
-    motionOwner = "scroll";
-    scrollAutoplayStatus = direction === "forward" ? "playing" : "rewinding";
-    announcement = direction === "forward"
-      ? "Demand shift playing. Supply remains fixed."
-      : "Demand shift rewinding to the initial equilibrium.";
-    dispatchKpEditorAnimationPlaybackAction(player, {
-      type: direction,
-      nowMs: performance.now()
-    });
   }
 
   function handleScrubBarSeek(event: Event): void {
@@ -523,15 +498,20 @@
         distance,
         proximity: clamp(1 - Math.abs(distance) / 96, 0, 1)
       });
-      if (projection.crossingDirection !== undefined) {
-        scrubBar.dispatchEvent(new CustomEvent<KpTutorialScrubAutoDetail>(
-          KP_TUTORIAL_SCRUB_AUTO_EVENT,
-          {
-            bubbles: true,
-            composed: true,
-            detail: { direction: projection.crossingDirection }
-          }
-        ));
+      if (
+        !reducedMotion &&
+        ready &&
+        player !== undefined &&
+        motionOwner !== "manual" &&
+        (motionOwner === "scroll" || active.progress > 0.001)
+      ) {
+        motionOwner = "scroll";
+        scrollTimelineStatus = active.progress >= 0.999
+          ? "complete"
+          : active.progress <= 0.001
+            ? "rewound"
+            : "seeking";
+        seek(active.progress);
       }
     }
     updateReadingBandSelection();
@@ -622,7 +602,6 @@
       selectNextCheckpoint
     );
     scrubBar?.addEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, handleScrubBarSeek);
-    scrubBar?.addEventListener(KP_TUTORIAL_SCRUB_AUTO_EVENT, handleScrubBarAuto);
     scrollCoordinator = new KpEconomicsTutorialScrollCoordinator(
       window,
       collectScrollBlocks,
@@ -646,7 +625,7 @@
     reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     reducedMotion = reducedMotionQuery.matches;
     if (reducedMotion && motionOwner === "untouched") {
-      scrollAutoplayStatus = "reduced-motion";
+      scrollTimelineStatus = "reduced-motion";
     }
     reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
     void document.fonts.ready.then(() => {
@@ -674,7 +653,6 @@
       selectNextCheckpoint
     );
     scrubBar?.removeEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, handleScrubBarSeek);
-    scrubBar?.removeEventListener(KP_TUTORIAL_SCRUB_AUTO_EVENT, handleScrubBarAuto);
     window.removeEventListener("keydown", handleTutorialKeydown);
     reducedMotionQuery?.removeEventListener("change", handleReducedMotionChange);
     disposePlayerHost?.();
@@ -748,7 +726,7 @@
   data-kp-economics-tutorial-focus-target={visualCheckpoint.attention.target}
   data-kp-economics-tutorial-equations={equationsVisible ? "visible" : "quiet"}
   data-kp-economics-tutorial-motion-owner={motionOwner}
-  data-kp-economics-tutorial-scroll-autoplay={scrollAutoplayStatus}
+  data-kp-economics-tutorial-scroll-timeline={scrollTimelineStatus}
   data-kp-economics-tutorial-scroll-coordinator={scrollCoordinatorStatus}
   data-kp-economics-tutorial-scroll-active-block={scrollActiveMotionBlock}
 >
