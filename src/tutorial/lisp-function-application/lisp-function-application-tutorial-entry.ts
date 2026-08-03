@@ -23,6 +23,7 @@ import {
   createKpLispLessonMotionController
 } from "./lisp-function-application-motion-controller.ts";
 import { compileKpLispFunctionApplicationPublication } from "./lisp-function-application-publication.ts";
+import { createKpLispLessonNavigationController } from "./lisp-function-application-navigation.ts";
 
 export async function mountKpLispFunctionApplicationTutorial(input: {
   readonly root: HTMLElement;
@@ -57,18 +58,30 @@ export async function mountKpLispFunctionApplicationTutorial(input: {
   if (descriptor === undefined) {
     throw new Error("Lisp tutorial animation descriptor is not catalogued.");
   }
+  const tutorialRoot = input.root.querySelector<HTMLElement>(
+    "[data-kp-lisp-function-application-tutorial]"
+  );
+  if (tutorialRoot === null) {
+    throw new Error("Lisp tutorial host did not render its semantic root.");
+  }
   const motion = createKpLispLessonMotionController({
-    root: input.root,
+    root: tutorialRoot,
     animation,
     descriptor,
     source,
     plan
+  });
+  const navigation = createKpLispLessonNavigationController({
+    root: tutorialRoot,
+    lesson: publication.lesson,
+    motion
   });
   const reviewHost = createKpAnimationCatalogueReviewHost();
   input.root.dataset["kpLispFunctionApplicationTutorialMounted"] = "true";
   void reviewHost.mount();
 
   return () => {
+    navigation.dispose();
     motion.dispose();
     reviewHost.dispose();
     style.remove();

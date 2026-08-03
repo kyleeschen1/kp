@@ -138,8 +138,16 @@ button, input { font: inherit; }
   list-style: none;
 }
 .kp-lisp-tutorial__toc .kp-tutorial-toc__list--depth-1,
-.kp-lisp-tutorial__toc .kp-tutorial-toc__list--depth-2 { display: none; }
+.kp-lisp-tutorial__toc .kp-tutorial-toc__list--depth-2 {
+  gap: .35rem;
+  margin: .35rem 0 .1rem .7rem;
+  padding-left: .65rem;
+  border-left: 1px solid var(--kp-lisp-line);
+}
+.kp-lisp-tutorial__toc .kp-tutorial-toc__list--depth-2 { margin-left: .3rem; }
 .kp-lisp-tutorial__toc a { color: var(--kp-lisp-muted); font-size: .82rem; text-decoration: none; }
+.kp-lisp-tutorial__toc .kp-tutorial-toc__list--depth-1 a,
+.kp-lisp-tutorial__toc .kp-tutorial-toc__list--depth-2 a { font-size: .72rem; }
 .kp-lisp-tutorial__toc a[aria-current="location"] { color: var(--kp-lisp-ink); font-weight: 700; }
 
 @media (max-width: 76rem) {

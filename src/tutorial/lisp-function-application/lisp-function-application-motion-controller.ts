@@ -26,6 +26,14 @@ import { projectKpLispLessonSalience } from "./lisp-function-application-salienc
 
 export const kpLispReconstructedGlobalProgress = 0.74;
 
+export interface KpLispLessonMotionController {
+  readonly restore: (
+    blockId: KpLispLessonMotionBlockId,
+    localProgress: number
+  ) => void;
+  readonly dispose: () => void;
+}
+
 export function projectKpLispBindAndReconstructProgress(
   localProgress: number
 ): number {
@@ -60,7 +68,7 @@ export function createKpLispLessonMotionController(input: {
   readonly descriptor: KpEditorAnimationDescriptor;
   readonly source: KpLispLambdaApplicationAsset;
   readonly plan: KpLispBotanicalPresentationPlan;
-}): { readonly dispose: () => void } {
+}): KpLispLessonMotionController {
   const view = input.root.ownerDocument.defaultView;
   if (view === null) throw new Error("Lisp motion controls require a browser view.");
   const stage = required<HTMLElement>(input.root, "[data-kp-lisp-stage-host]");
@@ -242,6 +250,8 @@ export function createKpLispLessonMotionController(input: {
   render();
 
   return Object.freeze({
+    restore: (blockId: KpLispLessonMotionBlockId, local: number) =>
+      seek(blockId, local),
     dispose: () => {
       cancel();
       input.root.removeEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, onSeek);

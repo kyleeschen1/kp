@@ -353,6 +353,37 @@
       "status": "passed",
       "scope": "s15 patch hygiene",
       "checkedAt": "2026-08-03T17:35:11.814Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/kp-lisp-lesson-navigation.browser.spec.ts --config playwright.config.ts --project=chromium --workers=1",
+      "status": "failed",
+      "scope": "s16 initial deep-link integration",
+      "checkedAt": "2026-08-03T17:43:40.410Z",
+      "notes": "Exposed lesson state on the outer mount and hidden nested TOC destinations; both boundaries were corrected before rerun."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-lesson-navigation.test.ts tests/kp-lisp-cumulative-motion-blocks.test.ts tests/kp-tutorial-url.test.ts",
+      "status": "passed",
+      "scope": "s16 section, block, checkpoint, URL, and cumulative state registry",
+      "checkedAt": "2026-08-03T17:43:41.590Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/kp-lisp-lesson-navigation.browser.spec.ts --config playwright.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s16 direct-load, long-jump, one-write transaction, Back, Forward, native endpoint",
+      "checkedAt": "2026-08-03T17:43:42.579Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s16 repository TypeScript Svelte and domain boundaries",
+      "checkedAt": "2026-08-03T17:43:43.576Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s16 patch hygiene",
+      "checkedAt": "2026-08-03T17:43:44.553Z"
     }
   ],
   "allowedWork": [
@@ -469,7 +500,8 @@
     {
       "id": "s16",
       "title": "Restore semantic deep links transactionally",
-      "status": "planned"
+      "summary": "Added a local destination registry and navigation controller that maps every section, block, and named checkpoint directly to one cumulative semantic state. Direct loads, visible nested TOC jumps, and Back/Forward restore motion before scrolling with one progress write and no progress in the URL. Unit/navigation tests, focused Chromium, full typecheck, and patch hygiene pass after correcting lesson-root ownership exposed by the initial browser run.",
+      "status": "complete"
     },
     {
       "id": "s17",
