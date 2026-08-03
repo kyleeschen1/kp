@@ -19,6 +19,10 @@ import {
   projectKpEconomicsLessonMotion
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-motion-blocks.ts";
 import {
+  projectKpEconomicsCorridorTravel,
+  projectKpEconomicsMotionCorridor
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-scroll-corridor.ts";
+import {
   isKpEconomicsDemandShiftTutorialRoute,
   kpEconomicsDemandShiftTutorialPath
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-route.ts";
@@ -120,6 +124,42 @@ test("lesson motion projection settles predecessors and ignores DOM history", ()
     activeBlockId: "demand-shift",
     localProgress: Number.NaN
   }).demandShiftProgress, 0);
+});
+
+test("viewport corridors preserve authored holds in both scroll directions", () => {
+  const corridor = kpEconomicsMotionBlocks[0]!.corridor;
+  const sampledTravel = Array.from({ length: 1001 }, (_, index) => index / 1000);
+  const forward = sampledTravel.map((travel) =>
+    projectKpEconomicsCorridorTravel(corridor, travel)
+  );
+  const reverse = [...sampledTravel].reverse().map((travel) =>
+    projectKpEconomicsCorridorTravel(corridor, travel)
+  ).reverse();
+
+  assert.deepEqual(forward, reverse);
+  assert.equal(forward.every((progress, index) =>
+    index === 0 || progress + Number.EPSILON >= forward[index - 1]!
+  ), true);
+  assert.equal(projectKpEconomicsCorridorTravel(corridor, 0.14), 0);
+  assert.equal(projectKpEconomicsCorridorTravel(corridor, 0.57), 0.72);
+  assert.equal(projectKpEconomicsCorridorTravel(corridor, 0.63), 0.72);
+  assert.equal(projectKpEconomicsCorridorTravel(corridor, 0.94), 1);
+
+  assert.deepEqual(projectKpEconomicsMotionCorridor({
+    corridor,
+    anchorTop: 720,
+    viewportHeight: 1000
+  }), { travel: 0, progress: 0 });
+  assert.deepEqual(projectKpEconomicsMotionCorridor({
+    corridor,
+    anchorTop: 160,
+    viewportHeight: 1000
+  }), { travel: 1, progress: 1 });
+  assert.equal(projectKpEconomicsMotionCorridor({
+    corridor,
+    anchorTop: 380,
+    viewportHeight: 1000
+  }).progress, 0.72);
 });
 
 test("approved Markdown compiles into the complete annotated lesson", () => {

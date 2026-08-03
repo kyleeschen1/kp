@@ -59,6 +59,27 @@
       "scope": "s05",
       "checkedAt": "2026-08-03T06:04:35.658Z",
       "notes": "Svelte check reported zero errors and warnings."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-08-03T06:07:20.805Z",
+      "notes": "Nine economics tutorial unit tests passed, including 1,001-sample monotonic and reverse-symmetry corridor proof."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-08-03T06:07:21.871Z",
+      "notes": "Svelte check reported zero errors and warnings."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-08-03T06:07:22.794Z",
+      "notes": "No whitespace errors."
     }
   ],
   "allowedWork": [
@@ -115,7 +136,8 @@
     {
       "id": "s06",
       "title": "Define-scroll-corridors",
-      "status": "planned"
+      "summary": "Added economics-local viewport corridors whose authored start, checkpoint holds, and settlement map monotonically and identically in either scroll direction; dense deterministic sampling passed.",
+      "status": "complete"
     },
     {
       "id": "s07",

@@ -31,6 +31,17 @@ export interface KpEconomicsMotionCheckpoint {
   readonly progress: number;
 }
 
+export interface KpEconomicsMotionCorridorKeyframe {
+  readonly travel: number;
+  readonly progress: number;
+}
+
+export interface KpEconomicsMotionCorridor {
+  readonly startViewportRatio: number;
+  readonly endViewportRatio: number;
+  readonly keyframes: readonly KpEconomicsMotionCorridorKeyframe[];
+}
+
 export interface KpEconomicsMotionBlock {
   readonly id: KpEconomicsMotionBlockId;
   readonly passageId: "follow-shift" | "shift-versus-movement";
@@ -38,6 +49,7 @@ export interface KpEconomicsMotionBlock {
   readonly entry: KpEconomicsMotionSceneState;
   readonly settled: KpEconomicsMotionSceneState;
   readonly checkpoints: readonly KpEconomicsMotionCheckpoint[];
+  readonly corridor: KpEconomicsMotionCorridor;
 }
 
 export interface KpEconomicsMotionBlockProjection {
@@ -66,7 +78,15 @@ export const kpEconomicsMotionBlocks: readonly KpEconomicsMotionBlock[] =
         checkpoint("shift-ready", "Before the shift", 0),
         checkpoint("shift-handoff", "Equilibrium handoff", 0.72),
         checkpoint("shift-settled", "New equilibrium", 1)
-      ]
+      ],
+      corridor: corridor([
+        [0, 0],
+        [0.14, 0],
+        [0.57, 0.72],
+        [0.69, 0.72],
+        [0.94, 1],
+        [1, 1]
+      ])
     }),
     motionBlock({
       id: "supply-movement",
@@ -78,7 +98,15 @@ export const kpEconomicsMotionBlocks: readonly KpEconomicsMotionBlock[] =
         checkpoint("movement-ready", "Hold supply fixed", 0),
         checkpoint("movement-traced", "Trace movement along supply", 0.58),
         checkpoint("movement-verified", "Compare price and quantity", 1)
-      ]
+      ],
+      corridor: corridor([
+        [0, 0],
+        [0.16, 0],
+        [0.55, 0.58],
+        [0.67, 0.58],
+        [0.94, 1],
+        [1, 1]
+      ])
     })
   ]);
 
@@ -157,7 +185,24 @@ function motionBlock(
 ): KpEconomicsMotionBlock {
   return Object.freeze({
     ...block,
-    checkpoints: Object.freeze([...block.checkpoints])
+    checkpoints: Object.freeze([...block.checkpoints]),
+    corridor: Object.freeze({
+      ...block.corridor,
+      keyframes: Object.freeze([...block.corridor.keyframes])
+    })
+  });
+}
+
+function corridor(
+  keyframes: readonly (readonly [travel: number, progress: number])[]
+): KpEconomicsMotionCorridor {
+  return Object.freeze({
+    // The block anchor crosses the handoff hold at the established 38% reading band.
+    startViewportRatio: 0.72,
+    endViewportRatio: 0.16,
+    keyframes: Object.freeze(keyframes.map(([travel, progress]) =>
+      Object.freeze({ travel, progress })
+    ))
   });
 }
 
