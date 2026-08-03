@@ -5,6 +5,7 @@ import {
 
 export interface KpLispLessonParagraph {
   readonly html: string;
+  readonly sourceText: string;
 }
 
 export interface KpLispLessonPassageBlock {
@@ -65,7 +66,8 @@ export function compileKpLispFunctionApplicationLesson(
     if (passage === undefined) {
       throw new Error("Lisp lesson prose must belong to an annotated passage.");
     }
-    passage.paragraphs.push({ html: renderInlineCode(paragraph.join(" ")) });
+    const sourceText = paragraph.join(" ");
+    passage.paragraphs.push({ html: renderInlineCode(sourceText), sourceText });
     paragraph = [];
   };
 

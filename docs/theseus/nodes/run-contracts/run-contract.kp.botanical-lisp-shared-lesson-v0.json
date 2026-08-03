@@ -521,6 +521,30 @@
       "status": "passed",
       "scope": "s20 patch hygiene",
       "checkedAt": "2026-08-03T18:15:53.289Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-tutorial-lesson-document.test.ts tests/semantic-reader-lesson-document.test.ts tests/economics-demand-shift-tutorial.test.ts tests/kp-lisp-publication.test.ts",
+      "status": "passed",
+      "scope": "s21 thirty document reader and caller tests",
+      "checkedAt": "2026-08-03T18:22:11.673Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21 application test Svelte and domain types",
+      "checkedAt": "2026-08-03T18:22:12.842Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s21 document boundary architecture",
+      "checkedAt": "2026-08-03T18:22:13.818Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s21 patch hygiene",
+      "checkedAt": "2026-08-03T18:22:14.800Z"
     }
   ],
   "allowedWork": [
@@ -667,7 +691,8 @@
     {
       "id": "s21",
       "title": "Reconcile shared lesson publication document",
-      "status": "planned"
+      "summary": "Added a framework-neutral tutorial publication wrapper whose content authority is the existing validated KpLessonDocument. Economics and Lisp adapters preserve raw source syntax, h3 headings, typed asset refs, checkpoints converted to permille, and optional tutorial metadata while local KaTeX/code HTML remains an adapter projection. Thirty focused caller/reader tests, full typecheck, architecture gates, and patch hygiene pass.",
+      "status": "complete"
     },
     {
       "id": "s22",

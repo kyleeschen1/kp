@@ -14,9 +14,16 @@ import {
   type KpLispLessonMotionBlockId
 } from "./lisp-function-application-motion-blocks.ts";
 import { kpLispFunctionApplicationTutorialPath } from "./lisp-function-application-route.ts";
+import {
+  adaptKpLispFunctionApplicationLessonDocument
+} from "./lisp-function-application-document.ts";
+import type {
+  KpTutorialLessonPublicationDocument
+} from "../kp-tutorial-lesson-document.ts";
 
 export interface KpLispFunctionApplicationPublication {
   readonly lesson: KpLispFunctionApplicationLesson;
+  readonly document: KpTutorialLessonPublicationDocument;
   readonly tocHtml: string;
   readonly motionScrubBarHtml: Readonly<Record<KpLispLessonMotionBlockId, string>>;
 }
@@ -37,6 +44,7 @@ export function compileKpLispFunctionApplicationPublication(
   ])) as Record<KpLispLessonMotionBlockId, string>;
   return Object.freeze({
     lesson,
+    document: adaptKpLispFunctionApplicationLessonDocument(lesson),
     tocHtml: renderKpTutorialToc(toc(lesson)),
     motionScrubBarHtml: Object.freeze(scrubbers)
   });

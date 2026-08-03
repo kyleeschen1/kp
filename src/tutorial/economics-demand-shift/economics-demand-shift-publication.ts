@@ -22,9 +22,16 @@ import { renderKpTutorialToc } from "../kp-tutorial-toc.ts";
 import {
   serializeKpTutorialDestinationHref
 } from "../kp-tutorial-url.ts";
+import {
+  adaptKpEconomicsDemandShiftLessonDocument
+} from "./economics-demand-shift-document.ts";
+import type {
+  KpTutorialLessonPublicationDocument
+} from "../kp-tutorial-lesson-document.ts";
 
 export interface KpEconomicsDemandShiftPublication {
   readonly lesson: KpEconomicsDemandShiftLesson;
+  readonly document: KpTutorialLessonPublicationDocument;
   readonly tocHtml: string;
   readonly motionScrubBarHtml: Readonly<Record<KpEconomicsMotionBlockId, string>>;
   readonly verificationSurfaceHtml: string;
@@ -53,6 +60,7 @@ export function compileKpEconomicsDemandShiftPublication(
 
   return Object.freeze({
     lesson,
+    document: adaptKpEconomicsDemandShiftLessonDocument(lesson),
     tocHtml: renderKpTutorialToc(createKpEconomicsDemandShiftToc(lesson)),
     motionScrubBarHtml: Object.freeze(motionScrubBarHtml),
     verificationSurfaceHtml: renderKpEconomicsVerificationSurface()

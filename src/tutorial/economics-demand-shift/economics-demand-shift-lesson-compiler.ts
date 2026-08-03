@@ -7,6 +7,7 @@ import {
 
 export interface KpEconomicsDemandShiftLessonParagraph {
   readonly html: string;
+  readonly sourceText: string;
 }
 
 export interface KpEconomicsDemandShiftLessonPassage {
@@ -81,8 +82,10 @@ export function compileKpEconomicsDemandShiftLesson(
     if (passage === undefined) {
       throw new Error("Lesson prose must belong to an annotated passage.");
     }
+    const sourceText = paragraphLines.join(" ");
     passage.paragraphs.push({
-      html: renderInlineMarkdown(paragraphLines.join(" "))
+      html: renderInlineMarkdown(sourceText),
+      sourceText
     });
     paragraphLines = [];
   };
