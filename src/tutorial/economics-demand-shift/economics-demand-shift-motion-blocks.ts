@@ -10,7 +10,10 @@ export type KpEconomicsMotionCheckpointId =
   | "movement-traced"
   | "movement-verified";
 
-export type KpEconomicsSemanticMarketState = "initial" | "shifted";
+export type KpEconomicsSemanticMarketState =
+  | "initial"
+  | "shifting"
+  | "shifted";
 
 export type KpEconomicsPresentationState =
   | "graph-only"
@@ -35,6 +38,20 @@ export interface KpEconomicsMotionBlock {
   readonly entry: KpEconomicsMotionSceneState;
   readonly settled: KpEconomicsMotionSceneState;
   readonly checkpoints: readonly KpEconomicsMotionCheckpoint[];
+}
+
+export interface KpEconomicsMotionBlockProjection {
+  readonly id: KpEconomicsMotionBlockId;
+  readonly status: "settled" | "active" | "inactive";
+  readonly progress: number;
+}
+
+export interface KpEconomicsLessonMotionProjection {
+  readonly activeBlockId: KpEconomicsMotionBlockId;
+  readonly blocks: readonly KpEconomicsMotionBlockProjection[];
+  readonly demandShiftProgress: number;
+  readonly supplyMovementProgress: number;
+  readonly scene: KpEconomicsMotionSceneState;
 }
 
 export const kpEconomicsMotionBlocks: readonly KpEconomicsMotionBlock[] =
@@ -80,6 +97,46 @@ export function findKpEconomicsMotionCheckpoint(input: {
   );
 }
 
+export function projectKpEconomicsLessonMotion(input: {
+  readonly activeBlockId: KpEconomicsMotionBlockId;
+  readonly localProgress: number;
+}): KpEconomicsLessonMotionProjection {
+  const activeIndex = kpEconomicsMotionBlocks.findIndex(
+    (block) => block.id === input.activeBlockId
+  );
+  if (activeIndex < 0) {
+    throw new Error(`Unknown economics motion block: ${input.activeBlockId}`);
+  }
+  const localProgress = clampProgress(input.localProgress);
+  const blocks = kpEconomicsMotionBlocks.map((block, index) => Object.freeze({
+    id: block.id,
+    status: index < activeIndex
+      ? "settled" as const
+      : index === activeIndex
+        ? "active" as const
+        : "inactive" as const,
+    progress: index < activeIndex ? 1 : index === activeIndex ? localProgress : 0
+  }));
+  const demandShiftProgress = blocks[0]!.progress;
+  const supplyMovementProgress = blocks[1]!.progress;
+
+  return Object.freeze({
+    activeBlockId: input.activeBlockId,
+    blocks: Object.freeze(blocks),
+    demandShiftProgress,
+    supplyMovementProgress,
+    scene: supplyMovementProgress >= 1
+      ? scene("shifted", "comparison-verified")
+      : supplyMovementProgress > 0
+        ? scene("shifted", "supply-trace")
+        : demandShiftProgress >= 1
+          ? scene("shifted", "graph-only")
+          : demandShiftProgress > 0
+            ? scene("shifting", "graph-only")
+            : scene("initial", "graph-only")
+  });
+}
+
 function scene(
   market: KpEconomicsSemanticMarketState,
   presentation: KpEconomicsPresentationState
@@ -104,3 +161,6 @@ function motionBlock(
   });
 }
 
+function clampProgress(value: number): number {
+  return Number.isFinite(value) ? Math.max(0, Math.min(1, value)) : 0;
+}

@@ -67,7 +67,8 @@
     {
       "id": "s03",
       "title": "Build-cumulative-projection",
-      "status": "planned"
+      "summary": "Added history-independent cumulative projection with explicit initial, shifting, shifted, supply-trace, and verified presentation states.",
+      "status": "complete"
     },
     {
       "id": "s04",

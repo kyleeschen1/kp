@@ -15,7 +15,8 @@ import {
 import {
   findKpEconomicsMotionBlock,
   findKpEconomicsMotionCheckpoint,
-  kpEconomicsMotionBlocks
+  kpEconomicsMotionBlocks,
+  projectKpEconomicsLessonMotion
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-motion-blocks.ts";
 import {
   isKpEconomicsDemandShiftTutorialRoute,
@@ -76,6 +77,49 @@ test("economics defines two local motion blocks with exact scene handoff", () =>
     blockId: "supply-movement",
     checkpointId: "movement-traced"
   })?.progress, 0.58);
+});
+
+test("lesson motion projection settles predecessors and ignores DOM history", () => {
+  assert.deepEqual(projectKpEconomicsLessonMotion({
+    activeBlockId: "demand-shift",
+    localProgress: 0.4
+  }), {
+    activeBlockId: "demand-shift",
+    blocks: [
+      { id: "demand-shift", status: "active", progress: 0.4 },
+      { id: "supply-movement", status: "inactive", progress: 0 }
+    ],
+    demandShiftProgress: 0.4,
+    supplyMovementProgress: 0,
+    scene: { market: "shifting", presentation: "graph-only" }
+  });
+
+  assert.deepEqual(projectKpEconomicsLessonMotion({
+    activeBlockId: "supply-movement",
+    localProgress: 0.58
+  }), {
+    activeBlockId: "supply-movement",
+    blocks: [
+      { id: "demand-shift", status: "settled", progress: 1 },
+      { id: "supply-movement", status: "active", progress: 0.58 }
+    ],
+    demandShiftProgress: 1,
+    supplyMovementProgress: 0.58,
+    scene: { market: "shifted", presentation: "supply-trace" }
+  });
+
+  assert.equal(projectKpEconomicsLessonMotion({
+    activeBlockId: "supply-movement",
+    localProgress: 1
+  }).scene.presentation, "comparison-verified");
+  assert.equal(projectKpEconomicsLessonMotion({
+    activeBlockId: "supply-movement",
+    localProgress: -4
+  }).demandShiftProgress, 1);
+  assert.equal(projectKpEconomicsLessonMotion({
+    activeBlockId: "demand-shift",
+    localProgress: Number.NaN
+  }).demandShiftProgress, 0);
 });
 
 test("approved Markdown compiles into the complete annotated lesson", () => {

@@ -62,6 +62,18 @@
       "status": "passed",
       "scope": "s02 Svelte host compatibility",
       "checkedAt": "2026-08-03T05:54:58.490Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s03 cumulative projection",
+      "checkedAt": "2026-08-03T05:57:03.107Z"
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s03 host type compatibility",
+      "checkedAt": "2026-08-03T05:57:04.007Z"
     }
   ],
   "progress": {
