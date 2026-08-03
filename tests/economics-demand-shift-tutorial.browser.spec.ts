@@ -1078,6 +1078,11 @@ test("direct semantic links restore complete cumulative state without replay", a
   await expect(toc.locator(
     '[data-kp-tutorial-destination-id="movement-verified"]'
   )).toHaveAttribute("aria-current", "location");
+  await mkdir(evidenceDirectory, { recursive: true });
+  await page.screenshot({
+    path: `${evidenceDirectory}/deep-link-movement-verified.png`,
+    fullPage: false
+  });
 
   await page.goto(`${route}?direct=scope#kp-section-model-scope`);
   root = page.locator("[data-kp-economics-demand-shift-tutorial]");

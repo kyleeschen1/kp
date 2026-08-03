@@ -2,7 +2,8 @@
   "id": "run-contract.kp.economics.motion-block-publication-v1",
   "kind": "run-contract",
   "title": "Economics motion blocks and progressive publication",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -626,6 +627,41 @@
       "scope": "s27",
       "checkedAt": "2026-08-03T08:30:56.249Z",
       "notes": "Workspace valid before slice completion: 873 nodes and 16853 events."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-08-03T08:35:50.172Z",
+      "notes": "Final evidence run passed 11 Chromium scenarios and refreshed wide, phone, direct-deep-link, and JavaScript-disabled component evidence, including the new movement-verified deep-link capture."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-08-03T08:35:51.336Z",
+      "notes": "All 24 deterministic tutorial, economics runtime, and SVG tests passed."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-08-03T08:35:52.279Z",
+      "notes": "Production build and performance budget passed: 301382 transfer bytes, 229184 script bytes, 46 resources, startup CLS 0.0000068, active p95 35.3ms, no active long tasks, and one changing motion-block progress attribute at most."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-08-03T08:36:12.248Z",
+      "notes": "Final checkpoint diff has no whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-08-03T08:36:13.166Z",
+      "notes": "Workspace valid before loop closeout: 873 nodes and 16865 events."
     }
   ],
   "allowedWork": [
@@ -814,7 +850,8 @@
     {
       "id": "s28",
       "title": "Capture-human-review-checkpoint",
-      "status": "planned"
+      "summary": "Captured and inspected deterministic overview, motion, composition, direct-deep-link, phone, and pre-upgrade evidence; added an explicit HUMAN_CHECKPOINT dossier separating objective closure, performance and fallback truth, existing unrelated suite debt, five human visual decisions, and a frozen promotion boundary. Final visual, 24-test unit, production performance/build, diff, and Theseus validation gates passed.",
+      "status": "complete"
     }
   ]
 }
