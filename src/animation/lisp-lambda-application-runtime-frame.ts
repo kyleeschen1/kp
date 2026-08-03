@@ -79,7 +79,7 @@ export function sampleKpLispLambdaApplicationRuntimeFrame(input: {
       application: "((lambda (x) (+ x 1)) 4)",
       reconstructed: "(+ 4 1)",
       result: "5",
-      applicationOpacity: 1 - 0.72 * substitutionProgress,
+      applicationOpacity: 1 - substitutionProgress,
       environmentOpacity: bindingProgress * (1 - substitutionProgress),
       reconstructedOpacity: substitutionProgress * (1 - evaluationProgress),
       resultOpacity: evaluationProgress

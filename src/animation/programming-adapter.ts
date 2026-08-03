@@ -14,13 +14,19 @@ import {
   createSemanticTransformationLeaf,
   createSemanticTransformationSequence
 } from "../semantic/transformation-composition.ts";
+import {
+  createKpLispLambdaApplicationAnimationAsset
+} from "./lisp-lambda-application-adapter.ts";
 
 const programTraceAnimationId = "animation.programming.add.execution-trace";
 const programTraceTimelineId = "timeline.programming.add.execution-trace";
 const programTraceRenderTargetId = "render.programming.add.execution-trace";
 
 export function createProgrammingAnimationAssets(): readonly KpAnimationAsset[] {
-  return [createProgramTraceAnimationAsset()];
+  return [
+    createProgramTraceAnimationAsset(),
+    createKpLispLambdaApplicationAnimationAsset()
+  ];
 }
 
 export function createProgramTraceAnimationAsset(): KpAnimationAsset {

@@ -1526,6 +1526,38 @@
     }
   },
   {
+    "id": "editor-animation.animation.programming.lisp-lambda-application",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.programming.lisp-lambda-application",
+    "title": "Lisp function application",
+    "summary": "Lisp function application",
+    "renderTargetKinds": [
+      "programming"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 14000,
+    "beatCount": 100,
+    "tags": [
+      "animation",
+      "programming",
+      "lisp",
+      "lambda",
+      "binding",
+      "botanical"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.comparison.linear-solve-programming",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.comparison.linear-solve-programming",

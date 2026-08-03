@@ -174,6 +174,44 @@
       "status": "passed",
       "scope": "s08 test inference",
       "checkedAt": "2026-08-03T16:58:28.506Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-catalogue-registration.test.ts tests/kp-lisp-botanical-stage-renderer.test.ts tests/animation-catalog-loader.test.ts",
+      "status": "failed",
+      "scope": "s09 initial catalogue closure before metadata regeneration",
+      "checkedAt": "2026-08-03T17:05:59.507Z",
+      "notes": "The new canonical asset was valid but generated editor metadata was stale; regeneration was the required repair."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-catalogue-registration.test.ts tests/kp-lisp-botanical-stage-renderer.test.ts tests/animation-catalog-loader.test.ts",
+      "status": "passed",
+      "scope": "s09 ten catalogue pack and visual projection tests",
+      "checkedAt": "2026-08-03T17:06:00.614Z"
+    },
+    {
+      "command": "npm run visual:botanical-lisp-asset",
+      "status": "passed",
+      "scope": "s09 five stable asset captures",
+      "checkedAt": "2026-08-03T17:06:01.727Z",
+      "notes": "Application, binding, substitution, evaluation, and result frames captured under tmp/codex; motif remains experimental-local."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09 full TypeScript Svelte and domain boundary",
+      "checkedAt": "2026-08-03T17:06:02.694Z"
+    },
+    {
+      "command": "npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "s09 generated catalogue metadata",
+      "checkedAt": "2026-08-03T17:06:03.658Z"
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s09 no botanical promotion claim",
+      "checkedAt": "2026-08-03T17:06:04.622Z"
     }
   ],
   "allowedWork": [
@@ -248,7 +286,8 @@
     {
       "id": "s09",
       "title": "Register catalogue asset and visual harness",
-      "status": "planned"
+      "summary": "Wrapped the Lisp fixture as a valid programming animation asset, registered it in eager/lazy catalogues and generated editor metadata, retained experimental-local status, and added stable visual:botanical-lisp-asset capture with five frames. The capture exposed and repaired native-stage overprint. Ten catalogue/projection tests, full typecheck, metadata freshness, promotion-memory, and visual capture pass.",
+      "status": "complete"
     },
     {
       "id": "s10",

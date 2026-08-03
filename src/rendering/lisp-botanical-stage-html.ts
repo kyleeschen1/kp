@@ -38,7 +38,7 @@ export function renderKpLispBotanicalStageHtml(
 }
 
 export const kpLispBotanicalStageCss = `
-.kp-lisp-botanical { position: relative; display: grid; min-height: 24rem; place-items: center; color: #173f35; }
+.kp-lisp-botanical { position: relative; display: grid; min-height: 30rem; place-items: start center; color: #173f35; }
 .kp-lisp-botanical__plant { width: min(100%, 45rem); overflow: visible; }
 .kp-lisp-botanical__enclosure, .kp-lisp-botanical__branch, .kp-lisp-botanical__root, .kp-lisp-botanical__motion { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .kp-lisp-botanical__enclosure { stroke: #8b6b46; stroke-width: 3; opacity: calc(1 - (.62 * var(--kp-lisp-substitute))); }
@@ -49,9 +49,14 @@ export const kpLispBotanicalStageCss = `
 .kp-lisp-botanical__bud { fill: #d5a64a; }
 .kp-lisp-botanical__fruit { fill: #c76252; }
 .kp-lisp-botanical__motion { stroke: #d5a64a; stroke-width: 2; stroke-dasharray: 5 7; }
-.kp-lisp-stage { position: absolute; inset: 0; display: grid; place-items: center; }
-.kp-lisp-stage__expression, .kp-lisp-stage__environment { position: absolute; opacity: var(--kp-lisp-expression-opacity, var(--kp-lisp-environment-opacity, 0)); }
+.kp-lisp-stage { position: absolute; inset: auto 0 0; display: grid; min-height: 7rem; place-items: center; }
+.kp-lisp-stage__expression, .kp-lisp-stage__environment { position: absolute; margin: 0; opacity: var(--kp-lisp-expression-opacity, var(--kp-lisp-environment-opacity, 0)); }
 .kp-lisp-stage__expression code, .kp-lisp-stage__environment code { font: 600 clamp(1.05rem, 2.7vw, 1.7rem)/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.kp-lisp-stage__expression--application { transform: translateY(-1.35rem); }
+.kp-lisp-stage__environment { transform: translateY(1.65rem); }
+.kp-lisp-stage__environment > div { display: flex; align-items: baseline; gap: .55rem; }
+.kp-lisp-stage__environment dt::after { content: " ↦"; color: #8b6b46; }
+.kp-lisp-stage__environment dd { margin: 0; }
 .kp-lisp-stage__accessible { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 @media (prefers-reduced-motion: reduce) { .kp-lisp-botanical * { transition: none !important; } }
 `;
