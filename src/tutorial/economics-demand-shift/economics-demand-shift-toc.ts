@@ -15,6 +15,9 @@ import type {
 import type {
   KpEconomicsMotionBlockId
 } from "./economics-demand-shift-motion-blocks.ts";
+import {
+  serializeKpTutorialDestinationHref
+} from "../kp-tutorial-url.ts";
 
 export function createKpEconomicsDemandShiftToc(
   lesson: KpEconomicsDemandShiftLesson
@@ -78,7 +81,10 @@ export function resolveKpEconomicsDemandShiftTocDestination(input: {
 }
 
 function href(kind: "section" | "block" | "checkpoint", id: string): string {
-  return `${kpEconomicsDemandShiftTutorialPath}#kp-${kind}-${id}`;
+  return serializeKpTutorialDestinationHref(
+    kpEconomicsDemandShiftTutorialPath,
+    { kind, id }
+  );
 }
 
 function motionProgress(

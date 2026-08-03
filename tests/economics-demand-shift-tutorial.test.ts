@@ -53,6 +53,11 @@ import {
 import {
   renderKpTutorialScrubBar
 } from "../src/tutorial/kp-tutorial-scrub-bar-renderer.ts";
+import {
+  parseKpTutorialDestinationHash,
+  serializeKpTutorialDestinationHash,
+  serializeKpTutorialDestinationHref
+} from "../src/tutorial/kp-tutorial-url.ts";
 
 test("economics demand-shift tutorial owns one stable route", () => {
   assert.equal(
@@ -66,6 +71,47 @@ test("economics demand-shift tutorial owns one stable route", () => {
     true
   );
   assert.equal(isKpEconomicsDemandShiftTutorialRoute("/"), false);
+});
+
+test("semantic tutorial URLs round-trip without choreography coordinates", () => {
+  const destinations = [
+    { kind: "section" as const, id: "market-clearing" },
+    { kind: "block" as const, id: "supply-movement" },
+    { kind: "checkpoint" as const, id: "movement-verified" }
+  ];
+  for (const destination of destinations) {
+    const hash = serializeKpTutorialDestinationHash(destination);
+    assert.deepEqual(parseKpTutorialDestinationHash(hash), destination);
+  }
+  assert.equal(
+    serializeKpTutorialDestinationHref(
+      "/tutorials/economics/demand-shift/?example=18#old",
+      destinations[2]!
+    ),
+    "/tutorials/economics/demand-shift/?example=18#kp-checkpoint-movement-verified"
+  );
+  assert.deepEqual(
+    parseKpTutorialDestinationHash("#kp-section-market%2Dclearing"),
+    destinations[0]
+  );
+  for (const invalid of [
+    "",
+    "#kp-progress-0.72",
+    "#kp-checkpoint-0.72",
+    "#kp-block-Supply-Movement",
+    "#kp-section-",
+    "#kp-checkpoint-movement--verified",
+    "#kp-checkpoint-%E0%A4%A"
+  ]) {
+    assert.equal(parseKpTutorialDestinationHash(invalid), undefined);
+  }
+  assert.throws(
+    () => serializeKpTutorialDestinationHash({
+      kind: "checkpoint",
+      id: "0.72"
+    }),
+    /require a section, block, or checkpoint slug/
+  );
 });
 
 test("economics defines two local motion blocks with exact scene handoff", () => {

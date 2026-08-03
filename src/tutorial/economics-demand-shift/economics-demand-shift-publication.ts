@@ -19,6 +19,9 @@ import {
   renderKpTutorialScrubBar
 } from "../kp-tutorial-scrub-bar-renderer.ts";
 import { renderKpTutorialToc } from "../kp-tutorial-toc.ts";
+import {
+  serializeKpTutorialDestinationHref
+} from "../kp-tutorial-url.ts";
 
 export interface KpEconomicsDemandShiftPublication {
   readonly lesson: KpEconomicsDemandShiftLesson;
@@ -40,8 +43,10 @@ export function compileKpEconomicsDemandShiftPublication(
       blockId: block.id,
       checkpoints: block.checkpoints.map((checkpoint) => ({
         ...checkpoint,
-        href: `${kpEconomicsDemandShiftTutorialPath}` +
-          `#kp-checkpoint-${checkpoint.id}`
+        href: serializeKpTutorialDestinationHref(
+          kpEconomicsDemandShiftTutorialPath,
+          { kind: "checkpoint", id: checkpoint.id }
+        )
       }))
     })]
   )) as Record<KpEconomicsMotionBlockId, string>;
