@@ -31,6 +31,36 @@
     "git diff --check",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-08-03T06:04:34.288Z",
+      "notes": "Four Chromium economics exemplar checks passed, including wide, manual ownership, reduced motion, and phone."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-08-03T06:04:34.894Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-08-03T06:04:35.283Z",
+      "notes": "Eight economics tutorial unit tests passed."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-08-03T06:04:35.658Z",
+      "notes": "Svelte check reported zero errors and warnings."
+    }
+  ],
   "allowedWork": [
     "Implement only the 28 approved economics exemplar slices, focused tests, stable visual and performance harness extensions, progressive tutorial custom-element renderers, and durable project/Theseus evidence.",
     "Continue through objective exemplar slices under advance approval, but freeze all visual acceptance and cross-caller promotion at the final human checkpoint."
@@ -79,7 +109,8 @@
     {
       "id": "s05",
       "title": "Render-first-motion-block",
-      "status": "planned"
+      "summary": "Rendered the first demand-shift passage and its unchanged text-free scrubber as one labeled semantic motion-block boundary, with contiguous lesson styling and no second-block surface yet.",
+      "status": "complete"
     },
     {
       "id": "s06",

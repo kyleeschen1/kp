@@ -258,6 +258,13 @@ summary {
   background: rgb(255 253 248 / 0.72);
 }
 
+.kp-economics-tutorial__motion-block {
+  position: relative;
+  isolation: isolate;
+  margin-block: 0.85rem 1.35rem;
+  scroll-margin-block-start: 38vh;
+}
+
 .kp-economics-tutorial__passage p {
   margin: 0 0 1.05rem;
   text-indent: 1.35em;

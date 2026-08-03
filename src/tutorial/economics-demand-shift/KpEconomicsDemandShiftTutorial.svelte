@@ -31,6 +31,7 @@
   import type {
     KpEconomicsDemandShiftLesson
   } from "./economics-demand-shift-lesson-compiler.ts";
+  import { findKpEconomicsMotionBlock } from "./economics-demand-shift-motion-blocks.ts";
   import {
     KP_TUTORIAL_SCRUB_AUTO_EVENT,
     KP_TUTORIAL_SCRUB_NEXT_EVENT,
@@ -727,13 +728,22 @@
           <h3 id={`kp-econ-heading-${sectionIndex}`}>{section.heading}</h3>
 
           {#each section.passages as passage}
+            {@const renderedMotionBlock = passage.motionBlockId === "demand-shift"
+              ? findKpEconomicsMotionBlock(passage.motionBlockId)
+              : undefined}
             <div
               class="kp-economics-tutorial__passage"
               class:kp-economics-tutorial__passage--active={checkpoint.passageId === passage.id}
+              class:kp-economics-tutorial__motion-block={renderedMotionBlock !== undefined}
               class:kp-economics-tutorial__prediction={passage.id === "prediction"}
               class:kp-economics-tutorial__equation-check={passage.id === "equation-check"}
               class:kp-economics-tutorial__synthesis={passage.id === "synthesis"}
               data-kp-economics-tutorial-passage={passage.id}
+              data-kp-tutorial-motion-block={renderedMotionBlock?.id}
+              role={renderedMotionBlock === undefined ? undefined : "group"}
+              aria-label={renderedMotionBlock === undefined
+                ? undefined
+                : `${renderedMotionBlock.label} animation step`}
             >
               {#if passage.id === "prediction"}
                 <p>{@html passage.paragraphs[0]!.html}</p>
@@ -754,7 +764,7 @@
                   <p>{@html paragraph.html}</p>
                 {/each}
               {/if}
-              {#if passage.id === "follow-shift"}
+              {#if renderedMotionBlock?.id === "demand-shift"}
                 <kp-tutorial-scrub-bar
                   bind:this={scrubBar}
                   data-kp-economics-tutorial-motion-divider

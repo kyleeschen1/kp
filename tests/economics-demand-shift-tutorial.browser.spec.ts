@@ -22,6 +22,9 @@ test("approved economics prose and semantic controls form one persistent tutoria
   const graph = player.locator("[data-kp-editor-graph-svg]");
   const stageCard = root.locator(".kp-economics-tutorial__stage-card");
   const motionCue = root.locator("kp-tutorial-scrub-bar");
+  const firstMotionBlock = root.locator(
+    '[data-kp-tutorial-motion-block="demand-shift"]'
+  );
   const tutorialScrubber = motionCue.getByRole("slider", {
     name: "Scrub animation progress"
   });
@@ -53,6 +56,14 @@ test("approved economics prose and semantic controls form one persistent tutoria
   await expect(player.locator(".editor-animation-player__controls")).toBeHidden();
   await expect(root.locator(".kp-economics-tutorial__controls")).toHaveCount(0);
   await expect(motionCue).toHaveCount(1);
+  await expect(firstMotionBlock).toHaveAttribute(
+    "aria-label",
+    "Demand shifts animation step"
+  );
+  await expect(firstMotionBlock.locator("p")).toHaveCount(1);
+  await expect(firstMotionBlock.locator("kp-tutorial-scrub-bar")).toHaveCount(1);
+  await expect(root.locator('[data-kp-tutorial-motion-block="supply-movement"]'))
+    .toHaveCount(0);
   expect(await motionCue.evaluate((element) => ({
     tag: element.localName,
     registered: customElements.get(element.localName) === element.constructor,
