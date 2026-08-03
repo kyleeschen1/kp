@@ -33,6 +33,14 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-economics-demand-shift-tutorial-mounted",
     "true"
   );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-coordinator",
+    "connected"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-active-block",
+    "demand-shift"
+  );
   await expect(root.getByText(
     "Why does an increase in demand raise both equilibrium price and equilibrium quantity when supply remains fixed?"
   )).toBeVisible();

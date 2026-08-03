@@ -31,7 +31,15 @@
   import type {
     KpEconomicsDemandShiftLesson
   } from "./economics-demand-shift-lesson-compiler.ts";
-  import { findKpEconomicsMotionBlock } from "./economics-demand-shift-motion-blocks.ts";
+  import {
+    findKpEconomicsMotionBlock,
+    kpEconomicsMotionBlocks
+  } from "./economics-demand-shift-motion-blocks.ts";
+  import {
+    KpEconomicsTutorialScrollCoordinator,
+    type KpEconomicsCoordinatedScrollProjection,
+    type KpEconomicsScrollBlockRegistration
+  } from "./economics-demand-shift-scroll-coordinator.ts";
   import {
     KP_TUTORIAL_SCRUB_AUTO_EVENT,
     KP_TUTORIAL_SCRUB_NEXT_EVENT,
@@ -136,12 +144,14 @@
   );
   let reducedMotion = $state(false);
   let readingBandProximity = $state(0);
-  let scrollFrame: number | undefined;
+  let scrollCoordinatorStatus = $state<"pending" | "connected">("pending");
+  let scrollActiveMotionBlock = $state("");
   let attentionFrame: number | undefined;
   let attentionResizeObserver: ResizeObserver | undefined;
   let reducedMotionQuery: MediaQueryList | undefined;
   let attentionProjection = $state(emptyAttentionProjection);
   let disposePlayerHost: (() => void) | undefined;
+  let scrollCoordinator: KpEconomicsTutorialScrollCoordinator | undefined;
   const playerHtml = initial.playerHtml;
   let checkpoint = $derived(kpEconomicsDemandShiftCheckpoints[checkpointIndex]!);
   let equationsVisible = $derived(
@@ -352,17 +362,14 @@
       (event.detail as { readonly status?: unknown })?.status !== "ready"
     ) return;
     ready = true;
-    scheduleReadingBandSelection();
+    scrollCoordinator?.scheduleProjection();
     scheduleAttentionProjection();
   }
 
   function claimManualMotion(): void {
     // A control action must win even when it lands between a scroll event and
-    // that event's deferred reading-band projection.
-    if (scrollFrame !== undefined) {
-      cancelAnimationFrame(scrollFrame);
-      scrollFrame = undefined;
-    }
+    // the coordinator's deferred reading-band projection.
+    scrollCoordinator?.cancelPendingProjection();
     motionOwner = "manual";
     scrollAutoplayStatus = "manual";
   }
@@ -490,57 +497,93 @@
     };
   }
 
-  function scheduleReadingBandSelection(): void {
-    if (scrollFrame !== undefined) return;
-    scrollFrame = requestAnimationFrame(() => {
-      scrollFrame = undefined;
-      scheduleAttentionProjection();
-      if (shell === undefined) return;
-      const passages = [...shell.querySelectorAll<HTMLElement>(
-        "[data-kp-economics-tutorial-passage]"
-      )];
-      const tops = Object.fromEntries(passages.map((passage) => [
-        passage.dataset["kpEconomicsTutorialPassage"] ?? "",
-        passage.getBoundingClientRect().top
-      ]));
-      const readingBandY = window.innerHeight * 0.38;
-      const motionDividerTop = scrubBar?.getBoundingClientRect().top;
-      const motionDividerDistance = motionDividerTop === undefined
-        ? Number.POSITIVE_INFINITY
-        : Math.abs(motionDividerTop - readingBandY);
-      const nearestPassageDistance = Math.min(
-        motionDividerDistance,
-        ...Object.values(tops).map((top) => Math.abs(top - readingBandY))
+  function collectScrollBlocks(): readonly KpEconomicsScrollBlockRegistration[] {
+    if (shell === undefined) return [];
+    return kpEconomicsMotionBlocks.flatMap((block) => {
+      const boundary = shell?.querySelector<HTMLElement>(
+        `[data-kp-tutorial-motion-block="${block.id}"]`
       );
-      readingBandProximity = Number.isFinite(nearestPassageDistance)
-        ? clamp(1 - nearestPassageDistance / 96, 0, 1)
-        : 0;
-      // At the document boundary the final passage cannot physically reach the
-      // reading band, so bottom settlement explicitly selects it.
-      const atBottom = window.scrollY + window.innerHeight >=
-        document.documentElement.scrollHeight - 2;
-      let selectedPassage: string;
-      if (motionDividerDistance <= 48) {
-        // The divider is its own reading anchor: the introducing paragraph
-        // keeps prose focus until the interpretation itself reaches the band.
-        selectedPassage = "follow-shift";
-      } else if (atBottom) {
-        selectedPassage = passages.at(-1)
-          ?.dataset["kpEconomicsTutorialPassage"] ?? checkpoint.passageId;
-      } else {
-        selectedPassage = selectKpEconomicsReadingBandPassage({
-          currentPassageId: checkpoint.passageId,
-          readingBandY,
-          passageTops: tops
-        });
-      }
-      if (selectedPassage !== checkpoint.passageId) {
-        const nextIndex = kpEconomicsDemandShiftCheckpoints.findIndex(
-          (candidate) => candidate.passageId === selectedPassage
-        );
-        if (nextIndex >= 0) activateCheckpoint(nextIndex, "scroll");
-      }
+      const anchor = boundary?.querySelector<KpTutorialScrubBarElement>(
+        "kp-tutorial-scrub-bar"
+      );
+      return anchor === undefined || anchor === null
+        ? []
+        : [{ id: block.id, anchor, corridor: block.corridor }];
     });
+  }
+
+  function handleCoordinatedScroll(
+    projection: KpEconomicsCoordinatedScrollProjection
+  ): void {
+    scrollActiveMotionBlock = projection.activeBlockId ?? "";
+    const active = projection.blocks.find(({ ownsScroll }) => ownsScroll);
+    if (active?.id === "demand-shift" && scrubBar !== undefined) {
+      const distance = active.anchorTop - projection.readingBandY;
+      scrubBar.setReadingBandProjection({
+        distance,
+        proximity: clamp(1 - Math.abs(distance) / 96, 0, 1)
+      });
+      if (projection.crossingDirection !== undefined) {
+        scrubBar.dispatchEvent(new CustomEvent<KpTutorialScrubAutoDetail>(
+          KP_TUTORIAL_SCRUB_AUTO_EVENT,
+          {
+            bubbles: true,
+            composed: true,
+            detail: { direction: projection.crossingDirection }
+          }
+        ));
+      }
+    }
+    updateReadingBandSelection();
+    updateAttentionProjection();
+  }
+
+  function updateReadingBandSelection(): void {
+    if (shell === undefined) return;
+    const passages = [...shell.querySelectorAll<HTMLElement>(
+      "[data-kp-economics-tutorial-passage]"
+    )];
+    const tops = Object.fromEntries(passages.map((passage) => [
+      passage.dataset["kpEconomicsTutorialPassage"] ?? "",
+      passage.getBoundingClientRect().top
+    ]));
+    const readingBandY = window.innerHeight * 0.38;
+    const motionDividerTop = scrubBar?.getBoundingClientRect().top;
+    const motionDividerDistance = motionDividerTop === undefined
+      ? Number.POSITIVE_INFINITY
+      : Math.abs(motionDividerTop - readingBandY);
+    const nearestPassageDistance = Math.min(
+      motionDividerDistance,
+      ...Object.values(tops).map((top) => Math.abs(top - readingBandY))
+    );
+    readingBandProximity = Number.isFinite(nearestPassageDistance)
+      ? clamp(1 - nearestPassageDistance / 96, 0, 1)
+      : 0;
+    // At the document boundary the final passage cannot physically reach the
+    // reading band, so bottom settlement explicitly selects it.
+    const atBottom = window.scrollY + window.innerHeight >=
+      document.documentElement.scrollHeight - 2;
+    let selectedPassage: string;
+    if (motionDividerDistance <= 48) {
+      // The divider is its own reading anchor: the introducing paragraph
+      // keeps prose focus until the interpretation itself reaches the band.
+      selectedPassage = "follow-shift";
+    } else if (atBottom) {
+      selectedPassage = passages.at(-1)
+        ?.dataset["kpEconomicsTutorialPassage"] ?? checkpoint.passageId;
+    } else {
+      selectedPassage = selectKpEconomicsReadingBandPassage({
+        currentPassageId: checkpoint.passageId,
+        readingBandY,
+        passageTops: tops
+      });
+    }
+    if (selectedPassage !== checkpoint.passageId) {
+      const nextIndex = kpEconomicsDemandShiftCheckpoints.findIndex(
+        (candidate) => candidate.passageId === selectedPassage
+      );
+      if (nextIndex >= 0) activateCheckpoint(nextIndex, "scroll");
+    }
   }
 
   function handleTutorialKeydown(event: KeyboardEvent): void {
@@ -580,10 +623,13 @@
     );
     scrubBar?.addEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, handleScrubBarSeek);
     scrubBar?.addEventListener(KP_TUTORIAL_SCRUB_AUTO_EVENT, handleScrubBarAuto);
-    window.addEventListener("scroll", scheduleReadingBandSelection, {
-      passive: true
-    });
-    window.addEventListener("resize", scheduleReadingBandSelection);
+    scrollCoordinator = new KpEconomicsTutorialScrollCoordinator(
+      window,
+      collectScrollBlocks,
+      handleCoordinatedScroll
+    );
+    scrollCoordinator.connect();
+    scrollCoordinatorStatus = "connected";
     window.addEventListener("keydown", handleTutorialKeydown);
     disposePlayerHost = mountKpAnimationCataloguePlayerHost({
       shell,
@@ -603,13 +649,16 @@
       scrollAutoplayStatus = "reduced-motion";
     }
     reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
-    void document.fonts.ready.then(scheduleAttentionProjection);
-    scheduleReadingBandSelection();
+    void document.fonts.ready.then(() => {
+      scrollCoordinator?.scheduleProjection();
+      scheduleAttentionProjection();
+    });
+    scrollCoordinator.scheduleProjection();
     scheduleAttentionProjection();
   });
 
   onDestroy(() => {
-    if (scrollFrame !== undefined) cancelAnimationFrame(scrollFrame);
+    scrollCoordinator?.disconnect();
     if (attentionFrame !== undefined) cancelAnimationFrame(attentionFrame);
     attentionResizeObserver?.disconnect();
     player?.removeEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
@@ -626,8 +675,6 @@
     );
     scrubBar?.removeEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, handleScrubBarSeek);
     scrubBar?.removeEventListener(KP_TUTORIAL_SCRUB_AUTO_EVENT, handleScrubBarAuto);
-    window.removeEventListener("scroll", scheduleReadingBandSelection);
-    window.removeEventListener("resize", scheduleReadingBandSelection);
     window.removeEventListener("keydown", handleTutorialKeydown);
     reducedMotionQuery?.removeEventListener("change", handleReducedMotionChange);
     disposePlayerHost?.();
@@ -702,6 +749,8 @@
   data-kp-economics-tutorial-equations={equationsVisible ? "visible" : "quiet"}
   data-kp-economics-tutorial-motion-owner={motionOwner}
   data-kp-economics-tutorial-scroll-autoplay={scrollAutoplayStatus}
+  data-kp-economics-tutorial-scroll-coordinator={scrollCoordinatorStatus}
+  data-kp-economics-tutorial-scroll-active-block={scrollActiveMotionBlock}
 >
   <h1 class="kp-economics-tutorial__visually-hidden">
     Economics demand-shift tutorial

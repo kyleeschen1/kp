@@ -80,6 +80,34 @@
       "scope": "s06",
       "checkedAt": "2026-08-03T06:07:22.794Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-08-03T06:15:40.880Z",
+      "notes": "Ten unit tests passed, including exclusive scroll ownership across overlapping block corridors."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-08-03T06:15:41.937Z",
+      "notes": "Svelte check reported zero errors and warnings."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-08-03T06:15:42.838Z",
+      "notes": "Four Chromium checks passed with centralized lifecycle, legacy crossing preservation, manual ownership, reduced motion, and phone."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-08-03T06:15:43.750Z",
+      "notes": "No whitespace errors."
     }
   ],
   "allowedWork": [
@@ -142,7 +170,8 @@
     {
       "id": "s07",
       "title": "Centralize-scroll-coordination",
-      "status": "planned"
+      "summary": "Moved all lesson scroll/resize observation into one coalesced coordinator, removed per-scrubber viewport listeners, proved exclusive block ownership, and preserved crossing autoplay until continuous seek lands.",
+      "status": "complete"
     },
     {
       "id": "s08",

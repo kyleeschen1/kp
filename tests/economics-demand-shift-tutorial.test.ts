@@ -23,6 +23,9 @@ import {
   projectKpEconomicsMotionCorridor
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-scroll-corridor.ts";
 import {
+  projectKpEconomicsScrollFrame
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-scroll-coordinator.ts";
+import {
   isKpEconomicsDemandShiftTutorialRoute,
   kpEconomicsDemandShiftTutorialPath
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-route.ts";
@@ -160,6 +163,34 @@ test("viewport corridors preserve authored holds in both scroll directions", () 
     anchorTop: 380,
     viewportHeight: 1000
   }).progress, 0.72);
+});
+
+test("one coordinated scroll frame grants paint ownership to one block", () => {
+  const projection = projectKpEconomicsScrollFrame({
+    viewportHeight: 1000,
+    blocks: [
+      {
+        id: "demand-shift",
+        anchorTop: 410,
+        corridor: kpEconomicsMotionBlocks[0]!.corridor
+      },
+      {
+        id: "supply-movement",
+        anchorTop: 385,
+        corridor: kpEconomicsMotionBlocks[1]!.corridor
+      }
+    ]
+  });
+
+  assert.equal(projection.activeBlockId, "supply-movement");
+  assert.deepEqual(
+    projection.blocks.filter(({ ownsScroll }) => ownsScroll).map(({ id }) => id),
+    ["supply-movement"]
+  );
+  assert.equal(projectKpEconomicsScrollFrame({
+    viewportHeight: 1000,
+    blocks: []
+  }).activeBlockId, undefined);
 });
 
 test("approved Markdown compiles into the complete annotated lesson", () => {

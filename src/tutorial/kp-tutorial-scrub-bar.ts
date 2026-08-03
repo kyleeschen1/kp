@@ -14,6 +14,11 @@ export interface KpTutorialScrubAutoDetail {
   readonly direction: "forward" | "rewind";
 }
 
+export interface KpTutorialScrubReadingBandProjection {
+  readonly distance: number;
+  readonly proximity: number;
+}
+
 const observedAttributes = [
   "controls-disabled",
   "direction",
@@ -26,8 +31,8 @@ const observedAttributes = [
 
 /**
  * Framework-neutral playback boundary for prose-led tutorials. The element
- * owns controls and scroll-crossing intent, while the host keeps semantic
- * checkpoints and the animation clock authoritative.
+ * owns controls and their local presentation, while the host keeps semantic
+ * checkpoints, viewport coordination, and the animation clock authoritative.
  */
 export class KpTutorialScrubBarElement extends HTMLElement {
   static readonly observedAttributes = observedAttributes;
@@ -39,9 +44,6 @@ export class KpTutorialScrubBarElement extends HTMLElement {
   private readonly rewindButton: HTMLButtonElement;
   private readonly scrubber: HTMLInputElement;
   private readonly progressOutput: HTMLOutputElement;
-  private scrollFrame: number | undefined;
-  private previousTop: number | undefined;
-  private previousScrollY: number | undefined;
   private manualClaimedInternally = false;
   private reducedMotionQuery: MediaQueryList | undefined;
 
@@ -65,15 +67,8 @@ export class KpTutorialScrubBarElement extends HTMLElement {
     this.scrubber.addEventListener("input", this.handleSeek);
     const view = this.ownerDocument.defaultView;
     if (view !== null) {
-      view.addEventListener("scroll", this.scheduleScrollProjection, {
-        passive: true
-      });
-      view.addEventListener("resize", this.resetScrollProjection);
       this.reducedMotionQuery = view.matchMedia("(prefers-reduced-motion: reduce)");
       this.reducedMotionQuery.addEventListener("change", this.handleMotionPreference);
-      this.previousTop = this.getBoundingClientRect().top;
-      this.previousScrollY = view.scrollY;
-      this.projectReadingBandFocus(view, this.previousTop);
     }
     this.render();
   }
@@ -84,21 +79,37 @@ export class KpTutorialScrubBarElement extends HTMLElement {
     this.nextButton.removeEventListener("click", this.handleNext);
     this.rewindButton.removeEventListener("click", this.handleRewind);
     this.scrubber.removeEventListener("input", this.handleSeek);
-    const view = this.ownerDocument.defaultView;
-    view?.removeEventListener("scroll", this.scheduleScrollProjection);
-    view?.removeEventListener("resize", this.resetScrollProjection);
     this.reducedMotionQuery?.removeEventListener(
       "change",
       this.handleMotionPreference
     );
-    if (this.scrollFrame !== undefined && view !== null) {
-      view.cancelAnimationFrame(this.scrollFrame);
-    }
-    this.scrollFrame = undefined;
   }
 
   attributeChangedCallback(): void {
     this.render();
+  }
+
+  setReadingBandProjection(
+    projection: KpTutorialScrubReadingBandProjection
+  ): void {
+    const proximity = Math.max(0, Math.min(1, projection.proximity));
+    this.style.setProperty(
+      "--kp-tutorial-scrub-focus-proximity",
+      proximity.toFixed(3)
+    );
+    this.style.setProperty(
+      "--kp-tutorial-scrub-focus-lift",
+      `${(-2 * proximity).toFixed(3)}px`
+    );
+    this.style.setProperty(
+      "--kp-tutorial-scrub-focus-scale",
+      (1 + 0.018 * proximity).toFixed(4)
+    );
+    this.dataset["kpTutorialScrubFocus"] = Math.abs(projection.distance) <= 6
+      ? "crossing"
+      : projection.distance > 0
+        ? "approaching"
+        : "past";
   }
 
   private readonly handlePrevious = (): void => {
@@ -132,82 +143,6 @@ export class KpTutorialScrubBarElement extends HTMLElement {
   private readonly handleMotionPreference = (): void => {
     this.render();
   };
-
-  private readonly resetScrollProjection = (): void => {
-    const view = this.ownerDocument.defaultView;
-    if (view === null) return;
-    this.previousTop = this.getBoundingClientRect().top;
-    this.previousScrollY = view.scrollY;
-    this.projectReadingBandFocus(view, this.previousTop);
-    this.render();
-  };
-
-  private readonly scheduleScrollProjection = (): void => {
-    const view = this.ownerDocument.defaultView;
-    if (view === null || this.scrollFrame !== undefined) return;
-    this.scrollFrame = view.requestAnimationFrame(() => {
-      this.scrollFrame = undefined;
-      this.projectScrollCrossing(view);
-    });
-  };
-
-  private projectScrollCrossing(view: Window): void {
-    const top = this.getBoundingClientRect().top;
-    const scrollY = view.scrollY;
-    const previousTop = this.previousTop;
-    const previousScrollY = this.previousScrollY;
-    this.previousTop = top;
-    this.previousScrollY = scrollY;
-    this.projectReadingBandFocus(view, top);
-    if (
-      previousTop === undefined ||
-      previousScrollY === undefined ||
-      this.manualClaimed ||
-      this.reducedMotion ||
-      this.controlsDisabled
-    ) return;
-
-    const readingBand = view.innerHeight * 0.38;
-    if (
-      scrollY > previousScrollY &&
-      previousTop > readingBand &&
-      top <= readingBand + 2
-    ) {
-      this.emit<KpTutorialScrubAutoDetail>(KP_TUTORIAL_SCRUB_AUTO_EVENT, {
-        direction: "forward"
-      });
-    } else if (
-      scrollY < previousScrollY &&
-      previousTop < readingBand &&
-      top >= readingBand - 2
-    ) {
-      this.emit<KpTutorialScrubAutoDetail>(KP_TUTORIAL_SCRUB_AUTO_EVENT, {
-        direction: "rewind"
-      });
-    }
-  }
-
-  private projectReadingBandFocus(view: Window, top: number): void {
-    const distance = top - view.innerHeight * 0.38;
-    const proximity = Math.max(0, Math.min(1, 1 - Math.abs(distance) / 96));
-    this.style.setProperty(
-      "--kp-tutorial-scrub-focus-proximity",
-      proximity.toFixed(3)
-    );
-    this.style.setProperty(
-      "--kp-tutorial-scrub-focus-lift",
-      `${(-2 * proximity).toFixed(3)}px`
-    );
-    this.style.setProperty(
-      "--kp-tutorial-scrub-focus-scale",
-      (1 + 0.018 * proximity).toFixed(4)
-    );
-    this.dataset["kpTutorialScrubFocus"] = Math.abs(distance) <= 6
-      ? "crossing"
-      : distance > 0
-        ? "approaching"
-        : "past";
-  }
 
   private claimManualControl(): void {
     this.manualClaimedInternally = true;
