@@ -13,6 +13,11 @@ import {
   compileKpEconomicsDemandShiftLesson
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-lesson-compiler.ts";
 import {
+  findKpEconomicsMotionBlock,
+  findKpEconomicsMotionCheckpoint,
+  kpEconomicsMotionBlocks
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-motion-blocks.ts";
+import {
   isKpEconomicsDemandShiftTutorialRoute,
   kpEconomicsDemandShiftTutorialPath
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-route.ts";
@@ -29,6 +34,48 @@ test("economics demand-shift tutorial owns one stable route", () => {
     true
   );
   assert.equal(isKpEconomicsDemandShiftTutorialRoute("/"), false);
+});
+
+test("economics defines two local motion blocks with exact scene handoff", () => {
+  assert.deepEqual(kpEconomicsMotionBlocks.map((block) => ({
+    id: block.id,
+    passageId: block.passageId,
+    entry: block.entry,
+    settled: block.settled,
+    checkpoints: block.checkpoints.map(({ id, progress }) => [id, progress])
+  })), [
+    {
+      id: "demand-shift",
+      passageId: "follow-shift",
+      entry: { market: "initial", presentation: "graph-only" },
+      settled: { market: "shifted", presentation: "graph-only" },
+      checkpoints: [
+        ["shift-ready", 0],
+        ["shift-handoff", 0.72],
+        ["shift-settled", 1]
+      ]
+    },
+    {
+      id: "supply-movement",
+      passageId: "shift-versus-movement",
+      entry: { market: "shifted", presentation: "graph-only" },
+      settled: { market: "shifted", presentation: "comparison-verified" },
+      checkpoints: [
+        ["movement-ready", 0],
+        ["movement-traced", 0.58],
+        ["movement-verified", 1]
+      ]
+    }
+  ]);
+  assert.deepEqual(
+    kpEconomicsMotionBlocks[0]!.settled,
+    kpEconomicsMotionBlocks[1]!.entry
+  );
+  assert.equal(findKpEconomicsMotionBlock("missing"), undefined);
+  assert.equal(findKpEconomicsMotionCheckpoint({
+    blockId: "supply-movement",
+    checkpointId: "movement-traced"
+  })?.progress, 0.58);
 });
 
 test("approved Markdown compiles into the complete annotated lesson", () => {

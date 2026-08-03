@@ -61,7 +61,8 @@
     {
       "id": "s02",
       "title": "Define-motion-block-contract",
-      "status": "planned"
+      "summary": "Defined two economics-local motion blocks with six named checkpoints and an exact shifted-state handoff; no generic reader contract was introduced.",
+      "status": "complete"
     },
     {
       "id": "s03",

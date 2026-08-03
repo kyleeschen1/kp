@@ -50,6 +50,18 @@
       "status": "passed",
       "scope": "s01 durable graph validation",
       "checkedAt": "2026-08-03T05:52:52.596Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s02 motion-block contract",
+      "checkedAt": "2026-08-03T05:54:57.588Z"
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s02 Svelte host compatibility",
+      "checkedAt": "2026-08-03T05:54:58.490Z"
     }
   ],
   "progress": {
