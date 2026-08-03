@@ -24,6 +24,7 @@ import {
 } from "./lisp-function-application-motion-controller.ts";
 import { compileKpLispFunctionApplicationPublication } from "./lisp-function-application-publication.ts";
 import { createKpLispLessonNavigationController } from "./lisp-function-application-navigation.ts";
+import { createKpLispLessonScrollController } from "./lisp-function-application-scroll.ts";
 
 export async function mountKpLispFunctionApplicationTutorial(input: {
   readonly root: HTMLElement;
@@ -76,11 +77,16 @@ export async function mountKpLispFunctionApplicationTutorial(input: {
     lesson: publication.lesson,
     motion
   });
+  const scroll = createKpLispLessonScrollController({
+    root: tutorialRoot,
+    motion
+  });
   const reviewHost = createKpAnimationCatalogueReviewHost();
   input.root.dataset["kpLispFunctionApplicationTutorialMounted"] = "true";
   void reviewHost.mount();
 
   return () => {
+    scroll.dispose();
     navigation.dispose();
     motion.dispose();
     reviewHost.dispose();

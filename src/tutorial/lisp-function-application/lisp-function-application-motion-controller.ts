@@ -31,6 +31,16 @@ export interface KpLispLessonMotionController {
     blockId: KpLispLessonMotionBlockId,
     localProgress: number
   ) => void;
+  readonly projectScroll: (
+    blockId: KpLispLessonMotionBlockId,
+    localProgress: number
+  ) => void;
+  readonly snapshot: () => {
+    readonly activeBlockId: KpLispLessonMotionBlockId;
+    readonly localProgress: number;
+    readonly globalProgress: number;
+    readonly playbackStatus: KpEditorAnimationPlaybackSession["player"]["playbackStatus"];
+  };
   readonly dispose: () => void;
 }
 
@@ -85,6 +95,8 @@ export function createKpLispLessonMotionController(input: {
     progress: 0
   });
   let activeBlockId: KpLispLessonMotionBlockId = "bind-and-reconstruct";
+  let motionOwner: "untouched" | "navigation" | "scroll" | "manual" =
+    "untouched";
   let request: number | undefined;
 
   const render = (): void => {
@@ -106,6 +118,7 @@ export function createKpLispLessonMotionController(input: {
     });
     input.root.dataset["kpLispTutorialProgress"] = global.toFixed(4);
     input.root.dataset["kpLispTutorialActiveMotionBlock"] = activeBlockId;
+    input.root.dataset["kpLispTutorialMotionOwner"] = motionOwner;
     input.root.dataset["kpLispTutorialActivePassage"] = salience.activePassageId;
     input.root.querySelectorAll<HTMLElement>("[data-kp-lisp-tutorial-passage]")
       .forEach((passage) => {
@@ -128,6 +141,10 @@ export function createKpLispLessonMotionController(input: {
       control.setAttribute("direction", session.player.direction);
       control.setAttribute("previous-disabled", String(blockLocal <= 0.001));
       control.setAttribute("next-disabled", String(blockLocal >= 0.999));
+      control.setAttribute(
+        "manual-claimed",
+        String(motionOwner === "manual" && block.id === activeBlockId)
+      );
     }
   };
 
@@ -170,6 +187,17 @@ export function createKpLispLessonMotionController(input: {
     request = undefined;
   };
 
+  const setOwner = (
+    owner: typeof motionOwner,
+    blockId: KpLispLessonMotionBlockId
+  ): void => {
+    motionOwner = owner;
+    activeBlockId = blockId;
+    if (owner !== "manual") {
+      for (const control of Object.values(scrubs)) control.releaseManualControl();
+    }
+  };
+
   const blockForEvent = (event: Event): KpLispLessonMotionBlockId | undefined => {
     if (!(event.target instanceof Element)) return undefined;
     const control = event.target.closest<HTMLElement>(
@@ -184,11 +212,14 @@ export function createKpLispLessonMotionController(input: {
   const onSeek = (event: Event): void => {
     const blockId = blockForEvent(event);
     if (blockId === undefined) return;
+    setOwner("manual", blockId);
     seek(blockId, (event as CustomEvent<KpTutorialScrubSeekDetail>).detail.progress);
   };
   const onToggle = (event: Event): void => {
     const blockId = blockForEvent(event);
     if (blockId === undefined) return;
+    const changedBlock = blockId !== activeBlockId;
+    setOwner("manual", blockId);
     if (session.player.playbackStatus === "playing" && blockId === activeBlockId) {
       session = reduceKpEditorAnimationPlaybackSession(session, {
         type: "pause",
@@ -199,7 +230,7 @@ export function createKpLispLessonMotionController(input: {
     } else {
       cancel();
       const local = localProgress(blockId, semanticProgress(session));
-      if (blockId !== activeBlockId || local >= 0.999) {
+      if (changedBlock || local >= 0.999) {
         seek(blockId, local >= 0.999 ? 0 : local);
       }
       activeBlockId = blockId;
@@ -215,7 +246,9 @@ export function createKpLispLessonMotionController(input: {
   const onRewind = (event: Event): void => {
     const blockId = blockForEvent(event);
     if (blockId === undefined) return;
-    if (blockId !== activeBlockId) {
+    const changedBlock = blockId !== activeBlockId;
+    setOwner("manual", blockId);
+    if (changedBlock) {
       seek(blockId, localProgress(blockId, semanticProgress(session)));
     }
     activeBlockId = blockId;
@@ -230,6 +263,7 @@ export function createKpLispLessonMotionController(input: {
   const onNext = (event: Event): void => {
     const blockId = blockForEvent(event);
     if (blockId === undefined) return;
+    setOwner("manual", blockId);
     const local = localProgress(blockId, semanticProgress(session));
     const checkpoints = kpLispLessonMotionBlocks.find(({ id }) => id === blockId)!.checkpoints;
     seek(blockId, checkpoints.find(({ progress }) => progress > local + 0.001)?.progress ?? 1);
@@ -237,6 +271,7 @@ export function createKpLispLessonMotionController(input: {
   const onPrevious = (event: Event): void => {
     const blockId = blockForEvent(event);
     if (blockId === undefined) return;
+    setOwner("manual", blockId);
     const local = localProgress(blockId, semanticProgress(session));
     const checkpoints = kpLispLessonMotionBlocks.find(({ id }) => id === blockId)!.checkpoints;
     seek(blockId, [...checkpoints].reverse().find(({ progress }) => progress < local - 0.001)?.progress ?? 0);
@@ -250,8 +285,23 @@ export function createKpLispLessonMotionController(input: {
   render();
 
   return Object.freeze({
-    restore: (blockId: KpLispLessonMotionBlockId, local: number) =>
-      seek(blockId, local),
+    restore: (blockId: KpLispLessonMotionBlockId, local: number) => {
+      setOwner("navigation", blockId);
+      seek(blockId, local);
+    },
+    projectScroll: (blockId: KpLispLessonMotionBlockId, local: number) => {
+      setOwner("scroll", blockId);
+      seek(blockId, local);
+    },
+    snapshot: () => {
+      const global = semanticProgress(session);
+      return Object.freeze({
+        activeBlockId,
+        localProgress: localProgress(activeBlockId, global),
+        globalProgress: global,
+        playbackStatus: session.player.playbackStatus
+      });
+    },
     dispose: () => {
       cancel();
       input.root.removeEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, onSeek);

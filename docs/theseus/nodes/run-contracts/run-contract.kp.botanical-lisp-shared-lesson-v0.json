@@ -384,6 +384,37 @@
       "status": "passed",
       "scope": "s16 patch hygiene",
       "checkedAt": "2026-08-03T17:43:44.553Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/kp-lisp-scroll-coordination.browser.spec.ts tests/kp-lisp-lesson-navigation.browser.spec.ts --config playwright.config.ts --project=chromium --workers=1",
+      "status": "failed",
+      "scope": "s17 initial coordinated-scroll integration",
+      "checkedAt": "2026-08-03T17:53:54.069Z",
+      "notes": "Exposed CSS smooth-scroll in deterministic geometry checks and subpixel misses at an authored hold; test scrolling was made deterministic and near-keyframe travel now snaps exactly."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-scroll-coordination.test.ts tests/kp-lisp-cumulative-motion-blocks.test.ts tests/kp-lisp-lesson-navigation.test.ts tests/kp-lisp-first-motion-block.test.ts",
+      "status": "passed",
+      "scope": "s17 corridors, holds, one owner, rebase, cumulative motion, and navigation",
+      "checkedAt": "2026-08-03T17:53:55.224Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/kp-lisp-scroll-coordination.browser.spec.ts tests/kp-lisp-lesson-navigation.browser.spec.ts --config playwright.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s17 wheel, touch-equivalent, keyboard, manual rebase, reverse, holds, one block, and history",
+      "checkedAt": "2026-08-03T17:53:56.187Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s17 repository TypeScript Svelte and domain boundaries",
+      "checkedAt": "2026-08-03T17:53:57.132Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s17 patch hygiene",
+      "checkedAt": "2026-08-03T17:53:58.108Z"
     }
   ],
   "allowedWork": [
@@ -506,7 +537,8 @@
     {
       "id": "s17",
       "title": "Coordinate scroll and manual ownership",
-      "status": "planned"
+      "summary": "Added Lisp-local authored scroll corridors with semantic holds, 38% reading-band cues, one active block, wheel/touch/keyboard intent, manual and navigation takeover, continuous rebasing, and exact reverse sampling through the canonical motion controller. Twelve focused tests, four Chromium interactions, full typecheck, and patch hygiene pass after correcting smooth-scroll test geometry and subpixel hold settlement.",
+      "status": "complete"
     },
     {
       "id": "s18",
