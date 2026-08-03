@@ -587,6 +587,36 @@
       "status": "passed",
       "scope": "s22 patch hygiene",
       "checkedAt": "2026-08-03T18:32:02.893Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-tutorial-navigation.test.ts tests/kp-lisp-lesson-navigation.test.ts tests/economics-demand-shift-tutorial.test.ts",
+      "status": "passed",
+      "scope": "s23 shared ordering URL and both resolver tests",
+      "checkedAt": "2026-08-03T18:38:53.831Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/kp-lisp-lesson-navigation.browser.spec.ts tests/economics-demand-shift-tutorial.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s23 fourteen direct load long jump Back Forward and route interactions",
+      "checkedAt": "2026-08-03T18:38:55.013Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s23 application test Svelte and domain types",
+      "checkedAt": "2026-08-03T18:38:55.986Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s23 framework-neutral navigation boundary",
+      "checkedAt": "2026-08-03T18:38:56.948Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s23 patch hygiene",
+      "checkedAt": "2026-08-03T18:38:57.950Z"
     }
   ],
   "allowedWork": [
@@ -745,7 +775,8 @@
     {
       "id": "s23",
       "title": "Extract shared navigation transactions",
-      "status": "planned"
+      "summary": "Extracted a framework-neutral semantic navigation controller used by both tutorials. It owns TOC intent, semantic history, duplicate popstate/hash suppression, listener lifecycle, and restore-before-active-before-scroll ordering while caller callbacks retain reconstruction and geometry. Twenty-four focused tests, 14 Chromium navigation/interaction tests, full typecheck, architecture gates, and patch hygiene pass.",
+      "status": "complete"
     },
     {
       "id": "s24",

@@ -65,16 +65,13 @@
     KpTutorialTocElement
   } from "../kp-tutorial-toc-element.ts";
   import {
-    KP_TUTORIAL_TOC_NAVIGATE_EVENT,
-    type KpTutorialTocNavigateDetail
-  } from "../kp-tutorial-toc-element.ts";
+    createKpTutorialNavigationController,
+    type KpTutorialNavigationController
+  } from "../kp-tutorial-navigation.ts";
   import type {
     KpTutorialTocDestination
   } from "../kp-tutorial-toc.ts";
-  import {
-    serializeKpTutorialDestinationHash,
-    serializeKpTutorialDestinationHref
-  } from "../kp-tutorial-url.ts";
+  import { serializeKpTutorialDestinationHash } from "../kp-tutorial-url.ts";
   import KpInlineMath from "./KpInlineMath.svelte";
 
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
@@ -205,6 +202,7 @@
   let attentionProjection = $state(emptyAttentionProjection);
   let disposePlayerHost: (() => void) | undefined;
   let scrollCoordinator: KpEconomicsTutorialScrollCoordinator | undefined;
+  let navigationController: KpTutorialNavigationController | undefined;
   let latestScrollProjection: KpEconomicsCoordinatedScrollProjection | undefined;
   let manualScrollRebase: KpEconomicsManualScrollRebase | undefined;
   let navigationProjectionPending = initialDeepLink.destination !== undefined;
@@ -978,11 +976,6 @@
     supplyScrubBar = shell.querySelector<KpTutorialScrubBarElement>(
       '[data-kp-tutorial-motion-controls="supply-movement"]'
     ) ?? undefined;
-    scrollToSemanticDestination(initialDeepLink);
-    shell.addEventListener(
-      KP_TUTORIAL_TOC_NAVIGATE_EVENT,
-      handleTocNavigationIntent
-    );
     player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
     for (const scrubBar of [demandScrubBar, supplyScrubBar]) {
@@ -1014,6 +1007,27 @@
     );
     scrollCoordinator.connect();
     scrollCoordinatorStatus = "connected";
+    if (tutorialToc !== undefined) {
+      navigationController = createKpTutorialNavigationController({
+        root: shell,
+        toc: tutorialToc,
+        resolve: resolveNavigationTarget,
+        restore: restoreNavigationTarget,
+        scroll: scrollToSemanticDestination,
+        onApplied: ({ destination }) => {
+          currentSemanticDestination = destination;
+          announcement = `Opened ${destination.kind} ${destination.id}.`;
+        }
+      });
+      navigationController.connect();
+    }
+    if (
+      initialDeepLink.destination === undefined ||
+      navigationController?.apply(initialDeepLink.destination, {
+        source: "initial",
+        scroll: true
+      }) !== true
+    ) scrollToSemanticDestination(initialDeepLink);
     window.addEventListener("keydown", handleTutorialKeydown);
     window.addEventListener("wheel", handleNavigationScrollIntent, {
       passive: true
@@ -1021,7 +1035,6 @@
     window.addEventListener("touchmove", handleNavigationScrollIntent, {
       passive: true
     });
-    window.addEventListener("popstate", handleHistoryNavigation);
     disposePlayerHost = mountKpAnimationCataloguePlayerHost({
       shell,
       entry,
@@ -1052,6 +1065,7 @@
 
   onDestroy(() => {
     scrollCoordinator?.disconnect();
+    navigationController?.dispose();
     cancelSupplyPlayback();
     if (attentionFrame !== undefined) cancelAnimationFrame(attentionFrame);
     attentionResizeObserver?.disconnect();
@@ -1082,11 +1096,6 @@
     window.removeEventListener("keydown", handleTutorialKeydown);
     window.removeEventListener("wheel", handleNavigationScrollIntent);
     window.removeEventListener("touchmove", handleNavigationScrollIntent);
-    window.removeEventListener("popstate", handleHistoryNavigation);
-    shell?.removeEventListener(
-      KP_TUTORIAL_TOC_NAVIGATE_EVENT,
-      handleTocNavigationIntent
-    );
     reducedMotionQuery?.removeEventListener("change", handleReducedMotionChange);
     if (previousHistoryScrollRestoration !== undefined) {
       window.history.scrollRestoration = previousHistoryScrollRestoration;
@@ -1173,47 +1182,26 @@
     navigationLockedScrollY = window.scrollY;
   }
 
-  function handleTocNavigationIntent(event: Event): void {
-    if (!(event instanceof CustomEvent) || event.defaultPrevented) return;
-    const detail = event.detail as KpTutorialTocNavigateDetail | undefined;
-    if (
-      detail === undefined ||
-      typeof detail.id !== "string" ||
-      !["section", "block", "checkpoint"].includes(detail.kind)
-    ) return;
-    event.preventDefault();
-    navigateToSemanticDestination(
-      { kind: detail.kind, id: detail.id },
-      "push"
-    );
-  }
-
-  function handleHistoryNavigation(): void {
-    navigateToSemanticHash(window.location.hash, "history");
-  }
-
   function handleNavigationScrollIntent(): void {
     if (navigationProjectionPending) navigationScrollIntent = true;
   }
 
-  function navigateToSemanticDestination(
-    destination: KpTutorialTocDestination,
-    historyMode: "push" | "history"
-  ): void {
-    navigateToSemanticHash(
-      serializeKpTutorialDestinationHash(destination),
-      historyMode
-    );
-  }
-
-  function navigateToSemanticHash(
-    hash: string,
-    historyMode: "push" | "history"
-  ): void {
+  function resolveNavigationTarget(
+    destination: KpTutorialTocDestination
+  ): KpEconomicsDemandShiftInitialDestination | undefined {
     const next = resolveKpEconomicsDemandShiftInitialDestination({
       lesson,
-      hash
+      hash: serializeKpTutorialDestinationHash(destination)
     });
+    return next.destination?.kind === destination.kind &&
+      next.destination.id === destination.id
+      ? next
+      : undefined;
+  }
+
+  function restoreNavigationTarget(
+    next: KpEconomicsDemandShiftInitialDestination
+  ): void {
     scrollCoordinator?.cancelPendingProjection();
     const session = player === undefined
       ? undefined
@@ -1228,7 +1216,6 @@
     navigationProjectionPending = true;
     navigationScrollIntent = false;
     navigationResume = createNavigationResume(next);
-    currentSemanticDestination = next.destination;
     checkpointIndex = next.checkpointIndex;
     lessonMotionProjection = next.motion;
     scrollActiveMotionBlock = next.motion.activeBlockId;
@@ -1240,23 +1227,6 @@
     supplyPlaybackDirection = "forward";
     supplyPlaybackStatus = "paused";
     seek(next.motion.demandShiftProgress);
-    if (next.destination !== undefined) {
-      tutorialToc?.setActiveDestination(next.destination);
-      announcement = `Opened ${next.destination.kind} ${next.destination.id}.`;
-      if (historyMode === "push") {
-        window.history.pushState(
-          { kpTutorialDestination: next.destination },
-          "",
-          serializeKpTutorialDestinationHref(
-            `${window.location.pathname}${window.location.search}`,
-            next.destination
-          )
-        );
-      }
-    } else {
-      announcement = "Returned to the beginning of the lesson.";
-    }
-    scrollToSemanticDestination(next);
     scrollCoordinator?.scheduleProjection();
     scheduleAttentionProjection();
   }
