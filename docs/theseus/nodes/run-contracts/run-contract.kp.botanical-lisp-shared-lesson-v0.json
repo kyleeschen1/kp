@@ -286,6 +286,36 @@
       "status": "passed",
       "scope": "s13 application types",
       "checkedAt": "2026-08-03T17:21:59.136Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-cumulative-motion-blocks.test.ts tests/kp-lisp-first-motion-block.test.ts tests/kp-lisp-lambda-application-runtime-frame.test.ts tests/kp-lisp-publication.test.ts",
+      "status": "passed",
+      "scope": "s14 cumulative projection, reducer reuse, runtime, and publication",
+      "checkedAt": "2026-08-03T17:28:38.102Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s14 application types",
+      "checkedAt": "2026-08-03T17:28:39.266Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s14 test types",
+      "checkedAt": "2026-08-03T17:28:40.239Z"
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s14 Svelte host diagnostics",
+      "checkedAt": "2026-08-03T17:28:41.200Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s14 patch hygiene",
+      "checkedAt": "2026-08-03T17:28:42.235Z"
     }
   ],
   "allowedWork": [
@@ -390,7 +420,8 @@
     {
       "id": "s14",
       "title": "Bind cumulative evaluation motion block",
-      "status": "planned"
+      "summary": "Bound both prose scrubbers to one canonical playback session and sampler. The first maps global progress 0–0.74, the second 0.74–1, their exact boundary is shared, and earlier controls remain cumulatively complete while later motion plays. Fourteen focused tests, Svelte diagnostics, app/test TypeScript, and patch hygiene pass.",
+      "status": "complete"
     },
     {
       "id": "s15",

@@ -20,7 +20,7 @@ import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
 import KpLispFunctionApplicationTutorial from "./KpLispFunctionApplicationTutorial.svelte";
 import {
-  createKpLispBindAndReconstructController
+  createKpLispLessonMotionController
 } from "./lisp-function-application-motion-controller.ts";
 import { compileKpLispFunctionApplicationPublication } from "./lisp-function-application-publication.ts";
 
@@ -57,7 +57,7 @@ export async function mountKpLispFunctionApplicationTutorial(input: {
   if (descriptor === undefined) {
     throw new Error("Lisp tutorial animation descriptor is not catalogued.");
   }
-  const motion = createKpLispBindAndReconstructController({
+  const motion = createKpLispLessonMotionController({
     root: input.root,
     animation,
     descriptor,

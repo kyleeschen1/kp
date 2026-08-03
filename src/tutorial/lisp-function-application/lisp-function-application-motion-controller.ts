@@ -18,7 +18,10 @@ import {
   type KpTutorialScrubSeekDetail
 } from "../kp-tutorial-scrub-bar-events.ts";
 import type { KpTutorialScrubBarElement } from "../kp-tutorial-scrub-bar.ts";
-import { kpLispLessonMotionBlocks } from "./lisp-function-application-motion-blocks.ts";
+import {
+  kpLispLessonMotionBlocks,
+  type KpLispLessonMotionBlockId
+} from "./lisp-function-application-motion-blocks.ts";
 
 export const kpLispReconstructedGlobalProgress = 0.74;
 
@@ -34,7 +37,23 @@ export function unprojectKpLispBindAndReconstructProgress(
   return clamp(globalProgress / kpLispReconstructedGlobalProgress);
 }
 
-export function createKpLispBindAndReconstructController(input: {
+export function projectKpLispEvaluateAndGatherProgress(
+  localProgress: number
+): number {
+  return kpLispReconstructedGlobalProgress +
+    clamp(localProgress) * (1 - kpLispReconstructedGlobalProgress);
+}
+
+export function unprojectKpLispEvaluateAndGatherProgress(
+  globalProgress: number
+): number {
+  return clamp(
+    (globalProgress - kpLispReconstructedGlobalProgress) /
+      (1 - kpLispReconstructedGlobalProgress)
+  );
+}
+
+export function createKpLispLessonMotionController(input: {
   readonly root: HTMLElement;
   readonly animation: KpAnimationAsset;
   readonly descriptor: KpEditorAnimationDescriptor;
@@ -44,21 +63,23 @@ export function createKpLispBindAndReconstructController(input: {
   const view = input.root.ownerDocument.defaultView;
   if (view === null) throw new Error("Lisp motion controls require a browser view.");
   const stage = required<HTMLElement>(input.root, "[data-kp-lisp-stage-host]");
-  const scrub = required<KpTutorialScrubBarElement>(
-    input.root,
-    '[data-kp-tutorial-motion-controls="bind-and-reconstruct"]'
-  );
-  const checkpoints = kpLispLessonMotionBlocks[0]!.checkpoints;
+  const scrubs = Object.fromEntries(kpLispLessonMotionBlocks.map(({ id }) => [
+    id,
+    required<KpTutorialScrubBarElement>(
+      input.root,
+      `[data-kp-tutorial-motion-controls="${id}"]`
+    )
+  ])) as Record<KpLispLessonMotionBlockId, KpTutorialScrubBarElement>;
   let session = createKpEditorAnimationPlaybackSession({
     descriptor: input.descriptor,
     animation: input.animation,
     progress: 0
   });
+  let activeBlockId: KpLispLessonMotionBlockId = "bind-and-reconstruct";
   let request: number | undefined;
 
   const render = (): void => {
     const global = semanticProgress(session);
-    const local = unprojectKpLispBindAndReconstructProgress(global);
     stage.innerHTML = renderKpLispBotanicalStageHtml({
       frame: sampleKpLispLambdaApplicationRuntimeFrame({
         asset: input.source,
@@ -68,16 +89,28 @@ export function createKpLispBindAndReconstructController(input: {
       reducedMotion: view.matchMedia("(prefers-reduced-motion: reduce)").matches
     });
     input.root.dataset["kpLispTutorialProgress"] = global.toFixed(4);
-    scrub.setAttribute("controls-disabled", "false");
-    scrub.setAttribute("progress", local.toFixed(4));
-    scrub.setAttribute("playback-status", session.player.playbackStatus);
-    scrub.setAttribute("direction", session.player.direction);
-    scrub.setAttribute("previous-disabled", String(local <= 0.001));
-    scrub.setAttribute("next-disabled", String(local >= 0.999));
+    input.root.dataset["kpLispTutorialActiveMotionBlock"] = activeBlockId;
+    for (const block of kpLispLessonMotionBlocks) {
+      const control = scrubs[block.id];
+      const blockLocal = localProgress(block.id, global);
+      control.setAttribute("controls-disabled", "false");
+      control.setAttribute("progress", blockLocal.toFixed(4));
+      control.setAttribute(
+        "playback-status",
+        block.id === activeBlockId ? session.player.playbackStatus : "paused"
+      );
+      control.setAttribute("direction", session.player.direction);
+      control.setAttribute("previous-disabled", String(blockLocal <= 0.001));
+      control.setAttribute("next-disabled", String(blockLocal >= 0.999));
+    }
   };
 
-  const seek = (local: number): void => {
-    const global = projectKpLispBindAndReconstructProgress(local);
+  const seek = (
+    blockId: KpLispLessonMotionBlockId,
+    local: number
+  ): void => {
+    activeBlockId = blockId;
+    const global = globalProgress(blockId, local);
     session = reduceKpEditorAnimationPlaybackSession(session, {
       type: "seek",
       progress: session.player.direction === "rewind" ? 1 - global : global
@@ -92,11 +125,12 @@ export function createKpLispBindAndReconstructController(input: {
       nowMs
     });
     const global = semanticProgress(session);
+    const bounds = blockBounds(activeBlockId);
     const boundary = session.player.direction === "forward"
-      ? global >= kpLispReconstructedGlobalProgress
-      : global <= 0;
+      ? global >= bounds.end
+      : global <= bounds.start;
     if (boundary) {
-      seek(session.player.direction === "forward" ? 1 : 0);
+      seek(activeBlockId, session.player.direction === "forward" ? 1 : 0);
       return;
     }
     render();
@@ -110,18 +144,26 @@ export function createKpLispBindAndReconstructController(input: {
     request = undefined;
   };
 
-  const owns = (event: Event): boolean =>
-    event.target instanceof Element && event.target.closest(
-      '[data-kp-tutorial-motion-controls="bind-and-reconstruct"]'
-    ) === scrub;
+  const blockForEvent = (event: Event): KpLispLessonMotionBlockId | undefined => {
+    if (!(event.target instanceof Element)) return undefined;
+    const control = event.target.closest<HTMLElement>(
+      "[data-kp-tutorial-motion-controls]"
+    );
+    const id = control?.dataset["kpTutorialMotionControls"];
+    return id === "bind-and-reconstruct" || id === "evaluate-and-gather"
+      ? id
+      : undefined;
+  };
 
   const onSeek = (event: Event): void => {
-    if (!owns(event)) return;
-    seek((event as CustomEvent<KpTutorialScrubSeekDetail>).detail.progress);
+    const blockId = blockForEvent(event);
+    if (blockId === undefined) return;
+    seek(blockId, (event as CustomEvent<KpTutorialScrubSeekDetail>).detail.progress);
   };
   const onToggle = (event: Event): void => {
-    if (!owns(event)) return;
-    if (session.player.playbackStatus === "playing") {
+    const blockId = blockForEvent(event);
+    if (blockId === undefined) return;
+    if (session.player.playbackStatus === "playing" && blockId === activeBlockId) {
       session = reduceKpEditorAnimationPlaybackSession(session, {
         type: "pause",
         nowMs: view.performance.now()
@@ -129,9 +171,12 @@ export function createKpLispBindAndReconstructController(input: {
       cancel();
       render();
     } else {
-      if (unprojectKpLispBindAndReconstructProgress(semanticProgress(session)) >= 0.999) {
-        seek(0);
+      cancel();
+      const local = localProgress(blockId, semanticProgress(session));
+      if (blockId !== activeBlockId || local >= 0.999) {
+        seek(blockId, local >= 0.999 ? 0 : local);
       }
+      activeBlockId = blockId;
       session = reduceKpEditorAnimationPlaybackSession(session, {
         type: "forward",
         nowMs: view.performance.now()
@@ -142,7 +187,12 @@ export function createKpLispBindAndReconstructController(input: {
     }
   };
   const onRewind = (event: Event): void => {
-    if (!owns(event)) return;
+    const blockId = blockForEvent(event);
+    if (blockId === undefined) return;
+    if (blockId !== activeBlockId) {
+      seek(blockId, localProgress(blockId, semanticProgress(session)));
+    }
+    activeBlockId = blockId;
     session = reduceKpEditorAnimationPlaybackSession(session, {
       type: "rewind",
       nowMs: view.performance.now()
@@ -152,14 +202,18 @@ export function createKpLispBindAndReconstructController(input: {
     request = view.requestAnimationFrame(tick);
   };
   const onNext = (event: Event): void => {
-    if (!owns(event)) return;
-    const local = unprojectKpLispBindAndReconstructProgress(semanticProgress(session));
-    seek(checkpoints.find(({ progress }) => progress > local + 0.001)?.progress ?? 1);
+    const blockId = blockForEvent(event);
+    if (blockId === undefined) return;
+    const local = localProgress(blockId, semanticProgress(session));
+    const checkpoints = kpLispLessonMotionBlocks.find(({ id }) => id === blockId)!.checkpoints;
+    seek(blockId, checkpoints.find(({ progress }) => progress > local + 0.001)?.progress ?? 1);
   };
   const onPrevious = (event: Event): void => {
-    if (!owns(event)) return;
-    const local = unprojectKpLispBindAndReconstructProgress(semanticProgress(session));
-    seek([...checkpoints].reverse().find(({ progress }) => progress < local - 0.001)?.progress ?? 0);
+    const blockId = blockForEvent(event);
+    if (blockId === undefined) return;
+    const local = localProgress(blockId, semanticProgress(session));
+    const checkpoints = kpLispLessonMotionBlocks.find(({ id }) => id === blockId)!.checkpoints;
+    seek(blockId, [...checkpoints].reverse().find(({ progress }) => progress < local - 0.001)?.progress ?? 0);
   };
 
   input.root.addEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, onSeek);
@@ -179,6 +233,33 @@ export function createKpLispBindAndReconstructController(input: {
       input.root.removeEventListener(KP_TUTORIAL_SCRUB_PREVIOUS_EVENT, onPrevious);
     }
   });
+}
+
+function globalProgress(
+  blockId: KpLispLessonMotionBlockId,
+  local: number
+): number {
+  return blockId === "evaluate-and-gather"
+    ? projectKpLispEvaluateAndGatherProgress(local)
+    : projectKpLispBindAndReconstructProgress(local);
+}
+
+function localProgress(
+  blockId: KpLispLessonMotionBlockId,
+  global: number
+): number {
+  return blockId === "evaluate-and-gather"
+    ? unprojectKpLispEvaluateAndGatherProgress(global)
+    : unprojectKpLispBindAndReconstructProgress(global);
+}
+
+function blockBounds(blockId: KpLispLessonMotionBlockId): {
+  readonly start: number;
+  readonly end: number;
+} {
+  return blockId === "evaluate-and-gather"
+    ? { start: kpLispReconstructedGlobalProgress, end: 1 }
+    : { start: 0, end: kpLispReconstructedGlobalProgress };
 }
 
 function semanticProgress(session: KpEditorAnimationPlaybackSession): number {
