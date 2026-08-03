@@ -224,6 +224,7 @@ summary {
 
 .kp-economics-tutorial__passage p {
   margin: 0 0 1.05rem;
+  text-indent: 1.35em;
 }
 
 .kp-economics-tutorial__passage p:last-child {
@@ -495,60 +496,6 @@ summary {
   opacity: 1;
 }
 
-.kp-economics-tutorial__attention-bridge {
-  position: fixed;
-  inset: 0;
-  z-index: 8;
-  overflow: visible;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 160ms ease;
-}
-
-.kp-economics-tutorial__attention-bridge--visible {
-  opacity: 1;
-}
-
-.kp-economics-tutorial__attention-gutter,
-.kp-economics-tutorial__attention-local {
-  fill: none;
-  stroke: #7096a1;
-  stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
-}
-
-.kp-economics-tutorial__attention-gutter {
-  stroke-width: 1.35;
-  opacity: 0.7;
-}
-
-.kp-economics-tutorial__attention-local {
-  stroke-width: 1.65;
-  opacity: 0.9;
-}
-
-.kp-economics-tutorial__attention-bridge marker path {
-  fill: #587e89;
-}
-
-.kp-economics-tutorial__attention-source {
-  fill: #7096a1;
-  stroke: #f4f1e9;
-  stroke-width: 1.5;
-}
-
-.kp-economics-tutorial__attention-relay {
-  fill: #fffdf8;
-  stroke: #587e89;
-  stroke-width: 1.5;
-}
-
-.kp-economics-tutorial__attention-target {
-  fill: none;
-  stroke: rgb(88 126 137 / 0.58);
-  stroke-width: 1.5;
-}
-
 .kp-economics-tutorial__player-host .editor-graph-stage__economics-explanation p {
   display: none;
 }
@@ -687,10 +634,6 @@ summary {
 }
 
 @media (max-width: 760px) {
-  .kp-economics-tutorial__attention-bridge {
-    display: none;
-  }
-
   .kp-economics-tutorial__layout {
     display: block;
     width: 100%;
@@ -806,7 +749,6 @@ summary {
 @media (prefers-reduced-motion: reduce) {
   .kp-economics-tutorial__passage,
   .kp-economics-tutorial__stage,
-  .kp-economics-tutorial__attention-bridge,
   .kp-economics-tutorial__spotlight,
   .kp-economics-tutorial__player-host
     .editor-graph-stage__economics-curve,

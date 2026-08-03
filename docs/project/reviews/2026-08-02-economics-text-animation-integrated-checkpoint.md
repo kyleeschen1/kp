@@ -26,11 +26,11 @@ The route provides:
 - a stable compact phone stage with optional temporary expansion.
 
 The salience-transmission revision adds one economics-local focus target and
-context profile per checkpoint. On wide screens, the active passage connects
-through the gutter to a graph-local curve, point, or equation landing. A subtle
-veil and semantic attenuation let incidental material recede without hiding
-the context needed for the claim. Phone layouts omit the connector and retain
-the graph-local focus treatment.
+context profile per checkpoint. The first human review rejected the cross-page
+connector, so it has been removed on every viewport. A subtle graph-local veil
+and semantic attenuation still let incidental material recede without hiding
+the context needed for the claim. Lesson body paragraphs now begin with a
+first-line indent.
 
 ## Review questions
 
@@ -45,8 +45,12 @@ the graph-local focus treatment.
 5. Does the phone dock preserve both graph legibility and reading space?
 6. What economics-local revision, if any, is necessary before using generated
    solve-x as the structurally different second caller?
-7. Do the connector landing and focus treatment always answer “where should I
-   look?” without crossing labels, dominating the graph, or hiding context?
+7. Does the graph-local focus treatment answer “where should I look?” without
+   dominating the graph or hiding context?
+8. Should the spotlight remain graph-local, briefly expand into a page-wide
+   veil with selected apertures, or use a quieter hybrid treatment?
+9. Should the stage remain a distinct card, or share the page background as a
+   contiguous reading-and-animation plane?
 
 ## Preservation and promotion boundary
 

@@ -4,9 +4,10 @@ Status: active-supporting
 Last Updated: 2026-08-02
 Current Next Action: Human-review the integrated economics tutorial at
 `/tutorials/economics/demand-shift/` for reading cadence, stage coordination,
-semantic controls, connector landings, focus attenuation, and the compact phone
-dock. Do not generalize the local lesson compiler or salience projection, or
-begin the solve-x caller, before this checkpoint is approved.
+semantic controls, graph-local focus attenuation, spotlight scope, stage/page
+continuity, and the compact phone dock. The rejected cross-page connector is
+removed. Do not generalize the local lesson compiler or salience projection,
+or begin the solve-x caller, before this checkpoint is approved.
 
 ## Goal
 
@@ -58,9 +59,10 @@ The delivered exemplar includes:
 - a stable compact phone dock with temporary expansion;
 - inline KaTeX, quiet equations until verification, and the existing Review
   capture dock;
-- economics-local focus profiles, semantic curve/point/equation targets, a
-  wide-screen passage-to-stage relay, and graph-local attenuation;
-- a phone fallback that retains focus but removes the cross-layout connector;
+- economics-local focus profiles, semantic curve/point/equation targets,
+  graph-local attenuation, and a graph-local spotlight;
+- no cross-layout connector on wide or phone layouts after human rejection;
+- conventional first-line indents for lesson body paragraphs;
 - economics-local rollback and preservation boundaries.
 
 ## Accepted Product Boundary
@@ -107,10 +109,12 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
   and fine-grained control?
 - Does passage selection prepare the right static state without surprising
   motion?
-- Do the connector and attenuation make the target unmistakable without
-  obscuring causally necessary context?
-- Are the demand, supply, equilibrium, and equation landings semantically
-  distinct, or does any pointer compete with a label?
+- Does attenuation make the target unmistakable without obscuring causally
+  necessary context?
+- Should spotlighting stay graph-local, become a brief page-wide veil with
+  selected apertures, or use a hybrid?
+- Should the animation stage remain a card or become contiguous with the page
+  background?
 - Is the phone dock large enough to read while leaving enough room for prose?
 - Should any local cadence, emphasis, or control detail change before solve-x
   pressures the boundary?

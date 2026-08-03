@@ -59,7 +59,11 @@ test("approved economics prose and semantic controls form one persistent tutoria
   await expect(root.locator("[data-kp-economics-tutorial-spotlight]"))
     .toHaveAttribute("data-kp-attention-spotlight-visible", "true");
   await expect(root.locator("[data-kp-economics-tutorial-attention-bridge]"))
-    .toHaveAttribute("data-kp-attention-bridge-visible", "true");
+    .toHaveCount(0);
+  await expect.poll(() => root.locator(".kp-economics-tutorial__passage p")
+    .first()
+    .evaluate((element) => Number.parseFloat(getComputedStyle(element).textIndent)))
+    .toBeGreaterThan(0);
   await mkdir(evidenceDirectory, { recursive: true });
   await page.screenshot({
     path: `${evidenceDirectory}/wide-start.png`,
@@ -136,7 +140,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "supply"
   );
   await expect(root.locator("[data-kp-economics-tutorial-attention-bridge]"))
-    .toHaveAttribute("data-kp-attention-bridge-visible", "true");
+    .toHaveCount(0);
   await expect.poll(() => graph.locator("[data-kp-economics-supply-line]")
     .evaluate((element) => getComputedStyle(element).filter))
     .toContain("opacity(1)");
@@ -193,7 +197,7 @@ test("phone tutorial keeps a stable compact stage dock with optional expansion",
     "true"
   );
   await expect(root.locator("[data-kp-economics-tutorial-attention-bridge]"))
-    .toHaveAttribute("data-kp-attention-bridge-visible", "false");
+    .toHaveCount(0);
   await expect(root.locator("[data-kp-economics-tutorial-spotlight]"))
     .toHaveAttribute("data-kp-attention-spotlight-visible", "true");
   const compact = await stage.boundingBox();

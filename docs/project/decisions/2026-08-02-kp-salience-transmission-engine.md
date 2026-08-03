@@ -22,20 +22,28 @@ Every meaningful lesson checkpoint should eventually answer three questions:
 
 The economics demand-shift tutorial is the discovery exemplar. Its local
 checkpoint projection now declares a focus profile, semantic DOM target, curve
-anchor when necessary, and spotlight radius. On wide screens, the active prose
-connects through a restrained gutter relay to a graph-local pointer. Semantic
-attenuation and a subtle veil let incidental material recede while preserving
-axes and causally necessary curves. On phones, the physical connector is
-omitted; the graph-local salience treatment remains.
+anchor when necessary, and spotlight radius. Semantic attenuation and a subtle
+veil let incidental material recede while preserving axes and causally
+necessary curves.
 
 This treatment is presentation authority only. It does not change economics
 truth, graph geometry, runtime frames, playback, or the canonical prose source.
 Surrounding prose remains fully readable and is never dimmed or blurred.
+Lesson body paragraphs use a conventional first-line indent.
+
+## Human review revision
+
+The first integrated review rejected the prose-to-stage connector as visually
+unhelpful. It is removed on every viewport rather than retained as a hidden or
+phone-only branch. The attention experiment continues through graph-local
+attenuation and spotlighting. A broader page veil and a stage that shares the
+page background remain design candidates, not accepted behavior; the user
+currently leans toward a contiguous page plane.
 
 ## Discovery boundary
 
 This decision records the product principle without enforcing one universal
-salience schema. The connector geometry, attenuation levels, target selectors,
+salience schema. The attenuation levels, spotlight geometry, target selectors,
 and responsive behavior remain economics-local until the integrated human
 checkpoint passes. Generated solve-x remains the structurally different second
 caller. Only the focus concepts both callers actually require may be promoted.
@@ -51,8 +59,9 @@ and framework-neutral runtime remain intact.
 - necessary context remains visible rather than collapsing into a blackout;
 - demand, supply, equilibrium, comparison, and equation checkpoints land on
   distinct meaningful targets;
-- the connector tracks scrolling, sticky layout, resizing, font settlement,
-  direct seek, and live animation without controlling playback;
+- no line or pointer crosses the prose-stage boundary;
+- the graph-local spotlight tracks resizing, font settlement, direct seek, and
+  live animation without controlling playback;
 - reduced-motion mode removes presentation transitions;
-- the phone dock retains focus without a cross-layout connector;
+- the phone dock retains graph-local focus;
 - no shared schema or second-caller rollout occurs before human approval.
