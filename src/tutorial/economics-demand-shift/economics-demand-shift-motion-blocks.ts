@@ -2,6 +2,10 @@ import {
   projectKpEconomicsStageComposition,
   type KpEconomicsStageCompositionProjection
 } from "./economics-demand-shift-stage-composition.ts";
+import {
+  projectKpEconomicsVerificationReveal,
+  type KpEconomicsVerificationRevealProjection
+} from "./economics-demand-shift-verification.ts";
 
 export type KpEconomicsMotionBlockId =
   | "demand-shift"
@@ -70,6 +74,7 @@ export interface KpEconomicsLessonMotionProjection {
   readonly supplyMovementProgress: number;
   readonly scene: KpEconomicsMotionSceneState;
   readonly composition: KpEconomicsStageCompositionProjection;
+  readonly verification: KpEconomicsVerificationRevealProjection;
 }
 
 export const kpEconomicsMotionBlocks: readonly KpEconomicsMotionBlock[] =
@@ -160,6 +165,9 @@ export function projectKpEconomicsLessonMotion(input: {
     demandShiftProgress,
     supplyMovementProgress,
     composition: projectKpEconomicsStageComposition(supplyMovementProgress),
+    verification: projectKpEconomicsVerificationReveal(
+      supplyMovementProgress
+    ),
     scene: supplyMovementProgress >= 1
       ? scene("shifted", "comparison-verified")
       : supplyMovementProgress > 0

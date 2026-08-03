@@ -25,6 +25,9 @@ import KpEconomicsDemandShiftTutorial from
 import {
   compileKpEconomicsDemandShiftLesson
 } from "./economics-demand-shift-lesson-compiler.ts";
+import {
+  renderKpEconomicsVerificationSurface
+} from "./economics-demand-shift-verification-surface.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 
 export async function mountKpEconomicsDemandShiftTutorial(input: {
@@ -56,6 +59,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       animation: prepared.animation,
       hostability: prepared.hostability,
       lesson: compileKpEconomicsDemandShiftLesson(lessonMarkdown),
+      verificationSurfaceHtml: renderKpEconomicsVerificationSurface(),
       initialDemandIntercept:
         prepared.economicsParameters?.demandInterceptAfter ?? 18
     }

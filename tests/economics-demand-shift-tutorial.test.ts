@@ -31,6 +31,12 @@ import {
   projectKpEconomicsStageComposition
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-stage-composition.ts";
 import {
+  projectKpEconomicsVerificationReveal
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-verification.ts";
+import {
+  renderKpEconomicsVerificationSurface
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-verification-surface.ts";
+import {
   isKpEconomicsDemandShiftTutorialRoute,
   kpEconomicsDemandShiftTutorialPath
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-route.ts";
@@ -257,6 +263,45 @@ test("economics stage composition has stable reversible merge and split endpoint
     projectKpEconomicsStageComposition(progress).progress
   );
   assert.deepEqual(reverseSamples, forwardSamples);
+});
+
+test("verification math is static KaTeX HTML with synchronized semantic groups", () => {
+  const html = renderKpEconomicsVerificationSurface();
+
+  assert.match(html, /data-kp-math-renderer="static-katex-html"/);
+  assert.match(html, /data-kp-economics-verification-group="supply-rule"/);
+  assert.match(html, /data-kp-economics-verification-group="equilibria"/);
+  assert.match(html, /data-kp-economics-verification-group="changes"/);
+  assert.match(html, /data-kp-economics-verification-targets="initial-equilibrium settled-equilibrium"/);
+  assert.match(html, /class="katex"/);
+  assert.match(html, /<math/);
+  assert.doesNotMatch(html, /<script/);
+
+  assert.deepEqual(projectKpEconomicsVerificationReveal(0.58), {
+    phase: "hidden",
+    groups: { "supply-rule": 0, equilibria: 0, changes: 0 }
+  });
+  const supplyMidpoint = projectKpEconomicsVerificationReveal(0.64);
+  assert.equal(supplyMidpoint.phase, "supply-rule");
+  assert.equal(Math.abs(supplyMidpoint.groups["supply-rule"] - 0.5) < 1e-12, true);
+  assert.equal(supplyMidpoint.groups.equilibria, 0);
+  assert.equal(supplyMidpoint.groups.changes, 0);
+
+  const equilibriaMidpoint = projectKpEconomicsVerificationReveal(0.79);
+  assert.equal(equilibriaMidpoint.phase, "equilibria");
+  assert.equal(equilibriaMidpoint.groups["supply-rule"], 1);
+  assert.equal(Math.abs(equilibriaMidpoint.groups.equilibria - 0.5) < 1e-12, true);
+  assert.equal(equilibriaMidpoint.groups.changes, 0);
+
+  const changesMidpoint = projectKpEconomicsVerificationReveal(0.93);
+  assert.equal(changesMidpoint.phase, "changes");
+  assert.equal(changesMidpoint.groups["supply-rule"], 1);
+  assert.equal(changesMidpoint.groups.equilibria, 1);
+  assert.equal(Math.abs(changesMidpoint.groups.changes - 0.5) < 1e-12, true);
+  assert.deepEqual(projectKpEconomicsVerificationReveal(1), {
+    phase: "verified",
+    groups: { "supply-rule": 1, equilibria: 1, changes: 1 }
+  });
 });
 
 test("viewport corridors preserve authored holds in both scroll directions", () => {

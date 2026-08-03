@@ -290,6 +290,34 @@
       "scope": "s14",
       "checkedAt": "2026-08-03T07:06:22.870Z",
       "notes": "Active aperture slice diff has no whitespace errors."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-08-03T07:13:31.763Z",
+      "notes": "Nineteen focused tests pass, including static KaTeX/MathML markup, three semantic target groups, exact progressive reveal checkpoints, cumulative composition, and renderer determinism."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-08-03T07:13:32.874Z",
+      "notes": "Six Chromium exemplar checks pass; five pre-rendered KaTeX expressions reveal in complete groups and the exact E0/E1 graph targets synchronize with the equilibria group."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-08-03T07:13:33.770Z",
+      "notes": "Svelte and TypeScript diagnostics pass with zero errors and warnings after separating the pure reveal projection from the static KaTeX renderer."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-08-03T07:13:34.675Z",
+      "notes": "Active verification-reveal diff has no whitespace errors."
     }
   ],
   "allowedWork": [
@@ -400,7 +428,8 @@
     {
       "id": "s15",
       "title": "Reveal-verification-math",
-      "status": "planned"
+      "summary": "Added a framework-neutral static KaTeX/MathML renderer for five exact comparison expressions, kept its pure reveal projection free of renderer dependencies, revealed three complete semantic groups, and synchronized the unchanged-supply and E0/E1 graph targets without typing effects.",
+      "status": "complete"
     },
     {
       "id": "s16",

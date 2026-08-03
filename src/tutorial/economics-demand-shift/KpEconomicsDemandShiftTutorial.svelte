@@ -112,7 +112,8 @@
     animation,
     hostability,
     initialDemandIntercept,
-    lesson
+    lesson,
+    verificationSurfaceHtml
   }: {
     readonly entry: KpAnimationCatalogueEntry;
     readonly descriptor: KpEditorAnimationDescriptor;
@@ -121,6 +122,7 @@
     readonly hostability: KpAnimationCatalogueSurfaceHostability;
     readonly initialDemandIntercept: number;
     readonly lesson: KpEconomicsDemandShiftLesson;
+    readonly verificationSurfaceHtml: string;
   } = $props();
 
   const initial = untrack(() => ({
@@ -238,6 +240,15 @@
       (verificationStageSurface.rect.inline - verificationStageSlot.rect.inline) /
         verificationStageSlot.rect.inlineSize
     )}`
+  );
+  let verificationReveal = $derived(lessonMotionProjection.verification);
+  let verificationRevealStyle = $derived(
+    `--kp-verification-supply-rule:${verificationReveal.groups["supply-rule"].toFixed(3)};` +
+    `--kp-verification-supply-rule-clip:${percent(1 - verificationReveal.groups["supply-rule"])};` +
+    `--kp-verification-equilibria:${verificationReveal.groups.equilibria.toFixed(3)};` +
+    `--kp-verification-equilibria-clip:${percent(1 - verificationReveal.groups.equilibria)};` +
+    `--kp-verification-changes:${verificationReveal.groups.changes.toFixed(3)};` +
+    `--kp-verification-changes-clip:${percent(1 - verificationReveal.groups.changes)}`
   );
   let supplyInterpretationPhase = $derived(
     supplyMovementProgress <= 0.001
@@ -1026,7 +1037,8 @@
   data-kp-economics-tutorial-supply-interpretation={supplyInterpretationPhase}
   data-kp-economics-stage-composition-phase={stageComposition.phase}
   data-kp-economics-stage-composition-progress={stageComposition.progress.toFixed(3)}
-  style={`${supplyInterpretationStyle};${stageCompositionStyle}`}
+  data-kp-economics-verification-reveal={verificationReveal.phase}
+  style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle}`}
 >
   <h1 class="kp-economics-tutorial__visually-hidden">
     Economics demand-shift tutorial
@@ -1190,7 +1202,7 @@
               data-kp-economics-stage-surface="equilibrium-verification"
               data-kp-economics-stage-slot="verification-slot"
               data-kp-economics-stage-surface-lifecycle={verificationStageSurface.lifecycle}
-            ></div>
+            >{@html verificationSurfaceHtml}</div>
           </div>
           <div
             class="kp-economics-tutorial__spotlight"

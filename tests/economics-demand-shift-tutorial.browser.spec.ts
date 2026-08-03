@@ -801,6 +801,23 @@ test("verification surface enters and exits without changing outer stage geometr
   expect(splitGeometry.aperture.inlineSize).toBeCloseTo(0.28, 2);
   expect(splitGeometry.aperture.blockSize).toBeCloseTo(0.72, 2);
 
+  await supplyScrubber.fill("0.93");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-verification-reveal",
+    "changes"
+  );
+  await expect(host.locator("[data-kp-economics-verification-group]"))
+    .toHaveCount(3);
+  await expect(host.locator("[data-kp-math-renderer='static-katex-html'] .katex"))
+    .toHaveCount(5);
+  await expect(host.locator(
+    '[data-kp-economics-verification-group="changes"]'
+  )).toHaveCSS("opacity", "0.5");
+  await expect.poll(() => host.locator(
+    '[data-kp-economics-supply-movement-target="settled"]'
+  ).evaluate((element) => Number(getComputedStyle(element).opacity)))
+    .toBeCloseTo(1, 2);
+
   await supplyScrubber.fill("0.58");
   await expect(root).toHaveAttribute(
     "data-kp-economics-stage-composition-phase",

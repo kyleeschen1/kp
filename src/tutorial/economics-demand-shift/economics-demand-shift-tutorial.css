@@ -439,6 +439,67 @@ summary {
   transform-origin: center;
 }
 
+.kp-economics-verification {
+  display: grid;
+  gap: 0.85rem;
+  align-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--kp-tutorial-ink);
+}
+
+.kp-economics-verification__group {
+  display: grid;
+  gap: 0.28rem;
+  margin: 0;
+  clip-path: inset(0 var(--kp-verification-group-clip) 0 0);
+  opacity: var(--kp-verification-group-progress);
+}
+
+.kp-economics-verification__group[data-kp-economics-verification-group="supply-rule"] {
+  --kp-verification-group-progress: var(--kp-verification-supply-rule);
+  --kp-verification-group-clip: var(--kp-verification-supply-rule-clip);
+}
+
+.kp-economics-verification__group[data-kp-economics-verification-group="equilibria"] {
+  --kp-verification-group-progress: var(--kp-verification-equilibria);
+  --kp-verification-group-clip: var(--kp-verification-equilibria-clip);
+}
+
+.kp-economics-verification__group[data-kp-economics-verification-group="changes"] {
+  --kp-verification-group-progress: var(--kp-verification-changes);
+  --kp-verification-group-clip: var(--kp-verification-changes-clip);
+}
+
+.kp-economics-verification__group p {
+  margin: 0;
+  color: var(--kp-tutorial-muted);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.15;
+  text-indent: 0;
+  text-transform: uppercase;
+}
+
+.kp-economics-verification__math {
+  display: grid;
+  gap: 0.18rem;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.kp-economics-verification__math > span {
+  display: block;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.kp-economics-verification__math .katex {
+  font-size: 1em;
+}
+
 .kp-economics-tutorial__player-host .editor-animation-player__controls {
   display: none;
 }
@@ -539,13 +600,17 @@ summary {
 
 .kp-economics-tutorial__player-host
   .editor-graph-stage__economics-supply-movement-target {
-  opacity: var(--kp-tutorial-supply-comparison);
+  opacity: var(--kp-verification-equilibria);
 }
 
 .kp-economics-tutorial[data-kp-economics-tutorial-scroll-active-block="supply-movement"]
   .kp-economics-tutorial__player-host
   [data-kp-economics-supply-line] {
-  stroke-width: calc(3.25px + 1.1px * var(--kp-tutorial-supply-emphasis));
+  stroke-width: calc(
+    3.25px +
+    1.1px * var(--kp-tutorial-supply-emphasis) +
+    0.65px * var(--kp-verification-supply-rule)
+  );
 }
 
 .kp-economics-tutorial__player-host
