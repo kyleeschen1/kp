@@ -156,6 +156,24 @@
       "status": "passed",
       "scope": "s07 test inference",
       "checkedAt": "2026-08-03T16:55:32.161Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-botanical-presentation-plan.test.ts tests/kp-lisp-botanical-stage-renderer.test.ts tests/kp-lisp-lambda-application-renderer.test.ts",
+      "status": "passed",
+      "scope": "s08 eleven botanical projection and settlement tests",
+      "checkedAt": "2026-08-03T16:58:26.254Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s08 application types",
+      "checkedAt": "2026-08-03T16:58:27.519Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s08 test inference",
+      "checkedAt": "2026-08-03T16:58:28.506Z"
     }
   ],
   "allowedWork": [
@@ -224,7 +242,8 @@
     {
       "id": "s08",
       "title": "Render reversible botanical animation",
-      "status": "planned"
+      "summary": "Rendered the local botanical plan as one framework-neutral stage with flexible enclosure, branches, binding root, leaf, buds, fruit, and three material paths. Absolute progress gives exact seek/rewind, reduced motion snaps to checkpoints, and native code plus nonvisual truth remain authoritative. Eleven focused tests and app/test TypeScript checks pass.",
+      "status": "complete"
     },
     {
       "id": "s09",
