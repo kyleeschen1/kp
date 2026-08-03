@@ -535,6 +535,34 @@
       "scope": "s24",
       "checkedAt": "2026-08-03T08:04:59.132Z",
       "notes": "Wide exemplar tuning has no whitespace errors."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-08-03T08:11:04.395Z",
+      "notes": "Eleven Chromium checks pass across wide, manual, deep-link/history, reduced-motion, JavaScript-disabled static publication, pre-upgrade geometry, and phone-final-state projections."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-08-03T08:11:05.574Z",
+      "notes": "Twenty-four focused economics tutorial and runtime tests pass."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-08-03T08:11:06.521Z",
+      "notes": "Svelte diagnostics pass with zero errors and warnings after navigation-intent ownership hardening."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-08-03T08:11:07.439Z",
+      "notes": "Responsive and fallback slice has no whitespace errors."
     }
   ],
   "allowedWork": [
@@ -705,7 +733,8 @@
     {
       "id": "s25",
       "title": "Complete-responsive-accessible-fallbacks",
-      "status": "planned"
+      "summary": "Completed the responsive/accessibility fallback matrix: reduced motion suppresses automatic seeking but preserves exact manual steps; static light DOM remains useful with JavaScript disabled; phone omits the pointer and verification aperture while preserving its dock, prose cadence, full graph, and exact deep-link state. Navigation lock now ignores layout settlement until explicit wheel, touch, or scroll-key intent.",
+      "status": "complete"
     },
     {
       "id": "s26",

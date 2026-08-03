@@ -209,6 +209,7 @@
   let manualScrollRebase: KpEconomicsManualScrollRebase | undefined;
   let navigationProjectionPending = initialDeepLink.destination !== undefined;
   let navigationLockedScrollY: number | undefined;
+  let navigationScrollIntent = false;
   let navigationResume = initialDeepLink.destination === undefined
     ? undefined
     : createNavigationResume(initialDeepLink);
@@ -801,9 +802,14 @@
   ): void {
     latestScrollProjection = projection;
     const movedFromNavigation = navigationProjectionPending &&
+      navigationScrollIntent &&
       navigationLockedScrollY !== undefined &&
       Math.abs(projection.scrollY - navigationLockedScrollY) > 0.5;
     if (navigationProjectionPending && !movedFromNavigation) {
+      // Font, stage, and responsive layout settlement can move scrollY without
+      // reader intent. Follow that geometry while retaining the exact semantic
+      // jump; only a wheel, touch, or scroll key may hand ownership back.
+      navigationLockedScrollY = projection.scrollY;
       const block = projection.blocks.find(
         ({ id }) => id === navigationResume?.blockId
       );
@@ -818,6 +824,7 @@
     if (movedFromNavigation) {
       navigationProjectionPending = false;
       navigationLockedScrollY = undefined;
+      navigationScrollIntent = false;
       navigationResume = undefined;
     }
     scrollActiveMotionBlock = projection.activeBlockId ?? "";
@@ -936,6 +943,11 @@
 
   function handleTutorialKeydown(event: KeyboardEvent): void {
     if (
+      navigationProjectionPending &&
+      ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "]
+        .includes(event.key)
+    ) navigationScrollIntent = true;
+    if (
       player !== undefined &&
       event.target instanceof Node &&
       player.contains(event.target) &&
@@ -1008,6 +1020,12 @@
     scrollCoordinator.connect();
     scrollCoordinatorStatus = "connected";
     window.addEventListener("keydown", handleTutorialKeydown);
+    window.addEventListener("wheel", handleNavigationScrollIntent, {
+      passive: true
+    });
+    window.addEventListener("touchmove", handleNavigationScrollIntent, {
+      passive: true
+    });
     window.addEventListener("popstate", handleHistoryNavigation);
     disposePlayerHost = mountKpAnimationCataloguePlayerHost({
       shell,
@@ -1067,6 +1085,8 @@
       );
     }
     window.removeEventListener("keydown", handleTutorialKeydown);
+    window.removeEventListener("wheel", handleNavigationScrollIntent);
+    window.removeEventListener("touchmove", handleNavigationScrollIntent);
     window.removeEventListener("popstate", handleHistoryNavigation);
     shell?.removeEventListener(
       KP_TUTORIAL_TOC_NAVIGATE_EVENT,
@@ -1177,6 +1197,10 @@
     navigateToSemanticHash(window.location.hash, "history");
   }
 
+  function handleNavigationScrollIntent(): void {
+    if (navigationProjectionPending) navigationScrollIntent = true;
+  }
+
   function navigateToSemanticDestination(
     destination: KpTutorialTocDestination,
     historyMode: "push" | "history"
@@ -1207,6 +1231,7 @@
     }
     cancelSupplyPlayback();
     navigationProjectionPending = true;
+    navigationScrollIntent = false;
     navigationResume = createNavigationResume(next);
     currentSemanticDestination = next.destination;
     checkpointIndex = next.checkpointIndex;

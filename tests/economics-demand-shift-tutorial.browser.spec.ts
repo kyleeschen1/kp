@@ -1,10 +1,13 @@
-import { mkdir } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 
 import { expect, test } from "@playwright/test";
 
 import {
   renderKpTutorialScrubBar
 } from "../src/tutorial/kp-tutorial-scrub-bar-renderer.ts";
+import {
+  compileKpEconomicsDemandShiftPublication
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
 
 const route = "/tutorials/economics/demand-shift/";
 const animationId =
@@ -614,7 +617,7 @@ test("manual demand scrub rebases into scroll without a jump", async ({
     await player.getAttribute("data-kp-editor-animation-progress")
   );
 
-  await page.evaluate(() => window.scrollBy(0, 1));
+  await page.mouse.wheel(0, 1);
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-motion-owner",
     "scroll"
@@ -1243,6 +1246,94 @@ test("reduced-motion readers retain the text-free divider without automatic seek
   expect(await motionCue.evaluate((element) =>
     element.querySelector(".heading")
   )).toBeNull();
+  await motionCue.getByRole("link", {
+    name: "Next semantic checkpoint"
+  }).click();
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-demand-progress",
+    "0.720"
+  );
+  await motionCue.getByRole("link", {
+    name: "Previous semantic checkpoint"
+  }).click();
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-demand-progress",
+    "0.000"
+  );
+});
+
+test("static publication controls remain useful with JavaScript disabled", async ({
+  browser
+}) => {
+  const markdown = await readFile(
+    "content/lessons/economics-demand-shift.md",
+    "utf8"
+  );
+  const publication = compileKpEconomicsDemandShiftPublication(markdown);
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 820, height: 700 }
+  });
+  const page = await context.newPage();
+  try {
+    await page.setContent(`<!doctype html>
+      <html>
+        <head>
+          <link rel="stylesheet" href="http://127.0.0.1:4173/src/tutorial/kp-tutorial-scrub-bar.css">
+          <link rel="stylesheet" href="http://127.0.0.1:4173/src/tutorial/economics-demand-shift/economics-demand-shift-tutorial.css">
+          <style>
+            body { width: 780px; padding: 20px; }
+            .kp-economics-tutorial__layout { display: block; width: 740px; padding: 0; }
+          </style>
+        </head>
+        <body>
+          <main class="kp-economics-tutorial">
+            <article class="kp-economics-tutorial__prose">
+              ${publication.tocHtml}
+              <div class="kp-economics-tutorial__passage kp-economics-tutorial__motion-block">
+                ${publication.motionScrubBarHtml["demand-shift"]}
+              </div>
+              <span id="kp-checkpoint-shift-ready">Before the shift</span>
+              <span id="kp-checkpoint-shift-handoff">Equilibrium handoff</span>
+              <span id="kp-checkpoint-shift-settled">New equilibrium</span>
+            </article>
+          </main>
+        </body>
+      </html>`);
+    const toc = page.locator("kp-tutorial-toc");
+    const scrub = page.locator("kp-tutorial-scrub-bar");
+    await expect(toc).toHaveAttribute(
+      "data-kp-tutorial-toc-enhancement",
+      "pending"
+    );
+    await expect(scrub).toHaveAttribute(
+      "data-kp-tutorial-scrub-enhancement",
+      "pending"
+    );
+    await expect(toc.getByRole("navigation", { name: "In this lesson" }))
+      .toBeVisible();
+    await expect(scrub.getByRole("button", { name: "Play" })).toBeDisabled();
+    await expect(scrub.getByRole("slider", {
+      name: "Scrub animation progress"
+    })).toBeDisabled();
+    await expect(scrub.getByRole("link", {
+      name: "Next semantic checkpoint"
+    })).toHaveAttribute(
+      "href",
+      "/tutorials/economics/demand-shift/#kp-checkpoint-shift-handoff"
+    );
+    const geometry = await scrub.boundingBox();
+    expect(geometry).not.toBeNull();
+    expect(geometry!.width).toBeGreaterThan(600);
+    expect(geometry!.height).toBeGreaterThan(30);
+    await mkdir(evidenceDirectory, { recursive: true });
+    await page.screenshot({
+      path: `${evidenceDirectory}/no-js-controls.png`,
+      fullPage: false
+    });
+  } finally {
+    await context.close();
+  }
 });
 
 test("static scrubber keeps native links and geometry when it upgrades", async ({
@@ -1392,6 +1483,29 @@ test("phone tutorial keeps a stable compact stage dock with optional expansion",
   }).click();
   await expect.poll(async () => (await stage.boundingBox())?.height ?? 0)
     .toBeLessThan(350);
+
+  await page.goto(`${route}#kp-checkpoint-movement-verified`);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-demand-progress",
+    "1.000"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "1.000"
+  );
+  await expect(root.locator("[data-kp-economics-stage-aperture]"))
+    .toBeHidden();
+  const graphSurface = root.locator(
+    ".editor-animation-player__surface--graph"
+  );
+  const [phoneStageBox, phoneGraphBox] = await Promise.all([
+    root.locator("[data-kp-economics-stage='economics-stage']").boundingBox(),
+    graphSurface.boundingBox()
+  ]);
+  expect(phoneStageBox).not.toBeNull();
+  expect(phoneGraphBox).not.toBeNull();
+  expect(phoneGraphBox!.width).toBeCloseTo(phoneStageBox!.width, 0);
+  expect(phoneGraphBox!.height).toBeCloseTo(phoneStageBox!.height, 0);
 
   await mkdir(evidenceDirectory, { recursive: true });
   await page.screenshot({
