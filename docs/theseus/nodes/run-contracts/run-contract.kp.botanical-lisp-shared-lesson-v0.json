@@ -316,6 +316,43 @@
       "status": "passed",
       "scope": "s14 patch hygiene",
       "checkedAt": "2026-08-03T17:28:42.235Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-salience-projection.test.ts tests/kp-lisp-botanical-stage-renderer.test.ts tests/kp-lisp-cumulative-motion-blocks.test.ts tests/kp-lisp-first-motion-block.test.ts",
+      "status": "passed",
+      "scope": "s15 semantic target, context, passage, native-code, and motion preservation",
+      "checkedAt": "2026-08-03T17:35:06.644Z"
+    },
+    {
+      "command": "npm run visual:botanical-lisp-asset",
+      "status": "passed",
+      "scope": "s15 five representative salience captures",
+      "checkedAt": "2026-08-03T17:35:07.818Z",
+      "notes": "Application, binding, substitution, evaluation, and result remain legible; native code remains authoritative and botanical context stays visible."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s15 application types",
+      "checkedAt": "2026-08-03T17:35:08.842Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s15 test types",
+      "checkedAt": "2026-08-03T17:35:09.929Z"
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s15 Svelte host diagnostics",
+      "checkedAt": "2026-08-03T17:35:10.858Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s15 patch hygiene",
+      "checkedAt": "2026-08-03T17:35:11.814Z"
     }
   ],
   "allowedWork": [
@@ -426,7 +463,8 @@
     {
       "id": "s15",
       "title": "Add Lisp salience projection",
-      "status": "planned"
+      "summary": "Added a Lisp-local salience projection derived from canonical runtime selectors. It marks stage target/context/attenuated nodes and material paths, applies stable before/after passage treatment without mutating prose, and preserves native code. Fourteen focused tests, five representative captures, Svelte diagnostics, app/test TypeScript, and patch hygiene pass.",
+      "status": "complete"
     },
     {
       "id": "s16",

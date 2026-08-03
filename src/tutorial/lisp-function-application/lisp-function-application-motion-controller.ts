@@ -22,6 +22,7 @@ import {
   kpLispLessonMotionBlocks,
   type KpLispLessonMotionBlockId
 } from "./lisp-function-application-motion-blocks.ts";
+import { projectKpLispLessonSalience } from "./lisp-function-application-salience.ts";
 
 export const kpLispReconstructedGlobalProgress = 0.74;
 
@@ -80,16 +81,33 @@ export function createKpLispLessonMotionController(input: {
 
   const render = (): void => {
     const global = semanticProgress(session);
-    stage.innerHTML = renderKpLispBotanicalStageHtml({
-      frame: sampleKpLispLambdaApplicationRuntimeFrame({
-        asset: input.source,
-        progress: global
-      }),
+    const frame = sampleKpLispLambdaApplicationRuntimeFrame({
+      asset: input.source,
+      progress: global
+    });
+    const salience = projectKpLispLessonSalience({
+      frame,
       plan: input.plan,
+      activeBlockId
+    });
+    stage.innerHTML = renderKpLispBotanicalStageHtml({
+      frame,
+      plan: input.plan,
+      salience,
       reducedMotion: view.matchMedia("(prefers-reduced-motion: reduce)").matches
     });
     input.root.dataset["kpLispTutorialProgress"] = global.toFixed(4);
     input.root.dataset["kpLispTutorialActiveMotionBlock"] = activeBlockId;
+    input.root.dataset["kpLispTutorialActivePassage"] = salience.activePassageId;
+    input.root.querySelectorAll<HTMLElement>("[data-kp-lisp-tutorial-passage]")
+      .forEach((passage) => {
+        const id = passage.dataset["kpLispTutorialPassage"] ?? "";
+        passage.dataset["kpLispPassageSalience"] = id === salience.activePassageId
+          ? "target"
+          : salience.contextPassageIds.includes(id)
+            ? "context"
+            : "rest";
+      });
     for (const block of kpLispLessonMotionBlocks) {
       const control = scrubs[block.id];
       const blockLocal = localProgress(block.id, global);

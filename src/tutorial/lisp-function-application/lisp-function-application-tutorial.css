@@ -86,6 +86,15 @@ button, input { font: inherit; }
   line-height: 1.78;
 }
 .kp-lisp-tutorial__passage p + p { text-indent: 1.35em; }
+.kp-lisp-tutorial__passage {
+  border-radius: .8rem;
+  transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+}
+.kp-lisp-tutorial__passage[data-kp-lisp-passage-salience="target"] {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgb(32 59 53 / .09);
+}
+.kp-lisp-tutorial__passage[data-kp-lisp-passage-salience="context"] { opacity: .82; }
 .kp-lisp-tutorial__inline-code {
   padding: .08em .28em;
   border-radius: .3em;
@@ -167,4 +176,6 @@ button, input { font: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .kp-lisp-tutorial__passage { transition: none; }
+  .kp-lisp-tutorial__passage[data-kp-lisp-passage-salience="target"] { transform: none; }
 }
