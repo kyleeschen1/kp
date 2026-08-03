@@ -10,6 +10,7 @@ import { createKpLispBotanicalPresentationPlan } from "../../animation/lisp-bota
 import { createKpLispLambdaApplicationAnimationAsset } from "../../animation/lisp-lambda-application-adapter.ts";
 import { sampleKpLispLambdaApplicationRuntimeFrame } from "../../animation/lisp-lambda-application-runtime-frame.ts";
 import { createKpAnimationCatalogueReviewHost } from "../../editor/animation-catalogue-review-host.ts";
+import { createKpEditorAnimationLibrary } from "../../editor/animation-library.ts";
 import {
   kpLispBotanicalStageCss,
   renderKpLispBotanicalStageHtml
@@ -18,6 +19,9 @@ import { createKpLispLambdaApplicationAsset } from "../../semantic/lisp-lambda-a
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
 import KpLispFunctionApplicationTutorial from "./KpLispFunctionApplicationTutorial.svelte";
+import {
+  createKpLispBindAndReconstructController
+} from "./lisp-function-application-motion-controller.ts";
 import { compileKpLispFunctionApplicationPublication } from "./lisp-function-application-publication.ts";
 
 export async function mountKpLispFunctionApplicationTutorial(input: {
@@ -47,11 +51,25 @@ export async function mountKpLispFunctionApplicationTutorial(input: {
       animationId: animation.id
     }
   });
+  const descriptor = createKpEditorAnimationLibrary().find(
+    ({ animationId }) => animationId === animation.id
+  );
+  if (descriptor === undefined) {
+    throw new Error("Lisp tutorial animation descriptor is not catalogued.");
+  }
+  const motion = createKpLispBindAndReconstructController({
+    root: input.root,
+    animation,
+    descriptor,
+    source,
+    plan
+  });
   const reviewHost = createKpAnimationCatalogueReviewHost();
   input.root.dataset["kpLispFunctionApplicationTutorialMounted"] = "true";
   void reviewHost.mount();
 
   return () => {
+    motion.dispose();
     reviewHost.dispose();
     style.remove();
     delete input.root.dataset["kpLispFunctionApplicationTutorialMounted"];

@@ -108,7 +108,7 @@
       data-kp-animation-catalogue-stage-persistent="true"
       aria-label="Persistent Lisp function application stage"
     >
-      {@html stageHtml}
+      <div data-kp-lisp-stage-host>{@html stageHtml}</div>
     </aside>
   </div>
 </main>

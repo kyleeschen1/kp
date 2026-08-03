@@ -261,6 +261,31 @@
       "scope": "s12 production lazy route chunk",
       "checkedAt": "2026-08-03T17:16:49.018Z",
       "notes": "Lisp route emits separate 8.75 kB gzip JS and 1.26 kB gzip CSS chunks; inherited large workbench warning remains unchanged."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-first-motion-block.test.ts tests/kp-lisp-tutorial-route.test.ts tests/kp-lisp-lambda-application-runtime-frame.test.ts",
+      "status": "failed",
+      "scope": "s13 initial Node portability check",
+      "checkedAt": "2026-08-03T17:21:55.852Z",
+      "notes": "Importing event names through the custom-element class evaluated HTMLElement in Node; event constants moved to a DOM-neutral contract and remain re-exported."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-first-motion-block.test.ts tests/kp-lisp-tutorial-route.test.ts tests/kp-lisp-lambda-application-runtime-frame.test.ts",
+      "status": "passed",
+      "scope": "s13 eleven first-block projection route and runtime tests",
+      "checkedAt": "2026-08-03T17:21:57.168Z"
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s13 Svelte host remains composition-only",
+      "checkedAt": "2026-08-03T17:21:58.166Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s13 application types",
+      "checkedAt": "2026-08-03T17:21:59.136Z"
     }
   ],
   "allowedWork": [
@@ -359,7 +384,8 @@
     {
       "id": "s13",
       "title": "Bind application and substitution motion block",
-      "status": "planned"
+      "summary": "Bound the first prose scrubber to global progress 0 through 0.74 using one local controller over the canonical playback reducer and Lisp sampler. Seek, checkpoints, play, pause, and rewind stop exactly at reconstructed (+ 4 1); Svelte remains a static composition host. Split scrubber event names into a DOM-neutral contract after a focused Node portability failure. Eleven focused tests, Svelte diagnostics, and app/test TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s14",
