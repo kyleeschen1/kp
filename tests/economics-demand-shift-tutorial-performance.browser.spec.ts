@@ -81,6 +81,10 @@ test("production economics tutorial stays inside publication and motion budgets"
         .filter(({ initiatorType }) => initiatorType === "script")
         .reduce((total, { transferSize }) => total + transferSize, 0),
       resourceCount: resources.length,
+      resources: resources.map(({ name, initiatorType }) => ({
+        name: new URL(name).pathname.split("/").at(-1),
+        initiatorType
+      })),
       transferByInitiator: byKind,
       cls: probe.cls,
       longTaskCount: probe.longTasks.length,

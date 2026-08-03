@@ -90,6 +90,35 @@ export default defineConfig({
           kpReaderRouteEntryName(descriptor.route),
           filename
         ]))
+      },
+      output: {
+        manualChunks(id) {
+          // Both tutorial routes should pay for one lazy platform seam, not a
+          // request per extracted primitive. Domain assets remain separately
+          // lazy and the catalogue entry does not eagerly import this chunk.
+          if (
+            !id.includes(".css") &&
+            (id.includes("/src/tutorial/kp-tutorial-") ||
+              id.includes("/src/tutorial/KpTutorialLessonShell.svelte") ||
+              id.includes("/src/editor/animation-catalogue-review-host.ts"))
+          ) return "kp-tutorial-core";
+          // These pure pathname matchers are synchronously read together by
+          // bootstrap. Keeping one tiny route table avoids three startup
+          // requests without pulling either tutorial implementation forward.
+          if (
+            id.includes("/src/editor/animation-catalogue-route.ts") ||
+            id.includes("/src/tutorial/economics-demand-shift/economics-demand-shift-route.ts") ||
+            id.includes("/src/tutorial/lisp-function-application/lisp-function-application-route.ts")
+          ) return "kp-route-table";
+          // These dependency-free IDs travel together in the display catalog;
+          // one metadata leaf avoids request overhead without creating a large
+          // startup evaluation task or coupling their render implementations.
+          if (
+            id.includes("/src/rendering/dimensional-continuity-graph-language.ts") ||
+            id.includes("/src/tutorial/verified-generated-linear-solve-identity.ts")
+          ) return "kp-catalogue-identities";
+          return undefined;
+        }
       }
     }
   },

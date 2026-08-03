@@ -1,0 +1,133 @@
+.kp-tutorial-shell {
+  --kp-lesson-ink: #263845;
+  --kp-lesson-muted: #667983;
+  --kp-lesson-border: #d8d5cc;
+  --kp-lesson-paper: #fffdf8;
+  --kp-lesson-reading-rail: #7a9da8;
+  min-height: 100vh;
+  color: var(--kp-lesson-ink);
+}
+
+.kp-tutorial-shell__layout {
+  display: grid;
+  grid-template-columns:
+    minmax(9rem, 13rem)
+    minmax(26rem, 42rem)
+    minmax(28rem, 44rem);
+  gap: clamp(3rem, 5vw, 6.5rem);
+  width: min(100% - 3rem, 94rem);
+  margin: 0 auto;
+  padding: 4rem 0 8rem;
+  align-items: start;
+}
+
+.kp-tutorial-shell__layout--prose-toc {
+  grid-template-columns: minmax(28rem, 43rem) minmax(32rem, 1fr);
+}
+
+.kp-tutorial-shell__toc,
+.kp-tutorial-shell__stage {
+  position: sticky;
+  top: 50vh;
+  min-width: 0;
+  max-height: 88vh;
+  transform: translateY(-50%);
+}
+
+.kp-tutorial-shell__toc {
+  z-index: 4;
+  overflow: auto;
+}
+
+.kp-tutorial-shell__prose {
+  min-width: 0;
+}
+
+.kp-tutorial-shell :where(.kp-tutorial-shell__visually-hidden) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.kp-tutorial-shell :where(.kp-tutorial-shell__intro) {
+  margin-bottom: 4rem;
+}
+
+.kp-tutorial-shell :where(.kp-tutorial-shell__eyebrow) {
+  color: var(--kp-lesson-muted);
+  font-size: .72rem;
+  font-weight: 750;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.kp-tutorial-shell :where(.kp-tutorial-shell__question) {
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.kp-tutorial-shell :where(.kp-tutorial-shell__assumption) {
+  color: var(--kp-lesson-muted);
+  line-height: 1.6;
+}
+
+.kp-tutorial-shell :where(.kp-tutorial-shell__motion-block) {
+  position: relative;
+  scroll-margin-block-start: 38vh;
+}
+
+@media (max-width: 76rem) {
+  .kp-tutorial-shell__layout {
+    grid-template-columns: minmax(24rem, 38rem) minmax(24rem, 40rem);
+    gap: 3rem;
+  }
+
+  .kp-tutorial-shell[data-kp-tutorial-shell-toc="rail"] .kp-tutorial-shell__toc {
+    display: none;
+  }
+}
+
+@media (max-width: 52rem) {
+  .kp-tutorial-shell__layout,
+  .kp-tutorial-shell__layout--prose-toc {
+    display: flex;
+    flex-direction: column;
+    width: min(100% - 2rem, 42rem);
+    padding-top: 2rem;
+  }
+
+  .kp-tutorial-shell__prose {
+    display: contents;
+  }
+
+  .kp-tutorial-shell__stage {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    width: 100%;
+    max-height: none;
+    transform: none;
+    background: var(--kp-lesson-paper);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kp-tutorial-shell {
+    scroll-behavior: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  .kp-tutorial-shell {
+    --kp-lesson-ink: CanvasText;
+    --kp-lesson-muted: CanvasText;
+    --kp-lesson-border: CanvasText;
+    --kp-lesson-paper: Canvas;
+    color: CanvasText;
+    background: Canvas;
+  }
+}

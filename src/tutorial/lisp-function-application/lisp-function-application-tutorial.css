@@ -1,3 +1,5 @@
+@import "../kp-tutorial-lesson-shell.css";
+
 :root {
   color: #203b35;
   background: #f4f0e6;
@@ -12,9 +14,13 @@ body { min-width: 320px; margin: 0; background: #f4f0e6; }
 button, input { font: inherit; }
 
 .kp-lisp-tutorial {
-  --kp-lisp-ink: #203b35;
-  --kp-lisp-muted: #667b74;
-  --kp-lisp-line: #d8d1c2;
+  --kp-lesson-ink: #203b35;
+  --kp-lesson-muted: #667b74;
+  --kp-lesson-border: #d8d1c2;
+  --kp-lesson-paper: #f4f0e6;
+  --kp-lisp-ink: var(--kp-lesson-ink);
+  --kp-lisp-muted: var(--kp-lesson-muted);
+  --kp-lisp-line: var(--kp-lesson-border);
   min-height: 100vh;
   color: var(--kp-lisp-ink);
 }

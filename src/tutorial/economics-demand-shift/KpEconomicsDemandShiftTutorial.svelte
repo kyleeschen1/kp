@@ -72,6 +72,7 @@
     KpTutorialTocDestination
   } from "../kp-tutorial-toc.ts";
   import { serializeKpTutorialDestinationHash } from "../kp-tutorial-url.ts";
+  import KpTutorialLessonShell from "../KpTutorialLessonShell.svelte";
   import KpInlineMath from "./KpInlineMath.svelte";
 
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
@@ -1277,54 +1278,63 @@
   }
 </script>
 
-<main
-  bind:this={shell}
-  class="kp-economics-tutorial"
-  class:kp-economics-tutorial--stage-expanded={stageExpanded}
-  data-kp-economics-demand-shift-tutorial
-  data-kp-animation-catalogue
-  data-kp-animation-catalogue-selection={entry.animationId}
-  data-kp-economics-demand-intercept={demandIntercept}
-  data-kp-economics-tutorial-checkpoint={checkpoint.id}
-  data-kp-economics-tutorial-passage={checkpoint.passageId}
-  data-kp-economics-tutorial-focus-profile={visualCheckpoint.attention.profile}
-  data-kp-economics-tutorial-focus-target={visualCheckpoint.attention.target}
-  data-kp-economics-tutorial-equations={equationsVisible ? "visible" : "quiet"}
-  data-kp-economics-tutorial-motion-owner={motionOwner}
-  data-kp-economics-tutorial-manual-block={manualMotionBlock ?? ""}
-  data-kp-economics-tutorial-scroll-timeline={scrollTimelineStatus}
-  data-kp-economics-tutorial-scroll-coordinator={scrollCoordinatorStatus}
-  data-kp-economics-tutorial-scroll-active-block={scrollActiveMotionBlock}
-  data-kp-economics-tutorial-initial-destination={currentSemanticDestination === undefined
-    ? ""
-    : `${currentSemanticDestination.kind}:${currentSemanticDestination.id}`}
-  data-kp-economics-tutorial-demand-progress={lessonMotionProjection.demandShiftProgress.toFixed(3)}
-  data-kp-economics-tutorial-supply-movement-progress={supplyMovementProgress.toFixed(3)}
-  data-kp-economics-tutorial-scene-market={lessonMotionProjection.scene.market}
-  data-kp-economics-tutorial-scene-presentation={lessonMotionProjection.scene.presentation}
-  data-kp-economics-tutorial-supply-interpretation={supplyInterpretationPhase}
-  data-kp-economics-stage-composition-phase={stageComposition.phase}
-  data-kp-economics-stage-composition-progress={stageComposition.progress.toFixed(3)}
-  data-kp-economics-verification-reveal={verificationReveal.phase}
+<KpTutorialLessonShell
+  bind:root={shell}
+  rootClass={`kp-economics-tutorial${stageExpanded
+    ? " kp-economics-tutorial--stage-expanded"
+    : ""}`}
+  layoutClass="kp-economics-tutorial__layout"
+  proseClass="kp-economics-tutorial__prose"
+  proseLabel="Economics lesson"
+  stageClass="kp-economics-tutorial__stage"
+  stageLabel="Persistent supply and demand stage"
+  attributes={{
+    "data-kp-economics-demand-shift-tutorial": true,
+    "data-kp-animation-catalogue": true,
+    "data-kp-animation-catalogue-selection": entry.animationId,
+    "data-kp-economics-demand-intercept": demandIntercept,
+    "data-kp-economics-tutorial-checkpoint": checkpoint.id,
+    "data-kp-economics-tutorial-passage": checkpoint.passageId,
+    "data-kp-economics-tutorial-focus-profile": visualCheckpoint.attention.profile,
+    "data-kp-economics-tutorial-focus-target": visualCheckpoint.attention.target,
+    "data-kp-economics-tutorial-equations": equationsVisible ? "visible" : "quiet",
+    "data-kp-economics-tutorial-motion-owner": motionOwner,
+    "data-kp-economics-tutorial-manual-block": manualMotionBlock ?? "",
+    "data-kp-economics-tutorial-scroll-timeline": scrollTimelineStatus,
+    "data-kp-economics-tutorial-scroll-coordinator": scrollCoordinatorStatus,
+    "data-kp-economics-tutorial-scroll-active-block": scrollActiveMotionBlock,
+    "data-kp-economics-tutorial-initial-destination": currentSemanticDestination === undefined
+      ? ""
+      : `${currentSemanticDestination.kind}:${currentSemanticDestination.id}`,
+    "data-kp-economics-tutorial-demand-progress": lessonMotionProjection.demandShiftProgress.toFixed(3),
+    "data-kp-economics-tutorial-supply-movement-progress": supplyMovementProgress.toFixed(3),
+    "data-kp-economics-tutorial-scene-market": lessonMotionProjection.scene.market,
+    "data-kp-economics-tutorial-scene-presentation": lessonMotionProjection.scene.presentation,
+    "data-kp-economics-tutorial-supply-interpretation": supplyInterpretationPhase,
+    "data-kp-economics-stage-composition-phase": stageComposition.phase,
+    "data-kp-economics-stage-composition-progress": stageComposition.progress.toFixed(3),
+    "data-kp-economics-verification-reveal": verificationReveal.phase
+  }}
   style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle}`}
 >
-  <h1 class="kp-economics-tutorial__visually-hidden">
-    Economics demand-shift tutorial
-  </h1>
+  {#snippet before()}
+    <h1 class="kp-tutorial-shell__visually-hidden kp-economics-tutorial__visually-hidden">
+      Economics demand-shift tutorial
+    </h1>
 
-  <span
-    class="kp-economics-tutorial__reading-band-marker"
-    data-kp-economics-tutorial-reading-band
-    data-kp-reading-band-state={readingBandProximity >= 0.94 ? "crossing" : "tracking"}
-    aria-hidden="true"
-  ></span>
+    <span
+      class="kp-economics-tutorial__reading-band-marker"
+      data-kp-economics-tutorial-reading-band
+      data-kp-reading-band-state={readingBandProximity >= 0.94 ? "crossing" : "tracking"}
+      aria-hidden="true"
+    ></span>
+  {/snippet}
 
-  <div class="kp-economics-tutorial__layout">
-    <article class="kp-economics-tutorial__prose" aria-label="Economics lesson">
-      <header class="kp-economics-tutorial__intro">
-        <p class="kp-economics-tutorial__eyebrow">{lesson.kicker}</p>
-        <p class="kp-economics-tutorial__question">{lesson.title}</p>
-        <p class="kp-economics-tutorial__assumption">{lesson.assumption}</p>
+  {#snippet prose()}
+      <header class="kp-tutorial-shell__intro kp-economics-tutorial__intro">
+        <p class="kp-tutorial-shell__eyebrow kp-economics-tutorial__eyebrow">{lesson.kicker}</p>
+        <p class="kp-tutorial-shell__question kp-economics-tutorial__question">{lesson.title}</p>
+        <p class="kp-tutorial-shell__assumption kp-economics-tutorial__assumption">{lesson.assumption}</p>
       </header>
 
       {@html tocHtml}
@@ -1346,6 +1356,7 @@
               class="kp-economics-tutorial__passage"
               class:kp-economics-tutorial__passage--active={checkpoint.passageId === passage.id}
               class:kp-economics-tutorial__motion-block={renderedMotionBlock !== undefined}
+              class:kp-tutorial-shell__motion-block={renderedMotionBlock !== undefined}
               class:kp-economics-tutorial__prediction={passage.id === "prediction"}
               class:kp-economics-tutorial__equation-check={passage.id === "equation-check"}
               class:kp-economics-tutorial__synthesis={passage.id === "synthesis"}
@@ -1429,12 +1440,9 @@
       <footer class="kp-economics-tutorial__footer">
         <a href={`/?artifact=${entry.animationId}`}>Open the animation catalogue</a>
       </footer>
-    </article>
+  {/snippet}
 
-    <aside
-      class="kp-economics-tutorial__stage"
-      aria-label="Persistent supply and demand stage"
-    >
+  {#snippet stage()}
       <div class="kp-economics-tutorial__stage-card">
         <header class="kp-economics-tutorial__stage-header">
           <div>
@@ -1483,9 +1491,9 @@
         </div>
 
       </div>
-    </aside>
-  </div>
+  {/snippet}
 
+  {#snippet after()}
   <svg
     class="kp-economics-tutorial__page-veil"
     class:kp-economics-tutorial__page-veil--visible={attentionProjection.pageVeilVisible}
@@ -1552,4 +1560,5 @@
     {announcement}
   </p>
   <div data-kp-animation-catalogue-review-dock aria-hidden="true"></div>
-</main>
+  {/snippet}
+</KpTutorialLessonShell>

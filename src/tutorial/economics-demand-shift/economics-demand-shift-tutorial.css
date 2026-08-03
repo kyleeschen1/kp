@@ -1,3 +1,5 @@
+@import "../kp-tutorial-lesson-shell.css";
+
 :root {
   color: #263845;
   background: #f4f1e9;
@@ -27,11 +29,16 @@ summary {
 }
 
 .kp-economics-tutorial {
-  --kp-tutorial-ink: #263845;
-  --kp-tutorial-muted: #667983;
-  --kp-tutorial-border: #d8d5cc;
-  --kp-tutorial-paper: #fffdf8;
-  --kp-tutorial-reading-rail: #7a9da8;
+  --kp-lesson-ink: #263845;
+  --kp-lesson-muted: #667983;
+  --kp-lesson-border: #d8d5cc;
+  --kp-lesson-paper: #fffdf8;
+  --kp-lesson-reading-rail: #7a9da8;
+  --kp-tutorial-ink: var(--kp-lesson-ink);
+  --kp-tutorial-muted: var(--kp-lesson-muted);
+  --kp-tutorial-border: var(--kp-lesson-border);
+  --kp-tutorial-paper: var(--kp-lesson-paper);
+  --kp-tutorial-reading-rail: var(--kp-lesson-reading-rail);
   --kp-tutorial-focus-supply: 1;
   --kp-tutorial-focus-demand: 1;
   --kp-tutorial-focus-equilibrium: 0.9;
