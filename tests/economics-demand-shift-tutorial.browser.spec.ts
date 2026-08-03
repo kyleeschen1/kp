@@ -472,7 +472,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
   });
 });
 
-test("manual demand playback rebases into scroll without a jump", async ({
+test("manual demand scrub rebases into scroll without a jump", async ({
   page
 }) => {
   await page.goto(route);
@@ -491,15 +491,17 @@ test("manual demand playback rebases into scroll without a jump", async ({
     top: window.scrollY + element.getBoundingClientRect().top -
       window.innerHeight * 0.38
   }));
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-owner",
+    "scroll"
+  );
+  await expect.poll(async () => Number(
+    await player.getAttribute("data-kp-editor-animation-progress")
+  )).toBeCloseTo(0.72, 2);
   const scrubber = motionCue.getByRole("slider", {
     name: "Scrub animation progress"
   });
   await scrubber.fill("0.35");
-  await motionCue.evaluate((element) => {
-    element.shadowRoot?.querySelector<HTMLButtonElement>(
-      "[data-action=toggle]"
-    )?.click();
-  });
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-motion-owner",
     "manual"
@@ -508,11 +510,6 @@ test("manual demand playback rebases into scroll without a jump", async ({
     "data-kp-economics-tutorial-scroll-timeline",
     "manual"
   );
-  await expect(player).toHaveAttribute(
-    "data-kp-editor-animation-status",
-    "playing"
-  );
-  await page.waitForTimeout(32);
   const manualProgress = Number(
     await player.getAttribute("data-kp-editor-animation-progress")
   );
@@ -550,6 +547,7 @@ test("manual supply playback preserves the settled demand handoff", async ({
 
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const player = root.locator("[data-kp-editor-animation-player]");
+  const graph = player.locator("[data-kp-editor-graph-svg]");
   const supplyMotionCue = root.locator(
     '[data-kp-tutorial-motion-block="supply-movement"] kp-tutorial-scrub-bar'
   );
@@ -561,11 +559,52 @@ test("manual supply playback preserves the settled demand handoff", async ({
     top: window.scrollY + element.getBoundingClientRect().top -
       window.innerHeight * 0.38
   }));
+  const movement = graph.locator("[data-kp-economics-supply-movement]");
+  const trace = movement.locator("[data-kp-economics-supply-movement-trace]");
+  await expect(movement).toHaveAttribute(
+    "data-kp-economics-supply-equation",
+    "P=2+Q"
+  );
+  await expect(movement).toHaveAttribute(
+    "data-kp-economics-movement-from-quantity",
+    "6"
+  );
+  await expect(movement).toHaveAttribute(
+    "data-kp-economics-movement-from-price",
+    "8"
+  );
+  await expect(movement).toHaveAttribute(
+    "data-kp-economics-movement-to-quantity",
+    "8"
+  );
+  await expect(movement).toHaveAttribute(
+    "data-kp-economics-movement-to-price",
+    "10"
+  );
+  await expect.poll(() => trace.evaluate((element) => ({
+    opacity: Number(getComputedStyle(element).opacity),
+    dashOffset: Number.parseFloat(getComputedStyle(element).strokeDashoffset)
+  }))).toEqual({
+    opacity: expect.closeTo(1, 2),
+    dashOffset: expect.closeTo(0, 2)
+  });
+  await page.screenshot({
+    path: `${evidenceDirectory}/wide-supply-movement-trace.png`,
+    fullPage: false
+  });
   await page.keyboard.press("Alt+ArrowRight");
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-supply-movement-progress",
     "1.000"
   );
+  await expect.poll(() => movement.locator(
+    '[data-kp-economics-supply-movement-target="settled"]'
+  ).evaluate((element) => Number(getComputedStyle(element).opacity)))
+    .toBeCloseTo(1, 2);
+  await page.screenshot({
+    path: `${evidenceDirectory}/wide-supply-movement-verified.png`,
+    fullPage: false
+  });
   await page.keyboard.press("Alt+ArrowLeft");
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-supply-movement-progress",
@@ -574,6 +613,10 @@ test("manual supply playback preserves the settled demand handoff", async ({
   await supplyMotionCue.getByRole("slider", {
     name: "Scrub animation progress"
   }).fill("0.3");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "0.300"
+  );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-motion-owner",
     "manual"
@@ -614,6 +657,10 @@ test("manual supply playback preserves the settled demand handoff", async ({
   await expect(supplyMotionCue).toHaveAttribute(
     "data-kp-tutorial-scrub-manual",
     "false"
+  );
+  await expect(supplyMotionCue).toHaveAttribute(
+    "playback-status",
+    "paused"
   );
 });
 

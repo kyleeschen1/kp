@@ -475,6 +475,28 @@ summary {
 }
 
 .kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-supply-movement {
+  opacity: 1;
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-supply-movement-trace {
+  opacity: var(--kp-tutorial-supply-emphasis);
+  stroke-dashoffset: calc(1 - var(--kp-tutorial-supply-trace));
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-supply-movement-target {
+  opacity: var(--kp-tutorial-supply-comparison);
+}
+
+.kp-economics-tutorial[data-kp-economics-tutorial-scroll-active-block="supply-movement"]
+  .kp-economics-tutorial__player-host
+  [data-kp-economics-supply-line] {
+  stroke-width: calc(3.25px + 1.1px * var(--kp-tutorial-supply-emphasis));
+}
+
+.kp-economics-tutorial__player-host
   [data-kp-economics-initial-demand-reference],
 .kp-economics-tutorial__player-host
   [data-kp-economics-initial-equilibrium-reference],

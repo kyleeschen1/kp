@@ -192,6 +192,34 @@
       "scope": "s10",
       "checkedAt": "2026-08-03T06:37:28.254Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s11",
+      "checkedAt": "2026-08-03T06:45:11.505Z",
+      "notes": "Seventeen tutorial, runtime, dense model, and deterministic SVG tests passed; exact movement semantics are renderer-owned."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s11",
+      "checkedAt": "2026-08-03T06:45:12.650Z",
+      "notes": "Svelte check reported zero errors and warnings."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s11",
+      "checkedAt": "2026-08-03T06:45:13.588Z",
+      "notes": "Five Chromium checks passed and captured trace/verified frames; exact E0 (6,8), E1 (8,10), P=2+Q, trace completion, endpoint reveal, manual cancellation, reduced motion, and phone were observed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s11",
+      "checkedAt": "2026-08-03T06:45:14.500Z",
+      "notes": "No whitespace errors."
     }
   ],
   "allowedWork": [
@@ -278,7 +306,8 @@
     {
       "id": "s11",
       "title": "Animate-supply-movement-interpretation",
-      "status": "planned"
+      "summary": "Added a hidden-by-default semantic SVG interpretation layer, drove unchanged-supply emphasis and an E0-to-E1 trace from local progress, revealed exact endpoint targets at verification, and captured the economics-local visual exemplar.",
+      "status": "complete"
     },
     {
       "id": "s12",

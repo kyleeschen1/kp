@@ -125,9 +125,13 @@ function renderEconomicsContent(input: {
   const equilibrium = point(equilibriumQuantity, equilibriumPrice);
   const quantityAxis = point(equilibriumQuantity, 0);
   const priceAxis = point(0, equilibriumPrice);
+  const initialEquilibriumQuantity = exactNumber(
+    input.initialEquilibrium.quantity
+  );
+  const initialEquilibriumPrice = exactNumber(input.initialEquilibrium.price);
   const initialEquilibrium = point(
-    exactNumber(input.initialEquilibrium.quantity),
-    exactNumber(input.initialEquilibrium.price)
+    initialEquilibriumQuantity,
+    initialEquilibriumPrice
   );
   const demandRole = input.stage === "establish"
     ? "D_0"
@@ -151,6 +155,11 @@ function renderEconomicsContent(input: {
     <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand-reference" data-kp-economics-initial-demand-reference x1="${initialDemandStart[0]}" y1="${initialDemandStart[1]}" x2="${initialDemandEnd[0]}" y2="${initialDemandEnd[1]}" style="opacity:${input.initialDemandReferenceOpacity}" />
     <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--supply" data-kp-economics-supply-line data-kp-economics-equation="${supplyEquation(input.frame)}" x1="${supplyStart[0]}" y1="${supplyStart[1]}" x2="${supplyEnd[0]}" y2="${supplyEnd[1]}" />
     <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand" data-kp-economics-demand-line data-kp-economics-equation="${demandEquation(input.frame)}" x1="${demandStart[0]}" y1="${demandStart[1]}" x2="${demandEnd[0]}" y2="${demandEnd[1]}" />
+    <g class="editor-graph-stage__economics-supply-movement" data-kp-economics-supply-movement data-kp-economics-supply-equation="${supplyEquation(input.frame)}" data-kp-economics-movement-from-quantity="${exactText(input.initialEquilibrium.quantity)}" data-kp-economics-movement-from-price="${exactText(input.initialEquilibrium.price)}" data-kp-economics-movement-to-quantity="${exactText(input.frame.equilibrium.quantity)}" data-kp-economics-movement-to-price="${exactText(input.frame.equilibrium.price)}" aria-hidden="true">
+      <line class="editor-graph-stage__economics-supply-movement-trace" data-kp-economics-supply-movement-trace x1="${initialEquilibrium[0]}" y1="${initialEquilibrium[1]}" x2="${equilibrium[0]}" y2="${equilibrium[1]}" pathLength="1" />
+      <circle class="editor-graph-stage__economics-supply-movement-target editor-graph-stage__economics-supply-movement-target--initial" data-kp-economics-supply-movement-target="initial" cx="${initialEquilibrium[0]}" cy="${initialEquilibrium[1]}" r="7" />
+      <circle class="editor-graph-stage__economics-supply-movement-target editor-graph-stage__economics-supply-movement-target--settled" data-kp-economics-supply-movement-target="settled" cx="${equilibrium[0]}" cy="${equilibrium[1]}" r="7" />
+    </g>
     <line class="editor-graph-stage__economics-guide" data-kp-economics-equilibrium-quantity-guide x1="${equilibrium[0]}" y1="${equilibrium[1]}" x2="${quantityAxis[0]}" y2="${quantityAxis[1]}" />
     <line class="editor-graph-stage__economics-guide" data-kp-economics-equilibrium-price-guide x1="${equilibrium[0]}" y1="${equilibrium[1]}" x2="${priceAxis[0]}" y2="${priceAxis[1]}" />
     <circle class="editor-graph-stage__economics-equilibrium" data-kp-economics-equilibrium-point data-kp-economics-equilibrium-quantity="${exactText(input.frame.equilibrium.quantity)}" data-kp-economics-equilibrium-price="${exactText(input.frame.equilibrium.price)}" cx="${equilibrium[0]}" cy="${equilibrium[1]}" r="4.5" />

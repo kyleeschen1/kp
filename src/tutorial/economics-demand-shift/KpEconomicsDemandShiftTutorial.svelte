@@ -207,6 +207,20 @@
     `--kp-tutorial-spotlight-y:${attentionProjection.spotlightY}px;` +
     `--kp-tutorial-spotlight-radius:${visualCheckpoint.attention.spotlightRadius}px`
   );
+  let supplyInterpretationStyle = $derived(
+    `--kp-tutorial-supply-emphasis:${clamp(supplyMovementProgress / 0.18, 0, 1).toFixed(3)};` +
+    `--kp-tutorial-supply-trace:${clamp((supplyMovementProgress - 0.12) / 0.46, 0, 1).toFixed(3)};` +
+    `--kp-tutorial-supply-comparison:${clamp((supplyMovementProgress - 0.58) / 0.42, 0, 1).toFixed(3)}`
+  );
+  let supplyInterpretationPhase = $derived(
+    supplyMovementProgress <= 0.001
+      ? "ready"
+      : supplyMovementProgress < 0.58
+        ? "tracing"
+        : supplyMovementProgress < 0.999
+          ? "comparing"
+          : "verified"
+  );
 
   function activateCheckpoint(
     index: number,
@@ -978,6 +992,8 @@
   data-kp-economics-tutorial-supply-movement-progress={supplyMovementProgress.toFixed(3)}
   data-kp-economics-tutorial-scene-market={lessonMotionProjection.scene.market}
   data-kp-economics-tutorial-scene-presentation={lessonMotionProjection.scene.presentation}
+  data-kp-economics-tutorial-supply-interpretation={supplyInterpretationPhase}
+  style={supplyInterpretationStyle}
 >
   <h1 class="kp-economics-tutorial__visually-hidden">
     Economics demand-shift tutorial

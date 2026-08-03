@@ -27,7 +27,7 @@
     "test:browser:svelte-catalogue-release": "playwright test tests/svelte-catalogue-exemplar.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "test:browser:exact-fraction-quantity": "playwright test tests/exact-fraction-quantity-animation-library.browser.spec.ts tests/exact-fraction-quantity-determinism.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "test:browser:economics-equilibrium": "playwright test tests/animation-catalogue-economics.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
-    "test:economics-demand-shift-tutorial": "node --disable-warning=ExperimentalWarning --test tests/economics-demand-shift-tutorial.test.ts",
+    "test:economics-demand-shift-tutorial": "node --disable-warning=ExperimentalWarning --test tests/economics-demand-shift-tutorial.test.ts tests/kp-economics-equilibrium-runtime-frame.test.ts tests/kp-economics-equilibrium-static-svg.test.ts",
     "test:browser:economics-demand-shift-tutorial": "playwright test tests/economics-demand-shift-tutorial.browser.spec.ts --project=chromium --workers=1",
     "visual:economics-demand-shift-tutorial": "playwright test tests/economics-demand-shift-tutorial.browser.spec.ts --project=chromium --workers=1",
     "test:browser:physics-work-energy": "playwright test tests/animation-catalogue-physics-work-energy.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",

@@ -2341,6 +2341,25 @@ h2 {
   stroke-dasharray: 3 2;
   stroke-width: 1.5;
 }
+.editor-graph-stage__economics-supply-movement {
+  opacity: 0;
+  pointer-events: none;
+}
+.editor-graph-stage__economics-supply-movement-trace {
+  fill: none;
+  stroke: var(--kp-graph-stable);
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  stroke-linecap: round;
+  stroke-width: 6;
+  vector-effect: non-scaling-stroke;
+}
+.editor-graph-stage__economics-supply-movement-target {
+  fill: var(--kp-graph-plane);
+  stroke: var(--kp-graph-stable);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
 .editor-graph-stage__economics-math-foreign-object {
   overflow: visible;
   pointer-events: none;
