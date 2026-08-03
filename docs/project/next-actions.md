@@ -8,26 +8,29 @@ with source refs, verification, run-contract slices, and completion evidence.
 ## Current Queue
 
 1. Keep `Apply a 2 × 2 matrix to a vector` and its remaining run slices tabled
-   at the open visual checkpoint; select a nearer transformation family without
-   generalizing its provisional Pour treatment.
-2. Choose among place-value subtraction, fraction repartition and equivalence,
-   function-coordinate transformations, geometric dissection, distribution,
-   proportional rescaling, branching, refinement, or accumulation. The
-   recommended default is `402 - 178 = 224` as inverse-exchange pressure.
-3. Explicitly replace or waive the old matrix-specific host-pressure gate
+   at the open visual checkpoint while the explanation-attention work leads.
+   This is a preservation guardrail, not authorization to resume the run.
+2. Review the four-section economics lesson draft and its attention storyboard.
+   Decide prose length, cadence, concrete-market usefulness, prediction timing,
+   and whether the closing synthesis repairs shift versus movement.
+3. If the editorial checkpoint is approved, build one economics-local Svelte 5
+   lesson surface with a persistent stage, compact semantic controls, static
+   passage preparation, and a stable phone dock; then stop for integrated human
+   review.
+4. Use generated solve-x as the second caller. Promote only shared document,
+   passage, control, and reader seams that survive both exemplars.
+5. When animation promotion resumes, choose among place-value subtraction,
+   fraction equivalence, function-coordinate transformations, and geometric
+   dissection; the recommended default remains `402 - 178 = 224`.
+6. Explicitly replace or waive the old matrix-specific host-pressure gate
    before generalizing the Svelte seam or adopting SvelteKit.
-4. Build Internal Studio v0 after that decision: keep Catalogue and
-   Internal Editor as distinct surfaces over one typed authoring session, and
-   retain framework-neutral animation and authoring authority.
-5. Freeze the portable publication bundle, then establish Public Web v0 with a
-   mission page and a small explicitly curated lesson set. Do not mirror all
-   internally hostable catalogue rows.
-6. Complete M4 context-specific encoding, then add M5 as an internal
-   editorial-candidate workflow over verified claims and the approved
-   generated-solve gold example.
-7. Build the constrained Public Editor last, after internal authoring,
-   publication, untrusted-text, and public safety contracts are proven.
-8. Keep Graph3D mesh-to-donut and the programming addition/comparison internal.
+7. Build Internal Studio v0 after that decision, then freeze the portable
+   publication bundle and establish Public Web v0 with a small curated lesson
+   set rather than every internally hostable catalogue row.
+8. Complete M4 context-specific encoding before M5 internal editorial
+   candidates. Build the constrained Public Editor only after internal
+   authoring, publication, untrusted-text, and public safety contracts pass.
+9. Keep Graph3D mesh-to-donut and the programming addition/comparison internal.
    Do not spend current learner-product effort on them or advance rank-23 BFS.
 
 ## Historical Queue Snapshot

@@ -1,0 +1,47 @@
+{
+  "id": "priority-change.kp.explanation-attention-economics-editorial-v0",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.explanation-attention-economics-editorial-v0",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The user approved continuous prose with explicit learner-controlled semantic checkpoints, economics as the editorial exemplar, and solve-x as the second caller before shared attention contracts.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The user approved continuous prose with explicit learner-controlled semantic checkpoints, economics as the editorial exemplar, and solve-x as the second caller before shared attention contracts.",
+      "occurredAt": "2026-08-03T01:21:57.558Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v22"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v22",
+    "rationale": "The user approved continuous prose with explicit learner-controlled semantic checkpoints, economics as the editorial exemplar, and solve-x as the second caller before shared attention contracts.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "explanation-attention",
+        "to": "economics-editorial-checkpoint"
+      },
+      {
+        "subject": "matrix-linear-map",
+        "to": "tabled"
+      },
+      {
+        "subject": "animation-promotion",
+        "to": "paused"
+      }
+    ],
+    "effectiveAt": "2026-08-03T01:21:57.558Z",
+    "requestedBy": "kyle"
+  }
+}

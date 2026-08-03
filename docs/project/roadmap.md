@@ -7,6 +7,7 @@ Supporting Threads:
 - `threads/semantic-runtime.md`
 - `threads/animation-catalogue.md`
 - `threads/cross-domain-tutorial-platform.md`
+- `threads/explanation-attention.md`
 
 ## Current Source Of Truth
 
@@ -78,6 +79,20 @@ platform gates are rank-6 host pressure, Internal Studio v0, Public Web v0,
 M4/M5, and only then a constrained Public Editor. The preceding reversible
 Svelte catalogue-shell gate is complete: Svelte 5 now owns the canonical host
 composition without owning framework-neutral animation or publication truth.
+
+The immediate product priority is now explanatory text and its coordination
+with animation, recorded in
+`decisions/2026-08-02-kp-continuous-explanation-and-attention-coordination.md`
+and owned by `threads/explanation-attention.md`. KP will preserve continuous
+Markdown prose and coordinate it with one persistent semantic stage through
+static passage preparation, explicit learner-triggered motion, semantic
+Previous/Next controls, and a continuously draggable marked scrubber. The
+approved economics equilibrium asset is the canonical discovery exemplar;
+generated solve-x is the second caller before any shared passage or reader
+contract is promoted. The current checkpoint is editorial only:
+`reviews/2026-08-02-economics-text-animation-editorial-checkpoint.md`.
+This priority change does not resume linear algebra, authorize SvelteKit or a
+public site, or move LLM wording into runtime.
 
 The symbolic manipulation family plan recorded in
 `decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`
@@ -193,6 +208,13 @@ return to the exemplar, second caller, then adjacent pruning. This prevents
 both operation-specific tuning and a speculative universal scene graph.
 
 ## Active Focus
+
+**The active human checkpoint is the economics continuous-prose explanation
+and attention storyboard.** The full four-section draft preserves one argument
+over a persistent graph, lets the graph lead and equations verify, inserts one
+non-gating prediction before learner-triggered motion, and closes on the shift
+versus movement misconception. No lesson UI or generic attention schema will
+be built until its prose and cadence are approved.
 
 **Canonical construction, the fraction and radical migrations, foldable
 distribution pressure work, canonical fraction composition, and role-complete
@@ -528,16 +550,20 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Select one nearer transformation exemplar without resuming the tabled
-   matrix-to-linear-map run. The recommended default is place-value
-   subtraction; fraction equivalence, function-coordinate transformations, and
-   geometric dissection are the leading alternatives.
-2. Revisit what evidence should replace the old matrix-specific host-pressure
-   gate before generalizing the Svelte seam or adopting SvelteKit.
-3. Establish Internal Studio v0 over one typed authoring session, then freeze
-   the portable publication bundle and establish Public Web v0 with a mission
-   page and curated lessons.
-4. Complete M4 before internal M5 editorial candidates, and build the
+1. Human-review the economics demand-shift prose, verified claims, and
+   attention storyboard; revise the Markdown before creating UI churn.
+2. After editorial approval, build one bounded internal Svelte 5 economics
+   lesson surface and stop at an integrated human cadence checkpoint.
+3. Pressure the approved attention boundary with generated solve-x, then
+   promote only the document, passage, control, and reader contracts both
+   callers prove.
+4. Select one nearer transformation exemplar without resuming the tabled
+   matrix-to-linear-map run. Place-value subtraction remains the recommended
+   default when animation-library promotion resumes.
+5. Revisit what evidence should replace the old matrix-specific host-pressure
+   gate before generalizing the Svelte seam or adopting SvelteKit, then resume
+   the Internal Studio and Public Web sequence.
+6. Complete M4 before internal M5 editorial candidates, and build the
    constrained Public Editor only after internal authoring, publication,
    untrusted-text, and public safety contracts pass.
 

@@ -3,9 +3,10 @@
 Status: active
 Last Updated: 2026-08-02
 Current Next Action: Keep `Apply a 2 × 2 matrix to a vector` tabled at its open
-visual checkpoint and select a nearer non-linear-algebra transformation. Do not
-resume generalization or silently rerank the ledger before that explicit human
-choice.
+visual checkpoint while the economics explanation-attention editorial
+checkpoint leads. When animation promotion resumes, select a nearer
+non-linear-algebra transformation. Do not resume generalization or silently
+rerank the ledger before that explicit human choice.
 
 ## Goal
 
@@ -58,7 +59,9 @@ decision.
 The selection review recommends place-value subtraction as the strongest new
 architectural pressure, with fraction equivalence, function-coordinate
 transformations, and geometric dissection as materially different alternatives.
-No candidate is active yet.
+No candidate is active yet. The accepted explanation-attention priority in
+`threads/explanation-attention.md` now precedes that selection; it does not
+change the rank or status of any row below.
 
 ## Completed Foundation
 

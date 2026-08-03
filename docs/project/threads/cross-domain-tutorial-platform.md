@@ -2,10 +2,10 @@
 
 Status: active-supporting
 Last Updated: 2026-08-02
-Current Next Action: Preserve the approved generated solve and explanation as
-the first human-gold deterministic session while the bounded rank-5 vector
-label correction closes. M4 remains the next editorial safety gate; no live
-model dependency, domain engine, or universal renderer is authorized.
+Current Next Action: Human-review the economics continuous-prose lesson and
+attention storyboard before building a bounded Svelte 5 lesson surface.
+Generated solve remains the approved second caller; M4 and live-model work do
+not advance during this editorial checkpoint.
 
 ## Goal
 
@@ -31,6 +31,16 @@ cross-domain loop also classified API tiers, promoted four narrow two-caller
 contracts, and retired four zero-caller rendering facades. Older symbolic,
 capability-pressure, and six-loop records retain rationale but do not
 independently override this stable ledger.
+
+The immediate tutorial priority is now the text-animation attention problem,
+owned by `threads/explanation-attention.md` and recorded in
+`decisions/2026-08-02-kp-continuous-explanation-and-attention-coordination.md`.
+The economics equilibrium asset will first support one continuous four-section
+argument with static passage preparation and explicit learner-triggered motion.
+The editorial checkpoint precedes UI implementation. Generated solve-x then
+pressures the boundary before any continuous-prose schema or shared lesson host
+is promoted. This changes the near-term tutorial order without changing the
+stable animation-promotion ledger.
 
 The same ledger now owns the platform gates around that content order. After
 the four early visible exemplars, KP declared public API tiers and will compile
