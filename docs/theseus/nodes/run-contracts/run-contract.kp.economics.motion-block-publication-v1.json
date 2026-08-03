@@ -220,6 +220,34 @@
       "scope": "s11",
       "checkedAt": "2026-08-03T06:45:14.500Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-08-03T06:55:35.563Z",
+      "notes": "Svelte and TypeScript diagnostics pass with zero errors and warnings."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-08-03T06:55:36.758Z",
+      "notes": "Five Chromium exemplar checks pass; desktop labels and equation strip match the transparent graph plane, phone labels match the solid plane, and bounded glyph contrast remains."
+    },
+    {
+      "command": "npm run test:browser:economics-equilibrium",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-08-03T06:55:37.669Z",
+      "notes": "Catalogue economics caller passes in Chromium, Firefox, and WebKit with labels and synchronized equation strip on the exact solid graph plane."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-08-03T06:55:38.586Z",
+      "notes": "Active slice diff has no whitespace errors."
     }
   ],
   "allowedWork": [
@@ -312,7 +340,8 @@
     {
       "id": "s12",
       "title": "Match-graph-label-backings",
-      "status": "planned"
+      "summary": "Matched economics labels and synchronized equations to the exact graph-plane token across contiguous tutorial, phone, and catalogue surfaces; retained legibility with a bounded glyph outline instead of blur or backing patches.",
+      "status": "complete"
     },
     {
       "id": "s13",

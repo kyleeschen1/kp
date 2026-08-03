@@ -60,6 +60,25 @@ test("economics catalogue preserves exact accessible seek, rewind, parameters, R
   );
   await expect(graph.locator("[data-kp-economics-math-label]"))
     .toHaveCount(14);
+  await expect.poll(() => player.evaluate((element) => {
+    const graphStage = element.querySelector<HTMLElement>(
+      ".editor-graph-stage"
+    );
+    const graphLabel = element.querySelector<HTMLElement>(
+      '[data-kp-economics-math-label="equilibrium-current"] ' +
+      ".editor-graph-stage__economics-math-label"
+    );
+    const equationStrip = element.querySelector<HTMLElement>(
+      ".editor-graph-stage__economics-explanation"
+    );
+    return [graphStage, graphLabel, equationStrip].map((node) =>
+      node === null ? null : getComputedStyle(node).backgroundColor
+    );
+  })).toEqual([
+    "rgb(255, 253, 248)",
+    "rgb(255, 253, 248)",
+    "rgb(255, 253, 248)"
+  ]);
   await expect(graph.locator('[data-kp-latex="D_0"]')).toBeVisible();
   await expect(graph.locator('[data-kp-latex="E_0 = (6.00, 8.00)"]'))
     .toBeVisible();

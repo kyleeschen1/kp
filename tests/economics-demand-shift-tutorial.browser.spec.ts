@@ -50,6 +50,38 @@ test("approved economics prose and semantic controls form one persistent tutoria
   )).toBeVisible();
   await expect(root.getByRole("heading", { level: 3 })).toHaveCount(4);
   await expect(root.locator(".kp-economics-tutorial__prose .katex")).not.toHaveCount(0);
+  await expect.poll(() => root.evaluate((element) => {
+    const graphStage = element.querySelector<HTMLElement>(
+      ".editor-graph-stage"
+    );
+    const graphLabel = element.querySelector<HTMLElement>(
+      '[data-kp-economics-math-label="equilibrium-current"] ' +
+      ".editor-graph-stage__economics-math-label"
+    );
+    const equationStrip = element.querySelector<HTMLElement>(
+      ".editor-graph-stage__economics-explanation"
+    );
+    return {
+      graph: graphStage === null
+        ? null
+        : getComputedStyle(graphStage).backgroundColor,
+      label: graphLabel === null
+        ? null
+        : getComputedStyle(graphLabel).backgroundColor,
+      equations: equationStrip === null
+        ? null
+        : getComputedStyle(equationStrip).backgroundColor
+    };
+  })).toEqual({
+    graph: "rgba(0, 0, 0, 0)",
+    label: "rgba(0, 0, 0, 0)",
+    equations: "rgba(0, 0, 0, 0)"
+  });
+  await expect.poll(() => root.locator(
+    '[data-kp-economics-math-label="equilibrium-current"] ' +
+    ".editor-graph-stage__economics-math-label"
+  ).evaluate((element) => getComputedStyle(element).textShadow))
+    .toContain("rgb(244, 241, 233)");
   await expect.poll(() => root.locator(".kp-economics-tutorial__math")
     .first()
     .evaluate((element) => ({
@@ -727,6 +759,18 @@ test("phone tutorial keeps a stable compact stage dock with optional expansion",
     .toHaveAttribute("data-kp-attention-page-veil-visible", "false");
   await expect(root.locator("[data-kp-economics-tutorial-reading-band]"))
     .toBeHidden();
+  await expect.poll(() => root.evaluate((element) => {
+    const graphStage = element.querySelector<HTMLElement>(
+      ".editor-graph-stage"
+    );
+    const graphLabel = element.querySelector<HTMLElement>(
+      '[data-kp-economics-math-label="equilibrium-current"] ' +
+      ".editor-graph-stage__economics-math-label"
+    );
+    return [graphStage, graphLabel].map((node) =>
+      node === null ? null : getComputedStyle(node).backgroundColor
+    );
+  })).toEqual(["rgb(255, 253, 248)", "rgb(255, 253, 248)"]);
   await expect.poll(() => stageCard.evaluate((element) => {
     const style = getComputedStyle(element);
     return {
