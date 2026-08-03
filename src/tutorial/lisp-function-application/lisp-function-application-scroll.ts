@@ -8,56 +8,15 @@ import {
 import type { KpTutorialScrubBarElement } from "../kp-tutorial-scrub-bar.ts";
 import {
   KpTutorialScrollCoordinator,
-  projectKpTutorialMotionCorridor,
   projectKpTutorialRebasedCorridor,
-  projectKpTutorialScrollFrame,
   type KpTutorialCoordinatedScrollProjection,
-  type KpTutorialScrollBlockProjection,
   type KpTutorialScrollFrameProjection
 } from "../kp-tutorial-motion.ts";
 import type { KpLispLessonMotionController } from "./lisp-function-application-motion-controller.ts";
 import {
   kpLispLessonMotionBlocks,
-  type KpLispLessonMotionBlockId,
-  type KpLispLessonMotionCorridor
+  type KpLispLessonMotionBlockId
 } from "./lisp-function-application-motion-blocks.ts";
-
-export interface KpLispScrollBlockProjection
-  extends KpTutorialScrollBlockProjection<KpLispLessonMotionBlockId> {}
-
-export interface KpLispScrollFrameProjection
-  extends KpTutorialScrollFrameProjection<KpLispLessonMotionBlockId> {}
-
-export function projectKpLispScrollCorridor(input: {
-  readonly corridor: KpLispLessonMotionCorridor;
-  readonly anchorTop: number;
-  readonly viewportHeight: number;
-}): { readonly travel: number; readonly progress: number } {
-  return projectKpTutorialMotionCorridor({ ...input, snapTolerance: 0.002 });
-}
-
-export function projectKpLispScrollFrame(input: {
-  readonly viewportHeight: number;
-  readonly blocks: readonly {
-    readonly id: KpLispLessonMotionBlockId;
-    readonly anchorTop: number;
-    readonly corridor: KpLispLessonMotionCorridor;
-  }[];
-}): KpLispScrollFrameProjection {
-  return projectKpTutorialScrollFrame({
-    ...input,
-    blocks: input.blocks.map((block) => ({ ...block, snapTolerance: 0.002 }))
-  });
-}
-
-export function projectKpLispRebasedScroll(input: {
-  readonly corridor: KpLispLessonMotionCorridor;
-  readonly rawTravelAtTakeover: number;
-  readonly manualProgress: number;
-  readonly rawTravel: number;
-}): { readonly travel: number; readonly progress: number } {
-  return projectKpTutorialRebasedCorridor(input);
-}
 
 export function createKpLispLessonScrollController(input: {
   readonly root: HTMLElement;
@@ -73,7 +32,8 @@ export function createKpLispLessonScrollController(input: {
     )
   ])) as Record<KpLispLessonMotionBlockId, KpTutorialScrubBarElement>;
   const reducedMotion = view.matchMedia("(prefers-reduced-motion: reduce)");
-  let latest: KpLispScrollFrameProjection | undefined;
+  let latest:
+    KpTutorialScrollFrameProjection<KpLispLessonMotionBlockId> | undefined;
   let userIntent = false;
   let rebase: {
     readonly blockId: KpLispLessonMotionBlockId;
@@ -108,7 +68,7 @@ export function createKpLispLessonScrollController(input: {
     const snapshot = input.motion.snapshot();
     let localProgress = active.progress;
     if (rebase?.blockId === active.id) {
-      localProgress = projectKpLispRebasedScroll({
+      localProgress = projectKpTutorialRebasedCorridor({
         corridor: kpLispLessonMotionBlocks.find(({ id }) => id === active.id)!.corridor,
         rawTravelAtTakeover: rebase.rawTravelAtTakeover,
         manualProgress: snapshot.activeBlockId === active.id
@@ -162,7 +122,7 @@ export function createKpLispLessonScrollController(input: {
   view.addEventListener("wheel", noteIntent, { passive: true });
   view.addEventListener("touchmove", noteIntent, { passive: true });
   view.addEventListener("keydown", onKeydown);
-  const coordinator = new KpTutorialScrollCoordinator(
+  const coordinator = new KpTutorialScrollCoordinator<KpLispLessonMotionBlockId>(
     view,
     () => kpLispLessonMotionBlocks.map((block) => ({
       id: block.id,

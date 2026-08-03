@@ -26,6 +26,8 @@ const html = renderKpLispFunctionApplicationStaticPublication({
 
 test("static Lisp publication preserves complete prose navigation and native code", () => {
   assert.match(html, /data-kp-lisp-tutorial-projection="static"/);
+  assert.match(html, /data-kp-tutorial-shell data-kp-tutorial-shell-toc="rail"/);
+  assert.match(html, /class="kp-tutorial-shell__layout kp-lisp-tutorial__layout"/);
   assert.equal((html.match(/<h3 /g) ?? []).length, 4);
   assert.equal((html.match(/data-kp-tutorial-motion-block=/g) ?? []).length, 2);
   assert.match(html, /data-kp-lisp-native-code="application">\(\(lambda/);

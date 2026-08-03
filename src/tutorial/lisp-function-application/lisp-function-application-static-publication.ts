@@ -10,15 +10,15 @@ export function renderKpLispFunctionApplicationStaticPublication(input: {
   readonly animationId: string;
 }): string {
   const { lesson } = input.publication;
-  return `<main class="kp-lisp-tutorial" data-kp-lisp-function-application-tutorial data-kp-lisp-tutorial-projection="static">
-    <h1 class="kp-lisp-tutorial__visually-hidden">Lisp function application tutorial</h1>
-    <div class="kp-lisp-tutorial__layout">
-      <aside class="kp-lisp-tutorial__toc" aria-label="Lesson navigation">${input.publication.tocHtml}</aside>
-      <article class="kp-lisp-tutorial__prose" aria-label="Lisp lesson">
-        <header class="kp-lisp-tutorial__intro">
-          <p class="kp-lisp-tutorial__eyebrow">${escapeHtml(lesson.kicker)}</p>
-          <p class="kp-lisp-tutorial__question">${escapeHtml(lesson.title)}</p>
-          <p class="kp-lisp-tutorial__assumption">${escapeHtml(lesson.assumption)}</p>
+  return `<main class="kp-tutorial-shell kp-lisp-tutorial" data-kp-tutorial-shell data-kp-tutorial-shell-toc="rail" data-kp-lisp-function-application-tutorial data-kp-lisp-tutorial-projection="static">
+    <h1 class="kp-tutorial-shell__visually-hidden kp-lisp-tutorial__visually-hidden">Lisp function application tutorial</h1>
+    <div class="kp-tutorial-shell__layout kp-lisp-tutorial__layout">
+      <aside class="kp-tutorial-shell__toc kp-lisp-tutorial__toc" aria-label="Lesson navigation">${input.publication.tocHtml}</aside>
+      <article class="kp-tutorial-shell__prose kp-lisp-tutorial__prose" aria-label="Lisp lesson">
+        <header class="kp-tutorial-shell__intro kp-lisp-tutorial__intro">
+          <p class="kp-tutorial-shell__eyebrow kp-lisp-tutorial__eyebrow">${escapeHtml(lesson.kicker)}</p>
+          <p class="kp-tutorial-shell__question kp-lisp-tutorial__question">${escapeHtml(lesson.title)}</p>
+          <p class="kp-tutorial-shell__assumption kp-lisp-tutorial__assumption">${escapeHtml(lesson.assumption)}</p>
         </header>
         ${lesson.sections.map((section) => `<section id="kp-section-${section.id}" data-kp-tutorial-destination="section" data-kp-tutorial-destination-id="${section.id}" aria-labelledby="kp-heading-${section.id}">
           <h3 id="kp-heading-${section.id}">${escapeHtml(section.heading)}</h3>
@@ -29,7 +29,7 @@ export function renderKpLispFunctionApplicationStaticPublication(input: {
         </section>`).join("")}
         <footer class="kp-lisp-tutorial__footer"><a href="/?artifact=${escapeHtml(input.animationId)}">Open the animation catalogue</a></footer>
       </article>
-      <aside class="kp-lisp-tutorial__stage" aria-label="Static Lisp function application stage">${input.stageHtml}</aside>
+      <aside class="kp-tutorial-shell__stage kp-lisp-tutorial__stage" aria-label="Static Lisp function application stage">${input.stageHtml}</aside>
     </div>
   </main>`;
 }
@@ -39,7 +39,7 @@ function renderMotion(
   id: KpLispLessonMotionBlockId
 ): string {
   const block = kpLispLessonMotionBlocks.find((candidate) => candidate.id === id)!;
-  return `<div class="kp-lisp-tutorial__motion-block" id="kp-block-${block.id}" data-kp-tutorial-motion-block="${block.id}" data-kp-tutorial-destination="block" data-kp-tutorial-destination-id="${block.id}" role="group" aria-label="${escapeHtml(block.label)} animation step">
+  return `<div class="kp-tutorial-shell__motion-block kp-lisp-tutorial__motion-block" id="kp-block-${block.id}" data-kp-tutorial-motion-block="${block.id}" data-kp-tutorial-destination="block" data-kp-tutorial-destination-id="${block.id}" role="group" aria-label="${escapeHtml(block.label)} animation step">
     ${block.checkpoints.map((checkpoint) => `<span class="kp-lisp-tutorial__checkpoint-anchor" id="kp-checkpoint-${checkpoint.id}" data-kp-tutorial-destination="checkpoint" data-kp-tutorial-destination-id="${checkpoint.id}" data-kp-tutorial-destination-block="${block.id}" aria-hidden="true"></span>`).join("")}
     ${scrubbers[id]}
   </div>`;

@@ -11,7 +11,7 @@ import { compileKpTutorialPublicationControls } from "../src/tutorial/kp-tutoria
 const economicsUrl = new URL("../content/lessons/economics-demand-shift.md", import.meta.url);
 const lispUrl = new URL("../content/lessons/programming-lisp-function-application.md", import.meta.url);
 
-test("both publications compile controls through one document contract", async () => {
+test("both lesson callers obey one shared publication contract", async () => {
   const callers = [
     {
       publication: compileKpEconomicsDemandShiftPublication(
@@ -27,6 +27,20 @@ test("both publications compile controls through one document contract", async (
     }
   ];
   for (const { publication, ids } of callers) {
+    assert.equal(publication.document.document.kind, "lesson-document");
+    assert.equal(Object.isFrozen(publication.document.document), true);
+    assert.equal(
+      publication.document.document.blocks.every((block) =>
+        block.kind !== "heading" || block.level === 3
+      ),
+      true
+    );
+    assert.deepEqual(
+      publication.document.document.blocks.flatMap((block) =>
+        block.kind === "animation-story" ? [block.id] : []
+      ),
+      ids
+    );
     assert.match(publication.tocHtml, /^<kp-tutorial-toc/);
     assert.equal(
       (publication.tocHtml.match(/data-kp-tutorial-destination-kind="checkpoint"/g) ?? []).length,

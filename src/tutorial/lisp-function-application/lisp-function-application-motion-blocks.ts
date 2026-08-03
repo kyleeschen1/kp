@@ -1,3 +1,9 @@
+import type {
+  KpTutorialMotionBlock,
+  KpTutorialMotionCheckpoint,
+  KpTutorialMotionCorridor
+} from "../kp-tutorial-motion.ts";
+
 export type KpLispLessonMotionBlockId =
   | "bind-and-reconstruct"
   | "evaluate-and-gather";
@@ -64,8 +70,3 @@ function corridor(
     ))
   });
 }
-import type {
-  KpTutorialMotionBlock,
-  KpTutorialMotionCheckpoint,
-  KpTutorialMotionCorridor
-} from "../kp-tutorial-motion.ts";

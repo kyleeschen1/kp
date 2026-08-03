@@ -728,6 +728,75 @@
       "status": "passed",
       "scope": "s26 patch hygiene",
       "checkedAt": "2026-08-03T19:22:48.061Z"
+    },
+    {
+      "command": "npm run test:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "s27 sixty Lisp semantics renderer lesson and shared-seam conformance tests",
+      "checkedAt": "2026-08-03T19:32:06.466Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-tutorial-publication-controls.test.ts tests/kp-tutorial-motion.test.ts tests/kp-tutorial-navigation.test.ts tests/kp-tutorial-lesson-shell.test.ts tests/kp-economics-shared-lesson-conformance.test.ts",
+      "status": "passed",
+      "scope": "s27 seventeen unified two-caller contract and gold-boundary tests",
+      "checkedAt": "2026-08-03T19:32:07.668Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/kp-lisp-scroll-coordination.browser.spec.ts tests/kp-lisp-lesson-navigation.browser.spec.ts tests/economics-demand-shift-tutorial.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s27 sixteen combined economics and Lisp route interactions",
+      "checkedAt": "2026-08-03T19:32:08.650Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/kp-lisp-accessibility.browser.spec.ts --config playwright.config.ts --workers=1",
+      "status": "passed",
+      "scope": "s27 fifteen Chromium Firefox WebKit phone reduced no-JS high-contrast and screen-reader checks",
+      "checkedAt": "2026-08-03T19:32:09.637Z"
+    },
+    {
+      "command": "npm run visual:botanical-lisp-asset",
+      "status": "passed",
+      "scope": "s27 five catalogue-hosted botanical checkpoints",
+      "checkedAt": "2026-08-03T19:32:10.597Z",
+      "notes": "Capture reports presentationStatus experimental-local."
+    },
+    {
+      "command": "npm run visual:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "s27 six tutorial checkpoint and phone captures",
+      "checkedAt": "2026-08-03T19:32:11.560Z"
+    },
+    {
+      "command": "npm run performance:botanical-lisp-tutorial",
+      "status": "failed",
+      "scope": "s27 initial production type gate",
+      "checkedAt": "2026-08-03T19:32:12.546Z",
+      "notes": "The new shared contract assertion narrowed heading blocks across Array.filter incorrectly; replaced with an inline discriminant check before rerun."
+    },
+    {
+      "command": "npm run performance:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "s27 production build transfer CLS long-task and motion budgets",
+      "checkedAt": "2026-08-03T19:32:13.515Z",
+      "notes": "101504 transfer bytes; 81947 script bytes; 21 resources; zero initial CLS; initial longest task 119ms; active p95 33.7ms; no active long tasks."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s27 shared seam and domain boundary",
+      "checkedAt": "2026-08-03T19:32:14.478Z"
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s27 botanical presentation remains experimental-local",
+      "checkedAt": "2026-08-03T19:32:15.456Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s27 patch hygiene",
+      "checkedAt": "2026-08-03T19:32:16.434Z"
     }
   ],
   "allowedWork": [
@@ -910,7 +979,8 @@
     {
       "id": "s27",
       "title": "Migrate Lisp and prove shared conformance",
-      "status": "planned"
+      "summary": "Migrated Lisp fully onto the shared document, motion, navigation, controls, tokens, and replaceable shell seams. Removed local corridor/frame/rebase wrapper exports, aligned the no-JS static projection with shared shell classes, strengthened the one-path two-caller contract suite, added Lisp conformance gates, and documented the explicitly experimental botanical APIs. Sixty Lisp tests, 17 shared/gold conformance tests, 16 combined route interactions, 15 cross-browser accessibility checks, catalogue and tutorial visuals, production build/performance, architecture, promotion memory, and patch hygiene pass. Production Lisp uses 101.5kB transfer, 81.9kB script, 21 resources, zero initial CLS, and 33.7ms active p95.",
+      "status": "complete"
     },
     {
       "id": "s28",
