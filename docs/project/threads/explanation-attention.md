@@ -2,13 +2,13 @@
 
 Status: active-supporting
 Last Updated: 2026-08-03
-Current Next Action: Execute the approved botanical Lisp and shared-lesson
-contract in
-`../reviews/2026-08-03-botanical-lisp-shared-lesson-long-loop-proposal.md`.
-Build the Lisp semantic asset and local tutorial first; only then compare it
-with the completed economics caller and extract lifecycle-identical lesson
-mechanics. Generated solve-x remains the third caller. Do not promote botanical
-motifs, adopt SvelteKit, or change the animation-promotion ledger.
+Current Next Action: Review the completed botanical Lisp tutorial and the
+deterministic economics/Lisp comparison in
+`../reviews/2026-08-03-botanical-lisp-shared-lesson-human-checkpoint.md`.
+Approve, repair, or reject the botanical language before any motif promotion;
+then pressure the shared lesson seams with generated solve-x as the third
+caller. Do not adopt SvelteKit, widen the lesson rollout, or change the
+animation-promotion ledger at this checkpoint.
 
 ## Goal
 
@@ -138,10 +138,12 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
    enhancement, and stage-composition revision. Complete.
 4. Human review and requested navigation/typography refinements. Complete.
 5. Botanical Lisp semantic asset and local tutorial as the structurally
-   different second caller. Next proposed loop.
+   different second caller. Complete; human review pending.
 6. Comparison of economics, Lisp, and the existing lesson document, followed
-   by promotion of only caller-proven shared lesson mechanics.
-7. Generated solve-x as a third caller before broad lesson rollout.
+   by extraction of only caller-proven shared lesson mechanics. Complete.
+7. Human review of the botanical language and shared lesson ergonomics.
+   Current checkpoint.
+8. Generated solve-x as a third caller before broad lesson rollout.
 
 ## Out Of Scope
 

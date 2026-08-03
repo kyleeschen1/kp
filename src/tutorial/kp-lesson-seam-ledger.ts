@@ -34,6 +34,21 @@ export interface KpLessonDocumentFieldLedgerEntry {
   readonly decision: string;
 }
 
+export type KpLessonApiTier =
+  | "shared-internal"
+  | "replaceable-first-party-host"
+  | "domain-internal"
+  | "experimental-domain";
+
+export interface KpLessonApiTierEntry {
+  readonly id: string;
+  readonly tier: KpLessonApiTier;
+  readonly ownerPaths: readonly string[];
+  readonly callers: readonly KpLessonSeamCaller[];
+  readonly boundary: string;
+  readonly promotionCondition?: string | undefined;
+}
+
 const economics = (...paths: readonly string[]): KpLessonSeamEvidence =>
   Object.freeze({ caller: "economics", paths: Object.freeze(paths) });
 const lisp = (...paths: readonly string[]): KpLessonSeamEvidence =>
@@ -245,6 +260,87 @@ export const kpLessonDocumentFieldLedger: readonly KpLessonDocumentFieldLedgerEn
     field("tutorial.assumption", "domain-extension", "required local metadata", "required local metadata", "Add as optional publication metadata rather than a competing document root.")
   ]);
 
+/**
+ * Two callers justify shared internal ownership, not a public package promise.
+ * The tiers keep the reusable lesson mechanics distinct from the replaceable
+ * Svelte host and from presentation language that still awaits human review.
+ */
+export const kpLessonApiTierLedger: readonly KpLessonApiTierEntry[] =
+  Object.freeze([
+    apiTier({
+      id: "lesson-document-adapter",
+      tier: "shared-internal",
+      ownerPaths: ["src/tutorial/kp-tutorial-lesson-document.ts"],
+      callers: ["economics", "lisp", "reader-document"],
+      boundary: "KpLessonDocument is the ordered content authority; domain compilers only adapt it."
+    }),
+    apiTier({
+      id: "lesson-motion",
+      tier: "shared-internal",
+      ownerPaths: ["src/tutorial/kp-tutorial-motion.ts"],
+      callers: ["economics", "lisp"],
+      boundary: "Projection, corridors, rebase, and one-rAF ownership never select a domain scene or renderer."
+    }),
+    apiTier({
+      id: "lesson-navigation",
+      tier: "shared-internal",
+      ownerPaths: ["src/tutorial/kp-tutorial-navigation.ts"],
+      callers: ["economics", "lisp"],
+      boundary: "The transaction owns restore-before-scroll ordering while callers resolve semantic state."
+    }),
+    apiTier({
+      id: "lesson-publication-controls",
+      tier: "shared-internal",
+      ownerPaths: [
+        "src/tutorial/kp-tutorial-publication-controls.ts",
+        "src/tutorial/kp-tutorial-toc.ts",
+        "src/tutorial/kp-tutorial-scrub-bar-renderer.ts"
+      ],
+      callers: ["economics", "lisp"],
+      boundary: "Static final geometry and meaningful links precede optional custom-element enhancement."
+    }),
+    apiTier({
+      id: "lesson-progressive-elements",
+      tier: "shared-internal",
+      ownerPaths: [
+        "src/tutorial/kp-tutorial-toc-element.ts",
+        "src/tutorial/kp-tutorial-scrub-bar.ts"
+      ],
+      callers: ["economics", "lisp"],
+      boundary: "Light-DOM elements enhance server-rendered controls in place and do not own lesson truth."
+    }),
+    apiTier({
+      id: "lesson-svelte-shell",
+      tier: "replaceable-first-party-host",
+      ownerPaths: [
+        "src/tutorial/KpTutorialLessonShell.svelte",
+        "src/tutorial/kp-tutorial-lesson-shell.css"
+      ],
+      callers: ["economics", "lisp"],
+      boundary: "Svelte owns first-party layout composition only; static publication and animation authority remain framework-neutral."
+    }),
+    apiTier({
+      id: "economics-lesson-presentation",
+      tier: "domain-internal",
+      ownerPaths: ["src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte"],
+      callers: ["economics"],
+      boundary: "Graph composition, equilibrium verification, parameters, spotlight geometry, and focus targets remain economics-owned."
+    }),
+    apiTier({
+      id: "lisp-botanical-presentation",
+      tier: "experimental-domain",
+      ownerPaths: [
+        "src/animation/lisp-botanical-presentation-plan.ts",
+        "src/rendering/lisp-botanical-stage-html.ts",
+        "src/tutorial/lisp-function-application/lisp-function-application-salience.ts",
+        "src/tutorial/lisp-function-application/lisp-function-application-motion-controller.ts"
+      ],
+      callers: ["lisp"],
+      boundary: "The metaphor, stage paint, salience, and choreography remain one reversible tutorial-local treatment.",
+      promotionCondition: "Human approval plus a structurally different approved botanical caller."
+    })
+  ]);
+
 export function validateKpLessonSeamLedger(): readonly string[] {
   const issues: string[] = [];
   const ids = new Set<string>();
@@ -271,11 +367,33 @@ export function validateKpLessonSeamLedger(): readonly string[] {
     if (fieldPaths.has(entry.path)) issues.push(`duplicate document field ${entry.path}`);
     fieldPaths.add(entry.path);
   }
+  const apiIds = new Set<string>();
+  for (const entry of kpLessonApiTierLedger) {
+    if (apiIds.has(entry.id)) issues.push(`duplicate lesson API tier ${entry.id}`);
+    apiIds.add(entry.id);
+    const callers = new Set(entry.callers);
+    if (
+      (entry.tier === "shared-internal" ||
+        entry.tier === "replaceable-first-party-host") &&
+      (!callers.has("economics") || !callers.has("lisp"))
+    ) issues.push(`shared lesson API ${entry.id} lacks two tutorial callers`);
+    if (entry.tier === "experimental-domain" && entry.promotionCondition === undefined) {
+      issues.push(`experimental lesson API ${entry.id} lacks a promotion condition`);
+    }
+  }
   return Object.freeze(issues);
 }
 
 function seam(entry: KpLessonSeamLedgerEntry): KpLessonSeamLedgerEntry {
   return Object.freeze({ ...entry, evidence: Object.freeze([...entry.evidence]) });
+}
+
+function apiTier(entry: KpLessonApiTierEntry): KpLessonApiTierEntry {
+  return Object.freeze({
+    ...entry,
+    ownerPaths: Object.freeze([...entry.ownerPaths]),
+    callers: Object.freeze([...entry.callers])
+  });
 }
 
 function field(

@@ -2,7 +2,8 @@
   "id": "run-contract.kp.botanical-lisp-shared-lesson-v0",
   "kind": "run-contract",
   "title": "Botanical Lisp and shared lesson seams",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -985,7 +986,8 @@
     {
       "id": "s28",
       "title": "Close release evidence and human checkpoint",
-      "status": "planned"
+      "summary": "Closed release evidence with an executable lesson API-tier ledger, deterministic economics/Lisp wide and phone comparison command, durable human checkpoint, aligned roadmap and threads, green full/unit/visual/performance/boundary checks, and explicit experimental botanical status.",
+      "status": "complete"
     }
   ]
 }

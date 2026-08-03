@@ -91,17 +91,18 @@ solid reading pointer, widens the three-column gutters, and increases prose
 line height. The exact route, graph, controls, responsive behavior, and
 performance ceilings are the reference caller.
 
-Botanical Lisp now replaces generated solve-x as the next tutorial caller,
+Botanical Lisp replaced generated solve-x as the second tutorial caller,
 recorded in
 `decisions/2026-08-03-kp-botanical-lisp-second-caller-and-shared-lesson-seams.md`.
-The loop first builds the exact lambda-application semantic asset and local
-tutorial, then compares economics, Lisp, and the existing `KpLessonDocument`
-before extracting shared lesson document, navigation, control, motion,
-publication, token, and Svelte-host seams. Domain semantics, renderer geometry,
-stage choreography, and salience profiles remain local. Generated solve-x is
-retained as the third caller. This priority does not resume linear algebra,
-authorize SvelteKit or Public Web, promote a botanical language pack, or move
-LLM wording into runtime. The approved contract rationale is
+The completed implementation builds the exact lambda-application semantic
+asset and local tutorial, compares economics, Lisp, and the existing
+`KpLessonDocument`, and extracts only caller-proven lesson document,
+navigation, control, motion, publication, token, and Svelte-host seams. Domain
+semantics, renderer geometry, stage choreography, and salience profiles remain
+local. Generated solve-x is retained as the third caller after human review.
+This result does not resume linear algebra, authorize SvelteKit or Public Web,
+promote a botanical language pack, or move LLM wording into runtime. The
+approved contract rationale is
 `reviews/2026-08-03-botanical-lisp-shared-lesson-long-loop-proposal.md`.
 
 The symbolic manipulation family plan recorded in
@@ -220,18 +221,20 @@ both operation-specific tuning and a speculative universal scene graph.
 
 ## Active Focus
 
-**The active implementation is the botanical Lisp semantic asset,
-tutorial, and two-caller shared lesson seam.** The exact exemplar is
-`((lambda (x) (+ x 1)) 4) -> (+ 4 1) -> 5`, published at the proposed internal
-route `/tutorials/programming/lisp-function-application/`. Lisp first proves
-S-expression occurrence identity, binding provenance, exact evaluation,
-material conservation, native settled code, reversible botanical presentation,
-and two cumulative motion blocks locally. Only after that complete caller
-exists may the loop compare it with economics and extract lifecycle-identical
-lesson mechanics. The economics route remains the visual, URL, responsive,
-and performance preservation baseline. Shared Svelte code may own replaceable
-first-party reader composition, but semantic assets, clocks, URLs, custom-
-element contracts, and stage renderers remain framework-neutral.
+**The botanical Lisp semantic asset, tutorial, and two-caller shared lesson
+seam are implementation-complete and now await human review.** The exact
+exemplar `((lambda (x) (+ x 1)) 4) -> (+ 4 1) -> 5` is published internally at
+`/tutorials/programming/lisp-function-application/`. It proves S-expression
+occurrence identity, binding provenance, exact evaluation, material
+conservation, native settled code, reversible botanical presentation, and two
+cumulative motion blocks. Economics and Lisp now share one lesson-document
+adapter, motion primitives, navigation transaction, progressive publication
+controls, layout tokens, and a replaceable Svelte host. Domain semantics,
+stage rendering, focus geometry, and choreography remain local. The botanical
+presentation remains experimental pending the checkpoint in
+`reviews/2026-08-03-botanical-lisp-shared-lesson-human-checkpoint.md`; generated
+solve-x remains the third caller, and no botanical motif, SvelteKit adoption,
+or wider lesson rollout is authorized.
 
 **Canonical construction, the fraction and radical migrations, foldable
 distribution pressure work, canonical fraction composition, and role-complete
@@ -567,17 +570,14 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Execute the approved botanical Lisp/shared-lesson contract, beginning with
-   the exact Lisp semantic asset and reversible botanical catalogue exemplar.
-2. Publish the Lisp function-application tutorial locally with continuous
-   prose, two cumulative motion blocks, semantic URLs, progressive controls,
-   and the economics reader baseline.
-3. Compare economics, Lisp, and `KpLessonDocument`; extract only proven shared
-   lesson document, navigation, control, motion, publication, layout-token, and
-   replaceable Svelte-host seams. Preserve domain stages and semantics.
-4. Stop for human review of the botanical language and shared lesson
-   ergonomics, then use generated solve-x as a third caller before broad
-   rollout.
+1. Review the economics/Lisp comparison checkpoint, especially botanical
+   legibility, binding/evaluation choreography, salience, and phone behavior.
+2. Approve, repair, or reject the botanical treatment while preserving the
+   certified Lisp semantics and the already-proven shared lesson mechanics.
+3. After approval, use generated solve-x as a third caller before any broad
+   lesson rollout or public tutorial API declaration.
+4. Keep botanical presentation experimental and SvelteKit/Public Web deferred
+   until those caller and publication gates pass.
 5. Select one nearer transformation exemplar without resuming the tabled
    matrix-to-linear-map run. Place-value subtraction remains the recommended
    default when animation-library promotion resumes.

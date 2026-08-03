@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  kpLessonApiTierLedger,
   kpLessonDocumentFieldLedger,
   kpLessonSeamLedger,
   validateKpLessonSeamLedger
@@ -69,4 +70,22 @@ test("domain projections have no shared extraction target", () => {
     ["inline-content-rendering", "semantic-stage-projection", "domain-runtime-and-parameters"]
   );
   assert.ok(local.every(({ extractionSlice }) => extractionSlice === undefined));
+});
+
+test("lesson API tiers keep shared mechanics internal and botanical paint experimental", () => {
+  const byId = new Map(kpLessonApiTierLedger.map((entry) => [entry.id, entry]));
+  for (const id of [
+    "lesson-document-adapter",
+    "lesson-motion",
+    "lesson-navigation",
+    "lesson-publication-controls",
+    "lesson-progressive-elements"
+  ]) assert.equal(byId.get(id)?.tier, "shared-internal");
+  assert.equal(byId.get("lesson-svelte-shell")?.tier, "replaceable-first-party-host");
+  assert.equal(byId.get("economics-lesson-presentation")?.tier, "domain-internal");
+  assert.equal(byId.get("lisp-botanical-presentation")?.tier, "experimental-domain");
+  assert.match(
+    byId.get("lisp-botanical-presentation")?.promotionCondition ?? "",
+    /Human approval/
+  );
 });

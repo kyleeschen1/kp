@@ -2,8 +2,130 @@
   "id": "next-action.kp.botanical-lisp-shared-lesson-v0",
   "kind": "next-action",
   "title": "Build botanical Lisp and extract shared lesson seams",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "HUMAN_CHECKPOINT: exact Lisp semantic asset, experimental botanical tutorial, two-caller shared lesson seams, API tiers, comparison evidence, release verification, and durable project memory are complete; motif promotion and third-caller rollout await human judgment.",
+  "verificationRecords": [
+    {
+      "command": "npm run visual:tutorial-lesson-comparison",
+      "status": "failed",
+      "scope": "comparison-discovery",
+      "checkedAt": "2026-08-03T19:56:44.760Z",
+      "notes": "Initial evidence probe assumed both callers placed the TOC in the same shell slot; the failure correctly exposed economics prose-owned TOC placement and preserved that domain projection."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "release",
+      "checkedAt": "2026-08-03T19:56:45.660Z",
+      "notes": "First release run caught an over-narrow HTMLElement annotation in the new comparison test before production measurement; widened the geometry helper to Element."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lesson-seam-ledger.test.ts tests/kp-tutorial-lesson-shell.test.ts tests/kp-economics-shared-lesson-conformance.test.ts tests/kp-lisp-shared-lesson-conformance.test.ts tests/kp-tutorial-publication-controls.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-03T19:56:46.545Z",
+      "notes": "17 shared seam, API-tier, shell, and publication-control checks passed."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full",
+      "checkedAt": "2026-08-03T19:56:47.412Z",
+      "notes": "Full unit, architecture, inference, concept-catalog, and promotion-memory suite passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "full",
+      "checkedAt": "2026-08-03T19:56:48.266Z",
+      "notes": "App, Node, test, Svelte, and domain type checks passed; Svelte reported zero errors and warnings."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "economics",
+      "checkedAt": "2026-08-03T19:56:49.123Z",
+      "notes": "26 focused economics tutorial and shared-conformance tests passed."
+    },
+    {
+      "command": "npm run test:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "lisp",
+      "checkedAt": "2026-08-03T19:56:49.981Z",
+      "notes": "60 semantic, runtime, publication, conformance, and presentation tests passed."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "economics-visual",
+      "checkedAt": "2026-08-03T19:56:50.845Z",
+      "notes": "12 Chromium tutorial, deep-link, progressive-enhancement, reduced-motion, and phone checks passed."
+    },
+    {
+      "command": "npm run visual:botanical-lisp-asset",
+      "status": "passed",
+      "scope": "lisp-visual",
+      "checkedAt": "2026-08-03T19:56:51.722Z",
+      "notes": "Five deterministic experimental-local asset checkpoints captured."
+    },
+    {
+      "command": "npm run visual:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "lisp-visual",
+      "checkedAt": "2026-08-03T19:56:52.598Z",
+      "notes": "Two tutorial tests produced six wide and phone checkpoint captures."
+    },
+    {
+      "command": "npm run visual:tutorial-lesson-comparison",
+      "status": "passed",
+      "scope": "comparison-release",
+      "checkedAt": "2026-08-03T19:56:53.443Z",
+      "notes": "Economics and Lisp settled checkpoints passed one shared geometry, typography, token, heading, motion-block, and progressive-control comparison path."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "economics-performance",
+      "checkedAt": "2026-08-03T19:56:54.390Z",
+      "notes": "Build passed; 310403 transfer bytes, 236714 script bytes, 48 resources, 0.000276 initial CLS, 104 ms initial longest task, and 34.2 ms active p95 remained within budgets."
+    },
+    {
+      "command": "npm run performance:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "lisp-performance",
+      "checkedAt": "2026-08-03T19:56:55.250Z",
+      "notes": "Build passed; 101504 transfer bytes, 81947 script bytes, 21 resources, zero initial CLS, 121 ms initial longest task, and 33.5 ms active p95 remained within budgets."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-03T19:56:56.127Z",
+      "notes": "All concept-room, reader, semantic-animation, and operation-presentation boundaries passed."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "project-memory",
+      "checkedAt": "2026-08-03T19:56:57.017Z",
+      "notes": "Rank 6 remains tabled with no conflicting active animation-promotion contract."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "worktree",
+      "checkedAt": "2026-08-03T19:56:57.905Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-08-03T19:56:58.792Z",
+      "notes": "Workspace valid at 875 nodes and 17110 events before release records."
+    }
+  ],
   "progress": {
     "state": "partial",
     "summary": "Approved 28-slice contract activated; economics baseline, Lisp semantic exemplar, shared-lesson boundary, verification tiers, deferrals, and stop conditions are now durable. Production work begins with the minimal Lisp semantic model in s02."

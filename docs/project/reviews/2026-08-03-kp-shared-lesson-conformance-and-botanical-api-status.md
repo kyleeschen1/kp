@@ -25,6 +25,27 @@ The shared contract suite exercises both publications through one assertion
 path. Caller-specific conformance tests additionally prevent economics or Lisp
 from reintroducing pass-through corridor, coordinator, TOC, or shell APIs.
 
+## API tiers after two callers
+
+The executable tier ledger is `src/tutorial/kp-lesson-seam-ledger.ts`. None of
+the newly shared lesson code is a public package promise.
+
+- The lesson-document adapter, motion projection, navigation transaction,
+  publication-control compiler, and progressively enhanced light-DOM elements
+  are **shared-internal** APIs backed by both economics and Lisp.
+- `KpTutorialLessonShell.svelte` and its layout tokens are a
+  **replaceable-first-party-host**. They reduce duplicate Svelte composition
+  without making Svelte the owner of content, controls, URLs, clocks, or stage
+  rendering.
+- Economics graph/focus/parameter composition is **domain-internal**.
+- Lisp botanical presentation, stage paint, salience, and orchestration are
+  **experimental-domain** APIs. They cannot advance without human approval and
+  a structurally different approved botanical caller.
+
+This classification deliberately stops short of a public tutorial SDK,
+SvelteKit adoption, generated solve-x migration, or a shared focus/scene-graph
+vocabulary.
+
 ## What remains local
 
 The following are domain projections, not missing shared abstractions:

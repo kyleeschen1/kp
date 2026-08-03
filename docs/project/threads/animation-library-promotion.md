@@ -3,8 +3,8 @@
 Status: active
 Last Updated: 2026-08-03
 Current Next Action: Keep `Apply a 2 × 2 matrix to a vector` tabled at its open
-visual checkpoint while the botanical Lisp tutorial and shared-lesson caller
-proof leads. When animation promotion resumes, select a nearer non-linear-
+visual checkpoint while the completed botanical Lisp/shared-lesson proof waits
+for human review. When animation promotion resumes, select a nearer non-linear-
 algebra transformation. Do not treat Lisp lesson work as a rank insertion,
 resume matrix generalization, or silently rerank this ledger.
 
