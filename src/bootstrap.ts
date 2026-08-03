@@ -13,12 +13,23 @@ import {
 import {
   isKpEconomicsDemandShiftTutorialRoute
 } from "./tutorial/economics-demand-shift/economics-demand-shift-route.ts";
+import {
+  isKpLispFunctionApplicationTutorialRoute
+} from "./tutorial/lisp-function-application/lisp-function-application-route.ts";
 
 const conceptCatalog: readonly GeneratedConceptCatalogEntry[] = generatedConceptCatalog;
 
 async function bootstrap(): Promise<void> {
   const root = document.querySelector<HTMLElement>("#app");
   if (root === null) throw new Error("Expected #app root element to exist.");
+  if (isKpLispFunctionApplicationTutorialRoute(window.location.pathname)) {
+    const tutorial = await import(
+      "./tutorial/lisp-function-application/lisp-function-application-tutorial-entry.ts"
+    );
+    const dispose = await tutorial.mountKpLispFunctionApplicationTutorial({ root });
+    window.addEventListener("pagehide", dispose, { once: true });
+    return;
+  }
   if (isKpEconomicsDemandShiftTutorialRoute(window.location.pathname)) {
     const tutorial = await import(
       "./tutorial/economics-demand-shift/economics-demand-shift-tutorial-entry.ts"

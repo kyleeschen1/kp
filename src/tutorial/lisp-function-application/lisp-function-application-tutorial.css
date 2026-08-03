@@ -1,0 +1,170 @@
+:root {
+  color: #203b35;
+  background: #f4f0e6;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizelegibility;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { min-width: 320px; margin: 0; background: #f4f0e6; }
+button, input { font: inherit; }
+
+.kp-lisp-tutorial {
+  --kp-lisp-ink: #203b35;
+  --kp-lisp-muted: #667b74;
+  --kp-lisp-line: #d8d1c2;
+  min-height: 100vh;
+  color: var(--kp-lisp-ink);
+}
+
+.kp-lisp-tutorial__visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.kp-lisp-tutorial__layout {
+  display: grid;
+  grid-template-columns: minmax(9rem, 13rem) minmax(28rem, 42rem) minmax(28rem, 44rem);
+  gap: clamp(3rem, 5vw, 6.5rem);
+  width: min(100% - 3rem, 94rem);
+  margin: 0 auto;
+  padding: 4rem 0 8rem;
+  align-items: start;
+}
+
+.kp-lisp-tutorial__toc,
+.kp-lisp-tutorial__stage {
+  position: sticky;
+  top: 50vh;
+  transform: translateY(-50%);
+  max-height: 88vh;
+}
+
+.kp-lisp-tutorial__toc { z-index: 4; }
+.kp-lisp-tutorial__stage { min-width: 0; }
+
+.kp-lisp-tutorial__intro { margin-bottom: 5rem; }
+.kp-lisp-tutorial__eyebrow {
+  margin: 0 0 1rem;
+  color: #7a6848;
+  font-size: .74rem;
+  font-weight: 750;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.kp-lisp-tutorial__question {
+  margin: 0;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  font-size: clamp(1.7rem, 3.1vw, 2.5rem);
+  line-height: 1.16;
+  text-wrap: balance;
+}
+.kp-lisp-tutorial__assumption {
+  margin: 1.4rem 0 0;
+  color: var(--kp-lisp-muted);
+  font-size: .94rem;
+  line-height: 1.65;
+}
+
+.kp-lisp-tutorial__prose section { scroll-margin-top: 10vh; }
+.kp-lisp-tutorial__prose section + section { margin-top: 5.5rem; }
+.kp-lisp-tutorial__prose h3 {
+  margin: 0 0 1.6rem;
+  font-size: 1.15rem;
+  line-height: 1.35;
+  letter-spacing: -.01em;
+}
+.kp-lisp-tutorial__passage p {
+  margin: 0 0 1.15rem;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  font-size: clamp(1.04rem, 1.25vw, 1.16rem);
+  line-height: 1.78;
+}
+.kp-lisp-tutorial__passage p + p { text-indent: 1.35em; }
+.kp-lisp-tutorial__inline-code {
+  padding: .08em .28em;
+  border-radius: .3em;
+  background: rgb(32 59 53 / .07);
+  font-size: .92em;
+}
+
+.kp-lisp-tutorial__motion-block {
+  position: relative;
+  margin: 2.3rem 0;
+  padding: .7rem 0;
+  scroll-margin-top: 45vh;
+}
+.kp-lisp-tutorial__checkpoint-anchor {
+  position: absolute;
+  top: 50%;
+  width: 1px;
+  height: 1px;
+  scroll-margin-top: 45vh;
+}
+.kp-lisp-tutorial__footer {
+  margin-top: 6rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--kp-lisp-line);
+}
+.kp-lisp-tutorial a { color: #436d62; }
+
+.kp-lisp-tutorial__toc kp-tutorial-toc { display: block; }
+.kp-lisp-tutorial__toc .kp-tutorial-toc__label {
+  margin: 0 0 1rem;
+  color: var(--kp-lisp-muted);
+  font-size: .72rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.kp-lisp-tutorial__toc .kp-tutorial-toc__list {
+  display: grid;
+  gap: .65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.kp-lisp-tutorial__toc .kp-tutorial-toc__list--depth-1,
+.kp-lisp-tutorial__toc .kp-tutorial-toc__list--depth-2 { display: none; }
+.kp-lisp-tutorial__toc a { color: var(--kp-lisp-muted); font-size: .82rem; text-decoration: none; }
+.kp-lisp-tutorial__toc a[aria-current="location"] { color: var(--kp-lisp-ink); font-weight: 700; }
+
+@media (max-width: 76rem) {
+  .kp-lisp-tutorial__layout {
+    grid-template-columns: minmax(24rem, 38rem) minmax(24rem, 40rem);
+    gap: 3rem;
+    width: min(100% - 2.5rem, 76rem);
+  }
+  .kp-lisp-tutorial__toc { display: none; }
+}
+
+@media (max-width: 52rem) {
+  .kp-lisp-tutorial__layout {
+    display: flex;
+    flex-direction: column;
+    width: min(100% - 2rem, 42rem);
+    padding-top: 2rem;
+  }
+  .kp-lisp-tutorial__prose { display: contents; }
+  .kp-lisp-tutorial__intro { order: 0; }
+  .kp-lisp-tutorial__stage {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    order: 1;
+    width: 100%;
+    max-height: 48vh;
+    transform: none;
+    background: #f4f0e6;
+  }
+  .kp-lisp-tutorial__prose section,
+  .kp-lisp-tutorial__footer { order: 2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

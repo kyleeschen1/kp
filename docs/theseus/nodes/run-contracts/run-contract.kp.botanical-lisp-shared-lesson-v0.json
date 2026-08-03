@@ -242,6 +242,25 @@
       "status": "passed",
       "scope": "s11 test inference",
       "checkedAt": "2026-08-03T17:11:32.232Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-tutorial-route.test.ts tests/kp-lisp-publication.test.ts tests/kp-lisp-botanical-stage-renderer.test.ts",
+      "status": "passed",
+      "scope": "s12 ten route host publication and stage tests",
+      "checkedAt": "2026-08-03T17:16:46.995Z"
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s12 Svelte host diagnostics",
+      "checkedAt": "2026-08-03T17:16:48.090Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s12 production lazy route chunk",
+      "checkedAt": "2026-08-03T17:16:49.018Z",
+      "notes": "Lisp route emits separate 8.75 kB gzip JS and 1.26 kB gzip CSS chunks; inherited large workbench warning remains unchanged."
     }
   ],
   "allowedWork": [
@@ -334,7 +353,8 @@
     {
       "id": "s12",
       "title": "Host local Svelte tutorial route",
-      "status": "planned"
+      "summary": "Mounted /tutorials/programming/lisp-function-application/ through a thin lazy Svelte shell with h3 headings, continuous indented prose, fixed left TOC, persistent contiguous right stage, static motion controls, and Review capture. Semantic models, samplers, renderer, URLs, and controls remain framework-neutral. Ten focused tests, zero Svelte diagnostics, app/test TypeScript, and production build pass; the route emits separate 8.75 kB JS and 1.26 kB CSS gzip chunks.",
+      "status": "complete"
     },
     {
       "id": "s13",
