@@ -696,6 +696,130 @@ test("manual supply playback preserves the settled demand handoff", async ({
   );
 });
 
+test("verification surface enters and exits without changing outer stage geometry", async ({
+  page
+}) => {
+  await page.goto(route);
+
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const host = root.locator("[data-kp-economics-stage='economics-stage']");
+  const graphSlot = host.locator(
+    ".editor-animation-player__surface--graph"
+  );
+  const aperture = host.locator(
+    "[data-kp-economics-stage-aperture='verification-aperture']"
+  );
+  const verificationSurface = aperture.locator(
+    "[data-kp-economics-stage-surface='equilibrium-verification']"
+  );
+  const supplyMotionCue = root.locator(
+    '[data-kp-tutorial-motion-block="supply-movement"] kp-tutorial-scrub-bar'
+  );
+  const supplyScrubber = supplyMotionCue.getByRole("slider", {
+    name: "Scrub animation progress"
+  });
+  await supplyMotionCue.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.38
+  }));
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-active-block",
+    "supply-movement"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-stage-composition-phase",
+    "merged"
+  );
+  const outerBefore = await host.boundingBox();
+  expect(outerBefore).not.toBeNull();
+
+  await supplyScrubber.fill("0.71");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-stage-composition-phase",
+    "composing"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-stage-composition-progress",
+    "0.500"
+  );
+  await expect(aperture).toHaveAttribute(
+    "data-kp-economics-stage-aperture-openness",
+    "0.500"
+  );
+  await expect(verificationSurface).toHaveAttribute(
+    "data-kp-economics-stage-surface-lifecycle",
+    "transiting"
+  );
+  await expect.poll(() => aperture.evaluate((element) => ({
+    clipPath: getComputedStyle(element).clipPath,
+    travel: getComputedStyle(
+      element.firstElementChild as HTMLElement
+    ).transform
+  }))).toEqual({
+    clipPath: "inset(0px 0px 0px 50%)",
+    travel: expect.not.stringMatching(/^none$/)
+  });
+
+  await supplyScrubber.fill("0.84");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-stage-composition-phase",
+    "split"
+  );
+  await expect(verificationSurface).toHaveAttribute(
+    "data-kp-economics-stage-surface-lifecycle",
+    "settled"
+  );
+  const splitGeometry = await host.evaluate((element) => {
+    const hostRect = element.getBoundingClientRect();
+    const graph = element.querySelector<HTMLElement>(
+      ".editor-animation-player__surface--graph"
+    )!.getBoundingClientRect();
+    const apertureRect = element.querySelector<HTMLElement>(
+      "[data-kp-economics-stage-aperture]"
+    )!.getBoundingClientRect();
+    return {
+      graph: {
+        inline: (graph.left - hostRect.left) / hostRect.width,
+        block: (graph.top - hostRect.top) / hostRect.height,
+        inlineSize: graph.width / hostRect.width,
+        blockSize: graph.height / hostRect.height
+      },
+      aperture: {
+        inline: (apertureRect.left - hostRect.left) / hostRect.width,
+        block: (apertureRect.top - hostRect.top) / hostRect.height,
+        inlineSize: apertureRect.width / hostRect.width,
+        blockSize: apertureRect.height / hostRect.height
+      }
+    };
+  });
+  expect(splitGeometry.graph.inline).toBeCloseTo(0.02, 2);
+  expect(splitGeometry.graph.block).toBeCloseTo(0.03, 2);
+  expect(splitGeometry.graph.inlineSize).toBeCloseTo(0.64, 2);
+  expect(splitGeometry.graph.blockSize).toBeCloseTo(0.94, 2);
+  expect(splitGeometry.aperture.inline).toBeCloseTo(0.7, 2);
+  expect(splitGeometry.aperture.block).toBeCloseTo(0.14, 2);
+  expect(splitGeometry.aperture.inlineSize).toBeCloseTo(0.28, 2);
+  expect(splitGeometry.aperture.blockSize).toBeCloseTo(0.72, 2);
+
+  await supplyScrubber.fill("0.58");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-stage-composition-phase",
+    "merged"
+  );
+  await expect(verificationSurface).toHaveAttribute(
+    "data-kp-economics-stage-surface-lifecycle",
+    "outside"
+  );
+  const outerAfter = await host.boundingBox();
+  const graphAfter = await graphSlot.boundingBox();
+  expect(outerAfter).not.toBeNull();
+  expect(graphAfter).not.toBeNull();
+  expect(outerAfter!.width).toBeCloseTo(outerBefore!.width, 1);
+  expect(outerAfter!.height).toBeCloseTo(outerBefore!.height, 1);
+  expect(graphAfter!.width).toBeCloseTo(outerBefore!.width, 1);
+  expect(graphAfter!.height).toBeCloseTo(outerBefore!.height, 1);
+});
+
 test("reduced-motion readers retain the text-free divider without automatic seek", async ({
   page
 }) => {

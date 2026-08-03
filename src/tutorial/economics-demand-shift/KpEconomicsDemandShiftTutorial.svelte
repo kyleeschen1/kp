@@ -212,6 +212,33 @@
     `--kp-tutorial-supply-trace:${clamp((supplyMovementProgress - 0.12) / 0.46, 0, 1).toFixed(3)};` +
     `--kp-tutorial-supply-comparison:${clamp((supplyMovementProgress - 0.58) / 0.42, 0, 1).toFixed(3)}`
   );
+  let stageComposition = $derived(lessonMotionProjection.composition);
+  let graphStageSlot = $derived(
+    stageComposition.slots.find(({ id }) => id === "graph-slot")!
+  );
+  let verificationStageSlot = $derived(
+    stageComposition.slots.find(({ id }) => id === "verification-slot")!
+  );
+  let verificationStageSurface = $derived(
+    stageComposition.surfaces.find(
+      ({ id }) => id === "equilibrium-verification"
+    )!
+  );
+  let stageCompositionStyle = $derived(
+    `--kp-stage-graph-inline:${percent(graphStageSlot.rect.inline)};` +
+    `--kp-stage-graph-block:${percent(graphStageSlot.rect.block)};` +
+    `--kp-stage-graph-inline-size:${percent(graphStageSlot.rect.inlineSize)};` +
+    `--kp-stage-graph-block-size:${percent(graphStageSlot.rect.blockSize)};` +
+    `--kp-stage-verification-inline:${percent(verificationStageSlot.rect.inline)};` +
+    `--kp-stage-verification-block:${percent(verificationStageSlot.rect.block)};` +
+    `--kp-stage-verification-inline-size:${percent(verificationStageSlot.rect.inlineSize)};` +
+    `--kp-stage-verification-block-size:${percent(verificationStageSlot.rect.blockSize)};` +
+    `--kp-stage-aperture-inset:${percent(1 - stageComposition.aperture.openness)};` +
+    `--kp-stage-verification-travel:${percent(
+      (verificationStageSurface.rect.inline - verificationStageSlot.rect.inline) /
+        verificationStageSlot.rect.inlineSize
+    )}`
+  );
   let supplyInterpretationPhase = $derived(
     supplyMovementProgress <= 0.001
       ? "ready"
@@ -946,6 +973,10 @@
     return Math.max(minimum, Math.min(maximum, value));
   }
 
+  function percent(value: number): string {
+    return `${(value * 100).toFixed(4)}%`;
+  }
+
   function projectAttentionFocusRect(
     rect: DOMRect,
     inset: number,
@@ -993,7 +1024,9 @@
   data-kp-economics-tutorial-scene-market={lessonMotionProjection.scene.market}
   data-kp-economics-tutorial-scene-presentation={lessonMotionProjection.scene.presentation}
   data-kp-economics-tutorial-supply-interpretation={supplyInterpretationPhase}
-  style={supplyInterpretationStyle}
+  data-kp-economics-stage-composition-phase={stageComposition.phase}
+  data-kp-economics-stage-composition-progress={stageComposition.progress.toFixed(3)}
+  style={`${supplyInterpretationStyle};${stageCompositionStyle}`}
 >
   <h1 class="kp-economics-tutorial__visually-hidden">
     Economics demand-shift tutorial
@@ -1140,9 +1173,25 @@
           class="kp-economics-tutorial__player-host"
           data-kp-animation-catalogue-stage
           data-kp-animation-catalogue-stage-persistent="true"
+          data-kp-economics-stage="economics-stage"
+          data-kp-economics-stage-outer-geometry="fixed"
           aria-busy={!ready}
         >
           {@html playerHtml}
+          <div
+            class="kp-economics-tutorial__verification-aperture"
+            data-kp-economics-stage-aperture="verification-aperture"
+            data-kp-economics-stage-aperture-edge={stageComposition.aperture.edge}
+            data-kp-economics-stage-aperture-openness={stageComposition.aperture.openness.toFixed(3)}
+            aria-hidden="true"
+          >
+            <div
+              class="kp-economics-tutorial__verification-surface"
+              data-kp-economics-stage-surface="equilibrium-verification"
+              data-kp-economics-stage-slot="verification-slot"
+              data-kp-economics-stage-surface-lifecycle={verificationStageSurface.lifecycle}
+            ></div>
+          </div>
           <div
             class="kp-economics-tutorial__spotlight"
             data-kp-economics-tutorial-spotlight

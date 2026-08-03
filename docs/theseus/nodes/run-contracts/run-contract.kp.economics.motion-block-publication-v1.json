@@ -269,6 +269,27 @@
       "scope": "s13",
       "checkedAt": "2026-08-03T07:00:35.366Z",
       "notes": "Active stage-composition diff has no whitespace errors."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-08-03T07:06:20.757Z",
+      "notes": "Svelte and TypeScript diagnostics pass with zero errors and warnings."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-08-03T07:06:21.903Z",
+      "notes": "Six Chromium exemplar checks pass; aperture openness, surface lifecycle, exact normalized split geometry, reverse merge, phone omission, and invariant outer stage dimensions are proven."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-08-03T07:06:22.870Z",
+      "notes": "Active aperture slice diff has no whitespace errors."
     }
   ],
   "allowedWork": [
@@ -373,7 +394,8 @@
     {
       "id": "s14",
       "title": "Add-aperture-ingress-egress",
-      "status": "planned"
+      "summary": "Bound cumulative composition to one fixed outer stage: the graph moves through normalized slot geometry while an empty frameless verification surface enters/exits through a clipped inline-end aperture; midpoint, split, reverse merge, phone omission, and invariant dimensions are browser-proven.",
+      "status": "complete"
     },
     {
       "id": "s15",
