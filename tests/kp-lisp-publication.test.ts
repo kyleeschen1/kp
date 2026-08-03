@@ -41,7 +41,7 @@ test("publication emits useful static TOC and scrubber geometry", async () => {
   }
 });
 
-test("compiler rejects missing motion coverage and raw HTML", () => {
+test("compiler rejects missing, unintroduced, and unsafe motion content", async () => {
   const incomplete = `# T\nKicker: K\nAssumption: A\n### S\n<!-- kp:section s -->\n<!-- kp:passage p -->\nText.`;
   assert.throws(
     () => compileKpLispFunctionApplicationPublication(incomplete),
@@ -52,5 +52,16 @@ test("compiler rejects missing motion coverage and raw HTML", () => {
       incomplete.replace("Text.", "<script>alert(1)</script>")
     ),
     /Unsupported Lisp lesson HTML/
+  );
+  const source = await readFile(lessonUrl, "utf8");
+  const unintroduced = source
+    .replace("<!-- kp:motion bind-and-reconstruct -->", "")
+    .replace(
+      "<!-- kp:passage binding-before -->",
+      "<!-- kp:motion bind-and-reconstruct -->\n\n<!-- kp:passage binding-before -->"
+    );
+  assert.throws(
+    () => compileKpLispFunctionApplicationPublication(unintroduced),
+    /follow an introducing passage/
   );
 });

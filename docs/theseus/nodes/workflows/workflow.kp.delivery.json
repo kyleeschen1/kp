@@ -33,7 +33,8 @@
     "next-action.kp.six-loop-product-convergence-v0",
     "next-action.kp.vector-label-attenuation-correction-v0",
     "next-action.refill.plan-phase.plan-revision.kp.v22.svelte-catalogue-shell",
-    "next-action.refill.plan-phase.plan-revision.kp.v22.matrix-linear-map"
+    "next-action.refill.plan-phase.plan-revision.kp.v22.matrix-linear-map",
+    "next-action.kp.tutorial.unified-attention-projection-v0"
   ],
   "verificationRecords": [
     {

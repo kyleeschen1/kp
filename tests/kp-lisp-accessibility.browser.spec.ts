@@ -69,9 +69,22 @@ test("high contrast replaces attenuation and shadows with system emphasis", asyn
   await page.goto(route);
   const root = page.locator("[data-kp-lisp-function-application-tutorial]");
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.0000");
+  const attentionRegion = root.locator(
+    '[data-kp-tutorial-attention-passage="expression-as-structure"]'
+  );
+  await attentionRegion.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.38
+  }));
+  await expect(attentionRegion).toHaveAttribute(
+    "data-kp-lisp-reading-active",
+    "true"
+  );
   const projection = await root.evaluate((element) => {
     const target = element.querySelector<HTMLElement>('[data-kp-lisp-salience="target"]')!;
-    const passage = element.querySelector<HTMLElement>('[data-kp-lisp-passage-salience="target"]')!;
+    const passage = element.querySelector<HTMLElement>(
+      '[data-kp-tutorial-attention-region][data-kp-lisp-reading-active="true"]'
+    )!;
     return {
       targetFilter: getComputedStyle(target).filter,
       passageShadow: getComputedStyle(passage).boxShadow,

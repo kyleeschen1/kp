@@ -32,6 +32,7 @@
     "visual:economics-demand-shift-tutorial": "playwright test tests/economics-demand-shift-tutorial.browser.spec.ts --project=chromium --workers=1",
     "visual:botanical-lisp-asset": "node --disable-warning=ExperimentalWarning scripts/capture-botanical-lisp-asset.ts",
     "test:botanical-lisp-tutorial": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-*.test.ts",
+    "test:browser:botanical-lisp-tutorial": "playwright test tests/kp-lisp-scroll-coordination.browser.spec.ts tests/kp-lisp-tutorial-visual.browser.spec.ts tests/kp-lisp-accessibility.browser.spec.ts tests/kp-lisp-lesson-navigation.browser.spec.ts --project=chromium --workers=1",
     "visual:botanical-lisp-tutorial": "playwright test tests/kp-lisp-tutorial-visual.browser.spec.ts --project=chromium --workers=1",
     "visual:tutorial-lesson-comparison": "playwright test tests/kp-tutorial-lesson-comparison.browser.spec.ts --project=chromium --workers=1",
     "preview:botanical-lisp-performance": "vite preview --port 4177 --strictPort",

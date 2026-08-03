@@ -50,7 +50,11 @@ test("approved economics prose and semantic controls form one persistent tutoria
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-scroll-active-block",
-    "demand-shift"
+    ""
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-attention-passage",
+    ""
   );
   await expect(root.getByText(
     "Why does an increase in demand raise both equilibrium price and equilibrium quantity when supply remains fixed?"
@@ -270,6 +274,32 @@ test("approved economics prose and semantic controls form one persistent tutoria
   );
   await expect(readingPointer)
     .toHaveAttribute("data-kp-reading-band-state", "crossing");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-attention-passage",
+    "demand-change"
+  );
+  const attentionContainment = await root.evaluate((element) => {
+    const activePassages = [...element.querySelectorAll<HTMLElement>(
+      ".kp-economics-tutorial__passage--active"
+    )];
+    const pointer = element.querySelector<HTMLElement>(
+      "[data-kp-economics-tutorial-reading-band]"
+    );
+    const passageBounds = activePassages[0]?.getBoundingClientRect();
+    const pointerBounds = pointer?.getBoundingClientRect();
+    const cursorY = pointerBounds === undefined
+      ? Number.NaN
+      : pointerBounds.top + pointerBounds.height / 2;
+    return {
+      activeCount: activePassages.length,
+      cursorIsInsideActivePassage: passageBounds !== undefined &&
+        cursorY >= passageBounds.top && cursorY <= passageBounds.bottom
+    };
+  });
+  expect(attentionContainment).toEqual({
+    activeCount: 1,
+    cursorIsInsideActivePassage: true
+  });
   const pointerProjection = await readingPointer.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     const style = getComputedStyle(element);

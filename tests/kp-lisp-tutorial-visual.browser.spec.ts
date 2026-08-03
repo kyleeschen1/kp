@@ -12,6 +12,9 @@ test("the shared shell preserves the approved reader attention cues", async ({ p
   const passage = root.locator(
     '[data-kp-lisp-tutorial-passage="binding-before"]'
   );
+  const attentionRegion = root.locator(
+    '[data-kp-tutorial-attention-passage="binding-before"]'
+  );
   const motion = root.locator(
     '[data-kp-tutorial-motion-block="bind-and-reconstruct"]'
   );
@@ -44,11 +47,14 @@ test("the shared shell preserves the approved reader attention cues", async ({ p
     "data-kp-lisp-tutorial-reading-passage",
     "binding-before"
   );
-  await expect(passage).toHaveAttribute("data-kp-lisp-reading-active", "true");
+  await expect(attentionRegion).toHaveAttribute(
+    "data-kp-lisp-reading-active",
+    "true"
+  );
   const toc = root.locator("kp-tutorial-toc");
   await expect(toc).toHaveAttribute(
     "data-kp-tutorial-toc-active-id",
-    "bind-argument"
+    "application-ready"
   );
 
   const pointer = root.locator("[data-kp-lisp-tutorial-reading-band]");
@@ -56,9 +62,11 @@ test("the shared shell preserves the approved reader attention cues", async ({ p
   const cueProjection = await pointer.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     const style = getComputedStyle(element);
-    const activePassage = document.querySelector<HTMLElement>(
-      '[data-kp-lisp-reading-active="true"]'
+    const activeRegion = document.querySelector<HTMLElement>(
+      '[data-kp-tutorial-attention-region][data-kp-lisp-reading-active="true"]'
     )!;
+    const activeBounds = activeRegion.getBoundingClientRect();
+    const cursorY = bounds.top + bounds.height / 2;
     return {
       background: style.backgroundColor,
       clipPath: style.clipPath,
@@ -68,8 +76,10 @@ test("the shared shell preserves the approved reader attention cues", async ({ p
       width: bounds.width,
       height: bounds.height,
       right: bounds.right,
-      passageLeft: activePassage.getBoundingClientRect().left,
-      rail: getComputedStyle(activePassage).borderLeftColor
+      passageLeft: activeBounds.left,
+      rail: getComputedStyle(activeRegion).borderLeftColor,
+      cursorIsInsideActiveRegion: cursorY >= activeBounds.top &&
+        cursorY <= activeBounds.bottom
     };
   });
   expect(cueProjection).toMatchObject({
@@ -82,6 +92,7 @@ test("the shared shell preserves the approved reader attention cues", async ({ p
   expect(cueProjection.width).toBeGreaterThanOrEqual(16);
   expect(cueProjection.height).toBeGreaterThanOrEqual(19);
   expect(cueProjection.right).toBeLessThan(cueProjection.passageLeft);
+  expect(cueProjection.cursorIsInsideActiveRegion).toBe(true);
 });
 
 test("capture the complete local Lisp tutorial checkpoint story", async ({ page }) => {

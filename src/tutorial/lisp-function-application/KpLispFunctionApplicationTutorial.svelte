@@ -1,6 +1,7 @@
 <script lang="ts">
   import type {
     KpLispFunctionApplicationLesson,
+    KpLispLessonPassageBlock,
     KpLispLessonMotionBlockRef
   } from "./lisp-function-application-lesson-compiler.ts";
   import {
@@ -30,6 +31,50 @@
     return kpLispLessonMotionBlocks.find(({ id }) => id === block.id)!;
   }
 </script>
+
+{#snippet passage(block: KpLispLessonPassageBlock)}
+  <div
+    id={`kp-passage-${block.id}`}
+    class="kp-lisp-tutorial__passage"
+    data-kp-lisp-tutorial-passage={block.id}
+  >
+    {#each block.paragraphs as paragraph}
+      <p>{@html paragraph.html}</p>
+    {/each}
+  </div>
+{/snippet}
+
+{#snippet motionBlock(
+  block: KpLispLessonMotionBlockRef,
+  introduction: KpLispLessonPassageBlock | undefined
+)}
+  {@const definition = motion(block)}
+  <div
+    class="kp-tutorial-shell__motion-block kp-lisp-tutorial__motion-block"
+    id={`kp-block-${definition.id}`}
+    data-kp-tutorial-motion-block={definition.id}
+    data-kp-tutorial-destination="block"
+    data-kp-tutorial-destination-id={definition.id}
+    data-kp-tutorial-motion-introduction={introduction?.id}
+    role="group"
+    aria-label={`${definition.label} animation step`}
+    aria-describedby={introduction === undefined
+      ? undefined
+      : `kp-passage-${introduction.id}`}
+  >
+    {#each definition.checkpoints as checkpoint}
+      <span
+        class="kp-lisp-tutorial__checkpoint-anchor"
+        id={`kp-checkpoint-${checkpoint.id}`}
+        data-kp-tutorial-destination="checkpoint"
+        data-kp-tutorial-destination-id={checkpoint.id}
+        data-kp-tutorial-destination-block={definition.id}
+        aria-hidden="true"
+      ></span>
+    {/each}
+    {@html motionScrubBarHtml[definition.id]}
+  </div>
+{/snippet}
 
 <KpTutorialLessonShell
   rootClass="kp-lisp-tutorial"
@@ -83,46 +128,20 @@
 
           {#each section.blocks as block, index}
             {#if block.kind === "passage"}
+              {@const following = section.blocks[index + 1]}
               <div
-                id={`kp-passage-${block.id}`}
-                class="kp-lisp-tutorial__passage"
-                data-kp-lisp-tutorial-passage={block.id}
+                class="kp-lisp-tutorial__attention-region"
+                data-kp-tutorial-attention-region={block.id}
+                data-kp-tutorial-attention-passage={block.id}
+                data-kp-tutorial-attention-motion-block={following?.kind === "motion"
+                  ? following.id
+                  : undefined}
+                data-kp-lisp-reading-active="false"
               >
-                {#each block.paragraphs as paragraph}
-                  <p>{@html paragraph.html}</p>
-                {/each}
-              </div>
-            {:else}
-              {@const definition = motion(block)}
-              {@const introduction = section.blocks[index - 1]}
-              <div
-                class="kp-tutorial-shell__motion-block kp-lisp-tutorial__motion-block"
-                id={`kp-block-${definition.id}`}
-                data-kp-tutorial-motion-block={definition.id}
-                data-kp-tutorial-destination="block"
-                data-kp-tutorial-destination-id={definition.id}
-                data-kp-tutorial-motion-introduction={
-                  introduction?.kind === "passage" ? introduction.id : undefined
-                }
-                role="group"
-                aria-label={`${definition.label} animation step`}
-                aria-describedby={
-                  introduction?.kind === "passage"
-                    ? `kp-passage-${introduction.id}`
-                    : undefined
-                }
-              >
-                {#each definition.checkpoints as checkpoint}
-                  <span
-                    class="kp-lisp-tutorial__checkpoint-anchor"
-                    id={`kp-checkpoint-${checkpoint.id}`}
-                    data-kp-tutorial-destination="checkpoint"
-                    data-kp-tutorial-destination-id={checkpoint.id}
-                    data-kp-tutorial-destination-block={definition.id}
-                    aria-hidden="true"
-                  ></span>
-                {/each}
-                {@html motionScrubBarHtml[definition.id]}
+                {@render passage(block)}
+                {#if following?.kind === "motion"}
+                  {@render motionBlock(following, block)}
+                {/if}
               </div>
             {/if}
           {/each}

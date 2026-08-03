@@ -25,7 +25,6 @@
     findKpEconomicsDemandShiftCheckpointIndex,
     kpEconomicsDemandShiftCheckpoints,
     selectKpEconomicsDemandShiftPlaybackCheckpointId,
-    selectKpEconomicsReadingBandPassage,
     stepKpEconomicsDemandShiftCheckpoint
   } from "./economics-demand-shift-checkpoints.ts";
   import type {
@@ -41,6 +40,11 @@
     projectKpEconomicsLessonMotion,
     type KpEconomicsMotionBlockId
   } from "./economics-demand-shift-motion-blocks.ts";
+  import {
+    measureKpTutorialAttentionRegions,
+    projectKpTutorialAttentionFrame,
+    type KpTutorialAttentionFrame
+  } from "../kp-tutorial-attention.ts";
   import {
     KpTutorialScrollCoordinator,
     projectKpTutorialRebasedCorridor,
@@ -189,7 +193,12 @@
     "idle"
   );
   let reducedMotion = $state(false);
-  let readingBandProximity = $state(0);
+  let attentionPassageId = $state<string | undefined>(
+    kpEconomicsDemandShiftCheckpoints[initialDeepLink.checkpointIndex]!.passageId
+  );
+  let attentionCursorState = $state<
+    KpTutorialAttentionFrame["state"]
+  >("between-regions");
   let scrollCoordinatorStatus = $state<"pending" | "connected">("pending");
   let scrollActiveMotionBlock = $state<KpEconomicsMotionBlockId | "">(
     initialDeepLink.motion.activeBlockId
@@ -797,6 +806,9 @@
     projection: KpTutorialCoordinatedScrollProjection<KpEconomicsMotionBlockId>
   ): void {
     latestScrollProjection = projection;
+    const tutorialAttention = updateReadingBandSelection(
+      projection.readingBandY
+    );
     const movedFromNavigation = navigationProjectionPending &&
       navigationScrollIntent &&
       navigationLockedScrollY !== undefined &&
@@ -823,11 +835,22 @@
       navigationScrollIntent = false;
       navigationResume = undefined;
     }
-    scrollActiveMotionBlock = projection.activeBlockId ?? "";
-    const active = projection.blocks.find(({ ownsScroll }) => ownsScroll);
+    const active = tutorialAttention.activeMotionBlockId === undefined
+      ? undefined
+      : projection.blocks.find(
+        ({ id }) => id === tutorialAttention.activeMotionBlockId
+      );
     const activeScrubBar = active?.id === "supply-movement"
       ? supplyScrubBar
       : demandScrubBar;
+    if (
+      active === undefined &&
+      projection.scrollChanged &&
+      !navigationProjectionPending &&
+      tutorialAttention.activePassageId !== undefined
+    ) {
+      settleMotionOutsideAttentionBlock(tutorialAttention.activePassageId);
+    }
     if (active !== undefined && activeScrubBar !== undefined) {
       const distance = active.anchorTop - projection.readingBandY;
       activeScrubBar.setReadingBandProjection({
@@ -880,61 +903,90 @@
         seek(lessonMotionProjection.demandShiftProgress);
       }
     }
-    if (!navigationProjectionPending) updateReadingBandSelection();
     updateAttentionProjection();
   }
 
-  function updateReadingBandSelection(): void {
-    if (shell === undefined) return;
+  function settleMotionOutsideAttentionBlock(passageId: string): void {
+    const passageOrder = lesson.sections.flatMap(({ passages }) =>
+      passages.map((passage) => passage.id)
+    );
+    const passageIndex = passageOrder.indexOf(passageId);
+    const demandIndex = passageOrder.indexOf("follow-shift");
+    const supplyIndex = passageOrder.indexOf("shift-versus-movement");
+    if (passageIndex < 0 || demandIndex < 0 || supplyIndex < 0) return;
+
+    const boundary = passageIndex < demandIndex
+      ? { activeBlockId: "demand-shift" as const, localProgress: 0 }
+      : passageIndex > supplyIndex
+        ? { activeBlockId: "supply-movement" as const, localProgress: 1 }
+        : passageIndex > demandIndex && passageIndex < supplyIndex
+          ? { activeBlockId: "demand-shift" as const, localProgress: 1 }
+          : undefined;
+    if (boundary === undefined) return;
+
+    // Once the cursor enters prose outside a motion card, that prose owns the
+    // corresponding boundary frame. This keeps scroll, focus, and paint state
+    // synchronized without pretending a departed motion card is still active.
+    lessonMotionProjection = projectKpEconomicsLessonMotion(boundary);
+    seek(lessonMotionProjection.demandShiftProgress);
+    cancelSupplyPlayback();
+    demandScrubBar?.releaseManualControl();
+    supplyScrubBar?.releaseManualControl();
+    manualMotionBlock = undefined;
+    manualScrollRebase = undefined;
+    motionOwner = "scroll";
+    scrollTimelineStatus = boundary.localProgress === 1
+      ? "complete"
+      : "rewound";
+  }
+
+  function updateReadingBandSelection(
+    readingBandY: number = window.innerHeight * 0.38
+  ): KpTutorialAttentionFrame<string, string, KpEconomicsMotionBlockId> {
+    if (shell === undefined) {
+      return projectKpTutorialAttentionFrame({ cursorY: readingBandY, regions: [] });
+    }
     const passages = [...shell.querySelectorAll<HTMLElement>(
       "[data-kp-economics-tutorial-passage]"
     )];
-    const tops = Object.fromEntries(passages.map((passage) => [
-      passage.dataset["kpEconomicsTutorialPassage"] ?? "",
-      passage.getBoundingClientRect().top
-    ]));
-    const readingBandY = window.innerHeight * 0.38;
-    const activeScrubBar = scrollActiveMotionBlock === "supply-movement"
-      ? supplyScrubBar
-      : demandScrubBar;
-    const motionDividerTop = activeScrubBar?.getBoundingClientRect().top;
-    const motionDividerDistance = motionDividerTop === undefined
-      ? Number.POSITIVE_INFINITY
-      : Math.abs(motionDividerTop - readingBandY);
-    const nearestPassageDistance = Math.min(
-      motionDividerDistance,
-      ...Object.values(tops).map((top) => Math.abs(top - readingBandY))
-    );
-    readingBandProximity = Number.isFinite(nearestPassageDistance)
-      ? clamp(1 - nearestPassageDistance / 96, 0, 1)
-      : 0;
-    // At the document boundary the final passage cannot physically reach the
-    // reading band, so bottom settlement explicitly selects it.
-    const atBottom = window.scrollY + window.innerHeight >=
-      document.documentElement.scrollHeight - 2;
-    let selectedPassage: string;
-    if (motionDividerDistance <= 48) {
-      // The divider is its own reading anchor: the introducing paragraph
-      // keeps prose focus until the interpretation itself reaches the band.
-      selectedPassage = scrollActiveMotionBlock === "supply-movement"
-        ? "shift-versus-movement"
-        : "follow-shift";
-    } else if (atBottom) {
-      selectedPassage = passages.at(-1)
-        ?.dataset["kpEconomicsTutorialPassage"] ?? checkpoint.passageId;
-    } else {
-      selectedPassage = selectKpEconomicsReadingBandPassage({
-        currentPassageId: checkpoint.passageId,
-        readingBandY,
-        passageTops: tops
-      });
-    }
-    if (selectedPassage !== checkpoint.passageId) {
+    const frame = projectKpTutorialAttentionFrame({
+      cursorY: readingBandY,
+      regions: measureKpTutorialAttentionRegions(passages.map((passage) => {
+        const passageId = passage.dataset["kpEconomicsTutorialPassage"] ?? "";
+        const motionBlockId = economicsMotionBlockId(
+          passage.dataset["kpTutorialMotionBlock"]
+        );
+        return {
+          id: passageId,
+          passageId,
+          ...(motionBlockId === undefined ? {} : { motionBlockId }),
+          element: passage
+        };
+      }))
+    });
+    attentionPassageId = frame.activePassageId;
+    attentionCursorState = frame.state;
+    scrollActiveMotionBlock = frame.activeMotionBlockId ?? "";
+    const selectedPassage = frame.activePassageId;
+    if (
+      !navigationProjectionPending &&
+      selectedPassage !== undefined &&
+      selectedPassage !== checkpoint.passageId
+    ) {
       const nextIndex = kpEconomicsDemandShiftCheckpoints.findIndex(
         (candidate) => candidate.passageId === selectedPassage
       );
       if (nextIndex >= 0) activateCheckpoint(nextIndex, "scroll");
     }
+    return frame;
+  }
+
+  function economicsMotionBlockId(
+    value: string | undefined
+  ): KpEconomicsMotionBlockId | undefined {
+    return value === "demand-shift" || value === "supply-movement"
+      ? value
+      : undefined;
   }
 
   function handleTutorialKeydown(event: KeyboardEvent): void {
@@ -1297,6 +1349,8 @@
     "data-kp-economics-demand-intercept": demandIntercept,
     "data-kp-economics-tutorial-checkpoint": checkpoint.id,
     "data-kp-economics-tutorial-passage": checkpoint.passageId,
+    "data-kp-economics-tutorial-attention-passage": attentionPassageId ?? "",
+    "data-kp-economics-tutorial-attention-state": attentionCursorState,
     "data-kp-economics-tutorial-focus-profile": visualCheckpoint.attention.profile,
     "data-kp-economics-tutorial-focus-target": visualCheckpoint.attention.target,
     "data-kp-economics-tutorial-equations": equationsVisible ? "visible" : "quiet",
@@ -1327,7 +1381,9 @@
     <span
       class="kp-economics-tutorial__reading-band-marker"
       data-kp-economics-tutorial-reading-band
-      data-kp-reading-band-state={readingBandProximity >= 0.94 ? "crossing" : "tracking"}
+      data-kp-reading-band-state={attentionCursorState === "within-region"
+        ? "crossing"
+        : "tracking"}
       aria-hidden="true"
     ></span>
   {/snippet}
@@ -1356,7 +1412,7 @@
             )}
             <div
               class="kp-economics-tutorial__passage"
-              class:kp-economics-tutorial__passage--active={checkpoint.passageId === passage.id}
+              class:kp-economics-tutorial__passage--active={attentionPassageId === passage.id}
               class:kp-economics-tutorial__motion-block={renderedMotionBlock !== undefined}
               class:kp-tutorial-shell__motion-block={renderedMotionBlock !== undefined}
               class:kp-economics-tutorial__prediction={passage.id === "prediction"}

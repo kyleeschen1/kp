@@ -167,12 +167,22 @@ function validate(input: {
   const motions = input.sections.flatMap(({ blocks }) =>
     blocks.filter((block): block is KpLispLessonMotionBlockRef => block.kind === "motion")
   );
+  const hasUnintroducedMotion = input.sections.some(({ blocks }) =>
+    blocks.some((block, index) =>
+      block.kind === "motion" && blocks[index - 1]?.kind !== "passage"
+    )
+  );
   if (sectionIds.some((id) => id === "") || new Set(sectionIds).size !== sectionIds.length) {
     throw new Error("Lisp lesson section annotations must be unique.");
   }
   if (new Set(passages.map(({ id }) => id)).size !== passages.length ||
       passages.some(({ paragraphs }) => paragraphs.length === 0)) {
     throw new Error("Lisp lesson passages must be unique and nonempty.");
+  }
+  if (hasUnintroducedMotion) {
+    throw new Error(
+      "Lisp lesson motion blocks must follow an introducing passage."
+    );
   }
   if (motions.length !== kpLispLessonMotionBlocks.length ||
       new Set(motions.map(({ id }) => id)).size !== motions.length ||

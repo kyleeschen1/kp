@@ -6,7 +6,6 @@ import {
   findKpEconomicsDemandShiftCheckpointIndex,
   kpEconomicsDemandShiftCheckpoints,
   selectKpEconomicsDemandShiftPlaybackCheckpointId,
-  selectKpEconomicsReadingBandPassage,
   stepKpEconomicsDemandShiftCheckpoint
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-checkpoints.ts";
 import {
@@ -718,19 +717,4 @@ test("every semantic checkpoint declares one local salience target and context p
     ),
     true
   );
-});
-
-test("reading-band selection uses hysteresis before replacing the active passage", () => {
-  assert.equal(selectKpEconomicsReadingBandPassage({
-    currentPassageId: "initial",
-    readingBandY: 300,
-    passageTops: { initial: 360, next: 310 },
-    hysteresisPx: 20
-  }), "next");
-  assert.equal(selectKpEconomicsReadingBandPassage({
-    currentPassageId: "initial",
-    readingBandY: 300,
-    passageTops: { initial: 330, next: 310 },
-    hysteresisPx: 24
-  }), "initial");
 });

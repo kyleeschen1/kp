@@ -107,7 +107,7 @@ button, input { font: inherit; }
   line-height: 1.78;
   text-indent: 1.35em;
 }
-.kp-lisp-tutorial__passage {
+.kp-lisp-tutorial__attention-region {
   border-left: 3px solid transparent;
   border-radius: .8rem;
   padding: .45rem .9rem .5rem 1rem;
@@ -115,15 +115,12 @@ button, input { font: inherit; }
   transition: border-color 180ms ease, background-color 180ms ease,
     transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
 }
-.kp-lisp-tutorial__passage[data-kp-lisp-reading-active="true"] {
+.kp-lisp-tutorial__attention-region[data-kp-lisp-reading-active="true"] {
   border-left-color: var(--kp-lesson-reading-rail);
   background: rgb(255 253 248 / .72);
-}
-.kp-lisp-tutorial__passage[data-kp-lisp-passage-salience="target"] {
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgb(32 59 53 / .09);
 }
-.kp-lisp-tutorial__passage[data-kp-lisp-passage-salience="context"] { opacity: .82; }
 .kp-lisp-tutorial__inline-code {
   padding: .08em .28em;
   border-radius: .3em;
@@ -224,8 +221,10 @@ button, input { font: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .kp-lisp-tutorial__passage { transition: none; }
-  .kp-lisp-tutorial__passage[data-kp-lisp-passage-salience="target"] { transform: none; }
+  .kp-lisp-tutorial__attention-region { transition: none; }
+  .kp-lisp-tutorial__attention-region[data-kp-lisp-reading-active="true"] {
+    transform: none;
+  }
 }
 
 @media (forced-colors: active) {
@@ -238,13 +237,11 @@ button, input { font: inherit; }
   }
   .kp-lisp-tutorial__stage { background: Canvas; }
   .kp-lisp-tutorial a { color: LinkText; }
-  .kp-lisp-tutorial__passage { forced-color-adjust: auto; }
-  .kp-lisp-tutorial__passage[data-kp-lisp-passage-salience="target"] {
+  .kp-lisp-tutorial__attention-region { forced-color-adjust: auto; }
+  .kp-lisp-tutorial__attention-region[data-kp-lisp-reading-active="true"] {
     outline: 2px solid Highlight;
     outline-offset: 4px;
     box-shadow: none;
-  }
-  .kp-lisp-tutorial__passage[data-kp-lisp-reading-active="true"] {
     border-left-color: Highlight;
   }
   .kp-lisp-botanical [data-kp-lisp-salience] { filter: none; }

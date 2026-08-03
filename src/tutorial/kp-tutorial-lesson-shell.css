@@ -41,6 +41,8 @@
 
 .kp-tutorial-shell__prose {
   min-width: 0;
+  /* The final attention region must be able to cross the 38vh reading cursor. */
+  padding-bottom: 62vh;
 }
 
 .kp-tutorial-shell :where(.kp-tutorial-shell__visually-hidden) {

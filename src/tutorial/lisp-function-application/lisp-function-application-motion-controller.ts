@@ -125,16 +125,9 @@ export function createKpLispLessonMotionController(input: {
     } else if (motionOwner === "navigation") {
       input.root.dataset["kpLispTutorialScrollTimeline"] = "navigation";
     }
-    input.root.dataset["kpLispTutorialActivePassage"] = salience.activePassageId;
-    input.root.querySelectorAll<HTMLElement>("[data-kp-lisp-tutorial-passage]")
-      .forEach((passage) => {
-        const id = passage.dataset["kpLispTutorialPassage"] ?? "";
-        passage.dataset["kpLispPassageSalience"] = id === salience.activePassageId
-          ? "target"
-          : salience.contextPassageIds.includes(id)
-            ? "context"
-            : "rest";
-      });
+    // Stage salience remains semantic animation data; the scroll attention
+    // projection is the sole owner of visible prose-card focus.
+    input.root.dataset["kpLispTutorialStagePassage"] = salience.activePassageId;
     const cumulative = projectKpTutorialCumulativeMotion({
       blocks: kpLispLessonMotionBlocks,
       activeBlockId,

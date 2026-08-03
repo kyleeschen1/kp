@@ -7,6 +7,11 @@ import {
 } from "../kp-tutorial-scrub-bar-events.ts";
 import type { KpTutorialScrubBarElement } from "../kp-tutorial-scrub-bar.ts";
 import {
+  measureKpTutorialAttentionRegions,
+  projectKpTutorialAttentionFrame,
+  type KpTutorialAttentionFrame
+} from "../kp-tutorial-attention.ts";
+import {
   KpTutorialScrollCoordinator,
   projectKpTutorialRebasedCorridor,
   type KpTutorialCoordinatedScrollProjection,
@@ -34,8 +39,8 @@ export function createKpLispLessonScrollController(input: {
     )
   ])) as Record<KpLispLessonMotionBlockId, KpTutorialScrubBarElement>;
   const reducedMotion = view.matchMedia("(prefers-reduced-motion: reduce)");
-  const passages = Array.from(input.root.querySelectorAll<HTMLElement>(
-    "[data-kp-lisp-tutorial-passage]"
+  const attentionRegions = Array.from(input.root.querySelectorAll<HTMLElement>(
+    "[data-kp-tutorial-attention-region]"
   ));
   const readingMarker = required<HTMLElement>(
     input.root,
@@ -55,15 +60,20 @@ export function createKpLispLessonScrollController(input: {
   ): void => {
     const scrollChanged = projection.scrollChanged;
     latest = projection;
+    const attention = resolveAttentionFrame(projection.readingBandY);
     input.root.dataset["kpLispTutorialScrollActiveBlock"] =
-      projection.activeBlockId ?? "";
+      attention.activeMotionBlockId ?? "";
     for (const block of projection.blocks) {
       controls[block.id].setReadingBandProjection({
         distance: block.anchorTop - projection.readingBandY,
         proximity: clamp(1 - Math.abs(block.anchorTop - projection.readingBandY) / 96)
       });
     }
-    const active = projection.blocks.find(({ ownsScroll }) => ownsScroll);
+    const active = attention.activeMotionBlockId === undefined
+      ? undefined
+      : projection.blocks.find(({ id }) =>
+        id === attention.activeMotionBlockId
+      );
     if (reducedMotion.matches) {
       input.root.dataset["kpLispTutorialScrollTimeline"] = "reduced-motion";
     } else if (active !== undefined && scrollChanged && userIntent) {
@@ -82,60 +92,78 @@ export function createKpLispLessonScrollController(input: {
       input.motion.projectScroll(active.id, localProgress);
       rebase = undefined;
       userIntent = false;
+    } else if (
+      active === undefined &&
+      attention.activeRegionId !== undefined &&
+      scrollChanged &&
+      userIntent
+    ) {
+      const boundary = boundaryForAttentionRegion(attention.activeRegionId);
+      if (boundary !== undefined) {
+        input.motion.projectScroll(boundary.blockId, boundary.localProgress);
+        rebase = undefined;
+        userIntent = false;
+      }
     }
-    projectReadingState(projection);
+    projectAttentionOutputs(attention);
   };
 
-  const projectReadingState = (
-    projection: KpTutorialCoordinatedScrollProjection<KpLispLessonMotionBlockId>
+  const resolveAttentionFrame = (
+    readingBandY: number
+  ): KpTutorialAttentionFrame<string, string, KpLispLessonMotionBlockId> =>
+    projectKpTutorialAttentionFrame({
+      cursorY: readingBandY,
+      regions: measureKpTutorialAttentionRegions(attentionRegions.map((region) => {
+        const id = region.dataset["kpTutorialAttentionRegion"] ?? "";
+        const passageId = region.dataset["kpTutorialAttentionPassage"] ?? id;
+        const motionBlockId = lispMotionBlockId(
+          region.dataset["kpTutorialAttentionMotionBlock"]
+        );
+        return {
+          id,
+          passageId,
+          ...(motionBlockId === undefined ? {} : { motionBlockId }),
+          element: region
+        };
+      }))
+    });
+
+  const projectAttentionOutputs = (
+    attention: KpTutorialAttentionFrame<
+      string,
+      string,
+      KpLispLessonMotionBlockId
+    >
   ): void => {
-    const travelling = projection.blocks.find(({ ownsScroll, travel }) =>
-      ownsScroll && travel > 0 && travel < 1
-    );
-    const nearby = projection.blocks.find(({ ownsScroll, distanceFromReadingBand }) =>
-      ownsScroll && distanceFromReadingBand <= 128
-    );
-    const motionBlock = travelling ?? nearby;
-    const motionElement = motionBlock === undefined
+    const activeRegion = attention.activeRegionId === undefined
       ? undefined
-      : controls[motionBlock.id].closest<HTMLElement>(
-        "[data-kp-tutorial-motion-block]"
-      ) ?? undefined;
-    const introductionId = motionElement?.dataset["kpTutorialMotionIntroduction"];
-    const motionPassage = introductionId === undefined
-      ? undefined
-      : passages.find(({ dataset }) =>
-        dataset["kpLispTutorialPassage"] === introductionId
+      : attentionRegions.find(({ dataset }) =>
+        dataset["kpTutorialAttentionRegion"] === attention.activeRegionId
       );
-    const activePassage = motionPassage ?? [...passages].sort((left, right) =>
-      Math.abs(left.getBoundingClientRect().top - projection.readingBandY) -
-      Math.abs(right.getBoundingClientRect().top - projection.readingBandY)
-    )[0];
-    if (activePassage === undefined) return;
-
-    for (const passage of passages) {
-      passage.dataset["kpLispReadingActive"] = String(passage === activePassage);
+    for (const region of attentionRegions) {
+      region.dataset["kpLispReadingActive"] = String(region === activeRegion);
     }
-    const passageId = activePassage.dataset["kpLispTutorialPassage"] ?? "";
-    input.root.dataset["kpLispTutorialReadingPassage"] = passageId;
-    const passageBounds = activePassage.getBoundingClientRect();
-    readingMarker.style.setProperty(
-      "--kp-lisp-reading-pointer-left",
-      `${Math.max(0, passageBounds.left - 22)}px`
-    );
+    input.root.dataset["kpLispTutorialReadingPassage"] =
+      attention.activePassageId ?? "";
+    input.root.dataset["kpLispTutorialAttentionState"] = attention.state;
+    if (activeRegion !== undefined) {
+      const regionBounds = activeRegion.getBoundingClientRect();
+      readingMarker.style.setProperty(
+        "--kp-lisp-reading-pointer-left",
+        `${Math.max(0, regionBounds.left - 22)}px`
+      );
+    }
     readingMarker.dataset["kpReadingBandState"] =
-      Math.abs(passageBounds.top - projection.readingBandY) <= 12
-        ? "crossing"
-        : "tracking";
+      attention.state === "within-region" ? "crossing" : "tracking";
 
-    if (motionBlock !== undefined) {
+    if (attention.activeMotionBlockId !== undefined) {
       const snapshot = input.motion.snapshot();
       const definition = kpLispLessonMotionBlocks.find(
-        ({ id }) => id === motionBlock.id
+        ({ id }) => id === attention.activeMotionBlockId
       )!;
-      const localProgress = snapshot.activeBlockId === motionBlock.id
+      const localProgress = snapshot.activeBlockId === attention.activeMotionBlockId
         ? snapshot.localProgress
-        : motionBlock.progress;
+        : 0;
       const checkpoint = [...definition.checkpoints].sort((left, right) =>
         Math.abs(left.progress - localProgress) -
         Math.abs(right.progress - localProgress)
@@ -146,12 +174,41 @@ export function createKpLispLessonScrollController(input: {
       });
       return;
     }
-    const sectionId = activePassage.closest<HTMLElement>(
+    const sectionId = activeRegion?.closest<HTMLElement>(
       '[data-kp-tutorial-destination="section"]'
     )?.dataset["kpTutorialDestinationId"];
     if (sectionId !== undefined) {
       input.navigation.setReadingDestination({ kind: "section", id: sectionId });
     }
+  };
+
+  const boundaryForAttentionRegion = (regionId: string): {
+    readonly blockId: KpLispLessonMotionBlockId;
+    readonly localProgress: number;
+  } | undefined => {
+    const regionIndex = attentionRegions.findIndex(({ dataset }) =>
+      dataset["kpTutorialAttentionRegion"] === regionId
+    );
+    const motionRegionIndexes = kpLispLessonMotionBlocks.map((block) =>
+      attentionRegions.findIndex(({ dataset }) =>
+        dataset["kpTutorialAttentionMotionBlock"] === block.id
+      )
+    );
+    const firstMotionIndex = motionRegionIndexes[0] ?? -1;
+    const secondMotionIndex = motionRegionIndexes[1] ?? -1;
+    if (regionIndex < 0 || firstMotionIndex < 0 || secondMotionIndex < 0) {
+      return undefined;
+    }
+    if (regionIndex < firstMotionIndex) {
+      return { blockId: "bind-and-reconstruct", localProgress: 0 };
+    }
+    if (regionIndex > secondMotionIndex) {
+      return { blockId: "evaluate-and-gather", localProgress: 1 };
+    }
+    if (regionIndex > firstMotionIndex && regionIndex < secondMotionIndex) {
+      return { blockId: "bind-and-reconstruct", localProgress: 1 };
+    }
+    return undefined;
   };
 
   const noteIntent = (): void => {
@@ -226,6 +283,14 @@ function blockFromEvent(event: Event): KpLispLessonMotionBlockId | undefined {
   const id = event.target.closest<HTMLElement>("[data-kp-tutorial-motion-controls]")
     ?.dataset["kpTutorialMotionControls"];
   return id === "bind-and-reconstruct" || id === "evaluate-and-gather" ? id : undefined;
+}
+
+function lispMotionBlockId(
+  value: string | undefined
+): KpLispLessonMotionBlockId | undefined {
+  return value === "bind-and-reconstruct" || value === "evaluate-and-gather"
+    ? value
+    : undefined;
 }
 
 function required<ElementType extends Element>(root: ParentNode, selector: string): ElementType {

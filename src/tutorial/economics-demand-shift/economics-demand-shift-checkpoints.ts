@@ -108,27 +108,6 @@ export function selectKpEconomicsDemandShiftPlaybackCheckpointId(
   return "ready-to-shift";
 }
 
-export function selectKpEconomicsReadingBandPassage(input: {
-  readonly currentPassageId: string;
-  readonly readingBandY: number;
-  readonly passageTops: Readonly<Record<string, number>>;
-  readonly hysteresisPx?: number | undefined;
-}): string {
-  const entries = Object.entries(input.passageTops);
-  if (entries.length === 0) return input.currentPassageId;
-  const distance = ([, top]: readonly [string, number]) =>
-    Math.abs(top - input.readingBandY);
-  const candidate = entries.reduce((best, entry) =>
-    distance(entry) < distance(best) ? entry : best
-  );
-  const current = entries.find(([id]) => id === input.currentPassageId);
-  if (current === undefined) return candidate[0];
-  const hysteresis = input.hysteresisPx ?? 48;
-  return distance(candidate) + hysteresis < distance(current)
-    ? candidate[0]
-    : current[0];
-}
-
 function checkpoint<
   const Id extends string,
   const PassageId extends string,

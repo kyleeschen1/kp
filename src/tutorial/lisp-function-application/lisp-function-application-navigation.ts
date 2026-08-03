@@ -71,10 +71,23 @@ export function createKpLispLessonNavigationController(input: {
       input.motion.restore(resolved.blockId, resolved.localProgress);
     },
     scroll: (resolved, destination) => {
-      input.root.ownerDocument.getElementById(resolved.elementId)?.scrollIntoView({
-        behavior: "auto",
-        block: destination.kind === "section" ? "start" : "center"
-      });
+      const element = input.root.ownerDocument.getElementById(
+        resolved.elementId
+      );
+      if (element === null) return;
+      const bounds = element.getBoundingClientRect();
+      const targetTop = destination.kind === "section"
+        ? bounds.top
+        : bounds.top - (view.innerHeight - bounds.height) / 2;
+      // Direct scrollTop assignment keeps semantic jumps atomic even when the
+      // publication's reading stylesheet opts into smooth ordinary scrolling.
+      const scroller = input.root.ownerDocument.scrollingElement;
+      if (scroller === null) return;
+      const documentElement = input.root.ownerDocument.documentElement;
+      const previousScrollBehavior = documentElement.style.scrollBehavior;
+      documentElement.style.scrollBehavior = "auto";
+      scroller.scrollTop = Math.max(0, scroller.scrollTop + targetTop);
+      documentElement.style.scrollBehavior = previousScrollBehavior;
     },
     onApplied: ({ destination }) => {
       input.root.dataset["kpLispTutorialDestinationKind"] = destination.kind;
