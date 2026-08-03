@@ -136,6 +136,34 @@
       "scope": "s08",
       "checkedAt": "2026-08-03T06:21:42.586Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-08-03T06:27:15.628Z",
+      "notes": "Ten deterministic unit tests passed, including exact cumulative handoff projection."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-08-03T06:27:16.681Z",
+      "notes": "Svelte check reported zero errors and warnings."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-08-03T06:27:17.576Z",
+      "notes": "Four Chromium checks passed; block two projected 0 and 0.58 locally while demand and the underlying graph remained exactly settled at 1."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-08-03T06:27:18.497Z",
+      "notes": "No whitespace errors."
     }
   ],
   "allowedWork": [
@@ -210,7 +238,8 @@
     {
       "id": "s09",
       "title": "Bind-second-cumulative-timeline",
-      "status": "planned"
+      "summary": "Rendered the supply-movement motion block, bound its corridor to cumulative projection, and proved its local rewind stops at the demand block's exact settled state; manual block-two controls remain disabled until takeover rebasing.",
+      "status": "complete"
     },
     {
       "id": "s10",

@@ -21,10 +21,14 @@ test("approved economics prose and semantic controls form one persistent tutoria
   );
   const graph = player.locator("[data-kp-editor-graph-svg]");
   const stageCard = root.locator(".kp-economics-tutorial__stage-card");
-  const motionCue = root.locator("kp-tutorial-scrub-bar");
   const firstMotionBlock = root.locator(
     '[data-kp-tutorial-motion-block="demand-shift"]'
   );
+  const secondMotionBlock = root.locator(
+    '[data-kp-tutorial-motion-block="supply-movement"]'
+  );
+  const motionCue = firstMotionBlock.locator("kp-tutorial-scrub-bar");
+  const supplyMotionCue = secondMotionBlock.locator("kp-tutorial-scrub-bar");
   const tutorialScrubber = motionCue.getByRole("slider", {
     name: "Scrub animation progress"
   });
@@ -63,15 +67,18 @@ test("approved economics prose and semantic controls form one persistent tutoria
   );
   await expect(player.locator(".editor-animation-player__controls")).toBeHidden();
   await expect(root.locator(".kp-economics-tutorial__controls")).toHaveCount(0);
-  await expect(motionCue).toHaveCount(1);
+  await expect(root.locator("kp-tutorial-scrub-bar")).toHaveCount(2);
   await expect(firstMotionBlock).toHaveAttribute(
     "aria-label",
     "Demand shifts animation step"
   );
   await expect(firstMotionBlock.locator("p")).toHaveCount(1);
   await expect(firstMotionBlock.locator("kp-tutorial-scrub-bar")).toHaveCount(1);
-  await expect(root.locator('[data-kp-tutorial-motion-block="supply-movement"]'))
-    .toHaveCount(0);
+  await expect(secondMotionBlock).toHaveAttribute(
+    "aria-label",
+    "Supply did not shift animation step"
+  );
+  await expect(supplyMotionCue).toHaveAttribute("controls-disabled", "true");
   expect(await motionCue.evaluate((element) => ({
     tag: element.localName,
     registered: customElements.get(element.localName) === element.constructor,
@@ -81,10 +88,10 @@ test("approved economics prose and semantic controls form one persistent tutoria
     registered: true,
     shadow: "open"
   });
-  await expect(root.getByRole("button", {
+  await expect(motionCue.getByRole("button", {
     name: "Previous semantic checkpoint"
   })).toBeVisible();
-  await expect(root.getByRole("button", {
+  await expect(motionCue.getByRole("button", {
     name: "Next semantic checkpoint"
   })).toBeVisible();
   await expect(root).toHaveAttribute(
@@ -299,6 +306,62 @@ test("approved economics prose and semantic controls form one persistent tutoria
     await player.getAttribute("data-kp-editor-animation-progress")
   )).toBeCloseTo(0.72, 2);
 
+  await supplyMotionCue.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.38
+  }));
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-active-block",
+    "supply-movement"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-demand-progress",
+    "1.000"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "0.580"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scene-presentation",
+    "supply-trace"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "1"
+  );
+  await expect(motionCue).toHaveAttribute("progress", "1");
+  await expect(supplyMotionCue).toHaveAttribute("progress", "0.58");
+
+  await supplyMotionCue.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.72
+  }));
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "0.000"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-demand-progress",
+    "1.000"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "1"
+  );
+
+  await motionCue.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.38 + 4
+  }));
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-active-block",
+    "demand-shift"
+  );
+  await expect.poll(async () => Number(
+    await player.getAttribute("data-kp-editor-animation-progress")
+  )).toBeCloseTo(0.72, 2);
+
   await page.evaluate(() => {
     (window as typeof window & { __kpTutorialDocumentToken?: string })
       .__kpTutorialDocumentToken = "persistent-economics-tutorial";
@@ -325,14 +388,14 @@ test("approved economics prose and semantic controls form one persistent tutoria
     path: `${evidenceDirectory}/wide-motion-divider.png`,
     fullPage: false
   });
-  await root.getByRole("button", {
+  await motionCue.getByRole("button", {
     name: "Next semantic checkpoint"
   }).click();
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-checkpoint",
     "handoff"
   );
-  await root.getByRole("button", {
+  await motionCue.getByRole("button", {
     name: "Next semantic checkpoint"
   }).click();
   await expect(root).toHaveAttribute(
@@ -416,7 +479,9 @@ test("manual playback retains timeline ownership during scroll", async ({
 
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const player = root.locator("[data-kp-editor-animation-player]");
-  const motionCue = root.locator("kp-tutorial-scrub-bar");
+  const motionCue = root.locator(
+    '[data-kp-tutorial-motion-block="demand-shift"] kp-tutorial-scrub-bar'
+  );
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-hydrated",
     "true"
@@ -481,7 +546,9 @@ test("reduced-motion readers retain the text-free divider without automatic seek
 
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const player = root.locator("[data-kp-editor-animation-player]");
-  const motionCue = root.locator("kp-tutorial-scrub-bar");
+  const motionCue = root.locator(
+    '[data-kp-tutorial-motion-block="demand-shift"] kp-tutorial-scrub-bar'
+  );
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-hydrated",
     "true"

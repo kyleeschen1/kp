@@ -33,7 +33,8 @@
   } from "./economics-demand-shift-lesson-compiler.ts";
   import {
     findKpEconomicsMotionBlock,
-    kpEconomicsMotionBlocks
+    kpEconomicsMotionBlocks,
+    projectKpEconomicsLessonMotion
   } from "./economics-demand-shift-motion-blocks.ts";
   import {
     KpEconomicsTutorialScrollCoordinator,
@@ -125,7 +126,8 @@
   }));
   let shell = $state<HTMLElement | undefined>();
   let player = $state<HTMLElement | undefined>();
-  let scrubBar = $state<KpTutorialScrubBarElement | undefined>();
+  let demandScrubBar = $state<KpTutorialScrubBarElement | undefined>();
+  let supplyScrubBar = $state<KpTutorialScrubBarElement | undefined>();
   let checkpointIndex = $state(0);
   let progress = $state(initial.progress);
   let playbackStatus = $state(initial.playbackStatus);
@@ -149,6 +151,12 @@
   let attentionProjection = $state(emptyAttentionProjection);
   let disposePlayerHost: (() => void) | undefined;
   let scrollCoordinator: KpEconomicsTutorialScrollCoordinator | undefined;
+  let lessonMotionProjection = $state(projectKpEconomicsLessonMotion({
+    activeBlockId: "demand-shift",
+    localProgress: initial.playbackDirection === "rewind"
+      ? 1 - initial.progress
+      : initial.progress
+  }));
   const playerHtml = initial.playerHtml;
   let checkpoint = $derived(kpEconomicsDemandShiftCheckpoints[checkpointIndex]!);
   let equationsVisible = $derived(
@@ -157,8 +165,9 @@
     checkpoint.id === "synthesis" ||
     checkpoint.id === "explore"
   );
-  let semanticProgress = $derived(
-    playbackDirection === "rewind" ? 1 - progress : progress
+  let semanticProgress = $derived(lessonMotionProjection.demandShiftProgress);
+  let supplyMovementProgress = $derived(
+    lessonMotionProjection.supplyMovementProgress
   );
   let visualCheckpoint = $derived(
     checkpoint.passageId === "follow-shift"
@@ -337,6 +346,12 @@
       playbackStatus =
         detail.playbackStatus as KpEditorAnimationPlayerState["playbackStatus"];
     }
+    if (scrollActiveMotionBlock !== "supply-movement") {
+      lessonMotionProjection = projectKpEconomicsLessonMotion({
+        activeBlockId: "demand-shift",
+        localProgress: playbackDirection === "rewind" ? 1 - progress : progress
+      });
+    }
     if (
       detail.playbackStatus === "complete" &&
       detail.progress === 1 &&
@@ -492,9 +507,12 @@
   ): void {
     scrollActiveMotionBlock = projection.activeBlockId ?? "";
     const active = projection.blocks.find(({ ownsScroll }) => ownsScroll);
-    if (active?.id === "demand-shift" && scrubBar !== undefined) {
+    const activeScrubBar = active?.id === "supply-movement"
+      ? supplyScrubBar
+      : demandScrubBar;
+    if (active !== undefined && activeScrubBar !== undefined) {
       const distance = active.anchorTop - projection.readingBandY;
-      scrubBar.setReadingBandProjection({
+      activeScrubBar.setReadingBandProjection({
         distance,
         proximity: clamp(1 - Math.abs(distance) / 96, 0, 1)
       });
@@ -503,15 +521,23 @@
         ready &&
         player !== undefined &&
         motionOwner !== "manual" &&
-        (motionOwner === "scroll" || active.progress > 0.001)
+        (
+          motionOwner === "scroll" ||
+          active.progress > 0.001 ||
+          active.id === "supply-movement"
+        )
       ) {
+        lessonMotionProjection = projectKpEconomicsLessonMotion({
+          activeBlockId: active.id,
+          localProgress: active.progress
+        });
         motionOwner = "scroll";
         scrollTimelineStatus = active.progress >= 0.999
           ? "complete"
           : active.progress <= 0.001
             ? "rewound"
             : "seeking";
-        seek(active.progress);
+        seek(lessonMotionProjection.demandShiftProgress);
       }
     }
     updateReadingBandSelection();
@@ -528,7 +554,10 @@
       passage.getBoundingClientRect().top
     ]));
     const readingBandY = window.innerHeight * 0.38;
-    const motionDividerTop = scrubBar?.getBoundingClientRect().top;
+    const activeScrubBar = scrollActiveMotionBlock === "supply-movement"
+      ? supplyScrubBar
+      : demandScrubBar;
+    const motionDividerTop = activeScrubBar?.getBoundingClientRect().top;
     const motionDividerDistance = motionDividerTop === undefined
       ? Number.POSITIVE_INFINITY
       : Math.abs(motionDividerTop - readingBandY);
@@ -547,7 +576,9 @@
     if (motionDividerDistance <= 48) {
       // The divider is its own reading anchor: the introducing paragraph
       // keeps prose focus until the interpretation itself reaches the band.
-      selectedPassage = "follow-shift";
+      selectedPassage = scrollActiveMotionBlock === "supply-movement"
+        ? "shift-versus-movement"
+        : "follow-shift";
     } else if (atBottom) {
       selectedPassage = passages.at(-1)
         ?.dataset["kpEconomicsTutorialPassage"] ?? checkpoint.passageId;
@@ -591,17 +622,20 @@
     if (player === undefined) return;
     player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
-    scrubBar?.addEventListener(KP_TUTORIAL_SCRUB_TOGGLE_EVENT, togglePlayback);
-    scrubBar?.addEventListener(KP_TUTORIAL_SCRUB_REWIND_EVENT, rewindPlayback);
-    scrubBar?.addEventListener(
+    demandScrubBar?.addEventListener(KP_TUTORIAL_SCRUB_TOGGLE_EVENT, togglePlayback);
+    demandScrubBar?.addEventListener(KP_TUTORIAL_SCRUB_REWIND_EVENT, rewindPlayback);
+    demandScrubBar?.addEventListener(
       KP_TUTORIAL_SCRUB_PREVIOUS_EVENT,
       selectPreviousCheckpoint
     );
-    scrubBar?.addEventListener(
+    demandScrubBar?.addEventListener(
       KP_TUTORIAL_SCRUB_NEXT_EVENT,
       selectNextCheckpoint
     );
-    scrubBar?.addEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, handleScrubBarSeek);
+    demandScrubBar?.addEventListener(
+      KP_TUTORIAL_SCRUB_SEEK_EVENT,
+      handleScrubBarSeek
+    );
     scrollCoordinator = new KpEconomicsTutorialScrollCoordinator(
       window,
       collectScrollBlocks,
@@ -642,17 +676,26 @@
     attentionResizeObserver?.disconnect();
     player?.removeEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player?.removeEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
-    scrubBar?.removeEventListener(KP_TUTORIAL_SCRUB_TOGGLE_EVENT, togglePlayback);
-    scrubBar?.removeEventListener(KP_TUTORIAL_SCRUB_REWIND_EVENT, rewindPlayback);
-    scrubBar?.removeEventListener(
+    demandScrubBar?.removeEventListener(
+      KP_TUTORIAL_SCRUB_TOGGLE_EVENT,
+      togglePlayback
+    );
+    demandScrubBar?.removeEventListener(
+      KP_TUTORIAL_SCRUB_REWIND_EVENT,
+      rewindPlayback
+    );
+    demandScrubBar?.removeEventListener(
       KP_TUTORIAL_SCRUB_PREVIOUS_EVENT,
       selectPreviousCheckpoint
     );
-    scrubBar?.removeEventListener(
+    demandScrubBar?.removeEventListener(
       KP_TUTORIAL_SCRUB_NEXT_EVENT,
       selectNextCheckpoint
     );
-    scrubBar?.removeEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, handleScrubBarSeek);
+    demandScrubBar?.removeEventListener(
+      KP_TUTORIAL_SCRUB_SEEK_EVENT,
+      handleScrubBarSeek
+    );
     window.removeEventListener("keydown", handleTutorialKeydown);
     reducedMotionQuery?.removeEventListener("change", handleReducedMotionChange);
     disposePlayerHost?.();
@@ -729,6 +772,10 @@
   data-kp-economics-tutorial-scroll-timeline={scrollTimelineStatus}
   data-kp-economics-tutorial-scroll-coordinator={scrollCoordinatorStatus}
   data-kp-economics-tutorial-scroll-active-block={scrollActiveMotionBlock}
+  data-kp-economics-tutorial-demand-progress={lessonMotionProjection.demandShiftProgress.toFixed(3)}
+  data-kp-economics-tutorial-supply-movement-progress={supplyMovementProgress.toFixed(3)}
+  data-kp-economics-tutorial-scene-market={lessonMotionProjection.scene.market}
+  data-kp-economics-tutorial-scene-presentation={lessonMotionProjection.scene.presentation}
 >
   <h1 class="kp-economics-tutorial__visually-hidden">
     Economics demand-shift tutorial
@@ -755,9 +802,9 @@
           <h3 id={`kp-econ-heading-${sectionIndex}`}>{section.heading}</h3>
 
           {#each section.passages as passage}
-            {@const renderedMotionBlock = passage.motionBlockId === "demand-shift"
-              ? findKpEconomicsMotionBlock(passage.motionBlockId)
-              : undefined}
+            {@const renderedMotionBlock = findKpEconomicsMotionBlock(
+              passage.motionBlockId
+            )}
             <div
               class="kp-economics-tutorial__passage"
               class:kp-economics-tutorial__passage--active={checkpoint.passageId === passage.id}
@@ -793,7 +840,8 @@
               {/if}
               {#if renderedMotionBlock?.id === "demand-shift"}
                 <kp-tutorial-scrub-bar
-                  bind:this={scrubBar}
+                  bind:this={demandScrubBar}
+                  data-kp-tutorial-motion-controls="demand-shift"
                   data-kp-economics-tutorial-motion-divider
                   progress={semanticProgress}
                   playback-status={playbackStatus}
@@ -802,6 +850,19 @@
                   previous-disabled={checkpointIndex === 0 ? "true" : "false"}
                   next-disabled={checkpointIndex === kpEconomicsDemandShiftCheckpoints.length - 1 ? "true" : "false"}
                   manual-claimed={motionOwner === "manual" ? "true" : "false"}
+                ></kp-tutorial-scrub-bar>
+              {:else if renderedMotionBlock?.id === "supply-movement"}
+                <kp-tutorial-scrub-bar
+                  bind:this={supplyScrubBar}
+                  data-kp-tutorial-motion-controls="supply-movement"
+                  data-kp-economics-tutorial-motion-divider
+                  progress={supplyMovementProgress}
+                  playback-status="paused"
+                  direction="forward"
+                  controls-disabled="true"
+                  previous-disabled="true"
+                  next-disabled="true"
+                  manual-claimed="false"
                 ></kp-tutorial-scrub-bar>
               {/if}
               {#if passage.id === "explore"}
