@@ -4,11 +4,12 @@ Status: active-supporting
 Last Updated: 2026-08-02
 Current Next Action: Human-review the integrated economics tutorial at
 `/tutorials/economics/demand-shift/` for reading cadence, stage coordination,
-semantic controls, graph-local focus attenuation, spotlight scope, stage/page
-continuity, and the compact phone dock. The rejected cross-page connector is
-removed; the selected local revision uses a soft two-aperture page wash and a
-contiguous wide stage. Do not generalize the local lesson compiler or salience
-projection, or begin the solve-x caller, before this checkpoint is approved.
+semantic controls, the annotated one-shot motion handoff, graph-local focus
+attenuation, spotlight scope, stage/page continuity, and the compact phone
+dock. The rejected cross-page connector is removed; the selected local
+revision uses a soft two-aperture page wash and a contiguous wide stage. Do not
+generalize the local lesson compiler, autoplay rule, or salience projection, or
+begin the solve-x caller, before this checkpoint is approved.
 
 ## Goal
 
@@ -32,9 +33,12 @@ implementation is local discovery evidence, not a globally enforced schema.
 
 Learners retain fine-grained control through Previous semantic checkpoint,
 Play/Pause, Next semantic checkpoint, a continuously draggable marked
-scrubber, and keyboard equivalents. Scroll may select a passage through a
-stable reading band and prepare a static state, but it never autoplays and no
-coordination action auto-scrolls the page.
+scrubber, and keyboard equivalents. The local economics exemplar now places an
+annotated Play row before the causal shift. After a short dwell in the stable
+reading band, scrolling may start the untouched authored timeline once. Scroll
+does not scrub or seek the curves, any manual interaction takes precedence,
+reduced-motion suppresses automatic playback, and no coordination action
+auto-scrolls the page.
 
 The first exemplar is the approved economics supply-demand equilibrium asset.
 Its lesson asks why increased demand raises both equilibrium price and quantity
@@ -57,6 +61,10 @@ The delivered exemplar includes:
 - stable passage, claim, object, and checkpoint references;
 - a persistent stage, explicit Previous/Play/Next controls, and a marked
   continuous scrubber without page reloads;
+- one annotated inline motion cue that names the demand shift and fixed supply
+  before a 650 ms dwell may start the untouched timeline once;
+- manual timeline ownership, no scroll seeking, no incidental replay, and a
+  reduced-motion manual fallback;
 - a stable compact phone dock with temporary expansion;
 - inline KaTeX, quiet equations until verification, and the existing Review
   capture dock;
@@ -99,7 +107,8 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
 
 - resuming or reranking the tabled linear algebra frontier;
 - changing the approved economics graph during integrated review;
-- many inline players, autoplay on scroll, or prose auto-scrolling;
+- many inline players, unannounced or catalogue-wide autoplay, continuous
+  scroll scrubbing, or prose auto-scrolling;
 - replacing full prose with cue cards or a transcript rail;
 - an authoring editor before the hand-authored exemplar passes;
 - SvelteKit adoption, Public Web, or a Public Editor during discovery;
@@ -113,8 +122,10 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
   subordinate or crowded?
 - Are Previous/Play/Next and the marked scrubber sufficient for both conceptual
   and fine-grained control?
-- Does passage selection prepare the right static state without surprising
-  motion?
+- Does the annotated cue plus short dwell make one-shot playback feel expected
+  rather than surprising?
+- Does the authored curve motion now replace every scroll-induced jump without
+  making the reader wait too long?
 - Does attenuation make the target unmistakable without obscuring causally
   necessary context?
 - Is the hybrid page wash strong enough without making surrounding prose feel

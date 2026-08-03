@@ -32,6 +32,17 @@
   } from "./economics-demand-shift-lesson-compiler.ts";
   import KpInlineMath from "./KpInlineMath.svelte";
 
+  type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
+  type KpEconomicsTutorialScrollAutoplayStatus =
+    | "idle"
+    | "armed"
+    | "playing"
+    | "complete"
+    | "manual"
+    | "reduced-motion";
+
+  const scrollAutoplayDwellMs = 650;
+
   interface KpEconomicsTutorialAttentionProjection {
     readonly spotlightVisible: boolean;
     readonly spotlightX: number;
@@ -104,9 +115,16 @@
   let stageExpanded = $state(false);
   let explorationOpen = $state(false);
   let announcement = $state("Initial market ready.");
+  let motionOwner = $state<KpEconomicsTutorialMotionOwner>("untouched");
+  let scrollAutoplayStatus = $state<KpEconomicsTutorialScrollAutoplayStatus>(
+    "idle"
+  );
+  let reducedMotion = $state(false);
   let scrollFrame: number | undefined;
+  let scrollAutoplayTimer: number | undefined;
   let attentionFrame: number | undefined;
   let attentionResizeObserver: ResizeObserver | undefined;
+  let reducedMotionQuery: MediaQueryList | undefined;
   let attentionProjection = $state(emptyAttentionProjection);
   let disposePlayerHost: (() => void) | undefined;
   const playerHtml = initial.playerHtml;
@@ -124,20 +142,51 @@
         ? "Replay"
         : "Play"
   );
+  let cueButtonLabel = $derived(
+    playbackStatus === "playing"
+      ? "Pause"
+      : playbackStatus === "complete"
+        ? "Replay shift"
+        : progress > 0
+          ? "Continue shift"
+          : "Show the shift"
+  );
+  let cueStatus = $derived(
+    scrollAutoplayStatus === "reduced-motion"
+      ? "Automatic motion is off. Play when you are ready."
+      : scrollAutoplayStatus === "armed"
+        ? "The shift will begin after this cue settles into focus."
+        : scrollAutoplayStatus === "playing"
+          ? "The demand shift is playing."
+          : scrollAutoplayStatus === "complete"
+            ? "The shift is complete. Replay it whenever you need."
+            : scrollAutoplayStatus === "manual"
+              ? "You control this animation."
+              : "It will begin when this cue enters focus, or you can play it now."
+  );
   let spotlightStyle = $derived(
     `--kp-tutorial-spotlight-x:${attentionProjection.spotlightX}px;` +
     `--kp-tutorial-spotlight-y:${attentionProjection.spotlightY}px;` +
     `--kp-tutorial-spotlight-radius:${checkpoint.attention.spotlightRadius}px`
   );
 
-  function activateCheckpoint(index: number): void {
+  function activateCheckpoint(
+    index: number,
+    source: "manual" | "scroll" = "manual"
+  ): void {
+    if (source === "manual") claimManualMotion();
     checkpointIndex = Math.max(
       0,
       Math.min(kpEconomicsDemandShiftCheckpoints.length - 1, index)
     );
     const next = kpEconomicsDemandShiftCheckpoints[checkpointIndex]!;
     announcement = `${next.label}. Animation at ${Math.round(next.progress * 100)} percent.`;
-    seek(next.progress);
+    // Scroll may prepare the pre-motion state, but it must never snap the
+    // curves to a later frame. Only the authored clock or explicit controls
+    // can advance the causal shift.
+    if (source === "manual" || (
+      motionOwner === "untouched" && next.progress === 0
+    )) seek(next.progress);
     scheduleAttentionProjection();
   }
 
@@ -149,6 +198,7 @@
   }
 
   function togglePlayback(): void {
+    claimManualMotion();
     if (player === undefined) return;
     const session = getKpEditorAnimationPlaybackSession(player);
     if (session === undefined) return;
@@ -162,6 +212,7 @@
 
   function scrub(event: Event): void {
     if (!(event.currentTarget instanceof HTMLInputElement)) return;
+    claimManualMotion();
     const nextProgress = Number(event.currentTarget.value);
     seek(nextProgress);
     if (Math.abs(nextProgress - 0.72) < 0.015) {
@@ -186,6 +237,7 @@
     if (!(event.currentTarget instanceof HTMLInputElement) || player === undefined) {
       return;
     }
+    claimManualMotion();
     const state = createKpEconomicsEquilibriumParameterState(
       event.currentTarget.value
     );
@@ -208,6 +260,7 @@
   }
 
   function restoreLessonExample(): void {
+    claimManualMotion();
     const state = createKpEconomicsEquilibriumParameterState(
       kpEconomicsDemandInterceptParameter.defaultValue
     );
@@ -252,6 +305,15 @@
     if (
       detail.playbackStatus === "complete" &&
       detail.progress === 1 &&
+      motionOwner === "scroll"
+    ) {
+      scrollAutoplayStatus = "complete";
+      announcement = "Demand shift complete. Quantity 8 and price 10.";
+    }
+    if (
+      detail.playbackStatus === "complete" &&
+      detail.progress === 1 &&
+      motionOwner !== "scroll" &&
       checkpointIndex <= findKpEconomicsDemandShiftCheckpointIndex("handoff")
     ) {
       checkpointIndex = findKpEconomicsDemandShiftCheckpointIndex("settled");
@@ -266,7 +328,58 @@
       (event.detail as { readonly status?: unknown })?.status !== "ready"
     ) return;
     ready = true;
+    scheduleReadingBandSelection();
     scheduleAttentionProjection();
+  }
+
+  function claimManualMotion(): void {
+    clearScrollAutoplayTimer();
+    motionOwner = "manual";
+    scrollAutoplayStatus = "manual";
+  }
+
+  function clearScrollAutoplayTimer(): void {
+    if (scrollAutoplayTimer === undefined) return;
+    window.clearTimeout(scrollAutoplayTimer);
+    scrollAutoplayTimer = undefined;
+  }
+
+  function synchronizeScrollAutoplay(selectedPassage: string): void {
+    if (motionOwner !== "untouched") return;
+    if (selectedPassage !== "follow-shift") {
+      clearScrollAutoplayTimer();
+      scrollAutoplayStatus = "idle";
+      return;
+    }
+    if (reducedMotion) {
+      clearScrollAutoplayTimer();
+      scrollAutoplayStatus = "reduced-motion";
+      return;
+    }
+    if (!ready || player === undefined || scrollAutoplayTimer !== undefined) {
+      return;
+    }
+    scrollAutoplayStatus = "armed";
+    scrollAutoplayTimer = window.setTimeout(() => {
+      scrollAutoplayTimer = undefined;
+      if (
+        motionOwner !== "untouched" ||
+        checkpoint.passageId !== "follow-shift" ||
+        player === undefined
+      ) return;
+      motionOwner = "scroll";
+      scrollAutoplayStatus = "playing";
+      announcement = "Demand shift playing. Supply remains fixed.";
+      dispatchKpEditorAnimationPlaybackAction(player, {
+        type: "play",
+        nowMs: performance.now()
+      });
+    }, scrollAutoplayDwellMs);
+  }
+
+  function handleReducedMotionChange(event: MediaQueryListEvent): void {
+    reducedMotion = event.matches;
+    scheduleReadingBandSelection();
   }
 
   function scheduleAttentionProjection(): void {
@@ -380,15 +493,25 @@
             readingBandY: window.innerHeight * 0.38,
             passageTops: tops
           });
-      if (selectedPassage === checkpoint.passageId) return;
-      const nextIndex = kpEconomicsDemandShiftCheckpoints.findIndex(
-        (candidate) => candidate.passageId === selectedPassage
-      );
-      if (nextIndex >= 0) activateCheckpoint(nextIndex);
+      if (selectedPassage !== checkpoint.passageId) {
+        const nextIndex = kpEconomicsDemandShiftCheckpoints.findIndex(
+          (candidate) => candidate.passageId === selectedPassage
+        );
+        if (nextIndex >= 0) activateCheckpoint(nextIndex, "scroll");
+      }
+      synchronizeScrollAutoplay(selectedPassage);
     });
   }
 
   function handleTutorialKeydown(event: KeyboardEvent): void {
+    if (
+      player !== undefined &&
+      event.target instanceof Node &&
+      player.contains(event.target) &&
+      [" ", "ArrowLeft", "ArrowRight", "Home", "End", "r", "R"].includes(
+        event.key
+      )
+    ) claimManualMotion();
     if (
       !event.altKey ||
       (event.key !== "ArrowLeft" && event.key !== "ArrowRight")
@@ -422,6 +545,9 @@
       ".kp-economics-tutorial__player-host"
     );
     if (playerHost !== null) attentionResizeObserver.observe(playerHost);
+    reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    reducedMotion = reducedMotionQuery.matches;
+    reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
     void document.fonts.ready.then(scheduleAttentionProjection);
     scheduleReadingBandSelection();
     scheduleAttentionProjection();
@@ -429,6 +555,7 @@
 
   onDestroy(() => {
     if (scrollFrame !== undefined) cancelAnimationFrame(scrollFrame);
+    clearScrollAutoplayTimer();
     if (attentionFrame !== undefined) cancelAnimationFrame(attentionFrame);
     attentionResizeObserver?.disconnect();
     player?.removeEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
@@ -436,6 +563,7 @@
     window.removeEventListener("scroll", scheduleReadingBandSelection);
     window.removeEventListener("resize", scheduleReadingBandSelection);
     window.removeEventListener("keydown", handleTutorialKeydown);
+    reducedMotionQuery?.removeEventListener("change", handleReducedMotionChange);
     disposePlayerHost?.();
   });
 
@@ -506,6 +634,8 @@
   data-kp-economics-tutorial-focus-profile={checkpoint.attention.profile}
   data-kp-economics-tutorial-focus-target={checkpoint.attention.target}
   data-kp-economics-tutorial-equations={equationsVisible ? "visible" : "quiet"}
+  data-kp-economics-tutorial-motion-owner={motionOwner}
+  data-kp-economics-tutorial-scroll-autoplay={scrollAutoplayStatus}
 >
   <h1 class="kp-economics-tutorial__visually-hidden">
     Economics demand-shift tutorial
@@ -532,6 +662,31 @@
               class:kp-economics-tutorial__synthesis={passage.id === "synthesis"}
               data-kp-economics-tutorial-passage={passage.id}
             >
+              {#if passage.id === "follow-shift"}
+                <div
+                  class="kp-economics-tutorial__motion-cue"
+                  data-kp-economics-tutorial-motion-cue
+                  role="note"
+                  aria-label="Animation ahead"
+                >
+                  <div class="kp-economics-tutorial__motion-cue-copy">
+                    <span class="kp-economics-tutorial__motion-cue-eyebrow">
+                      Animation ahead
+                    </span>
+                    <strong>Demand shifts right; supply stays fixed.</strong>
+                    <span
+                      class="kp-economics-tutorial__motion-cue-status"
+                      aria-live="polite"
+                    >{cueStatus}</span>
+                  </div>
+                  <button
+                    type="button"
+                    disabled={!ready}
+                    aria-label={`${cueButtonLabel}: demand shifts right while supply stays fixed`}
+                    onclick={togglePlayback}
+                  >{cueButtonLabel}</button>
+                </div>
+              {/if}
               {#if passage.id === "prediction"}
                 <p>{@html passage.paragraphs[0]!.html}</p>
                 <details>

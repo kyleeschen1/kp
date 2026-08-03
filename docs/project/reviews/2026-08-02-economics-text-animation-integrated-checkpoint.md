@@ -16,7 +16,13 @@ The route provides:
 
 - continuous prose that remains coherent without motion;
 - one persistent graph, with no navigation reload while attention changes;
-- static passage preparation without autoplay or prose auto-scrolling;
+- static pre-motion passage preparation without scroll seeking or prose
+  auto-scrolling;
+- an annotated inline action row that names the moving demand curve and fixed
+  supply before motion begins;
+- one-shot playback after a 650 ms reading-band dwell when the timeline is
+  untouched, with manual interaction taking permanent precedence and
+  reduced-motion retaining explicit Play only;
 - Previous, Play/Pause, Next, and a marked continuous scrubber;
 - a graph-led explanation with equations quiet until verification;
 - non-gating prediction and synthesis reveals;
@@ -42,8 +48,8 @@ surface and shadow. This remains economics-local discovery evidence.
 
 1. Does the prose-stage cadence keep enough conceptual context without making
    either side feel crowded?
-2. Do passage changes prepare the graph state you expect, without unwanted
-   motion?
+2. Does the annotated “Animation ahead” row make the coming motion clear before
+   the one-shot scroll handoff begins?
 3. Are the semantic buttons and scrubber enough for both stepwise and
    fine-grained control?
 4. Are prediction, graph motion, equation verification, synthesis, and
@@ -57,6 +63,8 @@ surface and shadow. This remains economics-local discovery evidence.
    surrounding argument feel unavailable?
 9. Do the aperture softness and contiguous stage make text and animation feel
    like one argument, or does either clear region still look boxed in?
+10. Does the 650 ms dwell feel calm, and do the demand curves now move smoothly
+    instead of jumping as the explanation advances?
 
 ## Preservation and promotion boundary
 

@@ -161,11 +161,47 @@
       "status": "passed",
       "scope": "matrix frontier remains tabled",
       "checkedAt": "2026-08-03T03:02:36.035Z"
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "annotated cue, one-shot autoplay, manual ownership, reduced-motion fallback, wide and phone checkpoint",
+      "checkedAt": "2026-08-03T03:28:55.218Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "local checkpoint ordering and lesson compilation",
+      "checkedAt": "2026-08-03T03:29:03.987Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, test, Svelte, and domain type safety",
+      "checkedAt": "2026-08-03T03:29:04.938Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "framework-neutral semantic and runtime boundaries",
+      "checkedAt": "2026-08-03T03:29:05.889Z"
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "tabled matrix frontier and active checkpoint alignment",
+      "checkedAt": "2026-08-03T03:29:06.786Z"
+    },
+    {
+      "command": "npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "catalogue metadata preservation",
+      "checkedAt": "2026-08-03T03:29:07.690Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Implemented the selected economics-local hybrid: a soft wide page wash clears the active passage and complete stage, the wide stage is contiguous with the page, and the phone dock remains bounded; awaiting human visual approval before promotion."
+    "summary": "Added an annotated inline motion cue and one-shot reading-band autoplay for the economics exemplar. Scroll never seeks the curves forward; manual interaction owns the timeline; reduced-motion remains manual-only. Awaiting human visual review before any promotion."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

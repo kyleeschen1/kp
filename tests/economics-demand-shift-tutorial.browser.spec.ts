@@ -128,6 +128,45 @@ test("approved economics prose and semantic controls form one persistent tutoria
     fullPage: false
   });
 
+  const motionCue = root.locator(
+    "[data-kp-economics-tutorial-motion-cue]"
+  );
+  await expect(motionCue).toContainText("Animation ahead");
+  await expect(motionCue).toContainText(
+    "Demand shifts right; supply stays fixed."
+  );
+  await expect(motionCue.getByRole("button")).toHaveText("Show the shift");
+  const followShift = root.locator(
+    '[data-kp-economics-tutorial-passage="follow-shift"]'
+  );
+  await followShift.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.38
+  }));
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-owner",
+    "scroll"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-autoplay",
+    "playing"
+  );
+  await expect.poll(async () => Number(
+    await player.getAttribute("data-kp-editor-animation-progress")
+  )).toBeGreaterThan(0);
+  await page.screenshot({
+    path: `${evidenceDirectory}/wide-motion-cue.png`,
+    fullPage: false
+  });
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-autoplay",
+    "complete"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "1"
+  );
+
   await page.evaluate(() => {
     (window as typeof window & { __kpTutorialDocumentToken?: string })
       .__kpTutorialDocumentToken = "persistent-economics-tutorial";
@@ -216,6 +255,96 @@ test("approved economics prose and semantic controls form one persistent tutoria
     path: `${evidenceDirectory}/wide-synthesis.png`,
     fullPage: false
   });
+});
+
+test("manual playback claims the timeline before scroll autoplay", async ({
+  page
+}) => {
+  await page.goto(route);
+
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const player = root.locator("[data-kp-editor-animation-player]");
+  const motionCue = root.locator(
+    "[data-kp-economics-tutorial-motion-cue]"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+
+  await motionCue.getByRole("button").click();
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-owner",
+    "manual"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-autoplay",
+    "manual"
+  );
+  await expect.poll(async () => Number(
+    await player.getAttribute("data-kp-editor-animation-progress")
+  )).toBeGreaterThan(0);
+  await motionCue.getByRole("button").click();
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "paused"
+  );
+  const pausedProgress = Number(
+    await player.getAttribute("data-kp-editor-animation-progress")
+  );
+
+  const demandChange = root.locator(
+    '[data-kp-economics-tutorial-passage="demand-change"]'
+  );
+  const followShift = root.locator(
+    '[data-kp-economics-tutorial-passage="follow-shift"]'
+  );
+  await demandChange.scrollIntoViewIfNeeded();
+  await followShift.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.38
+  }));
+  await page.waitForTimeout(800);
+  expect(Number(
+    await player.getAttribute("data-kp-editor-animation-progress")
+  )).toBeCloseTo(pausedProgress, 5);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-autoplay",
+    "manual"
+  );
+});
+
+test("reduced-motion readers receive the annotated manual cue without autoplay", async ({
+  page
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(route);
+
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const player = root.locator("[data-kp-editor-animation-player]");
+  const followShift = root.locator(
+    '[data-kp-economics-tutorial-passage="follow-shift"]'
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+  await followShift.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.38
+  }));
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-autoplay",
+    "reduced-motion"
+  );
+  await page.waitForTimeout(800);
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "0"
+  );
+  await expect(root.locator(
+    ".kp-economics-tutorial__motion-cue-status"
+  )).toContainText("Automatic motion is off");
 });
 
 test("phone tutorial keeps a stable compact stage dock with optional expansion", async ({

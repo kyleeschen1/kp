@@ -231,6 +231,58 @@ summary {
   margin-bottom: 0;
 }
 
+.kp-economics-tutorial__motion-cue {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  margin: 0.15rem 0 1.1rem;
+  border-block: 1px solid rgb(91 122 133 / 0.24);
+  padding: 0.8rem 0.1rem;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.kp-economics-tutorial__motion-cue-copy {
+  display: grid;
+  gap: 0.13rem;
+}
+
+.kp-economics-tutorial__motion-cue-eyebrow,
+.kp-economics-tutorial__motion-cue-status {
+  color: #607983;
+  font-size: 0.67rem;
+  line-height: 1.4;
+}
+
+.kp-economics-tutorial__motion-cue-eyebrow {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.kp-economics-tutorial__motion-cue-copy strong {
+  color: #294653;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.kp-economics-tutorial__motion-cue button {
+  border: 1px solid #365e6a;
+  border-radius: 7px;
+  padding: 0.48rem 0.68rem;
+  color: #fff;
+  background: #365e6a;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.kp-economics-tutorial__motion-cue button:disabled {
+  cursor: default;
+  opacity: 0.42;
+}
+
 .kp-economics-tutorial__math {
   display: inline-block;
   min-width: max-content;
@@ -699,6 +751,14 @@ summary {
     padding-left: 0.75rem;
   }
 
+  .kp-economics-tutorial__motion-cue {
+    gap: 0.65rem;
+  }
+
+  .kp-economics-tutorial__motion-cue-status {
+    display: none;
+  }
+
   .kp-economics-tutorial__stage {
     position: fixed;
     top: 0;
@@ -803,6 +863,7 @@ summary {
 
 @media (prefers-reduced-motion: reduce) {
   .kp-economics-tutorial__passage,
+  .kp-economics-tutorial__motion-cue,
   .kp-economics-tutorial__stage,
   .kp-economics-tutorial__page-veil,
   .kp-economics-tutorial__spotlight,

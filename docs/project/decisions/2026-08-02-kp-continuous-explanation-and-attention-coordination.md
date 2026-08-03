@@ -45,16 +45,31 @@ at the visual scale of `h3`; the reader surface does not add a large
 
 ### Coordinate attention without simultaneous demands
 
-Passage selection prepares a relevant static semantic checkpoint. Motion never
-starts merely because a learner scrolls, selects a passage, or follows a link.
-The learner explicitly starts motion with Play, Next, the scrubber, or a
-keyboard command. This preserves a simple rule: do not require the learner to
-read unfamiliar prose while watching causally important motion.
+Passage selection prepares a relevant static semantic checkpoint. At a causal
+bottleneck, the prose may then place one annotated action row on its own line,
+immediately before the motion it introduces. The row names what will move and
+what will remain invariant, and offers an explicit Play action.
+
+The economics integrated-review exemplar may also start that authored timeline
+once after the annotated row dwells in the stable reading band. This is a
+scroll-triggered handoff, not continuous scroll scrubbing: scrolling never
+directly seeks the curves to a later frame, and motion stops when its ordinary
+timeline stops. Any learner use of Play/Pause, Previous/Next, the scrubber,
+keyboard controls, or a bespoke parameter claims the timeline and suppresses
+later scroll autoplay. Minor backtracking does not replay it. Reduced-motion
+preference suppresses automatic playback while retaining the inline Play row.
+
+The notice and dwell preserve the core rule: do not surprise the learner with
+causally important motion while they are absorbing unfamiliar prose. The
+economics behavior remains local discovery evidence pending integrated review;
+it is not yet a shared reader default.
 
 The coordination is soft and bidirectional:
 
-- selecting or scrolling into a passage prepares its static stage state and
-  gives that passage a subtle positive emphasis;
+- selecting or scrolling into a passage prepares its pre-motion static stage
+  state and gives that passage a subtle positive emphasis;
+- an annotated causal handoff may start one untouched timeline after a short
+  dwell, without seeking to a later frame;
 - crossing a semantic checkpoint updates the emphasized prose;
 - continuous motion between checkpoints leaves the prose emphasis stable;
 - no coordination action auto-scrolls the page;
@@ -166,6 +181,10 @@ unchanged.
   stage.
 - Previous, Play/Pause, Next, scrubber, keyboard, seek, and rewind preserve
   semantic correspondence.
+- The annotated motion cue identifies both the moving object and retained
+  invariant before one-shot scroll playback can begin.
+- Manual interaction always takes ownership, reduced-motion disables automatic
+  playback, and scroll never snaps a causal animation to a later frame.
 - The lesson explicitly repairs the shift-versus-movement misconception.
 - The phone composition remains usable without stage-size jitter.
 - Static, reduced-motion, keyboard, and screen-reader use preserve the causal
