@@ -84,6 +84,24 @@
       "status": "passed",
       "scope": "s03 test inference",
       "checkedAt": "2026-08-03T16:41:46.034Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-semantic-model.test.ts tests/kp-lisp-lambda-application-fixture.test.ts tests/kp-lisp-lambda-application-asset.test.ts",
+      "status": "passed",
+      "scope": "s04 twelve semantic asset and lineage tests",
+      "checkedAt": "2026-08-03T16:44:49.261Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s04 application types",
+      "checkedAt": "2026-08-03T16:44:50.342Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s04 test inference",
+      "checkedAt": "2026-08-03T16:44:51.253Z"
     }
   ],
   "allowedWork": [
@@ -128,7 +146,8 @@
     {
       "id": "s04",
       "title": "Compile canonical Lisp animation asset",
-      "status": "planned"
+      "summary": "Compiled the certified Lisp fixture into canonical KP asset objects, selectors, strict semantic transformations, reversible correspondence maps, substitution/evaluation lineage graphs, four checkpoints, accessibility truth, and an explicit five-entry material ledger. Twelve tests and app/test TypeScript checks pass.",
+      "status": "complete"
     },
     {
       "id": "s05",
