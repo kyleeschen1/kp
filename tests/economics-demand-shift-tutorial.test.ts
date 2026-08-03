@@ -40,6 +40,12 @@ import {
   isKpEconomicsDemandShiftTutorialRoute,
   kpEconomicsDemandShiftTutorialPath
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-route.ts";
+import {
+  createKpEconomicsDemandShiftToc
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-toc.ts";
+import {
+  renderKpTutorialToc
+} from "../src/tutorial/kp-tutorial-toc.ts";
 
 test("economics demand-shift tutorial owns one stable route", () => {
   assert.equal(
@@ -406,6 +412,12 @@ test("approved Markdown compiles into the complete annotated lesson", () => {
   );
 
   assert.equal(lesson.sections.length, 4);
+  assert.deepEqual(lesson.sections.map(({ id }) => id), [
+    "equilibrium",
+    "demand-increase",
+    "market-clearing",
+    "model-scope"
+  ]);
   assert.deepEqual(passageIds, [
     "context",
     "initial-equilibrium",
@@ -438,6 +450,47 @@ test("approved Markdown compiles into the complete annotated lesson", () => {
     lesson.sections[0]!.passages[0]!.paragraphs[0]!.html,
     /<script/
   );
+});
+
+test("static tutorial TOC links every section, motion block, and checkpoint", () => {
+  const markdown = readFileSync(new URL(
+    "../content/lessons/economics-demand-shift.md",
+    import.meta.url
+  ), "utf8");
+  const toc = createKpEconomicsDemandShiftToc(
+    compileKpEconomicsDemandShiftLesson(markdown)
+  );
+  const destinations = toc.items.flatMap((section) => [
+    [section.kind, section.id, section.href],
+    ...section.children.flatMap((block) => [
+      [block.kind, block.id, block.href],
+      ...block.children.map((checkpoint) => [
+        checkpoint.kind,
+        checkpoint.id,
+        checkpoint.href
+      ])
+    ])
+  ]);
+
+  assert.deepEqual(destinations, [
+    ["section", "equilibrium", "/tutorials/economics/demand-shift/#kp-section-equilibrium"],
+    ["section", "demand-increase", "/tutorials/economics/demand-shift/#kp-section-demand-increase"],
+    ["section", "market-clearing", "/tutorials/economics/demand-shift/#kp-section-market-clearing"],
+    ["block", "demand-shift", "/tutorials/economics/demand-shift/#kp-block-demand-shift"],
+    ["checkpoint", "shift-ready", "/tutorials/economics/demand-shift/#kp-checkpoint-shift-ready"],
+    ["checkpoint", "shift-handoff", "/tutorials/economics/demand-shift/#kp-checkpoint-shift-handoff"],
+    ["checkpoint", "shift-settled", "/tutorials/economics/demand-shift/#kp-checkpoint-shift-settled"],
+    ["block", "supply-movement", "/tutorials/economics/demand-shift/#kp-block-supply-movement"],
+    ["checkpoint", "movement-ready", "/tutorials/economics/demand-shift/#kp-checkpoint-movement-ready"],
+    ["checkpoint", "movement-traced", "/tutorials/economics/demand-shift/#kp-checkpoint-movement-traced"],
+    ["checkpoint", "movement-verified", "/tutorials/economics/demand-shift/#kp-checkpoint-movement-verified"],
+    ["section", "model-scope", "/tutorials/economics/demand-shift/#kp-section-model-scope"]
+  ]);
+  const html = renderKpTutorialToc(toc);
+  assert.match(html, /^<kp-tutorial-toc/);
+  assert.match(html, /<nav class="kp-tutorial-toc" aria-label="In this lesson">/);
+  assert.match(html, /href="\/tutorials\/economics\/demand-shift\/#kp-checkpoint-movement-verified"/);
+  assert.doesNotMatch(html, /onclick|<script/);
 });
 
 test("semantic checkpoint navigation is ordered, bounded, and reversible", () => {

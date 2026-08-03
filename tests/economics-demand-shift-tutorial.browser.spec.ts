@@ -49,6 +49,23 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "Why does an increase in demand raise both equilibrium price and equilibrium quantity when supply remains fixed?"
   )).toBeVisible();
   await expect(root.getByRole("heading", { level: 3 })).toHaveCount(4);
+  const toc = root.locator("kp-tutorial-toc");
+  await expect(toc.getByRole("navigation", { name: "In this lesson" }))
+    .toBeVisible();
+  await expect(toc.locator('[data-kp-tutorial-toc-item="section"]'))
+    .toHaveCount(4);
+  await expect(toc.locator('[data-kp-tutorial-toc-item="block"]'))
+    .toHaveCount(2);
+  await expect(toc.locator('[data-kp-tutorial-toc-item="checkpoint"]'))
+    .toHaveCount(6);
+  await expect(toc.locator(
+    '[data-kp-tutorial-destination-id="movement-verified"]'
+  )).toHaveAttribute(
+    "href",
+    "/tutorials/economics/demand-shift/#kp-checkpoint-movement-verified"
+  );
+  await expect(root.locator("#kp-checkpoint-movement-verified"))
+    .toHaveAttribute("data-kp-tutorial-destination-block", "supply-movement");
   await expect(root.locator(".kp-economics-tutorial__prose .katex")).not.toHaveCount(0);
   await expect.poll(() => root.evaluate((element) => {
     const graphStage = element.querySelector<HTMLElement>(

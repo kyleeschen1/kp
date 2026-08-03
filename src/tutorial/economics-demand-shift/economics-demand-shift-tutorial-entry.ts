@@ -28,6 +28,10 @@ import {
 import {
   renderKpEconomicsVerificationSurface
 } from "./economics-demand-shift-verification-surface.ts";
+import {
+  createKpEconomicsDemandShiftToc
+} from "./economics-demand-shift-toc.ts";
+import { renderKpTutorialToc } from "../kp-tutorial-toc.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 
 export async function mountKpEconomicsDemandShiftTutorial(input: {
@@ -50,6 +54,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
     search: input.search,
     playhead: 0
   });
+  const lesson = compileKpEconomicsDemandShiftLesson(lessonMarkdown);
   const component = mount(KpEconomicsDemandShiftTutorial, {
     target: input.root,
     props: {
@@ -58,7 +63,8 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       player: prepared.player,
       animation: prepared.animation,
       hostability: prepared.hostability,
-      lesson: compileKpEconomicsDemandShiftLesson(lessonMarkdown),
+      lesson,
+      tocHtml: renderKpTutorialToc(createKpEconomicsDemandShiftToc(lesson)),
       verificationSurfaceHtml: renderKpEconomicsVerificationSurface(),
       initialDemandIntercept:
         prepared.economicsParameters?.demandInterceptAfter ?? 18

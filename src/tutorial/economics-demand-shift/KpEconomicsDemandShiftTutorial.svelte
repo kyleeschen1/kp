@@ -113,6 +113,7 @@
     hostability,
     initialDemandIntercept,
     lesson,
+    tocHtml,
     verificationSurfaceHtml
   }: {
     readonly entry: KpAnimationCatalogueEntry;
@@ -122,6 +123,7 @@
     readonly hostability: KpAnimationCatalogueSurfaceHostability;
     readonly initialDemandIntercept: number;
     readonly lesson: KpEconomicsDemandShiftLesson;
+    readonly tocHtml: string;
     readonly verificationSurfaceHtml: string;
   } = $props();
 
@@ -1060,9 +1062,16 @@
         <p class="kp-economics-tutorial__assumption">{lesson.assumption}</p>
       </header>
 
-      {#each lesson.sections as section, sectionIndex}
-        <section aria-labelledby={`kp-econ-heading-${sectionIndex}`}>
-          <h3 id={`kp-econ-heading-${sectionIndex}`}>{section.heading}</h3>
+      {@html tocHtml}
+
+      {#each lesson.sections as section}
+        <section
+          id={`kp-section-${section.id}`}
+          data-kp-tutorial-destination="section"
+          data-kp-tutorial-destination-id={section.id}
+          aria-labelledby={`kp-heading-${section.id}`}
+        >
+          <h3 id={`kp-heading-${section.id}`}>{section.heading}</h3>
 
           {#each section.passages as passage}
             {@const renderedMotionBlock = findKpEconomicsMotionBlock(
@@ -1077,11 +1086,30 @@
               class:kp-economics-tutorial__synthesis={passage.id === "synthesis"}
               data-kp-economics-tutorial-passage={passage.id}
               data-kp-tutorial-motion-block={renderedMotionBlock?.id}
+              id={renderedMotionBlock === undefined
+                ? undefined
+                : `kp-block-${renderedMotionBlock.id}`}
+              data-kp-tutorial-destination={renderedMotionBlock === undefined
+                ? undefined
+                : "block"}
+              data-kp-tutorial-destination-id={renderedMotionBlock?.id}
               role={renderedMotionBlock === undefined ? undefined : "group"}
               aria-label={renderedMotionBlock === undefined
                 ? undefined
                 : `${renderedMotionBlock.label} animation step`}
             >
+              {#if renderedMotionBlock !== undefined}
+                {#each renderedMotionBlock.checkpoints as motionCheckpoint}
+                  <span
+                    class="kp-economics-tutorial__checkpoint-anchor"
+                    id={`kp-checkpoint-${motionCheckpoint.id}`}
+                    data-kp-tutorial-destination="checkpoint"
+                    data-kp-tutorial-destination-id={motionCheckpoint.id}
+                    data-kp-tutorial-destination-block={renderedMotionBlock.id}
+                    aria-hidden="true"
+                  ></span>
+                {/each}
+              {/if}
               {#if passage.id === "prediction"}
                 <p>{@html passage.paragraphs[0]!.html}</p>
                 <details>

@@ -15,6 +15,7 @@ export interface KpEconomicsDemandShiftLessonPassage {
 }
 
 export interface KpEconomicsDemandShiftLessonSection {
+  readonly id: string;
   readonly heading: string;
   readonly passages: readonly KpEconomicsDemandShiftLessonPassage[];
 }
@@ -28,6 +29,7 @@ export interface KpEconomicsDemandShiftLesson {
 
 const passageMarkerPattern = /^<!-- kp:passage ([a-z0-9-]+) -->$/;
 const motionMarkerPattern = /^<!-- kp:motion ([a-z0-9-]+) -->$/;
+const sectionMarkerPattern = /^<!-- kp:section ([a-z0-9-]+) -->$/;
 
 function escapeHtml(value: string): string {
   return value
@@ -61,6 +63,7 @@ export function compileKpEconomicsDemandShiftLesson(
   let kicker = "";
   let assumption = "";
   const sections: Array<{
+    id: string;
     heading: string;
     passages: Array<{
       id: string;
@@ -106,9 +109,24 @@ export function compileKpEconomicsDemandShiftLesson(
     }
     if (line.startsWith("### ")) {
       flushParagraph();
-      section = { heading: line.slice(4).trim(), passages: [] };
+      section = { id: "", heading: line.slice(4).trim(), passages: [] };
       sections.push(section);
       passage = undefined;
+      continue;
+    }
+    const sectionMarker = sectionMarkerPattern.exec(line);
+    if (sectionMarker !== null) {
+      flushParagraph();
+      if (
+        section === undefined ||
+        section.id !== "" ||
+        section.passages.length > 0
+      ) {
+        throw new Error(
+          "A section annotation must appear once before its first passage."
+        );
+      }
+      section.id = sectionMarker[1]!;
       continue;
     }
     const passageMarker = passageMarkerPattern.exec(line);
@@ -154,6 +172,13 @@ export function compileKpEconomicsDemandShiftLesson(
   }
   if (new Set(passageIds).size !== passageIds.length) {
     throw new Error("Lesson passage annotations must be unique.");
+  }
+  const sectionIds = sections.map(({ id }) => id);
+  if (
+    sectionIds.some((id) => id === "") ||
+    new Set(sectionIds).size !== sectionIds.length
+  ) {
+    throw new Error("Lesson section annotations must be present and unique.");
   }
   const motionBlockIds = sections.flatMap(({ passages }) =>
     passages.flatMap(({ motionBlockId }) =>

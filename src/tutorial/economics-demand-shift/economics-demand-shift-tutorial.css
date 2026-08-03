@@ -152,6 +152,74 @@ summary {
   padding: clamp(1.5rem, 3vw, 3.5rem);
 }
 
+kp-tutorial-toc {
+  display: block;
+  margin: 0.7rem 0 1.7rem;
+}
+
+.kp-tutorial-toc {
+  border-block: 1px solid rgb(88 124 135 / 0.2);
+  padding: 0.6rem 0;
+}
+
+.kp-tutorial-toc__label {
+  margin: 0 0 0.35rem;
+  color: var(--kp-tutorial-muted);
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  text-indent: 0;
+  text-transform: uppercase;
+}
+
+.kp-tutorial-toc__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kp-tutorial-toc__list--depth-1 {
+  margin-top: 0.12rem;
+}
+
+.kp-tutorial-toc__list--depth-2 {
+  gap: 0.08rem 0.45rem;
+  margin-top: 0.08rem;
+}
+
+.kp-tutorial-toc__list--depth-0 > li {
+  flex: 1 1 9rem;
+}
+
+.kp-tutorial-toc a {
+  color: #486a76;
+  font-size: 0.76rem;
+  line-height: 1.35;
+  text-decoration-color: rgb(72 106 118 / 0.34);
+  text-underline-offset: 0.18em;
+}
+
+.kp-tutorial-toc__list--depth-1 > li > a {
+  font-weight: 700;
+}
+
+.kp-tutorial-toc__list--depth-2 a {
+  color: var(--kp-tutorial-muted);
+  font-size: 0.68rem;
+}
+
+.kp-economics-tutorial__checkpoint-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
 .kp-economics-tutorial__reading-band-marker {
   position: fixed;
   top: calc(38vh - 0.25rem);
@@ -197,7 +265,7 @@ summary {
 }
 
 .kp-economics-tutorial__intro {
-  margin-bottom: 3.2rem;
+  margin-bottom: 1.2rem;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--kp-tutorial-border);
 }

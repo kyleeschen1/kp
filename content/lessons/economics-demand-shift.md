@@ -6,6 +6,8 @@ Assumption: This lesson assumes that you can read price and quantity axes and ha
 
 ### What equilibrium means
 
+<!-- kp:section equilibrium -->
+
 <!-- kp:passage context -->
 
 Imagine a simplified weekly market for boxes of strawberries. We will measure quantity, $Q$, in hundreds of boxes and price, $P$, in dollars per box. The numbers are deliberately simple so that we can see the economic relationship without letting arithmetic take over the lesson.
@@ -20,6 +22,8 @@ Look at the intersection before anything moves. The point is not an extra fact p
 
 ### What changes when demand increases
 
+<!-- kp:section demand-increase -->
+
 <!-- kp:passage demand-change -->
 
 Suppose strawberries become more desirable while the supply relationship stays the same. In this model, demand changes from $P=14-Q$ to $P=18-Q$. At any given quantity, buyers are now willing to pay $4$ more than before. Said the other way around, at any given price they want four hundred more boxes. This is an increase in demand, so the entire demand curve shifts. It is not a movement from one point to another on the old demand curve.
@@ -33,6 +37,8 @@ Before playing the change, make a prediction. If the demand curve moves while th
 At the old price of $8$, sellers still supply six hundred boxes. Under the new demand schedule, however, buyers demand $Q=10$, or one thousand boxes, because $8=18-Q$. The old price therefore produces a shortage of four hundred boxes. The demand shift has made the old equilibrium inconsistent with the new pair of schedules.
 
 ### How the market-clearing point changes
+
+<!-- kp:section market-clearing -->
 
 <!-- kp:passage follow-shift -->
 <!-- kp:motion demand-shift -->
@@ -53,6 +59,8 @@ Notice the two different kinds of change. Demand shifted: the relationship betwe
 The equations verify what the graph has already shown. Initially, $2+Q=14-Q$, so $2Q=12$, $Q=6$, and $P=8$. After the demand shift, $2+Q=18-Q$, so $2Q=16$, $Q=8$, and $P=10$. The algebra does not provide a second story. It gives an exact reading of the same two intersections.
 
 ### What the model does and does not say
+
+<!-- kp:section model-scope -->
 
 <!-- kp:passage scope -->
 
