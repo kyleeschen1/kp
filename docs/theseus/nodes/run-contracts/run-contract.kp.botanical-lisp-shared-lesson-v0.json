@@ -617,6 +617,36 @@
       "status": "passed",
       "scope": "s23 patch hygiene",
       "checkedAt": "2026-08-03T18:38:57.950Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-tutorial-publication-controls.test.ts tests/kp-lisp-static-publication.test.ts tests/economics-demand-shift-tutorial.test.ts",
+      "status": "passed",
+      "scope": "s24 twenty-two shared static and caller publication tests",
+      "checkedAt": "2026-08-03T18:44:28.140Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/kp-lisp-accessibility.browser.spec.ts tests/economics-demand-shift-tutorial.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s24 seventeen pre-upgrade no-JS accessibility and route browser tests",
+      "checkedAt": "2026-08-03T18:44:29.346Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s24 application test Svelte and domain types",
+      "checkedAt": "2026-08-03T18:44:30.352Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s24 static publication boundary",
+      "checkedAt": "2026-08-03T18:44:31.390Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s24 patch hygiene",
+      "checkedAt": "2026-08-03T18:44:32.409Z"
     }
   ],
   "allowedWork": [
@@ -781,7 +811,8 @@
     {
       "id": "s24",
       "title": "Extract shared static publication controls",
-      "status": "planned"
+      "summary": "Added one shared static publication-control compiler over KpLessonDocument, existing TOC/scrubber renderers, and semantic URLs. Economics and Lisp now supply only route and block labels; final light DOM, fallback links, disabled pre-upgrade controls, and checkpoint geometry remain shared. Twenty-two focused tests, 17 Chromium no-JS/accessibility/interaction tests, full typecheck, architecture gates, and patch hygiene pass.",
+      "status": "complete"
     },
     {
       "id": "s25",

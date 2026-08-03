@@ -1,10 +1,4 @@
-import { renderKpTutorialScrubBar } from "../kp-tutorial-scrub-bar-renderer.ts";
-import {
-  renderKpTutorialToc,
-  type KpTutorialTocItem,
-  type KpTutorialTocModel
-} from "../kp-tutorial-toc.ts";
-import { serializeKpTutorialDestinationHref } from "../kp-tutorial-url.ts";
+import { compileKpTutorialPublicationControls } from "../kp-tutorial-publication-controls.ts";
 import {
   compileKpLispFunctionApplicationLesson,
   type KpLispFunctionApplicationLesson
@@ -32,63 +26,18 @@ export function compileKpLispFunctionApplicationPublication(
   markdown: string
 ): KpLispFunctionApplicationPublication {
   const lesson = compileKpLispFunctionApplicationLesson(markdown);
-  const scrubbers = Object.fromEntries(kpLispLessonMotionBlocks.map((block) => [
-    block.id,
-    renderKpTutorialScrubBar({
-      blockId: block.id,
-      checkpoints: block.checkpoints.map((checkpoint) => ({
-        ...checkpoint,
-        href: href("checkpoint", checkpoint.id)
-      }))
-    })
-  ])) as Record<KpLispLessonMotionBlockId, string>;
+  const document = adaptKpLispFunctionApplicationLessonDocument(lesson);
+  const controls = compileKpTutorialPublicationControls({
+    publication: document,
+    path: kpLispFunctionApplicationTutorialPath,
+    motionBlockLabels: Object.fromEntries(kpLispLessonMotionBlocks.map(
+      ({ id, label }) => [id, label]
+    )) as Record<KpLispLessonMotionBlockId, string>
+  });
   return Object.freeze({
     lesson,
-    document: adaptKpLispFunctionApplicationLessonDocument(lesson),
-    tocHtml: renderKpTutorialToc(toc(lesson)),
-    motionScrubBarHtml: Object.freeze(scrubbers)
+    document,
+    tocHtml: controls.tocHtml,
+    motionScrubBarHtml: controls.motionScrubBarHtml
   });
-}
-
-function toc(lesson: KpLispFunctionApplicationLesson): KpTutorialTocModel {
-  return Object.freeze({
-    label: "In this lesson",
-    items: Object.freeze(lesson.sections.map((section) => item({
-      kind: "section",
-      id: section.id,
-      label: section.heading,
-      href: href("section", section.id),
-      children: section.blocks.flatMap((lessonBlock) => {
-        if (lessonBlock.kind !== "motion") return [];
-        const block = kpLispLessonMotionBlocks.find(({ id }) => id === lessonBlock.id)!;
-        return [item({
-          kind: "block",
-          id: block.id,
-          label: block.label,
-          href: href("block", block.id),
-          children: block.checkpoints.map((checkpoint) => item({
-            kind: "checkpoint",
-            id: checkpoint.id,
-            label: checkpoint.label,
-            href: href("checkpoint", checkpoint.id),
-            children: []
-          }))
-        })];
-      })
-    })))
-  });
-}
-
-function item(value: KpTutorialTocItem): KpTutorialTocItem {
-  return Object.freeze({ ...value, children: Object.freeze([...value.children]) });
-}
-
-function href(
-  kind: "section" | "block" | "checkpoint",
-  id: string
-): string {
-  return serializeKpTutorialDestinationHref(
-    kpLispFunctionApplicationTutorialPath,
-    { kind, id }
-  );
 }

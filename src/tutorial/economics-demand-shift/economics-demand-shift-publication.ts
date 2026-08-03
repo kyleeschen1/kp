@@ -10,18 +10,11 @@ import {
   kpEconomicsDemandShiftTutorialPath
 } from "./economics-demand-shift-route.ts";
 import {
-  createKpEconomicsDemandShiftToc
-} from "./economics-demand-shift-toc.ts";
-import {
   renderKpEconomicsVerificationSurface
 } from "./economics-demand-shift-verification-surface.ts";
 import {
-  renderKpTutorialScrubBar
-} from "../kp-tutorial-scrub-bar-renderer.ts";
-import { renderKpTutorialToc } from "../kp-tutorial-toc.ts";
-import {
-  serializeKpTutorialDestinationHref
-} from "../kp-tutorial-url.ts";
+  compileKpTutorialPublicationControls
+} from "../kp-tutorial-publication-controls.ts";
 import {
   adaptKpEconomicsDemandShiftLessonDocument
 } from "./economics-demand-shift-document.ts";
@@ -45,24 +38,20 @@ export function compileKpEconomicsDemandShiftPublication(
   markdown: string
 ): KpEconomicsDemandShiftPublication {
   const lesson = compileKpEconomicsDemandShiftLesson(markdown);
-  const motionScrubBarHtml = Object.fromEntries(kpEconomicsMotionBlocks.map(
-    (block) => [block.id, renderKpTutorialScrubBar({
-      blockId: block.id,
-      checkpoints: block.checkpoints.map((checkpoint) => ({
-        ...checkpoint,
-        href: serializeKpTutorialDestinationHref(
-          kpEconomicsDemandShiftTutorialPath,
-          { kind: "checkpoint", id: checkpoint.id }
-        )
-      }))
-    })]
-  )) as Record<KpEconomicsMotionBlockId, string>;
+  const document = adaptKpEconomicsDemandShiftLessonDocument(lesson);
+  const controls = compileKpTutorialPublicationControls({
+    publication: document,
+    path: kpEconomicsDemandShiftTutorialPath,
+    motionBlockLabels: Object.fromEntries(kpEconomicsMotionBlocks.map(
+      ({ id, label }) => [id, label]
+    )) as Record<KpEconomicsMotionBlockId, string>
+  });
 
   return Object.freeze({
     lesson,
-    document: adaptKpEconomicsDemandShiftLessonDocument(lesson),
-    tocHtml: renderKpTutorialToc(createKpEconomicsDemandShiftToc(lesson)),
-    motionScrubBarHtml: Object.freeze(motionScrubBarHtml),
+    document,
+    tocHtml: controls.tocHtml,
+    motionScrubBarHtml: controls.motionScrubBarHtml,
     verificationSurfaceHtml: renderKpEconomicsVerificationSurface()
   });
 }
