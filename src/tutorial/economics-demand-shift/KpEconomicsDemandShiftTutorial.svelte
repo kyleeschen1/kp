@@ -24,8 +24,8 @@
   import {
     findKpEconomicsDemandShiftCheckpointIndex,
     kpEconomicsDemandShiftCheckpoints,
+    selectKpEconomicsDemandShiftPlaybackCheckpointId,
     selectKpEconomicsReadingBandPassage,
-    selectKpEconomicsDemandShiftPlaybackCue,
     stepKpEconomicsDemandShiftCheckpoint
   } from "./economics-demand-shift-checkpoints.ts";
   import type {
@@ -134,6 +134,7 @@
     "idle"
   );
   let reducedMotion = $state(false);
+  let readingBandProximity = $state(0);
   let scrollFrame: number | undefined;
   let attentionFrame: number | undefined;
   let attentionResizeObserver: ResizeObserver | undefined;
@@ -151,13 +152,24 @@
   let semanticProgress = $derived(
     playbackDirection === "rewind" ? 1 - progress : progress
   );
-  let playbackCue = $derived(
-    selectKpEconomicsDemandShiftPlaybackCue(semanticProgress)
+  let visualCheckpoint = $derived(
+    checkpoint.passageId === "follow-shift"
+      ? kpEconomicsDemandShiftCheckpoints[
+          findKpEconomicsDemandShiftCheckpointIndex(
+            selectKpEconomicsDemandShiftPlaybackCheckpointId(semanticProgress)
+          )
+        ]!
+      : checkpoint
+  );
+  let readingBandStyle = $derived(
+    `--kp-tutorial-reading-band-proximity:${readingBandProximity.toFixed(3)};` +
+    `--kp-tutorial-reading-band-opacity:${(0.18 + 0.72 * readingBandProximity).toFixed(3)};` +
+    `--kp-tutorial-reading-band-scale:${(0.78 + 0.28 * readingBandProximity).toFixed(3)}`
   );
   let spotlightStyle = $derived(
     `--kp-tutorial-spotlight-x:${attentionProjection.spotlightX}px;` +
     `--kp-tutorial-spotlight-y:${attentionProjection.spotlightY}px;` +
-    `--kp-tutorial-spotlight-radius:${checkpoint.attention.spotlightRadius}px`
+    `--kp-tutorial-spotlight-radius:${visualCheckpoint.attention.spotlightRadius}px`
   );
 
   function activateCheckpoint(
@@ -228,23 +240,6 @@
   function scrub(nextProgress: number): void {
     claimManualMotion();
     seek(nextProgress);
-    synchronizePlaybackCheckpoint(nextProgress);
-  }
-
-  function synchronizePlaybackCheckpoint(nextSemanticProgress: number): void {
-    const readyIndex = findKpEconomicsDemandShiftCheckpointIndex(
-      "ready-to-shift"
-    );
-    const settledIndex = findKpEconomicsDemandShiftCheckpointIndex("settled");
-    if (checkpointIndex < readyIndex || checkpointIndex > settledIndex) return;
-    const cue = selectKpEconomicsDemandShiftPlaybackCue(nextSemanticProgress);
-    const nextId = cue.id === "shift" ? "ready-to-shift" : cue.id;
-    const nextIndex = findKpEconomicsDemandShiftCheckpointIndex(nextId);
-    if (nextIndex === checkpointIndex) return;
-    // Cue copy, graph focus, prose emphasis, and controls must describe the
-    // same semantic moment even though the custom element owns none of them.
-    checkpointIndex = nextIndex;
-    scheduleAttentionProjection();
   }
 
   function seek(nextProgress: number): void {
@@ -335,16 +330,6 @@
         detail.playbackStatus as KpEditorAnimationPlayerState["playbackStatus"];
     }
     if (
-      typeof detail.progress === "number" &&
-      (detail.direction === "forward" || detail.direction === "rewind")
-    ) {
-      synchronizePlaybackCheckpoint(
-        detail.direction === "rewind"
-          ? 1 - detail.progress
-          : detail.progress
-      );
-    }
-    if (
       detail.playbackStatus === "complete" &&
       detail.progress === 1 &&
       motionOwner === "scroll"
@@ -356,15 +341,6 @@
         scrollAutoplayStatus = "complete";
         announcement = "Demand shift complete. Quantity 8 and price 10.";
       }
-    }
-    if (
-      detail.playbackStatus === "complete" &&
-      detail.progress === 1 &&
-      motionOwner !== "scroll" &&
-      checkpointIndex <= findKpEconomicsDemandShiftCheckpointIndex("handoff")
-    ) {
-      checkpointIndex = findKpEconomicsDemandShiftCheckpointIndex("settled");
-      announcement = "New equilibrium. Quantity 8 and price 10.";
     }
     scheduleAttentionProjection();
   }
@@ -449,7 +425,9 @@
     );
     const target = playerHost === null
       ? null
-      : playerHost.querySelector<Element>(checkpoint.attention.targetSelector);
+      : playerHost.querySelector<Element>(
+          visualCheckpoint.attention.targetSelector
+        );
     if (
       playerHost === null ||
       passage === null ||
@@ -465,7 +443,7 @@
     const stageRect = stage.getBoundingClientRect();
     const targetPoint = resolveAttentionTargetPoint(
       target,
-      checkpoint.attention.targetAnchor
+      visualCheckpoint.attention.targetAnchor
     );
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
@@ -524,18 +502,37 @@
         passage.dataset["kpEconomicsTutorialPassage"] ?? "",
         passage.getBoundingClientRect().top
       ]));
+      const readingBandY = window.innerHeight * 0.38;
+      const motionDividerTop = scrubBar?.getBoundingClientRect().top;
+      const motionDividerDistance = motionDividerTop === undefined
+        ? Number.POSITIVE_INFINITY
+        : Math.abs(motionDividerTop - readingBandY);
+      const nearestPassageDistance = Math.min(
+        motionDividerDistance,
+        ...Object.values(tops).map((top) => Math.abs(top - readingBandY))
+      );
+      readingBandProximity = Number.isFinite(nearestPassageDistance)
+        ? clamp(1 - nearestPassageDistance / 96, 0, 1)
+        : 0;
       // At the document boundary the final passage cannot physically reach the
       // reading band, so bottom settlement explicitly selects it.
       const atBottom = window.scrollY + window.innerHeight >=
         document.documentElement.scrollHeight - 2;
-      const selectedPassage = atBottom
-        ? passages.at(-1)?.dataset["kpEconomicsTutorialPassage"] ??
-          checkpoint.passageId
-        : selectKpEconomicsReadingBandPassage({
-            currentPassageId: checkpoint.passageId,
-            readingBandY: window.innerHeight * 0.38,
-            passageTops: tops
-          });
+      let selectedPassage: string;
+      if (motionDividerDistance <= 48) {
+        // The divider is its own reading anchor: the introducing paragraph
+        // keeps prose focus until the interpretation itself reaches the band.
+        selectedPassage = "follow-shift";
+      } else if (atBottom) {
+        selectedPassage = passages.at(-1)
+          ?.dataset["kpEconomicsTutorialPassage"] ?? checkpoint.passageId;
+      } else {
+        selectedPassage = selectKpEconomicsReadingBandPassage({
+          currentPassageId: checkpoint.passageId,
+          readingBandY,
+          passageTops: tops
+        });
+      }
       if (selectedPassage !== checkpoint.passageId) {
         const nextIndex = kpEconomicsDemandShiftCheckpoints.findIndex(
           (candidate) => candidate.passageId === selectedPassage
@@ -699,8 +696,8 @@
   data-kp-economics-demand-intercept={demandIntercept}
   data-kp-economics-tutorial-checkpoint={checkpoint.id}
   data-kp-economics-tutorial-passage={checkpoint.passageId}
-  data-kp-economics-tutorial-focus-profile={checkpoint.attention.profile}
-  data-kp-economics-tutorial-focus-target={checkpoint.attention.target}
+  data-kp-economics-tutorial-focus-profile={visualCheckpoint.attention.profile}
+  data-kp-economics-tutorial-focus-target={visualCheckpoint.attention.target}
   data-kp-economics-tutorial-equations={equationsVisible ? "visible" : "quiet"}
   data-kp-economics-tutorial-motion-owner={motionOwner}
   data-kp-economics-tutorial-scroll-autoplay={scrollAutoplayStatus}
@@ -708,6 +705,14 @@
   <h1 class="kp-economics-tutorial__visually-hidden">
     Economics demand-shift tutorial
   </h1>
+
+  <span
+    class="kp-economics-tutorial__reading-band-marker"
+    data-kp-economics-tutorial-reading-band
+    data-kp-reading-band-state={readingBandProximity >= 0.94 ? "crossing" : "tracking"}
+    style={readingBandStyle}
+    aria-hidden="true"
+  ></span>
 
   <div class="kp-economics-tutorial__layout">
     <article class="kp-economics-tutorial__prose" aria-label="Economics lesson">
@@ -730,22 +735,6 @@
               class:kp-economics-tutorial__synthesis={passage.id === "synthesis"}
               data-kp-economics-tutorial-passage={passage.id}
             >
-              {#if passage.id === "follow-shift"}
-                <kp-tutorial-scrub-bar
-                  bind:this={scrubBar}
-                  data-kp-economics-tutorial-motion-cue
-                  data-kp-economics-tutorial-motion-cue-phase={playbackCue.id}
-                  label={playbackCue.title}
-                  retained-context={playbackCue.instruction}
-                  progress={semanticProgress}
-                  playback-status={playbackStatus}
-                  direction={playbackDirection}
-                  controls-disabled={ready ? "false" : "true"}
-                  previous-disabled={checkpointIndex === 0 ? "true" : "false"}
-                  next-disabled={checkpointIndex === kpEconomicsDemandShiftCheckpoints.length - 1 ? "true" : "false"}
-                  manual-claimed={motionOwner === "manual" ? "true" : "false"}
-                ></kp-tutorial-scrub-bar>
-              {/if}
               {#if passage.id === "prediction"}
                 <p>{@html passage.paragraphs[0]!.html}</p>
                 <details>
@@ -764,6 +753,19 @@
                 {#each passage.paragraphs as paragraph}
                   <p>{@html paragraph.html}</p>
                 {/each}
+              {/if}
+              {#if passage.id === "follow-shift"}
+                <kp-tutorial-scrub-bar
+                  bind:this={scrubBar}
+                  data-kp-economics-tutorial-motion-divider
+                  progress={semanticProgress}
+                  playback-status={playbackStatus}
+                  direction={playbackDirection}
+                  controls-disabled={ready ? "false" : "true"}
+                  previous-disabled={checkpointIndex === 0 ? "true" : "false"}
+                  next-disabled={checkpointIndex === kpEconomicsDemandShiftCheckpoints.length - 1 ? "true" : "false"}
+                  manual-claimed={motionOwner === "manual" ? "true" : "false"}
+                ></kp-tutorial-scrub-bar>
               {/if}
               {#if passage.id === "explore"}
                 <details class="kp-economics-tutorial__explore" bind:open={explorationOpen}>

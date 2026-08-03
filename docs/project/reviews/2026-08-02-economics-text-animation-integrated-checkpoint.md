@@ -18,10 +18,12 @@ The route provides:
 - one persistent graph, with no navigation reload while attention changes;
 - static pre-motion passage preparation without scroll seeking or prose
   auto-scrolling;
-- a block-level custom web component in the prose that names the moving demand
-  curve and fixed supply through a phase-synchronized “what to watch”
-  instruction above Rewind, Previous, Play/Pause, Next, and a marked continuous
-  scrubber;
+- stable before-motion prose above a block-level custom web component and
+  stable interpretation below it; the component itself contains only Rewind,
+  Previous, Play/Pause, Next, a marked continuous scrubber, and progress;
+- a quiet wide-screen gutter diamond at the reading height, plus a local
+  control hairline whose Play button gradually lifts and fades in a
+  pre-rendered pseudo-element shadow at crossing;
 - downward crossing that plays and upward crossing that rewinds through the
   authored clock without scroll seeking or direction-change jumps;
 - manual interaction that takes permanent precedence and reduced-motion that
@@ -69,9 +71,11 @@ economics-local discovery evidence.
    like one argument, or does either clear region still look boxed in?
 10. Do the demand curves remain continuous when scroll direction reverses, and
     is the prose control block visually prominent without feeling like a card?
-11. Does the short viewing instruction consistently establish where to look
-    before Play, and do its handoff and settlement changes aid inspection
-    without competing with the full paragraph below?
+11. Does stable prose above and below the text-free divider prevent playback
+    from causing an unnecessary textual focus switch?
+12. Does the gutter diamond reveal the reading height without resembling a
+    connector, and does the Play-button lift clarify the crossing without
+    feeling decorative?
 
 ## Preservation and promotion boundary
 

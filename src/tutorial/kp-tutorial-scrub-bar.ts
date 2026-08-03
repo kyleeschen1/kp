@@ -17,13 +17,11 @@ export interface KpTutorialScrubAutoDetail {
 const observedAttributes = [
   "controls-disabled",
   "direction",
-  "label",
   "manual-claimed",
   "next-disabled",
   "playback-status",
   "previous-disabled",
-  "progress",
-  "retained-context"
+  "progress"
 ] as const;
 
 /**
@@ -35,9 +33,6 @@ export class KpTutorialScrubBarElement extends HTMLElement {
   static readonly observedAttributes = observedAttributes;
 
   private readonly root: ShadowRoot;
-  private readonly titleElement: HTMLElement;
-  private readonly retainedContext: HTMLElement;
-  private readonly status: HTMLOutputElement;
   private readonly previousButton: HTMLButtonElement;
   private readonly toggleButton: HTMLButtonElement;
   private readonly nextButton: HTMLButtonElement;
@@ -54,9 +49,6 @@ export class KpTutorialScrubBarElement extends HTMLElement {
     super();
     this.root = this.attachShadow({ mode: "open" });
     this.root.innerHTML = template;
-    this.titleElement = requiredElement(this.root, "[data-title]");
-    this.retainedContext = requiredElement(this.root, "[data-retained-context]");
-    this.status = requiredElement(this.root, "[data-status]");
     this.previousButton = requiredElement(this.root, "[data-action=previous]");
     this.toggleButton = requiredElement(this.root, "[data-action=toggle]");
     this.nextButton = requiredElement(this.root, "[data-action=next]");
@@ -81,6 +73,7 @@ export class KpTutorialScrubBarElement extends HTMLElement {
       this.reducedMotionQuery.addEventListener("change", this.handleMotionPreference);
       this.previousTop = this.getBoundingClientRect().top;
       this.previousScrollY = view.scrollY;
+      this.projectReadingBandFocus(view, this.previousTop);
     }
     this.render();
   }
@@ -145,6 +138,7 @@ export class KpTutorialScrubBarElement extends HTMLElement {
     if (view === null) return;
     this.previousTop = this.getBoundingClientRect().top;
     this.previousScrollY = view.scrollY;
+    this.projectReadingBandFocus(view, this.previousTop);
     this.render();
   };
 
@@ -164,6 +158,7 @@ export class KpTutorialScrubBarElement extends HTMLElement {
     const previousScrollY = this.previousScrollY;
     this.previousTop = top;
     this.previousScrollY = scrollY;
+    this.projectReadingBandFocus(view, top);
     if (
       previousTop === undefined ||
       previousScrollY === undefined ||
@@ -192,6 +187,28 @@ export class KpTutorialScrubBarElement extends HTMLElement {
     }
   }
 
+  private projectReadingBandFocus(view: Window, top: number): void {
+    const distance = top - view.innerHeight * 0.38;
+    const proximity = Math.max(0, Math.min(1, 1 - Math.abs(distance) / 96));
+    this.style.setProperty(
+      "--kp-tutorial-scrub-focus-proximity",
+      proximity.toFixed(3)
+    );
+    this.style.setProperty(
+      "--kp-tutorial-scrub-focus-lift",
+      `${(-2 * proximity).toFixed(3)}px`
+    );
+    this.style.setProperty(
+      "--kp-tutorial-scrub-focus-scale",
+      (1 + 0.018 * proximity).toFixed(4)
+    );
+    this.dataset["kpTutorialScrubFocus"] = Math.abs(distance) <= 6
+      ? "crossing"
+      : distance > 0
+        ? "approaching"
+        : "past";
+  }
+
   private claimManualControl(): void {
     this.manualClaimedInternally = true;
     this.render();
@@ -216,8 +233,6 @@ export class KpTutorialScrubBarElement extends HTMLElement {
     const reducedMotion = this.reducedMotion;
     const playing = playbackStatus === "playing";
 
-    this.titleElement.textContent = this.getAttribute("label") ?? "Animation";
-    this.retainedContext.textContent = this.getAttribute("retained-context") ?? "";
     this.scrubber.value = String(progress);
     this.progressOutput.value = `${Math.round(progress * 100)}%`;
     this.previousButton.disabled = disabled || booleanAttribute(
@@ -238,20 +253,13 @@ export class KpTutorialScrubBarElement extends HTMLElement {
         : progress >= 0.999
           ? "Replay"
           : "Play";
-    this.status.value = reducedMotion
-      ? "Scroll motion is off. Use the controls when ready."
-      : manualClaimed
-        ? "Manual control"
-        : playing && direction === "rewind"
-          ? "Rewinding as you move up"
-          : playing
-            ? "Playing as you move down"
-            : "Scroll down to play · scroll up to rewind";
     this.dataset["kpTutorialScrubManual"] = String(manualClaimed);
     this.dataset["kpTutorialScrubReducedMotion"] = String(reducedMotion);
     this.setAttribute(
       "aria-label",
-      `Animation playback controls: ${this.titleElement.textContent}`
+      reducedMotion
+        ? "Animation timeline. Automatic scroll motion is disabled."
+        : "Animation timeline"
     );
   }
 
@@ -303,53 +311,47 @@ function normalizeProgress(value: string | null): number {
 const template = String.raw`
   <style>
     :host {
+      --kp-tutorial-scrub-focus-proximity: 0;
+      --kp-tutorial-scrub-focus-lift: 0px;
+      --kp-tutorial-scrub-focus-scale: 1;
       display: block;
-      margin: 0.2rem 0 1.25rem;
+      margin: 0.8rem 0 1rem;
       color: #294653;
       font-family: Inter, ui-sans-serif, system-ui, sans-serif;
     }
     .boundary {
-      display: grid;
-      gap: 0.72rem;
-      border-block: 1px solid rgb(91 122 133 / 0.28);
-      padding: 0.82rem 0.1rem 0.9rem;
+      position: relative;
+      padding: 0.55rem 0.1rem;
     }
-    .heading {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 1rem;
-      align-items: end;
+    .boundary::before,
+    .boundary::after {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      left: 0;
+      height: 1px;
+      content: "";
+      pointer-events: none;
+      transform: translateY(-50%);
     }
-    .copy {
-      display: grid;
-      gap: 0.12rem;
-      min-height: 3.65rem;
+    .boundary::before {
+      background: rgb(91 122 133 / 0.24);
     }
-    .eyebrow,
-    .context,
+    .boundary::after {
+      background: #608692;
+      opacity: var(--kp-tutorial-scrub-focus-proximity);
+      transition: opacity 180ms ease-out;
+    }
     output {
       color: #607983;
       font-size: 0.67rem;
       line-height: 1.4;
-    }
-    .context {
-      max-width: 34rem;
-      font-size: 0.72rem;
-    }
-    .eyebrow {
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    strong {
-      font-size: 0.82rem;
-      line-height: 1.4;
-    }
-    output {
       font-variant-numeric: tabular-nums;
       font-weight: 750;
     }
     .controls {
+      position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: auto auto auto auto minmax(8rem, 1fr) 2.7rem;
       gap: 0.42rem;
@@ -367,9 +369,37 @@ const template = String.raw`
       white-space: nowrap;
     }
     button[data-action="toggle"] {
+      position: relative;
+      isolation: isolate;
       border-color: #365e6a;
       color: #fff;
       background: #365e6a;
+      box-shadow: 0 1px 2px rgb(38 56 66 / 0.16);
+      transform:
+        translateY(var(--kp-tutorial-scrub-focus-lift))
+        scale(var(--kp-tutorial-scrub-focus-scale));
+      transition: transform 280ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    button[data-action="toggle"]::after {
+      /* Fade a pre-rendered shadow layer; interpolating box-shadow would repaint. */
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: 0 7px 18px rgb(38 56 66 / 0.3);
+      content: "";
+      opacity: var(--kp-tutorial-scrub-focus-proximity);
+      pointer-events: none;
+      transition: opacity 280ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    button[data-action="toggle"]:is(:hover, :focus-visible) {
+      transform: translateY(-2px) scale(1.018);
+    }
+    button[data-action="toggle"]:is(:hover, :focus-visible)::after {
+      opacity: 1;
+    }
+    button[data-action="toggle"]:active {
+      transform: translateY(0) scale(0.985);
     }
     button:disabled {
       cursor: default;
@@ -378,16 +408,14 @@ const template = String.raw`
     input {
       width: 100%;
       min-width: 0;
+      background: #fffdf8;
       accent-color: #496f7b;
     }
     .progress {
+      background: #fffdf8;
       text-align: right;
     }
     @media (max-width: 560px) {
-      .heading {
-        grid-template-columns: 1fr;
-        gap: 0.25rem;
-      }
       .controls {
         grid-template-columns: repeat(4, auto) minmax(4.5rem, 1fr);
       }
@@ -404,17 +432,12 @@ const template = String.raw`
         scroll-behavior: auto !important;
         transition: none !important;
       }
+      button[data-action="toggle"] {
+        transform: none !important;
+      }
     }
   </style>
   <div class="boundary">
-    <div class="heading">
-      <div class="copy">
-        <span class="eyebrow">What to watch</span>
-        <strong data-title>Animation</strong>
-        <span class="context" data-retained-context></span>
-      </div>
-      <output data-status aria-live="polite"></output>
-    </div>
     <div class="controls" role="group" aria-label="Animation timeline">
       <button type="button" data-action="rewind" aria-label="Rewind animation">Rewind</button>
       <button type="button" data-action="previous" aria-label="Previous semantic checkpoint" aria-keyshortcuts="Alt+ArrowLeft">Previous</button>

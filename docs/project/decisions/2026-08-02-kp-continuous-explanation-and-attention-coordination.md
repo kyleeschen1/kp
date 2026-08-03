@@ -47,22 +47,12 @@ at the visual scale of `h3`; the reader surface does not add a large
 
 Passage selection prepares a relevant static semantic checkpoint. At a causal
 bottleneck, the prose places one annotated scrub-bar block on its own line,
-immediately before the motion it introduces. The block is an attention
-contract: above its controls it first gives a concise authored viewing
-instruction that names the target, the expected change, and the context or
-invariant to retain. It then exposes Rewind, Previous, Play/Pause, Next, and
-continuous semantic progress. This local instruction supplements the
-surrounding continuous argument; it is not a clipped replacement for it.
-
-For multi-phase motion, the viewing instruction may change only at authored
-semantic boundaries. Its phase is selected from the same semantic timeline
-that drives the animation, scrub position, checkpoint attention, and prose
-emphasis, so reverse playback restores the earlier instruction. The host or
-framework-neutral scene definition authors these cues; the web component
-displays them but does not infer pedagogy from pixels or playback status. Cue
-space remains dimensionally stable to avoid layout shift. Mathematical cue
-content, when present, uses pre-rendered inline KaTeX, and assistive technology
-is notified at meaningful phase changes rather than every scrub sample.
+between stable prose that introduces and then interprets the motion. The
+before-motion paragraph names the target, expected change, and retained
+context; the after-motion paragraph explains the result. The block itself
+contains controls and progress only. Playback never replaces or changes prose.
+The accepted refinement and its focus-divider treatment are recorded in
+`2026-08-02-kp-stable-prose-focus-divider.md`.
 
 The economics integrated-review exemplar treats crossing that visible block as
 a directional handoff. Crossing downward plays the authored timeline; crossing
@@ -88,8 +78,8 @@ The coordination is soft and bidirectional:
   state and gives that passage a subtle positive emphasis;
 - crossing the visible scrub boundary may play downward or rewind upward on
   the authored clock, without scroll seeking;
-- crossing a semantic checkpoint updates the emphasized prose;
-- continuous motion between checkpoints leaves the prose emphasis stable;
+- scrolling a passage through the reading band updates emphasized prose;
+- continuous motion and semantic playback phases leave prose emphasis stable;
 - no coordination action auto-scrolls the page;
 - a prose phrase may preview or pin its semantic object in the stage;
 - selecting a semantic object may identify the relevant prose without moving
@@ -98,7 +88,8 @@ The coordination is soft and bidirectional:
 Active prose uses a restrained left rule or light tint. Surrounding prose is
 not dimmed, blurred, or made harder to read. Scroll selection uses a stable
 reading band with hysteresis so adjacent passages do not flicker between
-states.
+states. A quiet wide-screen gutter marker identifies that height without
+drawing another connector or focus line across the page.
 
 ### Give the learner fine-grained semantic control
 
@@ -201,10 +192,9 @@ unchanged.
   stage.
 - Previous, Play/Pause, Next, scrubber, keyboard, seek, and rewind preserve
   semantic correspondence.
-- The scrub boundary identifies the target, expected change, and retained
-  invariant in a viewing instruction above the controls before directional
-  scroll playback can begin; phase changes follow the same semantic timeline
-  in both directions.
+- Stable prose above the scrub boundary identifies the target, expected
+  change, and retained invariant; prose below interprets settlement. Playback
+  changes neither paragraph nor the active prose passage.
 - Manual interaction always takes ownership, reduced-motion disables automatic
   playback/rewind, and reversing scroll direction never snaps the animation.
 - The lesson explicitly repairs the shift-versus-movement misconception.

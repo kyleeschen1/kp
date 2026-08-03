@@ -13,11 +13,12 @@ with source refs, verification, run-contract slices, and completion evidence.
 2. Review the integrated economics tutorial at
    `/tutorials/economics/demand-shift/`: continuous prose, persistent stage,
    a custom-element prose scrub boundary with downward play and upward rewind,
-   an authored phase-synchronized “what to watch” instruction above its
-   controls, no curve seeking, manual timeline precedence, context-preserving
+   stable explanatory prose above and below a text-free control divider, a
+   quiet wide-screen reading-band marker, composited Play-button lift and
+   shadow, no curve seeking, manual timeline precedence, context-preserving
    focus attenuation, two-aperture page-wash strength, contiguous wide stage,
    paragraph indents without inherited KaTeX spacing, and compact phone dock.
-   The rejected connector is removed.
+   The rejected connector and animation-driven cue changes are removed.
 3. Make only economics-local cadence or presentation revisions requested at
    the checkpoint; do not generalize the local compiler during review.
 4. After approval, use generated solve-x as the second caller. Promote only shared document,

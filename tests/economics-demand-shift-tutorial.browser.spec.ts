@@ -139,6 +139,8 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-economics-tutorial-focus-target",
     "demand"
   );
+  await expect(root.locator("[data-kp-economics-tutorial-reading-band]"))
+    .toHaveAttribute("data-kp-reading-band-state", "crossing");
   await expect.poll(() => graph.locator("[data-kp-economics-demand-line]")
     .evaluate((element) => getComputedStyle(element).filter))
     .toContain("opacity(1)");
@@ -147,18 +149,29 @@ test("approved economics prose and semantic controls form one persistent tutoria
     fullPage: false
   });
 
-  await expect(motionCue.getByText("What to watch")).toBeVisible();
-  await expect(motionCue.getByText("Watch the demand shift")).toBeVisible();
-  await expect(motionCue.getByText(
-    "The demand curve shifts right while supply stays fixed. Follow the intersection upward and to the right."
-  )).toBeVisible();
-  await expect(motionCue).toHaveAttribute(
-    "data-kp-economics-tutorial-motion-cue-phase",
-    "shift"
-  );
-  await expect(motionCue.getByText(
-    "Scroll down to play · scroll up to rewind"
-  )).toBeVisible();
+  const beforeMotion = root.locator(
+    '[data-kp-economics-tutorial-passage="follow-shift"] p'
+  ).first();
+  const afterMotion = root.locator(
+    '[data-kp-economics-tutorial-passage="new-equilibrium"] p'
+  ).first();
+  const beforeMotionText = await beforeMotion.textContent();
+  const [beforeBox, dividerBox, afterBox] = await Promise.all([
+    beforeMotion.boundingBox(),
+    motionCue.boundingBox(),
+    afterMotion.boundingBox()
+  ]);
+  expect(beforeBox).not.toBeNull();
+  expect(dividerBox).not.toBeNull();
+  expect(afterBox).not.toBeNull();
+  expect(beforeBox!.y + beforeBox!.height).toBeLessThan(dividerBox!.y);
+  expect(dividerBox!.y + dividerBox!.height).toBeLessThan(afterBox!.y);
+  await expect(motionCue).not.toHaveAttribute("label");
+  await expect(motionCue).not.toHaveAttribute("retained-context");
+  expect(await motionCue.evaluate((element) => ({
+    heading: element.shadowRoot?.querySelector(".heading") !== null,
+    status: element.shadowRoot?.querySelector("[data-status]") !== null
+  }))).toEqual({ heading: false, status: false });
   await expect(motionCue.getByRole("button", { name: "Play" })).toBeVisible();
   await motionCue.evaluate((element) => window.scrollTo({
     top: window.scrollY + element.getBoundingClientRect().top -
@@ -172,6 +185,33 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-economics-tutorial-scroll-autoplay",
     "playing"
   );
+  await expect(motionCue).toHaveAttribute(
+    "data-kp-tutorial-scrub-focus",
+    "crossing"
+  );
+  await expect.poll(() => motionCue.evaluate((element) => {
+    const button = element.shadowRoot?.querySelector<HTMLButtonElement>(
+      "[data-action=toggle]"
+    );
+    const boundary = element.shadowRoot?.querySelector<HTMLElement>(
+      ".boundary"
+    );
+    if (
+      button === undefined ||
+      button === null ||
+      boundary === undefined ||
+      boundary === null
+    ) return null;
+    return {
+      transform: getComputedStyle(button).transform,
+      shadowOpacity: Number(getComputedStyle(button, "::after").opacity),
+      dividerOpacity: Number(getComputedStyle(boundary, "::after").opacity)
+    };
+  })).toEqual({
+    transform: expect.not.stringMatching(/^none$|matrix\(1, 0, 0, 1, 0, 0\)$/),
+    shadowOpacity: expect.closeTo(0.958, 1),
+    dividerOpacity: expect.closeTo(0.958, 1)
+  });
   await expect.poll(async () => Number(
     await player.getAttribute("data-kp-editor-animation-progress")
   )).toBeGreaterThan(0);
@@ -185,7 +225,11 @@ test("approved economics prose and semantic controls form one persistent tutoria
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-checkpoint",
-    "settled"
+    "ready-to-shift"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-passage",
+    "follow-shift"
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-focus-target",
@@ -195,6 +239,9 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-editor-animation-progress",
     "1"
   );
+  await expect(beforeMotion).toHaveText(beforeMotionText ?? "");
+  await expect(root.locator(".kp-economics-tutorial__stage-header strong"))
+    .toHaveText("Follow the shift");
 
   await demandChange.evaluate((element) => window.scrollTo({
     top: window.scrollY + element.getBoundingClientRect().top -
@@ -245,17 +292,15 @@ test("approved economics prose and semantic controls form one persistent tutoria
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-checkpoint",
-    "handoff"
+    "ready-to-shift"
   );
-  await expect(motionCue).toHaveAttribute(
-    "data-kp-economics-tutorial-motion-cue-phase",
-    "handoff"
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-focus-target",
+    "equilibrium"
   );
-  await expect(motionCue.getByText(
-    "The moving intersection becomes the market-clearing point. Keep the old curve and point as quiet references."
-  )).toBeVisible();
+  await expect(beforeMotion).toHaveText(beforeMotionText ?? "");
   await page.screenshot({
-    path: `${evidenceDirectory}/wide-motion-handoff.png`,
+    path: `${evidenceDirectory}/wide-motion-divider.png`,
     fullPage: false
   });
   await root.getByRole("button", {
@@ -263,15 +308,15 @@ test("approved economics prose and semantic controls form one persistent tutoria
   }).click();
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-checkpoint",
+    "handoff"
+  );
+  await root.getByRole("button", {
+    name: "Next semantic checkpoint"
+  }).click();
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-checkpoint",
     "settled"
   );
-  await expect(motionCue).toHaveAttribute(
-    "data-kp-economics-tutorial-motion-cue-phase",
-    "settled"
-  );
-  await expect(motionCue.getByText(
-    "The new equilibrium is higher and farther right. Supply itself did not shift."
-  )).toBeVisible();
   await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
     .toHaveAttribute("data-kp-economics-equilibrium-quantity", "8");
   expect(await page.evaluate(() =>
@@ -406,7 +451,7 @@ test("manual playback claims the timeline before scroll autoplay", async ({
   );
 });
 
-test("reduced-motion readers receive the annotated manual cue without autoplay", async ({
+test("reduced-motion readers retain the text-free manual divider without autoplay", async ({
   page
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -436,9 +481,13 @@ test("reduced-motion readers receive the annotated manual cue without autoplay",
     "data-kp-tutorial-scrub-reduced-motion",
     "true"
   );
-  await expect(motionCue.getByText(
-    "Scroll motion is off. Use the controls when ready."
-  )).toBeVisible();
+  await expect(motionCue).toHaveAttribute(
+    "aria-label",
+    "Animation timeline. Automatic scroll motion is disabled."
+  );
+  expect(await motionCue.evaluate((element) =>
+    element.shadowRoot?.querySelector(".heading")
+  )).toBeNull();
 });
 
 test("phone tutorial keeps a stable compact stage dock with optional expansion", async ({
@@ -461,6 +510,8 @@ test("phone tutorial keeps a stable compact stage dock with optional expansion",
     .toHaveAttribute("data-kp-attention-spotlight-visible", "true");
   await expect(root.locator("[data-kp-economics-tutorial-page-veil]"))
     .toHaveAttribute("data-kp-attention-page-veil-visible", "false");
+  await expect(root.locator("[data-kp-economics-tutorial-reading-band]"))
+    .toBeHidden();
   await expect.poll(() => stageCard.evaluate((element) => {
     const style = getComputedStyle(element);
     return {

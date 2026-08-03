@@ -269,11 +269,41 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-03T04:35:35.846Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-03T04:58:11.581Z"
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-03T04:58:12.663Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-03T04:58:13.904Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-03T04:58:15.350Z"
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-03T04:58:16.418Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Added authored phase-synchronized what-to-watch cues above the framework-neutral scrub controls, synchronized cue and economics focus checkpoints through shift/handoff/settlement, fixed inherited paragraph indentation inside inline KaTeX, and retained the economics-only human checkpoint."
+    "summary": "Replaced animation-driven widget copy with stable prose above and below a text-free control divider, separated scroll-owned prose focus from playback-owned graph focus, added a wide-screen 38vh gutter marker, and implemented a composited Play-button lift and pseudo-shadow. Economics remains at human checkpoint."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

@@ -5,8 +5,8 @@ Last Updated: 2026-08-02
 Current Next Action: Human-review the integrated economics tutorial at
 `/tutorials/economics/demand-shift/` for reading cadence, stage coordination,
 semantic controls, the directional prose scrub boundary, graph-local focus
-attenuation, spotlight scope, stage/page continuity, the phase-synchronized
-“what to watch” instruction, and the compact phone dock. The rejected
+attenuation, spotlight scope, stage/page continuity, the stable-prose focus
+divider, reading-band gutter marker, and the compact phone dock. The rejected
 cross-page connector is removed; the selected local revision uses a soft
 two-aperture page wash and a contiguous wide stage. Do not
 generalize the local lesson compiler, autoplay rule, or salience projection, or
@@ -41,12 +41,15 @@ does not scrub or seek the curves, any manual interaction takes precedence,
 reduced-motion suppresses automatic motion, and no coordination action
 auto-scrolls the page.
 
-The control block begins with an authored “what to watch” instruction above
-the transport and scrub controls. It names the target, expected change, and
-retained context, then changes at the shift, handoff, and settlement boundaries
-from the same semantic progress used by the animation. The custom element
-displays the cue without owning its wording or phase selection. Stable cue
-space prevents copy changes from shifting the controls.
+The accepted refinement is recorded in
+`decisions/2026-08-02-kp-stable-prose-focus-divider.md`. Stable lesson prose
+surrounds the control divider: the paragraph above introduces what to watch,
+and the paragraph below interprets the result. The custom element displays only
+controls and progress. Scroll owns prose emphasis; playback progress may alter
+graph-local focus but never changes the active prose passage or stage heading.
+A quiet wide-screen gutter diamond marks the `38vh` reading band. At the
+divider, the Play button lifts through transform while a pre-rendered
+pseudo-element shadow fades in; phones omit the fixed marker.
 
 The first exemplar is the approved economics supply-demand equilibrium asset.
 Its lesson asks why increased demand raises both equilibrium price and quantity
@@ -70,8 +73,10 @@ The delivered exemplar includes:
 - a persistent graph-only stage plus a prose-column custom element containing
   Rewind, Previous, Play/Pause, Next, and a marked continuous scrubber;
 - one visible animation boundary that names the demand shift and fixed supply,
-  gives a phase-synchronized viewing instruction above its controls, plays when
-  crossed downward, and rewinds when crossed upward;
+  through stable surrounding prose, plays when crossed downward, and rewinds
+  when crossed upward;
+- a text-free control divider, wide-screen reading-band gutter marker, and
+  composited Play-button lift and shadow;
 - mirrored direction changes without curve jumps, manual timeline ownership,
   no scroll seeking, and a reduced-motion manual fallback;
 - a stable compact phone dock with temporary expansion;
@@ -133,6 +138,9 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
   and fine-grained control?
 - Does the block-level scrub boundary make both downward play and upward rewind
   feel expected rather than surprising?
+- Does the gutter marker make the reading height legible without becoming
+  visible machinery, and does the divider lift feel gradual rather than
+  decorative?
 - Does mirrored direction reversal eliminate every curve jump?
 - Does attenuation make the target unmistakable without obscuring causally
   necessary context?
