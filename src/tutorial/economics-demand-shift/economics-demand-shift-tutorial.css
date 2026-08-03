@@ -228,38 +228,21 @@ kp-tutorial-toc {
 
 .kp-economics-tutorial__reading-band-marker {
   position: fixed;
-  top: calc(38vh - 0.25rem);
+  top: calc(38vh - 0.4rem);
   left: calc(
-    max((100vw - 94rem) / 2, 0px) + clamp(1.5rem, 3vw, 3.5rem) - 0.25rem
+    max((100vw - 94rem) / 2, 0px) + clamp(1.5rem, 3vw, 3.5rem) - 0.1rem
   );
   z-index: 7;
-  width: 0.5rem;
-  height: 0.5rem;
-  border: 1px solid #587c87;
-  background: #f4f1e9;
-  box-shadow: 0 0 0 3px rgb(244 241 233 / 0.74);
+  width: 0.72rem;
+  height: 0.8rem;
+  background: #7a9da8;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  filter: drop-shadow(0 1px 1px rgb(38 56 69 / 0.3));
   opacity: var(--kp-tutorial-reading-band-opacity);
   pointer-events: none;
-  transform:
-    rotate(45deg)
-    scale(var(--kp-tutorial-reading-band-scale));
+  transform: scale(var(--kp-tutorial-reading-band-scale));
+  transform-origin: center;
   transition: opacity 120ms ease-out, transform 120ms ease-out;
-}
-
-.kp-economics-tutorial__reading-band-marker::after {
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  width: 1rem;
-  height: 1px;
-  background: #587c87;
-  content: "";
-  opacity: var(--kp-tutorial-reading-band-proximity);
-  transform:
-    translateY(-50%)
-    rotate(-45deg)
-    scaleX(var(--kp-tutorial-reading-band-proximity));
-  transform-origin: left center;
 }
 
 .kp-economics-tutorial__prose {

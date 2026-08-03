@@ -222,8 +222,38 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-economics-tutorial-focus-target",
     "demand"
   );
-  await expect(root.locator("[data-kp-economics-tutorial-reading-band]"))
+  const readingPointer = root.locator(
+    "[data-kp-economics-tutorial-reading-band]"
+  );
+  await expect(readingPointer)
     .toHaveAttribute("data-kp-reading-band-state", "crossing");
+  const pointerProjection = await readingPointer.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    return {
+      background: style.backgroundColor,
+      clipPath: style.clipPath,
+      filter: style.filter,
+      pointerEvents: style.pointerEvents,
+      zIndex: Number(style.zIndex),
+      right: bounds.right,
+      hitTargetIsPointer: document.elementFromPoint(
+        bounds.left + bounds.width / 2,
+        bounds.top + bounds.height / 2
+      ) === element
+    };
+  });
+  const demandTextBox = await demandChange.locator("p").first().boundingBox();
+  expect(demandTextBox).not.toBeNull();
+  expect(pointerProjection).toMatchObject({
+    background: "rgb(122, 157, 168)",
+    clipPath: "polygon(0px 0px, 100% 50%, 0px 100%)",
+    pointerEvents: "none",
+    hitTargetIsPointer: false
+  });
+  expect(pointerProjection.filter).toContain("drop-shadow");
+  expect(pointerProjection.zIndex).toBeGreaterThan(1);
+  expect(pointerProjection.right).toBeLessThan(demandTextBox!.x);
   await expect.poll(() => graph.locator("[data-kp-economics-demand-line]")
     .evaluate((element) => getComputedStyle(element).filter))
     .toContain("opacity(1)");
