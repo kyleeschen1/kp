@@ -13,6 +13,7 @@ import {
   type KpTutorialScrollFrameProjection
 } from "../kp-tutorial-motion.ts";
 import type { KpLispLessonMotionController } from "./lisp-function-application-motion-controller.ts";
+import type { KpLispLessonNavigationController } from "./lisp-function-application-navigation.ts";
 import {
   kpLispLessonMotionBlocks,
   type KpLispLessonMotionBlockId
@@ -21,6 +22,7 @@ import {
 export function createKpLispLessonScrollController(input: {
   readonly root: HTMLElement;
   readonly motion: KpLispLessonMotionController;
+  readonly navigation: KpLispLessonNavigationController;
 }): { readonly dispose: () => void } {
   const view = input.root.ownerDocument.defaultView;
   if (view === null) throw new Error("Lisp scroll coordination requires a browser view.");
@@ -32,6 +34,13 @@ export function createKpLispLessonScrollController(input: {
     )
   ])) as Record<KpLispLessonMotionBlockId, KpTutorialScrubBarElement>;
   const reducedMotion = view.matchMedia("(prefers-reduced-motion: reduce)");
+  const passages = Array.from(input.root.querySelectorAll<HTMLElement>(
+    "[data-kp-lisp-tutorial-passage]"
+  ));
+  const readingMarker = required<HTMLElement>(
+    input.root,
+    "[data-kp-lisp-tutorial-reading-band]"
+  );
   let latest:
     KpTutorialScrollFrameProjection<KpLispLessonMotionBlockId> | undefined;
   let userIntent = false;
@@ -54,32 +63,95 @@ export function createKpLispLessonScrollController(input: {
         proximity: clamp(1 - Math.abs(block.anchorTop - projection.readingBandY) / 96)
       });
     }
+    const active = projection.blocks.find(({ ownsScroll }) => ownsScroll);
     if (reducedMotion.matches) {
       input.root.dataset["kpLispTutorialScrollTimeline"] = "reduced-motion";
+    } else if (active !== undefined && scrollChanged && userIntent) {
+      const snapshot = input.motion.snapshot();
+      let localProgress = active.progress;
+      if (rebase?.blockId === active.id) {
+        localProgress = projectKpTutorialRebasedCorridor({
+          corridor: kpLispLessonMotionBlocks.find(({ id }) => id === active.id)!.corridor,
+          rawTravelAtTakeover: rebase.rawTravelAtTakeover,
+          manualProgress: snapshot.activeBlockId === active.id
+            ? snapshot.localProgress
+            : rebase.manualProgress,
+          rawTravel: active.travel
+        }).progress;
+      }
+      input.motion.projectScroll(active.id, localProgress);
+      rebase = undefined;
+      userIntent = false;
+    }
+    projectReadingState(projection);
+  };
+
+  const projectReadingState = (
+    projection: KpTutorialCoordinatedScrollProjection<KpLispLessonMotionBlockId>
+  ): void => {
+    const travelling = projection.blocks.find(({ ownsScroll, travel }) =>
+      ownsScroll && travel > 0 && travel < 1
+    );
+    const nearby = projection.blocks.find(({ ownsScroll, distanceFromReadingBand }) =>
+      ownsScroll && distanceFromReadingBand <= 128
+    );
+    const motionBlock = travelling ?? nearby;
+    const motionElement = motionBlock === undefined
+      ? undefined
+      : controls[motionBlock.id].closest<HTMLElement>(
+        "[data-kp-tutorial-motion-block]"
+      ) ?? undefined;
+    const introductionId = motionElement?.dataset["kpTutorialMotionIntroduction"];
+    const motionPassage = introductionId === undefined
+      ? undefined
+      : passages.find(({ dataset }) =>
+        dataset["kpLispTutorialPassage"] === introductionId
+      );
+    const activePassage = motionPassage ?? [...passages].sort((left, right) =>
+      Math.abs(left.getBoundingClientRect().top - projection.readingBandY) -
+      Math.abs(right.getBoundingClientRect().top - projection.readingBandY)
+    )[0];
+    if (activePassage === undefined) return;
+
+    for (const passage of passages) {
+      passage.dataset["kpLispReadingActive"] = String(passage === activePassage);
+    }
+    const passageId = activePassage.dataset["kpLispTutorialPassage"] ?? "";
+    input.root.dataset["kpLispTutorialReadingPassage"] = passageId;
+    const passageBounds = activePassage.getBoundingClientRect();
+    readingMarker.style.setProperty(
+      "--kp-lisp-reading-pointer-left",
+      `${Math.max(0, passageBounds.left - 22)}px`
+    );
+    readingMarker.dataset["kpReadingBandState"] =
+      Math.abs(passageBounds.top - projection.readingBandY) <= 12
+        ? "crossing"
+        : "tracking";
+
+    if (motionBlock !== undefined) {
+      const snapshot = input.motion.snapshot();
+      const definition = kpLispLessonMotionBlocks.find(
+        ({ id }) => id === motionBlock.id
+      )!;
+      const localProgress = snapshot.activeBlockId === motionBlock.id
+        ? snapshot.localProgress
+        : motionBlock.progress;
+      const checkpoint = [...definition.checkpoints].sort((left, right) =>
+        Math.abs(left.progress - localProgress) -
+        Math.abs(right.progress - localProgress)
+      )[0]!;
+      input.navigation.setReadingDestination({
+        kind: "checkpoint",
+        id: checkpoint.id
+      });
       return;
     }
-    const active = projection.blocks.find(({ ownsScroll }) => ownsScroll);
-    if (
-      active === undefined ||
-      !scrollChanged ||
-      !userIntent
-    ) return;
-
-    const snapshot = input.motion.snapshot();
-    let localProgress = active.progress;
-    if (rebase?.blockId === active.id) {
-      localProgress = projectKpTutorialRebasedCorridor({
-        corridor: kpLispLessonMotionBlocks.find(({ id }) => id === active.id)!.corridor,
-        rawTravelAtTakeover: rebase.rawTravelAtTakeover,
-        manualProgress: snapshot.activeBlockId === active.id
-          ? snapshot.localProgress
-          : rebase.manualProgress,
-        rawTravel: active.travel
-      }).progress;
+    const sectionId = activePassage.closest<HTMLElement>(
+      '[data-kp-tutorial-destination="section"]'
+    )?.dataset["kpTutorialDestinationId"];
+    if (sectionId !== undefined) {
+      input.navigation.setReadingDestination({ kind: "section", id: sectionId });
     }
-    input.motion.projectScroll(active.id, localProgress);
-    rebase = undefined;
-    userIntent = false;
   };
 
   const noteIntent = (): void => {

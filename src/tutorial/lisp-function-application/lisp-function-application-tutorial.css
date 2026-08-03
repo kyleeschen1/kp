@@ -18,6 +18,7 @@ button, input { font: inherit; }
   --kp-lesson-muted: #667b74;
   --kp-lesson-border: #d8d1c2;
   --kp-lesson-paper: #f4f0e6;
+  --kp-lesson-reading-rail: #7a9da8;
   --kp-lisp-ink: var(--kp-lesson-ink);
   --kp-lisp-muted: var(--kp-lesson-muted);
   --kp-lisp-line: var(--kp-lesson-border);
@@ -53,6 +54,20 @@ button, input { font: inherit; }
 
 .kp-lisp-tutorial__toc { z-index: 4; }
 .kp-lisp-tutorial__stage { min-width: 0; }
+
+.kp-lisp-tutorial__reading-band-marker {
+  position: fixed;
+  top: calc(38vh - .6rem);
+  left: var(--kp-lisp-reading-pointer-left, 17.7rem);
+  z-index: 30;
+  width: 1.05rem;
+  height: 1.2rem;
+  background: var(--kp-lesson-reading-rail);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  filter: drop-shadow(0 1px 1px rgb(32 59 53 / .42));
+  opacity: 1;
+  pointer-events: none;
+}
 
 .kp-lisp-tutorial__intro { margin-bottom: 5rem; }
 .kp-lisp-tutorial__eyebrow {
@@ -90,11 +105,19 @@ button, input { font: inherit; }
   font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
   font-size: clamp(1.04rem, 1.25vw, 1.16rem);
   line-height: 1.78;
+  text-indent: 1.35em;
 }
-.kp-lisp-tutorial__passage p + p { text-indent: 1.35em; }
 .kp-lisp-tutorial__passage {
+  border-left: 3px solid transparent;
   border-radius: .8rem;
-  transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+  padding: .45rem .9rem .5rem 1rem;
+  background: transparent;
+  transition: border-color 180ms ease, background-color 180ms ease,
+    transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+}
+.kp-lisp-tutorial__passage[data-kp-lisp-reading-active="true"] {
+  border-left-color: var(--kp-lesson-reading-rail);
+  background: rgb(255 253 248 / .72);
 }
 .kp-lisp-tutorial__passage[data-kp-lisp-passage-salience="target"] {
   transform: translateY(-2px);
@@ -110,8 +133,8 @@ button, input { font: inherit; }
 
 .kp-lisp-tutorial__motion-block {
   position: relative;
-  margin: 2.3rem 0;
-  padding: .7rem 0;
+  margin: .5rem 0 2.3rem;
+  padding: .35rem 0 .7rem;
   scroll-margin-top: 45vh;
 }
 .kp-lisp-tutorial__checkpoint-anchor {
@@ -166,6 +189,7 @@ button, input { font: inherit; }
 }
 
 @media (max-width: 52rem) {
+  .kp-lisp-tutorial__reading-band-marker { display: none; }
   .kp-lisp-tutorial__layout {
     display: flex;
     flex-direction: column;
@@ -219,6 +243,9 @@ button, input { font: inherit; }
     outline: 2px solid Highlight;
     outline-offset: 4px;
     box-shadow: none;
+  }
+  .kp-lisp-tutorial__passage[data-kp-lisp-reading-active="true"] {
+    border-left-color: Highlight;
   }
   .kp-lisp-botanical [data-kp-lisp-salience] { filter: none; }
   .kp-lisp-botanical [data-kp-lisp-salience="target"] { stroke: Highlight; }

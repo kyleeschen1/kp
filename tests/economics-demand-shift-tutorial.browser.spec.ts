@@ -81,6 +81,12 @@ test("approved economics prose and semantic controls form one persistent tutoria
       stageLeft: document.querySelector<HTMLElement>(
         ".kp-economics-tutorial__stage"
       )!.getBoundingClientRect().left,
+      stageTop: document.querySelector<HTMLElement>(
+        ".kp-economics-tutorial__stage"
+      )!.getBoundingClientRect().top,
+      stageTransform: getComputedStyle(document.querySelector<HTMLElement>(
+        ".kp-economics-tutorial__stage"
+      )!).transform,
       proseLineHeight: Number.parseFloat(getComputedStyle(prose).lineHeight),
       proseFontSize: Number.parseFloat(getComputedStyle(prose).fontSize),
       viewportHeight: window.innerHeight,
@@ -94,6 +100,9 @@ test("approved economics prose and semantic controls form one persistent tutoria
   expect(tocProjection.top).toBeGreaterThanOrEqual(0);
   expect(tocProjection.bottom).toBeLessThanOrEqual(tocProjection.viewportHeight);
   expect(tocProjection.center).toBeCloseTo(tocProjection.viewportHeight / 2, 1);
+  expect(tocProjection.stageTop).toBeGreaterThanOrEqual(8);
+  expect(tocProjection.stageTop).toBeLessThanOrEqual(32);
+  expect(tocProjection.stageTransform).toBe("none");
   expect(tocProjection.proseLineHeight / tocProjection.proseFontSize)
     .toBeGreaterThanOrEqual(1.77);
   await expect(toc.locator(

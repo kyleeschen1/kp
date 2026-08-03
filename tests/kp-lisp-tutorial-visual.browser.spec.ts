@@ -5,6 +5,85 @@ import { expect, test, type Page } from "@playwright/test";
 const route = "/tutorials/programming/lisp-function-application/";
 const evidenceDirectory = "tmp/codex/botanical-lisp-tutorial";
 
+test("the shared shell preserves the approved reader attention cues", async ({ page }) => {
+  await page.setViewportSize({ width: 1_440, height: 900 });
+  await page.goto(route);
+  const root = page.locator("[data-kp-lisp-function-application-tutorial]");
+  const passage = root.locator(
+    '[data-kp-lisp-tutorial-passage="binding-before"]'
+  );
+  const motion = root.locator(
+    '[data-kp-tutorial-motion-block="bind-and-reconstruct"]'
+  );
+
+  await expect(motion).toHaveAttribute(
+    "data-kp-tutorial-motion-introduction",
+    "binding-before"
+  );
+  await expect(motion).toHaveAttribute(
+    "aria-describedby",
+    "kp-passage-binding-before"
+  );
+  expect(await motion.evaluate((element) =>
+    element.previousElementSibling?.id
+  )).toBe("kp-passage-binding-before");
+  const introductionGap = await motion.evaluate((element) => {
+    const before = element.previousElementSibling!.getBoundingClientRect();
+    return element.getBoundingClientRect().top - before.bottom;
+  });
+  expect(introductionGap).toBeLessThanOrEqual(24);
+  await expect.poll(() => passage.locator("p").first().evaluate((element) =>
+    Number.parseFloat(getComputedStyle(element).textIndent)
+  )).toBeGreaterThan(0);
+
+  await passage.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.38
+  }));
+  await expect(root).toHaveAttribute(
+    "data-kp-lisp-tutorial-reading-passage",
+    "binding-before"
+  );
+  await expect(passage).toHaveAttribute("data-kp-lisp-reading-active", "true");
+  const toc = root.locator("kp-tutorial-toc");
+  await expect(toc).toHaveAttribute(
+    "data-kp-tutorial-toc-active-id",
+    "bind-argument"
+  );
+
+  const pointer = root.locator("[data-kp-lisp-tutorial-reading-band]");
+  await expect(pointer).toHaveAttribute("data-kp-reading-band-state", "crossing");
+  const cueProjection = await pointer.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    const activePassage = document.querySelector<HTMLElement>(
+      '[data-kp-lisp-reading-active="true"]'
+    )!;
+    return {
+      background: style.backgroundColor,
+      clipPath: style.clipPath,
+      opacity: style.opacity,
+      pointerEvents: style.pointerEvents,
+      zIndex: Number(style.zIndex),
+      width: bounds.width,
+      height: bounds.height,
+      right: bounds.right,
+      passageLeft: activePassage.getBoundingClientRect().left,
+      rail: getComputedStyle(activePassage).borderLeftColor
+    };
+  });
+  expect(cueProjection).toMatchObject({
+    opacity: "1",
+    pointerEvents: "none"
+  });
+  expect(cueProjection.background).toBe(cueProjection.rail);
+  expect(cueProjection.clipPath).toContain("polygon");
+  expect(cueProjection.zIndex).toBeGreaterThan(12);
+  expect(cueProjection.width).toBeGreaterThanOrEqual(16);
+  expect(cueProjection.height).toBeGreaterThanOrEqual(19);
+  expect(cueProjection.right).toBeLessThan(cueProjection.passageLeft);
+});
+
 test("capture the complete local Lisp tutorial checkpoint story", async ({ page }) => {
   await mkdir(evidenceDirectory, { recursive: true });
   await page.setViewportSize({ width: 1_440, height: 900 });

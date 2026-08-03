@@ -53,6 +53,12 @@
     <h1 class="kp-tutorial-shell__visually-hidden kp-lisp-tutorial__visually-hidden">
       Lisp function application tutorial
     </h1>
+    <span
+      class="kp-lisp-tutorial__reading-band-marker"
+      data-kp-lisp-tutorial-reading-band
+      data-kp-reading-band-state="tracking"
+      aria-hidden="true"
+    ></span>
   {/snippet}
 
   {#snippet toc()}
@@ -75,9 +81,10 @@
         >
           <h3 id={`kp-heading-${section.id}`}>{section.heading}</h3>
 
-          {#each section.blocks as block}
+          {#each section.blocks as block, index}
             {#if block.kind === "passage"}
               <div
+                id={`kp-passage-${block.id}`}
                 class="kp-lisp-tutorial__passage"
                 data-kp-lisp-tutorial-passage={block.id}
               >
@@ -87,14 +94,23 @@
               </div>
             {:else}
               {@const definition = motion(block)}
+              {@const introduction = section.blocks[index - 1]}
               <div
                 class="kp-tutorial-shell__motion-block kp-lisp-tutorial__motion-block"
                 id={`kp-block-${definition.id}`}
                 data-kp-tutorial-motion-block={definition.id}
                 data-kp-tutorial-destination="block"
                 data-kp-tutorial-destination-id={definition.id}
+                data-kp-tutorial-motion-introduction={
+                  introduction?.kind === "passage" ? introduction.id : undefined
+                }
                 role="group"
                 aria-label={`${definition.label} animation step`}
+                aria-describedby={
+                  introduction?.kind === "passage"
+                    ? `kp-passage-${introduction.id}`
+                    : undefined
+                }
               >
                 {#each definition.checkpoints as checkpoint}
                   <span

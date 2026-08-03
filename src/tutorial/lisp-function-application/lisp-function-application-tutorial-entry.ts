@@ -79,7 +79,8 @@ export async function mountKpLispFunctionApplicationTutorial(input: {
   });
   const scroll = createKpLispLessonScrollController({
     root: tutorialRoot,
-    motion
+    motion,
+    navigation
   });
   const reviewHost = createKpAnimationCatalogueReviewHost();
   input.root.dataset["kpLispFunctionApplicationTutorialMounted"] = "true";

@@ -16,6 +16,13 @@ export interface KpLispLessonNavigationTarget {
   readonly elementId: string;
 }
 
+export interface KpLispLessonNavigationController {
+  readonly setReadingDestination: (
+    destination: KpTutorialTocDestination
+  ) => boolean;
+  readonly dispose: () => void;
+}
+
 export function resolveKpLispLessonNavigationTarget(input: {
   readonly lesson: KpLispFunctionApplicationLesson;
   readonly destination: KpTutorialTocDestination;
@@ -49,7 +56,7 @@ export function createKpLispLessonNavigationController(input: {
   readonly root: HTMLElement;
   readonly lesson: KpLispFunctionApplicationLesson;
   readonly motion: KpLispLessonMotionController;
-}): { readonly dispose: () => void } {
+}): KpLispLessonNavigationController {
   const view = input.root.ownerDocument.defaultView;
   if (view === null) throw new Error("Lisp navigation requires a browser view.");
   const toc = required<KpTutorialTocElement>(input.root, "kp-tutorial-toc");
@@ -87,6 +94,19 @@ export function createKpLispLessonNavigationController(input: {
   }
 
   return Object.freeze({
+    // Reading projection only moves the visible TOC cursor. URL changes and
+    // semantic restoration remain atomic navigation transactions above.
+    setReadingDestination: (destination: KpTutorialTocDestination): boolean => {
+      if (resolveKpLispLessonNavigationTarget({
+        lesson: input.lesson,
+        destination
+      }) === undefined) return false;
+      toc.setActiveDestination(destination);
+      input.root.dataset["kpLispTutorialReadingDestinationKind"] =
+        destination.kind;
+      input.root.dataset["kpLispTutorialReadingDestinationId"] = destination.id;
+      return true;
+    },
     dispose: controller.dispose
   });
 }

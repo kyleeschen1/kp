@@ -405,6 +405,9 @@ kp-tutorial-toc {
   align-self: start;
   height: min(44rem, calc(100vh - clamp(1.4rem, 4vw, 2.8rem)));
   min-height: 34rem;
+  /* This stage is top-anchored; the shared shell's centered-stage transform
+     belongs to lessons whose domain stylesheet does not choose an anchor. */
+  transform: none;
 }
 
 .kp-economics-tutorial__stage-card {

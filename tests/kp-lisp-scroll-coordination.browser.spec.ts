@@ -13,6 +13,10 @@ test("scroll owns one block, honors holds, and rebases manual control without ju
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-motion-owner", "scroll");
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-active-motion-block", "bind-and-reconstruct");
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.3404");
+  await expect(root.locator("kp-tutorial-toc")).toHaveAttribute(
+    "data-kp-tutorial-toc-active-id",
+    "binding-established"
+  );
 
   await setTravel(page, "bind-and-reconstruct", 0.58, "wheel");
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.3404");
