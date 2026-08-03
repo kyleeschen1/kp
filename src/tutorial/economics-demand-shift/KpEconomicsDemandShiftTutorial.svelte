@@ -31,8 +31,9 @@
   import type {
     KpEconomicsDemandShiftLesson
   } from "./economics-demand-shift-lesson-compiler.ts";
-  import type {
-    KpEconomicsDemandShiftInitialDestination
+  import {
+    resolveKpEconomicsDemandShiftInitialDestination,
+    type KpEconomicsDemandShiftInitialDestination
   } from "./economics-demand-shift-deep-link.ts";
   import {
     findKpEconomicsMotionBlock,
@@ -63,6 +64,17 @@
   import type {
     KpTutorialTocElement
   } from "../kp-tutorial-toc-element.ts";
+  import {
+    KP_TUTORIAL_TOC_NAVIGATE_EVENT,
+    type KpTutorialTocNavigateDetail
+  } from "../kp-tutorial-toc-element.ts";
+  import type {
+    KpTutorialTocDestination
+  } from "../kp-tutorial-toc.ts";
+  import {
+    serializeKpTutorialDestinationHash,
+    serializeKpTutorialDestinationHref
+  } from "../kp-tutorial-url.ts";
   import KpInlineMath from "./KpInlineMath.svelte";
 
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
@@ -95,6 +107,11 @@
     readonly blockId: KpEconomicsMotionBlockId;
     readonly rawTravelAtTakeover: number;
     readonly manualProgress: number;
+  }
+
+  interface KpEconomicsNavigationResume {
+    readonly blockId: KpEconomicsMotionBlockId;
+    readonly progress: number;
   }
 
   const emptyAttentionProjection: KpEconomicsTutorialAttentionProjection = {
@@ -184,12 +201,18 @@
   let attentionFrame: number | undefined;
   let attentionResizeObserver: ResizeObserver | undefined;
   let reducedMotionQuery: MediaQueryList | undefined;
+  let previousHistoryScrollRestoration: ScrollRestoration | undefined;
   let attentionProjection = $state(emptyAttentionProjection);
   let disposePlayerHost: (() => void) | undefined;
   let scrollCoordinator: KpEconomicsTutorialScrollCoordinator | undefined;
   let latestScrollProjection: KpEconomicsCoordinatedScrollProjection | undefined;
   let manualScrollRebase: KpEconomicsManualScrollRebase | undefined;
-  let initialNavigationPending = initialDeepLink.destination !== undefined;
+  let navigationProjectionPending = initialDeepLink.destination !== undefined;
+  let navigationLockedScrollY: number | undefined;
+  let navigationResume = initialDeepLink.destination === undefined
+    ? undefined
+    : createNavigationResume(initialDeepLink);
+  let currentSemanticDestination = $state(initialDeepLink.destination);
   let supplyPlaybackStatus = $state<"paused" | "playing" | "complete">(
     "paused"
   );
@@ -777,8 +800,25 @@
     projection: KpEconomicsCoordinatedScrollProjection
   ): void {
     latestScrollProjection = projection;
-    if (initialNavigationPending && projection.scrollChanged) {
-      initialNavigationPending = false;
+    const movedFromNavigation = navigationProjectionPending &&
+      navigationLockedScrollY !== undefined &&
+      Math.abs(projection.scrollY - navigationLockedScrollY) > 0.5;
+    if (navigationProjectionPending && !movedFromNavigation) {
+      const block = projection.blocks.find(
+        ({ id }) => id === navigationResume?.blockId
+      );
+      if (block !== undefined && navigationResume !== undefined) {
+        manualScrollRebase = {
+          blockId: navigationResume.blockId,
+          rawTravelAtTakeover: block.travel,
+          manualProgress: navigationResume.progress
+        };
+      }
+    }
+    if (movedFromNavigation) {
+      navigationProjectionPending = false;
+      navigationLockedScrollY = undefined;
+      navigationResume = undefined;
     }
     scrollActiveMotionBlock = projection.activeBlockId ?? "";
     const active = projection.blocks.find(({ ownsScroll }) => ownsScroll);
@@ -793,7 +833,7 @@
       });
       const manualCanResume = motionOwner === "manual" &&
         projection.scrollChanged;
-      const mayProjectScroll = !initialNavigationPending && (
+      const mayProjectScroll = !navigationProjectionPending && (
         motionOwner !== "manual" || manualCanResume
       );
       if (!reducedMotion && ready && player !== undefined && mayProjectScroll && (
@@ -837,7 +877,7 @@
         seek(lessonMotionProjection.demandShiftProgress);
       }
     }
-    if (!initialNavigationPending) updateReadingBandSelection();
+    if (!navigationProjectionPending) updateReadingBandSelection();
     updateAttentionProjection();
   }
 
@@ -931,7 +971,11 @@
     supplyScrubBar = shell.querySelector<KpTutorialScrubBarElement>(
       '[data-kp-tutorial-motion-controls="supply-movement"]'
     ) ?? undefined;
-    restoreInitialDestinationScroll();
+    scrollToSemanticDestination(initialDeepLink);
+    shell.addEventListener(
+      KP_TUTORIAL_TOC_NAVIGATE_EVENT,
+      handleTocNavigationIntent
+    );
     player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
     for (const scrubBar of [demandScrubBar, supplyScrubBar]) {
@@ -964,6 +1008,7 @@
     scrollCoordinator.connect();
     scrollCoordinatorStatus = "connected";
     window.addEventListener("keydown", handleTutorialKeydown);
+    window.addEventListener("popstate", handleHistoryNavigation);
     disposePlayerHost = mountKpAnimationCataloguePlayerHost({
       shell,
       entry,
@@ -977,6 +1022,8 @@
     );
     if (playerHost !== null) attentionResizeObserver.observe(playerHost);
     reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    previousHistoryScrollRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
     reducedMotion = reducedMotionQuery.matches;
     if (reducedMotion && motionOwner === "untouched") {
       scrollTimelineStatus = "reduced-motion";
@@ -1020,7 +1067,15 @@
       );
     }
     window.removeEventListener("keydown", handleTutorialKeydown);
+    window.removeEventListener("popstate", handleHistoryNavigation);
+    shell?.removeEventListener(
+      KP_TUTORIAL_TOC_NAVIGATE_EVENT,
+      handleTocNavigationIntent
+    );
     reducedMotionQuery?.removeEventListener("change", handleReducedMotionChange);
+    if (previousHistoryScrollRestoration !== undefined) {
+      window.history.scrollRestoration = previousHistoryScrollRestoration;
+    }
     disposePlayerHost?.();
   });
 
@@ -1058,28 +1113,35 @@
     return `${(value * 100).toFixed(4)}%`;
   }
 
-  function restoreInitialDestinationScroll(): void {
-    if (shell === undefined || initialDeepLink.destination === undefined) {
+  function scrollToSemanticDestination(
+    destination: KpEconomicsDemandShiftInitialDestination
+  ): void {
+    if (shell === undefined) {
       return;
     }
-    if (initialDeepLink.motionScroll !== undefined) {
+    if (destination.destination === undefined) {
+      window.scrollTo({ top: 0, behavior: "auto" });
+      navigationLockedScrollY = window.scrollY;
+      return;
+    }
+    if (destination.motionScroll !== undefined) {
       const block = findKpEconomicsMotionBlock(
-        initialDeepLink.motionScroll.blockId
+        destination.motionScroll.blockId
       )!;
-      const anchor = initialDeepLink.motionScroll.blockId ===
+      const anchor = destination.motionScroll.blockId ===
           "supply-movement"
         ? supplyScrubBar
         : demandScrubBar;
       if (anchor === undefined) return;
       const start = block.corridor.startViewportRatio * window.innerHeight;
       const end = block.corridor.endViewportRatio * window.innerHeight;
-      const endpointInset = initialDeepLink.motionScroll.travel <= 0.001
+      const endpointInset = destination.motionScroll.travel <= 0.001
         ? 2
-        : initialDeepLink.motionScroll.travel >= 0.999
+        : destination.motionScroll.travel >= 0.999
           ? -2
           : 0;
       const desiredTop = start -
-        initialDeepLink.motionScroll.travel * (start - end) + endpointInset;
+        destination.motionScroll.travel * (start - end) + endpointInset;
       window.scrollTo({
         top: Math.max(
           0,
@@ -1087,11 +1149,108 @@
         ),
         behavior: "auto"
       });
+      navigationLockedScrollY = window.scrollY;
       return;
     }
     shell.querySelector<HTMLElement>(
-      `#${initialDeepLink.targetElementId}`
+      `#${destination.targetElementId}`
     )?.scrollIntoView({ block: "start", behavior: "auto" });
+    navigationLockedScrollY = window.scrollY;
+  }
+
+  function handleTocNavigationIntent(event: Event): void {
+    if (!(event instanceof CustomEvent) || event.defaultPrevented) return;
+    const detail = event.detail as KpTutorialTocNavigateDetail | undefined;
+    if (
+      detail === undefined ||
+      typeof detail.id !== "string" ||
+      !["section", "block", "checkpoint"].includes(detail.kind)
+    ) return;
+    event.preventDefault();
+    navigateToSemanticDestination(
+      { kind: detail.kind, id: detail.id },
+      "push"
+    );
+  }
+
+  function handleHistoryNavigation(): void {
+    navigateToSemanticHash(window.location.hash, "history");
+  }
+
+  function navigateToSemanticDestination(
+    destination: KpTutorialTocDestination,
+    historyMode: "push" | "history"
+  ): void {
+    navigateToSemanticHash(
+      serializeKpTutorialDestinationHash(destination),
+      historyMode
+    );
+  }
+
+  function navigateToSemanticHash(
+    hash: string,
+    historyMode: "push" | "history"
+  ): void {
+    const next = resolveKpEconomicsDemandShiftInitialDestination({
+      lesson,
+      hash
+    });
+    scrollCoordinator?.cancelPendingProjection();
+    const session = player === undefined
+      ? undefined
+      : getKpEditorAnimationPlaybackSession(player);
+    if (session?.player.playbackStatus === "playing") {
+      dispatchKpEditorAnimationPlaybackAction(player!, {
+        type: "pause",
+        nowMs: performance.now()
+      });
+    }
+    cancelSupplyPlayback();
+    navigationProjectionPending = true;
+    navigationResume = createNavigationResume(next);
+    currentSemanticDestination = next.destination;
+    checkpointIndex = next.checkpointIndex;
+    lessonMotionProjection = next.motion;
+    scrollActiveMotionBlock = next.motion.activeBlockId;
+    motionOwner = "untouched";
+    manualMotionBlock = undefined;
+    manualScrollRebase = undefined;
+    scrollTimelineStatus = "idle";
+    playbackDirection = "forward";
+    supplyPlaybackDirection = "forward";
+    supplyPlaybackStatus = "paused";
+    seek(next.motion.demandShiftProgress);
+    if (next.destination !== undefined) {
+      tutorialToc?.setActiveDestination(next.destination);
+      announcement = `Opened ${next.destination.kind} ${next.destination.id}.`;
+      if (historyMode === "push") {
+        window.history.pushState(
+          { kpTutorialDestination: next.destination },
+          "",
+          serializeKpTutorialDestinationHref(
+            `${window.location.pathname}${window.location.search}`,
+            next.destination
+          )
+        );
+      }
+    } else {
+      announcement = "Returned to the beginning of the lesson.";
+    }
+    scrollToSemanticDestination(next);
+    scrollCoordinator?.scheduleProjection();
+    scheduleAttentionProjection();
+  }
+
+  function createNavigationResume(
+    destination: KpEconomicsDemandShiftInitialDestination
+  ): KpEconomicsNavigationResume {
+    const block = destination.motion.blocks.find(
+      ({ id }) => id === destination.motion.activeBlockId
+    )!;
+    return {
+      blockId: destination.motion.activeBlockId,
+      progress: block.progress
+    };
   }
 
   function writeScrubBarAttributes(
@@ -1146,9 +1305,9 @@
   data-kp-economics-tutorial-scroll-timeline={scrollTimelineStatus}
   data-kp-economics-tutorial-scroll-coordinator={scrollCoordinatorStatus}
   data-kp-economics-tutorial-scroll-active-block={scrollActiveMotionBlock}
-  data-kp-economics-tutorial-initial-destination={initialDeepLink.destination === undefined
+  data-kp-economics-tutorial-initial-destination={currentSemanticDestination === undefined
     ? ""
-    : `${initialDeepLink.destination.kind}:${initialDeepLink.destination.id}`}
+    : `${currentSemanticDestination.kind}:${currentSemanticDestination.id}`}
   data-kp-economics-tutorial-demand-progress={lessonMotionProjection.demandShiftProgress.toFixed(3)}
   data-kp-economics-tutorial-supply-movement-progress={supplyMovementProgress.toFixed(3)}
   data-kp-economics-tutorial-scene-market={lessonMotionProjection.scene.market}

@@ -479,6 +479,34 @@
       "scope": "s21",
       "checkedAt": "2026-08-03T07:48:59.392Z",
       "notes": "Active deep-link restoration diff has no whitespace errors."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-08-03T07:55:28.580Z",
+      "notes": "Twenty-four focused tests continue to pass for semantic resolution, cumulative projections, corridor rebasing, static publication, exact economics runtime, and deterministic SVG output."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-08-03T07:55:29.785Z",
+      "notes": "Svelte and TypeScript diagnostics pass with zero errors and warnings after transactional navigation and history lifecycle integration."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-08-03T07:55:30.717Z",
+      "notes": "Ten Chromium checks pass; cancelable TOC navigation preserves query state, jumps directly without intermediate replay, retains the document, rebases the next scroll, and restores exact states through Back and Forward with manual scroll restoration."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-08-03T07:55:31.647Z",
+      "notes": "Active transactional navigation diff has no whitespace errors."
     }
   ],
   "allowedWork": [
@@ -631,7 +659,8 @@
     {
       "id": "s22",
       "title": "Transact-toc-and-history-navigation",
-      "status": "planned"
+      "summary": "Added host-level cancelable TOC transactions and popstate restoration: active clocks pause, one complete semantic projection applies, current queries survive, programmatic scrolling is locked from the motion coordinator, manual history scroll restoration prevents races, and an exact corridor rebase makes the next deliberate scroll continuous without intermediate-block replay.",
+      "status": "complete"
     },
     {
       "id": "s23",

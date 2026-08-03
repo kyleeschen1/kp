@@ -1034,6 +1034,109 @@ test("direct semantic links restore complete cumulative state without replay", a
   await expect(root.locator("#kp-section-model-scope")).toBeInViewport();
 });
 
+test("TOC transactions and history restore exact states without intermediate replay", async ({
+  page
+}) => {
+  await page.goto(`${route}?keep=1`);
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const toc = root.locator("kp-tutorial-toc");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-coordinator",
+    "connected"
+  );
+  await page.evaluate(() => {
+    (window as unknown as { kpTutorialToken: string }).kpTutorialToken =
+      "same-document";
+    const root = document.querySelector<HTMLElement>(
+      "[data-kp-economics-demand-shift-tutorial]"
+    )!;
+    const samples: string[] = [];
+    const observer = new MutationObserver(() => samples.push(
+      `${root.dataset["kpEconomicsTutorialDemandProgress"]}|` +
+      `${root.dataset["kpEconomicsTutorialSupplyMovementProgress"]}`
+    ));
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: [
+        "data-kp-economics-tutorial-demand-progress",
+        "data-kp-economics-tutorial-supply-movement-progress"
+      ]
+    });
+    (window as unknown as { kpNavigationSamples: string[] })
+      .kpNavigationSamples = samples;
+  });
+
+  await toc.locator(
+    '[data-kp-tutorial-destination-id="movement-verified"]'
+  ).click();
+  await expect(page).toHaveURL(
+    `${route}?keep=1#kp-checkpoint-movement-verified`
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-initial-destination",
+    "checkpoint:movement-verified"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-demand-progress",
+    "1.000"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "1.000"
+  );
+  expect(await page.evaluate(() =>
+    (window as unknown as { kpNavigationSamples: string[] })
+      .kpNavigationSamples
+  )).not.toContain("1.000|0.580");
+
+  await toc.locator(
+    '[data-kp-tutorial-destination-id="shift-handoff"]'
+  ).click();
+  await expect(page).toHaveURL(`${route}?keep=1#kp-checkpoint-shift-handoff`);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-demand-progress",
+    "0.720"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "0.000"
+  );
+  const beforeScroll = Number(await root.getAttribute(
+    "data-kp-economics-tutorial-demand-progress"
+  ));
+  await page.evaluate(() => window.scrollBy(0, 1));
+  await expect.poll(async () => Number(await root.getAttribute(
+    "data-kp-economics-tutorial-demand-progress"
+  ))).toBeCloseTo(beforeScroll, 2);
+
+  await page.goBack();
+  await expect(page).toHaveURL(
+    `${route}?keep=1#kp-checkpoint-movement-verified`
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "1.000"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-stage-composition-phase",
+    "split"
+  );
+
+  await page.goForward();
+  await expect(page).toHaveURL(`${route}?keep=1#kp-checkpoint-shift-handoff`);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-demand-progress",
+    "0.720"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "0.000"
+  );
+  expect(await page.evaluate(() =>
+    (window as unknown as { kpTutorialToken: string }).kpTutorialToken
+  )).toBe("same-document");
+});
+
 test("reduced-motion readers retain the text-free divider without automatic seek", async ({
   page
 }) => {
