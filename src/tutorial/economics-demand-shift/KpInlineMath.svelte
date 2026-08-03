@@ -5,6 +5,4 @@
   let html = $derived(renderLatexToHtml(latex, { displayMode: false }));
 </script>
 
-<span class="kp-economics-tutorial__math" data-kp-latex={latex}>
-  {@html html}
-</span>
+<span class="kp-economics-tutorial__math" data-kp-latex={latex}>{@html html}</span>

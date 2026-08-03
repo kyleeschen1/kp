@@ -100,8 +100,12 @@ human review:
 The current economics-local revision implements the accepted learner-facing
 framing of KP as a salience-transmission engine: each checkpoint names a target
 and retained context, while graph-local attenuation and spotlighting emphasize
-the intended landing. Human review rejected the cross-page connector, so it is
-removed on every viewport; lesson body paragraphs now use first-line indents.
+the intended landing. The prose scrub boundary now puts a concise authored
+“what to watch” instruction above its controls and changes that instruction at
+semantic shift, handoff, and settlement boundaries from the same animation
+progress. Inline KaTeX explicitly cancels inherited paragraph indentation.
+Human review rejected the cross-page connector, so it is removed on every
+viewport; lesson body paragraphs still use first-line indents.
 Follow-up review selected a soft wide-screen page wash with apertures for the
 active passage and complete stage, plus a contiguous wide stage without card
 chrome or a separate graph plane. The fixed phone dock keeps its surface
@@ -237,8 +241,10 @@ asset or runtime. Downward crossing plays, upward crossing rewinds, manual
 interaction takes timeline ownership, scrolling never seeks the curves, and
 reduced-motion disables automatic motion. It now also
 carries economics-local target profiles,
-context-preserving graph attenuation, graph-local spotlighting, and indented
-lesson paragraphs. The rejected passage-to-stage connector is removed. The
+context-preserving graph attenuation, graph-local spotlighting, an authored
+phase-synchronized viewing instruction above the playback controls, and
+indented lesson paragraphs whose inline KaTeX does not inherit that indent.
+The rejected passage-to-stage connector is removed. The
 selected local revision adds a two-aperture page wash and a contiguous wide
 stage while retaining the bounded phone dock. No shared attention schema or
 second caller begins until this integrated cadence and salience treatment are

@@ -16,6 +16,36 @@ export type KpEconomicsDemandShiftFocusTarget =
   | "supply"
   | "equations";
 
+export interface KpEconomicsDemandShiftPlaybackCue {
+  readonly id: "shift" | "handoff" | "settled";
+  readonly title: string;
+  readonly instruction: string;
+}
+
+const playbackCues = Object.freeze({
+  shift: Object.freeze({
+    id: "shift",
+    title: "Watch the demand shift",
+    instruction:
+      "The demand curve shifts right while supply stays fixed. Follow the intersection upward and to the right."
+  }),
+  handoff: Object.freeze({
+    id: "handoff",
+    title: "Watch equilibrium change hands",
+    instruction:
+      "The moving intersection becomes the market-clearing point. Keep the old curve and point as quiet references."
+  }),
+  settled: Object.freeze({
+    id: "settled",
+    title: "Compare the two equilibria",
+    instruction:
+      "The new equilibrium is higher and farther right. Supply itself did not shift."
+  })
+} satisfies Record<
+  KpEconomicsDemandShiftPlaybackCue["id"],
+  KpEconomicsDemandShiftPlaybackCue
+>);
+
 const focusTargetProjection = Object.freeze({
   // Curve anchors avoid making every connector terminate at the intersection,
   // which would collapse distinct demand, supply, and equilibrium meanings.
@@ -92,6 +122,15 @@ export function stepKpEconomicsDemandShiftCheckpoint(input: {
       input.currentIndex + input.direction
     )
   );
+}
+
+export function selectKpEconomicsDemandShiftPlaybackCue(
+  semanticProgress: number
+): KpEconomicsDemandShiftPlaybackCue {
+  const progress = Math.max(0, Math.min(1, semanticProgress));
+  if (progress >= 0.995) return playbackCues.settled;
+  if (progress >= 0.72) return playbackCues.handoff;
+  return playbackCues.shift;
 }
 
 export function selectKpEconomicsReadingBandPassage(input: {

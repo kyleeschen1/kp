@@ -237,6 +237,8 @@ summary {
   color: #223b47;
   font-size: 0.94em;
   line-height: 1;
+  /* Paragraph indentation must not restart inside each inline KaTeX box. */
+  text-indent: 0;
   vertical-align: -0.08em;
 }
 

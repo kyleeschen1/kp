@@ -19,8 +19,9 @@ The route provides:
 - static pre-motion passage preparation without scroll seeking or prose
   auto-scrolling;
 - a block-level custom web component in the prose that names the moving demand
-  curve and fixed supply, then exposes Rewind, Previous, Play/Pause, Next, and
-  a marked continuous scrubber;
+  curve and fixed supply through a phase-synchronized “what to watch”
+  instruction above Rewind, Previous, Play/Pause, Next, and a marked continuous
+  scrubber;
 - downward crossing that plays and upward crossing that rewinds through the
   authored clock without scroll seeking or direction-change jumps;
 - manual interaction that takes permanent precedence and reduced-motion that
@@ -29,7 +30,8 @@ The route provides:
 - non-gating prediction and synthesis reveals;
 - optional parameter exploration after synthesis with a return-to-example
   action;
-- inline KaTeX, compact section headings, and the lower-left Review dock;
+- inline KaTeX without inherited paragraph-indent spacing, compact section
+  headings, and the lower-left Review dock;
 - a stable compact phone stage with optional temporary expansion.
 
 The salience-transmission revision adds one economics-local focus target and
@@ -67,6 +69,9 @@ economics-local discovery evidence.
    like one argument, or does either clear region still look boxed in?
 10. Do the demand curves remain continuous when scroll direction reverses, and
     is the prose control block visually prominent without feeling like a card?
+11. Does the short viewing instruction consistently establish where to look
+    before Play, and do its handoff and settlement changes aid inspection
+    without competing with the full paragraph below?
 
 ## Preservation and promotion boundary
 

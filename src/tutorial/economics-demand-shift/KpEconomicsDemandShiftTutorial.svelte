@@ -25,6 +25,7 @@
     findKpEconomicsDemandShiftCheckpointIndex,
     kpEconomicsDemandShiftCheckpoints,
     selectKpEconomicsReadingBandPassage,
+    selectKpEconomicsDemandShiftPlaybackCue,
     stepKpEconomicsDemandShiftCheckpoint
   } from "./economics-demand-shift-checkpoints.ts";
   import type {
@@ -150,6 +151,9 @@
   let semanticProgress = $derived(
     playbackDirection === "rewind" ? 1 - progress : progress
   );
+  let playbackCue = $derived(
+    selectKpEconomicsDemandShiftPlaybackCue(semanticProgress)
+  );
   let spotlightStyle = $derived(
     `--kp-tutorial-spotlight-x:${attentionProjection.spotlightX}px;` +
     `--kp-tutorial-spotlight-y:${attentionProjection.spotlightY}px;` +
@@ -224,14 +228,23 @@
   function scrub(nextProgress: number): void {
     claimManualMotion();
     seek(nextProgress);
-    if (Math.abs(nextProgress - 0.72) < 0.015) {
-      checkpointIndex = findKpEconomicsDemandShiftCheckpointIndex("handoff");
-    } else if (
-      nextProgress >= 0.995 &&
-      checkpointIndex < findKpEconomicsDemandShiftCheckpointIndex("settled")
-    ) {
-      checkpointIndex = findKpEconomicsDemandShiftCheckpointIndex("settled");
-    }
+    synchronizePlaybackCheckpoint(nextProgress);
+  }
+
+  function synchronizePlaybackCheckpoint(nextSemanticProgress: number): void {
+    const readyIndex = findKpEconomicsDemandShiftCheckpointIndex(
+      "ready-to-shift"
+    );
+    const settledIndex = findKpEconomicsDemandShiftCheckpointIndex("settled");
+    if (checkpointIndex < readyIndex || checkpointIndex > settledIndex) return;
+    const cue = selectKpEconomicsDemandShiftPlaybackCue(nextSemanticProgress);
+    const nextId = cue.id === "shift" ? "ready-to-shift" : cue.id;
+    const nextIndex = findKpEconomicsDemandShiftCheckpointIndex(nextId);
+    if (nextIndex === checkpointIndex) return;
+    // Cue copy, graph focus, prose emphasis, and controls must describe the
+    // same semantic moment even though the custom element owns none of them.
+    checkpointIndex = nextIndex;
+    scheduleAttentionProjection();
   }
 
   function seek(nextProgress: number): void {
@@ -320,6 +333,16 @@
     if (typeof detail.playbackStatus === "string") {
       playbackStatus =
         detail.playbackStatus as KpEditorAnimationPlayerState["playbackStatus"];
+    }
+    if (
+      typeof detail.progress === "number" &&
+      (detail.direction === "forward" || detail.direction === "rewind")
+    ) {
+      synchronizePlaybackCheckpoint(
+        detail.direction === "rewind"
+          ? 1 - detail.progress
+          : detail.progress
+      );
     }
     if (
       detail.playbackStatus === "complete" &&
@@ -711,8 +734,9 @@
                 <kp-tutorial-scrub-bar
                   bind:this={scrubBar}
                   data-kp-economics-tutorial-motion-cue
-                  label="Demand shifts right"
-                  retained-context="Supply stays fixed."
+                  data-kp-economics-tutorial-motion-cue-phase={playbackCue.id}
+                  label={playbackCue.title}
+                  retained-context={playbackCue.instruction}
                   progress={semanticProgress}
                   playback-status={playbackStatus}
                   direction={playbackDirection}

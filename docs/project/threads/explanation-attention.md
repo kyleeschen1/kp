@@ -5,9 +5,10 @@ Last Updated: 2026-08-02
 Current Next Action: Human-review the integrated economics tutorial at
 `/tutorials/economics/demand-shift/` for reading cadence, stage coordination,
 semantic controls, the directional prose scrub boundary, graph-local focus
-attenuation, spotlight scope, stage/page continuity, and the compact phone
-dock. The rejected cross-page connector is removed; the selected local
-revision uses a soft two-aperture page wash and a contiguous wide stage. Do not
+attenuation, spotlight scope, stage/page continuity, the phase-synchronized
+“what to watch” instruction, and the compact phone dock. The rejected
+cross-page connector is removed; the selected local revision uses a soft
+two-aperture page wash and a contiguous wide stage. Do not
 generalize the local lesson compiler, autoplay rule, or salience projection, or
 begin the solve-x caller, before this checkpoint is approved.
 
@@ -40,6 +41,13 @@ does not scrub or seek the curves, any manual interaction takes precedence,
 reduced-motion suppresses automatic motion, and no coordination action
 auto-scrolls the page.
 
+The control block begins with an authored “what to watch” instruction above
+the transport and scrub controls. It names the target, expected change, and
+retained context, then changes at the shift, handoff, and settlement boundaries
+from the same semantic progress used by the animation. The custom element
+displays the cue without owning its wording or phase selection. Stable cue
+space prevents copy changes from shifting the controls.
+
 The first exemplar is the approved economics supply-demand equilibrium asset.
 Its lesson asks why increased demand raises both equilibrium price and quantity
 when supply remains fixed. The generated solve-x lesson is the second caller.
@@ -62,12 +70,13 @@ The delivered exemplar includes:
 - a persistent graph-only stage plus a prose-column custom element containing
   Rewind, Previous, Play/Pause, Next, and a marked continuous scrubber;
 - one visible animation boundary that names the demand shift and fixed supply,
-  plays when crossed downward, and rewinds when crossed upward;
+  gives a phase-synchronized viewing instruction above its controls, plays when
+  crossed downward, and rewinds when crossed upward;
 - mirrored direction changes without curve jumps, manual timeline ownership,
   no scroll seeking, and a reduced-motion manual fallback;
 - a stable compact phone dock with temporary expansion;
-- inline KaTeX, quiet equations until verification, and the existing Review
-  capture dock;
+- inline KaTeX with paragraph indentation explicitly reset inside math boxes,
+  quiet equations until verification, and the existing Review capture dock;
 - economics-local focus profiles, semantic curve/point/equation targets,
   graph-local attenuation, and a graph-local spotlight;
 - a gentle wide-screen page wash that leaves the active passage and complete

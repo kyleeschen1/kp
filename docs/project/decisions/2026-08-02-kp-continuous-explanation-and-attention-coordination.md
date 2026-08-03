@@ -47,9 +47,22 @@ at the visual scale of `h3`; the reader surface does not add a large
 
 Passage selection prepares a relevant static semantic checkpoint. At a causal
 bottleneck, the prose places one annotated scrub-bar block on its own line,
-immediately before the motion it introduces. The block names what will move and
-what will remain invariant, then exposes Rewind, Previous, Play/Pause, Next,
-and continuous semantic progress.
+immediately before the motion it introduces. The block is an attention
+contract: above its controls it first gives a concise authored viewing
+instruction that names the target, the expected change, and the context or
+invariant to retain. It then exposes Rewind, Previous, Play/Pause, Next, and
+continuous semantic progress. This local instruction supplements the
+surrounding continuous argument; it is not a clipped replacement for it.
+
+For multi-phase motion, the viewing instruction may change only at authored
+semantic boundaries. Its phase is selected from the same semantic timeline
+that drives the animation, scrub position, checkpoint attention, and prose
+emphasis, so reverse playback restores the earlier instruction. The host or
+framework-neutral scene definition authors these cues; the web component
+displays them but does not infer pedagogy from pixels or playback status. Cue
+space remains dimensionally stable to avoid layout shift. Mathematical cue
+content, when present, uses pre-rendered inline KaTeX, and assistive technology
+is notified at meaningful phase changes rather than every scrub sample.
 
 The economics integrated-review exemplar treats crossing that visible block as
 a directional handoff. Crossing downward plays the authored timeline; crossing
@@ -188,8 +201,10 @@ unchanged.
   stage.
 - Previous, Play/Pause, Next, scrubber, keyboard, seek, and rewind preserve
   semantic correspondence.
-- The scrub boundary identifies both the moving object and retained invariant
-  before directional scroll playback can begin.
+- The scrub boundary identifies the target, expected change, and retained
+  invariant in a viewing instruction above the controls before directional
+  scroll playback can begin; phase changes follow the same semantic timeline
+  in both directions.
 - Manual interaction always takes ownership, reduced-motion disables automatic
   playback/rewind, and reversing scroll direction never snaps the animation.
 - The lesson explicitly repairs the shift-versus-movement misconception.

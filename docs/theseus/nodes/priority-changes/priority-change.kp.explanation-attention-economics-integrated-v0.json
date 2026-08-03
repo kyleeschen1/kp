@@ -239,11 +239,41 @@
       "status": "passed",
       "scope": "catalogue metadata preservation",
       "checkedAt": "2026-08-03T03:59:49.132Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-03T04:35:31.747Z"
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-03T04:35:32.704Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-03T04:35:33.780Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-03T04:35:34.882Z"
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-03T04:35:35.846Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Replaced the Svelte-owned stage controls with a framework-neutral prose scrub-bar custom element. Downward crossing plays, upward crossing rewinds through a symmetric runtime direction change, manual controls take ownership, and reduced-motion remains explicit-only. Awaiting human visual review before second-caller pressure or shared-contract promotion."
+    "summary": "Added authored phase-synchronized what-to-watch cues above the framework-neutral scrub controls, synchronized cue and economics focus checkpoints through shift/handoff/settlement, fixed inherited paragraph indentation inside inline KaTeX, and retained the economics-only human checkpoint."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

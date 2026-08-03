@@ -323,6 +323,7 @@ const template = String.raw`
     .copy {
       display: grid;
       gap: 0.12rem;
+      min-height: 3.65rem;
     }
     .eyebrow,
     .context,
@@ -330,6 +331,10 @@ const template = String.raw`
       color: #607983;
       font-size: 0.67rem;
       line-height: 1.4;
+    }
+    .context {
+      max-width: 34rem;
+      font-size: 0.72rem;
     }
     .eyebrow {
       font-weight: 800;
@@ -404,7 +409,7 @@ const template = String.raw`
   <div class="boundary">
     <div class="heading">
       <div class="copy">
-        <span class="eyebrow">Animation boundary</span>
+        <span class="eyebrow">What to watch</span>
         <strong data-title>Animation</strong>
         <span class="context" data-retained-context></span>
       </div>

@@ -35,6 +35,13 @@ test("approved economics prose and semantic controls form one persistent tutoria
   )).toBeVisible();
   await expect(root.getByRole("heading", { level: 3 })).toHaveCount(4);
   await expect(root.locator(".kp-economics-tutorial__prose .katex")).not.toHaveCount(0);
+  await expect.poll(() => root.locator(".kp-economics-tutorial__math")
+    .first()
+    .evaluate((element) => ({
+      wrapper: getComputedStyle(element).textIndent,
+      katex: getComputedStyle(element.querySelector(".katex")!).textIndent
+    })))
+    .toEqual({ wrapper: "0px", katex: "0px" });
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-hydrated",
     "true"
@@ -140,9 +147,15 @@ test("approved economics prose and semantic controls form one persistent tutoria
     fullPage: false
   });
 
-  await expect(motionCue.getByText("Animation boundary")).toBeVisible();
-  await expect(motionCue.getByText("Demand shifts right")).toBeVisible();
-  await expect(motionCue.getByText("Supply stays fixed.")).toBeVisible();
+  await expect(motionCue.getByText("What to watch")).toBeVisible();
+  await expect(motionCue.getByText("Watch the demand shift")).toBeVisible();
+  await expect(motionCue.getByText(
+    "The demand curve shifts right while supply stays fixed. Follow the intersection upward and to the right."
+  )).toBeVisible();
+  await expect(motionCue).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-cue-phase",
+    "shift"
+  );
   await expect(motionCue.getByText(
     "Scroll down to play · scroll up to rewind"
   )).toBeVisible();
@@ -169,6 +182,14 @@ test("approved economics prose and semantic controls form one persistent tutoria
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-scroll-autoplay",
     "complete"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-checkpoint",
+    "settled"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-focus-target",
+    "equilibrium"
   );
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-progress",
@@ -226,6 +247,17 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-economics-tutorial-checkpoint",
     "handoff"
   );
+  await expect(motionCue).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-cue-phase",
+    "handoff"
+  );
+  await expect(motionCue.getByText(
+    "The moving intersection becomes the market-clearing point. Keep the old curve and point as quiet references."
+  )).toBeVisible();
+  await page.screenshot({
+    path: `${evidenceDirectory}/wide-motion-handoff.png`,
+    fullPage: false
+  });
   await root.getByRole("button", {
     name: "Next semantic checkpoint"
   }).click();
@@ -233,6 +265,13 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-economics-tutorial-checkpoint",
     "settled"
   );
+  await expect(motionCue).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-cue-phase",
+    "settled"
+  );
+  await expect(motionCue.getByText(
+    "The new equilibrium is higher and farther right. Supply itself did not shift."
+  )).toBeVisible();
   await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
     .toHaveAttribute("data-kp-economics-equilibrium-quantity", "8");
   expect(await page.evaluate(() =>

@@ -5,6 +5,7 @@ import test from "node:test";
 import {
   findKpEconomicsDemandShiftCheckpointIndex,
   kpEconomicsDemandShiftCheckpoints,
+  selectKpEconomicsDemandShiftPlaybackCue,
   selectKpEconomicsReadingBandPassage,
   stepKpEconomicsDemandShiftCheckpoint
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-checkpoints.ts";
@@ -101,6 +102,23 @@ test("semantic checkpoint navigation is ordered, bounded, and reversible", () =>
   assert.equal(
     stepKpEconomicsDemandShiftCheckpoint({ currentIndex: handoff, direction: 1 }),
     handoff + 1
+  );
+});
+
+test("playback cues tell the learner what to inspect at semantic boundaries", () => {
+  assert.deepEqual(
+    [-1, 0.719, 0.72, 0.994, 0.995, 2].map((progress) =>
+      selectKpEconomicsDemandShiftPlaybackCue(progress).id
+    ),
+    ["shift", "shift", "handoff", "handoff", "settled", "settled"]
+  );
+  assert.match(
+    selectKpEconomicsDemandShiftPlaybackCue(0).instruction,
+    /supply stays fixed/i
+  );
+  assert.match(
+    selectKpEconomicsDemandShiftPlaybackCue(1).instruction,
+    /did not shift/i
   );
 });
 
