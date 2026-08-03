@@ -107,6 +107,11 @@ export class KpTutorialScrubBarElement extends HTMLElement {
         : "past";
   }
 
+  releaseManualControl(): void {
+    this.manualClaimedInternally = false;
+    this.render();
+  }
+
   private readonly handlePrevious = (): void => {
     this.claimManualControl();
     this.emit(KP_TUTORIAL_SCRUB_PREVIOUS_EVENT);

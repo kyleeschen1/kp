@@ -164,6 +164,34 @@
       "scope": "s09",
       "checkedAt": "2026-08-03T06:27:18.497Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-08-03T06:37:25.305Z",
+      "notes": "Eleven unit tests passed, including inverse-corridor no-jump rebasing."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-08-03T06:37:26.420Z",
+      "notes": "Svelte check reported zero errors and warnings."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-08-03T06:37:27.341Z",
+      "notes": "Five Chromium checks passed for demand and supply pointer, keyboard, playback, cancellation, one-pixel scroll resumption, reduced motion, and phone."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-08-03T06:37:28.254Z",
+      "notes": "No whitespace errors."
     }
   ],
   "allowedWork": [
@@ -244,7 +272,8 @@
     {
       "id": "s10",
       "title": "Reconcile-manual-and-scroll-ownership",
-      "status": "planned"
+      "summary": "Enabled both local control sets, added manual supply playback and checkpoint stepping, canceled active clocks on takeover, and used inverse-corridor rebasing so the next deliberate scroll resumes without a visible discontinuity.",
+      "status": "complete"
     },
     {
       "id": "s11",

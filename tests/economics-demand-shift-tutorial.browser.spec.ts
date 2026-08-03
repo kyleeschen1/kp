@@ -78,7 +78,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "aria-label",
     "Supply did not shift animation step"
   );
-  await expect(supplyMotionCue).toHaveAttribute("controls-disabled", "true");
+  await expect(supplyMotionCue).toHaveAttribute("controls-disabled", "false");
   expect(await motionCue.evaluate((element) => ({
     tag: element.localName,
     registered: customElements.get(element.localName) === element.constructor,
@@ -472,7 +472,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
   });
 });
 
-test("manual playback retains timeline ownership during scroll", async ({
+test("manual demand playback rebases into scroll without a jump", async ({
   page
 }) => {
   await page.goto(route);
@@ -487,6 +487,14 @@ test("manual playback retains timeline ownership during scroll", async ({
     "true"
   );
 
+  await motionCue.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.38
+  }));
+  const scrubber = motionCue.getByRole("slider", {
+    name: "Scrub animation progress"
+  });
+  await scrubber.fill("0.35");
   await motionCue.evaluate((element) => {
     element.shadowRoot?.querySelector<HTMLButtonElement>(
       "[data-action=toggle]"
@@ -500,41 +508,112 @@ test("manual playback retains timeline ownership during scroll", async ({
     "data-kp-economics-tutorial-scroll-timeline",
     "manual"
   );
-  await expect.poll(async () => Number(
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "playing"
+  );
+  await page.waitForTimeout(32);
+  const manualProgress = Number(
     await player.getAttribute("data-kp-editor-animation-progress")
-  )).toBeGreaterThan(0);
-  await motionCue.evaluate((element) => {
-    element.shadowRoot?.querySelector<HTMLButtonElement>(
-      "[data-action=toggle]"
-    )?.click();
-  });
+  );
+
+  await page.evaluate(() => window.scrollBy(0, 1));
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-owner",
+    "scroll"
+  );
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-status",
     "paused"
   );
-  const pausedProgress = Number(
+  await expect.poll(async () => Number(
     await player.getAttribute("data-kp-editor-animation-progress")
-  );
-
-  const demandChange = root.locator(
-    '[data-kp-economics-tutorial-passage="demand-change"]'
-  );
-  await demandChange.scrollIntoViewIfNeeded();
-  await motionCue.evaluate((element) => window.scrollTo({
-    top: window.scrollY + element.getBoundingClientRect().top -
-      window.innerHeight * 0.38 + 4
-  }));
-  await page.waitForTimeout(800);
-  expect(Number(
-    await player.getAttribute("data-kp-editor-animation-progress")
-  )).toBeCloseTo(pausedProgress, 5);
+  )).toBeCloseTo(manualProgress, 1);
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-scroll-timeline",
-    "manual"
+    "seeking"
   );
   await expect(motionCue).toHaveAttribute(
     "data-kp-tutorial-scrub-manual",
+    "false"
+  );
+  await page.evaluate(() => window.scrollBy(0, 120));
+  await expect.poll(async () => Number(
+    await player.getAttribute("data-kp-editor-animation-progress")
+  )).toBeGreaterThan(manualProgress);
+});
+
+test("manual supply playback preserves the settled demand handoff", async ({
+  page
+}) => {
+  await page.goto(route);
+
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const player = root.locator("[data-kp-editor-animation-player]");
+  const supplyMotionCue = root.locator(
+    '[data-kp-tutorial-motion-block="supply-movement"] kp-tutorial-scrub-bar'
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
     "true"
+  );
+  await supplyMotionCue.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.38
+  }));
+  await page.keyboard.press("Alt+ArrowRight");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "1.000"
+  );
+  await page.keyboard.press("Alt+ArrowLeft");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "0.580"
+  );
+  await supplyMotionCue.getByRole("slider", {
+    name: "Scrub animation progress"
+  }).fill("0.3");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-owner",
+    "manual"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-manual-block",
+    "supply-movement"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-demand-progress",
+    "1.000"
+  );
+  await supplyMotionCue.getByRole("button", { name: "Play" }).click();
+  await expect.poll(async () => Number(
+    await root.getAttribute(
+      "data-kp-economics-tutorial-supply-movement-progress"
+    )
+  )).toBeGreaterThan(0.3);
+  const manualProgress = Number(await root.getAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress"
+  ));
+  await page.evaluate(() => window.scrollBy(0, 1));
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-owner",
+    "scroll"
+  );
+  await expect.poll(async () => Number(await root.getAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress"
+  ))).toBeCloseTo(manualProgress, 1);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-demand-progress",
+    "1.000"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "1"
+  );
+  await expect(supplyMotionCue).toHaveAttribute(
+    "data-kp-tutorial-scrub-manual",
+    "false"
   );
 });
 

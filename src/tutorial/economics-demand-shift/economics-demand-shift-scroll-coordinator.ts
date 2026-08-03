@@ -33,8 +33,11 @@ export interface KpEconomicsScrollBlockRegistration {
   readonly corridor: KpEconomicsMotionCorridor;
 }
 
-export type KpEconomicsCoordinatedScrollProjection =
-  KpEconomicsScrollFrameProjection;
+export interface KpEconomicsCoordinatedScrollProjection
+  extends KpEconomicsScrollFrameProjection {
+  readonly scrollY: number;
+  readonly scrollChanged: boolean;
+}
 
 export function projectKpEconomicsScrollFrame(input: {
   readonly blocks: readonly KpEconomicsScrollBlockGeometry[];
@@ -86,6 +89,7 @@ export class KpEconomicsTutorialScrollCoordinator {
   ) => void;
   private frame: number | undefined;
   private connected = false;
+  private previousScrollY: number | undefined;
 
   constructor(
     view: Window,
@@ -103,6 +107,7 @@ export class KpEconomicsTutorialScrollCoordinator {
   connect(): void {
     if (this.connected) return;
     this.connected = true;
+    this.previousScrollY = this.view.scrollY;
     this.view.addEventListener("scroll", this.scheduleProjection, {
       passive: true
     });
@@ -143,6 +148,10 @@ export class KpEconomicsTutorialScrollCoordinator {
       blocks: geometry,
       viewportHeight: this.view.innerHeight
     });
-    this.onProjection(projection);
+    const scrollY = this.view.scrollY;
+    const scrollChanged = this.previousScrollY !== undefined &&
+      Math.abs(scrollY - this.previousScrollY) > 0.01;
+    this.previousScrollY = scrollY;
+    this.onProjection(Object.freeze({ ...projection, scrollY, scrollChanged }));
   }
 }

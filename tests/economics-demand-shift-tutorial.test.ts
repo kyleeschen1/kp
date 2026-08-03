@@ -20,7 +20,8 @@ import {
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-motion-blocks.ts";
 import {
   projectKpEconomicsCorridorTravel,
-  projectKpEconomicsMotionCorridor
+  projectKpEconomicsMotionCorridor,
+  projectKpEconomicsRebasedCorridor
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-scroll-corridor.ts";
 import {
   projectKpEconomicsScrollFrame
@@ -191,6 +192,33 @@ test("one coordinated scroll frame grants paint ownership to one block", () => {
     viewportHeight: 1000,
     blocks: []
   }).activeBlockId, undefined);
+});
+
+test("manual corridor takeover rebases the next scroll without a jump", () => {
+  const corridor = kpEconomicsMotionBlocks[0]!.corridor;
+  const takeover = projectKpEconomicsRebasedCorridor({
+    corridor,
+    rawTravelAtTakeover: 0.4,
+    manualProgress: 0.72,
+    rawTravel: 0.4
+  });
+  const onePixelDown = projectKpEconomicsRebasedCorridor({
+    corridor,
+    rawTravelAtTakeover: 0.4,
+    manualProgress: 0.72,
+    rawTravel: 0.401
+  });
+  const upward = projectKpEconomicsRebasedCorridor({
+    corridor,
+    rawTravelAtTakeover: 0.4,
+    manualProgress: 0.72,
+    rawTravel: 0.3
+  });
+
+  assert.deepEqual(takeover, { travel: 0.57, progress: 0.72 });
+  assert.equal(onePixelDown.progress - takeover.progress < 0.01, true);
+  assert.equal(onePixelDown.progress >= takeover.progress, true);
+  assert.equal(upward.progress < takeover.progress, true);
 });
 
 test("approved Markdown compiles into the complete annotated lesson", () => {

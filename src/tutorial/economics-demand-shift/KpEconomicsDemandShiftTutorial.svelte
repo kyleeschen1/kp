@@ -34,8 +34,12 @@
   import {
     findKpEconomicsMotionBlock,
     kpEconomicsMotionBlocks,
-    projectKpEconomicsLessonMotion
+    projectKpEconomicsLessonMotion,
+    type KpEconomicsMotionBlockId
   } from "./economics-demand-shift-motion-blocks.ts";
+  import {
+    projectKpEconomicsRebasedCorridor
+  } from "./economics-demand-shift-scroll-corridor.ts";
   import {
     KpEconomicsTutorialScrollCoordinator,
     type KpEconomicsCoordinatedScrollProjection,
@@ -76,6 +80,12 @@
     readonly stageY: number;
     readonly stageWidth: number;
     readonly stageHeight: number;
+  }
+
+  interface KpEconomicsManualScrollRebase {
+    readonly blockId: KpEconomicsMotionBlockId;
+    readonly rawTravelAtTakeover: number;
+    readonly manualProgress: number;
   }
 
   const emptyAttentionProjection: KpEconomicsTutorialAttentionProjection = {
@@ -138,6 +148,7 @@
   let explorationOpen = $state(false);
   let announcement = $state("Initial market ready.");
   let motionOwner = $state<KpEconomicsTutorialMotionOwner>("untouched");
+  let manualMotionBlock = $state<KpEconomicsMotionBlockId | undefined>();
   let scrollTimelineStatus = $state<KpEconomicsTutorialScrollTimelineStatus>(
     "idle"
   );
@@ -151,6 +162,14 @@
   let attentionProjection = $state(emptyAttentionProjection);
   let disposePlayerHost: (() => void) | undefined;
   let scrollCoordinator: KpEconomicsTutorialScrollCoordinator | undefined;
+  let latestScrollProjection: KpEconomicsCoordinatedScrollProjection | undefined;
+  let manualScrollRebase: KpEconomicsManualScrollRebase | undefined;
+  let supplyPlaybackStatus = $state<"paused" | "playing" | "complete">(
+    "paused"
+  );
+  let supplyPlaybackDirection = $state<"forward" | "rewind">("forward");
+  let supplyPlaybackFrame: number | undefined;
+  let supplyPlaybackLastMs: number | undefined;
   let lessonMotionProjection = $state(projectKpEconomicsLessonMotion({
     activeBlockId: "demand-shift",
     localProgress: initial.playbackDirection === "rewind"
@@ -193,7 +212,7 @@
     index: number,
     source: "manual" | "scroll" = "manual"
   ): void {
-    if (source === "manual") claimManualMotion();
+    if (source === "manual") claimManualMotion("demand-shift");
     checkpointIndex = Math.max(
       0,
       Math.min(kpEconomicsDemandShiftCheckpoints.length - 1, index)
@@ -216,26 +235,49 @@
     }));
   }
 
-  function selectPreviousCheckpoint(): void {
-    stepCheckpoint(-1);
+  function motionBlockFromEvent(event: Event): KpEconomicsMotionBlockId {
+    return event.currentTarget instanceof HTMLElement &&
+        event.currentTarget.dataset["kpTutorialMotionControls"] ===
+          "supply-movement"
+      ? "supply-movement"
+      : "demand-shift";
   }
 
-  function selectNextCheckpoint(): void {
-    stepCheckpoint(1);
+  function handlePreviousCheckpoint(event: Event): void {
+    const blockId = motionBlockFromEvent(event);
+    if (blockId === "demand-shift") {
+      stepCheckpoint(-1);
+      return;
+    }
+    stepSupplyCheckpoint(-1);
   }
 
-  function togglePlayback(): void {
-    claimManualMotion();
+  function handleNextCheckpoint(event: Event): void {
+    const blockId = motionBlockFromEvent(event);
+    if (blockId === "demand-shift") {
+      stepCheckpoint(1);
+      return;
+    }
+    stepSupplyCheckpoint(1);
+  }
+
+  function handleTogglePlayback(event: Event): void {
+    const blockId = motionBlockFromEvent(event);
+    const demandWasPlaying = player === undefined
+      ? false
+      : getKpEditorAnimationPlaybackSession(player)?.player.playbackStatus ===
+        "playing";
+    const supplyWasPlaying = supplyPlaybackStatus === "playing";
+    claimManualMotion(blockId);
+    if (blockId === "supply-movement") {
+      if (supplyWasPlaying) return;
+      toggleSupplyPlayback();
+      return;
+    }
+    if (demandWasPlaying) return;
     if (player === undefined) return;
     const session = getKpEditorAnimationPlaybackSession(player);
     if (session === undefined) return;
-    if (session.player.playbackStatus === "playing") {
-      dispatchKpEditorAnimationPlaybackAction(player, {
-        type: "pause",
-        nowMs: performance.now()
-      });
-      return;
-    }
     dispatchKpEditorAnimationPlaybackAction(
       player,
       session.player.direction === "rewind" &&
@@ -245,18 +287,18 @@
     );
   }
 
-  function rewindPlayback(): void {
-    claimManualMotion();
+  function handleRewindPlayback(event: Event): void {
+    const blockId = motionBlockFromEvent(event);
+    claimManualMotion(blockId);
+    if (blockId === "supply-movement") {
+      startSupplyPlayback("rewind");
+      return;
+    }
     if (player === undefined) return;
     dispatchKpEditorAnimationPlaybackAction(player, {
       type: "rewind",
       nowMs: performance.now()
     });
-  }
-
-  function scrub(nextProgress: number): void {
-    claimManualMotion();
-    seek(nextProgress);
   }
 
   function seek(nextProgress: number): void {
@@ -273,11 +315,95 @@
     });
   }
 
+  function applyManualMotionProgress(
+    blockId: KpEconomicsMotionBlockId,
+    nextProgress: number
+  ): void {
+    const localProgress = clamp(nextProgress, 0, 1);
+    lessonMotionProjection = projectKpEconomicsLessonMotion({
+      activeBlockId: blockId,
+      localProgress
+    });
+    seek(lessonMotionProjection.demandShiftProgress);
+    const rawTravel = latestScrollProjection?.blocks.find(
+      ({ id }) => id === blockId
+    )?.travel ?? 0;
+    manualScrollRebase = {
+      blockId,
+      rawTravelAtTakeover: rawTravel,
+      manualProgress: localProgress
+    };
+  }
+
+  function stepSupplyCheckpoint(direction: -1 | 1): void {
+    claimManualMotion("supply-movement");
+    const checkpoints = findKpEconomicsMotionBlock("supply-movement")!
+      .checkpoints;
+    const currentIndex = checkpoints.reduce((nearest, candidate, index) =>
+      Math.abs(candidate.progress - supplyMovementProgress) <
+          Math.abs(checkpoints[nearest]!.progress - supplyMovementProgress)
+        ? index
+        : nearest
+    , 0);
+    const nextIndex = Math.max(
+      0,
+      Math.min(checkpoints.length - 1, currentIndex + direction)
+    );
+    applyManualMotionProgress(
+      "supply-movement",
+      checkpoints[nextIndex]!.progress
+    );
+  }
+
+  function toggleSupplyPlayback(): void {
+    if (supplyPlaybackStatus === "playing") {
+      cancelSupplyPlayback();
+      return;
+    }
+    startSupplyPlayback("forward");
+  }
+
+  function startSupplyPlayback(direction: "forward" | "rewind"): void {
+    cancelSupplyPlayback();
+    supplyPlaybackDirection = direction;
+    if (direction === "forward" && supplyMovementProgress >= 0.999) {
+      applyManualMotionProgress("supply-movement", 0);
+    }
+    supplyPlaybackStatus = "playing";
+    supplyPlaybackLastMs = performance.now();
+    supplyPlaybackFrame = requestAnimationFrame(tickSupplyPlayback);
+  }
+
+  function tickSupplyPlayback(nowMs: number): void {
+    if (supplyPlaybackStatus !== "playing") return;
+    const previousMs = supplyPlaybackLastMs ?? nowMs;
+    supplyPlaybackLastMs = nowMs;
+    const delta = Math.max(0, Math.min(64, nowMs - previousMs)) / 2400;
+    const nextProgress = supplyMovementProgress +
+      (supplyPlaybackDirection === "rewind" ? -delta : delta);
+    applyManualMotionProgress("supply-movement", nextProgress);
+    if (nextProgress <= 0 || nextProgress >= 1) {
+      supplyPlaybackStatus = "complete";
+      supplyPlaybackFrame = undefined;
+      return;
+    }
+    supplyPlaybackFrame = requestAnimationFrame(tickSupplyPlayback);
+  }
+
+  function cancelSupplyPlayback(): void {
+    if (supplyPlaybackFrame !== undefined) {
+      cancelAnimationFrame(supplyPlaybackFrame);
+      supplyPlaybackFrame = undefined;
+    }
+    supplyPlaybackLastMs = undefined;
+    if (supplyPlaybackStatus === "playing") supplyPlaybackStatus = "paused";
+  }
+
   function changeDemandIntercept(event: Event): void {
     if (!(event.currentTarget instanceof HTMLInputElement) || player === undefined) {
       return;
     }
-    claimManualMotion();
+    claimManualMotion("demand-shift");
     const state = createKpEconomicsEquilibriumParameterState(
       event.currentTarget.value
     );
@@ -300,7 +426,7 @@
   }
 
   function restoreLessonExample(): void {
-    claimManualMotion();
+    claimManualMotion("demand-shift");
     const state = createKpEconomicsEquilibriumParameterState(
       kpEconomicsDemandInterceptParameter.defaultValue
     );
@@ -351,6 +477,14 @@
         activeBlockId: "demand-shift",
         localProgress: playbackDirection === "rewind" ? 1 - progress : progress
       });
+      if (motionOwner === "manual" && manualMotionBlock === "demand-shift") {
+        manualScrollRebase = manualScrollRebase === undefined
+          ? undefined
+          : {
+              ...manualScrollRebase,
+              manualProgress: lessonMotionProjection.demandShiftProgress
+            };
+      }
     }
     if (
       detail.playbackStatus === "complete" &&
@@ -378,12 +512,39 @@
     scheduleAttentionProjection();
   }
 
-  function claimManualMotion(): void {
+  function claimManualMotion(
+    blockId: KpEconomicsMotionBlockId = scrollActiveMotionBlock ===
+        "supply-movement"
+      ? "supply-movement"
+      : "demand-shift"
+  ): void {
     // A control action must win even when it lands between a scroll event and
     // the coordinator's deferred reading-band projection.
     scrollCoordinator?.cancelPendingProjection();
+    const session = player === undefined
+      ? undefined
+      : getKpEditorAnimationPlaybackSession(player);
+    if (session?.player.playbackStatus === "playing") {
+      dispatchKpEditorAnimationPlaybackAction(player!, {
+        type: "pause",
+        nowMs: performance.now()
+      });
+    }
+    cancelSupplyPlayback();
     motionOwner = "manual";
+    manualMotionBlock = blockId;
     scrollTimelineStatus = "manual";
+    const currentProgress = blockId === "supply-movement"
+      ? supplyMovementProgress
+      : semanticProgress;
+    const rawTravel = latestScrollProjection?.blocks.find(
+      ({ id }) => id === blockId
+    )?.travel ?? 0;
+    manualScrollRebase = {
+      blockId,
+      rawTravelAtTakeover: rawTravel,
+      manualProgress: currentProgress
+    };
   }
 
   function handleReducedMotionChange(event: MediaQueryListEvent): void {
@@ -396,7 +557,10 @@
   function handleScrubBarSeek(event: Event): void {
     if (!(event instanceof CustomEvent)) return;
     const detail = event.detail as KpTutorialScrubSeekDetail | undefined;
-    if (typeof detail?.progress === "number") scrub(detail.progress);
+    if (typeof detail?.progress !== "number") return;
+    const blockId = motionBlockFromEvent(event);
+    claimManualMotion(blockId);
+    applyManualMotionProgress(blockId, detail.progress);
   }
 
   function scheduleAttentionProjection(): void {
@@ -505,6 +669,7 @@
   function handleCoordinatedScroll(
     projection: KpEconomicsCoordinatedScrollProjection
   ): void {
+    latestScrollProjection = projection;
     scrollActiveMotionBlock = projection.activeBlockId ?? "";
     const active = projection.blocks.find(({ ownsScroll }) => ownsScroll);
     const activeScrubBar = active?.id === "supply-movement"
@@ -516,25 +681,45 @@
         distance,
         proximity: clamp(1 - Math.abs(distance) / 96, 0, 1)
       });
-      if (
-        !reducedMotion &&
-        ready &&
-        player !== undefined &&
-        motionOwner !== "manual" &&
-        (
-          motionOwner === "scroll" ||
-          active.progress > 0.001 ||
-          active.id === "supply-movement"
-        )
-      ) {
+      const manualCanResume = motionOwner === "manual" &&
+        projection.scrollChanged;
+      const mayProjectScroll = motionOwner !== "manual" || manualCanResume;
+      if (!reducedMotion && ready && player !== undefined && mayProjectScroll && (
+        motionOwner === "scroll" ||
+        manualCanResume ||
+        active.progress > 0.001 ||
+        active.id === "supply-movement"
+      )) {
+        let localProgress = active.progress;
+        if (manualScrollRebase?.blockId === active.id) {
+          const block = findKpEconomicsMotionBlock(active.id)!;
+          const rebased = projectKpEconomicsRebasedCorridor({
+            corridor: block.corridor,
+            rawTravelAtTakeover: manualScrollRebase.rawTravelAtTakeover,
+            manualProgress: manualScrollRebase.manualProgress,
+            rawTravel: active.travel
+          });
+          localProgress = rebased.progress;
+          if (rebased.travel <= 0.001 || rebased.travel >= 0.999) {
+            manualScrollRebase = undefined;
+          }
+        } else if (manualCanResume) {
+          manualScrollRebase = undefined;
+        }
         lessonMotionProjection = projectKpEconomicsLessonMotion({
           activeBlockId: active.id,
-          localProgress: active.progress
+          localProgress
         });
+        if (manualCanResume) {
+          cancelSupplyPlayback();
+          demandScrubBar?.releaseManualControl();
+          supplyScrubBar?.releaseManualControl();
+          manualMotionBlock = undefined;
+        }
         motionOwner = "scroll";
-        scrollTimelineStatus = active.progress >= 0.999
+        scrollTimelineStatus = localProgress >= 0.999
           ? "complete"
-          : active.progress <= 0.001
+          : localProgress <= 0.001
             ? "rewound"
             : "seeking";
         seek(lessonMotionProjection.demandShiftProgress);
@@ -605,13 +790,18 @@
       [" ", "ArrowLeft", "ArrowRight", "Home", "End", "r", "R"].includes(
         event.key
       )
-    ) claimManualMotion();
+    ) claimManualMotion("demand-shift");
     if (
       !event.altKey ||
       (event.key !== "ArrowLeft" && event.key !== "ArrowRight")
     ) return;
     event.preventDefault();
-    stepCheckpoint(event.key === "ArrowLeft" ? -1 : 1);
+    const direction = event.key === "ArrowLeft" ? -1 : 1;
+    if (scrollActiveMotionBlock === "supply-movement") {
+      stepSupplyCheckpoint(direction);
+    } else {
+      stepCheckpoint(direction);
+    }
   }
 
   onMount(() => {
@@ -622,20 +812,28 @@
     if (player === undefined) return;
     player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
-    demandScrubBar?.addEventListener(KP_TUTORIAL_SCRUB_TOGGLE_EVENT, togglePlayback);
-    demandScrubBar?.addEventListener(KP_TUTORIAL_SCRUB_REWIND_EVENT, rewindPlayback);
-    demandScrubBar?.addEventListener(
-      KP_TUTORIAL_SCRUB_PREVIOUS_EVENT,
-      selectPreviousCheckpoint
-    );
-    demandScrubBar?.addEventListener(
-      KP_TUTORIAL_SCRUB_NEXT_EVENT,
-      selectNextCheckpoint
-    );
-    demandScrubBar?.addEventListener(
-      KP_TUTORIAL_SCRUB_SEEK_EVENT,
-      handleScrubBarSeek
-    );
+    for (const scrubBar of [demandScrubBar, supplyScrubBar]) {
+      scrubBar?.addEventListener(
+        KP_TUTORIAL_SCRUB_TOGGLE_EVENT,
+        handleTogglePlayback
+      );
+      scrubBar?.addEventListener(
+        KP_TUTORIAL_SCRUB_REWIND_EVENT,
+        handleRewindPlayback
+      );
+      scrubBar?.addEventListener(
+        KP_TUTORIAL_SCRUB_PREVIOUS_EVENT,
+        handlePreviousCheckpoint
+      );
+      scrubBar?.addEventListener(
+        KP_TUTORIAL_SCRUB_NEXT_EVENT,
+        handleNextCheckpoint
+      );
+      scrubBar?.addEventListener(
+        KP_TUTORIAL_SCRUB_SEEK_EVENT,
+        handleScrubBarSeek
+      );
+    }
     scrollCoordinator = new KpEconomicsTutorialScrollCoordinator(
       window,
       collectScrollBlocks,
@@ -672,30 +870,33 @@
 
   onDestroy(() => {
     scrollCoordinator?.disconnect();
+    cancelSupplyPlayback();
     if (attentionFrame !== undefined) cancelAnimationFrame(attentionFrame);
     attentionResizeObserver?.disconnect();
     player?.removeEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player?.removeEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
-    demandScrubBar?.removeEventListener(
-      KP_TUTORIAL_SCRUB_TOGGLE_EVENT,
-      togglePlayback
-    );
-    demandScrubBar?.removeEventListener(
-      KP_TUTORIAL_SCRUB_REWIND_EVENT,
-      rewindPlayback
-    );
-    demandScrubBar?.removeEventListener(
-      KP_TUTORIAL_SCRUB_PREVIOUS_EVENT,
-      selectPreviousCheckpoint
-    );
-    demandScrubBar?.removeEventListener(
-      KP_TUTORIAL_SCRUB_NEXT_EVENT,
-      selectNextCheckpoint
-    );
-    demandScrubBar?.removeEventListener(
-      KP_TUTORIAL_SCRUB_SEEK_EVENT,
-      handleScrubBarSeek
-    );
+    for (const scrubBar of [demandScrubBar, supplyScrubBar]) {
+      scrubBar?.removeEventListener(
+        KP_TUTORIAL_SCRUB_TOGGLE_EVENT,
+        handleTogglePlayback
+      );
+      scrubBar?.removeEventListener(
+        KP_TUTORIAL_SCRUB_REWIND_EVENT,
+        handleRewindPlayback
+      );
+      scrubBar?.removeEventListener(
+        KP_TUTORIAL_SCRUB_PREVIOUS_EVENT,
+        handlePreviousCheckpoint
+      );
+      scrubBar?.removeEventListener(
+        KP_TUTORIAL_SCRUB_NEXT_EVENT,
+        handleNextCheckpoint
+      );
+      scrubBar?.removeEventListener(
+        KP_TUTORIAL_SCRUB_SEEK_EVENT,
+        handleScrubBarSeek
+      );
+    }
     window.removeEventListener("keydown", handleTutorialKeydown);
     reducedMotionQuery?.removeEventListener("change", handleReducedMotionChange);
     disposePlayerHost?.();
@@ -769,6 +970,7 @@
   data-kp-economics-tutorial-focus-target={visualCheckpoint.attention.target}
   data-kp-economics-tutorial-equations={equationsVisible ? "visible" : "quiet"}
   data-kp-economics-tutorial-motion-owner={motionOwner}
+  data-kp-economics-tutorial-manual-block={manualMotionBlock ?? ""}
   data-kp-economics-tutorial-scroll-timeline={scrollTimelineStatus}
   data-kp-economics-tutorial-scroll-coordinator={scrollCoordinatorStatus}
   data-kp-economics-tutorial-scroll-active-block={scrollActiveMotionBlock}
@@ -849,7 +1051,8 @@
                   controls-disabled={ready ? "false" : "true"}
                   previous-disabled={checkpointIndex === 0 ? "true" : "false"}
                   next-disabled={checkpointIndex === kpEconomicsDemandShiftCheckpoints.length - 1 ? "true" : "false"}
-                  manual-claimed={motionOwner === "manual" ? "true" : "false"}
+                  manual-claimed={motionOwner === "manual" &&
+                      manualMotionBlock === "demand-shift" ? "true" : "false"}
                 ></kp-tutorial-scrub-bar>
               {:else if renderedMotionBlock?.id === "supply-movement"}
                 <kp-tutorial-scrub-bar
@@ -857,12 +1060,13 @@
                   data-kp-tutorial-motion-controls="supply-movement"
                   data-kp-economics-tutorial-motion-divider
                   progress={supplyMovementProgress}
-                  playback-status="paused"
-                  direction="forward"
-                  controls-disabled="true"
-                  previous-disabled="true"
-                  next-disabled="true"
-                  manual-claimed="false"
+                  playback-status={supplyPlaybackStatus}
+                  direction={supplyPlaybackDirection}
+                  controls-disabled={ready ? "false" : "true"}
+                  previous-disabled={supplyMovementProgress <= 0.001 ? "true" : "false"}
+                  next-disabled={supplyMovementProgress >= 0.999 ? "true" : "false"}
+                  manual-claimed={motionOwner === "manual" &&
+                      manualMotionBlock === "supply-movement" ? "true" : "false"}
                 ></kp-tutorial-scrub-bar>
               {/if}
               {#if passage.id === "explore"}
