@@ -224,6 +224,24 @@
       "status": "passed",
       "scope": "s10 lesson prose patch hygiene",
       "checkedAt": "2026-08-03T17:08:15.266Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-publication.test.ts tests/kp-lisp-lesson-prose.test.ts",
+      "status": "passed",
+      "scope": "s11 six publication and editorial tests",
+      "checkedAt": "2026-08-03T17:11:30.213Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s11 application types",
+      "checkedAt": "2026-08-03T17:11:31.301Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s11 test inference",
+      "checkedAt": "2026-08-03T17:11:32.232Z"
     }
   ],
   "allowedWork": [
@@ -310,7 +328,8 @@
     {
       "id": "s11",
       "title": "Compile local Lisp publication payload",
-      "status": "planned"
+      "summary": "Added a narrow local Markdown compiler and publication projection with escaped continuous prose, native inline code, four semantic section destinations, ordered passage/motion blocks, static TOC links, and two final-geometry text-free scrubbers. Six focused tests and app/test TypeScript checks pass; no client parser or syntax highlighter was added.",
+      "status": "complete"
     },
     {
       "id": "s12",
